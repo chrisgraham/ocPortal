@@ -59,7 +59,7 @@
   <setAcl path="ocportal/themes" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/text_custom" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/text_custom/EN" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
-  <setAcl path="ocportal/persistant_cache" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
+  <setAcl path="ocportal/persistent_cache" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/safe_mode_temp" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/lang_cached/EN" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/lang_custom/EN" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />

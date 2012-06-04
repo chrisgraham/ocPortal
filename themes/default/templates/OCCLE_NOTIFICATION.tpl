@@ -1,4 +1,8 @@
 <div class="occle_notification">
-	{!NOTIFICATION_SECTION} {SECTION*}{!NOTIFICATION_TYPE} {TYPE*}<br />
+	<p>
+		{!NOTIFICATION_SECTION} {SECTION*}
+		{!NOTIFICATION_TYPE} {TYPE*}
+	</p>
+
 	{NOTIFICATION_CONTENT}
 </div>

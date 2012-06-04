@@ -2254,7 +2254,7 @@ EventListenerManager.prototype.fire = function( event ) {
 	var dm = this.events[event];
 	if( dm === undefined ) { return; }
 
-	
+
 	// get passed arguments and shift the first (event) off the front 
 	var args = Array.prototype.slice.call(arguments);
 	args.shift();
@@ -3562,7 +3562,7 @@ Xmpp4Js.PacketFilter.FromContainsFilter = function(match) {
 	this.match = match;
 }
 
-	
+
 Xmpp4Js.PacketFilter.FromContainsFilter.prototype = {
 	accept: function(packet) {
 		return packet.getFrom().match( this.match );

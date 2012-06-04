@@ -57,7 +57,7 @@ function validate_ip_script()
 	$code=either_param('code','');
 	if ($code=='')
 	{
-		$title=get_page_title('CONFIRM');
+		$title=get_screen_title('CONFIRM');
 		require_code('form_templates');
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_codename(do_lang_tempcode('CODE'),'','code','',true));
@@ -75,7 +75,7 @@ function validate_ip_script()
 	if (is_null($test)) warn_exit(do_lang_tempcode('ALREADY_VALIDATED'));
 	$GLOBALS['FORUM_DB']->query_update('f_member_known_login_ips',array('i_val_code'=>''),array('i_val_code'=>$code),'',1);
 
-	$title=get_page_title('CONFIRM');
+	$title=get_screen_title('CONFIRM');
 	$middle=redirect_screen($title,get_base_url().$keep,do_lang_tempcode('SUCCESS'));
 	$echo=globalise($middle,NULL,'',true);
 	$echo->evaluate_echo();
@@ -127,7 +127,7 @@ function ocf_member_external_linker_ask($username,$type,$email_address='',$dob_d
 	@ob_end_clean();
 	if (!function_exists('do_header')) require_code('site');
 
-	$title=get_page_title('FINISH_PROFILE');
+	$title=get_screen_title('FINISH_PROFILE');
 
 	if (($username!='') && ($type!='ldap'))
 	{
@@ -613,7 +613,7 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 		0,
 		$mini_mode?true:NULL // show on join form
 	);
-	$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=true;
+	$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=true;
 	$field_groups=array();
 	require_code('fields');
 	foreach ($_custom_fields as $custom_field)
@@ -669,10 +669,10 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 		if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
 
 		if ($field_group_title!='')
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'af91e3c040a0a18a4d9cc1143c0d2007','TITLE'=>$field_group_title)));
 		$fields->attach($extra_fields);
 	}
-	$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=false;
+	$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=false;
 
 	return array($fields,$hidden);
 }

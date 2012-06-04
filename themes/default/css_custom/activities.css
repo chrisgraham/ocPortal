@@ -1,23 +1,21 @@
 /* CSS for the activities feed and the status posting box */
 
-.activities-box {
+.activities_box {
 	overflow: hidden;
 	height: auto;
 	list-style: none;
-	/*float: {!en_left};
-	width: 100%;*/
-	margin-top: 0px;
-	margin-left: 0px;
-	margin-right: 0px;
+	margin-top: 0;
+	margin-left: 0;
+	margin-right: 0;
 	margin-bottom: 1px;
-	padding-right: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
+	padding-right: 0;
+	padding-top: 0;
+	padding-bottom: 0;
 	padding-{!en_left}: 5px;
 	vertical-align: top;
 }
 
-.avatar-box {
+.avatar_box {
 	width: 40px;
 	float: left;
 	margin-top: 5px;
@@ -25,7 +23,7 @@
 }
 
 .activities_line {
-	margin-top: 0px;
+	margin-top: 0;
 	font-size: 0.95em;
 }
 
@@ -58,16 +56,16 @@
 
 /* What's this all about, eh? Standards compliant are we Mozilla? What-ever*/
 .remove input.remove_cross::-moz-focus-inner {
-	border: 0px;
+	border: 0;
 }
 
-.activities-content {
+.activities_content {
 	width: auto;
 	float: none;
 	padding: 6px 5px 5px 45px;
 	font-size: 1.1em;
-	color: #333;
-	word-wrap: break-word;
+	color: #333333;
+	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 }
 
 .name {
@@ -78,18 +76,18 @@
 	font-weight: bold;
 }
 
-.name a, .activities-box .name a[href*=".php"] {
-	color: #333;
+.name a, .activities_box .name a[href*=".php"] {
+	color: #333333;
 	text-decoration: none;
 }
 
-.name a:hover, .activities-box .name a[href*=".php"]:hover {
+.name a:hover, .activities_box .name a[href*=".php"]:hover {
 	color: #005567;
 }
 
 .time {
 	float: right;
-	color: #999;
+	color: #999999;
 }
 
 .name, .time {
@@ -114,7 +112,6 @@
 }
 
 .status_controls {
-
 }
 
 .status_table {
@@ -127,6 +124,6 @@
 }
 
 .activities_holder {
-	padding-left: 0px;
+	padding-left: 0;
 	margin-left: 0;
 }

@@ -146,7 +146,7 @@ function warnings_script()
 	require_lang('ocf_warnings');
 
 	if (!ocf_may_warn_members())
-		access_denied('SPECIFIC_PERMISSION','warn_members');
+		access_denied('PRIVILEGE','warn_members');
 
 	$type=get_param('type');
 
@@ -174,7 +174,7 @@ function warnings_script()
 	}
 	if ($content->is_empty()) $content=paragraph(do_lang_tempcode('NO_ENTRIES'),'rfdsfsdf3t45');
 
-	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>do_lang_tempcode('CHOOSE_SAVED_WARNING'),'CONTENT'=>$content));
+	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('CHOOSE_SAVED_WARNING'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->evaluate_echo();
 }
 
@@ -197,7 +197,7 @@ function warnings_script()
  */
 function ocf_make_warning($member_id,$explanation,$by=NULL,$time=NULL,$is_warning=1,$silence_from_topic=NULL,$silence_from_forum=NULL,$probation=0,$banned_ip='',$charged_points=0,$banned_member=0,$changed_usergroup_from=NULL)
 {
-	if ((is_null($time)) && (!ocf_may_warn_members())) access_denied('SPECIFIC_PERMISSION','warn_members');
+	if ((is_null($time)) && (!ocf_may_warn_members())) access_denied('PRIVILEGE','warn_members');
 
 	if (is_null($time)) $time=time();
 	if (is_null($by)) $by=get_member();
@@ -232,7 +232,7 @@ function ocf_make_warning($member_id,$explanation,$by=NULL,$time=NULL,$is_warnin
  */
 function ocf_edit_warning($warning_id,$explanation,$is_warning=1)
 {
-	if (!ocf_may_warn_members()) access_denied('SPECIFIC_PERMISSION','warn_members');
+	if (!ocf_may_warn_members()) access_denied('PRIVILEGE','warn_members');
 
    $member_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_warnings','w_member_id',array('id'=>$warning_id));
    if (is_null($member_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -252,7 +252,7 @@ function ocf_edit_warning($warning_id,$explanation,$is_warning=1)
  */
 function ocf_delete_warning($warning_id)
 {
-	if (!ocf_may_warn_members()) access_denied('SPECIFIC_PERMISSION','warn_members');
+	if (!ocf_may_warn_members()) access_denied('PRIVILEGE','warn_members');
 
 	$member_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_warnings','w_member_id',array('id'=>$warning_id));
 	if (is_null($member_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));

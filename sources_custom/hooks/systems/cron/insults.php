@@ -25,7 +25,7 @@ class Hook_cron_insults
 
 		require_lang('insults');
 
-		// ensure it is done once per week
+		// ensure it is done once per week		
 		$time=time();
 		$last_time=intval(get_value('last_insult_time'));
 		if ($last_time>time()-24*60*60) return; // run it once a day

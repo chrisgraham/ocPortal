@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_zone_editor
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_core_zone_editor
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,7 +72,7 @@ class Hook_addon_registry_core_zone_editor
 	function get_file_list()
 	{
 		return array(
-
+			'zone_editor.css',
 			'sources/hooks/systems/snippets/exists_zone.php',
 			'sources/hooks/systems/addon_registry/core_zone_editor.php',
 			'ZONE_EDITOR_SCREEN.tpl',
@@ -82,22 +81,22 @@ class Hook_addon_registry_core_zone_editor
 			'themes/default/images/bigicons/zone_editor.png',
 			'themes/default/images/bigicons/zones.png',
 			'adminzone/pages/modules/admin_zones.php',
-			'themes/default/images/pagepics/zones.png',
+			'themes/default/images/pagepics/zones.png'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'ZONE_EDITOR_PANEL.tpl'=>'administrative__zone_editor_screen',
-				'ZONE_EDITOR_SCREEN.tpl'=>'administrative__zone_editor_screen',
-				);
+			'ZONE_EDITOR_PANEL.tpl' => 'administrative__zone_editor_screen',
+			'ZONE_EDITOR_SCREEN.tpl' => 'administrative__zone_editor_screen'
+		);
 	}
 
 	/**
@@ -110,28 +109,48 @@ class Hook_addon_registry_core_zone_editor
 	function tpl_preview__administrative__zone_editor_screen()
 	{
 		require_lang('zones');
-		$comcode_editor=do_lorem_template('COMCODE_EDITOR_BUTTON',array('DIVIDER'=>true,'FIELD_NAME'=>lorem_word(),'TITLE'=>lorem_word(),'B'=>'block'));
+		$comcode_editor = do_lorem_template('COMCODE_EDITOR_BUTTON', array(
+			'DIVIDER' => true,
+			'FIELD_NAME' => lorem_word(),
+			'TITLE' => lorem_word(),
+			'B' => 'block'
+		));
 
-		$editor=array();
-		foreach (array('panel_left','panel_middle','panel_right') as $i=>$for)
+		$editor = array();
+		foreach (array(
+			'panel_left',
+			'panel_middle',
+			'panel_right'
+		) as $i => $for)
 		{
-			$editor[$for]=do_lorem_template('ZONE_EDITOR_PANEL',array('CLASS'=>'','ZONES'=>'','CURRENT_ZONE'=>'','ZONE'=>'','COMCODE'=>lorem_phrase(),'PREVIEW'=>lorem_phrase(),'ID'=>$for,'IS_PANEL'=>true,'TYPE'=>lorem_phrase(),'EDIT_URL'=>placeholder_url(),'SETTINGS'=>NULL,'COMCODE_EDITOR'=>$comcode_editor));
+			$editor[$for] = do_lorem_template('ZONE_EDITOR_PANEL', array(
+				'CLASS' => '',
+				'ZONES' => '',
+				'CURRENT_ZONE' => '',
+				'ZONE' => '',
+				'COMCODE' => lorem_phrase(),
+				'PREVIEW' => lorem_paragraph_html(),
+				'ID' => $for,
+				'IS_PANEL' => true,
+				'TYPE' => lorem_phrase(),
+				'EDIT_URL' => placeholder_url(),
+				'SETTINGS' => NULL,
+				'COMCODE_EDITOR' => $comcode_editor
+			));
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('ZONE_EDITOR_SCREEN',array(
-					'PING_URL'=>placeholder_url(),
-					'WARNING_DETAILS'=>'',
-					'TITLE'=>lorem_title(),
-					'ID'=>'',
-					'LANG'=>fallback_lang(),
-					'URL'=>placeholder_url(),
-					'LEFT_EDITOR'=>$editor['panel_left'],
-					'RIGHT_EDITOR'=>$editor['panel_right'],
-					'MIDDLE_EDITOR'=>$editor['panel_middle'],
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ZONE_EDITOR_SCREEN', array(
+				'PING_URL' => placeholder_url(),
+				'WARNING_DETAILS' => '',
+				'TITLE' => lorem_title(),
+				'ID' => '',
+				'LANG' => fallback_lang(),
+				'URL' => placeholder_url(),
+				'LEFT_EDITOR' => $editor['panel_left'],
+				'RIGHT_EDITOR' => $editor['panel_right'],
+				'MIDDLE_EDITOR' => $editor['panel_middle']
+			)), NULL, '', true)
 		);
 	}
 }

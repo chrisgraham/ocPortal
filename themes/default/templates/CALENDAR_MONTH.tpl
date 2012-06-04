@@ -1,4 +1,4 @@
-<table summary="{!SPREAD_TABLE}" class="calendar_month variable_table">
+<table summary="{!SPREAD_TABLE}" class="calendar_month autosized_table">
 	<thead>
 		<tr>
 			<th></th>

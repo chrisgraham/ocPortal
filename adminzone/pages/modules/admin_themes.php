@@ -202,6 +202,8 @@ class Module_admin_themes
 		require_code('themes2');
 		require_lang('zones');
 
+		require_css('themes_editor');
+
 		require_javascript('javascript_themeing');
 
 		$type=get_param('type','misc');
@@ -238,11 +240,13 @@ class Module_admin_themes
 	 */
 	function manage_themes()
 	{
-		$title=get_page_title('MANAGE_THEMES');
+		$title=get_screen_title('MANAGE_THEMES');
 
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_THEMES');
 
 		$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),NULL,'ORDER BY zone_title',50/*reasonable limit; zone_title is sequential for default zones*/);
+
+		require_css('do_next');
 
 		// Show all themes
 		$_themes=find_all_themes(true);
@@ -379,7 +383,7 @@ class Module_admin_themes
 		{
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'zones SET zone_theme=\''.db_escape_string($theme).'\' WHERE '.db_string_not_equal_to('zone_name','cms').' AND '.db_string_not_equal_to('zone_name','adminzone'));
 		}
-		persistant_cache_empty();
+		persistent_cache_empty();
 
 		$before=better_parse_ini_file((($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini');
 		$myfile=@fopen((($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.filter_naughty($theme).'/theme.ini','wt') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini');
@@ -429,7 +433,7 @@ class Module_admin_themes
 	 */
 	function add_theme()
 	{
-		$title=get_page_title('ADD_THEME');
+		$title=get_screen_title('ADD_THEME');
 
 		$fields=$this->get_theme_fields();
 
@@ -474,7 +478,7 @@ class Module_admin_themes
 	 */
 	function _add_theme()
 	{
-		$title=get_page_title('ADD_THEME');
+		$title=get_screen_title('ADD_THEME');
 
 		$theme=post_param('theme');
 		require_code('type_validation');
@@ -500,7 +504,7 @@ class Module_admin_themes
 	 */
 	function edit_theme()
 	{
-		$title=get_page_title('EDIT_THEME');
+		$title=get_screen_title('EDIT_THEME');
 
 		$theme=get_param('theme',false,true);
 
@@ -539,7 +543,7 @@ class Module_admin_themes
 	{
 		if (post_param_integer('delete',0)==1)
 		{
-			$title=get_page_title('DELETE_THEME');
+			$title=get_screen_title('DELETE_THEME');
 
 			$theme=get_param('old_theme',false,true);
 			require_code('themes3');
@@ -548,7 +552,7 @@ class Module_admin_themes
 			$to='';
 		} elseif (post_param_integer('copy',0)==1)
 		{
-			$title=get_page_title('COPY_THEME');
+			$title=get_screen_title('COPY_THEME');
 
 			$theme=get_param('old_theme',false,true);
 			$to=post_param('theme',$theme); // Can't rename the default theme, so there's no such field for it
@@ -560,7 +564,7 @@ class Module_admin_themes
 			$this->save_theme_changes($to);
 		} else
 		{
-			$title=get_page_title('EDIT_THEME');
+			$title=get_screen_title('EDIT_THEME');
 
 			$theme=get_param('old_theme',false,true);
 			$to=post_param('theme',$theme); // Can't rename the default theme, so there's no such field for it
@@ -592,7 +596,7 @@ class Module_admin_themes
 	/**
 	 * The do-next manager for after download content management.
 	 *
-	 * @param  tempcode			The title (output of get_page_title)
+	 * @param  tempcode			The title (output of get_screen_title)
 	 * @param  tempcode			Some description to show, saying what happened
 	 * @param  ID_TEXT			The theme that was just handled
 	 * @param  ?LANGUAGE_NAME  The language we were working in (NULL: autodetect) (blank: autodetect)
@@ -710,7 +714,7 @@ class Module_admin_themes
 	 */
 	function choose_css()
 	{
-		$title=get_page_title('EDIT_CSS');
+		$title=get_screen_title('EDIT_CSS');
 
 		require_code('form_templates');
 
@@ -757,7 +761,7 @@ class Module_admin_themes
 	{
 		$file=filter_naughty(get_param('file','global.css'));
 
-		$title=get_page_title('_EDIT_CSS',true,array($file));
+		$title=get_screen_title('_EDIT_CSS',true,array($file));
 
 		if (get_option('editarea')=='1')
 		{
@@ -891,7 +895,7 @@ class Module_admin_themes
 	 */
 	function _edit_css()
 	{
-		$title=get_page_title('EDIT_CSS');
+		$title=get_screen_title('EDIT_CSS');
 
 		$file=filter_naughty(get_param('file','global.css'));
 
@@ -1063,7 +1067,7 @@ class Module_admin_themes
 	 */
 	function edit_templates()
 	{
-		$title=get_page_title('EDIT_TEMPLATES');
+		$title=get_screen_title('EDIT_TEMPLATES');
 
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_markup';
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_TEMPLATES');
@@ -1078,6 +1082,7 @@ class Module_admin_themes
 		require_code('form_templates');
 		$temp=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
 		$files='';
+		$files_tmp='';
 		$stub='';
 		foreach ($filesarray as $file)
 		{
@@ -1086,20 +1091,32 @@ class Module_admin_themes
 			$new_stub=dirname($file);
 			if ($stub!=$new_stub)
 			{
-				$temp=form_input_list_entry('!'.$new_stub,false,$new_stub.':',true,true);
+				$temp=form_input_list_group($new_stub,$files_tmp);
 				$files.=$temp->evaluate(); // XHTMLXHTML
 				$stub=$new_stub;
 			}
 			$_file=substr($file,strrpos($file,'/')+1);
 			$temp=form_input_list_entry($_file,false,/*'- '.*/basename($file));
-			$files.=$temp->evaluate(); // XHTMLXHTML
+			$files_tmp.=$temp->evaluate(); // XHTMLXHTML
 		}
+		$temp=form_input_list_group($new_stub,$files_tmp);
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_multi_list(do_lang_tempcode('EXISTING'),'','f0file',make_string_tempcode($files),NULL,35));
-		$fields->attach(form_input_line(do_lang_tempcode('SEARCH'),do_lang_tempcode('DESCRIPTION_TEMPLATES_SEARCH'),'search','',false));
-		$fields->attach(form_input_codename(do_lang_tempcode('NEW'),do_lang_tempcode('NEW_TEMPLATE'),'f0file2','',false));
+
+		$set_name='template';
+		$required=true;
+		$set_title=do_lang_tempcode('TEMPLATE');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_multi_list(do_lang_tempcode('EXISTING'),'','f0file',make_string_tempcode($files),NULL,35));
+
+		$field_set->attach(form_input_line(do_lang_tempcode('SEARCH'),do_lang_tempcode('DESCRIPTION_TEMPLATES_SEARCH'),'search','',false));
+
+		$field_set->attach(form_input_codename(do_lang_tempcode('NEW'),do_lang_tempcode('NEW_TEMPLATE'),'f0file2','',false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme),'_SELF');
-		$edit_form=do_template('FORM',array('_GUID'=>'b26747b4a29281baf83b31167c63582a','GET'=>true,'HIDDEN'=>'','TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'JAVASCRIPT'=>'standardAlternateFields(\'f0file\',\'f0file2\',\'search\');'));
+		$edit_form=do_template('FORM',array('_GUID'=>'b26747b4a29281baf83b31167c63582a','GET'=>true,'HIDDEN'=>'','TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
 
 		list($warning_details,$ping_url)=handle_conflict_resolution(''); // Intentionally blank, because only one person should edit any of all templates at any time (because they depend on each other)
 
@@ -1119,7 +1136,7 @@ class Module_admin_themes
 		$theme=get_param('theme');
 		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		$title=get_page_title('EDIT_TEMPLATES');
+		$title=get_screen_title('EDIT_TEMPLATES');
 
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_MARKUP');
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_themes';
@@ -1233,9 +1250,8 @@ class Module_admin_themes
 				$a=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>'FOOTER'),'_SELF');
 				$b=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>'STYLED_HTML_WRAP'),'_SELF');
 				$c=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>'BASIC_HTML_WRAP'),'_SELF');
-				$d=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>'POPUP_HTML_WRAP'),'_SELF');
-				$e=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>'MAIL'),'_SELF');
-				attach_message(do_lang_tempcode('HEADER_EDIT_ALSO',escape_html($a->evaluate()),escape_html($b->evaluate()),array(escape_html($c->evaluate()),escape_html($d->evaluate()),escape_html($e->evaluate()))),'inform');
+				$d=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>'MAIL'),'_SELF');
+				attach_message(do_lang_tempcode('HEADER_EDIT_ALSO',escape_html($a->evaluate()),escape_html($b->evaluate()),array(escape_html($c->evaluate()),escape_html($d->evaluate()))),'inform');
 			}
 
 			// Support searching
@@ -1369,7 +1385,7 @@ class Module_admin_themes
 											array('IF_EMPTY','1'),
 											array('IF','1'),
 											array('IF_ADJACENT','1'),
-											array('SHIFT_ENCODE','1'),
+											array('SET','1'),
 											array('LOOP','1'), // To simplify things, we won't throw all options at the user
 									);
 			$directives=$this->generate_from($_directives,'DIRECTIVE',$i);
@@ -1383,7 +1399,6 @@ class Module_admin_themes
 											array('GET','1'),
 											array('INC','1'),
 											array('DEC','1'),
-											array('SHIFT_DECODE','1'),
 											);
 			$programmatic_symbols=$this->generate_from($_programmatic_symbols,'PROGRAMMATIC_SYMBOL',$i);
 
@@ -1471,7 +1486,28 @@ class Module_admin_themes
 
 			$display=($count==0)?'block':'none';
 			if ($count==0) $first_id=$i;
-			$template_editors->attach(do_template('TEMPLATE_EDIT_SCREEN_EDITOR',array('PREVIEW_URL'=>$preview_url,'CODENAME'=>str_replace('.tpl','',$codename),'I'=>$i,'DISPLAY'=>$display,'GUIDS'=>$guids,'GUID'=>$guid,'ARITHMETICAL_SYMBOLS'=>$arithmetical_symbols,'FORMATTING_SYMBOLS'=>$formatting_symbols,'LOGICAL_SYMBOLS'=>$logical_symbols,'ABSTRACTION_SYMBOLS'=>$abstraction_symbols,'PARAMETERS'=>$parameters,'DIRECTIVES'=>$directives,'PROGRAMMATIC_SYMBOLS'=>$programmatic_symbols,'SYMBOLS'=>$symbols,'FILE'=>$file,'FILE_SAVE_TARGET'=>str_replace('default/',$theme.'/',$file),'OLD_CONTENTS'=>$old_contents,'CONTENTS'=>$contents,'REVISION_HISTORY'=>$revision_history)));
+			$template_editors->attach(do_template('TEMPLATE_EDIT_SCREEN_EDITOR',array(
+				'_GUID'=>'9d3b75215c34c2b4b366118605b4cd59',
+				'PREVIEW_URL'=>$preview_url,
+				'CODENAME'=>str_replace('.tpl','',$codename),
+				'I'=>$i,
+				'DISPLAY'=>$display,
+				'GUIDS'=>$guids,
+				'GUID'=>$guid,
+				'ARITHMETICAL_SYMBOLS'=>$arithmetical_symbols,
+				'FORMATTING_SYMBOLS'=>$formatting_symbols,
+				'LOGICAL_SYMBOLS'=>$logical_symbols,
+				'ABSTRACTION_SYMBOLS'=>$abstraction_symbols,
+				'PARAMETERS'=>$parameters,
+				'DIRECTIVES'=>$directives,
+				'PROGRAMMATIC_SYMBOLS'=>$programmatic_symbols,
+				'SYMBOLS'=>$symbols,
+				'FILE'=>$file,
+				'FILE_SAVE_TARGET'=>str_replace('default/',$theme.'/',$file),
+				'OLD_CONTENTS'=>$old_contents,
+				'CONTENTS'=>$contents,
+				'REVISION_HISTORY'=>$revision_history
+			)));
 
 			$count++;
 		}
@@ -1522,7 +1558,7 @@ class Module_admin_themes
 		require_code('view_modes');
 		erase_tempcode_cache();
 
-		$title=get_page_title('EDIT_TEMPLATES');
+		$title=get_screen_title('EDIT_TEMPLATES');
 
 		foreach (array_keys($_REQUEST) as $_i)
 		{
@@ -1637,9 +1673,19 @@ class Module_admin_themes
 			$list->attach(combo_get_image_paths($path,get_base_url().'/themes/default/images_custom/',get_file_base().'/themes/default/images_custom/'));
 		}*/
 		handle_max_file_size($hidden,'image');
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-	//	$fields->attach(form_input_radio(do_lang_tempcode('CHOOSE'),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),$list));
-		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'path',$path,false));
+
+		$set_name='image';
+		$required=true;
+		$set_title=do_lang_tempcode('IMAGE');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+	//	$fields->attach(form_input_radio(do_lang_tempcode('CHOOSE'),'',$list));
+
+		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','path',$path,false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 		return array($fields,$hidden);
 	}
 
@@ -1650,7 +1696,7 @@ class Module_admin_themes
 	 */
 	function add_image()
 	{
-		$title=get_page_title('ADD_THEME_IMAGE');
+		$title=get_screen_title('ADD_THEME_IMAGE');
 
 		$theme=get_param('theme');
 		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
@@ -1675,7 +1721,7 @@ class Module_admin_themes
 			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
 		}
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'7b8066b63002cda0a7628ddadddd9962','HIDDEN'=>$hidden,'TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>'standardAlternateFields(\'file\',\'path\');'));
+		return do_template('FORM_SCREEN',array('_GUID'=>'7b8066b63002cda0a7628ddadddd9962','HIDDEN'=>$hidden,'TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -1687,7 +1733,7 @@ class Module_admin_themes
 	{
 		require_code('uploads');
 
-		$title=get_page_title('ADD_THEME_IMAGE');
+		$title=get_screen_title('ADD_THEME_IMAGE');
 
 		$theme=post_param('theme');
 		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
@@ -1717,7 +1763,7 @@ class Module_admin_themes
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:add_image:theme='.post_param('theme'),do_lang_tempcode('CHOOSE'))));
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
-		persistant_cache_delete('THEME_IMAGES');
+		persistent_cache_delete('THEME_IMAGES');
 		erase_cached_templates();
 
 		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),$theme,$lang,'image',$id);
@@ -1730,7 +1776,7 @@ class Module_admin_themes
 	 */
 	function manage_images()
 	{
-		$title=get_page_title('MANAGE_THEME_IMAGES');
+		$title=get_screen_title('MANAGE_THEME_IMAGES');
 
 		if (function_exists('set_time_limit')) @set_time_limit(300);
 
@@ -1759,7 +1805,7 @@ class Module_admin_themes
 		$fields=form_input_huge_list(do_lang_tempcode('CODENAME'),'','id',make_string_tempcode($list),NULL,true,true,725);*/
 		require_code('themes2');
 		$ids=get_all_image_ids_type('',true,$GLOBALS['SITE_DB'],$theme);
-		$fields=form_input_picture_choose_specific(do_lang_tempcode('IMAGE'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang,true);
+		$fields=form_input_theme_image(do_lang_tempcode('CODENAME'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang,true,true);
 		$hidden=form_input_hidden('theme',$theme);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_image','lang'=>$lang),'_SELF');
 		$edit_form=do_template('FORM',array('_GUID'=>'48b3218750fcea21e0bf3be31ae58296','HIDDEN'=>$hidden,'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'GET'=>true,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
@@ -1779,7 +1825,7 @@ class Module_admin_themes
 	 */
 	function edit_image()
 	{
-		$title=get_page_title('EDIT_THEME_IMAGE');
+		$title=get_screen_title('EDIT_THEME_IMAGE');
 
 		$lang=choose_language($title,true,true);
 		if (is_object($lang)) return $lang;
@@ -1851,7 +1897,7 @@ class Module_admin_themes
 			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
 		}
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'b0e178ad1f840a07c4967f3c266c750b','HIDDEN'=>$hidden,'TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>'standardAlternateFields(\'file\',\'path\');'));
+		return do_template('FORM_SCREEN',array('_GUID'=>'b0e178ad1f840a07c4967f3c266c750b','HIDDEN'=>$hidden,'TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -1863,7 +1909,7 @@ class Module_admin_themes
 	{
 		require_code('uploads');
 
-		$title=get_page_title('EDIT_THEME_IMAGE');
+		$title=get_screen_title('EDIT_THEME_IMAGE');
 
 		$lang=choose_language($title,true,true);
 		if (is_object($lang)) return $lang;
@@ -1887,7 +1933,7 @@ class Module_admin_themes
 			if ($path[0]=='') return warn_screen($title,do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
 			actual_edit_theme_image($old_id,$theme,$lang,$id,$path[0]);
 		}
-		persistant_cache_delete('THEME_IMAGES');
+		persistent_cache_delete('THEME_IMAGES');
 
 		erase_cached_templates();
 
@@ -1904,7 +1950,7 @@ class Module_admin_themes
 	 */
 	function list_screen_previews()
 	{
-		$title = get_page_title('SCREEN_PREVIEWS');
+		$title = get_screen_title('SCREEN_PREVIEWS');
 
 		$GLOBALS['HELPER_PANEL_PIC']='';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='';
@@ -1947,7 +1993,7 @@ class Module_admin_themes
 
 					$template_used = "(".implode(', ',$all_previews__by_screen[$func]).")";
 
-					$tpl_x=do_template('TEMPLATE_LIST',array('URL'=>$preview_url,'COLOR'=>'green','TEMPLATE'=>preg_replace('#^tpl_preview\_\_#','',$func),'LIST'=>$template_used));
+					$tpl_x=do_template('TEMPLATE_LIST',array('_GUID'=>'1f27f619db553dfcb8d427e70a736226','URL'=>$preview_url,'COLOR'=>'green','TEMPLATE'=>preg_replace('#^tpl_preview\_\_#','',$func),'LIST'=>$template_used));
 					if (preg_match('#^tpl_preview\_\_administrative\_\_#',$func)!=0)
 					{
 						$lis_admin->attach($tpl_x);
@@ -1972,7 +2018,7 @@ class Module_admin_themes
 		/* $lis (the main previews) will be displayed in the main INDEX_SCREEN content */
 
 		/* LISTING ADMIN PREVIEWS */
-		$post->attach(do_template('TEMPLATE_LIST_WRAP',array('LI'=>$lis_admin,'TITLE'=>do_lang('ADMIN_SCREENS'))));
+		$post->attach(do_template('TEMPLATE_LIST_WRAP',array('_GUID'=>'1e847f3c75998f2276765bc0c8ab6b78','LI'=>$lis_admin,'TITLE'=>do_lang('ADMIN_SCREENS'))));
 
 		/* LISTING COMCODE FILES   */
 		$com_li = new ocp_tempcode();
@@ -1986,10 +2032,10 @@ class Module_admin_themes
 
 				$file = $page.'.txt';
 				$url = build_url(array('page'=>$page),$zone);
-				$com_li->attach(do_template('TEMPLATE_LIST',array('URL'=>$url,'COLOR'=>'','TEMPLATE'=>$file,'LIST'=>'')));
+				$com_li->attach(do_template('TEMPLATE_LIST',array('_GUID'=>'9db6fa9333470137ccf9bb752fd9b19e','URL'=>$url,'COLOR'=>'','TEMPLATE'=>$file,'LIST'=>'')));
 			}
 		}
-		$post->attach(do_template('TEMPLATE_LIST_WRAP',array('LI'=>$com_li,'TITLE'=>do_lang('COMCODE_PAGES'))));
+		$post->attach(do_template('TEMPLATE_LIST_WRAP',array('_GUID'=>'adf69728048cbdbc3a0d9a2e2485a234','LI'=>$com_li,'TITLE'=>do_lang('COMCODE_PAGES'))));
 
 		/* LISTING HTML FILES   */
 		$htm_li = new ocp_tempcode();
@@ -2000,12 +2046,12 @@ class Module_admin_themes
 				$file = $page.'.htm';
 				$url = build_url(array('page'=>$page),$zone);
 
-				$htm_li->attach(do_template('TEMPLATE_LIST',array('URL'=>$url,'COLOR'=>'','TEMPLATE'=>$file,'LIST'=>'')));
+				$htm_li->attach(do_template('TEMPLATE_LIST',array('_GUID'=>'16d1c1c5dc5556254f7a3f28a44fdb52','URL'=>$url,'COLOR'=>'','TEMPLATE'=>$file,'LIST'=>'')));
 			}
 		}
-		$post->attach(do_template('TEMPLATE_LIST_WRAP',array('LI'=>$htm_li,'TITLE'=>do_lang('HTML_PAGES'))));
+		$post->attach(do_template('TEMPLATE_LIST_WRAP',array('_GUID'=>'2220938b443ecdb7d3f2d869665b3a4e','LI'=>$htm_li,'TITLE'=>do_lang('HTML_PAGES'))));
 
-		return do_template('INDEX_SCREEN',array('TITLE'=>$title,'CONTENT'=>$lis,'POST'=>$post,'PRE'=>''));
+		return do_template('INDEX_SCREEN',array('_GUID'=>'6137f107de679580a6aafe36af427cdd','TITLE'=>$title,'CONTENT'=>$lis,'POST'=>$post,'PRE'=>''));
 	}
 
 	/**
@@ -2028,8 +2074,8 @@ class Module_admin_themes
 		$hook=get_param('hook');
 		$function=get_param('function');
 
-		//get_page_title('SCREEN_PREVIEW',true,array(escape_html($function))); // Affects breadcrumbs etc
-		get_page_title($function,false); // Affects breadcrumbs etc
+		//get_screen_title('SCREEN_PREVIEW',true,array(escape_html($function))); // Affects breadcrumbs etc
+		get_screen_title($function,false); // Affects breadcrumbs etc
 		breadcrumb_set_parents(array(array('_SELF:_SELF:list',do_lang_tempcode('SCREEN_PREVIEWS'))));
 
 		return render_screen_preview($template,$hook,$function);

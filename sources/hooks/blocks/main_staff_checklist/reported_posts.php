@@ -48,11 +48,11 @@ class Hook_checklist_reported_posts
 			$img	=	'completed';
 		}
 
-		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('ORDER_STATUS'=>$img));
+		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'c6e8455efb7d1cf598983795103d2a66','ORDER_STATUS'=>$img));
 
 		$url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id);
 
-		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('REPORTED_POSTS_FORUM'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($outstanding)))));
+		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'9ee69e250c997730a3670ed77d681e5f','URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('REPORTED_POSTS_FORUM'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($outstanding)))));
 		return array(array($tpl,NULL,$outstanding,NULL));
 	}
 

@@ -2,17 +2,17 @@
 <hr class="spaced_rule" />
 {+END}
 
-<{$?,{$VALUE_OPTION,html5},nav,div} class="do_next_section_wrap"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
-	<!-- Layout table needed to ensure perfect alignment (height indeterminate) -->
+<nav class="do_next_section_wrap" role="navigation">
+	{$,Layout table needed to ensure perfect alignment (height indeterminate)}
 	<table summary="" class="do_next_section">
 		<colgroup>
-			<col style="width: 9px" />
-			<col style="width: 168px" />
-			<col style="width: 10px" />
-			<col style="width: 168px" />
-			<col style="width: 10px" />
-			<col style="width: 168px" />
-			<col style="width: 10px" />
+			<col class="do_next_column1" />
+			<col class="do_next_column2" />
+			<col class="do_next_column3" />
+			<col class="do_next_column4" />
+			<col class="do_next_column5" />
+			<col class="do_next_column6" />
+			<col class="do_next_column7" />
 		</colgroup>
 
 		<tbody>
@@ -31,7 +31,7 @@
 			<tr>
 				<td class="do_next_pretty_mid_{!en_left}"></td>
 				<td colspan="5" class="do_next_section_inner">
-					<!-- Layout table needed to align icons across rows, without assuming icon label width -->
+					{$,Layout table needed to align icons across rows, without assuming icon label width}
 					<div class="wide_table_wrap"><table summary="" class="wide_table">
 						<tbody>
 							<tr>
@@ -41,7 +41,7 @@
 									{$,Finish off the row}
 									{$SET,I,{I}}
 									{+START,WHILE,{$NEQ,{$REM,{$GET,I},4},0}}
-										<td class="do_next_item_spacer">&nbsp;</td>
+										<td class="do_next_item_spacer"></td>
 										{$INC,I}
 									{+END}
 								{+END}
@@ -58,4 +58,4 @@
 			</tr>
 		</tbody>
 	</table>
-</{$?,{$VALUE_OPTION,html5},nav,div}>
+</nav>

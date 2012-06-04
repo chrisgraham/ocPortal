@@ -11,7 +11,7 @@ function update_details_box(element)
 	var target=document.getElementById('details_target');
 	if (element.value=='')
 	{
-		setInnerHTML(target,'{!NO_ENTRY_POINT_SELECTED^;}');
+		set_inner_html(target,'{!NO_ENTRY_POINT_SELECTED^;}');
 		return;
 	}
 
@@ -97,17 +97,17 @@ function update_details_box(element)
 	}
 
 	// Output
-	setInnerHTML(target,'');
+	set_inner_html(target,'');
 	if (action_buildup!='')
 	{
 		var actions=document.createElement('div');
-		setInnerHTML(actions,actions_tpl.replace(/\[1\]/,action_buildup));
+		set_inner_html(actions,actions_tpl.replace(/\[1\]/,action_buildup));
 		target.appendChild(actions);
 	}
 	if (info_buildup!='')
 	{
 		var info=document.createElement('div');
-		setInnerHTML(info,info_tpl.replace(/\[1\]/,info_buildup));
+		set_inner_html(info,info_tpl.replace(/\[1\]/,info_buildup));
 		target.appendChild(info);
 	}
 }

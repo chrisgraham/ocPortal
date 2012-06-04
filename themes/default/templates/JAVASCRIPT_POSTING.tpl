@@ -6,7 +6,7 @@
 // ATTACHMENTS
 // ===========
 
-function addAttachment(startNum,posting_field_name)
+function add_attachment(startNum,posting_field_name)
 {
 	if (typeof window.numAttachments=='undefined') return;
 	if (typeof window.maxAttachments=='undefined') return;
@@ -16,7 +16,7 @@ function addAttachment(startNum,posting_field_name)
 	numAttachments++;
 
 	var new_div=document.createElement('div');
-	setInnerHTML(new_div,attachment_template.replace(/\_\_num_attachments\_\_/g,numAttachments));
+	set_inner_html(new_div,attachment_template.replace(/\_\_num_attachments\_\_/g,numAttachments));
 	addTo.appendChild(new_div);
 	document.getElementById('file'+numAttachments).setAttribute('unselectable','on');
 
@@ -34,10 +34,10 @@ function attachment_present(post_value,number)
 	return !(post_value.indexOf('[attachment]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe]new_'+number+'[/attachment_safe]')==-1) && (post_value.indexOf('[attachment thumb="1"]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe thumb="1"]new_'+number+'[/attachment_safe]')==-1) && (post_value.indexOf('[attachment thumb="0"]new_'+number+'[/attachment]')==-1) && (post_value.indexOf('[attachment_safe thumb="0"]new_'+number+'[/attachment_safe]')==-1);
 }
 
-function setAttachment(field_name,number,filename)
+function set_attachment(field_name,number,filename)
 {
 	if (typeof window.is_comcode_xml=='undefined') return;
-	if (typeof window.insertTextbox=='undefined') return;
+	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.numAttachments=='undefined') return;
 	if (typeof window.maxAttachments=='undefined') return;
 
@@ -51,7 +51,7 @@ function setAttachment(field_name,number,filename)
 		tmp_form.preview.disabled=true;
 	}
 
-	var post_value=getTextbox(post);
+	var post_value=get_textbox(post);
 	var done=attachment_present(post.value,number) || attachment_present(post_value,number);
 	if (!done)
 	{
@@ -70,7 +70,7 @@ function setAttachment(field_name,number,filename)
 			is_image=(ext=='.png') || (ext=='.jpg') || (ext=='jpeg') || (ext=='.gif');
 		}
 
-		var wysiwyg=isWYSIWYGField(document.getElementById(field_name));
+		var wysiwyg=is_wysiwyg_field(document.getElementById(field_name));
 
 		if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 		var url='{$FIND_SCRIPT;,comcode_helper}';
@@ -97,7 +97,7 @@ function setAttachment(field_name,number,filename)
 					var add_another_field=(number==numAttachments) && (numAttachments<maxAttachments); // Needs running late, in case something happened inbetween
 					if (add_another_field)
 					{
-						addAttachment(numAttachments+1,field_name);
+						add_attachment(numAttachments+1,field_name);
 					}
 				} else // Cancelled
 				{
@@ -114,7 +114,7 @@ function setAttachment(field_name,number,filename)
 		// Add field for next one
 		var add_another_field=(number==numAttachments) && (numAttachments<maxAttachments);
 		if (add_another_field)
-			addAttachment(numAttachments+1,field_name);
+			add_attachment(numAttachments+1,field_name);
 	}
 }
 
@@ -124,25 +124,25 @@ function setAttachment(field_name,number,filename)
 
 function doInput_html(field_name)
 {
-	if (typeof window.insertTextboxWrapping=='undefined') return;
+	if (typeof window.insert_textboxWrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
-	insertTextboxWrapping(post,"semihtml","");
+	insert_textboxWrapping(post,"semihtml","");
 }
 
 function doInput_code(field_name)
 {
-	if (typeof window.insertTextboxWrapping=='undefined') return;
+	if (typeof window.insert_textboxWrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
-	insertTextboxWrapping(post,"codebox","");
+	insert_textboxWrapping(post,"codebox","");
 }
 
 function doInput_quote(field_name)
 {
-	if (typeof window.insertTextboxWrapping=='undefined') return;
+	if (typeof window.insert_textboxWrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
@@ -151,7 +151,7 @@ function doInput_quote(field_name)
 		'',
 		function(va)
 		{
-			if (va!==null) insertTextboxWrapping(post,"[quote=\""+va+"\"]","[/quote]");
+			if (va!==null) insert_textboxWrapping(post,"[quote=\""+va+"\"]","[/quote]");
 		},
 		"{!comcode:INPUT_COMCODE_quote^#}"
 	);
@@ -159,7 +159,7 @@ function doInput_quote(field_name)
 
 function doInput_box(field_name)
 {
-	if (typeof window.insertTextboxWrapping=='undefined') return;
+	if (typeof window.insert_textboxWrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
@@ -168,7 +168,7 @@ function doInput_box(field_name)
 		'',
 		function(va)
 		{
-			if (va!==null) insertTextboxWrapping(post,"[box=\""+va+"\" type=\"light\"]","[/box]");
+			if (va!==null) insert_textboxWrapping(post,"[box=\""+va+"\"]","[/box]");
 		},
 		"{!comcode:INPUT_COMCODE_box^#}"
 	);
@@ -176,7 +176,7 @@ function doInput_box(field_name)
 
 function doInput_menu(field_name)
 {
-	if (typeof window.insertTextbox=='undefined') return;
+	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
@@ -203,7 +203,7 @@ function doInput_menu(field_name)
 						{
 							add="[block=\""+escape_comcode(va)+"\" caption=\""+escape_comcode(vb)+"\" type=\"tree\"]side_stored_menu[/block]";
 						}
-						insertTextbox(element,add);
+						insert_textbox(element,add);
 					},
 					"{!comcode:INPUT_COMCODE_menu^#}"
 				);
@@ -226,21 +226,21 @@ function doInput_comcode(field_name,tag)
 	if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 	var url='{$FIND_SCRIPT;,comcode_helper}?field_name='+field_name;
 	if (tag) url+='&type=step2&tag='+tag;
-	if (isWYSIWYGField(document.getElementById(field_name))) url+='&in_wysiwyg=1';
+	if (is_wysiwyg_field(document.getElementById(field_name))) url+='&in_wysiwyg=1';
 	url+=keep_stub();
 	window.faux_open(maintain_theme_in_link(url),'','width=750,height=520,status=no,resizable=yes,scrollbars=yes',null,"{!INPUTSYSTEM_CANCEL#}");
 }
 
 function doInput_list(field_name,add)
 {
-	if (typeof window.insertTextbox=='undefined') return;
+	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	if (typeof add=='undefined') var add=[];
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
-	insertTextbox(post,"\n");
+	insert_textbox(post,"\n");
 	window.fauxmodal_prompt(
 		"{!ENTER_LIST_ENTRY^#}",
 		'',
@@ -255,28 +255,28 @@ function doInput_list(field_name,add)
 			var i;
 			if (is_comcode_xml(post))
 			{
-				insertTextbox(post,"<list>\n")
+				insert_textbox(post,"<list>\n")
 				for (i=0;i<add.length;i++)
 				{
-					insertTextbox(post,"<list_element>"+add[i]+"</list_element>\n")
+					insert_textbox(post,"<list_element>"+add[i]+"</list_element>\n")
 				}
-				insertTextbox(post,"</list>\n")
+				insert_textbox(post,"</list>\n")
 			} else
 			{
 				if (post.value.indexOf('[semihtml')!=-1)
-					insertTextbox(post,"[list]\n")
+					insert_textbox(post,"[list]\n")
 				for (i=0;i<add.length;i++)
 				{
 					if (post.value.indexOf('[semihtml')!=-1)
 					{
-						insertTextbox(post,"[*]"+add[i]+"\n")
+						insert_textbox(post,"[*]"+add[i]+"\n")
 					} else
 					{
-						insertTextbox(post," - "+add[i]+"\n")
+						insert_textbox(post," - "+add[i]+"\n")
 					}
 				}
 				if (post.value.indexOf('[semihtml')!=-1)
-					insertTextbox(post,"[/list]\n")
+					insert_textbox(post,"[/list]\n")
 			}
 		},
 		"{!comcode:INPUT_COMCODE_list^#}"
@@ -285,7 +285,7 @@ function doInput_list(field_name,add)
 
 function doInput_hide(field_name)
 {
-	if (typeof window.insertTextbox=='undefined') return;
+	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
@@ -306,10 +306,10 @@ function doInput_hide(field_name)
 						{
 							if (is_comcode_xml(element))
 							{
-								insertTextbox(element,"<hide><hideTitle>"+va+"</hideTitle>"+escape_html(vb)+"</hide>");
+								insert_textbox(element,"<hide><hideTitle>"+va+"</hideTitle>"+escape_html(vb)+"</hide>");
 							} else
 							{
-								insertTextbox(element,"[hide=\""+escape_comcode(va)+"\"]"+escape_comcode(vb)+"[/hide]");
+								insert_textbox(element,"[hide=\""+escape_comcode(va)+"\"]"+escape_comcode(vb)+"[/hide]");
 							}
 						}
 					},
@@ -323,7 +323,7 @@ function doInput_hide(field_name)
 
 function doInput_thumb(field_name,va)
 {
-	if (typeof window.insertTextbox=='undefined') return;
+	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
@@ -359,19 +359,19 @@ function doInput_thumb(field_name,va)
 								{
 									if (is_comcode_xml(element))
 									{
-										insertTextbox(element,"<img url=\""+escape_html(va)+"\">"+escape_html(vc)+"</img>");
+										insert_textbox(element,"<img url=\""+escape_html(va)+"\">"+escape_html(vc)+"</img>");
 									} else
 									{
-										insertTextbox(element,"[img=\""+escape_comcode(vc)+"\"]"+escape_comcode(va)+"[/img]");
+										insert_textbox(element,"[img=\""+escape_comcode(vc)+"\"]"+escape_comcode(va)+"[/img]");
 									}
 								} else
 								{
 									if (is_comcode_xml(element))
 									{
-										insertTextbox(element,"<thumb caption=\""+escape_html(vc)+"\">"+escape_html(va)+"</thumb>");
+										insert_textbox(element,"<thumb caption=\""+escape_html(vc)+"\">"+escape_html(va)+"</thumb>");
 									} else
 									{
-										insertTextbox(element,"[thumb caption=\""+escape_comcode(vc)+"\"]"+escape_comcode(va)+"[/thumb]");
+										insert_textbox(element,"[thumb caption=\""+escape_comcode(vc)+"\"]"+escape_comcode(va)+"[/thumb]");
 									}
 								}
 							},
@@ -388,7 +388,7 @@ function doInput_thumb(field_name,va)
 
 function doInput_attachment(field_name)
 {
-	if (typeof window.insertTextbox=='undefined') return;
+	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
@@ -396,7 +396,7 @@ function doInput_attachment(field_name)
 		'',
 		function(va)
 		{
-			if (!isInteger(va))
+			if (!is_integer(va))
 			{
 				window.fauxmodal_alert("{!NOT_VALID_ATTACHMENT^#}");
 			} else
@@ -405,10 +405,10 @@ function doInput_attachment(field_name)
 				element=ensure_true_id(element,field_name);
 				if (is_comcode_xml(element))
 				{
-					insertTextbox(element,"<attachment>new_"+va+"</attachment>");
+					insert_textbox(element,"<attachment>new_"+va+"</attachment>");
 				} else
 				{
-					insertTextbox(element,"[attachment]new_"+va+"[/attachment]");
+					insert_textbox(element,"[attachment]new_"+va+"[/attachment]");
 				}
 			}
 		},
@@ -418,7 +418,7 @@ function doInput_attachment(field_name)
 
 function doInput_url(field_name,va)
 {
-	if (typeof window.insertTextbox=='undefined') return;
+	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
@@ -443,10 +443,10 @@ function doInput_url(field_name,va)
 						element=ensure_true_id(element,field_name);
 						if (is_comcode_xml(element))
 						{
-							if (vb!=null) insertTextbox(element,"<url param=\""+escape_html(va)+"\">"+escape_html(vb)+"</url>");
+							if (vb!=null) insert_textbox(element,"<url param=\""+escape_html(va)+"\">"+escape_html(vb)+"</url>");
 						} else
 						{
-							if (vb!=null) insertTextbox(element,"[url=\""+escape_comcode(vb)+"\"]"+escape_comcode(va)+"[/url]");
+							if (vb!=null) insert_textbox(element,"[url=\""+escape_comcode(vb)+"\"]"+escape_comcode(va)+"[/url]");
 						}
 					},
 					"{!comcode:INPUT_COMCODE_url^#}"
@@ -459,7 +459,7 @@ function doInput_url(field_name,va)
 
 function doInput_page(field_name)
 {
-	if (typeof window.insertTextbox=='undefined') return;
+	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	var result;
@@ -528,16 +528,16 @@ function _doInput_page(field_name,result,vc)
 	element=ensure_true_id(element,field_name);
 	if (is_comcode_xml(element))
 	{
-		insertTextbox(element,"<page pageLink=\""+escape_html(result)+"\">"+escape_html(vc)+"</page>");
+		insert_textbox(element,"<page pageLink=\""+escape_html(result)+"\">"+escape_html(vc)+"</page>");
 	} else
 	{
-		insertTextbox(element,"[page=\""+escape_comcode(result)+"\"]"+escape_comcode(vc)+"[/page]");
+		insert_textbox(element,"[page=\""+escape_comcode(result)+"\"]"+escape_comcode(vc)+"[/page]");
 	}
 }
 
 function doInput_email(field_name,va)
 {
-	if (typeof window.insertTextbox=='undefined') return;
+	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	window.fauxmodal_prompt(
@@ -561,10 +561,10 @@ function doInput_email(field_name,va)
 							element=ensure_true_id(element,field_name);
 							if (is_comcode_xml(element))
 							{
-								if (vb!==null) insertTextbox(element,"<email address=\""+escape_html(va)+"\">"+escape_html(vb)+"</email>");
+								if (vb!==null) insert_textbox(element,"<email address=\""+escape_html(va)+"\">"+escape_html(vb)+"</email>");
 							} else
 							{
-								if (vb!==null) insertTextbox(element,"[email=\""+escape_comcode(vb)+"\"]"+escape_comcode(va)+"[/email]");
+								if (vb!==null) insert_textbox(element,"[email=\""+escape_comcode(vb)+"\"]"+escape_comcode(va)+"[/email]");
 							}
 						},
 						"{!comcode:INPUT_COMCODE_email^#}"
@@ -578,25 +578,25 @@ function doInput_email(field_name,va)
 
 function doInput_b(field_name)
 {
-	if (typeof window.insertTextboxWrapping=='undefined') return;
+	if (typeof window.insert_textboxWrapping=='undefined') return;
 
 	var element=document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
-	insertTextboxWrapping(element,"b","");
+	insert_textboxWrapping(element,"b","");
 }
 
 function doInput_i(field_name)
 {
-	if (typeof window.insertTextboxWrapping=='undefined') return;
+	if (typeof window.insert_textboxWrapping=='undefined') return;
 
 	var element=document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
-	insertTextboxWrapping(element,"i","");
+	insert_textboxWrapping(element,"i","");
 }
 
 function doInput_font(field_name)
 {
-	if (typeof window.insertTextboxWrapping=='undefined') return;
+	if (typeof window.insert_textboxWrapping=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	var element=document.getElementById(field_name);
@@ -612,14 +612,14 @@ function doInput_font(field_name)
 	}
 	if (is_comcode_xml(element))
 	{
-		insertTextboxWrapping(document.getElementById(field_name),'<font param=\"'+escape_html(face.value)+'\" color=\"'+escape_html(colour.value)+'\" size=\"'+escape_html(size.value)+'\">','</font>');
+		insert_textboxWrapping(document.getElementById(field_name),'<font param=\"'+escape_html(face.value)+'\" color=\"'+escape_html(colour.value)+'\" size=\"'+escape_html(size.value)+'\">','</font>');
 	} else
 	{
-		insertTextboxWrapping(document.getElementById(field_name),'[font=\"'+escape_comcode(face.value)+'\" color=\"'+escape_comcode(colour.value)+'\" size=\"'+escape_comcode(size.value)+'\"]','[/font]');
+		insert_textboxWrapping(document.getElementById(field_name),'[font=\"'+escape_comcode(face.value)+'\" color=\"'+escape_comcode(colour.value)+'\" size=\"'+escape_comcode(size.value)+'\"]','[/font]');
 	}
 }
 
-function setFontSizes(list)
+function set_font_sizes(list)
 {
 	var i=0;
 	for (i=1;i<list.options.length;i++)
@@ -628,7 +628,7 @@ function setFontSizes(list)
 	}
 }
 
-function desetFontSizes(list)
+function deset_font_sizes(list)
 {
 	var i=0;
 	for (i=1;i<list.options.length;i++)
@@ -637,9 +637,13 @@ function desetFontSizes(list)
 	}
 }
 
-function init_form_saving()
+// =====
+// OTHER
+// =====
+
+function init_form_saving(form_id)
 {
-	var posting_form=document.getElementById('posting_form');
+	var posting_form=document.getElementById(form_id);
 	var i,name,fields_to_do=[],cookie_name,fields_to_do_counter=0,biggest_length_data='',cookie_value,result,type;
 	for (i=0;i<posting_form.elements.length;i++)
 	{
@@ -649,7 +653,7 @@ function init_form_saving()
 		{
 			cookie_name='ocp_autosave_'+window.location.pathname+window.location.search.replace(/[\?&]redirect=.*/,'')+':'+name;
 			cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
-			cookie_value=ReadCookie(encodeURIComponent(cookie_name));
+			cookie_value=read_cookie(encodeURIComponent(cookie_name));
 
 			if ((cookie_value!='') && (cookie_value!='0'))
 			{
@@ -665,7 +669,7 @@ function init_form_saving()
 				}
 			}
 			window.last_autosave=new Date();
-			addEventListenerAbstract(posting_form.elements[i],'keypress',handle_form_saving);
+			add_event_listener_abstract(posting_form.elements[i],'keypress',handle_form_saving);
 			posting_form.elements[i].externalonKeyPress=handle_form_saving;
 		}
 	}
@@ -685,7 +689,7 @@ function init_form_saving()
 
 						if ((posting_form.elements[key]) && (posting_form.elements[key].style))
 						{
-							setTextbox(posting_form.elements[key],fields_to_do[key],fields_to_do[key]);
+							set_textbox(posting_form.elements[key],fields_to_do[key],fields_to_do[key]);
 						}
 					}
 				} else
@@ -696,7 +700,7 @@ function init_form_saving()
 
 						cookie_name='ocp_autosave_'+window.location.pathname+window.location.search.replace(/[\?&]redirect=.*/,'')+':'+key;
 						cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
-						SetCookie(encodeURIComponent(cookie_name),'0',0.1);
+						set_cookie(encodeURIComponent(cookie_name),'0',0.1);
 					}
 				}
 			}
@@ -720,8 +724,8 @@ function handle_form_saving(event,target,force)
 
 	var cookie_name='ocp_autosave_'+window.location.pathname+window.location.search.replace(/[\?&]redirect=.*/,'')+':'+target.name;
 	cookie_name=cookie_name.replace(/[\.=,; \t\r\n\013\014\/?]/g,'');
-	var value=getTextbox(target)+String.fromCharCode(event.keyCode?event.keyCode:event.charCode);
-	SetCookie(encodeURIComponent(cookie_name),'1',1);
+	var value=get_textbox(target)+String.fromCharCode(event.keyCode?event.keyCode:event.charCode);
+	set_cookie(encodeURIComponent(cookie_name),'1',1);
 	require_javascript('javascript_ajax');
 	do_ajax_request('{$FIND_SCRIPT_NOHTTP;,autosave}?type=store'+keep_stub(),function() { },'key='+window.encodeURIComponent(cookie_name)+'&value='+window.encodeURIComponent(value));
 

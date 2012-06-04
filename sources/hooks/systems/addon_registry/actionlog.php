@@ -59,10 +59,10 @@ class Hook_addon_registry_actionlog
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-			'previously_in_addon'=>array('actionlog'),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array(),
+			'previously_in_addon' => array('actionlog'),
 		);
 	}
 

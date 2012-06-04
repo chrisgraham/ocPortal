@@ -164,7 +164,7 @@ class Block_side_last_fm
 
 					if($track_images!='')
 					{
-						$out.='<div class="float_surrounder"><img width="64" src="'.$track_images.'" title="" style="float: left; margin: 3px;" /><a href="'.$track_url.'" target="_blank">'.$track_name.'</a><br />';
+						$out.='<div class="float_surrounder"><img width="64" src="'.$track_images.'" style="float: left; margin: 3px;" /><a href="'.$track_url.'" target="_blank">'.$track_name.'</a><br />';
 						$out.='<a href="'.$artist_url.'" target="_blank" style="font-style: italic;">'.$artist.'</a><br />';
 						$out.='Total Plays: '.$playcount.'</div><br />';
 					} else
@@ -210,7 +210,7 @@ class Block_side_last_fm
 
 					if($artist_image!='')
 					{
-						$out.='<div class="float_surrounder"><img width="64" src="'.$artist_image.'" title="" style="float: left; margin: 3px;" />';
+						$out.='<div class="float_surrounder"><img width="64" src="'.$artist_image.'" style="float: left; margin: 3px;" />';
 						$out.='<a href="'.$artist_url.'" target="_blank" style="font-style: italic;">'.$artist.'</a><br />';
 						$out.='Total Plays: '.$playcount.'</div><br />';
 					} else
@@ -260,7 +260,7 @@ class Block_side_last_fm
 
 					if($album_images!='')
 					{
-						$out.='<div class="float_surrounder"><img width="64" src="'.$album_images.'" title="" style="float: left; margin: 3px;" /><a href="'.$album_url.'" target="_blank">'.$album_name.'</a><br />';
+						$out.='<div class="float_surrounder"><img width="64" src="'.$album_images.'" style="float: left; margin: 3px;" /><a href="'.$album_url.'" target="_blank">'.$album_name.'</a><br />';
 						$out.='<a href="'.$artist_url.'" target="_blank" style="font-style: italic;">'.$artist.'</a><br />';
 						$out.='Total Plays: '.$playcount.'</div><br />';
 					} else
@@ -277,7 +277,7 @@ class Block_side_last_fm
 		$out.='<br style="" /><a href="'.escape_html($profile_url).'" target="_blank" style="font-style: italic;">Click here for more...</a></div>';						
 
 
-		return do_template('BLOCK_SIDE_LAST_FM',array('TITLE'=>$title,'CONTENT'=>$out));
+		return do_template('BLOCK_SIDE_LAST_FM',array('_GUID'=>'6fd41bbdbd441d4d82691e0e7e8cd3ee','TITLE'=>$title,'CONTENT'=>$out));
 	}
 }
 

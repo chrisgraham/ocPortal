@@ -1,3 +1,9 @@
-{+START,IF,{$AND,{$OCF},{$ADDON_INSTALLED,redirects_editor},{$OR,{$EQ,{$PAGE},recommend,onlinemembers,points,warnings,contactmember,groups,rules,members},{$EQ,{$ZONE},forum,personalzone}}}}
+[semihtml]
+{+START,IF,{$AND,{$OCF},{$ADDON_INSTALLED,redirects_editor},{$OR,{$EQ,{$PAGE},recommend,onlinemembers,points,warnings,contactmember,groups,rules,members},{$EQ,{$ZONE},forum}}}}
 [block="_community" type="top"]side_stored_menu[/block]
 {+END}
+{+START,IF,{$EQ,{$PAGE},topicview,forumview}}
+[block]main_member_bar[/block]
+[block]main_pt_notifications[/block]
+{+END}
+[/semihtml]

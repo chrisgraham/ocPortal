@@ -39,7 +39,7 @@ if (!is_file($FILE_BASE.'/sources/global.php'))
 
 @chdir($FILE_BASE);
 
-if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10).'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The second most basic ocPortal startup file, sources/global.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
+if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The second most basic ocPortal startup file, sources/global.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
 
 require($FILE_BASE.'/sources/global.php');
 
@@ -156,7 +156,7 @@ function do_work()
 	require_code('calendar2');
 	for ($i=$GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		add_calendar_event(db_get_first_id(),'',NULL,0,random_line(),random_text(),1,1,intval(date('Y')),intval(date('m')),intval(date('d')),0,0);
+		add_calendar_event(db_get_first_id(),'',NULL,0,random_line(),random_text(),1,1,intval(date('Y')),intval(date('m')),intval(date('d')),'day_of_month',0,0);
 	}
 	echo 'done event stuff'.chr(10);
 
@@ -336,15 +336,15 @@ function do_work()
 	// successful searches (to test the search recommender)
 	// ACTUALLY: I have manually verified the code, it is an isolated portion
 
-	// cedi pages (do a long descendant tree for some, and orphans for others)
-	// cedi posts (remember to test cedi changes screen)
+	// Wiki+ pages (do a long descendant tree for some, and orphans for others)
+	// Wiki+ posts (remember to test Wiki+ changes screen)
 	require_code('cedi');
 	for ($i=$GLOBALS['SITE_DB']->query_value('seedy_pages','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$page_id=cedi_add_page(random_line(),random_text(),'',1);
 		cedi_add_post($page_id,random_text(),1,NULL,false);
 	}
-	echo 'done cedi stuff'.chr(10);
+	echo 'done Wiki+ stuff'.chr(10);
 
 	if (function_exists('gc_collect_cycles')) gc_enable();
 

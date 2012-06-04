@@ -92,7 +92,7 @@ class Module_cms_polls extends standard_aed_module
 	{
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_page_title('MANAGE_POLLS'),comcode_lang_string('DOC_POLLS'),
+		return do_next_manager(get_screen_title('MANAGE_POLLS'),comcode_lang_string('DOC_POLLS'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_midrange_content','cms_polls')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POLL')):NULL,

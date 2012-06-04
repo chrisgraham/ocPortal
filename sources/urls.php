@@ -81,7 +81,7 @@ function get_self_url_easy()
  * @param  boolean		Whether to evaluate the URL (so as we don't return tempcode)
  * @param  boolean		Whether to direct to the default page if there was a POST request leading to where we are now (i.e. to avoid missing post fields when we go to this URL)
  * @param  ?array			A map of extra parameters for the URL (NULL: none)
- * @param  boolean		Whether to also keep POSTed data, in the GET request (useful if either_param is used to get the data instead of post_param - of course the POST data must be of the not--persistant-state-changing variety)
+ * @param  boolean		Whether to also keep POSTed data, in the GET request (useful if either_param is used to get the data instead of post_param - of course the POST data must be of the not--persistent-state-changing variety)
  * @param  boolean		Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
  * @return mixed			The URL (tempcode or string)
  */
@@ -219,7 +219,7 @@ function skippable_keep($key,$val)
 {
 	global $CACHE_BOT_TYPE;
 	if ($CACHE_BOT_TYPE===false) get_bot_type();
-	if ($CACHE_BOT_TYPE!==NULL)
+	if ($CACHE_BOT_TYPE!==false)
 	{
 		return true;
 	}
@@ -257,7 +257,7 @@ function is_page_https($zone,$page)
 
 	global $HTTPS_PAGES;
 	if ($HTTPS_PAGES===NULL)
-		$HTTPS_PAGES=persistant_cache_get('HTTPS_PAGES');
+		$HTTPS_PAGES=persistent_cache_get('HTTPS_PAGES');
 	if ($HTTPS_PAGES===NULL)
 	{
 		$results=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'https_pages',NULL,NULL,true);
@@ -267,7 +267,7 @@ function is_page_https($zone,$page)
 			return false;
 		}
 		$HTTPS_PAGES=collapse_1d_complexity('https_page_name',$results);
-		persistant_cache_set('HTTPS_PAGES',$HTTPS_PAGES);
+		persistent_cache_set('HTTPS_PAGES',$HTTPS_PAGES);
 	}
 	return in_array($zone.':'.$page,$HTTPS_PAGES);
 }
@@ -401,7 +401,7 @@ function url_monikers_enabled()
  */
 function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=false,$skip_keep=false,$hash='')
 {
-	global $HAS_KEEP_IN_URL,$USE_REWRITE_PARAMS,$CACHE_BOT_TYPE;
+	global $HAS_KEEP_IN_URL,$USE_REWRITE_PARAMS,$CACHE_BOT_TYPE,$WHAT_IS_RUNNING;
 
 	// Build up our URL base
 	$url=get_base_url(is_page_https($zone_name,isset($vars['page'])?$vars['page']:''),$zone_name);
@@ -466,10 +466,18 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		if (!$avoid_remap) $USE_REWRITE_PARAMS=$use_rewrite_params;
 	} else $use_rewrite_params=$USE_REWRITE_PARAMS;
 	$test_rewrite=NULL;
-	if ($use_rewrite_params) $test_rewrite=_url_rewrite_params($zone_name,$vars,count($keep_actual)>0); else $test_rewrite=NULL;
+	$self_page=(!isset($vars['page'])) || ($vars['page']=='_SELF');
+	if ($use_rewrite_params)
+	{
+		if ((!$self_page) || ($WHAT_IS_RUNNING==='index'))
+		{
+			$test_rewrite=_url_rewrite_params($zone_name,$vars,count($keep_actual)>0);
+		}
+	}
 	if ($test_rewrite===NULL)
 	{
-		$url.='index.php';
+		$script=$self_page?$WHAT_IS_RUNNING:'index';
+		$url.=$script.'.php';
 
 		// Fix sort order
 		if (isset($vars['id']))
@@ -572,7 +580,7 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 		{
 			// We've found one, now let's sort out the target
 			$makeup=$target;
-			if ($GLOBALS['DEBUG_MODE'])
+			if ($GLOBALS['DEV_MODE'])
 			{
 				foreach ($vars as $key=>$val)
 				{
@@ -859,7 +867,7 @@ function load_moniker_hooks()
 	global $CONTENT_OBS;
 	if ($CONTENT_OBS===NULL)
 	{
-		$CONTENT_OBS=function_exists('persistant_cache_get')?persistant_cache_get('CONTENT_OBS'):NULL;
+		$CONTENT_OBS=function_exists('persistent_cache_get')?persistent_cache_get('CONTENT_OBS'):NULL;
 		if ($CONTENT_OBS!==NULL)
 		{
 			foreach ($CONTENT_OBS as $ob_info)
@@ -888,7 +896,7 @@ function load_moniker_hooks()
 			}
 		}
 
-		if (function_exists('persistant_cache_set')) persistant_cache_set('CONTENT_OBS',$CONTENT_OBS);
+		if (function_exists('persistent_cache_set')) persistent_cache_set('CONTENT_OBS',$CONTENT_OBS);
 	}
 }
 

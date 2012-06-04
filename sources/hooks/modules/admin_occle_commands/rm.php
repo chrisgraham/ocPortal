@@ -47,7 +47,7 @@ class Hook_rm
 					if (($i==0) && (count($parameters)==1))
 						return array('','','',do_lang('NOT_A_FILE',strval($i+1)));
 				}
-
+	
 				$success=$success && $occle_fs->remove_file($param);
 			}
 		}

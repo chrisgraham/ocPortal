@@ -16,32 +16,29 @@
 	RIGHT=1
 {+END}
 
-<br />
+<p class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</p>
 
-<div class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</div>
+<div class="box box___file_dump_screen"><div class="box_inner">
+	<h2>{!FILEDUMP_UPLOAD}</h2>
 
-{+START,BOX,{!FILEDUMP_UPLOAD},,med}
 	{UPLOAD_FORM}
-{+END}
+</div></div>
 
 {+START,IF_NON_EMPTY,{CREATE_FOLDER_FORM}}
-	<br />
-	<div class="standardbox_wrap_classic lightborder">
-		<div class="standardbox_classic">
-			<div class="standardbox_title_light toggle_div_title">
-				{!FILEDUMP_CREATE_FOLDER}
-				<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('create_folder','block'); return false;"><img id="e_create_folder" alt="{!EXPAND}: {!FILEDUMP_CREATE_FOLDER}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-			</div>
-		</div>
+	<div class="box box___file_dump_screen">
+		<h2 class="toggleable_tray_title">
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!FILEDUMP_CREATE_FOLDER}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!FILEDUMP_CREATE_FOLDER}</a>
+		</h2>
 
-		<div class="toggler_main standardbox_main_classic" id="create_folder" style="{$JS_ON,display: none,}">
+		<div class="toggleable_tray" style="{$JS_ON,display: none,}" aria-expanded="false">
 			{CREATE_FOLDER_FORM}
 		</div>
 	</div>
 {+END}
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
-{+START,IF,{$AND,{$SHOW_DOCS},{$HAS_SPECIFIC_PERMISSION,see_software_docs}}}
+{+START,IF,{$AND,{$SHOW_DOCS},{$HAS_PRIVILEGE,see_software_docs}}}
 	{+START,INCLUDE,STAFF_ACTIONS}
 		STAFF_ACTIONS_TITLE={!STAFF_ACTIONS}
 		1_URL={$BRAND_BASE_URL*}/docs{$VERSION*}/pg/tut_collaboration

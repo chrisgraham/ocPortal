@@ -35,7 +35,7 @@ class Block_main_banner_wave
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','extra','max');
+		$info['parameters']=array('param','max');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_banner_wave
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'extra\',$map)?$map[\'extra\']:\'\',array_key_exists(\'max\',$map)?intval($map[\'max\']):100)';
+		$info['cache_on']='array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'max\',$map)?intval($map[\'max\']):100)';
 		$info['ttl']=5; // due to shuffle, can't cache long
 		return $info;
 	}
@@ -60,8 +60,9 @@ class Block_main_banner_wave
 	 */
 	function run($map)
 	{
+		require_css('banners');
+
 		if (!array_key_exists('param',$map)) $map['param']='';
-		if (!array_key_exists('extra',$map)) $map['extra']='';
 		$max=array_key_exists('max',$map)?intval($map['max']):100;
 
 		require_code('banners');
@@ -80,11 +81,10 @@ class Block_main_banner_wave
 		foreach ($banners as $i=>$banner)
 		{
 			$bd=show_banner($banner['name'],$banner['b_title_text'],get_translated_tempcode($banner['caption']),$banner['img_url'],'',$banner['site_url'],$banner['b_type']);
-			$more_coming=($i<count($banners)-1);
-			$assemble->attach(do_template('BLOCK_MAIN_BANNER_WAVE_BWRAP',array('EXTRA'=>$map['extra'],'TYPE'=>$map['param'],'BANNER'=>$bd,'MORE_COMING'=>$more_coming)));
+			$assemble->attach(do_template('BLOCK_MAIN_BANNER_WAVE_BWRAP',array('TYPE'=>$map['param'],'BANNER'=>$bd)));
 		}
 
-		return do_template('BLOCK_MAIN_BANNER_WAVE',array('EXTRA'=>$map['extra'],'TYPE'=>$map['param'],'ASSEMBLE'=>$assemble));
+		return do_template('BLOCK_MAIN_BANNER_WAVE',array('TYPE'=>$map['param'],'ASSEMBLE'=>$assemble));
 	}
 
 }

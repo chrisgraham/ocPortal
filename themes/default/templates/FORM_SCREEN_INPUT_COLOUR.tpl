@@ -1,27 +1,27 @@
 {+START,IF,{TRUE_FIELD}}
 	<div class="float_surrounder">
-		<div id="colours_go_here">&nbsp;</div>
+		<div id="colours_go_here"></div>
 		<script type="text/javascript">// <![CDATA[
-			makeColourChooser('{NAME;}','{DEFAULT;}','',{TABINDEX%},' ','input_colour{_REQUIRED}');
-			doColorChooser();
+			make_colour_chooser('{NAME;}','{DEFAULT;}','',{TABINDEX%},' ','input_colour{_REQUIRED}');
+			do_color_chooser();
 		//]]></script>
 	</div>
 {+END}
 {+START,IF,{$NOT,{TRUE_FIELD}}}
 	<tr>
-		<td {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="input_huge_field de_th{+START,IF,{REQUIRED*}} dottedborder_barrier_b_required{+END}">
-			<div id="colours_go_here">&nbsp;</div>
+		<td {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="form_table_huge_field_description_is_under form_table_huge_field{+START,IF,{REQUIRED}} required{+END}">
+			<div id="colours_go_here"></div>
 			<script type="text/javascript">// <![CDATA[
-				makeColourChooser('{NAME;}','{DEFAULT;}','',{TABINDEX%},'{PRETTY_NAME;}','input_colour{_REQUIRED}');
-				doColorChooser();
+				make_colour_chooser('{NAME;}','{DEFAULT;}','',{TABINDEX%},'{PRETTY_NAME;}','input_colour{_REQUIRED}');
+				do_color_chooser();
 			//]]></script>
 		</td>
 	</tr>
 	{+START,IF_NON_EMPTY,{DESCRIPTION}}
-	<tr>
-		<th style="width: 100%" abbr="{PRETTY_NAME=}" {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="de_th{+START,IF,{REQUIRED*}} dottedborder_barrier_a_required{+END}">
-			<div class="associated_caption">{DESCRIPTION}</div>
-		</th>
-	</tr>
+		<tr>
+			<th {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="form_table_description_under_cell{+START,IF,{REQUIRED}} required{+END}">
+				<div class="associated_details">{DESCRIPTION}</div>
+			</th>
+		</tr>
 	{+END}
 {+END}

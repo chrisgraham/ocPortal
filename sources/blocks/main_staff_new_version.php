@@ -64,7 +64,7 @@ class Block_main_staff_new_version
 
 		require_lang('version');
 		require_code('version2');
-		require_css('adminzone');
+		require_css('adminzone_frontpage');
 
 		$table=get_future_version_information();
 

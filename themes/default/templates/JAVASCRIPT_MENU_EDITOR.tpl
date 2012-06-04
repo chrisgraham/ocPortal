@@ -33,7 +33,7 @@ function menu_editor_add_new_page()
 	);
 }
 
-function makeFieldSelected(ob)
+function make_field_selected(ob)
 {
 	if (ob.className=='menu_editor_selected_field') return;
 
@@ -48,10 +48,10 @@ function makeFieldSelected(ob)
 		}
 	}
 
-	copyFieldsIntoBottom(ob.id.substr(8),changed);
+	copy_fields_into_bottom(ob.id.substr(8),changed);
 }
 
-function copyFieldsIntoBottom(i,changed)
+function copy_fields_into_bottom(i,changed)
 {
 	window.current_selection=i;
 	var form=document.getElementById('edit_form');
@@ -70,26 +70,26 @@ function copyFieldsIntoBottom(i,changed)
 	form.elements['new_window'].onclick=function () { document.getElementById('new_window_'+i).value=this.checked?'1':'0'; };
 	form.elements['check_perms'].checked=document.getElementById('check_perms_'+i).value=='1';
 	form.elements['check_perms'].onclick=function () { document.getElementById('check_perms_'+i).value=this.checked?'1':'0'; };
-	//setInnerHTML(form.elements['branch_type'],getInnerHTML(document.getElementById('branch_type_'+i))); Breaks in IE due to strict container rules
+	//set_inner_html(form.elements['branch_type'],get_inner_html(document.getElementById('branch_type_'+i))); Breaks in IE due to strict container rules
 	form.elements['branch_type'].selectedIndex=document.getElementById('branch_type_'+i).selectedIndex;
 	form.elements['branch_type'].onchange=function (event) { document.getElementById('branch_type_'+i).selectedIndex=this.selectedIndex; if (document.getElementById('branch_type_'+i).onchange) document.getElementById('branch_type_'+i).onchange(event); };
 	var mfh=document.getElementById('mini_form_hider');
 	mfh.style.display='block';
-	if ((typeof window.nereidFade!='undefined'))
+	if ((typeof window.thumbnail_fade!='undefined'))
 	{
 		if (!changed)
 		{
-			setOpacity(mfh,0.0);
-			nereidFade(mfh,100,30,4);
+			set_opacity(mfh,0.0);
+			thumbnail_fade(mfh,100,30,4);
 		} else
 		{
-			setOpacity(form.elements['url'],0.0);
-			nereidFade(form.elements['url'],100,30,4);
+			set_opacity(form.elements['url'],0.0);
+			thumbnail_fade(form.elements['url'],100,30,4);
 		}
 	}
 }
 
-function menuEditorHandleKeypress(e)
+function menu_editor_handle_keypress(e)
 {
 	if (typeof e=='undefined') var e=window.event;
 	var t=e.srcElement?e.srcElement:e.target;
@@ -97,16 +97,16 @@ function menuEditorHandleKeypress(e)
 	var up=(e.keyCode?e.keyCode:e.charCode)==38;
 	var down=(e.keyCode?e.keyCode:e.charCode)==40;
 
-	handleOrdering(t,up,down);
+	handle_ordering(t,up,down);
 }
 
-function branchDepth(branch)
+function branch_depth(branch)
 {
-	if (branch.parentNode) return branchDepth(branch.parentNode)+1;
+	if (branch.parentNode) return branch_depth(branch.parentNode)+1;
 	return 0;
 }
 
-function existsChild(elements,parent)
+function exists_child(elements,parent)
 {
 	for (var i=0;i<elements.length;i++)
 	{
@@ -115,20 +115,20 @@ function existsChild(elements,parent)
 	return false;
 }
 
-function isChild(elements,possible_parent,possible_child)
+function is_child(elements,possible_parent,possible_child)
 {
 	for (var i=0;i<elements.length;i++)
 	{
 		if ((elements[i].name.substr(7)==possible_child) && (elements[i].name.substr(0,7)=='parent_'))
 		{
 			if (elements[i].value==possible_parent) return true;
-			return isChild(elements,possible_parent,elements[i].value);
+			return is_child(elements,possible_parent,elements[i].value);
 		}
 	}
 	return false;
 }
 
-function handleOrdering(t,up,down)
+function handle_ordering(t,up,down)
 {
 	if ((up) || (down))
 	{
@@ -193,12 +193,12 @@ function handleOrdering(t,up,down)
 				var us=elements[i];
 				for (b=up?(i-1):(i+1);up?(b>0):(b<elements.length);up?b--:b++)
 				{
-					if ((!isChild(elements,index,elements[b].name.substr(7))) && (elements[b].name.substr(0,7)=='parent_') && ((up) || (document.getElementById('branch_type_'+elements[b].name.substr(7)).selectedIndex==0) || (!existsChild(elements,elements[b].name.substr(7)))))
+					if ((!is_child(elements,index,elements[b].name.substr(7))) && (elements[b].name.substr(0,7)=='parent_') && ((up) || (document.getElementById('branch_type_'+elements[b].name.substr(7)).selectedIndex==0) || (!exists_child(elements,elements[b].name.substr(7)))))
 					{
 						var target=elements[b];
 						var main=us.parentNode.parentNode;
 						var place=target.parentNode.parentNode;
-						if (((up) && (branchDepth(target)<=branchDepth(us))) || ((down) && (branchDepth(target)!=branchDepth(us))))
+						if (((up) && (branch_depth(target)<=branch_depth(us))) || ((down) && (branch_depth(target)!=branch_depth(us))))
 						{
 							main.parentNode.removeChild(main);
 							place.parentNode.insertBefore(main,place);
@@ -241,7 +241,8 @@ function handleOrdering(t,up,down)
 		swap_names('branch_wrap',bestindex,index);
 		swap_names('branch',bestindex,index);
 		swap_names('branches_go_before',bestindex,index);
-		swap_names('add_new_menu_link',bestindex,index);
+		swap_names('add_new_menu_linka',bestindex,index);
+		swap_names('add_new_menu_linkb',bestindex,index);
 		swap_names('branch',bestindex,index,'_follow_1');
 		swap_names('branch',bestindex,index,'_follow_2');
 
@@ -310,7 +311,7 @@ function swap_names(t,a,b,t2,values_also)
 	}
 }
 
-function magicCopier(object,caption,url,error_message,confirm_message)
+function magic_copier(object,caption,url,error_message,confirm_message)
 {
 	var e=parent.document.getElementsByName('selected');
 
@@ -325,14 +326,14 @@ function magicCopier(object,caption,url,error_message,confirm_message)
 			{
 				if (parent.document.getElementById('url_'+num).value=='')
 				{
-					_doMagicCopier(num,url,caption);
+					_do_magic_copier(num,url,caption);
 				} else
 				{
 					window.fauxmodal_confirm(
 						confirm_message,
 						function(answer)
 						{
-							if (answer) _doMagicCopier(num,url,caption);
+							if (answer) _do_magic_copier(num,url,caption);
 						}
 					);
 				}
@@ -345,13 +346,13 @@ function magicCopier(object,caption,url,error_message,confirm_message)
 	return false;
 }
 
-function _doMagicCopier(num,url,caption)
+function _do_magic_copier(num,url,caption)
 {
 	parent.document.getElementById('url_'+num).value=url;
 	parent.document.getElementById('caption_'+num).value=caption;
 }
 
-function menuEditorBranchTypeChange(id)
+function menu_editor_branch_type_change(id)
 {
 	var disabled=(document.getElementById('branch_type_'+id).value!='page');
 	/*document.getElementById('new_window_'+id).disabled=disabled;
@@ -366,13 +367,13 @@ function menuEditorBranchTypeChange(id)
 	if (sub) sub.style.display=disabled?'block':'none';
 }
 
-function deleteBranch(id)
+function delete_branch(id)
 {
 	var branch=document.getElementById(id);
 	branch.parentNode.removeChild(branch);
 }
 
-function addNewMenuItem(parent_id,clickable_sections)
+function add_new_menu_item(parent_id,clickable_sections)
 {
 	var insert_before_id='branches_go_before_'+parent_id;
 
@@ -396,7 +397,7 @@ function addNewMenuItem(parent_id,clickable_sections)
 		elements_bak.push([_elements_bak[i].name,_elements_bak[i].value]);
 	}
 
-	setInnerHTML(before,template2,true); // Technically we are actually putting after "branches_go_before_XXX", but it makes no difference. It only needs to act as a divider.
+	set_inner_html(before,template2,true); // Technically we are actually putting after "branches_go_before_XXX", but it makes no difference. It only needs to act as a divider.
 
 	// Restore form branches
 	for (i=0;i<elements_bak.length;i++)
@@ -407,7 +408,7 @@ function addNewMenuItem(parent_id,clickable_sections)
 		}
 	}
 
-	if (!clickable_sections) menuEditorBranchTypeChange(new_id);
+	if (!clickable_sections) menu_editor_branch_type_change(new_id);
 
 	//document.getElementById('selected_'+new_id).checked=true;
 
@@ -416,7 +417,7 @@ function addNewMenuItem(parent_id,clickable_sections)
 	return false;
 }
 
-function validateMenu(missingCaptionError,missingURLError)
+function validate_menu(missingCaptionError,missingURLError)
 {
 	var form=document.getElementById('edit_form');
 	var i,id,name,the_parent,ignore,caption,url,branch_type;
@@ -484,7 +485,7 @@ function delete_menu_branch(ob)
 			{
 				if (result.toLowerCase()=='{!DELETE^;}'.toLowerCase())
 				{
-					deleteBranch('branch_wrap_'+ob.name.substr(4,ob.name.length));
+					delete_branch('branch_wrap_'+ob.name.substr(4,ob.name.length));
 				} else if (result.toLowerCase()=='{!MOVETO_MENU^;}'.toLowerCase())
 				{
 					var choices=['{!INPUTSYSTEM_CANCEL^;}'];
@@ -522,7 +523,7 @@ function delete_menu_branch(ob)
 									}
 								}
 								do_ajax_request('{$FIND_SCRIPT_NOHTTP;,menu_management}'+'?id='+window.encodeURIComponent(id)+'&menu='+window.encodeURIComponent(result)+keep_stub(),null,post);
-								deleteBranch('branch_wrap_'+ob.name.substr(4,ob.name.length));
+								delete_branch('branch_wrap_'+ob.name.substr(4,ob.name.length));
 							}
 						}
 					);
@@ -536,7 +537,7 @@ function delete_menu_branch(ob)
 			function(result)
 			{
 				if (result)
-					deleteBranch('branch_wrap_'+ob.name.substr(4,ob.name.length));
+					delete_branch('branch_wrap_'+ob.name.substr(4,ob.name.length));
 			}
 		);
 	}

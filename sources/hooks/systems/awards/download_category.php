@@ -62,7 +62,7 @@ class Hook_awards_download_category
 	{
 		require_code('downloads');
 
-		return get_download_category_html($row,$zone);
+		return render_download_category_box($row,$zone);
 	}
 
 }

@@ -15,8 +15,6 @@
 				<input maxlength="255" class="wide_field" id="email" name="email" type="text" alt="{!EMAIL_ADDRESS}" value="{!EMAIL_ADDRESS}" size="25" onfocus="if (this.value=='{!EMAIL_ADDRESS;}') this.value='';" />
 			</div>
 
-			<br />
-
 			<p class="accessibility_hidden"><label for="interest_level">{!INST_SUBSCRIPTION_LEVEL}</label></p>
 			<div class="constrain_field">
 				<select class="wide_field" id="interest_level" name="interest_level">
@@ -29,11 +27,11 @@
 
 			<p><label for="advertise_on"><input type="checkbox" checked="checked" value="1" name="advertise_on" id="advertise_on" />{!ADVERTISE_ON_OCPORTAL}</label></p>
 		</div>
-		<br />
+
 		<p>{!EMAIL_NEWSLETTER}</p>
 	 </div>
 
-	<div class="proceed_button">
+	<p class="proceed_button">
 		<input class="button_page" type="submit" value="{!I_AGREE}" />
-	</div>
+	</p>
 </form>

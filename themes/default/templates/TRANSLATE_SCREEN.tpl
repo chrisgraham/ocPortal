@@ -1,8 +1,8 @@
 {TITLE}
 
-{+START,IF,{$NEQ,{$_GET,lang},EN}}
+{+START,IF,{$NEQ,{LANG},EN}}
 	<p>
-		{!LAUNCHPAD,https://translations.launchpad.net/ocportal/+translations,{$_GET,lang},{$PAGE_LINK*,_SELF:_SELF:export_po:{$_GET,lang}}}
+		{!LAUNCHPAD,https://translations.launchpad.net/ocportal/+translations,{LANG},{$PAGE_LINK*,_SELF:_SELF:export_po:{LANG}}}
 	</p>
 {+END}
 
@@ -13,15 +13,7 @@
 {+END}
 
 <form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
-	<div class="wide_table_wrap really_long_table_wrap"><table summary="{!COLUMNED_TABLE}" class="solidborder wide_table">
-		<colgroup>
-			<col style="width: 270px" />
-			<col />
-			{+START,IF_NON_EMPTY,{INTERTRANS}}
-				<col style="width: 100px" />
-			{+END}
-		</colgroup>
-
+	<div class="wide_table_wrap really_long_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
 		<thead>
 			<tr>
 				<th class="translate_line_first">
@@ -42,10 +34,9 @@
 		</tbody>
 	</table></div>
 
-	<br />
-	<div class="proceed_button">
+	<p class="proceed_button">
 		<input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!SAVE}" />
-	</div>
+	</p>
 </form>
 
 <form title="" id="hack_form" action="http://translate.google.com/translate_t" method="post">

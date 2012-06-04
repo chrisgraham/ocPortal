@@ -175,7 +175,7 @@ class Hook_html_site
 			require_code('zones2');
 			foreach ($new_zones as $zone)
 			{
-				actual_add_zone($zone,ucwords(str_replace('_',' ',$zone)),'start','',$theme,0,0);
+				actual_add_zone($zone,titleify($zone),'start','',$theme,0,0);
 			}
 		}
 
@@ -356,7 +356,7 @@ class Hook_html_site
 		if ((window.location.href.indexOf(\'upgrader.php\')==-1) && (window.location.search.indexOf(\'keep_has_js\')==-1)) {$,Redirect with JS on, and then hopefully we can remove keep_has_js after one click. This code only happens if JS is marked off, no infinite loops can happen.}
 			window.location=window.location.href+((window.location.search==\'\')?(((window.location.href.indexOf(\'.htm\')==-1)&&(window.location.href.indexOf(\'.php\')==-1))?(((window.location.href.substr(window.location.href.length-1)!=\'/\')?\'/\':\'\')+\'index.php?\'):\'?\'):\'&\')+\'keep_has_js=1{+START,IF,{$DEV_MODE}}&keep_devtest=1{+END}\';
 		{+END}
-		{+START,IF,{$NOT,{$BROWSER_MATCHES,ie}}}{+START,IF,{$HAS_SPECIFIC_PERMISSION,sees_javascript_error_alerts}}window.take_errors=true;{+END}{+END}
+		{+START,IF,{$NOT,{$BROWSER_MATCHES,ie}}}{+START,IF,{$HAS_PRIVILEGE,sees_javascript_error_alerts}}window.take_errors=true;{+END}{+END}
 		var {+START,IF,{$CONFIG_OPTION,is_on_timezone_detection}}server_timestamp={$FROM_TIMESTAMP%},{+END}ocp_lang=\'{$LANG;}\',ocp_theme=\'{$THEME;}\';
 	//]]></script>
 

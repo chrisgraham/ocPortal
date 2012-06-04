@@ -57,7 +57,7 @@ class Hook_pointstore_highlight_name
 		if ((get_option('is_on_'.$class.'_buy')=='0') || (get_forum_type()!='ocf')) return new ocp_tempcode();
 		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_highlighted_name')==1) warn_exit(do_lang_tempcode('_ALREADY_HAVE'));
 
-		$title=get_page_title('NAME_HIGHLIGHTING');
+		$title=get_screen_title('NAME_HIGHLIGHTING');
 
 		$cost=intval(get_option($class));
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action_done','id'=>$class),'_SELF');
@@ -84,7 +84,7 @@ class Hook_pointstore_highlight_name
 		if ((get_option('is_on_'.$class.'_buy')=='0') || (get_forum_type()!='ocf')) return new ocp_tempcode();
 		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_highlighted_name')==1) warn_exit(do_lang_tempcode('_ALREADY_HAVE'));
 
-		$title=get_page_title('NAME_HIGHLIGHTING');
+		$title=get_screen_title('NAME_HIGHLIGHTING');
 
 		post_param_integer('confirm'); // To make sure we're not being passed by a GET
 

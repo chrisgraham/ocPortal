@@ -158,7 +158,7 @@ class Module_cms_catalogues extends standard_aed_module
 
 		require_code('fields');
 
-		return do_next_manager(($catalogue_name!='')?get_page_title(escape_html(get_translated_text($cat_title)),false):get_page_title('MANAGE_CATALOGUES'),($catalogue_name!='')?get_translated_tempcode($cat_description):comcode_lang_string('DOC_CATALOGUES'),
+		return do_next_manager(($catalogue_name!='')?get_screen_title(escape_html(get_translated_text($cat_title)),false):get_screen_title('MANAGE_CATALOGUES'),($catalogue_name!='')?get_translated_tempcode($cat_description):comcode_lang_string('DOC_CATALOGUES'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						(has_specific_permission(get_member(),'submit_cat_highrange_content','cms_catalogues') && ($catalogue_name==''))?array('add_one_catalogue',array('_SELF',array_merge($extra_map,array('type'=>'add_catalogue')),'_SELF'),do_lang('ADD_CATALOGUE')):NULL,
@@ -389,9 +389,9 @@ class Module_cms_catalogues extends standard_aed_module
 
 			$_cf_description=escape_html(get_translated_text($field['cf_description']));
 
-			$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=true;
+			$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=true;
 			$result=$ob->get_field_inputter($_cf_name,$_cf_description,$field,$default,is_null($id),!array_key_exists($field_num+1,$special_fields));
-			$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=false;
+			$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=false;
 
 			if (is_null($result)) continue;
 
@@ -421,7 +421,7 @@ class Module_cms_catalogues extends standard_aed_module
 			if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
 
 			if ($field_group_title!='')
-				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'a03ec5b2afe5be764bd10694fc401fed','TITLE'=>$field_group_title)));
 			$fields->attach($extra_fields);
 		}
 
@@ -658,7 +658,7 @@ class Module_cms_catalogues extends standard_aed_module
 	/**
 	 * The do-next manager for after content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -710,7 +710,7 @@ class Module_cms_catalogues extends standard_aed_module
 	{
 		check_specific_permission('mass_import');
 
-		$title=get_page_title('CATALOGUE_IMPORT');
+		$title=get_screen_title('CATALOGUE_IMPORT');
 
 		$catalogue_select=$this->choose_catalogue($title);
 
@@ -731,7 +731,51 @@ class Module_cms_catalogues extends standard_aed_module
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
 
-		return do_template('FORM_SCREEN',array('TITLE'=>$title,'TEXT'=>do_lang_tempcode('CATALOGUE_IMPORT_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		$fields->attach(form_input_codename(do_lang_tempcode('CATALOGUE_CSV_IMPORT_KEY_FIELD'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_IMPORT_KEY_FIELD'),'key_field','',false));
+
+		$new_handling_options=new ocp_tempcode();
+		$new_handling_options->attach(form_input_radio_entry('new_handling','add',true,do_lang_tempcode('NEW_HANDLING_ADD')));
+		$new_handling_options->attach(form_input_radio_entry('new_handling','skip',false,do_lang_tempcode('NEW_HANDLING_SKIP')));
+		$fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_NEW_HANDLING'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_NEW_HANDLING'),$new_handling_options));
+
+		$delete_handling_options=new ocp_tempcode();
+		$delete_handling_options->attach(form_input_radio_entry('delete_handling','delete',false,do_lang_tempcode('DELETE_HANDLING_DELETE')));
+		$delete_handling_options->attach(form_input_radio_entry('delete_handling','leave',true,do_lang_tempcode('DELETE_HANDLING_LEAVE')));
+		$fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_DELETE_HANDLING'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_DELETE_HANDLING'),$delete_handling_options));
+
+		$update_handling_options=new ocp_tempcode();
+		$update_handling_options->attach(form_input_radio_entry('update_handling','overwrite',true,do_lang_tempcode('UPDATE_HANDLING_OVERWRITE')));
+		$update_handling_options->attach(form_input_radio_entry('update_handling','freshen',false,do_lang_tempcode('UPDATE_HANDLING_FRESHEN')));
+		$update_handling_options->attach(form_input_radio_entry('update_handling','skip',false,do_lang_tempcode('UPDATE_HANDLING_SKIP')));
+		$update_handling_options->attach(form_input_radio_entry('update_handling','delete',false,do_lang_tempcode('UPDATE_HANDLING_DELETE')));
+		$fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_UPDATE_HANDLING'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_UPDATE_HANDLING'),$update_handling_options));
+
+		$javascript='
+			var key_field=document.getElementById(\'key_field\');
+			var update_key_settings=function() {
+				var has_key=(key_field.value!=\'\');
+				key_field.form.elements[\'new_handling\'][0].disabled=!has_key;
+				key_field.form.elements[\'new_handling\'][1].disabled=!has_key;
+				key_field.form.elements[\'delete_handling\'][0].disabled=!has_key;
+				key_field.form.elements[\'delete_handling\'][1].disabled=!has_key;
+				key_field.form.elements[\'update_handling\'][0].disabled=!has_key;
+				key_field.form.elements[\'update_handling\'][1].disabled=!has_key;
+				key_field.form.elements[\'update_handling\'][2].disabled=!has_key;
+				key_field.form.elements[\'update_handling\'][3].disabled=!has_key;
+			}
+			key_field.onchange=update_key_settings;
+			update_key_settings();
+		';
+
+		$fields->attach(form_input_codename(do_lang_tempcode('CATALOGUE_CSV_IMPORT_META_KEYWORDS_FIELD'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_IMPORT_META_KEYWORDS_FIELD'),'meta_keywords_field','',false));
+		$fields->attach(form_input_codename(do_lang_tempcode('CATALOGUE_CSV_IMPORT_META_DESCRIPTION_FIELD'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_IMPORT_META_DESCRIPTION_FIELD'),'meta_description_field','',false));
+		$fields->attach(form_input_codename(do_lang_tempcode('CATALOGUE_CSV_IMPORT_NOTES_FIELD'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_IMPORT_NOTES_FIELD'),'notes_field','',false));
+
+		require_code('feedback2');
+		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically(1,1,1);
+		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,'',$allow_comments==2,false,false));
+
+		return do_template('FORM_SCREEN',array('_GUID'=>'0ad5a822bccb3de8e53fcc47594eb404','TITLE'=>$title,'JAVASCRIPT'=>$javascript,'TEXT'=>do_lang_tempcode('CATALOGUE_IMPORT_TEXT'),'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -741,22 +785,33 @@ class Module_cms_catalogues extends standard_aed_module
 	 */
 	function _import_catalogue()
 	{	
+		$title=get_screen_title('CATALOGUE_IMPORT');
+
 		require_code('catalogues2');
 
 		check_specific_permission('mass_import');
 
-		$catalog_root=NULL;
-
-		$title=get_page_title('CATALOGUE_IMPORT');
-
 		$catalogue_name=get_param('catalogue_name');
 
-		$categories=array();
+		// Details about how to handle the import
+		$key_field=post_param('key_field','');
+		if ($key_field=='')
+		{
+			$new_handling='';
+			$delete_handling='';
+			$update_handling='';
+		} else
+		{
+			$new_handling=post_param('new_handling');
+			$delete_handling=post_param('delete_handling');
+			$update_handling=post_param('update_handling');
+		}
 
 		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name));
 
+		// Find out what categories we have in the catalogue
+		$categories=array();
 		$catsrow=$GLOBALS['SITE_DB']->query("SELECT t1.id,t2.text_original,t1.cc_parent_id FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."catalogue_categories t1,".$GLOBALS['SITE_DB']->get_table_prefix()."translate t2 WHERE t1.cc_title=t2.id AND t1.c_name='".db_escape_string($catalogue_name)."'");
-
 		foreach($catsrow as $values)
 		{
 			$categories[$values['text_original']]=$values['id'];
@@ -765,15 +820,17 @@ class Module_cms_catalogues extends standard_aed_module
 			if ((!array_key_exists($catalogue_name,$categories)) && (is_null($values['cc_parent_id'])))
 				$categories[$catalogue_name]=$values['id'];
 		}
+		$root_cat=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','id',array('cc_parent_id'=>NULL));
 
+		// Grab the CSV file
 		require_code('uploads');
 		$csv_name=NULL;
 		if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
 			$csv_name=$_FILES['file_novalidate']['tmp_name'];
-
 		if (is_null($csv_name))
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
+		// Fix up the CSV file to have unix style line endings
 		$fixed_contents=unixify_line_format(file_get_contents($csv_name));
 		$myfile=@fopen($csv_name,'wb');
 		if ($myfile!==false)
@@ -782,8 +839,10 @@ class Module_cms_catalogues extends standard_aed_module
 			fclose($myfile);
 		}
 
+		// Open CSV file
 		$handle=fopen($csv_name,'rb');
 
+		// Read column names
 		$del=',';
 		$csv_field_titles=fgetcsv($handle,1000,$del);
 		if ((count($csv_field_titles)==1) && (strpos($csv_field_titles[0],';')!==false))
@@ -792,11 +851,41 @@ class Module_cms_catalogues extends standard_aed_module
 			rewind($handle);
 			$csv_field_titles=fgetcsv($handle,1000,$del);
 		}
-
 		$csv_field_titles=array_flip($csv_field_titles);
 
-		//if(!array_key_exists('CATEGORY',$csv_field_titles)) //Checking the fields title contains 'CATEGORY'.
-		//	warn_exit(do_lang_tempcode('FIELDS_UNMATCH'));
+		$meta_keywords_field=post_param('meta_keywords_field','');
+		if (($meta_keywords_field!='') && (!array_key_exists($meta_keywords_field,$csv_field_titles)))
+			warn_exit(do_lang_tempcode('CATALOGUES_IMPORT_MISSING_META_KEYWORDS_FIELD'));
+		$meta_description_field=post_param('meta_description_field','');
+		if (($meta_description_field!='') && (!array_key_exists($meta_description_field,$csv_field_titles)))
+			warn_exit(do_lang_tempcode('CATALOGUES_IMPORT_MISSING_META_DESCRIPTION_FIELD'));
+		$notes_field=post_param('notes_field','');
+		if (($notes_field!='') && (!array_key_exists($notes_field,$csv_field_titles)))
+			warn_exit(do_lang_tempcode('CATALOGUES_IMPORT_MISSING_NOTES_FIELD'));
+
+		$allow_rating=post_param_integer('allow_rating',0);
+		$allow_comments=post_param_integer('allow_comments',0);
+		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
+
+		// Check key exists, if we have one
+		if (($key_field!='') && ($key_field!='ID'))
+		{
+			if (!array_key_exists($key_field,$csv_field_titles))
+			{
+				warn_exit(do_lang_tempcode('CATALOGUES_IMPORT_MISSING_KEY_FIELD'));
+			}
+			$found_key=false;
+			foreach ($fields as $field)
+			{
+				if (get_translated_text($field['cf_name'])==$key_field)
+				{
+					$found_key=true;
+					break;
+				}
+			}
+			if (!$found_key)
+				warn_exit(do_lang_tempcode('CATALOGUES_IMPORT_MISSING_KEY_FIELD'));
+		}
 
 		global $LAX_COMCODE;
 		$temp2=$LAX_COMCODE;
@@ -804,21 +893,33 @@ class Module_cms_catalogues extends standard_aed_module
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
-		//$count=0;
-		$root_cat=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','id',array('cc_parent_id'=>NULL));
+		// Import, line by line
+		$matched_ids=array();
 		while (($data=fgetcsv($handle,100000,$del))!==false)
 		{
 			if ($data===array(NULL)) continue; // blank line
-			$this->import_csv_lines($catalogue_name,$data,$root_cat,$fields,$categories,$csv_field_titles,$catalog_root);
-			//$count++;
+			$this->import_csv_lines($catalogue_name,$data,$root_cat,$fields,$categories,$csv_field_titles,$key_field,$new_handling,$delete_handling,$update_handling,$matched_ids,$notes_field,$meta_keywords_field,$meta_description_field,$allow_rating,$allow_comments,$allow_trackbacks);
+		}
+
+		// Handle non-matched existing ones
+		if ($delete_handling=='delete')
+		{
+			$all_entry_ids=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id'),array('c_name'=>$catalogue_name));
+			foreach ($all_entry_ids as $id)
+			{
+				if (!array_key_exists($id['id'],$matched_ids))
+				{
+					// Delete entry
+					actual_delete_catalogue_entry($id['id']);
+				}
+			}
 		}
 
 		$LAX_COMCODE=$temp2;
 
+		// Say we're done
 		$description=is_null($this->do_next_description)?do_lang_tempcode('SUCCESS'):$this->do_next_description;
-
 		$this->donext_catalogue_name=$catalogue_name;
-
 		return $this->do_next_manager($title,$description,NULL);		
 	}
 
@@ -831,49 +932,64 @@ class Module_cms_catalogues extends standard_aed_module
 	 * @param  array			Array of catalogue fields
  	 * @param  array			Array of categories
  	 * @param  array			Array of csv field titles
+ 	 * @param  ID_TEXT		Key field
+ 	 * @param  ID_TEXT		New handling method
+ 	 * @param  ID_TEXT		Delete handling method
+ 	 * @param  ID_TEXT		Update handling method
+ 	 * @param  array			IDs that are matched are collected here
+ 	 * @param  ID_TEXT		Notes field
+ 	 * @param  ID_TEXT		Meta keywords field
+ 	 * @param  ID_TEXT		Meta description field
+	 * @param  boolean		Whether rating is allowed for this resource
+	 * @param  boolean		Whether comments are allowed for this resource
+	 * @param  boolean		Whether trackbacks are allowed for this resource
 	 */
-	function import_csv_lines($catalogue_name,$csv_data,$catalog_root,$fields,&$categories,$csv_field_titles)
+	function import_csv_lines($catalogue_name,$csv_data,$catalog_root,$fields,&$categories,$csv_field_titles,$key_field,$new_handling,$delete_handling,$update_handling,&$matched_ids,$notes_field,$meta_keywords_field,$meta_description_field,$allow_rating,$allow_comments,$allow_trackbacks)
 	{
-		$map=array();	
-		$match_flag=false;
+		$notes='';
+		$meta_keywords='';
+		$meta_description='';
+		$key='';
 
-		check_specific_permission('mass_import');
-
-		$curr_cat=array_key_exists('CATEGORY',$csv_field_titles)?$csv_data[$csv_field_titles['CATEGORY']]:'';
-
-		if($curr_cat=='')
+		if (array_key_exists($notes_field,$csv_field_titles))
 		{
-			//Checks the general category exists or not
-			if(array_key_exists($catalogue_name,$categories))
-				$catid=$categories[$catalogue_name];
-			else	//If category field is null, record adds to a general category named catalogue name.
-			{
-				$catalog_title=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>$catalogue_name));
+			if (!array_key_exists($csv_field_titles[$notes_field],$csv_data)) $csv_data[$csv_field_titles[$notes_field]]=''; // Not set for this particular row, even though column exists in the CSV
 
-				$catid=actual_add_catalogue_category($catalogue_name,$catalog_title,$catalog_title,$catalog_title,$catalog_root,'');
-
-				$categories=array_merge(array($catalogue_name=>$catid),$categories);
-			}
-		}
-		elseif(array_key_exists($curr_cat,$categories))
-		{	
-			$catid=$categories[$curr_cat];
-		}
-		else
-		{	
-			$catid=actual_add_catalogue_category($catalogue_name,$curr_cat,$curr_cat,$curr_cat,$catalog_root,'');
-
-			$categories=array_merge(array($curr_cat=>$catid),$categories);
-
-			if (get_value('disable_cat_cat_perms')!=='1')
-				$this->set_permissions(strval($catid));					
+			$notes=$csv_data[$csv_field_titles[$notes_field]];
+			unset($csv_field_titles[$notes_field]);
 		}
 
+		if (array_key_exists($meta_keywords_field,$csv_field_titles))
+		{
+			if (!array_key_exists($csv_field_titles[$meta_keywords_field],$csv_data)) $csv_data[$csv_field_titles[$meta_keywords_field]]=''; // Not set for this particular row, even though column exists in the CSV
+
+			$meta_keywords=$csv_data[$csv_field_titles[$meta_keywords_field]];
+			unset($csv_field_titles[$meta_keywords_field]);
+		}
+
+		if (array_key_exists($meta_description_field,$csv_field_titles))
+		{
+			if (!array_key_exists($csv_field_titles[$meta_description_field],$csv_data)) $csv_data[$csv_field_titles[$meta_description_field]]=''; // Not set for this particular row, even though column exists in the CSV
+
+			$meta_description=$csv_data[$csv_field_titles[$meta_description_field]];
+			unset($csv_field_titles[$meta_description_field]);
+		}
+
+		if (array_key_exists($key_field,$csv_field_titles))
+		{
+			if (!array_key_exists($csv_field_titles[$key_field],$csv_data)) $csv_data[$csv_field_titles[$key_field]]=''; // Not set for this particular row, even though column exists in the CSV
+
+			$key=$csv_data[$csv_field_titles[$key_field]];
+		}
+
+		// Tidy up fields, to make $map
+		$map=array();	
+		$matched_at_least_one_field=false;
 		foreach ($fields as $field)
 		{
 			$field_name=get_translated_text($field['cf_name']);
 
-			if(array_key_exists($field_name,$csv_field_titles))
+			if (array_key_exists($field_name,$csv_field_titles))
 			{
 				if (!array_key_exists($csv_field_titles[$field_name],$csv_data)) $csv_data[$csv_field_titles[$field_name]]=''; // Not set for this particular row, even though column exists in the CSV
 
@@ -897,18 +1013,147 @@ class Module_cms_catalogues extends standard_aed_module
 				}
 
 				$map[$field['id']]=$value;
-				$match_flag=true; // to check matching of csv and db fields	
-			}
-			else
+				$matched_at_least_one_field=true; // to check matching of csv and db fields	
+			} else // Can't bind the field, so we'll make this the default
 			{
-				$map[$field['id']]=$field['cf_default'];
+				$map[$field['id']]=NULL;//$field['cf_default'];
 			}			
 		}
 
-		if ($match_flag)
-			$id=actual_add_catalogue_entry($catid,1,'',1,1,1,$map);
-		else
-			warn_exit(do_lang_tempcode('FIELDS_UNMATCH'));
+		if (!$matched_at_least_one_field) warn_exit(do_lang_tempcode('FIELDS_UNMATCH'));
+
+		// See if we can match to existing record, via $key_field
+		$method='add';
+		$has_match=mixed();
+		if ($key_field!='')
+		{
+			if ($key_field=='ID')
+			{
+				if ($key!='')
+				{
+					$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','id',array('id'=>intval($key)));
+				}
+			} else
+			{
+				require_code('fields');
+				foreach ($fields as $field)
+				{
+					if (get_translated_text($field['cf_name'])==$key_field)
+					{
+						$hook_ob=get_fields_hook($field['cf_type']);
+						list(,,$db_type)=$hook_ob->get_field_value_row_bits($field);
+						switch ($db_type)
+						{
+							case 'integer':
+								$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$db_type,'id',array('cv_value'=>intval($key)));
+								break;
+							case 'float':
+								$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$db_type,'id',array('cv_value'=>floatval($key)));
+								break;
+							case 'short_trans':
+							case 'long_trans':
+								$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$db_type.' f JOIN '.get_table_prefix().'translate t ON t.id=f.cv_value','f.id',array('text_original'=>$key));
+								break;
+							default:
+								$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$db_type,'id',array('cv_value'=>$key));
+								break;
+						}
+						break;
+					}
+				}
+			}
+
+			if (!is_null($has_match))
+			{
+				$method=$update_handling;
+			} else
+			{
+				$method=$new_handling;
+			}
+		}
+
+		if ($method=='skip')
+		{
+			$matched_ids[$has_match]=true;
+			return;
+		}
+
+		if ($method=='delete')
+		{
+			actual_delete_catalogue_entry($has_match);
+		}
+
+		if (($method=='overwrite') || ($method=='freshen') || ($method=='add'))
+		{
+			// Handle category addition
+			$category_title=array_key_exists('CATEGORY',$csv_field_titles)?$csv_data[$csv_field_titles['CATEGORY']]:'';
+			if ($category_title=='') // Have to do a general category for the catalogue
+			{
+				// Checks the general category exists or not
+				if (array_key_exists($catalogue_name,$categories))
+					$category_id=$categories[$catalogue_name];
+				else // If category field is null, record adds to a general category named catalogue name.
+				{
+					$catalog_title=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_title',array('c_name'=>$catalogue_name));
+
+					$category_id=actual_add_catalogue_category($catalogue_name,$catalog_title,$catalog_title,$catalog_title,$catalog_root,'');
+					if (get_value('disable_cat_cat_perms')!=='1')
+						$this->set_permissions(strval($category_id));					
+
+					$categories[$catalogue_name]=$category_id;
+				}
+			}
+			elseif (array_key_exists($category_title,$categories))
+			{	
+				$category_id=$categories[$category_title];
+			}
+			else
+			{	
+				$category_id=actual_add_catalogue_category($catalogue_name,$category_title,$category_title,$category_title,$catalog_root,'');
+				if (get_value('disable_cat_cat_perms')!=='1')
+					$this->set_permissions(strval($category_id));					
+
+				$categories[$catalogue_name]=$category_id;
+			}
+
+			if (($method=='overwrite') || ($method=='add'))
+			{
+				// Map settings to defaults
+				foreach ($map as $key=>$val)
+				{
+					if (is_null($val))
+					{
+						foreach ($fields as $field)
+						{
+							if ($field['id']==$key)
+								$map[$key]=$field['cf_default'];
+						}
+					}
+				}
+			} else // 'freshen'
+			{
+				// Remove non-covered columns
+				foreach ($map as $key=>$val)
+				{
+					if ((is_null($val)) || ($val==''))
+						unset($map[$key]);
+				}
+			}
+
+			if (($method=='overwrite') || ($method=='freshen'))
+			{
+				actual_edit_catalogue_entry($has_match,$category_id,1,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords,$meta_description);
+				$id=$has_match;
+			} else // Add
+			{
+				$id=actual_add_catalogue_entry($category_id,1,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map);
+
+				require_code('seo2');
+				seo_meta_set_for_explicit('catalogue_entry',strval($id),$meta_keywords,$meta_description);
+			}
+
+			$matched_ids[$id]=true;
+		}
 	}
 
 	/**
@@ -920,7 +1165,7 @@ class Module_cms_catalogues extends standard_aed_module
 	{
 		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) access_denied('I_ERROR');
 
-		$title=get_page_title('CATALOGUE_EXPORT');
+		$title=get_screen_title('CATALOGUE_EXPORT');
 
 		$catalogue_select=$this->choose_catalogue($title);
 
@@ -956,15 +1201,27 @@ class Module_cms_catalogues extends standard_aed_module
 
 		$category_names=array();
 
+		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+		global $CAT_FIELDS_CACHE;
+		$CAT_FIELDS_CACHE[$catalogue_name]=$fields;
+		echo 'ID,';
+		echo 'CATEGORY';
+		foreach ($fields as $k)
+		{
+			echo ',';
+			echo '"'.str_replace('"','""',get_translated_text($k['cf_name'])).'"';
+		}
+		echo chr(10);
+
 		$start=0;
 		do
 		{
 			$entry_rows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('c_name'=>$catalogue_name),'ORDER BY ce_add_date ASC',4000,$start);
 
-			foreach($entry_rows as $k=>$entry_row)
+			foreach($entry_rows as $entry_row)
 			{
 				if (is_null($entry_row)) $entry_row=array();
-				if(isset($entry_row[0])) $entry_row=$entry_row[0];
+				if (isset($entry_row[0])) $entry_row=$entry_row[0];
 
 				$details=get_catalogue_entry_map($entry_row,$catalogue_row,'PAGE','DEFAULT',NULL);
 
@@ -974,27 +1231,18 @@ class Module_cms_catalogues extends standard_aed_module
 					if (substr($key,0,10)=='FIELDNAME_')
 					{
 						$value=$details['FIELD_'.substr($key,10).'_PLAIN'];
-						if(is_object($value))
+						if (is_object($value))
 							$value=$value->evaluate();
 						$better_results[$val]=$value;
 					}
 				}
 
-				if ($k==0)
-				{
-					echo 'CATEGORY';
-					foreach (array_keys($better_results) as $k)
-					{
-						echo ',';
-						echo '"'.str_replace('"','""',$k).'"';
-					}
-					echo chr(10);
-				}
 				if (!isset($category_names[$entry_row['cc_id']]))
 				{
 					if (!array_key_exists($entry_row['cc_id'],$category_names))
 						$category_names[$entry_row['cc_id']]=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogue_categories','cc_title',array('id'=>$entry_row['cc_id'])));
 				}
+				echo strval($entry_row['id']).',';
 				echo '"'.str_replace('"','""',$category_names[$entry_row['cc_id']]).'"';
 				foreach ($better_results as $v)
 				{
@@ -1325,7 +1573,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after catalogue content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever catalogue category was just handled (NULL: deleted)
 	 * @return tempcode		The UI
@@ -1447,9 +1695,10 @@ class Module_cms_catalogues_alt extends standard_aed_module
 			$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_CATALOGUE_DESCRIPTION'),'description',$description,false));
 
 			$display_types=new ocp_tempcode();
-			$display_types->attach(form_input_list_entry(strval(0),$display_type==0,do_lang_tempcode('DT_MAPS')));
-			$display_types->attach(form_input_list_entry(strval(1),$display_type==1,do_lang_tempcode('DT_LIST')));
-			$display_types->attach(form_input_list_entry(strval(2),$display_type==2,do_lang_tempcode('DT_MATRIX')));
+			foreach (array(C_DT_FIELDMAPS=>'DT_FIELDMAPS',C_DT_TITLELIST=>'DT_TITLELIST',C_DT_TABULAR=>'DT_TABULAR',C_DT_GRID=>'DT_GRID') as $_display_type=>$display_type_str)
+			{
+				$display_types->attach(form_input_list_entry(strval($_display_type),$display_type==$_display_type,do_lang_tempcode($display_type_str)));
+			}
 			$fields->attach(form_input_list(do_lang_tempcode('DISPLAY_TYPE'),do_lang_tempcode('DESCRIPTION_DISPLAY_TYPE'),'display_type',$display_types));
 
 			if (addon_installed('shopping'))
@@ -1889,7 +2138,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	/**
 	 * The do-next manager for after catalogue content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?ID_TEXT		The catalogue name we were working with (NULL: deleted)
 	 * @return tempcode		The UI

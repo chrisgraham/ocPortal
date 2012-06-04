@@ -17,7 +17,7 @@ function set_edited_panel(object_ignore /* No longer used */,id)
 			store.id='store_'+id;
 			document.getElementById('edit_field_store').appendChild(store);
 		}
-		store.value=getTextbox(object);
+		store.value=get_textbox(object);
 	}
 
 	/* The WYSIWYG setting (not the actual HTML text value of the editor, the setting of whether WYSIWYG was used or not) */
@@ -95,48 +95,26 @@ function select_ze_tab(id,tab)
 			element.style.display=(tabs[i]==tab)?'block':'none';
 			if ((tabs[i]==tab) && (tab=='edit'))
 			{
-				if (isWYSIWYGField(document.getElementById('edit_'+id+'_textarea')))
+				if (is_wysiwyg_field(document.getElementById('edit_'+id+'_textarea')))
 				{
 					// Fix for Firefox
-					if (typeof areaedit_editors['edit_'+id+'_textarea'].document!='undefined')
+					if (typeof wysiwyg_editors['edit_'+id+'_textarea'].document!='undefined')
 					{
-						areaedit_editors['edit_'+id+'_textarea'].document.getBody().$.contentEditable='false';
-						areaedit_editors['edit_'+id+'_textarea'].document.getBody().$.contentEditable='true';
+						wysiwyg_editors['edit_'+id+'_textarea'].document.getBody().$.contentEditable='false';
+						wysiwyg_editors['edit_'+id+'_textarea'].document.getBody().$.contentEditable='true';
 					}
 				}
 			}
-			if ((typeof window.nereidFade!='undefined') && (tabs[i]==tab))
+			if ((typeof window.thumbnail_fade!='undefined') && (tabs[i]==tab))
 			{
-				if (!browser_matches('ie6'))
-				{
-					setOpacity(element,0.0);
-					nereidFade(element,100,30,4);
-				}
+				set_opacity(element,0.0);
+				thumbnail_fade(element,100,30,4);
 
-				elementh.className+=' ze_tab_selected';
+				elementh.className+=' tab_active';
 			} else
 			{
-				elementh.className=elementh.className.replace(/ ze_tab_selected$/,'');
+				elementh.className=elementh.className.replace(/ tab_active$/,'');
 			}
-		}
-	}
-}
-
-function ze_ie6(element)
-{
-	// IE6 will not overlay over select inputs
-	if (browser_matches('ie6'))
-	{
-		var i,selects;
-		selects=document.getElementById('ze_panels_wrap').getElementsByTagName('select');
-		for (j=0;j<selects.length;j++)
-		{
-			selects[j].style.visibility='hidden';
-		}
-		selects=element.getElementsByTagName('select');
-		for (j=0;j<selects.length;j++)
-		{
-			selects[j].style.visibility='visible';
 		}
 	}
 }
@@ -145,12 +123,6 @@ var ze_timer=[];
 var ze_delay_function=[];
 function ze_animate_to(ob,amount,towards_expanded,now)
 {
-	if (browser_matches('ie6')) // Slow
-	{
-		ob.style.width=(amount)+'em';
-		return;
-	}
-
 	{+START,IF,{$VALUE_OPTION,disable_animations}}
 		ob.style.width=(amount)+'em';
 		return;
@@ -200,20 +172,20 @@ function reload_preview(id)
 	var edit_element=document.getElementById('edit_'+id+'_textarea');
 	if (!edit_element) return; // Nothing interatively edited
 
-	setInnerHTML(element,'<div{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="ajax_tree_list_loading"><img class="inline_image_2" src="'+'{$IMG,bottom/loading}'.replace(/^http:/,window.location.protocol)+'" /> {!LOADING^;}</div>');
+	set_inner_html(element,'<div aria-busy="true" class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG;,loading}'.replace(/^http:/,window.location.protocol)+'" /> <span>{!LOADING^;}</span></div>');
 
 	window.loading_preview_of=id;
 
 	var data='';
-	data+=getTextbox(edit_element);
-	do_ajax_request('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?fix_bad_html=1&css=1&javascript=1&from_html=0&is_semihtml='+(isWYSIWYGField(edit_element)?'1':'0')+'&panel='+(((id=='panel_left') || (id=='panel_right'))?'1':'0')+keep_stub(),reloaded_preview,(isWYSIWYGField(edit_element)?'data__is_wysiwyg=1&':'')+'data='+window.encodeURIComponent(data));
+	data+=get_textbox(edit_element);
+	do_ajax_request('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?fix_bad_html=1&css=1&javascript=1&from_html=0&is_semihtml='+(is_wysiwyg_field(edit_element)?'1':'0')+'&panel='+(((id=='panel_left') || (id=='panel_right'))?'1':'0')+keep_stub(),reloaded_preview,(is_wysiwyg_field(edit_element)?'data__is_wysiwyg=1&':'')+'data='+window.encodeURIComponent(data));
 }
 
 function reloaded_preview(ajax_result_frame,ajax_result)
 {
 	if (typeof window.loading_preview_of=='undefined') return;
 	var element=document.getElementById('view_'+window.loading_preview_of);
-	setInnerHTML(element,merge_text_nodes(ajax_result.childNodes).replace(/^((\s)|(\<br\s*\>)|(&nbsp;))*/,'').replace(/((\s)|(\<br\s*\>)|(&nbsp;))*$/,''));
+	set_inner_html(element,merge_text_nodes(ajax_result.childNodes).replace(/^((\s)|(\<br\s*\>)|(&nbsp;))*/,'').replace(/((\s)|(\<br\s*\>)|(&nbsp;))*$/,''));
 
 	disable_preview_scripts(element);
 }

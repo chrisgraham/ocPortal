@@ -1,4 +1,4 @@
-<p class="iotd_expose">
+<p class="media_box">
 	<a href="{VIEW_URL*}">{IMAGE}</a>
 </p>
 

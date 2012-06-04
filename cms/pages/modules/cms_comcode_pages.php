@@ -168,7 +168,7 @@ class Module_cms_comcode_pages
 	/**
 	 * The do-next manager for after content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  ?ID_TEXT		The name of the page just handled (NULL: none)
 	 * @param  ID_TEXT		The name of the zone just handled (blank: none/welcome-zone)
 	 * @param  tempcode		The text to show (blank: default)
@@ -290,7 +290,7 @@ class Module_cms_comcode_pages
 	 */
 	function ed()
 	{
-		$title=get_page_title('COMCODE_PAGE_EDIT');
+		$title=get_screen_title('COMCODE_PAGE_EDIT');
 		$lang=choose_language($title,true);
 		if (is_object($lang)) return $lang;
 
@@ -491,7 +491,7 @@ class Module_cms_comcode_pages
 
 			$wrappable_pagelink=preg_replace('#([^ ]):([\w\-]{10,})$#','${1}: ${2}',preg_replace('#(^[\w\-]{10,}):#','${1}: ',$pagelink));
 
-			$actions=do_template('COMCODE_PAGE_EDIT_ACTIONS',array('EDIT_URL'=>$edit_link,'CLONE_URL'=>$clone_link));
+			$actions=do_template('COMCODE_PAGE_EDIT_ACTIONS',array('_GUID'=>'6cc8c492ba9ae4035c394fbe28a56c26','EDIT_URL'=>$edit_link,'CLONE_URL'=>$clone_link));
 
 			$_table_rows[]=array(
 				'page_title'=>$page_title,
@@ -538,7 +538,7 @@ class Module_cms_comcode_pages
 
 		$table=results_table(do_lang('COMCODE_PAGES'),$start,'start',$max,'max',$max_rows,$header_row,$table_rows,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fdgfdfdfdggfd',true);
 
-		return do_template('TABLE_TABLE_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'FIELDS'=>$fields,'POST_URL'=>$post_url,'GET'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name));
+		return do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'0b7285c14eb632ab50d0a497a240cf7a','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'FIELDS'=>$fields,'POST_URL'=>$post_url,'GET'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -576,7 +576,7 @@ class Module_cms_comcode_pages
 
 		$simple_add=(get_param_integer('simple_add',0)==1);
 
-		$lang=choose_language(get_page_title($simple_add?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT'),true);
+		$lang=choose_language(get_screen_title($simple_add?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT'),true);
 		if (is_object($lang)) return $lang;
 
 		if (addon_installed('page_management'))
@@ -619,7 +619,7 @@ class Module_cms_comcode_pages
 			}
 		}
 
-		$title=get_page_title(($simple_add || ($file==''))?'COMCODE_PAGE_ADD':'_COMCODE_PAGE_EDIT',true,array(escape_html($zone),escape_html($file)));
+		$title=get_screen_title(($simple_add || ($file==''))?'COMCODE_PAGE_ADD':'_COMCODE_PAGE_EDIT',true,array(escape_html($zone),escape_html($file)));
 		if (!$simple_add && ($file!='')) breadcrumb_set_self(do_lang_tempcode('COMCODE_PAGE_EDIT'));
 
 		if (!has_actual_page_access(get_member(),$file,$zone)) access_denied('PAGE_ACCESS');
@@ -870,7 +870,7 @@ class Module_cms_comcode_pages
 	{
 		$simple_add=get_param_integer('simple_add',0)==1;
 
-		$title=get_page_title($simple_add?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT');
+		$title=get_screen_title($simple_add?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/comcode_page_edit';
 
@@ -923,6 +923,7 @@ class Module_cms_comcode_pages
 		}
 
 		$validated=post_param_integer('validated',0);
+		inject_action_spamcheck();
 		if (!has_specific_permission(get_member(),'bypass_validation_highrange_content')) $validated=0;
 		$parent_page=post_param('parent_page','');
 		$show_as_edit=post_param_integer('show_as_edit',0);
@@ -1034,8 +1035,8 @@ class Module_cms_comcode_pages
 		{
 			delete_lang($cache['string_index']);
 		}
-		persistant_cache_empty();
-		persistant_cache_delete(array('PAGE_INFO'));
+		persistent_cache_empty();
+		persistent_cache_delete(array('PAGE_INFO'));
 		decache('main_comcode_page_children');
 
 		fix_permissions($fullpath);
@@ -1128,7 +1129,7 @@ class Module_cms_comcode_pages
 	 */
 	function export()
 	{
-		$title=get_page_title('EXPORT_COMCODE_PAGE');
+		$title=get_screen_title('EXPORT_COMCODE_PAGE');
 
 		$lang=choose_language($title);
 		if (is_object($lang)) return $lang;

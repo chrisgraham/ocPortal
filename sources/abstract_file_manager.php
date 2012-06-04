@@ -119,7 +119,7 @@ function get_afm_form()
 {
 	$fields=get_afm_form_fields();
 
-	$title=get_page_title('ABSTRACT_FILE_MANAGEMENT');
+	$title=get_screen_title('ABSTRACT_FILE_MANAGEMENT');
 
 	$post_url=get_self_url();
 	$submit_name=do_lang_tempcode('PROCEED');

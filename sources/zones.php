@@ -34,7 +34,7 @@ function init__zones()
 	$DO_NOT_CACHE_THIS=false;
 
 	global $MODULES_ZONES,$MODULES_ZONES_DEFAULT;
-	$MODULES_ZONES=function_exists('persistant_cache_get')?persistant_cache_get('MODULES_ZONES'):NULL;
+	$MODULES_ZONES=function_exists('persistent_cache_get')?persistent_cache_get('MODULES_ZONES'):NULL;
 	global $SITE_INFO;
 	$hardcoded=(isset($SITE_INFO['hardcode_common_module_zones'])) && ($SITE_INFO['hardcode_common_module_zones']=='1');
 	if (get_forum_type()=='ocf')
@@ -89,7 +89,7 @@ function init__zones()
 	$MODULE_INSTALLED_CACHE=array();
 
 	global $HOOKS_CACHE;
-	$HOOKS_CACHE=function_exists('persistant_cache_get')?persistant_cache_get('HOOKS'):array();
+	$HOOKS_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('HOOKS'):array();
 	if ($HOOKS_CACHE===NULL) $HOOKS_CACHE=array();
 
 	define('FIND_ALL_PAGES__PERFORMANT',0);
@@ -97,7 +97,7 @@ function init__zones()
 	define('FIND_ALL_PAGES__ALL',2);
 
 	global $BLOCKS_AT_CACHE;
-	$BLOCKS_AT_CACHE=function_exists('persistant_cache_get')?persistant_cache_get('BLOCKS_AT'):array();
+	$BLOCKS_AT_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('BLOCKS_AT'):array();
 	if ($BLOCKS_AT_CACHE===NULL) $BLOCKS_AT_CACHE=array();
 }
 
@@ -238,7 +238,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1)) // Only needs to actually look for redirections in first zones until end due to the way precedences work (we know the current zone will be in the first zones)
 		{
 			$MODULES_ZONES[$module_name]=$zone;
-			if (function_exists('persistant_cache_set')) persistant_cache_set('MODULES_ZONES',$MODULES_ZONES);
+			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES);
 			return $zone;
 		}
 
@@ -247,7 +247,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		{
 			if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==0) && ($REDIRECT_CACHE[$zone][$module_name]['r_to_page']==$module_name)) $zone=$REDIRECT_CACHE[$zone][$module_name]['r_to_zone'];
 			$MODULES_ZONES[$module_name]=$zone;
-			if (function_exists('persistant_cache_set')) persistant_cache_set('MODULES_ZONES',$MODULES_ZONES);
+			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES);
 			return $zone;
 		}
 	}
@@ -261,7 +261,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 			{
 				if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==0) && ($REDIRECT_CACHE[$zone][$module_name]['r_to_page']==$module_name)) $zone=$REDIRECT_CACHE[$zone][$module_name]['r_to_zone'];
 				$MODULES_ZONES[$module_name]=$zone;
-				if (function_exists('persistant_cache_set')) persistant_cache_set('MODULES_ZONES',$MODULES_ZONES);
+				if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES);
 				return $zone;
 			}
 		}
@@ -272,7 +272,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1))
 		{
 			$MODULES_ZONES[$module_name]=$zone;
-			if (function_exists('persistant_cache_set')) persistant_cache_set('MODULES_ZONES',$MODULES_ZONES);
+			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES);
 			return $zone;
 		}
 	}
@@ -461,11 +461,11 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 
 	if ($get_titles)
 	{
-		if ($ALL_ZONES_TITLED===NULL) $ALL_ZONES_TITLED=function_exists('persistant_cache_get')?persistant_cache_get('ALL_ZONES_TITLED'):NULL;
+		if ($ALL_ZONES_TITLED===NULL) $ALL_ZONES_TITLED=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES_TITLED'):NULL;
 		if ($ALL_ZONES_TITLED!==NULL) return $ALL_ZONES_TITLED;
 	} else
 	{
-		if ($ALL_ZONES===NULL) $ALL_ZONES=function_exists('persistant_cache_get')?persistant_cache_get('ALL_ZONES'):NULL;
+		if ($ALL_ZONES===NULL) $ALL_ZONES=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES'):NULL;
 		if ($ALL_ZONES!==NULL) return $ALL_ZONES;
 	}
 
@@ -491,9 +491,9 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 	}
 
 	$ALL_ZONES_TITLED=$zones_titled;
-	if (function_exists('persistant_cache_set')) persistant_cache_set('ALL_ZONES_TITLED',$ALL_ZONES_TITLED);
+	if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES_TITLED',$ALL_ZONES_TITLED);
 	$ALL_ZONES=$zones;
-	if (function_exists('persistant_cache_set')) persistant_cache_set('ALL_ZONES',$ALL_ZONES);
+	if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES',$ALL_ZONES);
 
 	return $get_titles?$zones_titled:$zones;
 }
@@ -574,7 +574,7 @@ function find_all_hooks($type,$entry)
 		}
 		closedir($dh);
 	}
-	if (!in_safe_mode())
+	if ((!isset($GLOBALS['DOING_USERS_INIT'])) && (!in_safe_mode())) // The !isset is because of if the user init causes a DB query to load sessions which loads DB hooks which checks for safe mode which leads to a permissions check for safe mode and thus a failed user check (as sessions not loaded yet)
 	{
 		$dir=get_file_base().'/sources_custom/hooks/'.filter_naughty($type).'/'.filter_naughty($entry);
 		$dh=@opendir($dir);
@@ -604,7 +604,7 @@ function find_all_hooks($type,$entry)
 
 	$HOOKS_CACHE[$type.'/'.$entry]=$out;
 
-	if (function_exists('persistant_cache_set')) persistant_cache_set('HOOKS',$HOOKS_CACHE,true);
+	if (function_exists('persistent_cache_set')) persistent_cache_set('HOOKS',$HOOKS_CACHE,true);
 
 	return $out;
 }
@@ -680,7 +680,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 						{
 							// Removed outdated cache-on information
 							$GLOBALS['SITE_DB']->query_delete('cache_on',array('cached_for'=>$codename),'',1);
-							persistant_cache_delete('CACHE_ON');
+							persistent_cache_delete('CACHE_ON');
 						}
 
 						$out=new ocp_tempcode();
@@ -819,7 +819,7 @@ function do_block_hunt_file($codename,$map=NULL)
 		if (!isset($BLOCKS_AT_CACHE[$codename]))
 		{
 			$BLOCKS_AT_CACHE[$codename]='sources_custom/blocks';
-			if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+			if (function_exists('persistent_cache_set')) persistent_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 		}
 	}
 	elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/blocks/'.$codename.'.php'))))
@@ -830,7 +830,7 @@ function do_block_hunt_file($codename,$map=NULL)
 		if (!isset($BLOCKS_AT_CACHE[$codename]))
 		{
 			$BLOCKS_AT_CACHE[$codename]='sources/blocks';
-			if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+			if (function_exists('persistent_cache_set')) persistent_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 		}
 	}
 	else
@@ -854,7 +854,7 @@ function do_block_hunt_file($codename,$map=NULL)
 			if (!isset($BLOCKS_AT_CACHE[$codename]))
 			{
 				$BLOCKS_AT_CACHE[$codename]='sources_custom/miniblocks';
-				if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+				if (function_exists('persistent_cache_set')) persistent_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 			}
 		}
 		elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/miniblocks/'.$codename.'.php'))))
@@ -876,11 +876,11 @@ function do_block_hunt_file($codename,$map=NULL)
 			if (!isset($BLOCKS_AT_CACHE[$codename]))
 			{
 				$BLOCKS_AT_CACHE[$codename]='sources/miniblocks';
-				if (function_exists('persistant_cache_set')) persistant_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
+				if (function_exists('persistent_cache_set')) persistent_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 			}
 		} elseif ((is_null($map)) || (!array_key_exists('failsafe',$map)) || ($map['failsafe']!='1'))
 		{
-			$temp=paragraph(do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($codename)),'90dfdlksds8d7dyddssdds','error_marker');
+			$temp=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($codename))));
 			return $temp->evaluate();
 		} else $object='';
 		return $object;
@@ -919,9 +919,6 @@ function do_block_get_cache_identifier($cache_on,$map)
 
 	$_cache_identifier[]=get_users_timezone(get_member());
 	$_cache_identifier[]=(get_bot_type()===NULL);
-	global $TEMPCODE_SETGET;
-	$_cache_identifier[]=isset($TEMPCODE_SETGET['in_panel'])?$TEMPCODE_SETGET['in_panel']:'0';
-	$_cache_identifier[]=isset($TEMPCODE_SETGET['interlock'])?$TEMPCODE_SETGET['interlock']:'0';
 
 	$cache_identifier=serialize($_cache_identifier);
 

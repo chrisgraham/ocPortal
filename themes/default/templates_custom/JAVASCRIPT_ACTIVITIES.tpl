@@ -86,10 +86,10 @@ function sUpdateShow(data, stat)
 				{
 					var this_li = document.createElement('li');
 					this_li.id = jQuery(this).attr('id');
-					this_li.className = "activities-box lightborder";
+					this_li.className = "activities_box box";
 					this_li.setAttribute('toFade', 'yes');
 					top_of_list.parentNode.insertBefore(this_li, top_of_list);
-					setInnerHTML(this_li,Base64.decode(jQuery(this).text()));
+					set_inner_html(this_li,Base64.decode(jQuery(this).text()));
 				});
 
 				listels=jQuery('li','#activities_feed');

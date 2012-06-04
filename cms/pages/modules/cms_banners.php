@@ -34,7 +34,7 @@ class Module_cms_banners extends standard_aed_module
 	var $upload='image';
 	var $non_integer_id=true;
 	var $permission_module='banners';
-	var $javascript='standardAlternateFields(\'file\',\'image_url\',null,true); var form=document.getElementById(\'campaignremaining\').form; var crf=function() { form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked); }; crf(); form.elements[\'the_type\'][0].onclick=crf; form.elements[\'the_type\'][1].onclick=crf; form.elements[\'the_type\'][2].onclick=crf;';
+	var $javascript='var form=document.getElementById(\'campaignremaining\').form; var crf=function() { form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked); }; crf(); form.elements[\'the_type\'][0].onclick=crf; form.elements[\'the_type\'][1].onclick=crf; form.elements[\'the_type\'][2].onclick=crf;';
 	var $menu_label='BANNERS';
 	var $array_key='name';
 
@@ -87,10 +87,10 @@ class Module_cms_banners extends standard_aed_module
 					var _im_total=document.getElementById("im_total");
 					var im_here=window.parseInt(document.getElementById("importancemodulus").value);
 					var im_total=window.parseInt(_im_total.className.replace("im_",""))+im_here;
-					setInnerHTML(_im_here,im_here);
-					setInnerHTML(document.getElementById("im_here_2"),im_here);
-					setInnerHTML(_im_total,im_total);
-					setInnerHTML(document.getElementById("im_total_2"),im_total);
+					set_inner_html(_im_here,im_here);
+					set_inner_html(document.getElementById("im_here_2"),im_here);
+					set_inner_html(_im_total,im_total);
+					set_inner_html(document.getElementById("im_total_2"),im_total);
 				}
 			}
 		';
@@ -179,7 +179,7 @@ class Module_cms_banners extends standard_aed_module
 		}
 
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('MANAGE_BANNERS'),comcode_lang_string('DOC_BANNERS'),
+		return do_next_manager(get_screen_title('MANAGE_BANNERS'),comcode_lang_string('DOC_BANNERS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_banners')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_BANNER_TYPE')):NULL,
@@ -445,7 +445,7 @@ class Module_cms_banners extends standard_aed_module
 	/**
 	 * The do-next manager for after banner content management (banners only).
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -634,7 +634,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (event types only).
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -647,7 +647,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after banner content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @param  ID_TEXT		The type ID we were working in (NULL: N/A)

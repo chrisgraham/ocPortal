@@ -238,7 +238,7 @@ class galleries_test_set extends ocp_test_case
 			'require__cat' => 1,
 			'require__file' => 0,
 			'hidFileID_file' => -1,			
-			'url' => find_theme_image('bottom/loading'),
+			'url' => find_theme_image('loading'),
 			'require__url' => 1,
 			'require__file2' => 1,
 			'hidFileID_file2' => -1,

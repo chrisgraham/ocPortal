@@ -17,6 +17,7 @@
  * @copyright	ocProducts Ltd
  * @package		core
  */
+/*EXTRA FUNCTIONS: memory_get_usage|memory_get_peak_usage*/
 
 /**
  * Standard code module initialisation function.
@@ -29,15 +30,14 @@ function init__symbols()
 	$LOADED_PAGES=array();
 	$LOADED_PANELS=array();
 	$NON_CACHEABLE_SYMBOLS=array('SET_RAND'=>1,'RAND'=>1,'CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1); // these symbols can't be cached regardless of if they have params or not; other symbols can only be cached if they have no params or escaping
-	$PREPROCESSABLE_SYMBOLS=array('PAGE_LINK'=>1,'SET'=>1,'BLOCK'=>1,'FACILITATE_AJAX_BLOCK_CALL'=>1,'JAVASCRIPT_INCLUDE'=>1,'CSS_INCLUDE'=>1,'LOAD_PANEL'=>1,'JS_TEMPCODE'=>1,'CSS_TEMPCODE'=>1,'LOAD_PAGE'=>1,'FRACTIONAL_EDITABLE'=>1,);
+	$PREPROCESSABLE_SYMBOLS=array('PAGE_LINK'=>1,'SET'=>1,'BLOCK'=>1,'FACILITATE_AJAX_BLOCK_CALL'=>1,'REQUIRE_JAVASCRIPT'=>1,'REQUIRE_CSS'=>1,'LOAD_PANEL'=>1,'JS_TEMPCODE'=>1,'CSS_TEMPCODE'=>1,'LOAD_PAGE'=>1,'FRACTIONAL_EDITABLE'=>1,);
 	$EXTRA_SYMBOLS=NULL;
 	$DOCUMENT_HELP='';
 	$HTTP_STATUS_CODE='200';
 	global $META_DATA;
 	$META_DATA=array();
 
-	global $SHIFT_VARIABLES,$SYMBOL_CACHE,$CYCLES,$TEMPCODE_SETGET;
-	$SHIFT_VARIABLES=array();
+	global $SYMBOL_CACHE,$CYCLES,$TEMPCODE_SETGET;
 	$SYMBOL_CACHE=array();
 	$CYCLES=array();
 	$TEMPCODE_SETGET=array();
@@ -127,6 +127,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 						if ((substr($key,0,5)=='keep_')  && (!skippable_keep($key,$val))) continue;
 						$value.=':'.$key.'='.$val;
 					}
+				}
+				break;
+
+			case 'THEME_WIZARD_COLOR':
+				if (isset($param[2]))
+				{
+					$TEMPCODE_SETGET[$param[1]]=$param[0];
 				}
 				break;
 
@@ -235,17 +242,94 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case '':
 				break;
 
+			case 'REFRESH':
+				// Is this refreshing?
+				global $REFRESH_URL,$FORCE_META_REFRESH;
+				if ((!running_script('upgrader')) && (get_option('force_meta_refresh')=='1')) $FORCE_META_REFRESH=true;
+				if ((array_key_exists(0,$REFRESH_URL)) && ($REFRESH_URL[0]!='') && ($FORCE_META_REFRESH)) // The page itself has actually told it to refresh itself DISABLED FOR ACCESSIBILITY REASONS: Now headers do refreshing when it's crucial
+				{
+					if (!array_key_exists(1,$REFRESH_URL)) $REFRESH_URL[1]=1;
+					$refresh=do_template('META_REFRESH_LINE',array('_GUID'=>'6ee20694dfa474f160481a3ab5331d87','URL'=>$REFRESH_URL[0],'TIME'=>integer_format($REFRESH_URL[1])));
+				} else $refresh=new ocp_tempcode();
+				$value=$refresh->evaluate();
+				break;
+
+			case 'FEEDS':
+				// Feeds
+				$feeds=new ocp_tempcode();
+				if (addon_installed('syndication'))
+				{
+					if (get_option('is_on_rss',true)==='1')
+					{
+						if ($GLOBALS['FEED_URL']!==NULL)
+							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>$GLOBALS['FEED_URL'])));
+						if ($GLOBALS['FEED_URL_2']!==NULL)
+							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>$GLOBALS['FEED_URL_2'],'TITLE'=>do_lang('COMMENTS'))));
+						if (addon_installed('news'))
+							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
+					}
+				}
+				$value=$feeds->evaluate();
+				break;
+
 			case 'META_DATA':
 				if (isset($param[0]))
 				{
 					global $META_DATA;
-					if (isset($param[1]))
+
+					switch ($param[0])
 					{
-						$META_DATA[$param[0]]=$param[1];
-					} else
-					{
-						$value=isset($META_DATA[$param[0]])?strip_comcode($META_DATA[$param[0]]):'';
-						if ($value===NULL) $value='';
+						case 'site_newestmember':
+							$value=get_value('ocf_newest_member_username');
+							break;
+						case 'site_nummembers':
+							$value=strval($GLOBALS['FORUM_DRIVER']->get_members());
+							break;
+						case 'site_bestmember':
+							$value=get_value('site_bestmember');
+							break;
+						case 'forum_numtopics':
+							$value=strval($GLOBALS['FORUM_DRIVER']->get_topics());
+							break;
+						case 'forum_numposts':
+							$value=strval($GLOBALS['FORUM_DRIVER']->get_num_forum_posts());
+							break;
+
+						case 'meta_description':
+							global $SEO_DESCRIPTION;
+							if (($SEO_DESCRIPTION===NULL) || ($SEO_DESCRIPTION==''))
+							{
+								if ((isset($GLOBALS['META_DATA']['description'])) && ($GLOBALS['META_DATA']['description']!=''))
+								{
+									$value=strip_comcode($GLOBALS['META_DATA']['description']);
+								} else
+								{
+									$value=get_option('description');
+								}
+							} else
+							{
+								$value=$SEO_DESCRIPTION;
+							}
+							break;
+
+						case 'keywords':
+							global $SEO_KEYWORDS;
+							$keywords=get_option('keywords');
+							if ($SEO_KEYWORDS===NULL) $SEO_KEYWORDS=array();
+							$keywords_array=$SEO_KEYWORDS;
+							if ($keywords!='') $keywords_array=array_merge($keywords_array,explode(',',$keywords));
+							$value=implode(',',array_unique($keywords_array));
+							break;
+
+						default:
+							if (isset($param[1]))
+							{
+								$META_DATA[$param[0]]=$param[1];
+							} else
+							{
+								$value=isset($META_DATA[$param[0]])?strip_comcode($META_DATA[$param[0]]):'';
+								if ($value===NULL) $value='';
+							}
 					}
 				}
 				break;
@@ -274,7 +358,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
-			case 'JAVASCRIPT_INCLUDE':
+			case 'REQUIRE_JAVASCRIPT':
 				if (isset($param[0]))
 				{
 					require_javascript($param[0]);
@@ -395,6 +479,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=symbol_truncator($param,'expand');
 				break;
 
+			case 'PARAGRAPH':
+				if (isset($param[0]))
+				{
+					$is_blocky_already=(preg_match('#<(p|div|ul|ol|dl|blockquote|h1|h2|h3|h4|h5|h6|table|iframe)(\s.*)?>#',$param[0])!=0);
+					$value.=($is_blocky_already?'':'<p>').$param[0].($is_blocky_already?'':'</p>');
+				}
+				break;
+
 			case 'THEME':
 				if (isset($GLOBALS['FORUM_DRIVER']))
 				{
@@ -467,7 +559,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=array_key_exists($sr,$LOADED_PANELS)?$LOADED_PANELS[$sr]:'';
 				break;
 
-			case 'HAS_JS':
 			case 'JS_ON':
 				if (isset($param[1]))
 				{
@@ -478,12 +569,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'BASE_URL_NOHTTP':
 				$value=preg_replace('#^https?://[^/]+#','',get_base_url());
 				if (substr($value,0,2)=='//') $value=substr($value,1);
-				if (!$GLOBALS['DEBUG_MODE']) break; // Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode). Bubble on...
+				if (!$GLOBALS['DEV_MODE']) break; // Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode). Bubble on...
 
 			case 'CUSTOM_BASE_URL_NOHTTP':
 				$value=preg_replace('#^https?://[^/]+/#','/',get_custom_base_url());
 				if (substr($value,0,2)=='//') $value=substr($value,1);
-				if (!$GLOBALS['DEBUG_MODE']) break; // Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode). Bubble on...
+				if (!$GLOBALS['DEV_MODE']) break; // Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode). Bubble on...
 
 			case 'BASE_URL':
 				$value=get_base_url(isset($param[0])?($param[0]=='1'):NULL);
@@ -501,30 +592,146 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=get_site_name();
 				break;
 
-			case 'HEADER_TEXT':
-				global $ZONE;
-				$value=$ZONE['zone_header_text_trans'];
+			case 'VERSION_NUMBER':
+				$value=ocp_version_full();
 				break;
 
-			case 'PANEL_WIDTH':
-				if ((isset($TEMPCODE_SETGET['PANEL_WIDTH'])) && ($TEMPCODE_SETGET['PANEL_WIDTH']!=''))
+			case 'CHARSET':
+				$value=get_charset();
+				break;
+
+			case 'HEADER_TEXT':
+				global $ZONE,$DONE_HEADER,$SEO_TITLE,$DISPLAYED_TITLE;
+				if ($ZONE===NULL)
 				{
-					$value=$TEMPCODE_SETGET['PANEL_WIDTH'];
-				} else
+					warn_exit(do_lang_tempcode('ZONE_NOT_INSTALLED'));
+				}
+				if (($SEO_TITLE===NULL) || ($SEO_TITLE=='')) // Take from either zone header or page title
 				{
-					$value=get_option('panel_width',true);
-					if ($value===NULL) $value='13.3em';
+					if ($DISPLAYED_TITLE!==NULL) $_displayed_title=$DISPLAYED_TITLE->evaluate();
+					if (($DISPLAYED_TITLE!==NULL) && (strip_tags($_displayed_title)!=''))
+					{
+						$value=strip_tags($_displayed_title);
+					} else
+					{
+						$value=$ZONE['zone_header_text_trans'];
+					}
+				} else // Take from SEO title
+				{
+					$comcodeless=strip_comcode($SEO_TITLE); // This is not HTML
+
+					// Strip 'Welcome to' off if it's there
+					/*$comcodeless=str_replace('&hellip;','...',$comcodeless);
+					$comcodeless=str_replace('&middot;','-',$comcodeless);
+					$comcodeless=str_replace('&ndash;','-',$comcodeless);
+					$comcodeless=str_replace('&mdash;','-',$comcodeless);*/
+					$value=preg_replace('#'.str_replace('#','\#',preg_quote(do_lang('WELCOME_TO_STRIPPABLE').' '.get_site_name())).'([^-]+\s*-\s*)?#','',$comcodeless);
+					// Strip site name off it it's there (it'll be put on in the templates, so we don't want it twice)
+					$stub=get_site_name().' - ';
+					if (substr($value,strlen($stub))==$stub) $value=substr($value,strlen($stub));
+					if ($value==get_site_name()) $value='';
 				}
 				break;
 
-			case 'PANEL_WIDTH_SPACED':
-				if ((isset($TEMPCODE_SETGET['PANEL_WIDTH_SPACED'])) && ($TEMPCODE_SETGET['PANEL_WIDTH_SPACED']!=''))
+			case 'ZONE_HEADER_TEXT':
+				$value=$GLOBALS['ZONE']['zone_header_text_trans'];
+				break;
+
+			case 'CANONICAL_URL':
+				global $NON_CANONICAL_PARAMS;
+				$non_canonical=array();
+				foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
+				$value=get_self_url(true,false,$non_canonical);
+				break;
+
+			case 'SHOW_HEADER':
+				$value=((get_param_integer('wide_high',get_param_integer('keep_wide_high',0))!=1) && (!running_script('preview')) && (!running_script('iframe'))/* && (is_null(get_param('zone',NULL)))*/)?'1':'0';
+				break;
+
+			case 'SHOW_FOOTER':
+				$value=((get_param_integer('wide_high',get_param_integer('keep_wide_high',0))!=1) && (!running_script('preview')))?'1':'0';
+				break;
+
+			case 'LOGO_URL':
+				$value=get_logo_url();
+				break;
+
+			case 'HELPER_PANEL_TUTORIAL':
+				if ($GLOBALS['HELPER_PANEL_TUTORIAL']===NULL) $GLOBALS['HELPER_PANEL_TUTORIAL']='';
+				if (get_option('show_docs')=='0') $GLOBALS['HELPER_PANEL_TUTORIAL']='';
+				$value=$GLOBALS['HELPER_PANEL_TUTORIAL'];
+				break;
+
+			case 'HELPER_PANEL_PIC':
+				if ($GLOBALS['HELPER_PANEL_PIC']===NULL) $GLOBALS['HELPER_PANEL_PIC']='';
+				$value=$GLOBALS['HELPER_PANEL_PIC'];
+				if (($value!='') && (find_theme_image($value,true)=='')) $value='';
+				break;
+
+			case 'HELPER_PANEL_HTML':
+				if ($GLOBALS['HELPER_PANEL_HTML']===NULL) $GLOBALS['HELPER_PANEL_HTML']='';
+				$value=$GLOBALS['HELPER_PANEL_HTML'];
+				break;
+
+			case 'HELPER_PANEL_TEXT':
+				if ($GLOBALS['HELPER_PANEL_TEXT']===NULL) $GLOBALS['HELPER_PANEL_TEXT']='';
+				$value=is_object($GLOBALS['HELPER_PANEL_TEXT'])?$GLOBALS['HELPER_PANEL_TEXT']->evaluate():$GLOBALS['HELPER_PANEL_TEXT'];
+				break;
+
+			case 'MESSAGES_TOP':
+				$value=static_evaluate_tempcode($GLOBALS['ATTACHED_MESSAGES']);
+				break;
+
+			case 'MESSAGES_BOTTOM':
+				// Extra stuff we can tag on (like messages)
+				$messages_bottom=new ocp_tempcode();
+				$site_closed=get_option('site_closed'); // May have been JUST changed in page load - think Setup Wizard
+				$page=get_page_name();
+				if (($site_closed=='1') && ($page!='login') && ($page!='join') && (get_param_integer('wide_high',0)==0))
 				{
-					$value=$TEMPCODE_SETGET['PANEL_WIDTH_SPACED'];
-				} else
+					$messages_bottom->attach(do_template('MESSAGE',array('_GUID'=>'03a41a91606b3ad05330e7d6f3e741c1','TYPE'=>'notice','MESSAGE'=>do_lang_tempcode(has_specific_permission(get_member(),'access_closed_site')?'SITE_SPECIAL_ACCESS':'SITE_SPECIAL_ACCESS_SU'))));
+				}
+				if ($GLOBALS['IS_ACTUALLY_ADMIN'])
 				{
-					$value=get_option('panel_width_spaced',true);
-					if (is_null($value)) $value='14.3em';
+					$unsu_link=get_self_url(true,true,array('keep_su'=>NULL));
+					$su_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+					$messages_bottom->attach(do_template('MESSAGE',array('_GUID'=>'13a41a91606b3ad05330e7d6f3e741c1','TYPE'=>'notice','MESSAGE'=>do_lang_tempcode('USING_SU',escape_html($unsu_link),escape_html($su_username)))));
+				}
+				if ((function_exists('memory_get_usage')) && (get_param('special_page_type','')=='memory'))
+				{
+					if (function_exists('memory_get_peak_usage'))
+					{
+						$memory_usage=memory_get_peak_usage();
+					} else
+					{
+						$memory_usage=memory_get_usage();
+					}
+					$messages_bottom->attach(do_template('MESSAGE',array('_GUID'=>'d605c0d111742a8cd2d4ef270a1e5fe1','TYPE'=>'inform','MESSAGE'=>do_lang_tempcode('MEMORY_USAGE',float_format(round(floatval($memory_usage)/1024.0/1024.0,2))))));
+				}
+				$value=$messages_bottom->evaluate();
+				break;
+
+			case 'BREADCRUMBS':
+				$value=static_evaluate_tempcode(breadcrumbs());
+				break;
+
+			case 'HAS_SU':
+				$value='0';
+				if (!is_guest())
+				{
+					$value=(get_option('ocp_show_su',true)=='1') && (has_specific_permission(get_member(),'assume_any_member'))?'1':'0';
+				}
+				break;
+
+			case 'STAFF_ACTIONS':
+				if (!is_guest())
+				{
+					// Different types of page type for staff (debug view, etc)
+					if ((get_option('ocp_show_staff_page_actions',true)=='1') && (has_specific_permission(get_member(),'view_profiling_modes')) && (count($_POST)==0)) // We count POST because we don't want to allow double submits
+					{
+						require_code('site2');
+						$value=get_staff_actions_list();
+					}
 				}
 				break;
 
@@ -591,6 +798,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'FORUM_CONTEXT':
+				global $SET_CONTEXT_FORUM;
+				$value=is_null($SET_CONTEXT_FORUM)?'':strval($SET_CONTEXT_FORUM);
+				break;
+
 			case 'AVATAR':
 				$value=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url(isset($param[0])?intval($param[0]):get_member());
 				if ((url_is_local($value)) && ($value!='')) $value=get_base_url().'/'.$value;
@@ -621,7 +833,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
-			case 'CSS_INCLUDE':
+			case 'REQUIRE_CSS':
 				if (isset($param[0]))
 				{
 					require_css($param[0]);
@@ -645,7 +857,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=is_httpauth_login()?'1':'0';
 				break;
 
-			case 'MEMBER_PROFILE_LINK':
+			case 'MEMBER_PROFILE_URL':
 				$value=$GLOBALS['FORUM_DRIVER']->member_profile_url(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member(),false,true);
 				if (is_null($value)) $value='';
 				break;
@@ -744,7 +956,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				else $value='0';
 				break;
 
-			case 'IS_SUPER_ADMIN':
+			case 'IS_ADMIN':
 				if (isset($GLOBALS['FORUM_DRIVER']))
 					$value=$GLOBALS['FORUM_DRIVER']->is_super_admin(((!is_null($param)) && (isset($param[0])))?intval($param[0]):get_member())?'1':'0';
 				else $value='0';
@@ -889,7 +1101,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					global $THEME_IMG_DIMS_CACHE;
 					if (!isset($THEME_IMG_DIMS_CACHE))
 					{
-						$THEME_IMG_DIMS_CACHE=function_exists('persistant_cache_get')?persistant_cache_get('THEME_IMG_DIMS'):array();
+						$THEME_IMG_DIMS_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('THEME_IMG_DIMS'):array();
 					}
 					if (isset($THEME_IMG_DIMS_CACHE[$param[0]]))
 					{
@@ -905,7 +1117,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						list($width,$height)=_symbol_image_dims(array($img_url));
 						$value=($name=='IMG_WIDTH')?$width:$height;
 						$THEME_IMG_DIMS_CACHE[$param[0]]=array($width,$height);
-						if (function_exists('persistant_cache_set')) persistant_cache_set('THEME_IMG_DIMS',$THEME_IMG_DIMS_CACHE);
+						if (function_exists('persistent_cache_set')) persistent_cache_set('THEME_IMG_DIMS',$THEME_IMG_DIMS_CACHE);
 					}
 				}
 				break;
@@ -1110,7 +1322,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$value=preg_replace('#^https?://[^/]+#','',find_script($param[0],false,isset($param[1])?intval($param[1]):0));
 				}
-				if (!$GLOBALS['DEBUG_MODE']) break; // Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode). Bubble on...
+				if (!$GLOBALS['DEV_MODE']) break; // Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode). Bubble on...
 
 			case 'FIND_SCRIPT':
 				if ((isset($param[0])) && (function_exists('find_script')))
@@ -1183,7 +1395,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'SET_TITLE':
 				if (array_key_exists(0,$param))
 				{
-					get_page_title($param[0],false);
+					get_screen_title($param[0],false);
 				}
 				break;
 
@@ -1274,12 +1486,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					require_code('ocf_members');
 					require_code('ocf_members2');
-					$_value=ocf_show_member_box(isset($param[0])?intval($param[0]):get_member());
+					$_value=render_member_box(isset($param[0])?intval($param[0]):get_member());
 					$value=$_value->evaluate();
 				}
 				break;
 
-			case 'HAS_SPECIFIC_PERMISSION':
+			case 'HAS_PRIVILEGE':
 				if (isset($param[0]))
 				{
 					$value=has_specific_permission(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'1':'0';
@@ -1476,7 +1688,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'DEV_MODE':
-				$value=$GLOBALS['DEBUG_MODE']?'1':'0';
+				$value=$GLOBALS['DEV_MODE']?'1':'0';
 				break;
 
 			case 'BROWSER_MATCHES':
@@ -1595,7 +1807,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'WCASE':
 				if (isset($param[0]))
 				{
-					$value=ucwords($param[0]);
+					$value=ocp_mb_ucwords($param[0]);
 				}
 				break;
 
@@ -1818,6 +2030,62 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'INSERT_SPAMMER_BLACKHOLE':
+				if (get_option('spam_blackhole_detection')=='1')
+				{
+					$field_name='x'.md5(get_site_name().': antispam');
+					$value='<div id="'.escape_html($field_name).'_wrap" style="display:none"><label for="'.escape_html($field_name).'">'.do_lang('DO_NOT_FILL_ME_SPAMMER_BLACKHOLE').'</label><input id="'.escape_html($field_name).'" name="'.escape_html($field_name).'" value="" type="text" /></div>';
+					if (!$GLOBALS['SEMI_DEV_MODE'])
+						$value.='<script type="text/javascript">// <![CDATA['.chr(10).'var wrap=document.getElementById(\''.escape_html($field_name).'_wrap\'); wrap.parentNode.removeChild(wrap);'.chr(10).'//]]></script>';
+				}
+				break;
+
+			case 'HONEYPOT_LINK':
+				$honeypot_url=get_option('honeypot_url',true);
+				if ($honeypot_url!=='')
+				{
+					$first_char=substr(md5(get_page_name()),0,1);
+					$bot_phrase=get_option('honeypot_phrase');
+					switch ($first_char)
+					{
+						case '0':
+						case '1':
+							$value='<a rel="nofollow" href="'.escape_html($honeypot_url).'"><!-- '.escape_html($bot_phrase).' --></a>';
+							break;
+						case '2':
+						case '3':
+							$value='<a rel="nofollow" href="'.escape_html($honeypot_url).'"><img alt="'.escape_html($bot_phrase).'" src="'.escape_html(find_theme_image('blank')).'" height="1" width="1" border="0" /></a>';
+							break;
+						case '4':
+						case '5':
+							$value='<a rel="nofollow" href="'.escape_html($honeypot_url).'" style="display: none;">'.escape_html($bot_phrase).'</a>';
+							break;
+						case '6':
+						case '7':
+							$value='<div style="display: none;"><a rel="nofollow" href="'.escape_html($honeypot_url).'">'.escape_html($bot_phrase).'</a></div>';
+							break;
+						case '8':
+						case '9':
+							$value='<a rel="nofollow" href="'.escape_html($honeypot_url).'"></a>';
+							break;
+						case 'a':
+						case 'b':
+							$value='<!-- <a rel="nofollow" href="'.escape_html($honeypot_url).'">'.escape_html($bot_phrase).'</a> -->';
+							break;
+						case 'c':
+						case 'd':
+							$value='<div style="position: absolute; top: -250px; left: -250px;"><a rel="nofollow" href="'.escape_html($honeypot_url).'">'.escape_html($bot_phrase).'</a></div>';
+							break;
+						case 'e':
+							$value='<a rel="nofollow" href="'.escape_html($honeypot_url).'"><span style="display: none;">'.escape_html($bot_phrase).'</span></a>';
+							break;
+						case 'f':
+							$value='<a rel="nofollow" href="'.escape_html($honeypot_url).'"><div style="height: 0px; width: 0px;"></div></a>';
+							break;
+					}
+				}
+				break;
+
 			case 'MAILTO':
 				require_code('obfuscate');
 
@@ -1897,15 +2165,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=get_self_url(true,(isset($param[0])) && ($param[0]=='1'),$extra_params,(isset($param[1])) && ($param[1]=='1'),(isset($param[2])) && ($param[2]=='1'));
 				break;
 
-			case 'SHIFT_DECODE':
-				if (isset($param[0]))
-				{
-					global $SHIFT_VARIABLES;
-					$key=$param[0];
-					$value=isset($SHIFT_VARIABLES[$key])?$SHIFT_VARIABLES[$key]->evaluate():'';
-				}
-				break;
-
 			case 'NUMBER_FORMAT':
 				if (isset($param[0]))
 				{
@@ -1961,6 +2220,28 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$test=$GLOBALS['SITE_DB']->query_value_null_ok($param[0],$param[1],array($id_field=>$param[2]));
 						if (!is_null($test)) $value=integer_format($test);
 					}
+				}
+				break;
+
+			case 'BETA_CSS_PROPERTY':
+				if (isset($param[0]))
+				{
+					$value='';
+					$vendors=array('','-o-','-webkit-','-ms-','-moz-');
+					foreach ($vendors as $prefix)
+					{
+						if (substr(trim($param[0]),-1)!=';') $value.='; ';
+						$matches=array();
+						if (preg_match('#^background-image:\s*(\w+-gradient)(.*)$#s',$param[0],$matches)!=0) // CSS gradients
+						{
+							$value.='background-image: '.$prefix.$matches[1].$matches[2];
+						} else
+						{
+							$value.=$prefix.$param[0];
+						}
+						$value.="\n\t";
+					}
+					$value=rtrim($value);
 				}
 				break;
 
@@ -2026,9 +2307,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 		switch ($name)
 		{
-			case 'SHIFT_ENCODE':
-				break;
-
 			case 'PARAM_INFO':
 				$_value=do_template('PARAM_INFO',array('MAP'=>$param['vars']));
 				$value=$_value->evaluate();
@@ -2099,39 +2377,45 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
-			case 'IN_ARRAY':
-				if (isset($param[1]))
-				{
-					$key=$param[1]->evaluate();
-					$array=array_key_exists($key,$param['vars'])?$param['vars'][$key]:array();
-					$value=in_array($param[0]->evaluate(),$array)?'1':'0';
-				}
-				break;
-
-			case 'NOT_IN_ARRAY':
-				if (isset($param[1]))
-				{
-					$key=$param[1]->evaluate();
-					$array=array_key_exists($key,$param['vars'])?$param['vars'][$key]:array();
-					$value=in_array($param[0]->evaluate(),$array)?'0':'1';
-				}
-				break;
-
 			case 'IF_IN_ARRAY':
 				if (isset($param[2]))
 				{
-					$key=$param[1]->evaluate();
+					$key=$param[0]->evaluate();
 					$array=array_key_exists($key,$param['vars'])?$param['vars'][$key]:array();
-					$value=in_array($param[0]->evaluate(),$array)?$param[2]->evaluate():'';
+					$value='';
+					$i=1;
+					while (array_key_exists($i+1,$param))
+					{
+						$checking_in=$param[$i]->evaluate();
+						if (in_array($checking_in,$array))
+						{
+							$value=$param[count($param)-2]->evaluate();
+							break;
+						}
+						$i++;
+					}
 				}
 				break;
 
 			case 'IF_NOT_IN_ARRAY':
 				if (isset($param[2]))
 				{
-					$key=$param[1]->evaluate();
+					$key=$param[0]->evaluate();
 					$array=array_key_exists($key,$param['vars'])?$param['vars'][$key]:array();
-					$value=in_array($param[0]->evaluate(),$array)?'':$param[2]->evaluate();
+					$value='';
+					$ok=true;
+					$i=1;
+					while (array_key_exists($i+1,$param))
+					{
+						$checking_in=$param[$i]->evaluate();
+						if (in_array($checking_in,$array))
+						{
+							$ok=false;
+							break;
+						}
+						$i++;
+					}
+					if ($ok) $value=$param[$i]->evaluate();
 				}
 				break;
 
@@ -2167,15 +2451,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'BOX':
 				unset($param['vars']);
 				$title=isset($param[1])?$param[0]->evaluate():'';
-				$dimensions=isset($param[2])?$param[1]->evaluate():'100%';
-				if ($dimensions=='') $dimensions='100%';
-				$box_type=isset($param[3])?$param[2]->evaluate():'classic';
+				$box_type=isset($param[2])?$param[1]->evaluate():'';
+				$width=isset($param[3])?$param[2]->evaluate():'';
 				$options=isset($param[4])?$param[3]->evaluate():'';
 				$meta=isset($param[5])?$param[4]->evaluate():'';
 				$links=isset($param[6])?$param[5]->evaluate():'';
-				$expand=isset($param[7])?($param[6]->evaluate()=='1'):false;
-				$toplink=isset($param[8])?$param[7]->evaluate():'';
-				$tmp=put_in_standard_box(array_pop($param),$title,$dimensions,$box_type,$options,$meta,$links,$expand,$toplink);
+				$top_links=isset($param[7])?$param[6]->evaluate():'';
+				$tmp=put_in_standard_box(array_pop($param),$title,$box_type,$width,$options,$meta,$links,$top_links);
 				$value=$tmp->evaluate();
 				break;
 
@@ -2205,6 +2487,28 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$t=$param[0]->evaluate();
 					if (!isset($param['vars'][$t]))
+					{
+						$value=$param[1]->evaluate();
+					}
+				}
+				break;
+
+			case 'IF_PASSED_AND_TRUE':
+				if (isset($param[1]))
+				{
+					$t=$param[0]->evaluate();
+					if ((isset($param['vars'][$t])) && ($param['vars'][$t]!='0') && ($param['vars'][$t]!=''))
+					{
+						$value=$param[1]->evaluate();
+					}
+				}
+				break;
+
+			case 'IF_NON_PASSED_OR_FALSE':
+				if (isset($param[1]))
+				{
+					$t=$param[0]->evaluate();
+					if ((!isset($param['vars'][$t])) || ($param['vars'][$t]=='0') || ($param['vars'][$t]==''))
 					{
 						$value=$param[1]->evaluate();
 					}
@@ -2253,6 +2557,24 @@ function ecv($lang,$escaped,$type,$name,$param)
 						elseif ($x2>=count($array)) $x2-=count($array);
 					}
 					$value=array_key_exists($x2,$array)?$array[$x2]:'';
+				}
+				break;
+
+			case 'RECONTEXTUALISE_IDS':
+				if (isset($param[1]))
+				{
+					$prefix=$param[0]->evaluate();
+					$str=$param[1]->evaluate();
+					$matches=array();
+					$num_matches=preg_match_all('# id="([^"]*)"#',$str,$matches);
+					for ($i=0;$i<$num_matches;$i++)
+					{
+						$str=str_replace(' id="'.$matches[$i][1].'"',' id="'.$prefix.'_'.$matches[$i][1].'"',$str);
+						$str=str_replace(' for="'.$matches[$i][1].'"',' for="'.$prefix.'_'.$matches[$i][1].'"',$str);
+						$str=str_replace(' ById(\''.$matches[$i][1].'\')',' ById(\''.$prefix.'_'.$matches[$i][1].'\')',$str);
+						$str=str_replace(' ById("'.$matches[$i][1].'\')',' ById(\''.$prefix.'_'.$matches[$i][1].'")',$str);
+					}
+					$value=$str;
 				}
 				break;
 
@@ -2527,7 +2849,7 @@ function keep_symbol($param)
 		{
 			if ((get_magic_quotes_gpc()) && (is_string($val))) $val=stripslashes($val);
 
-			if ((substr($key,0,5)=='keep_') && (strpos($key,'_expand_')===false) && ((!skippable_keep($key,$val)) || (($key=='keep_session') && (is_null(get_bot_type())) && (isset($param[1])) && ($param[1]=='1'))) && (is_string($val)))
+			if ((substr($key,0,5)=='keep_') && ((!skippable_keep($key,$val)) || (($key=='keep_session') && (is_null(get_bot_type())) && (isset($param[1])) && ($param[1]=='1'))) && (is_string($val)))
 			{
 				$value.=($first?'?':'&').urlencode($key).'='.ocp_url_encode($val);
 				$first=false;

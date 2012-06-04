@@ -11,9 +11,9 @@ function initialise_slideshow()
 	reset_slideshow_countdown();
 	start_slideshow_timer();
 
-	addEventListenerAbstract(window,'keypress',toggle_slideshow_timer);
+	add_event_listener_abstract(window,'keypress',toggle_slideshow_timer);
 
-	addEventListenerAbstract(document.getElementById('gallery_entry_screen'),'click',function(event) {
+	add_event_listener_abstract(document.getElementById('gallery_entry_screen'),'click',function(event) {
 		if (typeof event=='undefined') var event=window.event;
 
 		if (event.altKey || event.metaKey)
@@ -53,7 +53,7 @@ function start_slideshow_timer()
 function show_current_slideshow_time()
 {
 	var changer=document.getElementById('changer_wrap');
-	if (changer) setInnerHTML(changer,'{!CHANGING_IN,xxx}'.replace('xxx',(slideshow_time<0)?0:slideshow_time));
+	if (changer) set_inner_html(changer,'{!CHANGING_IN,xxx}'.replace('xxx',(slideshow_time<0)?0:slideshow_time));
 }
 
 function reset_slideshow_countdown()
@@ -83,7 +83,7 @@ function stop_slideshow_timer(message)
 {
 	if (typeof message=='undefined') var message='{!STOPPED;}';
 	var changer=document.getElementById('changer_wrap');
-	if (changer) setInnerHTML(changer,message);
+	if (changer) set_inner_html(changer,message);
 	if (slideshow_timer) window.clearInterval(slideshow_timer);
 	slideshow_timer=null;
 	document.getElementById('gallery_entry_screen').style.cursor='';
@@ -122,7 +122,7 @@ function slideshow_ensure_loaded(slide,immediate)
 
 	if (slideshow_current_position==slide) // Ah, it's where we are, so save that in
 	{
-		slideshow_slides[slide]=getInnerHTML(document.getElementById('gallery_entry_screen'));
+		slideshow_slides[slide]=get_inner_html(document.getElementById('gallery_entry_screen'));
 		return;
 	}
 
@@ -165,21 +165,21 @@ function slideshow_show_slide(slide)
 		{
 			var fadeElement_old=fadeElements_old[0];
 			fadeElement_old.style.position='absolute';
-			var left_pos=findWidth(fadeElement_old.parentNode)/2-findWidth(fadeElement_old)/2;
+			var left_pos=find_width(fadeElement_old.parentNode)/2-find_width(fadeElement_old)/2;
 			fadeElement_old.style.left=left_pos+'px';
 		} // else probably a video
 
-		setInnerHTML(document.getElementById('gallery_entry_screen'),slideshow_slides[slide].replace(/<script[^>]*>(.|\n)*?<\/script>/gi,''));
+		set_inner_html(document.getElementById('gallery_entry_screen'),slideshow_slides[slide].replace(/<script[^>]*>(.|\n)*?<\/script>/gi,''));
 
 		var fadeElements=get_elements_by_class_name(document.body,'scale_down');
 		if ((typeof fadeElements[0]!='undefined') && (typeof fadeElements_old[0]!='undefined'))
 		{
 			var fadeElement=fadeElements[0];
-			setOpacity(fadeElement,0);
+			set_opacity(fadeElement,0);
 			fadeElement.parentNode.insertBefore(fadeElement_old,fadeElement);
-			nereidFade(fadeElement,100.0,30,10);
-			setOpacity(fadeElement_old,1.0);
-			nereidFade(fadeElement_old,0.0,30,-10,true);
+			thumbnail_fade(fadeElement,100.0,30,10);
+			set_opacity(fadeElement_old,1.0);
+			thumbnail_fade(fadeElement_old,0.0,30,-10,true);
 		} // else probably a video
 
 		document.getElementById('slideshow_from').value=slideshow_from.value; // Make sure stays the same

@@ -69,8 +69,8 @@ class template_previews_test_set extends ocp_test_case
 		$only_do_these=array( // If you want to test specific templates temporarily put the template names (without .tpl) in this array. But remove again before you commit!
 		);
 
-		$lists = find_all_previews__by_template();
-		foreach($lists as $template=>$list)
+		$lists=find_all_previews__by_template();
+		foreach ($lists as $template=>$list)
 		{
 			$temp_name=basename($template,'.tpl');
 
@@ -79,11 +79,11 @@ class template_previews_test_set extends ocp_test_case
 
 			if ($temp_name=='tempcode_test') continue;
 
-			if(is_plain_text_template($temp_name))
+			if (is_plain_text_template($temp_name))
 				continue;
 
-			$hook = $list[0];
-			$function = $list[1];
+			$hook=$list[0];
+			$function=$list[1];
 
 			if (is_file(get_file_base().'/_tests/screens_tested/'.$function)) continue; // To make easier to debug through
 
@@ -92,8 +92,8 @@ class template_previews_test_set extends ocp_test_case
 			$DONE_HEADER=false;
 			$RECORDED_TEMPLATES_USED=array();
 			$out=render_screen_preview($template,$hook,$function);
-			$flag = false;
-			foreach($lists as $template_2=>$list_2)
+			$flag=false;
+			foreach ($lists as $template_2=>$list_2)
 			{
 				$temp_name_2=basename($template_2,'.tpl');
 				if (count($only_do_these)!=0)
@@ -101,17 +101,17 @@ class template_previews_test_set extends ocp_test_case
 
 				if ($temp_name_2=='tempcode_test') continue;
 
-				if(is_plain_text_template($temp_name_2))
+				if (is_plain_text_template($temp_name_2))
 					continue;
 				if ($list_2[1]==$function)
 				{
-					if($temp_name_2 == 'FORM_STANDARD_END' || $temp_name_2 == 'MENU_LINK_PROPERTIES')
+					if ($temp_name_2 == 'GLOBAL_HELPER_PANEL' || $temp_name_2 == 'GLOBAL_mobile' || $temp_name_2 == 'HTML_HEAD' || $temp_name_2 == 'FORM_STANDARD_END' || $temp_name_2 == 'MENU_LINK_PROPERTIES')
 						continue;
 
 					$this->assertTrue(in_array($temp_name_2,$RECORDED_TEMPLATES_USED),$template_2.' not used in preview as claimed in '.$hook.'/'.$function);
-					if(!in_array($temp_name_2,$RECORDED_TEMPLATES_USED))
+					if (!in_array($temp_name_2,$RECORDED_TEMPLATES_USED))
 					{
-						$flag = true;
+						$flag=true;
 					}
 				}
 			}
@@ -128,7 +128,7 @@ class template_previews_test_set extends ocp_test_case
 				display_validation_results($_out,$result,false,false);
 			} else
 			{
-				if(!$flag)
+				if (!$flag)
 				{
 					fclose(fopen(get_file_base().'/_tests/screens_tested/'.$function,'wb'));
 					sync_file(get_file_base().'/_tests/screens_tested/'.$function);
@@ -140,18 +140,18 @@ class template_previews_test_set extends ocp_test_case
 
 	function testRepeatConsistency()
 	{
-		global $NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$DOCUMENT_HELP,$HTTP_STATUS_CODE,$PREPROCESSABLE_SYMBOLS,$SHIFT_VARIABLES,$CYCLES,$TEMPCODE_SETGET,$LOADED_TPL_CACHE,$META_DATA;
+		global $NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$DOCUMENT_HELP,$HTTP_STATUS_CODE,$PREPROCESSABLE_SYMBOLS,$CYCLES,$TEMPCODE_SETGET,$LOADED_TPL_CACHE,$META_DATA;
 		$NON_CACHEABLE_SYMBOLS=array('CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1);
 
 		global $HAS_KEEP_IN_URL;
 		$_GET['wide']='1';
 		$HAS_KEEP_IN_URL=NULL;
 
-		$lists = find_all_previews__by_screen();
-		foreach($lists as $function=>$tpls)
+		$lists=find_all_previews__by_screen();
+		foreach ($lists as $function=>$tpls)
 		{
-			$template = $tpls[0];
-			$hook = NULL;
+			$template=$tpls[0];
+			$hook=NULL;
 
 			if (is_file(get_file_base().'/_tests/screens_tested/consistency__'.$function)) continue; // To make easier to debug through
 
@@ -159,7 +159,6 @@ class template_previews_test_set extends ocp_test_case
 
 			init__lorem();
 			$META_DATA=array();
-			$SHIFT_VARIABLES=array();
 			$CYCLES=array();
 			$TEMPCODE_SETGET=array();
 			$LOADED_TPL_CACHE=array();
@@ -167,7 +166,6 @@ class template_previews_test_set extends ocp_test_case
 			$_out1=$out1->evaluate();
 			init__lorem();
 			$META_DATA=array();
-			$SHIFT_VARIABLES=array();
 			$CYCLES=array();
 			$TEMPCODE_SETGET=array();
 			$LOADED_TPL_CACHE=array();
@@ -210,11 +208,11 @@ class template_previews_test_set extends ocp_test_case
 	{
 		global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW;
 
-		$lists = find_all_previews__by_screen();
-		foreach($lists as $function=>$tpls)
+		$lists=find_all_previews__by_screen();
+		foreach ($lists as $function=>$tpls)
 		{
-			$template = $tpls[0];
-			$hook = NULL;
+			$template=$tpls[0];
+			$hook=NULL;
 
 			if (is_file(get_file_base().'/_tests/screens_tested/nonemissing__'.$function)) continue; // To make easier to debug through
 

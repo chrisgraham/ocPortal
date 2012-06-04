@@ -151,40 +151,8 @@ class Hook_search_news
 			$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 		}
 
-		$id=$myrow['id'];
-		$date=get_timezoned_date($myrow['date_and_time']);
-		$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$myrow['author']),get_module_zone('authors')):new ocp_tempcode();
-		$author=$myrow['author'];
-		$news_title=get_translated_tempcode($myrow['title']);
-		$news=get_translated_tempcode($myrow['news']);
-		if ($news->is_empty())
-		{
-			$news=get_translated_tempcode($myrow['news_article']);
-			$truncate=true;
-		} else $truncate=false;
-		$tmp=array('page'=>'news','type'=>'view','id'=>$id);
-		$full_url=build_url($tmp,get_module_zone('news'));
-		if (!array_key_exists($myrow['news_category'],$NEWS_CATS))
-		{
-			$_news_cats=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>$myrow['news_category']),'',1);
-			if (array_key_exists(0,$_news_cats))
-				$NEWS_CATS[$myrow['news_category']]=$_news_cats[0];
-		}
-		if ((!array_key_exists($myrow['news_category'],$NEWS_CATS)) || (!array_key_exists('nc_title',$NEWS_CATS[$myrow['news_category']])))
-			$myrow['news_category']=db_get_first_id();
-		$img=find_theme_image($NEWS_CATS[$myrow['news_category']]['nc_img']);
-		if (is_null($img)) $img='';
-		if ($myrow['news_image']!='')
-		{
-			$img=$myrow['news_image'];
-			if (url_is_local($img)) $img=get_base_url().'/'.$img;
-		}
-		$category=get_translated_text($NEWS_CATS[$myrow['news_category']]['nc_title']);
-		$seo_bits=seo_meta_get_for('news',strval($id));
-		$map=array('ID'=>strval($id),'TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'TRUNCATE'=>$truncate,'BLOG'=>false,'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$category,'IMG'=>$img,'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'NEWS_TITLE'=>$news_title,'AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS'=>$news,'FULL_URL'=>$full_url);
-
-		$tpl=do_template('NEWS_PIECE_SUMMARY',$map);
-		return put_in_standard_box($tpl,do_lang_tempcode('NEWS_ARTICLE'));
+		require_code('news');
+		render_news_box($myrow);
 	}
 
 }

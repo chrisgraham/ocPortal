@@ -1,13 +1,16 @@
 {+START,IF,{$NOR,{$GET,login_screen},{$MATCH_KEY_MATCH,_WILD:login}}}
-	{+START,BOX,{TITLE},,{$?,{$GET,in_panel},panel,classic}}
-		<form title="{!_LOGIN}" onsubmit="if (checkFieldForBlankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete side_block_form">
+	<section class="box box___block_side_personal_stats_no"><div class="box_inner">
+		{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE}</h3>{+END}
+
+		<form title="{!_LOGIN}" onsubmit="if (check_field_for_blankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete">
 			<div>
 				<div class="constrain_field">
-					<div class="accessibility_hidden"><label for="login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
-					<div class="accessibility_hidden"><label for="s_password">{!PASSWORD}</label></div>
-					<input accesskey="l" class="wide_field login_block_username" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="login_username" name="login_username" />
-					<input class="wide_field" type="password" value="password" name="password" id="s_password" />
+					<div class="accessibility_hidden"><label for="sps_login_username">{!USERNAME}{+START,IF,{$AND,{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label></div>
+					<div class="accessibility_hidden"><label for="sps_s_password">{!PASSWORD}</label></div>
+					<input accesskey="l" class="wide_field login_block_username" type="text" onfocus="if (this.value=='{!USERNAME;}'){ this.value=''; password.value=''; }" value="{!USERNAME}" id="sps_login_username" name="login_username" />
+					<input class="wide_field" type="password" value="password" name="password" id="sps_s_password" />
 				</div>
+
 				<div class="login_block_cookies">
 					<div class="float_surrounder">
 						<label for="remember">{!REMEMBER_ME}</label>
@@ -20,22 +23,23 @@
 						</div>
 					{+END}
 				</div>
-				<input class="wide_button" type="submit" value="{!_LOGIN}" />
+
+				<p class="constrain_field"><input class="wide_button" type="submit" value="{!_LOGIN}" /></p>
 			</div>
 		</form>
-		<p class="button_panel">
-			[ {+START,IF_NON_EMPTY,{JOIN_LINK}}<a href="{JOIN_LINK*}">{!_JOIN}</a> | {+END}<a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
 
-			{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
-				{+START,IF_EMPTY,{$FB_CONNECT_UID}}
-					<br />
-					<br />
-					<span xmlns:fb="http://api.facebook.com/1.0/">
-						<fb:login-button scope="email,user_birthday"></fb:login-button>
-					</span>
-				{+END}
+		<ul class="horizontal_links associated_links_block_group">
+			{+START,IF_NON_EMPTY,{JOIN_URL}}<li><a href="{JOIN_URL*}">{!_JOIN}</a></li>{+END}
+			<li><a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LOGIN_URL*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a></li>
+		</ul>
+
+		{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
+			{+START,IF_EMPTY,{$FB_CONNECT_UID}}
+				<span xmlns:fb="http://api.facebook.com/1.0/">
+					<fb:login-button scope="email,user_birthday"></fb:login-button>
+				</span>
 			{+END}
-		</p>
-	{+END}
+		{+END}
+	</div></section>
 {+END}
 

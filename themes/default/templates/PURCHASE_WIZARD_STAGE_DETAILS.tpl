@@ -1,10 +1,10 @@
 <p>{TEXT}</p>
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
+<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<colgroup>
-			<col style="width: 200px" />
-			<col style="width: 100%" />
+			<col class="purchase_wizard_field_name_column" />
+			<col class="purchase_wizard_field_input_column" />
 		</colgroup>
 	{+END}
 

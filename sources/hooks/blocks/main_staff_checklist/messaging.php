@@ -83,11 +83,11 @@ class Hook_checklist_messaging
 			$img	=	'completed';
 		}
 
-		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('ORDER_STATUS'=>$img));
+		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'0578142633c6f3d37776e82a869deb91','ORDER_STATUS'=>$img));
 
 		$url=build_url(array('page'=>'admin_messaging','type'=>'misc'),get_module_zone('admin_messaging'));
 
-		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('CONTACT_US_MESSAGING'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($outstanding)))));
+		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'10cf866e2ea104ac41685a8756e182f8','URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('CONTACT_US_MESSAGING'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($outstanding)))));
 		return array(array($tpl,NULL,$outstanding,NULL));
 	}
 

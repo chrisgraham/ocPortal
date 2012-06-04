@@ -1,0 +1,114 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Providing galleries[/title]
+
+{!galleries:DOC_GALLERIES} This tutorial describes the basic gallery features, and how to use them.
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Gallery structure[/title]
+
+[exp_thumb="Viewing a gallery that has a subgallery" float="right"]gallery_subcat[/exp_thumb]
+Galleries are organised in a hierarchical (tree) structure. For more information of these tree structures, see the 'Providing downloads' tutorial, as the download system is the perfect clean example of an ocPortal tree-structured system. The gallery structure is more complex than that of the download structure, and additional information on it is given in the 'Advanced galleries' tutorial.
+
+Galleries may have 'representative images' (rep-images). When a user views a gallery with sub-galleries, the sub-galleries are actually shown with their rep-images, so as to make them look more attractive and give an impression of the contents. Rep-images may be chosen when adding or editing a gallery, or when adding an image to a gallery it can be chosen that that image shall also become the rep-image.
+
+[title="2"]Galleries[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="A gallery in flow mode" float="right"]gallery_flow_mode[/exp_thumb]
+A gallery is a category of the gallery system, and is used to hold images and videos (together, gallery entries). Galleries can also hold audio files which are treated in the same way as videos.
+
+Galleries are given a name, and a title. The name should be a code-name that can easily be typed in a URL, rather than a cleanly readable name. For example, 'holiday2004' would be a good gallery name for a gallery with title, 'Holiday Pictures, 2004 (Sweden)'.
+
+[exp_thumb="A gallery in multi-page mode" float="right"]gallery_not_flow_mode[/exp_thumb]
+There are two display modes for galleries:
+ - Flow mode -- this mode allows you to see all the entries in the gallery at the same time as viewing one of the entries. This makes navigation more efficient
+ - Multi-page mode -- this mode provides page browsing features so as to be able to browse through a large numbers of entries
+
+From the gallery, the user can choose any of the available entries (images or videos), and the chosen entry will be presented to the user on a full wide page.
+[html]</div>[/html]
+[title="2"]Gallery index[/title]
+
+A gallery index is provided that lists all galleries in the system. Galleries that are empty are omitted from this list.
+
+The index is not linked onto the menus by default but may be added via the entry-point finder in the menu editor if you want it.
+
+[title="2"]Watermarking[/title]
+
+When you add or edit a gallery you may choose watermarks to be automatically added to any of the 4 corners of any added images that you select to be watermarked. A watermark is just a semi-transparent image that is overlaid across images as an official mark, or to prevent unauthorised reproduction. If you wish to place a watermark on an edge, you simply make a corner watermark image that includes enough transparency to change the location for the main image to be placed.
+
+Watermarks are actually 'inherited' in the tree structure: in other words, when adding an image, watermarks will be chosen from the first gallery back down towards the root gallery that actually defines watermarks.
+
+[title="2"]Teasers[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="Viewing a gallery image" float="right"]gallery_view_image[/exp_thumb]
+For various kinds of website, such as expert photography communities, galleries provide a place to position premium or important content. ocPortal forms a 'teaser' system, whereby you can encourage users to join a certain usergroup (perhaps, via some form of subscription) that has access to view certain galleries, by 'teasing' them about them. You can define 'teaser' text for each gallery, and use the [tt]:tease[/tt] page to display it, other details, and the rep-image, to those without access.
+[html]</div>[/html]
+[title="2"]Videos[/title]
+
+Galleries have powerful video support. ocPortal will analyse the file types of uploaded videos and use carefully crafted templates that use browser plug-ins that are most appropriate to that file type. For example, QuickTime files will be displayed with HTML to use the QuickTime plugin.
+
+ocPortal can usually auto-detect video widths, heights and lengths, from the actual video files.
+
+[title="2"]Ordering[/title]
+
+[exp_thumb="Adding an image to a gallery" float="right"]gallery_add_image[/exp_thumb]
+Gallery entries are ordered in the same order they were added to the system. If you are batch importing (covered in the Advanced Galleries tutorial), then you may want to define a custom ordering. To do this, you just need to give all the images in the batch names that are consistent with a numbering scheme of your choice. ocPortal will detect numbering schemes automatically, and order by them.
+
+The rule is very simple: ocPortal will order by filename if when taking all numbers out of all filenames in the gallery, the filenames are all the same.
+
+For example, a gallery with the following named files would not be ordered according to a scheme:
+ - foo.png
+ - foo1.png
+ - foo2.png
+ - foo2something.png
+But without the last image, the contents would be ordered by filename.
+
+[title="2"]Slide-shows[/title]
+
+When viewing an image or video visitors will be able to start moving through all the subsequent images/videos in the gallery automatically. This is referred to as a slide-show. Visitors may pause the slide-show via a click or keypress, which could be triggered via a hand-held USB control device (as such devices can be mapped to such input actions).
+If you would like to change the speed of the slide-show you can do it via editing the [tt]GALLERY_ENTRY_SCREEN[/tt] template.
+
+On some browsers, alt-clicking on the slideshow will activate the browser full screen mode.
+
+[title="2"]e-cards[/title]
+
+When viewing an image visitors will have an option (if the 'recommend' addon is installed) to send the image as an e-card. This is a good form of website promotion, as the e-card also functions as a kind of website recommendation.
+If you don't want this feature you can remove it by editing the [tt]GALLERY_ENTRY_SCREEN[/tt] template.
+
+[title="2"]Video formats[/title]
+
+ocPortal supports most video formats, but video on the web is fraught with complexity.
+
+The following formats are best to use:
+ - mp4 (with h.264 aac encoding)
+ - webm (the new [at time of writing] Google-sponsored format, supported natively in all web browsers except IE and Safari, but available in those via normal system codec plugins)
+
+The following are almost as good:
+ - mov (with h.264 aac encoding -- this modern QuickTime format is identical to mp4)
+ - flv (works as long as Flash is installed)
+
+The following common formats are not safe:
+ - avi (could be many different codecs, no consistent support even for the MPEG-compatible encodings like DivX or XVid or MS-Video, plus your browser might not load the correct plugin)
+ - wmv/asf (requires Windows Media Player plugin, only properly supported on Windows)
+ - ogv (Ogg video, essentially replaced by WebM)
+ - mpeg/mpg (old MPEG formats, no consistent plugin support, plus your browser might not load the correct plugin)
+ - rm/ram (requires RealPlayer plugin, not available on Linux)
+ - qt (Old quicktime format)
+
+You can set it up so that any video format is 'transcoded' to MP4 by setting the FFMPEG executable path in the configuration. For this to work, 'FFMPEG' needs to be installed on the server. The default transcoder settings are set to produce MP4 h.264 DVD-quality movie files.
+Unfortunately FFMPEG does have some major problems with audio/video synchronisation, mixed bit-rates, and lack of adaption to corrupt files, and incompatibilities between versions. It's a sad situation but there's no real cheap solution to it for now, other than to focus on supporting WebM to become a dominant universal standard.
+
+[concepts
+ 1_key="Gallery"     1_value="A category for images and videos"
+ 2_key="Rep-image"   2_value="An image chosen to represent a category, when a box for it is displayed"
+ 3_key="Teaser page" 3_value="A page that only shows gallery rep-images and details, intended for sites where the gallery requires subscription (stock art sites, auction sites, etc.)"
+ 4_key="Watermark"   4_value="A standard mark shown on an image to mark its identity, often done for a number of different reasons"
+ 5_key="Flow mode"   5_value="The gallery view mode intended for attractive display of small galleries"
+ 6_key="Subgallery"  6_value="A gallery placed beneath another gallery"
+]Concepts[/concepts]
+
+[title="2"]See also[/title]
+
+ - [page="_SEARCH:tut_featured"]Providing featured content[/page]
+ - [page="_SEARCH:tut_downloads"]Providing downloads[/page]
+ - [page="_SEARCH:tut_adv_galleries"]Advanced galleries[/page]
+

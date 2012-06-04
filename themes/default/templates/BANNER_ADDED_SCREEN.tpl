@@ -13,7 +13,7 @@
 	</code>
 </div>
 
-<h2>INFORMATION</h2>
+<h2>{!INFORMATION}</h2>
 
 <p>
 	{!ACCESS_BANNER_INFO,{STATS_URL*}}

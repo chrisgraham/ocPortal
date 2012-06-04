@@ -64,7 +64,6 @@ class Block_side_forum_news
 
 		require_css('news');
 		require_lang('news');
-		require_css('side_blocks');
 
 		$limit=array_key_exists('param',$map)?intval($map['param']):6;
 		$forum_name=array_key_exists('forum',$map)?$map['forum']:do_lang('NEWS');

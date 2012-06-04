@@ -44,7 +44,7 @@ class tickettype_test_set extends ocp_test_case
 		$this->assertTrue('gold'==get_translated_text($this->tickettype_id));;
 	}
 
-	
+
 	function tearDown()
 	{
 		delete_ticket_type($this->tickettype_id);

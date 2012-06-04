@@ -119,7 +119,7 @@ class Block_main_search
 
 		if ((!array_key_exists('content',$input_fields)) && (count($input_fields)!=1)) $extra['content']='';
 
-		return do_template('BLOCK_MAIN_SEARCH',array('_GUID'=>'4d239be8e7d846106c951d21d7979f78','TITLE'=>$title,'INPUT_FIELDS'=>$input_fields,'EXTRA'=>$extra,'SORT'=>$sort,'AUTHOR'=>$author,'DAYS'=>strval($days),'DIRECTION'=>$direction,'ONLY_TITLES'=>$only_titles?'1':'0','ONLY_SEARCH_META'=>$only_search_meta?'1':'0','BOOLEAN_SEARCH'=>$boolean_search?'1':'0','CONJUNCTIVE_OPERATOR'=>$conjunctive_operator,'LIMIT_TO'=>$limit_to,'URL'=>$url,'FULL_LINK'=>$full_link));
+		return do_template('BLOCK_MAIN_SEARCH',array('_GUID'=>'4d239be8e7d846106c951d21d7979f78','TITLE'=>$title,'INPUT_FIELDS'=>$input_fields,'EXTRA'=>$extra,'SORT'=>$sort,'AUTHOR'=>$author,'DAYS'=>strval($days),'DIRECTION'=>$direction,'ONLY_TITLES'=>$only_titles?'1':'0','ONLY_SEARCH_META'=>$only_search_meta?'1':'0','BOOLEAN_SEARCH'=>$boolean_search?'1':'0','CONJUNCTIVE_OPERATOR'=>$conjunctive_operator,'LIMIT_TO'=>$limit_to,'URL'=>$url,'FULL_LOGIN_URL'=>$full_link));
 	}
 
 }

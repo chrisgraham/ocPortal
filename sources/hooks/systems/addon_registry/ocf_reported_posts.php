@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_ocf_reported_posts
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,11 @@ class Hook_addon_registry_ocf_reported_posts
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array('ocf_forum'),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(
+				'ocf_forum'
+			),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,24 +74,23 @@ class Hook_addon_registry_ocf_reported_posts
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/ocf_reported_posts.php',
 			'OCF_REPORTED_POST_FCOMCODE.tpl',
 			'sources/hooks/blocks/main_staff_checklist/reported_posts.php',
-			'themes/default/images/EN/pageitem/report_post.png',
+			'themes/default/images/EN/pageitem/report_post.png'
 		);
 	}
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'OCF_REPORTED_POST_FCOMCODE.tpl'=>'ocf_reported_post_fcomcode',
-				);
+			'OCF_REPORTED_POST_FCOMCODE.tpl' => 'ocf_reported_post_fcomcode'
+		);
 	}
 
 	/**
@@ -105,15 +105,13 @@ class Hook_addon_registry_ocf_reported_posts
 		require_lang('ocf');
 		require_css('ocf');
 		return array(
-			lorem_globalise(
-				do_lorem_template('OCF_REPORTED_POST_FCOMCODE',array(
-					'POST_ID'=>placeholder_id(),
-					'MEMBER'=>lorem_phrase(),
-					'POST'=>lorem_phrase(),
-					'POSTER'=>lorem_phrase(),
-					'TOPIC_TITLE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OCF_REPORTED_POST_FCOMCODE', array(
+				'POST_ID' => placeholder_id(),
+				'MEMBER' => lorem_phrase(),
+				'POST' => lorem_phrase(),
+				'POSTER' => lorem_phrase(),
+				'TOPIC_TITLE' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 

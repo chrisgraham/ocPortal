@@ -1,12 +1,12 @@
 <tr class="{$CYCLE,results_table_zebra,zebra_0,zebra_1}">
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		{MEMBER}
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		{!MINUTES_AGO,{TIME*}}
 
 		{+START,IF,{$MOBILE}}
-			{+START,IF,{$HAS_SPECIFIC_PERMISSION,show_user_browsing}}
+			{+START,IF,{$HAS_PRIVILEGE,show_user_browsing}}
 				<p class="associated_details">
 					{+START,IF_EMPTY,{AT_URL}}
 						{+START,IF_NON_EMPTY,{AT_URL}}
@@ -24,8 +24,8 @@
 		{+END}
 	</td>
 	{+START,IF,{$NOT,{$MOBILE}}}
-		{+START,IF,{$HAS_SPECIFIC_PERMISSION,show_user_browsing}}
-			<td class="dottedborder_barrier_b_nonrequired">
+		{+START,IF,{$HAS_PRIVILEGE,show_user_browsing}}
+			<td>
 				{+START,IF_EMPTY,{AT_URL}}
 					{LOCATION}
 				{+END}
@@ -35,8 +35,8 @@
 			</td>
 		{+END}
 	{+END}
-	{+START,IF,{$HAS_SPECIFIC_PERMISSION,see_ip}}
-		<td class="dottedborder_barrier_b_nonrequired">
+	{+START,IF,{$HAS_PRIVILEGE,see_ip}}
+		<td>
 			<a href="{$PAGE_LINK*,adminzone:admin_lookup:misc:{IP}}">{IP*}</a>
 		</td>
 	{+END}

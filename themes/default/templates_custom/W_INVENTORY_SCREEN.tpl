@@ -3,7 +3,7 @@
 <div class="float_surrounder">
 	{+START,IF_NON_EMPTY,{AVATAR}}
 		<div class="ocw_avatar">
-			<img title="" alt="{!W_AVATAR}" src="{AVATAR*}" />
+			<img alt="{!W_AVATAR}" src="{AVATAR*}" />
 			{+START,IF_NON_EMPTY,{PIC}}
 				[<a title="{!W_PHOTO}: {!LINK_NEW_WINDOW}" target="_blank" href="{PIC*}">{!W_PHOTO}</a>]
 			{+END}
@@ -16,14 +16,7 @@
 </div>
 
 {+START,IF_NON_EMPTY,{INVENTORY}}
-	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table ocw_inventory solidborder ocw_centered_contents">
-		<colgroup>
-			<col style="width: 50%" />
-			<col style="width: 26%" />
-			<col style="width: 6%" />
-			<col style="width: 18%" />
-		</colgroup>
-
+	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table ocw_inventory results_table ocw_centered_contents autosized_table">
 		<thead>
 			<tr>
 				<th>{!W_PICTURE}</th>

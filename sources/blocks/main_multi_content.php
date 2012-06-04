@@ -35,7 +35,7 @@ class Block_main_multi_content
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','efficient','filter','filter_b','title','zone','mode','max','days','lifetime','pinned','no_links');
+		$info['parameters']=array('ocselect','param','efficient','filter','filter_b','title','zone','mode','max','days','lifetime','pinned','no_links');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_multi_content
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'efficient\',$map)?$map[\'efficient\']:\'_SEARCH\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'mode\',$map)?$map[\'mode\']:\'recent\')';
+		$info['cache_on']='array(array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'mode\',$map)?$map[\'mode\']:\'recent\'):NULL';
 		$info['ttl']=30;
 		return $info;
 	}
@@ -105,6 +105,7 @@ class Block_main_multi_content
 		$mode=array_key_exists('mode',$map)?$map['mode']:'recent'; // recent|top|random|all
 		$filter=array_key_exists('filter',$map)?$map['filter']:'';
 		$filter_b=array_key_exists('filter_b',$map)?$map['filter_b']:'';
+		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
 		$zone=array_key_exists('zone',$map)?$map['zone']:'_SEARCH';
 		$efficient=(array_key_exists('efficient',$map)?$map['efficient']:'1')=='1';
 		$title=array_key_exists('title',$map)?$map['title']:'';
@@ -174,6 +175,7 @@ class Block_main_multi_content
 				} else
 				{
 					$query.=' LEFT JOIN '.get_table_prefix().'group_category_access a ON ('.db_string_equal_to('a.module_the_name',$category_type_access).' AND r.'.$category_field_access.'=a.category_name)';
+					$query.=' LEFT JOIN '.get_table_prefix().'member_category_access ma ON ('.db_string_equal_to('ma.module_the_name',$category_type_access).' AND r.'.$category_field_access.'=ma.category_name)';
 				}
 			}
 			if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='!'))
@@ -188,7 +190,7 @@ class Block_main_multi_content
 					$where.='(a.group_id IS NULL) AND ('.str_replace('a.','a2.',$groups).') AND (a2.group_id IS NOT NULL)';
 				} else
 				{
-					$where.='('.$groups.') AND (a.group_id IS NOT NULL)';
+					$where.='(('.$groups.') AND (a.group_id IS NOT NULL) OR (ma.active_until>'.strval(time()).' AND ma.member_id='.strval(get_member()).'))';
 				}
 			}
 			if ((!is_null($category_field_filter)) && ($category_field_filter!=$category_field_access) && ($info['category_type']!=='!'))
@@ -244,6 +246,20 @@ class Block_main_multi_content
 		{
 			if ($where!='') $where.=' AND ';
 			$where.=$info['extra_where_sql'];
+		}
+
+		// ocSelect support
+		if ($ocselect!='')
+		{
+			require_code('content');
+			$cma_hook=convert_ocportal_type_codes('award_hook',$type_id,'cma_hook');
+
+			// Convert the filters to SQL
+			require_code('ocselect');
+			list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($info['connection'],parse_ocselect($ocselect),$cma_hook,'');
+			$extra_select_sql.=implode('',$extra_select);
+			$query.=implode('',$extra_join);
+			$where.=$extra_where;
 		}
 
 		if ($mode=='all')

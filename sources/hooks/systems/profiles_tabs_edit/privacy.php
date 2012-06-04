@@ -179,7 +179,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 
 		$cpfs_hidden=form_input_hidden('cpf_fields',implode(',', $cpf_ids));
 
-		$text=do_template('OCF_CPF_PERMISSIONS_TAB',array('_GUID'=>'dbdac6ca3bc752b54d2a24a4c6e69c7c','FIELDS'=>$fields));
+		$text=do_template('OCF_CPF_PERMISSIONS_TAB',array('_GUID'=>'1ca98f8ea5009be2229491d341ec6e87','FIELDS'=>$fields));
 
 		$javascript='';
 

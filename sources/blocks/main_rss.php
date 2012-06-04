@@ -183,7 +183,7 @@ class Block_main_rss
 			} else
 			{
 				$news=$item['news'];
-				if (array_key_exists('news_article',$item)) $news_full=do_template('BLOCK_MAIN_RSS_FULL',array('_GUID'=>'adcd82c64966f54fb0173b8edc626bd7','RAND'=>strval(mt_rand(0,999999)),'NEWS_FULL'=>$item['news_article'])); else $news_full=new ocp_tempcode();
+				if (array_key_exists('news_article',$item)) $news_full=do_template('BLOCK_MAIN_RSS_FULL',array('_GUID'=>'adcd82c64966f54fb0173b8edc626bd7','NEWS_FULL'=>$item['news_article'])); else $news_full=new ocp_tempcode();
 			}
 
 			if (array_key_exists('author',$item))

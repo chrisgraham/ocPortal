@@ -502,8 +502,8 @@ YAHOO.util.Color = function() {
      * @final
      */
     proto.IMAGE = {
-        PICKER_THUMB: "{$IMG,colour_picker/picker_thumb}".replace(/^http:/,window.location.protocol),
-        HUE_THUMB: "{$IMG,colour_picker/hue_thumb}".replace(/^http:/,window.location.protocol)
+        PICKER_THUMB: "{$IMG#,colour_picker/picker_thumb}".replace(/^http:/,window.location.protocol),
+        HUE_THUMB: "{$IMG#,colour_picker/hue_thumb}".replace(/^http:/,window.location.protocol)
     };
 
     /*
@@ -729,11 +729,11 @@ YAHOO.util.Color = function() {
         this.getElement(this.ID.S).value = this.get(this.OPT.SATURATION);
         this.getElement(this.ID.V).value = this.get(this.OPT.VALUE);
         this.getElement(this.ID.R).value = this.get(this.OPT.RED);
-        setInnerHTML(this.getElement(this.ID.R_HEX),Color.dec2hex(this.get(this.OPT.RED)));
+        set_inner_html(this.getElement(this.ID.R_HEX),Color.dec2hex(this.get(this.OPT.RED)));
         this.getElement(this.ID.G).value = this.get(this.OPT.GREEN);
-        setInnerHTML(this.getElement(this.ID.G_HEX),Color.dec2hex(this.get(this.OPT.GREEN)));
+        set_inner_html(this.getElement(this.ID.G_HEX),Color.dec2hex(this.get(this.OPT.GREEN)));
         this.getElement(this.ID.B).value = this.get(this.OPT.BLUE);
-        setInnerHTML(this.getElement(this.ID.B_HEX),Color.dec2hex(this.get(this.OPT.BLUE)));
+        set_inner_html(this.getElement(this.ID.B_HEX),Color.dec2hex(this.get(this.OPT.BLUE)));
         this.getElement(this.ID.HEX).value = this.get(this.OPT.HEX);
     };
 
@@ -1630,7 +1630,7 @@ YAHOO.util.Color = function() {
 
                     _hideShowEl.call(this, el, on);
 
-                    setInnerHTML(this.getElement(this.ID.CONTROLS_LABEL), 
+                    set_inner_html(this.getElement(this.ID.CONTROLS_LABEL), 
                         (on) ? this.get(this.OPT.TXT).HIDE_CONTROLS :
                                this.get(this.OPT.TXT).SHOW_CONTROLS);
 

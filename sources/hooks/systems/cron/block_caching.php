@@ -58,7 +58,7 @@ class Hook_cron_block_caching
 		}
 
 		$where=array('c_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'c_lang'=>user_lang());
-		$requests=$GLOBALS['SITE_DB']->query_select('cron_caching_requests',array('id','c_codename','c_map','c_timezone','c_is_bot','c_in_panel','c_interlock','c_store_as_tempcode'),$where);
+		$requests=$GLOBALS['SITE_DB']->query_select('cron_caching_requests',array('id','c_codename','c_map','c_timezone','c_is_bot','c_store_as_tempcode'),$where);
 		foreach ($requests as $request)
 		{
 			$GLOBALS['NO_QUERY_LIMIT']=true;
@@ -106,8 +106,6 @@ class Hook_cron_block_caching
 					}
 					$_cache_identifier[]=$request['c_timezone'];
 					$_cache_identifier[]=$request['c_is_bot']==0;
-					$_cache_identifier[]=strval($request['c_in_panel']);
-					$_cache_identifier[]=strval($request['c_interlock']);
 					$cache_identifier=serialize($_cache_identifier);
 
 					require_code('caches2');

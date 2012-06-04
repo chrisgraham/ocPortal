@@ -100,7 +100,7 @@ class Block_side_amazon_wishlist
 		while($items->Lists->List->TotalPages>$i);
 
 
-		return do_template('BLOCK_SIDE_AMAZON_WISHLIST',array('TITLE'=>$title,'CONTENT'=>$out));
+		return do_template('BLOCK_SIDE_AMAZON_WISHLIST',array('_GUID'=>'3c5da7ade6aca4c30a3842e00d686d90','TITLE'=>$title,'CONTENT'=>$out));
 	}
 
 	/**

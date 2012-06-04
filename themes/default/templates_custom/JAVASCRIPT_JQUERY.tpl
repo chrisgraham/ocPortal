@@ -782,7 +782,7 @@ function evalScript( i, elem ) {
 			dataType: "script"
 		});
 	} else {
-		jQuery.globalEval( elem.text || elem.textContent || (getInnerHTML(elem)=='') || "" );
+		jQuery.globalEval( elem.text || elem.textContent || (get_inner_html(elem)=='') || "" );
 	}
 
 	if ( elem.parentNode ) {
@@ -832,7 +832,7 @@ function now() {
 		id = "script" + now();
 
 	div.style.display = "none";
-	setInnerHTML(div," <link/><table></table><a href='/a' style='color:red;float:left;opacity:.55;'>a</a><input type='checkbox'/>");
+	set_inner_html(div," <link/><table></table><a href='/a' style='color:red;float:left;opacity:.55;'>a</a><input type='checkbox'/>");
 
 	var all = div.getElementsByTagName("*"),
 		a = div.getElementsByTagName("a")[0];
@@ -927,7 +927,7 @@ function now() {
 	}
 
 	div = document.createElement("div");
-	setInnerHTML(div,"<input type='radio' name='radiotest' checked='checked'/>");
+	set_inner_html(div,"<input type='radio' name='radiotest' checked='checked'/>");
 
 	var fragment = document.createDocumentFragment();
 	fragment.appendChild( div.firstChild );
@@ -3441,7 +3441,7 @@ function getText( elems ) {
 	// We're going to inject a fake input element with a specified name
 	var form = document.createElement("div"),
 		id = "script" + (new Date).getTime();
-	setInnerHTML(form, "<a name='" + id + "'/>");
+	set_inner_html(form, "<a name='" + id + "'/>");
 
 	// Inject it into the root element, check its status, and remove it quickly
 	var root = document.documentElement;
@@ -3498,7 +3498,7 @@ function getText( elems ) {
 	}
 
 	// Check to see if an attribute returns normalized href attributes
-	setInnerHTML(div, "<a href='#'></a>");
+	set_inner_html(div, "<a href='#'></a>");
 	if ( div.firstChild && typeof div.firstChild.getAttribute !== "undefined" &&
 			div.firstChild.getAttribute("href") !== "#" ) {
 		Expr.attrHandle.href = function(elem){
@@ -3512,7 +3512,7 @@ function getText( elems ) {
 if ( document.querySelectorAll ) {
 	(function(){
 		var oldSizzle = Sizzle, div = document.createElement("div");
-		setInnerHTML(div, "<p class='TEST'></p>");
+		set_inner_html(div, "<p class='TEST'></p>");
 
 		// Safari can't handle uppercase or unicode characters when
 		// in quirks mode.
@@ -3545,7 +3545,7 @@ if ( document.querySelectorAll ) {
 (function(){
 	var div = document.createElement("div");
 
-	setInnerHTML(div, "<div class='test e'></div><div class='test'></div>");
+	set_inner_html(div, "<div class='test e'></div><div class='test'></div>");
 
 	// Opera can't find a second classname (in 9.6)
 	// Also, make sure that getElementsByClassName actually exists
@@ -4159,7 +4159,7 @@ jQuery.fn.extend({
 				if ( !html ) {
 					var div = ownerDocument.createElement("div");
 					div.appendChild( this.cloneNode(true) );
-					html = getInnerHTML(div);
+					html = get_inner_html(div);
 				}
 
 				return jQuery.clean([html.replace(rinlinejQuery, "")
@@ -4184,7 +4184,7 @@ jQuery.fn.extend({
 	html: function( value ) {
 		if ( value === undefined ) {
 			return this[0] && this[0].nodeType === 1 ?
-				getInnerHTML(this[0]).replace(rinlinejQuery, "") :
+				get_inner_html(this[0]).replace(rinlinejQuery, "") :
 				null;
 
 		// See if we can take a shortcut and just use innerHTML
@@ -4199,7 +4199,7 @@ jQuery.fn.extend({
 					// Remove element nodes and prevent memory leaks
 					if ( this[i].nodeType === 1 ) {
 						jQuery.cleanData( this[i].getElementsByTagName("*") );
-						setInnerHTML(this[i], value);
+						set_inner_html(this[i], value);
 					}
 				}
 
@@ -4445,7 +4445,7 @@ jQuery.extend({
 					div = context.createElement("div");
 
 				// Go to html and back, then peel off extra wrappers
-				setInnerHTML(div, wrap[1] + elem + wrap[2]);
+				set_inner_html(div, wrap[1] + elem + wrap[2]);
 
 				// Move to the right depth
 				while ( depth-- ) {
@@ -6023,7 +6023,7 @@ jQuery.offset = {
 
 		jQuery.extend( container.style, { position: "absolute", top: 0, left: 0, margin: 0, border: 0, width: "1px", height: "1px", visibility: "hidden" } );
 
-		setInnerHTML(container, html);
+		set_inner_html(container, html);
 		body.insertBefore( container, body.firstChild );
 		innerDiv = container.firstChild;
 		checkDiv = innerDiv.firstChild;

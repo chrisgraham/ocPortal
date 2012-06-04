@@ -24,9 +24,7 @@
 }
 
 #openid_btns {
-  width: 100%;
   overflow: hidden;
-  outline: 0;
 }
 
 #openid_btns br {
@@ -34,10 +32,9 @@
 }
 
 #openid_highlight {
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
+  {$BETA_CSS_PROPERTY,border-radius: 10px;}
   padding: 2px;
-  background-color: #FFFCC9;
+  background-color: {$GET,area_background};
   float: left;
 }
 

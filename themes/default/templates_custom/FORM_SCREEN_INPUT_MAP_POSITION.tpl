@@ -71,7 +71,7 @@
 	<input onchange="place_marker(this.form.elements['latitude'].value,this.form.elements['longitude'].value);" size="6" type="number" {+START,IF,{REQUIRED}}class="hidden_required" {+END}id="{NAME*}_longitude" name="longitude" value="{LONGITUDE*}" />
 </label>
 
-{$JAVASCRIPT_INCLUDE,javascript_ajax}
+{$REQUIRE_JAVASCRIPT,javascript_ajax}
 <form action="{$SELF_URL*}" onsubmit="return false;">
 	<div>
 		<label for="location">Look at Location:</label>

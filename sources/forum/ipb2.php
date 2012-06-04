@@ -428,8 +428,8 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 				}
 				$post=preg_replace('#style_emoticons/<\#EMO_DIR\#>(.+?)\'#is',$emoticons_set_dir.'\\1\'',$post);
 
-				$post=str_replace("class='quotetop'","class='comcode_quote_h4'",$post);
-				$post=str_replace("class='quotemain'","class='comcode_quote_content'",$post);
+				$post=str_replace("class='quotetop'","class='comcode_quote'",$post);
+				$post=str_replace("class='quotemain'","class='comcode_quote_inner'",$post);
 
 				// Attachments
 				$attachments=$this->connection->query_select('attachments',array('attach_member_id','attach_id','attach_file','attach_location','attach_thumb_location','attach_is_image','attach_filesize','attach_hits'),array('attach_post_key'=>$fp_rows[0]['post_key'],'attach_approved'=>1));

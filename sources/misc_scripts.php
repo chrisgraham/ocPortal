@@ -133,33 +133,10 @@ function simple_tracker_script()
 }
 
 /**
- * Script to jump between zones using a URL parameter.
- */
-function zone_jump_script()
-{
-	get_zone_name(); // So 'VIRTUALISED_ZONES' has chance to load.
-
-	$zone_name=get_param('zone_jump');
-
-	$zone_default_page=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_default_page',array('zone_name'=>$zone_name));
-	if (is_null($zone_default_page)) $zone_default_page='start';
-
-	$_redirect_url=build_url(array('page'=>$zone_default_page),$zone_name);
-	$redirect_url=$_redirect_url->evaluate();
-
-	if ((strpos($redirect_url,chr(10))!==false) || (strpos($redirect_url,chr(13))!==false))
-		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-
-	header('Location: '.$redirect_url);
-	exit();
-}
-
-/**
  * Script to show previews of content being added/edited.
  */
 function preview_script()
 {
-   $_GET['wide_high']='1';
 	require_code('preview');
 	list($output,$validation,$keyword_density,$spelling)=build_preview(true);
 
@@ -257,7 +234,7 @@ function iframe_script()
 
 	global $ATTACHED_MESSAGES;
 	$output->handle_symbol_preprocessing();
-	$tpl=do_template('STYLED_HTML_WRAP',array('TITLE'=>is_null($GLOBALS['DISPLAYED_TITLE'])?do_lang_tempcode('NA'):$GLOBALS['DISPLAYED_TITLE'],'EXTRA_HEAD'=>$GLOBALS['EXTRA_HEAD'],'EXTRA_FOOT'=>$GLOBALS['EXTRA_FOOT'],'MESSAGE_TOP'=>$ATTACHED_MESSAGES,'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
+	$tpl=do_template('STYLED_HTML_WRAP',array('OPENS_BELOW'=>get_param_integer('opens_below',0)==1,'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
 	$tpl->handle_symbol_preprocessing();
 	$tpl->evaluate_echo();
 }
@@ -298,7 +275,7 @@ function page_link_chooser_script()
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	// Display
-	$content=do_template('PAGE_LINK_CHOOSER',array('NAME'=>'tree_list'));
+	$content=do_template('PAGE_LINK_CHOOSER',array('_GUID'=>'235d969528d7b81aeb17e042a17f5537','NAME'=>'tree_list'));
 	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('CHOOSE'),'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
@@ -316,7 +293,7 @@ function staff_tips_script($ret=false)
 	if (!has_zone_access(get_member(),'adminzone'))
 		access_denied('ZONE_ACCESS');
 
-	require_css('adminzone');
+	require_css('adminzone_frontpage');
 
 	// Anything to dismiss?
 	$dismiss=get_param('dismiss','');
@@ -397,7 +374,7 @@ function block_helper_script()
 
 	check_specific_permission('comcode_dangerous');
 
-	$title=get_page_title('BLOCK_HELPER');
+	$title=get_screen_title('BLOCK_HELPER');
 
 	require_code('form_templates');
 	require_all_lang();
@@ -522,7 +499,7 @@ function block_helper_script()
 			$link_caption=do_lang_tempcode('NICE_BLOCK_NAME',escape_html(cleanup_block_name($block)),$block);
 			$usage=array_key_exists($block,$block_usage)?$block_usage[$block]:array();
 
-			$block_types[$this_block_type]->attach(do_template('BLOCK_HELPER_BLOCK_CHOICE',array('USAGE'=>$usage,'DESCRIPTION'=>$descriptiont,'URL'=>$url,'LINK_CAPTION'=>$link_caption)));
+			$block_types[$this_block_type]->attach(do_template('BLOCK_HELPER_BLOCK_CHOICE',array('_GUID'=>'079e9b37fc142d292d4a64940243178a','USAGE'=>$usage,'DESCRIPTION'=>$descriptiont,'URL'=>$url,'LINK_CAPTION'=>$link_caption)));
 		}
 		/*if (array_key_exists($type_wanted,$block_types)) We don't do this now, as we structure by addon name
 		{
@@ -549,9 +526,9 @@ function block_helper_script()
 					$img=array_key_exists($block_type,$block_types_icon)?$block_types_icon[$block_type]:NULL;
 					break;
 			}
-			$links->attach(do_template('BLOCK_HELPER_BLOCK_GROUP',array('IMG'=>$img,'TITLE'=>$type_title,'LINKS'=>$_links)));
+			$links->attach(do_template('BLOCK_HELPER_BLOCK_GROUP',array('_GUID'=>'975a881f5dbd054ced9d2e3b35ed59bf','IMG'=>$img,'TITLE'=>$type_title,'LINKS'=>$_links)));
 		}
-		$content=do_template('BLOCK_HELPER_START',array('_GUID'=>'d2d6837cdd8b19d80ea95ab9f5d09c9a','GET'=>true,'TITLE'=>$title,'LINKS'=>$links));
+		$content=do_template('BLOCK_HELPER_START',array('_GUID'=>'1d58238a6d00eb7f79d5a4f0e85fb1a4','GET'=>true,'TITLE'=>$title,'LINKS'=>$links));
 	}
 	elseif ($type=='step2') // Ask for block fields
 	{
@@ -559,7 +536,7 @@ function block_helper_script()
 		$defaults=parse_single_comcode_tag(get_param('parse_defaults','',true),'block');
 
 		$block=trim(get_param('block'));
-		$title=get_page_title('_BLOCK_HELPER',true,array(escape_html($block)));
+		$title=get_screen_title('_BLOCK_HELPER',true,array(escape_html($block)));
 		$fields=new ocp_tempcode();
 		$parameters=get_block_parameters($block);
 		$parameters[]='failsafe';
@@ -643,7 +620,7 @@ function block_helper_script()
 					$list=new ocp_tempcode();
 					foreach ($options as $option)
 						$list->attach(form_input_list_entry($option,$has_default && $option==$default));
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif ($block.':'.$parameter=='side_stored_menu:param') // special case for menus
 				{
@@ -653,7 +630,7 @@ function block_helper_script()
 					{
 						$list->attach(form_input_list_entry($row['i_menu'],$has_default && $row['i_menu']==$default));
 					}
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif ($block.':'.$parameter=='side_shoutbox:param') // special case for chat rooms
 				{
@@ -663,7 +640,7 @@ function block_helper_script()
 					{
 						$list->attach(form_input_list_entry(strval($row['id']),$has_default && strval($row['id'])==$default,$row['room_name']));
 					}
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif ($block.':'.$parameter=='main_poll:param') // special case for polls
 				{
@@ -674,7 +651,7 @@ function block_helper_script()
 					{
 						$list->attach(form_input_list_entry(strval($row['id']),$has_default && strval($row['id'])==$default,get_translated_text($row['question'])));
 					}
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif ($block.':'.$parameter=='main_awards:param') // special case for menus
 				{
@@ -684,14 +661,14 @@ function block_helper_script()
 					{
 						$list->attach(form_input_list_entry(strval($row['id']),$has_default && strval($row['id'])==$default,get_translated_text($row['a_title'])));
 					}
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif (($parameter=='zone') || (($parameter=='param') && ($block=='main_as_zone_access'))) // Zone list
 				{
 					$list=new ocp_tempcode();
 					$list->attach(form_input_list_entry('_SEARCH',($default=='')));
 					$list->attach(nice_get_zones(($default=='')?NULL:$default));
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif ((($parameter=='forum') || (($parameter=='param') && (in_array($block,array('main_forum_topics'))))) && (get_forum_type()=='ocf')) // OCF forum list
 				{
@@ -699,47 +676,50 @@ function block_helper_script()
 					require_code('ocf_forums2');
 					if (!addon_installed('ocf_forum')) warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
 					$list=ocf_get_forum_tree_secure(NULL,NULL,true,explode(',',$default));
-					$fields->attach(form_input_multi_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list));
+					$fields->attach(form_input_multi_list(titleify($parameter),escape_html($description),$parameter,$list));
 				}
 				elseif (($parameter=='param') && (in_array($block,array('side_root_galleries','main_gallery_tease','main_gallery_embed','main_image_fader')))) // gallery list
 				{
 					require_code('galleries');
 					$list=nice_get_gallery_tree($default);
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif (($parameter=='param') && (in_array($block,array('main_download_category')))) // download category list
 				{
 					require_code('downloads');
 					$list=nice_get_download_category_tree(($default=='')?NULL:intval($default));
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif ((($parameter=='param') && (in_array($block,array('main_contact_catalogues')))) || (($parameter=='catalogue') && (in_array($block,array('main_recent_cc_entries'))))) // catalogue list
 				{
 					require_code('catalogues');
 					$list=nice_get_catalogues($default,false);
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif (($parameter=='param') && (in_array($block,array('main_cc_embed'))) && ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)')<500)) // catalogue category
 				{
 					$list=new ocp_tempcode();
-					$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title','c_name'),NULL,'ORDER BY c_name,id');
+					$structured_list=new ocp_tempcode();
+					$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title','c_name'),array('cc_parent_id'=>NULL),'ORDER BY c_name,id',100);
 					$last_cat=mixed();
 					foreach ($categories as $cat)
 					{
 						if ((is_null($last_cat)) || ($cat['c_name']!=$last_cat))
 						{
-							$list->attach(form_input_list_entry($cat['c_name'],$has_default && $cat['c_name']==$default,$cat['c_name'],false,true));
+							$structured_list->attach(form_input_list_group($cat['c_name'],$list));
+							$list=new ocp_tempcode();
 							$last_cat=$cat['c_name'];
 						}
 						$list->attach(form_input_list_entry(strval($cat['id']),$has_default && strval($cat['id'])==$default,get_translated_text($cat['cc_title'])));
 					}
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$structured_list->attach(form_input_list_group($cat['c_name'],$list));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$structured_list,NULL,false,false));
 				}
 				elseif (($parameter=='param') && (in_array($block,array('main_banner_wave','main_topsites')))) // banner type list
 				{
 					require_code('banners');
 					$list=nice_get_banner_types($default);
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif (($parameter=='param') && (in_array($block,array('main_newsletter_signup')))) // newsletter list
 				{
@@ -747,13 +727,13 @@ function block_helper_script()
 					$rows=$GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
 					foreach ($rows as $newsletter)
 						$list->attach(form_input_list_entry(strval($newsletter['id']),$has_default && strval($newsletter['id'])==$default,get_translated_text($newsletter['title'])));
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif (($parameter=='filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive')))) // news category list
 				{
 					require_code('news');
 					$list=nice_get_news_categories(($default=='')?-1:intval($default));
-					$fields->attach(form_input_multi_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list));
+					$fields->attach(form_input_multi_list(titleify($parameter),escape_html($description),$parameter,$list));
 				}
 				elseif ($parameter=='font') // font choice
 				{
@@ -777,7 +757,7 @@ function block_helper_script()
 					{
 						$list->attach(form_input_list_entry($font,$font==$default));
 					}
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif (preg_match('#'.do_lang('BLOCK_IND_EITHER').' (.+)#i',$description,$matches)!=0) // list
 				{
@@ -796,7 +776,7 @@ function block_helper_script()
 						for ($i=0;$i<$num_matches;$i++)
 							$list->attach(form_input_list_entry($matches2[1][$i],$matches2[1][$i]==$default));
 					}
-					$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif (preg_match('#\('.do_lang('BLOCK_IND_HOOKTYPE').': \'([^\'/]*)/([^\'/]*)\'\)#i',$description,$matches)!=0) // hook list
 				{
@@ -818,21 +798,21 @@ function block_helper_script()
 					}
 					if ((($block=='main_search') && ($parameter=='limit_to')) || ($block=='side_tag_cloud'))
 					{
-						$fields->attach(form_input_multi_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,0));
+						$fields->attach(form_input_multi_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,0));
 					} else
 					{
-						$fields->attach(form_input_list(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$list,NULL,false,false));
+						$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 					}
 				}
 				elseif ((($default=='0') || ($default=='1') || (strpos($description,'\'0\'')!==false) || (strpos($description,'\'1\'')!==false)) && (do_lang('BLOCK_IND_WHETHER')!='') && (strpos(strtolower($description),do_lang('BLOCK_IND_WHETHER'))!==false)) // checkbox
 				{
-					$fields->attach(form_input_tick(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$default=='1'));
+					$fields->attach(form_input_tick(titleify($parameter),escape_html($description),$parameter,$default=='1'));
 				} elseif ((do_lang('BLOCK_IND_NUMERIC')!='') && (strpos($description,do_lang('BLOCK_IND_NUMERIC'))!==false)) // numeric
 				{
-					$fields->attach(form_input_integer(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,($default=='')?NULL:intval($default),false));
+					$fields->attach(form_input_integer(titleify($parameter),escape_html($description),$parameter,($default=='')?NULL:intval($default),false));
 				} else // normal
 				{
-					$fields->attach(form_input_line(ucwords(str_replace('_',' ',$parameter)),escape_html($description),$parameter,$default,false));
+					$fields->attach(form_input_line(titleify($parameter),escape_html($description),$parameter,$default,false));
 				}
 			}
 		}
@@ -854,7 +834,7 @@ function block_helper_script()
 		}
 		$text=do_lang_tempcode('BLOCK_HELPER_2',escape_html(cleanup_block_name($block)),escape_html(do_lang('BLOCK_'.$block.'_DESCRIPTION')),escape_html(do_lang('BLOCK_'.$block.'_USE')));
 		$hidden=form_input_hidden('block',$block);
-		$content=do_template('FORM_SCREEN',array('_GUID'=>'270058349d048a8be6570bba97c81fa2','TITLE'=>$title,'TARGET'=>'_self','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>true,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
+		$content=do_template('FORM_SCREEN',array('_GUID'=>'62f8688bf0ae4223a2ba1f76fef3b0b4','TITLE'=>$title,'TARGET'=>'_self','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>true,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
 
 		if ($fields->is_empty()) $type='step3';
 	}
@@ -915,7 +895,7 @@ function block_helper_script()
 	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>do_lang_tempcode('BLOCK_HELPER'),'CONTENT'=>$content));
+	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('BLOCK_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }
@@ -957,7 +937,7 @@ function emoticons_script()
 	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$echo=do_template('POPUP_HTML_WRAP',array('_GUID'=>'8acac778b145bfe7b063317fbcae7fde','TITLE'=>do_lang_tempcode('EMOTICONS_POPUP'),'CONTENT'=>$content));
+	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'8acac778b145bfe7b063317fbcae7fde','TITLE'=>do_lang_tempcode('EMOTICONS_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }
@@ -1001,13 +981,13 @@ function question_ui_script()
 	$button_set=explode(',',get_param('button_set',false,true));
 	$_image_set=get_param('image_set',false,true);
 	$image_set=($_image_set=='')?array():explode(',',$_image_set);
-	$message=do_template('QUESTION_UI_BUTTONS',array('TITLE'=>$title,'IMAGES'=>$image_set,'BUTTONS'=>$button_set,'MESSAGE'=>$_message));
+	$message=do_template('QUESTION_UI_BUTTONS',array('_GUID'=>'0c5a1efcf065e4281670426c8fbb2769','TITLE'=>$title,'IMAGES'=>$image_set,'BUTTONS'=>$button_set,'MESSAGE'=>$_message));
 
 	global $EXTRA_HEAD;
 	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>escape_html($title),'CONTENT'=>$message));
+	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>escape_html($title),'POPUP'=>true,'CONTENT'=>$message));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }

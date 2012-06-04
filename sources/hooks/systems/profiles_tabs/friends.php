@@ -51,7 +51,7 @@ class Hook_Profiles_Tabs_friends
 		$friends_b=array();
 		$add_friend_url=new ocp_tempcode();
 		$remove_friend_url=new ocp_tempcode();
-		$all_buddies_link=new ocp_tempcode();
+		$all_friends_link=new ocp_tempcode();
 		if (addon_installed('chat'))
 		{
 			require_code('chat');
@@ -59,10 +59,10 @@ class Hook_Profiles_Tabs_friends
 			{
 				if (!member_befriended($member_id_of))
 				{
-					$add_friend_url=build_url(array('page'=>'chat','type'=>'buddy_add','member_id'=>$member_id_of,'redirect'=>get_self_url(true)),get_module_zone('chat'));
+					$add_friend_url=build_url(array('page'=>'chat','type'=>'friend_add','member_id'=>$member_id_of,'redirect'=>get_self_url(true)),get_module_zone('chat'));
 				} else
 				{
-					$remove_friend_url=build_url(array('page'=>'chat','type'=>'buddy_remove','member_id'=>$member_id_of,'redirect'=>get_self_url(true)),get_module_zone('chat'));
+					$remove_friend_url=build_url(array('page'=>'chat','type'=>'friend_remove','member_id'=>$member_id_of,'redirect'=>get_self_url(true)),get_module_zone('chat'));
 				}
 			}
 
@@ -94,7 +94,7 @@ class Hook_Profiles_Tabs_friends
 					$friend_usergroup_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($f_id,'m_primary_group');
 					$friend_usergroup=array_key_exists($friend_usergroup_id,$all_usergroups)?$all_usergroups[$friend_usergroup_id]:do_lang_tempcode('UNKNOWN');
 					$mutual_label=do_lang('MUTUAL_FRIEND');
-					$box=ocf_show_member_box($f_id,false,NULL,NULL,true,($f_id==$member_id_viewing || $member_id_of==$member_id_viewing)?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL);
+					$box=render_member_box($f_id,false,NULL,NULL,true,($f_id==$member_id_viewing || $member_id_of==$member_id_viewing)?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL);
 					if ($box->is_empty()) continue;
 					$friend_map=array('USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
 					if ($appears_twice) // Mutual friendship
@@ -108,10 +108,10 @@ class Hook_Profiles_Tabs_friends
 
 				$done_already[$f_id]=1;
 			}
-			if (count($rows)==100) $all_buddies_link=build_url(array('page'=>'chat','type'=>'buddies_list','id'=>$member_id_of),get_module_zone('chat'));
+			if (count($rows)==100) $all_friends_link=build_url(array('page'=>'chat','type'=>'friends_list','id'=>$member_id_of),get_module_zone('chat'));
 		}
 
-		$content=do_template('OCF_MEMBER_PROFILE_FRIENDS',array('MEMBER_ID'=>strval($member_id_of),'FRIENDS_A'=>$friends_a,'FRIENDS_B'=>$friends_b,'ALL_BUDDIES_LINK'=>$all_buddies_link,'ADD_FRIEND_URL'=>$add_friend_url,'REMOVE_FRIEND_URL'=>$remove_friend_url));
+		$content=do_template('OCF_MEMBER_PROFILE_FRIENDS',array('MEMBER_ID'=>strval($member_id_of),'FRIENDS_A'=>$friends_a,'FRIENDS_B'=>$friends_b,'ALL_FRIENDS_URL'=>$all_friends_link,'ADD_FRIEND_URL'=>$add_friend_url,'REMOVE_FRIEND_URL'=>$remove_friend_url));
 
 		return array($title,$content,$order);
 	}

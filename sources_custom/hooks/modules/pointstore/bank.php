@@ -76,7 +76,7 @@ class Hook_pointstore_bank
 			$bank_divident=intval($_bank_divident);
 		}
 
-		$title=get_page_title('BANKING');
+		$title=get_screen_title('BANKING');
 
 		$points_left=available_points(get_member());
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action_done','id'=>$class),'_SELF');
@@ -94,7 +94,7 @@ class Hook_pointstore_bank
 
 		$text=do_lang_tempcode('BANK_A',integer_format($points_left));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'ae703225db618f2bc938290fbae4d6d8','TITLE'=>$title,'TEXT'=>$text,'URL'=>$next_url,'FIELDS'=>$fields,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'f58cd830101bd4b440d42a8b8d4e39aa','TITLE'=>$title,'TEXT'=>$text,'URL'=>$next_url,'FIELDS'=>$fields,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
 	}
 
 	/**
@@ -112,7 +112,7 @@ class Hook_pointstore_bank
 
 		$bank_divident=intval(get_option('bank_divident'));
 
-		$title=get_page_title('BANKING');
+		$title=get_screen_title('BANKING');
 
 
 		// Check points

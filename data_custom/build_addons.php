@@ -39,7 +39,7 @@ if (!is_file($FILE_BASE.'/sources/global.php'))
 
 @chdir($FILE_BASE);
 
-if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10).'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The second most basic ocPortal startup file, sources/global.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
+if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The second most basic ocPortal startup file, sources/global.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
 
 require($FILE_BASE.'/sources/global.php');
 require_code('addons');
@@ -196,7 +196,7 @@ if (get_param_integer('export_themes',0)==1)
 		$_GET['theme']=$theme;
 		create_addon($file,$files2,$name,'','',$author,'ocProducts Ltd','1.0',$description,'exports/mods');
 
-		echo show_updated_commnets_code($file,$name);
+		echo show_updated_comments_code($file,$name);
 	}
 
 	if ($only!==NULL) echo "All themes have been exported to 'export/mods/'\n";
@@ -204,7 +204,7 @@ if (get_param_integer('export_themes',0)==1)
 
 echo "Done\n";
 
-function show_updated_commnets_code($file,$name)
+function show_updated_comments_code($file,$name)
 {
 return <<<END
 	Paste into ocPortal.com's OcCLE if this addon is updated: {$file}...

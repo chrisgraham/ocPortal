@@ -37,7 +37,7 @@ function form_input_tick($pretty_name,$description,$name,$ticked,$tabindex=NULL,
 
 	$ticked=(filter_form_field_default($name,$ticked?'1':'0')=='1');
 
-	$input=do_template('FORM_SCREEN_INPUT_TICK',array('_GUID'=>'340a68c271b838d327f042d101df27eb','VALUE'=>$value,'CHECKED'=>$ticked,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'DISABLED'=>$disabled));
+	$input=do_template('FORM_SCREEN_INPUT_TICK',array('_GUID'=>'f765a641c7527c0027b2d5c1da408aca','VALUE'=>$value,'CHECKED'=>$ticked,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'DISABLED'=>$disabled));
 	return _form_input($name,$pretty_name,$description,$input,false,false,$tabindex);
 }
 
@@ -97,7 +97,7 @@ function form_input_various_ticks($options,$description,$_tabindex=NULL,$_pretty
 			$out[]=array('CHECKED'=>$value,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$_description,'DISABLED'=>$disabled);
 		}
 
-		$input->attach(do_template('FORM_SCREEN_INPUT_VARIOUS_TICKS',array('_GUID'=>'a6212f61304a101fb2754e334a8b4212','SECTION_TITLE'=>$_option[2],'EXPANDED'=>$_option[1],'SIMPLE_STYLE'=>$simple_style,'BRETHREN_COUNT'=>strval(count($out)),'OUT'=>$out)));
+		$input->attach(do_template('FORM_SCREEN_INPUT_VARIOUS_TICKS',array('_GUID'=>'e6be7f9668020bc2ba5d112300ceba4c','SECTION_TITLE'=>$_option[2],'EXPANDED'=>$_option[1],'SIMPLE_STYLE'=>$simple_style,'BRETHREN_COUNT'=>strval(count($out)),'OUT'=>$out)));
 	}
 	return _form_input('',$_pretty_name,$description,$input,false,false,$tabindex);
 }

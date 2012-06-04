@@ -135,6 +135,7 @@ function _ocfilter_subtree_fetch($look_under,$table_name,$parent_name,$field_nam
 			if ((!is_null($child[$parent_name])) && ((($numeric_ids) && ($child[$parent_name]==intval($look_under))) || ((!$numeric_ids) && ($child[$parent_name]==$look_under))))
 			{
 				$under[]=$child[$field_name];
+
 				$under=array_merge($under,_ocfilter_subtree_fetch(is_integer($child[$field_name])?strval($child[$field_name]):$child[$field_name],$table_name,$parent_name,$field_name,$numeric_ids,$db,$cached_mappings,false));
 			}
 		}

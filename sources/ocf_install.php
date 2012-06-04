@@ -759,7 +759,7 @@ function install_ocf($upgrade_from=NULL)
 			'c_description'=>'LONG_TEXT',
 			'c_expanded_by_default'=>'BINARY'
 		));
-		$category_id=ocf_make_category(do_lang('DEFAULT_CATEGORY_TITLE'),'');
+		$category_id=ocf_make_category(do_lang('DEFAULT_GROUPING_TITLE'),'');
 		$category_id_staff=ocf_make_category(do_lang('STAFF'),'');
 
 		$GLOBALS['FORUM_DB']->create_table('f_forums',array(

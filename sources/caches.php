@@ -29,7 +29,7 @@ function init__caches()
 	global $MEM_CACHE,$SITE_INFO;
 	$MEM_CACHE=NULL;
 	$use_memcache=((array_key_exists('use_mem_cache',$SITE_INFO)) && ($SITE_INFO['use_mem_cache']=='1'));// Default to off because badly configured caches can result in lots of very slow misses and lots of lost sessions || ((!array_key_exists('use_mem_cache',$SITE_INFO)) && ((function_exists('xcache_get')) || (function_exists('wincache_ucache_get')) || (function_exists('apc_fetch')) || (function_exists('eaccelerator_get')) || (function_exists('mmcache_get'))));
-	if ((($use_memcache)/* || ($GLOBALS['DEBUG_MODE'])*/) && ($GLOBALS['IN_MINIKERNEL_VERSION']!=1)) // There's some randomness so people in dev mode SOMETIMES use memcache. This'll stop it being allowed to rot.
+	if ((($use_memcache)/* || ($GLOBALS['DEV_MODE'])*/) && ($GLOBALS['IN_MINIKERNEL_VERSION']!=1)) // There's some randomness so people in dev mode SOMETIMES use memcache. This'll stop it being allowed to rot.
 	{
 		if (class_exists('Memcache'))
 		{
@@ -75,7 +75,7 @@ function init__caches()
 			$ECACHE_OBJECTS=wincache_ucache_get(get_file_base().'ECACHE_OBJECTS');
 			if ($ECACHE_OBJECTS===false) $ECACHE_OBJECTS=array();
 		}
-		elseif (file_exists(get_custom_file_base().'/persistant_cache/'))
+		elseif (file_exists(get_custom_file_base().'/persistent_cache/'))
 		{
 			require_code('caches_filesystem');
 			require_code('files');
@@ -85,16 +85,16 @@ function init__caches()
 }
 
 /**
- * Get data from the persistant cache.
+ * Get data from the persistent cache.
  *
  * @param  mixed			Key
  * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
  * @return ?mixed			The data (NULL: not found / NULL entry)
  */
-function persistant_cache_get($key,$min_cache_date=NULL)
+function persistent_cache_get($key,$min_cache_date=NULL)
 {
 	global $MEM_CACHE;
-	if (($GLOBALS['DEBUG_MODE']) && (mt_rand(0,3)==1)) return NULL;
+	if (($GLOBALS['DEV_MODE']) && (mt_rand(0,3)==1)) return NULL;
 	if ($MEM_CACHE===NULL) return NULL;
 	$test=$MEM_CACHE->get(get_file_base().serialize($key),$min_cache_date); // First we'll try specifically for site
 	if ($test!==NULL) return $test;
@@ -102,14 +102,14 @@ function persistant_cache_get($key,$min_cache_date=NULL)
 }
 
 /**
- * Put data into the persistant cache.
+ * Put data into the persistent cache.
  *
  * @param  mixed			Key
  * @param  mixed			The data
  * @param  boolean		Whether it is server-wide data
  * @param  ?integer		The expiration time in seconds. (NULL: Default expiry in 60 minutes, or never if it is server-wide).
  */
-function persistant_cache_set($key,$data,$server_wide=false,$expire_secs=NULL)
+function persistent_cache_set($key,$data,$server_wide=false,$expire_secs=NULL)
 {
 	global $MEM_CACHE;
 	if ($MEM_CACHE===NULL) return NULL;
@@ -118,11 +118,11 @@ function persistant_cache_set($key,$data,$server_wide=false,$expire_secs=NULL)
 }
 
 /**
- * Delete data from the persistant cache.
+ * Delete data from the persistent cache.
  *
  * @param  mixed			Key name
  */
-function persistant_cache_delete($key)
+function persistent_cache_delete($key)
 {
 	global $MEM_CACHE;
 	if ($MEM_CACHE===NULL) return NULL;
@@ -131,9 +131,9 @@ function persistant_cache_delete($key)
 }
 
 /**
- * Remove all data from the persistant cache.
+ * Remove all data from the persistent cache.
  */
-function persistant_cache_empty()
+function persistent_cache_empty()
 {
 	global $MEM_CACHE;
 	if ($MEM_CACHE===NULL) return NULL;
@@ -151,11 +151,11 @@ function decache($cached_for,$identifier=NULL)
 	if (running_script('stress_test_loader')) return;
 	if (get_page_name()=='admin_import') return;
 
-	// NB: If we use persistant cache we still need to decache from DB, in case we're switching between for whatever reason. Or maybe some users use persistant cache and others don't. Or maybe some nodes do and others don't.
+	// NB: If we use persistent cache we still need to decache from DB, in case we're switching between for whatever reason. Or maybe some users use persistent cache and others don't. Or maybe some nodes do and others don't.
 
 	if ($GLOBALS['MEM_CACHE']!==NULL)
 	{
-		persistant_cache_delete(array('CACHE',$cached_for));
+		persistent_cache_delete(array('CACHE',$cached_for));
 	}
 
 	$where=array('cached_for'=>$cached_for);
@@ -164,8 +164,6 @@ function decache($cached_for,$identifier=NULL)
 
 	if ($identifier!==NULL)
 	{
-		global $TEMPCODE_SETGET;
-		$identifier[]=array_key_exists('in_panel',$TEMPCODE_SETGET)?$TEMPCODE_SETGET['in_panel']:'0';
 		$where['identifier']=md5(serialize($identifier));
 		$GLOBALS['SITE_DB']->query_delete('cache',$where);
 	}
@@ -185,11 +183,11 @@ function find_cache_on($codename)
 	global $CACHE_ON;
 	if ($CACHE_ON===NULL)
 	{
-		$CACHE_ON=persistant_cache_get('CACHE_ON');
+		$CACHE_ON=persistent_cache_get('CACHE_ON');
 		if ($CACHE_ON===NULL)
 		{
 			$CACHE_ON=$GLOBALS['SITE_DB']->query_select('cache_on',array('*'));
-			persistant_cache_set('CACHE_ON',$CACHE_ON);
+			persistent_cache_set('CACHE_ON',$CACHE_ON);
 		}
 	}
 	foreach ($CACHE_ON as $row)
@@ -209,7 +207,7 @@ function find_cache_on($codename)
  * @param  LONG_TEXT		The further restraints (a serialized map)
  * @param  integer		The TTL for the cache entry
  * @param  boolean		Whether we are cacheing Tempcode (needs special care)
- * @param  boolean		Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone, bot-type, in-panel and interlock are automatically considered)
+ * @param  boolean		Whether to defer caching to CRON. Note that this option only works if the block's defined cache signature depends only on $map (timezone and bot-type are automatically considered)
  * @param  ?array			Parameters to call up block with if we have to defer caching (NULL: none)
  * @return ?mixed			The cached result (NULL: no cached result)
  */
@@ -217,7 +215,7 @@ function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false,
 {
 	if ($GLOBALS['MEM_CACHE']!==NULL)
 	{
-		$pcache=persistant_cache_get(array('CACHE',$codename));
+		$pcache=persistent_cache_get(array('CACHE',$codename));
 		if ($pcache===NULL) return NULL;
 		$theme=$GLOBALS['FORUM_DRIVER']->get_theme();
 		$lang=user_lang();
@@ -307,8 +305,6 @@ function request_via_cron($codename,$map,$tempcode)
 		'c_map'=>serialize($map),
 		'c_timezone'=>get_users_timezone(get_member()),
 		'c_is_bot'=>is_null(get_bot_type())?0:1,
-		'c_in_panel'=>((array_key_exists('in_panel',$TEMPCODE_SETGET)?$TEMPCODE_SETGET['in_panel']:'_false')=='_true')?1:0,
-		'c_interlock'=>((array_key_exists('interlock',$TEMPCODE_SETGET)?$TEMPCODE_SETGET['interlock']:'_false')=='_true')?1:0,
 		'c_store_as_tempcode'=>$tempcode?1:0,
 	);
 	if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('cron_caching_requests','id',$map)))

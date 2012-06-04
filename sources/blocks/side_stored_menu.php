@@ -63,8 +63,6 @@ class Block_side_stored_menu
 	{
 		if (!array_key_exists('param',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','param'); // can't function like that
 
-		require_css('side_blocks');
-
 		$type=array_key_exists('type',$map)?$map['type']:'tree';
 		$silent_failure=array_key_exists('silent_failure',$map)?$map['silent_failure']:'0';
 		$tray_status=array_key_exists('tray_status',$map)?$map['tray_status']:'';

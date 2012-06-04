@@ -137,13 +137,13 @@ class OCP_Topic
 			list($posts,$serialized_options,$hash)=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
 
 			// Pagination
-			$results_browser=NULL;
+			$pagination=NULL;
 			if ((!$this->is_threaded) && (is_null($preloaded_comments)))
 			{
 				if ($this->total_posts>$num_to_show_limit)
 				{
-					require_code('templates_results_browser');
-					$results_browser=results_browser(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',$this->total_posts,NULL,NULL,true);
+					require_code('templates_pagination');
+					$pagination=pagination(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',$this->total_posts,NULL,NULL,true);
 				}
 			}
 
@@ -193,12 +193,12 @@ class OCP_Topic
 			// Show it all
 			return do_template('COMMENTS_WRAPPER',array(
 				'_GUID'=>'a89cacb546157d34vv0994ef91b2e707',
-				'RESULTS_BROWSER'=>$results_browser,
+				'PAGINATION'=>$pagination,
 				'TYPE'=>$content_type,
 				'ID'=>$content_id,
 				'REVIEW_RATING_CRITERIA'=>$reviews_rating_criteria,
 				'FORUM_LINK'=>$forum_url,
-				'AUTHORISED_FORUM_LINK'=>$authorised_forum_url,
+				'AUTHORISED_FORUM_URL'=>$authorised_forum_url,
 				'FORM'=>$form,
 				'COMMENTS'=>$posts,
 				'HASH'=>$hash,
@@ -756,14 +756,14 @@ class OCP_Topic
 					if (!is_guest($post['poster']))
 					{
 						require_code('ocf_members2');
-						$poster_details=ocf_show_member_box($post,false,$hooks,$hook_objects,false);
+						$poster_details=render_member_box($post,false,$hooks,$hook_objects,false);
 					} else
 					{
 						$custom_fields=new ocp_tempcode();
 						if (array_key_exists('ip_address',$post))
 						{
 							$custom_fields->attach(do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>($post['ip_address']))));
-							$poster_details=do_template('OCF_GUEST_DETAILS',array('CUSTOM_FIELDS'=>$custom_fields));
+							$poster_details=do_template('OCF_GUEST_DETAILS',array('_GUID'=>'df42e7d5003834a60fdb3bf476b393c5','CUSTOM_FIELDS'=>$custom_fields));
 						} else
 						{
 							$poster_details=new ocp_tempcode();
@@ -776,7 +776,7 @@ class OCP_Topic
 				} else
 				{
 					$ip_link=((array_key_exists('ip_address',$post)) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$post['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();
-					$poster=do_template('OCF_POSTER_GUEST',array('IP_LINK'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$post['poster_username']));
+					$poster=do_template('OCF_POSTER_GUEST',array('_GUID'=>'93107543c6a0138f379e7124b72b24ff','LOOKUP_IP_URL'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$post['poster_username']));
 				}
 			}
 
@@ -911,7 +911,7 @@ class OCP_Topic
 			$redirect=get_self_url(true,true);
 			$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>$redirect),get_module_zone('login'));
 			$join_url=$GLOBALS['FORUM_DRIVER']->join_url();
-			$join_bits=do_template('JOIN_OR_LOGIN',array('LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url));
+			$join_bits=do_template('JOIN_OR_LOGIN',array('_GUID'=>'2d26dba6fa5e6b665fbbe3f436289f7b','LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url));
 		}
 
 		$reviews_rating_criteria=array();

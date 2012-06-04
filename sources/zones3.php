@@ -36,7 +36,7 @@ function erase_comcode_page_cache()
 		}
 	}
 	while (count($rows)!=0);
-	persistant_cache_empty();
+	persistent_cache_empty();
 
 	$GLOBALS['NO_QUERY_LIMIT']=false;
 }
@@ -91,11 +91,10 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		$ZONE['theme']=$theme;
 	}
 
-	decache('side_zone_jump');
 	decache('side_stored_menu');
 	decache('main_sitemap');
-	persistant_cache_delete(array('ZONE',$zone));
-	persistant_cache_delete('ALL_ZONES');
+	persistent_cache_delete(array('ZONE',$zone));
+	persistent_cache_delete('ALL_ZONES');
 
 	log_it('EDIT_ZONE',$zone);
 }
@@ -205,11 +204,10 @@ function actual_delete_zone_lite($zone)
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$zone.':'));
 
 	log_it('DELETE_ZONE',$zone);
-	decache('side_zone_jump');
 	decache('side_stored_menu');
 	decache('main_sitemap');
-	persistant_cache_delete(array('ZONE',$zone));
-	persistant_cache_delete('ALL_ZONES');
+	persistent_cache_delete(array('ZONE',$zone));
+	persistent_cache_delete('ALL_ZONES');
 
 	global $ALL_ZONES,$ALL_ZONES_TITLED;
 	$ALL_ZONES=NULL;
@@ -219,7 +217,7 @@ function actual_delete_zone_lite($zone)
 /**
  * The do-next manager for after content management.
  *
- * @param  tempcode		The title (output of get_page_title)
+ * @param  tempcode		The title (output of get_screen_title)
  * @param  ?ID_TEXT		The name of the page just handled (NULL: none)
  * @param  ID_TEXT		The name of the zone just handled (blank: none/welcome-zone)
  * @param  tempcode		The text to show (blank: default)

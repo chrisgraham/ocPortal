@@ -284,7 +284,7 @@ class Module_quiz
 	function archive()
 	{
 		$start=get_param_integer('start',0);
-		$title=get_page_title('QUIZZES');
+		$title=get_screen_title('QUIZZES');
 
 		require_code('quiz');
 
@@ -298,7 +298,7 @@ class Module_quiz
 		$content_surveys=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{
-			$link=show_quiz_html($myrow);
+			$link=render_quiz_box($myrow);
 
 			switch ($myrow['q_type'])
 			{
@@ -321,7 +321,7 @@ class Module_quiz
 
 		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>($start-$max==0)?NULL:$start-$max),'_SELF');
 		$next_url=(count($rows)!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'ab0d27890dd2c1476dcdf82a46d5be90','NEXT_LINK'=>$next_url,'PREVIOUS_LINK'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'ab0d27890dd2c1476dcdf82a46d5be90','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
 		return do_template('QUIZ_ARCHIVE_SCREEN',array('_GUID'=>'3073f74b500deba96b7a3031a2e9c8d8','TITLE'=>$title,'CONTENT_SURVEYS'=>$content_surveys,'CONTENT_COMPETITIONS'=>$content_competitions,'CONTENT_TESTS'=>$content_tests,'BROWSE'=>$browse));
 	}
@@ -380,7 +380,7 @@ class Module_quiz
 		$quiz_name=get_translated_text($quiz['q_name']);
 		$title_to_use=do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html($quiz_name)));
 		$title_to_use_2=do_lang('THIS_WITH_SIMPLE',do_lang($quiz['q_type']),$quiz_name);
-		$title=get_page_title($title_to_use,false,NULL,NULL,$awards);
+		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 		seo_meta_load_for('quiz',strval($id),$title_to_use_2);
 
 		$last_visit_time=$GLOBALS['SITE_DB']->query_value_null_ok('quiz_member_last_visit','v_time',array('v_quiz_id'=>$id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
@@ -430,9 +430,9 @@ class Module_quiz
 		if ($quiz['q_validated']==0)
 		{
 			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
-				access_denied('SPECIFIC_PERMISSION','jump_to_unvalidated');
+				access_denied('PRIVILEGE','jump_to_unvalidated');
 
-			$warning_details=do_template('WARNING_TABLE',array('WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
+			$warning_details=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
 		} else $warning_details=new ocp_tempcode();
 
 		$type='Quiz';
@@ -678,7 +678,7 @@ class Module_quiz
 			}
 		}
 
-		$mail_title=do_lang('EMAIL_TITLE',do_lang($quiz['q_type']),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),strval($entry_id),get_site_default_lang());
+		$notification_title=do_lang('QUIZ_NOTIFICATION_TITLE',do_lang($quiz['q_type']),$GLOBALS['FORUM_DRIVER']->get_username(get_member()),strval($entry_id),get_site_default_lang());
 
 		$_corrections=new ocp_tempcode();
 		$_corrections_to_show=new ocp_tempcode();
@@ -744,7 +744,7 @@ class Module_quiz
 
 			// Send mail about the result to the staff: include result and corrections, and unknowns
 			$mail=do_template('QUIZ_TEST_ANSWERS_MAIL',array('_GUID'=>'a0f8f47cdc1ef83b59c93135ebb5c114','UNKNOWNS'=>$_unknowns,'CORRECTIONS'=>$_corrections,'RESULT'=>$result2,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
-			dispatch_notification('quiz_results',strval($id),$mail_title,$mail->evaluate(get_site_default_lang()));
+			dispatch_notification('quiz_results',strval($id),$notification_title,$mail->evaluate(get_site_default_lang()));
 		}
 		// Give them corrections if it is a quiz.
 		elseif ($quiz['q_type']=='COMPETITION')
@@ -771,7 +771,7 @@ class Module_quiz
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))))));
 
 		// Show end text
-		$title=get_page_title(do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
+		$title=get_screen_title(do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
 		$fail_text=get_translated_tempcode($quiz['q_end_text_fail']);
 		$message=(($quiz['q_type']!='TEST') || ($minimum_percentage>=$quiz['q_percentage']) || ($fail_text->is_empty()))?get_translated_tempcode($quiz['q_end_text']):get_translated_tempcode($quiz['q_end_text_fail']);
 		return do_template('QUIZ_DONE_SCREEN',array('_GUID'=>'fa783f087eca7f8f577b134ec0bdc4ce','CORRECTIONS_TO_SHOW'=>comcode_to_tempcode($_corrections_to_show->evaluate()),'POINTS_DIFFERENCE'=>strval($points_difference),'RESULT'=>$result,'TITLE'=>$title,'TYPE'=>$quiz['q_type'],'MESSAGE'=>$message));

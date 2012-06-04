@@ -101,7 +101,7 @@ Set the following to [b]777[/b]: (full directory permissions)
  - personalzone/pages/comcode_custom/<for-each-language>
  - personalzone/pages/html_custom/<for-each-language>
  - personalzone/pages/html_custom
- - persistant_cache
+ - persistent_cache
  - safe_mode_temp
  - site/pages/comcode_custom
  - site/pages/comcode_custom/<for-each-language>

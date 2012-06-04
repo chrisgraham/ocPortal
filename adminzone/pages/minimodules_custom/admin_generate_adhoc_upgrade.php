@@ -1,6 +1,6 @@
 <?php
 
-$title=get_page_title('Generate an upgrade',false);
+$title=get_screen_title('Generate an upgrade',false);
 
 $auto_probe=array();
 $cutoff_days=post_param_integer('cutoff_days',intval(ceil((time()-filemtime(get_file_base().'/sources/version.php'))/60/60/24)));

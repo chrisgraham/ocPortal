@@ -1,1 +1,1 @@
-<li>&raquo; {ACTION}</li>
+<li>{ACTION}</li>

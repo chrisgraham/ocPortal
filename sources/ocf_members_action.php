@@ -243,8 +243,8 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 				if (addon_installed('chat'))
 				{
 					require_code('chat2');
-					buddy_add($inviter,$member_id);
-					buddy_add($member_id,$inviter);
+					friend_add($inviter,$member_id);
+					friend_add($member_id,$inviter);
 				}
 			}
 		}

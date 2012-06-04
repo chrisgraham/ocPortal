@@ -1,8 +1,8 @@
 {+START,IF_NON_EMPTY,{CONTENT}}
 <ul class="compact_list">
 	<li>
-		{SECTION*}:<br />
-		<ul class="compact_list associated_link_to_small">
+		<p class="lonely_label">{SECTION*}:</p>
+		<ul class="compact_list associated_details">
 			{CONTENT}
 		</ul>
 	</li>

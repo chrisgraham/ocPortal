@@ -515,10 +515,14 @@ class forum_driver_ocf extends forum_driver_base
 		if (get_value('username_profile_links')=='1')
 		{
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($id);
-			$_url=build_url(array('page'=>'members','type'=>'view','id'=>is_null($username)?strval($id):$username),get_module_zone('members'),NULL,false,false,!$tempcode_okay);
+			$map=array('page'=>'members','type'=>'view','id'=>is_null($username)?strval($id):$username);
+			if (get_page_name()=='members') $map+=propagate_ocselect();
+			$_url=build_url($map,get_module_zone('members'),NULL,false,false,!$tempcode_okay);
 		} else
 		{
-			$_url=build_url(array('page'=>'members','type'=>'view','id'=>$id),get_module_zone('members'),NULL,false,false,!$tempcode_okay);
+			$map=array('page'=>'members','type'=>'view','id'=>$id);
+			if (get_page_name()=='members') $map+=propagate_ocselect();
+			$_url=build_url($map,get_module_zone('members'),NULL,false,false,!$tempcode_okay);
 		}
 		if (($tempcode_okay) && (get_base_url()==get_forum_base_url())) return $_url;
 		$url=$_url->evaluate();
@@ -1559,9 +1563,10 @@ class forum_driver_ocf extends forum_driver_base
 			{
 				$ip=get_ip_address();
 				require_code('failure');
-				add_ip_ban($ip);
+				add_ip_ban($ip,do_lang('SPAM_REPORT_SITE_FLOODING'));
 				require_code('notifications');
 				dispatch_notification('auto_ban',NULL,do_lang('AUTO_BAN_SUBJECT',$ip,NULL,NULL,get_site_default_lang()),do_lang('AUTO_BAN_DOS_MESSAGE',$ip,integer_format($count_threshold),integer_format($time_threshold),get_site_default_lang()),NULL,A_FROM_SYSTEM_PRIVILEGED);
+				syndicate_spammer_report($ip,is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),do_lang('SPAM_REPORT_SITE_FLOODING'));
 			}
 			if (!function_exists('require_lang')) require_code('lang');
 			if (!function_exists('do_lang_tempcode')) require_code('tempcode');

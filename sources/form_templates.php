@@ -31,12 +31,15 @@ function init__form_templates()
 	global $TABINDEX;
 	$TABINDEX=50; // Base
 
-	global $NO_DEBUG_MODE_FULLSTOP_CHECK;
-	$NO_DEBUG_MODE_FULLSTOP_CHECK=false;
+	global $NO_DEV_MODE_FULLSTOP_CHECK;
+	$NO_DEV_MODE_FULLSTOP_CHECK=false;
 
 	require_code('input_filter');
 
-	header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
+	global $DOING_ALTERNATE_FIELDS_SET;
+	$DOING_ALTERNATE_FIELDS_SET=mixed();
+
+	require_css('forms');
 }
 
 /**
@@ -175,7 +178,30 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 	/*if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($post,NULL,false,60,NULL,NULL,true);
 	$LAX_COMCODE=$temp;
 
-	return do_template('POSTING_FORM',array('_GUID'=>'41259424ca13c437d5bc523ce18980fe','REQUIRED'=>$required,'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,'JAVASCRIPT'=>$javascript,'PREVIEW'=>$has_preview?true:NULL,'COMCODE_EDITOR'=>$comcode_editor,'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,'CLASS'=>$class,'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),'EXTRA'=>$extra,'POST_COMMENT'=>$post_comment,'EMOTICON_CHOOSER'=>$emoticon_chooser,'SUBMIT_NAME'=>$submit_name,'HIDDEN_FIELDS'=>$hidden_fields,'COMCODE_HELP'=>$comcode_help,'URL'=>$post_url,'POST'=>$post,'DEFAULT_PARSED'=>$default_parsed,'CONTINUE_URL'=>$continue_url,'ATTACHMENTS'=>$attachments,'SPECIALISATION'=>$specialisation,'SPECIALISATION2'=>$specialisation2));
+	return do_template('POSTING_FORM',array(
+		'_GUID'=>'41259424ca13c437d5bc523ce18980fe',
+		'REQUIRED'=>$required,
+		'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,
+		'JAVASCRIPT'=>$javascript,
+		'PREVIEW'=>$has_preview,
+		'COMCODE_EDITOR'=>$comcode_editor,
+		'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,
+		'CLASS'=>$class,
+		'COMCODE_URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)),
+		'EXTRA'=>$extra,
+		'POST_COMMENT'=>$post_comment,
+		'EMOTICON_CHOOSER'=>$emoticon_chooser,
+		'SUBMIT_NAME'=>$submit_name,
+		'HIDDEN_FIELDS'=>$hidden_fields,
+		'COMCODE_HELP'=>$comcode_help,
+		'URL'=>$post_url,
+		'POST'=>$post,
+		'DEFAULT_PARSED'=>$default_parsed,
+		'CONTINUE_URL'=>$continue_url,
+		'ATTACHMENTS'=>$attachments,
+		'SPECIALISATION'=>$specialisation,
+		'SPECIALISATION2'=>$specialisation2,
+	));
 }
 
 /**
@@ -307,7 +333,7 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
 	$_required=($required)?'_required':'';
 	$maxlength=get_field_restrict_property('maxlength',$name);
 	if ((is_null($maxlength)) && (!is_null($_maxlength))) $maxlength=strval($_maxlength);
-	$input=do_template('FORM_SCREEN_INPUT_CODENAME',array('MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
+	$input=do_template('FORM_SCREEN_INPUT_CODENAME',array('_GUID'=>'4b1a3a3ebe6ac85c7c14bcec9d8ab88d','MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
@@ -321,7 +347,7 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
  * @param  boolean		Whether this is a required input field
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?integer		The maximum length of the field (NULL: default 255)
- * @param  string			The input type (only used if HTML5 enabled)
+ * @param  string			The input type
  * @return tempcode		The input field
  */
 function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$type='text')
@@ -335,7 +361,7 @@ function form_input_line($pretty_name,$description,$name,$default,$required,$tab
 	$_required=($required)?'_required':'';
 	$maxlength=get_field_restrict_property('maxlength',$name);
 	if ((is_null($maxlength)) && (!is_null($_maxlength))) $maxlength=strval($_maxlength);
-	$input=do_template('FORM_SCREEN_INPUT_LINE',array('MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'TYPE'=>$type));
+	$input=do_template('FORM_SCREEN_INPUT_LINE',array('_GUID'=>'02789c9af25cbc971e86bfcc0ad322d5','MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'TYPE'=>$type));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
@@ -450,7 +476,6 @@ function form_input_colour($pretty_name,$description,$name,$default,$required,$t
 	}
 
 	require_javascript('javascript_theme_colours');
-	require_css('adminzone');
 
 	if (is_null($default)) $default='';
 
@@ -586,13 +611,13 @@ function form_input_text_multi($pretty_name,$description,$name,$default_array,$n
 	foreach ($default_array as $default)
 	{
 		$_required=($i<$num_required)?'_required':'';
-		$input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>$_required,'DEFAULT'=>$default)));
+		$input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('_GUID'=>'0d9e3c073d09d1ce3725f47813375c28','PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>$_required,'DEFAULT'=>$default)));
 		$i++;
 	}
 	if (!has_js()) $num_required=max($num_required,10);
 	for (;$i<$num_required;$i++)
 	{
-		$input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>'_required','DEFAULT'=>'')));
+		$input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('_GUID'=>'2e816a71ef5a9ac9e1aac4bd1c13b5bd','PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>'_required','DEFAULT'=>'')));
 	}
 	return _form_input($name,$pretty_name,$description,$input,$num_required>0,false,$tabindex,false,true);
 }
@@ -706,7 +731,7 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
 		$WYSIWYG_ATTACHED=true;
 		@header('Content-type: text/html; charset='.get_charset());
 
-		$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(!browser_matches('no_multi_wysiwyg')) && (has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
+		$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
 		if ($w) $_required.=' wysiwyg';
 		global $LAX_COMCODE;
 		$temp=$LAX_COMCODE;
@@ -760,7 +785,7 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 	$WYSIWYG_ATTACHED=true;
 	@header('Content-type: text/html; charset='.get_charset());
 
-	$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(!browser_matches('no_multi_wysiwyg')) && (has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
+	$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
 	if ($w) $_required.=' wysiwyg';
 	global $LAX_COMCODE;
 	$temp=$LAX_COMCODE;
@@ -927,7 +952,7 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
 		$existing_url=$default;
 		if (url_is_local($existing_url)) $existing_url=get_custom_base_url().'/'.$existing_url;
 	}
-	$input=do_template('FORM_SCREEN_INPUT_UPLOAD',array('FILTER'=>$filter,'PRETTY_NAME'=>$pretty_name,'EXISTING_URL'=>$existing_url,'IS_IMAGE'=>$is_image,'SWFUPLOAD'=>$swfupload,'EDIT'=>((!is_null($default)) && (!$required)),'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name));
+	$input=do_template('FORM_SCREEN_INPUT_UPLOAD',array('_GUID'=>'f493edcc5298bb32fff8635f2d316d21','FILTER'=>$filter,'PRETTY_NAME'=>$pretty_name,'EXISTING_URL'=>$existing_url,'IS_IMAGE'=>$is_image,'SWFUPLOAD'=>$swfupload,'EDIT'=>((!is_null($default)) && (!$required)),'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
@@ -1153,10 +1178,11 @@ function form_input_radio($pretty_name,$description,$content,$required=false,$pi
  * @param  ?object		The database connection to the OCF install we are choosing images from (NULL: site db)
  * @param  ?ID_TEXT		Theme to use (NULL: current theme)
  * @param  ?ID_TEXT		Language to use (NULL: current language)
+ * @param  boolean		Whether choices are presented in a list (as opposed to a grid); useful when sizes are irregular
  * @param  boolean		Whether to show direct codenames, rather than trying to prettify them into titles
  * @return tempcode		The input field
  */
-function form_input_picture_choose_specific($pretty_name,$description,$name,$ids,$selected_url=NULL,$selected_code=NULL,$tabindex=NULL,$allow_none=false,$db=NULL,$theme=NULL,$lang=NULL,$direct_titles=false)
+function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_url=NULL,$selected_code=NULL,$tabindex=NULL,$allow_none=false,$db=NULL,$theme=NULL,$lang=NULL,$linear=false,$direct_titles=false)
 {
 	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
 
@@ -1218,7 +1244,7 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 	$content=new ocp_tempcode();
 	foreach ($categories as $cat=>$ids)
 	{
-		$cat=str_replace('_',' ',$cat);
+		$cat=titleify($cat);
 
 		if ($avatars)
 		{
@@ -1229,7 +1255,7 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 
 		if ((!$avatars) && ($cat=='')) $cat=do_lang('GENERAL');
 
-		$cells=new ocp_tempcode();
+		$category=new ocp_tempcode();
 		$i=0;
 		$category_expanded=false;
 		foreach ($ids as $id)
@@ -1259,38 +1285,19 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 			}
 			if ($url=='') continue;
 
-			$temp=do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_2',array('_GUID'=>'10005e2f08b44bfe17fce68685b4c884','CHECKED'=>$selected,'PRETTY'=>$pretty,'NAME'=>$name,'CODE'=>$id,'URL'=>$url));
-			$cells->attach($temp);
+			$temp=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID'=>'10005e2f08b44bfe17fce68685b4c884','LINEAR'=>$linear,'CHECKED'=>$selected,'PRETTY'=>$pretty,'NAME'=>$name,'CODE'=>$id,'URL'=>$url));
+			$category->attach($temp);
 
 			$i++;
 		}
 
-		$_category=do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_2_WRAP',array('_GUID'=>'b21bda147b3e6363b2dfb8c6ca845530','ROWS'=>$cells));
-		if ($cat!='') $_category=do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_2_CAT_WRAP',array('_GUID'=>'c2f429315b73bcaacc3bff8db11c0056','DISPLAY'=>$category_expanded?'block':'none','CATEGORY'=>$_category,'CATEGORY_NAME'=>$cat));
+		$_category=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array('_GUID'=>'c2f429315b73bcaacc3bff8db11c0056','DISPLAY'=>$category_expanded?'block':'none','CATEGORY'=>$category,'CATEGORY_NAME'=>$cat));
 		$content->attach($_category);
 	}
 
-	$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('NAME'=>$name,'CODE'=>is_null($selected_code)?'':$selected_code,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
+	$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('_GUID'=>'35fed772f022cf561f823543e56d63e8','NAME'=>$name,'CODE'=>is_null($selected_code)?'':$selected_code,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
 
-	return _form_input('',$pretty_name,$description,$input,false);
-}
-
-/**
- * Get the tempcode for a radio list of pictures.
- *
- * @param  array			A list of image radio buttons
- * @return tempcode		The input field
- */
-function wrap_image_radio_list($entries)
-{
-	$content=new ocp_tempcode();
-	foreach ($entries as $i=>$tempcode)
-	{
-		$content->attach($tempcode);
-	}
-
-	$content=do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE_3_WRAP',array('_GUID'=>'88f11fc88ad78bd6e302a0dbe5f0ef51','ROWS'=>$content));
-	return $content;
+	return _form_input($GLOBALS['DOING_ALTERNATE_FIELDS_SET']?$name:'',$pretty_name,$description,$input,false);
 }
 
 /**
@@ -1416,7 +1423,7 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 	$hours=ob_get_contents();
 	ob_end_clean();
 
-	$time=($do_time)?do_template('FORM_SCREEN_INPUT_TIME',array('NULL_OK'=>$null_ok,'DISABLED'=>$null_default && has_js(),'TABINDEX'=>strval($tabindex),'MINUTES'=>$minutes,'HOURS'=>$hours,'STUB'=>$stub)):new ocp_tempcode();
+	$time=($do_time)?do_template('FORM_SCREEN_INPUT_TIME',array('_GUID'=>'2d5886e54c7a14e69a8f84bbe62ec84a','NULL_OK'=>$null_ok,'DISABLED'=>$null_default && has_js(),'TABINDEX'=>strval($tabindex),'MINUTES'=>$minutes,'HOURS'=>$hours,'STUB'=>$stub)):new ocp_tempcode();
 	if (!$do_date)
 		return _form_input($stub,$pretty_name,$description,$time,$required,false,$tabindex,false,true);
 	$null=($null_ok)?do_template('FORM_SCREEN_INPUT_DATE_NULL',array('_GUID'=>'22859d15f1b295b08036e1d0308d371a','TICKED'=>!$null_default,'TABINDEX'=>strval($tabindex),'STUB'=>$stub)):new ocp_tempcode();
@@ -1553,9 +1560,44 @@ function form_input_float($pretty_name,$description,$name,$default,$required,$ta
 }
 
 /**
+ * Start off a field set.
+ *
+ * IMPORTANT: Note that this function uses global state -- any fields generated between alternate_fields_set__start and alternate_fields_set__end will be rendered using field set templating.
+ *
+ * @param  ID_TEXT		The codename for this field set
+ * @return tempcode		Tempcode to start attaching the field set to
+ */
+function alternate_fields_set__start($set_name)
+{
+	global $DOING_ALTERNATE_FIELDS_SET;
+	if (!is_null($DOING_ALTERNATE_FIELDS_SET)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+	$DOING_ALTERNATE_FIELDS_SET=$set_name;
+	return new ocp_tempcode();
+}
+
+/**
+ * Show a field set that has just been finished off.
+ *
+ * @param  ID_TEXT		The codename for this field set
+ * @param  mixed			The human-readable name for this field set
+ * @param  mixed			The human-readable description for this field set
+ * @param  tempcode		The field set tempcode
+ * @param  boolean		Whether it is required that this field set be filled in
+ * @return tempcode		The field set
+ */
+function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$required)
+{
+	$set=do_template('FORM_SCREEN_FIELDS_SET',array('_GUID'=>'ae81cf68280aef067de1e8e71b2919a7','FIELDS'=>$fields,'PRETTY_NAME'=>$pretty_name,'SET_NAME'=>$set_name,'REQUIRED'=>$required));
+	global $DOING_ALTERNATE_FIELDS_SET;
+	if (is_null($DOING_ALTERNATE_FIELDS_SET)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+	$DOING_ALTERNATE_FIELDS_SET=NULL;
+	return _form_input('',$pretty_name,$description,$set,$required);
+}
+
+/**
  * Helper function to show an input field.
  *
- * @param  ID_TEXT		The codename for this field
+ * @param  ID_TEXT		The codename for this field (blank: N/A)
  * @param  mixed			The human-readable name for this field
  * @param  mixed			The human-readable description for this field
  * @param  tempcode		The actual raw input field
@@ -1569,12 +1611,10 @@ function form_input_float($pretty_name,$description,$name,$default,$required,$ta
  */
 function _form_input($name,$pretty_name,$description,$input,$required,$comcode=false,$tabindex=NULL,$w=false,$skip_label=false,$description_side='')
 {
-	unset($tabindex); // Not currently used
-
-	if (($GLOBALS['DEBUG_MODE']) && (user_lang()==fallback_lang()))
+	if (($GLOBALS['DEV_MODE']) && (user_lang()==fallback_lang()))
 	{
 		$_description=trim(strip_tags(is_object($description)?$description->evaluate():$description));
-		if (($_description!='') && (substr($_description,-1)!='.') && (substr($_description,-1)!='!') && (substr($_description,-1)!='?') && (substr($_description,-1)!=']') && (substr($_description,-1)!=')') && (!$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']))
+		if (($_description!='') && (substr($_description,-1)!='.') && (substr($_description,-1)!='!') && (substr($_description,-1)!='?') && (substr($_description,-1)!=']') && (substr($_description,-1)!=')') && (!$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']))
 		{
 			fatal_exit('Description fields should end in full stops ['.$_description.'].');
 		}
@@ -1582,7 +1622,14 @@ function _form_input($name,$pretty_name,$description,$input,$required,$comcode=f
 
 	$_comcode=$comcode?do_template('COMCODE_MESSAGE',array('_GUID'=>'7668b8365e34b2484be7c2c271f82e79','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false)))):new ocp_tempcode();
 
-	$tpl=do_template('FORM_SCREEN_FIELD',array('_GUID'=>'fa1402b7ad8319372f4bb5b152be7852','REQUIRED'=>$required,'SKIP_LABEL'=>$skip_label,'BORING_NAME'=>$name,'NAME'=>$pretty_name,'DESCRIPTION'=>$description,'DESCRIPTION_SIDE'=>$description_side,'INPUT'=>$input,'COMCODE'=>$_comcode));
+	global $DOING_ALTERNATE_FIELDS_SET;
+	if ($DOING_ALTERNATE_FIELDS_SET!==NULL)
+	{
+		$tpl=do_template('FORM_SCREEN_FIELDS_SET_ITEM',array('_GUID'=>'23f2e2df7fcacc01d9f5158dc635e73d','SET_NAME'=>$DOING_ALTERNATE_FIELDS_SET,'REQUIRED'=>$required,'SKIP_LABEL'=>$skip_label,'NAME'=>$name,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'DESCRIPTION_SIDE'=>$description_side,'INPUT'=>$input,'COMCODE'=>$_comcode));
+		return $tpl;
+	}
+
+	$tpl=do_template('FORM_SCREEN_FIELD',array('_GUID'=>'fa1402b7ad8319372f4bb5b152be7852','REQUIRED'=>$required,'SKIP_LABEL'=>$skip_label,'NAME'=>$name,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'DESCRIPTION_SIDE'=>$description_side,'INPUT'=>$input,'COMCODE'=>$_comcode));
 	return $tpl;
 }
 
@@ -1605,7 +1652,7 @@ function handle_conflict_resolution($id=NULL,$only_staff=false)
 	{
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($last_edit_screen_time[0]['the_member']);
 		if (is_null($username)) $username='?';
-		$warning_details=do_template('WARNING_TABLE',array('WARNING'=>do_lang_tempcode('EDIT_CONFLICT_WARNING',escape_html($username))));
+		$warning_details=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('EDIT_CONFLICT_WARNING',escape_html($username))));
 	} else $warning_details=NULL;
 	$keep=symbol_tempcode('KEEP');
 	$ping_url=find_script('edit_ping').'?page='.urlencode(get_page_name()).'&type='.urlencode(get_param('type','misc')).'&id='.urlencode($id).$keep->evaluate();
@@ -1638,7 +1685,7 @@ function get_form_field_tabindex($tabindex=NULL)
  * @param  boolean		Whether this entry is selected by default or not
  * @param  mixed			The text associated with this choice (blank: just use name for text)
  * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  string			An additional long description (blank: no description)
+ * @param  mixed			An additional long description (blank: no description)
  * @return tempcode		The input field
  */
 function form_input_radio_entry($name,$value,$selected=false,$text='',$tabindex=NULL,$description='')

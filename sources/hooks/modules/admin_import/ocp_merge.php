@@ -140,7 +140,7 @@ class Hook_ocp_merge
 	 */
 	function pre_import_tests($db,$table_prefix,$file_base)
 	{
-		$title=get_page_title('IMPORT');
+		$title=get_screen_title('IMPORT');
 
 		$bad=false;
 
@@ -1282,7 +1282,7 @@ class Hook_ocp_merge
 			if (!array_key_exists('allow_comments',$row)) $row['allow_comments']=1;
 			if (!array_key_exists('allow_trackbacks',$row)) $row['allow_trackbacks']=1;
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-			$id_new=add_calendar_event($type,$row['e_recurrence'],$row['e_recurrences'],array_key_exists('e_seg_recurrences',$row)?$row['e_seg_recurrences']:0,$this->get_lang_string($db,$row['e_title']),$this->get_lang_string($db,$row['e_content']),$row['e_priority'],$row['e_is_public'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],$row['e_start_hour'],$row['e_start_minute'],$row['e_end_year'],$row['e_end_month'],$row['e_end_day'],$row['e_end_hour'],$row['e_end_minute'],array_key_exists('e_timezone',$row)?$row['e_timezone']:NULL,array_key_exists('e_do_timezone_conv',$row)?$row['e_do_timezone_conv']:1,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$row['e_views'],$row['e_add_date'],$row['e_edit_date'],$id);
+			$id_new=add_calendar_event($type,$row['e_recurrence'],$row['e_recurrences'],array_key_exists('e_seg_recurrences',$row)?$row['e_seg_recurrences']:0,$this->get_lang_string($db,$row['e_title']),$this->get_lang_string($db,$row['e_content']),$row['e_priority'],$row['e_is_public'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],array_key_exists('e_start_monthly_spec_type',$row)?$row['e_start_monthly_spec_type']:'day_of_month',$row['e_start_hour'],$row['e_start_minute'],$row['e_end_year'],$row['e_end_month'],$row['e_end_day'],array_key_exists('e_end_monthly_spec_type',$row)?$row['e_end_monthly_spec_type']:'day_of_month',$row['e_end_hour'],$row['e_end_minute'],array_key_exists('e_timezone',$row)?$row['e_timezone']:NULL,array_key_exists('e_do_timezone_conv',$row)?$row['e_do_timezone_conv']:1,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$row['e_views'],$row['e_add_date'],$row['e_edit_date'],$id);
 
 			import_id_remap_put('event',strval($row['id']),$id_new);
 		}
@@ -1413,7 +1413,7 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'usersubmitban_ip');
 		foreach ($rows as $row)
 		{
-			add_ip_ban($row['ip'],array_key_exists('i_descrip',$row)?$row['i_descrip']:'');
+			add_ip_ban($row['ip'],array_key_exists('i_descrip',$row)?$row['i_descrip']:'',array_key_exists('i_ban_until',$row)?$row['i_ban_until']:NULL,array_key_exists('i_ban_positive',$row)?($row['i_ban_positive']==1):1);
 		}
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'usersubmitban_member');
 		$on_same_msn=($this->on_same_msn($file_base));

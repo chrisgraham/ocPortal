@@ -1,15 +1,17 @@
-<div class="float_surrounder"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/VideoObject"}>
+<div class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/VideoObject">
 	<div class="flowmode_video left float_separation">
 		{VIDEO_PLAYER}
 	</div>
 	<div class="lined_up_boxes">
 		<div class="gallery_entry_details left">
-			{+START,BOX,{!DETAILS},,med}
-				<table summary="{!MAP_TABLE}" class="solidborder">
+			<section class="box box___gallery_flowmode_video"><div class="box_inner">
+				<h3>{!DETAILS}</h3>
+
+				<table summary="{!MAP_TABLE}" class="results_table">
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<colgroup>
-							<col style="width: 100px" />
-							<col style="width: 180px" />
+							<col class="gallery_entry_field_name_column" />
+							<col class="gallery_entry_field_value_column" />
 						</colgroup>
 					{+END}
 
@@ -17,18 +19,13 @@
 						<tr>
 							<th class="de_th meta_data_title">{!_ADDED}</th>
 							<td>
-								{+START,IF,{$VALUE_OPTION,html5}}
-									<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{$DATE_AND_TIME*,1,0,0,{ADD_DATE_RAW}}</time>
-								{+END}
-								{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
-									{$DATE_AND_TIME*,1,0,0,{ADD_DATE_RAW}}
-								{+END}
+								<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{$DATE_AND_TIME*,1,0,0,{ADD_DATE_RAW}}</time>
 							</td>
 						</tr>
 
 						<tr>
 							<th class="de_th meta_data_title">{!BY}</th>
-							<td><a rel="author" href="{$MEMBER_PROFILE_LINK*,{SUBMITTER}}"{$?,{$VALUE_OPTION,html5}, itemprop="author"}>{$USERNAME*,{SUBMITTER}}</a></td>
+							<td><a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}</a></td>
 						</tr>
 
 						{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
@@ -49,14 +46,16 @@
 					</tbody>
 				</table>
 
-				<p class="view_alone_link"><a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a></p>
+				<ul class="horizontal_links associated_links_block_group">
+					<li><a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a></li>
+				</ul>
 
 				{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 				{+START,INCLUDE,STAFF_ACTIONS}
 					1_URL={EDIT_URL*}
 					1_TITLE={!EDIT_VIDEO}
 				{+END}
-			{+END}
+			</div></section>
 		</div>
 
 		<div class="ratings left">
@@ -65,10 +64,8 @@
 	</div>
 </div>
 
-<br />
-
 {+START,IF_PASSED,DESCRIPTION}
-	<div{$?,{$VALUE_OPTION,html5}, itemprop="caption"}>
+	<div itemprop="caption">
 		{DESCRIPTION}
 	</div>
 {+END}

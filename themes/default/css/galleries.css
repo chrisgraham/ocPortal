@@ -5,11 +5,6 @@
 
 /* Both flow mode and viewing entries */
 
-.ecard_link, .view_alone_link {
-	text-align: center;
-	margin: 5px 0 1px 0;
-}
-
 .gallery_entry_details {
 	margin-bottom: 1em;
 	{+START,IF,{$NOT,{$MOBILE}}}
@@ -17,25 +12,31 @@
 	{+END}
 }
 
+.gallery_entry_field_name_column {
+	width: 8.5em.
+}
+
+.gallery_entry_field_value_column {
+	width: 16em;
+}
+
 /* Non flow-mode only */
 
 .gallery_media_expose_wrap {
 	overflow: hidden;
-	width: 100%;
-	outline: 0;
 }
 
 .gallery_media_expose {
 	overflow: hidden;
 	outline: 0;
 	float: {!en_left};
-	margin: 8px 8px 0 0;
+	margin: 1em 1em 0 0;
 	width: 152px;
 }
 
 .gallery_regular_thumb {
-	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
-	background-color: #e3e9f2; /* {$,wizard, 100% sb_color } */
+	border: 1px solid {$GET,standard_border};
+	background-color: {$GET,area_background};
 	font-size: 0.85em;
 }
 
@@ -46,10 +47,6 @@
 .gallery_regular_thumb a img {
 	width: 150px;
 	display: block;
-}
-
-.gallery_regular_thumb .gmeta {
-	margin: 3px;
 }
 
 .gallery_regular_thumb .grating {
@@ -91,7 +88,7 @@
 
 /* Viewing entries */
 
-#gallery_entry_screen {
+.gallery_entry_screen {
 	width: 100%;
 	min-height: 100%;
 }
@@ -110,7 +107,8 @@
 	width: 3em;
 }
 
-#changer {
+/* The timer countdown */
+.changer {
 	font-weight: bold;
 	font-family: Courier;
 	font-size: 1.2em;
@@ -119,11 +117,13 @@
 /* side_root galleries block */
 
 .side_galleries_block p {
-	margin-top: 0.4em;
+	margin-top: 0.5em;
 }
 
 .side_galleries_block_exp {
 	font-weight: bold;
+	background: none;
+	color: {$GET,slightly_seeded_text};
 }
 
 .side_galleries_block ul.compact_list {
@@ -139,7 +139,7 @@
 /* Tease block */
 
 .gallery_tease_pic_wrap {
-	margin-bottom: 15px;
+	margin-bottom: 1.5em;
 }
 
 .gallery_tease_pic {
@@ -152,6 +152,18 @@
 .gallery_tease_pic_pic {
 	float: {!en_right};
 	text-align: {!en_right};
+}
+
+/* Image fader block */
+
+.image_fader_box {
+	position: relative;
+	border: 1px solid {$GET,standard_border};
+	display: inline-block;
+}
+
+.image_fader_box img {
+	display: block;
 }
 
 /* Miscellaneous media handling */

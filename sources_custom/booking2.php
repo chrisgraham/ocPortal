@@ -32,7 +32,7 @@ function booking_do_next()
 	require_lang('calendar');
 	require_code('templates_donext');
 	require_code('fields');
-	return do_next_manager(get_page_title('BOOKINGS'),comcode_lang_string('DOC_BOOKING'),
+	return do_next_manager(get_screen_title('BOOKINGS'),comcode_lang_string('DOC_BOOKING'),
 				array(
 					/*	 type							  page	 params													 zone	  */
 					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_booking')?array('bookable',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_BOOKABLE')):NULL,

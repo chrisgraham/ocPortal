@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_cedi
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_cedi
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_cedi
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/content_meta_aware/cedi_page.php',
 			'sources/hooks/systems/config_default/cedi_show_stats_count_pages.php',
 			'sources/hooks/systems/config_default/cedi_show_stats_count_posts.php',
@@ -86,18 +84,17 @@ class Hook_addon_registry_cedi
 			'sources/hooks/systems/addon_registry/cedi.php',
 			'sources/hooks/modules/admin_themewizard/cedi.php',
 			'sources/hooks/modules/admin_import_types/cedi.php',
-			'CEDI_CHANGES_SCREEN.tpl',
-			'CEDI_LIST_TREE_DEPTH.tpl',
-			'CEDI_LIST_TREE_LINE.tpl',
-			'CEDI_MANAGE_TREE_SCREEN.tpl',
-			'CEDI_PAGE_SCREEN.tpl',
-			'CEDI_POST.tpl',
-			'CEDI_POST_SCREEN.tpl',
-			'CEDI_RATING.tpl',
-			'CEDI_RATING_FORM.tpl',
-			'CEDI_SUBCATEGORY_CHILDREN.tpl',
-			'CEDI_SUBCATEGORY_LINK.tpl',
-			'cedi.css',
+			'WIKI_CHANGES_SCREEN.tpl',
+			'WIKI_LIST_TREE_LINE.tpl',
+			'WIKI_MANAGE_TREE_SCREEN.tpl',
+			'WIKI_PAGE_SCREEN.tpl',
+			'WIKI_POST.tpl',
+			'WIKI_POSTING_SCREEN.tpl',
+			'WIKI_RATING.tpl',
+			'WIKI_RATING_FORM.tpl',
+			'WIKI_SUBCATEGORY_CHILDREN.tpl',
+			'WIKI_SUBCATEGORY_LINK.tpl',
+			'wiki.css',
 			'themes/default/images/bigicons/cedi.png',
 			'themes/default/images/pagepics/cedi.png',
 			'sources/hooks/systems/ajax_tree/choose_cedi_page.php',
@@ -124,53 +121,29 @@ class Hook_addon_registry_cedi
 			'sources/hooks/systems/content_meta_aware/cedi_post.php',
 			'themes/default/images/EN/page/edit_tree.png',
 			'site/pages/html_custom/EN/cedi_tree_made.htm',
-			'sources/hooks/systems/notifications/cedi.php',
+			'sources/hooks/systems/notifications/cedi.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'CEDI_MANAGE_TREE_SCREEN.tpl'=>'administrative__cedi_manage_tree_screen',
-				'CEDI_LIST_TREE_LINE.tpl'=>'cedi_list_tree',
-				'CEDI_LIST_TREE_DEPTH.tpl'=>'cedi_list_tree',
-				'CEDI_SUBCATEGORY_CHILDREN.tpl'=>'cedi_page_screen',
-				'CEDI_SUBCATEGORY_LINK.tpl'=>'cedi_page_screen',
-				'CEDI_POST.tpl'=>'cedi_page_screen',
-				'CEDI_PAGE_SCREEN.tpl'=>'cedi_page_screen',
-				'CEDI_CHANGES_SCREEN.tpl'=>'cedi_changes_screen',
-				'CEDI_RATING.tpl'=>'cedi_page_screen',
-				'CEDI_POST_SCREEN.tpl'=>'cedi_post_screen',
-				'CEDI_RATING_FORM.tpl'=>'cedi_page_screen',
-				);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__administrative__cedi_manage_tree_screen()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('CEDI_MANAGE_TREE_SCREEN',array(
-					'PING_URL'=>placeholder_url(),
-					'WARNING_DETAILS'=>'',
-					'TREE'=>lorem_phrase(),
-					'TITLE'=>lorem_title(),
-					'FORM'=>placeholder_form(),
-					'CEDI_TREE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			'WIKI_MANAGE_TREE_SCREEN.tpl' => 'administrative__wiki_manage_tree_screen',
+			'WIKI_LIST_TREE_LINE.tpl' => 'wiki_list_tree',
+			'WIKI_SUBCATEGORY_CHILDREN.tpl' => 'wiki_page_screen',
+			'WIKI_SUBCATEGORY_LINK.tpl' => 'wiki_page_screen',
+			'WIKI_POST.tpl' => 'wiki_page_screen',
+			'WIKI_PAGE_SCREEN.tpl' => 'wiki_page_screen',
+			'WIKI_CHANGES_SCREEN.tpl' => 'wiki_changes_screen',
+			'WIKI_RATING.tpl' => 'wiki_page_screen',
+			'WIKI_POSTING_SCREEN.tpl' => 'wiki_posting_screen',
+			'WIKI_RATING_FORM.tpl' => 'wiki_page_screen'
 		);
 	}
 
@@ -181,19 +154,17 @@ class Hook_addon_registry_cedi
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__cedi_list_tree()
+	function tpl_preview__administrative__wiki_manage_tree_screen()
 	{
-		$depth = do_lorem_template('CEDI_LIST_TREE_DEPTH',array(
-					'BEFORE'=>lorem_phrase(),
-						)	);
 		return array(
-			lorem_globalise(
-				do_lorem_template('CEDI_LIST_TREE_LINE',array(
-					'DEPTH'=>$depth,
-					'TITLE'=>lorem_word(),
-					'ID'=>placeholder_id(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('WIKI_MANAGE_TREE_SCREEN', array(
+				'PING_URL' => placeholder_url(),
+				'WARNING_DETAILS' => '',
+				'TREE' => lorem_phrase(),
+				'TITLE' => lorem_title(),
+				'FORM' => placeholder_form(),
+				'WIKI_TREE' => placeholder_options(),
+			)), NULL, '', true)
 		);
 	}
 
@@ -204,63 +175,111 @@ class Hook_addon_registry_cedi
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__cedi_page_screen()
+	function tpl_preview__wiki_list_tree()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('WIKI_LIST_TREE_LINE', array(
+				'BREADCRUMBS' => lorem_phrase(),
+				'TITLE' => lorem_word(),
+				'ID' => placeholder_id()
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__wiki_page_screen()
 	{
 		require_lang('ocf');
-		$extra	=	new ocp_tempcode();
-		$extra	=	do_lorem_template('SCREEN_ITEM_BUTTON',array('REL'=>'edit','IMMEDIATE'=>false,'URL'=>placeholder_url(),'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'edit'));
+		$extra = new ocp_tempcode();
+		$extra = do_lorem_template('SCREEN_ITEM_BUTTON', array(
+			'REL' => 'edit',
+			'IMMEDIATE' => false,
+			'URL' => placeholder_url(),
+			'TITLE' => do_lang_tempcode('EDIT'),
+			'IMG' => 'edit'
+		));
 
-		$extra->attach(do_lorem_template('SCREEN_ITEM_BUTTON',array('REL'=>'move','IMMEDIATE'=>false,'URL'=>placeholder_url(),'TITLE'=>do_lang_tempcode('MOVE'),'IMG'=>'move')));
+		$extra->attach(do_lorem_template('SCREEN_ITEM_BUTTON', array(
+			'REL' => 'move',
+			'IMMEDIATE' => false,
+			'URL' => placeholder_url(),
+			'TITLE' => do_lang_tempcode('MOVE'),
+			'IMG' => 'move'
+		)));
 
-		$all_rating_criteria=array();
-		$all_rating_criteria[]=array('TITLE'=>lorem_word(),'RATING'=>make_string_tempcode("6"),'NUM_RATINGS'=>placeholder_number(),'TYPE'=>lorem_word());
-		$rating_inside	=	do_lorem_template('CEDI_RATING_FORM',array('LIKES'=>true,'CONTENT_TYPE'=>'seedy','ID'=>placeholder_id(),'URL'=>placeholder_url(),'ALL_RATING_CRITERIA'=>$all_rating_criteria,'OVERALL_NUM_RATINGS'=>placeholder_number(),'HAS_RATINGS'=>true,'SIMPLISTIC'=>true,'ERROR'=>''));
+		$all_rating_criteria = array();
+		$all_rating_criteria[] = array(
+			'TITLE' => lorem_word(),
+			'RATING' => make_string_tempcode("6"),
+			'NUM_RATINGS' => placeholder_number(),
+			'TYPE' => lorem_word()
+		);
+		$rating_inside = do_lorem_template('WIKI_RATING_FORM', array(
+			'LIKES' => true,
+			'CONTENT_TYPE' => 'seedy',
+			'ID' => placeholder_id(),
+			'URL' => placeholder_url(),
+			'ALL_RATING_CRITERIA' => $all_rating_criteria,
+			'OVERALL_NUM_RATINGS' => placeholder_number(),
+			'HAS_RATINGS' => true,
+			'SIMPLISTIC' => true,
+			'ERROR' => ''
+		));
 
-		$rating_details = do_lorem_template('CEDI_RATING',array('OVERALL_NUM_RATINGS'=>placeholder_number(),'RATING_FORM'=>$rating_inside,'ALL_RATING_CRITERIA'=>$all_rating_criteria,'HAS_RATINGS'=>true));
+		$rating_details = do_lorem_template('WIKI_RATING', array(
+			'OVERALL_NUM_RATINGS' => placeholder_number(),
+			'RATING_FORM' => $rating_inside,
+			'ALL_RATING_CRITERIA' => $all_rating_criteria,
+			'HAS_RATINGS' => true
+		));
 
-		$posts	=	do_lorem_template('CEDI_POST',array(
-					'INCLUDE_EXPANSION'=>lorem_phrase(),
-					'UNVALIDATED'=>do_lang('UNVALIDATED'),
-					'STAFF_ACCESS'=>lorem_phrase(),
-					'EXP_IMG'=>placeholder_img_code(),
-					'RATE_URL'=>placeholder_url(),
-					'RATING'=>$rating_details,
-					'ID'=>placeholder_id(),
-					'POSTER_URL'=>placeholder_url(),
-					'POSTER'=>lorem_phrase(),
-					'POST_DATE_RAW'=>placeholder_date(),
-					'POST_DATE'=>placeholder_date(),
-					'POST'=>lorem_phrase(),
-					'BUTTONS'=>$extra,
-						));
+		$posts = do_lorem_template('WIKI_POST', array(
+			'INCLUDE_EXPANSION' => lorem_phrase(),
+			'UNVALIDATED' => do_lang('UNVALIDATED'),
+			'STAFF_ACCESS' => lorem_phrase(),
+			'EXP_IMG' => placeholder_img_code(),
+			'RATE_URL' => placeholder_url(),
+			'RATING' => $rating_details,
+			'ID' => placeholder_id(),
+			'POSTER_URL' => placeholder_url(),
+			'POSTER' => lorem_phrase(),
+			'POST_DATE_RAW' => placeholder_date(),
+			'POST_DATE' => placeholder_date(),
+			'POST' => lorem_phrase(),
+			'BUTTONS' => $extra
+		));
 
-		$_child = do_lorem_template('CEDI_SUBCATEGORY_CHILDREN',array(
-					'MY_CHILD_POSTS'=>lorem_phrase(),
-					'MY_CHILD_CHILDREN'=>lorem_phrase(),
-						));
-		$child = do_lorem_template('CEDI_SUBCATEGORY_LINK',array(
-					'URL'=>placeholder_url(),
-					'CHILD'=>$_child,
-					'SUP'=>lorem_phrase(),
-						));
+		$_child = do_lorem_template('WIKI_SUBCATEGORY_CHILDREN', array(
+			'MY_CHILD_POSTS' => lorem_phrase(),
+			'MY_CHILD_CHILDREN' => lorem_phrase()
+		));
+		$child = do_lorem_template('WIKI_SUBCATEGORY_LINK', array(
+			'URL' => placeholder_url(),
+			'CHILD' => $_child,
+			'SUP' => lorem_phrase()
+		));
 
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('CEDI_PAGE_SCREEN',array(
-					'TAGS'=>lorem_word_html(),
-					'HIDE_POSTS'=>placeholder_id(),
-					'ID'=>placeholder_id(),
-					'VIEWS'=>placeholder_number(),
-					'STAFF_ACCESS'=>'1',
-					'DESCRIPTION'=>lorem_paragraph_html(),
-					'TITLE'=>lorem_title(),
-					'CHILDREN'=>$child,
-					'POSTS'=>$posts,
-					'NUM_POSTS'=>placeholder_number(),
-					'MENU'=>placeholder_button(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('WIKI_PAGE_SCREEN', array(
+				'TAGS' => lorem_word_html(),
+				'HIDE_POSTS' => placeholder_id(),
+				'ID' => placeholder_id(),
+				'VIEWS' => placeholder_number(),
+				'STAFF_ACCESS' => '1',
+				'DESCRIPTION' => lorem_paragraph_html(),
+				'TITLE' => lorem_title(),
+				'CHILDREN' => $child,
+				'POSTS' => $posts,
+				'NUM_POSTS' => placeholder_number(),
+				'MENU' => placeholder_button()
+			)), NULL, '', true)
 		);
 	}
 
@@ -271,15 +290,13 @@ class Hook_addon_registry_cedi
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__cedi_changes_screen()
+	function tpl_preview__wiki_changes_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('CEDI_CHANGES_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'RESULTS'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('WIKI_CHANGES_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'RESULTS' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -290,45 +307,44 @@ class Hook_addon_registry_cedi
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__cedi_post_screen()
+	function tpl_preview__wiki_posting_screen()
 	{
 		require_javascript('javascript_validation');
 		require_lang('comcode');
 
-		$posting_form = do_lorem_template('POSTING_FORM',array(
-					'TABINDEX_PF'=>placeholder_number(),
-					'JAVASCRIPT'=>'',
-					'PREVIEW'=>lorem_phrase(),
-					'COMCODE_EDITOR'=>lorem_phrase(),
-					'COMCODE_EDITOR_SMALL'=>lorem_phrase(),
-					'CLASS'=>lorem_phrase(),
-					'COMCODE_URL'=>placeholder_url(),
-					'EXTRA'=>'',
-					'POST_COMMENT'=>lorem_phrase(),
-					'EMOTICON_CHOOSER'=>lorem_phrase(),
-					'SUBMIT_NAME'=>lorem_word(),
-					'HIDDEN_FIELDS'=>'',
-					'COMCODE_HELP'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'POST'=>lorem_phrase(),
-					'DEFAULT_PARSED'=>lorem_phrase(),
-					'CONTINUE_URL'=>placeholder_url(),
-					'ATTACHMENTS'=>lorem_phrase(),
-					'SPECIALISATION'=>placeholder_fields(),
-					'SPECIALISATION2'=>'',
-						)
-			);
+		require_css('forms');
+
+		$posting_form = do_lorem_template('POSTING_FORM', array(
+			'TABINDEX_PF' => placeholder_number(),
+			'JAVASCRIPT' => '',
+			'PREVIEW' => lorem_phrase(),
+			'COMCODE_EDITOR' => lorem_phrase(),
+			'COMCODE_EDITOR_SMALL' => lorem_phrase(),
+			'CLASS' => lorem_phrase(),
+			'COMCODE_URL' => placeholder_url(),
+			'EXTRA' => '',
+			'POST_COMMENT' => lorem_phrase(),
+			'EMOTICON_CHOOSER' => lorem_phrase(),
+			'SUBMIT_NAME' => lorem_word(),
+			'HIDDEN_FIELDS' => '',
+			'COMCODE_HELP' => lorem_phrase(),
+			'URL' => placeholder_url(),
+			'POST' => lorem_phrase(),
+			'DEFAULT_PARSED' => lorem_phrase(),
+			'CONTINUE_URL' => placeholder_url(),
+			'ATTACHMENTS' => lorem_phrase(),
+			'SPECIALISATION' => placeholder_fields(),
+			'SPECIALISATION2' => ''
+		));
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('CEDI_POST_SCREEN',array(
-					'PING_URL'=>'',
-					'WARNING_DETAILS'=>'',
-					'TEXT'=>lorem_phrase(),
-					'TITLE'=>lorem_title(),
-					'POSTING_FORM'=>$posting_form
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('WIKI_POSTING_SCREEN', array(
+				'PING_URL' => '',
+				'WARNING_DETAILS' => '',
+				'TEXT' => lorem_phrase(),
+				'TITLE' => lorem_title(),
+				'POSTING_FORM' => $posting_form
+			)), NULL, '', true)
 		);
 	}
 }

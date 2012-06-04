@@ -1,6 +1,6 @@
 {TITLE}
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table solidborder variable_table">
+<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table autosized_table">
 	<thead>
 		<tr>
 			<th>{!NAME}</th>
@@ -17,7 +17,7 @@
 			{$SET,cycle,{$CYCLE,results_table_zebra,zebra_0,zebra_1}}
 
 			<tr class="{$GET,cycle} thick_border">
-				<td class="dottedborder_barrier_b_nonrequired">
+				<td>
 					{+START,IF_NON_EMPTY,{ORDER_DET_URL}}
 						<strong><a href="{ORDER_DET_URL*}">{ORDER_TITLE*}</a></strong>
 					{+END}
@@ -27,25 +27,25 @@
 
 					{+START,IF,{$MOBILE}}
 						<p class="assocated_details">
-							{!STATUS}: {STATE*}
+							<span class="field_name">{!STATUS}:</span> {STATE*}
 						</p>
 					{+END}
 				</td>
-				<td class="dottedborder_barrier_b_nonrequired">
+				<td>
 					{$CURRENCY_SYMBOL}{AMOUNT*}
 				</td>
-				<td class="dottedborder_barrier_b_nonrequired">
+				<td>
 					{TIME*}
 				</td>
 				{+START,IF,{$NOT,{$MOBILE}}}
-					<td class="dottedborder_barrier_b_nonrequired">
+					<td>
 						{STATE*}
 					</td>
 				{+END}
 			</tr>
 			{+START,IF_NON_EMPTY,{NOTE}}
 				<tr>
-					<td class="dottedborder_barrier_b_nonrequired" colspan="5">
+					<td colspan="5">
 						{NOTE*}
 					</td>
 				</tr>

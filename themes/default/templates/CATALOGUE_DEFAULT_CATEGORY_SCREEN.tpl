@@ -1,21 +1,22 @@
 {TITLE}
 
 {+START,IF_NON_EMPTY,{DESCRIPTION}}
-	{+START,BOX,,,curved}
-		<div{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
+	<div class="box box___catalogue_default_category_screen"><div class="box_inner">
+		<div itemprop="description">
 			{DESCRIPTION}
 		</div>
-	{+END}
-	<br />
+	</div></div>
 {+END}
 
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,catalogue_category,{ID}}}
-{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}<br />{+END}
+{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
 {SUBCATEGORIES}
 
 {+START,IF_NON_EMPTY,{ENTRIES}}
-	{ENTRIES}
+	<div class="float_surrounder display_type_{DISPLAY_TYPE*}">
+		{ENTRIES}
+	</div>
 {+END}
 
 {+START,IF_EMPTY,{ENTRIES}{SUBCATEGORIES}}
@@ -25,15 +26,15 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{SORTING}}
-	<div class="medborder special_category_sorter inline_block">
+	<div class="box category_sorter inline_block"><div class="box_inner">
 		{$SET,show_sort_button,1}
 		{SORTING}
-	</div>
+	</div></div>
 {+END}
 
-{+START,IF_NON_EMPTY,{BROWSER}}
+{+START,IF_NON_EMPTY,{PAGINATION}}
 	<div class="float_surrounder">
-		{BROWSER}
+		{PAGINATION}
 	</div>
 {+END}
 
@@ -48,7 +49,7 @@
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 {+START,INCLUDE,STAFF_ACTIONS}
-	1_URL={ADD_LINK*}
+	1_URL={ADD_ENTRY_URL*}
 	1_TITLE={!CATALOGUE_GENERIC_ADD,{_TITLE*}}
 	1_REL=add
 	2_URL={ADD_CAT_URL*}

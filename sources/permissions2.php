@@ -78,30 +78,30 @@ function has_specific_permission_group($group_id,$permission,$page=NULL,$cats=NU
 {
 	if (is_null($page)) $page=get_page_name();
 
-	global $GROUP_SPECIFIC_PERMISSION_CACHE;
-	if (array_key_exists($group_id,$GROUP_SPECIFIC_PERMISSION_CACHE))
+	global $GROUP_PRIVILEGE_CACHE;
+	if (array_key_exists($group_id,$GROUP_PRIVILEGE_CACHE))
 	{
 		if (!is_null($cats))
 		{
 			for ($i=0;$i<intval(floor(count($cats)/2));$i++)
 			{
 				if (is_null($cats[$i*2])) continue;
-				if (isset($GROUP_SPECIFIC_PERMISSION_CACHE[$group_id][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]))
+				if (isset($GROUP_PRIVILEGE_CACHE[$group_id][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]))
 				{
-					return $GROUP_SPECIFIC_PERMISSION_CACHE[$group_id][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]==1;
+					return $GROUP_PRIVILEGE_CACHE[$group_id][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]==1;
 				}
 			}
 		}
 		if ($page!='')
 		{
-			if (isset($GROUP_SPECIFIC_PERMISSION_CACHE[$group_id][$permission][$page]['']['']))
+			if (isset($GROUP_PRIVILEGE_CACHE[$group_id][$permission][$page]['']['']))
 			{
-				return $GROUP_SPECIFIC_PERMISSION_CACHE[$group_id][$permission][$page]['']['']==1;
+				return $GROUP_PRIVILEGE_CACHE[$group_id][$permission][$page]['']['']==1;
 			}
 		}
-		if (isset($GROUP_SPECIFIC_PERMISSION_CACHE[$group_id][$permission]['']['']['']))
+		if (isset($GROUP_PRIVILEGE_CACHE[$group_id][$permission]['']['']['']))
 		{
-			return $GROUP_SPECIFIC_PERMISSION_CACHE[$group_id][$permission]['']['']['']==1;
+			return $GROUP_PRIVILEGE_CACHE[$group_id][$permission]['']['']['']==1;
 		}
 		return false;
 	}
@@ -111,11 +111,11 @@ function has_specific_permission_group($group_id,$permission,$page=NULL,$cats=NU
 	{
 		$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE group_id='.strval($group_id).' AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true));
 	}
-	$GROUP_SPECIFIC_PERMISSION_CACHE[$group_id]=array();
+	$GROUP_PRIVILEGE_CACHE[$group_id]=array();
 	foreach ($perhaps as $p)
 	{
-		if (@$GROUP_SPECIFIC_PERMISSION_CACHE[$group_id][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]!=1)
-			$GROUP_SPECIFIC_PERMISSION_CACHE[$group_id][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]=$p['the_value'];
+		if (@$GROUP_PRIVILEGE_CACHE[$group_id][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]!=1)
+			$GROUP_PRIVILEGE_CACHE[$group_id][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]=$p['the_value'];
 	}
 
 	return has_specific_permission_group($group_id,$permission,$page,$cats);
@@ -259,7 +259,7 @@ function get_permissions_matrix($server_id,$access,$overridables,$specific_permi
 				if (is_array($cat_support)) $cat_support=$cat_support[0];
 				if ($cat_support==0) continue;
 
-				$overrides->attach(do_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE',array('FORCE_PRESETS'=>$no_outer,'GROUP_NAME'=>$group_name,'VIEW_ACCESS'=>$view_access,'TABINDEX'=>strval($tabindex),'GROUP_ID'=>strval($id),'SP'=>$override,'ALL_GLOBAL'=>$all_global,'TITLE'=>$lang_string,'DEFAULT_ACCESS'=>$default_access[$id][$override],'CODE'=>isset($specific_permissions[$override][$id])?$specific_permissions[$override][$id]:'-1')));
+				$overrides->attach(do_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE',array('_GUID'=>'115fbf91873be9016c5e192f5a5e090b','FORCE_PRESETS'=>$no_outer,'GROUP_NAME'=>$group_name,'VIEW_ACCESS'=>$view_access,'TABINDEX'=>strval($tabindex),'GROUP_ID'=>strval($id),'SP'=>$override,'ALL_GLOBAL'=>$all_global,'TITLE'=>$lang_string,'DEFAULT_ACCESS'=>$default_access[$id][$override],'CODE'=>isset($specific_permissions[$override][$id])?$specific_permissions[$override][$id]:'-1')));
 			}
 			$permission_rows->attach(do_template('FORM_SCREEN_INPUT_PERMISSION',array('_GUID'=>'e2c4459ae995d33376c07e498f1d973a','FORCE_PRESETS'=>$no_outer,'GROUP_NAME'=>$group_name,'OVERRIDES'=>$overrides->evaluate()/*FUDGEFUDGE*/,'ALL_GLOBAL'=>$all_global,'VIEW_ACCESS'=>$view_access,'TABINDEX'=>strval($tabindex),'GROUP_ID'=>strval($id),'PINTERFACE_VIEW'=>$pinterface_view)));
 		} else
@@ -270,7 +270,7 @@ function get_permissions_matrix($server_id,$access,$overridables,$specific_permi
 				if (is_array($cat_support)) $cat_support=$cat_support[0];
 				if ($cat_support==1) $overridables_filtered[$override]=1;
 			}
-			$permission_rows->attach(do_template('FORM_SCREEN_INPUT_PERMISSION_ADMIN',array('FORCE_PRESETS'=>$no_outer,'OVERRIDES'=>$overridables_filtered,'GROUP_NAME'=>$group_name,'GROUP_ID'=>strval($id),'PINTERFACE_VIEW'=>$pinterface_view)));
+			$permission_rows->attach(do_template('FORM_SCREEN_INPUT_PERMISSION_ADMIN',array('_GUID'=>'59fafa2fa66ec6eb0fe2432b1d747636','FORCE_PRESETS'=>$no_outer,'OVERRIDES'=>$overridables_filtered,'GROUP_NAME'=>$group_name,'GROUP_ID'=>strval($id),'PINTERFACE_VIEW'=>$pinterface_view)));
 		}
 	}
 	if ((count($overridables)==0) && (!$no_outer))
@@ -451,6 +451,6 @@ function set_page_permissions_from_environment($zone,$page)
 
 	decache('main_sitemap');
 	$GLOBALS['SITE_DB']->query_delete('cache');
-	if (function_exists('persistant_cache_empty')) persistant_cache_empty();
+	if (function_exists('persistent_cache_empty')) persistent_cache_empty();
 }
 

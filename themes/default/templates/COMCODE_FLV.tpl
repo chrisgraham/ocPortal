@@ -1,5 +1,5 @@
 {$SET,flv_url,{URL}}
-{$JAVASCRIPT_INCLUDE,javascript_jwplayer}
+{$REQUIRE_JAVASCRIPT,javascript_jwplayer}
 {$SET,rand_id,{$RAND}}
 
 <div class="xhtml_validator_off">
@@ -12,10 +12,10 @@
 <script type="text/javascript">// <![CDATA[
 	jwplayer("flv_container_{$GET%,rand_id}").setup({
 		autostart: false,
-      players: [
-          { type: "html5" },
-          { type: "flash", src: "{$BASE_URL#}/data/flvplayer.swf" }
-      ],
+		players: [
+			{ type: "html5" },
+			{ type: "flash", src: "{$BASE_URL#}/data/flvplayer.swf" }
+		],
 		provider: '{$?,{$EQ,{$SUBSTR,{URL},-4},.mp3},sound,video}'
 	});
 //]]></script>

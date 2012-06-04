@@ -34,6 +34,11 @@ function occle_script()
 {
 	$cli=(php_sapi_name()=='cli' && empty($_SERVER['REMOTE_ADDR']));
 
+	if ($cli)
+	{
+		if (function_exists('set_time_limit')) @set_time_limit(0);
+	}
+
 	// Closed site
 	if (!$cli)
 	{
@@ -2016,9 +2021,10 @@ function do_command_help($command,$options,$parameters)
 		else $_options['-'.$option_name]=do_lang('CMD_'.strtoupper($command).'_HELP_'.strtoupper($option_name));
 	}
 
-	foreach ($parameters as $parameter_number=>$parameter)
+	foreach (array_keys($parameters) as $parameter_number)
 	{
-		$_parameter=do_lang('CMD_'.strtoupper($command).'_HELP_PARAM_'.strval($parameter_number));
+		$_parameter=do_lang('CMD_'.strtoupper($command).'_HELP_PARAM_'.strval($parameter_number),NULL,NULL,NULL,NULL,false);
+		if (is_null($_parameter)) continue;
 		$matches=array();
 		if (preg_match('#/sources/hooks/(.*)/(.*)/#',$_parameter,$matches)!=0)
 		{

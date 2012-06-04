@@ -77,11 +77,15 @@ function date_from_week_of_year($year,$week)
  * @param  integer		The year the event starts at. This and the below are in server time
  * @param  integer		The month the event starts at
  * @param  integer		The day the event starts at
+ * @param  ID_TEXT		In-month specification type for start date
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  integer		The hour the event starts at
  * @param  integer		The minute the event starts at
  * @param  ?integer		The year the event ends at (NULL: not a multi day event)
  * @param  ?integer		The month the event ends at (NULL: not a multi day event)
  * @param  ?integer		The day the event ends at (NULL: not a multi day event)
+ * @param  ID_TEXT		In-month specification type for end date
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  ?integer		The hour the event ends at (NULL: not a multi day event / all day event)
  * @param  ?integer		The minute the event ends at (NULL: not a multi day event / all day event)
  * @param  string			The event recurrence
@@ -90,7 +94,7 @@ function date_from_week_of_year($year,$week)
  * @param  ?TIME			The timestamp that found times must not exceed. In user-time (NULL: 20 years time)
  * @return array			A list of pairs for period times (timestamps, in user-time). Actually a series of pairs, 'window-bound timestamps' is first pair, then 'true coverage timestamps', then 'true coverage timestamps without timezone conversions'
  */
-function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences,$period_start=NULL,$period_end=NULL)
+function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start=NULL,$period_end=NULL)
 {
 	if ($recurrences===0) return array();
 
@@ -116,33 +120,46 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 	$dif_day=0;
 	$dif_month=0;
 	$dif_year=0;
-	$dif=utctime_to_usertime()-utctime_to_usertime(mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year));
+	$day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
+	$dif=utctime_to_usertime()-utctime_to_usertime(mktime($start_hour,$start_minute,0,$start_month,$day_of_month,$start_year));
+	$start_day_of_month=$start_day;
 	switch ($recurrence) // If a long way out of range, accelerate forward before steadedly looping forward till we might find a match (doesn't jump fully forward, due to possibility of timezones complicating things)
 	{
 		case 'daily':
 			$dif_day=1;
 			if ($dif>60*60*24*10)
+			{
 				$start_day+=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)));
+			}
 			break;
 		case 'weekly':
 			$dif_day=7;
 			if ($dif>60*60*24*70)
+			{
 				$start_day+=$dif_day*intval(floor(floatval($dif)/(60.0*60.0*24.0)))-70;
+			}
 			break;
 		case 'monthly':
 			$dif_month=1;
 			if ($dif>60*60*24*31*10)
+			{
 				$start_month+=$dif_month*intval(floor(floatval($dif)/(60.0*60.0*24.0*31.0)))-10;
+				$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
+			}
 			break;
 		case 'yearly':
 			$dif_year=1;
 			if ($dif>60*60*24*365*10)
+			{
 				$start_year+=$dif_year*intval(floor(floatval($dif)/(60.0*60.0*24.0*365.0)))-1;
+			}
 			break;
 	}
 
 	$_b=mixed();
 	$b=mixed();
+
+	$no_end=false;
 
 	do
 	{
@@ -156,7 +173,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		The server already has the day stored UTC which may be different to the day stored for the +1 timezone (in fact either the start or end day will be stored differently, assuming there is an end day)
 		*/
 
-		$_a=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_hour,$start_minute,$do_timezone_conv==1);
+		$_a=cal_get_start_utctime_for_event($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$do_timezone_conv==1);
 		$a=cal_utctime_to_usertime(
 			$_a,
 			$timezone,
@@ -164,15 +181,16 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		);
 		if ((is_null($start_hour)) && (is_null($end_year) || is_null($end_month) || is_null($end_day))) // All day event with no end date, should be same as start date
 		{
+			$end_day=$start_day_of_month;
+			$end_month=$start_month;
+			$end_year=$start_year;
+			$no_end=true;
+
 			// Should not be needed, but normalise possible database error
 			$start_minute=NULL;
 			$start_hour=NULL;
 			$end_minute=NULL;
 			$end_hour=NULL;
-
-			$end_day=$start_day;
-			$end_month=$start_month;
-			$end_year=$start_year;
 		}
 		if (is_null($end_year) || is_null($end_month) || is_null($end_day))
 		{
@@ -180,8 +198,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$b=NULL;
 		} else
 		{
-			$_b=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_hour,$end_minute,$do_timezone_conv==1);
-
+			$_b=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$do_timezone_conv==1);
 			$b=cal_utctime_to_usertime(
 				$_b,
 				$timezone,
@@ -197,14 +214,34 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		}
 		$i++;
 
-		$start_day+=$dif_day;
-		$start_month+=$dif_month;
 		$start_year+=$dif_year;
+		$start_month+=$dif_month;
+		if ($start_monthly_spec_type=='day_of_month')
+		{
+			$start_day+=$dif_day;
+		} else
+		{
+			$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
+		}
 		if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 		{
-			$end_day+=$dif_day;
-			$end_month+=$dif_month;
 			$end_year+=$dif_year;
+			$end_month+=$dif_month;
+			if ($end_monthly_spec_type=='day_of_month')
+			{
+				$end_day+=$dif_day;
+			} else
+			{
+				$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type);
+			}
+		}
+
+		// Let it reset
+		if ($no_end)
+		{
+			$end_day=NULL;
+			$end_month=NULL;
+			$end_year=NULL;
 		}
 
 		if ($i==300) break; // Let's be reasonable
@@ -256,7 +293,7 @@ function regenerate_event_reminder_jobs($id,$force=false)
 	$GLOBALS['SITE_DB']->query_delete('calendar_jobs',array('j_event_id'=>$id));
 
 	$period_start=$force?0:NULL;
-	$recurrences=find_periods_recurrence($event['e_timezone'],$event['e_do_timezone_conv'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],is_null($event['e_start_hour'])?0:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],is_null($event['e_end_hour'])?23:$event['e_end_hour'],is_null($event['e_end_minute'])?0:$event['e_end_minute'],$event['e_recurrence'],min(1,$event['e_recurrences']),$period_start);
+	$recurrences=find_periods_recurrence($event['e_timezone'],$event['e_do_timezone_conv'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],is_null($event['e_start_hour'])?0:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],is_null($event['e_end_hour'])?23:$event['e_end_hour'],is_null($event['e_end_minute'])?0:$event['e_end_minute'],$event['e_recurrence'],min(1,$event['e_recurrences']),$period_start);
 	if ((array_key_exists(0,$recurrences)) && ($recurrences[0][0]==$recurrences[0][2]/*really starts in window, not just spanning it*/))
 	{
 		if ($event['e_type']==db_get_first_id()) // Add system command job if necessary
@@ -427,10 +464,10 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 					}
 					if ($key!=0)
 					{
-						list($full_url,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)=get_event_data_ical($calendar_nodes[$key]);
+						list($full_url,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)=get_event_data_ical($calendar_nodes[$key]);
 						$is_public=1;
 
-						$event=array('e_recurrence'=>$recurrence,'e_content'=>$content,'e_title'=>$title,'e_id'=>$feed_url,'e_priority'=>$priority,'t_logo'=>'calendar/rss','e_recurrences'=>$recurrences,'e_seg_recurrences'=>$seg_recurrences,'e_is_public'=>$is_public,'e_start_year'=>$start_year,'e_start_month'=>$start_month,'e_start_day'=>$start_day,'e_start_hour'=>$start_hour,'e_start_minute'=>$start_minute,'e_end_year'=>$end_year,'e_end_month'=>$end_month,'e_end_day'=>$end_day,'e_end_hour'=>$end_hour,'e_end_minute'=>$end_minute,'e_timezone'=>$timezone);
+						$event=array('e_recurrence'=>$recurrence,'e_content'=>$content,'e_title'=>$title,'e_id'=>$feed_url,'e_priority'=>$priority,'t_logo'=>'calendar/rss','e_recurrences'=>$recurrences,'e_seg_recurrences'=>$seg_recurrences,'e_is_public'=>$is_public,'e_start_year'=>$start_year,'e_start_month'=>$start_month,'e_start_day'=>$start_day,'e_start_hour'=>$start_hour,'e_start_minute'=>$start_minute,'e_end_year'=>$end_year,'e_end_month'=>$end_month,'e_end_day'=>$end_day,'e_end_hour'=>$end_hour,'e_end_minute'=>$end_minute,'e_timezone'=>$timezone,'e_start_monthly_spec_type'=>'day_of_month','e_end_monthly_spec_type'=>'day_of_month');
 						if (!is_null($event_type)) $event['t_logo']=$_event_types[$event_type]['t_logo'];
 						if (!is_null($type))
 						{
@@ -439,7 +476,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 								$event['t_logo']=$event_types[$type];
 						}
 
-						$their_times=find_periods_recurrence($timezone,0,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
+						$their_times=find_periods_recurrence($timezone,0,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences,$period_start,$period_end);
 
 						// Now search every combination to see if we can get a hit
 						foreach ($their_times as $their)
@@ -474,7 +511,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 						$from=utctime_to_usertime($item['clean_add_date']);
 						if (($from>=$period_start) && ($from<$period_end))
 						{
-							$event+=array('e_start_year'=>date('Y',$from),'e_start_month'=>date('m',$from),'e_start_day'=>date('D',$from),'e_start_hour'=>date('H',$from),'e_start_minute'=>date('i',$from),'e_end_year'=>NULL,'e_end_month'=>NULL,'e_end_day'=>NULL,'e_end_hour'=>NULL,'e_end_minute'=>NULL);
+							$event+=array('e_start_year'=>intval(date('Y',$from)),'e_start_month'=>intval(date('m',$from)),'e_start_day'=>intval(date('D',$from)),'e_start_hour'=>intval(date('H',$from)),'e_start_minute'=>intval(date('i',$from)),'e_end_year'=>NULL,'e_end_month'=>NULL,'e_end_day'=>NULL,'e_end_hour'=>NULL,'e_end_minute'=>NULL,'e_start_monthly_spec_type'=>'day_of_month','e_end_monthly_spec_type'=>'day_of_month');
 							$matches[]=array($full_url,$event,$from,NULL,$from,NULL,$from,NULL);
 						}
 					}
@@ -500,7 +537,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	{
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) continue;
 
-		$their_times=find_periods_recurrence($event['e_timezone'],$event['e_do_timezone_conv'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_hour'],$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_hour'],$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
+		$their_times=find_periods_recurrence($event['e_timezone'],$event['e_do_timezone_conv'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$event['e_end_hour'],$event['e_end_minute'],$event['e_recurrence'],$event['e_recurrences'],$period_start,$period_end);
 
 		// Now search every combination to see if we can get a hit
 		foreach ($their_times as $their)
@@ -550,20 +587,24 @@ function nice_get_events($only_owned,$it,$edit_viewable_events=true)
  * @param  ?integer		The year the event starts at. This and the below are in server time (NULL: default)
  * @param  ?integer		The month the event starts at (NULL: default)
  * @param  ?integer		The day the event starts at (NULL: default)
+ * @param  ID_TEXT		In-month specification type for start date
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  ?integer		The hour the event starts at (NULL: default)
  * @param  ?integer		The minute the event starts at (NULL: default)
  * @param  ?integer		The year the event ends at (NULL: not a multi day event)
  * @param  ?integer		The month the event ends at (NULL: not a multi day event)
  * @param  ?integer		The day the event ends at (NULL: not a multi day event)
+ * @param  ID_TEXT		In-month specification type for end date
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  ?integer		The hour the event ends at (NULL: not a multi day event)
  * @param  ?integer		The minute the event ends at (NULL: not a multi day event)
  * @param  string			The event recurrence
  * @param  ?integer		The number of recurrences (NULL: none/infinite)
  * @return ?tempcode		Information about conflicts (NULL: none)
  */
-function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences)
+function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences)
 {
-	$our_times=find_periods_recurrence(get_users_timezone(),1,$start_year,$start_month,$start_day,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute,$recurrence,$recurrences);
+	$our_times=find_periods_recurrence(get_users_timezone(),1,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
 
 	$conflicts=detect_happening_at($member_id,$skip_id,$our_times,!has_specific_permission(get_member(),'sense_personal_conflicts'));
 
@@ -593,10 +634,13 @@ function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_da
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
+ * @param  ID_TEXT			In-month specification type
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @return integer			Hour
  */
-function find_timezone_start_hour_in_utc($timezone,$year,$month,$day)
+function find_timezone_start_hour_in_utc($timezone,$year,$month,$day,$monthly_spec_type)
 {
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
 	$t1=mktime(0,0,0,$month,$day,$year);
 	$t2=tz_time($t1,$timezone);
 	$t2-=2*($t2-$t1);
@@ -611,10 +655,13 @@ function find_timezone_start_hour_in_utc($timezone,$year,$month,$day)
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
+ * @param  ID_TEXT			In-month specification type
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @return integer			Hour
  */
-function find_timezone_start_minute_in_utc($timezone,$year,$month,$day)
+function find_timezone_start_minute_in_utc($timezone,$year,$month,$day,$monthly_spec_type)
 {
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
 	$t1=mktime(0,0,0,$month,$day,$year);
 	$t2=tz_time($t1,$timezone);
 	$t2-=2*($t2-$t1);
@@ -629,10 +676,13 @@ function find_timezone_start_minute_in_utc($timezone,$year,$month,$day)
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
+ * @param  ID_TEXT			In-month specification type
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @return integer			Hour
  */
-function find_timezone_end_hour_in_utc($timezone,$year,$month,$day)
+function find_timezone_end_hour_in_utc($timezone,$year,$month,$day,$monthly_spec_type)
 {
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
 	$t1=mktime(23,59,0,$month,$day,$year);
 	$t2=tz_time($t1,$timezone);
 	$t2-=2*($t2-$t1);
@@ -647,10 +697,13 @@ function find_timezone_end_hour_in_utc($timezone,$year,$month,$day)
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
+ * @param  ID_TEXT			In-month specification type
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @return integer			Hour
  */
-function find_timezone_end_minute_in_utc($timezone,$year,$month,$day)
+function find_timezone_end_minute_in_utc($timezone,$year,$month,$day,$monthly_spec_type)
 {
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
 	$t1=mktime(23,59,0,$month,$day,$year);
 	$t2=tz_time($t1,$timezone);
 	$t2-=2*($t2-$t1);
@@ -665,13 +718,17 @@ function find_timezone_end_minute_in_utc($timezone,$year,$month,$day)
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
+ * @param  ID_TEXT			In-month specification type
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  ?integer			Hour (NULL: start hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
  * @param  ?integer			Minute (NULL: start minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
  * @param  boolean			Whether the time should be converted to the viewer's own timezone instead.
  * @return TIME				Timestamp
  */
-function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$hour,$minute,$show_in_users_timezone)
+function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$monthly_spec_type,$hour,$minute,$show_in_users_timezone)
 {
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
+
 	$_hour=is_null($hour)?0:$hour;
 	$_minute=is_null($minute)?0:$minute;
 
@@ -726,13 +783,17 @@ function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$hour,$minu
  * @param  integer			Year
  * @param  integer			Month
  * @param  integer			Day
+ * @param  ID_TEXT			In-month specification type
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
  * @param  ?integer			Hour (NULL: end hour of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
  * @param  ?integer			Minute (NULL: end minute of day in the timezone expressed as UTC, for whatever day the given midnight day/month/year shifts to after timezone conversion)
  * @param  boolean			Whether the time should be converted to the viewer's own timezone instead.
  * @return TIME				Timestamp
  */
-function cal_get_end_utctime_for_event($timezone,$year,$month,$day,$hour,$minute,$show_in_users_timezone)
+function cal_get_end_utctime_for_event($timezone,$year,$month,$day,$monthly_spec_type,$hour,$minute,$show_in_users_timezone)
 {
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
+
 	$_hour=is_null($hour)?23:$hour;
 	$_minute=is_null($minute)?59:$minute;
 
@@ -832,13 +893,15 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 			$event['e_start_year'],
 			$event['e_start_month'],
 			$event['e_start_day'],
-			is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_hour'],
-			is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day']):$event['e_start_minute'],
+			$event['e_start_monthly_spec_type'],
+			is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_hour'],
+			is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_minute'],
 			$event['e_end_year'],
 			$event['e_end_month'],
 			$event['e_end_day'],
-			is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_hour'],
-			is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']):$event['e_end_minute'],
+			$event['e_end_monthly_spec_type'],
+			is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_hour'],
+			is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_minute'],
 			$event['e_recurrence'],
 			$event['e_recurrences'],
 			$period_start,
@@ -883,4 +946,129 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 	}
 
 	return $conflicts;
+}
+
+/**
+ * Given a specially encoded day of month, work out the real day of the month.
+ *
+ * @param  integer		The concrete year
+ * @param  integer		The concrete month
+ * @param  integer		The encoded day of month
+ * @param  ID_TEXT		In-month specification type
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
+ * @return integer		Concrete day
+ */
+function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type)
+{
+	switch ($monthly_spec_type)
+	{
+		case 'day_of_month':
+		default:
+			$day_of_month=$day;
+			break;
+		case 'day_of_month_backwards':
+			$day_of_month=intval(date('d',mktime(0,0,0,$month+1,0,$year)))-$day+1;
+			break;
+		case 'dow_of_month':
+			$days=array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+			$month_start=mktime(0,0,0,$month,1,$year);
+			$timestamp=strtotime('+'.strval(intval(1.0+floatval($day)/7.0)).' '.strval($days[$day%7]),$month_start);
+			$day_of_month=intval(date('d',$timestamp));
+			break;
+		case 'dow_of_month_backwards':
+			$days=array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+			$month_end=mktime(0,0,0,$month+1,0,$year);
+			$timestamp=strtotime('-'.strval(intval(1.0+floatval($day)/7.0)).' '.strval($days[$day%7]),$month_end);
+			$day_of_month=intval(date('d',$timestamp));
+			break;
+	}
+	return $day_of_month;
+}
+
+/**
+ * Given a calendar day of month, work out the day of the month within the specified encoding.
+ *
+ * @param  integer		The concrete year
+ * @param  integer		The concrete month
+ * @param  integer		The encoded day of month
+ * @param  ID_TEXT		In-month specification type
+ * @return integer		Concrete day
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
+ */
+function find_abstract_day($year,$month,$day_of_month,$monthly_spec_type)
+{
+	switch ($monthly_spec_type)
+	{
+		case 'day_of_month':
+		default:
+			$day=$day_of_month;
+			break;
+		case 'day_of_month_backwards':
+			$day=intval(date('d',mktime(0,0,0,$month+1,0,$year)))-$day_of_month+1;
+			break;
+		case 'dow_of_month':
+			$day_code=intval(date('w',mktime(0,0,0,$month,$day_of_month,$year)));
+
+			// Monday is 0 in my mind, not Sunday
+			$day_code--;
+			if ($day_code==-1) $day_code=6;
+
+			$day=$day_code+7*intval(floatval($day_of_month)/7.0);
+			break;
+		case 'dow_of_month_backwards':
+			$day_code=intval(date('w',mktime(0,0,0,$month,$day_of_month,$year)));
+
+			// Monday is 0 in my mind, not Sunday
+			$day_code--;
+			if ($day_code==-1) $day_code=6;
+
+			$month_end=mktime(0,0,0,$month+1,0,$year);
+			$days_in_month=intval(date('d',$month_end));
+
+			$day=$day_code+7*intval(floatval($days_in_month-$day_of_month)/7.0);
+			break;
+	}
+	return $day;
+}
+
+/**
+ * Choose how a recurring monthly event should be encoded.
+ *
+ * @param  integer		The concrete day
+ * @param  integer		The concrete month
+ * @param  integer		The concrete year
+ * @param  ID_TEXT		Current in-month specification type
+ * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
+ * @return tempcode		Chooser
+ */
+function monthly_spec_type_chooser($day_of_month,$month,$year,$default_monthly_spec_type='day_of_month')
+{
+	require_code('form_templates');
+	require_lang('calendar');
+
+	$radios=new ocp_tempcode();
+
+	foreach (array('day_of_month','day_of_month_backwards','dow_of_month','dow_of_month_backwards') as $monthly_spec_type)
+	{
+		$day=find_abstract_day($year,$month,$day_of_month,$monthly_spec_type);
+
+		$timestamp=mktime(0,0,0,$month,$day_of_month,$year);
+
+		if (substr($monthly_spec_type,0,4)=='dow_')
+		{
+			$nth=locale_filter(date('jS',mktime(0,0,0,1,intval(floatval($day)/7.0)+1,$year))); // Bit of a hack. Uses the date locales nth stuff, even when it's not actually a day-of-month here.
+		} else
+		{
+			$nth=locale_filter(date('jS',mktime(0,0,0,$month,$day,$year))); // Bit of a hack. Uses the date locales nth stuff, even when it's not actually a day-of-month here.
+		}
+		$dow=locale_filter(date('l',$timestamp));
+		$month_name=locale_filter(date('M',$timestamp));
+
+		$text=do_lang_tempcode('CALENDAR_MONTHLY_RECURRENCE_CONCRETE_'.$monthly_spec_type,$nth,$dow,$month_name);
+		$description=do_lang_tempcode('CALENDAR_MONTHLY_RECURRENCE_'.$monthly_spec_type);
+
+		$radios->attach(form_input_radio_entry('monthly_spec_type',$monthly_spec_type,$monthly_spec_type==$default_monthly_spec_type,$text,NULL,$description));
+	}
+
+	return form_input_radio(do_lang_tempcode('MONTHLY_SPEC_TYPE'),do_lang_tempcode('DESCRIPTION_MONTHLY_SPEC_TYPE'),$radios,true);
 }

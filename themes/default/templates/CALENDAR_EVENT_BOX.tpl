@@ -11,6 +11,6 @@
 	</p>
 {+END}
 
-<p class="shunted_button">
-	<a class="more" href="{URL*}">{!READ_MORE}</a>
-</p>
+<ul class="horizontal_links associated_links_block_group">
+	<li><a title="{TITLE*}: {!READ_MORE}" class="more" href="{URL*}">{!READ_MORE}</a></li>
+</ul>

@@ -2,17 +2,17 @@
 
 function fractional_edit(event,object,url,edit_text,edit_param_name)
 {
-	if (magicKeypress(event))
+	if (magic_keypress(event))
 	{
 		// Bubbling needs to be stopped because shift+click will open a new window on some lower event handler (in firefox anyway)
-		cancelBubbling(event);
+		cancel_bubbling(event);
 
 		require_javascript("javascript_ajax");
 
-		var width=findWidth(object);
+		var width=find_width(object);
 		if (width<180) width=180;
-		var x=findPosX(object);
-		var y=findPosY(object);
+		var x=find_pos_x(object);
+		var y=find_pos_y(object);
 
 		object.old_onclick=object.onclick;
 		object.old_onkeypress=object.onkeypress;
@@ -74,7 +74,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 						}
 					} else
 					{
-						setInnerHTML(object,response.responseText);
+						set_inner_html(object,response.responseText);
 					}
 
 					return false;
@@ -89,9 +89,9 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 				if (typeof event=='undefined') var event=window.event;
 
 				// Bubbling needs to be stopped because shift+click will open a new window on some lower event handler (in firefox anyway)
-				cancelBubbling(event);
+				cancel_bubbling(event);
 
-				if (magicKeypress(event))
+				if (magic_keypress(event))
 				{
 					object.onclick=object.old_onclick;
 					object.onkeypress=object.old_onkeypress;
@@ -103,7 +103,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 			{
 				if (typeof event=='undefined') var event=window.event;
 
-				if (magicKeypress(event))
+				if (magic_keypress(event))
 				{
 					form.parentNode.removeChild(form);
 				}

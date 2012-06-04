@@ -46,7 +46,7 @@ class post_template_test_set extends ocp_test_case
 		$this->assertTrue('Tested Post'==$GLOBALS['FORUM_DB']->query_value('f_post_templates','t_title ',array('id'=>$this->post_id)));
 	}
 
-	
+
 	function tearDown()
 	{
 		ocf_delete_post_template($this->post_id);

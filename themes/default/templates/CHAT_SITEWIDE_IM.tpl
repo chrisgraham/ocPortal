@@ -1,5 +1,4 @@
-<script type="text/javascript">
-// <![CDATA[
+<script type="text/javascript">// <![CDATA[
 	if ((typeof window.im_area_template=='undefined') && (!window.load_from_room_id)) // Only if not in chat lobby or chat room, so as to avoid conflicts
 	{
 		var im_area_template='{IM_AREA_TEMPLATE/^;}';
@@ -15,7 +14,6 @@
 		}
 		window.setTimeout(begin_im_chatting,6000); // To give chance for any existing popups to reopen
 	}
-// ]]>
-</script>
+// ]]></script>
 
 {CHAT_SOUND}

@@ -117,10 +117,10 @@ function create_session($member,$session_confirmed=0)
 		$SESSION_CACHE[$new_session]=array_merge($SESSION_CACHE[$new_session],$new_session_row);
 	}
 
-	if ($big_change) // Only update the persistant cache for non-trivial changes.
+	if ($big_change) // Only update the persistent cache for non-trivial changes.
 	{
-		if (get_value('session_prudence')!=='1') // With session prudence we don't store all these in persistant cache due to the size of it all. So only re-save if that's not on.
-			persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
+		if (get_value('session_prudence')!=='1') // With session prudence we don't store all these in persistent cache due to the size of it all. So only re-save if that's not on.
+			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 	}
 
 	set_session_id($new_session/*,true*/); // We won't set it true here, but something that really needs it to persist might come back and re-set it
@@ -156,9 +156,13 @@ function create_session($member,$session_confirmed=0)
  */
 function set_session_id($id,$guest_session=false)  // NB: Guests sessions can persist because they are more benign
 {
+	// If checking safe mode, can really get in a spin. Don't let it set a session cookie till we've completed startup properly.
+	global $CHECKING_SAFEMODE;
+	if (($CHECKING_SAFEMODE) && ($id==-1)) return;
+
 	// Save cookie
 	$timeout=$guest_session?(time()+60*60*max(1,intval(get_option('session_expiry_time')))):NULL;
-	/*if (($GLOBALS['DEBUG_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))
+	/*if (($GLOBALS['DEV_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))
 	{
 		$test=false;
 	} else*/

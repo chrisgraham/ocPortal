@@ -292,8 +292,6 @@ class Hook_search_comcode_pages
 			}
 		}
 
-		$tpl=do_template('COMCODE_PAGE_PREVIEW',array('_GUID'=>'79cd9e7d0b63ee916c4cd74b26c2f652','PAGE'=>$page,'ZONE'=>$zone,'URL'=>$url,'SUMMARY'=>$summary));
-
 		require_lang('comcode');
 		$title=do_lang_tempcode('_SEARCH_RESULT_COMCODE_PAGE',escape_html($page));
 		global $LAST_COMCODE_PARSED_TITLE;
@@ -301,10 +299,9 @@ class Hook_search_comcode_pages
 		if ($LAST_COMCODE_PARSED_TITLE!='')
 			$title=do_lang_tempcode('_SEARCH_RESULT_COMCODE_PAGE_NICE',$LAST_COMCODE_PARSED_TITLE);
 
-		$tree=comcode_breadcrumbs($page,$zone);
-		if (!$tree->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$tree)));
+		$breadcrumbs=comcode_breadcrumbs($page,$zone);
 
-		return put_in_standard_box($tpl,$title);
+		return do_template('COMCODE_PAGE_BOX',array('_GUID'=>'79cd9e7d0b63ee916c4cd74b26c2f652','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'PAGE'=>$page,'ZONE'=>$zone,'URL'=>$url,'SUMMARY'=>$summary));
 	}
 
 }

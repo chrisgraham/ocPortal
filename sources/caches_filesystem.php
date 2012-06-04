@@ -21,7 +21,7 @@
 class filecache
 {
 	/**
-	 * (Plug-in replacement for memcache API) Get data from the persistant cache.
+	 * (Plug-in replacement for memcache API) Get data from the persistent cache.
 	 *
 	 * @param  mixed			Key
 	 * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
@@ -29,11 +29,11 @@ class filecache
 	 */
 	function get($key,$min_cache_date=NULL)
 	{
-		$myfile=@fopen(get_custom_file_base().'/persistant_cache/'.md5($key).'.gcd','rb');
+		$myfile=@fopen(get_custom_file_base().'/persistent_cache/'.md5($key).'.gcd','rb');
 		if ($myfile===false) return NULL;
 		if (!is_null($min_cache_date)) // Code runs here as we know file exists at this point
 		{
-			if (filemtime(get_custom_file_base().'/persistant_cache/'.md5($key).'.gcd')<$min_cache_date)
+			if (filemtime(get_custom_file_base().'/persistent_cache/'.md5($key).'.gcd')<$min_cache_date)
 			{
 				fclose($myfile);
 				return NULL;
@@ -72,7 +72,7 @@ class filecache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Put data into the persistant cache.
+	 * (Plug-in replacement for memcache API) Put data into the persistent cache.
 	 *
 	 * @param  mixed			Key
 	 * @param  mixed			The data
@@ -84,7 +84,7 @@ class filecache
 		unset($flags);
 		unset($expire_secs);
 
-		$path=get_custom_file_base().'/persistant_cache/'.md5($key).'.gcd';
+		$path=get_custom_file_base().'/persistent_cache/'.md5($key).'.gcd';
 		$myfile=@fopen($path,'ab');
 		if ($myfile===false) return; // Failure
 
@@ -114,28 +114,28 @@ class filecache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Delete data from the persistant cache.
+	 * (Plug-in replacement for memcache API) Delete data from the persistent cache.
 	 *
 	 * @param  mixed			Key name
 	 */
 	function delete($key)
 	{
 		// Ideally we'd lock whilst we delete, but it's not stable (and the workaround would be too slow for our efficiency context). So some people reading may get errors whilst we're clearing the cache. Fortunately this is a rare op to perform.
-		@unlink(get_custom_file_base().'/persistant_cache/'.md5($key).'.gcd');
+		@unlink(get_custom_file_base().'/persistent_cache/'.md5($key).'.gcd');
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Remove all data from the persistant cache.
+	 * (Plug-in replacement for memcache API) Remove all data from the persistent cache.
 	 */
 	function flush()
 	{
-		$d=opendir(get_custom_file_base().'/persistant_cache');
+		$d=opendir(get_custom_file_base().'/persistent_cache');
 		while (($e=readdir($d))!==false)
 		{
 			if (substr($e,-4)=='.gcd')
 			{
 				// Ideally we'd lock whilst we delete, but it's not stable (and the workaround would be too slow for our efficiency context). So some people reading may get errors whilst we're clearing the cache. Fortunately this is a rare op to perform.
-				@unlink(get_custom_file_base().'/persistant_cache/'.$e);
+				@unlink(get_custom_file_base().'/persistent_cache/'.$e);
 			}
 		}
 		closedir($d);

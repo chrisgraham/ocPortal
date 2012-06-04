@@ -36,7 +36,7 @@ function open_link_as_overlay(ob,width,height,target)
 	function open_image_into_lightbox(a)
 	{
 		// Set up overlay for Lightbox
-		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" class="inline_image_2" src="{$IMG*,bottom/loading}" /></p><p class="community_block_tagline">[ <a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a> ]</p>';
+		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" src="{$IMG*,loading}" /></p><p class="associated_link associated_links_block_group"><a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a></p>';
 
 		// Show overlay
 		var myLightbox = {
@@ -62,8 +62,8 @@ function open_link_as_overlay(ob,width,height,target)
 				var height=real_height;
 
 				// Might need to rescale using some maths, if natural size is too big
-				var max_width=modal.topWindow.getWindowWidth()-20;
-				var max_height=modal.topWindow.getWindowHeight()-180;
+				var max_width=modal.topWindow.get_window_width()-20;
+				var max_height=modal.topWindow.get_window_height()-180;
 				if (width>max_width)
 				{
 					width=max_width;
@@ -192,7 +192,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 					{
 						if (bits[1]=='100%')
 						{
-							height = getWindowHeight() - 200;
+							height = get_window_height() - 200;
 						} else
 						{
 							height=window.parseInt(bits[1].replace(/px$/,''));
@@ -315,11 +315,6 @@ function ModalWindow()
 
 			this.close(this.topWindow);
 			this.initBox();
-
-			if (browser_matches('ie6'))
-			{
-				this.topWindow.smoothScroll(0);
-			}
 		},
 
 		close: function(win) {
@@ -360,7 +355,7 @@ function ModalWindow()
 			if (boxPosVCentre < 20) boxPosVCentre = 20;
 			var boxPosHCentre = ((dim.pageWidth / 2) - (parseInt(boxWidth) / 2));
 
-			var boxPosTop = (/*getWindowScrollY() + */boxPosVCentre) + "px" ;
+			var boxPosTop = (/*get_window_scroll_y() + */boxPosVCentre) + "px" ;
 			var boxPosLeft = boxPosHCentre + "px";
 
 			this.width = width;
@@ -402,12 +397,10 @@ function ModalWindow()
 			});
 
 			this.box.appendChild(this.element("div", {
-				'class': 'medborder medborder_box overlay',
+				'class': 'box overlay',
 				'role': 'dialog',
 				'styles' : {
-					'position': browser_matches('ie_old')?"absolute":"fixed",
-					'borderRadius': "15px",
-					'overflow': (this.type == "iframe") ? "auto" : "hidden"
+					'position': "fixed"
 				}
 			}));
 
@@ -416,7 +409,7 @@ function ModalWindow()
 			this.inject(this.box);
 
 			var container = this.element("div", {
-				'class': "standardbox_main_classic",
+				'class': "box_inner",
 				'styles' : {
 					'width': "auto",
 					'height': "auto"
@@ -478,7 +471,7 @@ function ModalWindow()
 				}
 			};
 
-			this.addEvent( this.box, "click", function(e) { try { _this.topWindow.cancelBubbling(e); } catch (e) {}; } );
+			this.addEvent( this.box, "click", function(e) { try { _this.topWindow.cancel_bubbling(e); } catch (e) {}; } );
 
 			switch(this.type) {
 				case "iframe":
@@ -516,7 +509,7 @@ function ModalWindow()
 						{
 							if (iframe.contentWindow.document.title!='')
 							{
-								setInnerHTML(overlay_header,escape_html(iframe.contentWindow.document.title));
+								set_inner_html(overlay_header,escape_html(iframe.contentWindow.document.title));
 								overlay_header.style.display='block';
 							}
 						}
@@ -536,8 +529,8 @@ function ModalWindow()
 							iframe.scrolling=(_this.scrollbars === false)?"no":"auto";
 
 							// Remove fixed width
-							var body_inner=iframe.contentWindow.document.getElementById('body_inner');
-							if (body_inner) body_inner.id='';
+							var main_website_inner=iframe.contentWindow.document.getElementById('main_website_inner');
+							if (main_website_inner) main_website_inner.id='';
 
 							// Remove main_website marker
 							var main_website=iframe.contentWindow.document.getElementById('main_website');
@@ -590,11 +583,11 @@ function ModalWindow()
 								};
 							}
 
-							if (getInnerHTML(iframe.contentWindow.document.body).length>300) // Loaded now
+							if (get_inner_html(iframe.contentWindow.document.body).length>300) // Loaded now
 								iframe.contentWindow.document.body.done_popup_trans=true;
 						}
 					};
-					window.setTimeout(function() { illustrateFrameLoad(iframe,'overlay_iframe'); iframe.src=_this.href; makeFrameLikePopup(); },0);
+					window.setTimeout(function() { illustrate_frame_load(iframe,'overlay_iframe'); iframe.src=_this.href; makeFrameLikePopup(); },0);
 					window.setInterval(makeFrameLikePopup,100); // In case internal nav changes
 					break;
 
@@ -699,7 +692,7 @@ function ModalWindow()
 						if(name == "styles") {
 							this.setStyles(el, value);
 						} else if(name == "html") {
-							setInnerHTML(el, value);
+							set_inner_html(el, value);
 						} else if (attributes[name]) {
 							el[attributes[name]] = value;
 						} else {
@@ -733,7 +726,7 @@ function ModalWindow()
 
 		setStyle: function(e, p, v) {
 			if (p == 'opacity') {
-				this.topWindow.setOpacity(e,v);
+				this.topWindow.set_opacity(e,v);
 			} else {
 				try
 				{
@@ -744,7 +737,7 @@ function ModalWindow()
 		},
 
 		getPageSize: function() {
-			return { 'pageWidth': this.topWindow.getWindowScrollWidth(this.topWindow), 'pageHeight': this.topWindow.getWindowScrollHeight(this.topWindow), 'windowWidth' : this.topWindow.getWindowWidth(), 'windowHeight': this.topWindow.getWindowHeight() };
+			return { 'pageWidth': this.topWindow.get_window_scroll_width(this.topWindow), 'pageHeight': this.topWindow.get_window_scroll_height(this.topWindow), 'windowWidth' : this.topWindow.get_window_width(), 'windowHeight': this.topWindow.get_window_height() };
 		}
 	};
 }

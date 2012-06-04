@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_core
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,16 +72,19 @@ class Hook_addon_registry_core
 	function get_file_list()
 	{
 		return array(
-
-			'sources/hooks/systems/config_default/complex_uploader.php',
-			'sources/hooks/systems/config_default/wysiwyg.php',
-			'sources/hooks/systems/config_default/editarea.php',
-			'sources/hooks/systems/config_default/autoban.php',
-			'sources/hooks/systems/config_default/js_overlays.php',
-			'sources/hooks/systems/config_default/likes.php',
-			'sources/hooks/systems/config_default/tree_lists.php',
-			'sources/hooks/systems/config_default/captcha_single_guess.php',
-			'sources/hooks/systems/config_default/css_captcha.php',
+			'themes/default/images/action.png',
+			'themes/default/images/action_small.png',
+			'sources/antispam.php',
+			'sources/hooks/systems/notifications/spam_check_block.php',
+ 			'sources/hooks/systems/config_default/complex_uploader.php',
+ 			'sources/hooks/systems/config_default/wysiwyg.php',
+ 			'sources/hooks/systems/config_default/editarea.php',
+ 			'sources/hooks/systems/config_default/autoban.php',
+ 			'sources/hooks/systems/config_default/js_overlays.php',
+ 			'sources/hooks/systems/config_default/likes.php',
+ 			'sources/hooks/systems/config_default/tree_lists.php',
+ 			'sources/hooks/systems/config_default/captcha_single_guess.php',
+ 			'sources/hooks/systems/config_default/css_captcha.php',
 			'sources/hooks/systems/notifications/low_disk_space.php',
 			'sources/hooks/systems/notifications/hack_attack.php',
 			'sources/hooks/systems/notifications/auto_ban.php',
@@ -97,7 +99,7 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/snippets/password_strength.php',
 			'web.config',
 			'data/html5.js',
-			'themes/default/images/bottom/ocpchat.png',
+			'themes/default/images/footer/ocpchat.png',
 			'themes/default/images/no_image.png',
 			'install.css',
 			'lang/EN/installer.ini',
@@ -192,23 +194,27 @@ class Hook_addon_registry_core
 			'themes/default/images/exp_con.png',
 			'themes/default/images/help_jumpout.png',
 			'themes/default/images/help_panel_show.png',
-			'themes/default/images/am_icons/index.html',
-			'themes/default/images/am_icons/notice.png',
-			'themes/default/images/am_icons/inform.png',
-			'themes/default/images/am_icons/warn.png',
-			'themes/default/images/am_icons/inform_large.png',
-			'themes/default/images/am_icons/warn_large.png',
+			'themes/default/images/messageicons/index.html',
+			'themes/default/images/messageicons/notice.png',
+			'themes/default/images/messageicons/inform.png',
+			'themes/default/images/messageicons/warn.png',
+			'themes/default/images/messageicons/inform_large.png',
+			'themes/default/images/messageicons/warn_large.png',
 			'themes/default/images/arrow_ruler.png',
 			'themes/default/images/arrow_ruler_small.png',
-			'themes/default/images/outer-background.jpg',
-			'themes/default/images/inner-background.jpg',
-			'themes/default/images/block-background.png',
+			'themes/default/images/outer_background.jpg',
+			'themes/default/images/inner_background.jpg',
+			'themes/default/images/block_background.png',
 			'themes/default/images/header.png',
 			'pages/comcode/EN/panel_top.txt',
+			'pages/comcode/EN/panel_bottom.txt',
 			'lang/EN/dearchive.ini',
 			'sources/hooks/modules/admin_config/.htaccess',
 			'sources/hooks/modules/admin_config/index.html',
 			'sources/ocfiltering.php',
+			'sources/ocselect.php',
+			'lang/EN/ocselect.ini',
+			'sources/blocks/main_content_filtering.php',
 			'MISSING_SCREEN.tpl',
 			'PARAM_INFO.tpl',
 			'sources/temporal.php',
@@ -250,8 +256,6 @@ class Hook_addon_registry_core
 			'sources/url_remappings.php',
 			'sources/hooks/systems/addon_registry/.htaccess',
 			'data/quick_js_loader.js',
-			'ZONE_CHOOSE.tpl',
-			'ZONE_CHOOSE_INLINE.tpl',
 			'JOIN_OR_LOGIN.tpl',
 			'JAVASCRIPT.tpl',
 			'JAVASCRIPT_AJAX.tpl',
@@ -274,10 +278,10 @@ class Hook_addon_registry_core
 			'BLOCK_SIDE_PERSONAL_STATS_LINK_2.tpl',
 			'BLOCK_SIDE_PERSONAL_STATS_LOGOUT.tpl',
 			'BLOCK_SIDE_PERSONAL_STATS_NO.tpl',
+			'BLOCK_MAIN_CONTENT_FILTERING.tpl',
 			'LOGIN_REDIRECT_SCREEN.tpl',
 			'LOGIN_SCREEN.tpl',
 			'login.css',
-			'BLOCK_SIDE_ZONE_JUMP.tpl',
 			'CSS_NEED.tpl',
 			'CSS_NEED_INLINE.tpl',
 			'BROKEN_LANG_STRINGS.tpl',
@@ -324,7 +328,7 @@ class Hook_addon_registry_core
 			'adminzone/pages/modules/.htaccess',
 			'adminzone/pages/modules/admin.php',
 			'themes/default/images/keyboard.png',
-			'themes/default/images/admin-search.png',
+			'themes/default/images/admin_search.png',
 			'ocp_sitemap.xml',
 			'sources/sitemap.php',
 			'data/force_sitemap_generation.php',
@@ -383,14 +387,13 @@ class Hook_addon_registry_core
 			'lang_custom/EN/.htaccess',
 			'lang_custom/EN/index.html',
 			'lang_custom/index.html',
-			'adminzone.css',
+			'sitetree_editor.css',
 			'global.css',
 			'themes/default/css/index.html',
 			'no_cache.css',
 			'data/editarea/reg_syntax/index.html',
 			'themes/default/images/pagepics/export.png',
 			'themes/default/images/pagepics/email.png',
-			'side_blocks.css',
 			'themes/default/css_custom/index.html',
 			'themes/default/index.html',
 			'themes/default/templates/.htaccess',
@@ -439,11 +442,11 @@ class Hook_addon_registry_core
 			'themes/default/images/bigicons/view_this.png',
 			'themes/default/images/bigicons/view_this_category.png',
 			'themes/default/images/blank.gif',
-			'themes/default/images/bottom/home.png',
-			'themes/default/images/bottom/index.html',
-			'themes/default/images/bottom/loading.gif',
-			'themes/default/images/bottom/sitemap.png',
-			'themes/default/images/bottom/top.png',
+			'themes/default/images/footer/home.png',
+			'themes/default/images/footer/index.html',
+			'themes/default/images/loading.gif',
+			'themes/default/images/footer/sitemap.png',
+			'themes/default/images/footer/top.png',
 			'themes/default/images/contract.png',
 			'themes/default/images/donext/index.html',
 			'themes/default/images/donext/botleft.png',
@@ -457,11 +460,13 @@ class Hook_addon_registry_core
 			'themes/default/images/donext/topleft.png',
 			'themes/default/images/donext/topright.png',
 			'themes/default/images/edited.png',
+			'themes/default/images/action_link.png',
+			'themes/default/images/cannot_show.png',
 			'themes/default/images/comcode.png',
 			'themes/default/images/EN/index.html',
 			'themes/default/images/EN/logo/-logo.png',
 			'themes/default/images/EN/logo/index.html',
-			'themes/default/images/EN/logo/trimmed-logo.png',
+			'themes/default/images/EN/logo/trimmed_logo.png',
 			'themes/default/images/EN/page/advanced.png',
 			'themes/default/images/EN/page/all.png',
 			'themes/default/images/EN/page/all2.png',
@@ -518,14 +523,7 @@ class Hook_addon_registry_core
 			'themes/default/images/results/sortablefield_desc.png',
 			'themes/default/images/results/sortablefield_asc_nonselected.png',
 			'themes/default/images/results/sortablefield_desc_nonselected.png',
-			'themes/default/images/standardboxes/bottom_left.png',
-			'themes/default/images/standardboxes/bottom_right.png',
-			'themes/default/images/standardboxes/index.html',
-			'themes/default/images/standardboxes/nontitle_left.png',
-			'themes/default/images/standardboxes/nontitle_right.png',
-			'themes/default/images/standardboxes/title_gradient.png',
-			'themes/default/images/standardboxes/title_left.png',
-			'themes/default/images/standardboxes/title_right.png',
+			'themes/default/images/gradient.png',
 			'themes/default/images/tab.png',
 			'themes/default/images/tableitem/delete.png',
 			'themes/default/images/tableitem/download.png',
@@ -537,8 +535,7 @@ class Hook_addon_registry_core
 			'themes/default/images/treefield/index.html',
 			'themes/default/images/treefield/minus.png',
 			'themes/default/images/treefield/plus.png',
-			'themes/default/images/treenav.png',
-			'themes/default/images/underline.gif',
+			'themes/default/images/breadcrumbs.png',
 			'themes/default/images/zone_gradient.png',
 			'themes/default/images/pagepics/index.html',
 			'themes/default/images/pagepics/investigateuser.png',
@@ -786,7 +783,6 @@ class Hook_addon_registry_core
 			'sources/hooks/modules/index.html',
 			'sources/hooks/systems/.htaccess',
 			'sources/hooks/systems/index.html',
-			'data/zone_jump.php',
 			'data/ajax_tree.php',
 			'sources/hooks/systems/ajax_tree/.htaccess',
 			'sources/hooks/systems/ajax_tree/index.html',
@@ -845,7 +841,7 @@ class Hook_addon_registry_core
 			'data/javaupload/Uploader.jar',
 			'JAVA_DETECT.tpl',
 			'swfupload.css',
-			'NEWSLETTER_DEFAULT.tpl',
+			'NEWSLETTER_DEFAULT_FCOMCODE.tpl',
 			'themes/default/images/favicon.ico',
 			'themes/default/images/appleicon.png',
 			'adminzone/pages/modules/admin_emaillog.php',
@@ -856,67 +852,66 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/cron/implicit_usergroup_sync.php',
 			'sources/hooks/systems/ocf_implicit_usergroups/index.html',
 			'sources/hooks/systems/ocf_implicit_usergroups/.htaccess',
+			'personal_stats.css',
+			'sitemap.css',
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'ACTION_LOGS_SCREEN.tpl'=>'administrative__action_logs_screen',
-				'ACTION_LOGS_TOGGLE_LINK.tpl'=>'administrative__action_logs_toggle_link',
-				'IPBAN_SCREEN.tpl'=>'ipban_screen',
-				'LOOKUP_IP_LIST_ENTRY.tpl'=>'administrative__lookup_screen',
-				'LOOKUP_IP_LIST_GROUP.tpl'=>'administrative__lookup_screen',
-				'LOOKUP_SCREEN.tpl'=>'administrative__lookup_screen',
-				'LOGIN_SCREEN.tpl'=>'login_screen',
-				'LOGIN_REDIRECT_SCREEN.tpl'=>'login_redirect_screen',
-				'FORUMS_EMBED.tpl'=>'forums_embed',
-				'JAVASCRIPT_NEED_INLINE.tpl'=>'javascript_need_inline',
-				'CSS_NEED_INLINE.tpl'=>'css_need_inline',
-				'FATAL_SCREEN.tpl'=>'administrative__fatal_screen',
-				'STACK_TRACE_LINE.tpl'=>'administrative__stack_trace_hyper_wrap',
-				'STACK_TRACE_WRAP.tpl'=>'administrative__stack_trace_hyper_wrap',
-				'STACK_TRACE_HYPER_WRAP.tpl'=>'administrative__stack_trace_hyper_wrap',
-				'INLINE_WIP_MESSAGE.tpl'=>'inline_wip_message',
-				'MISSING_SCREEN.tpl'=>'missing_screen',
-				'PARAM_INFO.tpl'=>'param_info',
-				'JAVASCRIPT_NEED.tpl'=>'javascript_need',
-				'CSS_NEED.tpl'=>'css_need',
-				'BLOCK_SIDE_PERSONAL_STATS_LINE.tpl'=>'block_side_personal_stats',
-				'BLOCK_SIDE_PERSONAL_STATS_LINK_2.tpl'=>'block_side_personal_stats',
-				'BLOCK_SIDE_PERSONAL_STATS_LINK.tpl'=>'block_side_personal_stats',
-				'BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX.tpl'=>'block_side_personal_stats',
-				'BLOCK_SIDE_PERSONAL_STATS_LOGOUT.tpl'=>'block_side_personal_stats',
-				'BLOCK_SIDE_PERSONAL_STATS.tpl'=>'block_side_personal_stats',
-				'BLOCK_SIDE_PERSONAL_STATS_NO.tpl'=>'block_side_personal_stats_no',
-				'BLOCK_NO_ENTRIES.tpl'=>'block_no_entries',
-				'BLOCK_MAIN_EMOTICON_CODES_ENTRY.tpl'=>'block_main_emoticon_codes',
-				'BLOCK_MAIN_EMOTICON_CODES.tpl'=>'block_main_emoticon_codes',
-				'BLOCK_SIDE_ZONE_JUMP.tpl'=>'block_side_zone_jump',
-				'BLOCK_MAIN_COMCODE_PAGE_CHILDREN.tpl'=>'block_main_comcode_page_children',
-				'BLOCK_MAIN_SITEMAP_NEST.tpl'=>'block_main_sitemap',
-				'BLOCK_MAIN_SITEMAP.tpl'=>'block_main_sitemap',
-				'QUERY_LOG.tpl'=>'administrative__query_screen',
-				'QUERY_SCREEN.tpl'=>'administrative__query_screen',
-				'BROKEN_URLS.tpl'=>'administrative__broken_urls',
-				'BROKEN_LANG_STRINGS.tpl'=>'administrative__broken_lang_strings',
-				'ZONE_CHOOSE.tpl'=>'zone_choose',
-				'ZONE_CHOOSE_INLINE.tpl'=>'block_side_zone_jump',
-				'JOIN_OR_LOGIN.tpl'=>'join_or_login',
-				'FORUM_ATTACHMENT_IMAGE.tpl'=>'forum_attachment_image',
-				'FORUM_ATTACHMENT_IMAGE_THUMB.tpl'=>'forum_attachment_link',
-				'FORUM_ATTACHMENT_LINK.tpl'=>'forum_attachment_link',
-				'tempcode_test.tpl'=>'administrative__tempcode_test',
-				'JAVA_DETECT.tpl'=>'java_detect',
-				'EMAILLOG_SCREEN.tpl'=>'email_log_screen',
-				'QUICK_JS_LOADER.tpl'=>'quick_js_loader',
-				);
+			'ACTION_LOGS_SCREEN.tpl' => 'administrative__action_logs_screen',
+			'ACTION_LOGS_TOGGLE_LINK.tpl' => 'administrative__action_logs_toggle_link',
+			'LOOKUP_IP_LIST_ENTRY.tpl' => 'administrative__lookup_screen',
+			'LOOKUP_IP_LIST_GROUP.tpl' => 'administrative__lookup_screen',
+			'LOOKUP_SCREEN.tpl' => 'administrative__lookup_screen',
+			'LOGIN_SCREEN.tpl' => 'login_screen',
+			'LOGIN_REDIRECT_SCREEN.tpl' => 'login_redirect_screen',
+			'FORUMS_EMBED.tpl' => 'forums_embed',
+			'JAVASCRIPT_NEED_INLINE.tpl' => 'javascript_need_inline',
+			'CSS_NEED_INLINE.tpl' => 'css_need_inline',
+			'FATAL_SCREEN.tpl' => 'administrative__fatal_screen',
+			'STACK_TRACE_LINE.tpl' => 'administrative__stack_trace_hyper_wrap',
+			'STACK_TRACE_WRAP.tpl' => 'administrative__stack_trace_hyper_wrap',
+			'STACK_TRACE_HYPER_WRAP.tpl' => 'administrative__stack_trace_hyper_wrap',
+			'INLINE_WIP_MESSAGE.tpl' => 'inline_wip_message',
+			'MISSING_SCREEN.tpl' => 'missing_screen',
+			'PARAM_INFO.tpl' => 'param_info',
+			'JAVASCRIPT_NEED.tpl' => 'javascript_need',
+			'CSS_NEED.tpl' => 'css_need',
+			'BLOCK_SIDE_PERSONAL_STATS_LINE.tpl' => 'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS_LINK_2.tpl' => 'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS_LINK.tpl' => 'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX.tpl' => 'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS_LOGOUT.tpl' => 'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS.tpl' => 'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS_NO.tpl' => 'block_side_personal_stats_no',
+			'BLOCK_NO_ENTRIES.tpl' => 'nothing_here',
+			'BLOCK_MAIN_EMOTICON_CODES_ENTRY.tpl' => 'block_main_emoticon_codes',
+			'BLOCK_MAIN_EMOTICON_CODES.tpl' => 'block_main_emoticon_codes',
+			'BLOCK_MAIN_COMCODE_PAGE_CHILDREN.tpl' => 'block_main_comcode_page_children',
+			'BLOCK_MAIN_SITEMAP_NEST.tpl' => 'block_main_sitemap',
+			'BLOCK_MAIN_SITEMAP.tpl' => 'block_main_sitemap',
+			'QUERY_LOG.tpl' => 'administrative__query_screen',
+			'QUERY_SCREEN.tpl' => 'administrative__query_screen',
+			'BROKEN_URLS.tpl' => 'administrative__broken_urls',
+			'BROKEN_LANG_STRINGS.tpl' => 'administrative__broken_lang_strings',
+			'JOIN_OR_LOGIN.tpl' => 'join_or_login',
+			'FORUM_ATTACHMENT_IMAGE.tpl' => 'forum_attachment_image',
+			'FORUM_ATTACHMENT_IMAGE_THUMB.tpl' => 'forum_attachment_link',
+			'FORUM_ATTACHMENT_LINK.tpl' => 'forum_attachment_link',
+			'tempcode_test.tpl' => 'administrative__tempcode_test',
+			'JAVA_DETECT.tpl' => 'java_detect',
+			'EMAILLOG_SCREEN.tpl' => 'email_log_screen',
+			'QUICK_JS_LOADER.tpl' => 'quick_js_loader',
+			'BLOCK_MAIN_CONTENT_FILTERING.tpl' => 'block_main_content_filtering',
+		);
 	}
 
 	/**
@@ -929,10 +924,7 @@ class Hook_addon_registry_core
 	function tpl_preview__java_detect()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('JAVA_DETECT',array(
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('JAVA_DETECT', array()), NULL, '', true)
 		);
 	}
 
@@ -948,14 +940,12 @@ class Hook_addon_registry_core
 		require_lang('emaillog');
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('EMAILLOG_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'RESULTS_TABLE'=>placeholder_table(),
-					'MASS_DELETE_URL'=>placeholder_url(),
-					'MASS_SEND_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('EMAILLOG_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'RESULTS_TABLE' => placeholder_table(),
+				'MASS_DELETE_URL' => placeholder_url(),
+				'MASS_SEND_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -969,10 +959,7 @@ class Hook_addon_registry_core
 	function tpl_preview__quick_js_loader()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('QUICK_JS_LOADER',array(
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('QUICK_JS_LOADER', array()), NULL, '', true)
 		);
 	}
 
@@ -986,16 +973,14 @@ class Hook_addon_registry_core
 	function tpl_preview__administrative__action_logs_toggle_link()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ACTION_LOGS_TOGGLE_LINK',array(
-					'URL'=>placeholder_url(),
-					'page'=>lorem_phrase(),
-					'type'=>lorem_phrase(),
-					'id'=>lorem_phrase(),
-					'mode'=>lorem_phrase(),
-					'action_id'=>lorem_phrase(),
-					)
-				),NULL,'',true),
+			lorem_globalise(do_lorem_template('ACTION_LOGS_TOGGLE_LINK', array(
+				'URL' => placeholder_url(),
+				'page' => lorem_phrase(),
+				'type' => lorem_phrase(),
+				'id' => lorem_phrase(),
+				'mode' => lorem_phrase(),
+				'action_id' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1009,37 +994,12 @@ class Hook_addon_registry_core
 	function tpl_preview__administrative__action_logs_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ACTION_LOGS_SCREEN',array(
-					'TABLE'=>placeholder_table(),
-					'TITLE'=>lorem_title(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('ACTION_LOGS_SCREEN', array(
+				'TABLE' => placeholder_table(),
+				'TITLE' => lorem_title()
+			)), NULL, '', true)
 		);
 	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__ipban_screen()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('IPBAN_SCREEN',array(
-					'PING_URL'=>placeholder_url(),
-					'WARNING_DETAILS'=>'',
-					'TITLE'=>lorem_title(),
-					'BANS'=>placeholder_ip(),
-					'URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
-		);
-	}
-
 
 	/**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
@@ -1050,31 +1010,42 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__administrative__lookup_screen()
 	{
-		$inner_ip_list	=	new ocp_tempcode();
+		$inner_ip_list = new ocp_tempcode();
 		foreach (placeholder_array() as $value)
-			$inner_ip_list->attach(do_lorem_template('LOOKUP_IP_LIST_ENTRY',array('LOOKUP_URL'=>placeholder_url(),'DATE'=>placeholder_time(),'_DATE'=>placeholder_time(),'IP'=>placeholder_ip(),'BANNED'=>do_lang_tempcode('YES'),'UNIQID'=>placeholder_random())));
+			$inner_ip_list->attach(do_lorem_template('LOOKUP_IP_LIST_ENTRY', array(
+				'LOOKUP_URL' => placeholder_url(),
+				'DATE' => placeholder_time(),
+				'_DATE' => placeholder_time(),
+				'IP' => placeholder_ip(),
+				'BANNED' => do_lang_tempcode('YES'),
+				'UNIQID' => placeholder_random()
+			)));
 
-		$group = do_lorem_template('LOOKUP_IP_LIST_GROUP',array('BANNED'=>do_lang_tempcode('YES'),'MASK'=>placeholder_ip(),'GROUP'=>$inner_ip_list,'OPEN_DEFAULT'=>true,'UNIQID'=>placeholder_random()));
+		$group = do_lorem_template('LOOKUP_IP_LIST_GROUP', array(
+			'BANNED' => do_lang_tempcode('YES'),
+			'MASK' => placeholder_ip(),
+			'GROUP' => $inner_ip_list,
+			'OPEN_DEFAULT' => true,
+			'UNIQID' => placeholder_random()
+		));
 		return array(
-			lorem_globalise(
-				do_lorem_template('LOOKUP_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'ALERTS'=>lorem_phrase(),
-					'STATS'=>lorem_phrase(),
-					'IP_LIST'=>$group,
-					'IP_BANNED'=>lorem_phrase(),
-					'SUBMITTER_BANNED'=>lorem_phrase(),
-					'MEMBER_BANNED'=>lorem_phrase(),
-					'ID'=>placeholder_id(),
-					'IP'=>placeholder_ip(),
-					'NAME'=>lorem_word(),
-					'SEARCH_URL'=>placeholder_url(),
-					'AUTHOR_URL'=>placeholder_url(),
-					'POINTS_URL'=>placeholder_url(),
-					'PROFILE_URL'=>placeholder_url(),
-					'ACTION_LOG_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('LOOKUP_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'ALERTS' => lorem_phrase(),
+				'STATS' => lorem_phrase(),
+				'IP_LIST' => $group,
+				'IP_BANNED' => lorem_phrase(),
+				'SUBMITTER_BANNED' => lorem_phrase(),
+				'MEMBER_BANNED' => lorem_phrase(),
+				'ID' => placeholder_id(),
+				'IP' => placeholder_ip(),
+				'NAME' => lorem_word(),
+				'SEARCH_URL' => placeholder_url(),
+				'AUTHOR_URL' => placeholder_url(),
+				'POINTS_URL' => placeholder_url(),
+				'PROFILE_URL' => placeholder_url(),
+				'ACTION_LOG_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1087,19 +1058,17 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__login_screen()
 	{
-		$_GET['wide']='1';
+		$_GET['wide'] = '1';
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('LOGIN_SCREEN',array(
-					'EXTRA'=>lorem_phrase(),
-					'USERNAME'=>lorem_word(),
-					'JOIN_LINK'=>placeholder_url(),
-					'TITLE'=>lorem_title(),
-					'LOGIN_URL'=>placeholder_url(),
-					'PASSION'=>'',
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('LOGIN_SCREEN', array(
+				'EXTRA' => lorem_phrase(),
+				'USERNAME' => lorem_word(),
+				'JOIN_URL' => placeholder_url(),
+				'TITLE' => lorem_title(),
+				'LOGIN_URL' => placeholder_url(),
+				'PASSION' => ''
+			)), NULL, '', true)
 		);
 	}
 
@@ -1113,15 +1082,13 @@ class Hook_addon_registry_core
 	function tpl_preview__login_redirect_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('LOGIN_REDIRECT_SCREEN',array(
-					'REFRESH'=>'',
-					'TITLE'=>lorem_title(),
-					'TEXT'=>lorem_sentence_html(),
-					'URL'=>placeholder_url(),
-					'POST'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('LOGIN_REDIRECT_SCREEN', array(
+				'REFRESH' => '',
+				'TITLE' => lorem_title(),
+				'TEXT' => lorem_sentence_html(),
+				'URL' => placeholder_url(),
+				'POST' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1135,11 +1102,9 @@ class Hook_addon_registry_core
 	function tpl_preview__forums_embed()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('FORUMS_EMBED',array(
-					'FORUMS'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('FORUMS_EMBED', array(
+				'FORUMS' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1153,11 +1118,9 @@ class Hook_addon_registry_core
 	function tpl_preview__javascript_need_inline()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('JAVASCRIPT_NEED_INLINE',array(
-					'CODE'=>placeholder_javascript_code(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('JAVASCRIPT_NEED_INLINE', array(
+				'CODE' => placeholder_javascript_code()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1171,11 +1134,9 @@ class Hook_addon_registry_core
 	function tpl_preview__css_need_inline()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('CSS_NEED_INLINE',array(
-					'CSS'=>'',
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('CSS_NEED_INLINE', array(
+				'CSS' => ''
+			)), NULL, '', true)
 		);
 	}
 
@@ -1189,13 +1150,11 @@ class Hook_addon_registry_core
 	function tpl_preview__administrative__fatal_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('FATAL_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'MESSAGE'=>lorem_phrase(),
-					'TRACE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('FATAL_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'MESSAGE' => lorem_phrase(),
+				'TRACE' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1208,24 +1167,29 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__administrative__stack_trace_hyper_wrap()
 	{
-		$trace	=	new ocp_tempcode();
+		$trace = new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
-			$traces	=	new ocp_tempcode();
-			foreach (placeholder_array() as $key=>$value1)
+			$traces = new ocp_tempcode();
+			foreach (placeholder_array() as $key => $value1)
 			{
-				$traces->attach(do_lorem_template('STACK_TRACE_LINE',array('LINE'=>$value1,'FILE'=>lorem_phrase(),'KEY'=>ucfirst($value1),'VALUE'=>lorem_sentence())));
+				$traces->attach(do_lorem_template('STACK_TRACE_LINE', array(
+					'LINE' => $value1,
+					'FILE' => lorem_phrase(),
+					'KEY' => ucfirst($value1),
+					'VALUE' => lorem_sentence()
+				)));
 			}
-			$trace->attach(do_lorem_template('STACK_TRACE_WRAP',array('TRACES'=>$traces)));
+			$trace->attach(do_lorem_template('STACK_TRACE_WRAP', array(
+				'TRACES' => $traces
+			)));
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('STACK_TRACE_HYPER_WRAP',array(
-					'CONTENT'=>$trace,
-					'POST'=>placeholder_array(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('STACK_TRACE_HYPER_WRAP', array(
+				'CONTENT' => $trace,
+				'POST' => placeholder_array()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1239,12 +1203,10 @@ class Hook_addon_registry_core
 	function tpl_preview__inline_wip_message()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('INLINE_WIP_MESSAGE',array(
-					'MESSAGE'=>lorem_phrase(),
-					'NO_ENTRIES'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('INLINE_WIP_MESSAGE', array(
+				'MESSAGE' => lorem_phrase(),
+				'NO_ENTRIES' => lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1258,15 +1220,13 @@ class Hook_addon_registry_core
 	function tpl_preview__missing_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('MISSING_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'ADD_URL'=>placeholder_url(),
-					'PAGE'=>lorem_phrase(),
-					'DID_MEAN'=>lorem_word(),
-					'ADD_REDIRECT_URL'=>placeholder_url(),
-				)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('MISSING_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'ADD_URL' => placeholder_url(),
+				'PAGE' => lorem_phrase(),
+				'DID_MEAN' => lorem_word(),
+				'ADD_REDIRECT_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1280,14 +1240,12 @@ class Hook_addon_registry_core
 	function tpl_preview__param_info()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('PARAM_INFO',array(
-					'MAP'=>array(
-						'A'=>'a',
-						'B'=>'b',
-					),
+			lorem_globalise(do_lorem_template('PARAM_INFO', array(
+				'MAP' => array(
+					'A' => 'a',
+					'B' => 'b'
 				)
-			),NULL,'',true),
+			)), NULL, '', true)
 		);
 	}
 
@@ -1301,11 +1259,9 @@ class Hook_addon_registry_core
 	function tpl_preview__javascript_need()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('JAVASCRIPT_NEED',array(
-					'CODE'=>placeholder_javascript_code(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('JAVASCRIPT_NEED', array(
+				'CODE' => placeholder_javascript_code()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1319,11 +1275,9 @@ class Hook_addon_registry_core
 	function tpl_preview__css_need()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('CSS_NEED',array(
-					'CODE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('CSS_NEED', array(
+				'CODE' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1336,34 +1290,43 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__block_side_personal_stats()
 	{
-		$content	=	new ocp_tempcode();
-		$links	=	new ocp_tempcode();
+		$details = new ocp_tempcode();
+		$links = new ocp_tempcode();
 
-		$content->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('KEY'=>lorem_word(),'VALUE'=>placeholder_number())));
+		$details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE', array(
+			'KEY' => lorem_word(),
+			'VALUE' => placeholder_number()
+		)));
 
-		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('NAME'=>lorem_word_2(),'DESCRIPTION'=>lorem_phrase(),'URL'=>placeholder_url())));
+		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2', array(
+			'NAME' => lorem_word_2(),
+			'DESCRIPTION' => lorem_phrase(),
+			'URL' => placeholder_url()
+		)));
 
-		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('NAME'=>lorem_word(),'URL'=>placeholder_url(),'REL'=>'me')));
+		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK', array(
+			'NAME' => lorem_word(),
+			'URL' => placeholder_url(),
+			'REL' => 'me'
+		)));
 
-		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT',array('NAME'=>do_lang_tempcode('LOGOUT'),'URL'=>placeholder_url())));
+		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT', array(
+			'NAME' => do_lang_tempcode('LOGOUT'),
+			'URL' => placeholder_url()
+		)));
 
-		$content->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX',array('KEY'=>do_lang_tempcode('GROUP'),'VALUE'=>placeholder_link())));
-
-		$staff_actions=new ocp_tempcode();
-
-		$staff_actions->attach(form_input_list_entry(lorem_word(),true,lorem_phrase()));
+		$details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX', array(
+			'KEY' => do_lang_tempcode('GROUP'),
+			'VALUE' => placeholder_link()
+		)));
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_PERSONAL_STATS',array(
-					'AVATAR_URL'=>placeholder_avatar(),
-					'LINKS'=>$links,
-					'HAS_SU'=>true,
-					'CONTENT'=>$content,
-					'USERNAME'=>lorem_word(),
-					'STAFF_ACTIONS'=>$staff_actions,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS', array(
+				'AVATAR_URL' => placeholder_avatar(),
+				'LINKS' => $links,
+				'DETAILS' => $details,
+				'USERNAME' => lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1377,14 +1340,12 @@ class Hook_addon_registry_core
 	function tpl_preview__block_side_personal_stats_no()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_NO',array(
-					'TITLE'=>lorem_phrase(),
-					'FULL_LINK'=>placeholder_url(),
-					'JOIN_LINK'=>placeholder_url(),
-					'LOGIN_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_NO', array(
+				'TITLE' => lorem_phrase(),
+				'FULL_LOGIN_URL' => placeholder_url(),
+				'JOIN_URL' => placeholder_url(),
+				'LOGIN_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1395,21 +1356,19 @@ class Hook_addon_registry_core
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_no_entries()
+	function tpl_preview__nothing_here()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_NO_ENTRIES',array(
-					'HIGH'=>lorem_phrase(),
-					'TITLE'=>lorem_word(),
-					'MESSAGE'=>lorem_phrase(),
-					'ADD_NAME'=>lorem_word(),
-					'SUBMIT_URL'=>placeholder_url(),
-					'RECENT'=>lorem_word(),
-					'MEMBERS'=>lorem_word(),
-					'NO_ENTRIES'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_NO_ENTRIES', array(
+				'HIGH' => lorem_phrase(),
+				'TITLE' => lorem_word(),
+				'MESSAGE' => lorem_phrase(),
+				'ADD_NAME' => lorem_word(),
+				'SUBMIT_URL' => placeholder_url(),
+				'RECENT' => lorem_word(),
+				'MEMBERS' => lorem_word(),
+				'NO_ENTRIES' => lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1423,22 +1382,23 @@ class Hook_addon_registry_core
 	function tpl_preview__block_main_emoticon_codes()
 	{
 		$smilies = placeholder_emoticons();
-		$entries=new ocp_tempcode();
+		$entries = new ocp_tempcode();
 		global $EMOTICON_LEVELS;
-		foreach ($smilies as $code=>$imgcode)
+		foreach ($smilies as $code => $imgcode)
 		{
-			if ((is_null($EMOTICON_LEVELS)) || ($EMOTICON_LEVELS[$code]<3))
+			if ((is_null($EMOTICON_LEVELS)) || ($EMOTICON_LEVELS[$code] < 3))
 			{
-				$entries->attach(do_lorem_template('BLOCK_MAIN_EMOTICON_CODES_ENTRY',array('CODE'=>$code,'TPL'=>do_emoticon($imgcode))));
+				$entries->attach(do_lorem_template('BLOCK_MAIN_EMOTICON_CODES_ENTRY', array(
+					'CODE' => $code,
+					'TPL' => do_emoticon($imgcode)
+				)));
 			}
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_EMOTICON_CODES',array(
-					'ENTRIES'=>$entries,
-				)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_EMOTICON_CODES', array(
+				'ENTRIES' => $entries
+			)), NULL, '', true)
 		);
 	}
 
@@ -1450,36 +1410,12 @@ class Hook_addon_registry_core
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
 	function tpl_preview__join_or_login()
-	{		
+	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('JOIN_OR_LOGIN',array(
-					'LOGIN_URL'=>placeholder_url(),
-					'JOIN_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__block_side_zone_jump()
-	{		
-		$out	=	do_lorem_template('ZONE_CHOOSE_INLINE',array(
-							'CONTENT'=>placeholder_options()
-					));
-
-		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_ZONE_JUMP',array(
-					'CONTENT'=>$out,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('JOIN_OR_LOGIN', array(
+				'LOGIN_URL' => placeholder_url(),
+				'JOIN_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1492,26 +1428,24 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__block_main_comcode_page_children()
 	{
-		$children=array();
-		foreach (placeholder_array() as $i=>$temp)
+		$children = array();
+		foreach (placeholder_array() as $i => $temp)
 		{
-			$child=array();
-			$child['TITLE']=$temp;
-			$child['PAGE']=lorem_word();
-			$child['ZONE']=lorem_word();
+			$child = array();
+			$child['TITLE'] = $temp;
+			$child['PAGE'] = lorem_word();
+			$child['ZONE'] = lorem_word();
 
-			$children[$i]=$child;
+			$children[$i] = $child;
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_COMCODE_PAGE_CHILDREN',array(
-					'CHILDREN'=>$children,
-					'THE_PAGE'=>lorem_phrase(),
-					'THE_ZONE'=>lorem_phrase(),
-					'TITLE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_COMCODE_PAGE_CHILDREN', array(
+				'CHILDREN' => $children,
+				'THE_PAGE' => lorem_phrase(),
+				'THE_ZONE' => lorem_phrase(),
+				'TITLE' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1530,37 +1464,32 @@ class Hook_addon_registry_core
 			$children1 = array();
 			foreach (placeholder_array(2) as $v)
 			{
-					$children2 = array();
-					foreach (placeholder_array(1) as $v)
-					{
-						$children2[] = do_lorem_template('BLOCK_MAIN_SITEMAP_NEST',array(
-						'URL'=>placeholder_url(),
-						'NAME'=>lorem_word(),
-						'CHILDREN'=>placeholder_array(),
-							)
-						);
-					}
+				$children2 = array();
+				foreach (placeholder_array(1) as $v)
+				{
+					$children2[] = do_lorem_template('BLOCK_MAIN_SITEMAP_NEST', array(
+						'URL' => placeholder_url(),
+						'NAME' => lorem_word(),
+						'CHILDREN' => placeholder_array()
+					));
+				}
 
-					$children1[] = do_lorem_template('BLOCK_MAIN_SITEMAP_NEST',array(
-					'URL'=>placeholder_url(),
-					'NAME'=>lorem_word(),
-					'CHILDREN'=>$children2,
-						)
-					);
+				$children1[] = do_lorem_template('BLOCK_MAIN_SITEMAP_NEST', array(
+					'URL' => placeholder_url(),
+					'NAME' => lorem_word(),
+					'CHILDREN' => $children2
+				));
 			}
-			$children[] = do_lorem_template('BLOCK_MAIN_SITEMAP_NEST',array(
-				'URL'=>placeholder_url(),
-				'NAME'=>lorem_word(),
-				'CHILDREN'=>$children1,
-					)
-			);
+			$children[] = do_lorem_template('BLOCK_MAIN_SITEMAP_NEST', array(
+				'URL' => placeholder_url(),
+				'NAME' => lorem_word(),
+				'CHILDREN' => $children1
+			));
 		}
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_SITEMAP',array(
-					'CHILDREN'=>$children,
-						)
-				),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_SITEMAP', array(
+				'CHILDREN' => $children
+			)), NULL, '', true)
 		);
 	}
 
@@ -1573,25 +1502,22 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__administrative__query_screen()
 	{
-		$queries	=	new ocp_tempcode();
+		$queries = new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
-			$queries->attach(do_lorem_template('QUERY_LOG',array(
-					'TIME'=>placeholder_number(),
-					'TEXT'=>lorem_sentence(),
-						)
-			));
+			$queries->attach(do_lorem_template('QUERY_LOG', array(
+				'TIME' => placeholder_number(),
+				'TEXT' => lorem_sentence()
+			)));
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('QUERY_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'TOTAL'=>lorem_phrase(),
-					'TOTAL_TIME'=>placeholder_number(),
-					'QUERIES'=>$queries,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('QUERY_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'TOTAL' => lorem_phrase(),
+				'TOTAL_TIME' => placeholder_number(),
+				'QUERIES' => $queries
+			)), NULL, '', true)
 		);
 	}
 
@@ -1605,25 +1531,31 @@ class Hook_addon_registry_core
 	function tpl_preview__administrative__broken_urls()
 	{
 		require_lang('cleanup');
-		$found_404=array();
+		$found_404 = array();
 		foreach (placeholder_array() as $value)
 		{
-			$found_404[]	=	array('URL'=>placeholder_url(),'SPOT'=>$value);
+			$found_404[] = array(
+				'URL' => placeholder_url(),
+				'SPOT' => $value
+			);
 		}
 
-		$found=array();
-		foreach (placeholder_array() as $k=>$value)
+		$found = array();
+		foreach (placeholder_array() as $k => $value)
 		{
-			$found[]	=	array('URL'=>placeholder_url(),'TABLE'=>$value,'FIELD'=>lorem_word_2(),'ID'=>strval($k));
+			$found[] = array(
+				'URL' => placeholder_url(),
+				'TABLE' => $value,
+				'FIELD' => lorem_word_2(),
+				'ID' => strval($k)
+			);
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('BROKEN_URLS',array(
-					'FOUND'=>$found,
-					'FOUND_404'=>$found_404,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BROKEN_URLS', array(
+				'FOUND' => $found,
+				'FOUND_404' => $found_404
+			)), NULL, '', true)
 		);
 	}
 
@@ -1638,31 +1570,11 @@ class Hook_addon_registry_core
 	{
 		require_lang('cleanup');
 		return array(
-			lorem_globalise(
-				do_lorem_template('BROKEN_LANG_STRINGS',array(
-					'MISSING_LANG_STRINGS'=>placeholder_array(),
-					'FUSED_LANG_STRINGS'=>placeholder_array(),
-					'ORPHANED_LANG_STRINGS'=>placeholder_array(),
-						)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__zone_choose()
-	{
-		return array(
-			lorem_globalise(
-				do_lorem_template('ZONE_CHOOSE',array(
-					'CONTENT'=>placeholder_options()
-				)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BROKEN_LANG_STRINGS', array(
+				'MISSING_LANG_STRINGS' => placeholder_array(),
+				'FUSED_LANG_STRINGS' => placeholder_array(),
+				'ORPHANED_LANG_STRINGS' => placeholder_array()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1676,11 +1588,9 @@ class Hook_addon_registry_core
 	function tpl_preview__forum_attachment_image()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('FORUM_ATTACHMENT_IMAGE',array(
-					'URL'=>placeholder_image_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('FORUM_ATTACHMENT_IMAGE', array(
+				'URL' => placeholder_image_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -1693,19 +1603,19 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__forum_attachment_link()
 	{
-		$content = do_lorem_template('FORUM_ATTACHMENT_IMAGE_THUMB',array(
-					'FULL'=>placeholder_url(),
-					'URL'=>placeholder_image_url(),
-						));
+		$content = do_lorem_template('FORUM_ATTACHMENT_IMAGE_THUMB', array(
+			'FULL' => placeholder_url(),
+			'URL' => placeholder_image_url()
+		));
 
-		$content->attach(do_lorem_template('FORUM_ATTACHMENT_LINK',array(
-					'FULL'=>placeholder_url(),
-					'FILENAME'=>lorem_word(),
-					'CLEAN_SIZE'=>placeholder_filesize(),
-					'NUM_DOWNLOADS'=>placeholder_number(),
-						)));
+		$content->attach(do_lorem_template('FORUM_ATTACHMENT_LINK', array(
+			'FULL' => placeholder_url(),
+			'FILENAME' => lorem_word(),
+			'CLEAN_SIZE' => placeholder_filesize(),
+			'NUM_DOWNLOADS' => placeholder_number()
+		)));
 		return array(
-			lorem_globalise($content,NULL,'',true),
+			lorem_globalise($content, NULL, '', true)
 		);
 	}
 
@@ -1719,15 +1629,44 @@ class Hook_addon_registry_core
 	function tpl_preview__administrative__tempcode_test()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('tempcode_test',array(
-					'EMPTY1'=>'',
-					'EMPTY2'=>'',
-					'NONEMPTY'=>lorem_word(),
-					'PASSED'=>lorem_word(),
-					'ARRAY'=>array(array('A'=>'','B'=>'','C'=>'')),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('tempcode_test', array(
+				'EMPTY1' => '',
+				'EMPTY2' => '',
+				'NONEMPTY' => lorem_word(),
+				'PASSED' => lorem_word(),
+				'ARRAY' => array(
+					array(
+						'A' => '',
+						'B' => '',
+						'C' => ''
+					)
+				)
+			)), NULL, '', true)
 		);
 	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_main_content_filtering()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTENT_FILTERING', array(
+				'FIELDS' => placeholder_fields(),
+				'ACTIVE_FILTER' => placeholder_id(),
+				'LINKS' => array(
+					array(
+						'ACTIVE' => true,
+						'TITLE' => lorem_phrase(),
+						'URL' => placeholder_url()
+					)
+				)
+			)), NULL, '', true)
+		);
+	}
+
 }

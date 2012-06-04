@@ -3,6 +3,22 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
+.notifications_field_name_column {
+	width: 100%;
+}
+
+.notifications_privileges_column {
+	width: 10em;
+}
+
+.notifications_tick_column {
+	width: 4em;
+}
+
+.notifications_advanced_column {
+	width: 10em;
+}
+
 .notifications_form h2 {
 	text-align: left;
 	text-decoration: none;
@@ -21,6 +37,3 @@
 .notifications_form td div {
 	display: inline;
 }
-
-/* Advanced screens */
-

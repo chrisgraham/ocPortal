@@ -2,18 +2,24 @@
 
 <div class="whos_read">
 	{+START,IF_NON_EMPTY,{WHOS_READ}}
-		{+START,BOX,{!THIS_HAS_BEEN_READ_BY}}
-			{+START,LOOP,WHOS_READ}
-				<a href="{MEMBER_LINK*}">{USERNAME*}</a> &ndash; <span class="associated_details">{DATE*}</span><br />
-			{+END}
-		{+END}
+		<div class="box box___messaging_message_screen"><div class="box_inner">
+			<h2>{!THIS_HAS_BEEN_READ_BY}</h2>
+
+			<ul>
+				{+START,LOOP,WHOS_READ}
+					<li><a href="{MEMBER_URL*}">{USERNAME*}</a> &ndash; <span class="associated_details">{DATE*}</span></li>
+				{+END}
+			</ul>
+		</div></div>
 	{+END}
 </div>
 
 <div class="message_main">
-	{+START,BOX,{MESSAGE_TITLE} ({!BY_SIMPLE,{BY*}})}
+	<div class="box box___messaging_message_screen"><div class="box_inner">
+		<h2>{MESSAGE_TITLE} <span class="associated_details">({!BY_SIMPLE,{BY*}})</span></h2>
+
 		{MESSAGE}
-	{+END}
+	</div></div>
 </div>
 
 {+START,IF_NON_PASSED,RESPONSIBLE}

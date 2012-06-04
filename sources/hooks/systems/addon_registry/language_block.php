@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_language_block
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_language_block
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,24 +72,23 @@ class Hook_addon_registry_language_block
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/language_block.php',
 			'BLOCK_SIDE_LANGUAGE.tpl',
-			'sources/blocks/side_language.php',
+			'sources/blocks/side_language.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'BLOCK_SIDE_LANGUAGE.tpl'=>'block_side_language',
-				);
+			'BLOCK_SIDE_LANGUAGE.tpl' => 'block_side_language'
+		);
 	}
 
 	/**
@@ -103,11 +101,9 @@ class Hook_addon_registry_language_block
 	function tpl_preview__block_side_language()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_LANGUAGE',array(
-					'LANGS'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_LANGUAGE', array(
+				'LANGS' => placeholder_options(),
+			)), NULL, '', true)
 		);
 	}
 }

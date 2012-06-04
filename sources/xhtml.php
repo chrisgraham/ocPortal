@@ -33,7 +33,7 @@ function hide_the_evidence($html)
  * Function that 'fixes' HTML (or bad XHTML) enough for it to pass most basic structural validation.
  *
  * @param  string			The XHTML string to convert to XHTML
- * @param  boolean		Whether to force a repair even if we aren't in XHTML mode
+ * @param  boolean		Whether to force a repair even if we aren't enforcing XHTML strictness
  * @return string			The converted string
  */
 function xhtmlise_html($html,$definitely_want=false)
@@ -43,7 +43,7 @@ function xhtmlise_html($html,$definitely_want=false)
 
 	if (!$definitely_want)
 	{
-		if (!(($GLOBALS['SEMI_DEBUG_MODE']) && (browser_matches('true_xhtml')))) return $html; // One day, this will get removed and we'll ensure all our output is always XHTML. But so far there's no point as IE doesn't support true XHTML
+		return $html; // One day, this will get removed and we'll ensure all our output is always XHTML. But so far there's no point as IE doesn't support true XHTML
 	}
 
 	$html=preg_replace('#<\!--.*($|-->)#Us','',$html); // Strip comments

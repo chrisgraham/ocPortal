@@ -1,11 +1,32 @@
 {TITLE}
 
+<div class="meta_details" role="contentinfo">
+	<ul class="meta_details_list">
+		<li>{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}}</a></li>
+		<li>{!ADDED,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate">{ADD_DATE*}</time>}</li>
+		{+START,IF,{$INLINE_STATS}}<li>{!VIEWS,{VIEWS*}}</li>{+END}
+	</ul>
+</div>
+
 <div class="poll_details">
 	{POLL_DETAILS}
 </div>
 
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,poll,{ID}}}
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
+
+<div class="float_surrounder">
+	{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
+		<div class="trackbacks right">
+			{TRACKBACK_DETAILS}
+		</div>
+	{+END}
+	{+START,IF_NON_EMPTY,{RATING_DETAILS}}
+		<div class="ratings right">
+			{RATING_DETAILS}
+		</div>
+	{+END}
+</div>
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 {+START,INCLUDE,STAFF_ACTIONS}
@@ -15,22 +36,13 @@
 	1_REL=edit
 {+END}
 
-<div>
-	<div class="float_surrounder">
-		{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
-			<div class="trackbacks right">
-				{TRACKBACK_DETAILS}
-			</div>
-		{+END}
-		{+START,IF_NON_EMPTY,{RATING_DETAILS}}
-			<div class="ratings right">
-				{RATING_DETAILS}
-			</div>
-		{+END}
+{COMMENT_DETAILS}
+
+{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
+	<div class="edited" role="note">
+		<img alt="" src="{$IMG*,edited}" /> {!EDITED}
+		<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{EDIT_DATE_RAW}}">{$DATE*,{EDIT_DATE_RAW}}</time>
 	</div>
-	<div>
-		{COMMENT_DETAILS}
-	</div>
-</div>
+{+END}
 
 {+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}

@@ -63,7 +63,7 @@ class Module_admin_unvalidated
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/unvalidated';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_censor';
 
-		$_title=get_page_title('UNVALIDATED_RESOURCES');
+		$_title=get_screen_title('UNVALIDATED_RESOURCES');
 
 		$out=new ocp_tempcode();
 		require_code('form_templates');
@@ -118,13 +118,13 @@ class Module_admin_unvalidated
 			if (!$content->is_empty())
 			{
 				// Could debate whether to include "'TARGET'=>'_blank',". However it does redirect back, so it's a nice linear process like this. If it was new window it could be more efficient, but also would confuse people with a lot of new windows opening and not closing.
-				$content=do_template('FORM',array('_GUID'=>'51dcee39273a0fee29569190344f2e41','GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('EDIT'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+				$content=do_template('FORM',array('_GUID'=>'0abb28f6b8543396c90c8c4395b7e7d4','GET'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('EDIT'),'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 			}
 
-			$out->attach(do_template('UNVALIDATED_SECTION',array('_GUID'=>'838240008e190b9cbaa0280fbddd6baf','TITLE'=>$info['title'],'CONTENT'=>$content)));
+			$out->attach(do_template('UNVALIDATED_SECTION',array('_GUID'=>'044f99ca3c101f90b35fc4b64977b1c7','TITLE'=>$info['title'],'CONTENT'=>$content)));
 		}
 
-		return do_template('UNVALIDATED_SCREEN',array('_GUID'=>'4e971f1c8851b821af030b5c7bbcb3fb','TITLE'=>$_title,'SECTIONS'=>$out));
+		return do_template('UNVALIDATED_SCREEN',array('_GUID'=>'fd41829ff0848f23d1f428a840eeb72a','TITLE'=>$_title,'SECTIONS'=>$out));
 	}
 
 }

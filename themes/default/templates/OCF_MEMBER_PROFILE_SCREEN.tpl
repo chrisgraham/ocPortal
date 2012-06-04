@@ -1,20 +1,18 @@
 {$SET,name_set_elsewhere,1}
 
-<div class="vcard"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/ProfilePage"}>
+<div class="vcard" itemscope="itemscope" itemtype="http://schema.org/ProfilePage">
 	{TITLE}
 
 	<div>
-		<div class="float_surrounder"><div class="tabs"{$?,{$VALUE_OPTION,html5}, role="tablist"}>
+		<div class="float_surrounder"><div class="tabs" role="tablist">
 			{+START,LOOP,TABS}
-				<a{$?,{$VALUE_OPTION,html5}, aria-controls="g_{TAB_CODE*}" role="tab"} href="#" id="t_{TAB_CODE*}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="select_tab('g','{TAB_CODE*}'); return false;">
-					{TAB_TITLE*}
-				</a>
+				<a aria-controls="g_{TAB_CODE*}" role="tab" href="#" id="t_{TAB_CODE*}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="select_tab('g','{TAB_CODE*}'); return false;">{TAB_TITLE*}</a>
 			{+END}
 		</div></div>
 		<div class="tab_surround">
 			{+START,LOOP,TABS}
-				<div{$?,{$VALUE_OPTION,html5}, aria-labeledby="t_{TAB_CODE*}" role="tabpanel"} id="g_{TAB_CODE*}" style="display: {$?,{$OR,{TAB_FIRST},{$NOT,{$JS_ON}}},block,none}">
-					<a name="tab__{TAB_CODE*}" id="tab__{TAB_CODE*}"></a>
+				<div aria-labeledby="t_{TAB_CODE*}" role="tabpanel" id="g_{TAB_CODE*}" style="display: {$?,{$OR,{TAB_FIRST},{$NOT,{$JS_ON}}},block,none}">
+					<a id="tab__{TAB_CODE*}"></a>
 
 					{TAB_CONTENT}
 				</div>
@@ -24,19 +22,7 @@
 </div>
 
 <script type="text/javascript">// <![CDATA[
-	addEventListenerAbstract(window,'load',function () {
-		{$,Expand the correct tab}
-		if (window.location.hash.replace(/^#/,'')!='')
-		{
-			var tab=window.location.hash.replace(/^#/,'').replace(/^tab\_\_/,'');
-
-			if (tab.indexOf('__')!=-1)
-			{
-				if (document.getElementById('g_'+tab.substr(0,tab.indexOf('__'))))
-					select_tab('g',tab.substr(0,tab.indexOf('__')));
-			}
-			if (document.getElementById('g_'+tab))
-				select_tab('g',tab);
-		}
+	add_event_listener_abstract(window,'load',function () {
+		find_url_tab();
 	} );
 //]]></script>

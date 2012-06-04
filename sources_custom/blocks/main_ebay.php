@@ -81,7 +81,7 @@ class Block_main_ebay
 			$out.='<object width="'.$width.'" height="'.$height.'"><param name="movie" value="http://togo.ebay.'.$domain.'/togo/store.swf" /><param name="flashvars" value="base=http://togo.ebay.'.$domain.'/togo/'.$lang.'&seller='.$seller.'&query='.$query.'" /><embed src="http://togo.ebay.'.$domain.'/togo/store.swf" type="application/x-shockwave-flash" width="'.$width.'" height="'.$height.'" flashvars="base=http://togo.ebay.'.$domain.'/togo/'.$lang.'&seller='.$seller.'&query='.$query.'"></embed></object>';
 		}
 
-		return do_template('BLOCK_MAIN_EBAY',array('TITLE'=>$title,'CONTENT'=>($out)));
+		return do_template('BLOCK_MAIN_EBAY',array('_GUID'=>'ffda4477bf08164f80dd45ef2985dfe9','TITLE'=>$title,'CONTENT'=>($out)));
 
 	}
 }

@@ -95,7 +95,7 @@ class Module_staff
 	 */
 	function do_all_staff()
 	{
-		$title=get_page_title('STAFF_TITLE',true,array(escape_html(get_site_name())));
+		$title=get_screen_title('STAFF_TITLE',true,array(escape_html(get_site_name())));
 
 		$admin_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
 		$rows=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups,400);
@@ -161,7 +161,7 @@ class Module_staff
 		if (is_null($row_staff)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$id=$GLOBALS['FORUM_DRIVER']->pname_id($row_staff);
 
-		$title=get_page_title('_STAFF',true,array(escape_html($username)));
+		$title=get_screen_title('_STAFF',true,array(escape_html($username)));
 
 		$_real_name=get_ocp_cpf('fullname',$id);
 		if ($_real_name=='')
@@ -186,7 +186,7 @@ class Module_staff
 
 		$all_link=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 
-		return do_template('STAFF_SCREEN',array('_GUID'=>'fd149466f16722fcbcef0fba5685a895','TITLE'=>$title,'REAL_NAME'=>$real_name,'ROLE'=>$role,'ADDRESS'=>$email_address,'NAME'=>$name,'MEMBER_ID'=>strval($id),'PROFILE_URL'=>$profile_url,'ALL_LINK'=>$all_link));
+		return do_template('STAFF_SCREEN',array('_GUID'=>'fd149466f16722fcbcef0fba5685a895','TITLE'=>$title,'REAL_NAME'=>$real_name,'ROLE'=>$role,'ADDRESS'=>$email_address,'NAME'=>$name,'MEMBER_ID'=>strval($id),'PROFILE_URL'=>$profile_url,'ALL_STAFF_URL'=>$all_link));
 	}
 
 }

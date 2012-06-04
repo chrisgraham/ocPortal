@@ -1,6 +1,6 @@
 <tr>
-	<td class="field_secondary_title_left translate_line_first">
-		<a name="jmp_{NAME*}" id="jmp_{NAME*}"></a>
+	<th class="translate_line_first">
+		<a id="jmp_{NAME*}"></a>
 
 		{NAME*}
 
@@ -9,7 +9,7 @@
 				{DESCRIPTION*}
 			</p>
 		{+END}
-	</td>
+	</th>
 	<td class="translate_line_second">
 		<div class="accessibility_hidden"><label for="old__trans_{NAME*}">{!OLD} {NAME*}</label></div>
 		<div class="constrain_field">
@@ -31,7 +31,7 @@
 </tr>
 <tr id="rexp_{NAME*}" style="display: none">
 	<td colspan="{$?,{$IS_EMPTY,{ACTIONS}},3,4}">
-		<div id="exp_{NAME*}">&nbsp;</div>
+		<div id="exp_{NAME*}"></div>
 	</td>
 </tr>
 

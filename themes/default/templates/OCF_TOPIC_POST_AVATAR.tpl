@@ -1,2 +1,2 @@
-<img class="ocf_topic_post_avatar" title="" alt="{!AVATAR}" src="{AVATAR*}" />
+<img class="ocf_topic_post_avatar" alt="{!AVATAR}" src="{AVATAR*}" />
 

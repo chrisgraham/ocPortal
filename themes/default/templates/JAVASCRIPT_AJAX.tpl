@@ -8,7 +8,7 @@ var block_data_cache={};
 
 function call_block(url,new_params,target_div,append,callback)
 {
-	if (typeof block_data_cache[url]=='undefined') block_data_cache[url]=getInnerHTML(target_div); // Cache start position. For this to be useful we must be smart enough to pass blank new_params if returning to fresh state
+	if (typeof block_data_cache[url]=='undefined') block_data_cache[url]=get_inner_html(target_div); // Cache start position. For this to be useful we must be smart enough to pass blank new_params if returning to fresh state
 
 	var ajax_url=url+'&block_map_sup='+window.encodeURIComponent(new_params);
 	if (typeof block_data_cache[ajax_url]!='undefined')
@@ -25,10 +25,10 @@ function call_block(url,new_params,target_div,append,callback)
 		target_div.orig_position=target_div.style.position;
 		target_div.style.position='relative';
 		var loading_image=document.createElement('img');
-		loading_image.src='{$IMG;,bottom/loading}';
+		loading_image.src='{$IMG;,loading}';
 		loading_image.style.position='absolute';
-		loading_image.style.left=(findWidth(target_div)/2-10)+'px';
-		loading_image.style.top=(findHeight(target_div)/2-20)+'px';
+		loading_image.style.left=(find_width(target_div)/2-10)+'px';
+		loading_image.style.top=(find_height(target_div)/2-20)+'px';
 		target_div.appendChild(loading_image);
 	}
 
@@ -49,7 +49,7 @@ function _call_block(raw_ajax_result,ajax_url,target_div,append,callback)
 
 function show_block_html(new_html,target_div,append)
 {
-	setInnerHTML(target_div,new_html,append);
+	set_inner_html(target_div,new_html,append);
 }
 
 function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_params)
@@ -92,8 +92,6 @@ function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_para
 /* Calls up a URL to check something, giving any 'feedback' as an error (or if just 'false' then returning false with no message) */
 function do_ajax_field_test(url,post)
 {
-	if (!ajax_supported()) return true;
-
 	if (typeof window.keep_stub!='undefined') url=url+keep_stub();
 	var xmlhttp=do_ajax_request(url,null,post);
 	if ((xmlhttp.responseText!='') && (xmlhttp.responseText.replace(/[ \t\n\r]/g,'')!='0'/*some cache layers may change blank to zero*/))
@@ -120,15 +118,15 @@ function do_ajax_field_test(url,post)
 
 function ajax_form_submit(event,form,block_name,map)
 {
-	if (typeof window.cleverFindValue=='undefined') return true;
+	if (typeof window.clever_find_value=='undefined') return true;
 
-	cancelBubbling(event);
+	cancel_bubbling(event);
 
 	var comcode='[block'+map+']'+block_name+'[/block]';
 	var post='data='+window.encodeURIComponent(comcode);
 	for (var i=0;i<form.elements.length;i++)
 	{
-		post+='&'+form.elements[i].name+'='+window.encodeURIComponent(cleverFindValue(form,form.elements[i]));
+		post+='&'+form.elements[i].name+'='+window.encodeURIComponent(clever_find_value(form,form.elements[i]));
 	}
 	var request=do_ajax_request(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}'+keep_stub(true)),null,post);
 
@@ -149,7 +147,7 @@ function ajax_form_submit(event,form,block_name,map)
 					if (!element_replace) return true; // Oh dear, target not found
 				}
 
-				setInnerHTML(element_replace,xhtml);
+				set_inner_html(element_replace,xhtml);
 
 				window.fauxmodal_alert('{!SUCCESS;}');
 
@@ -159,13 +157,6 @@ function ajax_form_submit(event,form,block_name,map)
 	}
 
 	return true;
-}
-
-function ajax_supported()
-{
-	// Intentionally not a single line, to help validator
-	if ((typeof window.XMLHttpRequest!='undefined') || (typeof window.ActiveXObject!='undefined')) return true;
-	return false;
 }
 
 function do_ajax_request(url,callback__method,post) // Note: 'post' is not an array, it's a string (a=b)
@@ -181,40 +172,18 @@ function do_ajax_request(url,callback__method,post) // Note: 'post' is not an ar
 
 	var index=AJAX_REQUESTS.length;
 	AJAX_METHODS[index]=callback__method;
-	if (typeof window.XMLHttpRequest!='undefined')
+
+	AJAX_REQUESTS[index]=new XMLHttpRequest();
+	if (!synchronous) AJAX_REQUESTS[index].onreadystatechange=process_request_changes;
+	if (post)
 	{
-		// Branch for none-IE
-		AJAX_REQUESTS[index]=new XMLHttpRequest();
-		if (!synchronous) AJAX_REQUESTS[index].onreadystatechange=process_request_changes;
-		if (post)
-		{
-			AJAX_REQUESTS[index].open('POST',url,!synchronous);
-			AJAX_REQUESTS[index].setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-			AJAX_REQUESTS[index].send(post);
-		} else
-		{
-			AJAX_REQUESTS[index].open("GET",url,!synchronous);
-			AJAX_REQUESTS[index].send(null);
-		}
-	}
-	else if (typeof window.ActiveXObject!='undefined')
+		AJAX_REQUESTS[index].open('POST',url,!synchronous);
+		AJAX_REQUESTS[index].setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		AJAX_REQUESTS[index].send(post);
+	} else
 	{
-		// Branch for IE
-		AJAX_REQUESTS[index]=new ActiveXObject("Microsoft.XMLHTTP");
-		if (AJAX_REQUESTS[index])
-		{
-			if (!synchronous) AJAX_REQUESTS[index].onreadystatechange=process_request_changes;
-			if (post)
-			{
-				AJAX_REQUESTS[index].open('POST',url,!synchronous);
-				AJAX_REQUESTS[index].setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-				try { AJAX_REQUESTS[index].send(post); } catch (e) {};
-			} else
-			{
-				AJAX_REQUESTS[index].open("GET",url,!synchronous);
-				try { AJAX_REQUESTS[index].send(); } catch (e) {};
-			}
-		}
+		AJAX_REQUESTS[index].open("GET",url,!synchronous);
+		AJAX_REQUESTS[index].send(null);
 	}
 
 	if ((typeof window.AJAX_REQUESTS=="undefined") || (!window.AJAX_REQUESTS)) return null; // Probably the page is in process of being navigated away so window object is gone

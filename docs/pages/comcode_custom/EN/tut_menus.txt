@@ -1,0 +1,164 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Customising what's on the menus[/title]
+
+{!menus:DOC_MENUS} There are two ways to define menus:
+[list="1"]
+[*]Comcode menus. These are described in the 'Comcode' tutorial
+[*]Menu-editor managed menus. These are described in this tutorial
+[/list]
+Panel-pages are described in the 'Site structure' tutorial, and also in the 'Custom pages of information (via Comcode)' tutorial.
+
+Comcode menus and menu-editor managed menus are alternatives to each other: both produce the same visual interface, using the same templates, but one is written and laid out in plain-text (Comcode menus) and one is constructed in an editor (managed menus).
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Comcode menus verses Managed menus[/title]
+
+There are advantages and disadvantages for both types of menu inside a panel page.
+
+Comcode menus:
+[tt]+[/tt]	Quick to edit for those who prefer to do things in a quick but technical way
+[tt]+[/tt]	Unifies the panel pages and menus under a single editing interface
+[tt]-[/tt]	Complex syntax
+
+Managed menus:
+[tt]+[/tt]	User friendly
+[tt]+[/tt]	Provides menus with greater power (context dependant menus)
+[tt]+[/tt]	Provides an interface to find all 'entry points' and easily add them to the menu
+[tt]-[/tt]	The admin interface is not designed to be accessible for those with disabilities (it requires Javascript)
+
+Clearly which to use is a personal/needs-based choice, and there is nothing stopping you using both of them.
+
+[title="2"]Template sets / menu types[/title]
+
+The Comcode/managed menu system supports 'template sets' to allow different kinds of menu on a website.
+The template set to use is specified as one of the parameters to the '[tt]side_stored_menu[/tt]' block.
+
+The following template sets exist:
+ - [b]tree[/b] (the default type, for side-placed menus where branches can be contracted and expanded as drawers; supports multiple-levels)
+ - [b]embossed[/b] (a very simple single-layered type for side-placed menus; does not support multiple-levels)
+ - [b]popup[/b] (a very nice type for side-placed menus where branches may popup as overlays by hovering the mouse over other branches; supports multiple-levels)
+ - [b]dropdown[/b] (a nice type for top-placed menus, similar to dropdown menus on Windows applications; supports multiple-levels)
+ - [b]top[/b] (a very simple single-layered type for top-placed menus that provides the same look as the Admin Zone uses for navigation between sections; does not support multiple-levels)
+ - [b]select[/b] (select menu items via a dropdown list; does not support multiple-levels)
+
+The menus themselves aren't saved against how the data is to be used, but for usability reasons ocPortal will adapt the menu interface a bit depending on the context you're editing for (i.e. the edit menu button will open up the menu editor in with an interface optimised for how the menu was displayed for that instance).
+
+[title="2"]Panel pages[/title]
+
+[exp_thumb="Links to edit a panel page and to edit managed menus" float="right"]menus_edit_links[/exp_thumb]
+Please see the 'site structure' tutorial for more information on panel pages. This section is only intended to provide a brief orientation to help further clarify the menu relationship. Basically panel pages are pages beginning with the name 'panel_' in the zone of the page being viewed.
+
+Your panel pages by default are just Comcode pages that use the block tag for arrangement of blocks such as the 'login/personal-stats block' (side_personal_stats), and the managed menu block, 'side_stored_menu'. Blocks are described in the 'Advanced custom pages of information (via Comcode)' tutorial, but basically, you can use any of the blocks that begin with the name 'side_' on your panel pages to add dynamic elements, as well as any Comcode (Comcode menus are actually created using the Comcode 'menu' tag). To edit a panel page, make sure you are logged in as a staff member and click the 'edit page' link underneath the pages as they are seen.
+
+Some information:
+ - Panel pages need to be Comcode pages if you want to use the ocPortal Comcode/managed menu features, but otherwise there is nothing stopping you constructing panel pages as HTML or modules if you wish to
+ - You will very rarely want to put Comcode menus or managed menus onto anything other than a panel page, although there is nothing stopping you putting them anywhere Comcode or Tempcode is supported
+
+These two statements may confuse you, but I thought it was important at this point to make it clear that ocPortal is completely flexible when it comes to menu management: we provide default features, but you can divert from them as you wish to when it comes to your own website. The rest of this tutorial will assume that you are using the standard combination of [i]managed menus[/i] on [i]Comcode panel pages[/i].
+
+[title="2"]Adding and editing managed menus[/title]
+
+[exp_thumb="Adding a new menu" float="right"]menus_add_link[/exp_thumb]
+The easiest way to add a new managed menu is to edit a panel page so as to include a 'side_stored_menu' block that uses a menu with a code-name of what you want to create. You can use the 'Add block' button to help you do this. When you view the saved panel ocPortal will detect the menu is missing, and place a link to create the menu there instead of the menu itself (in much the same way it detects a missing page and allows the creation of a new Comcode page). It is important to [b]not[/b] click to add a new menu from the Comcode page preview, unless you open the add link in a new window/tab: this is because the Comcode page editing will not have been confirmed, hence making you repeat the page editing process.
+
+The easiest way to edit a managed menu is to click the 'edit menu' link shown underneath, much like when clicking the 'edit page' link to edit the panel page.
+
+[title="3"]Adding a new top (horizontal) menu[/title]
+
+It is a bit harder to add a new horizontal menu ('dropdown' or 'top' menu types) because you may well not realise that there are actually 'panel_top' pages you can put them on.
+There are three reasons you might not realise this:
+1) The default 'panel_top' is usually invisible, because it's been given some special tempcode to only show on certain pages (forum zone pages, the recommend page, and a few others)
+2) 'panel_top' menus are not given edit buttons, due to space constraints
+3) By default there's a system of redirects in place that might confuse you. You might have seen a top panel in the forum zone but seen no [tt]forum:panel_top[/tt] page, and hence assumed it was rendered by some other mechanism. The truth is that the forum shows the [tt]:panel_top[/tt] page, due to some default transparent redirects. These redirects exist because this default panel (the one that hides most of the time) cuts across zones, linking community pages together
+
+You can edit the [tt]:panel_top[/tt] menu from the Content Management zone, as if it were any other Comcode page. If you like you can rip out the Tempcode 'IF' directive that's there, leaving only the block code ([tt][block="_community" type="top"]side_stored_menu[/block][/tt]). That change will make the menu start showing everywhere where the panel shows (that's a lot of places, due to the transparent redirects).
+
+If you wish to edit the menu itself you need to change the referenced menu name from '_community' to something else like 'topmenu'. The name '_community' references a hard-coded adaptive menu (it adapts what it shows based on what addons are installed). Hard-coded menus can't be edited and can be spotted because their names start '_'. The menu in the Admin Zone/CMS zone works by exactly the same principle. Once you rename the menu you will suddenly be able to change it.
+
+[title="3"]Caching[/title]
+
+The menu block is cached. There is one small issue with the caching: if you have multiple links on a menu under the same page (e.g. to two different galleries), it won't show the 'current page' properly when cached because it caches against page-name rather than URL (necessary to stop the database getting huge).
+To resolve this you will need to turn off the caching for the block by adding a parameter like [tt]cache=0[/tt]. This will not affect performance much.
+
+[title="2"]The menu editor[/title]
+
+[exp_thumb="The menu editor" float="right"]menus_editor[/exp_thumb]
+The menu editing interface is split into three main sections:
+ - the actual menu tree structure
+ - a form for editing a branch in the tree structure (invisible, until one of the branches is selected)
+ - a site-tree tool to find 'entry points' for insertion into the selected branch's URL field
+
+Menus are a tree structure made up of branches, where each branch may be a simple link and/or be a container for more child branches. For a branch with children that branch can be set to be initially expanded or contracted.
+
+The 'add branch' tool, used in conjunction with the branch-type drop-down list (shown for each branch) allows the full structure to be developed. When you change a branch so it can have children (contracted or expanded branch), you will see that suddenly you may create sub-branches for it.
+
+In the form part of the interface there are the following fields:
+ - a field for a caption
+ - a field for a tooltip
+ - a field for a URL or entry-point
+ - a field for match-keys -- match-keys are a powerful tool for making menus 'context sensitive'.
+ - a check-box to determine if the link opens in a new window
+ - a check-box to determine whether the link will be shown only if there is permission to actually view the page (slight efficiency hit)
+
+[title="2"]The site-tree tool[/title]
+
+Entry points are described in full in the 'Site structure' tutorial, but basically they are ocPortal links that are robust to changes in your website and are of the syntax, '[tt]<zone>:<page>[:<param>=<val>...][/tt]'. In other words, they all have at least a zone and a page, and may also specify additional parameters: for example, '[tt]site:downloads:type=ad[/tt]' is the entry point to a download. If you do not want to hard-code what zone a page is in (perhaps because you might move it in the future), you may specify '_SEARCH' (do a search, which is slightly inefficient) or '_SELF' (the zone the menu is being displayed in).
+
+Don't worry too much about entry point syntax as ocPortal will automatically convert any local URLs that you paste.
+
+To copy an entry point to a branch you need to:
+ - select the caption field of an item in the menu (this will cause an editing form to become available for that menu item)
+ - click the entry point in the site-tree tool
+You will then see the URL has been changed to the entry point you want. Do not be alarmed that this was placed in the 'URL' field, as the field also supports page links (of which entry points are a type of).
+
+[title="2"]Images[/title]
+
+Any theme images available with a prefix of [tt]menu_items/[/tt] will be available for attachment to menu items, so long as those theme images are defined in the default theme.
+You can have different versions of the images for different themes, but they must be available on the default theme too.
+
+The simple way to add them if you don't want to use the theme image management to upload them individually is to upload the images to [tt]themes/default/images_custom/menu_items/[/tt].
+
+[title="2"]Match-keys[/title]
+
+[concept]Match-key[/concept]s are basically page links (entry points are a type of page link) that are used for matching against the URL the menu is being viewed from, to determine whether a branch will be shown. If the URL matches against one of the match-keys for a branch, then the branch will be shown, otherwise it won't. Note that if you leave the 'match-keys' field blank, none of this checking happens, and the branch is shown.
+
+Match-keys are entered into the field with commas to separate them. The only differences between a page link and a match-key are:
+ - Match-keys may use '_WILD' as the zone in order to skip checking against zone
+ - Match-keys may use '_WILD' as the page in order to skip checking against page
+ - The additional '<key>=<value>' parts of the match-key enforce a match from the URL the menu is being viewed from, but the URL may also have additional parameters and the match-key does not need to state them
+ - It makes no sense to use '_SEARCH' or '_SELF' in a match-key
+
+An example match-key list is '_WILD:downloads:type=ad,adminzone:admin_downloads:type=ed'. This would match URLs that were generated from the following page links (whether these page links points themselves actually work is irrelevant):
+ - [tt]site:downloads:type=ad[/tt]
+ - [tt]randomzone:downloads:type=ad[/tt]
+ - [tt]:downloads:type=ad:wide=1[/tt]
+ - [tt]adminzone:admin_downloads:type=ed[/tt]
+ - [tt]adminzone:admin_downloads:type=ed:keep_novalidate=1[/tt]
+
+It would not match URLs generated from the following page links:
+ - [tt]site:galleries:type=ad[/tt]
+ - [tt]randomzone:downloads[/tt]
+ - [tt]:downloads:type=ed:wide=1[/tt]
+ - [tt]adminzone:admin_downloads:type=ad[/tt]
+ - [tt]adminzone:admin_downloads:type=ad:keep_novalidate=1[/tt]
+
+[title="2"]Chaining menus together / menu auto-generation (advanced)[/title]
+
+There are some advanced features for those wanting to have auto-generated deep menus.
+ - If a menu branch's tooltip is set to [tt]!!!<pagelink>[/tt] (e.g. [tt]!!!site:downloads[/tt]) then the category tree from the module will be inserted underneath that branch. This works with virtually any module that supports categories, including [tt]forum:forumview[/tt]
+ - ... also, if you ask the [tt]side_stored_menu[/tt] block to load a menu named [tt]!!!<pagelink>[/tt], this will insert the category tree as if it were a standalone menu
+ - If a menu branch's tooltip is set to [tt]@@<menuname>[/tt] then the menu will be inserted underneath that branch. This is very useful for generating drop-down menus that automatically absorb the left-hand-side menus from multiple zones -- removing the need to maintain two sets of menus
+
+[concepts
+ 1_key="Match-key"      1_value="Page link style identifiers used to do pattern matching against URLs"
+ 2_key="Comcode menu"   2_value="A menu created via the Comcode 'menu' tag"
+ 3_key="Managed menu"   3_value="A menu created by the menu editor"
+ 4_key="Panel page"     4_value="A specially named page that sits on an edge of the main page for all pages in its zone (although a templator could place it anywhere, edges are most common)"
+]Concepts[/concepts]
+
+[title="2"]See also[/title]
+
+ - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
+ - [page="_SEARCH:tut_comcode_pages"]Custom pages of information (via Comcode)[/page]
+ - [page="_SEARCH:tut_adv_comcode_pages"]Advanced custom pages of information[/page]
+ - [page="_SEARCH:tut_comcode"]Comcode and the attachment system[/page]

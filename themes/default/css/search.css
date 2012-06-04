@@ -7,16 +7,16 @@
 */
 
 .search_advanced_title {
-	padding: 15px 0;
+	padding: 1em 0;
 }
 
 .google_search_box {
-	margin-top: 30px;
+	margin-top: 3em;
 	text-align: center;
 }
 
 .search_tabular_header {
-	margin: 20px 0;
+	padding: 1em 0;
 }
 
 .google_search_button {
@@ -33,7 +33,7 @@
 }
 
 {+START,IF,{$NOT,{$MOBILE}}}
-	.main_search_form #search_content {
+	.main_search_form .search_content {
 		width: 300px;
 		max-width: 100%;
 	}
@@ -48,18 +48,26 @@
 	text-align: {!en_right};
 }
 
-#boolean_options {
+.boolean_options {
 	margin-{!en_left}: 40px;
 }
 
+.boolean_options label {
+	display: block;
+}
+
+.search_option {
+	margin: 0.2em 0;
+}
+
 {+START,IF,{$MOBILE}}
-	.search_option {
+	.search_option label {
 		float: {!en_left};
 	}
 {+END}
 
 {+START,IF,{$NOT,{$MOBILE}}}
-	.search_option {
+	.search_option label {
 		float: {!en_left};
 		width: 350px;
 		max-width: 100%;
@@ -71,14 +79,18 @@
 	}
 {+END}
 
+.search_option * {
+	margin-left: 0;
+}
+
 .search_result {
-	margin-top: 10px;
+	margin-top: 1em;
 }
 
 .search_field_table th {
 	vertical-align: middle;
 }
 
-#search_sort {
+.search_sort {
 	max-width: 100%;
 }

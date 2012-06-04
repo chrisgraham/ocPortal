@@ -717,7 +717,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 	}
 	elseif (strtoupper($xmlnode["tag"])=="CONDITION"){
 
-		
+
 		$mynode=upperkeysarray($xmlnode["attributes"]);
 
 		// First do multi condition name=value

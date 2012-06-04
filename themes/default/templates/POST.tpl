@@ -1,8 +1,8 @@
 {+START,IF,{IS_SPACER_POST}}
 	{+START,IF,{$NOT,{$IN_STR,{POST},<div}}}
-		{+START,BOX,,,curved}
+		<div class="box box___post"><div class="box_inner">
 			{POST}
-		{+END}
+		</div></div>
 	{+END}
 
 	{+START,IF,{$IN_STR,{POST},<div}}
@@ -11,14 +11,14 @@
 {+END}
 
 {+START,IF,{$NOT,{IS_SPACER_POST}}}
-	{+START,BOX,,,light}
-		<div id="post_{ID*}" class="post time_{TIME_RAW*}"{$?,{$VALUE_OPTION,html5}, itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review"}>
+	<div class="box box___post"><div class="box_inner">
+		<div id="post_{ID*}" class="post time_{TIME_RAW*}" itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
 			{+START,IF_NON_EMPTY,{ID}}<a name="post_{ID*}"></a>{+END}
 
 			<div class="float_surrounder">
-				{+START,IF_NON_EMPTY,{TITLE}}<h3 class="post_title"{$?,{$VALUE_OPTION,html5}, itemprop="name"}>{TITLE*}</h3>{+END}
+				{+START,IF_NON_EMPTY,{TITLE}}<h3 class="post_title" itemprop="name">{TITLE*}</h3>{+END}
 				{+START,IF_NON_EMPTY,{$AVATAR,{POSTER_ID}}}
-					<img class="post_avatar" src="{$AVATAR*,{POSTER_ID}}" alt="{!AVATAR}" title="" />
+					<img class="post_avatar" src="{$AVATAR*,{POSTER_ID}}" alt="{!AVATAR}" />
 				{+END}
 
 				<div class="post_subline">
@@ -28,16 +28,11 @@
 					{+END}
 					{$,OCF style...}
 					{+START,IF_PASSED,POSTER}
-						<span class="post_poster"{$?,{$VALUE_OPTION,html5}, itemprop="author"}>{POSTER}</span>
+						<span class="post_poster" itemprop="author">{POSTER}</span>
 					{+END}
 
 					<span class="post_time">
-						{+START,IF,{$VALUE_OPTION,html5}}
-							{!_POSTED_TIME,<time{$?,{$VALUE_OPTION,html5}, itemprop="datePublished"} datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{TIME_RAW}}" pubdate="pubdate">{TIME*}</time>}
-						{+END}
-						{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
-							{!_POSTED_TIME,{TIME*}}
-						{+END}
+						{!_POSTED_TIME,<time itemprop="datePublished" datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{TIME_RAW}}" pubdate="pubdate">{TIME*}</time>}
 					</span>
 
 					{+START,IF_NON_EMPTY,{EMPHASIS}}
@@ -50,23 +45,23 @@
 
 					{+START,LOOP,INDIVIDUAL_REVIEW_RATINGS}
 						{+START,IF_PASSED,REVIEW_RATING}
-							&nbsp;
-							(
+							{+START,SET,REVIEWS}
+								{+START,IF_NON_EMPTY,{REVIEW_TITLE}}
+									<span class="field_title">{REVIEW_TITLE*}:</span>
+								{+END}
 
-							{+START,IF_NON_EMPTY,{REVIEW_TITLE}}
-								{REVIEW_TITLE*}:
-							{+END}
+								{$SET,rating_loop,0}
+								{+START,WHILE,{$LT,{$GET,rating_loop},{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}}}
+									<img src="{$IMG*,rating}" alt="{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}" />
+									{$INC,rating_loop}
+								{+END}
 
-							{$SET,rating_loop,0}
-							{+START,WHILE,{$LT,{$GET,rating_loop},{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}}}
-								<img src="{$IMG*,rating}" title="" alt="{$ROUND,{$DIV_FLOAT,{REVIEW_RATING},2}}" />
-								{$INC,rating_loop}
-							{+END}
-
-							{+START,IF,{$VALUE_OPTION,html5}}
 								<span itemprop="reviewRating" itemscope="itemscope" itemtype="http://schema.org/Rating"><meta itemprop="ratingValue" content="{REVIEW_RATING*}" /></span>
 							{+END}
-						)
+
+							<span class="post_action_link">
+								({$GET,REVIEWS})
+							</span>
 						{+END}
 					{+END}
 
@@ -75,7 +70,7 @@
 					{+END}
 
 					{+START,IF,{$NOT,{$MOBILE}}}
-						{+START,IF,{$JS_ON}}{+START,IF_NON_EMPTY,{ID}}{+START,IF_NON_PASSED,PREVIEWING}{+START,IF,{$MATCH_KEY_MATCH,_SEARCH:topicview}}
+						{+START,IF,{$JS_ON}}{+START,IF_NON_EMPTY,{ID}}{+START,IF_NON_PASSED_OR_FALSE,PREVIEWING}{+START,IF,{$MATCH_KEY_MATCH,_SEARCH:topicview}}
 							<div id="cell_mark_{ID*}" class="ocf_off post_action_link inline_block">
 								<form title="{!MARKER} #{ID*}" method="post" action="index.php" id="form_mark_{ID*}">
 									<div>
@@ -88,7 +83,7 @@
 					{+END}
 				</div>
 
-				<div{+START,IF,{HIGHLIGHT}} class="highlighted_post"{+END}{$?,{$VALUE_OPTION,html5}, itemprop="reviewBody"}>
+				<div{+START,IF,{HIGHLIGHT}} class="highlighted_post"{+END} itemprop="reviewBody">
 					{POST}
 				</div>
 
@@ -96,7 +91,7 @@
 			</div>
 
 			{+START,IF_NON_EMPTY,{BUTTONS}}
-				<div class="ocf_post_buttons">
+				<div class="post_buttons">
 					{BUTTONS}
 				</div>
 			{+END}
@@ -108,7 +103,5 @@
 			{+END}
 			{+START,INCLUDE,POST_CHILD_LOAD_LINK}{+END}
 		</div>
-	{+END}
+	</div></div>
 {+END}
-
-<br />

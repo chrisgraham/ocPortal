@@ -309,7 +309,7 @@ class Module_tickets
 	{
 		require_code('feedback');
 
-		$title=get_page_title('SUPPORT_TICKETS');
+		$title=get_screen_title('SUPPORT_TICKETS');
 
 		$message=new ocp_tempcode();
 		$links=new ocp_tempcode();
@@ -355,7 +355,7 @@ class Module_tickets
 					}
 					$unclosed=(!$GLOBALS['FORUM_DRIVER']->is_staff($topic['lastmemberid']));
 
-					$params=array('NUM_POSTS'=>integer_format($topic['num']),'CLOSED'=>strval($topic['closed']),'URL'=>$url,'TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>strval($topic['lasttime']),'PROFILE_LINK'=>$profile_link,'LAST_POSTER'=>$last_poster,'UNCLOSED'=>$unclosed);
+					$params=array('NUM_POSTS'=>integer_format($topic['num']),'CLOSED'=>strval($topic['closed']),'URL'=>$url,'TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>strval($topic['lasttime']),'PROFILE_URL'=>$profile_link,'LAST_POSTER'=>$last_poster,'UNCLOSED'=>$unclosed);
 
 					$links->attach(do_template('SUPPORT_TICKET_LINK',$params));
 				}
@@ -437,7 +437,7 @@ class Module_tickets
 			if ($new)
 			{
 				$id=strval($member).'_'.$ticket_id;
-				$title=get_page_title('ADD_TICKET');
+				$title=get_screen_title('ADD_TICKET');
 			} else
 			{
 				$ticket_type=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','ticket_type',array('ticket_id'=>$id));
@@ -452,7 +452,7 @@ class Module_tickets
 				$ticket_title=$_comments[0]['title'];
 				if ($ticket_title=='') $ticket_title=do_lang('UNKNOWN');
 
-				$title=get_page_title('_VIEW_SUPPORT_TICKET',true,array(escape_html($ticket_title),escape_html($ticket_type_text)));
+				$title=get_screen_title('_VIEW_SUPPORT_TICKET',true,array(escape_html($ticket_title),escape_html($ticket_type_text)));
 				breadcrumb_set_self($ticket_title);
 			}
 
@@ -460,7 +460,7 @@ class Module_tickets
 			$staff_details=new ocp_tempcode();
 			$types=$this->build_types_list(get_param('default',''));
 
-			$results_browser=NULL;
+			$pagination=NULL;
 
 			if (!$new)
 			{
@@ -487,8 +487,8 @@ class Module_tickets
 				{
 					if (count($_comments_all)>$num_to_show_limit)
 					{
-						require_code('templates_results_browser');
-						$results_browser=results_browser(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',count($_comments_all),NULL,NULL,true);
+						require_code('templates_pagination');
+						$pagination=pagination(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',count($_comments_all),NULL,NULL,true);
 					}
 				}
 
@@ -574,7 +574,7 @@ class Module_tickets
 							$last_poster=$topic['lastusername'];
 							$unclosed=(!$GLOBALS['FORUM_DRIVER']->is_staff($topic['lastmemberid']));
 
-							$params=array('NUM_POSTS'=>integer_format($topic['num']-1),'CLOSED'=>strval($topic['closed']),'URL'=>$url,'TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>strval($topic['lasttime']),'PROFILE_LINK'=>$profile_link,'LAST_POSTER'=>$last_poster,'UNCLOSED'=>$unclosed);
+							$params=array('NUM_POSTS'=>integer_format($topic['num']-1),'CLOSED'=>strval($topic['closed']),'URL'=>$url,'TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>strval($topic['lasttime']),'PROFILE_URL'=>$profile_link,'LAST_POSTER'=>$last_poster,'UNCLOSED'=>$unclosed);
 
 							$other_tickets->attach(do_template('SUPPORT_TICKET_LINK',$params));
 						} else
@@ -616,7 +616,7 @@ class Module_tickets
 				'STAFF_DETAILS'=>$staff_details,
 				'URL'=>$post_url,
 				'ADD_TICKET_URL'=>$add_ticket_url,
-				'RESULTS_BROWSER'=>$results_browser,
+				'PAGINATION'=>$pagination,
 			));
 
 		} else // Guest has posted ticket successfully. Actually, this code problem never runs (as they in fact see a separate screen from do_update_ticket), but it's here as a fail safe.
@@ -650,7 +650,7 @@ class Module_tickets
 			}
 		}
 
-		$title=get_page_title($action);
+		$title=get_screen_title($action);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id),'_SELF');
 		if (is_guest()) $url=build_url(array('page'=>'_SELF'),'_SELF');
@@ -664,7 +664,7 @@ class Module_tickets
 	 */
 	function do_update_ticket()
 	{
-		$title=get_page_title('SUPPORT_TICKETS');
+		$title=get_screen_title('SUPPORT_TICKETS');
 
 		$id=get_param('id');
 		$_title=post_param('title');

@@ -161,7 +161,7 @@ class Module_purchase
 	/**
 	 * Standard modular entry-point finder function.
 	 *
-	 * @return ?array	A map of entry points (type-code=>language-code) (NULL: disabled).
+	 * @return ?array		A map of entry points (type-code=>language-code) (NULL: disabled).
 	 */
 	function get_entry_points()
 	{
@@ -171,7 +171,7 @@ class Module_purchase
 	/**
 	 * Standard modular run function.
 	 *
-	 * @return tempcode	The result of execution.
+	 * @return tempcode		The result of execution.
 	 */
 	function run()
 	{
@@ -181,12 +181,24 @@ class Module_purchase
 		require_css('ecommerce');
 
 		// Kill switch
-		if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_specific_permission(get_member(),'access_ecommerce_in_test_mode'))) warn_exit(do_lang_tempcode('PURCHASE_DISABLED'));
+		if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_specific_permission(get_member(),'access_ecommerce_in_test_mode')))
+			warn_exit(do_lang_tempcode('PURCHASE_DISABLED'));
 
 		$type=get_param('type','misc');
 
-		$title=get_page_title('PURCHASING_TITLE',true,array(do_lang_tempcode('PURCHASE_STAGE_'.$type)));
+		$title=get_screen_title('PURCHASING_TITLE',true,array(do_lang_tempcode('PURCHASE_STAGE_'.$type)));
 
+		// Recognise join operations
+		$new_username=post_param('username',NULL);
+		if (!is_null($new_username))
+		{
+			require_code('ocf_join');
+			list($messages)=ocf_join_actual(true,false,false,true,false,false,false,true);
+			if (!$messages->is_empty())
+				return inform_screen($title,$messages);
+		}
+
+		// Normal processing
 		$tpl=new ocp_tempcode();
 		if ($type=='misc') $tpl=$this->choose($title);
 		if ($type=='message') $tpl=$this->message($title);
@@ -198,28 +210,15 @@ class Module_purchase
 	}
 
 	/**
-	 * Only allow logged in members to here.
-	 */
-	function ensure_in()
-	{
-		if (is_guest())
-		{
-			attach_message(do_lang_tempcode('PURCHASE_NOT_LOGGED_IN'),'warn');
-
-			access_denied('NOT_AS_GUEST');
-		}
-	}
-
-	/**
 	 * Wrap-up so as to remove redundancy in templates.
 	 *
-	 * @param  tempcode	To wrap.
-	 * @param  tempcode	The title to use.
-	 * @param  ?mixed		URL (NULL: no next URL).
-	 * @param  boolean	Whether it is a GET form
-	 * @return tempcode	Wrapped.
+	 * @param  tempcode		To wrap.
+	 * @param  tempcode		The title to use.
+	 * @param  ?mixed			URL (NULL: no next URL).
+	 * @param  boolean		Whether it is a GET form
+	 * @return tempcode		Wrapped.
 	 */
-	function wrap($content,$title,$url,$get=false)
+	function _wrap($content,$title,$url,$get=false)
 	{
 		if (is_null($url)) $url='';
 		require_javascript('javascript_validation');
@@ -229,23 +228,12 @@ class Module_purchase
 	/**
 	 * Choose product step.
 	 *
-	 * @param  tempcode	The page title.
-	 * @return tempcode	The result of execution.
+	 * @param  tempcode		The page title.
+	 * @return tempcode		The result of execution.
 	 */
 	function choose($title)
 	{
 		breadcrumb_set_self(do_lang_tempcode('PURCHASING'));
-
-		/*if (is_guest())
-		{
-			$register=$GLOBALS['FORUM_DRIVER']->join_url();
-			if (is_object($register)) $register=$register->evaluate();
-			$_redirect=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-			$redirect=$_redirect->evaluate();
-			$_login=build_url(array('page'=>'login','redirect'=>$redirect));
-			$login=$_login->evaluate();
-			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_GUEST',array('_GUID'=>'accf475a1457f73d7280b14d774acc6e','TITLE'=>$title,'TEXT'=>do_lang_tempcode('PURCHASE_NOT_LOGGED_IN_2',escape_html($register),escape_html($login)))),$title,NULL);
-		}*/
 
 		$url=build_url(array('page'=>'_SELF','type'=>'message','id'=>get_param_integer('id',-1)),'_SELF',NULL,true,true);
 
@@ -261,7 +249,17 @@ class Module_purchase
 			{
 				if ((!is_string($product)) || (substr($product,0,strlen($filter))!=$filter)) continue;
 			}
-			if ((($details[0]==PRODUCT_PURCHASE_WIZARD) || ($details[0]==PRODUCT_SUBSCRIPTION) || ($details[0]==PRODUCT_CATALOGUE)) && (method_exists($details[count($details)-1],'is_available')) && ($details[count($details)-1]->is_available($product,get_member())))
+
+			$wizard_supported=(($details[0]==PRODUCT_PURCHASE_WIZARD) || ($details[0]==PRODUCT_SUBSCRIPTION) || ($details[0]==PRODUCT_CATALOGUE));
+
+			$is_available=false; // Anything without is_available is not meant to be purchased directly
+			if (method_exists($details[count($details)-1],'is_available'))
+			{
+				$availability_status=$details[count($details)-1]->is_available($product,get_member());
+				$is_available=($availability_status==ECOMMERCE_PRODUCT_AVAILABLE) || ($availability_status==ECOMMERCE_PRODUCT_NO_GUESTS);
+			}
+
+			if ($wizard_supported && $is_available)
 			{
 				require_code('currency');
 				$currency=get_option('currency');
@@ -276,34 +274,34 @@ class Module_purchase
 		if ($list->is_empty()) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
 		$fields=form_input_list(do_lang_tempcode('PRODUCT'),'','product',$list,NULL,true);
 
-		return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_CHOOSE',array('_GUID'=>'47c22d48313ff50e6323f05a78342eae','FIELDS'=>$fields,'TITLE'=>$title)),$title,$url,true);
+		return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_CHOOSE',array('_GUID'=>'47c22d48313ff50e6323f05a78342eae','FIELDS'=>$fields,'TITLE'=>$title)),$title,$url,true);
 	}
 
 	/**
 	 * Message about product step.
 	 *
-	 * @param  tempcode	The page title.
-	 * @return tempcode	The result of execution.
+	 * @param  tempcode		The page title.
+	 * @return tempcode		The result of execution.
 	 */
 	function message($title)
 	{
 		require_code('form_templates');
 
+		$product=get_param('product');
+
 		$text=new ocp_tempcode();
-		$object=find_product(get_param('product'));
+		$object=find_product($product);
 		if (is_null($object))
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		if ((method_exists($object,'is_available')) && (!$object->is_available(get_param('product'),get_member())))
-		{
-			$this->ensure_in();
-			warn_exit(do_lang_tempcode('PRODUCT_UNAVAILABLE'));
-		}
+
+		$test=$this->_check_availability($product);
+		if (!is_null($test)) return $test;
 
 		// Work out what next step is
-		$licence=method_exists($object,'get_agreement')?$object->get_agreement(get_param('product')):'';
-		$fields=method_exists($object,'get_needed_fields')?$object->get_needed_fields(get_param('product')):NULL;
+		$licence=method_exists($object,'get_agreement')?$object->get_agreement($product):'';
+		$fields=method_exists($object,'get_needed_fields')?$object->get_needed_fields($product):NULL;
 		if ((!is_null($fields)) && ($fields->is_empty())) $fields=NULL;
-		$url=build_url(array('page'=>'_SELF','type'=>($licence=='')?(is_null($fields)?'pay':'details'):'licence','product'=>get_param('product'),'id'=>get_param_integer('id',-1)),'_SELF',NULL,true);
+		$url=build_url(array('page'=>'_SELF','type'=>($licence=='')?(is_null($fields)?'pay':'details'):'licence','product'=>$product,'id'=>get_param_integer('id',-1)),'_SELF',NULL,true);
 
 		if (method_exists($object,'product_info'))
 		{
@@ -315,19 +313,19 @@ class Module_purchase
 				// Ah, not even a message to show - jump ahead
 				return redirect_screen($title,$url,'');
 			}
-			$text->attach(paragraph($object->get_message(get_param('product'))));
+			$text->attach(paragraph($object->get_message($product)));
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PURCHASING'))));
 
-		return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_MESSAGE',array('_GUID'=>'8667b6b544c4cea645a52bb4d087f816','TITLE'=>'','TEXT'=>$text)),$title,$url);
+		return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_MESSAGE',array('_GUID'=>'8667b6b544c4cea645a52bb4d087f816','TITLE'=>'','TEXT'=>$text)),$title,$url);
 	}
 
 	/**
 	 * Licence agreement step.
 	 *
-	 * @param  tempcode	The page title.
-	 * @return tempcode	The result of execution.
+	 * @param  tempcode		The page title.
+	 * @return tempcode		The result of execution.
 	 */
 	function licence($title)
 	{
@@ -335,59 +333,64 @@ class Module_purchase
 
 		require_code('form_templates');
 
-		$object=find_product(get_param('product'));
-		if ((method_exists($object,'is_available')) && (!$object->is_available(get_param('product'),get_member())))
-		{
-			$this->ensure_in();
-			warn_exit(do_lang_tempcode('PRODUCT_UNAVAILABLE'));
-		}
-		$licence=$object->get_agreement(get_param('product'));
-		$fields=$object->get_needed_fields(get_param('product'));
+		$product=get_param('product');
+
+		$object=find_product($product);
+
+		$test=$this->_check_availability($product);
+		if (!is_null($test)) return $test;
+
+		// Work out what next step is
+		$licence=$object->get_agreement($product);
+		$fields=$object->get_needed_fields($product);
 		if ((!is_null($fields)) && ($fields->is_empty())) $fields=NULL;
-		$url=build_url(array('page'=>'_SELF','type'=>is_null($fields)?'pay':'details','product'=>get_param('product'),'id'=>get_param_integer('id',-1)),'_SELF',NULL,true,true);
+		$url=build_url(array('page'=>'_SELF','type'=>is_null($fields)?'pay':'details','product'=>$product,'id'=>get_param_integer('id',-1)),'_SELF',NULL,true,true);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PURCHASING'))));
 
-		return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_LICENCE',array('_GUID'=>'55c7bc550bb327535db1aebdac9d85f2','TITLE'=>$title,'URL'=>$url,'LICENCE'=>$licence)),$title,NULL);
+		return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_LICENCE',array('_GUID'=>'55c7bc550bb327535db1aebdac9d85f2','TITLE'=>$title,'URL'=>$url,'LICENCE'=>$licence)),$title,NULL);
 	}
 
 	/**
 	 * Details about purchase step.
 	 *
-	 * @param  tempcode	The page title.
-	 * @return tempcode	The result of execution.
+	 * @param  tempcode		The page title.
+	 * @return tempcode		The result of execution.
 	 */
 	function details($title)
 	{
 		require_code('form_templates');
 
-		$object=find_product(get_param('product'));
-		if ((method_exists($object,'is_available')) && (!$object->is_available(get_param('product'),get_member())))
-		{
-			warn_exit(do_lang_tempcode('PRODUCT_UNAVAILABLE'));
-		}
-		$fields=$object->get_needed_fields(get_param('product'),get_param_integer('id',-1));
-		$url=build_url(array('page'=>'_SELF','type'=>'pay','product'=>get_param('product')),'_SELF',NULL,true);
+		$product=get_param('product');
+
+		$object=find_product($product);
+
+		$test=$this->_check_availability($product);
+		if (!is_null($test)) return $test;
+
+		// Work out what next step is
+		$fields=$object->get_needed_fields($product,get_param_integer('id',-1));
+		$url=build_url(array('page'=>'_SELF','type'=>'pay','product'=>$product),'_SELF',NULL,true);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PURCHASING'))));
 
-		return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_DETAILS',array('_GUID'=>'7fcbb0be5e90e52163bfec01f22f4ea0','TEXT'=>is_array($fields)?$fields[1]:'','FIELDS'=>is_array($fields)?$fields[0]:$fields)),$title,$url);
+		return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_DETAILS',array('_GUID'=>'7fcbb0be5e90e52163bfec01f22f4ea0','TEXT'=>is_array($fields)?$fields[1]:'','FIELDS'=>is_array($fields)?$fields[0]:$fields)),$title,$url);
 	}
 
 	/**
 	 * Payment step.
 	 *
-	 * @param  tempcode	The page title.
-	 * @return tempcode	The result of execution.
+	 * @param  tempcode		The page title.
+	 * @return tempcode		The result of execution.
 	 */
 	function pay($title)
 	{
 		$product=get_param('product');
 		$object=find_product($product);
-		if ((method_exists($object,'is_available')) && (!$object->is_available($product,get_member())))
-		{
-			warn_exit(do_lang_tempcode('PRODUCT_UNAVAILABLE'));
-		}
+
+		$test=$this->_check_availability($product);
+		if (!is_null($test)) return $test;
+
 		$temp=$object->get_products(true,$product);
 		$price=$temp[$product][1];
 		$item_name=$temp[$product][4];
@@ -477,16 +480,16 @@ class Module_purchase
 			$finish_url=build_url(array('page'=>'_SELF','type'=>'finish'),'_SELF');
 
 			$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('_GUID'=>'15cbba9733f6ff8610968418d8ab527e','FIELDS'=>$fields));
-			return $this->wrap($result,$title,$finish_url);
+			return $this->_wrap($result,$title,$finish_url);
 		}
-		return $this->wrap($result,$title,NULL);
+		return $this->_wrap($result,$title,NULL);
 	}
 
 	/**
 	 * Finish step.
 	 *
-	 * @param  tempcode	The page title.
-	 * @return tempcode	The result of execution.
+	 * @param  tempcode		The page title.
+	 * @return tempcode		The result of execution.
 	 */
 	function finish($title)
 	{
@@ -551,51 +554,75 @@ class Module_purchase
 				}
 			}
 
-			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'43f706793719ea893c280604efffacfe','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
+			return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'43f706793719ea893c280604efffacfe','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
 		}
 
 		if (!is_null($message))
 		{
-			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'859c31e8f0f02a2a46951be698dd22cf','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
+			return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'859c31e8f0f02a2a46951be698dd22cf','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
 		}
 
-		inform_exit(do_lang_tempcode('PRODUCT_PURCHASE_CANCEL'));
+		return inform_screen(get_screen_title('PURCHASING'),do_lang_tempcode('PRODUCT_PURCHASE_CANCEL'));
 	}
 
 	/**
-	 * Product info for all ecommerce items
+	 * Check to see if a product is available to the current user.
 	 *
-	 * @param  tempcode	The page title.
-	 * @return tempcode	The result of execution.
-	*/
-	function product_info($title)
+	 * @param  ID_TEXT		The product code.
+	 * @return ?tempcode		Error screen (NULL: no error).
+	 */
+	function _check_availability($product)
 	{
-		$this->ensure_in();
+		$object=find_product($product);
+		if (!method_exists($object,'is_available')) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		require_code('form_templates');
+		$availability_status=$object->is_available($product,get_member());
 
-		$text=new ocp_tempcode();
-
-		$object=find_product(get_param('product'));
-
-		if (is_null($object))
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-
-		if ((method_exists($object,'is_available')) && (!$object->is_available(get_param('product'),get_member())))
+		switch ($availability_status)
 		{
-			warn_exit(do_lang_tempcode('PRODUCT_UNAVAILABLE'));
+			case ECOMMERCE_PRODUCT_ALREADY_HAS:
+				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_ALREADY_HAS'));
+
+			case ECOMMERCE_PRODUCT_DISABLED:
+				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_DISABLED'));
+
+			case ECOMMERCE_PRODUCT_PROHIBITED:
+				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_PROHIBITED'));
+
+			case ECOMMERCE_PRODUCT_OUT_OF_STOCK:
+				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_OUT_OF_STOCK'));
+
+			case ECOMMERCE_PRODUCT_MISSING:
+				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('ECOMMERCE_PRODUCT_MISSING'));
+
+			case ECOMMERCE_PRODUCT_INTERNAL_ERROR:
+				return warn_screen(get_screen_title('PURCHASING'),do_lang_tempcode('INTERNAL_ERROR'));
+
+			case ECOMMERCE_PRODUCT_NO_GUESTS:
+				if ((is_guest()) && (get_forum_type()!='ocf'))
+				{
+					access_denied('NOT_AS_GUEST');
+				}
+
+				require_code('ocf_join');
+
+				$url=get_self_url();
+
+				list($javascript,$form)=ocf_join_form($url,true,false,false,false);
+
+				$hidden=build_keep_post_fields();
+
+				$join_screen=do_template('PURCHASE_WIZARD_STAGE_GUEST',array(
+					'_GUID'=>'accf475a1457f73d7280b14d774acc6e',
+					'TEXT'=>do_lang_tempcode('PURCHASE_NOT_LOGGED_IN',escape_html(get_site_name())),
+					'JAVASCRIPT'=>$javascript,
+					'FORM'=>$form,
+					'HIDDEN'=>$hidden,
+				));
+
+				return $this->_wrap($join_screen,get_screen_title('PURCHASING'),NULL);
 		}
 
-		$text->attach(paragraph($object->product_info(get_param('product'))));
-		$licence=method_exists($object,'get_agreement')?$object->get_agreement(get_param('product')):'';
-		$fields=method_exists($object,'get_needed_fields')?$object->get_needed_fields(get_param('product')):NULL;
-
-		$url=build_url(array('page'=>'_SELF','type'=>($licence=='')?(is_null($fields)?'pay':'details'):'licence','product'=>get_param('product'),'id'=>get_param_integer('id',-1)),'_SELF');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PURCHASING'))));
-
-		return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_MESSAGE',array('_GUID'=>'8667b6b544c4cea645a52bb4d087f816','TITLE'=>$title,'TEXT'=>$text)),$title,$url);		
+		return NULL;
 	}
 }
-
-

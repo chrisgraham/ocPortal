@@ -125,7 +125,7 @@ function require_code($codename,$light_exit=false)
 		global $CODE_OVERRIDES;
 		if (!isset($CODE_OVERRIDES))
 		{
-			$CODE_OVERRIDES=persistant_cache_get('CODE_OVERRIDES');
+			$CODE_OVERRIDES=persistent_cache_get('CODE_OVERRIDES');
 			if ($CODE_OVERRIDES===NULL) $CODE_OVERRIDES=array();
 		}
 		if (isset($CODE_OVERRIDES[$codename]))
@@ -138,7 +138,7 @@ function require_code($codename,$light_exit=false)
 			$has_original=is_file($path_b);
 			$CODE_OVERRIDES[$codename]=$has_override;
 			$CODE_OVERRIDES['!'.$codename]=$has_original;
-			persistant_cache_set('CODE_OVERRIDES',$CODE_OVERRIDES,true);
+			persistent_cache_set('CODE_OVERRIDES',$CODE_OVERRIDES,true);
 		}
 	} else
 	{
@@ -327,7 +327,7 @@ function require_code($codename,$light_exit=false)
 	{
 		if ($codename=='critical_errors')
 		{
-			exit('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10).'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The ocPortal critical error message file, sources/critical_errors.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>'); require($GLOBALS['FILE_BASE'].'/sources/global.php');
+			exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The ocPortal critical error message file, sources/critical_errors.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>'); require($GLOBALS['FILE_BASE'].'/sources/global.php');
 		}
 		critical_error('MISSING_SOURCE',$codename);
 	}
@@ -518,7 +518,7 @@ if (is_file($FILE_BASE.'/sources_custom/critical_errors.php'))
 	@include($FILE_BASE.'/sources/critical_errors.php');
 	if ($php_errormsg!='')
 	{
-		exit('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10).'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The third most basic ocPortal startup file, sources/critical_errors.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
+		exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal startup error</h1><p>The third most basic ocPortal startup file, sources/critical_errors.php, could not be located. This is almost always due to an incomplete upload of the ocPortal system, so please check all files are uploaded correctly.</p><p>Once all ocPortal files are in place, ocPortal must actually be installed by running the installer. You must be seeing this message either because your system has become corrupt since installation, or because you have uploaded some but not all files from our manual installer package: the quick installer is easier, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
 	}
 }
 

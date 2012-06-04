@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_unvalidated
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,10 +58,12 @@ class Hook_addon_registry_unvalidated
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-			'previously_in_addon'=>array('core_unvalidated'),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array(),
+			'previously_in_addon' => array(
+				'core_unvalidated'
+			)
 		);
 	}
 
@@ -74,35 +75,34 @@ class Hook_addon_registry_unvalidated
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/notifications/content_validated.php',
 			'sources/hooks/systems/notifications/needs_validation.php',
 			'sources/hooks/systems/addon_registry/unvalidated.php',
 			'UNVALIDATED_SCREEN.tpl',
 			'UNVALIDATED_SECTION.tpl',
-			'VALIDATION_REQUEST.tpl',
+			'VALIDATION_REQUEST_MAIL.tpl',
 			'adminzone/pages/modules/admin_unvalidated.php',
 			'themes/default/images/pagepics/unvalidated.png',
 			'lang/EN/unvalidated.ini',
 			'sources/hooks/blocks/main_staff_checklist/unvalidated.php',
 			'sources/hooks/modules/admin_unvalidated/.htaccess',
-			'sources/hooks/modules/admin_unvalidated/index.html',
+			'sources/hooks/modules/admin_unvalidated/index.html'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'UNVALIDATED_SECTION.tpl'=>'administrative__unvalidated_screen',
-				'UNVALIDATED_SCREEN.tpl'=>'administrative__unvalidated_screen',
-				'VALIDATION_REQUEST.tpl'=>'administrative__validation_request',
-				);
+			'UNVALIDATED_SECTION.tpl' => 'administrative__unvalidated_screen',
+			'UNVALIDATED_SCREEN.tpl' => 'administrative__unvalidated_screen',
+			'VALIDATION_REQUEST_MAIL.tpl' => 'administrative__validation_request_mail'
+		);
 	}
 
 	/**
@@ -112,18 +112,16 @@ class Hook_addon_registry_unvalidated
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__validation_request()
+	function tpl_preview__administrative__validation_request_mail()
 	{
 		require_lang('unvalidated');
 		return array(
-			lorem_globalise(
-				do_lorem_template('VALIDATION_REQUEST',array(
-					'USERNAME'=>lorem_word(),
-					'TYPE'=>lorem_phrase(),
-					'ID'=>placeholder_id(),
-					'URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('VALIDATION_REQUEST_MAIL', array(
+				'USERNAME' => lorem_word(),
+				'TYPE' => lorem_phrase(),
+				'ID' => placeholder_id(),
+				'URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -136,18 +134,15 @@ class Hook_addon_registry_unvalidated
 	 */
 	function tpl_preview__administrative__unvalidated_screen()
 	{
-		$section = do_lorem_template('UNVALIDATED_SECTION',array(
-				'TITLE'=>lorem_phrase(),
-				'CONTENT'=>lorem_phrase(),
-					)
-			);
+		$section = do_lorem_template('UNVALIDATED_SECTION', array(
+			'TITLE' => lorem_phrase(),
+			'CONTENT' => lorem_phrase()
+		));
 		return array(
-			lorem_globalise(
-				do_lorem_template('UNVALIDATED_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'SECTIONS'=>$section,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('UNVALIDATED_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'SECTIONS' => $section
+			)), NULL, '', true)
 		);
 	}
 }

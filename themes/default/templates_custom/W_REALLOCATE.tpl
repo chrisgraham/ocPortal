@@ -2,6 +2,6 @@
 
 {OUT}
 
-{+START,BOX}
+<div class="box box___w_reallocate"><div class="box_inner">
 	{!SUCCESS}
-{+END}
+</div></div>

@@ -1,7 +1,11 @@
-{+START,BOX,{!VIDEO}: {TITLE*}}
-	<div><a href="{URL*}">{THUMB}</a></div>
+<section class="box box___gallery_video_box"><div class="box_inner">
+	<h3>{!VIDEO}: {TITLE*}</h3>
 
-	{+START,IF_NON_EMPTY,{TREE}}
-		<p>{TREE}</p>
+	<div>
+		<a href="{URL*}">{THUMB}</a>
+	</div>
+
+	{+START,IF_NON_EMPTY,{BREADCRUMBS}}
+		<p>{BREADCRUMBS}</p>
 	{+END}
-{+END}
+</div></section>

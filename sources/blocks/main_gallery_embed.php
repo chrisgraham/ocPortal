@@ -35,7 +35,7 @@ class Block_main_gallery_embed
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','select','video_select','zone','max','title','sort','days','render_if_empty');
+		$info['parameters']=array('ocselect','param','select','video_select','zone','max','title','sort','days','render_if_empty');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_gallery_embed
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',array_key_exists(\'days\',$map)?$map[\'days\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'add_date DESC\',get_param_integer(\'mge_start\',0),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',((is_null($map)) || (!array_key_exists(\'select\',$map)))?\'*\':$map[\'select\'],((is_null($map)) || (!array_key_exists(\'video_select\',$map)))?\'*\':$map[\'video_select\'],get_param_integer(\'mge_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
+		$info['cache_on']='array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',array_key_exists(\'days\',$map)?$map[\'days\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'add_date DESC\',get_param_integer(\'mge_start\',0),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',((is_null($map)) || (!array_key_exists(\'select\',$map)))?\'*\':$map[\'select\'],((is_null($map)) || (!array_key_exists(\'video_select\',$map)))?\'*\':$map[\'video_select\'],get_param_integer(\'mge_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
 		$info['ttl']=60*2;
 		return $info;
 	}
@@ -69,6 +69,8 @@ class Block_main_gallery_embed
 		require_code('ocfiltering');
 		$cat=array_key_exists('param',$map)?$map['param']:'root';
 		$cat_select=ocfilter_to_sqlfragment($cat,'cat','galleries','parent_id','cat','name',false,false);
+
+		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
 
 		$title=array_key_exists('title',$map)?$map['title']:'';
 
@@ -96,8 +98,27 @@ class Block_main_gallery_embed
 		if (($sort!='random ASC') && ($sort!='fixed_random ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC')) $sort='add_date DESC';
 		list($_sort,$_dir)=explode(' ',$sort,2);
 
-		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup);
-		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup);
+		// ocSelect support
+		if ($ocselect!='')
+		{
+			// Convert the filters to SQL
+			require_code('ocselect');
+			$content_type='image';
+			if ($map['video_select']=='') $content_type='image';
+			elseif ($map['select']=='') $content_type='video';
+
+			list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($ocselect),$content_type,'');
+			$extra_select_sql=implode('',$extra_select);
+			$extra_join_sql=implode('',$extra_join);
+			$where_sup.=$extra_where;
+		} else
+		{
+			$extra_select_sql='';
+			$extra_join_sql='';
+		}
+
+		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup);
+		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup);
 
 		if ($_sort=='random')
 		{
@@ -111,13 +132,13 @@ class Block_main_gallery_embed
 			{
 				if ((mt_rand(0,1)==0) || ($total_videos-count($rows_videos)==0))
 				{
-					$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'images e WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup.' AND '.$done_images,1,mt_rand(0,$total_images-count($rows_images)-1));
+					$rows=$GLOBALS['SITE_DB']->query('SELECT *.'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup.' AND '.$done_images,1,mt_rand(0,$total_images-count($rows_images)-1));
 					$rows_images[]=$rows[0];
 					$done_images.=' AND ';
 					$done_images.='id<>'.strval($rows[0]['id']);
 				} else
 				{
-					$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'videos e WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup.' AND '.$done_videos,1,mt_rand(0,$total_videos-count($rows_videos)-1));
+					$rows=$GLOBALS['SITE_DB']->query('SELECT *.'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup.' AND '.$done_videos,1,mt_rand(0,$total_videos-count($rows_videos)-1));
 					$rows_videos[]=$rows[0];
 					$done_videos.=' AND ';
 					$done_videos.='id<>'.strval($rows[0]['id']);
@@ -127,7 +148,7 @@ class Block_main_gallery_embed
 		{
 			if ($_sort=='compound_rating')
 			{
-				$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=e.id) AS compound_rating';
+				$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=r.id) AS compound_rating';
 			} elseif ($_sort=='fixed_random')
 			{
 				$rating_sort=',(MOD(id,3.142)) AS fixed_random';
@@ -135,10 +156,10 @@ class Block_main_gallery_embed
 			{
 				$rating_sort='';
 			}
-			$rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$rating_sort.' FROM '.get_table_prefix().'images e WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup.' ORDER BY '.$sort,$max+$start);
+			$rows_images=$GLOBALS['SITE_DB']->query('SELECT *'.$rating_sort.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup.' ORDER BY '.$sort,$max+$start);
 			if ($_sort=='compound_rating')
 			{
-				$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','videos').' AND rating_for_id=e.id) AS compound_rating';
+				$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','videos').' AND rating_for_id=r.id) AS compound_rating';
 			} elseif ($_sort=='fixed_random')
 			{
 				$rating_sort=',(MOD(id,3.142)) AS fixed_random';
@@ -146,7 +167,7 @@ class Block_main_gallery_embed
 			{
 				$rating_sort='';
 			}
-			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$rating_sort.' FROM '.get_table_prefix().'videos e WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup.' ORDER BY '.$sort,$max+$start);
+			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT *'.$rating_sort.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup.' ORDER BY '.$sort,$max+$start);
 		}
 
 		// Sort
@@ -233,12 +254,12 @@ class Block_main_gallery_embed
 		}
 
 		// Results browser
-		require_code('templates_results_browser');
+		require_code('templates_pagination');
 		$_selectors=array_map('intval',explode(',',get_option('gallery_selectors')));
 		$root=get_param('root','root');
-		$results_browser=results_browser(do_lang('ENTRY'),$cat,$start,'mge_start',$max,'mge_max',$total_videos+$total_images,$root,'misc',true,false,10,$_selectors);
+		$pagination=pagination(do_lang('ENTRY'),$cat,$start,'mge_start',$max,'mge_max',$total_videos+$total_images,$root,'misc',true,false,10,$_selectors);
 
-		$tpl=do_template('BLOCK_MAIN_GALLERY_EMBED',array('_GUID'=>'b7b969c8fe8c398dd6e3af7ee06717ea','IMAGE_SELECT'=>$map['select'],'VIDEO_SELECT'=>$map['video_select'],'DAYS'=>$_days,'SORT'=>$sort,'BLOCK_PARAMS'=>block_params_arr_to_str($map),'RESULTS_BROWSER'=>$results_browser,'TITLE'=>$title,'CAT'=>$cat,'IMAGES'=>$entries,'MAX'=>strval($max),'ZONE'=>$zone,'TOTAL_VIDEOS'=>strval($total_videos),'TOTAL_IMAGES'=>strval($total_images),'TOTAL'=>strval($total_videos+$total_images)));
+		$tpl=do_template('BLOCK_MAIN_GALLERY_EMBED',array('_GUID'=>'b7b969c8fe8c398dd6e3af7ee06717ea','IMAGE_SELECT'=>$map['select'],'VIDEO_SELECT'=>$map['video_select'],'DAYS'=>$_days,'SORT'=>$sort,'BLOCK_PARAMS'=>block_params_arr_to_str($map),'PAGINATION'=>$pagination,'TITLE'=>$title,'CAT'=>$cat,'IMAGES'=>$entries,'MAX'=>strval($max),'ZONE'=>$zone,'TOTAL_VIDEOS'=>strval($total_videos),'TOTAL_IMAGES'=>strval($total_images),'TOTAL'=>strval($total_videos+$total_images)));
 		return $tpl;
 	}
 

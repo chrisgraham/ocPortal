@@ -25,6 +25,8 @@ class css_and_js_test_set extends ocp_test_case
 {
 	function setUp()
 	{
+		if (function_exists('set_time_limit')) set_time_limit(0);
+
 		require_code('validation');
 		require_code('validation2');
 		require_code('js_validator');

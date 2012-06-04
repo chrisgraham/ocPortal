@@ -11,6 +11,7 @@
    **** If you ignore this advice, then your website upgrades (e.g. for bug fixes) will likely kill your changes ****
 
 */
+/*EXTRA FUNCTIONS: TornUserinfoClass|SoapClient*/
 
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
@@ -290,10 +291,10 @@ function _generic_exit($text,$template)
 	$echo=$bail_out?new ocp_tempcode():do_header(running_script('preview') || running_script('iframe') || running_script('shoutbox'));
 	if (($template=='INFORM_SCREEN') && (is_object($GLOBALS['DISPLAYED_TITLE'])))
 	{
-		$title=get_page_title($GLOBALS['DISPLAYED_TITLE'],false);
+		$title=get_screen_title($GLOBALS['DISPLAYED_TITLE'],false);
 	} else
 	{
-		$title=get_page_title(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURRED');
+		$title=get_screen_title(($template=='INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURRED');
 	}
 
 	if (running_script('preview') || running_script('iframe') || running_script('shoutbox'))
@@ -422,15 +423,22 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 			$rows=$GLOBALS['SITE_DB']->query_select('hackattack',array('*'),array('ip'=>$alt_ip?$ip2:$ip));
 			$rows[]=$new_row;
 			$summary='';
+			$is_spammer=false;
 			foreach ($rows as $row)
 			{
+				if ($row['reason']=='LAME_SPAM_HACK') $is_spammer=true;
 				$full_reason=do_lang($row['reason'],$row['reason_param_a'],$row['reason_param_b'],NULL,get_site_default_lang());
 				$summary.="\n".' - '.$full_reason.' ['.$row['url'].']';
 			}
-			add_ip_ban($alt_ip?$ip2:$ip,$full_reason);
+			if ($is_spammer)
+			{
+				syndicate_spammer_report($alt_ip?$ip2:$ip,is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),do_lang('SPAM_REPORT_TRIGGERED_SPAM_HEURISTICS'));
+			}
+			$ban_happened=add_ip_ban($alt_ip?$ip2:$ip,$full_reason);
 			$_ip_ban_url=build_url(array('page'=>'admin_ipban','type'=>'misc'),get_module_zone('admin_ipban'),NULL,false,false,true);
 			$ip_ban_url=$_ip_ban_url->evaluate();
-			$ip_ban_todo=do_lang('AUTO_BAN_HACK_MESSAGE',$alt_ip?$ip2:$ip,integer_format($hack_threshold),array($summary,$ip_ban_url),get_site_default_lang());
+			if ($ban_happened)
+				$ip_ban_todo=do_lang('AUTO_BAN_HACK_MESSAGE',$alt_ip?$ip2:$ip,integer_format($hack_threshold),array($summary,$ip_ban_url),get_site_default_lang());
 		}
 	}
 	$GLOBALS['SITE_DB']->query_insert('hackattack',$new_row);
@@ -469,15 +477,21 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
  *
  * @param  IP				The IP address to ban
  * @param  LONG_TEXT		Explanation for ban
+ * @param  ?TIME			When to ban until (NULL: no limit)
+ * @param  boolean		Whether this is a positive ban (as opposed to a cached negative)
+ * @return boolean		Whether a change actually happened
  */
-function add_ip_ban($ip,$descrip='')
+function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 {
-	if (!addon_installed('securitylogging')) return;
+	if (!addon_installed('securitylogging')) return false;
+
+	require_code('support2');
+	if ((!is_null($ban_until)) && (ip_banned($ip,true))) return false; // Don't allow shortening ban period automatically, or having a negative ban negating a positive one!
 
 	$GLOBALS['SITE_DB']->query_delete('usersubmitban_ip',array('ip'=>$ip),'',1);
-	$GLOBALS['SITE_DB']->query_insert('usersubmitban_ip',array('ip'=>$ip,'i_descrip'=>$descrip),false,true); // To stop weird race-like conditions
-	persistant_cache_delete('IP_BANS');
-	if (is_writable_wrap(get_file_base().'/.htaccess'))
+	$GLOBALS['SITE_DB']->query_insert('usersubmitban_ip',array('ip'=>$ip,'i_descrip'=>$descrip,'i_ban_until'=>$ban_until,'i_ban_positive'=>$ban_positive?1:0),false,true); // To stop weird race-like conditions
+	persistent_cache_delete('IP_BANS');
+	if ((is_writable_wrap(get_file_base().'/.htaccess')) && (is_null($ban_until)))
 	{
 		$original_contents=file_get_contents(get_file_base().'/.htaccess',FILE_TEXT);
 		$ip_cleaned=str_replace('*','',$ip);
@@ -504,6 +518,8 @@ function add_ip_ban($ip,$descrip='')
 		}
 		sync_file(get_file_base().'/.htaccess');
 	}
+
+	return true;
 }
 
 /**
@@ -516,7 +532,7 @@ function remove_ip_ban($ip)
 	if (!addon_installed('securitylogging')) return;
 
 	$GLOBALS['SITE_DB']->query_delete('usersubmitban_ip',array('ip'=>$ip),'',1);
-	persistant_cache_delete('IP_BANS');
+	persistent_cache_delete('IP_BANS');
 	if (is_writable_wrap(get_file_base().'/.htaccess'))
 	{
 		$contents=file_get_contents(get_file_base().'/.htaccess',FILE_TEXT);
@@ -687,7 +703,7 @@ function _fatal_exit($text,$return=false)
 		$trace=paragraph(do_lang_tempcode('STACK_TRACE_DENIED_ERROR_NOTIFICATION'),'yrthrty4ttewdf');
 	}
 
-	$title=get_page_title('ERROR_OCCURRED');
+	$title=get_screen_title('ERROR_OCCURRED');
 
 	if (get_param_integer('keep_fatalistic',0)==0)
 		@error_log('ocPortal:  '.(is_object($text)?$text->evaluate():$text).' @ '.get_self_url_easy(),0);
@@ -699,7 +715,7 @@ function _fatal_exit($text,$return=false)
 	if (get_param_integer('keep_fatalistic',0)==0)
 	{
 		$trace=get_html_trace();
-		$error_tpl=do_template('FATAL_SCREEN',array('_GUID'=>'9fdc6d093bdb685a0eda6bb56988a8c5','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'MESSAGE'=>$text,'TRACE'=>$trace));
+		$error_tpl=do_template('FATAL_SCREEN',array('_GUID'=>'1cb286dd9fc75950c2cd41ca9607e0cf','TITLE'=>$title,'WEBSERVICE_RESULT'=>get_webservice_result($text),'MESSAGE'=>$text,'TRACE'=>$trace));
 		relay_error_notification((is_object($text)?$text->evaluate():$text).'[html]'.$error_tpl->evaluate().'[/html]');
 	}
 
@@ -721,7 +737,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		$num=intval(get_value('num_error_mails_'.date('Y-m-d')))+1;
 		if ($num==51) return; // We've sent too many error mails today
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'values WHERE the_name LIKE \''.db_encode_like('num\_error\_mails\_%').'\'');
-		persistant_cache_delete('VALUES');
+		persistent_cache_delete('VALUES');
 		set_value('num_error_mails_'.date('Y-m-d'),strval($num));
 	}
 
@@ -813,7 +829,7 @@ function die_html_trace($message)
 	if (!function_exists('var_export')) critical_error('EMERGENCY',$message);
 	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
 	$_trace=debug_backtrace();
-	$trace='<div class="medborder medborder_box"><h2>Stack trace&hellip;</h2>';
+	$trace='<div class="box guid_{_GUID}"><div class="box_inner"><h2>Stack trace&hellip;</h2>';
 	foreach ($_trace as $stage)
 	{
 		$traces='';
@@ -841,7 +857,7 @@ function die_html_trace($message)
 		}
 		$trace.='<p>'.$traces.'</p>'.chr(10);
 	}
-	$trace.='</div>';
+	$trace.='</div></div>';
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($trace);
 
@@ -938,8 +954,8 @@ function get_html_trace()
 /**
  * Show a helpful access-denied page. Has a login ability if it senses that logging in could curtail the error.
  *
- * @param  ID_TEXT		The class of error (e.g. SPECIFIC_PERMISSION)
- * @param  string			The parameteter given to the error message
+ * @param  ID_TEXT		The class of error (e.g. PRIVILEGE)
+ * @param  string			The parameter given to the error message
  * @param  boolean		Force the user to login (even if perhaps they are logged in already)
  */
 function _access_denied($class,$param,$force_login)
@@ -973,7 +989,7 @@ function _access_denied($class,$param,$force_login)
 			$message=make_string_tempcode($class);
 		} else
 		{
-			if ($class=='SPECIFIC_PERMISSION') $param=do_lang('PT_'.$param);
+			if ($class=='PRIVILEGE') $param=do_lang('PT_'.$param);
 			$message=do_lang_tempcode('ACCESS_DENIED__'.$class,escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())),escape_html($param));
 		}
 	}
@@ -1014,3 +1030,96 @@ function _access_denied($class,$param,$force_login)
 	warn_exit($message);
 }
 
+/**
+ * Syndicate a spammer report out to wherever we can.
+ *
+ * @param  IP				IP address to report
+ * @param  ID_TEXT		Username address to report
+ * @param  EMAIL			Email address to report
+ * @param  string			The reason for the report (blank: none)
+ * @param  boolean		Whether to throw an ocPortal error, on error. Should not be 'true' for automatic spammer reports, as the spammer should not see the submission process in action!
+ */
+function syndicate_spammer_report($ip_addr,$username,$email,$reason,$trigger_error=false)
+{
+	$did_something=false;
+
+	// Syndicate to dnsbl.tornevall.org
+	// ================================
+
+	$can_do_torn=(class_exists('SoapClient')) && (get_option('tornevall_api_username')!='');
+
+	if ($can_do_torn)
+	{
+		$torn_url='http://dnsbl.tornevall.org/soap/soapsubmit.php';
+
+		if (!class_exists('TornUserinfoClass'))
+		{
+			class TornUserinfoClass
+			{
+				var $Username;
+				var $Password;
+			}
+		}
+
+		$soapconf=array(
+			'location'=>$torn_url,
+			'uri'=>$torn_url,
+			'trace'=>0,
+			'exceptions'=>0,
+			'connection_timeout'=>0
+		);
+
+		$userinfo=new TornUserinfoClass();
+		$userinfo->Username=get_option('tornevall_api_username');
+		$userinfo->Password=get_option('tornevall_api_password');
+
+		$add=array();
+		$add['ip']=$ip_addr;
+		if ($username!='') $add['username']=$username;
+		if ($email!='') $add['mail']=$email;
+
+		$client=new SoapClient(null,$soapconf);
+		$udata=array('userinfo'=>$userinfo);
+		$result=$client->submit($udata,array('add'=>$add));
+		if ($trigger_error)
+		{
+			if (isset($result['error']))
+			{
+				attach_message('dnsbl.tornevall.org: '.$result['error']['message'],'warn');
+			}
+		}
+
+		$did_something=true;
+	}
+
+	// Syndicate to Stop Forum Spam
+	// ============================
+
+	$stopforumspam_key=get_option('stopforumspam_api_key');
+	$can_do_stopforumspam=($stopforumspam_key!='') && ($username!='') && ($email!='');
+
+	if ($can_do_stopforumspam)
+	{
+		require_code('files');
+		require_code('character_sets');
+		$url='http://www.stopforumspam.com/add.php?api_key='.urlencode($stopforumspam_key).'&ip_addr='.urlencode($ip_addr);
+		if ($username!='') $url.='&username='.urlencode(convert_to_internal_encoding($username,get_charset(),'utf-8'));
+		if ($email!='') $url.='&email='.urlencode(convert_to_internal_encoding($email,get_charset(),'utf-8'));
+		if ($reason!='') $url.='&evidence='.urlencode(convert_to_internal_encoding($reason,get_charset(),'utf-8'));
+		$result=http_download_file($url,NULL,$trigger_error);
+		if (($trigger_error) && ($result!=''))
+		{
+			attach_message($result.' [ '.$url.' ]','warn');
+		}
+
+		$did_something=true;
+	}
+
+	// ---
+
+	// Did we get anything done?
+	if (($trigger_error) && (!$did_something))
+	{
+		attach_message(do_lang('SPAM_REPORT_NO_EMAIL_OR_USERNAME'),'warn');
+	}
+}

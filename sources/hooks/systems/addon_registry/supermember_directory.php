@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_supermember_directory
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,11 @@ class Hook_addon_registry_supermember_directory
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array('collaboration_zone'),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(
+				'collaboration_zone'
+			),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,55 +74,63 @@ class Hook_addon_registry_supermember_directory
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/config_default/supermembers_text.php',
 			'sources/hooks/systems/addon_registry/supermember_directory.php',
 			'lang/EN/supermembers.ini',
 			'SUPERMEMBERS_SCREEN.tpl',
 			'SUPERMEMBERS_SCREEN_ENTRY.tpl',
 			'SUPERMEMBERS_SCREEN_GROUP.tpl',
-			'collaboration/pages/modules/supermembers.php',
+			'collaboration/pages/modules/supermembers.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array                 The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array                 The mapping
+	 */
 	function tpl_previews()
 	{
-	   return array(
-		'SUPERMEMBERS_SCREEN_GROUP.tpl'=>'supermembers_screen',
-		'SUPERMEMBERS_SCREEN_ENTRY.tpl'=>'supermembers_screen',
-		'SUPERMEMBERS_SCREEN.tpl'=>'supermembers_screen',
+		return array(
+			'SUPERMEMBERS_SCREEN_GROUP.tpl' => 'supermembers_screen',
+			'SUPERMEMBERS_SCREEN_ENTRY.tpl' => 'supermembers_screen',
+			'SUPERMEMBERS_SCREEN.tpl' => 'supermembers_screen'
 		);
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__supermembers_screen()
 	{
 		require_lang('authors');
 		require_lang('points');
-		$groups_current = do_lorem_template('SUPERMEMBERS_SCREEN_ENTRY',array('NAME'=>lorem_phrase(),'DAYS'=>placeholder_number(),'PROFILE_URL'=>placeholder_url(),'AUTHOR_URL'=>placeholder_url(),'POINTS_URL'=>placeholder_url(),'PM_URL'=>placeholder_url(),'SKILLS'=>lorem_phrase()));
+		$groups_current = do_lorem_template('SUPERMEMBERS_SCREEN_ENTRY', array(
+			'NAME' => lorem_phrase(),
+			'DAYS' => placeholder_number(),
+			'PROFILE_URL' => placeholder_url(),
+			'AUTHOR_URL' => placeholder_url(),
+			'POINTS_URL' => placeholder_url(),
+			'PM_URL' => placeholder_url(),
+			'SKILLS' => lorem_phrase()
+		));
 
-		$groups = do_lorem_template('SUPERMEMBERS_SCREEN_GROUP',array('ENTRIES'=>$groups_current,'GROUP_NAME'=>lorem_phrase()));
+		$groups = do_lorem_template('SUPERMEMBERS_SCREEN_GROUP', array(
+			'ENTRIES' => $groups_current,
+			'GROUP_NAME' => lorem_phrase()
+		));
 
 		return array(
-						lorem_globalise(
-									do_lorem_template('SUPERMEMBERS_SCREEN',array(
-							'TITLE'=>lorem_title(),
-							'GROUPS'=>$groups,
-							'TEXT'=>lorem_sentence_html(),
-								)
-						),NULL,'',true),
-			);
+			lorem_globalise(do_lorem_template('SUPERMEMBERS_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'GROUPS' => $groups,
+				'TEXT' => lorem_sentence_html()
+			)), NULL, '', true)
+		);
 	}
 }

@@ -82,7 +82,7 @@ class Module_admin_notifications
 	{
 		require_lang('notifications');
 
-		$title=get_page_title('NOTIFICATIONS_LOCKDOWN');
+		$title=get_screen_title('NOTIFICATIONS_LOCKDOWN');
 
 		require_css('notifications');
 		require_javascript('javascript_notifications');

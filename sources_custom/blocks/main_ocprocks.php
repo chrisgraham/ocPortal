@@ -57,6 +57,8 @@ class Block_main_ocprocks
 	{
 		$file=array_key_exists('param',$map)?$map['param']:'ocprocks';
 
+		require_css('random_quotes');
+
 		require_code('textfiles');
 		require_lang('ocprocks');
 
@@ -65,7 +67,7 @@ class Block_main_ocprocks
 		if (!file_exists($place)) warn_exit(do_lang_tempcode('DIRECTORY_NOT_FOUND',escape_html($place)));
 		$edit_url=new ocp_tempcode();
 
-		return do_template('BLOCK_MAIN_OCPROCKS',array('FILE'=>$file,'CONTENT'=>apply_emoticons($this->get_random_line($place))));
+		return do_template('BLOCK_MAIN_OCPROCKS',array('_GUID'=>'7ac5b9318cde812966dae9a8cca5daf1','FILE'=>$file,'CONTENT'=>apply_emoticons($this->get_random_line($place))));
 	}
 
 	/**

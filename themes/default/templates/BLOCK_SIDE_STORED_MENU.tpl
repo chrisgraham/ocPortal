@@ -1,6 +1,8 @@
 <div class="menu_block">
-	{+START,BOX,{CAPTION*},,{$?,{$GET,in_panel},panel,classic},{TRAY_STATUS}}
+	<section class="box box___block_side_stored_menu"><div class="box_inner">
+		<h3>{CAPTION*}</h3>
+
 		{CONTENT}
-	{+END}
+	</div></section>
 </div>
 

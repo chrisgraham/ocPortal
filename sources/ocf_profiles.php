@@ -64,7 +64,7 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 		$awards=find_awards_for('member',strval($member_id_of));
 	} else $awards=array();
 
-	$title=get_page_title('MEMBER_PROFILE',true,array(escape_html($username)),NULL,$awards);
+	$title=get_screen_title('MEMBER_PROFILE',true,array(escape_html($username)),NULL,$awards);
 
 	$_tabs=array();
 	$i=0;
@@ -74,5 +74,5 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 		$i++;
 	}
 
-	return do_template('OCF_MEMBER_PROFILE_SCREEN',array('TITLE'=>$title,'TABS'=>$_tabs,'MEMBER_ID'=>strval($member_id_of)));
+	return do_template('OCF_MEMBER_PROFILE_SCREEN',array('_GUID'=>'2f33348714723492105c4717974c8f4c','TITLE'=>$title,'TABS'=>$_tabs,'MEMBER_ID'=>strval($member_id_of)));
 }

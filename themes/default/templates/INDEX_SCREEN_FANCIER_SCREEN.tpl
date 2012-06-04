@@ -1,13 +1,13 @@
 {TITLE}
 
 {+START,IF_NON_EMPTY,{PRE}}
-<div class="index_page_fancier_page_pre"{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
-	{PRE}
-</div>
+	<div class="index_screen_fancier_screen_pre" itemprop="description">
+		{PRE}
+	</div>
 {+END}
 
 {+START,IF_NON_EMPTY,{CONTENT}}
-	<div class="index_page_fancier_page_entries"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
+	<div class="index_screen_fancier_screen_entries" itemprop="significantLinks">
 		{+START,IF_PASSED,ARRAY}
 			{+START,LOOP,CONTENT}
 				{+START,IF_NON_EMPTY,{_loop_var}}
@@ -18,13 +18,13 @@
 					</div>
 				{+END}
 			{+END}
-			{+START,IF_PASSED,EMPTY}
+			{+START,IF_EMPTY,{CONTENT}}
 				<p class="nothing_here">
 					{!NONE}
 				</p>
 			{+END}
 		{+END}
-		{+START,IF_NON_PASSED,ARRAY}
+		{+START,IF_NON_PASSED_OR_FALSE,EMPTY}
 			{CONTENT}
 		{+END}
 	</div>
@@ -36,15 +36,14 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{POST}}
-	<div class="index_page_fancier_page_post">
+	<div class="index_screen_fancier_screen_post">
 		{POST}
 	</div>
 {+END}
 
-{+START,IF_PASSED,RESULTS_BROWSER}
-	<br />
+{+START,IF_PASSED,PAGINATION}
 	<div class="float_surrounder">
-		{RESULTS_BROWSER}
+		{PAGINATION}
 	</div>
 {+END}
 

@@ -142,6 +142,8 @@ class Module_admin_menus
 		require_lang('menus');
 		require_code('menus2');
 
+		require_css('menu_editor');
+
 		$type=get_param('type','misc');
 
 		if ($type=='misc') return $this->get_menu_name();
@@ -161,26 +163,34 @@ class Module_admin_menus
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/menus';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_menus';
 
-		$title=get_page_title('MENU_MANAGEMENT');
+		$title=get_screen_title('MENU_MANAGEMENT');
 
 		require_code('form_templates');
 		$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
-		$list=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
+		$list=new ocp_tempcode();//form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
 		foreach ($rows as $row)
 		{
 			$list->attach(form_input_list_entry($row['i_menu']));
 		}
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_list(do_lang_tempcode('EXISTING'),do_lang_tempcode('EXISTING_MENU'),'id',$list,NULL,true,false));
-		$fields->attach(form_input_codename(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('NEW')),do_lang_tempcode('NEW_MENU'),'id_new','',false));
+
+		$set_name='menu';
+		$required=true;
+		$set_title=do_lang_tempcode('MENU');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_list(do_lang_tempcode('EXISTING'),do_lang_tempcode('EXISTING_MENU'),'id',$list,NULL,true,false));
+
+		$field_set->attach(form_input_codename(do_lang_tempcode('NEW'),do_lang_tempcode('NEW_MENU'),'id_new','',false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 		$map=array('page'=>'_SELF','type'=>'edit','wide'=>1);
 		if (get_param('redirect','!')!='!') $map['redirect']=get_param('redirect');
 		$post_url=build_url($map,'_SELF',NULL,false,true);
 		$submit_name=do_lang_tempcode('CHOOSE');
 
-		$javascript='standardAlternateFields(\'id\',\'id_new\');';
-
-		return do_template('FORM_SCREEN',array('_GUID'=>'f3c04ea3fb5e429210c5e33e5a2f2092','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>$javascript));
+		return do_template('FORM_SCREEN',array('_GUID'=>'f3c04ea3fb5e429210c5e33e5a2f2092','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -196,13 +206,7 @@ class Module_admin_menus
 		if ($id=='') $id=get_param('id_new');
 		if (substr($id,0,1)=='_') warn_exit(do_lang_tempcode('MENU_UNDERSCORE_RESERVED'));
 
-		if (($id=='zone_menu') && (get_option('use_custom_zone_menu')=='0'))
-		{
-			$config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'THEME'),get_module_zone('admin_config'));
-			attach_message(do_lang_tempcode('EDITING_UNUSED_MENU',escape_html($config_url->evaluate())),'warn');
-		}
-
-		$title=get_page_title('_EDIT_MENU',true,array(escape_html($id)));
+		$title=get_screen_title('_EDIT_MENU',true,array(escape_html($id)));
 
 		$clickable_sections=(get_param_integer('clickable_sections',0)==1); // This is set to '1 if we have a menu type where pop out sections may be clicked on to be loaded. If we do then we make no UI distinction between page nodes and contracted/expanded, so people don't get compelled to choose a URL for everything, it simply becomes an option for them.
 
@@ -325,7 +329,7 @@ class Module_admin_menus
 	 */
 	function _edit_menu()
 	{
-		$title=get_page_title('_EDIT_MENU',true,array(escape_html(get_param('id'))));
+		$title=get_screen_title('_EDIT_MENU',true,array(escape_html(get_param('id'))));
 
 		post_param_integer('confirm'); // Just to make sure hackers don't try and get people to erase this form via a URL
 
@@ -388,7 +392,7 @@ class Module_admin_menus
 		}
 
 		decache('side_stored_menu');
-		persistant_cache_delete(array('MENU',$menu_id));
+		persistent_cache_delete(array('MENU',$menu_id));
 
 		log_it((count($_POST)==1)?'DELETE_MENU':'EDIT_MENU',$menu_id);
 

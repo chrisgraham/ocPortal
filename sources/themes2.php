@@ -180,7 +180,7 @@ function actual_add_theme_image($theme,$lang,$id,$path,$fail_ok=false)
 
 	log_it('ADD_THEME_IMAGE',$id,$theme);
 
-	persistant_cache_delete('THEME_IMAGES');
+	persistent_cache_delete('THEME_IMAGES');
 }
 
 /**
@@ -213,7 +213,7 @@ function get_theme_img_code($type,$allow_skip=false,$field_file='file',$field_ch
 
 		$db->query_insert('theme_images',array('id'=>$theme_img_code,'theme'=>'default','path'=>$urls[0],'lang'=>get_site_default_lang()));
 
-		persistant_cache_delete('THEME_IMAGES');
+		persistent_cache_delete('THEME_IMAGES');
 	} else
 	{
 		$theme_img_code=post_param($field_choose,'');
@@ -322,7 +322,7 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL,$dirs_
 		foreach ($rows as $row)
 		{
 			if ($row['path']=='') continue;
-
+	
 			if ((url_is_local($row['path'])) && (!file_exists(((substr($row['path'],0,15)=='themes/default/')?get_file_base():get_custom_file_base()).'/'.rawurldecode($row['path'])))) continue;
 			if ($row['path']!='themes/default/images/blank.gif') // We sometimes associate to blank.gif to essentially delete images so they can never be found again
 			{

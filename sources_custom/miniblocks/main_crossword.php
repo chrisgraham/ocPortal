@@ -48,7 +48,7 @@ if (is_null($cached))
 echo '<div class="float_surrounder crossword">';
 
 echo <<<END
-<table class="questionTable solidborder" border="0" cellpadding="4">
+<table class="questionTable results_table" border="0" cellpadding="4">
 <tr>
 	<th>Num.</th>
 	<th>Question</th>

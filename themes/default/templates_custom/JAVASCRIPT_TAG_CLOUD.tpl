@@ -170,7 +170,7 @@ Scene3D.prototype.renderCamera = function (camera){
 				currItem.style.left = currItem._x+'px';
 				currItem.style.fontSize = 100*currItem.scale+'%';
 
-				setOpacity(currItem,(currItem.scale-0.75)*2);
+				set_opacity(currItem,(currItem.scale-0.75)*2);
 
 			}
 
@@ -232,8 +232,8 @@ Sphere.prototype = new DisplayObject3D();
 
 function load_tag_cloud(container)
 {
-	var width=findWidth(container);
-	var height=findHeight(container);
+	var width=find_width(container);
+	var height=find_height(container);
 
 	// Make sure that the links are actually clickable
 	var lis=container.getElementsByTagName("li");
@@ -269,10 +269,10 @@ function load_tag_cloud(container)
 	var speed = 1000;
 
 	var animateIt = function(){
-		var offsetX = findPosX(container,true);
-		var offsetY = findPosY(container,true);
-		var width=findWidth(container);
-		var height=findHeight(container);
+		var offsetX = find_pos_x(container,true);
+		var offsetY = find_pos_y(container,true);
+		var width=find_width(container);
+		var height=find_height(container);
 
 		var mouseX = window.mouseX - offsetX - (width / 2);
 		var mouseY = window.mouseY - offsetY - (height / 2);

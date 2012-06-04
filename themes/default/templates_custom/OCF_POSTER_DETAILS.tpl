@@ -23,25 +23,27 @@
 		{$SET,AVATAR_URL,{$?,{$GET,fancy_screen},{$THUMBNAIL,{$?,{$IS_EMPTY,{$PHOTO,{POSTER}}},{$IMG,no_image},{$PHOTO,{POSTER}}},80x80,uploads/website_specific,,,pad,both,#faf5ef},{AVATAR_URL}}}
 
 		{$SET,main,0}
-		<a onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'&lt;table class=&quot;tooltip_fields variable_table&quot; summary=&quot;{!MAP_TABLE}&quot;&gt;&lt;tbody&gt;{CUSTOM_FIELDS_FULL^;*}{$GET^;*,ADDITIONAL_DETAILS}&lt;/tbody&gt;&lt;/table&gt;','auto');" href="{$MEMBER_PROFILE_LINK*,{POSTER}}"><img class="ocf_member_box_avatar" src="{$GET*,AVATAR_URL}" alt="" /></a>
+		<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'&lt;table class=&quot;tooltip_fields autosized_table&quot; summary=&quot;{!MAP_TABLE}&quot;&gt;&lt;tbody&gt;{CUSTOM_FIELDS_FULL^;*}{$GET^;*,ADDITIONAL_DETAILS}&lt;/tbody&gt;&lt;/table&gt;','auto');" href="{$MEMBER_PROFILE_URL*,{POSTER}}"><img class="ocf_member_box_avatar" src="{$GET*,AVATAR_URL}" alt="" /></a>
 
 		<div{+START,IF_NON_EMPTY,{$GET,AVATAR_URL}} class="ocf_member_box_avatar"{+END} style="float: left; width: 95px; word-wrap: break-word; margin-right: 0">
-			<a href="{$MEMBER_PROFILE_LINK*,{POSTER}}">{$TRUNCATE_LEFT,{$USERNAME,{POSTER}},18,1}</a>
+			<a href="{$MEMBER_PROFILE_URL*,{POSTER}}">{$TRUNCATE_LEFT,{$USERNAME,{POSTER}},18,1}</a>
 			{$SET,main,1}
 			{CUSTOM_FIELDS}
 
-			<p class="community_block_tagline">
+			<p class="associated_link associated_links_block_group">
 				{+START,IF,{$NEQ,{$USER},{POSTER}}}
-					[ <a href="{$PAGE_LINK*,site:pointstore:action:ocgifts:username={$USERNAME,{POSTER}}}">Give a gift</a> ]
+					<a href="{$PAGE_LINK*,site:pointstore:action:ocgifts:username={$USERNAME,{POSTER}}}">Give a gift</a>
 				{+END}
 				{+START,IF,{$EQ,{$USER},{POSTER}}}
-					[ <em>This is you</em> ]
+					<em>This is you</em>
 				{+END}
 			</p>
 		</div>
 	{+END}
 
-	<div style="width: 188px; float: left; padding: 5px; margin: 5px" class="lightborder">
+	<div style="width: 188px; float: left; padding: 5px; margin: 5px" class="box">
+		<input class="right" type="hidden" name="result__member_{POSTER*}" value="1" />
+
 		{$GET,CONTENTS}
 	</div>
 {+END}
@@ -52,9 +54,9 @@
 	{+END}
 
 	<div{+START,IF_NON_EMPTY,{AVATAR_URL}} class="ocf_member_box_avatar"{+END}>
-		<table class="tooltip_fields variable_table" summary="{!MAP_TABLE}">
+		<table class="tooltip_fields autosized_table" summary="{!MAP_TABLE}">
 			<tbody>
-				<tr><th class="de_th">{!USERNAME}:</th><td><a href="{$MEMBER_PROFILE_LINK*,{POSTER}}">{$USERNAME*,{POSTER}}</a></td></tr>
+				<tr><th class="de_th">{!USERNAME}:</th><td><a href="{$MEMBER_PROFILE_URL*,{POSTER}}">{$USERNAME*,{POSTER}}</a></td></tr>
 				<tr><th class="de_th">{!ocf:SPECIFIC_FORUM_POSTS}:</th><td>{POSTS*}</td></tr>
 				{+START,IF_NON_EMPTY,{POINTS}}
 					<tr><th class="de_th">{!POINTS}:</th><td>{POINTS*}</td></tr>

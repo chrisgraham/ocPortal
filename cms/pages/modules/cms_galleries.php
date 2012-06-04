@@ -35,7 +35,6 @@ class Module_cms_galleries extends standard_aed_module
 	var $seo_type='image';
 	var $upload='image';
 	var $award_type='image';
-	var $javascript='standardAlternateFields(\'file\',\'url\'); standardAlternateFields(\'file2\',\'thumb_url\');';
 	var $menu_label='GALLERIES';
 	var $table='images';
 
@@ -159,7 +158,7 @@ class Module_cms_galleries extends standard_aed_module
 
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_page_title('MANAGE_GALLERIES'),comcode_lang_string('DOC_GALLERIES'),
+		return do_next_manager(get_screen_title('MANAGE_GALLERIES'),comcode_lang_string('DOC_GALLERIES'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_cat_midrange_content','cms_galleries')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_GALLERY')):NULL,
@@ -181,7 +180,7 @@ class Module_cms_galleries extends standard_aed_module
 	 */
 	function gimp()
 	{
-		$title=get_page_title('GALLERY_IMPORT');
+		$title=get_screen_title('GALLERY_IMPORT');
 
 		check_specific_permission('mass_import');
 
@@ -202,11 +201,14 @@ class Module_cms_galleries extends standard_aed_module
 		}
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_gimp'),'_SELF',NULL,false,true);
 		require_code('form_templates');
+
 		$fields=new ocp_tempcode();
+
 		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),'','name',NULL,'choose_gallery',array('purity'=>false,'filter'=>$condition,'member_id'=>$member_id),true,''));
+
 		$submit_name=do_lang_tempcode('GALLERY_IMPORT');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'5213edb75c8d534c121b587c555a3b9a','TITLE'=>$title,'SKIP_VALIDATION'=>true,'GET'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>'standardAlternateFields(\'name\',\'name2\');'));
+		return do_template('FORM_SCREEN',array('_GUID'=>'5213edb75c8d534c121b587c555a3b9a','TITLE'=>$title,'SKIP_VALIDATION'=>true,'GET'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -225,7 +227,7 @@ class Module_cms_galleries extends standard_aed_module
 			if (is_null($test)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 
-		$title=get_page_title('GALLERY_IMPORT');
+		$title=get_screen_title('GALLERY_IMPORT');
 
 		require_code('form_templates');
 		require_lang('trackbacks');
@@ -488,7 +490,7 @@ class Module_cms_galleries extends standard_aed_module
 			}
 		}
 
-		$title=get_page_title('GALLERY_IMPORT');
+		$title=get_screen_title('GALLERY_IMPORT');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('GALLERY_IMPORT'))));
 
@@ -569,7 +571,7 @@ class Module_cms_galleries extends standard_aed_module
 			}
 		}
 
-		$title=get_page_title('GALLERY_IMPORT');
+		$title=get_screen_title('GALLERY_IMPORT');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('GALLERY_IMPORT'))));
 
@@ -654,7 +656,7 @@ class Module_cms_galleries extends standard_aed_module
 			}
 		}
 
-		$title=get_page_title('ADD_IMAGE');
+		$title=get_screen_title('ADD_IMAGE');
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'_gimp','name'=>$cat),'_SELF');
@@ -772,7 +774,7 @@ class Module_cms_galleries extends standard_aed_module
 			}
 		}
 
-		$title=get_page_title('DELETE_IMAGE');
+		$title=get_screen_title('DELETE_IMAGE');
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'_gimp','name'=>$cat),'_SELF');
@@ -890,13 +892,32 @@ class Module_cms_galleries extends standard_aed_module
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE',do_lang_tempcode('TITLE')),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,false));
 
 		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat));
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$url,false));
+
+		$set_name='image';
+		$required=true;
+		$set_title=do_lang_tempcode('IMAGE');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$url,false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 		if (get_option('is_on_gd')=='0')
 		{
 			$thumb_width=get_option('thumb_width');
-			$fields->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),'file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-			$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'thumb_url',$thumb_url,false));
+
+			$set_name='thumbnail';
+			$required=true;
+			$set_title=do_lang_tempcode('THUMBNAIL');
+			$field_set=alternate_fields_set__start($set_name);
+
+			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+			$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','thumb_url',$thumb_url,false));
+
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required));
 		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION_ACCESSIBILITY'),'comments',$comments,false));
 		if ($validated==0)
@@ -1106,7 +1127,7 @@ class Module_cms_galleries extends standard_aed_module
 	/**
 	 * The do-next manager for after content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -1131,7 +1152,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	var $user_facing=true;
 	var $seo_type='video';
 	var $upload='file';
-	var $javascript='standardAlternateFields(\'file\',\'url\'); standardAlternateFields(\'file2\',\'thumb_url\');';
+	var $javascript='';
 	var $award_type='video';
 	var $menu_label='GALLERIES';
 	var $table='videos';
@@ -1268,10 +1289,6 @@ class Module_cms_galleries_alt extends standard_aed_module
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
 		$no_thumb_needed=(get_option('ffmpeg_path')!='') || (class_exists('ffmpeg_movie'));
-		if (!$no_thumb_needed)
-			$this->javascript='standardAlternateFields(\'file\',\'url\'); standardAlternateFields(\'file2\',\'thumb_url\',null,true);';
-		else
-			$this->javascript='standardAlternateFields(\'file\',\'url\');';
 
 		if ($cat=='')
 		{
@@ -1287,8 +1304,18 @@ class Module_cms_galleries_alt extends standard_aed_module
 
 		$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','must_accept_videos'=>true,'addable_filter'=>true),true,$cat));
 		$supported=get_allowed_video_file_types();
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,$supported));
-		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$url,false));
+
+		$set_name='video';
+		$required=true;
+		$set_title=do_lang_tempcode('VIDEO');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,$supported));
+
+		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$url,false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
@@ -1307,8 +1334,18 @@ class Module_cms_galleries_alt extends standard_aed_module
 			$temp=do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADVANCED'),'SECTION_HIDDEN'=>true));
 			$fields->attach($temp);
 		}
-		$fields->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('_DESCRIPTION_THUMBNAIL',integer_format($thumb_width)),'file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'thumb_url',$thumb_url,false));
+
+		$set_name='thumbnail';
+		$required=true;
+		$set_title=do_lang_tempcode('THUMBNAIL');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','thumb_url',$thumb_url,false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('_DESCRIPTION_THUMBNAIL',integer_format($thumb_width)),$field_set,$required));
+
 		if (!$no_thumb_needed)
 		{
 			$fields->attach($description_field);
@@ -1520,7 +1557,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	/**
 	 * The do-next manager for after content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -1815,7 +1852,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (event types only).
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?ID_TEXT		The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -1828,7 +1865,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	/**
 	 * The do-next manager for after image/video content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?ID_TEXT		The gallery we were working in (NULL: deleted)
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)

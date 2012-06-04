@@ -33,7 +33,7 @@ class Hook_themewizard_equation
 
 		require_code('themewizard');
 
-		$css_path=get_custom_file_base().'/themes/'.$theme.'/css_custom/global.css';
+		$css_path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom/global.css';
 		if (!file_exists($css_path))
 			$css_path=get_file_base().'/themes/default/css/global.css';
 		$css_file_contents=file_get_contents($css_path,FILE_TEXT);

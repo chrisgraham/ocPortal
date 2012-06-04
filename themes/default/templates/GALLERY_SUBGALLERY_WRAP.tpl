@@ -1,5 +1,5 @@
 {+START,IF_NON_EMPTY,{CONTENT}}
-	<li class="category_entry">
+	<li>
 		{CONTENT}
 	</li>
 {+END}

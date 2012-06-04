@@ -1,8 +1,8 @@
-<h1 class="main_page_title">{$SITE_NAME*} members</h1>
+<h1 class="screen_title">{$SITE_NAME*} members</h1>
 
 {+START,IF_PASSED,SYMBOLS}
-	<div class="float_surrounder"><div class="results_browser alpha_jumper">
-		{+START,LOOP,SYMBOLS}<a class="results_continue alpha_jumper_cont" target="_top" href="{$PAGE_LINK*,_SELF:_SELF:start={START}:sort=m_username ASC}">{SYMBOL*}</a>{+END}
+	<div class="float_surrounder"><div class="pagination alphabetical_jumper">
+		{+START,LOOP,SYMBOLS}<a class="results_continue alphabetical_jumper_cont" target="_top" href="{$PAGE_LINK*,_SELF:_SELF:start={START}:sort=m_username ASC}">{SYMBOL*}</a>{+END}
 	</div></div>
 {+END}
 
@@ -26,6 +26,6 @@
 	</div>
 
 	<div class="float_surrounder">
-		{RESULTS_BROWSER}
+		{PAGINATION}
 	</div>
 {+END}

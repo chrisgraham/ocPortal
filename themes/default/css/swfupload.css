@@ -20,14 +20,7 @@ div.flash {
 	{+END}
 	margin: 10px 5px;
 	border-color: #D9E4FF;
-	-moz-border-radius-topleft : 5px;
-	-webkit-border-top-left-radius : 5px;
-	-moz-border-radius-topright : 5px;
-	-webkit-border-top-right-radius : 5px;
-	-moz-border-radius-bottomleft : 5px;
-	-webkit-border-bottom-left-radius : 5px;
-	-moz-border-radius-bottomright : 5px;
-	-webkit-border-bottom-right-radius : 5px;
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 }
 
 /* -- Table Styles ------------------------------- */
@@ -118,14 +111,14 @@ a.progressCancel {
 	display: block;
 	height: 14px;
 	width: 14px;
-	background-image: url('{$IMG,swfupload/cancelbutton}');
+	background-image: url('{$IMG;,swfupload/cancelbutton}');
 	background-repeat: no-repeat;
-	background-position: -14px 0px;
+	background-position: -14px 0;
 	float: right;
 }
 
 a.progressCancel:hover {
-	background-position: 0px 0px;
+	background-position: 0 0;
 }
 
 /* -- SWFUpload Object Styles ------------------------------- */

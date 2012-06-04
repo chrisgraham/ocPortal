@@ -32,9 +32,9 @@ class Hook_stats_external
 		$map['Speed']=$speed;
 		foreach ($map as $key=>$val)
 		{
-			$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>$key,'VALUE'=>is_null($val)?'':$val)));
+			$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'fa391b1b773cd8a4b283cb6617af898b','KEY'=>$key,'VALUE'=>is_null($val)?'':$val)));
 		}
-		$section=do_template('BLOCK_SIDE_STATS_SECTION',array('SECTION'=>'Meta stats','CONTENT'=>$bits));
+		$section=do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'0d26b94a7903aab57d76d72da53eca98','SECTION'=>'Meta stats','CONTENT'=>$bits));
 
 		return $section;
 	}

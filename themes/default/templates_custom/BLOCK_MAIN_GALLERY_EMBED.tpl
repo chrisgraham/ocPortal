@@ -1,5 +1,5 @@
 {+START,IF,{$NEQ,{$COMMA_LIST_GET,{BLOCK_PARAMS},raw},1}}
-{$JAVASCRIPT_INCLUDE,javascript_dyn_comcode}
+{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
 
 {$SET,carousel_id,{$RAND}}
 
@@ -19,7 +19,7 @@
 </div>
 
 <script type="text/javascript">// <![CDATA[
-	addEventListenerAbstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function () {
 		initialise_carousel({$GET,carousel_id});
 	} );
 
@@ -29,7 +29,7 @@
 	{
 		var ob=document.getElementById('carousel_ns_'+carousel_id);
 
-		if (ob.parentNode.scrollLeft+findWidth(ob)*1.5<ob.scrollWidth) return; // Not close enough to need more results
+		if (ob.parentNode.scrollLeft+find_width(ob)*1.5<ob.scrollWidth) return; // Not close enough to need more results
 
 		current_loading_from_pos_{$GET*,carousel_id}+={MAX%};
 

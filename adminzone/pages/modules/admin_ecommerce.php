@@ -127,7 +127,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		attach_message(do_lang_tempcode('ALSO_SEE_USAGE',escape_html($also_url->evaluate())),'inform');
 
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_ECOMMERCE'),
+		return do_next_manager(get_screen_title('CUSTOM_PRODUCT_USERGROUP'),comcode_lang_string('DOC_ECOMMERCE'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						((get_forum_type()!='ocf') && (get_value('unofficial_ecommerce')!='1'))?NULL:array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_USERGROUP_SUBSCRIPTION')),
@@ -150,7 +150,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		attach_message(do_lang_tempcode('ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
 
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('ECOMMERCE'),comcode_lang_string('DOC_ECOMMERCE'),
+		return do_next_manager(get_screen_title('ECOMMERCE'),comcode_lang_string('DOC_ECOMMERCE'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('cash_flow',array('_SELF',array('type'=>'cash_flow'),'_SELF'),do_lang('CASH_FLOW')),
@@ -176,7 +176,7 @@ class Module_admin_ecommerce extends standard_aed_module
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
 
-		$title=get_page_title('TRANSACTIONS');
+		$title=get_screen_title('TRANSACTIONS');
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
@@ -258,7 +258,7 @@ class Module_admin_ecommerce extends standard_aed_module
 	 */
 	function trigger()
 	{
-		$title=get_page_title('MANUAL_TRANSACTION');
+		$title=get_screen_title('MANUAL_TRANSACTION');
 
 		require_code('form_templates');
 		$fields=new ocp_tempcode();
@@ -280,7 +280,7 @@ class Module_admin_ecommerce extends standard_aed_module
 
 			$submit_name=do_lang('CHOOSE');
 
-			return do_template('FORM_SCREEN',array('TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>'','URL'=>get_self_url(),'GET'=>true,'HIDDEN'=>''));
+			return do_template('FORM_SCREEN',array('_GUID'=>'a2fe914c23e378c493f6e1dad0dc11eb','TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>'','URL'=>get_self_url(),'GET'=>true,'HIDDEN'=>''));
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE')),array('_SELF:_SELF:trigger',do_lang_tempcode('PRODUCT'))));
@@ -303,7 +303,7 @@ class Module_admin_ecommerce extends standard_aed_module
 				if (is_array($needed_fields))
 					$extra_hidden->attach($needed_fields[0]);
 
-				return do_template('FORM_SCREEN',array('TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>is_array($needed_fields)?$needed_fields[1]:$needed_fields,'TEXT'=>'','URL'=>get_self_url(),'HIDDEN'=>$extra_hidden));
+				return do_template('FORM_SCREEN',array('_GUID'=>'90ee397ac24dcf0b3a0176da9e9c9741','TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>is_array($needed_fields)?$needed_fields[1]:$needed_fields,'TEXT'=>'','URL'=>get_self_url(),'HIDDEN'=>$extra_hidden));
 			}
 		}
 		$default_purchase_id=get_param('id',NULL);
@@ -342,7 +342,7 @@ class Module_admin_ecommerce extends standard_aed_module
 	 */
 	function _trigger()
 	{
-		$title=get_page_title('MANUAL_TRANSACTION');
+		$title=get_screen_title('MANUAL_TRANSACTION');
 
 		$item_name=post_param('item_name');
 
@@ -541,7 +541,7 @@ class Module_admin_ecommerce extends standard_aed_module
 	 */
 	function cash_flow()
 	{
-		$title=get_page_title('CASH_FLOW');
+		$title=get_screen_title('CASH_FLOW');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/cash_flow';
 
@@ -567,7 +567,7 @@ class Module_admin_ecommerce extends standard_aed_module
 	 */
 	function profit_loss()
 	{
-		$title=get_page_title('PROFIT_LOSS');
+		$title=get_screen_title('PROFIT_LOSS');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/profit_loss';
 

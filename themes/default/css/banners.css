@@ -1,0 +1,21 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.banner_side {
+	text-align: center;
+}
+
+.banner_wrap {
+	display: inline-block;
+}
+
+.banner_wrap + .banner_wrap {
+	margin-left: 1em;
+}
+
+.global_side .banner_wrap {
+	margin: 1em 0;
+	display: block;
+}

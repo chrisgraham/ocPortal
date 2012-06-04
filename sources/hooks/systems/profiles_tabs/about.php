@@ -110,9 +110,9 @@ class Hook_Profiles_Tabs_about
 			}
 		}
 		require_code('ocf_members2');
-		if ((!is_guest()) && (ocf_may_whisper($member_id_of)) && (has_actual_page_access($member_id_viewing,'topics')) && (ocf_may_make_personal_topic()) && ($member_id_viewing!=$member_id_of))
+		if ((!is_guest()) && (ocf_may_whisper($member_id_of)) && (has_actual_page_access($member_id_viewing,'topics')) && (ocf_may_make_private_topic()) && ($member_id_viewing!=$member_id_of))
 		{
-			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('contact',do_lang_tempcode('ADD_PERSONAL_TOPIC'),build_url(array('page'=>'topics','type'=>'new_pt','id'=>$member_id_of),get_module_zone('topics')),'reply');
+			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('contact',do_lang_tempcode('ADD_PRIVATE_TOPIC'),build_url(array('page'=>'topics','type'=>'new_pt','id'=>$member_id_of),get_module_zone('topics')),'reply');
 		}
 		$extra_sections=array();
 		$info_details=array();
@@ -283,8 +283,6 @@ class Hook_Profiles_Tabs_about
 		$a=($avatar_url=='')?0:ocf_get_member_best_group_property($member_id_of,'max_avatar_width');
 		$b=($photo_thumb_url=='')?0:intval(get_option('thumb_width'));
 		$right_margin=(max($a,$b)==0)?'auto':(strval(max($a,$b)+6).'px');
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBERS'))));
 
 		if (has_specific_permission($member_id_viewing,'see_ip'))
 		{

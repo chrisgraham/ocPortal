@@ -1,10 +1,10 @@
 <h3>{NAME*}</h3>
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table solidborder">
+<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table">
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<colgroup>
-			<col style="width: 100px" />
-			<col style="width: 100%" />
+			<col class="block_help_field_name_column" />
+			<col class="block_help_field_value_column" />
 		</colgroup>
 	{+END}
 
@@ -20,5 +20,5 @@
 		{PARAMETERS}
 	</tbody>
 </table></div>
-<br />
+
 

@@ -148,7 +148,7 @@ function comcode_to_clean_text($message_plain)
 	$message_plain=preg_replace_callback('#\[indent[^\]]*\](.*)\[/indent\]#Us','_indent_callback',$message_plain);
 	$message_plain=preg_replace_callback('#\[title([^\]])*\](.*)\[/title\]#Us','_title_callback',$message_plain);
 	$message_plain=preg_replace_callback('#\[box="([^"]*)"[^\]]*\](.*)\[/box\]#Us','_box_callback',$message_plain);
-	$tags_to_strip_inards=array('if_in_group','snapback','post','thread','topic','include','staff_note','attachment','attachment2','attachment_safe','contents','block','random');
+	$tags_to_strip_inards=array('if_in_group','snapback','post','thread','topic','include','staff_note','attachment','attachment_safe','contents','block','random');
 	foreach ($tags_to_strip_inards as $s)
 	{
 		$message_plain=preg_replace('#\['.$s.'[^\]]*\].*\[/'.$s.'\]#Us','',$message_plain);
@@ -204,7 +204,7 @@ http://people.dsv.su.se/~jpalme/ietf/ietf-mail-attributes.html
  * @param  ID_TEXT		The template used to show the email
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL')
+function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL')
 {
 	if (running_script('stress_test_loader')) return NULL;
 
@@ -223,7 +223,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 		$through_queue=(get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed()));
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
-			'm_subject'=>substr($subject_tag,0,255),
+			'm_subject'=>substr($subject_line,0,255),
 			'm_message'=>$message_raw,
 			'm_to_email'=>serialize($to_email),
 			'm_to_name'=>serialize($to_name),
@@ -328,7 +328,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	$boundary3=$_boundary.'_3';
 
 	// Our subject
-	$subject=do_template('MAIL_SUBJECT',array('_GUID'=>'44a57c666bb00f96723256e26aade9e5','SUBJECT_TAG'=>$subject_tag),$lang,false,NULL,'.tpl','templates',$theme);
+	$subject=do_template('MAIL_SUBJECT',array('_GUID'=>'44a57c666bb00f96723256e26aade9e5','SUBJECT_LINE'=>$subject_line),$lang,false,NULL,'.tpl','templates',$theme);
 	$tightened_subject=$subject->evaluate($lang); // Note that this is slightly against spec, because characters aren't forced to be printable us-ascii. But it's better we allow this (which works in practice) than risk incompatibility via charset-base64 encoding.
 	$tightened_subject=str_replace(chr(10),'',$tightened_subject);
 	$tightened_subject=str_replace(chr(13),'',$tightened_subject);
@@ -663,7 +663,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			attach_message(!is_null($error)?make_string_tempcode($error):do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))),'warn');
 		} else
 		{
-			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
+			return warn_screen(get_screen_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
 		}
 	}
 
@@ -791,7 +791,7 @@ function form_to_email_entry_script()
 
 	global $PAGE_NAME_CACHE;
 	$PAGE_NAME_CACHE='_form_to_email';
-	$title=get_page_title('MAIL_SENT');
+	$title=get_screen_title('MAIL_SENT');
 	$text=do_lang_tempcode('MAIL_SENT_TEXT',escape_html(post_param('to_written_name',get_site_name())));
 	$redirect=get_param('redirect',NULL);
 	if (!is_null($redirect))
@@ -827,7 +827,7 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 			if ($is_hidden) continue;
 
 			if (substr($key,0,1)!='_')
-				$fields[$key]=post_param('label_for__'.$key,ucwords(str_replace('_',' ',$key)));
+				$fields[$key]=post_param('label_for__'.$key,titleify($key));
 		}
 	}
 

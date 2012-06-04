@@ -1,13 +1,13 @@
 <tr class="{$CYCLE,results_table_zebra,zebra_0,zebra_1}">
-	<td class="dottedborder_barrier_b_nonrequired addon_name">
-		<p onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{DESCRIPTION*^;}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
+	<td class="addon_name">
+		<p onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{DESCRIPTION*^;}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
 			{NAME*}
 		</p>
-		<p onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{FILE_LIST*^;}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
+		<p onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{FILE_LIST*^;}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
 			{FILENAME*}
 		</p>
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		<p>
 			{AUTHOR*}
 		</p>
@@ -15,13 +15,13 @@
 			{ORGANISATION*}
 		</p>
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		{VERSION*}
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired" style="color: {COLOUR*}">
+	<td style="color: {COLOUR*}">
 		{STATUS*}
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired addon_actions">
+	<td class="results_table_field addon_actions">
 		{ACTIONS}
 
 		<label class="accessibility_hidden" for="install_{NAME*}">{!INSTALL} {NAME*}</label>

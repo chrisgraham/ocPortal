@@ -66,7 +66,7 @@ function init__comcode_text()
 	// In theory, almost any tag is reversable. However these tags can be converted ROBUSTLY and hence the WYSIWYG editor can manipulate them as HTML rather than having to display as Comcode
 	// If the tag is mapped to a string that provides a regexp to say when it is NOT reversible. Usually this is done for certain parameters.
 	global $REVERSABLE_TAGS;
-	$REVERSABLE_TAGS=array('surround'=>1,'attachment_safe'=>1,'attachment2'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'highlight'=>1,'indent'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
+	$REVERSABLE_TAGS=array('surround'=>1,'attachment_safe'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'highlight'=>1,'indent'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
 										'title'=>1,'size'=>1,'color'=>1,'font'=>1,'tt'=>1,'img'=>'#\s(rollover|refresh\_time)=#','url'=>1,'email'=>1,'upload'=>1,
 										'semihtml'=>1,'html'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
 
@@ -74,7 +74,7 @@ function init__comcode_text()
 										'block'=>1,'contents'=>1,'concepts'=>1,'attachment'=>1,'flash'=>1,'menu'=>1,'reference'=>1,'page'=>1,'exp_thumb'=>1,'exp_ref'=>1,'thumb'=>1,'snapback'=>1,'post'=>1,'thread'=>1,'topic'=>1,'include'=>1,'random'=>1,'jumping'=>1,'shocker'=>1,);
 	// These are not reversable, but we want them WYSIWYGABLE
 	global $PUREHTML_TAGS;
-	$PUREHTML_TAGS=array(/*'attachment2'=>1,'attachment_safe'=>'1*/); // Actually: there is some dynamicness even in this ($KEEP and $SESSION in particular -- and we couldn't even have them preserved inside a WYSIWYG-edit)
+	$PUREHTML_TAGS=array(/*'attachment_safe'=>'1*/); // Actually: there is some dynamicness even in this ($KEEP and $SESSION in particular -- and we couldn't even have them preserved inside a WYSIWYG-edit)
 	// The following could conceivably not need to be reversed, as they're pure HTML. However, it's better not to let the WYSIWYG'd HTML get too complex.
 	// 'tooltip'=>1,'section'=>1,'section_controller'=>1,'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,'carousel'=>1,'flash'=>1,'hide'=>1,'quote'=>1,'ticker'=>1,'jumping'=>1
 
@@ -152,7 +152,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 	if ((function_exists('set_time_limit')) && (ini_get('max_execution_time')!='0')) @set_time_limit(300);
 
-	$allowed_html_seqs=array('<table>','<table class="[^"]*">','<table class="[^"]*" summary="[^"]*">','<table summary="[^"]*">','</table>','<tr>','</tr>','<td>','</td>','<th>','</th>','<pre>','</pre>','<br />','<br/>','<br >','<br>','<p>','</p>','<p />','<b>','</b>','<u>','</u>','<i>','</i>','<em>','</em>','<strong>','</strong>','<ul>','</ul>','<ol>','</ol>','<del>','</del>','<dir>','</dir>','<s>','</s>','</a>','</font>','<!--','<h1 id="main_page_title">','<h1 class="main_page_title">','<h1 id="main_page_title" class="main_page_title">','</h1>','<img (class="inline_image" )?alt="[^"]*" src="[^"]*" (complete="true" )*/>','<img src=["\'][^"\'<>]*["\']( border=["\'][^"\'<>]*["\'])?( alt=["\'][^"\'<>]*["\'])?( )?(/)?'.'>','<a href=["\'][^"\'<>]*["\']( target=["\'][^"\'<>]*["\'])?'.'>'); // HTML tag may actually be used in very limited conditions: only the following HTML seqs will come out as HTML. This is, unless the blacklist filter is used instead.
+	$allowed_html_seqs=array('<table>','<table class="[^"]*">','<table class="[^"]*" summary="[^"]*">','<table summary="[^"]*">','</table>','<tr>','</tr>','<td>','</td>','<th>','</th>','<pre>','</pre>','<br />','<br/>','<br >','<br>','<p>','</p>','<p />','<b>','</b>','<u>','</u>','<i>','</i>','<em>','</em>','<strong>','</strong>','<ul>','</ul>','<ol>','</ol>','<del>','</del>','<dir>','</dir>','<s>','</s>','</a>','</font>','<!--','<h1 id="screen_title">','<h1 class="screen_title">','<h1 id="screen_title" class="screen_title">','</h1>','<img (class="vertical_alignment" )?alt="[^"]*" src="[^"]*" (complete="true" )*/>','<img src=["\'][^"\'<>]*["\']( border=["\'][^"\'<>]*["\'])?( alt=["\'][^"\'<>]*["\'])?( )?(/)?'.'>','<a href=["\'][^"\'<>]*["\']( target=["\'][^"\'<>]*["\'])?'.'>'); // HTML tag may actually be used in very limited conditions: only the following HTML seqs will come out as HTML. This is, unless the blacklist filter is used instead.
 	if ($as_admin)
 	{
 		$comcode_dangerous=true;
@@ -755,28 +755,28 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							}
 							if ((trim($next)!='') && (!$in_code_tag) && (!$differented))
 							{
-								// CEDI pages
+								// Wiki pages
 								if (($pos<$len) && ($next=='[') && ($pos+1<$len) && ($comcode[$pos]=='[') && (!$semiparse_mode) && (addon_installed('cedi')))
 								{
 									$matches=array();
 									if (preg_match('#^\[([^\[\]]*)\]\]#',substr($comcode,$pos,200),$matches)!=0)
 									{
-										$cedi_page_name=$matches[1];
+										$wiki_page_name=$matches[1];
 										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 										$tag_output->attach($continuation);
 										$continuation='';
-										$hash_pos=strpos($cedi_page_name,'#');
+										$hash_pos=strpos($wiki_page_name,'#');
 										if ($hash_pos!==false)
 										{
-											$jump_to=substr($cedi_page_name,$hash_pos+1);
-											$cedi_page_name=substr($cedi_page_name,0,$hash_pos);
+											$jump_to=substr($wiki_page_name,$hash_pos+1);
+											$wiki_page_name=substr($wiki_page_name,0,$hash_pos);
 										} else $jump_to='';
-										$cedi_page_url=build_url(array('page'=>'cedi','type'=>'misc','find'=>$cedi_page_name),get_module_zone('cedi'));
+										$wiki_page_url=build_url(array('page'=>'cedi','type'=>'misc','find'=>$wiki_page_name),get_module_zone('cedi'));
 										if ($jump_to!='')
 										{
-											$cedi_page_url->attach('#'.$jump_to);
+											$wiki_page_url->attach('#'.$jump_to);
 										}
-										$tag_output->attach(do_template('COMCODE_CEDI_LINK',array('_GUID'=>'ebcd7ba5290c5b2513272a53b4d666e5','URL'=>$cedi_page_url,'TEXT'=>$cedi_page_name)));
+										$tag_output->attach(do_template('COMCODE_WIKI_LINK',array('_GUID'=>'ebcd7ba5290c5b2513272a53b4d666e5','URL'=>$wiki_page_url,'TEXT'=>$wiki_page_name)));
 										$pos+=strlen($matches[1])+3;
 										$differented=true;
 									}
@@ -807,7 +807,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											{
 												require_lang('ocf');
 												require_code('ocf_members2');
-												$details=ocf_show_member_box($this_member_id);
+												$details=render_member_box($this_member_id);
 												$tag_output->attach(do_template('HYPERLINK_TOOLTIP',array('_GUID'=>'d8f4f4ac70bd52b3ef9ee74ae9c5e085','TOOLTIP'=>$details,'CAPTION'=>$username,'URL'=>$poster_url,'NEW_WINDOW'=>false)));
 											} else
 											{
@@ -878,8 +878,6 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 												foreach ($rows as $i=>$row)
 												{
-													if ($i!=0) $tag_output->attach(do_template('BLOCK_SEPARATOR'));
-
 													$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$row,-1,PREG_SPLIT_DELIM_CAPTURE);
 													array_shift($cells); // First one is non-existant empty
 													$spec=true;
@@ -1791,7 +1789,7 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
 	$textual_area=isset($TEXTUAL_TAGS[$current_tag]);
 
 	$white_space_area=$textual_area;
-	if (((($current_tag=='code') || ($current_tag=='codebox')) && (isset($attribute_map['param'])) && ((strtolower($attribute_map['param'])=='php') || (file_exists(get_file_base().'/sources/geshi/'.filter_naughty(strtolower($attribute_map['param'])).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty($attribute_map['param']).'.php')))) || ($current_tag=='php') || ($current_tag=='attachment') || ($current_tag=='attachment2') || ($current_tag=='attachment_safe') || ($current_tag=='menu'))
+	if (((($current_tag=='code') || ($current_tag=='codebox')) && (isset($attribute_map['param'])) && ((strtolower($attribute_map['param'])=='php') || (file_exists(get_file_base().'/sources/geshi/'.filter_naughty(strtolower($attribute_map['param'])).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty($attribute_map['param']).'.php')))) || ($current_tag=='php') || ($current_tag=='attachment') || ($current_tag=='attachment_safe') || ($current_tag=='menu'))
 	{
 		$in_separate_parse_section=true;
 	} else

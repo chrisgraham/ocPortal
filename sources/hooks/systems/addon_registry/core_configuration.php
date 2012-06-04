@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_configuration
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_core_configuration
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_core_configuration
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/config_default/check_broken_urls.php',
 			'sources/hooks/systems/config_default/google_analytics.php',
 			'sources/hooks/systems/config_default/ocp_show_personal_sub_links.php',
@@ -154,8 +152,6 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config_default/ocp_show_personal_usergroup.php',
 			'sources/hooks/systems/config_default/ocp_show_staff_page_actions.php',
 			'sources/hooks/systems/config_default/ocp_show_su.php',
-			'sources/hooks/systems/config_default/panel_width.php',
-			'sources/hooks/systems/config_default/panel_width_spaced.php',
 			'sources/hooks/systems/config_default/root_zone_login_theme.php',
 			'sources/hooks/systems/config_default/send_error_emails_ocproducts.php',
 			'sources/hooks/systems/config_default/session_expiry_time.php',
@@ -175,11 +171,9 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config_default/ssw.php',
 			'sources/hooks/systems/config_default/staff_address.php',
 			'sources/hooks/systems/config_default/thumb_width.php',
-			'sources/hooks/systems/config_default/tray_support.php',
 			'sources/hooks/systems/config_default/unzip_cmd.php',
 			'sources/hooks/systems/config_default/unzip_dir.php',
 			'sources/hooks/systems/config_default/use_contextual_dates.php',
-			'sources/hooks/systems/config_default/use_custom_zone_menu.php',
 			'sources/hooks/systems/config_default/use_security_images.php',
 			'sources/hooks/systems/config_default/user_postsize_errors.php',
 			'sources/hooks/systems/config_default/users_online_time.php',
@@ -207,23 +201,23 @@ class Hook_addon_registry_core_configuration
 			'lang/EN/config.ini',
 			'sources/hooks/systems/config_default/.htaccess',
 			'sources/hooks/systems/config_default/index.html',
-			'XML_CONFIG_SCREEN.tpl',
+			'XML_CONFIG_SCREEN.tpl'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'CONFIG_GROUP.tpl'=>'administrative__config_category_screen',
-				'CONFIG_CATEGORY_SCREEN.tpl'=>'administrative__config_category_screen',
-				'XML_CONFIG_SCREEN.tpl'=>'administrative__xml_config_screen',
-				);
+			'CONFIG_GROUP.tpl' => 'administrative__config_category_screen',
+			'CONFIG_CATEGORY_SCREEN.tpl' => 'administrative__config_category_screen',
+			'XML_CONFIG_SCREEN.tpl' => 'administrative__xml_config_screen'
+		);
 	}
 
 	/**
@@ -235,33 +229,30 @@ class Hook_addon_registry_core_configuration
 	 */
 	function tpl_preview__administrative__config_category_screen()
 	{
-		$groups=new ocp_tempcode();
+		$groups = new ocp_tempcode();
 
-		foreach (placeholder_array() as $k=>$group)
+		foreach (placeholder_array() as $k => $group)
 		{
-			$group	=	do_lorem_template('CONFIG_GROUP',array(
-								'GROUP_DESCRIPTION'=>lorem_word(),
-								'GROUP_NAME'=>$group,
-								'GROUP'=>lorem_phrase(),
-								'CURRENT_GROUP'=>"ID$k",
-							)
-						);
+			$group = do_lorem_template('CONFIG_GROUP', array(
+				'GROUP_DESCRIPTION' => lorem_word(),
+				'GROUP_NAME' => $group,
+				'GROUP' => placeholder_fields(),
+				'CURRENT_GROUP' => "ID$k"
+			));
 			$groups->attach($group->evaluate());
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('CONFIG_CATEGORY_SCREEN',array(
-					'CATEGORY_DESCRIPTION'=>lorem_word_2(),
-					'_GROUPS'=>placeholder_array(),
-					'PING_URL'=>placeholder_url(),
-					'WARNING_DETAILS'=>'',
-					'TITLE'=>lorem_title(),
-					'URL'=>placeholder_url(),
-					'GROUPS'=>$groups,
-					'SUBMIT_NAME'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('CONFIG_CATEGORY_SCREEN', array(
+				'CATEGORY_DESCRIPTION' => lorem_word_2(),
+				'_GROUPS' => placeholder_array(),
+				'PING_URL' => placeholder_url(),
+				'WARNING_DETAILS' => '',
+				'TITLE' => lorem_title(),
+				'URL' => placeholder_url(),
+				'GROUPS' => $groups,
+				'SUBMIT_NAME' => lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -275,13 +266,11 @@ class Hook_addon_registry_core_configuration
 	function tpl_preview__administrative__xml_config_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('XML_CONFIG_SCREEN',array(
-					'XML'=>'<test />',
-					'POST_URL'=>placeholder_url(),
-					'TITLE'=>lorem_title(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('XML_CONFIG_SCREEN', array(
+				'XML' => '<test />',
+				'POST_URL' => placeholder_url(),
+				'TITLE' => lorem_title()
+			)), NULL, '', true)
 		);
 	}
 }

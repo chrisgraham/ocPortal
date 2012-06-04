@@ -1,4 +1,4 @@
-{$JAVASCRIPT_INCLUDE,javascript_dyn_comcode}
+{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
 
 {$SET,carousel_id,{$RAND}}
 
@@ -15,7 +15,7 @@
 </div>
 
 <script type="text/javascript">// <![CDATA[
-	addEventListenerAbstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function () {
 		initialise_carousel({$GET,carousel_id});
 	} );
 //]]></script>

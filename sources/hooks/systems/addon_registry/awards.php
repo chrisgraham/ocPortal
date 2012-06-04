@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_awards
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,10 +58,12 @@ class Hook_addon_registry_awards
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-			'previously_in_addon'=>array('awards'),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array(),
+			'previously_in_addon' => array(
+				'awards'
+			)
 		);
 	}
 
@@ -74,7 +75,6 @@ class Hook_addon_registry_awards
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/awards.php',
 			'AWARDED_CONTENT.tpl',
 			'BLOCK_MAIN_AWARDS.tpl',
@@ -94,24 +94,24 @@ class Hook_addon_registry_awards
 			'sources/blocks/main_multi_content.php',
 			'awards.css',
 			'themes/default/images/awarded.png',
-			'sources/hooks/modules/admin_import_types/awards.php',
+			'sources/hooks/modules/admin_import_types/awards.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'BLOCK_MAIN_CONTENT.tpl'=>'block_main_content',
-				'BLOCK_MAIN_MULTI_CONTENT.tpl'=>'block_main_multi_content',
-				'BLOCK_MAIN_AWARDS.tpl'=>'block_main_awards',
-				'AWARDED_CONTENT.tpl'=>'awarded_content',
-				);
+			'BLOCK_MAIN_CONTENT.tpl' => 'block_main_content',
+			'BLOCK_MAIN_MULTI_CONTENT.tpl' => 'block_main_multi_content',
+			'BLOCK_MAIN_AWARDS.tpl' => 'block_main_awards',
+			'AWARDED_CONTENT.tpl' => 'awarded_content'
+		);
 	}
 
 	/**
@@ -124,17 +124,15 @@ class Hook_addon_registry_awards
 	function tpl_preview__block_main_content()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_CONTENT',array(
-					'TYPE'=>lorem_phrase(),
-					'TITLE'=>lorem_word(),
-					'RAW_AWARD_DATE'=>placeholder_time(),
-					'AWARD_DATE'=>placeholder_time(),
-					'CONTENT'=>lorem_phrase_html(),
-					'SUBMIT_URL'=>placeholder_url(),
-					'ARCHIVE_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTENT', array(
+				'TYPE' => lorem_phrase(),
+				'TITLE' => lorem_word(),
+				'RAW_AWARD_DATE' => placeholder_time(),
+				'AWARD_DATE' => placeholder_time(),
+				'CONTENT' => lorem_phrase_html(),
+				'SUBMIT_URL' => placeholder_url(),
+				'ARCHIVE_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -148,17 +146,17 @@ class Hook_addon_registry_awards
 	function tpl_preview__block_main_multi_content()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_MULTI_CONTENT',array(
-					'TYPE'=>lorem_phrase(),
-					'TITLE'=>lorem_word(),
-					'RAW_AWARD_DATE'=>placeholder_time(),
-					'AWARD_DATE'=>placeholder_time(),
-					'CONTENT'=>array(lorem_phrase_html()),
-					'SUBMIT_URL'=>placeholder_url(),
-					'ARCHIVE_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_MULTI_CONTENT', array(
+				'TYPE' => lorem_phrase(),
+				'TITLE' => lorem_word(),
+				'RAW_AWARD_DATE' => placeholder_time(),
+				'AWARD_DATE' => placeholder_time(),
+				'CONTENT' => array(
+					lorem_phrase_html()
+				),
+				'SUBMIT_URL' => placeholder_url(),
+				'ARCHIVE_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -172,21 +170,19 @@ class Hook_addon_registry_awards
 	function tpl_preview__block_main_awards()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_AWARDS',array(
-					'TITLE'=>lorem_word(),
-					'TYPE'=>lorem_word(),
-					'DESCRIPTION'=>lorem_paragraph_html(),
-					'AWARDEE_PROFILE_URL'=>placeholder_url(),
-					'AWARDEE'=>lorem_phrase(),
-					'AWARDEE_USERNAME'=>lorem_word(),
-					'RAW_AWARD_DATE'=>placeholder_time(),
-					'AWARD_DATE'=>placeholder_time(),
-					'CONTENT'=>lorem_phrase_html(),
-					'SUBMIT_URL'=>placeholder_url(),
-					'ARCHIVE_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_AWARDS', array(
+				'TITLE' => lorem_word(),
+				'TYPE' => lorem_word(),
+				'DESCRIPTION' => lorem_paragraph_html(),
+				'AWARDEE_PROFILE_URL' => placeholder_url(),
+				'AWARDEE' => lorem_phrase(),
+				'AWARDEE_USERNAME' => lorem_word(),
+				'RAW_AWARD_DATE' => placeholder_time(),
+				'AWARD_DATE' => placeholder_time(),
+				'CONTENT' => lorem_phrase_html(),
+				'SUBMIT_URL' => placeholder_url(),
+				'ARCHIVE_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -200,16 +196,14 @@ class Hook_addon_registry_awards
 	function tpl_preview__awarded_content()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('AWARDED_CONTENT',array(
-					'AWARDEE_PROFILE_URL'=>placeholder_url(),
-					'AWARDEE'=>lorem_phrase(),
-					'AWARDEE_USERNAME'=>lorem_word(),
-					'RAW_AWARD_DATE'=>placeholder_time(),
-					'AWARD_DATE'=>placeholder_time(),
-					'CONTENT'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('AWARDED_CONTENT', array(
+				'AWARDEE_PROFILE_URL' => placeholder_url(),
+				'AWARDEE' => lorem_phrase(),
+				'AWARDEE_USERNAME' => lorem_word(),
+				'RAW_AWARD_DATE' => placeholder_time(),
+				'AWARD_DATE' => placeholder_time(),
+				'CONTENT' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 }

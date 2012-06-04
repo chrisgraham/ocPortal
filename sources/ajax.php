@@ -260,7 +260,7 @@ function comcode_convert_script()
 	$data=post_param('data',NULL,false,false);
 	if (is_null($data))
 	{
-		$title=get_page_title('_COMCODE');
+		$title=get_screen_title('_COMCODE');
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_huge(do_lang_tempcode('TEXT'),'','data','',true));
@@ -273,18 +273,6 @@ function comcode_convert_script()
 		$out2=globalise(do_template('FORM_SCREEN',array('_GUID'=>'dd82970fa1196132e07049871c51aab7','TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('VIEW'),'TEXT'=>'','HIDDEN'=>$hidden,'URL'=>find_script('comcode_convert',true),'FIELDS'=>$fields)),NULL,'',true);
 		$out2->evaluate_echo();
 		return;
-	}
-	$panel=either_param_integer('panel',NULL);
-	if (!is_null($panel))
-	{
-		global $TEMPCODE_SETGET;
-		if ($panel==0)
-		{
-			$TEMPCODE_SETGET['in_panel']='0';
-		} else
-		{
-			$TEMPCODE_SETGET['in_panel']='1';
-		}
 	}
 	if (either_param_integer('to_comcode_xml',0)==1)
 	{

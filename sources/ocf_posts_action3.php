@@ -386,9 +386,9 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 	} else
 	{
 		// Make informative post
-		$me_link='[page="'.get_module_zone('members').'" type="view" id="'.strval(get_member()).'" caption="'.$GLOBALS['OCF_DRIVER']->get_username(get_member()).'"]members[/page]';
+		$me_link='[page="'.get_module_zone('members').':members:view:'.strval(get_member()).'"]'.$GLOBALS['OCF_DRIVER']->get_username(get_member()).'[/page]';
 		$topic_title=$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$to_topic_id));
-		$lang=do_lang('INLINE_POSTS_MOVED_MESSAGE',$me_link,integer_format(count($posts)),array('[page="'.get_module_zone('topicview').'" id="'.strval($to_topic_id).'" caption="'.str_replace('"','\"',str_replace('[','\\[',$topic_title)).'"]topicview[/page]'));
+		$lang=do_lang('INLINE_POSTS_MOVED_MESSAGE',$me_link,integer_format(count($posts)),array('[page="'.get_module_zone('topicview').':topicview:misc:'.strval($to_topic_id).'"]'.str_replace('"','\"',str_replace('[','\\[',$topic_title)).'[/page]'));
 		ocf_make_post($from_topic_id,'',$lang,0,false,1,1,NULL,NULL,$GLOBALS['FORUM_DB']->query_value('f_posts','p_time',array('id'=>$posts[0]))+1,NULL,NULL,NULL,NULL,false);
 
 		require_code('ocf_general_action2');

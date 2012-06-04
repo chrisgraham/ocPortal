@@ -33,7 +33,6 @@ class Module_cms_iotds extends standard_aed_module
 	var $send_validation_request=false;
 	var $upload='image';
 	var $permissions_require='mid';
-	var $javascript='standardAlternateFields(\'file\',\'url\'); standardAlternateFields(\'file2\',\'thumb_url\');';
 	var $menu_label='IOTDS';
 	var $table='iotd';
 
@@ -61,7 +60,7 @@ class Module_cms_iotds extends standard_aed_module
 		if ($type=='_delete')
 		{
 			$this->delete_actualisation(post_param_integer('id'));
-			$title=get_page_title('DELETE_IOTD');
+			$title=get_screen_title('DELETE_IOTD');
 			return $this->do_next_manager($title,do_lang_tempcode('SUCCESS'),NULL);
 		}
 
@@ -97,7 +96,7 @@ class Module_cms_iotds extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('MANAGE_IOTDS'),comcode_lang_string('DOC_IOTDS'),
+		return do_next_manager(get_screen_title('MANAGE_IOTDS'),comcode_lang_string('DOC_IOTDS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_midrange_content','cms_iotds')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_IOTD')):NULL,
@@ -130,13 +129,32 @@ class Module_cms_iotds extends standard_aed_module
 		require_code('form_templates');
 		handle_max_file_size($hidden,'image');
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'url',$url,false));
+
+		$set_name='image';
+		$required=true;
+		$set_title=do_lang_tempcode('IMAGE');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','url',$url,false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 		if (get_option('is_on_gd')=='0')
 		{
 			$thumb_width=get_option('thumb_width');
-			$fields->attach(form_input_upload(do_lang_tempcode('THUMBNAIL'),do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),'file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-			$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'thumb_url',$thumb_url,false));
+
+			$set_name='thumbnail';
+			$required=true;
+			$set_title=do_lang_tempcode('THUMBNAIL');
+			$field_set=alternate_fields_set__start($set_name);
+
+			$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file2',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+
+			$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','thumb_url',$thumb_url,false));
+
+			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required));
 		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('CAPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'caption',$caption,false));
 		if (has_specific_permission(get_member(),'choose_iotd'))
@@ -167,7 +185,7 @@ class Module_cms_iotds extends standard_aed_module
 
 		$used=get_param_integer('used',0);
 
-		$title=get_page_title('EDIT_OR_CHOOSE_IOTD');
+		$title=get_screen_title('EDIT_OR_CHOOSE_IOTD');
 
 		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_iotds')?NULL:get_member();
 
@@ -379,7 +397,7 @@ class Module_cms_iotds extends standard_aed_module
 	{
 		check_specific_permission('choose_iotd');
 
-		$title=get_page_title('CHOOSE_IOTD');
+		$title=get_screen_title('CHOOSE_IOTD');
 
 		$id=post_param_integer('id');
 

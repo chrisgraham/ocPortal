@@ -39,11 +39,11 @@ class Hook_checklist_ecommerce_orders
 			$img	=	'completed';
 		}
 
-		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('ORDER_STATUS'=>$img));
+		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'15138b84598f5c45113fc169a44d55c7','ORDER_STATUS'=>$img));
 
 		$url=build_url(array('page'=>'admin_orders','type'=>'show_orders','filter'=>'undispatched'),get_module_zone('admin_orders'));
 
-		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('ORDERS'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($to_dispatch_order_cnt)))));
+		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'440a79b164533416f4d086a93efba9ea','URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('ORDERS'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($to_dispatch_order_cnt)))));
 		return array(array($tpl,NULL,$to_dispatch_order_cnt,NULL));
 	}
 

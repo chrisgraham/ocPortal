@@ -63,7 +63,6 @@ class Block_side_root_galleries
 		require_lang('galleries');
 		require_code('galleries');
 		require_css('galleries');
-		require_css('side_blocks');
 
 		$parent_id=array_key_exists('param',$map)?$map['param']:'root';
 

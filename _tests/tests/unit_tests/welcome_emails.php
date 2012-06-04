@@ -43,7 +43,7 @@ class welcome_emails_test_set extends ocp_test_case
 		$this->assertTrue('test_mail1'==$GLOBALS['SITE_DB']->query_value('f_welcome_emails','w_name ',array('id'=>$this->email_id)));
 	}
 
-	
+
 	function tearDown()
 	{
 		ocf_delete_welcome_email($this->email_id);

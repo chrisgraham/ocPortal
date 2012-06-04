@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_filedump
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_filedump
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,7 +72,6 @@ class Hook_addon_registry_filedump
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/notifications/filedump.php',
 			'sources/hooks/systems/config_default/filedump_show_stats_count_total_files.php',
 			'sources/hooks/systems/config_default/filedump_show_stats_count_total_space.php',
@@ -90,21 +88,21 @@ class Hook_addon_registry_filedump
 			'sources/hooks/systems/rss/filedump.php',
 			'sources/hooks/modules/admin_occle_fs/home.php',
 			'uploads/filedump/.htaccess',
-			'themes/default/images/bigicons/filedump.png',
+			'themes/default/images/bigicons/filedump.png'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'FILE_DUMP_SCREEN.tpl'=>'file_dump_screen',
-				);
+			'FILE_DUMP_SCREEN.tpl' => 'file_dump_screen'
+		);
 	}
 
 	/**
@@ -116,16 +114,16 @@ class Hook_addon_registry_filedump
 	 */
 	function tpl_preview__file_dump_screen()
 	{
+		require_css('forms');
+
 		return array(
-			lorem_globalise(
-				do_lorem_template('FILE_DUMP_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'FILES'=>placeholder_table(),
-					'UPLOAD_FORM'=>placeholder_form(),
-					'CREATE_FOLDER_FORM'=>placeholder_form(),
-					'PLACE'=>placeholder_id(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('FILE_DUMP_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'FILES' => placeholder_table(),
+				'UPLOAD_FORM' => placeholder_form(),
+				'CREATE_FOLDER_FORM' => placeholder_form(),
+				'PLACE' => placeholder_id()
+			)), NULL, '', true)
 		);
 	}
 }

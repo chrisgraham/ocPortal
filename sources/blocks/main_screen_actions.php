@@ -49,6 +49,8 @@ class Block_main_screen_actions
 	{
 		//if (count($_POST)!=0) return new ocp_tempcode();		Can't do that, breaks previewing it
 
+		require_css('screen_actions');
+
 		require_lang('recommend');
 
 		$_map=array('page'=>'recommend','from'=>get_self_url(true));

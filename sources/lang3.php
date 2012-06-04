@@ -99,13 +99,12 @@ function _find_all_langs($even_empty_langs=false)
 }
 
 /**
- * Get a nice formatted XHTML listed language selector.
+ * Get the title for a language.
  *
- * @param  ?LANGUAGE_NAME	The language to have selected by default (NULL: uses the current language)
- * @param  boolean			Whether to show languages that have no language details currently defined for them
- * @return tempcode			The language selector
+ * @param  LANGUAGE_NAME	The language to have selected by default
+ * @return string				The language title
  */
-function _nice_get_langs($select_lang=NULL,$show_unset=false)
+function get_language_title($lang)
 {
 	global $LANGS_MAP;
 
@@ -117,6 +116,18 @@ function _nice_get_langs($select_lang=NULL,$show_unset=false)
 		$LANGS_MAP=better_parse_ini_file($map_b);
 	}
 
+	return array_key_exists($lang,$LANGS_MAP)?$LANGS_MAP[$lang]:$lang;
+}
+
+/**
+ * Get a nice formatted XHTML listed language selector.
+ *
+ * @param  ?LANGUAGE_NAME	The language to have selected by default (NULL: uses the current language)
+ * @param  boolean			Whether to show languages that have no language details currently defined for them
+ * @return tempcode			The language selector
+ */
+function _nice_get_langs($select_lang=NULL,$show_unset=false)
+{
 	$langs=new ocp_tempcode();
 	$_langs=find_all_langs();
 
@@ -124,11 +135,12 @@ function _nice_get_langs($select_lang=NULL,$show_unset=false)
 
 	foreach (array_keys($_langs) as $lang)
 	{
-		$langs->attach(form_input_list_entry($lang,($lang==$select_lang),array_key_exists($lang,$LANGS_MAP)?$LANGS_MAP[$lang]:$lang));
+		$langs->attach(form_input_list_entry($lang,($lang==$select_lang),get_language_title($lang)));
 	}
 
 	if ($show_unset)
 	{
+		global $LANGS_MAP;
 		asort($LANGS_MAP);
 		foreach ($LANGS_MAP as $lang=>$full)
 		{

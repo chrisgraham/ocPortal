@@ -1,0 +1,109 @@
+[title sub="Written by Philip Withnall, ocProducts"]ocPortal Tutorial: Activity statistics for your site (analytics)[/title]
+
+{!stats:DOC_STATISTICS}
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]The administration interface[/title]
+
+The administration interface resides in the Admin Zone, under the Usage section.
+
+Be aware that hits coming from the web server itself will be filtered from the stats, so if you are running a web server on your own computer you may not see any results if nobody else has used your website yet.
+
+[title="3"]Installing geo-location data[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The menu link to install geolocation data" float="left"]statistics_Install-geolocation-data-link[/exp_thumb]
+[exp_thumb="The message shown when installing geolocation data" float="right"]statistics_Installing-geolocation-data[/exp_thumb]
+{!stats:DOC_INSTALL_GEOLOCATION_DATA}
+
+[box="Important note" width="25em" float="right"]Do not disturb the geolocation data installation process. You will be informed when it is complete.[/box]
+
+Once the geo-location data is installed, all the extra statistics can be used.
+[html]</div>[/html]
+[title="3"]Page view statistics[/title]
+
+{!stats:DOC_PAGE_STATISTICS}
+
+[title="3"]Per-page breakdowns[/title]
+
+The per-page breakdowns list more detailed statistics for each page, in various forms, but all have a graph. The following statistics are present:
+ - Views per hour
+ - Views per day
+ - Views per week
+ - Views per month
+ - Browsers used to view this page
+ - Referrers to this page
+ - Operating Systems used to view this page
+ - Regionalities this page has been viewed from
+
+[title="3"]Users online statistics[/title]
+
+{!stats:DOC_USERS_ONLINE_STATISTICS}
+
+[title="3"]Submission statistics[/title]
+
+{!stats:DOC_SUBMISSION_STATISTICS}
+
+[title="3"]Top referrers[/title]
+
+{!stats:DOC_TOP_REFERRERS}
+
+[title="3"]Top Google keywords[/title]
+
+{!stats:DOC_TOP_SEARCH_KEYWORDS}
+
+[title="3"]Page load times[/title]
+
+{!stats:DOC_LOAD_TIMES}
+
+[title="2"]Download statistics[/title]
+[html]<div class="float_surrounder">[/html]
+There is a screen for download statistics, but you may also wish to allow your visitors to see some trends...
+
+[exp_thumb="The download statistics box" float="right"]statistics_Download-statistics[/exp_thumb]
+There are two methods for revealing download trends to your visitors:
+1) Download statistics are generally available on an individual download page
+2) You can also pull out key downloads for the benefit of your visitors is to use one of the download blocks: [i]most popular downloads[/i], and [i]most recently-added downloads[/i]. These are explained below.
+[html]</div>[/html]
+[title="3"]Most popular downloads[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The most popular downloads block" float="left"]statistics_Top-downloads-block[/exp_thumb]
+The most popular downloads block obviously displays the most popular (i.e. most frequently downloaded) downloads. It can be added using the Block assistant, available via the 'Add block' icon when editing Comcode pages.
+
+When rendered, these blocks also show how many downloads each listed download has received, and when they were added.
+[html]</div>[/html]
+[title="3"]Most recently-added downloads[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="The most recently-added downloads block" float="left"]statistics_Recently-added-downloads-block[/exp_thumb]
+The most-recently added downloads block does indeed display the most recently-added downloads. It can be added using the Block assistant, available via the 'Add block' icon when editing Comcode pages.
+
+When rendered, this block also shows when each listed download was added, and how many downloads it has received.
+[html]</div>[/html]
+[title="2"]Other statistics[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="View statistics are shown for various forms of content" float="right"]statistics_News-item-stats[/exp_thumb]
+All content will automatically store download/view statistics as appropriate, which will usually be displayed on the respective entry screen.
+
+An example of this would be news entries: each news entry records how many times it is viewed, and displays this number on its view screen.
+[html]</div>[/html]
+
+[title="2"]OCF statistics[/title]
+
+The following statistics screens exist to show [concept]OCF[/concept] data:
+ - Demographics (summarise the ages of your members)
+ - Posting rates (identify trends in daily posting rates)
+
+[title="2"]Google Analytics[/title]
+
+[url="Google Analytics"]http://www.google.com/analytics/[/url] is an excellent free package for analysing website activity, allowing you to spot all kinds of trends in your data.
+
+We don't consider Google Analytics a competitor to our own inbuilt analytics -- both offer different features, complementing each other. Google Analytics is easy to install, all you need to do is follow their instructions, and when prompted to add some code to your website, place that code in your [tt]FOOTER[/tt] template.
+
+[concepts
+ 1_key="SVG"            1_value="Scaleable Vector Graphics, a text-markup-based graphics format that allows infinite scalability of graphics without texture loss due to being vector-based (co-ordinate-delimited shapes) instead of pixel based (specific data for each pixel)."
+ 2_key="Geo-location"   2_value="The process of using some type of individually-identifiable information to find out where in the world somebody is."
+]Concepts[/concepts]
+
+[title="2"]See also[/title]
+
+ - [page="_SEARCH:tut_trace"]IP addresses and tracing users[/page]

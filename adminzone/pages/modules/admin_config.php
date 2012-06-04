@@ -36,7 +36,7 @@ class Module_admin_config
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=13;
+		$info['version']=14;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -62,7 +62,7 @@ class Module_admin_config
 										'ocp_show_personal_sub_links','ocp_show_personal_adminzone_link','ocp_show_conceded_mode_link','ocp_show_su','ocp_show_staff_page_actions','ocf_show_profile_link',
 										'ocp_show_personal_usergroup','ocp_show_personal_last_visit','ocp_show_avatar',
 										'panel_width','panel_width_spaced','debug_mode','main_forum_name','allowed_post_submitters','ssw',
-										'root_zone_login_theme','use_custom_zone_menu','tray_support','show_docs','captcha_noise','captcha_on_feedback',
+										'root_zone_login_theme','show_docs','captcha_noise','captcha_on_feedback',
 										'show_post_validation','ip_forwarding','force_meta_refresh','use_contextual_dates','eager_wysiwyg',
 										'website_email','enveloper_override','bcc','allow_ext_images','htm_short_urls','ip_strict_for_sessions','enable_previews',
 										'enable_keyword_density_check','enable_spell_check','enable_markup_validation','enable_image_fading','users_online_time','auto_submit_sitemap',
@@ -72,8 +72,11 @@ class Module_admin_config
 										'check_broken_urls','advanced_admin_cache','collapse_user_zones','google_analytics','fixed_width','show_screen_actions','show_content_tagging','show_content_tagging_inline',
 										'long_google_cookies','remember_me_by_default','detect_javascript','mobile_support','mail_queue','mail_queue_debug',
 										'comments_to_show_in_thread','max_thread_depth',
+										'spam_check_level','stopforumspam_api_key','tornevall_api_username','tornevall_api_password','spam_block_lists','spam_cache_time','spam_check_exclusions',
+										'spam_stale_threshold','spam_ban_threshold','spam_block_threshold','spam_approval_threshold',
+										'spam_check_usernames','implied_spammer_confidence','spam_blackhole_detection','honeypot_url','honeypot_phrase',
+										'filetype_icons',
 										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
-
 										);
 
 		foreach ($config_options as $option)
@@ -180,14 +183,10 @@ class Module_admin_config
 			add_config_option('_USERGROUP','ocp_show_personal_usergroup','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('LAST_HERE','ocp_show_personal_last_visit','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('AVATAR','ocp_show_avatar','tick','return (has_no_forum() || ((get_forum_type()==\'ocf\') && (!addon_installed(\'ocf_member_avatars\'))))?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('PANEL_WIDTH','panel_width','line','return \'13.3em\';','THEME','GENERAL');
-			add_config_option('PANEL_WIDTH_SPACED','panel_width_spaced','line','return \'14.3em\';','THEME','GENERAL');
 			add_config_option('ROOT_ZONE_LOGIN_THEME','root_zone_login_theme','tick','return \'0\';','THEME','GENERAL');
-			add_config_option('USE_CUSTOM_ZONE_MENU','use_custom_zone_menu','tick','return \'1\';','THEME','GENERAL');
-			add_config_option('TRAY_SUPPORT','tray_support','tick','return \'1\';','THEME','GENERAL');
 			add_config_option('SHOW_DOCS','show_docs','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('CAPTCHA_NOISE','captcha_noise','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','SECURITY_IMAGE');
-			add_config_option('CAPTCHA_ON_FEEDBACK','captcha_on_feedback','tick','return addon_installed(\'captcha\')?\'0\':NULL;','SECURITY','SECURITY_IMAGE');
+			add_config_option('CAPTCHA_NOISE','captcha_noise','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','SPAMMER_DETECTION');
+			add_config_option('CAPTCHA_ON_FEEDBACK','captcha_on_feedback','tick','return addon_installed(\'captcha\')?\'0\':NULL;','SECURITY','SPAMMER_DETECTION');
 			add_config_option('SHOW_POST_VALIDATION','show_post_validation','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('IP_FORWARDING','ip_forwarding','tick','return \'0\';','SITE','ENVIRONMENT');
 			add_config_option('FORCE_META_REFRESH','force_meta_refresh','tick','return \'0\';','SITE','ENVIRONMENT');
@@ -272,11 +271,39 @@ class Module_admin_config
 
 			add_config_option('ENABLE_LIKES','likes','tick','return \'0\';','FEATURE','USER_INTERACTION');
 		}
+		if ((is_null($upgrade_from)) || ($upgrade_from<14))
+		{
+			add_config_option('SPAM_CHECK_LEVEL','spam_check_level','list','return \'NEVER\';','SECURITY','SPAMMER_DETECTION',0,'EVERYTHING|ACTIONS|GUESTACTIONS|JOINING|NEVER');
+			add_config_option('STOPFORUMSPAM_API_KEY','stopforumspam_api_key','line','return \'\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('TORNEVALL_API_USERNAME','tornevall_api_username','line','return class_exists(\'SoapClient\')?\'\':NULL;','SECURITY','SPAMMER_DETECTION');
+			add_config_option('TORNEVALL_API_PASSWORD','tornevall_api_password','line','return class_exists(\'SoapClient\')?\'\':NULL;','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SPAM_BLOCK_LISTS','spam_block_lists','line','return \'*.opm.tornevall.org\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SPAM_CACHE_TIME','spam_cache_time','integer','return \'60\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SPAM_CHECK_EXCLUSIONS','spam_check_exclusions','line','return \'127.0.0.1,\'.ocp_srv(\'SERVER_ADDR\').\'\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SPAM_STALE_THRESHOLD','spam_stale_threshold','integer','return \'31\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SPAM_BAN_THRESHOLD','spam_ban_threshold','integer','return \'90\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SPAM_BLOCK_THRESHOLD','spam_block_threshold','integer','return \'60\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SPAM_APPROVAL_THRESHOLD','spam_approval_threshold','integer','return \'40\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SPAM_CHECK_USERNAMES','spam_check_usernames','tick','return \'0\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('IMPLIED_SPAMMER_CONFIDENCE','implied_spammer_confidence','integer','return \'80\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SPAM_BLACKHOLE_DETECTION','spam_blackhole_detection','tick','return \'1\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('HONEYPOT_URL','honeypot_url','line','return \'\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('HONEYPOT_PHRASE','honeypot_phrase','line','return \'\';','SECURITY','SPAMMER_DETECTION');
+		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
 		{
 			delete_config_option('logo_map');
 			$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'config SET the_type=\'forum\' WHERE the_name LIKE \''.db_encode_like('%_forum_name').'\'');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<14))
+		{
+			delete_config_option('use_custom_zone_menu');
+			delete_config_option('panel_width');
+			delete_config_option('panel_width_spaced');
+			delete_config_option('tray_support');
+			add_config_option('FILETYPE_ICONS','filetype_icons','tick','return \'1\';','THEME','GENERAL');
 		}
 
 		if (is_null($upgrade_from))
@@ -409,7 +436,7 @@ class Module_admin_config
 	 */
 	function base()
 	{
-		$title=get_page_title('CONFIGURATION');
+		$title=get_screen_title('CONFIGURATION');
 		require_code('site2');
 		assign_refresh(get_base_url().'/config_editor.php',0.0);
 		return do_template('REDIRECT_SCREEN',array('URL'=>get_base_url().'/config_editor.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
@@ -422,7 +449,7 @@ class Module_admin_config
 	 */
 	function upgrader()
 	{
-		$title=get_page_title('FU_UPGRADER_TITLE');
+		$title=get_screen_title('FU_UPGRADER_TITLE');
 		require_code('site2');
 		assign_refresh(get_base_url().'/upgrader.php',0.0);
 		return do_template('REDIRECT_SCREEN',array('URL'=>get_base_url().'/upgrader.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
@@ -435,7 +462,7 @@ class Module_admin_config
 	 */
 	function backend()
 	{
-		$title=get_page_title('FEEDS');
+		$title=get_screen_title('FEEDS');
 		require_code('site2');
 		assign_refresh(get_base_url().'/backend.php',0.0);
 		return do_template('REDIRECT_SCREEN',array('URL'=>get_base_url().'/backend.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
@@ -448,7 +475,7 @@ class Module_admin_config
 	 */
 	function code_editor()
 	{
-		$title=get_page_title('CODE_EDITOR');
+		$title=get_screen_title('CODE_EDITOR');
 		require_code('site2');
 		assign_refresh(get_base_url().'/code_editor.php',0.0);
 		return do_template('REDIRECT_SCREEN',array('URL'=>get_base_url().'/code_editor.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
@@ -464,7 +491,7 @@ class Module_admin_config
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/config';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_configuration';
 
-		$title=get_page_title('CONFIGURATION');
+		$title=get_screen_title('CONFIGURATION');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('config',array('the_page','COUNT(*) AS cnt'),NULL,'GROUP BY the_page ORDER BY the_page');
 		$content=new ocp_tempcode();
@@ -498,7 +525,7 @@ class Module_admin_config
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_configuration';*/
 
 		$page=get_param('id');
-		$title=get_page_title(do_lang_tempcode('CONFIG_CATEGORY_'.$page),false);
+		$title=get_screen_title(do_lang_tempcode('CONFIG_CATEGORY_'.$page),false);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'set','id'=>$page,'redirect'=>get_param('redirect',NULL)),'_SELF');
 
 		$category_description=do_lang_tempcode('CONFIG_CATEGORY_DESCRIPTION__'.$page);
@@ -802,7 +829,7 @@ class Module_admin_config
 	function config_set()
 	{
 		$page=get_param('id','MAIN');
-		$title=get_page_title(do_lang_tempcode('CONFIG_CATEGORY_'.$page),false);
+		$title=get_screen_title(do_lang_tempcode('CONFIG_CATEGORY_'.$page),false);
 
 		// Make sure we haven't locked ourselves out due to clean URL support
 		if ((post_param_integer('mod_rewrite',0)==1) && (substr(ocp_srv('SERVER_SOFTWARE'),0,6)=='Apache') && ((!file_exists(get_file_base().'/.htaccess')) || (strpos(file_get_contents(get_file_base().'/.htaccess'),'RewriteEngine on')===false)))
@@ -940,8 +967,8 @@ class Module_admin_config
 		require_code('zones3');
 		erase_comcode_page_cache();
 		erase_tempcode_cache();
-		//persistant_cache_delete('OPTIONS');  Done by set_option
-		persistant_cache_empty();
+		//persistent_cache_delete('OPTIONS');  Done by set_option
+		persistent_cache_empty();
 		erase_cached_templates();
 
 		// Show it worked / Refresh
@@ -966,11 +993,11 @@ class Module_admin_config
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_fields_filter';
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_FIELD_FILTERS');
 
-		$title=get_page_title('FIELD_FILTERS');
+		$title=get_screen_title('FIELD_FILTERS');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_xml_fields'),'_SELF');
 
-		return do_template('XML_CONFIG_SCREEN',array('TITLE'=>$title,'POST_URL'=>$post_url,'XML'=>file_exists(get_custom_file_base().'/data_custom/fields.xml')?file_get_contents(get_custom_file_base().'/data_custom/fields.xml'):''));
+		return do_template('XML_CONFIG_SCREEN',array('_GUID'=>'cc21f921ecbdbdf83e1e28d2b3f75a3a','TITLE'=>$title,'POST_URL'=>$post_url,'XML'=>file_exists(get_custom_file_base().'/data_custom/fields.xml')?file_get_contents(get_custom_file_base().'/data_custom/fields.xml'):''));
 	}
 
 	/**
@@ -980,7 +1007,7 @@ class Module_admin_config
 	 */
 	function _xml_fields()
 	{
-		$title=get_page_title('FIELD_FILTERS');
+		$title=get_screen_title('FIELD_FILTERS');
 
 		$myfile=@fopen(get_custom_file_base().'/data_custom/fields.xml','wt');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/fields.xml');
@@ -1003,11 +1030,11 @@ class Module_admin_config
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_BREADCRUMB_OVERRIDES');
 
-		$title=get_page_title('BREADCRUMB_OVERRIDES');
+		$title=get_screen_title('BREADCRUMB_OVERRIDES');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_xml_breadcrumbs'),'_SELF');
 
-		return do_template('XML_CONFIG_SCREEN',array('TITLE'=>$title,'POST_URL'=>$post_url,'XML'=>file_exists(get_custom_file_base().'/data_custom/breadcrumbs.xml')?file_get_contents(get_custom_file_base().'/data_custom/breadcrumbs.xml'):''));
+		return do_template('XML_CONFIG_SCREEN',array('_GUID'=>'456f56149832d459bce72ca63a1578b9','TITLE'=>$title,'POST_URL'=>$post_url,'XML'=>file_exists(get_custom_file_base().'/data_custom/breadcrumbs.xml')?file_get_contents(get_custom_file_base().'/data_custom/breadcrumbs.xml'):''));
 	}
 
 	/**
@@ -1017,7 +1044,7 @@ class Module_admin_config
 	 */
 	function _xml_breadcrumbs()
 	{
-		$title=get_page_title('BREADCRUMB_OVERRIDES');
+		$title=get_screen_title('BREADCRUMB_OVERRIDES');
 
 		$myfile=@fopen(get_custom_file_base().'/data_custom/breadcrumbs.xml','wt');
 		if ($myfile===false) intelligent_write_error(get_custom_file_base().'/data_custom/breadcrumbs.xml');

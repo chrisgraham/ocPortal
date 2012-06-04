@@ -1,4 +1,4 @@
-<table summary="{!SPREAD_TABLE}" class="calendar_week spaced_table variable_table">
+<table summary="{!SPREAD_TABLE}" class="calendar_week spaced_table autosized_table">
 	<thead>
 		<tr>
 			<th></th>

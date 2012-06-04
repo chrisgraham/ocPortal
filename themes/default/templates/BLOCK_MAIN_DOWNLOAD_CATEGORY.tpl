@@ -1,11 +1,10 @@
 {+START,SET,DC_CONTENT}
 	{+START,IF_NON_EMPTY,{SUBCATEGORIES}}
-		{+START,BOX,{!SUBCATEGORIES_HERE}}
+		<section class="box box___block_main_download_category"><div class="box_inner">
+			<h3>{!SUBCATEGORIES_HERE}</h3>
+
 			{SUBCATEGORIES}
-		{+END}
-		{+START,IF_NON_EMPTY,{DOWNLOADS}}
-			<br />
-		{+END}
+		</div></section>
 	{+END}
 
 	{+START,IF_NON_EMPTY,{DOWNLOADS}}
@@ -13,20 +12,16 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{SUBMIT_URL}}
-		<p class="community_block_tagline">
-			[ <a rel="add" href="{SUBMIT_URL*}">{!ADD_DOWNLOAD}</a> ]
+		<p class="associated_link associated_links_block_group">
+			<a rel="add" href="{SUBMIT_URL*}">{!ADD_DOWNLOAD}</a>
 		</p>
 	{+END}
 {+END}
 
-{+START,IF,{$GET,in_panel}}
-	{+START,BOX,{TITLE},,panel}
+<div class="only_a_box_if_in_panel">
+	<section class="box box___block_main_download_category"><div class="box_inner">
+		{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE}</h3>{+END}
+
 		{$GET,DC_CONTENT}
-	{+END}
-{+END}
-
-{+START,IF,{$NOT,{$GET,in_panel}}}
-	<h2>{TITLE}</h2>
-
-	{$GET,DC_CONTENT}
-{+END}
+	</div></section>
+</div>

@@ -53,12 +53,12 @@ class Hook_admin_stats_ocf_posting_rates
 		require_lang('ocf');
 
 		//This will show a plain bar chart with all the downloads listed
-		$title=get_page_title('POSTING_RATES');
+		$title=get_screen_title('POSTING_RATES');
 
 		// Handle time range
 		if (get_param_integer('dated',0)==0)
 		{
-			$title=get_page_title('POSTING_RATES');
+			$title=get_screen_title('POSTING_RATES');
 
 			$extra_fields=new ocp_tempcode();
 			require_code('form_templates');
@@ -73,7 +73,7 @@ class Hook_admin_stats_ocf_posting_rates
 		if (is_null($time_start)) $time_start=0;
 		if (is_null($time_end)) $time_end=time();
 
-		$title=get_page_title('SECTION_POSTING_RATES_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
+		$title=get_screen_title('SECTION_POSTING_RATES_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		$poster_exception='';
 		foreach (explode(',',get_param('poster_exception','')) as $e)
@@ -179,7 +179,7 @@ class Hook_admin_stats_ocf_posting_rates
 
 		$graph=do_template('STATS_GRAPH',array('GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Posting_rates.xml','TITLE'=>do_lang_tempcode('POSTING_RATES'),'TEXT'=>do_lang_tempcode('DESCRIPTION_POSTING_RATES')));
 
-		return do_template('STATS_SCREEN',array('TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		return do_template('STATS_SCREEN',array('_GUID'=>'2af485cee293bf89607066db9f667423','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
 	}
 
 }

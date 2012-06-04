@@ -30,7 +30,7 @@ if (typeof window.YAHOO != 'undefined')
 			if (window[calob] != null)
 			{
 				window[calob] = null;
-				setInnerHTML(container, '');
+				set_inner_html(container, '');
 			}
 			window.a_date_field_is_on = false;
 		} else
@@ -75,7 +75,7 @@ if (typeof window.YAHOO != 'undefined')
 				{
 					var new_option = document.createElement('option');
 					new_option.value = date.getFullYear();
-					setInnerHTML(new_option,date.getFullYear());
+					set_inner_html(new_option,date.getFullYear());
 					year.appendChild(new_option);
 					year.selectedIndex = year.options.length-1;
 				} else
@@ -90,8 +90,8 @@ if (typeof window.YAHOO != 'undefined')
 
 				match_calendar_from_to(stub);
 			};
-			container.style.top = (findPosY(window[linkob]) + findHeight(window[linkob])) + "px";
-			container.style.left = findPosX(window[linkob]) + "px";
+			container.style.top = (find_pos_y(window[linkob]) + find_height(window[linkob])) + "px";
+			container.style.left = find_pos_x(window[linkob]) + "px";
 			container.style.position = 'absolute';
 			container.style.width = '150px';
 			container.style.display = 'block';
@@ -312,7 +312,7 @@ if (typeof window.YAHOO != 'undefined')
 		this.Style = this.Config.Style;
 		this.Config.Locale = { MONTHS_SHORT: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],MONTHS_LONG: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],WEEKDAYS_1CHAR: ["S", "M", "T", "W", "T", "F", "S"],WEEKDAYS_SHORT: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],WEEKDAYS_MEDIUM: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],WEEKDAYS_LONG: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],DATE_DELIMITER: ",",DATE_FIELD_DELIMITER: "/",DATE_RANGE_DELIMITER: "-",MY_MONTH_POSITION: 1,MY_YEAR_POSITION: 2,MD_MONTH_POSITION: 1,MD_DAY_POSITION: 2,MDY_MONTH_POSITION: 1,MDY_DAY_POSITION: 2,MDY_YEAR_POSITION: 3 };
 		this.Locale = this.Config.Locale;
-		this.Config.Options = { MULTI_SELECT: false,SHOW_WEEKDAYS: true,START_WEEKDAY: 1,SHOW_WEEK_HEADER: false,SHOW_WEEK_FOOTER: false,HIDE_BLANK_WEEKS: false,NAV_ARROW_LEFT: "{$IMG;,date_chooser/callt}".replace(/^http:/, window.location.protocol),NAV_ARROW_RIGHT: "{$IMG;,date_chooser/calrt}".replace(/^http:/, window.location.protocol) };
+		this.Config.Options = { MULTI_SELECT: false,SHOW_WEEKDAYS: true,START_WEEKDAY: 1,SHOW_WEEK_HEADER: false,SHOW_WEEK_FOOTER: false,HIDE_BLANK_WEEKS: false,NAV_ARROW_LEFT: "{$IMG#,date_chooser/callt}".replace(/^http:/, window.location.protocol),NAV_ARROW_RIGHT: "{$IMG#,date_chooser/calrt}".replace(/^http:/, window.location.protocol) };
 		this.Options = this.Config.Options;
 		this.customConfig();
 		if (!this.Options.LOCALE_MONTHS) {
@@ -382,7 +382,7 @@ if (typeof window.YAHOO != 'undefined')
 			{
 				var cell = document.createElement("th");
 				YAHOO.widget.Calendar_Core.setCssClasses(cell, [this.Style.CSS_WEEKDAY_CELL]);
-				setInnerHTML(cell, this.Options.LOCALE_WEEKDAYS[i]);
+				set_inner_html(cell, this.Options.LOCALE_WEEKDAYS[i]);
 				row.appendChild(cell);
 			}
 			if (this.Config.Options.SHOW_WEEK_FOOTER) {
@@ -440,7 +440,7 @@ if (typeof window.YAHOO != 'undefined')
 		this.onRender();
 	};
 	YAHOO.widget.Calendar_Core.prototype.renderHeader = function() {
-		setInnerHTML(this.headerCell, "");
+		set_inner_html(this.headerCell, "");
 		var headerContainer = document.createElement("div");
 		headerContainer.className = this.Style.CSS_HEADER;
 		headerContainer.appendChild(document.createTextNode(this.buildMonthLabel()));
@@ -635,7 +635,7 @@ if (typeof window.YAHOO != 'undefined')
 	};
 	YAHOO.widget.Calendar_Core.prototype.renderOutOfBoundsDate = function(workingDate, cell) {
 		YAHOO.widget.Calendar_Core.addCssClass(cell, "previous");
-		setInnerHTML(cell, workingDate.getDate());
+		set_inner_html(cell, workingDate.getDate());
 		return YAHOO.widget.Calendar_Core.STOP_RENDER;
 	}
 	YAHOO.widget.Calendar_Core.prototype.renderRowHeader = function(workingDate, cell) {
@@ -645,7 +645,7 @@ if (typeof window.YAHOO != 'undefined')
 			useYear = workingDate.getFullYear();
 		}
 		var weekNum = YAHOO.widget.DateMath.getWeekNumber(workingDate, useYear, this.Options.START_WEEKDAY);
-		setInnerHTML(cell, weekNum);
+		set_inner_html(cell, weekNum);
 		if (this.isDateOOM(workingDate) && !YAHOO.widget.DateMath.isMonthOverlapWeek(workingDate)) {
 			YAHOO.widget.Calendar_Core.addCssClass(cell, this.Style.CSS_CELL_OOM);
 		}
@@ -657,7 +657,7 @@ if (typeof window.YAHOO != 'undefined')
 		}
 	};
 	YAHOO.widget.Calendar_Core.prototype.renderCellDefault = function(workingDate, cell) {
-		setInnerHTML(cell, "");
+		set_inner_html(cell, "");
 		var link = document.createElement("a");
 		link.href = "javascript:void(null);";
 		link.name = this.id + "__" + workingDate.getFullYear() + "_" + (workingDate.getMonth() + 1) + "_" + workingDate.getDate();
@@ -689,12 +689,12 @@ if (typeof window.YAHOO != 'undefined')
 	};
 	YAHOO.widget.Calendar_Core.prototype.renderCellNotThisMonth = function(workingDate, cell) {
 		YAHOO.widget.Calendar_Core.addCssClass(cell, this.Style.CSS_CELL_OOM);
-		setInnerHTML(cell, workingDate.getDate());
+		set_inner_html(cell, workingDate.getDate());
 		return YAHOO.widget.Calendar_Core.STOP_RENDER;
 	};
 	YAHOO.widget.Calendar_Core.prototype.renderBodyCellRestricted = function(workingDate, cell) {
 		YAHOO.widget.Calendar_Core.setCssClasses(cell, [this.Style.CSS_CELL, this.Style.CSS_CELL_RESTRICTED]);
-		setInnerHTML(cell, workingDate.getDate());
+		set_inner_html(cell, workingDate.getDate());
 		return YAHOO.widget.Calendar_Core.STOP_RENDER;
 	};
 	YAHOO.widget.Calendar_Core.prototype.addMonths = function(count) {
@@ -957,7 +957,7 @@ if (typeof window.YAHOO != 'undefined')
 		this.renderStack = this._renderStack.concat();
 	};
 	YAHOO.widget.Calendar_Core.prototype.clearElement = function(cell) {
-		setInnerHTML(cell, "&nbsp;");
+		set_inner_html(cell, "&nbsp;");
 		cell.className = "";
 	};
 	YAHOO.widget.Calendar_Core.prototype.addRenderer = function(sDates, fnRender) {
@@ -1312,7 +1312,7 @@ if (typeof window.YAHOO != 'undefined')
 		this.shellRendered = true;
 	};
 	YAHOO.widget.Calendar.prototype.renderHeader = function() {
-		setInnerHTML(this.headerCell, "");
+		set_inner_html(this.headerCell, "");
 		var headerContainer = document.createElement("div");
 		headerContainer.className = this.Style.CSS_HEADER;
 		var linkLeft = document.createElement("a");
@@ -1342,7 +1342,7 @@ if (typeof window.YAHOO != 'undefined')
 	}
 	YAHOO.widget.Calendar2up_Cal.prototype = new YAHOO.widget.Calendar_Core();
 	YAHOO.widget.Calendar2up_Cal.prototype.renderHeader = function() {
-		setInnerHTML(this.headerCell, "");
+		set_inner_html(this.headerCell, "");
 		var headerContainer = document.createElement("div");
 		headerContainer.className = this.Style.CSS_HEADER;
 		if (this.index == 0) {
@@ -1417,14 +1417,14 @@ if (typeof window.YAHOO != 'undefined')
 			}
 		}
 		this.titleDiv.className = "title";
-		setInnerHTML(this.titleDiv, this.title);
+		set_inner_html(this.titleDiv, this.title);
 		if (this.outerContainer.style.position == "absolute") 
 		{
 			var linkClose = document.createElement("a");
 			linkClose.href = "javascript:void(null)";
 			YAHOO.util.Event.addListener(linkClose, "click", this.hide, this);
 			var imgClose = document.createElement("img");
-			imgClose.src = "{$IMG;,date_chooser/calx}".replace(/^http:/, window.location.protocol);
+			imgClose.src = "{$IMG#,date_chooser/calx}".replace(/^http:/, window.location.protocol);
 			imgClose.className = "close-icon";
 			linkClose.appendChild(imgClose);
 			this.linkClose = linkClose;

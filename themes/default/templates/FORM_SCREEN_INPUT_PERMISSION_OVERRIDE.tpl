@@ -1,9 +1,9 @@
-<td class="dottedborder_barrier_b_nonrequired sp_cell">
+<td class="form_table_field_input sp_cell">
 	<div class="accessibility_hidden"><label for="access_{GROUP_ID*}_sp_{SP*}">{!OVERRIDE} ({GROUP_NAME*}, {TITLE*})</label></div>
 	<select onclick="this.onchange(event);" onchange="permissions_overridden('access_{GROUP_ID%}');" onmouseover="if (this.options[this.selectedIndex].value=='-1') show_permission_setting(this,event);" tabindex="{TABINDEX*}" title="{TITLE*}" id="access_{GROUP_ID*}_sp_{SP*}" name="access_{GROUP_ID*}_sp_{SP*}">
 		{$,The order of options here should not be changed with unless Javascript is also recoded}
 		{+START,IF,{$EQ,{CODE},-1}}
-			<option selected="selected" value="-1">&nbsp;</option>
+			<option selected="selected" value="-1">&mdash;</option>
 		{+END}
 		{+START,IF,{$NEQ,{CODE},-1}}
 			<option value="-1">{!USE_DEFAULT}</option>

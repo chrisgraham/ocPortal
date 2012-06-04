@@ -1,6 +1,8 @@
-{+START,BOX,{!TOP,{NUMBER*},{!GALLERIES}},,{$?,{$GET,in_panel},panel,classic}}
+<section class="box box___block_main_top_galleries"><div class="box_inner">
+	<h3>{!TOP,{NUMBER*},{!GALLERIES}}</h3>
+
 	<ul class="category_list">
 		{CONTENT}
 	</ul>
-{+END}
+</div></section>
 

@@ -19,7 +19,7 @@
  */
 
 /**
- * Show poll block.
+ * Handle the poll.
  *
  * @param  boolean			Whether to get the output instead of outputting it directly
  * @param  ?AUTO_LINK		Poll ID (NULL: read from environment)
@@ -35,11 +35,11 @@ function poll_script($ret=false,$param=NULL)
 
 	if ($param==-1)
 	{
-		$rows=persistant_cache_get('POLL');
+		$rows=persistent_cache_get('POLL');
 		if (is_null($rows))
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('is_current'=>1),'ORDER BY id DESC',1);
-			persistant_cache_set('POLL',$rows);
+			persistent_cache_set('POLL',$rows);
 		}
 	} else
 	{
@@ -61,7 +61,7 @@ function poll_script($ret=false,$param=NULL)
 		$show_poll_results=get_param_integer('show_poll_results_'.strval($myrow['id']),0);
 		if ($show_poll_results==0)
 		{
-			$content=show_poll(false,$myrow,$zone);
+			$content=render_poll_box(false,$myrow,$zone);
 		} else
 		{
 			// Voting
@@ -103,7 +103,7 @@ function poll_script($ret=false,$param=NULL)
 			}
 
 			// Show poll, with results
-			$content=show_poll(true,$myrow,$zone);
+			$content=render_poll_box(true,$myrow,$zone);
 		}
 	}
 
@@ -141,14 +141,14 @@ function may_vote_in_poll($myrow)
 }
 
 /**
- * Show an actual poll block.
+ * Show an actual poll box.
  *
  * @param  boolean			Whether to show results (if we've already voted, this'll be overrided)
  * @param  array				The poll row
  * @param  ID_TEXT			The zone our poll module is in
- * @return tempcode			The block
+ * @return tempcode			The box
  */
-function show_poll($results,$myrow,$zone)
+function render_poll_box($results,$myrow,$zone='_SEARCH')
 {
 	$ip=get_ip_address();
 	if (!may_vote_in_poll($myrow)) $results=true;
@@ -170,19 +170,9 @@ function show_poll($results,$myrow,$zone)
 	}
 	if ($results) asort($orderings);
 
-	if (running_script('poll'))
-	{
-		$keep=symbol_tempcode('KEEP');
-		$vote_url=find_script('poll').'?poll_id='.strval($myrow['id']).'&show_poll_results_'.strval($myrow['id']).'=1&param='.urlencode(strval($myrow['id'])).'&zone='.urlencode(get_param('zone',get_module_zone('polls'))).$keep->evaluate();
-		if (get_param_integer('in_panel',0)==1) $vote_url.='&in_panel=1';
-		if (get_param_integer('interlock',0)==1) $vote_url.='&interlock=1';
-		$result_url=$results?'':$vote_url;
-	} else
-	{
-		$poll_results='show_poll_results_'.strval($myrow['id']);
-		$vote_url=get_self_url(false,true,array('poll_id'=>$myrow['id'],$poll_results=>1,'utheme'=>NULL));
-		$result_url=$results?'':get_self_url(false,true,array($poll_results=>1,'utheme'=>NULL));
-	}
+	$poll_results='show_poll_results_'.strval($myrow['id']);
+	$vote_url=get_self_url(false,true,array('poll_id'=>$myrow['id'],$poll_results=>1,'utheme'=>NULL));
+	$result_url=$results?'':get_self_url(false,true,array($poll_results=>1,'utheme'=>NULL));
 	if (get_param('utheme','')!='')
 	{
 		if (is_object($result_url))
@@ -233,7 +223,7 @@ function show_poll($results,$myrow,$zone)
 		$full_url=build_url(array('page'=>'polls','type'=>'view','id'=>$myrow['id']),$zone);
 	$map2=array('_GUID'=>'4c6b026f7ed96f0b5b8408eb5e5affb5','VOTE_URL'=>$vote_url,'SUBMITTER'=>strval($myrow['submitter']),'PID'=>strval($myrow['id']),'FULL_URL'=>$full_url,'CONTENT'=>$tpl,'QUESTION'=>$question,'QUESTION_PLAIN'=>$question_plain,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'RESULT_URL'=>$result_url,'ZONE'=>$zone);
 	if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map2['COMMENT_COUNT']='1';
-	return do_template('POLL',$map2);
+	return do_template('POLL_BOX',$map2);
 }
 
 /**
@@ -290,7 +280,7 @@ function add_poll($question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_option
 {
 	if ($current==1)
 	{
-		persistant_cache_delete('POLL');
+		persistent_cache_delete('POLL');
 		$GLOBALS['SITE_DB']->query_update('poll',array('is_current'=>0),array('is_current'=>1),'',1);
 	}
 
@@ -331,7 +321,7 @@ function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_o
 {
 	log_it('EDIT_POLL',strval($id),$question);
 
-	persistant_cache_delete('POLL');
+	persistent_cache_delete('POLL');
 
 	$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$id),'',1);
 	$_question=$rows[0]['question'];
@@ -365,7 +355,7 @@ function delete_poll($id)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$id),'',1);
 
-	persistant_cache_delete('POLL');
+	persistent_cache_delete('POLL');
 
 	$question=get_translated_text($rows[0]['question']);
 	log_it('DELETE_POLL',strval($id),$question);
@@ -389,7 +379,7 @@ function delete_poll($id)
  */
 function set_poll($id)
 {
-	persistant_cache_delete('POLL');
+	persistent_cache_delete('POLL');
 
 	$rows=$GLOBALS['SITE_DB']->query_select('poll',array('question','submitter'),array('id'=>$id));
 	$question=$rows[0]['question'];

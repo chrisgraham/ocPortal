@@ -1,5 +1,5 @@
 <hr class="spaced_rule" />
 
-<div class="important_notification">
+<p class="red_alert" role="alert">
 	{!REVISION_RESTORE}
-</div>
+</p>

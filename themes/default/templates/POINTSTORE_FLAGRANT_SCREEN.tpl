@@ -18,6 +18,9 @@
 
 <div>
 	<p>{!FLAGRANT_E}</p>
-	<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list"><li class="actions_list_strong">&raquo; <a href="{TEXT_LINK*}">{!PROCEED}</a></li></ul>
+	<ul role="navigation" class="actions_list">
+		<li class="actions_list_strong">
+			<a href="{TEXT_URL*}">{!PROCEED}</a>
+		</li>
+	</ul>
 </div>
-<br class="tiny_linebreak" />

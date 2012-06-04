@@ -966,6 +966,8 @@ function actualise_post_trackback($allow_trackbacks,$content_type,$content_id)
 {
 	if ((get_option('is_on_trackbacks')=='0') || (!$allow_trackbacks)) return false;
 
+	inject_action_spamcheck();
+
 	$url=either_param('url',NULL);
 	if (is_null($url)) return false;
 	$title=either_param('title',$url);

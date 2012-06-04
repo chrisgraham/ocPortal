@@ -190,7 +190,7 @@ function notifications_ui($member_id_of)
 		$auto_monitor_contrib_content=strval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_auto_monitor_contrib_content'));
 	}
 
-	return do_template('NOTIFICATIONS_MANAGE',array('COLOR'=>$color,'AUTO_NOTIFICATION_CONTRIB_CONTENT'=>$auto_monitor_contrib_content,'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,'NOTIFICATION_SECTIONS'=>$notification_sections));
+	return do_template('NOTIFICATIONS_MANAGE',array('_GUID'=>'838165ca739c45c2dcf994bed6fefe3e','COLOR'=>$color,'AUTO_NOTIFICATION_CONTRIB_CONTENT'=>$auto_monitor_contrib_content,'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,'NOTIFICATION_SECTIONS'=>$notification_sections));
 }
 
 /**
@@ -218,7 +218,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	$ob=_get_notification_ob_for_code($notification_code);
 	$info_details=$ob->list_handled_codes();
 
-	$title=get_page_title('NOTIFICATION_MANAGEMENT_FOR',true,array(escape_html($info_details[$notification_code][1])));
+	$title=get_screen_title('NOTIFICATION_MANAGEMENT_FOR',true,array(escape_html($info_details[$notification_code][1])));
 
 	if (is_guest()) access_denied('NOT_AS_GUEST');
 

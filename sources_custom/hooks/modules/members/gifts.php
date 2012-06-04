@@ -77,7 +77,7 @@ class Hook_members_gifts
 			}
 		}
 
-		$gifts_block=do_template('OCF_MEMBER_SCREEN_GIFTS_WRAP',array('GIFTS'=>$gifts));
+		$gifts_block=do_template('OCF_MEMBER_SCREEN_GIFTS_WRAP',array('_GUID'=>'fd4b5344b3b16cdf129e49bae903cbb2','GIFTS'=>$gifts));
 		return array($gifts_block);
 	}
 }

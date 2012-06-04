@@ -105,7 +105,7 @@ class Hook_Profiles_Tabs_edit
 		}
 		$url=build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,false/*,'tab__edit'  confusing, esp if was not on settings edit tab initially*/);
 
-		$content=do_template('OCF_MEMBER_PROFILE_EDIT',array('JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'URL'=>$url,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'AUTOCOMPLETE'=>false,'SKIP_VALIDATION'=>true,'TABS'=>$_tabs));
+		$content=do_template('OCF_MEMBER_PROFILE_EDIT',array('_GUID'=>'7a3e2cc210583fe4f3097af48b052351','JAVASCRIPT'=>$javascript,'HIDDEN'=>$hidden,'URL'=>$url,'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),'AUTOCOMPLETE'=>false,'SKIP_VALIDATION'=>true,'TABS'=>$_tabs));
 
 		return array($title,$content,$order);
 	}

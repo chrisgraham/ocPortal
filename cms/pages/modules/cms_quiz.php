@@ -100,7 +100,7 @@ class Module_cms_quiz extends standard_aed_module
 
 		require_code('templates_donext');
 		require_code('fields');
-		return do_next_manager(get_page_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
+		return do_next_manager(get_screen_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_QUIZ')),

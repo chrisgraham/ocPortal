@@ -91,7 +91,7 @@ class Module_admin_quiz
 		attach_message(do_lang_tempcode('ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform');
 
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
+		return do_next_manager(get_screen_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('findwinners',array('_SELF',array('type'=>'find_winner'),'_SELF'),do_lang('FIND_WINNERS')),
@@ -128,7 +128,7 @@ class Module_admin_quiz
 	 */
 	function export_quiz()
 	{
-		$title=get_page_title('EXPORT_QUIZ');
+		$title=get_screen_title('EXPORT_QUIZ');
 
 		$fields		=	new ocp_tempcode();
 		$quiz_list	=	$this->nice_get_entries();
@@ -141,7 +141,7 @@ class Module_admin_quiz
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_export'),'_SELF');
 		$submit_name=do_lang_tempcode('EXPORT_QUIZ');
 
-		return do_template('FORM_SCREEN',array('TITLE'=>$title,'TEXT'=>do_lang_tempcode('EXPORT_QUIZ_TEXT'),'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'POST'=>true));
+		return do_template('FORM_SCREEN',array('_GUID'=>'3110ee0e917e2e0f83a41ab27ec7eafe','TITLE'=>$title,'TEXT'=>do_lang_tempcode('EXPORT_QUIZ_TEXT'),'HIDDEN'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url,'POST'=>true));
 	}
 
 	/**
@@ -162,7 +162,7 @@ class Module_admin_quiz
 	 */
 	function find_winner()
 	{
-		$title=get_page_title('FIND_WINNERS');
+		$title=get_screen_title('FIND_WINNERS');
 
 		require_code('form_templates');
 
@@ -282,7 +282,7 @@ class Module_admin_quiz
 		breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES')),array('_SELF:_SELF:find_winner',do_lang_tempcode('CHOOSE'))));
 
 		// Show the winners
-		$title=get_page_title('FIND_WINNERS');
+		$title=get_screen_title('FIND_WINNERS');
 		return do_template('INDEX_SCREEN',array('_GUID'=>'d427ec7300a325ee4f00020ea59468e2','TITLE'=>$title,'CONTENT'=>$_winners,'PRE'=>do_lang_tempcode('WINNERS_FOUND_AS_FOLLOWS'),'POST'=>''));
 	}
 
@@ -293,7 +293,7 @@ class Module_admin_quiz
 	 */
 	function survey_results()
 	{
-		$title=get_page_title('SURVEY_RESULTS');
+		$title=get_screen_title('SURVEY_RESULTS');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/survey_results';
 
@@ -325,7 +325,7 @@ class Module_admin_quiz
 	 */
 	function _survey_results()
 	{
-		$title=get_page_title('SURVEY_RESULTS');
+		$title=get_screen_title('SURVEY_RESULTS');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES'))));
 
@@ -336,7 +336,7 @@ class Module_admin_quiz
 		$fields=new ocp_tempcode();
 
 		require_code('templates_results_table');
-		require_code('templates_view_space');
+		require_code('templates_map_table');
 
 		// Show summary
 		$question_rows=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY id');
@@ -363,9 +363,9 @@ class Module_admin_quiz
 			}
 			if ($answers->is_empty()) $answers=do_lang_tempcode('FREE_ENTRY_ANSWER');
 
-			$fields->attach(view_space_field($question,$answers,true));
+			$fields->attach(map_table_field($question,$answers,true));
 		}
-		$summary=do_template('VIEW_SPACE',array('_GUID'=>'2b0c2ba0070ba810c5e4b5b4aedcb15f','WIDTH'=>'300','FIELDS'=>$fields));
+		$summary=do_template('MAP_TABLE',array('_GUID'=>'2b0c2ba0070ba810c5e4b5b4aedcb15f','WIDTH'=>'300','FIELDS'=>$fields));
 
 		// Show results table
 		$start=get_param_integer('start',0);
@@ -406,11 +406,11 @@ class Module_admin_quiz
 	 */
 	function __survey_results()
 	{
-		$title=get_page_title('SURVEY_RESULTS');
+		$title=get_screen_title('SURVEY_RESULTS');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/survey_results';
 
-		require_code('templates_view_space');
+		require_code('templates_map_table');
 
 		$id=get_param_integer('id'); // entry ID
 
@@ -433,7 +433,7 @@ class Module_admin_quiz
 				$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('q_answer_text'),array('q_question'=>$q['id'],'id'=>intval($answer)),'ORDER BY id');
 				if (array_key_exists(0,$answer_rows)) $answer=get_translated_text($answer_rows[0]['q_answer_text']);
 			}
-			$fields->attach(view_space_field(get_translated_text($q['q_question_text']),$answer));
+			$fields->attach(map_table_field(get_translated_text($q['q_question_text']),$answer));
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES')),array('_SELF:_SELF:_survey_results:id='.strval($quiz_id),do_lang_tempcode('SURVEY_RESULTS'))));
@@ -446,7 +446,7 @@ class Module_admin_quiz
 			if (is_object($member_url)) $member_url=$member_url->evaluate();
 		}
 
-		return do_template('VIEW_SPACE_SCREEN',array('_GUID'=>'02b4dd6d52feaf3844e631e56395c4da','TITLE'=>$title,'TEXT'=>do_lang_tempcode('SURVEY_WAS_ENTERED_AS_FOLLOWS',escape_html($username),escape_html($member_url),escape_html($date)),'FIELDS'=>$fields));
+		return do_template('MAP_TABLE_SCREEN',array('_GUID'=>'02b4dd6d52feaf3844e631e56395c4da','TITLE'=>$title,'TEXT'=>do_lang_tempcode('SURVEY_WAS_ENTERED_AS_FOLLOWS',escape_html($username),escape_html($member_url),escape_html($date)),'FIELDS'=>$fields));
 	}
 
 }

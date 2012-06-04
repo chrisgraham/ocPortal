@@ -201,7 +201,7 @@ class forum_driver_aef extends forum_driver_base
 		foreach ($emoticons as $emo)
 		{
 			$code=$emo['smcode'];
-			$em->attach(do_template('EMOTICON_CLICK_CODE',array('FIELD_NAME'=>$field_name,'CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
+			$em->attach(do_template('EMOTICON_CLICK_CODE',array('_GUID'=>'681b0be397b1892c1ee76e58409822f3','FIELD_NAME'=>$field_name,'CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
 		}
 
 		return $em;

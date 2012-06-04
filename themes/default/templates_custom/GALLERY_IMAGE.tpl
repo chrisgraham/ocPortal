@@ -6,11 +6,11 @@
 			</h3>
 		{+END}
 
-		<table summary="{!MAP_TABLE}" class="solidborder">
+		<table summary="{!MAP_TABLE}" class="results_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
-					<col style="width: 85px" />
-					<col style="width: 160px" />
+					<col class="gallery_entry_field_name_column" />
+					<col class="gallery_entry_field_value_column" />
 				</colgroup>
 			{+END}
 
@@ -22,7 +22,7 @@
 
 				<tr>
 					<th class="de_th meta_data_title">{!BY}</th>
-					<td><a rel="author" href="{$MEMBER_PROFILE_LINK*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a></td>
+					<td><a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a></td>
 				</tr>
 
 				{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
@@ -52,17 +52,17 @@
 {+END}
 
 {+START,IF,{$EQ,{_GUID},043ac7d15ce02715ac02309f6e8340ff}}
-	<a onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{$GET^;*,TOOLTIP}','auto',null,null,false,true);" href="{VIEW_URL*}"><img height="140" src="{$THUMBNAIL*,{THUMB_URL},140x140,website_specific,,,height}" /></a>
+	<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET^;*,TOOLTIP}','auto',null,null,false,true);" href="{VIEW_URL*}"><img height="140" src="{$THUMBNAIL*,{THUMB_URL},140x140,website_specific,,,height}" /></a>
 {+END}
 
 {+START,IF,{$NEQ,{_GUID},043ac7d15ce02715ac02309f6e8340ff}}
-	<div class="gallery_regular_thumb" onmouseout="if (typeof window.deactivateTooltip!='undefined') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!='undefined') repositionTooltip(this,event);" onmouseover="if (typeof window.activateTooltip!='undefined') activateTooltip(this,event,'{$GET^;*,TOOLTIP}','auto',null,null,false,true);">
+	<div class="gallery_regular_thumb" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET^;*,TOOLTIP}','auto',null,null,false,true);">
 		<a href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
-		<div class="gmeta">
+		<p class="gallery_entry_box_details">
 			{+START,IF_PASSED,RATING_DETAILS}{+START,IF_NON_EMPTY,{RATING_DETAILS}}
 				<span class="grating">{RATING_DETAILS}</span>
 			{+END}{+END}
 			<a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a>
-		</div>
+		</p>
 	</div>
 {+END}

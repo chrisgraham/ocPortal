@@ -36,7 +36,7 @@ class Hook_integrity_check
 			require_code('upgrade');
 			$result=run_integrity_check(true,false,true);
 			if ($result=='') $result=do_lang('NO_ACTION_REQUIRED');
-
+	
 			return array('',$result,'','');
 		}
 	}

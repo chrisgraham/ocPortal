@@ -41,7 +41,7 @@ function download_licence_script()
 	}
 	$licence_title=$rows[0]['l_title'];
 	$licence_text=$rows[0]['l_text'];
-	$echo=do_template('POPUP_HTML_WRAP',array('_GUID'=>'d8f60d5f6f56b08589ed6f4b874dad85','TITLE'=>$licence_title,'CONTENT'=>comcode_to_tempcode($licence_text,$GLOBALS['FORUM_DRIVER']->get_guest_id(),false)));
+	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'d8f60d5f6f56b08589ed6f4b874dad85','TITLE'=>$licence_title,'POPUP'=>true,'CONTENT'=>comcode_to_tempcode($licence_text,$GLOBALS['FORUM_DRIVER']->get_guest_id(),false)));
 	$echo->evaluate_echo();
 }
 
@@ -55,7 +55,7 @@ function download_licence_script()
  * @param  ?string		Text summary for result (e.g. highlighted portion of actual file from search result) (NULL: none)
  * @return tempcode		A box for this download, linking to the full download page
  */
-function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_summary=NULL)
+function render_download_box($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_summary=NULL)
 {
 	require_css('downloads');
 
@@ -66,11 +66,13 @@ function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_sum
 	$filesize=($filesize>0)?clean_file_size($filesize):do_lang('UNKNOWN');
 	$description=get_translated_tempcode($row['description']);
 	$root=get_param_integer('root',db_get_first_id(),true);
-	$download_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$row['id'],'root'=>($root==db_get_first_id())?NULL:$root),$zone);
+	$map=array('page'=>'downloads','type'=>'entry','id'=>$row['id'],'root'=>($root==db_get_first_id())?NULL:$root);
+	if (get_page_name()=='downloads') $map+=propagate_ocselect();
+	$download_url=build_url($map,$zone);
 	$date=get_timezoned_date($row['add_date'],false);
 	$date_raw=$row['add_date'];
 
-	$tree=((get_option('show_dload_trees')=='1') && ($breadcrumbs))?download_breadcrumbs($row['category_id'],NULL,false,$zone):new ocp_tempcode();
+	$breadcrumbs=((get_option('show_dload_trees')=='1') && ($breadcrumbs))?download_breadcrumbs($row['category_id'],NULL,false,$zone):new ocp_tempcode();
 
 	$pic_suffix='';
 	$thumb_url='';
@@ -105,7 +107,7 @@ function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_sum
 		{
 			$keep=symbol_tempcode('KEEP');
 			$licence_url=find_script('download_licence').'?id='.strval($licence).$keep->evaluate();
-			$licence_hyperlink=do_template('HYPERLINK_POPUP_WINDOW',array('_GUID'=>'10582f28c37ee7e9e462fdbd6a2cb8dd','TITLE'=>'','CAPTION'=>$licence_title,'URL'=>$licence_url,'WIDTH'=>'600','HEIGHT'=>'500','REL'=>'license'));
+			$licence_hyperlink=do_template('HYPERLINK_POPUP_WINDOW',array('_GUID'=>'58a9e5c99bd236290009b6eab44dbac3','TITLE'=>'','CAPTION'=>$licence_title,'URL'=>$licence_url,'WIDTH'=>'600','HEIGHT'=>'500','REL'=>'license'));
 		} else
 		{
 			$licence=NULL; // Orphaned
@@ -114,7 +116,7 @@ function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_sum
 
 	// Final template
 	if (($full_img_url!='') && (url_is_local($full_img_url))) $full_img_url=get_custom_base_url().'/'.$full_img_url;
-	return do_template('DOWNLOAD_BOX',array('TEXT_SUMMARY'=>$text_summary,'AUTHOR'=>$row['author'],'ID'=>strval($row['id']),'RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>get_translated_text($row['name']),'TREE'=>$tree,'IMG_URL'=>$thumb_url,'FULL_IMG_URL'=>$full_img_url,'IMGCODE'=>$imgcode,'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink));
+	return do_template('DOWNLOAD_BOX',array('_GUID'=>'7a4737e21bdb4bd15ac5fe8570915d08','TEXT_SUMMARY'=>$text_summary,'AUTHOR'=>$row['author'],'ID'=>strval($row['id']),'RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>get_translated_text($row['name']),'BREADCRUMBS'=>$breadcrumbs,'IMG_URL'=>$thumb_url,'FULL_IMG_URL'=>$full_img_url,'IMGCODE'=>$imgcode,'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink));
 }
 
 /**
@@ -125,20 +127,22 @@ function get_download_html($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_sum
  * @param  boolean		Whether to put it in a box
  * @return tempcode		A box for it, linking to the full page
  */
-function get_download_category_html($row,$zone='_SEARCH',$put_in_box=true)
+function render_download_category_box($row,$zone='_SEARCH',$put_in_box=true)
 {
 	$url=build_url(array('page'=>'downloads','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']),$zone);
 
-	$content=do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>get_translated_tempcode($row['description']),'URL'=>$url));
-	if (!$put_in_box) return $content;
-
-	if (!is_null($row['parent_id']))
+	$breadcrumbs=mixed();
+	$title=mixed();
+	if ($put_in_box)
 	{
-		$tree=download_breadcrumbs($row['parent_id'],NULL,false,$zone);
-		if (!$tree->is_empty()) $content->attach(paragraph(do_lang_tempcode('LOCATED_IN',$tree)));
+		if (!is_null($row['parent_id']))
+		{
+			$breadcrumbs=download_breadcrumbs($row['parent_id'],NULL,false,$zone);
+		}
+		$title=get_translated_text($row['category']);
 	}
 
-	return put_in_standard_box($content,get_translated_text($row['category']));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'SUMMARY'=>get_translated_tempcode($row['description']),'URL'=>$url));
 }
 
 /**
@@ -162,7 +166,7 @@ function nice_get_downloads_tree($it=NULL,$submitter=NULL,$shun=NULL,$use_compou
 		foreach ($category['entries'] as $eid=>$etitle)
 		{
 			$selected=($eid==$it);
-			$line=do_template('DOWNLOAD_LIST_LINE',array('_GUID'=>'7bb13e4418b500cb2b330e629710138a','TREE'=>$category['tree'],'DOWNLOAD'=>$etitle));
+			$line=do_template('DOWNLOAD_LIST_LINE',array('_GUID'=>'7bb13e4418b500cb2b330e629710138a','BREADCRUMBS'=>$category['breadcrumbs'],'DOWNLOAD'=>$etitle));
 			$out.='<option value="'.(!$use_compound_list?strval($eid):$category['compound_list']).'"'.($selected?' selected="selected"':'').'>'.$line->evaluate().'</option>';
 		}
 	}
@@ -177,26 +181,26 @@ function nice_get_downloads_tree($it=NULL,$submitter=NULL,$shun=NULL,$use_compou
  *
  * @param  ?MEMBER		Only show images/videos submitted by this member (NULL: no filter)
  * @param  ?AUTO_LINK	The category being at the root of our recursion (NULL: true root)
- * @param  ?string		The tree up to this point in the recursion (NULL: blank, as we are starting the recursion)
+ * @param  ?string		The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
  * @param  ?ID_TEXT		The name of the $category_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
  * @param  ?integer		The number of recursive levels to search (NULL: all)
  * @param  ?AUTO_LINK	Download we do not want to show (NULL: none to not show)
  * @param  boolean		Whether to get a list of child categories (not just direct ones, recursively), instead of just IDs
  * @param  boolean		Whether to only show for what may be edited by the current member
  * @param  boolean		Whether to only show entries that are tar files (addons)
- * @return array			A list of maps for all categories. Each map entry containins the fields 'id' (category ID) and 'tree' (tree path to the category, including the categories own title), and more. Or if $use_compound_list, the tree structure built with pairs containing the compound list in addition to the child branches
+ * @return array			A list of maps for all categories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (to the category, including the categories own title), and more. Or if $use_compound_list, the tree structure built with pairs containing the compound list in addition to the child branches
  */
-function get_downloads_tree($submitter=NULL,$category_id=NULL,$tree=NULL,$title=NULL,$shun=NULL,$levels=NULL,$use_compound_list=false,$editable_filter=false,$tar_filter=false)
+function get_downloads_tree($submitter=NULL,$category_id=NULL,$breadcrumbs=NULL,$title=NULL,$shun=NULL,$levels=NULL,$use_compound_list=false,$editable_filter=false,$tar_filter=false)
 {
 	if (is_null($category_id)) $category_id=db_get_first_id();
 
 	if (!has_category_access(get_member(),'downloads',strval($category_id))) return array();
 
-	if (is_null($tree)) $tree='';
+	if (is_null($breadcrumbs)) $breadcrumbs='';
 
-	// Put our title onto our tree
+	// Put our title onto our breadcrumbs
 	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_value('download_categories','category',array('id'=>$category_id)));
-	$tree.=$title;
+	$breadcrumbs.=$title;
 
 	$compound_list=strval($category_id).',';
 
@@ -205,7 +209,7 @@ function get_downloads_tree($submitter=NULL,$category_id=NULL,$tree=NULL,$title=
 	$children[0]=array();
 	$children[0]['id']=$category_id;
 	$children[0]['title']=$title;
-	$children[0]['tree']=$tree;
+	$children[0]['breadcrumbs']=$breadcrumbs;
 
 	// Children of this category
 	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category'),array('parent_id'=>$category_id),'',300/*reasonable limit*/);
@@ -228,16 +232,16 @@ function get_downloads_tree($submitter=NULL,$category_id=NULL,$tree=NULL,$title=
 		$children[0]['entries']=array();
 	}
 	$children[0]['child_count']=count($rows);
-	$tree.=' > ';
+	$breadcrumbs.=' > ';
 	if (($levels!==0) || ($use_compound_list))
 	{
 		foreach ($rows as $child)
 		{
 			$child_id=$child['id'];
 			$child_title=get_translated_text($child['category']);
-			$child_tree=$tree;
+			$child_breadcrumbs=$breadcrumbs;
 
-			$child_children=get_downloads_tree($submitter,$child_id,$child_tree,$child_title,$shun,is_null($levels)?NULL:max(0,$levels-1),$use_compound_list,$editable_filter,$tar_filter);
+			$child_children=get_downloads_tree($submitter,$child_id,$child_breadcrumbs,$child_title,$shun,is_null($levels)?NULL:max(0,$levels-1),$use_compound_list,$editable_filter,$tar_filter);
 			if ($use_compound_list)
 			{
 				list($child_children,$_compound_list)=$child_children;
@@ -263,7 +267,7 @@ function get_downloads_tree($submitter=NULL,$category_id=NULL,$tree=NULL,$title=
  */
 function nice_get_download_category_tree($it=NULL,$use_compound_list=false,$addable_filter=false)
 {
-	$tree=get_download_category_tree(NULL,NULL,NULL,false,$use_compound_list,NULL,$addable_filter);
+	$breadcrumbs=get_download_category_tree(NULL,NULL,NULL,false,$use_compound_list,NULL,$addable_filter);
 	if ($use_compound_list) $tree=$tree[0];
 
 	$out=''; // XHTMLXHTML
@@ -272,7 +276,7 @@ function nice_get_download_category_tree($it=NULL,$use_compound_list=false,$adda
 		if (($addable_filter) && (!$category['addable'])) continue;
 
 		$selected=($category['id']==$it);
-		$line=do_template('DOWNLOAD_LIST_LINE_2',array('_GUID'=>'0ccffeff5b80b1840188b839aee8d9f2','TREE'=>$category['tree'],'FILECOUNT'=>'?'));
+		$line=do_template('DOWNLOAD_LIST_LINE_2',array('_GUID'=>'0ccffeff5b80b1840188b839aee8d9f2','BREADCRUMBS'=>$category['breadcrumbs'],'FILECOUNT'=>'?'));
 		$out.='<option value="'.(!$use_compound_list?strval($category['id']):$category['compound_list']).'"'.($selected?' selected="selected"':'').'>'.$line->evaluate().'</option>';
 	}
 
@@ -304,33 +308,33 @@ function nice_get_download_licences($it=NULL,$allow_na=false)
  * Get a list of maps containing all the subcategories, and path information, of the specified category - and those beneath it, recursively.
  *
  * @param  ?AUTO_LINK	The category being at the root of our recursion (NULL: true root category)
- * @param  ?string		The tree up to this point in the recursion (NULL: blank, as we are starting the recursion)
+ * @param  ?string		The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
  * @param  ?ID_TEXT		The category name of the $category_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
  * @param  boolean		Whether to collect download counts with our tree information
  * @param  boolean		Whether to make a compound list (a pair of a comma-separated list of children, and the child array)
  * @param  ?integer		The number of recursive levels to search (NULL: all)
  * @param  boolean		Whether to only show for what may be added to by the current member
- * @return array			A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'tree' (tree path to the category, including the categories own title). There is also an additional 'downloadcount' entry if stats were requested
+ * @return array			A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title). There is also an additional 'downloadcount' entry if stats were requested
  */
-function get_download_category_tree($category_id=NULL,$tree=NULL,$title=NULL,$do_stats=true,$use_compound_list=false,$levels=NULL,$addable_filter=false)
+function get_download_category_tree($category_id=NULL,$breadcrumbs=NULL,$title=NULL,$do_stats=true,$use_compound_list=false,$levels=NULL,$addable_filter=false)
 {
 	if ($levels==-1) return array();
 
 //	if (!has_category_access(get_member(),'downloads',strval($category_id))) return array();
 
 	if (is_null($category_id)) $category_id=db_get_first_id();
-	if (is_null($tree)) $tree='';
+	if (is_null($breadcrumbs)) $breadcrumbs='';
 
-	// Put our title onto our tree
+	// Put our title onto our breadcrumbs
 	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_value('download_categories','category',array('id'=>$category_id)));
-	$tree.=$title;
+	$breadcrumbs.=$title;
 
 	// We'll be putting all children in this entire tree into a single list
 	$children=array();
 	$children[0]=array();
 	$children[0]['id']=$category_id;
 	$children[0]['title']=$title;
-	$children[0]['tree']=$tree;
+	$children[0]['breadcrumbs']=$breadcrumbs;
 	$children[0]['compound_list']=strval($category_id).',';
 	if ($addable_filter) $children[0]['addable']=has_submit_permission('mid',get_member(),get_ip_address(),'cms_downloads',array('downloads',$category_id));
 	if ($do_stats) $children[0]['filecount']=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)',array('category_id'=>$category_id));
@@ -339,16 +343,16 @@ function get_download_category_tree($category_id=NULL,$tree=NULL,$title=NULL,$do
 	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category'),array('parent_id'=>$category_id),'',300/*reasonable*/);
 	if (count($rows)==300) $rows=array();
 	$children[0]['child_count']=count($rows);
-	$tree.=' > ';
+	$breadcrumbs.=' > ';
 	if ($levels!==0)
 	{
 		foreach ($rows as $child)
 		{
 			$child_id=$child['id'];
 			$child_title=get_translated_text($child['category']);
-			$child_tree=$tree;
+			$child_breadcrumbs=$breadcrumbs;
 
-			$child_children=get_download_category_tree($child_id,$child_tree,$child_title,$do_stats,$use_compound_list,is_null($levels)?NULL:max(0,$levels-1),$addable_filter);
+			$child_children=get_download_category_tree($child_id,$child_breadcrumbs,$child_title,$do_stats,$use_compound_list,is_null($levels)?NULL:max(0,$levels-1),$addable_filter);
 			if ($use_compound_list)
 			{
 				list($child_children,$_compound_list)=$child_children;
@@ -369,14 +373,14 @@ function get_download_category_tree($category_id=NULL,$tree=NULL,$title=NULL,$do
  * @param  ?AUTO_LINK	The root of the tree (NULL: the true root)
  * @param  boolean		Whether to include category links at this level (the recursed levels will always contain links - the top level is optional, hence this parameter)
  * @param  ?ID_TEXT		The zone the download module we're using is in (NULL: find it)
- * @return tempcode		The tree route
+ * @return tempcode		The breadcrumbs
  */
 function download_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$zone=NULL)
 {
 	if (is_null($root)) $root=db_get_first_id();
 	if (is_null($zone)) $zone=get_module_zone('downloads');
 
-	$url=build_url(array('page'=>'downloads','type'=>'misc','id'=>($category_id==db_get_first_id())?NULL:$category_id,'root'=>($root==db_get_first_id())?NULL:$root),$zone);
+	$url=build_url(array('page'=>'downloads','type'=>'misc','id'=>($category_id==db_get_first_id())?NULL:$category_id,'root'=>($root==db_get_first_id())?NULL:$root)+propagate_ocselect(),$zone);
 
 	if (($category_id==$root) || ($category_id==db_get_first_id()))
 	{
@@ -449,10 +453,35 @@ function get_category_downloads($category_id,$root,$order=NULL)
 	$max=get_param_integer('max',30);
 	$start=get_param_integer('start',0);
 
+	// WHERE clause
+	if (get_option('downloads_subcat_narrowin')=='1')
+	{
+		require_code('ocfiltering');
+		$map=ocfilter_to_sqlfragment(strval($category_id).'*','id','download_categories','parent_id','category_id','id');
+	} else
+	{
+		$map='category_id='.strval($category_id);
+	}
+	if (!has_specific_permission(get_member(),'see_unvalidated')) $map.=' AND validated=1';
+
+	// ocSelect
+	$ocselect=either_param('active_filter','');
+	if ($ocselect!='')
+	{
+		require_code('ocselect');
+		$content_type='download';
+		list($ocselect_extra_select,$ocselect_extra_join,$ocselect_extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($ocselect),$content_type,'');
+		$extra_select_sql=implode('',$ocselect_extra_select);
+		$extra_join_sql=implode('',$ocselect_extra_join);
+		$map.=$ocselect_extra_where;
+	} else
+	{
+		$extra_select_sql='';
+		$extra_join_sql='';
+	}
+
 	// How many might there have been? (So we know how to browse pages nicely)
-	$map=array('category_id'=>$category_id);
-	if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
-	$max_rows=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)',$map);
+	$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'download_downloads r'.$extra_join_sql.' WHERE '.$map);
 
 	// Quick security check
 	if (is_null($order))
@@ -476,19 +505,18 @@ function get_category_downloads($category_id,$root,$order=NULL)
 	$NON_CANONICAL_PARAMS[]='order';
 
 	// Fetch
-	$rows=$GLOBALS['SITE_DB']->query_select('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND d.name=t.id',array('d.*','text_original'),$map,'ORDER BY '.$order,$max,$start);
+	$rows=$GLOBALS['SITE_DB']->query('SELECT r.*,t.text_original'.$extra_select_sql.' FROM '.get_table_prefix().'download_downloads r'.$extra_join_sql.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('t.language',user_lang()).' AND r.name=t.id WHERE '.$map.' ORDER BY '.$order,$max,$start);
 	$out=new ocp_tempcode();
 	foreach ($rows as $myrow)
 	{
 		if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($myrow['text_original'])) $myrow['text_original']=get_translated_text($myrow['description']);
 
-		$out->attach(get_download_html($myrow,true,false));
-		$out->attach(do_template('BLOCK_SEPARATOR',array('_GUID'=>'ea7sddsdsfds5bsddsdsdsc586e6e6536')));
+		$out->attach(render_download_box($myrow,true,false));
 	}
 	if ($out->is_empty()) return $out;
 
-	require_code('templates_results_browser');
-	$out->attach(results_browser(do_lang_tempcode('SECTION_DOWNLOADS'),$category_id,$start,'start',$max,'max',$max_rows,$root,'misc'));
+	require_code('templates_pagination');
+	$out->attach(pagination(do_lang_tempcode('SECTION_DOWNLOADS'),$category_id,$start,'start',$max,'max',$max_rows,$root,'misc',true));
 	return $out;
 }
 
@@ -530,7 +558,7 @@ function get_download_sub_categories($category_id,$root=NULL,$zone=NULL,$order=N
 		$num_downloads=$info['num_downloads_children'];
 		$display_string=do_lang_tempcode('CATEGORY_SUBORDINATE',integer_format($num_downloads),integer_format($num_children));
 
-		$url=build_url(array('page'=>'downloads','type'=>'misc','id'=>($child_id==db_get_first_id())?NULL:$child_id,'root'=>($root==db_get_first_id())?NULL:$root,'order'=>get_param('order',NULL)),$zone);
+		$url=build_url(array('page'=>'downloads','type'=>'misc','id'=>($child_id==db_get_first_id())?NULL:$child_id,'root'=>($root==db_get_first_id())?NULL:$root,'order'=>get_param('order',NULL))+propagate_ocselect(),$zone);
 
 		if ($myrow['rep_image']!='')
 		{

@@ -94,7 +94,7 @@ class Module_supermembers
 		if (addon_installed('points')) require_lang('points');
 		require_lang('supermembers');
 
-		$title=get_page_title('SUPER_MEMBERS');
+		$title=get_screen_title('SUPER_MEMBERS');
 
 		$message=get_option('supermembers_text');
 		if (has_actual_page_access(get_member(),'admin_config'))

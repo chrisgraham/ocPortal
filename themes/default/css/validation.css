@@ -1,0 +1,38 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+/*
+=========================
+=Markup/Code validation==
+=========================
+*/
+
+.validate_div {
+	margin-top: 1em;
+	overflow: auto
+}
+
+.validation_error {
+	font-weight: bold;
+	font-style: italic;
+	color: {$GET,red_highlight_text};
+}
+
+.validate_red_alert {
+	color: {$GET,red_highlight_text};
+}
+
+.validate_error_line {
+	font-style: italic;
+	color: {$GET,red_highlight_text};
+}
+
+.validate_tag {
+	font-weight: bold;
+}
+
+.validate_attribute {
+	font-style: italic;
+}

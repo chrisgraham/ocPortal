@@ -131,7 +131,6 @@ class Block_main_activities
 			$member_ids=array(get_member());
 		}
 
-		require_css('side_blocks');
 		require_lang('activities');
 		require_code('activities');
 		require_code('addons_overview');
@@ -155,8 +154,8 @@ class Block_main_activities
 		{
 			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'activities WHERE '.$whereville);
 
-			require_code('templates_results_browser');
-			$results_browser=results_browser(do_lang('ACTIVITIES_TITLE'),NULL,$start,'act_start',$max,'act_max',$max_rows,NULL,NULL,true,false,7,NULL,'tab__activities');
+			require_code('templates_pagination');
+			$pagination=pagination(do_lang('ACTIVITIES_TITLE'),NULL,$start,'act_start',$max,'act_max',$max_rows,NULL,NULL,true,false,7,NULL,'tab__activities');
 
 			$activities=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'activities WHERE '.$whereville.' ORDER BY a_time DESC',$max,$start);
 
@@ -174,13 +173,13 @@ class Block_main_activities
 					'MEMBER_IDS'=>implode(',',$member_ids),
 					'CONTENT'=>$content,
 					'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
-					'RESULTS_BROWSER'=>$results_browser,
+					'PAGINATION'=>$pagination,
 					'MAX'=>($start==0)?strval($max):NULL,
 				));
 			}
 		} else
 		{
-			$results_browser=new ocp_tempcode();
+			$pagination=new ocp_tempcode();
 		}
 
 		// No entries
@@ -190,7 +189,7 @@ class Block_main_activities
 			'CONTENT'=>$content,
 			'MEMBER_IDS'=>'',
 			'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
-			'RESULTS_BROWSER'=>$results_browser,
+			'PAGINATION'=>$pagination,
 			'MAX'=>($start==0)?strval($max):NULL,
 		));
 	}

@@ -280,7 +280,7 @@ function attachment_popup_script()
 
 	$content=do_template('ATTACHMENTS_BROWSER',array('_GUID'=>'7773aad46fb0bfe563a142030beb1a36','LIST'=>$list,'CONTENT'=>$content,'URL'=>$post_url));
 
-	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ATTACHMENT_POPUP'),'CONTENT'=>$content));
+	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ATTACHMENT_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->evaluate_echo();
 }
 
@@ -288,7 +288,7 @@ function attachment_popup_script()
  * Get tempcode for a Comcode rich-media attachment.
  *
  * @param  ID_TEXT		The attachment tag
- * @set attachment attachment_safe attachment2
+ * @set attachment attachment_safe
  * @param  array			A map of the attributes (name=>val) for the tag
  * @param  array			A map of the attachment properties (name=>val) for the attachment
  * @param  string			A special identifier to mark where the resultant tempcode is going to end up (e.g. the ID of a post)
@@ -312,7 +312,6 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 	$attachment['MIME_TYPE']=$mime_type;
 	$attachment['PASS_ID']=(intval($pass_id)<0)?strval(mt_rand(0,10000)):$pass_id;
 	$attachment['SCRIPT']=find_script('attachment');
-	$attachment['RAND']=strval(mt_rand(0,32000));
 	if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write)
 	{
 		$attachment['SUP_PARAMS']='&forum_db=1';

@@ -77,7 +77,7 @@ function init__tempcode__runtime()
 	$SIMPLE_ESCAPED=array(ENTITY_ESCAPED);
 
 	global $DIRECTIVES_NEEDING_VARS;
-	$DIRECTIVES_NEEDING_VARS=array('IF_PASSED'=>1,'IF_NON_PASSED'=>1,'IN_ARRAY'=>1,'IMPLODE'=>1,'COUNT'=>1,'IF_ARRAY_EMPTY'=>1,'IF_ARRAY_NON_EMPTY'=>1,'OF'=>1,'INCLUDE'=>1,'LOOP'=>1);
+	$DIRECTIVES_NEEDING_VARS=array('IF_PASSED'=>1,'IF_NON_PASSED'=>1,'IF_PASSED_AND_TRUE'=>1,'IF_NON_PASSED_OR_FALSE'=>1,'IN_ARRAY'=>1,'IMPLODE'=>1,'COUNT'=>1,'IF_ARRAY_EMPTY'=>1,'IF_ARRAY_NON_EMPTY'=>1,'OF'=>1,'INCLUDE'=>1,'LOOP'=>1);
 
 	global $PHP_REP_FROM,$PHP_REP_TO,$PHP_REP_TO_TWICE;
 	$PHP_REP_FROM=array('\\',"\n",'$','"');
@@ -280,14 +280,14 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		$lang=isset($USER_LANG_CACHED)?$USER_LANG_CACHED:(function_exists('user_lang')?user_lang():'EN');
 	}
 
-	if ($GLOBALS['SEMI_DEBUG_MODE'])
+	if ($GLOBALS['SEMI_DEV_MODE'])
 	{
-		if (($codename!='tempcode_test') && ($codename!='handle_conflict_resolution') && (strtoupper($codename)!=strtoupper($codename)))
+		if (($codename!='tempcode_test') && (strtoupper($codename)!=strtoupper($codename)))
 		{
 			fatal_exit('Template names should be in upper case, and the files should be stored in upper case.');
 		}
 
-		if ((substr($codename,-7)=='_SCREEN') || ($codename=='POOR_XHTML_WRAPPER') || ($codename=='OCF_WRAPPER'))
+		if ((substr($codename,-7)=='_SCREEN') || (substr($codename,-8)=='_OVERLAY') || ($codename=='POOR_XHTML_WRAPPER'))
 		{
 			$GLOBALS['SCREEN_TEMPLATE_CALLED']=$codename;
 		}
@@ -340,7 +340,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 	{
 		if (!is_null($MEM_CACHE))
 		{
-			$data=persistant_cache_get(array('TEMPLATE',$theme,$lang,$_codename));
+			$data=persistent_cache_get(array('TEMPLATE',$theme,$lang,$_codename));
 			if (!is_null($data))
 			{
 				$_data=new ocp_tempcode();
@@ -433,11 +433,11 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		}
 		if (($SHOW_EDIT_LINKS) && ($codename!='PARAM_INFO'))
 		{
-			$param_info=do_template('PARAM_INFO',array('MAP'=>$parameters));
+			$param_info=do_template('PARAM_INFO',array('_GUID'=>'fd3a19c3c4f2e54ded5c784c04f2b622','MAP'=>$parameters));
 
 			$edit_url=build_url(array('page'=>'admin_themes','theme'=>$FORUM_DRIVER->get_theme(),'template'=>$codename),'adminzone');
 			$SHOW_EDIT_LINKS=false;
-			$ret=do_template('TEMPLATE_EDIT_LINK',array('_GUID'=>'511ae911d31a5b237a4371ff22fc78fd','PARAM_INFO'=>$param_info,'CONTENTS'=>$ret,'CODENAME'=>$codename,'EDIT_URL'=>$edit_url));
+			$ret=do_template('TEMPLATE_EDIT_LINK',array('_GUID'=>'f0a439e3384a57e4c9a0e0bc366d7ce9','PARAM_INFO'=>$param_info,'CONTENTS'=>$ret,'CODENAME'=>$codename,'EDIT_URL'=>$edit_url));
 			$SHOW_EDIT_LINKS=true;
 		}
 	}
@@ -560,7 +560,7 @@ function handle_symbol_preprocessing($bit,&$children)
 
 			return;
 
-		case 'JAVASCRIPT_INCLUDE':
+		case 'REQUIRE_JAVASCRIPT':
 			if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) return;
 			$param=$bit[3];
 			foreach ($param as $i=>$p)
@@ -572,7 +572,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			require_javascript('javascript_ajax');
 			return;
 
-		case 'CSS_INCLUDE':
+		case 'REQUIRE_CSS':
 			if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) return;
 			$param=$bit[3];
 			foreach ($param as $i=>$p)
@@ -708,8 +708,8 @@ class ocp_tempcode
 				{
 					switch ($seq_part[2])
 					{
-						case 'CSS_INCLUDE':
-						case 'JAVASCRIPT_INCLUDE':
+						case 'REQUIRE_CSS':
+						case 'REQUIRE_JAVASCRIPT':
 						case 'FACILITATE_AJAX_BLOCK_CALL':
 						case 'JS_TEMPCODE':
 						case 'CSS_TEMPCODE':
@@ -772,32 +772,6 @@ class ocp_tempcode
 			{
 				if (isset($bit[3]))
 				{
-					// Handle the shift encode directive
-					if ($bit[2]=='SHIFT_ENCODE')
-					{
-						global $SHIFT_VARIABLES;
-						$key=$bit[3][0]->evaluate();
-						if (array_key_exists($key,$SHIFT_VARIABLES))
-						{
-							if (array_key_exists(2,$bit[3])) $set=$bit[3][1]->evaluate(); else $set='0';
-							switch ($set)
-							{
-								case '0': // Replace
-									$SHIFT_VARIABLES[$key]=$bit[3][count($bit[3])-1];
-									break;
-								case '1': // Ignore
-									break;
-								case '2': // Append
-									$SHIFT_VARIABLES[$key]->attach($bit[3][count($bit[3])-1]);
-									break;
-							}
-						} else
-						{
-							$SHIFT_VARIABLES[$key]=$bit[3][count($bit[3])-1];
-						}
-						continue;
-					}
-
 					foreach ($bit[3] as $v)
 					{
 						if (is_object($v))
@@ -1057,7 +1031,7 @@ class ocp_tempcode
 				{
 					$send_parameters=&$parameters;
 					$bit_2=$bit[2];
-					if (($bit_2=='IF_NON_PASSED') || ($bit_2=='IF_PASSED'))
+					if (($bit_2=='IF_NON_PASSED') || ($bit_2=='IF_PASSED') || ($bit_2=='IF_PASSED_AND_TRUE') || ($bit_2=='IF_NON_PASSED_OR_FALSE'))
 					{
 						$spec=$bit[3][0]->bits[0][2];
 						if (!isset($send_parameters[$spec])) $send_parameters[$spec]=NULL;
@@ -1069,7 +1043,7 @@ class ocp_tempcode
 					{
 						foreach ($bit[3] as $i=>$param)
 						{
-							if (is_object($param)) $bit[3][$i]=$param->bind($send_parameters,$codename,$under_loop || ($bit[2]=='LOOP') || ($bit[2]=='IF_PASSED')); // We need to be able to keep the parameters for bubbling down later
+							if (is_object($param)) $bit[3][$i]=$param->bind($send_parameters,$codename,$under_loop || ($bit[2]=='LOOP') || ($bit[2]=='IF_PASSED') || ($bit[2]=='IF_PASSED_AND_TRUE')); // We need to be able to keep the parameters for bubbling down later
 
 							if (($i==0) && ($bit_2=='IF_NON_EMPTY')) // To save memory
 							{
@@ -1129,7 +1103,7 @@ class ocp_tempcode
 				$last_param=false;
 
 				// Handle the pass checking directives
-				if (($bit_2=='IF_PASSED') || ($bit_2=='IF_NON_PASSED'))
+				if (($bit_2=='IF_PASSED') || ($bit_2=='IF_NON_PASSED') || ($bit_2=='IF_PASSED_AND_TRUE') || ($bit_2=='IF_NON_PASSED_OR_FALSE'))
 				{
 					$out->bits[]=array($bit[0],$bit_1,$bit_2,$bit[3]);
 					continue;

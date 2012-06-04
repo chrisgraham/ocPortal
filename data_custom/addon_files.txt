@@ -98,7 +98,7 @@ ocforthewin
  - themes/default/templates_custom/BLOCK_MAIN_BANNER_WAVE_BWRAP_CUSTOM.tpl
  - themes/default/templates_custom/BLOCK_MAIN_BUTTONS.tpl
  - sources_custom/banners3.php
- - lang_custom/EN/main_buttons.ini
+ - lang_custom/EN/buttons.ini
 
 ocpurrrr
 --------
@@ -287,7 +287,7 @@ google_search
  - sources_custom/blocks/side_google_search.php
  - sources_custom/blocks/main_google_results.php
  - themes/default/templates_custom/BLOCK_SIDE_GOOGLE_SEARCH.tpl
- - themes/default/templates_custom/BLOCK_MAIN_GOOGLE_SEARCH_REULTS.tpl
+ - themes/default/templates_custom/BLOCK_MAIN_GOOGLE_SEARCH_RESULTS.tpl
  - pages/comcode_custom/EN/google_search.txt
 
 justgiving
@@ -311,7 +311,7 @@ google_similar_sites
 
 ocdatamap
 ---------
- - lang_custom/EN/main_google_map.ini
+ - lang_custom/EN/google_map.ini
  - sources_custom/blocks/main_google_map.php
  - themes/default/templates_custom/BLOCK_MAIN_GOOGLE_MAP.tpl
  - sources_custom/hooks/systems/fields/float.php
@@ -319,10 +319,11 @@ ocdatamap
  - sources_custom/hooks/systems/fields/index.html
  - themes/default/templates_custom/FORM_SCREEN_INPUT_MAP_POSITION.tpl
  - themes/default/images_custom/star-3.png
+ - sources_custom/catalogues2.php
 
 ocusermap
 ---------
- - lang_custom/EN/main_google_map_users.ini
+ - lang_custom/EN/google_map_users.ini
  - sources_custom/blocks/main_google_map_users.php
  - themes/default/templates_custom/BLOCK_MAIN_GOOGLE_MAP_USERS.tpl
  - data_custom/set_coordinates.php
@@ -1102,7 +1103,7 @@ xmppchat
  - data_custom/modules/chat/ejabberd_auth.php
  - themes/default/templates_custom/CHAT_LOBBY_SCREEN.tpl
  - themes/default/templates_custom/CHAT_ROOM_LINK.tpl
- - themes/default/templates_custom/CHAT_SCREEN.tpl
+ - themes/default/templates_custom/CHAT_ROOM_SCREEN.tpl
  - themes/default/templates_custom/JAVASCRIPT_CHAT.tpl
  - sources_custom/chat.php
  - sources_custom/hooks/systems/content_meta_aware/chat.php
@@ -1142,7 +1143,7 @@ occhallenge
  - lang_custom/EN/quiz.ini
  - themes/default/templates_custom/QUIZ_DONE_SCREEN.tpl
  - site/pages/modules_custom/quiz.php
- - themes/default/templates_custom/QUIZ_LINK.tpl
+ - themes/default/templates_custom/QUIZ_BOX.tpl
 
 ocbrowserbookmarks
 ------------------
@@ -1184,7 +1185,7 @@ octhanks
 ocnoobs
 -------
  - sources_custom/blocks/main_recent_members.php
- - lang_custom/EN/main_recent_members.ini
+ - lang_custom/EN/recent_members.ini
 
 ocprose
 -------
@@ -1215,7 +1216,7 @@ ocworld
  - themes/default/templates_custom/W_MAIN_PEOPLE_HERE.tpl
  - themes/default/templates_custom/W_MAIN_PERSON_HERE.tpl
  - themes/default/templates_custom/W_MAIN_PORTAL.tpl
- - themes/default/templates_custom/W_MESSAGES.tpl
+ - themes/default/templates_custom/W_MESSAGES_HTML_WRAP.tpl
  - themes/default/templates_custom/W_MESSAGE_ALL.tpl
  - themes/default/templates_custom/W_MESSAGE_TO.tpl
  - themes/default/templates_custom/W_PORTAL_SCREEN.tpl
@@ -1315,127 +1316,126 @@ ocworld
 
 ocportal_tutorials
 ------------------
- - docs4/index.php
- - docs4/pages/comcode/.htaccess
- - docs4/pages/comcode/EN/.htaccess
- - docs4/pages/comcode/EN/index.html
- - docs4/pages/comcode/index.html
- - docs4/pages/comcode_custom/.htaccess
- - docs4/pages/comcode_custom/EN/.htaccess
- - docs4/pages/comcode_custom/EN/faq.txt
- - docs4/pages/comcode_custom/EN/index.html
- - docs4/pages/comcode_custom/EN/tut_accessibility.txt
- - docs4/pages/comcode_custom/EN/tut_adminzone.txt
- - docs4/pages/comcode_custom/EN/tut_adv_comcode.txt
- - docs4/pages/comcode_custom/EN/tut_adv_comcode_pages.txt
- - docs4/pages/comcode_custom/EN/tut_adv_configuration.txt
- - docs4/pages/comcode_custom/EN/tut_adv_downloads.txt
- - docs4/pages/comcode_custom/EN/tut_adv_galleries.txt
- - docs4/pages/comcode_custom/EN/tut_adv_installation.txt
- - docs4/pages/comcode_custom/EN/tut_adv_members.txt
- - docs4/pages/comcode_custom/EN/tut_adv_news.txt
- - docs4/pages/comcode_custom/EN/tut_adv_themes.txt
- - docs4/pages/comcode_custom/EN/tut_authors.txt
- - docs4/pages/comcode_custom/EN/tut_backup.txt
- - docs4/pages/comcode_custom/EN/tut_banners.txt
- - docs4/pages/comcode_custom/EN/tut_browsers.txt
- - docs4/pages/comcode_custom/EN/tut_calendar.txt
- - docs4/pages/comcode_custom/EN/tut_catalogues.txt
- - docs4/pages/comcode_custom/EN/tut_cedi.txt
- - docs4/pages/comcode_custom/EN/tut_censor.txt
- - docs4/pages/comcode_custom/EN/tut_chat.txt
- - docs4/pages/comcode_custom/EN/tut_chmod.txt
- - docs4/pages/comcode_custom/EN/tut_cleanup.txt
- - docs4/pages/comcode_custom/EN/tut_collaboration.txt
- - docs4/pages/comcode_custom/EN/tut_comcode.txt
- - docs4/pages/comcode_custom/EN/tut_comcode_pages.txt
- - docs4/pages/comcode_custom/EN/tut_configuration.txt
- - docs4/pages/comcode_custom/EN/tut_cookies.txt
- - docs4/pages/comcode_custom/EN/tut_correspondance.txt
- - docs4/pages/comcode_custom/EN/tut_design.txt
- - docs4/pages/comcode_custom/EN/tut_disaster.txt
- - docs4/pages/comcode_custom/EN/tut_do.txt
- - docs4/pages/comcode_custom/EN/tut_domain_names.txt
- - docs4/pages/comcode_custom/EN/tut_downloads.txt
- - docs4/pages/comcode_custom/EN/tut_drinking.txt
- - docs4/pages/comcode_custom/EN/tut_ecommerce.txt
- - docs4/pages/comcode_custom/EN/tut_email.txt
- - docs4/pages/comcode_custom/EN/tut_emoticons.txt
- - docs4/pages/comcode_custom/EN/tut_featured.txt
- - docs4/pages/comcode_custom/EN/tut_feedback.txt
- - docs4/pages/comcode_custom/EN/tut_fields_filter.txt
- - docs4/pages/comcode_custom/EN/tut_filter.txt
- - docs4/pages/comcode_custom/EN/tut_fixed_width.txt
- - docs4/pages/comcode_custom/EN/tut_forum_helpdesk.txt
- - docs4/pages/comcode_custom/EN/tut_forum_tracking.txt
- - docs4/pages/comcode_custom/EN/tut_forums.txt
- - docs4/pages/comcode_custom/EN/tut_framework.txt
- - docs4/pages/comcode_custom/EN/tut_fringe.txt
- - docs4/pages/comcode_custom/EN/tut_galleries.txt
- - docs4/pages/comcode_custom/EN/tut_hardcore_1.txt
- - docs4/pages/comcode_custom/EN/tut_hardcore_2.txt
- - docs4/pages/comcode_custom/EN/tut_hardcore_3.txt
- - docs4/pages/comcode_custom/EN/tut_how_internet_works.txt
- - docs4/pages/comcode_custom/EN/tut_httpauth.txt
- - docs4/pages/comcode_custom/EN/tut_importer.txt
- - docs4/pages/comcode_custom/EN/tut_information.txt
- - docs4/pages/comcode_custom/EN/tut_install.txt
- - docs4/pages/comcode_custom/EN/tut_integration.txt
- - docs4/pages/comcode_custom/EN/tut_intl.txt
- - docs4/pages/comcode_custom/EN/tut_keymap.txt
- - docs4/pages/comcode_custom/EN/tut_ldap.txt
- - docs4/pages/comcode_custom/EN/tut_legal.txt
- - docs4/pages/comcode_custom/EN/tut_markup.txt
- - docs4/pages/comcode_custom/EN/tut_members.txt
- - docs4/pages/comcode_custom/EN/tut_menus.txt
- - docs4/pages/comcode_custom/EN/tut_mod.txt
- - docs4/pages/comcode_custom/EN/tut_moving.txt
- - docs4/pages/comcode_custom/EN/tut_msn.txt
- - docs4/pages/comcode_custom/EN/tut_news.txt
- - docs4/pages/comcode_custom/EN/tut_newsletter.txt
- - docs4/pages/comcode_custom/EN/tut_nuances.txt
- - docs4/pages/comcode_custom/EN/tut_occle.txt
- - docs4/pages/comcode_custom/EN/tut_optimisation.txt
- - docs4/pages/comcode_custom/EN/tut_permissions.txt
- - docs4/pages/comcode_custom/EN/tut_points.txt
- - docs4/pages/comcode_custom/EN/tut_programming.txt
- - docs4/pages/comcode_custom/EN/tut_quizzes.txt
- - docs4/pages/comcode_custom/EN/tut_releasing_themes.txt
- - docs4/pages/comcode_custom/EN/tut_search.txt
- - docs4/pages/comcode_custom/EN/tut_security.txt
- - docs4/pages/comcode_custom/EN/tut_seo.txt
- - docs4/pages/comcode_custom/EN/tut_sql.txt
- - docs4/pages/comcode_custom/EN/tut_staff.txt
- - docs4/pages/comcode_custom/EN/tut_staff_advice.txt
- - docs4/pages/comcode_custom/EN/tut_statistics.txt
- - docs4/pages/comcode_custom/EN/tut_structure.txt
- - docs4/pages/comcode_custom/EN/tut_subcom.txt
- - docs4/pages/comcode_custom/EN/tut_support_desk.txt
- - docs4/pages/comcode_custom/EN/tut_tempcode.txt
- - docs4/pages/comcode_custom/EN/tut_themes.txt
- - docs4/pages/comcode_custom/EN/tut_trace.txt
- - docs4/pages/comcode_custom/EN/tut_uninstall.txt
- - docs4/pages/comcode_custom/EN/tut_upgrade.txt
- - docs4/pages/comcode_custom/EN/tut_users.txt
- - docs4/pages/comcode_custom/EN/tut_web_hosting.txt
- - docs4/pages/comcode_custom/EN/tut_webapp.txt
- - docs4/pages/comcode_custom/EN/tut_windows.txt
- - docs4/pages/comcode_custom/EN/tut_wysiwyg.txt
- - docs4/pages/comcode_custom/index.html
- - docs4/pages/html/.htaccess
- - docs4/pages/html/EN/.htaccess
- - docs4/pages/html/EN/index.html
- - docs4/pages/html/index.html
- - docs4/pages/html_custom/EN/index.html
- - docs4/pages/html_custom/index.html
- - docs4/pages/index.html
- - docs4/pages/minimodules/.htaccess
- - docs4/pages/minimodules/index.html
- - docs4/pages/minimodules_custom/.htaccess
- - docs4/pages/minimodules_custom/index.html
- - docs4/pages/modules/.htaccess
- - docs4/pages/modules_custom/.htaccess
- - docs4/pages/modules_custom/index.html
+ - docs/index.php
+ - docs/pages/comcode/.htaccess
+ - docs/pages/comcode/EN/.htaccess
+ - docs/pages/comcode/EN/index.html
+ - docs/pages/comcode/index.html
+ - docs/pages/comcode_custom/.htaccess
+ - docs/pages/comcode_custom/EN/.htaccess
+ - docs/pages/comcode_custom/EN/faq.txt
+ - docs/pages/comcode_custom/EN/index.html
+ - docs/pages/comcode_custom/EN/tut_accessibility.txt
+ - docs/pages/comcode_custom/EN/tut_adminzone.txt
+ - docs/pages/comcode_custom/EN/tut_adv_comcode.txt
+ - docs/pages/comcode_custom/EN/tut_adv_comcode_pages.txt
+ - docs/pages/comcode_custom/EN/tut_adv_configuration.txt
+ - docs/pages/comcode_custom/EN/tut_adv_downloads.txt
+ - docs/pages/comcode_custom/EN/tut_adv_galleries.txt
+ - docs/pages/comcode_custom/EN/tut_adv_installation.txt
+ - docs/pages/comcode_custom/EN/tut_adv_members.txt
+ - docs/pages/comcode_custom/EN/tut_adv_news.txt
+ - docs/pages/comcode_custom/EN/tut_authors.txt
+ - docs/pages/comcode_custom/EN/tut_backup.txt
+ - docs/pages/comcode_custom/EN/tut_banners.txt
+ - docs/pages/comcode_custom/EN/tut_browsers.txt
+ - docs/pages/comcode_custom/EN/tut_calendar.txt
+ - docs/pages/comcode_custom/EN/tut_catalogues.txt
+ - docs/pages/comcode_custom/EN/tut_cedi.txt
+ - docs/pages/comcode_custom/EN/tut_censor.txt
+ - docs/pages/comcode_custom/EN/tut_chat.txt
+ - docs/pages/comcode_custom/EN/tut_chmod.txt
+ - docs/pages/comcode_custom/EN/tut_cleanup.txt
+ - docs/pages/comcode_custom/EN/tut_collaboration.txt
+ - docs/pages/comcode_custom/EN/tut_comcode.txt
+ - docs/pages/comcode_custom/EN/tut_comcode_pages.txt
+ - docs/pages/comcode_custom/EN/tut_configuration.txt
+ - docs/pages/comcode_custom/EN/tut_cookies.txt
+ - docs/pages/comcode_custom/EN/tut_correspondance.txt
+ - docs/pages/comcode_custom/EN/tut_design.txt
+ - docs/pages/comcode_custom/EN/tut_disaster.txt
+ - docs/pages/comcode_custom/EN/tut_do.txt
+ - docs/pages/comcode_custom/EN/tut_domain_names.txt
+ - docs/pages/comcode_custom/EN/tut_downloads.txt
+ - docs/pages/comcode_custom/EN/tut_drinking.txt
+ - docs/pages/comcode_custom/EN/tut_ecommerce.txt
+ - docs/pages/comcode_custom/EN/tut_email.txt
+ - docs/pages/comcode_custom/EN/tut_emoticons.txt
+ - docs/pages/comcode_custom/EN/tut_featured.txt
+ - docs/pages/comcode_custom/EN/tut_feedback.txt
+ - docs/pages/comcode_custom/EN/tut_fields_filter.txt
+ - docs/pages/comcode_custom/EN/tut_filter.txt
+ - docs/pages/comcode_custom/EN/tut_fixed_width.txt
+ - docs/pages/comcode_custom/EN/tut_forum_helpdesk.txt
+ - docs/pages/comcode_custom/EN/tut_forum_tracking.txt
+ - docs/pages/comcode_custom/EN/tut_forums.txt
+ - docs/pages/comcode_custom/EN/tut_framework.txt
+ - docs/pages/comcode_custom/EN/tut_fringe.txt
+ - docs/pages/comcode_custom/EN/tut_galleries.txt
+ - docs/pages/comcode_custom/EN/tut_hardcore_1.txt
+ - docs/pages/comcode_custom/EN/tut_hardcore_2.txt
+ - docs/pages/comcode_custom/EN/tut_hardcore_3.txt
+ - docs/pages/comcode_custom/EN/tut_how_internet_works.txt
+ - docs/pages/comcode_custom/EN/tut_httpauth.txt
+ - docs/pages/comcode_custom/EN/tut_importer.txt
+ - docs/pages/comcode_custom/EN/tut_information.txt
+ - docs/pages/comcode_custom/EN/tut_install.txt
+ - docs/pages/comcode_custom/EN/tut_integration.txt
+ - docs/pages/comcode_custom/EN/tut_intl.txt
+ - docs/pages/comcode_custom/EN/tut_keymap.txt
+ - docs/pages/comcode_custom/EN/tut_ldap.txt
+ - docs/pages/comcode_custom/EN/tut_legal.txt
+ - docs/pages/comcode_custom/EN/tut_markup.txt
+ - docs/pages/comcode_custom/EN/tut_members.txt
+ - docs/pages/comcode_custom/EN/tut_menus.txt
+ - docs/pages/comcode_custom/EN/tut_mod.txt
+ - docs/pages/comcode_custom/EN/tut_moving.txt
+ - docs/pages/comcode_custom/EN/tut_msn.txt
+ - docs/pages/comcode_custom/EN/tut_news.txt
+ - docs/pages/comcode_custom/EN/tut_newsletter.txt
+ - docs/pages/comcode_custom/EN/tut_nuances.txt
+ - docs/pages/comcode_custom/EN/tut_occle.txt
+ - docs/pages/comcode_custom/EN/tut_optimisation.txt
+ - docs/pages/comcode_custom/EN/tut_permissions.txt
+ - docs/pages/comcode_custom/EN/tut_points.txt
+ - docs/pages/comcode_custom/EN/tut_programming.txt
+ - docs/pages/comcode_custom/EN/tut_quizzes.txt
+ - docs/pages/comcode_custom/EN/tut_releasing_themes.txt
+ - docs/pages/comcode_custom/EN/tut_search.txt
+ - docs/pages/comcode_custom/EN/tut_security.txt
+ - docs/pages/comcode_custom/EN/tut_seo.txt
+ - docs/pages/comcode_custom/EN/tut_sql.txt
+ - docs/pages/comcode_custom/EN/tut_staff.txt
+ - docs/pages/comcode_custom/EN/tut_staff_advice.txt
+ - docs/pages/comcode_custom/EN/tut_statistics.txt
+ - docs/pages/comcode_custom/EN/tut_structure.txt
+ - docs/pages/comcode_custom/EN/tut_subcom.txt
+ - docs/pages/comcode_custom/EN/tut_support_desk.txt
+ - docs/pages/comcode_custom/EN/tut_tempcode.txt
+ - docs/pages/comcode_custom/EN/tut_themes.txt
+ - docs/pages/comcode_custom/EN/tut_trace.txt
+ - docs/pages/comcode_custom/EN/tut_uninstall.txt
+ - docs/pages/comcode_custom/EN/tut_upgrade.txt
+ - docs/pages/comcode_custom/EN/tut_users.txt
+ - docs/pages/comcode_custom/EN/tut_web_hosting.txt
+ - docs/pages/comcode_custom/EN/tut_webapp.txt
+ - docs/pages/comcode_custom/EN/tut_windows.txt
+ - docs/pages/comcode_custom/EN/tut_wysiwyg.txt
+ - docs/pages/comcode_custom/index.html
+ - docs/pages/html/.htaccess
+ - docs/pages/html/EN/.htaccess
+ - docs/pages/html/EN/index.html
+ - docs/pages/html/index.html
+ - docs/pages/html_custom/EN/index.html
+ - docs/pages/html_custom/index.html
+ - docs/pages/index.html
+ - docs/pages/minimodules/.htaccess
+ - docs/pages/minimodules/index.html
+ - docs/pages/minimodules_custom/.htaccess
+ - docs/pages/minimodules_custom/index.html
+ - docs/pages/modules/.htaccess
+ - docs/pages/modules_custom/.htaccess
+ - docs/pages/modules_custom/index.html
  - data/images/docs/accessibility_colour_useful_not_needed.png
  - data/images/docs/accessibility_enable_validator.png
  - data/images/docs/accessibility_excel.png
@@ -1913,16 +1913,9 @@ direct_video_link_posting
 
 cool_member_directory
 ---------------------
- - themes/default/templates_custom/OCF_POSTER_DETAILS.tpl
+ - themes/default/templates_custom/OCF_MEMBER_BOX.tpl
  - themes/default/templates_custom/OCF_MEMBER_DIRECTORY_SCREEN.tpl
- - themes/default/templates_custom/SEARCH_ADVANCED.tpl
- - themes/default/templates_custom/SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl
- - themes/default/templates_custom/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl
- - themes/default/templates_custom/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl
- - themes/default/templates_custom/SEARCH_FORM_SCREEN.tpl
  - themes/default/templates_custom/OCF_TOPIC_POST_CUSTOM_FIELD.tpl
- - themes/default/css_custom/search.css
- - sources_custom/hooks/modules/search/ocf_members.php
 
 activity_feed
 -------------
@@ -1990,6 +1983,7 @@ workflows
  - themes/default/images_custom/bigicons/workflows.png
  - site/pages/modules_custom/galleries.php
  - adminzone/pages/modules_custom/admin_unvalidated.php
+ - themes/default/templates_custom/WORKFLOW_BOX.tpl
 
 gallery_carousel
 ----------------
@@ -1997,7 +1991,6 @@ gallery_carousel
  - themes/default/templates_custom/GALLERY_VIDEO.tpl
  - themes/default/templates_custom/GALLERY_ENTRY_WRAP.tpl
  - themes/default/templates_custom/BLOCK_MAIN_GALLERY_EMBED.tpl
- - themes/default/templates_custom/BLOCK_NO_ENTRIES.tpl
 
 referrals
 ---------
@@ -2301,6 +2294,7 @@ booking
  - themes/default/templates_custom/BLOCK_SIDE_BOOK_DATE_RANGE.tpl
  - themes/default/templates_custom/BLOCK_SIDE_CHOOSE_SHOWING.tpl
  - themes/default/templates_custom/BLOCK_MAIN_CHOOSE_TO_BOOK.tpl
+ - themes/default/templates_custom/JAVASCRIPT_BOOKING.tpl
  - data_custom/bookings_ical.php
  - data_custom/bookables_ical.php
  - lang_custom/EN/booking.ini
@@ -2346,3 +2340,16 @@ classified_ads
 custom_ratings
 --------------
  - sources_custom/feedback.php
+
+related_members
+---------------
+ - themes/default/templates_custom/OCF_MEMBER_PROFILE_SCREEN.tpl
+
+downloads_carousel
+------------------
+ - sources_custom/miniblocks/main_downloads_carousel.php
+
+pointstore_to_main
+------------------
+ - sources_custom/hooks/systems/ecommerce/custom.php
+ - sources_custom/hooks/systems/ecommerce/permission.php

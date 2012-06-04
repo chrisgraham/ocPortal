@@ -89,7 +89,7 @@ class Module_cms_blogs extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('MANAGE_BLOGS'),comcode_lang_string('DOC_BLOGS'),
+		return do_next_manager(get_screen_title('MANAGE_BLOGS'),comcode_lang_string('DOC_BLOGS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						has_specific_permission(get_member(),'submit_highrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS_BLOG')):NULL,
@@ -397,7 +397,7 @@ class Module_cms_blogs extends standard_aed_module
 			$start_hour=post_param_integer('schedule_hour');
 			$start_minute=post_param_integer('schedule_minute');
 			require_code('calendar2');
-			add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
+			add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
 		}
 
 		return strval($id);
@@ -468,7 +468,7 @@ class Module_cms_blogs extends standard_aed_module
 				$start_day=post_param_integer('schedule_day');
 				$start_hour=post_param_integer('schedule_hour');
 				$start_minute=post_param_integer('schedule_minute');
-				add_calendar_event(db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
+				add_calendar_event(db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
 			}
 		}
 
@@ -500,7 +500,7 @@ class Module_cms_blogs extends standard_aed_module
 	/**
 	 * The do-next manager for after news content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -541,7 +541,7 @@ class Module_cms_blogs extends standard_aed_module
 		check_specific_permission('mass_import');
 
 		$lang			=	post_param('lang',user_lang());
-		$title		=	get_page_title('IMPORT_WP_DB');
+		$title		=	get_screen_title('IMPORT_WP_DB');
 		$submit_name=	do_lang_tempcode('IMPORT_WP_DB');
 
 		require_code('form_templates');
@@ -550,17 +550,22 @@ class Module_cms_blogs extends standard_aed_module
 		// Build up form
 		$fields_xml=new ocp_tempcode();		
 
-		$fields_xml->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_WP_XML'),'file_novalidate',false,NULL,NULL,true,'xml'));
+		$set_name='rss';
+		$required=true;
+		$set_title=do_lang_tempcode('FILE');
+		$field_set=alternate_fields_set__start($set_name);
 
-		$fields_xml->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('URL')),do_lang_tempcode('DESCRIPTION_ALTERNATE_URL'),'xml_url','',false));
+		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file_novalidate',false,NULL,NULL,true,'xml'));
+
+		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','xml_url','',false));
+
+		$fields_xml->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_WP_XML'),$field_set,$required));
 
 		$hidden=form_input_hidden('lang',$lang);
 
-		$javascript='standardAlternateFields(\'file_novalidate\',\'xml_url\');';
-
 		$xml_post_url	=	build_url(array('page'=>'_SELF','type'=>'_import_wordpress','method'=>'xml'),'_SELF');
 
-		$xml_upload_form	=	do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields_xml,'SUBMIT_NAME'=>$submit_name,'URL'=>$xml_post_url,'JAVASCRIPT'=>$javascript));
+		$xml_upload_form	=	do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields_xml,'SUBMIT_NAME'=>$submit_name,'URL'=>$xml_post_url));
 
 		//--------------------------------------------
 		$fields=new ocp_tempcode();	
@@ -595,7 +600,7 @@ class Module_cms_blogs extends standard_aed_module
 
 		$db_import_form=	do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$db_post_url,'JAVASCRIPT'=>$javascript));
 
-		return do_template('NEWS_WORDPRESS_IMPORT_SCREEN',array('TITLE'=>get_page_title('DB_IMPORT_FORM'),'XML_UPLOAD_FORM'=>$xml_upload_form,'DB_IMPORT_FORM'=>$db_import_form));
+		return do_template('NEWS_WORDPRESS_IMPORT_SCREEN',array('TITLE'=>get_screen_title('DB_IMPORT_FORM'),'XML_UPLOAD_FORM'=>$xml_upload_form,'DB_IMPORT_FORM'=>$db_import_form));
 	}
 
 	/**
@@ -607,7 +612,7 @@ class Module_cms_blogs extends standard_aed_module
 	{
 		check_specific_permission('mass_import');
 
-		$title=get_page_title('IMPORT_WP_DB');
+		$title=get_screen_title('IMPORT_WP_DB');
 
 		require_code('rss');
 		require_code('news');

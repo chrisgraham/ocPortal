@@ -101,7 +101,7 @@ class Block_main_gallery_tease
 			{
 				require_code('ocf_members');
 				require_code('ocf_members2');
-				$member_info=ocf_show_member_box($member_id,true);
+				$member_info=render_member_box($member_id,true);
 			} else $member_info=new ocp_tempcode();
 			list($num_children,$num_images,$num_videos)=get_recursive_gallery_details($child['name']);
 			if (($num_images==0) && ($num_videos==0)) continue;
@@ -124,7 +124,7 @@ class Block_main_gallery_tease
 
 		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start-$max),'_SELF');
 		$next_url=($page_num==$num_pages)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'6fb2def18957c246ddb2f19bf74abf9a','NEXT_LINK'=>$next_url,'PREVIOUS_LINK'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'6fb2def18957c246ddb2f19bf74abf9a','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
 		return do_template('BLOCK_MAIN_GALLERY_TEASE',array('_GUID'=>'0e7f84042ab0c873155998eae41b8a16','CONTENT'=>$content,'BROWSE'=>$browse));
 	}

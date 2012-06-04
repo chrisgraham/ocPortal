@@ -290,9 +290,10 @@ function base64_encode($data)
  * @param  ?mixed	Optional parameter (NULL: none).
  * @param  ?mixed	Optional parameter (NULL: none).
  * @param  ?mixed	Optional parameter (NULL: none).
+ * @param  ?mixed	Optional parameter (NULL: none).
  * @return mixed	Whatever the function returns.
  */
-function call_user_func($function,$param_a=NULL,$param_b=NULL,$param_c=NULL)
+function call_user_func($function,$param_a=NULL,$param_b=NULL,$param_c=NULL,$param_d=NULL)
 {
 	return 0;
 }
@@ -3078,7 +3079,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Get data from the persistant cache.
+ * Get data from the persistent cache.
  *
  * @param  mixed			Key
  * @return ?mixed			The data (NULL: not found / NULL entry)
@@ -3089,7 +3090,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Put data into the persistant cache.
+ * Put data into the persistent cache.
  *
  * @param  mixed			Key
  * @param  mixed			The data
@@ -3100,7 +3101,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Delete data from the persistant cache.
+ * Delete data from the persistent cache.
  *
  * @param  mixed			Key name
  */
@@ -3109,7 +3110,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Get data from the persistant cache.
+ * Get data from the persistent cache.
  *
  * @param  mixed			Key
  * @return ?mixed			The data (NULL: not found / NULL entry)
@@ -3120,7 +3121,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Put data into the persistant cache.
+ * Put data into the persistent cache.
  *
  * @param  mixed			Key
  * @param  mixed			The data
@@ -3131,7 +3132,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
 }*/
 
 /*!SPECIAL*
- * Delete data from the persistant cache.
+ * Delete data from the persistent cache.
  *
  * @param  mixed			Key name
  */

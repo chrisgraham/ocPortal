@@ -180,7 +180,7 @@ class Notification_dispatcher
 		$message=$this->message;
 		$no_cc=$this->no_cc;
 
-		if ($GLOBALS['DEBUG_MODE'])
+		if ($GLOBALS['DEV_MODE'])
 		{
 			if ((strpos($this->message,'keep_devtest')!==false) && (strpos($this->message,running_script('index')?static_evaluate_tempcode(build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,true)):get_self_url_easy())===false) && ((strpos(ocp_srv('HTTP_REFERER'),'keep_devtest')===false) || (strpos($this->message,ocp_srv('HTTP_REFERER'))===false))) // Bad URL - it has to be general, not session-specific
 				fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));

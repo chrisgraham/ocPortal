@@ -5,8 +5,12 @@
 
 .whos_read {
 	float: {!en_right};
-	margin-{!en_left}: 5px;
+	margin-{!en_left}: 1em;
 	width: 20em;
+}
+
+.whos_read .box {
+	margin-top: 0; /* Because it is floated it would not collapse with the margin above */
 }
 
 .message_main {

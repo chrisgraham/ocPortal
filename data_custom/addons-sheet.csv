@@ -60,7 +60,7 @@ ocBrowserbookmarks,Chris Graham,"Ever wished it was quicker to navigate around y
 Google translate,Chris Graham,"By adding [code=""Comcode""][block]side_language[/block][/code] to the side panel of your website, you will give your users the option to translate the content of your website into another language by using Google Translate. After installing you must enable via the 'Enable Google translate' option.",,,Translation,Licensed on the same terms as ocPortal,,
 Admin search stemmer,Chris Graham,Our new Admin Zone search has premiered in 4.0.3. One small thing that is missing is something called a stemmer. A stemmer allows you to search for something like 'publishing' and match words like 'publish' in the results. This is the stemmer.,,,Admin Utilities,GPL,Jon Abernathy,
 Java Uploader Ftp Source code,Chris Graham,"This is a modified version of the third-party Open Source HTML Large File Uploader code. It has been improved quite significantly to integrate very seamlessly with ocPortal. This code is included so people can modify it themselves also -- but mainly because it is needed in order to generate a signed certificate, so users can see that it is your domain that is certifying the applet as safe.",,,Admin Utilities,Based on open code posted without a license,Richard Johnson,
-ocPortal Tutorials,Chris Graham,"Here is a downloadable archive of the version 4.3 documentation. To view this documentation load up the [tt]docs4:tutorials[/tt] page-link (i.e. [tt]/docs4/index.php?page=tutorials[/tt]). You can also use the Debranding tool from the Admin Zone to make documentation point towards your own install, by setting your own site's base URL as the brand URL. The documentation is primarily maintained on our website, and this archive is only provided for those who wish to view it off-line, or for availability if our website is ever off-line.",,,Admin Utilities,Licensed on the same terms as ocPortal,,
+ocPortal Tutorials,Chris Graham,"Here is a downloadable archive of the version 4.3 documentation. To view this documentation load up the [tt]docs:tutorials[/tt] page-link (i.e. [tt]/docs/index.php?page=tutorials[/tt]). You can also use the Debranding tool from the Admin Zone to make documentation point towards your own install, by setting your own site's base URL as the brand URL. The documentation is primarily maintained on our website, and this archive is only provided for those who wish to view it off-line, or for availability if our website is ever off-line.",,,Admin Utilities,Licensed on the same terms as ocPortal,,
 GeSHi,Chris Graham,"GeSHi applies syntax highlighting to a block of coding which is pasted inside the Comcode 'code' tag as follows:
 [code=""Comcode""][codebox=""<language>""]<the code goes here>[/codebox][/code]",,,Information Display,GPL,The Authors of GeSHi,
 getid3,Chris Graham,"This addon will automatically detect the Height, Width and Length of video files when they are uploaded to the gallery.",galleries,,Admin Utilities,GPL,"James Heinrich, Allan Hansen",
@@ -147,7 +147,7 @@ Eventually this addon will probably become a core part of the system, but for no
 
 I'll give an example for news...
 
-In the [tt]NEWS_FULL_SCREEN[/tt] template you'll find the action links are driven by...
+In the [tt]NEWS_ENTRY_SCREEN[/tt] template you'll find the action links are driven by...
 
 [codebox]
 

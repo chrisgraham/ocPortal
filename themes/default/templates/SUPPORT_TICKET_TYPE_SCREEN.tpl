@@ -4,7 +4,6 @@
 
 {+START,IF_NON_EMPTY,{TPL}}
 	{TPL}
-	<br />
 {+END}
 {+START,IF_EMPTY,{TPL}}
 	<p class="nothing_here">

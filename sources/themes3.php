@@ -91,7 +91,7 @@ function regen_theme_images($theme,$langs=NULL,$target_theme=NULL)
 		}
 	}
 
-	persistant_cache_delete('THEME_IMAGES');
+	persistent_cache_delete('THEME_IMAGES');
 }
 
 /**

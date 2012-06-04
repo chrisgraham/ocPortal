@@ -59,9 +59,9 @@ class Hook_addon_registry_linux_helper_scripts
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array(),
 		);
 	}
 

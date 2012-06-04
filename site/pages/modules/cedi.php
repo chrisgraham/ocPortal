@@ -337,7 +337,7 @@ class Module_cedi
 
 		require_code('cedi');
 		require_lang('cedi');
-		require_css('cedi');
+		require_css('wiki');
 
 		// Decide what to do
 		if ($type=='findpost')
@@ -347,7 +347,7 @@ class Module_cedi
 			$redirect=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$page_id),'_SELF',NULL,false,false,false,'post_'.strval($post_id));
 			require_code('site2');
 			assign_refresh($redirect,0.0);
-			return do_template('REDIRECT_SCREEN',array('URL'=>$redirect,'TITLE'=>get_page_title('CEDI'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
+			return do_template('REDIRECT_SCREEN',array('_GUID'=>'ec38429b79fff8b311d45e7d8126cb48','URL'=>$redirect,'TITLE'=>get_screen_title('CEDI'),'TEXT'=>do_lang_tempcode('REDIRECTING')));
 		}
 		if ($type=='misc') return $this->page();
 		if ($type=='random') return $this->random();
@@ -379,7 +379,7 @@ class Module_cedi
 		}
 		while (!array_key_exists(0,$pages));
 		$redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>($id==db_get_first_id())?NULL:$id),'_SELF');
-		return redirect_screen(get_page_title('RANDOM_PAGE'),$redir_url,'');
+		return redirect_screen(get_screen_title('RANDOM_PAGE'),$redir_url,'');
 	}
 
 	/**
@@ -393,7 +393,6 @@ class Module_cedi
 
 		// We will use OCF styling
 		require_lang('ocf');
-		require_css('ocf');
 
 		// Find our page by whatever means
 		$find=get_param('find','');
@@ -402,7 +401,7 @@ class Module_cedi
 			$id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages p LEFT JOIN '.get_table_prefix().'translate t ON p.title=t.id','p.id',array('text_original'=>$find));
 			if (is_null($id))
 			{
-				$title=get_page_title('ERROR_OCCURRED');
+				$title=get_screen_title('ERROR_OCCURRED');
 				$add_access=(has_submit_permission('low',get_member(),get_ip_address(),'cms_cedi'));
 				require_lang('zones');
 				$add_url=$add_access?build_url(array('page'=>'cms_cedi','type'=>'add_page','id'=>$find,'redirect'=>get_self_url(true,true)),get_module_zone('cms_cedi')):new ocp_tempcode();
@@ -418,7 +417,7 @@ class Module_cedi
 		// Display title
 		if (!array_key_exists(0,$pages))
 		{
-			return warn_screen(get_page_title('CEDI'),do_lang_tempcode('MISSING_RESOURCE'));
+			return warn_screen(get_screen_title('CEDI'),do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$page=$pages[0];
 		$current_title=get_translated_text($page['title']);
@@ -429,7 +428,7 @@ class Module_cedi
 			require_code('awards');
 			$awards=find_awards_for('cedi_page',strval($page['id']));
 		} else $awards=array();
-		$title=get_page_title($title_to_use,false,NULL,NULL,$awards);
+		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 
 		if (!has_category_access(get_member(),'seedy_page',strval($page['id']))) access_denied('CATEGORY_ACCESS');
 
@@ -447,7 +446,7 @@ class Module_cedi
 		$description_comcode=get_translated_text($page['description']);
 
 		// Build up navigation tree
-		$tree=cedi_breadcrumbs($chain,$current_title,has_specific_permission(get_member(),'open_virtual_roots'),true,true);
+		$breadcrumbs=cedi_breadcrumbs($chain,$current_title,has_specific_permission(get_member(),'open_virtual_roots'),true,true);
 
 		// Children Links
 		$dbchildren=$GLOBALS['SITE_DB']->query('SELECT child_id FROM '.get_table_prefix().'seedy_children c LEFT JOIN '.get_table_prefix().'seedy_pages p ON c.child_id=p.id WHERE c.parent_id='.strval((integer)$id).' ORDER BY c.the_order');
@@ -474,12 +473,12 @@ class Module_cedi
 			$my_child_posts_string=do_lang_tempcode('POST_PLU',integer_format($my_child_posts));
 			$my_child_children_string=do_lang_tempcode('CHILD_PLU',integer_format($my_child_children));
 			if ((!($my_child_posts>0)) && (!($my_child_children>0))) $sup=($subpage['hide_posts']==1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
-			if (($my_child_posts>0) && ($my_child_children>0)) $sup=do_template('CEDI_SUBCATEGORY_CHILDREN',array('_GUID'=>'90e9f1647fdad0cacccecca3cbf12888','MY_CHILD_POSTS'=>integer_format($my_child_posts),'MY_CHILD_CHILDREN'=>integer_format($my_child_children)));
+			if (($my_child_posts>0) && ($my_child_children>0)) $sup=do_template('WIKI_SUBCATEGORY_CHILDREN',array('_GUID'=>'90e9f1647fdad0cacccecca3cbf12888','MY_CHILD_POSTS'=>integer_format($my_child_posts),'MY_CHILD_CHILDREN'=>integer_format($my_child_children)));
 			if ((!($my_child_posts>0)) && ($my_child_children>0)) $sup=$my_child_children_string;
 			if ((!($my_child_children>0)) && ($my_child_posts>0)) $sup=$my_child_posts_string;
 
 			$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain.'/'.strval($child_id)),'_SELF');
-			$children->attach(do_template('CEDI_SUBCATEGORY_LINK',array('_GUID'=>'e9f9b504093220dc23a1ab59b3e8e5df','URL'=>$url,'CHILD'=>$child_title,'SUP'=>$sup)));
+			$children->attach(do_template('WIKI_SUBCATEGORY_LINK',array('_GUID'=>'e9f9b504093220dc23a1ab59b3e8e5df','URL'=>$url,'CHILD'=>$child_title,'SUP'=>$sup)));
 
 			$num_children++;
 		}
@@ -508,10 +507,10 @@ class Module_cedi
 
 			// Rating
 			actualise_rating(true,'seedy_post',strval($post_id),build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title);
-			$rating_array=get_rating_simple_array(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title,'seedy_post',strval($post_id),'CEDI_RATING_FORM',$poster);
+			$rating_array=get_rating_simple_array(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title,'seedy_post',strval($post_id),'WIKI_RATING_FORM',$poster);
 			if (!is_null($rating_array))
 			{
-				$rating=do_template('CEDI_RATING',$rating_array);
+				$rating=do_template('WIKI_RATING',$rating_array);
 			} else $rating=new ocp_tempcode();
 
 			// Display the post then ;)
@@ -528,7 +527,7 @@ class Module_cedi
 			} else $extra=new ocp_tempcode();
 			$poster_url=is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_url($poster,false,true);
 			$rate_url=get_self_url(true);
-			$posts->attach(do_template('CEDI_POST',array('_GUID'=>'a29b107abfaf7689c8392676c63093f5','INCLUDE_EXPANSION'=>$include_expansion_here,'UNVALIDATED'=>($myrow['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),'STAFF_ACCESS'=>$staff_access,'RATE_URL'=>$rate_url.'#post_'.strval($post_id),'RATING'=>$rating,'ID'=>strval($myrow['id']),'POSTER_URL'=>$poster_url,'POSTER'=>$username,'POST_DATE_RAW'=>strval($post_date_raw),'POST_DATE'=>$post_date,'POST'=>$post,'BUTTONS'=>$extra)));
+			$posts->attach(do_template('WIKI_POST',array('_GUID'=>'a29b107abfaf7689c8392676c63093f5','INCLUDE_EXPANSION'=>$include_expansion_here,'UNVALIDATED'=>($myrow['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),'STAFF_ACCESS'=>$staff_access,'RATE_URL'=>$rate_url.'#post_'.strval($post_id),'RATING'=>$rating,'ID'=>strval($myrow['id']),'POSTER_URL'=>$poster_url,'POSTER'=>$username,'POST_DATE_RAW'=>strval($post_date_raw),'POST_DATE'=>$post_date,'POST'=>$post,'BUTTONS'=>$extra)));
 
 			$num_posts++;
 		}
@@ -545,7 +544,7 @@ class Module_cedi
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($page['submitter']),
 			'publisher'=>'', // blank means same as creator
 			'modified'=>'',
-			'type'=>'CEDI Page',
+			'type'=>'Wiki+ Page',
 			'title'=>get_translated_text($page['title']),
 			'identifier'=>'_SEARCH:cedi:misc:'.strval($page['id']),
 			'description'=>get_translated_text($page['description']),
@@ -553,12 +552,12 @@ class Module_cedi
 			'image'=>find_theme_image('bigicons/cedi'),
 		);
 
-		breadcrumb_add_segment($tree);
-		return do_template('CEDI_PAGE_SCREEN',array('_GUID'=>'1840d6934be3344c4f93a159fc737a45','TAGS'=>get_loaded_tags('cedi_pages'),'HIDE_POSTS'=>$page['hide_posts']==1,'ID'=>strval($id),'VIEWS'=>integer_format($page['seedy_views']),'STAFF_ACCESS'=>$staff_access,'DESCRIPTION'=>$description,'TITLE'=>$title,'CHILDREN'=>$children,'POSTS'=>$posts,'NUM_POSTS'=>integer_format($num_posts),'MENU'=>$menu));
+		breadcrumb_add_segment($breadcrumbs);
+		return do_template('WIKI_PAGE_SCREEN',array('_GUID'=>'1840d6934be3344c4f93a159fc737a45','TAGS'=>get_loaded_tags('cedi_pages'),'HIDE_POSTS'=>$page['hide_posts']==1,'ID'=>strval($id),'VIEWS'=>integer_format($page['seedy_views']),'STAFF_ACCESS'=>$staff_access,'DESCRIPTION'=>$description,'TITLE'=>$title,'CHILDREN'=>$children,'POSTS'=>$posts,'NUM_POSTS'=>integer_format($num_posts),'MENU'=>$menu));
 	}
 
 	/**
-	 * Show the buttons on the CEDI page viewing page.
+	 * Show the buttons on the Wiki+ page viewing page.
 	 *
 	 * @param  SHORT_TEXT	The ID chain being used to get to this page
 	 * @param  AUTO_LINK		The ID of the page we are showing the menu on
@@ -610,7 +609,7 @@ class Module_cedi
 	 */
 	function changes()
 	{
-		$title=get_page_title('CEDI_CHANGELOG');
+		$title=get_screen_title('CEDI_CHANGELOG');
 
 		require_code('templates_internalise_screen');
 		$test_tpl=internalise_own_screen($title);
@@ -663,7 +662,7 @@ class Module_cedi
 		$fields_title=results_field_title(array(do_lang_tempcode('PAGE'),do_lang_tempcode('USERNAME'),do_lang_tempcode('DATE'),do_lang_tempcode('ACTION')),$sortables,'sort',$sortable.' '.$sort_order);
 		$out=results_table(do_lang_tempcode('CEDI_CHANGELOG'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		return do_template('CEDI_CHANGES_SCREEN',array('_GUID'=>'0dea1ed9d31a818cba60f56fc1c8f68f','TITLE'=>$title,'RESULTS'=>$out));
+		return do_template('WIKI_CHANGES_SCREEN',array('_GUID'=>'0dea1ed9d31a818cba60f56fc1c8f68f','TITLE'=>$title,'RESULTS'=>$out));
 	}
 
 	/**
@@ -682,13 +681,13 @@ class Module_cedi
 	}
 
 	/**
-	 * The UI for merging CEDI posts.
+	 * The UI for merging Wiki+ posts.
 	 *
 	 * @return tempcode	The UI.
 	 */
 	function do_cedi_merge_interface()
 	{
-		$title=get_page_title('MERGE_CEDI_POSTS');
+		$title=get_screen_title('MERGE_CEDI_POSTS');
 
 		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>(get_param('id',false,true)==strval(db_get_first_id()))?NULL:get_param('id',false,true)),'_SELF');
 		$redir_url=$_redir_url->evaluate();
@@ -718,13 +717,13 @@ class Module_cedi
 	}
 
 	/**
-	 * The actualiser for merging CEDI posts.
+	 * The actualiser for merging Wiki+ posts.
 	 *
 	 * @return tempcode	The UI.
 	 */
 	function do_cedi_merge()
 	{
-		$title=get_page_title('MERGE_CEDI_POSTS');
+		$title=get_screen_title('MERGE_CEDI_POSTS');
 
 		check_edit_permission('low',NULL,array('seedy_page',get_param('id',false,true)),'cms_cedi');
 
@@ -754,13 +753,13 @@ class Module_cedi
 	}
 
 	/**
-	 * The UI for moving a CEDI post.
+	 * The UI for moving a Wiki+ post.
 	 *
 	 * @return tempcode	The UI.
 	 */
 	function move()
 	{
-		$title=get_page_title('CEDI_MOVE_POST');
+		$title=get_screen_title('CEDI_MOVE_POST');
 
 		$_id=get_param_cedi_chain('id');
 		$id=$_id[0];
@@ -786,13 +785,13 @@ class Module_cedi
 	}
 
 	/**
-	 * The actualiser for moving a CEDI post.
+	 * The actualiser for moving a Wiki+ post.
 	 *
 	 * @return tempcode	The UI.
 	 */
 	function _move()
 	{
-		$title=get_page_title('CEDI_MOVE_POST');
+		$title=get_screen_title('CEDI_MOVE_POST');
 
 		$post_id=post_param_integer('source');
 		$target=post_param_integer('target');
@@ -827,7 +826,7 @@ class Module_cedi
 	}
 
 	/**
-	 * The UI for making a CEDI post.
+	 * The UI for making a Wiki+ post.
 	 *
 	 * @return tempcode	The UI.
 	 */
@@ -856,7 +855,7 @@ class Module_cedi
 			$original_poster=$myrow['the_user'];
 			check_edit_permission('low',$original_poster,array('seedy_page',$myrow['page_id']),'cms_cedi');
 
-			$title=get_page_title('CEDI_EDIT_POST');
+			$title=get_screen_title('CEDI_EDIT_POST');
 
 			// If we are editing, we need to retrieve the message
 			$message=get_translated_text($myrow['the_message']);
@@ -888,7 +887,7 @@ class Module_cedi
 
 			check_submit_permission('low',array('seedy_page',$id),'cms_cedi');
 
-			$title=get_page_title('CEDI_MAKE_POST');
+			$title=get_screen_title('CEDI_MAKE_POST');
 
 			$message='';
 
@@ -942,7 +941,7 @@ class Module_cedi
 		$_chain=get_param_cedi_chain('id',strval(db_get_first_id()));
 		$chain=$_chain[1];
 
-		$tree=cedi_breadcrumbs($chain,NULL,true,true);
+		$breadcrumbs=cedi_breadcrumbs($chain,NULL,true,true);
 
 		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>(get_param('id',strval($id),true)==strval(db_get_first_id()))?NULL:get_param('id',strval($id),true)),'_SELF');
 		$redir_url=$_redir_url->evaluate();
@@ -954,13 +953,13 @@ class Module_cedi
 
 		$posting_form=get_posting_form($submit_name,$message,$post_url,$hidden_fields,new ocp_tempcode(),NULL,'',$specialisation,$parsed,$javascript);
 
-		breadcrumb_add_segment($tree,$submit_name);
+		breadcrumb_add_segment($breadcrumbs,$submit_name);
 
-		return do_template('CEDI_POST_SCREEN',array('_GUID'=>'efdea6198cba136eb6809937c2322458','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TEXT'=>$text,'TITLE'=>$title,'POSTING_FORM'=>$posting_form));
+		return do_template('WIKI_POSTING_SCREEN',array('_GUID'=>'efdea6198cba136eb6809937c2322458','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TEXT'=>$text,'TITLE'=>$title,'POSTING_FORM'=>$posting_form));
 	}
 
 	/**
-	 * The actualiser for making a CEDI post.
+	 * The actualiser for making a Wiki+ post.
 	 *
 	 * @return tempcode	The UI.
 	 */
@@ -982,10 +981,10 @@ class Module_cedi
 		if ($mode=='edit')
 		{
 			$delete=post_param_integer('delete',0);
-			$title=get_page_title('CEDI_EDIT_POST');
+			$title=get_screen_title('CEDI_EDIT_POST');
 		} else
 		{
-			$title=get_page_title('CEDI_MAKE_POST');
+			$title=get_screen_title('CEDI_MAKE_POST');
 
 			if ($GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)',array('id'=>$id))>=300)
 			{
@@ -1006,6 +1005,7 @@ class Module_cedi
 		// Do it
 		if ($mode=='post')
 		{
+			inject_action_spamcheck();
 			if (!has_specific_permission(get_member(),'bypass_validation_lowrange_content','cms_cedi',array('seedy_page',$id)))
 				$validated=0;
 			if (!has_category_access(get_member(),'seedy_page',strval($id))) access_denied('CATEGORY_ACCESS');
@@ -1014,6 +1014,13 @@ class Module_cedi
 
 			$post_id=cedi_add_post($id,$message,$validated);
 
+			if ($validated==0)
+			{
+				require_code('submit');
+				$edit_url=build_url(array('page'=>'cedi','type'=>'post','post_id'=>$post_id,'validated'=>1),'_SELF',NULL,false,false,true);
+				if (addon_installed('unvalidated'))
+					send_validation_request('CEDI_MAKE_POST','seedy_posts',false,strval($post_id),$edit_url);
+			}
 		} else
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('seedy_posts',array('*'),array('id'=>$post_id),'',1);
@@ -1066,7 +1073,7 @@ class Module_cedi
 	}
 
 	/**
-	 * The UI to show the CEDI tree.
+	 * The UI to show the Wiki+ tree.
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -1108,7 +1115,7 @@ class Module_cedi
 		if (!is_null($root)) $cache_name.=strval($root);
 		$content=splurgh_master_build('id',$map,$url_stub->evaluate(),$cache_name,$last_change_time,$root);
 
-		$title=get_page_title('CEDI_TREE');
+		$title=get_screen_title('CEDI_TREE');
 		return do_template('SPLURGH_SCREEN',array('_GUID'=>'be1e902d5f4429795f0f4c4e4384071b','TITLE'=>$title,'CONTENT'=>$content));
 	}
 

@@ -173,6 +173,17 @@ function js_compile($j,$js_cache_path,$minify=true)
  */
 function css_compile($theme,$c,$fullpath,$css_cache_path,$minify=true)
 {
+	if ($c!='global') // We need to make sure the global.css file is parsed, as it contains some shared THEME_WIZARD_COLOR variables that Tempcode will pick up on
+	{
+		$found=find_template_place('global','',$theme,'.css','css');
+		$theme=$found[0];
+		$global_fullpath=get_custom_file_base().'/themes/'.$theme.$found[1].'global.css';
+		if (!is_file($global_fullpath))
+			$global_fullpath=get_file_base().'/themes/'.$theme.$found[1].'global.css';
+
+		_css_compile($theme,'global',$global_fullpath,false);
+	}
+
 	list($success_status,$out)=_css_compile($theme,$c,$fullpath,$minify);
 	$css_file=@fopen($css_cache_path,'wt');
 	if ($css_file===false) intelligent_write_error($css_cache_path);

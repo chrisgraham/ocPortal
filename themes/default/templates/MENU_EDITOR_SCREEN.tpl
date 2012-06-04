@@ -1,6 +1,6 @@
 {TITLE}
 
-{+START,INCLUDE,handle_conflict_resolution}{+END}
+{+START,INCLUDE,HANDLE_CONFLICT_RESOLUTION}{+END}
 {+START,IF_PASSED,WARNING_DETAILS}
 	{WARNING_DETAILS}
 {+END}
@@ -8,7 +8,7 @@
 <div class="menu_editor_page docked" id="menu_editor_wrap">
 	<form title="" action="{URL*}" method="post">
 		<!-- In separate form due to mod_security -->
-		<textarea{$?,{$VALUE_OPTION,html5}, aria-hidden="true"} cols="30" rows="3" style="display: none" name="template" id="template">{CHILD_BRANCH_TEMPLATE*}</textarea>
+		<textarea aria-hidden="true" cols="30" rows="3" style="display: none" name="template" id="template">{CHILD_BRANCH_TEMPLATE*}</textarea>
 	</form>
 
 	<form title="{!PRIMARY_PAGE_FORM}" id="edit_form" action="{URL*}" method="post">
@@ -31,9 +31,9 @@
 				</div>
 			</div>
 
-			<div class="proceed_button">
-				<input accesskey="u" class="button_page" type="submit" value="{!SAVE}" onclick="if (validateMenu('{!MISSING_CAPTION_ERROR;}','{!MISSING_URL_ERROR;}')) { disable_button_just_clicked(this); return true; } else return false;" />
-			</div>
+			<p class="proceed_button">
+				<input accesskey="u" class="button_page" type="submit" value="{!SAVE}" onclick="if (validate_menu('{!MISSING_CAPTION_ERROR;}','{!MISSING_URL_ERROR;}')) { disable_button_just_clicked(this); return true; } else return false;" />
+			</p>
 		</div>
 
 		<div id="mini_form_hider" style="display: none" class="float_surrounder">
@@ -52,23 +52,25 @@
 					var site_tree=new tree_list('tree_list','data/site_tree.php?get_perms=0{$KEEP;}&start_links=1','','',false,null,false,true);
 				//]]></script>
 
-				<p class="associated_caption">
+				<p class="associated_details">
 					{!CLICK_ENTRY_POINT_TO_USE}
 				</p>
 
-				<p>
-					&raquo; <a href="#" onclick="return menu_editor_add_new_page();">{!SPECIFY_NEW_PAGE}</a>
-				</p>
+				<ul class="actions_list" role="navigation">
+					<li><a href="#" onclick="return menu_editor_add_new_page();">{!SPECIFY_NEW_PAGE}</a></li>
+				</ul>
 			</div>
 
 			<div class="menu_editor_lh_side">
 				<h2>{!EDIT_SELECTED_FIELD}</h2>
 
-				<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="dottedborder wide_table">
-					<colgroup>
-						<col style="width: 198px" />
-						<col style="width: 100%" />
-					</colgroup>
+				<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
+					{+START,IF,{$NOT,{$MOBILE}}}
+						<colgroup>
+							<col class="field_name_column" />
+							<col class="field_input_column" />
+						</colgroup>
+					{+END}
 
 					<tbody>
 						{FIELDS_TEMPLATE}
@@ -80,24 +82,21 @@
 		<input type="hidden" name="confirm" value="1" />
 	</form>
 
-	<br />
+	<div class="box box___menu_editor_screen">
+		<h2 class="toggleable_tray_title">
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!DELETE_MENU}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!DELETE_MENU}</a>
+		</h2>
 
-	<div class="lightborder">
-		<div class="standardbox_classic">
-			<div class="standardbox_title_light toggle_div_title">
-				{!DELETE_MENU}
-				<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('delete_menu','block'); return false;"><img id="e_delete_menu" alt="{!EXPAND}: {!DELETE_MENU}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-			</div>
-		</div>
-
-		<div class="toggler_main" id="delete_menu" style="{$JS_ON,display: none,}">
+		<div class="toggleable_tray" id="delete_menu" style="{$JS_ON,display: none,}" aria-expanded="false">
 			<p>{!ABOUT_DELETE_MENU}</p>
 
 			<form title="{!DELETE}" action="{DELETE_URL*}" method="post">
-				<input type="hidden" name="confirm" value="1" />
-				<div class="proceed_button">
+				<p class="proceed_button">
+					<input type="hidden" name="confirm" value="1" />
+
 					<input class="button_pageitem" type="submit" value="{!DELETE}" onclick="window.fauxmodal_confirm('{!CONFIRM_DELETE;,{MENU_NAME*}}',function(answer) { if (answer) form.submit(); }); return false;" />
-				</div>
+				</p>
 			</form>
 		</div>
 	</div>
@@ -109,7 +108,7 @@
 		all_menus.push('{_loop_var;/}');
 	{+END}
 
-	var cf=function() { var e=document.getElementById('menu_editor_wrap'); if (e.className.indexOf(' docked')==-1) smoothScroll(findPosY(document.getElementById('caption_'+window.current_selection))); };
+	var cf=function() { var e=document.getElementById('menu_editor_wrap'); if (e.className.indexOf(' docked')==-1) smooth_scroll(find_pos_y(document.getElementById('caption_'+window.current_selection))); };
 	document.getElementById('url').ondblclick=cf;
 	document.getElementById('caption_long').ondblclick=cf;
 	document.getElementById('match_tags').ondblclick=cf;

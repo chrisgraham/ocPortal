@@ -170,7 +170,6 @@ function activities_ajax_update_list_handler()
 	$last_id=post_param('lastid', '-1');
 	$mode=post_param('mode','all');
 
-	//require_css('side_blocks');
 	require_lang('activities');
 	require_code('activities');
 	require_code('addons_overview');

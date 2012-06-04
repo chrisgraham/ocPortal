@@ -149,7 +149,7 @@ function backend_script()
 	$date=date($date_string);
 
 	$site_about=xmlentities(get_option('description'));
-	$logo_url=xmlentities(find_theme_image('logo/trimmed-logo'));
+	$logo_url=xmlentities(find_theme_image('logo/trimmed_logo'));
 	$copyright=xmlentities(trim(str_replace('&copy;','',get_option('copyright'))));
 
 	$cutoff=get_param_integer('cutoff',time()-60*60*24*get_param_integer('days',30));
@@ -164,7 +164,7 @@ function backend_script()
 		foreach (array_keys($_feeds) as $feed)
 		{
 			if ((get_forum_type()!='ocf') && (substr($feed,0,4)=='ocf_')) continue;
-			$feed_title=ucwords(str_replace('_',' ',$feed));
+			$feed_title=titleify($feed);
 
 			// Try and get a better feed title
 			require_code('hooks/systems/rss/'.filter_naughty_harsh($feed),true);

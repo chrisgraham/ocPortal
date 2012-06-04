@@ -26,10 +26,13 @@
  */
 function build_preview($multi_return=false)
 {
+	require_css('forms');
+	require_javascript('javascript_validation');
+
 	// Check CAPTCHA if it is passed
 	if (addon_installed('captcha'))
 	{
-		if (((array_key_exists('post',$_POST)) && ($_POST['post']!='')) && (array_key_exists('security_image',$_POST)))
+		if (((array_key_exists('post',$_POST)) && ($_POST['post']!='')) && (array_key_exists('captcha',$_POST)))
 		{
 			require_code('captcha');
 			enforce_captcha(false);
@@ -103,7 +106,6 @@ function build_preview($multi_return=false)
 				$_val_orig=$val;
 
 				require_lang('validation');
-				require_css('adminzone');
 				require_code('view_modes');
 				require_code('obfuscate');
 				require_code('validation');
@@ -127,8 +129,8 @@ function build_preview($multi_return=false)
 		require_once(get_file_base().'/data/areaedit/plugins/SpellChecker/spell-check-logic.php');
 	}
 	$db=$forum_db?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
-	$view_space_map=array();
-	require_code('templates_view_space');
+	$map_table_map=array();
+	require_code('templates_map_table');
 	foreach ($_POST as $key=>$val)
 	{
 		if (!is_string($val)) continue;
@@ -161,7 +163,7 @@ function build_preview($multi_return=false)
 		}
 		elseif ((substr($key,-6)=='_month') || (substr($key,-5)=='_year')) $is_hidden=true;
 
-		$key_nice=post_param('label_for__'.$key,ucwords(str_replace('_',' ',$key)));
+		$key_nice=post_param('label_for__'.$key,titleify($key));
 		if ($key_nice=='') $is_hidden=true;
 
 		if (!$is_hidden)
@@ -242,7 +244,7 @@ function build_preview($multi_return=false)
 					$valt=make_string_tempcode(escape_html($val));
 				}
 
-				$view_space_map[$key_nice]=$valt;
+				$map_table_map[$key_nice]=$valt;
 			} else // An attachment-supporting field
 			{
 				$tempcodecss=false;
@@ -251,7 +253,7 @@ function build_preview($multi_return=false)
 				$post_bits=do_comcode_attachments($val,$attachment_type,strval(-$posting_ref_id),true,$db);
 				$new_post_value=$post_bits['comcode'];
 
-				$view_space_map[$key_nice]=$post_bits['tempcode'];
+				$map_table_map[$key_nice]=$post_bits['tempcode'];
 
 				$val=$post_bits['tempcode'];
 				$supports_comcode=true;
@@ -276,17 +278,17 @@ function build_preview($multi_return=false)
 
 	if (is_null($output))
 	{
-		if (count($view_space_map)==1)
+		if (count($map_table_map)==1)
 		{
-			$output=array_pop($view_space_map);
+			$output=array_pop($map_table_map);
 		} else
 		{
-			$view_space_fields=new ocp_tempcode();
-			foreach ($view_space_map as $key=>$val)
+			$map_table_fields=new ocp_tempcode();
+			foreach ($map_table_map as $key=>$val)
 			{
-				$view_space_fields->attach(view_space_field($key,$val,true));
+				$map_table_fields->attach(map_table_field($key,$val,true));
 			}
-			$output=do_template('VIEW_SPACE',array('_GUID'=>'3f548883b9eb37054c500d1088d9efa3','WIDTH'=>'170','FIELDS'=>$view_space_fields));
+			$output=do_template('MAP_TABLE',array('_GUID'=>'3f548883b9eb37054c500d1088d9efa3','WIDTH'=>'170','FIELDS'=>$map_table_fields));
 		}
 	}
 

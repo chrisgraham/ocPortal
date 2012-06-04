@@ -41,7 +41,7 @@ function ocf_get_topic_where($topic_id)
  * @param  ?MEMBER	The member (NULL: current member).
  * @return boolean	The answer.
  */
-function ocf_may_make_personal_topic($member_id=NULL)
+function ocf_may_make_private_topic($member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 

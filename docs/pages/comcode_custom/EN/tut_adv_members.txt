@@ -1,0 +1,141 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Advanced ocPortal member system[/title]
+
+This tutorial will cover some of the more advanced features of the [concept]OCF[/concept] member system.
+
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Merging members[/title]
+
+[exp_thumb="Merging members" float="left"]adv_members_merge[/exp_thumb]
+{!ocf:DOC_MERGE_MEMBERS}
+It is possible that some reassignments will not be possible, in which case, records may be dropped; for example, if both members share a secondary usergroup, ocPortal would fail [due to database key constraints] to assign both membership records to the same user, and hence drop one of them. You do not need to worry as this is handled automatically.
+
+[title="2"]Custom profile fields[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="Adding a custom profile field" float="right"]adv_members_cpf[/exp_thumb]
+{!ocf:DOC_CUSTOM_PROFILE_FIELDS}
+
+You can manage Custom Profile Fields from: Admin Zone > Tools > Members > the Custom Profile Fields icon.
+
+[box="Lists"]For a list-type CPF, define the list by placing a '|' separated list in the default value field (e.g. "This|That|Other"). The first value in the list will be the default.[/box]
+[html]</div>[/html]
+[exp_thumb="Custom profile fields are edited by editing member profiles" float="right"]adv_members_cpf_edit[/exp_thumb]
+There are a number of custom profile field options that you may set that allow CPFs to function for a number of different purposes, including:
+ - Storing hidden details on member (for example, a list of rule infractions, such as to aid decisions on cumulative punishment)
+ - Allowing members to specify details about themselves (for example, their occupation)
+ - Forcing members to specify certain additional details (for example, on a forum for staff of a company, you could make members enter their job role, so as to reduce the chance of a non employee from joining and remaining an active member)
+ - Allowing members of a certain sub-communities (via their usergroup) to specify details appropriate to that sub-community (for example, those in the 'Football' usergroup of a school discussion forum could specify the position they play, whilst those in the 'Music' usergroup could specify the instrument they play).
+
+There is a 'Privacy' sub-tab in the account settings that allows members to limit access beyond this. If there are more than 15 CPFs it will only give them options for the CPFs they have filled in.
+
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="Custom profile fields are optionally shown where members post" float="right"]adv_members_cpf_space_1[/exp_thumb]
+A 'locked' custom profile field can not be edited or deleted.
+
+[exp_thumb="Custom profile fields are all shown in member profiles (those that the viewer has permission to view)" float="right"]adv_members_cpf_space_2[/exp_thumb]
+It is possible to configure where a value for a custom profile field for members will be displayed. The field will always be visible from their profile page, but also:
+ - if 'show in posts' is selected, it will also be visible on their forum posts, and their member galleries and member gallery images/videos
+ - if 'show in post previews' is selected, it will also be visible when displaying a member sub-gallery in a list of sub-galleries
+
+If you have more than 60 textual CPFs (except Comcode ones), any ones created after the 60th will not be included for searching on the search module's member search form.
+
+[html]</div>[/html]
+
+[title="3"]Display rules[/title]
+
+CPFs are pulled up according to the following set of rules:
+
+[html]
+<div class="wide_table_wrap">
+<table class="results_table wide_table autosized_table"><tbody>
+<tr><th colspan="4">PROFILE FIELD SETTINGS</th><th>&nbsp;</th><th colspan="9">SHOWS IN FOLLOWING CIRCUMSTANCES</th></tr>
+<tr><th>Owner viewable</th><th>Owner settable</th><th>Publicly viewable</th><th>Required</th><th /><th>Join</th><th>Admin add member</th><th>Edit own profile</th><th>Edit others profile</th><th>Edit others profile but has 'View any field' permission</th><th>View own profile</th><th>View others profile</th><th>View own or others profile but has 'View any field' permission</th><th>Member searchable</th></tr>
+<tr><td><p>N</p></td><td><p>N</p></td><td><p>N</p></td><td><p>N</p></td><td>&nbsp;</td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>N</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td>&nbsp;</td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td>&nbsp;</td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td>&nbsp;</td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td>&nbsp;</td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td>&nbsp;</td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td>&nbsp;</td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td>&nbsp;</td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>N</p></td><td>&nbsp;</td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td>&nbsp;</td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td>&nbsp;</td><td><p>N</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td>&nbsp;</td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td></tr>
+<tr><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>N</p></td><td>&nbsp;</td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td></tr>
+<tr><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td>&nbsp;</td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td></tr>
+<tr><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>N</p></td><td>&nbsp;</td><td><p>N</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td></tr>
+<tr><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td>&nbsp;</td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td><td><p>Y</p></td></tr>
+</tbody></table>
+</div>
+[/html]
+
+In addition, members may override display settings in their Account, on a per-field basis. They may choose to display fields:
+ - Not at all
+ - To members
+ - To friends
+ - To certain usergroups
+ - To everyone
+
+[title="3"]Encrypted CPFs[/title]
+
+When creating a custom profile field, it is possible to mark it as encrypted. If you have the OpenSSL PHP extension installed and configured (see the [page="_SEARCH:tut_web_hosting"]Web Hosting for ocPortal[/page] tutorial), ocPortal can automatically encrypt the contents of such CPFs, such that their sensitive data would not be revealed if the server were to be compromised.
+
+To mark a CPF as encrypted, tick the "Encryption" box when creating the field, making sure to first have encryption set up on your server and on ocPortal.
+
+When editing the value of an encrypted CPF, the encrypted data will be shown. To change the value, simply overwrite it with the data you want to change it to. Leaving the value alone will not cause it to be doubly-encrypted.
+
+When viewing an encrypted CPF on a member's profile page, the encrypted data will not be decrypted or shown. To decrypt and view the data, click the "Decrypt" JavaScript link for the CPF. A popup will allow the decryption passphrase to be entered and the data decrypted. The decryption passphrase is the passphrase used to unlock the private key, as specified when originally generating the public/private key pair. Typically only staff will have knowledge of the passphrase, since there's only one for the entire site.
+
+Note that encrypted CPFs are not supported for any kind of CPF value that is not typed in (such as list selections).
+
+[title="3"]Categorisation of CPFs[/title]
+
+If you prefix CPF names like "Example: Field A" and "Example: Field B", ocPortal will be smart enough to treat this as a categorisation and render the join/edit-profile forms in a more appropriate way.
+
+[title="2"]Welcome E-mails[/title]
+[html]<div class="float_surrounder">[/html]
+[exp_thumb="Creating a welcome e-mail" float="right"]adv_members_welcome_email[/exp_thumb]
+ocPortal provides special support for composing a series of welcome e-mails that are sent out to new members on a predefined schedule.
+The purpose of this feature is to gradually advertise the features of your website to your members in a way that reinforces awareness. As most members will not usually return to a website, welcome e-mails provide a strong tool to keep them aware and entice them to fully embrace whatever service you are providing.
+
+For welcome e-mails to work the ocPortal cron bridge must be configured as discussed in the [page="_SEARCH:tut_configuration"]Configuration tutorial[/page]
+[html]</div>[/html]
+
+[title="2"]CSV files[/title]
+
+You can use [abbr="Comma-Separated-Values"]CSV[/abbr] files to put member data into your website, or to export it. This functionality is available from the 'Tools' section of the Admin Zone. There is full support for auto-creation of usergroups and custom profile fields as required to get the data imported.
+
+[title="2"]Implicit usergroups and external usergroup listings[/title]
+
+ocPortal has support for 'implicit usergroups' which are usergroup memberships defined by custom code written by programmers. It is useful for using permissions for handling special circumstances. For example, a programmer could create an implicit usergroup for under 18's and remove the bypass-wordfilter permission for that usergroup.
+
+In addition ocPortal can take usergroup memberships from LDAP.
+
+Usually when ocPortal handles checks of when someone is in a usergroup it goes through some fool-proof methods to do it. However for performance sometimes it needs to get a full list of everyone in a usergroup without having to run a lot of calculations. In these situations only natural ocPortal usergroups are checked.
+This said, ocPortal automatically syncs LDAP groups and ocPortal has a CRON hook (scheduler task) that is disabled by default that can be turned on by an OcCLE command to synchronise implicit usergroups as normal usergroup memberships:
+[code]
+:set_value('implicit_usergroup_sync','1');
+[/code]
+If this is set then anyone put into the usergroup manually that does not match the implicit usergroup check would end up being removed again.
+
+If synching is not enabled, or group memberships come from LDAP, then the following things will not work as expected when it comes to them:
+ - member search by usergroup
+ - birthdays RSS feed filtering by usergroup
+ - sending a newsletter to a usergroup
+ - implicit memberships are not shown in exported CSV files
+ - copying members from one usergroup to another
+ - various areas of code that list all staff or super-members
+ - signing up everyone in a usergroup for calendar event reminders
+ - showing how many members there are in a usergroup
+ - listing usergroup memberships when viewing a usergroup
+
+
+[title="2"]See also[/title]
+
+ - [page="_SEARCH:tut_members"]ocPortal member system[/page]
+ - [page="_SEARCH:tut_subcom"]Creating sub-communities[/page]
+ - [page="_SEARCH:tut_web_hosting"]Web Hosting for ocPortal[/page]
+
+

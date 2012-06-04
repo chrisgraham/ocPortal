@@ -4,11 +4,7 @@
 	{!TESTER_STATISTICS_INTRO}
 </p>
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="solidborder wide_table">
-	<colgroup>
-		<col style="width: 250px" />
-		<col style="width: 100%" />
-	</colgroup>
+<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="results_table autosized_table">
 	<tbody>
 		<tr>
 			<th>{!NUM_TESTS}</th>

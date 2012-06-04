@@ -136,7 +136,7 @@ class Hook_search_catalogue_categories
 	 */
 	function render($row)
 	{
-		return get_catalogue_category_html($row);
+		return render_catalogue_category_box($row);
 	}
 
 }

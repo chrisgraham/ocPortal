@@ -1,0 +1,24 @@
+[semihtml]
+	[surround="welcome"]
+		[title]Welcome to {$SITE_NAME*}[/title]
+	
+		[block]main_greeting[/block]
+	
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse aliquam gravida nisi, et auctor leo fringilla sit amet. Duis lorem sapien, consectetur sed porttitor et, accumsan et erat. Phasellus lacinia feugiat convallis. Nulla semper vehicula molestie. Vestibulum libero nulla, convallis et facilisis eget, varius id nibh. Nam placerat malesuada est, posuere feugiat velit sagittis eget. Vestibulum tristique, ligula in tincidunt suscipit, ante orci mollis augue, ultrices auctor diam est in libero. Curabitur libero turpis, placerat eu commodo sed, dictum vitae mauris. Nulla ac purus quis sem vestibulum placerat.</p>
+
+		<p>Proin vestibulum eros imperdiet magna luctus sit amet pharetra urna ultricies. In hac habitasse platea dictumst. Ut ut elit sit amet turpis pulvinar pretium quis nec ligula. Ut mauris felis, tempor eu tempor ut, aliquam quis massa. Nullam nulla libero, aliquam et posuere consectetur, luctus sit amet augue. Donec feugiat, ante lobortis viverra facilisis, arcu massa euismod odio, quis lacinia neque risus a est. Donec cursus arcu nec ipsum dignissim sit amet venenatis lacus pellentesque. Suspendisse luctus fringilla nisi, ac semper dui aliquam vel.</p>
+	[/surround]
+
+	[surround="box2"]
+		[surround="news-list"]
+			[block="3" blogs="0" title="Latest News"]main_news[/block]
+		[/surround]
+	[/surround]
+
+	[surround="box2"]
+		[surround="news-list"]
+			[block="3" blogs="1" title="Latest Blog Posts"]main_news[/block]
+		[/surround]
+	[/surround]
+[/semihtml]
+{$,page hint: no_wysiwyg}{$,page hint: no_smart_conversion}

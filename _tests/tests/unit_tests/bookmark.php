@@ -42,7 +42,7 @@ class bookmark_test_set extends ocp_test_case
 		$this->assertTrue('nnnnn'==$GLOBALS['SITE_DB']->query_value('bookmarks','b_title ',array('id'=>$this->bookmark_id)));
 	}
 
-	
+
 	function tearDown()
 	{
 		delete_bookmark($this->bookmark_id,4);

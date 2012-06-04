@@ -62,8 +62,8 @@ $OPTIONS=array();
 global $CURRENT_SHARE_USER;
 $CURRENT_SHARE_USER=NULL;
 
-$GLOBALS['DEBUG_MODE']=false;
-$GLOBALS['SEMI_DEBUG_MODE']=true;
+$GLOBALS['DEV_MODE']=false;
+$GLOBALS['SEMI_DEV_MODE']=true;
 
 @ob_end_clean();
 
@@ -118,7 +118,7 @@ require_lang('version');
 
 require_code('tempcode_compiler');
 $css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-$tpl=do_template('RESTORE_WRAP',array('CSS_NOCACHE'=>$css_nocache,'MESSAGE'=>do_lang('SUCCESS')));
+$tpl=do_template('RESTORE_HTML_WRAP',array('CSS_NOCACHE'=>$css_nocache,'MESSAGE'=>do_lang('SUCCESS')));
 echo $tpl->evaluate();
 
 /**

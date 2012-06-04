@@ -1,0 +1,304 @@
+[title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Optimising[/title]
+
+ocPortal is very heavily optimised so that pages load as quickly as possible. This tutorial will provide information on techniques and issues for increasing throughput, so that your site may support more visitors.
+
+If you have need to be able to take particularly high load, considering getting [page="site:support"]the support of the experts[/page].
+
+[contents]decimal,lower-alpha[/contents]
+
+[title="2"]Making PHP run faster[/title]
+
+Speed can be approximately doubled if an "opcode cache" is installed as a PHP extension. These caches cache compiled PHP code so that PHP does not need to re-compile scripts on every page view. The 5 main solutions for this are:
+ - APC (free, recommended)
+ - wincache (Windows only)
+ - xcache
+ - Zend Optimizer (part of it is free but mostly it is commercial; made by the company behind PHP)
+ - eAccelerator (free, carried on from Turck mmcache)
+ - ionCube PHP Accelerator (free)
+
+We recommend using APC, for reasons that will become apparent.
+Only one opcode cache can be used, and they often need to be manually compiled against the PHP version on the server and then installed as an extension. Such system administation is beyond the scope of this tutorial.
+
+[title="2"]Persistent database connections[/title]
+
+For MySQL you can configure ocPortal to use persistent database connections. This is not recommended on shared hosting because it may annoy the web host, but if you have a dedicated server it will cut down load times as a new database connection does not need to be established.
+
+These are enabled through the "Installation Options" ([tt]config_editor.php[/tt]).
+
+[title="2"]ocPortal cacheing[/title]
+
+ocPortal provides many forms of cache, to allow the system to run as quickly as is possible.
+
+The ocPortal caches are:
+ - [b]language cache[/b]: this removes the need for ocPortal to parse the .ini language files on each load
+ - [b]template cache[/b]: this removes the need for ocPortal to parse the .tpl template files on each load
+ - [b]Comcode page cache[/b]: this removes the need for ocPortal to parse the .txt Comcode pages on each load
+ - [b]Comcode cache[/b]: this removes the need for ocPortal to parse Comcode whenever it is used
+ - [b]block cache[/b]: this removes the need for many blocks to be fully executed whenever they are viewed -- they are cached against the parameters they are called up with using a per-block tailored scheme
+ - [b]theme image cache[/b]: this removes the need for ocPortal to search for theme image files whenever they are referenced by code (a code could translate to perhaps 10 different URLs, due to the flexibility of the system)
+ - [b]values caches[/b]: this isn't a specific cache, but cacheing of values such as member post counts removes the need for ocPortal to recalculate them on-the-fly
+ - [b]persistent cache[/b]: this is a very special cache that is explained in the next section
+ - [b]advanced admin cache[/b]: this can be turned on in the Admin Zone configuration to let admins have cached pages on their computer that are immediately (without server communication) interstitially displayed (for roughly 1 second) whilst the server generates the up-to-date page
+ - [b]fast spider cache[/b]: this can be turned on from the installation options editor to feed static pages to bots, to stop bots hurting site performance
+
+[box="Technical note for programmers"]
+ocPortal is not designed to "cache everything as it will be displayed" because the high dynamic nature of the system makes that impossible. Instead, Tempcode is typically cached against relevant parameters, which provides a "half way" between determined output and neutral data.
+[/box]
+
+[title="2"]General tips[/title]
+
+ - If you are using a particularly visually complex block (e.g. deep pop-out menus) then use the 'quick_cache' block option on it if possible.
+ - Avoid making very long Comcode pages if they are just going to be static for all users. Ideally for usability pages should not be very long, but there are cases where you may choose for them to be (e.g. large glossaries). You can put [tt]{$,page hint: no_smart_conversion}[/tt] into a Comcode page to prevent the WYSIWYG editor converting it to Comcode and otherwise use the Comcode 'html' tag to include pure HTML content.
+ - If you get a lot of 404 errors, it is best to make a static 404 page instead of using ocPortal's which can be relatively intensive. You activate a custom 404 page by putting a reference to it in the [tt].htaccess[/tt] file (our [tt]recommended.htaccess[/tt] file does this for ocPortal's).
+ - If you are optimising your server infrastructure to be able to handle large numbers of users don't forget to change the value of the "Maximum users" config option to something much higher!
+ - Even though ocPortal supports various database vendors it is optimised for MySQL
+ - Even though ocPortal supports various third party forums it is optimised for OCF
+
+[title="2"]Persistent cache[/title]
+
+The persistent cache is a cache that aims to store regularly-accessed data in-memory between requests, so that it does not actually need to be loaded from the database or re-calculated on each page load. This cache removes about 30% of the page load time, but most importantly, takes load away from the database, allowing the database to become less of a limiting factor in high throughput situations.
+
+The cache is implemented to work with either:
+ - APC (or another opcode cache mentioned in the intro paragraph), which provides in-memory storage features as well as an opcode cache and is associated with core PHP development (hence why we recommend it as the opcode cache to use)
+ - memcache ('memcache' is the PHP extension for the 'memcached' server), which provides a heavyweight solution to memory sharing -- it is not recommended that this be used, as it requires additional configuration and PHP memcached support (by the mainstream extension) is limited, leading ocPortal to not be able to make use of its advantage over eAccelerator (a network of memory servers)
+ - disk cache -- whilst this does increase disk usage, it still provides a performance boost over not having a persistent cache. Don't use the disk cache is a production situation as it is not designed to work on busy servers (file access conflicts)
+
+ocPortal will not use a persistent cache by default (except in v6.0.0) but it may be enable from the installation options editor.
+
+ocPortal does not cache processed content in memory that has no special featured status, as this would only trade reliance on CPU for reliance on memory in a non-productive fashion.
+
+[title="2"]Aggressive cacheing for bots[/title]
+
+If you want to serve cached pages to bots, put a line like this into your [tt]info.php[/tt] file:
+[code]
+$SITE_INFO['fast_spider_cache']=3;
+[/code]
+All user agents identified as bots or spiders, or listed in the [tt]text/bots.txt[/tt] file, will be served out of a cache. HTTP cacheing is also properly implemented.
+The cache lifetime in this example would be 3 hours, but you can change it to whatever you require.
+The cache files are saved under the [tt]persistent_cache[/tt] directory.
+
+If you want any Guest user to be cached like this, set:
+[code]
+$SITE_INFO['any_guest_cached_too']='1';
+[/code]
+
+[title="2"]'keep_' parameters[/title]
+
+This is not recommended, but if you really need to squeeze performance, you can disable the 'keep_' parameters:
+[codebox]
+$SITE_INFO['no_keep_params']='1'; // Disable 'keep_' parameters, which can lead to a small performance improvement as URLs can be compiled directly into the template cache
+[/codebox]
+
+[title="2"]Disk activity[/title]
+
+If you have a hard disk that is slow, for whatever reason, you can put these settings into [tt]info.php[/tt] to reduce access significantly:
+[codebox]
+/* The best ones, can also be enabled via the config_editor.php interface */
+$SITE_INFO['disable_smart_decaching']='1'; // Don't check file times to check caches aren't stale
+$SITE_INFO['no_disk_sanity_checks']='1'; // Assume that there are no missing language directories, or other configured directories; things may crash horribly if they are missing and this is enabled
+$SITE_INFO['hardcode_common_module_zones']='1'; // Don't search for common modules, assume they are in default positions
+$SITE_INFO['prefer_direct_code_call']='1'; // Assume a good opcode cache is present, so load up full code files via this rather than trying to save RAM by loading up small parts of files on occasion
+
+/* Very minor ones */
+$SITE_INFO['charset']='utf-8'; // To avoid having to do lookup of character set via a preload of the language file
+$SITE_INFO['known_suexec']='1'; // To assume .htaccess is writable for implementing security blocks, so don't check
+$SITE_INFO['debug_mode']='0'; // Don't check for debug mode by looking for traces of git/subversion
+$SITE_INFO['no_extra_logs']='1'; // Don't allow extra permission/query logs
+$SITE_INFO['no_extra_bots']='1'; // Don't read in extra bot signatures from disk
+$SITE_INFO['no_extra_closed_file']='1'; // Don't support reading closed.html for closing down the site
+$SITE_INFO['no_installer_checks']='1'; // Don't check the installer is not there
+$SITE_INFO['assume_full_mobile_support']='1'; // Don't check the theme supports mobile devices (via loading theme.ini), assume it always does
+$SITE_INFO['no_extra_mobiles']='1'; // Don't read in extra mobile device signatures from disk
+$SITE_INFO['old_mysql']='0'; // We don't support old MySQL versions, don't check for a file called old_mysql to confirm this
+[/codebox]
+They all have effects, so be careful! There are reasons these settings aren't the defaults.
+
+[title="2"]Server[/title]
+
+A faster and more dedicated server will make ocPortal run faster. This may seem obvious, but in the efforts of optimisation, is easily forgotten.
+
+CPU speed will be the most limiting factor for most websites: so this is the first thing that should be considered.
+
+[title="2"]The Cloud[/title]
+
+ocPortal runs perfectly on Rackspace Cloud Sites hosting (formerly named Mosso Cloud), which will spread requests across machines automatically, and handle data synching faultlessly (we have been told that behind-the-scenes there is database replication, but it is unnoticeable). You could also run on your own Amazon Cloud Server Instances, but there is probably no reason to -- it's a lot more work and ocPortal is designed to run on commodity machines that require no custom configuration.
+
+[title="2"]Sessions[/title]
+
+If you are on a single database but have hundreds of members online at once (or replication you cannot control) then your session pool will be shared between all websites. You should type this into OcCLE:
+[code]
+:set_value('session_prudence','1');
+[/code]
+It will cause ocPortal to not load up all sessions on each page request. This will stop "users online" working, but is important for performance.
+
+[title="2"]Huge databases[/title]
+
+If you have really large databases then two issues come into play:
+1) ocPortal will start doing sensible changes to site behaviour to stop things grinding to a halt
+2) You might start worrying about databases being too large for a single database server and need to implement 'sharding'
+
+[title="3"]ocPortal adaptations[/title]
+
+ocPortal has been tested up to a million of the following:
+ - Comment topic posts for a single resource
+ - Ratings for a single resource
+ - Trackbacks for a single resource
+ - Forum/topic trackers (if you do this though things will get horribly slow -- imagine the number of emails sent out)
+ - Authors
+ - Members
+ - Newsletter subscribers
+ - Point transactions
+ - Friends to a single member
+ - Friends of a single member
+ - Banners
+ - Comcode pages
+ - Calendar events
+ - Subscribers to a single calendar event
+ - Catalogues (but only a few hundred should contain actual entries -- the rest must be empty)
+ - Catalogue categories
+ - Catalogue entries in a single catalogue category
+ - Shopping orders
+ - Chat rooms (only a few can be public though)
+ - Chat messages in a single chat room
+ - Download categories
+ - Downloads in a single download category
+ - Polls
+ - Votes in a single poll
+ - Forums under a single forum
+ - Forum topics under a single forum
+ - Forum posts in a single topic
+ - Clubs (but not usergroups in general)
+ - Galleries under a single gallery
+ - Images under a single gallery
+ - Videos under a single gallery (unvalidated, to test validation queue)
+ - Quizzes
+ - IOTDs
+ - Hack attempts
+ - Logged hits
+ - News
+ - Blogs
+ - Support tickets
+ - Wiki+ pages
+ - Wiki+ posts
+(where we have tested the million resources 'under a single' something this is to place additional pressure on the testing process)
+
+If there is a lot of data then ocPortal will do a number of things to workaround the problem:
+1) Choose-to-select lists will either become non-active or be restricted just to a selection of the most recent entries.
+2) A very small number of features, like A-Z indexes, will become non-functional.
+3) Pagination features will become more obvious.
+4) In some cases, subcategories may not be shown. For example, if there are hundreds of personal galleries, those galleries will need to be accessed via member profiles rather than gallery browsing. This is because pagination is not usually implemented for subcategory browsing.
+5) The sitemap might not show subtrees of content if the subtree would be huge.
+6) Some ocPortal requests will average become very slightly slower (more database queries) as optimised algorithms that load all content from database tables at once have to be replaced with ones that do multiple queries instead.
+7) Entry/Category counts for subtrees will only show the number of immediate entries rather than the recursive number
+8) Birthdays or users-online won't show (for example)
+9) The IS_IN_GROUP symbol and if_in_group Comcode tags will no longer fully consider clubs, only regular usergroups
+10) Usergroup selection lists won't include clubs except sometimes the ones you're in
+11) With very large numbers of catalogue entries, only in-database (indexed) sorting methods will work, so you can't have the full range of normal ordering control
+12) ocFilter will not work thoroughly when using category tree filters if there are more than 1000 subcategories
+All normal foreground processes are designed to be fast even with huge amounts of data, but some admin screens or backend processes may take a long time to complete if this is necessarily the case (for example, CSV export). ocPortal has been programmed to not use excessive memory even if a task will take a long time to complete, and to not time-out.
+
+There is a risk that people could perform a [acronym="Distributed Denial Of Service"]DDOS[/acronym] attack. For example, someone might submit huge numbers of blog items, and then override default RSS query settings to download them all, from lots of computers simultaneously. ocPortal cannot protect against this (we don't put in limits that would break expected behaviour for cases when people explicitly ask for complex requests, and if we did it would just shift the hackers focus to a different target), but if you have this much exposure that hackers would attempt this you should be budgetting for a proper network security team to detect and prevent such attacks.
+
+Be aware of these reasonable limits (unless you have dedicated programming resources to work around them):
+1) Don't create more than 60 Custom Profile Fields, as MySQL will run out of index room and things may get slow!
+2) ocPortal will stop you putting more than 300 children under a single Wiki+ page. You shouldn't want to though!
+3) ocPortal will stop you putting more than 300 posts under a single Wiki+ page. You shouldn't want to though!
+4) Don't create more than about 1000 zones (anything after the 50th shouldn't contain any modules either).
+5) LDAP support won't run smoothly with 1000's of LDAP users in scope (without changes anyway).
+6) Just generally don't do anything unusually silly, like make hundreds of usergroups available for selection when members join.
+
+[title="3"]Sharding[/title]
+
+If you have so much data (100's of GB, millions of records) that you can't house it in a single database server then you have a good kind of problem because clearly you are being incredibly successful.
+It's at this point that serious programming or database administration will need to happen to adapt ocPortal to your needs. MySQL does have support for 'sharding' that can happen transparently to ocPortal, where you could use multiple hard-disks together to serve a single database. However this is not the commodity hardware approach many people prefer.
+An alternative is to implement a No-SQL database driver into ocPortal. There is nothing stopping this happening so long as SQL is mapped to it. We have no out-of-the-box solution, but we do have full SQL parsing support in ocPortal for the intentionally-limited SQL base used by ocPortal (in the XML database driver) so have a lot of the technology needed to build the necessary translation layer. Practically speaking though this is a serious job, and at this point you are so huge you should be having a full-time team (hopefully from ocProducts, but that's your choice) dedicated to performance work.
+
+[title="2"]Server farms (custom)[/title]
+
+ocPortal has special support for running on server farms:
+ - ocPortal file changes are architectured so that any changes call up a synchronisation function which can be used to distribute filesystem changes across servers. As ocPortal requires no usage of FTP once installed, it presents the ideal managed solution for automated mirroring, once the initial network and synchronisation hook are created
+ - the ocPortal database system supports replication
+
+In order to implement file change synchronisation, you need to create a simple PHP file in [tt]data_custom/sync_script.php[/tt] that defines these functions:
+
+[codebox="PHP"]
+/**
+ * Provides a hook for file synchronisation between mirrored servers. Called after any file creation, deletion or edit.
+ *
+ * @param  PATH             File/directory name to sync on (may be full or relative path)
+ */
+function master__sync_file($filename)
+{
+   // Implementation details up to the network administrators; might work via NFS, FTP, etc
+}
+
+/**
+ * Provides a hook for file-move synchronisation between mirrored servers. Called after any rename or move action.
+ *
+ * @param  PATH             File/directory name to move from (may be full or relative path)
+ * @param  PATH             File/directory name to move to (may be full or relative path)
+ */
+function master__sync_file_move($old,$new)
+{
+   // Implementation details up to the network administrators; might work via NFS, FTP, etc
+}
+[/codebox]
+
+In order to implement replication, just change the 'db_site_host' and 'db_forums_host' values using [tt]config_editor.php[/tt] (or editing [tt]info.php[/tt] by hand in a text editor) so that they contain a comma-separated list of host names. The first host in the list must be the master server. It is assumed that each server has equivalent credentials and database naming. Due to the master server being a bottleneck, it will never be picked as a read-access server in the randomisation process, unless there is only one slave.
+It is advised to not set replication for the ocPortal 'sessions' table, as this is highly volatile. Instead you should remove any display of 'users online' from your templates because if you're at the point of replication there will be too many to list anyway (and ocPortal will have realised this and stopped showing it consistently in many cases, to stop performance issues).
+
+Round-Robin DNS could be used to choose a frontend server from the farm randomly, or some other form of load balancing such as one based on a reverse proxy server.
+
+[title="3"]Geographic distribution of servers[/title]
+
+Some people with very ambitious goals want to have multiple servers dotted around the world. This requires some custom programming but ocProducts has studied the scenario and can role out solutions to clients if required. Our solution would involve priority-based geo-DNS resolution coupled with a reverse proxy server to also cover fail-over scenarios. The custom programming to implement this is in setting up the complex network infrastructure as well as implementing ID randomisation instead of key auto-incrementing to avoid conflicts (across distances replication can not be set to be instant).
+
+[title="3"]Content Delivery Networks[/title]
+
+You can have randomised content delivery networks used for your theme images and CSS files.
+
+To activate you would type a command like this into OcCLE:
+[code]
+:set_value('cdn','example1.example.com,example2.example.com');
+[/code]
+
+As you can see, it is a comma-separated list of domain names. These domain names must be serving your files from a directory structure that mirrors that of your normal domain precisely.
+
+ocPortal will randomise what CDN's it uses, so parallisation can work more efficiently (this is the only reason for the comma-separation). Web browsers have a limit on how many parallel web requests may come from a single server, and this works around that.
+DNS may be used to route the CDN servers based on geographic location.
+
+[title="2"]Facebook's HipHop PHP (hphp)[/title]
+
+Facebook released an alternative implementation of PHP that works as a compiler (compiles to an executable, via C++) instead of an interpreter. It more than doubles performance, and is set to improve further as it is developed.
+This is not suitable for most people for the following reasons:
+ - It requires server admin access
+ - The compiled app takes over the whole server
+ - It only runs on 64 bit systems running Linux (Fedora, CentOS, Ubuntu and Kubuntu are all the ones known to work at the time of writing)
+ - You can't make changes to your PHP code without doing a full recompile and redeployment (e.g. you can't just install and use new addons)
+ - It requires some advanced skills
+However, it is very suitable for those who need to serve a high capacity and have the skills and staffing to manage all the above.
+
+ocPortal fully supports hphp since version 5.
+
+The 'roadsend' addon (shipped by default) provides a build script for hphp (we used to use this with the Roadsend PHP compiler, but this is no longer maintained and was always rather complex and buggy).
+To invoke a compile (we are assuming that hphp has been properly installed):
+ - Open a shell to the ocPortal directory
+ - Type [tt]./hphp.sh[/tt] (this is in the 'roadsend' addon)
+ - Make sure [tt]data_custom/fields.xml[/tt] is deleted (at the time of writing there is a critical bug in hphp's XML support that any XML parsing will lead to request failure)
+
+In order to support hphp (which imposes some language restrictions) we made some changes to ocPortal, and updated our coding standards. There's no guarantee that any individual non-bundled addon will meet the coding standards however.
+
+We expect Facebook will improve hphp performance will increase over time, as the current 50% performance improvement seems low compared to what could be possible, especially if they can implement better 'type hinting' support (or some other type detection support, such as type database building via gathering at run-time); currently type detection (needed for the significant performance boosts) is very limited. hphp is an Open Source project, so anybody can contribute.
+
+To support short URLs it is necessary to turn on the hidden 'ionic_on' option, which tells ocPortal that short URLs are supported even though Apache is not running. Of course, you also would need to enable the regular configuration options to enable short URLs also.
+
+We have tried in the past to support:
+ - Roadsend
+ - Phalanger
+ - Quercus
+ - Project Zero
+But after quite a lot of work we have concluded these projects are too buggy to be realistic, and not well maintained.
+
+[title="2"]See also[/title]
+
+ - [page="_SEARCH:tut_moving"]Moving servers (including copying themes manually)[/page]

@@ -21,10 +21,10 @@
 {TIME}
 
 {+START,IF,{$JS_ON}}
-	<img class="inline_image" id="cal{STUB#}Button" title="{!SHOW_DATE_CHOOSER}" alt="{!SHOW_DATE_CHOOSER}" src="{$IMG*,date_chooser/pdate}" />
+	<img class="top_vertical_alignment" id="cal{STUB#}Button" title="{!SHOW_DATE_CHOOSER}" alt="{!SHOW_DATE_CHOOSER}" src="{$IMG*,date_chooser/pdate}" />
 {+END}
 
-<div id="cal{STUB#}Container" class="inline">&nbsp;</div>
+<div id="cal{STUB#}Container" class="inline"></div>
 
 <script type="text/javascript">// <![CDATA[
 	var mindate=null,maxdate=null;
@@ -51,7 +51,7 @@
 		var year_field=document.getElementById('{STUB%}_year');
 		var special_option=document.createElement('option');
 		special_option.value='-';
-		setInnerHTML(special_option,'&hellip;');
+		set_inner_html(special_option,'&hellip;');
 		year_field.onchange=function() {
 			if (this.options[this.selectedIndex].value=='-')
 			{
@@ -68,7 +68,7 @@
 							year=year.replace(/^0+/,'');
 							var custom_option=document.createElement('option');
 							custom_option.value=year;
-							setInnerHTML(custom_option,year);
+							set_inner_html(custom_option,year);
 							this.appendChild(custom_option);
 							this.selectedIndex=this.options.length-1;
 						}

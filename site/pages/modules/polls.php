@@ -262,7 +262,7 @@ class Module_polls
 	{
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
-		$title=get_page_title('POLL_ARCHIVE');
+		$title=get_screen_title('POLL_ARCHIVE');
 
 		$total_polls=$GLOBALS['SITE_DB']->query_value('poll','COUNT(*)');
 		if ($total_polls<500)
@@ -279,8 +279,6 @@ class Module_polls
 		{
 			$poll=do_block('main_poll',array('param'=>strval($myrow['id'])));
 			$content->attach($poll);
-
-			$content->attach(do_template('BLOCK_SEPARATOR',array('_GUID'=>'dfdsffdsdfsdfssddsdsdsc586e6e6536')));
 		}
 		if ($content->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
@@ -289,7 +287,7 @@ class Module_polls
 
 		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>($start-$max==0)?NULL:$start-$max),'_SELF');
 		$next_url=(count($rows)!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'47ab31dd5c4baf64c524beaaa666a984','NEXT_LINK'=>$next_url,'PREVIOUS_LINK'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'47ab31dd5c4baf64c524beaaa666a984','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
 
 		return do_template('NEXT_BROWSER_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
 	}
@@ -301,7 +299,7 @@ class Module_polls
 	 */
 	function view()
 	{
-		$title=get_page_title('POLL');
+		$title=get_screen_title('POLL');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POLL_ARCHIVE'))));
 
@@ -363,7 +361,7 @@ class Module_polls
 			'image'=>find_theme_image('bigicons/polls'),
 		);
 
-		return do_template('POLL_SCREEN',array('_GUID'=>'1463a42354c3ad154e2c6bb0c96be3b9','TITLE'=>$title,'ID'=>strval($id),'DATE_RAW'=>$date_raw,'ADD_DATE_RAW'=>$add_date_raw,'EDIT_DATE_RAW'=>$edit_date_raw,'DATE'=>$date,'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'VIEWS'=>integer_format($myrow['poll_views']),'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'POLL_DETAILS'=>$poll_details));
+		return do_template('POLL_SCREEN',array('_GUID'=>'1463a42354c3ad154e2c6bb0c96be3b9','TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'ID'=>strval($id),'DATE_RAW'=>$date_raw,'ADD_DATE_RAW'=>$add_date_raw,'EDIT_DATE_RAW'=>$edit_date_raw,'DATE'=>$date,'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'VIEWS'=>integer_format($myrow['poll_views']),'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'POLL_DETAILS'=>$poll_details));
 	}
 
 }

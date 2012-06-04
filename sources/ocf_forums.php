@@ -26,8 +26,8 @@ function init__ocf_forums()
 	global $USER_ACCESS_CACHE;
 	$USER_ACCESS_CACHE=array();
 
-	global $CATEGORY_TITLES;
-	$CATEGORY_TITLES=NULL;
+	global $GROUPING_TITLES;
+	$GROUPING_TITLES=NULL;
 
 	global $FORUM_TREE_SECURE_CACHE;
 	$FORUM_TREE_SECURE_CACHE=mixed();
@@ -177,13 +177,13 @@ function ocf_get_forum_parent_or_list($forum_id,$parent_id=-1)
 }
 
 /**
- * Get a forum navigation tree (a horizontal thing that works backwards along the tree path ['bread crumb trail'], not a full tree).
+ * Get breadcrumbs for a forum.
  *
  * @param  mixed			The ID of the forum we are at in our path (NULL: end of recursion) (false: no forum ID available, this_name and parent_forum must not be NULL).
  * @param  ?string		The name of the given forum (NULL: find it from the DB).
  * @param  ?AUTO_LINK	The parent forum of the given forum (NULL: find it from the DB).
- * @param  boolean		Whether this is being called as the recursion start of deriving the navigation tree (top level call).
- * @return tempcode		The navigation tree.
+ * @param  boolean		Whether this is being called as the recursion start of deriving the breadcrumbs (top level call).
+ * @return tempcode		The breadcrumbs.
  */
 function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NULL,$start=true)
 {

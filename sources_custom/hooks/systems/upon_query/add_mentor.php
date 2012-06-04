@@ -78,7 +78,7 @@ class upon_query_add_mentor
 				'mentor_id'=>$mentor_id,
 			));
 
-			log_it('MAKE_BUDDY',strval($mentor_id),strval($member_id));
+			log_it('MAKE_FRIEND',strval($mentor_id),strval($member_id));
 
 			$subject=do_lang('MENTOR_PT_TOPIC',$GLOBALS['FORUM_DRIVER']->get_username($mentor_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
 			$topic_id=ocf_make_topic(NULL,$subject,'',1,1,0,0,0,$mentor_id,$member_id,false,0,NULL,'');

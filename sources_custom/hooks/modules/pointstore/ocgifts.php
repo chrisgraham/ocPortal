@@ -49,7 +49,7 @@ class Hook_pointstore_ocgifts
 		require_code('database_action');
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
 
-		$title=get_page_title('OCGIFTS_TITLE');
+		$title=get_screen_title('OCGIFTS_TITLE');
 
 		require_code('form_templates');
 
@@ -64,8 +64,8 @@ class Hook_pointstore_ocgifts
 
 		$max=get_param_integer('max',20);
 		$start=get_param_integer('start',0);
-		require_code('templates_results_browser');
-		$results_browser=results_browser(do_lang_tempcode('OCGIFTS_TITLE'),get_param('id'),$start,'start',$max,'max',$max_rows,NULL,NULL,true,true);
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang_tempcode('OCGIFTS_TITLE'),get_param('id'),$start,'start',$max,'max',$max_rows,NULL,NULL,true,true);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('ocgifts g',array('*','(SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'members_gifts m WHERE m.gift_id=g.id) AS popularity'),$map,'ORDER BY popularity DESC',$max,$start);
 		$username=get_param('username','');
@@ -91,7 +91,7 @@ class Hook_pointstore_ocgifts
 
 		$categories=collapse_1d_complexity('category',$GLOBALS['SITE_DB']->query_select('ocgifts',array('DISTINCT category'),NULL,'ORDER BY category'));
 
-		return do_template('POINTSTORE_OCGIFTS_GIFTS',array('TITLE'=>$title,'GIFTS'=>$gifts,'RESULTS_BROWSER'=>$results_browser,'CATEGORY'=>$category,'CATEGORIES'=>$categories));
+		return do_template('POINTSTORE_OCGIFTS_GIFTS',array('_GUID'=>'5ff1ea34d0a71d50532e9b906879b72f','TITLE'=>$title,'GIFTS'=>$gifts,'PAGINATION'=>$pagination,'CATEGORY'=>$category,'CATEGORIES'=>$categories));
 	}
 
 	/**
@@ -103,7 +103,7 @@ class Hook_pointstore_ocgifts
 	{
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
 
-		$title=get_page_title('OCGIFTS_TITLE');
+		$title=get_screen_title('OCGIFTS_TITLE');
 
 		require_code('form_templates');
 		$fields=new ocp_tempcode();
@@ -131,7 +131,7 @@ class Hook_pointstore_ocgifts
 	{
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
 
-		$title=get_page_title('OCGIFTS_TITLE');
+		$title=get_screen_title('OCGIFTS_TITLE');
 
 		$gift_id=get_param_integer('gift');
 		$member_id=get_member();

@@ -80,7 +80,7 @@ class Block_main_staff_checklist
 				do_lang('CHECKLIST_INITIAL_TASK_WEBCLIP'),
 				do_lang('CHECKLIST_INITIAL_TASK_THEME'),
 				do_lang('CHECKLIST_INITIAL_TASK_CONTENT'),
-				'[page="adminzone:admin_themes:edit_image:logo/trimmed-logo:theme=default"]'.do_lang('CHECKLIST_INITIAL_TASK_MAIL_LOGO').'[/page]',
+				'[page="adminzone:admin_themes:edit_image:logo/trimmed_logo:theme=default"]'.do_lang('CHECKLIST_INITIAL_TASK_MAIL_LOGO').'[/page]',
 				'[page="adminzone:admin_themes:_edit_templates:theme=default:f0file=MAIL.tpl"]'.do_lang('CHECKLIST_INITIAL_TASK_MAIL').'[/page]',
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_P3P').'"]http://www.p3pwiz.com/[/url]',
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_GOOGLE').'"]http://www.google.com/addurl/[/url]',
@@ -152,11 +152,11 @@ class Block_main_staff_checklist
 					break;
 			}
 			$custasks->attach(do_template('BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK',array(
-				'TASKTITLE'=>comcode_to_tempcode($r['tasktitle']),
-				'DATETIMEADDED'=>display_time_period($r['datetimeadded']),
-				'RECURINTERVAL'=>($r['recurinterval']==0)?'':integer_format($r['recurinterval']),
-				'RECUREVERY'=>$recurevery,
-				'TASKDONE'=>((!is_null($r['taskisdone'])) && (($r['recurinterval']==0) || (($r['recurevery']!='mins') || (time()<$r['taskisdone']+60*$r['recurinterval'])) && (($r['recurevery']!='hours') || (time()<$r['taskisdone']+60*60*$r['recurinterval'])) && (($r['recurevery']!='days') || (time()<$r['taskisdone']+24*60*60*$r['recurinterval'])) && (($r['recurevery']!='months') || (time()<$r['taskisdone']+31*24*60*60*$r['recurinterval']))))?'checklist1':'not_completed',
+				'TASK_TITLE'=>comcode_to_tempcode($r['tasktitle']),
+				'ADD_DATE'=>display_time_period($r['datetimeadded']),
+				'RECUR_INTERVAL'=>($r['recurinterval']==0)?'':integer_format($r['recurinterval']),
+				'RECUR_EVERY'=>$recurevery,
+				'TASK_DONE'=>((!is_null($r['taskisdone'])) && (($r['recurinterval']==0) || (($r['recurevery']!='mins') || (time()<$r['taskisdone']+60*$r['recurinterval'])) && (($r['recurevery']!='hours') || (time()<$r['taskisdone']+60*60*$r['recurinterval'])) && (($r['recurevery']!='days') || (time()<$r['taskisdone']+24*60*60*$r['recurinterval'])) && (($r['recurevery']!='months') || (time()<$r['taskisdone']+31*24*60*60*$r['recurinterval']))))?'checklist1':'not_completed',
 				'ID'=>strval($r['id']),
 				'ADD_TIME'=>do_lang_tempcode('DAYS_AGO',escape_html(integer_format(intval(round(floatval(time()-$r['datetimeadded'])/60.0/60.0/24.0))))),
 			)));
@@ -174,7 +174,7 @@ class Block_main_staff_checklist
 		if (is_null($notes)) $notes='';
 
 		require_lang('staff_checklist');
-		require_css('adminzone');
+		require_css('adminzone_frontpage');
 
 		// Handle built in items
 
@@ -231,7 +231,7 @@ class Block_main_staff_checklist
 			$out_dates->attach($item[0]);
 		}
 
-		return do_template('BLOCK_MAIN_STAFF_CHECKLIST',array('_GUID'=>'aefbca8252dc1d6edc44fc6d1e78b3ec','URL'=>get_self_url(),'DATES'=>$out_dates,'NO_TIMES'=>$out_no_times,'TODO_COUNTS'=>$out_todo_counts,'CUSTOMTASKS'=>$custasks));
+		return do_template('BLOCK_MAIN_STAFF_CHECKLIST',array('_GUID'=>'aefbca8252dc1d6edc44fc6d1e78b3ec','URL'=>get_self_url(),'DATES'=>$out_dates,'NO_TIMES'=>$out_no_times,'TODO_COUNTS'=>$out_todo_counts,'CUSTOM_TASKS'=>$custasks));
 	}
 
 }

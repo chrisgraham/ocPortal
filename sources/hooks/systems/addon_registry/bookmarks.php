@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_bookmarks
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_bookmarks
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,32 +72,32 @@ class Hook_addon_registry_bookmarks
 	function get_file_list()
 	{
 		return array(
-
 			'sources/bookmarks.php',
 			'data/bookmarks.php',
 			'sources/hooks/systems/addon_registry/bookmarks.php',
 			'sources/hooks/modules/admin_import_types/bookmarks.php',
 			'BOOKMARKS_SCREEN.tpl',
-			'themes/default/images/bottom/bookmarksmenu.png',
-			'themes/default/images/bottom/bookmarksmenu_off.png',
+			'JAVASCRIPT_BOOKMARKS.tpl',
+			'themes/default/images/footer/bookmarksmenu.png',
+			'themes/default/images/footer/bookmarksmenu_off.png',
 			'lang/EN/bookmarks.ini',
 			'site/pages/modules/bookmarks.php',
 			'sources/hooks/systems/snippets/bookmarks_menu.php',
-			'bookmarks.css',
+			'bookmarks.css'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'BOOKMARKS_SCREEN.tpl'=>'bookmarks_screen',
-				);
+			'BOOKMARKS_SCREEN.tpl' => 'bookmarks_screen'
+		);
 	}
 
 	/**
@@ -112,24 +111,22 @@ class Hook_addon_registry_bookmarks
 	{
 		require_lang('zones');
 
-		$bookmarks=array(
+		$bookmarks = array(
 			array(
-				'CAPTION'=>lorem_word(),
-				'ID'=>placeholder_id(),
-				'FOLDER'=>lorem_word_2(),
-				'PAGE_LINK'=>placeholder_url(),
-			),
+				'CAPTION' => lorem_word(),
+				'ID' => placeholder_id(),
+				'FOLDER' => lorem_word_2(),
+				'PAGE_LINK' => placeholder_url()
+			)
 		);
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('BOOKMARKS_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'FORM_URL'=>placeholder_url(),
-					'FORM'=>placeholder_form(),
-					'BOOKMARKS'=>$bookmarks,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BOOKMARKS_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'FORM_URL' => placeholder_url(),
+				'FORM' => placeholder_form(),
+				'BOOKMARKS' => $bookmarks
+			)), NULL, '', true)
 		);
 	}
 }

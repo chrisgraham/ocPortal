@@ -39,7 +39,9 @@ class Hook_cron_calendar
 			$or_list='';
 			foreach ($jobs as $job)
 			{
-				$recurrences=find_periods_recurrence($job['e_timezone'],1,$job['e_start_year'],$job['e_start_month'],$job['e_start_day'],is_null($job['e_start_hour'])?find_timezone_start_hour_in_utc($job['e_timezone'],$job['e_start_year'],$job['e_start_month'],$job['e_start_day']):$job['e_start_hour'],is_null($job['e_start_minute'])?find_timezone_start_minute_in_utc($job['e_timezone'],$job['e_start_year'],$job['e_start_month'],$job['e_start_day']):$job['e_start_minute'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day'],is_null($job['e_end_hour'])?find_timezone_end_hour_in_utc($job['e_timezone'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day']):$job['e_end_hour'],is_null($job['e_end_minute'])?find_timezone_end_minute_in_utc($job['e_timezone'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day']):$job['e_end_minute'],$job['e_recurrence'],min(1,$job['e_recurrences']));
+				$recurrences=find_periods_recurrence($job['e_timezone'],1,$job['e_start_year'],$job['e_start_month'],$job['e_start_day'],$job['e_start_monthly_spec_type'],is_null($job['e_start_hour'])?find_timezone_start_hour_in_utc($job['e_timezone'],$job['e_start_year'],$job['e_start_month'],$job['e_start_day'],$job['e_start_monthly_spec_type']):$job['e_start_hour'],is_null($job['e_start_minute'])?find_timezone_start_minute_in_utc($job['e_timezone'],$job['e_start_year'],$job['e_start_month'],$job['e_start_day'],$job['e_start_monthly_spec_type']):$job['e_start_minute'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day'],$job['e_end_monthly_spec_type'],is_null($job['e_end_hour'])?find_timezone_end_hour_in_utc($job['e_timezone'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day'],$job['e_end_monthly_spec_type']):$job['e_end_hour'],is_null($job['e_end_minute'])?find_timezone_end_minute_in_utc($job['e_timezone'],$job['e_end_year'],$job['e_end_month'],$job['e_end_day'],$job['e_end_monthly_spec_type']):$job['e_end_minute'],$job['e_recurrence'],min(1,$job['e_recurrences']));
+
+				$start_day_of_month=find_concrete_day_of_month($job['e_start_year'],$job['e_start_month'],$job['e_start_day'],$job['e_start_monthly_spec_type']);
 
 				// Dispatch
 				if (is_null($job['j_reminder_id'])) // It's code/URL
@@ -65,7 +67,8 @@ class Hook_cron_calendar
 								if ($to_echo===false) fatal_exit(@strval($php_errormsg));
 							} else
 							{
-								$GLOBALS['event_timestamp']=array_key_exists(0,$recurrences)?usertime_to_utctime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$job['e_start_day'],$job['e_start_year']);
+								$GLOBALS['event_timestamp']=array_key_exists(0,$recurrences)?usertime_to_utctime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$start_day_of_month,$job['e_start_year']);
+
 								// OcCLE code
 								require_code('occle');
 								$temp=new virtual_bash($job_text);
@@ -81,15 +84,15 @@ class Hook_cron_calendar
 					// Send notification
 					if (!has_category_access($job['n_member_id'],'calendar',strval($job['e_type']))) continue;
 					$title=get_translated_text($job['e_title']);
-					$timestamp=array_key_exists(0,$recurrences)?usertime_to_utctime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$job['e_start_day'],$job['e_start_year']);
+					$timestamp=array_key_exists(0,$recurrences)?usertime_to_utctime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$start_day_of_month,$job['e_start_year']);
 					$date=get_timezoned_date($timestamp,true,false,false,false,$job['n_member_id']);
 					$_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$job['j_event_id']),get_module_zone('calendar'),NULL,false,false,true);
 					$url=$_url->evaluate();
-					$subject_tag=do_lang('EVENT_REMINDER_SUBJECT',$title,NULL,NULL,get_lang($job['n_member_id']));
+					$subject_line=do_lang('EVENT_REMINDER_SUBJECT',$title,NULL,NULL,get_lang($job['n_member_id']));
 					$message_raw=do_lang('EVENT_REMINDER_CONTENT',comcode_escape($date),comcode_escape($url),get_translated_text($job['e_content']),get_lang($job['n_member_id']));
-					dispatch_notification('calendar_reminder',strval($job['e_type']),$subject_tag,$message_raw,array($job['n_member_id']),A_FROM_SYSTEM_UNPRIVILEGED);
+					dispatch_notification('calendar_reminder',strval($job['e_type']),$subject_line,$message_raw,array($job['n_member_id']),A_FROM_SYSTEM_UNPRIVILEGED);
 
-					//echo $subject_tag."\n\n".$message_raw;
+					//echo $subject_line."\n\n".$message_raw;
 				}
 
 				// Recreate job for when next reminder due (if appropriate)

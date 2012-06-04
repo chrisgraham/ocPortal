@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_themewizard
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_themewizard
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,7 +72,8 @@ class Hook_addon_registry_themewizard
 	function get_file_list()
 	{
 		return array(
-
+			'sources/hooks/modules/admin_occle_commands/themewizard_find_color.php',
+			'sources/hooks/modules/admin_occle_commands/themewizard_compute_equation.php',
 			'sources/hooks/modules/admin_themewizard/.htaccess',
 			'sources/hooks/systems/snippets/themewizard_equation.php',
 			'sources/hooks/modules/admin_themewizard/index.html',
@@ -86,104 +86,102 @@ class Hook_addon_registry_themewizard
 			'sources/hooks/systems/do_next_menus/themewizard.php',
 			'themes/default/images/pagepics/themewizard.png',
 			'themes/default/images/bigicons/themewizard.png',
-			'LOGOWIZARD_2_SCREEN.tpl',
+			'LOGOWIZARD_2.tpl',
 			'adminzone/logowizard.php',
 			'themes/default/images/bigicons/make_logo.png',
-			'themes/default/images/logo-template.png',
-			'themes/default/images/trimmed-logo-template.png',
-			'themes/default/images/pagepics/logowizard.png',
+			'themes/default/images/logo_template.png',
+			'themes/default/images/trimmed_logo_template.png',
+			'themes/default/images/pagepics/logowizard.png'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array                 The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array                 The mapping
+	 */
 	function tpl_previews()
 	{
-	   return array(
-			'THEMEWIZARD_2_PREVIEW.tpl'=>'administrative__themewizard_2_preview',
-			'THEMEWIZARD_2_SCREEN.tpl'=>'administrative__themewizard_2_screen',
-			'LOGOWIZARD_2_SCREEN.tpl'=>'administrative__logowizard_2_screen',
+		return array(
+			'THEMEWIZARD_2_PREVIEW.tpl' => 'administrative__themewizard_2_preview',
+			'THEMEWIZARD_2_SCREEN.tpl' => 'administrative__themewizard_2_screen',
+			'LOGOWIZARD_2.tpl' => 'administrative__logowizard_2'
 		);
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__themewizard_2_preview()
 	{
 		require_lang('themes');
 
 		$content = do_lorem_template('THEMEWIZARD_2_PREVIEW');
 
-	   return array(
-		   lorem_globalise(
-			   $content,NULL,'',true
-			)
+		return array(
+			lorem_globalise($content, NULL, '', true)
 		);
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__administrative__themewizard_2_screen()
 	{
 		require_lang('themes');
 
-	   return array(
-		   lorem_globalise(
-			   do_lorem_template('THEMEWIZARD_2_SCREEN',array(
-					'SOURCE_THEME'=>'default',
-					'ALGORITHM'=>'equations',
-					'RED'=>placeholder_id(),
-					'GREEN'=>placeholder_id(),
-					'BLUE'=>placeholder_id(),
-					'SEED'=>lorem_word(),
-					'DARK'=>lorem_word_2(),
-					'DOMINANT'=>lorem_word(),
-					'LD'=>lorem_phrase(),
-					'TITLE'=>lorem_title(),
-					'CHANGE_LINK'=>placeholder_url(),
-					'STAGE3_LINK'=>placeholder_url(),
-				)
-		   ),NULL,'',true),
-	   );
+		return array(
+			lorem_globalise(do_lorem_template('THEMEWIZARD_2_SCREEN', array(
+				'SOURCE_THEME' => 'default',
+				'ALGORITHM' => 'equations',
+				'RED' => placeholder_id(),
+				'GREEN' => placeholder_id(),
+				'BLUE' => placeholder_id(),
+				'SEED' => lorem_word(),
+				'DARK' => lorem_word_2(),
+				'DOMINANT' => lorem_word(),
+				'LD' => lorem_phrase(),
+				'TITLE' => lorem_title(),
+				'CHANGE_URL' => placeholder_url(),
+				'STAGE3_URL' => placeholder_url()
+			)), NULL, '', true)
+		);
 	}
 
 	/**
-	* Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	* Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	* Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	*
-	* @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	*/
-	function tpl_preview__administrative__logowizard_2_screen()
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__administrative__logowizard_2()
 	{
 		require_lang('themes');
 
-		$preview = do_lorem_template('LOGOWIZARD_2_SCREEN',array('NAME'=>lorem_phrase(),'TITLE'=>lorem_phrase(),'THEME'=>lorem_phrase()));
+		$preview = do_lorem_template('LOGOWIZARD_2', array(
+			'NAME' => lorem_phrase(),
+			'TITLE' => lorem_phrase(),
+			'THEME' => lorem_phrase()
+		));
 
-	   return array(
-			lorem_globalise(
-				do_lorem_template('FORM_CONFIRM_SCREEN',array(
-				'URL'=>placeholder_url(),
-				'BACK_URL'=>placeholder_url(),
-				'PREVIEW'=>$preview,
-				'FIELDS'=>placeholder_table(),
-				'TITLE'=>lorem_title()
-				)
-			),NULL,'',true),
+		return array(
+			lorem_globalise(do_lorem_template('CONFIRM_SCREEN', array(
+				'URL' => placeholder_url(),
+				'BACK_URL' => placeholder_url(),
+				'PREVIEW' => $preview,
+				'FIELDS' => '',
+				'TITLE' => lorem_title()
+			)), NULL, '', true)
 		);
 	}
 }

@@ -36,8 +36,8 @@ function xml_dump_script()
 	}
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
-	$GLOBALS['DEBUG_MODE']=false;
-	$GLOBALS['SEMI_DEBUG_MODE']=false;
+	$GLOBALS['DEV_MODE']=false;
+	$GLOBALS['SEMI_DEV_MODE']=false;
 
 	@ini_set('ocproducts.xss_detect','0');
 
@@ -48,7 +48,7 @@ function xml_dump_script()
 		$only=get_param('only',NULL);
 
 		echo '
-		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		<!DOCTYPE html>
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 		<title>XML/MySQL DB syncher</title>
@@ -57,8 +57,7 @@ function xml_dump_script()
 		';
 
 		echo '<p>Select the tables to sync below. Tables have been auto-ticked based on what seems to need re-synching.</p>';
-		$keep=symbol_tempcode('KEEP',array('1'));
-		echo '<form title="Choose tables" method="post" action="'.escape_html(find_script('xml_db_import').$keep->evaluate()).'">';
+		echo '<form title="Choose tables" method="post" action="'.escape_html(get_self_url(true)).'">';
 
 		$tables=array_keys(find_all_tables($GLOBALS['SITE_DB']));
 		$mysql_status=list_to_map('Name',$chain_db->query('SHOW TABLE STATUS'));
@@ -187,9 +186,10 @@ function find_all_tables($db)
  * @param  ?ID_TEXT		Table to look from (NULL: first table)
  * @param  ?array			Array of table names to skip (NULL: none)
  * @param  ?array			Array of only table names to do (NULL: all)
+ * @param  boolean		Whether to echo out
  * @return array			The SQL statements
  */
-function get_sql_dump($include_drops=false,$output_statuses=false,$from=NULL,$skip=NULL,$only=NULL)
+function get_sql_dump($include_drops=false,$output_statuses=false,$from=NULL,$skip=NULL,$only=NULL,$echo=false)
 {
 	if (is_null($skip)) $skip=array();
 
@@ -213,49 +213,71 @@ function get_sql_dump($include_drops=false,$output_statuses=false,$from=NULL,$sk
 		if ($include_drops)
 		{
 			$out[]='DROP TABLE IF EXISTS '.get_table_prefix().$table_name.';';
+			if ($echo)
+			{
+				echo $out[0];
+				$out=array();
+			}
 		}
 
 		$out[]=db_create_table($table_name,$fields);
+		if ($echo)
+		{
+			echo $out[0];
+			$out=array();
+		}
 
 		// Data
-		$data=$GLOBALS['SITE_DB']->query_select($table_name,array('*'),NULL,'',NULL,NULL,false,array());
-		foreach ($data as $map)
+		$start=0;
+		do
 		{
-			$keys='';
-			$all_values=array();
-
-			foreach ($map as $key=>$value)
+			$data=$GLOBALS['SITE_DB']->query_select($table_name,array('*'),NULL,'',100,$start,false,array());
+			foreach ($data as $map)
 			{
-				if ($keys!='') $keys.=', ';
-				$keys.=$key;
+				$keys='';
+				$all_values=array();
 
-				$_value=(!is_array($value))?array($value):$value;
-
-				$v=mixed();
-				foreach ($_value as $i=>$v)
+				foreach ($map as $key=>$value)
 				{
-					if (!array_key_exists($i,$all_values)) $all_values[$i]='';
-					$values=$all_values[$i];
+					if ($keys!='') $keys.=', ';
+					$keys.=$key;
 
-					if ($values!='') $values.=', ';
+					$_value=(!is_array($value))?array($value):$value;
 
-					if (is_null($value))
+					$v=mixed();
+					foreach ($_value as $i=>$v)
 					{
-						$values.='NULL';
-					}
-					else
-					{
-						if (is_float($v)) $values.=float_to_raw_string($v);
-						elseif (is_integer($v)) $values.=strval($v);
-						else $values.='\''.db_escape_string($v).'\'';
-					}
+						if (!array_key_exists($i,$all_values)) $all_values[$i]='';
+						$values=$all_values[$i];
 
-					$all_values[$i]=$values; // essentially appends, as $values was loaded from former $all_values[$i] value
+						if ($values!='') $values.=', ';
+
+						if (is_null($value))
+						{
+							$values.='NULL';
+						}
+						else
+						{
+							if (is_float($v)) $values.=float_to_raw_string($v);
+							elseif (is_integer($v)) $values.=strval($v);
+							else $values.='\''.db_escape_string($v).'\'';
+						}
+
+						$all_values[$i]=$values; // essentially appends, as $values was loaded from former $all_values[$i] value
+					}
+				}
+
+				$out[]='INSERT INTO '.get_table_prefix().$table_name.' ('.$keys.') VALUES ('.$all_values[0].')'.";";
+				if ($echo)
+				{
+					echo $out[0];
+					$out=array();
 				}
 			}
 
-			$out[]='INSERT INTO '.get_table_prefix().$table_name.' ('.$keys.') VALUES ('.$all_values[0].')'.";";
+			$start+=100;
 		}
+		while (count($data)!=0);
 	}
 
 	// Indexes
@@ -269,6 +291,11 @@ function get_sql_dump($include_drops=false,$output_statuses=false,$from=NULL,$sk
 			$type='FULLTEXT';
 		} else $type='INDEX';
 		$out[]='ALTER TABLE '.get_table_prefix().$index['i_table'].' ADD '.$type.' '.$index_name.' ('.$index['i_fields'].')'.";";
+		if ($echo)
+		{
+			echo $out[0];
+			$out=array();
+		}
 	}
 
 	return $out;

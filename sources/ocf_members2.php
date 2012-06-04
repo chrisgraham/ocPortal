@@ -19,6 +19,53 @@
  */
 
 /**
+ * Make sure we are doing necessary join to be able to access the given field
+ *
+ * @param  object				Database connection
+ * @param  array				Content type info
+ * @param  ID_TEXT			Context (unused)
+ * @param  array				List of joins (passed as reference)
+ * @param  array				List of selects (passed as reference)
+ * @param  ID_TEXT			The field to get
+ * @param  string				The field value for this
+ * @param  array				Database field data
+ * @return ?array				A triple: Proper database field name to access with, The fields API table type (blank: no special table), The new filter value (NULL: error)
+ */
+function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filter_key,$field_val,$db_fields)
+{
+	// If it's trivial
+	if (($filter_key=='id') || (preg_match('#^m\_[\w\_]+$#',$filter_key)!=0))
+	{
+		if (!array_key_exists($filter_key,$db_fields)) return NULL;
+		return array($filter_key,'',$field_val);
+	}
+
+	// CPFS...
+	// -------
+
+	$join_sql=' LEFT JOIN '.$db->get_table_prefix().'f_member_custom_fields f ON f.mf_member_id=r.id';
+
+	if (!in_array($join_sql,$extra_join))
+		$extra_join[$filter_key]=$join_sql;
+
+	$new_filter_key=$filter_key;
+	if (is_numeric($filter_key))
+	{
+		$new_filter_key='field_'.strval($new_filter_key);
+	}
+	elseif (preg_match('#^field\_\d+$#',$filter_key)==0) // If it's not already correct
+	{
+		require_code('ocf_members');
+		$new_filter_key='field_'.strval(find_cpf_field_id($filter_key));
+	} else
+	{
+		if (!array_key_exists($filter_key,$db_fields)) return NULL;
+	}
+
+	return array($new_filter_key,'',$field_val);
+}
+
+/**
  * Get tempcode for a mouseover for a member. For use with OCF_POSTER_MEMBER.tpl.
  *
  * @param  mixed			Either a member ID or an array containing: ip_address, poster_num_warnings, poster, poster_posts, poster_points, poster_join_date_string, primary_group_name.
@@ -29,7 +76,7 @@
  * @param  ?array			Map of extra fields to show (NULL: none)
  * @return tempcode		The mouseover tempcode
  */
-function ocf_show_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_objects=NULL,$show_avatar=true,$extra_fields=NULL)
+function render_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_objects=NULL,$show_avatar=true,$extra_fields=NULL)
 {
 	require_lang('ocf');
 	require_css('ocf');
@@ -146,7 +193,7 @@ function ocf_show_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_obje
 	{
 		foreach ($extra_fields as $key=>$val)
 		{
-			$custom_fields->attach(do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('NAME'=>$key,'VALUE'=>($val))));
+			$custom_fields->attach(do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('_GUID'=>'530f049d3b3065df2d1b69270aa93490','NAME'=>$key,'VALUE'=>($val))));
 		}
 	}
 
@@ -166,7 +213,7 @@ function ocf_show_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_obje
 			$usergroups[]=$all_usergroups[$u];
 	}
 
-	return do_template('OCF_POSTER_DETAILS',array(
+	return do_template('OCF_MEMBER_BOX',array(
 		'_GUID'=>'dfskfdsf9',
 		'POSTER'=>strval($member_id),
 		'POSTS'=>integer_format($_postdetails['poster_posts']),

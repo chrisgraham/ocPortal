@@ -379,12 +379,12 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 
 	// Perform lots of conversions. We can't convert everything. Sometimes we reverse-convert what Comcode forward-converts; sometimes we match generic HTML; sometimes we match Microsoft Word or Open Office; sometimes we do lossy match
 	$array_html_preg_replace=array();
-	$array_html_preg_replace[]=array('#^<h1 id="main_page_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 class="main_page_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="main_page_title" class="main_page_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="main_page_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 class="main_page_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="main_page_title" class="main_page_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 id="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 class="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 id="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 class="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
 	$array_html_preg_replace[]=array('#^<h1>(.*)</h1>$#siU','[title="1"]${1}[/title]');
 	$semihtml=array_html_preg_replace('h1',$array_html_preg_replace,$semihtml);
 	$semihtml=preg_replace('#^\s*<h1[^>]+>(.*)</h1>#siU','[title="1"]${1}[/title]',$semihtml);
@@ -396,12 +396,12 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		$semihtml=array_html_preg_replace('h'.strval($i).'',$array_html_preg_replace,$semihtml);
 	}
 	$array_html_preg_replace=array();
-	$array_html_preg_replace[]=array('#^<h1 id="main_page_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 class="main_page_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="main_page_title" class="main_page_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="main_page_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 class="main_page_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="main_page_title" class="main_page_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 id="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 class="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 id="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 class="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
 	$semihtml=array_html_preg_replace('h1',$array_html_preg_replace,$semihtml);
 	$semihtml=preg_replace('#^\s*<h1[^>]+>(.*)</h1>#siU','[title="1"]${1}[/title]',$semihtml);
 	for ($i=2;$i<=4;$i++)

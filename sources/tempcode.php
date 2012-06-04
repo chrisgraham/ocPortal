@@ -264,6 +264,7 @@ function closure_loop($param,$args,$main_function)
 		{
 			$array=isset($param['vars'][$key])?$param['vars'][$key]:array();
 		}
+		if (!is_array($array)) return do_lang('TEMPCODE_NOT_ARRAY'); // Must have this, otherwise will loop over the Tempcode object
 		if (isset($param[1+1])) /* NB: +1 is due to there being a non-numeric index here too */
 		{
 			$columns=intval($param[1]);
@@ -449,14 +450,14 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		$lang=isset($USER_LANG_CACHED)?$USER_LANG_CACHED:(function_exists('user_lang')?user_lang():'EN');
 	}
 
-	if ($GLOBALS['SEMI_DEBUG_MODE'])
+	if ($GLOBALS['SEMI_DEV_MODE'])
 	{
-		if (($codename==strtolower($codename)) && ($type!='css') && ($codename!='tempcode_test') && ($codename!='handle_conflict_resolution'))
+		if (($codename==strtolower($codename)) && ($type!='css') && ($codename!='tempcode_test'))
 		{
 			fatal_exit('Template names should be in upper case, and the files should be stored in upper case.');
 		}
 
-		if ((substr($codename,-7)=='_SCREEN') || (substr($codename,-8)=='_OVERLAY') || ($codename=='POOR_XHTML_WRAPPER') || ($codename=='OCF_WRAPPER'))
+		if ((substr($codename,-7)=='_SCREEN') || (substr($codename,-8)=='_OVERLAY') || ($codename=='POOR_XHTML_WRAPPER'))
 		{
 			$GLOBALS['SCREEN_TEMPLATE_CALLED']=$codename;
 		}
@@ -485,7 +486,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		$loaded_this_once=true;
 	}
 	$_data=false;
-	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP) && ((!$POSSIBLY_IN_SAFE_MODE)/* || ($GLOBALS['SEMI_DEBUG_MODE'])*/ || (!in_safe_mode())))
+	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP) && ((!$POSSIBLY_IN_SAFE_MODE)/* || ($GLOBALS['SEMI_DEV_MODE'])*/ || (!in_safe_mode())))
 	{
 		$tcp_path=$prefix.$theme.'/templates_cached/'.$lang.'/'.$codename.$suffix.'.tcp';
 		if ($loaded_this_once)
@@ -621,7 +622,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 					if (strlen($parameters2[$k])>100) $parameters2[$k]=substr($parameters2[$k],0,100).'...';
 				}
 			}
-			$param_info=do_template('PARAM_INFO',array('MAP'=>$parameters2));
+			$param_info=do_template('PARAM_INFO',array('_GUID'=>'0070acad5e82e0877ad49e25283d342e','MAP'=>$parameters2));
 
 			$SHOW_EDIT_LINKS=false;
 			$ret=do_template('TEMPLATE_EDIT_LINK',array('_GUID'=>'511ae911d31a5b237a4371ff22fc78fd','PARAM_INFO'=>$param_info,'CONTENTS'=>$ret,'CODENAME'=>$codename,'EDIT_URL'=>$edit_url));
@@ -759,10 +760,11 @@ function handle_symbol_preprocessing($bit,&$children)
 
 			return;
 
-		case 'JAVASCRIPT_INCLUDE':
+		case 'REQUIRE_JAVASCRIPT':
 			$param=$bit[3];
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
+
 			require_javascript($param[0]);
 			return;
 
@@ -772,14 +774,16 @@ function handle_symbol_preprocessing($bit,&$children)
 
 		case 'CSS_INHERIT':
 
-		case 'CSS_INCLUDE':
+		case 'REQUIRE_CSS':
 			$param=$bit[3];
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
+
 			require_css($param[0]);
 			return;
 
 		case 'TRIM':
+		case 'PARAGRAPH':
 			$param=$bit[3];
 			if ((isset($param[0])) && (is_object($param[0])))
 			{
@@ -912,7 +916,7 @@ function handle_symbol_preprocessing($bit,&$children)
 class ocp_tempcode
 {
 	var $code_to_preexecute;
-	var $seq_parts; // List of closure pairs: function name, and parameters, type, name, and also last attach
+	var $seq_parts; // List of closure pairs: (0) function name, and (1) parameters, (2) type, (3) name, and also (4) last attach
 	var $preprocessable_bits; // List of tuples: escape (ignored), type (e.g. TC_SYMBOL), name, parameters
 	var $last_attach;
 	var $pure_lang;
@@ -928,17 +932,18 @@ class ocp_tempcode
 	 */
 	function ocp_tempcode($details=NULL)
 	{
-		$this->preprocessable_bits=array();
 		$this->cached_output=NULL;
 
 		if (!isset($details))
 		{
+			$this->preprocessable_bits=array();
 			$this->seq_parts=array();
 			$this->code_to_preexecute='';
 		} else
 		{
 			$this->code_to_preexecute=$details[0];
 			$this->seq_parts=$details[1];
+			$pp_bits=array();
 
 			foreach ($this->seq_parts as $seq_part)
 			{
@@ -946,8 +951,8 @@ class ocp_tempcode
 				{
 					switch ($seq_part[3])
 					{
-						case 'CSS_INCLUDE':
-						case 'JAVASCRIPT_INCLUDE':
+						case 'REQUIRE_CSS':
+						case 'REQUIRE_JAVASCRIPT':
 						case 'FACILITATE_AJAX_BLOCK_CALL':
 						case 'JS_TEMPCODE':
 						case 'CSS_TEMPCODE':
@@ -956,8 +961,7 @@ class ocp_tempcode
 						case 'PAGE_LINK':
 						case 'LOAD_PAGE':
 						case 'LOAD_PANEL':
-						case 'TRIM':
-							$this->preprocessable_bits[]=array(array(),TC_SYMBOL,$seq_part[3],$seq_part[1]);
+							$pp_bits[]=array(array(),TC_SYMBOL,$seq_part[3],$seq_part[1]);
 							break;
 					}
 				}
@@ -966,11 +970,20 @@ class ocp_tempcode
 					switch ($seq_part[3])
 					{
 						case 'FRACTIONAL_EDITABLE':
-							$this->preprocessable_bits[]=array(array(),TC_DIRECTIVE,$seq_part[3],$seq_part[1]);
+							$pp_bits[]=array(array(),TC_DIRECTIVE,$seq_part[3],$seq_part[1]);
 							break;
 					}
 				}
+				foreach ($seq_part[1] as $param)
+				{
+					if (is_object($param))
+					{
+						array_splice($pp_bits,-1,0,$param->preprocessable_bits);
+					}
+				}
 			}
+
+			$this->preprocessable_bits=$pp_bits;
 		}
 
 		if ($GLOBALS['RECORD_TEMPLATES_TREE'])
@@ -1074,7 +1087,7 @@ class ocp_tempcode
 			{
 				$this->code_to_preexecute.=$attach->code_to_preexecute;
 			}
-			$this->preprocessable_bits=array_merge($this->preprocessable_bits,$attach->preprocessable_bits);
+			array_splice($this->preprocessable_bits,-1,0,$attach->preprocessable_bits);
 
 			if ((!$avoid_child_merge) && ($GLOBALS['RECORD_TEMPLATES_TREE']))
 			{
@@ -1104,6 +1117,7 @@ class ocp_tempcode
 			$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($attach)."\\\";\";\n";
 			$this->code_to_preexecute.=$funcdef;
 			$this->seq_parts[]=array($myfunc,array(),TC_KNOWN,'','');
+
 			$this->last_attach='';
 		}
 
@@ -1295,12 +1309,6 @@ class ocp_tempcode
 			else { eval($result[5]); unset($result); }';
 		}
 
-		global $SITE_INFO;
-		if (((!isset($SITE_INFO['disable_decaching_shift_encode'])) || ($SITE_INFO['disable_decaching_shift_encode']!='1')) && (@strpos(file_get_contents($file),'SHIFT_ENCODE')!==false))
-		{
-			$this->code_to_preexecute.='/*SHIFT_ENCODE*/';
-		}
-
 		if ($GLOBALS['XSS_DETECT'])
 		{
 			$this->_mark_all_as_escaped();
@@ -1362,12 +1370,6 @@ class ocp_tempcode
 			$this->_mark_all_as_escaped();
 		}
 
-		if (strpos($raw_data,'SHIFT_ENCODE')!==false)
-		{
-			$this->code_to_preexecute.='/*SHIFT_ENCODE*/';
-			$this->evaluate();
-		}
-
 		return true;
 	}
 
@@ -1390,7 +1392,7 @@ class ocp_tempcode
 			$this->seq_parts[$i]=$bit;
 		}
 
-		$this->preprocessable_bits=array_merge($value->preprocessable_bits,$value->preprocessable_bits);
+		array_splice($this->preprocessable_bits,-1,0,$value->preprocessable_bits);
 	}
 
 	/**
@@ -1438,7 +1440,7 @@ class ocp_tempcode
 				if (is_object($parameter))
 				{
 					if (count($parameter->preprocessable_bits)!=0)
-						$parameter->handle_symbol_preprocessing(); // Needed to force children to be populated. Otherwise it is possible but not definite that evaluation will result in children being pushed down (SHIFT_ENCODING in a template can cause them to be misappropriated, as it causes a runtime cache string in the Tempcode tree).
+						$parameter->handle_symbol_preprocessing(); // Needed to force children to be populated. Otherwise it is possible but not definite that evaluation will result in children being pushed down.
 					$out->children[]=array($parameter->codename,isset($parameter->children)?$parameter->children:array(),isset($parameter->fresh)?$parameter->fresh:false);
 				}
 				elseif ((is_string($parameter)) && ($key=='_GUID'))
@@ -1458,7 +1460,7 @@ class ocp_tempcode
 			{
 				if (isset($parameter->preprocessable_bits[0]))
 				{
-					$out->preprocessable_bits=array_merge($out->preprocessable_bits,$parameter->preprocessable_bits);
+					array_splice($out->preprocessable_bits,-1,0,$parameter->preprocessable_bits);
 				} elseif (!isset($parameter->seq_parts[0])) $parameters[$key]=''; // Little optimisation to save memory
 			}
 			elseif ($p_type=='boolean')
@@ -1477,9 +1479,6 @@ class ocp_tempcode
 				$bit[1]=&$parameters; // & is to preserve memory
 			$out->seq_parts[]=$bit;
 		}
-
-		// Force pre-execution, so shift encoding handled. This is prior to pre-processing (it needs to be for validity in interaction with what is in itself preprocessed), so you could consider it pre-pre-processing
-		if (strpos($out->code_to_preexecute,'SHIFT_ENCODE')!==false) $out->evaluate();
 
 		return $out;
 	}

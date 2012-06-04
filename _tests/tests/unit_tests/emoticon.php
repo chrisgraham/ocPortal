@@ -45,7 +45,7 @@ class emoticon_test_set extends ocp_test_case
 		$this->assertTrue('Z:D'==$GLOBALS['FORUM_DB']->query_value('f_emoticons','e_code ',array('e_code'=>'Z:D')));
 	}
 
-	
+
 	function tearDown()
 	{
 		ocf_delete_emoticon('Z:D');

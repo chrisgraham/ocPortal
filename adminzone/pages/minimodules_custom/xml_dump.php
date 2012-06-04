@@ -31,11 +31,30 @@ if (!isset($_GET['testing']))
 
 require_code('xml_dump');
 
-$st=get_sql_dump();
-foreach ($st as $s)
+if ((strpos(ini_get('disallowed_functions'),'shell_exec')===false) && (strpos(get_db_type(),'mysql')!==false))
 {
-	echo $s;
-	echo "\n\n";
+	$cmd='mysqldump -h'.get_db_site_host().' -u'.get_db_site_user().' -p'.get_db_site_password().' '.get_db_site().' 2>&1';
+	$filename='dump_'.uniqid('').'.sql';
+	$target_file=get_custom_file_base().'/'.$filename;
+	$cmd.=' > '.$target_file;
+	$msg=shell_exec($cmd);
+	if (($msg!='') || (filesize($target_file)==0))
+	{
+		/*echo 'Error';
+		if ($msg!='') echo ' - '.$msg; */
+	} else
+	{
+		header('Location: '.get_custom_base_url().'/'.$target_file);
+		exit();
+	}
+}/* else*/
+{
+	$st=get_sql_dump(false,false,NULL,NULL,NULL,true);
+	foreach ($st as $s)
+	{
+		echo $s;
+		echo "\n\n";
+	}
 }
 
 $GLOBALS['SCREEN_TEMPLATE_CALLED']='';

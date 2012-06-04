@@ -179,6 +179,7 @@ class Module_booking
 		require_lang('booking');
 		require_code('booking');
 		require_code('ocf_join');
+		require_javascript('javascript_booking');
 
 		$type=get_param('type','misc');
 
@@ -206,7 +207,7 @@ class Module_booking
 	{
 		global $M_SORT_KEY;
 
-		$title=get_page_title('CREATE_BOOKING');
+		$title=get_screen_title('CREATE_BOOKING');
 
 		$query='SELECT * FROM '.get_table_prefix().'bookable WHERE enabled=1';
 		$filter=get_param('filter','*');
@@ -417,7 +418,7 @@ class Module_booking
 	 */
 	function flesh_out()
 	{
-		$title=get_page_title('CREATE_BOOKING');
+		$title=get_screen_title('CREATE_BOOKING');
 
 		// Check booking: redirect to last step as re-entrant if not valid
 		$request=get_booking_request_from_form();
@@ -487,7 +488,7 @@ class Module_booking
 	 */
 	function join_or_login()
 	{
-		$title=get_page_title('CREATE_BOOKING');
+		$title=get_screen_title('CREATE_BOOKING');
 
 		// Check login: skip to thanks if logged in
 		if (!is_guest())
@@ -500,7 +501,7 @@ class Module_booking
 		list($javascript,$form)=ocf_join_form($url,true,false,false,false);
 
 		$hidden=build_keep_post_fields();
-		return do_template('BOOKING_JOIN_OR_LOGIN_SCREEN',array('TITLE'=>$title,'JAVASCRIPT'=>$javascript,'FORM'=>$form,'HIDDEN'=>$hidden));
+		return do_template('BOOKING_JOIN_OR_LOGIN_SCREEN',array('_GUID'=>'b6e499588de8e2136122949478bac2e7','TITLE'=>$title,'JAVASCRIPT'=>$javascript,'FORM'=>$form,'HIDDEN'=>$hidden));
 	}
 
 	/**
@@ -510,7 +511,7 @@ class Module_booking
 	 */
 	function thanks()
 	{
-		$title=get_page_title('CREATE_BOOKING');
+		$title=get_screen_title('CREATE_BOOKING');
 
 		// Finish join operation, if applicable
 		if (is_guest())

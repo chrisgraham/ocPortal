@@ -1,6 +1,7 @@
 {TITLE}
+
 <div class="float_surrounder">
-	<div class="top_navigation">
+	<div class="calendar_top_navigation">
 		<div class="calendar_date_span_link"><div class="calendar_date_span_link_inner">
 			{+START,IF_NON_EMPTY,{YEAR_URL}}
 				<a href="{YEAR_URL*}">{!YEARLY}</a>
@@ -36,8 +37,6 @@
 	</div>
 </div>
 
-<br />
-
 <div class="float_surrounder">
 	<div class="trinav_left">
 		<a href="{PREVIOUS_URL*}" rel="{+START,IF,{PREVIOUS_NO_FOLLOW}}nofollow {+END}prev" accesskey="j"><img class="button_page" src="{$IMG*,page/previous}" title="{!PREVIOUS}" alt="{!PREVIOUS}" /></a>
@@ -54,83 +53,69 @@
 	</div>
 </div>
 
-<br />
-
-<div class="expansive_section">
+<div class="horizontal_scrolling">
 	{MAIN}
 </div>
 
-<br />
-
 {+START,IF_NON_EMPTY,{ADD_URL}}
-	<p class="button_panel">
+	<p class="buttons_group">
 		<a rel="add" href="{ADD_URL*}"><img class="button_page" src="{$IMG*,page/add_event}" title="{!ADD_CALENDAR_EVENT}" alt="{!ADD_CALENDAR_EVENT}" /></a>
 	</p>
 {+END}
 
-<br />
+<div class="box box___calendar_main_screen_interests">
+	<h2 class="toggleable_tray_title">
+		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!INTERESTS}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!INTERESTS}</a>
+	</h2>
 
-<div class="standardbox_wrap_classic solidborder">
-	<div class="standardbox_classic">
-		<div class="standardbox_title_classic toggle_div_title">
-			{!INTERESTS}
-			<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('interests','block'); return false;"><img id="e_interests" alt="{!EXPAND}: {!INTERESTS}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-		</div>
-	</div>
-
-	<div class="toggler_main" id="interests" style="{$JS_ON,display: none,}">
+	<div class="toggleable_tray" style="{$JS_ON,display: none,}" aria-expanded="false">
 		<div class="float_surrounder">
-			<div class="medborder_box">
-				{+START,IF_NON_EMPTY,{EVENT_TYPES_1}}
-					<div class="right medborder event_interest_box">
-						<form title="{!INTERESTS}" method="post" action="{INTERESTS_URL*}">
-							<p><strong>{!DESCRIPTION_INTERESTS}</strong></p>
+			{+START,IF_NON_EMPTY,{EVENT_TYPES_1}}
+				<div class="right event_interest_box"><section class="box"><div class="box_inner">
+					<form title="{!INTERESTS}" method="post" action="{INTERESTS_URL*}">
+						<p><strong>{!DESCRIPTION_INTERESTS}</strong></p>
 
-							<div class="calendar_main_page_hidden_data">
-								{EVENT_TYPES_1}
-							</div>
+						<div class="calendar_main_page_hidden_data">
+							{EVENT_TYPES_1}
+						</div>
 
-							<div class="proceed_button">
-								<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!INTERESTS}" />
-							</div>
-						</form>
-					</div>
-				{+END}
-				{+START,IF_NON_EMPTY,{EVENT_TYPES_2}}
-					<div class="medborder event_interest_box">
-						<form title="{!FILTER}" action="{$URL_FOR_GET_FORM*,{FILTER_URL}}" method="get">
-							{$HIDDENS_FOR_GET_FORM,{FILTER_URL}}
+						<p class="proceed_button">
+							<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!INTERESTS}" />
+						</p>
+					</form>
+				</div></section></div>
+			{+END}
+			{+START,IF_NON_EMPTY,{EVENT_TYPES_2}}
+				<div class="left event_interest_box"><section class="box"><div class="box_inner">
+					<form title="{!FILTER}" action="{$URL_FOR_GET_FORM*,{FILTER_URL}}" method="get">
+						{$HIDDENS_FOR_GET_FORM,{FILTER_URL}}
 
-							<p><strong>{!DESCRIPTION_INTERESTS_2}</strong></p>
+						<p><strong>{!DESCRIPTION_INTERESTS_2}</strong></p>
 
-							<div class="calendar_main_page_hidden_data">
-								{EVENT_TYPES_2}
-							</div>
+						<div class="calendar_main_page_hidden_data">
+							{EVENT_TYPES_2}
+						</div>
 
-							<div class="proceed_button">
-								<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!FILTER}" />
-							</div>
-						</form>
-					</div>
-				{+END}
-			</div>
+						<p class="proceed_button">
+							<input onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!FILTER}" />
+						</p>
+					</form>
+				</div></section></div>
+			{+END}
 		</div>
 	</div>
 </div>
 
-<br />
-
 {$, Commented out... bloat
 {+START,IF,{$ADDON_INSTALLED,syndication_blocks}}
-	<div class="standardbox_wrap_classic solidborder">
-		<div class="standardbox_classic">
-			<div class="standardbox_title_classic toggle_div_title">
-				{!FEEDS_TO_OVERLAY}
-				<a class="hide_button" href="#" onclick="event.returnValue=false; toggleSectionInline('rss','block'); return false;"><img id="e_rss" alt="{!EXPAND}: {!FEEDS_TO_OVERLAY}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-			</div>
-		</div>
+	<div class="box box___calendar_main_screen_feeds_to_overlay">
+		<h2 class="toggleable_tray_title">
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!FEEDS_TO_OVERLAY}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!FEEDS_TO_OVERLAY}</a>
+		</h2>
 
-		<div class="toggler_main standardbox_main_classic" id="rss" style="{$JS_ON,display: none,}">
+		<div class="toggleable_tray" style="{$JS_ON,display: none,}" aria-expanded="false">
 			{RSS_FORM}
 		</div>
 	</div>

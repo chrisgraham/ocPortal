@@ -28,7 +28,7 @@ class Hook_comcode_link_handler_mp3
 	 * @param  boolean		Whether to check as arbitrary admin
 	 * @param  object			The database connection to use
 	 * @param  string			The whole chunk of comcode
-	 * @param  boolean		Whether this is for WML output
+	 * @param  boolean		Whether this is for WML output (no longer supported)
 	 * @param  boolean		Whether this is only a structure sweep
 	 * @param  boolean		Whether we are in semi-parse-mode (some tags might convert differently)
 	 * @param  ?array			A list of words to highlight (NULL: none)

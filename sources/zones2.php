@@ -55,7 +55,7 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($zone)));
 		} else // In DB, not on disk, so we'll just delete DB record
 		{
-			persistant_cache_delete(array('ZONE',$zone));
+			persistent_cache_delete(array('ZONE',$zone));
 			$GLOBALS['SITE_DB']->query_delete('zones',array('zone_name'=>$zone),'',1);
 		}
 	}
@@ -100,14 +100,13 @@ END;
 	require_code('menus2');
 	$menu_item_count=$GLOBALS['SITE_DB']->query_value('menu_items','COUNT(*)',array('i_menu'=>'zone_menu'));
 	if ($menu_item_count<40)
-		add_menu_item_simple('zone_menu',NULL,$title,$zone.':',0,1);
+		add_menu_item_simple('zone_menu',NULL,($zone=='forum')?do_lang('SECTION_SOCIAL'):$title,$zone.':',0,1);
 
 	log_it('ADD_ZONE',$zone);
-	persistant_cache_delete('ALL_ZONES');
+	persistent_cache_delete('ALL_ZONES');
 
 	decache('main_sitemap');
 	decache('side_stored_menu');
-	decache('side_zone_jump');
 }
 
 /**
@@ -370,7 +369,7 @@ function cleanup_block_name($block)
 	if (!is_null($title)) return $title;
 
 	$block=str_replace('_ocf_','_',$block);
-	return ucwords(str_replace('_',' ',str_replace('block_bottom_','Bottom: ',str_replace('block_side_','Side: ',str_replace('block_main_','Main: ',$block)))));
+	return titleify(str_replace('block_bottom_','Bottom: ',str_replace('block_side_','Side: ',str_replace('block_main_','Main: ',$block))));
 }
 
 /**

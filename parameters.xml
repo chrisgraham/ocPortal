@@ -394,8 +394,8 @@
   </parameter>
 
   <parameter
-    name="SetAclParameter8" description="Sets the ACL on the right file" defaultValue="{Application Path}/persistant_cache" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/persistant_cache" />
+    name="SetAclParameter8" description="Sets the ACL on the right file" defaultValue="{Application Path}/persistent_cache" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/persistent_cache" />
   </parameter> 
 
   <parameter

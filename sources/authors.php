@@ -24,6 +24,7 @@
 function authors_script()
 {
 	require_lang('authors');
+	require_css('authors');
 
 	$start=get_param_integer('start',0);
 	$max=get_param_integer('max',300);
@@ -64,18 +65,19 @@ function authors_script()
 
 		$i++;
 	}
-	if ($content->is_empty()) $content=paragraph(do_lang_tempcode('NO_ENTRIES'),'dfids09fi;lk;3');
 
 	if ($i>=$start+$max)
 	{
 		$keep=symbol_tempcode('KEEP');
-		$next_link=find_script('authors').'?field_name='.urlencode($field_name).'&start='.strval($start+$max).'&max='.strval($max).$keep->evaluate();
+		$next_url=find_script('authors').'?field_name='.urlencode($field_name).'&start='.strval($start+$max).'&max='.strval($max).$keep->evaluate();
 	} else
 	{
-		$next_link=NULL;
+		$next_url=NULL;
 	}
 
-	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'ab8d8c9d276530d82ddd84202aacf32f','TITLE'=>do_lang_tempcode('CHOOSE_AUTHOR'),'NEXT_LINK'=>$next_link,'CONTENT'=>$content));
+	$content=do_template('AUTHOR_POPUP',array('_GUID'=>'e18411d1bf24c6ed945b4d9064774884','CONTENT'=>$content,'NEXT_URL'=>$next_url));
+
+	$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'ab8d8c9d276530d82ddd84202aacf32f','TITLE'=>do_lang_tempcode('CHOOSE_AUTHOR'),'CONTENT'=>$content));
 	$echo->evaluate_echo();
 }
 

@@ -694,11 +694,11 @@ function render_php_function($function,$class,$show_filename=false)
 //				if (!array_key_exists('type',$parameter)) exit($function['name']);
 
 		if (!$parameters->is_empty()) $parameters->attach(', ');
-		$parameters->attach(do_template('PHP_PARAMETER_LIST',array('_GUID'=>'03e76c19ec2cf9cb7f283db72728fc13','TYPE'=>$parameter['type'],'NAME'=>$parameter['name'])));
+		$parameters->attach(do_template('PHP_PARAMETER_LIST',array('_GUID'=>'7d9b89e65865a0ba126c30ff5561a2b5','TYPE'=>$parameter['type'],'NAME'=>$parameter['name'])));
 
 		$bits=render_php_function_do_bits($parameter);
 
-		$full_parameters->attach(do_template('PHP_PARAMETER',array('_GUID'=>'fa1f59637723d35da5e210e4efa0e27c','BITS'=>$bits)));
+		$full_parameters->attach(do_template('PHP_PARAMETER',array('_GUID'=>'bb4ec04e63be1fcd7a783a5f7123207b','BITS'=>$bits)));
 	}
 
 	if (array_key_exists('return',$function))
@@ -729,8 +729,8 @@ function render_php_function($function,$class,$show_filename=false)
 	$filename=$show_filename?$function['filename']:'';
 	if (!isset($class['name'])) $class['name']='';
 
-	$a=do_template('PHP_FUNCTION',array('_GUID'=>'f01224ffadc5cde023a1777b9267da61','FILENAME'=>$filename,'CODE'=>$code,'RETURN_TYPE'=>$return_type,'FUNCTION'=>$function['name'],'CLASS'=>$class['name'],'PARAMETERS'=>$parameters,'DESCRIPTION'=>$description,'FULL_PARAMETERS'=>$full_parameters,'RETURN'=>$return));
-	$b=do_template('PHP_FUNCTION_SUMMARY',array('_GUID'=>'ac91501d0fcef2f17c7f068f0d506d42','FILENAME'=>$filename,'RETURN_TYPE'=>$return_type,'CLASS'=>$class['name'],'FUNCTION'=>$function['name'],'PARAMETERS'=>$parameters));
+	$a=do_template('PHP_FUNCTION',array('_GUID'=>'61795b9576955f19386a991b47c7913e','FILENAME'=>$filename,'CODE'=>$code,'RETURN_TYPE'=>$return_type,'FUNCTION'=>$function['name'],'CLASS'=>$class['name'],'PARAMETERS'=>$parameters,'DESCRIPTION'=>$description,'FULL_PARAMETERS'=>$full_parameters,'RETURN'=>$return));
+	$b=do_template('PHP_FUNCTION_SUMMARY',array('_GUID'=>'508e2650805d3a12a3b8fc4c0db8f596','FILENAME'=>$filename,'RETURN_TYPE'=>$return_type,'CLASS'=>$class['name'],'FUNCTION'=>$function['name'],'PARAMETERS'=>$parameters));
 
 	return array($a,$b);
 }
@@ -747,12 +747,12 @@ function render_php_function_do_bits($parameter)
 
 	if (array_key_exists('name',$parameter)) // Name
 	{
-		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'81bd29ddf7c9b4d2ae03ca870575cb18','NAME'=>do_lang_tempcode('NAME'),'VALUE'=>$parameter['name'])));
+		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'c1b3d63d3caf8ffa508e2f242ce88034','NAME'=>do_lang_tempcode('NAME'),'VALUE'=>$parameter['name'])));
 	}
 	if (array_key_exists('description',$parameter)) // Description
 	{
 		$description=comcode_to_tempcode($parameter['description']);
-		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'c1e8627fa77c26b15d4346948c623fd3','NAME'=>do_lang_tempcode('DESCRIPTION'),'VALUE'=>$description)));
+		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'81346f6aa23aed120b554fb1c8c29d96','NAME'=>do_lang_tempcode('DESCRIPTION'),'VALUE'=>$description)));
 	}
 	if (array_key_exists('default',$parameter)) // Default
 	{
@@ -761,19 +761,19 @@ function render_php_function_do_bits($parameter)
 		{
 			if (!is_null($parameter['default'])) $value=strval($parameter['default']);
 		} else $value=$parameter['default'];
-		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'b5fc6eb98568ca4e36e25cb15d3e26b5','NAME'=>do_lang_tempcode('DEFAULT_VALUE'),'VALUE'=>$value)));
+		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'3c2cd67575c8602ac31c0efe9722f4a8','NAME'=>do_lang_tempcode('DEFAULT_VALUE'),'VALUE'=>$value)));
 	}
 	if (array_key_exists('type',$parameter)) // Type
 	{
-		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'dd638a63173699326a8f856e931354d5','NAME'=>do_lang_tempcode('TYPE'),'VALUE'=>$parameter['type'])));
+		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'04d6c4f1df246a17b795cd2e496703b2','NAME'=>do_lang_tempcode('TYPE'),'VALUE'=>$parameter['type'])));
 	}
 	if (array_key_exists('set',$parameter)) // Set
 	{
-		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'d647ace9bdd0150dac1b02e3b1cf12c9','NAME'=>do_lang_tempcode('POSSIBLE_VALUES'),'VALUE'=>$parameter['set'])));
+		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'c530b216547aecda15a5fb1f41ea80cd','NAME'=>do_lang_tempcode('POSSIBLE_VALUES'),'VALUE'=>$parameter['set'])));
 	}
 	if (array_key_exists('range',$parameter)) // Range
 	{
-		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'845d1a0286323342bc4e011b178d4ac1','NAME'=>do_lang_tempcode('VALUE_RANGE'),'VALUE'=>$parameter['range'])));
+		$bits->attach(do_template('PHP_PARAMETER_BIT',array('_GUID'=>'1ab5a4388f6f9527a8829deff584ac75','NAME'=>do_lang_tempcode('VALUE_RANGE'),'VALUE'=>$parameter['range'])));
 	}
 
 	return $bits;

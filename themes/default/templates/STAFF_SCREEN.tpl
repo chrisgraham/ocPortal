@@ -2,18 +2,16 @@
 
 <h2>{!DETAILS}</h2>
 
-<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="solidborder wide_table">
-	{+START,IF,{$NOT,{$MOBILE}}}
-		<colgroup>
-			<col style="width: 140px" />
-			<col style="width: 100%" />
-		</colgroup>
-	{+END}
+<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="results_table wide_table">
+	<colgroup>
+		<col class="field_name_column" />
+		<col class="field_value_column" />
+	</colgroup>
 
 	<tbody>
 		<tr>
 			<th>{!USERNAME}</th>
-			<td><a href="{PROFILE_URL*}">{NAME*}</a></td>
+			<td><a class="associated_link suggested" href="{PROFILE_URL*}">{NAME*}</a></td>
 		</tr>
 		{+START,IF_NON_EMPTY,{REAL_NAME}}
 			<tr>
@@ -30,24 +28,22 @@
 		{+START,IF_NON_EMPTY,{ADDRESS}}
 			{+START,IF,{$OCF}}
 				<tr>
-					<th>{!ocf:ADD_PERSONAL_TOPIC}</th>
-					<td><a href="{$PAGE_LINK*,_SEARCH:topics:new_pt:{MEMBER_ID}}">{!ocf:ADD_PERSONAL_TOPIC}</a></td>
+					<th>{!ocf:ADD_PRIVATE_TOPIC}</th>
+					<td><a class="associated_link" href="{$PAGE_LINK*,_SEARCH:topics:new_pt:{MEMBER_ID}}">{!ocf:ADD_PRIVATE_TOPIC}</a></td>
 				</tr>
 			{+END}
 			{+START,IF,{$NOT,{$OCF}}}
 				<tr>
 					<th>{!EMAIL}</th>
-					<td><a href="{$MAILTO}{$OBFUSCATE,{ADDRESS}}">{!EMAIL}</a></td>
+					<td><a class="associated_link" href="{$MAILTO}{$OBFUSCATE,{ADDRESS}}">{!EMAIL}</a></td>
 				</tr>
 			{+END}
 		{+END}
 	</tbody>
 </table></div>
 
-<br />
-
-<div class="button_panel_left">
-	<a href="{ALL_LINK*}"><img class="button_page" src="{$IMG*,page/all2}" title="{!VIEW_ALL_STAFF}" alt="{!VIEW_ALL_STAFF}" /></a>
+<div class="buttons_group">
+	<a href="{ALL_STAFF_URL*}"><img class="button_page" src="{$IMG*,page/all2}" title="{!VIEW_ALL_STAFF}" alt="{!VIEW_ALL_STAFF}" /></a>
 
 	{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_staff}}
 		<a rel="edit" href="{$PAGE_LINK*,_SEARCH:admin_staff}"><img class="button_page" src="{$IMG*,page/edit}" title="{!EDIT}" alt="{!EDIT}" /></a>

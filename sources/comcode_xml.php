@@ -255,7 +255,7 @@ class comcode_xml_to_tempcode
 
 		global $VALID_COMCODE_TAGS,$COMCODE_XML_PARAM_RENAMING,$COMCODE_XML_SWITCH_AROUND;
 		$conflict_tags=array('br','hr','table','tr','th','td');
-		$aux_tags=array('html_wrap','comcode','br','hr','table','tr','th','td','float','fh','fd','emoticon','member','cedi','list','list_element','concepts','show_concept','block','block_param','random','random_target','jumping','jumping_target','shocker','shocker_left','shocker_right','directive','language','symbol','directive_param','language_param','symbol_param','attachment','attachment_description','hide','hide_title','tooltip','tooltip_message');
+		$aux_tags=array('html_wrap','comcode','br','hr','table','tr','th','td','float','fh','fd','emoticon','member','wiki','list','list_element','concepts','show_concept','block','block_param','random','random_target','jumping','jumping_target','shocker','shocker_left','shocker_right','directive','language','symbol','directive_param','language_param','symbol_param','attachment','attachment_description','hide','hide_title','tooltip','tooltip_message');
 
 		// Tidy up tag name
 		$namespace=array_peek($this->namespace_stack);
@@ -452,7 +452,7 @@ class comcode_xml_to_tempcode
 							{
 								require_lang('ocf');
 								require_code('ocf_members2');
-								$details=ocf_show_member_box($this_member_id);
+								$details=render_member_box($this_member_id);
 								$tempcode=do_template('HYPERLINK_TOOLTIP',array('_GUID'=>'f7b65418616787b0f732c32486b63f4e','TOOLTIP'=>$details,'CAPTION'=>$username,'URL'=>$poster_url,'NEW_WINDOW'=>false));
 							} else
 							{
@@ -460,18 +460,18 @@ class comcode_xml_to_tempcode
 							}
 						}
 						break;
-					case 'cedi':
-						$cedi_page_name=$child_tempcode->evaluate();
+					case 'wiki':
+						$wiki_page_name=$child_tempcode->evaluate();
 						if (isset($attributes['anchor']))
 						{
 							$jump_to=$attributes['anchor'];
 						} else $jump_to='';
-						$cedi_page_url=build_url(array('page'=>'cedi','type'=>'misc','find'=>$cedi_page_name),get_module_zone('cedi'));
+						$wiki_page_url=build_url(array('page'=>'cedi','type'=>'misc','find'=>$wiki_page_name),get_module_zone('cedi'));
 						if ($jump_to!='')
 						{
-							$cedi_page_url->attach('#'.$jump_to);
+							$wiki_page_url->attach('#'.$jump_to);
 						}
-						$tempcode=do_template('COMCODE_CEDI_LINK',array('_GUID'=>'770ac8741e9b0fc2697d1ee3d7ec3b38','URL'=>$cedi_page_url,'TEXT'=>$cedi_page_name));
+						$tempcode=do_template('COMCODE_WIKI_LINK',array('_GUID'=>'770ac8741e9b0fc2697d1ee3d7ec3b38','URL'=>$wiki_page_url,'TEXT'=>$wiki_page_name));
 						break;
 					case 'list':
 						if (!isset($special_child_elements['listElement'])) $special_child_elements['listElement']=array();

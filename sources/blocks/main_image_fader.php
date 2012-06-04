@@ -60,6 +60,8 @@ class Block_main_image_fader
 	 */
 	function run($map)
 	{
+		require_css('galleries');
+
 		$cat=array_key_exists('param',$map)?$map['param']:'';
 		if ($cat=='') $cat='root';
 		$mill=array_key_exists('time',$map)?intval($map['time']):8000; // milliseconds between animations
@@ -129,7 +131,6 @@ class Block_main_image_fader
 
 		return do_template('BLOCK_MAIN_IMAGE_FADER',array(
 			'GALLERY_URL'=>$gallery_url,
-			'RAND'=>uniqid(''),
 			'PREVIOUS_URL'=>$images[count($images)-1],
 			'PREVIOUS_URL_FULL'=>$images[count($images_full)-1],
 			'FIRST_URL'=>$images[0],

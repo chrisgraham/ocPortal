@@ -57,6 +57,9 @@ class Hook_content_meta_aware_member
 			'addon_name'=>'core_ocf',
 
 			'module'=>'members',
+
+			'ocselect'=>'ocf_members2::_members_ocselect',
+			'ocselect_protected_fields'=>array('m_pass_hash_salted','m_pass_salt','m_password_change_code'), // These are ones even some staff should never know
 		);
 	}
 

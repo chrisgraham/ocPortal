@@ -10,5 +10,5 @@
 [block="main_content" type="tree" caption="Content"]side_stored_menu[/block]
 [block="main_community" type="tree" caption="Community"]side_stored_menu[/block]
 [block="main_website" type="tree" caption="Web site"]side_stored_menu[/block]
-[block="cedi_features" type="tree" silent_failure="1" caption="CEDI"]side_stored_menu[/block]
+[block="cedi_features" type="tree" silent_failure="1" caption="Wiki+"]side_stored_menu[/block]
 {+END}

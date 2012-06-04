@@ -159,7 +159,7 @@ class Module_admin_workflow extends standard_aed_module
 	{
 		require_code('templates_donext');
 		require_lang('workflows');
-		return do_next_manager(get_page_title('MANAGE_WORKFLOWS'),comcode_to_tempcode(do_lang('DOC_WORKFLOWS'),NULL,true),
+		return do_next_manager(get_screen_title('MANAGE_WORKFLOWS'),comcode_to_tempcode(do_lang('DOC_WORKFLOWS'),NULL,true),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WORKFLOW')),
@@ -514,7 +514,7 @@ class Module_admin_workflow extends standard_aed_module
 			}
 		}
 
-		$title=get_page_title($doing);
+		$title=get_screen_title($doing);
 
 		if (($this->second_stage_preview) && (get_param_integer('preview',0)==1))
 		{
@@ -623,7 +623,7 @@ class Module_admin_workflow extends standard_aed_module
 				$doing=do_lang('CATALOGUE_GENERIC_EDIT_CATEGORY',escape_html($catalogue_title));
 			}
 		}
-		$title=get_page_title($doing);
+		$title=get_screen_title($doing);
 
 		if (($this->second_stage_preview) && (get_param_integer('preview',0)==1))
 		{
@@ -683,7 +683,7 @@ class Module_admin_workflow extends standard_aed_module
 					$doing=do_lang('CATALOGUE_GENERIC_DELETE_CATEGORY',escape_html($catalogue_title));
 				}
 			}
-			$title=get_page_title($doing);
+			$title=get_screen_title($doing);
 
 			$test=$this->handle_confirmations($title);
 			if (!is_null($test)) return $test;
@@ -802,7 +802,7 @@ class Module_admin_workflow extends standard_aed_module
 		// Grab our data
 		list($workflow_id,$workflow_name,$approval_points,$is_default)=$this->read_in_data(false);
 
-		
+
 	}
 
 	/**

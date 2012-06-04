@@ -101,17 +101,16 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 			{
 				if ($cell_count%2==0)
 				{
-					if ($cell_count!=0) $cells.='<br />';
-					$cells.="<div class=\"float_surrounder\">";
+					$cells.='[semihtml][surround="fp_col_blocks_wrap"]';
 				}
-				$cells.="<div class=\"fp_col_block\" style=\"float: ".(($cell_count%2==0)?'left':'right')."\">".$block_comcode."</div>\n";
-				if ($cell_count%2==1) $cells.="</div>";
+				$cells.="\t".'[surround="fp_col_block '.(($cell_count%2==0)?'left':'right').'"]'."\n\t\t".$block_comcode."\n\t".'[/surround]'."\n";
+				if ($cell_count%2==1) $cells.="[/surround][/semihtml]\n\n";
 				$cell_count++;
 			}
 		}
 		if ($cells!='') // Odd number of cells chosen, close off at odd point
 		{
-			if ($cell_count%2==1) $cells.="</div>";
+			if ($cell_count%2==1) $cells.="[/surround][/semihtml]\n\n";
 		}
 
 		// Start page
@@ -119,9 +118,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 		$comcode.="[title=\"1\"]Welcome to {\$SITE_NAME*}[/title]\n\n[block=\"3\"]main_greeting[/block]\n\n";
 		if ($cells!='')
 		{
-			$comcode.="[semihtml]\n";
 			$comcode.=$cells;
-			$comcode.="\n[/semihtml]\n\n";
 		}
 		$main.=chr(10).chr(10)."[block]main_comcode_page_children[/block]";
 		$comcode.=$main;
@@ -135,7 +132,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 			if (($zone=='') && (!$collapse_zones))
 				$comcode.="[block=\"root_website\" type=\"tree\" caption=\"".do_lang('SITE')."\"]side_stored_menu[/block]\n";
 			else
-				$comcode.="[block=\"main_features\" type=\"tree\" caption=\"".do_lang('FEATURES')."\"]side_stored_menu[/block]\n[block=\"main_content\" type=\"tree\" caption=\"".do_lang('CONTENT')."\"]side_stored_menu[/block]\n[block=\"main_community\" type=\"tree\" caption=\"".do_lang('FORUM_SLASH_COMMUNITY')."\"]side_stored_menu[/block]\n[block=\"main_website\" type=\"tree\" caption=\"".do_lang('SITE')."\"]side_stored_menu[/block]\n[block=\"cedi_features\" type=\"tree\" silent_failure=\"1\" caption=\"CEDI\"]side_stored_menu[/block]\n";
+				$comcode.="[block=\"main_features\" type=\"tree\" caption=\"".do_lang('FEATURES')."\"]side_stored_menu[/block]\n[block=\"main_content\" type=\"tree\" caption=\"".do_lang('CONTENT')."\"]side_stored_menu[/block]\n[block=\"main_community\" type=\"tree\" caption=\"".do_lang('FORUM_SLASH_COMMUNITY')."\"]side_stored_menu[/block]\n[block=\"main_website\" type=\"tree\" caption=\"".do_lang('SITE')."\"]side_stored_menu[/block]\n[block=\"cedi_features\" type=\"tree\" silent_failure=\"1\" caption=\"Wiki+\"]side_stored_menu[/block]\n";
 		} elseif ($left!='')
 		{
 			if ($GLOBALS['SITE_DB']->query_value('menu_items','COUNT(*)',array('i_menu'=>'site'))>1)
@@ -148,7 +145,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 		}
 		if (post_param_integer('include_ocp_advert',0)==1)
 		{
-			$comcode.='[center][url="http://ocportal.com/?from=logo"][img="Powered by ocPortal"]http://ocportal.com/uploads/website_specific/ocportal.com/logos/a.png[/img][/url][/center]{$SET,interlock,0}';
+			$comcode.='[center][url="http://ocportal.com/?from=logo"][img="Powered by ocPortal"]http://ocportal.com/uploads/website_specific/ocportal.com/logos/a.png[/img][/url][/center]';
 		}
 		$page_structure[$zone]['left']=$comcode;
 

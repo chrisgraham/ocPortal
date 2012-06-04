@@ -5,9 +5,10 @@
 		{!NO_ENTRIES}
 	</p>
 {+END}
+
 {+START,IF_NON_EMPTY,{FIELDS}}
 	{MESSAGE}
-	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="dottedborder wide_table{+START,IF_EMPTY,{WIDTHS}} variable_table{+END}"{$?,{$VALUE_OPTION,html5}, itemprop="significantLinks"}>
+	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table{+START,IF_EMPTY,{WIDTHS}} autosized_table{+END}" itemprop="significantLinks">
 		{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{WIDTHS}}
 			<colgroup>
 				{+START,LOOP,WIDTHS}
@@ -25,14 +26,15 @@
 			{FIELDS}
 		</tbody>
 	</table></div>
-	{+START,IF_NON_EMPTY,{SORT}{BROWSER}}
-		<div class="lightborder medborder_box results_table">
-			<div class="float_surrounder">
-				<div class="results_table_sorter">{SORT}</div>
 
-				{BROWSER}
+	{+START,IF_NON_EMPTY,{SORT}{PAGINATION}}
+		<div class="box results_table_under"><div class="box_inner float_surrounder">
+			<div class="results_table_sorter">
+				{SORT}
 			</div>
-		</div>
+
+			{PAGINATION}
+		</div></div>
 	{+END}
 {+END}
 

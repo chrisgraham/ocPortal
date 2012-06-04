@@ -1,6 +1,6 @@
 window.hasFocus=true;
-addEventListenerAbstract(window,'blur',function() { window.hasFocus=false; });
-addEventListenerAbstract(window,'focus',function() { window.hasFocus=true; });
+add_event_listener_abstract(window,'blur',function() { window.hasFocus=false; });
+add_event_listener_abstract(window,'focus',function() { window.hasFocus=true; });
 
 function play_sound_url(url) // Used for testing different sounds
 {
@@ -36,7 +36,7 @@ function chat_load(room_id)
 {
 	document.getElementById("post").focus();
 
-	manageScrollHeight(document.getElementById('post'));
+	manage_scroll_height(document.getElementById('post'));
 
 	con.addPacketListener(
 	    function(msg) {
@@ -66,7 +66,7 @@ function addChatMessage(username,body,_date)
 	if (!_date)
 		_date=new Date();
 	var date=_date.toLocaleString();
-	setInnerHTML(messages,"<div class=\"chat_message\"><a href=\"{$BASE_URL*}/site/index.php?page=members&amp;type=view&amp;id="+escape_html(username)+"\"><img class=\"chat_avatar\" src=\"{$FIND_SCRIPT*,get_avatar}?id="+window.encodeURIComponent(username)+keep_stub(false)+"\" alt=\"{!AVATAR}\" title=\"\" /></a><div><span class=\"chat_message_by\">By <a href=\"{$BASE_URL*}/site/index.php?page=members&amp;type=view&amp;id="+escape_html(username)+"\">"+escape_html(username)+"</a></span> <span class=\"associated_details\">("+escape_html(date)+")</span></div><blockquote>"+escape_html(body)+"</blockquote></div>"+getInnerHTML(messages));
+	set_inner_html(messages,"<div class=\"chat_message\"><a href=\"{$BASE_URL*}/site/index.php?page=members&amp;type=view&amp;id="+escape_html(username)+"\"><img class=\"chat_avatar\" src=\"{$FIND_SCRIPT*,get_avatar}?id="+window.encodeURIComponent(username)+keep_stub(false)+"\" alt=\"{!AVATAR}\" title=\"\" /></a><div><span class=\"chat_message_by\">By <a href=\"{$BASE_URL*}/site/index.php?page=members&amp;type=view&amp;id="+escape_html(username)+"\">"+escape_html(username)+"</a></span> <span class=\"associated_details\">("+escape_html(date)+")</span></div><blockquote>"+escape_html(body)+"</blockquote></div>"+get_inner_html(messages));
 }
 
 // Post a chat message
@@ -126,7 +126,7 @@ function onConnectForLogin(username,password,onLoginCompleted)
 
 	window.mucMan = Xmpp4Js.Muc.MucManager.getInstanceFor( window.con, "conference.{$DOMAIN;}", window.extProvider );
 
-	addEventListenerAbstract(window,'unload',function () {
+	add_event_listener_abstract(window,'unload',function () {
 		if (con.isConnected()) // Clean shutdown
 		{
 			if (window.room) room.part();

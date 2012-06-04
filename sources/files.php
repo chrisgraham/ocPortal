@@ -251,6 +251,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		$ignore_filenames+=array(
 			// Non-bundled addon stuff that we can't detect automatically
 			'_tests'=>'',
+			'_old'=>'',
 			'killjunk.sh'=>'',
 			'transcoder'=>'',
 			'facebook_connect.php'=>'',
@@ -300,7 +301,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		'tar'=>'(imports|exports)/.*',
 		'gz'=>'(imports|exports)/.*',
 		'lcd'=>'lang_cached(/.*)?',
-		'gcd'=>'persistant_cache',
+		'gcd'=>'persistent_cache',
 		'tcp'=>'themes/[^/]*/templates_cached/.*',
 		'tcd'=>'themes/[^/]*/templates_cached/.*',
 		'css'=>'themes/[^/]*/templates_cached/.*',

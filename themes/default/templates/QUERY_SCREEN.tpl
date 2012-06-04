@@ -4,12 +4,7 @@
 	{!QUERIES_WITHOUT_CACHE}
 </p>
 
-<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table solidborder">
-	<colgroup>
-		<col style="width: 100%" />
-		<col style="width: 75px" />
-	</colgroup>
-
+<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="wide_table results_table autosized_table">
 	<thead>
 		<tr>
 			<th>

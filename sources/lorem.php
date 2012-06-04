@@ -65,7 +65,7 @@ function lorem_phrase()
  */
 function lorem_title()
 {
-	return get_page_title('Lorem Ipsum Dolor');
+	return get_screen_title('Lorem Ipsum Dolor');
 }
 
 /**
@@ -187,6 +187,8 @@ function lorem_chunk_html()
  */
 function placeholder_form()
 {
+	require_css('forms');
+
 	$text='<p>(A form would go here.)</p>';
 	if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($text);
 	return make_string_tempcode($text);
@@ -199,7 +201,23 @@ function placeholder_form()
  */
 function placeholder_fields()
 {
+	require_css('forms');
+
 	$text='<tr><th>(Some field key would go here.)</th><td>(Some field value would go here.)</td></tr>';
+	if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($text);
+	return make_string_tempcode($text);
+}
+
+/**
+ * Get fields, but composed of divs (used by forum)
+ *
+ * @return tempcode		Place holder text.
+ */
+function placeholder_fields_as_divs()
+{
+	require_css('forms');
+
+	$text='<div><div>(Some field key would go here.)</div><div>(Some field value would go here.)</div></div>';
 	if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($text);
 	return make_string_tempcode($text);
 }
@@ -212,6 +230,8 @@ function placeholder_fields()
  */
 function placeholder_form_with_field($field_name)
 {
+	require_css('forms');
+
 	$text='<p>(A form would go here.)</p>';
 
 	require_code('form_templates');
@@ -231,7 +251,7 @@ function placeholder_form_with_field($field_name)
  */
 function placeholder_table()
 {
-	$text='<table class="solidborder" width="100%" summary="Lorum Ipsum"><tbody><tr><th>(Cell 1)</th><td>(Cell 2)</td></tr><tr><td>(Cell 3)</td><td>(Cell 4)</td></tr></tbody></table>';
+	$text='<table class="results_table" width="100%" summary="Lorum Ipsum"><tbody><tr><th>(Cell 1)</th><td>(Cell 2)</td></tr><tr><td>(Cell 3)</td><td>(Cell 4)</td></tr></tbody></table>';
 	if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($text);
 	return make_string_tempcode($text);
 }
@@ -283,7 +303,7 @@ function placeholder_random_id()
 	global $LOREM_RANDOM_VAR;
 	$x=$LOREM_RANDOM_VAR;
 	$LOREM_RANDOM_VAR++;
-	return "id_".strval($x);
+	return 'id_'.strval($x);
 }
 
 /**
@@ -336,9 +356,9 @@ function placeholder_array($num_elements=3)
  *
  * @return string			Place holder text.
  */
-function placeholder_archive()
+function placeholder_list_item()
 {
-	return '<li>An archive list will display here</li>';
+	return '<li>A list will display here</li>';
 }
 
 /**
@@ -429,16 +449,6 @@ function placeholder_filesize()
  *
  * @return string			Place holder text.
  */
-function placeholder_javascript()
-{
-	return "<script language='javascript'></script>";
-}
-
-/**
- * Get javascript code
- *
- * @return string			Place holder text.
- */
 function placeholder_javascript_code()
 {
 	return "alert('test');";
@@ -515,34 +525,23 @@ function lorem_globalise($middle,$message=NULL,$type='',$include_header_and_foot
 	if (($LOREM_AVOID_GLOBALISE) || is_full_screen_template(NULL, $middle))
 		return $middle;
 
-	$_message=(!is_null($message))?do_lorem_template('ADDITIONAL',array('TYPE'=>$type,'MESSAGE'=>$message)):new ocp_tempcode();
+	$_messages=(!is_null($message))?do_lorem_template('MESSAGE',array('TYPE'=>$type,'MESSAGE'=>$message)):new ocp_tempcode();
 
 	$out=new ocp_tempcode();
 	if ($include_header_and_footer)
 	{
 		$display = do_lorem_template('HEADER',array(
-			'VERSION_NUMBER'=>lorem_phrase(),
-			'CHARSET'=>'ISO-8859-1',
-			'HEADER_TEXT'=>lorem_phrase(),
-			'DESCRIPTION'=>lorem_paragraph(),
-			'KEYWORDS'=>lorem_phrase(),
-			'SELF_URL'=>placeholder_url(),
 			'REFRESH'=>'',
-			'LOGOURL'=>placeholder_image_url(),
-			'SHOW_TOP'=>true,
+			'FEEDS'=>'',
 		));
 		$out->attach($display);
 	}
-	$out->attach(do_lorem_template('GLOBAL',array('HELPER_PANEL_TUTORIAL'=>'','HELPER_PANEL_HTML'=>'','HELPER_PANEL_TEXT'=>'','HELPER_PANEL_PIC'=>'','MESSAGE_TOP'=>'','MESSAGE'=>$_message,'MIDDLE'=>$middle,'BREADCRUMBS'=>'')));
+	$out->attach(do_lorem_template('GLOBAL',array('MIDDLE'=>$middle)));
 	if ($include_header_and_footer)
 	{
 		$display = do_lorem_template('FOOTER',array(
 			'BAIL_OUT'=>false,
 			'ERROR_MESSAGES_DURING_OUTPUT'=>'',
-			'SHOW_BOTTOM'=>true,
-			'HAS_SU'=>lorem_phrase(),
-			'STAFF_ACTIONS'=>lorem_phrase(),
-			'EXTRA_FOOT'=>new ocp_tempcode(),
 		));
 		$out->attach($display);
 	}
@@ -559,24 +558,24 @@ function lorem_globalise($middle,$message=NULL,$type='',$include_header_and_foot
  */
 function placeholder_emoticons()
 {
-	$smilies=array();
-	$smilies[':constipated:'][] = 'EMOTICON_IMG_CODE_THEMED';
-	$smilies[':constipated:'][] = 'ocf_emoticons/constipated';
-	$smilies[':constipated:'][] = ':constipated:';
+	$emoticons=array();
+	$emoticons[':constipated:'][] = 'EMOTICON_IMG_CODE_THEMED';
+	$emoticons[':constipated:'][] = 'ocf_emoticons/constipated';
+	$emoticons[':constipated:'][] = ':constipated:';
 
-	$smilies[':upsidedown:'][] = 'EMOTICON_IMG_CODE_THEMED';
-	$smilies[':upsidedown:'][] = 'ocf_emoticons/upsidedown';
-	$smilies[':upsidedown:'][] = ':upsidedown:';
+	$emoticons[':upsidedown:'][] = 'EMOTICON_IMG_CODE_THEMED';
+	$emoticons[':upsidedown:'][] = 'ocf_emoticons/upsidedown';
+	$emoticons[':upsidedown:'][] = ':upsidedown:';
 
-	$smilies[':depressed:'][] = 'EMOTICON_IMG_CODE_THEMED';
-	$smilies[':depressed:'][] = 'ocf_emoticons/depressed';
-	$smilies[':depressed:'][] = ':depressed:';
+	$emoticons[':depressed:'][] = 'EMOTICON_IMG_CODE_THEMED';
+	$emoticons[':depressed:'][] = 'ocf_emoticons/depressed';
+	$emoticons[':depressed:'][] = ':depressed:';
 
-	$smilies[':christmas:'][] = 'EMOTICON_IMG_CODE_THEMED';
-	$smilies[':christmas:'][] = 'ocf_emoticons/christmas';
-	$smilies[':christmas:'][] = ':christmas:';
+	$emoticons[':christmas:'][] = 'EMOTICON_IMG_CODE_THEMED';
+	$emoticons[':christmas:'][] = 'ocf_emoticons/christmas';
+	$emoticons[':christmas:'][] = ':christmas:';
 
-	return $smilies;
+	return $emoticons;
 }
 
 /**
@@ -596,13 +595,13 @@ function placeholder_avatar()
  */
 function placeholder_emoticon_chooser()
 {
-		$em=new ocp_tempcode();
-		foreach (placeholder_emoticons() as $emo)
-		{
-			$code=$emo[2];
-			$em->attach(do_lorem_template('EMOTICON_CLICK_CODE',array('_GUID'=>'93968e9ff0308fff92d1d45e433557e2','FIELD_NAME'=>'post','CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
-		}
-		return $em;
+	$em=new ocp_tempcode();
+	foreach (placeholder_emoticons() as $emo)
+	{
+		$code=$emo[2];
+		$em->attach(do_lorem_template('EMOTICON_CLICK_CODE',array('_GUID'=>'93968e9ff0308fff92d1d45e433557e2','FIELD_NAME'=>'post','CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
+	}
+	return $em;
 }
 
 /**
@@ -628,32 +627,97 @@ function placeholder_img_code($type='')
 }
 
 /**
- * Get a results browser.
+ * Get pagination.
  *
- * @return tempcode		Results browser.
+ * @return tempcode		Pagination.
  */
-function placeholder_result_browser()
+function placeholder_pagination()
 {
-	$selectors=new ocp_tempcode();
-	foreach (placeholder_array(11) as $k=>$v)
+	//pagination starts
+	$selectors = new ocp_tempcode();
+	foreach (placeholder_array() as $k => $v)
 	{
-			$selectors->attach(do_lorem_template('RESULTS_BROWSER_PER_PAGE_OPTION',array('SELECTED'=>true,'VALUE'=>strval($k),'NAME'=>$v)));
+		$selectors->attach(do_lorem_template('PAGINATION_PER_PAGE_OPTION', array(
+			'SELECTED' => true,
+			'VALUE' => strval($k),
+			'NAME' => $v
+		)));
 	}
-	$per_page = do_lorem_template('RESULTS_BROWSER_PER_SCREEN',array('HIDDEN'=>'','URL'=>placeholder_url(),'MAX_NAME'=>lorem_word(),'SELECTORS'=>$selectors,'RAND'=>placeholder_random()));
+	$per_page = do_lorem_template('PAGINATION_PER_SCREEN', array(
+		'HIDDEN' => '',
+		'URL' => placeholder_url(),
+		'MAX_NAME' => 'max',
+		'SELECTORS' => $selectors
+	));
 
-	$part=new ocp_tempcode();
-	$part->attach(do_lorem_template('RESULTS_BROWSER_CONTINUE_FIRST',array('TITLE'=>lorem_phrase(),'P'=>placeholder_number(),'FIRST_URL'=>placeholder_url())));
-	$part->attach(do_lorem_template('RESULTS_BROWSER_PREVIOUS_LINK',array('TITLE'=>lorem_phrase(),'P'=>placeholder_date_raw(),'URL'=>placeholder_url())));
-	$part->attach(do_lorem_template('RESULTS_BROWSER_NEXT_LINK',array('REL'=>NULL,'TITLE'=>lorem_phrase(),'NUM_PAGES'=>placeholder_number(),'P'=>placeholder_number(),'URL'=>placeholder_url())));
-	$part->attach(do_lorem_template('RESULTS_BROWSER_CONTINUE_LAST',array('TITLE'=>lorem_phrase(),'P'=>placeholder_number(),'LAST_URL'=>placeholder_url())));
-	$pages=new ocp_tempcode();
-	foreach (placeholder_array() as $key=>$value)
+	$parts = new ocp_tempcode();
+	foreach (placeholder_array() as $k => $v)
 	{
-	   $pages->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array('SELECTED'=>false,'DISABLED'=>false,'CLASS'=>'','NAME'=>strval($key),'TEXT'=>$value)));
+		$j = $k + 1;
+		if ($k == 0)
+		{
+			$parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER', array(
+				'P' => strval($j)
+			)));
+		} else
+		{
+			$parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER_LINK', array(
+				'P' => strval($j),
+				'URL' => placeholder_url(),
+				'TITLE' => lorem_phrase()
+			)));
+		}
 	}
-	$part->attach(do_lorem_template('RESULTS_BROWSER_LIST_PAGES',array('URL'=>placeholder_url(),'RAND'=>placeholder_random(),'HIDDEN'=>'','START_NAME'=>lorem_word(),'LIST'=>$pages)));
+	$first=do_lorem_template('PAGINATION_CONTINUE_FIRST', array(
+		'TITLE' => lorem_phrase(),
+		'P' => placeholder_number(),
+		'FIRST_URL' => placeholder_url()
+	));
+	$previous=do_lorem_template('PAGINATION_PREVIOUS_LINK', array(
+		'TITLE' => lorem_phrase(),
+		'P' => placeholder_date_raw(),
+		'URL' => placeholder_url()
+	));
+	$previous->attach(do_lorem_template('PAGINATION_PREVIOUS', array(
+		'TITLE' => lorem_phrase(),
+		'P' => placeholder_date_raw(),
+	)));
+	$next=do_lorem_template('PAGINATION_NEXT_LINK', array(
+		'REL' => NULL,
+		'TITLE' => lorem_phrase(),
+		'NUM_PAGES' => placeholder_number(),
+		'P' => placeholder_number(),
+		'URL' => placeholder_url()
+	));
+	$next->attach(do_lorem_template('PAGINATION_NEXT', array(
+		'TITLE' => lorem_phrase(),
+		'P' => placeholder_date_raw(),
+	)));
+	$continues=do_lorem_template('PAGINATION_CONTINUE', array());
+	$last=do_lorem_template('PAGINATION_CONTINUE_LAST', array(
+		'TITLE' => lorem_phrase(),
+		'P' => placeholder_number(),
+		'LAST_URL' => placeholder_url()
+	));
+	$pages_list=do_lorem_template('PAGINATION_LIST_PAGES', array(
+		'URL' => placeholder_url(),
+		'HIDDEN' => '',
+		'START_NAME' => 'start',
+		'LIST' => placeholder_options()
+	));
 
-	return do_lorem_template('RESULTS_BROWSER_WRAP',array('TEXT_ID'=>lorem_phrase(),'PER_PAGE'=>$per_page,'PART'=>$part));
+	return do_lorem_template('PAGINATION_WRAP', array(
+		'TEXT_ID' => lorem_phrase(),
+		'PER_PAGE' => $per_page,
+		'PREVIOUS' => $previous,
+		'CONTINUES_LEFT' => $continues,
+		'CONTINUES_RIGHT' => $continues,
+		'NEXT' => $next,
+		'PARTS' => $parts,
+		'FIRST' => $first,
+		'LAST' => $last,
+		'PAGES_LIST' => $pages_list,
+	));
 }
 
 /**
@@ -714,8 +778,6 @@ function find_all_previews__by_template()
 
 			foreach ($previews as $tpl=>$function)
 			{
-				if (is_array($function)) continue; // TODO: we should not have this anymore
-
 				$all_previews[$tpl]=array($hook,'tpl_preview__'.$function);
 			}
 		}
@@ -809,7 +871,7 @@ function render_screen_preview($template,$hook,$function)
 	}
 	if (is_plain_text_template($temp_name))
 	{
-		@header('Content-type: text/plain');
+		//@header('Content-type: text/plain');		Let it show with WITH_WHITESPACE
 		$text=true;
 	} else
 	{
@@ -819,7 +881,7 @@ function render_screen_preview($template,$hook,$function)
 	// Render preview
 	$previews=call_user_func(array($ob,$function));
 
-	if ($text) $previews[0]=do_template('WITH_WHITESPACE',array('CONTENT'=>$previews[0]));
+	if ($text) $previews[0]=do_template('WITH_WHITESPACE',array('_GUID'=>'bcc1c95427d7f70524501955ba046d56','CONTENT'=>$previews[0]));
 	$tmp = substr($function, 13);
 
 	if (($complete_html) && (get_page_name()=='admin_themes'))
@@ -851,10 +913,10 @@ function get_text_templates()
 		'PREVIEW_SCRIPT_CODE',
 		'QUICK_JS_LOADER',
 		'TRACKBACK_XML_WRAPPER',
-		'handle_conflict_resolution',
-		'AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',
+		'HANDLE_CONFLICT_RESOLUTION',
 		'TRACKBACK_XML',
 		'POLL_RSS_SUMMARY',
+		'WYSIWYG_SETTINGS',
 	);
 	return $text_templates;
 }
@@ -867,20 +929,20 @@ function get_text_templates()
  */
 function is_plain_text_template($temp_name)
 {
-	return ( substr($temp_name,0,5) == 'MAIL_' ||
-			substr($temp_name,0,6) == 'PLAIN_' ||
-			substr($temp_name,0,11) == 'JAVASCRIPT_' && $temp_name!= 'JAVASCRIPT_NEED' && $temp_name!= 'JAVASCRIPT_NEED_INLINE' ||
-			$temp_name == 'JAVASCRIPT.tpl' ||
-			substr($temp_name,-9) === '_FCOMCODE' ||
-			substr($temp_name,-5) === '_MAIL' ||
-			substr($temp_name,-13) === '_FCOMCODEPAGE' ||
-			substr($temp_name,0,14)=='TRACKBACK_XML_' ||
-			$temp_name=='NEWSLETTER_DEFAULT' ||
-			$temp_name=='OPENSEARCH' ||
-			substr($temp_name,0,5)=='OPML_' ||
-			substr($temp_name,0,5)=='ATOM_' || substr($temp_name,0,4)=='RSS_' ||
-			in_array($temp_name, get_text_templates())
-		);
+	return (
+		substr($temp_name,0,5) == 'MAIL_' ||
+		substr($temp_name,0,11) == 'JAVASCRIPT_' && $temp_name!= 'JAVASCRIPT_NEED' && $temp_name!= 'JAVASCRIPT_NEED_INLINE' ||
+		$temp_name == 'JAVASCRIPT.tpl' ||
+		substr($temp_name,-9) === '_FCOMCODE' ||
+		substr($temp_name,-5) === '_MAIL' ||
+		substr($temp_name,-13) === '_FCOMCODEPAGE' ||
+		substr($temp_name,0,14)=='TRACKBACK_XML_' ||
+		$temp_name=='OPENSEARCH' ||
+		$temp_name=='WYSIWYG_SETTINGS' ||
+		substr($temp_name,0,5)=='OPML_' ||
+		substr($temp_name,0,5)=='ATOM_' || substr($temp_name,0,4)=='RSS_' ||
+		in_array($temp_name, get_text_templates())
+	);
 }
 
 /**
@@ -892,12 +954,12 @@ function is_plain_text_template($temp_name)
  */
 function is_full_screen_template($temp_name=NULL,$tempcode=NULL)
 {
-	if($temp_name===NULL)
+	if ($temp_name===NULL)
 	{
 		$pos=strpos($tempcode->evaluate(),'<html');
 		return ($pos!==false) && ($pos<400);
 	}
 
-	return ($temp_name=='HEADER' || $temp_name=='FOOTER' || $temp_name=='GLOBAL' || $temp_name=='RESTORE_WRAP' || $temp_name=='BASIC_HTML_WRAP' || $temp_name=='STYLED_HTML_WRAP' || $temp_name=='MAIL' || $temp_name=='CHAT_LOGS_SCREEN' || $temp_name=='POPUP_HTML_WRAP');
+	return ($temp_name=='HEADER' || $temp_name=='FOOTER' || $temp_name=='GLOBAL' || $temp_name=='RESTORE_HTML_WRAP' || $temp_name=='BASIC_HTML_WRAP' || $temp_name=='STYLED_HTML_WRAP' || $temp_name=='MAIL');
 }
 

@@ -145,6 +145,7 @@ class Module_admin_import
 		require_code('ocf_general_action2');
 		require_code('ocf_forums_action2');
 		require_code('ocf_topics_action2');
+		require_css('importing');
 
 		// Decide what we're doing
 		$type=get_param('type','misc');
@@ -167,7 +168,7 @@ class Module_admin_import
 	 */
 	function choose_importer()
 	{
-		$title=get_page_title('IMPORT');
+		$title=get_screen_title('IMPORT');
 
 		$hooks=new ocp_tempcode();
 		$_hooks=find_all_hooks('modules','admin_import');
@@ -200,7 +201,7 @@ class Module_admin_import
 	 */
 	function choose_session()
 	{
-		$title=get_page_title('IMPORT');
+		$title=get_screen_title('IMPORT');
 
 		/* Codes to detect redirect hooks for import */
 		$importer=filter_naughty(get_param('importer'));
@@ -250,7 +251,7 @@ class Module_admin_import
 	 */
 	function choose_session2()
 	{
-		$title=get_page_title('IMPORT');
+		$title=get_screen_title('IMPORT');
 
 		/* Three cases:
 			  1) We are continuing (therefore do nothing)
@@ -342,7 +343,7 @@ class Module_admin_import
 	 */
 	function choose_actions($extra='')
 	{
-		$title=get_page_title('IMPORT');
+		$title=get_screen_title('IMPORT');
 
 		$session=either_param_integer('session',get_session_id());
 		$importer=filter_naughty(get_param('importer'));
@@ -459,7 +460,7 @@ class Module_admin_import
 	 */
 	/*function advanced_choose_actions()
 	{
-		$title=get_page_title('IMPORT');
+		$title=get_screen_title('IMPORT');
 
 		$session=either_param_integer('session',get_session_id());
 		$importer=filter_naughty(get_param('importer'));
@@ -479,7 +480,7 @@ class Module_admin_import
 		require_code('form_templates');
 
 		// Selector for the content to import
-		$javascript='standardAlternateFields(\'import_all\',\'import_items\',NULL,false);';
+		$javascript='standard_alternate_fields([\'import_all\',\'import_items\'],true);';
 		$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_ALL'),do_lang_tempcode('DESCRIPTION_IMPORT_ALL'),'import_all',true));
 		$fields->attach($importer_object->get_import_items_selector($content_type)); // Returns a form field called import_items
 
@@ -534,7 +535,7 @@ class Module_admin_import
 
 		require_code('database_action');
 
-		$title=get_page_title('IMPORT');
+		$title=get_screen_title('IMPORT');
 
 		$importer=get_param('importer');
 		require_code('hooks/modules/admin_import/'.filter_naughty_harsh($importer));

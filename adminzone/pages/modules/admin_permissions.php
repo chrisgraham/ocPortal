@@ -235,7 +235,7 @@ class Module_admin_permissions
 	 */
 	function get_entry_points()
 	{
-		$ret=array('page'=>'PAGE_ACCESS','specific'=>'SPECIFIC_PERMISSIONS');
+		$ret=array('page'=>'PAGE_ACCESS','specific'=>'PRIVILEGES');
 		if (addon_installed('match_key_permissions')) $ret['keys']='MATCH_KEYS';
 		return $ret;
 	}
@@ -250,6 +250,7 @@ class Module_admin_permissions
 		if (function_exists('set_time_limit')) @set_time_limit(60);
 
 		require_lang('permissions');
+		require_css('permissions_editor');
 
 		$type=get_param('type','misc');
 
@@ -278,7 +279,7 @@ class Module_admin_permissions
 	{
 		require_lang('security');
 
-		$title=get_page_title('ABSORB_PERMISSIONS');
+		$title=get_screen_title('ABSORB_PERMISSIONS');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/privileges';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
@@ -328,7 +329,7 @@ class Module_admin_permissions
 		$from=post_param_integer('from');
 		if ($to==$from) warn_exit(do_lang_tempcode('MERGE_SAME'));
 
-		$title=get_page_title('ABSORB_PERMISSIONS');
+		$title=get_screen_title('ABSORB_PERMISSIONS');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/privileges';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
@@ -352,7 +353,7 @@ class Module_admin_permissions
 	 */
 	function tree_editor()
 	{
-		$title=get_page_title('PERMISSIONS_TREE');
+		$title=get_screen_title('PERMISSIONS_TREE');
 
 		if (!has_js())
 		{
@@ -367,6 +368,8 @@ class Module_admin_permissions
 		require_javascript('javascript_tree_list');
 		require_javascript('javascript_more');
 		require_code('form_templates');
+
+		require_css('sitetree_editor');
 
 		$groups=new ocp_tempcode();
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
@@ -443,7 +446,7 @@ class Module_admin_permissions
 	/**
 	 * The UI to choose a zone to edit permissions for pages in.
 	 *
-	 * @param  tempcode		The title to use (output of get_page_title)
+	 * @param  tempcode		The title to use (output of get_screen_title)
 	 * @return tempcode		The UI
 	 */
 	function choose_zone($title)
@@ -473,7 +476,7 @@ class Module_admin_permissions
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/matchkeysecurity';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
 
-		$title=get_page_title('PAGE_MATCH_KEY_ACCESS');
+		$title=get_screen_title('PAGE_MATCH_KEY_ACCESS');
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_keys'),'_SELF');
 
@@ -544,7 +547,7 @@ class Module_admin_permissions
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/matchkeysecurity';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
 
-		$title=get_page_title('PAGE_MATCH_KEY_ACCESS');
+		$title=get_screen_title('PAGE_MATCH_KEY_ACCESS');
 
 		// Delete to cleanup
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_page_access WHERE page_name LIKE \''.db_encode_like('%:%').'\'');
@@ -615,7 +618,7 @@ class Module_admin_permissions
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/permissionstree';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
 
-		$title=get_page_title('PAGE_ACCESS');
+		$title=get_screen_title('PAGE_ACCESS');
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_page'),'_SELF');
 
@@ -686,7 +689,7 @@ class Module_admin_permissions
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/permissionstree';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
 
-		$title=get_page_title('PAGE_ACCESS');
+		$title=get_screen_title('PAGE_ACCESS');
 
 		// Delete to cleanup
 		$zone=post_param('zone');
@@ -721,7 +724,7 @@ class Module_admin_permissions
 
 		decache('main_sitemap');
 		$GLOBALS['SITE_DB']->query_delete('cache');
-		if (function_exists('persistant_cache_empty')) persistant_cache_empty();
+		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'page'),'_SELF');
@@ -776,7 +779,7 @@ class Module_admin_permissions
 		require_all_lang();
 		require_code('zones2');
 
-		$title=get_page_title('SPECIFIC_PERMISSIONS');
+		$title=get_screen_title('PRIVILEGES');
 
 		$p_section=get_param('id',NULL);
 		if ((is_null($p_section)) || ($p_section==''))
@@ -791,17 +794,30 @@ class Module_admin_permissions
 
 			$_sections=$this->_get_ordered_sections();
 			$sections=new ocp_tempcode();
+			$sections_common=new ocp_tempcode();
+			$sections_uncommon=new ocp_tempcode();
+			$doing_uncommon=false;
 			foreach ($_sections as $s)
 			{
 				if (is_null($s))
 				{
-					$sections->attach(form_input_list_entry('',false,'',false,true));
+					$doing_uncommon=true;
 				} else
 				{
 					if (!is_null($s['trans']))
-						$sections->attach(form_input_list_entry($s['p_section'],false,$s['trans']));
+					{
+						if ($doing_uncommon)
+						{
+							$sections_uncommon->attach(form_input_list_entry($s['p_section'],false,$s['trans']));
+						} else
+						{
+							$sections_common->attach(form_input_list_entry($s['p_section'],false,$s['trans']));
+						}
+					}
 				}
 			}
+			$sections->attach(form_input_list_group(do_lang_tempcode('MOST_COMMON'),$sections_common));
+			$sections->attach(form_input_list_group(do_lang_tempcode('OTHER'),$sections_uncommon));
 			$fields->attach(form_input_list(do_lang_tempcode('SECTION'),'','id',$sections,NULL,true));
 
 			$post_url=get_self_url(false,false,NULL,false,true);
@@ -809,7 +825,7 @@ class Module_admin_permissions
 			return do_template('FORM_SCREEN',array('_GUID'=>'e5d457a49a76706afebc92da3d846e74','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
 		}
 
-		$title=get_page_title('_SPECIFIC_PERMISSIONS',true,array(do_lang_tempcode($p_section)));
+		$title=get_screen_title('_PRIVILEGES',true,array(do_lang_tempcode($p_section)));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_specific','id'=>$p_section),'_SELF');
 
@@ -983,7 +999,7 @@ class Module_admin_permissions
 
 		if ((count($_POST)==0) && (strtolower(ocp_srv('REQUEST_METHOD'))!='post')) warn_exit(do_lang_tempcode('PERMISSION_TRAGEDY_PREVENTED'));
 
-		$title=get_page_title('SPECIFIC_PERMISSIONS');
+		$title=get_screen_title('PRIVILEGES');
 
 		$p_section=get_param('id');
 		$_sections=$this->_get_ordered_sections();
@@ -1027,7 +1043,7 @@ class Module_admin_permissions
 
 		decache('main_sitemap');
 		$GLOBALS['SITE_DB']->query_delete('cache');
-		if (function_exists('persistant_cache_empty')) persistant_cache_empty();
+		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'specific','id'=>$next_section),'_SELF');

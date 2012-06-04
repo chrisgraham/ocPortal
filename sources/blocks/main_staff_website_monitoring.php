@@ -80,6 +80,7 @@ class Block_main_staff_website_monitoring
 			));
 		}
 	}
+
 	/**
 	 * Function to find Alexa details of the site.
 	 *
@@ -113,7 +114,6 @@ class Block_main_staff_website_monitoring
 
 		return array($rank,$links,$speed);
 	}
-
 
 	//convert a string to a 32-bit integer
 	function StrToNum($str, $check, $magic)
@@ -157,7 +157,7 @@ class Block_main_staff_website_monitoring
 		return ($t1 | $t2);
 	}
 
-	//genearate a checksum for the hash string
+	//generate a checksum for the hash string
 	function CheckHash($hashnum)
 	{
 		$check_byte = 0;
@@ -242,17 +242,17 @@ class Block_main_staff_website_monitoring
 	 */
 	function run($map)
 	{
-		define('GOOGLE_MAGIC', 0xE6359A60);
+		define('GOOGLE_MAGIC',0xE6359A60);
 
-		$links = post_param('watchlistsites',NULL);
-		if(!is_null($links))
+		$links=post_param('website_monitoring_list_edit',NULL);
+		if (!is_null($links))
 		{
 			$GLOBALS['SITE_DB']->query_delete('sitewatchlist');
-			$items = explode("\n", $links);
-			foreach($items as $i)
+			$items=explode("\n", $links);
+			foreach ($items as $i)
 			{
-				$q = trim($i);
-				if(!empty($q))
+				$q=trim($i);
+				if (!empty($q))
 				{
 					$bits=explode('=',$q);
 					if (count($bits)>=2)
@@ -294,26 +294,26 @@ class Block_main_staff_website_monitoring
 			}
 		}
 
-		$rows = $GLOBALS['SITE_DB']->query_select('sitewatchlist');
+		$rows=$GLOBALS['SITE_DB']->query_select('sitewatchlist');
 
 		$sitesbeingwatched = array();
 		$sitegriddata=array();
-		if(count($rows) > 0)
+		if (count($rows)>0)
 		{
-			foreach($rows as $r)
+			foreach ($rows as $r)
 			{
-				$alex = $this->getAlexaRank(($r['siteurl']));
+				$alex=$this->getAlexaRank(($r['siteurl']));
 				$sitesbeingwatched[$r['siteurl']] = $r['site_name'];
-				$googleranking = integer_format(intval($this->getPageRank($r['siteurl'])));
-				$alexaranking = $alex[0];
-				$alexatraffic = $alex[1];
+				$googleranking=integer_format(intval($this->getPageRank($r['siteurl'])));
+				$alexaranking=$alex[0];
+				$alexatraffic=$alex[1];
 
 				$sitegriddata[] = array(
-					'URL' => $r['siteurl'],
-					'GRANK' => $googleranking,
-					'ALEXAR' => $alexaranking,
-					'ALEXAT' => $alexatraffic,
-					'SITETITLE' => $r['site_name'],
+					'URL'=>$r['siteurl'],
+					'GRANK'=>$googleranking,
+					'ALEXAR'=>$alexaranking,
+					'ALEXAT'=>$alexatraffic,
+					'SITETITLE'=>$r['site_name'],
 				);
 			}
 		}

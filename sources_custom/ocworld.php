@@ -56,7 +56,7 @@ function ocw_refresh_with_message($message,$msg_type='inform')
 
 	@ob_end_clean();
 
-	$title=get_page_title('MESSAGE');
+	$title=get_screen_title('MESSAGE');
 	$tpl=redirect_screen($title,$url,$message,false,$msg_type);
 
 	$echo=globalise($tpl,NULL,'',true);

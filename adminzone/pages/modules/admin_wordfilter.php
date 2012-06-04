@@ -121,7 +121,7 @@ class Module_admin_wordfilter
 	 */
 	function word_filter_interface()
 	{
-		$title=get_page_title('MANAGE_WORDFILTER');
+		$title=get_screen_title('MANAGE_WORDFILTER');
 
 		require_code('form_templates');
 		$list=new ocp_tempcode();
@@ -160,7 +160,7 @@ class Module_admin_wordfilter
 	 */
 	function add_word()
 	{
-		$title=get_page_title('ADD_WORDFILTER');
+		$title=get_screen_title('ADD_WORDFILTER');
 
 		$word=post_param('word_2');
 		$this->_add_word($word,post_param('replacement'),post_param_integer('substr',0));
@@ -194,7 +194,7 @@ class Module_admin_wordfilter
 	 */
 	function remove_word()
 	{
-		$title=get_page_title('DELETE_WORDFILTER');
+		$title=get_screen_title('DELETE_WORDFILTER');
 
 		$this->_remove_word(post_param('word'));
 

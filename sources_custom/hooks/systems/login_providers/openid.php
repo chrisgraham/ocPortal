@@ -135,6 +135,16 @@ class Hook_login_provider_openid
 								$language=$attributes['pref/language'];
 						}
 
+						// Check RBL's/stopforumspam
+						$spam_check_level=get_option('spam_check_level',true);
+						if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') || ($spam_check_level==='JOINING'))
+						{
+							require_code('antispam');
+							check_rbls();
+							check_stopforumspam($username);
+						}
+
+						// Actually add member
 						require_code('config2');
 						set_option('maximum_password_length','1000');
 						$member=ocf_member_external_linker($username,$openid->identity,'openid',false,$email,$dob_day,$dob_month,$dob_year,NULL,$language);

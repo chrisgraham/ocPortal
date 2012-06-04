@@ -62,7 +62,6 @@ class Block_side_news
 	{
 		require_lang('news');
 		require_css('news');
-		require_css('side_blocks');
 
 		$max=array_key_exists('param',$map)?intval($map['param']):5;
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('news');

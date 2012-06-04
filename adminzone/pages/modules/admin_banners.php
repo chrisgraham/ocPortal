@@ -74,7 +74,7 @@ class Module_admin_banners
 	 */
 	function banner_statistics()
 	{
-		$title=get_page_title('BANNER_STATISTICS');
+		$title=get_screen_title('BANNER_STATISTICS');
 
 		check_specific_permission('view_anyones_banner_stats');
 

@@ -124,13 +124,13 @@ class Block_main_staff_links
 	{
 		require_lang('staff_checklist');
 
-		$newdata=post_param('stafflinksedit', NULL);
-		if(!is_null($newdata))
+		$newdata=post_param('staff_links_edit', NULL);
+		if (!is_null($newdata))
 		{
 			$items=explode("\n", $newdata);
 			$GLOBALS['SITE_DB']->query_delete('stafflinks');
 
-			foreach($items as $i)
+			foreach ($items as $i)
 			{
 				$q=trim($i);
 				if(!empty($q))
@@ -185,24 +185,24 @@ class Block_main_staff_links
 		}
 
 		$rows=$GLOBALS['SITE_DB']->query_select('stafflinks',array('*'));
-		$formattedstafflinks=array();
-		$unformattedstafflinks=array();
+		$formatted_staff_links=array();
+		$unformatted_staff_links=array();
 		foreach($rows as $r)
 		{
 			if ($r['link_title']=='') $r['link_title']=$r['link_desc'];
 			if (strlen($r['link_title'])>strlen($r['link_desc'])) $r['link_title']=$r['link_desc'];
 
-			$formattedstafflinks[]=array(
+			$formatted_staff_links[]=array(
 				'URL'=>$r['link'],
 				'TITLE'=>$r['link_title'],
 				'DESC'=>($r['link_title']==$r['link_desc'])?'':$r['link_desc'],
 			);
-			$unformattedstafflinks[]=array('LINKS'=>$r['link'].'='.$r['link_desc']);
+			$unformatted_staff_links[]=array('LINKS'=>$r['link'].'='.$r['link_desc']);
 		}
 
 		$map_comcode='';
 		foreach ($map as $key=>$val) $map_comcode.=' '.$key.'="'.addslashes($val).'"';
-		return do_template('BLOCK_MAIN_STAFF_LINKS',array('URL'=>get_self_url(),'BLOCK_NAME'=>'main_staff_links','MAP'=>$map_comcode,'FORMATTEDLINKS'=>$formattedstafflinks,'UNFORMATTEDLINKS'=>$unformattedstafflinks));
+		return do_template('BLOCK_MAIN_STAFF_LINKS',array('URL'=>get_self_url(),'BLOCK_NAME'=>'main_staff_links','MAP'=>$map_comcode,'FORMATTED_LINKS'=>$formatted_staff_links,'UNFORMATTED_LINKS'=>$unformatted_staff_links));
 	}
 
 }

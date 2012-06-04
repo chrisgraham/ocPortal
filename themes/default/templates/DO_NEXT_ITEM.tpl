@@ -4,32 +4,32 @@
 	<tr>
 {+END}
 {$SET,rand_donextitem,{$RAND}}
-<td id="donext_item_{$GET*,rand_donextitem}" class="do_next_item" onclick="var as=this.getElementsByTagName('a'); var a=as[as.length-1]; click_link(a);" onkeypress="if (enter_pressed(event)) this.onclick(event);" onmouseout="this.className='do_next_item'; if (typeof window.doc_onmouseout!='undefined') doc_onmouseout();" onmouseover="this.className='do_next_item_hover'; if (typeof window.doc_onmouseover!='undefined') doc_onmouseover('{I2}');">
+<td id="donext_item_{$GET,rand_donextitem}" class="do_next_item" onclick="var as=this.getElementsByTagName('a'); var a=as[as.length-1]; click_link(a);" onkeypress="if (enter_pressed(event)) this.onclick(event);" onmouseout="this.className='do_next_item'; if (typeof window.doc_onmouseout!='undefined') doc_onmouseout();" onmouseover="this.className='do_next_item_hover'; if (typeof window.doc_onmouseover!='undefined') doc_onmouseover('{I2}');">
 	{+START,IF_NON_EMPTY,{DOC}}<div id="doc_{I2}" style="display: none">{DOC}</div>{+END}
 
 	<div>
 		{+START,IF_EMPTY,{WARNING}}
-			<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancelBubbling(event);" href="{LINK*}"><img class="do_next_icon" title="" alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
+			<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{LINK*}"><img class="do_next_icon" alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
 		{+END}
 		{+START,IF_NON_EMPTY,{WARNING}}
-			<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancelBubbling(event); var t=this; window.fauxmodal_confirm('{WARNING*;}',function(answer) { if (answer) click_link(t); }); return false;" href="{LINK*}"><img class="do_next_icon" title="" alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
+			<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event); var t=this; window.fauxmodal_confirm('{WARNING*;}',function(answer) { if (answer) click_link(t); }); return false;" href="{LINK*}"><img class="do_next_icon" alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
 		{+END}
 	</div>
 
 	<div>
-		<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancelBubbling(event);" href="{LINK*}">{DESCRIPTION*}</a>
+		<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{LINK*}">{DESCRIPTION*}</a>
 	</div>
 
 	{+START,IF_PASSED,AUTO_ADD}
 		<script type="text/javascript">// <![CDATA[
-			addEventListenerAbstract(window,'load',function() {
-				var as=document.getElementById('donext_item_{$GET*,rand_donextitem}').getElementsByTagName('a');
+			add_event_listener_abstract(window,'load',function() {
+				var as=document.getElementById('donext_item_{$GET,rand_donextitem}').getElementsByTagName('a');
 				for (var i=0;i<as.length;i++)
 				{
 					as[i].onclick=function(_this) {
 						return function(event) {
 							if (typeof event.preventDefault!='undefined') event.preventDefault();
-							cancelBubbling(event);
+							cancel_bubbling(event);
 							test=window.fauxmodal_confirm(
 								'{!KEEP_ADDING_QUESTION;}',
 								function(test)

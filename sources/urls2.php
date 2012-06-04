@@ -398,18 +398,14 @@ function autogenerate_new_url_moniker($ob_info,$url_parts)
 	$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 	$select=array($ob_info['id_field']);
-	if ((substr($ob_info['title_field'],0,5)!='EVAL:') && (substr($ob_info['title_field'],0,5)!='CALL:')) $select[]=$ob_info['title_field'];
+	if (substr($ob_info['title_field'],0,5)!='CALL:') $select[]=$ob_info['title_field'];
 	if (!is_null($ob_info['parent_category_field'])) $select[]=$ob_info['parent_category_field'];
 	$db=((substr($ob_info['table'],0,2)!='f_') || (get_forum_type()=='none'))?$GLOBALS['SITE_DB']:$GLOBALS['FORUM_DB'];
 	$_moniker_src=$db->query_select($ob_info['table'],$select,array($ob_info['id_field']=>$ob_info['id_field_numeric']?intval($url_parts['id']):$url_parts['id']));
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 	if (!array_key_exists(0,$_moniker_src)) return NULL; // been deleted?
 
-	if (substr($ob_info['title_field'],0,5)=='EVAL:') // Deprecated
-	{
-		$moniker_src=eval(trim(substr($ob_info['title_field'],5)));
-	}
-	elseif (substr($ob_info['title_field'],0,5)=='CALL:')
+	if (substr($ob_info['title_field'],0,5)=='CALL:')
 	{
 		$moniker_src=call_user_func(trim(substr($ob_info['title_field'],5)),$url_parts);
 	} else
@@ -577,7 +573,7 @@ function _give_moniker_scope($page,$type,$id,$main)
 		$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		$select=array($ob_info['id_field']);
-		if ((substr($ob_info['title_field'],0,5)!='EVAL:') && (substr($ob_info['title_field'],0,5)!='CALL:')) $select[]=$ob_info['title_field'];
+		if (substr($ob_info['title_field'],0,5)!='CALL:') $select[]=$ob_info['title_field'];
 		if (!is_null($ob_info['parent_category_field'])) $select[]=$ob_info['parent_category_field'];
 		$id_flat=mixed();
 		if ($ob_info['id_field_numeric'])

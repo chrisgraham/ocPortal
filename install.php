@@ -68,8 +68,8 @@ $CACHE_DB=array();
 global $CURRENT_SHARE_USER;
 $CURRENT_SHARE_USER=NULL;
 
-$GLOBALS['DEBUG_MODE']=false;
-$GLOBALS['SEMI_DEBUG_MODE']=true;
+$GLOBALS['DEV_MODE']=false;
+$GLOBALS['SEMI_DEV_MODE']=true;
 
 @ob_end_clean();
 
@@ -81,7 +81,7 @@ if (!array_key_exists('type',$_GET))
 	if (count($_GET)==0)
 		header('Content-type: text/html');
 
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10);
+	echo '<!DOCTYPE html>'.chr(10);
 	if (count($_GET)==0) // Special code to skip checks if need-be. The XHTML here is invalid but unfortunately it does need to be.
 	{
 		echo '<script type="text/javascript">// <![CDATA[
@@ -222,7 +222,7 @@ $logo_url='install.php?type=logo';
 if (is_null($DEFAULT_FORUM)) $DEFAULT_FORUM='ocf'; // Shouldn't happen, but who knows
 require_code('tempcode_compiler');
 $css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-$out_final=do_template('INSTALLER_WRAP',array('_GUID'=>'29aa056c05fa360b72dbb01c46608c4b','CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>$DEFAULT_FORUM,'PASSWORD_PROMPT'=>$password_prompt,'CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$content,'VERSION'=>$VERSION));
+$out_final=do_template('INSTALLER_HTML_WRAP',array('_GUID'=>'29aa056c05fa360b72dbb01c46608c4b','CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>$DEFAULT_FORUM,'PASSWORD_PROMPT'=>$password_prompt,'CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$content,'VERSION'=>$VERSION));
 unset($css_nocache);
 unset($content);
 $out_final->evaluate_echo();
@@ -468,8 +468,6 @@ END;
 			warn_exit(do_lang_tempcode('CORRUPT_FILES_CROP'));
 		if ((!file_exists(get_file_base().'/themes/default/templates/ANCHOR.tpl')) && (file_exists(get_file_base().'/themes/default/templates/anchor.tpl')))
 			warn_exit(do_lang_tempcode('CORRUPT_FILES_LOWERCASE'));
-/*		if (!file_exists(get_file_base().'/themes/default/templates/ADDITIONAL.tpl')) Redundant now
-			warn_exit(do_lang_tempcode('MISSING_FILES'));*/
 	}
 
 	if (file_exists('lang_custom/langs.ini')) $lookup=better_parse_ini_file(get_custom_file_base().'/lang_custom/langs.ini');
@@ -908,7 +906,7 @@ function step_4()
 	if (($use_msn==0) && ($forum_type!='ocf')) // Merge into one set of options
 	{
 		$forum_options->attach($options);
-		$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('HIDDEN'=>$hidden,'TITLE'=>$forum_title,'TEXT'=>$forum_text,'OPTIONS'=>$forum_options)));
+		$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'48a122b54d68d9893533ece7237ea5e0','HIDDEN'=>$hidden,'TITLE'=>$forum_title,'TEXT'=>$forum_text,'OPTIONS'=>$forum_options)));
 	} else
 	{
 		$title=do_lang_tempcode('OCPORTAL_SETTINGS');
@@ -1931,8 +1929,8 @@ function step_10()
 		$final->attach(do_lang_tempcode('FINAL_INSTRUCTIONS_A_SUP'));
 	}
 
-	// Empty persistant cache
-	$path=get_custom_file_base().'/persistant_cache/';
+	// Empty persistent cache
+	$path=get_custom_file_base().'/persistent_cache/';
 	$_dir=@opendir($path);
 	if ($_dir!==false)
 	{
@@ -2061,7 +2059,7 @@ function require_code($codename)
 			$path=$FILE_BASE.((strpos($codename,'.php')===false)?('/sources_custom/'.$codename.'.php'):'/'.str_replace('_custom','',$codename));
 		if (!file_exists($path))
 		{
-			exit('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.chr(10).'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal installer startup error</h1><p>A required installation file, sources/'.$codename.'.php, could not be located. This is almost always due to an incomplete upload of the ocPortal manual installation package, so please check all files are uploaded correctly.</p><p>Only once all ocPortal files are in place can the installer can function. Please note that we have a quick installer package which requires uploading only two files, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
+			exit('<!DOCTYPE html>'.chr(10).'<html lang="EN"><head><title>Critical startup error</title></head><body><h1>ocPortal installer startup error</h1><p>A required installation file, sources/'.$codename.'.php, could not be located. This is almost always due to an incomplete upload of the ocPortal manual installation package, so please check all files are uploaded correctly.</p><p>Only once all ocPortal files are in place can the installer can function. Please note that we have a quick installer package which requires uploading only two files, so you might consider using that instead.</p><p>ocProducts maintains full documentation for all procedures and tools, especially those for installation. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p><hr /><p style="font-size: 0.8em">ocPortal is a website engine created by ocProducts.</p></body></html>');
 		}
 
 		require_once($path);
@@ -2181,13 +2179,13 @@ function handle_self_referencing_embedment()
 		if ($type=='logo')
 		{
 			header('Content-type: image/png');
-			if (!file_exists(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/trimmed-logo.png'))
+			if (!file_exists(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/trimmed_logo.png'))
 			{
-				$out=file_array_get('themes/default/images/'.get_site_default_lang().'/logo/trimmed-logo.png');
+				$out=file_array_get('themes/default/images/'.get_site_default_lang().'/logo/trimmed_logo.png');
 				echo $out;
 			} else
 			{
-				print(file_get_contents(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/trimmed-logo.png'));
+				print(file_get_contents(get_file_base().'/themes/default/images/'.get_site_default_lang().'/logo/trimmed_logo.png'));
 				exit();
 			}
 
@@ -2238,21 +2236,31 @@ function handle_self_referencing_embedment()
 
 			exit();
 		}
-		if ($type=='css')
+		if (($type=='css') || ($type=='css_2'))
 		{
 			header('Content-Type: text/css');
-			if (!file_exists(get_file_base().'/themes/default/css/global.css'))
+
+			$output='';
+
+			$css_files=array('global','forms');
+			foreach ($css_files as $css_file)
 			{
-				$file=file_array_get('themes/default/css/global.css');
-			} else $file=file_get_contents(get_file_base().'/themes/default/css/global.css',FILE_TEXT);
-			$file=preg_replace('#\{\$IMG;?\,([^,\}\']+)\}#','install.php?type=themes/default/images/${1}.png',$file);
+				if (!file_exists(get_file_base().'/themes/default/css/'.$css_file.'.css'))
+				{
+					$file=file_array_get('themes/default/css/'.$css_file.'.css');
+				} else $file=file_get_contents(get_file_base().'/themes/default/css/'.$css_file.'.css',FILE_TEXT);
+				$file=preg_replace('#\{\$IMG;?\,([^,\}\']+)\}#','install.php?type=themes/default/images/${1}.png',$file);
 
-			require_code('tempcode_compiler');
-			$css=template_to_tempcode($file,0,false,'');
-			$file=$css->evaluate();
+				require_code('tempcode_compiler');
+				$css=template_to_tempcode($file,0,false,'');
+				$output.=$css->evaluate();
+			}
 
-			print($file);
-			exit();
+			if ($type=='css')
+			{
+				print($output);
+				exit();
+			}
 		}
 		if ($type=='css_2')
 		{
@@ -2266,9 +2274,9 @@ function handle_self_referencing_embedment()
 
 			require_code('tempcode_compiler');
 			$css=template_to_tempcode($file,0,false,'');
-			$file=$css->evaluate();
+			$output=$css->evaluate();
 
-			print($file);
+			print($output);
 			exit();
 		}
 
@@ -2300,8 +2308,7 @@ function make_option($nice_name,$description,$name,$value,$hidden=false,$require
 		if ((substr($name,0,3)!='db_') && ($name!='ftp_password'))
 		{
 			$input2=do_template('INSTALLER_INPUT_PASSWORD',array('_GUID'=>'0f15bfe5b58f3ca7830a48791f1a6a6d','REQUIRED'=>$_required,'NAME'=>$name.'_confirm','VALUE'=>$value));
-			$nice_name_2=do_lang_tempcode('dont_escape_trick','&raquo; ');
-			$nice_name_2->attach($nice_name);
+			$nice_name_2=do_lang_tempcode('RELATED_FIELD',$nice_name);
 			$b=do_template('INSTALLER_STEP_4_SECTION_OPTION',array('_GUID'=>'c99e7339b7ffe81318ae84953e3c03a3','NAME'=>$name,'INPUT'=>$input2,'NICE_NAME'=>$nice_name_2,'DESCRIPTION'=>do_lang_tempcode('CONFIRM_PASSWORD')));
 			$a->attach($b);
 		}
@@ -2560,7 +2567,7 @@ RewriteEngine on
 RewriteRule ^([^=]*)webdav.php/([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ - [L]
 RewriteRule ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ $1index.php\?page=$3 [L,QSA,R]
 
-# These have a specially reduced form (no need to make it too explicit that these are CEDI)
+# These have a specially reduced form (no need to make it too explicit that these are Wiki+)
 #  We shouldn't shorten them too much, or the actual zone or base url might conflict
 RewriteRule ^([^=]*)pg/s/([^\&\?]*)/index\.php$ $1index.php\?page=cedi&id=$2 [L,QSA]
 
@@ -2595,7 +2602,7 @@ RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.p
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$ $1index.php\?$4&page=$2&type=$3 [L,QSA]
 RewriteRule ^([^=]*)pg/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=$2 [L,QSA]
 
-# These have a specially reduced form (no need to make it too explicit that these are CEDI)
+# These have a specially reduced form (no need to make it too explicit that these are Wiki+)
 #  We shouldn't shorten them too much, or the actual zone or base url might conflict
 RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/s/([^\&\?]*)\.htm$ $1/index.php\?page=cedi&id=$2 [L,QSA]
 RewriteRule ^s/([^\&\?]*)\.htm$ index\.php\?page=cedi&id=$1 [L,QSA]

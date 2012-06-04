@@ -303,7 +303,7 @@ class standard_aed_module
 	/**
 	 * The do-next manager for after content management.
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?ID_TEXT		The ID of whatever we are working with (NULL: deleted)
 	 * @return tempcode		The UI
@@ -377,7 +377,7 @@ class standard_aed_module
 	/**
 	 * Get some XHTML for a form to choose a catalogue out of all the available ones.
 	 *
-	 * @param  tempcode		The get_page_title converted title for this page
+	 * @param  tempcode		The get_screen_title converted title for this page
 	 * @return ?tempcode		The tempcode for the catalogue chooser (NULL: already chosen)
 	 */
 	function choose_catalogue($title)
@@ -459,7 +459,7 @@ class standard_aed_module
 			}
 		}
 
-		$title=get_page_title($doing);
+		$title=get_screen_title($doing);
 
 		$test=$this->choose_catalogue($title);
 		if (!is_null($test)) return $test;
@@ -615,7 +615,7 @@ class standard_aed_module
 			}
 		}
 
-		$title=get_page_title($doing);
+		$title=get_screen_title($doing);
 
 		if (($this->second_stage_preview) && (get_param_integer('preview',0)==1))
 		{
@@ -627,6 +627,7 @@ class standard_aed_module
 
 		if (($this->user_facing) && (!is_null($this->permissions_require)))
 		{
+			inject_action_spamcheck();
 			if (!has_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
 				$_POST['validated']='0';
 		}
@@ -801,7 +802,7 @@ class standard_aed_module
 			}
 		}
 
-		$title=get_page_title($doing);
+		$title=get_screen_title($doing);
 
 		$test=$this->choose_catalogue($title);
 		if (!is_null($test)) return $test;
@@ -849,7 +850,7 @@ class standard_aed_module
 				$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_TABLE'));
 			}
 
-			return do_template('TABLE_TABLE_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>$has_ordering?do_lang_tempcode('ORDER'):NULL,'POST_URL'=>get_self_url()));
+			return do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'3a3e7cf1bef6ca31f8c992c69a80449e','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>$has_ordering?do_lang_tempcode('ORDER'):NULL,'POST_URL'=>get_self_url()));
 		} else
 		{
 			$_entries=$this->nice_get_entries();
@@ -876,7 +877,7 @@ class standard_aed_module
 		$iframe_url=NULL;
 		if (!$this->special_edit_frontend && (has_js()))
 		{
-			$iframe_url=find_script('iframe').'?zone='.get_zone_name().'&wide_high=1&opens_below=1';
+			$iframe_url=find_script('iframe').'?zone='.get_zone_name().'&opens_below=1';
 			foreach ($map as $key=>$val)
 			{
 				$iframe_url.='&'.$key.'='.urlencode(str_replace('_SELF',get_page_name(),$val));
@@ -908,7 +909,7 @@ class standard_aed_module
 			}
 		}
 
-		$title=get_page_title($doing);
+		$title=get_screen_title($doing);
 		//$submit_name=(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang($doing);
 		//if (!is_null($this->edit_submit_name)) $submit_name=$this->edit_submit_name;
 		$submit_name=do_lang_tempcode('SAVE');
@@ -1133,7 +1134,7 @@ class standard_aed_module
 				$doing=do_lang('CATALOGUE_GENERIC_EDIT_CATEGORY',escape_html($catalogue_title));
 			}
 		}
-		$title=get_page_title($doing);
+		$title=get_screen_title($doing);
 
 		if (($this->second_stage_preview) && (get_param_integer('preview',0)==1))
 		{
@@ -1193,7 +1194,7 @@ class standard_aed_module
 					$doing=do_lang('CATALOGUE_GENERIC_DELETE_CATEGORY',escape_html($catalogue_title));
 				}
 			}
-			$title=get_page_title($doing);
+			$title=get_screen_title($doing);
 
 			$test=$this->handle_confirmations($title);
 			if (!is_null($test)) return $test;

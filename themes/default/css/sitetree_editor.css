@@ -1,0 +1,65 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.tree_list__root_tree_list {
+	height: 358px;
+	overflow: auto;
+}
+
+.site_tree_left {
+	width: 50%;
+	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+}
+
+.site_tree_right {
+	float: {!en_right};
+	width: 50%;
+	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+}
+
+
+/*
+=========================
+=Permission tree editor==
+=========================
+*/
+
+.pt_editor .ajax_tree_cat_icon {
+	display: none;
+}
+
+.pte_tips {
+	font-size: 0.9em;
+}
+
+.pte_tree {
+	position: relative;
+}
+
+.pte_icon_box {
+	width: 15em;
+	position: absolute;
+	{!en_right}: 2em;
+	top: 0;
+}
+
+.pte_icon_box select {
+	width: 8em;
+}
+
+.pte_icon_box p {
+	font-size: 0.9em;
+}
+
+.pte_help_box {
+	float: {!en_right};
+	width: 24em;
+	margin-{!en_left}: 1em;
+}
+
+.pte_set_box {
+	margin-top: 1em;
+}
+

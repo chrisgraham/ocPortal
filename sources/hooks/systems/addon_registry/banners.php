@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_banners
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_banners
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,7 +72,7 @@ class Hook_addon_registry_banners
 	function get_file_list()
 	{
 		return array(
-
+			'banners.css',
 			'sources/hooks/systems/snippets/exists_banner.php',
 			'sources/hooks/systems/snippets/exists_banner_type.php',
 			'sources/hooks/systems/config_default/admin_banners.php',
@@ -125,36 +124,36 @@ class Hook_addon_registry_banners
 			'data/images/advertise_here.png',
 			'data/images/donate.png',
 			'site/pages/comcode/EN/advertise.txt',
-			'site/pages/comcode/EN/donate.txt',
+			'site/pages/comcode/EN/donate.txt'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'BANNER_PREVIEW.tpl'=>'banner_preview',
-				'BANNER_SHOW_CODE.tpl'=>'banner_show_code',
-				'BANNER_ADDED_SCREEN.tpl'=>'administrative__banner_added_screen',
-				'BLOCK_MAIN_TOPSITES.tpl'=>'block_main_topsites',
-				'BLOCK_MAIN_BANNER_WAVE_BWRAP.tpl'=>'block_main_banner_wave',
-				'BLOCK_MAIN_BANNER_WAVE.tpl'=>'block_main_banner_wave',
-				'BANNERS_NONE.tpl'=>'banners_none',
-				'BANNER_FLASH.tpl'=>'banner_flash',
-				'BANNER_IMAGE.tpl'=>'banner_image',
-				'BANNER_IFRAME.tpl'=>'banner_iframe',
-				'BANNER_TEXT.tpl'=>'banner_text',
-				'POINTSTORE_BANNERS_2.tpl'=>'pointstore_banners_2',
-				'POINTSTORE_BANNERS_UPGRADE.tpl'=>'pointstore_banners_upgrade',
-				'POINTSTORE_BANNERS_ACTIVATE.tpl'=>'pointstore_banners_activate',
-				'POINTSTORE_BANNERS_SCREEN.tpl'=>'pointstore_banners_screen',
-				'BANNER_VIEW_SCREEN.tpl'=>'administrative__banner_view_screen',
-				);
+			'BANNER_PREVIEW.tpl' => 'banner_preview',
+			'BANNER_SHOW_CODE.tpl' => 'banner_show_code',
+			'BANNER_ADDED_SCREEN.tpl' => 'administrative__banner_added_screen',
+			'BLOCK_MAIN_TOPSITES.tpl' => 'block_main_topsites',
+			'BLOCK_MAIN_BANNER_WAVE_BWRAP.tpl' => 'block_main_banner_wave',
+			'BLOCK_MAIN_BANNER_WAVE.tpl' => 'block_main_banner_wave',
+			'BANNERS_NONE.tpl' => 'banners_none',
+			'BANNER_FLASH.tpl' => 'banner_flash',
+			'BANNER_IMAGE.tpl' => 'banner_image',
+			'BANNER_IFRAME.tpl' => 'banner_iframe',
+			'BANNER_TEXT.tpl' => 'banner_text',
+			'POINTSTORE_BANNERS_2.tpl' => 'pointstore_banners_2',
+			'POINTSTORE_BANNERS_UPGRADE.tpl' => 'pointstore_banners_upgrade',
+			'POINTSTORE_BANNERS_ACTIVATE.tpl' => 'pointstore_banners_activate',
+			'POINTSTORE_BANNERS_SCREEN.tpl' => 'pointstore_banners_screen',
+			'BANNER_VIEW_SCREEN.tpl' => 'administrative__banner_view_screen'
+		);
 	}
 
 	/**
@@ -167,11 +166,9 @@ class Hook_addon_registry_banners
 	function tpl_preview__banner_preview()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BANNER_PREVIEW',array(
-					'PREVIEW'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BANNER_PREVIEW', array(
+				'PREVIEW' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -185,14 +182,12 @@ class Hook_addon_registry_banners
 	function tpl_preview__banner_show_code()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BANNER_SHOW_CODE',array(
-					'NAME'=>lorem_word(),
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-					'TYPE'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BANNER_SHOW_CODE', array(
+				'NAME' => lorem_word(),
+				'WIDTH' => placeholder_number(),
+				'HEIGHT' => placeholder_number(),
+				'TYPE' => lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -206,15 +201,13 @@ class Hook_addon_registry_banners
 	function tpl_preview__administrative__banner_added_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BANNER_ADDED_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'TEXT'=>lorem_sentence_html(),
-					'BANNER_CODE'=>lorem_phrase(),
-					'STATS_URL'=>placeholder_url(),
-					'DO_NEXT'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BANNER_ADDED_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'TEXT' => lorem_sentence_html(),
+				'BANNER_CODE' => lorem_phrase(),
+				'STATS_URL' => placeholder_url(),
+				'DO_NEXT' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -228,17 +221,15 @@ class Hook_addon_registry_banners
 	function tpl_preview__block_main_topsites()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_TOPSITES',array(
-					'TYPE'=>lorem_phrase(),
-					'BANNERS'=>placeholder_array(),
-					'SUBMIT_URL'=>placeholder_url(),
-					'DESCRIPTION'=>lorem_word(),
-					'BANNER'=>lorem_word_2(),
-					'HITSFROM'=>placeholder_number(),
-					'HITSTO'=>placeholder_number(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_TOPSITES', array(
+				'TYPE' => lorem_phrase(),
+				'BANNERS' => placeholder_array(),
+				'SUBMIT_URL' => placeholder_url(),
+				'DESCRIPTION' => lorem_word(),
+				'BANNER' => lorem_word_2(),
+				'HITSFROM' => placeholder_number(),
+				'HITSTO' => placeholder_number()
+			)), NULL, '', true)
 		);
 	}
 
@@ -252,20 +243,45 @@ class Hook_addon_registry_banners
 	function tpl_preview__block_main_banner_wave()
 	{
 		$banners = new ocp_tempcode();
-		$banners->attach(do_lorem_template('BANNER_FLASH',array('B_TYPE'=>lorem_phrase(),'WIDTH'=>placeholder_number(),'HEIGHT'=>placeholder_number(),'SOURCE'=>lorem_phrase(),'DEST'=>lorem_phrase(),'CAPTION'=>lorem_phrase(),'IMG'=>placeholder_image_url())));
-		$banners->attach(do_lorem_template('BANNER_IMAGE',array('URL'=>placeholder_url(),'B_TYPE'=>lorem_phrase(),'WIDTH'=>placeholder_number(),'HEIGHT'=>placeholder_number(),'SOURCE'=>lorem_phrase(),'DEST'=>lorem_phrase(),'CAPTION'=>lorem_phrase(),'IMG'=>placeholder_image_url())));
-		$banners->attach(do_lorem_template('BANNER_IFRAME',array('B_TYPE'=>lorem_phrase(),'IMG'=>placeholder_image_url(),'WIDTH'=>placeholder_number(),'HEIGHT'=>placeholder_number())));
+		$banners->attach(do_lorem_template('BANNER_FLASH', array(
+			'B_TYPE' => lorem_phrase(),
+			'WIDTH' => placeholder_number(),
+			'HEIGHT' => placeholder_number(),
+			'SOURCE' => lorem_phrase(),
+			'DEST' => lorem_phrase(),
+			'CAPTION' => lorem_phrase(),
+			'IMG' => placeholder_image_url()
+		)));
+		$banners->attach(do_lorem_template('BANNER_IMAGE', array(
+			'URL' => placeholder_url(),
+			'B_TYPE' => lorem_phrase(),
+			'WIDTH' => placeholder_number(),
+			'HEIGHT' => placeholder_number(),
+			'SOURCE' => lorem_phrase(),
+			'DEST' => lorem_phrase(),
+			'CAPTION' => lorem_phrase(),
+			'IMG' => placeholder_image_url()
+		)));
+		$banners->attach(do_lorem_template('BANNER_IFRAME', array(
+			'B_TYPE' => lorem_phrase(),
+			'IMG' => placeholder_image_url(),
+			'WIDTH' => placeholder_number(),
+			'HEIGHT' => placeholder_number()
+		)));
 
-		$assemble = do_lorem_template('BLOCK_MAIN_BANNER_WAVE_BWRAP',array('EXTRA'=>lorem_phrase(),'TYPE'=>lorem_phrase(),'BANNER'=>$banners,'MORE_COMING'=>lorem_phrase()));
+		$assemble = do_lorem_template('BLOCK_MAIN_BANNER_WAVE_BWRAP', array(
+			'EXTRA' => lorem_phrase(),
+			'TYPE' => lorem_phrase(),
+			'BANNER' => $banners,
+			'MORE_COMING' => lorem_phrase()
+		));
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_BANNER_WAVE',array(
-					'EXTRA'=>lorem_phrase(),
-					'TYPE'=>lorem_phrase(),
-					'ASSEMBLE'=>$assemble
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_BANNER_WAVE', array(
+				'EXTRA' => lorem_phrase(),
+				'TYPE' => lorem_phrase(),
+				'ASSEMBLE' => $assemble
+			)), NULL, '', true)
 		);
 	}
 
@@ -279,11 +295,9 @@ class Hook_addon_registry_banners
 	function tpl_preview__banners_none()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BANNERS_NONE',array(
-					'ADD_BANNER_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BANNERS_NONE', array(
+				'ADD_BANNER_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -297,17 +311,15 @@ class Hook_addon_registry_banners
 	function tpl_preview__banner_flash()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BANNER_FLASH',array(
-					'B_TYPE'=>lorem_phrase(),
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-					'SOURCE'=>lorem_phrase(),
-					'DEST'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
-					'IMG'=>placeholder_image_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BANNER_FLASH', array(
+				'B_TYPE' => lorem_phrase(),
+				'WIDTH' => placeholder_number(),
+				'HEIGHT' => placeholder_number(),
+				'SOURCE' => lorem_phrase(),
+				'DEST' => lorem_phrase(),
+				'CAPTION' => lorem_phrase(),
+				'IMG' => placeholder_image_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -321,18 +333,16 @@ class Hook_addon_registry_banners
 	function tpl_preview__banner_image()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BANNER_IMAGE',array(
-					'URL'=>placeholder_url(),
-					'B_TYPE'=>lorem_phrase(),
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-					'SOURCE'=>lorem_phrase(),
-					'DEST'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
-					'IMG'=>placeholder_image_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BANNER_IMAGE', array(
+				'URL' => placeholder_url(),
+				'B_TYPE' => lorem_phrase(),
+				'WIDTH' => placeholder_number(),
+				'HEIGHT' => placeholder_number(),
+				'SOURCE' => lorem_phrase(),
+				'DEST' => lorem_phrase(),
+				'CAPTION' => lorem_phrase(),
+				'IMG' => placeholder_image_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -346,14 +356,12 @@ class Hook_addon_registry_banners
 	function tpl_preview__banner_iframe()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BANNER_IFRAME',array(
-					'B_TYPE'=>lorem_phrase(),
-					'IMG'=>placeholder_image_url(),
-					'WIDTH'=>placeholder_number(),
-					'HEIGHT'=>placeholder_number(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BANNER_IFRAME', array(
+				'B_TYPE' => lorem_phrase(),
+				'IMG' => placeholder_image_url(),
+				'WIDTH' => placeholder_number(),
+				'HEIGHT' => placeholder_number()
+			)), NULL, '', true)
 		);
 	}
 
@@ -367,17 +375,15 @@ class Hook_addon_registry_banners
 	function tpl_preview__banner_text()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BANNER_TEXT',array(
-					'B_TYPE'=>lorem_phrase(),
-					'TITLE_TEXT'=>lorem_phrase(),
-					'CAPTION'=>lorem_phrase(),
-					'SOURCE'=>lorem_phrase(),
-					'DEST'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'FILTERED_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BANNER_TEXT', array(
+				'B_TYPE' => lorem_phrase(),
+				'TITLE_TEXT' => lorem_phrase(),
+				'CAPTION' => lorem_phrase(),
+				'SOURCE' => lorem_phrase(),
+				'DEST' => lorem_phrase(),
+				'URL' => placeholder_url(),
+				'FILTERED_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -392,11 +398,9 @@ class Hook_addon_registry_banners
 	{
 		require_lang('pointstore');
 		return array(
-			lorem_globalise(
-				do_lorem_template('POINTSTORE_BANNERS_2',array(
-					'BANNER_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_2', array(
+				'BANNER_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -411,11 +415,9 @@ class Hook_addon_registry_banners
 	{
 		require_lang('pointstore');
 		return array(
-			lorem_globalise(
-				do_lorem_template('POINTSTORE_BANNERS_UPGRADE',array(
-					'UPGRADE_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_UPGRADE', array(
+				'UPGRADE_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -430,11 +432,9 @@ class Hook_addon_registry_banners
 	{
 		require_lang('pointstore');
 		return array(
-			lorem_globalise(
-				do_lorem_template('POINTSTORE_BANNERS_ACTIVATE',array(
-					'ACTIVATE_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_ACTIVATE', array(
+				'ACTIVATE_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -449,13 +449,11 @@ class Hook_addon_registry_banners
 	{
 		require_lang('pointstore');
 		return array(
-			lorem_globalise(
-				do_lorem_template('POINTSTORE_BANNERS_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'ACTIVATE'=>lorem_phrase(),
-					'UPGRADE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'ACTIVATE' => lorem_phrase(),
+				'UPGRADE' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -469,14 +467,12 @@ class Hook_addon_registry_banners
 	function tpl_preview__administrative__banner_view_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BANNER_VIEW_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'EDIT_URL'=>placeholder_url(),
-					'VIEW_SPACE'=>lorem_phrase(),
-					'BANNER'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BANNER_VIEW_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'EDIT_URL' => placeholder_url(),
+				'MAP_TABLE' => lorem_phrase(),
+				'BANNER' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 }

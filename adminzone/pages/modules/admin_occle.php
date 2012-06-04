@@ -128,7 +128,7 @@ class Module_admin_occle
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		$title=get_page_title('OCCLE');
+		$title=get_screen_title('OCCLE');
 
 		$command=post_param('occle_command','');
 		if ($command!='')

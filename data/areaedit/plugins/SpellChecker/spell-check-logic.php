@@ -15,19 +15,6 @@
 	fclose($x);*/
 
 
-if (!function_exists('do_lang'))
-{
-	/**
-	 * Stub for translations. Really doesn't do anything
-	 *
-	 * @param  string			Code to translate (currently ignored - only one hard-coded translation in here)
-	 * @return string			"Translated" version of code
-	 */
-	function do_lang($x)
-	{
-		return 'utf-8'; // or ISO-8859-1
-	}
-}
 if (strpos($_SERVER['PHP_SELF'],'spell-check-logic.php')!==false)
 	spellchecklogic();
 

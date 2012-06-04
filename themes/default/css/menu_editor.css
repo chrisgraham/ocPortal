@@ -1,0 +1,76 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.menu_editor_page {
+	min-height: 400px;
+}
+
+.menu_editor_page.docked #mini_form_hider {
+	margin-top: 1em;
+	border-top: 3px dotted {$GET,divider_line} !important;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	background: {$GET,floating_section_background};
+	font-size: 0.9em;
+}
+
+.docked .menu_edit_main {
+	padding-bottom: 10em;
+}
+
+.dock_button {
+	float: right;
+	padding: 0.5em;
+	cursor: pointer;
+}
+
+.menu_editor_lh_side {
+	margin-{!en_right}: 420px;
+}
+
+.menu_editor_page.docked {
+	overflow-y: scroll;
+	max-height: 380px;
+	margin-right: 1em;
+}
+
+.docked .menu_editor_rh_side {
+	overflow-y: hidden;
+	max-height: 280px;
+}
+
+.menu_editor_rh_side {
+	float: {!en_right};
+	margin-{!en_left}: 20px;
+	width: 400px;
+	font-size: 0.9em;
+}
+
+.menu_editor_selected_field {
+	background-color: {$GET,native_ui_active_background};
+}
+
+.menu_editor_branch_indent {
+	padding-{!en_left}: 20px;
+}
+
+.menu_editor_branch {
+	border: 1px solid {$GET,standard_border};
+	margin-top: -1px;
+	padding: 0.5em 0 0.5em 0.5em;
+}
+
+.menu_editor_branch_wrap {
+	padding: 1em 0 1em 1em;
+	margin-{!en_right}: -1px;
+}
+
+/* Undoes main actions_list style */
+.menu_editor_branch_wrap .actions_list li {
+	background: none;
+	padding-left: 0;
+	margin-left: 0;
+}

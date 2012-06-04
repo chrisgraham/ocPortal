@@ -728,7 +728,7 @@
 			});
 		},
 
-		
+
 		/**
 		 * Remove event handler from the specified object. If third argument (callback)
 		 * is not specified remove all events with the specified name.
@@ -755,7 +755,7 @@
 				return;
 			}
 
-				
+
 			for (var i=type.length-1; i>=0; i--) {
 				// undefined or not, key should match			
 				if (type[i].key === key || type[i].orig === callback) {
@@ -796,7 +796,7 @@
 			}
 		},
 
-		
+
 		/**
 		 * Remove all kind of events from the specified object
 		 *
@@ -2415,12 +2415,12 @@
 					}
 				});
 
-				
+
 				uploader.bind('Flash:ExifData', function(up, obj) {
 					uploader.trigger('ExifData', uploader.getFile(lookup[obj.id]), obj.data);
 				});
 
-				
+
 				uploader.bind('Flash:GpsData', function(up, obj) {
 					uploader.trigger('GpsData', uploader.getFile(lookup[obj.id]), obj.data);
 				});
@@ -3196,7 +3196,7 @@
 					form.parentNode.removeChild(form);
 				});
 
-				
+
 
 				up.bind('FileUploaded', function(up) {
 					up.refresh(); // just to get the form back on top of browse_button
@@ -3299,7 +3299,7 @@
 					}
 				});
 
-				
+
 				// Completely destroy the runtime
 				uploader.bind("Destroy", function(up) {
 					var name, element, form,
@@ -3932,7 +3932,7 @@
 								}
 							};
 
-	
+
 							// Build multipart request
 							if (up.settings.multipart && features.multipart) {
 
@@ -3945,7 +3945,7 @@
 									xhr.setRequestHeader(name, value);
 								});
 
-								
+
 								// if has FormData support like Chrome 6+, Safari 5+, Firefox 4, use it
 								if (typeof(bin) !== 'string' && !!window.FormData) {
 									formData = new FormData();
@@ -3962,7 +3962,7 @@
 									return;
 								}  // if no FormData we can still try to send it directly as last resort (see below)
 
-								
+
 								if (typeof(bin) === 'string') {
 									// Trying to send the whole thing as binary...
 
@@ -3989,7 +3989,7 @@
 									multipartDeltaSize = multipartBlob.length - bin.length;
 									bin = multipartBlob;
 
-							
+
 									if (xhr.sendAsBinary) { // Gecko
 										xhr.sendAsBinary(bin);
 									} else if (features.canSendBinary) { // WebKit with typed arrays support
@@ -4088,7 +4088,7 @@
 				}
 			});
 
-			
+
 			uploader.bind('Destroy', function(up) {
 				var name, element, container = document.body,
 					elements = {
@@ -4232,7 +4232,7 @@
 			},
 			headers = [], read, idx, marker = undef, length = 0, limit;
 
-		
+
 		read = new BinaryReader();
 		read.init(data);
 
@@ -4344,7 +4344,7 @@
 		};		
 	}
 
-	
+
 	function ExifParser() {
 		// Private ExifParser fields
 		var data, tags, offsets = {}, tagDescs;
@@ -5115,7 +5115,7 @@
 					);
 				});
 
-				
+
 				uploader.bind('Silverlight:MouseEnter', function(up) {
 					var browseButton, hoverClass;
 
@@ -5223,7 +5223,7 @@ function doSubmit(e,ob) {
 		var ret=true;
 		if (ob.settings.required)
 		{
-			setFieldError(document.getElementById(ob.settings.txtName),"{!REQUIRED_NOT_FILLED_IN^#}");
+			set_field_error(document.getElementById(ob.settings.txtName),"{!REQUIRED_NOT_FILLED_IN^#}");
 			ret=false;
 			window.just_checking_requirements=true;
 		}
@@ -5245,7 +5245,7 @@ function doSubmit(e,ob) {
 	e = e || window.event;
 	if ((typeof e!='undefined') && (e))
 	{
-		cancelBubbling(e);
+		cancel_bubbling(e);
 		if (typeof e.preventDefault!='undefined') e.preventDefault();
 	}
 
@@ -5254,7 +5254,7 @@ function doSubmit(e,ob) {
 	{
 		btnSubmit.disabled = true;
 		ob.start();
-		smoothScroll(findPosY(txtFileName,true));
+		smooth_scroll(find_pos_y(txtFileName,true));
 	} else
 	{
 		window.form_submitting=btnSubmit.form; // For IE
@@ -5283,7 +5283,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 	if (page_type=="attachment")
 	{
 		var current_num=name.replace('file', '');
-		setAttachment(posting_field_name,current_num,file_name);
+		set_attachment(posting_field_name,current_num,file_name);
 		document.getElementById(name).onchange=null;
 	}
 }
@@ -5509,7 +5509,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		filenameField.setAttribute('id','txtFileName_'+name);
 		filenameField.setAttribute('type','text');
 		filenameField.value='';
-		filenameField.className='inline_image';
+		filenameField.className='top_vertical_alignment';
 		filenameField.name='txtFileName_'+name;
 		filenameField.disabled=true;
 		subdiv.appendChild(filenameField);
@@ -5535,23 +5535,23 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var colorAt=rep.parentNode,backgroundColor;
 		do
 		{
-			backgroundColor=abstractGetComputedStyle(colorAt,'background-color');
+			backgroundColor=abstract_get_computed_style(colorAt,'background-color');
 			colorAt=colorAt.parentNode;
 		}
 		while ((colorAt) && (backgroundColor) && (backgroundColor=='transparent'));
 		if ((!backgroundColor) || (backgroundColor=='transparent')) backgroundColor='#FFFFFF';
-		var foregroundColor=abstractGetComputedStyle(rep.parentNode,'color');
+		var foregroundColor=abstract_get_computed_style(rep.parentNode,'color');
 		if (!foregroundColor) foregroundColor='#000000';
 		var matches;
-		function decToHex(number)
+		function dec_to_hex(number)
 		{
 			var hexbase="0123456789ABCDEF";
 			return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 		}
 		matches=backgroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
-		if (matches) backgroundColor='#'+decToHex(matches[1])+decToHex(matches[2])+decToHex(matches[3]);
+		if (matches) backgroundColor='#'+dec_to_hex(matches[1])+dec_to_hex(matches[2])+dec_to_hex(matches[3]);
 		matches=foregroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
-		if (matches) foregroundColor='#'+decToHex(matches[1])+decToHex(matches[2])+decToHex(matches[3]);
+		if (matches) foregroundColor='#'+dec_to_hex(matches[1])+dec_to_hex(matches[2])+dec_to_hex(matches[3]);
 
 		var out='';
 		var maxLength=(typeof btnSubmit.form.elements['MAX_FILE_SIZE']=='undefined')?'2000000000':(btnSubmit.form.elements['MAX_FILE_SIZE'].value);
@@ -5595,7 +5595,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		out+='</object>';
 		/*out+='<applet mayscript="true" scriptable="true" code="Uploader.class" archive="{$BASE_URL}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL}/data/javaupload/Net.jar" width="430" height="29" id="uploader_'+name+'">';
 		out+='</applet>';*/
-		setInnerHTML(progressDiv,out);
+		set_inner_html(progressDiv,out);
 
 		var old_onclick=btnSubmit.onclick;
 		btnSubmit.onclick=function() {
@@ -5628,7 +5628,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var uploadButton=document.createElement('input');
 		uploadButton.type='button';
 		uploadButton.value='{!BROWSE;}';
-		uploadButton.className='inline_image';
+		uploadButton.className='top_vertical_alignment';
 		uploadButton.id='uploadButton_'+name;
 		uploadButton.onclick=function() { return false; };
 		subdiv.appendChild(uploadButton,rep);
@@ -5651,7 +5651,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 							'&postvalues='+window.encodeURIComponent('name=image.jpg')+
 							'&postimagefilename=image.jpg&returnstatus=true&returnserverresponse=true';
 
-		setInnerHTML(message,'iOS doesn\'t support direct file uploads, but if you have the <a target=\"_blank\" href=\"http://itunes.apple.com/gb/app/picup/id354101378?mt=8\">Picup app</a> then you can<br /><a style="display: block; font-size: 1.3em; line-height: 1.4em" href=\"'+escape_html(picup_url)+'\">Upload using Picup</a>');
+		set_inner_html(message,'iOS doesn\'t support direct file uploads, but if you have the <a target=\"_blank\" href=\"http://itunes.apple.com/gb/app/picup/id354101378?mt=8\">Picup app</a> then you can<br /><a style="display: block; font-size: 1.3em; line-height: 1.4em" href=\"'+escape_html(picup_url)+'\">Upload using Picup</a>');
 
 		subdiv.insertBefore(message,filenameField);
 	}
@@ -5795,10 +5795,10 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		txtFileName.value = "";
 		if ((typeof rep.form.elements[posting_field_name]!='undefined') && (name.indexOf('file')!=-1))
 		{
-			var new_contents=getTextbox(rep.form.elements[posting_field_name]);
+			var new_contents=get_textbox(rep.form.elements[posting_field_name]);
 			new_contents=new_contents.replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
 			new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]* title="[^<>]*" value="[^"]+"[^<>]* />'),''); // Shell of the above
-			setTextbox(rep.form.elements[posting_field_name],new_contents,new_contents);
+			set_textbox(rep.form.elements[posting_field_name],new_contents,new_contents);
 		}
 		fireFakeChangeFor(name,'');
 		document.getElementById(ob.settings.txtFileDbID).value='-1';
@@ -5852,7 +5852,7 @@ function FileProgress(file, targetID) {
 
 		var progressStatus = document.createElement("div");
 		progressStatus.className = "progressBarStatus";
-		setInnerHTML(progressStatus,"&nbsp;");
+		set_inner_html(progressStatus,"&nbsp;");
 
 		this.fileProgressElement.appendChild(progressCancel);
 		this.fileProgressElement.appendChild(progressText);
@@ -5865,7 +5865,7 @@ function FileProgress(file, targetID) {
 	} else {
 		this.fileProgressElement = this.fileProgressWrapper.firstChild;
 		if (file && typeof file.name!='undefined')
-			setInnerHTML(this.fileProgressElement.childNodes[1],file.name);
+			set_inner_html(this.fileProgressElement.childNodes[1],file.name);
 	}
 
 	this.height = this.fileProgressWrapper.offsetHeight;
@@ -5910,7 +5910,7 @@ FileProgress.prototype.setCancelled = function () {
 	}, 2000);
 };
 FileProgress.prototype.setStatus = function (status) {
-	setInnerHTML(this.fileProgressElement.childNodes[2],status);
+	set_inner_html(this.fileProgressElement.childNodes[2],status);
 };
 
 // Makes sure the FileProgress box is visible
@@ -6017,7 +6017,7 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 		{+END}
 
 		var edit_link=document.createElement('a');
-		setInnerHTML(edit_link,'({!EDIT;})');
+		set_inner_html(edit_link,'({!EDIT;})');
 		edit_link.className='associated_details';
 		edit_link.id='edit_for_'+field.id;
 		edit_link.target='_blank';

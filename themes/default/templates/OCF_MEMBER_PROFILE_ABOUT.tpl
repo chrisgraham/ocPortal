@@ -2,7 +2,7 @@
 	<div class="ocf_profile_column">
 		{+START,IF_NON_EMPTY,{AVATAR_URL}}
 			<div class="ocf_member_profile_avatar">
-				<img src="{AVATAR_URL*}" title="" alt="{!AVATAR}" />
+				<img src="{AVATAR_URL*}" alt="{!AVATAR}" />
 			</div>
 		{+END}
 
@@ -20,69 +20,69 @@
 		{+START,IF_NON_EMPTY,{ACTIONS_contact}{$GET,messenger_fields}}
 			<div>
 				<h3>
-					<a class="hide_button" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;"><img alt="{!CONTRACT}: {!CONTACT}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
-					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!CONTACT}</a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!CONTRACT}: {!CONTACT}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!CONTACT}</a>
 				</h3>
 
-				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: block"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
+				<nav class="toggleable_tray" style="display: block" role="navigation">
 					<ul>
 						{ACTIONS_contact}
 						{$GET,messenger_fields}
 					</ul>
-				</{$?,{$VALUE_OPTION,html5},nav,div}>
+				</nav>
 			</div>
 		{+END}
 
 		{+START,IF_NON_EMPTY,{ACTIONS_content}}
 			<div>
 				<h3>
-					<a class="hide_button" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}: {!CONTENT}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!CONTENT}</a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!CONTENT}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!CONTENT}</a>
 				</h3>
 
-				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: {$JS_ON,none,block}"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
+				<nav class="toggleable_tray" style="display: {$JS_ON,none,block}" role="navigation" aria-expanded="false">
 					<ul>
 						{ACTIONS_content}
 					</ul>
-				</{$?,{$VALUE_OPTION,html5},nav,div}>
+				</nav>
 			</div>
 		{+END}
 
 		{+START,IF_NON_EMPTY,{ACTIONS_views}{ACTIONS_profile}}
 			<div>
 				<h3>
-					<a class="hide_button" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}: {!ACCOUNT}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!ACCOUNT}</a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!ACCOUNT}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!ACCOUNT}</a>
 				</h3>
 
-				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: {$JS_ON,none,block}"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
+				<nav class="toggleable_tray" style="display: {$JS_ON,none,block}" role="navigation" aria-expanded="false">
 					<ul>
 						{ACTIONS_views}
 						{ACTIONS_profile}
 					</ul>
-				</{$?,{$VALUE_OPTION,html5},nav,div}>
+				</nav>
 			</div>
 		{+END}
 
 		{+START,IF_NON_EMPTY,{ACTIONS_usage}}
 			<div>
 				<h3>
-					<a class="hide_button" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}: {!USAGE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-					<a class="non_link" href="#" onclick="event.returnValue=false; hideTag(this.parentNode.parentNode); return false;">{!USAGE}</a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!USAGE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+					<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!USAGE}</a>
 				</h3>
 
-				<{$?,{$VALUE_OPTION,html5},nav,div} class="hide_tag" style="display: {$JS_ON,none,block}"{$?,{$VALUE_OPTION,html5}, role="navigation"}>
+				<nav class="toggleable_tray" style="display: {$JS_ON,none,block}" role="navigation" aria-expanded="false">
 					<ul>
 						{ACTIONS_usage}
 					</ul>
-				</{$?,{$VALUE_OPTION,html5},nav,div}>
+				</nav>
 			</div>
 		{+END}
 	</div>
 
 	<div class="ocf_profile_main">
 		{+START,IF,{$NOT,{VIEW_PROFILES}}}
-			<p class="important_notification"{$?,{$VALUE_OPTION,html5}, role="alert"}>
+			<p class="red_alert" role="alert">
 				{!ACCESS_DENIED}
 			</p>
 		{+END}
@@ -91,8 +91,8 @@
 			<table class="wide_table ocf_profile_fields" summary="{!MAP_TABLE}">
 				{+START,IF,{$NOT,{$MOBILE}}}
 					<colgroup>
-						<col style="width: 130px" />
-						<col style="width: 100%" />
+						<col class="ocf_profile_about_field_name_column" />
+						<col class="ocf_profile_about_field_value_column" />
 					</colgroup>
 				{+END}
 
@@ -103,10 +103,17 @@
 							{+START,IF,{$GET,is_messenger_field}}
 								{+START,SET,messenger_fields}
 									{$GET,messenger_fields}
+
 									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_msn_NAME}}}<li><a title="{!ADD_AS_FRIEND}: {!LINK_NEW_WINDOW}" href="msnim:add?contact={VALUE*}">{!ADD_AS_FRIEND}</a> (Windows Live Messenger)</li>{+END}
 									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_aim_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="aim:goim?screename={VALUE*}">{!MESSAGE_THEM}</a> (AOL Instant Messenger)</li>{+END}
 									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_yahoo_NAME}}}<li><a title="{!ADD_AS_FRIEND}: {!LINK_NEW_WINDOW}" href="ymsgr:addfriend?{VALUE*}">{!ADD_AS_FRIEND}</a> (Yahoo Messenger)</li>{+END}
-									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_skype_NAME}}}<li><a title="{!PHONE_THEM_UP}: {!LINK_NEW_WINDOW}" href="skype:{VALUE*}?call">{!PHONE_THEM_UP}</a> (Skype)</li>{+END}
+									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_skype_NAME}}}
+										<li>
+											{$,<a title="{!PHONE_THEM_UP}: {!LINK_NEW_WINDOW}" href="skype:{VALUE*}?call">{!PHONE_THEM_UP}</a> (Skype)}
+											<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
+											<a href="skype:{VALUE*}?call"><img src="http://mystatus.skype.com/bigclassic/{VALUE*}" style="border: none;" width="182" height="44" alt="My status" /></a>
+										</li>
+									{+END}
 									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_icq_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="http://www.icq.com/people/cmd.php?uin={VALUE*}&amp;action=message">{!MESSAGE_THEM}</a> (ICQ)</li>{+END}
 									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_jabber_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="xmpp:{VALUE*}">{!MESSAGE_THEM}</a> (Jabber/XMPP)</li>{+END}
 									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_sn_twitter_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="http://twitter.com/{VALUE*}" rel="me">@{VALUE*}</a> (Twitter)</li>{+END}
@@ -154,33 +161,28 @@
 		{+START,IF,{VIEW_PROFILES}}
 			<h2>{!DETAILS}</h2>
 
-			{+START,IF,{$VALUE_OPTION,html5}}<meta itemprop="name" content="{USERNAME*}" />{+END}
+			<meta itemprop="name" content="{USERNAME*}" />
 
 			<div class="wide_table_wrap">
 				<table class="wide_table ocf_profile_details" summary="{!MAP_TABLE}">
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<colgroup>
-							<col style="width: 130px" />
-							<col style="width: 100%" />
+							<col class="ocf_profile_about_field_name_column" />
+							<col class="ocf_profile_about_field_value_column" />
 						</colgroup>
 					{+END}
 
 					<tbody>
 						<tr>
 							<th class="de_th">{!ONLINE_NOW}:</th>
-							<td>{ONLINE_NOW*}<br />({$DATE_AND_TIME*,1,0,0,{LAST_VISIT_TIME_RAW}})</td>
+							<td>{ONLINE_NOW*} <span class="associated_details">({$DATE_AND_TIME*,1,0,0,{LAST_VISIT_TIME_RAW}})</span></td>
 						</tr>
 
 						{+START,IF_NON_EMPTY,{JOIN_DATE}}
 							<tr>
 								<th class="de_th">{!JOIN_DATE}:</th>
 								<td>
-									{+START,IF,{$VALUE_OPTION,html5}}
-										<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{JOIN_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{JOIN_DATE*}</time>
-									{+END}
-									{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
-										{JOIN_DATE*}
-									{+END}
+									<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{JOIN_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{JOIN_DATE*}</time>
 								</td>
 							</tr>
 						{+END}
@@ -211,7 +213,7 @@
 							</tr>
 						{+END}
 
-						{+START,IF,{$HAS_SPECIFIC_PERMISSION,member_maintenance}}{+START,IF_NON_EMPTY,{EMAIL_ADDRESS}}
+						{+START,IF,{$HAS_PRIVILEGE,member_maintenance}}{+START,IF_NON_EMPTY,{EMAIL_ADDRESS}}
 							<tr>
 								<th class="de_th">{!EMAIL_ADDRESS}:</th>
 								<td><a class="email" href="mailto:{EMAIL_ADDRESS*}">{EMAIL_ADDRESS*}</a></td>
@@ -232,7 +234,7 @@
 				<h2>{!PHOTO}</h2>
 
 				<div class="ocf_member_profile_photo">
-					<a href="{PHOTO_URL*}"><img src="{PHOTO_THUMB_URL*}" title="" alt="{!PHOTO}" class="photo"{$?,{$VALUE_OPTION,html5}, itemprop="primaryImageOfPage"} /></a>
+					<a href="{PHOTO_URL*}"><img src="{PHOTO_THUMB_URL*}" alt="{!PHOTO}" class="photo" itemprop="primaryImageOfPage" /></a>
 				</div>
 			{+END}
 		{+END}
@@ -249,8 +251,8 @@
 				<table class="wide_table ocf_profile_statistics" summary="{!MAP_TABLE}">
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<colgroup>
-							<col style="width: 130px" />
-							<col style="width: 100%" />
+							<col class="ocf_profile_about_field_name_column" />
+							<col class="ocf_profile_about_field_value_column" />
 						</colgroup>
 					{+END}
 

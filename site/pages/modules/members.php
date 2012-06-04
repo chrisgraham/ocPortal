@@ -112,7 +112,7 @@ class Module_members
 	 */
 	function remote()
 	{
-		$title=get_page_title('LEARN_ABOUT_REMOTE_LOGINS');
+		$title=get_screen_title('LEARN_ABOUT_REMOTE_LOGINS');
 
 		if (get_option('allow_member_integration')=='off') warn_exit(do_lang_tempcode('NO_REMOTE_ON'));
 
@@ -129,7 +129,7 @@ class Module_members
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_ajax_people_lists');
 
-		$title=get_page_title('MEMBERS');
+		$title=get_screen_title('MEMBERS');
 
 		require_code('templates_internalise_screen');
 		$test_tpl=internalise_own_screen($title);
@@ -169,19 +169,43 @@ class Module_members
 			$usergroups[$group_id]=array('USERGROUP'=>$group,'NUM'=>strval($num));
 		}
 
-		$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE id<>'.strval(db_get_first_id());
+		// ocSelect
+		$ocselect=either_param('active_filter','');
+		if ($ocselect!='')
+		{
+			require_code('ocselect');
+			$content_type='member';
+			list($ocselect_extra_select,$ocselect_extra_join,$ocselect_extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($ocselect),$content_type,'');
+			$extra_select_sql=implode('',$ocselect_extra_select);
+			$extra_join_sql=implode('',$ocselect_extra_join);
+		} else
+		{
+			$extra_select_sql='';
+			$extra_join_sql='';
+			$ocselect_extra_where='';
+		}
+
+		$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members r'.$extra_join_sql.' WHERE id<>'.strval(db_get_first_id()).$ocselect_extra_where;
 		if (!has_specific_permission(get_member(),'see_unvalidated')) $query.=' AND m_validated=1';
+
 		if ($group_filter!='')
 		{
 			if (is_numeric($group_filter))
-				$title=get_page_title('USERGROUP',true,array($usergroups[intval($group_filter)]['USERGROUP']));
+				$title=get_screen_title('USERGROUP',true,array($usergroups[intval($group_filter)]['USERGROUP']));
 
 			require_code('ocfiltering');
 			$filter=ocfilter_to_sqlfragment($group_filter,'m_primary_group','f_groups',NULL,'m_primary_group','id');
 			$query.=' AND '.$filter;
 		}
 		$search=get_param('filter','');
-		$sup=($search!='')?(' AND m_username LIKE \''.db_encode_like(str_replace('*','%',$search)).'\''):'';
+		$sup='';
+		if ($search!='')
+		{
+			$sup=' AND (m_username LIKE \''.db_encode_like(str_replace('*','%',$search)).'\'';
+			if (has_specific_permission(get_member(),'member_maintenance'))
+				$sup.=' OR m_email_address LIKE \''.db_encode_like(str_replace('*','%',$search)).'\'';
+			$sup.=')';
+		}
 		if ($sortable=='m_join_time')
 		{
 			$query.=$sup.' ORDER BY m_join_time '.$sort_order.','.'id '.$sort_order;
@@ -191,7 +215,7 @@ class Module_members
 		}
 
 		$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT * '.$query,$max,$start);
+		$rows=$GLOBALS['FORUM_DB']->query('SELECT r.*'.$extra_select_sql.' '.$query,$max,$start);
 		if (count($rows)==0)
 		{
 			return inform_screen($title,do_lang_tempcode('NO_RESULTS'));
@@ -211,11 +235,11 @@ class Module_members
 
 			$members->attach(results_entry(array($link,$primary_group,integer_format($row['m_cache_num_posts']),escape_html(get_timezoned_date($row['m_join_time'])))));
 
-			$member_boxes[]=ocf_show_member_box($row['id'],true);
+			$member_boxes[]=render_member_box($row['id'],true);
 		}
 		$results_table=results_table(do_lang_tempcode('MEMBERS'),$start,'md_start',$max,'md_max',$max_rows,$fields_title,$members,$sortables,$sortable,$sort_order,'md_sort');
 
-		$results_browser=results_browser(do_lang_tempcode('MEMBERS'),NULL,$start,'md_start',$max,'md_max',$max_rows,NULL,NULL,true,true);
+		$pagination=pagination(do_lang_tempcode('MEMBERS'),NULL,$start,'md_start',$max,'md_max',$max_rows,NULL,NULL,true,true);
 
 		$symbols=NULL;
 		if (get_option('allow_alpha_search')=='1')
@@ -236,7 +260,7 @@ class Module_members
 			}
 		}
 
-		return do_template('OCF_MEMBER_DIRECTORY_SCREEN',array('_GUID'=>'096767e9aaabce9cb3e6591b7bcf95b8','MAX'=>strval($max),'RESULTS_BROWSER'=>$results_browser,'MEMBER_BOXES'=>$member_boxes,'USERGROUPS'=>$usergroups,'HIDDEN'=>$hidden,'SYMBOLS'=>$symbols,'SEARCH'=>$search,'GET_URL'=>$get_url,'TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+		return do_template('OCF_MEMBER_DIRECTORY_SCREEN',array('_GUID'=>'096767e9aaabce9cb3e6591b7bcf95b8','MAX'=>strval($max),'PAGINATION'=>$pagination,'MEMBER_BOXES'=>$member_boxes,'USERGROUPS'=>$usergroups,'HIDDEN'=>$hidden,'SYMBOLS'=>$symbols,'SEARCH'=>$search,'GET_URL'=>$get_url,'TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
 	}
 
 	/**
@@ -246,7 +270,7 @@ class Module_members
 	 */
 	function profile()
 	{
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBERS'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.propagate_ocselect_pagelink(),do_lang_tempcode('MEMBERS'))));
 
 		$username=get_param('id',strval(get_member()));
 		if ($username=='') $username=strval(get_member());

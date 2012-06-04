@@ -45,7 +45,7 @@ class Hook_alien_check
 				require_lang('upgrade');
 				$result.=do_lang('RM_HINT');
 			}
-
+	
 			return array('',$result,'','');
 		}
 	}

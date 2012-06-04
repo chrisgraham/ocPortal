@@ -78,7 +78,7 @@ class Module_admin_debrand
 	 */
 	function misc()
 	{
-		$title=get_page_title('SUPER_DEBRAND');
+		$title=get_screen_title('SUPER_DEBRAND');
 
 		require_code('form_templates');
 
@@ -268,7 +268,7 @@ class Module_admin_debrand
 				$GLOBALS['SITE_DB']->query_update('theme_images',array('path'=>$path[0]),array('id'=>'ocf_default_avatars/default_set/ocp_fanatic'));
 		}
 
-		$title=get_page_title('SUPER_DEBRAND');
+		$title=get_screen_title('SUPER_DEBRAND');
 
 		// Redirect them back to editing screen
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

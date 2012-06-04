@@ -70,7 +70,7 @@ function get_chmod_array()
 	}
 
 	return array_merge($extra_files,array(
-						'safe_mode_temp','persistant_cache','data_custom/modules/admin_backup','data_custom/modules/chat','data_custom/fields.xml','data_custom/breadcrumbs.xml','data_custom/modules/admin_stats','data_custom/spelling/write.log','data_custom/spelling/output.log','data_custom/spelling/personal_dicts',
+						'safe_mode_temp','persistent_cache','data_custom/modules/admin_backup','data_custom/modules/chat','data_custom/fields.xml','data_custom/breadcrumbs.xml','data_custom/modules/admin_stats','data_custom/spelling/write.log','data_custom/spelling/output.log','data_custom/spelling/personal_dicts',
 						'themes/map.ini','text_custom','text_custom/'.$LANG,
 						'data_custom/modules/chat/chat_last_msg.dat','data_custom/modules/chat/chat_last_event.dat',
 						'lang_cached','lang_cached/'.$LANG,'lang_custom','lang_custom/'.$LANG,

@@ -1,16 +1,12 @@
 <div id="status_updates" class="float_surrounder">
 	{+START,IF_NON_EMPTY,{TITLE}}
-		<h2 class="status-icon">{TITLE*}</h2>
+		<h2 class="status_icon">{TITLE*}</h2>
 	{+END}
 
 	<form id="fp_status_form" action="#" method="post">
 		<input type="hidden" name="zone" value="{$?,{$ZONE},{$ZONE*},frontpage}" />
 		<input type="hidden" name="page" value="{$PAGE*}" />
-		<table class="status_table">
-			<colgroup>
-				<col style="width: 100%" />
-				<col />
-			</colgroup>
+		<table class="status_table autosized_table">
 			<tbody>
 				<tr>
 					<td>
@@ -22,7 +18,7 @@
 					<td nowrap="nowrap" >
 						<div class="status_controls">
 							{+START,IF,{$ADDON_INSTALLED,chat}}
-								<select class="drop-down" name="privacy" size="1">
+								<select class="drop_down" name="privacy" size="1">
 									<option selected="selected">
 										{!PUBLIC}
 									</option>
@@ -34,8 +30,8 @@
 							{+START,IF,{$NOT,{$ADDON_INSTALLED,chat}}}
 								<input type="hidden" name="privacy" value="{!PUBLIC}" />
 							{+END}
-							<input onclick="disable_button_just_clicked(this);" type="submit" class="login-but button_pageitem" name="button" id="button" value="{!UPDATE}" />
-							<p id="notify" class="update_success">254 {!activities:CHARACTERS_LEFT}</p> <!-- Do not remove; the AJAX notifications are inserted here. -->
+							<input onclick="disable_button_just_clicked(this);" type="submit" class="login_but button_pageitem" name="button" id="button" value="{!UPDATE}" />
+							<p id="notify" class="update_success">254 {!activities:CHARACTERS_LEFT}</p> {$,Do not remove; the AJAX notifications are inserted here.}
 						</div>
 					</td>
 				</tr>

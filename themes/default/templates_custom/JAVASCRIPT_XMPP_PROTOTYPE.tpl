@@ -1586,7 +1586,7 @@ Element.Methods = {
     var elementStyle = element.style;
 
     for (var property in styles)
-      if (property == 'opacity') element.setOpacity(styles[property])
+      if (property == 'opacity') element.set_opacity(styles[property])
       else
         elementStyle[(property == 'float' || property == 'cssFloat') ?
           (elementStyle.styleFloat === undefined ? 'cssFloat' : 'styleFloat') :
@@ -1595,7 +1595,7 @@ Element.Methods = {
     return element;
   },
 
-  setOpacity: function(element, value) {
+  set_opacity: function(element, value) {
     element = $(element);
     element.style.opacity = (value == 1 || value === '') ? '' :
       (value < 0.00001) ? 0 : value;
@@ -1711,7 +1711,7 @@ else if (Prototype.Browser.IE) {
     return value;
   };
 
-  Element.Methods.setOpacity = function(element, value) {
+  Element.Methods.set_opacity = function(element, value) {
     element = $(element);
     var filter = element.getStyle('filter'), style = element.style;
     if (value == 1 || value === '') {
@@ -1755,7 +1755,7 @@ else if (Prototype.Browser.IE) {
   }
 }
 else if (Prototype.Browser.Gecko) {
-  Element.Methods.setOpacity = function(element, value) {
+  Element.Methods.set_opacity = function(element, value) {
     element = $(element);
     element.style.opacity = (value == 1) ? 0.999999 :
       (value === '') ? '' : (value < 0.00001) ? 0 : value;

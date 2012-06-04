@@ -127,7 +127,7 @@ class Module_admin_flagrant extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('FLAGRANT_TEXT'),comcode_lang_string('DOC_FLAGRANT'),
+		return do_next_manager(get_screen_title('FLAGRANT_TEXT'),comcode_lang_string('DOC_FLAGRANT'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_FLAGRANT')),

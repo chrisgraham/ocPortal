@@ -246,7 +246,7 @@ class Module_banners
 	 */
 	function choose_banner()
 	{
-		$title=get_page_title('BANNERS');
+		$title=get_screen_title('BANNERS');
 
 		$table=new ocp_tempcode();
 
@@ -331,7 +331,7 @@ class Module_banners
 
 		$text=do_lang_tempcode('CHOOSE_VIEW_LIST');
 
-		return do_template('TABLE_TABLE_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
+		return do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'be5248da379faeead5a18d9f2b62bd6b','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
 	}
 
 	/**
@@ -341,7 +341,7 @@ class Module_banners
 	 */
 	function view_banner()
 	{
-		$title=get_page_title('BANNER_INFORMATION');
+		$title=get_screen_title('BANNER_INFORMATION');
 
 		$source=get_param('source');
 
@@ -375,23 +375,23 @@ class Module_banners
 		$has_banner_network=$GLOBALS['SITE_DB']->query_value('banners','SUM(views_from)')!=0.0;
 
 		$fields=new ocp_tempcode();
-		require_code('templates_view_space');
-		$fields->attach(view_space_field(do_lang_tempcode('TYPE'),$type));
-		if ($myrow['b_type']!='') $fields->attach(view_space_field(do_lang_tempcode('_BANNER_TYPE'),$myrow['b_type']));
+		require_code('templates_map_table');
+		$fields->attach(map_table_field(do_lang_tempcode('TYPE'),$type));
+		if ($myrow['b_type']!='') $fields->attach(map_table_field(do_lang_tempcode('_BANNER_TYPE'),$myrow['b_type']));
 		$expiry_date=is_null($myrow['expiry_date'])?do_lang_tempcode('NA_EM'):make_string_tempcode(escape_html(get_timezoned_date($myrow['expiry_date'],true)));
-		$fields->attach(view_space_field(do_lang_tempcode('EXPIRY_DATE'),$expiry_date));
+		$fields->attach(map_table_field(do_lang_tempcode('EXPIRY_DATE'),$expiry_date));
 		if ($has_banner_network)
 		{
-			$fields->attach(view_space_field(do_lang_tempcode('BANNER_HITSFROM'),integer_format($myrow['hits_from']),false,'hits_from'));
-			$fields->attach(view_space_field(do_lang_tempcode('BANNER_VIEWSFROM'),integer_format($myrow['views_from']),false,'views_from'));
+			$fields->attach(map_table_field(do_lang_tempcode('BANNER_HITSFROM'),integer_format($myrow['hits_from']),false,'hits_from'));
+			$fields->attach(map_table_field(do_lang_tempcode('BANNER_VIEWSFROM'),integer_format($myrow['views_from']),false,'views_from'));
 		}
-		$fields->attach(view_space_field(do_lang_tempcode('BANNER_HITSTO'),($myrow['site_url']=='')?do_lang_tempcode('CANT_TRACK'):protect_from_escaping(escape_html(integer_format($myrow['hits_to']))),false,'hits_to'));
-		$fields->attach(view_space_field(do_lang_tempcode('BANNER_VIEWSTO'),($myrow['site_url']=='')?do_lang_tempcode('CANT_TRACK'):protect_from_escaping(escape_html(integer_format($myrow['views_to']))),false,'views_to'));
-		$fields->attach(view_space_field(do_lang_tempcode('BANNER_CLICKTHROUGH'),$click_through));
+		$fields->attach(map_table_field(do_lang_tempcode('BANNER_HITSTO'),($myrow['site_url']=='')?do_lang_tempcode('CANT_TRACK'):protect_from_escaping(escape_html(integer_format($myrow['hits_to']))),false,'hits_to'));
+		$fields->attach(map_table_field(do_lang_tempcode('BANNER_VIEWSTO'),($myrow['site_url']=='')?do_lang_tempcode('CANT_TRACK'):protect_from_escaping(escape_html(integer_format($myrow['views_to']))),false,'views_to'));
+		$fields->attach(map_table_field(do_lang_tempcode('BANNER_CLICKTHROUGH'),$click_through));
 		$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['submitter']);
-		$fields->attach(view_space_field(do_lang_tempcode('SUBMITTER'),$username,true));
+		$fields->attach(map_table_field(do_lang_tempcode('SUBMITTER'),$username,true));
 
-		$view_space=do_template('VIEW_SPACE',array('_GUID'=>'eb97a46d8e9813da7081991d5beed270','WIDTH'=>'300','FIELDS'=>$fields));
+		$map_table=do_template('MAP_TABLE',array('_GUID'=>'eb97a46d8e9813da7081991d5beed270','WIDTH'=>'300','FIELDS'=>$fields));
 
 		$banner=show_banner($myrow['name'],$myrow['b_title_text'],get_translated_tempcode($myrow['caption']),$myrow['img_url'],$source,$myrow['site_url'],$myrow['b_type']);
 
@@ -415,7 +415,7 @@ class Module_banners
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
 
-		return do_template('BANNER_VIEW_SCREEN',array('_GUID'=>'ed923ae0682c6ed679c0efda688c49ea','TITLE'=>$title,'EDIT_URL'=>$edit_url,'VIEW_SPACE'=>$view_space,'BANNER'=>$banner));
+		return do_template('BANNER_VIEW_SCREEN',array('_GUID'=>'ed923ae0682c6ed679c0efda688c49ea','TITLE'=>$title,'EDIT_URL'=>$edit_url,'MAP_TABLE'=>$map_table,'BANNER'=>$banner));
 	}
 
 }

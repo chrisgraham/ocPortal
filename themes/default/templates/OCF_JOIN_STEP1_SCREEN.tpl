@@ -4,9 +4,9 @@
 	{!DESCRIPTION_I_AGREE_RULES}
 </p>
 
-{+START,BOX}
+<div class="box box___ocf_join_step1_screen"><div class="box_inner">
 	{RULES}
-{+END}
+</div></div>
 
 <form title="{!PRIMARY_PAGE_FORM}" class="ocf_join_1" method="post" action="{URL*}">
 	<p>
@@ -14,12 +14,13 @@
 	</p>
 
 	{+START,IF_NON_EMPTY,{GROUP_SELECT}}
-		<label for="additional_group">{!CHOOSE_JOIN_USERGROUP}
-			<select id="additional_group" name="additional_group">
-				{GROUP_SELECT}
-			</select>
-		</label>
-		<br />
+		<p>
+			<label for="additional_group">{!CHOOSE_JOIN_USERGROUP}
+				<select id="additional_group" name="additional_group">
+					{GROUP_SELECT}
+				</select>
+			</label>
+		</p>
 	{+END}
 
 	<p>
@@ -33,8 +34,10 @@
 </form>
 
 {+START,IF_NON_EMPTY,{GENERATE_HOST}}
-	{+START,BOX,{!REMOTE_MEMBERS},,light}
+	<div class="box box___ocf_join_step1_screen"><div class="box_inner">
+		<h2>{!REMOTE_MEMBERS}</h2>
+
 		{!DESCRIPTION_IS_REMOTE_MEMBER,{GENERATE_HOST}}
-	{+END}
+	</div></div>
 {+END}
 

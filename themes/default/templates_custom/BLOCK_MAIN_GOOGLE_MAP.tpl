@@ -128,7 +128,9 @@
 	google.load("maps", "3",  {callback: google_map_initialize, other_params:"sensor=true"{+START,IF_NON_EMPTY,{REGION}}, region:'{REGION}'{+END}});
 //]]></script>
 
-{+START,BOX,{TITLE*}}
+<section class="box box___block_main_google_map"><div class="box_inner">
+	<h3>{TITLE*}</h3>
+
 	<div id="{DIV_ID*}" style="width:{WIDTH}; height:{HEIGHT}"></div>
-{+END}
+</div></section>
 

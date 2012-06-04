@@ -17,11 +17,11 @@
 		<h2>{!facebook:LOGIN_NATIVE_HEADER,{$SITE_NAME*}}</h2>
 	{+END}
 
-	{+START,BOX,,,light}
-		{!LOGIN_TEXT,<a href="{JOIN_LINK*}"><strong>{!JOIN_HERE}</strong></a>}
-	{+END}
+	<div class="box box___login_screen"><div class="box_inner">
+		{!LOGIN_TEXT,<a href="{JOIN_URL*}"><strong>{!JOIN_HERE}</strong></a>}
+	</div></div>
 
-	<form title="{!_LOGIN}" onsubmit="if (checkFieldForBlankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete">
+	<form title="{!_LOGIN}" onsubmit="if (check_field_for_blankness(this.elements['login_username'],event)) { disable_button_just_clicked(this); return true; } return false;" action="{LOGIN_URL*}" method="post" class="autocomplete">
 		<div>
 			{PASSION}
 
@@ -39,7 +39,7 @@
 				{+END}
 
 				{+START,IF,{$NOT,{$MOBILE}}}
-					<table summary="{!MAP_TABLE}" class="variable_table login_page_form">
+					<table summary="{!MAP_TABLE}" class="autosized_table login_page_form">
 						<tbody>
 							<tr>
 								<th class="de_th">{!USERNAME}:</th>
@@ -55,40 +55,41 @@
 									<input maxlength="255" type="password" id="password" name="password" size="25" />
 								</td>
 							</tr>
-							<tr>
-								<td colspan="2">&nbsp;</td>
-							</tr>
 						</tbody>
 					</table>
 				{+END}
 
 				<div class="login_page_options">
-					<p><label for="remember">
-					  <input id="remember" type="checkbox" value="1" name="remember" {+START,IF,{$CONFIG_OPTION,remember_me_by_default}}checked="checked" {+END}{+START,IF,{$NOT,{$CONFIG_OPTION,remember_me_by_default}}}onclick="if (this.checked) { var t=this; window.fauxmodal_confirm('{!REMEMBER_ME_COOKIE;}',function(answer) { if (!answer) { t.checked=false; } }); }" {+END}/>
-					  <span class="field_name">{!REMEMBER_ME}</span>
-					</label><br />
-					<span class="associated_details">{!REMEMBER_ME_TEXT}</span></p>
+					<p>
+						<label for="remember">
+						  <input id="remember" type="checkbox" value="1" name="remember" {+START,IF,{$CONFIG_OPTION,remember_me_by_default}}checked="checked" {+END}{+START,IF,{$NOT,{$CONFIG_OPTION,remember_me_by_default}}}onclick="if (this.checked) { var t=this; window.fauxmodal_confirm('{!REMEMBER_ME_COOKIE;}',function(answer) { if (!answer) { t.checked=false; } }); }" {+END}/>
+						  <span class="field_name">{!REMEMBER_ME}</span>
+						</label>
+						<span class="associated_details">{!REMEMBER_ME_TEXT}</span>
+					</p>
 
 					{+START,IF,{$CONFIG_OPTION,is_on_invisibility}}
-						<p><label for="login_invisible">
-							<input id="login_invisible" type="checkbox" value="1" name="login_invisible" />
-							<span class="field_name">{!INVISIBLE}</span>
-						</label><br />
-						<span class="associated_details">{!INVISIBLE_TEXT}</span></p>
+						<p>
+							<label for="login_invisible">
+								<input id="login_invisible" type="checkbox" value="1" name="login_invisible" />
+								<span class="field_name">{!INVISIBLE}</span>
+							</label>
+							<span class="associated_details">{!INVISIBLE_TEXT}</span>
+						</p>
 					{+END}
 				</div>
 			</div>
 
-			<div style="padding: 0; margin: 0" class="proceed_button">
+			<p class="proceed_button">
 				<input class="button_page" type="submit" value="{!_LOGIN}" />
-			</div>
+			</p>
 		</div>
 	</form>
 
 	{+START,IF_NON_EMPTY,{EXTRA}}
-	<p class="login_note">
-		{EXTRA}
-	</p>
+		<p class="login_note">
+			{EXTRA}
+		</p>
 	{+END}
 
 	{+START,IF_NON_EMPTY,{$BLOCK,block=openid,failsafe=1}}
@@ -99,8 +100,8 @@
 </div>
 
 <script type="text/javascript">// <![CDATA[
-addEventListenerAbstract(window,'real_load',function () {
-	if ((typeof document.activeElement=='undefined') || (document.activeElement!=document.getElementById('password')))
-		document.getElementById('login_username').focus();
-} );
+	add_event_listener_abstract(window,'real_load',function () {
+		if ((typeof document.activeElement=='undefined') || (document.activeElement!=document.getElementById('password')))
+			document.getElementById('login_username').focus();
+	} );
 //]]></script>

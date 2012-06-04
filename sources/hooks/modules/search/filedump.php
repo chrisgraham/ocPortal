@@ -102,22 +102,22 @@ class Hook_search_filedump
 				$dirs=explode('/',substr($_path,0,strlen($_path)-1));
 				$i2=0;
 				$pre='';
-				$file_tree=new ocp_tempcode();
+				$file_breadcrumbs=new ocp_tempcode();
 				while (array_key_exists($i2,$dirs))
 				{
 					if ($i2>0) $d=$dirs[$i2]; else $d=do_lang('ROOT');
 
 					if (array_key_exists($i2+1,$dirs))
 					{
-						$tree_url=build_url(array('page'=>'filedump','place'=>$pre.$dirs[$i2].'/'),get_module_zone('filedump'));
-						if (!$file_tree->is_empty()) $file_tree->attach(do_template('BREADCRUMB',array('_GUID'=>'7ee62e230d53344a7d9667dc59be21c4')));
-						$file_tree->attach(hyperlink($tree_url,$d));
+						$breadcrumbs_url=build_url(array('page'=>'filedump','place'=>$pre.$dirs[$i2].'/'),get_module_zone('filedump'));
+						if (!$file_breadcrumbs->is_empty()) $file_breadcrumbs->attach(do_template('BREADCRUMB',array('_GUID'=>'7ee62e230d53344a7d9667dc59be21c4')));
+						$file_breadcrumbs->attach(hyperlink($breadcrumbs_url,$d));
 					}
 					$pre.=$dirs[$i2].'/';
 					$i2++;
 				}
-				if (!$file_tree->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$file_tree)));
-				$out[$i]['template']=put_in_standard_box($tpl,do_lang_tempcode('FILE'));
+				if (!$file_breadcrumbs->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$file_breadcrumbs)));
+				$out[$i]['template']=do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'51bc0cf751f4ccbd0b7f1a247b092368','TITLE'=>$file,'SUMMARY'=>$tpl));
 
 				if ($sort=='title') $out[$i]['orderer']=$path;
 				elseif ($sort=='add_date') $out[$i]['orderer']=filectime($path);

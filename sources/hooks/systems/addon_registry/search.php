@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_search
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,10 +58,12 @@ class Hook_addon_registry_search
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-			'previously_in_addon'=>array('search'),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array(),
+			'previously_in_addon' => array(
+				'search'
+			)
 		);
 	}
 
@@ -74,7 +75,6 @@ class Hook_addon_registry_search
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/realtime_rain/search.php',
 			'TAGS.tpl',
 			'sources/blocks/side_tag_cloud.php',
@@ -106,37 +106,37 @@ class Hook_addon_registry_search
 			'sources/hooks/modules/search/index.html',
 			'themes/default/images/google.png',
 			'OPENSEARCH.tpl',
-			'data/opensearch.php',
+			'data/opensearch.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'BLOCK_MAIN_SEARCH.tpl'=>'block_main_search',
-				'BLOCK_SIDE_TAG_CLOUD.tpl'=>'block_side_tag_cloud',
-				'TAGS.tpl'=>'tags',
-				'OPENSEARCH.tpl'=>'opensearch',
-				'SEARCH_SAVED_DELETION_BUTTON.tpl'=>'search_saved_screen',
-				'SEARCH_SAVED_RUN_BUTTON.tpl'=>'search_saved_screen',
-				'SEARCH_SAVED_SCREEN.tpl'=>'search_saved_screen',
-				'SEARCH_RESULT.tpl'=>'search_form_screen',
-				'SEARCH_RESULT_TABLE.tpl'=>'search_form_screen',
-				'SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl'=>'search_form_screen',
-				'SEARCH_ADVANCED.tpl'=>'search_form_screen',
-				'SEARCH_FOR_SEARCH_DOMAIN.tpl'=>'search_form_screen',
-				'SEARCH_DOMAINS.tpl'=>'search_form_screen',
-				'SEARCH_FORM_SCREEN.tpl'=>'search_form_screen',
-				'SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl'=>'search_form_screen',
-				'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl'=>'search_form_screen',
-				'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl'=>'search_form_screen',
-				);
+			'BLOCK_MAIN_SEARCH.tpl' => 'block_main_search',
+			'BLOCK_SIDE_TAG_CLOUD.tpl' => 'block_side_tag_cloud',
+			'TAGS.tpl' => 'tags',
+			'OPENSEARCH.tpl' => 'opensearch',
+			'SEARCH_SAVED_DELETION_BUTTON.tpl' => 'search_saved_screen',
+			'SEARCH_SAVED_RUN_BUTTON.tpl' => 'search_saved_screen',
+			'SEARCH_SAVED_SCREEN.tpl' => 'search_saved_screen',
+			'SEARCH_RESULT.tpl' => 'search_form_screen',
+			'SEARCH_RESULT_TABLE.tpl' => 'search_form_screen',
+			'SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl' => 'search_form_screen',
+			'SEARCH_ADVANCED.tpl' => 'search_form_screen',
+			'SEARCH_FOR_SEARCH_DOMAIN.tpl' => 'search_form_screen',
+			'SEARCH_DOMAINS.tpl' => 'search_form_screen',
+			'SEARCH_FORM_SCREEN.tpl' => 'search_form_screen',
+			'SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl' => 'search_form_screen',
+			'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl' => 'search_form_screen',
+			'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl' => 'search_form_screen'
+		);
 	}
 
 	/**
@@ -149,24 +149,22 @@ class Hook_addon_registry_search
 	function tpl_preview__block_main_search()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_SEARCH',array(
-					'TITLE'=>lorem_phrase(),
-					'INPUT_FIELDS'=>placeholder_array(),
-					'EXTRA'=>placeholder_array(),
-					'SORT'=>lorem_phrase(),
-					'AUTHOR'=>lorem_phrase(),
-					'DAYS'=>lorem_phrase(),
-					'DIRECTION'=>lorem_phrase(),
-					'ONLY_TITLES'=>'1',
-					'ONLY_SEARCH_META'=>'1',
-					'BOOLEAN_SEARCH'=>'1',
-					'CONJUNCTIVE_OPERATOR'=>'AND',
-					'LIMIT_TO'=>placeholder_array(),
-					'URL'=>placeholder_url(),
-					'FULL_LINK'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_SEARCH', array(
+				'TITLE' => lorem_phrase(),
+				'INPUT_FIELDS' => placeholder_array(),
+				'EXTRA' => placeholder_array(),
+				'SORT' => lorem_phrase(),
+				'AUTHOR' => lorem_phrase(),
+				'DAYS' => lorem_phrase(),
+				'DIRECTION' => lorem_phrase(),
+				'ONLY_TITLES' => '1',
+				'ONLY_SEARCH_META' => '1',
+				'BOOLEAN_SEARCH' => '1',
+				'CONJUNCTIVE_OPERATOR' => 'AND',
+				'LIMIT_TO' => placeholder_array(),
+				'URL' => placeholder_url(),
+				'FULL_LOGIN_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -179,26 +177,27 @@ class Hook_addon_registry_search
 	 */
 	function tpl_preview__block_side_tag_cloud()
 	{
-		$tpl_tags=array();
-		$tags	=	array(lorem_word()=>3,lorem_word_2()=>5);
-		foreach ($tags as $tag=>$count)
+		$tpl_tags = array();
+		$tags = array(
+			lorem_word() => 3,
+			lorem_word_2() => 5
+		);
+		foreach ($tags as $tag => $count)
 		{
-			$em=1.0;
-			$tpl_tags[]=array(
-				'TAG'=>$tag,
-				'COUNT'=>"$count",
-				'EM'=>float_to_raw_string($em),
-				'LINK'=>placeholder_url(),
+			$em = 1.0;
+			$tpl_tags[] = array(
+				'TAG' => $tag,
+				'COUNT' => "$count",
+				'EM' => float_to_raw_string($em),
+				'LINK' => placeholder_url()
 			);
 		}
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_TAG_CLOUD',array(
-					'TITLE'=>lorem_phrase(),
-					'TAGS'=>$tpl_tags,
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_TAG_CLOUD', array(
+				'TITLE' => lorem_phrase(),
+				'TAGS' => $tpl_tags
+			)), NULL, '', true)
 		);
 	}
 
@@ -212,21 +211,19 @@ class Hook_addon_registry_search
 	function tpl_preview__tags()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('TAGS',array(
-					'TAGS'=>array(
-						array(
-							'LINK_FULLSCOPE'=>placeholder_url(),
-							'TAG'=>lorem_word(),
-						),
-						array(
-							'LINK_FULLSCOPE'=>placeholder_url(),
-							'TAG'=>lorem_word(),
-						),
+			lorem_globalise(do_lorem_template('TAGS', array(
+				'TAGS' => array(
+					array(
+						'LINK_FULLSCOPE' => placeholder_url(),
+						'TAG' => lorem_word()
 					),
-					'TYPE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+					array(
+						'LINK_FULLSCOPE' => placeholder_url(),
+						'TAG' => lorem_word()
+					)
+				),
+				'TYPE' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -240,11 +237,9 @@ class Hook_addon_registry_search
 	function tpl_preview__opensearch()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('OPENSEARCH',array(
-					'DESCRIPTION'=>lorem_paragraph(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('OPENSEARCH', array(
+				'DESCRIPTION' => lorem_paragraph()
+			)), NULL, '', true)
 		);
 	}
 
@@ -259,44 +254,70 @@ class Hook_addon_registry_search
 	{
 		$entries = new ocp_tempcode();
 
-		foreach (placeholder_array() as $k=>$v)
+		foreach (placeholder_array() as $k => $v)
 		{
-			$deletion_button=do_lorem_template('SEARCH_SAVED_DELETION_BUTTON',array('NAME'=>lorem_phrase(),'URL'=>placeholder_url(),'ID'=>placeholder_random()));
-			$run_button=do_lorem_template('SEARCH_SAVED_RUN_BUTTON',array('NAME'=>lorem_phrase(),'URL'=>placeholder_url(),'HIDDEN'=>''));
+			$deletion_button = do_lorem_template('SEARCH_SAVED_DELETION_BUTTON', array(
+				'NAME' => lorem_phrase(),
+				'URL' => placeholder_url(),
+				'ID' => placeholder_random()
+			));
+			$run_button = do_lorem_template('SEARCH_SAVED_RUN_BUTTON', array(
+				'NAME' => lorem_phrase(),
+				'URL' => placeholder_url(),
+				'HIDDEN' => ''
+			));
 
 			$cells = new ocp_tempcode();
 
-			$entry_data	=	array('Title'=>lorem_word(),'Date'=>placeholder_date(),'Delete'=>$deletion_button,'Run search'=>$run_button);
+			$entry_data = array(
+				'Title' => lorem_word(),
+				'Date' => placeholder_date(),
+				'Delete' => $deletion_button,
+				'Run search' => $run_button
+			);
 
-			foreach ($entry_data as $k=>$v)
+			foreach ($entry_data as $k => $v)
 			{
-				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>$v),NULL,false,'RESULTS_TABLE_FIELD'));
+				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD', array(
+					'VALUE' => $v
+				)));
 			}
-			$entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY',array('VALUES'=>$cells),NULL,false,'RESULTS_TABLE_ENTRY'));
+			$entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY', array(
+				'VALUES' => $cells
+			)));
 		}
 
-		$selectors = new ocp_tempcode();
-		foreach (placeholder_array() as $k=>$v)
+		$fields_title = new ocp_tempcode();
+		foreach (array(
+			'Title',
+			'Date',
+			'Delete',
+			'Run search'
+		) as $k => $v)
 		{
-			$selectors->attach(do_lorem_template('RESULTS_BROWSER_SORTER',array('SELECTED'=>'','NAME'=>$v,'VALUE'=>$v)));
+			$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
+				'VALUE' => $v
+			)));
 		}
 
-		$sort = do_lorem_template('RESULTS_BROWSER_SORT',array('HIDDEN'=>'','SORT'=>lorem_word(),'RAND'=>placeholder_random(),'URL'=>placeholder_url(),'SELECTORS'=>$selectors));
+		$results_table = do_lorem_template('RESULTS_TABLE', array(
+			'WIDTHS' => array(),
+			'TEXT_ID' => lorem_phrase(),
+			'FIELDS_TITLE' => $fields_title,
+			'FIELDS' => $entries,
+			'MESSAGE' => new ocp_tempcode(),
+			'SORT' => '',
+			'PAGINATION' => placeholder_pagination()
+		));
 
-		$fields_title	=	new ocp_tempcode();
-		foreach (array('Title','Date','Delete','Run search') as $k=>$v)
-		{
-			$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>$v)));
-      }
-
-		$results_table = do_lorem_template('RESULTS_TABLE',array('TEXT_ID'=>lorem_phrase(),'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$entries,'MESSAGE'=>new ocp_tempcode(),'SORT'=>$sort,'BROWSER'=>placeholder_result_browser(),'WIDTHS'=>array(placeholder_number())),NULL,false,'RESULTS_TABLE');
-
-		$saved_search_screen	=		do_lorem_template('SEARCH_SAVED_SCREEN',array('TITLE'=>lorem_title(),'SEARCHES'=>$results_table,'URL'=>placeholder_url()));
+		$saved_search_screen = do_lorem_template('SEARCH_SAVED_SCREEN', array(
+			'TITLE' => lorem_title(),
+			'SEARCHES' => placeholder_table(),
+			'URL' => placeholder_url()
+		));
 
 		return array(
-			lorem_globalise(
-				$saved_search_screen
-			,NULL,'',true),
+			lorem_globalise($saved_search_screen, NULL, '', true)
 		);
 	}
 
@@ -309,106 +330,113 @@ class Hook_addon_registry_search
 	 */
 	function tpl_preview__search_form_screen()
 	{
-		$options	=	new ocp_tempcode();
+		require_css('forms');
+
+		$options = new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
-			$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION',array(
-						'NAME'=>placeholder_random(),
-						'DISPLAY'=>lorem_phrase(),
-						'SPECIAL'=>lorem_phrase(),
-						'CHECKED'=>lorem_phrase(),
-							)
-				));
+			$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION', array(
+				'NAME' => placeholder_random(),
+				'DISPLAY' => lorem_phrase(),
+				'SPECIAL' => lorem_phrase(),
+				'CHECKED' => lorem_phrase()
+			)));
 		}
 
-		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST',array(
-						'NAME'=>placeholder_random(),
-						'DISPLAY'=>lorem_word(),
-						'SPECIAL'=>placeholder_options(),
-						'CHECKED'=>false,
-							)
-				));
+		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST', array(
+			'NAME' => placeholder_random(),
+			'DISPLAY' => lorem_word(),
+			'SPECIAL' => placeholder_options(),
+			'CHECKED' => false
+		)));
 
-		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT',array(
-						'NAME'=>placeholder_random(),
-						'DISPLAY'=>lorem_word(),
-						'SPECIAL'=>lorem_word(),
-						'CHECKED'=>false,
-							)
-				));
+		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT', array(
+			'NAME' => placeholder_random(),
+			'DISPLAY' => lorem_word(),
+			'SPECIAL' => lorem_word(),
+			'CHECKED' => false
+		)));
 
-		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK',array(
-						'NAME'=>placeholder_random(),
-						'DISPLAY'=>lorem_word(),
-						'SPECIAL'=>lorem_word(),
-						'CHECKED'=>false,
-							)
-				));
+		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK', array(
+			'NAME' => placeholder_random(),
+			'DISPLAY' => lorem_word(),
+			'SPECIAL' => lorem_word(),
+			'CHECKED' => false
+		)));
 
-		$specialisation	=	do_lorem_template('SEARCH_ADVANCED',array(
-					'AJAX'=>lorem_phrase(),
-					'OPTIONS'=>$options,
-					'TREE'=>'',
-					'UNDERNEATH'=>lorem_phrase(),
-				)
-		);
-
-		$search_domains	=	new ocp_tempcode();
-		foreach (placeholder_array() as $value)
-		{
-			$search_domains->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN',array(
-					'ADVANCED_ONLY'=>lorem_phrase(),
-					'CHECKED'=>lorem_phrase(),
-					'OPTIONS'=>placeholder_url(),
-					'LANG'=>lorem_phrase(),
-					'NAME'=>placeholder_random(),
-						)
-			));
-		}
-
-		$specialisation->attach(do_lorem_template('SEARCH_DOMAINS',array(
-					'SEARCH_DOMAINS'=>$search_domains,
-				)
+		$specialisation = do_lorem_template('SEARCH_ADVANCED', array(
+			'AJAX' => lorem_phrase(),
+			'OPTIONS' => $options,
+			'TREE' => '',
+			'UNDERNEATH' => lorem_phrase()
 		));
 
-		$result	=	new ocp_tempcode();
-		$result->attach(do_lorem_template('SEARCH_RESULT',array('CONTENT'=>lorem_paragraph_html())));
+		$search_domains = new ocp_tempcode();
+		foreach (placeholder_array() as $value)
+		{
+			$search_domains->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN', array(
+				'ADVANCED_ONLY' => lorem_phrase(),
+				'CHECKED' => lorem_phrase(),
+				'OPTIONS_URL' => placeholder_url(),
+				'LANG' => lorem_phrase(),
+				'NAME' => placeholder_random()
+			)));
+		}
 
-		$types_results=array();
-		foreach (placeholder_array() as $i=>$r)
-			$types_results[$i]=array('R'=>placeholder_array());
+		$specialisation->attach(do_lorem_template('SEARCH_DOMAINS', array(
+			'SEARCH_DOMAINS' => $search_domains
+		)));
 
-		$result->attach(do_lorem_template('SEARCH_RESULT_TABLE',array('HEADERS'=>placeholder_array(),'ROWS'=>$types_results)));
+		$result = new ocp_tempcode();
+		$result->attach(do_lorem_template('SEARCH_RESULT', array(
+			'CONTENT' => lorem_paragraph_html(),
+			'TYPE'=>placeholder_id(),
+			'ID'=>placeholder_id()
+		)));
+
+		$types_results = array();
+		foreach (placeholder_array() as $i => $r)
+			$types_results[$i] = array(
+				'R' => placeholder_array()
+			);
+
+		$result->attach(do_lorem_template('SEARCH_RESULT_TABLE', array(
+			'HEADERS' => placeholder_array(),
+			'ROWS' => $types_results
+		)));
 
 		require_lang('catalogues');
-		$result->attach(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES',array('BUILDUP'=>lorem_phrase(),'NAME'=>lorem_word(),'TITLE'=>lorem_word_2())));
+		$result->attach(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES', array(
+			'BUILDUP' => lorem_phrase(),
+			'NAME' => lorem_word(),
+			'TITLE' => lorem_word_2()
+		)));
 
 
 		return array(
-			lorem_globalise(
-				do_lorem_template('SEARCH_FORM_SCREEN',array(
-					'SEARCH_TERM'=>lorem_word_2(),
-					'NUM_RESULTS'=>placeholder_number(),
-					'CAN_ORDER_BY_RATING'=>false,
-					'EXTRA_SORT_FIELDS'=>placeholder_array(0),
-					'USER_LABEL'=>lorem_word(),
-					'DAYS_LABEL'=>lorem_word(),
-					'BOOLEAN_SEARCH'=>false,
-					'AND'=>false,
-					'ONLY_TITLES'=>true,
-					'DAYS'=>placeholder_id(),
-					'SORT'=>'relevance',
-					'DIRECTION'=>'DESC',
-					'CONTENT'=>lorem_phrase(),
-					'RESULTS'=>NULL,
-					'RESULTS_BROWSER'=>'',
-					'OLD_MYSQL'=>false,
-					'TITLE'=>lorem_title(),
-					'AUTHOR'=>lorem_phrase(),
-					'SPECIALISATION'=>$specialisation,
-					'URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('SEARCH_FORM_SCREEN', array(
+				'SEARCH_TERM' => lorem_word_2(),
+				'NUM_RESULTS' => placeholder_number(),
+				'CAN_ORDER_BY_RATING' => false,
+				'EXTRA_SORT_FIELDS' => placeholder_array(0),
+				'USER_LABEL' => lorem_word(),
+				'DAYS_LABEL' => lorem_word(),
+				'BOOLEAN_SEARCH' => false,
+				'AND' => false,
+				'ONLY_TITLES' => true,
+				'DAYS' => placeholder_id(),
+				'SORT' => 'relevance',
+				'DIRECTION' => 'DESC',
+				'CONTENT' => lorem_phrase(),
+				'RESULTS' => NULL,
+				'PAGINATION' => '',
+				'OLD_MYSQL' => false,
+				'TITLE' => lorem_title(),
+				'AUTHOR' => lorem_phrase(),
+				'SPECIALISATION' => $specialisation,
+				'URL' => placeholder_url(),
+				'HAS_TEMPLATE_SEARCH' => true
+			)), NULL, '', true)
 		);
 	}
 }

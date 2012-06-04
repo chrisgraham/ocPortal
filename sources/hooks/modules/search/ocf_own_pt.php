@@ -36,7 +36,7 @@ class Hook_search_ocf_own_pt
 		require_lang('ocf');
 
 		$info=array();
-		$info['lang']=do_lang_tempcode('SEARCH_PERSONAL_TOPICS');
+		$info['lang']=do_lang_tempcode('SEARCH_PRIVATE_TOPICS');
 		$info['default']=false;
 		$info['special_on']=array();
 		$info['special_off']=array('starter'=>do_lang_tempcode('POST_SEARCH_STARTER'));
@@ -136,7 +136,7 @@ class Hook_search_ocf_own_pt
 	function render($row)
 	{
 		require_code('ocf_posts2');
-		return ocf_show_isolated_post($row);
+		return render_post_box($row);
 	}
 
 }

@@ -2,8 +2,11 @@
 
 {$,Parser hint: .innerHTML okay}
 
-{$,This provides the Javascript necessary for the "status" part of activities}
-{$,You can make use of it via require_javascript('javascript_activities_state')}
+/*
+This provides the Javascript necessary for the "status" part of activities
+
+You can make use of it via require_javascript('javascript_activities_state')
+*/
 
 function sUpdateF(evt) {
 	if (jQuery(this).val().trim()=='{!activities:TYPE_HERE;}') {

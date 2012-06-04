@@ -27,7 +27,7 @@
 
 	Certain aspects of Comcode are incompatible between implementations ("implementation-incompatible") and websites ("website-incompatible").
 	These are the incompatibilities:
-	 - CEDI; CEDI is essentially an extended WIKI system, and this tag can be considered as a link to a named WIKI-page. If no WIKI-like system is presented, this tag could be considered a link to a named page or article. Thus this tag is website-incompatible.
+	 - Wiki+; Wiki+ is essentially an extended WIKI system, and this tag can be considered as a link to a named WIKI-page. If no WIKI-like system is presented, this tag could be considered a link to a named page or article. Thus this tag is website-incompatible.
 	 - topic and post; this requires a forum system to be present, and links to content within that system by ID - thus this is website-incompatible.
 	 - block; this calls up and embeds the output of a named dynamic block of code - the names available are not considered a part of the Comcode specification and are thus website-incompatible. Therefore, the 'block' tag is not considered portable across implementations unless implementations choose to support the same blocks as provided in ocPortal.
 	 - directive; directives are based on the directive functionality present in ocPortal's 'tempcode'. This functionality is not considered a core part of Comcode, but there is no reason that it cannot, in majority, be replicated in other implementations as the number of directives is small.
@@ -209,7 +209,7 @@
 				</xs:complexType>
 			</xs:element>
 
-			<xs:element name="cedi">
+			<xs:element name="wiki">
 				<xs:complexType mixed="true">
 					<xs:attribute name="anchor" type="xs:string" use="optional" />
 				</xs:complexType>

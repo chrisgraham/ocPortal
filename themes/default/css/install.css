@@ -3,127 +3,81 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
+{$THEME_WIZARD_COLOR,#ffffff,installer_background_text,100% W/B}
+{$THEME_WIZARD_COLOR,#eeeeee,installer_background_text_hover,5% B/W + 95% W/B}
+{$THEME_WIZARD_COLOR,#2258a9,installer_background_a,seed sat_to 80}
+{$THEME_WIZARD_COLOR,#5476a9,installer_background_b,seed sat_to 50}
+{$THEME_WIZARD_COLOR,#ffffff,external_tool_background,100% FFFFFF}
+
+/* Global */
+
 #installer_body {
-	background-color: #45608B;
-}
-
-#install_welcome {
-	background-color: #d0eff8;
-	border: 1px solid #79dbf7;
-	text-align: center;
-	padding: 5px 0;
-	margin: 20px 0;
-}
-
-#install_newsletter {
-	border: 1px dotted #758AAC;
-	width: 15em;
-	float: {!en_right};
-	margin-left: 15px;
-	background-color: #eaeff6;
-	padding: 5px;
-}
-
-#install_versiontop {
-	text-align: {!en_left};
-	width: 75%;
-	height: 100%;
-	margin: 0 auto;
-	border-left: 1px solid #758AAC;
-	border-right: 1px solid #758AAC;
-	border-bottom: 1px solid #758AAC;
-	font-weight: bold;
-	padding: 3px 5px 6px 5px;
-	background-color: #F4F7FA;
-}
-
-.installer_main_internal .standardbox_main_classic {
-	padding: 4px 10px;
-}
-
-.install_log_table {
-	border: 1px solid #072A66;
-	border-collapse: collapse;
-	display: inline-block;
-	background-color: #5A84C4;
-	color: white;
-	padding: 4px;
-}
-
-.install_log_table_title {
-	font-weight: bold;
-}
-
-.installer_section {
-	text-align: {!en_left};
-	width: 75%;
-	margin: 0 auto;
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,installer_background_a}\, {$GET,installer_background_b});}
+	background-color: {$GET,installer_background_b}; {$,IE fallback}
+	background-repeat: no-repeat;
 }
 
 .installer_main {
-	width: 324px;
 	text-align: center;
-	margin: 25px auto 0 auto;
-	border: 1px solid;
+	margin: 2.5em 0 1em 0;
 }
 
-.installer_main_internal {
+.installer_main img {
+	display: inline-block;
+	{$BETA_CSS_PROPERTY,box-shadow: 0 0 25px 2px {$GET,standard_border};}
+	margin-bottom: 2.6em;
+}
+
+.installer_main_inner>.box {
+	{$BETA_CSS_PROPERTY,box-shadow: 0 0 25px 2px {$GET,standard_border};}
+}
+
+.installer_main_inner {
 	width: 80%;
 	margin: 0 10%;
-	background: white; /* So if things go haywire, at least we have a white background to render on */
 }
 
 .installer_main_min {
 	min-height: 410px;
 }
 
-.installer_terms_title {
-	padding: 1em 0 1.5em 1em;
+.installer_main_min th, .installer_main_min td {
+	vertical-align: middle;
 }
 
 .installer_version {
 	margin-top: 25px;
 	font-size: 0.8em;
 	text-align: center;
-	color: white;
 }
 
+.installer_version,
 .installer_version a:link,
 .installer_version a:visited,
 .installer_version a:active {
-	color: #EEE;
+	color: {$GET,installer_background_text};
 }
 
 .installer_version a:hover {
-	color: #FFF;
+	color: {$GET,installer_background_text_hover};
 }
 
-.installer_ocp_licence {
-	margin-bottom: 20px;
+/* Re-used */
+
+.installer_left_column {
+	width: 40%;
 }
 
-.installer_forums {
-	text-align: {!en_left};
-	border: 1px solid #758AAC;
-	border-collapse: collapse;
-	width: 90%;
-	margin: 0 auto;
+.installer_right_column {
+	width: 60%;
 }
 
-.installer_forum_headers {
-	background-color: #EBEFF5;
-	height: 15px;
+.installer_input_left_column {
+	width: 30%;
 }
 
-.installer_forum_list {
-	background-color: #EBEFF5;
-	width: 65%;
-	border-right: 1px solid #C3CDDD;
-}
-
-.installer_forum_version {
-	padding-top: 20px;
-	background-color: #F2F5F9;
+.installer_input_right_column {
+	width: 70%;
 }
 
 .long_warning ul {
@@ -135,18 +89,27 @@
 	list-style-type: circle;
 }
 
+.installer_warning, .installer_notice {
+	background: {$GET,external_tool_background};
+	border: 1px solid {$GET,pale_border};
+	padding: 1em;
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+}
+
 .installer_warning {
-	color: red;
-	background: white;
-	padding: 5px;
+	color: {$GET,red_highlight_text};
 }
 
 .installer_notice {
-	color: green;
+	color: {$GET,green_highlight_text};
+}
+
+.up_alert {
+	text-transform: uppercase;
 }
 
 .radio_horiz_spacer {
-	padding-{!en_left}: 20px;
+	padding-{!en_left}: 2em;
 }
 
 .actions_list_strong {
@@ -155,4 +118,120 @@
 
 textarea.mono_textbox {
 	font-family: 'Courier';
+}
+
+.popup_blocker_warning {
+	color: {$GET,red_highlight_text};
+}
+
+/* Step 1 */
+
+#install_welcome {
+	background-color: {$GET,point_of_interest_background};
+	border: 1px solid {$GET,point_of_interest_border};
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+	text-align: center;
+	padding: 0.5em 0;
+	margin: 2em 0;
+}
+
+#install_newsletter {
+	border: 1px dotted {$GET,standard_border};
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+	width: 15em;
+	float: {!en_right};
+	margin-left: 15px;
+	background-color: {$GET,area_background};
+	padding: 5px;
+}
+
+/* Step 2 */
+
+.installer_terms_title {
+	padding: 1em 0 1.5em 1em;
+}
+
+.installer_ocp_licence {
+	margin-bottom: 2em;
+}
+
+/* Step 3 */
+
+.installer_forums {
+	text-align: {!en_left};
+	border: 1px solid {$GET,standard_border};
+	border-collapse: collapse;
+	width: 90%;
+	margin: 0 auto;
+}
+
+.installer_forums th {
+	background-color: {$GET,area_background};
+	padding: 0;
+}
+
+.installer_forums td {
+	vertical-align: top !important;
+	padding: 1em;
+}
+
+.installer_forums th>div {
+	text-align: {!en_left};
+	width: 75%;
+	height: 100%;
+	margin: 0 auto;
+	border-bottom: 1px dotted {$GET,standard_border};
+	font-weight: bold;
+	padding: 0.5em;
+	background-color: {$GET,area_faded_background};
+}
+
+.installer_forums th>div.left {
+	border-left: 1px dotted {$GET,standard_border};
+	float: right;
+}
+
+.installer_forums th>div.right {
+	border-right: 1px dotted {$GET,standard_border};
+	float: left;
+	text-align: right;
+}
+
+.installer_forum_list {
+	background-color: {$GET,area_background};
+	width: 65%;
+	border-right: 1px dotted {$GET,standard_border};
+}
+
+.installer_forum_version {
+	background-color: {$GET,area_background};
+}
+
+/* Step 4 */
+
+.installer_section {
+	text-align: {!en_left};
+	width: 75%;
+	margin: 2em auto;
+}
+
+/* After Step 4 */
+
+.install_log_table {
+	border: 1px dashed {$GET,dark_border};
+	border-collapse: collapse;
+	display: inline-block;
+	background-color: {$GET,point_of_interest_background};
+	color: {$GET,area_key_text};
+	padding: 1em;
+	margin: 1em;
+}
+
+.install_log_table>p:first-child {
+	margin-top: 0;
+}
+
+.installer_completed_calltoaction {
+	margin-top: 1em;
+	font-size: 1.1em;
 }

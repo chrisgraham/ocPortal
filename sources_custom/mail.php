@@ -23,9 +23,9 @@
  * @param  ID_TEXT		The template used to show the email
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL')
+function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL')
 {
-	if (get_option('smtp_sockets_use')=='0') return non_overrided__mail_wrap($subject_tag,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue);
+	if (get_option('smtp_sockets_use')=='0') return non_overrided__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue);
 
 	if (running_script('stress_test_loader')) return NULL;
 
@@ -42,7 +42,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
-			'm_subject'=>$subject_tag,
+			'm_subject'=>$subject_line,
 			'm_message'=>$message_raw,
 			'm_to_email'=>serialize($to_email),
 			'm_to_name'=>serialize($to_name),
@@ -119,7 +119,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	}
 
 	// Our subject
-	$_subject=do_template('MAIL_SUBJECT',array('_GUID'=>'44a57c666bb00f96723256e26aade9e5','SUBJECT_TAG'=>$subject_tag),$lang,false,NULL,'.tpl','templates',$theme);
+	$_subject=do_template('MAIL_SUBJECT',array('_GUID'=>'4c7eefb7296e7b7d4f3a4ef0eeeca658','SUBJECT_LINE'=>$subject_line),$lang,false,NULL,'.tpl','templates',$theme);
 	$subject=$_subject->evaluate($lang); // Note that this is slightly against spec, because characters aren't forced to be printable us-ascii. But it's better we allow this (which works in practice) than risk incompatibility via charset-base64 encoding.
 
 	// Evaluate message. Needs doing early so we know if we have any headers
@@ -349,7 +349,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			attach_message(!is_null($error)?make_string_tempcode($error):do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))),'warn');
 		} else
 		{
-			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
+			return warn_screen(get_screen_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
 		}
 	}
 	return NULL;

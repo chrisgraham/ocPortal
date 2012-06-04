@@ -5,9 +5,13 @@
 
 {+START,IF,{$MOBILE}}
 	.calendar_week th a, .calendar_month th a, .calendar_day th a, .calendar_week th span, .calendar_month th span, .calendar_day th span {
-		writing-mode:tb-rl;
+		writing-mode: tb-rl;
 	}
 {+END}
+
+abbr.dtstart, abbr.dtend {
+	border-bottom: 0;
+}
 
 /*
 =========================
@@ -22,7 +26,7 @@
 
 .calendar_month th {
 	width: 12%;
-	border: 1px solid #a2b6d5; /* {$,wizard, 60% sb_color + 40% seed} */
+	border: 1px solid {$GET,th_background}; /* Obscures border */
 }
 
 .calendar_month_entry {
@@ -46,6 +50,10 @@
 =========================
 */
 
+.calendar_year_wrap {
+	border-collapse: collapse;
+}
+
 {+START,IF,{$MOBILE}}
 	.calendar_year_wrap {
 		display: block;
@@ -59,7 +67,6 @@
 		display: block;
 		padding: 3em;
 		overflow: hidden;
-		outline: 0;
 	}
 {+END}
 
@@ -95,6 +102,7 @@
 
 .calendar_year_month_day img {
 	float: {!en_right};
+	display: block;
 }
 
 /*
@@ -108,10 +116,13 @@
 	border-collapse: collapse;
 }
 
-.calendar_week_hour {
+.calendar_week th {
+	border: 1px solid {$GET,th_background}; /* Obscures border */
+}
+
+.calendar_week_hour { /* Left-most column */
 	width: 90px;
 	height: 30px;
-	border: 1px solid #6b81a1; /* {$,dottedborder.border, 95% (seed sat_to 33) + 5% !W/B}*/
 }
 
 /*
@@ -135,8 +146,12 @@
 	height: 100%;
 }
 
+.calendar_day_entry_time {
+	display: block;
+}
+
 .calendar_day_entry_description {
-	padding-top: 20px;
+	padding-top: 2em;
 }
 
 .calendar_day_icon {
@@ -159,42 +174,52 @@
 
 /*
 =========================
-======Miscellaneous======
+===Main screen global====
 =========================
 */
 
-abbr.dtstart, abbr.dtend {
-	border-bottom: 0;
-}
-
-.top_navigation {
+.calendar_top_navigation {
 	border-collapse: collapse;
 	margin-left: 1px;
+	margin-bottom: 1em;
 }
 
 .calendar_date_span_link {
 	float: {!en_left};
-	width: 24.9%; /* Fixes IE6 bug - should be 50% */
+	width: 25%;
 	text-align: center;
 }
 
 .calendar_date_span_link_inner {
-	border: 1px solid #6b81a1; /* {$,wizard, 100% medborder.border} */
-	background-color: #F2F5F9; /* {$,wizard, 80% ocf_row2 + 20% W/B}*/
-	color: #2a3d5a; /* {$,wizard, 53% (seed sat_to 53) + 47% !W/B}*/
-	padding: 3px;
+	border: 1px solid {$GET,standard_border};
+	background-color: {$GET,area_faded_background};
+	color: {$GET,area_key_text};
+	padding: 0.3em;
 	margin-left: -1px;
 }
 
-.no_description {
-	font-style: italic;
-	text-align: center;
+.box___calendar_main_screen_interests {
+	margin-top: 2em;
 }
 
+{+START,IF,{$NOT,{$MOBILE}}}
+	.event_interest_box {
+		width: 50%;
+		padding: 0.5em;
+		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+	}
+{+END}
+
 .calendar_main_page_hidden_data {
-	width: 36%;
-	padding: 5px;
+	width: 24em;
+	padding: 0.5em;
 }
+
+/*
+=========================
+==Misc calendar tables===
+=========================
+*/
 
 .calendar_priority_na,
 .calendar_priority_1,
@@ -204,21 +229,13 @@ abbr.dtstart, abbr.dtend {
 .calendar_priority_5,
 .calendar_priority_free_time,
 .calendar_free_time,
-.calendar_hover,
 .calendar_active {
 	font-size: 0.85em;
-	padding: 2px;
-	border: 1px solid #6b81a1; /* {$,dottedborder.border, 95% (seed sat_to 33) + 5% !W/B}*/
-	color: #2a3d5a; /* {$,wizard, 53% (seed sat_to 53) + 47% !W/B}*/
-	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2 } */
-}
-
-.side_calendar th {
-	border: 1px solid #6b81a1; /* {$,dottedborder.border, 95% (seed sat_to 33) + 5% !W/B}*/
+	padding: 0.5em;
 }
 
 .calendar_day_table th, .calendar_year_month th {
-	border: 1px solid #a2b6d5; /* {$,th.bgcolor, 60% sb_color + 40% seed} Matches border above, but uses bg-color so invisible */
+	border: 1px solid {$GET,th_background}; /* Matches border above, but uses bg-color so invisible */
 }
 
 /* The following classes are for the varying degress of priority that
@@ -253,21 +270,36 @@ abbr.dtstart, abbr.dtend {
 /* -- */
 
 .calendar_current {
-	background-color: #c7d3e6; /* {$,wizard, 30% seed + 70% W/B} */
+	background-color: {$GET,area_current_background};
 }
 
-.calendar_hover {
-	background-color: #c2d1e5; /* {$,wizard, 100% hover_bg} */
+.calendar_day_table td, .calendar_week td, .calendar_month td, .calendar_year_wrap td {
+	border: 1px solid {$GET,standard_border};
+}
+
+.calendar_day_table td:hover, .calendar_week td:hover, .calendar_month td:hover, .calendar_year_month_table td:hover {
+	color: {$GET,area_key_text};
+	background-color: {$GET,area_hover_2_background};
 }
 
 .calendar_multiple {
-	background-color: red;
+	background-color: {$GET,red_highlight_background};
 }
 
-.event_reminders {
-	width: 100%;
+/*
+=========================
+======View event=========
+=========================
+*/
+
+.no_description {
+	font-style: italic;
+	text-align: center;
+}
+
+.event_subscriptions {
+	margin: 1em 0;
 	overflow: hidden;
-	outline: 0;
 }
 
 {+START,IF,{$NOT,{$MOBILE}}}
@@ -275,30 +307,18 @@ abbr.dtstart, abbr.dtend {
 		width: 20em;
 	}
 
-	.event_interest_box {
-		padding: 3px;
-		width: 48.5%;
-	}
-
 	.event_right {
 		float: right;
 		width: 22em;
-		margin-bottom: 10px;
+		margin-bottom: 1em;
 	}
 
 	.event_left {
-		margin-right: 22.4em;
+		margin-right: 23em;
 	}
 
-	.event_subscribe {
-		text-align: center;
-		font-size: 0.85em;
-		font-weight: bold;
-		margin-top: 0.25em;
-	}
-
-	.event_subscriptions div {
-		font-size: 0.8em;
+	.event_subscriptions>li {
+		font-size: 0.9em;
 		vertical-align: middle;
 		margin-{!en_left}: 6px;
 		float: {!en_right};
@@ -318,28 +338,23 @@ abbr.dtstart, abbr.dtend {
 	}
 
 	.event_subscribe {
-		text-align: left;
 		font-size: 0.85em;
 		font-weight: bold;
 		margin-top: 0.25em;
 		line-height: 2em;
 	}
 
-	.event_subscriptions div {
+	.event_subscriptions>li {
 		font-size: 0.95em;
 		vertical-align: middle;
 		margin-{!en_right}: 6px;
 		float: {!en_left};
 	}
-
-	.event_reminders {
-		margin-bottom: 1em;
-	}
 {+END}
 
 .event_type_image {
 	float: {!en_left};
-	margin-{!en_right}: 3px;
+	margin-{!en_right}: 0.5em;
 }
 
 /*
@@ -347,12 +362,6 @@ abbr.dtstart, abbr.dtend {
 =========Block===========
 =========================
 */
-
-.event_listing_day {
-	text-decoration: underline;
-	font-weight: bold;
-	font-size: 1.1em;
-}
 
 .side_calendar_wrap {
 	overflow-x: hidden;
@@ -362,6 +371,20 @@ abbr.dtstart, abbr.dtend {
 	border-collapse: collapse;
 }
 
+.side_calendar th {
+	border: 1px solid {$GET,standard_border};
+}
+
+.calendar_weekly_column {
+	width: 14.29%;
+}
+
 .events_listing_table th, .events_listing_table td {
 	vertical-align: middle;
+}
+
+.event_listing_day {
+	text-decoration: underline;
+	font-weight: bold;
+	font-size: 1.1em;
 }

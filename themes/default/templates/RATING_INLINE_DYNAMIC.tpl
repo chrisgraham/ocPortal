@@ -1,13 +1,16 @@
-<span class="RATING_INLINE_DYNAMIC"{$?,{$VALUE_OPTION,html5}, itemscope="itemscope" itemtype="http://schema.org/AggregateRating"}>
+<div class="RATING_INLINE_DYNAMIC" itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
 	{$,Show the current result (nothing shows if nobody voted yet)}
 	{+START,IF,{HAS_RATINGS}}
 		{+START,LOOP,ALL_RATING_CRITERIA}
-			{+START,INCLUDE,RATING_DISPLAY_SHARED}{+END}
+			<span{+START,IF,{$NEQ,{_loop_key},0}} class="horiz_field_sep"{+END}>
+				{+START,INCLUDE,RATING_DISPLAY_SHARED}{+END}
+			</span>
 		{+END}
-		&nbsp;
 	{+END}
 
 	{$SET,block_embedded_forms,1}
-	{RATING_FORM}
+	<div{+START,IF,{HAS_RATINGS}} class="horiz_field_sep"{+END}>
+		{RATING_FORM}
+	</div>
 	{$SET,block_embedded_forms,0}
-</span>
+</div>

@@ -29,7 +29,7 @@ function bookmarks_script()
 	switch ($type)
 	{
 		case '_ad':
-			$title=get_page_title('ADD_BOOKMARK');
+			$title=get_screen_title('ADD_BOOKMARK');
 
 			$folder=post_param('folder_new','');
 			if ($folder=='') $folder=post_param('folder');
@@ -49,7 +49,7 @@ function bookmarks_script()
 			$content=add_bookmark_form($url);
 			break;
 	}
-	$echo=do_template('POPUP_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ADD_BOOKMARK'),'CONTENT'=>$content));
+	$echo=do_template('STYLED_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ADD_BOOKMARK'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }
@@ -62,7 +62,7 @@ function bookmarks_script()
  */
 function add_bookmark_form($post_url)
 {
-	$title=get_page_title('ADD_BOOKMARK');
+	$title=get_screen_title('ADD_BOOKMARK');
 
 	require_lang('zones');
 
@@ -90,15 +90,25 @@ function add_bookmark_form($post_url)
 		if ($row['b_folder']!='') $list->attach(form_input_list_entry($row['b_folder']));
 	}
 	$fields=new ocp_tempcode();
-	$fields->attach(form_input_list(do_lang_tempcode('OLD_BOOKMARK_FOLDER'),do_lang_tempcode('DESCRIPTION_OLD_BOOKMARK_FOLDER'),'folder',$list,NULL,false,false));
-	$fields->attach(form_input_line(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('NEW_BOOKMARK_FOLDER')),do_lang_tempcode('DESCRIPTION_NEW_BOOKMARK_FOLDER'),'folder_new','',false));
+
+	$set_name='folder';
+	$required=true;
+	$set_title=do_lang_tempcode('BOOKMARK_FOLDER');
+	$field_set=alternate_fields_set__start($set_name);
+
+	$field_set->attach(form_input_list(do_lang_tempcode('EXISTING'),do_lang_tempcode('DESCRIPTION_OLD_BOOKMARK_FOLDER'),'folder',$list,NULL,false,false));
+
+	$field_set->attach(form_input_line(do_lang_tempcode('NEW'),do_lang_tempcode('DESCRIPTION_NEW_BOOKMARK_FOLDER'),'folder_new','',false));
+
+	$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+
 	$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',($default_title=='')?'':substr($default_title,0,200),true));
 	$fields->attach(form_input_line(do_lang_tempcode('PAGE_LINK'),do_lang_tempcode('DESCRIPTION_PAGE_LINK_BOOKMARK'),'page_link',$page_link,true));
 	$submit_name=do_lang_tempcode('ADD_BOOKMARK');
 
 	breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_BOOKMARKS'))));
 
-	$javascript='standardAlternateFields(\'folder\',\'folder_new\'); var title=document.getElementById(\'title\'); if (((title.value==\'\') || (title.value==\'0\')) && (window.opener)) title.value=getInnerHTML(window.opener.document.getElementsByTagName(\'title\')[0]); ';
+	$javascript='var title=document.getElementById(\'title\'); if (((title.value==\'\') || (title.value==\'0\')) && (window.opener)) title.value=get_inner_html(window.opener.document.getElementsByTagName(\'title\')[0]); ';
 
 	return do_template('FORM_SCREEN',array('_GUID'=>'7e94bb97008de4fa0fffa2b5f91c95eb','TITLE'=>$title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>$javascript));
 }

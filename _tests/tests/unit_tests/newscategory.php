@@ -45,7 +45,7 @@ class newscategory_test_set extends ocp_test_case
 		$this->assertTrue('Politics'==get_translated_text($GLOBALS['SITE_DB']->query_value('news_categories','nc_title ',array('id'=>$this->news_id))));
 	}
 
-	
+
 	function tearDown()
 	{
 		delete_news_category($this->news_id);

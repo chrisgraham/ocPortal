@@ -167,7 +167,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 			'lang','lang_custom',
 			'lang_cached',
 			'pages',
-			'persistant_cache','safe_mode_temp',
+			'persistent_cache','safe_mode_temp',
 			'sources','sources_custom',
 			'text','text_custom',
 			'themes',

@@ -1,5 +1,5 @@
 <script type="text/javascript">// <![CDATA[
-	addEventListenerAbstract(window,'load',function() {
+	add_event_listener_abstract(window,'load',function() {
 		replace_comments_form_with_ajax('{OPTIONS^;}','{HASH^;}');
 	} );
 //]]></script>

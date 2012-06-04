@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_wordfilter
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,10 +58,12 @@ class Hook_addon_registry_wordfilter
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-			'previously_in_addon'=>array('core_wordfilter'),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array(),
+			'previously_in_addon' => array(
+				'core_wordfilter'
+			)
 		);
 	}
 
@@ -74,7 +75,6 @@ class Hook_addon_registry_wordfilter
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/wordfilter.php',
 			'sources/hooks/systems/do_next_menus/wordfilter.php',
 			'lang/EN/wordfilter.ini',
@@ -83,21 +83,21 @@ class Hook_addon_registry_wordfilter
 			'WORDFILTER_SCREEN.tpl',
 			'adminzone/pages/modules/admin_wordfilter.php',
 			'sources/hooks/modules/admin_setupwizard/wordfilter.php',
-			'sources/hooks/modules/admin_import_types/wordfilter.php',
+			'sources/hooks/modules/admin_import_types/wordfilter.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'WORDFILTER_SCREEN.tpl'=>'administrative__wordfilter_screen',
-				);
+			'WORDFILTER_SCREEN.tpl' => 'administrative__wordfilter_screen'
+		);
 	}
 
 	/**
@@ -110,13 +110,11 @@ class Hook_addon_registry_wordfilter
 	function tpl_preview__administrative__wordfilter_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('WORDFILTER_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'TPL'=>lorem_phrase(),
-					'ADD_FORM'=>placeholder_form(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('WORDFILTER_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'TPL' => lorem_phrase(),
+				'ADD_FORM' => placeholder_form()
+			)), NULL, '', true)
 		);
 	}
 }

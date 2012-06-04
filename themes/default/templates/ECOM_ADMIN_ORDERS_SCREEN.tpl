@@ -1,11 +1,11 @@
 {TITLE}
 
 <div class="wide_table_wrap">
-	{RESULT_TABLE}
+	{RESULTS_TABLE}
 
-	{+START,IF_NON_EMPTY,{RESULTS_BROWSER}}
-		<div class="results_browser_spacing float_surrounder">
-			{RESULTS_BROWSER}
+	{+START,IF_NON_EMPTY,{PAGINATION}}
+		<div class="pagination_spacing float_surrounder">
+			{PAGINATION}
 		</div>
 	{+END}
 </div>
@@ -17,7 +17,7 @@
 		{HIDDEN}
 
 		<label for="order_filter">
-			<span class="invisible_ref_point">&nbsp;</span>
+			<span class="invisible_ref_point"></span>
 			<input maxlength="255" type="text" id="order_filter" name="search" value="{SEARCH_VAL*}" />
 			<input onclick="disable_button_just_clicked(this);" class="button_micro" type="submit" value="{!SEARCH}" /> ({!SEARCH_ORDERS})
 		</label>
@@ -26,11 +26,11 @@
 
 <h2>{!MORE} / {!ADVANCED}</h2>
 
-<p>
+<p class="lonely_label">
 	{!ACTIONS}:
 </p>
-<ul{$?,{$VALUE_OPTION,html5}, role="navigation"} class="actions_list">
+<ul role="navigation" class="actions_list">
 	<li class="actions_list_strong">
-		&raquo; <a href="{$PAGE_LINK*,_SELF:_SELF:type=order_export}">{!EXPORT_ORDER_LIST}</a>
+		<a href="{$PAGE_LINK*,_SELF:_SELF:type=order_export}">{!EXPORT_ORDER_LIST}</a>
 	</li>
 </ul>

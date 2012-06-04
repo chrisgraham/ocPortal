@@ -76,7 +76,7 @@ function restrictify()
 	error_reporting(E_ALL);
 	if (function_exists('set_time_limit')) @set_time_limit(25);
 	if (get_forum_type()=='ocf') $GLOBALS['SITE_DB']->query('SET sql_mode=STRICT_ALL_TABLES',NULL,NULL,true);
-	if ($GLOBALS['DEBUG_MODE'])
+	if ($GLOBALS['DEV_MODE'])
 	{
 		@ini_set('ocproducts.type_strictness','1');
 		@ini_set('ocproducts.xss_detect','1');

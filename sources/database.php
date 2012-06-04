@@ -73,7 +73,7 @@ function _general_db_init()
 	global $TABLE_LANG_FIELDS;
 	if (count($TABLE_LANG_FIELDS)>0) return;
 
-	$TABLE_LANG_FIELDS=function_exists('persistant_cache_get')?persistant_cache_get('TABLE_LANG_FIELDS'):NULL;
+	$TABLE_LANG_FIELDS=function_exists('persistent_cache_get')?persistent_cache_get('TABLE_LANG_FIELDS'):NULL;
 	if ($TABLE_LANG_FIELDS===NULL)
 	{
 		$TABLE_LANG_FIELDS=array();
@@ -90,8 +90,8 @@ function _general_db_init()
 			}
 		}
 
-		if (function_exists('persistant_cache_set'))
-			persistant_cache_set('TABLE_LANG_FIELDS',$TABLE_LANG_FIELDS);
+		if (function_exists('persistent_cache_set'))
+			persistent_cache_set('TABLE_LANG_FIELDS',$TABLE_LANG_FIELDS);
 	}
 }
 
@@ -812,7 +812,7 @@ class database_driver
 	{
 		global $FILECACHE_OBJECT;
 		require_code('database/xml');
-		$chain_db=new database_driver(get_custom_file_base().'/persistant_cache','','','',get_table_prefix(),false,object_factory('Database_Static_xml'));
+		$chain_db=new database_driver(get_custom_file_base().'/persistent_cache','','','',get_table_prefix(),false,object_factory('Database_Static_xml'));
 		$chain_connection=&$chain_db->connection_write;
 		if (count($chain_connection)>4) // Okay, we can't be lazy anymore
 		{
@@ -951,14 +951,14 @@ class database_driver
 	 */
 	function _query($query,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false,$lang_fields=NULL,$field_prefix='',$save_as_volatile=false)
 	{
-		global $QUERY_COUNT,$NO_QUERY_LIMIT,$QUERY_LOG,$QUERY_LIST,$DEBUG_MODE,$IN_MINIKERNEL_VERSION,$QUERY_FILE_LOG,$UPON_QUERY_HOOKS;
+		global $QUERY_COUNT,$NO_QUERY_LIMIT,$QUERY_LOG,$QUERY_LIST,$DEV_MODE,$IN_MINIKERNEL_VERSION,$QUERY_FILE_LOG,$UPON_QUERY_HOOKS;
 
 		if ($QUERY_FILE_LOG!==NULL)
 		{
 			fwrite($QUERY_FILE_LOG,$query.';'.chr(10).chr(10));
 		}
 
-		if ($DEBUG_MODE)
+		if ($DEV_MODE)
 		{
 			if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!==$GLOBALS['FORUM_DB']->connection_write) && (!$GLOBALS['NO_DB_SCOPE_CHECK']))
 			{
@@ -991,7 +991,7 @@ class database_driver
 				fwrite($myfile,get_self_url_easy().chr(10));
 				fclose($myfile);
 			}
-			if ($DEBUG_MODE)
+			if ($DEV_MODE)
 			{
 				$QUERY_COUNT=0;
 				fatal_exit(do_lang_tempcode('TOO_MANY_QUERIES'));

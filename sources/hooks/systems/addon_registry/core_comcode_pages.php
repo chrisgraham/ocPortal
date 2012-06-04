@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_comcode_pages
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_core_comcode_pages
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,14 +72,13 @@ class Hook_addon_registry_core_comcode_pages
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/config_default/number_revisions_show.php',
 			'sources/hooks/systems/config_default/points_COMCODE_PAGE_ADD.php',
 			'sources/hooks/systems/config_default/store_revisions.php',
 			'sources/hooks/systems/addon_registry/core_comcode_pages.php',
 			'COMCODE_PAGE_EXPORT_SCREEN.tpl',
 			'COMCODE_PAGE_EDIT_ACTIONS.tpl',
-			'COMCODE_PAGE_PREVIEW.tpl',
+			'COMCODE_PAGE_BOX.tpl',
 			'sources/hooks/modules/search/comcode_pages.php',
 			'sources/hooks/systems/awards/comcode_page.php',
 			'sources/hooks/systems/content_meta_aware/comcode_page.php',
@@ -93,24 +91,24 @@ class Hook_addon_registry_core_comcode_pages
 			'sources/hooks/systems/preview/comcode_page.php',
 			'sources/hooks/systems/attachments/comcode_page.php',
 			'sources/hooks/modules/admin_unvalidated/comcode_pages.php',
-			'sources/hooks/modules/admin_newsletter/comcode_pages.php',
+			'sources/hooks/modules/admin_newsletter/comcode_pages.php'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'COMCODE_PAGE_EXPORT_SCREEN.tpl'=>'comcode_page_export_screen',
-				'COMCODE_PAGE_SCREEN.tpl'=>'comcode_page_screen',
-				'COMCODE_PAGE_EDIT_ACTIONS.tpl'=>'comcode_page_edit_actions',
-				'COMCODE_PAGE_PREVIEW.tpl'=>'comcode_page_preview',
-				);
+			'COMCODE_PAGE_EXPORT_SCREEN.tpl' => 'comcode_page_export_screen',
+			'COMCODE_PAGE_SCREEN.tpl' => 'comcode_page_screen',
+			'COMCODE_PAGE_EDIT_ACTIONS.tpl' => 'comcode_page_edit_actions',
+			'COMCODE_PAGE_BOX.tpl' => 'comcode_page_preview'
+		);
 	}
 
 	/**
@@ -124,12 +122,10 @@ class Hook_addon_registry_core_comcode_pages
 	{
 		require_lang('zones');
 		return array(
-			lorem_globalise(
-				do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS',array(
-					'EDIT_URL'=>placeholder_url(),
-					'CLONE_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS', array(
+				'EDIT_URL' => placeholder_url(),
+				'CLONE_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -144,12 +140,10 @@ class Hook_addon_registry_core_comcode_pages
 	{
 		require_lang('zones');
 		return array(
-			lorem_globalise(
-				do_lorem_template('COMCODE_PAGE_EXPORT_SCREEN',array(
-					'TITLE'=>lorem_title(),
-					'EXPORT'=>lorem_chunk(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('COMCODE_PAGE_EXPORT_SCREEN', array(
+				'TITLE' => lorem_title(),
+				'EXPORT' => lorem_chunk()
+			)), NULL, '', true)
 		);
 	}
 
@@ -163,21 +157,19 @@ class Hook_addon_registry_core_comcode_pages
 	function tpl_preview__comcode_page_screen()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('COMCODE_PAGE_SCREEN',array(
-					'BEING_INCLUDED'=>false,
-					'IS_PANEL'=>false,
-					'SUBMITTER'=>placeholder_id(),
-					'TAGS'=>lorem_word_html(),
-					'WARNING_DETAILS'=>'',
-					'EDIT_DATE_RAW'=>placeholder_date_raw(),
-					'SHOW_AS_EDIT'=>lorem_phrase(),
-					'CONTENT'=>lorem_phrase(),
-					'EDIT_URL'=>placeholder_url(),
-					'ADD_CHILD_URL'=>placeholder_url(),
-					'NAME'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('COMCODE_PAGE_SCREEN', array(
+				'BEING_INCLUDED' => false,
+				'IS_PANEL' => false,
+				'SUBMITTER' => placeholder_id(),
+				'TAGS' => lorem_word_html(),
+				'WARNING_DETAILS' => '',
+				'EDIT_DATE_RAW' => placeholder_date_raw(),
+				'SHOW_AS_EDIT' => lorem_phrase(),
+				'CONTENT' => lorem_phrase(),
+				'EDIT_URL' => placeholder_url(),
+				'ADD_CHILD_URL' => placeholder_url(),
+				'NAME' => lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -191,14 +183,12 @@ class Hook_addon_registry_core_comcode_pages
 	function tpl_preview__comcode_page_preview()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('COMCODE_PAGE_PREVIEW',array(
-					'PAGE'=>lorem_phrase(),
-					'ZONE'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'SUMMARY'=>lorem_paragraph_html(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('COMCODE_PAGE_BOX', array(
+				'PAGE' => lorem_phrase(),
+				'ZONE' => lorem_phrase(),
+				'URL' => placeholder_url(),
+				'SUMMARY' => lorem_paragraph_html()
+			)), NULL, '', true)
 		);
 	}
 }

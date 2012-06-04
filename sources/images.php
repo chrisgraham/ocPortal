@@ -269,18 +269,23 @@ function get_max_image_size()
  * @param  mixed			The caption for the thumbnail (string or Tempcode)
  * @param  boolean		Whether to use a JS tooltip. Forcibly set to true if you pass Tempcode
  * @param  boolean		Whether already a thumbnail (if not, function will make one)
- * @param  integer		Thumbnail width to use
- * @param  integer		Thumbnail height to use
+ * @param  ?integer		Thumbnail width to use (NULL: default)
+ * @param  ?integer		Thumbnail height to use (NULL: default)
  * @return tempcode		The thumbnail
  */
-function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=true,$width=90,$height=90)
+function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=true,$width=NULL,$height=NULL)
 {
 	if (is_object($caption))
 	{
 		$js_tooltip=true;
 	}
 
-	if(!$is_thumbnail_already)
+	$box_size=((is_null($width)) && (is_null($height)));
+
+	if (is_null($width)) $width=intval(get_option('thumb_width'));
+	if (is_null($height)) $height=intval(get_option('thumb_width'));
+
+	if (!$is_thumbnail_already)
 	{	
 		$new_name=strval($width).'_'.strval($height).'_'.url_to_filename($url);
 
@@ -291,7 +296,7 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 
 		if (!file_exists($file_thumb))
-			convert_image($url,$file_thumb,$width,$height,$width,false);
+			convert_image($url,$file_thumb,$box_size?-1:$width,$box_size?-1:$height,$box_size?$width:-1,false);
 
 		$url=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 	}

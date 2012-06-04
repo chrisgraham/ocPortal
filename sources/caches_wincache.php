@@ -23,7 +23,7 @@
 class wincache
 {
 	/**
-	 * (Plug-in replacement for memcache API) Get data from the persistant cache.
+	 * (Plug-in replacement for memcache API) Get data from the persistent cache.
 	 *
 	 * @param  mixed			Key
 	 * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
@@ -39,7 +39,7 @@ class wincache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Put data into the persistant cache.
+	 * (Plug-in replacement for memcache API) Put data into the persistent cache.
 	 *
 	 * @param  mixed			Key
 	 * @param  mixed			The data
@@ -63,7 +63,7 @@ class wincache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Delete data from the persistant cache.
+	 * (Plug-in replacement for memcache API) Delete data from the persistent cache.
 	 *
 	 * @param  mixed			Key name
 	 */
@@ -79,7 +79,7 @@ class wincache
 	}
 
 	/**
-	 * (Plug-in replacement for memcache API) Remove all data from the persistant cache.
+	 * (Plug-in replacement for memcache API) Remove all data from the persistent cache.
 	 */
 	function flush()
 	{

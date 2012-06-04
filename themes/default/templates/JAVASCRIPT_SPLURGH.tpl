@@ -7,7 +7,7 @@
 // Creates a tree from a compressed format
 //  This function is recursive in two dimensions. It iterates linearly along lists, and it iterates down through depth.
 //  Both kinds of iterates are modelled as recursions to this function call.
-function splurgh(key_name,url_stub,range_a,range_b,level,data,chain,not_first)
+function splurgh(save_to,key_name,url_stub,range_a,range_b,level,data,chain,not_first)
 {
 	if (range_b==-1) range_b=data.length;
 	if ((range_b-range_a)<2) return "";
@@ -58,11 +58,11 @@ function splurgh(key_name,url_stub,range_a,range_b,level,data,chain,not_first)
 			b=scanner_for_b-1;
 
 			// Render level
-			under=splurgh(key_name,url_stub,a,b,level+1,data,chain+"~"+anchor_reference,true);
+			under=splurgh(save_to,key_name,url_stub,a,b,level+1,data,chain+"~"+anchor_reference,true);
 			if (under!="")
 			{
-				contents+=" <a class=\"hide_button\" href=\"#\" onclick=\"event.returnValue=false; hideTag(this.parentNode); return false;\"><img class=\"inline_image_4\" title=\"\" alt=\"{!EXPAND^#}/{!CONTRACT^#}\" src=\""+"{$IMG*,contract}".replace(/^http:/,window.location.protocol)+"\" /></a>\n";
-				contents+="<br /><ul class=\"hide_tag\">\n";
+				contents+="<p class=\"toggleable_tray_title\"><a class=\"toggleable_tray_button\" href=\"#\" onclick=\"return toggleable_tray(this.parentNode.parentNode);\"><img title=\"\" alt=\"{!EXPAND^#}/{!CONTRACT^#}\" src=\""+"{$IMG*#,contract}".replace(/^http:/,window.location.protocol)+"\" /></a></p>\n";
+				contents+="<ul class=\"toggleable_tray\">\n";
 				contents+=under;
 				contents+="</ul>\n";
 			}
@@ -72,7 +72,7 @@ function splurgh(key_name,url_stub,range_a,range_b,level,data,chain,not_first)
 			b=range_b;
 		}
 		contents+="</li>";
-		contents+=splurgh(key_name,url_stub,a,b,level,data,chain,true); // Next iteration in list, handled by recursion
+		contents+=splurgh(save_to,key_name,url_stub,a,b,level,data,chain,true); // Next iteration in list, handled by recursion
 	} else
 	{
 		contents+="</li>";
@@ -80,9 +80,9 @@ function splurgh(key_name,url_stub,range_a,range_b,level,data,chain,not_first)
 
 	if (!not_first)
 	{
-		var splurghElement=document.getElementById('splurgh');
-		setInnerHTML(splurghElement,"<ul>"+contents+"</ul>\n");
-//		setInnerHTML(splurghElement,escape_html(getInnerHTML(splurghElement)).replace(/\n/g,'<br />'));
+		var splurgh_element=document.getElementById(save_to);
+		set_inner_html(splurgh_element,"<ul>"+contents+"</ul>\n");
+//		set_inner_html(splurgh_element,escape_html(get_inner_html(splurgh_element)).replace(/\n/g,'<br />'));
 	} else return contents;
 }
 

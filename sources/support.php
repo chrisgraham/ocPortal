@@ -236,6 +236,21 @@ function ocp_mb_substr($in,$from,$amount=NULL,$force=false)
 }
 
 /**
+ * Make a string title-case, with utf-8 awareness where possible/required.
+ *
+ * @param  string	Subject.
+ * @return string	Result.
+ */
+function ocp_mb_ucwords()
+{
+	if (strtolower(get_charset())!='utf-8') return ucwords($in);
+
+	if (function_exists('mb_convert_case')) return @mb_convert_case($in,MB_CASE_TITLE,get_charset());
+
+	return /*ucwords*/($in);
+}
+
+/**
  * Make a string lowercase, with utf-8 awareness where possible/required.
  *
  * @param  string	Subject.
@@ -245,9 +260,9 @@ function ocp_mb_strtolower($in)
 {
 	if (strtolower(get_charset())!='utf-8') return strtolower($in);
 
-	if (function_exists('mb_strtolower')) return mb_strtolower($in);
+	if (function_exists('mb_strtolower')) return @mb_strtolower($in,get_charset());
 
-	return strtolower($in);
+	return /*strtolower*/($in);
 }
 
 /**
@@ -260,9 +275,9 @@ function ocp_mb_strtoupper($in)
 {
 	if (strtoupper(get_charset())!='utf-8') return strtoupper($in);
 
-	if (function_exists('mb_strtoupper')) return mb_strtoupper($in);
+	if (function_exists('mb_strtoupper')) return @mb_strtoupper($in,get_charset());
 
-	return strtoupper($in);
+	return /*strtoupper*/($in);
 }
 
 /**
@@ -395,12 +410,12 @@ function addon_installed($addon)
 	global $ADDON_INSTALLED_CACHE;
 	if ($ADDON_INSTALLED_CACHE==array())
 	{
-		if (function_exists('persistant_cache_get')) $ADDON_INSTALLED_CACHE=persistant_cache_get('ADDONS_INSTALLED');
+		if (function_exists('persistent_cache_get')) $ADDON_INSTALLED_CACHE=persistent_cache_get('ADDONS_INSTALLED');
 	}
 	if (isset($ADDON_INSTALLED_CACHE[$addon])) return $ADDON_INSTALLED_CACHE[$addon];
 	$answer=is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty($addon).'.php') || is_file(get_file_base().'/sources_custom/hooks/addon_registry/'.filter_naughty($addon).'.php');
 	$ADDON_INSTALLED_CACHE[$addon]=$answer;
-	if (function_exists('persistant_cache_set')) persistant_cache_set('ADDONS_INSTALLED',$ADDON_INSTALLED_CACHE,true);
+	if (function_exists('persistent_cache_set')) persistent_cache_set('ADDONS_INSTALLED',$ADDON_INSTALLED_CACHE,true);
 	return $answer;
 }
 
@@ -411,18 +426,20 @@ function addon_installed($addon)
  * @param  integer		The number of decimals to keep
  * @return string			The string converted
  */
-function float_to_raw_string($num,$dec_keep=0)
+function float_to_raw_string($num,$decs_wanted=0)
 {
 	$str=number_format($num,5,'.','');
-	if (strpos($str,'.')!==false)
+	$decs_here=strlen($str)-strpos($str,'.')-1;
+	if ($decs_here<$decs_wanted)
 	{
-		$str=rtrim($str,'0');
-		if ($dec_keep==0) $str=rtrim($str,'.');
-		$decs=strlen($str)-strpos($str,'.')-1;
-		for ($i=0;$i<$dec_keep-$decs;$i++)
+		for ($i=0;$i<$decs_wanted-$decs_here;$i++)
 		{
 			$str.='0';
 		}
+	} else
+	{
+		$str=substr($str,0,strlen($str)-$decs_here+$decs_wanted);
+		if ($decs_wanted==0) $str=rtrim($str,'.');
 	}
 	return $str;
 }
@@ -564,6 +581,8 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 {
 	require_code('site');
 
+	if ($message!==NULL) attach_message($message,$type);
+
 	if (running_script('iframe'))
 	{
 		global $ATTACHED_MESSAGES;
@@ -577,16 +596,10 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 
 	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 
-	if ($GLOBALS['HELPER_PANEL_TUTORIAL']===NULL) $GLOBALS['HELPER_PANEL_TUTORIAL']='';
-	if ($GLOBALS['HELPER_PANEL_HTML']===NULL) $GLOBALS['HELPER_PANEL_HTML']='';
-	if ($GLOBALS['HELPER_PANEL_TEXT']===NULL) $GLOBALS['HELPER_PANEL_TEXT']='';
-	if ($GLOBALS['HELPER_PANEL_PIC']===NULL) $GLOBALS['HELPER_PANEL_PIC']='';
-	$_message=($message!==NULL)?do_template('ADDITIONAL',array('_GUID'=>'b4c9f0a0bbfb9344d00c29db8ff5715d','TYPE'=>$type,'MESSAGE'=>$message)):new ocp_tempcode();
-	if (get_option('show_docs')=='0') $GLOBALS['HELPER_PANEL_TUTORIAL']='';
 	$global=new ocp_tempcode();
 	$bail_out=(isset($DONE_HEADER) && $DONE_HEADER);
 	if (($include_header_and_footer) && (!$bail_out)) $global->attach(do_header());
-	$global->attach(do_template('GLOBAL',array('_GUID'=>'592faa2c0e8bf2dc3492de2c11ca7131','HELPER_PANEL_TUTORIAL'=>$GLOBALS['HELPER_PANEL_TUTORIAL'],'HELPER_PANEL_HTML'=>$GLOBALS['HELPER_PANEL_HTML'],'HELPER_PANEL_TEXT'=>$GLOBALS['HELPER_PANEL_TEXT'],'HELPER_PANEL_PIC'=>$GLOBALS['HELPER_PANEL_PIC'],'MESSAGE_TOP'=>$GLOBALS['ATTACHED_MESSAGES'],'MESSAGE'=>$_message,'MIDDLE'=>$middle,'BREADCRUMBS'=>breadcrumbs())));
+	$global->attach(do_template('GLOBAL',array('_GUID'=>'592faa2c0e8bf2dc3492de2c11ca7131','MIDDLE'=>$middle)));
 	if ($include_header_and_footer) $global->attach(do_footer($bail_out));
 	$global->handle_symbol_preprocessing();
 
@@ -629,7 +642,7 @@ function make_xhtml_strict($global)
 {
 	$_global=$global->evaluate();
 	$_global=str_replace(
-		'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
+		'<!DOCTYPE html>',
 		'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
 		$_global);
 	$_global=preg_replace('#(<a\s[^>]*)onclick="([^"]*)"(\s[^>]*)target="_blank"#','${1}onclick="this.target=\'_blank\'; ${2}"${3}',$_global);
@@ -664,7 +677,7 @@ function array_peek($array,$depth_down=1)
  */
 function fix_id($param)
 {
-	return str_replace('[','_opensquare_',str_replace(']','_closesquare_',str_replace('&#039;','_apostophe_',str_replace('\'','_apostophe_',str_replace('-','_minus_',str_replace(' ','_space_',str_replace('+','_plus_',str_replace('*','_star_',str_replace('/','__',$param)))))))));
+	return str_replace(array('[',']','&#039;','\'','-',' ','+','*','/','__'),array('_opensquare_','_closesquare_','_apostophe_','_apostophe_','_minus_','_space_','_plus_','_star_'),$param);
 }
 
 /**
@@ -871,10 +884,10 @@ function get_ip_address($amount=4)
 {
 //	return strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)); // Nice little test for if sessions break
 
-	$fw=ocp_srv('HTTP_X_FORWARDED_FOR');
+	/*$fw=ocp_srv('HTTP_X_FORWARDED_FOR');	Presents too many security and maintenance problems. Can easily be faked, or changed.
 	if (ocp_srv('HTTP_CLIENT_IP')!='') $fw=ocp_srv('HTTP_CLIENT_IP');
 	if (($fw!='') && ($fw!='127.0.0.1') && (substr($fw,0,8)!='192.168.') && (substr($fw,0,3)!='10.') && (is_valid_ip($fw)) && ($fw!=ocp_srv('SERVER_ADDR'))) $ip=$fw;
-	else $ip=ocp_srv('REMOTE_ADDR');
+	else */$ip=ocp_srv('REMOTE_ADDR');
 
 	if (!is_valid_ip($ip)) return '';
 
@@ -1049,17 +1062,17 @@ function get_flagrant()
 
 	if (!$system)
 	{
-		$_flagrant=persistant_cache_get('FLAGRANT');
+		$_flagrant=persistent_cache_get('FLAGRANT');
 		if ($_flagrant===NULL)
 		{
 			$flagrant=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT the_message FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24<'.strval(time()),true/*in case tablemissing*/);
 			if ($flagrant===NULL)
 			{
-				persistant_cache_set('FLAGRANT',false);
+				persistent_cache_set('FLAGRANT',false);
 			} else
 			{
 				$_flagrant=get_translated_tempcode($flagrant);
-				persistant_cache_set('FLAGRANT',$_flagrant);
+				persistent_cache_set('FLAGRANT',$_flagrant);
 			}
 		}
 		if ($_flagrant===false) $_flagrant=NULL;
@@ -1385,7 +1398,7 @@ function brand_base_url()
  * See's if the current browser matches some special property code. Assumes users are keeping up on newish browsers (except for IE users, who are 6+)
  *
  * @param  string			The property code
- * @set    android ios wysiwyg windows mac linux odd_os mobile opera ie_decent ie_new ie ie_old gecko konqueror safari odd_browser has_artificial_monopoly has_fanboys quirk__internalised_list_indent quirk__quirk__list_indent_in_ul_instead_of_li chrome ie5 ie6 ie7+ ie8+ ie9+
+ * @set    android ios wysiwyg windows mac linux odd_os mobile opera ie ie8 ie8+ ie9 ie9+ gecko konqueror safari odd_browser chrome
  * @return boolean		Whether there is a match
  */
 function browser_matches($code)
@@ -1401,15 +1414,10 @@ function browser_matches($code)
 	$is_chrome=strpos($browser,'chrome/')!==false;
 	$is_gecko=(strpos($browser,'gecko')!==false) && !$is_opera && !$is_konqueror && !$is_safari;
 	$is_ie=(strpos($browser,'msie')!==false) && !$is_opera;
-	$is_ie_old=((strpos($browser,'msie 6')!==false) || (strpos($browser,'msie 5')!==false)) && ($is_ie);
-	$is_ie_decent=(!$is_ie_old) && (strpos($browser,'msie 7')===false) && $is_ie;
-	$is_ie5=(strpos($browser,'msie 5')!==false) && ($is_ie);
-	$is_ie6=(strpos($browser,'msie 6')!==false) && ($is_ie);
-	$is_ie7=(strpos($browser,'msie 7')!==false) && ($is_ie);
 	$is_ie8=(strpos($browser,'msie 8')!==false) && ($is_ie);
-	$is_ie9=(strpos($browser,'msie 8')===false) && ($is_ie_decent);
-	$is_ie_new=(!$is_ie_old) && ($is_ie);
-	$is_iceweasel=(strpos($browser,'iceweasel')!==false);
+	$is_ie9=(strpos($browser,'msie 9')!==false) && ($is_ie);
+	$is_ie8_plus=$is_ie; // Below IE8 not supported/recognised
+	$is_ie9_plus=$is_ie && !$is_ie8;
 
 	switch ($code)
 	{
@@ -1418,9 +1426,6 @@ function browser_matches($code)
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'ios':
 			$BROWSER_MATCHES_CACHE[$code]=strpos($browser,'iphone')!==false;
-			return $BROWSER_MATCHES_CACHE[$code];
-		case 'true_xhtml':
-			$BROWSER_MATCHES_CACHE[$code]=$is_opera || $is_konqueror || $is_safari || $is_gecko;
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'wysiwyg':
 			if ((get_option('wysiwyg')=='0') || (is_mobile()) || (strpos($os,'ipad')!==false))
@@ -1451,38 +1456,17 @@ function browser_matches($code)
 		case 'ie':
 			$BROWSER_MATCHES_CACHE[$code]=$is_ie;
 			return $BROWSER_MATCHES_CACHE[$code];
-		case 'ie5':
-			$BROWSER_MATCHES_CACHE[$code]=$is_ie5;
-			return $BROWSER_MATCHES_CACHE[$code];
-		case 'ie6':
-		case 'ie_old':
-			$BROWSER_MATCHES_CACHE[$code]=$is_ie_old;
-			return $BROWSER_MATCHES_CACHE[$code];
-		case 'ie7':
-			$BROWSER_MATCHES_CACHE[$code]=$is_ie7;
-			return $BROWSER_MATCHES_CACHE[$code];
 		case 'ie8':
 			$BROWSER_MATCHES_CACHE[$code]=$is_ie8;
 			return $BROWSER_MATCHES_CACHE[$code];
-		case 'ie7+':
-		case 'ie_new':
-			$BROWSER_MATCHES_CACHE[$code]=$is_ie_new;
-			return $BROWSER_MATCHES_CACHE[$code];
 		case 'ie8+':
-		case 'ie_decent':
-			$BROWSER_MATCHES_CACHE[$code]=$is_ie_decent;
+			$BROWSER_MATCHES_CACHE[$code]=$is_ie8_plus;
 			return $BROWSER_MATCHES_CACHE[$code];
-		case 'ie9+':
+		case 'ie9':
 			$BROWSER_MATCHES_CACHE[$code]=$is_ie9;
 			return $BROWSER_MATCHES_CACHE[$code];
-		case 'has_artificial_monopoly':
-			$BROWSER_MATCHES_CACHE[$code]=$is_ie;
-			return $BROWSER_MATCHES_CACHE[$code];
-		case 'has_fanboys':
-			$BROWSER_MATCHES_CACHE[$code]=$is_gecko; // change to Chrome?
-			return $BROWSER_MATCHES_CACHE[$code];
-		case 'no_multi_wysiwyg':
-			$BROWSER_MATCHES_CACHE[$code]=false;//$is_gecko; once once needed, but Firefox is much more stable now
+		case 'ie9+':
+			$BROWSER_MATCHES_CACHE[$code]=$is_ie9_plus;
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'chrome':
 			$BROWSER_MATCHES_CACHE[$code]=$is_chrome;
@@ -1498,15 +1482,6 @@ function browser_matches($code)
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'odd_browser':
 			$BROWSER_MATCHES_CACHE[$code]=!$is_opera && !$is_konqueror && !$is_safari && !$is_gecko && !$is_ie;
-			return $BROWSER_MATCHES_CACHE[$code];
-		case 'quirk__internalised_list_indent':
-			$BROWSER_MATCHES_CACHE[$code]=$is_gecko;
-			return $BROWSER_MATCHES_CACHE[$code];
-		case 'quirk__list_indent_in_ul_instead_of_li':
-			$BROWSER_MATCHES_CACHE[$code]=$is_opera;
-			return $BROWSER_MATCHES_CACHE[$code];
-		case 'itunes':
-			$BROWSER_MATCHES_CACHE[$code]=(strpos($browser,'itunes')!==false);
 			return $BROWSER_MATCHES_CACHE[$code];
 	}
 
@@ -1666,7 +1641,9 @@ function get_bot_type()
 	global $CACHE_BOT_TYPE;
 	if ($CACHE_BOT_TYPE!==false) return $CACHE_BOT_TYPE;
 
-	$agent=strtolower(ocp_srv('HTTP_USER_AGENT'));
+	$agent=ocp_srv('HTTP_USER_AGENT');
+	if (strpos($agent,'WebKit')!==false || strpos($agent,'MSIE')!==false || strpos($agent,'Firefox')!==false || strpos($agent,'Opera')!==false) return NULL; // Quick exit path
+	$agent=strtolower($agent);
 
 	global $BOT_MAP,$SITE_INFO;
 	if ($BOT_MAP===NULL)
@@ -1795,7 +1772,7 @@ function has_cookies() // Will fail on users first visit, but then will catch on
 	global $HAS_COOKIES;
 	if ($HAS_COOKIES!==NULL) return $HAS_COOKIES;
 
-	/*if (($GLOBALS['DEBUG_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0) && (!running_script('occle')))	We know this works by now, was tested for years. Causes annoyance when developing
+	/*if (($GLOBALS['DEV_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0) && (!running_script('occle')))	We know this works by now, was tested for years. Causes annoyance when developing
 	{
 		$_COOKIE=array();
 		return false;
@@ -1822,7 +1799,6 @@ function has_js()
 {
 	if (get_param_integer('keep_has_js',0)==1) return true;
 	if (get_param_integer('keep_has_js',NULL)===0) return false;
-	//if (browser_matches('ie5')) return true; // Dual running masks cookies
 	if (!function_exists('get_option')) return true;
 	if (get_option('detect_javascript',true)==='0') return true;
 	return ((array_key_exists('js_on',$_COOKIE)) && ($_COOKIE['js_on']=='1'));
@@ -1857,7 +1833,7 @@ function mixed()
  */
 function seo_meta_get_for($type,$id)
 {
-	$cache=persistant_cache_get(array('seo',$type,$id));
+	$cache=persistent_cache_get(array('seo',$type,$id));
 	if ($cache!==NULL) return $cache;
 
 	$rows=$GLOBALS['SITE_DB']->query_select('seo_meta',array('*'),array('meta_for_type'=>$type,'meta_for_id'=>$id),'',1);
@@ -1868,7 +1844,7 @@ function seo_meta_get_for($type,$id)
 	{
 		$cache=array(get_translated_text($rows[0]['meta_keywords']),get_translated_text($rows[0]['meta_description']));
 	}
-	persistant_cache_set(array('seo',$type,$id),$cache);
+	persistent_cache_set(array('seo',$type,$id),$cache);
 	return $cache;
 }
 
@@ -1935,7 +1911,7 @@ function get_loaded_tags($limit_to=NULL,$the_tags=NULL)
 		}
 	}
 
-	return do_template('TAGS',array('TAGS'=>$tags,'TYPE'=>($limit_to===NULL)?'':$limit_to));
+	return do_template('TAGS',array('_GUID'=>'2cd542a245bc7d1c3f10e858e8fc5159','TAGS'=>$tags,'TYPE'=>($limit_to===NULL)?'':$limit_to));
 }
 
 /**
@@ -1948,7 +1924,7 @@ function get_zone_default_page($zone_name)
 {
 	if ($zone_name=='_SELF') $zone_name=get_zone_name();
 
-	$p_test=persistant_cache_get(array('ZONE',$zone_name));
+	$p_test=persistent_cache_get(array('ZONE',$zone_name));
 	if ($p_test!==NULL)
 		return $p_test['zone_default_page'];
 
@@ -1962,9 +1938,9 @@ function get_zone_default_page($zone_name)
 		if (!isset($ZONE_DEFAULT_PAGES[$zone_name]))
 		{
 			$_zone_default_page=NULL;
-			if (function_exists('persistant_cache_set'))
+			if (function_exists('persistent_cache_set'))
 			{
-				$temp=persistant_cache_get('ALL_ZONES_TITLED');
+				$temp=persistent_cache_get('ALL_ZONES_TITLED');
 				if ($temp!==NULL)
 				{
 					$_zone_default_page=array();
@@ -2070,4 +2046,189 @@ function get_site_salt()
 	//global $SITE_INFO; This is unstable on some sites, as the array can be prepopulated on the fly
 	//$site_salt.=serialize($SITE_INFO);
 	return md5($site_salt);
+}
+
+/**
+ * Turn a boring codename, into a "pretty" title.
+ *
+ * @param  ID_TEXT		The codename
+ * @return string			The title
+ */
+function titleify($boring)
+{
+	return ucwords(str_replace('_',' ',$boring));
+}
+
+/**
+ * Propagate ocSelect through links.
+ *
+ * @return array				Extra URL mappings
+ */
+function propagate_ocselect()
+{
+	$active_filter=either_param('active_filter','');
+	$map=array();
+	if ($active_filter!='')
+	{
+		$map['active_filter']=$active_filter;
+		foreach (array_keys($_GET+$_POST) as $key)
+		{
+			if (substr($key,0,7)=='filter_')
+			{
+				$map[$key]=either_param($key,'');
+			}
+		}
+	}
+	return $map;
+}
+
+/**
+ * Propagate ocSelect through page-links.
+ *
+ * @return array				Extra URL mappings
+ */
+function propagate_ocselect_pagelink()
+{
+	$map=propagate_ocselect();
+	$_map='';
+	foreach ($map as $key=>$val)
+	{
+		$_map.=':'.$key.'='.urlencode($val);
+	}
+	return $_map;
+}
+
+/**
+ * Get links and details related to a member.
+ *
+ * @param  MEMBER				A member ID
+ * @return array				A tuple: links (Tempcode), details (Tempcode), number of unread inline personal posts or private topics
+ */
+function member_personal_links_and_details($member_id)
+{
+	$details=new ocp_tempcode();
+	$links=new ocp_tempcode();
+
+	if (get_forum_type()!='none')
+	{
+		// Post count
+		if ((!has_no_forum()) && (get_option('forum_show_personal_stats_posts')=='1'))
+		{
+			$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'371dfee46e8c40b1b109e0350055f8cc','KEY'=>do_lang_tempcode('COUNT_POSTSCOUNT'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_post_count($member_id)))));
+		}
+		// Topic count
+		if ((!has_no_forum()) && (get_option('forum_show_personal_stats_topics')=='1'))
+		{
+			$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('KEY'=>do_lang_tempcode('COUNT_TOPICSCOUNT'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_topic_count($member_id)))));
+		}
+
+		// Member profile view link
+		if (get_option('ocf_show_profile_link')=='1')
+		{
+			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true);
+			$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'2c8648c953c802a9de41c3adeef0e97f','NAME'=>do_lang_tempcode('MY_PROFILE'),'URL'=>$url,'REL'=>'me')));
+		}
+	}
+
+	// Point count
+	if (addon_installed('points'))
+	{
+		require_lang('points');
+		require_code('points');
+		if (get_option('points_show_personal_stats_points_left')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241e58e30457576735f3a2618fd7fff','KEY'=>do_lang_tempcode('COUNT_POINTS_LEFT'),'VALUE'=>integer_format(available_points($member_id)))));
+		if (get_option('points_show_personal_stats_points_used')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241e58edfdsf735f3a2618fd7fff','KEY'=>do_lang_tempcode('COUNT_POINTS_USED'),'VALUE'=>integer_format(points_used($member_id)))));
+		if (get_option('points_show_personal_stats_total_points')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'3e6183abf9054574c0cd292d25a4fe5c','KEY'=>do_lang_tempcode('COUNT_POINTS_EVER'),'VALUE'=>integer_format(total_points($member_id)))));
+		if (get_option('points_show_personal_stats_gift_points_left')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241e5ssd45ddsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('COUNT_GIFT_POINTS_LEFT'),'VALUE'=>integer_format(get_gift_points_to_give($member_id)))));
+		if (get_option('points_show_personal_stats_gift_points_used')=='1') $details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'6241eddsd4sdddssdsa2618fd7fff','KEY'=>do_lang_tempcode('COUNT_GIFT_POINTS_USED'),'VALUE'=>integer_format(get_gift_points_used($member_id)))));
+	}
+
+	// Links to usergroups
+	if (get_option('ocp_show_personal_usergroup')=='1')
+	{
+		$group_id=$GLOBALS['FORUM_DRIVER']->pname_group($GLOBALS['FORUM_DRIVER']->pget_row($username));
+		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+		if (array_key_exists($group_id,$usergroups))
+		{
+			if (get_forum_type()=='ocf')
+			{
+				$group_url=build_url(array('page'=>'groups','type'=>'view','id'=>$group_id),get_module_zone('groups'));
+				$hyperlink=hyperlink($group_url,$usergroups[$group_id],false,true);
+				$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX',array('_GUID'=>'sas41eddsd4sdddssdsa2618fd7fff','KEY'=>do_lang_tempcode('GROUP'),'VALUE'=>$hyperlink)));
+			} else
+			{
+				$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'65180134fbc4cf7e227011463d466677','KEY'=>do_lang_tempcode('GROUP'),'VALUE'=>$usergroups[$group_id])));
+			}
+		}
+	}
+
+	// Last visit time
+	if (get_option('ocp_show_personal_last_visit')=='1')
+	{
+		$row=$GLOBALS['FORUM_DRIVER']->pget_row($username);
+		$last_visit=$GLOBALS['FORUM_DRIVER']->pnamelast_visit($row);
+		$_last_visit=get_timezoned_date($last_visit,false);
+		$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'sas41eddsdsdsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('LAST_HERE'),'RAW_KEY'=>strval($last_visit),'VALUE'=>$_last_visit)));
+	}
+
+	// Subscription links
+	if ((get_forum_type()=='ocf') && (addon_installed('ecommerce')) && (get_option('ocp_show_personal_sub_links')=='1') && (!has_zone_access($member_id,'adminzone')) && (has_actual_page_access($member_id,'purchase')))
+	{
+		$usergroup_subs=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('id','s_title','s_group_id','s_cost'),array('s_enabled'=>1));
+		$in_one=false;
+		$members_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
+		foreach ($usergroup_subs as $i=>$sub)
+		{
+			$usergroup_subs[$i]['s_cost']=floatval($sub['s_cost']);
+			if (in_array($sub['s_group_id'],$members_groups))
+			{
+				$in_one=true;
+				break;
+			}
+		}
+		if (!$in_one)
+		{
+			global $M_SORT_KEY;
+			$M_SORT_KEY='s_cost';
+			usort($usergroup_subs,'multi_sort');
+			foreach ($usergroup_subs as $sub)
+			{
+				$url=build_url(array('page'=>'purchase','type'=>'message','product'=>'USERGROUP'.strval($sub['id'])),get_module_zone('purchase'));
+				$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('NAME'=>do_lang_tempcode('UPGRADE_TO',escape_html(get_translated_text($sub['s_title']))),'URL'=>$url)));
+			}
+		}
+	}
+
+	// Admin Zone link
+	if ((get_option('ocp_show_personal_adminzone_link')=='1') && (has_zone_access($member_id,'adminzone')))
+	{
+		$url=build_url(array('page'=>''),'adminzone');
+		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'ae243058f780f9528016f7854763a5fa','ACCESSKEY'=>'I','NAME'=>do_lang_tempcode('ADMIN_ZONE'),'URL'=>$url)));
+	}
+
+	// Conceded mode link
+	if (($GLOBALS['SESSION_CONFIRMED']==1) && (get_option('ocp_show_conceded_mode_link')=='1'))
+	{
+		$url=build_url(array('page'=>'login','type'=>'concede','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
+		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('_GUID'=>'81fa81cfd3130e42996bf72b0e03d8aa','POST'=>true,'NAME'=>do_lang_tempcode('CONCEDED_MODE'),'DESCRIPTION'=>do_lang_tempcode('DESCRIPTION_CONCEDED_MODE'),'URL'=>$url)));
+	}
+
+	// Becomes-invisible link
+	if (get_option('is_on_invisibility')=='1')
+	{
+		if ((array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0))
+		{
+			$url=build_url(array('page'=>'login','type'=>'invisible','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
+			$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('NAME'=>do_lang_tempcode('INVISIBLE'),'DESCRIPTION'=>'','URL'=>$url)));
+		}
+	}
+
+	// Logout link
+	$url=build_url(array('page'=>'login','type'=>'logout'),get_module_zone('login'));
+	if (!is_httpauth_login())
+		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT',array('_GUID'=>'d1caacba272a7ee3bf5b2a758e4e54ee','NAME'=>do_lang_tempcode('LOGOUT'),'URL'=>$url)));
+
+	require_code('ocf_notifications');
+	list(,$num_unread_pps)=generate_notifications($member_id);
+
+	return array($links,$details,$num_unread_pps);
 }

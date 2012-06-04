@@ -104,7 +104,7 @@ if (!function_exists('critical_error'))
 		if ((function_exists('debug_backtrace')) && (strpos($error,'Allowed memory')===false) && ((is_null($relay)) || (strpos($relay,'Stack trace')===false)) && (function_exists('ocp_srv')) && (((ocp_srv('REMOTE_ADDR')==ocp_srv('SERVER_ADDR')) && (ocp_srv('HTTP_X_FORWARDED_FOR')=='')) || (preg_match('#^localhost(\.|\:|$)#',ocp_srv('HTTP_HOST'))!=0) && (function_exists('get_base_url')) && (substr(get_base_url(),0,16)=='http://localhost')))
 		{
 			$_trace=debug_backtrace();
-			$extra='<div class="medborder medborder_box"><h2>Stack trace&hellip;</h2>';
+			$extra='<div class="box guid_{_GUID}"><div class="box_inner"><h2>Stack trace&hellip;</h2>';
 			foreach ($_trace as $stage)
 			{
 				$traces='';
@@ -147,7 +147,7 @@ if (!function_exists('critical_error'))
 				}
 				$extra.='<p>'.$traces.'</p>'.chr(10);
 			}
-			$extra.='</div>';
+			$extra.='</div></div>';
 		}
 
 		$headers_sent=headers_sent();
@@ -155,8 +155,8 @@ if (!function_exists('critical_error'))
 		{
 			@header('Content-type: text/html');
 			echo <<<END
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN">
+<!DOCTYPE html>
+<html lang="EN">
 <head>
 	<title>Critical error</title>
 	<style type="text/css">
@@ -171,19 +171,19 @@ if (strpos($error,'Allowed memory')===false)
 $css=((preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',$file_contents))))));
 echo htmlentities($css);
 echo <<<END
-		.main_page_title { text-decoration: underline; display: block; min-height: 42px; padding: 3px 0 0 0; }
+		.screen_title { text-decoration: underline; display: block; min-height: 42px; padding: 3px 0 0 0; }
 		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 	</style>
 </head>
 <body><div class="global_middle">
 END;
 		}
-		echo '<h1 class="main_page_title">Critical error &ndash; bailing out</h1>'.chr(10).'<div class="red_alert">'.$error.'</div>'.chr(10);
+		echo '<h1 class="screen_title">Critical error &ndash; bailing out</h1>'.chr(10).'<div class="red_alert" role="error">'.$error.'</div>'.chr(10);
 		flush();
 		if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')!==false) && (strpos($error,'Allowed memory')===false))
 		{
 			require_code('upgrade');
-			echo '<div class="medborder medborder_box"><h2>Integrity check</h2><p><strong>If you think this problem could be due to corruption caused by a failed upgrade (e.g. time-out during extraction), check the following integrity check&hellip;</strong></p>',run_integrity_check(true),'</div><br />';
+			echo '<div class="box guid_{_GUID}"><div class="box_inner"><h2>Integrity check</h2><p><strong>If you think this problem could be due to corruption caused by a failed upgrade (e.g. time-out during extraction), check the following integrity check&hellip;</strong></p>',run_integrity_check(true),'</div></div><br />';
 		}
 		flush();
 		echo $extra,chr(10);

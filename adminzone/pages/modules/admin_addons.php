@@ -107,6 +107,7 @@ class Module_admin_addons
 		require_lang('addons');
 		require_code('addons');
 		require_code('menus2');
+		require_css('addons_editor');
 
 		// Decide what we're doing
 		$type=get_param('type','misc');
@@ -142,7 +143,7 @@ class Module_admin_addons
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/addons';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_configuration';
 
-		$title=get_page_title('ADDONS');
+		$title=get_screen_title('ADDONS');
 
 		$addons_installed=find_installed_addons();
 		$addons_available_for_installation=find_available_addons();
@@ -152,7 +153,7 @@ class Module_admin_addons
 		// Show installed addons
 		foreach ($addons_installed as $row)
 		{
-			$actions=do_template('TABLE_TABLE_ACTION_DELETE_ENTRY',array('GET'=>true,'NAME'=>$row['addon_name'],'URL'=>build_url(array('page'=>'_SELF','type'=>'addon_uninstall','name'=>$row['addon_name']),'_SELF')));
+			$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('GET'=>true,'NAME'=>$row['addon_name'],'URL'=>build_url(array('page'=>'_SELF','type'=>'addon_uninstall','name'=>$row['addon_name']),'_SELF')));
 			$status=do_lang_tempcode('STATUS_INSTALLED');
 			$description=$row['addon_description'];
 			$file_list=$row['addon_files'];
@@ -164,7 +165,7 @@ class Module_admin_addons
 		{
 			if (!array_key_exists($addon['name'],$addons_installed))
 			{
-				$actions=do_template('TABLE_TABLE_ACTION_INSTALL_ENTRY',array('_GUID'=>'e6e2bdac62c0d3afcd5251b3d525a1c9','GET'=>true,'NAME'=>$addon['name'],'HIDDEN'=>'','URL'=>build_url(array('page'=>'_SELF','type'=>'addon_install','file'=>$filename),'_SELF')));
+				$actions=do_template('COLUMNED_TABLE_ACTION_INSTALL_ENTRY',array('_GUID'=>'e6e2bdac62c0d3afcd5251b3d525a1c9','GET'=>true,'NAME'=>$addon['name'],'HIDDEN'=>'','URL'=>build_url(array('page'=>'_SELF','type'=>'addon_install','file'=>$filename),'_SELF')));
 				$status=do_lang_tempcode('STATUS_NOT_INSTALLED');
 				$description=$addon['description'];
 				$file_list=$addon['files'];
@@ -193,16 +194,21 @@ class Module_admin_addons
 	 */
 	function addon_import()
 	{
-		$title=get_page_title('IMPORT_ADDON');
+		$title=get_screen_title('IMPORT_ADDON');
 
 		require_code('form_templates');
 
-		$required=false;
-		$javascript='standardAlternateFields(\'file\',\'url\');';
-
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',$required,NULL,NULL,true,'tar'));
-		$fields->attach(form_input_tree_list(do_lang_tempcode('DOWNLOAD'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_OCPORTALCOM'),'url',NULL,'choose_ocportalcom_addon',array(),$required));
+		$set_name='addon';
+		$required=true;
+		$set_title=do_lang_tempcode('SOURCE');
+		$field_set=alternate_fields_set__start($set_name);
+
+		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,'tar'));
+
+		$field_set->attach(form_input_tree_list(do_lang_tempcode('DOWNLOAD'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_OCPORTALCOM'),'url',NULL,'choose_ocportalcom_addon',array(),false));
+
+		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
@@ -222,7 +228,7 @@ class Module_admin_addons
 			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html($config_url))));
 		}
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'7f50130c5a46e0f6e8a95e936ce7bf47','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>$text,'URL'=>$post_url,'JAVASCRIPT'=>$javascript));
+		return do_template('FORM_SCREEN',array('_GUID'=>'7f50130c5a46e0f6e8a95e936ce7bf47','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'FIELDS'=>$fields,'TEXT'=>$text,'URL'=>$post_url));
 	}
 
 	/**
@@ -232,7 +238,7 @@ class Module_admin_addons
 	 */
 	function _addon_import()
 	{
-		$title=get_page_title('IMPORT_ADDON');
+		$title=get_screen_title('IMPORT_ADDON');
 
 		require_code('uploads');
 
@@ -254,7 +260,7 @@ class Module_admin_addons
 		$full=get_custom_file_base().'/'.$urls[0];
 		if (strtolower(substr($full,-4))!='.tar')
 		{
-			return warn_screen(get_page_title('ERROR_OCCURRED'),do_lang_tempcode('ADDON_NOT_TAR'));
+			return warn_screen(get_screen_title('ERROR_OCCURRED'),do_lang_tempcode('ADDON_NOT_TAR'));
 		}
 
 		// Show it worked / Refresh
@@ -269,7 +275,7 @@ class Module_admin_addons
 	 */
 	function multi_action()
 	{
-		$title=get_page_title('INSTALL_AND_UNINSTALL');
+		$title=get_screen_title('INSTALL_AND_UNINSTALL');
 
 		$warnings=new ocp_tempcode();
 		$install_files=new ocp_tempcode();
@@ -312,7 +318,7 @@ class Module_admin_addons
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ADDONS'))));
 
-		return do_template('ADDON_MULTI_CONFIRM_SCREEN',array('TITLE'=>$title,'HIDDEN'=>build_keep_post_fields(),'URL'=>$url,'INSTALL_FILES'=>$install_files,'UNINSTALL_FILES'=>$uninstall_files,'WARNINGS'=>$warnings));
+		return do_template('ADDON_MULTI_CONFIRM_SCREEN',array('_GUID'=>'bd6b7e012825bb0c873a76a9f4b19cf1','TITLE'=>$title,'HIDDEN'=>build_keep_post_fields(),'URL'=>$url,'INSTALL_FILES'=>$install_files,'UNINSTALL_FILES'=>$uninstall_files,'WARNINGS'=>$warnings));
 	}
 
 	/**
@@ -322,7 +328,7 @@ class Module_admin_addons
 	 */
 	function _multi_action()
 	{
-		$title=get_page_title('INSTALL_AND_UNINSTALL');
+		$title=get_screen_title('INSTALL_AND_UNINSTALL');
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -368,8 +374,8 @@ class Module_admin_addons
 		require_code('zones3');
 		erase_comcode_page_cache();
 		erase_tempcode_cache();
-		//persistant_cache_delete('OPTIONS');  Done by set_option
-		persistant_cache_empty();
+		//persistent_cache_delete('OPTIONS');  Done by set_option
+		persistent_cache_empty();
 		erase_cached_templates();
 
 		// Show it worked / Refresh
@@ -384,7 +390,7 @@ class Module_admin_addons
 	 */
 	function addon_install()
 	{
-		$title=get_page_title('INSTALL_ADDON');
+		$title=get_screen_title('INSTALL_ADDON');
 
 		$file=get_param('file');
 		list($warnings,$files,$info)=inform_about_addon_install($file);
@@ -405,7 +411,7 @@ class Module_admin_addons
 	 */
 	function _addon_install()
 	{
-		$title=get_page_title('INSTALL_ADDON');
+		$title=get_screen_title('INSTALL_ADDON');
 
 		require_code('abstract_file_manager');
 		force_have_afm_details();
@@ -449,7 +455,7 @@ class Module_admin_addons
 	 */
 	function addon_uninstall()
 	{
-		$title=get_page_title('UNINSTALL_ADDON');
+		$title=get_screen_title('UNINSTALL_ADDON');
 
 		$name=get_param('name');
 
@@ -469,7 +475,7 @@ class Module_admin_addons
 	 */
 	function _addon_uninstall()
 	{
-		$title=get_page_title('UNINSTALL_ADDON');
+		$title=get_screen_title('UNINSTALL_ADDON');
 
 		require_code('abstract_file_manager');
 		force_have_afm_details();
@@ -504,8 +510,8 @@ class Module_admin_addons
 		require_code('zones3');
 		erase_comcode_page_cache();
 		erase_tempcode_cache();
-		//persistant_cache_delete('OPTIONS');  Done by set_option
-		persistant_cache_empty();
+		//persistent_cache_delete('OPTIONS');  Done by set_option
+		persistent_cache_empty();
 		erase_cached_templates();
 
 		// Show it worked / Refresh
@@ -520,7 +526,7 @@ class Module_admin_addons
 	 */
 	function addon_export()
 	{
-		$title=get_page_title('EXPORT_ADDON');
+		$title=get_screen_title('EXPORT_ADDON');
 
 		// Lang packs
 		$url=build_url(array('page'=>'_SELF','type'=>'_addon_export','exp'=>'lang'),'_SELF');
@@ -604,8 +610,6 @@ class Module_admin_addons
 		{
 			while (false!==($file=readdir($_dir)))
 			{
-				if (($dir=='') && ($file=='_tests')) continue;
-
 				if (!should_ignore_file((($dir=='')?'':($dir.'/')).$file,IGNORE_EDITFROM_FILES | IGNORE_REVISION_FILES))
 				{
 					$temp[$file]=1;
@@ -642,7 +646,7 @@ class Module_admin_addons
 
 		$theme=get_param('theme',NULL,true);
 
-		$title=get_page_title('EXPORT_ADDON');
+		$title=get_screen_title('EXPORT_ADDON');
 
 		// Default meta data
 		$name='';
@@ -774,7 +778,7 @@ class Module_admin_addons
 	 */
 	function __addon_export()
 	{
-		$title=get_page_title('EXPORT_ADDON');
+		$title=get_screen_title('EXPORT_ADDON');
 
 		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',post_param('name'))).date('-dmY-Hm',time()).'.tar';
 
@@ -811,7 +815,7 @@ class Module_admin_addons
 	 */
 	function modules_interface()
 	{
-		$title=get_page_title('MODULE_MANAGEMENT');
+		$title=get_screen_title('MODULE_MANAGEMENT');
 
 		require_code('form_templates');
 		require_code('zones2');
@@ -836,12 +840,12 @@ class Module_admin_addons
 	 */
 	function modules_view()
 	{
-		$title=get_page_title('MODULE_MANAGEMENT');
+		$title=get_screen_title('MODULE_MANAGEMENT');
 
 		$zone=get_param('id');
 		$tpl_modules=new ocp_tempcode();
 
-		require_code('templates_table_table');
+		require_code('templates_columned_table');
 		require_code('zones2');
 
 		if ($zone!='_block')
@@ -894,7 +898,7 @@ class Module_admin_addons
 					$hidden=new ocp_tempcode();
 					$hidden->attach(form_input_hidden('zone',$zone));
 					$hidden->attach(form_input_hidden('module',$module));
-					$actions->attach(do_template('TABLE_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'331afd26f5e62a6a4cdc4e2c520a4114','HIDDEN'=>$hidden,'NAME'=>$module,'URL'=>build_url(array('page'=>'_SELF','type'=>'uninstall'),'_SELF'))));
+					$actions->attach(do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'331afd26f5e62a6a4cdc4e2c520a4114','HIDDEN'=>$hidden,'NAME'=>$module,'URL'=>build_url(array('page'=>'_SELF','type'=>'uninstall'),'_SELF'))));
 				}
 				if ($row[$prefix.'_version']<$version)
 				{
@@ -902,7 +906,7 @@ class Module_admin_addons
 					$hidden=new ocp_tempcode();
 					$hidden->attach(form_input_hidden('zone',$zone));
 					$hidden->attach(form_input_hidden('module',$module));
-					$actions->attach(do_template('TABLE_TABLE_ACTION_UPGRADE_ENTRY',array('_GUID'=>'e5d012cb8c839e0e869f1edfa008dacd','HIDDEN'=>$hidden,'NAME'=>$module,'URL'=>build_url(array('page'=>'_SELF','type'=>'upgrade'),'_SELF'))));
+					$actions->attach(do_template('COLUMNED_TABLE_ACTION_UPGRADE_ENTRY',array('_GUID'=>'e5d012cb8c839e0e869f1edfa008dacd','HIDDEN'=>$hidden,'NAME'=>$module,'URL'=>build_url(array('page'=>'_SELF','type'=>'upgrade'),'_SELF'))));
 				}
 				elseif ((!is_null($hack_version)) && ($row[$prefix.'_hack_version']<$hack_version))
 				{
@@ -910,7 +914,7 @@ class Module_admin_addons
 					$hidden=new ocp_tempcode();
 					$hidden->attach(form_input_hidden('zone',$zone));
 					$hidden->attach(form_input_hidden('module',$module));
-					$actions->attach(do_template('TABLE_TABLE_ACTION_UPGRADE_ENTRY',array('_GUID'=>'42c4473bf31dfd329e921e443ccc2ec3','HIDDEN'=>$hidden,'NAME'=>$module,'URL'=>build_url(array('page'=>'_SELF','type'=>'upgrade'),'_SELF'))));
+					$actions->attach(do_template('COLUMNED_TABLE_ACTION_UPGRADE_ENTRY',array('_GUID'=>'42c4473bf31dfd329e921e443ccc2ec3','HIDDEN'=>$hidden,'NAME'=>$module,'URL'=>build_url(array('page'=>'_SELF','type'=>'upgrade'),'_SELF'))));
 				} else
 				{
 					$status=do_lang_tempcode('STATUS_CURRENT');
@@ -920,14 +924,14 @@ class Module_admin_addons
 					$hidden=new ocp_tempcode();
 					$hidden->attach(form_input_hidden('zone',$zone));
 					$hidden->attach(form_input_hidden('module',$module));
-					$actions->attach(do_template('TABLE_TABLE_ACTION_REINSTALL_ENTRY',array('_GUID'=>'c2d820af4b9a2f8633f6f5a4e3de76bc','HIDDEN'=>$hidden,'NAME'=>$module,'URL'=>build_url(array('page'=>'_SELF','type'=>'reinstall'),'_SELF'))));
+					$actions->attach(do_template('COLUMNED_TABLE_ACTION_REINSTALL_ENTRY',array('_GUID'=>'c2d820af4b9a2f8633f6f5a4e3de76bc','HIDDEN'=>$hidden,'NAME'=>$module,'URL'=>build_url(array('page'=>'_SELF','type'=>'reinstall'),'_SELF'))));
 				}
 			} else
 			{
 				$hidden=new ocp_tempcode();
 				$hidden->attach(form_input_hidden('zone',$zone));
 				$hidden->attach(form_input_hidden('module',$module));
-				$actions->attach(do_template('TABLE_TABLE_ACTION_INSTALL_ENTRY',array('_GUID'=>'6b438e07cfe154afc21439479fd76978','HIDDEN'=>$hidden,'NAME'=>$module,'URL'=>build_url(array('page'=>'_SELF','type'=>'reinstall'),'_SELF'))));
+				$actions->attach(do_template('COLUMNED_TABLE_ACTION_INSTALL_ENTRY',array('_GUID'=>'6b438e07cfe154afc21439479fd76978','HIDDEN'=>$hidden,'NAME'=>$module,'URL'=>build_url(array('page'=>'_SELF','type'=>'reinstall'),'_SELF'))));
 			}
 
 			if (is_null($hacked_by)) $hacked_by=do_lang_tempcode('NA_EM');
@@ -956,7 +960,7 @@ class Module_admin_addons
 			upgrade_module($zone,$module);
 		else upgrade_block($module);
 
-		$title=get_page_title('UPGRADE_MODULE');
+		$title=get_screen_title('UPGRADE_MODULE');
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$zone),'_SELF');
@@ -977,7 +981,7 @@ class Module_admin_addons
 
 		if ($zone!='_block') uninstall_module($zone,$module); else uninstall_block($module);
 
-		$title=get_page_title('UNINSTALL_MODULE');
+		$title=get_screen_title('UNINSTALL_MODULE');
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$zone),'_SELF');
@@ -998,7 +1002,7 @@ class Module_admin_addons
 
 		if ($zone!='_block') reinstall_module($zone,$module); else reinstall_block($module);
 
-		$title=get_page_title('REINSTALL_MODULE');
+		$title=get_screen_title('REINSTALL_MODULE');
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$zone),'_SELF');

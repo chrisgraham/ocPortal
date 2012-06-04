@@ -36,7 +36,7 @@ class Module_pointstore
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=4;
+		$info['version']=5;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -89,6 +89,15 @@ class Module_pointstore
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
+		if (($upgrade_from<5) && (!is_null($upgrade_from)))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('pstore_permissions','p_mail_subject','SHORT_TRANS');
+			$GLOBALS['SITE_DB']->add_table_field('pstore_permissions','p_mail_body','LONG_TRANS');
+
+			$GLOBALS['SITE_DB']->add_table_field('pstore_customs','c_mail_subject','SHORT_TRANS');
+			$GLOBALS['SITE_DB']->add_table_field('pstore_customs','c_mail_body','LONG_TRANS');
+		}
+
 		if (($upgrade_from<4) && (!is_null($upgrade_from)))
 		{
 			delete_config_option('is_on_shop');
@@ -121,6 +130,8 @@ class Module_pointstore
 					'id'=>'*AUTO',
 					'c_title'=>'SHORT_TRANS',
 					'c_description'=>'LONG_TRANS',
+					'c_mail_subject'=>'SHORT_TRANS',
+					'c_mail_body'=>'LONG_TRANS',
 					'c_enabled'=>'BINARY',
 					'c_cost'=>'INTEGER',
 					'c_one_per_member'=>'BINARY',
@@ -130,6 +141,8 @@ class Module_pointstore
 					'id'=>'*AUTO',
 					'p_title'=>'SHORT_TRANS',
 					'p_description'=>'LONG_TRANS',
+					'p_mail_subject'=>'SHORT_TRANS',
+					'p_mail_body'=>'LONG_TRANS',
 					'p_enabled'=>'BINARY',
 					'p_cost'=>'INTEGER',
 					'p_hours'=>'INTEGER',
@@ -203,7 +216,7 @@ class Module_pointstore
 		require_code('points');
 		require_css('points');
 
-		$title=get_page_title('POINT_STORE');
+		$title=get_screen_title('POINT_STORE');
 
 		$type=get_param('type','misc');
 		$hook=get_param('id','');
@@ -234,7 +247,7 @@ class Module_pointstore
 	 */
 	function do_module_gui()
 	{
-		$title=get_page_title('POINT_STORE');
+		$title=get_screen_title('POINT_STORE');
 
 		$points_left=available_points(get_member());
 

@@ -165,7 +165,7 @@ function find_theme_seed($theme,$no_easy_anchor=false)
 		if (!is_file($css_path)) return '426aa9'; // Not ideal, but default theme is this
 		$css_file_contents=file_get_contents($css_path,FILE_TEXT);
 		$matches=array();
-		if (preg_match('#\#(.{6}); /\* \{\$,wizard, 100% seed\} \*/#',$css_file_contents,$matches)!=0)
+		if (preg_match('#\{\$THEME\_WIZARD\_COLOR,\#(.{6}),seed,.*\}#',$css_file_contents,$matches)!=0)
 		{
 			$THEME_SEED_CACHE[$theme]=$matches[1];
 		} else
@@ -203,7 +203,7 @@ function find_theme_dark($theme)
 	if (!is_file($css_path)) return false;
 	$css_file_contents=file_get_contents($css_path,FILE_TEXT);
 	$matches=array();
-	if (preg_match('#\#(.{6}); /\* \{\$,wizard, 100% W/B\} \*/#',$css_file_contents,$matches)!=0)
+	if (preg_match('#\{\$THEME\_WIZARD\_COLOR,\#(.{6}),W/B,.*\}#',$css_file_contents,$matches)!=0)
 	{
 		$THEME_DARK_CACHE[$theme]=(strtoupper($matches[1])!='FFFFFF');
 	} else
@@ -222,7 +222,7 @@ function find_theme_dark($theme)
  */
 function find_theme_image_themewizard_preview($id)
 {
-	load_themewizard_params_from_theme(get_param('keep_theme_source','default'),get_param('keep_theme_algorithm')=='hsv');
+	load_themewizard_params_from_theme(get_param('keep_theme_source','default'),get_param('keep_theme_algorithm','equations')=='hsv');
 
 	$seed=get_param('keep_theme_seed');
 	if ($seed=='random')
@@ -258,7 +258,7 @@ function find_theme_image_themewizard_preview($id)
  * @param  string		The logo img file to base upon.
  * @return resource  The image resource.
  */
-function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo-template')
+function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template')
 {
 	require_code('character_sets');
 
@@ -290,7 +290,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo-template'
 	$file_path_stub=convert_url_to_path($logo_url);
 	if (!is_null($file_path_stub))
 	{
-		if (!file_exists($file_path_stub)) $file_path_stub=get_file_base().'/themes/default/images/trimmed-logo-template.png'; // Exceptional situation. Maybe theme got corrupted?
+		if (!file_exists($file_path_stub)) $file_path_stub=get_file_base().'/themes/default/images/trimmed_logo_template.png'; // Exceptional situation. Maybe theme got corrupted?
 		$data=file_get_contents($file_path_stub);
 	} else
 	{
@@ -324,7 +324,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo-template'
 	{
 		$css_file=file_get_contents(get_file_base().'/themes/default/css/global.css');
 	}
-	if (preg_match('/#(\w\w)(\w\w)(\w\w); \/\* \{\$,wizard, 100% medborder.border}/',$css_file,$matches)!=0)
+	if (preg_match('/#\{\$THEME\_WIZARD\_COLOR,\#(\w\w)(\w\w)(\w\w),standard_border,.*\}/',$css_file,$matches)!=0)
 	{
 		$blue=imagecolorallocate($img,hexdec($matches[1]),hexdec($matches[2]),hexdec($matches[3]));
 	} else
@@ -520,7 +520,6 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 				$saveat=get_custom_file_base().'/themes/'.filter_naughty($themename).'/css_custom/'.$sheet;
 				if ((!file_exists($saveat)) || ($source_theme!='default') || ($algorithm=='hsv'))
 				{
-					$fp=@fopen($saveat,'wt') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($themename).'/css_custom/'.$sheet);
 					if ($inherit_css)
 					{
 						$output='{+START,CSS_INHERIT,'.basename($sheet,'.css').','.filter_naughty($source_theme).','.$seed.','.$algorithm.'}{+END}';
@@ -528,21 +527,34 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 					{
 						$output=theme_wizard_colours_to_sheet($sheet,$landscape,$source_theme,$algorithm,$seed);
 					}
-					if (fwrite($fp,$output)<strlen($output)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-					fclose($fp);
-					fix_permissions($saveat);
-					sync_file($saveat);
-					if (!$inherit_css)
+					$default_version_path=get_file_base().'/themes/default/css/'.$sheet;
+					if (is_file($default_version_path))
 					{
-						$c_success=@copy(get_file_base().'/themes/'.filter_naughty($source_theme).'/css/'.$sheet,$saveat.'.editfrom');
-						if ($c_success!==false)
-						{
-							fix_permissions($saveat.'.editfrom');
-							sync_file($saveat.'.editfrom');
-						}
+						$default_version=file_get_contents($default_version_path);
+						$changed_from_default_theme=file_get_contents(unixify_line_format($default_version))!=$output;
 					} else
 					{
-						@unlink($saveat.'.editfrom');
+						$changed_from_default_theme=true;
+					}
+					if ($changed_from_default_theme)
+					{
+						$fp=@fopen($saveat,'wt') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($themename).'/css_custom/'.$sheet);
+						if (fwrite($fp,$output)<strlen($output)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+						fclose($fp);
+						fix_permissions($saveat);
+						sync_file($saveat);
+						if (!$inherit_css)
+						{
+							$c_success=@copy(get_file_base().'/themes/'.filter_naughty($source_theme).'/css/'.$sheet,$saveat.'.editfrom');
+							if ($c_success!==false)
+							{
+								fix_permissions($saveat.'.editfrom');
+								sync_file($saveat.'.editfrom');
+							}
+						} else
+						{
+							@unlink($saveat.'.editfrom');
+						}
 					}
 				}
 			}
@@ -564,7 +576,7 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 			$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'theme','category_name'=>$themename,'group_id'=>$group_id));
 		}
 
-		persistant_cache_empty();
+		persistent_cache_empty();
 	}
 }
 
@@ -675,20 +687,19 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 	if ((is_null($landscape)) || (is_null($colours)))
 	{
 		$colours=array(
+			// Hints for computation
 			'dark'=>($light_dark=='dark')?'1':'0',
-			'seed'=>$seed,
 			'red'=>strval($red),
 			'green'=>strval($green),
 			'blue'=>strval($blue),
 			'dominant'=>$dominant,
-			'WB'=>$wb,
-			'AWB'=>$awb,
-			'LD'=>$light_dark,
-			'ADD'=>$anti_light_dark,
-			'W/B'=>$wb,
-			'!W/B'=>$awb,
 			'L/D'=>$light_dark,
-			'!D/D'=>$anti_light_dark
+			'!D/D'=>$anti_light_dark,
+
+			// Actual colours
+			'seed'=>$seed,
+			'W/B'=>$wb,
+			'B/W'=>$awb,
 		);
 		if ($algorithm=='equations')
 		{
@@ -722,36 +733,28 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 			{
 				if ($source_theme=='default')
 				{
-					$needed=array('washed_out','donextbordercolor','do_next_item','lgradcolor','dgradcolor','lightborder','bordcolor','bgcol','comcode_quote_left','comcode_quote_right','a.link','a.hover','a.link__dark','a.hover__dark','special_borderer','zg_top','zg_bot','zg_peak','ocfredirectindicator','ocfpostindicator','topcolor','maincolor','special_middle',);
+					$needed=array('washed_out','do_next_border','area_background','lgrad','dgrad','dark_border','comcode_quote_left','comcode_quote_right','a.link','a.hover','a.link__dark','a.hover__dark','special_borderer','navigation_top','navigation_bot','navigation_peak','ocfredirectindicator','ocfpostindicator','header_background','slightly_seeded_text','special_middle',);
 					foreach ($needed as $colour_needed)
 					{
 						if (!array_key_exists($colour_needed,$colours))
 							fatal_exit(do_lang_tempcode('UNRESOLVABLE_COLOURS',escape_html($colour_needed)));
 					}
 
-					if ($show=='standardboxes/title_gradient')
+					if ($show=='gradient')
 					{
-						$img=generate_gradient($colours['lgradcolor'],$colours['dgradcolor']);
-					}
-					elseif ((preg_match('#^standardboxes/nontitle\_left#',$show)!=0) || (preg_match('#^standardboxes/nontitle\_right#',$show)!=0) || (preg_match('#^standardboxes/bottom\_right#',$show)!=0) || (preg_match('#^standardboxes/bottom\_left#',$show)!=0))
-					{
-						$img=generate_recoloured_image($path,'#10316A',$colours['lightborder'],'#E4EAF2',$colours['bgcol']);
+						$img=generate_gradient($colours['lgrad'],$colours['dgrad']);
 					}
 					elseif (($show=='background_image'))
 					{
 						$img=generate_recoloured_image($path,'#FFFFFF',$colours['WB'],'#DDE5F7',$colours['washed_out']);
 					}
-					elseif (($show=='header') || ($show=='outer-background') || ($show=='inner-background') || ($show=='block-background') || ($show=='big_tabs_controller_button_active') || ($show=='big_tabs_controller_button_top_active') || ($show=='big_tabs_controller_button_top') || ($show=='big_tabs_controller_button'))
+					elseif (($show=='header') || ($show=='outer_background') || ($show=='inner_background') || ($show=='block_background') || ($show=='big_tabs_controller_button_active') || ($show=='big_tabs_controller_button_top_active') || ($show=='big_tabs_controller_button_top') || ($show=='big_tabs_controller_button'))
 					{
 						$img=re_hue_image($path,$seed,$source_theme,false,$light_dark=='dark');
 					}
-					elseif (($show=='standardboxes/title_left') || ($show=='standardboxes/title_right'))
-					{
-						$img=generate_recoloured_image($path,'#c1cee3',$colours['lightborder'],'#5B84C3',$colours['lgradcolor'],'#466EAD',$colours['dgradcolor']);
-					}
 					elseif ($show=='quote_gradient')
 					{
-						$img=generate_recoloured_image($path,'#072A66',$colours['bordcolor'],'#C7D5EC',$colours['comcode_quote_left'],'#8CA7D2',$colours['comcode_quote_right'],'horizontal');
+						$img=generate_recoloured_image($path,'#072A66',$colours['dark_border'],'#C7D5EC',$colours['comcode_quote_left'],'#8CA7D2',$colours['comcode_quote_right'],'horizontal');
 					}
 					elseif ($show=='menu_bullet')
 					{
@@ -779,13 +782,13 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 					}
 					elseif ($show=='help_panel_hide')
 					{
-						$img=generate_recoloured_image($path,'#82A3D8',$colours['zg_top'],'#82A3D8',$colours['zg_top']);
+						$img=generate_recoloured_image($path,'#82A3D8',$colours['navigation_top'],'#82A3D8',$colours['navigation_top']);
 					}
 					elseif ($show=='zone_gradient')
 					{
-						$img=generate_recoloured_image($path,'#FFFFFF'/*3660A6*/,'#FFFFFF'/*$colours['zg_peak']*/,'#82A3D8',$colours['zg_top'],'#3865A9',$colours['zg_bot']);
+						$img=generate_recoloured_image($path,'#FFFFFF'/*3660A6*/,'#FFFFFF'/*$colours['navigation_peak']*/,'#82A3D8',$colours['navigation_top'],'#3865A9',$colours['navigation_bot']);
 					}
-					elseif (($show=='trimmed-logo-template') || ($show=='logo-template') || (substr($show,0,5)=='logo/'))
+					elseif (($show=='trimmed_logo_template') || ($show=='logo_template') || (substr($show,0,5)=='logo/'))
 					{
 						$pixel_x_start_array=array();
 						for ($y=0;$y<=59+((strpos($show,'trimmed')===false)?0:13);$y++)
@@ -796,28 +799,28 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 						{
 							$pixel_x_start_array=array_merge($pixel_x_start_array,array(320,319,318,317,316,316,315,315,314,314,313,312,309));
 						}
-						$img=generate_recoloured_image($path,'#FFFFFF'/*3660A6*/,'#FFFFFF'/*$colours['zg_peak']*/,'#82A3D8',$colours['zg_top'],'#3865A9',$colours['zg_bot'],'vertical',$pixel_x_start_array,60);
+						$img=generate_recoloured_image($path,'#FFFFFF'/*3660A6*/,'#FFFFFF'/*$colours['navigation_peak']*/,'#82A3D8',$colours['navigation_top'],'#3865A9',$colours['navigation_bot'],'vertical',$pixel_x_start_array,60);
 						for ($y=0;$y<=88;$y++)
 						{
 							$pixel_x_start_array[$y]=(array_key_exists($y,$pixel_x_start_array)?$pixel_x_start_array[$y]:0);
 						}
-						$img=generate_recoloured_image(isset($img)?$img:$path,'#8FADDC',$colours['zg_peak'],'#FFFFFF',$colours['W/B'],'#E3EAF2',$colours['topcolor'],'horizontal',$pixel_x_start_array,0,true);
+						$img=generate_recoloured_image(isset($img)?$img:$path,'#8FADDC',$colours['navigation_peak'],'#FFFFFF',$colours['W/B'],'#E3EAF2',$colours['header_background'],'horizontal',$pixel_x_start_array,0,true);
 					}
 					elseif (in_array($show,array('donext/topleft','donext/topright')))
 					{
-						$img=generate_recoloured_image($path,'#5B84C4',$colours['donextbordercolor'],'#E4EAF2',$colours['do_next_item'],NULL,NULL,'vertical');
+						$img=generate_recoloured_image($path,'#5B84C4',$colours['do_next_border'],'#E4EAF2',$colours['area_background'],NULL,NULL,'vertical');
 					}
 					elseif (in_array($show,array('donext/botleft','donext/botright')))
 					{
-						$img=generate_recoloured_image($path,'#5B84C4',$colours['donextbordercolor'],'#E4EAF2',$colours['do_next_item'],NULL,NULL,'vertical');
+						$img=generate_recoloured_image($path,'#5B84C4',$colours['do_next_border'],'#E4EAF2',$colours['area_background'],NULL,NULL,'vertical');
 					}
 					elseif (in_array($show,array('donext/topcent','donext/botmid','donext/midleft','donext/midright')))
 					{
-						$img=generate_recoloured_image($path,'#5B84C4',$colours['donextbordercolor'],'#E4EAF2',$colours['do_next_item']);
+						$img=generate_recoloured_image($path,'#5B84C4',$colours['do_next_border'],'#E4EAF2',$colours['area_background']);
 					}
 					elseif (($show=='donext/titleleft') || ($show=='donext/titleright'))
 					{
-						$img=generate_recoloured_image($path,'#FFFFFF',$colours['maincolor'],'#5B84C4',$colours['donextbordercolor']);
+						$img=generate_recoloured_image($path,'#FFFFFF',$colours['slightly_seeded_text'],'#5B84C4',$colours['do_next_border']);
 					}
 					elseif (in_array($show,array('ocf_general/no_new_posts_redirect','ocf_general/new_posts_redirect')))
 					{
@@ -868,14 +871,18 @@ function calculate_dynamic_css_colours($colours,$source_theme)
 			$contents=unixify_line_format(file_get_contents($path,FILE_TEXT));
 
 			$matches=array();
-			$num_matches=preg_match_all('#/\* *\{\\$,([^,\n\r\\$\']*),([^}{\n\r\\$\']*)\}#',$contents,$matches);
+			$num_matches=preg_match_all('#\{\$THEME_WIZARD_COLOR,(.*),(.*),(.*)\}#',$contents,$matches);
 
 			for ($i=0;$i<$num_matches;$i++)
 			{
-				$parsed=parse_css_colour_expression($matches[2][$i]);
+				// Skip over our little stored hints (not intended for ocPortal)
+				if (in_array($matches[2][$i],array('seed','W/B','B/W'))) continue;
+
+				// A one we're really interested in
+				$parsed=parse_css_colour_expression($matches[3][$i]);
 				if (!is_null($parsed))
-					//					  Colour name	  Parsed expression									 Full match string	 Final colour
-					$landscape[]=array($matches[1][$i],$parsed,										substr($matches[0][$i],6,strlen($matches[0][$i])-7),	  NULL);
+					//							Colour name			Parsed expression		Full match string	 		  Final colour
+					$landscape[]=array(	$matches[2][$i],	$parsed,					$matches[0][$i],			  NULL);
 			}
 		}
 	}
@@ -1028,13 +1035,13 @@ function execute_css_colour_expression($expression,$colours)
 	$operation=$expression[0];
 	$operand_a=execute_css_colour_expression($expression[1],$colours);
 	if (is_null($operand_a)) return NULL;
-	/*if (($operation=='+') && ($expression[2][0]=='*') && (!is_array($expression[2][1])) && ((($expression[2][2]=='!W/B') && ($colours['L/D']=='light')) || (($expression[2][2]=='W/B') && ($colours['L/D']=='dark'))))
+	/*if (($operation=='+') && ($expression[2][0]=='*') && (!is_array($expression[2][1])) && ((($expression[2][2]=='B/W') && ($colours['L/D']=='light')) || (($expression[2][2]=='W/B') && ($colours['L/D']=='dark'))))
 	{
 		$operation='-';
 		$expression[2][2]='FFFFFF';
 	} else
 	{
-//	if (($operation=='-') && ($expression[2][0]=='*') && (!is_array($expression[2][1])) && ((($expression[2][2]=='W/B') && ($colours['L/D']=='light')) || (($expression[2][2]=='!W/B') && ($colours['L/D']=='dark'))))
+//	if (($operation=='-') && ($expression[2][0]=='*') && (!is_array($expression[2][1])) && ((($expression[2][2]=='W/B') && ($colours['L/D']=='light')) || (($expression[2][2]=='B/W') && ($colours['L/D']=='dark'))))
 //		$operation='+';
 	}*/
 	$operand_b=execute_css_colour_expression($expression[2],$colours);
@@ -1116,7 +1123,7 @@ function execute_css_colour_expression($expression,$colours)
 			$red=intval(round(floatval(hexdec(substr($operand_b,0,2))*intval($operand_a))/(100.0)));
 			$green=intval(round(floatval(hexdec(substr($operand_b,2,2))*intval($operand_a))/(100.0)));
 			$blue=intval(round(floatval(hexdec(substr($operand_b,4,2))*intval($operand_a))/(100.0)));
-			/*if ((($expression[2]==='W/B') && ($colours['L/D']=='dark')) || (($expression[2]==='!W/B') && ($colours['L/D']=='light')))
+			/*if ((($expression[2]==='W/B') && ($colours['L/D']=='dark')) || (($expression[2]==='B/W') && ($colours['L/D']=='light')))
 			{
 				$red=255-$red;
 				$green=255-$green;
@@ -1360,7 +1367,7 @@ function theme_wizard_colours_to_css($contents,$landscape,$source_theme,$algorit
 		{
 			list($h,$s,$v)=rgb_to_hsv((strlen($matches[1][$i])==3)?($matches[1][$i][0].$matches[1][$i][0].$matches[1][$i][1].$matches[1][$i][1].$matches[1][$i][2].$matches[1][$i][2]):$matches[1][$i]);
 			$new_colour=hsv_to_rgb(floatval(fix_colour($h+$hue_dif,true)),floatval(fix_colour($s+$sat_dif)),floatval(fix_colour($v+$val_dif)));
-			$contents=str_replace($matches[0][$i],'#'.$new_colour.$matches[2][$i],$contents);
+			$contents=str_replace(array(strtolower($matches[0][$i]),strtoupper($matches[0][$i])),array('#'.$new_colour.$matches[2][$i],'#'.$new_colour.$matches[2][$i]),$contents);
 		}
 
 		return $contents;
@@ -1368,14 +1375,9 @@ function theme_wizard_colours_to_css($contents,$landscape,$source_theme,$algorit
 
 	foreach ($landscape as $peak)
 	{
-		$matches=array();
-
-		$num_matches=preg_match_all('#\#[A-Fa-f0-9]{6}(.*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$contents,$matches);
-		for ($i=0;$i<$num_matches;$i++)
-			$contents=str_replace($matches[0][$i],'#'.$peak[3].$matches[1][$i].$peak[2],$contents);
-		$num_matches=preg_match_all('#\#[A-Fa-f0-9]{3}([^A-Fa-f0-9].*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$contents,$matches);
-		for ($i=0;$i<$num_matches;$i++)
-			$contents=str_replace($matches[0][$i],'#'.$peak[3].$matches[1][$i].$peak[2],$contents);
+		$from=$peak[2];
+		$to=preg_replace('#\{\$THEME_WIZARD_COLOR,\#[\da-fA-F]{6},#','{$THEME_WIZARD_COLOR,#'.$peak[3].',',$peak[2]);
+		$contents=str_replace($from,$to,$contents);
 	}
 
 	return $contents;

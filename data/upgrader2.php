@@ -164,7 +164,7 @@ if ($next_offset_url=='')
 }
 else
 {
-	echo '<p><img alt="" src="../themes/default/images/bottom/loading.gif" /></p>';
+	echo '<p><img alt="" src="../themes/default/images/loading.gif" /></p>';
 }
 echo '<ol>';
 foreach ($todo as $i=>$target_file)
@@ -193,8 +193,8 @@ function up2_do_header($refresh_url='')
 {
 	$_refresh_url=htmlentities($refresh_url);
 	echo <<<END
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	<html xmlns="http://www.w3.org/1999/xhtml" lang="EN">
+<!DOCTYPE html>
+	<html lang="EN">
 	<head>
 		<title>Extracting files</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
@@ -208,13 +208,13 @@ END;
 global $FILE_BASE;
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($FILE_BASE.'/themes/default/css/global.css'))))));
 echo <<<END
-			.main_page_title { text-decoration: underline; display: block; background: url('../themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
+			.screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 		</style>
 
 		<meta name="robots" content="noindex, nofollow" />
 	</head>
-	<body class="re_body"><div class="global_middle">
+	<body class="website_body"><div class="global_middle">
 END;
 }
 

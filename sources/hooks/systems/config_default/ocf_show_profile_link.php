@@ -29,7 +29,7 @@ class Hook_config_default_ocf_show_profile_link
 	function get_details()
 	{
 		return array(
-			'human_name'=>'MY_PROFILE_LINK',
+			'human_name'=>'MY_PROFILE_URL',
 			'the_type'=>'tick',
 			'the_page'=>'BLOCKS',
 			'section'=>'PERSONAL_BLOCK',

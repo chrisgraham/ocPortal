@@ -318,7 +318,7 @@ class Module_cms_booking extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (event types only).
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -515,7 +515,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (event types only).
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -705,7 +705,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (event types only).
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
@@ -905,8 +905,8 @@ class Module_cms_booking_bookings extends standard_aed_module
 				$submit_name=do_lang_tempcode('PROCEED');
 				$hidden=build_keep_post_fields();
 
-				$title=get_page_title('ADD_BOOKING');
-				$tpl=do_template('FORM_SCREEN',array('TARGET'=>'_self','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+				$title=get_screen_title('ADD_BOOKING');
+				$tpl=do_template('FORM_SCREEN',array('_GUID'=>'05c227f908ce664269b2bb6ba0fff75e','TARGET'=>'_self','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 				$echo=globalise($tpl,NULL,'',true);
 				$echo->evaluate_echo();
 				exit();
@@ -1053,7 +1053,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 	/**
 	 * The do-next manager for after download content management (event types only).
 	 *
-	 * @param  tempcode		The title (output of get_page_title)
+	 * @param  tempcode		The title (output of get_screen_title)
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI

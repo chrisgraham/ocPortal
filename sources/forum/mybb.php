@@ -203,7 +203,7 @@ class forum_driver_mybb extends forum_driver_base
 		foreach ($emoticons as $emo)
 		{
 			$code=$emo['find'];
-			$em->attach(do_template('EMOTICON_CLICK_CODE',array('FIELD_NAME'=>$field_name,'CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
+			$em->attach(do_template('EMOTICON_CLICK_CODE',array('_GUID'=>'89aa93c39b3929b00245981ba632371f','FIELD_NAME'=>$field_name,'CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
 		}
 		return $em;
 	}

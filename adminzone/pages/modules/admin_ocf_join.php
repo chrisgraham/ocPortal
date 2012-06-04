@@ -99,7 +99,7 @@ class Module_admin_ocf_join
 		if (addon_installed('staff')) require_lang('staff');
 
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('MEMBERS'),comcode_lang_string('DOC_MEMBERS'),
+		return do_next_manager(get_screen_title('MEMBERS'),comcode_lang_string('DOC_MEMBERS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('addmember',array('admin_ocf_join',array('type'=>'misc'),get_module_zone('admin_ocf_join')),do_lang_tempcode('ADD_MEMBER'),('DOC_ADD_MEMBER')),
@@ -126,7 +126,7 @@ class Module_admin_ocf_join
 	 */
 	function step1()
 	{
-		$title=get_page_title('ADD_MEMBER');
+		$title=get_screen_title('ADD_MEMBER');
 
 		list($fields,$hidden)=ocf_get_member_fields(false);
 
@@ -147,7 +147,7 @@ class Module_admin_ocf_join
 	 */
 	function step2()
 	{
-		$title=get_page_title('ADD_MEMBER');
+		$title=get_screen_title('ADD_MEMBER');
 
 		// Read in data
 		$username=trim(post_param('username'));
@@ -250,7 +250,7 @@ class Module_admin_ocf_join
 	 */
 	function group_member_timeouts()
 	{
-		$title=get_page_title('GROUP_MEMBER_TIMEOUTS');
+		$title=get_screen_title('GROUP_MEMBER_TIMEOUTS');
 
 		if (!cron_installed()) attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_configuration')),'warn');
 
@@ -303,7 +303,7 @@ class Module_admin_ocf_join
 
 		$form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 
-		return do_template('RESULTS_TABLE_SCREEN',array('TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'FORM'=>$form));
+		return do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'e9ce4084126653162ad84839fb7f47e3','TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'FORM'=>$form));
 	}
 
 	/**
@@ -313,7 +313,7 @@ class Module_admin_ocf_join
 	 */
 	function _group_member_timeouts()
 	{
-		$title=get_page_title('GROUP_MEMBER_TIMEOUTS');
+		$title=get_screen_title('GROUP_MEMBER_TIMEOUTS');
 
 		$group_id=post_param_integer('group_id');
 
@@ -345,7 +345,7 @@ class Module_admin_ocf_join
 	 */
 	function delurk()
 	{
-		$title=get_page_title('DELETE_LURKERS');
+		$title=get_screen_title('DELETE_LURKERS');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
@@ -468,7 +468,7 @@ class Module_admin_ocf_join
 	 */
 	function _delurk()
 	{
-		$title=get_page_title('DELETE_LURKERS');
+		$title=get_screen_title('DELETE_LURKERS');
 
 		if (function_exists('set_time_limit')) @set_time_limit(100);
 
@@ -512,7 +512,7 @@ class Module_admin_ocf_join
 	 */
 	function __delurk()
 	{
-		$title=get_page_title('DELETE_LURKERS');
+		$title=get_screen_title('DELETE_LURKERS');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/deletelurkers';
 
@@ -768,7 +768,7 @@ class Module_admin_ocf_join
 	 */
 	function import_csv()
 	{
-		$title=get_page_title('IMPORT_MEMBER_CSV');
+		$title=get_screen_title('IMPORT_MEMBER_CSV');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
@@ -789,7 +789,7 @@ class Module_admin_ocf_join
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_import_csv'),'_SELF');
 		$text='';
 
-		return do_template('FORM_SCREEN',array('TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'9196652a093d7f3a0e5dd0922f74cc51','TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -799,7 +799,7 @@ class Module_admin_ocf_join
 	 */
 	function _import_csv()
 	{
-		$title=get_page_title('IMPORT_MEMBER_CSV');
+		$title=get_screen_title('IMPORT_MEMBER_CSV');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/import_csv';
 

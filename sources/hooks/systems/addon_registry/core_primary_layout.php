@@ -20,7 +20,6 @@
 
 class Hook_addon_registry_core_primary_layout
 {
-
 	/**
 	 * Get a list of file permissions to set
 	 *
@@ -59,9 +58,9 @@ class Hook_addon_registry_core_primary_layout
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array()
 		);
 	}
 
@@ -73,10 +72,13 @@ class Hook_addon_registry_core_primary_layout
 	function get_file_list()
 	{
 		return array(
-
 			'sources/hooks/systems/addon_registry/core_primary_layout.php',
-			'ADDITIONAL.tpl',
+			'MESSAGE.tpl',
+			'helper_panel.css',
+			'messages.css',
 			'GLOBAL.tpl',
+			'GLOBAL_mobile.tpl',
+			'GLOBAL_HELPER_PANEL.tpl',
 			'FOOTER.tpl',
 			'HEADER.tpl',
 			'CLOSED_SITE.tpl',
@@ -87,33 +89,35 @@ class Hook_addon_registry_core_primary_layout
 			'MAIL_SUBJECT.tpl',
 			'BREADCRUMB.tpl',
 			'BREADCRUMB_ESCAPED.tpl',
-			'CSS_NEED_FULL.tpl',
+			'CSS_NEED_FULL.tpl'
 		);
 	}
 
 
 	/**
-	* Get mapping between template names and the method of this class that can render a preview of them
-	*
-	* @return array			The mapping
-	*/
+	 * Get mapping between template names and the method of this class that can render a preview of them
+	 *
+	 * @return array			The mapping
+	 */
 	function tpl_previews()
 	{
 		return array(
-				'BREADCRUMB_ESCAPED.tpl'=>'breadcrumb',
-				'BREADCRUMB.tpl'=>'breadcrumb',
-				'CLOSED_SITE.tpl'=>'closed_site',
-				'CSS_NEED_FULL.tpl'=>'css_need_full',
-				'ADDITIONAL.tpl'=>'additional',
-				'HEADER.tpl'=>'main_layout',
-				'FOOTER.tpl'=>'main_layout',
-				'MAIL_SUBJECT.tpl'=>'mail_subject',
-				'MAIL.tpl'=>'mail',
-				'GLOBAL.tpl'=>'global',
-				'SCREEN_TITLE.tpl'=>'screen_title',
-				'MINOR_TITLE.tpl'=>'minor_title',
-				'SECTION_TITLE.tpl'=>'section_title',
-				);
+			'BREADCRUMB_ESCAPED.tpl' => 'breadcrumb',
+			'BREADCRUMB.tpl' => 'breadcrumb',
+			'CLOSED_SITE.tpl' => 'closed_site',
+			'CSS_NEED_FULL.tpl' => 'css_need_full',
+			'MESSAGE.tpl' => 'message',
+			'HEADER.tpl' => 'main_layout',
+			'FOOTER.tpl' => 'main_layout',
+			'MAIL_SUBJECT.tpl' => 'mail_subject',
+			'MAIL.tpl' => 'mail',
+			'GLOBAL.tpl' => 'global',
+			'GLOBAL_mobile.tpl' => 'global',
+			'GLOBAL_HELPER_PANEL.tpl' => 'global',
+			'SCREEN_TITLE.tpl' => 'screen_title',
+			'MINOR_TITLE.tpl' => 'minor_title',
+			'SECTION_TITLE.tpl' => 'section_title'
+		);
 	}
 
 	/**
@@ -125,19 +129,15 @@ class Hook_addon_registry_core_primary_layout
 	 */
 	function tpl_preview__breadcrumb()
 	{
-		$out=new ocp_tempcode();
+		$out = new ocp_tempcode();
 		$out->attach(lorem_phrase());
-		$bc=do_lorem_template('BREADCRUMB',array(
-				));
+		$bc = do_lorem_template('BREADCRUMB', array());
 		$out->attach($bc->evaluate());
 		$out->attach(lorem_phrase());
-		$out->attach(do_lorem_template('BREADCRUMB_ESCAPED',array(
-				)));
+		$out->attach(do_lorem_template('BREADCRUMB_ESCAPED', array()));
 		$out->attach(lorem_phrase());
 		return array(
-			lorem_globalise(
-				$out
-			,NULL,'',true),
+			lorem_globalise($out, NULL, '', true)
 		);
 	}
 
@@ -151,13 +151,11 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__closed_site()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('CLOSED_SITE',array(
-					'CLOSED'=>lorem_phrase(),
-					'LOGIN_URL'=>placeholder_url(),
-					'JOIN_URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('CLOSED_SITE', array(
+				'CLOSED' => lorem_phrase(),
+				'LOGIN_URL' => placeholder_url(),
+				'JOIN_URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -171,11 +169,9 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__css_need_full()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('CSS_NEED_FULL',array(
-					'URL'=>placeholder_url(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('CSS_NEED_FULL', array(
+				'URL' => placeholder_url()
+			)), NULL, '', true)
 		);
 	}
 
@@ -186,15 +182,13 @@ class Hook_addon_registry_core_primary_layout
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__additional()
+	function tpl_preview__message()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('ADDITIONAL',array(
-					'TYPE'=>placeholder_img_code('am_icons'),
-					'MESSAGE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('MESSAGE', array(
+				'TYPE' => placeholder_img_code('messageicons'),
+				'MESSAGE' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -207,31 +201,19 @@ class Hook_addon_registry_core_primary_layout
 	 */
 	function tpl_preview__main_layout()
 	{
-		$display = do_lorem_template('HEADER',array(
-			'VERSION_NUMBER'=>lorem_phrase(),
-			'CHARSET'=>'ISO-8859-1',
-			'HEADER_TEXT'=>lorem_phrase(),
-			'DESCRIPTION'=>lorem_paragraph(),
-			'KEYWORDS'=>lorem_phrase(),
-			'SELF_URL'=>placeholder_url(),
-			'REFRESH'=>'',
-			'LOGOURL'=>placeholder_image_url(),
-			'SHOW_TOP'=>true,
+		$display = do_lorem_template('HEADER', array(
+			'REFRESH' => '',
+			'FEEDS' => '',
 		));
-		$display->attach(do_lorem_template('FOOTER',array(
-					'BAIL_OUT'=>false,
-					'ERROR_MESSAGES_DURING_OUTPUT'=>'',
-					'SHOW_BOTTOM'=>true,
-					'HAS_SU'=>lorem_phrase(),
-					'STAFF_ACTIONS'=>lorem_phrase(),
-					'EXTRA_FOOT'=>new ocp_tempcode(),
-						)
-			));
+		$display->attach(do_lorem_template('FOOTER', array(
+			'BAIL_OUT' => false,
+			'ERROR_MESSAGES_DURING_OUTPUT' => '',
+		)));
 		return array(
-			$display,
+			$display
 		);
 
-		
+
 	}
 
 	/**
@@ -244,11 +226,9 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__mail_subject()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('MAIL_SUBJECT',array(
-					'SUBJECT_TAG'=>lorem_word(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('MAIL_SUBJECT', array(
+				'SUBJECT_LINE' => lorem_word()
+			)), NULL, '', true)
 		);
 	}
 
@@ -262,16 +242,14 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__mail()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('MAIL',array(
-					'CSS'=>'',
-					'LOGOURL'=>placeholder_image_url(),
-					'LOGOMAP'=>'',
-					'LANG'=>fallback_lang(),
-					'TITLE'=>lorem_phrase(),
-					'CONTENT'=>lorem_paragraph(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('MAIL', array(
+				'CSS' => '',
+				'LOGOURL' => placeholder_image_url(),
+				'LOGOMAP' => '',
+				'LANG' => fallback_lang(),
+				'TITLE' => lorem_phrase(),
+				'CONTENT' => lorem_paragraph()
+			)), NULL, '', true)
 		);
 	}
 
@@ -284,41 +262,25 @@ class Hook_addon_registry_core_primary_layout
 	 */
 	function tpl_preview__global()
 	{
-		$out=new ocp_tempcode();
+		$out = new ocp_tempcode();
 
-		$out->attach(do_lorem_template('HEADER',array(
-			'VERSION_NUMBER'=>lorem_phrase(),
-			'CHARSET'=>'ISO-8859-1',
-			'HEADER_TEXT'=>lorem_phrase(),
-			'DESCRIPTION'=>lorem_paragraph(),
-			'KEYWORDS'=>lorem_phrase(),
-			'SELF_URL'=>placeholder_url(),
-			'REFRESH'=>'',
-			'LOGOURL'=>placeholder_image_url(),
-			'SHOW_TOP'=>true,
+		$out->attach(do_lorem_template('HEADER', array(
+			'REFRESH' => '',
+			'FEEDS' => '',
 		)));
 
-		$out->attach(do_lorem_template('GLOBAL',array(
-			'HELPER_PANEL_TUTORIAL'=>lorem_word(),
-			'HELPER_PANEL_HTML'=>lorem_sentence_html(),
-			'HELPER_PANEL_TEXT'=>lorem_phrase(),
-			'HELPER_PANEL_PIC'=>lorem_phrase(),
-			'MESSAGE_TOP'=>lorem_phrase(),
-			'MESSAGE'=>lorem_phrase(),
-			'MIDDLE'=>placeholder_id(),
-			'BREADCRUMBS'=>placeholder_breadcrumbs(),
+		$out->attach(do_lorem_template('GLOBAL', array(
+			'MIDDLE' => lorem_paragraph_html(),
 		)));
 
-		$out->attach(do_lorem_template('FOOTER',array(
-					'BAIL_OUT'=>false,
-					'ERROR_MESSAGES_DURING_OUTPUT'=>'',
-					'SHOW_BOTTOM'=>true,
-					'HAS_SU'=>lorem_phrase(),
-					'STAFF_ACTIONS'=>lorem_phrase(),
-					'EXTRA_FOOT'=>new ocp_tempcode(),
+		$out->attach(do_lorem_template('FOOTER', array(
+			'BAIL_OUT' => false,
+			'ERROR_MESSAGES_DURING_OUTPUT' => '',
 		)));
 
-		return array($out);
+		return array(
+			$out
+		);
 	}
 
 	/**
@@ -332,14 +294,17 @@ class Hook_addon_registry_core_primary_layout
 	{
 		require_lang('awards');
 		return array(
-			lorem_globalise(
-				do_lorem_template('SCREEN_TITLE',array(
-					'TITLE'=>lorem_phrase(),
-					'HELP_URL'=>placeholder_url(),
-					'HELP_TERM'=>lorem_word(),
-					'AWARDS'=>array(array('AWARD_TYPE'=>lorem_title(),'AWARD_TIMESTAMP'=>placeholder_time())),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('SCREEN_TITLE', array(
+				'TITLE' => lorem_phrase(),
+				'HELP_URL' => placeholder_url(),
+				'HELP_TERM' => lorem_word(),
+				'AWARDS' => array(
+					array(
+						'AWARD_TYPE' => lorem_title(),
+						'AWARD_TIMESTAMP' => placeholder_time()
+					)
+				)
+			)), NULL, '', true)
 		);
 	}
 
@@ -353,11 +318,9 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__minor_title()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('MINOR_TITLE',array(
-					'TITLE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('MINOR_TITLE', array(
+				'TITLE' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 
@@ -371,11 +334,9 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_preview__section_title()
 	{
 		return array(
-			lorem_globalise(
-				do_lorem_template('SECTION_TITLE',array(
-					'TITLE'=>lorem_phrase(),
-						)
-			),NULL,'',true),
+			lorem_globalise(do_lorem_template('SECTION_TITLE', array(
+				'TITLE' => lorem_phrase()
+			)), NULL, '', true)
 		);
 	}
 }

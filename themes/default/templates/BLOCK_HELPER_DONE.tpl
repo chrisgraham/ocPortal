@@ -1,7 +1,7 @@
-<div{$?,{$VALUE_OPTION,html5}, aria-busy="true"} class="spaced">
-	<div class="ajax_tree_list_loading">
-		<img id="loading_image" class="inline_image_2" src="{$IMG*,bottom/loading}" title="{!LOADING^;}" alt="{!LOADING^;}" />
-		{!LOADING}
+<div aria-busy="true" class="spaced">
+	<div class="ajax_tree_list_loading vertical_alignment">
+		<img id="loading_image" src="{$IMG*,loading}" title="{!LOADING^;}" alt="{!LOADING^;}" />
+		<span>{!LOADING}</span>
 	</div>
 </div>
 
@@ -32,7 +32,7 @@
 		var win=window;
 		if ('{$_GET%,save_to_id}'!='')
 		{
-			var ob=target_window.areaedit_editors[element.id].document.$.getElementById('{$_GET%,save_to_id}');
+			var ob=target_window.wysiwyg_editors[element.id].document.$.getElementById('{$_GET%,save_to_id}');
 
 			if ('{$_POST%,_delete}'=='1')
 			{
@@ -40,11 +40,11 @@
 			} else
 			{
 				var input_container=document.createElement('div');
-				setInnerHTML(input_container,comcode_semihtml.replace(/^\s*/,''));
+				set_inner_html(input_container,comcode_semihtml.replace(/^\s*/,''));
 				ob.parentNode.replaceChild(input_container.childNodes[0],ob);
 			}
 
-			target_window.areaedit_editors[element.id].updateElement();
+			target_window.wysiwyg_editors[element.id].updateElement();
 
 			if (typeof win.faux_close!='undefined')
 				win.faux_close();
@@ -67,7 +67,7 @@
 				message='{!ADDED_COMCODE_ONLY;}';
 			}
 
-			target_window.insertTextbox(element,comcode,target_window.document.selection?target_window.document.selection:null,true,comcode_semihtml);
+			target_window.insert_textbox(element,comcode,target_window.document.selection?target_window.document.selection:null,true,comcode_semihtml);
 			window.fauxmodal_alert(
 				message,
 				function() {

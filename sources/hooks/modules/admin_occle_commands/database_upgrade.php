@@ -36,7 +36,7 @@ class Hook_database_upgrade
 			require_code('upgrade');
 			$result=upgrade_modules();
 			if ($result=='') $result=do_lang('NO_ACTION_REQUIRED');
-
+	
 			return array('',$result,'','');
 		}
 	}

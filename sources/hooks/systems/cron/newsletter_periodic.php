@@ -190,7 +190,7 @@ class Hook_cron_newsletter_periodic
 		{
 			$_automatic->attach($tp);
 		}
-		$completed=do_template('NEWSLETTER_AUTOMATED_FCOMCODE',array('CONTENT'=>$_automatic));
+		$completed=do_template('NEWSLETTER_AUTOMATED_FCOMCODE',array('_GUID'=>'b8897fb43a341f6b7058ea6125630f5a','CONTENT'=>$_automatic));
 
 		// Now we have the contents of our newsletter, we can send it to all of
 		// those listed in the newsletter_periodic row

@@ -42,7 +42,7 @@ function points_profile($member_id_of,$member_id_viewing)
 	// Get info about viewed user
 	$name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 	if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
-	$title=get_page_title('_POINTS',true,array(escape_html($name)));
+	$title=get_screen_title('_POINTS',true,array(escape_html($name)));
 
 	$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id_of,false,true);
 
@@ -115,8 +115,6 @@ function points_profile($member_id_of,$member_id_viewing)
 			$charges->attach(results_entry(array(escape_html($date),escape_html($amount),escape_html($fromname),escape_html($toname),$reason)));
 		}
 		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'start',$max,'max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fgfdgfdgfdgfdger4gtrhg',false,'tab__points');
-
-		$chargelog_details->attach(do_template('POINTS_CHARGE',array('_GUID'=>'f1e2d45a7d920ab91553a5fd0728a5ad','URL'=>build_url(array('page'=>'admin_points','type'=>'charge','redirect'=>get_self_url(true)),get_module_zone('admin_points')),'USER'=>strval($member_id_of))));
 	}
 
 	// Show giving form
@@ -142,7 +140,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		'_GUID'=>'f91208ef0f9a1e1a8633ce307a778a8d',
 		'TITLE'=>$title,
 		'MEMBER'=>strval($member_id_of),
-		'PROFILE_LINK'=>$profile_link,
+		'PROFILE_URL'=>$profile_link,
 		'NAME'=>$name,
 
 		'POINTS_JOINING'=>integer_format($points_joining),
@@ -156,9 +154,9 @@ function points_profile($member_id_of,$member_id_viewing)
 		'MULT_POINTS_PER_DAY'=>integer_format($points_per_day*$days_joined),
 		'POINTS_GAINED_AUTO'=>integer_format($points_gained_auto), // This isn't needed now, it is same as MULT_POINTS_PER_DAY
 
-		'CEDI_POST_COUNT'=>integer_format($cedi_post_count),
-		'POINTS_CEDI_POSTING'=>integer_format($points_cedi_posting),
-		'MULT_POINTS_CEDI_POSTING'=>integer_format($cedi_post_count*$points_cedi_posting),
+		'WIKI_POST_COUNT'=>integer_format($cedi_post_count),
+		'POINTS_WIKI_POSTING'=>integer_format($points_cedi_posting),
+		'MULT_POINTS_WIKI_POSTING'=>integer_format($cedi_post_count*$points_cedi_posting),
 
 		'CHAT_POST_COUNT'=>integer_format($chat_post_count),
 		'POINTS_CHAT_POSTING'=>integer_format($points_chat_posting),

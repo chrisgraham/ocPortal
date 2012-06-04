@@ -133,6 +133,8 @@ class Block_main_buttons
 	 */
 	function run($map)
 	{
+		require_css('banners');
+
 		if (!array_key_exists('param',$map)) $map['param']='';
 		if (!array_key_exists('extra',$map)) $map['extra']='';
 		if (!array_key_exists('title',$map)) $map['title']='I support'; //default value

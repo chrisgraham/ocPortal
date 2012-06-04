@@ -1,0 +1,16 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2012
+*/
+
+.redirect_table td, .redirect_table th {
+	vertical-align: middle;
+}
+
+.redirect_table_input_column {
+	width: 25%;
+}
+
+.redirect_table_sup_column {
+	width: 4em;
+}

@@ -1,26 +1,26 @@
 <tr class="{$CYCLE,results_table_zebra,zebra_0,zebra_1}">
-	<td class="dottedborder_barrier_b_nonrequired addon_name">
+	<td class="addon_name">
 		{NAME*}
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		{AUTHOR*}
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		{ORGANISATION*}
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		{VERSION*}
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		{HACKED_BY*}
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		{HACK_VERSION*}
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		{STATUS*}
 	</td>
-	<td class="dottedborder_barrier_b_nonrequired">
+	<td>
 		{ACTIONS}
 	</td>
 </tr>

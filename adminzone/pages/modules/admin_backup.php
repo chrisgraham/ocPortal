@@ -131,7 +131,7 @@ class Module_admin_backup
 	 */
 	function backup_interface()
 	{
-		$title=get_page_title('BACKUP');
+		$title=get_screen_title('BACKUP');
 
 		require_javascript('javascript_ajax');
 
@@ -222,8 +222,8 @@ class Module_admin_backup
 
 		if (count($entries)!=0)
 		{
-			require_code('templates_table_table');
-			$header_row=table_table_header_row(array(do_lang_tempcode('FILENAME'),do_lang_tempcode('TYPE'),do_lang_tempcode('SIZE'),do_lang_tempcode('DATE_TIME'),new ocp_tempcode()));
+			require_code('templates_columned_table');
+			$header_row=columned_table_header_row(array(do_lang_tempcode('FILENAME'),do_lang_tempcode('TYPE'),do_lang_tempcode('SIZE'),do_lang_tempcode('DATE_TIME'),new ocp_tempcode()));
 
 			$rows=new ocp_tempcode();
 			foreach ($entries as $entry)
@@ -231,7 +231,7 @@ class Module_admin_backup
 				$delete_url=build_url(array('page'=>'_SELF','type'=>'confirm_delete','file'=>$entry['file']),'_SELF');
 				$link=get_custom_base_url().'/exports/backups/'.$entry['file'];
 
-				$actions=do_template('TABLE_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'23a8b5d5d345d8fdecc74b01fe5a9042','NAME'=>$entry['file'],'URL'=>$delete_url));
+				$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'23a8b5d5d345d8fdecc74b01fe5a9042','NAME'=>$entry['file'],'URL'=>$delete_url));
 
 				$type=do_lang_tempcode('UNKNOWN');
 				switch (get_file_extension($entry['file']))
@@ -250,10 +250,10 @@ class Module_admin_backup
 						break;
 				}
 
-				$rows->attach(table_table_row(array(hyperlink($link,escape_html($entry['file'])),$type,clean_file_size($entry['size']),get_timezoned_date($entry['mtime']),$actions)));
+				$rows->attach(columned_table_row(array(hyperlink($link,escape_html($entry['file'])),$type,clean_file_size($entry['size']),get_timezoned_date($entry['mtime']),$actions)));
 			}
 
-			$files=do_template('TABLE_TABLE',array('_GUID'=>'726070efa71843236e975d87d4a17dae','HEADER_ROW'=>$header_row,'ROWS'=>$rows));
+			$files=do_template('COLUMNED_TABLE',array('_GUID'=>'726070efa71843236e975d87d4a17dae','HEADER_ROW'=>$header_row,'ROWS'=>$rows));
 
 		} else $files=new ocp_tempcode();
 
@@ -267,7 +267,7 @@ class Module_admin_backup
 	 */
 	function confirm_delete()
 	{
-		$title=get_page_title('DELETE');
+		$title=get_screen_title('DELETE');
 
 		$file=get_param('file');
 
@@ -289,7 +289,7 @@ class Module_admin_backup
 	 */
 	function delete()
 	{
-		$title=get_page_title('DELETE');
+		$title=get_screen_title('DELETE');
 
 		$file=post_param('file');
 
@@ -312,7 +312,7 @@ class Module_admin_backup
 	 */
 	function make_backup()
 	{
-		$title=get_page_title('BACKUP');
+		$title=get_screen_title('BACKUP');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('BACKUP'))));
 		breadcrumb_set_self(do_lang_tempcode('START'));

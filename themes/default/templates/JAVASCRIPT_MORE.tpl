@@ -104,7 +104,7 @@ function window_ob(expr)
   win.document.close()
   try
   {
-    win.focus();
+		win.focus();
   }
   catch (e) {};
 }

@@ -13,13 +13,13 @@ function translate(name,old,lang_from,lang_to)
 
 	if (!apiKey)
 	{
-		toggleSectionInline('rexp_'+name,browser_matches('ie')?'block':'table-row');
+		toggleable_tray('rexp_'+name);
 
 		var element=document.getElementById('rexp_'+name);
 		if (element.style.display!='none')
 		{
 			element=document.getElementById('exp_'+name);
-			setInnerHTML(element,'<iframe title="" src="{$BASE_URL_NOHTTP*;}/data/empty.html" id="iframe_'+name+'" name="iframe_'+name+'" class="translate_iframe">{!IGNORE^}</iframe>');
+			set_inner_html(element,'<iframe src="{$BASE_URL_NOHTTP*;}/data/empty.html" id="iframe_'+name+'" name="iframe_'+name+'" class="translate_iframe">{!IGNORE^}</iframe>');
 			var form=document.getElementById('hack_form');
 			form.setAttribute('target','iframe_'+name);
 			var input_text=document.getElementById('hack_input');
@@ -32,14 +32,14 @@ function translate(name,old,lang_from,lang_to)
 
 		var newScript=document.createElement('script');
 		newScript.type='text/javascript';
-		var source='https://www.googleapis.com/language/translate/v2?key='+window.encodeURIComponent(apiKey)+'&source='+window.encodeURIComponent(lang_from)+'&target='+window.encodeURIComponent(lang_to)+'&callback=translateText&q='+window.encodeURIComponent(old);
+		var source='https://www.googleapis.com/language/translate/v2?key='+window.encodeURIComponent(apiKey)+'&source='+window.encodeURIComponent(lang_from)+'&target='+window.encodeURIComponent(lang_to)+'&callback=translate_text&q='+window.encodeURIComponent(old);
 		newScript.src=source;
 		document.getElementsByTagName('head')[0].appendChild(newScript);
 	}
 }
 
 
-function translateText(response)
+function translate_text(response)
 {
 	document.getElementById(window.translating).value=response.data.translations[0].translatedText;
 }

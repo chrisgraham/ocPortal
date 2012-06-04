@@ -4,13 +4,13 @@
 	{!PT_RULES_PAGE_INTRO,{USERNAME*}}
 </p>
 
-{+START,BOX}
+<div class="box box___ocf_member_pt_rules_screen"><div class="box_inner">
 	{RULES}
-{+END}
+</div></div>
 
 <form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
-	<div class="proceed_button">
+	<p class="proceed_button">
 		 <input accesskey="u" onclick="disable_button_just_clicked(this);" class="button_page" type="submit" value="{!PROCEED}" />
-	</div>
+	</p>
 </form>
 

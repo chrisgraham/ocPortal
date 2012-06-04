@@ -109,7 +109,7 @@ class Hook_Profiles_Tabs_blog
 				$seo_bits=seo_meta_get_for('news',strval($news_id));
 				$map2=array('TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'TRUNCATE'=>$truncate,'BLOG'=>false,'ID'=>strval($news_id),'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$news_category,'IMG'=>$news_img,'DATE'=>$news_date,'DATE_RAW'=>strval($myrow['date_and_time']),'NEWS_TITLE'=>$news_title,'AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS'=>$news_summary,'FULL_URL'=>$news_full_url);
 				if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map2['COMMENT_COUNT']='1';
-				$recent_blog_posts->attach(do_template('NEWS_PIECE_SUMMARY',$map2));
+				$recent_blog_posts->attach(do_template('NEWS_BOX',$map2));
 
 				$done++;
 			}
@@ -122,11 +122,11 @@ class Hook_Profiles_Tabs_blog
 			$add_blog_post_url=new ocp_tempcode();
 
 		// Pagination
-		require_code('templates_results_browser');
-		$results_browser=results_browser(do_lang_tempcode('BLOGS_POSTS'),NULL,$start,'blogs_start',$max,'blogs_max',$max_rows,NULL,'view',true,false,7,NULL,'tab__blog');
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang_tempcode('BLOGS_POSTS'),NULL,$start,'blogs_start',$max,'blogs_max',$max_rows,NULL,'view',true,false,7,NULL,'tab__blog');
 
 		// Wrap it all up
-		$content=do_template('OCF_MEMBER_PROFILE_BLOG',array('RESULTS_BROWSER'=>$results_browser,'RSS_URL'=>$rss_url,'ADD_BLOG_POST_URL'=>$add_blog_post_url,'MEMBER_ID'=>strval($member_id_of),'RECENT_BLOG_POSTS'=>$recent_blog_posts));
+		$content=do_template('OCF_MEMBER_PROFILE_BLOG',array('PAGINATION'=>$pagination,'RSS_URL'=>$rss_url,'ADD_BLOG_POST_URL'=>$add_blog_post_url,'MEMBER_ID'=>strval($member_id_of),'RECENT_BLOG_POSTS'=>$recent_blog_posts));
 
 		return array($title,$content,$order);
 	}

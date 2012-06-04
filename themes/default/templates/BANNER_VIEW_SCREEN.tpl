@@ -2,7 +2,7 @@
 
 <h2>{!DETAILS}</h2>
 
-{VIEW_SPACE}
+{MAP_TABLE}
 
 <h2>{!VIEW}</h2>
 

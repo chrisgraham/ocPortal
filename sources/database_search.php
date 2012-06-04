@@ -724,7 +724,9 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}
 
 		$t_main_search_rows_count=$db->query_value_null_ok_full($_count_query_main_search);
-		if ($t_main_search_rows_count>500) // Too much to sort in memory, so we will just put up with overlapping content types that aren't sorted together right
+		$_max_rows_to_preload=get_value('max_rows_to_preload');
+		$max_rows_to_preload=is_null($_max_rows_to_preload)?500:intval($_max_rows_to_preload);
+		if ($t_main_search_rows_count>$max_rows_to_preload) // Too much to sort in memory, so we will just put up with overlapping content types that aren't sorted together right
 		{
 			$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
 			$had_limit_imposed=true;
@@ -1105,6 +1107,8 @@ function sort_search_results($hook_results,$results,$direction)
  */
 function build_search_results_interface($results,$start,$max,$direction,$general_search=false)
 {
+	require_code('content');
+
 	$out=new ocp_tempcode();
 	$i=0;
 	global $CATALOGUE_ENTRIES_BUILDUP;
@@ -1114,9 +1118,21 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 	{
 		if (array_key_exists('restricted',$result)) continue; // This has been blanked out due to insufficient access permissions or some other reason
 
-		if ($i>=$start+$max) break;
+		$type=convert_ocportal_type_codes('search_hook',$result['type'],'cma_hook');
+		$id=mixed();
+		if (!is_null($type))
+		{
+			require_code('hooks/systems/content_meta_aware/'.$type);
+			$cma_ob=object_factory('Hook_content_meta_aware_'.$type);
+			$cma_info=$cma_ob->info();
+			$id_field=$cma_info['id_field'];
+			if (!is_array($id_field))
+			{
+				$id=is_integer($result['data'][$id_field])?strval($result['data'][$id_field]):$result['data'][$id_field];
+			}
+		}
 
-		if ($i>=$start)
+		if (($i>=$start) && ($i<$start+$max))
 		{
 			if (array_key_exists('template',$result))
 			{
@@ -1140,9 +1156,12 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 					$tabular_results[$class][]=$rendered_result;
 				} else
 				{
-					$out->attach(do_template('SEARCH_RESULT',array('_GUID'=>'47da093f9ace87819e246f0cec1402a9','CONTENT'=>$rendered_result)));
+					$out->attach(do_template('SEARCH_RESULT',array('_GUID'=>'47da093f9ace87819e246f0cec1402a9','TYPE'=>$type,'ID'=>$id,'CONTENT'=>$rendered_result)));
 				}
 			}
+		} else
+		{
+			$out->attach(static_evaluate_tempcode(do_template('SEARCH_RESULT',array('_GUID'=>'d8422a971f55a8a94d090861d519ca7a','TYPE'=>$type,'ID'=>$id))));
 		}
 		$i++;
 	}
@@ -1168,7 +1187,7 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 		}
 
 		// Output
-		$out->attach(do_template('SEARCH_RESULT_TABLE',array('HEADERS'=>$ultimate_field_map,'ROWS'=>$types_results)));
+		$out->attach(do_template('SEARCH_RESULT_TABLE',array('_GUID'=>'816ec14dc0df432ca6e1e1014ef1f3d1','HEADERS'=>$ultimate_field_map,'ROWS'=>$types_results)));
 	}
 	if (count($CATALOGUE_ENTRIES_BUILDUP)!=0)
 	{

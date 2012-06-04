@@ -101,7 +101,7 @@ class Module_admin_newsletter extends standard_aed_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_page_title('MANAGE_NEWSLETTER'),comcode_lang_string('DOC_NEWSLETTER'),
+		return do_next_manager(get_screen_title('MANAGE_NEWSLETTER'),comcode_lang_string('DOC_NEWSLETTER'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWSLETTER')),
@@ -135,7 +135,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function import_subscribers()
 	{
-		$title=get_page_title('IMPORT_NEWSLETTER_SUBSCRIBERS');
+		$title=get_screen_title('IMPORT_NEWSLETTER_SUBSCRIBERS');
 
 		$_lang=choose_language($title);
 		if (is_object($_lang)) return $_lang;
@@ -325,7 +325,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function bounce_filter_a()
 	{
-		$title=get_page_title('BOUNCE_FILTER');
+		$title=get_screen_title('BOUNCE_FILTER');
 
 		if (!function_exists('imap_open')) warn_exit(do_lang_tempcode('IMAP_NEEDED'));
 
@@ -351,7 +351,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function bounce_filter_b()
 	{
-		$title=get_page_title('BOUNCE_FILTER');
+		$title=get_screen_title('BOUNCE_FILTER');
 
 		if (!function_exists('imap_open')) warn_exit(do_lang_tempcode('IMAP_NEEDED'));
 
@@ -400,7 +400,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function bounce_filter_c()
 	{
-		$title=get_page_title('BOUNCE_FILTER');
+		$title=get_screen_title('BOUNCE_FILTER');
 
 		$username=post_param('username');
 		$password=post_param('password');
@@ -468,7 +468,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function bounce_filter_d()
 	{
-		$title=get_page_title('BOUNCE_FILTER');
+		$title=get_screen_title('BOUNCE_FILTER');
 
 		$sup='';
 		foreach (array_keys($_POST) as $key)
@@ -494,7 +494,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function view_subscribers()
 	{
-		$title=get_page_title('VIEW_NEWSLETTER_SUBSCRIBERS');
+		$title=get_screen_title('VIEW_NEWSLETTER_SUBSCRIBERS');
 
 		$lang=choose_language($title);
 		if (is_object($lang)) return $lang;
@@ -632,7 +632,7 @@ class Module_admin_newsletter extends standard_aed_module
 						echo '"'.str_replace('"','""',$email).'",'.'"'.str_replace('"','""',$forename).'",'.'"'.str_replace('"','""',$surname).'",'.'"'.str_replace('"','""',$name).'",'.'"'.str_replace('"','""',$send_id).'",'.'"'.str_replace('"','""',$unsub).'",'.'"'.str_replace('"','""',$hash).'",'.'"'.str_replace('"','""',$salt).'",'.'"'.str_replace('"','""',$lang).'",'.'"'.str_replace('"','""',strval($confirm_code)).'",'.'"'.str_replace('"','""',date('Y-m-d h:i:s',$join_time)).'"'.chr(10);
 					} else
 					{
-						$tpl=do_template('NEWSLETTER_SUBSCRIBER',array('EMAIL'=>$email,'FORENAME'=>$forename,'SURNAME'=>$surname,'NAME'=>$name,'NEWSLETTER_SEND_ID'=>$send_id,'NEWSLETTER_HASH'=>$hash));
+						$tpl=do_template('NEWSLETTER_SUBSCRIBER',array('_GUID'=>'ca45867a23cbaa7c6788d3cd2ba2793c','EMAIL'=>$email,'FORENAME'=>$forename,'SURNAME'=>$surname,'NAME'=>$name,'NEWSLETTER_SEND_ID'=>$send_id,'NEWSLETTER_HASH'=>$hash));
 						$out.=$tpl->evaluate();
 					}
 				}
@@ -658,10 +658,10 @@ class Module_admin_newsletter extends standard_aed_module
 				echo '""'.chr(10);
 			} else
 			{
-				require_code('templates_results_browser');
-				$results_browser=results_browser(do_lang_tempcode('VIEW_NEWSLETTER_SUBSCRIBERS'),NULL,$start,'start_'.(is_null($level)?'':strval($level)),$max,'max_'.(is_null($level)?'':strval($level)),$max_rows,NULL,'subscribers',true);
+				require_code('templates_pagination');
+				$pagination=pagination(do_lang_tempcode('VIEW_NEWSLETTER_SUBSCRIBERS'),NULL,$start,'start_'.(is_null($level)?'':strval($level)),$max,'max_'.(is_null($level)?'':strval($level)),$max_rows,NULL,'subscribers',true);
 
-				$outs[]=array('RESULTS_BROWSER'=>$results_browser,'SUB'=>$out,'TEXT'=>$text);
+				$outs[]=array('PAGINATION'=>$pagination,'SUB'=>$out,'TEXT'=>$text);
 			}
 		}
 
@@ -719,7 +719,7 @@ class Module_admin_newsletter extends standard_aed_module
 	{
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/newsletter_from_changes';
 
-		$title=get_page_title('NEW_CONTENT');
+		$title=get_screen_title('NEW_CONTENT');
 
 		$lang=choose_language($title);
 		if (is_object($lang)) return $lang;
@@ -856,7 +856,7 @@ class Module_admin_newsletter extends standard_aed_module
 			$hidden->attach(form_input_hidden('chosen_content','1'));
 			$hidden->attach(form_input_hidden('periodic_choice','periodic_remove_confirmed_'.$matches[1]));
 			return do_template('PERIODIC_NEWSLETTER_REMOVE',array(
-				'TITLE'=>get_page_title('REMOVE_PERIODIC_NEWSLETTER'),
+				'TITLE'=>get_screen_title('REMOVE_PERIODIC_NEWSLETTER'),
 				'URL'=>get_self_url(),
 				'HIDDEN'=>$hidden,
 			));
@@ -955,7 +955,7 @@ class Module_admin_newsletter extends standard_aed_module
 				if ((is_null($temp)) || (count($temp)==0)) continue;
 				if (!$temp[0]->is_empty())
 				{
-					$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
+					$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'64c8870e7c75354c07b2e94f299cd38c','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
 					$automatic[$find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
 					$i++;
 				}
@@ -965,7 +965,7 @@ class Module_admin_newsletter extends standard_aed_module
 				if ((is_null($temp)) || (count($temp)==0)) continue;
 				if (!$temp[0]->is_empty())
 				{
-					$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
+					$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'8d1e7f448d11853b675a0949b8a0c2c9','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
 					$automatic[$last_find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
 					$i++;
 				}
@@ -1024,45 +1024,10 @@ class Module_admin_newsletter extends standard_aed_module
 				break;
 		}
 
-		$title=get_page_title('NEWSLETTER_SEND');
+		$title=get_screen_title('NEWSLETTER_SEND');
 
 		$lang=choose_language($title);
 		if (is_object($lang)) return $lang;
-
-		$comcode_given=($_existing!='') && (strpos($_existing,'<html')!==false);
-		$_existing=post_param('message',$_existing);
-		if ($_existing=='')
-		{
-			$from_news=get_param_integer('from_news',-1);
-			if (($from_news!=-1) && (addon_installed('news')))
-			{
-				$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('id'=>$from_news),'ORDER BY id DESC',1);
-				if (!array_key_exists(0,$rows))
-				{
-					require_lang('news');
-					return warn_screen(get_page_title('NEWS'),do_lang_tempcode('MISSING_RESOURCE'));
-				}
-				$myrow=$rows[0];
-
-				$_existing=get_translated_text($myrow['news_article'],NULL,$lang);
-				if ($_existing=='') $_existing=get_translated_text($myrow['news'],NULL,$lang);
-			}
-			$existing=do_template('NEWSLETTER_DEFAULT',array('_GUID'=>'53c02947915806e519fe14c318813f42','CONTENT'=>$_existing,'LANG'=>$lang));
-		} else
-		{
-			$default=do_template('NEWSLETTER_DEFAULT',array('_GUID'=>'53c02947915806e519fe14c318813f44','CONTENT'=>$_existing,'LANG'=>$lang));
-			if (strpos($default->evaluate(),'<html')!==false) // Our template contains HTML, so we need to pull in that HTML to the edit field (it's a full design email, not a simple encapsulation)
-			{
-				if ($comcode_given)
-				{
-					$default=do_template('NEWSLETTER_DEFAULT',array('_GUID'=>'53c02947915806e519fe14c318813f46','CONTENT'=>comcode_to_tempcode($_existing),'LANG'=>$lang));
-				}
-				$existing=$default;
-			} else
-			{
-				$existing=make_string_tempcode($_existing);
-			}
-		}
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'confirm','old_type'=>get_param('type','')),'_SELF');
 
@@ -1071,7 +1036,9 @@ class Module_admin_newsletter extends standard_aed_module
 		$hidden=new ocp_tempcode();
 		$hidden->attach(form_input_hidden('lang',$lang));
 
-		// Build up form
+		// Build up form...
+		// ================
+
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 
@@ -1086,6 +1053,41 @@ class Module_admin_newsletter extends standard_aed_module
 		$in_full=post_param_integer('in_full',0);
 		$chosen_categories=post_param('chosen_categories','');
 
+		// Newsletter message (complex, as will depend if an automatic periodicial being made, meaning no message defined now)
+		$comcode_given=($_existing!='') && (strpos($_existing,'<html')!==false);
+		$_existing=post_param('message',$_existing);
+		if ($_existing=='')
+		{
+			$from_news=get_param_integer('from_news',-1);
+			if (($from_news!=-1) && (addon_installed('news')))
+			{
+				$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('id'=>$from_news),'ORDER BY id DESC',1);
+				if (!array_key_exists(0,$rows))
+				{
+					require_lang('news');
+					return warn_screen(get_screen_title('NEWS'),do_lang_tempcode('MISSING_RESOURCE'));
+				}
+				$myrow=$rows[0];
+
+				$_existing=get_translated_text($myrow['news_article'],NULL,$lang);
+				if ($_existing=='') $_existing=get_translated_text($myrow['news'],NULL,$lang);
+			}
+			$existing=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'53c02947915806e519fe14c318813f42','CONTENT'=>$_existing,'LANG'=>$lang));
+		} else
+		{
+			$default=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'53c02947915806e519fe14c318813f44','CONTENT'=>$_existing,'LANG'=>$lang));
+			if (strpos($default->evaluate(),'<html')!==false) // Our template contains HTML, so we need to pull in that HTML to the edit field (it's a full design email, not a simple encapsulation)
+			{
+				if ($comcode_given)
+				{
+					$default=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'53c02947915806e519fe14c318813f46','CONTENT'=>comcode_to_tempcode($_existing),'LANG'=>$lang));
+				}
+				$existing=$default;
+			} else
+			{
+				$existing=make_string_tempcode($_existing);
+			}
+		}
 		if ($periodic_action=='make' || $periodic_action=='replace')
 		{
 			// We are making a periodic newsletter. This means we need to pass
@@ -1122,6 +1124,7 @@ class Module_admin_newsletter extends standard_aed_module
 			}
 		}
 
+		// Some general details of how to send
 		if ((addon_installed('calendar')) && ($periodic_action=='none'))
 			$fields->attach(form_input_date__scheduler(do_lang_tempcode('DEFER_TIME'),do_lang_tempcode('DESCRIPTION_DEFER_TIME'),'schedule',true,true,true));
 		$from_email=post_param('from_email',get_option('staff_address'));
@@ -1148,7 +1151,32 @@ class Module_admin_newsletter extends standard_aed_module
 		$fields->attach(form_input_list(do_lang_tempcode('PRIORITY'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_PRIORITY'),'priority',$l));
 
 		// Where to send to
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('CHOOSE_SEND_TO'))));
+		$csv_data=post_param('csv_data',NULL);
+		$send_to_help=mixed();
+		if (is_null($csv_data)) // Maybe discern it from passed parameters from search module
+		{
+			$_csv_data=array();
+			$_csv_data[]=array(do_lang('EMAIL_ADDRESS'),do_lang('NAME'),do_lang('NEWSLETTER_SEND_ID'));
+			foreach (array_keys($_POST) as $post_key)
+			{
+				$matches=array();
+				if ((preg_match('#^result\_\_member_(\d+)$#',$post_key,$matches)!=0) && (post_param_integer($post_key,0)==1))
+				{
+					$member_id=intval($matches[1]);
+					$_csv_data[]=array($GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id),'m'.strval($member_id));
+				}
+			}
+			if (count($_csv_data)>1)
+				$csv_data=serialize($_csv_data);
+		}
+		if (!is_null($csv_data))
+		{
+			$hidden->attach(form_input_hidden('csv_data',$csv_data));
+			$_csv_data=unserialize($csv_data);
+			$num_csv_data=count($_csv_data)-1;
+			$send_to_help=do_lang_tempcode('SOME_NEWSLETTER_TARGETS_KNOWN',escape_html(integer_format($num_csv_data)));
+		}
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('CHOOSE_SEND_TO'),'HELP'=>$send_to_help)));
 		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
 		foreach ($newsletters as $newsletter)
 		{
@@ -1197,11 +1225,15 @@ class Module_admin_newsletter extends standard_aed_module
 				}
 			}
 		}
-		$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV'),'file',false,NULL,NULL,true,'csv,txt'));
+		if (is_null($csv_data))
+		{
+			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV'),'file',false,NULL,NULL,true,'csv,txt'));
+		}
 		//if ($fields->is_empty()) inform_exit(do_lang_tempcode('NOBODY_TO_SEND_TO'));
 
 		handle_max_file_size($hidden);
 
+		// Which newsletter template?
 		$template_choices=new ocp_tempcode();
 		$dh=opendir(get_custom_file_base().'/themes/default/templates_custom');
 		while (($f=readdir($dh))!==false)
@@ -1288,7 +1320,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function confirm_send()
 	{
-		$title=get_page_title('NEWSLETTER_SEND');
+		$title=get_screen_title('NEWSLETTER_SEND');
 
 		$message=post_param('message');
 		$subject=post_param('subject');
@@ -1303,22 +1335,29 @@ class Module_admin_newsletter extends standard_aed_module
 
 		$extra_post_data=array();
 		require_code('uploads');
-		if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
+		$_csv_data=post_param('csv_data',NULL);
+		if (!is_null($_csv_data))
 		{
-			$_csv_data=array();
-			$myfile=fopen($_FILES['file']['tmp_name'],'rt');
-			$del=',';
-			$csv_test_line=fgetcsv($myfile,4096,$del);
-			if ((count($csv_test_line)==1) && (strpos($csv_test_line[0],';')!==false))
-				$del=';';
-			rewind($myfile);
-			while (($csv_line=fgetcsv($myfile,4096,$del))!==false)
+			$extra_post_data['csv_data']=$_csv_data;
+		} else
+		{
+			if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 			{
-				$_csv_data[]=$csv_line;
-			}
-			fclose($myfile);
+				$__csv_data=array();
+				$myfile=fopen($_FILES['file']['tmp_name'],'rt');
+				$del=',';
+				$csv_test_line=fgetcsv($myfile,4096,$del);
+				if ((count($csv_test_line)==1) && (strpos($csv_test_line[0],';')!==false))
+					$del=';';
+				rewind($myfile);
+				while (($csv_line=fgetcsv($myfile,4096,$del))!==false)
+				{
+					$__csv_data[]=$csv_line;
+				}
+				fclose($myfile);
 
-			$extra_post_data['csv_data']=serialize($_csv_data);
+				$extra_post_data['csv_data']=serialize($__csv_data);
+			}
 		}
 
 		if (post_param_integer('make_periodic',0)==1)
@@ -1348,7 +1387,7 @@ class Module_admin_newsletter extends standard_aed_module
 		} else
 		{
 			$comcode_version=comcode_to_tempcode($message,get_member(),true);
-			$_preview=do_template('MAIL',array('TITLE'=>$subject,'CSS'=>css_tempcode(true,true,$comcode_version->evaluate()),'LANG'=>get_site_default_lang(),'LOGOURL'=>get_logo_url(''),'CONTENT'=>$comcode_version),NULL,false,NULL,'.tpl','templates',$GLOBALS['FORUM_DRIVER']->get_theme(''));
+			$_preview=do_template('MAIL',array('_GUID'=>'b081cf9104748b090f63b6898027985e','TITLE'=>$subject,'CSS'=>css_tempcode(true,true,$comcode_version->evaluate()),'LANG'=>get_site_default_lang(),'LOGOURL'=>get_logo_url(''),'CONTENT'=>$comcode_version),NULL,false,NULL,'.tpl','templates',$GLOBALS['FORUM_DRIVER']->get_theme(''));
 			$in_html=($html_only==1);
 		}
 		$text_preview=($html_only==1)?'':comcode_to_clean_text(static_evaluate_tempcode(template_to_tempcode($message)));
@@ -1365,7 +1404,7 @@ class Module_admin_newsletter extends standard_aed_module
 		breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
 
 		require_code('templates_confirm_screen');
-		return form_confirm_screen($title,$preview,'send',get_param('old_type','new'),$extra_post_data);
+		return confirm_screen($title,$preview,'send',get_param('old_type','new'),$extra_post_data);
 	}
 
 	/**
@@ -1375,7 +1414,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function send_message()
 	{
-		$title=get_page_title('NEWSLETTER_SEND');
+		$title=get_screen_title('NEWSLETTER_SEND');
 
 		$lang=choose_language($title);
 		if (is_object($lang)) return $lang;
@@ -1497,7 +1536,7 @@ class Module_admin_newsletter extends standard_aed_module
 				$start_day=post_param_integer('schedule_day');
 				$start_hour=post_param_integer('schedule_hour');
 				$start_minute=post_param_integer('schedule_minute');
-				$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('NEWSLETTER_SEND',$subject),$schedule_code,3,0,$start_year,$start_month,$start_day,$start_hour,$start_minute);
+				$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('NEWSLETTER_SEND',$subject),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
 				regenerate_event_reminder_jobs($event_id);
 
 				return inform_screen($title,do_lang_tempcode('NEWSLETTER_DEFERRED',get_timezoned_date($schedule)));
@@ -1518,7 +1557,7 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function archive()
 	{
-		$title=get_page_title('NEWSLETTER_ARCHIVE');
+		$title=get_screen_title('NEWSLETTER_ARCHIVE');
 
 		$lang=choose_language($title);
 		if (is_object($lang)) return $lang;
@@ -1563,8 +1602,8 @@ class Module_admin_newsletter extends standard_aed_module
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWSLETTER')),array('_SELF:_SELF:archive',do_lang_tempcode('NEWSLETTER_ARCHIVE'))));
 		breadcrumb_set_self($subject);
 
-		require_code('templates_view_space');
-		return view_space(get_page_title('NEWSLETTER'),array('DATE_TIME'=>$time,'LANGUAGE'=>$language,'SUBSCRIPTION_LEVEL'=>integer_format($level),'SUBJECT'=>$subject,'MESSAGE'=>comcode_to_tempcode($message)));
+		require_code('templates_map_table');
+		return map_table(get_screen_title('NEWSLETTER'),array('DATE_TIME'=>$time,'LANGUAGE'=>$language,'SUBSCRIPTION_LEVEL'=>integer_format($level),'SUBJECT'=>$subject,'MESSAGE'=>comcode_to_tempcode($message)));
 	}
 
 	/**

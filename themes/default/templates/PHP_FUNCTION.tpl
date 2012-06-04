@@ -1,11 +1,11 @@
-<br />
-<a name="link_{CLASS*}.{FUNCTION*}" id="link_{CLASS*}.{FUNCTION*}"></a>
+<a id="link_{CLASS*}.{FUNCTION*}"></a>
 
-<span class="php_parameter_type">{RETURN_TYPE*}</span> {FUNCTION*}({PARAMETERS})
-{+START,IF_NON_EMPTY,{FILENAME}}
-[ {!IN,{FILENAME*}} ]
-{+END}
-<br />
+<p>
+	<span class="php_parameter_type">{RETURN_TYPE*}</span> {FUNCTION*}({PARAMETERS})
+	{+START,IF_NON_EMPTY,{FILENAME}}
+		[ {!IN,{FILENAME*}} ]
+	{+END}
+</p>
 
 <div class="php_function_inner">
 	<p>{DESCRIPTION}</p>
@@ -17,13 +17,7 @@
 	{+START,IF_NON_EMPTY,{RETURN}}
 		<p>{!RETURNS}&hellip;</p>
 
-		<!-- Layout table needed due to ensure consistant indentation against unknown width range -->
-		<div class="wide_table_wrap"><table summary="" class="wide_table">
-			<colgroup>
-				<col style="width: 110px" />
-				<col style="width: 100%" />
-			</colgroup>
-
+		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="autosized_table">
 			<tbody>
 				{RETURN}
 			</tbody>
@@ -34,17 +28,22 @@
 	{+END}
 </div>
 
-<br />
-
-<a class="right" title="{!RETURN_TO_FUNCTION_INDEX}" href="#class_index_{CLASS*}" target="_self"><img class="inline_image" src="{$IMG*,top}" alt="{!RETURN_TO_FUNCTION_INDEX}" title=""/></a>
+<p>
+	<a class="right" title="{!RETURN_TO_FUNCTION_INDEX}" href="#class_index_{CLASS*}" target="_self"><img class="top_vertical_alignment" src="{$IMG*,top}" alt="{!RETURN_TO_FUNCTION_INDEX}"/></a>
+</p>
 
 {+START,IF_NON_EMPTY,{CODE}}
-<a class="hide_button" title="{!VIEW_SOURCE_CODE}" href="#" onclick="event.returnValue=false; toggleSectionInline('{CLASS*}.{FUNCTION*}','block'); return false;"><img alt="{!EXPAND}: {!VIEW_SOURCE_CODE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-<div class="hide_button_spacing" id="{CLASS*}.{FUNCTION*}" style="display: {$JS_ON,none,block}">
-	<span class="xhtml_validator_off">
-		{CODE`}
-	</span>
-</div>
+	<div class="float_surrounder">
+		<div class="float_surrounder">
+			<a class="toggleable_tray_button ttb_left" title="{!VIEW_SOURCE_CODE}" href="#" onclick="return toggleable_tray('{CLASS*}.{FUNCTION*}');"><img alt="{!EXPAND}: {!VIEW_SOURCE_CODE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+		</div>
+
+		<div class="toggleable_tray toggleable_tray_pulldown_spacer" id="{CLASS*}.{FUNCTION*}" style="display: {$JS_ON,none,block}" aria-expanded="false">
+			<span class="xhtml_validator_off">
+				{CODE`}
+			</span>
+		</div>
+	</div>
 {+END}
 
 <hr class="spaced_rule" />

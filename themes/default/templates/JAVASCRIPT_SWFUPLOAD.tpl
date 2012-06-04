@@ -5,7 +5,7 @@
  *
  * mmSWFUpload 1.0: Flash upload dialog - http://profandesign.se/swfupload/,  http://www.vinterwebb.se/
  *
- * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilzen and Mammon Media and is released under the MIT License:
+ * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilzon and Mammon Media and is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  *
  * SWFUpload 2 is (c) 2007-2008 Jake Roberts and is released under the MIT License:
@@ -220,7 +220,7 @@ SWFUpload.prototype.loadFlash = function () {
 
 	// Append the container and load the flash
 	tempParent = document.createElement("div");
-	setInnerHTML(tempParent,this.getFlashHTML());
+	set_inner_html(tempParent,this.getFlashHTML());
 	var next=tempParent.firstChild.nextSibling;
 	targetElement.parentNode.replaceChild(tempParent.firstChild, targetElement);
 	if (next) targetElement.appendChild(next);
@@ -358,7 +358,7 @@ SWFUpload.prototype.destroy = function () {
 		this.eventQueue = null;
 		this.movieName = null;
 
-		
+
 		return true;
 	} catch (ex2) {
 		return false;
@@ -1029,7 +1029,7 @@ function FileProgress(file, targetID) {
 
 		var progressStatus = document.createElement("div");
 		progressStatus.className = "progressBarStatus";
-		setInnerHTML(progressStatus,"&nbsp;");
+		set_inner_html(progressStatus,"&nbsp;");
 
 		this.fileProgressElement.appendChild(progressCancel);
 		this.fileProgressElement.appendChild(progressText);
@@ -1042,7 +1042,7 @@ function FileProgress(file, targetID) {
 	} else {
 		this.fileProgressElement = this.fileProgressWrapper.firstChild;
 		if (typeof file.name!='undefined')
-			setInnerHTML(this.fileProgressElement.childNodes[1],file.name);
+			set_inner_html(this.fileProgressElement.childNodes[1],file.name);
 	}
 
 	this.height = this.fileProgressWrapper.offsetHeight;
@@ -1087,7 +1087,7 @@ FileProgress.prototype.setCancelled = function () {
 	}, 2000);
 };
 FileProgress.prototype.setStatus = function (status) {
-	setInnerHTML(this.fileProgressElement.childNodes[2],status);
+	set_inner_html(this.fileProgressElement.childNodes[2],status);
 };
 
 // Show/Hide the cancel button
@@ -1206,7 +1206,7 @@ function doSubmit(e,ob) {
 		var ret=true;
 		if (ob.settings.required)
 		{
-			setFieldError(document.getElementById(ob.settings.txtName),"{!REQUIRED_NOT_FILLED_IN^#}");
+			set_field_error(document.getElementById(ob.settings.txtName),"{!REQUIRED_NOT_FILLED_IN^#}");
 			ret=false;
 			window.just_checking_requirements=true;
 		}
@@ -1229,7 +1229,7 @@ function doSubmit(e,ob) {
 	e = e || window.event;
 	if ((typeof e!='undefined') && (e))
 	{
-		cancelBubbling(e);
+		cancel_bubbling(e);
 		if (typeof e.preventDefault!='undefined') e.preventDefault();
 	}
 
@@ -1238,7 +1238,7 @@ function doSubmit(e,ob) {
 	{
 		btnSubmit.disabled = true;
 		ob.startUpload();
-		smoothScroll(findPosY(txtFileName,true));
+		smooth_scroll(find_pos_y(txtFileName,true));
 	} else
 	{
 		window.form_submitting=btnSubmit.form; // For IE
@@ -1312,7 +1312,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 	if (page_type=="attachment")
 	{
 		var current_num=name.replace('file', '');
-		setAttachment(posting_field_name,current_num,file_name);
+		set_attachment(posting_field_name,current_num,file_name);
 		document.getElementById(name).onchange=null;
 	}
 	if (page_type=="upload_multi")
@@ -1334,7 +1334,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 			var nextField=document.createElement('input');
 			nextField.className='input_upload';
 			nextField.setAttribute('id','multi_'+nextNum);
-			nextField.onchange=_ensureNextFieldUpload;
+			nextField.onchange=_ensure_next_fieldUpload;
 			nextField.setAttribute('type','file');
 			nextField.name=nameStub+nextNum;
 			var br=document.createElement('br');
@@ -1637,7 +1637,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	maindiv.appendChild(hidFileID);
 
 	var disable_link=document.createElement('a');
-	setInnerHTML(disable_link,'{!SWITCH_TO_REGULAR_UPLOADER;}');
+	set_inner_html(disable_link,'{!SWITCH_TO_REGULAR_UPLOADER;}');
 	disable_link.setAttribute('href',window.location+(((window.location+'').indexOf('?')==-1)?'?':'&')+'keep_no_swfupload=1');
 	disable_link.className='associated_details';
 	disable_link.onclick=function(e) {
@@ -1681,23 +1681,23 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var colorAt=rep.parentNode,backgroundColor;
 		do
 		{
-			backgroundColor=abstractGetComputedStyle(colorAt,'background-color');
+			backgroundColor=abstract_get_computed_style(colorAt,'background-color');
 			colorAt=colorAt.parentNode;
 		}
 		while ((colorAt) && (backgroundColor) && (backgroundColor=='transparent'));
 		if ((!backgroundColor) || (backgroundColor=='transparent')) backgroundColor='#FFFFFF';
-		var foregroundColor=abstractGetComputedStyle(rep.parentNode,'color');
+		var foregroundColor=abstract_get_computed_style(rep.parentNode,'color');
 		if (!foregroundColor) foregroundColor='#000000';
 		var matches;
-		function decToHex(number)
+		function dec_to_hex(number)
 		{
 			var hexbase="0123456789ABCDEF";
 			return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 		}
 		matches=backgroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
-		if (matches) backgroundColor='#'+decToHex(matches[1])+decToHex(matches[2])+decToHex(matches[3]);
+		if (matches) backgroundColor='#'+dec_to_hex(matches[1])+dec_to_hex(matches[2])+dec_to_hex(matches[3]);
 		matches=foregroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
-		if (matches) foregroundColor='#'+decToHex(matches[1])+decToHex(matches[2])+decToHex(matches[3]);
+		if (matches) foregroundColor='#'+dec_to_hex(matches[1])+dec_to_hex(matches[2])+dec_to_hex(matches[3]);
 
 		var out='';
 		var maxLength=(typeof btnSubmit.form.elements['MAX_FILE_SIZE']=='undefined')?'2000000000':(btnSubmit.form.elements['MAX_FILE_SIZE'].value);
@@ -1741,7 +1741,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		out+='</object>';
 		/*out+='<applet mayscript="true" scriptable="true" code="Uploader.class" archive="{$BASE_URL}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL}/data/javaupload/Net.jar" width="430" height="29" id="uploader_'+name+'">';
 		out+='</applet>';*/
-		setInnerHTML(progressDiv,out);
+		set_inner_html(progressDiv,out);
 
 		var old_onclick=btnSubmit.onclick;
 		btnSubmit.onclick=function() {
@@ -1810,7 +1810,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			upload_complete_handler : uploadComplete,
 
 			// Button Settings
-			button_image_url : "{$IMG#,pageitem/upload}".replace(/^http:/,window.location.protocol),
+			button_image_url : '{$IMG;,pageitem/upload}'.replace(/^http:/,window.location.protocol),
 			button_placeholder_id : "spanButtonPlaceholder_"+name,
 			button_width: 66,
 			button_height: 20,
@@ -1843,10 +1843,10 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			txtFileName.value = "";
 			if ((typeof rep.form.elements[posting_field_name]!='undefined') && (name.indexOf('file')!=-1))
 			{
-				var new_contents=getTextbox(rep.form.elements[posting_field_name]);
+				var new_contents=get_textbox(rep.form.elements[posting_field_name]);
 				new_contents=new_contents.replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
-				new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]* title=""[^<>]* value="[^"]+"[^<>]* />'),''); // Shell of the above
-				setTextbox(rep.form.elements[posting_field_name],new_contents,new_contents);
+				new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]*[^<>]* value="[^"]+"[^<>]* />'),''); // Shell of the above
+				set_textbox(rep.form.elements[posting_field_name],new_contents,new_contents);
 			}
 			fireFakeChangeFor(name,'');
 			ob.setButtonDisabled(false);
@@ -1950,7 +1950,7 @@ function _isValidJVM(checker)
 function initialise_dragdrop_upload(key,key2)
 {
 	var ob=document.getElementById(key);
-	ob.ondragover=function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancelBubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
+	ob.ondragover=function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancel_bubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
 	if ((typeof window.google!='undefined') && (typeof window.google.gears!='undefined') && (typeof window.google.gears.factory!='undefined') && (typeof window.google.gears.factory.create!='undefined') && (typeof window.gears_upload!='undefined'))
 	{
 		/* Google Gears support. */
@@ -2148,7 +2148,7 @@ function build_gears_upload_handler(request,fileProgress,attachmentBase,field_na
 					progress.setStatus("{!SWFUPLOAD_FAILED^#}");
 				} else
 				{
-					insertTextbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name+"\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n");
+					insert_textbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name+"\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n");
 
 					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
 					progress.setProgress(100);
@@ -2172,7 +2172,7 @@ function html5_upload(event,field_name,files)
 	if (typeof files=='undefined') return;
 	var count = files.length;
 
-	cancelBubbling(event);
+	cancel_bubbling(event);
 	if (typeof event.preventDefault!='undefined') event.preventDefault();
 
 	if (typeof window.extraAttachmentBase=='undefined') window.extraAttachmentBase=1000;

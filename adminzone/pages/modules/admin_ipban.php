@@ -36,7 +36,7 @@ class Module_admin_ipban
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=4;
+		$info['version']=5;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -78,6 +78,11 @@ class Module_admin_ipban
 		{
 			$GLOBALS['SITE_DB']->add_table_field('usersubmitban_ip','i_descrip','LONG_TEXT');
 		}
+		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('usersubmitban_ip','i_ban_until','?TIME');
+			$GLOBALS['SITE_DB']->add_table_field('usersubmitban_ip','i_ban_positive','BINARY',1);
+		}
 	}
 
 	/**
@@ -118,16 +123,23 @@ class Module_admin_ipban
 	 */
 	function gui()
 	{
-		$title=get_page_title('IP_BANS');
+		$title=get_screen_title('IP_BANS');
 
 		$lookup_url=build_url(array('page'=>'admin_lookup'),get_module_zone('admin_lookup'));
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_to_tempcode(do_lang('IP_BANNING_WILDCARDS',$lookup_url->evaluate()));
 
 		$bans='';
-		$rows=$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('ip','i_descrip'));
+		$locked_bans='';
+		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip,i_ban_until FROM '.get_table_prefix().'usersubmitban_ip WHERE i_ban_positive=1 AND (i_ban_until IS NULL'.' OR i_ban_until>'.strval(time()).')');
 		foreach ($rows as $row)
 		{
-			$bans.=$row['ip'].' '.$row['i_descrip'].chr(10);
+			if (is_null($row['i_ban_until']))
+			{
+				$bans.=$row['ip'].' '.$row['i_descrip'].chr(10);
+			} else
+			{
+				$locked_bans.=do_lang('SPAM_AUTO_BAN_TIMEOUT',$row['ip'],$row['i_descrip'],get_timezoned_date($row['i_ban_until'])).chr(10);
+			}
 		}
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
@@ -136,7 +148,7 @@ class Module_admin_ipban
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		return do_template('IPBAN_SCREEN',array('_GUID'=>'963d24852ba87e9aa84e588862bcfecb','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$title,'BANS'=>$bans,'URL'=>$post_url));
+		return do_template('IPBAN_SCREEN',array('_GUID'=>'963d24852ba87e9aa84e588862bcfecb','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$title,'LOCKED_BANS'=>$locked_bans,'BANS'=>$bans,'URL'=>$post_url));
 	}
 
 	/**
@@ -148,7 +160,8 @@ class Module_admin_ipban
 	{
 		require_code('failure');
 
-		$old_bans=collapse_1d_complexity('ip',$GLOBALS['SITE_DB']->query_select('usersubmitban_ip'));
+		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip FROM '.get_table_prefix().'usersubmitban_ip WHERE i_ban_until IS NULL'/*.' OR i_ban_until>'.strval(time())*/);
+		$old_bans=collapse_1d_complexity('ip',$rows);
 		$bans=post_param('bans');
 		$_bans=explode(chr(10),$bans);
 		foreach ($old_bans as $ban)
@@ -174,7 +187,7 @@ class Module_admin_ipban
 		}
 
 		// Show it worked / Refresh
-		$title=get_page_title('IP_BANS');
+		$title=get_screen_title('IP_BANS');
 		$refresh_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$refresh_url,do_lang_tempcode('SUCCESS'));
 	}

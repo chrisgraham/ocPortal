@@ -529,8 +529,8 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 				}
 				$post=preg_replace('#public/style_emoticons/<\#EMO_DIR\#>(.+?)\'#is',$emoticons_set_dir.'\\1\'',$post);
 
-				$post=str_replace("class='quotetop'","class='comcode_quote_h4'",$post);
-				$post=str_replace("class='quotemain'","class='comcode_quote_content'",$post);
+				$post=str_replace("class='quotetop'","class='comcode_quote'",$post);
+				$post=str_replace("class='quotemain'","class='comcode_quote_inner'",$post);
 
 				// Attachments
 				$attachments=$this->connection->query_select('attachments',array('attach_member_id','attach_id','attach_file','attach_location','attach_thumb_location','attach_is_image','attach_filesize','attach_hits'),array('attach_post_key'=>$fp_rows[0]['post_key']/*,'attach_approved'=>1 Gone in IPB3? */));
@@ -541,14 +541,14 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 						$url=get_forum_base_url().'/index.php?act=Attach&type=post&id='.$attachment['attach_id'];
 						if ($attachment['attach_thumb_location']!='')
 						{
-							$special=do_template('FORUM_ATTACHMENT_IMAGE_THUMB',array('_GUID'=>'98a66462f270f53101c4c0a1b63f0bfc','FULL'=>$url,'URL'=>get_forum_base_url().'/uploads/'.$attachment['attach_thumb_location']));
+							$special=do_template('FORUM_ATTACHMENT_IMAGE_THUMB',array('_GUID'=>'f06760e3325efd9be27e2d5c89611d43','FULL'=>$url,'URL'=>get_forum_base_url().'/uploads/'.$attachment['attach_thumb_location']));
 						} else
 						{
-							$special=do_template('FORUM_ATTACHMENT_LINK',array('_GUID'=>'002a3220f35debbe567ce7a225aa221e','FULL'=>$url,'FILENAME'=>$attachment['attach_file'],'CLEAN_SIZE'=>clean_file_size($attachment['attach_filesize']),'NUM_DOWNLOADS'=>integer_format($attachment['attach_hits'])));
+							$special=do_template('FORUM_ATTACHMENT_LINK',array('_GUID'=>'344b0b127433938302118b2ca7572452','FULL'=>$url,'FILENAME'=>$attachment['attach_file'],'CLEAN_SIZE'=>clean_file_size($attachment['attach_filesize']),'NUM_DOWNLOADS'=>integer_format($attachment['attach_hits'])));
 						}
 					} else // Must be an inline image
 					{
-						$special=do_template('FORUM_ATTACHMENT_IMAGE',array('_GUID'=>'49dbf65cb5e20340a5ad4379ea6344c3','URL'=>get_forum_base_url().'/uploads/'.$attachment['attach_location']));
+						$special=do_template('FORUM_ATTACHMENT_IMAGE',array('_GUID'=>'22f1e3e5a9e156afc53d847cabe4a754','URL'=>get_forum_base_url().'/uploads/'.$attachment['attach_location']));
 					}
 
 					// See if we have to place it somewhere special inside the post

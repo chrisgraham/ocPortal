@@ -1,32 +1,29 @@
 {TITLE}
 
 {+START,IF_NON_EMPTY,{DESCRIPTION}}
-	<div{$?,{$VALUE_OPTION,html5}, itemprop="description"}>
+	<div itemprop="description">
 		{DESCRIPTION}
 	</div>
-	<br />
-	<br />
 {+END}
 
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,download_category,{ID}}}
-{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}<br />{+END}
+{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
 {+START,IF_NON_EMPTY,{SUBCATEGORIES}}
-	{+START,BOX,{!SUBCATEGORIES_HERE},,light}
+	<div class="box box___download_category_screen"><div class="box_inner">
+		<h2>{!SUBCATEGORIES_HERE}</h2>
+
 		{SUBCATEGORIES}
-	{+END}
-	<br />
+	</div></div>
 {+END}
 
 {+START,IF_NON_EMPTY,{DOWNLOADS}}
 	{DOWNLOADS}
 
-	<div class="medborder special_category_sorter inline_block">
+	<div class="box category_sorter inline_block"><div class="box_inner">
 		{$SET,show_sort_button,1}
 		{SORTING}
-	</div>
-
-	<br />
+	</div></div>
 {+END}
 
 {+START,IF_EMPTY,{DOWNLOADS}{SUBCATEGORIES}}
@@ -56,33 +53,6 @@
 	3_URL={EDIT_CAT_URL*}
 	3_TITLE={!EDIT_DOWNLOAD_CATEGORY}
 	3_REL=edit
-{+END}
-
-{+START,IF_NON_EMPTY,{SUBDOWNLOADS}}
-	<hr class="long_break" />
-	{+START,BOX,{!RANDOM_20_DOWNLOADS},,light}
-		{$JAVASCRIPT_INCLUDE,javascript_dyn_comcode}
-
-		{$SET,carousel_id,{$RAND}}
-
-		<div id="carousel_{$GET*,carousel_id}" class="carousel" style="display: none">
-			<div class="move_left" onmousedown="carousel_move({$GET*,carousel_id},-100); return false;" onmouseover="this.className='move_left move_left_hover';" onmouseout="this.className='move_left';"></div>
-			<div class="move_right" onmousedown="carousel_move({$GET*,carousel_id},+100); return false;" onmouseover="this.className='move_right move_right_hover';" onmouseout="this.className='move_right';"></div>
-
-			<div class="main">
-			</div>
-		</div>
-
-		<div class="carousel_temp" id="carousel_ns_{$GET*,carousel_id}">
-			{SUBDOWNLOADS}
-		</div>
-
-		<script type="text/javascript">// <![CDATA[
-			addEventListenerAbstract(window,'load',function () {
-				initialise_carousel({$GET,carousel_id});
-			} );
-		//]]></script>
-	{+END}
 {+END}
 
 {+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}

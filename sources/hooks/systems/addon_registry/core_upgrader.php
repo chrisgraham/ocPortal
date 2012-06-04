@@ -59,10 +59,10 @@ class Hook_addon_registry_core_upgrader
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-			'previously_in_addon'=>array('core_installation_uninstallation'),
+			'requires' => array(),
+			'recommends' => array(),
+			'conflicts_with' => array(),
+			'previously_in_addon' => array('core_installation_uninstallation'),
 		);
 	}
 

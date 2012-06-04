@@ -1,5 +1,5 @@
 {$,You can uncomment this and put in extra startup code
-function scriptLoadStuffB()
+function script_load_stuffB()
 \{
 \}
 }

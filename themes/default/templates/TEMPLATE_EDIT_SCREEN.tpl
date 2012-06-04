@@ -20,9 +20,7 @@
 
 		{TEMPLATE_EDITORS}
 
-		<br />
-
-		<div class="float_surrounder">
+		<div class="float_surrounder buttons_group">
 			<div class="right">
 				<input onclick="disable_button_just_clicked(this); this.form.target='_self'; this.form.action='{URL*}';" class="button_page" type="submit" value="{!SAVE}" />
 			</div>
@@ -36,5 +34,5 @@
 </form>
 
 {+START,IF,{$NEQ,{$VALUE_OPTION,no_frames},2}}
-	<iframe name="save_frame" id="save_frame" title="{!SAVE_AND_STAY}" style="width: 100%; height: 0px" src="{$BASE_URL*}/uploads/index.html">{!SAVE_AND_STAY}</iframe>
+	<iframe name="save_frame" id="save_frame" title="{!SAVE_AND_STAY}" class="hidden_save_frame" src="{$BASE_URL*}/uploads/index.html">{!SAVE_AND_STAY}</iframe>
 {+END}

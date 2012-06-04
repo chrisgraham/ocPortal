@@ -541,7 +541,7 @@ function install_addon($file,$files=NULL)
 	require_code('zones3');
 	erase_comcode_page_cache();
 	erase_tempcode_cache();
-	persistant_cache_empty();
+	persistent_cache_empty();
 	erase_cached_templates();
 	erase_cached_language();
 
@@ -600,7 +600,7 @@ function uninstall_addon($name)
 	require_code('zones3');
 	erase_comcode_page_cache();
 	erase_tempcode_cache();
-	persistant_cache_empty();
+	persistent_cache_empty();
 	erase_cached_templates();
 	erase_cached_language();
 	global $HOOKS_CACHE;

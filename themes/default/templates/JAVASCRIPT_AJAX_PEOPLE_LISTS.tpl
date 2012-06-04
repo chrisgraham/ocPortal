@@ -85,8 +85,8 @@ function update_ajax_member_list_response(result,list_contents)
 	}
 	list.setAttribute('id','ajax_list');
 	list.style.position='absolute';
-	list.style.left=(findPosX(current_list_for))+'px';
-	list.style.top=(findPosY(current_list_for)+findHeight(current_list_for))+'px';
+	list.style.left=(find_pos_x(current_list_for))+'px';
+	list.style.top=(find_pos_y(current_list_for)+find_height(current_list_for))+'px';
 	setTimeout(function() { list.style.zIndex++; } ,100); // Fixes Opera by causing a refresh
 
 	if (list_contents.childNodes.length==0) return;
@@ -106,10 +106,10 @@ function update_ajax_member_list_response(result,list_contents)
 	item.innerText='{!SUGGESTIONS_ONLY;}'.toUpperCase();
 	list.appendChild(item);
 	current_list_for.parentNode.appendChild(list);
-	if (typeof window.nereidFade!='undefined')
+	if (typeof window.thumbnail_fade!='undefined')
 	{
-		setOpacity(list,0.0);
-		nereidFade(list,100,30,8);
+		set_opacity(list,0.0);
+		thumbnail_fade(list,100,30,8);
 	}
 
 	var current_list_for_copy=current_list_for;
@@ -158,7 +158,7 @@ function update_ajax_member_list_response(result,list_contents)
 				if (list.selectedIndex<list.options.length-1) list.selectedIndex++;
 			}
 			list.options[list.selectedIndex].selected=true;
-			return cancelBubbling(event);
+			return cancel_bubbling(event);
 		}
 		if (key_pressed(event,38,true)) // UP
 		{
@@ -178,7 +178,7 @@ function update_ajax_member_list_response(result,list_contents)
 				if (list.selectedIndex>0) list.selectedIndex--;
 			}
 			list.options[list.selectedIndex].selected=true;
-			return cancelBubbling(event);
+			return cancel_bubbling(event);
 		}
 		return null;
 	}
@@ -207,12 +207,12 @@ function update_ajax_member_list_response(result,list_contents)
 			current_list_for_copy.disabled=true;
 			window.setTimeout(function() { current_list_for_copy.disabled=false; }, 200);
 
-			return cancelBubbling(event);
+			return cancel_bubbling(event);
 		}
 		if (key_pressed(event,[40,38],true))
 		{
 			if (typeof event.preventDefault!='undefined') event.preventDefault();
-			return cancelBubbling(event);
+			return cancel_bubbling(event);
 		}
 		return null;
 	}
@@ -223,7 +223,7 @@ function update_ajax_member_list_response(result,list_contents)
 		if (key_pressed(event,[40,38],true))
 		{
 			if (typeof event.preventDefault!='undefined') event.preventDefault();
-			return cancelBubbling(event);
+			return cancel_bubbling(event);
 		}
 		return null;
 	}
@@ -234,12 +234,12 @@ function update_ajax_member_list_response(result,list_contents)
 		if (key_pressed(event,[40,38,13],true))
 		{
 			if (typeof event.preventDefault!='undefined') event.preventDefault();
-			return cancelBubbling(event);
+			return cancel_bubbling(event);
 		}
 		return null;
 	}
 
-	addEventListenerAbstract(list,'click',make_selection,false);
+	add_event_listener_abstract(list,'click',make_selection,false);
 
 	current_list_for=null;
 }

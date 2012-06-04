@@ -45,7 +45,7 @@ class moderation_test_set extends ocp_test_case
 		$this->assertTrue('Tested'==get_translated_text($GLOBALS['FORUM_DB']->query_value('f_multi_moderations','mm_name ',array('id'=>$this->mod_id)),$GLOBALS['FORUM_DB']));
 	}
 
-	
+
 	function tearDown()
 	{
 		ocf_delete_multi_moderation($this->mod_id);

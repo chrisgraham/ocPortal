@@ -19,6 +19,29 @@
  */
 
 /**
+ * Ensure a catalogues fields are loaded up in a cache, and return them.
+ *
+ * @param  ?ID_TEXT			The name of the catalogue (NULL: all catalogues)
+ * @return array				The fields
+ */
+function get_catalogue_fields($catalogue_name=NULL)
+{
+	global $CAT_FIELDS_CACHE;
+	if (isset($CAT_FIELDS_CACHE[$catalogue_name]))
+	{
+		$fields=$CAT_FIELDS_CACHE[$catalogue_name];
+	} else
+	{
+		$where=array();
+		if (!is_null($catalogue_name))
+			$where+=array('c_name'=>$catalogue_name);
+		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),$where,'ORDER BY cf_order');
+		$CAT_FIELDS_CACHE[$catalogue_name]=$fields;
+	}
+	return $fields;
+}
+
+/**
  * Get a fields hook, from a given codename.
  *
  * @param  ID_TEXT		Codename
@@ -174,9 +197,9 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
 
 		$_cf_description=escape_html(get_translated_text($field['cf_description']));
 
-		$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=true;
+		$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=true;
 		$result=$ob->get_field_inputter($_cf_name,$_cf_description,$field,$default,true,!array_key_exists($field_num+1,$special_fields));
-		$GLOBALS['NO_DEBUG_MODE_FULLSTOP_CHECK']=false;
+		$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']=false;
 
 		if (is_null($result)) continue;
 
@@ -205,7 +228,7 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
 		if (is_integer($field_group_title)) $field_group_title=($field_group_title==0)?'':strval($field_group_title);
 
 		if ($field_group_title!='')
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>$field_group_title)));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'58937f03882cc09276fa100933eb6041','TITLE'=>$field_group_title)));
 		$fields->attach($extra_fields);
 	}
 }
@@ -336,13 +359,17 @@ function nice_get_field_type($type='',$limit_to_storage_set=false)
 	{
 		$types=array_merge($_types,array(do_lang_tempcode('FIELD_TYPES__OTHER')),array_keys($types));
 	} else $types=$_types;
+	$_type_list=new ocp_tempcode();
 	$type_list=new ocp_tempcode();
+	$last_type=do_lang_tempcode('OTHER');
 	foreach ($types as $_type)
 	{
 		if (is_object($_type))
 		{
-			if (!$type_list->is_empty()) $type_list->attach(form_input_list_entry('',false,escape_html(''),false,true));
-			$type_list->attach(form_input_list_entry('',false,$_type,false,true));
+			if (!$_type_list->is_empty())
+				$type_list->attach(form_input_list_group($last_type,$_type_list));
+			$_type_list=new ocp_tempcode();
+			$last_type=$_type;
 		} else
 		{
 			$ob=get_fields_hook($_type);
@@ -356,10 +383,12 @@ function nice_get_field_type($type='',$limit_to_storage_set=false)
 
 			foreach ($sub_types as $_type=>$_title)
 			{
-				$type_list->attach(form_input_list_entry($_type,($_type==$type),$_title));
+				$_type_list->attach(form_input_list_entry($_type,($_type==$type),$_title));
 			}
 		}
 	}
+	if (!$_type_list->is_empty())
+		$type_list->attach(form_input_list_group($last_type,$_type_list));
 
 	return make_string_tempcode($type_list->evaluate()); // XHTMLXHTML
 }

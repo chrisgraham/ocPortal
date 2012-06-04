@@ -123,7 +123,7 @@ class Module_classifieds
 
 		$member_id=get_param_integer('member_id',get_member());
 
-		$title=get_page_title(($member_id==get_member())?'CLASSIFIED_ADVERTS':'_CLASSIFIED_ADVERTS',true,array($GLOBALS['FORUM_DRIVER']->get_username($member_id)));
+		$title=get_screen_title(($member_id==get_member())?'CLASSIFIED_ADVERTS':'_CLASSIFIED_ADVERTS',true,array($GLOBALS['FORUM_DRIVER']->get_username($member_id)));
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
@@ -132,7 +132,7 @@ class Module_classifieds
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',30);
 
-		require_code('templates_results_browser');
+		require_code('templates_pagination');
 
 		$max_rows=$GLOBALS['SITE_DB']->query_value('catalogue_entries e JOIN '.get_table_prefix().'classifieds_prices c ON c.c_catalogue_name=e.c_name','COUNT(*)',array('ce_submitter'=>$member_id));
 
@@ -201,9 +201,9 @@ class Module_classifieds
 			);
 		}
 
-		$results_browser=results_browser(do_lang('_CLASSIFIED_ADVERTS'),NULL,$start,'start',$max,'max',$max_rows,NULL,NULL,true);
+		$pagination=pagination(do_lang('_CLASSIFIED_ADVERTS'),NULL,$start,'start',$max,'max',$max_rows,NULL,NULL,true);
 
-		return do_template('CLASSIFIED_ADVERTS_SCREEN',array('TITLE'=>$title,'ADS'=>$ads));
+		return do_template('CLASSIFIED_ADVERTS_SCREEN',array('_GUID'=>'b25659c245a738b4f161dc87869d9edc','TITLE'=>$title,'ADS'=>$ads));
 	}
 
 }

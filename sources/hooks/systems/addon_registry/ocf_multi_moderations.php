@@ -59,9 +59,9 @@ class Hook_addon_registry_ocf_multi_moderations
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array('ocf_forum'),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
+			'requires' => array('ocf_forum'),
+			'recommends' => array(),
+			'conflicts_with' => array(),
 		);
 	}
 

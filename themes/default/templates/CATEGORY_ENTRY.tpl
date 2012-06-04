@@ -1,4 +1,4 @@
-<li class="category_entry">
+<li>
 	{+START,IF_NON_EMPTY,{REP_IMAGE}}
 		<div class="right"><a href="{URL*}">{REP_IMAGE}</a></div>
 	{+END}

@@ -1,7 +1,7 @@
 <div class="float_surrounder">
 	<div id="activities_feed">
 		{+START,IF_NON_EMPTY,{TITLE}}
-			<h2 class="activities-icon">{TITLE*}</h2>
+			<h2 class="activities_icon">{TITLE*}</h2>
 		{+END}
 
 		<div id="activitiesfeed_info" mode="{MODE*}" member_ids="{MEMBER_IDS*}"></div>
@@ -11,14 +11,14 @@
 			{+END}
 
 			{+START,LOOP,CONTENT}
-				<li id="{LIID*}" class="activities-box lightborder">
+				<li id="{LIID*}" class="activities_box box">
 					{+START,INCLUDE,ACTIVITY}{+END}
 				</li>
 			{+END}
 		</ul>
 	</div>
 
-	{RESULTS_BROWSER}
+	{PAGINATION}
 </div>
 
 {+START,IF_PASSED,MAX}

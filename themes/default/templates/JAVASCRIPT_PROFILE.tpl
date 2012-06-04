@@ -4,11 +4,11 @@ function decrypt_data(encrypted_data)
 {
 	var container=document.createElement('div');
 	container.className='comcode_overlay';
-	container.id='decryption_overlay';
+	container.className='decryption_overlay';
 	container.style.position='absolute';
 	container.style.width='300px';
-	container.style.left=(getWindowWidth()/2-200).toString()+'px';
-	container.style.top=(getWindowHeight()/2-100).toString()+'px';
+	container.style.left=(get_window_width()/2-200).toString()+'px';
+	container.style.top=(get_window_height()/2-100).toString()+'px';
 
 	var title=document.createElement('h2');
 	title.appendChild(document.createTextNode('{!DECRYPT_TITLE^;}'));
@@ -45,7 +45,7 @@ function decrypt_data(encrypted_data)
 	button.type='button';
 	button.appendChild(document.createTextNode('{!INPUTSYSTEM_CANCEL^;}'));
 	// Remove the form when it's cancelled
-	addEventListenerAbstract(button,'click',function () { document.getElementsByTagName('body')[0].removeChild(container); return false; });
+	add_event_listener_abstract(button,'click',function () { document.getElementsByTagName('body')[0].removeChild(container); return false; });
 	proceed_div.appendChild(button);
 
 	// Submit button
@@ -53,7 +53,7 @@ function decrypt_data(encrypted_data)
 	button.type='submit';
 	button.value='{!DECRYPT^;}';
 	// Hide the form upon submission
-	addEventListenerAbstract(button,'click',function () { container.style.display='none'; return true; });
+	add_event_listener_abstract(button,'click',function () { container.style.display='none'; return true; });
 	proceed_div.appendChild(button);
 
 	form.appendChild(proceed_div);

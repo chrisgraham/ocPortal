@@ -51,7 +51,6 @@ class Block_main_poll
 		if ($param==-1) $param=get_param_integer('poll_id',$param);
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('polls');
 
-		require_css('side_blocks');
 		require_css('polls');
 		require_lang('polls');
 
@@ -61,7 +60,7 @@ class Block_main_poll
 			return poll_script(true,$param);
 		}
 
-		return do_template('BLOCK_MAIN_POLL_IFRAME',array('RAND'=>strval(mt_rand(0,100000)),'PARAM'=>strval($param),'ZONE'=>$zone));
+		return do_template('BLOCK_MAIN_POLL_IFRAME',array('PARAM'=>strval($param),'ZONE'=>$zone));
 	}
 
 }

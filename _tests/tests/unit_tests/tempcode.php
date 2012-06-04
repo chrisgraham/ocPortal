@@ -116,7 +116,7 @@ class tempcode_test_set extends ocp_test_case
 		<td>3_plus_2</td>
 	</tr>
 	<tr>
-		<td>$SHIFT_DECODE,foobar</td>
+		<td>$GET,foobar</td>
 		<td></td>
 	</tr>
 </tbody></table>
@@ -347,7 +347,7 @@ class tempcode_test_set extends ocp_test_case
 </tbody></table>
 
 <p>
-	Putting #anchor onto URL should cause jump to here.<a name="anchor" id="anchor"></a>
+	Putting #anchor onto URL should cause jump to here.<a id="anchor"></a>
 </p>
 
 <h2>Directives</h2>

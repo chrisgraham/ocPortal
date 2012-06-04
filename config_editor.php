@@ -89,8 +89,8 @@ ce_do_footer();
 function ce_do_header()
 {
 	echo '
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="EN">
+<!DOCTYPE html>
+<html lang="EN">
 <head>
 	<title>ocPortal Installation Options editor</title>
 	<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
@@ -98,14 +98,14 @@ function ce_do_header()
 ';
 @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css'))))));
 echo '
-		.main_page_title { text-decoration: underline; display: block; background: url(\'themes/default/images/bigicons/ocp-logo.png\') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
+		.screen_title { text-decoration: underline; display: block; background: url(\'themes/default/images/bigicons/ocp-logo.png\') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 	</style>
 
 	<meta name="robots" content="noindex, nofollow" />
 </head>
-<body class="re_body"><div class="global_middle">
-	<h1 class="main_page_title">ocPortal Installation Options editor</h1>
+<body class="website_body"><div class="global_middle">
+	<h1 class="screen_title">ocPortal Installation Options editor</h1>
 	<p>This is an editor kept as simple as possible, to allow fixing of configuration problems when ocPortal is not in a workable state. It is provided in English only, and only modifies the configuration file, not the database.</p>
 	<form action="config_editor.php" method="post">
 ';
@@ -125,9 +125,9 @@ if (array_key_exists('base_url',$SITE_INFO))
 $_base_url=htmlentities($SITE_INFO['base_url']);
 echo <<<END
 		<hr />
-		<p>
-		&raquo; <a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a>
-		</p>
+		<ul class="actions_list" role="navigation">
+			<li><a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a></li>
+		</ul>
 END;
 }
 echo <<<END
@@ -157,7 +157,7 @@ function do_access($given_password)
 {
 	global $SITE_INFO;
 echo <<<END
-	<table class="solidborder">
+	<table class="results_table">
 END;
 	if (!array_key_exists('block_mod_rewrite',$SITE_INFO)) $SITE_INFO['block_mod_rewrite']='0';
 	if (!array_key_exists('use_mem_cache',$SITE_INFO)) $SITE_INFO['use_mem_cache']='1';
@@ -189,7 +189,7 @@ vb_unique_id
 stronghold_cookies
 vb_version*/
 			case 'use_mem_cache':
-				$notes='Set this to \'1\' if persistant memory cacheing is to be used (caches data in memory between requests using whatever appropriate PHP extensions are available).';
+				$notes='Set this to \'1\' if persistent memory cacheing is to be used (caches data in memory between requests using whatever appropriate PHP extensions are available).';
 				break;
 			case 'fast_spider_cache':
 				$notes='The number of hours that the spider/bot cache lasts for (this sets both HTTP cacheing, and server retention of cached screens).';
