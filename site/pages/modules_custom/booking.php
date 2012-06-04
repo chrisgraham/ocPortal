@@ -285,9 +285,9 @@ class Module_booking
 			$category=get_translated_text($bookable['categorisation']);
 
 			if (!array_key_exists($category,$categories))
-	         $categories[$category]=array('CATEGORY_TITLE'=>$category,'BOOKABLES'=>array());
+				$categories[$category]=array('CATEGORY_TITLE'=>$category,'BOOKABLES'=>array());
 
-	      $quantity_available=$GLOBALS['SITE_DB']->query_value('bookable_codes','COUNT(*)',array('bookable_id'=>$bookable['id']));
+			$quantity_available=$GLOBALS['SITE_DB']->query_value('bookable_codes','COUNT(*)',array('bookable_id'=>$bookable['id']));
 
 			list($quantity,$date_from,$date_to)=$this->_read_chosen_bookable_settings($bookable);
 
@@ -406,7 +406,7 @@ class Module_booking
 		if (is_null($date_from)) $date_from=time();
 		$date_to=get_input_date('bookable_'.strval($bookable['id']).'_date_to');
 		if (is_null($date_to)) $date_to=get_input_date('bookable_date_to'); // allow to be specified for whole form (the norm actually); may still be null, if ranges not being used
-      if (is_null($date_to)) $date_to=$date_from;
+		if (is_null($date_to)) $date_to=$date_from;
 
 		return array($quantity,$date_from,$date_to);
 	}

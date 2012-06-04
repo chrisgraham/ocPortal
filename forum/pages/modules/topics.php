@@ -533,7 +533,7 @@ class Module_topics
 	 * Mark a topic as unread by the current member.
 	 *
 	 * @param  AUTO_LINK The ID of the topic to mark as unread.
-	 * @return boolean   Success status.
+	 * @return boolean	Success status.
 	 */
 	function ocf_ping_topic_unread($topic_id)
 	{
@@ -1268,7 +1268,7 @@ class Module_topics
 		{
 			if (!is_null($forum_id))
 			{
-	         if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
+				if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
 			}
 
 			$staff_help_url=NULL;
@@ -1554,7 +1554,7 @@ class Module_topics
 		if (is_null($topic_title)) $topic_title='';
 		if (!is_null($forum_id))
 		{
-         if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
+			if (!has_category_access(get_member(),'forums',strval($forum_id))) access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
 		} else
 		{
 			// It must be a Private Topic. Do we have access?
@@ -2229,8 +2229,8 @@ END;
 	 */
 	function _delete_post() // Type
 	{
-      $post_id=either_param_integer('id',NULL);
-      if (is_null($post_id)) $post_id=either_param_integer('post_id');
+		$post_id=either_param_integer('id',NULL);
+		if (is_null($post_id)) $post_id=either_param_integer('post_id');
 		$reason=post_param('reason');
 
 		require_code('ocf_posts_action');

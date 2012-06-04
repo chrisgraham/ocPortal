@@ -104,7 +104,7 @@ class Hook_addon_registry_stats_block
 	/**
 	 * Get mapping between template names and the method of this class that can render a preview of them
 	 *
-	 * @return array                 The mapping
+	 * @return array						The mapping
 	 */
 	function tpl_previews()
 	{
@@ -120,7 +120,7 @@ class Hook_addon_registry_stats_block
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
 	 *
-	 * @return array                 Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 * @return array						Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
 	function tpl_preview__block_side_stats()
 	{

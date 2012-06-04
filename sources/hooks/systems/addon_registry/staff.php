@@ -93,7 +93,7 @@ class Hook_addon_registry_staff
 	/**
 	 * Get mapping between template names and the method of this class that can render a preview of them
 	 *
-	 * @return array                 The mapping
+	 * @return array						The mapping
 	 */
 	function tpl_previews()
 	{
