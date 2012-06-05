@@ -144,10 +144,10 @@ tree_list.prototype.render_tree=function(xml,html,element)
 	var initially_expanded,selectable,extra,url,title,func,temp,master_html,node,node_self_wrap,node_self;
 	if ((typeof element=='undefined') || (!element)) var element=document.getElementById(this.name);
 
-	if (typeof window.thumbnail_fade!='undefined')
+	if (typeof window.fade_transition!='undefined')
 	{
 		set_opacity(html,0.0);
-		thumbnail_fade(html,100,30,4);
+		fade_transition(html,100,30,4);
 	}
 
 	html.style.display='block';
@@ -476,10 +476,10 @@ tree_list.prototype.handle_tree_click=function(event,automated) // Not called as
 		}
 
 		html_node.style.display='block';
-		if (typeof window.thumbnail_fade!='undefined')
+		if (typeof window.fade_transition!='undefined')
 		{
 			set_opacity(html_node,0.0);
-			thumbnail_fade(html_node,100,30,4);
+			fade_transition(html_node,100,30,4);
 		}
 
 		img.src='{$IMG;,treefield/minus}'.replace(/^http:/,window.location.protocol);

@@ -189,7 +189,7 @@ class Module_pointstore
 				add_config_option('ENABLE_PURCHASE','is_on_flagrant_buy','tick','return (!addon_installed(\'flagrant\'))?false:\'1\';','POINTSTORE','FLAGRANT_MESSAGE');
 
 			require_lang('pointstore');
-			add_menu_item_simple('main_community',NULL,'POINT_STORE','_SEARCH:pointstore:type=misc');
+			add_menu_item_simple('main_community',NULL,'POINT_STORE','_SEARCH:pointstore:type=misc',0,0,true,'',0,'menu_items/forum_navigation/pointstore');
 		}
 	}
 

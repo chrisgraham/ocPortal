@@ -622,10 +622,10 @@ function set_task_hiding(hide_done)
 			checklist_rows[i].className+=' task_hidden';
 		} else
 		{
-			if ((typeof window.thumbnail_fade!='undefined') && (checklist_rows[i].style.display=='none'))
+			if ((typeof window.fade_transition!='undefined') && (checklist_rows[i].style.display=='none'))
 			{
 				set_opacity(checklist_rows[i],0.0);
-				thumbnail_fade(checklist_rows[i],100,30,4);
+				fade_transition(checklist_rows[i],100,30,4);
 			}
 			checklist_rows[i].style.display='block';
 			checklist_rows[i].className=checklist_rows[i].className.replace(/ task_hidden/g,'');

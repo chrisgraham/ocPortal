@@ -205,11 +205,11 @@ class Module_cedi
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_seedy',20,1,0,0,0,'','integer');
 
 			require_lang('cedi');
-			add_menu_item_simple('main_content',NULL,'CEDI','_SEARCH:cedi:type=misc');
-			add_menu_item_simple('cedi_features',NULL,'CEDI','_SEARCH:cedi:type=misc');
-			add_menu_item_simple('cedi_features',NULL,'RANDOM_PAGE','_SEARCH:cedi:type=random');
-			add_menu_item_simple('cedi_features',NULL,'CEDI_CHANGELOG','_SEARCH:cedi:type=changes');
-			add_menu_item_simple('cedi_features',NULL,'TREE','_SEARCH:cedi:type=tree');
+			//add_menu_item_simple('main_content',NULL,'CEDI','_SEARCH:cedi:type=misc');
+			add_menu_item_simple('wiki_features',NULL,'CEDI','_SEARCH:cedi:type=misc');
+			add_menu_item_simple('wiki_features',NULL,'RANDOM_PAGE','_SEARCH:cedi:type=random');
+			add_menu_item_simple('wiki_features',NULL,'CEDI_CHANGELOG','_SEARCH:cedi:type=changes');
+			add_menu_item_simple('wiki_features',NULL,'TREE','_SEARCH:cedi:type=tree');
 
 			$GLOBALS['SITE_DB']->create_index('seedy_posts','ftjoin_spm',array('the_message'));
 			$GLOBALS['SITE_DB']->create_index('seedy_pages','ftjoin_spt',array('title'));

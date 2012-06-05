@@ -271,7 +271,10 @@ class Module_catalogues
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'projects','group_id'=>$group_id));
 			}
-			add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_PROJECTS_TITLE','_SEARCH:catalogues:type=index:id=projects');
+			//add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_PROJECTS_TITLE','_SEARCH:catalogues:type=index:id=projects');
+			$projects=add_menu_item_simple('collab_features',NULL,'DEFAULT_CATALOGUE_PROJECTS_TITLE');
+			add_menu_item_simple('collab_features',$projects,'VIEW','_SEARCH:catalogues:type=index:id=projects',0,0,true,do_lang('ZONE_BETWEEN'),1);
+			add_menu_item_simple('collab_features',$projects,'ADD','_SEARCH:cms_catalogues:type=add_entry:catalogue_name=projects',0,0,true,do_lang('ZONE_BETWEEN'),1);
 
 			// Modifications
 			actual_add_catalogue('modifications',lang_code_to_default_content('DEFAULT_CATALOGUE_MODIFICATIONS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_MODIFICATIONS_DESCRIPTION',true,3),C_DT_TITLELIST,0,'',60);
@@ -287,7 +290,7 @@ class Module_catalogues
 				actual_add_catalogue_field('modifications',lang_code_to_default_content($field[0],false,3),lang_code_to_default_content($field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4]);
 			foreach (array_keys($groups) as $group_id)
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'modifications','group_id'=>$group_id));
-			add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_MODIFICATIONS_TITLE','_SEARCH:catalogues:type=index:id=modifications');
+			add_menu_item_simple('collab_features',NULL,'DEFAULT_CATALOGUE_MODIFICATIONS_TITLE','_SEARCH:catalogues:type=index:id=modifications');
 
 			// Hosted-sites
 			actual_add_catalogue('hosted',lang_code_to_default_content('DEFAULT_CATALOGUE_HOSTED_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_HOSTED_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',0);
@@ -304,7 +307,7 @@ class Module_catalogues
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'hosted','group_id'=>$group_id));
 			}
-			add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_HOSTED_TITLE','_SEARCH:catalogues:type=index:id=hosted');
+			add_menu_item_simple('collab_features',NULL,'DEFAULT_CATALOGUE_HOSTED_TITLE','_SEARCH:catalogues:type=index:id=hosted');
 
 			// Links
 			$links_category=actual_add_catalogue('links',lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_DESCRIPTION',true,3),C_DT_TABULAR,1,'',0);
@@ -361,10 +364,6 @@ class Module_catalogues
 				actual_add_catalogue_field('contacts',lang_code_to_default_content($field[0],false,3),insert_lang('',2),$field[2],$i,$field[3],1,1,'',$field[4]);
 			actual_add_catalogue_category('contacts',lang_code_to_default_content('CONTACTS',false,2),'','',NULL,'');
 			add_menu_item_simple('main_content',NULL,'CONTACTS','_SEARCH:catalogues:type=index:id=contacts');
-
-			$projects=add_menu_item_simple('collab_features',NULL,'DEFAULT_CATALOGUE_PROJECTS_TITLE');
-			add_menu_item_simple('collab_features',$projects,'VIEW','_SEARCH:catalogues:id=projects:type=index',0,0,true,do_lang('ZONE_BETWEEN'),1);
-			add_menu_item_simple('collab_features',$projects,'ADD','_SEARCH:cms_catalogues:catalogue_name=projects:type=add_entry',0,0,true,do_lang('ZONE_BETWEEN'),1);
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))

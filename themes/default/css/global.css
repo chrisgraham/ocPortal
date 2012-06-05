@@ -68,7 +68,8 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#fff2f2,light_error_background,95% W/B + 5% FF0000}
 {$THEME_WIZARD_COLOR,#d91522,red_highlight_text,80% FF0000 + 20% seed}
 {$THEME_WIZARD_COLOR,#00aa00,green_highlight_text,100% 00AA00}
-{$THEME_WIZARD_COLOR,#e2cece,required_background,95% (area_4_background hue_to 0) + 5% B/W}
+{$THEME_WIZARD_COLOR,#ede2e4,required_background,60% (area_4_background hue_to 0) + 40% area_background}
+{$THEME_WIZARD_COLOR,#ebe6eb,required_2_background,40% (area_4_background hue_to 0) + 60% area_background}
 {$THEME_WIZARD_COLOR,#000000,dark_shadow,100% B/W}
 
 /* For standard elements */
@@ -88,7 +89,7 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#4b5a71,dark_border,70% standard_border + 30% B/W}
 {$THEME_WIZARD_COLOR,#c1cee3,pale_border,33% seed + 67% W/B}
 
-/* Backgrounds */
+/* Backgrounds (quiet a variety, as we need to be able to stack them, to have both hover and active effects, to have zebra striping, and various other levels of perceived focus) */
 {$THEME_WIZARD_COLOR,#eaeff6,area_background,11% seed + 89% W/B}
 {$THEME_WIZARD_COLOR,#e3e9f2,area_2_background,15% seed + 85% W/B}
 {$THEME_WIZARD_COLOR,#eef2f7,area_3_background,60% area_2_background + 40% W/B}
@@ -101,6 +102,13 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#c2d1e5,area_hover_3_background,93% (area_background sat_to 15) + 7% B/W}
 {$THEME_WIZARD_COLOR,#c2d1e5,area_current_background,93% (area_background sat_to 15) + 7% B/W}
 {$THEME_WIZARD_COLOR,#d8dde6,point_of_interest_background,95% area_2_background + 5% B/W}
+{$THEME_WIZARD_COLOR,#6b81a1,footer_background,95% (seed sat_to 33) + 5% B/W}
+{$THEME_WIZARD_COLOR,#607490,footer_2_background,85% (seed sat_to 33) + 15% B/W}
+/* Backgrounds, employing color wheel theory */
+{$THEME_WIZARD_COLOR,#d9e1ee,area_highlight_background,20% seed + 80% W/B}
+{$THEME_WIZARD_COLOR,#d9ecee,area_highlight_left_complement_background,20% (seed hue_add -21) + 80% W/B}
+{$THEME_WIZARD_COLOR,#dbd9ee,area_highlight_right_complement_background,20% (seed hue_add +21) + 80% W/B}
+{$THEME_WIZARD_COLOR,#eee6d9,area_highlight_complement_background,20% (seed hue_add 128) + 80% W/B}
 
 /* Text */
 {$THEME_WIZARD_COLOR,#325180,area_text,76% seed + 24% B/W}
@@ -127,8 +135,8 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#4b5a71,message_highlighted_part,70% standard_border + 30% B/W}
 
 /* Footer */
-{$THEME_WIZARD_COLOR,#97aed0,footer_link_hover,10% W/B + 90% footer_tinting}
-{$THEME_WIZARD_COLOR,#000000,footer_link,100% B/W}
+{$THEME_WIZARD_COLOR,#0a1019,footer_link,15% seed + 85% B/W}
+{$THEME_WIZARD_COLOR,#1a2a44,footer_link_hover,40% seed + 60% B/W}
 {$THEME_WIZARD_COLOR,#8ba4ca,footer_tinting,61% seed + 39% W/B}
 {$THEME_WIZARD_COLOR,#ffffff,footer_text,100% W/B}
 {$THEME_WIZARD_COLOR,#dbe6f7,inverted_text,35% footer_tinting + 65% W/B}
@@ -639,7 +647,8 @@ body.popup_spacer h2 {
 }
 
 footer {
-	background-color: {$GET,standard_border};
+	background-color: {$GET,footer_background};
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,footer_background}\, {$GET,footer_2_background});}
 
 	color: {$GET,footer_text};
 	padding: 1em;
@@ -1105,7 +1114,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 
 /* Don't let boxes on side panels get too much styling (focuses the eye away) */
-.global_side_panel .box {
+.global_side_panel .box, .box.nested {
 	background: {$GET,area_5_background};
 }
 .global_side_panel .box_inner>h1, .global_side_panel .box_inner>h2, .global_side_panel .box_inner>h3, .global_side_panel .box_inner>h4, .global_side_panel .box_inner>h5, .global_side_panel .box_inner>h6 {
@@ -1419,7 +1428,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .field_name_column {
-	width: 16em;
+	width: 14em;
 }
 
 .field_name_column_shorter {
@@ -1689,7 +1698,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	font-weight: bold;
 	margin-bottom: 0.3em;
 	padding: 0 0 0 18px;
-	background: url('{$IMG;,action_link}') 0 2px no-repeat;
+	background: url('{$IMG;,action_link}') 0 5px no-repeat;
 }
 .index_screen_fancier_entry_count {
 	font-size: 0.8em;
@@ -1961,12 +1970,7 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .highlighted_post {
-	background-color: {$GET,point_of_interest_background};
-	padding: 1em;
-	border: 1px dotted {$GET,standard_border};
-	{+START,IF,{$NOT,{$MOBILE}}}
-		margin-right: 70px;
-	{+END}
+	background: {$GET,point_of_interest_background} !important;
 }
 
 .reviews_average {
@@ -2185,7 +2189,7 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 	border: 1px solid {$GET,pale_border};
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 	padding: 0.5em;
-	{$BETA_CSS_PROPERTY,opacity: 0.4;} display: inline-block;/*Needed for IE8*/
+	{$BETA_CSS_PROPERTY,opacity: 0.4;}
 	{$BETA_CSS_PROPERTY,transition: opacity 0.6s linear;}
 }
 .quick_self_edit_link:hover {
@@ -2283,7 +2287,6 @@ ul.associated_links_block_group.horizontal_links>li:before,
 .horizontal_meta_details li:before,
 .horizontal_ticker li:before {
 	content: "\00b7" !important; /* a &middot; */
-	vertical-align: middle;
 	padding: 0 0.4em 0 0.1em;
 }
 .horizontal_buttons li {
@@ -2340,7 +2343,7 @@ ul.associated_link>li {
 	margin: 2em 0;
 	display: block;
 	list-style: none;
-	font-size: 0.9em;
+	/*font-size: 0.9em; Not very touch-friendly*/
 }
 ul.buttons_group, ul.associated_links_block_group {
 	margin: 0; /* Margin will go on li elements if its a list */
@@ -2372,7 +2375,7 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 */
 
 .field_input_non_filled {
-	color: {$GET,unfilled_input_text};
+	color: {$GET,unfilled_input_text} !important;
 }
 .field_input_filled {
 	color: {$GET,native_ui_foreground};
@@ -2420,7 +2423,6 @@ input[type="submit"].wide_button, input[type="submit"].button_micro, input[type=
 input[type="button"].wide_button, input[type="button"].button_micro, input[type="button"].button_page, input[type="button"].button_pageitem,
 button.wide_button, button.button_micro, button.button_page, button.button_pageitem
 {
-	{$BETA_CSS_PROPERTY,transition: opacity 0.5s linear;}
 	display: inline-block;
 	border: none;
 	cursor: pointer;
@@ -2429,7 +2431,6 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	color: {$GET,native_ui_button_foreground};
 	{$BETA_CSS_PROPERTY,border-radius: 6px;}
 	background-image: url('{$IMG;,gradient}');
-	{$BETA_CSS_PROPERTY,opacity: 0.85;}
 	text-shadow: 1px 1px 1px {$GET,dark_shadow};
 	margin: 0 2px;
 }
@@ -2452,7 +2453,6 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 input[type="reset"].button_micro, input[type="submit"].button_micro, input[type="button"].button_micro, button.button_micro
 {
 	padding: 0 3px 1px 3px !important;
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} /* Needed for Opera */
 }
 input[type="reset"].wide_button, input[type="submit"].wide_button, input[type="button"].wide_button, button.wide_button, input[type="submit"].button_pageitem, input[type="button"].button_pageitem, button.button_pageitem
 {
@@ -2477,6 +2477,15 @@ button.wide_button:disabled, button.button_micro:disabled, button.button_page:di
 {
 	{$BETA_CSS_PROPERTY,opacity: 0.4 !important;}
 	cursor: default;
+}
+
+.button_page, .button_pageitem, .button_micro, .wide_button, .toggleable_tray_button img {
+	{$BETA_CSS_PROPERTY,opacity: 0.85;}
+	display: inline-block;
+}
+
+.button_page:hover, .button_pageitem:hover, .button_micro:hover, .wide_button:hover, .toggleable_tray_button:hover img {
+	{$BETA_CSS_PROPERTY,opacity: 1.0;} /* Needed for Opera */
 }
 
 .button_page, .button_pageitem {
@@ -2797,6 +2806,30 @@ ul.nl, .nl ul {
 	color: {$GET,slightly_seeded_text} !important;
 }
 
+/* Embossed menus should be flush to their box */
+.box___block_side_stored_menu_embossed>.box_inner>h3 {
+	margin: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+.box___block_side_stored_menu_embossed>.box_inner {
+	margin: 0;
+	position: relative;
+}
+.box___block_side_stored_menu_embossed .edit_menu_link {
+	position: absolute;
+	right: 0;
+}
+.box___block_side_stored_menu_embossed nav, .box___block_side_stored_menu_embossed li {
+	border-left: 0;
+	border-right: 0;
+}
+.box___block_side_stored_menu_embossed nav, .box___block_side_stored_menu_embossed li:last-child {
+	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 5px;}
+	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 5px;}
+	border-bottom: 0;
+}
+
 .menu_type__embossed, .menu_type__top, .menu_type__dropdown {
 	overflow: hidden;
 }
@@ -2807,7 +2840,8 @@ ul.nl, .nl ul {
 
 .menu_type__embossed .current, .menu_type__top .current, .menu_type__dropdown .toplevel.current {
 	color: {$GET,slightly_seeded_text};
-	background-color: {$GET,area_hover_3_background} !important;
+	background-color: {$GET,area_highlight_left_complement_background} !important;
+	font-weight: bold;
 }
 
 .menu_type__embossed a:link, .menu_type__embossed a:visited, .menu_type__embossed a:hover, .menu_type__embossed a:active, .menu_type__top a:link, .menu_type__top a:visited, .menu_type__top a:hover, .menu_type__top a:active {
@@ -2815,13 +2849,20 @@ ul.nl, .nl ul {
 }
 
 .menu_type__embossed a:hover, .menu_type__top a:hover, .menu_type__dropdown a.toplevel_link:hover {
-	background-color: {$GET,area_hover_3_background} !important;
+	background-color: {$GET,area_highlight_right_complement_background} !important;
 	{$BETA_CSS_PROPERTY,transition: color,background-color 0.5s linear;}
+}
+
+.menu_type__top a, .menu_type__dropdown a.toplevel_link {
+	padding: 0.4em 0.5em !important;
+}
+
+.menu_type__embossed a {
+	padding: 0.5em !important;
 }
 
 .menu_type__embossed a, .menu_type__top a, .menu_type__dropdown a.toplevel_link {
 	display: block;
-	padding: 3px 4px 5px 4px !important;
 	outline: 0;
 }
 

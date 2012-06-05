@@ -553,19 +553,29 @@ hr.ocf_sig_barrier {
 
 .ocf_information_bar_outer {
 	margin-bottom: 1em;
+	border: 1px solid {$GET,pale_border} !important;
 }
 
 .ocf_information_bar { /* {$,either OCF_GUEST_BAR.tpl or OCF_MEMBER_BAR.tpl} */
 	font-size: 0.9em;
 }
 
-.ocf_information_bar_outer>.box_inner {
+.ocf_information_bar_outer>.toggleable_tray {
 	margin: 0; /* Undoes what .box_inner sets, so that our dividers are flush with the box border */
 }
 
-.ocf_information_bar_outer>.box_inner>h2 {
+.ocf_information_bar_outer>h2 {
 	margin: 0 0 0 0;
 	width: auto;
+	background: {$GET,point_of_interest_background};
+	color: {$GET,area_key_text};
+}
+
+.ocf_information_bar_outer .toggleable_tray_title img {
+	{$BETA_CSS_PROPERTY,opacity: 0.2;}
+}
+.ocf_information_bar_outer .toggleable_tray_title:hover img {
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
 }
 
 .ocf_member_column>*:first-child, .ocf_guest_column>*:first-child {
@@ -581,7 +591,7 @@ hr.ocf_sig_barrier {
 	margin-{!en_left}: -1px;
 	{+START,IF,{$NOT,{$MOBILE}}}
 		float: {!en_left};
-		border-{!en_left}: 1px solid {$GET,standard_border};
+		border-{!en_left}: 1px solid {$GET,pale_border};
 	{+END}
 }
 

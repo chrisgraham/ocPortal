@@ -108,10 +108,10 @@ function pop_up_menu(id,place,menu,event)
 
 	var full_height=get_window_scroll_height(); // Has to be got before e is visible, else results skewed
 	e.style.display='block';
-	if (typeof window.thumbnail_fade!='undefined')
+	if (typeof window.fade_transition!='undefined')
 	{
 		set_opacity(e,0.0);
-		thumbnail_fade(e,100,30,8);
+		fade_transition(e,100,30,8);
 	}
 	e.style.position='absolute';
 	var full_width=(window.scrollX==0)?get_window_width():get_window_scroll_width();

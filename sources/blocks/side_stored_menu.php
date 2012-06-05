@@ -35,7 +35,7 @@ class Block_side_stored_menu
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('caption','type','param','tray_status','silent_failure');
+		$info['parameters']=array('title','type','param','tray_status','silent_failure');
 		return $info;
 	}
 
@@ -63,7 +63,7 @@ class Block_side_stored_menu
 	{
 		if (!array_key_exists('param',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','param'); // can't function like that
 
-		$type=array_key_exists('type',$map)?$map['type']:'tree';
+		$type=array_key_exists('type',$map)?$map['type']:'embossed';
 		$silent_failure=array_key_exists('silent_failure',$map)?$map['silent_failure']:'0';
 		$tray_status=array_key_exists('tray_status',$map)?$map['tray_status']:'';
 
@@ -86,7 +86,8 @@ class Block_side_stored_menu
 
 		if ($menu->is_empty()) return new ocp_tempcode();
 
-		if ((array_key_exists('caption',$map)) && ($map['caption']!='')) $menu=do_template('BLOCK_SIDE_STORED_MENU',array('_GUID'=>'ae46aa37a9c5a526f43b26a391164436','CONTENT'=>$menu,'PARAM'=>$map['param'],'TRAY_STATUS'=>$tray_status,'CAPTION'=>$map['caption']));
+		if ((array_key_exists('title',$map)) && ($map['title']!=''))
+			$menu=do_template('BLOCK_SIDE_STORED_MENU',array('_GUID'=>'ae46aa37a9c5a526f43b26a391164436','CONTENT'=>$menu,'TYPE'=>$type,'PARAM'=>$map['param'],'TRAY_STATUS'=>$tray_status,'TITLE'=>comcode_to_tempcode($map['title'],NULL,true)));
 
 		return $menu;
 	}

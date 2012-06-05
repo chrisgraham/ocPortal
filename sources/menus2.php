@@ -89,9 +89,10 @@ function menu_management_script()
  * @param  boolean		Whether the caption is a language code.
  * @param  SHORT_TEXT	The tooltip (blank: none).
  * @param  BINARY			Whether the link will open in a new window.
+ * @param  ID_TEXT		The theme image code.
  * @return AUTO_LINK		The ID of the newly added menu item.
  */
-function add_menu_item_simple($menu,$parent,$caption,$url='',$expanded=0,$check_permissions=0,$dereference_caption=true,$caption_long='',$new_window=0)
+function add_menu_item_simple($menu,$parent,$caption,$url='',$expanded=0,$check_permissions=0,$dereference_caption=true,$caption_long='',$new_window=0,$theme_image_code='')
 {
 	global $ADD_MENU_COUNTER;
 
@@ -104,7 +105,7 @@ function add_menu_item_simple($menu,$parent,$caption,$url='',$expanded=0,$check_
 
 	$_caption=(strpos($caption,':')===false)?do_lang($caption,NULL,NULL,NULL,NULL,false):NULL;
 	if (is_null($_caption)) $_caption=$caption;
-	$id=add_menu_item($menu,$ADD_MENU_COUNTER,$parent,$dereference_caption?$_caption:$caption,$url,$check_permissions,'',$expanded,$new_window,$caption_long);
+	$id=add_menu_item($menu,$ADD_MENU_COUNTER,$parent,$dereference_caption?$_caption:$caption,$url,$check_permissions,'',$expanded,$new_window,$caption_long,$theme_image_code);
 
 	$ADD_MENU_COUNTER++;
 
@@ -138,9 +139,10 @@ function delete_menu_item_simple($url)
  * @param  BINARY			Whether it is an expanded branch.
  * @param  BINARY			Whether the link will open in a new window.
  * @param  SHORT_TEXT	The tooltip (blank: none).
+ * @param  ID_TEXT		The theme image code.
  * @return AUTO_LINK		The ID of the newly added menu item.
  */
-function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long)
+function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code='')
 {
 	$id=$GLOBALS['SITE_DB']->query_insert('menu_items',array(
 		'i_menu'=>$menu,
@@ -153,7 +155,7 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
 		'i_page_only'=>$page_only,
 		'i_expanded'=>$expanded,
 		'i_new_window'=>$new_window,
-		'i_theme_img_code'=>'',
+		'i_theme_img_code'=>$theme_image_code,
 	),true);
 
 	log_it('ADD_MENU_ITEM',strval($id),$caption);
@@ -175,8 +177,9 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
  * @param  BINARY			Whether it is an expanded branch.
  * @param  BINARY			Whether the link will open in a new window.
  * @param  SHORT_TEXT	The tooltip (blank: none).
+ * @param  ID_TEXT		The theme image code.
  */
-function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long)
+function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code)
 {
 	$_caption=$GLOBALS['SITE_DB']->query_value('menu_items','i_caption',array('id'=>$id));
 	$_caption_long=$GLOBALS['SITE_DB']->query_value('menu_items','i_caption_long',array('id'=>$id));

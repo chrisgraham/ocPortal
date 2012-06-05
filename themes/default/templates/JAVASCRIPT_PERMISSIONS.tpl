@@ -38,7 +38,7 @@ function fade_icons_out()
 	for (var i=0;i<icons.length;i++)
 	{
 		set_opacity(icons[i],1.0);
-		if (typeof window.thumbnail_fade!='undefined') thumbnail_fade(icons[i],20,50,-10);
+		if (typeof window.fade_transition!='undefined') fade_transition(icons[i],20,50,-10);
 	}
 }
 
@@ -47,7 +47,7 @@ function fade_icons_in()
 	var icons=get_elements_by_class_name(document,'perm_icon');
 	for (var i=0;i<icons.length;i++)
 	{
-		if (typeof window.thumbnail_fade!='undefined') thumbnail_fade(icons[i],100,50,10);
+		if (typeof window.fade_transition!='undefined') fade_transition(icons[i],100,50,10);
 	}
 }
 

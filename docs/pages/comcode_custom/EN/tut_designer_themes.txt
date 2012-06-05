@@ -294,14 +294,12 @@ and in Comcode like:
 Where [tt]<name>[/tt] is something that identifies the particular menu instance, holding together the links in that particular menu instance. You can just make the [tt]<name>[/tt]s up, and you'll get a new empty menu each time you do. If you're making a theme it's best to try and use default pre-existing menu names (ones that are there on any new ocPortal installation) so that the default links are immediately available in your theme (menu links are considered content, so not exported with your theme).
 The following default menus exist in ocPortal:
  - [b][tt]zone_menu[/tt][/b] -- top-level navigation, between sections of the website
- - [b][tt]main_features[/tt][/b] -- main navigation for website pages
  - [b][tt]main_content[/tt][/b] -- links to module content category-navigation (a bit formulaic, so best only used if you need a secondary navigation)
  - [b][tt]main_website[/tt][/b] -- website meta-features, good for use as a footer menu
- - [b][tt]root_website[/tt][/b] -- links for splash page
  - [tt]main_community[/tt] -- website community links
  - [tt]member_features[/tt] -- features relating to members
- - Access to specific features: [tt]cedi_features[/tt], [tt]ecommerce_features[/tt]
- - Personal zone menus: [tt]pc_features[/tt], [tt]pc_edit[/tt]
+ - [tt]root_website[/tt] -- menu shown on welcome zone, if collapsed zones not enabled
+ - Access to specific features: [tt]wiki_features[/tt], [tt]ecommerce_features[/tt]
  - Forum zone menus: [tt]forum_personal[/tt], [tt]forum_features[/tt]
  - Collaboration zone menus: [tt]collab_website[/tt], [tt]collab_features[/tt]
 

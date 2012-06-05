@@ -177,9 +177,9 @@ function slideshow_show_slide(slide)
 			var fadeElement=fadeElements[0];
 			set_opacity(fadeElement,0);
 			fadeElement.parentNode.insertBefore(fadeElement_old,fadeElement);
-			thumbnail_fade(fadeElement,100.0,30,10);
+			fade_transition(fadeElement,100.0,30,10);
 			set_opacity(fadeElement_old,1.0);
-			thumbnail_fade(fadeElement_old,0.0,30,-10,true);
+			fade_transition(fadeElement_old,0.0,30,-10,true);
 		} // else probably a video
 
 		document.getElementById('slideshow_from').value=slideshow_from.value; // Make sure stays the same

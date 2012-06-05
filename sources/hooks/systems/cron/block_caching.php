@@ -77,7 +77,7 @@ class Hook_cron_block_caching
 				get_users_timezone();
 				$backup_timezone=$TIMEZONE_MEMBER_CACHE[get_member()];
 				$LANGS_REQUESTED=array();
-				$JAVASCRIPTS=array('javascript'=>1,'javascript_thumbnails'=>1);
+				$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
 				$CSSS=array('no_cache'=>1,'global'=>1);
 				$cache=$object->run($map);
 				$TIMEZONE_MEMBER_CACHE[get_member()]=$backup_timezone;

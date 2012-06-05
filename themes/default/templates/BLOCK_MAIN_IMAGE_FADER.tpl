@@ -22,9 +22,9 @@
 					{
 						fp_animation_fader.src=fp_animation.src;
 						set_opacity(fp_animation_fader,1.0);
-						thumbnail_fade(fp_animation_fader,0,50,-3);
+						fade_transition(fp_animation_fader,0,50,-3);
 						set_opacity(fp_animation,0.0);
-						thumbnail_fade(fp_animation,100,50,3);
+						fade_transition(fp_animation,100,50,3);
 						fp_animation.src=url{_loop_key%};
 					};
 					if ({_loop_key%}!=0) func{_loop_key%}();

@@ -235,7 +235,7 @@ function init__global2()
 		require_code('developer_tools');
 	}
 
-	$JAVASCRIPTS=array('javascript'=>1,'javascript_thumbnails'=>1);
+	$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
 	if (($GLOBALS['CURRENT_SHARE_USER']!==NULL) || (get_domain()=='myocp.com')) $JAVASCRIPTS['javascript_ajax']=1;
 	$CSSS=array('no_cache'=>1,'global'=>1);
 
@@ -1786,7 +1786,7 @@ function javascript_tempcode($position=NULL)
 	}
 
 	// Our main loop
-	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_fractional_edit'=>1,'javascript_thumbnails'=>1,'javascript_button_realtime_rain'=>1);
+	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_fractional_edit'=>1,'javascript_transitions'=>1,'javascript_button_realtime_rain'=>1);
 	foreach (array_keys($JAVASCRIPTS) as $j)
 	{
 		if (($good_to_merge) && (in_array($j,$to_merge))) continue;

@@ -86,7 +86,7 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 			afm_make_file($zone.'/'.$i.'/index.html','',false);
 		}
 		$default_menu=<<<END
-[block="zone_{$zone}_menu" type="tree" caption="Menu"]side_stored_menu[/block]
+[block="zone_{$zone}_menu" title="Menu"]side_stored_menu[/block]
 [block failsafe="1"]side_users_online[/block]
 [block failsafe="1"]side_stats[/block]
 [block]side_personal_stats[/block]

@@ -167,12 +167,12 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 						{+END}{+END}{+END}{+END}
 						{+START,IF,{$HAS_ZONE_ACCESS,adminzone}}
 							{+START,IF,{$ADDON_INSTALLED,occle}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_occle}}{+START,IF,{$CONFIG_OPTION,bottom_show_occle_button}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},adminzone:admin_occle}}
-								<li><a id="occle_button" accesskey="o" onclick="if (typeof window.load_occle!='undefined') return load_occle(); else return false;" href="{$PAGE_LINK*,adminzone:admin_occle}"><img width="20" height="20" id="occle_img" title="OcCLE" alt="OcCLE" src="{$IMG*,footer/occle}" /></a></li>
+								<li><a id="occle_button" accesskey="o" onclick="if (typeof window.load_occle!='undefined') return load_occle(); else return false;" href="{$PAGE_LINK*,adminzone:admin_occle}"><img width="20" height="20" id="occle_img" title="{!occle:OCCLE_DESCRIPTIVE_TITLE}" alt="{!occle:OCCLE_DESCRIPTIVE_TITLE}" src="{$IMG*,footer/occle}" /></a></li>
 							{+END}{+END}{+END}{+END}
 							{+START,IF,{$CONFIG_OPTION,bottom_show_admin_menu}}
 								<li>
 									<span class="global_footer_button_ref_point" id="management_menu_rel"></span>
-									<a accesskey="m" id="management_menu_button" onclick="if (typeof window.load_management_menu!='undefined') return load_management_menu(); else return false;" href="{$PAGE_LINK*,adminzone:admin}"><img width="20" height="20" id="management_menu_img" class="no_theme_img_click" title="{!MENU}" alt="{!MENU}" src="{$IMG*,footer/managementmenu}" /></a>
+									<a accesskey="m" id="management_menu_button" onclick="if (typeof window.load_management_menu!='undefined') return load_management_menu(); else return false;" href="{$PAGE_LINK*,adminzone:admin}"><img width="20" height="20" id="management_menu_img" class="no_theme_img_click" title="{!_ADMIN_MENU}" alt="{!MENU}" src="{$IMG*,footer/managementmenu}" /></a>
 								</li>
 							{+END}
 							{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$EQ,{$BRAND_NAME},ocPortal}}

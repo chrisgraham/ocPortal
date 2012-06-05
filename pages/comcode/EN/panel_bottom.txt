@@ -1,3 +1,3 @@
 {+START,IF,{$EQ,{$PAGE},vforums,topicview,forumview}}
-[block]main_bottom_bar[/block]
+{+START,IF,{$ADDON_INSTALLED,ocf_forum}}[block]main_bottom_bar[/block]{+END}
 {+END}

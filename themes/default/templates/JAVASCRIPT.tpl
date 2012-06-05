@@ -116,6 +116,8 @@ function script_load_stuff()
 		}
 		for (i=0;i<document.forms.length;i++)
 		{
+			//convert_tooltip(document.forms[i]);	Not useful
+
 			var elements,j;
 			elements=document.forms[i].elements;
 			for (j=0;j<elements.length;j++)
@@ -198,9 +200,9 @@ function staff_unload_action()
 	if (bi)
 	{
 		bi.className+=' site_unloading';
-		if (typeof window.thumbnail_fade!='undefined')
+		if (typeof window.fade_transition!='undefined')
 		{
-			thumbnail_fade(bi,20,30,-4);
+			fade_transition(bi,20,30,-4);
 		}
 	}
 	var div=document.createElement('div');
@@ -236,10 +238,10 @@ function undo_staff_unload_action()
 	var bi=document.getElementById('main_website_inner');
 	if (bi)
 	{
-		if ((typeof window.thumbnail_fading_timers!='undefined') && (thumbnail_fading_timers[bi.faderKey]))
+		if ((typeof window.fade_transition_timers!='undefined') && (fade_transition_timers[bi.fader_key]))
 		{
-			window.clearTimeout(thumbnail_fading_timers[bi.faderKey]);
-			thumbnail_fading_timers[bi.faderKey]=null;
+			window.clearTimeout(fade_transition_timers[bi.fader_key]);
+			fade_transition_timers[bi.fader_key]=null;
 		}
 		bi.className=bi.className.replace(' site_unloading','');
 	}
@@ -459,10 +461,10 @@ function doc_onmouseout()
 		var help=document.getElementById('help');
 		if (!help) return; // In zone editor, probably
 		set_inner_html(help,window.orig_helper_text);
-		if (typeof window.thumbnail_fade!='undefined')
+		if (typeof window.fade_transition!='undefined')
 		{
 			set_opacity(help,0.0);
-			thumbnail_fade(help,100,30,4);
+			fade_transition(help,100,30,4);
 		}
 		help.className='global_helper_panel_text';
 	}
@@ -476,10 +478,10 @@ function doc_onmouseover(i)
 		if (!help) return; // In zone editor, probably
 		window.orig_helper_text=get_inner_html(help);
 		set_inner_html(help,get_inner_html(doc));
-		if (typeof window.thumbnail_fade!='undefined')
+		if (typeof window.fade_transition!='undefined')
 		{
 			set_opacity(help,0.0);
-			thumbnail_fade(help,100,30,4);
+			fade_transition(help,100,30,4);
 		}
 		help.className='global_helper_panel_text_over';
 	}
@@ -534,10 +536,10 @@ function help_panel(show)
 
 		helper_panel_contents.setAttribute('aria-expanded','true');
 		helper_panel_contents.style.display='block';
-		if (typeof window.thumbnail_fade!='undefined')
+		if (typeof window.fade_transition!='undefined')
 		{
 			set_opacity(helper_panel_contents,0.0);
-			thumbnail_fade(helper_panel_contents,100,30,4);
+			fade_transition(helper_panel_contents,100,30,4);
 		}
 		if (read_cookie('hide_help_panel')=='1') set_cookie('hide_help_panel','0',100);
 		helper_panel_toggle.onclick=function() { return help_panel(false); };
@@ -916,10 +918,10 @@ function select_tab(id,tab)
 		{
 			element.style.display=(tabs[i]==tab)?'block':'none';
 
-			if ((typeof window.thumbnail_fade!='undefined') && (tabs[i]==tab))
+			if ((typeof window.fade_transition!='undefined') && (tabs[i]==tab))
 			{
 				set_opacity(element,0.0);
-				thumbnail_fade(element,100,30,8);
+				fade_transition(element,100,30,8);
 			}
 		}
 
@@ -992,10 +994,10 @@ function toggleable_tray(element,no_animate,cookie_id_name)
 			window.setTimeout(function() { begin_toggleable_tray_animation(element,20,70,-1,pic); } ,20);
 		} else
 		{
-			if (typeof window.thumbnail_fade!='undefined')
+			if (typeof window.fade_transition!='undefined')
 			{
 				set_opacity(element,0.0);
-				thumbnail_fade(element,100,30,4);
+				fade_transition(element,100,30,4);
 			}
 
 			if (pic)
@@ -1044,16 +1046,16 @@ function begin_toggleable_tray_animation(element,animate_dif,animate_ticks,final
 	}
 	element.style.outline='1px dashed gray';
 
-	if (typeof window.thumbnail_fade!='undefined')
+	if (typeof window.fade_transition!='undefined')
 	{
 		if (final_height==0)
 		{
 			set_opacity(element,1.0);
-			thumbnail_fade(element,0,30,4);
+			fade_transition(element,0,30,4);
 		} else
 		{
 			set_opacity(element,0.0);
-			thumbnail_fade(element,100,30,4);
+			fade_transition(element,100,30,4);
 		}
 	}
 
@@ -1520,6 +1522,13 @@ function convert_tooltip(element)
 	{
 		element.title='';
 
+		if (element.innerText)
+		{
+			var prefix=element.innerText+': ';
+			if (title.substr(0,prefix.length)==prefix)
+				title=title.substring(prefix.length,title.length);
+		}
+
 		// Stop the tooltip code adding to these events, by defining our own (it'll not overwrite existing events).
 		if (!element.onmouseout) element.onmouseout=function() {};
 		if (!element.onmousemove) element.onmouseover=function() {};
@@ -1863,14 +1872,14 @@ function mark_all_topics(event)
 /* Set opacity, without interfering with the thumbnail timer */
 function set_opacity(element,fraction)
 {
-	if ((typeof element.faderKey!='undefined') && (element.faderKey) && (typeof window.thumbnail_fading_timers!='undefined') && (thumbnail_fading_timers[element.faderKey]))
+	if ((typeof element.fader_key!='undefined') && (element.fader_key) && (typeof window.fade_transition_timers!='undefined') && (fade_transition_timers[element.fader_key]))
 	{
 		try // Cross-frame issues may cause error
 		{
-			window.clearTimeout(thumbnail_fading_timers[element.faderKey]);
+			window.clearTimeout(fade_transition_timers[element.fader_key]);
 		}
 		catch (e) {};
-		thumbnail_fading_timers[element.faderKey]=null;
+		fade_transition_timers[element.fader_key]=null;
 	}
 
 	if (typeof element.style.opacity!='undefined')
@@ -2527,7 +2536,7 @@ function replace_comments_form_with_ajax(options,hash)
 						if (!known_times.inArray(known_posts[i].className.replace(/^post /,'')))
 						{
 							set_opacity(known_posts[i],0.0);
-							thumbnail_fade(known_posts[i],100,20,5);
+							fade_transition(known_posts[i],100,20,5);
 						}
 					}
 
@@ -2607,7 +2616,7 @@ function threaded_load_more(ob,ids,id)
 		set_inner_html(wrapper,ajax_result.responseText,true);
 
 		window.setTimeout(function() {
-			if (typeof window.thumbnail_fade!='undefined')
+			if (typeof window.fade_transition!='undefined')
 			{
 				var _ids=ids.split(',');
 				for (var i=0;i<_ids.length;i++)
@@ -2616,7 +2625,7 @@ function threaded_load_more(ob,ids,id)
 					if (element)
 					{
 						set_opacity(element,0);
-						thumbnail_fade(element,100,30,10);
+						fade_transition(element,100,30,10);
 					}
 				}
 			}

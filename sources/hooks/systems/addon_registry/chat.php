@@ -72,6 +72,7 @@ class Hook_addon_registry_chat
 	function get_file_list()
 	{
 		return array(
+			'themes/default/images/menu_items/forum_navigation/chat.png',
 			'sources/hooks/systems/notifications/im_invited.php',
 			'sources/hooks/systems/notifications/new_friend.php',
 			'sources/hooks/systems/notifications/member_entered_chatroom.php',

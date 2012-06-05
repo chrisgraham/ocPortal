@@ -1,7 +1,11 @@
-<div class="box ocf_information_bar_outer">
-	<div class="box_inner">
-		<h2>{!MEMBER_INFORMATION,{$USERNAME*}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}} / {!SEARCH}{+END}</h2>
+<section id="tray_{!MEMBER|}" class="box ocf_information_bar_outer">
+	<h2 class="toggleable_tray_title">
+		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!MEMBER|}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{!MEMBER}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
 
+		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!MEMBER|}');">{!MEMBER_INFORMATION,{$USERNAME*}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}} / {!SEARCH}{+END}</a>
+	</h2>
+
+	<div class="toggleable_tray">
 		<div class="ocf_information_bar float_surrounder">
 			{+START,IF_NON_EMPTY,{AVATAR_URL}}
 				<div{+START,IF,{$NOT,{$MOBILE}}} style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_a">
@@ -9,7 +13,7 @@
 				</div>
 			{+END}
 
-			<div{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_b">
+			<div{+START,IF,{$NOT,{$MOBILE}}} style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_b">
 				<p class="ocf_member_column_title">{!WELCOME_BACK,<a href="{PROFILE_URL*}">{USERNAME*}</a>}</p>
 				{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 					<form class="inline horiz_field_sep associated_link" title="{!LOGOUT}" method="post" action="{LOGOUT_URL*}"><input class="button_hyperlink" type="submit" value="{!LOGOUT}" /></form>
@@ -24,43 +28,9 @@
 				</dl>
 			</div>
 
-			<div{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_c">
+			<div{+START,IF,{$NOT,{$MOBILE}}} style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_c">
 				{+START,IF,{$ADDON_INSTALLED,search}}{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,search}}
-					{+START,IF,{$EQ,{$PAGE},forumview}}
-						{+START,IF,{$EQ,{$_GET,type},pt}}
-							<div class="ocf_search_box">
-								<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_own_pt,1}}" method="get">
-									{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_own_pt,1}}
-
-									<div>
-										<label class="accessibility_hidden" for="member_bar_search">{!_SEARCH_PRIVATE_TOPICS}</label><input maxlength="255" type="text" name="content" id="member_bar_search" onfocus="if (this.value=='{!_SEARCH_PRIVATE_TOPICS;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!_SEARCH_PRIVATE_TOPICS;}'; this.className='unfilled_input'; };" class="unfilled_input" value="{!_SEARCH_PRIVATE_TOPICS}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> <a class="horiz_field_sep associated_link" href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_own_pt}" title="{!MORE}: {!SEARCH}">{!MORE}</a>
-									</div>
-								</form>
-							</div>
-						{+END}
-						{+START,IF,{$NEQ,{$_GET,type},pt}}
-							<div class="ocf_search_box">
-								<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK*,_SEARCH:search:results:ocf_posts:search_under={$_GET,id},1}}" method="get">
-									{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_posts:search_under={$_GET,id},1}}
-
-									<div>
-										<label class="accessibility_hidden" for="member_bar_search">{!SEARCH_FORUM_POSTS}</label><input maxlength="255" type="text" name="content" id="member_bar_search" onfocus="if (this.value=='{!SEARCH_FORUM_POSTS;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_FORUM_POSTS;}'; this.className='unfilled_input'; };" class="unfilled_input" value="{!SEARCH_FORUM_POSTS}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> <a class="horiz_field_sep associated_link" href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_posts:search_under={$_GET,id}}" title="{!MORE}: {!SEARCH}">{!MORE}</a>
-									</div>
-								</form>
-							</div>
-						{+END}
-					{+END}
-					{+START,IF,{$EQ,{$PAGE},topicview}}
-						<div class="ocf_search_box">
-							<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$PAGE_LINK,_SEARCH:search:results:ocf_within_topic:search_under={$_GET,id}}}" method="get">
-								{$HIDDENS_FOR_GET_FORM,{$PAGE_LINK,_SEARCH:search:results:ocf_within_topic:search_under={$_GET,id}}}
-
-								<div>
-									<label class="accessibility_hidden" for="member_bar_search">{!SEARCH_POSTS_WITHIN_TOPIC}</label><input maxlength="255" type="text" name="content" id="member_bar_search" onfocus="if (this.value=='{!SEARCH_POSTS_WITHIN_TOPIC;}') { this.value=''; this.className=''; }" onblur="if (this.value=='') { this.value='{!SEARCH_POSTS_WITHIN_TOPIC;}'; this.className='unfilled_input'; };" class="unfilled_input" value="{!SEARCH_POSTS_WITHIN_TOPIC}" /> <input class="button_micro" type="submit" onclick="disable_button_just_clicked(this);" value="{!SEARCH}" /> <a class="horiz_field_sep associated_link" href="{$PAGE_LINK*,_SEARCH:search:misc:ocf_within_topic:search_under={$_GET,id}}" title="{!MORE}: {!SEARCH}">{!MORE}</a>
-								</div>
-							</form>
-						</div>
-					{+END}
+					<div class="box nested"><div class="box_inner">{+START,INCLUDE,MEMBER_BAR_SEARCH}{+END}</div></div>
 				{+END}{+END}
 
 				<div class="ocf_member_column_last_visit">{!LAST_VISIT,{LAST_VISIT_DATE*}}
@@ -83,4 +53,12 @@
 			</nav>
 		</div>
 	</div>
-</div>
+</section>
+
+<script type="text/javascript">// <![CDATA[
+	add_event_listener_abstract(window,'load',function () {
+		{+START,IF,{$JS_ON}}
+			handle_tray_cookie_setting('{!MEMBER|}');
+		{+END}
+	} );
+//]]></script>

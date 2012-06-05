@@ -137,7 +137,7 @@ class Module_staff
 		$message=get_option('staff_text');
 		if (has_actual_page_access(get_member(),'admin_config'))
 		{
-			if ($message!='') $message.=' [[page="_SEARCH:admin_config:category:SECURITY#group_STAFF"]'.do_lang('EDIT').'[/page]]';
+			if ($message!='') $message.=' [semihtml]<a class="associated_link" href="{$PAGE_LINK*,_SEARCH:admin_config:category:SECURITY#group_STAFF}">'.do_lang('EDIT').'</a>[/semihtml]'; // HACKHACK: This (and similar things in other modules) should be done through a template really
 		}
 		$post=comcode_to_tempcode($message,NULL,true);
 

@@ -66,20 +66,7 @@
 	background-color: {$GET,area_background};
 }
 
-.do_next_item_hover, .do_theme_item_hover {
-	background-color: {$GET,area_hover_background};
-}
-
-.do_next_item, .do_next_item_hover {
-	width: 25%;
-	cursor: pointer;
-}
-
-.do_theme_item, .do_theme_item_hover {
-	width: 16%;
-}
-
-.do_next_item, .do_next_item_hover, .do_theme_item, .do_theme_item_hover {
+.do_next_item, .do_next_item:hover, .do_theme_item, .do_theme_item:hover {
 	border: 1px dotted {$GET,standard_border};
 	text-align: center;
 	font-size: 0.9em;
@@ -87,11 +74,25 @@
 	{$BETA_CSS_PROPERTY,transition: background-color 0.5s linear;}
 }
 
-.do_next_item_hover {
+.do_next_item a, .do_theme_item a {
+	text-decoration: none;
+}
+
+.do_next_item:hover, .do_theme_item:hover {
+	background-color: {$GET,area_hover_background};
+	cursor: pointer;
 	border-style: solid;
 }
 
-.do_next_icon {
+.do_next_item, .do_next_item:hover {
+	width: 25%;
+}
+
+.do_theme_item, .do_theme_item:hover {
+	width: 16%;
+}
+
+.do_next_item img {
 	width: 45px;
 	height: 45px;
 }

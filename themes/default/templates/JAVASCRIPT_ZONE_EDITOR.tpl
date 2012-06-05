@@ -105,10 +105,10 @@ function select_ze_tab(id,tab)
 					}
 				}
 			}
-			if ((typeof window.thumbnail_fade!='undefined') && (tabs[i]==tab))
+			if ((typeof window.fade_transition!='undefined') && (tabs[i]==tab))
 			{
 				set_opacity(element,0.0);
-				thumbnail_fade(element,100,30,4);
+				fade_transition(element,100,30,4);
 
 				elementh.className+=' tab_active';
 			} else

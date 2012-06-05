@@ -9,10 +9,6 @@
 	</colgroup>
 
 	<tbody>
-		<tr>
-			<th>{!USERNAME}</th>
-			<td><a class="associated_link suggested" href="{PROFILE_URL*}">{NAME*}</a></td>
-		</tr>
 		{+START,IF_NON_EMPTY,{REAL_NAME}}
 			<tr>
 				<th>{!REALNAME}</th>
@@ -25,6 +21,10 @@
 				<td>{ROLE*}</td>
 			</tr>
 		{+END}
+		<tr>
+			<th>{!USERNAME}</th>
+			<td><a class="associated_link suggested" href="{PROFILE_URL*}">{NAME*}</a></td>
+		</tr>
 		{+START,IF_NON_EMPTY,{ADDRESS}}
 			{+START,IF,{$OCF}}
 				<tr>
@@ -43,10 +43,10 @@
 </table></div>
 
 <div class="buttons_group">
-	<a href="{ALL_STAFF_URL*}"><img class="button_page" src="{$IMG*,page/all2}" title="{!VIEW_ALL_STAFF}" alt="{!VIEW_ALL_STAFF}" /></a>
-
 	{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,admin_staff}}
 		<a rel="edit" href="{$PAGE_LINK*,_SEARCH:admin_staff}"><img class="button_page" src="{$IMG*,page/edit}" title="{!EDIT}" alt="{!EDIT}" /></a>
 	{+END}
+
+	<a href="{ALL_STAFF_URL*}"><img class="button_page" src="{$IMG*,page/all2}" title="{!VIEW_ALL_STAFF}" alt="{!VIEW_ALL_STAFF}" /></a>
 </div>
 

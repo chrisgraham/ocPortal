@@ -106,10 +106,10 @@ function update_ajax_member_list_response(result,list_contents)
 	item.innerText='{!SUGGESTIONS_ONLY;}'.toUpperCase();
 	list.appendChild(item);
 	current_list_for.parentNode.appendChild(list);
-	if (typeof window.thumbnail_fade!='undefined')
+	if (typeof window.fade_transition!='undefined')
 	{
 		set_opacity(list,0.0);
-		thumbnail_fade(list,100,30,8);
+		fade_transition(list,100,30,8);
 	}
 
 	var current_list_for_copy=current_list_for;

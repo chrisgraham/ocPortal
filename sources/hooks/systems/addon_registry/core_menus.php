@@ -322,7 +322,8 @@ class Hook_addon_registry_core_menus
 					'CONTENT' => $menu,
 					'PARAM' => lorem_phrase(),
 					'TRAY_STATUS' => lorem_phrase(),
-					'CAPTION' => lorem_phrase(),
+					'TITLE' => lorem_phrase(),
+					'TYPE' => 'tree',
 				)
 			),NULL,'',true),
 		);
@@ -483,7 +484,8 @@ class Hook_addon_registry_core_menus
 					'CONTENT' => $menu,
 					'PARAM' => lorem_phrase(),
 					'TRAY_STATUS' => lorem_phrase(),
-					'CAPTION' => lorem_phrase(),
+					'TITLE' => lorem_phrase(),
+					'TYPE' => 'embossed',
 				)
 			),NULL,'',true),
 		);
@@ -567,7 +569,8 @@ class Hook_addon_registry_core_menus
 					'CONTENT' => $menu,
 					'PARAM' => lorem_phrase(),
 					'TRAY_STATUS' => lorem_phrase(),
-					'CAPTION' => lorem_phrase(),
+					'TITLE' => lorem_phrase(),
+					'TYPE' => 'popup',
 				)
 			),NULL,'',true),
 		);
@@ -651,7 +654,8 @@ class Hook_addon_registry_core_menus
 					'CONTENT' => $menu,
 					'PARAM' => lorem_phrase(),
 					'TRAY_STATUS' => lorem_phrase(),
-					'CAPTION' => lorem_phrase(),
+					'TITLE' => lorem_phrase(),
+					'TYPE' => 'select',
 				)
 			),NULL,'',true),
 		);
@@ -813,7 +817,8 @@ class Hook_addon_registry_core_menus
 					'CONTENT' => $menu,
 					'PARAM' => lorem_phrase(),
 					'TRAY_STATUS' => lorem_phrase(),
-					'CAPTION' => lorem_phrase(),
+					'TITLE' => lorem_phrase(),
+					'TYPE' => 'zone',
 				)
 			),NULL,'',true),
 		);

@@ -71,19 +71,19 @@ function load_occle()
 					}
 
 					smooth_scroll(0,null,null,function() { document.getElementById('occle_command').focus(); } );
-					if (typeof window.thumbnail_fade!='undefined')
+					if (typeof window.fade_transition!='undefined')
 					{
 						set_opacity(document.getElementById('command_line'),0.0);
-						thumbnail_fade(document.getElementById('command_line'),90,30,5);
+						fade_transition(document.getElementById('command_line'),90,30,5);
 					}
 
 					var bi=document.getElementById('main_website_inner');
 					if (bi)
 					{
-						if (typeof window.thumbnail_fade!='undefined')
+						if (typeof window.fade_transition!='undefined')
 						{
 							set_opacity(bi,1.0);
-							thumbnail_fade(bi,30,30,-5);
+							fade_transition(bi,30,30,-5);
 						} else
 						{
 							set_opacity(bi,0.3);
@@ -104,9 +104,9 @@ function load_occle()
 					var bi=document.getElementById('main_website_inner');
 					if (bi)
 					{
-						if (typeof window.thumbnail_fade!='undefined')
+						if (typeof window.fade_transition!='undefined')
 						{
-							thumbnail_fade(bi,100,30,5);
+							fade_transition(bi,100,30,5);
 						} else
 						{
 							set_opacity(bi,1.0);

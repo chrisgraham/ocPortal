@@ -190,49 +190,6 @@ function build_management_menu()
 }
 
 /**
- * Build community menu.
- *
- * @return array			Faked database rows
- */
-function build_community_menu()
-{
-	if (!addon_installed('ocf_forum')) return array();
-	if (get_forum_type()!='ocf') return array();
-
-	require_lang('ocf');
-	require_lang('menus');
-	//require_lang('chat');
-
-	$sections=array(
-		'forumview'=>array('CURRENT'=>false,'URL'=>'_SEARCH:forumview','CAPTION'=>do_lang('SECTION_FORUMS'),'IMG'=>'menu_items/forum_navigation/forums'),
-		'rules'=>array('CURRENT'=>false,'URL'=>'_SEARCH:rules','CAPTION'=>do_lang('RULES'),'IMG'=>'menu_items/forum_navigation/rules'),
-		'members'=>array('CURRENT'=>false,'URL'=>'_SEARCH:members','CAPTION'=>do_lang('MEMBERS'),'IMG'=>'menu_items/forum_navigation/members'),
-		'groups'=>array('CURRENT'=>false,'URL'=>'_SEARCH:groups','CAPTION'=>do_lang('GROUPS'),'IMG'=>'menu_items/forum_navigation/groups'),
-//		'points'=>array('CURRENT'=>false,'URL'=>'_SEARCH:points','CAPTION'=>do_lang('POINTS'),'IMG'=>'menu_items/forum_navigation/points'),
-//		'chat'=>array('CURRENT'=>false,'URL'=>'_SEARCH:chat','CAPTION'=>do_lang('SHORT_SECTION_CHAT'),'IMG'=>'menu_items/forum_navigation/chat'),
-//		'staff'=>array('CURRENT'=>false,'URL'=>'_SEARCH:staff','CAPTION'=>do_lang('STAFF'),'IMG'=>'menu_items/forum_navigation/staff'),
-		'vforums'=>array('CURRENT'=>false,'URL'=>'_SEARCH:vforums:unread','CAPTION'=>do_lang('SHORT_TOPICS_UNREAD'),'TOOLTIP'=>do_lang('TOPICS_UNREAD'),'IMG'=>'menu_items/forum_navigation/unread_topics'),
-	);
-
-	if (addon_installed('recommend'))
-	{
-		require_lang('recommend');
-		$sections['recommend']=array('CURRENT'=>false,'URL'=>'_SEARCH:recommend','CAPTION'=>do_lang('SHORT_RECOMMEND_SITE'),'IMG'=>'menu_items/forum_navigation/recommend');
-	}
-
-	$items=array();
-
-	$i=1;
-	foreach ($sections as $section)
-	{
-		$items[]=array('id'=>$i,'i_parent'=>NULL,'cap'=>$section['CAPTION'],'i_url'=>$section['URL'],'i_theme_img_code'=>$section['IMG'],'i_check_permissions'=>1,'i_expanded'=>0,'i_new_window'=>0,'i_page_only'=>'','i_caption_long'=>array_key_exists('TOOLTIP',$section)?$section['TOOLTIP']:'');
-		$i++;
-	}
-
-	return $items;
-}
-
-/**
  * Take a stored menu identifier, and return an XHTML menu created from it.
  *
  * @param  ID_TEXT		The type of the menu (determines which templates to use)
@@ -252,11 +209,6 @@ function build_stored_menu($type,$menu,$silent_failure=false)
 	elseif ($menu=='_management')
 	{
 		$items=build_management_menu();
-	}
-	elseif ($menu=='_community')
-	{
-		$items=build_community_menu();
-		if (count($items)==0) return new ocp_tempcode();
 	}
 	elseif (substr($menu,0,3)=='!!!')
 	{

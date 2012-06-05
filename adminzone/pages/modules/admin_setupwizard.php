@@ -658,7 +658,7 @@ class Module_admin_setupwizard
 		if ($installprofile!='')
 		{
 			// Simplify down to a single menu
-			foreach (array('main_community','main_content','main_features','main_website','root_website') as $merge_item)
+			foreach (array('main_content','main_website') as $merge_item)
 			{
 				$GLOBALS['SITE_DB']->query_update('menu_items',array('i_menu'=>'site'),array('i_menu'=>$merge_item));
 			}

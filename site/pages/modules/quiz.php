@@ -115,7 +115,7 @@ class Module_quiz
 		if ((is_null($upgrade_from)) || ($upgrade_from<5))
 		{
 			require_lang('quiz');
-			add_menu_item_simple('main_website',NULL,'QUIZZES','_SEARCH:quiz:type=misc');
+			add_menu_item_simple('main_content',NULL,'QUIZZES','_SEARCH:quiz:type=misc');
 		}
 
 		if (is_null($upgrade_from))

@@ -213,10 +213,10 @@ function flip_page(to,pass_id,sections)
 			{
 				if (i==current_pos)
 				{
-					if ((typeof x.faderKey!='undefined') && (thumbnail_fading_timers[x.faderKey]))
+					if ((typeof x.fader_key!='undefined') && (fade_transition_timers[x.fader_key]))
 					{
-						window.clearTimeout(thumbnail_fading_timers[x.faderKey]);
-						thumbnail_fading_timers[x.faderKey]=null;
+						window.clearTimeout(fade_transition_timers[x.fader_key]);
+						fade_transition_timers[x.fader_key]=null;
 					}
 
 					x.style.width='';
@@ -225,8 +225,8 @@ function flip_page(to,pass_id,sections)
 				} else
 				{
 					if (x.style.position!='static') set_opacity(x,0.0); else set_opacity(x,1.0);
-					if ((typeof x.faderKey=='undefined') || (!thumbnail_fading_timers[x.faderKey]))
-						thumbnail_fade(x,0,30,-5);
+					if ((typeof x.fader_key=='undefined') || (!fade_transition_timers[x.fader_key]))
+						fade_transition(x,0,30,-5);
 					x.style.width=(find_width(x)-24)+'px'; // 24=lhs padding+rhs padding+lhs border+rhs border
 					x.style.position='absolute';
 					x.style.top='0';
@@ -238,10 +238,10 @@ function flip_page(to,pass_id,sections)
 			{
 				x.style.display=(i==current_pos)?'block':'none';
 
-				if ((typeof window.thumbnail_fade!='undefined') && (i==current_pos))
+				if ((typeof window.fade_transition!='undefined') && (i==current_pos))
 				{
 					set_opacity(x,0.0);
-					thumbnail_fade(x,100,30,4);
+					fade_transition(x,100,30,4);
 				}
 			}
 		}
@@ -262,19 +262,19 @@ function shocker_tick(id,time,min_color,max_color)
 	if (!e_left) return;
 	set_inner_html(e_left,shocker_parts[id][shocker_pos[id]][0]);
 	set_opacity(e_left,0.6);
-	if (typeof window.thumbnail_fade!='undefined')
+	if (typeof window.fade_transition!='undefined')
 	{
 		set_opacity(e_left,0.0);
-		thumbnail_fade(e_left,100,time/40,5);
+		fade_transition(e_left,100,time/40,5);
 	}
 	var e_right=document.getElementById('comcodeshocker'+id+'_right');
 	if (!e_right) return;
 	set_inner_html(e_right,shocker_parts[id][shocker_pos[id]][1]);
 	set_opacity(e_right,0);
-	if (typeof window.thumbnail_fade!='undefined')
+	if (typeof window.fade_transition!='undefined')
 	{
 		set_opacity(e_right,0.0);
-		thumbnail_fade(e_right,100,time/20,5);
+		fade_transition(e_right,100,time/20,5);
 	}
 	shocker_pos[id]++;
 

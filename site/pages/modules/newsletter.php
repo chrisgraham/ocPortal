@@ -266,7 +266,7 @@ class Module_newsletter
 		$message=get_option('newsletter_text');
 		if (has_actual_page_access(get_member(),'admin_config'))
 		{
-			if ($message!='') $message.=' [[page="_SEARCH:admin_config:category:FEATURE#group_NEWSLETTER"]'.do_lang('EDIT').'[/page]]';
+			if ($message!='') $message.=' [semihtml]<a class="associated_link" href="{$PAGE_LINK*,_SEARCH:admin_config:category:FEATURE#group_NEWSLETTER}">'.do_lang('EDIT').'</a>[/semihtml]';
 		}
 		$text=comcode_to_tempcode($message,NULL,true);
 

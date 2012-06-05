@@ -1022,7 +1022,7 @@ function execute_css_colour_expression($expression,$colours)
 	{
 		if (preg_match('#^[0-9A-Fa-f]{6}$#',$expression)!=0) return $expression;
 		if (preg_match('#^\#[0-9A-Fa-f]{6}$#',$expression)!=0) return substr($expression,1);
-		if (preg_match('#^\d+$#',$expression)!=0) return $expression;
+		if (preg_match('#^[\+\-]?\d+$#',$expression)!=0) return $expression;
 
 		foreach ($colours as $colour=>$actual_colour)
 		{

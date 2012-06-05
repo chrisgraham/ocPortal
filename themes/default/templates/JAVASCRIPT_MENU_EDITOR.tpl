@@ -75,16 +75,16 @@ function copy_fields_into_bottom(i,changed)
 	form.elements['branch_type'].onchange=function (event) { document.getElementById('branch_type_'+i).selectedIndex=this.selectedIndex; if (document.getElementById('branch_type_'+i).onchange) document.getElementById('branch_type_'+i).onchange(event); };
 	var mfh=document.getElementById('mini_form_hider');
 	mfh.style.display='block';
-	if ((typeof window.thumbnail_fade!='undefined'))
+	if ((typeof window.fade_transition!='undefined'))
 	{
 		if (!changed)
 		{
 			set_opacity(mfh,0.0);
-			thumbnail_fade(mfh,100,30,4);
+			fade_transition(mfh,100,30,4);
 		} else
 		{
 			set_opacity(form.elements['url'],0.0);
-			thumbnail_fade(form.elements['url'],100,30,4);
+			fade_transition(form.elements['url'],100,30,4);
 		}
 	}
 }

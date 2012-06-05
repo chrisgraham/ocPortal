@@ -78,17 +78,18 @@ class Module_admin_menus
 		//add_menu_item_simple('root_website',NULL,'FEEDBACK','_SEARCH:feedback');
 		if (!in_array(get_forum_type(),array('ocf','none'))) add_menu_item_simple('root_website',NULL,'SECTION_FORUMS',get_forum_base_url(true));
 
-		// main_features
-		add_menu_item_simple('main_features',NULL,'FRONT_PAGE','site:');
-		add_menu_item_simple('main_features',NULL,'GUIDE','_SEARCH:help');
-		add_menu_item_simple('main_features',NULL,'RULES','_SEARCH:rules');
+		// main_website
+		add_menu_item_simple('main_website',NULL,'FRONT_PAGE','site:');
+		add_menu_item_simple('main_website',NULL,'GUIDE','_SEARCH:help');
 
 		// main_content
 
 		// main_community
-		if (!in_array(get_forum_type(),array('ocf','none'))) add_menu_item_simple('main_community',NULL,'SECTION_FORUMS',get_forum_base_url(true));
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'MEMBERS','_SEARCH:members:type=misc');
-		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'USERGROUPS','_SEARCH:groups:type=misc');
+		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'SECTION_FORUMS','forum:forumview',0,0,true,'',0,'menu_items/forum_navigation/forums');
+		elseif (!in_array(get_forum_type(),array('none'))) add_menu_item_simple('main_community',NULL,'SECTION_FORUMS',get_forum_base_url(true),0,0,true,'',0,'menu_items/forum_navigation/forums');
+		add_menu_item_simple('main_community',NULL,'RULES','_SEARCH:rules',0,0,true,'',0,'menu_items/forum_navigation/rules');
+		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'MEMBERS','_SEARCH:members:type=misc',0,0,true,'',0,'menu_items/forum_navigation/members');
+		if (get_forum_type()=='ocf') add_menu_item_simple('main_community',NULL,'USERGROUPS','_SEARCH:groups:type=misc',0,0,true,'',0,'menu_items/forum_navigation/groups');
 
 		// member_features
 		add_menu_item_simple('member_features',NULL,'_JOIN','_SEARCH:join:type=misc',0,1);

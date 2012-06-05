@@ -39,7 +39,7 @@ class menu_test_set extends ocp_test_case
 	function testEditmenu()
 	{
 		// Test the forum edits
-		edit_menu_item($this->menu_id,'Service',2,NULL,'Serv','www.google.com',0,'catalogues',1,0,'tested');
+		edit_menu_item($this->menu_id,'Service',2,NULL,'Serv','www.google.com',0,'catalogues',1,0,'tested','');
 
 		// Test the forum was actually created
 		$this->assertTrue('Service'==$GLOBALS['SITE_DB']->query_value('menu_items','i_menu',array('id'=>$this->menu_id)));

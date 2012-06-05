@@ -11,7 +11,7 @@
 {+END}
 
 {+START,IF,{$NOT,{IS_SPACER_POST}}}
-	<div class="box box___post"><div class="box_inner">
+	<div class="box box___post{+START,IF,{HIGHLIGHT}} highlighted_post{+END}"><div class="box_inner">
 		<div id="post_{ID*}" class="post time_{TIME_RAW*}" itemprop="reviews" itemscope="itemscope" itemtype="http://schema.org/Review">
 			{+START,IF_NON_EMPTY,{ID}}<a name="post_{ID*}"></a>{+END}
 
@@ -83,7 +83,7 @@
 					{+END}
 				</div>
 
-				<div{+START,IF,{HIGHLIGHT}} class="highlighted_post"{+END} itemprop="reviewBody">
+				<div itemprop="reviewBody">
 					{POST}
 				</div>
 
@@ -91,7 +91,7 @@
 			</div>
 
 			{+START,IF_NON_EMPTY,{BUTTONS}}
-				<div class="post_buttons">
+				<div class="post_buttons buttons_group">
 					{BUTTONS}
 				</div>
 			{+END}

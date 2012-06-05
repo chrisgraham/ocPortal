@@ -71,9 +71,7 @@ There are three reasons you might not realise this:
 2) 'panel_top' menus are not given edit buttons, due to space constraints
 3) By default there's a system of redirects in place that might confuse you. You might have seen a top panel in the forum zone but seen no [tt]forum:panel_top[/tt] page, and hence assumed it was rendered by some other mechanism. The truth is that the forum shows the [tt]:panel_top[/tt] page, due to some default transparent redirects. These redirects exist because this default panel (the one that hides most of the time) cuts across zones, linking community pages together
 
-You can edit the [tt]:panel_top[/tt] menu from the Content Management zone, as if it were any other Comcode page. If you like you can rip out the Tempcode 'IF' directive that's there, leaving only the block code ([tt][block="_community" type="top"]side_stored_menu[/block][/tt]). That change will make the menu start showing everywhere where the panel shows (that's a lot of places, due to the transparent redirects).
-
-If you wish to edit the menu itself you need to change the referenced menu name from '_community' to something else like 'topmenu'. The name '_community' references a hard-coded adaptive menu (it adapts what it shows based on what addons are installed). Hard-coded menus can't be edited and can be spotted because their names start '_'. The menu in the Admin Zone/CMS zone works by exactly the same principle. Once you rename the menu you will suddenly be able to change it.
+You can edit the [tt]:panel_top[/tt] menu from the Content Management zone, as if it were any other Comcode page. If you like you can rip out the Tempcode 'IF' directive that's there, leaving only the block code ([tt][block="community_menu" type="top"]side_stored_menu[/block][/tt]). That change will make the menu start showing everywhere where the panel shows (that's a lot of places, due to the transparent redirects).
 
 [title="3"]Caching[/title]
 

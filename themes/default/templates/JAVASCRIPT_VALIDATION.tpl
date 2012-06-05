@@ -91,10 +91,10 @@ function set_field_error(the_element,error_msg)
 					error_element.setAttribute('role','alert');
 
 					// Fade in
-					if (typeof window.thumbnail_fade!='undefined')
+					if (typeof window.fade_transition!='undefined')
 					{
 						set_opacity(error_element,0.0);
-						thumbnail_fade(error_element,100,30,4);
+						fade_transition(error_element,100,30,4);
 					}
 				} else
 				{
@@ -827,10 +827,10 @@ function toggle_subordinate_fields(pic,help_id)
 		/* Ok to proceed */
 		field_input.style.display=new_state;
 
-		if ((typeof window.thumbnail_fade!='undefined') && (new_state_2!='none') && (count<50/*Performance*/))
+		if ((typeof window.fade_transition!='undefined') && (new_state_2!='none') && (count<50/*Performance*/))
 		{
 			set_opacity(field_input,0.0);
-			thumbnail_fade(field_input,100,30,4);
+			fade_transition(field_input,100,30,20);
 			count++;
 		}
 	}
