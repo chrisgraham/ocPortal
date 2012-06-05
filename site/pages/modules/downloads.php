@@ -160,7 +160,7 @@ class Module_downloads
 			add_config_option('ADD_DOWNLOAD','points_ADD_DOWNLOAD','integer','return addon_installed(\'points\')?\'150\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 
 			require_lang('downloads');
-			add_menu_item_simple('main_content',NULL,'SECTION_DOWNLOADS','_SEARCH:downloads:type=misc');
+			add_menu_item_simple('main_content',NULL,'SECTION_DOWNLOADS','_SEARCH:downloads:type=misc',0,0,true,'',0,'',1);
 
 			$GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_dname',array('name'));
 			$GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_ddescrip',array('description'));

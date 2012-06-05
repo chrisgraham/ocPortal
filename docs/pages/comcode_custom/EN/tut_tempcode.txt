@@ -559,6 +559,14 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 		<td>Whether the footer will be shown</td>
 	</tr>
 	<tr style="background: #DDFFDD">
+		<td>{$WIDE}</td>
+		<td>Whether the side panels will be shown</td>
+	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$WIDE_HIGH}</td>
+		<td>Whether the side panels, header, and footer, will be shown</td>
+	</tr>
+	<tr style="background: #DDFFDD">
 		<td>{$LOGO_URL}</td>
 		<td>The logo URL for the current zone</td>
 	</tr>

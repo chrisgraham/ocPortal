@@ -23,7 +23,7 @@ There is no requirement to display our logo or copyright notices on your website
 ocPortal offers many powerful features that aren't to be found built-in to any competing products. Features such as:
  - sophisticated tools to help you build and manage your website, such as the Theme Wizard to allow you to set up your own colour scheme in just a few minutes.
  - functionality for all forms of content, includes articles, pages, downloads, banners, and your own custom forms of content.
- - the 'points' system, and the point-store, that allow users to earn, donate and spend points in your community.
+ - the 'points' system, and the Point Store, that allow users to earn, donate and spend points in your community.
  - integration with 8 different popular forums, as well as our own leading forum that is (optionally) seamlessly integrated into the system.
 If this all sounds just like a powerful portal solution... we have support for completely customised page, sub-site and menu creation and layout entirely from within the powerful Admin Zone. To read more about ocPortal's extensive features, see our [page="site:features"]features page[/page].
 
@@ -98,7 +98,7 @@ Users who need a new feature should bear in mind that ocPortal is Open Source an
 These significant new feature categories are often requested, but are unlikely to be produced as official ocPortal features. This is because these features are very specific, and particularly contrary to the needs of most websites. We are not against these feature categories in any way, but these are best developed and released as third party addons.
 
 [b]Will you implement per-user permissions?[/b]
-For reasons of simplicity we have opted to only provide per-usergroup permissions. ocPortal does have internal functionality for per-user permissions (used by the point-store), but we feel that this would add unneeded complexity if it were placed in the administrative interface.
+For reasons of simplicity we have opted to only provide per-usergroup permissions. ocPortal does have internal functionality for per-user permissions (used by the Point Store), but we feel that this would add unneeded complexity if it were placed in the administrative interface.
 
 [b]Is ocPortal available in (some language)?[/b]
 ocProducts does not officially get involved in the translation of ocPortal. Please check the [url="internationalisation forum"]http://ocportal.com/forum/forumview/misc/internationalisation.htm[/url] for more information on specific languages and [url="check this topic if you would like to get involved with translation"]http://ocportal.com/forum/topicview/misc/internationalisation/if_youd_like_to_do_a.htm[/url] (please do!). We provide an [page="_SEARCH:tut_intl"]internationalisation tutorial[/page], and tools, to translate ocPortal, and ocPortal has excellent internationalisation support.
@@ -333,8 +333,8 @@ Also, if there are specific things ocPortal is breaking, we can also look into i
 This is not possible: we could have very easily allowed this, but it would mean that themes could essentially be distributed that delete files, for instance. Templates could still be abused, to steal password cookies, for example: but direct server attacks are less likely.
 Instead, use our tempcode language, which provides all the power you should need: and if you need more power, you should be working with source code in conjunction with the templates.
 
-[b]Can new items be added to the point-store?[/b]
-At this time, they can only be added via custom programming new point-store 'hooks'.
+[b]Can new items be added to the Point Store?[/b]
+At this time, they can only be added via custom programming new Point Store 'hooks'.
 
 [b]What are catalogues?[/b]
 Catalogues holds structured records of data. The system is extremely powerful, as the staff can create new catalogues with any structure of their choosing. The default FAQ page on an ocPortal install is a catalogue.

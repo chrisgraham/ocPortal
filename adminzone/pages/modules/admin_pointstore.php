@@ -77,7 +77,7 @@ class Module_admin_pointstore
 	}
 
 	/**
-	 * The UI to view point-store logs.
+	 * The UI to view Point Store logs.
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -168,7 +168,7 @@ class Module_admin_pointstore
 	}
 
 	/**
-	 * Delete a point-store purchase.
+	 * Delete a Point Store purchase.
 	 *
 	 * @param  integer		The time of the purchase
 	 * @param  MEMBER			The member that made the purchase
@@ -179,7 +179,7 @@ class Module_admin_pointstore
 	}
 
 	/**
-	 * The UI to set point-store prices.
+	 * The UI to set Point Store prices.
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -231,7 +231,7 @@ class Module_admin_pointstore
 	}
 
 	/**
-	 * The actualiser to set point-store prices.
+	 * The actualiser to set Point Store prices.
 	 *
 	 * @return tempcode		The UI
 	 */

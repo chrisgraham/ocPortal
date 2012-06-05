@@ -48,6 +48,7 @@ class Block_main_member_bar
 	function run($map)
 	{
 		require_css('ocf');
+		require_lang('ocf');
 
 		$member_id=get_member();
 
@@ -77,7 +78,7 @@ class Block_main_member_bar
 					'PROFILE_URL'=>$profile_url,
 					'USERNAME'=>$member_info['username'],
 					'LOGOUT_URL'=>build_url(array('page'=>'login','type'=>'logout'),get_module_zone('login')),
-					'NUM_POINTS_ADVANCE'=>array_key_exists('num_points_advance',$member_info)?make_string_tempcode(integer_format($member_info['num_points_advance'])):do_lang('NA'),
+					'NUM_POINTS_ADVANCE'=>array_key_exists('num_points_advance',$member_info)?make_string_tempcode(integer_format($member_info['num_points_advance'])):NULL,
 					'NUM_POINTS'=>array_key_exists('points',$member_info)?integer_format($member_info['points']):'',
 					'NUM_POSTS'=>integer_format($member_info['posts']),
 					'PRIMARY_GROUP'=>$member_info['primary_group_name'],

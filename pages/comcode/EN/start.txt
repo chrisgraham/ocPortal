@@ -14,23 +14,27 @@ The short cut key is Alt+O for IE users, or Alt+Shift+O for Firefox users.
 [/surround]
 {+END}
 {+START,IF,{$CONFIG_OPTION,collapse_user_zones}}
+[semihtml]
 [title="1"]{$SITE_NAME}[/title]
 
 [block="3" failsafe="1"]main_greeting[/block]
 
-
-[semihtml][surround="fp_col_blocks_wrap"]
+[surround="fp_col_blocks_wrap"]
 	[surround="fp_col_block left"]
-		[block failsafe="1"]main_content[/block]
+		[block failsafe="1"]main_iotd[/block]
 	[/surround]
 
 	[surround="fp_col_block right"]
 		[block failsafe="1"]main_poll[/block]
 	[/surround]
-[/surround][/semihtml]
+[/surround]
+
+[block failsafe="1"]main_news[/block]
 
 [block failsafe="1"]main_leader_board[/block]
 
-[block="http://news.google.co.uk/news?hs=UTT&tab=wn&topic=w&output=atom" failsafe="1"]main_rss[/block]
+[block failsafe="1"]main_quotes[/block]
 
-[block]main_comcode_page_children[/block]{+END}
+[block]main_comcode_page_children[/block]
+[/semihtml]
+{+END}

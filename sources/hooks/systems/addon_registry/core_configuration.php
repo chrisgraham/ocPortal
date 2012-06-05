@@ -87,6 +87,7 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config_default/bcc.php',
 			'sources/hooks/systems/config_default/bottom_show_admin_menu.php',
 			'sources/hooks/systems/config_default/bottom_show_feedback_link.php',
+			'sources/hooks/systems/config_default/bottom_show_rules_link.php',
 			'sources/hooks/systems/config_default/bottom_show_privacy_link.php',
 			'sources/hooks/systems/config_default/bottom_show_sitemap_button.php',
 			'sources/hooks/systems/config_default/bottom_show_top_button.php',

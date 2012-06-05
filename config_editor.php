@@ -210,7 +210,7 @@ vb_version*/
 				$notes='This is the base-URL for the forums. If it is not correct, various links, such as links to topics, will not function correctly.';
 				break;
 			case 'domain':
-				$notes='The domain that e-mail addresses are registered on. This applies only to the point-store and may be ignored by most.';
+				$notes='The domain that e-mail addresses are registered on. This applies only to the Point Store and may be ignored by most.';
 				break;
 			case 'base_url':
 				$notes='A critical option, that defines the URL of the site (no trailing slash). If the URL changes, the base URL must be changed to reflect it. If you change this option you will need to empty your template and image caches (in the Cleanup Tools or Upgrader), else you may get strange error messages, broken images, and an ocPortal warning about an inconsistency.';

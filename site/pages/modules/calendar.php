@@ -158,6 +158,8 @@ class Module_calendar
 				'i_member_id'=>'*USER',
 				't_type'=>'*AUTO_LINK'
 			));
+
+			add_menu_item_simple('main_content',NULL,'CALENDAR','_SEARCH:calendar:type=misc',0,0,true,'',0,'',3);
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))

@@ -24,7 +24,7 @@
 function init__menus2()
 {
 	global $ADD_MENU_COUNTER;
-	$ADD_MENU_COUNTER=0;
+	$ADD_MENU_COUNTER=10;
 }
 
 /**
@@ -90,9 +90,10 @@ function menu_management_script()
  * @param  SHORT_TEXT	The tooltip (blank: none).
  * @param  BINARY			Whether the link will open in a new window.
  * @param  ID_TEXT		The theme image code.
+ * @param  ?integer		Order to use (NULL: automatic, after the ones that have it specified).
  * @return AUTO_LINK		The ID of the newly added menu item.
  */
-function add_menu_item_simple($menu,$parent,$caption,$url='',$expanded=0,$check_permissions=0,$dereference_caption=true,$caption_long='',$new_window=0,$theme_image_code='')
+function add_menu_item_simple($menu,$parent,$caption,$url='',$expanded=0,$check_permissions=0,$dereference_caption=true,$caption_long='',$new_window=0,$theme_image_code='',$order=NULL)
 {
 	global $ADD_MENU_COUNTER;
 

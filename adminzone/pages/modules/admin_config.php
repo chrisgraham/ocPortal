@@ -57,7 +57,7 @@ class Module_admin_config
 										'validation_xhtml','validation_wcag','validation_css','validation_javascript','validation_ext_files','validation_compat',
 										'is_on_strong_forum_tie','is_on_preview_validation','show_inline_stats',
 										'sms_username','sms_password','sms_api_id','sms_low_limit','sms_high_limit','sms_low_trigger_limit','sms_high_trigger_limit','max_download_size',
-										'bottom_show_admin_menu','bottom_show_top_button','bottom_show_feedback_link','bottom_show_privacy_link',
+										'bottom_show_admin_menu','bottom_show_top_button','bottom_show_feedback_link','bottom_show_privacy_link','bottom_show_rules_link',
 										'bottom_show_sitemap_button','forum_show_personal_stats_posts','forum_show_personal_stats_topics',
 										'ocp_show_personal_sub_links','ocp_show_personal_adminzone_link','ocp_show_conceded_mode_link','ocp_show_su','ocp_show_staff_page_actions','ocf_show_profile_link',
 										'ocp_show_personal_usergroup','ocp_show_personal_last_visit','ocp_show_avatar',
@@ -289,6 +289,7 @@ class Module_admin_config
 			add_config_option('SPAM_BLACKHOLE_DETECTION','spam_blackhole_detection','tick','return \'1\';','SECURITY','SPAMMER_DETECTION');
 			add_config_option('HONEYPOT_URL','honeypot_url','line','return \'\';','SECURITY','SPAMMER_DETECTION');
 			add_config_option('HONEYPOT_PHRASE','honeypot_phrase','line','return \'\';','SECURITY','SPAMMER_DETECTION');
+			add_config_option('RULES_LINK','bottom_show_rules_link','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))

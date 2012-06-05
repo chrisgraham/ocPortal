@@ -20,7 +20,7 @@ Register with us and have your banner added to the database. We will of course v
 
 {+START,IF,{$ADDON_INSTALLED,pointstore}}[title="2"]Point-store[/title]
 
-If you have built up points on our site then you may use the point-store to purchase a banner and hits for it.
+If you have built up points on our site then you may use the Point Store to purchase a banner and hits for it.
 {+END}
 [title="2"]Commercial[/title]
 

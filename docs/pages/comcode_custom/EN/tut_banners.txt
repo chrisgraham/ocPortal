@@ -122,13 +122,13 @@ c) Change the [tt]global_banner[/tt] CSS class used in the code snippet to a new
 
 d) Place the code in any template you like (or multiple ones). Obviously you'll need to write it in in such a way as for it to fit well into the layout. This is a standard CSS/XHTML themeing issue.
 
-[title="2"]The point-store[/title]
+[title="2"]The Point Store[/title]
 
-If you wish to use your banner space, in part of full, for showing banners that your community want, then you may wish to enable the point-store, to allow members to buy banners using points.
+If you wish to use your banner space, in part of full, for showing banners that your community want, then you may wish to enable the Point Store, to allow members to buy banners using points.
 
-More information on the point-store is provided in the 'Creating an economy/reward-system for members via points' tutorial.
+More information on the Point Store is provided in the 'Creating an economy/reward-system for members via points' tutorial.
 
-Alternatively, or in conjunction with the point-store, members may simple submit banners, and you may choose to validate them without requiring the members to spend points.
+Alternatively, or in conjunction with the Point Store, members may simple submit banners, and you may choose to validate them without requiring the members to spend points.
 
 [title="2"]Troubleshooting[/title]
 

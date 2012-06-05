@@ -129,7 +129,6 @@ table.points_summary_table .answer {
 /* Leaderboard */
 
 .leaderboard_table th, .leaderboard_table td {
-	padding: 0.8em;
 	vertical-align: middle;
 }
 
@@ -144,7 +143,5 @@ table.points_summary_table .answer {
 }
 
 .pointstore_welcome {
-	padding: 0.8em;
-	font-size: 0.8em;
 	text-align: center;
 }

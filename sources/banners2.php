@@ -21,7 +21,7 @@
 /**
  * Get the tempcode for the form to add a banner, with the information passed along to it via the parameters already added in.
  *
- * @param  boolean			Whether to simplify the banner interface (for the point-store buy process)
+ * @param  boolean			Whether to simplify the banner interface (for the Point Store buy process)
  * @param  ID_TEXT			The name of the banner
  * @param  URLPATH			The URL to the banner image
  * @param  URLPATH			The URL to the site the banner leads to

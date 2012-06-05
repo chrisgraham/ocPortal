@@ -567,6 +567,9 @@ hr.ocf_sig_barrier {
 .ocf_information_bar_outer>h2 {
 	margin: 0 0 0 0;
 	width: auto;
+}
+
+#panel_top .ocf_information_bar_outer>h2 {
 	background: {$GET,point_of_interest_background};
 	color: {$GET,area_key_text};
 }
@@ -1260,7 +1263,6 @@ side_ocf_personal_topics=
 @media print {
 	.ocf_member_bar_etc,
 	.ocf_page_buttons,
-	.ocf_member_bar,
 	.ocf_topic_marker,
 	.ocf_member_signature .comcode_hide {
 		display: none;

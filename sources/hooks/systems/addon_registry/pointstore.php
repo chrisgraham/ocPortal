@@ -74,7 +74,7 @@ class Hook_addon_registry_pointstore
 	{
 		return array(
 
-			'themes/default/images/menu_items/forum_navigation/pointstore.png',
+			'themes/default/images/menu_items/community_navigation/pointstore.png',
 			'sources/hooks/systems/notifications/pointstore_request_custom.php',
 			'sources/hooks/systems/notifications/pointstore_request_flagrant.php',
 			'sources/hooks/systems/notifications/pointstore_request_forwarding.php',

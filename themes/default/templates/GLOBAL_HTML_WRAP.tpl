@@ -232,11 +232,14 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 							{+START,IF,{$CONFIG_OPTION,bottom_show_sitemap_button}}
 								<li><a accesskey="3" rel="site_map" href="{$PAGE_LINK*,_SEARCH:sitemap}">{!SITE_MAP}</a></li>
 							{+END}
+							{+START,IF,{$CONFIG_OPTION,bottom_show_rules_link}}
+								<li><a rel="site_privacy" accesskey="8" href="{$PAGE_LINK*,_SEARCH:rules}">{!RULES}</a></li>
+							{+END}
 							{+START,IF,{$CONFIG_OPTION,bottom_show_privacy_link}}
-								<li><a rel="site_privacy" accesskey="8" href="{$PAGE_LINK*,:privacy}">{!PRIVACY}</a></li>
+								<li><a rel="site_privacy" accesskey="8" href="{$PAGE_LINK*,_SEARCH:privacy}">{!PRIVACY}</a></li>
 							{+END}
 							{+START,IF,{$CONFIG_OPTION,bottom_show_feedback_link}}
-								<li><a rel="site_contact" accesskey="9" href="{$PAGE_LINK*,:feedback}{+START,IF,{$NOT,{$IN_STR,{$PAGE_LINK,:feedback},?}}}?{+END}{+START,IF,{$NOT,{$NOT,{$IN_STR,{$PAGE_LINK,:feedback},?}}}}&amp;{+END}redirect={$SELF_URL*&,1}">{!FEEDBACK}</a></li>
+								<li><a rel="site_contact" accesskey="9" href="{$PAGE_LINK*,_SEARCH:feedback}{+START,IF,{$NOT,{$IN_STR,{$PAGE_LINK,:feedback},?}}}?{+END}{+START,IF,{$NOT,{$NOT,{$IN_STR,{$PAGE_LINK,:feedback},?}}}}&amp;{+END}redirect={$SELF_URL*&,1}">{!FEEDBACK}</a></li>
 							{+END}
 							{+START,IF,{$CONFIG_OPTION,mobile_support}}{+START,IF,{$MOBILE,1}}
 								<li><a href="{$SELF_URL*,1,0,0,keep_mobile=0}">{!NONMOBILE_VERSION}</a>{+END}

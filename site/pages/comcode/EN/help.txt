@@ -21,9 +21,9 @@ Members of staff have the ability to give any number of points they like to peop
 
 Please have fun with the system and use your gift-points well.
 {+END}
-{+START,IF,{$ADDON_INSTALLED,pointstore}}[title="2"]The point-store[/title]
+{+START,IF,{$ADDON_INSTALLED,pointstore}}[title="2"]The Point Store[/title]
 
-{$ANCHOR,POINT_STORE}The [page="_SEARCH:pointstore"]point-store[/page] contains all the items you can buy using your points. You can then select some and buy them.
+{$ANCHOR,POINT_STORE}The [page="_SEARCH:pointstore"]Point Store[/page] contains all the items you can buy using your points. You can then select some and buy them.
 
 The items that are purchasable may include:
  - Flagrant text messages. These are messages displayed in a prominent position on the website. All flagrant messages are placed in a queue and activated manually (and thus subject to moderation).

@@ -165,7 +165,7 @@ class Module_galleries
 			add_config_option('ADD_VIDEO','points_ADD_VIDEO','integer','return addon_installed(\'points\')?\'100\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 
 			require_lang('galleries');
-			add_menu_item_simple('main_content',NULL,'GALLERIES','_SEARCH:galleries:type=misc');
+			add_menu_item_simple('main_content',NULL,'GALLERIES','_SEARCH:galleries:type=misc',0,0,true,'',0,'',2);
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))

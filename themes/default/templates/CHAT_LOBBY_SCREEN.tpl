@@ -97,7 +97,7 @@
 								<tbody>
 									{+START,LOOP,FRIENDS}
 										<tr>
-											<td><img id="friend_img_{MEMBER_ID*}" alt="" src="{$IMG*,menu_items/forum_navigation/members}" /></td>
+											<td><img id="friend_img_{MEMBER_ID*}" alt="" src="{$IMG*,menu_items/community_navigation/members}" /></td>
 											<td>
 												{+START,IF,{CAN_IM}}
 													<a rel="friend" title="{USERNAME*}: {!START_IM}" href="#" onclick="start_im('{MEMBER_ID*}'); return false;">{USERNAME*}</a>

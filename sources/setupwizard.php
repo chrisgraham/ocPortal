@@ -101,26 +101,26 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
 			{
 				if ($cell_count%2==0)
 				{
-					$cells.='[semihtml][surround="fp_col_blocks_wrap"]';
+					$cells.='[surround="fp_col_blocks_wrap"]';
 				}
 				$cells.="\t".'[surround="fp_col_block '.(($cell_count%2==0)?'left':'right').'"]'."\n\t\t".$block_comcode."\n\t".'[/surround]'."\n";
-				if ($cell_count%2==1) $cells.="[/surround][/semihtml]\n\n";
+				if ($cell_count%2==1) $cells.="[/surround]\n\n";
 				$cell_count++;
 			}
 		}
 		if ($cells!='') // Odd number of cells chosen, close off at odd point
 		{
-			if ($cell_count%2==1) $cells.="[/surround][/semihtml]\n\n";
+			if ($cell_count%2==1) $cells.="[/surround]\n\n";
 		}
 
 		// Start page
 		$comcode='';
-		$comcode.="[title=\"1\"]Welcome to {\$SITE_NAME*}[/title]\n\n[block=\"3\"]main_greeting[/block]\n\n";
+		$comcode.="[semihtml]\n[title=\"1\"]Welcome to {\$SITE_NAME*}[/title]\n\n[block=\"3\"]main_greeting[/block]\n\n";
 		if ($cells!='')
 		{
 			$comcode.=$cells;
 		}
-		$main.=chr(10).chr(10)."[block]main_comcode_page_children[/block]";
+		$main.=chr(10).chr(10)."[block]main_comcode_page_children[/block]\n[/semihtml]";
 		$comcode.=$main;
 		$page_structure[$zone]['start']=$comcode;
 

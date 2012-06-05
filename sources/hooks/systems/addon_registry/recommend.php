@@ -75,7 +75,7 @@ class Hook_addon_registry_recommend
 			'sources/hooks/systems/config_default/points_RECOMMEND_SITE.php',
 			'sources/hooks/systems/realtime_rain/recommend.php',
 			'sources/hooks/systems/addon_registry/recommend.php',
-			'themes/default/images/menu_items/forum_navigation/recommend.png',
+			'themes/default/images/menu_items/community_navigation/recommend.png',
 			'lang/EN/recommend.ini',
 			'pages/modules/recommend.php',
 			'pages/comcode/EN/recommend_help.txt',

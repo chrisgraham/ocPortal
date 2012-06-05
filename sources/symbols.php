@@ -29,7 +29,7 @@ function init__symbols()
 	$LOADED_BLOCKS=array();
 	$LOADED_PAGES=array();
 	$LOADED_PANELS=array();
-	$NON_CACHEABLE_SYMBOLS=array('SET_RAND'=>1,'RAND'=>1,'CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1,'WIDE_HIGH'=>1,'WIDE'=>1); // these symbols can't be cached regardless of if they have params or not; other symbols can only be cached if they have no params or escaping
+	$NON_CACHEABLE_SYMBOLS=array('SET_RAND'=>1,'RAND'=>1,'CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1,'SHOW_HEADER'=>1,'SHOW_FOOTER'=>1,'WIDE_HIGH'=>1,'WIDE'=>1); // these symbols can't be cached regardless of if they have params or not; other symbols can only be cached if they have no params or escaping
 	$PREPROCESSABLE_SYMBOLS=array('PAGE_LINK'=>1,'SET'=>1,'BLOCK'=>1,'FACILITATE_AJAX_BLOCK_CALL'=>1,'REQUIRE_JAVASCRIPT'=>1,'REQUIRE_CSS'=>1,'LOAD_PANEL'=>1,'JS_TEMPCODE'=>1,'CSS_TEMPCODE'=>1,'LOAD_PAGE'=>1,'FRACTIONAL_EDITABLE'=>1,);
 	$EXTRA_SYMBOLS=NULL;
 	$DOCUMENT_HELP='';
@@ -647,9 +647,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'SHOW_HEADER':
 				$value=((get_param_integer('wide_high',get_param_integer('keep_wide_high',0))!=1) && (!running_script('preview')) && (!running_script('iframe'))/* && (is_null(get_param('zone',NULL)))*/)?'1':'0';
 				break;
-
 			case 'SHOW_FOOTER':
 				$value=((get_param_integer('wide_high',get_param_integer('keep_wide_high',0))!=1) && (!running_script('preview')))?'1':'0';
+				break;
+			case 'WIDE':
+				$value=((is_wide()) || (running_script('preview')))?'1':'0';
+				break;
+			case 'WIDE_HIGH':
+				$value=((is_wide_high()) || (running_script('preview')))?'1':'0';
 				break;
 
 			case 'LOGO_URL':

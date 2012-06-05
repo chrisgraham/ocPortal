@@ -1072,8 +1072,25 @@ th.meta_data_title {
 
 	overflow: hidden;
 }
+/* Accordion boxes don't have margins */
 .box___standardbox_accordion {
 	margin: 0 !important;
+}
+/* Don't do margins for boxes at the end of frames */
+/*#standalone_html_wrap>div>.box:first-child {	Actually we want this, due to how .fp_col_block has been written
+	margin-top: 0;
+}*/
+#standalone_html_wrap>div>.box:last-child {
+	margin-bottom: 0;
+}
+
+/* Don't let boxes on side panels get too much styling (focuses the eye away) */
+.global_side_panel .box, .box.nested {
+	background: {$GET,area_5_background};
+	border: 1px solid {$GET,pale_border};
+}
+.global_side_panel .box_inner>h1, .global_side_panel .box_inner>h2, .global_side_panel .box_inner>h3, .global_side_panel .box_inner>h4, .global_side_panel .box_inner>h5, .global_side_panel .box_inner>h6 {
+	background-image: none;
 }
 
 .box>.box_inner, .box>.toggleable_tray {
@@ -1113,15 +1130,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	color: {$GET,footer_link_hover};
 }
 
-/* Don't let boxes on side panels get too much styling (focuses the eye away) */
-.global_side_panel .box, .box.nested {
-	background: {$GET,area_5_background};
-}
-.global_side_panel .box_inner>h1, .global_side_panel .box_inner>h2, .global_side_panel .box_inner>h3, .global_side_panel .box_inner>h4, .global_side_panel .box_inner>h5, .global_side_panel .box_inner>h6 {
-	background-image: none;
-}
-
-/* Undo a .box if not in a panel (.only_a_box_if_in_panel may be put on boxes to achieve this) */
+/* This is a CSS class to undo a .box if not in a panel (.only_a_box_if_in_panel may be put on boxes to achieve this) */
 .only_a_box_if_in_panel>.box {
 	background: none;
 	border: none;
@@ -1202,12 +1211,18 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 }
 
-.fp_col_block.left {
-	margin-{!en_right}: 8px;
+.fp_col_block .box {
+	margin-bottom: 0; /* margin-top from boxes below will work instead. This is needed as the "overflow: hidden" stops margin collapsing between the block contents and outside it */
 }
 
+.fp_col_block.left {
+	padding-{!en_right}: 0.5em;
+}
 .fp_col_block.right {
-	margin-{!en_left}: 8px;
+	padding-{!en_left}: 0.5em;
+}
+.fp_col_block.left:last-child {
+	padding-{!en_right}: 0; /* Undo padding if actually there is nothing to the right of this */
 }
 
 /* Box-attached meta details */
@@ -1325,7 +1340,7 @@ hr.spaced_rule {
 /* Used to align stuff horizontally, i.e. force a gap between separate bits */
 .horiz_field_sep, ul.horizontal_links.horiz_field_sep {
 	padding-{!en_left}: 0.8em;
-	display: inline !important;
+	display: inline-block !important;
 }
 
 /* Used e.g. on links that should not get split between lines */
@@ -1361,7 +1376,7 @@ table.scrollable_inside {
 	overflow-y: hidden;
 
 	/* To add in the extra pixel needed for 2x1/2 overhanging borders that tables have, and also to shunt the alignment to compensate http://fantasai.inkedblade.net/style/discuss/collapsed-outer-border/ */
-	padding-right: 1px;
+	padding-right: 2px; /* Actually Chrome seems to need 2 (observed on form tables) */
 }
 
 .wide_table {
@@ -2159,7 +2174,7 @@ ul.meta_details_list>li {
 
 dl.meta_details_list>dt {
 	float: {!en_left};
-	padding-{!en_right}: 0.2em !important;
+	padding-{!en_right}: 0.4em !important;
 }
 dl.meta_details_list>dt, dl.meta_details_list>dd {
 	margin: 0;
@@ -2360,12 +2375,15 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 }
 
 .alt_field:before {
-	padding-left: 4em;
 	content: "\00bb"; /* raquo */
 }
 .related_field:before {
-	padding-left: 4em;
 	content: "\203a"; /* rsaquo */
+	font-size: 1.2em;
+}
+.alt_field:before, .related_field:before {
+	padding-left: 1em;
+	padding-right: 0.2em;
 }
 
 /*
@@ -2858,7 +2876,7 @@ ul.nl, .nl ul {
 }
 
 .menu_type__embossed a {
-	padding: 0.5em !important;
+	padding: 0.5em 0.7em !important;
 }
 
 .menu_type__embossed a, .menu_type__top a, .menu_type__dropdown a.toplevel_link {
