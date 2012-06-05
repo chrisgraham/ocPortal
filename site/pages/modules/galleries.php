@@ -1215,7 +1215,7 @@ class Module_galleries
 		$member_details=((is_null($member_id)) || (get_forum_type()!='ocf'))?new ocp_tempcode():render_member_box($member_id);
 
 		if (is_null($breadcrumbs)) $breadcrumbs=gallery_breadcrumbs($cat,$root,false,get_module_zone('galleries'));
-		breadcrumb_add_segment($breadcrumbs,do_lang_tempcode('VIEW_IMAGE'));
+		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('VIEW_IMAGE').'</span>'));
 
 		$GLOBALS['META_DATA']+=array(
 			'created'=>date('Y-m-d',$myrow['add_date']),
@@ -1353,7 +1353,7 @@ class Module_galleries
 		$video_details=show_video_details($myrow);
 
 		if (is_null($breadcrumbs)) $breadcrumbs=gallery_breadcrumbs($cat,$root,false,get_module_zone('galleries'));
-		breadcrumb_add_segment($breadcrumbs,do_lang_tempcode('VIEW_VIDEO'));
+		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('VIEW_VIDEO').'</span>'));
 
 		$GLOBALS['META_DATA']+=array(
 			'created'=>date('Y-m-d',$myrow['add_date']),

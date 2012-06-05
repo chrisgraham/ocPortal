@@ -29,7 +29,7 @@
 					{+END}{+END}
 					{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
 						{+START,IF,{$JS_ON}}
-							<li><a id="toggle_wysiwyg_{NAME*}" class="wysiwyg_button" href="#" onclick="return toggle_wysiwyg('{NAME*;}');"><abbr title="{!TOGGLE_WYSIWYG_2}">{!ENABLE_WYSIWYG}</abbr></a></li>
+							<li><a id="toggle_wysiwyg_{NAME*}" href="#" onclick="return toggle_wysiwyg('{NAME*;}');"><abbr title="{!TOGGLE_WYSIWYG_2}">{!ENABLE_WYSIWYG}</abbr></a></li>
 						{+END}
 					{+END}
 				</ul>

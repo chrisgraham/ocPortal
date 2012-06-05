@@ -54,9 +54,7 @@ function script_load_stuff()
 
 		/* HTML editor */
 		if (typeof window.load_html_edit!='undefined')
-		{
 			load_html_edit(document.forms[i]);
-		}
 
 		/* Remove tooltips from forms for mouse users as they are for screenreader accessibility only */
 		if (document.forms[i].getAttribute('target')!='_blank')
@@ -106,11 +104,43 @@ function script_load_stuff()
 		}
 	{+END}
 
-	if (typeof window.script_load_stuffB!='undefined') window.script_load_stuffB();
+	/* Convert a/img title attributes into ocPortal tooltips */
+	{+START,IF,{$CONFIG_OPTION,js_overlays}}
+		for (i=0;i<document.links.length;i++)
+		{
+			convert_tooltip(document.links[i]);
+		}
+		for (i=0;i<document.images.length;i++)
+		{
+			convert_tooltip(document.images[i]);
+		}
+		for (i=0;i<document.forms.length;i++)
+		{
+			var elements,j;
+			elements=document.forms[i].elements;
+			for (j=0;j<elements.length;j++)
+			{
+				if (typeof elements[j].title!='undefined')
+				{
+					convert_tooltip(elements[j]);
+				}
+			}
+			elements=document.forms[i].getElementsByTagName('input'); // Lame, but JS DOM does not include type="image" ones in form.elements
+			for (j=0;j<elements.length;j++)
+			{
+				if ((elements[j].type=='image') && (typeof elements[j].title!='undefined'))
+				{
+					convert_tooltip(elements[j]);
+				}
+			}
+		}
+	{+END}
+
+	if (typeof window.script_load_stuff_b!='undefined') window.script_load_stuff_b(); // This is designed to allow you to easily define additional initialisation code in JAVASCRIPT_CUSTOM_GLOBALS.tpl
 
 	page_loaded=true;
 
-	add_event_listener_abstract(window,'real_load',function () {
+	add_event_listener_abstract(window,'real_load',function () { // When images etc have loaded
 		script_page_rendered();
 		page_fully_loaded=true;
 	} );
@@ -1483,6 +1513,45 @@ function key_pressed(event,key,no_error_if_bad)
 	return ((typeof event.keyCode!="undefined") && (event.keyCode==key));
 }
 
+function convert_tooltip(element)
+{
+	var title=element.title;
+	if (title!='')
+	{
+		element.title='';
+
+		// Stop the tooltip code adding to these events, by defining our own (it'll not overwrite existing events).
+		if (!element.onmouseout) element.onmouseout=function() {};
+		if (!element.onmousemove) element.onmouseover=function() {};
+
+		// And now define nice listeners for it all...
+
+		add_event_listener_abstract(
+			element,
+			'mouseover',
+			function(event) {
+				activate_tooltip(element,event,title);
+			}
+		);
+
+		add_event_listener_abstract(
+			element,
+			'mouseout',
+			function(event) {
+				deactivate_tooltip(element,event);
+			}
+		);
+
+		add_event_listener_abstract(
+			element,
+			'mousemove',
+			function(event) {
+				reposition_tooltip(element,event);
+			}
+		);
+	}
+}
+
 /* Tooltips that can work on any element with rich HTML support */
 //  ac is the object to have the tooltip
 //  myevent is the event handler
@@ -1587,8 +1656,15 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		ac.tooltip_on=true;
 		tooltip_element.style.display='block';
 
+		if (!no_delay)
+		{
+			// If delayed we'll sub in what the currently known global mouse coordinate is
+			myevent_copy.pageX=window.mouseX;
+			myevent_copy.pageY=window.mouseY;
+		}
+
 		reposition_tooltip(ac,myevent_copy,bottom,true,tooltip_element,force_width);
-	}, no_delay?10:666);
+	}, no_delay?0:666);
 }
 function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width)
 {
@@ -1611,16 +1687,22 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 		if ((!width) || ((tooltip_element.style.width=='auto') && (width<200))) width=360;
 		var height=find_height(tooltip_element);
 
-		var x=(get_mouse_x(event)+10);
-		var y=(get_mouse_y(event)+10);
+		var style__offset_x=18;
+		var style__offset_y=18;
+
+		var x,y;
+		x=get_mouse_x(event);
+		y=get_mouse_y(event);
+		x+=style__offset_x;
+		y+=style__offset_y;
 		try
 		{
 			if (typeof event.type!='undefined')
 			{
 				if (event.type!='focus') ac.done_none_focus=true;
 				if ((event.type=='focus') && (ac.done_none_focus)) return;
-				x=(event.type=='focus')?(get_window_scroll_x()+get_window_width()/2):(get_mouse_x(event)+10);
-				y=(event.type=='focus')?(get_window_scroll_y()+get_window_height()/2-40):(get_mouse_y(event)+10);
+				x=(event.type=='focus')?(get_window_scroll_x()+get_window_width()/2):(get_mouse_x(event)+style__offset_x);
+				y=(event.type=='focus')?(get_window_scroll_y()+get_window_height()/2-40):(get_mouse_y(event)+style__offset_y);
 			}
 		}
 		catch(ignore) {};
@@ -2550,10 +2632,10 @@ function setup_word_counter(post,count_element)
 	window.setInterval(function() {
 		if (is_wysiwyg_field(post))
 		{
-			text_value=CKEDITOR.instances['post'].getData();
-			var matches = text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
-			var count = 0;
-			if(matches) count = matches.length/2;
+			var text_value=CKEDITOR.instances['post'].getData();
+			var matches=text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
+			var count=0;
+			if(matches) count=matches.length/2;
 			set_inner_html(count_element,'{!WORDS;}'.replace('\{1\}',count));
 		}
 	}, 1000);

@@ -12,7 +12,6 @@
 {$THEME_WIZARD_COLOR,#ffffaa,occle_notification_color,100% FFFFAA}
 {$THEME_WIZARD_COLOR,#39669f,occle_directory_listing,100% 39669F}
 {$THEME_WIZARD_COLOR,#39ff9f,occle_file_listing,100% 39FF9F}
-{$THEME_WIZARD_COLOR,#454545,occle_past_command,100% 454545}
 
 #command_line { /* This wraps the OcCLE module/window as a whole */
 	/* Styled to look like generic command prompt */
@@ -53,7 +52,7 @@
 }
 
 .command_output, .past_command td {
-	color: {$GET,occle_past_command};
+	color: {$GET,occle_text};
 }
 
 .occle_dir {

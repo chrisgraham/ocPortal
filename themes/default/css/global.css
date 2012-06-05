@@ -68,7 +68,7 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#fff2f2,light_error_background,95% W/B + 5% FF0000}
 {$THEME_WIZARD_COLOR,#d91522,red_highlight_text,80% FF0000 + 20% seed}
 {$THEME_WIZARD_COLOR,#00aa00,green_highlight_text,100% 00AA00}
-{$THEME_WIZARD_COLOR,#e2cece,required_background,95% (area_zebra_background hue_to 0) + 5% B/W}
+{$THEME_WIZARD_COLOR,#e2cece,required_background,95% (area_4_background hue_to 0) + 5% B/W}
 {$THEME_WIZARD_COLOR,#000000,dark_shadow,100% B/W}
 
 /* For standard elements */
@@ -77,6 +77,7 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#113871,a.visited,67% (seed sat_to 85) + 33% B/W}
 {$THEME_WIZARD_COLOR,#123d7b,a.link,73% (seed sat_to 85) + 27% B/W}
 {$THEME_WIZARD_COLOR,#9fb7db,th_background,60% area_background + 40% seed}
+{$THEME_WIZARD_COLOR,#86a0c7,th_2_background,40% area_background + 60% seed}
 {$THEME_WIZARD_COLOR,#313740,th_text,30% th_background + 70% B/W}
 {$THEME_WIZARD_COLOR,#bdcbe1,th_secondary_text,35% seed + 65% W/B}
 {$THEME_WIZARD_COLOR,#a2b6d5,hr,60% area_background + 40% seed}
@@ -161,7 +162,8 @@ html, body {
 }
 
 body, textarea, input, td, th {
-	font-family: 'Open Sans', 'Tahoma', 'Verdana', 'Arial', 'Helvetica', sans-serif;
+	/* 'Open Sans' is a Google font, and only will be enabled if uncommented in HTML_HEAD.tpl -- so normally it is Segoe UI (Windows, newer version of Tahoma) or Tahoma that is active (available on Windows and Mac since Leopard) or a similar humanist sans-serif font */
+	font-family: 'Open Sans', 'Segoe UI', 'Tahoma', 'Verdana', 'Arial', 'Helvetica', sans-serif;
 }
 
 tt, kbd, samp {
@@ -255,11 +257,15 @@ th, .fake_th {
 	font-weight: bold;
 	text-align: center;
 }
+thead>tr>th {
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,th_background}\, {$GET,th_2_background});}
+}
 /* .de_th makes a th look like a td, yet allows us to use correct markup */
 td, th.de_th {
 	color: {$GET,slightly_seeded_text};
 	font-weight: normal;
 	text-align: {!en_left};
+	background-image: none;
 	background-color: transparent;
 	font-weight: normal;
 	border: 0;
@@ -619,7 +625,7 @@ body.popup_spacer h2 {
 	vertical-align: middle;
 }
 .global_message strong {
-	text-shadow: 1px 1px 1px {$GET,message_highlighted_part};
+	text-shadow: 1px 1px 0px {$GET,message_highlighted_part};
 	font-weight: normal;
 }
 .global_message img {
@@ -629,7 +635,6 @@ body.popup_spacer h2 {
 .global_message>span {
 	margin-left: 22px;
 	padding-left: 0.5em;
-	padding-top: 3px;
 	display: block;
 }
 
@@ -1383,10 +1388,10 @@ table.scrollable_inside {
 }
 
 .results_table .zebra_0 th, .results_table .zebra_0 td, div.zebra_0 {
-	background-color: {$GET,area_zebra_background};
+	background-color: {$GET,area_zebra_background} !important;
 }
 .results_table .zebra_1 th, .results_table .zebra_1 td, div.zebra_1 {
-	background-color: {$GET,area_background};
+	background-color: {$GET,area_background} !important;
 }
 div.zebra_0, div.zebra_1 {
 	border: 1px solid {$GET,standard_border};
@@ -1444,10 +1449,14 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	font-size: 1em;
 	padding: 0.5em;
 	background-color: {$GET,area_faded_background};
-	border: 1px solid {$GET,dark_border};
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,area_faded_background}\, {$GET,area_background});}
+	border: 1px solid {$GET,point_of_interest_border};
+	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,point_of_interest_border};}
 	z-index: 1000;
 	{$BETA_CSS_PROPERTY,opacity: 0.9;}
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
+	{$BETA_CSS_PROPERTY,border-radius: 10px;}
+	color: {$GET,area_text};
 }
 .tooltip img {
 	max-width: 100%;
@@ -2068,6 +2077,9 @@ ul.compact_list, ol.compact_list {
 ul.compact_list>li, ol.compact_list>li {
 	margin: 0 0 0 17px;
 	padding: 0;
+}
+.compact_list>li>p {
+	margin-top: 0;
 }
 
 ul.spaced_list, .spaced_list ul, ol.spaced_list, .spaced_list ol {

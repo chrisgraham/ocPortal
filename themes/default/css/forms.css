@@ -16,6 +16,7 @@
 	{+START,IF,{$NOT,{$MOBILE}}}
 		width: 11em;
 	{+END}
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 }
 
 .comcode_supported {
@@ -29,10 +30,6 @@ div.comcode_supported {
 .required_star {
 	float: right;
 	{$BETA_CSS_PROPERTY,opacity: 0.4;}
-}
-
-.wysiwyg_button {
-	font-size: 0.95em;
 }
 
 .input_erroneous {
@@ -50,7 +47,9 @@ div.comcode_supported {
 
 /* This is used to fix a problem on screen readers (we don't want a paragraph used) */
 .form_field_name {
-	margin: 0.5em;
+	margin: 0.5em 0;
+}
+span.form_field_name {
 	display: inline-block;
 }
 
@@ -72,9 +71,25 @@ div.comcode_supported {
 
 .form_table { /* Some people think tables for forms are bad semantics. You can change it if you like, but we consider tables the optimal semantics (field name column, field input column, each field being a row). It's a conscious decision. Also all modern browsers allow complete styling control to change how tables are displayed, so there is no visual constraint here. */
 	border-collapse: collapse;
-	border: 1px dotted {$GET,standard_border};
+	border: 1px dotted {$GET,pale_border};
 	margin: 1em 0;
 }
+
+/*
+Curved borders would be cool, but it does not work well with internal cell borders which we have
+.form_table>tbody>tr:first-child>:first-child {
+	{$BETA_CSS_PROPERTY,border-top-left-radius: 15px;}
+}
+.form_table>tbody>tr:first-child>:last-child {
+	{$BETA_CSS_PROPERTY,border-top-right-radius: 15px;}
+}
+.form_table>tbody>tr:last-child>:first-child {
+	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 15px;}
+}
+.form_table>tbody>tr:last-child>:last-child {
+	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 15px;}
+}
+*/
 
 .form_table_field_name {
 	text-align: right;
@@ -88,9 +103,10 @@ div.comcode_supported {
 th.form_table_field_name, /* Extra specificity to take precedence over th.de_th */
 .form_table_field_spacer>th, .form_table_field_spacer>td, .form_table_description_above_cell, .form_table_description_under_cell
 {
-	border: 1px dotted {$GET,standard_border};
+	border: 1px dotted {$GET,pale_border};
 	padding: {$?,{$MOBILE},2,5}px;
 	background-color: {$GET,area_background} !important; /* !important is so has priority over .de_th */
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,area_background}\, {$GET,area_2_background});}
 }
 
 .form_table_field_spacer>th, .form_table_field_spacer>td, .form_table_description_above_cell {
@@ -102,7 +118,7 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 }
 
 .form_table_huge_field_description_is_under {
-	border-top: 1px dotted {$GET,standard_border};
+	border-top: 1px dotted {$GET,pale_border};
 	border-bottom: 0 !important;
 }
 
@@ -163,7 +179,7 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 }
 
 .various_ticks .input_individual_tick {
-	border-{!en_right}: 1px dotted {$GET,standard_border};
+	border-{!en_right}: 1px dotted {$GET,pale_border};
 	padding: 1em; /* Designed to make it fill whole box, i.e. equalise against the th's (to the left) height */
 	float: {!en_left};
 	font-size: 0.9em;
@@ -329,7 +345,7 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 }
 
 .posting_form_wrap_buttons, .posting_form_insert_buttons {
-	border: 1px solid {$GET,standard_border};
+	border: 1px dotted {$GET,standard_border};
 	padding: 0.5em;
 	margin-top: 0.5em;
 }
@@ -378,7 +394,7 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 }
 
 .permission_copy_column {
-	width: 3.5em;
+	width: 3.8em;
 }
 
 .permission_match_key_column {

@@ -540,6 +540,7 @@ function do_emoticon(field_name,p,_opener)
 	element=ensure_true_id(element,field_name);
 
 	var title=p.title;
+	if (title=='') title=p.getElementsByTagName('img')[0].alt; // Might be on image inside link instead
 	title=title.replace(/^.*: /,'');
 
 	var text=is_comcode_xml(element)?('<emoticon>'+escape_html(title)+'</emoticon>'):(' '+title+' ');

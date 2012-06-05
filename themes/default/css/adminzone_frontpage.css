@@ -51,7 +51,7 @@ a.top_left_toggleicon:hover {
 	float: left;
 }
 
-.checklist_task * {
+.checklist_task>* {
 	vertical-align: middle;
 }
 

@@ -321,7 +321,8 @@ function handle_image_mouse_over(event)
 
 	var target=event.target || event.srcElement;
 	if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && target.previousSibling.className.indexOf('magic_image_edit_link')!=-1) return;
-	if (find_width(target)<100) return;
+	if (find_width(target)<130) return;
+
 	if (target.src.indexOf('/themes/')==-1) return;
 	if (window.location.href.indexOf('admin_themes')!=-1) return;
 

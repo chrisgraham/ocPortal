@@ -856,7 +856,7 @@ function choose_picture(id,ob,name,event)
 		for (var i=0;i<e.length;i++)
 		{
 			if (e[i].disabled) continue;
-			var img=e[i].parentNode.parentNode.getElementsByTagName('img')[0];
+			var img=e[i].parentNode.parentNode.parentNode.getElementsByTagName('img')[0];
 			if ((img) && (img!=ob))
 			{
 				img.parentNode.className=img.parentNode.className.replace(' selected','');

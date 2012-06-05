@@ -715,7 +715,7 @@ class Module_downloads
 			}
 		}
 
-		breadcrumb_add_segment($breadcrumbs,$title_to_use);
+		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.$title_to_use.'</span>'));
 
 		$GLOBALS['META_DATA']+=array(
 			'created'=>date('Y-m-d',$myrow['add_date']),

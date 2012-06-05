@@ -251,6 +251,7 @@ class Module_admin_permissions
 
 		require_lang('permissions');
 		require_css('permissions_editor');
+		require_css('forms');
 
 		$type=get_param('type','misc');
 

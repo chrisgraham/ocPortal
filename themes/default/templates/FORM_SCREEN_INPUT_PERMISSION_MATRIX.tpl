@@ -3,7 +3,7 @@
 //]]></script>
 
 <div class="permissions_matrix_wrap" id="enter_the_matrix">
-	<table summary="{!MAP_TABLE}" class="autosized_table form_table">
+	<table summary="{!MAP_TABLE}" class="autosized_table results_table">
 		<thead>
 			<tr>
 				<th>

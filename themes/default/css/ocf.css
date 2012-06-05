@@ -223,8 +223,9 @@
 	vertical-align: middle;
 }
 
-.ocf_topic .ocf_forum_box_left {
+.ocf_topic .ocf_forum_box_left, .ocf_post_details {
 	background-color: {$GET,th_background} !important;
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,th_background}\, {$GET,th_2_background});}
 }
 
 .ocf_post_emphasis, .ocf_post_personal {
@@ -311,13 +312,12 @@
 
 .ocf_post_details {
 	text-align: {!en_left};
-	background-color: {$GET,th_background};
 	padding: 0.3em;
 }
 
 .ocf_post_details_date {
 	float: {!en_left};
-	padding-{!en_left}: 1em;
+	padding-{!en_left}: 0.5em;
 }
 
 .ocf_post_details_rating {
@@ -361,6 +361,7 @@
 		padding: 0 2em;
 		{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 	{+END}
+	margin: 1em 0;
 }
 
 {+START,IF,{$NOT,{$MOBILE}}}
@@ -524,6 +525,7 @@ hr.ocf_sig_barrier {
 .ocf_forum_topic_row_preview_button {
 	border: 1px solid {$GET,standard_border};
 	background-color: {$GET,area_background};
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,area_background}\, {$GET,area_4_background});}
 	font-size: 0.85em;
 	padding: 0.5em !important;
 	float: {!en_right};

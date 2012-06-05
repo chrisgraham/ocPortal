@@ -813,7 +813,7 @@ class Module_topics
 		}
 
 		$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-		breadcrumb_add_segment($breadcrumbs,do_lang_tempcode('PERFORM_MULTI_MODERATION'));
+		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('PERFORM_MULTI_MODERATION').'</span>'));
 
 		$title=get_screen_title('PERFORM_MULTI_MODERATION');
 		$mm=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('*'),array('id'=>$mm_id),'',1);
@@ -915,7 +915,7 @@ class Module_topics
 		$hidden=$this->keep_markers();
 
 		$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-		breadcrumb_add_segment($breadcrumbs,do_lang_tempcode('MOVE_TOPICS'));
+		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('MOVE_TOPICS').'</span>'));
 
 		$title=get_screen_title('MOVE_TOPICS');
 		$submit_name=do_lang_tempcode('MOVE_TOPICS');
@@ -1113,7 +1113,7 @@ class Module_topics
 		$content=new ocp_tempcode();
 		$extra=has_specific_permission(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT e_theme_img_code FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_emoticons WHERE e_use_topics=1'.$extra);
-		$content->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID'=>'d9f9399072af3f19f21695aef01168c7','CODE'=>'','URL'=>find_theme_image('ocf_emoticons/none'),'CHECKED'=>$selected_path=='','NAME'=>'emoticon')));
+		$content->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID'=>'d9f9399072af3f19f21695aef01168c7','PRETTY'=>do_lang_tempcode('NONE'),'CODE'=>'','URL'=>find_theme_image('ocf_emoticons/none'),'CHECKED'=>$selected_path=='','NAME'=>'emoticon')));
 
 		if (count($rows)==0) return new ocp_tempcode();
 		foreach ($rows as $row)
@@ -1274,7 +1274,7 @@ class Module_topics
 			$staff_help_url=NULL;
 
 			$breadcrumbs=ocf_forum_breadcrumbs($forum_id,NULL,NULL,false);
-			breadcrumb_add_segment($breadcrumbs,do_lang_tempcode('ADD_TOPIC'));
+			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('ADD_TOPIC').'</span>'));
 		}
 
 		$hidden_fields=new ocp_tempcode();

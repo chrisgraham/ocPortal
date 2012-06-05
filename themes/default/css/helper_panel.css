@@ -59,11 +59,13 @@ body .horiz_help_panel { /* {$,Long definition to force precedence} */
 }
 
 .global_helper_panel_wrap {
-	border: 1px solid {$GET,standard_border};
-	background-color: {$GET,area_background};
+	border: 1px solid {$GET,pale_border};
+	background-color: {$GET,area_3_background};
 	overflow: hidden;
 	position: relative;
 	margin-top: 1em;
+	{$BETA_CSS_PROPERTY,border-top-left-radius: 15px;}
+	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 15px;}
 }
 
 .global_helper_panel {

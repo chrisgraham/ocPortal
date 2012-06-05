@@ -38,7 +38,7 @@
 				<label for="edit_{ID*}_textarea">{!COMCODE}:</label> <a class="link_exempt" title="{!COMCODE_MESSAGE,Comcode}: {!LINK_NEW_WINDOW}" target="_blank" href="{$PAGE_LINK*,_SEARCH:userguide_comcode}"><img class="comcode_supported_icon" alt="{!COMCODE_MESSAGE,Comcode}" src="{$IMG*,comcode}" title="{!COMCODE_MESSAGE,Comcode}" /></a>
 				{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
 					{+START,IF,{$JS_ON}}
-						<a class="horiz_field_sep associated_link" id="toggle_wysiwyg_edit_{ID*}_textarea" class="wysiwyg_button" href="#" onclick="return toggle_wysiwyg('edit_{ID*}_textarea');"><abbr title="{!TOGGLE_WYSIWYG_2}">{!ENABLE_WYSIWYG}</abbr></a>
+						<a class="horiz_field_sep associated_link" id="toggle_wysiwyg_edit_{ID*}_textarea" href="#" onclick="return toggle_wysiwyg('edit_{ID*}_textarea');"><abbr title="{!TOGGLE_WYSIWYG_2}">{!ENABLE_WYSIWYG}</abbr></a>
 					{+END}
 				{+END}
 			</p>

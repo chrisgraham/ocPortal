@@ -698,7 +698,7 @@ class Module_topicview
 		{
 			$root_forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>db_get_first_id()));
 			$breadcrumbs=hyperlink(build_url(array('page'=>'forumview','id'=>db_get_first_id()),get_module_zone('forumview')),escape_html($root_forum_name),false,false,do_lang('GO_BACKWARDS_TO'));
-			breadcrumb_add_segment($breadcrumbs,do_lang('INLINE_PERSONAL_POSTS'));
+			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('INLINE_PERSONAL_POSTS').'</span>'));
 		}
 
 		if ($topic_info['validated']==0)
