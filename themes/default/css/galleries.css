@@ -7,9 +7,10 @@
 
 .gallery_entry_details {
 	margin-bottom: 1em;
-	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 250px;
-	{+END}
+}
+
+.gallery_entry_details .box {
+	margin-top: 0;
 }
 
 .gallery_entry_field_name_column {
@@ -22,31 +23,57 @@
 
 /* Non flow-mode only */
 
-.gallery_media_expose_wrap {
+{$,Our standard ocPortal-wide thumbnail image size is defined by the thumb_width option}
+{$SET,gallery_thumb_size,{$CONFIG_OPTION,thumb_width}px}
+{$,However actually lets make them smaller custom sizes for the gallery and let CSS scale-down the larger thumbnail images}
+{$SET,gallery_thumb_size,176px}
+{$,That is not the most efficient approach - which would be to use the Tempcode THUMBNAIL symbol in the GALLERY_IMAGE/GALLERY_VIDEO templates to generate idealised thumbnails and tie them into the HTML - but that is fiddly and messy, requires more thought and planning by the web designer}
+{$,Or, of course we could use the standard thumbnail size, or change the standard thumbnail size, but that would affect other systems which may want the larger thumbnails}
+
+.gallery_grid_cell_wrap {
 	overflow: hidden;
+
+	/* Fiddle it so our grid cells will be flush with the left */
+	margin-left: -0.5em;
+	width: 100%;
+	padding-right: 0.5em;
 }
 
-.gallery_media_expose {
-	overflow: hidden;
-	outline: 0;
+.gallery_grid_cell {
 	float: {!en_left};
-	margin: 1em 1em 0 0;
-	width: 152px;
+	padding: 0.5em;
 }
 
 .gallery_regular_thumb {
+	font-size: 0.85em;
 	border: 1px solid {$GET,standard_border};
 	background-color: {$GET,area_background};
-	font-size: 0.85em;
+	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
 }
 
-.gallery_regular_thumb a {
+.gallery_regular_thumb .img_thumb_wrap {
+	/* Essentially adds padding around thumbnails; the thumbnails are sized to fit a box as tightly as possible, but unused space is not stored inside the images themselves */
+	width: {$GET,gallery_thumb_size};
+	height: {$GET,gallery_thumb_size};
+	text-align: center;
+	vertical-align: middle;
+	display: table-cell;
+}
+
+.gallery_regular_thumb .img_thumb_wrap a {
 	outline: 0;
 }
 
-.gallery_regular_thumb a img {
-	width: 150px;
-	display: block;
+.gallery_regular_thumb .img_thumb_wrap .img_thumb {
+	vertical-align: bottom; /* Removes gap under this centered inline image, by moving it to baseline */
+
+	/* Maybe the thumbnail size has been reduced at some point - guard against this */
+	max-width: {$GET,gallery_thumb_size};
+	max-height: {$GET,gallery_thumb_size};
+}
+
+.gallery_regular_thumb p {
+	margin: 0.5em;
 }
 
 .gallery_regular_thumb .grating {
@@ -57,9 +84,8 @@
 	font-size: 0.85em;
 }
 
-.gallery_tooltip_description {
+.gallery_tooltip h3 {
 	margin-bottom: 0.85em;
-	max-width: 245px;
 }
 
 /* Flow-mode only */
@@ -67,15 +93,15 @@
 .flowmode_thumb {
 	display: inline-block;
 	{+START,IF,{$MOBILE}}
-		margin: 4px;
+		margin: 0.5em;
 	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
-		margin: 0 10px;
+		margin: 0 1em;
 	{+END}
 }
 
 .flowmode_thumb img {
-	max-width: 150px;
+	max-width: 150px; /* Smaller, for carousel */
 }
 
 .flowmode_video {
@@ -114,7 +140,7 @@
 	font-size: 1.2em;
 }
 
-/* side_root galleries block */
+/* side_root_galleries block */
 
 .side_galleries_block p {
 	margin-top: 0.5em;

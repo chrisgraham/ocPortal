@@ -1541,7 +1541,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 
 	$map['TAGS']=get_loaded_tags('catalogue_entries');
 
-	breadcrumb_add_segment($map['BREADCRUMBS'],protect_from_escaping('<span>'.$title_to_use.'</span>'));
+	breadcrumb_add_segment($map['BREADCRUMBS'],protect_from_escaping('<span>'.$title_to_use->evaluate().'</span>'));
 	if (is_null($root)) breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.($ecommerce?':ecommerce=1':''),do_lang('CATALOGUES'))));
 
 	$GLOBALS['META_DATA']+=array(

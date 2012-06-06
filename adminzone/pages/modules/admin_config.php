@@ -202,7 +202,6 @@ class Module_admin_config
 			add_config_option('ENABLE_KEYWORD_DENSITY_CHECK','enable_keyword_density_check','tick','return \'0\';','SITE','PREVIEW');
 			add_config_option('ENABLE_SPELL_CHECK','enable_spell_check','tick','return function_exists(\'pspell_check\')?\'0\':NULL;','SITE','PREVIEW');
 			add_config_option('ENABLE_MARKUP_VALIDATION','enable_markup_validation','tick','return \'0\';','SITE','PREVIEW');
-			add_config_option('ENABLE_IMAGE_FADING','enable_image_fading','tick','return \'1\';','THEME','GENERAL');
 		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<9))
 		{
@@ -304,6 +303,7 @@ class Module_admin_config
 			delete_config_option('panel_width');
 			delete_config_option('panel_width_spaced');
 			delete_config_option('tray_support');
+			delete_config_option('enable_image_fading');
 			add_config_option('FILETYPE_ICONS','filetype_icons','tick','return \'1\';','THEME','GENERAL');
 		}
 

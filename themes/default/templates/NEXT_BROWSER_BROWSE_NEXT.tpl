@@ -1,5 +1,5 @@
 {+START,IF,{$OR,{$IS_NON_EMPTY,{PREVIOUS_URL}},{$IS_NON_EMPTY,{NEXT_URL}}}}
-	<div class="float_surrounder">
+	<div class="trinav_wrap">
 		<p class="trinav_left">
 			{+START,IF_NON_EMPTY,{PREVIOUS_URL}}
 				<a rel="prev" accesskey="j" href="{PREVIOUS_URL*}"><img class="button_page" title="{!PREVIOUS}" alt="{!PREVIOUS}" src="{$IMG*,page/previous}" /></a>

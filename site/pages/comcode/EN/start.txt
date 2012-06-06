@@ -1,8 +1,6 @@
 [semihtml]
 [title="1"]{$SITE_NAME}[/title]
 
-[block="3" failsafe="1"]main_greeting[/block]
-
 [surround="fp_col_blocks_wrap"]
 	[surround="fp_col_block left"]
 		[block failsafe="1"]main_iotd[/block]

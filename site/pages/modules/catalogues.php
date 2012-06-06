@@ -933,7 +933,7 @@ class Module_catalogues
 			$catalogue_title=get_translated_text($catalogue['c_title']);
 			$breadcrumbs->attach(hyperlink($url,escape_html($catalogue_title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($catalogue_name))));
 			$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
-			$breadcrumbs->attach(escape_html($_title));
+			$breadcrumbs->attach('<span>'.escape_html($_title).'</span>');
 		}
 
 		breadcrumb_add_segment($breadcrumbs);

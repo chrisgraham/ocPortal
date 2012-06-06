@@ -3,7 +3,10 @@
 
 	<div class="meta_details" role="contentinfo">
 		<ul class="meta_details_list">
-			<li>{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}}</a></li>
+			<li>
+				{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}}</a>
+				{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
+			</li>
 			<li>{!ADDED,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate">{ADD_DATE*}</time>}</li>
 			{+START,IF,{$INLINE_STATS}}<li>{!VIEWS,{VIEWS*}}</li>{+END}
 		</ul>

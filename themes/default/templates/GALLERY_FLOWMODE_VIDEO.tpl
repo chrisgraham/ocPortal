@@ -3,7 +3,7 @@
 		{VIDEO_PLAYER}
 	</div>
 	<div class="lined_up_boxes">
-		<div class="gallery_entry_details left">
+		<div class="gallery_entry_details right">
 			<section class="box box___gallery_flowmode_video"><div class="box_inner">
 				<h3>{!DETAILS}</h3>
 

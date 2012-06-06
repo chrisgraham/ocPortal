@@ -1,25 +1,28 @@
 <div itemscope="itemscope" itemtype="http://schema.org/ImageObject">
 	{TITLE}
 
-	<div class="meta_details" role="contentinfo">
-		<ul class="meta_details_list">
-			<li>{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}}</a></li>
-			<li>{!ADDED,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate">{ADD_DATE*}</time>}</li>
-			{+START,IF,{$INLINE_STATS}}<li>{!VIEWS,{VIEWS*}}</li>{+END}
-		</ul>
-	</div>
-
-	<p class="media_box">
-		<img class="scale_down" alt="{!IMAGE}" src="{URL*}" itemprop="contentURL" />
-	</p>
-
-	{+START,IF_NON_EMPTY,{CAPTION}}
-		<div class="box box___iotd_entry_screen"><div class="box_inner">
+	<div class="box box___news_entry_screen"><div class="box_inner">
+		<div class="meta_details" role="contentinfo">
+			<ul class="meta_details_list">
+				<li>
+					{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}}</a>
+					{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
+				</li>
+				<li>{!ADDED,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate">{ADD_DATE*}</time>}</li>
+				{+START,IF,{$INLINE_STATS}}<li>{!VIEWS,{VIEWS*}}</li>{+END}
+			</ul>
+		</div>
+	
+		<p class="media_box">
+			<img class="scale_down" alt="{!IMAGE}" src="{URL*}" itemprop="contentURL" />
+		</p>
+	
+		{+START,IF_NON_EMPTY,{CAPTION}}
 			<div itemprop="caption">
-				{CAPTION}
+				{$PARAGRAPH,{CAPTION}}
 			</div>
-		</div></div>
-	{+END}
+		{+END}
+	</div></div>
 
 	<div class="float_surrounder">
 		{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}

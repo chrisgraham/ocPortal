@@ -1,7 +1,7 @@
 {+START,SET,TOOLTIP}
 	<div class="gallery_tooltip">
 		{+START,IF_NON_EMPTY,{TITLE}}
-			<h3 class="gallery_tooltip_description">
+			<h3>
 				{$TRUNCATE_LEFT,{TITLE},100,0,0}
 			</h3>
 		{+END}
@@ -57,11 +57,14 @@
 
 {+START,IF,{$NEQ,{_GUID},043ac7d15ce02715ac02309f6e8340ff}}
 	<div class="gallery_regular_thumb" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET^;*,TOOLTIP}','auto',null,null,false,true);">
-		<a href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
-		<p class="gallery_entry_box_details">
-			{+START,IF_PASSED,RATING_DETAILS}{+START,IF_NON_EMPTY,{RATING_DETAILS}}
-				<span class="grating">{RATING_DETAILS}</span>
-			{+END}{+END}
+		<div class="img_thumb_wrap">
+			<a href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
+		</div>
+
+		{+START,IF_PASSED,RATING_DETAILS}{+START,IF_NON_EMPTY,{RATING_DETAILS}}
+			<div class="grating">{RATING_DETAILS}</div>
+		{+END}{+END}
+		<p class="gallery_regular_thumb_comments_count">
 			<a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a>
 		</p>
 	</div>

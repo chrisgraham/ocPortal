@@ -1,6 +1,6 @@
 {$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
 <div id="{$GET*,wrapper_id}">
-	<div class="gallery_media_expose_wrap">
+	<div class="gallery_grid_cell_wrap">
 		{IMAGES}
 	</div>
 

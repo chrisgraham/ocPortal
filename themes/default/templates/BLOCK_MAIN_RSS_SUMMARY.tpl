@@ -14,9 +14,12 @@
 
 	<h3><a href="{FULL_URL_RAW*}">{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}</a></h3>
 
-	{+START,IF_NON_EMPTY,{DATE}}
-		<div class="subtitle_tagline">
-			{!POSTED_TIME,{DATE*}}{+START,IF,{$AND,{$NOT,{$IN_STR,{CATEGORY},<img}},{$IS_NON_EMPTY,{CATEGORY}}}}. {!IN,{CATEGORY}}.{+END}
+	{+START,IF,{$OR,{$IS_NON_EMPTY,{DATE}},{$AND,{$NOT,{$IN_STR,{CATEGORY},<img}},{$IS_NON_EMPTY,{CATEGORY}}}}}
+		<div class="meta_details" role="contentinfo">
+			<ul class="meta_details_list">
+				{+START,IF_NON_EMPTY,{DATE}}<li>{!POSTED_TIME,{DATE*}}</li>{+END}
+				{+START,IF,{$AND,{$NOT,{$IN_STR,{CATEGORY},<img}},{$IS_NON_EMPTY,{CATEGORY}}}}<li>{!IN,{CATEGORY}}</li>{+END}
+			</ul>
 		</div>
 	{+END}
 

@@ -318,6 +318,7 @@ function check_field(the_element,theForm,forPreview)
 	{
 		return null;
 	}
+	if (the_element.disabled) return null;
 
 	// Test file sizes
 	if ((the_element.type=='file') && (the_element.files) && (the_element.files.item) && (the_element.files.item(0)) && (the_element.files.item(0).fileSize))

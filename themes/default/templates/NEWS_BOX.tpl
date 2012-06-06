@@ -31,8 +31,11 @@
 
 	<h3><a title="{$STRIP_TAGS,{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}}: #{ID*}" href="{FULL_URL*}">{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}</a></h3>
 
-	<div class="subtitle_tagline">
-		{!POSTED_TIME,{DATE*}}{+START,IF,{BLOG}}, {!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>}{+END}
+	<div class="meta_details" role="contentinfo">
+		<ul class="meta_details_list">
+			<li>{!POSTED_TIME,{DATE*}}</li>
+			{+START,IF,{BLOG}}<li>{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>}</li>{+END}
+		</ul>
 	</div>
 
 	{+START,IF_NON_EMPTY,{NEWS}}

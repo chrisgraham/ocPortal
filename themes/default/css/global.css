@@ -492,6 +492,7 @@ header h1 {
 
 /* .hero_section is specially designed to wrap around a title and some text, to give a 'hero' introduction for the front page of a site (standard marketing technique) */
 .hero_section {
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,main_2_background}\, {$GET,main_background});}
 	font-size: 1.25em;
 	color: {$GET,slightly_seeded_text};
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Choose better font for larger text */
@@ -555,16 +556,13 @@ header h1 {
 	vertical-align: middle;
 }
 
-.title_tagline, .subtitle_tagline {
+.title_tagline {
 	font-size: 0.85em;
 }
 .title_tagline {
 	padding-bottom: 2em;
 	margin-top: -1.5em;
 	color: {$GET,area_key_text};
-}
-.subtitle_tagline {
-	margin: -0.5em 0 0 2em;
 }
 
 body#main_website #main_website_inner, .global_middle_faux {
@@ -661,6 +659,10 @@ body.popup_spacer h2 {
 
 .global_messages {
 	margin: 1em;
+}
+
+.global_message {
+	min-height: 21px;
 }
 
 .global_message span, .global_message img {
@@ -823,10 +825,6 @@ footer .global_minilinks a {
 	width: 100%;
 }
 
-.img_thumb { /* Membership of this class is used as a tag to turn on the thumbnail blend effect */
-	{$BETA_CSS_PROPERTY,opacity: 0.7;}
-}
-
 .textarea_scroll { /* Turns off word-wrapping for a textarea: this has to be done using Javascript so that the invalid 'wrap' property isn't written into the XHTML */
 }
 
@@ -885,22 +883,19 @@ div.edited {
 	vertical-align: top;
 }
 
-/* Makes an item of media (e.g. an image) get framed nicely */
+/* Makes an item of media (e.g. an image) get framed nicely. NB: We do not use this for galleries (which are more elaborate), although that has similar styling with .gallery_grid_cell */
 .media_box {
-	overflow: hidden;
 	margin: {$?,{$MOBILE},1,1.5}em 0;
 	text-align: center;
-	position: relative;
 }
 .media_box a {
 	outline: 0;
 }
-.media_box img, .img_thumb {
+.media_box img {
 	border: 1px solid {$GET,standard_border};
-	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
-	max-width: 99%; /* Room for shadow */
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
-
+	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
+	max-width: 100%;
 }
 
 .scale_down { /* Membership of this class is used as a tag to turn on image scale-to-fit */
@@ -965,6 +960,14 @@ input.button_hyperlink {
 	cursor: default;
 }
 
+.trinav_wrap {
+	overflow: hidden;
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,main_2_background}\, {$GET,main_background});}
+}
+.trinav_wrap.nograd {
+	background-image: none;
+}
+
 /* Used e.g. for "paginating" through the calendar (i.e. infinite pagination left/right) */
 .trinav_left, .trinav_mid, .trinav_right {
 	margin: 1em 0 2em 0;
@@ -1001,6 +1004,15 @@ input.button_hyperlink {
 		width: 33%;
 	{+END}
 	text-align: right;
+}
+
+/* An inline avatar */
+.embedded_mini_avatar {
+	width: 0.9em;
+	height: 0.9em;
+	vertical-align: bottom;
+	cursor: pointer;
+	border: 1px solid {$GET,standard_border};
 }
 
 /* Error/status messages */
@@ -1084,6 +1096,14 @@ th.meta_data_title {
 	background: {$GET,native_ui_background};
 }
 
+.img_thumb { /* Membership of this class is used as a tag to turn on the thumbnail blend effect */
+	{$BETA_CSS_PROPERTY,opacity: 0.7;}
+}
+.img_thumb:hover {
+	{$BETA_CSS_PROPERTY,opacity: 1.0;}
+	{$BETA_CSS_PROPERTY,transition: opacity 0.2s linear !important;}
+}
+
 /*
 =========================
 =========Boxes===========
@@ -1103,6 +1123,8 @@ th.meta_data_title {
 		Find how to edit the referenced "block_background" theme image by doing an Admin Zone search for "block_background"
 	*/
 	background: url('{$IMG;,block_background}') {$GET,area_background};
+	/* If the browser supports gradients, we'll put a nice box-filling gradient in here instead */
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,area_background}\, {$GET,area_5_background});}
 
 	overflow: hidden;
 }
@@ -1261,7 +1283,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	padding-{!en_right}: 0; /* Undo padding if actually there is nothing to the right of this */
 }
 
-/* Box-attached meta details */
+/* Box/title-attached meta details */
 
 .meta_details {
 	font-size: 0.8em;
@@ -1274,6 +1296,12 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	padding-{!en_left}: 5px;
 	padding-bottom: 0.5em;
 	margin-bottom: 1em;
+}
+
+h3+.meta_details {
+	border-bottom: 0;
+	margin-top: -1em;
+	margin-bottom: 0.5em;
 }
 
 .meta_details a {
@@ -1912,6 +1940,10 @@ div.wysiwyg_toolbar_color_finder {
 	margin-top: 1em;
 }
 
+.RATING_BOX .box {
+	margin: 0;
+}
+
 .RATING_BOX .rating_inner {
 	text-align: center;
 }
@@ -2198,7 +2230,6 @@ A note about display of meta data...
 It may be displayed using:
  - meta_details_list (usually used on full screen views of content)
  - horizontal_meta_details (usually used on blocks where the meta details are important to encourage a click through)
- - subtitle_tagline (usually on blocks where the meta details can tuck neatly under the title, on a single line)
  - a table (usually used where the content defines its own meta data beyond what all ocPortal content has, such as a length or resolution)
  - a tooltip (good for tucking it away, although it's not touch friendly so should only be used if non-important)
 But it should always have role="contentinfo" on it (ARIA)

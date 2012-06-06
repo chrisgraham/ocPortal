@@ -21,7 +21,7 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{ENTRIES}}
-		<div class="gallery_media_expose_wrap" itemprop="significantLinks">
+		<div class="gallery_grid_cell_wrap" itemprop="significantLinks">
 			{ENTRIES}
 		</div>
 

@@ -11,7 +11,7 @@
 	{$REQUIRE_JAVASCRIPT,javascript_galleries}
 	{$REQUIRE_JAVASCRIPT,javascript_ajax}
 
-	<div class="float_surrounder">
+	<div class="trinav_wrap">
 		<div class="trinav_left">
 			{$,Back}
 			{+START,IF_NON_EMPTY,{BACK_URL}}

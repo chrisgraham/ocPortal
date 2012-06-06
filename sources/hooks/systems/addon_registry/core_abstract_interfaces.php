@@ -141,6 +141,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			'RESULTS_TABLE_TICK.tpl',
 			'JAVASCRIPT_PAGINATION.tpl',
 			'IFRAME_SCREEN.tpl',
+			'MEMBER_TOOLTIP.tpl',
 			'SIMPLE_PREVIEW_BOX.tpl',
 			'JAVASCRIPT_IFRAME_SCREEN.tpl',
 			'RESULTS_TABLE_SCREEN.tpl',
@@ -228,6 +229,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			'FULL_MESSAGE_SCREEN.tpl' => 'full_message_screen',
 			'INDEX_SCREEN_FANCY_SCREEN.tpl' => 'index_screen_fancy_screen',
 			'RESULTS_TABLE.tpl' => 'result_table_screen',
+			'MEMER_TOOLTIP.tpl' => 'member_tooltip',
 			'INDEX_SCREEN_FANCY_ENTRY.tpl' => 'index_screen_fancy_screen',
 			'COLUMNED_TABLE_ACTION_DOWNLOAD.tpl' => 'columned_table_action_download',
 			'COLUMNED_TABLE_ACTION_TRANSLATE.tpl' => 'administrative__columned_table_action_translate',
@@ -1048,6 +1050,23 @@ class Hook_addon_registry_core_abstract_interfaces
 				'TABLE' => placeholder_table(),
 				'SUBMIT_NAME' => lorem_word(),
 				'POST_URL' => placeholder_url()
+			)), NULL, '', true)
+		);
+
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__member_tooltip()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('MEMBER_TOOLTIP', array(
+				'SUBMITTER' => placeholder_id(),
 			)), NULL, '', true)
 		);
 

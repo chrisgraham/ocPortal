@@ -7,7 +7,7 @@
 				<a href="{YEAR_URL*}">{!YEARLY}</a>
 			{+END}
 			{+START,IF_EMPTY,{YEAR_URL}}
-				{!YEARLY}
+				<span>{!YEARLY}</span>
 			{+END}
 		</div></div>
 		<div class="calendar_date_span_link"><div class="calendar_date_span_link_inner">
@@ -15,7 +15,7 @@
 				<a href="{MONTH_URL*}">{!MONTHLY}</a>
 			{+END}
 			{+START,IF_EMPTY,{MONTH_URL}}
-				{!MONTHLY}
+				<span>{!MONTHLY}</span>
 			{+END}
 		</div></div>
 		<div class="calendar_date_span_link"><div class="calendar_date_span_link_inner">
@@ -23,7 +23,7 @@
 				<a href="{WEEK_URL*}">{!WEEKLY}</a>
 			{+END}
 			{+START,IF_EMPTY,{WEEK_URL}}
-				{!WEEKLY}
+				<span>{!WEEKLY}</span>
 			{+END}
 		</div></div>
 		<div class="calendar_date_span_link"><div class="calendar_date_span_link_inner">
@@ -31,15 +31,18 @@
 				<a href="{DAY_URL*}">{!DAILY}</a>
 			{+END}
 			{+START,IF_EMPTY,{DAY_URL}}
-				{!DAILY}
+				<span>{!DAILY}</span>
 			{+END}
 		</div></div>
 	</div>
 </div>
 
-<div class="float_surrounder">
+<div class="trinav_wrap nograd">
 	<div class="trinav_left">
 		<a href="{PREVIOUS_URL*}" rel="{+START,IF,{PREVIOUS_NO_FOLLOW}}nofollow {+END}prev" accesskey="j"><img class="button_page" src="{$IMG*,page/previous}" title="{!PREVIOUS}" alt="{!PREVIOUS}" /></a>
+	</div>
+	<div class="trinav_right">
+		<a href="{NEXT_URL*}" rel="{+START,IF,{NEXT_NO_FOLLOW}}nofollow {+END}next" accesskey="k"><img class="button_page" src="{$IMG*,page/next}" title="{!NEXT}" alt="{!NEXT}" /></a>
 	</div>
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<div class="trinav_mid">
@@ -48,9 +51,6 @@
 			{+END}
 		</div>
 	{+END}
-	<div class="trinav_right">
-		<a href="{NEXT_URL*}" rel="{+START,IF,{NEXT_NO_FOLLOW}}nofollow {+END}next" accesskey="k"><img class="button_page" src="{$IMG*,page/next}" title="{!NEXT}" alt="{!NEXT}" /></a>
-	</div>
 </div>
 
 <div class="horizontal_scrolling">
