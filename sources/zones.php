@@ -574,6 +574,7 @@ function find_all_hooks($type,$entry)
 		}
 		closedir($dh);
 	}
+
 	if ((!isset($GLOBALS['DOING_USERS_INIT'])) && (!in_safe_mode())) // The !isset is because of if the user init causes a DB query to load sessions which loads DB hooks which checks for safe mode which leads to a permissions check for safe mode and thus a failed user check (as sessions not loaded yet)
 	{
 		$dir=get_file_base().'/sources_custom/hooks/'.filter_naughty($type).'/'.filter_naughty($entry);
@@ -602,7 +603,8 @@ function find_all_hooks($type,$entry)
 		$out=array_merge($_out,$out);
 	}
 
-	$HOOKS_CACHE[$type.'/'.$entry]=$out;
+	if (!$GLOBALS['DOING_USERS_INIT'])
+		$HOOKS_CACHE[$type.'/'.$entry]=$out;
 
 	if (function_exists('persistent_cache_set')) persistent_cache_set('HOOKS',$HOOKS_CACHE,true);
 

@@ -1,7 +1,7 @@
 <div>
-	<h2 class="toggleable_tray_title">
-		<a class="toggleable_tray_button right" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!OCGIFTS_TITLE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
-		<a class="toggleable_tray_button right" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!OCGIFTS_TITLE}</a>
+	<h2>
+		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!OCGIFTS_TITLE}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
+		<span class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!OCGIFTS_TITLE}</span>
 	</h2>
 
 	<div class="toggleable_tray" style="display: {$JS_ON,none,block}" aria-expanded="false">

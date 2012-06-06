@@ -84,7 +84,7 @@
 					<h3>{!FRIEND_LIST}</h3>
 
 					{+START,IF_NON_EMPTY,{FRIENDS}}
-						<form title="{!FRIEND_LIST}" method="post" action="{$?,{$IS_EMPTY,{URL_REMOVE_FRIENDS}},index.php,{URL_REMOVE_FRIENDS*}}">
+						<form autocomplete="off" title="{!FRIEND_LIST}" method="post" action="{$?,{$IS_EMPTY,{URL_REMOVE_FRIENDS}},index.php,{URL_REMOVE_FRIENDS*}}">
 							<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
 								<thead>
 									<tr>
@@ -145,7 +145,7 @@
 					{+START,IF_NON_EMPTY,{URL_ADD_FRIEND}}
 						<p>{!MUST_ADD_CONTACTS}</p>
 
-						<form title="{!ADD}: {!FRIEND_LIST}" method="post" action="{URL_ADD_FRIEND*}">
+						<form autocomplete="off" title="{!ADD}: {!FRIEND_LIST}" method="post" action="{URL_ADD_FRIEND*}">
 							<label class="accessibility_hidden" for="friend_username">{!USERNAME}: </label><input size="18" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" onfocus="if (this.value=='{!USERNAME}') { this.value=''; this.className='field_input_filled'; }" onblur="if (this.value=='') { this.value='{!USERNAME}'; this.className='field_input_non_filled'; }" class="field_input_non_filled" value="{!USERNAME}" id="friend_username" name="friend_username" />
 							<input onclick="disable_button_just_clicked(this);" class="button_pageitem" type="submit" value="{!ADD}" />
 						</form>

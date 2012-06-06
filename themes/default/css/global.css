@@ -31,7 +31,7 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#e3eaf6,fixed_width_background,11% (seed sat_to 100) + 89% W/B}
 {$THEME_WIZARD_COLOR,#8ba4ca,fixed_width_border,61% seed + 39% W/B}
 {$THEME_WIZARD_COLOR,#ffffff,main_background,100% W/B}
-{$THEME_WIZARD_COLOR,#0d1522,slightly_seeded_text,20% seed + 80% B/W}
+{$THEME_WIZARD_COLOR,#ebebeb,main_2_background,92% W/B + 8% B/W}
 
 /* Header */
 {$THEME_WIZARD_COLOR,#e3e9f2,header_background,100% area_2_background}
@@ -111,6 +111,7 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#eee6d9,area_highlight_complement_background,20% (seed hue_add 128) + 80% W/B}
 
 /* Text */
+{$THEME_WIZARD_COLOR,#0d1522,slightly_seeded_text,20% seed + 80% B/W}
 {$THEME_WIZARD_COLOR,#325180,area_text,76% seed + 24% B/W}
 {$THEME_WIZARD_COLOR,#2a3d5a,area_key_text,53% (seed sat_to 53) + 47% B/W}
 {$THEME_WIZARD_COLOR,#0d2d5d,area_link,55% (seed sat_to 86) + 45% B/W}
@@ -289,6 +290,10 @@ hr {
 img {
 	display: inline;
 	border: 0;
+}
+
+blockquote {
+	margin: 1em 0;
 }
 
 iframe {
@@ -481,9 +486,35 @@ header h1 {
 	margin-bottom: 0.8em;
 	min-width: 300px;
 }
-
 .screen_title li span {
 	display: block;
+}
+
+/* .hero_section is specially designed to wrap around a title and some text, to give a 'hero' introduction for the front page of a site (standard marketing technique) */
+.hero_section {
+	font-size: 1.25em;
+	color: {$GET,slightly_seeded_text};
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Choose better font for larger text */
+	padding: 2em 3em;
+	margin-bottom: 3em;
+}
+.hero_section h1 {
+	font-size: 2.6em;
+	margin-bottom: 0.1em;
+	text-decoration: none;
+	border-bottom: none;
+	color: inherit;
+}
+.hero_section * {
+	margin-top: 0;
+}
+.hero_section .hero_button a {
+	text-decoration: none;
+	padding: 0.5em;
+	background-image: none !important;
+	margin-bottom: 1em;
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,lgrad}\, {$GET,dgrad}) !important;}
+	font-size: 0.9em;
 }
 
 .global_breadcrumbs {
@@ -537,7 +568,7 @@ header h1 {
 }
 
 body#main_website #main_website_inner, .global_middle_faux {
-	background-color: {$GET,main_background};
+	background-color: {$GET,main_background} !important;
 
 	/* Want to set a tiled background?
 		Uncomment the code below
@@ -597,11 +628,14 @@ body.popup_spacer h2 {
 /* Spacing around middle column if it adjoins panels */
 #panel_left ~ .global_middle {
 	margin-{!en_left}: 13em;
-	padding-{!en_left}: 1.5em;
+	padding-{!en_left}: 1.8em;
 }
 #panel_right ~ .global_middle {
 	margin-{!en_right}: 13em;
-	padding-{!en_right}: 1.5em;
+	padding-{!en_right}: 1.8em;
+}
+#panel_right:first-child ~ .global_middle { /* If no left panel, lets give some extra space */
+	margin-{!en_right}: 16em;
 }
 
 .global_side_panel .hide_if_in_panel {
@@ -749,7 +783,6 @@ footer .invisible_ref_point {
 }
 
 footer .global_copyright {
-	font-size: 0.85em;
 	{+START,IF,{$NOT,{$MOBILE}}}
 		text-align: center;
 	{+END}
@@ -766,6 +799,7 @@ footer .global_minilinks {
 
 footer .global_minilinks .horizontal_links {
 	width: auto;
+	font-size: 1.1em;
 }
 
 footer .global_minilinks a {
@@ -1087,6 +1121,8 @@ th.meta_data_title {
 /* Don't let boxes on side panels get too much styling (focuses the eye away) */
 .global_side_panel .box, .box.nested {
 	background: {$GET,area_5_background};
+}
+.box.nested {
 	border: 1px solid {$GET,pale_border};
 }
 .global_side_panel .box_inner>h1, .global_side_panel .box_inner>h2, .global_side_panel .box_inner>h3, .global_side_panel .box_inner>h4, .global_side_panel .box_inner>h5, .global_side_panel .box_inner>h6 {
@@ -1097,7 +1133,7 @@ th.meta_data_title {
 	margin: 0.5em;
 }
 
-.box_inner>h1, .box_inner>h2, .box_inner>h3, .box_inner>h4, .box_inner>h5, .box_inner>h6, .toggleable_tray_title {
+.box_inner>h1, .box_inner>h2, .box_inner>h3, .box_inner>h4, .box_inner>h5, .box_inner>h6, .toggleable_tray_title, #standalone_html_wrap .box .box .box_inner>h2, #standalone_html_wrap .box .box .box_inner>h3 {
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 3px;}
 	{$BETA_CSS_PROPERTY,border-top-right-radius: 3px;}
 	background-color: {$GET,box_title_background};
@@ -1153,10 +1189,10 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 
 /* Boxes under boxes shouldn't have the title style - would be ugly */
 
-.box .box .box_inner>h1, .box .box .box_inner>h2, .box .box .box_inner>h3, .box .box .box_inner>h4, .box .box .box_inner>h5, .box .box .box_inner>h6, .box .box .toggleable_tray_title {
+.box .box .box_inner>h1, .box .box .box_inner>h2, .box .box .box_inner>h3, .box .box .box_inner>h4, .box .box .box_inner>h5, .box .box .box_inner>h6, .box .box .toggleable_tray_title, #standalone_html_wrap .box .box .box .box_inner>h2, #standalone_html_wrap .box .box .box .box_inner>h3 {
 	background: none;
 	color: inherit;
-}
+} /* This rule is not applied to boxes under the top level box in the preview (#standalone_html_wrap) as those should show verbatim*/
 
 /* Expanding and contracting, mostly for boxes but not necessarily always */
 
@@ -1230,7 +1266,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 .meta_details {
 	font-size: 0.8em;
 	color: {$GET,area_text};
-	border-bottom: 1px solid;
+	border-bottom: 1px solid {$GET,standard_border};
 	{+START,IF,{$NOT,{$MOBILE}}}
 		width: 300px;
 	{+END}
@@ -1340,7 +1376,12 @@ hr.spaced_rule {
 /* Used to align stuff horizontally, i.e. force a gap between separate bits */
 .horiz_field_sep, ul.horizontal_links.horiz_field_sep {
 	padding-{!en_left}: 0.8em;
+}
+.horiz_field_sep {
 	display: inline-block !important;
+}
+ul.horizontal_links.horiz_field_sep {
+	display: inline !important;
 }
 
 /* Used e.g. on links that should not get split between lines */
@@ -1376,7 +1417,7 @@ table.scrollable_inside {
 	overflow-y: hidden;
 
 	/* To add in the extra pixel needed for 2x1/2 overhanging borders that tables have, and also to shunt the alignment to compensate http://fantasai.inkedblade.net/style/discuss/collapsed-outer-border/ */
-	padding-right: 2px; /* Actually Chrome seems to need 2 (observed on form tables) */
+	padding-right: 3px; /* Actually Chrome seems to need 2 (observed on form tables) */
 }
 
 .wide_table {
@@ -1436,6 +1477,9 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	text-align: {!en_left};
 	background-color: {$GET,area_background} !important; /*  !important so precedence over th.dh */
 	font-weight: normal;
+}
+.table_heading_cell h2 {
+	margin: 0;
 }
 
 .thick_border th, .thick_border td {
@@ -1994,7 +2038,7 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .comments_field_name_column {
-	width: 16em;
+	width: 12em;
 }
 
 .comments_field_input_column {
@@ -2358,12 +2402,17 @@ ul.associated_link>li {
 	margin: 2em 0;
 	display: block;
 	list-style: none;
-	/*font-size: 0.9em; Not very touch-friendly*/
+}
+.horizontal_links, .associated_link {
+	font-size: 0.9em;
 }
 ul.buttons_group, ul.associated_links_block_group {
 	margin: 0; /* Margin will go on li elements if its a list */
 }
-table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_block_group, .force_margin { /* In this case no margin is coming from above so we must define one */
+table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_block_group { /* In this case no margin is coming from above so we must define one */
+	margin-top: 1em !important;
+}
+.force_margin {
 	margin-top: 1.5em !important;
 }
 .buttons_group>* {
@@ -2412,6 +2461,18 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 	background-color: {$GET,native_ui_selected_background};
 }
 
+.simple_neat_checkbox {
+	overflow: hidden;
+}
+.simple_neat_checkbox input {
+	float: {!en_left};
+}
+.simple_neat_checkbox span {
+	float: {!en_right};
+	margin-{!en_left}: 2em;
+	margin-top: -1.5em;
+}
+
 .captcha_frame {
 	width: 100px;
 	height: 52px;
@@ -2439,7 +2500,7 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 input[type="reset"].wide_button, input[type="reset"].button_micro, input[type="reset"].button_page, input[type="reset"].button_pageitem,
 input[type="submit"].wide_button, input[type="submit"].button_micro, input[type="submit"].button_page, input[type="submit"].button_pageitem,
 input[type="button"].wide_button, input[type="button"].button_micro, input[type="button"].button_page, input[type="button"].button_pageitem,
-button.wide_button, button.button_micro, button.button_page, button.button_pageitem
+button.wide_button, button.button_micro, button.button_page, button.button_pageitem, .hero_section .hero_button a
 {
 	display: inline-block;
 	border: none;
@@ -2648,7 +2709,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 
 .tab {
 	float: left;
-	background: url('{$IMG;,tab}') !important;
+	background-image: url('{$IMG;,tab}') !important;
 	padding: 3px 7px 0 7px !important;
 	height: 20px;
 	text-align: center;

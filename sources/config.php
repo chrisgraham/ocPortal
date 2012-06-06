@@ -379,11 +379,14 @@ function get_option($name,$missing_ok=false)
 				$OPTIONS=list_to_map('the_name',$OPTIONS);
 				$option=&$OPTIONS[$name];
 			}
-			$option['config_value']=eval($option['eval'].';');
-			if ((get_value('setup_wizard_completed')==='1') && (isset($option['config_value_translated']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
+			if ((function_exists('do_lang')) || (strpos($option['eval'],'lang')===false)) // Something in set_option may need do_lang
 			{
-				require_code('config2');
-				set_option($name,$option['config_value']);
+				$option['config_value']=eval($option['eval'].';');
+				if ((get_value('setup_wizard_completed')==='1') && (isset($option['config_value_translated']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
+				{
+					require_code('config2');
+					set_option($name,$option['config_value']);
+				}
 			}
 		}
 		if (is_object($option['config_value'])) $option['config_value']=$option['config_value']->evaluate(); elseif (is_integer($option['config_value'])) $option['config_value']=strval($option['config_value']);

@@ -11,7 +11,7 @@
 <div class="chat_posting_area">
 	<div class="float_surrounder">
 		<div class="left">
-			<form title="{!MESSAGE}" action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
+			<form autocomplete="off" title="{!MESSAGE}" action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
 				{$INSERT_SPAMMER_BLACKHOLE}
 
 				<div style="display: inline;">
@@ -23,7 +23,7 @@
 			</form>
 		</div>
 		<div class="left">
-			<form title="{SUBMIT_VALUE*}" action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
+			<form autocomplete="off" title="{SUBMIT_VALUE*}" action="{MESSAGES_PHP*}?action=post&amp;room_id={ROOM_ID*}" method="post" style="display: inline;">
 				<input type="button" class="button_micro" name="post_now" onclick="return chat_post(event,{ROOM_ID*},'post',document.getElementById('font_name').options[document.getElementById('font_name').selectedIndex].value,document.getElementById('text_colour').value);" value="{SUBMIT_VALUE*}" />
 			</form>
 			{+START,IF,{$NOT,{$MOBILE}}}

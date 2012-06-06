@@ -16,7 +16,7 @@
 
 {+START,IF_NON_EMPTY,{$TRIM,{FILTERS}}}
 	<div class="box box___ocf_forum"><div class="box_inner">
-		<span class="ocf_pt_category_filters">{!CATEGORIES}</span>: {FILTERS}
+		<span class="ocf_pt_category_filters">{!CATEGORIES}:</span> {FILTERS}
 	</div></div>
 {+END}
 

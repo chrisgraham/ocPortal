@@ -19,46 +19,6 @@
  */
 
 /**
- * Standard code module initialisation function.
- */
-function init__ajax()
-{
-	if (!function_exists('do_lang'))
-	{
-		/**
-		 * Get the human-readable form of a language id, or a language entry from a language INI file. (STUB)
-		 *
-		 * @param  ID_TEXT		The language id
-		 * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
-		 * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
-		 * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
-		 * @param  ?LANGUAGE_NAME The language to use (NULL: users language)
-		 * @param  boolean		Whether to cause ocPortal to exit if the lookup does not succeed
-		 * @return ?mixed			The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
-		 */
-		function do_lang($a,$param_a=NULL,$param_b=NULL,$param_c=NULL,$lang=NULL,$require_result=true)
-		{
-			if (function_exists('_do_lang')) return _do_lang($a,$param_a,$param_b,$param_c,$lang,$require_result);
-
-			switch ($a)
-			{
-				case 'LINK_NEW_WINDOW':
-					return 'new window';
-				case 'SPREAD_TABLE':
-					return 'Spread table';
-				case 'MAP_TABLE':
-					return 'Item to value mapper table';
-				case 'charset':
-					return NULL;
-			}
-
-			if (is_null($param_a)) return $a;
-			return serialize(array($a,$param_a,$param_b,$param_c));
-		}
-	}
-}
-
-/**
  * AJAX script for checking if a new username is valid.
  */
 function username_check_script()

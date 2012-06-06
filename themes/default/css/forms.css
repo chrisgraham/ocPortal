@@ -50,9 +50,6 @@ div.comcode_supported {
 }
 
 /* This is used to fix a problem on screen readers (we don't want a paragraph used) */
-.form_field_name {
-	margin: 0.5em 0;
-}
 span.form_field_name {
 	display: inline-block;
 }
@@ -80,7 +77,7 @@ span.form_field_name {
 }
 
 /*
-Curved borders would be cool, but it does not work well with internal cell borders which we have
+Curved borders would be cool, but it does not work well with the carefully defined internal cell borders which we have
 .form_table>tbody>tr:first-child>:first-child {
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 15px;}
 }
@@ -108,9 +105,12 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 .form_table_field_spacer>th, .form_table_field_spacer>td, .form_table_description_above_cell, .form_table_description_under_cell
 {
 	border: 1px dotted {$GET,pale_border};
-	padding: {$?,{$MOBILE},2,5}px;
+	padding: 0.5em;
 	background-color: {$GET,area_background} !important; /* !important is so has priority over .de_th */
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,area_background}\, {$GET,area_2_background});}
+}
+.form_table_field_input input {
+	margin-top: 0;
 }
 
 .form_table_field_spacer>th, .form_table_field_spacer>td, .form_table_description_above_cell {
@@ -145,11 +145,13 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 .upload_field_msg {
 	white-space: nowrap;
 }
+	list.className='ajax_people_list';
 
 .people_list {
 	background-color: {$GET,area_background};
 	color: {$GET,slightly_seeded_text};
 	width: auto;
+	border: 1px solid {$GET,pale_border};
 }
 
 .field_checkbox_description {
@@ -385,6 +387,14 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 	overflow-x: auto;
 	outline: 0;
 	padding-bottom: 1px;
+
+	/* Fix for overhanging borders */
+	padding-right: 2px;
+	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+}
+
+.permissions_matrix_wrap select {
+	max-width: 11em;
 }
 
 .permissions_matrix_wrap .sp_header, .permissions_matrix_wrap .view_header {
@@ -435,4 +445,12 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 
 .form_set_indent {
 	margin-{!en_left}: 2em;
+}
+
+/* Spruce up defaults for form fields */
+
+.form_table input[type="text"], .form_table input[type="password"], .form_table textarea {
+	{$BETA_CSS_PROPERTY,border-radius: 4px;}
+	border: 1px solid {$GET,standard_border};
+	padding: 0.2em;
 }

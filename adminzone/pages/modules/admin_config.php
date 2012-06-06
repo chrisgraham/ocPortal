@@ -228,7 +228,7 @@ class Module_admin_config
 		if ((is_null($upgrade_from)) || ($upgrade_from<10))
 		{
 			add_config_option('ADVANCED_ADMIN_CACHE','advanced_admin_cache','tick','return \'0\';','SITE','CACHES');
-			add_config_option('COLLAPSE_USER_ZONES','collapse_user_zones','tick','return \'1\';','SITE','GENERAL');
+			add_config_option('COLLAPSE_USER_ZONES','collapse_user_zones','tick','return \'0\';','SITE','GENERAL');
 			add_config_option('CHECK_BROKEN_URLS','check_broken_urls','tick','return \'1\';','SITE','_COMCODE');
 			add_config_option('GOOGLE_ANALYTICS','google_analytics','line','return \'\';','SITE','GENERAL');
 			add_config_option('FIXED_WIDTH','fixed_width','tick','return \'1\';','THEME','GENERAL');

@@ -94,7 +94,7 @@ function init__users()
 	if (array_key_exists('REMOTE_USER',$_SERVER))
 		$_SERVER['PHP_AUTH_USER']=preg_replace('#@.*$#','',$_SERVER['REMOTE_USER']);
 
-	$DOING_USERS_INIT=false;
+	$DOING_USERS_INIT=NULL;
 }
 
 /**

@@ -13,7 +13,7 @@
 
 		{+START,SET,EXTRA_COMMENTS_FIELDS_1}
 			<div>
-				<span class="field_name"><label for="ticket_type">{!TICKET_TYPE}</label></span>:
+				<span class="field_name"><label for="ticket_type">{!TICKET_TYPE}:</label></span>
 				<select id="ticket_type" name="ticket_type" class="input_list_required">
 					<option value="">---</option>
 					{+START,LOOP,TYPES}

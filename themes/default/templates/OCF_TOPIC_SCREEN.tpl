@@ -73,7 +73,7 @@
 
 	{+START,IF,{$OR,{$IS_NON_EMPTY,{MODERATOR_ACTIONS}},{$AND,{$NOT,{$MOBILE}},{$IS_NON_EMPTY,{MARKED_POST_ACTIONS}}},{MAY_CHANGE_MAX}}}
 		<div class="box ocf_topic_control_functions"><div class="box_inner">
-			<span class="field_name">{!CONTROL_FUNCTIONS}</span>:
+			<span class="field_name">{!CONTROL_FUNCTIONS}:</span>
 			{+START,IF_NON_EMPTY,{MODERATOR_ACTIONS}}
 				<form title="{!TOPIC_ACTIONS}" action="{$URL_FOR_GET_FORM*,{ACTION_URL}}" method="get" class="inline">
 					{$HIDDENS_FOR_GET_FORM,{ACTION_URL}}

@@ -76,6 +76,7 @@ class Module_admin_redirects
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
 			$zones=find_all_zones();
+			if (!in_array('site',$zones)) $zones[]='site';
 			foreach ($zones as $zone)
 			{
 				if (!file_exists(get_file_base().'/'.$zone.'/pages/comcode/'.fallback_lang().'/panel_top.txt'))
@@ -86,6 +87,7 @@ class Module_admin_redirects
 		if ((is_null($upgrade_from)) || ($upgrade_from<4))
 		{
 			$zones=find_all_zones();
+			if (!in_array('site',$zones)) $zones[]='site';
 			foreach ($zones as $zone)
 			{
 				if (!file_exists(get_file_base().'/'.$zone.'/pages/comcode/'.fallback_lang().'/panel_bottom.txt'))

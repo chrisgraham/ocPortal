@@ -4,7 +4,7 @@
 */
 
 .site_special_message {
-	padding: {$?,{$MOBILE},3,10}em 0;
+	padding: {$?,{$MOBILE},3,9}em 0;
 	text-align: center;
 }
 

@@ -5509,7 +5509,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		filenameField.setAttribute('id','txtFileName_'+name);
 		filenameField.setAttribute('type','text');
 		filenameField.value='';
-		filenameField.className='top_vertical_alignment button_pageitem';
+		filenameField.className='top_vertical_alignment button_micro';
 		filenameField.name='txtFileName_'+name;
 		filenameField.disabled=true;
 		subdiv.appendChild(filenameField);
@@ -5628,7 +5628,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var uploadButton=document.createElement('input');
 		uploadButton.type='button';
 		uploadButton.value='{!BROWSE;}';
-		uploadButton.className='top_vertical_alignment button_pageitem';
+		uploadButton.className='top_vertical_alignment button_micro';
 		uploadButton.id='uploadButton_'+name;
 		uploadButton.onclick=function() { return false; };
 		subdiv.appendChild(uploadButton,rep);
@@ -5783,11 +5783,14 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	if (clearBtn) clearBtn.style.display='none';
 	var newClearBtn=document.createElement('input');
 	newClearBtn.id='fsClear_'+name;
-	newClearBtn.type='image';
-	newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
+	//newClearBtn.type='image';
+	newClearBtn.type='button';
+	newClearBtn.className='button_micro';
+	//newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
 	newClearBtn.style.marginLeft='8px';
 	newClearBtn.style.verticalAlign='top';
-	newClearBtn.value='{+START,IF,{$VALUE_OPTION,aviary}}{!UPLOAD^;} {+END}{!CLEAR^;}';
+	newClearBtn.alt='{+START,IF,{$VALUE_OPTION,aviary}}{!UPLOAD^;} {+END}{!CLEAR^;}';
+	newClearBtn.value='{!CLEAR^;}';
 	subdiv.appendChild(newClearBtn);
 
 	newClearBtn.onclick=function() {

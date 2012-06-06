@@ -42,16 +42,14 @@
 					<table summary="{!MAP_TABLE}" class="autosized_table login_page_form">
 						<tbody>
 							<tr>
-								<th class="de_th">{!USERNAME}:</th>
+								<th class="de_th"><label for="login_username">{!USERNAME}</label>:</th>
 								<td>
-									<div class="accessibility_hidden"><label for="login_username">{!USERNAME}</label></div>
 									<input maxlength="80" accesskey="l" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="25" />
 								</td>
 							</tr>
 							<tr>
-								<th class="de_th">{!PASSWORD}:</th>
+								<th class="de_th"><label for="password">{!PASSWORD}</label>:</th>
 								<td>
-									<div class="accessibility_hidden"><label for="password">{!PASSWORD}</label></div>
 									<input maxlength="255" type="password" id="password" name="password" size="25" />
 								</td>
 							</tr>

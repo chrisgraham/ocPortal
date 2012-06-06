@@ -920,8 +920,8 @@ function select_tab(id,tab)
 
 			if ((typeof window.fade_transition!='undefined') && (tabs[i]==tab))
 			{
-				set_opacity(element,0.0);
-				fade_transition(element,100,30,8);
+				/*set_opacity(element,0.0);	Too slow
+				fade_transition(element,100,30,8);*/
 			}
 		}
 

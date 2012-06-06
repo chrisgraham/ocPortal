@@ -295,7 +295,7 @@ function wysiwyg_editor_init_for(element)
 	css+="#screen_title { display: block !important }";
 	css+=".MsoNormal { margin: 0; }";
 	css+='kbd.ocp_keep,kbd.ocp_keep_block { background-color: #BABAFF; }';
-	css+='input.ocp_keep_ui_controlled,input.ocp_keep_ui_controlled:focus { border:1px dotted; text-align: center; color: buttontext; background: buttonface; }';
+	css+='input.ocp_keep_ui_controlled,input.ocp_keep_ui_controlled:focus { border:1px dotted; text-align: center; color: buttontext; background: buttonface; max-width: 270px; }';
 	css+='input.ocp_keep_ui_controlled::selection { background: buttonface; }';
 	css+='input.ocp_keep_ui_controlled::-moz-selection { background: buttonface; }';
 	css+='.comcode_fake_table > div, .fp_col_block { outline: 1px dotted; margin: 1px 0; }';
@@ -471,14 +471,14 @@ function find_tags_in_editor(editor,element)
 									{
 										if (self_ob.is_over)
 										{
-											activate_tooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'auto');
+											activate_tooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'auto',null,null,false,true);
 											self_ob.title=self_ob.orig_title;
 										}
 									}
 								},'data='+window.encodeURIComponent('[semihtml]'+tag_text.replace(/<\/?span[^>]*>/gi,'')).substr(0,1000)+'[/semihtml]');
 							} else if (typeof this.rendered_tooltip!='undefined')
 							{
-									activate_tooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'400px');
+									activate_tooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'400px',null,null,false,true);
 							}
 						}
 					}
@@ -640,10 +640,10 @@ function insert_textbox(element,text,sel,plain_insert,html)
 				is_non_text_tag=is_non_text_tag || text.match(new RegExp('^\s*\\['+non_text_tags[i]+'([ =].*)?\\](.*)\\[\/'+non_text_tags[i]+'\\]\s*$'));
 			if (is_block || is_non_text_tag)
 			{
-				var button_text=is_block?'{!comcode:COMCODE_EDITABLE_BLOCK;*}':'{!comcode:COMCODE_EDITABLE_TAG;*}';
+				var button_text=is_block?'{!comcode:COMCODE_EDITABLE_BLOCK;}':'{!comcode:COMCODE_EDITABLE_TAG;}';
 				var matches=text.match(/^\s*\[(\w+)([ =].*)?\](.*)\[\/\w+\]\s*$/);
 				insert=get_selected_html(editor)+
-					('<input class="ocp_keep_ui_controlled" size="45" title="'+(html?matches[0].replace(/^\s*/,'').replace(/\s*$/,''):escape_html(matches[0].replace(/^\s*/,'').replace(/\s*$/,'')))+'" readonly="readonly" type="text" value="'+(button_text.replace('\{1\}',matches[is_block?3:1]))+'" />');
+					('<input class="ocp_keep_ui_controlled" size="45" title="'+(html?matches[0].replace(/^\s*/,'').replace(/\s*$/,''):escape_html(matches[0].replace(/^\s*/,'').replace(/\s*$/,'')))+'" readonly="readonly" type="text" value="'+(button_text.replace(/^(main|side|bottom)\_/,'').replace('\{1\}',matches[is_block?3:1]))+'" />');
 			} else
 			{
 				var tag_name=text.replace(/^\[/,'').replace(/[ \]].*$/,'');

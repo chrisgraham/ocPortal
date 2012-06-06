@@ -103,6 +103,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 		require_code('form_templates');
 		require_code('themes2');
 		$ids=get_all_image_ids_type('ocf_default_avatars',true);
+
 		$found_it=false;
 		foreach ($ids as $id)
 		{

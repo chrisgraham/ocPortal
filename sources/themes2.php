@@ -371,7 +371,7 @@ function _get_all_image_ids_type(&$ids,$dir,$type,$recurse,$dirs_only=false)
 				elseif (($recurse) && ((strlen($file)!=2) || (strtoupper($file)!=$file)))
 				{
 					if ($dirs_only) $ids[]=$type.(($type!='')?'/':'').$file;
-					_get_all_image_ids_type($ids,$type.(($type!='')?'/':'').$file,true,$dirs_only);
+					_get_all_image_ids_type($ids,$dir.(($dir!='')?'/':'').$file,$type.(($type!='')?'/':'').$file,true,$dirs_only);
 				}
 			}
 		}

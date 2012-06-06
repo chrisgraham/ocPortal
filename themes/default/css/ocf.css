@@ -424,6 +424,10 @@ hr.ocf_sig_barrier {
 	margin: 0.5em 0 0 0;
 }
 
+.ocf_topic_control_functions label, .ocf_topic_control_functions span, .ocf_topic_control_functions input {
+	vertical-align: middle;
+}
+
 .ocf_topic_actions {
 	margin: 1em 0;
 	font-size: 0.85em;
@@ -1170,7 +1174,7 @@ ul.ocf_profile_friends li .associated_details {
 
 .ocf_avatar_page_old_avatar {
 	float: {!en_right};
-	padding-{!en_left}: 20px;
+	padding: 1em 0 1em 1em;
 	text-align: {!en_right};
 }
 

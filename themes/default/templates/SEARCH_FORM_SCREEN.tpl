@@ -62,7 +62,7 @@
 						<td class="form_table_field_input" colspan="2">
 							<div class="accessibility_hidden"><label for="search_content">{!SEARCH_FOR}</label></div>
 							<div class="constrain_field">
-								<input maxlength="255" onkeyup="update_ajax_search_list(this,event);" class="search_content wide_field" type="search" size="48" id="search_content" name="content" value="{+START,IF_PASSED,CONTENT}{CONTENT*}{+END}" />
+								<input maxlength="255" autocomplete="off" onkeyup="update_ajax_search_list(this,event);" class="search_content wide_field" type="search" size="48" id="search_content" name="content" value="{+START,IF_PASSED,CONTENT}{CONTENT*}{+END}" />
 							</div>
 
 							{+START,IF_NON_EMPTY,{HAS_TEMPLATE_SEARCH}}
@@ -97,7 +97,7 @@
 						<td class="form_table_field_input" colspan="2">
 							<div class="accessibility_hidden"><label for="search_author">{USER_LABEL*}</label></div>
 							<div class="constrain_field">
-								<span class="invisible_ref_point"></span><input maxlength="80" class="wide_field" onkeyup="update_ajax_author_list(this,event);" type="text" value="{AUTHOR*}" id="search_author" name="author" />
+								<span class="invisible_ref_point"></span><input autocomplete="off" maxlength="80" class="wide_field" onkeyup="update_ajax_author_list(this,event);" type="text" value="{AUTHOR*}" id="search_author" name="author" />
 							</div>
 						</td>
 					</tr>

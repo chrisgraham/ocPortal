@@ -16,9 +16,11 @@
 		</p>
 	{+END}{+END}
 
-	<p class="shunted_button">
-		<a href="{URL*}"><img class="button_pageitem" alt="{!VIEW}" title="{!VIEW}" src="{$IMG*,pageitem/goto}" /></a>
-	</p>
+	{+START,IF_PASSED,URL}
+		<p class="shunted_button">
+			<a href="{URL*}"><img class="button_pageitem" alt="{!VIEW}" title="{!VIEW}" src="{$IMG*,pageitem/goto}" /></a>
+		</p>
+	{+END}
 {+END}
 
 {+START,IF_PASSED,TITLE}

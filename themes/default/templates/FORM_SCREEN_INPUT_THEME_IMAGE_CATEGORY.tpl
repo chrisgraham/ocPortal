@@ -1,6 +1,6 @@
 {+START,IF_NON_EMPTY,{CATEGORY_NAME}}
 	<div>
-		<h2 class="toggleable_tray_title">
+		<h2>
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {CATEGORY_NAME*}" title="{!EXPAND}" src="{$IMG*,expand}" /></a>
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{CATEGORY_NAME*}</a>
 		</h2>

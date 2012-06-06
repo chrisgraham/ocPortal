@@ -1,5 +1,5 @@
 [semihtml]
-{$SET,HAS_SOCIAL_MENU,{$AND,{$OCF},{$ADDON_INSTALLED,redirects_editor},{$OR,{$EQ,{$PAGE},vforums,chat,onlinemembers,points,pointstore,warnings,contactmember,groups,rules,members},{$EQ,{$ZONE},forum}}}}
+{$SET,HAS_SOCIAL_MENU,{$AND,{$OCF},{$ADDON_INSTALLED,redirects_editor},{$OR,{$EQ,{$PAGE},chat,onlinemembers,points,pointstore,warnings,contactmember,groups,rules,members},{$EQ,{$ZONE},forum}}}}
 
 {+START,IF,{$GET,HAS_SOCIAL_MENU}}
 	[block="main_community" type="top"]side_stored_menu[/block]

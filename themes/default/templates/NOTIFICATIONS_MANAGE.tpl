@@ -61,8 +61,10 @@
 {+START,IF_PASSED,AUTO_NOTIFICATION_CONTRIB_CONTENT}
 	<h2>{!ocf:AUTO_NOTIFICATION_CONTRIB_CONTENT}</h2>
 
-	<p>
-		<label for="auto_monitor_contrib_content"><input {+START,IF,{AUTO_NOTIFICATION_CONTRIB_CONTENT}}checked="checked" {+END}type="checkbox" id="auto_monitor_contrib_content" name="auto_monitor_contrib_content" value="1" />
-		{!ocf:DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT}</label>
+	<p class="simple_neat_checkbox">
+		<label for="auto_monitor_contrib_content">
+			<input {+START,IF,{AUTO_NOTIFICATION_CONTRIB_CONTENT}}checked="checked" {+END}type="checkbox" id="auto_monitor_contrib_content" name="auto_monitor_contrib_content" value="1" />
+			<span>{!ocf:DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT}</span>
+		</label>
 	</p>
 {+END}

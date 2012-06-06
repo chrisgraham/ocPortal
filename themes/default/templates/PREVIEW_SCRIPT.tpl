@@ -20,12 +20,12 @@
 	</div></div>
 {+END}
 {+START,IF_EMPTY,{VALIDATION}}
-	<div class="box box___preview_script"><div class="box_inner">
+	<section class="box box___preview_script global_middle_faux"><div class="box_inner">
 		<h2>{!PREVIEW}</h2>
 
 		<div class="preview_box">
 			<div id="preview_box_inner" class="preview_box_inner">
-				{OUTPUT}
+				{$TRIM,{OUTPUT}}
 			</div>
 		</div>
 
@@ -52,5 +52,5 @@
 				{+END}
 			</form>
 		{+END}
-	</div></div>
+	</div></section>
 {+END}

@@ -3,12 +3,20 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
+.page_running_login #main_website_inner {
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(bottom left\, {$GET,main_background}\, {$GET,main_2_background});}
+}
+
 .login_page {
 	text-align: center;
 	width: 80%;
 	margin: 0 auto;
 	background: url('{$IMG;,background_image}') no-repeat 20px 44px;
 	padding: 5px;
+}
+
+.login_page input[type="text"], .login_page input[type="password"] {
+	background: rgba(255,255,255,0.5);
 }
 
 .login_page .box {

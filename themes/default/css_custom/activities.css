@@ -126,4 +126,11 @@
 .activities_holder {
 	padding-left: 0;
 	margin-left: 0;
+	display: block;
+	list-style: none;
 }
+
+.update_success {
+	margin: 0;
+}
+
