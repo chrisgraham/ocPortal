@@ -17,7 +17,7 @@
 	font-size: 0.85em;
 	padding-bottom: 0.5em;
 	margin-bottom: 1.3em;
-	border-bottom: 1px solid {$GET,divider_line};
+	border-bottom: 1px solid {$GET,pale_border};
 }
 
 .points_give_box_header span {

@@ -4,10 +4,7 @@
 	overflow: hidden;
 	height: auto;
 	list-style: none;
-	margin-top: 0;
-	margin-left: 0;
-	margin-right: 0;
-	margin-bottom: 1px;
+	margin: 0.5em 0;
 	padding-right: 0;
 	padding-top: 0;
 	padding-bottom: 0;
@@ -97,18 +94,16 @@
 }
 
 .status_box_outer {
-	border: 1px solid #999;
-	margin: 0 10px 0 0;
+	margin: 0 1em 0 0;
 	font-size: 0.90em;
-	padding: 5px 5px 0 5px;
 }
 
 .status_box {
-	border: none;
 	background: #FFFFFF;
 	width: 100%;
 	overflow: auto;
-	height: 3.5em;
+	height: 2.3em;
+	font-size: 1.2em;
 }
 
 .status_controls {
@@ -121,6 +116,7 @@
 #notify {
 	white-space: normal;
 	font-size: 0.85em;
+	margin: 0.2em;
 }
 
 .activities_holder {

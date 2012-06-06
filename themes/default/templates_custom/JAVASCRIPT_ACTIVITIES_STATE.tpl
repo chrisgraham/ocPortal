@@ -11,6 +11,7 @@ You can make use of it via require_javascript('javascript_activities_state')
 function sUpdateF(evt) {
 	if (jQuery(this).val().trim()=='{!activities:TYPE_HERE;}') {
 		jQuery(this).val('');
+		this.className=this.className.replace(' field_input_non_filled',' field_input_filled');
 	}
 	jQuery(this).removeClass('fade_input');
 }

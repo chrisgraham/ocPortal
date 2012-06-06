@@ -1519,7 +1519,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .field_name_column_shorter {
-	width: 12em;
+	width: 8em;
 }
 
 .field_input_column, .field_value_column {
@@ -2720,8 +2720,21 @@ Form buttons are wrapped in either:
 	border-right: 1px solid;
 	border-bottom: 1px solid;
 	border-color: {$GET,tab_border};
-	padding: 8px;
+	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 10px;}
+	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 10px;}
+	padding: 0.5em;
 	margin-left: 1px;
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,main_2_background}\, {$GET,main_background});}
+}
+
+/* Tighten up subtab display */
+.tab_surround .tab_surround {
+	background-image: none;
+	background: {$GET,main_background};
+	overflow: hidden; /* To stop margin collapsing bleeding backgrounds */
+}
+.tab_surround .tab_surround .form_table {
+	margin: 0;
 }
 
 .tabs {
@@ -2731,7 +2744,6 @@ Form buttons are wrapped in either:
 	border-bottom: 1px solid;
 	border-color: {$GET,tab_border};
 	height: 22px;
-	background: {$GET,main_background};
 }
 
 a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {

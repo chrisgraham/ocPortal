@@ -12,10 +12,10 @@
 					<td>
 						<div class="status_box_outer">
 							<label class="accessibility_hidden" for="activity_status">{!TYPE_HERE}</label>
-							<textarea class="status_box fade_input" name="status" id="activity_status" rows="2">{!TYPE_HERE}</textarea>
+							<textarea class="status_box fade_input field_input_non_filled" name="status" id="activity_status" rows="2">{!TYPE_HERE}</textarea>
 						</div>
 					</td>
-					<td nowrap="nowrap" >
+					<td nowrap="nowrap" style="width: 14em">
 						<div class="status_controls">
 							{+START,IF,{$ADDON_INSTALLED,chat}}
 								<select class="drop_down" name="privacy" size="1">
@@ -30,7 +30,7 @@
 							{+START,IF,{$NOT,{$ADDON_INSTALLED,chat}}}
 								<input type="hidden" name="privacy" value="{!PUBLIC}" />
 							{+END}
-							<input onclick="disable_button_just_clicked(this);" type="submit" class="login_but button_pageitem" name="button" id="button" value="{!UPDATE}" />
+							<input onclick="disable_button_just_clicked(this);" type="submit" class="login_but button_micro" name="button" id="button" value="{!UPDATE}" />
 							<p id="notify" class="update_success">254 {!activities:CHARACTERS_LEFT}</p> {$,Do not remove; the AJAX notifications are inserted here.}
 						</div>
 					</td>

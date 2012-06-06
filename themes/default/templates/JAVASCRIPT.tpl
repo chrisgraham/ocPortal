@@ -928,7 +928,8 @@ function select_tab(id,tab)
 		element=document.getElementById('t_'+tabs[i]);
 		if (element)
 		{
-			element.className=element.className.replace(' tab_active','');
+			if (element.className.indexOf('tab_active')!=-1)
+				element.className=element.className.replace(' tab_active','');
 			if (tabs[i]==tab)	element.className+=' tab_active';
 		}
 	}

@@ -42,7 +42,13 @@ class Hook_Profiles_Tabs_activities
 	 */
 	function render_tab($member_id_of,$member_id_viewing)
 	{
+		// Need to declare these here as the Tempcode engine can't look as deep, into a loop (I think), as it would need to, to find the block declaring the dependency
 		require_lang('activities');
+		require_css('activities');
+		require_javascript('javascript_activities_state');
+		require_javascript('javascript_activities');
+		require_javascript('javascript_jquery');
+		require_javascript('javascript_base64');
 
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=activities&filter='.strval($member_id_of);
 

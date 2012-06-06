@@ -205,7 +205,7 @@ function activities_ajax_update_list_handler()
 			{
 				list($message,$memberpic,$datetime,$member_url)=render_activity($row);
 
-				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('ADDON_ICON'=>find_addon_icon($row['a_addon']), 'BITS'=>$message, 'MEMPIC'=>$memberpic, 'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']), 'DATETIME'=>strval($datetime), 'MEMBER_URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)));
+				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('LANG_STRING'=>'RAW_DUMP', 'ADDON_ICON'=>find_addon_icon($row['a_addon']), 'BITS'=>$message, 'MEMPIC'=>$memberpic, 'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']), 'DATETIME'=>strval($datetime), 'MEMBER_URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)));
 				// We dump our response in CDATA, since that lets us work around the
 				// fact that our list elements aren't actually in a list, etc.
 				// However, we allow comcode but some tags make use of CDATA. Since
