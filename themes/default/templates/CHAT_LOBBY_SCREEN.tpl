@@ -146,7 +146,7 @@
 						<p>{!MUST_ADD_CONTACTS}</p>
 
 						<form title="{!ADD}: {!BUDDY_LIST}" method="post" action="{URL_ADD_BUDDY*}">
-							<label class="accessibility_hidden" for="buddy_username">{!USERNAME}: </label><input size="18" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" onfocus="if (this.value=='{!USERNAME}') { this.value=''; this.style.color='black'; } update_ajax_member_list(this,event);" onblur="if (this.value=='') { this.value='{!USERNAME}'; this.style.color='gray'; }" style="color: gray" value="{!USERNAME}" id="buddy_username" name="buddy_username" />
+							<label class="accessibility_hidden" for="buddy_username">{!USERNAME}: </label><input size="18" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" onfocus="if (this.value=='{!USERNAME*;}') { this.value=''; this.style.color='black'; }" onblur="if (this.value=='') { this.value='{!USERNAME*;}'; this.style.color='gray'; }" style="color: gray" value="{!USERNAME}" id="buddy_username" name="buddy_username" />
 							<input onclick="disable_button_just_clicked(this);" class="button_pageitem" type="submit" value="{!ADD}" />
 						</form>
 					{+END}
