@@ -30,9 +30,7 @@
 				{+START,IF_EMPTY,{$FB_CONNECT_UID}}
 					<br />
 					<br />
-					<span xmlns:fb="http://api.facebook.com/1.0/">
-						<fb:login-button scope="email,user_birthday"></fb:login-button>
-					</span>
+					<div class="fb-login-button" data-scope="email,user_birthday"></div>
 				{+END}
 			{+END}
 		</p>

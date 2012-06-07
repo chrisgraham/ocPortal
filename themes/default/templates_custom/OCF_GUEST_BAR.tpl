@@ -14,9 +14,7 @@
 						<input class="button_pageitem" type="submit" value="{!_LOGIN}" />
 						{+START,IF_EMPTY,{$FB_CONNECT_UID}}
 							{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
-								<span xmlns:fb="http://api.facebook.com/1.0/">
-									<fb:login-button scope="email,user_birthday"></fb:login-button>
-								</span>
+								<div class="fb-login-button" data-scope="email,user_birthday"></div>
 							{+END}
 						{+END}
 						&nbsp;[ <a href="{JOIN_LINK*}">{!_JOIN}</a> | <a onclick="return open_link_as_overlay(this);" rel="nofollow" href="{FULL_LINK*}" title="{!MORE}: {!_LOGIN}">{!MORE}</a> ]
