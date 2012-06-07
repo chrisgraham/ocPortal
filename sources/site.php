@@ -623,7 +623,7 @@ function do_site()
 	}
 
 	// Put it all together
-	$out=globalise($middle,NULL,NULL,true);
+	$out=globalise($middle,NULL,'',true);
 
 	// Validation
 	$novalidate=get_param_integer('keep_novalidate',get_param_integer('novalidate',0));

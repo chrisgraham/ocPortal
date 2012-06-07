@@ -551,34 +551,18 @@ hr.ocf_sig_barrier {
 
 /*
 =========================
-=====Header/Footer=======
-=========================
-*/
-
-.ocf_information_bar_outer, .box___block_main_bottom_bar {
-	margin-bottom: 1em;
-	border: 1px solid {$GET,pale_border} !important;
-}
-
-.ocf_information_bar_outer>h2, .box___block_main_bottom_bar h2 {
-	margin: 0 0 0 0;
-	width: auto;
-	background: {$GET,point_of_interest_background};
-	color: {$GET,area_key_text};
-}
-
-/*
-=========================
 =========Header==========
 =========================
 */
 
 .ocf_information_bar { /* {$,either OCF_GUEST_BAR.tpl or OCF_MEMBER_BAR.tpl} */
 	font-size: 0.9em;
+	margin-bottom: 1em !important;
 }
 
 .ocf_information_bar_outer>.toggleable_tray {
 	margin: 0; /* Undoes what .box_inner sets, so that our dividers are flush with the box border */
+	width: auto !important;
 }
 
 .ocf_information_bar_outer .toggleable_tray_title img {
@@ -744,7 +728,7 @@ hr.ocf_sig_barrier {
 	margin: 0;
 }
 
-.box___block_main_bottom_bar>.box_inner>h3 {
+.box___block_main_bottom_bar>.box_inner>h2 {
 	margin: 0;
 	padding: 0.3em 0 0.4em 0;
 }

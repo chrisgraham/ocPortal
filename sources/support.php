@@ -241,7 +241,7 @@ function ocp_mb_substr($in,$from,$amount=NULL,$force=false)
  * @param  string	Subject.
  * @return string	Result.
  */
-function ocp_mb_ucwords()
+function ocp_mb_ucwords($in)
 {
 	if (strtolower(get_charset())!='utf-8') return ucwords($in);
 
@@ -426,7 +426,7 @@ function addon_installed($addon)
  * @param  integer		The number of decimals to keep
  * @return string			The string converted
  */
-function float_to_raw_string($num,$decs_wanted=0)
+function float_to_raw_string($num,$decs_wanted=2)
 {
 	$str=number_format($num,5,'.','');
 	$decs_here=strlen($str)-strpos($str,'.')-1;
@@ -2089,7 +2089,7 @@ function propagate_ocselect()
 /**
  * Propagate ocSelect through page-links.
  *
- * @return array				Extra URL mappings
+ * @return string				Extra page-link mappings
  */
 function propagate_ocselect_pagelink()
 {
@@ -2149,7 +2149,7 @@ function member_personal_links_and_details($member_id)
 	// Links to usergroups
 	if (get_option('ocp_show_personal_usergroup')=='1')
 	{
-		$group_id=$GLOBALS['FORUM_DRIVER']->pname_group($GLOBALS['FORUM_DRIVER']->pget_row($username));
+		$group_id=$GLOBALS['FORUM_DRIVER']->pname_group($GLOBALS['FORUM_DRIVER']->get_member_row($member_id));
 		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 		if (array_key_exists($group_id,$usergroups))
 		{
@@ -2168,7 +2168,7 @@ function member_personal_links_and_details($member_id)
 	// Last visit time
 	if (get_option('ocp_show_personal_last_visit')=='1')
 	{
-		$row=$GLOBALS['FORUM_DRIVER']->pget_row($username);
+		$row=$GLOBALS['FORUM_DRIVER']->get_member_row($member_id);
 		$last_visit=$GLOBALS['FORUM_DRIVER']->pnamelast_visit($row);
 		$_last_visit=get_timezoned_date($last_visit,false);
 		$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'sas41eddsdsdsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('LAST_HERE'),'RAW_KEY'=>strval($last_visit),'VALUE'=>$_last_visit)));

@@ -13,23 +13,23 @@
 		if (substr($get_url,0,4)!='http') exit('Security issue');
 		$matches=array();
 		preg_match('/[^?]*/', $filename, $matches);
-		$string = $matches[0];
+		$string=$matches[0];
 		//split the string by the literal dot in the filename
-		$pattern = preg_split('/\./', $string, -1, PREG_SPLIT_OFFSET_CAPTURE);
+		$pattern=preg_split('/\./', $string, -1, PREG_SPLIT_OFFSET_CAPTURE);
 		//get the last dot position
-		$lastdot = $pattern[count($pattern)-1][1];
+		$lastdot=$pattern[count($pattern)-1][1];
 		//now extract the filename using the basename function
-		$filename = basename(substr($string, 0, $lastdot-1));
+		$filename=basename(substr($string, 0, $lastdot-1));
 
 		preg_match('/[^?]*/', $get_url, $matches);
-		$string = $matches[0];
+		$string=$matches[0];
 
-		$pattern = preg_split('/\./', $string, -1, PREG_SPLIT_OFFSET_CAPTURE);
+		$pattern=preg_split('/\./', $string, -1, PREG_SPLIT_OFFSET_CAPTURE);
 
 		$ext='';
 		if(count($pattern) > 1)
 		{
-			$filenamepart = $pattern[count($pattern)-1][0];
+			$filenamepart=$pattern[count($pattern)-1][0];
 			preg_match('/[^?]*/', $filenamepart, $matches);
 			$ext=$matches[0];
 		}
@@ -40,16 +40,16 @@
 		$save_to_file=preg_replace('#\\\#','/',realpath('./')).'/queue/'.$input_file;
 
 		//start upload
-		$read = fopen(str_replace(' ','%20',$get_url), "rb");
+		$read=fopen(str_replace(' ','%20',$get_url), "rb");
 
 
 		/* Open a file for writing */
-		$tmp_name = tempnam(('/tmp'),'transcodereceive');
-		$fp = fopen($tmp_name, "wb");
+		$tmp_name=tempnam(('/tmp'),'transcodereceive');
+		$fp=fopen($tmp_name, "wb");
 
 		/* Read the data 1 KB at a time
 		and write to the file */
-		while (($data = fread($read, 1024))!==false)
+		while (($data=fread($read, 1024))!==false)
 		fwrite($fp, $data);
 
 		rename($tmp_name,$save_to_file);

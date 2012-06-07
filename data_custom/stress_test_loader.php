@@ -451,7 +451,7 @@ function do_work()
 	require_code('shopping');
 	for ($j=$GLOBALS['SITE_DB']->query_value('shopping_cart','COUNT(*)');$j<$num_wanted;$j++)
 	{
-		$product_det	=	array(
+		$product_det=array(
 						'product_id'	=>	$pid,
 						'product_name'	=>	$fields[0],
 						'product_code'	=>	$fields[1],
@@ -475,13 +475,13 @@ function do_work()
 					'product_description'	=>	$product_det['description'],
 					'product_type'		=>	$product_det['product_type'],
 					'product_weight'	=>	$product_det['product_weight'],
-					'is_deleted' => 0,
+					'is_deleted'=>0,
 				)
 		);
 	}
 	for ($j=$GLOBALS['SITE_DB']->query_value('shopping_order','COUNT(*)');$j<$num_wanted;$j++)
 	{
-		$order_id	=	$GLOBALS['SITE_DB']->query_insert('shopping_order',array(
+		$order_id=$GLOBALS['SITE_DB']->query_insert('shopping_order',array(
 					'c_member'		=>	mt_rand(db_get_first_id()+1,$num_wanted-1),
 					'session_id'	=>	mt_rand(0,1000000),
 					'add_date'		=>	time(),
@@ -501,7 +501,7 @@ function do_work()
 			'p_quantity'	=>	1,
 			'p_price'	=>	'12.00',
 			'order_id'	=>	$order_id,
-			'dispatch_status' => '',
+			'dispatch_status'=>'',
 			'included_tax'=>	'1.00',
 		));
 	}

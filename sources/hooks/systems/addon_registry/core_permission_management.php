@@ -58,9 +58,9 @@ class Hook_addon_registry_core_permission_management
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -110,17 +110,17 @@ class Hook_addon_registry_core_permission_management
 	function tpl_previews()
 	{
 		return array(
-			'PERMISSIONS_TREE_EDITOR_SCREEN.tpl' => 'administrative__permissions_tree_editor_screen',
-			'PERMISSION_HEADER_CELL.tpl' => 'administrative__permission_keys_permissions_screen',
-			'PERMISSION_CELL.tpl' => 'administrative__permission_keys_permissions_screen',
-			'PERMISSION_KEYS_PERMISSION_ROW.tpl' => 'administrative__permission_keys_permissions_screen',
-			'PERMISSION_KEYS_MESSAGE_ROW.tpl' => 'administrative__permission_keys_permissions_screen',
-			'PERMISSION_KEYS_PERMISSIONS_SCREEN.tpl' => 'administrative__permission_keys_permissions_screen',
-			'PERMISSION_COLUMN_SIZER.tpl' => 'administrative__permission_screen_permissions_screen',
-			'PERMISSION_ROW.tpl' => 'administrative__permission_screen_permissions_screen',
-			'PERMISSION_SCREEN_PERMISSIONS_SCREEN.tpl' => 'administrative__permission_screen_permissions_screen',
-			'PERMISSION_S_CONFIG_SECTION.tpl' => 'administrative__permission_s_permissions_screen',
-			'PERMISSION_S_PERMISSIONS_SCREEN.tpl' => 'administrative__permission_s_permissions_screen'
+			'PERMISSIONS_TREE_EDITOR_SCREEN.tpl'=>'administrative__permissions_tree_editor_screen',
+			'PERMISSION_HEADER_CELL.tpl'=>'administrative__permission_keys_permissions_screen',
+			'PERMISSION_CELL.tpl'=>'administrative__permission_keys_permissions_screen',
+			'PERMISSION_KEYS_PERMISSION_ROW.tpl'=>'administrative__permission_keys_permissions_screen',
+			'PERMISSION_KEYS_MESSAGE_ROW.tpl'=>'administrative__permission_keys_permissions_screen',
+			'PERMISSION_KEYS_PERMISSIONS_SCREEN.tpl'=>'administrative__permission_keys_permissions_screen',
+			'PERMISSION_COLUMN_SIZER.tpl'=>'administrative__permission_screen_permissions_screen',
+			'PERMISSION_ROW.tpl'=>'administrative__permission_screen_permissions_screen',
+			'PERMISSION_SCREEN_PERMISSIONS_SCREEN.tpl'=>'administrative__permission_screen_permissions_screen',
+			'PERMISSION_S_CONFIG_SECTION.tpl'=>'administrative__permission_s_permissions_screen',
+			'PERMISSION_S_PERMISSIONS_SCREEN.tpl'=>'administrative__permission_s_permissions_screen'
 		);
 	}
 
@@ -142,20 +142,20 @@ class Hook_addon_registry_core_permission_management
 
 		require_css('forms');
 
-		$groups = new ocp_tempcode();
-		foreach (placeholder_array() as $id => $group_name)
+		$groups=new ocp_tempcode();
+		foreach (placeholder_array() as $id=>$group_name)
 		{
 			$groups->attach(form_input_list_entry("$id", false, $group_name));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('PERMISSIONS_TREE_EDITOR_SCREEN', array(
-				'USERGROUPS' => placeholder_array(),
-				'TITLE' => lorem_title(),
-				'INITIAL_GROUP' => lorem_phrase(),
-				'COLOR' => lorem_phrase(),
-				'GROUPS' => $groups,
-				'EDITOR' => lorem_phrase()
+				'USERGROUPS'=>placeholder_array(),
+				'TITLE'=>lorem_title(),
+				'INITIAL_GROUP'=>lorem_phrase(),
+				'COLOR'=>lorem_phrase(),
+				'GROUPS'=>$groups,
+				'EDITOR'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -174,74 +174,74 @@ class Hook_addon_registry_core_permission_management
 
 		require_css('forms');
 
-		$color = 'b7b7b7';
-		$header_cells = new ocp_tempcode();
-		foreach (placeholder_array() as $id => $name)
+		$color='b7b7b7';
+		$header_cells=new ocp_tempcode();
+		foreach (placeholder_array() as $id=>$name)
 		{
 			$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL', array(
-				'COLOR' => $color,
-				'GROUP' => $name
+				'COLOR'=>$color,
+				'GROUP'=>$name
 			)));
 		}
 
 		$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL', array(
-			'COLOR' => $color,
-			'GROUP' => '+/-'
+			'COLOR'=>$color,
+			'GROUP'=>'+/-'
 		)));
 
-		$rows = new ocp_tempcode();
-		$p_rows = placeholder_array();
-		foreach ($p_rows as $id => $page)
+		$rows=new ocp_tempcode();
+		$p_rows=placeholder_array();
+		foreach ($p_rows as $id=>$page)
 		{
-			$cells = new ocp_tempcode();
-			$code = '';
+			$cells=new ocp_tempcode();
+			$code='';
 
-			foreach (placeholder_array() as $gid => $g_name)
+			foreach (placeholder_array() as $gid=>$g_name)
 			{
 				//if (in_array($gid,$admin_groups)) continue;
 				$cells->attach(do_lorem_template('PERMISSION_CELL', array(
-					'CHECKED' => true,
-					'HUMAN' => lorem_phrase(),
-					'NAME' => 'p_' . strval($id) . '__' . strval($gid)
+					'CHECKED'=>true,
+					'HUMAN'=>lorem_phrase(),
+					'NAME'=>'p_' . strval($id) . '__' . strval($gid)
 				)));
 			}
 
 			$rows->attach(do_lorem_template('PERMISSION_KEYS_PERMISSION_ROW', array(
-				'ALL_OFF' => false,
-				'KEY' => lorem_word(),
-				'UID' => "$id",
-				'CODE' => '',
-				'CELLS' => $cells
+				'ALL_OFF'=>false,
+				'KEY'=>lorem_word(),
+				'UID'=>"$id",
+				'CODE'=>'',
+				'CELLS'=>$cells
 			)));
 		}
 
 		// Match-key messages
-		$m_rows = array();
-		$m_rows[] = array(
-			'id' => 'new_1',
-			'k_message' => '',
-			'k_match_key' => ''
+		$m_rows=array();
+		$m_rows[]=array(
+			'id'=>'new_1',
+			'k_message'=>'',
+			'k_match_key'=>''
 		);
 
-		$rows2 = new ocp_tempcode();
+		$rows2=new ocp_tempcode();
 		foreach ($m_rows as $row)
 		{
-			$msg = lorem_phrase();
+			$msg=lorem_phrase();
 			$rows2->attach(do_lorem_template('PERMISSION_KEYS_MESSAGE_ROW', array(
-				'KEY' => lorem_word(),
-				'MSG' => $msg,
-				'UID' => $row['id']
+				'KEY'=>lorem_word(),
+				'MSG'=>$msg,
+				'UID'=>$row['id']
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('PERMISSION_KEYS_PERMISSIONS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'HEADER_CELLS' => $header_cells,
-				'ROWS' => $rows,
-				'ROWS2' => $rows2,
-				'COLS' => '',
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'HEADER_CELLS'=>$header_cells,
+				'ROWS'=>$rows,
+				'ROWS2'=>$rows2,
+				'COLS'=>'',
 			)), NULL, '', true)
 		);
 	}
@@ -259,62 +259,62 @@ class Hook_addon_registry_core_permission_management
 
 		require_css('forms');
 
-		$header_cells = new ocp_tempcode();
-		foreach (placeholder_array() as $id => $name)
+		$header_cells=new ocp_tempcode();
+		foreach (placeholder_array() as $id=>$name)
 		{
 			$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL', array(
-				'COLOR' => 'b7b7b7',
-				'GROUP' => $name
+				'COLOR'=>'b7b7b7',
+				'GROUP'=>$name
 			)));
 		}
 		$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL', array(
-			'COLOR' => 'b7b7b7',
-			'GROUP' => ''
+			'COLOR'=>'b7b7b7',
+			'GROUP'=>''
 		)));
 
-		$cols = new ocp_tempcode();
-		foreach (placeholder_array() as $id => $g_name)
+		$cols=new ocp_tempcode();
+		foreach (placeholder_array() as $id=>$g_name)
 		{
 			$cols->attach(do_lorem_template('PERMISSION_COLUMN_SIZER'));
 		}
-		$k = 0;
-		$rows = new ocp_tempcode();
+		$k=0;
+		$rows=new ocp_tempcode();
 		foreach (placeholder_array() as $zone)
 		{
 			foreach (placeholder_array() as $page)
 			{
-				$cells = new ocp_tempcode();
-				$code = '';
+				$cells=new ocp_tempcode();
+				$code='';
 
-				$has = true;
-				foreach (placeholder_array() as $id => $g_name)
+				$has=true;
+				foreach (placeholder_array() as $id=>$g_name)
 				{
 					$cells->attach(do_lorem_template('PERMISSION_CELL', array(
-						'CHECKED' => true,
-						'HUMAN' => lorem_phrase(),
-						'NAME' => "id_" . strval($k)
+						'CHECKED'=>true,
+						'HUMAN'=>lorem_phrase(),
+						'NAME'=>"id_" . strval($k)
 					)));
 					$k++;
 				}
 
 				$rows->attach(do_lorem_template('PERMISSION_ROW', array(
-					'HAS' => true,
-					'ABBR' => lorem_word(),
-					'PERMISSION' => lorem_word_2(),
-					'CELLS' => $cells,
-					'CODE' => ''
+					'HAS'=>true,
+					'ABBR'=>lorem_word(),
+					'PERMISSION'=>lorem_word_2(),
+					'CELLS'=>$cells,
+					'CODE'=>''
 				)));
 			}
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('PERMISSION_SCREEN_PERMISSIONS_SCREEN', array(
-				'COLS' => '',
-				'ZONE' => lorem_phrase(),
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'HEADER_CELLS' => $header_cells,
-				'ROWS' => $rows
+				'COLS'=>'',
+				'ZONE'=>lorem_phrase(),
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'HEADER_CELLS'=>$header_cells,
+				'ROWS'=>$rows
 			)), NULL, '', true)
 		);
 	}
@@ -332,35 +332,35 @@ class Hook_addon_registry_core_permission_management
 
 		require_css('forms');
 
-		$sections = new ocp_tempcode();
-		$rows = new ocp_tempcode();
-		$header_cells = new ocp_tempcode();
-		$cols = new ocp_tempcode();
+		$sections=new ocp_tempcode();
+		$rows=new ocp_tempcode();
+		$header_cells=new ocp_tempcode();
+		$cols=new ocp_tempcode();
 		//permission rows
-		$k = 0;
+		$k=0;
 		foreach (placeholder_array() as $permission)
 		{
-			//$permission_text = do_lang('PT_'.$permission);
+			//$permission_text=do_lang('PT_'.$permission);
 
-			$cells = new ocp_tempcode();
+			$cells=new ocp_tempcode();
 
-			foreach (placeholder_array() as $id => $group)
+			foreach (placeholder_array() as $id=>$group)
 			{
 				$k++;
 				$cells->attach(do_lorem_template('PERMISSION_CELL', array(
-					'CHECKED' => true,
-					'HUMAN' => lorem_phrase(),
-					'NAME' => $group . strval($k)
+					'CHECKED'=>true,
+					'HUMAN'=>lorem_phrase(),
+					'NAME'=>$group . strval($k)
 				)));
 			}
 
-			$tpl_map = array(
-				'HAS' => lorem_word(),
-				'ABBR' => $permission,
-				'PERMISSION' => lorem_phrase(),
-				'CELLS' => $cells,
-				'CODE' => '',
-				'DESCRIPTION' => lorem_phrase()
+			$tpl_map=array(
+				'HAS'=>lorem_word(),
+				'ABBR'=>$permission,
+				'PERMISSION'=>lorem_phrase(),
+				'CELLS'=>$cells,
+				'CODE'=>'',
+				'DESCRIPTION'=>lorem_phrase()
 			);
 
 			$rows->attach(do_lorem_template('PERMISSION_ROW', $tpl_map));
@@ -368,27 +368,27 @@ class Hook_addon_registry_core_permission_management
 			$cols->attach(do_lorem_template('PERMISSION_COLUMN_SIZER'));
 
 			$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL', array(
-				'COLOR' => 'FF00FF',
-				'GROUP' => $permission
+				'COLOR'=>'FF00FF',
+				'GROUP'=>$permission
 			)));
 		}
 
 		$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL', array(
-			'COLOR' => 'FF00FF',
-			'GROUP' => '+/-'
+			'COLOR'=>'FF00FF',
+			'GROUP'=>'+/-'
 		)));
 
 		$sections->attach(do_lorem_template('PERMISSION_S_CONFIG_SECTION', array(
-			'HEADER_CELLS' => $header_cells,
-			'SECTION' => $rows,
-			'COLS' => '',
-			'CURRENT_SECTION' => lorem_word()
+			'HEADER_CELLS'=>$header_cells,
+			'SECTION'=>$rows,
+			'COLS'=>'',
+			'CURRENT_SECTION'=>lorem_word()
 		)));
 
-		$out = do_lorem_template('PERMISSION_S_PERMISSIONS_SCREEN', array(
-			'TITLE' => lorem_title(),
-			'URL' => placeholder_url(),
-			'SECTIONS' => $sections
+		$out=do_lorem_template('PERMISSION_S_PERMISSIONS_SCREEN', array(
+			'TITLE'=>lorem_title(),
+			'URL'=>placeholder_url(),
+			'SECTIONS'=>$sections
 		));
 
 		return array(

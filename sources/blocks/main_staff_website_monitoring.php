@@ -118,24 +118,24 @@ class Block_main_staff_website_monitoring
 	//convert a string to a 32-bit integer
 	function StrToNum($str, $check, $magic)
 	{
-		$int_32_unit = 4294967296.0;  // 2^32
+		$int_32_unit=4294967296.0;  // 2^32
 
-		$length = strlen($str);
-		for ($i = 0; $i < $length; $i++)
+		$length=strlen($str);
+		for ($i=0; $i < $length; $i++)
 		{
 			$check *= $magic;
-			//If the float is beyond the boundaries of integer (usually +/- 2.15e+9 = 2^31),
+			//If the float is beyond the boundaries of integer (usually +/- 2.15e+9=2^31),
 			//  the result of converting to integer is undefined
 			//  refer to http://www.php.net/manual/en/language.types.integer.php
 			if ((is_integer($check) && floatval($check) >= $int_32_unit) ||
 				(is_float($check) && $check >= $int_32_unit))
 			{
-				$check = ($check - $int_32_unit * intval($check / $int_32_unit));
+				$check=($check - $int_32_unit * intval($check / $int_32_unit));
 				//if the check less than -2^31
-				$check = ($check < -2147483648.0) ? ($check + $int_32_unit) : $check;
-				if (is_float($check)) $check = intval($check);
+				$check=($check < -2147483648.0) ? ($check + $int_32_unit) : $check;
+				if (is_float($check)) $check=intval($check);
 			}
-			$check += ord($str[$i]);
+			$check+=ord($str[$i]);
 		}
 		return is_integer($check)? $check : intval($check);
 	}
@@ -143,16 +143,16 @@ class Block_main_staff_website_monitoring
 	//genearate a hash for a url
 	function HashURL($string)
 	{
-		$check1 = $this->StrToNum($string, 0x1505, 0x21);
-		$check2 = $this->StrToNum($string, 0, 0x1003F);
+		$check1=$this->StrToNum($string, 0x1505, 0x21);
+		$check2=$this->StrToNum($string, 0, 0x1003F);
 
-		$check1 = $check1 >> 2;
-		$check1 = (($check1 >> 4) & 0x3FFFFC0 ) | ($check1 & 0x3F);
-		$check1 = (($check1 >> 4) & 0x3FFC00 ) | ($check1 & 0x3FF);
-		$check1 = (($check1 >> 4) & 0x3C000 ) | ($check1 & 0x3FFF);
+		$check1=$check1 >> 2;
+		$check1=(($check1 >> 4) & 0x3FFFFC0 ) | ($check1 & 0x3F);
+		$check1=(($check1 >> 4) & 0x3FFC00 ) | ($check1 & 0x3FF);
+		$check1=(($check1 >> 4) & 0x3C000 ) | ($check1 & 0x3FFF);
 
-		$t1 = (((($check1 & 0x3C0) << 4) | ($check1 & 0x3C)) <<2 ) | ($check2 & 0xF0F );
-		$t2 = @(((($check1 & 0xFFFFC000) << 4) | ($check1 & 0x3C00)) << 0xA) | ($check2 & 0xF0F0000 );
+		$t1=(((($check1 & 0x3C0) << 4) | ($check1 & 0x3C)) <<2 ) | ($check2 & 0xF0F );
+		$t2=@(((($check1 & 0xFFFFC000) << 4) | ($check1 & 0x3C00)) << 0xA) | ($check2 & 0xF0F0000 );
 
 		return ($t1 | $t2);
 	}
@@ -160,36 +160,36 @@ class Block_main_staff_website_monitoring
 	//generate a checksum for the hash string
 	function CheckHash($hashnum)
 	{
-		$check_byte = 0;
-		$flag = 0;
+		$check_byte=0;
+		$flag=0;
 
-		$hashstr = sprintf('%u', $hashnum) ;
-		$length = strlen($hashstr);
+		$hashstr=sprintf('%u', $hashnum) ;
+		$length=strlen($hashstr);
 
-		for ($i = $length - 1;  $i >= 0;  $i --)
+		for ($i=$length - 1;  $i >= 0;  $i --)
 		{
-			$re = intval($hashstr[$i]);
+			$re=intval($hashstr[$i]);
 			if (1 === ($flag % 2))
 			{
-				$re += $re;
-				$re = intval($re / 10) + ($re % 10);
+				$re+=$re;
+				$re=intval($re / 10) + ($re % 10);
 			}
-			$check_byte += $re;
+			$check_byte+=$re;
 			$flag ++;
 		}
 
-		$check_byte = $check_byte % 10;
+		$check_byte=$check_byte % 10;
 		if (0 !== $check_byte)
 		{
-			$check_byte = 10 - $check_byte;
+			$check_byte=10 - $check_byte;
 			if (1 === ($flag % 2) )
 			{
 				if (1 === ($check_byte % 2))
 				{
-					$check_byte += 9;
+					$check_byte+=9;
 				}
 
-				$check_byte = $check_byte >> 1;
+				$check_byte=$check_byte >> 1;
 			}
 		}
 
@@ -205,13 +205,13 @@ class Block_main_staff_website_monitoring
 	//return the pagerank figure
 	function getpr($url)
 	{
-		$ch = $this->getch($url);
-		$errno = '0';
-		$errstr = '';
+		$ch=$this->getch($url);
+		$errno='0';
+		$errstr='';
 		require_code('files');
 		$data=http_download_file('http://toolbarqueries.google.com/tbr?client=navclient-auto&ch='.$ch.'&features=Rank&q=info:'.$url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1.0);
 		if (is_null($data)) return '';
-		$pos = strpos($data, "Rank_");
+		$pos=strpos($data, "Rank_");
 		if($pos === false)
 		{
 		} else
@@ -296,19 +296,19 @@ class Block_main_staff_website_monitoring
 
 		$rows=$GLOBALS['SITE_DB']->query_select('sitewatchlist');
 
-		$sitesbeingwatched = array();
+		$sitesbeingwatched=array();
 		$sitegriddata=array();
 		if (count($rows)>0)
 		{
 			foreach ($rows as $r)
 			{
 				$alex=$this->getAlexaRank(($r['siteurl']));
-				$sitesbeingwatched[$r['siteurl']] = $r['site_name'];
+				$sitesbeingwatched[$r['siteurl']]=$r['site_name'];
 				$googleranking=integer_format(intval($this->getPageRank($r['siteurl'])));
 				$alexaranking=$alex[0];
 				$alexatraffic=$alex[1];
 
-				$sitegriddata[] = array(
+				$sitegriddata[]=array(
 					'URL'=>$r['siteurl'],
 					'GRANK'=>$googleranking,
 					'ALEXAR'=>$alexaranking,

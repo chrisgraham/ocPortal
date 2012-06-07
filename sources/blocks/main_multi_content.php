@@ -370,7 +370,7 @@ class Block_main_multi_content
 
 				$n_count=1; //If duplicates exist, position in the new array needs to be maintained.
 				//Carry on as it should be
-				for ($t_count = 1; $t_count<$total_count; $t_count++)
+				for ($t_count=1; $t_count<$total_count; $t_count++)
 				{
 					if (array_key_exists($n_count,$pinned_order))
 					{

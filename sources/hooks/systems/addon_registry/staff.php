@@ -58,9 +58,9 @@ class Hook_addon_registry_staff
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -98,9 +98,9 @@ class Hook_addon_registry_staff
 	function tpl_previews()
 	{
 		return array(
-			'STAFF_SCREEN.tpl' => 'staff_screen',
-			'STAFF_EDIT_WRAPPER.tpl' => 'administrative__staff_admin_screen',
-			'STAFF_ADMIN_SCREEN.tpl' => 'administrative__staff_admin_screen'
+			'STAFF_SCREEN.tpl'=>'staff_screen',
+			'STAFF_EDIT_WRAPPER.tpl'=>'administrative__staff_admin_screen',
+			'STAFF_ADMIN_SCREEN.tpl'=>'administrative__staff_admin_screen'
 		);
 	}
 
@@ -113,20 +113,20 @@ class Hook_addon_registry_staff
 	 */
 	function tpl_preview__administrative__staff_admin_screen()
 	{
-		$available = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$available=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$available->attach(do_lorem_template('STAFF_EDIT_WRAPPER', array(
-				'FORM' => placeholder_form(),
-				'NAME' => lorem_word()
+				'FORM'=>placeholder_form(),
+				'NAME'=>lorem_word()
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('STAFF_ADMIN_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'TEXT' => lorem_sentence_html(),
-				'FORUM_STAFF' => $available
+				'TITLE'=>lorem_title(),
+				'TEXT'=>lorem_sentence_html(),
+				'FORUM_STAFF'=>$available
 			)), NULL, '', true)
 		);
 	}
@@ -142,14 +142,14 @@ class Hook_addon_registry_staff
 	{
 		return array(
 			lorem_globalise(do_lorem_template('STAFF_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'REAL_NAME' => lorem_phrase(),
-				'ROLE' => lorem_phrase(),
-				'ADDRESS' => lorem_phrase(),
-				'NAME' => lorem_word(),
-				'MEMBER_ID' => placeholder_id(),
-				'PROFILE_URL' => placeholder_url(),
-				'ALL_STAFF_URL' => placeholder_url()
+				'TITLE'=>lorem_title(),
+				'REAL_NAME'=>lorem_phrase(),
+				'ROLE'=>lorem_phrase(),
+				'ADDRESS'=>lorem_phrase(),
+				'NAME'=>lorem_word(),
+				'MEMBER_ID'=>placeholder_id(),
+				'PROFILE_URL'=>placeholder_url(),
+				'ALL_STAFF_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}

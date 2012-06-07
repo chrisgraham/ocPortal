@@ -58,11 +58,11 @@ class Hook_addon_registry_ocf_post_templates
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(
+			'requires'=>array(
 				'ocf_forum'
 			),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -90,7 +90,7 @@ class Hook_addon_registry_ocf_post_templates
 	function tpl_previews()
 	{
 		return array(
-			'OCF_POST_TEMPLATE_SELECT.tpl' => 'ocf_post_template_select'
+			'OCF_POST_TEMPLATE_SELECT.tpl'=>'ocf_post_template_select'
 		);
 	}
 
@@ -106,44 +106,44 @@ class Hook_addon_registry_ocf_post_templates
 		require_lang('ocf');
 		require_css('ocf');
 
-		$list = new ocp_tempcode();
-		foreach (placeholder_array() as $key => $value)
+		$list=new ocp_tempcode();
+		foreach (placeholder_array() as $key=>$value)
 		{
 			$list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
-				'SELECTED' => false,
-				'DISABLED' => false,
-				'CLASS' => '',
-				'NAME' => lorem_word().strval($key),
-				'TEXT' => lorem_phrase()
+				'SELECTED'=>false,
+				'DISABLED'=>false,
+				'CLASS'=>'',
+				'NAME'=>lorem_word().strval($key),
+				'TEXT'=>lorem_phrase()
 			)));
 		}
 
-		$input = do_lorem_template('OCF_POST_TEMPLATE_SELECT', array(
-			'TABINDEX' => placeholder_number(),
-			'LIST' => $list
+		$input=do_lorem_template('OCF_POST_TEMPLATE_SELECT', array(
+			'TABINDEX'=>placeholder_number(),
+			'LIST'=>$list
 		));
 
-		$fields = new ocp_tempcode();
+		$fields=new ocp_tempcode();
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'PRETTY_NAME' => lorem_word(),
-			'NAME' => 'post_template',
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'PRETTY_NAME'=>lorem_word(),
+			'NAME'=>'post_template',
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
 		return array(
 			lorem_globalise(do_lorem_template('FORM_SCREEN', array(
-				'SKIP_VALIDATION' => true,
-				'HIDDEN' => '',
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'FIELDS' => $fields,
-				'SUBMIT_NAME' => lorem_phrase(),
-				'TEXT' => lorem_sentence_html()
+				'SKIP_VALIDATION'=>true,
+				'HIDDEN'=>'',
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'FIELDS'=>$fields,
+				'SUBMIT_NAME'=>lorem_phrase(),
+				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
 		);
 	}

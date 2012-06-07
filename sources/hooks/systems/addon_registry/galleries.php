@@ -59,9 +59,9 @@ class Hook_addon_registry_galleries
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -221,41 +221,41 @@ class Hook_addon_registry_galleries
 	function tpl_previews()
 	{
 		return array(
-				'BLOCK_MAIN_IMAGE_FADER.tpl' => 'block_main_image_fader',
-				'GALLERY_IMPORT_SCREEN.tpl' => 'administrative__gallery_import_screen',
-				'GALLERY_TEASE_PIC.tpl' => 'block_main_gallery_tease',
-				'BLOCK_MAIN_GALLERY_TEASE.tpl' => 'block_main_gallery_tease',
-				'BLOCK_MAIN_TOP_GALLERIES.tpl' => 'block_main_top_galleries',
-				'BLOCK_MAIN_RECENT_GALLERIES.tpl' => 'block_main_recent_galleries',
-				'GALLERY_IMAGE.tpl' => 'gallery_image',
-				'GALLERY_ENTRY_WRAP.tpl' => 'gallery_regular_mode_screen',
-				'GALLERY_VIDEO.tpl' => 'gallery_regular_mode_screen',
-				'BLOCK_MAIN_GALLERY_EMBED.tpl' => 'block_main_gallery_embed',
-				'BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH.tpl' => 'block_side_root_galleries',
-				'BLOCK_SIDE_ROOT_GALLERIES_LINE.tpl' => 'block_side_root_galleries',
-				'BLOCK_SIDE_ROOT_GALLERIES_LINE_CONTAINER.tpl' => 'block_side_root_galleries',
-				'BLOCK_SIDE_ROOT_GALLERIES.tpl' => 'block_side_root_galleries',
-				'GALLERY_VIDEO_INFO.tpl' => 'gallery_video_info',
-				'GALLERY_BOX.tpl' => 'gallery_regular_mode_screen',
-				'GALLERY_SUBGALLERY_WRAP.tpl' => 'block_main_recent_galleries',
-				'GALLERY_ENTRY_LIST_LINE.tpl' => 'gallery_entry_list_line',
-				'GALLERY_FLOWMODE_IMAGE.tpl' => 'gallery_flowmode_image',
-				'GALLERY_FLOWMODE_VIDEO.tpl' => 'gallery_flowmode_video',
-				'GALLERY_FLOW_ENTRY.tpl' => 'gallery_flowmode_image',
-				'GALLERY_FLOW_MODE_SCREEN.tpl' => 'gallery_flowmode_image',
-				'GALLERY_REGULAR_MODE_SCREEN.tpl' => 'gallery_regular_mode_screen',
-				'GALLERY_ENTRY_SCREEN.tpl' => 'gallery_entry_screen',
-				'GALLERY_NAV.tpl' => 'gallery_entry_screen',
-				'GALLERY_VIDEO_YOUTUBE.tpl' => 'gallery_video_youtube',
-				'GALLERY_VIDEO_FACEBOOK.tpl' => 'gallery_video_facebook',
-				'GALLERY_VIDEO_GENERAL.tpl' => 'gallery_video_general',
-				'GALLERY_VIDEO_QT.tpl' => 'gallery_video_qt',
-				'GALLERY_VIDEO_RM.tpl' => 'gallery_video_rm',
-				'GALLERY_SWF.tpl' => 'gallery_swf',
-				'GALLERY_PDF.tpl' => 'gallery_pdf',
-				'OCF_MEMBER_PROFILE_GALLERIES.tpl' => 'ocf_member_profile_galleries',
-				'GALLERY_VIDEO_BOX.tpl' => 'gallery_video_box',
-				'GALLERY_IMAGE_BOX.tpl' => 'gallery_image_box',
+				'BLOCK_MAIN_IMAGE_FADER.tpl'=>'block_main_image_fader',
+				'GALLERY_IMPORT_SCREEN.tpl'=>'administrative__gallery_import_screen',
+				'GALLERY_TEASE_PIC.tpl'=>'block_main_gallery_tease',
+				'BLOCK_MAIN_GALLERY_TEASE.tpl'=>'block_main_gallery_tease',
+				'BLOCK_MAIN_TOP_GALLERIES.tpl'=>'block_main_top_galleries',
+				'BLOCK_MAIN_RECENT_GALLERIES.tpl'=>'block_main_recent_galleries',
+				'GALLERY_IMAGE.tpl'=>'gallery_image',
+				'GALLERY_ENTRY_WRAP.tpl'=>'gallery_regular_mode_screen',
+				'GALLERY_VIDEO.tpl'=>'gallery_regular_mode_screen',
+				'BLOCK_MAIN_GALLERY_EMBED.tpl'=>'block_main_gallery_embed',
+				'BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH.tpl'=>'block_side_root_galleries',
+				'BLOCK_SIDE_ROOT_GALLERIES_LINE.tpl'=>'block_side_root_galleries',
+				'BLOCK_SIDE_ROOT_GALLERIES_LINE_CONTAINER.tpl'=>'block_side_root_galleries',
+				'BLOCK_SIDE_ROOT_GALLERIES.tpl'=>'block_side_root_galleries',
+				'GALLERY_VIDEO_INFO.tpl'=>'gallery_video_info',
+				'GALLERY_BOX.tpl'=>'gallery_regular_mode_screen',
+				'GALLERY_SUBGALLERY_WRAP.tpl'=>'block_main_recent_galleries',
+				'GALLERY_ENTRY_LIST_LINE.tpl'=>'gallery_entry_list_line',
+				'GALLERY_FLOWMODE_IMAGE.tpl'=>'gallery_flowmode_image',
+				'GALLERY_FLOWMODE_VIDEO.tpl'=>'gallery_flowmode_video',
+				'GALLERY_FLOW_ENTRY.tpl'=>'gallery_flowmode_image',
+				'GALLERY_FLOW_MODE_SCREEN.tpl'=>'gallery_flowmode_image',
+				'GALLERY_REGULAR_MODE_SCREEN.tpl'=>'gallery_regular_mode_screen',
+				'GALLERY_ENTRY_SCREEN.tpl'=>'gallery_entry_screen',
+				'GALLERY_NAV.tpl'=>'gallery_entry_screen',
+				'GALLERY_VIDEO_YOUTUBE.tpl'=>'gallery_video_youtube',
+				'GALLERY_VIDEO_FACEBOOK.tpl'=>'gallery_video_facebook',
+				'GALLERY_VIDEO_GENERAL.tpl'=>'gallery_video_general',
+				'GALLERY_VIDEO_QT.tpl'=>'gallery_video_qt',
+				'GALLERY_VIDEO_RM.tpl'=>'gallery_video_rm',
+				'GALLERY_SWF.tpl'=>'gallery_swf',
+				'GALLERY_PDF.tpl'=>'gallery_pdf',
+				'OCF_MEMBER_PROFILE_GALLERIES.tpl'=>'ocf_member_profile_galleries',
+				'GALLERY_VIDEO_BOX.tpl'=>'gallery_video_box',
+				'GALLERY_IMAGE_BOX.tpl'=>'gallery_image_box',
 				);
 	}
 
@@ -268,20 +268,20 @@ class Hook_addon_registry_galleries
 	 */
 	function tpl_preview__gallery_image_box()
 	{
-		$tab_content = do_lorem_template('GALLERY_IMAGE_BOX',array(
-			'TITLE' => lorem_phrase(),
-			'THUMB' => placeholder_image(),
-			'BREADCRUMBS' => lorem_phrase(),
-			'ADD_DATE_RAW' => placeholder_date_raw(),
-			'ID' => placeholder_id(),
-			'NOTES' => '',
-			'GALLERY_TITLE' => lorem_phrase(),
-			'CAT' => placeholder_id(),
-			'VIEWS' => placeholder_number(),
-			'URL' => placeholder_url(),
-			'IMAGE_URL' => placeholder_image_url(),
-			'DESCRIPTION' => lorem_paragraph(),
-			'THUMB_URL' => placeholder_image_url(),
+		$tab_content=do_lorem_template('GALLERY_IMAGE_BOX',array(
+			'TITLE'=>lorem_phrase(),
+			'THUMB'=>placeholder_image(),
+			'BREADCRUMBS'=>lorem_phrase(),
+			'ADD_DATE_RAW'=>placeholder_date_raw(),
+			'ID'=>placeholder_id(),
+			'NOTES'=>'',
+			'GALLERY_TITLE'=>lorem_phrase(),
+			'CAT'=>placeholder_id(),
+			'VIEWS'=>placeholder_number(),
+			'URL'=>placeholder_url(),
+			'IMAGE_URL'=>placeholder_image_url(),
+			'DESCRIPTION'=>lorem_paragraph(),
+			'THUMB_URL'=>placeholder_image_url(),
 		));
 		return array(
 			lorem_globalise($tab_content,NULL,'',true),
@@ -297,23 +297,23 @@ class Hook_addon_registry_galleries
 	 */
 	function tpl_preview__gallery_video_box()
 	{
-		$tab_content = do_lorem_template('GALLERY_VIDEO_BOX',array(
-			'TITLE' => lorem_phrase(),
-			'THUMB' => placeholder_image(),
-			'BREADCRUMBS' => lorem_phrase(),
-			'ADD_DATE_RAW' => placeholder_date_raw(),
-			'ID' => placeholder_id(),
-			'NOTES' => '',
-			'GALLERY_TITLE' => lorem_phrase(),
-			'CAT' => placeholder_id(),
-			'VIEWS' => placeholder_number(),
-			'URL' => placeholder_url(),
-			'VIDEO_URL' => placeholder_url(),
-			'DESCRIPTION' => lorem_paragraph(),
-			'THUMB_URL' => placeholder_image_url(),
-			'VIDEO_WIDTH' => placeholder_number(),
-			'VIDEO_HEIGHT' => placeholder_number(),
-			'VIDEO_LENGTH' => placeholder_number(),
+		$tab_content=do_lorem_template('GALLERY_VIDEO_BOX',array(
+			'TITLE'=>lorem_phrase(),
+			'THUMB'=>placeholder_image(),
+			'BREADCRUMBS'=>lorem_phrase(),
+			'ADD_DATE_RAW'=>placeholder_date_raw(),
+			'ID'=>placeholder_id(),
+			'NOTES'=>'',
+			'GALLERY_TITLE'=>lorem_phrase(),
+			'CAT'=>placeholder_id(),
+			'VIEWS'=>placeholder_number(),
+			'URL'=>placeholder_url(),
+			'VIDEO_URL'=>placeholder_url(),
+			'DESCRIPTION'=>lorem_paragraph(),
+			'THUMB_URL'=>placeholder_image_url(),
+			'VIDEO_WIDTH'=>placeholder_number(),
+			'VIDEO_HEIGHT'=>placeholder_number(),
+			'VIDEO_LENGTH'=>placeholder_number(),
 		));
 		return array(
 			lorem_globalise($tab_content,NULL,'',true),
@@ -329,12 +329,12 @@ class Hook_addon_registry_galleries
 	 */
 	function tpl_preview__ocf_member_profile_galleries()
 	{
-		$tab_content = do_lorem_template('OCF_MEMBER_PROFILE_GALLERIES',array(
-			'MEMBER_ID' => placeholder_id(),
-			'GALLERIES' => placeholder_list_item(),
-			'ADD_GALLERY_URL' => placeholder_url(),
-			'ADD_IMAGE_URL' => placeholder_url(),
-			'ADD_VIDEO_URL' => placeholder_url(),
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_GALLERIES',array(
+			'MEMBER_ID'=>placeholder_id(),
+			'GALLERIES'=>placeholder_list_item(),
+			'ADD_GALLERY_URL'=>placeholder_url(),
+			'ADD_IMAGE_URL'=>placeholder_url(),
+			'ADD_VIDEO_URL'=>placeholder_url(),
 		));
 		return array(
 			lorem_globalise($tab_content,NULL,'',true),
@@ -353,9 +353,9 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_SWF',array(
-					'URL' => placeholder_url(),
-					'WIDTH' => placeholder_number(),
-					'HEIGHT' => placeholder_number(),
+					'URL'=>placeholder_url(),
+					'WIDTH'=>placeholder_number(),
+					'HEIGHT'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -373,9 +373,9 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_PDF',array(
-					'URL' => placeholder_url(),
-					'WIDTH' => placeholder_number(),
-					'HEIGHT' => placeholder_number(),
+					'URL'=>placeholder_url(),
+					'WIDTH'=>placeholder_number(),
+					'HEIGHT'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -393,9 +393,9 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_VIDEO_RM',array(
-					'URL' => placeholder_url(),
-					'WIDTH' => placeholder_number(),
-					'HEIGHT' => placeholder_number(),
+					'URL'=>placeholder_url(),
+					'WIDTH'=>placeholder_number(),
+					'HEIGHT'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -413,9 +413,9 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_VIDEO_QT',array(
-					'URL' => placeholder_url(),
-					'WIDTH' => placeholder_number(),
-					'HEIGHT' => placeholder_number(),
+					'URL'=>placeholder_url(),
+					'WIDTH'=>placeholder_number(),
+					'HEIGHT'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -433,9 +433,9 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_VIDEO_GENERAL',array(
-					'URL' => placeholder_url(),
-					'WIDTH' => placeholder_number(),
-					'HEIGHT' => placeholder_number(),
+					'URL'=>placeholder_url(),
+					'WIDTH'=>placeholder_number(),
+					'HEIGHT'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -453,7 +453,7 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_VIDEO_YOUTUBE',array(
-					'URL' => '4cpX1ZjuaiA',
+					'URL'=>'4cpX1ZjuaiA',
 				)
 			),NULL,'',true),
 		);
@@ -471,7 +471,7 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_VIDEO_FACEBOOK',array(
-					'URL' => '10150307159560581',
+					'URL'=>'10150307159560581',
 				)
 			),NULL,'',true),
 		);
@@ -489,19 +489,18 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('BLOCK_MAIN_IMAGE_FADER',array(
-					'GALLERY_URL' => placeholder_url(),
-					'FIRST_URL' => placeholder_image_url(),
-					'PREVIOUS_URL' => placeholder_image_url(),
-					'NEXT_URL' => placeholder_image_url(),
-					'FIRST_URL_FULL' => placeholder_image_url(),
-					'PREVIOUS_URL_FULL' => placeholder_image_url(),
-					'NEXT_URL_FULL' => placeholder_image_url(),
-					'HTML' => array(),
-					'TITLES' => array(),
-					'IMAGES' => array(),
-					'IMAGES_FULL' => array(),
-					'HTML' => array(),
-					'MILL' => 3000,
+					'GALLERY_URL'=>placeholder_url(),
+					'FIRST_URL'=>placeholder_image_url(),
+					'PREVIOUS_URL'=>placeholder_image_url(),
+					'NEXT_URL'=>placeholder_image_url(),
+					'FIRST_URL_FULL'=>placeholder_image_url(),
+					'PREVIOUS_URL_FULL'=>placeholder_image_url(),
+					'NEXT_URL_FULL'=>placeholder_image_url(),
+					'TITLES'=>array(),
+					'IMAGES'=>array(),
+					'IMAGES_FULL'=>array(),
+					'HTML'=>array(),
+					'MILL'=>3000,
 				)
 			),NULL,'',true),
 		);
@@ -521,20 +520,20 @@ class Hook_addon_registry_galleries
 		//Need to create the form fields (instead of using placeholder_form()) because javascript is
 		//using a field called 'files' (list type).
 		require_lang('dearchive');
-		$fields = new ocp_tempcode();
-		$orphaned_content = new ocp_tempcode();
-		$orphaned_content->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array('SELECTED' => false,'DISABLED' => false,'CLASS' => '','NAME' => 'test','TEXT' => 'test')));
-		$input = do_lorem_template('FORM_SCREEN_INPUT_LIST',array('TABINDEX' => placeholder_id(),'REQUIRED' => '_required','NAME' => 'files','CONTENT' => $orphaned_content,'INLINE_LIST' => true));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED' => true,'SKIP_LABEL' => false,'NAME' => 'files','PRETTY_NAME' => lorem_phrase(),'DESCRIPTION' => lorem_paragraph_html(),'DESCRIPTION_SIDE' => '','INPUT' => $input,'COMCODE' => new ocp_tempcode())));
+		$fields=new ocp_tempcode();
+		$orphaned_content=new ocp_tempcode();
+		$orphaned_content->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array('SELECTED'=>false,'DISABLED'=>false,'CLASS'=>'','NAME'=>'test','TEXT'=>'test')));
+		$input=do_lorem_template('FORM_SCREEN_INPUT_LIST',array('TABINDEX'=>placeholder_id(),'REQUIRED'=>'_required','NAME'=>'files','CONTENT'=>$orphaned_content,'INLINE_LIST'=>true));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'NAME'=>'files','PRETTY_NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>new ocp_tempcode())));
 
-		$form = do_lorem_template('FORM',array('TABINDEX' => placeholder_number(),'FIELDS' => $fields,'SUBMIT_NAME' => lorem_word(),'URL' => placeholder_url(),'TEXT' => lorem_phrase(),'HIDDEN' => '','BATCH_IMPORT_ARCHIVE_CONTENTS' => lorem_phrase()));
+		$form=do_lorem_template('FORM',array('TABINDEX'=>placeholder_number(),'FIELDS'=>$fields,'SUBMIT_NAME'=>lorem_word(),'URL'=>placeholder_url(),'TEXT'=>lorem_phrase(),'HIDDEN'=>'','BATCH_IMPORT_ARCHIVE_CONTENTS'=>lorem_phrase()));
 
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_IMPORT_SCREEN',array(
-					'TITLE' => lorem_title(),
-					'FORM2' => placeholder_form(),
-					'FORM' => $form,
+					'TITLE'=>lorem_title(),
+					'FORM2'=>placeholder_form(),
+					'FORM'=>$form,
 				)
 			),NULL,'',true),
 		);
@@ -550,22 +549,22 @@ class Hook_addon_registry_galleries
 	function tpl_preview__block_main_gallery_tease()
 	{
 		//Create the 'GALLERY_TEASE_PIC' template
-		$content = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$content=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$sub = do_lorem_template('GALLERY_TEASE_PIC',array('GALLERY' =>placeholder_id(),'TEASER' => lorem_phrase(),'ADD_DATE' => placeholder_date(),'NUM_CHILDREN' => placeholder_number(),'NUM_IMAGES' => placeholder_number(),'NUM_VIDEOS' => placeholder_number(),'MEMBER_INFO' => lorem_paragraph(),'URL' => placeholder_url(),'PIC' => placeholder_url(),'TITLE' => lorem_phrase()));
+			$sub=do_lorem_template('GALLERY_TEASE_PIC',array('GALLERY' =>placeholder_id(),'TEASER'=>lorem_phrase(),'ADD_DATE'=>placeholder_date(),'NUM_CHILDREN'=>placeholder_number(),'NUM_IMAGES'=>placeholder_number(),'NUM_VIDEOS'=>placeholder_number(),'MEMBER_INFO'=>lorem_paragraph(),'URL'=>placeholder_url(),'PIC'=>placeholder_url(),'TITLE'=>lorem_phrase()));
 			$content->attach($sub);
 		}
 
 		//Create the 'NEXT_BROWSER_BROWSE_NEXT' template
-		$browse = do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL' => placeholder_url(),'PREVIOUS_URL' => placeholder_url(),'PAGE_NUM' => placeholder_number(),'NUM_PAGES' => placeholder_number()));
+		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL'=>placeholder_url(),'PREVIOUS_URL'=>placeholder_url(),'PAGE_NUM'=>placeholder_number(),'NUM_PAGES'=>placeholder_number()));
 
 		//Create the 'BLOCK_MAIN_GALLERY_TEASE' template with 'GALLERY_TEASE_PIC' and 'NEXT_BROWSER_BROWSE_NEXT' as sub-templates
 		return array(
 			lorem_globalise(
 				do_lorem_template('BLOCK_MAIN_GALLERY_TEASE',array(
-					'CONTENT' => $content,
-					'BROWSE' => $browse,
+					'CONTENT'=>$content,
+					'BROWSE'=>$browse,
 				)
 			),NULL,'',true),
 		);
@@ -583,8 +582,8 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('BLOCK_MAIN_TOP_GALLERIES',array(
-					'CONTENT' => placeholder_list_item(),
-					'NUMBER' => placeholder_number(),
+					'CONTENT'=>placeholder_list_item(),
+					'NUMBER'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -599,15 +598,15 @@ class Hook_addon_registry_galleries
 	 */
 	function tpl_preview__block_main_recent_galleries()
 	{
-		$content = do_lorem_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT' => do_lorem_template('GALLERY_BOX',array('THUMB' => '','NUM_VIDEOS' => placeholder_number(),'NUM_IMAGES' => placeholder_number(),'NUM_CHILDREN' => placeholder_number(),'ID' => lorem_word(),'LANG' => lorem_word(),'ADD_DATE_RAW' => placeholder_date_raw(),'ADD_DATE' => lorem_word(),'MEMBER_INFO' => lorem_paragraph(),'URL' => placeholder_url(),'PIC' => placeholder_image_url(),'TITLE' => lorem_phrase(),'COMMENTS' => lorem_paragraph()))));
-		$content->attach(do_lorem_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT' => do_lorem_template('GALLERY_BOX',array('THUMB' => placeholder_image(),'NUM_VIDEOS' => placeholder_number(),'NUM_IMAGES' => placeholder_number(),'NUM_CHILDREN' => placeholder_number(),'ID' => lorem_word(),'LANG' => lorem_word(),'ADD_DATE_RAW' => placeholder_date_raw(),'ADD_DATE' => lorem_word(),'MEMBER_INFO' => lorem_paragraph(),'URL' => placeholder_url(),'PIC' => placeholder_image_url(),'TITLE' => lorem_phrase(),'COMMENTS' => lorem_paragraph())))));
-		$content->attach(do_lorem_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT' => do_lorem_template('GALLERY_BOX',array('THUMB' => '','NUM_VIDEOS' => placeholder_number(),'NUM_IMAGES' => placeholder_number(),'NUM_CHILDREN' => placeholder_number(),'ID' => lorem_word(),'LANG' => lorem_word(),'ADD_DATE_RAW' => placeholder_date_raw(),'ADD_DATE' => lorem_word(),'MEMBER_INFO' => lorem_paragraph(),'URL' => placeholder_url(),'PIC' => placeholder_image_url(),'TITLE' => lorem_phrase(),'COMMENTS' => lorem_paragraph())))));
+		$content=do_lorem_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>do_lorem_template('GALLERY_BOX',array('THUMB'=>'','NUM_VIDEOS'=>placeholder_number(),'NUM_IMAGES'=>placeholder_number(),'NUM_CHILDREN'=>placeholder_number(),'ID'=>lorem_word(),'LANG'=>lorem_word(),'ADD_DATE_RAW'=>placeholder_date_raw(),'ADD_DATE'=>lorem_word(),'MEMBER_INFO'=>lorem_paragraph(),'URL'=>placeholder_url(),'PIC'=>placeholder_image_url(),'TITLE'=>lorem_phrase(),'COMMENTS'=>lorem_paragraph()))));
+		$content->attach(do_lorem_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>do_lorem_template('GALLERY_BOX',array('THUMB'=>placeholder_image(),'NUM_VIDEOS'=>placeholder_number(),'NUM_IMAGES'=>placeholder_number(),'NUM_CHILDREN'=>placeholder_number(),'ID'=>lorem_word(),'LANG'=>lorem_word(),'ADD_DATE_RAW'=>placeholder_date_raw(),'ADD_DATE'=>lorem_word(),'MEMBER_INFO'=>lorem_paragraph(),'URL'=>placeholder_url(),'PIC'=>placeholder_image_url(),'TITLE'=>lorem_phrase(),'COMMENTS'=>lorem_paragraph())))));
+		$content->attach(do_lorem_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>do_lorem_template('GALLERY_BOX',array('THUMB'=>'','NUM_VIDEOS'=>placeholder_number(),'NUM_IMAGES'=>placeholder_number(),'NUM_CHILDREN'=>placeholder_number(),'ID'=>lorem_word(),'LANG'=>lorem_word(),'ADD_DATE_RAW'=>placeholder_date_raw(),'ADD_DATE'=>lorem_word(),'MEMBER_INFO'=>lorem_paragraph(),'URL'=>placeholder_url(),'PIC'=>placeholder_image_url(),'TITLE'=>lorem_phrase(),'COMMENTS'=>lorem_paragraph())))));
 
 		return array(
 			lorem_globalise(
 				do_lorem_template('BLOCK_MAIN_RECENT_GALLERIES',array(
-					'CONTENT' => $content,
-					'NUMBER' => placeholder_number(),
+					'CONTENT'=>$content,
+					'NUMBER'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -625,14 +624,14 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_IMAGE',array(
-					'VIEW_URL' => placeholder_url(),
-					'THUMB' => placeholder_image(),
-					'DESCRIPTION' => lorem_phrase(),
-					'ADD_DATE_RAW' => placeholder_time(),
-					'EDIT_DATE_RAW' => placeholder_time(),
-					'VIEWS' => placeholder_number(),
-					'SUBMITTER' => placeholder_id(),
-					'ID' => placeholder_id(),
+					'VIEW_URL'=>placeholder_url(),
+					'THUMB'=>placeholder_image(),
+					'DESCRIPTION'=>lorem_phrase(),
+					'ADD_DATE_RAW'=>placeholder_time(),
+					'EDIT_DATE_RAW'=>placeholder_time(),
+					'VIEWS'=>placeholder_number(),
+					'SUBMITTER'=>placeholder_id(),
+					'ID'=>placeholder_id(),
 				)
 			),NULL,'',true),
 		);
@@ -648,28 +647,28 @@ class Hook_addon_registry_galleries
 	function tpl_preview__block_main_gallery_embed()
 	{
 		//Create the 'GALLERY_ENTRY_WRAP' template
-		$entries = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$entries=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$map = array('TITLE' => lorem_phrase(),'DESCRIPTION' => lorem_paragraph(),'TYPE' => 'image','ID' => placeholder_id(),'FILE_SIZE' => lorem_word(),'SUBMITTER' => lorem_word(),'FULL_URL' => placeholder_url(),'THUMB_URL' => placeholder_url(),'CAT' => lorem_word(),'THUMB' => placeholder_image(),'VIEW_URL' => placeholder_url(),'ADD_DATE_RAW' => lorem_word(),'EDIT_DATE_RAW' => placeholder_time(),'VIEWS' => placeholder_id());
-			$entry = do_lorem_template('GALLERY_IMAGE',$map);
-			$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY' => $entry)+$map));
+			$map=array('TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'ADD_DATE_RAW'=>lorem_word(),'EDIT_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_id());
+			$entry=do_lorem_template('GALLERY_IMAGE',$map);
+			$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 		}
 
 		//Create 'BLOCK_MAIN_GALLERY_EMBED' with 'GALLERY_ENTRY_WRAP' as sub-template
 		return array(
 			lorem_globalise(
 				do_lorem_template('BLOCK_MAIN_GALLERY_EMBED',array(
-					'TITLE' => lorem_phrase(),
-					'CAT' => placeholder_id(),
-					'IMAGES' => $entries,
-					'MAX' => lorem_phrase(),
-					'ZONE' => lorem_phrase(),
-					'TOTAL_VIDEOS' => placeholder_number(),
-					'TOTAL_IMAGES' => placeholder_number(),
-					'TOTAL' => lorem_phrase(),
-					'PAGINATION' => placeholder_pagination(),
-					'BLOCK_PARAMS' => '',
+					'TITLE'=>lorem_phrase(),
+					'CAT'=>placeholder_id(),
+					'IMAGES'=>$entries,
+					'MAX'=>lorem_phrase(),
+					'ZONE'=>lorem_phrase(),
+					'TOTAL_VIDEOS'=>placeholder_number(),
+					'TOTAL_IMAGES'=>placeholder_number(),
+					'TOTAL'=>lorem_phrase(),
+					'PAGINATION'=>placeholder_pagination(),
+					'BLOCK_PARAMS'=>'',
 				)
 			),NULL,'',true),
 		);
@@ -684,24 +683,24 @@ class Hook_addon_registry_galleries
 	*/
 	function tpl_preview__block_side_root_galleries()
 	{
-		$content = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$content=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$out = new ocp_tempcode();
-			foreach (placeholder_array() as $k => $v)
+			$out=new ocp_tempcode();
+			foreach (placeholder_array() as $k=>$v)
 			{
-				$out->attach(do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH',array('TITLE' => lorem_word(),'URL' => placeholder_url())));
+				$out->attach(do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH',array('TITLE'=>lorem_word(),'URL'=>placeholder_url())));
 			}
-			$out->attach(do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES_LINE',array('TITLE' => lorem_word(),'URL' => placeholder_url())));
+			$out->attach(do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES_LINE',array('TITLE'=>lorem_word(),'URL'=>placeholder_url())));
 
-			$content->attach(do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES_LINE_CONTAINER',array('ID' => placeholder_random(),'CAPTION' => lorem_phrase(),'CONTENTS' => $out)));
+			$content->attach(do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES_LINE_CONTAINER',array('ID'=>placeholder_random(),'CAPTION'=>lorem_phrase(),'CONTENTS'=>$out)));
 		}
 
 		return array(
 			lorem_globalise(
 				do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES',array(
-					'DEPTH' => true,
-					'CONTENT' => $content,
+					'DEPTH'=>true,
+					'CONTENT'=>$content,
 				)
 			),NULL,'',true),
 		);
@@ -718,9 +717,9 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_VIDEO_INFO',array(
-					'HEIGHT' => placeholder_number(),
-					'WIDTH' => placeholder_number(),
-					'LENGTH' => placeholder_number(),
+					'HEIGHT'=>placeholder_number(),
+					'WIDTH'=>placeholder_number(),
+					'LENGTH'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -738,8 +737,8 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_ENTRY_LIST_LINE',array(
-					'BREADCRUMBS' => lorem_phrase(),
-					'URL' => placeholder_url(),
+					'BREADCRUMBS'=>lorem_phrase(),
+					'URL'=>placeholder_url(),
 				)
 			),NULL,'',true),
 		);
@@ -754,74 +753,74 @@ class Hook_addon_registry_galleries
 	 */
 	function tpl_preview__gallery_flowmode_video()
 	{
-		$video = do_lorem_template('GALLERY_FLOWMODE_VIDEO',array(
-			'MAIN' => lorem_phrase(),
-			'DESCRIPTION' => lorem_paragraph_html(),
-			'FILE_SIZE' => placeholder_filesize(),
-			'CAT' => placeholder_id(),
-			'RATING_DETAILS' => '',
-			'THUMB_URL' => placeholder_image_url(),
-			'FULL_URL' => placeholder_url(),
-			'ID' => placeholder_id(),
-			'VIEWS' => lorem_phrase(),
-			'ADD_DATE_RAW' => placeholder_date_raw(),
-			'EDIT_DATE_RAW' => placeholder_date_raw(),
-			'SUBMITTER' => lorem_word_html(),
-			'VIDEO_PLAYER' => placeholder_image(),
-			'VIDEO_DETAILS' => lorem_phrase(),
-			'VIEW_URL' => placeholder_url(),
-			'EDIT_URL' => placeholder_url(),
+		$video=do_lorem_template('GALLERY_FLOWMODE_VIDEO',array(
+			'MAIN'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_paragraph_html(),
+			'FILE_SIZE'=>placeholder_filesize(),
+			'CAT'=>placeholder_id(),
+			'RATING_DETAILS'=>'',
+			'THUMB_URL'=>placeholder_image_url(),
+			'FULL_URL'=>placeholder_url(),
+			'ID'=>placeholder_id(),
+			'VIEWS'=>lorem_phrase(),
+			'ADD_DATE_RAW'=>placeholder_date_raw(),
+			'EDIT_DATE_RAW'=>placeholder_date_raw(),
+			'SUBMITTER'=>lorem_word_html(),
+			'VIDEO_PLAYER'=>placeholder_image(),
+			'VIDEO_DETAILS'=>lorem_phrase(),
+			'VIEW_URL'=>placeholder_url(),
+			'EDIT_URL'=>placeholder_url(),
 		));
-		$tags = do_lorem_template('TAGS',array('TAG' => lorem_word(),'TAGS' => placeholder_array(),'LINK_FULLSCOPE' => lorem_word(),'TYPE' => NULL));
+		$tags=do_lorem_template('TAGS',array('TAG'=>lorem_word(),'TAGS'=>placeholder_array(),'LINK_FULLSCOPE'=>lorem_word(),'TYPE'=>NULL));
 
-		$entries = new ocp_tempcode();
+		$entries=new ocp_tempcode();
 		foreach (placeholder_array(10) as $v)
 		{
-			$entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY',array('DESCRIPTION' => lorem_paragraph_html(),'_TITLE' => lorem_title(),'ID' => lorem_word(),'VIEWS' => placeholder_number(),'ADD_DATE_RAW' => placeholder_time(),'EDIT_DATE_RAW' => placeholder_date_raw(),'SUBMITTER' => lorem_word(),'CLASS' => lorem_word(),'THUMB' => placeholder_image(),'VIEW_URL' => placeholder_url(),'VIEW_URL_2' => placeholder_url(),'TYPE' => lorem_word())));
+			$entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY',array('DESCRIPTION'=>lorem_paragraph_html(),'_TITLE'=>lorem_title(),'ID'=>lorem_word(),'VIEWS'=>placeholder_number(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_date_raw(),'SUBMITTER'=>lorem_word(),'CLASS'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'VIEW_URL_2'=>placeholder_url(),'TYPE'=>lorem_word())));
 		}
 
-		$comment_details = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS' => lorem_phrase_html(),'USE_CAPTCHA' => false,'EMAIL_OPTIONAL' => lorem_word(),'POST_WARNING' => '','COMMENT_TEXT' => '','GET_EMAIL' => true,'GET_TITLE' => true,'EM' => placeholder_emoticon_chooser(),'DISPLAY' => 'block','COMMENT_URL' => placeholder_url(),'TITLE' => lorem_phrase(),'MAKE_POST' => true,'CREATE_TICKET_MAKE_POST' => true,'FIRST_POST_URL' => '','FIRST_POST' => ''));
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
 
-		$browse = do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL' => placeholder_url(),'PREVIOUS_URL' => placeholder_url(),'PAGE_NUM' => placeholder_number(),'NUM_PAGES' => placeholder_number()));
+		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL'=>placeholder_url(),'PREVIOUS_URL'=>placeholder_url(),'PAGE_NUM'=>placeholder_number(),'NUM_PAGES'=>placeholder_number()));
 
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_FLOW_MODE_SCREEN',array(
-					'_TITLE' => lorem_phrase(),
-					'VIEW_URL' => placeholder_url(),
-					'FULL_URL' => placeholder_url(),
-					'PROBE_TYPE' => lorem_phrase(),
-					'ENTRY_TITLE' => lorem_phrase(),
-					'ENTRY_DESCRIPTION' => lorem_paragraph_html(),
-					'ENTRY_SUBMITTER' => placeholder_id(),
-					'ENTRY_VIEWS' => placeholder_number(),
-					'ENTRY_ADD_DATE_RAW' => placeholder_date_raw(),
-					'ENTRY_EDIT_DATE_RAW' => placeholder_date_raw(),
-					'ENTRY_TRACKBACK_DETAILS' => lorem_sentence_html(),
-					'ENTRY_RATING_DETAILS' => lorem_sentence_html(),
-					'ENTRY_COMMENT_DETAILS' => lorem_sentence_html(),
-					'ENTRY_EDIT_URL' => placeholder_url(),
-					'WARNING_DETAILS' => '',
-					'TAGS' => $tags,
-					'RATING_DETAILS' => lorem_sentence_html(),
-					'COMMENT_DETAILS' => $comment_details,
-					'BROWSE' => $browse,
-					'REP_IMAGE_URL' => placeholder_image_url(),
-					'TITLE' => lorem_title(),
-					'MEMBER_DETAILS' => lorem_phrase(),
-					'DESCRIPTION' => lorem_paragraph_html(),
-					'CHILDREN' => placeholder_list_item(),
-					'CURRENT_ENTRY' => $video,
-					'ENTRIES' => $entries,
-					'EDIT_URL' => placeholder_url(),
-					'ADD_GALLERY_URL' => placeholder_url(),
-					'IMAGE_URL' => placeholder_image_url(),
-					'MEMBER_ID' => placeholder_id(),
-					'VIDEO_URL' => placeholder_url(),
-					'MAY_DOWNLOAD' => lorem_phrase(),
-					'CAT' => placeholder_id(),
-					'FIRST_ENTRY_ID' => placeholder_id(),
-					'SORTING' => lorem_phrase(),
+					'_TITLE'=>lorem_phrase(),
+					'VIEW_URL'=>placeholder_url(),
+					'FULL_URL'=>placeholder_url(),
+					'PROBE_TYPE'=>lorem_phrase(),
+					'ENTRY_TITLE'=>lorem_phrase(),
+					'ENTRY_DESCRIPTION'=>lorem_paragraph_html(),
+					'ENTRY_SUBMITTER'=>placeholder_id(),
+					'ENTRY_VIEWS'=>placeholder_number(),
+					'ENTRY_ADD_DATE_RAW'=>placeholder_date_raw(),
+					'ENTRY_EDIT_DATE_RAW'=>placeholder_date_raw(),
+					'ENTRY_TRACKBACK_DETAILS'=>lorem_sentence_html(),
+					'ENTRY_RATING_DETAILS'=>lorem_sentence_html(),
+					'ENTRY_COMMENT_DETAILS'=>lorem_sentence_html(),
+					'ENTRY_EDIT_URL'=>placeholder_url(),
+					'WARNING_DETAILS'=>'',
+					'TAGS'=>$tags,
+					'RATING_DETAILS'=>lorem_sentence_html(),
+					'COMMENT_DETAILS'=>$comment_details,
+					'BROWSE'=>$browse,
+					'REP_IMAGE_URL'=>placeholder_image_url(),
+					'TITLE'=>lorem_title(),
+					'MEMBER_DETAILS'=>lorem_phrase(),
+					'DESCRIPTION'=>lorem_paragraph_html(),
+					'CHILDREN'=>placeholder_list_item(),
+					'CURRENT_ENTRY'=>$video,
+					'ENTRIES'=>$entries,
+					'EDIT_URL'=>placeholder_url(),
+					'ADD_GALLERY_URL'=>placeholder_url(),
+					'IMAGE_URL'=>placeholder_image_url(),
+					'MEMBER_ID'=>placeholder_id(),
+					'VIDEO_URL'=>placeholder_url(),
+					'MAY_DOWNLOAD'=>lorem_phrase(),
+					'CAT'=>placeholder_id(),
+					'FIRST_ENTRY_ID'=>placeholder_id(),
+					'SORTING'=>lorem_phrase(),
 				)
 			),NULL,'',true),
 		);
@@ -836,70 +835,70 @@ class Hook_addon_registry_galleries
 	 */
 	function tpl_preview__gallery_flowmode_image()
 	{
-		$image = do_lorem_template('GALLERY_FLOWMODE_IMAGE',array(
-			'MAIN' => lorem_phrase(),
-			'DESCRIPTION' => lorem_paragraph_html(),
-			'FILE_SIZE' => placeholder_filesize(),
-			'RATING_DETAILS' => '',
-			'CAT' => placeholder_id(),
-			'THUMB_URL' => placeholder_image_url(),
-			'FULL_URL' => placeholder_url(),
-			'ID' => placeholder_id(),
-			'VIEWS' => lorem_phrase(),
-			'ADD_DATE_RAW' => placeholder_date_raw(),
-			'EDIT_DATE_RAW' => placeholder_date_raw(),
-			'SUBMITTER' => lorem_word_html(),
-			'THUMB' => placeholder_url(),
-			'VIEW_URL' => placeholder_url(),
-			'EDIT_URL' => placeholder_url(),
+		$image=do_lorem_template('GALLERY_FLOWMODE_IMAGE',array(
+			'MAIN'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_paragraph_html(),
+			'FILE_SIZE'=>placeholder_filesize(),
+			'RATING_DETAILS'=>'',
+			'CAT'=>placeholder_id(),
+			'THUMB_URL'=>placeholder_image_url(),
+			'FULL_URL'=>placeholder_url(),
+			'ID'=>placeholder_id(),
+			'VIEWS'=>lorem_phrase(),
+			'ADD_DATE_RAW'=>placeholder_date_raw(),
+			'EDIT_DATE_RAW'=>placeholder_date_raw(),
+			'SUBMITTER'=>lorem_word_html(),
+			'THUMB'=>placeholder_url(),
+			'VIEW_URL'=>placeholder_url(),
+			'EDIT_URL'=>placeholder_url(),
 		));
-		$tags = do_lorem_template('TAGS',array('TAG' => lorem_word(),'TAGS' => placeholder_array(),'LINK_FULLSCOPE' => lorem_word(),'TYPE' => NULL));
+		$tags=do_lorem_template('TAGS',array('TAG'=>lorem_word(),'TAGS'=>placeholder_array(),'LINK_FULLSCOPE'=>lorem_word(),'TYPE'=>NULL));
 
-		$entries = new ocp_tempcode();
+		$entries=new ocp_tempcode();
 		foreach (placeholder_array(10) as $v)
 		{
-			$entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY',array('ID' => lorem_word(),'VIEWS' => placeholder_number(),'ADD_DATE_RAW' => placeholder_time(),'EDIT_DATE_RAW' => placeholder_date_raw(),'SUBMITTER' => lorem_word(),'CLASS' => lorem_word(),'THUMB' => placeholder_image(),'VIEW_URL' => placeholder_url(),'VIEW_URL_2' => placeholder_url(),'TYPE' => lorem_word())));
+			$entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY',array('ID'=>lorem_word(),'VIEWS'=>placeholder_number(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_date_raw(),'SUBMITTER'=>lorem_word(),'CLASS'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'VIEW_URL_2'=>placeholder_url(),'TYPE'=>lorem_word())));
 		}
 
-		$comment_details = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS' => lorem_phrase_html(),'USE_CAPTCHA' => false,'EMAIL_OPTIONAL' => lorem_word(),'POST_WARNING' => '','COMMENT_TEXT' => '','GET_EMAIL' => true,'GET_TITLE' => true,'EM' => placeholder_emoticon_chooser(),'DISPLAY' => 'block','COMMENT_URL' => placeholder_url(),'TITLE' => lorem_phrase(),'MAKE_POST' => true,'CREATE_TICKET_MAKE_POST' => true,'FIRST_POST_URL' => '','FIRST_POST' => ''));
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
 
-		$browse = do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL' => placeholder_url(),'PREVIOUS_URL' => placeholder_url(),'PAGE_NUM' => placeholder_number(),'NUM_PAGES' => placeholder_number()));
+		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL'=>placeholder_url(),'PREVIOUS_URL'=>placeholder_url(),'PAGE_NUM'=>placeholder_number(),'NUM_PAGES'=>placeholder_number()));
 
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_FLOW_MODE_SCREEN',array(
-					'_TITLE' => lorem_phrase(),
-					'VIEW_URL' => placeholder_url(),
-					'FULL_URL' => placeholder_url(),
-					'PROBE_TYPE' => lorem_phrase(),
-					'ENTRY_VIEWS' => placeholder_number(),
-					'ENTRY_ADD_DATE_RAW' => placeholder_date_raw(),
-					'ENTRY_EDIT_DATE_RAW' => placeholder_date_raw(),
-					'ENTRY_TRACKBACK_DETAILS' => lorem_sentence_html(),
-					'ENTRY_RATING_DETAILS' => lorem_sentence_html(),
-					'ENTRY_COMMENT_DETAILS' => lorem_sentence_html(),
-					'ENTRY_EDIT_URL' => placeholder_url(),
-					'WARNING_DETAILS' => '',
-					'TAGS' => $tags,
-					'RATING_DETAILS' => lorem_sentence_html(),
-					'COMMENT_DETAILS' => $comment_details,
-					'BROWSE' => $browse,
-					'REP_IMAGE_URL' => placeholder_image_url(),
-					'TITLE' => lorem_title(),
-					'MEMBER_DETAILS' => lorem_paragraph_html(),
-					'DESCRIPTION' => lorem_paragraph_html(),
-					'CHILDREN' => placeholder_list_item(),
-					'CURRENT_ENTRY' => $image,
-					'ENTRIES' => $entries,
-					'EDIT_URL' => placeholder_url(),
-					'ADD_GALLERY_URL' => placeholder_url(),
-					'IMAGE_URL' => placeholder_image_url(),
-					'MEMBER_ID' => placeholder_id(),
-					'VIDEO_URL' => placeholder_url(),
-					'MAY_DOWNLOAD' => lorem_phrase(),
-					'CAT' => placeholder_id(),
-					'FIRST_ENTRY_ID' => placeholder_id(),
-					'SORTING' => lorem_phrase(),
+					'_TITLE'=>lorem_phrase(),
+					'VIEW_URL'=>placeholder_url(),
+					'FULL_URL'=>placeholder_url(),
+					'PROBE_TYPE'=>lorem_phrase(),
+					'ENTRY_VIEWS'=>placeholder_number(),
+					'ENTRY_ADD_DATE_RAW'=>placeholder_date_raw(),
+					'ENTRY_EDIT_DATE_RAW'=>placeholder_date_raw(),
+					'ENTRY_TRACKBACK_DETAILS'=>lorem_sentence_html(),
+					'ENTRY_RATING_DETAILS'=>lorem_sentence_html(),
+					'ENTRY_COMMENT_DETAILS'=>lorem_sentence_html(),
+					'ENTRY_EDIT_URL'=>placeholder_url(),
+					'WARNING_DETAILS'=>'',
+					'TAGS'=>$tags,
+					'RATING_DETAILS'=>lorem_sentence_html(),
+					'COMMENT_DETAILS'=>$comment_details,
+					'BROWSE'=>$browse,
+					'REP_IMAGE_URL'=>placeholder_image_url(),
+					'TITLE'=>lorem_title(),
+					'MEMBER_DETAILS'=>lorem_paragraph_html(),
+					'DESCRIPTION'=>lorem_paragraph_html(),
+					'CHILDREN'=>placeholder_list_item(),
+					'CURRENT_ENTRY'=>$image,
+					'ENTRIES'=>$entries,
+					'EDIT_URL'=>placeholder_url(),
+					'ADD_GALLERY_URL'=>placeholder_url(),
+					'IMAGE_URL'=>placeholder_image_url(),
+					'MEMBER_ID'=>placeholder_id(),
+					'VIDEO_URL'=>placeholder_url(),
+					'MAY_DOWNLOAD'=>lorem_phrase(),
+					'CAT'=>placeholder_id(),
+					'FIRST_ENTRY_ID'=>placeholder_id(),
+					'SORTING'=>lorem_phrase(),
 				)
 			),NULL,'',true),
 		);
@@ -914,45 +913,45 @@ class Hook_addon_registry_galleries
 	 */
 	function tpl_preview__gallery_regular_mode_screen()
 	{
-		$tags = do_lorem_template('TAGS',array('LINK_FULLSCOPE' => lorem_word(),'TAG' => lorem_word(),'TAGS' => placeholder_array(),'TYPE' => NULL));
+		$tags=do_lorem_template('TAGS',array('LINK_FULLSCOPE'=>lorem_word(),'TAG'=>lorem_word(),'TAGS'=>placeholder_array(),'TYPE'=>NULL));
 
-		$pagination = placeholder_pagination();
+		$pagination=placeholder_pagination();
 
-		$entry = new ocp_tempcode();
-		$map = array('TITLE' => lorem_phrase(),'DESCRIPTION' => lorem_paragraph(),'TYPE' => 'image','ID' => placeholder_id(),'FILE_SIZE' => lorem_word(),'SUBMITTER' => lorem_word(),'FULL_URL' => placeholder_url(),'THUMB_URL' => placeholder_url(),'CAT' => lorem_word(),'THUMB' => placeholder_image(),'VIEW_URL' => placeholder_url(),'EDIT_DATE_RAW' => placeholder_time(),'ADD_DATE_RAW' => placeholder_time(),'VIEWS' => placeholder_number());
-		$entry = do_lorem_template('GALLERY_IMAGE',$map);
-		$entries = new ocp_tempcode();
-		$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY' => $entry)+$map));
+		$entry=new ocp_tempcode();
+		$map=array('TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'EDIT_DATE_RAW'=>placeholder_time(),'ADD_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number());
+		$entry=do_lorem_template('GALLERY_IMAGE',$map);
+		$entries=new ocp_tempcode();
+		$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 
-		$video_details = do_lorem_template('GALLERY_VIDEO_INFO',array('HEIGHT' => placeholder_number(),'WIDTH' => placeholder_number(),'LENGTH' => placeholder_number()));
-		$map = array('TITLE' => lorem_phrase(),'VIDEO_DETAILS' => $video_details,'DESCRIPTION' => lorem_phrase(),'ADD_DATE_RAW' => placeholder_time(),'EDIT_DATE_RAW' => placeholder_time(),'VIEWS' => placeholder_number(),'VIEW_URL' => placeholder_url(),'SUBMITTER' => placeholder_id(),'ID' => placeholder_id(),'THUMB' => placeholder_image());
-		$entry = do_lorem_template('GALLERY_VIDEO',$map);
-		$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY' => $entry)+$map));
+		$video_details=do_lorem_template('GALLERY_VIDEO_INFO',array('HEIGHT'=>placeholder_number(),'WIDTH'=>placeholder_number(),'LENGTH'=>placeholder_number()));
+		$map=array('TITLE'=>lorem_phrase(),'VIDEO_DETAILS'=>$video_details,'DESCRIPTION'=>lorem_phrase(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number(),'VIEW_URL'=>placeholder_url(),'SUBMITTER'=>placeholder_id(),'ID'=>placeholder_id(),'THUMB'=>placeholder_image());
+		$entry=do_lorem_template('GALLERY_VIDEO',$map);
+		$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 
-		$children = do_lorem_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT' => do_lorem_template('GALLERY_BOX',array('THUMB' => '','NUM_VIDEOS' => lorem_word(),'NUM_IMAGES' => lorem_word(),'NUM_CHILDREN' => lorem_word(),'ID' => lorem_word(),'LANG' => lorem_word(),'ADD_DATE_RAW' => placeholder_date_raw(),'ADD_DATE' => lorem_word(),'MEMBER_INFO' => lorem_paragraph(),'URL' => placeholder_url(),'PIC' => placeholder_image_url(),'TITLE' => lorem_phrase(),'COMMENTS' => lorem_paragraph()))));
+		$children=do_lorem_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>do_lorem_template('GALLERY_BOX',array('THUMB'=>'','NUM_VIDEOS'=>lorem_word(),'NUM_IMAGES'=>lorem_word(),'NUM_CHILDREN'=>lorem_word(),'ID'=>lorem_word(),'LANG'=>lorem_word(),'ADD_DATE_RAW'=>placeholder_date_raw(),'ADD_DATE'=>lorem_word(),'MEMBER_INFO'=>lorem_paragraph(),'URL'=>placeholder_url(),'PIC'=>placeholder_image_url(),'TITLE'=>lorem_phrase(),'COMMENTS'=>lorem_paragraph()))));
 
-		$comment_details = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS' => lorem_phrase_html(),'USE_CAPTCHA' => false,'EMAIL_OPTIONAL' => lorem_word(),'POST_WARNING' => '','COMMENT_TEXT' => '','GET_EMAIL' => true,'GET_TITLE' => true,'EM' => placeholder_emoticon_chooser(),'DISPLAY' => 'block','COMMENT_URL' => placeholder_url(),'TITLE' => lorem_phrase(),'MAKE_POST' => true,'CREATE_TICKET_MAKE_POST' => true,'FIRST_POST_URL' => '','FIRST_POST' => ''));
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
 
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_REGULAR_MODE_SCREEN',array(
-					'_TITLE' => lorem_phrase(),
-					'PAGINATION' => $pagination,
-					'TAGS' => $tags,
-					'CAT' => lorem_word(),
-					'MEMBER_DETAILS' => lorem_sentence_html(),
-					'RATING_DETAILS' => lorem_sentence_html(),
-					'COMMENT_DETAILS' => $comment_details,
-					'ADD_GALLERY_URL' => placeholder_url(),
-					'EDIT_URL' => placeholder_url(),
-					'CHILDREN' => $children,
-					'TITLE' => lorem_title(),
-					'DESCRIPTION' => lorem_paragraph_html(),
-					'IMAGE_URL' => placeholder_url(),
-					'VIDEO_URL' => placeholder_url(),
-					'MAY_DOWNLOAD' => lorem_phrase(),
-					'ENTRIES' => $entries,
-					'SORTING' => lorem_phrase(),
+					'_TITLE'=>lorem_phrase(),
+					'PAGINATION'=>$pagination,
+					'TAGS'=>$tags,
+					'CAT'=>lorem_word(),
+					'MEMBER_DETAILS'=>lorem_sentence_html(),
+					'RATING_DETAILS'=>lorem_sentence_html(),
+					'COMMENT_DETAILS'=>$comment_details,
+					'ADD_GALLERY_URL'=>placeholder_url(),
+					'EDIT_URL'=>placeholder_url(),
+					'CHILDREN'=>$children,
+					'TITLE'=>lorem_title(),
+					'DESCRIPTION'=>lorem_paragraph_html(),
+					'IMAGE_URL'=>placeholder_url(),
+					'VIDEO_URL'=>placeholder_url(),
+					'MAY_DOWNLOAD'=>lorem_phrase(),
+					'ENTRIES'=>$entries,
+					'SORTING'=>lorem_phrase(),
 				)
 			),NULL,'',true),
 		);
@@ -967,48 +966,48 @@ class Hook_addon_registry_galleries
 	 */
 	function tpl_preview__gallery_entry_screen()
 	{
-		$nav = do_lorem_template('GALLERY_NAV',array('BACK_URL' => placeholder_url(),'SLIDESHOW' => false,'_X' => placeholder_number(),'_N' => placeholder_number(),'X' => placeholder_number(),'N' => placeholder_number(),'SLIDESHOW_URL' => placeholder_url(),'SLIDESHOW_NEXT_URL' => placeholder_url(),'PREVIOUS_URL' => placeholder_url(),'NEXT_URL' => placeholder_url(),'MORE_URL' => placeholder_url(),'CATEGORY_NAME' => lorem_word()));
+		$nav=do_lorem_template('GALLERY_NAV',array('BACK_URL'=>placeholder_url(),'SLIDESHOW'=>false,'_X'=>placeholder_number(),'_N'=>placeholder_number(),'X'=>placeholder_number(),'N'=>placeholder_number(),'SLIDESHOW_URL'=>placeholder_url(),'SLIDESHOW_NEXT_URL'=>placeholder_url(),'PREVIOUS_URL'=>placeholder_url(),'NEXT_URL'=>placeholder_url(),'MORE_URL'=>placeholder_url(),'CATEGORY_NAME'=>lorem_word()));
 
-		$comment_details = do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS' => lorem_phrase_html(),'USE_CAPTCHA' => false,'EMAIL_OPTIONAL' => lorem_word(),'POST_WARNING' => '','COMMENT_TEXT' => '','GET_EMAIL' => true,'GET_TITLE' => true,'EM' => placeholder_emoticon_chooser(),'DISPLAY' => 'block','COMMENT_URL' => placeholder_url(),'TITLE' => lorem_phrase(),'MAKE_POST' => true,'CREATE_TICKET_MAKE_POST' => true,'FIRST_POST_URL' => '','FIRST_POST' => ''));
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
 
-		$video = do_lorem_template('GALLERY_VIDEO_GENERAL',array(
-			'URL' => placeholder_url(),
-			'WIDTH' => placeholder_number(),
-			'HEIGHT' => placeholder_number(),
+		$video=do_lorem_template('GALLERY_VIDEO_GENERAL',array(
+			'URL'=>placeholder_url(),
+			'WIDTH'=>placeholder_number(),
+			'HEIGHT'=>placeholder_number(),
 		));
 
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_ENTRY_SCREEN',array(
-					'CAT' => placeholder_id(),
-					'MEDIA_TYPE' => 'image',
-					'ID' => placeholder_id(),
-					'SLIDESHOW' => false,
-					'TRUE_GALLERY_TITLE' => lorem_phrase(),
-					'E_TITLE' => lorem_phrase(),
-					'GALLERY_TITLE' => lorem_phrase(),
-					'MEMBER_ID' => placeholder_id(),
-					'TAGS' => lorem_word_html(),
-					'TITLE' => lorem_title(),
-					'SUBMITTER' => lorem_word_html(),
-					'URL' => placeholder_url(),
-					'VIDEO_DETAILS' => lorem_sentence_html(),
-					'MEMBER_DETAILS' => lorem_sentence_html(),
-					'X' => lorem_phrase(),
-					'N' => lorem_phrase(),
-					'VIEWS' => lorem_phrase(),
-					'ADD_DATE_RAW' => placeholder_date_raw(),
-					'EDIT_DATE_RAW' => placeholder_date_raw(),
-					'ADD_DATE' => placeholder_date(),
-					'EDIT_DATE' => placeholder_date(),
-					'RATING_DETAILS' => lorem_sentence_html(),
-					'TRACKBACK_DETAILS' => lorem_sentence_html(),
-					'COMMENT_DETAILS' => $comment_details,
-					'EDIT_URL' => placeholder_url(),
-					'NAV' => $nav,
-					'COMMENTS' => lorem_phrase(),
-					'VIDEO' => $video,
-					'WARNING_DETAILS' => '',
+					'CAT'=>placeholder_id(),
+					'MEDIA_TYPE'=>'image',
+					'ID'=>placeholder_id(),
+					'SLIDESHOW'=>false,
+					'TRUE_GALLERY_TITLE'=>lorem_phrase(),
+					'E_TITLE'=>lorem_phrase(),
+					'GALLERY_TITLE'=>lorem_phrase(),
+					'MEMBER_ID'=>placeholder_id(),
+					'TAGS'=>lorem_word_html(),
+					'TITLE'=>lorem_title(),
+					'SUBMITTER'=>lorem_word_html(),
+					'URL'=>placeholder_url(),
+					'VIDEO_DETAILS'=>lorem_sentence_html(),
+					'MEMBER_DETAILS'=>lorem_sentence_html(),
+					'X'=>lorem_phrase(),
+					'N'=>lorem_phrase(),
+					'VIEWS'=>lorem_phrase(),
+					'ADD_DATE_RAW'=>placeholder_date_raw(),
+					'EDIT_DATE_RAW'=>placeholder_date_raw(),
+					'ADD_DATE'=>placeholder_date(),
+					'EDIT_DATE'=>placeholder_date(),
+					'RATING_DETAILS'=>lorem_sentence_html(),
+					'TRACKBACK_DETAILS'=>lorem_sentence_html(),
+					'COMMENT_DETAILS'=>$comment_details,
+					'EDIT_URL'=>placeholder_url(),
+					'NAV'=>$nav,
+					'COMMENTS'=>lorem_phrase(),
+					'VIDEO'=>$video,
+					'WARNING_DETAILS'=>'',
 				)
 			),NULL,'',true),
 		);

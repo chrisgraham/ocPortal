@@ -235,7 +235,7 @@ function placeholder_form_with_field($field_name)
 	$text='<p>(A form would go here.)</p>';
 
 	require_code('form_templates');
-	$hidden	=	form_input_hidden($field_name,'0');
+	$hidden=form_input_hidden($field_name,'0');
 
 //	$field->attach(form_input_line_auto_load('test','test.','test','',false,'news'));
 
@@ -325,7 +325,7 @@ function placeholder_button()
  */
 function placeholder_options()
 {
-	$text = '';
+	$text='';
 	for ($i=1;$i<=3;$i++)
 	{
 		$text .= '<option value="'.lorem_word().'">'.lorem_word().'</option>';
@@ -342,10 +342,10 @@ function placeholder_options()
  */
 function placeholder_array($num_elements=3)
 {
-	$array = array();
+	$array=array();
 	for ($i=1;$i<=$num_elements;$i++)
 	{
-		$array[] = 'test'.strval($i);
+		$array[]='test'.strval($i);
 	}
 
 	return $array;
@@ -545,21 +545,21 @@ function lorem_globalise($middle,$message=NULL,$type='',$include_header_and_foot
 function placeholder_emoticons()
 {
 	$emoticons=array();
-	$emoticons[':constipated:'][] = 'EMOTICON_IMG_CODE_THEMED';
-	$emoticons[':constipated:'][] = 'ocf_emoticons/constipated';
-	$emoticons[':constipated:'][] = ':constipated:';
+	$emoticons[':constipated:'][]='EMOTICON_IMG_CODE_THEMED';
+	$emoticons[':constipated:'][]='ocf_emoticons/constipated';
+	$emoticons[':constipated:'][]=':constipated:';
 
-	$emoticons[':upsidedown:'][] = 'EMOTICON_IMG_CODE_THEMED';
-	$emoticons[':upsidedown:'][] = 'ocf_emoticons/upsidedown';
-	$emoticons[':upsidedown:'][] = ':upsidedown:';
+	$emoticons[':upsidedown:'][]='EMOTICON_IMG_CODE_THEMED';
+	$emoticons[':upsidedown:'][]='ocf_emoticons/upsidedown';
+	$emoticons[':upsidedown:'][]=':upsidedown:';
 
-	$emoticons[':depressed:'][] = 'EMOTICON_IMG_CODE_THEMED';
-	$emoticons[':depressed:'][] = 'ocf_emoticons/depressed';
-	$emoticons[':depressed:'][] = ':depressed:';
+	$emoticons[':depressed:'][]='EMOTICON_IMG_CODE_THEMED';
+	$emoticons[':depressed:'][]='ocf_emoticons/depressed';
+	$emoticons[':depressed:'][]=':depressed:';
 
-	$emoticons[':christmas:'][] = 'EMOTICON_IMG_CODE_THEMED';
-	$emoticons[':christmas:'][] = 'ocf_emoticons/christmas';
-	$emoticons[':christmas:'][] = ':christmas:';
+	$emoticons[':christmas:'][]='EMOTICON_IMG_CODE_THEMED';
+	$emoticons[':christmas:'][]='ocf_emoticons/christmas';
+	$emoticons[':christmas:'][]=':christmas:';
 
 	return $emoticons;
 }
@@ -620,7 +620,7 @@ function placeholder_img_code($type='')
 function placeholder_pagination()
 {
 	//pagination starts
-	$selectors = new ocp_tempcode();
+	$selectors=new ocp_tempcode();
 	foreach (placeholder_array() as $k => $v)
 	{
 		$selectors->attach(do_lorem_template('PAGINATION_PER_PAGE_OPTION', array(
@@ -629,18 +629,18 @@ function placeholder_pagination()
 			'NAME' => $v
 		)));
 	}
-	$per_page = do_lorem_template('PAGINATION_PER_SCREEN', array(
+	$per_page=do_lorem_template('PAGINATION_PER_SCREEN', array(
 		'HIDDEN' => '',
 		'URL' => placeholder_url(),
 		'MAX_NAME' => 'max',
 		'SELECTORS' => $selectors
 	));
 
-	$parts = new ocp_tempcode();
+	$parts=new ocp_tempcode();
 	foreach (placeholder_array() as $k => $v)
 	{
-		$j = $k + 1;
-		if ($k == 0)
+		$j=$k + 1;
+		if ($k==0)
 		{
 			$parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER', array(
 				'P' => strval($j)
@@ -713,12 +713,12 @@ function placeholder_pagination()
  */
 function find_comcodes()
 {
-	$zones = find_all_zones();
-	$files = array();
+	$zones=find_all_zones();
+	$files=array();
 	foreach($zones as $zone)
 	{
-		$z = $zone==''?'pages':$zone;
-		$files[$z] = find_all_pages($zone,'comcode/'.fallback_lang(),'txt');
+		$z=$zone==''?'pages':$zone;
+		$files[$z]=find_all_pages($zone,'comcode/'.fallback_lang(),'txt');
 		//$files[$z] += find_all_pages($zone,'comcode_custom/'.fallback_lang(),'txt');
 	}
 	return $files;
@@ -731,12 +731,12 @@ function find_comcodes()
  */
 function find_html()
 {
-	$zones = find_all_zones();
-	$files = array();
+	$zones=find_all_zones();
+	$files=array();
 	foreach($zones as $zone)
 	{
-		$z = $zone==''?'pages':$zone;
-		$files[$z] = find_all_pages($zone,'html/'.fallback_lang(),'htm');
+		$z=$zone==''?'pages':$zone;
+		$files[$z]=find_all_pages($zone,'html/'.fallback_lang(),'htm');
 		//$files[$z] += find_all_pages($zone,'html_custom/'.fallback_lang(),'htm');
 	}
 	return $files;
@@ -846,7 +846,7 @@ function render_screen_preview($template,$hook,$function)
 		if ((substr($file,-4)=='.tpl') && (strpos($file,'/')===false) && (substr($file,0,11)=='JAVASCRIPT_') && ($file!='JAVASCRIPT_NEED.tpl') && ($file!='JAVASCRIPT_NEED_INLINE.tpl'))
 			require_javascript(strtolower(basename($file,'.tpl')));
 	}
-	$temp_name = substr($template,0,-4);
+	$temp_name=substr($template,0,-4);
 
 	if (is_full_screen_template($temp_name))
 	{
@@ -868,7 +868,7 @@ function render_screen_preview($template,$hook,$function)
 	$previews=call_user_func(array($ob,$function));
 
 	if ($text) $previews[0]=do_template('WITH_WHITESPACE',array('_GUID'=>'bcc1c95427d7f70524501955ba046d56','CONTENT'=>$previews[0]));
-	$tmp = substr($function, 13);
+	$tmp=substr($function, 13);
 
 	if (($complete_html) && (get_page_name()=='admin_themes'))
 	{
@@ -885,7 +885,7 @@ function render_screen_preview($template,$hook,$function)
  */
 function get_text_templates()
 {
-	$text_templates = array(
+	$text_templates=array(
 		'CSS_NEED',
 		'CSS_NEED_FULL',
 		'CSS_NEED_INLINE',
@@ -916,18 +916,18 @@ function get_text_templates()
 function is_plain_text_template($temp_name)
 {
 	return (
-		substr($temp_name,0,5) == 'MAIL_' ||
-		substr($temp_name,0,11) == 'JAVASCRIPT_' && $temp_name!= 'JAVASCRIPT_NEED' && $temp_name!= 'JAVASCRIPT_NEED_INLINE' ||
-		$temp_name == 'JAVASCRIPT.tpl' ||
-		substr($temp_name,-9) === '_FCOMCODE' ||
-		substr($temp_name,-5) === '_MAIL' ||
-		substr($temp_name,-13) === '_FCOMCODEPAGE' ||
+		substr($temp_name,0,5)=='MAIL_' ||
+		substr($temp_name,0,11)=='JAVASCRIPT_' && $temp_name!='JAVASCRIPT_NEED' && $temp_name!='JAVASCRIPT_NEED_INLINE' ||
+		$temp_name=='JAVASCRIPT.tpl' ||
+		substr($temp_name,-9)==='_FCOMCODE' ||
+		substr($temp_name,-5)==='_MAIL' ||
+		substr($temp_name,-13)==='_FCOMCODEPAGE' ||
 		substr($temp_name,0,14)=='TRACKBACK_XML_' ||
 		$temp_name=='OPENSEARCH' ||
 		$temp_name=='WYSIWYG_SETTINGS' ||
 		substr($temp_name,0,5)=='OPML_' ||
 		substr($temp_name,0,5)=='ATOM_' || substr($temp_name,0,4)=='RSS_' ||
-		in_array($temp_name, get_text_templates())
+		in_array($temp_name,get_text_templates())
 	);
 }
 

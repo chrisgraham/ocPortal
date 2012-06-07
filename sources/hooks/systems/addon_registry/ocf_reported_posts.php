@@ -58,11 +58,11 @@ class Hook_addon_registry_ocf_reported_posts
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(
+			'requires'=>array(
 				'ocf_forum'
 			),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -89,7 +89,7 @@ class Hook_addon_registry_ocf_reported_posts
 	function tpl_previews()
 	{
 		return array(
-			'OCF_REPORTED_POST_FCOMCODE.tpl' => 'ocf_reported_post_fcomcode'
+			'OCF_REPORTED_POST_FCOMCODE.tpl'=>'ocf_reported_post_fcomcode'
 		);
 	}
 
@@ -106,11 +106,11 @@ class Hook_addon_registry_ocf_reported_posts
 		require_css('ocf');
 		return array(
 			lorem_globalise(do_lorem_template('OCF_REPORTED_POST_FCOMCODE', array(
-				'POST_ID' => placeholder_id(),
-				'MEMBER' => lorem_phrase(),
-				'POST' => lorem_phrase(),
-				'POSTER' => lorem_phrase(),
-				'TOPIC_TITLE' => lorem_phrase()
+				'POST_ID'=>placeholder_id(),
+				'MEMBER'=>lorem_phrase(),
+				'POST'=>lorem_phrase(),
+				'POSTER'=>lorem_phrase(),
+				'TOPIC_TITLE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

@@ -58,9 +58,9 @@ class Hook_addon_registry_core
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -76,15 +76,15 @@ class Hook_addon_registry_core
 			'themes/default/images/action_small.png',
 			'sources/antispam.php',
 			'sources/hooks/systems/notifications/spam_check_block.php',
- 			'sources/hooks/systems/config_default/complex_uploader.php',
- 			'sources/hooks/systems/config_default/wysiwyg.php',
- 			'sources/hooks/systems/config_default/editarea.php',
- 			'sources/hooks/systems/config_default/autoban.php',
- 			'sources/hooks/systems/config_default/js_overlays.php',
- 			'sources/hooks/systems/config_default/likes.php',
- 			'sources/hooks/systems/config_default/tree_lists.php',
- 			'sources/hooks/systems/config_default/captcha_single_guess.php',
- 			'sources/hooks/systems/config_default/css_captcha.php',
+			'sources/hooks/systems/config_default/complex_uploader.php',
+			'sources/hooks/systems/config_default/wysiwyg.php',
+			'sources/hooks/systems/config_default/editarea.php',
+			'sources/hooks/systems/config_default/autoban.php',
+			'sources/hooks/systems/config_default/js_overlays.php',
+			'sources/hooks/systems/config_default/likes.php',
+			'sources/hooks/systems/config_default/tree_lists.php',
+			'sources/hooks/systems/config_default/captcha_single_guess.php',
+			'sources/hooks/systems/config_default/css_captcha.php',
 			'sources/hooks/systems/notifications/low_disk_space.php',
 			'sources/hooks/systems/notifications/hack_attack.php',
 			'sources/hooks/systems/notifications/auto_ban.php',
@@ -866,51 +866,51 @@ class Hook_addon_registry_core
 	function tpl_previews()
 	{
 		return array(
-			'ACTION_LOGS_SCREEN.tpl' => 'administrative__action_logs_screen',
-			'ACTION_LOGS_TOGGLE_LINK.tpl' => 'administrative__action_logs_toggle_link',
-			'LOOKUP_IP_LIST_ENTRY.tpl' => 'administrative__lookup_screen',
-			'LOOKUP_IP_LIST_GROUP.tpl' => 'administrative__lookup_screen',
-			'LOOKUP_SCREEN.tpl' => 'administrative__lookup_screen',
-			'LOGIN_SCREEN.tpl' => 'login_screen',
-			'LOGIN_REDIRECT_SCREEN.tpl' => 'login_redirect_screen',
-			'FORUMS_EMBED.tpl' => 'forums_embed',
-			'JAVASCRIPT_NEED_INLINE.tpl' => 'javascript_need_inline',
-			'CSS_NEED_INLINE.tpl' => 'css_need_inline',
-			'FATAL_SCREEN.tpl' => 'administrative__fatal_screen',
-			'STACK_TRACE_LINE.tpl' => 'administrative__stack_trace_hyper_wrap',
-			'STACK_TRACE_WRAP.tpl' => 'administrative__stack_trace_hyper_wrap',
-			'STACK_TRACE_HYPER_WRAP.tpl' => 'administrative__stack_trace_hyper_wrap',
-			'INLINE_WIP_MESSAGE.tpl' => 'inline_wip_message',
-			'MISSING_SCREEN.tpl' => 'missing_screen',
-			'PARAM_INFO.tpl' => 'param_info',
-			'JAVASCRIPT_NEED.tpl' => 'javascript_need',
-			'CSS_NEED.tpl' => 'css_need',
-			'BLOCK_SIDE_PERSONAL_STATS_LINE.tpl' => 'block_side_personal_stats',
-			'BLOCK_SIDE_PERSONAL_STATS_LINK_2.tpl' => 'block_side_personal_stats',
-			'BLOCK_SIDE_PERSONAL_STATS_LINK.tpl' => 'block_side_personal_stats',
-			'BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX.tpl' => 'block_side_personal_stats',
-			'BLOCK_SIDE_PERSONAL_STATS_LOGOUT.tpl' => 'block_side_personal_stats',
-			'BLOCK_SIDE_PERSONAL_STATS.tpl' => 'block_side_personal_stats',
-			'BLOCK_SIDE_PERSONAL_STATS_NO.tpl' => 'block_side_personal_stats_no',
-			'BLOCK_NO_ENTRIES.tpl' => 'nothing_here',
-			'BLOCK_MAIN_EMOTICON_CODES_ENTRY.tpl' => 'block_main_emoticon_codes',
-			'BLOCK_MAIN_EMOTICON_CODES.tpl' => 'block_main_emoticon_codes',
-			'BLOCK_MAIN_COMCODE_PAGE_CHILDREN.tpl' => 'block_main_comcode_page_children',
-			'BLOCK_MAIN_SITEMAP_NEST.tpl' => 'block_main_sitemap',
-			'BLOCK_MAIN_SITEMAP.tpl' => 'block_main_sitemap',
-			'QUERY_LOG.tpl' => 'administrative__query_screen',
-			'QUERY_SCREEN.tpl' => 'administrative__query_screen',
-			'BROKEN_URLS.tpl' => 'administrative__broken_urls',
-			'BROKEN_LANG_STRINGS.tpl' => 'administrative__broken_lang_strings',
-			'JOIN_OR_LOGIN.tpl' => 'join_or_login',
-			'FORUM_ATTACHMENT_IMAGE.tpl' => 'forum_attachment_image',
-			'FORUM_ATTACHMENT_IMAGE_THUMB.tpl' => 'forum_attachment_link',
-			'FORUM_ATTACHMENT_LINK.tpl' => 'forum_attachment_link',
-			'tempcode_test.tpl' => 'administrative__tempcode_test',
-			'JAVA_DETECT.tpl' => 'java_detect',
-			'EMAILLOG_SCREEN.tpl' => 'email_log_screen',
-			'QUICK_JS_LOADER.tpl' => 'quick_js_loader',
-			'BLOCK_MAIN_CONTENT_FILTERING.tpl' => 'block_main_content_filtering',
+			'ACTION_LOGS_SCREEN.tpl'=>'administrative__action_logs_screen',
+			'ACTION_LOGS_TOGGLE_LINK.tpl'=>'administrative__action_logs_toggle_link',
+			'LOOKUP_IP_LIST_ENTRY.tpl'=>'administrative__lookup_screen',
+			'LOOKUP_IP_LIST_GROUP.tpl'=>'administrative__lookup_screen',
+			'LOOKUP_SCREEN.tpl'=>'administrative__lookup_screen',
+			'LOGIN_SCREEN.tpl'=>'login_screen',
+			'LOGIN_REDIRECT_SCREEN.tpl'=>'login_redirect_screen',
+			'FORUMS_EMBED.tpl'=>'forums_embed',
+			'JAVASCRIPT_NEED_INLINE.tpl'=>'javascript_need_inline',
+			'CSS_NEED_INLINE.tpl'=>'css_need_inline',
+			'FATAL_SCREEN.tpl'=>'administrative__fatal_screen',
+			'STACK_TRACE_LINE.tpl'=>'administrative__stack_trace_hyper_wrap',
+			'STACK_TRACE_WRAP.tpl'=>'administrative__stack_trace_hyper_wrap',
+			'STACK_TRACE_HYPER_WRAP.tpl'=>'administrative__stack_trace_hyper_wrap',
+			'INLINE_WIP_MESSAGE.tpl'=>'inline_wip_message',
+			'MISSING_SCREEN.tpl'=>'missing_screen',
+			'PARAM_INFO.tpl'=>'param_info',
+			'JAVASCRIPT_NEED.tpl'=>'javascript_need',
+			'CSS_NEED.tpl'=>'css_need',
+			'BLOCK_SIDE_PERSONAL_STATS_LINE.tpl'=>'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS_LINK_2.tpl'=>'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS_LINK.tpl'=>'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX.tpl'=>'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS_LOGOUT.tpl'=>'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS.tpl'=>'block_side_personal_stats',
+			'BLOCK_SIDE_PERSONAL_STATS_NO.tpl'=>'block_side_personal_stats_no',
+			'BLOCK_NO_ENTRIES.tpl'=>'nothing_here',
+			'BLOCK_MAIN_EMOTICON_CODES_ENTRY.tpl'=>'block_main_emoticon_codes',
+			'BLOCK_MAIN_EMOTICON_CODES.tpl'=>'block_main_emoticon_codes',
+			'BLOCK_MAIN_COMCODE_PAGE_CHILDREN.tpl'=>'block_main_comcode_page_children',
+			'BLOCK_MAIN_SITEMAP_NEST.tpl'=>'block_main_sitemap',
+			'BLOCK_MAIN_SITEMAP.tpl'=>'block_main_sitemap',
+			'QUERY_LOG.tpl'=>'administrative__query_screen',
+			'QUERY_SCREEN.tpl'=>'administrative__query_screen',
+			'BROKEN_URLS.tpl'=>'administrative__broken_urls',
+			'BROKEN_LANG_STRINGS.tpl'=>'administrative__broken_lang_strings',
+			'JOIN_OR_LOGIN.tpl'=>'join_or_login',
+			'FORUM_ATTACHMENT_IMAGE.tpl'=>'forum_attachment_image',
+			'FORUM_ATTACHMENT_IMAGE_THUMB.tpl'=>'forum_attachment_link',
+			'FORUM_ATTACHMENT_LINK.tpl'=>'forum_attachment_link',
+			'tempcode_test.tpl'=>'administrative__tempcode_test',
+			'JAVA_DETECT.tpl'=>'java_detect',
+			'EMAILLOG_SCREEN.tpl'=>'email_log_screen',
+			'QUICK_JS_LOADER.tpl'=>'quick_js_loader',
+			'BLOCK_MAIN_CONTENT_FILTERING.tpl'=>'block_main_content_filtering',
 		);
 	}
 
@@ -941,10 +941,10 @@ class Hook_addon_registry_core
 
 		return array(
 			lorem_globalise(do_lorem_template('EMAILLOG_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'RESULTS_TABLE' => placeholder_table(),
-				'MASS_DELETE_URL' => placeholder_url(),
-				'MASS_SEND_URL' => placeholder_url()
+				'TITLE'=>lorem_title(),
+				'RESULTS_TABLE'=>placeholder_table(),
+				'MASS_DELETE_URL'=>placeholder_url(),
+				'MASS_SEND_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -974,12 +974,12 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ACTION_LOGS_TOGGLE_LINK', array(
-				'URL' => placeholder_url(),
-				'page' => lorem_phrase(),
-				'type' => lorem_phrase(),
-				'id' => lorem_phrase(),
-				'mode' => lorem_phrase(),
-				'action_id' => lorem_phrase()
+				'URL'=>placeholder_url(),
+				'page'=>lorem_phrase(),
+				'type'=>lorem_phrase(),
+				'id'=>lorem_phrase(),
+				'mode'=>lorem_phrase(),
+				'action_id'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -995,8 +995,8 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ACTION_LOGS_SCREEN', array(
-				'TABLE' => placeholder_table(),
-				'TITLE' => lorem_title()
+				'TABLE'=>placeholder_table(),
+				'TITLE'=>lorem_title()
 			)), NULL, '', true)
 		);
 	}
@@ -1010,41 +1010,41 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__administrative__lookup_screen()
 	{
-		$inner_ip_list = new ocp_tempcode();
+		$inner_ip_list=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 			$inner_ip_list->attach(do_lorem_template('LOOKUP_IP_LIST_ENTRY', array(
-				'LOOKUP_URL' => placeholder_url(),
-				'DATE' => placeholder_time(),
-				'_DATE' => placeholder_time(),
-				'IP' => placeholder_ip(),
-				'BANNED' => do_lang_tempcode('YES'),
-				'UNIQID' => placeholder_random()
+				'LOOKUP_URL'=>placeholder_url(),
+				'DATE'=>placeholder_time(),
+				'_DATE'=>placeholder_time(),
+				'IP'=>placeholder_ip(),
+				'BANNED'=>do_lang_tempcode('YES'),
+				'UNIQID'=>placeholder_random()
 			)));
 
-		$group = do_lorem_template('LOOKUP_IP_LIST_GROUP', array(
-			'BANNED' => do_lang_tempcode('YES'),
-			'MASK' => placeholder_ip(),
-			'GROUP' => $inner_ip_list,
-			'OPEN_DEFAULT' => true,
-			'UNIQID' => placeholder_random()
+		$group=do_lorem_template('LOOKUP_IP_LIST_GROUP', array(
+			'BANNED'=>do_lang_tempcode('YES'),
+			'MASK'=>placeholder_ip(),
+			'GROUP'=>$inner_ip_list,
+			'OPEN_DEFAULT'=>true,
+			'UNIQID'=>placeholder_random()
 		));
 		return array(
 			lorem_globalise(do_lorem_template('LOOKUP_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'ALERTS' => lorem_phrase(),
-				'STATS' => lorem_phrase(),
-				'IP_LIST' => $group,
-				'IP_BANNED' => lorem_phrase(),
-				'SUBMITTER_BANNED' => lorem_phrase(),
-				'MEMBER_BANNED' => lorem_phrase(),
-				'ID' => placeholder_id(),
-				'IP' => placeholder_ip(),
-				'NAME' => lorem_word(),
-				'SEARCH_URL' => placeholder_url(),
-				'AUTHOR_URL' => placeholder_url(),
-				'POINTS_URL' => placeholder_url(),
-				'PROFILE_URL' => placeholder_url(),
-				'ACTION_LOG_URL' => placeholder_url()
+				'TITLE'=>lorem_title(),
+				'ALERTS'=>lorem_phrase(),
+				'STATS'=>lorem_phrase(),
+				'IP_LIST'=>$group,
+				'IP_BANNED'=>lorem_phrase(),
+				'SUBMITTER_BANNED'=>lorem_phrase(),
+				'MEMBER_BANNED'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'IP'=>placeholder_ip(),
+				'NAME'=>lorem_word(),
+				'SEARCH_URL'=>placeholder_url(),
+				'AUTHOR_URL'=>placeholder_url(),
+				'POINTS_URL'=>placeholder_url(),
+				'PROFILE_URL'=>placeholder_url(),
+				'ACTION_LOG_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -1058,16 +1058,16 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__login_screen()
 	{
-		$_GET['wide'] = '1';
+		$_GET['wide']='1';
 
 		return array(
 			lorem_globalise(do_lorem_template('LOGIN_SCREEN', array(
-				'EXTRA' => lorem_phrase(),
-				'USERNAME' => lorem_word(),
-				'JOIN_URL' => placeholder_url(),
-				'TITLE' => lorem_title(),
-				'LOGIN_URL' => placeholder_url(),
-				'PASSION' => ''
+				'EXTRA'=>lorem_phrase(),
+				'USERNAME'=>lorem_word(),
+				'JOIN_URL'=>placeholder_url(),
+				'TITLE'=>lorem_title(),
+				'LOGIN_URL'=>placeholder_url(),
+				'PASSION'=>''
 			)), NULL, '', true)
 		);
 	}
@@ -1083,11 +1083,11 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('LOGIN_REDIRECT_SCREEN', array(
-				'REFRESH' => '',
-				'TITLE' => lorem_title(),
-				'TEXT' => lorem_sentence_html(),
-				'URL' => placeholder_url(),
-				'POST' => lorem_phrase()
+				'REFRESH'=>'',
+				'TITLE'=>lorem_title(),
+				'TEXT'=>lorem_sentence_html(),
+				'URL'=>placeholder_url(),
+				'POST'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -1103,7 +1103,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('FORUMS_EMBED', array(
-				'FORUMS' => placeholder_url()
+				'FORUMS'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -1119,7 +1119,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('JAVASCRIPT_NEED_INLINE', array(
-				'CODE' => placeholder_javascript_code()
+				'CODE'=>placeholder_javascript_code()
 			)), NULL, '', true)
 		);
 	}
@@ -1135,7 +1135,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('CSS_NEED_INLINE', array(
-				'CSS' => ''
+				'CSS'=>''
 			)), NULL, '', true)
 		);
 	}
@@ -1151,9 +1151,9 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('FATAL_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'MESSAGE' => lorem_phrase(),
-				'TRACE' => lorem_phrase()
+				'TITLE'=>lorem_title(),
+				'MESSAGE'=>lorem_phrase(),
+				'TRACE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -1167,28 +1167,28 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__administrative__stack_trace_hyper_wrap()
 	{
-		$trace = new ocp_tempcode();
+		$trace=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
-			$traces = new ocp_tempcode();
-			foreach (placeholder_array() as $key => $value1)
+			$traces=new ocp_tempcode();
+			foreach (placeholder_array() as $key=>$value1)
 			{
 				$traces->attach(do_lorem_template('STACK_TRACE_LINE', array(
-					'LINE' => $value1,
-					'FILE' => lorem_phrase(),
-					'KEY' => ucfirst($value1),
-					'VALUE' => lorem_sentence()
+					'LINE'=>$value1,
+					'FILE'=>lorem_phrase(),
+					'KEY'=>ucfirst($value1),
+					'VALUE'=>lorem_sentence()
 				)));
 			}
 			$trace->attach(do_lorem_template('STACK_TRACE_WRAP', array(
-				'TRACES' => $traces
+				'TRACES'=>$traces
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('STACK_TRACE_HYPER_WRAP', array(
-				'CONTENT' => $trace,
-				'POST' => placeholder_array()
+				'CONTENT'=>$trace,
+				'POST'=>placeholder_array()
 			)), NULL, '', true)
 		);
 	}
@@ -1204,8 +1204,8 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('INLINE_WIP_MESSAGE', array(
-				'MESSAGE' => lorem_phrase(),
-				'NO_ENTRIES' => lorem_word()
+				'MESSAGE'=>lorem_phrase(),
+				'NO_ENTRIES'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -1221,11 +1221,11 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('MISSING_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'ADD_URL' => placeholder_url(),
-				'PAGE' => lorem_phrase(),
-				'DID_MEAN' => lorem_word(),
-				'ADD_REDIRECT_URL' => placeholder_url()
+				'TITLE'=>lorem_title(),
+				'ADD_URL'=>placeholder_url(),
+				'PAGE'=>lorem_phrase(),
+				'DID_MEAN'=>lorem_word(),
+				'ADD_REDIRECT_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -1241,9 +1241,9 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PARAM_INFO', array(
-				'MAP' => array(
-					'A' => 'a',
-					'B' => 'b'
+				'MAP'=>array(
+					'A'=>'a',
+					'B'=>'b'
 				)
 			)), NULL, '', true)
 		);
@@ -1260,7 +1260,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('JAVASCRIPT_NEED', array(
-				'CODE' => placeholder_javascript_code()
+				'CODE'=>placeholder_javascript_code()
 			)), NULL, '', true)
 		);
 	}
@@ -1276,7 +1276,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('CSS_NEED', array(
-				'CODE' => lorem_phrase()
+				'CODE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -1290,42 +1290,42 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__block_side_personal_stats()
 	{
-		$details = new ocp_tempcode();
-		$links = new ocp_tempcode();
+		$details=new ocp_tempcode();
+		$links=new ocp_tempcode();
 
 		$details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE', array(
-			'KEY' => lorem_word(),
-			'VALUE' => placeholder_number()
+			'KEY'=>lorem_word(),
+			'VALUE'=>placeholder_number()
 		)));
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2', array(
-			'NAME' => lorem_word_2(),
-			'DESCRIPTION' => lorem_phrase(),
-			'URL' => placeholder_url()
+			'NAME'=>lorem_word_2(),
+			'DESCRIPTION'=>lorem_phrase(),
+			'URL'=>placeholder_url()
 		)));
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK', array(
-			'NAME' => lorem_word(),
-			'URL' => placeholder_url(),
-			'REL' => 'me'
+			'NAME'=>lorem_word(),
+			'URL'=>placeholder_url(),
+			'REL'=>'me'
 		)));
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT', array(
-			'NAME' => do_lang_tempcode('LOGOUT'),
-			'URL' => placeholder_url()
+			'NAME'=>do_lang_tempcode('LOGOUT'),
+			'URL'=>placeholder_url()
 		)));
 
 		$details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX', array(
-			'KEY' => do_lang_tempcode('GROUP'),
-			'VALUE' => placeholder_link()
+			'KEY'=>do_lang_tempcode('GROUP'),
+			'VALUE'=>placeholder_link()
 		)));
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS', array(
-				'AVATAR_URL' => placeholder_avatar(),
-				'LINKS' => $links,
-				'DETAILS' => $details,
-				'USERNAME' => lorem_word()
+				'AVATAR_URL'=>placeholder_avatar(),
+				'LINKS'=>$links,
+				'DETAILS'=>$details,
+				'USERNAME'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -1341,10 +1341,10 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_NO', array(
-				'TITLE' => lorem_phrase(),
-				'FULL_LOGIN_URL' => placeholder_url(),
-				'JOIN_URL' => placeholder_url(),
-				'LOGIN_URL' => placeholder_url()
+				'TITLE'=>lorem_phrase(),
+				'FULL_LOGIN_URL'=>placeholder_url(),
+				'JOIN_URL'=>placeholder_url(),
+				'LOGIN_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -1360,14 +1360,14 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_NO_ENTRIES', array(
-				'HIGH' => lorem_phrase(),
-				'TITLE' => lorem_word(),
-				'MESSAGE' => lorem_phrase(),
-				'ADD_NAME' => lorem_word(),
-				'SUBMIT_URL' => placeholder_url(),
-				'RECENT' => lorem_word(),
-				'MEMBERS' => lorem_word(),
-				'NO_ENTRIES' => lorem_word()
+				'HIGH'=>lorem_phrase(),
+				'TITLE'=>lorem_word(),
+				'MESSAGE'=>lorem_phrase(),
+				'ADD_NAME'=>lorem_word(),
+				'SUBMIT_URL'=>placeholder_url(),
+				'RECENT'=>lorem_word(),
+				'MEMBERS'=>lorem_word(),
+				'NO_ENTRIES'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -1381,23 +1381,23 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__block_main_emoticon_codes()
 	{
-		$smilies = placeholder_emoticons();
-		$entries = new ocp_tempcode();
+		$smilies=placeholder_emoticons();
+		$entries=new ocp_tempcode();
 		global $EMOTICON_LEVELS;
-		foreach ($smilies as $code => $imgcode)
+		foreach ($smilies as $code=>$imgcode)
 		{
 			if ((is_null($EMOTICON_LEVELS)) || ($EMOTICON_LEVELS[$code] < 3))
 			{
 				$entries->attach(do_lorem_template('BLOCK_MAIN_EMOTICON_CODES_ENTRY', array(
-					'CODE' => $code,
-					'TPL' => do_emoticon($imgcode)
+					'CODE'=>$code,
+					'TPL'=>do_emoticon($imgcode)
 				)));
 			}
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_EMOTICON_CODES', array(
-				'ENTRIES' => $entries
+				'ENTRIES'=>$entries
 			)), NULL, '', true)
 		);
 	}
@@ -1413,8 +1413,8 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('JOIN_OR_LOGIN', array(
-				'LOGIN_URL' => placeholder_url(),
-				'JOIN_URL' => placeholder_url()
+				'LOGIN_URL'=>placeholder_url(),
+				'JOIN_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -1428,23 +1428,23 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__block_main_comcode_page_children()
 	{
-		$children = array();
-		foreach (placeholder_array() as $i => $temp)
+		$children=array();
+		foreach (placeholder_array() as $i=>$temp)
 		{
-			$child = array();
-			$child['TITLE'] = $temp;
-			$child['PAGE'] = lorem_word();
-			$child['ZONE'] = lorem_word();
+			$child=array();
+			$child['TITLE']=$temp;
+			$child['PAGE']=lorem_word();
+			$child['ZONE']=lorem_word();
 
-			$children[$i] = $child;
+			$children[$i]=$child;
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_COMCODE_PAGE_CHILDREN', array(
-				'CHILDREN' => $children,
-				'THE_PAGE' => lorem_phrase(),
-				'THE_ZONE' => lorem_phrase(),
-				'TITLE' => lorem_phrase()
+				'CHILDREN'=>$children,
+				'THE_PAGE'=>lorem_phrase(),
+				'THE_ZONE'=>lorem_phrase(),
+				'TITLE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -1458,37 +1458,37 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__block_main_sitemap()
 	{
-		$children = array();
+		$children=array();
 		foreach (placeholder_array() as $v)
 		{
-			$children1 = array();
+			$children1=array();
 			foreach (placeholder_array(2) as $v)
 			{
-				$children2 = array();
+				$children2=array();
 				foreach (placeholder_array(1) as $v)
 				{
-					$children2[] = do_lorem_template('BLOCK_MAIN_SITEMAP_NEST', array(
-						'URL' => placeholder_url(),
-						'NAME' => lorem_word(),
-						'CHILDREN' => placeholder_array()
+					$children2[]=do_lorem_template('BLOCK_MAIN_SITEMAP_NEST', array(
+						'URL'=>placeholder_url(),
+						'NAME'=>lorem_word(),
+						'CHILDREN'=>placeholder_array()
 					));
 				}
 
-				$children1[] = do_lorem_template('BLOCK_MAIN_SITEMAP_NEST', array(
-					'URL' => placeholder_url(),
-					'NAME' => lorem_word(),
-					'CHILDREN' => $children2
+				$children1[]=do_lorem_template('BLOCK_MAIN_SITEMAP_NEST', array(
+					'URL'=>placeholder_url(),
+					'NAME'=>lorem_word(),
+					'CHILDREN'=>$children2
 				));
 			}
-			$children[] = do_lorem_template('BLOCK_MAIN_SITEMAP_NEST', array(
-				'URL' => placeholder_url(),
-				'NAME' => lorem_word(),
-				'CHILDREN' => $children1
+			$children[]=do_lorem_template('BLOCK_MAIN_SITEMAP_NEST', array(
+				'URL'=>placeholder_url(),
+				'NAME'=>lorem_word(),
+				'CHILDREN'=>$children1
 			));
 		}
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_SITEMAP', array(
-				'CHILDREN' => $children
+				'CHILDREN'=>$children
 			)), NULL, '', true)
 		);
 	}
@@ -1502,21 +1502,21 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__administrative__query_screen()
 	{
-		$queries = new ocp_tempcode();
+		$queries=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
 			$queries->attach(do_lorem_template('QUERY_LOG', array(
-				'TIME' => placeholder_number(),
-				'TEXT' => lorem_sentence()
+				'TIME'=>placeholder_number(),
+				'TEXT'=>lorem_sentence()
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('QUERY_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'TOTAL' => lorem_phrase(),
-				'TOTAL_TIME' => placeholder_number(),
-				'QUERIES' => $queries
+				'TITLE'=>lorem_title(),
+				'TOTAL'=>lorem_phrase(),
+				'TOTAL_TIME'=>placeholder_number(),
+				'QUERIES'=>$queries
 			)), NULL, '', true)
 		);
 	}
@@ -1531,30 +1531,30 @@ class Hook_addon_registry_core
 	function tpl_preview__administrative__broken_urls()
 	{
 		require_lang('cleanup');
-		$found_404 = array();
+		$found_404=array();
 		foreach (placeholder_array() as $value)
 		{
-			$found_404[] = array(
-				'URL' => placeholder_url(),
-				'SPOT' => $value
+			$found_404[]=array(
+				'URL'=>placeholder_url(),
+				'SPOT'=>$value
 			);
 		}
 
-		$found = array();
-		foreach (placeholder_array() as $k => $value)
+		$found=array();
+		foreach (placeholder_array() as $k=>$value)
 		{
-			$found[] = array(
-				'URL' => placeholder_url(),
-				'TABLE' => $value,
-				'FIELD' => lorem_word_2(),
-				'ID' => strval($k)
+			$found[]=array(
+				'URL'=>placeholder_url(),
+				'TABLE'=>$value,
+				'FIELD'=>lorem_word_2(),
+				'ID'=>strval($k)
 			);
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('BROKEN_URLS', array(
-				'FOUND' => $found,
-				'FOUND_404' => $found_404
+				'FOUND'=>$found,
+				'FOUND_404'=>$found_404
 			)), NULL, '', true)
 		);
 	}
@@ -1571,9 +1571,9 @@ class Hook_addon_registry_core
 		require_lang('cleanup');
 		return array(
 			lorem_globalise(do_lorem_template('BROKEN_LANG_STRINGS', array(
-				'MISSING_LANG_STRINGS' => placeholder_array(),
-				'FUSED_LANG_STRINGS' => placeholder_array(),
-				'ORPHANED_LANG_STRINGS' => placeholder_array()
+				'MISSING_LANG_STRINGS'=>placeholder_array(),
+				'FUSED_LANG_STRINGS'=>placeholder_array(),
+				'ORPHANED_LANG_STRINGS'=>placeholder_array()
 			)), NULL, '', true)
 		);
 	}
@@ -1589,7 +1589,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('FORUM_ATTACHMENT_IMAGE', array(
-				'URL' => placeholder_image_url()
+				'URL'=>placeholder_image_url()
 			)), NULL, '', true)
 		);
 	}
@@ -1603,16 +1603,16 @@ class Hook_addon_registry_core
 	 */
 	function tpl_preview__forum_attachment_link()
 	{
-		$content = do_lorem_template('FORUM_ATTACHMENT_IMAGE_THUMB', array(
-			'FULL' => placeholder_url(),
-			'URL' => placeholder_image_url()
+		$content=do_lorem_template('FORUM_ATTACHMENT_IMAGE_THUMB', array(
+			'FULL'=>placeholder_url(),
+			'URL'=>placeholder_image_url()
 		));
 
 		$content->attach(do_lorem_template('FORUM_ATTACHMENT_LINK', array(
-			'FULL' => placeholder_url(),
-			'FILENAME' => lorem_word(),
-			'CLEAN_SIZE' => placeholder_filesize(),
-			'NUM_DOWNLOADS' => placeholder_number()
+			'FULL'=>placeholder_url(),
+			'FILENAME'=>lorem_word(),
+			'CLEAN_SIZE'=>placeholder_filesize(),
+			'NUM_DOWNLOADS'=>placeholder_number()
 		)));
 		return array(
 			lorem_globalise($content, NULL, '', true)
@@ -1630,15 +1630,15 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('tempcode_test', array(
-				'EMPTY1' => '',
-				'EMPTY2' => '',
-				'NONEMPTY' => lorem_word(),
-				'PASSED' => lorem_word(),
-				'ARRAY' => array(
+				'EMPTY1'=>'',
+				'EMPTY2'=>'',
+				'NONEMPTY'=>lorem_word(),
+				'PASSED'=>lorem_word(),
+				'ARRAY'=>array(
 					array(
-						'A' => '',
-						'B' => '',
-						'C' => ''
+						'A'=>'',
+						'B'=>'',
+						'C'=>''
 					)
 				)
 			)), NULL, '', true)
@@ -1656,13 +1656,13 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTENT_FILTERING', array(
-				'FIELDS' => placeholder_fields(),
-				'ACTIVE_FILTER' => placeholder_id(),
-				'LINKS' => array(
+				'FIELDS'=>placeholder_fields(),
+				'ACTIVE_FILTER'=>placeholder_id(),
+				'LINKS'=>array(
 					array(
-						'ACTIVE' => true,
-						'TITLE' => lorem_phrase(),
-						'URL' => placeholder_url()
+						'ACTIVE'=>true,
+						'TITLE'=>lorem_phrase(),
+						'URL'=>placeholder_url()
 					)
 				)
 			)), NULL, '', true)

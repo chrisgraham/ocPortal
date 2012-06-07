@@ -76,14 +76,14 @@ class Hook_checklist_messaging
 
 		if($outstanding>0)
 		{
-			$img	=	'not_completed';			
+			$img='not_completed';			
 		}
 		else
 		{	
-			$img	=	'completed';
+			$img='completed';
 		}
 
-		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'0578142633c6f3d37776e82a869deb91','ORDER_STATUS'=>$img));
+		$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'0578142633c6f3d37776e82a869deb91','ORDER_STATUS'=>$img));
 
 		$url=build_url(array('page'=>'admin_messaging','type'=>'misc'),get_module_zone('admin_messaging'));
 

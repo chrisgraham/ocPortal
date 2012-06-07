@@ -58,9 +58,9 @@ class Hook_addon_registry_printer_friendly_block
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -88,7 +88,7 @@ class Hook_addon_registry_printer_friendly_block
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_SIDE_PRINTER_FRIENDLY.tpl' => 'block_side_printer_friendly'
+			'BLOCK_SIDE_PRINTER_FRIENDLY.tpl'=>'block_side_printer_friendly'
 		);
 	}
 
@@ -103,7 +103,7 @@ class Hook_addon_registry_printer_friendly_block
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_PRINTER_FRIENDLY', array(
-				'URL' => placeholder_url()
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}

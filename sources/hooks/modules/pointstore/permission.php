@@ -313,9 +313,11 @@ class Hook_pointstore_permission
 		$rows=$GLOBALS['SITE_DB']->query_select('pstore_permissions',array('*'),array('id'=>$id,'p_enabled'=>1));
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-		$cost=$rows[0]['p_cost'];
+		$row=$rows[0];
 
-		$p_title=get_translated_text($rows[0]['p_title']);
+		$cost=$row['p_cost'];
+
+		$p_title=get_translated_text($row['p_title']);
 		$title=get_screen_title('PURCHASE_SOME_PRODUCT',true,array($p_title));
 
 		// Check points
@@ -326,17 +328,17 @@ class Hook_pointstore_permission
 		}
 
 		// Test to see if it's been bought
-		if ($this->bought($rows[0]))
+		if ($this->bought($row))
 			warn_exit(do_lang_tempcode('_ALREADY_HAVE'));
 
 		require_code('points2');
 		charge_member(get_member(),$cost,$p_title);
-		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_PERMISSION_PRODUCT','details'=>$p_title,'details2'=>strval($rows[0]['id'])));
+		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_PERMISSION_PRODUCT','details'=>$p_title,'details2'=>strval($row['id'])));
 
 		// Actuate
-		$map=$this->get_map($rows[0]);
-		$map['active_until']=time()+$rows[0]['p_hours']*60*60;
-		$GLOBALS['SITE_DB']->query_insert(filter_naughty_harsh($rows[0]['p_type']),$map);
+		$map=$this->get_map($row);
+		$map['active_until']=time()+$row['p_hours']*60*60;
+		$GLOBALS['SITE_DB']->query_insert(filter_naughty_harsh($row['p_type']),$map);
 
 		$member=get_member();
 

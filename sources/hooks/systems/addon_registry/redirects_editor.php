@@ -58,10 +58,10 @@ class Hook_addon_registry_redirects_editor
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
-			'previously_in_addon' => array(
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
+			'previously_in_addon'=>array(
 				'core_redirects_editor'
 			)
 		);
@@ -96,8 +96,8 @@ class Hook_addon_registry_redirects_editor
 	function tpl_previews()
 	{
 		return array(
-			'REDIRECTE_TABLE_REDIRECT.tpl' => 'administrative__redirecte_table_screen',
-			'REDIRECTE_TABLE_SCREEN.tpl' => 'administrative__redirecte_table_screen'
+			'REDIRECTE_TABLE_REDIRECT.tpl'=>'administrative__redirecte_table_screen',
+			'REDIRECTE_TABLE_SCREEN.tpl'=>'administrative__redirecte_table_screen'
 		);
 	}
 
@@ -112,38 +112,38 @@ class Hook_addon_registry_redirects_editor
 	{
 		require_javascript('javascript_ajax');
 
-		$fields = new ocp_tempcode();
-		foreach (placeholder_array() as $i => $row)
+		$fields=new ocp_tempcode();
+		foreach (placeholder_array() as $i=>$row)
 		{
 			$fields->attach(do_lorem_template('REDIRECTE_TABLE_REDIRECT', array(
-				'I' => strval($i),
-				'TO_ZONES' => placeholder_options(),
-				'FROM_ZONES' => placeholder_options(),
-				'FROM_PAGE' => lorem_word(),
-				'TO_PAGE' => lorem_word_2(),
-				'TICKED' => true,
-				'NAME' => "is_transparent_$i"
+				'I'=>strval($i),
+				'TO_ZONES'=>placeholder_options(),
+				'FROM_ZONES'=>placeholder_options(),
+				'FROM_PAGE'=>lorem_word(),
+				'TO_PAGE'=>lorem_word_2(),
+				'TICKED'=>true,
+				'NAME'=>"is_transparent_$i"
 			)));
 		}
 
-		$new = do_lorem_template('REDIRECTE_TABLE_REDIRECT', array(
-			'I' => 'new',
-			'TO_ZONES' => placeholder_options(),
-			'FROM_ZONES' => placeholder_options(),
-			'FROM_PAGE' => '',
-			'TO_PAGE' => '',
-			'TICKED' => false,
-			'NAME' => 'is_transparent_new'
+		$new=do_lorem_template('REDIRECTE_TABLE_REDIRECT', array(
+			'I'=>'new',
+			'TO_ZONES'=>placeholder_options(),
+			'FROM_ZONES'=>placeholder_options(),
+			'FROM_PAGE'=>'',
+			'TO_PAGE'=>'',
+			'TICKED'=>false,
+			'NAME'=>'is_transparent_new'
 		));
 
-		$out = do_lorem_template('REDIRECTE_TABLE_SCREEN', array(
-			'NOTES' => '',
-			'PING_URL' => placeholder_url(),
-			'WARNING_DETAILS' => '',
-			'TITLE' => lorem_title(),
-			'FIELDS' => $fields,
-			'NEW' => $new,
-			'URL' => placeholder_url()
+		$out=do_lorem_template('REDIRECTE_TABLE_SCREEN', array(
+			'NOTES'=>'',
+			'PING_URL'=>placeholder_url(),
+			'WARNING_DETAILS'=>'',
+			'TITLE'=>lorem_title(),
+			'FIELDS'=>$fields,
+			'NEW'=>$new,
+			'URL'=>placeholder_url()
 		));
 
 		return array(

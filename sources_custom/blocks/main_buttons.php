@@ -141,10 +141,10 @@ class Block_main_buttons
 		$max=array_key_exists('max',$map)?intval($map['max']):100;
 		$height=(!empty($map['height']))?$map['height']:'100%';//default: 100%
 
-		$set_height = '';
-		if($height!='100%')
+		$set_height='';
+		if ($height!='100%')
 		{
-			$set_height = ' style="overflow: auto; width: 100%!important; height: '.$height.'!important;" ';
+			$set_height=' style="overflow: auto; width: 100%!important; height: '.$height.'!important;" ';
 		}
 
 

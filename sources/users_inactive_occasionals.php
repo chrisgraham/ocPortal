@@ -125,7 +125,7 @@ function create_session($member,$session_confirmed=0)
 
 	set_session_id($new_session/*,true*/); // We won't set it true here, but something that really needs it to persist might come back and re-set it
 
-	// New sessions = Login points
+	// New sessions=Login points
 	if ((!is_null($member)) && (addon_installed('points')) && (addon_installed('stats')) && (!is_guest($member)))
 	{
 		$points_per_daily_visit=intval(get_option('points_per_daily_visit',true));

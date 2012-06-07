@@ -1009,12 +1009,12 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					}
 					if (preg_match("#HTTP/(\d*\.\d*) (\d*) #",$line,$matches)!=0)
 					{
-						// 200 = Ok
-						// 301/302 = Redirected: Not good, we should not be here
-						// 401 = Unauthorized
-						// 403 = Forbidden
-						// 404 = Not found
-						// 500 = Internal server error
+						// 200=Ok
+						// 301/302=Redirected: Not good, we should not be here
+						// 401=Unauthorized
+						// 403=Forbidden
+						// 404=Not found
+						// 500=Internal server error
 						$HTTP_MESSAGE=$matches[2];
 						switch ($matches[2])
 						{

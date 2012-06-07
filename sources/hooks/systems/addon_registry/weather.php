@@ -58,9 +58,9 @@ class Hook_addon_registry_weather
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -88,7 +88,7 @@ class Hook_addon_registry_weather
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_SIDE_WEATHER.tpl' => 'block_side_weather'
+			'BLOCK_SIDE_WEATHER.tpl'=>'block_side_weather'
 		);
 	}
 
@@ -103,11 +103,11 @@ class Hook_addon_registry_weather
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_WEATHER', array(
-				'TITLE' => lorem_phrase(),
-				'LOC_CODE' => placeholder_id(),
-				'IMAGE' => placeholder_image_url(),
-				'COND' => lorem_sentence(),
-				'FORECAST' => lorem_sentence()
+				'TITLE'=>lorem_phrase(),
+				'LOC_CODE'=>placeholder_id(),
+				'IMAGE'=>placeholder_image_url(),
+				'COND'=>lorem_sentence(),
+				'FORECAST'=>lorem_sentence()
 			)), NULL, '', true)
 		);
 	}

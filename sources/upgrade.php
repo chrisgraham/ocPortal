@@ -1775,6 +1775,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 	$templates_borked=array();
 
 	// TODO: Implement upgrade for next version
+	if (true)
 	{
 		$errors[]=do_lang_tempcode('NO_DEFINED_THEME_UPGRADER');
 		return array($errors,array());
@@ -1787,6 +1788,8 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 		$dark=find_theme_dark($theme);
 		list($colours,$landscape)=calculate_theme($seed,'default','equations','colours',$dark);
 	}
+
+	$css_recognition_string='xxx'; // TODO
 
 	// CSS
 	$css_dir=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom/';

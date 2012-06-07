@@ -143,7 +143,7 @@ class Block_main_activities
 
 		list($proceed_selection,$whereville)=find_activities($viewer_id,$mode,$member_ids);
 
-		$can_remove_others = (has_zone_access($viewer_id,'adminzone'))?true:false;
+		$can_remove_others=(has_zone_access($viewer_id,'adminzone'))?true:false;
 
 		$content=array();
 

@@ -58,9 +58,9 @@ class Hook_addon_registry_core_cleanup_tools
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -111,9 +111,9 @@ class Hook_addon_registry_core_cleanup_tools
 	function tpl_previews()
 	{
 		return array(
-			'CLEANUP_COMPLETED_SCREEN.tpl' => 'administrative__cleanup_completed_screen',
-			'CLEANUP_ORPHANED_UPLOADS.tpl' => 'administrative__cleanup_completed_screen',
-			'CLEANUP_PAGE_STATS.tpl' => 'administrative__cleanup_completed_screen'
+			'CLEANUP_COMPLETED_SCREEN.tpl'=>'administrative__cleanup_completed_screen',
+			'CLEANUP_ORPHANED_UPLOADS.tpl'=>'administrative__cleanup_completed_screen',
+			'CLEANUP_PAGE_STATS.tpl'=>'administrative__cleanup_completed_screen'
 		);
 	}
 
@@ -127,24 +127,24 @@ class Hook_addon_registry_core_cleanup_tools
 	function tpl_preview__administrative__cleanup_completed_screen()
 	{
 		require_lang('stats');
-		$url = array();
+		$url=array();
 		foreach (placeholder_array() as $v)
 		{
-			$url[] = array(
-				'URL' => placeholder_url()
+			$url[]=array(
+				'URL'=>placeholder_url()
 			);
 		}
 
-		$message = do_lorem_template('CLEANUP_ORPHANED_UPLOADS', array(
-			'FOUND' => $url
+		$message=do_lorem_template('CLEANUP_ORPHANED_UPLOADS', array(
+			'FOUND'=>$url
 		));
 		$message->attach(do_lorem_template('CLEANUP_PAGE_STATS', array(
-			'STATS_BACKUP_URL' => placeholder_url()
+			'STATS_BACKUP_URL'=>placeholder_url()
 		)));
 		return array(
 			lorem_globalise(do_lorem_template('CLEANUP_COMPLETED_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'MESSAGES' => $message
+				'TITLE'=>lorem_title(),
+				'MESSAGES'=>$message
 			)), NULL, '', true)
 		);
 	}

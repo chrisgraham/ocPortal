@@ -58,10 +58,10 @@ class Hook_addon_registry_jwplayer
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
-			'previously_in_addon' => array(
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
+			'previously_in_addon'=>array(
 				'core'
 			)
 		);
@@ -92,9 +92,9 @@ class Hook_addon_registry_jwplayer
 	function tpl_previews()
 	{
 		return array(
-			'COMCODE_FLV.tpl' => 'comcode_flv',
-			'ATTACHMENT_FLV.tpl' => 'attachment_flv',
-			'GALLERY_VIDEO_FLV.tpl' => 'gallery_video_flv'
+			'COMCODE_FLV.tpl'=>'comcode_flv',
+			'ATTACHMENT_FLV.tpl'=>'attachment_flv',
+			'GALLERY_VIDEO_FLV.tpl'=>'gallery_video_flv'
 		);
 	}
 
@@ -109,9 +109,9 @@ class Hook_addon_registry_jwplayer
 	{
 		return array(
 			lorem_globalise(do_lorem_template('COMCODE_FLV', array(
-				'URL' => placeholder_url(),
-				'WIDTH' => placeholder_number(),
-				'HEIGHT' => placeholder_number()
+				'URL'=>placeholder_url(),
+				'WIDTH'=>placeholder_number(),
+				'HEIGHT'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}
@@ -127,16 +127,16 @@ class Hook_addon_registry_jwplayer
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ATTACHMENT_FLV', array(
-				'SCRIPT' => lorem_word(),
-				'ID' => placeholder_id(),
-				'A_WIDTH' => placeholder_number(),
-				'A_HEIGHT' => placeholder_number(),
-				'A_DESCRIPTION' => lorem_paragraph_html(),
-				'SUP_PARAMS' => placeholder_blank(),
-				'FORUM_DB_BIN' => placeholder_blank(),
-				'MIME_TYPE' => lorem_word(),
-				'A_ORIGINAL_FILENAME' => lorem_phrase(),
-				'A_URL' => placeholder_url()
+				'SCRIPT'=>lorem_word(),
+				'ID'=>placeholder_id(),
+				'A_WIDTH'=>placeholder_number(),
+				'A_HEIGHT'=>placeholder_number(),
+				'A_DESCRIPTION'=>lorem_paragraph_html(),
+				'SUP_PARAMS'=>placeholder_blank(),
+				'FORUM_DB_BIN'=>placeholder_blank(),
+				'MIME_TYPE'=>lorem_word(),
+				'A_ORIGINAL_FILENAME'=>lorem_phrase(),
+				'A_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -152,11 +152,11 @@ class Hook_addon_registry_jwplayer
 	{
 		return array(
 			lorem_globalise(do_lorem_template('GALLERY_VIDEO_FLV', array(
-				'URL' => placeholder_url(),
-				'THUMB_URL' => placeholder_url(),
-				'WIDTH' => placeholder_number(),
-				'HEIGHT' => placeholder_number(),
-				'LENGTH' => placeholder_number()
+				'URL'=>placeholder_url(),
+				'THUMB_URL'=>placeholder_url(),
+				'WIDTH'=>placeholder_number(),
+				'HEIGHT'=>placeholder_number(),
+				'LENGTH'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}

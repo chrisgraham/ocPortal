@@ -58,9 +58,9 @@ class Hook_addon_registry_realtime_rain
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -156,8 +156,8 @@ class Hook_addon_registry_realtime_rain
 	function tpl_previews()
 	{
 		return array(
-			'REALTIME_RAIN_OVERLAY.tpl' => 'administrative__realtime_rain_overlay',
-			'REALTIME_RAIN_BUBBLE.tpl' => 'administrative__realtime_rain_bubble'
+			'REALTIME_RAIN_OVERLAY.tpl'=>'administrative__realtime_rain_overlay',
+			'REALTIME_RAIN_BUBBLE.tpl'=>'administrative__realtime_rain_bubble'
 		);
 	}
 
@@ -173,7 +173,7 @@ class Hook_addon_registry_realtime_rain
 		require_lang('realtime_rain');
 		return array(
 			lorem_globalise(do_lorem_template('REALTIME_RAIN_OVERLAY', array(
-				'MIN_TIME' => placeholder_id()
+				'MIN_TIME'=>placeholder_id()
 			)), NULL, '', true)
 		);
 	}
@@ -190,15 +190,15 @@ class Hook_addon_registry_realtime_rain
 		require_lang('realtime_rain');
 		return array(
 			lorem_globalise(do_lorem_template('REALTIME_RAIN_BUBBLE', array(
-				'TITLE' => lorem_phrase(),
-				'URL' => placeholder_url(),
-				'IMAGE' => placeholder_image_url(),
-				'GROUP_ID' => placeholder_id(),
-				'RELATIVE_TIMESTAMP' => placeholder_date_raw(),
-				'TICKER_TEXT' => lorem_phrase(),
-				'TYPE' => lorem_word(),
-				'IS_POSITIVE' => true,
-				'IS_NEGATIVE' => false
+				'TITLE'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'IMAGE'=>placeholder_image_url(),
+				'GROUP_ID'=>placeholder_id(),
+				'RELATIVE_TIMESTAMP'=>placeholder_date_raw(),
+				'TICKER_TEXT'=>lorem_phrase(),
+				'TYPE'=>lorem_word(),
+				'IS_POSITIVE'=>true,
+				'IS_NEGATIVE'=>false
 				// 					''=>(),
 			)), NULL, '', true)
 		);

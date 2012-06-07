@@ -1255,7 +1255,7 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 
 		if ((!$avatars) && ($cat=='')) $cat=do_lang('GENERAL');
 
-		$category=new ocp_tempcode();
+		$_category=new ocp_tempcode();
 		$i=0;
 		$category_expanded=false;
 		foreach ($ids as $id)
@@ -1286,12 +1286,12 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 			if ($url=='') continue;
 
 			$temp=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID'=>'10005e2f08b44bfe17fce68685b4c884','LINEAR'=>$linear,'CHECKED'=>$selected,'PRETTY'=>$pretty,'NAME'=>$name,'CODE'=>$id,'URL'=>$url));
-			$category->attach($temp);
+			$_category->attach($temp);
 
 			$i++;
 		}
 
-		$_category=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array('_GUID'=>'c2f429315b73bcaacc3bff8db11c0056','DISPLAY'=>$category_expanded?'block':'none','CATEGORY'=>$category,'CATEGORY_NAME'=>$cat));
+		$_category=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array('_GUID'=>'c2f429315b73bcaacc3bff8db11c0056','DISPLAY'=>$category_expanded?'block':'none','CATEGORY'=>$_category,'CATEGORY_NAME'=>$cat));
 		$content->attach($_category);
 	}
 

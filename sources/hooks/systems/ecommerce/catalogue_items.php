@@ -273,7 +273,7 @@ class Hook_catalogue_items
 	 */
 	function add_order($product_det)
 	{
-		if (!$this->is_available($product_det['product_id'],get_member(),1))
+		if ($this->is_available($product_det['product_id'],get_member(),1)!=ECOMMERCE_PRODUCT_AVAILABLE)
 		{
 			require_lang('shopping');
 			warn_exit(do_lang_tempcode('PRODUCT_UNAVAILABLE_WARNING',escape_html($product_det['product_name'])));

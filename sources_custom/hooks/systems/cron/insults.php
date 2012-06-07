@@ -60,8 +60,8 @@ class Hook_cron_insults
 					$insults_array[]=$x[0];
 				}
 
-				$rand_key = array_rand($insults_array, 1);
-				$rand_key = is_array($rand_key)?$rand_key[0]:$rand_key;
+				$rand_key=array_rand($insults_array, 1);
+				$rand_key=is_array($rand_key)?$rand_key[0]:$rand_key;
 
 				$get_insult=$insults_array[$rand_key];
 			}

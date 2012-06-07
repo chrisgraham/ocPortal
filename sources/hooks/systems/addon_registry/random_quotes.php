@@ -58,9 +58,9 @@ class Hook_addon_registry_random_quotes
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -97,7 +97,7 @@ class Hook_addon_registry_random_quotes
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_MAIN_QUOTES.tpl' => 'block_main_quotes'
+			'BLOCK_MAIN_QUOTES.tpl'=>'block_main_quotes'
 		);
 	}
 
@@ -112,10 +112,10 @@ class Hook_addon_registry_random_quotes
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_QUOTES', array(
-				'EDIT_URL' => placeholder_url(),
-				'FILE' => lorem_phrase(),
-				'CONTENT' => lorem_phrase(),
-				'TITLE' => lorem_phrase()
+				'EDIT_URL'=>placeholder_url(),
+				'FILE'=>lorem_phrase(),
+				'CONTENT'=>lorem_phrase(),
+				'TITLE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

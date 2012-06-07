@@ -58,10 +58,10 @@ class Hook_addon_registry_setupwizard
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
-			'previously_in_addon' => array(
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
+			'previously_in_addon'=>array(
 				'core_setupwizard'
 			)
 		);
@@ -107,9 +107,9 @@ class Hook_addon_registry_setupwizard
 	function tpl_previews()
 	{
 		return array(
-			'SETUPWIZARD_2_SCREEN.tpl' => 'administrative__setupwizard_2_screen',
-			'SETUPWIZARD_7_SCREEN.tpl' => 'administrative__setupwizard_7_screen',
-			'SETUPWIZARD_BLOCK_PREVIEW.tpl' => 'administrative__setupwizard_block_preview'
+			'SETUPWIZARD_2_SCREEN.tpl'=>'administrative__setupwizard_2_screen',
+			'SETUPWIZARD_7_SCREEN.tpl'=>'administrative__setupwizard_7_screen',
+			'SETUPWIZARD_BLOCK_PREVIEW.tpl'=>'administrative__setupwizard_block_preview'
 		);
 	}
 
@@ -124,9 +124,9 @@ class Hook_addon_registry_setupwizard
 	{
 		return array(
 			lorem_globalise(do_lorem_template('SETUPWIZARD_BLOCK_PREVIEW', array(
-				'LEFT' => lorem_paragraph(),
-				'RIGHT' => lorem_paragraph(),
-				'START' => lorem_paragraph()
+				'LEFT'=>lorem_paragraph(),
+				'RIGHT'=>lorem_paragraph(),
+				'START'=>lorem_paragraph()
 			)), NULL, '', true)
 		);
 	}
@@ -143,10 +143,10 @@ class Hook_addon_registry_setupwizard
 		require_lang('config');
 		return array(
 			lorem_globalise(do_lorem_template('SETUPWIZARD_2_SCREEN', array(
-				'SKIP_VALIDATION' => true,
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'SUBMIT_NAME' => lorem_word()
+				'SKIP_VALIDATION'=>true,
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'SUBMIT_NAME'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -162,11 +162,11 @@ class Hook_addon_registry_setupwizard
 	{
 		return array(
 			lorem_globalise(do_lorem_template('SETUPWIZARD_7_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'FORM' => placeholder_form(),
-				'BALANCED' => lorem_phrase(),
-				'LIBERAL' => lorem_phrase(),
-				'CORPORATE' => lorem_phrase()
+				'TITLE'=>lorem_title(),
+				'FORM'=>placeholder_form(),
+				'BALANCED'=>lorem_phrase(),
+				'LIBERAL'=>lorem_phrase(),
+				'CORPORATE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

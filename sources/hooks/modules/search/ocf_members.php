@@ -314,7 +314,9 @@ class Hook_search_ocf_members
 		}
 		require_code('ocf_members2');
 		$GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']]=$row;
-		return render_member_box($row['id']);
+		$box=render_member_box($row['id']);
+		$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['id']);
+		return do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>$box,'URL'=>$url));
 	}
 
 	/**

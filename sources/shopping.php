@@ -316,7 +316,7 @@ function payment_form()
 		$order_id=$GLOBALS['SITE_DB']->query_insert('shopping_order',$insert,true);
 	} else
 	{
-		$order_id = NULL;
+		$order_id=NULL;
 	}
 
 	$total_price=0;	

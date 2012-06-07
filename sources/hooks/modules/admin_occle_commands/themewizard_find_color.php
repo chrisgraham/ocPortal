@@ -68,7 +68,7 @@ class Hook_themewizard_find_color
 						$color=$matches[1][$i];
 						$equation=$matches[2][$i];
 						list($r,$g,$b)=array(hexdec(substr($color,0,2)),hexdec(substr($color,2,2)),hexdec(substr($color,4,2)));
-						$dist=sqrt(pow($r-$ir,2)+pow($g-$ig,2)+pow($b-$ib,2));
+						$dist=sqrt(pow($r-$ir,2.0)+pow($g-$ig,2.0)+pow($b-$ib,2.0));
 						$results[]=array($color,$dist,$equation,$f,array($r,$g,$b));
 					}
 				}

@@ -953,7 +953,7 @@ class Module_cedi
 
 		$posting_form=get_posting_form($submit_name,$message,$post_url,$hidden_fields,new ocp_tempcode(),NULL,'',$specialisation,$parsed,$javascript);
 
-		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.$submit_name.'</span>'));
+		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.$submit_name->evaluate().'</span>'));
 
 		return do_template('WIKI_POSTING_SCREEN',array('_GUID'=>'efdea6198cba136eb6809937c2322458','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TEXT'=>$text,'TITLE'=>$title,'POSTING_FORM'=>$posting_form));
 	}

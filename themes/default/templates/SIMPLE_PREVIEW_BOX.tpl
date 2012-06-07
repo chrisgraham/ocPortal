@@ -23,14 +23,10 @@
 	{+END}
 {+END}
 
-{+START,IF_PASSED,TITLE}
-	<section class="box box___simple_preview_box"><div class="box_inner">
+<section class="box box___simple_preview_box"><div class="box_inner">
+	{+START,IF_PASSED,TITLE}
 		<h3>{TITLE*}</h3>
+	{+END}
 
-		{$GET,PREVIEW_CONTENTS}
-	</div></section>
-{+END}
-
-{+START,IF_NON_PASSED,TITLE}
 	{$GET,PREVIEW_CONTENTS}
-{+END}
+</div></section>

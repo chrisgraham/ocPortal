@@ -58,9 +58,9 @@ class Hook_addon_registry_bookmarks
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -96,7 +96,7 @@ class Hook_addon_registry_bookmarks
 	function tpl_previews()
 	{
 		return array(
-			'BOOKMARKS_SCREEN.tpl' => 'bookmarks_screen'
+			'BOOKMARKS_SCREEN.tpl'=>'bookmarks_screen'
 		);
 	}
 
@@ -111,21 +111,21 @@ class Hook_addon_registry_bookmarks
 	{
 		require_lang('zones');
 
-		$bookmarks = array(
+		$bookmarks=array(
 			array(
-				'CAPTION' => lorem_word(),
-				'ID' => placeholder_id(),
-				'FOLDER' => lorem_word_2(),
-				'PAGE_LINK' => placeholder_url()
+				'CAPTION'=>lorem_word(),
+				'ID'=>placeholder_id(),
+				'FOLDER'=>lorem_word_2(),
+				'PAGE_LINK'=>placeholder_url()
 			)
 		);
 
 		return array(
 			lorem_globalise(do_lorem_template('BOOKMARKS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'FORM_URL' => placeholder_url(),
-				'FORM' => placeholder_form(),
-				'BOOKMARKS' => $bookmarks
+				'TITLE'=>lorem_title(),
+				'FORM_URL'=>placeholder_url(),
+				'FORM'=>placeholder_form(),
+				'BOOKMARKS'=>$bookmarks
 			)), NULL, '', true)
 		);
 	}

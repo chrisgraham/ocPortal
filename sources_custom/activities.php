@@ -53,7 +53,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				}
 			}
 			else
-				$blocked_by = '';
+				$blocked_by='';
 
 			//Grabbing who you've blocked
 			$blocking=$GLOBALS['SITE_DB']->query_select('chat_blocking', array('member_blocked'), array('member_blocker'=>$viewer_id));
@@ -72,13 +72,13 @@ function find_activities($viewer_id,$mode,$member_ids)
 				}
 			}
 			else
-				$blocking = '';
+				$blocking='';
 		}
 	}
 	else
 	{
-		$blocking = '';
-		$blocked_by = '';
+		$blocking='';
+		$blocked_by='';
 	}
 
 	switch ($mode)

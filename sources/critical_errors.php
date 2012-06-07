@@ -154,8 +154,8 @@ if (!function_exists('critical_error'))
 		if (!$headers_sent)
 		{
 			@header('Content-type: text/html');
+			echo '<'.'!DOCTYPE html>';
 			echo <<<END
-<!DOCTYPE html>
 <html lang="EN">
 <head>
 	<title>Critical error</title>

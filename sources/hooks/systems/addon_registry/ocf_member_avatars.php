@@ -58,9 +58,9 @@ class Hook_addon_registry_ocf_member_avatars
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -90,7 +90,7 @@ class Hook_addon_registry_ocf_member_avatars
 	function tpl_previews()
 	{
 		return array(
-			'OCF_EDIT_AVATAR_TAB.tpl' => 'ocf_edit_avatar_tab'
+			'OCF_EDIT_AVATAR_TAB.tpl'=>'ocf_edit_avatar_tab'
 		);
 	}
 
@@ -105,16 +105,16 @@ class Hook_addon_registry_ocf_member_avatars
 	{
 		require_lang('ocf');
 		require_css('ocf');
-		$avatar = do_lorem_template('OCF_TOPIC_POST_AVATAR', array(
-			'AVATAR' => placeholder_image_url()
+		$avatar=do_lorem_template('OCF_TOPIC_POST_AVATAR', array(
+			'AVATAR'=>placeholder_image_url()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('OCF_EDIT_AVATAR_TAB', array(
-				'USERNAME' => lorem_word(),
-				'AVATAR' => $avatar,
-				'WIDTH' => placeholder_number(),
-				'HEIGHT' => placeholder_number()
+				'USERNAME'=>lorem_word(),
+				'AVATAR'=>$avatar,
+				'WIDTH'=>placeholder_number(),
+				'HEIGHT'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}

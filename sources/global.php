@@ -153,7 +153,7 @@ function require_code($codename,$light_exit=false)
 		if (!isset($has_original)) $has_original=is_file($path_b);
 		if (($path_a!=$path_b) && ($has_original))
 		{
-			$orig=str_replace(array('?'.'>','<?php'),array('',''),file_get_contents($path_b));
+			$orig=str_replace(array('?'.'>','<'.'?php'),array('',''),file_get_contents($path_b));
 			$a=file_get_contents($path_a);
 
 			if (((strpos($codename,'.php')===false) || (strpos($a,'class Mx_')===false)) && ((function_exists('quercus_version')) || (!$hphp)))
@@ -222,7 +222,7 @@ function require_code($codename,$light_exit=false)
 				if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
 				{
 					@ini_set('display_errors','0');
-					$orig=str_replace('?'.'>','',str_replace('<?php','',file_get_contents($path_b)));
+					$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_b)));
 					if (eval($orig)===false)
 					{
 						if ((!function_exists('fatal_exit')) || ($codename=='failure')) critical_error('PASSON',@strval($php_errormsg).' [sources/'.$codename.'.php]');
@@ -235,7 +235,7 @@ function require_code($codename,$light_exit=false)
 				if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
 				{
 					@ini_set('display_errors','0');
-					$orig=str_replace('?'.'>','',str_replace('<?php','',file_get_contents($path_a)));
+					$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_a)));
 					if (eval($orig)===false)
 					{
 						if ((!function_exists('fatal_exit')) || ($codename=='failure')) critical_error('PASSON',@strval($php_errormsg).' [sources_custom/'.$codename.'.php]');
@@ -251,7 +251,7 @@ function require_code($codename,$light_exit=false)
 			if ((isset($_GET['keep_show_parse_errors'])) && ((function_exists('quercus_version')) || (!$hphp)))
 			{
 				@ini_set('display_errors','0');
-				$orig=str_replace('?'.'>','',str_replace('<?php','',file_get_contents($path_a)));
+				$orig=str_replace('?'.'>','',str_replace('<'.'?php','',file_get_contents($path_a)));
 				if (eval($orig)===false)
 				{
 					if ((!function_exists('fatal_exit')) || ($codename=='failure')) critical_error('PASSON',@strval($php_errormsg).' [sources_custom/'.$codename.'.php]');

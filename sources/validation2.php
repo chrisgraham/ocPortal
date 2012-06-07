@@ -25,6 +25,19 @@
  */
 function init__validation2()
 {
+	if (!function_exists('mailto_obfuscated'))
+	{
+		/**
+		 * Get obfuscate version of 'mailto:' (which'll hopefully fool e-mail scavengers to not pick up these e-mail addresses).
+		 *
+		 * @return string		The obfuscated 'mailto:' string
+		 */
+		function mailto_obfuscated()
+		{
+			return 'mailto:';
+		}
+	}
+
 	global $TAGS_BLOCK;
 	$TAGS_BLOCK=array(
 		'div'=>1,
@@ -657,7 +670,7 @@ function init__validation2()
 	global $TAG_ATTRIBUTES_REQUIRED;
 	$TAG_ATTRIBUTES_REQUIRED=array(
 		'base'=>array('href'), // XHTML-strict
-		'html'=>array('xmlns'/*,'xml:lang' Not in XHTML5*/),
+		//'html'=>array('xmlns'/*,'xml:lang' Not in XHTML5*/),
 		'meta'=>array('content'),
 		'style'=>array('type'),
 		'script'=>array('type'),
@@ -1114,7 +1127,7 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 
 			case 'a':
 				// Handle empty tag check for <a> (couldn't handle with normal case due to complexity)
-				if ((!isset($attributes['name'])) && (!isset($attributes['title'])) && (substr($OUT,$POS,4)=='</a>'))
+				if ((!isset($attributes['id'])) && (!isset($attributes['title'])) && (substr($OUT,$POS,4)=='</a>'))
 					$errors[]=array('XHTML_EMPTY_TAG',$tag);
 				break;
 

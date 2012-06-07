@@ -58,9 +58,9 @@ class Hook_addon_registry_core_configuration
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -105,7 +105,6 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config_default/display_php_errors.php',
 			'sources/hooks/systems/config_default/eager_wysiwyg.php',
 			'sources/hooks/systems/config_default/enable_https.php',
-			'sources/hooks/systems/config_default/enable_image_fading.php',
 			'sources/hooks/systems/config_default/enable_keyword_density_check.php',
 			'sources/hooks/systems/config_default/enable_markup_validation.php',
 			'sources/hooks/systems/config_default/enable_previews.php',
@@ -215,9 +214,9 @@ class Hook_addon_registry_core_configuration
 	function tpl_previews()
 	{
 		return array(
-			'CONFIG_GROUP.tpl' => 'administrative__config_category_screen',
-			'CONFIG_CATEGORY_SCREEN.tpl' => 'administrative__config_category_screen',
-			'XML_CONFIG_SCREEN.tpl' => 'administrative__xml_config_screen'
+			'CONFIG_GROUP.tpl'=>'administrative__config_category_screen',
+			'CONFIG_CATEGORY_SCREEN.tpl'=>'administrative__config_category_screen',
+			'XML_CONFIG_SCREEN.tpl'=>'administrative__xml_config_screen'
 		);
 	}
 
@@ -230,29 +229,29 @@ class Hook_addon_registry_core_configuration
 	 */
 	function tpl_preview__administrative__config_category_screen()
 	{
-		$groups = new ocp_tempcode();
+		$groups=new ocp_tempcode();
 
-		foreach (placeholder_array() as $k => $group)
+		foreach (placeholder_array() as $k=>$group)
 		{
-			$group = do_lorem_template('CONFIG_GROUP', array(
-				'GROUP_DESCRIPTION' => lorem_word(),
-				'GROUP_NAME' => $group,
-				'GROUP' => placeholder_fields(),
-				'CURRENT_GROUP' => "ID$k"
+			$group=do_lorem_template('CONFIG_GROUP', array(
+				'GROUP_DESCRIPTION'=>lorem_word(),
+				'GROUP_NAME'=>$group,
+				'GROUP'=>placeholder_fields(),
+				'CURRENT_GROUP'=>"ID$k"
 			));
 			$groups->attach($group->evaluate());
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('CONFIG_CATEGORY_SCREEN', array(
-				'CATEGORY_DESCRIPTION' => lorem_word_2(),
-				'_GROUPS' => placeholder_array(),
-				'PING_URL' => placeholder_url(),
-				'WARNING_DETAILS' => '',
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'GROUPS' => $groups,
-				'SUBMIT_NAME' => lorem_word()
+				'CATEGORY_DESCRIPTION'=>lorem_word_2(),
+				'_GROUPS'=>placeholder_array(),
+				'PING_URL'=>placeholder_url(),
+				'WARNING_DETAILS'=>'',
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'GROUPS'=>$groups,
+				'SUBMIT_NAME'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -268,9 +267,9 @@ class Hook_addon_registry_core_configuration
 	{
 		return array(
 			lorem_globalise(do_lorem_template('XML_CONFIG_SCREEN', array(
-				'XML' => '<test />',
-				'POST_URL' => placeholder_url(),
-				'TITLE' => lorem_title()
+				'XML'=>'<test />',
+				'POST_URL'=>placeholder_url(),
+				'TITLE'=>lorem_title()
 			)), NULL, '', true)
 		);
 	}

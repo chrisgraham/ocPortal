@@ -59,9 +59,9 @@ class Hook_addon_registry_ocf_avatars
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array('ocf_member_avatars'),
-			'recommends' => array(),
-			'conflicts_with' => array(),
+			'requires'=>array('ocf_member_avatars'),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
 		);
 	}
 

@@ -58,11 +58,11 @@ class Hook_addon_registry_flagrant
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(
+			'requires'=>array(),
+			'recommends'=>array(
 				'pointstore'
 			),
-			'conflicts_with' => array()
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -97,8 +97,8 @@ class Hook_addon_registry_flagrant
 	function tpl_previews()
 	{
 		return array(
-			'FLAGRANT_DETAILS.tpl' => 'administrative__flagrant_manage_screen',
-			'FLAGRANT_STORE_LIST_LINE.tpl' => 'administrative__flagrant_manage_screen'
+			'FLAGRANT_DETAILS.tpl'=>'administrative__flagrant_manage_screen',
+			'FLAGRANT_STORE_LIST_LINE.tpl'=>'administrative__flagrant_manage_screen'
 		);
 	}
 
@@ -113,57 +113,57 @@ class Hook_addon_registry_flagrant
 	{
 		require_css('forms');
 
-		$about_current = do_lorem_template('FLAGRANT_DETAILS', array(
-			'USERNAME' => lorem_word_html(),
-			'DAYS_ORDERED' => lorem_phrase(),
-			'DATE_RAW' => placeholder_time(),
-			'DATE' => placeholder_time()
+		$about_current=do_lorem_template('FLAGRANT_DETAILS', array(
+			'USERNAME'=>lorem_word_html(),
+			'DAYS_ORDERED'=>lorem_phrase(),
+			'DATE_RAW'=>placeholder_time(),
+			'DATE'=>placeholder_time()
 		));
 
-		$out = new ocp_tempcode();
-		foreach (placeholder_array() as $key => $value)
+		$out=new ocp_tempcode();
+		foreach (placeholder_array() as $key=>$value)
 		{
-			$text = do_lorem_template('FLAGRANT_STORE_LIST_LINE', array(
-				'MESSAGE' => $value,
-				'STATUS' => do_lang('NEW')
+			$text=do_lorem_template('FLAGRANT_STORE_LIST_LINE', array(
+				'MESSAGE'=>$value,
+				'STATUS'=>do_lang('NEW')
 			));
 			$out->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
-				'SELECTED' => false,
-				'DISABLED' => false,
-				'CLASS' => '',
-				'NAME' => strval($key),
-				'TEXT' => $text->evaluate()
+				'SELECTED'=>false,
+				'DISABLED'=>false,
+				'CLASS'=>'',
+				'NAME'=>strval($key),
+				'TEXT'=>$text->evaluate()
 			)));
 		}
 
-		$input = do_lorem_template('FORM_SCREEN_INPUT_LIST', array(
-			'TABINDEX' => '5',
-			'REQUIRED' => '_required',
-			'NAME' => lorem_word(),
-			'CONTENT' => $out,
-			'INLINE_LIST' => true
+		$input=do_lorem_template('FORM_SCREEN_INPUT_LIST', array(
+			'TABINDEX'=>'5',
+			'REQUIRED'=>'_required',
+			'NAME'=>lorem_word(),
+			'CONTENT'=>$out,
+			'INLINE_LIST'=>true
 		));
-		$fields = do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'PRETTY_NAME' => lorem_word(),
-			'NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+		$fields=do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'PRETTY_NAME'=>lorem_word(),
+			'NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		));
 
 		//Create 'FLAGRANT_MANAGE_SCREEN' using the sub-templates 'FLAGRANT_DETAILS' and 'FLAGRANT_STORE_LIST_LINE'
 		return array(
 			lorem_globalise(do_lorem_template('FORM_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'TEXT' => $about_current,
-				'HIDDEN' => '',
-				'URL' => placeholder_url(),
-				'GET' => true,
-				'FIELDS' => $fields,
-				'SUBMIT_NAME' => lorem_word()
+				'TITLE'=>lorem_title(),
+				'TEXT'=>$about_current,
+				'HIDDEN'=>'',
+				'URL'=>placeholder_url(),
+				'GET'=>true,
+				'FIELDS'=>$fields,
+				'SUBMIT_NAME'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}

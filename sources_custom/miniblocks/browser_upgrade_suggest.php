@@ -11,7 +11,7 @@ require_lang('browser_upgrade_suggest');
 
 $message='';
 
-$browser = new Browser();
+$browser=new Browser();
 if (($browser->getBrowser()==Browser::BROWSER_FIREFOX) && (floatval($browser->getVersion())<$firefox_needed))
 {
 	if ($browser->getPlatform()==Browser::PLATFORM_LINUX)

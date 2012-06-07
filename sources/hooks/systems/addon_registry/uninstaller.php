@@ -58,9 +58,9 @@ class Hook_addon_registry_uninstaller
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -86,7 +86,7 @@ class Hook_addon_registry_uninstaller
 	function tpl_previews()
 	{
 		return array(
-			'UNINSTALL_SCREEN.tpl' => 'administrative__uninstall_screen'
+			'UNINSTALL_SCREEN.tpl'=>'administrative__uninstall_screen'
 		);
 	}
 

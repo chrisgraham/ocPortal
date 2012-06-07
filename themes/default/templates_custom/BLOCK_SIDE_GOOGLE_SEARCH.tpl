@@ -5,12 +5,12 @@
 
 	<script src="http://www.google.com/jsapi" type="text/javascript"></script>
 	<script type="text/javascript">// <![CDATA[
-		var google_uid = '{USER_SEARCH_ID}';
+		var google_uid='{USER_SEARCH_ID}';
 		google.load('search', '1', {language : 'en'});
 		google.setOnLoadCallback(function(){
-			var customSearchControl = new google.search.CustomSearchControl(google_uid);
+			var customSearchControl=new google.search.CustomSearchControl(google_uid);
 			customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-			var options = new google.search.DrawOptions();
+			var options=new google.search.DrawOptions();
 			options.setSearchFormRoot('cse-search-form');
 			customSearchControl.draw('cse', options);
 

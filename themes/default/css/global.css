@@ -377,7 +377,7 @@ body.website_body {
 	}
 {+END}{+END}
 
-/* htmlarea = WYSIWYG editor */
+/* htmlarea=WYSIWYG editor */
 body.website_body, #htmlarea {
 	margin: 0;
 	font-size: 13px;
@@ -1202,6 +1202,15 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	color: {$GET,footer_link_hover};
 }
 
+/* If we want a box to standout less, give it 'pale_box' */
+.pale_box.box, .pale_box .box {
+	border: 1px solid {$GET,pale_border} !important;
+}
+.pale_box.box h2, .pale_box .box h2, .pale_box.box h3, .pale_box .box h3 {
+	background: {$GET,point_of_interest_background} !important;
+	color: {$GET,area_key_text} !important;
+}
+
 /* If you want to mark a region as box-less, wrap a div with class 'boxless_space' around it -- it'll invoke a very different kind of modern styling */
 .global_side_panel .boxless_space {
 	font-size: 1.05em; /* Undoes the font-size defined on the .global_side, as in this circumstance we probably want consistency across all panels */
@@ -1331,7 +1340,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	margin-bottom: 1em;
 }
 
-h3+.meta_details {
+h3+.meta_details, .newscat_img+.meta_details {
 	border-bottom: 0;
 	margin-top: -1em;
 	margin-bottom: 0.5em;

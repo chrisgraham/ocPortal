@@ -1011,8 +1011,8 @@ class Module_cms_calendar extends standard_aed_module
 	{
 		$title=get_screen_title('EXPORT_ICAL');
 
-		$fields		=	new ocp_tempcode();
-		$type_list	=	nice_get_event_types();
+		$fields=new ocp_tempcode();
+		$type_list=nice_get_event_types();
 
 		//Add all cal option
 		$type_list->attach(form_input_list_entry('0',true,'All types'));

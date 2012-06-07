@@ -551,14 +551,14 @@ class Hook_mybb
 	 */
 	function import_ip_bans($db,$table_prefix,$file_base)
 	{
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'users u LEFT JOIN '.$table_prefix.'banned b ON u.uid = b.uid WHERE b.gid=7');
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'users u LEFT JOIN '.$table_prefix.'banned b ON u.uid=b.uid WHERE b.gid=7');
 
 		require_code('failure');
 
 		foreach ($rows as $row)
 		{
-			$ban_time = $row['dateline']; //when is banned user
-			$ban_period = $row['bantime']; //how many days/months/years is banned
+			$ban_time=$row['dateline']; //when is banned user
+			$ban_period=$row['bantime']; //how many days/months/years is banned
 			$perm_banned=false;
 
 			if ($ban_period=='---')
@@ -571,19 +571,19 @@ class Hook_mybb
 				$period_array=array_map('intval',explode('-',$ban_period));
 				if (isset($period_array[0])&&($period_array[0]>0))
 				{
-					$ban_till = $ban_time+strtotime("+ ".$period_array[0]." day",strtotime($ban_time)); //the user is banned till this date/time
+					$ban_till=$ban_time+strtotime("+ ".$period_array[0]." day",strtotime($ban_time)); //the user is banned till this date/time
 				}
 				elseif (isset($period_array[1])&&($period_array[1]>0))
 				{
-					$ban_till = $ban_time+strtotime("+ ".$period_array[1]." month",strtotime($ban_time)); //the user is banned till this date/time
+					$ban_till=$ban_time+strtotime("+ ".$period_array[1]." month",strtotime($ban_time)); //the user is banned till this date/time
 				}
 				elseif (isset($period_array[2])&&($period_array[2]>0))
 				{
-					$ban_till = $ban_time+strtotime("+ ".$period_array[2]." year",strtotime($ban_time)); //the user is banned till this date/time
+					$ban_till=$ban_time+strtotime("+ ".$period_array[2]." year",strtotime($ban_time)); //the user is banned till this date/time
 				}
 			}
 
-			$ban_till = $ban_time+$ban_period; //the user is banned till this date/time
+			$ban_till=$ban_time+$ban_period; //the user is banned till this date/time
 
 			if (!$perm_banned) continue; //add just IPs of permanently banned users
 

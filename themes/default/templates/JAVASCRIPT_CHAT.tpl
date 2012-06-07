@@ -59,7 +59,7 @@ function chat_load(room_id)
 	text_colour=document.getElementById('text_colour');
 	if (text_colour) text_colour.style.color=text_colour.value;
 
-	var event = YAHOO.util.Event;
+	var event=YAHOO.util.Event;
 
 	event.onDOMReady(load_colour_picker);
 

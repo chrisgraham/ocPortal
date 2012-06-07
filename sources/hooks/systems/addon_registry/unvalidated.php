@@ -58,10 +58,10 @@ class Hook_addon_registry_unvalidated
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
-			'previously_in_addon' => array(
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
+			'previously_in_addon'=>array(
 				'core_unvalidated'
 			)
 		);
@@ -99,9 +99,9 @@ class Hook_addon_registry_unvalidated
 	function tpl_previews()
 	{
 		return array(
-			'UNVALIDATED_SECTION.tpl' => 'administrative__unvalidated_screen',
-			'UNVALIDATED_SCREEN.tpl' => 'administrative__unvalidated_screen',
-			'VALIDATION_REQUEST_MAIL.tpl' => 'administrative__validation_request_mail'
+			'UNVALIDATED_SECTION.tpl'=>'administrative__unvalidated_screen',
+			'UNVALIDATED_SCREEN.tpl'=>'administrative__unvalidated_screen',
+			'VALIDATION_REQUEST_MAIL.tpl'=>'administrative__validation_request_mail'
 		);
 	}
 
@@ -117,10 +117,10 @@ class Hook_addon_registry_unvalidated
 		require_lang('unvalidated');
 		return array(
 			lorem_globalise(do_lorem_template('VALIDATION_REQUEST_MAIL', array(
-				'USERNAME' => lorem_word(),
-				'TYPE' => lorem_phrase(),
-				'ID' => placeholder_id(),
-				'URL' => placeholder_url()
+				'USERNAME'=>lorem_word(),
+				'TYPE'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -134,14 +134,14 @@ class Hook_addon_registry_unvalidated
 	 */
 	function tpl_preview__administrative__unvalidated_screen()
 	{
-		$section = do_lorem_template('UNVALIDATED_SECTION', array(
-			'TITLE' => lorem_phrase(),
-			'CONTENT' => lorem_phrase()
+		$section=do_lorem_template('UNVALIDATED_SECTION', array(
+			'TITLE'=>lorem_phrase(),
+			'CONTENT'=>lorem_phrase()
 		));
 		return array(
 			lorem_globalise(do_lorem_template('UNVALIDATED_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'SECTIONS' => $section
+				'TITLE'=>lorem_title(),
+				'SECTIONS'=>$section
 			)), NULL, '', true)
 		);
 	}

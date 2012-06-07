@@ -58,10 +58,10 @@ class Hook_addon_registry_captcha
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
-			'previously_in_addon' => array(
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
+			'previously_in_addon'=>array(
 				'core_captcha'
 			)
 		);
@@ -129,7 +129,7 @@ class Hook_addon_registry_captcha
 	function tpl_previews()
 	{
 		return array(
-			'FORM_SCREEN_INPUT_CAPTCHA.tpl' => 'form_screen_input_captcha'
+			'FORM_SCREEN_INPUT_CAPTCHA.tpl'=>'form_screen_input_captcha'
 		);
 	}
 
@@ -147,29 +147,29 @@ class Hook_addon_registry_captcha
 
 		require_css('forms');
 
-		$input = do_lorem_template('FORM_SCREEN_INPUT_CAPTCHA', array(
-			'TABINDEX' => placeholder_number()
+		$input=do_lorem_template('FORM_SCREEN_INPUT_CAPTCHA', array(
+			'TABINDEX'=>placeholder_number()
 		));
-		$captcha = do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => 'captcha',
-			'PRETTY_NAME' => lorem_phrase(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+		$captcha=do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>'captcha',
+			'PRETTY_NAME'=>lorem_phrase(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('FORM_SCREEN', array(
-				'SKIP_VALIDATION' => true,
-				'HIDDEN' => '',
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'FIELDS' => $captcha,
-				'SUBMIT_NAME' => lorem_word(),
-				'TEXT' => lorem_sentence_html()
+				'SKIP_VALIDATION'=>true,
+				'HIDDEN'=>'',
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'FIELDS'=>$captcha,
+				'SUBMIT_NAME'=>lorem_word(),
+				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
 		);
 	}

@@ -58,9 +58,9 @@ class Hook_addon_registry_core_comcode_pages
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -104,10 +104,10 @@ class Hook_addon_registry_core_comcode_pages
 	function tpl_previews()
 	{
 		return array(
-			'COMCODE_PAGE_EXPORT_SCREEN.tpl' => 'comcode_page_export_screen',
-			'COMCODE_PAGE_SCREEN.tpl' => 'comcode_page_screen',
-			'COMCODE_PAGE_EDIT_ACTIONS.tpl' => 'comcode_page_edit_actions',
-			'COMCODE_PAGE_BOX.tpl' => 'comcode_page_preview'
+			'COMCODE_PAGE_EXPORT_SCREEN.tpl'=>'comcode_page_export_screen',
+			'COMCODE_PAGE_SCREEN.tpl'=>'comcode_page_screen',
+			'COMCODE_PAGE_EDIT_ACTIONS.tpl'=>'comcode_page_edit_actions',
+			'COMCODE_PAGE_BOX.tpl'=>'comcode_page_preview'
 		);
 	}
 
@@ -123,8 +123,8 @@ class Hook_addon_registry_core_comcode_pages
 		require_lang('zones');
 		return array(
 			lorem_globalise(do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS', array(
-				'EDIT_URL' => placeholder_url(),
-				'CLONE_URL' => placeholder_url()
+				'EDIT_URL'=>placeholder_url(),
+				'CLONE_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -141,8 +141,8 @@ class Hook_addon_registry_core_comcode_pages
 		require_lang('zones');
 		return array(
 			lorem_globalise(do_lorem_template('COMCODE_PAGE_EXPORT_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'EXPORT' => lorem_chunk()
+				'TITLE'=>lorem_title(),
+				'EXPORT'=>lorem_chunk()
 			)), NULL, '', true)
 		);
 	}
@@ -158,17 +158,17 @@ class Hook_addon_registry_core_comcode_pages
 	{
 		return array(
 			lorem_globalise(do_lorem_template('COMCODE_PAGE_SCREEN', array(
-				'BEING_INCLUDED' => false,
-				'IS_PANEL' => false,
-				'SUBMITTER' => placeholder_id(),
-				'TAGS' => lorem_word_html(),
-				'WARNING_DETAILS' => '',
-				'EDIT_DATE_RAW' => placeholder_date_raw(),
-				'SHOW_AS_EDIT' => lorem_phrase(),
-				'CONTENT' => lorem_phrase(),
-				'EDIT_URL' => placeholder_url(),
-				'ADD_CHILD_URL' => placeholder_url(),
-				'NAME' => lorem_word()
+				'BEING_INCLUDED'=>false,
+				'IS_PANEL'=>false,
+				'SUBMITTER'=>placeholder_id(),
+				'TAGS'=>lorem_word_html(),
+				'WARNING_DETAILS'=>'',
+				'EDIT_DATE_RAW'=>placeholder_date_raw(),
+				'SHOW_AS_EDIT'=>lorem_phrase(),
+				'CONTENT'=>lorem_phrase(),
+				'EDIT_URL'=>placeholder_url(),
+				'ADD_CHILD_URL'=>placeholder_url(),
+				'NAME'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -184,10 +184,10 @@ class Hook_addon_registry_core_comcode_pages
 	{
 		return array(
 			lorem_globalise(do_lorem_template('COMCODE_PAGE_BOX', array(
-				'PAGE' => lorem_phrase(),
-				'ZONE' => lorem_phrase(),
-				'URL' => placeholder_url(),
-				'SUMMARY' => lorem_paragraph_html()
+				'PAGE'=>lorem_phrase(),
+				'ZONE'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'SUMMARY'=>lorem_paragraph_html()
 			)), NULL, '', true)
 		);
 	}

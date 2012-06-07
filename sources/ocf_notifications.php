@@ -47,7 +47,7 @@ function ocf_get_pp_rows($limit=5)
 	{
 		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
 		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id = l_topic_id AND l_member_id ='.strval($member_id).' )
+		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
 		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_intended_solely_for ='.strval($member_id).')
 		WHERE
 		t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
@@ -58,7 +58,7 @@ function ocf_get_pp_rows($limit=5)
 	{
 		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
 		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id = l_topic_id AND l_member_id ='.strval($member_id).' )
+		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
 		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
 		WHERE
 		t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
@@ -70,7 +70,7 @@ function ocf_get_pp_rows($limit=5)
 
 		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
 		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id = l_topic_id AND l_member_id ='.strval($member_id).' )
+		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
 		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
 		WHERE
 		t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
@@ -82,7 +82,7 @@ function ocf_get_pp_rows($limit=5)
 
 		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
 		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id = l_topic_id AND l_member_id ='.strval($member_id).' )
+		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
 		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
 		WHERE
 		t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
@@ -95,7 +95,7 @@ function ocf_get_pp_rows($limit=5)
 		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
 		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
 		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_special_pt_access i ON (i.s_topic_id=t.id)
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id = l_topic_id AND l_member_id ='.strval($member_id).' )
+		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
 		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
 		WHERE
 		t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND

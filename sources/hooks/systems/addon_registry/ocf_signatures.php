@@ -58,9 +58,9 @@ class Hook_addon_registry_ocf_signatures
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -89,7 +89,7 @@ class Hook_addon_registry_ocf_signatures
 	function tpl_previews()
 	{
 		return array(
-			'OCF_EDIT_SIGNATURE_TAB.tpl' => 'ocf_edit_signature_tab'
+			'OCF_EDIT_SIGNATURE_TAB.tpl'=>'ocf_edit_signature_tab'
 		);
 	}
 
@@ -109,8 +109,8 @@ class Hook_addon_registry_ocf_signatures
 		require_lang('ocf');
 		require_css('ocf');
 
-		$buttons = new ocp_tempcode();
-		$_buttons = array(
+		$buttons=new ocp_tempcode();
+		$_buttons=array(
 			'img',
 			'thumb',
 			'url',
@@ -126,65 +126,65 @@ class Hook_addon_registry_ocf_signatures
 		foreach ($_buttons as $button)
 		{
 			$buttons->attach(do_lorem_template('COMCODE_EDITOR_BUTTON', array(
-				'DIVIDER' => true,
-				'FIELD_NAME' => lorem_word(),
-				'TITLE' => lorem_phrase(),
-				'B' => $button
+				'DIVIDER'=>true,
+				'FIELD_NAME'=>lorem_word(),
+				'TITLE'=>lorem_phrase(),
+				'B'=>$button
 			)));
 		}
 
-		$micro_buttons = new ocp_tempcode();
-		$_micro_buttons = array(
+		$micro_buttons=new ocp_tempcode();
+		$_micro_buttons=array(
 			array(
-				't' => 'b'
+				't'=>'b'
 			),
 			array(
-				't' => 'i'
+				't'=>'i'
 			)
 		);
 
 		foreach ($_micro_buttons as $button)
 		{
 			$micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON', array(
-				'FIELD_NAME' => lorem_word(),
-				'TITLE' => lorem_phrase(),
-				'B' => $button['t']
+				'FIELD_NAME'=>lorem_word(),
+				'TITLE'=>lorem_phrase(),
+				'B'=>$button['t']
 			)));
 		}
 
-		$comcode_editor = do_lorem_template('COMCODE_EDITOR', array(
-			'POSTING_FIELD' => lorem_word(),
-			'BUTTONS' => $buttons,
-			'MICRO_BUTTONS' => $micro_buttons
+		$comcode_editor=do_lorem_template('COMCODE_EDITOR', array(
+			'POSTING_FIELD'=>lorem_word(),
+			'BUTTONS'=>$buttons,
+			'MICRO_BUTTONS'=>$micro_buttons
 		));
 
-		$posting_form = do_lorem_template('POSTING_FORM', array(
-			'TABINDEX_PF' => placeholder_number() /*not called TABINDEX due to conflict with FORM_STANDARD_END*/ ,
-			'JAVASCRIPT' => '',
-			'PREVIEW' => true,
-			'COMCODE_EDITOR' => $comcode_editor,
-			'COMCODE_EDITOR_SMALL' => $comcode_editor,
-			'CLASS' => lorem_word(),
-			'COMCODE_URL' => placeholder_url(),
-			'EXTRA' => '',
-			'POST_COMMENT' => lorem_phrase(),
-			'EMOTICON_CHOOSER' => '',
-			'SUBMIT_NAME' => lorem_word(),
-			'HIDDEN_FIELDS' => new ocp_tempcode(),
-			'COMCODE_HELP' => placeholder_url(),
-			'URL' => placeholder_url(),
-			'POST' => lorem_sentence(),
-			'DEFAULT_PARSED' => lorem_sentence(),
-			'CONTINUE_URL' => placeholder_url(),
-			'ATTACHMENTS' => lorem_phrase(),
-			'SPECIALISATION' => new ocp_tempcode(),
-			'SPECIALISATION2' => new ocp_tempcode()
+		$posting_form=do_lorem_template('POSTING_FORM', array(
+			'TABINDEX_PF'=>placeholder_number() /*not called TABINDEX due to conflict with FORM_STANDARD_END*/ ,
+			'JAVASCRIPT'=>'',
+			'PREVIEW'=>true,
+			'COMCODE_EDITOR'=>$comcode_editor,
+			'COMCODE_EDITOR_SMALL'=>$comcode_editor,
+			'CLASS'=>lorem_word(),
+			'COMCODE_URL'=>placeholder_url(),
+			'EXTRA'=>'',
+			'POST_COMMENT'=>lorem_phrase(),
+			'EMOTICON_CHOOSER'=>'',
+			'SUBMIT_NAME'=>lorem_word(),
+			'HIDDEN_FIELDS'=>new ocp_tempcode(),
+			'COMCODE_HELP'=>placeholder_url(),
+			'URL'=>placeholder_url(),
+			'POST'=>lorem_sentence(),
+			'DEFAULT_PARSED'=>lorem_sentence(),
+			'CONTINUE_URL'=>placeholder_url(),
+			'ATTACHMENTS'=>lorem_phrase(),
+			'SPECIALISATION'=>new ocp_tempcode(),
+			'SPECIALISATION2'=>new ocp_tempcode()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('OCF_EDIT_SIGNATURE_TAB', array(
-				'SIZE' => placeholder_filesize(),
-				'SIGNATURE' => lorem_phrase()
+				'SIZE'=>placeholder_filesize(),
+				'SIGNATURE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

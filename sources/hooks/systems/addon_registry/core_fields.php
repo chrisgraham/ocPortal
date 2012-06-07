@@ -58,9 +58,9 @@ class Hook_addon_registry_core_fields
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -126,8 +126,8 @@ class Hook_addon_registry_core_fields
 	function tpl_previews()
 	{
 		return array(
-			'CATALOGUE_DEFAULT_FIELD_MULTILIST.tpl' => 'catalogue_multilist',
-			'CATALOGUE_DEFAULT_FIELD_PICTURE.tpl' => 'catalogue_picture'
+			'CATALOGUE_DEFAULT_FIELD_MULTILIST.tpl'=>'catalogue_multilist',
+			'CATALOGUE_DEFAULT_FIELD_PICTURE.tpl'=>'catalogue_picture'
 		);
 	}
 
@@ -142,14 +142,14 @@ class Hook_addon_registry_core_fields
 	{
 		return array(
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_MULTILIST', array(
-				'ALL' => array(
+				'ALL'=>array(
 					array(
-						'HAS' => true,
-						'OPTION' => lorem_phrase()
+						'HAS'=>true,
+						'OPTION'=>lorem_phrase()
 					),
 					array(
-						'HAS' => false,
-						'OPTION' => lorem_phrase()
+						'HAS'=>false,
+						'OPTION'=>lorem_phrase()
 					)
 				)
 			)), NULL, '', true)
@@ -167,9 +167,9 @@ class Hook_addon_registry_core_fields
 	{
 		return array(
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_PICTURE', array(
-				'URL' => placeholder_url(),
-				'THUMB_URL' => placeholder_image_url(),
-				'I' => '0'
+				'URL'=>placeholder_url(),
+				'THUMB_URL'=>placeholder_image_url(),
+				'I'=>'0'
 			)), NULL, '', true)
 		);
 	}

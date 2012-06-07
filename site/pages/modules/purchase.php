@@ -430,7 +430,7 @@ class Module_purchase
 			//Add cataloue item order to shopping_orders
 			if (method_exists($object,'add_purchase_order'))
 			{
-				$purchase_id	=	strval($object->add_purchase_order($product,$temp[$product]));
+				$purchase_id=strval($object->add_purchase_order($product,$temp[$product]));
 			}
 		}
 
@@ -473,10 +473,10 @@ class Module_purchase
 
 			$fields=get_transaction_form_fields(NULL,$purchase_id,$item_name,float_to_raw_string($price),($temp[$product][0]==PRODUCT_SUBSCRIPTION)?intval($length):NULL,($temp[$product][0]==PRODUCT_SUBSCRIPTION)?$length_units:'');
 
-			/*$via		=	get_option('payment_gateway');
+			/*$via=get_option('payment_gateway');
 			require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
-			$object	=	object_factory('Hook_'.$via);
-			$ipn_url	=	$object->get_ipn_url();*/
+			$object=object_factory('Hook_'.$via);
+			$ipn_url=$object->get_ipn_url();*/
 			$finish_url=build_url(array('page'=>'_SELF','type'=>'finish'),'_SELF');
 
 			$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('_GUID'=>'15cbba9733f6ff8610968418d8ab527e','FIELDS'=>$fields));

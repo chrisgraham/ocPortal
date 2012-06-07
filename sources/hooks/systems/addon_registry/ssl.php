@@ -58,9 +58,9 @@ class Hook_addon_registry_ssl
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -91,8 +91,8 @@ class Hook_addon_registry_ssl
 	function tpl_previews()
 	{
 		return array(
-			'SSL_CONFIGURATION_ENTRY.tpl' => 'administrative__ssl_configuration_screen',
-			'SSL_CONFIGURATION_SCREEN.tpl' => 'administrative__ssl_configuration_screen'
+			'SSL_CONFIGURATION_ENTRY.tpl'=>'administrative__ssl_configuration_screen',
+			'SSL_CONFIGURATION_SCREEN.tpl'=>'administrative__ssl_configuration_screen'
 		);
 	}
 
@@ -106,26 +106,26 @@ class Hook_addon_registry_ssl
 	function tpl_preview__administrative__ssl_configuration_screen()
 	{
 		require_lang('security');
-		$content = new ocp_tempcode();
-		$k = 0;
-		foreach (placeholder_array() as $k => $v)
+		$content=new ocp_tempcode();
+		$k=0;
+		foreach (placeholder_array() as $k=>$v)
 		{
-			foreach (placeholder_array() as $k => $v2)
+			foreach (placeholder_array() as $k=>$v2)
 			{
 				$k++;
 				$content->attach(do_lorem_template('SSL_CONFIGURATION_ENTRY', array(
-					'TICKED' => lorem_word(),
-					'PAGE' => $v,
-					'ZONE' => $v2
+					'TICKED'=>lorem_word(),
+					'PAGE'=>$v,
+					'ZONE'=>$v2
 				)));
 			}
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('SSL_CONFIGURATION_SCREEN', array(
-				'URL' => placeholder_url(),
-				'TITLE' => lorem_title(),
-				'CONTENT' => $content
+				'URL'=>placeholder_url(),
+				'TITLE'=>lorem_title(),
+				'CONTENT'=>$content
 			)), NULL, '', true)
 		);
 	}

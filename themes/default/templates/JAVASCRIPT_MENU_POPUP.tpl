@@ -31,7 +31,7 @@ function clean_menus()
 		}
 		if (hideable)
 		{
-			tags[i].style.left = "-999px";
+			tags[i].style.left="-999px";
 			tags[i].style.display='none';
 		}
 	}

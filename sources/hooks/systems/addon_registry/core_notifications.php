@@ -58,9 +58,9 @@ class Hook_addon_registry_core_notifications
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -107,11 +107,11 @@ class Hook_addon_registry_core_notifications
 	function tpl_previews()
 	{
 		return array(
-			'NOTIFICATIONS_MANAGE.tpl' => 'notifications_regular',
-			'NOTIFICATIONS_MANAGE_SCREEN.tpl' => 'notifications_regular',
-			'NOTIFICATIONS_MANAGE_ADVANCED_SCREEN.tpl' => 'notifications_advanced',
-			'NOTIFICATIONS_TREE.tpl' => 'notifications_advanced',
-			'NOTIFICATION_TYPES.tpl' => 'notifications_regular'
+			'NOTIFICATIONS_MANAGE.tpl'=>'notifications_regular',
+			'NOTIFICATIONS_MANAGE_SCREEN.tpl'=>'notifications_regular',
+			'NOTIFICATIONS_MANAGE_ADVANCED_SCREEN.tpl'=>'notifications_advanced',
+			'NOTIFICATIONS_TREE.tpl'=>'notifications_advanced',
+			'NOTIFICATION_TYPES.tpl'=>'notifications_regular'
 		);
 	}
 
@@ -127,44 +127,44 @@ class Hook_addon_registry_core_notifications
 		require_css('notifications');
 		require_javascript('javascript_notifications');
 
-		$notification_types = array();
-		$notification_types[] = array(
-			'NTYPE' => placeholder_id(),
-			'LABEL' => lorem_phrase(),
-			'CHECKED' => true,
-			'RAW' => placeholder_number(),
-			'AVAILABLE' => true,
-			'SCOPE' => placeholder_id()
+		$notification_types=array();
+		$notification_types[]=array(
+			'NTYPE'=>placeholder_id(),
+			'LABEL'=>lorem_phrase(),
+			'CHECKED'=>true,
+			'RAW'=>placeholder_number(),
+			'AVAILABLE'=>true,
+			'SCOPE'=>placeholder_id()
 		);
-		$notification_types_titles = array();
-		$notification_types_titles[] = array(
-			'NTYPE' => placeholder_id(),
-			'LABEL' => lorem_phrase(),
-			'RAW' => placeholder_number()
+		$notification_types_titles=array();
+		$notification_types_titles[]=array(
+			'NTYPE'=>placeholder_id(),
+			'LABEL'=>lorem_phrase(),
+			'RAW'=>placeholder_number()
 		);
-		$notification_code_map = array(
-			'NOTIFICATION_CODE' => placeholder_id(),
-			'NOTIFICATION_LABEL' => lorem_phrase(),
-			'NOTIFICATION_TYPES' => $notification_types,
-			'SUPPORTS_CATEGORIES' => true
+		$notification_code_map=array(
+			'NOTIFICATION_CODE'=>placeholder_id(),
+			'NOTIFICATION_LABEL'=>lorem_phrase(),
+			'NOTIFICATION_TYPES'=>$notification_types,
+			'SUPPORTS_CATEGORIES'=>true
 		);
 		do_lorem_template('NOTIFICATION_TYPES', $notification_code_map); // To make coverage test pass (is actually INCLUDE'd)
-		$notification_sections = array();
-		$notification_sections[lorem_phrase()] = array(
-			'NOTIFICATION_SECTION' => lorem_phrase(),
-			'NOTIFICATION_CODES' => array(
+		$notification_sections=array();
+		$notification_sections[lorem_phrase()]=array(
+			'NOTIFICATION_SECTION'=>lorem_phrase(),
+			'NOTIFICATION_CODES'=>array(
 				$notification_code_map
 			)
 		);
-		$interface = do_lorem_template('NOTIFICATIONS_MANAGE', array(
-			'COLOR' => 'FFFFFF',
-			'NOTIFICATION_TYPES_TITLES' => $notification_types_titles,
-			'NOTIFICATION_SECTIONS' => $notification_sections
+		$interface=do_lorem_template('NOTIFICATIONS_MANAGE', array(
+			'COLOR'=>'FFFFFF',
+			'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,
+			'NOTIFICATION_SECTIONS'=>$notification_sections
 		));
-		$out = do_lorem_template('NOTIFICATIONS_MANAGE_SCREEN', array(
-			'TITLE' => lorem_title(),
-			'INTERFACE' => $interface,
-			'ACTION_URL' => get_self_url()
+		$out=do_lorem_template('NOTIFICATIONS_MANAGE_SCREEN', array(
+			'TITLE'=>lorem_title(),
+			'INTERFACE'=>$interface,
+			'ACTION_URL'=>get_self_url()
 		));
 
 		return array(
@@ -184,42 +184,42 @@ class Hook_addon_registry_core_notifications
 		require_css('notifications');
 		require_javascript('javascript_notifications');
 
-		$notification_types = array();
-		$notification_types[] = array(
-			'NTYPE' => placeholder_id(),
-			'LABEL' => lorem_phrase(),
-			'CHECKED' => true,
-			'RAW' => placeholder_number(),
-			'AVAILABLE' => true,
-			'SCOPE' => placeholder_id()
+		$notification_types=array();
+		$notification_types[]=array(
+			'NTYPE'=>placeholder_id(),
+			'LABEL'=>lorem_phrase(),
+			'CHECKED'=>true,
+			'RAW'=>placeholder_number(),
+			'AVAILABLE'=>true,
+			'SCOPE'=>placeholder_id()
 		);
-		$notification_categories = array();
-		$notification_categories[] = array(
-			'NUM_CHILDREN' => '0',
-			'DEPTH' => '0',
-			'NOTIFICATION_CATEGORY' => placeholder_id(),
-			'NOTIFICATION_TYPES' => $notification_types,
-			'CATEGORY_TITLE' => lorem_phrase(),
-			'CHECKED' => true,
-			'CHILDREN' => ''
+		$notification_categories=array();
+		$notification_categories[]=array(
+			'NUM_CHILDREN'=>'0',
+			'DEPTH'=>'0',
+			'NOTIFICATION_CATEGORY'=>placeholder_id(),
+			'NOTIFICATION_TYPES'=>$notification_types,
+			'CATEGORY_TITLE'=>lorem_phrase(),
+			'CHECKED'=>true,
+			'CHILDREN'=>''
 		);
-		$tree = do_lorem_template('NOTIFICATIONS_TREE', array(
-			'NOTIFICATION_CODE' => placeholder_id(),
-			'NOTIFICATION_CATEGORIES' => $notification_categories
+		$tree=do_lorem_template('NOTIFICATIONS_TREE', array(
+			'NOTIFICATION_CODE'=>placeholder_id(),
+			'NOTIFICATION_CATEGORIES'=>$notification_categories
 		));
-		$notification_types_titles = array();
-		$notification_types_titles[] = array(
-			'NTYPE' => placeholder_id(),
-			'LABEL' => lorem_phrase(),
-			'RAW' => placeholder_number()
+		$notification_types_titles=array();
+		$notification_types_titles[]=array(
+			'NTYPE'=>placeholder_id(),
+			'LABEL'=>lorem_phrase(),
+			'RAW'=>placeholder_number()
 		);
-		$out = do_lorem_template('NOTIFICATIONS_MANAGE_ADVANCED_SCREEN', array(
-			'TITLE' => lorem_title(),
-			'COLOR' => 'FFFFFF',
-			'ACTION_URL' => placeholder_url(),
-			'NOTIFICATION_TYPES_TITLES' => $notification_types_titles,
-			'TREE' => $tree,
-			'NOTIFICATION_CODE' => placeholder_id()
+		$out=do_lorem_template('NOTIFICATIONS_MANAGE_ADVANCED_SCREEN', array(
+			'TITLE'=>lorem_title(),
+			'COLOR'=>'FFFFFF',
+			'ACTION_URL'=>placeholder_url(),
+			'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,
+			'TREE'=>$tree,
+			'NOTIFICATION_CODE'=>placeholder_id()
 		));
 
 		return array(

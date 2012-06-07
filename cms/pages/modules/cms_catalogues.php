@@ -1142,11 +1142,11 @@ class Module_cms_catalogues extends standard_aed_module
 
 			if (($method=='overwrite') || ($method=='freshen'))
 			{
-				actual_edit_catalogue_entry($has_match,$category_id,1,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords,$meta_description);
+				actual_edit_catalogue_entry($has_match,$category_id,1,$notes,$allow_rating?1:0,$allow_comments?1:0,$allow_trackbacks?1:0,$map,$meta_keywords,$meta_description);
 				$id=$has_match;
 			} else // Add
 			{
-				$id=actual_add_catalogue_entry($category_id,1,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map);
+				$id=actual_add_catalogue_entry($category_id,1,$notes,$allow_rating?1:0,$allow_comments?1:0,$allow_trackbacks?1:0,$map);
 
 				require_code('seo2');
 				seo_meta_set_for_explicit('catalogue_entry',strval($id),$meta_keywords,$meta_description);

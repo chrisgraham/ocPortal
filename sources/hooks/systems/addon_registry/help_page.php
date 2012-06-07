@@ -59,9 +59,9 @@ class Hook_addon_registry_help_page
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
 		);
 	}
 

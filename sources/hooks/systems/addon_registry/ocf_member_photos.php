@@ -58,9 +58,9 @@ class Hook_addon_registry_ocf_member_photos
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -91,7 +91,7 @@ class Hook_addon_registry_ocf_member_photos
 	function tpl_previews()
 	{
 		return array(
-			'OCF_EDIT_PHOTO_TAB.tpl' => 'ocf_edit_photo_tab'
+			'OCF_EDIT_PHOTO_TAB.tpl'=>'ocf_edit_photo_tab'
 		);
 	}
 
@@ -109,9 +109,9 @@ class Hook_addon_registry_ocf_member_photos
 
 		return array(
 			lorem_globalise(do_lorem_template('OCF_EDIT_PHOTO_TAB', array(
-				'USERNAME' => lorem_word(),
-				'PHOTO' => placeholder_image_url(),
-				'TEXT' => ''
+				'USERNAME'=>lorem_word(),
+				'PHOTO'=>placeholder_image_url(),
+				'TEXT'=>''
 			)), NULL, '', true)
 		);
 	}

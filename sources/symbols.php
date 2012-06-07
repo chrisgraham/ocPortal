@@ -17,6 +17,7 @@
  * @copyright	ocProducts Ltd
  * @package		core
  */
+
 /*EXTRA FUNCTIONS: memory_get_usage|memory_get_peak_usage*/
 
 /**
@@ -482,7 +483,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'PARAGRAPH':
 				if (isset($param[0]))
 				{
-					$is_blocky_already=(preg_match('#<(p|div|ul|ol|dl|blockquote|h1|h2|h3|h4|h5|h6|table|iframe)(\s.*)?>#',$param[0])!=0);
+					$is_blocky_already=(preg_match('#<(p|div|ul|ol|dl|blockquote|h1|h2|h3|h4|h5|h6|table|iframe)(\s.*)?'.'>#',$param[0])!=0);
 					$value.=($is_blocky_already?'':'<p>').$param[0].($is_blocky_already?'':'</p>');
 				}
 				break;
@@ -651,10 +652,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=((get_param_integer('wide_high',get_param_integer('keep_wide_high',0))!=1) && (!running_script('preview')))?'1':'0';
 				break;
 			case 'WIDE':
-				$value=((is_wide()) || (running_script('preview')))?'1':'0';
+				$value=((is_wide()==1) || (running_script('preview')))?'1':'0';
 				break;
 			case 'WIDE_HIGH':
-				$value=((is_wide_high()) || (running_script('preview')))?'1':'0';
+				$value=((is_wide_high()==1) || (running_script('preview')))?'1':'0';
 				break;
 
 			case 'LOGO_URL':
@@ -1207,7 +1208,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 					if ((count($param)==1) && (strpos($param[0],',')!==false))
 					{
-						$param=preg_split('#((?<![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
+						$param=preg_split('#((?<'.'![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
 					}
 
 					global $LOADED_BLOCKS;
@@ -2045,7 +2046,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$field_name='x'.md5(get_site_name().': antispam');
 					$value='<div id="'.escape_html($field_name).'_wrap" style="display:none"><label for="'.escape_html($field_name).'">'.do_lang('DO_NOT_FILL_ME_SPAMMER_BLACKHOLE').'</label><input id="'.escape_html($field_name).'" name="'.escape_html($field_name).'" value="" type="text" /></div>';
 					if (!$GLOBALS['SEMI_DEV_MODE'])
-						$value.='<script type="text/javascript">// <![CDATA['.chr(10).'var wrap=document.getElementById(\''.escape_html($field_name).'_wrap\'); wrap.parentNode.removeChild(wrap);'.chr(10).'//]]></script>';
+						$value.='<script type="text/javascript">// <'.'![CDATA['.chr(10).'var wrap=document.getElementById(\''.escape_html($field_name).'_wrap\'); wrap.parentNode.removeChild(wrap);'.chr(10).'//]]></script>';
 				}
 				break;
 
@@ -2059,7 +2060,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						case '0':
 						case '1':
-							$value='<a rel="nofollow" href="'.escape_html($honeypot_url).'"><!-- '.escape_html($bot_phrase).' --></a>';
+							$value='<a rel="nofollow" href="'.escape_html($honeypot_url).'"><'.'!-- '.escape_html($bot_phrase).' --></a>';
 							break;
 						case '2':
 						case '3':
@@ -2079,7 +2080,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 							break;
 						case 'a':
 						case 'b':
-							$value='<!-- <a rel="nofollow" href="'.escape_html($honeypot_url).'">'.escape_html($bot_phrase).'</a> -->';
+							$value='<'.'!-- <a rel="nofollow" href="'.escape_html($honeypot_url).'">'.escape_html($bot_phrase).'</a> -->';
 							break;
 						case 'c':
 						case 'd':
@@ -2448,7 +2449,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						foreach ($array as $key=>$val)
 						{
 							if ($value!='') $value.=$delim;
-							$value.=(is_integer($key)?integer_format($key):$key).' = '.$val;
+							$value.=(is_integer($key)?integer_format($key):$key).'='.$val;
 						}
 					} else
 					{

@@ -58,11 +58,11 @@ class Hook_addon_registry_supermember_directory
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(
+			'requires'=>array(
 				'collaboration_zone'
 			),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -93,9 +93,9 @@ class Hook_addon_registry_supermember_directory
 	function tpl_previews()
 	{
 		return array(
-			'SUPERMEMBERS_SCREEN_GROUP.tpl' => 'supermembers_screen',
-			'SUPERMEMBERS_SCREEN_ENTRY.tpl' => 'supermembers_screen',
-			'SUPERMEMBERS_SCREEN.tpl' => 'supermembers_screen'
+			'SUPERMEMBERS_SCREEN_GROUP.tpl'=>'supermembers_screen',
+			'SUPERMEMBERS_SCREEN_ENTRY.tpl'=>'supermembers_screen',
+			'SUPERMEMBERS_SCREEN.tpl'=>'supermembers_screen'
 		);
 	}
 
@@ -110,26 +110,26 @@ class Hook_addon_registry_supermember_directory
 	{
 		require_lang('authors');
 		require_lang('points');
-		$groups_current = do_lorem_template('SUPERMEMBERS_SCREEN_ENTRY', array(
-			'NAME' => lorem_phrase(),
-			'DAYS' => placeholder_number(),
-			'PROFILE_URL' => placeholder_url(),
-			'AUTHOR_URL' => placeholder_url(),
-			'POINTS_URL' => placeholder_url(),
-			'PM_URL' => placeholder_url(),
-			'SKILLS' => lorem_phrase()
+		$groups_current=do_lorem_template('SUPERMEMBERS_SCREEN_ENTRY', array(
+			'NAME'=>lorem_phrase(),
+			'DAYS'=>placeholder_number(),
+			'PROFILE_URL'=>placeholder_url(),
+			'AUTHOR_URL'=>placeholder_url(),
+			'POINTS_URL'=>placeholder_url(),
+			'PM_URL'=>placeholder_url(),
+			'SKILLS'=>lorem_phrase()
 		));
 
-		$groups = do_lorem_template('SUPERMEMBERS_SCREEN_GROUP', array(
-			'ENTRIES' => $groups_current,
-			'GROUP_NAME' => lorem_phrase()
+		$groups=do_lorem_template('SUPERMEMBERS_SCREEN_GROUP', array(
+			'ENTRIES'=>$groups_current,
+			'GROUP_NAME'=>lorem_phrase()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('SUPERMEMBERS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'GROUPS' => $groups,
-				'TEXT' => lorem_sentence_html()
+				'TITLE'=>lorem_title(),
+				'GROUPS'=>$groups,
+				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
 		);
 	}

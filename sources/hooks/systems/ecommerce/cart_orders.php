@@ -33,7 +33,7 @@ function handle_product_orders($purchase_id,$details,$product)
 {
 	require_code('shopping');
 
-	$old_status = $GLOBALS['SITE_DB']->query_value('shopping_order_details','dispatch_status',array('order_id'=>$purchase_id));
+	$old_status=$GLOBALS['SITE_DB']->query_value('shopping_order_details','dispatch_status',array('order_id'=>$purchase_id));
 
 	if ($old_status != $details['ORDER_STATUS'])
 	{
@@ -69,7 +69,7 @@ class Hook_cart_orders
 	 */
 	function get_products($site_lang=false,$search=NULL,$search_titles_not_ids=false)
 	{	
-		$products		=	array();
+		$products=array();
 
 		require_lang('shopping');	
 
@@ -95,11 +95,11 @@ class Hook_cart_orders
 		$start=0;
 		do
 		{
-			$orders		=	$GLOBALS['SITE_DB']->query('SELECT id,tot_price FROM '.get_table_prefix().'shopping_order WHERE '.$where,500);
+			$orders=$GLOBALS['SITE_DB']->query('SELECT id,tot_price FROM '.get_table_prefix().'shopping_order WHERE '.$where,500);
 
 			foreach($orders as $order)
 			{			
-				$products[do_lang('CART_ORDER',strval($order['id']),NULL,NULL,$site_lang?get_site_default_lang():user_lang())]	=	array(PRODUCT_ORDERS,$order['tot_price'],'handle_product_orders',array(),do_lang('CART_ORDER',strval($order['id']),NULL,NULL,$site_lang?get_site_default_lang():user_lang()));
+				$products[do_lang('CART_ORDER',strval($order['id']),NULL,NULL,$site_lang?get_site_default_lang():user_lang())]=array(PRODUCT_ORDERS,$order['tot_price'],'handle_product_orders',array(),do_lang('CART_ORDER',strval($order['id']),NULL,NULL,$site_lang?get_site_default_lang():user_lang()));
 			}
 
 			$start+=500;
@@ -117,7 +117,7 @@ class Hook_cart_orders
 	*/
 	function get_product_dispatch_type($order_id)
 	{		
-		$row		=	$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$order_id));
+		$row=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$order_id));
 
 		foreach($row as $item)
 		{
@@ -125,7 +125,7 @@ class Hook_cart_orders
 
 			require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($item['p_type']));
 
-			$object		=	object_factory('Hook_'.filter_naughty_harsh($item['p_type']));
+			$object=object_factory('Hook_'.filter_naughty_harsh($item['p_type']));
 
 			//if any of the product's dispatch type is manual, return type as 'manual'
 			if($object->get_product_dispatch_type()=='manual')

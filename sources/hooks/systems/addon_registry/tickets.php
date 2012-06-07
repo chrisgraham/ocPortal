@@ -58,9 +58,9 @@ class Hook_addon_registry_tickets
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -115,11 +115,11 @@ class Hook_addon_registry_tickets
 	function tpl_previews()
 	{
 		return array(
-			'SUPPORT_TICKET_LINK.tpl' => 'support_tickets_screen',
-			'SUPPORT_TICKETS_SCREEN.tpl' => 'support_tickets_screen',
-			'SUPPORT_TICKET_SCREEN.tpl' => 'support_ticket_screen',
-			'SUPPORT_TICKETS_SEARCH_SCREEN.tpl' => 'support_tickets_search_screen',
-			'SUPPORT_TICKET_TYPE_SCREEN.tpl' => 'support_ticket_type_screen'
+			'SUPPORT_TICKET_LINK.tpl'=>'support_tickets_screen',
+			'SUPPORT_TICKETS_SCREEN.tpl'=>'support_tickets_screen',
+			'SUPPORT_TICKET_SCREEN.tpl'=>'support_ticket_screen',
+			'SUPPORT_TICKETS_SEARCH_SCREEN.tpl'=>'support_tickets_search_screen',
+			'SUPPORT_TICKET_TYPE_SCREEN.tpl'=>'support_ticket_type_screen'
 		);
 	}
 
@@ -132,33 +132,33 @@ class Hook_addon_registry_tickets
 	 */
 	function tpl_preview__support_tickets_screen()
 	{
-		$links = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$links=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$links->attach(do_lorem_template('SUPPORT_TICKET_LINK', array(
-				'NUM_POSTS' => placeholder_number(),
-				'CLOSED' => lorem_phrase(),
-				'URL' => placeholder_url(),
-				'TITLE' => lorem_phrase(),
-				'DATE' => placeholder_date(),
-				'DATE_RAW' => placeholder_date_raw(),
-				'PROFILE_URL' => placeholder_url(),
-				'LAST_POSTER' => lorem_phrase(),
-				'UNCLOSED' => lorem_word()
+				'NUM_POSTS'=>placeholder_number(),
+				'CLOSED'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'TITLE'=>lorem_phrase(),
+				'DATE'=>placeholder_date(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'PROFILE_URL'=>placeholder_url(),
+				'LAST_POSTER'=>lorem_phrase(),
+				'UNCLOSED'=>lorem_word()
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('SUPPORT_TICKETS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'MESSAGE' => lorem_phrase(),
-				'LINKS' => $links,
-				'TICKET_TYPE' => lorem_word(),
-				'NAME' => lorem_word_2(),
-				'SELECTED' => true,
-				'ADD_TICKET_URL' => placeholder_url(),
-				'TYPES' => placeholder_array(),
-				'LEAD_TIME' => placeholder_number()
+				'TITLE'=>lorem_title(),
+				'MESSAGE'=>lorem_phrase(),
+				'LINKS'=>$links,
+				'TICKET_TYPE'=>lorem_word(),
+				'NAME'=>lorem_word_2(),
+				'SELECTED'=>true,
+				'ADD_TICKET_URL'=>placeholder_url(),
+				'TYPES'=>placeholder_array(),
+				'LEAD_TIME'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}
@@ -175,64 +175,64 @@ class Hook_addon_registry_tickets
 		require_javascript('javascript_ajax');
 		require_lang('ocf');
 
-		$other_tickets = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$other_tickets=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$other_tickets->attach(do_lorem_template('SUPPORT_TICKET_LINK', array(
-				'NUM_POSTS' => placeholder_number(),
-				'CLOSED' => lorem_phrase(),
-				'URL' => placeholder_url(),
-				'TITLE' => lorem_phrase(),
-				'DATE' => placeholder_date(),
-				'DATE_RAW' => placeholder_date_raw(),
-				'PROFILE_URL' => placeholder_url(),
-				'LAST_POSTER' => lorem_phrase(),
-				'UNCLOSED' => lorem_word()
+				'NUM_POSTS'=>placeholder_number(),
+				'CLOSED'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'TITLE'=>lorem_phrase(),
+				'DATE'=>placeholder_date(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'PROFILE_URL'=>placeholder_url(),
+				'LAST_POSTER'=>lorem_phrase(),
+				'UNCLOSED'=>lorem_word()
 			)));
 		}
 
-		$comments = new ocp_tempcode();
+		$comments=new ocp_tempcode();
 
-		$comment_form = do_lorem_template('COMMENTS_POSTING_FORM', array(
-			'JOIN_BITS' => lorem_phrase_html(),
-			'FIRST_POST_URL' => placeholder_url(),
-			'FIRST_POST' => lorem_paragraph_html(),
-			'USE_CAPTCHA' => false,
-			'ATTACHMENTS' => lorem_phrase(),
-			'ATTACH_SIZE_FIELD' => lorem_phrase(),
-			'POST_WARNING' => '',
-			'COMMENT_TEXT' => '',
-			'GET_EMAIL' => lorem_word(),
-			'EMAIL_OPTIONAL' => lorem_word(),
-			'GET_TITLE' => true,
-			'EM' => placeholder_emoticon_chooser(),
-			'DISPLAY' => 'block',
-			'COMMENT_URL' => '',
-			'SUBMIT_NAME' => lorem_phrase(),
-			'TITLE' => lorem_phrase(),
-			'MAKE_POST' => true,
-			'CREATE_TICKET_MAKE_POST' => true
+		$comment_form=do_lorem_template('COMMENTS_POSTING_FORM', array(
+			'JOIN_BITS'=>lorem_phrase_html(),
+			'FIRST_POST_URL'=>placeholder_url(),
+			'FIRST_POST'=>lorem_paragraph_html(),
+			'USE_CAPTCHA'=>false,
+			'ATTACHMENTS'=>lorem_phrase(),
+			'ATTACH_SIZE_FIELD'=>lorem_phrase(),
+			'POST_WARNING'=>'',
+			'COMMENT_TEXT'=>'',
+			'GET_EMAIL'=>lorem_word(),
+			'EMAIL_OPTIONAL'=>lorem_word(),
+			'GET_TITLE'=>true,
+			'EM'=>placeholder_emoticon_chooser(),
+			'DISPLAY'=>'block',
+			'COMMENT_URL'=>'',
+			'SUBMIT_NAME'=>lorem_phrase(),
+			'TITLE'=>lorem_phrase(),
+			'MAKE_POST'=>true,
+			'CREATE_TICKET_MAKE_POST'=>true
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('SUPPORT_TICKET_SCREEN', array(
-				'TOGGLE_TICKET_CLOSED_URL' => placeholder_url(),
-				'CLOSED' => lorem_phrase(),
-				'OTHER_TICKETS' => $other_tickets,
-				'USERNAME' => lorem_word(),
-				'PING_URL' => placeholder_url(),
-				'WARNING_DETAILS' => '',
-				'NEW' => lorem_phrase(),
-				'TICKET_PAGE_TEXT' => lorem_sentence_html(),
-				'TYPES' => placeholder_array(),
-				'STAFF_ONLY' => placeholder_fields(),
-				'POSTER' => lorem_phrase(),
-				'TITLE' => lorem_title(),
-				'COMMENTS' => $comments,
-				'COMMENT_FORM' => $comment_form,
-				'STAFF_DETAILS' => placeholder_url(),
-				'URL' => placeholder_url(),
-				'ADD_TICKET_URL' => placeholder_url()
+				'TOGGLE_TICKET_CLOSED_URL'=>placeholder_url(),
+				'CLOSED'=>lorem_phrase(),
+				'OTHER_TICKETS'=>$other_tickets,
+				'USERNAME'=>lorem_word(),
+				'PING_URL'=>placeholder_url(),
+				'WARNING_DETAILS'=>'',
+				'NEW'=>lorem_phrase(),
+				'TICKET_PAGE_TEXT'=>lorem_sentence_html(),
+				'TYPES'=>placeholder_array(),
+				'STAFF_ONLY'=>placeholder_fields(),
+				'POSTER'=>lorem_phrase(),
+				'TITLE'=>lorem_title(),
+				'COMMENTS'=>$comments,
+				'COMMENT_FORM'=>$comment_form,
+				'STAFF_DETAILS'=>placeholder_url(),
+				'URL'=>placeholder_url(),
+				'ADD_TICKET_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -248,10 +248,10 @@ class Hook_addon_registry_tickets
 	{
 		return array(
 			lorem_globalise(do_lorem_template('SUPPORT_TICKETS_SEARCH_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'POST_FIELDS' => '',
-				'RESULTS' => lorem_phrase()
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'POST_FIELDS'=>'',
+				'RESULTS'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -267,9 +267,9 @@ class Hook_addon_registry_tickets
 	{
 		return array(
 			lorem_globalise(do_lorem_template('SUPPORT_TICKET_TYPE_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'TPL' => placeholder_form(),
-				'ADD_FORM' => placeholder_form()
+				'TITLE'=>lorem_title(),
+				'TPL'=>placeholder_form(),
+				'ADD_FORM'=>placeholder_form()
 			)), NULL, '', true)
 		);
 	}

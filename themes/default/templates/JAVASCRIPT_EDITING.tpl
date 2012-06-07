@@ -337,7 +337,7 @@ function wysiwyg_editor_init_for(element)
 
 	/*editor.on('instanceReady',function(ev) Does not work
 	{
-		var editor = ev.editor;
+		var editor=ev.editor;
 		if (typeof window.initialise_dragdrop_upload!='undefined') initialise_dragdrop_upload(element.id,element.id,editor.element.$.document);
 	});*/
 
@@ -395,9 +395,9 @@ function find_tags_in_editor(editor,element)
 				if (event.altKey)
 				{
 					// Mouse cursor to start
-					var range = selection.getRanges()[0];
-					range.startOffset = 0;
-					range.endOffset = 0;
+					var range=selection.getRanges()[0];
+					range.startOffset=0;
+					range.endOffset=0;
 					range.select()
 					selection.selectRanges([range]);
 				}

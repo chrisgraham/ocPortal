@@ -58,9 +58,9 @@ class Hook_addon_registry_errorlog
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -91,7 +91,7 @@ class Hook_addon_registry_errorlog
 	function tpl_previews()
 	{
 		return array(
-			'ERRORLOG_SCREEN.tpl' => 'administrative__errorlog_screen'
+			'ERRORLOG_SCREEN.tpl'=>'administrative__errorlog_screen'
 		);
 	}
 
@@ -106,9 +106,9 @@ class Hook_addon_registry_errorlog
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ERRORLOG_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'ERROR' => lorem_phrase(),
-				'PERMISSION' => lorem_phrase()
+				'TITLE'=>lorem_title(),
+				'ERROR'=>lorem_phrase(),
+				'PERMISSION'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

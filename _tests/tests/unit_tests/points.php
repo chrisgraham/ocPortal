@@ -36,7 +36,7 @@ class points_test_set extends ocp_test_case
 	//	Test #88
 	function testPoints()
 	{
-		$browser = new SimpleBrowser();
+		$browser=new SimpleBrowser();
 		$browser->get(get_base_url().'/site/index.php?page=points');
 
 		$browser->setField('login_username', 'test');
@@ -56,7 +56,7 @@ class points_test_set extends ocp_test_case
 	//	Test #96
 	function testProfiles()
 	{
-		$browser = new SimpleBrowser();
+		$browser=new SimpleBrowser();
 		$browser->get(get_base_url().'/site/index.php?page=points');
 
 		$browser->setField('login_username', 'test');
@@ -80,7 +80,7 @@ class points_test_set extends ocp_test_case
 	//	Test #116
 	function testBanner()
 	{
-		$browser = new SimpleBrowser();
+		$browser=new SimpleBrowser();
 		$browser->get(get_base_url().'/site/index.php?page=pointstore&type=misc');
 		$title1=$browser->getTitle();
 		$this->assertTrue($title1=="Login &ndash; OcPortal 4.2");
@@ -89,7 +89,7 @@ class points_test_set extends ocp_test_case
 	//	Test #132
 	function testAddbanner_error()
 	{
-		$browser = new SimpleBrowser();
+		$browser=new SimpleBrowser();
 		$browser->get(get_base_url().'/site/index.php?page=pointstore&type=bannerinfo&id=banners');
 
 		$browser->setField('login_username', 'test');
@@ -110,7 +110,7 @@ class points_test_set extends ocp_test_case
 	//	Test #130
 	function testAddFlagmsg()
 	{
-		$browser = new SimpleBrowser();
+		$browser=new SimpleBrowser();
 		$browser->get(get_base_url().'/site/index.php?page=pointstore&type=text&id=flagrant');
 
 		$browser->setField('login_username', 'admin');
@@ -121,7 +121,7 @@ class points_test_set extends ocp_test_case
 	//	Test #1149
 	function testAddEventError()
 	{
-		$browser = new SimpleBrowser();
+		$browser=new SimpleBrowser();
 		echo $browser->get(get_base_url().'/site/index.php?page=calendar');
 
 // 		$browser->setField('login_username', 'test');

@@ -41,14 +41,14 @@ class Hook_checklist_reported_posts
 
 		if($outstanding>0)
 		{
-			$img	=	'not_completed';			
+			$img='not_completed';			
 		}
 		else
 		{	
-			$img	=	'completed';
+			$img='completed';
 		}
 
-		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'c6e8455efb7d1cf598983795103d2a66','ORDER_STATUS'=>$img));
+		$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'c6e8455efb7d1cf598983795103d2a66','ORDER_STATUS'=>$img));
 
 		$url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id);
 

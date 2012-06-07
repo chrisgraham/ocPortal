@@ -41,11 +41,11 @@
 </div>
 
 <script type="text/javascript">//<![CDATA[
-	if (jQuery('#fp_status_form').length != 0) {
-		jQuery('textarea', '#fp_status_form').bind('focus', sUpdateF);
-		jQuery('textarea', '#fp_status_form').bind('blur', sUpdateB);
+	if (jQuery('#fp_status_form').length!=0) {
+		jQuery('textarea','#fp_status_form').bind('focus',sUpdateF);
+		jQuery('textarea','#fp_status_form').bind('blur',sUpdateB);
 		jQuery('#fp_status_form').submit(sUpdateSubmit);
-		jQuery('textarea', '#fp_status_form').keyup(sUpdateCount);
-		jQuery('textarea', '#fp_status_form').keypress(sUpdateCount);
+		jQuery('textarea','#fp_status_form').keyup(sUpdateCount);
+		jQuery('textarea','#fp_status_form').keypress(sUpdateCount);
 	}
 //]]></script>

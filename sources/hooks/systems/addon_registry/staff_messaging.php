@@ -58,9 +58,9 @@ class Hook_addon_registry_staff_messaging
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -100,9 +100,9 @@ class Hook_addon_registry_staff_messaging
 	function tpl_previews()
 	{
 		return array(
-			'MESSAGING_MESSAGE_SCREEN.tpl' => 'administrative__messaging_message_screen', //
-			'BLOCK_MAIN_CONTACT_US.tpl' => 'block_main_contact_us',
-			'BLOCK_MAIN_CONTACT_SIMPLE.tpl' => 'block_main_contact_simple'
+			'MESSAGING_MESSAGE_SCREEN.tpl'=>'administrative__messaging_message_screen', //
+			'BLOCK_MAIN_CONTACT_US.tpl'=>'block_main_contact_us',
+			'BLOCK_MAIN_CONTACT_SIMPLE.tpl'=>'block_main_contact_simple'
 		);
 	}
 
@@ -115,37 +115,37 @@ class Hook_addon_registry_staff_messaging
 	 */
 	function tpl_preview__administrative__messaging_message_screen()
 	{
-		$comment_details = do_lorem_template('COMMENTS_POSTING_FORM', array(
-			'JOIN_BITS' => lorem_phrase_html(),
-			'USE_CAPTCHA' => false,
-			'EMAIL_OPTIONAL' => lorem_word(),
-			'POST_WARNING' => '',
-			'COMMENT_TEXT' => '',
-			'GET_EMAIL' => true,
-			'GET_TITLE' => true,
-			'EM' => placeholder_emoticon_chooser(),
-			'DISPLAY' => 'block',
-			'COMMENT_URL' => placeholder_url(),
-			'TITLE' => lorem_phrase(),
-			'MAKE_POST' => true,
-			'CREATE_TICKET_MAKE_POST' => true,
-			'FIRST_POST_URL' => '',
-			'FIRST_POST' => ''
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM', array(
+			'JOIN_BITS'=>lorem_phrase_html(),
+			'USE_CAPTCHA'=>false,
+			'EMAIL_OPTIONAL'=>lorem_word(),
+			'POST_WARNING'=>'',
+			'COMMENT_TEXT'=>'',
+			'GET_EMAIL'=>true,
+			'GET_TITLE'=>true,
+			'EM'=>placeholder_emoticon_chooser(),
+			'DISPLAY'=>'block',
+			'COMMENT_URL'=>placeholder_url(),
+			'TITLE'=>lorem_phrase(),
+			'MAKE_POST'=>true,
+			'CREATE_TICKET_MAKE_POST'=>true,
+			'FIRST_POST_URL'=>'',
+			'FIRST_POST'=>''
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('MESSAGING_MESSAGE_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'MESSAGE_TITLE' => lorem_phrase(),
-				'MESSAGE' => lorem_phrase(),
-				'BY' => lorem_phrase(),
-				'WHOS_READ' => placeholder_array(),
-				'COMMENT_DETAILS' => $comment_details,
-				'TAKE_RESPONSIBILITY_URL' => placeholder_url(),
-				'RESPONSIBLE' => lorem_phrase(),
-				'USERNAME' => lorem_word(),
-				'DATE' => placeholder_time(),
-				'MEMBER_URL' => placeholder_url()
+				'TITLE'=>lorem_title(),
+				'MESSAGE_TITLE'=>lorem_phrase(),
+				'MESSAGE'=>lorem_phrase(),
+				'BY'=>lorem_phrase(),
+				'WHOS_READ'=>placeholder_array(),
+				'COMMENT_DETAILS'=>$comment_details,
+				'TAKE_RESPONSIBILITY_URL'=>placeholder_url(),
+				'RESPONSIBLE'=>lorem_phrase(),
+				'USERNAME'=>lorem_word(),
+				'DATE'=>placeholder_time(),
+				'MEMBER_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -159,31 +159,31 @@ class Hook_addon_registry_staff_messaging
 	 */
 	function tpl_preview__block_main_contact_us()
 	{
-		$comment_details = do_lorem_template('COMMENTS_POSTING_FORM', array(
-			'JOIN_BITS' => lorem_phrase_html(),
-			'USE_CAPTCHA' => false,
-			'EMAIL_OPTIONAL' => lorem_word(),
-			'POST_WARNING' => '',
-			'COMMENT_TEXT' => '',
-			'GET_EMAIL' => true,
-			'GET_TITLE' => true,
-			'EM' => placeholder_emoticon_chooser(),
-			'DISPLAY' => 'block',
-			'COMMENT_URL' => placeholder_url(),
-			'TITLE' => lorem_phrase(),
-			'MAKE_POST' => true,
-			'CREATE_TICKET_MAKE_POST' => true,
-			'FIRST_POST_URL' => '',
-			'FIRST_POST' => ''
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM', array(
+			'JOIN_BITS'=>lorem_phrase_html(),
+			'USE_CAPTCHA'=>false,
+			'EMAIL_OPTIONAL'=>lorem_word(),
+			'POST_WARNING'=>'',
+			'COMMENT_TEXT'=>'',
+			'GET_EMAIL'=>true,
+			'GET_TITLE'=>true,
+			'EM'=>placeholder_emoticon_chooser(),
+			'DISPLAY'=>'block',
+			'COMMENT_URL'=>placeholder_url(),
+			'TITLE'=>lorem_phrase(),
+			'MAKE_POST'=>true,
+			'CREATE_TICKET_MAKE_POST'=>true,
+			'FIRST_POST_URL'=>'',
+			'FIRST_POST'=>''
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_US', array(
-				'COMMENT_DETAILS' => $comment_details,
-				'MESSAGE' => lorem_phrase(),
-				'NOTIFICATIONS_ENABLED' => lorem_phrase(),
-				'TYPE' => placeholder_id(),
-				'FIRST_POST' => lorem_paragraph_html()
+				'COMMENT_DETAILS'=>$comment_details,
+				'MESSAGE'=>lorem_phrase(),
+				'NOTIFICATIONS_ENABLED'=>lorem_phrase(),
+				'TYPE'=>placeholder_id(),
+				'FIRST_POST'=>lorem_paragraph_html()
 			)), NULL, '', true)
 		);
 	}
@@ -198,29 +198,29 @@ class Hook_addon_registry_staff_messaging
 	function tpl_preview__block_main_contact_simple()
 	{
 		require_lang('ocf');
-		$comment_details = do_lorem_template('COMMENTS_POSTING_FORM', array(
-			'JOIN_BITS' => lorem_phrase_html(),
-			'FIRST_POST_URL' => placeholder_url(),
-			'FIRST_POST' => lorem_paragraph_html(),
-			'USE_CAPTCHA' => false,
-			'EMAIL_OPTIONAL' => lorem_word(),
-			'POST_WARNING' => '',
-			'COMMENT_TEXT' => '',
-			'GET_EMAIL' => lorem_word(),
-			'GET_TITLE' => lorem_word(),
-			'EM' => placeholder_emoticon_chooser(),
-			'DISPLAY' => 'block',
-			'TITLE' => lorem_phrase(),
-			'COMMENT_URL' => placeholder_url(),
-			'MAKE_POST' => true,
-			'CREATE_TICKET_MAKE_POST' => true
+		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM', array(
+			'JOIN_BITS'=>lorem_phrase_html(),
+			'FIRST_POST_URL'=>placeholder_url(),
+			'FIRST_POST'=>lorem_paragraph_html(),
+			'USE_CAPTCHA'=>false,
+			'EMAIL_OPTIONAL'=>lorem_word(),
+			'POST_WARNING'=>'',
+			'COMMENT_TEXT'=>'',
+			'GET_EMAIL'=>lorem_word(),
+			'GET_TITLE'=>lorem_word(),
+			'EM'=>placeholder_emoticon_chooser(),
+			'DISPLAY'=>'block',
+			'TITLE'=>lorem_phrase(),
+			'COMMENT_URL'=>placeholder_url(),
+			'MAKE_POST'=>true,
+			'CREATE_TICKET_MAKE_POST'=>true
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_SIMPLE', array(
-				'EMAIL_OPTIONAL' => lorem_word_html(),
-				'COMMENT_DETAILS' => $comment_details,
-				'MESSAGE' => lorem_phrase()
+				'EMAIL_OPTIONAL'=>lorem_word_html(),
+				'COMMENT_DETAILS'=>$comment_details,
+				'MESSAGE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

@@ -58,9 +58,9 @@ class Hook_addon_registry_backup
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -111,8 +111,8 @@ class Hook_addon_registry_backup
 	function tpl_previews()
 	{
 		return array(
-			'RESTORE_HTML_WRAP.tpl' => 'administrative__restore_wrap',
-			'BACKUP_LAUNCH_SCREEN.tpl' => 'administrative__backup_launch_screen'
+			'RESTORE_HTML_WRAP.tpl'=>'administrative__restore_wrap',
+			'BACKUP_LAUNCH_SCREEN.tpl'=>'administrative__backup_launch_screen'
 		);
 	}
 
@@ -127,10 +127,10 @@ class Hook_addon_registry_backup
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BACKUP_LAUNCH_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'TEXT' => lorem_sentence(),
-				'RESULTS' => lorem_phrase(),
-				'FORM' => placeholder_form_with_field('submit_button')
+				'TITLE'=>lorem_title(),
+				'TEXT'=>lorem_sentence(),
+				'RESULTS'=>lorem_phrase(),
+				'FORM'=>placeholder_form_with_field('submit_button')
 			)), NULL, '', true)
 		);
 	}
@@ -148,9 +148,9 @@ class Hook_addon_registry_backup
 
 		return array(
 			lorem_globalise(do_lorem_template('RESTORE_HTML_WRAP', array(
-				'MESSAGE' => lorem_sentence_html(),
-				'CSS_NOCACHE' => '',
-				'SUCCESS' => '1'
+				'MESSAGE'=>lorem_sentence_html(),
+				'CSS_NOCACHE'=>'',
+				'SUCCESS'=>'1'
 			)), NULL, '', true)
 		);
 	}

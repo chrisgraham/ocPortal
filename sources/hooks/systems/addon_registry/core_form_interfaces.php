@@ -58,9 +58,9 @@ class Hook_addon_registry_core_form_interfaces
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -345,75 +345,76 @@ class Hook_addon_registry_core_form_interfaces
 	function tpl_previews()
 	{
 		return array(
-			'FORM_STANDARD_SIZING.tpl' => 'form_screen_2',
-			'FORM_SCREEN.tpl' => 'form_screen_2',
-			'FORM_SCREEN_FIELD_SPACER.tpl' => 'form_screen_1',
-			'FORM.tpl' => 'form_screen_1',
-			'POSTING_SCREEN.tpl' => 'posting_screen',
-			'FORM_SCREEN_INPUT_LIST_ENTRY.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_LIST_GROUP.tpl' => 'form_screen_1',
-			'FORM_GROUP.tpl' => 'form_group',
-			'FORM_GROUPED.tpl' => 'form_grouped',
-			'FORM_FIELD_SET_GROUPER.tpl' => 'form_field_set_grouper',
-			'PREVIEW_SCRIPT_SPELLING.tpl' => 'preview_script_spelling',
-			'PREVIEW_SCRIPT_KEYWORD_DENSITY.tpl' => 'preview_script_keyword_density',
-			'PREVIEW_SCRIPT_CODE.tpl' => 'preview_script_code',
-			'FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE.tpl' => 'form_screen',
-			'HTML_EDIT.tpl' => 'html_edit',
-			'POSTING_FORM.tpl' => 'posting_form',
-			'COMCODE_MESSAGE.tpl' => 'form_screen_1',
-			'COMCODE_EDITOR.tpl' => 'posting_form',
-			'COMCODE_EDITOR_BUTTON.tpl' => 'posting_form',
-			'COMCODE_EDITOR_MICRO_BUTTON.tpl' => 'posting_form',
-			'FORM_SCREEN_INPUT_CODENAME.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_LINE.tpl' => 'form_screen_1',
-			'FORM_SCREEN_FIELDS_SET_ITEM.tpl' => 'form_screen_1',
-			'FORM_SCREEN_FIELDS_SET.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_USERNAME.tpl' => 'form_screen_2',
-			'FORM_DESCRIP_SEP.tpl' => 'form_descrip_sep',
-			'FORM_SCREEN_INPUT_AUTHOR.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_EMAIL.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_COLOUR.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_LINE_MULTI.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_TEXT_MULTI.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_USERNAME_MULTI.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_TEXT.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_HUGE_COMCODE.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_HUGE.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_PASSWORD.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_TICK.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_VARIOUS_TICKS.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_UPLOAD.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_UPLOAD_MULTI.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_LIST.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_TREE_LIST.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_HUGE_LIST.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_MULTI_LIST.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_ALL_AND_NOT.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_RADIO_LIST.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY.tpl' => 'form_screen',
-			'FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY.tpl' => 'form_screen',
-			'POSTING_FIELD.tpl' => 'form_screen',
-			'FORM_SCREEN_INPUT_TIME.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_DATE_NULL.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_DATE.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_INTEGER.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_FLOAT.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_HIDDEN_2.tpl' => 'form_screen_2',
-			'FORM_SCREEN_FIELD.tpl' => 'form_screen_1',
-			'FORM_SCREEN_INPUT_RADIO_LIST_ENTRY.tpl' => 'form_screen_2',
-			'FORM_SCREEN_INPUT_PERMISSION_OVERRIDE.tpl' => 'administrative__form_screen_input_permission',
-			'FORM_SCREEN_INPUT_PERMISSION.tpl' => 'administrative__form_screen_input_permission',
-			'FORM_SCREEN_INPUT_PERMISSION_ADMIN.tpl' => 'administrative__form_screen_input_permission',
-			'FORM_SCREEN_INPUT_PERMISSION_MATRIX.tpl' => 'administrative__form_screen_input_permission',
-			'FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER.tpl' => 'administrative__form_screen_input_permission_outer',
-			'FORM_SCREEN_INPUT_HIDDEN.tpl' => 'form_screen_2',
-			'PREVIEW_SCRIPT.tpl' => 'preview_script',
-			'BLOCK_HELPER_BLOCK_CHOICE.tpl' => 'administrative__block_helper_block_group',
-			'BLOCK_HELPER_BLOCK_GROUP.tpl' => 'administrative__block_helper_block_group',
-			'BLOCK_HELPER_START.tpl' => 'administrative__block_helper_start',
-			'BLOCK_HELPER_DONE.tpl' => 'administrative__block_helper_done',
-			'WYSIWYG_SETTINGS.tpl' => 'wysiwyg_settings',
+			'FORM_STANDARD_SIZING.tpl'=>'form_screen_2',
+			'FORM_SCREEN.tpl'=>'form_screen_2',
+			'FORM_SCREEN_FIELD_SPACER.tpl'=>'form_screen_1',
+			'FORM_STANDARD_END.tpl'=>'form_screen_1',
+			'FORM.tpl'=>'form_screen_1',
+			'POSTING_SCREEN.tpl'=>'posting_screen',
+			'FORM_SCREEN_INPUT_LIST_ENTRY.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_LIST_GROUP.tpl'=>'form_screen_1',
+			'FORM_GROUP.tpl'=>'form_group',
+			'FORM_GROUPED.tpl'=>'form_grouped',
+			'FORM_FIELD_SET_GROUPER.tpl'=>'form_field_set_grouper',
+			'PREVIEW_SCRIPT_SPELLING.tpl'=>'preview_script_spelling',
+			'PREVIEW_SCRIPT_KEYWORD_DENSITY.tpl'=>'preview_script_keyword_density',
+			'PREVIEW_SCRIPT_CODE.tpl'=>'preview_script_code',
+			'FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE.tpl'=>'form_screen',
+			'HTML_EDIT.tpl'=>'html_edit',
+			'POSTING_FORM.tpl'=>'posting_form',
+			'COMCODE_MESSAGE.tpl'=>'form_screen_1',
+			'COMCODE_EDITOR.tpl'=>'posting_form',
+			'COMCODE_EDITOR_BUTTON.tpl'=>'posting_form',
+			'COMCODE_EDITOR_MICRO_BUTTON.tpl'=>'posting_form',
+			'FORM_SCREEN_INPUT_CODENAME.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_LINE.tpl'=>'form_screen_1',
+			'FORM_SCREEN_FIELDS_SET_ITEM.tpl'=>'form_screen_1',
+			'FORM_SCREEN_FIELDS_SET.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_USERNAME.tpl'=>'form_screen_2',
+			'FORM_DESCRIP_SEP.tpl'=>'form_descrip_sep',
+			'FORM_SCREEN_INPUT_AUTHOR.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_EMAIL.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_COLOUR.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_LINE_MULTI.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_TEXT_MULTI.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_USERNAME_MULTI.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_TEXT.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_HUGE_COMCODE.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_HUGE.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_PASSWORD.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_TICK.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_VARIOUS_TICKS.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_UPLOAD.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_UPLOAD_MULTI.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_LIST.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_TREE_LIST.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_HUGE_LIST.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_MULTI_LIST.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_ALL_AND_NOT.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_RADIO_LIST.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY.tpl'=>'form_screen',
+			'FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY.tpl'=>'form_screen',
+			'POSTING_FIELD.tpl'=>'form_screen',
+			'FORM_SCREEN_INPUT_TIME.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_DATE_NULL.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_DATE.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_INTEGER.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_FLOAT.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_HIDDEN_2.tpl'=>'form_screen_2',
+			'FORM_SCREEN_FIELD.tpl'=>'form_screen_1',
+			'FORM_SCREEN_INPUT_RADIO_LIST_ENTRY.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_PERMISSION_OVERRIDE.tpl'=>'administrative__form_screen_input_permission',
+			'FORM_SCREEN_INPUT_PERMISSION.tpl'=>'administrative__form_screen_input_permission',
+			'FORM_SCREEN_INPUT_PERMISSION_ADMIN.tpl'=>'administrative__form_screen_input_permission',
+			'FORM_SCREEN_INPUT_PERMISSION_MATRIX.tpl'=>'administrative__form_screen_input_permission',
+			'FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER.tpl'=>'administrative__form_screen_input_permission_outer',
+			'FORM_SCREEN_INPUT_HIDDEN.tpl'=>'form_screen_2',
+			'PREVIEW_SCRIPT.tpl'=>'preview_script',
+			'BLOCK_HELPER_BLOCK_CHOICE.tpl'=>'administrative__block_helper_block_group',
+			'BLOCK_HELPER_BLOCK_GROUP.tpl'=>'administrative__block_helper_block_group',
+			'BLOCK_HELPER_START.tpl'=>'administrative__block_helper_start',
+			'BLOCK_HELPER_DONE.tpl'=>'administrative__block_helper_done',
+			'WYSIWYG_SETTINGS.tpl'=>'wysiwyg_settings',
 		);
 	}
 
@@ -446,348 +447,348 @@ class Hook_addon_registry_core_form_interfaces
 		require_javascript('javascript_colour_picker');
 		require_javascript('javascript_theme_colours');
 
-		$fields = new ocp_tempcode();
+		$fields=new ocp_tempcode();
 
-		$name = placeholder_random_id();
-		$_input1 = do_lorem_template('FORM_SCREEN_INPUT_LINE', array(
-			'MAXLENGTH' => placeholder_number(),
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name . '1',
-			'DEFAULT' => ''
+		$name=placeholder_random_id();
+		$_input1=do_lorem_template('FORM_SCREEN_INPUT_LINE', array(
+			'MAXLENGTH'=>placeholder_number(),
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name . '1',
+			'DEFAULT'=>''
 		));
-		$input1 = do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM', array(
-			'SET_NAME' => $name,
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name . '1',
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $_input1,
-			'COMCODE' => ''
+		$input1=do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM', array(
+			'SET_NAME'=>$name,
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name . '1',
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$_input1,
+			'COMCODE'=>''
 		));
-		$_input2 = do_lorem_template('FORM_SCREEN_INPUT_LINE', array(
-			'MAXLENGTH' => placeholder_number(),
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name . '2',
-			'DEFAULT' => ''
+		$_input2=do_lorem_template('FORM_SCREEN_INPUT_LINE', array(
+			'MAXLENGTH'=>placeholder_number(),
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name . '2',
+			'DEFAULT'=>''
 		));
-		$input2 = do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM', array(
-			'SET_NAME' => $name,
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name . '2',
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $_input2,
-			'COMCODE' => ''
+		$input2=do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM', array(
+			'SET_NAME'=>$name,
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name . '2',
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$_input2,
+			'COMCODE'=>''
 		));
-		$inputs = new ocp_tempcode();
+		$inputs=new ocp_tempcode();
 		$inputs->attach($input1);
 		$inputs->attach($input2);
-		$fieldset = do_lorem_template('FORM_SCREEN_FIELDS_SET', array(
-			'SET_NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'FIELDS' => $inputs,
-			'REQUIRED' => true
+		$fieldset=do_lorem_template('FORM_SCREEN_FIELDS_SET', array(
+			'SET_NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'FIELDS'=>$inputs,
+			'REQUIRED'=>true
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => true,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $fieldset,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>true,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$fieldset,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_TEXT', array(
-			'RAW' => true,
-			'SCROLLS' => '',
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name,
-			'DEFAULT' => ''
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_TEXT', array(
+			'RAW'=>true,
+			'SCROLLS'=>'',
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_CODENAME', array(
-			'MAXLENGTH' => placeholder_number(),
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name,
-			'DEFAULT' => ''
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_CODENAME', array(
+			'MAXLENGTH'=>placeholder_number(),
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_TICK', array(
-			'CHECKED' => 'true',
-			'TABINDEX' => placeholder_number(),
-			'NAME' => $name
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK', array(
+			'CHECKED'=>'true',
+			'TABINDEX'=>placeholder_number(),
+			'NAME'=>$name
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER', array(
-			'SECTION_HIDDEN' => false,
-			'TITLE' => lorem_phrase(),
-			'THEME_ALSO_INCLUDE_PAGES' => false
+			'SECTION_HIDDEN'=>false,
+			'TITLE'=>lorem_phrase(),
+			'THEME_ALSO_INCLUDE_PAGES'=>false
 		)));
-		$list = new ocp_tempcode();
-		foreach (placeholder_array() as $key => $value)
+		$list=new ocp_tempcode();
+		foreach (placeholder_array() as $key=>$value)
 		{
 			$list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
-				'SELECTED' => false,
-				'DISABLED' => false,
-				'CLASS' => '',
-				'NAME' => placeholder_random_id(),
-				'TEXT' => lorem_phrase()
+				'SELECTED'=>false,
+				'DISABLED'=>false,
+				'CLASS'=>'',
+				'NAME'=>placeholder_random_id(),
+				'TEXT'=>lorem_phrase()
 			)));
 		}
 		$list=do_lorem_template('FORM_SCREEN_INPUT_LIST_GROUP', array(
-			'ENTRIES' => $list,
-			'TITLE' => lorem_phrase()
+			'ENTRIES'=>$list,
+			'TITLE'=>lorem_phrase()
 		));
-		$radios = new ocp_tempcode();
-		$name = placeholder_random_id();
+		$radios=new ocp_tempcode();
+		$name=placeholder_random_id();
 		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
-			'DESCRIPTION' => lorem_sentence(),
-			'CHECKED' => 'true',
-			'TABINDEX' => placeholder_number(),
-			'NAME' => $name,
-			'VALUE' => placeholder_random(),
-			'TEXT' => lorem_phrase()
+			'DESCRIPTION'=>lorem_sentence(),
+			'CHECKED'=>'true',
+			'TABINDEX'=>placeholder_number(),
+			'NAME'=>$name,
+			'VALUE'=>placeholder_random(),
+			'TEXT'=>lorem_phrase()
 		)));
 		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
-			'DESCRIPTION' => lorem_sentence(),
-			'CHECKED' => 'false',
-			'TABINDEX' => placeholder_number(),
-			'NAME' => $name,
-			'VALUE' => placeholder_random(),
-			'TEXT' => lorem_phrase()
+			'DESCRIPTION'=>lorem_sentence(),
+			'CHECKED'=>'false',
+			'TABINDEX'=>placeholder_number(),
+			'NAME'=>$name,
+			'VALUE'=>placeholder_random(),
+			'TEXT'=>lorem_phrase()
 		)));
 		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
-			'DESCRIPTION' => lorem_sentence(),
-			'CHECKED' => 'false',
-			'TABINDEX' => placeholder_number(),
-			'NAME' => $name,
-			'VALUE' => placeholder_random(),
-			'TEXT' => lorem_phrase()
+			'DESCRIPTION'=>lorem_sentence(),
+			'CHECKED'=>'false',
+			'TABINDEX'=>placeholder_number(),
+			'NAME'=>$name,
+			'VALUE'=>placeholder_random(),
+			'TEXT'=>lorem_phrase()
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_ALL_AND_NOT', array(
-			'TABINDEX' => placeholder_number(),
-			'BASE' => $name,
-			'RADIOS' => $radios,
-			'LIST' => $list
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_ALL_AND_NOT', array(
+			'TABINDEX'=>placeholder_number(),
+			'BASE'=>$name,
+			'RADIOS'=>$radios,
+			'LIST'=>$list
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name . '_list',
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name . '_list',
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_AUTHOR', array(
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name,
-			'DEFAULT' => ''
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_AUTHOR', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
 		));
-		$_description = new ocp_tempcode();
+		$_description=new ocp_tempcode();
 		$_description->attach(lorem_phrase());
 		$_description->attach(do_lorem_template('FORM_DESCRIP_SEP'));
-		$extra = do_lorem_template('HYPERLINK_POPUP_WINDOW', array(
-			'URL' => placeholder_url(),
-			'TITLE' => lorem_phrase(),
-			'CAPTION' => lorem_phrase()
+		$extra=do_lorem_template('HYPERLINK_POPUP_WINDOW', array(
+			'URL'=>placeholder_url(),
+			'TITLE'=>lorem_phrase(),
+			'CAPTION'=>lorem_phrase()
 		));
 		$_description->attach($extra);
 
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => $_description,
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>$_description,
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
 		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_COLOUR', array(
-			'TRUE_FIELD' => false,
-			'REQUIRED' => '',
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence(),
-			'TABINDEX' => placeholder_number(),
-			'_REQUIRED' => '',
-			'NAME' => lorem_word(),
-			'DEFAULT' => ''
+			'TRUE_FIELD'=>false,
+			'REQUIRED'=>'',
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence(),
+			'TABINDEX'=>placeholder_number(),
+			'_REQUIRED'=>'',
+			'NAME'=>lorem_word(),
+			'DEFAULT'=>''
 		)));
 
 		// Dates
-		$start_year = intval(date('Y')) - 1;
-		$start_month = intval(date('m'));
-		$start_day = intval(date('d'));
-		$start_hour = intval(date('H'));
-		$start_minute = intval(date('i'));
+		$start_year=intval(date('Y')) - 1;
+		$start_month=intval(date('m'));
+		$start_day=intval(date('d'));
+		$start_hour=intval(date('H'));
+		$start_minute=intval(date('i'));
 
-		$name = placeholder_random_id();
-		$time = do_lorem_template('FORM_SCREEN_INPUT_TIME', array(
-			'NULL_OK' => '',
-			'DISABLED' => '',
-			'TABINDEX' => placeholder_number(),
-			'MINUTES' => placeholder_options(),
-			'HOURS' => placeholder_options(),
-			'STUB' => placeholder_random_id()
+		$name=placeholder_random_id();
+		$time=do_lorem_template('FORM_SCREEN_INPUT_TIME', array(
+			'NULL_OK'=>'',
+			'DISABLED'=>'',
+			'TABINDEX'=>placeholder_number(),
+			'MINUTES'=>placeholder_options(),
+			'HOURS'=>placeholder_options(),
+			'STUB'=>placeholder_random_id()
 		));
-		$input = do_lorem_template('FORM_SCREEN_INPUT_DATE', array(
-			'UNLIMITED' => false,
-			'NULL_OK' => '',
-			'DISABLED' => '',
-			'TABINDEX' => placeholder_number(),
-			'YEARS' => placeholder_options(),
-			'MONTHS' => placeholder_options(),
-			'DAYS' => placeholder_options(),
-			'STUB' => $name,
-			'NULL' => '',
-			'TIME' => $time
+		$input=do_lorem_template('FORM_SCREEN_INPUT_DATE', array(
+			'UNLIMITED'=>false,
+			'NULL_OK'=>'',
+			'DISABLED'=>'',
+			'TABINDEX'=>placeholder_number(),
+			'YEARS'=>placeholder_options(),
+			'MONTHS'=>placeholder_options(),
+			'DAYS'=>placeholder_options(),
+			'STUB'=>$name,
+			'NULL'=>'',
+			'TIME'=>$time
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => true,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>true,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_EMAIL', array(
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name,
-			'DEFAULT' => ''
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_EMAIL', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_FLOAT', array(
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name,
-			'DEFAULT' => ''
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_FLOAT', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
 		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE', array(
-			'RAW' => true,
-			'SCROLLS' => '',
-			'DESCRIPTION_SIDE' => lorem_sentence(),
-			'REQUIRED' => '',
-			'_REQUIRED' => '',
-			'TABINDEX' => placeholder_number(),
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence(),
-			'NAME' => placeholder_random_id(),
-			'DEFAULT' => '',
-			'ROWS' => "20"
+			'RAW'=>true,
+			'SCROLLS'=>'',
+			'DESCRIPTION_SIDE'=>lorem_sentence(),
+			'REQUIRED'=>'',
+			'_REQUIRED'=>'',
+			'TABINDEX'=>placeholder_number(),
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence(),
+			'NAME'=>placeholder_random_id(),
+			'DEFAULT'=>'',
+			'ROWS'=>"20"
 		)));
 
-		$_comcode = do_lorem_template('COMCODE_MESSAGE', array(
-			'NAME' => lorem_word(),
-			'W' => '',
-			'URL' => placeholder_url()
+		$_comcode=do_lorem_template('COMCODE_MESSAGE', array(
+			'NAME'=>lorem_word(),
+			'W'=>'',
+			'URL'=>placeholder_url()
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_COMCODE', array(
-			'SCROLLS' => '',
-			'DESCRIPTION_SIDE' => lorem_sentence(),
-			'REQUIRED' => 'wysiwyg',
-			'_REQUIRED' => 'wysiwyg',
-			'TABINDEX' => placeholder_number(),
-			'COMCODE' => $_comcode,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_phrase(),
-			'NAME' => placeholder_random_id(),
-			'DEFAULT' => lorem_word(),
-			'DEFAULT_PARSED' => lorem_word(),
-			'ROWS' => "20"
+			'SCROLLS'=>'',
+			'DESCRIPTION_SIDE'=>lorem_sentence(),
+			'REQUIRED'=>'wysiwyg',
+			'_REQUIRED'=>'wysiwyg',
+			'TABINDEX'=>placeholder_number(),
+			'COMCODE'=>$_comcode,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_phrase(),
+			'NAME'=>placeholder_random_id(),
+			'DEFAULT'=>lorem_word(),
+			'DEFAULT_PARSED'=>lorem_word(),
+			'ROWS'=>"20"
 		)));
 
-		$hidden = do_lorem_template('FORM_SCREEN_INPUT_DATE_NULL', array(
-			'STUB' => placeholder_random_id()
+		$hidden=do_lorem_template('FORM_SCREEN_INPUT_DATE_NULL', array(
+			'STUB'=>placeholder_random_id()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('FORM', array(
-				'GET' => NULL,
-				'SKIP_VALIDATION' => true,
-				'HIDDEN' => $hidden,
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'FIELDS' => $fields,
-				'SUBMIT_NAME' => lorem_word(),
-				'TEXT' => lorem_sentence_html()
+				'GET'=>NULL,
+				'SKIP_VALIDATION'=>true,
+				'HIDDEN'=>$hidden,
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'FIELDS'=>$fields,
+				'SUBMIT_NAME'=>lorem_word(),
+				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
 		);
 	}
@@ -804,290 +805,290 @@ class Hook_addon_registry_core_form_interfaces
 		require_lang('comcode');
 		require_lang('dates');
 
-		$fields = new ocp_tempcode();
-		$list = new ocp_tempcode();
+		$fields=new ocp_tempcode();
+		$list=new ocp_tempcode();
 
-		$entries = new ocp_tempcode();
+		$entries=new ocp_tempcode();
 		foreach (placeholder_array() as $val)
 		{
 			$entries->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
-				'SELECTED' => '',
-				'DISABLED' => '',
-				'CLASS' => '',
-				'NAME' => placeholder_random_id(),
-				'TEXT' => lorem_phrase()
+				'SELECTED'=>'',
+				'DISABLED'=>'',
+				'CLASS'=>'',
+				'NAME'=>placeholder_random_id(),
+				'TEXT'=>lorem_phrase()
 			)));
 		}
 		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_LIST', array(
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence(),
-			'NAME' => placeholder_random_id(),
-			'CONTENT' => $entries,
-			'INLINE_LIST' => false
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence(),
+			'NAME'=>placeholder_random_id(),
+			'CONTENT'=>$entries,
+			'INLINE_LIST'=>false
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_INTEGER', array(
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name,
-			'DEFAULT' => ''
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_INTEGER', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$input = new ocp_tempcode();
-		foreach (placeholder_array(1) as $k => $v)
+		$input=new ocp_tempcode();
+		foreach (placeholder_array(1) as $k=>$v)
 		{
 			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_LINE_MULTI', array(
-				'CLASS' => '',
-				'MAXLENGTH' => '10',
-				'PRETTY_NAME' => $v,
-				'TABINDEX' => placeholder_random_id(),
-				'NAME_STUB' => placeholder_random_id(),
-				'I' => strval($k),
-				'REQUIRED' => '_required',
-				'DEFAULT' => ''
+				'CLASS'=>'',
+				'MAXLENGTH'=>'10',
+				'PRETTY_NAME'=>$v,
+				'TABINDEX'=>placeholder_random_id(),
+				'NAME_STUB'=>placeholder_random_id(),
+				'I'=>strval($k),
+				'REQUIRED'=>'_required',
+				'DEFAULT'=>''
 			)));
 		}
 
-		foreach (placeholder_array(2) as $k => $v)
+		foreach (placeholder_array(2) as $k=>$v)
 		{
 			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_TEXT_MULTI', array(
-				'PRETTY_NAME' => lorem_word(),
-				'TABINDEX' => placeholder_number(),
-				'NAME_STUB' => placeholder_random_id(),
-				'I' => strval($k),
-				'REQUIRED' => '_required',
-				'DEFAULT' => ''
+				'PRETTY_NAME'=>lorem_word(),
+				'TABINDEX'=>placeholder_number(),
+				'NAME_STUB'=>placeholder_random_id(),
+				'I'=>strval($k),
+				'REQUIRED'=>'_required',
+				'DEFAULT'=>''
 			)));
 		}
-		$name = placeholder_random_id();
-		$hidden = do_lorem_template('FORM_SCREEN_INPUT_HIDDEN_2', array(
-			'NAME' => $name,
-			'VALUE' => lorem_phrase()
+		$name=placeholder_random_id();
+		$hidden=do_lorem_template('FORM_SCREEN_INPUT_HIDDEN_2', array(
+			'NAME'=>$name,
+			'VALUE'=>lorem_phrase()
 		));
 
-		$name = placeholder_random_id();
-		foreach (placeholder_array() as $key => $value)
+		$name=placeholder_random_id();
+		foreach (placeholder_array() as $key=>$value)
 		{
 			$list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
-				'SELECTED' => '',
-				'DISABLED' => '',
-				'CLASS' => '',
-				'NAME' => $value,
-				'TEXT' => lorem_phrase()
+				'SELECTED'=>'',
+				'DISABLED'=>'',
+				'CLASS'=>'',
+				'NAME'=>$value,
+				'TEXT'=>lorem_phrase()
 			)));
 		}
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_LIST', array(
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name,
-			'CONTENT' => $list,
-			'INLINE_LIST' => false
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_LIST', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'CONTENT'=>$list,
+			'INLINE_LIST'=>false
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_MULTI_LIST', array(
-			'TABINDEX' => placeholder_number(),
-			'SIZE' => '5',
-			'NAME' => $name,
-			'CONTENT' => $list
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_MULTI_LIST', array(
+			'TABINDEX'=>placeholder_number(),
+			'SIZE'=>'5',
+			'NAME'=>$name,
+			'CONTENT'=>$list
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_PASSWORD', array(
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name,
-			'VALUE' => ''
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_PASSWORD', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'VALUE'=>''
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$radios = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
-			'DESCRIPTION' => lorem_phrase(),
-			'CHECKED' => 'true',
-			'TABINDEX' => placeholder_number(),
-			'NAME' => $name,
-			'VALUE' => lorem_word(),
-			'TEXT' => lorem_phrase()
+		$name=placeholder_random_id();
+		$radios=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
+			'DESCRIPTION'=>lorem_phrase(),
+			'CHECKED'=>'true',
+			'TABINDEX'=>placeholder_number(),
+			'NAME'=>$name,
+			'VALUE'=>lorem_word(),
+			'TEXT'=>lorem_phrase()
 		));
 		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
-			'DESCRIPTION' => lorem_phrase(),
-			'CHECKED' => 'true',
-			'TABINDEX' => placeholder_number(),
-			'NAME' => $name,
-			'VALUE' => lorem_word_2(),
-			'TEXT' => lorem_phrase()
+			'DESCRIPTION'=>lorem_phrase(),
+			'CHECKED'=>'true',
+			'TABINDEX'=>placeholder_number(),
+			'NAME'=>$name,
+			'VALUE'=>lorem_word_2(),
+			'TEXT'=>lorem_phrase()
 		)));
-		$input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
-			'CONTENT' => $radios
+		$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
+			'CONTENT'=>$radios
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => true,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>true,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_TREE_LIST', array(
-			'NICE_LABEL' => '',
-			'USE_SERVER_ID' => placeholder_id(),
-			'TABINDEX' => placeholder_number(),
-			'NAME' => $name,
-			'REQUIRED' => '',
-			'DEFAULT' => '',
-			'HOOK' => '',
-			'ROOT_ID' => '',
-			'OPTIONS' => serialize('')
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_TREE_LIST', array(
+			'NICE_LABEL'=>'',
+			'USE_SERVER_ID'=>placeholder_id(),
+			'TABINDEX'=>placeholder_number(),
+			'NAME'=>$name,
+			'REQUIRED'=>'',
+			'DEFAULT'=>'',
+			'HOOK'=>'',
+			'ROOT_ID'=>'',
+			'OPTIONS'=>serialize('')
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD', array(
-			'FILTER' => '',
-			'EXISTING_URL' => placeholder_url(),
-			'IS_IMAGE' => '',
-			'SWFUPLOAD' => false,
-			'EDIT' => '',
-			'TABINDEX' => placeholder_number(),
-			'REQUIRED' => '',
-			'NAME' => $name
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_UPLOAD', array(
+			'FILTER'=>'',
+			'EXISTING_URL'=>placeholder_url(),
+			'IS_IMAGE'=>'',
+			'SWFUPLOAD'=>false,
+			'EDIT'=>'',
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD_MULTI', array(
-			'TABINDEX' => placeholder_number(),
-			'FILTER' => '',
-			'SWFUPLOAD' => false,
-			'REQUIRED' => '',
-			'NAME' => $name,
-			'I' => $name,
-			'NAME_STUB' => lorem_word()
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_UPLOAD_MULTI', array(
+			'TABINDEX'=>placeholder_number(),
+			'FILTER'=>'',
+			'SWFUPLOAD'=>false,
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'I'=>$name,
+			'NAME_STUB'=>lorem_word()
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => true,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>true,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_USERNAME', array(
-			'TABINDEX' => placeholder_number(),
-			'NEEDS_MATCH' => true,
-			'REQUIRED' => '',
-			'NAME' => $name,
-			'DEFAULT' => ''
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_USERNAME', array(
+			'TABINDEX'=>placeholder_number(),
+			'NEEDS_MATCH'=>true,
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'DEFAULT'=>''
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => false,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$name = placeholder_random_id();
-		$input = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$name=placeholder_random_id();
+		$input=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_USERNAME_MULTI', array(
-				'PRETTY_NAME' => lorem_word(),
-				'TABINDEX' => placeholder_number(),
-				'NEEDS_MATCH' => true,
-				'NAME_STUB' => $name,
-				'I' => strval($k),
-				'REQUIRED' => '',
-				'DEFAULT' => ''
+				'PRETTY_NAME'=>lorem_word(),
+				'TABINDEX'=>placeholder_number(),
+				'NEEDS_MATCH'=>true,
+				'NAME_STUB'=>$name,
+				'I'=>strval($k),
+				'REQUIRED'=>'',
+				'DEFAULT'=>''
 			)));
 		}
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => true,
-			'NAME' => placeholder_random_id(),
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>true,
+			'NAME'=>placeholder_random_id(),
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
-		$input = new ocp_tempcode();
-		$options = array(
+		$input=new ocp_tempcode();
+		$options=array(
 			array(
 				'option1',
 				'opt1',
@@ -1109,7 +1110,7 @@ class Hook_addon_registry_core_form_interfaces
 		);
 		if (count($options[0]) != 3)
 		{
-			$options = array(
+			$options=array(
 				array(
 					$options,
 					NULL,
@@ -1120,53 +1121,53 @@ class Hook_addon_registry_core_form_interfaces
 
 		foreach ($options as $_option)
 		{
-			$out = array();
+			$out=array();
 			foreach ($_option[0] as $option)
 			{
-				$out[] = array(
-					'DISABLED' => false,
-					'CHECKED' => lorem_word(),
-					'TABINDEX' => placeholder_number(),
-					'NAME' => placeholder_random_id(),
-					'PRETTY_NAME' => lorem_word(),
-					'DESCRIPTION' => lorem_sentence()
+				$out[]=array(
+					'DISABLED'=>false,
+					'CHECKED'=>lorem_word(),
+					'TABINDEX'=>placeholder_number(),
+					'NAME'=>placeholder_random_id(),
+					'PRETTY_NAME'=>lorem_word(),
+					'DESCRIPTION'=>lorem_sentence()
 				);
 			}
 
 			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_VARIOUS_TICKS', array(
-				'SECTION_TITLE' => $_option[2],
-				'EXPANDED' => $_option[1],
-				'SIMPLE_STYLE' => false,
-				'BRETHREN_COUNT' => "3",
-				'OUT' => $out
+				'SECTION_TITLE'=>$_option[2],
+				'EXPANDED'=>$_option[1],
+				'SIMPLE_STYLE'=>false,
+				'BRETHREN_COUNT'=>"3",
+				'OUT'=>$out
 			)));
 		}
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => true,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>true,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
 		$hidden->attach(do_lorem_template('FORM_SCREEN_INPUT_HIDDEN', array(
-			'NAME' => lorem_word(),
-			'VALUE' => lorem_word()
+			'NAME'=>lorem_word(),
+			'VALUE'=>lorem_word()
 		)));
 
 		return array(
 			lorem_globalise(do_lorem_template('FORM_SCREEN', array(
-				'GET' => NULL,
-				'SKIP_VALIDATION' => true,
-				'HIDDEN' => $hidden,
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'FIELDS' => $fields,
-				'SUBMIT_NAME' => lorem_word(),
-				'TEXT' => lorem_sentence_html()
+				'GET'=>NULL,
+				'SKIP_VALIDATION'=>true,
+				'HIDDEN'=>$hidden,
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'FIELDS'=>$fields,
+				'SUBMIT_NAME'=>lorem_word(),
+				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
 		);
 	}
@@ -1182,10 +1183,10 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('POSTING_SCREEN', array(
-				'POSTING_FORM' => placeholder_form(),
-				'HIDDEN' => '',
-				'TITLE' => lorem_title(),
-				'TEXT' => lorem_sentence_html()
+				'POSTING_FORM'=>placeholder_form(),
+				'HIDDEN'=>'',
+				'TITLE'=>lorem_title(),
+				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
 		);
 	}
@@ -1201,8 +1202,8 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('FORM_GROUP', array(
-				'FIELDS' => placeholder_fields(),
-				'HIDDEN' => ''
+				'FIELDS'=>placeholder_fields(),
+				'HIDDEN'=>''
 			)), NULL, '', true)
 		);
 	}
@@ -1218,11 +1219,11 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('FORM_GROUPED', array(
-				'TEXT' => lorem_sentence_html(),
-				'FIELD_GROUPS' => lorem_phrase(),
-				'SUBMIT_NAME' => lorem_word(),
-				'SUBMIT_BUTTON_CLASS' => lorem_phrase(),
-				'URL' => placeholder_url()
+				'TEXT'=>lorem_sentence_html(),
+				'FIELD_GROUPS'=>lorem_phrase(),
+				'SUBMIT_NAME'=>lorem_word(),
+				'SUBMIT_BUTTON_CLASS'=>lorem_phrase(),
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -1238,9 +1239,9 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('FORM_FIELD_SET_GROUPER', array(
-				'NAME' => lorem_word(),
-				'ID' => placeholder_random_id(),
-				'FIELDS' => placeholder_fields()
+				'NAME'=>lorem_word(),
+				'ID'=>placeholder_random_id(),
+				'FIELDS'=>placeholder_fields()
 			)), NULL, '', true)
 		);
 	}
@@ -1256,15 +1257,15 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_SPELLING', array(
-				'FIELD' => lorem_phrase(),
-				'MISSPELLINGS' => array(
+				'FIELD'=>lorem_phrase(),
+				'MISSPELLINGS'=>array(
 					array(
-						'WORD' => 'batt',
-						'CORRECTIONS' => 'bat'
+						'WORD'=>'batt',
+						'CORRECTIONS'=>'bat'
 					),
 					array(
-						'WORD' => 'caat',
-						'CORRECTIONS' => 'cat'
+						'WORD'=>'caat',
+						'CORRECTIONS'=>'cat'
 					)
 				)
 			)), NULL, '', true)
@@ -1282,11 +1283,11 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_KEYWORD_DENSITY', array(
-				'FIELD' => lorem_phrase(),
-				'KEYWORDS' => placeholder_array(),
-				'KEYWORD' => lorem_word(),
-				'DENSITY' => placeholder_id(),
-				'IDEAL_DENSITY' => placeholder_number()
+				'FIELD'=>lorem_phrase(),
+				'KEYWORDS'=>placeholder_array(),
+				'KEYWORD'=>lorem_word(),
+				'DENSITY'=>placeholder_id(),
+				'IDEAL_DENSITY'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}
@@ -1302,8 +1303,8 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_CODE', array(
-				'NEW_POST_VALUE_HTML' => lorem_phrase(),
-				'NEW_POST_VALUE' => lorem_phrase()
+				'NEW_POST_VALUE_HTML'=>lorem_phrase(),
+				'NEW_POST_VALUE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -1319,97 +1320,97 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		require_lang('comcode');
 		require_lang('dates');
-		$input = new ocp_tempcode();
-		$fields = new ocp_tempcode();
-		foreach (placeholder_array(1) as $key => $val)
+		$input=new ocp_tempcode();
+		$fields=new ocp_tempcode();
+		foreach (placeholder_array(1) as $key=>$val)
 		{
-			$input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE', array(
-				'CHECKED' => true,
-				'NAME' => 'path',
-				'VALUE' => $val,
-				'URL' => placeholder_image_url(),
-				'PRETTY' => strval($key)
+			$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE', array(
+				'CHECKED'=>true,
+				'NAME'=>'path',
+				'VALUE'=>$val,
+				'URL'=>placeholder_image_url(),
+				'PRETTY'=>strval($key)
 			));
 			$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-				'REQUIRED' => true,
-				'SKIP_LABEL' => false,
-				'NAME' => 'path' . "_" . $val,
-				'PRETTY_NAME' => lorem_word(),
-				'DESCRIPTION' => lorem_sentence_html(),
-				'DESCRIPTION_SIDE' => '',
-				'INPUT' => $input,
-				'COMCODE' => ''
+				'REQUIRED'=>true,
+				'SKIP_LABEL'=>false,
+				'NAME'=>'path' . "_" . $val,
+				'PRETTY_NAME'=>lorem_word(),
+				'DESCRIPTION'=>lorem_sentence_html(),
+				'DESCRIPTION_SIDE'=>'',
+				'INPUT'=>$input,
+				'COMCODE'=>''
 			)));
 		}
-		$content = new ocp_tempcode();
-		$i = 0;
-		foreach (placeholder_array() as $k => $v)
+		$content=new ocp_tempcode();
+		$i=0;
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$cells = new ocp_tempcode();
-			foreach (placeholder_array() as $k => $v)
+			$cells=new ocp_tempcode();
+			foreach (placeholder_array() as $k=>$v)
 			{
-				$temp = do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY', array(
-					'CHECKED' => 'true',
-					'PRETTY' => lorem_phrase(),
-					'NAME' => placeholder_random_id(),
-					'CODE' => $v,
-					'URL' => placeholder_image_url()
+				$temp=do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY', array(
+					'CHECKED'=>'true',
+					'PRETTY'=>lorem_phrase(),
+					'NAME'=>placeholder_random_id(),
+					'CODE'=>$v,
+					'URL'=>placeholder_image_url()
 				));
 				$cells->attach($temp);
 			}
 
-			$input = do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY', array(
-				'DISPLAY' => 'block',
-				'CATEGORY' => $cells,
-				'CATEGORY_NAME' => lorem_word()
+			$input=do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY', array(
+				'DISPLAY'=>'block',
+				'CATEGORY'=>$cells,
+				'CATEGORY_NAME'=>lorem_word()
 			));
 			$content->attach($input);
 		}
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
-			'NAME' => $name,
-			'CODE' => '',
-			'TABINDEX' => placeholder_number(),
-			'CONTENT' => $content
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
+			'NAME'=>$name,
+			'CODE'=>'',
+			'TABINDEX'=>placeholder_number(),
+			'CONTENT'=>$content
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => true,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>true,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
 		$fields->attach(do_lorem_template('POSTING_FIELD', array(
-			'REQUIRED' => true,
-			'DESCRIPTION' => lorem_phrase(),
-			'HIDDEN_FIELDS' => '',
-			'PRETTY_NAME' => lorem_word(),
-			'NAME' => placeholder_random_id(),
-			'TABINDEX_PF' => placeholder_random(),
-			'COMCODE_EDITOR' => placeholder_blank(),
-			'COMCODE_EDITOR_SMALL' => placeholder_blank(),
-			'CLASS' => lorem_word(),
-			'COMCODE_URL' => placeholder_url(),
-			'EMOTICON_CHOOSER' => placeholder_emoticon_chooser(),
-			'COMCODE_HELP' => placeholder_blank(),
-			'POST' => placeholder_blank(),
-			'DEFAULT_PARSED' => placeholder_blank(),
-			'ATTACHMENTS' => placeholder_blank()
+			'REQUIRED'=>true,
+			'DESCRIPTION'=>lorem_phrase(),
+			'HIDDEN_FIELDS'=>'',
+			'PRETTY_NAME'=>lorem_word(),
+			'NAME'=>placeholder_random_id(),
+			'TABINDEX_PF'=>placeholder_random(),
+			'COMCODE_EDITOR'=>placeholder_blank(),
+			'COMCODE_EDITOR_SMALL'=>placeholder_blank(),
+			'CLASS'=>lorem_word(),
+			'COMCODE_URL'=>placeholder_url(),
+			'EMOTICON_CHOOSER'=>placeholder_emoticon_chooser(),
+			'COMCODE_HELP'=>placeholder_blank(),
+			'POST'=>placeholder_blank(),
+			'DEFAULT_PARSED'=>placeholder_blank(),
+			'ATTACHMENTS'=>placeholder_blank()
 		)));
 
 		return array(
 			lorem_globalise(do_lorem_template('FORM_SCREEN', array(
-				'GET' => NULL,
-				'HIDDEN' => '',
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'FIELDS' => $fields,
-				'SUBMIT_NAME' => lorem_word(),
-				'TEXT' => lorem_sentence_html()
+				'GET'=>NULL,
+				'HIDDEN'=>'',
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'FIELDS'=>$fields,
+				'SUBMIT_NAME'=>lorem_word(),
+				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
 		);
 	}
@@ -1441,8 +1442,8 @@ class Hook_addon_registry_core_form_interfaces
 		require_lang('dates');
 
 
-		$buttons = new ocp_tempcode();
-		$_buttons = array(
+		$buttons=new ocp_tempcode();
+		$_buttons=array(
 			'img',
 			'thumb',
 			'url',
@@ -1458,61 +1459,61 @@ class Hook_addon_registry_core_form_interfaces
 		foreach ($_buttons as $button)
 		{
 			$buttons->attach(do_lorem_template('COMCODE_EDITOR_BUTTON', array(
-				'DIVIDER' => true,
-				'FIELD_NAME' => lorem_word(),
-				'TITLE' => lorem_phrase(),
-				'B' => $button
+				'DIVIDER'=>true,
+				'FIELD_NAME'=>lorem_word(),
+				'TITLE'=>lorem_phrase(),
+				'B'=>$button
 			)));
 		}
 
-		$micro_buttons = new ocp_tempcode();
-		$_micro_buttons = array(
+		$micro_buttons=new ocp_tempcode();
+		$_micro_buttons=array(
 			array(
-				't' => 'b'
+				't'=>'b'
 			),
 			array(
-				't' => 'i'
+				't'=>'i'
 			)
 		);
 
 		foreach ($_micro_buttons as $button)
 		{
 			$micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON', array(
-				'FIELD_NAME' => lorem_word(),
-				'TITLE' => lorem_phrase(),
-				'B' => $button['t']
+				'FIELD_NAME'=>lorem_word(),
+				'TITLE'=>lorem_phrase(),
+				'B'=>$button['t']
 			)));
 		}
 
-		$comcode = do_lorem_template('COMCODE_EDITOR', array(
-			'POSTING_FIELD' => lorem_word(),
-			'BUTTONS' => $buttons,
-			'MICRO_BUTTONS' => $micro_buttons
+		$comcode=do_lorem_template('COMCODE_EDITOR', array(
+			'POSTING_FIELD'=>lorem_word(),
+			'BUTTONS'=>$buttons,
+			'MICRO_BUTTONS'=>$micro_buttons
 		));
 
 
 		return array(
 			lorem_globalise(do_lorem_template('POSTING_FORM', array(
-				'TABINDEX_PF' => placeholder_number(),
-				'JAVASCRIPT' => '',
-				'PREVIEW' => lorem_phrase(),
-				'COMCODE_EDITOR' => $comcode,
-				'COMCODE_EDITOR_SMALL' => lorem_phrase(),
-				'CLASS' => lorem_phrase(),
-				'COMCODE_URL' => placeholder_url(),
-				'EXTRA' => lorem_phrase(),
-				'POST_COMMENT' => lorem_phrase(),
-				'EMOTICON_CHOOSER' => lorem_phrase(),
-				'SUBMIT_NAME' => lorem_word(),
-				'HIDDEN_FIELDS' => '',
-				'COMCODE_HELP' => lorem_phrase(),
-				'URL' => placeholder_url(),
-				'POST' => lorem_phrase(),
-				'DEFAULT_PARSED' => lorem_phrase(),
-				'CONTINUE_URL' => placeholder_url(),
-				'ATTACHMENTS' => lorem_phrase(),
-				'SPECIALISATION' => placeholder_fields(),
-				'SPECIALISATION2' => placeholder_fields()
+				'TABINDEX_PF'=>placeholder_number(),
+				'JAVASCRIPT'=>'',
+				'PREVIEW'=>lorem_phrase(),
+				'COMCODE_EDITOR'=>$comcode,
+				'COMCODE_EDITOR_SMALL'=>lorem_phrase(),
+				'CLASS'=>lorem_phrase(),
+				'COMCODE_URL'=>placeholder_url(),
+				'EXTRA'=>lorem_phrase(),
+				'POST_COMMENT'=>lorem_phrase(),
+				'EMOTICON_CHOOSER'=>lorem_phrase(),
+				'SUBMIT_NAME'=>lorem_word(),
+				'HIDDEN_FIELDS'=>'',
+				'COMCODE_HELP'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'POST'=>lorem_phrase(),
+				'DEFAULT_PARSED'=>lorem_phrase(),
+				'CONTINUE_URL'=>placeholder_url(),
+				'ATTACHMENTS'=>lorem_phrase(),
+				'SPECIALISATION'=>placeholder_fields(),
+				'SPECIALISATION2'=>placeholder_fields()
 			)), NULL, '', true)
 		);
 	}
@@ -1541,61 +1542,61 @@ class Hook_addon_registry_core_form_interfaces
 	function tpl_preview__administrative__form_screen_input_permission()
 	{
 		require_lang('permissions');
-		$permission_rows = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$permission_rows=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$overrides = new ocp_tempcode();
-			$all_global = true;
-			foreach (placeholder_array() as $k => $v)
+			$overrides=new ocp_tempcode();
+			$all_global=true;
+			foreach (placeholder_array() as $k=>$v)
 			{
 				$overrides->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE', array(
-					'FORCE_PRESETS' => false,
-					'GROUP_NAME' => lorem_phrase(),
-					'VIEW_ACCESS' => '',
-					'TABINDEX' => placeholder_number(),
-					'GROUP_ID' => placeholder_random_id(),
-					'SP' => strval($k),
-					'ALL_GLOBAL' => true,
-					'TITLE' => lorem_phrase(),
-					'DEFAULT_ACCESS' => placeholder_number(),
-					'CODE' => '-1'
+					'FORCE_PRESETS'=>false,
+					'GROUP_NAME'=>lorem_phrase(),
+					'VIEW_ACCESS'=>'',
+					'TABINDEX'=>placeholder_number(),
+					'GROUP_ID'=>placeholder_random_id(),
+					'SP'=>strval($k),
+					'ALL_GLOBAL'=>true,
+					'TITLE'=>lorem_phrase(),
+					'DEFAULT_ACCESS'=>placeholder_number(),
+					'CODE'=>'-1'
 				)));
 			}
 
 			$permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION', array(
-				'FORCE_PRESETS' => false,
-				'GROUP_NAME' => lorem_phrase(),
-				'OVERRIDES' => $overrides->evaluate() /*FUDGEFUDGE*/ ,
-				'ALL_GLOBAL' => true,
-				'VIEW_ACCESS' => '',
-				'TABINDEX' => placeholder_number(),
-				'GROUP_ID' => placeholder_random_id(),
-				'PINTERFACE_VIEW' => ''
+				'FORCE_PRESETS'=>false,
+				'GROUP_NAME'=>lorem_phrase(),
+				'OVERRIDES'=>$overrides->evaluate() /*FUDGEFUDGE*/ ,
+				'ALL_GLOBAL'=>true,
+				'VIEW_ACCESS'=>'',
+				'TABINDEX'=>placeholder_number(),
+				'GROUP_ID'=>placeholder_random_id(),
+				'PINTERFACE_VIEW'=>''
 			)));
 		}
 
 		$permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_ADMIN', array(
-			'PINTERFACE_VIEW' => lorem_word(),
-			'GROUP_ID' => placeholder_random_id(),
-			'GROUP_NAME' => lorem_phrase(),
-			'FORCE_PRESETS' => false,
-			'OVERRIDES' => placeholder_array()
+			'PINTERFACE_VIEW'=>lorem_word(),
+			'GROUP_ID'=>placeholder_random_id(),
+			'GROUP_NAME'=>lorem_phrase(),
+			'FORCE_PRESETS'=>false,
+			'OVERRIDES'=>placeholder_array()
 		)));
 
-		$field = do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX', array(
-			'TITLE' => lorem_phrase(),
-			'SERVER_ID' => placeholder_id(),
-			'COLOR' => lorem_word(),
-			'OVERRIDES' => placeholder_array(),
-			'PERMISSION_ROWS' => $permission_rows
+		$field=do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX', array(
+			'TITLE'=>lorem_phrase(),
+			'SERVER_ID'=>placeholder_id(),
+			'COLOR'=>lorem_word(),
+			'OVERRIDES'=>placeholder_array(),
+			'PERMISSION_ROWS'=>$permission_rows
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('FORM_GROUPED', array(
-				'URL' => '#',
-				'FIELD_GROUPS' => $field,
-				'TEXT' => '',
-				'SUBMIT_NAME' => lorem_word_2()
+				'URL'=>'#',
+				'FIELD_GROUPS'=>$field,
+				'TEXT'=>'',
+				'SUBMIT_NAME'=>lorem_word_2()
 			)), NULL, '', true)
 		);
 	}
@@ -1611,37 +1612,37 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		require_lang('permissions');
 
-		$fields = new ocp_tempcode();
+		$fields=new ocp_tempcode();
 
-		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
-			'NAME' => $name,
-			'CODE' => '',
-			'TABINDEX' => placeholder_number(),
-			'CONTENT' => lorem_phrase(),
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
+			'NAME'=>$name,
+			'CODE'=>'',
+			'TABINDEX'=>placeholder_number(),
+			'CONTENT'=>lorem_phrase(),
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED' => true,
-			'SKIP_LABEL' => true,
-			'NAME' => $name,
-			'PRETTY_NAME' => lorem_word(),
-			'DESCRIPTION' => lorem_sentence_html(),
-			'DESCRIPTION_SIDE' => '',
-			'INPUT' => $input,
-			'COMCODE' => ''
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>true,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
 		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER', array(
-			'INNER' => lorem_word()
+			'INNER'=>lorem_word()
 		)));
 
 		return array(
 			lorem_globalise(do_lorem_template('FORM', array(
-				'URL' => '#',
-				'FIELDS' => $fields,
-				'HIDDEN' => '',
-				'TEXT' => '',
-				'SUBMIT_NAME' => lorem_word_2()
+				'URL'=>'#',
+				'FIELDS'=>$fields,
+				'HIDDEN'=>'',
+				'TEXT'=>'',
+				'SUBMIT_NAME'=>lorem_word_2()
 			)), NULL, '', true)
 		);
 	}
@@ -1657,11 +1658,11 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PREVIEW_SCRIPT', array(
-				'OUTPUT' => lorem_phrase(),
-				'HIDDEN' => '',
-				'VALIDATION' => lorem_phrase(),
-				'KEYWORD_DENSITY' => lorem_phrase(),
-				'SPELLING' => lorem_phrase()
+				'OUTPUT'=>lorem_phrase(),
+				'HIDDEN'=>'',
+				'VALIDATION'=>lorem_phrase(),
+				'KEYWORD_DENSITY'=>lorem_phrase(),
+				'SPELLING'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -1678,21 +1679,21 @@ class Hook_addon_registry_core_form_interfaces
 		require_lang('blocks');
 		require_lang('comcode');
 
-		$links = new ocp_tempcode();
+		$links=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
 			$links->attach(do_lorem_template('BLOCK_HELPER_BLOCK_CHOICE', array(
-				'USAGE' => placeholder_array(),
-				'DESCRIPTION' => lorem_paragraph_html(),
-				'URL' => placeholder_url(),
-				'LINK_CAPTION' => lorem_phrase()
+				'USAGE'=>placeholder_array(),
+				'DESCRIPTION'=>lorem_paragraph_html(),
+				'URL'=>placeholder_url(),
+				'LINK_CAPTION'=>lorem_phrase()
 			)));
 		}
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_HELPER_BLOCK_GROUP', array(
-				'IMG' => 'themes/default/images/bigicons/add_one.png',
-				'TITLE' => lorem_phrase(),
-				'LINKS' => $links
+				'IMG'=>'themes/default/images/bigicons/add_one.png',
+				'TITLE'=>lorem_phrase(),
+				'LINKS'=>$links
 			)), NULL, '', true)
 		);
 	}
@@ -1710,8 +1711,8 @@ class Hook_addon_registry_core_form_interfaces
 		return array(
 			lorem_globalise(
 				do_lorem_template('BLOCK_HELPER_START',array(
-					'TITLE' => lorem_phrase(),
-					'LINKS' => lorem_paragraph_html(),
+					'TITLE'=>lorem_phrase(),
+					'LINKS'=>lorem_paragraph_html(),
 				)
 			),NULL,'',true),
 		);
@@ -1728,12 +1729,12 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_HELPER_DONE', array(
-				'TITLE' => lorem_phrase(),
-				'FIELD_NAME' => placeholder_id(),
-				'BLOCK' => lorem_phrase(),
-				'COMCODE_XML' => lorem_phrase(),
-				'COMCODE' => lorem_phrase(),
-				'COMCODE_SEMIHTML' => lorem_phrase()
+				'TITLE'=>lorem_phrase(),
+				'FIELD_NAME'=>placeholder_id(),
+				'BLOCK'=>lorem_phrase(),
+				'COMCODE_XML'=>lorem_phrase(),
+				'COMCODE'=>lorem_phrase(),
+				'COMCODE_SEMIHTML'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

@@ -155,17 +155,17 @@ class Block_side_weather
 				$out=array();
 				$content=$item['news'];
 				if (preg_match('/<img src="(.*)"\/?'.'>/Usm',$item['news'],$out)!=0)
-					$image = $out[1];
+					$image=$out[1];
 				else
-					$image = '';
+					$image='';
 				if (preg_match('/Current Conditions:<\/b><br \/>(.*)<BR \/>/Uism',$item['news'],$out)!=0)
-					$cur_conditions = $out[1];
+					$cur_conditions=$out[1];
 				else
-					$cur_conditions = '';
+					$cur_conditions='';
 				if (preg_match('/Forecast:<\/b><BR \/>(.*)<br \/>/ism',$item['news'],$out)!=0)
-					$forecast = $out[1];
+					$forecast=$out[1];
 				else
-					$forecast = '';
+					$forecast='';
 			}
 		}
 

@@ -51,7 +51,7 @@ class Hook_themewizard_compute_equation
 
 			$colours=calculate_theme($seed,$theme,'equations','colours',$dark);
 			$parsed_equation=parse_css_colour_expression($equation);
-			if (is_null($parsed_equation)) return make_string_tempcode('');
+			if (is_null($parsed_equation)) return array('','','','?');
 			$answer=execute_css_colour_expression($parsed_equation,$colours[0]);
 			if (is_null($answer)) return array('','','','?');
 

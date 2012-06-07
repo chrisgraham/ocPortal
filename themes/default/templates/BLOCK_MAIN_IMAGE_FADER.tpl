@@ -11,7 +11,7 @@
 
 			<h2>{!MEDIA}</h2>
 
-			<div class="gallery_tease_pic_teaser left" id="tease_scrolling_text">
+			<div class="gallery_tease_pic_teaser left" id="image_fader_scrolling_text_{$GET,RAND}">
 			</div>
 		</div>
 	</div></div>
@@ -21,7 +21,7 @@
 	add_event_listener_abstract(window,'load',function () {
 		var fp_animation=document.getElementById('image_fader_{$GET,RAND}');
 		var fp_animation_fader=document.createElement('img');
-		var tease_scrolling_text=document.getElementById('tease_scrolling_text');
+		var tease_scrolling_text=document.getElementById('image_fader_scrolling_text_{$GET,RAND}');
 		fp_animation_fader.className='img_thumb';
 		fp_animation.parentNode.insertBefore(fp_animation_fader,fp_animation);
 		fp_animation.parentNode.style.position='relative';

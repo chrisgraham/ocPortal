@@ -539,9 +539,7 @@ class Module_admin
 					$null_test=$hook->get_default();
 				} else
 				{
-					$t_backup=$t;
 					$null_test=eval($p['eval']);
-					$t=$t_backup;
 				}
 
 				if (!is_null($null_test))

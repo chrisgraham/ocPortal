@@ -58,10 +58,10 @@ class Hook_addon_registry_page_management
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
-			'previously_in_addon' => array(
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
+			'previously_in_addon'=>array(
 				'core_page_management'
 			)
 		);
@@ -99,9 +99,9 @@ class Hook_addon_registry_page_management
 	function tpl_previews()
 	{
 		return array(
-			'SITE_TREE_EDITOR_SCREEN.tpl' => 'administrative__site_tree_editor_screen',
-			'VALIDATE_CHECK_SCREEN.tpl' => 'administrative__validate_check_screen',
-			'VALIDATE_CHECK_ERROR.tpl' => 'administrative__validate_check_screen'
+			'SITE_TREE_EDITOR_SCREEN.tpl'=>'administrative__site_tree_editor_screen',
+			'VALIDATE_CHECK_SCREEN.tpl'=>'administrative__validate_check_screen',
+			'VALIDATE_CHECK_ERROR.tpl'=>'administrative__validate_check_screen'
 		);
 	}
 
@@ -122,7 +122,7 @@ class Hook_addon_registry_page_management
 		require_lang('zones');
 		return array(
 			lorem_globalise(do_lorem_template('SITE_TREE_EDITOR_SCREEN', array(
-				'TITLE' => lorem_title()
+				'TITLE'=>lorem_title()
 			)), NULL, '', true)
 		);
 	}
@@ -137,18 +137,18 @@ class Hook_addon_registry_page_management
 	function tpl_preview__administrative__validate_check_screen()
 	{
 		require_lang('validation');
-		$content = new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $val)
 		{
 			$content->attach(do_lorem_template('VALIDATE_CHECK_ERROR', array(
-				'URL' => placeholder_url(),
-				'POINT' => lorem_phrase()
+				'URL'=>placeholder_url(),
+				'POINT'=>lorem_phrase()
 			)));
 		}
 		return array(
 			lorem_globalise(do_lorem_template('VALIDATE_CHECK_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'CONTENTS' => $content
+				'TITLE'=>lorem_title(),
+				'CONTENTS'=>$content
 			)), NULL, '', true)
 		);
 	}

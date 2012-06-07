@@ -165,7 +165,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
  * @param  BINARY				Whether the download may be trackbacked
  * @param  LONG_TEXT			Hidden notes pertaining to the download
  */
-function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$start_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
+function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$meta_keywords,$meta_description,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
 {
 	$myrows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('e_title','e_content','e_submitter'),array('id'=>$id),'',1);
 	$myrow=$myrows[0];

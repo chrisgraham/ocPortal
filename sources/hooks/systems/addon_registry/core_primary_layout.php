@@ -58,9 +58,9 @@ class Hook_addon_registry_core_primary_layout
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -100,19 +100,19 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_previews()
 	{
 		return array(
-			'BREADCRUMB_ESCAPED.tpl' => 'breadcrumb',
-			'BREADCRUMB.tpl' => 'breadcrumb',
-			'CLOSED_SITE.tpl' => 'closed_site',
-			'CSS_NEED_FULL.tpl' => 'css_need_full',
-			'MESSAGE.tpl' => 'message',
-			'MAIL_SUBJECT.tpl' => 'mail_subject',
-			'MAIL.tpl' => 'mail',
-			'GLOBAL_HTML_WRAP.tpl' => 'global_html_wrap',
-			'GLOBAL_HTML_WRAP_mobile.tpl' => 'global_html_wrap',
-			'GLOBAL_HELPER_PANEL.tpl' => 'global',
-			'SCREEN_TITLE.tpl' => 'screen_title',
-			'MINOR_TITLE.tpl' => 'minor_title',
-			'SECTION_TITLE.tpl' => 'section_title'
+			'BREADCRUMB_ESCAPED.tpl'=>'breadcrumb',
+			'BREADCRUMB.tpl'=>'breadcrumb',
+			'CLOSED_SITE.tpl'=>'closed_site',
+			'CSS_NEED_FULL.tpl'=>'css_need_full',
+			'MESSAGE.tpl'=>'message',
+			'MAIL_SUBJECT.tpl'=>'mail_subject',
+			'MAIL.tpl'=>'mail',
+			'GLOBAL_HTML_WRAP.tpl'=>'global_html_wrap',
+			'GLOBAL_HTML_WRAP_mobile.tpl'=>'global_html_wrap',
+			'GLOBAL_HELPER_PANEL.tpl'=>'global',
+			'SCREEN_TITLE.tpl'=>'screen_title',
+			'MINOR_TITLE.tpl'=>'minor_title',
+			'SECTION_TITLE.tpl'=>'section_title'
 		);
 	}
 
@@ -125,9 +125,9 @@ class Hook_addon_registry_core_primary_layout
 	 */
 	function tpl_preview__breadcrumb()
 	{
-		$out = new ocp_tempcode();
+		$out=new ocp_tempcode();
 		$out->attach(lorem_phrase());
-		$bc = do_lorem_template('BREADCRUMB', array());
+		$bc=do_lorem_template('BREADCRUMB', array());
 		$out->attach($bc->evaluate());
 		$out->attach(lorem_phrase());
 		$out->attach(do_lorem_template('BREADCRUMB_ESCAPED', array()));
@@ -148,9 +148,9 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('CLOSED_SITE', array(
-				'CLOSED' => lorem_phrase(),
-				'LOGIN_URL' => placeholder_url(),
-				'JOIN_URL' => placeholder_url()
+				'CLOSED'=>lorem_phrase(),
+				'LOGIN_URL'=>placeholder_url(),
+				'JOIN_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -166,7 +166,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('CSS_NEED_FULL', array(
-				'URL' => placeholder_url()
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -182,8 +182,8 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('MESSAGE', array(
-				'TYPE' => placeholder_img_code('messageicons'),
-				'MESSAGE' => lorem_phrase()
+				'TYPE'=>placeholder_img_code('messageicons'),
+				'MESSAGE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -199,7 +199,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('MAIL_SUBJECT', array(
-				'SUBJECT_LINE' => lorem_word()
+				'SUBJECT_LINE'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -215,12 +215,12 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('MAIL', array(
-				'CSS' => '',
-				'LOGOURL' => placeholder_image_url(),
-				'LOGOMAP' => '',
-				'LANG' => fallback_lang(),
-				'TITLE' => lorem_phrase(),
-				'CONTENT' => lorem_paragraph()
+				'CSS'=>'',
+				'LOGOURL'=>placeholder_image_url(),
+				'LOGOMAP'=>'',
+				'LANG'=>fallback_lang(),
+				'TITLE'=>lorem_phrase(),
+				'CONTENT'=>lorem_paragraph()
 			)), NULL, '', true)
 		);
 	}
@@ -234,8 +234,8 @@ class Hook_addon_registry_core_primary_layout
 	 */
 	function tpl_preview__global_html_wrap()
 	{
-		$out = do_lorem_template('GLOBAL_HTML_WRAP', array(
-			'MIDDLE' => lorem_paragraph_html(),
+		$out=do_lorem_template('GLOBAL_HTML_WRAP', array(
+			'MIDDLE'=>lorem_paragraph_html(),
 		));
 
 		return array(
@@ -255,13 +255,13 @@ class Hook_addon_registry_core_primary_layout
 		require_lang('awards');
 		return array(
 			lorem_globalise(do_lorem_template('SCREEN_TITLE', array(
-				'TITLE' => lorem_phrase(),
-				'HELP_URL' => placeholder_url(),
-				'HELP_TERM' => lorem_word(),
-				'AWARDS' => array(
+				'TITLE'=>lorem_phrase(),
+				'HELP_URL'=>placeholder_url(),
+				'HELP_TERM'=>lorem_word(),
+				'AWARDS'=>array(
 					array(
-						'AWARD_TYPE' => lorem_title(),
-						'AWARD_TIMESTAMP' => placeholder_time()
+						'AWARD_TYPE'=>lorem_title(),
+						'AWARD_TIMESTAMP'=>placeholder_time()
 					)
 				)
 			)), NULL, '', true)
@@ -279,7 +279,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('MINOR_TITLE', array(
-				'TITLE' => lorem_phrase()
+				'TITLE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -295,7 +295,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('SECTION_TITLE', array(
-				'TITLE' => lorem_phrase()
+				'TITLE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

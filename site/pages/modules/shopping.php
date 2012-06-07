@@ -48,19 +48,14 @@ class Module_shopping
 	function uninstall()
 	{		
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_cart');
-
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order_details');
-
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order');
-
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_logging');
-
 		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order_addresses');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'shopping'));
 
 		delete_config_option('shipping_cost_factor');
-
 		delete_config_option('allow_opting_out_of_tax');
 
 		delete_menu_item_simple('_SEARCH:catalogues:type=category:catalogue_name=products');
@@ -339,7 +334,7 @@ class Module_shopping
 
 			$empty_cart=build_url(array('page'=>'_SELF','type'=>'empty_cart'),'_SELF');
 
-			$checkout 	= 	build_url(array('page'=>'_SELF','type'=>'pay'),'_SELF');
+			$checkout=build_url(array('page'=>'_SELF','type'=>'pay'),'_SELF');
 
 			$payment_form=payment_form();			
 
@@ -361,7 +356,7 @@ class Module_shopping
 
 		$ecom_catalogue=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_ecommerce'=>1));
 
-		$cont_shopping = 	is_null($ecom_catalogue)?new ocp_tempcode():build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
+		$cont_shopping=is_null($ecom_catalogue)?new ocp_tempcode():build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
 
 		//Product id string for hidden field in Shopping cart
 		$pro_ids_val=is_array($pro_ids)?implode(',',$pro_ids):'';
@@ -588,7 +583,7 @@ class Module_shopping
 
 			if (count($_POST)!=0)
 			{
-				$order_id = handle_transaction_script();
+				$order_id=handle_transaction_script();
 
 				$object=find_product(do_lang('CART-ORDER',$order_id));
 

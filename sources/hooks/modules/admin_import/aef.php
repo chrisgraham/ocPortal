@@ -465,9 +465,9 @@ class Hook_aef
 
 		foreach ($rows as $row)
 		{
-			$ban_time = $row['temp_ban_time']; //when is banned user
-			$ban_period = $row['temp_ban']; //how many days is banned
-			$ban_till = $ban_time+$ban_period; //the user is banned till this date/time
+			$ban_time=$row['temp_ban_time']; //when is banned user
+			$ban_period=$row['temp_ban']; //how many days is banned
+			$ban_till=$ban_time+$ban_period; //the user is banned till this date/time
 
 			if ($ban_till < time()) continue;
 

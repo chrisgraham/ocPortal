@@ -58,9 +58,9 @@ class Hook_addon_registry_authors
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -104,12 +104,12 @@ class Hook_addon_registry_authors
 	function tpl_previews()
 	{
 		return array(
-			'AUTHOR_MANAGE_SCREEN.tpl' => 'author_manage_screen',
-			'AUTHOR_SCREEN.tpl' => 'author_screen',
-			'AUTHOR_POPUP.tpl' => 'author_popup_window',
-			'AUTHOR_POPUP_WINDOW_DEFINED.tpl' => 'author_popup_window',
-			'AUTHOR_POPUP_WINDOW_UNDEFINED.tpl' => 'author_popup_window',
-			'AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY.tpl' => 'author_screen'
+			'AUTHOR_MANAGE_SCREEN.tpl'=>'author_manage_screen',
+			'AUTHOR_SCREEN.tpl'=>'author_screen',
+			'AUTHOR_POPUP.tpl'=>'author_popup_window',
+			'AUTHOR_POPUP_WINDOW_DEFINED.tpl'=>'author_popup_window',
+			'AUTHOR_POPUP_WINDOW_UNDEFINED.tpl'=>'author_popup_window',
+			'AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY.tpl'=>'author_screen'
 		);
 	}
 
@@ -126,9 +126,9 @@ class Hook_addon_registry_authors
 		require_lang('authors');
 		return array(
 			lorem_globalise(do_lorem_template('AUTHOR_MANAGE_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'DEFINE_FORM' => placeholder_form(),
-				'MERGE_FORM' => placeholder_form()
+				'TITLE'=>lorem_title(),
+				'DEFINE_FORM'=>placeholder_form(),
+				'MERGE_FORM'=>placeholder_form()
 			)), NULL, '', true)
 		);
 	}
@@ -144,63 +144,63 @@ class Hook_addon_registry_authors
 	{
 		require_lang('authors');
 
-		$news_released = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$news_released=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$tpl = do_lorem_template('NEWS_BRIEF', array(
-				'DATE' => placeholder_time(),
-				'URL' => placeholder_url(),
-				'TITLE_PLAIN' => lorem_word(),
-				'ID' => placeholder_id(),
-				'TITLE' => lorem_word()
+			$tpl=do_lorem_template('NEWS_BRIEF', array(
+				'DATE'=>placeholder_time(),
+				'URL'=>placeholder_url(),
+				'TITLE_PLAIN'=>lorem_word(),
+				'ID'=>placeholder_id(),
+				'TITLE'=>lorem_word()
 			));
 			$news_released->attach($tpl);
 		}
 
-		$downloads_released = new ocp_tempcode();
+		$downloads_released=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
 			$downloads_released->attach(lorem_sentence_html());
 		}
 
-		$staff_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
-			'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('DEFINE_AUTHOR'), false)
+		$staff_details=do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
+			'ACTION'=>hyperlink(placeholder_url(), do_lang_tempcode('DEFINE_AUTHOR'), false)
 		));
 
-		$point_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
-			'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('AUTHOR_POINTS'))
+		$point_details=do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
+			'ACTION'=>hyperlink(placeholder_url(), do_lang_tempcode('AUTHOR_POINTS'))
 		));
 
-		$url_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
-			'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('AUTHOR_HOMEPAGE'))
+		$url_details=do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
+			'ACTION'=>hyperlink(placeholder_url(), do_lang_tempcode('AUTHOR_HOMEPAGE'))
 		));
 
-		$search_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
-			'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('SEARCH'))
+		$search_details=do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
+			'ACTION'=>hyperlink(placeholder_url(), do_lang_tempcode('SEARCH'))
 		));
 
-		$forum_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
-			'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('AUTHOR_PROFILE'))
+		$forum_details=do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
+			'ACTION'=>hyperlink(placeholder_url(), do_lang_tempcode('AUTHOR_PROFILE'))
 		));
 
-		$skills = new ocp_tempcode();
-		$description = new ocp_tempcode();
+		$skills=new ocp_tempcode();
+		$description=new ocp_tempcode();
 
 		return array(
 			lorem_globalise(do_lorem_template('AUTHOR_SCREEN', array(
-				'TAGS' => lorem_word_html(),
-				'TITLE' => lorem_title(),
-				'EDIT_URL' => placeholder_url(),
-				'AUTHOR' => lorem_phrase(),
-				'NEWS_RELEASED' => $news_released,
-				'DOWNLOADS_RELEASED' => $downloads_released,
-				'STAFF_DETAILS' => $staff_details,
-				'POINT_DETAILS' => $point_details,
-				'URL_DETAILS' => $url_details,
-				'SEARCH_DETAILS' => $search_details,
-				'FORUM_DETAILS' => $forum_details,
-				'SKILLS' => $skills,
-				'DESCRIPTION' => $description
+				'TAGS'=>lorem_word_html(),
+				'TITLE'=>lorem_title(),
+				'EDIT_URL'=>placeholder_url(),
+				'AUTHOR'=>lorem_phrase(),
+				'NEWS_RELEASED'=>$news_released,
+				'DOWNLOADS_RELEASED'=>$downloads_released,
+				'STAFF_DETAILS'=>$staff_details,
+				'POINT_DETAILS'=>$point_details,
+				'URL_DETAILS'=>$url_details,
+				'SEARCH_DETAILS'=>$search_details,
+				'FORUM_DETAILS'=>$forum_details,
+				'SKILLS'=>$skills,
+				'DESCRIPTION'=>$description
 			)), NULL, '', true)
 		);
 	}
@@ -216,17 +216,17 @@ class Hook_addon_registry_authors
 	{
 		require_lang('authors');
 
-		$out = new ocp_tempcode();
+		$out=new ocp_tempcode();
 		$out->attach(do_lorem_template('AUTHOR_POPUP_WINDOW_DEFINED', array(
-			'AUTHOR' => lorem_phrase(),
+			'AUTHOR'=>lorem_phrase(),
 			'FIELD_NAME'=>lorem_word(),
 		)));
 		$out->attach(do_lorem_template('AUTHOR_POPUP_WINDOW_UNDEFINED', array(
-			'AUTHOR' => lorem_phrase(),
+			'AUTHOR'=>lorem_phrase(),
 			'FIELD_NAME'=>lorem_word(),
 		)));
 
-		$out = do_lorem_template('AUTHOR_POPUP',array('CONTENT' => $out,'NEXT_URL' => placeholder_url()));
+		$out=do_lorem_template('AUTHOR_POPUP',array('CONTENT'=>$out,'NEXT_URL'=>placeholder_url()));
 
 		return array(
 			lorem_globalise($out, NULL, '', true)

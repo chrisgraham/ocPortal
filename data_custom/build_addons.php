@@ -98,22 +98,22 @@ if (get_param_integer('export_addons',1)==1)
 	$file_list=get_file_list_of_addons();
 	$addon_list=get_details_of_addons();
 
-	foreach ($file_list as $addon => $files)
+	foreach ($file_list as $addon=>$files)
 	{
 		if (($only!==NULL) && ($only!==$addon)) continue;
 
-		if ($addon == 'proper_name')
+		if ($addon=='proper_name')
 			continue;
 
 		if (!isset($addon_list[$addon]))
 		{
 			$addon_list[$addon]=array(
-				'name' => $addon,
-				'incompatibilities' => '',
-				'dependencies' => '',
-				'author' => 'ocProducts',
-				'version' => '1.0',
-				'description' => '',
+				'name'=>$addon,
+				'incompatibilities'=>'',
+				'dependencies'=>'',
+				'author'=>'ocProducts',
+				'version'=>'1.0',
+				'description'=>'',
 			);
 		}
 
@@ -121,14 +121,14 @@ if (get_param_integer('export_addons',1)==1)
 
 		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
 
-		$name = $addon_list[$addon]['Addon name'];
-		$author = $addon_list[$addon]['Author'];
-		$description = $addon_list[$addon]['Help'];
-		$dependencies = $addon_list[$addon]['Requirements / Dependencies'];
-		$incompatibilities = $addon_list[$addon]['Incompatible with'];
-		$category = $addon_list[$addon]['Category'];
-		$license = $addon_list[$addon]['License'];
-		$attribute = $addon_list[$addon]['Attribute'];
+		$name=$addon_list[$addon]['Addon name'];
+		$author=$addon_list[$addon]['Author'];
+		$description=$addon_list[$addon]['Help'];
+		$dependencies=$addon_list[$addon]['Requirements / Dependencies'];
+		$incompatibilities=$addon_list[$addon]['Incompatible with'];
+		$category=$addon_list[$addon]['Category'];
+		$license=$addon_list[$addon]['License'];
+		$attribute=$addon_list[$addon]['Attribute'];
 
 		// Formalise dependencies
 		$vs=explode(',',$dependencies);

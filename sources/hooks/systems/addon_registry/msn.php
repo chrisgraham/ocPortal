@@ -58,9 +58,9 @@ class Hook_addon_registry_msn
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -97,8 +97,8 @@ class Hook_addon_registry_msn
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_SIDE_NETWORK.tpl' => 'block_side_network',
-			'NETLINK.tpl' => 'netlink'
+			'BLOCK_SIDE_NETWORK.tpl'=>'block_side_network',
+			'NETLINK.tpl'=>'netlink'
 		);
 	}
 
@@ -113,7 +113,7 @@ class Hook_addon_registry_msn
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_NETWORK', array(
-				'CONTENT' => lorem_phrase()
+				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -127,16 +127,16 @@ class Hook_addon_registry_msn
 	 */
 	function tpl_preview__netlink()
 	{
-		$content = new ocp_tempcode();
-		$url = placeholder_url();
-		foreach (placeholder_array() as $key => $value)
+		$content=new ocp_tempcode();
+		$url=placeholder_url();
+		foreach (placeholder_array() as $key=>$value)
 		{
 			$content->attach(form_input_list_entry($url->evaluate(), false, lorem_word()));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('NETLINK', array(
-				'CONTENT' => $content
+				'CONTENT'=>$content
 			)), NULL, '', true)
 		);
 	}

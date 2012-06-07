@@ -502,8 +502,8 @@ class Module_downloads
 			$has_download=false;
 
 			$data=array();
-			$data['CAT_TITLE'] = $letter;
-			$data['LETTER'] = $letter;
+			$data['CAT_TITLE']=$letter;
+			$data['LETTER']=$letter;
 
 			$out=new ocp_tempcode();
 
@@ -715,7 +715,7 @@ class Module_downloads
 			}
 		}
 
-		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.$title_to_use.'</span>'));
+		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.$title_to_use->evaluate().'</span>'));
 
 		$GLOBALS['META_DATA']+=array(
 			'created'=>date('Y-m-d',$myrow['add_date']),

@@ -828,7 +828,7 @@ class Module_admin_themes
 				$line_start=strrpos(substr($css,0,$pos),chr(10));
 				$context1=substr($css,$section_line_start,$section_start-$section_line_start);
 				$context2=substr($css,$line_start,$pos-$line_start);
-				$context=$context1.' => '.trim($context2);
+				$context=$context1.'=>'.trim($context2);
 				$entries->attach(do_template('THEME_COLOUR_CHOOSER',array('_GUID'=>'a42ef9daa06a95f5bb9d715aab1bd887','COLOR'=>$color,'NAME'=>'c'.strval($id),'CONTEXT'=>trim($context))));
 
 	//			break;
@@ -1091,7 +1091,7 @@ class Module_admin_themes
 			$new_stub=dirname($file);
 			if ($stub!=$new_stub)
 			{
-				$temp=form_input_list_group($new_stub,$files_tmp);
+				$temp=form_input_list_group($new_stub,make_string_tempcode($files_tmp));
 				$files.=$temp->evaluate(); // XHTMLXHTML
 				$stub=$new_stub;
 			}
@@ -1099,7 +1099,7 @@ class Module_admin_themes
 			$temp=form_input_list_entry($_file,false,/*'- '.*/basename($file));
 			$files_tmp.=$temp->evaluate(); // XHTMLXHTML
 		}
-		$temp=form_input_list_group($new_stub,$files_tmp);
+		$temp=form_input_list_group($new_stub,make_string_tempcode($files_tmp));
 		$fields=new ocp_tempcode();
 
 		$set_name='template';
@@ -1941,7 +1941,7 @@ class Module_admin_themes
 	 */
 	function list_screen_previews()
 	{
-		$title = get_screen_title('SCREEN_PREVIEWS');
+		$title=get_screen_title('SCREEN_PREVIEWS');
 
 		$GLOBALS['HELPER_PANEL_PIC']='';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='';
@@ -1964,13 +1964,13 @@ class Module_admin_themes
 		$all_previews__by_screen=find_all_previews__by_screen();
 
 		// Find other things we may want to preview
-		$comcode_files = find_comcodes();
-		$html_files = find_html();
+		$comcode_files=find_comcodes();
+		$html_files=find_html();
 
 		// Loop over to display it all
-		$displayed_already = array();
-		$lis = new ocp_tempcode();
-		$lis_admin = new ocp_tempcode();
+		$displayed_already=array();
+		$lis=new ocp_tempcode();
+		$lis_admin=new ocp_tempcode();
 		foreach ($templates as $t)
 		{
 			// If we have a preview for it
@@ -1982,7 +1982,7 @@ class Module_admin_themes
 
 					$preview_url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$t,'hook'=>$all_previews[$t][0],'function'=>$func),'_SELF');
 
-					$template_used = "(".implode(', ',$all_previews__by_screen[$func]).")";
+					$template_used="(".implode(', ',$all_previews__by_screen[$func]).")";
 
 					$tpl_x=do_template('TEMPLATE_LIST',array('_GUID'=>'1f27f619db553dfcb8d427e70a736226','URL'=>$preview_url,'COLOR'=>'green','TEMPLATE'=>preg_replace('#^tpl_preview\_\_#','',$func),'LIST'=>$template_used));
 					if (preg_match('#^tpl_preview\_\_administrative\_\_#',$func)!=0)
@@ -2004,7 +2004,7 @@ class Module_admin_themes
 
 		// Prepare all to display...
 
-		$post = new ocp_tempcode();
+		$post=new ocp_tempcode();
 
 		/* $lis (the main previews) will be displayed in the main INDEX_SCREEN content */
 
@@ -2012,30 +2012,30 @@ class Module_admin_themes
 		$post->attach(do_template('TEMPLATE_LIST_WRAP',array('_GUID'=>'1e847f3c75998f2276765bc0c8ab6b78','LI'=>$lis_admin,'TITLE'=>do_lang('ADMIN_SCREENS'))));
 
 		/* LISTING COMCODE FILES   */
-		$com_li = new ocp_tempcode();
-		foreach($comcode_files as $zone => $pages)
+		$com_li=new ocp_tempcode();
+		foreach($comcode_files as $zone=>$pages)
 		{
-			if($zone == 'pages')
+			if($zone=='pages')
 				$zone="";
 			foreach($pages as $page=>$type)
 			{
 				if (!is_string($page)) $page=strval($page);
 
-				$file = $page.'.txt';
-				$url = build_url(array('page'=>$page),$zone);
+				$file=$page.'.txt';
+				$url=build_url(array('page'=>$page),$zone);
 				$com_li->attach(do_template('TEMPLATE_LIST',array('_GUID'=>'9db6fa9333470137ccf9bb752fd9b19e','URL'=>$url,'COLOR'=>'','TEMPLATE'=>$file,'LIST'=>'')));
 			}
 		}
 		$post->attach(do_template('TEMPLATE_LIST_WRAP',array('_GUID'=>'adf69728048cbdbc3a0d9a2e2485a234','LI'=>$com_li,'TITLE'=>do_lang('COMCODE_PAGES'))));
 
 		/* LISTING HTML FILES   */
-		$htm_li = new ocp_tempcode();
-		foreach($html_files as $zone => $pages)
+		$htm_li=new ocp_tempcode();
+		foreach($html_files as $zone=>$pages)
 		{
 			foreach($pages as $page=>$type)
 			{
-				$file = $page.'.htm';
-				$url = build_url(array('page'=>$page),$zone);
+				$file=$page.'.htm';
+				$url=build_url(array('page'=>$page),$zone);
 
 				$htm_li->attach(do_template('TEMPLATE_LIST',array('_GUID'=>'16d1c1c5dc5556254f7a3f28a44fdb52','URL'=>$url,'COLOR'=>'','TEMPLATE'=>$file,'LIST'=>'')));
 			}

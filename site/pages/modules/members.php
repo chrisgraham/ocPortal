@@ -228,6 +228,7 @@ class Module_members
 		foreach ($rows as $row)
 		{
 			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['id'],true,$row['m_username']);
+			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['id'],true);
 			if ($row['m_validated']==0) $link->attach(do_lang_tempcode('MEMBER_IS_UNVALIDATED'));
 			if ($row['m_validated_email_confirm_code']!='') $link->attach(do_lang_tempcode('MEMBER_IS_UNCONFIRMED'));
 			$member_primary_group=ocf_get_member_primary_group($row['id']);
@@ -235,7 +236,9 @@ class Module_members
 
 			$members->attach(results_entry(array($link,$primary_group,integer_format($row['m_cache_num_posts']),escape_html(get_timezoned_date($row['m_join_time'])))));
 
-			$member_boxes[]=render_member_box($row['id'],true);
+			$box=render_member_box($row['id'],true);
+			$_box=do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>$box,'URL'=>$url));
+			$member_boxes[]=$_box;
 		}
 		$results_table=results_table(do_lang_tempcode('MEMBERS'),$start,'md_start',$max,'md_max',$max_rows,$fields_title,$members,$sortables,$sortable,$sort_order,'md_sort');
 

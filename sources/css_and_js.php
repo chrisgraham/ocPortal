@@ -303,7 +303,7 @@ function js_minify($js)
 
 	if (!class_exists('JSMin')) return $js;
 
-	$jsmin = new JSMin($js);
+	$jsmin=new JSMin($js);
 	return $jsmin->min();
 }
 
@@ -338,15 +338,15 @@ function js_minify($js)
  */
 function css_minify($v) 
 {
-	$v = trim($v);
-	$v = str_replace("\r\n", "\n", $v);
-	$search = array("/\/\*[\d\D]*?\*\/|\t+/", "/\s+/", "/\}\s+/");
-	$replace = array('', " ", "}\n");
-	$v = preg_replace($search, $replace, $v);
-	$search = array("/\\;\s/", "/\s+\{\\s+/", "/\\:\s+\\#/", "/,\s+/i", "/\\:\s+\\\'/i", "/\\:\s+([0-9]+|[A-F]+)/i");
-	$replace = array(";", "{", ":#", ",", ":\'", ":$1");
-	$v = preg_replace($search, $replace, $v);
-	$v = str_replace("\n", '', $v);
+	$v=trim($v);
+	$v=str_replace("\r\n", "\n", $v);
+	$search=array("/\/\*[\d\D]*?\*\/|\t+/", "/\s+/", "/\}\s+/");
+	$replace=array('', " ", "}\n");
+	$v=preg_replace($search, $replace, $v);
+	$search=array("/\\;\s/", "/\s+\{\\s+/", "/\\:\s+\\#/", "/,\s+/i", "/\\:\s+\\\'/i", "/\\:\s+([0-9]+|[A-F]+)/i");
+	$replace=array(";", "{", ":#", ",", ":\'", ":$1");
+	$v=preg_replace($search, $replace, $v);
+	$v=str_replace("\n", '', $v);
 	return $v;	
 }
 

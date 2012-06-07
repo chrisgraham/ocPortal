@@ -89,7 +89,7 @@ function form_input_various_ticks($options,$description,$_tabindex=NULL,$_pretty
 			elseif (count($option)==5)
 			{
 				list($pretty_name,$name,$value,$_description,$_disabled)=$option;
-				$disabled = $_disabled?'1':'0';
+				$disabled=$_disabled?'1':'0';
 			}
 
 			$value=(filter_form_field_default($name,$value?'1':'0')=='1');

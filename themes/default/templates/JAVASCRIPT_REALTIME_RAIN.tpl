@@ -336,39 +336,39 @@ function create_line(x1, y1, x2, y2, margin)
 {
 	if (x2 < x1)
 	{
-		var temp = x1;
-		x1 = x2;
-		x2 = temp;
-		temp = y1;
-		y1 = y2;
-		y2 = temp;
+		var temp=x1;
+		x1=x2;
+		x2=temp;
+		temp=y1;
+		y1=y2;
+		y2=temp;
 	}
-	var length = Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
+	var length=Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
 	if (length-margin*2<0) return;
-	var line = document.createElement('div');
-	line.className = 'line';
+	var line=document.createElement('div');
+	line.className='line';
 	line.style.position='absolute';
 	line.style.zIndex=20;
-	line.style.width = (length-margin*2) + 'px';
+	line.style.width=(length-margin*2) + 'px';
 	line.style.marginLeft=margin + 'px';
 	line.style.marginRight=margin + 'px';
-	line.style.height = '1px';
+	line.style.height='1px';
 
 	if (browser_matches('ie'))
 	{
-		line.style.top = (y2 > y1) ? y1 + 'px' : y2 + 'px';
-		line.style.left = x1 + 'px';
-		var nCos = (x2-x1)/length;
-		var nSin = (y2-y1)/length;
-		line.style.filter = 'progid:DXImageTransform.Microsoft.Matrix(sizingMethod=\'auto expand\', M11=' + nCos + ', M12=' + -1*nSin + ', M21=' + nSin + ', M22=' + nCos + ')';
+		line.style.top=(y2 > y1) ? y1 + 'px' : y2 + 'px';
+		line.style.left=x1 + 'px';
+		var nCos=(x2-x1)/length;
+		var nSin=(y2-y1)/length;
+		line.style.filter='progid:DXImageTransform.Microsoft.Matrix(sizingMethod=\'auto expand\', M11=' + nCos + ', M12=' + -1*nSin + ', M21=' + nSin + ', M22=' + nCos + ')';
 	}
 	else
 	{
-		var angle = ((x2-x1)==0)?1.57:Math.atan((y2-y1)/(x2-x1));
-		line.style.top = Math.round(y1 + 0.5*length*Math.sin(angle)) + 'px';
-		line.style.left = Math.round(x1 - 0.5*length*(1 - Math.cos(angle))) + 'px';
+		var angle=((x2-x1)==0)?1.57:Math.atan((y2-y1)/(x2-x1));
+		line.style.top=Math.round(y1 + 0.5*length*Math.sin(angle)) + 'px';
+		line.style.left=Math.round(x1 - 0.5*length*(1 - Math.cos(angle))) + 'px';
 		if (!line.style.left) line.style.left=0;
-		line.style.MozTransform = line.style.WebkitTransform = line.style.OTransform = line.style.transform = 'rotate(' + angle + 'rad)';
+		line.style.MozTransform=line.style.WebkitTransform=line.style.OTransform=line.style.transform='rotate(' + angle + 'rad)';
 	}
 	return line;
 }

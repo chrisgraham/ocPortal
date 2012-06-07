@@ -58,10 +58,10 @@ class Hook_addon_registry_custom_comcode
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
-			'previously_in_addon' => array(
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
+			'previously_in_addon'=>array(
 				'core_page_management'
 			)
 		);
@@ -108,8 +108,8 @@ class Hook_addon_registry_custom_comcode
 	function tpl_previews()
 	{
 		return array(
-			'CUSTOM_COMCODE_TAG_ROW.tpl' => 'block_main_custom_comcode_tags',
-			'BLOCK_MAIN_CUSTOM_COMCODE_TAGS.tpl' => 'block_main_custom_comcode_tags'
+			'CUSTOM_COMCODE_TAG_ROW.tpl'=>'block_main_custom_comcode_tags',
+			'BLOCK_MAIN_CUSTOM_COMCODE_TAGS.tpl'=>'block_main_custom_comcode_tags'
 		);
 	}
 
@@ -122,19 +122,19 @@ class Hook_addon_registry_custom_comcode
 	 */
 	function tpl_preview__block_main_custom_comcode_tags()
 	{
-		$content = new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $tag)
 		{
 			$content->attach(do_lorem_template('CUSTOM_COMCODE_TAG_ROW', array(
-				'TITLE' => lorem_word(),
-				'DESCRIPTION' => lorem_paragraph(),
-				'EXAMPLE' => lorem_word()
+				'TITLE'=>lorem_word(),
+				'DESCRIPTION'=>lorem_paragraph(),
+				'EXAMPLE'=>lorem_word()
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_CUSTOM_COMCODE_TAGS', array(
-				'TAGS' => $content
+				'TAGS'=>$content
 			)), NULL, '', true)
 		);
 	}

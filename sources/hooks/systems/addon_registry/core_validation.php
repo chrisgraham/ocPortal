@@ -58,9 +58,9 @@ class Hook_addon_registry_core_validation
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -108,22 +108,22 @@ class Hook_addon_registry_core_validation
 	function tpl_previews()
 	{
 		return array(
-			'VALIDATE_SCREEN.tpl' => 'administrative__validate',
-			'VALIDATE_TAG_START.tpl' => 'administrative__validate',
-			'VALIDATE_TAG_NAME_START.tpl' => 'administrative__validate',
-			'VALIDATE_LINE_END.tpl' => 'administrative__validate',
-			'VALIDATE_LINE.tpl' => 'administrative__validate',
-			'VALIDATE_TAG_END.tpl' => 'administrative__validate',
-			'VALIDATE_TAG_NAME_END.tpl' => 'administrative__validate',
-			'VALIDATE_SCREEN_END.tpl' => 'administrative__validate',
-			'VALIDATE_ERROR.tpl' => 'administrative__validate_error_screen',
-			'VALIDATE_ERROR_SCREEN.tpl' => 'administrative__validate_error_screen',
-			'VALIDATE_ATTRIBUTE_START.tpl' => 'administrative__validate_error_screen',
-			'VALIDATE_ATTRIBUTE_END.tpl' => 'administrative__validate_error_screen',
-			'VALIDATE_MARKER.tpl' => 'administrative__validate_error_screen',
-			'VALIDATE_LINE_ERROR.tpl' => 'administrative__validate_error_screen',
-			'VALIDATE_MARKER_START.tpl' => 'administrative__validate',
-			'VALIDATE_MARKER_END.tpl' => 'administrative__validate'
+			'VALIDATE_SCREEN.tpl'=>'administrative__validate',
+			'VALIDATE_TAG_START.tpl'=>'administrative__validate',
+			'VALIDATE_TAG_NAME_START.tpl'=>'administrative__validate',
+			'VALIDATE_LINE_END.tpl'=>'administrative__validate',
+			'VALIDATE_LINE.tpl'=>'administrative__validate',
+			'VALIDATE_TAG_END.tpl'=>'administrative__validate',
+			'VALIDATE_TAG_NAME_END.tpl'=>'administrative__validate',
+			'VALIDATE_SCREEN_END.tpl'=>'administrative__validate',
+			'VALIDATE_ERROR.tpl'=>'administrative__validate_error_screen',
+			'VALIDATE_ERROR_SCREEN.tpl'=>'administrative__validate_error_screen',
+			'VALIDATE_ATTRIBUTE_START.tpl'=>'administrative__validate_error_screen',
+			'VALIDATE_ATTRIBUTE_END.tpl'=>'administrative__validate_error_screen',
+			'VALIDATE_MARKER.tpl'=>'administrative__validate_error_screen',
+			'VALIDATE_LINE_ERROR.tpl'=>'administrative__validate_error_screen',
+			'VALIDATE_MARKER_START.tpl'=>'administrative__validate',
+			'VALIDATE_MARKER_END.tpl'=>'administrative__validate'
 		);
 	}
 
@@ -136,21 +136,21 @@ class Hook_addon_registry_core_validation
 	 */
 	function tpl_preview__administrative__validate()
 	{
-		$display = new ocp_tempcode();
+		$display=new ocp_tempcode();
 		$display->attach(do_lorem_template('VALIDATE_SCREEN', array(
-			'MSG' => lorem_phrase(),
-			'RETURN_URL' => placeholder_url(),
-			'TITLE' => lorem_title(),
-			'MESSY_URL' => placeholder_url(),
-			'RET' => lorem_phrase()
+			'MSG'=>lorem_phrase(),
+			'RETURN_URL'=>placeholder_url(),
+			'TITLE'=>lorem_title(),
+			'MESSY_URL'=>placeholder_url(),
+			'RET'=>lorem_phrase()
 		)));
 
 		$display->attach(do_lorem_template('VALIDATE_LINE', array(
-			'NUMBER' => placeholder_number()
+			'NUMBER'=>placeholder_number()
 		)));
 
 		$display->attach(do_lorem_template('VALIDATE_TAG_START', array(
-			'COLOUR' => '#b7b7b7'
+			'COLOUR'=>'#b7b7b7'
 		)));
 		$display->attach(lorem_word());
 		$display->attach(do_lorem_template('VALIDATE_TAG_END', array()));
@@ -181,40 +181,40 @@ class Hook_addon_registry_core_validation
 	 */
 	function tpl_preview__administrative__validate_error_screen()
 	{
-		$errors = new ocp_tempcode();
-		$display = new ocp_tempcode();
-		foreach (placeholder_array() as $key => $_error)
+		$errors=new ocp_tempcode();
+		$display=new ocp_tempcode();
+		foreach (placeholder_array() as $key=>$_error)
 		{
 			$errors->attach(do_lorem_template('VALIDATE_ERROR', array(
-				'I' => lorem_word() . strval($key),
-				'LINE' => placeholder_number(),
-				'POS' => placeholder_number(),
-				'ERROR' => $_error
+				'I'=>lorem_word() . strval($key),
+				'LINE'=>placeholder_number(),
+				'POS'=>placeholder_number(),
+				'ERROR'=>$_error
 			)));
 		}
 
 		$display->attach(do_lorem_template('VALIDATE_ERROR_SCREEN', array(
-			'MSG' => lorem_phrase(),
-			'RETURN_URL' => placeholder_url(),
-			'TITLE' => lorem_title(),
-			'IGNORE_URL_2' => placeholder_url(),
-			'IGNORE_URL' => placeholder_url(),
-			'MESSY_URL' => placeholder_url(),
-			'ERRORS' => $errors,
-			'RET' => lorem_phrase()
+			'MSG'=>lorem_phrase(),
+			'RETURN_URL'=>placeholder_url(),
+			'TITLE'=>lorem_title(),
+			'IGNORE_URL_2'=>placeholder_url(),
+			'IGNORE_URL'=>placeholder_url(),
+			'MESSY_URL'=>placeholder_url(),
+			'ERRORS'=>$errors,
+			'RET'=>lorem_phrase()
 		)));
 
-		$markers = new ocp_tempcode();
-		foreach (placeholder_array() as $key => $_error)
+		$markers=new ocp_tempcode();
+		foreach (placeholder_array() as $key=>$_error)
 		{
 			$markers->attach(do_lorem_template('VALIDATE_MARKER', array(
-				'I' => lorem_word() . strval($key),
-				'ERROR' => $_error
+				'I'=>lorem_word() . strval($key),
+				'ERROR'=>$_error
 			)));
 		}
 		$display->attach(do_lorem_template('VALIDATE_LINE_ERROR', array(
-			'MARKERS' => $markers,
-			'NUMBER' => placeholder_number()
+			'MARKERS'=>$markers,
+			'NUMBER'=>placeholder_number()
 		)));
 		$display->attach(do_lorem_template('VALIDATE_ATTRIBUTE_START', array()));
 		$display->attach(lorem_word());
@@ -223,7 +223,7 @@ class Hook_addon_registry_core_validation
 		$display->attach(lorem_phrase());
 
 		$display->attach(do_lorem_template('VALIDATE_LINE', array(
-			'NUMBER' => placeholder_number()
+			'NUMBER'=>placeholder_number()
 		)));
 		$display->attach(do_lorem_template('VALIDATE_LINE_END', array()));
 

@@ -58,9 +58,9 @@ class Hook_addon_registry_filedump
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -101,7 +101,7 @@ class Hook_addon_registry_filedump
 	function tpl_previews()
 	{
 		return array(
-			'FILE_DUMP_SCREEN.tpl' => 'file_dump_screen'
+			'FILE_DUMP_SCREEN.tpl'=>'file_dump_screen'
 		);
 	}
 
@@ -118,11 +118,11 @@ class Hook_addon_registry_filedump
 
 		return array(
 			lorem_globalise(do_lorem_template('FILE_DUMP_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'FILES' => placeholder_table(),
-				'UPLOAD_FORM' => placeholder_form(),
-				'CREATE_FOLDER_FORM' => placeholder_form(),
-				'PLACE' => placeholder_id()
+				'TITLE'=>lorem_title(),
+				'FILES'=>placeholder_table(),
+				'UPLOAD_FORM'=>placeholder_form(),
+				'CREATE_FOLDER_FORM'=>placeholder_form(),
+				'PLACE'=>placeholder_id()
 			)), NULL, '', true)
 		);
 	}

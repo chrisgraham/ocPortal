@@ -58,9 +58,9 @@ class Hook_addon_registry_stats_block
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -109,9 +109,9 @@ class Hook_addon_registry_stats_block
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_SIDE_STATS_SUBLINE.tpl' => 'block_side_stats',
-			'BLOCK_SIDE_STATS_SECTION.tpl' => 'block_side_stats',
-			'BLOCK_SIDE_STATS.tpl' => 'block_side_stats'
+			'BLOCK_SIDE_STATS_SUBLINE.tpl'=>'block_side_stats',
+			'BLOCK_SIDE_STATS_SECTION.tpl'=>'block_side_stats',
+			'BLOCK_SIDE_STATS.tpl'=>'block_side_stats'
 		);
 	}
 
@@ -124,23 +124,23 @@ class Hook_addon_registry_stats_block
 	 */
 	function tpl_preview__block_side_stats()
 	{
-		$full_tpl = new ocp_tempcode();
-		$bits = new ocp_tempcode();
+		$full_tpl=new ocp_tempcode();
+		$bits=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
 			$bits->attach(do_lorem_template('BLOCK_SIDE_STATS_SUBLINE', array(
-				'KEY' => lorem_phrase(),
-				'VALUE' => placeholder_number()
+				'KEY'=>lorem_phrase(),
+				'VALUE'=>placeholder_number()
 			)));
 		}
 		$full_tpl->attach(do_lorem_template('BLOCK_SIDE_STATS_SECTION', array(
-			'SECTION' => lorem_phrase(),
-			'CONTENT' => $bits
+			'SECTION'=>lorem_phrase(),
+			'CONTENT'=>$bits
 		)));
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_STATS', array(
-				'CONTENT' => $full_tpl
+				'CONTENT'=>$full_tpl
 			)), NULL, '', true)
 		);
 	}

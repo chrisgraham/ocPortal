@@ -58,9 +58,9 @@ class Hook_addon_registry_bulkupload
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -92,8 +92,8 @@ class Hook_addon_registry_bulkupload
 	function tpl_previews()
 	{
 		return array(
-			'BULK_HELPER_RESULTS_SCREEN.tpl' => 'administrative__bulk_helper_results_screen',
-			'BULK_HELPER_ENTRY.tpl' => 'administrative__bulk_helper_results_screen'
+			'BULK_HELPER_RESULTS_SCREEN.tpl'=>'administrative__bulk_helper_results_screen',
+			'BULK_HELPER_ENTRY.tpl'=>'administrative__bulk_helper_results_screen'
 		);
 	}
 
@@ -106,13 +106,13 @@ class Hook_addon_registry_bulkupload
 	 */
 	function tpl_preview__administrative__bulk_helper_results_screen()
 	{
-		$test = do_lorem_template('BULK_HELPER_ENTRY', array(
-			'FILEFULL' => lorem_phrase()
+		$test=do_lorem_template('BULK_HELPER_ENTRY', array(
+			'FILEFULL'=>lorem_phrase()
 		));
 		return array(
 			lorem_globalise(do_lorem_template('BULK_HELPER_RESULTS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'RESULTS' => $test
+				'TITLE'=>lorem_title(),
+				'RESULTS'=>$test
 			)), NULL, '', true)
 		);
 	}

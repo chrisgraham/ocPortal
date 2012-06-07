@@ -58,9 +58,9 @@ class Hook_addon_registry_quizzes
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -117,13 +117,13 @@ class Hook_addon_registry_quizzes
 	function tpl_previews()
 	{
 		return array(
-			'SURVEY_RESULTS_SCREEN.tpl' => 'survey_results_screen',
-			'QUIZ_BOX.tpl' => 'quiz_archive_screen',
-			'QUIZ_ARCHIVE_SCREEN.tpl' => 'quiz_archive_screen',
-			'QUIZ_SCREEN.tpl' => 'quiz_screen',
-			'QUIZ_TEST_ANSWERS_MAIL.tpl' => 'quiz_test_answers_mail',
-			'QUIZ_ANSWERS_MAIL.tpl' => 'quiz_answers_mail',
-			'QUIZ_DONE_SCREEN.tpl' => 'quiz_done_screen'
+			'SURVEY_RESULTS_SCREEN.tpl'=>'survey_results_screen',
+			'QUIZ_BOX.tpl'=>'quiz_archive_screen',
+			'QUIZ_ARCHIVE_SCREEN.tpl'=>'quiz_archive_screen',
+			'QUIZ_SCREEN.tpl'=>'quiz_screen',
+			'QUIZ_TEST_ANSWERS_MAIL.tpl'=>'quiz_test_answers_mail',
+			'QUIZ_ANSWERS_MAIL.tpl'=>'quiz_answers_mail',
+			'QUIZ_DONE_SCREEN.tpl'=>'quiz_done_screen'
 		);
 	}
 
@@ -136,25 +136,25 @@ class Hook_addon_registry_quizzes
 	 */
 	function tpl_preview__survey_results_screen()
 	{
-		$fields = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$fields=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$fields->attach(do_lorem_template('MAP_TABLE_FIELD_RAW', array(
-				'ABBR' => '',
-				'NAME' => lorem_phrase(),
-				'VALUE' => lorem_phrase()
+				'ABBR'=>'',
+				'NAME'=>lorem_phrase(),
+				'VALUE'=>lorem_phrase()
 			)));
 		}
-		$summary = do_lorem_template('MAP_TABLE', array(
-			'WIDTH' => placeholder_number(),
-			'FIELDS' => $fields
+		$summary=do_lorem_template('MAP_TABLE', array(
+			'WIDTH'=>placeholder_number(),
+			'FIELDS'=>$fields
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('SURVEY_RESULTS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'SUMMARY' => $summary,
-				'RESULTS' => placeholder_table(),
+				'TITLE'=>lorem_title(),
+				'SUMMARY'=>$summary,
+				'RESULTS'=>placeholder_table(),
 			)), NULL, '', true)
 		);
 	}
@@ -168,41 +168,41 @@ class Hook_addon_registry_quizzes
 	 */
 	function tpl_preview__quiz_archive_screen()
 	{
-		$content_tests = new ocp_tempcode();
-		$content_competitions = new ocp_tempcode();
-		$content_surveys = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$content_tests=new ocp_tempcode();
+		$content_competitions=new ocp_tempcode();
+		$content_surveys=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$link = do_lorem_template('QUIZ_BOX', array(
-				'TYPE' => lorem_word(),
-				'DATE' => placeholder_time(),
-				'URL' => placeholder_url(),
-				'NAME' => lorem_phrase(),
-				'START_TEXT' => lorem_phrase(),
-				'TIMEOUT' => placeholder_number(),
-				'REDO_TIME' => placeholder_number(),
-				'_TYPE' => lorem_word(),
-				'POINTS' => placeholder_id()
+			$link=do_lorem_template('QUIZ_BOX', array(
+				'TYPE'=>lorem_word(),
+				'DATE'=>placeholder_time(),
+				'URL'=>placeholder_url(),
+				'NAME'=>lorem_phrase(),
+				'START_TEXT'=>lorem_phrase(),
+				'TIMEOUT'=>placeholder_number(),
+				'REDO_TIME'=>placeholder_number(),
+				'_TYPE'=>lorem_word(),
+				'POINTS'=>placeholder_id()
 			));
 		}
 		$content_surveys->attach($link);
 		$content_tests->attach($link);
 		$content_competitions->attach($link);
 
-		$browse = do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
-			'NEXT_URL' => placeholder_url(),
-			'PREVIOUS_URL' => placeholder_url(),
-			'PAGE_NUM' => placeholder_number(),
-			'NUM_PAGES' => placeholder_number()
+		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
+			'NEXT_URL'=>placeholder_url(),
+			'PREVIOUS_URL'=>placeholder_url(),
+			'PAGE_NUM'=>placeholder_number(),
+			'NUM_PAGES'=>placeholder_number()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('QUIZ_ARCHIVE_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'CONTENT_SURVEYS' => $content_surveys,
-				'CONTENT_COMPETITIONS' => $content_competitions,
-				'CONTENT_TESTS' => $content_tests,
-				'BROWSE' => $browse
+				'TITLE'=>lorem_title(),
+				'CONTENT_SURVEYS'=>$content_surveys,
+				'CONTENT_COMPETITIONS'=>$content_competitions,
+				'CONTENT_TESTS'=>$content_tests,
+				'BROWSE'=>$browse
 			)), NULL, '', true)
 		);
 	}
@@ -219,21 +219,21 @@ class Hook_addon_registry_quizzes
 		//This is for getting the do_ajax_request() javascript function.
 		require_javascript('javascript_ajax');
 
-		$warning_details = do_lorem_template('WARNING_BOX', array(
-			'WARNING' => lorem_phrase()
+		$warning_details=do_lorem_template('WARNING_BOX', array(
+			'WARNING'=>lorem_phrase()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('QUIZ_SCREEN', array(
-				'TAGS' => lorem_word_html(),
-				'ID' => placeholder_id(),
-				'WARNING_DETAILS' => $warning_details,
-				'URL' => placeholder_url(),
-				'TITLE' => lorem_title(),
-				'START_TEXT' => lorem_sentence_html(),
-				'FIELDS' => placeholder_fields(),
-				'TIMEOUT' => '5',
-				'EDIT_URL' => placeholder_url()
+				'TAGS'=>lorem_word_html(),
+				'ID'=>placeholder_id(),
+				'WARNING_DETAILS'=>$warning_details,
+				'URL'=>placeholder_url(),
+				'TITLE'=>lorem_title(),
+				'START_TEXT'=>lorem_sentence_html(),
+				'FIELDS'=>placeholder_fields(),
+				'TIMEOUT'=>'5',
+				'EDIT_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -247,24 +247,24 @@ class Hook_addon_registry_quizzes
 	 */
 	function tpl_preview__quiz_test_answers_mail()
 	{
-		$_unknowns = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$_unknowns=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$_unknowns->attach(lorem_phrase());
 		}
 
-		$_corrections = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$_corrections=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$_corrections->attach(lorem_phrase());
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('QUIZ_TEST_ANSWERS_MAIL', array(
-				'UNKNOWNS' => $_unknowns,
-				'CORRECTIONS' => $_corrections,
-				'RESULT' => lorem_phrase(),
-				'USERNAME' => lorem_phrase()
+				'UNKNOWNS'=>$_unknowns,
+				'CORRECTIONS'=>$_corrections,
+				'RESULT'=>lorem_phrase(),
+				'USERNAME'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -278,18 +278,18 @@ class Hook_addon_registry_quizzes
 	 */
 	function tpl_preview__quiz_answers_mail()
 	{
-		$_answers = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$_answers=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$_answers->attach(lorem_phrase());
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('QUIZ_ANSWERS_MAIL', array(
-				'ANSWERS' => $_answers,
-				'MEMBER_PROFILE_URL' => placeholder_url(),
-				'USERNAME' => lorem_phrase(),
-				'FORUM_DRIVER' => NULL
+				'ANSWERS'=>$_answers,
+				'MEMBER_PROFILE_URL'=>placeholder_url(),
+				'USERNAME'=>lorem_phrase(),
+				'FORUM_DRIVER'=>NULL
 			)), NULL, '', true)
 		);
 	}
@@ -305,12 +305,12 @@ class Hook_addon_registry_quizzes
 	{
 		return array(
 			lorem_globalise(do_lorem_template('QUIZ_DONE_SCREEN', array(
-				'RESULT' => lorem_phrase(),
-				'TITLE' => lorem_title(),
-				'TYPE' => lorem_phrase(),
-				'MESSAGE' => lorem_phrase(),
-				'CORRECTIONS_TO_SHOW' => lorem_phrase(),
-				'POINTS_DIFFERENCE' => placeholder_number()
+				'RESULT'=>lorem_phrase(),
+				'TITLE'=>lorem_title(),
+				'TYPE'=>lorem_phrase(),
+				'MESSAGE'=>lorem_phrase(),
+				'CORRECTIONS_TO_SHOW'=>lorem_phrase(),
+				'POINTS_DIFFERENCE'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}

@@ -53,7 +53,7 @@ class Block_main_activities_state
 		require_javascript('javascript_activities_state');
 		require_javascript('javascript_jquery');
 
-		$title = array_key_exists('param', $map)? $map['param'] : do_lang('STATUS_UPDATE');
+		$title=array_key_exists('param', $map)? $map['param'] : do_lang('STATUS_UPDATE');
 
 		return do_template('BLOCK_MAIN_ACTIVITIES_STATE',array('_GUID'=>'ad41b611db430c58189aa28e96a2712e','TITLE'=>$title));
 	}

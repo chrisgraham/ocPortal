@@ -58,9 +58,9 @@ class Hook_addon_registry_recommend
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -103,7 +103,7 @@ class Hook_addon_registry_recommend
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_MAIN_SCREEN_ACTIONS.tpl' => 'block_main_screen_actions'
+			'BLOCK_MAIN_SCREEN_ACTIONS.tpl'=>'block_main_screen_actions'
 		);
 	}
 
@@ -118,10 +118,10 @@ class Hook_addon_registry_recommend
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_SCREEN_ACTIONS', array(
-				'PRINT_URL' => placeholder_url(),
-				'RECOMMEND_URL' => placeholder_url(),
-				'EASY_SELF_URL' => placeholder_url(),
-				'TITLE' => lorem_phrase()
+				'PRINT_URL'=>placeholder_url(),
+				'RECOMMEND_URL'=>placeholder_url(),
+				'EASY_SELF_URL'=>placeholder_url(),
+				'TITLE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

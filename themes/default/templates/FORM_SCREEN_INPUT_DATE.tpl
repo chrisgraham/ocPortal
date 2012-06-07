@@ -30,14 +30,14 @@
 	var mindate=null,maxdate=null;
 
 	{+START,IF_PASSED,MIN_DATE_DAY}{+START,IF_PASSED,MIN_DATE_MONTH}{+START,IF_PASSED,MIN_DATE_YEAR}
-		minDate = new Date();
+		minDate=new Date();
 		minDate.setDate({MIN_DATE_DAY%});
 		minDate.setMonth({MIN_DATE_MONTH%}-1);
 		minDate.setFullYear({MIN_DATE_YEAR%});
 	{+END}{+END}{+END}
 
 	{+START,IF_PASSED,MAX_DATE_DAY}{+START,IF_PASSED,MAX_DATE_MONTH}{+START,IF_PASSED,MAX_DATE_YEAR}
-		maxDate = new Date();
+		maxDate=new Date();
 		maxDate.setDate({MAX_DATE_DAY%});
 		maxDate.setMonth({MAX_DATE_MONTH%}-1);
 		maxDate.setFullYear({MAX_DATE_YEAR%});

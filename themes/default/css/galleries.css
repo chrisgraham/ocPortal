@@ -185,6 +185,10 @@
 	text-align: {!en_right};
 }
 
+.gallery_tease_pic>.box {
+	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 0;}
+}
+
 #tease_scrolling_text {
 	width: 23em;
 }

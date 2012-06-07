@@ -58,9 +58,9 @@ class Hook_addon_registry_downloads
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -155,20 +155,20 @@ class Hook_addon_registry_downloads
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_MAIN_DOWNLOAD_TEASE.tpl' => 'block_main_download_tease',
-			'BLOCK_MAIN_DOWNLOAD_CATEGORY.tpl' => 'block_main_download_category',
-			'BLOCK_MAIN_RECENT_DOWNLOADS.tpl' => 'block_main_recent_downloads',
-			'BLOCK_MAIN_TOP_DOWNLOADS.tpl' => 'block_main_top_downloads',
-			'DOWNLOAD_LIST_LINE.tpl' => 'download_list_line',
-			'DOWNLOAD_LIST_LINE_2.tpl' => 'download_list_line_2',
-			'DOWNLOAD_BOX.tpl' => 'download_category_screen',
-			'DOWNLOAD_AND_IMAGES_SIMPLE_BOX.tpl' => 'download_and_images_simple_box',
-			'DOWNLOAD_CATEGORY_SCREEN.tpl' => 'download_category_screen',
-			'DOWNLOAD_ALL_SCREEN.tpl' => 'download_all_screen',
-			'DOWNLOAD_SCREEN_IMAGE.tpl' => 'download_screen',
-			'DOWNLOAD_GALLERY_IMAGE_CELL.tpl' => 'download_screen',
-			'DOWNLOAD_GALLERY_ROW.tpl' => 'download_screen',
-			'DOWNLOAD_SCREEN.tpl' => 'download_screen'
+			'BLOCK_MAIN_DOWNLOAD_TEASE.tpl'=>'block_main_download_tease',
+			'BLOCK_MAIN_DOWNLOAD_CATEGORY.tpl'=>'block_main_download_category',
+			'BLOCK_MAIN_RECENT_DOWNLOADS.tpl'=>'block_main_recent_downloads',
+			'BLOCK_MAIN_TOP_DOWNLOADS.tpl'=>'block_main_top_downloads',
+			'DOWNLOAD_LIST_LINE.tpl'=>'download_list_line',
+			'DOWNLOAD_LIST_LINE_2.tpl'=>'download_list_line_2',
+			'DOWNLOAD_BOX.tpl'=>'download_category_screen',
+			'DOWNLOAD_AND_IMAGES_SIMPLE_BOX.tpl'=>'download_and_images_simple_box',
+			'DOWNLOAD_CATEGORY_SCREEN.tpl'=>'download_category_screen',
+			'DOWNLOAD_ALL_SCREEN.tpl'=>'download_all_screen',
+			'DOWNLOAD_SCREEN_IMAGE.tpl'=>'download_screen',
+			'DOWNLOAD_GALLERY_IMAGE_CELL.tpl'=>'download_screen',
+			'DOWNLOAD_GALLERY_ROW.tpl'=>'download_screen',
+			'DOWNLOAD_SCREEN.tpl'=>'download_screen'
 		);
 	}
 
@@ -181,58 +181,58 @@ class Hook_addon_registry_downloads
 	 */
 	function tpl_preview__block_main_download_tease()
 	{
-		$downlaods = array(
+		$downlaods=array(
 			array(
-				'id' => 1,
-				'file_size' => placeholder_number(),
-				'description' => lorem_phrase(),
-				'add_date' => placeholder_time(),
-				'category_id' => placeholder_id(),
-				'default_pic' => '',
-				'download_views' => placeholder_number(),
-				'submitter' => placeholder_id(),
-				'num_downloads' => placeholder_number(),
-				'edit_date' => placeholder_time(),
-				'name' => 1
+				'id'=>1,
+				'file_size'=>placeholder_number(),
+				'description'=>lorem_phrase(),
+				'add_date'=>placeholder_time(),
+				'category_id'=>placeholder_id(),
+				'default_pic'=>'',
+				'download_views'=>placeholder_number(),
+				'submitter'=>placeholder_id(),
+				'num_downloads'=>placeholder_number(),
+				'edit_date'=>placeholder_time(),
+				'name'=>1
 			)
 		);
 
-		$content = new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach ($downlaods as $download)
 		{
-			$map = array(
-				'AUTHOR' => lorem_phrase(),
-				'ID' => placeholder_id(),
-				'VIEWS' => placeholder_number(),
-				'SUBMITTER' => placeholder_id(),
-				'DESCRIPTION' => lorem_sentence(),
-				'FILE_SIZE' => placeholder_number(),
-				'DOWNLOADS' => placeholder_number(),
-				'DATE_RAW' => placeholder_date_raw(),
-				'DATE' => placeholder_date(),
-				'EDIT_DATE_RAW' => '',
-				'SIZE' => placeholder_number(),
-				'URL' => placeholder_url(),
-				'NAME' => lorem_phrase(),
-				'BREADCRUMBS' => placeholder_breadcrumbs(),
-				'IMGCODE' => ''
+			$map=array(
+				'AUTHOR'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'VIEWS'=>placeholder_number(),
+				'SUBMITTER'=>placeholder_id(),
+				'DESCRIPTION'=>lorem_sentence(),
+				'FILE_SIZE'=>placeholder_number(),
+				'DOWNLOADS'=>placeholder_number(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'DATE'=>placeholder_date(),
+				'EDIT_DATE_RAW'=>'',
+				'SIZE'=>placeholder_number(),
+				'URL'=>placeholder_url(),
+				'NAME'=>lorem_phrase(),
+				'BREADCRUMBS'=>placeholder_breadcrumbs(),
+				'IMGCODE'=>''
 			);
-			$tpl = do_lorem_template('DOWNLOAD_BOX', $map);
+			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
 			$content->attach($tpl);
 		}
 
-		$browse = do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
-			'NEXT_URL' => placeholder_url(),
-			'PREVIOUS_URL' => placeholder_url(),
-			'PAGE_NUM' => placeholder_number(),
-			'NUM_PAGES' => placeholder_number()
+		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
+			'NEXT_URL'=>placeholder_url(),
+			'PREVIOUS_URL'=>placeholder_url(),
+			'PAGE_NUM'=>placeholder_number(),
+			'NUM_PAGES'=>placeholder_number()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_DOWNLOAD_TEASE', array(
-				'CONTENT' => $content,
-				'BROWSE' => $browse
+				'CONTENT'=>$content,
+				'BROWSE'=>$browse
 			)), NULL, '', true)
 		);
 	}
@@ -248,10 +248,10 @@ class Hook_addon_registry_downloads
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_DOWNLOAD_CATEGORY', array(
-				'SUBMIT_URL' => placeholder_url(),
-				'SUBCATEGORIES' => lorem_phrase(),
-				'DOWNLOADS' => lorem_phrase(),
-				'TITLE' => lorem_word()
+				'SUBMIT_URL'=>placeholder_url(),
+				'SUBCATEGORIES'=>lorem_phrase(),
+				'DOWNLOADS'=>lorem_phrase(),
+				'TITLE'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -267,8 +267,8 @@ class Hook_addon_registry_downloads
 	{
 		return array(
 			lorem_globalise(do_lorem_template('DOWNLOAD_AND_IMAGES_SIMPLE_BOX', array(
-				'DESCRIPTION' => lorem_paragraph_html(),
-				'IMAGES' => lorem_phrase(),
+				'DESCRIPTION'=>lorem_paragraph_html(),
+				'IMAGES'=>lorem_phrase(),
 			)), NULL, '', true)
 		);
 	}
@@ -282,65 +282,65 @@ class Hook_addon_registry_downloads
 	 */
 	function tpl_preview__block_main_recent_downloads()
 	{
-		$downlaods = array(
+		$downlaods=array(
 			array(
-				'id' => 1,
-				'file_size' => placeholder_number(),
-				'description' => lorem_phrase(),
-				'add_date' => placeholder_time(),
-				'category_id' => placeholder_id(),
-				'default_pic' => '',
-				'download_views' => placeholder_number(),
-				'submitter' => placeholder_id(),
-				'num_downloads' => placeholder_number(),
-				'edit_date' => placeholder_time(),
-				'name' => 1
+				'id'=>1,
+				'file_size'=>placeholder_number(),
+				'description'=>lorem_phrase(),
+				'add_date'=>placeholder_time(),
+				'category_id'=>placeholder_id(),
+				'default_pic'=>'',
+				'download_views'=>placeholder_number(),
+				'submitter'=>placeholder_id(),
+				'num_downloads'=>placeholder_number(),
+				'edit_date'=>placeholder_time(),
+				'name'=>1
 			),
 			array(
-				'id' => 2,
-				'file_size' => placeholder_number(),
-				'description' => lorem_phrase(),
-				'add_date' => placeholder_time(),
-				'category_id' => placeholder_id(),
-				'default_pic' => '',
-				'download_views' => placeholder_number(),
-				'submitter' => placeholder_id(),
-				'num_downloads' => placeholder_number(),
-				'edit_date' => placeholder_time(),
-				'name' => lorem_phrase()
+				'id'=>2,
+				'file_size'=>placeholder_number(),
+				'description'=>lorem_phrase(),
+				'add_date'=>placeholder_time(),
+				'category_id'=>placeholder_id(),
+				'default_pic'=>'',
+				'download_views'=>placeholder_number(),
+				'submitter'=>placeholder_id(),
+				'num_downloads'=>placeholder_number(),
+				'edit_date'=>placeholder_time(),
+				'name'=>lorem_phrase()
 			)
 		);
 
-		$content = new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach ($downlaods as $download)
 		{
-			$map = array(
-				'AUTHOR' => lorem_phrase(),
-				'ID' => placeholder_id(),
-				'VIEWS' => placeholder_number(),
-				'SUBMITTER' => placeholder_id(),
-				'DESCRIPTION' => lorem_sentence(),
-				'FILE_SIZE' => placeholder_number(),
-				'DOWNLOADS' => placeholder_number(),
-				'DATE_RAW' => placeholder_date_raw(),
-				'DATE' => placeholder_date(),
-				'EDIT_DATE_RAW' => '',
-				'SIZE' => placeholder_number(),
-				'URL' => placeholder_url(),
-				'NAME' => lorem_phrase(),
-				'BREADCRUMBS' => placeholder_breadcrumbs(),
-				'IMGCODE' => ''
+			$map=array(
+				'AUTHOR'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'VIEWS'=>placeholder_number(),
+				'SUBMITTER'=>placeholder_id(),
+				'DESCRIPTION'=>lorem_sentence(),
+				'FILE_SIZE'=>placeholder_number(),
+				'DOWNLOADS'=>placeholder_number(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'DATE'=>placeholder_date(),
+				'EDIT_DATE_RAW'=>'',
+				'SIZE'=>placeholder_number(),
+				'URL'=>placeholder_url(),
+				'NAME'=>lorem_phrase(),
+				'BREADCRUMBS'=>placeholder_breadcrumbs(),
+				'IMGCODE'=>''
 			);
-			$tpl = do_lorem_template('DOWNLOAD_BOX', $map);
+			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
 			$content->attach($tpl);
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_RECENT_DOWNLOADS', array(
-				'TITLE' => lorem_word(),
-				'CONTENT' => $content,
-				'NUMBER' => placeholder_number()
+				'TITLE'=>lorem_word(),
+				'CONTENT'=>$content,
+				'NUMBER'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}
@@ -354,65 +354,65 @@ class Hook_addon_registry_downloads
 	 */
 	function tpl_preview__block_main_top_downloads()
 	{
-		$downlaods = array(
+		$downlaods=array(
 			array(
-				'id' => placeholder_id(),
-				'file_size' => placeholder_number(),
-				'description' => lorem_phrase(),
-				'add_date' => placeholder_time(),
-				'category_id' => placeholder_id(),
-				'default_pic' => '',
-				'download_views' => placeholder_number(),
-				'submitter' => placeholder_id(),
-				'num_downloads' => placeholder_number(),
-				'edit_date' => placeholder_time(),
-				'name' => 1
+				'id'=>placeholder_id(),
+				'file_size'=>placeholder_number(),
+				'description'=>lorem_phrase(),
+				'add_date'=>placeholder_time(),
+				'category_id'=>placeholder_id(),
+				'default_pic'=>'',
+				'download_views'=>placeholder_number(),
+				'submitter'=>placeholder_id(),
+				'num_downloads'=>placeholder_number(),
+				'edit_date'=>placeholder_time(),
+				'name'=>1
 			),
 			array(
-				'id' => placeholder_id(),
-				'file_size' => placeholder_number(),
-				'description' => lorem_phrase(),
-				'add_date' => placeholder_time(),
-				'category_id' => placeholder_id(),
-				'default_pic' => '',
-				'download_views' => placeholder_number(),
-				'submitter' => placeholder_id(),
-				'num_downloads' => placeholder_number(),
-				'edit_date' => placeholder_time(),
-				'name' => lorem_phrase()
+				'id'=>placeholder_id(),
+				'file_size'=>placeholder_number(),
+				'description'=>lorem_phrase(),
+				'add_date'=>placeholder_time(),
+				'category_id'=>placeholder_id(),
+				'default_pic'=>'',
+				'download_views'=>placeholder_number(),
+				'submitter'=>placeholder_id(),
+				'num_downloads'=>placeholder_number(),
+				'edit_date'=>placeholder_time(),
+				'name'=>lorem_phrase()
 			)
 		);
 
-		$content = new ocp_tempcode();
+		$content=new ocp_tempcode();
 		foreach ($downlaods as $download)
 		{
-			$map = array(
-				'AUTHOR' => lorem_phrase(),
-				'ID' => placeholder_id(),
-				'VIEWS' => placeholder_number(),
-				'SUBMITTER' => placeholder_id(),
-				'DESCRIPTION' => lorem_sentence(),
-				'FILE_SIZE' => placeholder_number(),
-				'DOWNLOADS' => placeholder_number(),
-				'DATE_RAW' => placeholder_date_raw(),
-				'DATE' => placeholder_date(),
-				'EDIT_DATE_RAW' => '',
-				'SIZE' => placeholder_number(),
-				'URL' => placeholder_url(),
-				'NAME' => lorem_phrase(),
-				'BREADCRUMBS' => placeholder_breadcrumbs(),
-				'IMGCODE' => ''
+			$map=array(
+				'AUTHOR'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'VIEWS'=>placeholder_number(),
+				'SUBMITTER'=>placeholder_id(),
+				'DESCRIPTION'=>lorem_sentence(),
+				'FILE_SIZE'=>placeholder_number(),
+				'DOWNLOADS'=>placeholder_number(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'DATE'=>placeholder_date(),
+				'EDIT_DATE_RAW'=>'',
+				'SIZE'=>placeholder_number(),
+				'URL'=>placeholder_url(),
+				'NAME'=>lorem_phrase(),
+				'BREADCRUMBS'=>placeholder_breadcrumbs(),
+				'IMGCODE'=>''
 			);
-			$tpl = do_lorem_template('DOWNLOAD_BOX', $map);
+			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
 			$content->attach($tpl);
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_TOP_DOWNLOADS', array(
-				'TITLE' => lorem_word(),
-				'CONTENT' => $content,
-				'NUMBER' => placeholder_number()
+				'TITLE'=>lorem_word(),
+				'CONTENT'=>$content,
+				'NUMBER'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}
@@ -428,8 +428,8 @@ class Hook_addon_registry_downloads
 	{
 		return array(
 			lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE', array(
-				'BREADCRUMBS' => lorem_word(),
-				'DOWNLOAD' => lorem_phrase()
+				'BREADCRUMBS'=>lorem_word(),
+				'DOWNLOAD'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -445,8 +445,8 @@ class Hook_addon_registry_downloads
 	{
 		return array(
 			lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE_2', array(
-				'BREADCRUMBS' => lorem_phrase(),
-				'FILECOUNT' => placeholder_number()
+				'BREADCRUMBS'=>lorem_phrase(),
+				'FILECOUNT'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}
@@ -460,78 +460,78 @@ class Hook_addon_registry_downloads
 	 */
 	function tpl_preview__download_category_screen()
 	{
-		$out = new ocp_tempcode();
-		foreach (placeholder_array() as $id => $subcats)
+		$out=new ocp_tempcode();
+		foreach (placeholder_array() as $id=>$subcats)
 		{
 			$out->attach(do_lorem_template('CATEGORY_ENTRY', array(
-				'ID' => "$id",
-				'NAME_FIELD' => 'category',
-				'AJAX_EDIT_URL' => placeholder_url(),
-				'URL' => placeholder_url(),
-				'REP_IMAGE' => placeholder_image(),
-				'CHILDREN' => lorem_word(),
-				'NAME' => lorem_phrase(),
-				'NAME_PLAIN' => lorem_word_2()
+				'ID'=>"$id",
+				'NAME_FIELD'=>'category',
+				'AJAX_EDIT_URL'=>placeholder_url(),
+				'URL'=>placeholder_url(),
+				'REP_IMAGE'=>placeholder_image(),
+				'CHILDREN'=>lorem_word(),
+				'NAME'=>lorem_phrase(),
+				'NAME_PLAIN'=>lorem_word_2()
 			)));
 		}
 
-		$subcategories = do_lorem_template('CATEGORY_LIST', array(
-			'CONTENT' => $out
+		$subcategories=do_lorem_template('CATEGORY_LIST', array(
+			'CONTENT'=>$out
 		));
 
-		$downloads = new ocp_tempcode();
-		$download_items = array(
+		$downloads=new ocp_tempcode();
+		$download_items=array(
 			array(
-				'id' => 1,
-				'file_size' => placeholder_number(),
-				'description' => lorem_phrase(),
-				'add_date' => placeholder_time(),
-				'category_id' => placeholder_id(),
-				'default_pic' => '',
-				'download_views' => placeholder_number(),
-				'submitter' => placeholder_id(),
-				'num_downloads' => placeholder_number(),
-				'edit_date' => placeholder_time(),
-				'name' => lorem_phrase()
+				'id'=>1,
+				'file_size'=>placeholder_number(),
+				'description'=>lorem_phrase(),
+				'add_date'=>placeholder_time(),
+				'category_id'=>placeholder_id(),
+				'default_pic'=>'',
+				'download_views'=>placeholder_number(),
+				'submitter'=>placeholder_id(),
+				'num_downloads'=>placeholder_number(),
+				'edit_date'=>placeholder_time(),
+				'name'=>lorem_phrase()
 			)
 		);
 
 		foreach ($download_items as $download)
 		{
-			$map = array(
-				'ID' => placeholder_id(),
-				'VIEWS' => placeholder_number(),
-				'SUBMITTER' => placeholder_id(),
-				'DESCRIPTION' => lorem_sentence(),
-				'FILE_SIZE' => placeholder_number(),
-				'DOWNLOADS' => placeholder_number(),
-				'DATE_RAW' => placeholder_date_raw(),
-				'DATE' => placeholder_date(),
-				'EDIT_DATE_RAW' => '',
-				'SIZE' => placeholder_number(),
-				'URL' => placeholder_url(),
-				'NAME' => lorem_phrase(),
-				'BREADCRUMBS' => placeholder_breadcrumbs(),
-				'IMGCODE' => '',
-				'AUTHOR' => lorem_word()
+			$map=array(
+				'ID'=>placeholder_id(),
+				'VIEWS'=>placeholder_number(),
+				'SUBMITTER'=>placeholder_id(),
+				'DESCRIPTION'=>lorem_sentence(),
+				'FILE_SIZE'=>placeholder_number(),
+				'DOWNLOADS'=>placeholder_number(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'DATE'=>placeholder_date(),
+				'EDIT_DATE_RAW'=>'',
+				'SIZE'=>placeholder_number(),
+				'URL'=>placeholder_url(),
+				'NAME'=>lorem_phrase(),
+				'BREADCRUMBS'=>placeholder_breadcrumbs(),
+				'IMGCODE'=>'',
+				'AUTHOR'=>lorem_word()
 			);
-			$tpl = do_lorem_template('DOWNLOAD_BOX', $map);
+			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
 			$downloads->attach($tpl);
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('DOWNLOAD_CATEGORY_SCREEN', array(
-				'TAGS' => lorem_word_html(),
-				'TITLE' => lorem_title(),
-				'SUBMIT_URL' => placeholder_url(),
-				'ADD_CAT_URL' => placeholder_url(),
-				'EDIT_CAT_URL' => placeholder_url(),
-				'DESCRIPTION' => lorem_paragraph_html(),
-				'SUBCATEGORIES' => $subcategories,
-				'DOWNLOADS' => $downloads,
-				'SORTING' => lorem_phrase(),
-				'ID' => placeholder_id()
+				'TAGS'=>lorem_word_html(),
+				'TITLE'=>lorem_title(),
+				'SUBMIT_URL'=>placeholder_url(),
+				'ADD_CAT_URL'=>placeholder_url(),
+				'EDIT_CAT_URL'=>placeholder_url(),
+				'DESCRIPTION'=>lorem_paragraph_html(),
+				'SUBCATEGORIES'=>$subcategories,
+				'DOWNLOADS'=>$downloads,
+				'SORTING'=>lorem_phrase(),
+				'ID'=>placeholder_id()
 			)), NULL, '', true)
 		);
 	}
@@ -545,63 +545,63 @@ class Hook_addon_registry_downloads
 	 */
 	function tpl_preview__download_all_screen()
 	{
-		$downloads = new ocp_tempcode();
-		$download_items = array(
+		$downloads=new ocp_tempcode();
+		$download_items=array(
 			array(
-				'id' => placeholder_id(),
-				'file_size' => placeholder_number(),
-				'description' => lorem_phrase(),
-				'add_date' => placeholder_time(),
-				'category_id' => placeholder_id(),
-				'default_pic' => '',
-				'download_views' => placeholder_number(),
-				'submitter' => placeholder_id(),
-				'num_downloads' => placeholder_number(),
-				'edit_date' => placeholder_time(),
-				'name' => lorem_phrase()
+				'id'=>placeholder_id(),
+				'file_size'=>placeholder_number(),
+				'description'=>lorem_phrase(),
+				'add_date'=>placeholder_time(),
+				'category_id'=>placeholder_id(),
+				'default_pic'=>'',
+				'download_views'=>placeholder_number(),
+				'submitter'=>placeholder_id(),
+				'num_downloads'=>placeholder_number(),
+				'edit_date'=>placeholder_time(),
+				'name'=>lorem_phrase()
 			)
 		);
 
-		$subcats = array();
+		$subcats=array();
 		foreach (placeholder_array() as $cat)
 		{
 			foreach ($download_items as $download)
 			{
-				$map = array(
-					'AUTHOR' => lorem_phrase(),
-					'ID' => placeholder_id(),
-					'VIEWS' => placeholder_number(),
-					'SUBMITTER' => placeholder_id(),
-					'DESCRIPTION' => lorem_sentence(),
-					'FILE_SIZE' => placeholder_number(),
-					'DOWNLOADS' => placeholder_number(),
-					'DATE_RAW' => placeholder_date_raw(),
-					'DATE' => placeholder_date(),
-					'EDIT_DATE_RAW' => '',
-					'SIZE' => placeholder_number(),
-					'URL' => placeholder_url(),
-					'NAME' => lorem_phrase(),
-					'BREADCRUMBS' => placeholder_breadcrumbs(),
-					'IMGCODE' => ''
+				$map=array(
+					'AUTHOR'=>lorem_phrase(),
+					'ID'=>placeholder_id(),
+					'VIEWS'=>placeholder_number(),
+					'SUBMITTER'=>placeholder_id(),
+					'DESCRIPTION'=>lorem_sentence(),
+					'FILE_SIZE'=>placeholder_number(),
+					'DOWNLOADS'=>placeholder_number(),
+					'DATE_RAW'=>placeholder_date_raw(),
+					'DATE'=>placeholder_date(),
+					'EDIT_DATE_RAW'=>'',
+					'SIZE'=>placeholder_number(),
+					'URL'=>placeholder_url(),
+					'NAME'=>lorem_phrase(),
+					'BREADCRUMBS'=>placeholder_breadcrumbs(),
+					'IMGCODE'=>''
 				);
-				$tpl = do_lorem_template('DOWNLOAD_BOX', $map);
+				$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
 				$downloads->attach($tpl);
 			}
 
-			$data = array();
-			$data['DOWNLOADS'] = $downloads;
-			$subcats[] = $data;
+			$data=array();
+			$data['DOWNLOADS']=$downloads;
+			$subcats[]=$data;
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('DOWNLOAD_ALL_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'LETTER' => lorem_word(),
-				'SUBMIT_URL' => placeholder_url(),
-				'ADD_CAT_URL' => placeholder_url(),
-				'EDIT_CAT_URL' => placeholder_url(),
-				'SUB_CATEGORIES' => $subcats
+				'TITLE'=>lorem_title(),
+				'LETTER'=>lorem_word(),
+				'SUBMIT_URL'=>placeholder_url(),
+				'ADD_CAT_URL'=>placeholder_url(),
+				'EDIT_CAT_URL'=>placeholder_url(),
+				'SUB_CATEGORIES'=>$subcats
 			)), NULL, '', true)
 		);
 	}
@@ -616,57 +616,57 @@ class Hook_addon_registry_downloads
 	function tpl_preview__download_screen()
 	{
 		require_lang('galleries');
-		$images_details = new ocp_tempcode();
+		$images_details=new ocp_tempcode();
 		foreach (placeholder_array() as $row)
 		{
-			$image = do_lorem_template('DOWNLOAD_SCREEN_IMAGE', array(
-				'ID' => placeholder_id(),
-				'VIEW_URL' => placeholder_url(),
-				'EDIT_URL' => placeholder_url(),
-				'THUMB' => placeholder_image(),
-				'COMMENT' => lorem_phrase()
+			$image=do_lorem_template('DOWNLOAD_SCREEN_IMAGE', array(
+				'ID'=>placeholder_id(),
+				'VIEW_URL'=>placeholder_url(),
+				'EDIT_URL'=>placeholder_url(),
+				'THUMB'=>placeholder_image(),
+				'COMMENT'=>lorem_phrase()
 			));
 
-			$cell = do_lorem_template('DOWNLOAD_GALLERY_IMAGE_CELL', array(
-				'CONTENT' => $image
+			$cell=do_lorem_template('DOWNLOAD_GALLERY_IMAGE_CELL', array(
+				'CONTENT'=>$image
 			));
 
 			$images_details->attach(do_lorem_template('DOWNLOAD_GALLERY_ROW', array(
-				'CELLS' => $cell
+				'CELLS'=>$cell
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('DOWNLOAD_SCREEN', array(
-				'ORIGINAL_FILENAME' => lorem_phrase(),
-				'TAGS' => lorem_word_html(),
-				'LICENCE' => lorem_phrase(),
-				'LICENCE_TITLE' => lorem_phrase(),
-				'LICENCE_HYPERLINK' => placeholder_link(),
-				'SUBMITTER' => placeholder_id(),
-				'EDIT_DATE' => placeholder_time(),
-				'EDIT_DATE_RAW' => placeholder_date_raw(),
-				'VIEWS' => lorem_phrase(),
-				'DATE' => placeholder_time(),
-				'DATE_RAW' => placeholder_date_raw(),
-				'NUM_DOWNLOADS' => placeholder_number(),
-				'TITLE' => lorem_title(),
-				'NAME' => lorem_phrase(),
-				'OUTMODE_URL' => placeholder_url(),
-				'WARNING_DETAILS' => '',
-				'EDIT_URL' => placeholder_url(),
-				'ADD_IMG_URL' => placeholder_url(),
-				'DESCRIPTION' => lorem_paragraph_html(),
-				'ADDITIONAL_DETAILS' => lorem_sentence_html(),
-				'IMAGES_DETAILS' => $images_details,
-				'ID' => placeholder_id(),
-				'FILE_SIZE' => placeholder_filesize(),
-				'AUTHOR_URL' => placeholder_url(),
-				'AUTHOR' => lorem_phrase(),
-				'TRACKBACK_DETAILS' => lorem_sentence_html(),
-				'RATING_DETAILS' => lorem_sentence_html(),
-				'COMMENTS_DETAILS' => lorem_sentence_html(),
-				'NUM_IMAGES' => '3'
+				'ORIGINAL_FILENAME'=>lorem_phrase(),
+				'TAGS'=>lorem_word_html(),
+				'LICENCE'=>lorem_phrase(),
+				'LICENCE_TITLE'=>lorem_phrase(),
+				'LICENCE_HYPERLINK'=>placeholder_link(),
+				'SUBMITTER'=>placeholder_id(),
+				'EDIT_DATE'=>placeholder_time(),
+				'EDIT_DATE_RAW'=>placeholder_date_raw(),
+				'VIEWS'=>lorem_phrase(),
+				'DATE'=>placeholder_time(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'NUM_DOWNLOADS'=>placeholder_number(),
+				'TITLE'=>lorem_title(),
+				'NAME'=>lorem_phrase(),
+				'OUTMODE_URL'=>placeholder_url(),
+				'WARNING_DETAILS'=>'',
+				'EDIT_URL'=>placeholder_url(),
+				'ADD_IMG_URL'=>placeholder_url(),
+				'DESCRIPTION'=>lorem_paragraph_html(),
+				'ADDITIONAL_DETAILS'=>lorem_sentence_html(),
+				'IMAGES_DETAILS'=>$images_details,
+				'ID'=>placeholder_id(),
+				'FILE_SIZE'=>placeholder_filesize(),
+				'AUTHOR_URL'=>placeholder_url(),
+				'AUTHOR'=>lorem_phrase(),
+				'TRACKBACK_DETAILS'=>lorem_sentence_html(),
+				'RATING_DETAILS'=>lorem_sentence_html(),
+				'COMMENTS_DETAILS'=>lorem_sentence_html(),
+				'NUM_IMAGES'=>'3'
 			)), NULL, '', true)
 		);
 	}

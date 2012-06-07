@@ -56,41 +56,41 @@ class Block_side_amazon_wishlist
 		require_lang('amazon');
 
 		global $secret_key;
-		$title = (isset($map['title']) && strlen($map['title'])>0)?$map['title']:do_lang_tempcode('BLOCK_AMAZON_WISHLIST_TITLE');
+		$title=(isset($map['title']) && strlen($map['title'])>0)?$map['title']:do_lang_tempcode('BLOCK_AMAZON_WISHLIST_TITLE');
 		if (!array_key_exists('wishlist_id',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','wishlist_id');
 		if (!array_key_exists('access_key',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','access_key');
 		if (!array_key_exists('secret_key',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','secret_key');
-		$wishlist_id = $map['wishlist_id'];//"2VAUC2FYIEUZ5";//"3U62ZPEQ2G0GO";
-		$access_key  = $map['access_key'];//"AKIAJXSQP4CES2F37GWQ";//"AKIAIZCU6XMIQYEDWU6A";
-		$secret_key  = $map['secret_key'];//"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";//"kzKVLbT9+GufjsGPwwprdxCeLfE6Zyl/o94msNKO";
+		$wishlist_id=$map['wishlist_id'];//"2VAUC2FYIEUZ5";//"3U62ZPEQ2G0GO";
+		$access_key=$map['access_key'];//"AKIAJXSQP4CES2F37GWQ";//"AKIAIZCU6XMIQYEDWU6A";
+		$secret_key=$map['secret_key'];//"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";//"kzKVLbT9+GufjsGPwwprdxCeLfE6Zyl/o94msNKO";
 		$domain=$map['domain'];//'com';//coulb be also 'co.uk'
 
-		//$out = new ocp_tempcode();
-		$out = '';
+		//$out=new ocp_tempcode();
+		$out='';
 
 		require_code('files');
 		require_css('amazon_wishlist');
 
-		$i = 0;
+		$i=0;
 		do
 		{
 			$i++;
 
-			$url = $this->createSignature("http://webservices.amazon.".$domain."/onca/xml?AWSAccessKeyId=".$access_key."&ListId=".strval($wishlist_id)."&ListType=WishList&Operation=ListLookup&ProductPage=".$i."&ResponseGroup=Request,ListFull&Service=AWSECommerceService&Timestamp=".gmdate("Y-m-d\TH:i:s\Z")."&Version=2008-09-17");//2");
+			$url=$this->createSignature("http://webservices.amazon.".$domain."/onca/xml?AWSAccessKeyId=".$access_key."&ListId=".strval($wishlist_id)."&ListType=WishList&Operation=ListLookup&ProductPage=".$i."&ResponseGroup=Request,ListFull&Service=AWSECommerceService&Timestamp=".gmdate("Y-m-d\TH:i:s\Z")."&Version=2008-09-17");//2");
 
-			$xml_url = http_download_file($url);
-			$items = simplexml_load_string($xml_url);
+			$xml_url=http_download_file($url);
+			$items=simplexml_load_string($xml_url);
 
-			if(!empty($items->Lists->List->ListItem))
+			if (!empty($items->Lists->List->ListItem))
 			{
-				foreach($items->Lists->List->ListItem as $item)
+				foreach ($items->Lists->List->ListItem as $item)
 				{
-					if($item->QuantityReceived=="0")
+					if ($item->QuantityReceived=="0")
 					{
-						$url = $this->createSignature("http://webservices.amazon.".$domain."/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=".$access_key."&Operation=ItemLookup&IdType=ASIN&ItemId=".$item->Item->ASIN."&MerchantId=All&ResponseGroup=Medium&Timestamp=".gmdate("Y-m-d\TH:i:s\Z")."&Version=2007-07-16");//2");
+						$url=$this->createSignature("http://webservices.amazon.".$domain."/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=".$access_key."&Operation=ItemLookup&IdType=ASIN&ItemId=".$item->Item->ASIN."&MerchantId=All&ResponseGroup=Medium&Timestamp=".gmdate("Y-m-d\TH:i:s\Z")."&Version=2007-07-16");//2");
 
-						$xml_url = http_download_file($url);
-						$itemDetails = simplexml_load_string($xml_url);
+						$xml_url=http_download_file($url);
+						$itemDetails=simplexml_load_string($xml_url);
 
 						$out.='<div class="amazon_wishlist"><img src="' . $itemDetails->Items->Item->SmallImage->URL . '" width="22"  /> <a href="' . $itemDetails->Items->Item->DetailPageURL . '" title="' . htmlspecialchars($item->Item->ItemAttributes->Title) . '">' . $item->Item->ItemAttributes->Title . '</a></div><br />';
 					}
@@ -110,19 +110,19 @@ class Block_side_amazon_wishlist
 	 * @param  LONG_TEXT additional url params
 	 * @return SHORT_TEXT Amazon web service URL with signature
 	 */
-	function createSignature($url,$params = '')
+	function createSignature($url,$params='')
 	{
 		global $secret_key;
-		$url_parts = parse_url($url);
+		$url_parts=parse_url($url);
 		$query=array();
 		parse_str($url_parts['query'],$query);
 		uksort($query,"strcasecmp");
-		foreach($query as $key => $value)
+		foreach ($query as $key => $value)
 		{
 			$params .= $key."=".str_replace(array(":",","),array("%3A","%2C"),$value)."&";
 		}
-		$signature = base64_encode(hash_hmac('sha256',"GET\n".$url_parts['host']."\n".$url_parts['path']."\n".substr($params,0,-1),$secret_key,true));
-		$return = "http://".$url_parts['host'].$url_parts['path']."?".$params."Signature=".str_replace(array("+","="),array("%2B","%3D"),$signature);
+		$signature=base64_encode(hash_hmac('sha256',"GET\n".$url_parts['host']."\n".$url_parts['path']."\n".substr($params,0,-1),$secret_key,true));
+		$return="http://".$url_parts['host'].$url_parts['path']."?".$params."Signature=".str_replace(array("+","="),array("%2B","%3D"),$signature);
 
 		return $return;
 	}

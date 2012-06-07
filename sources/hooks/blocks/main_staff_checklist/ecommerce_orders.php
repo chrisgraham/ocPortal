@@ -28,18 +28,18 @@ class Hook_checklist_ecommerce_orders
 
 		require_lang('shopping');
 
-		$to_dispatch_order_cnt	=	$GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','count(id)',array('order_status'=>'ORDER_STATUS_payment_received'));
+		$to_dispatch_order_cnt=$GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','count(id)',array('order_status'=>'ORDER_STATUS_payment_received'));
 
 		if($to_dispatch_order_cnt>0)
 		{
-			$img	=	'not_completed';			
+			$img='not_completed';			
 		}
 		else
 		{	
-			$img	=	'completed';
+			$img='completed';
 		}
 
-		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'15138b84598f5c45113fc169a44d55c7','ORDER_STATUS'=>$img));
+		$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'15138b84598f5c45113fc169a44d55c7','ORDER_STATUS'=>$img));
 
 		$url=build_url(array('page'=>'admin_orders','type'=>'show_orders','filter'=>'undispatched'),get_module_zone('admin_orders'));
 

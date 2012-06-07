@@ -542,11 +542,11 @@ function comcode_helper_script()
 			{
 				$default_embed='-contracted section
  +expanded section
-  page = URL
-  page = URL
+  page=URL
+  page=URL
 +expanded section
- page = URL
- page = URL';
+ page=URL
+ page=URL';
 			}
 			$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_EMBED');
 			$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));

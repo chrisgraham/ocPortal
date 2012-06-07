@@ -19,11 +19,11 @@ function init__facebook_connect()
 	require_code('facebook/facebook');
 	class ocpFacebook extends BaseFacebook // We don't want any persistence - we store in normal ocPortal sessions/member rows
 	{
-		protected function setPersistentData($key, $value)
+		protected function setPersistentData($key,$value)
 		{
 		}
 
-		protected function getPersistentData($key, $default = false)
+		protected function getPersistentData($key,$default=false)
 		{
 		}
 

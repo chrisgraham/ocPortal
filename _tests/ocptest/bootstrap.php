@@ -93,11 +93,11 @@ function run_testset($testset)
 {
 	require_code('_tests/tests/'.filter_naughty($testset).'.php');
 
-   $loader = new SimpleFileLoader();
-   $suite = $loader->createSuiteFromClasses(
+   $loader=new SimpleFileLoader();
+   $suite=$loader->createSuiteFromClasses(
            $testset,
            array(basename($testset).'_test_set'));
-   /*$result = */$suite->run(new DefaultReporter());
+   /*$result=*/$suite->run(new DefaultReporter());
 }
 
 function testset_do_header($title)

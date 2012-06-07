@@ -132,7 +132,7 @@ class Block_main_staff_checklist
 			$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$newtask,'datetimeadded'=>time(),'recurinterval'=>$recurint,'recurevery'=>$recurevery,'taskisdone'=>NULL));
 		}
 		$custasks=new ocp_tempcode();
-		$rows = $GLOBALS['SITE_DB']->query_select('customtasks',array('*'));
+		$rows=$GLOBALS['SITE_DB']->query_select('customtasks',array('*'));
 		foreach($rows as $r)
 		{
 			$recurevery='';

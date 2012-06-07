@@ -58,9 +58,9 @@ class Hook_addon_registry_counting_blocks
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -90,8 +90,8 @@ class Hook_addon_registry_counting_blocks
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_MAIN_COUNTDOWN.tpl' => 'main_countdown',
-			'BLOCK_MAIN_COUNT.tpl' => 'main_count'
+			'BLOCK_MAIN_COUNTDOWN.tpl'=>'main_countdown',
+			'BLOCK_MAIN_COUNT.tpl'=>'main_count'
 		);
 	}
 
@@ -106,12 +106,12 @@ class Hook_addon_registry_counting_blocks
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNTDOWN', array(
-				'LANG' => placeholder_number(),
-				'POSITIVE' => true,
-				'PRECISION' => placeholder_number(),
-				'MILLISECONDS_FOR_PRECISION' => placeholder_number(),
-				'DISTANCE_FOR_PRECISION' => placeholder_number(),
-				'TAILING' => false
+				'LANG'=>placeholder_number(),
+				'POSITIVE'=>true,
+				'PRECISION'=>placeholder_number(),
+				'MILLISECONDS_FOR_PRECISION'=>placeholder_number(),
+				'DISTANCE_FOR_PRECISION'=>placeholder_number(),
+				'TAILING'=>false
 			)), NULL, '', true)
 		);
 	}
@@ -127,8 +127,8 @@ class Hook_addon_registry_counting_blocks
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNT', array(
-				'NAME' => lorem_word(),
-				'VALUE' => placeholder_random()
+				'NAME'=>lorem_word(),
+				'VALUE'=>placeholder_random()
 			)), NULL, '', true)
 		);
 	}

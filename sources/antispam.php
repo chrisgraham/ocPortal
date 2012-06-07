@@ -18,6 +18,9 @@
  * @package		core
  */
 
+/**
+ * Standard code module initialisation function.
+ */
 function init__antispam()
 {
 	define('ANTISPAM_RESPONSE_SKIP',-2);

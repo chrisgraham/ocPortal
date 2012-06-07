@@ -701,6 +701,7 @@ function get_charset()
 		return $CHARSET;
 	}
 
+	global $LANG_LOADED_LANG;
 	if ((function_exists('do_lang')) && (isset($LANG_LOADED_LANG[user_lang()]['critical_error'])) && (!in_safe_mode()))
 	{
 		$attempt=do_lang('charset',NULL,NULL,NULL,NULL,false);

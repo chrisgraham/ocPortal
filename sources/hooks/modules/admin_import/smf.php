@@ -543,12 +543,12 @@ class Hook_smf
 
 		require_code('failure');
 
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'ban_groups u LEFT JOIN '.$table_prefix.'ban_items b ON u.ID_BAN_GROUP = b.ID_BAN_GROUP');
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'ban_groups u LEFT JOIN '.$table_prefix.'ban_items b ON u.ID_BAN_GROUP=b.ID_BAN_GROUP');
 
 		foreach ($rows as $row)
 		{
-			$ban_time = $row['ban_time']; //when is banned user
-			$ban_till = $row['expire_time']; //member is banned until
+			$ban_time=$row['ban_time']; //when is banned user
+			$ban_till=$row['expire_time']; //member is banned until
 
 			if (($ban_till>time()) || empty($ban_till))
 			{
@@ -878,7 +878,7 @@ class Hook_smf
 
 		//start preparing the attachment file path by adding it's md5-ied filename and attachment id
 		$file_stripped=strtr($filename, 'äéöûü¿¡¬√ƒ≈«»… ÀÃÕŒœ—“”‘’÷ÿŸ⁄€‹›‡·‚„‰ÂÁËÈÍÎÏÌÓÔÒÚÛÙıˆ¯˘˙˚¸˝ˇ', 'SZszYAAAAAACEEEEIIIINOOOOOOUUUUYaaaaaaceeeeiiiinoooooouuuuyy');
-		$file_stripped=strtr($file_stripped, array('ﬁ' => 'TH', '˛' => 'th', '–' => 'DH', '' => 'dh', 'ﬂ' => 'ss', 'å' => 'OE', 'ú' => 'oe', '∆' => 'AE', 'Ê' => 'ae', 'µ' => 'u'));
+		$file_stripped=strtr($file_stripped, array('ﬁ'=>'TH', '˛'=>'th', '–'=>'DH', ''=>'dh', 'ﬂ'=>'ss', 'å'=>'OE', 'ú'=>'oe', '∆'=>'AE', 'Ê'=>'ae', 'µ'=>'u'));
 		$file_stripped=preg_replace(array('/\s/', '/[^\w_\.\-]/'), array('_', ''), $file_stripped);
 		$filename_fixed=((strlen($attachment_id)>0)?($attachment_id.'_'.str_replace('.','_',$file_stripped).md5($file_stripped)):(str_replace('.','_',$file_stripped).md5($file_stripped)));
 		$file_path=$attachments_dir.$filename_fixed;
@@ -1232,7 +1232,7 @@ class Hook_smf
 			$recurrences=NULL;
 
 
-			$days = intval(floor((strtotime($row['endDate']) - strtotime($row['startDate'])) / (60 * 60 * 24))); //Max 7 days in SMF
+			$days=intval(floor((strtotime($row['endDate']) - strtotime($row['startDate'])) / (60 * 60 * 24))); //Max 7 days in SMF
 			if ($days==0)
 			{
 				$recurrence='daily 1';

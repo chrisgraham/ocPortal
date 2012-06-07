@@ -540,8 +540,8 @@ class Module_cms_blogs extends standard_aed_module
 	{
 		check_specific_permission('mass_import');
 
-		$lang			=	post_param('lang',user_lang());
-		$title		=	get_screen_title('IMPORT_WP_DB');
+		$lang=post_param('lang',user_lang());
+		$title=get_screen_title('IMPORT_WP_DB');
 		$submit_name=	do_lang_tempcode('IMPORT_WP_DB');
 
 		require_code('form_templates');
@@ -563,9 +563,9 @@ class Module_cms_blogs extends standard_aed_module
 
 		$hidden=form_input_hidden('lang',$lang);
 
-		$xml_post_url	=	build_url(array('page'=>'_SELF','type'=>'_import_wordpress','method'=>'xml'),'_SELF');
+		$xml_post_url=build_url(array('page'=>'_SELF','type'=>'_import_wordpress','method'=>'xml'),'_SELF');
 
-		$xml_upload_form	=	do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields_xml,'SUBMIT_NAME'=>$submit_name,'URL'=>$xml_post_url));
+		$xml_upload_form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields_xml,'SUBMIT_NAME'=>$submit_name,'URL'=>$xml_post_url));
 
 		//--------------------------------------------
 		$fields=new ocp_tempcode();	
@@ -596,7 +596,7 @@ class Module_cms_blogs extends standard_aed_module
 
 		$javascript='';
 
-		$db_post_url	=	build_url(array('page'=>'_SELF','type'=>'_import_wordpress','method'=>'db'),'_SELF');
+		$db_post_url=build_url(array('page'=>'_SELF','type'=>'_import_wordpress','method'=>'db'),'_SELF');
 
 		$db_import_form=	do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$db_post_url,'JAVASCRIPT'=>$javascript));
 
@@ -623,8 +623,8 @@ class Module_cms_blogs extends standard_aed_module
 		require_code('uploads');
 		is_swf_upload(true);
 
-		$is_validated		=	post_param_integer('wp_auto_validate',0);
-		$to_own_account	=	post_param_integer('wp_add_to_own',0);		
+		$is_validated=post_param_integer('wp_auto_validate',0);
+		$to_own_account=post_param_integer('wp_add_to_own',0);		
 
 		//Wordpress post xml file importing method
 		if((get_param('method')=='xml'))
@@ -670,15 +670,15 @@ class Module_cms_blogs extends standard_aed_module
 				//Check for existing owner categories, if not create blog category for creator
 				if($to_own_account==0)
 				{
-					$creator				=	$item['author'];
-					$submitter_id		=	$GLOBALS['FORUM_DRIVER']->get_member_from_username($creator);
+					$creator=$item['author'];
+					$submitter_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($creator);
 				}
 				else
-					$submitter_id		=	get_member();
+					$submitter_id=get_member();
 
 				//if(is_null($submitter_id))	continue;	//Skip importing posts of nonexisting users
 
-				$owner_category_id	=	$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$submitter_id));
+				$owner_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$submitter_id));
 
 				if(is_null($cat_id))
 				{

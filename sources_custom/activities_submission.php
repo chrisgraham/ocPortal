@@ -192,7 +192,7 @@ function activities_ajax_update_list_handler()
 
 	$response ='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
 
-	$can_remove_others = (has_zone_access($viewer_id,'adminzone'))?true:false;
+	$can_remove_others=(has_zone_access($viewer_id,'adminzone'))?true:false;
 
 	if ($proceed_selection===true)
 	{
@@ -239,7 +239,7 @@ function activities_ajax_removal_handler()
 	if ($guest_id==$viewer_id)
 		$is_guest=true;
 
-	$can_remove_others = (has_zone_access($viewer_id,'adminzone'))?true:false;
+	$can_remove_others=(has_zone_access($viewer_id,'adminzone'))?true:false;
 
 	header('Content-Type: text/xml');
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
@@ -290,26 +290,26 @@ function activities_ajax_removal_handler()
  */
 function log_newest_activity($id,$timeout=1000,$force=false)
 {
-	$filename = get_custom_file_base().'/data_custom/latest_activity.txt';
+	$filename=get_custom_file_base().'/data_custom/latest_activity.txt';
 
 	// Grab a pointer for appending to this file
 	// NOTE: ALWAYS open as append! Opening as write will wipe the file during
 	// the fopen call, which is before we have a lock.
-	$fp = @fopen($filename, 'a+');
+	$fp=@fopen($filename, 'a+');
 
 	// Only bother running if this file can be opened
 	if ($fp!==false)
 	{
 		// Grab our current time in milliseconds
-		$start_time = microtime(true);
+		$start_time=microtime(true);
 
-		$sleep_multiplier = $timeout / 10;
+		$sleep_multiplier=$timeout / 10;
 
 		// Start looping
 		do
 		{
 			// Try to lock the file
-			$can_write = flock($fp, LOCK_EX);
+			$can_write=flock($fp, LOCK_EX);
 
 			// If lock is not obtained sleep for 0 <-> $timeout/10 milliseconds,
 			// to avoid collision and CPU load
@@ -322,7 +322,7 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 		{
 			// Read the current value
 			rewind($fp);
-			$old_id = intval(fgets($fp,1024));
+			$old_id=intval(fgets($fp,1024));
 			// See if we should be updating the file (IDs increase numerically)
 			if ($force || ($old_id < $id))
 			{

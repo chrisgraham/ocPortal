@@ -142,7 +142,7 @@ class forum_driver_mybb extends forum_driver_base
 
 		if (@file_exists($path.'/inc/config.php'))
 		{
-			$config = array();
+			$config=array();
 
 			@include($path.'/inc/config.php');
 			if (array_key_exists('database',$config))
@@ -655,10 +655,10 @@ class forum_driver_mybb extends forum_driver_base
 
 			$id=$r['tid'];
 
-			$r['topic_time'] = $r['dateline'];
-			$r['topic_poster'] = $r['uid'];
-			$r['last_poster'] = $r['lastposteruid'];
-			$r['last_time'] = $r['lastpost'];
+			$r['topic_time']=$r['dateline'];
+			$r['topic_poster']=$r['uid'];
+			$r['last_poster']=$r['lastposteruid'];
+			$r['last_time']=$r['lastpost'];
 
 
 			$firsttime[$id]=$r['dateline'];
@@ -888,7 +888,7 @@ class forum_driver_mybb extends forum_driver_base
 			return false; //the member is never banned
 		} else
 		{
-			$ban_till = $rows[0]['lifted']; //the user is banned till this date/time
+			$ban_till=$rows[0]['lifted']; //the user is banned till this date/time
 		}
 
 		if ($ban_till===0)
@@ -974,7 +974,7 @@ class forum_driver_mybb extends forum_driver_base
 				$skin=$this->get_member_row_field($member,'style'); else $skin='';
 			if ($skin>0) // User has a custom theme
 			{
-				$user_theme=$this->connection->query("SELECT * FROM ".$this->connection->get_table_prefix()."themes WHERE tid = ".strval($skin));
+				$user_theme=$this->connection->query("SELECT * FROM ".$this->connection->get_table_prefix()."themes WHERE tid=".strval($skin));
 
 				$user_theme=(!empty($user_theme[0]))?$user_theme[0]:'';
 				$user_theme=(!empty($user_theme['name']))?$user_theme['name']:'';
@@ -1207,7 +1207,7 @@ class forum_driver_mybb extends forum_driver_base
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'sessions SET time='.strval(time()).', uid='.strval($loguid).' WHERE '.db_string_equal_to('sid',$session_id),1);
 		} else
 		{
-			$session_id = md5(strval(time()));
+			$session_id=md5(strval(time()));
 			$this->connection->query_insert('sessions', array('sid'=>$session_id,'uid'=>$id,'time'=>time(),'ip'=>$current_ip));
 		}
 

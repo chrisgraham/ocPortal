@@ -152,7 +152,7 @@ class Hook_search_news
 		}
 
 		require_code('news');
-		render_news_box($myrow);
+		return render_news_box($myrow);
 	}
 
 }

@@ -58,10 +58,10 @@ class Hook_addon_registry_awards
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
-			'previously_in_addon' => array(
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
+			'previously_in_addon'=>array(
 				'awards'
 			)
 		);
@@ -107,10 +107,10 @@ class Hook_addon_registry_awards
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_MAIN_CONTENT.tpl' => 'block_main_content',
-			'BLOCK_MAIN_MULTI_CONTENT.tpl' => 'block_main_multi_content',
-			'BLOCK_MAIN_AWARDS.tpl' => 'block_main_awards',
-			'AWARDED_CONTENT.tpl' => 'awarded_content'
+			'BLOCK_MAIN_CONTENT.tpl'=>'block_main_content',
+			'BLOCK_MAIN_MULTI_CONTENT.tpl'=>'block_main_multi_content',
+			'BLOCK_MAIN_AWARDS.tpl'=>'block_main_awards',
+			'AWARDED_CONTENT.tpl'=>'awarded_content'
 		);
 	}
 
@@ -125,13 +125,13 @@ class Hook_addon_registry_awards
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTENT', array(
-				'TYPE' => lorem_phrase(),
-				'TITLE' => lorem_word(),
-				'RAW_AWARD_DATE' => placeholder_time(),
-				'AWARD_DATE' => placeholder_time(),
-				'CONTENT' => lorem_phrase_html(),
-				'SUBMIT_URL' => placeholder_url(),
-				'ARCHIVE_URL' => placeholder_url()
+				'TYPE'=>lorem_phrase(),
+				'TITLE'=>lorem_word(),
+				'RAW_AWARD_DATE'=>placeholder_time(),
+				'AWARD_DATE'=>placeholder_time(),
+				'CONTENT'=>lorem_phrase_html(),
+				'SUBMIT_URL'=>placeholder_url(),
+				'ARCHIVE_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -147,15 +147,15 @@ class Hook_addon_registry_awards
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_MULTI_CONTENT', array(
-				'TYPE' => lorem_phrase(),
-				'TITLE' => lorem_word(),
-				'RAW_AWARD_DATE' => placeholder_time(),
-				'AWARD_DATE' => placeholder_time(),
-				'CONTENT' => array(
+				'TYPE'=>lorem_phrase(),
+				'TITLE'=>lorem_word(),
+				'RAW_AWARD_DATE'=>placeholder_time(),
+				'AWARD_DATE'=>placeholder_time(),
+				'CONTENT'=>array(
 					lorem_phrase_html()
 				),
-				'SUBMIT_URL' => placeholder_url(),
-				'ARCHIVE_URL' => placeholder_url()
+				'SUBMIT_URL'=>placeholder_url(),
+				'ARCHIVE_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -171,17 +171,17 @@ class Hook_addon_registry_awards
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_AWARDS', array(
-				'TITLE' => lorem_word(),
-				'TYPE' => lorem_word(),
-				'DESCRIPTION' => lorem_paragraph_html(),
-				'AWARDEE_PROFILE_URL' => placeholder_url(),
-				'AWARDEE' => lorem_phrase(),
-				'AWARDEE_USERNAME' => lorem_word(),
-				'RAW_AWARD_DATE' => placeholder_time(),
-				'AWARD_DATE' => placeholder_time(),
-				'CONTENT' => lorem_phrase_html(),
-				'SUBMIT_URL' => placeholder_url(),
-				'ARCHIVE_URL' => placeholder_url()
+				'TITLE'=>lorem_word(),
+				'TYPE'=>lorem_word(),
+				'DESCRIPTION'=>lorem_paragraph_html(),
+				'AWARDEE_PROFILE_URL'=>placeholder_url(),
+				'AWARDEE'=>lorem_phrase(),
+				'AWARDEE_USERNAME'=>lorem_word(),
+				'RAW_AWARD_DATE'=>placeholder_time(),
+				'AWARD_DATE'=>placeholder_time(),
+				'CONTENT'=>lorem_phrase_html(),
+				'SUBMIT_URL'=>placeholder_url(),
+				'ARCHIVE_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -197,12 +197,12 @@ class Hook_addon_registry_awards
 	{
 		return array(
 			lorem_globalise(do_lorem_template('AWARDED_CONTENT', array(
-				'AWARDEE_PROFILE_URL' => placeholder_url(),
-				'AWARDEE' => lorem_phrase(),
-				'AWARDEE_USERNAME' => lorem_word(),
-				'RAW_AWARD_DATE' => placeholder_time(),
-				'AWARD_DATE' => placeholder_time(),
-				'CONTENT' => lorem_phrase()
+				'AWARDEE_PROFILE_URL'=>placeholder_url(),
+				'AWARDEE'=>lorem_phrase(),
+				'AWARDEE_USERNAME'=>lorem_word(),
+				'RAW_AWARD_DATE'=>placeholder_time(),
+				'AWARD_DATE'=>placeholder_time(),
+				'CONTENT'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

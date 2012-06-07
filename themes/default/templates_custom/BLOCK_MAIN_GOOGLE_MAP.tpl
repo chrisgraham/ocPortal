@@ -6,9 +6,9 @@
 	var data_map;
 	function google_map_initialize()
 	{
-		var bounds = new google.maps.LatLngBounds();
-		var center = new google.maps.LatLng({$?,{$IS_EMPTY,{LATITUDE}},0.0,{LATITUDE}},{$?,{$IS_EMPTY,{LONGITUDE}},0.0,{LONGITUDE}});
-		data_map = new google.maps.Map(document.getElementById('{DIV_ID;}'),
+		var bounds=new google.maps.LatLngBounds();
+		var center=new google.maps.LatLng({$?,{$IS_EMPTY,{LATITUDE}},0.0,{LATITUDE}},{$?,{$IS_EMPTY,{LONGITUDE}},0.0,{LONGITUDE}});
+		data_map=new google.maps.Map(document.getElementById('{DIV_ID;}'),
 		{
 			zoom: {ZOOM},
 			{+START,IF,{$NEQ,{CENTER},1}}
@@ -22,7 +22,7 @@
 			},
 		});
 
-		var infoWindow = new google.maps.InfoWindow();
+		var infoWindow=new google.maps.InfoWindow();
 
 		{$,Close InfoWindow when clicking anywhere on the map.}
 		google.maps.event.addListener(data_map, 'click', function ()
@@ -41,42 +41,42 @@
 		var latLng,markerOptions,marker;
 		var bound_length=0;
 		{+START,IF,{$EQ,{CLUSTER},1}}
-		var markers = [];
+		var markers=[];
 		{+END}
 		{+START,IF,{$AND,{$NEQ,{MIN_LATITUDE},{MAX_LATITUDE}},{$NEQ,{MIN_LONGITUDE},{MAX_LONGITUDE}}}}
 			{+START,IF_NON_EMPTY,{MIN_LATITUDE}{MIN_LONGITUDE}}
-				latLng = new google.maps.LatLng({MIN_LATITUDE}, {MIN_LONGITUDE});
+				latLng=new google.maps.LatLng({MIN_LATITUDE}, {MIN_LONGITUDE});
 				bounds.extend(latLng);
 				bound_length++;
 			{+END}
 			{+START,IF_NON_EMPTY,{MAX_LATITUDE}{MAX_LONGITUDE}}
-				latLng = new google.maps.LatLng({MAX_LATITUDE}, {MAX_LONGITUDE});
+				latLng=new google.maps.LatLng({MAX_LATITUDE}, {MAX_LONGITUDE});
 				bounds.extend(latLng);
 				bound_length++;
 			{+END}
 		{+END}
-		for (var i = 0; i < data.length; i++)
+		for (var i=0; i < data.length; i++)
 		{
-			latLng = new google.maps.LatLng(data[i][1], data[i][2]);
+			latLng=new google.maps.LatLng(data[i][1], data[i][2]);
 			bounds.extend(latLng);
 			bound_length++;
 
-			markerOptions = {
+			markerOptions={
 				position: latLng,
 				title: data[i][0]
 			};
 
 			{$, Reenable if you have put appropriate images in place
-				var categoryIcon = "{$BASE_URL#}/themes/default/images_custom/map_icons/catalogue_category_" + data[i][3] + ".png";
-				markerOptions.icon = categoryIcon;
+				var categoryIcon="{$BASE_URL#}/themes/default/images_custom/map_icons/catalogue_category_" + data[i][3] + ".png";
+				markerOptions.icon=categoryIcon;
 			}
 			if (data[i][6]==1)
 			{
-				var starIcon = "{$BASE_URL#}/themes/default/images_custom/star-3.png";
-				markerOptions.icon = starIcon;
+				var starIcon="{$BASE_URL#}/themes/default/images_custom/star-3.png";
+				markerOptions.icon=starIcon;
 			}
 
-			marker = new google.maps.Marker(markerOptions);
+			marker=new google.maps.Marker(markerOptions);
 
 			{+START,IF,{$EQ,{CLUSTER},1}}
 				markers.push(marker);
@@ -90,7 +90,7 @@
 				return function ()
 				{
 					{$,Dynamically load entry details only when their marker is clicked.}
-					var content = entry_content.replace(/<colgroup>(.|\n)*<\/colgroup>/,'').replace(/&nbsp;/g,' ');
+					var content=entry_content.replace(/<colgroup>(.|\n)*<\/colgroup>/,'').replace(/&nbsp;/g,' ');
 					if (content != "")
 					{
 						infoWindow.setContent(content);
@@ -101,7 +101,7 @@
 		}
 
 		{+START,IF,{$EQ,{CLUSTER},1}}
-			var markerCluster = new MarkerClusterer(data_map, markers);
+			var markerCluster=new MarkerClusterer(data_map, markers);
 		{+END}
 
 		{$,Fit the map around the markers, but only if we want the map centered.}
@@ -118,7 +118,7 @@
 		{$,Sample code to grab clicked positions
 			var lastPoint;
 			google.maps.event.addListener(data_map, "mousemove", function(point) \{
-				lastPoint = point.latLng;
+				lastPoint=point.latLng;
 			\});
 			google.maps.event.addListener(data_map, "click", function() \{
 				console.log(lastPoint.lat() + ', ' + lastPoint.lng());

@@ -59,9 +59,9 @@ class Hook_addon_registry_core_graphic_text
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
 		);
 	}
 

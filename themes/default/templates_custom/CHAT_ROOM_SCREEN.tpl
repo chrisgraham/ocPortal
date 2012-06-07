@@ -53,7 +53,7 @@ function on_login_completed_room()
 
 	chat_load('{ROOM_ID%}');
 	window.con.jid='{$REPLACE;*, ,.,{$USERNAME}}@{$DOMAIN;*}';
-	window.room = mucMan.getRoom( "{ROOM_ID*}" ).createState();
+	window.room=mucMan.getRoom( "{ROOM_ID*}" ).createState();
 	window.room.join('{$REPLACE;*, ,.,{$USERNAME}}');
 	function loadRoomMembers()
 	{

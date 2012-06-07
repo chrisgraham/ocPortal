@@ -58,9 +58,9 @@ class Hook_addon_registry_news_shared
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -89,7 +89,7 @@ class Hook_addon_registry_news_shared
 	function tpl_previews()
 	{
 		return array(
-			'NEWS_BOX.tpl' => 'news_piece_summary'
+			'NEWS_BOX.tpl'=>'news_piece_summary'
 		);
 	}
 
@@ -104,33 +104,33 @@ class Hook_addon_registry_news_shared
 	{
 		return array(
 			lorem_globalise(do_lorem_template('NEWS_BOX', array(
-				'BLOG' => lorem_phrase(),
-				'AUTHOR_URL' => placeholder_url(),
-				'TAGS' => '',
-				'CATEGORY' => lorem_phrase(),
-				'IMG' => placeholder_image_url(),
-				'AUTHOR' => lorem_phrase(),
-				'_AUTHOR' => lorem_phrase(),
-				'SUBMITTER' => placeholder_id(),
-				'AVATAR' => lorem_phrase(),
-				'NEWS_TITLE' => lorem_phrase(),
-				'DATE' => lorem_phrase(),
-				'NEWS' => lorem_phrase(),
-				'COMMENTS' => lorem_phrase(),
-				'VIEW' => lorem_phrase(),
-				'ID' => placeholder_id(),
-				'FULL_URL' => placeholder_url(),
-				'COMMENT_COUNT' => lorem_phrase(),
-				'READ_MORE' => lorem_sentence(),
-				'TRUNCATE' => false,
-				'FIRSTTIME' => lorem_word(),
-				'LASTTIME' => lorem_word_2(),
-				'CLOSED' => lorem_word(),
-				'FIRSTUSERNAME' => lorem_word(),
-				'LASTUSERNAME' => lorem_word(),
-				'FIRSTMEMBERID' => lorem_word(),
-				'LASTMEMBERID' => lorem_word(),
-				'DATE_RAW' => lorem_word()
+				'BLOG'=>lorem_phrase(),
+				'AUTHOR_URL'=>placeholder_url(),
+				'TAGS'=>'',
+				'CATEGORY'=>lorem_phrase(),
+				'IMG'=>placeholder_image_url(),
+				'AUTHOR'=>lorem_phrase(),
+				'_AUTHOR'=>lorem_phrase(),
+				'SUBMITTER'=>placeholder_id(),
+				'AVATAR'=>lorem_phrase(),
+				'NEWS_TITLE'=>lorem_phrase(),
+				'DATE'=>lorem_phrase(),
+				'NEWS'=>lorem_phrase(),
+				'COMMENTS'=>lorem_phrase(),
+				'VIEW'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'FULL_URL'=>placeholder_url(),
+				'COMMENT_COUNT'=>lorem_phrase(),
+				'READ_MORE'=>lorem_sentence(),
+				'TRUNCATE'=>false,
+				'FIRSTTIME'=>lorem_word(),
+				'LASTTIME'=>lorem_word_2(),
+				'CLOSED'=>lorem_word(),
+				'FIRSTUSERNAME'=>lorem_word(),
+				'LASTUSERNAME'=>lorem_word(),
+				'FIRSTMEMBERID'=>lorem_word(),
+				'LASTMEMBERID'=>lorem_word(),
+				'DATE_RAW'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}

@@ -135,8 +135,8 @@ function moveLetter(&$word) {
 	if (!containsVowel($word)) return $word;
 	
 	if (!isVowel(substr($word,0,1))) {
-		$chLetter = strtolower(substr($word,0,1));
-		$word = substr($word,1) . $chLetter;
+		$chLetter=strtolower(substr($word,0,1));
+		$word=substr($word,1) . $chLetter;
 		return moveLetter($word);
 	}
 	else { return $word; }
@@ -155,10 +155,10 @@ function containsVowel($word)
 // Simply checks if letter is a vowel.
 // For most pig latin variations, Y is considered a vowel.
 function isVowel($chLetter) {
-	$letters = array("a","e","i","o","u","y");
+	$letters=array("a","e","i","o","u","y");
 	
-	for ($i = 0; $i < 6; $i++) {
-		if (strtolower($chLetter) == $letters[$i]) { return true; }
+	for ($i=0; $i < 6; $i++) {
+		if (strtolower($chLetter)==$letters[$i]) { return true; }
 	}
 	
 	return false;

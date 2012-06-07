@@ -58,9 +58,9 @@ class Hook_addon_registry_ocf_cpfs
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -92,9 +92,9 @@ class Hook_addon_registry_ocf_cpfs
 	function tpl_previews()
 	{
 		return array(
-			'OCF_CPF_PERMISSIONS_TAB.tpl' => 'ocf_cpf_permissions_tab',
-			'OCF_CPF_STATS_LINE.tpl' => 'administrative__ocf_cpf_stats_screen',
-			'OCF_CPF_STATS_SCREEN.tpl' => 'administrative__ocf_cpf_stats_screen'
+			'OCF_CPF_PERMISSIONS_TAB.tpl'=>'ocf_cpf_permissions_tab',
+			'OCF_CPF_STATS_LINE.tpl'=>'administrative__ocf_cpf_stats_screen',
+			'OCF_CPF_STATS_SCREEN.tpl'=>'administrative__ocf_cpf_stats_screen'
 		);
 	}
 
@@ -109,7 +109,7 @@ class Hook_addon_registry_ocf_cpfs
 	{
 		return array(
 			lorem_globalise(do_lorem_template('OCF_CPF_PERMISSIONS_TAB', array(
-				'FIELDS' => placeholder_fields()
+				'FIELDS'=>placeholder_fields()
 			)), NULL, '', true)
 		);
 	}
@@ -123,19 +123,19 @@ class Hook_addon_registry_ocf_cpfs
 	 */
 	function tpl_preview__administrative__ocf_cpf_stats_screen()
 	{
-		$lines = new ocp_tempcode();
+		$lines=new ocp_tempcode();
 		foreach (placeholder_array() as $value)
 		{
 			$lines->attach(do_lorem_template('OCF_CPF_STATS_LINE', array(
-				'CNT' => placeholder_number(),
-				'VAL' => lorem_phrase()
+				'CNT'=>placeholder_number(),
+				'VAL'=>lorem_phrase()
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('OCF_CPF_STATS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'STATS' => $lines
+				'TITLE'=>lorem_title(),
+				'STATS'=>$lines
 			)), NULL, '', true)
 		);
 	}

@@ -82,7 +82,7 @@ class Hook_cron_ocdeadpeople
 						$friends_healthy[]=$friend;
 				}
 
-				$to_infect = array_rand($friends_healthy);
+				$to_infect=array_rand($friends_healthy);
 
 				if (isset($friends_healthy[$to_infect]) && ($friends_healthy[$to_infect]!=0))
 				{

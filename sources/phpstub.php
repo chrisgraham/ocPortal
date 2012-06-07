@@ -1616,8 +1616,8 @@ function imagetypes()
  * @param  integer	Y@top-left.
  * @param  integer	width.
  * @param  integer	height.
- * @param  integer	start degrees (0 degrees = 3 o clock).
- * @param  integer	end degrees (0 degrees = 3 o clock).
+ * @param  integer	start degrees (0 degrees=3 o clock).
+ * @param  integer	end degrees (0 degrees=3 o clock).
  * @param  integer	Colour code.
  * @return boolean	Success status.
  */
@@ -1634,8 +1634,8 @@ function imagearc($image,$cx,$cy,$w,$h,$s,$e,$color)
  * @param  integer	Y@top-left.
  * @param  integer	width.
  * @param  integer	height.
- * @param  integer	start degrees (0 degrees = 3 o clock).
- * @param  integer	end degrees (0 degrees = 3 o clock).
+ * @param  integer	start degrees (0 degrees=3 o clock).
+ * @param  integer	end degrees (0 degrees=3 o clock).
  * @param  integer	Style, bitwise of IMG_ARC_PIE, IMG_ARC_CHORD, IMG_ARC_NOFILL, IMG_ARC_EDGED.
  * @param  integer	Colour code.
  * @return boolean	Success status.
@@ -4277,9 +4277,10 @@ function pow($base,$exp)
  * Quote regular expression characters.
  *
  * @param  string	The string to escape.
+ * @param  string	Extra character to escape, was used in regular expression to surround it.
  * @return string	The escape string.
  */
-function preg_quote($str)
+function preg_quote($str,$surround_char='/')
 {
 	return '';
 }

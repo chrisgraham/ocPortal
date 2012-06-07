@@ -58,10 +58,10 @@ class Hook_addon_registry_securitylogging
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
-			'previously_in_addon' => array(
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
+			'previously_in_addon'=>array(
 				'core_securitylogging'
 			)
 		);
@@ -97,10 +97,10 @@ class Hook_addon_registry_securitylogging
 	function tpl_previews()
 	{
 		return array(
-			'SECURITY_SCREEN.tpl' => 'administrative__security_screen',
-			'SECURITY_ALERT_SCREEN.tpl' => 'administrative__security_alert_screen',
-			'HACK_ATTEMPT_MAIL.tpl' => 'administrative__hack_attempt_mail',
-			'IPBAN_SCREEN.tpl' => 'ipban_screen'
+			'SECURITY_SCREEN.tpl'=>'administrative__security_screen',
+			'SECURITY_ALERT_SCREEN.tpl'=>'administrative__security_alert_screen',
+			'HACK_ATTEMPT_MAIL.tpl'=>'administrative__hack_attempt_mail',
+			'IPBAN_SCREEN.tpl'=>'ipban_screen'
 		);
 	}
 
@@ -117,12 +117,12 @@ class Hook_addon_registry_securitylogging
 
 		return array(
 			lorem_globalise(do_lorem_template('IPBAN_SCREEN', array(
-				'PING_URL' => placeholder_url(),
-				'WARNING_DETAILS' => '',
-				'TITLE' => lorem_title(),
-				'BANS' => placeholder_ip(),
-				'LOCKED_BANS' => placeholder_ip(),
-				'URL' => placeholder_url()
+				'PING_URL'=>placeholder_url(),
+				'WARNING_DETAILS'=>'',
+				'TITLE'=>lorem_title(),
+				'BANS'=>placeholder_ip(),
+				'LOCKED_BANS'=>placeholder_ip(),
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -138,18 +138,18 @@ class Hook_addon_registry_securitylogging
 	{
 		return array(
 			lorem_globalise(do_lorem_template('HACK_ATTEMPT_MAIL', array(
-				'STACK_TRACE' => lorem_phrase(),
-				'USER_AGENT' => lorem_phrase(),
-				'REFERER' => lorem_phrase(),
-				'USER_OS' => lorem_phrase(),
-				'REASON' => lorem_phrase(),
-				'IP' => placeholder_ip(),
-				'ID' => placeholder_id(),
-				'USERNAME' => lorem_word_html(),
-				'TIME_RAW' => placeholder_date_raw(),
-				'TIME' => placeholder_date(),
-				'URL' => placeholder_url(),
-				'POST' => lorem_phrase()
+				'STACK_TRACE'=>lorem_phrase(),
+				'USER_AGENT'=>lorem_phrase(),
+				'REFERER'=>lorem_phrase(),
+				'USER_OS'=>lorem_phrase(),
+				'REASON'=>lorem_phrase(),
+				'IP'=>placeholder_ip(),
+				'ID'=>placeholder_id(),
+				'USERNAME'=>lorem_word_html(),
+				'TIME_RAW'=>placeholder_date_raw(),
+				'TIME'=>placeholder_date(),
+				'URL'=>placeholder_url(),
+				'POST'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -166,10 +166,10 @@ class Hook_addon_registry_securitylogging
 		require_lang('security');
 		return array(
 			lorem_globalise(do_lorem_template('SECURITY_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'FAILED_LOGINS' => placeholder_table(),
-				'ALERTS' => lorem_phrase(),
-				'URL' => placeholder_url()
+				'TITLE'=>lorem_title(),
+				'FAILED_LOGINS'=>placeholder_table(),
+				'ALERTS'=>lorem_phrase(),
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -186,15 +186,15 @@ class Hook_addon_registry_securitylogging
 		require_lang('security');
 		return array(
 			lorem_globalise(do_lorem_template('SECURITY_ALERT_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'USER_AGENT' => lorem_phrase(),
-				'REFERER' => lorem_phrase(),
-				'USER_OS' => lorem_phrase(),
-				'REASON' => lorem_phrase(),
-				'IP' => lorem_phrase(),
-				'USERNAME' => lorem_word_html(),
-				'POST' => lorem_phrase(),
-				'URL' => placeholder_url()
+				'TITLE'=>lorem_title(),
+				'USER_AGENT'=>lorem_phrase(),
+				'REFERER'=>lorem_phrase(),
+				'USER_OS'=>lorem_phrase(),
+				'REASON'=>lorem_phrase(),
+				'IP'=>lorem_phrase(),
+				'USERNAME'=>lorem_word_html(),
+				'POST'=>lorem_phrase(),
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}

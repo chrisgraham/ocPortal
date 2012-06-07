@@ -893,10 +893,10 @@ function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=N
 	// If its an array then we use it as-is, if it's a string then we explode it first.
 	if (is_array($addon_row['addon_files']))
 	{
-		$loopable = $addon_row['addon_files'];
+		$loopable=$addon_row['addon_files'];
 	} else
 	{
-		$loopable = explode(chr(10),$addon_row['addon_files']);
+		$loopable=explode(chr(10),$addon_row['addon_files']);
 	}
 	foreach ($loopable as $i=>$filename)
 	{

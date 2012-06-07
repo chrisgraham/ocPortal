@@ -58,9 +58,9 @@ class Hook_addon_registry_points
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -131,16 +131,16 @@ class Hook_addon_registry_points
 	function tpl_previews()
 	{
 		return array(
-			'POINTS_LEADERBOARD_ROW.tpl' => 'points_leaderboard',
-			'POINTS_LEADERBOARD.tpl' => 'points_leaderboard',
-			'POINTS_LEADERBOARD_WEEK.tpl' => 'points_leaderboard_screen',
-			'POINTS_LEADERBOARD_SCREEN.tpl' => 'points_leaderboard_screen',
-			'POINTS_SEARCH_RESULT.tpl' => 'points_search_screen',
-			'POINTS_SEARCH_SCREEN.tpl' => 'points_search_screen',
-			'POINTS_GIVE.tpl' => 'points_screen',
-			'POINTS_PROFILE.tpl' => 'points_screen',
-			'POINTS_SCREEN.tpl' => 'points_screen',
-			'POINTS_TRANSACTIONS_WRAP.tpl' => 'points_screen'
+			'POINTS_LEADERBOARD_ROW.tpl'=>'points_leaderboard',
+			'POINTS_LEADERBOARD.tpl'=>'points_leaderboard',
+			'POINTS_LEADERBOARD_WEEK.tpl'=>'points_leaderboard_screen',
+			'POINTS_LEADERBOARD_SCREEN.tpl'=>'points_leaderboard_screen',
+			'POINTS_SEARCH_RESULT.tpl'=>'points_search_screen',
+			'POINTS_SEARCH_SCREEN.tpl'=>'points_search_screen',
+			'POINTS_GIVE.tpl'=>'points_screen',
+			'POINTS_PROFILE.tpl'=>'points_screen',
+			'POINTS_SCREEN.tpl'=>'points_screen',
+			'POINTS_TRANSACTIONS_WRAP.tpl'=>'points_screen'
 		);
 	}
 
@@ -153,23 +153,23 @@ class Hook_addon_registry_points
 	 */
 	function tpl_preview__points_leaderboard()
 	{
-		$out = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$out=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$out->attach(do_lorem_template('POINTS_LEADERBOARD_ROW', array(
-				'ID' => placeholder_id(),
-				'POINTS_URL' => placeholder_url(),
-				'PROFILE_URL' => placeholder_url(),
-				'POINTS' => placeholder_number(),
-				'NAME' => lorem_phrase()
+				'ID'=>placeholder_id(),
+				'POINTS_URL'=>placeholder_url(),
+				'PROFILE_URL'=>placeholder_url(),
+				'POINTS'=>placeholder_number(),
+				'NAME'=>lorem_phrase()
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('POINTS_LEADERBOARD', array(
-				'URL' => placeholder_url(),
-				'LIMIT' => placeholder_number(),
-				'ROWS' => $out
+				'URL'=>placeholder_url(),
+				'LIMIT'=>placeholder_number(),
+				'ROWS'=>$out
 			)), NULL, '', true)
 		);
 	}
@@ -183,30 +183,30 @@ class Hook_addon_registry_points
 	 */
 	function tpl_preview__points_leaderboard_screen()
 	{
-		$out = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$out=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$week_tpl = new ocp_tempcode();
-			foreach (placeholder_array() as $k => $v)
+			$week_tpl=new ocp_tempcode();
+			foreach (placeholder_array() as $k=>$v)
 			{
 				$week_tpl->attach(do_lorem_template('POINTS_LEADERBOARD_ROW', array(
-					'ID' => placeholder_id(),
-					'POINTS_URL' => placeholder_url(),
-					'PROFILE_URL' => placeholder_url(),
-					'POINTS' => placeholder_number(),
-					'NAME' => lorem_phrase()
+					'ID'=>placeholder_id(),
+					'POINTS_URL'=>placeholder_url(),
+					'PROFILE_URL'=>placeholder_url(),
+					'POINTS'=>placeholder_number(),
+					'NAME'=>lorem_phrase()
 				)));
 			}
 			$out->attach(do_lorem_template('POINTS_LEADERBOARD_WEEK', array(
-				'WEEK' => placeholder_number(),
-				'ROWS' => $week_tpl
+				'WEEK'=>placeholder_number(),
+				'ROWS'=>$week_tpl
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('POINTS_LEADERBOARD_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'WEEKS' => $out
+				'TITLE'=>lorem_title(),
+				'WEEKS'=>$out
 			)), NULL, '', true)
 		);
 	}
@@ -220,20 +220,20 @@ class Hook_addon_registry_points
 	 */
 	function tpl_preview__points_search_screen()
 	{
-		$results = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$results=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$results->attach(do_lorem_template('POINTS_SEARCH_RESULT', array(
-				'URL' => placeholder_url(),
-				'ID' => placeholder_id(),
-				'NAME' => lorem_word()
+				'URL'=>placeholder_url(),
+				'ID'=>placeholder_id(),
+				'NAME'=>lorem_word()
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('POINTS_SEARCH_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'RESULTS' => $results
+				'TITLE'=>lorem_title(),
+				'RESULTS'=>$results
 			)), NULL, '', true)
 		);
 	}
@@ -247,71 +247,71 @@ class Hook_addon_registry_points
 	 */
 	function tpl_preview__points_screen()
 	{
-		$chargelog_details = do_lorem_template('POINTS_TRANSACTIONS_WRAP', array(
-			'CONTENT' => placeholder_table(),
-			'TITLE' => lorem_phrase()
+		$chargelog_details=do_lorem_template('POINTS_TRANSACTIONS_WRAP', array(
+			'CONTENT'=>placeholder_table(),
+			'TITLE'=>lorem_phrase()
 		));
 
-		$from = do_lorem_template('POINTS_TRANSACTIONS_WRAP', array(
-			'CONTENT' => placeholder_table(),
-			'TITLE' => lorem_phrase()
+		$from=do_lorem_template('POINTS_TRANSACTIONS_WRAP', array(
+			'CONTENT'=>placeholder_table(),
+			'TITLE'=>lorem_phrase()
 		));
 
-		$to = do_lorem_template('POINTS_TRANSACTIONS_WRAP', array(
-			'CONTENT' => placeholder_table(),
-			'TITLE' => lorem_phrase()
+		$to=do_lorem_template('POINTS_TRANSACTIONS_WRAP', array(
+			'CONTENT'=>placeholder_table(),
+			'TITLE'=>lorem_phrase()
 		));
 
-		$give_template = do_lorem_template('POINTS_GIVE', array(
-			'GIVE_URL' => placeholder_url(),
-			'USER' => lorem_phrase(),
-			'VIEWER_GIFT_POINTS_AVAILABLE' => placeholder_number()
+		$give_template=do_lorem_template('POINTS_GIVE', array(
+			'GIVE_URL'=>placeholder_url(),
+			'USER'=>lorem_phrase(),
+			'VIEWER_GIFT_POINTS_AVAILABLE'=>placeholder_number()
 		));
 
-		$content = do_lorem_template('POINTS_PROFILE', array(
-			'MEMBER' => lorem_phrase(),
-			'PROFILE_URL' => placeholder_url(),
-			'NAME' => lorem_word(),
-			'POINTS_JOINING' => placeholder_number(),
-			'POINTS_RATING' => placeholder_number(),
-			'POINTS_VOTING' => placeholder_number(),
-			'POINTS_POSTING' => placeholder_number(),
-			'POINTS_PER_DAY' => placeholder_number(),
-			'POINTS_PER_DAILY_VISIT' => placeholder_number(),
-			'POST_COUNT' => placeholder_number(),
-			'POINTS_GAINED_GIVEN' => placeholder_number(),
-			'POINTS_GAINED_RATING' => placeholder_number(),
-			'POINTS_GAINED_VOTING' => placeholder_number(),
-			'POINTS_GAINED_AUTO' => placeholder_number(),
-			'POINTS_USED' => placeholder_number(),
-			'REMAINING' => placeholder_number(),
-			'GIFT_POINTS_USED' => placeholder_number(),
-			'GIFT_POINTS_AVAILABLE' => placeholder_number(),
-			'DAYS_JOINED' => placeholder_number(),
-			'TO' => $to,
-			'FROM' => $from,
-			'CHARGELOG_DETAILS' => $chargelog_details,
-			'GIVE' => $give_template,
-			'WIKI_POST_COUNT' => placeholder_number(),
-			'POINTS_WIKI_POSTING' => placeholder_number(),
-			'CHAT_POST_COUNT' => placeholder_number(),
-			'POINTS_CHAT_POSTING' => placeholder_number(),
-			'MULT_POINTS_RATING' => placeholder_number(),
-			'MULT_POINTS_VOTING' => placeholder_number(),
-			'MULT_POINTS_CHAT_POSTING' => placeholder_number(),
-			'MULT_POINTS_WIKI_POSTING' => placeholder_number(),
-			'MULT_POINTS_POSTING' => placeholder_number(),
-			'MULT_POINTS_PER_DAY' => placeholder_number()
+		$content=do_lorem_template('POINTS_PROFILE', array(
+			'MEMBER'=>lorem_phrase(),
+			'PROFILE_URL'=>placeholder_url(),
+			'NAME'=>lorem_word(),
+			'POINTS_JOINING'=>placeholder_number(),
+			'POINTS_RATING'=>placeholder_number(),
+			'POINTS_VOTING'=>placeholder_number(),
+			'POINTS_POSTING'=>placeholder_number(),
+			'POINTS_PER_DAY'=>placeholder_number(),
+			'POINTS_PER_DAILY_VISIT'=>placeholder_number(),
+			'POST_COUNT'=>placeholder_number(),
+			'POINTS_GAINED_GIVEN'=>placeholder_number(),
+			'POINTS_GAINED_RATING'=>placeholder_number(),
+			'POINTS_GAINED_VOTING'=>placeholder_number(),
+			'POINTS_GAINED_AUTO'=>placeholder_number(),
+			'POINTS_USED'=>placeholder_number(),
+			'REMAINING'=>placeholder_number(),
+			'GIFT_POINTS_USED'=>placeholder_number(),
+			'GIFT_POINTS_AVAILABLE'=>placeholder_number(),
+			'DAYS_JOINED'=>placeholder_number(),
+			'TO'=>$to,
+			'FROM'=>$from,
+			'CHARGELOG_DETAILS'=>$chargelog_details,
+			'GIVE'=>$give_template,
+			'WIKI_POST_COUNT'=>placeholder_number(),
+			'POINTS_WIKI_POSTING'=>placeholder_number(),
+			'CHAT_POST_COUNT'=>placeholder_number(),
+			'POINTS_CHAT_POSTING'=>placeholder_number(),
+			'MULT_POINTS_RATING'=>placeholder_number(),
+			'MULT_POINTS_VOTING'=>placeholder_number(),
+			'MULT_POINTS_CHAT_POSTING'=>placeholder_number(),
+			'MULT_POINTS_WIKI_POSTING'=>placeholder_number(),
+			'MULT_POINTS_POSTING'=>placeholder_number(),
+			'MULT_POINTS_PER_DAY'=>placeholder_number()
 		));
 
 		//Create the 'NEXT_BROWSER_BROWSE_NEXT' template
-		$browse = do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL' => placeholder_url(),'PREVIOUS_URL' => placeholder_url(),'PAGE_NUM' => placeholder_number(),'NUM_PAGES' => placeholder_number()));
+		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL'=>placeholder_url(),'PREVIOUS_URL'=>placeholder_url(),'PAGE_NUM'=>placeholder_number(),'NUM_PAGES'=>placeholder_number()));
 
 		return array(
 			lorem_globalise(do_lorem_template('POINTS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'BROWSE' => $browse,
-				'CONTENT' => $content
+				'TITLE'=>lorem_title(),
+				'BROWSE'=>$browse,
+				'CONTENT'=>$content
 			)), NULL, '', true)
 		);
 	}

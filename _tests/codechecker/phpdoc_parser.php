@@ -42,7 +42,6 @@ if (isset($_SERVER['argv']))
 require(dirname(__FILE__).'/php.php');
 
 $files=do_dir($OCPORTAL_PATH,true,true);
-$files[]='sources/phpstub.php';
 
 $classes=array();
 $global=array();
@@ -116,7 +115,7 @@ echo 'Done';
 function require_code($codename)
 {
 	global $OCPORTAL_PATH;
-	require_once($codename.'.php');
+	require_once($OCPORTAL_PATH.'/sources/'.$codename.'.php');
 }
 
 function get_file_base()

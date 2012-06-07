@@ -58,9 +58,9 @@ class Hook_addon_registry_themewizard
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -104,9 +104,9 @@ class Hook_addon_registry_themewizard
 	function tpl_previews()
 	{
 		return array(
-			'THEMEWIZARD_2_PREVIEW.tpl' => 'administrative__themewizard_2_preview',
-			'THEMEWIZARD_2_SCREEN.tpl' => 'administrative__themewizard_2_screen',
-			'LOGOWIZARD_2.tpl' => 'administrative__logowizard_2'
+			'THEMEWIZARD_2_PREVIEW.tpl'=>'administrative__themewizard_2_preview',
+			'THEMEWIZARD_2_SCREEN.tpl'=>'administrative__themewizard_2_screen',
+			'LOGOWIZARD_2.tpl'=>'administrative__logowizard_2'
 		);
 	}
 
@@ -121,7 +121,7 @@ class Hook_addon_registry_themewizard
 	{
 		require_lang('themes');
 
-		$content = do_lorem_template('THEMEWIZARD_2_PREVIEW');
+		$content=do_lorem_template('THEMEWIZARD_2_PREVIEW');
 
 		return array(
 			lorem_globalise($content, NULL, '', true)
@@ -141,18 +141,18 @@ class Hook_addon_registry_themewizard
 
 		return array(
 			lorem_globalise(do_lorem_template('THEMEWIZARD_2_SCREEN', array(
-				'SOURCE_THEME' => 'default',
-				'ALGORITHM' => 'equations',
-				'RED' => placeholder_id(),
-				'GREEN' => placeholder_id(),
-				'BLUE' => placeholder_id(),
-				'SEED' => lorem_word(),
-				'DARK' => lorem_word_2(),
-				'DOMINANT' => lorem_word(),
-				'LD' => lorem_phrase(),
-				'TITLE' => lorem_title(),
-				'CHANGE_URL' => placeholder_url(),
-				'STAGE3_URL' => placeholder_url()
+				'SOURCE_THEME'=>'default',
+				'ALGORITHM'=>'equations',
+				'RED'=>placeholder_id(),
+				'GREEN'=>placeholder_id(),
+				'BLUE'=>placeholder_id(),
+				'SEED'=>lorem_word(),
+				'DARK'=>lorem_word_2(),
+				'DOMINANT'=>lorem_word(),
+				'LD'=>lorem_phrase(),
+				'TITLE'=>lorem_title(),
+				'CHANGE_URL'=>placeholder_url(),
+				'STAGE3_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -168,19 +168,19 @@ class Hook_addon_registry_themewizard
 	{
 		require_lang('themes');
 
-		$preview = do_lorem_template('LOGOWIZARD_2', array(
-			'NAME' => lorem_phrase(),
-			'TITLE' => lorem_phrase(),
-			'THEME' => lorem_phrase()
+		$preview=do_lorem_template('LOGOWIZARD_2', array(
+			'NAME'=>lorem_phrase(),
+			'TITLE'=>lorem_phrase(),
+			'THEME'=>lorem_phrase()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('CONFIRM_SCREEN', array(
-				'URL' => placeholder_url(),
-				'BACK_URL' => placeholder_url(),
-				'PREVIEW' => $preview,
-				'FIELDS' => '',
-				'TITLE' => lorem_title()
+				'URL'=>placeholder_url(),
+				'BACK_URL'=>placeholder_url(),
+				'PREVIEW'=>$preview,
+				'FIELDS'=>'',
+				'TITLE'=>lorem_title()
 			)), NULL, '', true)
 		);
 	}

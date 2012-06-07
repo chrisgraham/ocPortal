@@ -1730,7 +1730,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 		}
 		$myrow=$rows[0];
 
-		$gallery_owner	=	$GLOBALS['FORUM_DRIVER']->get_username($myrow['g_owner']);
+		$gallery_owner=$GLOBALS['FORUM_DRIVER']->get_username($myrow['g_owner']);
 
 		return $this->get_form_fields($id,get_translated_text($myrow['fullname']),get_translated_text($myrow['description']),get_translated_text($myrow['teaser']),$myrow['notes'],$myrow['parent_id'],$myrow['accept_images'],$myrow['accept_videos'],$myrow['is_member_synched'],$myrow['flow_mode_interface'],$myrow['rep_image'],$myrow['watermark_top_left'],$myrow['watermark_top_right'],$myrow['watermark_bottom_left'],$myrow['watermark_bottom_right'],$myrow['allow_rating'],$myrow['allow_comments'],$gallery_owner);
 	}
@@ -1763,7 +1763,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 		$g_owner_name=post_param('g_owner',NULL);
 
 		if(is_null($g_owner_name))
-			$g_owner	=	get_member();
+			$g_owner=get_member();
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
 
@@ -1813,7 +1813,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$g_owner_name=post_param('g_owner',NULL);
 		if(is_null($g_owner_name))
-			$g_owner	=	$GLOBALS['SITE_DB']->query_value('galleries','g_owner',array('name'=>$name));
+			$g_owner=$GLOBALS['SITE_DB']->query_value('galleries','g_owner',array('name'=>$name));
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
 

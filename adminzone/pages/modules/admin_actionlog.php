@@ -516,7 +516,7 @@ class Module_admin_actionlog
 	function syndicate_ip_ban()
 	{
 		$ip=either_param('ip');
-		$member_id=either_param('member_id');
+		$member_id=either_param_integer('member_id');
 
 		$title=get_screen_title('SYNDICATE_TO_STOPFORUMSPAM');
 

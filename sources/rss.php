@@ -480,7 +480,7 @@ class rss
 								$current_item['category']=$data;
 								break;
 							case 'SOURCE':
-								$current_item['author']	=	$data;
+								$current_item['author']=$data;
 								break;
 							case 'COMMENTS':
 								$current_item['comment_url']=$data;

@@ -3,10 +3,10 @@
 	var marker,map;
 	function google_map_users_initialize()
 	{
-		marker = new google.maps.Marker();
-		var bounds = new google.maps.LatLngBounds();
-		var center = new google.maps.LatLng({$?,{$IS_EMPTY,{LATITUDE}},0,{LATITUDE;}},{$?,{$IS_EMPTY,{LONGITUDE}},0,{LONGITUDE;}});
-		map = new google.maps.Map(document.getElementById('map_position_{NAME;}'),
+		marker=new google.maps.Marker();
+		var bounds=new google.maps.LatLngBounds();
+		var center=new google.maps.LatLng({$?,{$IS_EMPTY,{LATITUDE}},0,{LATITUDE;}},{$?,{$IS_EMPTY,{LONGITUDE}},0,{LONGITUDE;}});
+		map=new google.maps.Map(document.getElementById('map_position_{NAME;}'),
 		{
 			zoom: {$?,{$IS_NON_EMPTY,{LATITUDE}},12,1},
 			center: center,
@@ -23,7 +23,7 @@
 			}]
 		});
 
-		var infoWindow = new google.maps.InfoWindow();
+		var infoWindow=new google.maps.InfoWindow();
 
 		{$,Close InfoWindow when clicking anywhere on the map.}
 		google.maps.event.addListener(map, 'click', function ()
@@ -40,7 +40,7 @@
 		{$,Save into hidden fields}
 		var lastPoint;
 		google.maps.event.addListener(map, "mousemove", function(point) {
-			lastPoint = point.latLng;
+			lastPoint=point.latLng;
 		});
 		google.maps.event.addListener(map, "click", function() {
 			document.getElementById('{NAME;}_latitude').value=lastPoint.lat();
@@ -52,7 +52,7 @@
 
 	function place_marker(latitude,longitude)
 	{
-		var latLng = new google.maps.LatLng(latitude,longitude);
+		var latLng=new google.maps.LatLng(latitude,longitude);
 		marker.setPosition(latLng);
 	}
 

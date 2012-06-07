@@ -58,9 +58,9 @@ class Hook_addon_registry_import
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -123,14 +123,14 @@ class Hook_addon_registry_import
 	function tpl_previews()
 	{
 		return array(
-			'IMPORT_ACTION_LINE.tpl' => 'administrative__import_action_screen',
-			'IMPORT_ACTION_SCREEN.tpl' => 'administrative__import_action_screen',
-			'IMPORT_MESSAGE.tpl' => 'administrative__import_action_screen',
-			'XML_STORAGE_SCREEN.tpl' => 'administrative__xml_storage_screen',
-			'XML_STORAGE_IMPORT_RESULTS_SCREEN.tpl' => 'administrative__xml_storage_import_results_screen',
-			'XML_STORAGE_EXPORT_RESULTS_SCREEN.tpl' => 'administrative__xml_storage_export_results_screen',
-			'IMPORT_MKPORTAL_FCOMCODEPAGE.tpl' => 'administrative__import_mkportal_fcomcodepage',
-			'IMPORT_PHPNUKE_FCOMCODEPAGE.tpl' => 'administrative__import_phpnuke_fcomcodepage'
+			'IMPORT_ACTION_LINE.tpl'=>'administrative__import_action_screen',
+			'IMPORT_ACTION_SCREEN.tpl'=>'administrative__import_action_screen',
+			'IMPORT_MESSAGE.tpl'=>'administrative__import_action_screen',
+			'XML_STORAGE_SCREEN.tpl'=>'administrative__xml_storage_screen',
+			'XML_STORAGE_IMPORT_RESULTS_SCREEN.tpl'=>'administrative__xml_storage_import_results_screen',
+			'XML_STORAGE_EXPORT_RESULTS_SCREEN.tpl'=>'administrative__xml_storage_export_results_screen',
+			'IMPORT_MKPORTAL_FCOMCODEPAGE.tpl'=>'administrative__import_mkportal_fcomcodepage',
+			'IMPORT_PHPNUKE_FCOMCODEPAGE.tpl'=>'administrative__import_phpnuke_fcomcodepage'
 		);
 	}
 
@@ -143,27 +143,27 @@ class Hook_addon_registry_import
 	 */
 	function tpl_preview__administrative__import_action_screen()
 	{
-		$extra = do_lorem_template('IMPORT_MESSAGE', array(
-			'MESSAGE' => lorem_phrase()
+		$extra=do_lorem_template('IMPORT_MESSAGE', array(
+			'MESSAGE'=>lorem_phrase()
 		));
-		$import_list = do_lorem_template('IMPORT_ACTION_LINE', array(
-			'CHECKED' => false,
-			'DISABLED' => true,
-			'NAME' => lorem_word(),
-			'TEXT' => lorem_phrase(),
-			'ADVANCED_URL' => placeholder_url()
+		$import_list=do_lorem_template('IMPORT_ACTION_LINE', array(
+			'CHECKED'=>false,
+			'DISABLED'=>true,
+			'NAME'=>lorem_word(),
+			'TEXT'=>lorem_phrase(),
+			'ADVANCED_URL'=>placeholder_url()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('IMPORT_ACTION_SCREEN', array(
-				'EXTRA' => $extra,
-				'MESSAGE' => lorem_phrase(),
-				'TITLE' => lorem_title(),
-				'FIELDS' => lorem_phrase(),
-				'HIDDEN' => '',
-				'IMPORTER' => lorem_phrase(),
-				'IMPORT_LIST' => $import_list,
-				'URL' => placeholder_url()
+				'EXTRA'=>$extra,
+				'MESSAGE'=>lorem_phrase(),
+				'TITLE'=>lorem_title(),
+				'FIELDS'=>lorem_phrase(),
+				'HIDDEN'=>'',
+				'IMPORTER'=>lorem_phrase(),
+				'IMPORT_LIST'=>$import_list,
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -179,9 +179,9 @@ class Hook_addon_registry_import
 	{
 		return array(
 			lorem_globalise(do_lorem_template('XML_STORAGE_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'IMPORT_FORM' => placeholder_form(),
-				'EXPORT_FORM' => placeholder_form()
+				'TITLE'=>lorem_title(),
+				'IMPORT_FORM'=>placeholder_form(),
+				'EXPORT_FORM'=>placeholder_form()
 			)), NULL, '', true)
 		);
 	}
@@ -195,19 +195,19 @@ class Hook_addon_registry_import
 	 */
 	function tpl_preview__administrative__xml_storage_import_results_screen()
 	{
-		$ops_nice = array();
+		$ops_nice=array();
 		foreach (placeholder_array() as $v)
 		{
-			$ops_nice[] = array(
-				'OP' => lorem_word(),
-				'PARAM_A' => lorem_word_2(),
-				'PARAM_B' => lorem_word_2()
+			$ops_nice[]=array(
+				'OP'=>lorem_word(),
+				'PARAM_A'=>lorem_word_2(),
+				'PARAM_B'=>lorem_word_2()
 			);
 		}
 		return array(
 			lorem_globalise(do_lorem_template('XML_STORAGE_IMPORT_RESULTS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'OPS' => $ops_nice
+				'TITLE'=>lorem_title(),
+				'OPS'=>$ops_nice
 			)), NULL, '', true)
 		);
 	}
@@ -223,8 +223,8 @@ class Hook_addon_registry_import
 	{
 		return array(
 			lorem_globalise(do_lorem_template('XML_STORAGE_EXPORT_RESULTS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'XML' => lorem_phrase()
+				'TITLE'=>lorem_title(),
+				'XML'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -240,12 +240,12 @@ class Hook_addon_registry_import
 	{
 		return array(
 			lorem_globalise(do_lorem_template('IMPORT_MKPORTAL_FCOMCODEPAGE', array(
-				'TITLE' => lorem_phrase(),
-				'SUBTITLE' => lorem_phrase(),
-				'PAGE_HEADER' => lorem_phrase(),
-				'TEXT' => lorem_sentence_html(),
-				'PAGE_FOOTER' => lorem_phrase(),
-				'SIGNATURE' => lorem_phrase()
+				'TITLE'=>lorem_phrase(),
+				'SUBTITLE'=>lorem_phrase(),
+				'PAGE_HEADER'=>lorem_phrase(),
+				'TEXT'=>lorem_sentence_html(),
+				'PAGE_FOOTER'=>lorem_phrase(),
+				'SIGNATURE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -261,12 +261,12 @@ class Hook_addon_registry_import
 	{
 		return array(
 			lorem_globalise(do_lorem_template('IMPORT_PHPNUKE_FCOMCODEPAGE', array(
-				'TITLE' => lorem_phrase(),
-				'SUBTITLE' => lorem_phrase(),
-				'PAGE_HEADER' => lorem_phrase(),
-				'TEXT' => lorem_sentence_html(),
-				'PAGE_FOOTER' => lorem_phrase(),
-				'SIGNATURE' => lorem_phrase()
+				'TITLE'=>lorem_phrase(),
+				'SUBTITLE'=>lorem_phrase(),
+				'PAGE_HEADER'=>lorem_phrase(),
+				'TEXT'=>lorem_sentence_html(),
+				'PAGE_FOOTER'=>lorem_phrase(),
+				'SIGNATURE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

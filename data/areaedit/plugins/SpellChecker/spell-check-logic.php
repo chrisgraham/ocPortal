@@ -349,8 +349,8 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 
 	if (trim($text)!='')
 	{
-		$varlines='<script type="text/javascript">var suggested_words = { ';
-		$infolines='var spellcheck_info = {';
+		$varlines='<script type="text/javascript">var suggested_words={ ';
+		$infolines='var spellcheck_info={';
 		$counter=0;
 		$suggest_count=0;
 		$textarray=array();

@@ -58,9 +58,9 @@ class Hook_addon_registry_stats
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -131,10 +131,10 @@ class Hook_addon_registry_stats
 	function tpl_previews()
 	{
 		return array(
-			'STATS_GRAPH.tpl' => 'administrative__stats_screen',
-			'STATS_SCREEN.tpl' => 'administrative__stats_screen',
-			'STATS_OVERVIEW_SCREEN.tpl' => 'administrative__stats_screen_overview',
-			'STATS_SCREEN_ISCREEN.tpl' => 'administrative__stats_screen_iscreen'
+			'STATS_GRAPH.tpl'=>'administrative__stats_screen',
+			'STATS_SCREEN.tpl'=>'administrative__stats_screen',
+			'STATS_OVERVIEW_SCREEN.tpl'=>'administrative__stats_screen_overview',
+			'STATS_SCREEN_ISCREEN.tpl'=>'administrative__stats_screen_iscreen'
 		);
 	}
 
@@ -148,19 +148,19 @@ class Hook_addon_registry_stats
 	 */
 	function tpl_preview__administrative__stats_screen()
 	{
-		$graph = do_lorem_template('STATS_GRAPH', array(
-			'GRAPH' => placeholder_url(),
-			'TITLE' => lorem_phrase(),
-			'TEXT' => lorem_sentence(),
-			'KEYWORDS_SHARE' => lorem_word(),
-			'DESCRIPTION_KEYWORDS_SHARE' => lorem_word()
+		$graph=do_lorem_template('STATS_GRAPH', array(
+			'GRAPH'=>placeholder_url(),
+			'TITLE'=>lorem_phrase(),
+			'TEXT'=>lorem_sentence(),
+			'KEYWORDS_SHARE'=>lorem_word(),
+			'DESCRIPTION_KEYWORDS_SHARE'=>lorem_word()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('STATS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'GRAPH' => $graph,
-				'STATS' => placeholder_table()
+				'TITLE'=>lorem_title(),
+				'GRAPH'=>$graph,
+				'STATS'=>placeholder_table()
 			)), NULL, '', true)
 		);
 	}
@@ -176,10 +176,10 @@ class Hook_addon_registry_stats
 	{
 		return array(
 			lorem_globalise(do_lorem_template('STATS_OVERVIEW_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'STATS_VIEWS' => placeholder_table(),
-				'GRAPH_VIEWS_MONTHLY' => lorem_phrase(),
-				'STATS_VIEWS_MONTHLY' => lorem_phrase()
+				'TITLE'=>lorem_title(),
+				'STATS_VIEWS'=>placeholder_table(),
+				'GRAPH_VIEWS_MONTHLY'=>lorem_phrase(),
+				'STATS_VIEWS_MONTHLY'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -193,38 +193,38 @@ class Hook_addon_registry_stats
 	 */
 	function tpl_preview__administrative__stats_screen_iscreen()
 	{
-		$graph_regionality = do_lorem_template('STATS_GRAPH', array(
-			'GRAPH' => placeholder_url(),
-			'TITLE' => lorem_phrase(),
-			'TEXT' => lorem_sentence(),
-			'KEYWORDS_SHARE' => lorem_word(),
-			'DESCRIPTION_KEYWORDS_SHARE' => lorem_word()
+		$graph_regionality=do_lorem_template('STATS_GRAPH', array(
+			'GRAPH'=>placeholder_url(),
+			'TITLE'=>lorem_phrase(),
+			'TEXT'=>lorem_sentence(),
+			'KEYWORDS_SHARE'=>lorem_word(),
+			'DESCRIPTION_KEYWORDS_SHARE'=>lorem_word()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('STATS_SCREEN_ISCREEN', array(
-				'TITLE' => lorem_title(),
-				'GRAPH_REGIONALITY' => $graph_regionality,
-				'STATS_REGIONALITY' => placeholder_table(),
-				'STATS_VIEWS' => lorem_phrase(),
-				'GRAPH_KEYWORDS' => lorem_phrase(),
-				'STATS_KEYWORDS' => lorem_phrase(),
-				'GRAPH_VIEWS_HOURLY' => lorem_phrase(),
-				'STATS_VIEWS_HOURLY' => lorem_phrase(),
-				'GRAPH_VIEWS_DAILY' => lorem_phrase(),
-				'STATS_VIEWS_DAILY' => lorem_phrase(),
-				'GRAPH_VIEWS_WEEKLY' => lorem_phrase(),
-				'STATS_VIEWS_WEEKLY' => lorem_phrase(),
-				'GRAPH_VIEWS_MONTHLY' => lorem_phrase(),
-				'STATS_VIEWS_MONTHLY' => lorem_phrase(),
-				'GRAPH_IP' => placeholder_ip(),
-				'STATS_IP' => placeholder_ip(),
-				'GRAPH_BROWSER' => lorem_phrase(),
-				'STATS_BROWSER' => lorem_phrase(),
-				'GRAPH_REFERRER' => lorem_phrase(),
-				'STATS_REFERRER' => lorem_phrase(),
-				'GRAPH_OS' => lorem_phrase(),
-				'STATS_OS' => lorem_phrase()
+				'TITLE'=>lorem_title(),
+				'GRAPH_REGIONALITY'=>$graph_regionality,
+				'STATS_REGIONALITY'=>placeholder_table(),
+				'STATS_VIEWS'=>lorem_phrase(),
+				'GRAPH_KEYWORDS'=>lorem_phrase(),
+				'STATS_KEYWORDS'=>lorem_phrase(),
+				'GRAPH_VIEWS_HOURLY'=>lorem_phrase(),
+				'STATS_VIEWS_HOURLY'=>lorem_phrase(),
+				'GRAPH_VIEWS_DAILY'=>lorem_phrase(),
+				'STATS_VIEWS_DAILY'=>lorem_phrase(),
+				'GRAPH_VIEWS_WEEKLY'=>lorem_phrase(),
+				'STATS_VIEWS_WEEKLY'=>lorem_phrase(),
+				'GRAPH_VIEWS_MONTHLY'=>lorem_phrase(),
+				'STATS_VIEWS_MONTHLY'=>lorem_phrase(),
+				'GRAPH_IP'=>placeholder_ip(),
+				'STATS_IP'=>placeholder_ip(),
+				'GRAPH_BROWSER'=>lorem_phrase(),
+				'STATS_BROWSER'=>lorem_phrase(),
+				'GRAPH_REFERRER'=>lorem_phrase(),
+				'STATS_REFERRER'=>lorem_phrase(),
+				'GRAPH_OS'=>lorem_phrase(),
+				'STATS_OS'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}

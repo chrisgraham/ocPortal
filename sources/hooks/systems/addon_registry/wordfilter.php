@@ -58,10 +58,10 @@ class Hook_addon_registry_wordfilter
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array(),
-			'previously_in_addon' => array(
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array(),
+			'previously_in_addon'=>array(
 				'core_wordfilter'
 			)
 		);
@@ -96,7 +96,7 @@ class Hook_addon_registry_wordfilter
 	function tpl_previews()
 	{
 		return array(
-			'WORDFILTER_SCREEN.tpl' => 'administrative__wordfilter_screen'
+			'WORDFILTER_SCREEN.tpl'=>'administrative__wordfilter_screen'
 		);
 	}
 
@@ -111,9 +111,9 @@ class Hook_addon_registry_wordfilter
 	{
 		return array(
 			lorem_globalise(do_lorem_template('WORDFILTER_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'TPL' => lorem_phrase(),
-				'ADD_FORM' => placeholder_form()
+				'TITLE'=>lorem_title(),
+				'TPL'=>lorem_phrase(),
+				'ADD_FORM'=>placeholder_form()
 			)), NULL, '', true)
 		);
 	}

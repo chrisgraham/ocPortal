@@ -58,9 +58,9 @@ class Hook_addon_registry_tester
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -101,16 +101,16 @@ class Hook_addon_registry_tester
 	function tpl_previews()
 	{
 		return array(
-			'TESTER_STATISTICS_MEMBER.tpl' => 'administrative__tester_statistics_screen',
-			'TESTER_STATISTICS_SCREEN.tpl' => 'administrative__tester_statistics_screen',
-			'TESTER_GO_SECTION.tpl' => 'administrative__tester_go_section',
-			'TESTER_TEST_SET.tpl' => 'administrative__tester_go_screen',
-			'TESTER_GO_TEST.tpl' => 'administrative__tester_go_screen',
-			'TESTER_GO_SCREEN.tpl' => 'administrative__tester_go_screen',
-			'TESTER_REPORT.tpl' => 'administrative__tester_report',
-			'TESTER_TEST_GROUP_NEW.tpl' => 'administrative__tester_add_section_screen',
-			'TESTER_ADD_SECTION_SCREEN.tpl' => 'administrative__tester_add_section_screen',
-			'TESTER_TEST_GROUP.tpl' => 'administrative__tester_add_section_screen'
+			'TESTER_STATISTICS_MEMBER.tpl'=>'administrative__tester_statistics_screen',
+			'TESTER_STATISTICS_SCREEN.tpl'=>'administrative__tester_statistics_screen',
+			'TESTER_GO_SECTION.tpl'=>'administrative__tester_go_section',
+			'TESTER_TEST_SET.tpl'=>'administrative__tester_go_screen',
+			'TESTER_GO_TEST.tpl'=>'administrative__tester_go_screen',
+			'TESTER_GO_SCREEN.tpl'=>'administrative__tester_go_screen',
+			'TESTER_REPORT.tpl'=>'administrative__tester_report',
+			'TESTER_TEST_GROUP_NEW.tpl'=>'administrative__tester_add_section_screen',
+			'TESTER_ADD_SECTION_SCREEN.tpl'=>'administrative__tester_add_section_screen',
+			'TESTER_TEST_GROUP.tpl'=>'administrative__tester_add_section_screen'
 		);
 	}
 
@@ -123,26 +123,26 @@ class Hook_addon_registry_tester
 	 */
 	function tpl_preview__administrative__tester_statistics_screen()
 	{
-		$testers = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$testers=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$testers->attach(do_lorem_template('TESTER_STATISTICS_MEMBER', array(
-				'TESTER' => lorem_word(),
-				'NUM_TESTS' => placeholder_number(),
-				'NUM_TESTS_SUCCESSFUL' => placeholder_number(),
-				'NUM_TESTS_FAILED' => placeholder_number(),
-				'NUM_TESTS_INCOMPLETE' => placeholder_number()
+				'TESTER'=>lorem_word(),
+				'NUM_TESTS'=>placeholder_number(),
+				'NUM_TESTS_SUCCESSFUL'=>placeholder_number(),
+				'NUM_TESTS_FAILED'=>placeholder_number(),
+				'NUM_TESTS_INCOMPLETE'=>placeholder_number()
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('TESTER_STATISTICS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'TESTERS' => $testers,
-				'NUM_TESTS' => placeholder_number(),
-				'NUM_TESTS_SUCCESSFUL' => placeholder_number(),
-				'NUM_TESTS_FAILED' => placeholder_number(),
-				'NUM_TESTS_INCOMPLETE' => placeholder_number()
+				'TITLE'=>lorem_title(),
+				'TESTERS'=>$testers,
+				'NUM_TESTS'=>placeholder_number(),
+				'NUM_TESTS_SUCCESSFUL'=>placeholder_number(),
+				'NUM_TESTS_FAILED'=>placeholder_number(),
+				'NUM_TESTS_INCOMPLETE'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}
@@ -158,11 +158,11 @@ class Hook_addon_registry_tester
 	{
 		return array(
 			lorem_globalise(do_lorem_template('TESTER_GO_SECTION', array(
-				'ID' => placeholder_id(),
-				'EDIT_TEST_SECTION_URL' => placeholder_url(),
-				'NOTES' => lorem_phrase(),
-				'SECTION' => lorem_phrase(),
-				'TESTS' => placeholder_fields()
+				'ID'=>placeholder_id(),
+				'EDIT_TEST_SECTION_URL'=>placeholder_url(),
+				'NOTES'=>lorem_phrase(),
+				'SECTION'=>lorem_phrase(),
+				'TESTS'=>placeholder_fields()
 			)), NULL, '', true)
 		);
 	}
@@ -176,37 +176,37 @@ class Hook_addon_registry_tester
 	 */
 	function tpl_preview__administrative__tester_go_screen()
 	{
-		$sections = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$sections=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$a_test = do_lorem_template('TESTER_TEST_SET', array(
-				'TESTS' => placeholder_array(),
-				'T_TEST' => lorem_word()
+			$a_test=do_lorem_template('TESTER_TEST_SET', array(
+				'TESTS'=>placeholder_array(),
+				'T_TEST'=>lorem_word()
 			));
-			$tests = do_lorem_template('TESTER_GO_TEST', array(
-				'BUG_REPORT_URL' => placeholder_url(),
-				'TEST' => $a_test,
-				'ID' => strval($k),
-				'VALUE' => strval($k)
+			$tests=do_lorem_template('TESTER_GO_TEST', array(
+				'BUG_REPORT_URL'=>placeholder_url(),
+				'TEST'=>$a_test,
+				'ID'=>strval($k),
+				'VALUE'=>strval($k)
 			));
 
 			$sections->attach(do_lorem_template('TESTER_GO_SECTION', array(
-				'ID' => placeholder_id(),
-				'EDIT_TEST_SECTION_URL' => placeholder_url(),
-				'NOTES' => lorem_phrase(),
-				'SECTION' => lorem_phrase(),
-				'TESTS' => $tests
+				'ID'=>placeholder_id(),
+				'EDIT_TEST_SECTION_URL'=>placeholder_url(),
+				'NOTES'=>lorem_phrase(),
+				'SECTION'=>lorem_phrase(),
+				'TESTS'=>$tests
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('TESTER_GO_SCREEN', array(
-				'ADD_TEST_SECTION_URL' => placeholder_url(),
-				'SHOW_SUCCESSFUL' => 'true',
-				'SHOW_FOR_ALL' => 'true',
-				'TITLE' => lorem_title(),
-				'SECTIONS' => $sections,
-				'URL' => placeholder_url()
+				'ADD_TEST_SECTION_URL'=>placeholder_url(),
+				'SHOW_SUCCESSFUL'=>'true',
+				'SHOW_FOR_ALL'=>'true',
+				'TITLE'=>lorem_title(),
+				'SECTIONS'=>$sections,
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -222,9 +222,9 @@ class Hook_addon_registry_tester
 	{
 		return array(
 			lorem_globalise(do_lorem_template('TESTER_REPORT', array(
-				'TITLE' => lorem_title(),
-				'TEST' => lorem_phrase(),
-				'COMMENTS' => lorem_phrase()
+				'TITLE'=>lorem_title(),
+				'TEST'=>lorem_phrase(),
+				'COMMENTS'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -238,28 +238,28 @@ class Hook_addon_registry_tester
 	 */
 	function tpl_preview__administrative__tester_add_section_screen()
 	{
-		$tests = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$tests=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$tests->attach(do_lorem_template('TESTER_TEST_GROUP', array(
-				'ID' => 'edit_' . strval($k),
-				'FIELDS' => placeholder_fields()
+				'ID'=>'edit_' . strval($k),
+				'FIELDS'=>placeholder_fields()
 			)));
 		}
 
-		$add_template = do_lorem_template('TESTER_TEST_GROUP_NEW', array(
-			'ID' => lorem_word(),
-			'FIELDS' => placeholder_fields()
+		$add_template=do_lorem_template('TESTER_TEST_GROUP_NEW', array(
+			'ID'=>lorem_word(),
+			'FIELDS'=>placeholder_fields()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('TESTER_ADD_SECTION_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'SUBMIT_NAME' => lorem_phrase(),
-				'TESTS' => $tests,
-				'URL' => placeholder_url(),
-				'FIELDS' => placeholder_fields(),
-				'ADD_TEMPLATE' => $add_template
+				'TITLE'=>lorem_title(),
+				'SUBMIT_NAME'=>lorem_phrase(),
+				'TESTS'=>$tests,
+				'URL'=>placeholder_url(),
+				'FIELDS'=>placeholder_fields(),
+				'ADD_TEMPLATE'=>$add_template
 			)), NULL, '', true)
 		);
 	}

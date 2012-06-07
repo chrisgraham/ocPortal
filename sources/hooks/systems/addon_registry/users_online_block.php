@@ -58,9 +58,9 @@ class Hook_addon_registry_users_online_block
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -90,8 +90,8 @@ class Hook_addon_registry_users_online_block
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_SIDE_USERS_ONLINE_USER.tpl' => 'block_side_users_online',
-			'BLOCK_SIDE_USERS_ONLINE.tpl' => 'block_side_users_online'
+			'BLOCK_SIDE_USERS_ONLINE_USER.tpl'=>'block_side_users_online',
+			'BLOCK_SIDE_USERS_ONLINE.tpl'=>'block_side_users_online'
 		);
 	}
 
@@ -104,41 +104,41 @@ class Hook_addon_registry_users_online_block
 	 */
 	function tpl_preview__block_side_users_online()
 	{
-		$out = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$out=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$out->attach(do_lorem_template('BLOCK_SIDE_USERS_ONLINE_USER', array(
-				'URL' => placeholder_url(),
-				'NAME' => lorem_phrase(),
-				'COLOUR' => lorem_word()
+				'URL'=>placeholder_url(),
+				'NAME'=>lorem_phrase(),
+				'COLOUR'=>lorem_word()
 			)));
 		}
 
-		$newest = new ocp_tempcode();
-		$birthdays = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$newest=new ocp_tempcode();
+		$birthdays=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$newest->attach(lorem_phrase());
 
-			$birthday = do_lorem_template('OCF_USER_MEMBER', array(
-				'COLOUR' => lorem_word(),
-				'AGE' => placeholder_number(),
-				'PROFILE_URL' => placeholder_url(),
-				'USERNAME' => lorem_phrase(),
-				'AT' => lorem_phrase()
+			$birthday=do_lorem_template('OCF_USER_MEMBER', array(
+				'COLOUR'=>lorem_word(),
+				'AGE'=>placeholder_number(),
+				'PROFILE_URL'=>placeholder_url(),
+				'USERNAME'=>lorem_phrase(),
+				'AT'=>lorem_phrase()
 			));
 			$birthdays->attach($birthday);
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_USERS_ONLINE', array(
-				'CONTENT' => $out,
-				'GUESTS' => placeholder_number(),
-				'MEMBERS' => placeholder_number(),
-				'_GUESTS' => lorem_phrase(),
-				'_MEMBERS' => lorem_phrase(),
-				'BIRTHDAYS' => $birthdays,
-				'NEWEST' => $newest
+				'CONTENT'=>$out,
+				'GUESTS'=>placeholder_number(),
+				'MEMBERS'=>placeholder_number(),
+				'_GUESTS'=>lorem_phrase(),
+				'_MEMBERS'=>lorem_phrase(),
+				'BIRTHDAYS'=>$birthdays,
+				'NEWEST'=>$newest
 			)), NULL, '', true)
 		);
 	}

@@ -25,7 +25,7 @@ function parse($_tokens=NULL)
 	$structure=_parse_php($tokens,$i);
 	$structure['ok_extra_functions']=$OK_EXTRA_FUNCTIONS;
 	global $FILENAME;
-	if ((count($structure['main'])>0) && (substr($FILENAME,0,7)=='sources') && ($FILENAME!='sources/global.php') && ($FILENAME!='sources/critical_errors.php') && ((count($structure['main'])>1) || (($structure['main'][0][0]!='RETURN') && (($structure['main'][0][0]!='CALL_DIRECT') || ($structure['main'][0][1]!='require_code')))))
+	if ((count($structure['main'])>0) && (substr($FILENAME,0,7)=='sources') && ($FILENAME!='sources'.DIRECTORY_SEPARATOR.'global.php') && ($FILENAME!='sources'.DIRECTORY_SEPARATOR.'critical_errors.php') && ((count($structure['main'])>1) || (($structure['main'][0][0]!='RETURN') && (($structure['main'][0][0]!='CALL_DIRECT') || ($structure['main'][0][1]!='require_code')))))
 	{
 		log_warning('Sources files should not contain loose code');
 	}
@@ -70,7 +70,7 @@ function _parse_php()
 					if ($_['name']==$class['name']) log_warning('Duplicated class '.$class['name']);
 				}
 				$program['classes'][]=$class;
-				$modifiers = array();
+				$modifiers=array();
 				break;
 
 			case 'INTERFACE':
@@ -80,7 +80,7 @@ function _parse_php()
 					if (in_array('abstract',$modifiers)) log_warning('Interfaces are inherently abstract, do not use the abstract keyword');
 					if (in_array('protected',$modifiers)) log_warning('Interfaces cannot be protected. The point of an interface is that it is public');
 					if (in_array('private',$modifiers)) log_warning('Interfaces cannot be private. The point of an interface is that it is public');
-					$class['modifiers'] = $modifiers;
+					$class['modifiers']=$modifiers;
 				}
 				pparse__parser_next();
 				$class['name']=pparse__parser_expect('IDENTIFIER');
@@ -102,7 +102,7 @@ function _parse_php()
 				$class=array_merge($class,$_class);
 				pparse__parser_expect('CURLY_CLOSE');
 				$program['classes'][]=$class;
-				$modifiers = array();
+				$modifiers=array();
 				break;
 
 			case 'ABSTRACT':
@@ -114,12 +114,12 @@ function _parse_php()
 				switch (pparse__parser_peek())
 				{
 					case 'CLASS':
-						$modifiers[] = 'abstract';
+						$modifiers[]='abstract';
 						break;
 					default:
 						// This is an invalid token to appear after "abstract"
 						log_warning('Only classes and their methods can be abstract, not '.pparse__parser_peek());
-						$modifiers = array();
+						$modifiers=array();
 						break;
 				}
 				break;
@@ -254,8 +254,8 @@ function _parse_command_actual($no_term_needed=false)
 					// above. Handle this if so:
 					if (in_array(pparse__parser_peek(),array('EQUAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL'),true))
 					{
-						$assignment = _parse_assignment_operator();
-						$expression = _parse_expression();
+						$assignment=_parse_assignment_operator();
+						$expression=_parse_expression();
 						$command=array('ASSIGNMENT',$assignment,$command,$expression,$GLOBALS['i']);
 					}
 					break;
@@ -408,12 +408,12 @@ function _parse_command_actual($no_term_needed=false)
 
 		case 'TRY':
 			pparse__parser_next();		// Consume the "try"
-			$try_position = $GLOBALS['i'];
+			$try_position=$GLOBALS['i'];
 			if (pparse__parser_peek() != 'CURLY_OPEN') parser_error('Expected code block after "try".');
-			$try = _parse_command();
+			$try=_parse_command();
 			pparse__parser_expect('CATCH');
-			$catch_position = $GLOBALS['i'];
-			$exception = NULL;
+			$catch_position=$GLOBALS['i'];
+			$exception=NULL;
 			switch (pparse__parser_peek())
 			{
 				case 'BRACKET_OPEN':
@@ -422,11 +422,11 @@ function _parse_command_actual($no_term_needed=false)
 					// although it accepts a bit too much
 					pparse__parser_expect('BRACKET_OPEN');
 					pparse__parser_expect('IDENTIFIER'); // E.g. 'EXCEPTION'
-					$exception = _parse_comma_parameters();
+					$exception=_parse_comma_parameters();
 					pparse__parser_expect('BRACKET_CLOSE');
 					if (pparse__parser_peek() != 'CURLY_OPEN') parser_error ('Expected code block after "catch".');
 				case 'CURLY_OPEN':
-					$catch = _parse_command();
+					$catch=_parse_command();
 					$command=array('TRY',$try,array('CATCH',$exception,$catch,$catch_position),$try_position);
 					break;
 				default:
@@ -437,8 +437,8 @@ function _parse_command_actual($no_term_needed=false)
 
 		case 'THROW':
 			pparse__parser_next();		// Consume the "throw"
-			$expr = _parse_expression();
-			$command = array('THROW',$expr,$GLOBALS['i']);
+			$expr=_parse_expression();
+			$command=array('THROW',$expr,$GLOBALS['i']);
 			break;
 
 		case 'RETURN':
@@ -655,9 +655,9 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 				{
 					log_warning('Multiple visibility levels defined: '.implode(', ',$modifiers).', '.$next);
 				}
-				$modifiers[] = strtolower($next);
+				$modifiers[]=strtolower($next);
 				if ($is_interface && in_array('abstract',$modifiers)) log_warning('Everything in an interface is inherently abstract. Do not use the abstract keyword.');
-				if (pparse__parser_peek_dist(1) == 'FUNCTION')
+				if (pparse__parser_peek_dist(1)=='FUNCTION')
 				{
 					// Variables fall through to VAR, function's don't
 					pparse__parser_next();		// VAR does this in its do-while loop
@@ -676,7 +676,7 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 					if ($next_2=='EQUAL')
 					{
 						pparse__parser_next();
-						if (pparse__parser_peek() == 'ARRAY')
+						if (pparse__parser_peek()=='ARRAY')
 						{
 							pparse__parser_next();		// Skip over the ARRAY
 							pparse__parser_expect('BRACKET_OPEN');
@@ -699,7 +699,7 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 				while ($next_2=='COMMA');
 
 				pparse__parser_expect('COMMAND_TERMINATE');
-				$modifiers = array();
+				$modifiers=array();
 				break;
 
 			case 'FUNCTION':
@@ -711,12 +711,12 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 					if ($_['name']==$_function['name']) log_warning('Duplicated method \''.$_function['name'].'\'');
 				}
 				$class['functions'][]=$_function;
-				$modifiers = array();
+				$modifiers=array();
 				break;
 
 			case 'ABSTRACT':
 				if ($is_interface) log_warning('Everything in an interface is inherently abstract. Do not use the abstract keyword');
-				$modifiers[] = 'abstract';
+				$modifiers[]='abstract';
 				if (!in_array('abstract',$class_modifiers))
 				{
 					log_warning('Abstract keyword found in a non-abstract class.');
@@ -771,7 +771,7 @@ function _parse_class_dec($modifiers=array())
 	$class=array('is_interface'=>false);		// Classes and interfaces aren't different enough to justify separate handlers
 	if (count($modifiers) > 0)
 	{
-		$class['modifiers'] = $modifiers;
+		$class['modifiers']=$modifiers;
 	}
 	pparse__parser_next();
 	$class['name']=pparse__parser_expect('IDENTIFIER');
@@ -1527,9 +1527,9 @@ function parser_error($message)
 	global $tokens,$i;
 	/*foreach ($tokens as $key=>$token)
 	{
-		if ($key == $i) echo '<strong>';
+		if ($key==$i) echo '<strong>';
 		echo ' '.$token[0].' ';
-		if ($key == $i) echo '</strong>';
+		if ($key==$i) echo '</strong>';
 	}*/
 	list($pos,$line,$full_line)=pos_to_line_details($i);
 	die_error('PARSER',$pos,$line,$message);

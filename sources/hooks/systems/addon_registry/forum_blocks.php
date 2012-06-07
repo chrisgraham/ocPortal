@@ -58,11 +58,11 @@ class Hook_addon_registry_forum_blocks
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(
+			'requires'=>array(
 				'news_shared'
 			),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -97,11 +97,11 @@ class Hook_addon_registry_forum_blocks
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_MAIN_FORUM_TOPICS_TOPIC.tpl' => 'block_main_forum_topics',
-			'BLOCK_MAIN_FORUM_TOPICS.tpl' => 'block_main_forum_topics',
-			'BLOCK_SIDE_FORUM_NEWS_SUMMARY.tpl' => 'block_side_forum_news',
-			'BLOCK_SIDE_FORUM_NEWS.tpl' => 'block_side_forum_news',
-			'BLOCK_MAIN_FORUM_NEWS.tpl' => 'block_main_forum_news'
+			'BLOCK_MAIN_FORUM_TOPICS_TOPIC.tpl'=>'block_main_forum_topics',
+			'BLOCK_MAIN_FORUM_TOPICS.tpl'=>'block_main_forum_topics',
+			'BLOCK_SIDE_FORUM_NEWS_SUMMARY.tpl'=>'block_side_forum_news',
+			'BLOCK_SIDE_FORUM_NEWS.tpl'=>'block_side_forum_news',
+			'BLOCK_MAIN_FORUM_NEWS.tpl'=>'block_main_forum_news'
 		);
 	}
 
@@ -116,30 +116,30 @@ class Hook_addon_registry_forum_blocks
 	{
 		require_lang('ocf');
 		//Create the 'BLOCK_MAIN_FORUM_TOPICS_TOPIC' template value
-		$out = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$out=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$out->attach(do_lorem_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC', array(
-				'POST' => lorem_paragraph(),
-				'FORUM_ID' => NULL,
-				'FORUM_NAME' => lorem_word(),
-				'TOPIC_URL' => placeholder_url(),
-				'TITLE' => lorem_word(),
-				'DATE' => placeholder_time(),
-				'DATE_RAW' => placeholder_date_raw(),
-				'USERNAME' => lorem_word(),
-				'MEMBER_ID' => NULL,
-				'NUM_POSTS' => placeholder_number()
+				'POST'=>lorem_paragraph(),
+				'FORUM_ID'=>NULL,
+				'FORUM_NAME'=>lorem_word(),
+				'TOPIC_URL'=>placeholder_url(),
+				'TITLE'=>lorem_word(),
+				'DATE'=>placeholder_time(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'USERNAME'=>lorem_word(),
+				'MEMBER_ID'=>NULL,
+				'NUM_POSTS'=>placeholder_number()
 			)));
 		}
 
 		//Create the 'BLOCK_MAIN_FORUM_TOPICS' with 'BLOCK_MAIN_FORUM_TOPICS_TOPIC' as sub-template.
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_FORUM_TOPICS', array(
-				'TITLE' => lorem_word(),
-				'CONTENT' => $out,
-				'FORUM_NAME' => lorem_word_html(),
-				'SUBMIT_URL' => placeholder_url()
+				'TITLE'=>lorem_word(),
+				'CONTENT'=>$out,
+				'FORUM_NAME'=>lorem_word_html(),
+				'SUBMIT_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -156,33 +156,33 @@ class Hook_addon_registry_forum_blocks
 		require_lang('news');
 		require_lang('ocf');
 		//Create the 'BLOCK_SIDE_FORUM_NEWS_SUMMARY' template value
-		$out = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$out=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$out->attach(do_lorem_template('BLOCK_SIDE_FORUM_NEWS_SUMMARY', array(
-				'REPLIES' => lorem_word(),
-				'FIRSTTIME' => lorem_word(),
-				'LASTTIME' => lorem_word(),
-				'CLOSED' => lorem_word(),
-				'FIRSTUSERNAME' => lorem_word(),
-				'LASTUSERNAME' => lorem_word(),
-				'FIRSTMEMBERID' => lorem_word(),
-				'LASTMEMBERID' => lorem_word(),
-				'_DATE' => placeholder_date_raw(),
-				'DATE' => placeholder_time(),
-				'FULL_URL' => placeholder_url(),
-				'NEWS_TITLE' => escape_html(lorem_word())
+				'REPLIES'=>lorem_word(),
+				'FIRSTTIME'=>lorem_word(),
+				'LASTTIME'=>lorem_word(),
+				'CLOSED'=>lorem_word(),
+				'FIRSTUSERNAME'=>lorem_word(),
+				'LASTUSERNAME'=>lorem_word(),
+				'FIRSTMEMBERID'=>lorem_word(),
+				'LASTMEMBERID'=>lorem_word(),
+				'_DATE'=>placeholder_date_raw(),
+				'DATE'=>placeholder_time(),
+				'FULL_URL'=>placeholder_url(),
+				'NEWS_TITLE'=>escape_html(lorem_word())
 			)));
 		}
 
 		//Create the 'BLOCK_SIDE_FORUM_NEWS' with 'BLOCK_SIDE_FORUM_NEWS_SUMMARY' as sub-template.
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_FORUM_NEWS', array(
-				'FORUM_NAME' => lorem_word_html(),
-				'TITLE' => lorem_phrase(),
-				'CONTENT' => $out,
-				'SUBMIT_URL' => placeholder_url(),
-				'ARCHIVE_URL' => placeholder_url()
+				'FORUM_NAME'=>lorem_word_html(),
+				'TITLE'=>lorem_phrase(),
+				'CONTENT'=>$out,
+				'SUBMIT_URL'=>placeholder_url(),
+				'ARCHIVE_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -198,44 +198,44 @@ class Hook_addon_registry_forum_blocks
 	{
 		require_lang('news');
 		//Create the 'NEWS_BOX' template value
-		$out = new ocp_tempcode();
-		foreach (placeholder_array() as $k => $v)
+		$out=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
 		{
 			$out->attach(do_lorem_template('NEWS_BOX', array(
-				'TRUNCATE' => false,
-				'BLOG' => false,
-				'FIRSTTIME' => lorem_word(),
-				'LASTTIME' => lorem_word(),
-				'CLOSED' => lorem_word(),
-				'FIRSTUSERNAME' => lorem_word(),
-				'LASTUSERNAME' => lorem_word(),
-				'FIRSTMEMBERID' => lorem_word(),
-				'LASTMEMBERID' => lorem_word(),
-				'ID' => lorem_word(),
-				'FULL_URL' => placeholder_url(),
-				'SUBMITTER' => placeholder_id(),
-				'DATE' => placeholder_time(),
-				'DATE_RAW' => placeholder_date_raw(),
-				'NEWS_TITLE' => lorem_word(),
-				'CATEGORY' => '',
-				'IMG' => '',
-				'AUTHOR' => lorem_word(),
-				'AUTHOR_URL' => placeholder_url(),
-				'NEWS' => lorem_paragraph()
+				'TRUNCATE'=>false,
+				'BLOG'=>false,
+				'FIRSTTIME'=>lorem_word(),
+				'LASTTIME'=>lorem_word(),
+				'CLOSED'=>lorem_word(),
+				'FIRSTUSERNAME'=>lorem_word(),
+				'LASTUSERNAME'=>lorem_word(),
+				'FIRSTMEMBERID'=>lorem_word(),
+				'LASTMEMBERID'=>lorem_word(),
+				'ID'=>lorem_word(),
+				'FULL_URL'=>placeholder_url(),
+				'SUBMITTER'=>placeholder_id(),
+				'DATE'=>placeholder_time(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'NEWS_TITLE'=>lorem_word(),
+				'CATEGORY'=>'',
+				'IMG'=>'',
+				'AUTHOR'=>lorem_word(),
+				'AUTHOR_URL'=>placeholder_url(),
+				'NEWS'=>lorem_paragraph()
 			)));
 		}
 
 		//Create the 'BLOCK_MAIN_FORUM_NEWS' with 'NEWS_BOX' as sub-template.
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_FORUM_NEWS', array(
-				'TITLE' => lorem_word(),
-				'FORUM_NAME' => lorem_word_html(),
-				'CONTENT' => $out,
-				'BRIEF' => lorem_phrase(),
-				'ARCHIVE_URL' => placeholder_url(),
-				'SUBMIT_URL' => placeholder_url(),
-				'RSS_URL' => placeholder_url(),
-				'ATOM_URL' => placeholder_url()
+				'TITLE'=>lorem_word(),
+				'FORUM_NAME'=>lorem_word_html(),
+				'CONTENT'=>$out,
+				'BRIEF'=>lorem_phrase(),
+				'ARCHIVE_URL'=>placeholder_url(),
+				'SUBMIT_URL'=>placeholder_url(),
+				'RSS_URL'=>placeholder_url(),
+				'ATOM_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}

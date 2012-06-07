@@ -85,7 +85,7 @@ function get_dropbox_dir()
 
 	try
 	{
-		$db_connection = new DropboxConnection($dbemail, $dbpassword);
+		$db_connection=new DropboxConnection($dbemail, $dbpassword);
 		$directories=$db_connection->getdirs($dbdir."/".$sub_dir);
 
 		if (isset($sub_dir))

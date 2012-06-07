@@ -130,8 +130,8 @@ class Module_admin_quiz
 	{
 		$title=get_screen_title('EXPORT_QUIZ');
 
-		$fields		=	new ocp_tempcode();
-		$quiz_list	=	$this->nice_get_entries();
+		$fields=new ocp_tempcode();
+		$quiz_list=$this->nice_get_entries();
 
 		//Add all cal option
 		//$quiz_list->attach(form_input_list_entry('0',true,do_lang_tempcode('ALL_QUIZZES')));
@@ -150,8 +150,8 @@ class Module_admin_quiz
 	function	_export_quiz()
 	{
 		require_code('files2');
-		$quiz_id	=	post_param_integer('quiz_id');
-		$data		=	get_quizz_data_for_csv($quiz_id);
+		$quiz_id=post_param_integer('quiz_id');
+		$data=get_quizz_data_for_csv($quiz_id);
 		make_csv($data,'quiz.csv');
 	}
 

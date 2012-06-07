@@ -58,9 +58,9 @@ class Hook_addon_registry_ecommerce
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -171,32 +171,32 @@ class Hook_addon_registry_ecommerce
 	function tpl_previews()
 	{
 		return array(
-			'ECOM_OUTSTANDING_INVOICES_SCREEN.tpl' => 'administrative__ecom_outstanding_invoices_screen',
-			'ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER.tpl' => 'ecom_subscriptions_screen',
-			'ECOM_TRANSACTION_LOGS_SCREEN.tpl' => 'administrative__ecom_transaction_logs_screen',
-			'ECOM_CASH_FLOW_SCREEN.tpl' => 'administrative__ecom_cash_flow_screen',
-			'PURCHASE_WIZARD_STAGE_TRANSACT.tpl' => 'purchase_wizard_stage_transact',
-			'PURCHASE_WIZARD_SCREEN.tpl' => 'purchase_wizard_screen',
-			'ECOM_LOGOS_WORLDPAY.tpl' => 'ecom_logos_worldpay',
-			'ECOM_BUTTON_VIA_WORLDPAY.tpl' => 'ecom_button_via_worldpay',
-			'ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY.tpl' => 'ecom_subscription_button_via_worldpay',
-			'ECOM_CANCEL_BUTTON_VIA_WORLDPAY.tpl' => 'ecom_cancel_button_via_worldpay',
-			'ECOM_BUTTON_VIA_PAYPAL.tpl' => 'ecom_button_via_paypal',
-			'ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL.tpl' => 'ecom_subscription_button_via_paypal',
-			'ECOM_CANCEL_BUTTON_VIA_PAYPAL.tpl' => 'ecom_cancel_button_via_paypal',
-			'ECOM_BUTTON_VIA_SECPAY.tpl' => 'ecom_button_via_secpay',
-			'ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY.tpl' => 'ecom_subscription_button_via_secpay',
-			'ECOM_CANCEL_BUTTON_VIA_SECPAY.tpl' => 'ecom_cancel_button_via_secpay',
-			'PURCHASE_WIZARD_STAGE_GUEST.tpl' => 'purchase_wizard_stage_guest',
-			'PURCHASE_WIZARD_STAGE_CHOOSE.tpl' => 'purchase_wizard_stage_choose',
-			'PURCHASE_WIZARD_STAGE_MESSAGE.tpl' => 'purchase_wizard_stage_message',
-			'PURCHASE_WIZARD_STAGE_LICENCE.tpl' => 'purchase_wizard_stage_licence',
-			'PURCHASE_WIZARD_STAGE_DETAILS.tpl' => 'purchase_wizard_stage_details',
-			'PURCHASE_WIZARD_STAGE_FINISH.tpl' => 'purchase_wizard_stage_finish',
-			'ECOM_INVOICES_SCREEN.tpl' => 'ecom_invoices_screen',
-			'ECOM_SUBSCRIPTIONS_SCREEN.tpl' => 'ecom_subscriptions_screen',
-			'PURCHASE_WIZARD_STAGE_SUBSCRIBE.tpl' => 'purchase_wizard_stage_subscribe',
-			'PURCHASE_WIZARD_STAGE_PAY.tpl' => 'purchase_wizard_stage_pay'
+			'ECOM_OUTSTANDING_INVOICES_SCREEN.tpl'=>'administrative__ecom_outstanding_invoices_screen',
+			'ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER.tpl'=>'ecom_subscriptions_screen',
+			'ECOM_TRANSACTION_LOGS_SCREEN.tpl'=>'administrative__ecom_transaction_logs_screen',
+			'ECOM_CASH_FLOW_SCREEN.tpl'=>'administrative__ecom_cash_flow_screen',
+			'PURCHASE_WIZARD_STAGE_TRANSACT.tpl'=>'purchase_wizard_stage_transact',
+			'PURCHASE_WIZARD_SCREEN.tpl'=>'purchase_wizard_screen',
+			'ECOM_LOGOS_WORLDPAY.tpl'=>'ecom_logos_worldpay',
+			'ECOM_BUTTON_VIA_WORLDPAY.tpl'=>'ecom_button_via_worldpay',
+			'ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY.tpl'=>'ecom_subscription_button_via_worldpay',
+			'ECOM_CANCEL_BUTTON_VIA_WORLDPAY.tpl'=>'ecom_cancel_button_via_worldpay',
+			'ECOM_BUTTON_VIA_PAYPAL.tpl'=>'ecom_button_via_paypal',
+			'ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL.tpl'=>'ecom_subscription_button_via_paypal',
+			'ECOM_CANCEL_BUTTON_VIA_PAYPAL.tpl'=>'ecom_cancel_button_via_paypal',
+			'ECOM_BUTTON_VIA_SECPAY.tpl'=>'ecom_button_via_secpay',
+			'ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY.tpl'=>'ecom_subscription_button_via_secpay',
+			'ECOM_CANCEL_BUTTON_VIA_SECPAY.tpl'=>'ecom_cancel_button_via_secpay',
+			'PURCHASE_WIZARD_STAGE_GUEST.tpl'=>'purchase_wizard_stage_guest',
+			'PURCHASE_WIZARD_STAGE_CHOOSE.tpl'=>'purchase_wizard_stage_choose',
+			'PURCHASE_WIZARD_STAGE_MESSAGE.tpl'=>'purchase_wizard_stage_message',
+			'PURCHASE_WIZARD_STAGE_LICENCE.tpl'=>'purchase_wizard_stage_licence',
+			'PURCHASE_WIZARD_STAGE_DETAILS.tpl'=>'purchase_wizard_stage_details',
+			'PURCHASE_WIZARD_STAGE_FINISH.tpl'=>'purchase_wizard_stage_finish',
+			'ECOM_INVOICES_SCREEN.tpl'=>'ecom_invoices_screen',
+			'ECOM_SUBSCRIPTIONS_SCREEN.tpl'=>'ecom_subscriptions_screen',
+			'PURCHASE_WIZARD_STAGE_SUBSCRIBE.tpl'=>'purchase_wizard_stage_subscribe',
+			'PURCHASE_WIZARD_STAGE_PAY.tpl'=>'purchase_wizard_stage_pay'
 		);
 	}
 
@@ -209,27 +209,27 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__administrative__ecom_outstanding_invoices_screen()
 	{
-		$invoices = array();
+		$invoices=array();
 		foreach (placeholder_array() as $invoice)
 		{
-			$invoices[] = array(
-				'INVOICE_TITLE' => lorem_word(),
-				'PROFILE_URL' => placeholder_url(),
-				'USERNAME' => lorem_word_2(),
-				'ID' => placeholder_id(),
-				'STATE' => lorem_phrase(),
-				'AMOUNT' => placeholder_number(),
-				'TIME' => placeholder_time(),
-				'NOTE' => lorem_phrase(),
-				'TYPE_CODE' => lorem_phrase()
+			$invoices[]=array(
+				'INVOICE_TITLE'=>lorem_word(),
+				'PROFILE_URL'=>placeholder_url(),
+				'USERNAME'=>lorem_word_2(),
+				'ID'=>placeholder_id(),
+				'STATE'=>lorem_phrase(),
+				'AMOUNT'=>placeholder_number(),
+				'TIME'=>placeholder_time(),
+				'NOTE'=>lorem_phrase(),
+				'TYPE_CODE'=>lorem_phrase()
 			);
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_OUTSTANDING_INVOICES_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'FROM' => lorem_phrase(),
-				'INVOICES' => $invoices
+				'TITLE'=>lorem_title(),
+				'FROM'=>lorem_phrase(),
+				'INVOICES'=>$invoices
 			)), NULL, '', true)
 		);
 	}
@@ -245,10 +245,10 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_TRANSACTION_LOGS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'PRODUCTS' => placeholder_options(),
-				'URL' => placeholder_url(),
-				'RESULTS_TABLE' => placeholder_table(),
+				'TITLE'=>lorem_title(),
+				'PRODUCTS'=>placeholder_options(),
+				'URL'=>placeholder_url(),
+				'RESULTS_TABLE'=>placeholder_table(),
 			)), NULL, '', true)
 		);
 	}
@@ -262,19 +262,19 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__administrative__ecom_cash_flow_screen()
 	{
-		$types = array();
+		$types=array();
 		foreach (placeholder_array() as $v)
 		{
-			$types[] = array(
-				'TYPE' => lorem_word(),
-				'AMOUNT' => placeholder_number(),
-				'SPECIAL' => placeholder_number()
+			$types[]=array(
+				'TYPE'=>lorem_word(),
+				'AMOUNT'=>placeholder_number(),
+				'SPECIAL'=>placeholder_number()
 			);
 		}
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_CASH_FLOW_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'TYPES' => $types
+				'TITLE'=>lorem_title(),
+				'TYPES'=>$types
 			)), NULL, '', true)
 		);
 	}
@@ -290,7 +290,7 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_TRANSACT', array(
-				'FIELDS' => placeholder_fields()
+				'FIELDS'=>placeholder_fields()
 			)), NULL, '', true)
 		);
 	}
@@ -304,15 +304,15 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__purchase_wizard_screen()
 	{
-		$fields = do_lorem_template('PURCHASE_WIZARD_STAGE_TRANSACT', array(
-			'FIELDS' => placeholder_fields()
+		$fields=do_lorem_template('PURCHASE_WIZARD_STAGE_TRANSACT', array(
+			'FIELDS'=>placeholder_fields()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'CONTENT' => $fields,
-				'URL' => placeholder_url()
+				'TITLE'=>lorem_title(),
+				'CONTENT'=>$fields,
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -328,11 +328,11 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_LOGOS_WORLDPAY', array(
-				'INST_ID' => placeholder_id(),
-				'PD_ADDRESS' => lorem_phrase(),
-				'PD_EMAIL' => lorem_word(),
-				'PD_NUMBER' => placeholder_number(),
-				'PAYMENT_CANCEL_DTR' => lorem_word()
+				'INST_ID'=>placeholder_id(),
+				'PD_ADDRESS'=>lorem_phrase(),
+				'PD_EMAIL'=>lorem_word(),
+				'PD_NUMBER'=>placeholder_number(),
+				'PAYMENT_CANCEL_DTR'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -348,16 +348,16 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_BUTTON_VIA_WORLDPAY', array(
-				'PRODUCT' => lorem_phrase(),
-				'ITEM_NAME' => lorem_word(),
-				'DIGEST' => lorem_phrase(),
-				'TEST_MODE' => lorem_phrase(),
-				'PURCHASE_ID' => placeholder_id(),
-				'AMOUNT' => placeholder_number(),
-				'CURRENCY' => lorem_phrase(),
-				'USERNAME' => lorem_word(),
-				'IPN_URL' => placeholder_url(),
-				'EMAIL_ADDRESS' => lorem_word()
+				'PRODUCT'=>lorem_phrase(),
+				'ITEM_NAME'=>lorem_word(),
+				'DIGEST'=>lorem_phrase(),
+				'TEST_MODE'=>lorem_phrase(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'CURRENCY'=>lorem_phrase(),
+				'USERNAME'=>lorem_word(),
+				'IPN_URL'=>placeholder_url(),
+				'EMAIL_ADDRESS'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -373,20 +373,20 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY', array(
-				'PRODUCT' => lorem_phrase(),
-				'DIGEST' => lorem_phrase(),
-				'TEST' => lorem_phrase(),
-				'LENGTH' => lorem_phrase(),
-				'LENGTH_UNITS_2' => lorem_phrase(),
-				'ITEM_NAME' => lorem_word(),
-				'PURCHASE_ID' => placeholder_id(),
-				'AMOUNT' => placeholder_number(),
-				'FIRST_REPEAT' => lorem_phrase(),
-				'CURRENCY' => lorem_phrase(),
-				'USERNAME' => lorem_word(),
-				'IPN_URL' => placeholder_url(),
-				'TEST_MODE' => true,
-				'EMAIL_ADDRESS' => lorem_word()
+				'PRODUCT'=>lorem_phrase(),
+				'DIGEST'=>lorem_phrase(),
+				'TEST'=>lorem_phrase(),
+				'LENGTH'=>lorem_phrase(),
+				'LENGTH_UNITS_2'=>lorem_phrase(),
+				'ITEM_NAME'=>lorem_word(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'FIRST_REPEAT'=>lorem_phrase(),
+				'CURRENCY'=>lorem_phrase(),
+				'USERNAME'=>lorem_word(),
+				'IPN_URL'=>placeholder_url(),
+				'TEST_MODE'=>true,
+				'EMAIL_ADDRESS'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -402,8 +402,8 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_CANCEL_BUTTON_VIA_WORLDPAY', array(
-				'CANCEL_URL' => placeholder_url(),
-				'PURCHASE_ID' => placeholder_id()
+				'CANCEL_URL'=>placeholder_url(),
+				'PURCHASE_ID'=>placeholder_id()
 			)), NULL, '', true)
 		);
 	}
@@ -419,14 +419,14 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_BUTTON_VIA_PAYPAL', array(
-				'PRODUCT' => lorem_phrase(),
-				'ITEM_NAME' => lorem_word(),
-				'PURCHASE_ID' => placeholder_id(),
-				'AMOUNT' => placeholder_number(),
-				'CURRENCY' => lorem_phrase(),
-				'PAYMENT_ADDRESS' => lorem_word(),
-				'IPN_URL' => placeholder_url(),
-				'MEMBER_ADDRESS' => placeholder_array()
+				'PRODUCT'=>lorem_phrase(),
+				'ITEM_NAME'=>lorem_word(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'CURRENCY'=>lorem_phrase(),
+				'PAYMENT_ADDRESS'=>lorem_word(),
+				'IPN_URL'=>placeholder_url(),
+				'MEMBER_ADDRESS'=>placeholder_array()
 			)), NULL, '', true)
 		);
 	}
@@ -442,15 +442,15 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL', array(
-				'PRODUCT' => lorem_phrase(),
-				'ITEM_NAME' => lorem_word_html(),
-				'LENGTH' => lorem_phrase(),
-				'LENGTH_UNITS' => lorem_phrase(),
-				'PURCHASE_ID' => placeholder_id(),
-				'AMOUNT' => placeholder_number(),
-				'CURRENCY' => lorem_phrase(),
-				'PAYMENT_ADDRESS' => lorem_word(),
-				'IPN_URL' => placeholder_url()
+				'PRODUCT'=>lorem_phrase(),
+				'ITEM_NAME'=>lorem_word_html(),
+				'LENGTH'=>lorem_phrase(),
+				'LENGTH_UNITS'=>lorem_phrase(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'CURRENCY'=>lorem_phrase(),
+				'PAYMENT_ADDRESS'=>lorem_word(),
+				'IPN_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -466,7 +466,7 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_CANCEL_BUTTON_VIA_PAYPAL', array(
-				'PURCHASE_ID' => placeholder_id()
+				'PURCHASE_ID'=>placeholder_id()
 			)), NULL, '', true)
 		);
 	}
@@ -482,16 +482,16 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_BUTTON_VIA_SECPAY', array(
-				'PRODUCT' => lorem_phrase(),
-				'DIGEST' => lorem_phrase(),
-				'TEST' => lorem_phrase(),
-				'TRANS_ID' => placeholder_id(),
-				'ITEM_NAME' => lorem_word_html(),
-				'PURCHASE_ID' => placeholder_id(),
-				'AMOUNT' => placeholder_number(),
-				'CURRENCY' => lorem_phrase(),
-				'USERNAME' => lorem_word(),
-				'IPN_URL' => placeholder_url()
+				'PRODUCT'=>lorem_phrase(),
+				'DIGEST'=>lorem_phrase(),
+				'TEST'=>lorem_phrase(),
+				'TRANS_ID'=>placeholder_id(),
+				'ITEM_NAME'=>lorem_word_html(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'CURRENCY'=>lorem_phrase(),
+				'USERNAME'=>lorem_word(),
+				'IPN_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}
@@ -507,20 +507,20 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTION_BUTTON_VIA_SECPAY', array(
-				'PRODUCT' => lorem_phrase(),
-				'DIGEST' => lorem_phrase(),
-				'TEST' => lorem_phrase(),
-				'TRANS_ID' => placeholder_id(),
-				'FIRST_REPEAT' => lorem_phrase(),
-				'LENGTH' => lorem_phrase(),
-				'LENGTH_UNITS_2' => lorem_phrase(),
-				'ITEM_NAME' => lorem_word_html(),
-				'PURCHASE_ID' => placeholder_id(),
-				'AMOUNT' => placeholder_number(),
-				'CURRENCY' => lorem_phrase(),
-				'USERNAME' => lorem_word(),
-				'IPN_URL' => placeholder_url(),
-				'PRICE' => placeholder_number()
+				'PRODUCT'=>lorem_phrase(),
+				'DIGEST'=>lorem_phrase(),
+				'TEST'=>lorem_phrase(),
+				'TRANS_ID'=>placeholder_id(),
+				'FIRST_REPEAT'=>lorem_phrase(),
+				'LENGTH'=>lorem_phrase(),
+				'LENGTH_UNITS_2'=>lorem_phrase(),
+				'ITEM_NAME'=>lorem_word_html(),
+				'PURCHASE_ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'CURRENCY'=>lorem_phrase(),
+				'USERNAME'=>lorem_word(),
+				'IPN_URL'=>placeholder_url(),
+				'PRICE'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}
@@ -536,8 +536,8 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_CANCEL_BUTTON_VIA_SECPAY', array(
-				'CANCEL_URL' => placeholder_url(),
-				'PURCHASE_ID' => placeholder_id()
+				'CANCEL_URL'=>placeholder_url(),
+				'PURCHASE_ID'=>placeholder_id()
 			)), NULL, '', true)
 		);
 	}
@@ -555,10 +555,10 @@ class Hook_addon_registry_ecommerce
 
 		return array(
 			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_GUEST', array(
-				'TEXT' => lorem_sentence_html(),
-				'JAVASCRIPT' => '',
-				'FORM' => placeholder_form(),
-				'HIDDEN' => ''
+				'TEXT'=>lorem_sentence_html(),
+				'JAVASCRIPT'=>'',
+				'FORM'=>placeholder_form(),
+				'HIDDEN'=>''
 			)), NULL, '', true)
 		);
 	}
@@ -574,8 +574,8 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_CHOOSE', array(
-				'FIELDS' => placeholder_fields(),
-				'TITLE' => lorem_title()
+				'FIELDS'=>placeholder_fields(),
+				'TITLE'=>lorem_title()
 			)), NULL, '', true)
 		);
 	}
@@ -591,8 +591,8 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_MESSAGE', array(
-				'TITLE' => lorem_title(),
-				'TEXT' => lorem_sentence_html()
+				'TITLE'=>lorem_title(),
+				'TEXT'=>lorem_sentence_html()
 			)), NULL, '', true)
 		);
 	}
@@ -609,9 +609,9 @@ class Hook_addon_registry_ecommerce
 		require_lang('installer');
 		return array(
 			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_LICENCE', array(
-				'TITLE' => lorem_title(),
-				'URL' => placeholder_url(),
-				'LICENCE' => lorem_phrase()
+				'TITLE'=>lorem_title(),
+				'URL'=>placeholder_url(),
+				'LICENCE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -627,8 +627,8 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_DETAILS', array(
-				'TEXT' => lorem_sentence_html(),
-				'FIELDS' => placeholder_fields()
+				'TEXT'=>lorem_sentence_html(),
+				'FIELDS'=>placeholder_fields()
 			)), NULL, '', true)
 		);
 	}
@@ -644,8 +644,8 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_FINISH', array(
-				'TITLE' => lorem_title(),
-				'MESSAGE' => lorem_phrase()
+				'TITLE'=>lorem_title(),
+				'MESSAGE'=>lorem_phrase()
 			)), NULL, '', true)
 		);
 	}
@@ -659,28 +659,28 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__ecom_invoices_screen()
 	{
-		$invoices = array();
-		foreach (placeholder_array() as $k => $v)
+		$invoices=array();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$invoices[] = array(
-				'TRANSACTION_BUTTON' => placeholder_button(),
-				'INVOICE_TITLE' => lorem_phrase(),
-				'ID' => placeholder_id(),
-				'AMOUNT' => placeholder_number(),
-				'TIME' => placeholder_date(),
-				'STATE' => lorem_word(),
-				'DELIVERABLE' => lorem_word(),
-				'PAYABLE' => lorem_word(),
-				'NOTE' => lorem_phrase(),
-				'TYPE_CODE' => lorem_word()
+			$invoices[]=array(
+				'TRANSACTION_BUTTON'=>placeholder_button(),
+				'INVOICE_TITLE'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'AMOUNT'=>placeholder_number(),
+				'TIME'=>placeholder_date(),
+				'STATE'=>lorem_word(),
+				'DELIVERABLE'=>lorem_word(),
+				'PAYABLE'=>lorem_word(),
+				'NOTE'=>lorem_phrase(),
+				'TYPE_CODE'=>lorem_word()
 			);
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_INVOICES_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'CURRENCY' => lorem_phrase(),
-				'INVOICES' => $invoices
+				'TITLE'=>lorem_title(),
+				'CURRENCY'=>lorem_phrase(),
+				'INVOICES'=>$invoices
 			)), NULL, '', true)
 		);
 	}
@@ -694,29 +694,29 @@ class Hook_addon_registry_ecommerce
 	 */
 	function tpl_preview__ecom_subscriptions_screen()
 	{
-		$button = do_lorem_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER', array(
-			'STATUS' => lorem_phrase(),
-			'TRIGGER_URL' => placeholder_url()
+		$button=do_lorem_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER', array(
+			'STATUS'=>lorem_phrase(),
+			'TRIGGER_URL'=>placeholder_url()
 		));
-		$subscriptions = array();
-		foreach (placeholder_array() as $k => $v)
+		$subscriptions=array();
+		foreach (placeholder_array() as $k=>$v)
 		{
-			$subscriptions[] = array(
-				'SUBSCRIPTION_TITLE' => lorem_phrase(),
-				'ID' => placeholder_id(),
-				'PER' => lorem_word(),
-				'AMOUNT' => placeholder_number(),
-				'TIME' => placeholder_date(),
-				'STATE' => lorem_word(),
-				'TYPE_CODE' => lorem_word(),
-				'CANCEL_BUTTON' => $button
+			$subscriptions[]=array(
+				'SUBSCRIPTION_TITLE'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'PER'=>lorem_word(),
+				'AMOUNT'=>placeholder_number(),
+				'TIME'=>placeholder_date(),
+				'STATE'=>lorem_word(),
+				'TYPE_CODE'=>lorem_word(),
+				'CANCEL_BUTTON'=>$button
 			);
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_SUBSCRIPTIONS_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'SUBSCRIPTIONS' => $subscriptions
+				'TITLE'=>lorem_title(),
+				'SUBSCRIPTIONS'=>$subscriptions
 			)), NULL, '', true)
 		);
 	}
@@ -732,15 +732,15 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_SUBSCRIBE', array(
-				'LOGOS' => placeholder_image(),
-				'TRANSACTION_BUTTON' => placeholder_button(),
-				'CURRENCY' => placeholder_number(),
-				'ITEM_NAME' => lorem_word(),
-				'TITLE' => lorem_phrase(),
-				'LENGTH' => "3",
-				'LENGTH_UNITS' => "$",
-				'PURCHASE_ID' => placeholder_id(),
-				'PRICE' => "123.45"
+				'LOGOS'=>placeholder_image(),
+				'TRANSACTION_BUTTON'=>placeholder_button(),
+				'CURRENCY'=>placeholder_number(),
+				'ITEM_NAME'=>lorem_word(),
+				'TITLE'=>lorem_phrase(),
+				'LENGTH'=>"3",
+				'LENGTH_UNITS'=>"$",
+				'PURCHASE_ID'=>placeholder_id(),
+				'PRICE'=>"123.45"
 			)), NULL, '', true)
 		);
 	}
@@ -756,15 +756,15 @@ class Hook_addon_registry_ecommerce
 	{
 		return array(
 			lorem_globalise(do_lorem_template('PURCHASE_WIZARD_STAGE_PAY', array(
-				'LOGOS' => placeholder_image(),
-				'TRANSACTION_BUTTON' => placeholder_button(),
-				'CURRENCY' => placeholder_number(),
-				'ITEM_NAME' => lorem_word(),
-				'TITLE' => lorem_phrase(),
-				'LENGTH' => "3",
-				'LENGTH_UNITS' => "$",
-				'PURCHASE_ID' => placeholder_id(),
-				'PRICE' => "123.45"
+				'LOGOS'=>placeholder_image(),
+				'TRANSACTION_BUTTON'=>placeholder_button(),
+				'CURRENCY'=>placeholder_number(),
+				'ITEM_NAME'=>lorem_word(),
+				'TITLE'=>lorem_phrase(),
+				'LENGTH'=>"3",
+				'LENGTH_UNITS'=>"$",
+				'PURCHASE_ID'=>placeholder_id(),
+				'PRICE'=>"123.45"
 			)), NULL, '', true)
 		);
 	}

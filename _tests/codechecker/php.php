@@ -51,13 +51,7 @@ function get_php_file_api($filename,$include_code=true)
 	$classes=array();
 
 	// Open up PHP file
-	if ($filename=='phpstub.php')
-	{
-		$full_path=$filename;
-	} else
-	{
-		$full_path=((get_file_base()!='')?(get_file_base().'/'):'').filter_naughty($filename);
-	}
+	$full_path=((get_file_base()!='')?(get_file_base().'/'):'').filter_naughty($filename);
 	$lines=file($full_path);
 	foreach ($lines as $i=>$line)
 	{

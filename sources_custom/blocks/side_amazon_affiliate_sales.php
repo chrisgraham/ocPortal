@@ -60,10 +60,10 @@ class Block_side_amazon_affiliate_sales
 		if (!array_key_exists('subject_keywords',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','subject_keywords');
 		if (!array_key_exists('items_number',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','items_number');
 
-		$associates_id = $map['associates_id'];//'we4u-20';//
-		$product_line = $map['product_line'];
-		$subject_keywords = preg_replace('#\s#','+',$map['subject_keywords']);
-		$n = (isset($map['items_number']) && intval($map['items_number'])>0)?$map['items_number']:3;
+		$associates_id=$map['associates_id'];//'we4u-20';//
+		$product_line=$map['product_line'];
+		$subject_keywords=preg_replace('#\s#','+',$map['subject_keywords']);
+		$n=(isset($map['items_number']) && intval($map['items_number'])>0)?$map['items_number']:3;
 
 		$out='';
 

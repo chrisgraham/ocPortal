@@ -8,18 +8,16 @@
 }
 
 .news_piece_summary h3 {
-	display: inline-block;
-	min-width: 75%;
 	font-size: 1.2em;
 }
 
-.newscat_img_author, .newscat_img_member {
+.newscat_img {
 	margin-{!en_left}: 1em;
 	float: {!en_right};
 	width: 100px;
 }
 
-.newscat_img_author img, .newscat_img_member img {
+.newscat_img img {
 	max-width: 100px;
 }
 

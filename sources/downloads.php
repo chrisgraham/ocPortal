@@ -55,7 +55,7 @@ function download_licence_script()
  * @param  ?string		Text summary for result (e.g. highlighted portion of actual file from search result) (NULL: none)
  * @return tempcode		A box for this download, linking to the full download page
  */
-function render_download_box($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_summary=NULL)
+function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL,$text_summary=NULL)
 {
 	require_css('downloads');
 
@@ -72,7 +72,7 @@ function render_download_box($row,$pic=true,$breadcrumbs=true,$zone=NULL,$text_s
 	$date=get_timezoned_date($row['add_date'],false);
 	$date_raw=$row['add_date'];
 
-	$breadcrumbs=((get_option('show_dload_trees')=='1') && ($breadcrumbs))?download_breadcrumbs($row['category_id'],NULL,false,$zone):new ocp_tempcode();
+	$breadcrumbs=((get_option('show_dload_trees')=='1') && ($include_breadcrumbs))?download_breadcrumbs($row['category_id'],NULL,false,$zone):new ocp_tempcode();
 
 	$pic_suffix='';
 	$thumb_url='';
@@ -267,7 +267,7 @@ function get_downloads_tree($submitter=NULL,$category_id=NULL,$breadcrumbs=NULL,
  */
 function nice_get_download_category_tree($it=NULL,$use_compound_list=false,$addable_filter=false)
 {
-	$breadcrumbs=get_download_category_tree(NULL,NULL,NULL,false,$use_compound_list,NULL,$addable_filter);
+	$tree=get_download_category_tree(NULL,NULL,NULL,false,$use_compound_list,NULL,$addable_filter);
 	if ($use_compound_list) $tree=$tree[0];
 
 	$out=''; // XHTMLXHTML

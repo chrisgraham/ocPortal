@@ -220,9 +220,11 @@ class Hook_pointstore_custom
 		$rows=$GLOBALS['SITE_DB']->query_select('pstore_customs',array('id','c_title','c_cost','c_one_per_member'),array('id'=>$id,'c_enabled'=>1));
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-		$cost=$rows[0]['c_cost'];
+		$row=$rows[0];
 
-		$c_title=get_translated_text($rows[0]['c_title']);
+		$cost=$row['c_cost'];
+
+		$c_title=get_translated_text($row['c_title']);
 		$title=get_screen_title('PURCHASE_SOME_PRODUCT',true,array($c_title));
 
 		// Check points
@@ -232,17 +234,17 @@ class Hook_pointstore_custom
 			return warn_screen($title,do_lang_tempcode('_CANT_AFFORD',integer_format($cost),integer_format($points_left)));
 		}
 
-		if ($rows[0]['c_one_per_member']==1)
+		if ($row['c_one_per_member']==1)
 		{
 			// Test to see if it's been bought
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('sales','id',array('purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details2'=>strval($rows[0]['id']),'memberid'=>get_member()));
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('sales','id',array('purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details2'=>strval($row['id']),'memberid'=>get_member()));
 			if (!is_null($test))
 				warn_exit(do_lang_tempcode('ONE_PER_MEMBER_ONLY'));
 		}
 
 		require_code('points2');
 		charge_member(get_member(),$cost,$c_title);
-		$sale_id=$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details'=>$c_title,'details2'=>strval($rows[0]['id'])),true);
+		$sale_id=$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details'=>$c_title,'details2'=>strval($row['id'])),true);
 
 		require_code('notifications');
 		$subject=do_lang('MAIL_REQUEST_CUSTOM',comcode_escape($c_title),NULL,NULL,get_site_default_lang());

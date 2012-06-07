@@ -58,9 +58,9 @@ class Hook_addon_registry_iotds
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -116,12 +116,12 @@ class Hook_addon_registry_iotds
 	function tpl_previews()
 	{
 		return array(
-			'IOTD_ADMIN_CHOOSE_SCREEN.tpl' => 'administrative__iotd_admin_choose_screen',
-			'IOTD_ADMIN_CHOOSE_SCREEN_IOTD.tpl' => 'administrative__iotd_admin_choose_screen',
-			'IOTD.tpl' => 'block_main_iotd',
-			'BLOCK_MAIN_IOTD.tpl' => 'block_main_iotd',
-			'IOTD_ARCHIVE_SCREEN_IOTD.tpl' => 'iotd_view_screen_iotd',
-			'IOTD_ENTRY_SCREEN.tpl' => 'iotd_view_screen'
+			'IOTD_ADMIN_CHOOSE_SCREEN.tpl'=>'administrative__iotd_admin_choose_screen',
+			'IOTD_ADMIN_CHOOSE_SCREEN_IOTD.tpl'=>'administrative__iotd_admin_choose_screen',
+			'IOTD.tpl'=>'block_main_iotd',
+			'BLOCK_MAIN_IOTD.tpl'=>'block_main_iotd',
+			'IOTD_ARCHIVE_SCREEN_IOTD.tpl'=>'iotd_view_screen_iotd',
+			'IOTD_ENTRY_SCREEN.tpl'=>'iotd_view_screen'
 		);
 	}
 
@@ -134,30 +134,30 @@ class Hook_addon_registry_iotds
 	 */
 	function tpl_preview__administrative__iotd_admin_choose_screen()
 	{
-		$current_iotd = do_lorem_template('IOTD_ADMIN_CHOOSE_SCREEN_IOTD', array(
-			'IS_CURRENT' => placeholder_number(),
-			'SUBMITTER_URL' => placeholder_url(),
-			'THUMB_URL' => placeholder_image_url(),
-			'FULL_URL' => placeholder_url(),
-			'ID' => placeholder_id(),
-			'EDIT_URL' => placeholder_url(),
-			'DELETE_URL' => placeholder_url(),
-			'CHOOSE_URL' => placeholder_url(),
-			'CAPTION' => lorem_phrase(),
-			'USER' => lorem_word(),
-			'USERNAME_LINK' => lorem_word()
+		$current_iotd=do_lorem_template('IOTD_ADMIN_CHOOSE_SCREEN_IOTD', array(
+			'IS_CURRENT'=>placeholder_number(),
+			'SUBMITTER_URL'=>placeholder_url(),
+			'THUMB_URL'=>placeholder_image_url(),
+			'FULL_URL'=>placeholder_url(),
+			'ID'=>placeholder_id(),
+			'EDIT_URL'=>placeholder_url(),
+			'DELETE_URL'=>placeholder_url(),
+			'CHOOSE_URL'=>placeholder_url(),
+			'CAPTION'=>lorem_phrase(),
+			'USER'=>lorem_word(),
+			'USERNAME_LINK'=>lorem_word()
 		));
-		$unused_iotd = $current_iotd;
-		$used_iotd = $current_iotd;
+		$unused_iotd=$current_iotd;
+		$used_iotd=$current_iotd;
 
 		return array(
 			lorem_globalise(do_lorem_template('IOTD_ADMIN_CHOOSE_SCREEN', array(
-				'SHOWING_OLD' => lorem_phrase(),
-				'TITLE' => lorem_title(),
-				'USED_URL' => placeholder_url(),
-				'CURRENT_IOTD' => $current_iotd,
-				'UNUSED_IOTD' => $unused_iotd,
-				'USED_IOTD' => $used_iotd
+				'SHOWING_OLD'=>lorem_phrase(),
+				'TITLE'=>lorem_title(),
+				'USED_URL'=>placeholder_url(),
+				'CURRENT_IOTD'=>$current_iotd,
+				'UNUSED_IOTD'=>$unused_iotd,
+				'USED_IOTD'=>$used_iotd
 			)), NULL, '', true)
 		);
 	}
@@ -171,22 +171,22 @@ class Hook_addon_registry_iotds
 	 */
 	function tpl_preview__block_main_iotd()
 	{
-		$content = do_lorem_template('IOTD', array(
-			'ID' => placeholder_id(),
-			'SUBMITTER' => placeholder_number(),
-			'IMAGE_URL' => placeholder_image_url(),
-			'VIEW_URL' => placeholder_url(),
-			'CAPTION' => lorem_word(),
-			'IMAGE' => placeholder_image()
+		$content=do_lorem_template('IOTD', array(
+			'ID'=>placeholder_id(),
+			'SUBMITTER'=>placeholder_number(),
+			'IMAGE_URL'=>placeholder_image_url(),
+			'VIEW_URL'=>placeholder_url(),
+			'CAPTION'=>lorem_word(),
+			'IMAGE'=>placeholder_image()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_IOTD', array(
-				'CONTENT' => $content,
-				'FULL_URL' => placeholder_url(),
-				'SUBMIT_URL' => placeholder_url(),
-				'ARCHIVE_URL' => placeholder_url(),
-				'ID' => placeholder_id()
+				'CONTENT'=>$content,
+				'FULL_URL'=>placeholder_url(),
+				'SUBMIT_URL'=>placeholder_url(),
+				'ARCHIVE_URL'=>placeholder_url(),
+				'ID'=>placeholder_id()
 			)), NULL, '', true)
 		);
 	}
@@ -202,30 +202,30 @@ class Hook_addon_registry_iotds
 	{
 		//Wrap 'IOTD_ARCHIVE_SCREEN_IOTD' with 'NEXT_BROWSER_SCREEN'
 
-		$content = new ocp_tempcode();
+		$content=new ocp_tempcode();
 		$content->attach(do_lorem_template('IOTD_ARCHIVE_SCREEN_IOTD', array(
-			'SUBMITTER' => placeholder_id(),
-			'ID' => placeholder_id(),
-			'VIEWS' => placeholder_number(),
-			'THUMB' => placeholder_image(),
-			'DATE' => placeholder_time(),
-			'DATE_RAW' => placeholder_date_raw(),
-			'URL' => placeholder_url(),
-			'CAPTION' => lorem_phrase()
+			'SUBMITTER'=>placeholder_id(),
+			'ID'=>placeholder_id(),
+			'VIEWS'=>placeholder_number(),
+			'THUMB'=>placeholder_image(),
+			'DATE'=>placeholder_time(),
+			'DATE_RAW'=>placeholder_date_raw(),
+			'URL'=>placeholder_url(),
+			'CAPTION'=>lorem_phrase()
 		)));
 
-		$browse = do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
-			'NEXT_URL' => placeholder_url(),
-			'PREVIOUS_URL' => placeholder_url(),
-			'PAGE_NUM' => placeholder_number(),
-			'NUM_PAGES' => placeholder_number()
+		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
+			'NEXT_URL'=>placeholder_url(),
+			'PREVIOUS_URL'=>placeholder_url(),
+			'PAGE_NUM'=>placeholder_number(),
+			'NUM_PAGES'=>placeholder_number()
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('NEXT_BROWSER_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'CONTENT' => $content,
-				'BROWSE' => $browse
+				'TITLE'=>lorem_title(),
+				'CONTENT'=>$content,
+				'BROWSE'=>$browse
 			)), NULL, '', true)
 		);
 	}
@@ -243,84 +243,84 @@ class Hook_addon_registry_iotds
 		require_lang('captcha');
 
 		require_lang('trackbacks');
-		$trackbacks = new ocp_tempcode();
-		foreach (placeholder_array(1) as $k => $v)
+		$trackbacks=new ocp_tempcode();
+		foreach (placeholder_array(1) as $k=>$v)
 		{
 			$trackbacks->attach(do_lorem_template('TRACKBACK', array(
-				'ID' => placeholder_id(),
-				'TIME_RAW' => placeholder_date_raw(),
-				'TIME' => placeholder_date(),
-				'URL' => placeholder_url(),
-				'TITLE' => lorem_phrase(),
-				'EXCERPT' => lorem_paragraph(),
-				'NAME' => lorem_phrase()
+				'ID'=>placeholder_id(),
+				'TIME_RAW'=>placeholder_date_raw(),
+				'TIME'=>placeholder_date(),
+				'URL'=>placeholder_url(),
+				'TITLE'=>lorem_phrase(),
+				'EXCERPT'=>lorem_paragraph(),
+				'NAME'=>lorem_phrase()
 			)));
 		}
-		$trackback_details = do_lorem_template('TRACKBACK_WRAPPER', array(
-			'TRACKBACKS' => $trackbacks,
-			'TRACKBACK_PAGE' => placeholder_id(),
-			'TRACKBACK_ID' => placeholder_id(),
-			'TRACKBACK_TITLE' => lorem_phrase()
+		$trackback_details=do_lorem_template('TRACKBACK_WRAPPER', array(
+			'TRACKBACKS'=>$trackbacks,
+			'TRACKBACK_PAGE'=>placeholder_id(),
+			'TRACKBACK_ID'=>placeholder_id(),
+			'TRACKBACK_TITLE'=>lorem_phrase()
 		));
 
-		$rating_details = new ocp_tempcode();
+		$rating_details=new ocp_tempcode();
 
-		$review_titles = array();
-		$review_titles[] = array(
-			'REVIEW_TITLE' => lorem_word(),
-			'REVIEW_RATING' => make_string_tempcode(float_format(10.0))
+		$review_titles=array();
+		$review_titles[]=array(
+			'REVIEW_TITLE'=>lorem_word(),
+			'REVIEW_RATING'=>make_string_tempcode(float_format(10.0))
 		);
 
-		$comments = '';
+		$comments='';
 
-		$form = do_lorem_template('COMMENTS_POSTING_FORM', array(
-			'JOIN_BITS' => lorem_phrase_html(),
-			'FIRST_POST_URL' => placeholder_url(),
-			'FIRST_POST' => lorem_paragraph_html(),
-			'TYPE' => 'downloads',
-			'ID' => placeholder_id(),
-			'REVIEW_RATING_CRITERIA' => $review_titles,
-			'USE_CAPTCHA' => true,
-			'GET_EMAIL' => false,
-			'EMAIL_OPTIONAL' => true,
-			'GET_TITLE' => true,
-			'POST_WARNING' => do_lang('POST_WARNING'),
-			'COMMENT_TEXT' => get_option('comment_text'),
-			'EM' => placeholder_emoticon_chooser(),
-			'DISPLAY' => 'block',
-			'COMMENT_URL' => placeholder_url(),
-			'TITLE' => lorem_word(),
-			'MAKE_POST' => true,
-			'CREATE_TICKET_MAKE_POST' => true
+		$form=do_lorem_template('COMMENTS_POSTING_FORM', array(
+			'JOIN_BITS'=>lorem_phrase_html(),
+			'FIRST_POST_URL'=>placeholder_url(),
+			'FIRST_POST'=>lorem_paragraph_html(),
+			'TYPE'=>'downloads',
+			'ID'=>placeholder_id(),
+			'REVIEW_RATING_CRITERIA'=>$review_titles,
+			'USE_CAPTCHA'=>true,
+			'GET_EMAIL'=>false,
+			'EMAIL_OPTIONAL'=>true,
+			'GET_TITLE'=>true,
+			'POST_WARNING'=>do_lang('POST_WARNING'),
+			'COMMENT_TEXT'=>get_option('comment_text'),
+			'EM'=>placeholder_emoticon_chooser(),
+			'DISPLAY'=>'block',
+			'COMMENT_URL'=>placeholder_url(),
+			'TITLE'=>lorem_word(),
+			'MAKE_POST'=>true,
+			'CREATE_TICKET_MAKE_POST'=>true
 		));
 
-		$comment_details = do_lorem_template('COMMENTS_WRAPPER', array(
-			'TYPE' => lorem_phrase(),
-			'ID' => placeholder_id(),
-			'REVIEW_RATING_CRITERIA' => $review_titles,
-			'AUTHORISED_FORUM_URL' => placeholder_url(),
-			'FORM' => $form,
-			'COMMENTS' => $comments
+		$comment_details=do_lorem_template('COMMENTS_WRAPPER', array(
+			'TYPE'=>lorem_phrase(),
+			'ID'=>placeholder_id(),
+			'REVIEW_RATING_CRITERIA'=>$review_titles,
+			'AUTHORISED_FORUM_URL'=>placeholder_url(),
+			'FORM'=>$form,
+			'COMMENTS'=>$comments
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('IOTD_ENTRY_SCREEN', array(
-				'TITLE' => lorem_title(),
-				'SUBMITTER' => placeholder_id(),
-				'I_TITLE' => lorem_phrase(),
-				'CAPTION' => lorem_phrase(),
-				'DATE_RAW' => placeholder_date_raw(),
-				'ADD_DATE_RAW' => placeholder_date_raw(),
-				'EDIT_DATE_RAW' => placeholder_date_raw(),
-				'DATE' => placeholder_time(),
-				'ADD_DATE' => placeholder_time(),
-				'EDIT_DATE' => placeholder_time(),
-				'VIEWS' => placeholder_number(),
-				'TRACKBACK_DETAILS' => $trackback_details,
-				'RATING_DETAILS' => $rating_details,
-				'COMMENT_DETAILS' => $comment_details,
-				'EDIT_URL' => placeholder_url(),
-				'URL' => placeholder_image_url()
+				'TITLE'=>lorem_title(),
+				'SUBMITTER'=>placeholder_id(),
+				'I_TITLE'=>lorem_phrase(),
+				'CAPTION'=>lorem_phrase(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'ADD_DATE_RAW'=>placeholder_date_raw(),
+				'EDIT_DATE_RAW'=>placeholder_date_raw(),
+				'DATE'=>placeholder_time(),
+				'ADD_DATE'=>placeholder_time(),
+				'EDIT_DATE'=>placeholder_time(),
+				'VIEWS'=>placeholder_number(),
+				'TRACKBACK_DETAILS'=>$trackback_details,
+				'RATING_DETAILS'=>$rating_details,
+				'COMMENT_DETAILS'=>$comment_details,
+				'EDIT_URL'=>placeholder_url(),
+				'URL'=>placeholder_image_url()
 			)), NULL, '', true)
 		);
 	}

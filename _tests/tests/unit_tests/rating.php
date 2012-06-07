@@ -35,8 +35,8 @@ class rating_test_set extends ocp_test_case
 		{
 		   $GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type'=>'events','rating_for_id'=>$this->event_id,'rating_member'=>get_member(),'rating_ip'=>get_ip_address(),'rating_time'=>time(),'rating'=>4));		
 		}
-		$data = $GLOBALS['SITE_DB']->query_select('rating',array('rating '),array('rating_for_id'=>$this->event_id,'rating_member'=>get_member()));
-		$rating = $data[0]['rating'];
+		$data=$GLOBALS['SITE_DB']->query_select('rating',array('rating '),array('rating_for_id'=>$this->event_id,'rating_member'=>get_member()));
+		$rating=$data[0]['rating'];
 		// Test the forum was actually created
 		$this->assertTrue(4==$rating);
 	}

@@ -741,14 +741,7 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 
 	require_css('validation');
 
-	if (!$ret)
-	{
-		$echo=do_header($preview_mode);
-		$echo->evaluate_echo();
-	} else
-	{
-		ob_start();
-	}
+	ob_start();
 
 	$title=get_screen_title('VALIDATION_ERROR');
 
@@ -970,7 +963,8 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 	$echo->evaluate_echo();
 	if (!$ret)
 	{
-		$echo=do_footer();
+		$echo=globalise(make_string_tempcode(ob_get_contents()));
+		@ob_end_clean();
 		$echo->evaluate_echo();
 		exit();
 	}

@@ -41,18 +41,18 @@ class Hook_stats_external
 
 }
 
-function getAlexaRank( $url )
+function getAlexaRank($url)
 {
 	require_code('files');
 	$p=array();
-	$result=http_download_file('http://data.alexa.com/data?cli=10&dat=s&url=' . $url, NULL, false);
-	if (preg_match( '#<POPULARITY URL="(.*?)" TEXT="([0-9]+){1,}"/>#si', $result, $p )!=0)
+	$result=http_download_file('http://data.alexa.com/data?cli=10&dat=s&url='.$url,NULL,false);
+	if (preg_match('#<POPULARITY URL="(.*?)" TEXT="([0-9]+){1,}"/>#si',$result,$p)!=0)
 		$rank=integer_format(intval($p[2]));
 	else $rank='0';
-	if (preg_match( '#<LINKSIN NUM="([0-9]+){1,}"/>#si', $result, $p )!=0)
+	if (preg_match('#<LINKSIN NUM="([0-9]+){1,}"/>#si',$result,$p)!=0)
 		$links=integer_format(intval($p[1]));
 	else $links='0';
-	if (preg_match( '#<SPEED TEXT="[^"]*" PCT="([0-9]+){1,}"/>#si', $result, $p )!=0)
+	if (preg_match('#<SPEED TEXT="[^"]*" PCT="([0-9]+){1,}"/>#si',$result,$p)!=0)
 		$speed='Top '.integer_format(100-intval($p[1])).'%';
 	else $speed='?';
 
@@ -75,20 +75,20 @@ function StrToNum($Str, $Check, $Magic)
 	require_code('developer_tools');
 	destrictify();
 
-	$Int32Unit = 4294967296;  // 2^32
+	$Int32Unit=4294967296;  // 2^32
 
-	$length = strlen($Str);
-	for ($i = 0; $i < $length; $i++)
+	$length=strlen($Str);
+	for ($i=0;$i<$length;$i++)
 	{
-		$Check *= $Magic; 	
-		//If the float is beyond the boundaries of integer (usually +/- 2.15e+9 = 2^31),
+		$Check*=$Magic;
+		//If the float is beyond the boundaries of integer (usually +/- 2.15e+9=2^31),
 		//  the result of converting to integer is undefined
 		//  refer to http://www.php.net/manual/en/language.types.integer.php
-		if ($Check >= $Int32Unit)
+		if ($Check>=$Int32Unit)
 		{
-			$Check = ($Check - $Int32Unit * intval($Check / $Int32Unit));
+			$Check=($Check - $Int32Unit*intval($Check/$Int32Unit));
 			//if the check less than -2^31
-			$Check = ($Check < -2147483648) ? ($Check + $Int32Unit) : $Check;
+			$Check=($Check<-2147483648)?($Check+$Int32Unit):$Check;
 		}
 		$Check += ord($Str[$i]);
 	}
@@ -98,16 +98,16 @@ function StrToNum($Str, $Check, $Magic)
 //genearate a hash for a url
 function HashURL($String)
 {
-	$Check1 = StrToNum($String, 0x1505, 0x21);
-	$Check2 = StrToNum($String, 0, 0x1003F);
+	$Check1=StrToNum($String,0x1505,0x21);
+	$Check2=StrToNum($String,0,0x1003F);
 
-	$Check1 = $Check1 >> 2; 	
-	$Check1 = (($Check1 >> 4) & 0x3FFFFC0 ) | ($Check1 & 0x3F);
-	$Check1 = (($Check1 >> 4) & 0x3FFC00 ) | ($Check1 & 0x3FF);
-	$Check1 = (($Check1 >> 4) & 0x3C000 ) | ($Check1 & 0x3FFF);	
+	$Check1=$Check1>>2;
+	$Check1=(($Check1>>4) & 0x3FFFFC0) | ($Check1&0x3F);
+	$Check1=(($Check1>>4) & 0x3FFC00) | ($Check1&0x3FF);
+	$Check1=(($Check1>>4) & 0x3C000) | ($Check1&0x3FFF);	
 
-	$T1 = (((($Check1 & 0x3C0) << 4) | ($Check1 & 0x3C)) <<2 ) | ($Check2 & 0xF0F );
-	$T2 = @(((($Check1 & 0xFFFFC000) << 4) | ($Check1 & 0x3C00)) << 0xA) | ($Check2 & 0xF0F0000 );
+	$T1=(((($Check1&0x3C0)<<4) | ($Check1&0x3C)) <<2) | ($Check2&0xF0F);
+	$T2=@(((($Check1&0xFFFFC000)<<4) | ($Check1 & 0x3C00))<<0xA) | ($Check2&0xF0F0000);
 
 	return ($T1 | $T2);
 }
@@ -115,36 +115,36 @@ function HashURL($String)
 //genearate a checksum for the hash string
 function CheckHash($Hashnum)
 {
-	$CheckByte = 0;
-	$Flag = 0;
+	$CheckByte=0;
+	$Flag=0;
 
-	$HashStr = sprintf('%u', $Hashnum) ;
-	$length = strlen($HashStr);
+	$HashStr=sprintf('%u',$Hashnum);
+	$length=strlen($HashStr);
 
-	for ($i = $length - 1;  $i >= 0;  $i --)
+	for ($i=$length-1;$i>=0;$i--)
 	{
-		$Re = intval($HashStr[$i]);
-		if (1 === ($Flag % 2))
+		$Re=intval($HashStr[$i]);
+		if (1===($Flag%2))
 		{
-			$Re += $Re;
-			$Re = intval($Re / 10) + ($Re % 10);
+			$Re+=$Re;
+			$Re=intval($Re/10)+($Re%10);
 		}
-		$CheckByte += $Re;
-		$Flag ++;	
+		$CheckByte+=$Re;
+		$Flag++;	
 	}
 
-	$CheckByte = $CheckByte % 10;
-	if (0 !== $CheckByte)
+	$CheckByte=$CheckByte%10;
+	if (0!==$CheckByte)
 	{
-		$CheckByte = 10 - $CheckByte;
-		if (1 === ($Flag % 2) )
+		$CheckByte=10-$CheckByte;
+		if (1===($Flag%2))
 		{
-			if (1 === ($CheckByte % 2))
+			if (1===($CheckByte%2))
 			{
-				$CheckByte += 9;
+				$CheckByte+=9;
 			}
 
-			$CheckByte = $CheckByte >> 1;
+			$CheckByte=$CheckByte>>1;
 		}
 	}
 
@@ -160,17 +160,17 @@ function getch($url)
 //return the pagerank figure
 function getpr($url)
 {
-	$ch = getch($url);
-	$errno = '0';
-	$errstr = '';
+	$ch=getch($url);
+	$errno='0';
+	$errstr='';
 	require_code('files');
 	$data=http_download_file('http://toolbarqueries.google.com/search?client=navclient-auto&ch='.$ch.'&features=Rank&q=info:'.$url,NULL,false);
 	if (is_null($data)) return '';
 
-	$pos = strpos($data, "Rank_");
-	if($pos !== false)
+	$pos=strpos($data,"Rank_");
+	if($pos!==false)
 	{
-		$pr=substr($data, $pos + 9);
+		$pr=substr($data,$pos+9);
 		$pr=trim($pr);
 		$pr=str_replace("\n",'',$pr);
 		return $pr;
@@ -182,7 +182,7 @@ function getpr($url)
 //return the pagerank figure
 function getPageRank($url)
 {
-	if (preg_match('/^(http:\/\/)?([^\/]+)/i', $url)==0)
+	if (preg_match('/^(http:\/\/)?([^\/]+)/i',$url)==0)
 	{
 		$url='http://'.$url;
 	}

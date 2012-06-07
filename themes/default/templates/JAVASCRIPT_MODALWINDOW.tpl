@@ -39,7 +39,7 @@ function open_link_as_overlay(ob,width,height,target)
 		var lightbox_code='<p class="ajax_tree_list_loading"><img id="lightbox_image" src="{$IMG*,loading}" /></p><p class="associated_link associated_links_block_group"><a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a></p>';
 
 		// Show overlay
-		var myLightbox = {
+		var myLightbox={
 			type: "lightbox",
 			text: lightbox_code,
 			yes_button: "{!INPUTSYSTEM_CLOSE#}",
@@ -96,7 +96,7 @@ function fauxmodal_confirm(question,callback,title)
 	if (typeof title=='undefined') var title='{!Q_SURE;}';
 
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
-		var myConfirm = {
+		var myConfirm={
 			type: "confirm",
 			text: escape_html(question),
 			yes_button: "{!YES#}",
@@ -125,7 +125,7 @@ function fauxmodal_alert(notice,callback,title)
 	if (typeof title=='undefined') var title='{!MESSAGE;}';
 
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
-		var myAlert = {
+		var myAlert={
 			type: "alert",
 			text: escape_html(notice),
 			yes_button: "{!INPUTSYSTEM_OK#}",
@@ -145,7 +145,7 @@ function fauxmodal_alert(notice,callback,title)
 function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 {
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
-		var myPrompt = {
+		var myPrompt={
 			type: "prompt",
 			text: escape_html(question),
 			yes_button: "{!INPUTSYSTEM_OK#}",
@@ -192,7 +192,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 					{
 						if (bits[1]=='100%')
 						{
-							height = get_window_height() - 200;
+							height=get_window_height() - 200;
 						} else
 						{
 							height=window.parseInt(bits[1].replace(/px$/,''));
@@ -205,7 +205,7 @@ function faux_showModalDialog(url,name,options,callback,target,cancel_text)
 			}
 		}
 
-		var myFrame = {
+		var myFrame={
 			type: "iframe",
 			finished: function(value) {
 				callback(value);
@@ -284,8 +284,8 @@ function ModalWindow()
 		topWindow: null,
 
 		open: function() {
-			var options = arguments[0] || {};
-			var defaults = {
+			var options=arguments[0] || {};
+			var defaults={
 				'type': "alert",
 				'opacity': "0.5",
 				'width': null,
@@ -310,7 +310,7 @@ function ModalWindow()
 			this.topWindow=this.topWindow.top;
 
 			for(var key in defaults) {
-				this[key] = (typeof options[key] != "undefined") ? options[key] : defaults[key] ;
+				this[key]=(typeof options[key] != "undefined") ? options[key] : defaults[key] ;
 			}
 
 			this.close(this.topWindow);
@@ -320,20 +320,20 @@ function ModalWindow()
 		close: function(win) {
 			if(this.box) {
 				this.remove(this.box, win);
-				this.box = null;
+				this.box=null;
 
 				this.removeEvent(document, "keyup", this.keyup);
 			}
-			this.opened = false;
+			this.opened=false;
 		},
 
 		option: function(method) {
-			var win = this.topWindow; // The below call may end up killing our window reference (for nested alerts), so we need to grab it first
+			var win=this.topWindow; // The below call may end up killing our window reference (for nested alerts), so we need to grab it first
 			if(this[ method ]) {
-				if(this.type == "prompt") {
+				if(this.type=="prompt") {
 					this[ method ](this.input.value);
 				}
-				else if(this.type == "iframe") {
+				else if(this.type=="iframe") {
 					this[ method ](this.returnValue);
 				}
 				else this[ method ]();
@@ -342,30 +342,30 @@ function ModalWindow()
 		},
 
 		resetDimensions: function(width, height) { // Don't re-call this for an iframe-based overlay, doesn't work retro-actively on the iframe size (but CSS sized inards are fine)
-			var dim = this.getPageSize();
+			var dim=this.getPageSize();
 
 			if (width>dim.pageWidth) width=dim.pageWidth;
 
-			var boxWidth = ((width) ? (width + 8) : (dim.pageWidth / 4))  + "px";
-			var extra_box_height = (this.type == "iframe" ) ? 160 : 120;
-			if (this.cancel_button === null) extra_box_height = 0;
-			var boxHeight = (typeof height == "string" || height === null || this.type == "iframe") ? "auto" : (height + extra_box_height) + "px" ;
+			var boxWidth=((width) ? (width + 8) : (dim.pageWidth / 4))  + "px";
+			var extra_box_height=(this.type=="iframe" ) ? 160 : 120;
+			if (this.cancel_button === null) extra_box_height=0;
+			var boxHeight=(typeof height=="string" || height === null || this.type=="iframe") ? "auto" : (height + extra_box_height) + "px" ;
 
-			var boxPosVCentre = (typeof height == "string" || height === null || this.type == "iframe") ? ((this.type == "iframe") ? 20 : 150) : ((dim.windowHeight / 2.5) - (parseInt(boxHeight) / 2)) ;
-			if (boxPosVCentre < 20) boxPosVCentre = 20;
-			var boxPosHCentre = ((dim.pageWidth / 2) - (parseInt(boxWidth) / 2));
+			var boxPosVCentre=(typeof height=="string" || height === null || this.type=="iframe") ? ((this.type=="iframe") ? 20 : 150) : ((dim.windowHeight / 2.5) - (parseInt(boxHeight) / 2)) ;
+			if (boxPosVCentre < 20) boxPosVCentre=20;
+			var boxPosHCentre=((dim.pageWidth / 2) - (parseInt(boxWidth) / 2));
 
-			var boxPosTop = (/*get_window_scroll_y() + */boxPosVCentre) + "px" ;
-			var boxPosLeft = boxPosHCentre + "px";
+			var boxPosTop=(/*get_window_scroll_y() + */boxPosVCentre) + "px" ;
+			var boxPosLeft=boxPosHCentre + "px";
 
-			this.width = width;
-			this.height = height;
+			this.width=width;
+			this.height=height;
 
-			this.box.childNodes[0].style.width = boxWidth;
-			this.box.childNodes[0].style.height = boxHeight;
+			this.box.childNodes[0].style.width=boxWidth;
+			this.box.childNodes[0].style.height=boxHeight;
 
-			this.box.childNodes[0].style.top = boxPosTop;
-			this.box.childNodes[0].style.left = boxPosLeft;
+			this.box.childNodes[0].style.top=boxPosTop;
+			this.box.childNodes[0].style.left=boxPosLeft;
 
 			if (((boxHeight=='auto') && ('{$MOBILE}'==1)) || (height>dim.windowHeight))
 			{
@@ -381,9 +381,9 @@ function ModalWindow()
 		},
 
 		initBox: function() {
-			var dim = this.getPageSize();
+			var dim=this.getPageSize();
 
-			this.box = this.element("div", {
+			this.box=this.element("div", {
 				'styles' : {
 					'background': 'rgba(0,0,0,0.7)',
 					'zIndex': this.topWindow.overlay_zIndex++,
@@ -408,7 +408,7 @@ function ModalWindow()
 
 			this.inject(this.box);
 
-			var container = this.element("div", {
+			var container=this.element("div", {
 				'class': "box_inner",
 				'styles' : {
 					'width': "auto",
@@ -416,21 +416,21 @@ function ModalWindow()
 				}
 			});
 
-			var overlay_header = null;
-			if (this.title != '' || this.type == "iframe") {
-				overlay_header = this.element("h3", {
+			var overlay_header=null;
+			if (this.title != '' || this.type=="iframe") {
+				overlay_header=this.element("h3", {
 					'html': this.title,
 					'styles' : {
-						'display': (this.title == "") ? "none" : "block"
+						'display': (this.title=="") ? "none" : "block"
 					}
 				});
 				container.appendChild(overlay_header);
 			}
 
 			if (this.text != '') {
-				if (this.type == "prompt")
+				if (this.type=="prompt")
 				{
-					var p = this.element("p");
+					var p=this.element("p");
 					p.appendChild(this.element("label", {
 						'for': "overlay_prompt",
 						'html': this.text
@@ -444,29 +444,29 @@ function ModalWindow()
 				}
 			}
 
-			var buttonContainer = this.element("div", {
+			var buttonContainer=this.element("div", {
 				'class': "proceed_button"
 			});
 
-			var _this = this;
+			var _this=this;
 
-			this.clickout_cancel = function() {
+			this.clickout_cancel=function() {
 				_this.option('cancel');
 			};
 
-			this.clickout_finished = function() {
+			this.clickout_finished=function() {
 				_this.option('finished');
 			};
 
-			this.clickout_yes = function() {
+			this.clickout_yes=function() {
 				_this.option('yes');
 			};
 
-			this.keyup = function(e) {
-				if(!e) e = window.event ;
-				var keyCode = (e) ? (e.which || e.keyCode) : null ;
+			this.keyup=function(e) {
+				if(!e) e=window.event ;
+				var keyCode=(e) ? (e.which || e.keyCode) : null ;
 
-				if(keyCode == 13) {
+				if(keyCode==13) {
 					_this.option('yes');
 				}
 			};
@@ -475,7 +475,7 @@ function ModalWindow()
 
 			switch(this.type) {
 				case "iframe":
-					var iframe = this.element("iframe", {
+					var iframe=this.element("iframe", {
 						'frameBorder': "0",
 						'scrolling': browser_matches('ie')?"auto":"no",
 						'title': "",
@@ -505,7 +505,7 @@ function ModalWindow()
 					window.setTimeout(function() { _this.addEvent( _this.box, "click", _this.clickout_finished); }, 1000);
 
 					this.addEvent( iframe, "load", function() {
-						if (typeof iframe.contentWindow.document.getElementsByTagName('h1')[0] == 'undefined' && typeof iframe.contentWindow.document.getElementsByTagName('h2')[0] == 'undefined')
+						if (typeof iframe.contentWindow.document.getElementsByTagName('h1')[0]=='undefined' && typeof iframe.contentWindow.document.getElementsByTagName('h2')[0]=='undefined')
 						{
 							if (iframe.contentWindow.document.title!='')
 							{
@@ -540,7 +540,7 @@ function ModalWindow()
 							var popup_spacer=iframe.contentWindow.document.getElementById('popup_spacer');
 							if (popup_spacer) popup_spacer.id='';
 
-							iframe.contentWindow.opener = window;
+							iframe.contentWindow.opener=window;
 							var bases=iframe.contentWindow.document.getElementsByTagName('base');
 							var baseElement;
 							if (!bases[0])
@@ -624,7 +624,7 @@ function ModalWindow()
 					break;
 
 				case "prompt":
-					this.input = this.element("input", {
+					this.input=this.element("input", {
 						'name': "prompt",
 						'id': "overlay_prompt",
 						'type': this.input_type,
@@ -632,7 +632,7 @@ function ModalWindow()
 						'class': "wide_field",
 						'value': this.defaultValue
 					});
-					var input_wrap = this.element("div", {
+					var input_wrap=this.element("div", {
 						'class': "constrain_field"
 					});
 					input_wrap.appendChild(this.input);
@@ -672,29 +672,29 @@ function ModalWindow()
 		},
 
 		remove: function(el, win) {
-			if (!win) win = this.topWindow;
+			if (!win) win=this.topWindow;
 			win.document.body.removeChild(el);
 		},
 
 		element: function() {
-			var tag = arguments[0], options = arguments[1];
-			var el = this.topWindow.document.createElement(tag);
-			var attributes = {
+			var tag=arguments[0], options=arguments[1];
+			var el=this.topWindow.document.createElement(tag);
+			var attributes={
 				'html': 'innerHTML',
 				'class': 'className',
 				'for': 'htmlFor',
 				'text': 'innerText'
 			};
 			if(options) {
-				if(typeof options == "object") {
+				if(typeof options=="object") {
 					for(var name in options) {
-						var value = options[name];
-						if(name == "styles") {
+						var value=options[name];
+						if(name=="styles") {
 							this.setStyles(el, value);
-						} else if(name == "html") {
+						} else if(name=="html") {
 							set_inner_html(el, value);
 						} else if (attributes[name]) {
-							el[attributes[name]] = value;
+							el[attributes[name]]=value;
 						} else {
 							el.setAttribute(name, value);
 						}
@@ -725,12 +725,12 @@ function ModalWindow()
 		},
 
 		setStyle: function(e, p, v) {
-			if (p == 'opacity') {
+			if (p=='opacity') {
 				this.topWindow.set_opacity(e,v);
 			} else {
 				try
 				{
-					e.style[p] = v;
+					e.style[p]=v;
 				}
 				catch (e){};
 			}

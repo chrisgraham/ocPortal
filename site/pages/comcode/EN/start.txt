@@ -7,12 +7,12 @@
 	[block failsafe="1"]main_leader_board[/block]
 [/surround]
 
-[surround="fp_col_blocks_wrap"]
+[surround="fp_col_blocks_wrap pale_box"]
 	[surround="fp_col_block left"]
 		[block failsafe="1"]main_iotd[/block]
 	[/surround]
 
-	[surround="fp_col_block right"]
+	[surround="fp_col_block right pale_box"]
 		[block failsafe="1"]main_poll[/block]
 	[/surround]
 [/surround]

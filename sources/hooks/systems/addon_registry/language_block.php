@@ -58,9 +58,9 @@ class Hook_addon_registry_language_block
 	function get_dependencies()
 	{
 		return array(
-			'requires' => array(),
-			'recommends' => array(),
-			'conflicts_with' => array()
+			'requires'=>array(),
+			'recommends'=>array(),
+			'conflicts_with'=>array()
 		);
 	}
 
@@ -87,7 +87,7 @@ class Hook_addon_registry_language_block
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_SIDE_LANGUAGE.tpl' => 'block_side_language'
+			'BLOCK_SIDE_LANGUAGE.tpl'=>'block_side_language'
 		);
 	}
 
@@ -102,7 +102,7 @@ class Hook_addon_registry_language_block
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_LANGUAGE', array(
-				'LANGS' => placeholder_options(),
+				'LANGS'=>placeholder_options(),
 			)), NULL, '', true)
 		);
 	}

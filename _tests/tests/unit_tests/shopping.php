@@ -47,10 +47,10 @@ class shopping_test_set extends ocp_test_case
 		$this->access_mapping=array(db_get_first_id()=>4);
 		// Creating cms catalogues object
 		require_code('cms/pages/modules/cms_catalogues.php');
-		$this->cms_cat	=	new Module_cms_catalogues();
+		$this->cms_cat=new Module_cms_catalogues();
 		//Creating Shopping cart object
 		require_code('site/pages/modules/shopping.php');
-		$this->shopping_cart	=	new Module_shopping();
+		$this->shopping_cart=new Module_shopping();
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$this->category_id=	actual_add_catalogue('storetesting'.strval(get_member()),insert_lang(do_lang('DEFAULT_CATALOGUE_PRODUCTS_TITLE'),2),'',0,1,'',0,1);
@@ -86,22 +86,22 @@ class shopping_test_set extends ocp_test_case
 											);
 		}
 
-		$catalogue_name	=	'storetesting'.strval(get_member());
+		$catalogue_name='storetesting'.strval(get_member());
 
 		//Set Sample post values
 
 		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name));
 
-		foreach($fields as $key => $val)
+		foreach ($fields as $key => $val)
 		{
-			$type	=	$val['cf_type'];
+			$type=$val['cf_type'];
 
-			$id	=	$val['id'];
+			$id=$val['id'];
 
-			switch($type)
+			switch ($type)
 			{
 				case 'integer':
-					$_POST['field_'.strval($id)]=4;
+					$_POST['field_'.strval($id)]='4';
 					break;
 				case	'short_trans':
 					$_POST['field_'.strval($id)]='Test field value';
@@ -110,7 +110,7 @@ class shopping_test_set extends ocp_test_case
 					$_POST['field_'.strval($id)]='Test field value';
 					break;
 				case	'float':
-					$_POST['field_'.strval($id)]=68.35;
+					$_POST['field_'.strval($id)]='68.35';
 					break;
 				case	'list':
 					if($val['cf_order']=6)	//Order 6 is tax
@@ -123,7 +123,7 @@ class shopping_test_set extends ocp_test_case
 
 		$map=$this->cms_cat->get_set_field_map($catalogue_name);
 
-		$this->product_id=actual_add_catalogue_entry($this->category_id,$validated=0,$notes='test note',$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$map);
+		$this->product_id=actual_add_catalogue_entry($this->category_id,0,'test note',1,1,1,$map);
 	}
 
 	function tearDown()
@@ -144,7 +144,7 @@ class shopping_test_set extends ocp_test_case
 
 	function testHandleTransaction()
 	{
-		$purchase_id	=	$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
+		$purchase_id=$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
 		$item_name='Test field value';
 		$payment_status='Completed';
 		$reason_code='';
@@ -154,7 +154,7 @@ class shopping_test_set extends ocp_test_case
 		$mc_currency=get_option('currency');
 		$txn_id='0';
 		$parent_txn_id='0';
-		$via	=	'paypal';
+		$via='paypal';
 
 		handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$via,post_param('period3',''));
 	}

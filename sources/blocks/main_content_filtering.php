@@ -78,7 +78,7 @@ class Block_main_content_filtering
 		$links=array();
 		foreach ($_links as $link_title=>$_link_filter)
 		{
-			$links[]=prepare_ocselect_merger_link($_link_filter,$link_title)+array('TITLE'=>$link_title);
+			$links[]=prepare_ocselect_merger_link($_link_filter)+array('TITLE'=>$link_title);
 		}
 
 		return do_template('BLOCK_MAIN_CONTENT_FILTERING',array(
