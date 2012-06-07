@@ -1512,6 +1512,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
 	if (typeof filter=='undefined') var filter="{$CONFIG_OPTION#,valid_types}";
 	if (filter=='') filter="{$CONFIG_OPTION#,valid_types}";
+	filter+=','+filter.toUpperCase();
 
 	if (typeof window.done_aviary=='undefined') do_aviary();
 
