@@ -4,7 +4,7 @@
 */
 
 .page_running_login #main_website_inner {
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(bottom left\, {$GET,main_background}\, {$GET,main_2_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to top right\, {$GET,main_background}\, {$GET,main_2_background});}
 }
 
 .login_page {

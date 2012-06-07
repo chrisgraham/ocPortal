@@ -23,3 +23,13 @@
 	margin-bottom: 2em;
 }
 
+/* Fiddling to make the 'no entries' poll block have a decent and matching height */
+
+.fp_col_block .box___block_main_iotd, /* This is a fudge to make the IOTD balance this height, if IOTD and poll shown at same time. You are likely want to change the blocks referenced here or the sizing, depending on your requirements */
+.fp_col_block .box___poll_box,
+.fp_col_block .box___block_no_entries_poll {
+	min-height: 295px;
+}
+.box___block_no_entries_poll h3 {
+	margin-bottom: 8em;
+}

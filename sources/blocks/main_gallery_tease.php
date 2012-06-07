@@ -84,6 +84,10 @@ class Block_main_gallery_tease
 		}
 		$query='FROM '.get_table_prefix().'galleries WHERE ('.$where.') AND name NOT LIKE \''.db_encode_like('download\_%').'\'';
 		$galleries=$GLOBALS['SITE_DB']->query('SELECT * '.$query.' ORDER BY add_date DESC',$max,$start);
+		if (count($galleries)==0) // Hmm, gallery itself then
+		{
+			$galleries=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'galleries WHERE '.db_string_equal_to('name',$parent_id).' ORDER BY add_date DESC',$max,$start);
+		}
 		foreach ($galleries as $child)
 		{
 			$url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$child['name']),$zone);
@@ -113,7 +117,7 @@ class Block_main_gallery_tease
 			if (($pic!='') && (url_is_local($pic))) $pic=get_custom_base_url().'/'.$pic;
 			$add_date=get_timezoned_date($child['add_date'],false);
 
-			$sub=do_template('GALLERY_TEASE_PIC',array('_GUID'=>'37cd5f3fc64ac1c76f85980e69a50154','TEASER'=>$teaser,'ADD_DATE'=>$add_date,'NUM_CHILDREN'=>integer_format($num_children),'NUM_IMAGES'=>integer_format($num_images),'NUM_VIDEOS'=>integer_format($num_videos),'MEMBER_INFO'=>$member_info,'URL'=>$url,'PIC'=>$pic,'TITLE'=>$_title));
+			$sub=do_template('GALLERY_TEASE_PIC',array('_GUID'=>'37cd5f3fc64ac1c76f85980e69a50154','GALLERY'=>$child['name'],'TEASER'=>$teaser,'ADD_DATE'=>$add_date,'NUM_CHILDREN'=>integer_format($num_children),'NUM_IMAGES'=>integer_format($num_images),'NUM_VIDEOS'=>integer_format($num_videos),'MEMBER_INFO'=>$member_info,'URL'=>$url,'PIC'=>$pic,'TITLE'=>$_title));
 			$content->attach($sub);
 		}
 

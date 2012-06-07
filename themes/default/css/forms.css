@@ -107,7 +107,7 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 	border: 1px dotted {$GET,pale_border};
 	padding: 0.5em;
 	background-color: {$GET,area_background} !important; /* !important is so has priority over .de_th */
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,area_background}\, {$GET,area_2_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_2_background});}
 }
 .form_table_field_input input {
 	margin-top: 0;
@@ -128,12 +128,12 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 
 .form_table .required {
 	background-color: {$GET,required_background} !important;
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,required_2_background}\, {$GET,required_background}) !important;}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,required_2_background}\, {$GET,required_background}) !important;}
 }
 
 .form_table .filledin .required {
 	background-color: {$GET,area_background} !important;
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,required_2_background}\, {$GET,required_background}) !important;}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,required_2_background}\, {$GET,required_background}) !important;}
 }
 
 /* Particular input types */

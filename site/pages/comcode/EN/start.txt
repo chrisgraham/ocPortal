@@ -1,6 +1,12 @@
 [semihtml]
 [title="1"]{$SITE_NAME}[/title]
 
+[surround="boxless_space"]
+	[block failsafe="1"]main_news[/block]
+
+	[block failsafe="1"]main_leader_board[/block]
+[/surround]
+
 [surround="fp_col_blocks_wrap"]
 	[surround="fp_col_block left"]
 		[block failsafe="1"]main_iotd[/block]
@@ -11,11 +17,7 @@
 	[/surround]
 [/surround]
 
-[block failsafe="1"]main_news[/block]
-
-[block failsafe="1"]main_leader_board[/block]
-
-[block failsafe="1"]main_quotes[/block]
+[surround="boxless_space"][block failsafe="1"]main_quotes[/block][/surround]
 
 [block]main_comcode_page_children[/block]
 [/semihtml]

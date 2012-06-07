@@ -351,7 +351,7 @@ class Module_admin_config
 				add_config_option('COMMENTS_FORUM_NAME','comments_forum_name','forum','return has_no_forum()?NULL:do_lang(\'COMMENT_FORUM_NAME\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','USER_INTERACTION');
 				add_config_option('COMMENT_FORM_TEXT','comment_text','transtext','return has_no_forum()?NULL:static_evaluate_tempcode(do_template(\'COMMENTS_DEFAULT_TEXT\'));','FEATURE','USER_INTERACTION');
 			//  Images
-				add_config_option('THUMB_WIDTH','thumb_width','integer','return \'200\';','FEATURE','IMAGES');
+				add_config_option('THUMB_WIDTH','thumb_width','integer','return \'175\';','FEATURE','IMAGES');
 				add_config_option('IMAGES','max_image_size','integer','return \'700\';','SITE','UPLOAD');
 
 			add_config_option('USERS_ONLINE_TIME','users_online_time','integer','return \'5\';','SITE','LOGGING');

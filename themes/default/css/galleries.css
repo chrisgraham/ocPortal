@@ -26,7 +26,7 @@
 {$,Our standard ocPortal-wide thumbnail image size is defined by the thumb_width option}
 {$SET,gallery_thumb_size,{$CONFIG_OPTION,thumb_width}px}
 {$,However actually lets make them smaller custom sizes for the gallery and let CSS scale-down the larger thumbnail images}
-{$SET,gallery_thumb_size,176px}
+{$SET,gallery_thumb_size,175px}
 {$,That is not the most efficient approach - which would be to use the Tempcode THUMBNAIL symbol in the GALLERY_IMAGE/GALLERY_VIDEO templates to generate idealised thumbnails and tie them into the HTML - but that is fiddly and messy, requires more thought and planning by the web designer}
 {$,Or, of course we could use the standard thumbnail size, or change the standard thumbnail size, but that would affect other systems which may want the larger thumbnails}
 
@@ -51,7 +51,7 @@
 	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,standard_border};}
 }
 
-.gallery_regular_thumb .img_thumb_wrap {
+.img_thumb_wrap {
 	/* Essentially adds padding around thumbnails; the thumbnails are sized to fit a box as tightly as possible, but unused space is not stored inside the images themselves */
 	width: {$GET,gallery_thumb_size};
 	height: {$GET,gallery_thumb_size};
@@ -60,11 +60,11 @@
 	display: table-cell;
 }
 
-.gallery_regular_thumb .img_thumb_wrap a {
+.img_thumb_wrap a {
 	outline: 0;
 }
 
-.gallery_regular_thumb .img_thumb_wrap .img_thumb {
+.img_thumb_wrap .img_thumb {
 	vertical-align: bottom; /* Removes gap under this centered inline image, by moving it to baseline */
 
 	/* Maybe the thumbnail size has been reduced at some point - guard against this */
@@ -162,22 +162,31 @@
 	padding: 0;
 }
 
-/* Tease block */
+/* Tease block / Image fader block */
 
 .gallery_tease_pic_wrap {
 	margin-bottom: 1.5em;
 }
 
+.gallery_tease_pic_wrap h2, .gallery_tease_pic_wrap h3 {
+	max-width: 18em;
+}
+
 .gallery_tease_pic {
 	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 600px;
+		width: 40em;
 	{+END}
 	margin: 0 auto;
+	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,point_of_interest_border};}
 }
 
 .gallery_tease_pic_pic {
 	float: {!en_right};
 	text-align: {!en_right};
+}
+
+#tease_scrolling_text {
+	width: 23em;
 }
 
 /* Image fader block */
@@ -190,6 +199,11 @@
 
 .image_fader_box img {
 	display: block;
+}
+
+/* If nested in a box already */
+.box_inner>.image_fader_box {
+	border: 0;
 }
 
 /* Miscellaneous media handling */

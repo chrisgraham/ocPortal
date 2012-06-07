@@ -73,8 +73,10 @@ class Block_main_image_fader
 
 		$images=array();
 		$images_full=array();
-		$image_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,url FROM '.get_table_prefix().'images WHERE '.$cat_select,100/*reasonable amount*/);
-		$video_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,thumb_url AS url FROM '.get_table_prefix().'videos WHERE '.$cat_select,100/*reasonable amount*/);
+		$titles=array();
+		$html=array();
+		$image_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,url,title,comments FROM '.get_table_prefix().'images WHERE '.$cat_select,100/*reasonable amount*/);
+		$video_rows=$GLOBALS['SITE_DB']->query('SELECT id,thumb_url,thumb_url AS url,title,comments FROM '.get_table_prefix().'videos WHERE '.$cat_select,100/*reasonable amount*/);
 		$all_rows=array();
 		if ($order!='')
 		{
@@ -121,6 +123,9 @@ class Block_main_image_fader
 			$full_url=$row['url'];
 			if (url_is_local($full_url)) $full_url=get_custom_base_url().'/'.$full_url;
 			$images_full[]=$full_url;
+
+			$titles[]=get_translated_text($row['title']);
+			$html[]=get_translated_tempcode($row['comments']);
 		}
 
 		if (count($images)==0) return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>do_lang_tempcode('NO_ENTRIES')));
@@ -139,6 +144,8 @@ class Block_main_image_fader
 			'NEXT_URL_FULL'=>isset($images_full[1])?$images_full[1]:'',
 			'IMAGES'=>$images,
 			'IMAGES_FULL'=>$images_full,
+			'TITLES'=>$titles,
+			'HTML'=>$html,
 			'MILL'=>strval($mill),
 		));
 	}

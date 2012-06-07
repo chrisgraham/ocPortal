@@ -6,6 +6,8 @@
 	[block failsafe="1"]main_greeting[/block]
 	[surround="hero_button"][page="site:start"]{$SITE_NAME}[/page][/surround]
 [/surround]
+
+[block failsafe="1"]main_image_fader[/block]
 [/semihtml]
 {+END}
 
@@ -14,6 +16,10 @@
 [title="1"]{$SITE_NAME}[/title]
 
 [block="3" failsafe="1"]main_greeting[/block]
+
+[block failsafe="1"]main_news[/block]
+
+[block failsafe="1"]main_leader_board[/block]
 
 [surround="fp_col_blocks_wrap"]
 	[surround="fp_col_block left"]
@@ -24,10 +30,6 @@
 		[block failsafe="1"]main_poll[/block]
 	[/surround]
 [/surround]
-
-[block failsafe="1"]main_news[/block]
-
-[block failsafe="1"]main_leader_board[/block]
 
 [block failsafe="1"]main_quotes[/block]
 

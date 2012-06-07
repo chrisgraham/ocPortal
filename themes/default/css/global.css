@@ -101,7 +101,7 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#d9e1ee,area_hover_2_background,20% seed + 80% W/B}
 {$THEME_WIZARD_COLOR,#c2d1e5,area_hover_3_background,93% (area_background sat_to 15) + 7% B/W}
 {$THEME_WIZARD_COLOR,#c2d1e5,area_current_background,93% (area_background sat_to 15) + 7% B/W}
-{$THEME_WIZARD_COLOR,#d8dde6,point_of_interest_background,95% area_2_background + 5% B/W}
+{$THEME_WIZARD_COLOR,#dce2eb,point_of_interest_background,97% area_2_background + 2% B/W}
 {$THEME_WIZARD_COLOR,#6b81a1,footer_background,95% (seed sat_to 33) + 5% B/W}
 {$THEME_WIZARD_COLOR,#607490,footer_2_background,85% (seed sat_to 33) + 15% B/W}
 /* Backgrounds, employing color wheel theory */
@@ -116,6 +116,10 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#2a3d5a,area_key_text,53% (seed sat_to 53) + 47% B/W}
 {$THEME_WIZARD_COLOR,#0d2d5d,area_link,55% (seed sat_to 86) + 45% B/W}
 {$THEME_WIZARD_COLOR,#8497b3,point_of_interest_border,50% dark_border + 50% W/B}
+/* Text, employing color wheel theory */
+{$THEME_WIZARD_COLOR,#214f55,slightly_seeded_left_complement_text,50% (seed hue_add -21) + 50% B/W}
+{$THEME_WIZARD_COLOR,#262155,slightly_seeded_right_complement_text,50% (seed hue_add +21) + 50% B/W}
+{$THEME_WIZARD_COLOR,#554121,slightly_seeded_complement_text,50% (seed hue_add 128) + 50% B/W}
 
 /* Special colour for box titles */
 {$THEME_WIZARD_COLOR,#ffffff,box_title_text,100% W/B}
@@ -267,7 +271,7 @@ th, .fake_th {
 	text-align: center;
 }
 thead>tr>th {
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,th_background}\, {$GET,th_2_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,th_background}\, {$GET,th_2_background});}
 }
 /* .de_th makes a th look like a td, yet allows us to use correct markup */
 td, th.de_th {
@@ -397,6 +401,14 @@ header {
 	{+END}
 	margin-bottom: 0.8em;
 }
+{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
+	.zone_running_ header {
+		margin-bottom: 0; /* Splash page style design, tighter spacing */
+	}
+	.zone_running_ .global_side_panel {
+		margin-top: 0.8em;
+	}
+{+END}
 
 header h1 {
 	margin: 0;
@@ -492,12 +504,14 @@ header h1 {
 
 /* .hero_section is specially designed to wrap around a title and some text, to give a 'hero' introduction for the front page of a site (standard marketing technique) */
 .hero_section {
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,main_2_background}\, {$GET,main_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom right\, {$GET,main_background}\, {$GET,main_2_background});}
 	font-size: 1.25em;
 	color: {$GET,slightly_seeded_text};
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Choose better font for larger text */
 	padding: 2em 3em;
 	margin-bottom: 3em;
+	position: relative;
+	left: -0.8em;
 }
 .hero_section h1 {
 	font-size: 2.6em;
@@ -514,7 +528,7 @@ header h1 {
 	padding: 0.5em;
 	background-image: none !important;
 	margin-bottom: 1em;
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,lgrad}\, {$GET,dgrad}) !important;}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,lgrad}\, {$GET,dgrad}) !important;}
 	font-size: 0.9em;
 }
 
@@ -684,7 +698,7 @@ body.popup_spacer h2 {
 
 footer {
 	background-color: {$GET,footer_background};
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,footer_background}\, {$GET,footer_2_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,footer_background}\, {$GET,footer_2_background});}
 
 	color: {$GET,footer_text};
 	padding: 1em;
@@ -962,7 +976,7 @@ input.button_hyperlink {
 
 .trinav_wrap {
 	overflow: hidden;
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,main_2_background}\, {$GET,main_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,main_2_background}\, {$GET,main_background});}
 }
 .trinav_wrap.nograd {
 	background-image: none;
@@ -1124,7 +1138,7 @@ th.meta_data_title {
 	*/
 	background: url('{$IMG;,block_background}') {$GET,area_background};
 	/* If the browser supports gradients, we'll put a nice box-filling gradient in here instead */
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,area_background}\, {$GET,area_5_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_2_background});}
 
 	overflow: hidden;
 }
@@ -1188,25 +1202,44 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	color: {$GET,footer_link_hover};
 }
 
-/* This is a CSS class to undo a .box if not in a panel (.only_a_box_if_in_panel may be put on boxes to achieve this) */
-.only_a_box_if_in_panel>.box {
+/* If you want to mark a region as box-less, wrap a div with class 'boxless_space' around it -- it'll invoke a very different kind of modern styling */
+.global_side_panel .boxless_space {
+	font-size: 1.05em; /* Undoes the font-size defined on the .global_side, as in this circumstance we probably want consistency across all panels */
+}
+.boxless_space {
+	margin: 2em 0;
+}
+.boxless_space .box {
 	background: none;
 	border: none;
 	padding: 0;
 	margin: 0;
+	{$BETA_CSS_PROPERTY,border-radius: 0;}
 }
-.only_a_box_if_in_panel>.box>.box_inner {
+.boxless_space .box>.box_inner {
 	margin: 0;
 }
-.only_a_box_if_in_panel>.box>.box_inner>h1, .only_a_box_if_in_panel>.box>.box_inner>h2, .only_a_box_if_in_panel>.box>.box_inner>h3, .only_a_box_if_in_panel>.box>.box_inner>h4, .only_a_box_if_in_panel>.box>.box_inner>h5, .only_a_box_if_in_panel>.box>.box_inner>h6 {
+.boxless_space .box>.box_inner>h1, .boxless_space .box>.box_inner>h2, .boxless_space .box>.box_inner>h3, .boxless_space .box>.box_inner>h4, .boxless_space .box>.box_inner>h5, .boxless_space .box>.box_inner>h6 {
 	background: none;
-	color: {$GET,heading_text};
+	color: {$GET,slightly_seeded_right_complement_text};
 	text-align: {!en_left};
-	font-size: 1.4em;
+	font-size: 1.2em;
 	margin: 0.5em 0;
+	font-family: Arial;
 	padding: 0;
 	width: auto;
-	font-weight: normal;
+	font-weight: bold;
+	text-transform: uppercase;
+	{$BETA_CSS_PROPERTY,border-radius: 0;}
+}
+.global_side_panel .boxless_space .box>.box_inner>h1, .global_side_panel .boxless_space .box>.box_inner>h2, .global_side_panel .boxless_space .box>.box_inner>h3, .global_side_panel .boxless_space .box>.box_inner>h4, .global_side_panel .boxless_space .box>.box_inner>h5, .global_side_panel .boxless_space .box>.box_inner>h6 {
+	color: {$GET,slightly_seeded_left_complement_text};
+}
+
+.boxless_space .box + .box {
+	border-top: 2px solid {$GET,standard_border};
+	margin-top: 1.5em;
+	padding-top: 0.5em;
 }
 
 /* Boxes under boxes shouldn't have the title style - would be ugly */
@@ -1545,7 +1578,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	font-size: 1em;
 	padding: 0.5em;
 	background-color: {$GET,area_faded_background};
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,area_faded_background}\, {$GET,area_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_faded_background}\, {$GET,area_background});}
 	border: 1px solid {$GET,point_of_interest_border};
 	{$BETA_CSS_PROPERTY,box-shadow: 3px 3px 10px {$GET,point_of_interest_border};}
 	z-index: 1000;
@@ -2026,6 +2059,9 @@ div.wysiwyg_toolbar_color_finder {
 
 .post_buttons {
 	text-align: left !important; /* Overrides buttons_group */
+}
+.box .buttons_group {
+	margin-bottom: 0 !important;
 }
 
 .post .post_buttons {
@@ -2724,7 +2760,7 @@ Form buttons are wrapped in either:
 	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 10px;}
 	padding: 0.5em;
 	margin-left: 1px;
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,main_2_background}\, {$GET,main_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,main_2_background}\, {$GET,main_background});}
 }
 
 /* Tighten up subtab display */
@@ -2938,9 +2974,10 @@ ul.nl, .nl ul {
 	margin: 0;
 	position: relative;
 }
-.box___block_side_stored_menu_embossed .edit_menu_link {
+.box___block_side_stored_menu_embossed .edit_menu_link_inline {
 	position: absolute;
 	right: 0;
+	bottom: 1px;
 }
 .box___block_side_stored_menu_embossed nav, .box___block_side_stored_menu_embossed li {
 	border-left: 0;
@@ -3156,27 +3193,15 @@ ul.nl, .nl ul {
 	content: "";
 }
 
-.edit_menu_link {
-	text-align: {!en_right};
-	font-size: 0.85em;
-}
-
-.menu_block .edit_menu_link a, .global_navigation .edit_menu_link_inline, #panel_top .edit_page_link_inline, #panel_bottom .edit_page_link_inline {
-	{$BETA_CSS_PROPERTY,opacity: 0.4;} display: inline-block;/*Needed for IE8*/
-	{$BETA_CSS_PROPERTY,transition: opacity 0.5s linear;}
-}
-.menu_block:hover .edit_menu_link a, .global_navigation:hover .edit_menu_link_inline, #panel_top:hover .edit_page_link_inline, #panel_bottom:hover .edit_page_link_inline {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
-}
-
 /* We hide the inline edit menu links for design reasons, they fade in on top of stuff when hovering the menu */
-div>.edit_menu_link_inline, div>.edit_page_link_inline {
+.edit_menu_link_inline, .edit_page_link_inline {
 	{$BETA_CSS_PROPERTY,opacity: 0 !important;} display: inline-block;/*Needed for IE8*/
+	{$BETA_CSS_PROPERTY,transition: opacity 0.5s linear;}
 }
 div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;} display: inline-block;/*Needed for IE8*/
 }
-.edit_menu_link_inline, .edit_page_link_inline {
+.edit_page_link_inline, .edit_menu_link_inline {
 	position: absolute;
 	right: 1px;
 	z-index: 10000;

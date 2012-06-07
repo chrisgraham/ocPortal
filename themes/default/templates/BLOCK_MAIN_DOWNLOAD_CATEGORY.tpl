@@ -18,10 +18,8 @@
 	{+END}
 {+END}
 
-<div class="only_a_box_if_in_panel">
-	<section class="box box___block_main_download_category"><div class="box_inner">
-		{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE}</h3>{+END}
+<section class="box box___block_main_download_category"><div class="box_inner">
+	{+START,IF_NON_EMPTY,{TITLE}}<h3>{TITLE}</h3>{+END}
 
-		{$GET,DC_CONTENT}
-	</div></section>
-</div>
+	{$GET,DC_CONTENT}
+</div></section>

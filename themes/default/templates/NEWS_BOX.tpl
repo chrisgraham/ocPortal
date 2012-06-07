@@ -4,21 +4,11 @@
 			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{CATEGORY}}
 				<img src="{IMG*}" title="{CATEGORY*}" alt="{CATEGORY*}" />
 			{+END}{+END}
-
-			<div class="news_by">
-				{!BY_SIMPLE,<a href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a>}
-			</div>
 		</div>
 	{+END}
 
 	{+START,IF,{$NOT,{$IS_NON_EMPTY,{AUTHOR_URL}}}}
 		<div class="newscat_img_member">
-			{+START,IF_NON_EMPTY,{$USERNAME*,{SUBMITTER}}}
-				<div class="news_by">
-					<a class="fancy_user_link" rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>
-				</div>
-			{+END}
-
 			{+START,IF,{$NOT,{$MOBILE}}}{+START,IF_NON_EMPTY,{$AVATAR,{SUBMITTER}}}
 				<img src="{$AVATAR*,{SUBMITTER}}" title="{!AVATAR}" alt="{!AVATAR}" />
 			{+END}{+END}
@@ -34,7 +24,19 @@
 	<div class="meta_details" role="contentinfo">
 		<ul class="meta_details_list">
 			<li>{!POSTED_TIME,{DATE*}}</li>
-			{+START,IF,{BLOG}}<li>{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>}</li>{+END}
+			<li>
+				{+START,IF,{$AND,{$NOT,{BLOG}},{$IS_NON_EMPTY,{AUTHOR_URL}}}}
+					{!BY_SIMPLE,<a href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a>}
+					{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
+				{+END}
+			
+				{+START,IF,{$NOT,{$IS_NON_EMPTY,{AUTHOR_URL}}}}
+					{+START,IF_NON_EMPTY,{$USERNAME*,{SUBMITTER}}}
+						<a class="fancy_user_link" rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>
+						{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
+					{+END}
+				{+END}
+			</li>
 		</ul>
 	</div>
 
@@ -44,13 +46,14 @@
 		{+START,IF,{$NOT,{TRUNCATE}}}{NEWS}{+END}
 		{+START,IF,{$AND,{$NOT,{$IN_STR,{NEWS},<p>}},{$NOT,{$IN_STR,{NEWS},<h}}}}</p>{+END}
 	{+END}
+
+	{+START,IF_PASSED,TAGS}
+		{+START,IF,{$CONFIG_OPTION,show_content_tagging_inline}}{TAGS}{+END}
+	{+END}
+	
+	<p class="news_goto">
+		{$,<img class="button_pageitem" src="{$IMG*,pageitem/goto}" title="{!VIEW} / {!COMMENTS}" alt="{!VIEW} / {!COMMENTS}" />}
+		<a title="{!READ_MORE}: #{ID*}" href="{FULL_URL*}">{!READ_MORE}</a>{+START,IF,{$NOT,{$MATCH_KEY_MATCH,forum:topicview,forum:forumview}}} {+START,IF_PASSED_AND_TRUE,COMMENT_COUNT} <span class="comment_count">{$COMMENT_COUNT,news,{ID}}</span>{+END}{+END}
+	</p>
 </div>
 
-{+START,IF_PASSED,TAGS}
-	{+START,IF,{$CONFIG_OPTION,show_content_tagging_inline}}{TAGS}{+END}
-{+END}
-
-<p class="news_goto">
-	{$,<img class="button_pageitem" src="{$IMG*,pageitem/goto}" title="{!VIEW} / {!COMMENTS}" alt="{!VIEW} / {!COMMENTS}" />}
-	<a title="{!READ_MORE}: #{ID*}" href="{FULL_URL*}">{!READ_MORE}</a>{+START,IF,{$NOT,{$MATCH_KEY_MATCH,forum:topicview,forum:forumview}}} {+START,IF_PASSED_AND_TRUE,COMMENT_COUNT} <span class="comment_count">{$COMMENT_COUNT,news,{ID}}</span>{+END}{+END}
-</p>

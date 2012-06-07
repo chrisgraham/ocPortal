@@ -491,6 +491,17 @@ class Hook_addon_registry_galleries
 				do_lorem_template('BLOCK_MAIN_IMAGE_FADER',array(
 					'GALLERY_URL' => placeholder_url(),
 					'FIRST_URL' => placeholder_image_url(),
+					'PREVIOUS_URL' => placeholder_image_url(),
+					'NEXT_URL' => placeholder_image_url(),
+					'FIRST_URL_FULL' => placeholder_image_url(),
+					'PREVIOUS_URL_FULL' => placeholder_image_url(),
+					'NEXT_URL_FULL' => placeholder_image_url(),
+					'HTML' => array(),
+					'TITLES' => array(),
+					'IMAGES' => array(),
+					'IMAGES_FULL' => array(),
+					'HTML' => array(),
+					'MILL' => 3000,
 				)
 			),NULL,'',true),
 		);
@@ -542,7 +553,7 @@ class Hook_addon_registry_galleries
 		$content = new ocp_tempcode();
 		foreach (placeholder_array() as $k => $v)
 		{
-			$sub = do_lorem_template('GALLERY_TEASE_PIC',array('TEASER' => lorem_phrase(),'ADD_DATE' => placeholder_date(),'NUM_CHILDREN' => placeholder_number(),'NUM_IMAGES' => placeholder_number(),'NUM_VIDEOS' => placeholder_number(),'MEMBER_INFO' => lorem_paragraph(),'URL' => placeholder_url(),'PIC' => placeholder_url(),'TITLE' => lorem_phrase()));
+			$sub = do_lorem_template('GALLERY_TEASE_PIC',array('GALLERY' =>placeholder_id(),'TEASER' => lorem_phrase(),'ADD_DATE' => placeholder_date(),'NUM_CHILDREN' => placeholder_number(),'NUM_IMAGES' => placeholder_number(),'NUM_VIDEOS' => placeholder_number(),'MEMBER_INFO' => lorem_paragraph(),'URL' => placeholder_url(),'PIC' => placeholder_url(),'TITLE' => lorem_phrase()));
 			$content->attach($sub);
 		}
 

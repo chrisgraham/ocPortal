@@ -1,5 +1,5 @@
 <section class="box box___block_main_bottom_bar"><div class="box_inner">
-	<h3>{!_STATISTICS}</h3>
+	<h2>{!_STATISTICS}</h2>
 
 	<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="ocf_stats_table wide_table">
 		{+START,IF,{$NOT,{$MOBILE}}}

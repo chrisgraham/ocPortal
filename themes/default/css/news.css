@@ -7,6 +7,12 @@
 	white-space: normal;
 }
 
+.news_piece_summary h3 {
+	display: inline-block;
+	min-width: 75%;
+	font-size: 1.2em;
+}
+
 .newscat_img_author, .newscat_img_member {
 	margin-{!en_left}: 1em;
 	float: {!en_right};
@@ -35,6 +41,7 @@
 	border: 1px dashed {$GET,point_of_interest_border};
 	background-color: {$GET,point_of_interest_background};
 	padding: 0.5em;
+	font-size: 0.9em;
 }
 
 .news_summary_p {
@@ -46,7 +53,11 @@
 	padding-bottom: 0.5em;
 	margin-bottom: 3em;
 	text-align: center;
-	border-bottom: 1px solid {$GET,standard_border};
+}
+
+.news_piece_summary + .news_piece_summary {
+	border-top: 1px dotted {$GET,pale_border};
+	padding-top: 0.5em;
 }
 
 .news_by {

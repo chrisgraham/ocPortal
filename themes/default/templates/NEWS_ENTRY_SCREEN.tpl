@@ -11,7 +11,10 @@
 				{+START,IF,{$INLINE_STATS}}<li>{!VIEWS,{VIEWS*}}</li>{+END}
 				<li>{!ADDED,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{DATE*}</time>}</li>
 				{+START,IF_NON_EMPTY,{AUTHOR_URL}}
-					<li><span class="field_name">{!AUTHOR}:</span> <a rel="author" itemprop="author" href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a></li>
+					<li>
+						<span class="field_name">{!AUTHOR}:</span> <a rel="author" itemprop="author" href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a>
+						{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
+					</li>
 				{+END}
 				{+START,IF_EMPTY,{AUTHOR_URL}}{+START,IF_NON_EMPTY,{$USERNAME,{SUBMITTER}}}
 					<li>

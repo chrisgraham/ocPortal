@@ -14,7 +14,7 @@
 	{+START,IF_NON_EMPTY,{ARCHIVE_URL}{SUBMIT_URL}{RSS_URL}{ATOM_URL}}
 		<ul class="horizontal_links associated_links_block_group">
 			{+START,IF_NON_EMPTY,{ARCHIVE_URL}}
-				<li><a rel="archives" href="{ARCHIVE_URL*}">{$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}</a></li>
+				<li><a rel="archives" href="{ARCHIVE_URL*}">{!VIEW_ARCHIVE}</a></li>
 			{+END}
 			{+START,IF_NON_EMPTY,{SUBMIT_URL}}
 				<li><a rel="add" href="{SUBMIT_URL*}">{$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}</a></li>

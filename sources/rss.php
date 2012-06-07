@@ -50,6 +50,8 @@ class rss
 	{
 		require_lang('rss');
 
+		$url=str_replace('{$FIND_SCRIPT,backend}',find_script('backend'),$url);
+
 		$this->namespace_stack=array();
 		$this->tag_stack=array();
 		$this->attribute_stack=array();
@@ -71,7 +73,7 @@ class rss
 
 		//echo $url;exit();
 
-		if($is_filesystem_path)
+		if ($is_filesystem_path)
 		{
 			$GLOBALS['HTTP_CHARSET']='';
 			$data=@file_get_contents($url);

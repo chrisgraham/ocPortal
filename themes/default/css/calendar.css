@@ -201,7 +201,7 @@ abbr.dtstart, abbr.dtend {
 .calendar_date_span_link_inner {
 	border: 1px solid {$GET,standard_border};
 	background-color: {$GET,area_faded_background};
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,area_4_background}\, {$GET,area_5_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_4_background}\, {$GET,area_5_background});}
 	color: {$GET,area_key_text};
 	padding: 0.3em;
 	margin-left: -1px;

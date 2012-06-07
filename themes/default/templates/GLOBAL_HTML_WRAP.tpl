@@ -100,12 +100,12 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 				<article class="global_middle">
 					{$,Breadcrumbs}
-					{+START,IF_NON_EMPTY,{$BREADCRUMBS}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},:start}}{+START,IF,{$SHOW_HEADER}}
+					{+START,IF,{$IN_STR,{$BREADCRUMBS},<a}}{+START,IF,{$SHOW_HEADER}}
 						<nav class="global_breadcrumbs breadcrumbs" itemprop="breadcrumb" role="navigation">
 							<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" title="{!YOU_ARE_HERE}" alt="{!YOU_ARE_HERE}" />
 							{$BREADCRUMBS}
 						</nav>
-					{+END}{+END}{+END}
+					{+END}{+END}
 
 					{$,Associated with the SKIP_NAVIGATION link defined further up}
 					<a id="maincontent"></a>

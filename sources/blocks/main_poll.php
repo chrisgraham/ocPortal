@@ -54,7 +54,7 @@ class Block_main_poll
 		require_css('polls');
 		require_lang('polls');
 
-		if (get_value('no_frames')==='1')
+		if (get_value('no_frames')!=='0') // You have to explicitly set no_frames to 0 if you want frames here, as it makes styling a PITA and slows loading -- not worth the tradeoff for most people
 		{
 			require_code('polls');
 			return poll_script(true,$param);

@@ -122,7 +122,7 @@
 
 .chat_message {
 	border: 1px solid {$GET,pale_border};
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(top\, {$GET,area_background}\, {$GET,area_2_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_2_background});}
 	background-color: {$GET,area_background};
 	padding: 0.5em;
 	margin: 1em 0;
