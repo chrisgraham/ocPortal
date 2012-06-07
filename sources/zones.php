@@ -603,7 +603,7 @@ function find_all_hooks($type,$entry)
 		$out=array_merge($_out,$out);
 	}
 
-	if (!$GLOBALS['DOING_USERS_INIT'])
+	if (!isset($GLOBALS['DOING_USERS_INIT']))
 		$HOOKS_CACHE[$type.'/'.$entry]=$out;
 
 	if (function_exists('persistent_cache_set')) persistent_cache_set('HOOKS',$HOOKS_CACHE,true);

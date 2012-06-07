@@ -128,7 +128,15 @@ class Block_main_image_fader
 			$html[]=get_translated_tempcode($row['comments']);
 		}
 
-		if (count($images)==0) return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>do_lang_tempcode('NO_ENTRIES')));
+		if (count($images)==0)
+		{
+			$submit_url=mixed();
+			if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))))
+			{
+				$submit_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_galleries'));
+			}
+			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'aa84d65b8dd134ba6cd7b1b7bde99de2','HIGH'=>false,'TITLE'=>do_lang_tempcode('GALLERY'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),'SUBMIT_URL'=>$submit_url));
+		}
 
 		$nice_cat=str_replace('*','',$cat);
 		if (preg_match('#^[\w\_]+$#',$nice_cat)==0) $nice_cat='root';
