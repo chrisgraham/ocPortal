@@ -9,7 +9,7 @@
 				{+START,IF_NON_EMPTY,{TIP_CODE}}
 					<p class="community_block_tagline">
 						{+START,IF,{$RUNNING_SCRIPT,staff_tips}}
-							[ <a href="{$FIND_SCRIPT*,staff_tips}?dismiss={TIP_CODE*}{$KEEP*}">{!DISMISS_TIP}</a> | <a accesskey="k" href="{$FIND_SCRIPT*,staff_tips}{$KEEP*}">{!ANOTHER_TIP}</a> ]
+							[ <a href="{$FIND_SCRIPT*,staff_tips}?dismiss={TIP_CODE*}{$KEEP*}">{!DISMISS_TIP}</a> | <a accesskey="k" href="{$FIND_SCRIPT*,staff_tips}{$KEEP*,1}">{!ANOTHER_TIP}</a> ]
 						{+END}
 						{+START,IF,{$NOT,{$RUNNING_SCRIPT,staff_tips}}}
 							[ <a href="{$PAGE_LINK*,adminzone:start:dismiss={TIP_CODE}}">{!DISMISS_TIP}</a> | <a accesskey="k" href="{$PAGE_LINK*,adminzone:start}">{!ANOTHER_TIP}</a> ]
