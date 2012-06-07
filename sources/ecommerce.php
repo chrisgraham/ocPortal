@@ -28,9 +28,9 @@ function init__ecommerce()
 		define('PRODUCT_PURCHASE_WIZARD',0);
 		define('PRODUCT_INVOICE',1);
 		define('PRODUCT_SUBSCRIPTION',2);
-		define('PRODUCT_OTHER',2);
-		define('PRODUCT_CATALOGUE',3);
-		define('PRODUCT_ORDERS',4);
+		define('PRODUCT_OTHER',3);
+		define('PRODUCT_CATALOGUE',4);
+		define('PRODUCT_ORDERS',5);
 	}
 }
 
