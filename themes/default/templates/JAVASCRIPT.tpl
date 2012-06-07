@@ -1213,7 +1213,7 @@ function smoothScroll(destY,expectedScrollY,dir,eventAfter)
 	if (destY<0) destY=0;
 
 	if ((typeof expectedScrollY!="undefined") && (expectedScrollY!=null) && (expectedScrollY!=scrollY)) return; {$,We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already}
-	if (typeof dir=='undefined') var dir=((destY-scrollY)>0)?1:-1;
+	if (typeof dir=='undefined' || !null) var dir=((destY-scrollY)>0)?1:-1;
 	var dist=dir*17;
 	if (((dir==1) && (scrollY+dist>=destY)) || ((dir==-1) && (scrollY+dist<=destY)) || ((destY-scrollY)*dir>2000))
 	{
