@@ -608,7 +608,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 	$post=$topic['first_post'];
 	if (!is_null($show_forum))
 	{
-		$hover=do_lang_tempcode('FORUM_AND_TIME_HOVER',escape_html($show_forum),get_timezoned_date($topic['first_time']));
+		$hover=do_lang_tempcode('FORUM_AND_TIME_HOVER',escape_html($show_forum),escape_html(get_timezoned_date($topic['first_time'])));
 		$breadcrumbs=ocf_forum_breadcrumbs($topic['forum_id'],NULL,NULL,false);
 	} else
 	{
