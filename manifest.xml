@@ -10,7 +10,7 @@
        being used to create the database user for the application
   -->
 
-  <dbmysql path="user.sql" />
+  <dbmysql path="user.sql" waitAttempts="7" waitInterval="3000" />
   <dbmysql path="install1.sql" />
   <dbmysql path="install2.sql" />
   <dbmysql path="install3.sql" />
