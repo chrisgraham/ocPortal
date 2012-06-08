@@ -76,7 +76,7 @@ class Module_topics
 
 		global $NON_CANONICAL_PARAMS;
 		foreach (array_keys($_GET) as $key)
-			if (substr($key,0,3)=='kfs') $NON_CANONICAL_PARAMS[]=$key;
+			if ((substr($key,0,3)=='kfs') || (substr($key,0,5)=='mark_')) $NON_CANONICAL_PARAMS[]=$key;
 
 		$type=get_param('type','misc');
 
@@ -162,6 +162,9 @@ class Module_topics
 
 		if ($type=='misc')
 		{
+			global $EXTRA_HEAD;
+			$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 			warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
 		}
 
