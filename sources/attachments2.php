@@ -77,28 +77,31 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 				$data=@base64_decode($matches[1][$i]);
 				if ($data!==false)
 				{
-					$image=imagecreatefromstring($data);
-					do
+					$image=@imagecreatefromstring($data);
+					if ($image!==false)
 					{
-						$new_filename=uniqid('').'.png';
-						$new_path=get_custom_file_base().'/uploads/attachments/'.$new_filename;
+						do
+						{
+							$new_filename=uniqid('').'.png';
+							$new_path=get_custom_file_base().'/uploads/attachments/'.$new_filename;
+						}
+						while (file_exists($new_path));
+						imagepng($image,$new_path);
+	
+						$attachment_id=$GLOBALS['SITE_DB']->query_insert('attachments',array(
+							'a_member_id'=>get_member(),
+							'a_file_size'=>strlen($data),
+							'a_url'=>'uploads/attachments/'.$new_filename,
+							'a_thumb_url'=>'',
+							'a_original_filename'=>basename($new_filename),
+							'a_num_downloads'=>0,
+							'a_last_downloaded_time'=>time(),
+							'a_description'=>'',
+							'a_add_time'=>time()),true);
+						$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
+	
+						$original_comcode=str_replace($original_comcode,$matches[0][$i],'[attachment type="inline" thumb="0"]'.strval($attachment_id).'[/attachment]');
 					}
-					while (file_exists($new_path));
-					imagepng($image,$new_path);
-
-					$attachment_id=$GLOBALS['SITE_DB']->query_insert('attachments',array(
-						'a_member_id'=>get_member(),
-						'a_file_size'=>strlen($data),
-						'a_url'=>'uploads/attachments/'.$new_filename,
-						'a_thumb_url'=>'',
-						'a_original_filename'=>basename($new_filename),
-						'a_num_downloads'=>0,
-						'a_last_downloaded_time'=>time(),
-						'a_description'=>'',
-						'a_add_time'=>time()),true);
-					$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
-
-					$original_comcode=str_replace($original_comcode,$matches[0][$i],'[attachment type="inline" thumb="0"]'.strval($attachment_id).'[/attachment]');
 				}
 			}
 		}
