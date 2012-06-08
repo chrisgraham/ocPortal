@@ -567,7 +567,7 @@ function do_header($skip_top=false)
 			$description=strip_comcode($GLOBALS['META_DATA']['description']);
 		} else
 		{
-			$description=get_option('description');
+			$description='';//get_option('description');
 		}
 	} else
 	{

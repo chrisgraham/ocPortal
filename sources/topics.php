@@ -710,6 +710,7 @@ class OCP_Topic
 
 							$this->topic_title=do_lang('SPACER_TOPIC_TITLE_WRAP',$this->topic_title);
 							$post['title']=do_lang('SPACER_TOPIC_TITLE_WRAP',$post['title']);
+							$this->topic_description='';
 						}
 					}
 				}
