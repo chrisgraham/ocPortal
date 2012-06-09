@@ -9,7 +9,7 @@ If you are using the ocPortal forum, OCF, emoticon management features are provi
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]OCF emoticons[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Adding an emoticon" float="right"]emoticons_add[/exp_thumb]
 OCF emoticons are tied into the theme image system, although you are unlikely to need to know this as the images may be manipulated using direct features (in the 'Style' section of the Admin Zone, under the 'Emoticons' icon).
 
@@ -17,7 +17,7 @@ Images are associated with the 'code' that is typed to place the emoticon. You m
 
 Emoticons are given a relevancy level, which determines which areas they are listed for use in. The relevancy levels are described in the interface.
 You can also determine whether an emoticon can be used as a 'topic emoticon' (an emoticon placed next to a topic on the forum). It is best to only use standard sized emoticons as topic emoticons.
-[html]</div>[/html]
+[/surround]
 [block]main_emoticon_codes[/block]
 
 [concepts

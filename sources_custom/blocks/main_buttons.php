@@ -47,7 +47,6 @@ class Block_main_buttons
 		return $info;
 	}
 
-
 	/**
 	 * Standard modular install function.
 	 *
@@ -56,7 +55,7 @@ class Block_main_buttons
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		//first ensure there is 'buttons' banners category, and if it doesn't exist create it
+		// first ensure there is 'buttons' banners category, and if it doesn't exist create it
 		$id='buttons';
 		$is_textual=0;
 		$image_width=120;
@@ -82,48 +81,28 @@ class Block_main_buttons
 		$submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
 		require_code('banners3');
+
 		//create default banners, if they don't exist
 		add_banner_quiet('ocportal','data_custom/causes/ocportal.gif','ocPortal','ocPortal',0,'http://ocportal.com/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('firefox','data_custom/causes/firefox.gif','Firefox','Firefox',0,'http://www.mozilla.com/firefox/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('w3cxhtml','data_custom/causes/w3c-xhtml.gif','W3C XHTML','W3C XHTML',0,'http://www.w3.org/MarkUp/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('w3ccss','data_custom/causes/w3c-css.gif','W3C CSS','W3C CSS',0,'http://www.w3.org/Style/CSS/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
-		//no banner image
-		//add_banner_quiet('w3cwcag','data_custom/causes/w3c-wcag.gif','W3C WCAG','W3C WCAG',0,'http://www.w3.org/TR/WCAG10/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
+		//add_banner_quiet('w3cwcag','data_custom/causes/w3c-wcag.gif','W3C WCAG','W3C WCAG',0,'http://www.w3.org/TR/WCAG10/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL); 	//no banner image
 		add_banner_quiet('cancerresearch','data_custom/causes/cancerresearch.gif','Cancer Research','Cancer Research',0,'http://www.cancerresearchuk.org/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('rspca','data_custom/causes/rspca.gif','RSPCA','RSPCA',0,'http://www.rspca.org.uk/home',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('peta','data_custom/causes/peta.gif','PETA','PETA',0,'http://www.peta.org',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('Unicef','data_custom/causes/unicef.gif','Unicef','Unicef',0,'http://www.unicef.org',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('wwf','data_custom/causes/wwf.gif','WWF','WWF',0,'http://www.wwf.org/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('greenpeace','data_custom/causes/greenpeace.gif','Greenpeace','Greenpeace',0,'http://www.greenpeace.com',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('helptheaged','data_custom/causes/helptheaged.gif','HelpTheAged','HelpTheAged',0,'http://www.helptheaged.org.uk/en-gb',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('nspcc','data_custom/causes/nspcc.gif','NSPCC','NSPCC',0,'http://www.nspcc.org.uk/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('oxfam','data_custom/causes/oxfam.gif','Oxfam','Oxfam',0,'http://www.oxfam.org',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('bringdownie6','data_custom/causes/bringdownie6.gif','BringDownIE6','BringDownIE6',0,'http://www.bringdownie6.com',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('cnd','data_custom/causes/cnd.gif','CND','CND',0,'http://www.cnduk.org/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('amnestyinternational','data_custom/causes/amnestyinternational.gif','Amnesty International','Amnesty International',0,'http://www.amnesty.org/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('bhf','data_custom/causes/bhf.gif','British Heart Foundation','British Heart Foundation',0,'http://www.bhf.org.uk/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 		add_banner_quiet('gnu','data_custom/causes/gnu.gif','GNU','GNU',0,'http://www.gnu.org/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);
-
 	}
-
 
 	/**
 	 * Standard modular run function.
@@ -147,7 +126,6 @@ class Block_main_buttons
 			$set_height=' style="overflow: auto; width: 100%!important; height: '.$height.'!important;" ';
 		}
 
-
 		require_code('banners');
 
 		$b_type=$map['param'];
@@ -163,7 +141,7 @@ class Block_main_buttons
 
 		foreach ($banners as $i=>$banner)
 		{
-			$bd=show_banner($banner['name'],$banner['b_title_text'],get_translated_tempcode($banner['caption']),$banner['img_url'],'',$banner['site_url'],$banner['b_type']);
+			$bd=show_banner($banner['name'],$banner['b_title_text'],get_translated_tempcode($banner['caption']),$banner['b_direct_code'],$banner['img_url'],'',$banner['site_url'],$banner['b_type'],$banner['submitter']);
 			$more_coming=($i<count($banners)-1);
 			$assemble->attach(do_template('BLOCK_MAIN_BANNER_WAVE_BWRAP_CUSTOM',array('EXTRA'=>$map['extra'],'TYPE'=>$map['param'],'BANNER'=>$bd,'MORE_COMING'=>$more_coming)));
 		}

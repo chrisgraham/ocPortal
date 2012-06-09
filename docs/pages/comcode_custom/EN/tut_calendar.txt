@@ -41,7 +41,7 @@ When you add an event, you may define the following special settings:
 A member may remove reminders for events, and also have multiple reminders with different notice times.
 
 [title="2"]Views[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The calendar day view" float="right"]calendar_view_day[/exp_thumb]
 [exp_thumb="The calendar year view" float="right"]calendar_view_year[/exp_thumb]
 The calendar has 5 views:
@@ -50,8 +50,8 @@ The calendar has 5 views:
  - you can view a whole week
  - you can view a whole day
  - you can view a specific event
-[html]</div>[/html]
-[html]<div class="float_surrounder">[/html]
+[/surround]
+[surround]
 [exp_thumb="The calendar week view" float="left"]calendar_view_week[/exp_thumb]
 [exp_thumb="The calendar month view" float="right"]calendar_view_month[/exp_thumb]
 The user interface has been very carefully designed so as to allow very quick and easy navigation between these views, allowing you to focus in and out, and move along, from where you are viewing.
@@ -59,13 +59,13 @@ The user interface has been very carefully designed so as to allow very quick an
 The less focused the view, the less detail that is shown. On the year view you not see detail on any specific event happening on a day, but you can see trends and gauge how busy the individual days are. On the month view you can see specific events, but it is less easy to see how a day is time-tabled. On the week view you can can see a full time-table, but you can only see event titles by hovering the mouse. On the day view, you can see parallel activity streams, and actual event details.
 
 The views support filtering of event-types via a series of check-boxes (tick-boxes).
-[html]</div>[/html]
-[html]<div class="float_surrounder">[/html]
+[/surround]
+[surround]
 [exp_thumb="Calendar interest filtering" float="left"]calendar_interests[/exp_thumb]
 You may also declare your 'interests', which marks you down for auto-reminding for new events of the types you have said you consider interesting.
 
 From the screen-shots of the calendar views you can see how the recurrence pattern causes a gap where for one week in four, there is no shown event.
-[html]</div>[/html]
+[/surround]
 [title="2"]Adding an event[/title]
 
 To add an event, simply click in one of the boxes on the calendar view; this will fill in the date and time automatically for you, although you may wish to adjust them.

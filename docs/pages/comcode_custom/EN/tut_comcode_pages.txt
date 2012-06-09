@@ -1,10 +1,10 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Custom pages of information (via Comcode)[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [box="Note" width="25em" float="right"]If you are using short URLs, then '<base-url>/<zone>/pg/<page-name>' will also access the page.[/box]
 You may easily add new pages of information to ocPortal by making a 'Comcode page'.
 A Comcode page is a page written in Comcode, and thus is almost written in plain text. Like any page in ocPortal, a Comcode page is accessed by using:
 '[tt]<base-url>/<zone>/index.php?page=<page-name>[/tt]'.
-[html]</div>[/html]
+[/surround]
 
 [contents]decimal,lower-alpha[/contents]
 
@@ -28,14 +28,14 @@ Once the Comcode page editor is open, you can pretty much just type your page in
 More advanced pages, such as the default start page in the Welcome Zone, and the panels, make use of 'blocks'. Blocks are dynamic elements, tied into Comcode pages via the Comcode '[tt]block[/tt]' tag.
 By 'dynamic element', I mean an element that automatically generates content that could not be prepared, such as a list of recent topics on a forum, or information about the currently logged in user.
 The actual block to use, is just the contents within the [tt][block][/tt] tag, and the parameters to the block are just the parameters given to the [tt][block][/tt] tag.
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="An illustration to how blocks work" float="right"]comcode_pages_blocks[/exp_thumb]
 At the time of writing, ocPortal contains 67 blocks to choose from.
 Blocks can be classified into:
  - Main blocks (blocks inserted into the internal body of the site)
  - Side blocks (blocks shown on the side of the site, in [tt]panel_left[/tt] or [tt]panel_right[/tt])
  - Bottom blocks (blocks intended for the site footer)
-[html]</div>[/html]
+[/surround]
 
 [concepts
  1_key="Comcode page"   1_value="An ocPortal page written in Comcode, editable from inside ocPortal"

@@ -17,14 +17,14 @@ The easiest way to add a file for a download is by attaching the file to the web
  - PHP server settings often severely limit the maximum file size that may be uploaded
 
 [title="2"]Uploading, and then referencing the URL[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Attaching a file to a download, and charging for it" float="right"]adv_downloads_add[/exp_thumb]
 If a file is too large to comfortably upload by web-form, users with FTP or SFTP/SCP access to the server may wish to upload it using this, and then provide the 'Add download' form with an equivalent HTTP URL (or the direct FTP URL) to the location they upload to.
 The draw-backs with this method are:
  - It is less convenient than attaching directly
  - FTP/SFTP/SCP access is required and for obvious security reasons, these details are rarely given freely. Note that there is no restriction on actually uploading the file to your website's own server, so people may reference separate web space: but this leaves the download database integrity at the mercy of this secondary web space
  - The file is not contained in ocPortal, and thus cannot be managed by it (for example, deleted when the download is deleted)
-[html]</div>[/html]
+[/surround]
 [title="2"]Batch adding from an FTP server[/title]
 
 [exp_thumb="The FTP downloads interface" float="right"]adv_downloads_ftp_downloads[/exp_thumb]

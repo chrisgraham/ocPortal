@@ -662,7 +662,7 @@ class Hook_ocp_merge
 			{
 				$submitter=$on_same_msn?$row['submitter']:import_id_remap_get('member',$row['submitter'],true);
 				if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-				add_banner($row['name'],$row['img_url'],array_key_exists('b_title_text',$row)?$row['b_title_text']:'',$this->get_lang_string($db,$row['caption']),$row['campaign_remaining'],$row['site_url'],$row['importance_modulus'],$row['notes'],$row['the_type'],$row['expiry_date'],$submitter,$row['validated'],$row['b_type'],$row['add_date'],$row['hits_from'],$row['hits_to'],$row['views_from'],$row['views_to'],$row['edit_date']);
+				add_banner($row['name'],$row['img_url'],array_key_exists('b_title_text',$row)?$row['b_title_text']:'',$this->get_lang_string($db,$row['caption']),array_key_exists('direct_code',$row)?$row['direct_code']:'',$row['campaign_remaining'],$row['site_url'],$row['importance_modulus'],$row['notes'],$row['the_type'],$row['expiry_date'],$submitter,$row['validated'],$row['b_type'],$row['add_date'],$row['hits_from'],$row['hits_to'],$row['views_from'],$row['views_to'],$row['edit_date']);
 			}
 		}
 	}

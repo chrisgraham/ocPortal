@@ -12,14 +12,14 @@ This tutorial will cover some of the more advanced features of the [concept]OCF[
 It is possible that some reassignments will not be possible, in which case, records may be dropped; for example, if both members share a secondary usergroup, ocPortal would fail [due to database key constraints] to assign both membership records to the same user, and hence drop one of them. You do not need to worry as this is handled automatically.
 
 [title="2"]Custom profile fields[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Adding a custom profile field" float="right"]adv_members_cpf[/exp_thumb]
 {!ocf:DOC_CUSTOM_PROFILE_FIELDS}
 
 You can manage Custom Profile Fields from: Admin Zone > Tools > Members > the Custom Profile Fields icon.
 
 [box="Lists"]For a list-type CPF, define the list by placing a '|' separated list in the default value field (e.g. "This|That|Other"). The first value in the list will be the default.[/box]
-[html]</div>[/html]
+[/surround]
 [exp_thumb="Custom profile fields are edited by editing member profiles" float="right"]adv_members_cpf_edit[/exp_thumb]
 There are a number of custom profile field options that you may set that allow CPFs to function for a number of different purposes, including:
  - Storing hidden details on member (for example, a list of rule infractions, such as to aid decisions on cumulative punishment)
@@ -29,7 +29,7 @@ There are a number of custom profile field options that you may set that allow C
 
 There is a 'Privacy' sub-tab in the account settings that allows members to limit access beyond this. If there are more than 15 CPFs it will only give them options for the CPFs they have filled in.
 
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Custom profile fields are optionally shown where members post" float="right"]adv_members_cpf_space_1[/exp_thumb]
 A 'locked' custom profile field can not be edited or deleted.
 
@@ -40,7 +40,7 @@ It is possible to configure where a value for a custom profile field for members
 
 If you have more than 60 textual CPFs (except Comcode ones), any ones created after the 60th will not be included for searching on the search module's member search form.
 
-[html]</div>[/html]
+[/surround]
 
 [title="3"]Display rules[/title]
 
@@ -95,13 +95,13 @@ Note that encrypted CPFs are not supported for any kind of CPF value that is not
 If you prefix CPF names like "Example: Field A" and "Example: Field B", ocPortal will be smart enough to treat this as a categorisation and render the join/edit-profile forms in a more appropriate way.
 
 [title="2"]Welcome E-mails[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Creating a welcome e-mail" float="right"]adv_members_welcome_email[/exp_thumb]
 ocPortal provides special support for composing a series of welcome e-mails that are sent out to new members on a predefined schedule.
 The purpose of this feature is to gradually advertise the features of your website to your members in a way that reinforces awareness. As most members will not usually return to a website, welcome e-mails provide a strong tool to keep them aware and entice them to fully embrace whatever service you are providing.
 
 For welcome e-mails to work the ocPortal cron bridge must be configured as discussed in the [page="_SEARCH:tut_configuration"]Configuration tutorial[/page]
-[html]</div>[/html]
+[/surround]
 
 [title="2"]CSV files[/title]
 

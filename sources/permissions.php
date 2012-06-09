@@ -90,7 +90,7 @@ function handle_permission_check_logging($member,$op,$params,$result)
 /**
  * Show a helpful access-denied page. Has a login ability if it senses that logging in could curtail the error.
  *
- * @param  ID_TEXT		The class of error (e.g. PRIVILEGE)
+ * @param  ID_TEXT		The class of error (e.g. PRIVILEGE). This is a language string.
  * @param  string			The parameteter given to the error message
  * @param  boolean		Force the user to login (even if perhaps they are logged in already)
  */

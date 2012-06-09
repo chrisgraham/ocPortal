@@ -37,15 +37,15 @@ ocPortal zones are sub-directories of your site, that operate with different set
  - CMS ([tt]/cms[/tt])
  - Account ([tt]/personalzone[/tt]) -- For [concept]OCF[/concept] users only
  - Forum ([tt]/forum[/tt]) -- For OCF users only
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Viewing our zone (in its custom theme)" float="left"]subcom_church_santa[/exp_thumb]
 You may add new zones, edit zones, delete zones, and move pages between zones from the Admin Zone (Structure section). When performing an action that will add, rename or delete a zone, you will need to provide details that tell ocPortal how it can do this; this is because on the majority of web hosting configurations, PHP does not have full access to files on the hosting account. These details are the same as you provided when using the ocPortal quick installer (assuming you used this to install).
 [exp_thumb="To finalise the zone, FTP details will be needed so ocPortal can create the directory structure properly" float="right"]subcom_zone_afm[/exp_thumb]
 
 To change the logo image for a zone, add a theme image named '<zone-name>-logo'. By default zones use the logo image of the Welcome Zone.
-[html]</div>[/html]
+[/surround]
 [title="2"]Redirection pages[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Managing redirection pages" float="left"]subcom_redirects[/exp_thumb]
 [exp_thumb="Adding a download category for the NewTown Parish subcommunity" float="right"]subcom_cat_add[/exp_thumb]
 {!redirects:DOC_REDIRECTS}
@@ -59,16 +59,16 @@ Redirections are useful for a number of reasons, including:
 To reach the Redirects module go to the Structure section of the Admin Zone, then the 'Redirects' icon.
 
 Special tip: If you want a module to behave as if it was completely moved, you can set up a transparent redirect from your desired location to the actual location, and then another from the actual location to the desired location. ocPortal will sense your intent, so when you do something that searches for that module (e.g. for the Wiki+ module, doing a Wiki+ link) it will go to where you want.
-[html]</div>[/html]
+[/surround]
 [title="2"]Virtual roots[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Viewing the download category we added, we can find the virtualisation URL" float="right"]subcom_cat_view[/exp_thumb]
 A number of ocPortal modules contain categories organised into a tree structure, including:
  - galleries
  - download categories
  - catalogue categories
-[html]</div>[/html]
-[html]<div class="float_surrounder">[/html]
+[/surround]
+[surround]
 [exp_thumb="The virtualed download category" float="left"]subcom_virtualed[/exp_thumb]
 If sub-community categories are stored under a common sub-tree of the full category tree, then the root of the 'sub-tree' may be made into the apparent root of the full-tree, by picking it as a virtual-root. This is easy to do, and doesn't involve any kind of configuration other than finding the URL to enter the module with. To find this URL you just look for the link of the current category in the breadcrumbs on a category screen (it'll have 'keep_root' in it): this is a mouthful to explain, but really very simple. Once you have the URL, you may wish to add it to to the menu of your sub-communities zone.
 
@@ -78,7 +78,7 @@ Here are some step-by-step instructions:
 3) Click the link
 4) You should see now you have set a virtual root
 5) Take the URL you're at and put it on your menus as required
-[html]</div>[/html]
+[/surround]
 [title="2"]Usergroup management[/title]
 
 [exp_thumb="Adding a new usergroup" float="left"]subcom_usergroup_add[/exp_thumb]

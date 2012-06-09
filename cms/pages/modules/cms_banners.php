@@ -34,7 +34,6 @@ class Module_cms_banners extends standard_aed_module
 	var $upload='image';
 	var $non_integer_id=true;
 	var $permission_module='banners';
-	var $javascript='var form=document.getElementById(\'campaignremaining\').form; var crf=function() { form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked); }; crf(); form.elements[\'the_type\'][0].onclick=crf; form.elements[\'the_type\'][1].onclick=crf; form.elements[\'the_type\'][2].onclick=crf;';
 	var $menu_label='BANNERS';
 	var $array_key='name';
 
@@ -293,6 +292,7 @@ class Module_cms_banners extends standard_aed_module
 	 * @param  URLPATH			The URL to the banner image
 	 * @param  URLPATH			The URL to the site the banner leads to
 	 * @param  SHORT_TEXT		The caption of the banner
+	 * @param  LONG_TEXT			Complete HTML/PHP for the banner
 	 * @param  LONG_TEXT			Any notes associated with the banner
 	 * @param  integer			The banners "importance modulus"
 	 * @range  1 max
@@ -307,16 +307,16 @@ class Module_cms_banners extends standard_aed_module
 	 * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
 	 * @return array				Bits
 	 */
-	function get_form_fields($name='',$image_url='',$site_url='',$caption='',$notes='',$importancemodulus=3,$campaignremaining=50,$the_type=1,$expiry_date=NULL,$submitter=NULL,$validated=1,$b_type='',$title_text='')
+	function get_form_fields($name='',$image_url='',$site_url='',$caption='',$direct_code='',$notes='',$importancemodulus=3,$campaignremaining=50,$the_type=0,$expiry_date=NULL,$submitter=NULL,$validated=1,$b_type='',$title_text='')
 	{
 		if ($b_type=='') $b_type=get_param('b_type','');
 
-		$fields=get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,is_null($submitter)?NULL:$GLOBALS['FORUM_DRIVER']->get_username($submitter),$validated,$b_type,$title_text);
+		list($fields,$this->javascript)=get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$direct_code,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,is_null($submitter)?NULL:$GLOBALS['FORUM_DRIVER']->get_username($submitter),$validated,$b_type,$title_text);
 
 		// Permissions
 		if (get_option('use_banner_permissions')=='1') $fields->attach($this->get_permission_fields($name,NULL,($name=='')));
 
-		$edit_text=($name=='')?new ocp_tempcode():do_template('BANNER_PREVIEW',array('PREVIEW'=>show_banner($name,$title_text,comcode_to_tempcode($caption,$submitter),$image_url,'',$site_url,$b_type)));
+		$edit_text=($name=='')?new ocp_tempcode():do_template('BANNER_PREVIEW',array('PREVIEW'=>show_banner($name,$title_text,comcode_to_tempcode($caption,$submitter),$direct_code,$image_url,'',$site_url,$b_type,is_null($submitter)?get_member():$submitter)));
 
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
@@ -352,7 +352,7 @@ class Module_cms_banners extends standard_aed_module
 		}
 		$myrow=$rows[0];
 
-		return $this->get_form_fields($id,$myrow['img_url'],$myrow['site_url'],get_translated_text($myrow['caption']),$myrow['notes'],$myrow['importance_modulus'],$myrow['campaign_remaining'],$myrow['the_type'],$myrow['expiry_date'],$myrow['submitter'],$myrow['validated'],$myrow['b_type'],$myrow['b_title_text']);
+		return $this->get_form_fields($id,$myrow['img_url'],$myrow['site_url'],get_translated_text($myrow['caption']),$myrow['b_direct_code'],$myrow['notes'],$myrow['importance_modulus'],$myrow['campaign_remaining'],$myrow['the_type'],$myrow['expiry_date'],$myrow['submitter'],$myrow['validated'],$myrow['b_type'],$myrow['b_title_text']);
 	}
 
 	/**
@@ -364,6 +364,7 @@ class Module_cms_banners extends standard_aed_module
 	{
 		$name=post_param('name');
 		$caption=post_param('caption');
+		$direct_code=post_param('direct_code','');
 		$campaignremaining=post_param_integer('campaignremaining',0);
 		$siteurl=fixup_protocolless_urls(post_param('site_url',''));
 		$importancemodulus=post_param_integer('importancemodulus',3);
@@ -379,9 +380,9 @@ class Module_cms_banners extends standard_aed_module
 		$b_type=post_param('b_type');
 		$this->donext_type=$b_type;
 
-		list($url,$title_text)=check_banner($title_text,$b_type);
+		list($url,$title_text)=check_banner($title_text,$direct_code,$b_type);
 
-		add_banner($name,$url,$title_text,$caption,$campaignremaining,$siteurl,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type);
+		add_banner($name,$url,$title_text,$caption,$direct_code,$campaignremaining,$siteurl,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type);
 
 		$_banner_type_row=$GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id'=>$b_type),'',1);
 		if (array_key_exists(0,$_banner_type_row))
@@ -413,16 +414,17 @@ class Module_cms_banners extends standard_aed_module
 		$b_type=post_param('b_type');
 
 		$title_text=post_param('title_text','');
+		$direct_code=post_param('direct_code','');
 		$b_type=post_param('b_type');
 		$this->donext_type=$b_type;
 
-		list($url,$title_text)=check_banner($title_text,$b_type);
+		list($url,$title_text)=check_banner($title_text,$direct_code,$b_type);
 
 		$validated=post_param_integer('validated',0);
 		$_submitter=post_param('submitter',strval(get_member()));
 		$submitter=!is_numeric($_submitter)?$GLOBALS['FORUM_DRIVER']->get_member_from_username($_submitter):intval($_submitter);
 
-		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$submitter,$validated,$b_type);
+		edit_banner($id,post_param('name'),$url,$title_text,post_param('caption'),$direct_code,post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$submitter,$validated,$b_type);
 
 		$this->new_id=post_param('name');
 

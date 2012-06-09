@@ -7,13 +7,13 @@ This tutorial describes some of the more complex features available for news, in
 
 [title="2"]Personal Categories / Blogs[/title]
 
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="A blog being started by adding news to a category that will automatically be created" float="left"]adv_news_blog[/exp_thumb]
 [exp_thumb="The blog in action" float="right"]adv_news_blog_2[/exp_thumb]
 ocPortal has advanced support for blogging: members in permitted usergroups may have their own personal news categories, otherwise known as 'blogs' (short for 'web logs').
-[html]</div>[/html]
+[/surround]
 
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The blog is linked to in the member profile" float="right"]adv_news_profile[/exp_thumb]
 To create a 'blog', a member only needs to choose to add news, and select their own personal category; if the category does not yet exist, it will be displayed as 'new', and created automatically upon submission. The news will display on the front page of the website (by default), and the blog for the member may be viewed from the links given in their member profile.
 
@@ -21,7 +21,7 @@ Since version 4.2 there is a blogs CMS interface separate to the news CMS interf
 1) as a niceity so that you don't need to explain 'blogs are news' to your users
 2) so you can lock down access, so that members may submit to blogs but not website news
 The presence of the blogs CMS interface does not stop you using the regular news CMS interface to submit blog posts.
-[html]</div>[/html]
+[/surround]
 
 [title="2"]Advanced filtering[/title]
 
@@ -35,15 +35,15 @@ Also, when you view a news post you can see what categories it is in and choose 
 
 [title="2"]Feeds[/title]
 
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Syndication links are displayed in the news block" float="right"]adv_news_rss_1[/exp_thumb]
 ocPortal supports the two main formats for syndication of news (and most other kinds of content) in clean XML format: 'Atom' and 'RSS'. These formats are simple representations of news that may be viewed using an external program such as 'FeedReader', or incorporated onto another website. ocPortal itself provides two blocks that allow display of RSS and atom feeds in a news-like fashion (including feeds from other ocPortal sites, or any other site that provides them).
-[html]</div>[/html]
+[/surround]
 
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="RSS/Atom are really XML formats, and look a bit like this" float="right"]adv_news_rss_xml[/exp_thumb]
 Links to view the feeds are made available from the news blocks, as well as from the web browsers auto-discovery mechanism. If the news block is filtered (for a blog, for example) the link will open up the feed with the same filter. The URLs are not intended to be viewed directly, although we have used a technology called 'XSLT' to allow them to be displayed in the browser if desired; instead, they should be copied and pasted to another program.
-[html]</div>[/html]
+[/surround]
 
 The [page="tut_comcode"]Comcode[/page] syntax you should use to place the main block in a page is as follows:
 [code][block="http://example.com/feed.xml"]main_rss[/block][/code]
@@ -64,11 +64,11 @@ If you want to merge or filter feeds, [url="Yahoo Pipes"]http://pipes.yahoo.com/
 
 [title="2"]Trackbacks[/title]
 
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Special invisible mark-up code in the ocPortal HTML allows systems to see how they can place trackbacks to ocPortal" float="left"]adv_news_trackbacks_method[/exp_thumb]
 [exp_thumb="Trackbacks as displayed" float="right"]adv_news_show_trackbacks[/exp_thumb]
 Trackbacks are an advanced standard-based blogging feature, that allow a link to be established from an article on one blog to an article on another. It basically is a citation mechanism.
-[html]</div>[/html]
+[/surround]
 
 Trackbacks work as follows:
 1) The original article has a 'trackback' link written into the HTML

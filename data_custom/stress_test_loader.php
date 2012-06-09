@@ -108,7 +108,7 @@ function do_work()
 	require_code('banners2');
 	for ($i=$GLOBALS['SITE_DB']->query_value('banners','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		add_banner(uniqid(''),get_logo_url(),random_line(),random_text(),100,get_base_url(),3,'',db_get_first_id(),NULL,db_get_first_id()+1,1);
+		add_banner(uniqid(''),get_logo_url(),random_line(),random_text(),'',100,get_base_url(),3,'',db_get_first_id(),NULL,db_get_first_id()+1,1);
 	}
 	echo 'done banner stuff'.chr(10);
 

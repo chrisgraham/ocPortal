@@ -35,11 +35,11 @@ Within a forum, there are a number of to modify a topic, to change their behavio
 Topics may be moved between forums by moderators.
 
 [title="2"]Strategies for organising your forums[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="A home forum" float="left"]forums_view[/exp_thumb]
 [exp_thumb="A sub-forum of the home forum" float="right"]forums_view_2[/exp_thumb]
 When you design your discussion forums, you need to decide what forums you will create, and how to organise them. A very common mistake is to create far too many forums, which has the effect of diluting your community, and making it feel dead: which in return often terminally reduces member activity. If a month after creating a forum, you expect it to have less than ten topics, then you probably should not be making it: remember: you can always add new forums later, and mass move topics into them. Conversely, it would be a mistake to create too few forums, leading to a situation where it is difficult to locate topics.
-[html]</div>[/html]
+[/surround]
 OCF creates a default forum structure which is appropriate for a small or new community. To encourage discussion specific to your site, you may wish to add a new grouping with perhaps 3 forums (sub-forums of the home forum) placed in that grouping.
 
 [title="2"]Using access permissions effectively[/title]

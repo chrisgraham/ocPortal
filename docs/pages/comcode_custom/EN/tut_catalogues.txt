@@ -61,11 +61,11 @@ There are two options to set how a catalogue may display:
  - 'Own pages' -- this allows you to make it so that catalogue categories show only skeleton information on entries, encouraging users to view the entry screen for full details; typically this will be used when entries have many fields.
  - 'Is tree' -- a tree catalogue has a full hierarchical category tree, much like the download system does; a non-tree catalogue just shows the categories from a single catalogue index.
 
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="A catalogue with 'own pages' enabled" float="left"]catalogues_own_pages[/exp_thumb]
 [exp_thumb="A catalogue without 'own pages' enabled" float="left"]catalogues_not_own_pages[/exp_thumb]
 [exp_thumb="Viewing a catalogue entry" float="right"]catalogues_view_entry[/exp_thumb]
-[html]</div>[/html]
+[/surround]
 [title="2"]Creating a tree catalogue, fast[/title]
 
 There is a special feature on the screen to add a catalogue with a category tree constructed automatically for it.

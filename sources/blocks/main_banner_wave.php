@@ -80,7 +80,7 @@ class Block_main_banner_wave
 
 		foreach ($banners as $i=>$banner)
 		{
-			$bd=show_banner($banner['name'],$banner['b_title_text'],get_translated_tempcode($banner['caption']),$banner['img_url'],'',$banner['site_url'],$banner['b_type']);
+			$bd=show_banner($banner['name'],$banner['b_title_text'],get_translated_tempcode($banner['caption']),$banner['b_direct_code'],$banner['img_url'],'',$banner['site_url'],$banner['b_type'],$banner['submitter']);
 			$assemble->attach(do_template('BLOCK_MAIN_BANNER_WAVE_BWRAP',array('TYPE'=>$map['param'],'BANNER'=>$bd)));
 		}
 

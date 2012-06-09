@@ -22,7 +22,7 @@ For members that have permission, gallery contents may be downloaded in a ZIP fi
 These ZIP files contain only the actual image and video files, and not any meta content such as descriptions.
 
 [title="2"]Member Galleries -- quick start[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Editing a gallery to be a member gallery container" float="right"]adv_gallery_container[/exp_thumb]
 [exp_thumb="Making a personal gallery by adding an image" float="right"]adv_gallery_add[/exp_thumb]
 ocPortal supports members having their own galleries of images/videos.
@@ -36,15 +36,15 @@ To enable this:
 Now when members submit a new image/video, they will get the choice to create their personal gallery in the process, and further submissions can then also go into their personal gallery. If you want to add a quick link that members may use to submit images, add a link to [tt]cms:cms_galleries:ad[/tt] to a menu using the menu editor.
 
 Members may have multiple personal galleries if you set multiple galleries to be 'Personal category container'.
-
+[/surround]
 [title="2"]Member Galleries -- full explanation[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="A personal gallery as displayed in the container gallery" float="right"]adv_gallery_members[/exp_thumb]
 If a member is in a usergroup with special permission (permission to have personal categories), they may create their own galleries that are:
 1) displayed as belonging to them
 2) display their profile details
 3) and only addable-to (by default) by them
-[html]</div>[/html]
+[/surround]
 The personal gallery system is very sophisticated, and integrated with the hierarchical nature of the gallery system. Members may have personal galleries underneath any gallery in the hierarchy that is marked as a 'Personal category container'; this means that a member may have multiple personal galleries if there are multiple containers.
 
 The settings of new personal galleries are based on:
@@ -76,7 +76,7 @@ Personal galleries, like personal news categories, may be created on demand, sim
 [tt](+)[/tt] denotes a personal gallery created upon adding by the owner
 
 Personal galleries may only be submitted to by the owner of the personal gallery, unless the "Submit to categories belonging to other members" privilege is assigned.
-[html]</div>[/html]
+
 [title="3"]Limiting member galleries[/title]
 
 There are permissions and configuration options relating to the gallery system that allow you to limit the number of entries that members may have in their own galleries.

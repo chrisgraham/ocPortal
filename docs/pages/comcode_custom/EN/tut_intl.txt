@@ -42,9 +42,9 @@ ocPortal is developed in British English, and this is technically known as the '
 The .ini files for any translation are stored together in a directory that is named with the standard two-letter code to denote that language; for example, English is 'EN'. A list of these codes is in [tt]lang/langs.ini[/tt].
 
 All bundled languages packs are located in the 'lang' directory of ocPortal. There is also a 'lang_custom' directory which contains custom language packs, or language packs that 'override' those available in the 'lang' directory on a file-by-file basis. Whenever language files are edited in the Admin Zone, the file is automatically overridden to a lang_custom one if it has not been already.
-[html]<div class="float_surrounder">[/html]
+[surround]
 Not all language files need to be translated, and language files do not have to be complete, as if a string cannot be found and the fall-back language (English) isn't being used, ocPortal will look in the English language pack using the fall-back mechanism.
-[exp_thumb="Using the language editor to translate language strings" float="right"]intl_trans_screen[/exp_thumb][html]</div>[/html]
+[exp_thumb="Using the language editor to translate language strings" float="right"]intl_trans_screen[/exp_thumb][/surround]
 
 [title="2"]The language editor (i.e. how to change strings)[/title]
 

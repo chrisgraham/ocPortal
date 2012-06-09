@@ -21,10 +21,10 @@ Four different ocPortal systems may be used to provide such a support desk:
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]The Support Ticket system[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Managing support ticket types" float="right"]support_ticket_types[/exp_thumb]
 {!tickets:DOC_TICKETS}
-[html]</div>[/html]
+[/surround]
 [exp_thumb="Viewing support tickets as staff" float="right"]support_list_tickets[/exp_thumb]
 [exp_thumb="Viewing a support ticket" float="left"]support_show_ticket[/exp_thumb]
 However, if these two advantages are not significant, we recommend use of the Discussion Forum directly.

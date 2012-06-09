@@ -12,7 +12,7 @@ Galleries are organised in a hierarchical (tree) structure. For more information
 Galleries may have 'representative images' (rep-images). When a user views a gallery with sub-galleries, the sub-galleries are actually shown with their rep-images, so as to make them look more attractive and give an impression of the contents. Rep-images may be chosen when adding or editing a gallery, or when adding an image to a gallery it can be chosen that that image shall also become the rep-image.
 
 [title="2"]Galleries[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="A gallery in flow mode" float="right"]gallery_flow_mode[/exp_thumb]
 A gallery is a category of the gallery system, and is used to hold images and videos (together, gallery entries). Galleries can also hold audio files which are treated in the same way as videos.
 
@@ -24,7 +24,7 @@ There are two display modes for galleries:
  - Multi-page mode -- this mode provides page browsing features so as to be able to browse through a large numbers of entries
 
 From the gallery, the user can choose any of the available entries (images or videos), and the chosen entry will be presented to the user on a full wide page.
-[html]</div>[/html]
+[/surround]
 [title="2"]Gallery index[/title]
 
 A gallery index is provided that lists all galleries in the system. Galleries that are empty are omitted from this list.
@@ -38,10 +38,10 @@ When you add or edit a gallery you may choose watermarks to be automatically add
 Watermarks are actually 'inherited' in the tree structure: in other words, when adding an image, watermarks will be chosen from the first gallery back down towards the root gallery that actually defines watermarks.
 
 [title="2"]Teasers[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Viewing a gallery image" float="right"]gallery_view_image[/exp_thumb]
 For various kinds of website, such as expert photography communities, galleries provide a place to position premium or important content. ocPortal forms a 'teaser' system, whereby you can encourage users to join a certain usergroup (perhaps, via some form of subscription) that has access to view certain galleries, by 'teasing' them about them. You can define 'teaser' text for each gallery, and use the [tt]:tease[/tt] page to display it, other details, and the rep-image, to those without access.
-[html]</div>[/html]
+[/surround]
 [title="2"]Videos[/title]
 
 Galleries have powerful video support. ocPortal will analyse the file types of uploaded videos and use carefully crafted templates that use browser plug-ins that are most appropriate to that file type. For example, QuickTime files will be displayed with HTML to use the QuickTime plugin.

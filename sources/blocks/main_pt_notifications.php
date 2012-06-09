@@ -49,6 +49,7 @@ class Block_main_pt_notifications
 	{
 		require_code('ocf_general');
 		require_css('ocf');
+		require_lang('ocf');
 
 		if (!is_guest())
 		{

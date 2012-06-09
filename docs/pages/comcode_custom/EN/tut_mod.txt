@@ -17,11 +17,11 @@ Topic moderation actions are:
  - editing topics
  - closing, pinning, sinking, and cascading topics (these are available individually, or together by editing the topic)
  - validating topics
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Mass moderation of topics is performed by selecting topics and then choosing an action" float="right"]mod_topics[/exp_thumb]
 [exp_thumb="When editing a topic, various options may be simultaneously changed" float="left"]mod_edit_topic[/exp_thumb]
 All these actions are very straight-forward.
-[html]</div>[/html]
+[/surround]
 [title="2"]Moderating posts[/title]
 
 [exp_thumb="Moderation links are present underneath posts" float="right"]mod_post[/exp_thumb]

@@ -18,13 +18,13 @@ You can configure staff from the staff administration page. This is available fr
 By default, OCF is installed with a single staff member, 'admin'. It is recommended that this member be left as a general purpose 'site representative', not used solely by any single staff member. It is also useful as a fail-safe account, because as a super-administrator, 'admin' can access any part of your ocPortal-based site.
 
 [title="2"]Private forums[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Now you see it..." float="left"]staff_forums_1[/exp_thumb]
 [exp_thumb="Now you don't (because I logged out and hence lost my staff permissions)" float="right"]staff_forums_2[/exp_thumb]
 A very effective feature in running a website, where there are multiple staff involved, are forum permissions. By using a forum where only members in staff usergroups may gain access, staff can collaborate on matters relating to the operation of the site. Many members may not realise it, but often staff forums of large sites are almost as busy as the publicly accessible forums.
 
 OCF creates a default staff forum for you on installation.
-[html]</div>[/html]
+[/surround]
 [title="2"]Topic reporting[/title]
 
 [exp_thumb="A post needs a report / warning" float="left"]staff_report_1[/exp_thumb]

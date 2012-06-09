@@ -23,7 +23,7 @@ By default, the forum, the chat rooms, and Wiki+, are the main exceptions where 
 Naturally, privileged users may edit and delete any content on the system; by default, these privileged users are those in the staff usergroups. It is possible to configure ocPortal so that users may edit/delete their own content though, or even all content if you like.
 
 [title="2"]Tools for punishment[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Using the points system for punishment" float="right"]censor_point_in_right_direction[/exp_thumb]
 [exp_thumb="Making a warning" float="right"]censor_make_warning[/exp_thumb]
 [exp_thumb="A warning as displayed on the Account of a member" float="right"]censor_warning[/exp_thumb]
@@ -39,7 +39,7 @@ There are a number of ways to punish members who do not follow site policy, incl
 Since ocPortal version 4, all the various punishment tools are made available on one screen (OCF only). This screen can be accessed from members' post ("Punish member" button) or from any member-profile screen.
 
 As all these methods work on members, but not users in general (i.e. not guest users), you may wish to consider making it a requirement for all users to join in order to participate on the website. In other words, you may wish to remove permission for guests to make submissions.
-[html]</div>[/html]
+[/surround]
 [title="2"]Probation[/title]
 
 The probation feature is designed to work via the punishment system. You could manually put a member into the probation usergroup, but it's not advisable because any secondary usergroups they are in may lead to extra undesirable privileges.

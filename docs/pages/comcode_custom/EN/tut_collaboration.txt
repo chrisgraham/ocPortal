@@ -22,16 +22,16 @@ By default, some resources (Comcode pages, menu links, and catalogues), are crea
 These may be used, deleted, or moved, according to your specific needs.
 
 [title="2"]File Dump[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 The file dump is a tool to allow sharing of files. It provides the ability to upload, download, and delete files, and organise files into folders.
 [box="Important note" width="25em" float="right"]There is nothing stopping ordinary users from downloading from the file/media library if they have the URL to a file. This is sometimes useful, but you should be aware that if files are given guessable filenames, they will not be secure.[/box]
 [exp_thumb="The File Dump" float="left"]collaboration_filedump[/exp_thumb]
-[html]</div>[/html]
+[/surround]
 [title="2"]Other Super-members[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The Super-members fellows page" float="right"]collaboration_supermembers[/exp_thumb]
 The Collaboration Zone includes a page listing all members that have access, with links to information relating to them, and to contact them. It exists to make sure super-members are aware of each other, and to facilitate easy communication between them.
-[html]</div>[/html]
+[/surround]
 [title="2"]Additional resources that may be used[/title]
 
 The following are not by default set up for specifically for Super-Members, but may be:

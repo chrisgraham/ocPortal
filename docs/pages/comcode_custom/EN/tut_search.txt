@@ -55,16 +55,16 @@ Placing a checkmark beside each content type will cause ocPortal to search for e
 The Google search will carry out a search of the site using the index of the Google search engine. Upon filling in this separate form you will be redirected to a Google results page (the Google search is commented-out of the search templates by default, as the ocPortal search engine can search with more control and understands the data better).
 
 [title="2"]Advanced searches[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Performing an advanced search for a specific content type" float="right"]search_advanced[/exp_thumb]
 Many forms of content allow advanced searches which allow you to search underneath a chosen category. For members and catalogues you may also perform template searches. An advanced search limits you to that individual content type. The advanced searching screen is reached by clicking one of the 'Advanced' links on the main search screen.
-[html]</div>[/html]
+[/surround]
 [title="2"]Searching from the Forum[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The search button on the forum" float="left"]search_forum[/exp_thumb]
 
 To initiate a search while in the forum (our own [concept]OCF[/concept] forum), you need to click the 'Search' button on the forum or use the contextual search box on the forum member bar. The contextual search will search beneath your current forum if you are on a forum-view screen, or within your current topic if you are on a topic-view screen.
-[html]</div>[/html]
+[/surround]
 
 [title="2"]OpenSearch[/title]
 

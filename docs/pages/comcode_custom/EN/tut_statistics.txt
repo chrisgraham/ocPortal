@@ -11,7 +11,7 @@ The administration interface resides in the Admin Zone, under the Usage section.
 Be aware that hits coming from the web server itself will be filtered from the stats, so if you are running a web server on your own computer you may not see any results if nobody else has used your website yet.
 
 [title="3"]Installing geo-location data[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The menu link to install geolocation data" float="left"]statistics_Install-geolocation-data-link[/exp_thumb]
 [exp_thumb="The message shown when installing geolocation data" float="right"]statistics_Installing-geolocation-data[/exp_thumb]
 {!stats:DOC_INSTALL_GEOLOCATION_DATA}
@@ -19,7 +19,7 @@ Be aware that hits coming from the web server itself will be filtered from the s
 [box="Important note" width="25em" float="right"]Do not disturb the geolocation data installation process. You will be informed when it is complete.[/box]
 
 Once the geo-location data is installed, all the extra statistics can be used.
-[html]</div>[/html]
+[/surround]
 [title="3"]Page view statistics[/title]
 
 {!stats:DOC_PAGE_STATISTICS}
@@ -57,35 +57,35 @@ The per-page breakdowns list more detailed statistics for each page, in various 
 {!stats:DOC_LOAD_TIMES}
 
 [title="2"]Download statistics[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 There is a screen for download statistics, but you may also wish to allow your visitors to see some trends...
 
 [exp_thumb="The download statistics box" float="right"]statistics_Download-statistics[/exp_thumb]
 There are two methods for revealing download trends to your visitors:
 1) Download statistics are generally available on an individual download page
 2) You can also pull out key downloads for the benefit of your visitors is to use one of the download blocks: [i]most popular downloads[/i], and [i]most recently-added downloads[/i]. These are explained below.
-[html]</div>[/html]
+[/surround]
 [title="3"]Most popular downloads[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The most popular downloads block" float="left"]statistics_Top-downloads-block[/exp_thumb]
 The most popular downloads block obviously displays the most popular (i.e. most frequently downloaded) downloads. It can be added using the Block assistant, available via the 'Add block' icon when editing Comcode pages.
 
 When rendered, these blocks also show how many downloads each listed download has received, and when they were added.
-[html]</div>[/html]
+[/surround]
 [title="3"]Most recently-added downloads[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The most recently-added downloads block" float="left"]statistics_Recently-added-downloads-block[/exp_thumb]
 The most-recently added downloads block does indeed display the most recently-added downloads. It can be added using the Block assistant, available via the 'Add block' icon when editing Comcode pages.
 
 When rendered, this block also shows when each listed download was added, and how many downloads it has received.
-[html]</div>[/html]
+[/surround]
 [title="2"]Other statistics[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="View statistics are shown for various forms of content" float="right"]statistics_News-item-stats[/exp_thumb]
 All content will automatically store download/view statistics as appropriate, which will usually be displayed on the respective entry screen.
 
 An example of this would be news entries: each news entry records how many times it is viewed, and displays this number on its view screen.
-[html]</div>[/html]
+[/surround]
 
 [title="2"]OCF statistics[/title]
 

@@ -108,11 +108,9 @@ class Hook_pointstore_banners
 		$initial_hits=intval(get_option('initial_banner_hits'));
 		$banner_price=intval(get_option('banner_setup'));
 		$text=paragraph(do_lang_tempcode('BANNERS_DESCRIPTION',integer_format($initial_hits),integer_format($banner_price)));
-		$fields=get_banner_form_fields(true);
+		list($fields,$javascript)=get_banner_form_fields(true);
 		$title=get_screen_title('ADD_BANNER');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_newbanner','id'=>'banners','uploading'=>1),'_SELF');
-
-		$javascript='if (document.getElementById(\'campaignremaining\')) { var form=document.getElementById(\'campaignremaining\').form; var crf=function() { form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked); }; crf(); form.elements[\'the_type\'][0].onclick=crf; form.elements[\'the_type\'][1].onclick=crf; form.elements[\'the_type\'][2].onclick=crf; }';
 
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
@@ -143,13 +141,14 @@ class Hook_pointstore_banners
 		$image_url=$urls[0];
 		$site_url=post_param('site_url');
 		$caption=post_param('caption');
+		$direct_code=post_param('direct_code','');
 		$notes=post_param('notes','');
 
 		$this->check_afford_banner();
 
 		$this->handle_has_banner_already();
 
-		$banner=show_banner($name,'',comcode_to_tempcode($caption),(url_is_local($image_url)?(get_custom_base_url().'/'):'').$image_url,'',$site_url,'');
+		$banner=show_banner($name,'',comcode_to_tempcode($caption),$direct_code,(url_is_local($image_url)?(get_custom_base_url().'/'):'').$image_url,'',$site_url,'',get_member());
 		$proceed_url=build_url(array('page'=>'_SELF','type'=>'__newbanner','id'=>'banners'),'_SELF');
 		$cancel_url=build_url(array('page'=>'_SELF'),'_SELF');
 		$keep=new ocp_tempcode();
@@ -190,6 +189,7 @@ class Hook_pointstore_banners
 		$image_url=post_param('image_url');
 		$site_url=post_param('site_url');
 		$caption=post_param('caption');
+		$direct_code=post_param('direct_code','');
 		$notes=post_param('notes','');
 		$name=post_param('name');
 
@@ -198,7 +198,7 @@ class Hook_pointstore_banners
 		$this->handle_has_banner_already();
 
 		check_banner();
-		add_banner($name,$image_url,'',$caption,intval(get_option('initial_banner_hits')),$site_url,3,$notes,1,NULL,get_member(),0);
+		add_banner($name,$image_url,'',$caption,$direct_code,intval(get_option('initial_banner_hits')),$site_url,3,$notes,1,NULL,get_member(),0);
 		$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>get_member(),'purchasetype'=>'banner','details'=>$name,'details2'=>''));
 		require_code('points2');
 		charge_member(get_member(),$cost,do_lang('ADD_BANNER'));

@@ -159,10 +159,10 @@ You may wish to remove some of the links from the default menus on your installa
 If you are not running a community site, you will almost certainly want to delete the default banners. Three banners are added into the system by default, to give websites a 'leg up' and a working view of the banner rotation: but they may not be appropriate. If you ran the Setup Wizard then you have already been given a choice to remove these banners automatically.
 
 [title="2"]Environment configuration[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Your base-configuration" float="right"]configuration_environment[/exp_thumb]
 {!config:DOC_BASE_CONFIGURATION}
-[html]</div>[/html]
+[/surround]
 [title="2"]Scheduling[/title]
 
 In order for aspects of ocPortal that support scheduling to work it is necessary to set up a system level scheduling task for the '[tt]data/cron_bridge.php[/tt]' file on an every-minute basis. By doing this, you tie in ocPortal's scheduler with the server's scheduler. This [tt]cron_bridge.php[/tt] file can either be run up by calling the URL, or by passing the PHP file through the PHP interpreter. Don't call up the URL by hand because if you do then ocPortal will start assuming the scheduler is working from then on which can make testing it a bit harder (once it is called once it is marked 'working' by the system -- applicable features will become available, and the todo item will be removed from the checklist on the front page of the Admin Zone).
@@ -232,12 +232,12 @@ In the event your hosting platform does not allow you access to CRON, there are 
  - Other free options are http://www.setcronjob.com/ (up to every 5 minutes but the schedule needs to be re-set every week) and http://www.onlinecronjobs.com/ (up to 5 jobs twice a day).
 
 [title="2"]Closed site, and opening[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Your site is initially closed" float="right"]configuration_closed[/exp_thumb]
 It's not advertised in the interface, but it is possible for a user to join a closed OCF-powered site if they have been given the URL to the join module (they can't see any panels in this event). Once they have joined they can't log in though unless they have subsequently been put in a usergroup with 'Access closed site' permission. The reasoning here is that the staff may give out the join URL and ask someone to use it, and then give special access because they want them to be able to get in early. If you do not like this behaviour, you can alter the join-module's permissions so that the Guest usergroup cannot access it.
 
 Once you feel your site is ready for the general public, you will want to 'open the doors' so to speak. You can do this from the configuration: find the options in the Admin Zone, the Configuration page, the Site Configuration section, the 'Closed Site' subsection.
-[html]</div>[/html]
+[/surround]
 
 [concepts
  1_key=".htaccess"                         1_value="A file used by the Apache web server to set configuration options that apply to the directory (and sub-directories thereof-) that the file is contained in"

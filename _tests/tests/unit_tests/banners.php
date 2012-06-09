@@ -58,7 +58,7 @@ class banners_test_set extends ocp_test_case
 	{
 		$this->banner_name='Goodmorning';
 
-		add_banner($this->banner_name,'http://ocportal.com/themes/ocproducts/images/newlogo.gif','Good morning','Welcome',10,'http://ocportal.com',3,'test notes',1,1329153480,get_member(),1,$this->banner_type);
+		add_banner($this->banner_name,'http://ocportal.com/themes/ocproducts/images/newlogo.gif','Good morning','Welcome','',10,'http://ocportal.com',3,'test notes',1,1329153480,get_member(),1,$this->banner_type);
 
 		//make sure the banner is created with given name
 		$this->assertTrue('http://ocportal.com/themes/ocproducts/images/newlogo.gif'==$GLOBALS['FORUM_DB']->query_value('banners','img_url',array('name'=>$this->banner_name)));

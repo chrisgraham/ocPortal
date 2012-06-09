@@ -6,35 +6,6 @@
 
 [contents]decimal,lower-alpha[/contents]
 
-[title="2"]Using a banner network's HTML[/title]
-[html]<div class="float_surrounder">[/html]
-[exp_thumb="Configuring the HTML to an external banner/rotation" float="left"]banners_config[/exp_thumb]
-In order to use banners from an existing banner network, you often are asked to incorporate a chunk of HTML into your site. ocPortal makes this easy for you, with a config option to store this code ("Money advert-code"). If the config option is empty, then banners for the default banner category (the one by default shown in the top right, 468x60), come from the banner rotation purely; otherwise, a mix between rotation and your hard-coded banner is achieved according to the specified percentage.
-If you want a different commercial banner size to 468x60, or multiple banners, it is best to avoid the ocPortal banner system entirely. There is nothing particularly special about how ocPortal handles HTML, and you can put your Google banners in any templates or Comcode pages you wish to (for Comcode pages you will need to use the Comcode 'html' tag and should probably turn the WYSIWYG editor off). If you are having multiple commercial banners and also want to use the standard 468x60 spot for commercial banners you may want (for reasons of consistency, simplicity, and maintenance) to rip out ocPortals banner system entirely and paste your banner code into [tt]GLOBAL_HTML_WRAP.tpl[/tt] over ocPortals default banner Tempcode. i.e. replace this:
-[code]
-			{$SET,BANNER,{$BANNER}} {$,This is to avoid evaluating the banner parameter twice}
-			{+START,IF_NON_EMPTY,{$GET,BANNER}}
-				<div class="global_banner" style="text-align: {!en_right}">{$GET,BANNER}</div>
-			{+END}
-[/code]
-with something like this (example is for Google Adsense, and Google will supply the HTML to use here, apart from the surrounding 'div' tag I used to position the banner):
-[code]
-			<div class="global_banner" style="text-align: {!en_right}">
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-xxxxxxxx";
-/* test */
-google_ad_slot = "xxxxxxxxx";
-google_ad_width = 468;
-google_ad_height = 60;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-			</div>
-[/code]
-If you are using Google Adsense and don't see any banners, [url="http://yurko.net/blog/2010/03/website-related/white-space-instead-adsense-ads.html"]consider whether your account is set up correctly[/url].
-[html]</div>[/html]
 [title="2"]Managing your own banner rotation[/title]
 
 [exp_thumb="Adding a banner" float="right"]banners_add[/exp_thumb]
@@ -61,6 +32,8 @@ The banner system supports 4 different broad categories of file type:
  - flash (swf format)
  - text
  - urls (which are shown using frames)
+ - pure HTML
+ - HTML, with support for embedded PHP code
 
 [title="3"]Text[/title]
 
@@ -75,6 +48,14 @@ Linking to non-image URLs instead of images is handy in a number of situations, 
  - if you want to link to a textual banner
  - if you want to make a page that displays a randomised banner based on some kind of algorithm (such as choosing randomly from a folder of pictures)
 
+[title="3"]Using a banner network's HTML[/title]
+[surround]
+[exp_thumb="Configuring the HTML to an external banner/rotation" float="left"]banners_config[/exp_thumb]
+In order to use banners from an existing banner network, you often are asked to incorporate a chunk of HTML into your site. ocPortal makes this easy for you, as you can add banners consisting of raw HTML (or even PHP code).
+
+If you are using Google Adsense and don't see any banners, [url="http://yurko.net/blog/2010/03/website-related/white-space-instead-adsense-ads.html"]consider whether your account is set up correctly[/url].
+[/surround]
+
 [title="2"]Permissions[/title]
 
 [title="3"]Who may view what[/title]
@@ -86,12 +67,12 @@ If you turn on the "Permissions" option (under the "Banners" section in the Feat
 Any usergroup with the "Avoid banners" permission will not see banners. Super administrators will have this permission (as they always have all permissions), and hence super administrators will never see banners. To test banners from a super administrator account (such as the default 'admin' account), use the 'SU' feature to switch to the test account: add [tt]&keep_su=test[/tt] onto the end of a URL.
 
 [title="2"]Banner status[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Viewing the status of a banner" float="left"]banners_view[/exp_thumb]
 There is a facility for staff and banner submitters to view the status of their banner. Information about how much the banner has been viewed and clicked is shown, as well as the equivalent statistics for how the banners associated website (if there is one) has viewed and clicked the banner network.
 
 The details shown may have important statistical significance. For example, a banner that is viewed a lot, but never clicked, may not be a 'profitable' one to have in the rotation (note however, that a simple banner view could impact a visitor, and thus it actually being clicked is not always a measure of the user impact).
-[html]</div>[/html]
+[/surround]
 [title="2"]Having multiple banner sets[/title]
 
 You may have multiple sets of banners, determined by the 'Type' of the banners. A banners 'Type' defines what set it goes in.

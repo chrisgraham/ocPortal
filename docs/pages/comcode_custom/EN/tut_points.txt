@@ -42,11 +42,11 @@ The main ramification of this is that if posts are deleted, the point count goes
  - Pseudo-payment for a service rendered
  - A prize for winning a competition
  - A sign of appreciation for produce a high quality product that benefits the community
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Gift transactions should be monitored so as to pick up on cheating (mutual giving for example)" float="left"]points_admin_monitor[/exp_thumb]
 [exp_thumb="Those who give may get rewarded by the system (this encourages an active community)" float="right"]points_lucky[/exp_thumb]
 Gift points are useless unless spent, so the only advantage to hoarding them is to give a large amount in some kind of special situation being awaited; once given, the gift point receiver has the total added to their actual point count. Obviously members could abuse this, by giving points to each other in some form of reciprocal arrangement ("you pat my back I'll pat yours"): this is why there is an admin interface to monitor all gift transactions for fraud (and selectively reverse transactions). You can reach this interface from the 'Usage' section of the Admin Zone.
-[html]</div>[/html]
+[/surround]
 [title="2"]The Point Store[/title]
 
 The Point Store provides a number of products/services that members can access using points, including:
@@ -66,28 +66,28 @@ The Point Store provides a number of products/services that members can access u
   - staff must manually dispatch the custom product, whatever it is
  - name highlighting ([concept]OCF[/concept] only)
  - topic pinning
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Configuring the Point Store" float="right"]points_pointstore_config[/exp_thumb]
 {!pointstore:DOC_POINT_STORE}
-[html]</div>[/html]
-[html]<div class="float_surrounder">[/html]
+[/surround]
+[surround]
 [exp_thumb="Configuring the Point Store's prices" float="right"]points_prices[/exp_thumb]
 [exp_thumb="The Point Store shop-front" float="left"]points_pointstore[/exp_thumb]
 
 When a member buys something from the Point Store, the staff are informed of it via e-mail of appropriate details. The exception to this is that flagrant text is simply placed in a queue that, if enabled, the staff are expected to keep a hold on manually).
 
 There is a module in the Admin Zone for sales inventory management. It should be used to cancel purchases, such as an e-mail address bought up a user that is no longer valid: cancelling such a purchase allows a re-purchase at a later date (only one address of each e-mail address type is allowed per-user). Refunds must manually be given through the points system if points have been already charged by the point of cancellation.
-[html]</div>[/html]
+[/surround]
 
 [title="3"]Flagrant text[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 {!flagrant:DOC_FLAGRANT}
 
 [exp_thumb="Managing flagrant text messages in the queue" float="left"]points_flagrant_manage[/exp_thumb]
 [exp_thumb="Adding a flagrant text message from the Admin Zone" float="left"]points_flagrant_add[/exp_thumb]
 [exp_thumb="Configuring the default flagrant text" float="left"]points_default_flagrant[/exp_thumb]
 [exp_thumb="The flagrant text is shown in this space" float="left"]points_flagrant_actual[/exp_thumb]
-[html]</div>[/html]
+[/surround]
 [title="3"]E-mail accounts and the Point Store[/title]
 
 If e-mail accounts are sold through the Point-Store, ocPortal cannot create them itself. Instead, it has to send out e-mail notifications to the site staff address, which includes details of how to add them. The method of addition is different for different systems, so the Point-Store configuration defines 3 URLs that can be set according to your server.
@@ -160,14 +160,14 @@ The 'status symbol' of rank is an incentive for members to earn points (hence co
 If you would like to use rank, but not other point features, remove view permissions to the 'points' module and edit the 'Block options' (in the configuration) to not display point details. You cannot remove the points addon if you wish to use ranks.
 
 [title="2"]The leader-board[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The points leader-board" float="right"]points_leaderboard[/exp_thumb]
 The leader-board is a block, and corresponding archive viewing module, for the displaying of the top point holders for a week. Like rank, this is another incentive for members to earn points.
 
 Please be aware that the leader-board is not entirely accurate, as it actually only calculates the point count of top post count holders, and orders according to this; the reason for this is that, as explained earlier, point count is not actually stored, and calculating it for all members simultaneously would not be efficient. This is unlikely to be noticed, however, because more post count holders are chosen for point calculation than point holders shown, hence a buffer zone exists to reduce the chance of error.
 
 The leader-board is updated and archived weekly, regardless of whether you have the block cache enabled or not.
-[html]</div>[/html]
+[/surround]
 
 [concepts
  1_key="points"          1_value="Points are accumulated by various means and illustrate rank and provide spending power (currency)"

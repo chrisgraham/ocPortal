@@ -16,23 +16,23 @@ This tree principle applies to many areas of ocPortal: we strive to standardise 
 Download categories may have 'representative images'. When you are viewing a link to a category from it's parent category, the representative image will be included.
 
 [title="2"]Adding a download[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Adding a download" float="left"]downloads_add[/exp_thumb]
 [exp_thumb="Do-next options are provided after adding a download, as is also the case when managing other ocPortal content" float="right"]downloads_do_next[/exp_thumb]
 When you add a download you have a choice as to whether to specify a URL or to attach a file.
 
 We recommend that you attach a file, as ocPortal can then manage it without risk of the URL being broken by something outside of the ocPortal control. There is a caveat with this, however, as the web was not designed for uploading large files. Essentially, the web was designed to make fast requests for web pages: attaching a large file extends the request, and widens the window for transfer errors (HTTP uploads have no 'resume' mechanism, and no good way of easily finding it a transfer is actually proceeding other than checking for network usage). In addition, PHP may not support large files (sometimes dropping POST information as well as the file, which makes ocPortal give an error message). Therefore we recommend not to try attaching a file more than around 50MB in size. Larger files should be uploaded manually, and then the URL entered.
-[html]</div>[/html]
-[html]<div class="float_surrounder">[/html]
+[/surround]
+[surround]
 [exp_thumb="The subcategory (where our download is being stored) is displayed" float="left"]downloads_subcat[/exp_thumb]
 [exp_thumb="Our download, listed in its category" float="right"]downloads_in_subcat[/exp_thumb]
 For an uploaded file, you will see upon edit that the filename of the actual on-disk file can not be determined from the URL. ocPortal stores the true filename in the database, but makes it so that people cannot circumvent the download system and download files directly. When an uploaded file is downloaded, it does not actually directly indicate for the user's web browser to download the URL, but rather, it is 'piped through' ocPortal so as to hide where it came from. This allows you to maintain your chosen permission scheme. In addition, ocPortal provides an anti-leech feature which stops people placing the direct download links on other websites.
-[html]</div>[/html]
-[html]<div class="float_surrounder">[/html]
+[/surround]
+[surround]
 [box="Important note" width="25em" float="right"]It is your responsibility to scan files for viruses, as ocPortal does not include a virus scanner. This is particularly relevant to those submitted for validation by users.[/box]
 [exp_thumb="Viewing a download" float="left"]downloads_view[/exp_thumb]
 When you add a download, ocPortal automatically adds a specially named gallery for it. You will actually see a convenient 'add image' icon directly after adding the download, and you will also find an equivalent link on the download-view screen itself. The download gallery is displayed in-line, within the actual download-view screen. The ocPortal gallery system is used for adding and storage of the images.
-[html]</div>[/html]
+[/surround]
 [title="2"]Editing/Deleting a download[/title]
 
 [exp_thumb="Editing a download" float="left"]downloads_edit_file[/exp_thumb]

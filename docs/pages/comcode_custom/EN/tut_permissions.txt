@@ -27,19 +27,19 @@ The remainder of this section is concerned with manual permission setting.
 You can edit zone permissions by editing the zone for which you want to change the permissions.
 
 Go the Admin Zone, then the 'Structure' section, then the 'Zones' icon. Choose a zone to edit (bear in mind that you can't change permissions for the Welcome Zone, as everybody is allowed to access it), and continue.
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Choosing a zone to edit" float="right"]permissions_Choose-zone-edit[/exp_thumb]
 You will be presented with the zone editing form. Near the bottom are the options for usergroup access permissions: one binary 'can/can't' access permission per usergroup. Toggle the checkboxes as you see fit (if a checkbox is unchecked, the corresponding usergroup can't enter the zone, but if it is checked, the usergroup can enter the zone without problem), and submit the form.
-[html]</div>[/html]
+[/surround]
 [title="3"]Editing page permissions[/title]
 
 [i]This section describes editing from outside the Permissions Tree Editor. It is perhaps easier to centralise control from the Permissions Tree Editor. All the settings described here are also present in the Permissions Tree Editor.[/i]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Editing page permissions" float="right"]permissions_Page-permissions-grid[/exp_thumb]
 Go to the Admin Zone, then the 'Structure' section, then the 'Permissions' icon. Choose 'Page permissions'. To edit a page's permissions manually, you need to go to the page permissions page. Once more, choose a zone to edit, and submit the form. You will be presented with a checkbox-grid of the permissions for every page in your selected zone. Along the top are the names of all the usergroups on your site, and down the side are the names of all the pages in your selected zone. In the middle is a checkbox-grid for the permissions, and down the right is a column of buttons for inverting a whole row of checkboxes at once [[exp_ref]permissions_Mass-checkbox-change[/exp_ref]].
 
 Once all the access permissions are set as appropriate, submit the form.
-[html]</div>[/html]
+[/surround]
 [title="3"]Editing category permissions[/title]
 
 [i]This section describes editing from outside the Permissions Tree Editor. It is perhaps easier to centralise control from the Permissions Tree Editor. All the settings described here are also present in the Permissions Tree Editor.[/i]

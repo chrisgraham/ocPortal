@@ -12,10 +12,10 @@ Unfortunately disasters occur all the time, and to think it 'will not happen to 
  - I personally nearly lost the contents of a 120GB hard disk (due to a bug in the Windows boot sector recreation process)
  - I have personally rescued a server where two of the hard disks had developed bad sectors together (fortunately no data was lost here, but that was lucky)
  - A client of mine had their hard disk corrupt, loosing a great deal of data that took weeks to rebuild and incurred extra costs in consultancy to help automatically recreate some of the lost database rows
-[html]<div class="float_surrounder">[/html]
+[surround]
 [box="Important note" width="25em" float="right"]Do not leave backups such that others might get a-hold of them, as this would be a big security risk due to sensitive data stored upon them. Keep backup CDs in a locked drawer, for example.[/box]
 A good backup strategy will automatically and regularly backup all, or all changed/new, files, with months of history, and store them all twice in two different geographical regions. This is not realistic for most ocPortal users, but should drum home the fact that at the very least you should keep off-server backups to allow both roll-back and disk corruption/destruction recovery.
-[html]</div>[/html]
+[/surround]
 [title="2"]The ocPortal backup system[/title]
 
 The backup system provided by ocPortal is a system where the website makes a backup of itself when instructed to do so. You may set up the system to perform backups on a schedule, or activate themself yourself manually.

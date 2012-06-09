@@ -116,7 +116,7 @@ If you are moving a page from one zone to another, any page links to that page (
 It is recommended that you never move pages because it complicates the upgrade process. It is advisable to use the redirects feature instead (Structure section of the Admin Zone, Redirects icon).
 
 [title="2"].htaccess[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Finding how to change your settings" float="right"]phpsettings[/exp_thumb]
 You can try and get PHP and the web server to use an optimal configuration, via a special file named '.htaccess'. If you want the 'short URLs' option to be enabled, this step is necessary.
 Note that the file may already exist, potentially for either of two reasons:
@@ -134,7 +134,7 @@ There are three caveats here:
 [*]If this fails too you will need to rename the file back and consult your web-host.
 [/list]
 [/list]
-[html]</div>[/html]
+[/surround]
 [title="2"]Short URLS[/title]
 
 ocPortal supports clean URLs in Apache. These clean URLs can improve your search engine rankings in some cases. ocPortal can also do clean URLs on the following web-servers:

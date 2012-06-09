@@ -50,7 +50,7 @@ function add_banner_quiet($name,$imgurl,$title_text,$caption,$campaignremaining,
 	if (is_null($test))
 	{
 		if (!addon_installed('unvalidated')) $validated=1;
-		$GLOBALS['SITE_DB']->query_insert('banners',array('b_title_text'=>$title_text,'b_type'=>$b_type,'edit_date'=>$edit_date,'add_date'=>$time,'expiry_date'=>$expiry_date,'the_type'=>$the_type,'submitter'=>$submitter,'name'=>$name,'img_url'=>$imgurl,'caption'=>insert_lang_comcode($caption,2),'campaign_remaining'=>$campaignremaining,'site_url'=>$site_url,'importance_modulus'=>3,'notes'=>'','validated'=>$validated,'hits_from'=>$hits_from,'hits_to'=>$hits_to,'views_from'=>$views_from,'views_to'=>$views_to));
+		$GLOBALS['SITE_DB']->query_insert('banners',array('b_title_text'=>$title_text,'b_direct_code'=>'','b_type'=>$b_type,'edit_date'=>$edit_date,'add_date'=>$time,'expiry_date'=>$expiry_date,'the_type'=>$the_type,'submitter'=>$submitter,'name'=>$name,'img_url'=>$imgurl,'caption'=>insert_lang_comcode($caption,2),'campaign_remaining'=>$campaignremaining,'site_url'=>$site_url,'importance_modulus'=>3,'notes'=>'','validated'=>$validated,'hits_from'=>$hits_from,'hits_to'=>$hits_to,'views_from'=>$views_from,'views_to'=>$views_to));
 
 		if (function_exists('decache'))
 		{

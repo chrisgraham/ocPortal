@@ -61,10 +61,10 @@ or in reduced form,
 [/code]
 
 [title="3"]List syntax[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The example in action" float="right"]comcode_list[/exp_thumb]
 To create a list, you just need to start typing elements of the list using the list syntax. A line that is in the first level of a list is identified by the line starting with ' - '. Subsequent lines that have the same prefix are shown as subsequent items in the same list. If you wish to extend the list to a second level, just add the first line of the second level with two spaces before the hyphen, so that the line starts with '  - '; of course, you should start a second level of a list somewhere within the first level. Your list may have as many levels as you like, just by adding extra spaces in the lines at a certain depth. Be careful to not jump from, for instance, a depth of 1 straight to a depth of 3, as this will result in a Comcode error. This all sounds more complex than it is, so I will give an example to show how in fact, it is really very easy to do:
-[html]</div>[/html]
+[/surround]
 [code]
  - 1
  - 2
@@ -175,10 +175,10 @@ Using them couldn't be easier: you just choose a file (or many files) from your 
 
 Attachments may be given special captions, which are usually displayed as a part of the attachment box.
 Images have automatically generated and cached thumbnails.
-[html]<div class="float_surrounder">[/html]
+[surround]
 [box="Important note" width="25em" float="right"]Be careful when placing attachment tags in a Comcode spot that does not support attachments natively. This is supported, but the attachment will be deleted if its original content is deleted, as non-native Comcode spots have no way of recording that they have used it. In addition, if a viewer does not have access to the attachment's original content, they won't have access to your copy&pasted usage to a non-native Comcode spot.[/box]
 If you go back to edit the content with your attachment, you will see that it has been given a number, whereas it as just marked as 'new' when being added. You may actually copy and paste the attachment tag into any other area of Comcode, so as to re-use the attachment. Anyone with permission to access any of the attachment supporting content locations that the attachment is placed in will be able to view/download it. The attachment will remain in the system until all content that using it is edited to stop using it, or deleted.
-[html]</div>[/html]
+[/surround]
 
 
 

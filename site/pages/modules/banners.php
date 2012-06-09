@@ -36,7 +36,7 @@ class Module_banners
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=5;
+		$info['version']=6;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -85,9 +85,10 @@ class Module_banners
 				'expiry_date'=>'?TIME',
 				'submitter'=>'USER',
 				'img_url'=>'URLPATH',
+				'the_type'=>'SHORT_INTEGER', // 0=permanent|1=campaign|2=default
 				'b_title_text'=>'SHORT_TEXT',
-				'the_type'=>'SHORT_INTEGER',
 				'caption'=>'SHORT_TRANS',	// Comcode
+				'b_direct_code'=>'LONG_TEXT',
 				'campaign_remaining'=>'INTEGER',
 				'site_url'=>'URLPATH',
 				'hits_from'=>'INTEGER',
@@ -110,8 +111,8 @@ class Module_banners
 			$GLOBALS['SITE_DB']->create_index('banners','campaign_remaining',array('campaign_remaining'));
 			$GLOBALS['SITE_DB']->create_index('banners','bvalidated',array('validated'));
 
-			$GLOBALS['SITE_DB']->query_insert('banners',array('b_title_text'=>'','name'=>'advertise_here','the_type'=>2,'img_url'=>'data/images/advertise_here.png','caption'=>lang_code_to_default_content('ADVERTISE_HERE',true,1),'campaign_remaining'=>0,'site_url'=>get_base_url().'/site/index.php?page=advertise','hits_from'=>0,'views_from'=>0,'hits_to'=>0,'views_to'=>0,'importance_modulus'=>10,'notes'=>'Provided as default. This is a default banner (it shows when others are not available).','validated'=>1,'add_date'=>time(),'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'b_type'=>'','expiry_date'=>NULL,'edit_date'=>NULL));
-			$GLOBALS['SITE_DB']->query_insert('banners',array('b_title_text'=>'','name'=>'donate','the_type'=>0,'img_url'=>'data/images/donate.png','caption'=>lang_code_to_default_content('DONATION',true,1),'campaign_remaining'=>0,'site_url'=>get_base_url().'/site/index.php?page=donate','hits_from'=>0,'views_from'=>0,'hits_to'=>0,'views_to'=>0,'importance_modulus'=>30,'notes'=>'Provided as default.','validated'=>1,'add_date'=>time(),'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'b_type'=>'','expiry_date'=>NULL,'edit_date'=>NULL));
+			$GLOBALS['SITE_DB']->query_insert('banners',array('name'=>'advertise_here','b_title_text'=>'','b_direct_code'=>'','the_type'=>2,'img_url'=>'data/images/advertise_here.png','caption'=>lang_code_to_default_content('ADVERTISE_HERE',true,1),'campaign_remaining'=>0,'site_url'=>get_base_url().'/site/index.php?page=advertise','hits_from'=>0,'views_from'=>0,'hits_to'=>0,'views_to'=>0,'importance_modulus'=>10,'notes'=>'Provided as default. This is a default banner (it shows when others are not available).','validated'=>1,'add_date'=>time(),'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'b_type'=>'','expiry_date'=>NULL,'edit_date'=>NULL));
+			$GLOBALS['SITE_DB']->query_insert('banners',array('name'=>'donate','b_title_text'=>'','b_direct_code'=>'','the_type'=>0,'img_url'=>'data/images/donate.png','caption'=>lang_code_to_default_content('DONATION',true,1),'campaign_remaining'=>0,'site_url'=>get_base_url().'/site/index.php?page=donate','hits_from'=>0,'views_from'=>0,'hits_to'=>0,'views_to'=>0,'importance_modulus'=>30,'notes'=>'Provided as default.','validated'=>1,'add_date'=>time(),'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'b_type'=>'','expiry_date'=>NULL,'edit_date'=>NULL));
 			$banner_a='advertise_here';
 			$banner_c='donate';
 
@@ -123,8 +124,6 @@ class Module_banners
 			}
 
 			add_config_option('ENABLE_BANNERS','is_on_banners','tick','return \'1\';','FEATURE','BANNERS');
-			add_config_option('MONEY_AD_CODE','money_ad_code','text','return \'\';','FEATURE','BANNERS',1);
-			add_config_option('ADVERT_CHANCE','advert_chance','float','return \'5\';','FEATURE','BANNERS',1);
 
 			add_specific_permission('BANNERS','full_banner_setup',false);
 			add_specific_permission('BANNERS','view_anyones_banner_stats',false);
@@ -187,6 +186,19 @@ class Module_banners
 		{
 			add_config_option('BANNER_AUTOSIZE','banner_autosize','tick','return is_null($old=get_value(\'banner_autosize\'))?\'0\':$old;','FEATURE','BANNERS');
 			add_config_option('ADMIN_BANNERS','admin_banners','tick','return is_null($old=get_value(\'always_banners\'))?\'0\':$old;','FEATURE','BANNERS');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('banners','b_direct_code','LONG_TEXT');
+			delete_config_option('money_ad_code');
+			delete_config_option('advert_chance');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			add_specific_permission('_BANNERS','use_html_banner',false);
+			add_specific_permission('_BANNERS','use_php_banner',false,true);
 		}
 	}
 
@@ -393,7 +405,7 @@ class Module_banners
 
 		$map_table=do_template('MAP_TABLE',array('_GUID'=>'eb97a46d8e9813da7081991d5beed270','WIDTH'=>'300','FIELDS'=>$fields));
 
-		$banner=show_banner($myrow['name'],$myrow['b_title_text'],get_translated_tempcode($myrow['caption']),$myrow['img_url'],$source,$myrow['site_url'],$myrow['b_type']);
+		$banner=show_banner($myrow['name'],$myrow['b_title_text'],get_translated_tempcode($myrow['caption']),$myrow['b_direct_code'],$myrow['img_url'],$source,$myrow['site_url'],$myrow['b_type'],$myrow['submitter']);
 
 		$edit_url=new ocp_tempcode();
 		if ((has_actual_page_access(NULL,'cms_banners',NULL,NULL)) && (has_edit_permission('mid',get_member(),$myrow['submitter'],'cms_banners')))

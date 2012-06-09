@@ -5,21 +5,21 @@ At times you'll want to know how to talk to your members privately (i.e. not on 
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Private Topics[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The link to start a new Private Topic" float="left"]correspondance_hovering-over-startPT-link[/exp_thumb]
 [exp_thumb="Choosing what kind of whisper to use" float="right"]correspondance_whisper-page[/exp_thumb]
 Private Topics are very similar in concept to "private/personal messaging" -- a common feature among other forum systems. However, when designing OCF, we took the concept one step further, and integrated private messaging with the forum system in a new way. Private messaging systems are usually segregated from the main forum system; different layout, posting mechanisms, etc. With OCF, Private Topics are just that: topics. They are simply topics that are marked as between two users, and are shown in a special "Private Topics" virtual forum.
 
 Since version 4.0 Private Topics may involve more than 2 people -- a topic is initially between 2 members but other members may be invited.
-[html]</div>[/html]
+[/surround]
 [title="2"]Inline personal posts (whispers)[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Typing in a personal post" float="left"]correspondance_whisper-form[/exp_thumb]
 [exp_thumb="A personal post as displayed" float="right"]correspondance_whisper[/exp_thumb]
 Another innovation we have developed for OCF is that of inline personal posts (henceforth known as "whispers" for brevity's sake). Whispers allow forum-goers to privately reply within a public forum topic.
 
 The whispers are like regular posts but marked as only viewable by the sender and receiver, and nobody else (apart from staff).
-[html]</div>[/html]
+[/surround]
 [title="2"]Using Private Topics[/title]
 
 [title="3"]Starting a Private Topic[/title]
@@ -33,12 +33,12 @@ All 3 methods take you to a standard "new topic" page. Fill out all the fields, 
 
 The new Private Topic will have also appeared in your Private Topics list, so you can easily access it. To get to your Private Topics list, just click on the "Private Topics" link in either the top bar, or the side menu in OCF [[exp_ref]correspondance_hovering-over-PT-link[/exp_ref]]. The page lists all the Private Topics you have ever started, or been a participant in, in much the same way as a normal forum [[exp_ref]correspondance_PT-page[/exp_ref]].
 
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="The Private Topics link" float="left"]correspondance_hovering-over-PT-link[/exp_thumb]
 [exp_thumb="Creating a Private Topic (1)" float="left"]correspondance_create-PT-page[/exp_thumb]
 [exp_thumb="Our new Private Topic" float="right"]correspondance_new-PT[/exp_thumb]
 [exp_thumb="Creating a Private Topic (2)" float="right"]correspondance_create-PT-page1[/exp_thumb]
-[html]</div>[/html]
+[/surround]
 [title="3"]Private Topic notifications[/title]
 
 [exp_thumb="An e-mail notification of a new Private Topic" float="left"]correspondance_Thunderbird-notification-e-mail[/exp_thumb]

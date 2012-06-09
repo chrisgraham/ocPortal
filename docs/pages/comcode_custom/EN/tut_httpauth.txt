@@ -9,12 +9,12 @@ Sometimes, however, for additional security and/or integration reasons, it is de
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]HTTP authentication in ocPortal[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [box="Security Tip" width="25em" float="right"]Note that when using HTTP authentication, the user-name and passwords are available in plain text to any PHP script that can exist in the same domain as the ocPortal installation: although you would normally trust those with the ability to write PHP scripts on your domain, make sure you consider this ability for them to read anyone's password.[/box]
 If enabled, any new [concept]HTTP-Auth[/concept] user ocPortal sees, is added to ocPortal, after ocPortal collects some additional details for that user (including the desired user-name to connect to the HTTP-auth user-name, and their e-mail address). Note that by the time ocPortal sees a page view, the http-authentication scheme has already guaranteed that it is by a real, authenticated user. Once the activation information has been collected, no form of additional login is ever required for any zone controlled by HTTP authentication (although it is possible to override the HTTP authentication with a manual login if desired, for example, by staff).
 
 [i]Note: [/i] Account completion is not considered the same as joining. Members will by put into all default usergroups, but the ocPortal feature for giving members a choice of usergroup is not supported (that feature is only for members that join manually, as it requires a two-form join process, and we designed HTTP-auth profile completion to just by one-form).
-[html]</div>[/html]
+[/surround]
 [title="2"]Instructions[/title]
 
 [exp_thumb="Enabling HTTP-authentication recognition in ocPortal" float="right"]httpauth_enable[/exp_thumb]

@@ -18,13 +18,13 @@ Cheque processing is relatively straight forward, but more infrastructure is nee
  - by getting an agent to fully handle the transaction and relay the funds
  - by having a merchant account with a bank, using the banks infrastructure and your bank account to manage the transaction yourself
 
-[html]<div class="float_surrounder">[/html]
+[surround]
 [box="Important note" width="25em" float="right"]It is the webmasters responsibility to research any payment system before use, to convince themselves they are happy with the quality and terms of service. Whilst ocPortal by default only supports PayPal, WorldPay and SecPay, this should not be considered an endorsement of any of those services.[/box]
 ocPortal, by default, allows payment via PayPal, WorldPay and SecPay, although it could be extended to support any kind of payment gateway if extended and customised by an appropriate professional ([page="site:support"]ocProducts can do this for you[/page]).
 
 PayPal was chosen because it is without doubt the leading form of payment on the Internet, easy to setup, and flexible in that it can provide support for funding direct from bank accounts, or cheque, as well as debit and credit card processing.
 WorldPay and SecPay are popular alternatives to PayPal.
-[html]</div>[/html]
+[/surround]
 
 [title="3"]Configuration[/title]
 
@@ -173,7 +173,7 @@ However, we've designed it to be modular. In ocPortal another method of doing a 
 4) enter the sale amount that the product expects to be receiving (which you can leave blank for it to work this out itself).
 
 [title="2"]Subscriptions[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Adding a capability for a usergroup subscription" float="right"]ecommerce_subscription[/exp_thumb]
 
 Usergroup subscriptions are implemented on top of subscriptions. Set up a usergroup description as follows:
@@ -184,14 +184,14 @@ Usergroup subscriptions are implemented on top of subscriptions. Set up a usergr
 5) Provide a path for members to visit the purchase page so that they may activate their subscription. You do this via the [tt]site:purchase[/tt] page-link, which can be inserted into a template, Comcode page, or most simply, onto your menu using the menu editor.
 
 You can add as many usergroup subscriptions as you like. For example, [by adding more subscriptions] you could make it cheaper to subscribe yearly than monthly.
-[html]</div>[/html]
+[/surround]
 [title="2"]Invoices[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="Invoicing a member" float="right"]ecommerce_invoice[/exp_thumb]
 Members may be invoiced by the staff. To do this, go to the Usage section of the Admin Zone, then the eCommerce icon, then the Create invoice icon.
 
 Members may view their invoicing history and staff may quickly locate unpaid invoices and invoices for which the work has not yet been fulfilled.
-[html]</div>[/html]
+[/surround]
 
 [title="2"]Online store[/title]
 
@@ -252,7 +252,7 @@ If you think users may be making delayed purchases as guests, you may want to co
 The currency the website works in is defined in the configuration. If you use PayPal you need to make sure your account can accept this currency and is not set up to allow people to choose which currency to pay in (as it stops ocPortal being able to verify the payment if they use this feature).
 
 [title="2"]Charts[/title]
-[html]<div class="float_surrounder">[/html]
+[surround]
 [exp_thumb="A profit/loss account for a fresh install" float="left"]ecommerce_pl[/exp_thumb]
 ocPortal includes some basic accountancy charting support. This is not intended as a replacement for a proper accountancy system, but does serve as a very useful overview of finances and a record of activity.
 
@@ -262,7 +262,7 @@ ocPortal can generate the following charts over a custom specified period:
  - Profit and loss account
  - Cash flow diagram
 
-[html]</div>[/html]
+[/surround]
 [title="2"]Payment system[/title]
 
 [exp_thumb="Inputting a manual transaction" float="left"]ecommerce_manual[/exp_thumb]
