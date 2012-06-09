@@ -35,7 +35,7 @@
  * @param  SHORT_INTEGER	The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
  * @param  ?TIME				The banner expiry date (NULL: never expires)
- * @param  ?ID_TEXT			The username of the banners submitter (NULL: current member)
+ * @param  ?USER				The banners submitter (NULL: current member)
  * @param  BINARY				Whether the banner has been validated
  * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
  * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
@@ -60,7 +60,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	}
 	if (has_specific_permission(get_member(),'full_banner_setup'))
 	{
-		$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_SUBMITTER'),'submitter',$GLOBALS['FORUM_DRIVER']->get_username(is_null($submitter)?get_member():$submitter),false));
+		$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_SUBMITTER'),'submitter',$GLOBALS['FORUM_DRIVER']->get_username(is_null($submitter)?get_member():$submitter),true));
 	}
 	if (get_value('disable_staff_notes')!=='1')
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));

@@ -36,6 +36,7 @@ class Module_cms_banners extends standard_aed_module
 	var $permission_module='banners';
 	var $menu_label='BANNERS';
 	var $array_key='name';
+	var $title_is_multi_lang=false;
 
 	var $do_next_type=NULL;
 
@@ -311,7 +312,7 @@ class Module_cms_banners extends standard_aed_module
 	{
 		if ($b_type=='') $b_type=get_param('b_type','');
 
-		list($fields,$this->javascript)=get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$direct_code,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,is_null($submitter)?NULL:$GLOBALS['FORUM_DRIVER']->get_username($submitter),$validated,$b_type,$title_text);
+		list($fields,$this->javascript)=get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$direct_code,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,$submitter,$validated,$b_type,$title_text);
 
 		// Permissions
 		if (get_option('use_banner_permissions')=='1') $fields->attach($this->get_permission_fields($name,NULL,($name=='')));
@@ -545,7 +546,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	 * @param  BINARY			Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
 	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($id='',$is_textual=0,$image_width=160,$image_height=600,$max_file_size=70,$comcode_inline=0)
+	function get_form_fields($id='',$is_textual=0,$image_width=160,$image_height=600,$max_file_size=250,$comcode_inline=0)
 	{
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
@@ -696,7 +697,7 @@ class Module_cms_banners_cat extends standard_aed_module
 					array('_SELF',array('type'=>'ad','b_type'=>$type),'_SELF',do_lang_tempcode('ADD_BANNER')),											// Add one
 					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_lowrange_content','cms_banners')))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF',do_lang_tempcode('EDIT_THIS_BANNER')),							 // Edit this
 					has_specific_permission(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type'=>'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):NULL,											// Edit one
-					is_null($id)?NULL:array('banners',array('type'=>'view','source'=>$id),get_module_zone('banners')),						  // View this
+					((is_null($id)) || (/*Don't go direct to view if simplified do-next on as too unnatural*/get_option('simplified_donext')=='1'))?NULL:array('banners',array('type'=>'view','source'=>$id),get_module_zone('banners')),						  // View this
 					array('admin_banners',array('type'=>'misc'),get_module_zone('admin_banners')),				// View archive
 					NULL,																						// Add to category
 					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_banners')?array('_SELF',array('type'=>'ac'),'_SELF',do_lang_tempcode('ADD_BANNER_TYPE')):NULL,				// Add one category

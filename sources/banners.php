@@ -247,7 +247,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 function nice_get_banner_types($it=NULL)
 {
 	$list=new ocp_tempcode();
-	$rows=$GLOBALS['SITE_DB']->query_select('banner_types',array('id','t_image_width','t_image_height','t_is_textual'));
+	$rows=$GLOBALS['SITE_DB']->query_select('banner_types',array('id','t_image_width','t_image_height','t_is_textual'),NULL,'ORDER BY id');
 	foreach ($rows as $row)
 	{
 		$caption=($row['id']=='')?do_lang('GENERAL'):$row['id'];
