@@ -74,6 +74,7 @@ class Hook_addon_registry_core
 		return array(
 			'themes/default/images/action.png',
 			'themes/default/images/action_small.png',
+			'sources/hooks/systems/symbols/BETA_CSS_PROPERTY.php',
 			'sources/antispam.php',
 			'sources/hooks/systems/notifications/spam_check_block.php',
 			'sources/hooks/systems/config_default/complex_uploader.php',
