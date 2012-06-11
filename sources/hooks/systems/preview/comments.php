@@ -50,22 +50,67 @@ class Hook_Preview_comments
 			);
 		}
 
+		$poster_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		$post=comcode_to_tempcode(post_param('post'));
+
+		// OCF renderings of poster
+		static $hooks=NULL;
+		if (is_null($hooks)) $hooks=find_all_hooks('modules','topicview');
+		static $hook_objects=NULL;
+		if (is_null($hook_objects))
+		{
+			$hook_objects=array();
+			foreach (array_keys($hooks) as $hook)
+			{
+				require_code('hooks/modules/topicview/'.filter_naughty_harsh($hook));
+				$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
+				if (is_null($object)) continue;
+				$hook_objects[$hook]=$object;
+			}
+		}
+		if (!is_guest())
+		{
+			require_code('ocf_members2');
+			$poster_details=ocf_show_member_box(get_member(),false,$hooks,$hook_objects,false);
+		} else
+		{
+			$custom_fields=new ocp_tempcode();
+			$poster_details=new ocp_tempcode();
+		}
+		if (!is_guest())
+		{
+			$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>true,'ID'=>strval(get_member()),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),false,true),'POSTER_USERNAME'=>$poster_name));
+		} else
+		{
+			$poster=do_template('OCF_POSTER_GUEST',array('IP_LINK'=>'','POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$poster_name));
+		}
+
 		$highlight=false;
 		$datetime_raw=time();
 		$datetime=get_timezoned_date(time());
-		$poster_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink(get_member());
-		$poster_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+		$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member());
 		$title=post_param('title','');
-		$post=comcode_to_tempcode(post_param('post'));
 		$tpl=do_template('POST',array(
 			'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,
 			'HIGHLIGHT'=>$highlight,
 			'TITLE'=>$title,
 			'TIME_RAW'=>strval($datetime_raw),
 			'TIME'=>$datetime,
-			'POSTER_LINK'=>$poster_link,
+			'POSTER_URL'=>$poster_url,
 			'POSTER_NAME'=>$poster_name,
 			'POST'=>$post,
+			'POSTER_ID'=>strval(get_member()),
+			'POSTER'=>$poster,
+			'POSTER_DETAILS'=>$poster_details,
+			'ID'=>'',
+			'CHILDREN'=>'',
+			'RATING'=>'',
+			'EMPHASIS'=>'',
+			'BUTTONS'=>'',
+			'TOPIC_ID'=>'',
+			'UNVALIDATED'=>'',
+			'IS_SPACER_POST'=>false,
+			'NUM_TO_SHOW_LIMIT'=>'0',
 		));
 		return array($tpl,NULL);
 	}
