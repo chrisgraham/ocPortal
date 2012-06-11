@@ -5,6 +5,7 @@
 
 	<input type="hidden" name="_validated" value="1" />
 	<input type="hidden" name="comcode__post" value="1" />
+	<input type="hidden" name="stub" value="" />
 
 	<div class="standardbox_wrap_classic">
 		{+START,IF_NON_EMPTY,{TITLE}}

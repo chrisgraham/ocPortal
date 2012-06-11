@@ -2656,7 +2656,7 @@ END;
 					}
 		";
 
-		$stub=get_param('stub','',true);
+		$stub=unixify_line_format(either_param('stub','',true));
 		if ($stub!='') $javascript.="
 					var df='".str_replace(chr(10),'\n',addslashes($stub))."';
 

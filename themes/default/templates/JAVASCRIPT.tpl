@@ -2477,16 +2477,22 @@ function move_to_full_editor(button,more_url)
 	}
 
 	// Tell next screen what the stub to trim is
-	if (form.elements['post'].default_substring_to_strip!='undefined')
+	if (typeof form.elements['post'].default_substring_to_strip!='undefined')
 	{
-		if (more_url.indexOf('?')==-1)
+		if (typeof form.elements['stub']!='undefined')
 		{
-			more_url+='?';
+			form.elements['stub'].value=form.elements['post'].default_substring_to_strip;
 		} else
 		{
-			more_url+='&';
+			if (more_url.indexOf('?')==-1)
+			{
+				more_url+='?';
+			} else
+			{
+				more_url+='&';
+			}
+			more_url+='stub='+window.encodeURIComponent(form.elements['post'].default_substring_to_strip);
 		}
-		more_url+='stub='+window.encodeURIComponent(form.elements['post'].default_substring_to_strip);
 	}
 
 	// Reset form target
