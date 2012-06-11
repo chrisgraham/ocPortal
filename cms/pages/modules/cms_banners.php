@@ -300,7 +300,8 @@ class Module_cms_banners extends standard_aed_module
 	{
 		if ($b_type=='') $b_type=get_param('b_type','');
 
-		list($fields,$this->javascript)=get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$direct_code,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,$submitter,$validated,$b_type,$title_text);
+		list($fields,$_javascript)=get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$direct_code,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,$submitter,$validated,$b_type,$title_text);
+		$this->javascript.=$_javascript;
 
 		// Permissions
 		if (get_option('use_banner_permissions')=='1') $fields->attach($this->get_permission_fields($name,NULL,($name=='')));
