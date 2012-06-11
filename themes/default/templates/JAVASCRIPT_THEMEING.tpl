@@ -157,7 +157,7 @@ function _getParameterParameters(definite_gets,parameter,arity,box,name,value,nu
 	if (num_done<definite_gets)
 	{
 		window.fauxmodal_prompt(
-			'{!INPUT_NECESSARY_PARAMETER^;}'+', '+parameter[i],
+			'{!INPUT_NECESSARY_PARAMETER^;}'+', '+parameter[num_done],
 			'',
 			function(v)
 			{
@@ -200,7 +200,7 @@ function _getParameterParameters(definite_gets,parameter,arity,box,name,value,nu
 				},
 				"{!INSERT_PARAMETER^#}"
 			);
-		}
+		} else callback(box,name,value,params);
 	}
 }
 
