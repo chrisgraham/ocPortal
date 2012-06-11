@@ -944,7 +944,7 @@ class Module_galleries
 			$entries->attach(do_template('GALLERY_FLOW_ENTRY',array('_GUID'=>'ff75c904ba7fe857484874483ed65f5a','DESCRIPTION'=>get_translated_tempcode($row['comments']),'_TITLE'=>get_translated_tempcode($row['title']),'TYPE'=>$type,'ID'=>strval($row['id']),'VIEWS'=>strval($row[$type.'_views']),'ADD_DATE_RAW'=>strval($row['add_date']),'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SUBMITTER'=>strval($row['submitter']),'CLASS'=>$class,'THUMB'=>$thumb,'VIEW_URL'=>$probe_url,'VIEW_URL_2'=>$view_url_2)));
 		}
 
-		$member_id=get_member_id_from_gallery_name($cat);
+		$member_id=get_member_id_from_gallery_name($cat,NULL,true);
 		if (get_forum_type()=='ocf')
 		{
 			require_code('ocf_members');
@@ -1052,7 +1052,7 @@ class Module_galleries
 		}
 
 		// Member gallery?
-		$member_id=get_member_id_from_gallery_name($cat);
+		$member_id=get_member_id_from_gallery_name($cat,NULL,true);
 		if (get_forum_type()=='ocf')
 		{
 			require_code('ocf_members');
@@ -1168,7 +1168,7 @@ class Module_galleries
 
 		list($n,$x,$nav)=$this->build_set_navigation(db_string_equal_to('cat',$cat),'',$category_name,$id,$root,'image',get_param_integer('slideshow',0),get_param_integer('wide_high',0),get_param_integer('start',0),get_param_integer('max',get_default_gallery_max()),$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,get_param('select','*'),get_param('video_select','*'));
 
-		$member_id=get_member_id_from_gallery_name($cat);
+		$member_id=get_member_id_from_gallery_name($cat,NULL,true);
 		if (get_forum_type()=='ocf')
 		{
 			require_code('ocf_members');
@@ -1304,7 +1304,7 @@ class Module_galleries
 
 		list($n,$x,$nav)=$this->build_set_navigation(db_string_equal_to('cat',$cat),'',$category_name,$id,$root,'video',get_param_integer('slideshow',0),get_param_integer('wide_high',0),get_param_integer('start',0),get_param_integer('max',get_default_gallery_max()),$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,get_param('select','*'),get_param('video_select','*'));
 
-		$member_id=get_member_id_from_gallery_name($cat);
+		$member_id=get_member_id_from_gallery_name($cat,NULL,true);
 		if (get_forum_type()=='ocf')
 		{
 			require_code('ocf_members');

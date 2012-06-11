@@ -167,13 +167,16 @@ function gallery_has_content($name)
  *
  * @param  ID_TEXT		The name of the gallery
  * @param  ?array			Gallery row (NULL: look it up)
+ * @param  boolean		Only non-NULL if it is a personal gallery
  * @return ?MEMBER		The owner of the gallery (NULL: not a member owned gallery)
  */
-function get_member_id_from_gallery_name($gallery_name,$row=NULL)
+function get_member_id_from_gallery_name($gallery_name,$row=NULL,$only_if_personal_gallery=false)
 {
 	$is_member=(substr($gallery_name,0,7)=='member_');
 	if (!$is_member)
 	{
+		if ($only_if_personal_gallery) return NULL;
+
 		if (is_null($row))
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('g_owner'),array('name'=>$gallery_name));
@@ -209,11 +212,7 @@ function show_video_details($myrow)
  */
 function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false)
 {
-	$is_member=(substr($child['name'],0,7)=='member_');
-	if ($is_member)
-	{
-		$member_id=get_member_id_from_gallery_name($child['name'],$child);
-	}
+	$member_id=get_member_id_from_gallery_name($child['name'],$child,true);
 	$url=build_url(array('page'=>'galleries','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$child['name']),$zone);
 	$_title=get_translated_text($child['fullname']);
 	$pic=$child['rep_image'];
