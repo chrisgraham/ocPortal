@@ -37,6 +37,7 @@ class Module_cms_banners extends standard_aed_module
 	var $javascript='standardAlternateFields(\'file\',\'image_url\',null,true); var form=document.getElementById(\'campaignremaining\').form; var crf=function() { form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked); }; crf(); form.elements[\'the_type\'][0].onclick=crf; form.elements[\'the_type\'][1].onclick=crf; form.elements[\'the_type\'][2].onclick=crf;';
 	var $menu_label='BANNERS';
 	var $array_key='name';
+	var $title_is_multi_lang=false;
 
 	var $do_next_type=NULL;
 
@@ -526,7 +527,7 @@ class Module_cms_banners_cat extends standard_aed_module
 
 			$total=integer_format($GLOBALS['SITE_DB']->query_value('banners','COUNT(*)',array('b_type'=>$row['id'])));
 
-			$fields->attach(results_entry(array(($row['id']=='')?do_lang('GENERAL'):$row['id'],($row['t_is_textual']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),integer_format($row['t_image_width']),integer_format($row['t_image_height']),clean_file_size($row['t_max_file_size']),($row['t_comcode_inline']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),$total,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(($row['id']=='')?do_lang('GENERAL'):$row['id'],($row['t_is_textual']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),integer_format($row['t_image_width']),integer_format($row['t_image_height']),clean_file_size($row['t_max_file_size']*1024),($row['t_comcode_inline']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),$total,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
 
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
