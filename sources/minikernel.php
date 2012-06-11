@@ -714,5 +714,13 @@ function unixify_line_format($in)
 	return str_replace(chr(13),chr(10),$in);
 }
 
+/**
+ * Make sure that the given CSS file is loaded up.
+ *
+ * @param  ID_TEXT		The CSS file required
+ */
+function require_css($css)
+{
+}
 
 

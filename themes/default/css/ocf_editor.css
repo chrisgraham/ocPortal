@@ -4,7 +4,7 @@
 */
 
 .ocf_edit_forum_category {
-	background-color: {$GET,th_background};
+	background-color: {$GET,box_title_background};
 }
 
 .ocf_edit_forum_category, .ocf_edit_forum_forum {

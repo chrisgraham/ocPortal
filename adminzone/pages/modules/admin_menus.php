@@ -80,7 +80,7 @@ class Module_admin_menus
 
 		// main_website
 		add_menu_item_simple('main_website',NULL,'FRONT_PAGE','site:');
-		add_menu_item_simple('main_website',NULL,'GUIDE','_SEARCH:help');
+		add_menu_item_simple('main_website',NULL,'HELP','_SEARCH:help');
 
 		// main_content
 

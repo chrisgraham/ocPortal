@@ -473,7 +473,7 @@ function unparse_ocselect($parsed)
 function _fields_api_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_select,$filter_key,$filter_val,$db_fields)
 {
 	require_code('fields');
-	$fields=list_to_map('id',get_catalogue_fields($catalogue_name));
+	$fields=get_catalogue_fields($catalogue_name);
 
 	$matches=array();
 	if (preg_match('#^field\_(\d+)#',$filter_key,$matches)==0) return NULL;

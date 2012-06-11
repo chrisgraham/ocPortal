@@ -72,7 +72,7 @@ function load_previews()
 
 function template_edit_page(name,id)
 {
-	if (typeof window.insert_textboxWrapping=='undefined') return false;
+	if (typeof window.insert_textbox_wrapping=='undefined') return false;
 	if (typeof window.insert_textbox=='undefined') return false;
 
 	var params='';
@@ -81,11 +81,12 @@ function template_edit_page(name,id)
 	var value=document.getElementById(name).value;
 	var value_parts=value.split('__');
 	value=value_parts[0];
+
 	if (value=='---') return false;
 
 	var ecw=document.getElementById('frame_'+box.name).contentWindow;
 
-	if ((value=='BLOCK'){+START,IF,{$VALUE_OPTION,no_faux_popups}} && (typeof window.showModalDialog!='undefined'){+END})
+	if ((value=='BLOCK'){+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}} && (typeof window.showModalDialog!='undefined'){+END})
 	{
 		if (ecw) box.value=editAreaLoader.getValue(box.name);
 		var url='{$FIND_SCRIPT_NOHTTP;,block_helper}?field_name='+box.name+'&block_type=template'+keep_stub();
@@ -128,7 +129,7 @@ function template_edit_page(name,id)
 
 			if (name.indexOf('ppdirective')!=-1)
 			{
-				insert_textboxWrapping(box,'{'+'+START,'+value+params+'}','{'+'+END}');
+				insert_textbox_wrapping(box,'{'+'+START,'+value+params+'}','{'+'+END}');
 			} else
 			{
 				var st_value;
@@ -157,7 +158,7 @@ function _get_parameter_parameters(definite_gets,parameter,arity,box,name,value,
 	if (num_done<definite_gets)
 	{
 		window.fauxmodal_prompt(
-			'{!INPUT_NECESSARY_PARAMETER^;}'+', '+parameter[i],
+			'{!INPUT_NECESSARY_PARAMETER^;}'+', '+parameter[num_done],
 			'',
 			function(v)
 			{
@@ -201,6 +202,7 @@ function _get_parameter_parameters(definite_gets,parameter,arity,box,name,value,
 				"{!INSERT_PARAMETER^#}"
 			);
 		}
+		else callback(box,name,value,params);
 	}
 }
 

@@ -741,6 +741,8 @@ class Module_downloads
 	{
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=downloads&filter=';
 
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SECTION_DOWNLOADS'))));
+
 		require_code('splurgh');
 
 		if ($GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)')>1000)

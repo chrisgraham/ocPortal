@@ -50,18 +50,6 @@ class Module_cms_banners extends standard_aed_module
 	{
 //		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		// Message if banners not on
-		if (get_option('is_on_banners')=='0')
-		{
-			if (has_actual_page_access(get_member(),'admin_config'))
-			{
-				$_config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'FEATURE'),get_module_zone('admin_config'));
-				$config_url=$_config_url->evaluate();
-				$config_url.='#group_BANNERS';
-				attach_message(do_lang_tempcode('BANNERS_NOT_ENABLED',escape_html($config_url)),'warn');
-			}
-		}
-
 		if ((has_specific_permission(get_member(),'banner_free')) && (get_option('admin_banners')=='0'))
 		{
 			attach_message(do_lang_tempcode('PERMISSION_BANNER_SKIP'),'inform');

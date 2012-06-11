@@ -157,7 +157,7 @@ function get_ticked_people(form)
 	return people;
 }
 
-function doInput_private_message(field_name)
+function do_input_private_message(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	window.fauxmodal_prompt(
@@ -171,7 +171,7 @@ function doInput_private_message(field_name)
 	);
 }
 
-function doInput_invite(field_name)
+function do_input_invite(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	window.fauxmodal_prompt(
@@ -195,7 +195,7 @@ function doInput_invite(field_name)
 	);
 }
 
-function doInput_new_room(field_name)
+function do_input_new_room(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	window.fauxmodal_prompt(

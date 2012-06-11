@@ -36,11 +36,10 @@ function init__banners()
  * @set    "click" ""
  * @param  ?string		Specific banner to display (NULL: get from URL param) (blank: randomise)
  * @param  ?string		Banner type to display (NULL: get from URL param)
- * @param  ?integer		Whether we are only showing our own banners, rather than allowing external rotation ones (NULL: get from URL param)
  * @param  ?string		The banner advertisor who is actively displaying the banner (calling up this function) and hence is rewarded (NULL: get from URL param) (blank: our own site)
  * @return ?tempcode		Result (NULL: we weren't asked to return the result)
  */
-function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_only=NULL,$source=NULL)
+function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NULL)
 {
 	require_code('images');
 	require_lang('banners');
@@ -118,19 +117,6 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 	{
 		if (is_null($dest)) $dest=get_param('dest','');
 		if (is_null($b_type)) $b_type=get_param('b_type','');
-		if (is_null($internal_only)) $internal_only=get_param_integer('internal_only',0);
-
-		if (($internal_only==0) && ($dest=='') && ($b_type=='')) // If we haven't specified that we may only show internal banners (not paid ones)
-		{
-			$adcode=get_option('money_ad_code');
-			if (($adcode!='') && ((0==$GLOBALS['SITE_DB']->query_value('banners','COUNT(*)',array('validated'=>1))) || (mt_rand(0,100)>intval(get_option('advert_chance')))))
-			{
-				if ($ret) return make_string_tempcode($adcode);
-				$echo=do_template('BASIC_HTML_WRAP',array('_GUID'=>'fd6fc24384dd13e7931ceb369a500672','TITLE'=>do_lang_tempcode('BANNER'),'CONTENT'=>$adcode));
-				$echo->evaluate_echo();
-				return NULL;
-			}
-		}
 
 		// A community banner then...
 		// ==========================

@@ -47,6 +47,7 @@ div.comcode_supported {
 	padding: 1em;
 	border: 1px solid {$GET,light_error_border};
 	background: url('{$IMG;,messageicons/notice}') 0.6em 0.75em no-repeat {$GET,light_error_background};
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 }
 
 /* This is used to fix a problem on screen readers (we don't want a paragraph used) */
@@ -94,6 +95,7 @@ Curved borders would be cool, but it does not work well with the carefully defin
 
 .form_table_field_name {
 	text-align: right;
+	color: {$GET,slightly_seeded_text};
 }
 
 .form_table_description_above_cell {
@@ -105,6 +107,7 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 .form_table_field_spacer>th, .form_table_field_spacer>td, .form_table_description_above_cell, .form_table_description_under_cell
 {
 	border: 1px dotted {$GET,pale_border};
+	color: {$GET,slightly_seeded_text};
 	padding: 0.5em;
 	background-color: {$GET,area_background} !important; /* !important is so has priority over .de_th */
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_2_background});}

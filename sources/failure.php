@@ -296,7 +296,7 @@ function _generic_exit($text,$template)
 	}
 
 	$middle=do_template($template,array('TITLE'=>$title,'TEXT'=>$text,'PROVIDE_BACK'=>true));
-	$echo=globalise($middle);
+	$echo=globalise($middle,NULL,'',true);
 	$echo->evaluate_echo();
 	exit();
 }

@@ -47,7 +47,7 @@ class Hook_themewizard_compute_equation
 			$css_file_contents=file_get_contents($css_path,FILE_TEXT);
 
 			$seed=find_theme_seed($theme);
-			$dark=(strpos($css_file_contents,'#000000; /* {$,wizard, 100% W/B} */')!==false);
+			$dark=(strpos($css_file_contents,',#000000,WB,')!==false);
 
 			$colours=calculate_theme($seed,$theme,'equations','colours',$dark);
 			$parsed_equation=parse_css_colour_expression($equation);

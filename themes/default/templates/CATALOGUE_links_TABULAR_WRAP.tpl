@@ -10,6 +10,12 @@
 			</colgroup>
 		{+END}
 
+		<thead>
+			<tr>
+				{HEAD}
+			</tr>
+		</thead>
+
 		<tbody>
 			{CONTENT}
 		</tbody>

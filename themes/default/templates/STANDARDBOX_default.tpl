@@ -29,9 +29,9 @@
 	{+START,IF_NOT_IN_ARRAY,OPTIONS,tray_open,tray_closed}
 	<div class="box_inner">
 	{+END}
-		{+START,IF_NOT_IN_ARRAY,OPTIONS,tray_open,tray_closed}
+		{+START,IF_NOT_IN_ARRAY,OPTIONS,tray_open,tray_closed}{+START,IF_NON_EMPTY,{TITLE}}
 			<h3>{TITLE}</h3>
-		{+END}
+		{+END}{+END}
 
 		{+START,IF_NON_EMPTY,{META}}
 			<div class="meta_details" role="contentinfo">

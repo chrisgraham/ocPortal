@@ -3,8 +3,8 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
-{$THEME_WIZARD_COLOR,#ffffff,installer_background_text,100% W/B}
-{$THEME_WIZARD_COLOR,#eeeeee,installer_background_text_hover,5% B/W + 95% W/B}
+{$THEME_WIZARD_COLOR,#ffffff,installer_background_text,100% WB}
+{$THEME_WIZARD_COLOR,#eeeeee,installer_background_text_hover,5% BW + 95% WB}
 {$THEME_WIZARD_COLOR,#2258a9,installer_background_a,seed sat_to 80}
 {$THEME_WIZARD_COLOR,#5476a9,installer_background_b,seed sat_to 50}
 {$THEME_WIZARD_COLOR,#ffffff,external_tool_background,100% FFFFFF}
@@ -166,7 +166,6 @@ textarea.mono_textbox {
 }
 
 .installer_forums th {
-	background-color: {$GET,area_background};
 	padding: 0;
 }
 

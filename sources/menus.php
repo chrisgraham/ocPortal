@@ -609,7 +609,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 						}
 					}
 					$pv=get_param($k,($k=='page')?$dp:NULL,true);
-					if (($pv!==$v) && (($k!='page') || (is_null($REDIRECTED_TO)) || ((!is_null($REDIRECTED_TO)) && (($v!==$REDIRECTED_TO['r_to_page']) || ($zone_name!=$REDIRECTED_TO['r_to_zone'])))) && (($k!='type') || ($v!='misc')) && (($v!=$dp) || ($k!='page') || (get_param('page','')!='')) && (substr($k,0,5)!='keep_'))
+					if (($pv!==$v) && (($k!='page') || (is_null($REDIRECTED_TO)) || ((!is_null($REDIRECTED_TO)) && (($v!==$REDIRECTED_TO['r_to_page']) || ($zone_name!=$REDIRECTED_TO['r_to_zone'])))) && (($k!='type') || ($v!='misc') || ($pv!==NULL)) && (($v!=$dp) || ($k!='page') || (get_param('page','')!='')) && (substr($k,0,5)!='keep_'))
 					{
 						$current_page=false;
 						break;

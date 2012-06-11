@@ -374,7 +374,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		$middle_spt=do_template('QUERY_SCREEN',array('_GUID'=>'5f679c8f657b4e4ae94ae2d0ed4843fa','TITLE'=>$title,'TOTAL'=>integer_format($total),'TOTAL_TIME'=>float_format($total_time,3),'QUERIES'=>$queries));
 	}
 
-	$echo=globalise($middle_spt);
+	$echo=globalise($middle_spt,NULL,'',true);
 	$echo->evaluate_echo();
 
 	exit();
@@ -963,7 +963,7 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 	$echo->evaluate_echo();
 	if (!$ret)
 	{
-		$echo=globalise(make_string_tempcode(ob_get_contents()));
+		$echo=globalise(make_string_tempcode(ob_get_contents()),NULL,'',true);
 		@ob_end_clean();
 		$echo->evaluate_echo();
 		exit();

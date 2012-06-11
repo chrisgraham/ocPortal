@@ -3,8 +3,8 @@
  Copyright (c) ocProducts, 2004-2012
 */
 
-{$THEME_WIZARD_COLOR,#5985c7,do_next_border,65% (seed sat_to 100) + 35% W/B}
-{$THEME_WIZARD_COLOR,#ffffff,do_next_title_text,100% W/B}
+{$THEME_WIZARD_COLOR,#5985c7,do_next_border,65% (seed sat_to 100) + 35% WB}
+{$THEME_WIZARD_COLOR,#ffffff,do_next_title_text,100% WB}
 
 .do_next_column1 {
 	width: 9px;

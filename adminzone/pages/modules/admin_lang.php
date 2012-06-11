@@ -110,7 +110,6 @@ class Module_admin_lang
 
 		require_code('form_templates');
 		$langs=new ocp_tempcode();
-		if ($provide_na) $langs->attach(form_input_list_entry('',false,do_lang_tempcode('NA')));
 		$langs->attach(nice_get_langs(NULL,$add_lang));
 
 		$javascript='';

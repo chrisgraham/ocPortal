@@ -64,6 +64,8 @@ class Module_admin_ipban
 			$GLOBALS['SITE_DB']->create_table('usersubmitban_ip',array(
 				'ip'=>'*IP',
 				'i_descrip'=>'LONG_TEXT',
+				'i_ban_until'=>'?TIME',
+				'i_ban_positive'=>'BINARY',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('usersubmitban_member',array(

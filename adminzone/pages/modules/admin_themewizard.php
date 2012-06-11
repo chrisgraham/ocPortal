@@ -61,6 +61,7 @@ class Module_admin_themewizard
 		require_lang('themes');
 		require_code('themes2');
 		require_code('themewizard');
+		require_css('themes_editor');
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/themewizard';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_themes';

@@ -404,8 +404,8 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	global $HAS_KEEP_IN_URL,$USE_REWRITE_PARAMS,$CACHE_BOT_TYPE,$WHAT_IS_RUNNING;
 
 	// Build up our URL base
-	$url=get_base_url(is_page_https($zone_name,isset($vars['page'])?$vars['page']:''),$zone_name);
-	$url.='/';
+	$stub=get_base_url(is_page_https($zone_name,isset($vars['page'])?$vars['page']:''),$zone_name);
+	$stub.='/';
 
 	if (($CACHE_BOT_TYPE!==NULL) && (get_bot_type()!==NULL))
 	{
@@ -466,7 +466,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		if (!$avoid_remap) $USE_REWRITE_PARAMS=$use_rewrite_params;
 	} else $use_rewrite_params=$USE_REWRITE_PARAMS;
 	$test_rewrite=NULL;
-	$self_page=(!isset($vars['page'])) || ($vars['page']=='_SELF');
+	$self_page=((!isset($vars['page'])) || ($vars['page']=='_SELF') || ($vars['page']==get_page_name())) && ($hash!='_top');
 	if ($use_rewrite_params)
 	{
 		if ((!$self_page) || ($WHAT_IS_RUNNING==='index'))
@@ -476,8 +476,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	}
 	if ($test_rewrite===NULL)
 	{
-		$script=$self_page?$WHAT_IS_RUNNING:'index';
-		$url.=$script.'.php';
+		$url=$self_page?find_script($WHAT_IS_RUNNING):($stub.'index.php');
 
 		// Fix sort order
 		if (isset($vars['id']))
@@ -513,7 +512,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		}
 	} else
 	{
-		$url.=$test_rewrite;
+		$url=$stub.$test_rewrite;
 	}
 
 	// Done

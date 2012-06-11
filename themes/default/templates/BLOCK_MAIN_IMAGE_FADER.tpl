@@ -17,6 +17,10 @@
 	</div></div>
 </div></div>
 
+<noscript>
+	{_loop_var}
+</noscript>
+
 <script type="text/javascript">// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {
 		var fp_animation=document.getElementById('image_fader_{$GET,RAND}');

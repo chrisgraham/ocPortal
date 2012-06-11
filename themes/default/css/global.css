@@ -24,23 +24,23 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 
 /* Used to initate equations (although running the Theme Wizard replaces these with what the user chooses - which is how it works) */
 {$THEME_WIZARD_COLOR,#94979d,seed,100% 94979D}
-{$THEME_WIZARD_COLOR,#ffffff,W/B,100% FFFFFF}
-{$THEME_WIZARD_COLOR,#000000,B/W,100% 000000}
+{$THEME_WIZARD_COLOR,#ffffff,WB,100% FFFFFF}
+{$THEME_WIZARD_COLOR,#000000,BW,100% 000000}
 
 /* The fundamental website */
-{$THEME_WIZARD_COLOR,#e3eaf6,fixed_width_background,11% (seed sat_to 100) + 89% W/B}
-{$THEME_WIZARD_COLOR,#8ba4ca,fixed_width_border,61% seed + 39% W/B}
-{$THEME_WIZARD_COLOR,#ffffff,main_background,100% W/B}
-{$THEME_WIZARD_COLOR,#ebebeb,main_2_background,92% W/B + 8% B/W}
+{$THEME_WIZARD_COLOR,#e3eaf6,fixed_width_background,11% (seed sat_to 100) + 89% WB}
+{$THEME_WIZARD_COLOR,#8ba4ca,fixed_width_border,61% seed + 39% WB}
+{$THEME_WIZARD_COLOR,#ffffff,main_background,100% WB}
+{$THEME_WIZARD_COLOR,#ebebeb,main_2_background,92% WB + 8% BW}
 
 /* Header */
 {$THEME_WIZARD_COLOR,#e3e9f2,header_background,100% area_2_background}
 {$THEME_WIZARD_COLOR,#426aa9,navigation_background,100% seed}
-{$THEME_WIZARD_COLOR,#edf2f9,navigation_text,15% navigation_top + 85% W/B}
+{$THEME_WIZARD_COLOR,#edf2f9,navigation_text,15% navigation_top + 85% WB}
 {$THEME_WIZARD_COLOR,#426aa9,navigation_message_text,100% seed}
 {$THEME_WIZARD_COLOR,#a5bde1,global_navigation_underline_current,75% navigation_top + 25% FFFFFF}
-{$THEME_WIZARD_COLOR,#ffffff,global_navigation_hover,100% W/B}
-{$THEME_WIZARD_COLOR,#edf2f9,global_navigation_text,15% navigation_top + 85% W/B}
+{$THEME_WIZARD_COLOR,#ffffff,global_navigation_hover,100% WB}
+{$THEME_WIZARD_COLOR,#edf2f9,global_navigation_text,15% navigation_top + 85% WB}
 {$THEME_WIZARD_COLOR,#fbffc1,zone_jump_out_1_shadow,100% FBFFC1}
 {$THEME_WIZARD_COLOR,#ff4264,zone_jump_out_2_shadow,100% FF4264}
 
@@ -55,112 +55,109 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#ffffff,native_ui_alertfield_foreground,100% FFFFFF}
 {$THEME_WIZARD_COLOR,#888888,unfilled_input_text,100% 888888}
 {$THEME_WIZARD_COLOR,#888888,locked_input_field,100% 888888}
-{$THEME_WIZARD_COLOR,#94979d,comfortable_input_field_text,65% area_2_background + 35% B/W}
+{$THEME_WIZARD_COLOR,#94979d,comfortable_input_field_text,65% area_2_background + 35% WB}
 {$THEME_WIZARD_COLOR,#b5b5b5,tab_border,100% b5b5b5}
 {$THEME_WIZARD_COLOR,#008000,adwords_style_text,100% 008000} /* Google adwords style */
-{$THEME_WIZARD_COLOR,#ffffff,floating_section_background,100% W/B}
+{$THEME_WIZARD_COLOR,#ffffff,floating_section_background,100% WB}
 {$THEME_WIZARD_COLOR,#fffcc4,floating_alert_background,100% fffcc4}
 
 /* Colours to mirror human understandings (i.e. non-thematic) */
 {$THEME_WIZARD_COLOR,#ffffaa,yellow_highlight_background,100% #FFFFAA}
 {$THEME_WIZARD_COLOR,#ff8888,red_highlight_background,100% FF8888}
 {$THEME_WIZARD_COLOR,#ff8888,light_error_border,100% FF8888}
-{$THEME_WIZARD_COLOR,#fff2f2,light_error_background,95% W/B + 5% FF0000}
+{$THEME_WIZARD_COLOR,#fff2f2,light_error_background,95% WB + 5% FF0000}
 {$THEME_WIZARD_COLOR,#d91522,red_highlight_text,80% FF0000 + 20% seed}
 {$THEME_WIZARD_COLOR,#00aa00,green_highlight_text,100% 00AA00}
 {$THEME_WIZARD_COLOR,#ede2e4,required_background,60% (area_4_background hue_to 0) + 40% area_background}
 {$THEME_WIZARD_COLOR,#ebe6eb,required_2_background,40% (area_4_background hue_to 0) + 60% area_background}
-{$THEME_WIZARD_COLOR,#000000,dark_shadow,100% B/W}
+{$THEME_WIZARD_COLOR,#000000,dark_shadow,100% BW}
 
 /* For standard elements */
-{$THEME_WIZARD_COLOR,#325180,heading_text,76% seed + 24% B/W}
-{$THEME_WIZARD_COLOR,#051225,a.hover,30% a.link + 70% B/W}
-{$THEME_WIZARD_COLOR,#113871,a.visited,67% (seed sat_to 85) + 33% B/W}
-{$THEME_WIZARD_COLOR,#123d7b,a.link,73% (seed sat_to 85) + 27% B/W}
-{$THEME_WIZARD_COLOR,#9fb7db,th_background,60% area_background + 40% seed}
-{$THEME_WIZARD_COLOR,#86a0c7,th_2_background,40% area_background + 60% seed}
-{$THEME_WIZARD_COLOR,#313740,th_text,30% th_background + 70% B/W}
-{$THEME_WIZARD_COLOR,#bdcbe1,th_secondary_text,35% seed + 65% W/B}
+{$THEME_WIZARD_COLOR,#325180,heading_text,76% seed + 24% BW}
+{$THEME_WIZARD_COLOR,#051225,a.hover,30% a.link + 70% BW}
+{$THEME_WIZARD_COLOR,#113871,a.visited,67% (seed sat_to 85) + 33% BW}
+{$THEME_WIZARD_COLOR,#123d7b,a.link,73% (seed sat_to 85) + 27% BW}
+{$THEME_WIZARD_COLOR,#bdcbe1,th_secondary_text,35% seed + 65% WB}
 {$THEME_WIZARD_COLOR,#a2b6d5,hr,60% area_background + 40% seed}
-{$THEME_WIZARD_COLOR,#325180,divider_line,76% seed + 24% B/W}
+{$THEME_WIZARD_COLOR,#325180,divider_line,76% seed + 24% BW}
 
 /* Borders */
-{$THEME_WIZARD_COLOR,#6b81a1,standard_border,95% (seed sat_to 33) + 5% B/W}
-{$THEME_WIZARD_COLOR,#4b5a71,dark_border,70% standard_border + 30% B/W}
-{$THEME_WIZARD_COLOR,#c1cee3,pale_border,33% seed + 67% W/B}
+{$THEME_WIZARD_COLOR,#6b81a1,standard_border,95% (seed sat_to 33) + 5% BW}
+{$THEME_WIZARD_COLOR,#4b5a71,dark_border,70% standard_border + 30% BW}
+{$THEME_WIZARD_COLOR,#c1cee3,pale_border,33% seed + 67% WB}
 
 /* Backgrounds (quiet a variety, as we need to be able to stack them, to have both hover and active effects, to have zebra striping, and various other levels of perceived focus) */
-{$THEME_WIZARD_COLOR,#eaeff6,area_background,11% seed + 89% W/B}
-{$THEME_WIZARD_COLOR,#e3e9f2,area_2_background,15% seed + 85% W/B}
-{$THEME_WIZARD_COLOR,#eef2f7,area_3_background,60% area_2_background + 40% W/B}
-{$THEME_WIZARD_COLOR,#d9e1ee,area_4_background,20% seed + 80% W/B}
-{$THEME_WIZARD_COLOR,#f4f4f4,area_5_background,3% seed + 97% W/B}
-{$THEME_WIZARD_COLOR,#f2f5f9,area_faded_background,80% area_background + 20% W/B}
-{$THEME_WIZARD_COLOR,#d9e1ee,area_zebra_background,20% seed + 80% W/B}
-{$THEME_WIZARD_COLOR,#e6d8df,area_hover_background,92% (area_background hue_to 92) + 8% B/W}
-{$THEME_WIZARD_COLOR,#d9e1ee,area_hover_2_background,20% seed + 80% W/B}
-{$THEME_WIZARD_COLOR,#c2d1e5,area_hover_3_background,93% (area_background sat_to 15) + 7% B/W}
-{$THEME_WIZARD_COLOR,#c2d1e5,area_current_background,93% (area_background sat_to 15) + 7% B/W}
-{$THEME_WIZARD_COLOR,#dce2eb,point_of_interest_background,97% area_2_background + 2% B/W}
-{$THEME_WIZARD_COLOR,#6b81a1,footer_background,95% (seed sat_to 33) + 5% B/W}
-{$THEME_WIZARD_COLOR,#607490,footer_2_background,85% (seed sat_to 33) + 15% B/W}
+{$THEME_WIZARD_COLOR,#eaeff6,area_background,11% seed + 89% WB}
+{$THEME_WIZARD_COLOR,#e3e9f2,area_2_background,15% seed + 85% WB}
+{$THEME_WIZARD_COLOR,#eef2f7,area_3_background,60% area_2_background + 40% WB}
+{$THEME_WIZARD_COLOR,#d9e1ee,area_4_background,20% seed + 80% WB}
+{$THEME_WIZARD_COLOR,#f4f4f4,area_5_background,3% seed + 97% WB}
+{$THEME_WIZARD_COLOR,#f2f5f9,area_faded_background,80% area_background + 20% WB}
+{$THEME_WIZARD_COLOR,#d9e1ee,area_zebra_background,20% seed + 80% WB}
+{$THEME_WIZARD_COLOR,#e6d8df,area_hover_background,92% (area_background hue_to 92) + 8% BW}
+{$THEME_WIZARD_COLOR,#d9e1ee,area_hover_2_background,20% seed + 80% WB}
+{$THEME_WIZARD_COLOR,#c2d1e5,area_hover_3_background,93% (area_background sat_to 15) + 7% BW}
+{$THEME_WIZARD_COLOR,#c2d1e5,area_current_background,93% (area_background sat_to 15) + 7% BW}
+{$THEME_WIZARD_COLOR,#dce2eb,point_of_interest_background,97% area_2_background + 2% BW}
+{$THEME_WIZARD_COLOR,#6b81a1,footer_background,95% (seed sat_to 33) + 5% BW}
+{$THEME_WIZARD_COLOR,#607490,footer_2_background,85% (seed sat_to 33) + 15% BW}
 /* Backgrounds, employing color wheel theory */
-{$THEME_WIZARD_COLOR,#d9e1ee,area_highlight_background,20% seed + 80% W/B}
-{$THEME_WIZARD_COLOR,#d9ecee,area_highlight_left_complement_background,20% (seed hue_add -21) + 80% W/B}
-{$THEME_WIZARD_COLOR,#dbd9ee,area_highlight_right_complement_background,20% (seed hue_add +21) + 80% W/B}
-{$THEME_WIZARD_COLOR,#eee6d9,area_highlight_complement_background,20% (seed hue_add 128) + 80% W/B}
+{$THEME_WIZARD_COLOR,#d9e1ee,area_highlight_background,20% seed + 80% WB}
+{$THEME_WIZARD_COLOR,#d9ecee,area_highlight_left_complement_background,20% (seed hue_add -21) + 80% WB}
+{$THEME_WIZARD_COLOR,#dbd9ee,area_highlight_right_complement_background,20% (seed hue_add +21) + 80% WB}
+{$THEME_WIZARD_COLOR,#eee6d9,area_highlight_complement_background,20% (seed hue_add 128) + 80% WB}
 
 /* Text */
-{$THEME_WIZARD_COLOR,#0d1522,slightly_seeded_text,20% seed + 80% B/W}
-{$THEME_WIZARD_COLOR,#325180,area_text,76% seed + 24% B/W}
-{$THEME_WIZARD_COLOR,#2a3d5a,area_key_text,53% (seed sat_to 53) + 47% B/W}
-{$THEME_WIZARD_COLOR,#0d2d5d,area_link,55% (seed sat_to 86) + 45% B/W}
-{$THEME_WIZARD_COLOR,#8497b3,point_of_interest_border,50% dark_border + 50% W/B}
+{$THEME_WIZARD_COLOR,#0d1522,slightly_seeded_text,20% seed + 80% BW}
+{$THEME_WIZARD_COLOR,#325180,area_text,76% seed + 24% BW}
+{$THEME_WIZARD_COLOR,#2a3d5a,area_key_text,53% (seed sat_to 53) + 47% BW}
+{$THEME_WIZARD_COLOR,#0d2d5d,area_link,55% (seed sat_to 86) + 45% BW}
+{$THEME_WIZARD_COLOR,#8497b3,point_of_interest_border,50% dark_border + 50% WB}
 /* Text, employing color wheel theory */
-{$THEME_WIZARD_COLOR,#214f55,slightly_seeded_left_complement_text,50% (seed hue_add -21) + 50% B/W}
-{$THEME_WIZARD_COLOR,#262155,slightly_seeded_right_complement_text,50% (seed hue_add +21) + 50% B/W}
-{$THEME_WIZARD_COLOR,#554121,slightly_seeded_complement_text,50% (seed hue_add 128) + 50% B/W}
+{$THEME_WIZARD_COLOR,#214f55,slightly_seeded_left_complement_text,50% (seed hue_add -21) + 50% BW}
+{$THEME_WIZARD_COLOR,#262155,slightly_seeded_right_complement_text,50% (seed hue_add +21) + 50% BW}
+{$THEME_WIZARD_COLOR,#554121,slightly_seeded_complement_text,50% (seed hue_add 128) + 50% BW}
 
 /* Special colour for box titles */
-{$THEME_WIZARD_COLOR,#ffffff,box_title_text,100% W/B}
+{$THEME_WIZARD_COLOR,#ffffff,box_title_text,100% WB}
 {$THEME_WIZARD_COLOR,#426aa9,box_title_background,100% seed}
 
 /* Special colour for code/quote boxes */
-{$THEME_WIZARD_COLOR,#8ea6cb,code_title_background,60% seed + 40% W/B}
-{$THEME_WIZARD_COLOR,#3f3f3f,code_text,25% code_background + 85% B/W}
-{$THEME_WIZARD_COLOR,#fafbfd,code_background,25% area_background + 75% W/B}
-{$THEME_WIZARD_COLOR,#7f9ac5,code_border,68% seed + 32% W/B}
+{$THEME_WIZARD_COLOR,#8ea6cb,code_title_background,60% seed + 40% WB}
+{$THEME_WIZARD_COLOR,#3f3f3f,code_text,25% code_background + 85% BW}
+{$THEME_WIZARD_COLOR,#fafbfd,code_background,25% area_background + 75% WB}
+{$THEME_WIZARD_COLOR,#7f9ac5,code_border,68% seed + 32% WB}
 
 /* Drop down menus should look 'above' the site */
-{$THEME_WIZARD_COLOR,#c1cee3,dropdown_menu_background,33% seed + 67% W/B}
-{$THEME_WIZARD_COLOR,#d9e1ee,dropdown_menu_text,20% seed + 80% W/B}
+{$THEME_WIZARD_COLOR,#c1cee3,dropdown_menu_background,33% seed + 67% WB}
+{$THEME_WIZARD_COLOR,#d9e1ee,dropdown_menu_text,20% seed + 80% WB}
 
 /* Global-level messages should stand out compared to other styling */
 {$THEME_WIZARD_COLOR,#ebe773,message_border,100% EBE773} /* Intentionally coloured on all themes */
-{$THEME_WIZARD_COLOR,#4b5a71,message_highlighted_part,70% standard_border + 30% B/W}
+{$THEME_WIZARD_COLOR,#4b5a71,message_highlighted_part,70% standard_border + 30% BW}
 
 /* Footer */
-{$THEME_WIZARD_COLOR,#0a1019,footer_link,15% seed + 85% B/W}
-{$THEME_WIZARD_COLOR,#1a2a44,footer_link_hover,40% seed + 60% B/W}
-{$THEME_WIZARD_COLOR,#8ba4ca,footer_tinting,61% seed + 39% W/B}
-{$THEME_WIZARD_COLOR,#ffffff,footer_text,100% W/B}
-{$THEME_WIZARD_COLOR,#dbe6f7,inverted_text,35% footer_tinting + 65% W/B}
+{$THEME_WIZARD_COLOR,#0a1019,footer_link,15% seed + 85% BW}
+{$THEME_WIZARD_COLOR,#1a2a44,footer_link_hover,40% seed + 60% BW}
+{$THEME_WIZARD_COLOR,#8ba4ca,footer_tinting,61% seed + 39% WB}
+{$THEME_WIZARD_COLOR,#ffffff,footer_text,100% WB}
+{$THEME_WIZARD_COLOR,#dbe6f7,inverted_text,35% footer_tinting + 65% WB}
 
 /* Used for image generation */
-{$THEME_WIZARD_COLOR,#e8edf6,washed_out,10% (seed sat_to 85) + 90% W/B}
+{$THEME_WIZARD_COLOR,#e8edf6,washed_out,10% (seed sat_to 85) + 90% WB}
 {$THEME_WIZARD_COLOR,#5a85c5,lgrad,67% (seed sat_to 95) + 33% FFFFFF} /* We always want the light source coming from the top */
 {$THEME_WIZARD_COLOR,#345495,dgrad,95% (seed sat_to 65) + 5% 000000} /* We always want the light source coming from the top */
 {$THEME_WIZARD_COLOR,#5477bd,ltgrad,67% (seed sat_to 135) + 33% FFFFFF}  /* We always want the light source coming from the top */
 {$THEME_WIZARD_COLOR,#707c95,dtgrad,95% (seed sat_to 25) + 5% 000000} /* We always want the shadows at the bottom */
-{$THEME_WIZARD_COLOR,#e1e2e3,comcode_quote_left,48% comcode_quote_right + 52% W/B}
+{$THEME_WIZARD_COLOR,#e1e2e3,comcode_quote_left,48% comcode_quote_right + 52% WB}
 {$THEME_WIZARD_COLOR,#bfc1c4,comcode_quote_right,100% code_title_background}
-{$THEME_WIZARD_COLOR,#0e2a63,a.link__dark,63% (seed sat_to 85) + 37% B/W}
-{$THEME_WIZARD_COLOR,#030a17,a.hover__dark,20% a.link + 80% B/W}
-{$THEME_WIZARD_COLOR,#707377,special_borderer,76% seed + 24% B/W}
-{$THEME_WIZARD_COLOR,#0a1e47,special_middle,45% (seed sat_to 85) + 65% B/W}
-{$THEME_WIZARD_COLOR,#597bbf,ocfpostindicator,65% (seed sat_to 100) + 35% W/B}
-{$THEME_WIZARD_COLOR,#597bf7,ocfredirectindicator,65% (seed sat_to 100) + 35% W/B + 000038 - 061600}
-{$THEME_WIZARD_COLOR,#93a9d5,navigation_peak,90% navigation_top + 10% W/B}
+{$THEME_WIZARD_COLOR,#0e2a63,a.link__dark,63% (seed sat_to 85) + 37% BW}
+{$THEME_WIZARD_COLOR,#030a17,a.hover__dark,20% a.link + 80% BW}
+{$THEME_WIZARD_COLOR,#707377,special_borderer,76% seed + 24% BW}
+{$THEME_WIZARD_COLOR,#0a1e47,special_middle,45% (seed sat_to 85) + 65% BW}
+{$THEME_WIZARD_COLOR,#597bbf,ocfpostindicator,65% (seed sat_to 100) + 35% WB}
+{$THEME_WIZARD_COLOR,#597bf7,ocfredirectindicator,65% (seed sat_to 100) + 35% WB + 000038 - 061600}
+{$THEME_WIZARD_COLOR,#93a9d5,navigation_peak,90% navigation_top + 10% WB}
 {$THEME_WIZARD_COLOR,#869fd0,navigation_top,48% (seed sat_to 98) + 52% FFFFFF}
 {$THEME_WIZARD_COLOR,#2d5098,navigation_bot,97% (seed sat_to 71) + 3% 000000}
 
@@ -265,13 +262,17 @@ th>p:last-child, td>p:last-child {
 	margin-bottom: 0;
 }
 th, .fake_th {
-	background-color: {$GET,th_background};
-	color: {$GET,th_text};
+	background-color: {$GET,box_title_background};
+	color: {$GET,box_title_text};
 	font-weight: bold;
 	text-align: center;
 }
+th a, th a:hover {
+	color: {$GET,box_title_text};
+}
 thead>tr>th {
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,th_background}\, {$GET,th_2_background});}
+	background-color: {$GET,box_title_background};
+	background-repeat: repeat-x;
 }
 /* .de_th makes a th look like a td, yet allows us to use correct markup */
 td, th.de_th {
@@ -1184,7 +1185,7 @@ th.meta_data_title {
 
 	/* .box_inner set us in the wrong position, so fiddle around a bit to move us back to be flush */
 	margin: -0.506em 0 0.506em -0.506em; /* Would be -0.5 but Opera does not seem to like */
-	padding: 0.3em 0.8em 0.3em 0.3em;
+	padding: 0.4em 0.8em 0.4em 0.3em;
 	width: 100%;
 }
 .box_inner>h2>.right .button_page {
@@ -1514,19 +1515,56 @@ table.scrollable_inside {
 }
 
 .results_table {
-	border-collapse: collapse;
+	border-collapse: separate;
+	border-spacing: 0;
 	margin: 1em 0;
 }
 
-.results_table, .results_table td, .results_table th {
-	border: 1px solid {$GET,standard_border};
+.results_table thead tr:first-child *:first-child, .results_table tbody tr:first-child *:first-child {
+	{$BETA_CSS_PROPERTY,border-top-left-radius: 5px;}
+}
+.results_table thead tr:first-child *:last-child, .results_table tbody tr:first-child *:last-child {
+	{$BETA_CSS_PROPERTY,border-top-right-radius: 5px;}
+}
+.results_table thead tr:first-child *:first-child+results_table tbody tr:first-child *:first-child {
+	{$BETA_CSS_PROPERTY,border-top-left-radius: 0px;}
+}
+.results_table thead tr:first-child *:last-child+results_table tbody tr:first-child *:last-child {
+	{$BETA_CSS_PROPERTY,border-top-right-radius: 0px;}
+}
+.results_table tbody tr:last-child *:first-child {
+	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 5px;}
+}
+.results_table tbody tr:last-child *:last-child {
+	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 5px;}
+}
+
+.results_table th {
+	text-align: right;
+}
+
+.results_table thead th {
+	text-align: center;
+}
+
+.results_table td, .results_table th {
+	border-top: 1px solid {$GET,standard_border};
+	border-right: 1px solid {$GET,standard_border};
+}
+.results_table td:first-child, .results_table th:first-child {
+	border-left: 1px solid {$GET,standard_border};
+}
+.results_table tr:last-child td, .results_table tr:last-child th {
+	border-bottom: 1px solid {$GET,standard_border};
 }
 
 .results_table .zebra_0 th, .results_table .zebra_0 td, div.zebra_0 {
 	background-color: {$GET,area_zebra_background} !important;
+	color: {$GET,slightly_seeded_text};
 }
 .results_table .zebra_1 th, .results_table .zebra_1 td, div.zebra_1 {
 	background-color: {$GET,area_background} !important;
+	color: {$GET,slightly_seeded_text};
 }
 div.zebra_0, div.zebra_1 {
 	border: 1px solid {$GET,standard_border};
@@ -1799,9 +1837,6 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .category_sorter {
-	text-align: center;
-	margin: 1em auto 0 auto;
-	padding: 1em;
 }
 .category_sorter label {
 	font-weight: bold;
@@ -1816,7 +1851,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 
 {+START,IF,{$NOT,{$MOBILE}}}
 	.index_screen_fancier_screen_entries {
-		margin-{!en_left}: 30px;
+		margin-{!en_left}: 1em;
 	}
 {+END}
 .index_screen_fancier_entry {
@@ -1830,11 +1865,11 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	background: url('{$IMG;,action_link}') 0 5px no-repeat;
 }
 .index_screen_fancier_entry_count {
-	font-size: 0.8em;
+	font-size: 0.9em;
 	font-weight: normal;
 }
 .index_screen_fancier_entry_description {
-	font-size: 0.8em;
+	font-size: 0.9em;
 	margin-{!en_left}: 18px; /* Due to action_link image */
 }
 
@@ -1924,7 +1959,7 @@ div.wysiwyg_toolbar_color_finder {
 
 .ocp_chat {
 	margin: 20px;
-	font-size: 0.85em;
+	font-size: 0.9em;
 	float: right;
 	width: 260px;
 }
@@ -2043,7 +2078,7 @@ div.wysiwyg_toolbar_color_finder {
 
 .post .post_subline {
 	margin-bottom: 1em;
-	font-size: 0.8em;
+	font-size: 0.9em;
 }
 
 .post .post_poster {
@@ -2377,7 +2412,7 @@ div.associated_details {
 }
 
 .associated_breadcrumbs {
-	font-size: 0.8em;
+	font-size: 0.85em;
 	color: {$GET,a.link};
 }
 
@@ -3338,7 +3373,7 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 
 .comcode_exp_thumb p {
 	color: {$GET,area_text};
-	font-size: 0.8em;
+	font-size: 0.85em;
 	margin: 0.5em;
 }
 
@@ -3367,7 +3402,7 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 }
 
 .comcode_concepts_content {
-	padding-bottom: 0.8em;
+	padding-bottom: 0.85em;
 }
 
 .comcode_table_of_contents {

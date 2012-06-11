@@ -18,7 +18,7 @@
  * @package		core
  */
 
-class Hook_symbol_CATALOGUE_ENTRY_ALL_FIELD_VALUES
+class Hook_symbol_BETA_CSS_PROPERTY
 {
 
 	/**

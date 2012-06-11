@@ -87,9 +87,11 @@
 				</div></div>
 			</div>
 
-			<div class="ratings right">
-				{RATING_DETAILS}
-			</div>
+			{+START,IF_NON_EMPTY,{ENTRIES}{CURRENT_ENTRY}}
+				<div class="ratings right">
+					{RATING_DETAILS}
+				</div>
+			{+END}
 		{+END}
 	</div>
 
@@ -115,7 +117,9 @@
 		5_REL=edit
 	{+END}
 
-	{COMMENT_DETAILS}
+	{+START,IF_NON_EMPTY,{ENTRIES}{CURRENT_ENTRY}}
+		{COMMENT_DETAILS}
+	{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}
 </div>

@@ -73,8 +73,6 @@ class Hook_sw_banners
 					$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'advertise','zone_name'=>'site','group_id'=>$id));
 			}
 		}
-		$test=$GLOBALS['SITE_DB']->query_value('banners','COUNT(*)');
-		if ($test==0) set_option('is_on_banners','0');
 	}
 }
 

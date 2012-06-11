@@ -253,6 +253,7 @@ class Module_search
 	{
 		require_lang('search');
 		require_css('search');
+		require_css('forms');
 		require_code('database_search');
 
 		if (function_exists('set_time_limit')) @set_time_limit(15); // We really don't want to let it thrash the DB too long

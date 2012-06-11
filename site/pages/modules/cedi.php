@@ -206,7 +206,7 @@ class Module_cedi
 
 			require_lang('cedi');
 			//add_menu_item_simple('main_content',NULL,'CEDI','_SEARCH:cedi:type=misc');
-			add_menu_item_simple('wiki_features',NULL,'CEDI','_SEARCH:cedi:type=misc');
+			add_menu_item_simple('wiki_features',NULL,'HOME','_SEARCH:cedi:type=misc');
 			add_menu_item_simple('wiki_features',NULL,'RANDOM_PAGE','_SEARCH:cedi:type=random');
 			add_menu_item_simple('wiki_features',NULL,'CEDI_CHANGELOG','_SEARCH:cedi:type=changes');
 			add_menu_item_simple('wiki_features',NULL,'TREE','_SEARCH:cedi:type=tree');
@@ -370,6 +370,8 @@ class Module_cedi
 	 */
 	function random()
 	{
+		attach_message(do_lang_tempcode('TAKEN_RANDOM_WIKI_PAGE'),'inform');
+
 		$num_pages=$GLOBALS['SITE_DB']->query_value('seedy_pages','MAX(id)');
 		$pages=array();
 		do // Loop. picking random pages between 0 and max-id till we find one that exists
@@ -610,6 +612,8 @@ class Module_cedi
 	function changes()
 	{
 		$title=get_screen_title('CEDI_CHANGELOG');
+
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CEDI'))));
 
 		require_code('templates_internalise_screen');
 		$test_tpl=internalise_own_screen($title);
@@ -1080,6 +1084,8 @@ class Module_cedi
 	function tree()
 	{
 		require_code('splurgh');
+
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CEDI'))));
 
 		if ($GLOBALS['SITE_DB']->query_value('seedy_pages','COUNT(*)')>3000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));

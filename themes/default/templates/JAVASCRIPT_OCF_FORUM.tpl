@@ -17,11 +17,11 @@ function ocf_check_poll(form,min,max,error)
 	return answer;
 }
 
-function ignore_ocf_notification(ignore_url)
+function ignore_ocf_notification(ignore_url,ob)
 {
 	do_ajax_request(ignore_url);
 
-	var o=this.parentNode.parentNode;
+	var o=ob.parentNode.parentNode.parentNode.parentNode;
 	o.parentNode.removeChild(o);
 
 	var nots=get_elements_by_class_name(document,'ocf_member_column_pts');

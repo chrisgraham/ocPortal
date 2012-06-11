@@ -88,7 +88,7 @@ abbr.dtstart, abbr.dtend {
 
 .calendar_month th {
 	width: 12%;
-	border: 1px solid {$GET,th_background}; /* Obscures border */
+	border: 1px solid {$GET,box_title_background}; /* Obscures border */
 }
 
 .calendar_month_entry {
@@ -125,7 +125,7 @@ abbr.dtstart, abbr.dtend {
 }
 
 .calendar_week th {
-	border: 1px solid {$GET,th_background}; /* Obscures border */
+	border: 1px solid {$GET,box_title_background}; /* Obscures border */
 }
 
 .calendar_week_hour { /* Left-most column */
@@ -257,7 +257,7 @@ abbr.dtstart, abbr.dtend {
 }
 
 .calendar_day_table th, .calendar_year_month th {
-	border: 1px solid {$GET,th_background}; /* Matches border above, but uses bg-color so invisible */
+	border: 1px solid {$GET,box_title_background}; /* Matches border above, but uses bg-color so invisible */
 }
 
 /* The following classes are for the varying degress of priority that

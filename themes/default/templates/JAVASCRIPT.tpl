@@ -1528,6 +1528,7 @@ function convert_tooltip(element)
 			var prefix=element.innerText+': ';
 			if (title.substr(0,prefix.length)==prefix)
 				title=title.substring(prefix.length,title.length);
+			else if (title==element.innerText) return;
 		}
 
 		// Stop the tooltip code adding to these events, by defining our own (it'll not overwrite existing events).
@@ -1886,6 +1887,7 @@ function set_opacity(element,fraction)
 	if (typeof element.style.opacity!='undefined')
 	{
 		element.style.opacity=fraction;
+		element.style.filter='alpha(opacity='+(fraction*100)+')';
 		return;
 	}
 }

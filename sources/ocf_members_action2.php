@@ -1437,9 +1437,9 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 
 	require_code('uploads');
 
-	if ((!is_swf_upload()) &&((!array_key_exists($upload_name,$_FILES)) || (!is_uploaded_file($_FILES[$upload_name]['tmp_name']))))
+	if ((!is_swf_upload()) && ((!array_key_exists($upload_name,$_FILES)) || (!is_uploaded_file($_FILES[$upload_name]['tmp_name']))))
 	{
-		$x=post_param($param_name);
+		$x=post_param($param_name,'');
 		if (($x!='') && (url_is_local($x)) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 		{
 			$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_photo_url',array('id'=>$member_id));

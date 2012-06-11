@@ -782,7 +782,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (addon_installed('banners'))
 				{
 					global $SITE_INFO;
-					$is_on_banners=((get_option('is_on_banners')=='1') && ((!has_specific_permission(get_member(),'banner_free')) || (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_option('admin_banners')=='1')) || (!is_null($GLOBALS['CURRENT_SHARE_USER']))));
+					$is_on_banners=(((!has_specific_permission(get_member(),'banner_free')) || (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_option('admin_banners')=='1')) || (!is_null($GLOBALS['CURRENT_SHARE_USER']))));
 					if (array_key_exists('throttle_bandwidth_registered',$SITE_INFO))
 					{
 						$views_till_now=intval(get_value('page_views'));
@@ -795,10 +795,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 						require_code('banners');
 
 						$b_type=isset($param[0])?$param[0]:'';
-						$internal_only=isset($param[1])?intval($param[1]):(($b_type=='')?0:1);
 						if (isset($GLOBALS['NON_CACHEABLE_SYMBOLS']['SET_RAND'])) // Normal operation
 						{
-							$_value=banners_script(true,'','',$b_type,$internal_only,'');
+							$_value=banners_script(true,'','',$b_type,'');
 							$value=$_value->evaluate();
 						} else // Been told to behave statically
 						{

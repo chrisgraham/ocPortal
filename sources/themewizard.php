@@ -203,7 +203,7 @@ function find_theme_dark($theme)
 	if (!is_file($css_path)) return false;
 	$css_file_contents=file_get_contents($css_path,FILE_TEXT);
 	$matches=array();
-	if (preg_match('#\{\$THEME\_WIZARD\_COLOR,\#(.{6}),W/B,.*\}#',$css_file_contents,$matches)!=0)
+	if (preg_match('#\{\$THEME\_WIZARD\_COLOR,\#(.{6}),WB,.*\}#',$css_file_contents,$matches)!=0)
 	{
 		$THEME_DARK_CACHE[$theme]=(strtoupper($matches[1])!='FFFFFF');
 	} else
@@ -531,7 +531,7 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 					if (is_file($default_version_path))
 					{
 						$default_version=file_get_contents($default_version_path);
-						$changed_from_default_theme=file_get_contents(unixify_line_format($default_version))!=$output;
+						$changed_from_default_theme=file_get_contents(unixify_line_format($default_version_path))!=$output;
 					} else
 					{
 						$changed_from_default_theme=true;
@@ -693,13 +693,13 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 			'green'=>strval($green),
 			'blue'=>strval($blue),
 			'dominant'=>$dominant,
-			'L/D'=>$light_dark,
-			'!D/D'=>$anti_light_dark,
+			'LD'=>$light_dark,
+			'DL'=>$anti_light_dark,
 
 			// Actual colours
 			'seed'=>$seed,
-			'W/B'=>$wb,
-			'B/W'=>$awb,
+			'WB'=>$wb,
+			'BW'=>$awb,
 		);
 		if ($algorithm=='equations')
 		{
@@ -804,7 +804,7 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 						{
 							$pixel_x_start_array[$y]=(array_key_exists($y,$pixel_x_start_array)?$pixel_x_start_array[$y]:0);
 						}
-						$img=generate_recoloured_image(isset($img)?$img:$path,'#8FADDC',$colours['navigation_peak'],'#FFFFFF',$colours['W/B'],'#E3EAF2',$colours['header_background'],'horizontal',$pixel_x_start_array,0,true);
+						$img=generate_recoloured_image(isset($img)?$img:$path,'#8FADDC',$colours['navigation_peak'],'#FFFFFF',$colours['WB'],'#E3EAF2',$colours['header_background'],'horizontal',$pixel_x_start_array,0,true);
 					}
 					elseif (in_array($show,array('donext/topleft','donext/topright')))
 					{
@@ -876,7 +876,7 @@ function calculate_dynamic_css_colours($colours,$source_theme)
 			for ($i=0;$i<$num_matches;$i++)
 			{
 				// Skip over our little stored hints (not intended for ocPortal)
-				if (in_array($matches[2][$i],array('seed','W/B','B/W'))) continue;
+				if (in_array($matches[2][$i],array('seed','WB','BW'))) continue;
 
 				// A one we're really interested in
 				$parsed=parse_css_colour_expression($matches[3][$i]);
@@ -1035,13 +1035,13 @@ function execute_css_colour_expression($expression,$colours)
 	$operation=$expression[0];
 	$operand_a=execute_css_colour_expression($expression[1],$colours);
 	if (is_null($operand_a)) return NULL;
-	/*if (($operation=='+') && ($expression[2][0]=='*') && (!is_array($expression[2][1])) && ((($expression[2][2]=='B/W') && ($colours['L/D']=='light')) || (($expression[2][2]=='W/B') && ($colours['L/D']=='dark'))))
+	/*if (($operation=='+') && ($expression[2][0]=='*') && (!is_array($expression[2][1])) && ((($expression[2][2]=='WB') && ($colours['LD']=='light')) || (($expression[2][2]=='BW') && ($colours['LD']=='dark'))))
 	{
 		$operation='-';
 		$expression[2][2]='FFFFFF';
 	} else
 	{
-//	if (($operation=='-') && ($expression[2][0]=='*') && (!is_array($expression[2][1])) && ((($expression[2][2]=='W/B') && ($colours['L/D']=='light')) || (($expression[2][2]=='B/W') && ($colours['L/D']=='dark'))))
+//	if (($operation=='-') && ($expression[2][0]=='*') && (!is_array($expression[2][1])) && ((($expression[2][2]=='WB') && ($colours['LD']=='light')) || (($expression[2][2]=='BW') && ($colours['LD']=='dark'))))
 //		$operation='+';
 	}*/
 	$operand_b=execute_css_colour_expression($expression[2],$colours);
@@ -1123,7 +1123,7 @@ function execute_css_colour_expression($expression,$colours)
 			$red=intval(round(floatval(hexdec(substr($operand_b,0,2))*intval($operand_a))/(100.0)));
 			$green=intval(round(floatval(hexdec(substr($operand_b,2,2))*intval($operand_a))/(100.0)));
 			$blue=intval(round(floatval(hexdec(substr($operand_b,4,2))*intval($operand_a))/(100.0)));
-			/*if ((($expression[2]==='W/B') && ($colours['L/D']=='dark')) || (($expression[2]==='B/W') && ($colours['L/D']=='light')))
+			/*if ((($expression[2]==='WB') && ($colours['LD']=='dark')) || (($expression[2]==='BW') && ($colours['LD']=='light')))
 			{
 				$red=255-$red;
 				$green=255-$green;

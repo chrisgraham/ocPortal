@@ -122,27 +122,27 @@ function set_attachment(field_name,number,filename)
 // COMCODE UI FUNCTIONS
 // ====================
 
-function doInput_html(field_name)
+function do_input_html(field_name)
 {
-	if (typeof window.insert_textboxWrapping=='undefined') return;
+	if (typeof window.insert_textbox_wrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
-	insert_textboxWrapping(post,"semihtml","");
+	insert_textbox_wrapping(post,"semihtml","");
 }
 
-function doInput_code(field_name)
+function do_input_code(field_name)
 {
-	if (typeof window.insert_textboxWrapping=='undefined') return;
+	if (typeof window.insert_textbox_wrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
-	insert_textboxWrapping(post,"codebox","");
+	insert_textbox_wrapping(post,"codebox","");
 }
 
-function doInput_quote(field_name)
+function do_input_quote(field_name)
 {
-	if (typeof window.insert_textboxWrapping=='undefined') return;
+	if (typeof window.insert_textbox_wrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
@@ -151,15 +151,15 @@ function doInput_quote(field_name)
 		'',
 		function(va)
 		{
-			if (va!==null) insert_textboxWrapping(post,"[quote=\""+va+"\"]","[/quote]");
+			if (va!==null) insert_textbox_wrapping(post,"[quote=\""+va+"\"]","[/quote]");
 		},
 		"{!comcode:INPUT_COMCODE_quote^#}"
 	);
 }
 
-function doInput_box(field_name)
+function do_input_box(field_name)
 {
-	if (typeof window.insert_textboxWrapping=='undefined') return;
+	if (typeof window.insert_textbox_wrapping=='undefined') return;
 
 	var post=document.getElementById(field_name);
 	post=ensure_true_id(post,field_name);
@@ -168,13 +168,13 @@ function doInput_box(field_name)
 		'',
 		function(va)
 		{
-			if (va!==null) insert_textboxWrapping(post,"[box=\""+va+"\"]","[/box]");
+			if (va!==null) insert_textbox_wrapping(post,"[box=\""+va+"\"]","[/box]");
 		},
 		"{!comcode:INPUT_COMCODE_box^#}"
 	);
 }
 
-function doInput_menu(field_name)
+function do_input_menu(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
@@ -213,7 +213,7 @@ function doInput_menu(field_name)
 	);
 }
 
-function doInput_block(field_name)
+function do_input_block(field_name)
 {
 	if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 	var url='{$FIND_SCRIPT;,block_helper}?field_name='+field_name+keep_stub();
@@ -221,7 +221,7 @@ function doInput_block(field_name)
 	window.faux_open(maintain_theme_in_link(url),'','width=750,height=520,status=no,resizable=yes,scrollbars=yes',null,"{!INPUTSYSTEM_CANCEL#}");
 }
 
-function doInput_comcode(field_name,tag)
+function do_input_comcode(field_name,tag)
 {
 	if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 	var url='{$FIND_SCRIPT;,comcode_helper}?field_name='+field_name;
@@ -231,7 +231,7 @@ function doInput_comcode(field_name,tag)
 	window.faux_open(maintain_theme_in_link(url),'','width=750,height=520,status=no,resizable=yes,scrollbars=yes',null,"{!INPUTSYSTEM_CANCEL#}");
 }
 
-function doInput_list(field_name,add)
+function do_input_list(field_name,add)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
@@ -249,7 +249,7 @@ function doInput_list(field_name,add)
 			if ((va!=null) && (va!=''))
 			{
 				add.push(va);
-				return doInput_list(field_name,add)
+				return do_input_list(field_name,add)
 			}
 			if (add.length==0) return;
 			var i;
@@ -283,7 +283,7 @@ function doInput_list(field_name,add)
 	);
 }
 
-function doInput_hide(field_name)
+function do_input_hide(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
@@ -321,7 +321,7 @@ function doInput_hide(field_name)
 	);
 }
 
-function doInput_thumb(field_name,va)
+function do_input_thumb(field_name,va)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
@@ -334,7 +334,7 @@ function doInput_thumb(field_name,va)
 			if ((va!=null) && (va.indexOf('://')==-1))
 			{
 				window.fauxmodal_alert("{!NOT_A_URL^#}");
-				return doInput_thumb(field_name,va);
+				return do_input_thumb(field_name,va);
 			}
 
 			if (va)
@@ -386,7 +386,7 @@ function doInput_thumb(field_name,va)
 	);
 }
 
-function doInput_attachment(field_name)
+function do_input_attachment(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
@@ -416,7 +416,7 @@ function doInput_attachment(field_name)
 	);
 }
 
-function doInput_url(field_name,va)
+function do_input_url(field_name,va)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
@@ -429,7 +429,7 @@ function doInput_url(field_name,va)
 			if ((va!=null) && (va.indexOf('://')==-1))
 			{
 				window.fauxmodal_alert("{!NOT_A_URL^#}");
-				return doInput_url(field_name,va);
+				return do_input_url(field_name,va);
 			}
 
 			if (va!==null)
@@ -457,7 +457,7 @@ function doInput_url(field_name,va)
 	);
 }
 
-function doInput_page(field_name)
+function do_input_page(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
@@ -479,7 +479,7 @@ function doInput_page(field_name)
 					'',
 					function(vc)
 					{
-						_doInput_page(field_name,result,vc);
+						_do_input_page(field_name,result,vc);
 					},
 					"{!comcode:INPUT_COMCODE_page^#}"
 				);
@@ -508,7 +508,7 @@ function doInput_page(field_name)
 									'',
 									function(vc)
 									{
-										_doInput_page(field_name,result,vc);
+										_do_input_page(field_name,result,vc);
 									},
 									"{!comcode:INPUT_COMCODE_page^#}"
 								);
@@ -522,7 +522,7 @@ function doInput_page(field_name)
 	}
 }
 
-function _doInput_page(field_name,result,vc)
+function _do_input_page(field_name,result,vc)
 {
 	var element=document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
@@ -535,7 +535,7 @@ function _doInput_page(field_name,result,vc)
 	}
 }
 
-function doInput_email(field_name,va)
+function do_input_email(field_name,va)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
@@ -548,7 +548,7 @@ function doInput_email(field_name,va)
 			if ((va!=null) && (va.indexOf('@')==-1))
 			{
 				window.fauxmodal_alert("{!NOT_A_EMAIL^#}");
-				return doInput_email(field_name,va);
+				return do_input_email(field_name,va);
 
 				if (va!==null)
 				{
@@ -576,27 +576,27 @@ function doInput_email(field_name,va)
 	);
 }
 
-function doInput_b(field_name)
+function do_input_b(field_name)
 {
-	if (typeof window.insert_textboxWrapping=='undefined') return;
+	if (typeof window.insert_textbox_wrapping=='undefined') return;
 
 	var element=document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
-	insert_textboxWrapping(element,"b","");
+	insert_textbox_wrapping(element,"b","");
 }
 
-function doInput_i(field_name)
+function do_input_i(field_name)
 {
-	if (typeof window.insert_textboxWrapping=='undefined') return;
+	if (typeof window.insert_textbox_wrapping=='undefined') return;
 
 	var element=document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
-	insert_textboxWrapping(element,"i","");
+	insert_textbox_wrapping(element,"i","");
 }
 
-function doInput_font(field_name)
+function do_input_font(field_name)
 {
-	if (typeof window.insert_textboxWrapping=='undefined') return;
+	if (typeof window.insert_textbox_wrapping=='undefined') return;
 	if (typeof window.is_comcode_xml=='undefined') return;
 
 	var element=document.getElementById(field_name);
@@ -612,10 +612,10 @@ function doInput_font(field_name)
 	}
 	if (is_comcode_xml(element))
 	{
-		insert_textboxWrapping(document.getElementById(field_name),'<font param=\"'+escape_html(face.value)+'\" color=\"'+escape_html(colour.value)+'\" size=\"'+escape_html(size.value)+'\">','</font>');
+		insert_textbox_wrapping(document.getElementById(field_name),'<font param=\"'+escape_html(face.value)+'\" color=\"'+escape_html(colour.value)+'\" size=\"'+escape_html(size.value)+'\">','</font>');
 	} else
 	{
-		insert_textboxWrapping(document.getElementById(field_name),'[font=\"'+escape_comcode(face.value)+'\" color=\"'+escape_comcode(colour.value)+'\" size=\"'+escape_comcode(size.value)+'\"]','[/font]');
+		insert_textbox_wrapping(document.getElementById(field_name),'[font=\"'+escape_comcode(face.value)+'\" color=\"'+escape_comcode(colour.value)+'\" size=\"'+escape_comcode(size.value)+'\"]','[/font]');
 	}
 }
 

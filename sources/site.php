@@ -53,7 +53,7 @@ function init__site()
 	$FEED_URL_2=NULL;
 
 	global $NON_CANONICAL_PARAMS;
-	$NON_CANONICAL_PARAMS=array('active_filter','keep_has_js','keep_session','redirected','redirect_url','redirect','redirect_passon','keep_devtest','keep_su','wide_print','keep_cache','keep_markers','keep_print','keep_novalidate','keep_no_query_limit','keep_avoid_memory_limit','keep_no_swfupload','keep_no_xhtml','keep_no_minify','keep_no_frames','keep_su_online','keep_show_parse_errors','keep_firephp_queries','keep_firephp','keep_fatalistic','keep_currency','keep_country','keep_mobile','keep_textonly','keep_noiepng','keep_no_debug_mode','keep_referrer','keep_timezone');
+	$NON_CANONICAL_PARAMS=array('active_filter','keep_has_js','keep_session','redirected','redirect_url','redirect','redirect_passon','keep_devtest','keep_su','wide_print','keep_cache','keep_markers','keep_print','keep_novalidate','keep_no_query_limit','keep_avoid_memory_limit','keep_no_swfupload','keep_no_xhtml','keep_no_minify','keep_no_frames','keep_su_online','keep_show_parse_errors','keep_firephp_queries','keep_firephp','keep_fatalistic','keep_currency','keep_country','keep_mobile','keep_textonly','keep_noiepng','keep_no_dev_mode','keep_referrer','keep_timezone');
 
 	global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES,$LATE_ATTACHED_MESSAGES_RAW;
 	$ATTACHED_MESSAGES=new ocp_tempcode();
@@ -231,7 +231,8 @@ function attach_message($message,$type='inform')
 
 	foreach ($ATTACHED_MESSAGES_RAW as $last)
 	{
-		if (array(is_object($last[0])?$last[0]->evaluate():$last[0],$last[1])==array(is_object($message)?$message->evaluate():$message,$type)) return ''; // Already shown
+		if (array(is_object($last[0])?$last[0]->evaluate():$last[0],$last[1])==array(is_object($message)?$message->evaluate():$message,$type))
+			return ''; // Already shown
 	}
 
 	$ATTACH_MESSAGE_CALLED++;
@@ -260,7 +261,7 @@ function attach_message($message,$type='inform')
 
 	if ((get_param_integer('keep_fatalistic',0)==1) && ($type=='warn')) fatal_exit($message);
 
-	$message=do_template('MESSAGE',array(
+	$message_tpl=do_template('MESSAGE',array(
 		'_GUID'=>'ec843c8619d21fbeeb512686ea300a17',
 		'TYPE'=>$type,
 		'MESSAGE'=>is_string($message)?escape_html($message):$message
@@ -269,11 +270,11 @@ function attach_message($message,$type='inform')
 	if (headers_sent())
 	{
 		$LATE_ATTACHED_MESSAGES_RAW[]=array($message,$type);
-		$LATE_ATTACHED_MESSAGES->attach($message);
+		$LATE_ATTACHED_MESSAGES->attach($message_tpl);
 	} else
 	{
 		$ATTACHED_MESSAGES_RAW[]=array($message,$type);
-		$ATTACHED_MESSAGES->attach($message);
+		$ATTACHED_MESSAGES->attach($message_tpl);
 	}
 
 	$ATTACH_MESSAGE_CALLED--;

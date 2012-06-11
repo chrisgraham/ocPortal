@@ -81,13 +81,17 @@
 				</div></div>
 			</div>
 
-			<div class="ratings right">
-				{RATING_DETAILS}
-			</div>
+			{+START,IF_NON_EMPTY,{ENTRIES}}
+				<div class="ratings right">
+					{RATING_DETAILS}
+				</div>
+			{+END}
 		{+END}
 	</div>
 
-	{COMMENT_DETAILS}
+	{+START,IF_NON_EMPTY,{ENTRIES}}
+		{COMMENT_DETAILS}
+	{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}
 </div>

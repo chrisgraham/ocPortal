@@ -1091,8 +1091,12 @@ class Module_admin_themes
 			$new_stub=dirname($file);
 			if ($stub!=$new_stub)
 			{
-				$temp=form_input_list_group($new_stub,make_string_tempcode($files_tmp));
-				$files.=$temp->evaluate(); // XHTMLXHTML
+				if ($files_tmp!='')
+				{
+					$temp=form_input_list_group($new_stub,make_string_tempcode($files_tmp));
+					$files.=$temp->evaluate(); // XHTMLXHTML
+				}
+				$files_tmp='';
 				$stub=$new_stub;
 			}
 			$_file=substr($file,strrpos($file,'/')+1);
@@ -1358,7 +1362,7 @@ class Module_admin_themes
 			if ($old_contents===false) $old_contents='';
 
 			$matches=array();
-			$cnt=preg_match_all('#\{([\w_]*)\}#',$old_contents,$matches);
+			$cnt=preg_match_all('#\{([\w][\w\_]*)\}#',$old_contents,$matches);
 			$parameters=new ocp_tempcode();
 			$p_done=array();
 			for ($j=0;$j<$cnt;$j++)

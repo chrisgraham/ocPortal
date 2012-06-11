@@ -103,5 +103,5 @@ class Block_side_stored_menu
 function block_side_stored_menu__cache_on($map)
 {
 	$menu=array_key_exists('param',$map)?$map['param']:'';
-	return array($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()),((substr($menu,0,1)!='_') && (substr($menu,0,3)!='!!!') && (has_actual_page_access(get_member(),'admin_menus'))),get_zone_name(),get_page_name(),array_key_exists('type',$map)?$map['type']:'tree',$menu,array_key_exists('title',$map)?$map['title']:'',array_key_exists('silent_failure',$map)?$map['silent_failure']:'0',array_key_exists('tray_status',$map)?$map['tray_status']:'');
+	return array($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()),((substr($menu,0,1)!='_') && (substr($menu,0,3)!='!!!') && (has_actual_page_access(get_member(),'admin_menus'))),get_zone_name(),get_page_name(),get_param('type','misc'),array_key_exists('type',$map)?$map['type']:'tree',$menu,array_key_exists('title',$map)?$map['title']:'',array_key_exists('silent_failure',$map)?$map['silent_failure']:'0',array_key_exists('tray_status',$map)?$map['tray_status']:'');
 }

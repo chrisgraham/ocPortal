@@ -123,8 +123,6 @@ class Module_banners
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'banners','category_name'=>$banner_c,'group_id'=>$group_id));
 			}
 
-			add_config_option('ENABLE_BANNERS','is_on_banners','tick','return \'1\';','FEATURE','BANNERS');
-
 			add_specific_permission('BANNERS','full_banner_setup',false);
 			add_specific_permission('BANNERS','view_anyones_banner_stats',false);
 
@@ -193,6 +191,7 @@ class Module_banners
 			$GLOBALS['SITE_DB']->add_table_field('banners','b_direct_code','LONG_TEXT');
 			delete_config_option('money_ad_code');
 			delete_config_option('advert_chance');
+			delete_config_option('is_on_banners');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))

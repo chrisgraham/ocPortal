@@ -484,9 +484,9 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 		} elseif (is_numeric($order_by)) // Ah, so it's saying the nth field of this catalogue
 		{
 			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,'field_'.strval($order_by),'',array());
-			list($new_key,)=$bits;
 			if (!is_null($bits))
 			{
+				list($new_key,)=$bits;
 				if (strpos($new_key,'.text_original')!==false)
 				{
 					$num_entries=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause);
@@ -502,6 +502,9 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 				{
 					$virtual_order_by=$new_key;
 				}
+			} else
+			{
+				$virtual_order_by='r.id';
 			}
 		}
 	} else
