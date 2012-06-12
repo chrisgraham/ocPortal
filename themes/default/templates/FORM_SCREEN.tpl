@@ -64,7 +64,7 @@
 	<div class="arrow_ruler">
 		<form action="#" method="post">
 			<div>
-				[ <label for="will_open_new"><input onclick="var f=document.getElementById('main_form'); f.action=this.checked?non_iframe_url:iframe_url; f.elements['opens_below'].value=this.checked?'0':'1'; f.elements['wide_high'].value=this.checked?'0':'1'; f.target=this.checked?'_blank':'iframe_under';" type="checkbox" name="will_open_new" id="will_open_new" /> {!CHOOSE_OPEN_NEW_WINDOW}</label> ]
+				[ <input onclick="var f=document.getElementById('main_form'); f.action=this.checked?non_iframe_url:iframe_url; f.elements['opens_below'].value=this.checked?'0':'1'; f.elements['wide_high'].value=this.checked?'0':'1'; f.target=this.checked?'_blank':'iframe_under';" type="checkbox" name="will_open_new" id="will_open_new" /> <label for="will_open_new">{!CHOOSE_OPEN_NEW_WINDOW}</label> ]
 			</div>
 		</form>
 

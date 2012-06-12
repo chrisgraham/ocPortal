@@ -10,7 +10,7 @@
 
 <form title="{!PRIMARY_PAGE_FORM}" class="ocf_join_1" method="post" action="{URL*}">
 	<p>
-		<label for="confirm"><input type="checkbox" id="confirm" name="confirm" value="1" onclick="document.getElementById('proceed_button').disabled=!this.checked;" />{!I_AGREE_RULES}</label>
+		<input type="checkbox" id="confirm" name="confirm" value="1" onclick="document.getElementById('proceed_button').disabled=!this.checked;" /><label for="confirm">{!I_AGREE_RULES}</label>
 	</p>
 
 	{+START,IF_NON_EMPTY,{GROUP_SELECT}}

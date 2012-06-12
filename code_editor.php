@@ -452,7 +452,7 @@ END;
 if (strpos($path,'_custom/')!==false)
 {
 echo <<<END
-<p><label for="delete"><input id="delete" name="delete" type="checkbox" value="1" />Delete this override/custom-file. If you choose this, nothing will be edited, only deleted.</label></p>
+<p><input id="delete" name="delete" type="checkbox" value="1" /><label for="delete">Delete this override/custom-file. If you choose this, nothing will be edited, only deleted.</label></p>
 END;
 } elseif ($save_path==$path)
 {
@@ -463,7 +463,7 @@ END;
 else
 {
 echo <<<END
-<p>This file is not yet overridden. <label for="override"><input id="override" name="override" checked="checked" type="checkbox" value="1" /> Use this edit to specify the override (as opposed to saving over the original).</label></p>
+<p>This file is not yet overridden. <input id="override" name="override" checked="checked" type="checkbox" value="1" /> <label for="override">Use this edit to specify the override (as opposed to saving over the original).</label></p>
 END;
 }
 echo <<<END

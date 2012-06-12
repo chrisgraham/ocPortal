@@ -70,19 +70,19 @@
 					<td class="dottedborder_barrier" colspan="2">
 						{+START,IF,{$NOT,{$VALUE_OPTION,disable_boolean_search}}}
 							{+START,IF,{$NOT,{OLD_MYSQL}}}
-							<label for="boolean_search"><input type="checkbox" id="boolean_search" {+START,IF,{BOOLEAN_SEARCH}}checked="checked" {+END}name="boolean_search" value="1" onclick="document.getElementById('boolean_options').style.display=this.checked?'block':'none'; trigger_resize();" /> {!BOOLEAN_SEARCH}</label>
+							<input type="checkbox" id="boolean_search" {+START,IF,{BOOLEAN_SEARCH}}checked="checked" {+END}name="boolean_search" value="1" onclick="document.getElementById('boolean_options').style.display=this.checked?'block':'none'; trigger_resize();" /> <label for="boolean_search">{!BOOLEAN_SEARCH}</label>
 							<div style="display: {$JS_ON,none,block}" id="boolean_options">
 							{+END}
 								{+START,IF,{OLD_MYSQL}}
-									<p><label for="conjunctive_operator_and"><input type="radio" {+START,IF,{AND}}checked="checked" {+END}id="conjunctive_operator_and" name="conjunctive_operator" value="AND" />{!SEARCH_AND}</label><br />
-									<label for="conjunctive_operator_or"><input type="radio" {+START,IF,{$NOT,{AND}}}checked="checked" {+END}id="conjunctive_operator_or" name="conjunctive_operator" value="OR" />{!SEARCH_OR}</label></p>
+									<p><input type="radio" {+START,IF,{AND}}checked="checked" {+END}id="conjunctive_operator_and" name="conjunctive_operator" value="AND" /><label for="conjunctive_operator_and">{!SEARCH_AND}</label><br />
+									<input type="radio" {+START,IF,{$NOT,{AND}}}checked="checked" {+END}id="conjunctive_operator_or" name="conjunctive_operator" value="OR" /><label for="conjunctive_operator_or">{!SEARCH_OR}</label></p>
 								{+END}
 								<p>{!BOOLEAN_HELP}</p>
 							{+START,IF,{$NOT,{OLD_MYSQL}}}
 							</div>
 							{+END}
 						{+END}
-						<p><label for="only_titles"><input type="checkbox" {+START,IF,{ONLY_TITLES}}checked="checked" {+END}id="only_titles" name="only_titles" value="1" /> {!ONLY_TITLES}</label></p>
+						<p><input type="checkbox" {+START,IF,{ONLY_TITLES}}checked="checked" {+END}id="only_titles" name="only_titles" value="1" /> <label for="only_titles">{!ONLY_TITLES}</label></p>
 					</td>
 				</tr>
 				<tr>
