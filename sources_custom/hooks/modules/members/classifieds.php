@@ -28,8 +28,6 @@ class Hook_members_classifieds
 
 		require_lang('classifieds');
 
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-
 		$result=array();
 
 		if (($member_id==get_member()) || (has_specific_permission(get_member(),'assume_any_member')))
