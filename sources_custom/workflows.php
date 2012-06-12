@@ -490,7 +490,7 @@ function get_workflow_content_id($source_type,$source_id)
 	$content=$GLOBALS['SITE_DB']->query_select('workflow_content',array('id'),array('source_type'=>$source_type,'source_id'=>$source_id),'',1);
 	if ($content==array())
 	{
-		warn_exit(do_lang_tempcode('_MISSING_RESOURCE',get_translated_text($source_id)));
+		return NULL;
 	}
 	return $content[0]['id'];
 }

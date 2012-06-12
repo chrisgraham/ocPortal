@@ -686,8 +686,8 @@ class Module_news
 
 		// Rating and comments
 		$self_url_map=array('page'=>'_SELF','type'=>'view','id'=>$id);
-		if ($filter!='*') $self_url_map['filter']=$filter;
-		if (($filter_and!='*') && ($filter_and!='')) $self_url_map['filter_and']=$filter_and;
+		/*if ($filter!='*') $self_url_map['filter']=$filter;		Potentially makes URL too long for content topic to store, and we probably don't want to store this assumptive context anyway
+		if (($filter_and!='*') && ($filter_and!='')) $self_url_map['filter_and']=$filter_and;*/
 		if (!is_null($blog)) $self_url_map['blog']=$blog;
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
 			get_page_name(),

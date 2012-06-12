@@ -189,9 +189,10 @@ class Module_cms_blogs extends standard_aed_module
 	 * @param  BINARY				Whether to show the "send trackback" field
 	 * @param  LONG_TEXT			Notes for the video
 	 * @param  URLPATH			URL to the image for the news entry (blank: use cat image)
+	 * @param  ?array				Scheduled go-live time (NULL: N/A)
 	 * @return array				A tuple of lots of info (fields, hidden fields, trailing fields)
 	 */
-	function get_form_fields($main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='')
+	function get_form_fields($main_news_category=NULL,$news_category=NULL,$title='',$news='',$author='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$send_trackbacks=1,$notes='',$image='',$scheduled=NULL)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -254,7 +255,7 @@ class Module_cms_blogs extends standard_aed_module
 		$fields2->attach(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_NEWS_IMAGE_OVERRIDE'),'file',false,$image,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		handle_max_file_size($hidden,'image');
 		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')))
-			$fields2->attach(form_input_date__scheduler(do_lang_tempcode('PUBLICATION_TIME'),do_lang_tempcode('DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true));
+			$fields2->attach(form_input_date__scheduler(do_lang_tempcode('PUBLICATION_TIME'),do_lang_tempcode('DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true,$scheduled,intval(date('Y'))-1970+2,1970));
 
 		require_code('feedback2');
 		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,$send_trackbacks==1,$notes,$allow_comments==2));
@@ -319,7 +320,18 @@ class Module_cms_blogs extends standard_aed_module
 
 		foreach ($category_query as $value) $categories[]=$value['news_entry_category'];
 
-		list($fields,$hidden,,,,,$fields2)=$this->get_form_fields($cat,$categories,get_translated_text($myrow['title']),get_translated_text($myrow['news']),$myrow['author'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],0,$myrow['notes'],$myrow['news_image']);
+		if (addon_installed('calendar'))
+		{
+			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
+			$past_event=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id',array('e_start_day','e_start_month','e_start_year','e_start_hour','e_start_minute'),array('text_original'=>$schedule_code),'',1);
+			$scheduled=array_key_exists(0,$past_event)?array($past_event[0]['e_start_minute'],$past_event[0]['e_start_hour'],$past_event[0]['e_start_month'],$past_event[0]['e_start_day'],$past_event[0]['e_start_year']):NULL;
+			if ((!is_null($scheduled)) && ($scheduled<time())) $scheduled=NULL;
+		} else
+		{
+			$scheduled=NULL;
+		}
+
+		list($fields,$hidden,,,,,$fields2)=$this->get_form_fields($cat,$categories,get_translated_text($myrow['title']),get_translated_text($myrow['news']),$myrow['author'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],0,$myrow['notes'],$myrow['news_image'],$scheduled);
 
 		return array($fields,$hidden,new ocp_tempcode(),'',false,get_translated_text($myrow['news_article']),$fields2,get_translated_tempcode($myrow['news_article']));
 	}
@@ -390,14 +402,15 @@ class Module_cms_blogs extends standard_aed_module
 		if (!is_null($schedule))
 		{
 			require_code('calendar');
-			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>time(),\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
+			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
 			$start_year=post_param_integer('schedule_year');
 			$start_month=post_param_integer('schedule_month');
 			$start_day=post_param_integer('schedule_day');
 			$start_hour=post_param_integer('schedule_hour');
 			$start_minute=post_param_integer('schedule_minute');
 			require_code('calendar2');
-			add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+			$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('PUBLISH_NEWS',$title),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+			regenerate_event_reminder_jobs($event_id,true);
 		}
 
 		return strval($id);
@@ -415,7 +428,8 @@ class Module_cms_blogs extends standard_aed_module
 		$validated=post_param_integer('validated',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
 		$news_article=post_param('post',STRING_MAGIC_NULL);
-		$main_news_category=post_param_integer('main_news_category',INTEGER_MAGIC_NULL);
+		if (post_param('main_news_category')!='personal') $main_news_category=post_param_integer('main_news_category',INTEGER_MAGIC_NULL);
+		else warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 		$news_category=array();
 		if (array_key_exists('news_category',$_POST))
@@ -448,18 +462,21 @@ class Module_cms_blogs extends standard_aed_module
 		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
 		if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
 
+		$schedule=get_input_date('schedule');
+		$add_time=is_null($schedule)?mixed():$schedule;
+
 		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')))
 		{
 			require_code('calendar2');
-			$schedule=get_input_date('schedule');
-			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>time(),\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
+			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
 			$past_event=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id','e.id',array('text_original'=>$schedule_code));
 			require_code('calendar');
 			if (!is_null($past_event))
 			{
 				delete_calendar_event($past_event);
 			}
-			if (!is_null($schedule))
+
+			if ((!is_null($schedule)) && ($schedule>time()))
 			{
 				$validated=0;
 
@@ -468,7 +485,8 @@ class Module_cms_blogs extends standard_aed_module
 				$start_day=post_param_integer('schedule_day');
 				$start_hour=post_param_integer('schedule_hour');
 				$start_minute=post_param_integer('schedule_minute');
-				add_calendar_event(db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+				$event_id=add_calendar_event(db_get_first_id(),'none',NULL,0,do_lang('PUBLISH_NEWS',0,post_param('title')),$schedule_code,3,0,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+				regenerate_event_reminder_jobs($event_id,true);
 			}
 		}
 
@@ -482,7 +500,7 @@ class Module_cms_blogs extends standard_aed_module
 				syndicate_described_activity($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL,true);
 		}
 
-		edit_news(intval($id),$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url);
+		edit_news(intval($id),$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$add_time);
 	}
 
 	/**

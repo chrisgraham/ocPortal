@@ -558,7 +558,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		$redirect_url=get_param('redirect_passon',get_param('redirect',$redirect_url));
 
-		$_url=build_url(array('page'=>'join','redirect'=>$redirect_url),get_module_zone('join'));
+		$_url=build_url(array('page'=>'join','redirect'=>(get_page_name()=='recommend')?NULL:$redirect_url),get_module_zone('join'));
 		$url=$_url->evaluate();
 		if (get_option('forum_in_portal')=='0') $url=str_replace(get_base_url(),get_forum_base_url(),$url);
 		return $url;

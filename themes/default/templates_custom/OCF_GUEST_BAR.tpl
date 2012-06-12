@@ -19,9 +19,7 @@
 
 						{+START,IF_EMPTY,{$FB_CONNECT_UID}}
 							{+START,IF_NON_EMPTY,{$CONFIG_OPTION,facebook_appid}}
-								<span xmlns:fb="http://api.facebook.com/1.0/">
-									<fb:login-button scope="email,user_birthday"></fb:login-button>
-								</span>
+								<div class="fb-login-button" data-scope="email,user_birthday"></div>
 							{+END}
 						{+END}
 						<ul class="horizontal_links associated_links_block_group horiz_field_sep">

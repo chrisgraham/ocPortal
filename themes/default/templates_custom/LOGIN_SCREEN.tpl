@@ -9,9 +9,7 @@
 
 			<p>{!facebook:LOGIN_USING_FACEBOOK}</p>
 
-			<span xmlns:fb="http://api.facebook.com/1.0/">
-				<fb:login-button size="large" scope="email,user_birthday"></fb:login-button>
-			</span>
+			<div class="fb-login-button" data-scope="email,user_birthday"></div>
 		{+END}
 
 		<h2>{!facebook:LOGIN_NATIVE_HEADER,{$SITE_NAME*}}</h2>

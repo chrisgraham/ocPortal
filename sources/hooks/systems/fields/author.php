@@ -92,7 +92,10 @@ class Hook_fields_author
 	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-		return escape_html($ev);
+
+		if ($ev=='') return new ocp_tempcode();
+
+		return hyperlink(build_url(array('page'=>'authors','type'=>'misc','id'=>$ev),get_module_zone('authors')),$ev,false,true);
 	}
 
 	// ======================

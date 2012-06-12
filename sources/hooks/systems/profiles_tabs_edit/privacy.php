@@ -110,15 +110,17 @@ class Hook_Profiles_Tabs_Edit_privacy
 		$cpf_ids=array();
 		foreach ($member_cpfs as $cpf_id => $cpf)
 		{
-			if ((preg_replace('#^((\s)|(<br\s*/?'.'>)|(&nbsp;))*#','',$cpf) === '') && (count($member_cpfs)>15)) continue;
+			if ((preg_replace('#^((\s)|(<br\s*/?'.'>)|(&nbsp;))*#','',$cpf)==='') && (count($member_cpfs)>15)) continue; // If there are lots of CPFs, and this one seems to have a blank name, skip it (likely corrupt data)
 
-			$cpf_ids[]=$cpf_id; //id of the CPF
+			$cpf_ids[]=$cpf_id;
 
+			// Look up the details for this field
 			$cpf_data=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('*'),array('id'=>$cpf_id));
+			if (!array_key_exists(0,$cpf_data)) continue;
 			if ($cpf_data[0]['cf_public_view']==0) continue;
 
+			// Work out current settings for this field
 			$cpf_permissions=$GLOBALS['FORUM_DB']->query_select('f_member_cpf_perms',array('*'),array('member_id'=>$member_id_of,'field_id'=>$cpf_id));
-
 			if (!array_key_exists(0,$cpf_permissions))
 			{
 				$view_by_guests=true;
@@ -140,7 +142,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 				$view_by_groups=(strlen($cpf_permissions[0]['group_view'])>0)?explode(',',$cpf_permissions[0]['group_view']):array();
 			}
 
-			//CPF name
+			// Work out the CPF name
 			$cpf_title=get_translated_text($cpf_data[0]['cf_name']);
 			if (substr($cpf_title,0,4)=='ocp_')
 			{
@@ -148,7 +150,8 @@ class Hook_Profiles_Tabs_Edit_privacy
 				if (!is_null($_cpf_title)) $cpf_title=$_cpf_title;
 			}
 
-			if (get_value('simplify_privacy_options')==='1')
+			// Show privacy options for this field
+			if (get_value('simplify_privacy_options')==='1') // Simple style
 			{
 				$privacy_options=new ocp_tempcode();
 				$privacy_options->attach(form_input_list_entry('guests',$view_by_guests,do_lang_tempcode('VISIBLE_TO_GUESTS')));
@@ -156,7 +159,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 				$privacy_options->attach(form_input_list_entry('friends',$view_by_friends && !$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_FRIENDS')));
 				$privacy_options->attach(form_input_list_entry('staff',!$view_by_friends && !$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_STAFF')));
 				$fields->attach(form_input_list(do_lang_tempcode('WHO_CAN_SEE_YOUR',escape_html($cpf_title)),'','privacy_'.strval($cpf_id),$privacy_options));
-			} else
+			} else // Complex style
 			{
 				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('WHO_CAN_SEE_YOUR',escape_html($cpf_title)))));
 
@@ -177,10 +180,11 @@ class Hook_Profiles_Tabs_Edit_privacy
 			}
 		}
 
+		// What is being edited (so we don't need to work it out again in the actualiser)
 		$cpfs_hidden=form_input_hidden('cpf_fields',implode(',', $cpf_ids));
 
+		// UI
 		$text=do_template('OCF_CPF_PERMISSIONS_TAB',array('_GUID'=>'1ca98f8ea5009be2229491d341ec6e87','FIELDS'=>$fields));
-
 		$javascript='';
 
 		return array($title,$fields,$text,$javascript,$order,$cpfs_hidden);

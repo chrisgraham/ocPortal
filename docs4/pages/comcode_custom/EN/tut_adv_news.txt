@@ -7,21 +7,21 @@ This tutorial describes some of the more complex features available for news, in
 
 [title="2"]Personal Categories / Blogs[/title]
 
-[surround]
+[html]<div class="float_surrounder">[/html]
 [exp_thumb="A blog being started by adding news to a category that will automatically be created" float="left"]adv_news_blog[/exp_thumb]
 [exp_thumb="The blog in action" float="right"]adv_news_blog_2[/exp_thumb]
 ocPortal has advanced support for blogging: members in permitted usergroups may have their own personal news categories, otherwise known as 'blogs' (short for 'web logs').
-[/surround]
+[html]</div>[/html]
 
-[surround]
+[html]<div class="float_surrounder">[/html]
 [exp_thumb="The blog is linked to in the member profile" float="right"]adv_news_profile[/exp_thumb]
 To create a 'blog', a member only needs to choose to add news, and select their own personal category; if the category does not yet exist, it will be displayed as 'new', and created automatically upon submission. The news will display on the front page of the website (by default), and the blog for the member may be viewed from the links given in their member profile.
 
-Since version 4.2 there is a blogs CMS interface separate to the news CMS interface. This is provided for two reasons:
+There is a blogs CMS interface separate to the news CMS interface. This is provided for two reasons:
 1) as a niceity so that you don't need to explain 'blogs are news' to your users
 2) so you can lock down access, so that members may submit to blogs but not website news
 The presence of the blogs CMS interface does not stop you using the regular news CMS interface to submit blog posts.
-[/surround]
+[html]</div>[/html]
 
 [title="2"]Advanced filtering[/title]
 
@@ -35,15 +35,15 @@ Also, when you view a news post you can see what categories it is in and choose 
 
 [title="2"]Feeds[/title]
 
-[surround]
+[html]<div class="float_surrounder">[/html]
 [exp_thumb="Syndication links are displayed in the news block" float="right"]adv_news_rss_1[/exp_thumb]
 ocPortal supports the two main formats for syndication of news (and most other kinds of content) in clean XML format: 'Atom' and 'RSS'. These formats are simple representations of news that may be viewed using an external program such as 'FeedReader', or incorporated onto another website. ocPortal itself provides two blocks that allow display of RSS and atom feeds in a news-like fashion (including feeds from other ocPortal sites, or any other site that provides them).
-[/surround]
+[html]</div>[/html]
 
-[surround]
+[html]<div class="float_surrounder">[/html]
 [exp_thumb="RSS/Atom are really XML formats, and look a bit like this" float="right"]adv_news_rss_xml[/exp_thumb]
 Links to view the feeds are made available from the news blocks, as well as from the web browsers auto-discovery mechanism. If the news block is filtered (for a blog, for example) the link will open up the feed with the same filter. The URLs are not intended to be viewed directly, although we have used a technology called 'XSLT' to allow them to be displayed in the browser if desired; instead, they should be copied and pasted to another program.
-[/surround]
+[html]</div>[/html]
 
 The [page="tut_comcode"]Comcode[/page] syntax you should use to place the main block in a page is as follows:
 [code][block="http://example.com/feed.xml"]main_rss[/block][/code]
@@ -64,11 +64,11 @@ If you want to merge or filter feeds, [url="Yahoo Pipes"]http://pipes.yahoo.com/
 
 [title="2"]Trackbacks[/title]
 
-[surround]
+[html]<div class="float_surrounder">[/html]
 [exp_thumb="Special invisible mark-up code in the ocPortal HTML allows systems to see how they can place trackbacks to ocPortal" float="left"]adv_news_trackbacks_method[/exp_thumb]
 [exp_thumb="Trackbacks as displayed" float="right"]adv_news_show_trackbacks[/exp_thumb]
 Trackbacks are an advanced standard-based blogging feature, that allow a link to be established from an article on one blog to an article on another. It basically is a citation mechanism.
-[/surround]
+[html]</div>[/html]
 
 Trackbacks work as follows:
 1) The original article has a 'trackback' link written into the HTML
@@ -84,11 +84,11 @@ By default news posts show the news category image rather than the poster's avat
 
 If you uninstall the 'authors' addon it will automatically change to showing avatars. The reason being that default ocPortal acts more like a news site than a community site -- but by removing 'authors' you tell it you're not interested in that focus.
 
-Instead of removing the 'authors' addon you could change the [tt]NEWS_BOX[/tt] template -- this template encodes the logic described above, so by changing the template you can achieve either behaviour, or any combination.
+Instead of removing the 'authors' addon you could change the [tt]NEWS_PIECE_SUMMARY[/tt] template -- this template encodes the logic described above, so by changing the template you can achieve either behaviour, or any combination.
 
 [title="2"]Integrating third-party widgets[/title]
 
-There are a lot of 'widgets' out there for blogging platforms and there's nothing stopping you using them with ocPortal too. For example, [url="this widget"]http://www.backtype.com/widgets/backtweets[/url] allows you to see what people are saying about your article on Twitter. You could easily put the HTML provided into your [tt]NEWS_ENTRY_SCREEN[/tt] template.
+There are a lot of 'widgets' out there for blogging platforms and there's nothing stopping you using them with ocPortal too. For example, [url="this widget"]http://www.backtype.com/widgets/backtweets[/url] allows you to see what people are saying about your article on Twitter. You could easily put the HTML provided into your [tt]NEWS_FULL_SCREEN[/tt] template.
 
 [title="2"]Make news archive screens show summaries[/title]
 
@@ -104,8 +104,8 @@ The default news archive screen shows just the news headlines. By adding [tt]:in
 
 [title="2"]See also[/title]
 
- - [page="_SEARCH:tut_news"]Releasing news & running a blog[/page]
- - [page="_SEARCH:tut_comcode"]Comcode and the attachment system[/page]
+ - [page caption="Releasing news & running a blog"]tut_news[/page]
+ - [page caption="Comcode and the attachment system"]tut_comcode[/page]
  - [url="FeedReader"]http://www.feedreader.com/[/url]
 
 

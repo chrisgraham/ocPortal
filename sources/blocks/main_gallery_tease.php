@@ -92,11 +92,7 @@ class Block_main_gallery_tease
 		{
 			$url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$child['name']),$zone);
 
-			$is_member=(substr($child['name'],0,7)=='member_');
-			if ($is_member)
-			{
-				$member_id=get_member_id_from_gallery_name($child['name']);
-			}
+			$member_id=get_member_id_from_gallery_name($child['name'],$child,true);
 			$_title=get_translated_text($child['fullname']);
 			$pic=$child['rep_image'];
 			if (($pic=='') && ($is_member)) $pic=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_avatar_url');

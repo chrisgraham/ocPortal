@@ -529,6 +529,16 @@ function delete_image($id,$delete_full)
  */
 function create_video_thumb($src_url,$expected_output_path=NULL)
 {
+	// Audio ones should have automatic thumbnails
+	require_code('mime_types');
+	$file_ext=get_file_extension($src_url);
+	$input_mime_type=get_mime_type($file_ext);
+	if (preg_match('#audio\/#i',$input_mime_type)!=0)
+	{
+		return find_theme_image('audio_thumb',true);
+	}
+
+	// Try one of the hooks for video types
 	$ve_hooks=find_all_hooks('systems','video_embed');
 	foreach (array_keys($ve_hooks) as $ve_hook)
 	{
@@ -537,6 +547,8 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 		$thumbnail=$ve_ob->get_video_thumbnail($src_url);
 		if (!is_null($thumbnail)) return $thumbnail;
 	}
+
+	// Ok, gonna try hard using what FFMPEG techniques we can...
 
 	if (substr($src_url,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/') $src_url=substr($src_url,strlen(get_custom_base_url().'/'));
 	if (!url_is_local($src_url)) return '';
@@ -615,15 +627,6 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 
 			return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
 		}
-	}
-
-	// get_mime_type
-	require_code('mime_types');
-	$file_ext=get_file_extension($src_url);
-	$input_mime_type=get_mime_type($file_ext);
-	if (preg_match('#audio\/#i',$input_mime_type)!=0)
-	{
-		return find_theme_image('audio_thumb',true);
 	}
 
 	return '';

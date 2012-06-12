@@ -1314,7 +1314,7 @@ function get_num_users_site()
 			set_value('users_online',$NUM_USERS_SITE);
 		}
 	}
-	if ((intval($NUM_USERS_SITE)>intval(get_option('maximum_users'))) && (intval(get_option('maximum_users'))>1) && (get_page_name()!='login') && (!has_specific_permission(get_member(),'access_overrun_site')))
+	if ((intval($NUM_USERS_SITE)>intval(get_option('maximum_users'))) && (intval(get_option('maximum_users'))>1) && (get_page_name()!='login') && (!has_specific_permission(get_member(),'access_overrun_site')) && (!running_script('cron_bridge')))
 	{
 		$GLOBALS['HTTP_STATUS_CODE']='503';
 		header('HTTP/1.0 503 Service Unavailable');

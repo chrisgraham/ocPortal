@@ -235,8 +235,7 @@ function semihtml_to_comcode($semihtml)
 
 	$semihtml=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$semihtml);
 	$array_html_preg_replace=array();
-	$semihtml=str_replace('&#8203;<kbd','<kbd',$semihtml);
-	$semihtml=str_replace('</kbd>&#8203;','</kbd>',$semihtml);
+	$semihtml=str_replace('&#8203;','',$semihtml);
 	$array_html_preg_replace[]=array('#^<kbd class="(ocp_keep|ocp_keep_block)"[^>]*>(.*)</kbd>$#siU',"\${2}");
 	$semihtml=array_html_preg_replace('kbd',$array_html_preg_replace,$semihtml);
 	$semihtml=str_replace('<!-- >','',$semihtml);

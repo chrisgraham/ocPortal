@@ -129,6 +129,8 @@ class Module_topicview
 		$may_reply=(array_key_exists('may_reply',$topic_info)) && (($topic_info['is_open']) || (array_key_exists('may_post_closed',$topic_info)));
 		if (!$threaded)
 		{
+			$GLOBALS['META_DATA']['description']=$topic_info['description'];
+
 			// Poster detail hooks
 			$hooks=find_all_hooks('modules','topicview');
 			$hook_objects=array();
@@ -321,6 +323,8 @@ class Module_topicview
 
 			// Render posts
 			list($posts,$serialized_options,$hash)=$threaded_topic_ob->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$topic_info['first_poster'],array(),$topic_info['forum_id'],NULL,false);
+
+			$GLOBALS['META_DATA']['description']=$threaded_topic_ob->topic_description;
 
 			// Get other gathered details
 			$replied=$threaded_topic_ob->replied;

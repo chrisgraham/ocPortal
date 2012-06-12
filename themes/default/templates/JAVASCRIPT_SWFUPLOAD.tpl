@@ -1514,6 +1514,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 {
 	if (typeof filter=='undefined') var filter="{$CONFIG_OPTION#,valid_types}";
 	if (filter=='') filter="{$CONFIG_OPTION#,valid_types}";
+	filter+=','+filter.toUpperCase();
 
 	var rep=document.getElementById(name);
 	if (!rep.originally_disabled) rep.disabled=false;

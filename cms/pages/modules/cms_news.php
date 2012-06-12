@@ -363,6 +363,7 @@ class Module_cms_news extends standard_aed_module
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
 			$past_event=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id',array('e_start_day','e_start_month','e_start_year','e_start_hour','e_start_minute'),array('text_original'=>$schedule_code),'',1);
 			$scheduled=array_key_exists(0,$past_event)?array($past_event[0]['e_start_minute'],$past_event[0]['e_start_hour'],$past_event[0]['e_start_month'],$past_event[0]['e_start_day'],$past_event[0]['e_start_year']):NULL;
+			if ((!is_null($scheduled)) && ($scheduled<time())) $scheduled=NULL;
 		} else
 		{
 			$scheduled=NULL;
@@ -465,7 +466,8 @@ class Module_cms_news extends standard_aed_module
 		$validated=post_param_integer('validated',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
 		$news_article=post_param('post',STRING_MAGIC_NULL);
-		$main_news_category=post_param_integer('main_news_category',INTEGER_MAGIC_NULL);
+		if (post_param('main_news_category')!='personal') $main_news_category=post_param_integer('main_news_category',INTEGER_MAGIC_NULL);
+		else warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 		$news_category=array();
 		if (array_key_exists('news_category',$_POST))

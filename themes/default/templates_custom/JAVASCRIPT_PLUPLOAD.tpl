@@ -5449,6 +5449,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	if (('{$CONFIG_OPTION,complex_uploader}'=='0') || (window.location.search.indexOf('keep_no_swfupload=1')!=-1)) return;
 
 	if (!filter) filter='{$CONFIG_OPTION#,valid_types}';
+	filter+=','+filter.toUpperCase();
 
 	{+START,IF,{$VALUE_OPTION,aviary}}
 		if (typeof window.done_aviary=='undefined') do_aviary();

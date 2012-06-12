@@ -188,14 +188,14 @@ class Module_recommend
 			}
 		}
 
-		if ((get_option('is_on_invites')=='1') && (get_forum_type()=='ocf') && (!is_guest()))
+		if ((may_use_invites()) && (get_forum_type()=='ocf') && (!is_guest()))
 		{
 			$invites=get_num_invites(get_member());
 			if ($invites>0)
 			{
 				require_lang('ocf');
 				$invite=(count($_POST)==0)?true:(post_param_integer('invite',0)==1);
-				$fields->attach(form_input_tick(do_lang_tempcode('USE_INVITE'),do_lang_tempcode('USE_INVITE_DESCRIPTION',integer_format($invites)),'invite',$invite));
+				$fields->attach(form_input_tick(do_lang_tempcode('USE_INVITE'),do_lang_tempcode('USE_INVITE_DESCRIPTION',$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?do_lang('NA_EM'):integer_format($invites)),'invite',$invite));
 			}
 		}
 		$message=post_param('message',NULL);
@@ -634,13 +634,14 @@ class Module_recommend
 				$referring_username=is_guest()?NULL:get_member();
 				$_url=(post_param_integer('invite',0)==1)?build_url(array('page'=>'join','email_address'=>$email_address,'keep_referrer'=>$referring_username),get_module_zone('join')):build_url(array('page'=>'','keep_referrer'=>$referring_username),'');
 				$url=$_url->evaluate();
-				$message=do_lang((post_param_integer('invite',0)==1)?'INVITE_MEMBER_MESSAGE':'RECOMMEND_MEMBER_MESSAGE',$name,$url,array(get_site_name())).$message;
+				$join_url=$GLOBALS['FORUM_DRIVER']->join_url();
+				$message=do_lang((post_param_integer('invite',0)==1)?'INVITE_MEMBER_MESSAGE':'RECOMMEND_MEMBER_MESSAGE',$name,$url,array(get_site_name(),$join_url)).$message;
 			} else
 			{
 				$title=get_screen_title('RECOMMEND_LINK');
 			}
 
-			if ((get_option('is_on_invites')=='1') && (get_forum_type()=='ocf') && (!is_guest()) && (post_param_integer('invite',0)==1))
+			if ((may_use_invites()) && (get_forum_type()=='ocf') && (!is_guest()) && (post_param_integer('invite',0)==1))
 			{
 				$invites=get_num_invites(get_member());
 				if ($invites>0)

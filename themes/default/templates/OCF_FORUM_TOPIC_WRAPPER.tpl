@@ -81,7 +81,7 @@
 
 				<div class="inline">
 					<select class="dropdown_actions" name="type" id="fma_type">
-						<option value="-1">-</option>
+						<option value="misc">-</option>
 						{MODERATOR_ACTIONS}
 					</select>
 					<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_micro" type="submit" value="{!PROCEED}" />

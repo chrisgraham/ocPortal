@@ -178,7 +178,7 @@ class Hook_fields_date
 		$hour=post_param_integer($stub.'_hour',0);
 		$minute=post_param_integer($stub.'_minute',0);
 
-		return strval($year).'-'.strval($month).'-'.strval($day).' '.strval($hour).':'.strval($minute);
+		return str_pad(strval($year),4,'0',STR_PAD_LEFT).'-'.str_pad(strval($month),2,'0',STR_PAD_LEFT).'-'.str_pad(strval($day),2,'0',STR_PAD_LEFT).' '.strval($hour).':'.strval($minute);
 
 		/*$temp=get_input_date($tmp_name);
 		if (is_null($temp)) return $editing?STRING_MAGIC_NULL:'';
