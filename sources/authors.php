@@ -82,7 +82,7 @@ function authors_script()
 }
 
 /**
- * Get a member ID from an author name. First by trying authors table, second by trying forum membernames.
+ * Get a member ID from an author name. First by trying authors table, second by trying forum usernames.
  *
  * @param  ID_TEXT		The name of an author
  * @return ?MEMBER		The member ID (NULL: none found)

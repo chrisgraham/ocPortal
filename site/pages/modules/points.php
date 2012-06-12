@@ -209,7 +209,7 @@ class Module_points
 		{
 			$username='';
 		}
-		$fields=form_input_username(do_lang_tempcode('USERNAME'),'','membername',$username,true,false);
+		$fields=form_input_username(do_lang_tempcode('USERNAME'),'','username',$username,true,false);
 		$submit_name=do_lang_tempcode('SEARCH');
 		$text=new ocp_tempcode();
 		$text->attach(paragraph(do_lang_tempcode('POINTS_SEARCH_FORM')));
@@ -227,14 +227,14 @@ class Module_points
 	{
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=points&filter=';
 
-		$membername=str_replace('*','%',get_param('membername'));
-		if ((substr($membername,0,1)=='%') && ($GLOBALS['FORUM_DRIVER']->get_members()>3000))
+		$username=str_replace('*','%',get_param('username'));
+		if ((substr($username,0,1)=='%') && ($GLOBALS['FORUM_DRIVER']->get_members()>3000))
 			warn_exit(do_lang_tempcode('CANNOT_WILDCARD_START'));
-		if ((strpos($membername,'%')!==false) && (strpos($membername,'%')<6) && ($GLOBALS['FORUM_DRIVER']->get_members()>30000))
+		if ((strpos($username,'%')!==false) && (strpos($username,'%')<6) && ($GLOBALS['FORUM_DRIVER']->get_members()>30000))
 			warn_exit(do_lang_tempcode('CANNOT_WILDCARD_START'));
-		if ((strpos($membername,'%')!==false) && (strpos($membername,'%')<12) && ($GLOBALS['FORUM_DRIVER']->get_members()>300000))
+		if ((strpos($username,'%')!==false) && (strpos($username,'%')<12) && ($GLOBALS['FORUM_DRIVER']->get_members()>300000))
 			warn_exit(do_lang_tempcode('CANNOT_WILDCARD_START'));
-		$rows=$GLOBALS['FORUM_DRIVER']->get_matching_members($membername,100);
+		$rows=$GLOBALS['FORUM_DRIVER']->get_matching_members($username,100);
 		if (!array_key_exists(0,$rows))
 		{
 			$title=get_screen_title('USER_POINT_FIND');

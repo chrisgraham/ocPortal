@@ -7,9 +7,9 @@
 				{+START,IF,{$CONFIG_OPTION,enable_markup_validation}}
 					<p>
 						<span class="field_name">{!VALIDATION}:</span>
-						<label for="perform_validation_no"><input title="{!DESCRIPTION_VALIDATION_ON_PREVIEW_0}" {+START,IF,{$NOT,{$HAS_PRIVILEGE,perform_markup_validation_by_default}}}checked="checked" {+END}type="radio" name="perform_validation" value="0" id="perform_validation_no" />{!NO}</label>
-						<label for="perform_validation_yes"><input title="{!DESCRIPTION_VALIDATION_ON_PREVIEW_1}" {+START,IF,{$HAS_PRIVILEGE,perform_markup_validation_by_default}}checked="checked" {+END}type="radio" name="perform_validation" value="1" id="perform_validation_yes" />{!YES}</label>
-						<label for="perform_validation_more"><input title="{!DESCRIPTION_VALIDATION_ON_PREVIEW_2}" type="radio" name="perform_validation" value="2" id="perform_validation_more" />{!MANUAL_CHECKS_TOO}</label>
+						<input title="{!DESCRIPTION_VALIDATION_ON_PREVIEW_0}" {+START,IF,{$NOT,{$HAS_PRIVILEGE,perform_markup_validation_by_default}}}checked="checked" {+END}type="radio" name="perform_validation" value="0" id="perform_validation_no" /><label for="perform_validation_no">{!NO}</label>
+						<input title="{!DESCRIPTION_VALIDATION_ON_PREVIEW_1}" {+START,IF,{$HAS_PRIVILEGE,perform_markup_validation_by_default}}checked="checked" {+END}type="radio" name="perform_validation" value="1" id="perform_validation_yes" /><label for="perform_validation_yes">{!YES}</label>
+						<input title="{!DESCRIPTION_VALIDATION_ON_PREVIEW_2}" type="radio" name="perform_validation" value="2" id="perform_validation_more" /><label for="perform_validation_more">{!MANUAL_CHECKS_TOO}</label>
 					</p>
 				{+END}
 				{+START,IF,{$CONFIG_OPTION,enable_spell_check}}

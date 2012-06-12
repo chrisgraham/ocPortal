@@ -275,6 +275,8 @@ class Module_members
 	{
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.propagate_ocselect_pagelink(),do_lang_tempcode('MEMBERS'))));
 
+		disable_php_memory_limit();
+
 		$username=get_param('id',strval(get_member()));
 		if ($username=='') $username=strval(get_member());
 		if (is_numeric($username))

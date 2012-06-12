@@ -84,16 +84,16 @@
 				<tr>
 					<td class="form_table_field_name">{!USE_MULTI_DB} <div class="associated_details">{!REQUIRES_MORE_INFO}</div></td>
 					<td class="form_table_field_input">
-						<label for="yes"><input type="radio" name="use_multi_db" value="1" id="yes" />{!YES}</label>
-						<label class="radio_horiz_spacer" for="no"><input type="radio" name="use_multi_db" value="0" id="no" checked="checked" />{!NO}</label>
+						<input type="radio" name="use_multi_db" value="1" id="yes" /><label for="yes">{!YES}</label>
+						<input type="radio" name="use_multi_db" value="0" id="no" checked="checked" /><label class="radio_horiz_spacer" for="no">{!NO}</label>
 					</td>
 				</tr>
 
 				<tr>
 					<td class="form_table_field_name">{!USE_MSN} <div class="associated_details">{!REQUIRES_MORE_INFO}</div></td>
 					<td class="form_table_field_input">
-						<label for="yes2"><input type="radio" name="use_msn" value="1" id="yes2" />{!YES}</label>
-						<label class="radio_horiz_spacer" for="no2"><input type="radio" name="use_msn" value="0" id="no2" checked="checked" />{!NO}</label>
+						<input type="radio" name="use_msn" value="1" id="yes2" /><label for="yes2">{!YES}</label>
+						<input type="radio" name="use_msn" value="0" id="no2" checked="checked" /><label class="radio_horiz_spacer" for="no2">{!NO}</label>
 					</td>
 				</tr>
 			</tbody>

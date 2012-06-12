@@ -43,11 +43,11 @@ class points_test_set extends ocp_test_case
 		$browser->setField('password', 'welcome');
 		$browser->clickSubmit('Login');
 
-		$browser->setField('membername', 'abcxyz123');
+		$browser->setField('username', 'abcxyz123');
 		$page1= $browser->clickSubmitById('submit_button');
 
 		$browser->get(get_base_url().'/site/index.php?page=points');
-		$browser->setField('membername', '123abcxyz');
+		$browser->setField('username', '123abcxyz');
 		$page2= $browser->clickSubmitById('submit_button');
 
 		$this->assertTrue($page1==$page2);
@@ -63,7 +63,7 @@ class points_test_set extends ocp_test_case
 		$browser->setField('password', 'welcome');
 		$browser->clickSubmit('Login');
 
-		$browser->setField('membername', '*');
+		$browser->setField('username', '*');
 		$browser->clickSubmitById('submit_button');
 
 		$browser->click('admin');

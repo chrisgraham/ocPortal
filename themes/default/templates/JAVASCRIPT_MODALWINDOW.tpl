@@ -664,7 +664,12 @@ function ModalWindow()
 			if(this.input) this.input.focus();
 			else if (typeof this.box.getElementsByTagName('button')[0]!='undefined') this.box.getElementsByTagName('button')[0].focus();
 
-			if(this.yes || this.yes != false) this.addEvent(document, "keyup", this.keyup );
+			if(this.yes || this.yes != false)
+			{
+				window.setTimeout(function() { // Timeout needed else keyboard activation of overlay opener may cause instant shutdown also
+					_this.addEvent(document, "keyup", _this.keyup );
+				},100);
+			}
 		},
 
 		inject: function(el) {

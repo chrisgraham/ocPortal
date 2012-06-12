@@ -717,8 +717,9 @@ function do_site()
 		// Security feature admins can turn on
 		require_code('notifications');
 		$current_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$subject=do_lang('AFA_NOTIFICATION_MAIL_SUBJECT',$current_username,get_site_name(),get_ip_address());
-		$mail=do_lang('AFA_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($current_username),comcode_escape(get_ip_address()));
+		$subject=do_lang('AFA_NOTIFICATION_MAIL_SUBJECT',$current_username,get_site_name());
+		$mail=do_lang('AFA_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($current_username));
+
 		dispatch_notification('adminzone_frontpage_accessed',NULL,$subject,$mail);
 
 		// Track very basic details of what sites use ocPortal. You can remove if you like.
@@ -1464,5 +1465,4 @@ function log_stats($string,$pg_time)
 	global $SITE_INFO;
 	if (isset($SITE_INFO['throttle_bandwidth_views_per_meg'])) set_value('page_views',strval(intval(get_value('page_views'))+1));
 }
-
 

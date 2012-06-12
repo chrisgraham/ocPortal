@@ -190,6 +190,7 @@ class Module_admin
 			array('module','addon','system'),
 			array('cache','decache','cleanup'),
 			array('ssl','https'),
+			array('seed','theme wizard'),
 		);
 	}
 
@@ -1076,7 +1077,7 @@ class Module_admin
 			}
 		}
 
-		ksort($content);
+		//ksort($content);		Don't sort, we have an implicit good order in this code file
 
 		// And show results...
 		if (addon_installed('search'))

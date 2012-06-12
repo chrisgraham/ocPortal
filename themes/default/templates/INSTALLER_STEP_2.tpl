@@ -25,7 +25,7 @@
 				</select>
 			</div>
 
-			<p><label for="advertise_on"><input type="checkbox" checked="checked" value="1" name="advertise_on" id="advertise_on" />{!ADVERTISE_ON_OCPORTAL}</label></p>
+			<p><input type="checkbox" checked="checked" value="1" name="advertise_on" id="advertise_on" /><label for="advertise_on">{!ADVERTISE_ON_OCPORTAL}</label></p>
 		</div>
 
 		<p>{!EMAIL_NEWSLETTER}</p>
