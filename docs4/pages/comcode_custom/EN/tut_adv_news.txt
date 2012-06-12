@@ -17,7 +17,7 @@ ocPortal has advanced support for blogging: members in permitted usergroups may 
 [exp_thumb="The blog is linked to in the member profile" float="right"]adv_news_profile[/exp_thumb]
 To create a 'blog', a member only needs to choose to add news, and select their own personal category; if the category does not yet exist, it will be displayed as 'new', and created automatically upon submission. The news will display on the front page of the website (by default), and the blog for the member may be viewed from the links given in their member profile.
 
-Since version 4.2 there is a blogs CMS interface separate to the news CMS interface. This is provided for two reasons:
+There is a blogs CMS interface separate to the news CMS interface. This is provided for two reasons:
 1) as a niceity so that you don't need to explain 'blogs are news' to your users
 2) so you can lock down access, so that members may submit to blogs but not website news
 The presence of the blogs CMS interface does not stop you using the regular news CMS interface to submit blog posts.
