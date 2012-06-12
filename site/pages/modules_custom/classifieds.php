@@ -203,7 +203,7 @@ class Module_classifieds
 
 		$results_browser=results_browser(do_lang('_CLASSIFIED_ADVERTS'),NULL,$start,'start',$max,'max',$max_rows,NULL,NULL,true);
 
-		return do_template('CLASSIFIED_ADVERTS_SCREEN',array('TITLE'=>$title,'ADS'=>$ads));
+		return do_template('CLASSIFIED_ADVERTS_SCREEN',array('TITLE'=>$title,'RESULTS_BROWSER'=>$results_browser,'ADS'=>$ads));
 	}
 
 }
