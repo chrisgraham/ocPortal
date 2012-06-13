@@ -91,6 +91,8 @@ class Module_groups
 	 */
 	function get_sitemap_pagelinks($callback,$member_id,$depth,$pagelink_stub)
 	{
+		if (get_forum_type()!='ocf') return;
+
 		// Entries
 		if ($depth>=DEPTH__ENTRIES)
 		{
