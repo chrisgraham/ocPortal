@@ -194,12 +194,12 @@ class Module_iotds
 	 */
 	function iotd_browse()
 	{
-		$start=get_param_integer('start',0);
 		$title=get_page_title('IOTD_ARCHIVE');
 
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='max';
 
+		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),array('used'=>1),'ORDER BY date_and_time DESC',$max,$start);

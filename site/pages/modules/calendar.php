@@ -1300,6 +1300,9 @@ class Module_calendar
 	{
 		check_specific_permission('view_calendar');
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='back';
+
 		$id=get_param_integer('id');
 		$filter=$this->get_filter();
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=calendar&filter='.implode(',',$this->get_and_filter());
@@ -1409,7 +1412,6 @@ class Module_calendar
 
 		if ($event['e_seg_recurrences']==0)
 		{
-			global $NON_CANONICAL_PARAMS;
 			$NON_CANONICAL_PARAMS[]='day';
 			$NON_CANONICAL_PARAMS[]='date';
 		}

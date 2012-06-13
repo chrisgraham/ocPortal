@@ -175,6 +175,9 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	$CAT_FIELDS_CACHE[$catalogue_name]=$fields;
 	if ($do_sorting)
 	{
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='order';
+
 		if (is_null($_order_by))
 			$_order_by=get_param('order','');
 		if (($_order_by=='') || (strpos($_order_by,' ')===false/*probably some bot probing URLs -- sorting always has a space between sorter and direction*/))
