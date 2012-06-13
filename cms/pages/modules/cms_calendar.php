@@ -289,6 +289,11 @@ class Module_cms_calendar extends standard_aed_module
 
 		if (is_null($type)) // Adding one
 		{
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='date';
+			$NON_CANONICAL_PARAMS[]='e_type';
+			$NON_CANONICAL_PARAMS[]='validated';
+
 			$date=get_param('date','');
 			$start_hour=NULL;
 			$start_minute=NULL;

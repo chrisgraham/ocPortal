@@ -260,6 +260,9 @@ class Module_polls
 	 */
 	function view_polls()
 	{
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='max';
+
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
 		$title=get_page_title('POLL_ARCHIVE');

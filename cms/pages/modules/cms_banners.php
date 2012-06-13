@@ -310,6 +310,9 @@ class Module_cms_banners extends standard_aed_module
 	 */
 	function get_form_fields($name='',$image_url='',$site_url='',$caption='',$notes='',$importancemodulus=3,$campaignremaining=50,$the_type=1,$expiry_date=NULL,$submitter=NULL,$validated=1,$b_type='',$title_text='')
 	{
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='b_type';
+
 		if ($b_type=='') $b_type=get_param('b_type','');
 
 		$fields=get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,is_null($submitter)?NULL:$GLOBALS['FORUM_DRIVER']->get_username($submitter),$validated,$b_type,$title_text);

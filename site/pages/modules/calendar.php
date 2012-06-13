@@ -1407,6 +1407,13 @@ class Module_calendar
 			$edit_url=new ocp_tempcode();
 		}
 
+		if ($event['e_seg_recurrences']==0)
+		{
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='day';
+			$NON_CANONICAL_PARAMS[]='date';
+		}
+
 		$day=get_param('day','');
 		if ($day!='')
 		{

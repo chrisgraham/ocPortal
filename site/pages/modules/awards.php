@@ -186,6 +186,9 @@ class Module_awards
 		$info=$object->info();
 		if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='max';
+
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
 		$title=get_page_title('_AWARD',true,array(escape_html(get_translated_text($award_type_row['a_title']))));

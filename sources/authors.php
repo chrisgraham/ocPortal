@@ -25,6 +25,9 @@ function authors_script()
 {
 	require_lang('authors');
 
+	global $NON_CANONICAL_PARAMS;
+	$NON_CANONICAL_PARAMS[]='max';
+
 	$start=get_param_integer('start',0);
 	$max=get_param_integer('max',300);
 

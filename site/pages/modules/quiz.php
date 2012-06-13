@@ -283,6 +283,9 @@ class Module_quiz
 	 */
 	function archive()
 	{
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='max';
+
 		$start=get_param_integer('start',0);
 		$title=get_page_title('QUIZZES');
 

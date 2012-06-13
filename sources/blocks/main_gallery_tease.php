@@ -71,6 +71,9 @@ class Block_main_gallery_tease
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='max';
+
 		$max=get_param_integer('max',5);
 		if ($max<1) $max=1;
 		$start=get_param_integer('start',0);

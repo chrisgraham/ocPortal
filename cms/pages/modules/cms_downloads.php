@@ -468,10 +468,17 @@ class Module_cms_downloads extends standard_aed_module
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='validated';
+
 		if ((is_null($id)) && (is_null($category_id)))
 		{
-			global $NON_CANONICAL_PARAMS;
 			$NON_CANONICAL_PARAMS[]='cat';
+			$NON_CANONICAL_PARAMS[]='name';
+			$NON_CANONICAL_PARAMS[]='author';
+			$NON_CANONICAL_PARAMS[]='description';
+			$NON_CANONICAL_PARAMS[]='comments';
+			$NON_CANONICAL_PARAMS[]='notes';
 
 			$category_id=get_param_integer('cat',-1);
 			if ($category_id==-1) $category_id=NULL;

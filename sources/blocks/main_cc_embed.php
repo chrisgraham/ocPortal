@@ -60,6 +60,9 @@ class Block_main_cc_embed
 	 */
 	function run($map)
 	{
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='max';
+
 		$category_id=array_key_exists('param',$map)?intval($map['param']):db_get_first_id();
 		$max=get_param_integer('max',array_key_exists('max',$map)?intval($map['max']):30);
 		$start=get_param_integer('start',0);
