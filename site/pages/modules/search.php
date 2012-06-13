@@ -343,6 +343,8 @@ class Module_search
 	 */
 	function form()
 	{
+		global $NON_CANONICAL_PARAMS;
+
 		$id=get_param('id','');
 
 		$title=get_screen_title('SEARCH_TITLE');
@@ -484,6 +486,8 @@ class Module_search
 				$info=$object->info();
 				if (is_null($info)) continue;
 
+				$NON_CANONICAL_PARAMS[]='search_'.$hook;
+
 				$is_default_or_advanced=(($info['default']) && ($id=='')) || ($hook==$id);
 
 				$checked=(get_param_integer('search_'.$hook,((is_null($content)) || (get_param_integer('all_defaults',0)==1))?($is_default_or_advanced?1:0):0)==1);
@@ -509,12 +513,22 @@ class Module_search
 		$sort=get_param('sort','relevance');
 		$direction=get_param('direction','DESC');
 		if (!in_array(strtoupper($direction),array('ASC','DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
+		$NON_CANONICAL_PARAMS[]='direction';
 		$only_titles=get_param_integer('only_titles',0)==1;
 		$search_under=get_param('search_under','!',true);
 		if ($search_under=='') $search_under='!';
 		$boolean_operator=get_param('conjunctive_operator','OR');
+
+		$NON_CANONICAL_PARAMS[]='search_under';
+		$NON_CANONICAL_PARAMS[]='all_defaults';
+		$NON_CANONICAL_PARAMS[]='days';
+		$NON_CANONICAL_PARAMS[]='only_titles';
+		$NON_CANONICAL_PARAMS[]='conjunctive_operator';
+		$NON_CANONICAL_PARAMS[]='boolean_search';
+		$NON_CANONICAL_PARAMS[]='only_search_meta';
+		$NON_CANONICAL_PARAMS[]='content';
+		$NON_CANONICAL_PARAMS[]='author';
 
 		$test=db_has_full_text($GLOBALS['SITE_DB']->connection_read);
 		$old_mysql=!$test;

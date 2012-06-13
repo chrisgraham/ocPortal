@@ -323,11 +323,13 @@ class Module_cms_catalogues extends standard_aed_module
 
 		$hidden=form_input_hidden('catalogue_name',$catalogue_name);
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='validated';
+
 		if ((is_null($id)) && (is_null($category_id)))
 		{
 			$category_id=get_param_integer('category_id',NULL);
 
-			global $NON_CANONICAL_PARAMS;
 			$NON_CANONICAL_PARAMS[]='category_id';
 			$NON_CANONICAL_PARAMS[]='category_id_suggest';
 		}
@@ -372,6 +374,8 @@ class Module_cms_catalogues extends standard_aed_module
 		require_code('fields');
 		foreach ($special_fields as $field_num=>$field)
 		{
+			$NON_CANONICAL_PARAMS[]='field_'.strval($field['id']);
+
 			$ob=get_fields_hook($field['cf_type']);
 			$default=get_param('field_'.strval($field['id']),$field['cf_default']);
 			if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];
@@ -1378,6 +1382,8 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		{
 			global $NON_CANONICAL_PARAMS;
 			$NON_CANONICAL_PARAMS[]='parent_id';
+			$NON_CANONICAL_PARAMS[]='title';
+			$NON_CANONICAL_PARAMS[]='notes';
 
 			$parent_id=get_param_integer('parent_id',-1);
 

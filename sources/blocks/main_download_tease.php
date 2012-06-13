@@ -66,6 +66,9 @@ class Block_main_download_tease
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('downloads');
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='max';
+
 		$max=get_param_integer('max',10);
 		if ($max<1) $max=1;
 		$start=get_param_integer('start',0);

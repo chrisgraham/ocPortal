@@ -217,6 +217,9 @@ class Module_cms_quiz extends standard_aed_module
 		$fields->attach(form_input_huge(do_lang_tempcode('QUESTIONS'),do_lang_tempcode('IMPORT_QUESTIONS_TEXT'),'text',$text,true));
 		if ($validated==0)
 		{
+			global $NON_CANONICAL_PARAMS;
+			$NON_CANONICAL_PARAMS[]='validated';
+
 			$validated=get_param_integer('validated',0);
 			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}

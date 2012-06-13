@@ -71,6 +71,9 @@ class Block_main_gallery_tease
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='max';
+
 		$max=get_param_integer('max',5);
 		if ($max<1) $max=1;
 		$start=get_param_integer('start',0);
@@ -93,6 +96,7 @@ class Block_main_gallery_tease
 			$url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$child['name']),$zone);
 
 			$member_id=get_member_id_from_gallery_name($child['name'],$child,true);
+			$is_member=!is_null($member_id);
 			$_title=get_translated_text($child['fullname']);
 			$pic=$child['rep_image'];
 			if (($pic=='') && ($is_member)) $pic=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_avatar_url');

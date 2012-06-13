@@ -25,6 +25,8 @@ class standard_dir_files_test_set extends ocp_test_case
 {
 	function setUp()
 	{
+		if (function_exists('set_time_limit')) @set_time_limit(0);
+
 		parent::setUp();
 	}
 

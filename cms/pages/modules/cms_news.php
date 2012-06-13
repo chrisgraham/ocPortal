@@ -227,6 +227,13 @@ class Module_cms_news extends standard_aed_module
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='cat';
+		$NON_CANONICAL_PARAMS[]='title';
+		$NON_CANONICAL_PARAMS[]='author';
+		$NON_CANONICAL_PARAMS[]='notes';
+		$NON_CANONICAL_PARAMS[]='validated';
+
 		if ($title=='')
 		{
 			$main_news_category=get_param_integer('cat',$main_news_category);
@@ -357,6 +364,8 @@ class Module_cms_news extends standard_aed_module
 		$category_query=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry_category'),array('news_entry'=>$id));
 
 		foreach ($category_query as $value) $categories[]=$value['news_entry_category'];
+
+		$scheduled=mixed();
 
 		if (addon_installed('calendar'))
 		{
