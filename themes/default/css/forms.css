@@ -77,6 +77,10 @@ span.form_field_name {
 	margin: 1em 0;
 }
 
+.toggleable_tray>.wide_table_wrap:first-child>.form_table {
+	margin-top: 0;
+}
+
 /*
 Curved borders would be cool, but it does not work well with the carefully defined internal cell borders which we have
 .form_table>tbody>tr:first-child>:first-child {
@@ -107,7 +111,7 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 .form_table_field_spacer>th, .form_table_field_spacer>td, .form_table_description_above_cell, .form_table_description_under_cell
 {
 	border: 1px dotted {$GET,pale_border};
-	color: {$GET,slightly_seeded_text};
+	color: {$GET,slightly_seeded_text} !important;
 	padding: 0.5em;
 	background-color: {$GET,area_background} !important; /* !important is so has priority over .de_th */
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_2_background});}
