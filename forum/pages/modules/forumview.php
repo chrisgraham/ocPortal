@@ -217,6 +217,7 @@ class Module_forumview
 		global $NON_CANONICAL_PARAMS;
 		foreach (array_keys($_GET) as $key)
 			if (substr($key,0,3)=='kfs') $NON_CANONICAL_PARAMS[]=$key;
+		$NON_CANONICAL_PARAMS[]='order';
 
 		$type=get_param('type','misc');
 

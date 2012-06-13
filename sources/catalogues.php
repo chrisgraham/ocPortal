@@ -146,6 +146,9 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	// Find order field from environment (assuming $_order_by not passed in), and decode to $order_by/$direction which are semantically quite different
 	if ($do_sorting)
 	{
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='order';
+
 		if (is_null($_order_by))
 			$_order_by=get_param('order','');
 		if (($_order_by=='') || (strpos($_order_by,' ')===false/*probably some bot probing URLs -- sorting always has a space between sorter and direction*/))
