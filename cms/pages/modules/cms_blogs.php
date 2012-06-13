@@ -322,6 +322,8 @@ class Module_cms_blogs extends standard_aed_module
 
 		foreach ($category_query as $value) $categories[]=$value['news_entry_category'];
 
+		$scheduled=mixed();
+
 		if (addon_installed('calendar'))
 		{
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
