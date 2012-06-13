@@ -216,6 +216,7 @@ function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=
 	$url=build_url(array('page'=>'galleries','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$child['name']),$zone);
 	$_title=get_translated_text($child['fullname']);
 	$pic=$child['rep_image'];
+	$is_member=!is_null($member_id);
 	if (($pic=='') && ($is_member)) $pic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 	$add_date=get_timezoned_date($child['add_date'],false);
 	$comments=get_translated_tempcode($child['description']);
