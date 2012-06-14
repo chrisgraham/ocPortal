@@ -1774,7 +1774,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 	$templates_rename=array();
 	$templates_borked=array();
 
-	if (($from_version<8.0) && ($to_version==8.0))
+	if (($from_version<8.0) && ($to_version>=8.0) && ($to_version<9.0))
 	{
 		$css_recognition_string='2004-2011'; // Must be defined. Ensures theme is right version.
 
