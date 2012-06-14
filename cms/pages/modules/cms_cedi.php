@@ -374,7 +374,7 @@ class Module_cms_cedi
 
 			require_code('permissions2');
 			set_category_permissions_from_environment('seedy_page',strval($id),'cms_cedi');
-			cedi_edit_page($id,post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0),post_param('meta_keywords'),post_param('meta_description'));
+			cedi_edit_page($id,post_param('title'),post_param('post'),post_param('notes',''),post_param_integer('hide_posts',0),post_param('meta_keywords',''),post_param('meta_description',''));
 
 			require_code('fields');
 			if (has_tied_catalogue('seedy_page'))
