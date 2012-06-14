@@ -359,10 +359,16 @@ function checkField(theElement,theForm,forPreview)
 	}
 
 	// Find whether field is required and value of it
-	required=theElement.className.indexOf('_required');
+	if (theElement.type=='radio')
+	{
+		required=(typeof theForm.elements['require__'+theElement.name]!='undefined') && (theForm.elements['require__'+theElement.name].value=='1');
+	} else
+	{
+		required=theElement.className.indexOf('_required')!=-1;
+	}
 	myValue=cleverFindValue(theForm,theElement);
 
-	if ((required!=-1) && ((myValue.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (myValue=='****')))
+	if ((required) && ((myValue.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (myValue=='****')))
 	{
 		errorMsg="{!REQUIRED_NOT_FILLED_IN^#}";
 	} else
@@ -430,7 +436,7 @@ function checkForm(theForm,forPreview)
 
 			if (checkResult[0])
 			{
-				theElement.onblur=function(theElement) { return function(event,no_recurse) {
+				var auto_reset_error=function(theElement) { return function(event,no_recurse) {
 					var checkResult=checkField(theElement,theForm,forPreview);
 					if ((checkResult!=null) && (!checkResult[0]))
 					{
@@ -446,7 +452,18 @@ function checkForm(theForm,forPreview)
 						var e=document.getElementById(theElement.id.replace(/\_(day|month|year)$/,'_year'));
 						if (e!=theElement) e.onblur(event,true);
 					}
-				} }(theElement);
+				}; };
+
+				if (theElement.getAttribute('type')=='radio')
+				{
+					for (var i=0;i<theForm.elements.length;i++)
+					{
+						theForm.elements[i].onchange=auto_reset_error(theForm.elements[i]);
+					}
+				} else
+				{
+					theElement.onblur=auto_reset_error(theElement);
+				}
 			}
 		}
 	}

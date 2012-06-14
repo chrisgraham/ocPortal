@@ -168,7 +168,7 @@ class Module_admin_backup
 		$content->attach(form_input_radio_entry('b_type','full',true,do_lang_tempcode('FULL_BACKUP')));
 		$content->attach(form_input_radio_entry('b_type','incremental',false,do_lang_tempcode('INCREMENTAL_BACKUP')));
 		$content->attach(form_input_radio_entry('b_type','sql',false,do_lang_tempcode('SQL_BACKUP')));
-		$fields=form_input_radio(do_lang_tempcode('TYPE'),do_lang_tempcode('BACKUP_TYPE'),$content);
+		$fields=form_input_radio(do_lang_tempcode('TYPE'),do_lang_tempcode('BACKUP_TYPE'),'b_type',$content);
 		$fields->attach(form_input_integer(do_lang_tempcode('MAXIMUM_SIZE_INCLUSION'),do_lang_tempcode('MAX_FILE_SIZE'),'max_size',$max_size,false));
 		if (addon_installed('calendar'))
 		{

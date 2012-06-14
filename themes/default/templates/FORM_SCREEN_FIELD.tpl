@@ -37,7 +37,9 @@
 		{+START,IF_NON_EMPTY,{DESCRIPTION}}
 			<div class="associated_caption{+START,IF,{$AND,{$EQ,{$SUBSTR_COUNT,{INPUT}, name="},2},{$EQ,{$SUBSTR_COUNT,{INPUT},type="file"},0},{$EQ,{$SUBSTR_COUNT,{INPUT},type="checkbox"},1}}} field_checkbox_description{+END}">{+START,IF,{$GET,show_label}}<label for="{BORING_NAME*}">{+END}{DESCRIPTION}{+START,IF,{$GET,show_label}}</label>{+END}</div>
 		{+END}
-		<input type="hidden" id="requirec__{$GET,randomised_id}" name="require__{BORING_NAME*}" value="{$?,{REQUIRED*},1,0}" />
+		{+START,IF_NON_EMPTY,{BORING_NAME}}
+			<input type="hidden" id="requirec__{$GET,randomised_id}" name="require__{BORING_NAME*}" value="{$?,{REQUIRED*},1,0}" />
+		{+END}
 
 		<script type="text/javascript">// <![CDATA[
 			addEventListenerAbstract(window,'load',function () {

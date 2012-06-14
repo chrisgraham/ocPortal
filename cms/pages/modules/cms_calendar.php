@@ -402,7 +402,7 @@ class Module_cms_calendar extends standard_aed_module
 		$radios->attach(form_input_radio_entry('recurrence','weekly',$recurrence_main=='weekly',do_lang_tempcode('WEEKLY')));
 		$radios->attach(form_input_radio_entry('recurrence','monthly',$recurrence_main=='monthly',do_lang_tempcode('MONTHLY')));
 		$radios->attach(form_input_radio_entry('recurrence','yearly',$recurrence_main=='yearly',do_lang_tempcode('YEARLY')));
-		$fields2->attach(form_input_radio(do_lang_tempcode('RECURRENCE'),do_lang_tempcode('DESCRIPTION_RECURRENCE'),$radios)); // xth_dotw_of_monthly
+		$fields2->attach(form_input_radio(do_lang_tempcode('RECURRENCE'),do_lang_tempcode('DESCRIPTION_RECURRENCE'),'recurrence',$radios)); // xth_dotw_of_monthly
 		$fields2->attach(form_input_line(do_lang_tempcode('RECURRENCE_PATTERN'),do_lang_tempcode('DESCRIPTION_RECURRENCE_PATTERN'),'recurrence_pattern',$recurrence_pattern,false));
 		$fields2->attach(form_input_integer(do_lang_tempcode('RECURRENCES'),do_lang_tempcode('DESCRIPTION_RECURRENCES'),'recurrences',$recurrences,false));
 		$fields2->attach(form_input_tick(do_lang_tempcode('SEG_RECURRENCES'),do_lang_tempcode('DESCRIPTION_SEG_RECURRENCES'),'seg_recurrences',$seg_recurrences==1));
@@ -574,7 +574,7 @@ class Module_cms_calendar extends standard_aed_module
 			$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('EDIT'));
 			$radios->attach(form_input_radio_entry('delete','3',false,do_lang_tempcode('FIX_PAST_RECURRENCES')));
 			$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE')));
-			$delete_fields=form_input_radio(do_lang_tempcode('ACTION'),do_lang_tempcode('DESCRIPTION_FIX_PAST_RECURRENCES'),$radios);
+			$delete_fields=form_input_radio(do_lang_tempcode('ACTION'),do_lang_tempcode('DESCRIPTION_FIX_PAST_RECURRENCES'),'delete',$radios);
 		} else $delete_fields=new ocp_tempcode();
 
 		return array($fields[0],$fields[1],$delete_fields,'',true,$content,$fields[6],$parsed);

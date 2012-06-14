@@ -1270,12 +1270,12 @@ class Module_admin_newsletter extends standard_aed_module
 			$monthly_desc->attach(do_lang('PERIODIC_MONTHLY_ON'));
 			$monthly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_monthly','CONTENT'=>$month_days,'INLINE_LIST'=>'0')));
 			$radios->attach(form_input_radio_entry('periodic_when','monthly',$frequency=='monthly',$monthly_desc,NULL,''));
-			$fields->attach(form_input_radio(do_lang('PERIODIC_WHEN_CHOICE'),'',$radios,true));
+			$fields->attach(form_input_radio(do_lang('PERIODIC_WHEN_CHOICE'),'','periodic_when',$radios,true));
 
 			$radios=new ocp_tempcode();
 			$radios->attach(form_input_radio_entry('periodic_for','all',false,do_lang_tempcode('CREATE_PERIODIC_FOR_ALL'),NULL,''));
 			$radios->attach(form_input_radio_entry('periodic_for','future',true,do_lang_tempcode('CREATE_PERIODIC_FOR_FUTURE'),NULL,''));
-			$fields->attach(form_input_radio(do_lang('CREATE_PERIODIC_FOR'),'',$radios,true));
+			$fields->attach(form_input_radio(do_lang('CREATE_PERIODIC_FOR'),'','periodic_for',$radios,true));
 		}
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'0b2a4825ec586d9ff557026d9a1e0cca','TITLE'=>$title,'TEXT'=>(($periodic_action=='make' || $periodic_action=='replace')? do_lang_tempcode('PERIODIC_NO_EDIT') : do_lang_tempcode('NEWSLETTER_SEND_TEXT')),'HIDDEN'=>$hidden,'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));

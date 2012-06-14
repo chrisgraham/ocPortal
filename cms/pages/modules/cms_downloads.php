@@ -607,7 +607,7 @@ class Module_cms_downloads extends standard_aed_module
 			$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
 			$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
 			$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
-			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),$radios);
+			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
 		} else $delete_fields=new ocp_tempcode();
 
 		return array($fields,$hidden,$delete_fields,'',true);

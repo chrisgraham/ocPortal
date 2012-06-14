@@ -820,7 +820,7 @@ class standard_aed_module
 		{
 			$entries=$this->nice_get_radio_entries();
 			if ($entries->is_empty()) inform_exit(do_lang_tempcode(($this->type_code=='d')?'NO_ENTRIES':'NO_CATEGORIES'));
-			$fields=form_input_radio(do_lang_tempcode($this->select_name),$description,$entries,$this->no_blank_ids,true,'');
+			$fields=form_input_radio(do_lang_tempcode($this->select_name),$description,'id',$entries,$this->no_blank_ids,true,'');
 		}
 		elseif ((method_exists($this,'nice_get_ajax_tree')) && (($_fields=$this->nice_get_ajax_tree())!==NULL))
 		{

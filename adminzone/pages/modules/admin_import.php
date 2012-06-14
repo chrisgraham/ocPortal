@@ -491,14 +491,14 @@ class Module_admin_import
 			$radio_entries->attach(form_input_radio_entry('import_position','match_or_specific_position',false,do_lang_tempcode('IMPORT_MATCH_OR_SPECIFIC_POSITION')));
 			$radio_entries->attach(form_input_radio_entry('import_position','match_or_skip',false,do_lang_tempcode('IMPORT_MATCH_OR_SKIP')));
 			$radio_entries->attach(form_input_radio_entry('import_position','match_or_warn',false,do_lang_tempcode('IMPORT_MATCH_OR_WARN')));
-			$fields->attach(form_input_radio(do_lang_tempcode('IMPORT_POSITION'),do_lang_tempcode('DESCRIPTION_IMPORT_POSITION'),$radio_entries,true));
+			$fields->attach(form_input_radio(do_lang_tempcode('IMPORT_POSITION'),do_lang_tempcode('DESCRIPTION_IMPORT_POSITION'),'import_position',$radio_entries,true));
 		}
 
 		// Options for replacing/overwriting content
 		$radio_entries=new ocp_tempcode();
 		$radio_entries->attach(form_input_radio_entry('import_replace','replace',true,do_lang_tempcode('IMPORT_REPLACE_OVERWRITE')));
 		$radio_entries->attach(form_input_radio_entry('import_replace','skip',false,do_lang_tempcode('IMPORT_REPLACE_SKIP')));
-		$fields->attach(form_input_radio(do_lang_tempcode('IMPORT_REPLACE'),do_lang_tempcode('DESCRIPTION_IMPORT_REPLACE'),$radio_entries,true));
+		$fields->attach(form_input_radio(do_lang_tempcode('IMPORT_REPLACE'),do_lang_tempcode('DESCRIPTION_IMPORT_REPLACE'),'import_replace',$radio_entries,true));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'advanced_import','session'=>$session),'_SELF');
 		$message=array_key_exists('message',$info)?$info['message']:'';
