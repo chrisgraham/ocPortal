@@ -87,7 +87,40 @@ function content_get_details($content_type,$content_id)
 	$db=$GLOBALS[(substr($cma_info['table'],0,2)=='f_')?'FORUM_DB':'SITE_DB'];
 
 	$content_row=content_get_row($content_id,$cma_info);
-	if (is_null($content_row)) return array(NULL,NULL,NULL,NULL,NULL,NULL);
+	if (is_null($content_row))
+	{
+		if (($content_type=='comcode_page') && (strpos($content_id,':')!==false))
+		{
+			list($zone,$page)=explode(':',$content_id,2);
+
+			$members=$GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),1);
+			if (count($members)!=0)
+			{
+				$submitter_id=$GLOBALS['FORUM_DRIVER']->pname_id($members[key($members)]);
+			} else
+			{
+				$submitter_id=db_get_first_id()+1; // On OCF and most forums, this is the first admin member
+			}
+
+			$content_row=array(
+				'the_zone'=>$zone,
+				'the_page'=>$page,
+				'p_parent_page'=>'',
+				'p_validated'=>1,
+				'p_edit_date'=>NULL,
+				'p_add_date'=>time(),
+				'p_submitter'=>$submitter_id,
+				'p_show_as_edit'=>0
+			);
+
+			$content_url=build_url(array('page'=>$page),$zone,NULL,false,false,false);
+			$content_url_email_safe=build_url(array('page'=>$page),$zone,NULL,false,false,true);
+
+			return array($zone.':'.$page,$submitter_id,$cma_info,$content_row,$content_url,$content_url_email_safe);
+		}
+
+		return array(NULL,NULL,NULL,NULL,NULL,NULL);
+	}
 
 	if (is_null($cma_info['title_field']))
 	{
