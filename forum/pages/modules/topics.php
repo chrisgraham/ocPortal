@@ -1109,7 +1109,7 @@ class Module_topics
 
 		$_content=wrap_image_radio_list($content);
 
-		$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('NAME'=>'emoticon','CODE'=>$selected_path,'TABINDEX'=>strval($tabindex),'CONTENT'=>$_content));
+		$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('NAME'=>'emoticon','REQUIRED'=>false,'CODE'=>$selected_path,'TABINDEX'=>strval($tabindex),'CONTENT'=>$_content));
 
 		return _form_input('',do_lang_tempcode('TOPIC_EMOTICON'),'',$input,false);
 	}

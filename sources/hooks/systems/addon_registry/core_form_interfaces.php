@@ -582,7 +582,7 @@ class Hook_addon_registry_core_form_interfaces
 		$name = placeholder_random_id();
 		$radios = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array('DESCRIPTION'=>lorem_phrase(),'CHECKED'=>'true','TABINDEX'=>placeholder_number(),'NAME'=>$name,'VALUE'=>lorem_word(),'TEXT'=>lorem_phrase()));
 		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array('DESCRIPTION'=>lorem_phrase(),'CHECKED'=>'true','TABINDEX'=>placeholder_number(),'NAME'=>$name,'VALUE'=>lorem_word_2(),'TEXT'=>lorem_phrase())));
-		$input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array('CONTENT'=>$radios));
+		$input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array('REQUIRED'=>true,'NAME'=>$name,'CONTENT'=>$radios));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>true,'BORING_NAME'=>$name,'NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$name = placeholder_random_id();
@@ -827,7 +827,7 @@ class Hook_addon_registry_core_form_interfaces
 		}
 		//$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>placeholder_random(),'NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$content,'COMCODE'=>'')));
 		$name = placeholder_random_id();
-		$input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array('NAME'=>$name,'CODE'=>'','TABINDEX'=>placeholder_number(),'CONTENT'=>$content));
+		$input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array('REQUIRED'=>true,'NAME'=>$name,'CODE'=>'','TABINDEX'=>placeholder_number(),'CONTENT'=>$content));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>true,'BORING_NAME'=>$name,'NAME'=>lorem_word(),'DESCRIPTION'=>lorem_sentence_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>'')));
 
 		$entries = array();

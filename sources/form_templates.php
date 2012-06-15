@@ -1131,7 +1131,7 @@ function form_input_all_and_not($pretty_name,$description,$base,$list,$type='+',
  */
 function form_input_radio($pretty_name,$description,$name,$content,$required=false,$picture_contents=false,$selected_path='')
 {
-	$map=array('_GUID'=>'26021f9ae8a0cd83b93874bfa80052ca','NAME'=>$name,'CONTENT'=>$content);
+	$map=array('_GUID'=>'26021f9ae8a0cd83b93874bfa80052ca','NAME'=>$name,'REQUIRED'=>$required,'CONTENT'=>$content);
 	if ($picture_contents)
 	{
 		$map=array_merge($map,array('CODE'=>$selected_path,));
@@ -1271,7 +1271,7 @@ function form_input_picture_choose_specific($pretty_name,$description,$name,$ids
 		$content->attach($_category);
 	}
 
-	$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('NAME'=>$name,'CODE'=>is_null($selected_code)?'':$selected_code,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
+	$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('REQUIRED'=>false,'NAME'=>$name,'CODE'=>is_null($selected_code)?'':$selected_code,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
 
 	return _form_input('',$pretty_name,$description,$input,false);
 }

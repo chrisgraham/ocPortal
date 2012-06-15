@@ -5,7 +5,9 @@
 {CONTENT}
 
 {+START,IF_PASSED,NAME}
-	<input type="hidden" name="require__{NAME*}" value="1" />
+	{+START,IF,{REQUIRED}}
+		<input type="hidden" name="require__{NAME*}" value="1" />
+	{+END}
 
 	{+START,IF_PASSED,CODE}
 		<script type="text/javascript">// <![CDATA[
