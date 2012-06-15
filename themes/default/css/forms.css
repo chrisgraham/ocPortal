@@ -119,6 +119,12 @@ th.form_table_field_name, /* Extra specificity to take precedence over th.de_th 
 .form_table_field_input input {
 	margin-top: 0;
 }
+.form_table_field_name a, .form_table_field_input a, .form_table_huge_field a,
+th.form_table_field_name a, /* Extra specificity to take precedence over th.de_th */
+.form_table_field_spacer>th a, .form_table_field_spacer>td a, .form_table_description_above_cell a, .form_table_description_under_cell a
+{
+	color: {$GET,a.link} !important;
+}
 
 .form_table_field_spacer>th, .form_table_field_spacer>td, .form_table_description_above_cell {
 	border-bottom: 0;
