@@ -38,16 +38,21 @@ class Hook_Profiles_Tabs_points
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
+	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
 	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
 	 */
-	function render_tab($member_id_of,$member_id_viewing)
+	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
-		require_code('points3');
 		require_lang('points');
 
 		$title=do_lang_tempcode('POINTS');
 
 		$order=40;
+
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+
+		require_code('points3');
+		require_css('points');
 
 		$content=points_profile($member_id_of,$member_id_viewing);
 

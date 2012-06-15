@@ -204,11 +204,6 @@ class Hook_paypal
 			$payment_status='SCancelled';
 			$txn_id=post_param('subscr_id').'-c';
 		}
-		elseif ($txn_type=='subscr_cancel')
-		{
-			$payment_status='SCancelled';
-			$txn_id=post_param('subscr_id').'-c';
-		}
 
 		$primary_paypal_email=get_value('primary_paypal_email');
 

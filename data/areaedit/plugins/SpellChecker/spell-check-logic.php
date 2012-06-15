@@ -406,9 +406,9 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 						$textarray[$lineindex]=$beforeword.'<span class="HA-spellcheck-error">'.$word.'</span>'.$afterword;
 
 						$suggestion_list='';
-						foreach (array_keys($suggestionarray) as $value)
+						foreach (array_keys($suggestionarray) as $value2)
 						{
-							$suggestion_list.=$value.',';
+							$suggestion_list.=$value2.',';
 						}
 						$suggestion_list=substr($suggestion_list,0,strlen($suggestion_list)-1);
 						$varlines.='"'.trim($word).'":"'.trim($suggestion_list).'",';

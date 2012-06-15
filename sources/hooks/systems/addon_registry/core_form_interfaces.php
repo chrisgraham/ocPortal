@@ -964,7 +964,9 @@ class Hook_addon_registry_core_form_interfaces
 			'TEXT'=>lorem_phrase()
 		)));
 		$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
-			'CONTENT'=>$radios
+			'CONTENT'=>$radios,
+			'NAME'=>$name,
+			'REQUIRED'=>true,
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
 			'REQUIRED'=>true,
@@ -1366,12 +1368,14 @@ class Hook_addon_registry_core_form_interfaces
 			));
 			$content->attach($input);
 		}
+
 		$name=placeholder_random_id();
 		$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
 			'NAME'=>$name,
 			'CODE'=>'',
 			'TABINDEX'=>placeholder_number(),
-			'CONTENT'=>$content
+			'CONTENT'=>$content,
+			'REQUIRED'=>true,
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
 			'REQUIRED'=>true,

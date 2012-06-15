@@ -3,7 +3,7 @@
  ocPortal
  Copyright (c) ocProducts, 2004-2012
 
- See text/en/licence.txt for full licencing information.
+ See text/EN/licence.txt for full licencing information.
 
 */
 

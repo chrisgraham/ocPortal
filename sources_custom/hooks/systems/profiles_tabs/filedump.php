@@ -38,9 +38,10 @@ class Hook_Profiles_Tabs_filedump
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
+	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
 	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
 	 */
-	function render_tab($member_id_of,$member_id_viewing)
+	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
 		enforce_personal_access($member_id_of,NULL,NULL,$member_id_viewing);
 
@@ -49,6 +50,8 @@ class Hook_Profiles_Tabs_filedump
 		$title=do_lang_tempcode('FILE_DUMP');
 
 		$order=70;
+
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
 		$content=do_template('OCF_MEMBER_PROFILE_FILEDUMP',array('MEMBER_ID'=>strval($member_id_of)));
 

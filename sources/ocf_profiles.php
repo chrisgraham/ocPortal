@@ -46,7 +46,7 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 		$ob=object_factory('Hook_Profiles_Tabs_'.$hook);
 		if ($ob->is_active($member_id_of,$member_id_viewing))
 		{
-			$tabs[$hook]=$ob->render_tab($member_id_of,$member_id_viewing);
+			$tabs[$hook]=$ob->render_tab($member_id_of,$member_id_viewing,!browser_matches('ie6') && !browser_matches('ie7') && has_js());
 		}
 	}
 

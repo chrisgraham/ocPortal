@@ -118,7 +118,7 @@ class Hook_fields_radiolist
 		{
 			$_list->attach(form_input_radio_entry('field_'.strval($field['id']),$l,$l==$actual_value,$l));
 		}
-		return form_input_radio($_cf_name,$_cf_description,$_list);
+		return form_input_radio($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,$field['cf_required']==1);
 	}
 
 	/**

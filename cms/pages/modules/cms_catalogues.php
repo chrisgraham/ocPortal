@@ -1795,7 +1795,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 		$radios=form_input_radio_entry($prefix.'defines_order','0',$defines_order==0,do_lang_tempcode('NO'));
 		$radios->attach(form_input_radio_entry($prefix.'defines_order','1',$defines_order==1,do_lang_tempcode('ASCENDING')));
 		$radios->attach(form_input_radio_entry($prefix.'defines_order','2',$defines_order==2,do_lang_tempcode('DESCENDING')));
-		$fields->attach(form_input_radio(do_lang_tempcode('DEFINES_ORDER'),do_lang_tempcode('DESCRIPTION_DEFINES_ORDER'),$radios));
+		$fields->attach(form_input_radio(do_lang_tempcode('DEFINES_ORDER'),do_lang_tempcode('DESCRIPTION_DEFINES_ORDER'),$prefix.'defines_order',$radios));
 
 		if ($first_field)
 		{

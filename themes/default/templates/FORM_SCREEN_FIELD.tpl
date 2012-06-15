@@ -45,7 +45,9 @@
 
 		<div id="error_{$GET,randomised_id}" style="display: none" class="input_error_here"></div>
 
-		<input type="hidden" id="required_posted__{$GET,randomised_id}" name="require__{NAME*}" value="{$?,{REQUIRED*},1,0}" />
+		{+START,IF_NON_EMPTY,{NAME}}
+			<input type="hidden" id="required_posted__{$GET,randomised_id}" name="require__{NAME*}" value="{$?,{REQUIRED*},1,0}" />
+		{+END}
 
 		<script type="text/javascript">// <![CDATA[
 			set_up_change_monitor('form_table_field_input__{$GET,randomised_id}');

@@ -111,17 +111,17 @@ class Module_admin_ocf_multimoderations extends standard_aed_module
 		$pin_state_list->attach(form_input_radio_entry('pin_state','-1',is_null($pin_state),do_lang_tempcode('NA_EM')));
 		$pin_state_list->attach(form_input_radio_entry('pin_state','0',$pin_state===0,do_lang_tempcode('UNPIN_TOPIC')));
 		$pin_state_list->attach(form_input_radio_entry('pin_state','1',$pin_state===1,do_lang_tempcode('PIN_TOPIC')));
-		$fields->attach(form_input_radio(do_lang_tempcode('PIN_STATE'),do_lang_tempcode('DESCRIPTION_PIN_STATE'),$pin_state_list));
+		$fields->attach(form_input_radio(do_lang_tempcode('PIN_STATE'),do_lang_tempcode('DESCRIPTION_PIN_STATE'),'pin_state',$pin_state_list));
 		$open_state_list=new ocp_tempcode();
 		$open_state_list->attach(form_input_radio_entry('open_state','-1',is_null($open_state),do_lang_tempcode('NA_EM')));
 		$open_state_list->attach(form_input_radio_entry('open_state','0',$open_state===0,do_lang_tempcode('CLOSE_TOPIC')));
 		$open_state_list->attach(form_input_radio_entry('open_state','1',$open_state===1,do_lang_tempcode('OPEN_TOPIC')));
-		$fields->attach(form_input_radio(do_lang_tempcode('OPEN_STATE'),do_lang_tempcode('DESCRIPTION_OPEN_STATE'),$open_state_list));
+		$fields->attach(form_input_radio(do_lang_tempcode('OPEN_STATE'),do_lang_tempcode('DESCRIPTION_OPEN_STATE'),'open_state',$open_state_list));
 		$sink_state_list=new ocp_tempcode();
 		$sink_state_list->attach(form_input_radio_entry('sink_state','-1',is_null($sink_state),do_lang_tempcode('NA_EM')));
 		$sink_state_list->attach(form_input_radio_entry('sink_state','0',$sink_state===0,do_lang_tempcode('SINK_TOPIC')));
 		$sink_state_list->attach(form_input_radio_entry('sink_state','1',$sink_state===1,do_lang_tempcode('UNSINK_TOPIC')));
-		$fields->attach(form_input_radio(do_lang_tempcode('SINK_STATE'),do_lang_tempcode('DESCRIPTION_SINK_STATE'),$sink_state_list));
+		$fields->attach(form_input_radio(do_lang_tempcode('SINK_STATE'),do_lang_tempcode('DESCRIPTION_SINK_STATE'),'sink_state',$sink_state_list));
 		$fields->attach(ocf_get_forum_multi_code_field($forum_multi_code));
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE_SUFFIX'),do_lang_tempcode('DESCRIPTION_TITLE_SUFFIX'),'title_suffix',$title_suffix,false));
 

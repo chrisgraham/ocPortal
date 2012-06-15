@@ -1127,7 +1127,7 @@ class Module_topics
 			$content->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('PRETTY'=>'','CHECKED'=>$path==$selected_path,'NAME'=>'emoticon','CODE'=>$path,'URL'=>$url)));
 		}
 
-		$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('_GUID'=>'80fe581b26d04876180605cdbb111f6a','NAME'=>'emoticon','CODE'=>$selected_path,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
+		$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('_GUID'=>'80fe581b26d04876180605cdbb111f6a','NAME'=>'emoticon','REQUIRED'=>false,'CODE'=>$selected_path,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
 
 		return _form_input('',do_lang_tempcode('TOPIC_EMOTICON'),'',$input,false);
 	}

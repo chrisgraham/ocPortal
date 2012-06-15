@@ -1260,7 +1260,7 @@ class Module_admin_stats
 		$controls->attach(form_input_radio_entry('clear','some',true,do_lang_tempcode('DESCRIPTION_CLEAR_GRAPHS')));
 		$controls->attach(form_input_radio_entry('clear','all',false,do_lang_tempcode('DESCRIPTION_CLEAR_ALL')));
 
-		$fields=form_input_radio(do_lang_tempcode('CLEAR_STATISTICS'),'',$controls);
+		$fields=form_input_radio(do_lang_tempcode('CLEAR_STATISTICS'),'','clear',$controls);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 

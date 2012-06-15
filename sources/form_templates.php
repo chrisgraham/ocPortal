@@ -1147,18 +1147,19 @@ function form_input_all_and_not($pretty_name,$description,$base,$list,$type='+',
  *
  * @param  mixed			A human intelligible name for this input field
  * @param  mixed			A description for this input field
+ * @param  ID_TEXT		The name which this input field is for
  * @param  tempcode		The radio buttons for our radio group
  * @param  boolean		Whether a radio selection is required
  * @param  boolean		Whether this is a picture-based radio list
  * @param  string			Default value (only appropriate if has picture contents)
  * @return tempcode		The input field
  */
-function form_input_radio($pretty_name,$description,$content,$required=false,$picture_contents=false,$selected_path='')
+function form_input_radio($pretty_name,$description,$name,$content,$required=false,$picture_contents=false,$selected_path='')
 {
-	$map=array('_GUID'=>'26021f9ae8a0cd83b93874bfa80052ca','CONTENT'=>$content);
+	$map=array('_GUID'=>'26021f9ae8a0cd83b93874bfa80052ca','NAME'=>$name,'REQUIRED'=>$required,'CONTENT'=>$content);
 	if ($picture_contents)
 	{
-		$map=array_merge($map,array('NAME'=>'emoticon','CODE'=>$selected_path,));
+		$map=array_merge($map,array('CODE'=>$selected_path,));
 	}
 	$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',$map);
 	return _form_input('',$pretty_name,$description,$input,$required);
@@ -1295,7 +1296,7 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 		$content->attach($_category);
 	}
 
-	$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('_GUID'=>'35fed772f022cf561f823543e56d63e8','NAME'=>$name,'CODE'=>is_null($selected_code)?'':$selected_code,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
+	$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('_GUID'=>'35fed772f022cf561f823543e56d63e8','REQUIRED'=>false,'NAME'=>$name,'CODE'=>is_null($selected_code)?'':$selected_code,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
 
 	return _form_input($GLOBALS['DOING_ALTERNATE_FIELDS_SET']?$name:'',$pretty_name,$description,$input,false);
 }

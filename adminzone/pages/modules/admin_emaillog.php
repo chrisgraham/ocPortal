@@ -183,7 +183,7 @@ class Module_admin_emaillog
 		$radios->attach(form_input_radio_entry('action','edit',true,do_lang_tempcode('EDIT')));
 		$radios->attach(form_input_radio_entry('action','send',false,do_lang_tempcode('EDIT_AND_SEND')));
 		$radios->attach(form_input_radio_entry('action','delete',false,do_lang_tempcode('DELETE')));
-		$fields->attach(form_input_radio(do_lang_tempcode('ACTION'),'',$radios,true));
+		$fields->attach(form_input_radio(do_lang_tempcode('ACTION'),'','action',$radios,true));
 
 		$submit_name=do_lang_tempcode('PROCEED');
 

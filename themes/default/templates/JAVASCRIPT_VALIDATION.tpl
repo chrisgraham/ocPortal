@@ -310,7 +310,7 @@ function clever_find_value(theForm,the_element)
 	return my_value;
 }
 
-function check_field(the_element,theForm,forPreview)
+function check_field(the_element,theForm,for_preview)
 {
 	var i,the_class,required,my_value,erroneous=false,error_msg='',regexp,total_file_size=0,alerted=false,error_element=null;
 
@@ -356,16 +356,22 @@ function check_field(the_element,theForm,forPreview)
 
 	the_class=first_class_name(the_element.className);
 
-	if ((!forPreview) && (the_element.name=='delete') && (((the_class=='input_radio') && (the_element.value!='0')) || (the_class=='input_tick')) && (the_element.checked))
+	if ((!for_preview) && (the_element.name=='delete') && (((the_class=='input_radio') && (the_element.value!='0')) || (the_class=='input_tick')) && (the_element.checked))
 	{
 		return [false,the_element,0,true]; // Because we're deleting, errors do not matter
 	}
 
 	// Find whether field is required and value of it
-	required=the_element.className.indexOf('_required');
+	if (the_element.type=='radio')
+	{
+		required=(typeof theForm.elements['require__'+the_element.name]!='undefined') && (the_form.elements['require__'+the_element.name].value=='1');
+	} else
+	{
+		required=the_element.className.indexOf('_required')!=-1;
+	}
 	my_value=clever_find_value(theForm,the_element);
 
-	if ((required!=-1) && ((my_value.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (my_value=='****')))
+	if ((required) && ((myValue.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (myValue=='****')))
 	{
 		error_msg='{!REQUIRED_NOT_FILLED_IN^;}';
 	} else
@@ -412,7 +418,7 @@ function check_field(the_element,theForm,forPreview)
 	return [erroneous,error_element,total_file_size,alerted];
 }
 
-function check_form(theForm,forPreview)
+function check_form(theForm,for_preview)
 {
 	var j,the_element,erroneous=false,total_file_size=0,alerted=false,error_element=null,check_result;
 	for (j=0;j<theForm.elements.length;j++)
@@ -423,7 +429,7 @@ function check_form(theForm,forPreview)
 
 		the_element=theForm.elements[j];
 
-		check_result=check_field(the_element,theForm,forPreview);
+		check_result=check_field(the_element,theForm,for_preview);
 		if (check_result!=null)
 		{
 			erroneous=check_result[0] | erroneous;
@@ -433,8 +439,8 @@ function check_form(theForm,forPreview)
 
 			if (check_result[0])
 			{
-				the_element.onblur=function(the_element) { return function(event,no_recurse) {
-					var check_result=check_field(the_element,theForm,forPreview);
+				var auto_reset_error=function(the_element) { return function(event,no_recurse) {
+					var check_result=check_field(the_element,the_form,for_preview);
 					if ((check_result!=null) && (!check_result[0]))
 					{
 						set_field_error(the_element,'');
@@ -449,7 +455,19 @@ function check_form(theForm,forPreview)
 						var e=document.getElementById(the_element.id.replace(/\_(day|month|year)$/,'_year'));
 						if (e!=the_element) e.onblur(event,true);
 					}
-				} }(the_element);
+				}; };
+
+				if (theElement.getAttribute('type')=='radio')
+				{
+					for (var i=0;i<theForm.elements.length;i++)
+					{
+						theForm.elements[i].onchange=auto_reset_error(theForm.elements[i]);
+					}
+				} else
+				{
+					theElement.onblur=auto_reset_error(theElement);
+				}
+>>>>>>> master
 			}
 		}
 	}

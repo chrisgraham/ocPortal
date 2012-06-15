@@ -1,9 +1,9 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2009
+ Copyright (c) ocProducts, 2004-2012
 
- See text/en/licence.txt for full licencing information.
+ See text/EN/licence.txt for full licencing information.
 
 */
 
@@ -951,8 +951,10 @@ function check_variable_list($LOCAL_VARIABLES,$offset=-1)
 	}
 }
 
-function check_command($command,$depth,$function_guard='')
+function check_command($command,$depth,$function_guard='',$nogo_parameters=NULL)
 {
+	if (is_null($nogo_parameters)) $nogo_parameters=array();
+
 	global $LOCAL_VARIABLES,$CURRENT_CLASS,$FUNCTION_SIGNATURES;
 	foreach ($command as $i=>$c)
 	{
@@ -1016,7 +1018,7 @@ function check_command($command,$depth,$function_guard='')
 						$passes=ensure_type(array($switch_type),check_expression($case[0],false,false,$function_guard),$c_pos,'Switch type inconsistency');
 						if ($passes) infer_expression_type_to_variable_type($switch_type,$case[0]);
 					}
-					check_command($case[1],$depth+1,$function_guard);
+					check_command($case[1],$depth+1,$function_guard,$nogo_parameters);
 				}
 				break;
 			case 'ASSIGNMENT':
@@ -1031,7 +1033,7 @@ function check_command($command,$depth,$function_guard='')
 				if (($c[1][0]=='CALL_DIRECT') && (strpos($c[1][1],'_exists')!==false) && ($c[1][2][0][0]=='LITERAL') && ($c[1][2][0][1][0]=='STRING')) $temp_function_guard.=','.$c[1][2][0][1][1].',';
 				if (($c[1][0]=='BOOLEAN_AND') && ($c[1][1][0]=='BRACKETED') && ($c[1][1][1][0]=='CALL_DIRECT') && (strpos($c[1][1][1][1],'_exists')!==false) && ($c[1][1][1][2][0][0]=='LITERAL') && ($c[1][1][1][2][0][1][0]=='STRING')) $temp_function_guard.=','.$c[1][1][1][2][0][1][1].',';
 				if (($c[1][0]=='BOOLEAN_AND') && ($c[1][2][0]=='BOOLEAN_AND') && ($c[1][2][1][0]=='BRACKETED') && ($c[1][2][1][1][0]=='CALL_DIRECT') && (strpos($c[1][2][1][1][1],'_exists')!==false) && ($c[1][2][1][1][2][0][0]=='LITERAL') && ($c[1][2][1][1][2][0][1][0]=='STRING')) $temp_function_guard.=','.$c[1][2][1][1][2][0][1][1].',';
-				check_command($c[2],$depth,$temp_function_guard);
+				check_command($c[2],$depth,$temp_function_guard,$nogo_parameters);
 				break;
 			case 'IF_ELSE':
 				$passes=ensure_type(array('boolean'),check_expression($c[1],false,false,$function_guard),$c_pos,'Conditionals must be boolean (if-else)',true);
@@ -1040,8 +1042,8 @@ function check_command($command,$depth,$function_guard='')
 				if (($c[1][0]=='CALL_DIRECT') && (strpos($c[1][1],'_exists')!==false) && ($c[1][2][0][0]=='LITERAL') && ($c[1][2][0][1][0]=='STRING')) $temp_function_guard.=','.$c[1][2][0][1][1].',';
 				if (($c[1][0]=='BOOLEAN_AND') && ($c[1][1][0]=='BRACKETED') && ($c[1][1][1][0]=='CALL_DIRECT') && (strpos($c[1][1][1][1],'_exists')!==false) && ($c[1][1][1][2][0][0]=='LITERAL') && ($c[1][1][1][2][0][1][0]=='STRING')) $temp_function_guard.=','.$c[1][1][1][2][0][1][1].',';
 				if (($c[1][0]=='BOOLEAN_AND') && ($c[1][2][0]=='BOOLEAN_AND') && ($c[1][2][1][0]=='BRACKETED') && ($c[1][2][1][1][0]=='CALL_DIRECT') && (strpos($c[1][2][1][1][1],'_exists')!==false) && ($c[1][2][1][1][2][0][0]=='LITERAL') && ($c[1][2][1][1][2][0][1][0]=='STRING')) $temp_function_guard.=','.$c[1][2][1][1][2][0][1][1].',';
-				check_command($c[2],$depth,$temp_function_guard);
-				check_command($c[3],$depth,$function_guard);
+				check_command($c[2],$depth,$temp_function_guard,$nogo_parameters);
+				check_command($c[3],$depth,$function_guard,$nogo_parameters);
 				break;
 			case 'INNER_FUNCTION':
 				$temp=$LOCAL_VARIABLES;
@@ -1059,7 +1061,7 @@ function check_command($command,$depth,$function_guard='')
 				}
 				break;
 			case 'TRY':
-				check_command($c[1],$depth+1,$function_guard); // Goes first so that we get local variables defined inside loop for use in our loop conditional
+				check_command($c[1],$depth+1,$function_guard,$nogo_parameters); // Goes first so that we get local variables defined inside loop for use in our loop conditional
 				add_variable_reference($c[2][1][0][1],$c_pos,false);
 				check_command($c[2][2],$depth+1,$function_guard); // Goes first so that we get local variables defined inside loop for use in our loop conditional
 				break;
@@ -1068,30 +1070,40 @@ function check_command($command,$depth,$function_guard='')
 				if ($passes) infer_expression_type_to_variable_type('array',$c[1]);
 				add_variable_reference($c[2][1],$c_pos,false);
 				add_variable_reference($c[3][1],$c_pos,false);
-				check_command($c[4],$depth+1,$function_guard);
+
+				if (in_array($c[2][1],$nogo_parameters))
+					log_warning('Re-using a loop variable, '.$c[2][1],$c_pos);
+				if (in_array($c[3][1],$nogo_parameters))
+					log_warning('Re-using a loop variable, '.$c[3][1],$c_pos);
+
+				check_command($c[4],$depth+1,$function_guard,array_merge($nogo_parameters,array($c[2][1],$c[3][1])));
 				break;
 			case 'FOREACH_list':
 				$passes=ensure_type(array('array'),check_expression($c[1],false,false,$function_guard),$c_pos,'Foreach must take array');
 				if ($passes) infer_expression_type_to_variable_type('array',$c[1]);
 				add_variable_reference($c[2][1],$c_pos,false);
-				check_command($c[3],$depth+1,$function_guard);
+
+				if (in_array($c[2][1],$nogo_parameters))
+					log_warning('Re-using a loop variable, '.$c[2][1],$c_pos);
+
+				check_command($c[3],$depth+1,$function_guard,array_merge($nogo_parameters,array($c[2][1])));
 				break;
 			case 'FOR':
 				if (!is_null($c[1])) check_command(array($c[1]),$depth+1,$function_guard);
 				check_command(array($c[3]),$depth+1,$function_guard);
 				$passes=ensure_type(array('boolean'),check_expression($c[2],false,false,$function_guard),$c_pos,'Conditionals must be boolean (for)',true);
 				if ($passes) infer_expression_type_to_variable_type('boolean',$c[2]);
-				check_command($c[4],$depth+1,$function_guard);
+				check_command($c[4],$depth+1,$function_guard,$nogo_parameters);
 				break;
 			case 'DO':
-				check_command($c[2],$depth+1,$function_guard); // Goes first so that we get local variables defined inside loop for use in our loop conditional
+				check_command($c[2],$depth+1,$function_guard,$nogo_parameters); // Goes first so that we get local variables defined inside loop for use in our loop conditional
 				$passes=ensure_type(array('boolean'),check_expression($c[1],false,false,$function_guard),$c_pos,'Conditionals must be boolean (do)',true);
 				if ($passes) infer_expression_type_to_variable_type('boolean',$c[1]);
 				break;
 			case 'WHILE':
 				$passes=ensure_type(array('boolean'),check_expression($c[1],false,false,$function_guard),$c_pos,'Conditionals must be boolean (while)',true);
 				if ($passes) infer_expression_type_to_variable_type('boolean',$c[1]);
-				check_command($c[2],$depth+1,$function_guard);
+				check_command($c[2],$depth+1,$function_guard,$nogo_parameters);
 				break;
 			case 'CONTINUE':
 				if (($c[1][0]=='SOLO') && ($c[1][1][0]=='LITERAL') && ($c[1][1][1][0]=='INTEGER'))
@@ -1126,7 +1138,7 @@ function check_command($command,$depth,$function_guard='')
 				break;
 		}
 
-		if ($or) check_command(array($c[count($c)-1]),$depth,$function_guard);
+		if ($or) check_command(array($c[count($c)-1]),$depth,$function_guard,$nogo_parameters);
 	}
 }
 

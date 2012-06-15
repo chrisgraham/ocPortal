@@ -1,9 +1,9 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2009
+ Copyright (c) ocProducts, 2004-2012
 
- See text/en/licence.txt for full licencing information.
+ See text/EN/licence.txt for full licencing information.
 
 */
 
@@ -617,6 +617,15 @@ END;
 
 	$tests[66]=<<<END
 \$a=@\$b;
+END;
+
+	$tests[67]=<<<END
+foreach (array() as \$a)
+{
+	foreach (array() as \$a)
+	{
+	}
+}
 END;
 
 	return $tests;

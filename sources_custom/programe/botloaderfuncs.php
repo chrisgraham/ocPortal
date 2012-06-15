@@ -913,9 +913,6 @@ function handleme($parser, $data)
     elseif (strtoupper($whaton)=="TEMPLATE"){
         $template .= $data;
     }
-	elseif (strtoupper($whaton)=="TEMPLATE"){
-		$template .= "<![CDATA[$data]]>";
-	}
 }
 
 

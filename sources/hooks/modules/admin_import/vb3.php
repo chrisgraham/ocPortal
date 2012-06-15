@@ -866,7 +866,6 @@ class Hook_vb3
 			if (substr($data,4,4)=='JFIF') $filetype='jpg';
 			elseif (substr($data,0,3)=='GIF') $filetype='gif';
 			elseif (substr($data,1,3)=='PNG') $filetype='png';
-			elseif (substr($data,4,4)=='JFIF') $filetype='jpg';
 
 			if ($filetype!='') $filename=uniqid('').'.'.$filetype;
 		}

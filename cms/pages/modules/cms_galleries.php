@@ -317,7 +317,7 @@ class Module_cms_galleries extends standard_aed_module
 				$radios=new ocp_tempcode();
 				$radios->attach(form_input_radio_entry('type','sa',true,do_lang_tempcode('ADD_GALLERY_SELECTION')));
 				$radios->attach(form_input_radio_entry('type','sd',false,do_lang_tempcode('DELETE_GALLERY_SELECTION')));
-				$fields_2->attach(form_input_radio(do_lang_tempcode('ACTION'),'',$radios,true));
+				$fields_2->attach(form_input_radio(do_lang_tempcode('ACTION'),'','type',$radios,true));
 				// Feedback
 				require_code('feedback2');
 				$fields_2->attach(feedback_fields(true,true,true,false,''));
@@ -999,7 +999,7 @@ class Module_cms_galleries extends standard_aed_module
 			$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
 			$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
 			$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
-			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),$radios);
+			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
 		} else $delete_fields=new ocp_tempcode();
 
 		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$comments,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false);
@@ -1424,7 +1424,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 			$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
 			$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
 			$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
-			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),$radios);
+			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
 		} else $delete_fields=new ocp_tempcode();
 
 		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$comments,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height']);

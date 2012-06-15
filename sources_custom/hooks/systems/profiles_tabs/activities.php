@@ -38,9 +38,10 @@ class Hook_Profiles_Tabs_activities
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
+	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
 	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
 	 */
-	function render_tab($member_id_of,$member_id_viewing)
+	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
 		// Need to declare these here as the Tempcode engine can't look as deep, into a loop (I think), as it would need to, to find the block declaring the dependency
 		require_lang('activities');
@@ -52,9 +53,13 @@ class Hook_Profiles_Tabs_activities
 
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=activities&filter='.strval($member_id_of);
 
+		require_lang('activities');
+
 		$title=do_lang_tempcode('ACTIVITIES_TITLE');
 
 		$order=70;
+
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
 		// Allow user to link up things for syndication
 		$syndications=array();

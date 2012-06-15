@@ -122,7 +122,7 @@ class Module_admin_themewizard
 		$radios=new ocp_tempcode();
 		$radios->attach(form_input_radio_entry('algorithm','equations',$source_theme=='default',do_lang_tempcode('THEMEGEN_ALGORITHM_EQUATIONS')));
 		$radios->attach(form_input_radio_entry('algorithm','hsv',$source_theme!='default',do_lang_tempcode('THEMEGEN_ALGORITHM_HSV')));
-		$fields->attach(form_input_radio(do_lang_tempcode('THEMEGEN_ALGORITHM'),do_lang_tempcode('DESCRIPTION_THEMEGEN_ALGORITHM'),$radios,true));
+		$fields->attach(form_input_radio(do_lang_tempcode('THEMEGEN_ALGORITHM'),do_lang_tempcode('DESCRIPTION_THEMEGEN_ALGORITHM'),'algorithm',$radios,true));
 
 		$fields->attach(form_input_tick(do_lang_tempcode('DARK_THEME'),do_lang_tempcode('DESCRIPTION_DARK_THEME'),'dark',get_param_integer('dark',0)==1));
 

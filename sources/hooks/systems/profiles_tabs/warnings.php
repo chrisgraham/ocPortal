@@ -38,13 +38,19 @@ class Hook_Profiles_Tabs_warnings
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
+	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
 	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
 	 */
-	function render_tab($member_id_of,$member_id_viewing)
+	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
 		$title=do_lang_tempcode('MODULE_TRANS_NAME_warnings');
 
 		$order=80;
+
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+
+		require_lang('ocf');
+		require_css('ocf');
 
 		$warnings=new ocp_tempcode();
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_warnings',array('*'),array('w_member_id'=>$member_id_of,'w_is_warning'=>1));

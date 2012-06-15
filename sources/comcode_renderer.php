@@ -706,7 +706,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 		case 'topic':
 			require_lang('ocf');
 			$topic_id=intval($embed->evaluate());
-			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_POST_NUMBERED',integer_format($post_id)):make_string_tempcode($attributes['param']);
+			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_TOPIC_NUMBERED',integer_format($topic_id)):make_string_tempcode($attributes['param']);
 			$forum=array_key_exists('forum',$attributes)?$attributes['forum']:'';
 			$temp_tpl->attach(hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($topic_id,$forum),$s_title));
 			break;

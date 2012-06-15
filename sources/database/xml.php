@@ -1174,11 +1174,11 @@ class Database_Static_xml
 				{
 					$found=0;
 					$possible_matches=$match;
-					foreach ($possible_matches as $match)
+					foreach ($possible_matches as $match2)
 					{
 						if ($match=='') continue;
 
-						if (strpos($file_contents,xmlentities($match))!==false)
+						if (strpos($file_contents,xmlentities($match2))!==false)
 						{
 							$found++;
 							break;
