@@ -49,6 +49,10 @@ class Hook_Profiles_Tabs_posts
 
 		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
+		require_code('ocf_topics');
+		require_code('ocf_general');
+		require_lang('ocf');
+
 		$topics=new ocp_tempcode();
 		if (!has_no_forum())
 		{
