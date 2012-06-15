@@ -39,9 +39,9 @@ function find_lost_option($name)
 			foreach ($types as $type)
 			{
 				$pages=find_all_pages($zone,$type);
-				foreach ($pages as $page=>$type)
+				foreach ($pages as $page=>$type2)
 				{
-					$search[]=zone_black_magic_filterer(get_file_base().'/'.$zone.(($zone!='')?'/':'').'pages/'.$type.'/'.$page.'.php');
+					$search[]=zone_black_magic_filterer(get_file_base().'/'.$zone.(($zone!='')?'/':'').'pages/'.$type2.'/'.$page.'.php');
 				}
 			}
 		}

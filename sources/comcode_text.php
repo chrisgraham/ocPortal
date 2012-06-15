@@ -876,9 +876,9 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 													$caption=str_replace($ratios_matches[0],'',$caption);
 												}
 
-												foreach ($rows as $i=>$row)
+												foreach ($rows as $h=>$row)
 												{
-													if ($i!=0) $tag_output->attach(do_template('BLOCK_SEPARATOR'));
+													if ($h!=0) $tag_output->attach(do_template('BLOCK_SEPARATOR'));
 
 													$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$row,-1,PREG_SPLIT_DELIM_CAPTURE);
 													array_shift($cells); // First one is non-existant empty

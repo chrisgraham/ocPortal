@@ -1349,8 +1349,6 @@ class getid3_matroska
 
 		if (!empty($ThisFileInfo['video']['streams'])) {
 			$ThisFileInfo['mime_type'] = 'video/x-matroska';
-		} elseif (!empty($ThisFileInfo['video']['streams'])) {
-			$ThisFileInfo['mime_type'] = 'audio/x-matroska';
 		} elseif (isset($ThisFileInfo['mime_type'])) {
 			unset($ThisFileInfo['mime_type']);
 		}

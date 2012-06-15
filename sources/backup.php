@@ -239,7 +239,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 	{
 		$path_stub=get_custom_file_base().'/exports/backups/';
 		if (file_exists($path_stub.$file.'.tar.gz')) $_file=$file.'.tar.gz';
-		elseif (file_exists($path_stub.$file.'.tar.gz')) $_file=$file.'.tar';
+		elseif (file_exists($path_stub.$file.'.tar')) $_file=$file.'.tar';
 		else $file=NULL;
 
 		if (!is_null($file)) // If the backup was actually made

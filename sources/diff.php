@@ -716,8 +716,8 @@ class Text_Diff3_BlockBuilder {
  * echo $renderer->render($diff);
  * </code>
  *
- * @author	 Örjan Persson <o@42mm.org>
- * @copyright Copyright 2005 Örjan Persson
+ * @author	 Ö²jan Persson <o@42mm.org>
+ * @copyright Copyright 2005 Ö²jan Persson
  * @package	Text_Diff
  * @since	  0.2.0
  * @access	 private
@@ -835,16 +835,16 @@ class Text_Diff_Engine_string {
 					 // find the boundaries of the diff output of the two files
 					 for ($i=$j;
 							$i < $end && substr($diff[$i], 0, 3)=='***';
-							$i++);
+							$i++) {}
 					 for ($max_i=$i;
 							$max_i < $end && substr($diff[$max_i], 0, 3)!='---';
-							$max_i++);
+							$max_i++) {}
 					 for ($j=$max_i;
 							$j < $end && substr($diff[$j], 0, 3)=='---';
-							$j++);
+							$j++) {}
 					 for ($max_j=$j;
 							$max_j < $end && substr($diff[$max_j], 0, 3)!='***';
-							$max_j++);
+							$max_j++) {}
 				}
 
 				// find what hasn't been changed

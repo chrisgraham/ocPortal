@@ -391,16 +391,16 @@ class Module_recommend
 								$email_index=1; //by default
 								$name_index=0; //by default
 
-								foreach ($csv_header_line_fields as $key => $value)
+								foreach ($csv_header_line_fields as $key2=>$value2)
 								{
-									if (preg_match('#\?\?ame#',$value)!=0) $name_index=$key; //Windows mail
-									if (preg_match('#E\-mail#',$value)!=0) $email_index=$key; //both
+									if (preg_match('#\?\?ame#',$value2)!=0) $name_index=$key2; //Windows mail
+									if (preg_match('#E\-mail#',$value2)!=0) $email_index=$key2; //both
 								}
 
 								while (($csv_line=fgetcsv($myfile,10240,$del))!==false) // Reading a CSV record
 								{
-									foreach($csv_line as $key=>$value)
-										$csv_line[$key]=utf8_decode(mb_convert_encoding($csv_line[$key],"UTF-8","UTF-16"));
+									foreach($csv_line as $key2=>$value2)
+										$csv_line[$key2]=utf8_decode(mb_convert_encoding($value2,"UTF-8","UTF-16"));
 
 									$found_email_address=(array_key_exists($email_index,$csv_line) && strlen($csv_line[$email_index])>0)?$csv_line[$email_index]:'';
 									$found_email_address=(preg_match('#.*\@.*\..*#',$found_email_address)!=0)?preg_replace("#\"#",'',$found_email_address):'';

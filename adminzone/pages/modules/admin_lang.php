@@ -463,10 +463,10 @@ msgstr ""
 						if (isset($en_seen_before[$val]))
 						{
 							$seen_before=true;
-							foreach ($entries2 as $key=>$_val)
+							foreach ($entries2 as $_key=>$_val)
 							{
-								if ($entries2[$key][2]==$val)
-									$entries2[$key][1]=true;
+								if ($entries2[$_key][2]==$val)
+									$entries2[$_key][1]=true;
 							}
 						}
 						$entries2[$key]=array($val,$seen_before,$english);
