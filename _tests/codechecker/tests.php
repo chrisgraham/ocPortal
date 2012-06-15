@@ -619,5 +619,14 @@ END;
 \$a=@\$b;
 END;
 
+	$tests[67]=<<<END
+foreach (array() as \$a)
+{
+	foreach (array() as \$a)
+	{
+	}
+}
+END;
+
 	return $tests;
 }
