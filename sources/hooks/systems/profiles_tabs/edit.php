@@ -50,13 +50,16 @@ class Hook_Profiles_Tabs_edit
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
+	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
 	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
 	 */
-	function render_tab($member_id_of,$member_id_viewing)
+	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
 		$title=do_lang_tempcode('EDIT_EM');
 
 		$order=200;
+
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
 		$tabs=array();
 

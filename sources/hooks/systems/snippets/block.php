@@ -52,7 +52,14 @@ class Hook_block
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'temp_block_permissions WHERE p_time<'.strval(60*60*intval(get_option('session_expiry_time'))));
 
 		// Return block snippet
-		return do_block($map['block'],$map);
+		global $CSSS,$JAVASCRIPTS;
+		$CSSS=array();
+		$JAVASCRIPTS=array();
+		$out=new ocp_tempcode();
+		$out->attach(symbol_tempcode('CSS_TEMPCODE'));
+		$out->attach(symbol_tempcode('JS_TEMPCODE'));
+		$out->attach(do_block($map['block'],$map));
+		return $out;
 	}
 
 }

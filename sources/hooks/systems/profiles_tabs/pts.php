@@ -38,15 +38,21 @@ class Hook_Profiles_Tabs_pts
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
+	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
 	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
 	 */
-	function render_tab($member_id_of,$member_id_viewing)
+	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
 		$title=do_lang_tempcode('PERSONAL_TOPICS_INBOX');
 
 		$order=80;
 
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+
 		require_code('ocf_forumview');
+		require_code('ocf_topics');
+		require_code('ocf_general');
+		require_lang('ocf');
 
 		$id=NULL;
 		$current_filter_cat=get_param('category','');

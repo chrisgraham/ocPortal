@@ -75,6 +75,7 @@ class Hook_addon_registry_core_ocf
 		return array(
 
 			'sources/hooks/systems/snippets/email_exists.php',
+			'sources/hooks/systems/snippets/profile_tab.php',
 			'sources/hooks/systems/snippets/invite_missing.php',
 			'sources/hooks/systems/snippets/exists_usergroup.php',
 			'sources/hooks/systems/snippets/exists_emoticon.php',

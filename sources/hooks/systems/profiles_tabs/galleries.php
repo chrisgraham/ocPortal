@@ -38,17 +38,22 @@ class Hook_Profiles_Tabs_galleries
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
+	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
 	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
 	 */
-	function render_tab($member_id_of,$member_id_viewing)
+	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
+		require_lang('galleries');
+
 		$title=do_lang_tempcode('GALLERIES');
 
 		$order=30;
 
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+
 		$galleries=new ocp_tempcode();
-		require_lang('galleries');
 		require_code('galleries');
+		require_css('galleries');
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'galleries WHERE name LIKE \''.db_encode_like('member\_'.strval($member_id_of).'\_%').'\'');
 		foreach ($rows as $i=>$row)
 		{

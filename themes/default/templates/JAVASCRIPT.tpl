@@ -927,8 +927,11 @@ function select_tab(id,tab)
 
 			if ((typeof window.nereidFade!='undefined') && (tabs[i]==tab))
 			{
-				setOpacity(element,0.0);
-				nereidFade(element,100,30,8);
+				if (typeof window['load_tab__'+tab]=='undefined')
+				{
+					setOpacity(element,0.0);
+					nereidFade(element,100,30,8);
+				}
 			}
 		}
 
@@ -939,6 +942,8 @@ function select_tab(id,tab)
 			if (tabs[i]==tab)	element.className+=' tab_active';
 		}
 	}
+
+	if (typeof window['load_tab__'+tab]!='undefined') window['load_tab__'+tab](); // Usually an AJAX loader
 
 	return false;
 }
@@ -1913,7 +1918,7 @@ function addEventListenerAbstract(element,the_event,func,capture)
 	{
 		if ((element==window) && ((the_event=='load') || (the_event=='real_load')) && (pageLoaded))
 		{
-			func();
+			window.setTimeout(func,0);
 			return true;
 		}
 
@@ -1935,8 +1940,8 @@ function addEventListenerAbstract(element,the_event,func,capture)
 			{$,W3C}
 			if (the_event=='load') // Try and be smarter
 			{
-				element.addEventListener('DOMContentLoaded',function() { window.ranD=true; func(); },capture);
-				return element.addEventListener(the_event,function() { if (!window.ranD) func(); },capture);
+				element.addEventListener('DOMContentLoaded',function() { window.ranD=true; window.setTimeout(func,0); },capture);
+				return element.addEventListener(the_event,function() { if (!window.ranD) window.setTimeout(func,0); },capture);
 			}
 			if (the_event=='real_load') the_event='load';
 			return element.addEventListener(the_event,func,capture);
@@ -2116,7 +2121,7 @@ function EntitiesToUnicode(din)
 	if (typeof window.entity_rep_reg=='undefined')
 	{
 		var reps={'amp':38,'gt':62,'lt':60,'quot':34,'hellip':8230,'middot':183,'ldquo':8220,'lsquo':8216,'rdquo':8221,'rsquo':8217,'mdash':8212,'ndash':8211,'nbsp':160,'times':215,
-		'euro':8364,'pound':163,'bull':8226,'copy':169,'trade':8482,'dagger':8224,'yen':165,'laquo':171,'raquo':187,'larr':8592,'rarr':8594,'uarr':8593,'darr':8595};
+		'harr':8596,'lsaquo':8249,'rsaquo':8250,'euro':8364,'pound':163,'bull':8226,'copy':169,'trade':8482,'dagger':8224,'yen':165,'laquo':171,'raquo':187,'larr':8592,'rarr':8594,'uarr':8593,'darr':8595};
 		/*'acute':180,'cedil':184,'circ':710,'macr':175,'tilde':732,'uml':168,'Aacute':193,'aacute':225,'Acirc':194,'acirc':226,'AElig':198,
 		'aelig':230,'Agrave':192,'agrave':224,'Aring':197,'aring':229,'Atilde':195,'atilde':227,'Auml':196,
 		'auml':228,'Ccedil':199,'ccedil':231,'Eacute':201,'eacute':233,'Ecirc':202,'ecirc':234,'Egrave':200,
@@ -2130,7 +2135,7 @@ function EntitiesToUnicode(din)
 		'frasl':8260,'iexcl':161,'image':8465,'iquest':191,'lrm':8206,
 		'not':172,'oline':8254,'ordf':170,'ordm':186,'para':182,'permil':8240,'prime':8242,'Prime':8243,
 		'real':8476,'reg':174,'rlm':8207,'sect':167,'shy':173,'sup1':185,'weierp':8472,
-		'bdquo':8222,'lsaquo':8249,'rsaquo':8250,
+		'bdquo':8222,
 		'sbquo':8218,'emsp':8195,'ensp':8194,'thinsp':8201,'zwj':8205,'zwnj':8204,
 		'deg':176,'divide':247,'frac12':189,'frac14':188,'frac34':190,'ge':8805,'le':8804,'minus':8722,
 		'sup2':178,'sup3':179,'alefsym':8501,'and':8743,'ang':8736,'asymp':8776,'cap':8745,
@@ -2145,7 +2150,7 @@ function EntitiesToUnicode(din)
 		'Omega':937,'omega':969,'Omicron':927,'omicron':959,'Phi':934,'phi':966,'Pi':928,'pi':960,
 		'piv':982,'Psi':936,'psi':968,'Rho':929,'rho':961,'Sigma':931,'sigma':963,'sigmaf':962,
 		'Tau':932,'tau':964,'Theta':920,'theta':952,'thetasym':977,'upsih':978,'Upsilon':933,'upsilon':965,
-		'Xi':926,'xi':958,'Zeta':918,'zeta':950,'crarr':8629,'dArr':8659,'harr':8596,
+		'Xi':926,'xi':958,'Zeta':918,'zeta':950,'crarr':8629,'dArr':8659,
 		'hArr':8660,'lArr':8656,'rArr':8658,'uArr':8657,'clubs':9827,
 		'diams':9830,'hearts':9829,'spades':9824,'loz':9674};*/
 
@@ -2180,14 +2185,18 @@ function Load(xmlString) {
 function Copy(domNode,xmlDoc,level) {
 	if (typeof level=="undefined") level=1;
 	if (level>1) {
-		if ((xmlDoc.nodeName.toUpperCase()=='SCRIPT') && (!xmlDoc.src))
+		var node_upper=xmlDoc.nodeName.toUpperCase();
+
+		if ((node_upper=='SCRIPT') && (!xmlDoc.getAttribute('src')))
 		{
 			var text=(xmlDoc.nodeValue?xmlDoc.nodeValue:(xmlDoc.textContent?xmlDoc.textContent:(xmlDoc.text?xmlDoc.text:"")));
-			try
-			{
-				eval(text);
-			}
-			catch(ignore) {};
+			window.setTimeout(function() {
+				try
+				{
+					eval.call(window,text);
+				}
+				catch(ignore) {};
+			},0);
 			return;
 		}
 
@@ -2208,7 +2217,13 @@ function Copy(domNode,xmlDoc,level) {
 			}
 
 			// append node
-			domNode=domNode.appendChild(thisNode);
+			if ((node_upper=='SCRIPT') || (node_upper=='LINK')/* || (node_upper=='STYLE') Causes weird IE bug*/)
+			{
+				domNode=document.getElementsByTagName('head')[0].appendChild(thisNode);
+			} else
+			{
+				domNode=domNode.appendChild(thisNode);
+			}
 		}
 		else if (xmlDoc.nodeType==3) {
 			// text node
@@ -2247,7 +2262,7 @@ function Copy(domNode,xmlDoc,level) {
 		for (var i=0,j=xmlDoc.childNodes.length;i<j;i++)
 		{
 			if ((xmlDoc.childNodes[i].id!='_firebugConsole') && (xmlDoc.childNodes[i].type!='application/x-googlegears'))
-				Copy(domNode,xmlDoc.childNodes[i],level+1);
+				Copy.call(window,domNode,xmlDoc.childNodes[i],level+1);
 		}
 	}
 }
@@ -2274,7 +2289,7 @@ function setOuterHTML(element,tHTML)
 function setInnerHTML(element,tHTML,append)
 {
 	{$,Parser hint: .innerHTML okay}
-	if ((document.write) && (typeof element.innerHTML!="undefined") && (!document.xmlVersion))
+	if ((document.write) && (typeof element.innerHTML!="undefined") && (!document.xmlVersion) && (tHTML.toLowerCase().indexOf('<script type="text/javascript src="')==-1) && (tHTML.toLowerCase().indexOf('<link')==-1))
 	{
 		var clone=element.cloneNode(true);
 		try
@@ -2304,8 +2319,7 @@ function setInnerHTML(element,tHTML,append)
 							if (!scripts[i].src) // i.e. if it is inline JS
 							{
 								var text=(scripts[i].nodeValue?scripts[i].nodeValue:(scripts[i].textContent?scripts[i].textContent:(scripts[i].text?scripts[i].text.replace(/^<script[^>]*>/,''):"")));
-
-								eval(text);
+								eval.call(window,text);
 							}
 						}
 					} else
@@ -2330,7 +2344,7 @@ function setInnerHTML(element,tHTML,append)
 	var xmlDoc=Load(tHTML);
 	if (element && xmlDoc) {
 		if (!append) while (element.lastChild) element.removeChild(element.lastChild);
-		Copy(element,xmlDoc.documentElement);
+		Copy.call(window,element,xmlDoc.documentElement);
 
 		window.setTimeout( function() { fixImagesIn(element); } , 500); // Delayed so that the image dimensions can load up
 	}
