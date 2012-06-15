@@ -1347,13 +1347,13 @@ class Hook_addon_registry_core_form_interfaces
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$cells=new ocp_tempcode();
-			foreach (placeholder_array() as $k=>$v)
+			foreach (placeholder_array() as $_k=>$_v)
 			{
 				$temp=do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY', array(
 					'CHECKED'=>'true',
 					'PRETTY'=>lorem_phrase(),
 					'NAME'=>placeholder_random_id(),
-					'CODE'=>$v,
+					'CODE'=>$_v,
 					'URL'=>placeholder_image_url()
 				));
 				$cells->attach($temp);
@@ -1547,7 +1547,7 @@ class Hook_addon_registry_core_form_interfaces
 		{
 			$overrides=new ocp_tempcode();
 			$all_global=true;
-			foreach (placeholder_array() as $k=>$v)
+			foreach (placeholder_array() as $_k=>$_v)
 			{
 				$overrides->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE', array(
 					'FORCE_PRESETS'=>false,
@@ -1555,7 +1555,7 @@ class Hook_addon_registry_core_form_interfaces
 					'VIEW_ACCESS'=>'',
 					'TABINDEX'=>placeholder_number(),
 					'GROUP_ID'=>placeholder_random_id(),
-					'SP'=>strval($k),
+					'SP'=>strval($_k),
 					'ALL_GLOBAL'=>true,
 					'TITLE'=>lorem_phrase(),
 					'DEFAULT_ACCESS'=>placeholder_number(),

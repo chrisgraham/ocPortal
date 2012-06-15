@@ -276,10 +276,10 @@ class Hook_addon_registry_search
 				'Run search'=>$run_button
 			);
 
-			foreach ($entry_data as $k=>$v)
+			foreach ($entry_data as $_k=>$_v)
 			{
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD', array(
-					'VALUE'=>$v
+					'VALUE'=>$_v
 				)));
 			}
 			$entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY', array(

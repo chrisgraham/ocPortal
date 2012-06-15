@@ -860,7 +860,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		foreach ($array as $k1=>$v)
 		{
 			$cells=new ocp_tempcode();
-			foreach ($array as $k2=>$v)
+			foreach ($array as $k2=>$v2)
 			{
 				$tick=do_lorem_template('RESULTS_TABLE_TICK', array(
 					'ID'=>placeholder_id() . '_' . strval($k1) . '_' . strval($k2)
@@ -947,7 +947,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		foreach ($array as $k1=>$v)
 		{
 			$cells=new ocp_tempcode();
-			foreach ($array as $k2=>$v)
+			foreach ($array as $k2=>$v2)
 			{
 				$tick=do_lorem_template('RESULTS_TABLE_TICK', array(
 					'ID'=>placeholder_id() . '_' . strval($k1) . '_' . strval($k2)

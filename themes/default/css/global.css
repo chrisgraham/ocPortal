@@ -592,7 +592,7 @@ body#main_website #main_website_inner, .global_middle_faux {
 }
 
 .global_middle {
-	overflow: hidden;
+	/*overflow: hidden; Breaks Safari so we'll let the surrounding element contain floats*/
 
 	margin-bottom: 1em;
 

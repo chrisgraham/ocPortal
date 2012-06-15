@@ -449,17 +449,6 @@ class Hook_addon_registry_core
 			'themes/default/images/footer/sitemap.png',
 			'themes/default/images/footer/top.png',
 			'themes/default/images/contract.png',
-			'themes/default/images/donext/index.html',
-			'themes/default/images/donext/botleft.png',
-			'themes/default/images/donext/botmid.png',
-			'themes/default/images/donext/botright.png',
-			'themes/default/images/donext/midleft.png',
-			'themes/default/images/donext/midright.png',
-			'themes/default/images/donext/titleleft.png',
-			'themes/default/images/donext/titleright.png',
-			'themes/default/images/donext/topcent.png',
-			'themes/default/images/donext/topleft.png',
-			'themes/default/images/donext/topright.png',
 			'themes/default/images/edited.png',
 			'themes/default/images/action_link.png',
 			'themes/default/images/cannot_show.png',
@@ -1463,10 +1452,10 @@ class Hook_addon_registry_core
 		foreach (placeholder_array() as $v)
 		{
 			$children1=array();
-			foreach (placeholder_array(2) as $v)
+			foreach (placeholder_array(2) as $_v)
 			{
 				$children2=array();
-				foreach (placeholder_array(1) as $v)
+				foreach (placeholder_array(1) as $__v)
 				{
 					$children2[]=do_lorem_template('BLOCK_MAIN_SITEMAP_NEST', array(
 						'URL'=>placeholder_url(),

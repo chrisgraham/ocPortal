@@ -57,7 +57,7 @@ class Hook_checklist_messaging
 					$message_title=$_comments[0]['title'];
 					$message=$_comments[0]['message'];
 
-					foreach ($_comments as $i=>$comment)
+					foreach ($_comments as $i2=>$comment)
 					{
 						if (is_object($comment['message'])) $comment['message']=$comment['message']->evaluate();
 						if (substr($comment['message'],0,strlen(do_lang('AUTO_SPACER_STUB')))==do_lang('AUTO_SPACER_STUB'))

@@ -108,7 +108,7 @@ class Hook_addon_registry_ssl
 		require_lang('security');
 		$content=new ocp_tempcode();
 		$k=0;
-		foreach (placeholder_array() as $k=>$v)
+		foreach (placeholder_array() as $_k=>$_v)
 		{
 			foreach (placeholder_array() as $k=>$v2)
 			{

@@ -210,9 +210,9 @@ class Hook_addon_registry_pointstore
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$cells=new ocp_tempcode();
-			foreach (placeholder_array() as $k=>$v)
+			foreach (placeholder_array() as $_k=>$_v)
 			{
-				$cells->attach(do_lorem_template('COLUMNED_TABLE_ROW_CELL',array('VALUE'=>$v)));
+				$cells->attach(do_lorem_template('COLUMNED_TABLE_ROW_CELL',array('VALUE'=>$_v)));
 			}
 
 			$out->attach(do_lorem_template('COLUMNED_TABLE_ROW',array('CELLS'=>$cells)));

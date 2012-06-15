@@ -244,10 +244,10 @@ class Hook_addon_registry_shopping
 				lorem_word()
 			);
 
-			foreach ($entry_data as $k=>$v)
+			foreach ($entry_data as $_k=>$_v)
 			{
 				$cells->attach(do_lorem_template('RESULTS_TABLE_' . $tplset . 'FIELD', array(
-					'VALUE'=>$v
+					'VALUE'=>$_v
 				)));
 			}
 			$entries->attach(do_lorem_template('RESULTS_TABLE_' . $tplset . 'ENTRY', array(
@@ -393,10 +393,10 @@ class Hook_addon_registry_shopping
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$cells=new ocp_tempcode();
-			foreach (placeholder_array(8) as $v)
+			foreach (placeholder_array(8) as $_v)
 			{
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
-					'VALUE'=>$v
+					'VALUE'=>$_v
 				)));
 			}
 			$fields_title=$cells;
@@ -758,7 +758,7 @@ class Hook_addon_registry_shopping
 		$fields_title=$cells;
 
 		$order_entries=new ocp_tempcode();
-		foreach ($array as $k1=>$v)
+		foreach ($array as $k1=>$_v)
 		{
 			$cells=new ocp_tempcode();
 			foreach ($array as $k2=>$v)

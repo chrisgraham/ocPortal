@@ -530,7 +530,7 @@ class Hook_addon_registry_calendar
 				foreach (placeholder_array() as $k=>$v)
 				{
 					$entries=new ocp_tempcode();
-					foreach (placeholder_array() as $k=>$v)
+					foreach (placeholder_array() as $_k=>$_v)
 					{
 						$entries->attach(do_lorem_template('CALENDAR_MONTH_ENTRY', array(
 							'ID'=>placeholder_id(),

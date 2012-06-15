@@ -19,6 +19,9 @@ Not doing (from Zend's Code Anaylzer):
  - unnecessary reference check (Reason: lies!)
  - error for breaking with a variable (Reason: would only get used for a good reason, so let programmers do it if they have one)
  - Values overwritten before use (Reason: difficult to do, and annoying)
+
+Not doing (from CodeLobster Errors):
+ - IF and ELSEIF have same conditions (theoretically the prior IF might have changed the state)
 */
 
 @ini_set('memory_limit','-1');

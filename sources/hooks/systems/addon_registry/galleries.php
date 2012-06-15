@@ -687,7 +687,7 @@ class Hook_addon_registry_galleries
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$out=new ocp_tempcode();
-			foreach (placeholder_array() as $k=>$v)
+			foreach (placeholder_array() as $_k=>$_v)
 			{
 				$out->attach(do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH',array('TITLE'=>lorem_word(),'URL'=>placeholder_url())));
 			}

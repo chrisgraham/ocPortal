@@ -806,22 +806,6 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 						}
 						$img=generate_recoloured_image(isset($img)?$img:$path,'#8FADDC',$colours['navigation_peak'],'#FFFFFF',$colours['WB'],'#E3EAF2',$colours['header_background'],'horizontal',$pixel_x_start_array,0,true);
 					}
-					elseif (in_array($show,array('donext/topleft','donext/topright')))
-					{
-						$img=generate_recoloured_image($path,'#5B84C4',$colours['do_next_border'],'#E4EAF2',$colours['area_background'],NULL,NULL,'vertical');
-					}
-					elseif (in_array($show,array('donext/botleft','donext/botright')))
-					{
-						$img=generate_recoloured_image($path,'#5B84C4',$colours['do_next_border'],'#E4EAF2',$colours['area_background'],NULL,NULL,'vertical');
-					}
-					elseif (in_array($show,array('donext/topcent','donext/botmid','donext/midleft','donext/midright')))
-					{
-						$img=generate_recoloured_image($path,'#5B84C4',$colours['do_next_border'],'#E4EAF2',$colours['area_background']);
-					}
-					elseif (($show=='donext/titleleft') || ($show=='donext/titleright'))
-					{
-						$img=generate_recoloured_image($path,'#FFFFFF',$colours['slightly_seeded_text'],'#5B84C4',$colours['do_next_border']);
-					}
 					elseif (in_array($show,array('ocf_general/no_new_posts_redirect','ocf_general/new_posts_redirect')))
 					{
 						$img=generate_recoloured_image($path,'#FFFFFF','#FFFFFF','#549B8C',$colours['ocfredirectindicator']);

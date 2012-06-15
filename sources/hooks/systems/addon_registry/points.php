@@ -187,7 +187,7 @@ class Hook_addon_registry_points
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$week_tpl=new ocp_tempcode();
-			foreach (placeholder_array() as $k=>$v)
+			foreach (placeholder_array() as $_k=>$_v)
 			{
 				$week_tpl->attach(do_lorem_template('POINTS_LEADERBOARD_ROW', array(
 					'ID'=>placeholder_id(),

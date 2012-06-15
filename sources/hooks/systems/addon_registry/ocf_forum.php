@@ -962,7 +962,7 @@ class Hook_addon_registry_ocf_forum
 		foreach (placeholder_array(1) as $k=>$v)
 		{
 			$forums=new ocp_tempcode();
-			foreach (placeholder_array() as $k=>$v)
+			foreach (placeholder_array() as $_k=>$_v)
 			{
 				$poster=do_lorem_template('OCF_USER_MEMBER', array(
 					'USERNAME'=>lorem_word(),
@@ -995,7 +995,7 @@ class Hook_addon_registry_ocf_forum
 					'FORUM_RULES_URL'=>placeholder_url(),
 					'INTRO_QUESTION_URL'=>placeholder_url()
 				)));
-				if ($k==1)
+				if ($_k==1)
 					$forums->attach(do_lorem_template('OCF_PINNED_DIVIDER', array()));
 			}
 
@@ -1335,7 +1335,7 @@ class Hook_addon_registry_ocf_forum
 		foreach (placeholder_array() as $k=>$v)
 		{
 			$members_viewing=new ocp_tempcode();
-			foreach (placeholder_array() as $k=>$v)
+			foreach (placeholder_array() as $_k=>$_v)
 			{
 				$members_viewing->attach(do_lorem_template('OCF_USER_MEMBER', array(
 					'PROFILE_URL'=>placeholder_url(),
@@ -1378,7 +1378,7 @@ class Hook_addon_registry_ocf_forum
 			{
 				$answers=new ocp_tempcode();
 				$answer_tpl=new ocp_tempcode();
-				foreach (placeholder_array() as $k=>$v)
+				foreach (placeholder_array() as $_k=>$_v)
 				{
 					$answer_tpl->attach(do_lorem_template('OCF_TOPIC_POLL_ANSWER_RADIO', array(
 						'REAL_BUTTON'=>'',
@@ -1390,7 +1390,7 @@ class Hook_addon_registry_ocf_forum
 				$answers->attach($answer_tpl);
 
 				$answer_tpl=new ocp_tempcode();
-				foreach (placeholder_array() as $k=>$v)
+				foreach (placeholder_array() as $_k=>$_v)
 				{
 					$answer_tpl->attach(do_lorem_template('OCF_TOPIC_POLL_ANSWER', array(
 						'REAL_BUTTON'=>'',
@@ -1400,7 +1400,6 @@ class Hook_addon_registry_ocf_forum
 					)));
 				}
 				$answers->attach($answer_tpl);
-
 
 
 				$button=do_lorem_template('OCF_TOPIC_POLL_BUTTON', array(
@@ -1468,7 +1467,7 @@ class Hook_addon_registry_ocf_forum
 
 			//buttons
 			$buttons=new ocp_tempcode();
-			foreach (placeholder_array(1) as $k=>$v)
+			foreach (placeholder_array(1) as $_k=>$_v)
 			{
 				$buttons->attach(do_lorem_template('SCREEN_BUTTON', array(
 					'REL'=>lorem_word(),
@@ -1536,7 +1535,7 @@ class Hook_addon_registry_ocf_forum
 
 			//buttons
 			$buttons=new ocp_tempcode();
-			foreach (placeholder_array(1) as $k=>$v)
+			foreach (placeholder_array(1) as $_k=>$_v)
 			{
 				$buttons->attach(do_lorem_template('SCREEN_ITEM_BUTTON', array(
 					'REL'=>lorem_word(),

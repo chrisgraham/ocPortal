@@ -268,9 +268,9 @@ class Hook_addon_registry_installer
 		foreach ($forum_array as $key=>$forums)
 		{
 			$versions=new ocp_tempcode();
-			foreach ($forums as $key=>$forum)
+			foreach ($forums as $_key=>$forum)
 			{
-				$version=do_lang('VERSION_NUM', $key);
+				$version=do_lang('VERSION_NUM', $_key);
 				$versions->attach(do_lorem_template('INSTALLER_FORUM_CHOICE_VERSION', array(
 					'IS_DEFAULT'=>false,
 					'CLASS'=>'',
