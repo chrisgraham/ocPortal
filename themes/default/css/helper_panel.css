@@ -6,7 +6,7 @@
 .helper_panel ~ .global_middle {
 	margin-right: 265px !important;
 }
-.helper_panel ~ .global_middle {
+.helper_panel_hidden ~ .global_middle {
 	margin-right: 16px !important;
 }
 
