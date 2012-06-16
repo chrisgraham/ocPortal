@@ -71,8 +71,11 @@ body .horiz_help_panel { /* {$,Long definition to force precedence} */
 .global_helper_panel {
 	padding: 1em;
 	position: relative;
-	font-size: 0.9em;
 	min-height: 450px;
+}
+
+.global_side_panel .global_helper_panel .box {
+	font-size: 1em;
 }
 
 .global_helper_panel_text {
