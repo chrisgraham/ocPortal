@@ -75,6 +75,20 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 	$_header_text=$GLOBALS['SITE_DB']->query_value('zones','zone_header_text',array('zone_name'=>$zone));
 	$_title=$GLOBALS['SITE_DB']->query_value('zones','zone_title',array('zone_name'=>$zone));
 
+	if (get_translated_text($_title)!=$title)
+	{
+		// Update menu item
+		$i_caption=$GLOBALS['SITE_DB']->query_value_null_ok('menu_items','i_caption',array('i_menu'=>'zone_menu','i_url'=>$zone.':'));
+		if (!is_null($i_caption))
+		{
+			if (get_translated_text($i_caption)==get_translated_text($_title))
+			{
+				lang_remap($i_caption,$title);
+				decache('side_stored_menu');
+			}
+		}
+	}
+
 	$GLOBALS['SITE_DB']->query_update('zones',array('zone_name'=>$new_zone,'zone_title'=>lang_remap($_title,$title),'zone_default_page'=>$default_page,'zone_header_text'=>lang_remap($_header_text,$header_text),'zone_theme'=>$theme,'zone_wide'=>$wide,'zone_require_session'=>$require_session,'zone_displayed_in_menu'=>$displayed_in_menu),array('zone_name'=>$zone),'',1);
 
 	if ($new_zone!=$zone)

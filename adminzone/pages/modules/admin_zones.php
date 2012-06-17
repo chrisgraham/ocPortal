@@ -697,6 +697,8 @@ class Module_admin_zones
 	{
 		$title=get_screen_title('EDIT_ZONE');
 
+		require_lang('themes');
+
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/zones';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
 
