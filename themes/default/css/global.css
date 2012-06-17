@@ -1550,6 +1550,7 @@ table.scrollable_inside {
 .results_table td, .results_table th {
 	border-top: 1px solid {$GET,standard_border};
 	border-right: 1px solid {$GET,standard_border};
+	padding: 0.5em;
 }
 .results_table td:first-child, .results_table th:first-child {
 	border-left: 1px solid {$GET,standard_border};
