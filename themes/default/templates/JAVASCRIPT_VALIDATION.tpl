@@ -289,16 +289,16 @@ function do_form_preview(form,preview_url,has_separate_preview)
 	return true;
 }
 
-function clever_find_value(theForm,the_element)
+function clever_find_value(the_form,the_element)
 {
 	var my_value=(typeof window.get_textbox=='undefined')?the_element.value:get_textbox(the_element);
 	if (the_element.getAttribute('type')=='radio')
 	{
 		my_value='';
-		for (var i=0;i<theForm.elements.length;i++)
+		for (var i=0;i<the_form.elements.length;i++)
 		{
-			if ((theForm.elements[i].checked) && (theForm.elements[i].name==the_element.name))
-				my_value=theForm.elements[i].value;
+			if ((the_form.elements[i].checked) && (the_form.elements[i].name==the_element.name))
+				my_value=the_form.elements[i].value;
 		}
 	}
 	if ((the_element.nodeName.toLowerCase()=='select') && (the_element.selectedIndex>=0))
@@ -310,7 +310,7 @@ function clever_find_value(theForm,the_element)
 	return my_value;
 }
 
-function check_field(the_element,theForm,for_preview)
+function check_field(the_element,the_form,for_preview)
 {
 	var i,the_class,required,my_value,erroneous=false,error_msg='',regexp,total_file_size=0,alerted=false,error_element=null;
 
@@ -364,23 +364,23 @@ function check_field(the_element,theForm,for_preview)
 	// Find whether field is required and value of it
 	if (the_element.type=='radio')
 	{
-		required=(typeof theForm.elements['require__'+the_element.name]!='undefined') && (the_form.elements['require__'+the_element.name].value=='1');
+		required=(typeof the_form.elements['require__'+the_element.name]!='undefined') && (the_form.elements['require__'+the_element.name].value=='1');
 	} else
 	{
 		required=the_element.className.indexOf('_required')!=-1;
 	}
-	my_value=clever_find_value(theForm,the_element);
+	my_value=clever_find_value(the_form,the_element);
 
-	if ((required) && ((myValue.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (myValue=='****')))
+	if ((required) && ((my_value.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (my_value=='****')))
 	{
 		error_msg='{!REQUIRED_NOT_FILLED_IN^;}';
 	} else
 	{
 		if ((the_element.className.indexOf('date')!=-1) && (the_element.name.match(/\_(day|month|year)$/)) && (my_value!=''))
 		{
-			var day=theForm.elements[the_element.name.replace(/\_(day|month|year)$/,'_day')].options[theForm.elements[the_element.name.replace(/\_(day|month|year)$/,'_day')].selectedIndex].value;
-			var month=theForm.elements[the_element.name.replace(/\_(day|month|year)$/,'_month')].options[theForm.elements[the_element.name.replace(/\_(day|month|year)$/,'_month')].selectedIndex].value;
-			var year=theForm.elements[the_element.name.replace(/\_(day|month|year)$/,'_year')].options[theForm.elements[the_element.name.replace(/\_(day|month|year)$/,'_year')].selectedIndex].value;
+			var day=the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_day')].options[the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_day')].selectedIndex].value;
+			var month=the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_month')].options[the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_month')].selectedIndex].value;
+			var year=the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_year')].options[the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_year')].selectedIndex].value;
 			var source_date=new Date(year,month-1,day);
 			if (year!=source_date.getFullYear()) error_msg='{!NOT_A_DATE^;}';
 			if (month!=source_date.getMonth()+1) error_msg='{!NOT_A_DATE^;}';
@@ -418,18 +418,18 @@ function check_field(the_element,theForm,for_preview)
 	return [erroneous,error_element,total_file_size,alerted];
 }
 
-function check_form(theForm,for_preview)
+function check_form(the_form,for_preview)
 {
 	var j,the_element,erroneous=false,total_file_size=0,alerted=false,error_element=null,check_result;
-	for (j=0;j<theForm.elements.length;j++)
+	for (j=0;j<the_form.elements.length;j++)
 	{
-		if (!theForm.elements[j]) continue;
+		if (!the_form.elements[j]) continue;
 
-		if (theForm.elements[j].nodeName.toLowerCase()=='object') continue; // IE9 being weird!
+		if (the_form.elements[j].nodeName.toLowerCase()=='object') continue; // IE9 being weird!
 
-		the_element=theForm.elements[j];
+		the_element=the_form.elements[j];
 
-		check_result=check_field(the_element,theForm,for_preview);
+		check_result=check_field(the_element,the_form,for_preview);
 		if (check_result!=null)
 		{
 			erroneous=check_result[0] | erroneous;
@@ -457,24 +457,23 @@ function check_form(theForm,for_preview)
 					}
 				}; };
 
-				if (theElement.getAttribute('type')=='radio')
+				if (the_element.getAttribute('type')=='radio')
 				{
-					for (var i=0;i<theForm.elements.length;i++)
+					for (var i=0;i<the_form.elements.length;i++)
 					{
-						theForm.elements[i].onchange=auto_reset_error(theForm.elements[i]);
+						the_form.elements[i].onchange=auto_reset_error(the_form.elements[i]);
 					}
 				} else
 				{
-					theElement.onblur=auto_reset_error(theElement);
+					the_element.onblur=auto_reset_error(the_element);
 				}
->>>>>>> master
 			}
 		}
 	}
 
-	if ((total_file_size>0) && (theForm.elements['MAX_FILE_SIZE']))
+	if ((total_file_size>0) && (the_form.elements['MAX_FILE_SIZE']))
 	{
-		if (total_file_size>theForm.elements['MAX_FILE_SIZE'].value)
+		if (total_file_size>the_form.elements['MAX_FILE_SIZE'].value)
 		{
 			if (!erroneous)
 			{
@@ -483,7 +482,7 @@ function check_form(theForm,for_preview)
 			}
 			if (!alerted)
 			{
-				window.fauxmodal_alert('{!TOO_MUCH_FILE_DATA^;}'.replace(new RegExp('\\\\{'+'1'+'\\\\}','g'),Math.round(total_file_size/1024)).replace(new RegExp('\\\\{'+'2'+'\\\\}','g'),Math.round(theForm.elements['MAX_FILE_SIZE'].value/1024)));
+				window.fauxmodal_alert('{!TOO_MUCH_FILE_DATA^;}'.replace(new RegExp('\\\\{'+'1'+'\\\\}','g'),Math.round(total_file_size/1024)).replace(new RegExp('\\\\{'+'2'+'\\\\}','g'),Math.round(the_form.elements['MAX_FILE_SIZE'].value/1024)));
 			}
 			alerted=true;
 		}
