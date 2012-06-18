@@ -66,25 +66,7 @@ function scriptLoadStuff()
 
 	for (i=0;i<document.forms.length;i++)
 	{
-		if (document.forms[i].className.indexOf('autocomplete')!=-1)
-		{
-			document.forms[i].setAttribute('autocomplete','on');
-		} else
-		{
-			var dont_autocomplete=['edit_username','edit_password'];
-			for (var j=0;j<dont_autocomplete.length;j++) {$,Done in very specific way, as Firefox will nuke any explicitly non-autocompleted values when clicking back also}
-				if (document.forms[i].elements[dont_autocomplete[j]]) document.forms[i].elements[dont_autocomplete[j]].setAttribute('autocomplete','off');
-		}
-
-		{$,HTML editor}
-		if (typeof window.load_html_edit!='undefined')
-		{
-			load_html_edit(document.forms[i]);
-		}
-
-		{$,Remove tooltips from forms for mouse users as they are for screenreader accessibility only}
-		if (document.forms[i].getAttribute('target')!='_blank')
-			addEventListenerAbstract(document.forms[i],'mouseover',function(form) { return function() { try {form.setAttribute('title','');form.title='';}catch(e){};/*IE6 does not like*/ } }(document.forms[i]) );
+		new_html__initialise(document.forms[i]);
 	}
 
 	{$,Staff functionality}
@@ -139,6 +121,33 @@ function scriptLoadStuff()
 	if (typeof window.scriptLoadStuffB!='undefined') window.scriptLoadStuffB();
 
 	pageLoaded=true;
+}
+
+function new_html__initialise(element)
+{
+	switch (element.nodeName.toLowerCase())
+	{
+		case 'form':
+			if (element.className.indexOf('autocomplete')!=-1)
+			{
+				element.setAttribute('autocomplete','on');
+			} else
+			{
+				var dont_autocomplete=['edit_username','edit_password'];
+				for (var j=0;j<dont_autocomplete.length;j++) {$,Done in very specific way, as Firefox will nuke any explicitly non-autocompleted values when clicking back also}
+					if (element.elements[dont_autocomplete[j]]) element.elements[dont_autocomplete[j]].setAttribute('autocomplete','off');
+			}
+		
+			{$,HTML editor}
+			if (typeof window.load_html_edit!='undefined')
+			{
+				load_html_edit(element);
+			}
+		
+			{$,Remove tooltips from forms for mouse users as they are for screenreader accessibility only}
+			if (element.getAttribute('target')!='_blank')
+				addEventListenerAbstract(element,'mouseover',function() { try {element.setAttribute('title','');element.title='';}catch(e){};/*IE6 does not like*/ } );
+	}
 }
 
 function initialise_error_mechanism()
@@ -2182,7 +2191,7 @@ function Load(xmlString) {
 	return xml;
 }
 {$,recursively copy the XML (from xmlDoc) into the DOM (under domNode)}
-function Copy(domNode,xmlDoc,level) {
+function Copy(domNode,xmlDoc,level,script_tag_dependencies) {
 	if (typeof level=="undefined") level=1;
 	if (level>1) {
 		var node_upper=xmlDoc.nodeName.toUpperCase();
@@ -2190,13 +2199,15 @@ function Copy(domNode,xmlDoc,level) {
 		if ((node_upper=='SCRIPT') && (!xmlDoc.getAttribute('src')))
 		{
 			var text=(xmlDoc.nodeValue?xmlDoc.nodeValue:(xmlDoc.textContent?xmlDoc.textContent:(xmlDoc.text?xmlDoc.text:"")));
-			window.setTimeout(function() {
-				try
-				{
+			if (script_tag_dependencies['to_load']==0)
+			{
+				window.setTimeout(function() {
 					eval.call(window,text);
-				}
-				catch(ignore) {};
-			},0);
+				},0);
+			} else
+			{
+				script_tag_dependencies['to_run'].push(text); // Has to wait until all scripts are loaded
+			}
 			return;
 		}
 
@@ -2219,10 +2230,36 @@ function Copy(domNode,xmlDoc,level) {
 			// append node
 			if ((node_upper=='SCRIPT') || (node_upper=='LINK')/* || (node_upper=='STYLE') Causes weird IE bug*/)
 			{
+				if (node_upper=='SCRIPT')
+				{
+					script_tag_dependencies['to_load'].push(thisNode);
+					thisNode.onload=thisNode.onreadystatechange=function() {
+						if ((typeof thisNode.readyState=='undefined') || (thisNode.readyState=='complete') || (thisNode.readyState=='loaded'))
+						{
+							var found=0,i;
+
+							for (i=0;i<script_tag_dependencies['to_load'].length;i++)
+							{
+								if (script_tag_dependencies['to_load'][i]===thisNode)
+									delete script_tag_dependencies['to_load'][i];
+								else if (typeof script_tag_dependencies['to_load'][i]!=='undefined') found++;
+							}
+							if (found==0)
+							{
+								for (i=0;i<script_tag_dependencies['to_run'].length;i++)
+								{
+									eval.call(window,script_tag_dependencies['to_run'][i]);
+								}
+								script_tag_dependencies['to_run']=[]; // So won't run again, if both onreadystatechange and onload implemented in browser
+							}
+						}
+					};
+				}
 				domNode=document.getElementsByTagName('head')[0].appendChild(thisNode);
 			} else
 			{
 				domNode=domNode.appendChild(thisNode);
+				new_html__initialise(domNode);
 			}
 		}
 		else if (xmlDoc.nodeType==3) {
@@ -2262,7 +2299,7 @@ function Copy(domNode,xmlDoc,level) {
 		for (var i=0,j=xmlDoc.childNodes.length;i<j;i++)
 		{
 			if ((xmlDoc.childNodes[i].id!='_firebugConsole') && (xmlDoc.childNodes[i].type!='application/x-googlegears'))
-				Copy.call(window,domNode,xmlDoc.childNodes[i],level+1);
+				Copy.call(window,domNode,xmlDoc.childNodes[i],level+1,script_tag_dependencies);
 		}
 	}
 }
@@ -2344,7 +2381,11 @@ function setInnerHTML(element,tHTML,append)
 	var xmlDoc=Load(tHTML);
 	if (element && xmlDoc) {
 		if (!append) while (element.lastChild) element.removeChild(element.lastChild);
-		Copy.call(window,element,xmlDoc.documentElement);
+		var script_tag_dependencies={
+			'to_run': [],
+			'to_load': []
+		};
+		Copy.call(window,element,xmlDoc.documentElement,1,script_tag_dependencies);
 
 		window.setTimeout( function() { fixImagesIn(element); } , 500); // Delayed so that the image dimensions can load up
 	}

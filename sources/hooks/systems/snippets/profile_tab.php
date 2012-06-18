@@ -43,13 +43,13 @@ class Hook_profile_tab
 		unset($_GET['url']);
 		unset($_GET['title']);
 		unset($_GET['utheme']);
+		global $RELATIVE_PATH,$ZONE;
+		$RELATIVE_PATH=get_module_zone('members');
+		$ZONE=NULL;
 		global $PAGE_NAME_CACHE;
 		$PAGE_NAME_CACHE='members';
 		global $RUNNING_SCRIPT_CACHE;
 		$RUNNING_SCRIPT_CACHE='index';
-		global $RELATIVE_PATH,$ZONE;
-		$RELATIVE_PATH=get_module_zone('members');
-		$ZONE=NULL;
 
 		require_code('hooks/systems/profiles_tabs/'.$hook);
 		$ob=object_factory('Hook_Profiles_Tabs_'.$hook);
