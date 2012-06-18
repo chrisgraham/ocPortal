@@ -1383,8 +1383,16 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 				warn_exit(do_lang_tempcode('CORRUPT_FILE',escape_html($avatar_url)));
 			}
 
-			$sx=imagesx($source);
-			$sy=imagesy($source);
+			if (get_file_extension($avatar_url)=='gif')
+			{
+				$header = unpack('@6/'.'vwidth/'.'vheight',$from_file);
+				$sx=$header['width'];
+				$sy=$header['height'];
+			} else
+			{
+				$sx=imagesx($source);
+				$sy=imagesy($source);
+			}
 			imagedestroy($source);
 
 			$width=ocf_get_member_best_group_property($member_id,'max_avatar_width');
