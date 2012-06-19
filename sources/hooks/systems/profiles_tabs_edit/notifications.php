@@ -38,9 +38,10 @@ class Hook_Profiles_Tabs_Edit_notifications
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra Javascript (may be blank) the suggested tab order (NULL: not rendered after all)
+	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
+	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra Javascript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set)
 	 */
-	function render_tab($member_id_of,$member_id_viewing)
+	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
 		require_lang('notifications');
 		$title=do_lang_tempcode('NOTIFICATIONS');
@@ -56,6 +57,8 @@ class Hook_Profiles_Tabs_Edit_notifications
 			unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id_of]);
 			unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id_of]);
 		}
+
+		if ($leave_to_ajax_if_possible) return NULL;
 
 		require_code('notifications2');
 

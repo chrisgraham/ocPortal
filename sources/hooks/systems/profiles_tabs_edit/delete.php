@@ -38,9 +38,10 @@ class Hook_Profiles_Tabs_Edit_delete
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @return array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra Javascript (may be blank) the suggested tab order
+	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
+	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra Javascript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set)
 	 */
-	function render_tab($member_id_of,$member_id_viewing)
+	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
 		$title=do_lang_tempcode('DELETE_MEMBER');
 
@@ -57,6 +58,8 @@ class Hook_Profiles_Tabs_Edit_delete
 
 			inform_exit(do_lang_tempcode('SUCCESS'));
 		}
+
+		if ($leave_to_ajax_if_possible) return NULL;
 
 		// UI fields
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);

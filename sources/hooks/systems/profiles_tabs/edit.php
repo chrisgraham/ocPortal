@@ -59,7 +59,7 @@ class Hook_Profiles_Tabs_edit
 
 		$order=200;
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
+		if (($leave_to_ajax_if_possible) && (strtoupper(ocp_srv('REQUEST_METHOD'))!='POST')) return array($title,NULL,$order);
 
 		$tabs=array();
 
@@ -74,9 +74,11 @@ class Hook_Profiles_Tabs_edit
 			$ob=object_factory('Hook_Profiles_Tabs_Edit_'.$hook);
 			if ($ob->is_active($member_id_of,$member_id_viewing))
 			{
-				$tabs[]=$ob->render_tab($member_id_of,$member_id_viewing);
+				$tabs[]=$ob->render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible);
 			}
 		}
+
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
 		global $M_SORT_KEY;
 		$M_SORT_KEY=4;
