@@ -10,11 +10,11 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		xml_db_manage
+ * @package		developer_sync
  */
 
 
-class Hook_do_next_menus_xml_db_manage
+class Hook_do_next_menus_developer_sync
 {
 
 	/**
@@ -25,7 +25,8 @@ class Hook_do_next_menus_xml_db_manage
 	function run()
 	{
 		return array(
-			array('tools','admin_home',array('xml_dump',array(),'adminzone'),make_string_tempcode('Create SQL dump (MySQL syntax)'))
+			array('tools','admin_home',array('sql_dump',array(),'adminzone'),make_string_tempcode('Create SQL dump (MySQL syntax)')),
+			array('tools','admin_home',array('tar_dump',array(),'adminzone'),make_string_tempcode('Create files dump (TAR file)')),
 		);
 	}
 

@@ -370,11 +370,7 @@ class Module_admin_backup
 		}
 
 		$instant=get_param_integer('keep_backup_instant',0); // Toggle this to true when debugging
-		$max_time=intval(round(floatval(ini_get('max_execution_time'))/1.5));
-		if ($max_time<60*4)
-		{
-			if (function_exists('set_time_limit')) @set_time_limit(0) OR warn_exit(do_lang_tempcode('SAFE_MODE'));
-		}
+		if (function_exists('set_time_limit')) @set_time_limit(0) OR warn_exit(do_lang_tempcode('SAFE_MODE'));
 		if ($instant==1)
 		{
 			make_backup_2($file,$b_type,$max_size);

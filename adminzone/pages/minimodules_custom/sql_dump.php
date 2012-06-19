@@ -13,9 +13,13 @@
 */
 
 disable_php_memory_limit();
+if (function_exists('set_time_limit')) @set_time_limit(0);
 $GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
 $filename='ocportal-'.get_site_name().'.'.date('Y-m-d').'.sql';
+
+@ob_end_clean();
+@ob_end_clean();
 
 if (!isset($_GET['testing']))
 {
@@ -29,7 +33,7 @@ if (!isset($_GET['testing']))
 	header('Content-type: text/plain');
 }
 
-require_code('xml_dump');
+require_code('database_toolkit');
 
 if ((strpos(ini_get('disallowed_functions'),'shell_exec')===false) && (strpos(get_db_type(),'mysql')!==false))
 {

@@ -21,21 +21,27 @@
 /**
  * Open up a TAR archive, and return the resource.
  *
- * @param  PATH			The path to the TAR archive
+ * @param  ?PATH			The path to the TAR archive (NULL: write out directly to stdout)
  * @param  string			The mode to open the TAR archive (rb=read, wb=write)
  * @set    rb wb w+b
  * @return array			The TAR file handle
  */
 function tar_open($path,$mode)
 {
-	$exists=file_exists($path) && (strpos($mode,'a')!==false);
-	$myfile=@fopen($path,$mode);
-	if ($myfile===false)
+	if (is_null($path))
 	{
-		if (substr($mode,0,1)=='r')
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		else
-			intelligent_write_error($path);
+		$myfile=mixed();
+	} else
+	{
+		$exists=file_exists($path) && (strpos($mode,'a')!==false);
+		$myfile=@fopen($path,$mode);
+		if ($myfile===false)
+		{
+			if (substr($mode,0,1)=='r')
+				warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			else
+				intelligent_write_error($path);
+		}
 	}
 	$resource=array();
 	$resource['new']=!$exists;
@@ -45,7 +51,10 @@ function tar_open($path,$mode)
 	if (((!$exists) || (!(filesize($path)>0))) && (strpos($mode,'r')===false))
 	{
 		$chunk=pack('a512','');
-		if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		if (!is_null($myfile))
+		{
+			if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		}
 		$resource['directory']=array();
 		$resource['end']=0;
 	}
@@ -461,7 +470,10 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 
 //	if (!$resource['already_at_end'])
 	{
-		fseek($myfile,$resource['end'],SEEK_SET);
+		if (!is_null($myfile))
+		{
+			fseek($myfile,$resource['end'],SEEK_SET);
+		}
 		$resource['already_at_end']=true;
 	}
 	$resource['directory'][$resource['end']]=array('path'=>$target_path,'mode'=>$_mode,'size'=>$data_is_path?filesize($data):strlen($data));
@@ -502,7 +514,13 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 	$whole=pack('a512',$name.$mode.$uid.$gid.$size.$mtime.$chksum.$typeflag.$linkname.$magic.$version.$uname.$gname.$devmajor.$devminor.$prefix);
 
 	$chunk=pack('a512',$whole);
-	if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+	if (is_null($myfile))
+	{
+		echo $chunk;
+	} else
+	{
+		if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+	}
 
 	$block_size=file_size_to_tar_block_size($data_is_path?filesize($data):strlen($data));
 	if ($data_is_path)
@@ -511,19 +529,42 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 		while (!feof($infile))
 		{
 			$in=fread($infile,8000);
-			if (fwrite($myfile,$in)<strlen($in)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			if (is_null($myfile))
+			{
+				echo $in;
+			} else
+			{
+				if (fwrite($myfile,$in)<strlen($in)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			}
 		}
 		fclose($infile);
 		$extra_to_write=$block_size-filesize($data);
 		if ($extra_to_write!=0)
-			if (fwrite($myfile,pack('a'.strval($extra_to_write),''))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		{
+			if (is_null($myfile))
+			{
+				echo pack('a'.strval($extra_to_write),'');
+			} else
+			{
+				if (fwrite($myfile,pack('a'.strval($extra_to_write),''))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			}
+		}
 	} else
 	{
 		$chunk=pack('a'.strval($block_size),$data);
+		if (is_null($myfile))
+		{
+			echo $chunk;
+		} else
+		{
+			if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+		}
+	}
+	if (!is_null($myfile))
+	{
+		$chunk=pack('a512','');
 		if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	}
-	$chunk=pack('a512','');
-	if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	$resource['end']+=512+$block_size;
 }
 
@@ -551,8 +592,15 @@ function tar_crc($header)
  */
 function tar_close($resource)
 {
-	fclose($resource['myfile']);
-	fix_permissions($resource['full']);
+	if (is_null($resource['myfile']))
+	{
+		$chunk=pack('a512','');
+		echo $chunk;
+	} else
+	{
+		fclose($resource['myfile']);
+		fix_permissions($resource['full']);
+	}
 }
 
 

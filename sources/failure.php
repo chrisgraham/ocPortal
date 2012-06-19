@@ -615,7 +615,7 @@ function _fatal_exit($text,$return=false)
 		header('HTTP/1.0 200 Ok');
 
 		header('Content-type: text/xml');
-		$output='<'.'?xml version="1.0" encoding="utf-8" ?'.'>
+		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <response>
 	<result>
 		<command>'.post_param('command','').'</command>

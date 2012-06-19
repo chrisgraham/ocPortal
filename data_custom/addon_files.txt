@@ -1875,11 +1875,11 @@ db_schema
  - sources_custom/relations.php
  - sources_custom/hooks/systems/do_next_menus/db_schema.php
 
-xml_db_manage
--------------
- - adminzone/pages/minimodules_custom/xml_dump.php
+developer_sync
+--------------
+ - adminzone/pages/minimodules_custom/sql_dump.php
  - data_custom/xml_db_import.php
- - sources_custom/hooks/systems/do_next_menus/xml_db_manage.php
+ - sources_custom/hooks/systems/do_next_menus/developer_sync.php
 
 addon_publish
 --------------

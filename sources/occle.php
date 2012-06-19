@@ -227,7 +227,19 @@ class virtual_bash
 		if (is_object($this->output[STREAM_STDOUT])) $this->output[STREAM_STDOUT]=$this->output[STREAM_STDOUT]->evaluate();
 		if (is_object($this->output[STREAM_STDERR])) $this->output[STREAM_STDERR]=$this->output[STREAM_STDERR]->evaluate();
 
-		$output='<'.'?xml version="1.0" encoding="utf-8" ?'.'>
+		// Make the HTML not use non-XML entities
+		$table=array_flip(get_html_translation_table(HTML_ENTITIES));
+		if (strtoupper(get_charset())=='UTF-8')
+		{
+			foreach ($table as $x=>$y)
+				$table[$x]=utf8_encode($y);
+		}
+		unset($table['&amp;']);
+		unset($table['&gt;']);
+		unset($table['&lt;']);
+		$this->output[STREAM_STDHTML]=strtr($this->output[STREAM_STDHTML],$table);
+
+		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <response>
 	<result>
 		<command>'.xmlentities($this->current_input).'</command>
