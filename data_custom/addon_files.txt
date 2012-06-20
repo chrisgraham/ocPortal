@@ -2353,3 +2353,9 @@ pointstore_to_main
 ------------------
  - sources_custom/hooks/systems/ecommerce/custom.php
  - sources_custom/hooks/systems/ecommerce/permission.php
+
+static_export
+-------------
+ - adminzone/pages/minimodules_custom/static_export.php
+ - sources_custom/static_export.php
+ - sources_custom/hooks/systems/do_next_menus/static_export.php

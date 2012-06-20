@@ -33,7 +33,7 @@ $tar=tar_open(NULL,'wb');
 
 $max_size=get_param_integer('max_size',NULL);
 $subpath=get_param('path','');
-tar_add_folder($tar,NULL,get_file_base().(($subpath=='')?'/':'').$subpath,$max_size,$subpath,NULL,NULL,false,true);
+tar_add_folder($tar,NULL,get_file_base().(($subpath=='')?'':'/').$subpath,$max_size,$subpath,NULL,NULL,false,true);
 
 tar_close($tar);
 

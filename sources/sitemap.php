@@ -311,7 +311,7 @@ function sitemaps_xml_initialise($file_path)
 		$LOADED_MONIKERS[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']]=$result['m_moniker'];
 	}
 
-	// Load ALL guest permissions (for effiency)
+	// Load ALL guest permissions (for efficiency)
 	$guest_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 	load_up_all_self_page_permissions($guest_id);
 	load_up_all_module_category_permissions($guest_id);

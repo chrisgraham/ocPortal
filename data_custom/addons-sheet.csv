@@ -4,12 +4,12 @@ Aviary,Chris Graham,"This addons integrates the Aviary Phoenix onling image edit
 Amazon wishlist,Kamen Blaginov,"Adds an Amazon wishlist configured by the block parameters such as -- Amazon access and secret keys, Amazon wishlist id, and Amazon domain used. For this addon you will need to login at Amazon web services (http://aws-portal.amazon.com/gp/aws/developer/account/index.html) using your normal Amazon account log in. Once you have logged in and accepted the security message click on Security credentials on the left hand menu, click access keys and here you will find your access key and security key. When adding the addon you will be asked for four things: Access key, Security key, wishlist ID and domain. The Access and security keys you can find by following the process above, the wishlist ID is the string of numbers after the Amazon address usually something like ""2VAUC2FYIEUZ5"". Lastly the domain is either ""com"" or ""co.uk"" which will depend on the wishlist URL. An example of the code is: [code=""Comcode""][block access_key=""AKIAJXSQP4CES2F37GWQ"" secret_key=""xy9e5MHu4f9y7kjOjkysmjd58k2gjzN8YmC2/Ith"" wishlist_id=""2VAUC2FYIEUZ5"" domain=""com""]side_amazon_wishlist[/block][/code] Note: Sometimes wishlists may be quite long, you can create a specific wish list on Amazon to display and use that wishlist ID if you need to limit the amount of items on the list.","PHP simplexml extension, PHP 5.1",,Third Party Integration,Licensed on the same terms as ocPortal,,
 Amazon affiliates,Kamen Blaginov,"Displays an affiliate Amazon block in the portal that could be configured by the block parameters (associates id, product line, subject/keywords, and how many items to be displayed inside the block). This addon allows you to create a banner link to a number of banners from your Amazon affiliate account. You will need to know your Amazon affiliate ID as well as the Amazon category (Books, Music, Software etc) and the search term you want it to display banners from. An example of the code is [code=""Comcode""][block associates_id=""prehistoricsi-20"" title=""Amazon Affiliates"" product_line=""books"" subject_keywords=""lord of the rings"" items_number=""1""]side_amazon_affiliate_sales[/block][/code]",,,Third Party Integration,Licensed on the same terms as ocPortal,,
 Activity feed,Chris Warburton / Chris Graham / Paul / Naveen,"Displays a self-updating feed of logged site activity, with options to filter the contents. Also includes a block for entering new activities directly into the feed, allowing a ""status update"" functionality. These blocks are put on the member profile tabs by default, but may also be called up on other areas of the site. If the chat addon is installed, ""status"" posts can be restricted to only show for buddies. If the Facebook of Twitter addons are installed then the system can syndicate out activities to the user's Twitter and Facebook followers. The blocks provided are main_activities and the status entry box is called main_activities_state. [code=""Comcode""][block=""Goings On"" max=""20"" grow=""0"" mode=""all""]main_activities[/block][/code] will show a feed with a title ""Goings On"" containing the last 20 activities, old activities will ""fall off the bottom"" (grow=""0"") as new ones are loaded via AJAX and there is no filtering on what is shown. (mode=""all"").  [code=""Comcode""][block=""Say Something""]main_activities_state[/block][/code] will show a status update box with the title ""Say Something"".",,,New Features,Licensed on the same terms as ocPortal,"JAVASCRIPT_BASE64.tpl, http://www.webtoolkit.info",
-eBay store,Kamen Blaginov,"Adds a block advertising items for sale by an eBay seller or from an eBay store. It is more suitable to be used as a main block because if it placed on a panel the block size is too small and it is hard to be navigated inside of it. The block dimensions width/height could also be adjusted (to fit better on the block area). 'type' will be either ""seller"" or ""store"" -- 'seller' will be the seller or store ID -- 'query' (only works for stores) will display results from a particular search query",,,Third Party Integration,Licensed on the same terms as ocPortal,,
+eBay store,Kamen Blaginov,Adds a block advertising items for sale by an eBay seller or from an eBay store. It is more suitable to be used as a main block because if it placed on a panel the block size is too small and it is hard to be navigated inside of it. The block dimensions width/height could also be adjusted (to fit better on the block area). 'type' will be either "seller" or "store" -- 'seller' will be the seller or store ID -- 'query' (only works for stores) will display results from a particular search query,,,Third Party Integration,Licensed on the same terms as ocPortal,,
 ocSimplesums,Chris Graham,"ocSimplesums is a little calculator block that you could use to allow users to work out for example: how much money they might make. To include it use something like this Comcode on a page: [code=""Comcode""][block message=""You could be earning as much as $xxx per year after your first year"" equation=""Math.pow((this.totalPerSale*this.numAverageSales)*this.numPerLevel,(1+this.levelsAchieved*(this.fractionPerLevel/100)))"" totalPerSale=""Commission per sale in $"" numAverageSales=""Number of sales per reseller per year"" numPerLevel=""Number of partners per reseller per year"" levelsAchieved=""The number of partner levels in a year"" fractionPerLevel=""Relative partner commission per sale in %""]main_calculator[/block][/code]
 This is coded as a ""mini block"", and serves as a good example of how you can use PHP on a page. We have coded it into [tt]sources_custom/miniblocks/main_calculator.php[/tt]",,,New Features,Licensed on the same terms as ocPortal,,
 ocThepoint,Chris Graham,This addon will give each person who clicks a banner 1 site point.,banners,,New Features,Licensed on the same terms as ocPortal,,
 ocTagspinner,Chris Graham,This addon converts the standard ocPortal tag cloud into a spinning tag cloud which moves and rotates as you move the mouse around the edge of the cloud.,,,Graphical,Based on open code posted without a license,Devirtuoso,
-ocProse,Chris Graham,"ocProse allows you to display a block showing the posters with the longest average post length and their total number of posts. You can configure the total amount of posters to be listed using the [tt]max=""Number here""[/tt] parameter. Example: [code=""Comcode""][block max=""10""]main_best_posters[/block][/code]",OCF,,Information Display,Licensed on the same terms as ocPortal,,
+ocProse,Chris Graham,ocProse allows you to display a block showing the posters with the longest average post length and their total number of posts. You can configure the total amount of posters to be listed using the [tt]max="Number here"[/tt] parameter. Example: [code="Comcode"][block max="10"]main_best_posters[/block][/code],OCF,,Information Display,Licensed on the same terms as ocPortal,,
 ocWorld,Chris Graham,"ocWorld is a full zone addon for ocPortal. It adds a ""multi user dungeon"" (MUD) environment where members (players) may interact with each other and construct virtual worlds. The system includes an economy based on points.
 There is a very carefully selected feature-set that allows interesting world interactions; quests, adventures, simulations, and other things may all be created by clever use of this feature-set.",,,Fun and Games,Licensed on the same terms as ocPortal,,
 ocBank,Kamen Blaginov,"Members can deposit some of their hard earned points (but not the gift points) into a ""bank account"" and extract them again only after a month. The administrator can set the interest rate, that users will get with their points back at the end of the account term. To set the Interest rate go to Admin Zone > Setup > Manage point-store inventory and click ""edit your point-store configuration"" and change the interest rate to the level you would like. To deposit points go to the point store and click on the bank option and choose how much you would like to deposit for a month. The interest paid out will be at the level it was at when the points were deposited.","Cron, pointstore",,Fun and Games,Licensed on the same terms as ocPortal,,
@@ -84,7 +84,7 @@ XMPPchat,Chris Graham,"This addon replaces the standard ocPortal chat room with 
 9) In ocPortal you should deny access to Guests to the chat module, they are not supported at this time.
 10) Instructions for XMPP usage by users have been placed on the chat lobby screen. Note that as an administrator you now need to manage chat rooms via a normal XMPP client: the admin/CMS chat modules will no longer be functional.
 11) You may need to set up Proxy server (we're not sure why, but on some PHP configurations our proxying script does not work). Something similar to the following needs to be in the Apache configuration to workaround the problem: LoadModule proxy_module /usr/lib/apache2/modules/mod_proxy.so LoadModule proxy_http_module /usr/lib/apache2/modules/mod_proxy_http.so ProxyRequests Off ProxyPass /data_custom/xmpp_proxy.php http://<yourdomainname>:5280/http-bind/ Credits: We used xmpp4js to integrate with our chat frontend, and the ocP/jabber authentication was based on lissyx's work.","Dedicated server running ejabberd, chat",,User Interactivity,LGPL,Harlan Iverson,
-ocGroupies,Chris Graham,"ocGroupies displays a list of members with an option to limit how many members will be displayed within the list and which user group to display members from. You can get the group ID by going to Admin Zone > security > usergroups > edit user groups. An Example of the code is: [code=""Comcode""][block max=""10"" param=""2""]main_user_boxes[/block][/code]",OCF,,Information Display,Licensed on the same terms as ocPortal,,
+ocGroupies,Chris Graham,ocGroupies displays a list of members with an option to limit how many members will be displayed within the list and which user group to display members from. You can get the group ID by going to Admin Zone > security > usergroups > edit user groups. An Example of the code is: [code="Comcode"][block max="10" param="2"]main_user_boxes[/block][/code],OCF,,Information Display,Licensed on the same terms as ocPortal,,
 ocThumbsUp,Chris Graham,"ocThumbsUp allows inline attachments to get a custom-created thumbnail, via an integrated editing tool. After creating the attachment an automatic thumbnail will be generated, and then anyone with Admin Zone access gets the chance to customise it by choosing the size, cropping, and scaling.",GD,,Admin Utilities,BSD,webmotionuk,
 Facebook support,Kamen / Naveen / Chris,"This addon provides substantial Facebook integration for your ocPortal website.
 
@@ -151,40 +151,40 @@ In the [tt]NEWS_ENTRY_SCREEN[/tt] template you'll find the action links are driv
 
 [codebox]
 
-	{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
-	{+START,INCLUDE,STAFF_ACTIONS}
-		1_URL={SUBMIT_URL*}
-		1_TITLE={$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}
-		1_REL=add
-		1_NOREDIRECT=1
-		2_URL={EDIT_URL*}
-		2_ACCESSKEY=q
-		2_TITLE={!_EDIT_LINK}
-		2_REL=edit
-		3_URL={NEWSLETTER_URL*}
-		3_TITLE={+START,IF_NON_EMPTY,{NEWSLETTER_URL}}{!newsletter:NEWSLETTER_SEND}{+END}
-	{+END}
+{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
+{+START,INCLUDE,STAFF_ACTIONS}
+1_URL={SUBMIT_URL*}
+1_TITLE={$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}
+1_REL=add
+1_NOREDIRECT=1
+2_URL={EDIT_URL*}
+2_ACCESSKEY=q
+2_TITLE={!_EDIT_LINK}
+2_REL=edit
+3_URL={NEWSLETTER_URL*}
+3_TITLE={+START,IF_NON_EMPTY,{NEWSLETTER_URL}}{!newsletter:NEWSLETTER_SEND}{+END}
+{+END}
 [/codebox]
 
 change to:
 
 [codebox]
 
-	{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
-	{+START,INCLUDE,STAFF_ACTIONS}
-		1_URL={SUBMIT_URL*}
-		1_TITLE={$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}
-		1_REL=add
-		1_NOREDIRECT=1
-		2_URL={EDIT_URL*}
-		2_ACCESSKEY=q
-		2_TITLE={!_EDIT_LINK}
-		2_REL=edit
-		3_URL={NEWSLETTER_URL*}
-		3_TITLE={+START,IF_NON_EMPTY,{NEWSLETTER_URL}}{!newsletter:NEWSLETTER_SEND}{+END}
-		4_URL={$PAGE_LINK,_SEARCH:reportcontent:content_type=news:content_id={ID}:url={$SELF_URL&}}
-		4_TITLE=Report this
-	{+END}
+{$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
+{+START,INCLUDE,STAFF_ACTIONS}
+1_URL={SUBMIT_URL*}
+1_TITLE={$?,{BLOG},{!ADD_NEWS_BLOG},{!ADD_NEWS}}
+1_REL=add
+1_NOREDIRECT=1
+2_URL={EDIT_URL*}
+2_ACCESSKEY=q
+2_TITLE={!_EDIT_LINK}
+2_REL=edit
+3_URL={NEWSLETTER_URL*}
+3_TITLE={+START,IF_NON_EMPTY,{NEWSLETTER_URL}}{!newsletter:NEWSLETTER_SEND}{+END}
+4_URL={$PAGE_LINK,_SEARCH:reportcontent:content_type=news:content_id={ID}:url={$SELF_URL&}}
+4_TITLE=Report this
+{+END}
 [/codebox]
 
 So, you are probably thinking: what does [tt]_SEARCH:reportcontent:content_type=download:content_id={ID}:url={$SELF_URL&}[/tt] mean?
@@ -196,7 +196,7 @@ So, you are probably thinking: what does [tt]_SEARCH:reportcontent:content_type=
 ",,,Development,Licensed on the same terms as ocPortal,,
 Cool member directory,Chris Graham,"Re-styles the member directory to show avatars, etc.",,,Graphical,Licensed on the same terms as ocPortal,,
 Direct video link posting,Chris Graham,"Allow posting of video links direct from Facebook, Youtube, or CNN, or links to mp3 files, and have them show through an embedded player.",,,New Features,Licensed on the same terms as ocPortal,,
-Browser detect,Chris Graham,"Adds a new 'browser_upgrade_suggest' block, that can be used like [tt][block ie_needed=”7.0”]browser_upgrade_suggest[/block][/tt]. It will advise the visitor on doing an upgrade from old versions of IE or other browsers.",,,New Features,GPL,Chris Schuld,
+Browser detect,Chris Graham,"Adds a new 'browser_upgrade_suggest' block, that can be used like [tt][block ie_needed=??.0??browser_upgrade_suggest[/block][/tt]. It will advise the visitor on doing an upgrade from old versions of IE or other browsers.",,,New Features,GPL,Chris Schuld,
 Transcoder,Chris Graham,Simple ocProducts transcoding server. Needs a programmer to install and configure it.,,,Development,Licensed on the same terms as ocPortal,,
 Simplified emails,Chris Graham,"Simplifies mail templates, so no logo is shown. If you don't want to have to style your emails at all, use this addon.",,,Graphical,Licensed on the same terms as ocPortal,,
 Booking,Chris Graham,"Sophisticated booking system. Not yet fully finished for public use, but fully cohesive and suitable for some use cases.",,,Development,Licensed on the same terms as ocPortal,,
@@ -228,3 +228,4 @@ You need to add this code into your [tt]HEADER.tpl[/tt]:
 ",,,Graphical,Creative Commons Attribution 3.0,Based on the code of Adam Wulf,
 Classified Ads,Chris Graham,"This addon lets you set up price scales for placing entries ('adverts') in catalogues. The scales allow you to define discounts to customers buying longer listing periods. You can set up a free period if you wish to. Customers are given a control panel (the classifieds module) that shows their listings and allows renewal. E-mails are sent the day before an ad expires. Fully integrated with catalogues, eCommerce, and OCF member accounts.","OCF, catalogues, ecommerce",,New Features,Licensed on the same terms as ocPortal,Icon by Andrey Kem,
 Custom ratings,Chris Graham,Example of more complex rating configuration.,,,Development,Licensed on the same terms as ocPortal,,
+Static Export,Chris Graham,"This admin module exports a static copy of your website, as it would be seen by Guests. It is useful if you do not need any dynamic features and want to deploy on a server without a database.",,,Development,Licensed on the same terms as ocPortal,,
