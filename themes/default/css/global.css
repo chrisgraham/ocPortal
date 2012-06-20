@@ -3498,7 +3498,7 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 {+END}
 
 .attachment_details {
-	margin-top: 1em;
+	margin-top: 0.2em;
 }
 
 .attachment_left {
