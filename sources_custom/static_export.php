@@ -33,7 +33,7 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 {
 	if (($accessible) && (strpos($page_link,':static_export')===false))
 	{
-		global $STATIC_EXPORT_TAR;
+		global $STATIC_EXPORT_TAR,$STATIC_EXPORT_WARNINGS;
 
 		$date=time();
 		if (!is_null($add_date)) $date=$add_date;
@@ -68,6 +68,12 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 			$data=http_download_file($url,NULL,false);
 			if (is_null($data)) continue;
 
+			if (get_param_integer('save__deps',1)==1)
+			{
+				$data=preg_replace_callback('#"([^"]*/(attachment|dload)\.php\?id=(\d+)[^"]*)"#','_static_export_scriptrep_callback',$data);
+				$data=preg_replace_callback('#"([^"]*/(catalogue_file)\.php\?file=([^"&]+)&amp;original_filename=([^"&]+)[^"]*)"#','_static_export_scriptrep_callback',$data);
+			}
+
 			// Change absolute paths to relative ones
 			$path_bits=explode('/',$target_path);
 			array_pop($path_bits);
@@ -76,20 +82,128 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 			{
 				$relative_root.='../';
 			}
-			$data=str_replace(get_base_url().'/',$relative_root,$data);
-			$data=preg_replace('#<base\s[^>]*href="[^"]*"[^>]*>#','',$data);
+			$data=static_remove_dynamic_references($data,$relative_root);
 
-			// Remove any references to other ocPortal PHP scripts (e.g. RSS script) or callbacks with dynamic parameters
-			$data=preg_replace('#<meta\s[^>]*content="[^"]*\.php[^"]*"[^>]*>\s*#','',$data);
-			$data=preg_replace('#<link\s[^>]*href="[^"]*\.php[^"]*"[^>]*>\s*#','',$data);
-			$data=preg_replace('#<li><a href="[^"]*keep_mobile=1">.*</a></li>#U','',$data);
-			$data=preg_replace('#<noscript><a href="[^"]*keep_has_js=0">.*</a></noscript>#U','',$data);
-			$data=preg_replace('#<li><a href="[^"]*login.htm[^"]*">.*</a></li>#U','',$data);
-			$data=preg_replace('#\?redirect=[^&"]*&#','?',$data);
-			$data=preg_replace('#\?redirect=[^&"]*#','',$data);
-			$data=preg_replace('#&redirect=[^&"]*#','',$data);
+			// Potential warnings
+			if (strpos($data,'javascript_ajax')!==false)
+			{
+				$STATIC_EXPORT_WARNINGS[]='AJAX being included on '.$pagelink.', likely it doesn\'t work!';
+			}
+
+			// Redirect forms to mailer
+			if (strpos($data,'<form')!==false)
+			{
+				$STATIC_EXPORT_WARNINGS[]='Form(s) on '.$pagelink.' redirected to mailer.php. Check this is correct, test, and configure mailer.php!';
+
+				$data=preg_replace('#\saction="[^"]*"#',' action="'.escape_html(get_base_url().((count($langs)>1)?('/'.$lang):'').'/mailer.php').'"',$data);
+
+				// Set a JS session cookie for a very basic anti-spam system
+				$data=str_replace('</head>','<script>document.cookie="js_on=1";</script></head>',$data);
+			}
 
 			tar_add_file($STATIC_EXPORT_TAR,$save_target_path,$data,0644,$date,false);
 		}
 	}
+}
+
+/**
+ * Cleanup some HTML for static use.
+ *
+ * @param  string		The dirty HTML.
+ * @param  string		Root to replace base URL with.
+ * @param  string		Cleaned up HTML.
+ */
+function static_remove_dynamic_references($data,$relative_root='')
+{
+	$data=str_replace(get_base_url().'/',$relative_root,$data);
+	$data=preg_replace('#<base\s[^>]*href="[^"]*"[^>]*>#','',$data);
+
+	// Remove any references to other ocPortal PHP scripts (e.g. RSS script) or callbacks with dynamic parameters
+	$data=preg_replace('#<meta\s[^>]*content="[^"]*\.php[^"]*"[^>]*>\s*#','',$data);
+	$data=preg_replace('#<link\s[^>]*href="[^"]*\.php[^"]*"[^>]*>\s*#','',$data);
+	$data=preg_replace('#<li><a href="[^"]*keep_mobile=1">.*</a></li>#U','',$data);
+	$data=preg_replace('#<noscript><a href="[^"]*keep_has_js=0">.*</a></noscript>#U','',$data);
+	$data=preg_replace('#<li><a href="[^"]*login.htm[^"]*">.*</a></li>#U','',$data);
+	$data=preg_replace('#\?redirect=[^&"]*&#','?',$data);
+	$data=preg_replace('#\?redirect=[^&"]*#','',$data);
+	$data=preg_replace('#&redirect=[^&"]*#','',$data);
+
+	return $data;
+}
+
+/**
+ * Callback for replacing dynamic script links with static ones.
+ *
+ * @param  array		The matches.
+ * @param  string		Replaced string.
+ */
+function _static_export_scriptrep_callback($matches)
+{
+	global $STATIC_EXPORT_TAR;
+
+	$new_url=$matches[1];
+
+	switch ($matches[2])
+	{
+		case 'attachment':
+			$id=intval($matches[3]);
+
+			$thumb=(strpos($matches[1],'thumb=1')!==false);
+
+			$field='a_url';
+			if ($thumb) $field='a_thumb_url';
+			$attachment=$GLOBALS['SITE_DB']->query_select('attachments',array('id',$field,'a_original_filename'),array('id'=>$id),'',1);
+
+			if (url_is_local($attachment[0][$field]))
+			{
+				$prefix=($thumb?'thumbnail__':'').$attachment[0]['id'].'__';
+
+				$new_url=get_base_url().'/media/'.$prefix.$attachment[0]['a_original_filename'];
+
+				if (get_param_integer('save__deps_files',1)==1)
+				{
+					tar_add_file($STATIC_EXPORT_TAR,'media/'.$prefix.$attachment[0]['a_original_filename'],get_custom_file_base().'/'.urldecode($attachment[0][$field]),0644,$date,true,true);
+				}
+			} else
+			{
+				$new_url=$attachment[0][$field];
+			}
+
+			break;
+
+		case 'catalogue_file':
+			$file=urldecode($matches[3]);
+			$original_filename=urldecode($matches[4]);
+
+			$new_url=get_base_url().'/catalogue_files/'.md5($file).'__'.$original_filename;
+
+			if (get_param_integer('save__deps_files',1)==1)
+			{
+				tar_add_file($STATIC_EXPORT_TAR,'catalogue_files/'.md5($file).'__'.$original_filename,get_custom_file_base().'/uploads/catalogues/'.$file,0644,$date,true,true);
+			}
+
+			break;
+
+		case 'dload':
+			$id=intval($matches[3]);
+
+			$field='a_url';
+			$download=$GLOBALS['SITE_DB']->query_select('download_downloads',array('id','url','original_filename'),array('id'=>$id),'',1);
+
+			if (url_is_local($download[0]['url']))
+			{
+				$new_url=get_base_url().'/files/'.$download[0]['id'].'__'.$download[0]['original_filename'];
+
+				if (get_param_integer('save__deps_files',1)==1)
+				{
+					tar_add_file($STATIC_EXPORT_TAR,'files/'.$download[0]['id'].'__'.$download[0]['original_filename'],get_custom_file_base().'/'.urldecode($download[0][$field]),0644,$date,true,true);
+				}
+			} else
+			{
+				$new_url=$download[0]['url'];
+			}
+
+			break;
+	}
+	return '"'.$new_url.'"';
 }

@@ -19,25 +19,54 @@ $GLOBALS['NO_DB_SCOPE_CHECK']=true;
 require_code('tar');
 require_code('files');
 require_code('files2');
+require_code('config2');
 
 if ((get_option('htm_short_urls')!='1') || (get_option('mod_rewrite')!='1'))
-	warn_exit('New-style short URLs must be enabled before te export can happen, as this is the tidy scheme we export to.');
+{
+	set_option('htm_short_urls','1');
+	set_option('mod_rewrite','1');
+	warn_exit('New-style short URLs must be enabled before te export can happen, as this is the tidy scheme we export to. It is now enabled - just refresh the browser.');
+}
+
+if (get_option('show_inline_stats')=='1')
+{
+	set_option('show_inline_stats','0');
+	warn_exit('Inline stats must be disabled. It is now enabled - just refresh the browser.');
+}
 
 if (get_option('site_closed')=='1')
-	warn_exit('Site must not be closed.');
+{
+	set_option('site_closed','0');
+	warn_exit('Site must not be closed. It is now enabled - just refresh the browser.');
+}
+
+if (get_option('enable_previews')=='1')
+{
+	set_option('enable_previews','0');
+	warn_exit('Previews must be disabled. It is now enabled - just refresh the browser.');
+}
+
+if (!addon_installed('staff_messaging'))
+{
+	warn_exit('Staff Messaging addon must be installed.');
+}
 
 $filename='static-'.get_site_name().'.'.date('Y-m-d').'.tar';
 
 @ob_end_clean();
 @ob_end_clean();
 
-header('Content-Type: application/octet-stream'.'; authoritative=true;');
-if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-	header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
-else
-	header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+if (get_param_integer('do__headers',1)==1)
+{
+	header('Content-Type: application/octet-stream'.'; authoritative=true;');
+	if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
+		header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+	else
+		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
+}
 
-global $STATIC_EXPORT_TAR;
+global $STATIC_EXPORT_TAR,$STATIC_EXPORT_WARNINGS;
+$STATIC_EXPORT_WARNINGS=array();
 $STATIC_EXPORT_TAR=tar_open(NULL,'wb');
 
 $GLOBALS['NO_QUERY_LIMIT']=true;
@@ -45,50 +74,72 @@ $GLOBALS['NO_QUERY_LIMIT']=true;
 // The content in the sitemap
 require_code('sitemap');
 require_code('static_export');
-spawn_page_crawl('_pagelink_to_static',$GLOBALS['FORUM_DRIVER']->get_guest_id(),NULL,DEPTH__ENTRIES);
+if (get_param_integer('save__pages',1)==1)
+{
+	spawn_page_crawl('_pagelink_to_static',$GLOBALS['FORUM_DRIVER']->get_guest_id(),NULL,DEPTH__ENTRIES);
+}
 
 // Other media
-$subpaths=array();
-$subpaths=array_merge($subpaths,array('uploads'));
-$subpaths=array_merge($subpaths,array('themes/default/templates_cached','themes/default/images','themes/default/images_custom'));
-$theme=$GLOBALS['FORUM_DRIVER']->get_theme('');
-if ($theme!='default')
-	$subpaths=array_merge($subpaths,array('themes/'.$theme.'/templates_cached','themes/'.$theme.'/images','themes/'.$theme.'/images_custom'));
-foreach ($subpaths as $subpath)
+if (get_param_integer('save__uploads',1)==1)
 {
-	if (substr($subpath,-strlen('/templates_cached'))=='/templates_cached')
+	$subpaths=array();
+	foreach (get_directory_contents(get_custom_file_base().'/uploads','',false,false) as $subpath)
 	{
-		foreach (get_directory_contents(get_custom_file_base().'/'.$subpath,'') as $file)
+		if (($subpath!='downloads') && ($subpath!='attachments') && ($subpath!='attachments_thumbs') && ($subpath!='catalogues'))
+			$subpaths=array_merge($subpaths,array('uploads/'.$subpath));
+	}
+	$subpaths=array_merge($subpaths,array('themes/default/templates_cached','themes/default/images','themes/default/images_custom'));
+	$theme=$GLOBALS['FORUM_DRIVER']->get_theme('');
+	if ($theme!='default')
+		$subpaths=array_merge($subpaths,array('themes/'.$theme.'/templates_cached','themes/'.$theme.'/images','themes/'.$theme.'/images_custom'));
+	foreach ($subpaths as $subpath)
+	{
+		if (substr($subpath,-strlen('/templates_cached'))=='/templates_cached')
 		{
-			if ((substr($file,-4)=='.css') || (substr($file,-3)=='.js'))
-				tar_add_file($STATIC_EXPORT_TAR,$subpath.'/'.$file,get_custom_file_base().'/'.$subpath.'/'.$file,0644,time(),true);
+			foreach (get_directory_contents(get_custom_file_base().'/'.$subpath,'') as $file)
+			{
+				if ((substr($file,-4)=='.css') || (substr($file,-3)=='.js'))
+					tar_add_file($STATIC_EXPORT_TAR,$subpath.'/'.$file,get_custom_file_base().'/'.$subpath.'/'.$file,0644,time(),true);
+			}
+		} else
+		{
+			tar_add_folder($STATIC_EXPORT_TAR,NULL,get_file_base(),NULL,$subpath,NULL,NULL,false,false);
 		}
-	} else
-	{
-		tar_add_folder($STATIC_EXPORT_TAR,NULL,get_file_base(),NULL,$subpath,NULL,NULL,false,false);
 	}
 }
 
 // .htaccess
 $data='';
-$data.='DirectoryIndex start.htm'.chr(10);
-$data.=chr(10);
-$data.=chr(10);
 $data.='RewriteEngine on'.chr(10);
 $data.=chr(10);
 $data.=chr(10);
+$data.='RewriteRule ^$ start.htm [R,L]'.chr(10);
+$data.=chr(10);
+$data.=chr(10);
 $directory=$STATIC_EXPORT_TAR['directory'];
+$langs=find_all_langs();
 foreach ($directory as $entry) // Rewrite non-specific pages to 'misc' files
 {
 	$dir_name=preg_replace('#^[A-Z][A-Z]/#','',dirname($entry['path']));
 	if (($dir_name!='') && (basename($entry['path'])=='misc.htm'))
 	{
 		$data.='RewriteRule ^'.$dir_name.'\.htm(.*) '.$dir_name.'/misc.htm$1 [R,L]'.chr(10);
+
+		// If .htaccess not supported let it redirect via simple stub file instead
+		if (get_param_integer('save__redirects',1)==1)
+		{
+			$datax='<meta http-equiv="refresh" content="0;'.escape_html(basename($dir_name)).'/misc.htm" />';
+			foreach (array_keys($langs) as $lang)
+			{
+				if (($lang!=fallback_lang()) && (count(get_directory_contents(get_custom_file_base().'/lang_custom/'.$lang)<5))) continue; // Probably this is just the utf8 addon
+
+				tar_add_file($STATIC_EXPORT_TAR,((count($langs)!=1)?($lang.'/'):'').$dir_name.'.htm',$datax,0644,time(),false);
+			}
+		}
 	}
 }
 $data.=chr(10);
 $data.=chr(10);
-$langs=find_all_langs();
 if (count($langs)!=1) // Handling language detection
 {
 	// Recognise when language explicitly called
@@ -123,7 +174,104 @@ if (count($langs)!=1) // Handling language detection
 
 	$data.=chr(10);
 }
-tar_add_file($STATIC_EXPORT_TAR,'.htaccess',$data,0644,time(),false);
+if (get_param_integer('save__htaccess',1)==1)
+{
+	tar_add_file($STATIC_EXPORT_TAR,'.htaccess',$data,0644,time(),false);
+}
+
+require_code('mail');
+require_lang('messaging');
+
+// Mailer
+foreach (array_keys($langs) as $lang)
+{
+if (($lang!=fallback_lang()) && (count(get_directory_contents(get_custom_file_base().'/lang_custom/'.$lang)<5))) continue; // Probably this is just the utf8 addon
+$mailer_script='
+<'.'?php
+function post_param($key,$default)
+{
+	return isset($_POST[$key])?$_POST[$key]:$default;
+}
+
+function titleify($boring)
+{
+	return ucwords(str_replace("_"," ",$boring));
+}
+
+if (!isset($_COOKIE["js_on"])) exit("Error: cookies must be enabled, for anti-spam reasons.");
+
+$title=post_param("title","'.do_lang('UNKNOWN').'");
+
+$to="'.get_option('staff_address').'";
+
+$email=post_param("email",$to);
+$name=post_param("name","'.do_lang('UNKNOWN').'");
+
+$post=post_param("post","");
+
+$fields=array();
+foreach (array_diff(array_keys($_POST),array("MAX_FILE_SIZE","perform_validation","_validated","posting_ref_id","f_face","f_colour","f_size","x","y","name","subject","email","to_members_email","to_written_name","redirect","http_referer")) as $key)
+{
+	$is_hidden=(strpos($key,"hour")!==false) || (strpos($key,"access_")!==false) || (strpos($key,"minute")!==false) || (strpos($key,"confirm")!==false) || (strpos($key,"pre_f_")!==false) || (strpos($key,"label_for__")!==false) || (strpos($key,"wysiwyg_version_of_")!==false) || (strpos($key,"is_wysiwyg")!==false) || (strpos($key,"require__")!==false) || (strpos($key,"tempcodecss__")!==false) || (strpos($key,"comcode__")!==false) || (strpos($key,"_parsed")!==false) || (preg_match("#^caption\d+$#",$key)!=0) || (preg_match("#^attachmenttype\d+$#",$key)!=0) || (substr($key,0,1)=="_") || (substr($key,0,9)=="hidFileID") || (substr($key,0,11)=="hidFileName");
+	if ($is_hidden) continue;
+
+	if (substr($key,0,1)!="_")
+		$fields[$key]=post_param("label_for__".$key,titleify($key));
+}
+foreach ($fields as $field=>$field_title)
+{
+	$field_val=post_param($field,"");
+	if ($field_val!="")
+		$post.="\n\n".$field_title.": ".$field_val;
+}
+
+$subject=str_replace("xxx",$title,"'.addslashes(do_lang('CONTACT_US_NOTIFICATION_SUBJECT','xxx',NULL,NULL,$lang)).'");
+$message=str_replace(array("aaa","bbb"),array($name,$post),"'.addslashes(comcode_to_clean_text(do_lang('CONTACT_US_NOTIFICATION_MESSAGE',get_site_name(),'aaa',array('bbb'),$lang))).'");
+$headers="";
+$headers.="From: {$name} <{$email}>\n";
+$headers.="Content-type: multipart/mixed; boundary="PHP-mixed-{$random_hash}";
+$random_hash=md5(date("r",time()));
+$mime_message="";
+$mime_message.="--PHP-mixed-{$random_hash}\n";
+$mime_message.="Content-Type: text/plain; charset=\"'.get_charset().'\"\n\n";
+$mime_message.=$message."\n\n";
+foreach ($_FILES as $f)
+{
+	$mime_message.="--PHP-mixed-{$random_hash}\n";
+	$mime_message.="Content-Type: application/octet-stream; name=\"".addslashes($f["name"])."\"\n";
+	$mime_message.="Content-Transfer-Encoding: base64\n";
+	$mime_message.="Content-Disposition: attachment\n\n";
+	$mime_message.=base64_encode(file_get_contents($f["tmp_name"]));
+}
+$mime_message.="--PHP-mixed-{$random_hash}--\n\n";
+if (trim($post)!="")
+{
+	mail($to,$subject,$mime_message,$headers);
+}
+?'.'>
+
+<p>'.do_lang('MESSAGE_SENT',NULL,NULL,NULL,$lang).'</p>
+';
+if (get_param_integer('save__mailer',1)==1)
+{
+	$mailer_path=get_custom_file_base().'/pages/html_custom/'.$lang.'/mailer_temp.htm';
+	@mkdir(dirname($mailer_path),0777);
+	file_put_contents($mailer_path,$mailer_script);
+	$data=http_download_file(static_evaluate_tempcode(build_url(array('page'=>'mailer_temp','keep_lang'=>(count($langs)!=1)?$lang:NULL),'',NULL,false,false,true)));
+	unlink($mailer_path);
+	$data=preg_replace('#<title>.*</title>#','<title>'.escape_html(get_site_name()).'</title>',$data);
+	tar_add_file($STATIC_EXPORT_TAR,((count($langs)!=1)?($lang.'/'):'').'mailer.php',static_remove_dynamic_references($data),0644,time(),false);
+}
+}
+
+// Add warnings file
+if (get_param_integer('save__warnings',1)==1)
+{
+	if ($STATIC_EXPORT_WARNINGS!=array())
+	{
+		tar_add_file($STATIC_EXPORT_TAR,'_warnings.txt',implode(chr(10),$STATIC_EXPORT_WARNINGS),0644,time(),false);
+	}
+}
 
 tar_close($STATIC_EXPORT_TAR);
 

@@ -449,8 +449,9 @@ function tar_get_file(&$resource,$path,$tolerate_errors=false,$write_data_to=NUL
  * @param  integer		The file mode (permissions)
  * @param  TIME			The modification time we wish for our file
  * @param  boolean		Whether the $data variable is actually a full file path
+ * @param  boolean		Whether to return on errors
  */
-function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path=false)
+function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path=false,$return_on_errors=false)
 {
 	if (!array_key_exists('directory',$resource)) tar_get_directory($resource);
 
@@ -462,6 +463,7 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 	{
 		if ($entry['path']==$target_path)
 		{
+			if ($return_on_errors) return;
 			warn_exit(do_lang_tempcode('FILE_IN_ARCHIVE_TWICE',escape_html($target_path)));
 		}
 	}
