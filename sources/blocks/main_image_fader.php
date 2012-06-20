@@ -61,6 +61,7 @@ class Block_main_image_fader
 	function run($map)
 	{
 		require_css('galleries');
+		require_lang('galleries');
 
 		$cat=array_key_exists('param',$map)?$map['param']:'';
 		if ($cat=='') $cat='root';
