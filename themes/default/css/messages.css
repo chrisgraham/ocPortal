@@ -39,7 +39,7 @@
 .closed_site_special_message {
 	margin: {$?,{$MOBILE},3em 2em,10em auto};
 	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 60em;
+		width: 38em;
 	{+END}
 	text-align: center;
 }
