@@ -102,6 +102,11 @@ Curved borders would be cool, but it does not work well with the carefully defin
 	color: {$GET,slightly_seeded_text};
 }
 
+.form_table_field_name h3 {
+	border: 0;
+	margin: 0;
+}
+
 .form_table_description_above_cell {
 	text-align: left !important;
 }
