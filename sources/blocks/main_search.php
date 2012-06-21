@@ -102,12 +102,17 @@ class Block_main_search
 		}
 
 		$limit_to=array('all_defaults');
+		$extrax=array();
 		if (array_key_exists('limit_to',$map))
 		{
 			$limit_to=array();
 			foreach (explode(',',$map['limit_to']) as $key)
 			{
 				$limit_to[]='search_'.$key;
+				if (strpos($map['limit_to'],',')!==false)
+				{
+					$extrax['search_'.$key]='1';
+				}
 			}
 			if (count($limit_to)==1) $extra['id']=$key;
 		}
@@ -115,7 +120,10 @@ class Block_main_search
 		unset($map['input_fields']);
 		unset($map['extra']);
 		unset($map['zone']);
-		$full_link=build_url(array('page'=>'search','type'=>'misc')+$map+$extra,$zone);
+		unset($map['title']);
+		unset($map['limit_to']);
+		unset($map['block']);
+		$full_link=build_url(array('page'=>'search','type'=>'misc')+$map+$extra+$extrax,$zone);
 
 		if ((!array_key_exists('content',$input_fields)) && (count($input_fields)!=1)) $extra['content']='';
 
