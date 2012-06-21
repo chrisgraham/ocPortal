@@ -1047,12 +1047,12 @@ function get_flagrant()
 	$system=(mt_rand(0,1)==0);
 	$_flagrant=NULL;
 
-	if (!$system)
+	if ((!$system) || (get_option('system_flagrant')==''))
 	{
 		$_flagrant=persistant_cache_get('FLAGRANT');
 		if ($_flagrant===NULL)
 		{
-			$flagrant=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT the_message FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24<'.strval(time()),true/*in case tablemissing*/);
+			$flagrant=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT the_message FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
 			if ($flagrant===NULL)
 			{
 				persistant_cache_set('FLAGRANT',false);
