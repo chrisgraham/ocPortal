@@ -118,6 +118,7 @@ function static_remove_dynamic_references($data,$relative_root='')
 {
 	$data=str_replace(get_base_url().'/',$relative_root,$data);
 	$data=preg_replace('#<base\s[^>]*href="[^"]*"[^>]*>#','',$data);
+	$data=preg_replace('#<link rel="baseurl" href="[^"]*" />#','',$data);
 
 	// Remove any references to other ocPortal PHP scripts (e.g. RSS script) or callbacks with dynamic parameters
 	$data=preg_replace('#<meta\s[^>]*content="[^"]*\.php[^"]*"[^>]*>\s*#','',$data);
@@ -128,6 +129,7 @@ function static_remove_dynamic_references($data,$relative_root='')
 	$data=preg_replace('#\?redirect=[^&"]*&#','?',$data);
 	$data=preg_replace('#\?redirect=[^&"]*#','',$data);
 	$data=preg_replace('#&redirect=[^&"]*#','',$data);
+	$data=preg_replace('#<link rel="canonical" href="[^"]*mailer_temp[^"]*" />#','',$data);
 
 	return $data;
 }
