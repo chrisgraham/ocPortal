@@ -244,8 +244,10 @@ foreach ($fields as $field=>$field_title)
 $subject=str_replace("xxx",$title,"'.addslashes(do_lang('CONTACT_US_NOTIFICATION_SUBJECT','xxx',NULL,NULL,$lang)).'");
 $message=str_replace(array("aaa","bbb"),array($name,$post),"'.addslashes(comcode_to_clean_text(do_lang('CONTACT_US_NOTIFICATION_MESSAGE',get_site_name(),'aaa',array('bbb'),$lang))).'");
 $headers="";
-$headers.="From: {$name} <{$email}>\n";
-$headers.="Reply-To: {$name} <{$email}>\n";
+$website_email="'.addslashes(get_option('website_email')).'";
+if ($website_email=="") $website_email=$email;
+$headers.="From: \"".str_replace("\"","",$name)."\" <{$website_email}>\n";
+$headers.="Reply-To: \"".str_replace("\"","",$name)."\" <{$email}>\n";
 $random_hash=md5(date("r",time()));
 $headers.="Content-type: multipart/mixed; boundary=\"PHP-mixed-{$random_hash}\"";
 $mime_message="";
