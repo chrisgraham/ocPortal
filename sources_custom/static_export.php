@@ -42,14 +42,15 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 		$langs=find_all_langs();
 		foreach (array_keys($langs) as $lang)
 		{
-			if (($lang!=fallback_lang()) && (count(get_directory_contents(get_custom_file_base().'/lang_custom/'.$lang)<5))) continue; // Probably this is just the utf8 addon
+			if (($lang!=fallback_lang()) && (count(get_directory_contents(get_custom_file_base().'/lang_custom/'.$lang,'',true,false,true))<5)) continue; // Probably this is just the utf8 addon
 
 			$url_test=static_evaluate_tempcode(symbol_tempcode('PAGE_LINK',array($pagelink,'0','1')));
 			if (strpos($url_test,'?')!==false) continue;
 
 			$extended_pagelink=$pagelink;
 			if ($pagelink=='') $extended_pagelink=':'.get_zone_default_page('');
-			$extended_pagelink.=':keep_lang='.$lang;
+			if (count($langs)!=1)
+				$extended_pagelink.=':keep_lang='.$lang;
 			$url=static_evaluate_tempcode(symbol_tempcode('PAGE_LINK',array($extended_pagelink,'0','1')));
 
 			$target_path=urldecode(preg_replace('#\?.*$#','',preg_replace('#^'.preg_quote(get_base_url(),'#').'/#','',$url)));
@@ -65,13 +66,24 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 				}
 			}
 
-			$data=http_download_file($url,NULL,false);
+			$data=http_download_file($url,NULL,false,false,'ocPortal',NULL,array('ocp_session'=>12345));
 			if (is_null($data)) continue;
 
 			if (get_param_integer('save__deps',1)==1)
 			{
 				$data=preg_replace_callback('#"([^"]*/(attachment|dload)\.php\?id=(\d+)[^"]*)"#','_static_export_scriptrep_callback',$data);
 				$data=preg_replace_callback('#"([^"]*/(catalogue_file)\.php\?file=([^"&]+)&amp;original_filename=([^"&]+)[^"]*)"#','_static_export_scriptrep_callback',$data);
+			}
+
+			// Redirect forms to mailer
+			if (strpos($data,'<form')!==false)
+			{
+				$STATIC_EXPORT_WARNINGS[]='Form(s) on '.$pagelink.' redirected to mailer.php. Check this is correct (we have no other way of handling forms in static mode) and test mailer.php!';
+
+				$data=preg_replace('#\saction="[^"]*"#',' action="'.escape_html(get_base_url().((count($langs)>1)?('/'.$lang):'').'/mailer.php').'"',$data);
+
+				// Set a JS session cookie for a very basic anti-spam system
+				$data=str_replace('</head>','<script>document.cookie="js_on=1";</script></head>',$data);
 			}
 
 			// Change absolute paths to relative ones
@@ -88,17 +100,6 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 			if (strpos($data,'javascript_ajax')!==false)
 			{
 				$STATIC_EXPORT_WARNINGS[]='AJAX being included on '.$pagelink.', likely it doesn\'t work!';
-			}
-
-			// Redirect forms to mailer
-			if (strpos($data,'<form')!==false)
-			{
-				$STATIC_EXPORT_WARNINGS[]='Form(s) on '.$pagelink.' redirected to mailer.php. Check this is correct, test, and configure mailer.php!';
-
-				$data=preg_replace('#\saction="[^"]*"#',' action="'.escape_html(get_base_url().((count($langs)>1)?('/'.$lang):'').'/mailer.php').'"',$data);
-
-				// Set a JS session cookie for a very basic anti-spam system
-				$data=str_replace('</head>','<script>document.cookie="js_on=1";</script></head>',$data);
 			}
 
 			tar_add_file($STATIC_EXPORT_TAR,$save_target_path,$data,0644,$date,false);
@@ -158,11 +159,14 @@ function _static_export_scriptrep_callback($matches)
 			{
 				$prefix=($thumb?'thumbnail__':'').$attachment[0]['id'].'__';
 
+				$attachment[0]['a_original_filename']=_static_export_make_ascii($attachment[0]['a_original_filename']);
+
 				$new_url=get_base_url().'/media/'.$prefix.$attachment[0]['a_original_filename'];
 
 				if (get_param_integer('save__deps_files',1)==1)
 				{
-					tar_add_file($STATIC_EXPORT_TAR,'media/'.$prefix.$attachment[0]['a_original_filename'],get_custom_file_base().'/'.urldecode($attachment[0][$field]),0644,$date,true,true);
+					$full_path=get_custom_file_base().'/'.urldecode($attachment[0][$field]);
+					tar_add_file($STATIC_EXPORT_TAR,'media/'.$prefix.$attachment[0]['a_original_filename'],$full_path,0644,filemtime($full_path),true,true);
 				}
 			} else
 			{
@@ -173,13 +177,14 @@ function _static_export_scriptrep_callback($matches)
 
 		case 'catalogue_file':
 			$file=urldecode($matches[3]);
-			$original_filename=urldecode($matches[4]);
+			$original_filename=_static_export_make_ascii(urldecode($matches[4]));
 
 			$new_url=get_base_url().'/catalogue_files/'.md5($file).'__'.$original_filename;
 
 			if (get_param_integer('save__deps_files',1)==1)
 			{
-				tar_add_file($STATIC_EXPORT_TAR,'catalogue_files/'.md5($file).'__'.$original_filename,get_custom_file_base().'/uploads/catalogues/'.$file,0644,$date,true,true);
+				$full_path=get_custom_file_base().'/uploads/catalogues/'.$file;
+				tar_add_file($STATIC_EXPORT_TAR,'catalogue_files/'.md5($file).'__'.$original_filename,$full_path,0644,filemtime($full_path),true,true);
 			}
 
 			break;
@@ -192,11 +197,14 @@ function _static_export_scriptrep_callback($matches)
 
 			if (url_is_local($download[0]['url']))
 			{
+				$download[0]['original_filename']=_static_export_make_ascii($download[0]['original_filename']);
+
 				$new_url=get_base_url().'/files/'.$download[0]['id'].'__'.$download[0]['original_filename'];
 
 				if (get_param_integer('save__deps_files',1)==1)
 				{
-					tar_add_file($STATIC_EXPORT_TAR,'files/'.$download[0]['id'].'__'.$download[0]['original_filename'],get_custom_file_base().'/'.urldecode($download[0][$field]),0644,$date,true,true);
+					$full_path=get_custom_file_base().'/'.urldecode($download[0][$field]);
+					tar_add_file($STATIC_EXPORT_TAR,'files/'.$download[0]['id'].'__'.$download[0]['original_filename'],$full_path,0644,filemtime($full_path),true,true);
 				}
 			} else
 			{
@@ -206,4 +214,21 @@ function _static_export_scriptrep_callback($matches)
 			break;
 	}
 	return '"'.$new_url.'"';
+}
+
+/**
+ * Make a filename ASCII, for archive/cross-platform portability.
+ *
+ * @param  array		The filename.
+ * @return string		The ASCII version.
+ */
+function _static_export_make_ascii($filename)
+{
+	for ($i=0;$i<strlen($filename);$i++)
+	{
+		if ((ord($filename[$i])<32) || (ord($filename[$i])>127))
+			$filename[$i]='_';
+	}
+
+	return $filename;
 }
