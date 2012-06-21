@@ -59,6 +59,8 @@ if (get_option('enable_previews')=='1')
 	warn_exit('Previews must be disabled. It is now disabled - just refresh the browser.');
 }
 
+set_value('no_frames','1');
+
 $filename='static-'.get_site_name().'.'.date('Y-m-d').'.tar';
 
 @ob_end_clean();
@@ -119,6 +121,7 @@ if (get_param_integer('save__uploads',1)==1)
 
 // .htaccess
 $data='';
+$data.='ErrorDocument 404 /sitemap.htm'.chr(10).chr(10);
 $data.='RewriteEngine on'.chr(10);
 $data.=chr(10);
 $data.=chr(10);
@@ -195,6 +198,7 @@ require_code('mail');
 require_lang('messaging');
 
 // Mailer
+$robots_data='';
 foreach (array_keys($langs) as $lang)
 {
 if (($lang!=fallback_lang()) && (count(get_directory_contents(get_custom_file_base().'/lang_custom/'.$lang,'',true,false,true))<5)) continue; // Probably this is just the utf8 addon
@@ -241,6 +245,7 @@ $subject=str_replace("xxx",$title,"'.addslashes(do_lang('CONTACT_US_NOTIFICATION
 $message=str_replace(array("aaa","bbb"),array($name,$post),"'.addslashes(comcode_to_clean_text(do_lang('CONTACT_US_NOTIFICATION_MESSAGE',get_site_name(),'aaa',array('bbb'),$lang))).'");
 $headers="";
 $headers.="From: {$name} <{$email}>\n";
+$headers.="Reply-To: {$name} <{$email}>\n";
 $random_hash=md5(date("r",time()));
 $headers.="Content-type: multipart/mixed; boundary=\"PHP-mixed-{$random_hash}\"";
 $mime_message="";
@@ -274,8 +279,11 @@ if (get_param_integer('save__mailer',1)==1)
 	$data=preg_replace('#<title>.*</title>#','<title>'.escape_html(get_site_name()).'</title>',$data);
 	$relative_root=(count($langs)!=1)?'../':'';
 	tar_add_file($STATIC_EXPORT_TAR,((count($langs)!=1)?($lang.'/'):'').'mailer.php',static_remove_dynamic_references($data,$relative_root),0644,time(),false);
+
+	$robots_data.='Deny /'.((count($langs)!=1)?($lang.'/'):'').'mailer.php'.chr(10);
 }
 }
+tar_add_file($STATIC_EXPORT_TAR,'robots.txt','User-agent: *'.chr(10).$robots_data,0644,time(),false);
 
 // Add warnings file
 if (get_param_integer('save__warnings',1)==1)

@@ -50,7 +50,7 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 			$extended_pagelink=$pagelink;
 			if ($pagelink=='') $extended_pagelink=':'.get_zone_default_page('');
 			if (count($langs)!=1)
-				$extended_pagelink.=':keep_lang='.$lang;
+				$extended_pagelink.=':keep_lang='.$lang.':max=10000';
 			$url=static_evaluate_tempcode(symbol_tempcode('PAGE_LINK',array($extended_pagelink,'0','1')));
 
 			$target_path=urldecode(preg_replace('#\?.*$#','',preg_replace('#^'.preg_quote(get_base_url(),'#').'/#','',$url)));
@@ -78,9 +78,11 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 			// Redirect forms to mailer
 			if (strpos($data,'<form')!==false)
 			{
-				$STATIC_EXPORT_WARNINGS[]='Form(s) on '.$pagelink.' redirected to mailer.php. Check this is correct (we have no other way of handling forms in static mode) and test mailer.php!';
+				$STATIC_EXPORT_WARNINGS[]='Form(s) on '.$pagelink.' redirected to mailer.php if POST, else left alone if GET. Check this is correct! If it is a sort form you might want to remove that from the templates and re-export.';
 
-				$data=preg_replace('#\saction="[^"]*"#',' action="'.escape_html(get_base_url().((count($langs)>1)?('/'.$lang):'').'/mailer.php').'"',$data);
+				$new_form_action=escape_html(get_base_url().((count($langs)>1)?('/'.$lang):'').'/mailer.php');
+				$data=preg_replace('#(\s)action="[^"]*"([^>]*\smethod="post")#','${1}action="'.$new_form_action.'"${2}',$data);
+				$data=preg_replace('#(\smethod="post"[^>]*)(\s)action="[^"]*"#','${1}action="'.$new_form_action.'"${2}',$data);
 
 				// Set a JS session cookie for a very basic anti-spam system
 				$data=str_replace('</head>','<script>document.cookie="js_on=1";</script></head>',$data);
@@ -126,10 +128,12 @@ function static_remove_dynamic_references($data,$relative_root='')
 	$data=preg_replace('#<li><a href="[^"]*keep_mobile=1">.*</a></li>#U','',$data);
 	$data=preg_replace('#<noscript><a href="[^"]*keep_has_js=0">.*</a></noscript>#U','',$data);
 	$data=preg_replace('#<li><a href="[^"]*login.htm[^"]*">.*</a></li>#U','',$data);
-	$data=preg_replace('#\?redirect=[^&"]*&#','?',$data);
+	$data=preg_replace('#\?redirect=[^&"]*&amp;#','?',$data);
 	$data=preg_replace('#\?redirect=[^&"]*#','',$data);
-	$data=preg_replace('#&redirect=[^&"]*#','',$data);
-	$data=preg_replace('#<link rel="canonical" href="[^"]*mailer_temp[^"]*" />#','',$data);
+	$data=preg_replace('#&amp;redirect=[^&"]*#','',$data);
+	$data=preg_replace('#<link rel="canonical" href="[^"]*" />#','',$data);
+	$data=str_replace('&amp;max=10000','',$data);
+	$data=str_replace('max=10000&amp;','',$data);
 
 	return $data;
 }
