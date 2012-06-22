@@ -114,6 +114,11 @@ class Block_main_search
 					$extrax['search_'.$key]='1';
 				}
 			}
+			$hooks=find_all_hooks('modules','search');
+			foreach (array_keys($hooks) as $key)
+			{
+				if (!array_key_exists('search_'.$key,$extrax)) $extrax['search_'.$key]='0';
+			}
 			if (count($limit_to)==1) $extra['id']=$key;
 		}
 
