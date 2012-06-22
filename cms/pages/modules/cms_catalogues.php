@@ -387,7 +387,13 @@ class Module_cms_catalogues extends standard_aed_module
 			if (strpos($_cf_name,': ')!==false)
 			{
 				$field_cat=substr($_cf_name,0,strpos($_cf_name,': '));
-				$_cf_name=substr($_cf_name,strpos($_cf_name,': ')+2);
+				if ($field_cat.': '==$_cf_name)
+				{
+					$_cf_name=$field_cat; // Just been pulled out as heading, nothing after ": "
+				} else
+				{
+					$_cf_name=substr($_cf_name,strpos($_cf_name,': ')+2);
+				}
 			}
 			if (!array_key_exists($field_cat,$field_groups)) $field_groups[$field_cat]=new ocp_tempcode();
 

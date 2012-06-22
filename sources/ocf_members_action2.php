@@ -645,7 +645,13 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 			if (strpos($custom_field['trans_name'],': ')!==false)
 			{
 				$field_cat=substr($custom_field['trans_name'],0,strpos($custom_field['trans_name'],': '));
-				$custom_field['trans_name']=substr($custom_field['trans_name'],strpos($custom_field['trans_name'],': ')+2);
+				if ($field_cat.': '==$custom_field['trans_name'])
+				{
+					$custom_field['trans_name']=$field_cat; // Just been pulled out as heading, nothing after ": "
+				} else
+				{
+					$custom_field['trans_name']=substr($custom_field['trans_name'],strpos($custom_field['trans_name'],': ')+2);
+				}
 			}
 			elseif (preg_match('#(^\([A-Z][^\)]*\) )|( \([A-Z][^\)]*\)$)#',$custom_field['trans_name'],$matches)!=0)
 			{
