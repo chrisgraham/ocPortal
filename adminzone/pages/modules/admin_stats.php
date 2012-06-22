@@ -321,7 +321,7 @@ class Module_admin_stats
 			$start=0; $max=10000;
 		}
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'),'peak'=>do_lang_tempcode('PEAK'));
-		$test=explode(' ',get_param('sort','date_and_time ASC'),2);
+		$test=explode(' ',get_param('sort','date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
@@ -395,7 +395,7 @@ class Module_admin_stats
 			$start=0; $max=10000;
 		}
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'));
-		$test=explode(' ',either_param('sort','date_and_time ASC'));
+		$test=explode(' ',either_param('sort','date_and_time DESC'));
 		if (count($test)==1) $test[1]='DESC';
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
@@ -405,6 +405,7 @@ class Module_admin_stats
 
 		$rows=$GLOBALS['SITE_DB']->query_select('adminlogs',array('date_and_time','COUNT(*) AS cnt'),NULL,'GROUP BY date_and_time ORDER BY '.$sortable.' '.$sort_order,3000/*reasonable limit*/);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
+		//$max_rows=$GLOBALS['SITE_DB']->query_value('adminlogs','COUNT(DISTINCT date_and_time)');	Cannot do this as the DB does not do all the processing
 
 		$data=array();
 		$base=$rows[0]['date_and_time'];

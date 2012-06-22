@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @package		related_members
  */
 
-class Hook_Profiles_Tabs_Edit_profile
+class Hook_Profiles_Tabs_related
 {
 
 	/**
@@ -30,43 +30,33 @@ class Hook_Profiles_Tabs_Edit_profile
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return (($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')) || (has_specific_permission($member_id_viewing,'member_maintenance')));
+		require_lang('related');
+
+		return (get_ocp_cpf(do_lang('RELATED_CPF'),$member_id_of)!='');
 	}
 
 	/**
-	 * Standard modular render function for profile tabs edit hooks.
+	 * Standard modular render function for profile tab hooks.
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra Javascript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set)
+	 * @return array			A triple: The tab title, the tab contents, the suggested tab order
 	 */
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
-		$order=10;
+		require_lang('related');
 
-		// NB: Actualiser is handled in settings.php
+		$title=do_lang_tempcode('RELATED_MEMBERS');
 
-		if ($leave_to_ajax_if_possible) return NULL;
+		$order=150;
 
-		// UI
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
-		$title=do_lang_tempcode('PROFILE');
+		$cpf_value=get_ocp_cpf(do_lang('RELATED_CPF'),$member_id_of);
+		$content=do_block('main_multi_content',array('param'=>'member','select'=>'test='.$cpf_value.'\,id<>'.strval($member_id_of)));
 
-		$custom_fields=ocf_get_custom_fields_member($member_id_of);
-
-		require_code('ocf_members_action2');
-		list($fields,$hidden)=ocf_get_member_fields_profile(false,$member_id_of,NULL,$custom_fields);
-
-		$redirect=get_param('redirect',NULL);
-		if (!is_null($redirect))
-			$hidden->attach(form_input_hidden('redirect',$redirect));
-
-		$javascript='';
-
-		$text='';
-
-		return array($title,$fields,$text,$javascript,$order,$hidden);
+		return array($title,$content,$order);
 	}
 
 }

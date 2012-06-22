@@ -1,6 +1,6 @@
 {$SET,rand_donextitem,{$RAND}}
 
-<div id="donext_item_{$GET,rand_donextitem}" class="do_next_item" onclick="var as=this.getElementsByTagName('a'); var a=as[as.length-1]; click_link(a);" onkeypress="if (enter_pressed(event)) this.onclick(event);" onmouseout="if (typeof window.doc_onmouseout!='undefined') doc_onmouseout();" onmouseover="if (typeof window.doc_onmouseover!='undefined') doc_onmouseover('{I2}');">
+<div id="donext_item_{$GET,rand_donextitem}" class="do_next_item" style="width: {$DIV*,100,{$MIN,5,{NUM_SIBLINGS}}}%" onclick="var as=this.getElementsByTagName('a'); var a=as[as.length-1]; click_link(a);" onkeypress="if (enter_pressed(event)) this.onclick(event);" onmouseout="if (typeof window.doc_onmouseout!='undefined') doc_onmouseout();" onmouseover="if (typeof window.doc_onmouseover!='undefined') doc_onmouseover('{I2}');">
 	{+START,IF_NON_EMPTY,{DOC}}<div id="doc_{I2}" style="display: none">{DOC}</div>{+END}
 
 	<div>

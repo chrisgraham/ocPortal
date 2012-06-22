@@ -618,6 +618,7 @@ class Hook_addon_registry_core_abstract_interfaces
 				'PICTURE'=>$option,
 				'DESCRIPTION'=>lorem_phrase(),
 				'LINK'=>placeholder_url(),
+				'NUM_SIBLINGS'=>strval(count($list)),
 				'DOC'=>'',
 				'WARNING'=>''
 			)));

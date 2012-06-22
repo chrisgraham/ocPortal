@@ -2,8 +2,8 @@ simplified_emails
 -----------------
  - themes/default/templates_custom/MAIL.tpl
 
-octhumbsup
-----------
+oc_thumbs_up
+------------
  - themes/default/templates_custom/ATTACHMENT_IMG_MINI.tpl
  - sources_custom/hooks/modules/admin_cleanup/image_thumbs.php
  - sources_custom/hooks/modules/admin_cleanup/index.html
@@ -12,7 +12,7 @@ octhumbsup
  - data_custom/upload-crop/js/jquery.imgareaselect.min.js
  - data_custom/upload-crop/js/jquery-pack.js
 
-ocbanter
+oc_banter
 ---------
  - adminzone/pages/comcode_custom/EN/insults.txt
  - lang_custom/EN/insults.ini
@@ -22,8 +22,8 @@ ocbanter
  - text_custom/EN/insults.txt
  - themes/default/images_custom/bigicons/insults.png
 
-ocdeadpeople
-------------
+oc_dead_people
+--------------
  - sources_custom/hooks/systems/notifications/got_disease.php
  - adminzone/pages/modules_custom/admin_ocdeadpeople.php
  - lang_custom/EN/ocdeadpeople.ini
@@ -35,8 +35,8 @@ ocdeadpeople
  - themes/default/templates_custom/POINTSTORE_OCDEADPEOPLE_DISEASES.tpl
  - uploads/diseases_addon/index.html
 
-ocgiftgiver
------------
+oc_gift_giver
+-------------
  - sources_custom/hooks/systems/notifications/gift.php
  - adminzone/pages/modules_custom/admin_ocgifts.php
  - lang_custom/EN/ocgifts.ini
@@ -73,8 +73,8 @@ ocgiftgiver
  - uploads/ocgifts_addon/reporter_Happy_Valentine.gif
  - uploads/ocgifts_addon/Santa_Hat.jpg
 
-ocforthewin
------------
+oc_for_the_win
+--------------
  - data_custom/causes/index.html
  - sources_custom/blocks/main_buttons.php
  - data_custom/causes/amnestyinternational.gif
@@ -100,8 +100,8 @@ ocforthewin
  - sources_custom/banners3.php
  - lang_custom/EN/buttons.ini
 
-ocpurrrr
---------
+oc_purrrr
+---------
  - data_custom/lolcats/index.html
  - data_custom/lolcats/thumbs/index.html
  - data_custom/lolcats/funny-pictures-basement-cat-has-pink-sheets.jpg
@@ -186,23 +186,23 @@ ocpurrrr
  - data_custom/lolcats/thumbs/ridiculous_poses_moddles.jpg
  - data_custom/ocpurrrr_install.php
 
-ocbestbuddy
------------
+oc_best_buddy
+-------------
  - data_custom/ocbestbuddy_install.php
  - data_custom/ocbestbuddy_uninstall.php
  - sources_custom/points2.php
  - sources_custom/hooks/systems/upon_query/add_mentor.php
  - lang_custom/EN/ocbestbuddy.ini
 
-octhief
--------
+oc_thief
+--------
  - data_custom/octhief_install.php
  - data_custom/octhief_uninstall.php
  - lang_custom/EN/octhief.ini
  - sources_custom/hooks/systems/cron/octhief.php
 
-ocbank
-------
+oc_bank
+-------
  - sources_custom/hooks/modules/pointstore/bank.php
  - lang_custom/EN/bank.ini
  - sources_custom/hooks/systems/cron/bank.php
@@ -309,8 +309,8 @@ google_similar_sites
  - lang_custom/EN/similar_sites.ini
  - themes/default/templates_custom/BLOCK_SIDE_SIMILAR_SITES.tpl
 
-ocdatamap
----------
+oc_data_map
+-----------
  - lang_custom/EN/google_map.ini
  - sources_custom/blocks/main_google_map.php
  - themes/default/templates_custom/BLOCK_MAIN_GOOGLE_MAP.tpl
@@ -321,8 +321,8 @@ ocdatamap
  - themes/default/images_custom/star-3.png
  - sources_custom/catalogues2.php
 
-ocusermap
----------
+oc_user_map
+-----------
  - lang_custom/EN/google_map_users.ini
  - sources_custom/blocks/main_google_map_users.php
  - themes/default/templates_custom/BLOCK_MAIN_GOOGLE_MAP_USERS.tpl
@@ -1000,12 +1000,12 @@ java_uploader_ftp_source_code
  - data_custom/javaupload/Uploader.jar
  - data_custom/javaupload/Uploader.java
 
-ocsimplesums
-------------
+oc_simple_sums
+--------------
  - sources_custom/miniblocks/main_calculator.php
 
-ocsmiles
---------
+oc_smiles
+---------
  - themes/default/images_custom/ocf_emoticons/angry.png
  - themes/default/images_custom/ocf_emoticons/blink.gif
  - themes/default/images_custom/ocf_emoticons/blush.png
@@ -1034,8 +1034,8 @@ ocsmiles
  - themes/default/images_custom/ocf_emoticons/wub.png
  - data_custom/ocsmiles_install.php
 
-ocicon
-------
+oc_icon
+-------
  - themes/default/images_custom/menu_items/add_group.png
  - themes/default/images_custom/menu_items/add_user.png
  - themes/default/images_custom/menu_items/agt_business.png
@@ -1080,8 +1080,8 @@ ocicon
  - data_custom/icon_map.csv
  - data_custom/ocicon_install.php
 
-ocworrdss
----------
+oc_worrdss
+----------
  - sources_custom/php-crossword/index.html
  - sources_custom/php-crossword/COPYING
  - sources_custom/php-crossword/php_crossword.class.php
@@ -1110,17 +1110,17 @@ xmppchat
  - site/pages/modules_custom/chat.php
  - data_custom/get_avatar.php
 
-octagspinner
-------------
+oc_tag_spinner
+--------------
  - themes/default/templates_custom/BLOCK_SIDE_TAG_CLOUD.tpl
  - themes/default/templates_custom/JAVASCRIPT_TAG_CLOUD.tpl
 
-ocdstats
+ocd_stats
 ---------
  - sources_custom/hooks/blocks/side_stats/stats_external.php
 
-ocsupershout
-------------
+oc_super_shout
+--------------
  - data_custom/messages.php
  - themes/default/templates_custom/JAVASCRIPT_SHAKE.tpl
  - themes/default/templates_custom/JAVASCRIPT_SHOUTBOX.tpl
@@ -1129,8 +1129,8 @@ ocsupershout
  - themes/default/templates_custom/BLOCK_SIDE_SHOUTBOX.tpl
  - themes/default/templates_custom/BLOCK_SIDE_SHOUTBOX_IFRAME.tpl
 
-ocjester
---------
+oc_jester
+---------
  - sources_custom/forum/ocf.php
  - lang_custom/EN/ocjester.ini
  - data_custom/ocjester_install.php
@@ -1138,20 +1138,20 @@ ocjester
  - themes/default/templates_custom/EMOTICON_IMG_CODE_THEMED.tpl
  - forum/pages/modules_custom/topicview.php
 
-occhallenge
------------
+oc_challenge
+------------
  - lang_custom/EN/quiz.ini
  - themes/default/templates_custom/QUIZ_DONE_SCREEN.tpl
  - site/pages/modules_custom/quiz.php
  - themes/default/templates_custom/QUIZ_BOX.tpl
 
-ocbrowserbookmarks
-------------------
+oc_browser_bookmarks
+--------------------
  - adminzone/pages/minimodules_custom/admin_generate_bookmarks.php
  - sources_custom/hooks/systems/do_next_menus/ocbrowserbookmarks.php
 
-ocwhitelist
------------
+oc_whitelist
+------------
  - adminzone/pages/comcode_custom/EN/comcode_whitelist.txt
  - sources_custom/comcode_renderer.php
  - sources_custom/hooks/systems/do_next_menus/comcode_whitelist.php
@@ -1171,32 +1171,32 @@ admin_search_stemmer
 --------------------
  - sources_custom/stemmer_EN.php
 
-octhepoint
+oc_the_point
 ----------
  - sources_custom/hooks/systems/upon_query/banner_points.php
 
-octhanks
---------
+oc_thanks
+---------
  - sources_custom/hooks/modules/members/octhanks.php
  - sources_custom/miniblocks/main_stars.php
  - sources_custom/miniblocks/side_recent_points.php
  - themes/default/templates_custom/POINTS_GIVE.tpl
 
-ocnoobs
--------
+oc_noobs
+--------
  - sources_custom/blocks/main_recent_members.php
  - lang_custom/EN/recent_members.ini
 
-ocprose
--------
+oc_prose
+--------
  - sources_custom/miniblocks/main_best_posters.php
 
-ocgroupies
-----------
+oc_groupies
+-----------
  - sources_custom/miniblocks/main_user_boxes.php
 
-ocworld
--------
+oc_world
+--------
  - data_custom/modules/ocworld/index.html
  - sources_custom/hooks/modules/admin_themewizard/ocworld.php
  - sources_custom/ocworld.php
@@ -1875,14 +1875,14 @@ db_schema
  - sources_custom/relations.php
  - sources_custom/hooks/systems/do_next_menus/db_schema.php
 
-developer_sync
---------------
+xml_db_manage
+-------------
  - adminzone/pages/minimodules_custom/sql_dump.php
  - data_custom/xml_db_import.php
  - sources_custom/hooks/systems/do_next_menus/developer_sync.php
 
 addon_publish
---------------
+-------------
  - data_custom/publish_addons_as_downloads.php
  - data_custom/build_addons.php
  - sources_custom/dump_addons.php
@@ -1911,11 +1911,16 @@ direct_video_link_posting
  - sources_custom/hooks/systems/comcode_link_handlers/cnn.php
  - themes/default/templates_custom/GALLERY_VIDEO_CNN.tpl
 
-cool_member_directory
----------------------
+member_directory_boxes
+----------------------
  - themes/default/templates_custom/OCF_MEMBER_BOX.tpl
- - themes/default/templates_custom/OCF_MEMBER_DIRECTORY_SCREEN.tpl
  - themes/default/templates_custom/OCF_TOPIC_POST_CUSTOM_FIELD.tpl
+ - themes/default/templates_custom/OCF_MEMBER_DIRECTORY_SCREEN.tpl
+
+related_members
+---------------
+ - sources_custom/hooks/systems/profiles_tabs/related.php
+ - lang_custom/EN/related.ini
 
 activity_feed
 -------------

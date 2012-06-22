@@ -25,7 +25,7 @@ class Hook_do_next_menus_static_export
 	function run()
 	{
 		return array(
-			array('Tools','admin_home',array('static_export',array('keep_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme('')),'adminzone'),make_string_tempcode('Export static site copy'))
+			array('tools','admin_home',array('static_export',array('keep_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme('')),'adminzone'),make_string_tempcode('Export static site copy'))
 		);
 	}
 

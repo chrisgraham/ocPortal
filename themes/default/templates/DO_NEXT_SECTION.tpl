@@ -3,7 +3,9 @@
 {+END}
 
 <nav class="do_next_section_wrap" role="navigation">
-	<h2>{TITLE}</h2>
+	{+START,IF_NON_EMPTY,{TITLE}}
+		<h2>{TITLE}</h2>
+	{+END}
 
 	<div class="do_next_section">
 		{CONTENT}

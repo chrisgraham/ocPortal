@@ -54,9 +54,9 @@ if (!file_exists($FILE_BASE.'/data_custom/addon_files.txt'))
 {
 	exit("File missing : <br />".$FILE_BASE.'/data_custom/addon_files.txt');
 }
-if (!file_exists($FILE_BASE.'/data_custom/addons-sheet.csv'))
+if (!file_exists($FILE_BASE.'/data_custom/addon_details.csv'))
 {
-	exit("File missing : <br />".$FILE_BASE.'/data_custom/addons-sheet.csv');
+	exit("File missing : <br />".$FILE_BASE.'/data_custom/addon_details.csv');
 }
 
 @set_time_limit(0);
@@ -102,16 +102,13 @@ if (get_param_integer('export_addons',1)==1)
 	{
 		if (($only!==NULL) && ($only!==$addon)) continue;
 
-		if ($addon=='proper_name')
-			continue;
-
 		if (!isset($addon_list[$addon]))
 		{
 			$addon_list[$addon]=array(
 				'name'=>$addon,
 				'incompatibilities'=>'',
 				'dependencies'=>'',
-				'author'=>'ocProducts',
+				'author'=>'Unknown',
 				'version'=>'1.0',
 				'description'=>'',
 			);
@@ -121,7 +118,7 @@ if (get_param_integer('export_addons',1)==1)
 
 		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
 
-		$name=$addon_list[$addon]['Addon name'];
+		$name=titleify($addon_list[$addon]['Addon name']);
 		$author=$addon_list[$addon]['Author'];
 		$description=$addon_list[$addon]['Help'];
 		$dependencies=$addon_list[$addon]['Requirements / Dependencies'];
@@ -144,7 +141,7 @@ if (get_param_integer('export_addons',1)==1)
 
 		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
 
-		echo show_updated_commnets_code($file,$name);
+		echo show_updated_comments_code($file,$name);
 	}
 	if ($only!==NULL) echo "All non-bundled addons have been exported to 'export/mods/'\n";
 }

@@ -248,7 +248,7 @@ function semihtml_to_comcode($semihtml)
 
 	if (((get_option('eager_wysiwyg')=='0') && (has_specific_permission(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
 	{
-		$count=substr_count($semihtml,'[/')+substr_count($semihtml,'{')+substr_count($semihtml,'<h1');
+		$count=substr_count($semihtml,'[/')+substr_count($semihtml,'{')+substr_count($semihtml,'[[')+substr_count($semihtml,'<h1');
 		if ($count==0) return ($semihtml=='')?'':('[html]'.$semihtml.'[/html]');
 		$count2=substr_count($semihtml,'[/attachment]')+substr_count($semihtml,'<h1');
 		if ($count2==$count) // All HTML or attachments or headers, so we can encode mostly as 'html'

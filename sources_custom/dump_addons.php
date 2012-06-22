@@ -13,8 +13,7 @@
  * @package		core_addon_management
  */
 
-// returns the file list of an addon. addon_name=>array(files);
-
+// Returns the file list of an addon. addon_name=>array(files);
 function get_file_list_of_addons()
 {
 	if (!file_exists(get_file_base().'/data_custom/addon_files.txt'))
@@ -53,13 +52,14 @@ function get_file_list_of_addons()
 // Returns details of the addons
 function get_details_of_addons()
 {
-	if (!file_exists(get_file_base().'/data_custom/addons-sheet.csv'))
-		exit('File missing: data_custom/addons-sheet.csv');
+	if (!file_exists(get_file_base().'/data_custom/addon_details.csv'))
+		exit('File missing: data_custom/addon_details.csv');
 
 	$addon_list=array();
-	$fd=fopen (get_file_base().'/data_custom/addons-sheet.csv', "r");
+	$fd=fopen (get_file_base().'/data_custom/addon_details.csv', "r");
 	$header=fgetcsv($fd, 4096);
-	// initialize a loop to go through each line of the file
+
+	// Go through each CSV line of the file
 	while (!feof($fd))
 	{
 		$buffer=fgetcsv($fd, 4096); // declare an array to hold all of the contents of each
@@ -69,12 +69,32 @@ function get_details_of_addons()
 		{
 			$properties[$h]=@trim($buffer[$k]);
 		}
-		$formal_addon_name=preg_replace('/[\s_]/','_',strtolower($properties['Addon name']));
+		$addon_name=$properties['Addon name'];
 
-		if (($formal_addon_name!='') && (substr($formal_addon_name,0,1)!='#'))
-			$addon_list[$formal_addon_name]=$properties;
+		if (($addon_name!='') && (substr($addon_name,0,1)!='#'))
+			$addon_list[$addon_name]=$properties;
 	}
 	fclose ($fd);
+
+	$all_files=get_file_list_of_addons();
+	foreach (array_keys($all_files) as $addon_name)
+	{
+		if (!array_key_exists($addon_name,$addon_list))
+		{
+			$addon_list[$addon_name]=array(
+				'Addon name'=>$addon_name,
+				'Author'=>'ocProducts',
+				'Help'=>'',
+				'Requirements / Dependencies'=>'',
+				'Incompatible with'=>'',
+				'Category'=>'Uncategorised/Alpha',
+				'License'=>'Same as ocPortal',
+				'Attribute'=>'',
+				'Notes'=>''
+			);
+		}
+	}
+
 	return $addon_list;
 }
 
@@ -91,7 +111,7 @@ function category_list_from_details()
 	return array_unique($categories);
 }
 
-// Insert into db if the category does not exist
+// Insert into database if the category does not exist
 function check_and_add_category($category, $parentid=1)
 {
 	require_code('downloads2');
@@ -110,7 +130,7 @@ function check_and_add_category($category, $parentid=1)
 		return $id;
 }
 
-// Returns the category id
+// Returns the category ID of a named category
 function fetch_category_id($category)
 {
 	$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>1,'t.text_original'=>$category));

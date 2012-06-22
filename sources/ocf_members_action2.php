@@ -645,7 +645,13 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 			if (strpos($custom_field['trans_name'],': ')!==false)
 			{
 				$field_cat=substr($custom_field['trans_name'],0,strpos($custom_field['trans_name'],': '));
-				$custom_field['trans_name']=substr($custom_field['trans_name'],strpos($custom_field['trans_name'],': ')+2);
+				if ($field_cat.': '==$custom_field['trans_name'])
+				{
+					$custom_field['trans_name']=$field_cat; // Just been pulled out as heading, nothing after ": "
+				} else
+				{
+					$custom_field['trans_name']=substr($custom_field['trans_name'],strpos($custom_field['trans_name'],': ')+2);
+				}
 			}
 			elseif (preg_match('#(^\([A-Z][^\)]*\) )|( \([A-Z][^\)]*\)$)#',$custom_field['trans_name'],$matches)!=0)
 			{
@@ -1383,8 +1389,16 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 				warn_exit(do_lang_tempcode('CORRUPT_FILE',escape_html($avatar_url)));
 			}
 
-			$sx=imagesx($source);
-			$sy=imagesy($source);
+			if (get_file_extension($avatar_url)=='gif')
+			{
+				$header = unpack('@6/'.'vwidth/'.'vheight',$from_file);
+				$sx=$header['width'];
+				$sy=$header['height'];
+			} else
+			{
+				$sx=imagesx($source);
+				$sy=imagesy($source);
+			}
 			imagedestroy($source);
 
 			$width=ocf_get_member_best_group_property($member_id,'max_avatar_width');

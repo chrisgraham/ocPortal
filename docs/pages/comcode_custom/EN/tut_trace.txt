@@ -52,6 +52,11 @@ in addition to various other punitive measures, such as removing rank, or chargi
 [exp_thumb="Options available during an investigation" float="right"]trace_investigate_2[/exp_thumb]
 [exp_thumb="Starting an investigation" float="right"]trace_investigate_1[/exp_thumb]
 {!security:DOC_INVESTIGATE_USER}
+ - DNS lookup - this will find try and find a domain name attached to the IP address, and then the IP address attached to the domain name: with a second IP address, further analysis might be performed
+ - WHOIS query - this will try and find a domain name attached to the IP address, and then try to find real-world details about the registered owner of that domain name
+ - Ping - this will see if the computer with the IP address responds to &lsquo;pings&rsquo;; servers often will, but desktop computers rarely will
+ - Tracert - this will find the network route between the server that provides this web tool, and the server of the IP address; it provides an impression of the locality and connectivity of the associated computer
+ - Geo-lookup - this will try and find the geographical location of the IP address; it can be widely inaccurate however: for example, in the past UK AOL users have been shown as being located in the US
 
 [concepts
  1_key="IP address"  1_value="Every computer connected to the Internet has an IP address of its own, although the IP address may change if that computer has 'rented' it via DHCP"

@@ -42,23 +42,7 @@ function script_load_stuff()
 
 	for (i=0;i<document.forms.length;i++)
 	{
-		if (document.forms[i].className.indexOf('autocomplete')!=-1)
-		{
-			document.forms[i].setAttribute('autocomplete','on');
-		} else
-		{
-			var dont_autocomplete=['edit_username','edit_password'];
-			for (var j=0;j<dont_autocomplete.length;j++) /* Done in very specific way, as Firefox will nuke any explicitly non-autocompleted values when clicking back also */
-				if (document.forms[i].elements[dont_autocomplete[j]]) document.forms[i].elements[dont_autocomplete[j]].setAttribute('autocomplete','off');
-		}
-
-		/* HTML editor */
-		if (typeof window.load_html_edit!='undefined')
-			load_html_edit(document.forms[i]);
-
-		/* Remove tooltips from forms for mouse users as they are for screenreader accessibility only */
-		if (document.forms[i].getAttribute('target')!='_blank')
-			add_event_listener_abstract(document.forms[i],'mouseover',function(form) { return function() { form.title=''; } }(document.forms[i]) );
+		new_html__initialise(document.forms[i]);
 	}
 
 	/* Staff functionality */
@@ -148,6 +132,33 @@ function script_load_stuff()
 	} );
 
 	if ((typeof window.ocp_is_staff!='undefined') && (window.ocp_is_staff)) script_load_stuff_staff();
+}
+
+function new_html__initialise(element)
+{
+	switch (element.nodeName.toLowerCase())
+	{
+		case 'form':
+			if (element.className.indexOf('autocomplete')!=-1)
+			{
+				element.setAttribute('autocomplete','on');
+			} else
+			{
+				var dont_autocomplete=['edit_username','edit_password'];
+				for (var j=0;j<dont_autocomplete.length;j++) /* Done in very specific way, as Firefox will nuke any explicitly non-autocompleted values when clicking back also */
+					if (element.elements[dont_autocomplete[j]]) element.elements[dont_autocomplete[j]].setAttribute('autocomplete','off');
+			}
+
+			/* HTML editor */
+			if (typeof window.load_html_edit!='undefined')
+			{
+				load_html_edit(element);
+			}
+
+			/* Remove tooltips from forms for mouse users as they are for screenreader accessibility only */
+			if (element.getAttribute('target')!='_blank')
+				add_event_listener_abstract(element,'mouseover',function() { try {element.setAttribute('title','');element.title='';}catch(e){};/*IE6 does not like*/ } );
+	}
 }
 
 /* Staff JS error display */
@@ -922,8 +933,8 @@ function select_tab(id,tab)
 			{
 				if (typeof window['load_tab__'+tab]=='undefined')
 				{
-					setOpacity(element,0.0);
-					nereidFade(element,100,30,8);
+					set_opacity(element,0.0);
+					fade_transition(element,100,30,8);
 				}
 			}
 		}
@@ -2160,8 +2171,9 @@ function inner_html_load(xml_string) {
 
 	return xml;
 }
+
 /* recursively copy the XML (from xml_doc) into the DOM (under dom_node) */
-function inner_html_copy(dom_node,xml_doc,level) {
+function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 	if (typeof level=="undefined") level=1;
 	if (level>1) {
 		var node_upper=xml_doc.nodeName.toUpperCase();
@@ -2169,13 +2181,15 @@ function inner_html_copy(dom_node,xml_doc,level) {
 		if ((node_upper=='SCRIPT') && (!xml_doc.getAttribute('src')))
 		{
 			var text=(xml_doc.nodeValue?xml_doc.nodeValue:(xml_doc.textContent?xml_doc.textContent:(xml_doc.text?xml_doc.text:"")));
-			window.setTimeout(function() {
-				try
-				{
+			if (script_tag_dependencies['to_load']==0)
+			{
+				window.setTimeout(function() {
 					eval.call(window,text);
-				}
-				catch(ignore) {};
-			},0);
+				},0);
+			} else
+			{
+				script_tag_dependencies['to_run'].push(text); // Has to wait until all scripts are loaded
+			}
 
 			return;
 		}
@@ -2199,10 +2213,36 @@ function inner_html_copy(dom_node,xml_doc,level) {
 			// append node
 			if ((node_upper=='SCRIPT') || (node_upper=='LINK')/* || (node_upper=='STYLE') Causes weird IE bug*/)
 			{
+				if (node_upper=='SCRIPT')
+				{
+					script_tag_dependencies['to_load'].push(this_node);
+					this_node.onload=this_node.onreadystatechange=function() {
+						if ((typeof this_node.readyState=='undefined') || (this_node.readyState=='complete') || (this_node.readyState=='loaded'))
+						{
+							var found=0,i;
+
+							for (i=0;i<script_tag_dependencies['to_load'].length;i++)
+							{
+								if (script_tag_dependencies['to_load'][i]===this_node)
+									delete script_tag_dependencies['to_load'][i];
+								else if (typeof script_tag_dependencies['to_load'][i]!=='undefined') found++;
+							}
+							if (found==0)
+							{
+								for (i=0;i<script_tag_dependencies['to_run'].length;i++)
+								{
+									eval.call(window,script_tag_dependencies['to_run'][i]);
+								}
+								script_tag_dependencies['to_run']=[]; // So won't run again, if both onreadystatechange and onload implemented in browser
+							}
+						}
+					};
+				}
 				dom_node=document.getElementsByTagName('head')[0].appendChild(this_node);
 			} else
 			{
 				dom_node=dom_node.appendChild(this_node);
+				new_html__initialise(this_node);
 			}
 		}
 		else if (xml_doc.nodeType==3) {
@@ -2242,7 +2282,7 @@ function inner_html_copy(dom_node,xml_doc,level) {
 		for (var i=0,j=xml_doc.childNodes.length;i<j;i++)
 		{
 			if ((xml_doc.childNodes[i].id!='_firebugConsole') && (xml_doc.childNodes[i].type!='application/x-googlegears'))
-				inner_html_copy.call(window,dom_node,xml_doc.childNodes[i],level+1);
+				inner_html_copy.call(window,dom_node,xml_doc.childNodes[i],level+1,script_tag_dependencies);
 		}
 	}
 }
@@ -2324,7 +2364,12 @@ function set_inner_html(element,tHTML,append)
 	var xml_doc=inner_html_load(tHTML);
 	if (element && xml_doc) {
 		if (!append) while (element.lastChild) element.removeChild(element.lastChild);
-		inner_html_copy.call(window,element,xml_doc.documentElement);
+
+		var script_tag_dependencies={
+			'to_run': [],
+			'to_load': []
+		};
+		inner_html_copy.call(window,element,xml_doc.documentElement,1,script_tag_dependencies);
 	}
 }
 

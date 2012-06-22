@@ -758,7 +758,7 @@ footer .special_page_type_form select option {
 	color: {$GET,native_ui_foreground};
 }
 
-footer .global_footer_left .horizontal_buttons, footer .su_form, footer .special_page_type_form, footer .global_community_message {
+footer .global_footer_left .horizontal_buttons, footer .su_form, footer .special_page_type_form {
 	float: left;
 	padding-right: 20px;
 	margin-top: 5px;
@@ -788,6 +788,7 @@ footer .global_footer_right {
 footer .global_community_message {
 	float: {!en_right};
 	font-size: 0.9em;
+	padding-top: 1px;
 	color: {$GET,inverted_text};
 	font-weight: bold;
 	padding-bottom: 4px;
@@ -3485,12 +3486,12 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 		margin: 1em 0;
 		border: 1px solid {$GET,standard_border};
 		padding: 0.5em;
+		font-size: 0.9em;
 	}
 
 	.attachment figcaption {
 		border: 1px solid {$GET,standard_border};
 		padding: 0.15em 0.3em;
-		font-size: 0.9em;
 		font-style: italic;
 		margin-bottom: 0.5em;
 		display: inline-block;

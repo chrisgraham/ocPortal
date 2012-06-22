@@ -64,6 +64,7 @@ body .horiz_help_panel { /* {$,Long definition to force precedence} */
 	overflow: hidden;
 	position: relative;
 	margin-top: 1em;
+	margin-bottom: 1em;
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 15px;}
 	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 15px;}
 }

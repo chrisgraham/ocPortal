@@ -52,6 +52,12 @@ This process works as follows:
 
 [exp_thumb="Adding members manually in the Admin Zone" float="right"]adv_members_add[/exp_thumb]
 {!ocf:DOC_ADD_MEMBER}
+An interface is provided to add a new member to the site, with support for detailing the full set of profile options, including ones not available normally during joining, and ones not available for members to set themselves.
+
+The most common situations where it is convenient to pre-join a member are:
+ - if you want to add a member to the site before directing them to it, so that you don't have to make them go through the process themselves, or so that you can properly control or quickly set all their details, such as username and usergroup.
+ - if you want to add a member to the site before directing them to it, so that you can assign things to them before they reach the site (such as points).
+ - if the member encountered a problem during the joining process, possibly due to a difficulty with the image confirmation code (some Internet service providers do not properly assign IP addresses to users that are stable for any significant length of time, such as AOL: this can cause problems with the storage and later retrieval/processing of the image confirmation code)
 
 [title="3"]Other kinds of membership[/title]
 

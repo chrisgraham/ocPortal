@@ -318,7 +318,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 function ocf_make_boiler_custom_field($type)
 {
 	$_type='long_trans';
-	if (substr($type,0,3)=='im_') $_type='short_text';
+	if (substr($type,0,3)=='im_' || substr($type,0,3)=='sm_') $_type='short_text';
 	elseif ($type=='location') $_type='short_text';
 	elseif ($type=='occupation') $_type='short_text';
 	elseif ($type=='website') $_type='short_trans';

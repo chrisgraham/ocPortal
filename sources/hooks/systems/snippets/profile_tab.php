@@ -33,23 +33,7 @@ class Hook_profile_tab
 
 		$hook=filter_naughty_harsh(get_param('tab'));
 
-		// HACKHACK
-		$_GET['page']='members';
-		$_GET['type']='view';
-		$_GET['id']=strval($member_id_of);
-		unset($_GET['snippet']);
-		unset($_GET['member_id']);
-		unset($_GET['tab']);
-		unset($_GET['url']);
-		unset($_GET['title']);
-		unset($_GET['utheme']);
-		global $PAGE_NAME_CACHE;
-		$PAGE_NAME_CACHE='members';
-		global $RUNNING_SCRIPT_CACHE;
-		$RUNNING_SCRIPT_CACHE='index';
-		global $RELATIVE_PATH,$ZONE;
-		$RELATIVE_PATH=get_module_zone('members');
-		$ZONE=NULL;
+		set_execution_context(array('page'=>'members','type'=>'view','id'=>$member_id_of));
 
 		require_code('hooks/systems/profiles_tabs/'.$hook);
 		$ob=object_factory('Hook_Profiles_Tabs_'.$hook);
