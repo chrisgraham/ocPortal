@@ -3,9 +3,9 @@
 {+END}
 
 <nav class="do_next_section_wrap" role="navigation">
-	{+START,IF_NON_EMPTY,{TITLE}}
+	{+START,IF_NON_EMPTY,{TITLE}}{+START,IF,{$NEQ,{$PAGE_TITLE},{TITLE}}}
 		<h2>{TITLE}</h2>
-	{+END}
+	{+END}{+END}
 
 	<div class="do_next_section">
 		{CONTENT}

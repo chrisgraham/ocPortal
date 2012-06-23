@@ -1916,6 +1916,9 @@ member_directory_boxes
  - themes/default/templates_custom/OCF_MEMBER_BOX.tpl
  - themes/default/templates_custom/OCF_TOPIC_POST_CUSTOM_FIELD.tpl
  - themes/default/templates_custom/OCF_MEMBER_DIRECTORY_SCREEN.tpl
+ - themes/default/templates_custom/OCF_MEMBER_DIRECTORY_SCREEN_FILTER.tpl
+ - themes/default/css_custom/member_directory_boxes.css
+ - lang_custom/EN/member_directory_boxes.ini
 
 related_members
 ---------------

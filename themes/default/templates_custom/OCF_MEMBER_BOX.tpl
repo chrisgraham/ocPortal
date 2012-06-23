@@ -41,7 +41,7 @@
 		</div>
 	{+END}
 
-	<div style="width: 188px; float: left; padding: 5px; margin: 5px" class="box">
+	<div class="ocf_member_directory_box box">
 		<input class="right" type="hidden" name="result__member_{POSTER*}" value="1" />
 
 		{$GET,CONTENTS}

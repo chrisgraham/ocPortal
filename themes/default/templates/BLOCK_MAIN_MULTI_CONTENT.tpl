@@ -3,9 +3,11 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{CONTENT}}
-	{+START,LOOP,CONTENT}
-		{_loop_var}
-	{+END}
+	<div class="float_surrounder">
+		{+START,LOOP,CONTENT}
+			{_loop_var}
+		{+END}
+	</div>
 {+END}
 
 {+START,IF_EMPTY,{CONTENT}}

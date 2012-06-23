@@ -53,8 +53,11 @@ class Hook_Profiles_Tabs_related
 
 		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
+		require_css('member_directory_boxes');
+
 		$cpf_value=get_ocp_cpf(do_lang('RELATED_CPF'),$member_id_of);
-		$content=do_block('main_multi_content',array('param'=>'member','select'=>'test='.$cpf_value.'\,id<>'.strval($member_id_of)));
+		$ocselect=do_lang('RELATED_CPF').'='.$cpf_value.',id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).',id<>'.strval($member_id_of);
+		$content=do_block('main_multi_content',array('param'=>'member','ocselect'=>$ocselect,'no_links'=>'1'));
 
 		return array($title,$content,$order);
 	}

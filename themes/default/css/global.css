@@ -358,8 +358,8 @@ body.website_body {
 }
 
 {+START,IF,{$CONFIG_OPTION,fixed_width}}{+START,IF,{$NOT,{$MOBILE}}}
-	body#main_website { /* #main_website targets only the main site screen, avoiding frames etc */
-		background-color: {$GET,fixed_width_background} !important;
+	html>body#main_website { /* #main_website targets only the main site screen, avoiding frames etc */
+		background-color: {$GET,fixed_width_background};
 
 		/* Want to change the tiled background?
 			Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
@@ -580,8 +580,8 @@ header h1 {
 	color: {$GET,area_key_text};
 }
 
-body#main_website #main_website_inner, .global_middle_faux {
-	background-color: {$GET,main_background} !important;
+body#main_website #main_website_inner, html>body div.global_middle_faux {
+	background-color: {$GET,main_background};
 
 	/* Want to set a tiled background?
 		Uncomment the code below
@@ -674,6 +674,9 @@ body.popup_spacer h2 {
 
 .global_messages {
 	margin: 1em;
+}
+.global_middle_faux .global_messages {
+	margin: 1em 0; /* Probably inside a frame, hence already indented outside said frame */
 }
 
 .global_message {

@@ -1,4 +1,9 @@
-<h1 class="screen_title">{$SITE_NAME*} members</h1>
+{TITLE}
+
+{$REQUIRE_CSS,search}
+{$REQUIRE_CSS,member_directory_boxes}
+{$REQUIRE_JAVASCRIPT,javascript_ajax}
+{$REQUIRE_JAVASCRIPT,javascript_ajax_people_lists}
 
 {+START,IF_PASSED,SYMBOLS}
 	<div class="float_surrounder"><div class="pagination alphabetical_jumper">
@@ -6,26 +11,66 @@
 	</div></div>
 {+END}
 
-<div class="advanced_member_search">
-	{$BLOCK,block=main_include_module,param=site:search:misc:ocf_members:force_non_tabular=1:keep_no_frames=1,leave_page_and_zone=1,merge_parameters=1}
+{$SET,filters_row_a,m_username={!USERNAME},{!DEFAULT_CPF_interests_NAME}={!DEFAULT_CPF_interests_NAME},{!DEFAULT_CPF_location_NAME}={!DEFAULT_CPF_location_NAME}}
+{$SET,filters_row_b,{!DEFAULT_CPF_occupation_NAME}={!DEFAULT_CPF_occupation_NAME},{!DEFAULT_CPF_SELF_DESCRIPTION_NAME}={!DEFAULT_CPF_SELF_DESCRIPTION_NAME}}
+
+<div class="box"><div class="box_inner">
+	<form title="{!SEARCH}" action="{$SELF_URL*}" target="_self" method="post" class="advanced_member_search">
+		{+START,IF_NON_PASSED_OR_FALSE,GET}{$INSERT_SPAMMER_BLACKHOLE}{+END}
+
+		{+START,SET,active_filter}{+START,LOOP,{$GET,filters_row_a}\,{$GET,filters_row_b}}{_loop_key}~=<{$FIX_ID,{_loop_key}}>,{+END}{+END}
+
+		<input type="hidden" name="active_filter" value="{$GET*,active_filter}" />
+
+		<div class="search_fields float_surrounder">
+			<div class="search_button">
+				<input onclick="disable_button_just_clicked(this);" accesskey="u" class="button_pageitem" type="submit" value="{!member_directory_boxes:FILTER_RESULTS}" />
+			</div>
+
+			{+START,LOOP,{$GET,filters_row_a}}
+				{+START,INCLUDE,OCF_MEMBER_DIRECTORY_SCREEN_FILTER}
+					NAME={$FIX_ID,{_loop_key}}
+					LABEL={_loop_var}
+				{+END}
+			{+END}
+		</div>
+
+		<div class="search_fields float_surrounder">
+			{+START,IF_PASSED,RESULTS}
+				<div class="search_button">
+					<input onclick="window.location.href='{$SELF_URL*;}';" class="button_pageitem" type="button" value="{!member_directory_boxes:RESET_FILTER}" />
+				</div>
+			{+END}
+
+			{+START,LOOP,{$GET,filters_row_b}}
+				{+START,INCLUDE,OCF_MEMBER_DIRECTORY_SCREEN_FILTER}
+					NAME={$FIX_ID,{_loop_key}}
+					LABEL={_loop_var}
+				{+END}
+			{+END}
+		</div>
+	</form>
+</div></div>
+
+{+START,IF_EMPTY,{$_GET,filter}}
+	<p>{!member_directory_boxes:MEMBER_BOXES_UNFILTERED,{$SITE_NAME*}}</p>
+{+END}
+{+START,IF_NON_EMPTY,{$_GET,filter}}
+	{+START,IF_EMPTY,{MEMBER_BOXES}}
+		<p>{!member_directory_boxes:MEMBER_BOXES_FILTERED,{$SITE_NAME*}}</p>
+	{+END}
+
+	{+START,IF_NON_EMPTY,{MEMBER_BOXES}}
+		<p class="nothing_here red_alert">{!search:NO_RESULTS_SEARCH}</p>
+	{+END}
+{+END}
+
+<div class="float_surrounder ocf_member_directory_boxes">
+	{+START,LOOP,MEMBER_BOXES}
+		{_loop_var}
+	{+END}
 </div>
 
-{$,If no search done yet, fall back to conventional module results...}
-{+START,IF,{$NOT,{$GET,done_search}}}
-	{+START,IF_EMPTY,{$_GET,filter}}
-		<p>We have the following members on {$SITE_NAME*}&hellip;</p>
-	{+END}
-	{+START,IF_NON_EMPTY,{$_GET,filter}}
-		<p>The following members match your quick search&hellip;</p>
-	{+END}
-
-	<div class="float_surrounder">
-		{+START,LOOP,MEMBER_BOXES}
-			{_loop_var}
-		{+END}
-	</div>
-
-	<div class="float_surrounder">
-		{PAGINATION}
-	</div>
-{+END}
+<div class="float_surrounder">
+	{PAGINATION}
+</div>

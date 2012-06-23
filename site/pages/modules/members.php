@@ -239,8 +239,7 @@ class Module_members
 			$members->attach(results_entry(array($link,$primary_group,integer_format($row['m_cache_num_posts']),escape_html(get_timezoned_date($row['m_join_time'])))));
 
 			$box=render_member_box($row['id'],true);
-			$_box=do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>$box,'URL'=>$url));
-			$member_boxes[]=$_box;
+			$member_boxes[]=$box;
 		}
 		$results_table=results_table(do_lang_tempcode('MEMBERS'),$start,'md_start',$max,'md_max',$max_rows,$fields_title,$members,$sortables,$sortable,$sort_order,'md_sort');
 

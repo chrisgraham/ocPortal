@@ -64,9 +64,7 @@ class Hook_awards_member
 
 		$GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']]=$row;
 
-		$box=render_member_box($row['id']);
-
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['m_username'],'SUMMARY'=>$box));
+		return render_member_box($row['id']);
 	}
 
 }

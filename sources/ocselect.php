@@ -27,10 +27,10 @@
  */
 function read_ocselect_parameter_from_env($field_name,$field_type=NULL)
 {
+	$env=$_POST+$_GET;
+
 	if (is_null($field_type))
 	{
-		$env=$_POST+$_GET;
-
 		$field_type='line';
 		if (!array_key_exists('filter_'.$field_name,$env))
 		{
@@ -50,10 +50,10 @@ function read_ocselect_parameter_from_env($field_name,$field_type=NULL)
 		$default_value=is_null($_default_value)?'':strval($_default_value);
 	} elseif ($field_type=='multilist')
 	{
-		$default_value=array_key_exists('filter_'.$field_name,$_POST)?implode(',',$_POST['filter_'.$field_name]):'';
+		$default_value=array_key_exists('filter_'.$field_name,$env)?implode(',',$env['filter_'.$field_name]):'';
 	} else
 	{
-		$default_value=post_param('filter_'.$field_name,'');
+		$default_value=either_param('filter_'.$field_name,'');
 	}
 	return $default_value;
 }
@@ -206,6 +206,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 					'=='=>do_lang_tempcode('OCSELECT_OP_EQE'),
 					'~='=>do_lang_tempcode('OCSELECT_OP_CO'),
 					'~'=>do_lang_tempcode('OCSELECT_OP_FT'),
+					'<>'=>do_lang_tempcode('OCSELECT_OP_NE'),
 				)
 			);
 		}
@@ -432,7 +433,7 @@ function parse_ocselect($filter)
 	{
 		if ($bit!='')
 		{
-			$parts=preg_split('#(<[\w\-\_]+>|<=|>=|<|>|=|==|~=|~)#',$bit,2,PREG_SPLIT_DELIM_CAPTURE); // NB: preg_split is not greedy, so longest operators need to go first
+			$parts=preg_split('#(<[\w\-\_]+>|<=|>=|<>|<|>|=|==|~=|~)#',$bit,2,PREG_SPLIT_DELIM_CAPTURE); // NB: preg_split is not greedy, so longest operators need to go first
 			if (count($parts)==3) $parsed[]=$parts;
 		}
 	}
@@ -687,8 +688,6 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 			if ($filter_val=='') continue;
 		}
 
-		$filter_keys=preg_replace('#[^\w\|]#','',$filter_keys); // So can safely come from environment
-
 		$alt='';
 
 		// Go through each filter (these are ANDd)
@@ -706,6 +705,8 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 			}
 			list($filter_key,$field_type,$filter_val)=$bits;
 
+			$filter_key=preg_replace('#[^\w\s\|]#','',$filter_key); // So can safely come from environment
+
 			if (in_array($filter_key,$disallowed_fields)) continue;
 
 			switch ($filter_op)
@@ -719,6 +720,14 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 						if ($alt!='') $alt.=' OR ';
 						$alt.=$filter_key.$filter_op.$filter_val;
 					}
+					break;
+
+				case '<>':
+					if ($alt!='') $alt.=' OR ';
+					if ((is_numeric($filter_val)) && (($field_type=='integer') || ($field_type=='float') || ($field_type=='')))
+						$alt.=$filter_key.'<>'.strval($filter_val);
+					else
+						$alt.=db_string_not_equal_to($filter_key,$filter_val);
 					break;
 
 				case '=':

@@ -56,7 +56,9 @@ function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filte
 	elseif (preg_match('#^field\_\d+$#',$filter_key)==0) // If it's not already correct
 	{
 		require_code('ocf_members');
-		$new_filter_key='field_'.strval(find_cpf_field_id($filter_key));
+		$cpf_id=find_cpf_field_id($filter_key);
+		if (is_null($cpf_id)) return NULL;
+		$new_filter_key='field_'.strval($cpf_id);
 	} else
 	{
 		if (!array_key_exists($filter_key,$db_fields)) return NULL;

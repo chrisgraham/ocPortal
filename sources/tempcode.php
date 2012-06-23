@@ -256,13 +256,24 @@ function closure_loop($param,$args,$main_function)
 
 	if (isset($param[0]))
 	{
-		$key=$param[0];
-		if ((is_numeric($key)) || (strpos($key,',')!==false))
+		$array_key=$param[0];
+		if ((is_numeric($array_key)) || (strpos($array_key,',')!==false))
 		{
-			$array=explode(',',$key);
+			$array=array();
+			foreach (explode(',',$array_key) as $x)
+			{
+				if (strpos($x,'=')!==false)
+				{
+					list($key,$val)=explode('=',$x,2);
+					$array[$key]=$val;
+				} else
+				{
+					$array[]=$x;
+				}
+			}
 		} else
 		{
-			$array=isset($param['vars'][$key])?$param['vars'][$key]:array();
+			$array=isset($param['vars'][$array_key])?$param['vars'][$array_key]:array();
 		}
 		if (!is_array($array)) return do_lang('TEMPCODE_NOT_ARRAY'); // Must have this, otherwise will loop over the Tempcode object
 		if (isset($param[1+1])) /* NB: +1 is due to there being a non-numeric index here too */
@@ -288,6 +299,7 @@ function closure_loop($param,$args,$main_function)
 			}
 		}
 		$col=0;
+
 		$first=true;
 		$max_index=count($array)-1;
 		foreach ($array as $go_key=>$go)
