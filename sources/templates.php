@@ -209,9 +209,9 @@ function warn_screen($title,$text,$provide_back=true)
 
 	if ($text_eval==do_lang('MISSING_RESOURCE'))
 	{
+		$GLOBALS['HTTP_STATUS_CODE']='404';
 		if (!headers_sent())
 		{
-			$GLOBALS['HTTP_STATUS_CODE']='404';
 			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
 		}
 		if (ocp_srv('HTTP_REFERER')!='')

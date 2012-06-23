@@ -164,7 +164,10 @@ function closed_site()
 	{
 		@ob_end_clean();
 
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
+		if (!headers_sent())
+		{
+			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
+		}
 
 		log_stats('/closed',0);
 
@@ -199,7 +202,10 @@ function closed_site()
 function page_not_found($codename,$zone)
 {
 	$GLOBALS['HTTP_STATUS_CODE']='404';
-	if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+	if (!headers_sent())
+	{
+		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+	}
 
 	// Maybe problem with SEO URLs
 	if ((get_zone_name()=='') && (get_option('htm_short_urls')=='1') && (has_zone_access(get_member(),'adminzone')))

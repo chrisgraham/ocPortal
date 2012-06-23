@@ -801,7 +801,10 @@ function do_site()
 	if (($middle===NULL) || ($middle->is_definitely_empty()))
 	{
 		$GLOBALS['HTTP_STATUS_CODE']='404';
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+		if (!headers_sent())
+		{
+			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+		}
 
 		$title=get_page_title('ERROR_OCCURRED');
 		$text=do_lang_tempcode('NO_PAGE_OUTPUT');
@@ -1361,7 +1364,10 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 		$GLOBALS['HTTP_STATUS_CODE']='404';
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+		if (!headers_sent())
+		{
+			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+		}
 	}
 
 	if ((($is_panel) || ($codename[0]=='_')) && (get_page_name()==$codename))
