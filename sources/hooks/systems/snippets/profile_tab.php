@@ -49,7 +49,7 @@ class Hook_profile_tab
 		global $PAGE_NAME_CACHE;
 		$PAGE_NAME_CACHE='members';
 		global $RUNNING_SCRIPT_CACHE;
-		$RUNNING_SCRIPT_CACHE='index';
+		$RUNNING_SCRIPT_CACHE=array('index'=>true);
 
 		require_code('hooks/systems/profiles_tabs/'.$hook);
 		$ob=object_factory('Hook_Profiles_Tabs_'.$hook);
