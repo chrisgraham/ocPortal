@@ -234,7 +234,7 @@ function site_tree_script()
 		// Pages in the zone
 		$zone=$page_link;
 		$page_type=get_param('page_type',NULL);
-		$pages=find_all_pages_wrap($zone,false,!$permissions_needed,FIND_ALL_PAGES__NEWEST,$page_type);
+		$pages=find_all_pages_wrap($zone,false,true,FIND_ALL_PAGES__NEWEST,$page_type);
 		ksort($pages);
 		if ($permissions_needed)
 		{
@@ -573,7 +573,7 @@ function site_tree_script()
 			{
 				$serverid=$zone.':'/*.$_zone['zone_default_page']*/;
 			}
-			$pages=find_all_pages_wrap($zone,false,false,FIND_ALL_PAGES__NEWEST);
+			$pages=find_all_pages_wrap($zone,false,true,FIND_ALL_PAGES__NEWEST);
 			if ($permissions_needed)
 			{
 				$view_perms='';
