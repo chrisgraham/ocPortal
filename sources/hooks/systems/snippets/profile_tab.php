@@ -33,6 +33,8 @@ class Hook_profile_tab
 
 		$hook=filter_naughty_harsh(get_param('tab'));
 
+		require_lang('ocf');
+
 		// HACKHACK
 		$_GET['page']='members';
 		$_GET['type']='view';
@@ -45,7 +47,8 @@ class Hook_profile_tab
 		unset($_GET['utheme']);
 		global $RELATIVE_PATH,$ZONE;
 		$RELATIVE_PATH=get_module_zone('members');
-		$ZONE=NULL;
+		$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>$RELATIVE_PATH),'',1);
+		$ZONE=$zones[0];
 		global $PAGE_NAME_CACHE;
 		$PAGE_NAME_CACHE='members';
 		global $RUNNING_SCRIPT_CACHE;
