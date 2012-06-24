@@ -2325,6 +2325,8 @@ function setOuterHTML(element,tHTML)
 {$,Note that embedded Javascript IS run unlike the normal .innerHTML - in fact we go to effort to guarantee it - even onload attached Javascript}
 function setInnerHTML(element,tHTML,append)
 {
+	if (typeof tHTML=='number') tHTML=tHTML+'';
+
 	{$,Parser hint: .innerHTML okay}
 	if ((document.write) && (typeof element.innerHTML!="undefined") && (!document.xmlVersion) && (tHTML.toLowerCase().indexOf('<script type="text/javascript src="')==-1) && (tHTML.toLowerCase().indexOf('<link')==-1))
 	{
