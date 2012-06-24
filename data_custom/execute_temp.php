@@ -67,13 +67,7 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	global $MAIL_MODE;
-	$MAIL_MODE=false;
-	require_code('validation');
-	require_code('validation2');
-	var_dump(_validate_css_sheet('
-::selection {
-	background: #ffffaa;
-}
-	'));
+	$tar=tar_open(get_file_base().'/exports/chris_backup.tar','wb');
+	tar_add_folder_incremental($tar,NULL,'/',mktime(0,0,0,4,19,2012),NULL,'',true);
+	tar_close($tar);
 }

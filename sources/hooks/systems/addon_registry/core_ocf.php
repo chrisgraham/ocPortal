@@ -726,6 +726,7 @@ class Hook_addon_registry_core_ocf
 				'SEARCH'=>lorem_phrase(),
 				'GET_URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
+				'OTHER_IDS'=>placeholder_array(),
 				'RESULTS_TABLE'=>placeholder_table(),
 				'MEMBER_BOXES'=>array(),
 				'PAGINATION'=>''

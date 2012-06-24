@@ -187,8 +187,8 @@ class Module_members
 			$ocselect_extra_where='';
 		}
 
-		$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members r'.$extra_join_sql.' WHERE id<>'.strval(db_get_first_id()).$ocselect_extra_where;
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $query.=' AND m_validated=1';
+		$where_clause='id<>'.strval(db_get_first_id()).$ocselect_extra_where;
+		if (!has_specific_permission(get_member(),'see_unvalidated')) $where_clause.=' AND m_validated=1';
 
 		if ($group_filter!='')
 		{
@@ -197,23 +197,23 @@ class Module_members
 
 			require_code('ocfiltering');
 			$filter=ocfilter_to_sqlfragment($group_filter,'m_primary_group','f_groups',NULL,'m_primary_group','id');
-			$query.=' AND '.$filter;
+			$where_clause.=' AND '.$filter;
 		}
 		$search=get_param('filter','');
-		$sup='';
 		if ($search!='')
 		{
-			$sup=' AND (m_username LIKE \''.db_encode_like(str_replace('*','%',$search)).'\'';
+			$where_clause.=' AND (m_username LIKE \''.db_encode_like(str_replace('*','%',$search)).'\'';
 			if (has_specific_permission(get_member(),'member_maintenance'))
-				$sup.=' OR m_email_address LIKE \''.db_encode_like(str_replace('*','%',$search)).'\'';
-			$sup.=')';
+				$where_clause.=' OR m_email_address LIKE \''.db_encode_like(str_replace('*','%',$search)).'\'';
+			$where_clause.=')';
 		}
+		$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members r'.$extra_join_sql.' WHERE '.$where_clause;
 		if ($sortable=='m_join_time')
 		{
-			$query.=$sup.' ORDER BY m_join_time '.$sort_order.','.'id '.$sort_order;
+			$query.=' ORDER BY m_join_time '.$sort_order.','.'id '.$sort_order;
 		} else
 		{
-			$query.=$sup.' ORDER BY '.$sortable.' '.$sort_order;
+			$query.=' ORDER BY '.$sortable.' '.$sort_order;
 		}
 
 		$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
@@ -243,6 +243,19 @@ class Module_members
 		}
 		$results_table=results_table(do_lang_tempcode('MEMBERS'),$start,'md_start',$max,'md_max',$max_rows,$fields_title,$members,$sortables,$sortable,$sort_order,'md_sort');
 
+		$other_ids=array();
+		$_max_rows_to_preload=get_value('max_rows_to_preload');
+		$max_rows_to_preload=is_null($_max_rows_to_preload)?500:intval($_max_rows_to_preload);
+		if (($max_rows<$max_rows_to_preload) && ($max_rows>count($rows)) && (count($rows)!=0))
+		{
+			$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members r'.$extra_join_sql.' WHERE '.$where_clause;
+			$rows=$GLOBALS['FORUM_DB']->query('SELECT r.id'.$extra_select_sql.' '.$query.' AND (r.'.$sortable.'>'.@strval($rows[count($rows)-1][$sortable]).' OR r.'.$sortable.'<'.@strval($rows[0][$sortable]).')');
+			foreach ($rows as $row)
+			{
+				$other_ids[]=$row['id'];
+			}
+		}
+
 		$pagination=pagination(do_lang_tempcode('MEMBERS'),NULL,$start,'md_start',$max,'md_max',$max_rows,NULL,NULL,true,true);
 
 		$symbols=NULL;
@@ -264,7 +277,7 @@ class Module_members
 			}
 		}
 
-		return do_template('OCF_MEMBER_DIRECTORY_SCREEN',array('_GUID'=>'096767e9aaabce9cb3e6591b7bcf95b8','MAX'=>strval($max),'PAGINATION'=>$pagination,'MEMBER_BOXES'=>$member_boxes,'USERGROUPS'=>$usergroups,'HIDDEN'=>$hidden,'SYMBOLS'=>$symbols,'SEARCH'=>$search,'GET_URL'=>$get_url,'TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+		return do_template('OCF_MEMBER_DIRECTORY_SCREEN',array('_GUID'=>'096767e9aaabce9cb3e6591b7bcf95b8','MAX'=>strval($max),'PAGINATION'=>$pagination,'MEMBER_BOXES'=>$member_boxes,'OTHER_IDS'=>$other_ids,'USERGROUPS'=>$usergroups,'HIDDEN'=>$hidden,'SYMBOLS'=>$symbols,'SEARCH'=>$search,'GET_URL'=>$get_url,'TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
 	}
 
 	/**

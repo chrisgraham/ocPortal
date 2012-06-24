@@ -65,11 +65,28 @@
 	{+END}
 {+END}
 
+{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,_SEARCH:admin_newsletter}}
+	<form action="{$PAGE_LINK*,_SEARCH:admin_newsletter:new}" method="post">
+{+END}
+
+{$SET,fancy_screen,1}
 <div class="float_surrounder ocf_member_directory_boxes">
 	{+START,LOOP,MEMBER_BOXES}
 		{_loop_var}
 	{+END}
 </div>
+{$SET,fancy_screen,0}
+
+{+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,_SEARCH:admin_newsletter}}
+		{+START,LOOP,OTHER_IDS}
+			<input type="hidden" name="result__member_{_loop_var*}" value="1" />
+		{+END}
+
+		<p class="proceed_button">
+			<input class="button_page" type="submit" value="{!newsletter:NEWSLETTER_SEND_TO_ALL}" />
+		</p>
+	</form>
+{+END}
 
 <div class="float_surrounder">
 	{PAGINATION}
