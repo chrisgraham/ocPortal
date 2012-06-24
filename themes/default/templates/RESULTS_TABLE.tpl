@@ -25,14 +25,20 @@
 			{FIELDS}
 		</tbody>
 	</table></div>
-	{+START,IF_NON_EMPTY,{SORT}{BROWSER}}
-		<div class="lightborder medborder_box results_table">
-			<div class="float_surrounder">
-				<div class="results_table_sorter">{SORT}</div>
 
-				{BROWSER}
+	{+START,SET,RESULTS_TABLE_BROWSER}
+		{+START,IF_NON_EMPTY,{SORT}{BROWSER}}
+			<div class="lightborder medborder_box results_table">
+				<div class="float_surrounder">
+					<div class="results_table_sorter">{SORT}</div>
+	
+					{BROWSER}
+				</div>
 			</div>
-		</div>
+		{+END}
+	{+END}
+	{+START,IF,{$NOT,{$GET,DEFER_RESULTS_TABLE_BROWSER}}}
+		{$GET,RESULTS_TABLE_BROWSER}
 	{+END}
 {+END}
 
