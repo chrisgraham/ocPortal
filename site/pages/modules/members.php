@@ -246,10 +246,15 @@ class Module_members
 		$other_ids=array();
 		$_max_rows_to_preload=get_value('max_rows_to_preload');
 		$max_rows_to_preload=is_null($_max_rows_to_preload)?500:intval($_max_rows_to_preload);
-		if (($max_rows<$max_rows_to_preload) && ($max_rows>count($rows)) && (count($rows)!=0))
+		if (($max_rows<$max_rows_to_preload) && ($max_rows>count($rows)))
 		{
 			$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members r'.$extra_join_sql.' WHERE '.$where_clause;
-			$rows=$GLOBALS['FORUM_DB']->query('SELECT r.id'.$extra_select_sql.' '.$query.' AND (r.'.$sortable.'>'.@strval($rows[count($rows)-1][$sortable]).' OR r.'.$sortable.'<'.@strval($rows[0][$sortable]).')');
+			$or_list='';
+			foreach ($rows as $row)
+			{
+				$or_list=' AND r.id<>'.strval($row['id']);
+			}
+			$rows=$GLOBALS['FORUM_DB']->query('SELECT r.id'.$extra_select_sql.' '.$query.$or_list);
 			foreach ($rows as $row)
 			{
 				$other_ids[]=$row['id'];
