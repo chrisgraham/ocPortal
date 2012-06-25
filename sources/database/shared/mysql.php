@@ -86,7 +86,7 @@ class Database_super_mysql
 	/**
 	 * Assemble part of a WHERE clause for doing full-text search
 	 *
-	 * @param  string			Our match string
+	 * @param  string			Our match string (assumes "?" has been stripped already)
 	 * @param  boolean		Whether to do a boolean full text search
 	 * @return string			Part of a WHERE clause for doing full-text search
 	 */

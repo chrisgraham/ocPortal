@@ -428,7 +428,7 @@ function namelike_script()
 		$q='SELECT s_primary,COUNT(*) as cnt,MAX(s_num_results) AS s_num_results FROM '.get_table_prefix().'searches_logged WHERE ';
 		if ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()))
 		{
-			$q.=preg_replace('#\?(.*)#','s_primary${1}',db_full_text_assemble($id,false));
+			$q.=preg_replace('#\?#','s_primary',db_full_text_assemble($id,false));
 		} else
 		{
 			$q.='s_primary LIKE \''./*ideally we would put an % in front, but too slow*/db_encode_like($id).'%\'';
