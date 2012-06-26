@@ -2293,6 +2293,7 @@ ul.compact_list>li, ol.compact_list>li {
 
 dl.compact_list {
 	margin: 0.4em 0;
+	overflow: hidden;
 }
 dl.compact_list>dt {
 	display: inline;
