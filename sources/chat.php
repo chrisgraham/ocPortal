@@ -438,12 +438,16 @@ function chat_room_prune($room_id,$room_row=NULL)
 					require_code('lang');
 					require_code('tempcode');
 					require_lang('chat');
-					$_message_parsed=insert_lang_comcode(do_lang('LEFT_ROOM',$GLOBALS['FORUM_DRIVER']->get_username($p['member_id'])),4);
-					$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$p['room_id'],'user_id'=>$p['member_id'],'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
-					$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
-					fwrite($myfile,strval($message_id));
-					fclose($myfile);
-					sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+					$left_room_msg=do_lang('LEFT_ROOM',$GLOBALS['FORUM_DRIVER']->get_username($p['member_id']));
+					if ($left_room_msg!='')
+					{
+						$_message_parsed=insert_lang_comcode($left_room_msg,4);
+						$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$p['room_id'],'user_id'=>$p['member_id'],'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
+						$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+						fwrite($myfile,strval($message_id));
+						fclose($myfile);
+						sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+					}
 				}
 			}
 		}
@@ -1189,12 +1193,16 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 			sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 		}
 
-		$_message_parsed=insert_lang_comcode(do_lang('ENTERED_THE_ROOM',$their_username),4);
-		$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
-		$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
-		fwrite($myfile,strval($message_id));
-		fclose($myfile);
-		sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+		$enter_room_msg=do_lang('ENTERED_THE_ROOM',$their_username);
+		if ($enter_room_msg!='')
+		{
+			$_message_parsed=insert_lang_comcode($enter_room_msg,4);
+			$message_id=$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')),true);
+			$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+			fwrite($myfile,strval($message_id));
+			fclose($myfile);
+			sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+		}
 
 		$room_name=$GLOBALS['SITE_DB']->query_value('chat_rooms','room_name',array('id'=>$room_id));
 		$room_language=$GLOBALS['SITE_DB']->query_value('chat_rooms','room_language',array('id'=>$room_id));
