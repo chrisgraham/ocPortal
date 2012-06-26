@@ -12,7 +12,7 @@
 		<thead>
 			<tr>
 				<th>{!THEME}</th>
-				<th>{!_ADDED}</th>
+				<th>{!ADDED}</th>
 				<th colspan="4">{!EDIT}</th>
 			</tr>
 		</thead>

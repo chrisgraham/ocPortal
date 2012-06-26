@@ -526,6 +526,8 @@ class Hook_addon_registry_core
 			'themes/default/images/treefield/minus.png',
 			'themes/default/images/treefield/plus.png',
 			'themes/default/images/breadcrumbs.png',
+			'themes/default/imagges/boxless_title_leadin_leftcomp.png',
+			'themes/default/imagges/boxless_title_leadin_rightcomp.png',
 			'themes/default/images/zone_gradient.png',
 			'themes/default/images/pagepics/index.html',
 			'themes/default/images/pagepics/investigateuser.png',

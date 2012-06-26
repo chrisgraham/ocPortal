@@ -13,9 +13,7 @@
 			</div>
 		{+END}
 
-		<div>
-			{CONTENT}
-		</div>
+		{CONTENT}
 
 		{$JS_TEMPCODE,footer}
 

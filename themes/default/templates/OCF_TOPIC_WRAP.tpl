@@ -32,8 +32,10 @@
 	{+END}
 
 	{+START,IF,{THREADED}}
-		<div id="comments_wrapper">
-			{POSTS}
+		<div class="comments_wrapper">
+			<div class="boxless_space">
+				{POSTS}
+			</div>
 		</div>
 
 		{+START,IF_PASSED,SERIALIZED_OPTIONS}{+START,IF_PASSED,HASH}

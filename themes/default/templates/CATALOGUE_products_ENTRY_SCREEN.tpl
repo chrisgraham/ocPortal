@@ -55,7 +55,7 @@
 		</div>
 	</div></div>
 
-	<div class="float_surrounder">
+	<div class="float_surrounder lined_up_boxes">
 		{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
 			<div class="trackbacks right">
 				{TRACKBACK_DETAILS}
@@ -79,7 +79,9 @@
 			1_REL=edit
 		{+END}
 
-		{COMMENT_DETAILS}
+		<div class="content_screen_comments">
+			{COMMENT_DETAILS}
+		</div>
 	</div>
 
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}

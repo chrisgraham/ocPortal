@@ -665,7 +665,7 @@ class Hook_addon_registry_downloads
 				'AUTHOR'=>lorem_phrase(),
 				'TRACKBACK_DETAILS'=>lorem_sentence_html(),
 				'RATING_DETAILS'=>lorem_sentence_html(),
-				'COMMENTS_DETAILS'=>lorem_sentence_html(),
+				'COMMENT_DETAILS'=>lorem_sentence_html(),
 				'NUM_IMAGES'=>'3'
 			)), NULL, '', true)
 		);

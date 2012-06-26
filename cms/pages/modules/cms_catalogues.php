@@ -192,8 +192,8 @@ class Module_cms_catalogues extends standard_aed_module
 		$sortables=array(
 			'title'=>do_lang_tempcode('TITLE'),
 			'cc_id'=>do_lang_tempcode('CATEGORY'),
-			'ce_add_date'=>do_lang_tempcode('_ADDED'),
-			'ce_views'=>do_lang_tempcode('_VIEWS'),
+			'ce_add_date'=>do_lang_tempcode('ADDED'),
+			'ce_views'=>do_lang_tempcode('COUNT_VIEWS'),
 			'ce_submitter'=>do_lang_tempcode('OWNER'),
 		);
 		if (addon_installed('unvalidated'))
@@ -206,8 +206,8 @@ class Module_cms_catalogues extends standard_aed_module
 		$fh=array();
 		$fh[]=do_lang_tempcode('TITLE');
 		$fh[]=do_lang_tempcode('CATEGORY');
-		$fh[]=do_lang_tempcode('_ADDED');
-		$fh[]=do_lang_tempcode('_VIEWS');
+		$fh[]=do_lang_tempcode('ADDED');
+		$fh[]=do_lang_tempcode('COUNT_VIEWS');
 		$fh[]=do_lang_tempcode('OWNER');
 		if (addon_installed('unvalidated'))
 			$fh[]=do_lang_tempcode('VALIDATED');
@@ -1310,14 +1310,14 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'cc_title'=>do_lang_tempcode('TITLE'),
-			'cc_add_date'=>do_lang_tempcode('_ADDED'),
+			'cc_add_date'=>do_lang_tempcode('ADDED'),
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
 
-		$fh=array(do_lang_tempcode('TITLE'),do_lang_tempcode('_ADDED'));
+		$fh=array(do_lang_tempcode('TITLE'),do_lang_tempcode('ADDED'));
 		$fh[]=do_lang_tempcode('ACTIONS');
 		$header_row=results_field_title($fh,$sortables,'sort',$sortable.' '.$sort_order);
 

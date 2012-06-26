@@ -12,7 +12,8 @@
 }
 
 .newscat_img {
-	margin-{!en_left}: 1em;
+	margin-{!en_left}: 1.5em;
+	margin-bottom: 1.5em;
 	float: {!en_right};
 	width: 100px;
 }
@@ -51,6 +52,10 @@
 	padding-bottom: 0.5em;
 	margin-bottom: 3em;
 	text-align: center;
+}
+
+.boxless_space .news_goto {
+	text-align: left;
 }
 
 .news_piece_summary + .news_piece_summary {

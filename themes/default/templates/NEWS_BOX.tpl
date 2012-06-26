@@ -23,7 +23,7 @@
 
 	<div class="meta_details" role="contentinfo">
 		<ul class="meta_details_list">
-			<li>{!POSTED_TIME,{DATE*}}</li>
+			<li>{!POSTED_TIME_SIMPLE,{DATE*}}</li>
 			<li>
 				{+START,IF,{$AND,{$NOT,{BLOG}},{$IS_NON_EMPTY,{AUTHOR_URL}}}}
 					{!BY_SIMPLE,<a href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a>}
@@ -32,7 +32,7 @@
 			
 				{+START,IF,{$NOT,{$IS_NON_EMPTY,{AUTHOR_URL}}}}
 					{+START,IF_NON_EMPTY,{$USERNAME*,{SUBMITTER}}}
-						<a class="fancy_user_link" rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>
+						{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>}
 						{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
 					{+END}
 				{+END}

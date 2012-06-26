@@ -154,11 +154,12 @@
 .ocf_screen_buttons {
 	float: {!en_right};
 	white-space: nowrap;
+	margin: 1em 0 1em 1em !important;
 }
 
 .ocf_member_signature {
 	margin: 0.5em;
-	font-size: 0.8em;
+	font-size: 0.85em;
 	color: {$GET,area_key_text};
 	{+START,IF,{$MOBILE}}
 		display: none;
@@ -226,6 +227,10 @@
 .ocf_topic .ocf_forum_box_left, .ocf_post_details {
 	background-color: {$GET,box_title_background} !important;
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,lgrad}\, {$GET,dgrad});}
+	color: {$GET,box_title_text};
+}
+.ocf_topic .ocf_forum_box_left, .ocf_post_details, .ocf_post_details a, .ocf_post_details a:hover {
+	color: {$GET,box_title_text};
 }
 
 .ocf_post_emphasis, .ocf_post_personal {
@@ -286,7 +291,7 @@
 }
 
 .ocf_topic_poll_result_column2 {
-	font-size: 0.8em;
+	font-size: 0.85em;
 }
 
 .ocf_topic_poll_result_column2 * {
@@ -312,7 +317,7 @@
 
 .ocf_post_details {
 	text-align: {!en_left};
-	padding: 0.3em;
+	padding: 0.2em 0.3em 0.4em 0.2em;
 }
 
 .ocf_post_details_date {
@@ -1238,7 +1243,7 @@ side_ocf_personal_topics=
 }
 
 .topic_list_meta {
-	font-size: 0.8em;
+	font-size: 0.85em;
 }
 
 .topic_list_by {

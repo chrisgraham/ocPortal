@@ -1,30 +1,28 @@
 <div itemscope="itemscope" itemtype="http://schema.org/ImageObject">
 	{TITLE}
 
-	<div class="box box___news_entry_screen"><div class="box_inner">
-		<div class="meta_details" role="contentinfo">
-			<ul class="meta_details_list">
-				<li>
-					{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}}</a>
-					{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
-				</li>
-				<li>{!ADDED,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate">{ADD_DATE*}</time>}</li>
-				{+START,IF,{$INLINE_STATS}}<li>{!VIEWS,{VIEWS*}}</li>{+END}
-			</ul>
-		</div>
-	
-		<p class="media_box">
-			<img class="scale_down" alt="{!IMAGE}" src="{URL*}" itemprop="contentURL" />
-		</p>
-	
-		{+START,IF_NON_EMPTY,{CAPTION}}
-			<div itemprop="caption">
-				{$PARAGRAPH,{CAPTION}}
-			</div>
-		{+END}
-	</div></div>
+	<div class="meta_details" role="contentinfo">
+		<ul class="meta_details_list">
+			<li>
+				{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}}</a>
+				{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
+			</li>
+			<li>{!ADDED_SIMPLE,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate">{ADD_DATE*}</time>}</li>
+			{+START,IF,{$INLINE_STATS}}<li>{!VIEWS_SIMPLE,{VIEWS*}}</li>{+END}
+		</ul>
+	</div>
 
-	<div class="float_surrounder">
+	<p class="media_box">
+		<img class="scale_down" alt="{!IMAGE}" src="{URL*}" itemprop="contentURL" />
+	</p>
+
+	{+START,IF_NON_EMPTY,{CAPTION}}
+		<div itemprop="caption">
+			{$PARAGRAPH,{CAPTION}}
+		</div>
+	{+END}
+
+	<div class="float_surrounder lined_up_boxes">
 		{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
 			<div class="trackbacks right">
 				{TRACKBACK_DETAILS}
@@ -45,7 +43,9 @@
 		1_REL=edit
 	{+END}
 
-	{COMMENT_DETAILS}
+	<div class="content_screen_comments">
+		{COMMENT_DETAILS}
+	</div>
 
 	{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
 		<div class="edited" role="note">

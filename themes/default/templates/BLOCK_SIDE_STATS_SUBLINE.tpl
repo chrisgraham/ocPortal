@@ -1,1 +1,2 @@
-<li>{KEY*}: {VALUE*}</li>
+<dt>{KEY*}</dt>
+<dd>{VALUE*}</dd>

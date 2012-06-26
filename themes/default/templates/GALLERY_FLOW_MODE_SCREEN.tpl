@@ -13,7 +13,7 @@
 	{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
 	{+START,IF_NON_EMPTY,{CHILDREN}}
-		<div class="box box___gallery_flow_mode_screen"><div class="box_inner">
+		<div class="box box___gallery_flow_mode_screen__subcats"><div class="box_inner">
 			<h2>{!SUBCATEGORIES_HERE}</h2>
 
 			<ul class="category_list">
@@ -31,7 +31,7 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{ENTRIES}}
-		<div class="box box___gallery_flow_mode_screen"><div class="box_inner">
+		<div class="box box___gallery_flow_mode_screen__other"><div class="box_inner">
 			<h2>{!OTHER_IMAGES_IN_GALLERY}</h2>
 
 			{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
@@ -80,7 +80,7 @@
 	<div class="float_surrounder lined_up_boxes">
 		{+START,IF_NON_EMPTY,{MEMBER_DETAILS}}
 			<div class="right">
-				<div class="box box___gallery_flow_mode_screen"><div class="box_inner">
+				<div class="box box___gallery_flow_mode_screen__member"><div class="box_inner">
 					<h2>{_TITLE*}</h2>
 
 					{MEMBER_DETAILS}
@@ -118,7 +118,9 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{ENTRIES}{CURRENT_ENTRY}}
-		{COMMENT_DETAILS}
+		<div class="content_screen_comments">
+			{COMMENT_DETAILS}
+		</div>
 	{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}

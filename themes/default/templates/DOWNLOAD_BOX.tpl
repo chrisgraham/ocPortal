@@ -8,7 +8,7 @@
 			{+START,IF,{$INLINE_STATS}}
 				<dt class="field_name">{!COUNT_DOWNLOADS}:</dt> <dd>{DOWNLOADS*}</dd>
 			{+END}
-			<dt class="field_name">{!_ADDED}:</dt> <dd>{DATE*}</dd>
+			<dt class="field_name">{!ADDED}:</dt> <dd>{DATE*}</dd>
 			{+START,IF_PASSED,RATING}{+START,IF_NON_EMPTY,{RATING}}
 				<dt class="field_name">{!RATING}:</dt> <dd>{RATING}</dd>
 			{+END}{+END}
@@ -25,7 +25,7 @@
 		</p>
 
 		<p class="tiny_paragraph associated_details">
-			{!_ADDED} {DATE*}
+			{!ADDED} {DATE*}
 		</p>
 	</div>
 

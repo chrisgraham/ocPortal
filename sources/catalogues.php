@@ -231,7 +231,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 				}
 			}
 		}
-		foreach (array('add_date'=>'_ADDED','rating'=>'RATING') as $extra_sort_code=>$extra_sort_lang)
+		foreach (array('add_date'=>'ADDED','rating'=>'RATING') as $extra_sort_code=>$extra_sort_lang)
 		{
 			foreach (array('ASC'=>'_ASCENDING','DESC'=>'_DESCENDING') as $dir_code=>$dir_lang)
 			{

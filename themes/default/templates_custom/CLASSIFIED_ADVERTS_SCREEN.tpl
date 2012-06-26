@@ -6,7 +6,7 @@
 	<tr>
 		<th>{!TITLE}</th>
 		<th>{!COUNT_VIEWS}</th>
-		<th>{!_ADDED}</th>
+		<th>{!ADDED}</th>
 		<th>{!CLASSIFIED_EXPIRES_ON}</th>
 		<th>{!CLASSIFIED_ACTIVE}</th>
 	</tr>

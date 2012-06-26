@@ -130,8 +130,8 @@ class Module_cms_news extends standard_aed_module
 		$sortables=array(
 			'title'=>do_lang_tempcode('TITLE'),
 			'news_category'=>do_lang_tempcode('MAIN_CATEGORY'),
-			'date_and_time'=>do_lang_tempcode('_ADDED'),
-			'news_views'=>do_lang_tempcode('_VIEWS'),
+			'date_and_time'=>do_lang_tempcode('ADDED'),
+			'news_views'=>do_lang_tempcode('COUNT_VIEWS'),
 			'submitter'=>do_lang_tempcode('OWNER'),
 		);
 		if (addon_installed('unvalidated'))
@@ -142,8 +142,8 @@ class Module_cms_news extends standard_aed_module
 		$NON_CANONICAL_PARAMS[]='sort';
 
 		$fh=array(do_lang_tempcode('TITLE'),do_lang_tempcode('MAIN_CATEGORY'));
-		$fh[]=do_lang_tempcode('_ADDED');
-		$fh[]=do_lang_tempcode('_VIEWS');
+		$fh[]=do_lang_tempcode('ADDED');
+		$fh[]=do_lang_tempcode('COUNT_VIEWS');
 		if (addon_installed('unvalidated'))
 			$fh[]=do_lang_tempcode('VALIDATED');
 		$fh[]=do_lang_tempcode('OWNER');

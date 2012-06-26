@@ -273,7 +273,7 @@ class Module_banners
 			//'campaign_remaining'=>do_lang_tempcode('HITS_ALLOCATED'),
 			'importance_modulus'=>do_lang_tempcode('IMPORTANCE_MODULUS'),
 			'expiry_date'=>do_lang_tempcode('EXPIRY_DATE'),
-			'add_date'=>do_lang_tempcode('_ADDED'),
+			'add_date'=>do_lang_tempcode('ADDED'),
 		);
 		if (addon_installed('unvalidated')) $sortables['validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
@@ -288,7 +288,7 @@ class Module_banners
 			//do_lang_tempcode('HITS_ALLOCATED'),
 			do_lang_tempcode('IMPORTANCE_MODULUS'),
 			do_lang_tempcode('EXPIRY_DATE'),
-			do_lang_tempcode('_ADDED'),
+			do_lang_tempcode('ADDED'),
 		);
 		if (addon_installed('unvalidated')) $hr[]=do_lang_tempcode('VALIDATED');
 		$hr[]=do_lang_tempcode('ACTIONS');

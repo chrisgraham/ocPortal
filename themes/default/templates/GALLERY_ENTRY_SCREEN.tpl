@@ -34,7 +34,7 @@
 
 						<tbody>
 							<tr>
-								<th class="de_th meta_data_title">{!_ADDED}</th>
+								<th class="de_th meta_data_title">{!ADDED}</th>
 								<td>
 									<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{ADD_DATE*}</time>
 								</td>
@@ -118,7 +118,9 @@
 			1_REL=edit
 		{+END}
 
-		{COMMENT_DETAILS}
+		<div class="content_screen_comments">
+			{COMMENT_DETAILS}
+		</div>
 	{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,_TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={$META_DATA,title}}{+END}{+END}

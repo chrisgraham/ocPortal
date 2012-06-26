@@ -8,6 +8,6 @@
 	</p>
 
 	<p class="tiny_paragraph associated_details">
-		<span class="field_name">{!LAST_POST}:</span> {DATE*}
+		{!POSTED_TIME_SIMPLE,{DATE*}}
 	</p>
 </div></div>

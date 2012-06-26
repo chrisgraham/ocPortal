@@ -47,7 +47,7 @@ a.top_left_toggleicon:hover {
 }
 
 .checklist_task {
-	margin: 0.3em 0 0.3em 0.3em;
+	margin: 0.3em 0 0.5em 0.5em;
 	float: left;
 }
 
@@ -57,7 +57,7 @@ a.top_left_toggleicon:hover {
 
 .checklist_task_status {
 	font-size: 0.8em;
-	margin: 0.3em 0.3em 0.3em 0;
+	margin: 0.3em 0.5em 0.3em 0;
 	float: {!en_right};
 }
 

@@ -2,9 +2,9 @@
 <ul class="compact_list">
 	<li>
 		<p class="lonely_label">{SECTION*}:</p>
-		<ul class="compact_list associated_details">
+		<dl class="compact_list associated_details">
 			{CONTENT}
-		</ul>
+		</dl>
 	</li>
 </ul>
 {+END}

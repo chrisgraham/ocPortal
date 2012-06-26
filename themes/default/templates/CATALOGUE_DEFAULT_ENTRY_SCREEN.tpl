@@ -7,8 +7,8 @@
 				{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER}}}</a>
 				{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
 			</li>
-			<li>{!ADDED,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate">{ADD_DATE*}</time>}</li>
-			{+START,IF,{$INLINE_STATS}}<li>{!VIEWS,{VIEWS*}}</li>{+END}
+			<li>{!ADDED_SIMPLE,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate">{ADD_DATE*}</time>}</li>
+			{+START,IF,{$INLINE_STATS}}<li>{!VIEWS_SIMPLE,{VIEWS*}}</li>{+END}
 		</ul>
 	</div>
 
@@ -16,7 +16,7 @@
 
 	{ENTRY}
 
-	<div class="float_surrounder">
+	<div class="float_surrounder lined_up_boxes">
 		{+START,IF_NON_EMPTY,{TRACKBACK_DETAILS}}
 			<div class="trackbacks right">
 				{TRACKBACK_DETAILS}
@@ -39,7 +39,9 @@
 		1_REL=edit
 	{+END}
 
-	{COMMENT_DETAILS}
+	<div class="content_screen_comments">
+		{COMMENT_DETAILS}
+	</div>
 
 	{+START,IF_NON_EMPTY,{EDIT_DATE_RAW}}
 		<div class="edited" role="note">

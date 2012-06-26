@@ -386,10 +386,6 @@
 
 /* Shoutbox */
 
-.shoutbox_by, .shoutbox_time {
-	font-size: 0.8em;
-}
-
 .shoutbox_message {
 	font-weight: bold;
 	font-size: 0.9em;

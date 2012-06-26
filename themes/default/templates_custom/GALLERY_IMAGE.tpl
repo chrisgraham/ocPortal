@@ -16,7 +16,7 @@
 
 			<tbody>
 				<tr>
-					<th class="de_th meta_data_title">{!_ADDED}</th>
+					<th class="de_th meta_data_title">{!ADDED}</th>
 					<td>{$DATE_AND_TIME*,1,0,0,{ADD_DATE_RAW}}</td>
 				</tr>
 

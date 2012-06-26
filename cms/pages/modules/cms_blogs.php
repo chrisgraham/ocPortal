@@ -117,8 +117,8 @@ class Module_cms_blogs extends standard_aed_module
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 		$sortables=array(
 			'title'=>do_lang_tempcode('TITLE'),
-			'date_and_time'=>do_lang_tempcode('_ADDED'),
-			'news_views'=>do_lang_tempcode('_VIEWS'),
+			'date_and_time'=>do_lang_tempcode('ADDED'),
+			'news_views'=>do_lang_tempcode('COUNT_VIEWS'),
 		);
 		if (addon_installed('unvalidated'))
 			$sortables['validated']=do_lang_tempcode('VALIDATED');
@@ -129,8 +129,8 @@ class Module_cms_blogs extends standard_aed_module
 
 		$fh=array();
 		$fh[]=do_lang_tempcode('TITLE');
-		$fh[]=do_lang_tempcode('_ADDED');
-		$fh[]=do_lang_tempcode('_VIEWS');
+		$fh[]=do_lang_tempcode('ADDED');
+		$fh[]=do_lang_tempcode('COUNT_VIEWS');
 		if (addon_installed('unvalidated'))
 			$fh[]=do_lang_tempcode('VALIDATED');
 		$fh[]=do_lang_tempcode('ACTIONS');

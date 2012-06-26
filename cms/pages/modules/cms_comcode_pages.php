@@ -365,7 +365,7 @@ class Module_cms_comcode_pages
 			do_lang_tempcode('PAGE_LINK'),
 			//do_lang_tempcode('PARENT_PAGE'),
 			//do_lang_tempcode('OWNER'),
-			//do_lang_tempcode('_ADDED'),
+			//do_lang_tempcode('ADDED'),
 			//do_lang_tempcode('VALIDATED'),
 			do_lang_tempcode('ACTIONS'),
 		),$sortables,'sort',$sortable.' '.$sort_order);

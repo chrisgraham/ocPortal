@@ -2596,7 +2596,8 @@ function replace_comments_form_with_ajax(options,hash)
 					set_inner_html(comments_wrapper,ajax_result.responseText);
 
 					// Collapse, so user can see what happening
-					toggleable_tray('comments_posting_form_outer');
+					if (document.getElementById('comments_posting_form_outer').className.indexOf('toggleable_tray')!=-1)
+						toggleable_tray('comments_posting_form_outer');
 
 					// Set fade for posts not shown before
 					var known_posts=get_elements_by_class_name(comments_wrapper,'post');

@@ -3,7 +3,7 @@
 <section class="box"><div class="box_inner">
 	<h3>{!NAVIGATION}</h3>
 
-	<section class="box"><div class="box_inner">
+	<section class="box box__realm_main"><div class="box_inner">
 		<h3>&ldquo;{REALM_NAME*</h3>
 &rdquo;\, &lsquo;{ROOM_NAME*}&rsquo;\, <kbd>{REALM*}:{X*}:{Y*}</kbd>,,light}
 		<div class="ocw_navigation">
@@ -118,7 +118,7 @@
 
 <br />
 
-<section class="box"><div class="box_inner">
+<section class="box box__room_info"><div class="box_inner">
 	<h3>{!W_ROOM_INFORMATION}</h3>
 
 	<div class="float_surrounder">

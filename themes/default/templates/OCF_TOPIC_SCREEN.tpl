@@ -5,7 +5,7 @@
 <div class="ocf_topic_{THREADED*}">
 	{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
 		<div class="non_accessibility_redundancy">
-			<div class="float_surrounder pagination_spacing">
+			<div class="float_surrounder">
 				<div class="buttons_group ocf_screen_buttons">
 					{+START,INCLUDE,NOTIFICATION_BUTTONS}
 						NOTIFICATIONS_TYPE=ocf_topic
@@ -34,8 +34,10 @@
 	{+END}
 
 	{+START,IF,{THREADED}}
-		<div id="comments_wrapper">
-			{POSTS}
+		<div class="comments_wrapper">
+			<div class="boxless_space">
+				{POSTS}
+			</div>
 		</div>
 
 		{+START,IF_PASSED,SERIALIZED_OPTIONS}{+START,IF_PASSED,HASH}
@@ -68,8 +70,6 @@
 			{!NO_ENTRIES}
 		</p>
 	{+END}
-
-	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={TITLE}}{+END}{+END}
 
 	{+START,IF,{$OR,{$IS_NON_EMPTY,{MODERATOR_ACTIONS}},{$AND,{$NOT,{$MOBILE}},{$IS_NON_EMPTY,{MARKED_POST_ACTIONS}}},{MAY_CHANGE_MAX}}}
 		<div class="box ocf_topic_control_functions"><div class="box_inner">
@@ -138,7 +138,7 @@
 		</div>
 	{+END}
 
-	<div class="float_surrounder pagination_spacing">
+	<div class="float_surrounder">
 		<div class="buttons_group ocf_screen_buttons">
 			{+START,INCLUDE,NOTIFICATION_BUTTONS}
 				NOTIFICATIONS_TYPE=ocf_topic
@@ -167,5 +167,7 @@
 			</div></div>
 		{+END}{+END}{+END}{+END}
 	</div>
+
+	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{+START,IF_PASSED,TITLE}{$BLOCK,failsafe=1,block=main_screen_actions,title={TITLE}}{+END}{+END}
 </div>
 

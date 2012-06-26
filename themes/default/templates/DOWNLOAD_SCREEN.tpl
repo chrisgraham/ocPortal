@@ -47,7 +47,7 @@
 
 					<tbody>
 						<tr>
-							<th class="de_th meta_data_title">{!_ADDED}</th>
+							<th class="de_th meta_data_title">{!ADDED}</th>
 							<td>
 								<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{DATE*}</time>
 							</td>
@@ -170,5 +170,7 @@
 		{+END}
 	{+END}
 
-	{COMMENTS_DETAILS}
+	<div class="content_screen_comments">
+		{COMMENT_DETAILS}
+	</div>
 </div>

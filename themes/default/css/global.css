@@ -109,6 +109,7 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 
 /* Text */
 {$THEME_WIZARD_COLOR,#0d1522,slightly_seeded_text,20% seed + 80% BW}
+{$THEME_WIZARD_COLOR,#3d434c,slightly_seeded_gray_text,20% WB + 65% BW + 15% seed}
 {$THEME_WIZARD_COLOR,#325180,area_text,76% seed + 24% BW}
 {$THEME_WIZARD_COLOR,#2a3d5a,area_key_text,53% (seed sat_to 53) + 47% BW}
 {$THEME_WIZARD_COLOR,#0d2d5d,area_link,55% (seed sat_to 86) + 45% BW}
@@ -238,8 +239,7 @@ h2 {
 h3 {
 	font-size: 1.1em;
 }
-h3 a,
-h3 a:hover {
+h3 a, h3 a:hover {
 	text-decoration: none;
 }
 h4 {
@@ -283,6 +283,9 @@ td, th.de_th {
 	background-color: transparent;
 	font-weight: normal;
 	border: 0;
+}
+th.de_th a, th.de_th a:hover {
+	color: {$GET,slightly_seeded_text};
 }
 
 hr {
@@ -370,11 +373,9 @@ body.website_body {
 	#main_website #main_website_inner {
 		width: 980px;
 		position: relative;
-		margin: 0 auto 0 auto;
-		border-left: 1px solid {$GET,fixed_width_border};
-		border-right: 1px solid {$GET,fixed_width_border};
-		border-bottom: 1px solid {$GET,fixed_width_border};
-		{$BETA_CSS_PROPERTY,box-shadow: 0 0 30px {$GET,standard_border};}
+		margin: 15px auto 15px auto;
+		border: 1px solid {$GET,fixed_width_border};
+		{$BETA_CSS_PROPERTY,box-shadow: 0 0 20px {$GET,standard_border};}
 	}
 {+END}{+END}
 
@@ -632,20 +633,17 @@ body.popup_spacer h2 {
 .global_side_panel {
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 	width: 13em;
-}
-
-.global_side_panel .box {
-	font-size: 0.9em; /* We put this selector on .box to avoid changing the em unit for margins (we want top margins to balance) */
+	color: {$GET,slightly_seeded_gray_text};
 }
 
 /* Spacing around middle column if it adjoins panels */
 #panel_left ~ .global_middle {
 	margin-{!en_left}: 13em;
-	padding-{!en_left}: 2.8em;
+	padding-{!en_left}: 3.5em;
 }
 #panel_right ~ .global_middle {
 	margin-{!en_right}: 13em;
-	padding-{!en_right}: 2.8em;
+	padding-{!en_right}: 3.5em;
 }
 #panel_right:first-child ~ .global_middle { /* If no left panel, lets give some extra space */
 	margin-{!en_right}: 16em;
@@ -702,6 +700,7 @@ body.popup_spacer h2 {
 
 footer {
 	background-color: {$GET,footer_background};
+	margin-top: 2em;
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,footer_background}\, {$GET,footer_2_background});}
 
 	color: {$GET,footer_text};
@@ -876,6 +875,7 @@ body .accessibility_hidden { /* Contents should be made visible (or interpreted)
 .nothing_here, .more_here {
 	font-size: 0.95em;
 	padding-{!en_left}: 15px;
+	margin: 1.5em;
 	margin-{!en_left}: 10px;
 	background-image: url('{$IMG;,cannot_show}');
 	background-position: {!en_left} 5px;
@@ -1082,6 +1082,7 @@ div.red_alert, p.red_alert {
 }
 .comment_count span {
 	display: none;
+	padding-right: 2px;
 }
 .comment_count:hover span {
 	display: inline-block;
@@ -1217,43 +1218,63 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 
 /* If you want to mark a region as box-less, wrap a div with class 'boxless_space' around it -- it'll invoke a very different kind of modern styling */
-.global_side_panel .boxless_space {
-	font-size: 1.05em; /* Undoes the font-size defined on the .global_side, as in this circumstance we probably want consistency across all panels */
-}
-.boxless_space {
-	margin: 2em 0;
+.boxless_space .box:last-child {
+	margin-bottom: 0;
 }
 .boxless_space .box {
 	background: none;
-	border: none;
+	border: none !important;
 	padding: 0;
-	margin: 0;
+	margin: 1em 0;
 	{$BETA_CSS_PROPERTY,border-radius: 0;}
+}
+.boxless_space .fp_col_blocks_wrap .box {
+	margin: 0.5em 0;
 }
 .boxless_space .box>.box_inner {
 	margin: 0;
 }
-.boxless_space .box>.box_inner>h1, .boxless_space .box>.box_inner>h2, .boxless_space .box>.box_inner>h3, .boxless_space .box>.box_inner>h4, .boxless_space .box>.box_inner>h5, .boxless_space .box>.box_inner>h6 {
-	background: none;
-	color: {$GET,slightly_seeded_right_complement_text};
+.boxless_space .box>.box_inner>h1, .boxless_space .box>.box_inner>h2, .boxless_space .box>.box_inner>h3, .boxless_space .box>.box_inner>h4, .boxless_space .box>.box_inner>h5, .boxless_space .box>.box_inner>h6, .boxless_space .box>.toggleable_tray_title {
+	background: url('{$IMG;,boxless_title_leadin_rightcomp}') no-repeat !important;
+	color: {$GET,slightly_seeded_right_complement_text} !important;
 	text-align: {!en_left};
-	font-size: 1.2em;
+	font-size: 15px;
 	margin: 0.5em 0;
 	font-family: Arial;
-	padding: 0;
+	padding: 0 0 2px 21px;
 	width: auto;
 	font-weight: bold;
 	text-transform: uppercase;
 	{$BETA_CSS_PROPERTY,border-radius: 0;}
 }
 .global_side_panel .boxless_space .box>.box_inner>h1, .global_side_panel .boxless_space .box>.box_inner>h2, .global_side_panel .boxless_space .box>.box_inner>h3, .global_side_panel .boxless_space .box>.box_inner>h4, .global_side_panel .boxless_space .box>.box_inner>h5, .global_side_panel .boxless_space .box>.box_inner>h6 {
-	color: {$GET,slightly_seeded_left_complement_text};
+	background: url('{$IMG;,boxless_title_leadin_leftcomp}') no-repeat !important;
+	color: {$GET,slightly_seeded_left_complement_text} !important;
+}
+.boxless_space .buttons_group, .boxless_space .associated_links_block_group, .boxless_space .media_box, .boxless_space .proceed_button {
+	text-align: left;
 }
 
-.boxless_space .box + .box {
-	border-top: 2px solid {$GET,standard_border};
+.boxless_space .box + .box, .boxless_space .box + .fp_col_blocks_wrap, .boxless_space .fp_col_blocks_wrap + .box {
+	border-top: 2px solid {$GET,standard_border} !important;
 	margin-top: 1.5em;
 	padding-top: 0.5em;
+}
+.boxless_space .box .box + .box, .comments_wrapper .boxless_space .box + .box { /* Nested dividers more subtle */
+	border-top: 0 !important;
+}
+.global_side_panel .boxless_space .box .box + .box {
+	padding-top: 0;
+}
+.global_middle .boxless_space .box .box + .box:before, .comments_wrapper .boxless_space .box + .box:before {
+	content: "";
+	width: 60%;
+	display: block;
+	margin: 0 auto;
+	border-top: 2px dotted {$GET,pale_border} !important;
+}
+.boxless_space .box + .fp_col_blocks_wrap {
+	padding-top: 0;
 }
 
 /* Boxes under boxes shouldn't have the title style - would be ugly */
@@ -1333,14 +1354,14 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 /* Box/title-attached meta details */
 
 .meta_details {
-	font-size: 0.8em;
+	font-size: 0.9em;
 	color: {$GET,area_text};
-	border-bottom: 1px solid {$GET,standard_border};
+	border-bottom: 1px dotted {$GET,pale_border};
 	{+START,IF,{$NOT,{$MOBILE}}}
 		width: 300px;
 	{+END}
 	max-width: 100%;
-	padding-{!en_left}: 5px;
+	padding-{!en_left}: 0.5em;
 	padding-bottom: 0.5em;
 	margin-bottom: 1em;
 }
@@ -1362,7 +1383,7 @@ h3+.meta_details, .newscat_img+.meta_details {
 .global_side_panel .meta_details {
 	border-bottom: 0;
 	padding-left: 0;
-	padding-top: 5px;
+	padding-top: 0.5em;
 }
 
 /* Overlays are also based on boxes */
@@ -1390,7 +1411,7 @@ h3+.meta_details, .newscat_img+.meta_details {
 }
 
 .tiny_paragraph {
-	margin: 0.5em 0;
+	margin: 0.3em 0;
 }
 
 .whitespace_visible {
@@ -1703,7 +1724,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .pagination_spacing {
-	padding: 10px 0;
+	margin: 1em 0;
 }
 
 .pagination {
@@ -1994,10 +2015,6 @@ div.wysiwyg_toolbar_color_finder {
 */
 
 {+START,IF,{$NOT,{$MOBILE}}}
-	.lined_up_boxes .ratings, .lined_up_boxes .trackbacks {
-		margin-top: 0;
-	}
-
 	.lined_up_boxes .right {
 		margin-left: 1em;
 	}
@@ -2019,11 +2036,6 @@ div.wysiwyg_toolbar_color_finder {
 
 .ratings {
 	width: {$?,{$MOBILE},100%,10em};
-	margin-top: 1em;
-}
-
-.RATING_BOX .box {
-	margin: 0;
 }
 
 .RATING_BOX .rating_inner {
@@ -2052,6 +2064,10 @@ div.wysiwyg_toolbar_color_finder {
 	cursor: pointer;
 }
 
+.rating_error {
+	text-align: center;
+}
+
 .rating_star {
 	{$BETA_CSS_PROPERTY,opacity: 0.2;} display: inline-block;/*Needed for IE8*/
 }
@@ -2061,18 +2077,20 @@ div.wysiwyg_toolbar_color_finder {
 
 .trackbacks {
 	width: {$?,{$MOBILE},100%,14em};
-	margin-top: 1em;
-	margin-left: 1em;
 }
 
 .box___trackback label {
 	display: block;
 }
 
+.content_screen_comments .comments_wrapper {
+	margin-top: 2em;
+}
+
 .post .post_title {
 	font-weight: bold;
 	padding-left: 0;
-	margin-bottom: 0.2em;
+	margin-bottom: 0.3em;
 }
 
 .post .post_avatar {
@@ -2091,6 +2109,7 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .post .post_time {
+	margin-left: 0.5em;
 }
 
 .post .post_action_link {
@@ -2145,8 +2164,10 @@ div.wysiwyg_toolbar_color_finder {
 	margin-left: 2em;
 }
 
-.highlighted_post {
+.comment_wrapper .highlighted_post {
 	background: {$GET,point_of_interest_background} !important;
+	padding: 0 1em !important;
+	border: 1px dashed {$GET,slightly_seeded_complement_text} !important;
 }
 
 .reviews_average {
@@ -2175,7 +2196,11 @@ div.wysiwyg_toolbar_color_finder {
 .comments_posting_form_inner th {
 	font-weight: bold !important;
 	padding: 0.5em 1.5em 0.5em 0;
-	border-right: 1px solid {$GET,standard_border};
+	border-right: 1px solid {$GET,pale_border};
+	text-align: right;
+}
+.comments_posting_form_inner th * {
+	text-align: right !important;
 }
 
 .comments_posting_form_inner td {
@@ -2196,7 +2221,6 @@ div.wysiwyg_toolbar_color_finder {
 	padding-{!en_right}: 5px;
 	text-align: center;
 	padding-top: 0.5em;
-	font-size: 0.8em;
 }
 
 .comments_posting_form_emoticons p {
@@ -2211,13 +2235,18 @@ div.wysiwyg_toolbar_color_finder {
 .comments_posting_form_end {
 	overflow: hidden;
 	{+START,IF,{$MOBILE}}
-		margin: 4px 20px 10px 0;
+		margin: 0.5em 2em 1em 0;
 		padding: 0;
 		text-align: center;
 	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
-		margin-left: 160px;
+		margin: 1em 0 1em 160px;
 	{+END}
+}
+
+.comments_posting_form_end .proceed_button {
+	margin-top: 0;
+	text-align: center !important;
 }
 
 .comments_captcha img, .comments_captcha iframe, .comments_captcha input {
@@ -2260,6 +2289,24 @@ ul.compact_list>li, ol.compact_list>li {
 }
 .compact_list>li>p {
 	margin-top: 0;
+}
+
+dl.compact_list {
+	margin: 0.4em 0;
+}
+dl.compact_list>dt {
+	display: inline;
+	display: list-item;
+	list-style-type: circle;
+	float: left;
+	margin: 0 0.5em 0 8px;
+	clear: both;
+}
+dl.compact_list>dt:after {
+	content: ":";
+}
+dl.compact_list>dd {
+	margin: 0;
 }
 
 ul.spaced_list, .spaced_list ul, ol.spaced_list, .spaced_list ol {
@@ -2389,8 +2436,12 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 .staff_actions .box_inner {
 	padding-right: 25px;
 }
-.staff_actions .field_name {
+.staff_actions .field_name.standard_field_name {
 	display: none;
+}
+.staff_actions ul.horizontal_links {
+	width: auto;
+	font-size: 1em;
 }
 .staff_actions a {
 	white-space: nowrap !important;
@@ -2405,7 +2456,7 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 }
 
 .global_side_panel .associated_minor_button_action, .global_side_panel .associated_details, .associated_link {
-	font-size: 0.9em;
+	font-size: 0.95em;
 }
 
 .associated_minor_button_overlayed {
@@ -2533,6 +2584,9 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 }
 .buttons_group>* {
 	padding-left: 5px;
+}
+.buttons_group>*:first-child {
+	padding-left: 0;
 }
 
 .associated_link.suggested {
@@ -3485,11 +3539,11 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 
 {+START,IF,{$NOT,{$MOBILE}}}
 	.attachment {
-		min-width: 450px;
 		margin: 1em 0;
 		border: 1px solid {$GET,standard_border};
 		padding: 0.5em;
 		font-size: 0.9em;
+		white-space: nowrap;
 	}
 
 	.attachment figcaption {
