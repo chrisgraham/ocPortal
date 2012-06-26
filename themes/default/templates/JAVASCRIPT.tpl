@@ -2311,6 +2311,8 @@ function set_outer_html(element,tHTML)
 function set_inner_html(element,tHTML,append)
 {
 	/* Parser hint: .innerHTML okay */
+	if (typeof tHTML=='number') tHTML=tHTML+'';
+
 	if ((document.write) && (typeof element.innerHTML!="undefined") && (!document.xmlVersion) && (tHTML.toLowerCase().indexOf('<script type="text/javascript src="')==-1) && (tHTML.toLowerCase().indexOf('<link')==-1))
 	{
 		var clone=element.cloneNode(true);

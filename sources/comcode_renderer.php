@@ -881,6 +881,12 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=do_template('COMCODE_SUB',array('_GUID'=>'515e310e00a6d7c30f7dca0a5956ebcf','CONTENT'=>$embed));
 			break;
 		case 'title':
+			if (($semiparse_mode) && (strpos($comcode,'[contents')!==false))
+			{
+				$temp_tpl=make_string_tempcode('[title'.reinsert_parameters($attributes).']'.$embed->evaluate().'[/title]');
+				break;
+			}
+
 			$level=($attributes['param']!='')?intval($attributes['param']):1;
 			if ($level==0) $level=1; // Stop crazy Comcode causing stack errors with the toc
 
@@ -2051,12 +2057,14 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$levels++;
 				} else
 				{
-					// Going back up the tree
-					while ($level<$past_level_stack[$levels-1])
+					// Going back up the tree, destroying levels that must have now closed off
+					while (($level<$past_level_stack[$levels-1]) && ($levels>2/* counting starts at 1, and level 2 is the level at which we cannot jump up a parent level because level 1 is semantically undefined */))
 					{
 						array_pop($past_level_stack);
 						$subtree=array_pop($subtree_stack);
 						$levels--;
+
+						// Alter the last of the next level on stack so it is actually taking the closed off level as children, and changing from a property list to a pair: property list & children
 						$subtree_stack[$levels-1][count($subtree_stack[$levels-1])-1]=array($subtree_stack[$levels-1][count($subtree_stack[$levels-1])-1],$subtree);
 					}
 

@@ -86,7 +86,7 @@ class Database_super_mysql
 	/**
 	 * Assemble part of a WHERE clause for doing full-text search
 	 *
-	 * @param  string			Our match string
+	 * @param  string			Our match string (assumes "?" has been stripped already)
 	 * @param  boolean		Whether to do a boolean full text search
 	 * @return string			Part of a WHERE clause for doing full-text search
 	 */
@@ -97,12 +97,12 @@ class Database_super_mysql
 			$content=str_replace('"','',$content);
 			if ((strtoupper($content)==$content) && (!is_numeric($content)))
 			{
-				return 'MATCH (?) AGAINST (_latin1\''.$this->db_escape_string($content).'\' COLLATE latin1_general_cs)';
+				return 'MATCH (?) AGAINST (_latin1\''.$this->db_escape_string($content).'\' COLLATE latin1_general_cs) AND (? IS NOT NULL)';
 			}
-			return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\')';
+			return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\') AND (? IS NOT NULL)';
 		}
-
-		return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\' IN BOOLEAN MODE)';
+		
+		return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\' IN BOOLEAN MODE) AND (? IS NOT NULL)';
 	}
 
 	/**

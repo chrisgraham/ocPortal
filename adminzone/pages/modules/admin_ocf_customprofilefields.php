@@ -250,10 +250,11 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		{
 			$trans=get_translated_text($row['cf_name'],$GLOBALS['FORUM_DB']);
 
+			$used=true;
 			if (substr($trans,0,4)=='ocp_')
 			{
 				// See if it gets filtered
-				if (!array_key_exists(substr($trans,4),$to_keep)) continue;
+				if (!array_key_exists(substr($trans,4),$to_keep)) $used=false;
 
 				$test=do_lang('SPECIAL_CPF__'.$trans,NULL,NULL,NULL,NULL,false);
 				if (!is_null($test)) $trans=$test;
@@ -287,7 +288,14 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			//$fr[]=($row['cf_show_in_posts']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			//$fr[]=($row['cf_show_in_post_previews']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			$fr[]=protect_from_escaping($orderer);
-			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
+			if ($used)
+			{
+				$edit_link=hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']));
+			} else
+			{
+				$edit_link=do_lang_tempcode('UNUSED_CPF');
+			}
+			$fr[]=protect_from_escaping($edit_link);
 
 			$fields->attach(results_entry($fr,true));
 		}

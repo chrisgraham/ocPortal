@@ -115,7 +115,7 @@ class Module_admin_ocf_join
 						addon_installed('ecommerce')?array('ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'),('DOC_ECOMMERCE')):NULL,
 						array('usergroups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('USERGROUPS'),('DOC_GROUPS')),
 						addon_installed('staff')?array('staff',array('admin_staff',array('type'=>'misc'),get_module_zone('admin_staff'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('STAFF'),('DOC_STAFF')):NULL,
-					)
+					),do_lang('MEMBERS')
 		);
 	}
 

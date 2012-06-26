@@ -98,8 +98,8 @@ class Database_Static_oracle
 	/**
 	 * Assemble part of a WHERE clause for doing full-text search
 	 *
-	 * @param  string			Our match string
-	 * @param  boolean			Whether to do a boolean full text search
+	 * @param  string			Our match string (assumes "?" has been stripped already)
+	 * @param  boolean		Whether to do a boolean full text search
 	 * @return string			Part of a WHERE clause for doing full-text search
 	 */
 	function db_full_text_assemble($content,$boolean)

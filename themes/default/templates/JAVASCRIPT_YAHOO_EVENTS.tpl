@@ -37,6 +37,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Only load this library once.  If it is loaded a second time, existing
 // events cannot be detached.
+function yahoo_events_init() {
+if (typeof window.YAHOO=='undefined') // Yahoo not loaded yet. Probably this is all loading via AJAX which cannot guarantee load order
+{
+	window.setTimeout(yahoo_events_init,100);
+	return;
+}
 if (!YAHOO.util.Event) {
 
 /**
@@ -785,4 +791,5 @@ if (!YAHOO.util.Event) {
 	 YAHOO.util.Event._tryPreloadAttach();
 
 }
-
+}
+yahoo_events_init();
