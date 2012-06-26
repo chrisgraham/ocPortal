@@ -1081,11 +1081,14 @@ class database_driver
 			if (!function_exists('find_all_hooks')) return $ret;
 
 			$UPON_QUERY_HOOKS=array();
-			$hooks=find_all_hooks('systems','upon_query');
-			foreach (array_keys($hooks) as $hook)
+			if (!running_script('restore'))
 			{
-				require_code('hooks/systems/upon_query/'.filter_naughty($hook));
-				$UPON_QUERY_HOOKS[$hook]=object_factory('upon_query_'.filter_naughty($hook),true);
+				$hooks=find_all_hooks('systems','upon_query');
+				foreach (array_keys($hooks) as $hook)
+				{
+					require_code('hooks/systems/upon_query/'.filter_naughty($hook));
+					$UPON_QUERY_HOOKS[$hook]=object_factory('upon_query_'.filter_naughty($hook),true);
+				}
 			}
 		}
 		foreach ($UPON_QUERY_HOOKS as $ob)

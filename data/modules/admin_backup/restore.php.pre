@@ -106,19 +106,79 @@ require_lang('critical_error');
 require_lang('installer');
 require_lang('version');
 
-$GLOBALS['SITE_DB']->drop_if_exists('db_meta');
-$GLOBALS['SITE_DB']->create_table('db_meta',array(
-	'm_table'=>'*ID_TEXT',
-	'm_name'=>'*ID_TEXT',
-	'm_type'=>'ID_TEXT'
-));
 
-$GLOBALS['SITE_DB']->drop_if_exists('db_meta_indices');
-$GLOBALS['SITE_DB']->create_table('db_meta_indices',array(
-	'i_table'=>'*ID_TEXT',
-	'i_name'=>'*ID_TEXT',
-	'i_fields'=>'*ID_TEXT',
-));
+
+// Now we actually read into the data file and execute the commented out reinstallation code. This is necessary for re-entrant code, and because we can't load it all through the PHP parser at once!
+
+$time_start=time();
+
+$myfile=fopen(dirname(__FILE__).'/restore_data.php','rb');
+$i=0;
+$offset=get_param_integer('start_offset',0);
+if ($offset!=0)
+{
+	fseek($myfile,$offset);
+	$found_start=true;
+} else
+{
+	$found_start=false;
+}
+$sql_buildup='';
+$start_line=0;
+while (($line=fgets($myfile,10000000))!==false)
+{
+	if (!$found_start)
+	{
+		if (trim($line)=='//COMMANDS BEGIN')
+		{
+			$found_start=true;
+			$start_line=$i;
+		}
+	} else
+	{
+		if (substr($line,0,2)!='//') break; // Done
+
+		$line=substr($line,2);
+
+		$is_new_command=(substr(ltrim($line),0,21)=='$GLOBALS[\'SITE_DB\']->');
+		if (($is_new_command) && ($sql_buildup!=''))
+		{
+			$success=@eval($sql_buildup); // NB: Query errors are echo'd out as DB API knows restoration script is running
+			if ($success===false)
+			{
+				header('Content-type: text/plain');
+				exit('Failed on: '.$sql_buildup);
+			}
+			$sql_buildup='';
+		}
+		if ((time()>=$time_start+20) && ($sql_buildup==''))
+		{
+			$refresh_url='restore.php?start='.strval($i+$start_line+get_param_integer('start',0)).'&start_offset='.strval(ftell($myfile));
+			echo '<meta http-equiv="refresh" content="0;url='.$refresh_url.'" /> Please wait, continuing.';
+			//header('Location: '.$refresh_url);	Can result in "This web page has a redirect loop" error
+			exit();
+		}
+
+		$sql_buildup.=$line.chr(10);
+
+		$i++;
+	}
+}
+fclose($myfile);
+
+if ($sql_buildup!='')
+{
+	$success=@eval($sql_buildup);
+	if ($success===false)
+	{
+		header('Content-type: text/plain');
+		exit('Failed on: '.$sql_buildup);
+	}
+	$sql_buildup='';
+}
+
+
+
 
 {!!DB!!}
 
