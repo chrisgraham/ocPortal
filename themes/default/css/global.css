@@ -381,8 +381,14 @@ body.website_body {
 
 /* htmlarea=WYSIWYG editor */
 body.website_body, #htmlarea {
-	margin: 0;
 	font-size: 13px;
+}
+#htmlarea {
+	margin: 0;
+}
+
+body#main_website {
+	margin: 0;
 }
 
 body#main_website #main_website_inner {
@@ -392,8 +398,10 @@ body#main_website #main_website_inner {
 
 /* If not #main_website, it'll be one of these (the names correspond to the templates used) */
 body#basic_html_wrap {
+	margin: 0;
 }
 body#standalone_html_wrap {
+	margin: 0;
 }
 
 header {

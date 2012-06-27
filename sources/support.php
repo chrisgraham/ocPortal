@@ -403,9 +403,10 @@ function has_no_forum()
  * Check to see if an addon is installed. This only works with addons written with addon_registry hooks, which is all the bundled ocPortal addons; it is unlikely to work with third-party addons.
  *
  * @param  ID_TEXT		The module name
+ * @param  boolean		Whether to check non-bundled addons
  * @return boolean		Whether it is
  */
-function addon_installed($addon)
+function addon_installed($addon,$non_bundled_too=false)
 {
 	global $ADDON_INSTALLED_CACHE;
 	if ($ADDON_INSTALLED_CACHE==array())
@@ -414,6 +415,11 @@ function addon_installed($addon)
 	}
 	if (isset($ADDON_INSTALLED_CACHE[$addon])) return $ADDON_INSTALLED_CACHE[$addon];
 	$answer=is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty($addon).'.php') || is_file(get_file_base().'/sources_custom/hooks/addon_registry/'.filter_naughty($addon).'.php');
+	if ((!$answer) && ($non_bundled_too))
+	{
+		$test=$GLOBALS['SITE_DB']->query_value_null_ok('addons','addon_name',array('addon_name'=>$addon));
+		if (!is_null($test)) $answer=true;
+	}
 	$ADDON_INSTALLED_CACHE[$addon]=$answer;
 	if (function_exists('persistent_cache_set')) persistent_cache_set('ADDONS_INSTALLED',$ADDON_INSTALLED_CACHE,true);
 	return $answer;

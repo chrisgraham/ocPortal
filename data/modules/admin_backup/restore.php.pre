@@ -140,7 +140,16 @@ while (($line=fgets($myfile,10000000))!==false)
 
 		$line=substr($line,2);
 
-		$is_new_command=(substr(ltrim($line),0,21)=='$GLOBALS[\'SITE_DB\']->');
+		$is_new_command=false;
+		$valid_cmd_starts=array(
+			'$GLOBALS[\'SITE_DB\']->query_insert(\'',
+			'$GLOBALS[\'SITE_DB\']->drop_if_exists(\'',
+			'$GLOBALS[\'SITE_DB\']->create_table(\'',
+			'$GLOBALS[\'SITE_DB\']->delete_index_if_exists(\'',
+			'$GLOBALS[\'SITE_DB\']->create_index(\'',
+		);
+		foreach ($valid_cmd_starts as $valid_cmd_start)
+			$is_new_command=$is_new_command || (substr(ltrim($line),0,strlen($valid_cmd_start))==$valid_cmd_start);
 		if (($is_new_command) && ($sql_buildup!=''))
 		{
 			$success=@eval($sql_buildup); // NB: Query errors are echo'd out as DB API knows restoration script is running

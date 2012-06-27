@@ -5,6 +5,14 @@
 {+END}
 
 <div class="float_surrounder">
+	{+START,IF,{$NOT,{$IS_GUEST}}}
+		{+START,IF_NON_EMPTY,{$GET,panel_top}}
+			<div id="panel_top" role="complementary">
+				{$GET,panel_top}
+			</div>
+		{+END}
+	{+END}
+
 	<article id="page_running_{$PAGE*}" class="zone_running_{$ZONE*} global_middle">
 		{+START,IF_NON_EMPTY,{$BREADCRUMBS}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},:start}}{+START,IF,{$SHOW_HEADER}}
 			<nav class="global_breadcrumbs breadcrumbs" itemprop="breadcrumb" role="navigation">

@@ -91,7 +91,7 @@ class Module_admin_redirects
 			foreach ($zones as $zone)
 			{
 				if (!file_exists(get_file_base().'/'.$zone.'/pages/comcode/'.fallback_lang().'/panel_bottom.txt'))
-					$GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'panel_bottom','r_from_zone'=>$zone,'r_to_page'=>'panel_bottom','r_to_zone'=>'','r_is_transparent'=>1));
+					$GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'panel_bottom','r_from_zone'=>$zone,'r_to_page'=>'panel_bottom','r_to_zone'=>'','r_is_transparent'=>1),false,true);
 			}
 		}
 	}

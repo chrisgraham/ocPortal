@@ -1,3 +1,12 @@
+{+START,SET,roles}
+	<option value="">(Please select)</option>
+	<option value="Helpful soul">Helpful soul</option>
+	<option value="Support expert">Support expert</option>
+	<option value="Programming god">Programming god</option>
+	<option value="Themeing genius">Themeing genius</option>
+	<option value="Community ambassador">Community ambassador</option>
+{+END}
+
 {+START,IF,{$NOT,{$HAS_ACTUAL_PAGE_ACCESS,admin_points}}}
 	{$,Regular member}
 	<p class="points_give_box_header">
@@ -15,12 +24,7 @@
 			<label for="give_reason_pre">
 				Their role
 				<select id="give_reason_pre" name="reason_pre" onclick="this.onchange(event);" onchange="var reason=document.getElementById('give_reason'); if ((reason.value.substr(reason.value.indexOf(': ')).length&lt;=3) &amp;&amp; (this.selectedIndex!=0)) reason.value=this.options[this.selectedIndex].value+': ';">
-					<option value="">(Please select)</option>
-					<option value="Helpful soul">Helpful soul</option>
-					<option value="Support expert">Support expert</option>
-					<option value="Programming god">Programming god</option>
-					<option value="Themeing genius">Themeing genius</option>
-					<option value="Community ambassador">Community ambassador</option>
+					{$GET,roles}
 				</select>
 			</label>:
 
@@ -57,12 +61,7 @@
 				<label for="give_reason_pre">
 					Their role
 					<select id="give_reason_pre" name="reason_pre" onclick="this.onchange(event);" onchange="var reason=document.getElementById('give_reason'); if ((reason.value.substr(reason.value.indexOf(': ')).length&lt;=3) &amp;&amp; (this.selectedIndex!=0)) reason.value=this.options[this.selectedIndex].value+': ';">
-						<option value="">(Please select)</option>
-						<option value="Helpful soul">Helpful soul</option>
-						<option value="Support expert">Support expert</option>
-						<option value="Programming god">Programming god</option>
-						<option value="Themeing genius">Themeing genius</option>
-						<option value="Community ambassador">Community ambassador</option>
+						{$SET,roles}
 					</select>
 				</label>:
 

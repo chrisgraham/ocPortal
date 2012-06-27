@@ -144,20 +144,24 @@ function upgrade_script()
 	<h3>{$l_upgrade_steps}</h3>
 
 	<div class=\"wide_table_wrap\"><table style=\"margin-top: 5px\" class=\"results_table wide_table spaced_table\">
-		<tr>
-			<th>{$l_step}</th>
-			<th>{$l_action}</th>
-			<th>{$l_estimated_time}</th>
-		</tr>
-		<tr><th>X</th><td>{$l_not_for_patch} {$l_tutorial}</td><td>".escape_html(display_time_period(60*120))."</td></tr>
-		<tr><th>1</th><td>{$l_take_backup}</td><td>".escape_html(display_time_period(60*120))."</td></tr>
-		<tr><th>2</th><td>{$l_close_site}  {$l_fu_closedness}<br /><q style=\"font-style: italic\">".$closed->evaluate()."</q> <span class=\"associated_link\">[<a href=\"".escape_html($closed_url->evaluate())."\" title=\"(this link will open in a new window)\" target=\"_blank\">".do_lang('CHANGE')."</a>]</span></td><td>".escape_html(display_time_period(60))."</td></tr>
-		<tr><th>3</th><td>{$l_download}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
-		<tr><th>4</th><td>{$l_not_for_patch} {$l_integrity_scan_no_merging}<!-- ".do_lang('OR')." {$l_integrity_scan}--></td><td>".str_replace(' ','&nbsp;',escape_html(display_time_period(60*10)))."&nbsp;&dagger;</td></tr>
-		<tr><th>5</th><td>{$l_not_for_patch} {$l_database_upgrade}<br />{$l_up_info}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
-		<tr><th>6</th><td>{$l_not_for_patch} {$l_theme_upgrade}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
-		<tr><th>7</th><td>{$l_clear_caches}</td><td>1 minute</td></tr>
-		<tr><th>8</th><td>{$l_open_site}  {$l_fu_closedness}</td><td>1 minute</td></tr>
+		<thead>
+			<tr>
+				<th>{$l_step}</th>
+				<th>{$l_action}</th>
+				<th>{$l_estimated_time}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr><th>X</th><td>{$l_not_for_patch} {$l_tutorial}</td><td>".escape_html(display_time_period(60*120))."</td></tr>
+			<tr><th>1</th><td>{$l_take_backup}</td><td>".escape_html(display_time_period(60*120))."</td></tr>
+			<tr><th>2</th><td>{$l_close_site}  {$l_fu_closedness}<br /><q style=\"font-style: italic\">".$closed->evaluate()."</q> <span class=\"associated_link\">[<a href=\"".escape_html($closed_url->evaluate())."\" title=\"(this link will open in a new window)\" target=\"_blank\">".do_lang('CHANGE')."</a>]</span></td><td>".escape_html(display_time_period(60))."</td></tr>
+			<tr><th>3</th><td>{$l_download}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
+			<tr><th>4</th><td>{$l_not_for_patch} {$l_integrity_scan_no_merging}<!-- ".do_lang('OR')." {$l_integrity_scan}--></td><td>".str_replace(' ','&nbsp;',escape_html(display_time_period(60*10)))."&nbsp;&dagger;</td></tr>
+			<tr><th>5</th><td>{$l_not_for_patch} {$l_database_upgrade}<br />{$l_up_info}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
+			<tr><th>6</th><td>{$l_not_for_patch} {$l_theme_upgrade}</td><td>".escape_html(display_time_period(60*5))."</td></tr>
+			<tr><th>7</th><td>{$l_clear_caches}</td><td>1 minute</td></tr>
+			<tr><th>8</th><td>{$l_open_site}  {$l_fu_closedness}</td><td>1 minute</td></tr>
+		</tbody>
 	</table></div>
 
 	<p>&dagger; {$l_customisations}</p>
@@ -2008,7 +2012,6 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 			'SUPPORT_TICKET_SCREEN.tpl',
 		);
 	} else
->>>>>>> master
 	{
 		$errors[]=do_lang_tempcode('NO_DEFINED_THEME_UPGRADER');
 		return array($errors,array());

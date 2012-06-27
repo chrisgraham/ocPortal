@@ -323,13 +323,14 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 		{
 			$mode=fileperms($themed_version);
 			$mtime=0;
-			if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($themed_version)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
-			{
-				$_themed_version=dirname($val).'/'.$themed_suffix.basename($val);
-				require_code('files');
-				$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$_themed_version));
-				if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
-			}
+			// Too slow
+			//if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($themed_version)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
+			//{
+			//	$_themed_version=dirname($val).'/'.$themed_suffix.basename($val);
+			//	require_code('files');
+			//	$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$_themed_version));
+			//	if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
+			//}
 			if ($mtime==0) $mtime=filemtime($themed_version);
 			if ($mtime>$max_mtime) $max_mtime=$mtime;
 			tar_add_file($tar,$val,$themed_version,$mode,$mtime,true);
@@ -337,12 +338,12 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 		{
 			$mode=fileperms($full);
 			$mtime=0;
-			if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($full)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
-			{
-				require_code('files');
-				$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$val));
-				if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
-			}
+			//if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($full)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
+			//{
+			//	require_code('files');
+			//	$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$val));
+			//	if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
+			//}
 			if ($mtime==0) $mtime=filemtime($full);
 			if ($mtime>$max_mtime) $max_mtime=$mtime;
 			tar_add_file($tar,$val,$full,$mode,$mtime,true);

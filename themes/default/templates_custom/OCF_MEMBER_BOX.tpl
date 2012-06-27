@@ -10,7 +10,7 @@
 				<tr><th class="de_th">{!galleries:GALLERIES}:</th><td>{GALLERIES*}</td></tr>
 			{+END}
 			{+START,IF_PASSED,AGE}
-				<tr><th class="de_th">Age:</th><td><strong>{AGE*}</strong> ({DATE_OF_BIRTH*})</td></tr>
+				<tr><th class="de_th">{!AGE}:</th><td><strong>{AGE*}</strong> ({DATE_OF_BIRTH*})</td></tr>
 			{+END}
 		{+END}
 		<tr>
@@ -30,14 +30,16 @@
 			{$SET,main,1}
 			{CUSTOM_FIELDS}
 
-			<p class="associated_link associated_links_block_group">
-				{+START,IF,{$NEQ,{$USER},{POSTER}}}
-					<a href="{$PAGE_LINK*,site:pointstore:action:ocgifts:username={$USERNAME,{POSTER}}}">Give a gift</a>
-				{+END}
-				{+START,IF,{$EQ,{$USER},{POSTER}}}
-					<em>This is you</em>
-				{+END}
-			</p>
+			{+START,IF,{$ADDON_INSTALLED,oc_gift_giver,1}}
+				<p class="associated_link associated_links_block_group">
+					{+START,IF,{$NEQ,{$USER},{POSTER}}}
+						<a href="{$PAGE_LINK*,site:pointstore:action:ocgifts:username={$USERNAME,{POSTER}}}">{!ocgifts:GIVE_A_GIFT}</a>
+					{+END}
+					{+START,IF,{$EQ,{$USER},{POSTER}}}
+						<em>{!ocgifts:THIS_IS_YOU}</em>
+					{+END}
+				</p>
+			{+END}
 		</div>
 	{+END}
 
