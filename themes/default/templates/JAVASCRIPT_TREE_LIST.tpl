@@ -309,6 +309,10 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			}
 			html.appendChild(node_self_wrap);
 			var selected=((this.use_server_id?node.getAttribute('serverid'):node.getAttribute('id'))==element.value) || node.getAttribute('selected')=='yes';
+			if ((this.multi_selection) && (!selected))
+			{
+				selected=((','+element.value+',').indexOf(','+node.getAttribute('id')+',')!=-1);
+			}
 			this.make_element_look_selected(document.getElementById(this.name+'tsel_e_'+node.getAttribute('id')),selected);
 		}
 
@@ -623,7 +627,7 @@ tree_list.prototype.make_element_look_selected=function(target,selected)
 	if (!target) return;
 	if (!selected)
 	{
-		target.className+=target.className.replace(' native_ui_selected','');
+		target.className=target.className.replace(' native_ui_selected','');
 	} else
 	{
 		target.className+=' native_ui_selected';

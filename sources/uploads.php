@@ -314,6 +314,8 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				}
 			}
 			$result=@rename($path2,$place);
+			global $HTTP_DOWNLOAD_MTIME;
+			@touch($place,$HTTP_DOWNLOAD_MTIME);
 			if (!$result)
 			{
 				unlink($path2);

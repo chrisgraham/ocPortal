@@ -436,7 +436,7 @@ class Module_search
 				}
 
 				require_code('form_templates');
-				$tree=do_template('FORM_SCREEN_INPUT_TREE_LIST',array('_GUID'=>'25368e562be3b4b9c6163aa008b47c91','TABINDEX'=>strval(get_form_field_tabindex()),'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,'END_OF_FORM'=>true,'REQUIRED'=>false,'USE_SERVER_ID'=>false,'NAME'=>'search_under','DEFAULT'=>$under,'HOOK'=>$ajax_hook,'ROOT_ID'=>'','OPTIONS'=>serialize($ajax_options)));
+				$tree=do_template('FORM_SCREEN_INPUT_TREE_LIST',array('_GUID'=>'25368e562be3b4b9c6163aa008b47c91','MULTI_SELECT'=>false,'TABINDEX'=>strval(get_form_field_tabindex()),'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,'END_OF_FORM'=>true,'REQUIRED'=>false,'USE_SERVER_ID'=>false,'NAME'=>'search_under','DEFAULT'=>$under,'HOOK'=>$ajax_hook,'ROOT_ID'=>'','OPTIONS'=>serialize($ajax_options)));
 			} else
 			{
 				$ajax=false;

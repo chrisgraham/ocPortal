@@ -129,6 +129,13 @@ class Module_cms_cedi
 		require_code('form_templates');
 		$fields->attach(form_input_line(do_lang_tempcode('SCREEN_TITLE'),do_lang_tempcode('SCREEN_TITLE_DESC'),'title',$title,true));
 		$fields2->attach(form_input_tick(do_lang_tempcode('HIDE_POSTS'),do_lang_tempcode('DESCRIPTION_HIDE_POSTS'),'hide_posts',$hide_posts==1));
+
+		require_lang('notifications');
+		$notify=($page_id==-1) || ($GLOBALS['SITE_DB']->query_value_null_ok('seedy_changes','MAX(date_and_time)',array('the_page'=>$page_id))<time()-60*10);
+		$radios=form_input_radio_entry('send_notification','0',!$notify,do_lang_tempcode('NO'));
+		$radios->attach(form_input_radio_entry('send_notification','1',$notify,do_lang_tempcode('YES')));
+		$fields2->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),$radios));
+
 		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 		if (get_value('disable_staff_notes')!=='1')
 			$fields2->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
@@ -487,6 +494,7 @@ class Module_cms_cedi
 				{
 					$title=substr($newlink,$q_pos+1);
 					$child_id=intval(substr($newlink,0,$q_pos));
+					if ($child_id==$id) continue;
 					$title_id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','title',array('id'=>$child_id));
 					if (is_null($title_id)) continue;
 					if ($title=='')
@@ -514,6 +522,26 @@ class Module_cms_cedi
 
 				$GLOBALS['SITE_DB']->query_delete('seedy_children',array('parent_id'=>$id,'child_id'=>$child_id),'',1); // Just in case it was repeated
 				$GLOBALS['SITE_DB']->query_insert('seedy_children',array('parent_id'=>$id,'child_id'=>$child_id,'the_order'=>$i,'title'=>$title));
+
+				// Copy notifications over to new children
+				$start=0;
+				do
+				{
+					$notifications_to=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('t_member_id','l_setting'),array('l_notification_code'=>'cedi','l_code_category'=>strval($id)),'',100,$start);
+
+					foreach ($notifications_to as $notification_to)
+					{
+						$GLOBALS['SITE_DB']->query_insert('notifications_enabled',array(
+							'l_member_id'=>$notification_to['t_member_id'],
+							'l_notification_code'=>'cedi',
+							'l_code_category'=>strval($child_id),
+							'l_setting'=>$notification_to['l_setting'],
+						));
+					}
+
+					$start+=100;
+				}
+				while (count($notifications_to)!=0);
 			}
 			$start=$start+$length+1;
 		}

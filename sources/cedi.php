@@ -81,10 +81,10 @@ function render_cedi_page_box($row,$zone='_SEARCH',$put_in_box=true)
  * @param  string			The new post
  * @param  BINARY			Whether the post will be validated
  * @param  ?MEMBER		The member doing the action (NULL: current member)
- * @param  boolean		Whether to send out a staff e-mail about the new Wiki+ post
+ * @param  boolean		Whether to send out a notification out
  * @return AUTO_LINK		The post ID
  */
-function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_mail=true)
+function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_notification=true)
 {
 	if (is_null($member)) $member=get_member();
 
@@ -113,10 +113,12 @@ function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_mail=tr
 	update_stat('num_seedy_posts',1);
 	//update_stat('num_seedy_files',count($_FILES));
 
-	// Send e-mail to the staff. These exist because Wiki+ exists in the 'space' between a forum, and a website- usually there is no validation, but the content does need moderation (and unlike a forum, staff are unlikely to 'lurk')
-	if ($send_mail)
+	if ($send_notification)
 	{
-		dispatch_cedi_post_notification($id,'ADD');
+		if (post_param_integer('send_notification',NULL)!==0)
+		{
+			dispatch_cedi_post_notification($id,'ADD');
+		}
 	}
 
 	if (get_option('show_post_validation')=='1') decache('main_staff_checklist');
@@ -160,12 +162,15 @@ function cedi_edit_post($id,$message,$validated,$member=NULL)
 
 	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_EDIT_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
 
-	if ($just_validated)
+	if (post_param_integer('send_notification',NULL)!==0)
 	{
-		dispatch_cedi_post_notification($id,'ADD');
-	} else
-	{
-		dispatch_cedi_post_notification($id,'EDIT');
+		if ($just_validated)
+		{
+			dispatch_cedi_post_notification($id,'ADD');
+		} else
+		{
+			dispatch_cedi_post_notification($id,'EDIT');
+		}
 	}
 }
 
@@ -231,7 +236,10 @@ function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL)
 	require_code('seo2');
 	seo_meta_set_for_implicit('seedy_page',strval($id),array($title,$description),$description);
 
-	dispatch_cedi_page_notification($id,'ADD');
+	if (post_param_integer('send_notification',NULL)!==0)
+	{
+		dispatch_cedi_page_notification($id,'ADD');
+	}
 
 	return $id;
 }
@@ -266,7 +274,10 @@ function cedi_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	require_code('seo2');
 	seo_meta_set_for_explicit('seedy_page',strval($id),$meta_keywords,$meta_description);
 
-	dispatch_cedi_page_notification($id,'EDIT');
+	if (post_param_integer('send_notification',NULL)!==0)
+	{
+		dispatch_cedi_page_notification($id,'EDIT');
+	}
 }
 
 /**

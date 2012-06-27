@@ -27,8 +27,8 @@
 		</tbody>
 	</table></div>
 
-	{+START,SET,RESULTS_TABLE_BROWSER}
-		{+START,IF_NON_EMPTY,{SORT}{BROWSER}}
+	{+START,SET,PAGINATION}
+		{+START,IF_NON_EMPTY,{SORT}{PAGINATION}}
 			<div class="box results_table_under"><div class="box_inner float_surrounder">
 				<div class="results_table_sorter">
 					{SORT}

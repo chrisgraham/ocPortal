@@ -349,7 +349,8 @@ class Hook_addon_registry_core_adminzone_frontpage
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_NEW_VERSION', array(
 				'VERSION'=>lorem_phrase(),
-				'VERSION_TABLE'=>placeholder_table()
+				'VERSION_TABLE'=>placeholder_table(),
+				'HAS_UPDATED_ADDONS'=>true,
 			)), NULL, '', true)
 		);
 	}

@@ -165,7 +165,8 @@ class Hook_addon_registry_core_addon_management
 				'VERSION'=>placeholder_number(),
 				'ACTIONS'=>$actions,
 				'TYPE'=>lorem_phrase(),
-				'PASSTHROUGH'=>lorem_phrase()
+				'PASSTHROUGH'=>lorem_phrase(),
+				'UPDATED'=>false,
 			)));
 		}
 
@@ -173,7 +174,8 @@ class Hook_addon_registry_core_addon_management
 			lorem_globalise(do_lorem_template('ADDON_SCREEN', array(
 				'TITLE'=>lorem_title(),
 				'ADDONS'=>$add_ons,
-				'MULTI_ACTION'=>placeholder_url()
+				'MULTI_ACTION'=>placeholder_url(),
+				'UPDATED_ADDONS'=>'',
 			)), NULL, '', true)
 		);
 	}

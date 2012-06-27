@@ -8,7 +8,7 @@
 	{+START,IF,{$JS_ON}}
 		<div class="float_surrounder">
 			<p class="right associated_link">
-				<a href="#" onclick="var as=document.getElementsByTagName('input'); for (var i=0;i&lt;as.length;i++) { if (as[i].name.substr(0,10)=='uninstall_') as[i].checked=true; } return false;">{!DELETE}: {!USE_ALL}</a>
+				<a href="#" onclick="var as=document.getElementsByTagName('input'); for (var i=0;i&lt;as.length;i++) { if (as[i].name.substr(0,10)=='uninstall_') as[i].checked=true; } return false;">{!UNINSTALL}: {!USE_ALL}</a>
 			</p>
 		</div>
 	{+END}
@@ -56,6 +56,11 @@
 <h2>{!ACTIONS}</h2>
 
 <ul role="navigation" class="actions_list spaced_list">
+	{+START,IF_NON_EMPTY,{UPDATED_ADDONS}}
+		<li>
+			<a href="{$PAGE_LINK*,_SELF:_SELF:type=addon_import:to_import={UPDATED_ADDONS}}"><strong>{!IMPORT_UPDATED_ADDONS}</strong></a>
+		</li>
+	{+END}
 	<li>
 		<a href="{$PAGE_LINK*,_SELF:_SELF:type=addon_import}">{!IMPORT_ADDON}</a> ({!IMPORT_ADDON_2})
 	</li>

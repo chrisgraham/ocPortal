@@ -602,12 +602,7 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 			if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 		}
 	}
-	if (!is_null($myfile))
-	{
-		$chunk=pack('a1024','');
-		if (fwrite($myfile,$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-	}
-	$resource['end']+=$block_size;
+	$resource['end']+=$block_size+512;
 }
 
 /**
@@ -640,6 +635,9 @@ function tar_close($resource)
 		echo $chunk;
 	} else
 	{
+		$chunk=pack('a1024','');
+		if (fwrite($resource['myfile'],$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+
 		fclose($resource['myfile']);
 		fix_permissions($resource['full']);
 	}

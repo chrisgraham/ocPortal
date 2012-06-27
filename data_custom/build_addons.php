@@ -98,34 +98,29 @@ if (get_param_integer('export_addons',1)==1)
 	$file_list=get_file_list_of_addons();
 	$addon_list=get_details_of_addons();
 
-	foreach ($file_list as $addon=>$files)
+	$_addon_limit=get_param('addon_limit','');
+	$addon_limit=mixed();
+	if ($_addon_limit!='')
 	{
-		if (($only!==NULL) && ($only!==$addon)) continue;
+		$addon_limit=explode(',',$_addon_limit);
+	}
 
-		if (!isset($addon_list[$addon]))
-		{
-			$addon_list[$addon]=array(
-				'name'=>$addon,
-				'incompatibilities'=>'',
-				'dependencies'=>'',
-				'author'=>'Unknown',
-				'version'=>'1.0',
-				'description'=>'',
-			);
-		}
+	foreach ($file_list as $addon_codename=>$files)
+	{
+		if ((!is_null($addon_limit)) && (!in_array($addon_codename,$addon_limit))) continue;
 
-		$val=$addon_list[$addon];
+		if (($only!==NULL) && ($only!==$addon_codename)) continue;
 
-		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon)).$version_for_name.'.tar';
+		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_codename)).$version_for_name.'.tar';
 
-		$name=titleify($addon_list[$addon]['Addon name']);
-		$author=$addon_list[$addon]['Author'];
-		$description=$addon_list[$addon]['Help'];
-		$dependencies=$addon_list[$addon]['Requirements / Dependencies'];
-		$incompatibilities=$addon_list[$addon]['Incompatible with'];
-		$category=$addon_list[$addon]['Category'];
-		$license=$addon_list[$addon]['License'];
-		$attribute=$addon_list[$addon]['Attribute'];
+		$name=titleify($addon_list[$addon_codename]['Addon name']);
+		$author=$addon_list[$addon_codename]['Author'];
+		$description=$addon_list[$addon_codename]['Help'];
+		$dependencies=$addon_list[$addon_codename]['Requirements / Dependencies'];
+		$incompatibilities=$addon_list[$addon_codename]['Incompatible with'];
+		$category=$addon_list[$addon_codename]['Category'];
+		$license=$addon_list[$addon_codename]['License'];
+		$attribute=$addon_list[$addon_codename]['Attribute'];
 
 		// Formalise dependencies
 		$vs=explode(',',$dependencies);

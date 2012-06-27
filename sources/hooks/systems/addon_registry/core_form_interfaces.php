@@ -989,7 +989,8 @@ class Hook_addon_registry_core_form_interfaces
 			'DEFAULT'=>'',
 			'HOOK'=>'',
 			'ROOT_ID'=>'',
-			'OPTIONS'=>serialize('')
+			'OPTIONS'=>serialize(''),
+			'MULTI_SELECT'=>false
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
 			'REQUIRED'=>true,

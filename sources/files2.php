@@ -23,10 +23,11 @@
  */
 function init__files2()
 {
-	global $HTTP_DOWNLOAD_MIME_TYPE,$HTTP_DOWNLOAD_SIZE,$HTTP_DOWNLOAD_URL,$HTTP_MESSAGE,$HTTP_MESSAGE_B,$HTTP_NEW_COOKIES,$HTTP_FILENAME,$HTTP_CHARSET;
+	global $HTTP_DOWNLOAD_MIME_TYPE,$HTTP_DOWNLOAD_SIZE,$HTTP_DOWNLOAD_URL,$HTTP_MESSAGE,$HTTP_MESSAGE_B,$HTTP_NEW_COOKIES,$HTTP_FILENAME,$HTTP_CHARSET,$HTTP_DOWNLOAD_MTIME;
 	$HTTP_DOWNLOAD_MIME_TYPE=NULL;
 	$HTTP_DOWNLOAD_SIZE=NULL;
 	$HTTP_DOWNLOAD_URL=NULL;
+	$HTTP_DOWNLOAD_MTIME=NULL;
 	$HTTP_MESSAGE=NULL;
 	$HTTP_MESSAGE_B=NULL;
 	$HTTP_NEW_COOKIES=NULL;
@@ -539,6 +540,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 	$HTTP_DOWNLOAD_SIZE=0;
 	global $HTTP_DOWNLOAD_URL;
 	$HTTP_DOWNLOAD_URL=$url;
+	global $HTTP_DOWNLOAD_MTIME;
+	$HTTP_DOWNLOAD_MTIME=NULL;
 	global $HTTP_MESSAGE;
 	$HTTP_MESSAGE=NULL;
 	global $HTTP_MESSAGE_B;
@@ -700,6 +703,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				$HTTP_DOWNLOAD_MIME_TYPE=curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
 				$HTTP_DOWNLOAD_SIZE=curl_getinfo($ch,CURLINFO_CONTENT_LENGTH_DOWNLOAD);
 				$HTTP_DOWNLOAD_URL=curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
+				$HTTP_DOWNLOAD_MTIME=curl_getinfo($ch,CURLINFO_FILETIME);
 				$HTTP_MESSAGE=curl_getinfo($ch,CURLINFO_HTTP_CODE);
 				if (strpos($HTTP_DOWNLOAD_MIME_TYPE,';')!==false)
 				{
@@ -963,6 +967,10 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					if (preg_match("#^Content-Length: ([^;\r\n]*)\r\n#i",$line,$matches)!=0)
 					{
 						$HTTP_DOWNLOAD_SIZE=intval($matches[1]);
+					}
+					if (preg_match("#^Last-Modified: ([^;\r\n]*)\r\n#i",$line,$matches)!=0)
+					{
+						$HTTP_DOWNLOAD_MTIME=strtotime($matches[1]);
 					}
 					if (preg_match("#^Content-Type: ([^;\r\n]*)(;[^\r\n]*)?\r\n#i",$line,$matches)!=0)
 					{

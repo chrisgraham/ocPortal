@@ -542,7 +542,7 @@ Most of the competitors to ocPortal are, like ocPortal, Open Source. However the
  - the product reflects far from a stream-lined vision
  - whilst the developers are happy to code for free, they will not do the dull stuff like write documentation, or design user-friendly interfaces
  - there is great infighting and rivalry between developers
- - many features are only available within third-party addons. You'd spend half your time trying to smooth over the cracks between the various addons, or you'd need to tolerate the lack of full integration. Being able to search the various kinds of content on a website at once is a pretty basic thing, right? We don't know of any of our competitors that provide this kind of thing.
+ - many features are only available within non-bundled addons. You'd spend half your time trying to smooth over the cracks between the various addons, or you'd need to tolerate the lack of full integration. Being able to search the various kinds of content on a website at once is a pretty basic thing, right? We don't know of any of our competitors that provide this kind of thing.
 
 With a fully commercial product you may often find:
  - a quick dispatch to your suggestions: "we don't support this". The developers are personally unreachable

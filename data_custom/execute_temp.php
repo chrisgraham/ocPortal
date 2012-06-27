@@ -67,7 +67,14 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$tar=tar_open(get_file_base().'/exports/chris_backup.tar','wb');
-	tar_add_folder_incremental($tar,NULL,'/',mktime(0,0,0,4,19,2012),NULL,'',true);
-	tar_close($tar);
+	require_code('notifications');
+	foreach ($GLOBALS['SITE_DB']->query_select('tracking_info',array('*')) as $t)
+	{
+		$GLOBALS['SITE_DB']->query_insert('notifications_enabled',array(
+			'l_member_id'=>$t['t_member_id'],
+			'l_notification_code'=>$t['t_type'],
+			'l_code_category'=>$t['t_category_id'],
+			'l_setting'=>($t['t_use_email']==0)?A_NA:A_INSTANT_EMAIL,
+		));
+	}
 }

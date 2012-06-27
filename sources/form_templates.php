@@ -1029,9 +1029,10 @@ function form_input_list($pretty_name,$description,$name,$content,$tabindex=NULL
  * @param  ?string		The default value for the field (NULL: none)
  * @param  boolean		Whether to use the server-ID in the list instead of the ID in the list
  * @param  ?integer		The tab index of the field (NULL: not specified)
+ * @param  boolean		Whether multiple selections are allowed
  * @return tempcode		The input field
  */
-function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$options,$required,$default=NULL,$use_server_id=false,$tabindex=NULL)
+function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$options,$required,$default=NULL,$use_server_id=false,$tabindex=NULL,$multi_select=false)
 {
 	require_javascript('javascript_tree_list');
 	require_javascript('javascript_more');
@@ -1049,6 +1050,11 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
 				inform_exit(do_lang_tempcode('NO_OF_THIS',$pretty_name));
 			return new ocp_tempcode();
 		}
+		if ($multi_select)
+		{
+			return form_input_multi_list($pretty_name,$description,$name,$simple_content,$tabindex,10,$required);
+		}
+
 		return form_input_list($pretty_name,$description,$name,$simple_content,$tabindex,false,$required);
 	}
 
@@ -1070,7 +1076,7 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
 	}*/
 
 	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_TREE_LIST',array('_GUID'=>'21e9644eeac24356f38459ebe37f693a','NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,'USE_SERVER_ID'=>$use_server_id,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'REQUIRED'=>$_required,'DEFAULT'=>is_null($default)?'':$default,'HOOK'=>$hook,'ROOT_ID'=>is_null($root_id)?'':$root_id,'OPTIONS'=>serialize($options)));
+	$input=do_template('FORM_SCREEN_INPUT_TREE_LIST',array('_GUID'=>'21e9644eeac24356f38459ebe37f693a','MULTI_SELECT'=>$multi_select,'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,'USE_SERVER_ID'=>$use_server_id,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'REQUIRED'=>$_required,'DEFAULT'=>is_null($default)?'':$default,'HOOK'=>$hook,'ROOT_ID'=>is_null($root_id)?'':$root_id,'OPTIONS'=>serialize($options)));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 

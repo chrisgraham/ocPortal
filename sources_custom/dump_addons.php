@@ -95,6 +95,8 @@ function get_details_of_addons()
 		}
 	}
 
+	asort($addon_list);
+
 	return $addon_list;
 }
 

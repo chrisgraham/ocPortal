@@ -21,6 +21,51 @@
  */
 
 /**
+ * Find updated addons via checking the ocPortal.com web service.
+ *
+ * @return array		List of addons updated
+ */
+function find_updated_addons()
+{
+	$addons=find_installed_addons(true);
+	$url='http://ocportal.com/uploads/website_specific/ocportal.com/scripts/addon_manifest.php?version='.urlencode(float_to_raw_string(ocp_version_number()));
+	foreach (array_keys($addons) as $i=>$addon)
+	{
+		$url.='&addon_'.strval($i).'='.urlencode($addon);
+	}
+
+	require_code('files');
+	$addon_data=http_download_file($url);
+	if ($addon_data=='') warn_exit(do_lang('INTERNAL_ERROR'));
+
+	$available_addons=find_available_addons();
+
+	$updated_addons=array();
+	foreach (unserialize($addon_data) as $i=>$addon)
+	{
+		$found=false;
+
+		foreach ($available_addons as $available_addon)
+		{
+			if ($available_addon['name']==$addon[3])
+			{
+				$found=true;
+				if ((is_null($addon[0])) || ($available_addon['mtime']<$addon[0]))
+				{
+					if (!is_null($addon[0])) // If not known to server, we can't say is updated
+						$updated_addons[$addon[3]]=array($addon[1]); // Is known to server though
+				}
+			}
+		}
+		if (!$found) // Don't have our original .tar, so lets say we need to reinstall
+		{
+			$updated_addons[$addon[3]]=array($addon[1]);
+		}
+	}
+	return $updated_addons;
+}
+
+/**
  * Change an ocProducts new style addon file list to have real paths.
  *
  * @param  array		Shorthand list
@@ -53,9 +98,10 @@ function make_global_file_list($list)
 /**
  * Find all the installed addons.
  *
+ * @param  boolean	Whether to only return details on on-bundled addons
  * @return array		List of maps describing the available addons (simulating partial-extended versions of the traditional ocPortal-addon database row)
  */
-function find_installed_addons()
+function find_installed_addons($just_non_bundled=false)
 {
 	// Find installed addons- database registration method
 	$_rows=$GLOBALS['SITE_DB']->query_select('addons',array('*'));
@@ -70,6 +116,7 @@ function find_installed_addons()
 		}
 		$addons_installed[$row['addon_name']]=$row;
 	}
+	if ($just_non_bundled) return $addons_installed;
 
 	// Find installed addons- file system method (for ocProducts addons). ocProducts addons don't need to be in the DB, although they will be if they are (re)installed after the original ocPortal installation finished.
 	$hooks=find_all_hooks('systems','addon_registry');
@@ -176,6 +223,7 @@ function find_available_addons()
 			{
 				$info['files'].=$file_row['path'].chr(10);
 			}
+			$info['mtime']=filemtime($full);
 
 			$addons_available_for_installation[$file]=$info;
 		}
@@ -774,7 +822,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 		if (!$_incompatibilities->is_empty()) $_incompatibilities->attach(do_lang_tempcode('LIST_SEP'));
 		$_incompatibilities->attach(escape_html($in));
 	}
-	if (count($incompatibilities)!=0) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_INCOMPATIBILITIES',$_incompatibilities))));
+	if (count($incompatibilities)!=0) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_INCOMPATIBILITIES',$_incompatibilities,escape_html($file)))));
 
 	// Check dependencies
 	$_dependencies=explode(',',array_key_exists('dependencies',$info)?$info['dependencies']:'');
@@ -814,12 +862,12 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 			warn_exit(do_lang_tempcode('_ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies,escape_html($addon),array(escape_html(get_self_url(true,false,array('type'=>'multi_action','name'=>NULL))),$post_fields)));
 		} else
 		{
-			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str))));
+			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str,escape_html($file)))));
 		}
 	}
 
-//	if (!$overwrite->is_empty()) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'fe40ed8192a452a835be4c0fde64406b','WARNING'=>do_lang_tempcode('ADDON_WARNING_OVERWRITE',escape_html($overwrite)))));
-	if ($info['author']!='Core Team') if ($php) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'8cf249a119d10b2e97fc94cb9981dcea','WARNING'=>do_lang_tempcode('ADDON_WARNING_PHP'))));
+//	if (!$overwrite->is_empty()) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'fe40ed8192a452a835be4c0fde64406b','WARNING'=>do_lang_tempcode('ADDON_WARNING_OVERWRITE',escape_html($overwrite),escape_html($file)))));
+	if ($info['author']!='Core Team') if ($php) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'8cf249a119d10b2e97fc94cb9981dcea','WARNING'=>do_lang_tempcode('ADDON_WARNING_PHP',escape_html($file)))));
 //	if ($chmod!='') $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'78121e40b9a26c2f33d09f7eee7b74be','WARNING'=>do_lan g_tempcode('ADDON_WARNING_CHMOD',escape_html($chmod))))); // Now uses AFM
 
 	$files_combined=new ocp_tempcode();

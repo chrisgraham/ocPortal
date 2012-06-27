@@ -400,10 +400,10 @@ function has_no_forum()
 }
 
 /**
- * Check to see if an addon is installed. This only works with addons written with addon_registry hooks, which is all the bundled ocPortal addons; it is unlikely to work with third-party addons.
+ * Check to see if an addon is installed.
  *
  * @param  ID_TEXT		The module name
- * @param  boolean		Whether to check non-bundled addons
+ * @param  boolean		Whether to check non-bundled addons (ones without an addon_registry hook)
  * @return boolean		Whether it is
  */
 function addon_installed($addon,$non_bundled_too=false)

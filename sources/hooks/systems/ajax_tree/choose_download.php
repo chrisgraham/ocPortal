@@ -33,7 +33,7 @@ class Hook_choose_download
 	{
 		require_code('downloads');
 
-		if ((!is_numeric($id)) && ($id!=''))
+		if ((!is_numeric($id)) && ($id!='')) // This code is actually for ocPortal.com, for the addon directory
 		{
 			if (substr($id,0,8)=='Version ')
 			{

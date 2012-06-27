@@ -35,7 +35,7 @@ function ocp_version()
  */
 function ocp_version_minor()
 {
-	return 'alpha1';
+	return 'beta1';
 }
 
 /**
@@ -45,7 +45,7 @@ function ocp_version_minor()
  */
 function ocp_version_number()
 {
-	return 8.1;
+	return 9.0;
 }
 
 /**

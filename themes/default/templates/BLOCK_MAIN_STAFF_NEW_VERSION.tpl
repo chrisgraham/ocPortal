@@ -9,6 +9,12 @@
 		<div class="staff_new_versions">
 			{VERSION_TABLE}
 
+			{+START,IF,{HAS_UPDATED_ADDONS}}
+				<p class="red_alert">
+					{!addons:SOME_ADDONS_UPDATED,{$PAGE_LINK*,_SEARCH:admin_addons}}
+				</p>
+			{+END}
+
 			<div class="img_wrap">
 				<img src="{$IMG*,pagepics/ocp-logo}" alt="" />
 			</div>

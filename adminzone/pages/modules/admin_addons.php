@@ -150,14 +150,24 @@ class Module_admin_addons
 
 		$_tpl_addons=array();
 
+		$updated_addons_arr=find_updated_addons();
+		$updated_addons='';
+		foreach ($updated_addons_arr as $updated_addon)
+		{
+			if ($updated_addons!='') $updated_addons.=',';
+			$updated_addons.=strval($updated_addon[0]);
+		}
+
 		// Show installed addons
 		foreach ($addons_installed as $row)
 		{
 			$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('GET'=>true,'NAME'=>$row['addon_name'],'URL'=>build_url(array('page'=>'_SELF','type'=>'addon_uninstall','name'=>$row['addon_name']),'_SELF')));
-			$status=do_lang_tempcode('STATUS_INSTALLED');
+			$updated=array_key_exists($row['addon_name'],$updated_addons_arr);
+			$status=do_lang_tempcode($updated?'STATUS_OUTOFDATE':'STATUS_INSTALLED');
+			$colour=$updated?'red':'green';
 			$description=$row['addon_description'];
 			$file_list=$row['addon_files'];
-			$_tpl_addons[$row['addon_name']]=do_template('ADDON_SCREEN_ADDON',array('_GUID'=>'9a06f5a9c9e3085c10ab7fb17c3efcd1','DESCRIPTION'=>$description,'FILE_LIST'=>$file_list,'COLOUR'=>'green','STATUS'=>$status,'NAME'=>$row['addon_name'],'FILENAME'=>do_lang_tempcode('NA_EM'),'AUTHOR'=>$row['addon_author'],'ORGANISATION'=>$row['addon_organisation'],'VERSION'=>$row['addon_version'],'ACTIONS'=>$actions,'TYPE'=>'uninstall','PASSTHROUGH'=>$row['addon_name']));
+			$_tpl_addons[$row['addon_name']]=do_template('ADDON_SCREEN_ADDON',array('_GUID'=>'9a06f5a9c9e3085c10ab7fb17c3efcd1','UPDATED_ADDONS'=>$updated,'DESCRIPTION'=>$description,'FILE_LIST'=>$file_list,'COLOUR'=>$colour,'STATUS'=>$status,'NAME'=>$row['addon_name'],'FILENAME'=>do_lang_tempcode('NA_EM'),'AUTHOR'=>$row['addon_author'],'ORGANISATION'=>$row['addon_organisation'],'VERSION'=>$row['addon_version'],'ACTIONS'=>$actions,'TYPE'=>'uninstall','PASSTHROUGH'=>$row['addon_name']));
 		}
 
 		// Show addons available for installation
@@ -170,7 +180,7 @@ class Module_admin_addons
 				$description=$addon['description'];
 				$file_list=$addon['files'];
 				if ($addon['version']=='(version-synched)') $addon['version']=float_to_raw_string(ocp_version_number());
-				$_tpl_addons[$addon['name']]=do_template('ADDON_SCREEN_ADDON',array('_GUID'=>'cb61bdb9ce0cef5cd520440c5f62008f','DESCRIPTION'=>$description,'FILE_LIST'=>$file_list,'COLOUR'=>'orange','STATUS'=>$status,'NAME'=>$addon['name'],'FILENAME'=>$filename,'AUTHOR'=>$addon['author'],'ORGANISATION'=>$addon['organisation'],'VERSION'=>$addon['version'],'ACTIONS'=>$actions,'TYPE'=>'install','PASSTHROUGH'=>$filename));
+				$_tpl_addons[$addon['name']]=do_template('ADDON_SCREEN_ADDON',array('_GUID'=>'cb61bdb9ce0cef5cd520440c5f62008f','UPDATED_ADDONS'=>false,'DESCRIPTION'=>$description,'FILE_LIST'=>$file_list,'COLOUR'=>'orange','STATUS'=>$status,'NAME'=>$addon['name'],'FILENAME'=>$filename,'AUTHOR'=>$addon['author'],'ORGANISATION'=>$addon['organisation'],'VERSION'=>$addon['version'],'ACTIONS'=>$actions,'TYPE'=>'install','PASSTHROUGH'=>$filename));
 			}
 		}
 
@@ -184,7 +194,7 @@ class Module_admin_addons
 
 		$multi_action=build_url(array('page'=>'_SELF','type'=>'multi_action'),'_SELF');
 
-		return do_template('ADDON_SCREEN',array('_GUID'=>'ed6c80c29fcae333323ef03619954b6b','TITLE'=>$title,'ADDONS'=>$tpl_addons,'MULTI_ACTION'=>$multi_action));
+		return do_template('ADDON_SCREEN',array('_GUID'=>'ed6c80c29fcae333323ef03619954b6b','TITLE'=>$title,'ADDONS'=>$tpl_addons,'MULTI_ACTION'=>$multi_action,'UPDATED_ADDONS'=>$updated_addons));
 	}
 
 	/**
@@ -206,7 +216,9 @@ class Module_admin_addons
 
 		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD'),'file',false,NULL,NULL,true,'tar'));
 
-		$field_set->attach(form_input_tree_list(do_lang_tempcode('DOWNLOAD'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_OCPORTALCOM'),'url',NULL,'choose_ocportalcom_addon',array(),false));
+		$to_import=get_param('to_import',NULL);
+
+		$field_set->attach(form_input_tree_list(do_lang_tempcode('DOWNLOAD'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_OCPORTALCOM'),'url',NULL,'choose_ocportalcom_addon',array(),false,$to_import,false,NULL,true));
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
@@ -242,29 +254,36 @@ class Module_admin_addons
 
 		require_code('uploads');
 
-		$url=post_param('url','');
-		if (is_numeric($url))
-		{
-			$_POST['url']='http://ocportal.com/site/dload.php?id='.$url;
-		}
+		$url_map=array('page'=>'_SELF','type'=>'multi_action');
 
-//		if ($url=='')
-//		{
-			$urls=get_url('url','file','imports/mods',0,0,false,'','',true);
-//		}
-//		else
-//		{
-//			$urls=array($url);
-//		}
-
-		$full=get_custom_file_base().'/'.$urls[0];
-		if (strtolower(substr($full,-4))!='.tar')
+		$_url=post_param('url','');
+		foreach (explode(',',$_url) as $i=>$url)
 		{
-			return warn_screen(get_screen_title('ERROR_OCCURRED'),do_lang_tempcode('ADDON_NOT_TAR'));
+			if (is_numeric($url))
+			{
+				$_POST['url']='http://ocportal.com/site/dload.php?id='.$url;
+			}
+
+			//if ($url=='')
+			//{
+				$urls=get_url('url','file','imports/mods',0,0,false,'','',true);
+			//}
+			//else
+			//{
+			//	$urls=array($url);
+			//}
+
+			$full=get_custom_file_base().'/'.$urls[0];
+			if (strtolower(substr($full,-4))!='.tar')
+			{
+				return warn_screen(get_screen_title('ERROR_OCCURRED'),do_lang_tempcode('ADDON_NOT_TAR'));
+			}
+
+			$url_map['install_'.strval($i)]=basename($urls[0]);
 		}
 
 		// Show it worked / Refresh
-		$_url=build_url(array('page'=>'_SELF','type'=>'addon_install','file'=>basename($urls[0])),'_SELF');
+		$_url=build_url($url_map,'_SELF');
 		return redirect_screen($title,$_url,do_lang_tempcode('ADDON_IMPORTED'));
 	}
 
@@ -284,7 +303,7 @@ class Module_admin_addons
 		$installing=array();
 		$uninstalling=array();
 
-		foreach ($_POST as $key=>$passed)
+		foreach ($_POST+$_GET as $key=>$passed)
 		{
 			if (substr($key,0,8)=='install_')
 			{
