@@ -42,7 +42,7 @@ function chat_load(room_id)
 		function(msg) {
 			// load extensions that are present in the packet using our ExtensionProvider
 			msg.loadExtensions(extProvider);
-			
+
 			chatMessageHandler(null,msg);
 		},
 		new Xmpp4Js.PacketFilter.PacketTypeFilter( "groupchat" )

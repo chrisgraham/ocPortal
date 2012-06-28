@@ -43,13 +43,13 @@ var Xmpp4Js = {};
 //	logger.addAppender( Xmpp4Js.appender );
 
 //	Xmpp4Js.loggers.push( logger );
-	
+
 //	return logger;
 //}
 //javascript:Xmpp4Js.setLogLevel( Log4js.Level.OFF );
 //Xmpp4Js.setLogLevel = function(level) {
 //	Xmpp4Js.logLevel = level;
-	
+
 //	for(var i = 0; i < Xmpp4Js.loggers.length; i++ ) {
 //		Xmpp4Js.loggers[i].setLevel( level );
 //	}
@@ -203,13 +203,13 @@ Xmpp4Js.UA = function() {
 			}
 		}
 	}
-	
+
 	return o;
 }();
 
 Xmpp4Js.Lang = {
 //	logger: Xmpp4Js.createLogger("xmpp4js.lang"),
-	
+
 	/**
 	 * Determines whether or not the property was added
 	 * to the object instance.  Returns false if the property is not present
@@ -238,25 +238,25 @@ Xmpp4Js.Lang = {
 		  return !Xmpp4Js.Lang.isUndefined(o[prop]) && 
 				  o.constructor.prototype[prop] !== o[prop];
 	  },
-	
+
 	namespace: function(namespace, root) {
 		if( !root ) { root = window; }
 		var splitNS = namespace.split(/\./);
-		
+
 		var ctx = root;
 		for( var i = 0; i < splitNS.length; i++ ) {
 			var nsPiece = splitNS[i];
-			
+
 			if( ctx[nsPiece] === undefined ) {
 				ctx[nsPiece] = {};
 			}
-			
+
 			ctx = ctx[nsPiece];
 		}
-		
+
 		return ctx;
 	},
-	
+
 	/**
 	 * IE will not enumerate native functions in a derived object even if the
 	 * function was overridden.  This is a workaround for specific functions 
@@ -268,10 +268,10 @@ Xmpp4Js.Lang = {
 	 * @private
 	 */
 	_IEEnumFix: (Xmpp4Js.UA.ie) ? function(r, s) {
-		
+
 			// ADD = ["toString", "valueOf", "hasOwnProperty"],
 			var ADD = ["toString", "valueOf"];
-		
+
 			for (var i=0;i<ADD.length;i=i+1) {
 				var fname=ADD[i],f=s[fname];
 				if (Xmpp4Js.Lang.isFunction(f) && f!=Object.prototype[fname]) {
@@ -279,7 +279,7 @@ Xmpp4Js.Lang = {
 				}
 			}
 	} : function(){},
-	
+
 	/**
 	 * Determines whether or not the provided object is a function
 	 * @method isFunction
@@ -289,7 +289,7 @@ Xmpp4Js.Lang = {
 	isFunction: function(o) {
 		return typeof o === 'function';
 	},
-	
+
 	/**
 	 * Determines whether or not the provided object is undefined
 	 * @method isUndefined
@@ -299,7 +299,7 @@ Xmpp4Js.Lang = {
 	isUndefined: function(o) {
 		return typeof o === 'undefined';
 	},
-	
+
 	/**
 	 * Utility to set up the prototype, constructor and superclass properties to
 	 * support an inheritance strategy that can chain constructors and methods.
@@ -327,7 +327,7 @@ Xmpp4Js.Lang = {
 		if (superc.prototype.constructor == Object.prototype.constructor) {
 			superc.prototype.constructor=superc;
 		}
-	
+
 		if (overrides) {
 			for (var i in overrides) {
 				if (Xmpp4Js.Lang.hasOwnProperty(overrides, i)) {
@@ -338,13 +338,13 @@ Xmpp4Js.Lang = {
 			Xmpp4Js.Lang._IEEnumFix(subc.prototype, overrides);
 		}
 	},
-	
+
 	id: function(prefix) {
 		if(!prefix) { prefix = "soashable-"; }
-		
+
 		return prefix+Math.random(0, 50000);
 	},
-	
+
 	/**
 	 * Applies all properties in the supplier to the receiver if the
 	 * receiver does not have these properties yet.  Optionally, one or 
@@ -382,11 +382,11 @@ Xmpp4Js.Lang = {
 					r[p] = s[p];
 				}
 			}
-			
+
 			Xmpp4Js.Lang._IEEnumFix(r, s);
 		}
 	},
-	
+
 	asyncRequest: function(request) {
 	  var xhr = Xmpp4Js.Lang.createXhr();
 	  
@@ -407,7 +407,7 @@ Xmpp4Js.Lang = {
 	  
 	  xhr.send(xml);
 	},
-	
+
 	createXhr : function () {
 		var xhr = false;
 		if(window.XMLHttpRequest) {
@@ -428,7 +428,7 @@ Xmpp4Js.Lang = {
 		}
 		return xhr;
 	},
-	
+
 	urlEncode: function (clearString) {
 	  var output = '';
 	  var x = 0;
@@ -454,7 +454,7 @@ Xmpp4Js.Lang = {
 	},
 
 	noOp: function(){},
-	
+
 	bind: function( fn, scope ) {
 		var args = Array.prototype.slice.call(arguments);
 		args.shift(); args.shift(); // remove fn and scope
@@ -477,7 +477,7 @@ Function.prototype.bind = function(scope) {
 Xmpp4Js.Lang.TaskRunner = function(interval) {
 	this.interval = interval;
 	this.tasks = [];
-	
+
 	this.intervalId = setInterval(this.onInterval.bind(this), this.interval);
 }
 
@@ -485,53 +485,53 @@ Xmpp4Js.Lang.TaskRunner.prototype = {
 	start: function(task) {
 		this.tasks.push( task );
 	},
-	
+
 	stop: function(task) {
 		var removeIdxs = [];
-		
+
 		for( var i = 0; i < this.tasks.length; i++ ) {
 			if( this.tasks[i] === task ) {
 				removeIdxs.push( i );
 			}
 		}
-		
+
 		this.removeTasks( removeIdxs );
 	},
-	
+
 	removeTasks: function( removeIdxs ) {
 		// JS is single threaded, so this shouldn't have concurrency issues
 
 		for( var i = 0; i < removeIdxs.length; i++ ) {
 			var task = this.tasks[i];
-			
+
 			// fire a stop event if present
 			if( task.onStop ) {
 				task.onStop.apply( task.scope ? task.scope : task );
 			}
-			
+
 			this.tasks.splice( i, 1 );
 		}
 	},
-	
+
 	stopAll: function() {
 		var removeIdxs = [];
-		
+
 		// this is kind of stupid...
 		for( var i = 0; i < this.tasks.length; i++ ) {
 			removeIdxs.push(i);
 		}
-		
+
 		this.removeTasks( removeIdxs );
 	},
-	
+
 	onInterval: function() {
 		for( var i = 0; i < this.tasks.length; i++ ) {
 			var task = this.tasks[i];
-			
+
 			task.run.apply( task.scope ? task.scope : task );
 		}
 	}
-	
+
 }
 
 
@@ -581,7 +581,7 @@ Xmpp4Js.Jid = function(jid) {
 		this.setNode(jid.getNode());
 		this.setDomain(jid.getDomain());
 		this.setResource(jid.getResource());
-		
+
 	  } else {
 		if (jid.indexOf('@') != -1) {
 			this.setNode(jid.substring(0,jid.indexOf('@')));
@@ -898,7 +898,7 @@ Xmpp4Js.Packet.Base.prototype = {
 		}
 		return id;
 	},
-	
+
 	/**
 	 * 
 	 * @param \{String} to
@@ -909,7 +909,7 @@ Xmpp4Js.Packet.Base.prototype = {
 	getTo : function() {
 		return this.elem.getAttribute( "to" ).toString();
 	},
-	
+
 	/**
 	 * 
 	 * @param \{String} from
@@ -920,7 +920,7 @@ Xmpp4Js.Packet.Base.prototype = {
 	getFrom : function() {
 		return this.elem.getAttribute( "from" ).toString();
 	},
-	
+
 	/**
 	 * 
 	 * @param \{Jid} to
@@ -931,7 +931,7 @@ Xmpp4Js.Packet.Base.prototype = {
 	getToJid : function() {
 		return new Xmpp4Js.Jid(this.elem.getAttribute( "to" ).toString());
 	},
-	
+
 	/**
 	 * 
 	 * @param \{Jid} from
@@ -942,27 +942,27 @@ Xmpp4Js.Packet.Base.prototype = {
 	getFromJid : function() {
 		return new Xmpp4Js.Jid(this.elem.getAttribute( "from" ).toString());
 	},
-	
-	
-	
+
+
+
 	setType : function( type ) {
 		this.elem.setAttribute( "type", type );
 	},
 	getType : function() {
 		return this.elem.getAttribute( "type" ).toString();
 	},
-	
+
 	setNode : function(node) {
 		this.elem = node;
 	},
 	getNode : function() {
 		return this.elem;
 	},
-	
+
 	getDoc : function() {
 		return this.elem.ownerDocument;
 	},
-	
+
 	toString : function() {
 		var string = "Packet ["
 			+ "node (JSON)=" 
@@ -973,8 +973,8 @@ Xmpp4Js.Packet.Base.prototype = {
 			+ "]";
 		return string;
 	},
-	
-	
+
+
 	/**
 	 * Set text content or a node to a child element. 
 	 * Creates the element if it doesn't exist. 
@@ -993,34 +993,34 @@ Xmpp4Js.Packet.Base.prototype = {
 		} else {
 			childNode.setTextContent( content );
 		}
-		
+
 	},
-	
+
 	/**
 	 * Get a child element node if it exists.
 	 */
 	getChildElementNode : function(elemName) {
 		return this.elem.getElementsByTagName(elemName).item(0);
 	},
-	
+
 	/**
 	 * Get the text content of a node.
 	 */
 	getChildElementContent : function(elemName, defaultVal) {
 		var node = this.getChildElementNode(elemName);
 		var content = null;
-		
+
 		if( node ) {
 			content = node.getStringValue();
 		}
-		
+
 		if( content == null || content == "" ) {
 			content = defaultVal;
 		}
-		
+
 		return content;
 	},
-	
+
 	/**
 	 * Removes a child element of given name.
 	 */
@@ -1028,7 +1028,7 @@ Xmpp4Js.Packet.Base.prototype = {
 		var node = this.getChildElementNode(elemName);
 		node.parentNode.removeChild( node );
 	},
-	
+
 	/**
 	 * There can only be one extension per namespace. Removes an existing 
 	 * extension of same namespace if there is one, and adds the new one.
@@ -1037,10 +1037,10 @@ Xmpp4Js.Packet.Base.prototype = {
 		if( this.getExtension( extension.getElementNS() ) ) {
 			this.removeExtension( extension.getElementNS() );
 		}
-		
+
 		this.extensions[ extension.getElementNS() ] = extension;
 	},
-	
+
 	removeExtension : function( extensionNS ) {
 		//if( this.extensions[ extensionNS ] ) {
 			this.extensions[ extensionNS ].removeNode();
@@ -1049,35 +1049,35 @@ Xmpp4Js.Packet.Base.prototype = {
 			// throw error?
 		//}
 	},
-	
+
 	getExtensions : function() {
 		var extensions = [];
 		for( var k in this.extensions ) {
 			var ext = this.extensions[k];
-			
+
 			if( ext instanceof Xmpp4Js.Ext.PacketExtension ) {
 				extensions.push( ext );
 			}
 		}
-		
+
 		return extensions;
 	},
-	
+
 	getExtension : function(extensionNS) {
 		return this.extensions[ extensionNS ];
 	},
-	
+
 	/**
 	 * FIXME If there are multiple with the same namespace, there will be trouble.
 	 */
 	loadExtensions : function(provider) {
 		var extensions = provider.readAll( this );
-		
+
 		for( var i = 0; i < extensions.length; i++ ) {
 			var ext = extensions[i];
-			
-			
-			
+
+
+
 			this.addExtension( ext );
 		}
 	}
@@ -1118,10 +1118,10 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js.Packet" );
 Xmpp4Js.Packet.IQ = function( to, type, queryNS ) {
 
 	var doc = Xmpp4Js.Packet.getDocument();
-	
+
 	var node = doc.createElement( "iq" );
 	Xmpp4Js.Packet.IQ.superclass.constructor.call( this, node );
-	
+
 	if( to ) { this.setTo( to ); }
 	if( type ) { this.setType( type ); }
 	if( queryNS ) {
@@ -1131,7 +1131,7 @@ Xmpp4Js.Packet.IQ = function( to, type, queryNS ) {
 }
 
 Xmpp4Js.Packet.IQ.prototype = {
-	
+
 	setQuery : function( elem ) {
 		// TODO check elem
 		this.elem.appendChild( elem );
@@ -1140,7 +1140,7 @@ Xmpp4Js.Packet.IQ.prototype = {
 		var elem = this.elem.getElementsByTagName("query").item(0);
 		return elem;
 	},
-	
+
 	/** @deprecated */
 	getQueryXMLNS : function() {
 		var query = this.getQuery();
@@ -1164,7 +1164,7 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js.Packet" );
  */
 Xmpp4Js.Packet.Message = function( to, type, body, subject ) {
 	var doc = Xmpp4Js.Packet.getDocument();
-	
+
 	var node = doc.createElement( "message" );
 	Xmpp4Js.Packet.Message.superclass.constructor.call( this, node );
 
@@ -1181,7 +1181,7 @@ Xmpp4Js.Packet.Message.prototype = {
 	 */
 	setBody : function( content ) {
 		this.setChildElementContent( "body", content );
-		
+
 	},
 	getBodyNode : function() {
 		return this.getChildElementNode("body");
@@ -1189,7 +1189,7 @@ Xmpp4Js.Packet.Message.prototype = {
 	getBody : function() {
 		return this.getChildElementContent("body");
 	},
-	
+
 	getDate : function() {
 		var x=this.getChildElementNode("x");
 		if (!x) return null;
@@ -1213,15 +1213,15 @@ Xmpp4Js.Packet.Message.prototype = {
 	getSubject : function() {
 		return this.getChildElementContent("subject");
 	},
-	
-	
+
+
 	/**
 	 * 
 	 * @param \{String} subject
 	 */
 	setThread : function( content ) {
 		this.setChildElementContent( "thread", content );
-		
+
 	},
 	getThreadNode : function() {
 		return this.getChildElementNode("thread");
@@ -1229,7 +1229,7 @@ Xmpp4Js.Packet.Message.prototype = {
 	getThread : function() {
 		return this.getChildElementContent("thread");
 	},
-	
+
 	hasContent : function() {
 		var messageText = this.getBody();
 		return messageText != null && messageText != undefined;
@@ -1250,10 +1250,10 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js.Packet" );
  */
 Xmpp4Js.Packet.Presence = function( type, to, from, status, show, priority ) {
 	var doc = Xmpp4Js.Packet.getDocument();
-	
+
 	var node = doc.createElement( "presence" );
 	Xmpp4Js.Packet.Presence.superclass.constructor.call( this, node )
-	
+
 	if( to ) { this.setTo( to ); }
 	if( from ) { this.setFrom( from ); }
 	if( type ) { this.setType( type ); }
@@ -1261,12 +1261,12 @@ Xmpp4Js.Packet.Presence = function( type, to, from, status, show, priority ) {
 }
 
 Xmpp4Js.Packet.Presence.prototype = {
-	
+
 	getType : function() {
 		var type = this.elem.getAttribute( "type" ).toString();
 		return type ? type : "available";
 	},
-	
+
 	/**
 	 * 
 	 * @param \{String} status
@@ -1274,11 +1274,11 @@ Xmpp4Js.Packet.Presence.prototype = {
 	setStatus : function( content ) {
 		this.setChildElementContent( "status", content );
 	},
-	
+
 	getStatus : function() {
 		return this.getChildElementContent( "status" );
 	},
-	
+
 	/**
 	 * 
 	 * @param \{String} show
@@ -1286,19 +1286,19 @@ Xmpp4Js.Packet.Presence.prototype = {
 	setShow : function( content ) {
 		this.setChildElementContent( "show", content );
 	},
-	
+
 	getShow : function() {
 		return this.getChildElementContent( "show", "normal" );
 	},
-	
+
 	setPriority : function( content ) {
 		this.setChildElementContent( "priority", content );
 	},
-	
+
 	getPriority : function() {
 		return this.getChildElementContent( "priority", "5" );
 	},
-	
+
 	/**
 	 * Legacy from JSJaC
 	 * @param \{String} show
@@ -1329,9 +1329,9 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js.Packet" );
  */
 Xmpp4Js.Packet.AuthPlainText = function( username, password, resource ) {
 	var doc = Xmpp4Js.Packet.getDocument();
-	
+
 	Xmpp4Js.Packet.AuthPlainText.superclass.constructor.call( this, null, "set", "jabber:iq:auth" );
-	
+
 	var query = this.getQuery();
 	// FIXME see if Prototype can make this easier...
 	query.appendChild( doc.createElement( "username" ) ).appendChild( doc.createTextNode(username) );
@@ -1383,17 +1383,17 @@ Xmpp4Js.Ext.PacketExtension.prototype = {
 	getElementNS : function() {
 		throw new Error( "getElementNS is not defined" );
 	},
-	
+
 	getNode : function() {
 		return this.elem;
 	},
-	
+
 	createNode : function() {
 		var doc = this.stanza.getNode().ownerDocument;
 		this.elem = this.stanza.getNode().appendChild( doc.createElementNS( this.getElementNS(), this.getElementName() ) );
 		this.elem.setAttribute( "xmlns",  this.getElementNS() );
 	},
-	
+
 	readNode : function() {
 		//this.elem = stanza.getNode().getElementsByTagNameNS( this.getElementNS(), this.getElementName() )[0];
 		var nodes = this.stanza.getNode().childNodes;
@@ -1405,7 +1405,7 @@ Xmpp4Js.Ext.PacketExtension.prototype = {
 			}
 		}
 	},
-	
+
 	/**
 	 * sets internal node reference and updates packet document. this is only
 	 * needed in cases where the root element/ns changes, such as for the
@@ -1415,14 +1415,14 @@ Xmpp4Js.Ext.PacketExtension.prototype = {
 	 * constructor.|||
 	 */
 	setNode : function(node) {
-		
+
 		// TODO should try block be refactored to inside removeNode?
 		try {
 			this.removeNode();
 		} catch(e) {
 			// no big deal, node hasn't been added yet.
 		}
-		
+
 		var stanzaNode = this.stanza.getNode();
 		this.elem = stanzaNode.appendChild( node );
 	},
@@ -1448,44 +1448,44 @@ Xmpp4Js.Ext.PacketExtensionProvider.prototype = {
 	},
 	create : function( elemNS, stanza ) {
 		var clazz = this.get( elemNS );
-		
+
 		if( !clazz ) {
 			throw new Error( "No class registered for NS: " + elemNS );
 		}
-		
+
 		var ext = new clazz(stanza);
 		var args = Array.prototype.slice.call(arguments);
 		// knock the first two args off the beginning.
 		args.shift();
 		args.shift();
-		
+
 		ext.createNode.apply(ext, args);
-		
+
 		return ext;
 	},
 	read : function( elemNS, stanza ) {	
 		var clazz = this.get( elemNS );
-		
+
 		if( !clazz ) {
 			throw new Error( "No class registered for NS: " + elemNS );
 		}
-		
+
 		var ext = new clazz(stanza);
 		ext.readNode();
-		
+
 		return ext;
 	},
-	
+
 	readAll : function(stanza) {
 		var extensions = [];
-		
+
 		var children = stanza.getNode().childNodes;
 		for( var i = 0; i < children.getLength(); i++ ) {
 			var child = children.item(i);
-			
+
 			try {
 				var ext = this.read( child.namespaceURI, stanza );
-			
+
 				extensions.push( ext );
 			} catch(e) {
 				// no such extension... no big deal.
@@ -1496,7 +1496,7 @@ Xmpp4Js.Ext.PacketExtensionProvider.prototype = {
 	get : function( elemNS ) {
 		for( var j = 0; j < this.providers.length; j++ ) {
 			var prov = this.providers[j];
-			
+
 			if( prov.ns == elemNS ) {
 				return prov.clazz;
 			}
@@ -1521,26 +1521,26 @@ Xmpp4Js.Ext.ChatStates.prototype = {
 	getElementName : function() {
 		return this.state;
 	},
-	
+
 	setState : function(state) {
 		this.state = state;
-		
+
 		// add the new state
 		var doc = this.getNode().ownerDocument;
 		var node = doc.createElementNS( this.getElementNS(), this.getElementName() );
 
 		this.setNode( node );
-		
-		
+
+
 	},
-	
+
 	getState : function() {
 		return this.state;
 	},
-	
+
 	readNode : function() {
 		Xmpp4Js.Ext.ChatStates.superclass.readNode.call( this );
-		
+
 		this.state = this.getNode().nodeName;
 	},
 	createNode : function(state) {
@@ -1549,15 +1549,15 @@ Xmpp4Js.Ext.ChatStates.prototype = {
 		if( !state ) {
 			throw new Error( "state must be provided" );
 		}
-		
+
 		this.state = state;
 		Xmpp4Js.Ext.ChatStates.superclass.createNode.call(this);
-		
+
 		/*if( state ) {
 			this.setState(state);
 		}*/
 	}
-	
+
 };
 
 Xmpp4Js.Lang.extend( Xmpp4Js.Ext.ChatStates, Xmpp4Js.Ext.PacketExtension, Xmpp4Js.Ext.ChatStates.prototype);
@@ -1569,7 +1569,7 @@ Xmpp4Js.Lang.extend( Xmpp4Js.Ext.ChatStates, Xmpp4Js.Ext.PacketExtension, Xmpp4J
 Xmpp4Js.Ext.Error = function(stanza, code, type) {
 	this.code = code;
 	this.type = type;
-	
+
 	Xmpp4Js.Ext.Error.superclass.constructor.call( this, stanza );
 }
 
@@ -1582,32 +1582,32 @@ Xmpp4Js.Ext.Error.prototype = {
 	getElementName : function() {
 		return "error";
 	},
-	
+
 	setCode : function(code) {
 		this.code = code;
-		
+
 		// add the new state
 		this.getNode().setAttribute( "code", this.code);
 	},
-	
+
 	getCode : function() {
 		return this.code;
 	},
-	
+
 	setType : function(code) {
 		this.type = type;
-		
+
 		// add the new state
 		this.getNode().setAttribute( "type", this.type);
 	},
-	
+
 	getType : function() {
 		return this.type;
 	},
-	
+
 	readNode : function() {
 		Xmpp4Js.Ext.Error.superclass.readNode.call( this );
-		
+
 		this.code = this.getNode().getAttribute( "code").toString();
 		this.type = this.getNode().getAttribute( "type").toString();
 	},
@@ -1617,17 +1617,17 @@ Xmpp4Js.Ext.Error.prototype = {
 		if( !code ) {
 			throw new Error( "code must be provided" );
 		}
-		
+
 		if( !type ) {
 			throw new Error( "type must be provided" );
 		}
-		
+
 		this.code = code;
 		this.type = type;
 		Xmpp4Js.Ext.Error.superclass.createNode.call(this);
-		
+
 	}
-	
+
 }
 
 Xmpp4Js.Lang.extend( Xmpp4Js.Ext.Error, Xmpp4Js.Ext.PacketExtension, Xmpp4Js.Ext.PacketExtension.prototype);
@@ -1649,7 +1649,7 @@ Xmpp4Js.Ext.MessageEvent.XMLNS = "jabber:x:event";
 Xmpp4Js.Ext.MessageEvent.EVENT_EMPTY = null;
 
 Xmpp4Js.Ext.MessageEvent.prototype = {
-	
+
 	getElementNS : function() {
 		return Xmpp4Js.Ext.MessageEvent.XMLNS;
 	},
@@ -1659,30 +1659,30 @@ Xmpp4Js.Ext.MessageEvent.prototype = {
 			var node = this.elem.getElementsByTagName( this.event ).item(0);
 			this.getNode().removeChild( node );
 		} 
-		
+
 		// add the new state
 		if( event ) {
 			// append a new node if not empty
 			this.getNode().appendChild( this.elem.ownerDocument.createElement( event ) );
 		}
-		
+
 		this.event = event;		
 	},
-	
+
 	getEvent : function() {
 		return this.event;
 	},
-	
+
 	readNode : function() {
 		Xmpp4Js.Ext.MessageEvent.superclass.readNode.call( this );
-		
+
 		// FIXME this is potentially flaky... if there are text nodes, etc.
 		var eventNode = this.getNode().firstChild;
 		this.event = eventNode ? eventNode.nodeName : Xmpp4Js.Ext.MessageEvent.EVENT_EMPTY;
 	},
 	createNode : function(event) {
 		Xmpp4Js.Ext.MessageEvent.superclass.createNode.call(this);
-		
+
 		if( !event ) {
 			event = Xmpp4Js.Ext.MessageEvent.EVENT_EMPTY;
 		}
@@ -1723,7 +1723,7 @@ Xmpp4Js.PacketListenerManager.prototype = {
 
 		return wrapper;
 	},
-	
+
 	/**
 	 * Remove a packet listener
 	 * @param listener \{Function} The listener function (exact instance) to remove.
@@ -1743,7 +1743,7 @@ Xmpp4Js.PacketListenerManager.prototype = {
 			this.listeners.splice( removeIdx, 1 );
 		}
 	},
-	
+
 	/**
 	 * Run all filters on a given packet node.
 	 * @param \{Element} packetNode The body element to process packets on.
@@ -1751,7 +1751,7 @@ Xmpp4Js.PacketListenerManager.prototype = {
 	run: function(packetNode) {
 		// get rid of whitespace
 		packetNode.normalize();
-		
+
 		for( var i = 0; i < this.listeners.length; i++ ) {
 			var wrapper = this.listeners[i];
 			try {
@@ -1762,7 +1762,7 @@ Xmpp4Js.PacketListenerManager.prototype = {
 				} else {
 					for( var j = 0; j < packetNode.childNodes.getLength(); j++ ) {
 						var node = packetNode.childNodes.item(j);
-						
+
 						// if it's not a normal element ignore it
 						if( node.nodeType != 1 /* ELEMENT - are there cross-browser constants? */) {
 							continue;
@@ -1771,7 +1771,7 @@ Xmpp4Js.PacketListenerManager.prototype = {
 						// FIXME this seems it should be jabber:client, but server impls differ
 						if( node.namespaceURI == "http://jabber.org/protocol/httpbind" 
 							|| node.namespaceURI == "jabber:client" ) {
-						
+
 							var stanza = this.stanzaProvider.fromNode( node );
 
 							if( wrapper.filter.accept(stanza) ) {
@@ -2062,7 +2062,7 @@ function KeySequence(length) {
 	this._keys = [];
 	this._idx = null;
 	this._seed = null;
-	
+
 	this._initKeys( length );	
 }
 
@@ -2280,7 +2280,7 @@ Xmpp4Js.Event.EventProvider.prototype = {
 			this.eventListenerManager = new EventListenerManager();
 		}
 	},
-	
+
 	/**
 	 * If doing multiple, should scope and options be passed? doesn't seem likely.
 	 */
@@ -2298,31 +2298,31 @@ Xmpp4Js.Event.EventProvider.prototype = {
 		if( scope ) {
 			listener = listener.bind(scope);
 		}
-		
+
 		// immediately remove the listener and then call it.
 		if( options && options["single"] == true ) {
 			var eventProvider = this;
 			var originalListener = listener; // prevent recursion
-			
+
 			listener = function() {
 				eventProvider.removeListener( event, arguments.callee ); // remove this
-				
+
 				originalListener.apply(this, arguments); // use current this and arguments
 			}
 		}
-		
 
-		
+
+
 		this.eventListenerManager.add( event, listener );
 	},
-	
+
 	removeListener: function(event, listener) {
 		if( typeof event == "object" ) {
 			for( var e in event ) {
 				this.removeListener( e, event[e] );
 			}
 		}
-		
+
 		// TODO this code could probably be refactored to eventListenerManager
 		var removeId;
 		var delegateMap = this.eventListenerManager.getMap( event );
@@ -2332,38 +2332,38 @@ Xmpp4Js.Event.EventProvider.prototype = {
 				removeId = id;
 			}
 		}
-		
+
 		this.eventListenerManager.remove( event, id );
 	},
-	
+
 	fireEvent: function(event, args) {
 		var callArgs = Array.prototype.slice.call(arguments);
 		callArgs.shift(); // pull off the event
-		
+
 		this.eventListenerManager.fireArgs( event, callArgs );
 	},
-	
+
 	hasListener: function() {
 		alert( "hasListener not implemented" );
 	},
-	
+
 	purgeListeners: function() {
 		alert( "hasListener not implemented" );
 	},
-	
+
 	relayEvents: function() {
 		alert( "relayEvents not implemented" );
 	},
-	
+
 	resumeEvents: function() {
 		alert( "resumeEvents not implemented" );
 	},
-	
+
 	suspendEvents: function() {
 		alert( "suspendEvents not implemented" );
 	}
-	
-	
+
+
 }
 
 Xmpp4Js.Event.EventProvider.prototype.on = Xmpp4Js.Event.EventProvider.prototype.addListener;
@@ -2407,7 +2407,7 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js.Transport" );
  *	sends empty body if both are empty
  */
 Xmpp4Js.Transport.Base = function(config) {
-	
+
 	/**
 	 * The domain of the server you're connecting to.
 	 * @private
@@ -2429,14 +2429,14 @@ Xmpp4Js.Transport.Base = function(config) {
 	 * @private
 	 */
 	this.wait = config.wait || 45; 
-	
+
 	/**
 	 * Picked up by Observable.
 	 * @private
 	 */
 	this.listeners = config.listeners;
-	
-	
+
+
 	/**
 	 * This is set to true when the session creation response is 
 	 * received and it was successful.
@@ -2444,13 +2444,13 @@ Xmpp4Js.Transport.Base = function(config) {
 	 * @private
 	 */
 	this.isSessionOpen = false;
-	
+
 	/**
 	 * @type Ext.util.TaskRunner
 	 * @private
 	 */
 	this.taskRunner = new Xmpp4Js.Lang.TaskRunner(500);
-	
+
 	/**
 	 * @private
 	 */
@@ -2458,7 +2458,7 @@ Xmpp4Js.Transport.Base = function(config) {
 		scope: this,
 		run: this.sendQueue
 	};
-	
+
 	/**
 	 * @private
 	 */
@@ -2466,58 +2466,58 @@ Xmpp4Js.Transport.Base = function(config) {
 		scope: this,
 		run: this.sendPoll
 	};
-	
+
 	/**
 	 * @private
 	 */
 	this.queue = [];
-	
+
 	/**
 	 * The session ID sent by the server.
 	 * @private
 	 */
 	this.sid = null;
-	
+
 	/**
 	 * The request ID set in beginSession, and cleared in endSession
 	 * @private
 	 */
 	this.rid = null;
-	
+
 	/**
 	 * The keysequence object
 	 * @private
 	 */
 	this.keySeq = config.useKeys ? new KeySequence(25): null;
-	
+
 	/**
 	 * The max number of requests that can be open at once, sent by the server
 	 * @private
 	 */
 	this.maxRequests = null;
-	
+
 	/**
 	 * The max number of requests that the server will keep open, sent by the server.
 	 * Typically this is maxRequests - 1.
 	 * @private
 	 */
 	this.hold = null;
-	
+
 	/**
 	 * 
 	 * @private
 	 */
 	this.polling = 5;
-	
+
 	/** 
 	 * The number of open XHR requests. Used for polling.
 	 * @private
 	 */
 	this.openRequestCount = 0;
-	
+
 	var superConfig = config;
-	
-	
+
+
 	this.addEvents({
 		/**
 		 * @event recv
@@ -2528,8 +2528,8 @@ Xmpp4Js.Transport.Base = function(config) {
 		 * them in response to the sessionEnded and termerror events.
 		 */
 		recv : true,
-		
-		
+
+
 		/**
 		 * @event write
 		 * @param \{DomElement} the body element of the node about to be written.
@@ -2538,8 +2538,8 @@ Xmpp4Js.Transport.Base = function(config) {
 		 * the event is fired just before the open request count is incremented.
 		 */
 		write : true,
-		
-		
+
+
 		/**
 		 * @event error
 		 * @param \{DomElement} the body element of the node received.
@@ -2547,7 +2547,7 @@ Xmpp4Js.Transport.Base = function(config) {
 		 * A non-terminal error has occurred. Connection is not necisarily closed.
 		 */
 		error : true,
-		
+
 		/**
 		 * @event termerror
 		 * @param \{String} title
@@ -2558,10 +2558,10 @@ Xmpp4Js.Transport.Base = function(config) {
 		 * Client code should remove any recv handlers here (should we remove?)
 		 */
 		termerror : true,
-		
-		
+
+
 		streamerror : true,
-		
+
 		/**
 		 * @event sessionStarted
 		 *
@@ -2569,7 +2569,7 @@ Xmpp4Js.Transport.Base = function(config) {
 		 * register recv handlers here.
 		 */
 		beginsession : true,
-		
+
 		/**
 		 * @event sessionEnded
 		 *
@@ -2577,14 +2577,14 @@ Xmpp4Js.Transport.Base = function(config) {
 		 * should remove any recv handlers here (should we forcibly remove all?).
 		 */
 		endsession: true,
-		
+
 		beforepause: true,
-		
+
 		pause: true,
-		
+
 		resume: true
 	});
-	
+
 	Xmpp4Js.Transport.Base.superclass.constructor.call( this, superConfig );
 
 }
@@ -2592,17 +2592,17 @@ Xmpp4Js.Transport.Base = function(config) {
 //Xmpp4Js.Transport.Base.logger = Xmpp4Js.createLogger("xmpp4js.transport.base");
 
 Xmpp4Js.Transport.Base.prototype = {
-	
-	
+
+
 	/**
 	 * Send a session creation request, and if it is successfully responded to
 	 * then mark the session open and start the sendQueueTask.
 	 */
 	beginSession: function() {
 		this.isPausing = false;
-		
+
 		this.rid = this.createInitialRid();
-		
+
 		var packetNode = this.createPacketNode();
 		packetNode.setAttribute( "wait", this.wait );
 		packetNode.setAttribute( "to", this.domain );
@@ -2612,12 +2612,12 @@ Xmpp4Js.Transport.Base.prototype = {
 		packetNode.setAttribute( "xmlns:xmpp", "urn:xmpp:xbosh");
 //		packetNode.setAttribute( "xmpp:version", "1.0" );
 
-		
+
 		this.on("recv", this.onBeginSessionResponse, this, {single:true});
   
 		this.write( packetNode );
 	},
-	
+
 	/** 
 	 * Callback to the beginSession packet (recv event).
 	 *
@@ -2631,30 +2631,30 @@ Xmpp4Js.Transport.Base.prototype = {
 
 		this.sid = packetNode.getAttribute( "sid" ).toString();
 		this.maxRequests = packetNode.getAttribute( "requests" ).toString();
-		
+
 		if( packetNode.hasAttribute("hold") ) {
 			this.hold = packetNode.getAttribute("hold").toString();
 		} else {
 			// sensible default
 			this.hold = packetNode.maxRequests - 1;
 		}
-		
+
 		if( packetNode.hasAttribute("wait") ) {
 			// FIXME ideally xhr's timeout should be updated
 			this.wait = packetNode.getAttribute("wait").toString();
 		}
-		
+
 		if( packetNode.hasAttribute("polling") ) {
 			this.polling = packetNode.getAttribute("polling").toString();
 		}
-		
+
 //;;;	 Xmpp4Js.Transport.Base.logger.debug( "Get beginSession response. Session ID="+this.sid+", hold="+this.hold+", wait="+this.wait+", polling="+this.polling );
 
 		this.startup();
 
 		this.fireEvent( "beginsession" );
 	},
-	
+
 	/**
 	 * Set isSessionOpen to true and start sendQueue and sendPoll tasks
 	 * @private
@@ -2664,9 +2664,9 @@ Xmpp4Js.Transport.Base.prototype = {
 		this.isSessionOpen = true;
 		this.taskRunner.start( this.sendQueueTask );
 		this.taskRunner.start( this.sendPollTask );
-		
+
 	},
-	
+
 	/**
 	 * Send a terminate message, mark the sesion as closed, and stop the polling task.
 	 */
@@ -2674,16 +2674,16 @@ Xmpp4Js.Transport.Base.prototype = {
 //;;;	 Xmpp4Js.Transport.Base.logger.info( "End Session. Session ID="+this.sid );
 		var packetNode = this.createPacketNode();
 		packetNode.setAttribute( "type", "terminate" );
-		
+
 		// TODO we could be civil and append any remaining packets in the queue here.
-		
+
 		this.shutdown();
 
 		this.write( packetNode );
-		
+
 		this.fireEvent( "endsession" );
 	},
-	
+
 	/**
 	 * Set isSessionOpen to false and stop sendQueue and sendPoll tasks
 	 * @private
@@ -2694,7 +2694,7 @@ Xmpp4Js.Transport.Base.prototype = {
 		this.taskRunner.stop( this.sendQueueTask );
 		this.taskRunner.stop( this.sendPollTask );
 	},
-	
+
 	/**
 	 * Send a packet as soon as possible. If the session is not currently open,
 	 * packets will queue up until it is.
@@ -2707,14 +2707,14 @@ Xmpp4Js.Transport.Base.prototype = {
 //;;;	 Xmpp4Js.Transport.Base.logger.debug( "Sending packet." );
 		this.queue.push( node );
 	},
-	
+
 	prepareWrite: function(packetNode) {
 		this.addFrameData( packetNode );
 		this.fireEvent( "write", packetNode );
 
 		this.openRequestCount++;
 	},
-	
+
 	/**
 	 * Immediately write a raw packet node to the wire. Adds frame data including
 	 * RID, SID and Key if they are present.
@@ -2729,7 +2729,7 @@ Xmpp4Js.Transport.Base.prototype = {
 	write: function(packetNode) {
 //;;;	 Xmpp4Js.Transport.Base.logger.error( "write: Not Implemented" );
 	},
-	
+
 	/**
 	 * Handles the response to a write call.
 	 *
@@ -2739,7 +2739,7 @@ Xmpp4Js.Transport.Base.prototype = {
 	onWriteResponse: function() {
 //;;;	 Xmpp4Js.Transport.Base.logger.error( "onWriteResponse: Not Implemented" );
 	},
-	
+
 	/**
 	 * Create an empty packet node in the httpbind namespace.
 	 * @private
@@ -2750,10 +2750,10 @@ Xmpp4Js.Transport.Base.prototype = {
 				xmlns: "http://jabber.org/protocol/httpbind"
 			}
 		);
-		
+
 		return packetNode;
 	},
-	
+
 	/**
 	 * Write a blank node if there is no data waiting and no requests open.
 	 * @private
@@ -2773,7 +2773,7 @@ Xmpp4Js.Transport.Base.prototype = {
 			this.write( packetNode );
 		}
 	},
-	
+
 	/**
 	 * Pull all packets off the queue; first-in, first-out; and send them
 	 * within the body of a single packet. Don't send if # open requests
@@ -2788,7 +2788,7 @@ Xmpp4Js.Transport.Base.prototype = {
 		}
 
 //;;;	 Xmpp4Js.Transport.Base.logger.debug( "sendQueue with "+this.queue.length+" waiting stanzas." );
-		
+
 		var packetNode = this.createPacketNode();
 
 		while( this.queue.length > 0 ) {
@@ -2797,7 +2797,7 @@ Xmpp4Js.Transport.Base.prototype = {
 
 			packetNode.appendChild( importedNode );
 		}
-		
+
 		this.write( packetNode );
 	},
 
@@ -2811,7 +2811,7 @@ Xmpp4Js.Transport.Base.prototype = {
 			packetNode.setAttribute( "sid", this.sid );
 		}
 	},
-	
+
 	/**
 	 * Add rid attribute to a packet, if there is one.
 	 * @param \{Element} packetNode
@@ -2822,7 +2822,7 @@ Xmpp4Js.Transport.Base.prototype = {
 			packetNode.setAttribute( "rid", ++this.rid );
 		}
 	},
-	
+
 	/**
 	 * Add the key attribute to the request, and if needed,
 	 * generate a new sequence and add the newkey attribute.
@@ -2832,30 +2832,30 @@ Xmpp4Js.Transport.Base.prototype = {
 	addKey: function( packetNode ) {
 		if( this.keySeq instanceof KeySequence ) {
 			var keySeq = this.keySeq;
-			
+
 			var isFirstKey = keySeq.isFirstKey();
 			var isLastKey = keySeq.isLastKey();
 			var key = keySeq.getNextKey();
-			
+
 			// if it's the first key, use ONLY the newkey attribute.
 			if( isFirstKey ) {
 				packetNode.setAttribute( "newkey", key );
 			} else {
 				packetNode.setAttribute( "key", key );
 			}
-			
+
 			// if it's the last key, reset the KeySequence and add a newkey attribute.
 			if( isLastKey ) {
 //;;;	 Xmpp4Js.Transport.Base.logger.debug( "Resetting key sequence." );
 				keySeq.reset();
-	
+
 				var newKey = keySeq.getNextKey();
 				packetNode.setAttribute( "newkey", newKey );
 			}
 		}
-		
+
 	},
-	
+
 	/**
 	 * Add RID, SID and Key to a packet node. Calls each respective function.
 	 * @private
@@ -2865,7 +2865,7 @@ Xmpp4Js.Transport.Base.prototype = {
 		this.addSid( packetNode );
 		this.addKey( packetNode );
 	},
-	
+
 	/**
 	 * Generate a random number to be used as the initial request ID.
 	 * @private
@@ -2873,16 +2873,16 @@ Xmpp4Js.Transport.Base.prototype = {
 	createInitialRid: function() {
 		return Math.floor( Math.random() * 10000 ); 
 	},
-	
+
 	isPausing: false,
-	
+
 	pause: function(time) {
 		this.isPausing = true;
-		
+
 //;;;	 Xmpp4Js.Transport.Base.logger.info( "Pausing session." );
 
 		this.fireEvent( "beforepause", time );
-		
+
 		var pauseNode = this.createPacketNode();
 		pauseNode.setAttribute( "pause", time );
 
@@ -2896,19 +2896,19 @@ Xmpp4Js.Transport.Base.prototype = {
 		}, this, {single:true});
 		*/
 		this.sendQueue();
-		
+
 		this.write( pauseNode );
-		
+
 		this.shutdown();
-		
+
 		var pauseStruct = this.serializeState();
-		
+
 		// give others an opportunity to serialize proprties
 		this.fireEvent( "pause", pauseStruct );
-		
+
 		return pauseStruct;
 	},
-	
+
 	serializeState: function() {
 		var pauseStruct = {
 			maxpause: 120, // TODO not hard code me
@@ -2925,10 +2925,10 @@ Xmpp4Js.Transport.Base.prototype = {
 			keysSeqKeys : this.keySeq._keys, 
 			keySeqIdx: this.keySeq._idx
 		};
-		
+
 		return pauseStruct;
 	},
-	
+
 	deserializeState: function(pauseStruct) {
 		// this.maxpause = pauseStruct.maxpause;
 		this.maxpause = pauseStruct.maxpause;
@@ -2942,37 +2942,37 @@ Xmpp4Js.Transport.Base.prototype = {
 		this.domain = pauseStruct.domain;
 		this.endpoint = pauseStruct.endpoint;
 		this.maxRequests = pauseStruct.maxRequests;
-		
+
 		this.keySeq._keys = pauseStruct.keysSeqKeys;
 		this.keySeq._idx = pauseStruct.keySeqIdx;
 	},
-	
+
 	resume: function(pauseStruct) {
 		this.isPausing = false;
-		
+
 //;;;	 Xmpp4Js.Transport.Base.logger.info( "Resume session. Session ID="+pauseStruct.sid+", Request ID="+pauseStruct.rid );
-		
+
 		this.deserializeState(pauseStruct);
-		
+
 		this.startup();
-		
+
 		// give others an opportunity to deserialize properties
 		this.fireEvent( "resume", pauseStruct );
 	},
-	
+
 	handleErrors: function(packetNode) {
 		// TODO add log messages here
 		var errorNode = packetNode.getElementsByTagNameNS("http://etherx.jabber.org/streams","error");
 		errorNode = errorNode.getLength() > 0 ? errorNode.item(0) : null;
-		
+
 		// HACK these errors should be given with terminate / remote-stream-error but in Openfire they are not.
 		if( errorNode == null && (packetNode.getAttribute("type").toString() == "terminate" ||
 		  packetNode.getAttribute("type").toString() == "terminal")) { // HACK openfire uses terminal?
 			var condition = packetNode.getAttribute( "condition" ).toString();
-			
+
 			var title = Xmpp4Js.PacketFilter.TerminalErrorPacketFilter.conditions[ condition ].title;
 			var message = Xmpp4Js.PacketFilter.TerminalErrorPacketFilter.conditions[ condition ].message;
-			
+
 			this.fireEvent( "termerror", packetNode, title, message );
 			throw new Error( "Error in packet" );
 		} else if( packetNode.getAttribute("type").toString() == "error" ) {
@@ -3002,7 +3002,7 @@ Xmpp4Js.Transport.Base.prototype = {
 					}
 				}
 			}
-			
+
 			this.fireEvent( "streamerror", packetNode, errorNode, errorCode, text );
 			throw new Error( "Error in packet" );
 		}
@@ -3054,19 +3054,19 @@ Xmpp4Js.Transport.BOSH = function(config) {
 	 * @type String
 	 */
 	this.endpoint = config.endpoint;
-	
+
 	var superConfig = config;
-	
+
 	Xmpp4Js.Transport.BOSH.superclass.constructor.call( this, superConfig );
 
 }
 
 //Xmpp4Js.Transport.BOSH.logger = Xmpp4Js.createLogger("xmpp4js.transport.bosh");
-	
-	
+
+
 Xmpp4Js.Transport.BOSH.prototype = {
 
-	
+
 	/**
 	 * Immediately write a raw packet node to the wire. Adds frame data including
 	 * RID, SID and Key if they are present.
@@ -3080,7 +3080,7 @@ Xmpp4Js.Transport.BOSH.prototype = {
 	 */
 	write: function(packetNode) {
 		this.prepareWrite( packetNode );
-		
+
 //;;;	 Xmpp4Js.Transport.BOSH.logger.debug( "Writing packet." );
 
 		Xmpp4Js.Lang.asyncRequest({
@@ -3101,7 +3101,7 @@ Xmpp4Js.Transport.BOSH.prototype = {
 			headers: { 'content-type': 'text/xml' }
 		});
 	},
-	
+
 	/**
 	 * Handles the response to a write call.
 	 *
@@ -3110,9 +3110,9 @@ Xmpp4Js.Transport.BOSH.prototype = {
 	 */
 	onWriteResponse: function(options, success, response) {
 		this.openRequestCount--;
-		
+
 //;;;	 Xmpp4Js.Transport.BOSH.logger.debug( "Got write response." );
-		
+
 				// 17.4 XML Stanza Conditions?
 				// this condition would be true if we closed the connection
 				// before a response was received
@@ -3122,7 +3122,7 @@ Xmpp4Js.Transport.BOSH.prototype = {
 				//	  inturruption before the server responded. figure out
 				//	  how to handle this. 
 
-		
+
 		/*
 			TODO - 17.1
 			A legacy client (or connection manager) is a client (or 
@@ -3171,7 +3171,7 @@ Xmpp4Js.Transport.BOSH.prototype = {
 
 			  var packetNode = new DOMImplementation().loadXML( response.responseText ).documentElement;
 
-				
+
 			  // this will throw an exception if there is an error.
 			  this.handleErrors( packetNode );
 
@@ -3223,33 +3223,33 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js.Transport" );
  *	sends empty body if both are empty
  */
 Xmpp4Js.Transport.Script = function(config) {
-	
+
 	// support wild card hosts to get around the 2 connection
 	// limit
 	if( config.endpoint.indexOf('*') > -1 ) {
 		var rand = parseInt(Math.random() * 10000); // 4 digits of random
 		config.endpoint = config.endpoint.replace('*', rand);
 	}
-	
+
 	/**
 	 * @private
 	 * @type String
 	 */
 	this.endpoint = config.endpoint;
-	
+
 	var superConfig = config;
-	
+
 		// TODO handle multiple connections...
 		window._BOSH_ = function(xml) {
 			this.onWriteResponse(xml);
 		}.bind(this);
-		
-	
+
+
 	Xmpp4Js.Transport.Script.superclass.constructor.call( this, config );
 }
 
 //Xmpp4Js.Transport.Script.logger = Xmpp4Js.createLogger( "xmpp4js.transport.script" );	
-	
+
 Xmpp4Js.Transport.Script.prototype = {
 
 	/**
@@ -3269,12 +3269,12 @@ Xmpp4Js.Transport.Script.prototype = {
 //;;;	 Xmpp4Js.Transport.Script.logger.debug( "Writing packet. rid="+packetNode.getAttribute("rid") );
 
 		var xml = packetNode.toString();
-		
+
 		// TODO check for max length constraints in browsers
 		// HACK substr(5) takes out body=; there should be a method to
 		//	  only encode the right-hand side of the params.
 		var requestUrl = this.endpoint+"?"+Xmpp4Js.Lang.urlEncode(xml);
-		
+
 		var scriptElem = document.createElement( "script" );
 		scriptElem.setAttribute( "type", "text/javascript" );
 		scriptElem.setAttribute( "src", requestUrl );
@@ -3295,11 +3295,11 @@ Xmpp4Js.Transport.Script.prototype = {
 
 		document.body.appendChild( scriptElem );
 	},
-	
+
 	onScriptLoad: function(scriptElem) {
 			document.body.removeChild( scriptElem );
 	},
-	
+
 	onScriptError: function(scriptElem) {
 		if( this.isPausing ) { 
 //;;;		 Xmpp4Js.Transport.Script.logger.debug( "Script error while pausing. Ignoring error." );
@@ -3325,7 +3325,7 @@ Xmpp4Js.Transport.Script.prototype = {
 			this.shutdown();
 		}
 	},
-	
+
 	/**
 	 * Handles the response to a write call.
 	 *
@@ -3335,14 +3335,14 @@ Xmpp4Js.Transport.Script.prototype = {
 	onWriteResponse: function( xml ) {
 //;;;	 Xmpp4Js.Transport.Script.logger.debug( "Got write response." );
 		this.openRequestCount--;
-		
+
 		// TODO character replacement (18.3)?
 		var packetNode = new DOMImplementation().loadXML( xml ).documentElement;
-		
+
 		try {
 			// this will throw an exception if there is an error.
 			this.handleErrors( packetNode );
-			
+
 			this.fireEvent( "recv", packetNode );
 		} catch(e) {
 			this.shutdown();
@@ -3530,7 +3530,7 @@ Xmpp4Js.PacketFilter.PacketTypeFilter.prototype = {
 
 Xmpp4Js.Lang.extend(Xmpp4Js.PacketFilter.PacketTypeFilter, Xmpp4Js.PacketFilter.PacketFilter, Xmpp4Js.PacketFilter.PacketTypeFilter.prototype);
 
-	
+
 /**
  * Filters for packets with a particular packet ID.
  * @constructor
@@ -3716,7 +3716,7 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js.PacketFilter" );
  */
 Xmpp4Js.PacketFilter.ExtensionFilter = function(extensionNS) {
 	Xmpp4Js.PacketFilter.ExtensionFilter.superclass.constructor.apply(this, arguments);
-	
+
 	this.extensionNS = extensionNS;
 }
 
@@ -3725,7 +3725,7 @@ Xmpp4Js.PacketFilter.ExtensionFilter.prototype = {
 		// rather than loading extensions for all packets, we will
 		// just check child element namespaces.
 		var node = packet.getNode();
-		
+
 		for( var i = 0; i < node.childNodes.getLength(); i++ ) {
 			if( node.childNodes.item(i).namespaceURI == this.extensionNS ) {
 				return true;
@@ -3773,20 +3773,20 @@ Md5Sasl.prototype = {
 	decodeChallenge : function(challenge) {
 		return atob( challenge );
 	},
-	
+
 	encodeResponse : function( response ) {
 		return binb2b64(str2binb( response ));
 	},
 
 	computeChallengeResponse : function(challenge) {
 		var fields = this.deserializeFields( this.decodeChallenge( challenge ) );
-		
+
 		this._nc = "00000001";
 		this._nonce = fields.nonce;
 		this._cnonce = this._generateCnonce();
 		this._digestUri = "xmpp/" + this._domain;
 		this._realm = fields.realm || this._domain;
-		
+
 		var response = this._computeResponse( false );
 
 		var resp = {
@@ -3803,18 +3803,18 @@ Md5Sasl.prototype = {
 
 		return this.encodeResponse( this.serializeFields(resp) );	
 	},
-	
+
 	/**
 	 * Returns true if the server sent back the response that it should have,
 	 * false otherwise.
 	 */
 	checkResponse : function( challenge ) {
 		var fields = this.deserializeFields( this.decodeChallenge( challenge ) );
-		
+
 		var expected = this._computeResponse( true );
 		return ( expected == fields.rspauth );
 	},
-	
+
 	/**
 	 * Deserializes a="b",cd=ef,ghi="jkl", but will choke if a comma
 	 * is quoted. I don't know if quoted commas are possible or not,
@@ -3823,9 +3823,9 @@ Md5Sasl.prototype = {
 	 */
 	deserializeFields : function(fieldsStr) {
 		var fields = {};
-	
+
 		var fieldRegex = /\s*([^\=]+)\=\"?([^\"\,]*)\"?\,?\s*/g;
-	
+
 		var regexRes = fieldsStr.split(fieldRegex);
 		// TODO fixure out the exta whitespace matching.
 		// it starts with whitespace, there is whitespace between each, and it ends in whitespace...
@@ -3833,26 +3833,26 @@ Md5Sasl.prototype = {
 		for( var i = 0; i < regexRes.length - 1; i+=3 ) {
 			var k = regexRes[i+1];
 			var v = regexRes[i+2];
-			
+
 			fields[k] = v;
 		}
-		
+
 		return fields;
 	},
-	
+
 	serializeFields : function(fields) {
 		var ret = [];
-		
+
 		for( var k in fields ) {
 			var v = fields[k];
-			
+
 			// TODO some kind of encoding on v?
 			ret.push( k + '="' + v + '"' );
 		}
-		
+
 		return ret.join( "," );
 	},
-	
+
 	/**
 	 * According to JSJaC's impl, this is exacly the same except having AUTHENTICATE
 	 * before the outgoing challenge, and not in the incoming response. I 
@@ -3864,17 +3864,17 @@ Md5Sasl.prototype = {
 		var A = [this._username, 
 			this._domain, 
 			this._password].join(":");
-		
+
 		var A1 = [str_md5(A), 
 		this._nonce, 
 		this._cnonce].join(":");
-		
+
 		var A2 = (isCheck?"":"AUTHENTICATE") + ":" + this._digestUri;
 		var response = hex_md5([hex_md5(A1), this._nonce, this._nc, this._cnonce, this._qop, hex_md5(A2)].join(":"));
 	  
 		return response;
 	},
-	
+
 	_generateCnonce : function() {
 		return cnonce(14);
 	}
@@ -3931,7 +3931,7 @@ function utf8t2d(t)
 	  }
   return d;
 }
-		
+
 // returns plaintext from an array of bytesrepresenting dezimal numbers, which
 // represent an UTF-8 encoded text; browser which does not understand unicode
 // like NN401 will show "?"-signs instead
@@ -4056,20 +4056,20 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js");
 Xmpp4Js.Connection = function(config) {
 	/** @private */
 	this.transport = null;
-	
+
 	/**
 	 * Used for getInstanceFor as a substitute for hashCode, since I can't 
 	 * find one in JS.
 	 * @type String
 	 */
 	this.id = Xmpp4Js.Lang.id();
-	
+
 	this.stanzaProvider = config.stanzaProvider;
-	
+
 	this.transportConfig = config.transport;
-	
+
 	var superConfig = config;
-	
+
 	this.addEvents({
 		/**
 		 * The connection is open and ready for normal packets to be exchanged.
@@ -4095,24 +4095,24 @@ Xmpp4Js.Connection = function(config) {
 		 * @param \{String} message
 		 */
 		error: true,
-		
+
 		beforepause: true,
-		
+
 		pause: true,
-		
+
 		resume: true
 	});
-	
+
 	/**
 	 * Picked up by Observable.
 	 * @private
 	 */
 	this.listeners = config.listeners;
-	
+
 	this.domain = null;
 	this.connected = false;
 	this.packetHelper = new Xmpp4Js.Packet.PacketHelper();
-	
+
 	/** 
 	 * @private
 	 * @type Xmpp4Js.PacketListenerManager
@@ -4120,30 +4120,30 @@ Xmpp4Js.Connection = function(config) {
 	this.packetListenerManager = new Xmpp4Js.PacketListenerManager({
 		stanzaProvider: this.stanzaProvider
 	});
-	
+
 	this.setupTransport();
-	
-	
+
+
 	Xmpp4Js.Connection.superclass.constructor.call( this, superConfig );
-	
+
 	if( config.pauseStruct != undefined ) {
 		this.resume( config.pauseStruct );
 	}
-	
+
 }
 
 //Xmpp4Js.Connection.logger = Xmpp4Js.createLogger( "xmpp4js.connection" );
 
 Xmpp4Js.Connection.prototype = {
-	
+
 	setupTransport: function(server, port) {
 		var transportClass = this.transportConfig.clazz;
-		
+
 		if( typeof transportClass != 'function' ) {
 			throw new Error( "transportClass is not valid." );
 		}
-		
-		
+
+
 		var transportConfig = {};
 		Xmpp4Js.Lang.augmentObject( transportConfig, this.transportConfig );
 		Xmpp4Js.Lang.augmentObject( transportConfig, {
@@ -4166,7 +4166,7 @@ Xmpp4Js.Connection.prototype = {
 
 		this.transport = new transportClass(transportConfig);
 	},
-		
+
 	/**
 	 * Connect to a given domain, port and server. Only domain is required.
 	 */
@@ -4175,7 +4175,7 @@ Xmpp4Js.Connection.prototype = {
 		//	  event as a parameter, that registers on this and 
 		//	  unregisters right after it's called.
 //;;;	 Xmpp4Js.Connection.logger.info( "Connecting to "+domain+", server="+server+", port="+port );
-	
+
 		if( this.isConnected() ) {
 			throw new Xmpp4Js.Ext.Error( "Already Connected" );
 		}
@@ -4184,7 +4184,7 @@ Xmpp4Js.Connection.prototype = {
 		this.setupTransport( server, port );
 		this.transport.beginSession();
 	},
-	
+
 	/**
 	 * Close the connection.
 	 */
@@ -4193,10 +4193,10 @@ Xmpp4Js.Connection.prototype = {
 		if( !this.isConnected() ) {
 			throw new Xmpp4Js.Ext.Error( "Not Connected" );
 		}
-		
+
 		this.transport.endSession();
 	},
-	
+
 	/**
 	 * Send a packet across the wire, and register a PacketIdListener if a callback
 	 * is supplied
@@ -4210,7 +4210,7 @@ Xmpp4Js.Connection.prototype = {
 		if( !this.isConnected() ) {
 			throw new Xmpp4Js.Ext.Error( "Not Connected" );
 		}
-		
+
 		if( callback ) {
 			var id = packet.getId();
 
@@ -4225,17 +4225,17 @@ Xmpp4Js.Connection.prototype = {
 
 			this.addPacketListener( listener, pf );	
 		}
-		
+
 		this.transport.send( packet.getNode() );
 	},
-	
+
 	/**
 	 * Returns whether or not we are connected.
 	 */
 	isConnected: function() {
 		return this.connected;
 	},
-	
+
 	/**
 	 * Adds a packet listener and returns its function. See PacketReader.
 	 * @return Function
@@ -4253,7 +4253,7 @@ Xmpp4Js.Connection.prototype = {
 	removePacketListener : function( listener ) {
 		return this.packetListenerManager.removePacketListener( listener );
 	},
-	
+
 	/**
 	 * Called whenever an incoming packet comes. Handles dispatching
 	 * packet listeners / filters.
@@ -4275,7 +4275,7 @@ Xmpp4Js.Connection.prototype = {
 		this.shutdown();
 		this.fireEvent( "error", true, packetNode, title, message );
 	},
-	
+
 	/**
 	 * Shutdown before firing error event to give the listener an opportunity
 	 * to reconnect.
@@ -4286,7 +4286,7 @@ Xmpp4Js.Connection.prototype = {
 		this.shutdown();
 		this.fireEvent( "error", true, packetNode, errorCode, text );
 	},
-	
+
 	/**
 	 * Handle non-terminal errors
 	 * @param \{DomElement} packetNode
@@ -4296,7 +4296,7 @@ Xmpp4Js.Connection.prototype = {
 //;;;	 Xmpp4Js.Connection.logger.warn("Recoverable error.");
 		this.fireEvent( "error", false, packetNode );
 	},
-	
+
 	/**
 	 * Sets connected to true and sets up the onRecv listener.
 	 * @private
@@ -4306,7 +4306,7 @@ Xmpp4Js.Connection.prototype = {
 		this.startup();
 		this.fireEvent( "connect" );
 	},
-	
+
 	/**
 	 * Sets connected to false and removes the onRecv listener.
 	 * @private
@@ -4316,11 +4316,11 @@ Xmpp4Js.Connection.prototype = {
 		this.shutdown();
 		this.fireEvent( "close" );
 	},
-	
+
 	onBeforePause: function(time) {
 		this.fireEvent( "beforepause", time );
 	},
-	
+
 	/**
 	 * Event handler for when the transport session is paused. Bubbles the event 
 	 * through to listeners on this connection.
@@ -4334,7 +4334,7 @@ Xmpp4Js.Connection.prototype = {
 		this.fireEvent( "pause", pauseStruct );
 		this.shutdown();
 	},
-	
+
 	/**
 	 * Event handler for when the transport session is resumed. Bubbles the event 
 	 * through to listeners on this connection.
@@ -4351,7 +4351,7 @@ Xmpp4Js.Connection.prototype = {
 		this.startup();
 		this.fireEvent( "resume", pauseStruct );
 	},
-	
+
 	/**
 	 * Set connected to false, fire the close event, and remove the recv listener.
 	 * @private
@@ -4362,7 +4362,7 @@ Xmpp4Js.Connection.prototype = {
 
 		this.connected = false;
 	},
-		
+
 	/**
 	 * Set connected to true, fire the connect event, and add the recv listener.
 	 * @private
@@ -4370,20 +4370,20 @@ Xmpp4Js.Connection.prototype = {
 	startup: function() {
 //;;;	 Xmpp4Js.Connection.logger.info( "Starting up connection" );
 		this.connected = true;
-		
+
 		this.transport.on({
 			scope: this,
 			recv: this.onRecv
 		});
 	},
-	
+
 	/**
 	 * @deprecated
 	 */
 	getPacketHelper: function() {
 		return this.packetHelper;
 	},
-	
+
 	/**
 	 * Returns the Jid of the currently connected user, if any.
 	 * @type Xmpp4Js.Jid
@@ -4391,7 +4391,7 @@ Xmpp4Js.Connection.prototype = {
 	getJid : function() {
 		return new Xmpp4Js.Jid(this.jid);	
 	},
-	
+
 	/**
 	 * Sends a pause command to the server and returns a struct that may be 
 	 * serialized and passed to resume.
@@ -4400,10 +4400,10 @@ Xmpp4Js.Connection.prototype = {
 	 */
 	pause: function(time) {
 //;;;	 Xmpp4Js.Connection.logger.debug( "Requesting session pause. time="+time+" seconds, Session ID="+this.transport.sid );
-		
+
 		// serialize transport's junk
 		var pauseStruct = this.transport.pause(time);
-		
+
 		return pauseStruct;
 	},
 
@@ -4416,7 +4416,7 @@ Xmpp4Js.Connection.prototype = {
 	resume: function(pauseStruct) {
 //;;;	 Xmpp4Js.Connection.logger.debug( "Resuming session. Session ID="+this.transport.sid );
 		this.setupTransport( pauseStruct.server, pauseStruct.port );
-		
+
 		// deserialize transport's junk
 		this.transport.resume(pauseStruct);
 	}
@@ -4445,7 +4445,7 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js.Chat" );
 */
 Xmpp4Js.Chat.Chat = function(chatMan, jid, thread) {
 	jid = new Xmpp4Js.Jid( jid );
-	
+
 	/**
 	 * @type Xmpp4Js.Chat.ChatManager
 	 * @private
@@ -4461,7 +4461,7 @@ Xmpp4Js.Chat.Chat = function(chatMan, jid, thread) {
 	 * @private
 	 */
 	this.thread = thread;
-	
+
 	this.addEvents({
 		/**
 		* @event messageReceived
@@ -4470,7 +4470,7 @@ Xmpp4Js.Chat.Chat = function(chatMan, jid, thread) {
 		* @param \{Xmpp4Js.Packet.Message} message The incoming message
 		*/
 		"messageReceived" : true,
-		
+
 		/**
 		* @event messageSent
 		* Fires when a message is sent.
@@ -4554,7 +4554,7 @@ Xmpp4Js.Chat.Chat.prototype = {
 		}
 		return this.thread;
 	},
-	
+
 	/**
 	 * Closes a conversation. See ChatManager.closeChat for more info.
 	 * @see Xmpp4Js.Chat.ChatMan#closeChat
@@ -4610,7 +4610,7 @@ Xmpp4Js.Chat.ChatManager = function(con) {
 	this.threads = {};
 	/** An array of Chat objects. @private @type Xmpp4Js.Chat.Chat */
 	this.chats = [];
-	
+
 	this.addEvents({
 		/**
 		* Fires when a chat has been created. Does not include the message,
@@ -4621,8 +4621,8 @@ Xmpp4Js.Chat.ChatManager = function(con) {
 		* @param chat \{Xmpp4Js.Chat.Chat} The chat that was created
 		*/
 		"chatStarted" : true,
-		
-		
+
+
 		/**
 		* Fires when a chat message was received (including first).
 		* It is safe to assume that chatStarted will be invoked before this.
@@ -4632,7 +4632,7 @@ Xmpp4Js.Chat.ChatManager = function(con) {
 		* @param \{Xmpp4Js.Packet.Message} message The incoming message
 		*/
 		"messageReceived" : true, 
-		
+
 		/**
 		* Fires when a chat is closed. At this point it only happens locally, with
 		* a call to close(). If a new chat from the same user or with the same threadId
@@ -4641,7 +4641,7 @@ Xmpp4Js.Chat.ChatManager = function(con) {
 		*/
 		"chatClosed" : true
 	});	
-	
+
 	this._registerEvents();
 }
 
@@ -4721,7 +4721,7 @@ Xmpp4Js.Chat.ChatManager.prototype = {
 
 		return chat;
 	},
-	
+
 	/**
 	 * Closes a given chat, and sends events. The chat will no longer be
 	 * available from getUserChat or getThreadChat. If a new chat from the 
@@ -4738,9 +4738,9 @@ Xmpp4Js.Chat.ChatManager.prototype = {
 				break;
 			}
 		}
-		
+
 		delete this.threads[ chat.getThread() ];
-		
+
 		chat.fireEvent( "close", chat );
 		this.fireEvent( "chatClosed", chat);
 	},
@@ -4826,7 +4826,7 @@ Xmpp4Js.Chat.ChatManager.prototype = {
 Xmpp4Js.Chat.ChatManager.instances = {};
 Xmpp4Js.Chat.ChatManager.getInstanceFor = function(con) {
 	var instances = Xmpp4Js.Chat.ChatManager.instances;
-	
+
 	if( instances[con.id] === undefined ) {
 		instances[con.id] = new Xmpp4Js.Chat.ChatManager( con );
 	}
@@ -5024,10 +5024,10 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 	 */
 	get: function(jid) {
 		jid = new Xmpp4Js.Jid(jid).withoutResource().toString();
-	
+
 		return this.map[jid];
 	},
-	
+
 	/**
 	 * Get a roster group by name. See documentation on
 	 * return type for exact details.
@@ -5043,7 +5043,7 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 			}
 		}
 	},
-	
+
 	/**
 	 * Get an array of all groups
 	 *
@@ -5052,9 +5052,9 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 	getGroups: function() {
 		var retGroups = [];
 		var groupNames = {};
-		
+
 		retGroups.push( this.getUnfiledContacts() );
-		
+
 		for( var k in this.map) {
 			var entry = this.map[k];
 			for(var i = 0; i < entry.groups.length; i++) {
@@ -5064,12 +5064,12 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 					retGroups.push( new Xmpp4Js.Roster.RosterGroup( groupName, this ) );
 				}
 			};
-			
+
 		};
-		
+
 		return retGroups;
 	},
-	
+
 	/**
 	 * Get the special unfiled contacts group, and all entries that
 	 * are not in any group.
@@ -5079,7 +5079,7 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 	getUnfiledContacts: function(){
 		return new Xmpp4Js.Roster.UnfiledEntriesRosterGroup(this);
 	},
-	
+
 	/**
 	 * Fires events after add/modify and before delete.
 	 * Items are stored without taking resource into account.
@@ -5092,7 +5092,7 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 	 */
 	update: function(jid, alias, subscription, ask, groups) {
 		jid = new Xmpp4Js.Jid(jid).withoutResource().toString();
-	
+
 		// TODO find out if this is ever sent from the server
 		if( subscription == "remove" ) {
 			this.remove(jid);
@@ -5100,19 +5100,19 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 		}
 		var newEntry = new Xmpp4Js.Roster.RosterEntry(jid, alias, subscription, ask, groups, this);
 		var currentEntry = this.map[jid];
-		
+
 		// replace current entry with new one.
 		this.map[jid] = newEntry;
-		
+
 		if( currentEntry == undefined ) {
 			this.fireEvent( "add", newEntry );
 		} else {
 			this.fireEvent( "update", currentEntry, newEntry );
 		}
-		
+
 		return newEntry;
 	},
-	
+
 	/**
 	 * Remove a contact from the roster. Fires the remove event and
 	 * deletes the entry from the local map.
@@ -5121,7 +5121,7 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 		var entry = this.map[jid];
 
 		this.fireEvent( "remove", entry );
-		
+
 		delete this.map[jid];
 	},
 
@@ -5136,14 +5136,14 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 		var itemNodes = packet.getQuery().getElementsByTagName("item");
 		for ( var i=0; i < itemNodes.getLength(); i++ ) {
 			var item = itemNodes.item(i);
-	
+
 			var jid = item.getAttribute( "jid" ).toString();
 			var name = item.getAttribute( "name" ).toString();
 			var subscription = item.getAttribute( "subscription" ).toString(); // none, to, from, both, remove
 			var ask = item.getAttribute( "ask" ).toString(); // subscribe, unsubscribe		 
-	
+
 			var groups = [];
-	
+
 			var groupNodes = item.getElementsByTagName("group");
 			for( var j = 0; j < groupNodes.getLength(); j++ ) {
 				var node = groupNodes.item(j);
@@ -5152,7 +5152,7 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 
 			this.update( jid, name, subscription, ask, groups );
 		}
-		
+
 	},
 
 	/**
@@ -5173,21 +5173,21 @@ Xmpp4Js.Roster.RosterItemManager.prototype = {
 		if( !subsyncNode ) {
 			return;
 		}
-		
+
 		// in subsync the JID is on the presence element, and not the item element.
 		var jid = presence.getFrom();
-		
+
 		var itemNodes = subsyncNode.getElementsByTagName("item");
-			
+
 		for ( var i=0; i < itemNodes.getLength(); i++ ) {
 			var item = itemNodes.item(i);
-	
+
 			var name = item.getAttribute( "name" ).toString();
 			var subscription = item.getAttribute( "subscription" ).toString(); // none, to, from, both, remove
 			var ask = item.getAttribute( "ask" ).toString(); // subscribe, unsubscribe		 
-	
+
 			var groups = [];
-	
+
 			var groupNodes = item.getElementsByTagName("group");
 			for( var j = 0; j < groupNodes.getLength(); j++ ) {
 				var node = groupNodes.item(j);
@@ -5215,13 +5215,13 @@ Xmpp4Js.Roster.PresenceManager = function() {
 	 * Map by jid
 	 */
 	this.best = {};
-	
+
 	this.getBestImpl = new Xmpp4Js.Roster.PresenceManager.GetBestImpl();
 
 	this.addEvents({
 		update: true
 	});
-	
+
 }
 
 Xmpp4Js.Roster.PresenceManager.prototype = {
@@ -5234,22 +5234,22 @@ Xmpp4Js.Roster.PresenceManager.prototype = {
 	update: function(newPresence) {
 		var jid = newPresence.getFromJid().withoutResource().toString();
 		var resource = newPresence.getFromJid().getResource();
-		
+
 		var type = newPresence.getType();
-		
+
 		if(type != "available" && type != "unavailable") {
 			throw new Error("Invalid prsence type: " + type);
 		}
-		
+
 		// If a map entry for JID doesn't exist, create it.
 		if(this.map[jid]==undefined) { this.map[jid] = {}; }
 
 		// update the new presence
 		this.map[jid][resource] = newPresence;
-		
+
 		// fire the update event.
 		this.fireEvent( "update", newPresence );
-		
+
 		delete this.best[jid];
 	},
 	/**
@@ -5263,9 +5263,9 @@ Xmpp4Js.Roster.PresenceManager.prototype = {
 			// find "best"
 			return this.getBest(jid);
 		}
-		
+
 		return this.map[jid] ? this.map[jid][resource] : undefined;
-		
+
 	},
 	/**
 	 * Finds the presence with the "best" presence based on the algorithm 
@@ -5277,11 +5277,11 @@ Xmpp4Js.Roster.PresenceManager.prototype = {
 	 */
 	getBest: function( jid ) {
 		var presenceList = this.map[jid];
-		
+
 		this.best[jid] = this.getBestImpl.getBest( presenceList );
 		return this.best[jid];
 	},
-	
+
 	/**
 	 * Remove a jid/resource combo. If resource is empty, all resources are removed.
 	 * @param \{String} jid
@@ -5289,7 +5289,7 @@ Xmpp4Js.Roster.PresenceManager.prototype = {
 	 */
 	remove: function(jid, resource) {
 		if( this.map[jid] == undefined ) { return; }
-	
+
 		// remove all resources if none is specified
 		if( !resource ) {
 			for( var k in this.map[jid]) {
@@ -5299,7 +5299,7 @@ Xmpp4Js.Roster.PresenceManager.prototype = {
 			delete this.map[jid];
 		} else {
 			if( this.map[jid][resource] == undefined ) { return; }
-			
+
 			this.fireEvent( "remove", this.map[jid][resource] );
 			delete this.map[jid][resource]; 
 		}
@@ -5311,7 +5311,7 @@ Xmpp4Js.Roster.PresenceManager.prototype = {
 	 * TODO ability to gracefully handle non-presence packets
 	 */
 	presencePacketListener: function ( packet ) {
-		
+
 		try {
 			this.update( packet );
 		} catch(e) {
@@ -5355,10 +5355,10 @@ Xmpp4Js.Roster.PresenceManager.GetBestImpl.prototype = {
 	getBest: function( presenceList ) {
 		var bestPresence = undefined;
 		var bestWeight = 0;
-		
+
 		for(var k in presenceList) {
 			var presence = presenceList[k];
-			
+
 			// these return default values if empty.
 			var show = presence.getShow();
 			var type = presence.getType();
@@ -5366,17 +5366,17 @@ Xmpp4Js.Roster.PresenceManager.GetBestImpl.prototype = {
 
 			// calculate the weight of the presence for getBest
 			var weight = this.SHOW_WEIGHT[show] * this.TYPE_WEIGHT[type] * priority;
-			
+
 			//console.info( [show, type, priority]);
 			//console.info( weight+" > "+bestWeight+"="+(weight > bestWeight) );
-			
+
 			// use the weight determined in .update()
 			if( bestPresence == null || weight > bestWeight ) {
 				bestPresence = presence;
 				bestWeight = weight;
 			}
 		};
-		
+
 		return bestPresence;
 	}
 }
@@ -5409,22 +5409,22 @@ Xmpp4Js.Roster.Roster = function( con ) {
 
 	this.con = con;
 
-	
+
 	this.con.addPacketListener( this.rosterItemManager.rosterPacketListener.bind(this.rosterItemManager), new Xmpp4Js.PacketFilter.PacketClassFilter( Xmpp4Js.Packet.RosterPacket ) );
 	this.con.addPacketListener( this.rosterItemManager.rosterSubSyncPacketListener.bind(this.rosterItemManager), new Xmpp4Js.PacketFilter.PacketClassFilter( Xmpp4Js.Packet.Presence ) );
-	
+
 	this.con.addPacketListener( this.presenceManager.presencePacketListener.bind(this.presenceManager), new Xmpp4Js.PacketFilter.PacketClassFilter( Xmpp4Js.Packet.Presence ) );
-	
+
 
 }
 
 Xmpp4Js.Roster.Roster.prototype = {
 	reload: function() {
 		var iq = this.con.getPacketHelper().createIQ( null, "get", "jabber:iq:roster" );
-		
+
 		this.con.send( iq );	
 	},
-	
+
 	/**
 	 * @param \{String or Xmpp4Js.Jid} jid
 	 * @return Xmpp4Js.Roster.RosterEntry
@@ -5432,7 +5432,7 @@ Xmpp4Js.Roster.Roster.prototype = {
 	getEntry: function( jid ) {
 		return this.rosterItemManager.get( jid );
 	},
-	
+
 	/**
 	 * @param \{String} name
 	 * @return Xmpp4Js.Roster.RosterGroup
@@ -5440,14 +5440,14 @@ Xmpp4Js.Roster.Roster.prototype = {
 	getGroup: function( name ) {
 		return this.rosterItemManager.getGroup(name);
 	},
-	
+
 	/**
 	 * @return Xmpp4Js.Roster.RosterGroup an array of roster groups
 	 */
 	getGroups: function() {
 		return this.rosterItemManager.getGroups();
 	},
-	
+
 	/**
 	 * @return Xmpp4Js.Roster.RosterGroup
 	 */
@@ -5465,7 +5465,7 @@ Xmpp4Js.Roster.Roster.prototype = {
 	 * @param \{Array} groups an optional array of strings, group names
 	 */
 	add: function( jid, alias, groups ) {
-	
+
 		var packet = new Xmpp4Js.Packet.RosterPacket();
 		packet.addItem( jid, alias, groups );
 
@@ -5474,7 +5474,7 @@ Xmpp4Js.Roster.Roster.prototype = {
 			if( responsePacket.getType() == "error" ) {
 				// throw new exception: response.getError()	
 			}
-		
+
 			// automatically handle sending presence requests
 			// the server will ignore it if we already have
 			// subscription.
@@ -5482,7 +5482,7 @@ Xmpp4Js.Roster.Roster.prototype = {
 			this.con.send( presence );
 		}.bind(this)); 
 	},
-	
+
 	/**
 	 * Remove an item from the roster.
 	 *
@@ -5493,7 +5493,7 @@ Xmpp4Js.Roster.Roster.prototype = {
 		packet.addItem( jid, null, null, "remove" );
 		this.con.send( packet ); 
 	},
-	
+
 
 	/**
 	 * Creates an entry in roster under given groups,
@@ -5522,11 +5522,11 @@ Xmpp4Js.Roster.Roster.prototype = {
 	getPresence: function( jid, resource ) {
 		return this.presenceManager.get( jid, resource );
 	},
-	
+
 	getRosterItemManager: function() {
 		return this.rosterItemManager;
 	},
-	
+
 	getPresenceManager: function() {
 		return this.presenceManager;
 	},
@@ -5538,7 +5538,7 @@ Xmpp4Js.Roster.Roster.prototype = {
 Xmpp4Js.Roster.Roster.instances = {};
 Xmpp4Js.Roster.Roster.getInstanceFor = function(con) {
 	var instances = Xmpp4Js.Roster.Roster.instances;
-	
+
 	if( instances[con.id] === undefined ) {
 		instances[con.id] = new Xmpp4Js.Roster.Roster( con );
 	}
@@ -5561,22 +5561,22 @@ Xmpp4Js.Packet.RosterPacket = function( node ) {
 Xmpp4Js.Packet.RosterPacket.prototype = {
 	addItem: function( jid, alias, groups, subscription ) {
 		var doc = Xmpp4Js.Packet.getDocument();
-		
+
 		this.setId( "roster_add" ); 
-	
+
 		var query = this.getQuery();
 		var item = query.appendChild( doc.createElement( "item" ) );
 		item.setAttribute( "xmlns", "jabber:iq:roster" );
 		item.setAttribute( "jid", jid );
-		
+
 		if( subscription ) {
 			item.setAttribute( "subscription", subscription );
 		}
-		
+
 		if( alias ) {
 			item.setAttribute( "alias", alias );
 		}
-		
+
 		if( groups ) {
 			for( var i = 0; i < groups.length; i++ ) {
 				var group = groups[i];
@@ -5611,7 +5611,7 @@ Xmpp4Js.Muc.MucParticipant = function(room, confJid, realJid) {
 	this.room = room;
 	this.confJid = confJid;
 	this.realJid = realJid;
-	
+
 	this.status = [];
 }
 
@@ -5641,7 +5641,7 @@ Xmpp4Js.Muc.MucParticipant.prototype = {
 	getStatus : function() {
 		return this.status;
 	},
-	
+
 	/**
 	 * Returns whether the participant is self.
 	 */
@@ -5651,10 +5651,10 @@ Xmpp4Js.Muc.MucParticipant.prototype = {
 			var s = status[k];
 			if(s == Xmpp4Js.Muc.MucParticipant.Status.SELF) { return true; }
 		}
-		
+
 		return false;
 	},
-	
+
 	_getMucManager : function() {
 		return this.room._getMucManager();
 	}
@@ -5667,7 +5667,7 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js.Muc" );
  * @constructor
  */
 Xmpp4Js.Muc.MucRoom = function(mucMan, roomJid, name) {
-	
+
 	this.mucMan = mucMan;
 	this.roomJid = roomJid;
 	this.name = name;
@@ -5699,10 +5699,10 @@ Xmpp4Js.Muc.StatefulMucRoom = function(mucRoom) {
 	this.mucMan = mucRoom.mucMan;
 	this.roomJid = mucRoom.roomJid;
 	this.name = mucRoom.name;
-	
+
 	this._myNick = null; 
-	
-	
+
+
 	this.addEvents({
 		/**
 		 * Some user, including self, has entered the room. see participant.isSelf.
@@ -5749,12 +5749,12 @@ Xmpp4Js.Muc.StatefulMucRoom.prototype = {
 		  var participants = [];
 			for( var i = 0; i < items.length; i++ ) {
 				var item = items[i];
-				
+
 				var realJid = item.name;
 				var p = new Xmpp4Js.Muc.MucParticipant( self, item.jid, realJid );
 				participants.push( p );
 			}
-			
+
 			cb( self, participants );
 		} ); 
 	},
@@ -5763,10 +5763,10 @@ Xmpp4Js.Muc.StatefulMucRoom.prototype = {
 			this.part();
 		}
 		this._myNick = nick;
-		
+
 		var pres = this._createPresence();
 		var mucExt = pres.getExtension( Xmpp4Js.Ext.Muc.XMLNS );
-	
+
 		if( password ) {
 			mucExt.setPassword( password );
 		}
@@ -5793,7 +5793,7 @@ Xmpp4Js.Muc.StatefulMucRoom.prototype = {
 		var pres = this._createPresence("unavailable");
 
 		var con = this._getMucManager()._getConnection();
-		
+
 		con.send( pres, function(packet) {
 			this.fireEvent( "part", this, /* participant */null, packet );
 			this._myNick = undefined;
@@ -5802,7 +5802,7 @@ Xmpp4Js.Muc.StatefulMucRoom.prototype = {
 	sendMessage : function( msg ) {
 		msg.setType( "groupchat" );
 		msg.setTo( this.getRoomJid() );
-		
+
 		var con = this._getMucManager()._getConnection();
 		con.send( msg );
 	},
@@ -5814,16 +5814,16 @@ Xmpp4Js.Muc.StatefulMucRoom.prototype = {
 		return this._myNick ? true : false;
 	},
 	createPrivateChat : function( toNick ) { 
-	
+
 	},
 	_createPresence : function(type) {
 		var nickJid = this.getRoomJid() + "/" + this._myNick;
 		var con = this._getMucManager()._getConnection();
 		var pres = new Xmpp4Js.Packet.Presence( type, nickJid, con.jid );
-		
+
 		var extProvider = this._getMucManager()._getExtManager();
 		var mucExt = extProvider.create( Xmpp4Js.Ext.Muc.XMLNS, pres );
-		
+
 		return pres;
 	}
 }
@@ -5840,7 +5840,7 @@ Xmpp4Js.Lang.namespace( "Xmpp4Js.Muc" );
  */
 Xmpp4Js.Muc.MucPresenceFilter = function(fromJid) {
 	this.fromJid = fromJid;
-	
+
 	this.presenceFilter = new Xmpp4Js.PacketFilter.PacketClassFilter( Xmpp4Js.Packet.Presence ); 
 	if(fromJid != undefined) {
 		this.fromFilter = new Xmpp4Js.PacketFilter.FromContainsFilter(fromJid);
@@ -5853,13 +5853,13 @@ Xmpp4Js.Muc.MucPresenceFilter.prototype = {
 		if( !this.presenceFilter.accept(packet) ) {
 			return false;
 		}
-		
+
 		// if we are looking only at a specific room/occupant and this packet is 
 		// not from that room, then gtfo.
 		if( this.fromJid != undefined && packet.getFrom().indexOf(this.fromJid) == -1 ) {
 			return false;
 		}
-		
+
 		// if this element contains a muc user extension
 		// TODO ideally this would load real packet extensions, but...
 		var elements = packet.getNode().childNodes;
@@ -5871,7 +5871,7 @@ Xmpp4Js.Muc.MucPresenceFilter.prototype = {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }
@@ -5911,9 +5911,9 @@ Xmpp4Js.Muc.MucManager = function(con, node, extProvider) {
 	this.con = con;
 	this.node = node;
 	this.extProvider = extProvider;
-	
+
 	this.con.addPacketListener( );
-	
+
 	this.addEvents({
 		/**
 		 * Some participant in some room was updated
@@ -5926,11 +5926,11 @@ Xmpp4Js.Muc.MucManager = function(con, node, extProvider) {
 
 Xmpp4Js.Muc.MucManager.getInstanceFor = function( con, node, extProvider ) {
 	if(con._mucManager == undefined) { con._mucManager = {}; }
-	
+
 	if( con._mucManager[node] == null ) {
 		con._mucManager[node] = new Xmpp4Js.Muc.MucManager( con, node, extProvider );
 	}
-	
+
 	return con._mucManager[node];
 }
 
@@ -5950,22 +5950,22 @@ Xmpp4Js.Muc.MucManager.prototype = {
 
 		//var discoMan = this._getConnection().getServiceDisco();
 		var discoMan = ServiceDiscoManager.getInstanceFor(this._getConnection());
-	
+
 		var self = this; 
 
 		discoMan.discoverItems( this.node, function(node, items) {
 			var rooms = [];
 			for( var i = 0; i < items.length; i++ ) {
 				var item = items[i];
-				
+
 				var room = new Xmpp4Js.Muc.MucRoom( self, item.jid, item.name );
 				rooms.push( room );
 			}
-			
+
 			cb( self, rooms );
 		} ); 
 	},
-	
+
 	getRoom : function(name) {
 		var roomJid = name + "@" + this.node;
 		return new Xmpp4Js.Muc.MucRoom( this, roomJid, name );
@@ -5995,7 +5995,7 @@ Xmpp4Js.Ext.Muc.prototype = {
 	getElementNS : function() {
 		return Xmpp4Js.Ext.Muc.XMLNS;
 	},
-	
+
 	setPassword : function(password) {
 		throw new Error( "TODO implement" );
 	}
@@ -6140,8 +6140,8 @@ function ServiceDiscoManager( con ) {
 			 */
 			itemresponse: true
 		});
-	
-	
+
+
 	this.con = con;
 }
 
@@ -6154,7 +6154,7 @@ ServiceDiscoManager.prototype = {
 		this.con.addPacketListener( this.onDiscoItemsRequest.bind(this), new Xmpp4Js.PacketFilter.IQQueryNSFilter("http://jabber.org/protocol/disco#items") );
 		this.con.addPacketListener( this.onDiscoIInfoRequest.bind(this), new Xmpp4Js.PacketFilter.IQQueryNSFilter("http://jabber.org/protocol/disco#info") );
 	},
-	
+
 	/**
 	 * Discovers information of a given XMPP entity addressed by 
 	 * its JID and note attribute. Use this message only when trying to query 
@@ -6185,7 +6185,7 @@ ServiceDiscoManager.prototype = {
 	 */
 	discoverItems : function( jid, callback ) {
 			var packet = this.con.getPacketHelper().createIQ(jid, "get", "http://jabber.org/protocol/disco#items");
-			
+
 			var query = packet.getQuery();
 
 				this.jid = jid;
@@ -6194,7 +6194,7 @@ ServiceDiscoManager.prototype = {
 			// TODO should this time out?
 			this.con.send( packet, this.onDiscoItemsResponse.bind(this)); 
 	},
-	
+
 	/**
 	 * @private
 	 */
@@ -6251,8 +6251,8 @@ ServiceDiscoManager.prototype = {
 
 		return features;
 	},
-	
-	
+
+
 	/**
 	 * Respond to service discovery requests for items.
 	 * 
@@ -6264,11 +6264,11 @@ ServiceDiscoManager.prototype = {
 	onDiscoItemsRequest : function(requestIq) {
 		var response = this.con.getPacketHelper().createIQ( requestIq.getFrom(), "result", "http://jabber.org/protocol/disco#items" );
 		response.setId( requestIq.getId() );
-		
+
 		this.con.send( response );
 
 	},
-	
+
 	/**
 	 * Respond to service discovery requests for info.
 	 * 
@@ -6280,21 +6280,21 @@ ServiceDiscoManager.prototype = {
 	onDiscoIInfoRequest : function(requestIq) {
 		var response = this.con.getPacketHelper().createIQ( requestIq.getFrom(), "result", "http://jabber.org/protocol/disco#info" );
 		response.setId( requestIq.getId() );
-		
+
 		var queryNode = response.getQuery();
 		var doc = queryNode.ownerDocument;
-		
+
 		for( var i = 0; i < this.features.length; i++ ) {
 			var feature = this.features[i];
-			
+
 			var featureNode = doc.createElement( "feature" );
 			featureNode.setAttribute( "var", feature );
 			queryNode.appendChild( featureNode );
 		}
-		
+
 		this.con.send( response );
 	},
-	
+
 	/**
 	 * @private
 	 */
@@ -6310,7 +6310,7 @@ ServiceDiscoManager.prototype = {
 		if( responseQuery == null ) {
 			return; // TODO are responses with no query allowed?
 		} 
-		
+
 		var itemNodes = responseQuery.childNodes;
 		for ( var i=0; i < itemNodes.getLength(); i++ ) {
 			var item = itemNodes.item( i );
@@ -6327,7 +6327,7 @@ ServiceDiscoManager.prototype = {
 		this.callback(new Xmpp4Js.Jid(this.jid), items);
 		this.fireEvent( "itemresponse", new Xmpp4Js.Jid(this.jid), this.node, items );
 	},
-	
+
 	/**
 	 * @private
 	 */
@@ -6369,7 +6369,7 @@ ServiceDiscoManager.prototype = {
 ServiceDiscoManager.instances = {};
 ServiceDiscoManager.getInstanceFor = function(con) {
 	var instances = ServiceDiscoManager.instances;
-	
+
 	if( instances[con.id] === undefined ) {
 		instances[con.id] = new ServiceDiscoManager( con );
 	}
@@ -6470,7 +6470,7 @@ Xmpp4Js.Workflow.Login = function(config) {
 		 */
 		failure: true
 	});
-	
+
 	Xmpp4Js.Workflow.Login.superclass.constructor.call( this, config );
 }
 
@@ -6482,7 +6482,7 @@ Xmpp4Js.Workflow.Login.prototype = {
 	 */
 	start: function(type, username, password, resource) {
 		if( !resource ) { resource = 'xmpp4js'; };
-		
+
 		if( type=="plaintext" ) {
 			this.authPlaintext( username, password, resource );
 		} else if( type == "anon" ) {
@@ -6490,7 +6490,7 @@ Xmpp4Js.Workflow.Login.prototype = {
 		}
 
 	},
-	
+
 	authPlaintext: function( username, password, resource ) {
 		var iq = new Xmpp4Js.Packet.AuthPlainText( username, password, resource );
 
@@ -6508,7 +6508,7 @@ Xmpp4Js.Workflow.Login.prototype = {
 			}
 		}.bind(this) );
 	},
-	
+
 	authAnon: function() {
 		var iq = new Xmpp4Js.Packet.IQ( this.domain, "set", "jabber:iq:auth" );
 
@@ -6520,7 +6520,7 @@ Xmpp4Js.Workflow.Login.prototype = {
 				//		belonging as a listener in Connection. we surely
 				//		 should at least have a setJid or setCredentials method.
 				this.con.jid = responseIq.getTo();
-				
+
 				this.fireEvent( "success", responseIq );
 			}
 		}.bind(this) );
@@ -6550,7 +6550,7 @@ Xmpp4Js.Workflow.Registration = function(config) {
 	 * @private
 	 */
 	this.listeners = config.listeners;
-	
+
 	/**
 	 * The address to send the request to. Default to JID of conn
 	 * @private
@@ -6573,7 +6573,7 @@ Xmpp4Js.Workflow.Registration = function(config) {
 		 */
 		failure: true
 	});
-	
+
 	Xmpp4Js.Workflow.Registration.superclass.constructor.call( this, config );
 }
 
@@ -6585,7 +6585,7 @@ Xmpp4Js.Workflow.Registration.prototype = {
 		var iq = new Xmpp4Js.Packet.Registration(this.toJid, fields );
 		this.con.send( iq, this.onRegResponse.bind(this) );
 	},
-	
+
 	/**
 	 * @private
 	 */

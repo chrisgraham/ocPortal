@@ -49,12 +49,12 @@ class Hook_phpinfo
 				{
 					$style=substr($out,$offset-strlen($matches[0]),$end-$offset+strlen('</style>')+strlen($matches[0]));
 					//$GLOBALS['EXTRA_HEAD']=make_string_tempcode($style);
-	
+
 					$out=substr($out,0,$offset).substr($out,$end);
 				}
 			}
 			$out=preg_replace('#<head[^>]*>.*</head[^>]*>#s','',$out);
-	
+
 			$out=str_replace(' width="600"',' width="100%"',$out);
 			$out=preg_replace('#([^\s<>"\']{65}&[^;]+;)#','${1}<br />',$out);
 			$out=preg_replace('#([^\s<>"\']{95})#','${1}<br />',$out);

@@ -33,7 +33,7 @@
 				<div class="results_table_sorter">
 					{SORT}
 				</div>
-	
+
 				{PAGINATION}
 			</div></div>
 		{+END}

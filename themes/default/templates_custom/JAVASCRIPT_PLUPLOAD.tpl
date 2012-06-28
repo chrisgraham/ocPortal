@@ -647,7 +647,7 @@
 				return $1 === ' ' && $2 === ' ' ? ' ' : '';
 			});
 		},
-		
+
 		/**
 		 * Returns a given computed style of a DOM element.
 		 *
@@ -3746,7 +3746,7 @@
 									position : 'relative'
 								});
 							}
-							
+
 							plupload.extend(dropInputElm.style, {
 								position : 'absolute',
 								display : 'block',

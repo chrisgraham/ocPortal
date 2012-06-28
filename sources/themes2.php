@@ -322,7 +322,7 @@ function get_all_image_ids_type($type,$recurse=false,$db=NULL,$theme=NULL,$dirs_
 		foreach ($rows as $row)
 		{
 			if ($row['path']=='') continue;
-	
+
 			if ((url_is_local($row['path'])) && (!file_exists(((substr($row['path'],0,15)=='themes/default/')?get_file_base():get_custom_file_base()).'/'.rawurldecode($row['path'])))) continue;
 			if ($row['path']!='themes/default/images/blank.gif') // We sometimes associate to blank.gif to essentially delete images so they can never be found again
 			{

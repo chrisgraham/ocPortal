@@ -141,7 +141,7 @@ XMLP.prototype._checkStructure = function(iEvent) {
 
 	Author:	 Scott Severtson
 	*********************************************************************************************************************/
-	
+
 	if(XMLP._STATE_PROLOG == this.m_iState) {
 		if((XMLP._TEXT == iEvent) || (XMLP._ENTITY == iEvent)) {
 			if(SAXStrings.indexOfNonWhitespace(this.getContent(), this.getContentBegin(), this.getContentEnd()) != -1) {
@@ -393,7 +393,7 @@ XMLP.prototype._parseAttribute = function(iB, iE) {
 	var cQuote, strN, strV;
 
 	this.m_cAlt = ""; //resets the value so we don't use an old one by accident (see testAttribute7 in the test suite)
-	
+
 	iNB = SAXStrings.indexOfNonWhitespace(this.m_xml, iB, iE);
 	if((iNB == -1) ||(iNB >= iE)) {
 		return iNB;
@@ -2004,7 +2004,7 @@ function _XMLDoc_error(str) {
 	Description:
 		used to log an error in parsing or validating
 	*********************************************************************************************************************/
-	
+
 	this.hasErrors=true;
 	if(this.errFn){
 		this.errFn("ERROR: " + str);
@@ -3578,13 +3578,13 @@ DOMImplementation.prototype._parseLoop = function DOMImplementation__parseLoop(d
 	else if(iEvt == XMLP._TEXT || iEvt == XMLP._ENTITY) {					 // TextNode and entity Events
 		// get Text content
 		var pContent = p.getContent().substring(p.getContentBegin(), p.getContentEnd());
-		
+
 		if (!this.preserveWhiteSpace ) {
 		if (trim(pContent, true, true) == "") {
 			pContent = ""; //this will cause us not to create the text node below
 		}
 		}
-		
+
 		if (pContent.length > 0) {					// ignore empty TextNodes
 		var textNode = doc.createTextNode(pContent);
 		iNodeParent.appendChild(textNode); // attach TextNode to parentNode
@@ -3668,7 +3668,7 @@ DOMImplementation.prototype._parseLoop = function DOMImplementation__parseLoop(d
 		var parentNode = entity.getParentNode();
 		if (parentNode) {
 			parentNode.normalize();
-			
+
 			//now do whitespace (if necessary)
 			//it was not done for text nodes that have entities
 			if(!this.preserveWhiteSpace) {
@@ -3686,7 +3686,7 @@ DOMImplementation.prototype._parseLoop = function DOMImplementation__parseLoop(d
 			}
 		}
 	}
-	
+
 	//do the preserve whitespace processing on the rest of the text nodes
 	//It's possible (due to the processing above) that the node will have been
 	//removed from the tree. Only do whitespace checking if parentNode is not null.
@@ -3703,7 +3703,7 @@ DOMImplementation.prototype._parseLoop = function DOMImplementation__parseLoop(d
 			node.setData(nodeData);
 		}
 	}
-	
+
 	}
 };
 
@@ -7538,13 +7538,13 @@ function xmlIOGetData(dataName){
 	var cookieStart = myCookie.indexOf(cookieName);
 	var cookieEnd;
 	var retVal = "";
-		
+
 	if (cookieStart != -1){
 		cookieStart += cookieName.length;
 		cookieEnd = myCookie.indexOf(";", cookieStart);
 		retVal = unescape(myCookie.substring((cookieStart+1), cookieEnd));
 	}
-	
+
 	//if the return value is "", it's possible that the user has upgraded from XML for <SCRIPT> 2.0 to 2.1.
 	//we need to check to see if that's the case and handle the request correctly
 	//xml for <SCRIPT> used String.fromCharCode(171) and String.fromCharCode(187) as delimiters
@@ -7564,7 +7564,7 @@ function xmlIOGetData(dataName){
 
 		var retVal = unescape(myCookie.substring((cookieStart+1), cookieEnd));
 	}
-			
+
 	return retVal;
 
 }	// end function xmlIOGetData
@@ -7579,7 +7579,7 @@ function xmlIOListSavedDataNames(){
 		Returns an array of all the stored names in the XMLIO cookie database
 	********************************************************************************/
 	var aryRet = new Array();
-	
+
 	var arySplit = document.cookie.split(":::");
 	var intCount = arySplit.length;
 	for (intLoop = 0; intLoop < intCount; intLoop ++) {
@@ -7592,9 +7592,9 @@ function xmlIOListSavedDataNames(){
 			aryRet[aryRet.length] = arySplit[intLoop];
 		}
 	}
-			
+
 	return aryRet;
-	
+
 } // end xmlIOListSavedDataNames
 
 
@@ -7684,7 +7684,7 @@ function xmlIOProxyLoadData(proxyURL, resourceID, callbackFunction, authenticati
 
 	document.body.appendChild(dataSource);
 	return guid;
-	
+
 } //end function xmlIOProxyLoadData
 
 
@@ -7707,7 +7707,7 @@ function __getXMLFromIFrame(callbackGUID, callbackFunction, proxyReturnCode, xml
 	catch (e) {
 		//noop
 	}
-	
+
 	try {
 		//The retXML is escaped. use the XML for <SCRIPT>'s unescape function.
 		//Put the catch in here to make sure the programmer has included it
@@ -8934,20 +8934,20 @@ DOMNode.prototype.selectNodeSet_recursive = function (locationPath) {
 
 	// parse Predicates
 	var predicateList = this._parsePredicates(predicateListStr);
-		
+
 	// apply each predicate in turn
 	for (predicate in predicateList) {
 		// filter NodeSet by applying Predicate
 		candidateNodeSet = candidateNodeSet.filter(predicateList[predicate]);
 	}
-	
+
 	// recursively apply remaining steps in Location Path
 	if (locationSteps.length > 0) {
 		var remainingLocationPath = locationSteps.join('/');
 		candidateNodeSet = candidateNodeSet.selectNodeSet_recursive(remainingLocationPath);
 	}
 	}	
-	
+
 	return candidateNodeSet;
 };
 
@@ -8970,7 +8970,7 @@ DOMNode.prototype.selectNodeSet_recursive = function (locationPath) {
 DOMNode.prototype._nodeTypeIs = function(node, type) {
 	return (node.nodeType == type);
 };
-	
+
 
 // =========================================================================
 // @method
@@ -9013,14 +9013,14 @@ DOMNode.prototype._parseStep = function(step) {
 	var resultStep = new Object();
 	resultStep.axis = "";
 	var nodeTestStartInd = 0;		// start of NodeTest string defaults to starting at begining of string
-	
+
 	// test existance of AxisSpecifier
 	var axisEndInd = step.indexOf('::');
 	if (axisEndInd > -1) {
 	resultStep.axis = step.substring(0, axisEndInd);								// extract axis
 	nodeTestStartInd = axisEndInd +2;
 	}
-	
+
 	// test existance of Predicates
 	resultStep.predicateList = "";
 	var predicateStartInd = step.indexOf('[');
@@ -9109,7 +9109,7 @@ DOMNode.prototype._parseAxis = function(axisStr) {
 // ========================================================================= 
 DOMNode.prototype._parseNodeTest = function(nodeTestStr) {
 	var returnNodeTestObj = new Object();
-	
+
 	if (nodeTestStr.length == 0) {
 	returnNodeTestObj.type = DOMNode.NODE_TYPE_TEST
 	returnNodeTestObj.value = 'node';
@@ -9125,7 +9125,7 @@ DOMNode.prototype._parseNodeTest = function(nodeTestStr) {
 		returnNodeTestObj.value = nodeTestStr;
 	}
 	}
-	
+
 	return returnNodeTestObj;
 };
 
@@ -9147,18 +9147,18 @@ DOMNode.prototype._parseNodeTest = function(nodeTestStr) {
 // ========================================================================= 
 DOMNode.prototype._parsePredicates = function(predicateListStr) {
 	var returnPredicateArray = new Array();
-	
+
 	if (predicateListStr.length > 0) {
 	// remove top & tail square brackets to simplify the following split
 	var firstOpenBracket = predicateListStr.indexOf('[');
 	var lastCloseBracket = predicateListStr.lastIndexOf(']');
 
 	predicateListStr = predicateListStr.substring(firstOpenBracket+1, lastCloseBracket);
-	
+
 	// split predicate list on ']['
 	returnPredicateArray = predicateListStr.split('][');
 	}
-	
+
 	return returnPredicateArray;
 }
 
@@ -9212,7 +9212,7 @@ XPATHNodeSet.prototype.selectNodeSet_recursive = function(xpath) {
 	var candidateNode = this.item(i);
 	selectedNodeSet.union(candidateNode.selectNodeSet_recursive(xpath));
 	}
-	
+
 	return selectedNodeSet;
 };
 
@@ -9240,7 +9240,7 @@ XPATHNodeSet.prototype.getNamedItems = function(nodeName) {
 		namedItemsNodeSet._appendChild(candidateNode);
 	}
 	}
-	
+
 	return namedItemsNodeSet;
 };
 
@@ -9262,19 +9262,19 @@ XPATHNodeSet.prototype.getNamedItems = function(nodeName) {
 XPATHNodeSet.prototype.getTypedItems = function(nodeType) {
 	var typedItemsNodeSet = new XPATHNodeSet(this.ownerDocument);
 	var nodeTypeId;
-	
+
 		 if (nodeType.toLowerCase() == "node")	{ nodeTypeId = 0; }
 	else if (nodeType.toLowerCase() == "text")	{ nodeTypeId = DOMNode.TEXT_NODE; }
 	else if (nodeType.toLowerCase() == "comment") { nodeTypeId = DOMNode.COMMENT_NODE; }
 	else if (nodeType.toLowerCase() == "processing-instruction") { nodeTypeId = DOMNode.PROCESSING_INSTRUCTION_NODE; }
-	
+
 	for (var i=0; i < this.length; i++) {
 	var candidateNode = this.item(i);
 	if ((nodeTypeId == 0) || (candidateNode.nodeType == nodeTypeId)) {
 		typedItemsNodeSet._appendChild(candidateNode);
 	}
 	}
-	
+
 	return typedItemsNodeSet;
 };
 

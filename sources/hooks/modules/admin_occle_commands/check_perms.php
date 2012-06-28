@@ -36,7 +36,7 @@ class Hook_check_perms
 			require_code('upgrade');
 			$result=check_perms();
 			if ($result=='') $result=do_lang('NO_ACTION_REQUIRED');
-	
+
 			return array('',$result,'','');
 		}
 	}

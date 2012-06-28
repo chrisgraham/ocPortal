@@ -87,7 +87,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 						}
 						while (file_exists($new_path));
 						imagepng($image,$new_path);
-	
+
 						$attachment_id=$GLOBALS['SITE_DB']->query_insert('attachments',array(
 							'a_member_id'=>get_member(),
 							'a_file_size'=>strlen($data),
@@ -99,7 +99,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 							'a_description'=>'',
 							'a_add_time'=>time()),true);
 						$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>$type,'r_referer_id'=>$id,'a_id'=>$attachment_id));
-	
+
 						$original_comcode=str_replace($original_comcode,$matches[0][$i],'[attachment type="inline" thumb="0"]'.strval($attachment_id).'[/attachment]');
 					}
 				}

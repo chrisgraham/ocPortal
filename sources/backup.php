@@ -153,7 +153,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 	$install_data_php_file=fopen($__install_data_php_file,'wb');
 	fwrite($install_php_file,substr($_install_php_file,0,$place));
 	fwrite($install_data_php_file,"<"."?php
-	
+
 //COMMANDS BEGIN
 //\$GLOBALS['SITE_DB']->drop_if_exists('db_meta');
 //\$GLOBALS['SITE_DB']->create_table('db_meta',array(

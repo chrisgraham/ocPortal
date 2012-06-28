@@ -3,7 +3,7 @@
 
 {+START,IF,{$GET,HAS_SOCIAL_MENU}}
 	[block="main_community" type="top"]side_stored_menu[/block]
-	
+
 	{+START,IF,{$ADDON_INSTALLED,ocf_forum}}
 		{+START,IF,{$OR,{$WIDE},{$EQ,{$PAGE},forumview}}}
 			[block]main_member_bar[/block]

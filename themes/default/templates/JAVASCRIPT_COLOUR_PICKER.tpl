@@ -96,7 +96,7 @@ YAHOO.util.Color = function() {
 				case g:	h=(60*(b-r)/delta)+120; break;
 				case b:	h=(60*(r-g)/delta)+240; break;
 			}
-			
+
 			s = (max === 0) ? 0 : 1-(min/max);
 
 			var hsv = [Math.round(h), s, max];
@@ -150,7 +150,7 @@ YAHOO.util.Color = function() {
 			};
 
 			var s=str.split('');
-			
+
 			return ((f(s[0]) * 16) + f(s[1]));
 		},
 
@@ -225,7 +225,7 @@ YAHOO.util.Color = function() {
 		if (this.CSS.BASE) {
 			el.className = this.CSS.BASE;
 		}
-		
+
 		return el;
 	};
 
@@ -248,7 +248,7 @@ YAHOO.util.Color = function() {
 			attr = el; // treat first arg as attr object
 			el = attr.element || null;
 		}
-		
+
 		if (!el && !attr.element) { // create if we dont have one
 			el = _createHostElement.call(this, attr);
 		}
@@ -257,7 +257,7 @@ YAHOO.util.Color = function() {
 	};
 
 	YAHOO.extend(YAHOO.widget.ColorPicker, YAHOO.util.Element);
-	
+
 	var proto = YAHOO.widget.ColorPicker.prototype,
 		Slider=YAHOO.widget.Slider,
 		Color=YAHOO.util.Color,
@@ -265,7 +265,7 @@ YAHOO.util.Color = function() {
 		Event = YAHOO.util.Event,
 		lang = YAHOO.lang,
 		sub = lang.substitute;
-	
+
 
 	var b = "yui-picker";
 
@@ -444,7 +444,7 @@ YAHOO.util.Color = function() {
 		 * @default yui-picker-hsv-controls
 		 */
 		HSV_CONTROLS: b + "-hsv-controls",
-		
+
 		/**
 		 * The id for the hsv controls
 		 * @property ID.HEX_CONTROLS
@@ -570,7 +570,7 @@ YAHOO.util.Color = function() {
 			h = this.get(this.OPT.HUE);
 
 		h = size - Math.round(h / 360 * size);
-		
+
 		// 0 is at the top and bottom of the hue slider.  Always go to
 		// the top so we don't end up sending the thumb to the bottom
 		// when the value didn't actually change (e.g., a conversion
@@ -630,7 +630,7 @@ YAHOO.util.Color = function() {
 	 * @type YAHOO.widget.Slider
 	 */
 	proto.hueSlider = null; 
-	
+
 	/**
 	 * The picker region
 	 * @property pickerSlider
@@ -863,7 +863,7 @@ YAHOO.util.Color = function() {
 			case 6: // return, update the value
 				_useFieldValue.apply(this, arguments);
 				break;
-						
+
 			case 3: // up arrow, increment
 				this.set(prop, Math.min(this.get(prop)+inc, 255));
 				_updateFormFields.call(this);
@@ -997,7 +997,7 @@ YAHOO.util.Color = function() {
 		child.appendChild(img);
 		el.appendChild(child);
 		p.appendChild(el);
-		
+
 		// Hue slider ---------------------------------------------
 		el = new Elem("div", {
 			id: ids[this.ID.HUE_BG],
@@ -1355,7 +1355,7 @@ YAHOO.util.Color = function() {
 	 * @private
 	 */
 	var _updateHex = function() {
-		
+
 		var hex = this.get(this.OPT.HEX), l=hex.length;
 
 		// support #369 -> #336699 shorthand
@@ -1394,7 +1394,7 @@ YAHOO.util.Color = function() {
 
 		attr = attr || {};
 		YAHOO.widget.ColorPicker.superclass.initAttributes.call(this, attr);
-		
+
 		/**
 		 * The size of the picker. Trying to change this is not recommended.
 		 * @attribute pickersize

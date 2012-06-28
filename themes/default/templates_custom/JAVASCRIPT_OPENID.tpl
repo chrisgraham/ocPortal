@@ -10,7 +10,7 @@ Martin Conte Mac Donell <Reflejo@gmail.com>
 		var gprovider;
 		var INPUTID = 'openid_username';
 		var inputarea = $('#openid_inputarea').length ? $('#openid_inputarea'): $('<div id="openid_inputarea" />');
-	
+
 		var defaults = {
 			txt: {
 				label: 'Enter your {provider} {username}',
@@ -91,20 +91,20 @@ Martin Conte Mac Donell <Reflejo@gmail.com>
 			cookie_path: '/',
 			img_path: '/img/'
 		};
-	
+
 		var getBox = function(provider, idx, box_size) {
 			var a = $('<a title="' + provider + '" href="#" id="btn_' + idx + 
 								'" class="openid_' + box_size + '_btn ' + provider + '" />');
 			return a.click(signIn);
 		};
-	
+
 		var setCookie = function(value) {
 			var date = new Date();
 			date.setTime(date.getTime() + (settings.cookie_expires * 24 * 60 * 60 * 1000));
 			document.cookie = "openid_prov=" + value + "; expires=" + date.toGMTString() + 
 												"; path=" + settings.cookie_path;
 		};
-	
+
 		var readCookie = function(){
 			var c = document.cookie.split(';');
 			for(i in c){
@@ -113,19 +113,19 @@ Martin Conte Mac Donell <Reflejo@gmail.com>
 					return $.trim(c[i].slice(pos + 12));
 			}
 		};
-	
+
 		var signIn = function(obj, tidx) {
 			var idx = $(tidx || this).attr('id').replace('btn_', '');
 			if (!(gprovider = settings.providers[idx]))
 				return;
-		
+
 			// Hightlight
 			if (highlight = $('#openid_highlight'))
 				highlight.replaceWith($('#openid_highlight a')[0]);
 	 
 			$('#btn_' + idx).wrap('<div id="openid_highlight" />');
 			setCookie(idx);
-	
+
 			// prompt user for input?
 			showInputBox();
 			if (gprovider.label === null) {
@@ -137,26 +137,26 @@ Martin Conte Mac Donell <Reflejo@gmail.com>
 			}
 			return false;
 		};
-	
+
 		var showInputBox = function() {
 			var lbl = (gprovider.label || settings.txt.label).replace(
 				'{username}', (gprovider.username_txt !== undefined) ? gprovider.username_txt: settings.txt.username
 			).replace('{provider}', gprovider.name);
-	
+
 			inputarea.empty().show().append('<label for="' + INPUTID + '" class="oidlabel">' + lbl + '</label><input id="' + INPUTID + '" type="text" ' +
 				' name="username_txt" class="Verisign"/><input type="submit" value="' + settings.txt.sign + '"/>');
-	
+
 			$('#' + INPUTID).focus();
 		};
-	
+
 		var submit = function(){
 			var prov = (gprovider.url) ? gprovider.url.replace('{username}', $('#' + INPUTID).val()): $('#' + INPUTID).val();
 			form.append($('<input type="hidden" name="openid_identifier" value="' + prov + '" />'));
 		};
-	
+
 		var settings = $.extend(defaults, opt || {});
 		var btns = $('<div id="openid_btns" />');
-	
+
 		// Add box for each provider
 		var addbr = true;
 		$.each(settings.providers, function(i, val) {
@@ -166,17 +166,17 @@ Martin Conte Mac Donell <Reflejo@gmail.com>
 			}
 			btns.append(getBox(val.name, i, (val.big) ? 'large': 'small'));
 		});
-	
+
 		var form = this;
 		form.css({'background-image': 'none'});
 		form.append(btns).submit(submit);
 		btns.append(inputarea);
-	
+
 		if (idx = readCookie())
 			signIn(null, '#btn_' + idx);
 		else
 		inputarea.text(settings.txt.title).show();
-	
+
 		return this;
 	};
 })(jQuery);

@@ -101,7 +101,7 @@ class Database_super_mysql
 			}
 			return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\') AND (? IS NOT NULL)';
 		}
-		
+
 		return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\' IN BOOLEAN MODE) AND (? IS NOT NULL)';
 	}
 

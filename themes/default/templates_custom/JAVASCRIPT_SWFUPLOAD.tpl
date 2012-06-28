@@ -932,7 +932,7 @@ SWFUpload.prototype.debug = function (message) {
 	have debug disabled you can remove these functions to reduce the file size
 	and complexity.
 ********************************** */
-	
+
 // Private: debugMessage is the default debug_handler.  If you want to print debug messages
 // call the debug() function.  When overriding the function your own function should
 // check to see if the debug setting is true before outputting debug information.

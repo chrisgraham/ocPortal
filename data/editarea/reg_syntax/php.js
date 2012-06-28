@@ -130,7 +130,7 @@ editAreaLoader.load_syntax["php"] = {
 					]
 				}
 			}
-		,"live": {	
+		,"live": {
 
 			// class NAME: /class\W+([a-z]+)\W+/gi
 			// method: /^(public|private|protected)?\s*function\s+([a-z][a-z0-9\_]*)\s*(\([^\{]*\))/gmi
@@ -139,7 +139,7 @@ editAreaLoader.load_syntax["php"] = {
 			// 		v1 : /(\$this\-\>|var\W+|public\W+|protected\W+|private\W+)([a-z0-9\_]+)\W*(=|;)/gi 
 			// var type: /(\$(this\-\>)?[a-z0-9\_]+)\s*\=\s*new\s+([a-z0-9\_])+/gi 
 
-			
+
 			"REGEXP": { "before_word": "[^a-zA-Z0-9_]|^"	// \\s|\\.|
 						,"possible_words_letters": "[a-zA-Z0-9_\$]+"
 						,"letter_after_word_must_match": "[^a-zA-Z0-9_]|$"

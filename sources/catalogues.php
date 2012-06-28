@@ -888,14 +888,14 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 		foreach ($fields as $i=>$field)
 		{
 			$field_id=$field['id'];
-	
+
 			if ((!is_null($only_fields)) && (!in_array($i,$only_fields))) continue;
 			if ($field['cf_defines_order']==0)
 			{
 				if (($view_type=='CATEGORY') && ($field['cf_put_in_category']==0)) continue;
 				if (($view_type=='SEARCH') && ($field['cf_put_in_search']==0)) continue;
 			}
-	
+
 			$only_field_ids[]=$field_id;
 		}
 	}

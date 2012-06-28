@@ -159,7 +159,7 @@ function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name=
 			{
 				warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD_BANNERS'));
 			}
-	
+
 			// Check width, height, size
 			$test_url=$url;
 			if (url_is_local($test_url))
@@ -187,7 +187,7 @@ function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name=
 						if (url_is_local($test_url)) @unlink(get_custom_file_base().'/'.rawurldecode($test_url));
 						warn_exit(do_lang_tempcode('CORRUPT_FILE',escape_html($test_url)));
 					}
-	
+
 					if ((get_option('banner_autosize')!='1') && ((imagesx($img_res)!=$banner_type_row['t_image_width']) || (imagesy($img_res)!=$banner_type_row['t_image_height'])))
 					{
 						if (url_is_local($test_url)) @unlink(get_custom_file_base().'/'.rawurldecode($test_url));

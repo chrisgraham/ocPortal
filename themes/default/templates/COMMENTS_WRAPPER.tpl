@@ -34,7 +34,7 @@
 	<div class="boxless_space">
 		<div class="box box___comments_wrapper"><div class="box_inner">
 			<h2>{$GET,COMMENT_BOX_TITLE}</h2>
-	
+
 			{+START,LOOP,REVIEW_RATING_CRITERIA}
 				{+START,IF_NON_EMPTY,{REVIEW_RATING}}
 					{+START,IF_NON_EMPTY,{REVIEW_TITLE}}
@@ -49,17 +49,17 @@
 					{+END}
 				{+END}
 			{+END}
-	
+
 			<div class="comment_wrapper">
 				<meta itemprop="interactionCount" content="UserComments:{$META_DATA*,numcomments}" />
-	
+
 				{COMMENTS`}
-	
+
 				{+START,IF_EMPTY,{$TRIM,{COMMENTS}}}
 					<p class="nothing_here">{!NO_COMMENTS}</p>
 				{+END}
 			</div>
-	
+
 			{+START,IF_PASSED,PAGINATION}
 				<div class="float_surrounder">
 					{PAGINATION}
@@ -70,7 +70,7 @@
 		{$,If has commenting permission}
 		{+START,IF_NON_EMPTY,{FORM}}
 			{+START,IF_PASSED,COMMENTS}<a id="last_comment" rel="docomment"></a>{+END}
-	
+
 			{FORM}
 		{+END}
 

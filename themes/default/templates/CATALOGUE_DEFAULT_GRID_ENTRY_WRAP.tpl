@@ -15,7 +15,7 @@
 				<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET^;*,TOOLTIP}','500px');" href="{VIEW_URL*}">{FIELD_1_THUMB}</a>
 			</div>
 		{+END}
-	
+
 		{+START,IF_EMPTY,{FIELD_1_THUMB}}
 			<p>
 				<a title="{$STRIP_TAGS,{FIELD_0}}" href="{VIEW_URL*}">{!VIEW}</a>

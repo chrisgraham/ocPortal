@@ -29,7 +29,7 @@
 					{!BY_SIMPLE,<a href="{AUTHOR_URL*}" title="{!AUTHOR}: {AUTHOR*}">{AUTHOR*}</a>}
 					{+START,INCLUDE,MEMBER_TOOLTIP}{+END}
 				{+END}
-			
+
 				{+START,IF,{$NOT,{$IS_NON_EMPTY,{AUTHOR_URL}}}}
 					{+START,IF_NON_EMPTY,{$USERNAME*,{SUBMITTER}}}
 						{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{$USERNAME*,{SUBMITTER}}</a>}
@@ -50,7 +50,7 @@
 	{+START,IF_PASSED,TAGS}
 		{+START,IF,{$CONFIG_OPTION,show_content_tagging_inline}}{TAGS}{+END}
 	{+END}
-	
+
 	<p class="news_goto">
 		{$,<img class="button_pageitem" src="{$IMG*,pageitem/goto}" title="{!VIEW} / {!COMMENTS}" alt="{!VIEW} / {!COMMENTS}" />}
 		<a title="{!READ_MORE}: #{ID*}" href="{FULL_URL*}">{!READ_MORE}</a>{+START,IF,{$NOT,{$MATCH_KEY_MATCH,forum:topicview,forum:forumview}}} {+START,IF_PASSED_AND_TRUE,COMMENT_COUNT} <span class="comment_count">{$COMMENT_COUNT,news,{ID}}</span>{+END}{+END}

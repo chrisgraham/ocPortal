@@ -133,7 +133,7 @@ function pigLatin($word) {
 // Recall the function until a vowel is encountered and then return the word.
 function moveLetter(&$word) {
 	if (!containsVowel($word)) return $word;
-	
+
 	if (!isVowel(substr($word,0,1))) {
 		$chLetter=strtolower(substr($word,0,1));
 		$word=substr($word,1) . $chLetter;
@@ -156,11 +156,11 @@ function containsVowel($word)
 // For most pig latin variations, Y is considered a vowel.
 function isVowel($chLetter) {
 	$letters=array("a","e","i","o","u","y");
-	
+
 	for ($i=0; $i < 6; $i++) {
 		if (strtolower($chLetter)==$letters[$i]) { return true; }
 	}
-	
+
 	return false;
 }
 

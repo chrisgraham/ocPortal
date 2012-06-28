@@ -1,7 +1,7 @@
 <div class="boxless_space global_side_panel">
 	<div class="box" role="marquee"><div class="box_inner">
 		{MESSAGES}
-	
+
 		<form target="_self" action="{URL*}&amp;posted=1" method="post" title="{!SHOUTBOX}">
 			<div class="constrain_field">
 				<p class="accessibility_hidden"><label for="shoutbox_message">{!MESSAGE}</label></p>
@@ -20,7 +20,7 @@
 				</div>
 			</div>
 		</form>
-	
+
 		<script type="text/javascript">// <![CDATA[
 			document.getElementById('shoutbox_message').setAttribute('autocomplete','off');
 		//]]></script>

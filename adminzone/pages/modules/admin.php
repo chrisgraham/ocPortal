@@ -551,7 +551,7 @@ class Module_admin
 						case 'timezone':
 							$t=do_lang('DESCRIPTION_TIMEZONE_SITE');
 							break;
-	
+
 						default:
 							$t=do_lang($p['explanation'],NULL,NULL,NULL,NULL,false);
 							break;
@@ -577,15 +577,15 @@ class Module_admin
 							$breadcrumbs->attach(hyperlink($url,do_lang($p['section'])));
 							$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 							$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'f7271912ccbe0358fe263ed61f7ed427','NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>protect_from_escaping($t),'SUP'=>$sup)));
-	
+
 							if ($conf_found_count>100)
 							{
 								$content[$current_results_type]=do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'URL'=>'','TITLE'=>'','DESCRIPTION'=>'','SUP'=>''));
 								break;
 							}
-	
+
 							$conf_found_count++;
-	
+
 							if (!array_key_exists($p['the_page'],$config_categories)) $config_categories[$p['the_page']]=array();
 							$config_categories[$p['the_page']][$p['section']]=1;
 						}
