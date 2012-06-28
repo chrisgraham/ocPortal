@@ -81,9 +81,10 @@ function _enforce_sessioned_url($url)
  *
  * @param  MEMBER			Logged in member
  * @param  BINARY			Whether the session should be considered confirmed
+ * @param  boolean		Whether the session should be invisible
  * @return AUTO_LINK		New session ID
  */
-function create_session($member,$session_confirmed=0)
+function create_session($member,$session_confirmed=0,$invisible=false)
 {
 	global $SESSION_CACHE;
 
@@ -99,7 +100,7 @@ function create_session($member,$session_confirmed=0)
 
 		// Store session
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		$new_session_row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$member,'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed,'session_invisible'=>0,'cache_username'=>$username,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>substr(get_page_name(),0,80),'the_type'=>substr(get_param('type','',true),0,80),'the_id'=>substr(either_param('id',''),0,80));
+		$new_session_row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$member,'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed,'session_invisible'=>$invisible?1:0,'cache_username'=>$username,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>substr(get_page_name(),0,80),'the_type'=>substr(get_param('type','',true),0,80),'the_id'=>substr(either_param('id',''),0,80));
 		$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row,false,true);
 
 		$SESSION_CACHE[$new_session]=$new_session_row;
@@ -272,7 +273,7 @@ function try_httpauth_login()
 	}
 
 	if (!is_null($member))
-		create_session($member,1); // This will mark it as confirmed
+		create_session($member,1,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1')); // This will mark it as confirmed
 
 	return $member;
 }
@@ -380,7 +381,7 @@ function try_cookie_login()
 				global $IS_A_COOKIE_LOGIN;
 				$IS_A_COOKIE_LOGIN=true;
 
-				create_session($member);
+				create_session($member,0,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1'));
 			}
 		}
 	}

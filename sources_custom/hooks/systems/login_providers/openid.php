@@ -76,7 +76,7 @@ class Hook_login_provider_openid
 					{
 						require_code('users_inactive_occasionals');
 
-						create_session($member,1); // This will mark it as confirmed
+						create_session($member,1,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1')); // This will mark it as confirmed
 
 						return $member;
 					}
@@ -157,7 +157,7 @@ class Hook_login_provider_openid
 					if (!is_null($member))
 					{
 						require_code('users_inactive_occasionals');
-						create_session($member,1); // This will mark it as confirmed
+						create_session($member,1,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1')); // This will mark it as confirmed
 					}
 				} else
 				{

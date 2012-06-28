@@ -144,7 +144,7 @@ function apply_tempcode_escaping($escaped,&$value)
 		elseif ($escape==UL_ESCAPED) $value=ocp_url_encode($value);
 		elseif ($escape==UL2_ESCAPED) $value=rawurlencode($value);
 		elseif ($escape==JSHTML_ESCAPED) $value=str_replace(']]>',']]\'+\'>',str_replace('</','<\/',$value));
-		elseif ($escape==ID_ESCAPED) $value=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$value));
+		elseif ($escape==ID_ESCAPED) $value=fix_id($value);
 		elseif ($escape==CSS_ESCAPED) $value=preg_replace('#[^\w\#\.\-\%]#','_',$value);
 		elseif ($escape==NAUGHTY_ESCAPED) $value=filter_naughty_harsh($value,true);
 	}
@@ -175,7 +175,7 @@ function apply_tempcode_escaping_inline($escaped,$value)
 		elseif ($escape==UL_ESCAPED) $value=ocp_url_encode($value);
 		elseif ($escape==UL2_ESCAPED) $value=rawurlencode($value);
 		elseif ($escape==JSHTML_ESCAPED) $value=str_replace(']]>',']]\'+\'>',str_replace('</','<\/',$value));
-		elseif ($escape==ID_ESCAPED) $value=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$value));
+		elseif ($escape==ID_ESCAPED) $value=fix_id($value);
 		elseif ($escape==CSS_ESCAPED) $value=preg_replace('#[^\w\#\.\-\%]#','_',$value);
 		elseif ($escape==NAUGHTY_ESCAPED) $value=filter_naughty_harsh($value,true);
 	}

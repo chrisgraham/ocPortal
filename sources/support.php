@@ -689,7 +689,51 @@ function array_peek($array,$depth_down=1)
  */
 function fix_id($param)
 {
-	return str_replace(array('[',']','&#039;','\'','-',' ','+','*','/','__'),array('_opensquare_','_closesquare_','_apostophe_','_apostophe_','_minus_','_space_','_plus_','_star_'),$param);
+	$length=strlen($param);
+	$new='';
+	for ($i=0;$i<$length;$i++)
+	{
+		$char=$param[$i];
+		switch ($char)
+		{
+			case '[':
+				$new.='_opensquare_';
+				break;
+			case ']':
+				$new.='_closesquare_';
+				break;
+			case '&#039;':
+			case '\'':
+				$new.='_apostophe_';
+				break;
+			case '-':
+				$new.='_minus_';
+				break;
+			case ' ':
+				$new.='_space_';
+				break;
+			case '+':
+				$new.='_plus_';
+				break;
+			case '*':
+				$new.='_star_';
+				break;
+			case '/':
+				$new.='__';
+				break;
+			default:
+				$ascii=ord($char);
+				if ((($ascii>=48) && ($ascii<=57)) || (($ascii>=65) && ($ascii<=90)) || (($ascii>=97) && ($ascii<=122)))
+				{
+					$new.=$char;
+				} else
+				{
+					$new.='_'.strval($ascii).'_';
+				}
+				break;
+		}
+	}
+	return $new;
 }
 
 /**
@@ -2232,8 +2276,9 @@ function member_personal_links_and_details($member_id)
 	{
 		if ((array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0))
 		{
+			$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
 			$url=build_url(array('page'=>'login','type'=>'invisible','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
-			$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('NAME'=>do_lang_tempcode('INVISIBLE'),'DESCRIPTION'=>'','URL'=>$url)));
+			$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('NAME'=>do_lang_tempcode($visible?'INVISIBLE':'BE_VISIBLE'),'DESCRIPTION'=>'','URL'=>$url)));
 		}
 	}
 
