@@ -11,10 +11,6 @@ function init__facebook_connect()
 {
 	if (!class_exists('ocp_tempcode')) return;
 
-	global $EXTRA_FOOT;
-	if (!isset($EXTRA_FOOT)) $EXTRA_FOOT=new ocp_tempcode();
-	$EXTRA_FOOT->attach(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
-
 	// Initialise Facebook Connect
 	require_code('facebook/facebook');
 	class ocpFacebook extends BaseFacebook // We don't want any persistence - we store in normal ocPortal sessions/member rows
@@ -47,6 +43,10 @@ function init__facebook_connect()
 	if (is_null($appid)) return;
 	if (($appsecret!='') && ($appid!=''))
 		$FACEBOOK_CONNECT=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
+
+	global $EXTRA_FOOT;
+	if (!isset($EXTRA_FOOT)) $EXTRA_FOOT=new ocp_tempcode();
+	$EXTRA_FOOT->attach(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
 }
 
 // This is only called if we know we have a user logged into Facebook, who has authorised to our app
