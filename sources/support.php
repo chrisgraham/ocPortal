@@ -664,7 +664,51 @@ function array_peek($array,$depth_down=1)
  */
 function fix_id($param)
 {
-	return str_replace('[','_opensquare_',str_replace(']','_closesquare_',str_replace('&#039;','_apostophe_',str_replace('\'','_apostophe_',str_replace('-','_minus_',str_replace(' ','_space_',str_replace('+','_plus_',str_replace('*','_star_',str_replace('/','__',$param)))))))));
+	$length=strlen($param);
+	$new='';
+	for ($i=0;$i<$length;$i++)
+	{
+		$char=$param[$i];
+		switch ($char)
+		{
+			case '[':
+				$new.='_opensquare_';
+				break;
+			case ']':
+				$new.='_closesquare_';
+				break;
+			case '&#039;':
+			case '\'':
+				$new.='_apostophe_';
+				break;
+			case '-':
+				$new.='_minus_';
+				break;
+			case ' ':
+				$new.='_space_';
+				break;
+			case '+':
+				$new.='_plus_';
+				break;
+			case '*':
+				$new.='_star_';
+				break;
+			case '/':
+				$new.='__';
+				break;
+			default:
+				$ascii=ord($char);
+				if ((($ascii>=48) && ($ascii<=57)) || (($ascii>=65) && ($ascii<=90)) || (($ascii>=97) && ($ascii<=122)))
+				{
+					$new.=$char;
+				} else
+				{
+					$new.='_'.strval($ascii).'_';
+				}
+				break;
+		}
+	}
+	return $new;
 }
 
 /**

@@ -552,6 +552,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 					}
 				}
 			}
+
 			if (!is_file($lang_file_default)) $lang_file_default=$lang_file;
 			if ((is_file($cache_path)) && ((!is_file($lang_file)) || ((@/*race conditions*/filemtime($cache_path)>filemtime($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file_default)))))
 			{
@@ -648,13 +649,10 @@ function lang_code_to_default_content($code,$comcode=false,$level=2)
  */
 function require_all_open_lang_files($lang=NULL)
 {
-	global $LANG_LOADED,$PAGE_CACHE_LAZY_LOAD,$LANGS_REQUESTED;
+	global $PAGE_CACHE_LAZY_LOAD,$LANG_REQUESTED_LANG,$LANGS_REQUESTED;
 	$PAGE_CACHE_LAZY_LOAD=false;
-	global $LANG_REQUESTED_LANG,$LANG_LOADED_LANG;
-	$LANG_LOADED_LANG=array();
-	$LANG_REQUESTED_LANG=array();
+	$LANG_REQUESTED_LANG=array(); // So require_lang will do a re-load
 	$langs_requested_copy=$LANGS_REQUESTED;
-	$LANGS_REQUESTED=array();
 	foreach (array_keys($langs_requested_copy) as $toload)
 	{
 		require_lang($toload,$lang,NULL,true);
