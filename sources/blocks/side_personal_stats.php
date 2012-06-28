@@ -178,11 +178,9 @@ class Block_side_personal_stats
 			// Becomes-invisible link
 			if (get_option('is_on_invisibility')=='1')
 			{
-				if ((array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0))
-				{
-					$url=build_url(array('page'=>'login','type'=>'invisible','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
-					$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('NAME'=>do_lang_tempcode('INVISIBLE'),'DESCRIPTION'=>'','URL'=>$url)));
-				}
+				$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
+				$url=build_url(array('page'=>'login','type'=>'invisible','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
+				$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('NAME'=>do_lang_tempcode($visible?'INVISIBLE':'BE_VISIBLE'),'DESCRIPTION'=>'','URL'=>$url)));
 			}
 
 			// Logout link

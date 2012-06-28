@@ -265,23 +265,33 @@ class Module_login
 	}
 
 	/**
-	 * The actualiser for entering conceded mode.
+	 * The actualiser for toggling invisible mode.
 	 *
 	 * @return tempcode	The UI.
 	 */
 	function invisible()
 	{
-		$title=get_page_title('INVISIBLE');
+		$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
 
-		$GLOBALS['SITE_DB']->query_update('sessions',array('session_invisible'=>1),array('the_user'=>get_member(),'the_session'=>get_session_id()),'',1);
+		$title=get_page_title($visible?'INVISIBLE':'BE_VISIBLE');
+
+		$GLOBALS['SITE_DB']->query_update('sessions',array('session_invisible'=>$visible?1:0),array('the_user'=>get_member(),'the_session'=>get_session_id()),'',1);
 		global $SESSION_CACHE;
 		if ($SESSION_CACHE[get_session_id()]['the_user']==get_member()) // A little security
 		{
-			$SESSION_CACHE[get_session_id()]['session_invisible']=0;
+			$SESSION_CACHE[get_session_id()]['session_invisible']=$visible?1:0;
 			if (get_value('session_prudence')!=='1')
 			{
 				persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
 			}
+		}
+
+		// Store in cookie, if we have login cookies around
+		if (array_key_exists(get_member_cookie(),$_COOKIE))
+		{
+			require_code('users_active_actions');
+			ocp_setcookie(get_member_cookie().'_invisible',strval($visible?1:0));
+			$_COOKIE[get_member_cookie().'_invisible']=strval($visible?1:0);
 		}
 
 		$url=get_param('redirect',NULL);

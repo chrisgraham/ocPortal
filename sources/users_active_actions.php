@@ -98,8 +98,17 @@ function handle_active_login($username)
 
 	if (!is_null($member)) // Valid user
 	{
-		// Store the cookies
 		$remember=post_param_integer('remember',0);
+
+		// Create invisibility cookie
+		if ((array_key_exists(get_member_cookie().'_invisible',$_COOKIE)/*i.e. already has cookie set, so adjust*/) || ($remember==1))
+		{
+			$invisible=post_param_integer('login_invisible',0);
+			ocp_setcookie(get_member_cookie().'_invisible',strval($invisible));
+			$_COOKIE[get_member_cookie().'_invisible']=strval($invisible);
+		}
+
+		// Store the cookies
 		if ($remember==1)
 		{
 			global $IS_A_COOKIE_LOGIN;
@@ -157,7 +166,7 @@ function handle_active_login($username)
 
 		// Create session
 		require_code('users_inactive_occasionals');
-		create_session($member,1);
+		create_session($member,1,post_param_integer('login_invisible',0)==1);
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_insert('failedlogins',array('failed_account'=>trim(post_param('login_username')),'date_and_time'=>time(),'ip'=>get_ip_address()));

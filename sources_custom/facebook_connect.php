@@ -232,7 +232,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 	if (!is_null($member))
 	{
 		require_code('users_inactive_occasionals');
-		create_session($member,1); // This will mark it as confirmed
+		create_session($member,1,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1')); // This will mark it as confirmed
 	}
 
 	return $member;
