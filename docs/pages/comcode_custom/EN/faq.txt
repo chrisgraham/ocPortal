@@ -146,6 +146,13 @@ We acknowledge that most people don't have thousands of pounds/dollars to spend 
 [b]How can I make a donation?[/b]
 As we're a company we don't really accept direct donations, but you can sponsor features on the [url="tracker"]http://ocportal.com/tracker/[/url].
 
+[b]How is ocProducts funded / what is your company philosophy?[/b]
+We cover most of our costs through work we do for our clients, and feature sponsorships.
+Unlike many other CMS companies, we are financially independent -- we haven't taken outside venture capital, which means we are able to operate our ecosystem to our own founding ideals.
+We aren't a non-profit organisation like many CMSs have behind them, because we feel it's important to have an entity that can provide strong product leadership and direct resources efficiently. By being capitalist we have the right mindset to make sure that resources are allocated in a way that derives measurable value, and allows us to turn a profit to re-invest, as opposed to spreading resources around according to the specialist interests of those on a committee. Our belief is that forced committee decisions don't result in good product design and generally weigh/slow things down with bureaucracy and management cost, and general noise and chaos. We also believe that [i]relying[/i] on unpaid volunteers would result in an unbalanced product.
+So there you have it -- we are a small passionate organisation, led by the ocPortal founders, that ensures ocPortal is financially sustainable, but also free from big-money interests and short-term profitability burdens.
+And, if the company turns evil or otherwise fails to manage the project effectively, ocPortal is Open Source so someone can fork it!
+
 [title="2"]Installation issues[/title]
 
 [b]The install is failing, how can I make it work?[/b]
