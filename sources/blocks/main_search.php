@@ -125,13 +125,14 @@ class Block_main_search
 			}
 		}
 
-		unset($map['input_fields']);
-		unset($map['extra']);
-		unset($map['zone']);
-		unset($map['title']);
-		unset($map['limit_to']);
-		unset($map['block']);
-		$full_link=build_url(array('page'=>'search','type'=>'misc')+$map+$extra+$extrax,$zone);
+		$url_map=$map;
+		unset($url_map['input_fields']);
+		unset($url_map['extra']);
+		unset($url_map['zone']);
+		unset($url_map['title']);
+		unset($url_map['limit_to']);
+		unset($url_map['block']);
+		$full_link=build_url(array('page'=>'search','type'=>'misc')+$url_map+$extra+$extrax,$zone);
 
 		if ((!array_key_exists('content',$input_fields)) && (count($input_fields)!=1)) $extra['content']='';
 

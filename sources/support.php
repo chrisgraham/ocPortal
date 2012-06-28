@@ -430,9 +430,10 @@ function addon_installed($addon,$non_bundled_too=false)
  *
  * @param  float			The number
  * @param  integer		The number of decimals to keep
+ * @param  boolean		Whether to trim trailing zeros
  * @return string			The string converted
  */
-function float_to_raw_string($num,$decs_wanted=2)
+function float_to_raw_string($num,$decs_wanted=2,$only_needed_decs=false)
 {
 	$str=number_format($num,5,'.','');
 	$decs_here=strlen($str)-strpos($str,'.')-1;
@@ -447,6 +448,7 @@ function float_to_raw_string($num,$decs_wanted=2)
 		$str=substr($str,0,strlen($str)-$decs_here+$decs_wanted);
 		if ($decs_wanted==0) $str=rtrim($str,'.');
 	}
+	if ($only_needed_decs) $str=preg_replace('#\.$#','',preg_replace('#0+$#','',$str));
 	return $str;
 }
 

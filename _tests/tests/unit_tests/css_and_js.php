@@ -71,9 +71,10 @@ class css_and_js_test_set extends ocp_test_case
 		$dh=opendir(get_file_base().'/themes/default/css');
 		while (($f=readdir($dh))!==false)
 		{
-			if ((substr($f,-4)=='.css') && ($f!='svg.css') && ($f!='quizzes.css'/*we know this doesn't pass but it is extra glitz only*/))
+			if ((substr($f,-4)=='.css') && ($f!='svg.css') && ($f!='no_cache.css') && ($f!='quizzes.css'/*we know this doesn't pass but it is extra glitz only*/))
 			{
 				$path=css_enforce(basename($f,'.css'),'default',false);
+
 				$contents=file_get_contents($path);
 				$errors=check_css($contents);
 				if ((!is_null($errors)) && ($errors['errors']==array())) $errors=NULL; // Normalise

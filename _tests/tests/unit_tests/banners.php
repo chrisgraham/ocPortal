@@ -33,14 +33,20 @@ class banners_test_set extends ocp_test_case
 		require_code('banners');
 		require_code('banners2');
 		require_code('submit');
+
+		$this->banner_type='Welcome';
+		$this->banner_name='Goodmorning';
+
+		// Cleanup possible old failed test
+		delete_banner_type($this->banner_type);
+		//delete_banner($this->banner_name);
+
+		// Add banner type
+		add_banner_type($this->banner_type,0,100,100,100,0);
 	}
 
 	function testAddBannerTypes()
 	{
-		$this->banner_type='Welcome';
-		//Add banner type
-		add_banner_type($this->banner_type,0,100,100,100,0);
-
 		// Test the benner was actually created
 		$this->assertTrue(100==$GLOBALS['FORUM_DB']->query_value('banner_types','t_image_width',array('id'=>$this->banner_type)));
 	}
@@ -56,8 +62,6 @@ class banners_test_set extends ocp_test_case
 
 	function testAddbanner()
 	{
-		$this->banner_name='Goodmorning';
-
 		add_banner($this->banner_name,'http://ocportal.com/themes/ocproducts/images/newlogo.gif','Good morning','Welcome','',10,'http://ocportal.com',3,'test notes',1,1329153480,get_member(),1,$this->banner_type);
 
 		//make sure the banner is created with given name

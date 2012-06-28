@@ -219,7 +219,7 @@ function init__validation2()
 	$enforce_normal_or_length='(normal|'.$enforce_length.')';
 	$enforce_border_width='(thin|medium|thick|'.$enforce_length.')';
 	$enforce_potential_4d_border_width=$enforce_border_width.'( '.$enforce_border_width.'( '.$enforce_border_width.'( '.$enforce_border_width.'|)|)|)';
-	$enforce_css_color='((rgb\('.$enforce_inumber.'%,'.$enforce_inumber.'%,'.$enforce_inumber.'%\))|(rgb\('.$enforce_inumber.','.$enforce_inumber.','.$enforce_inumber.'\))|(rgba\('.$enforce_inumber.'%,'.$enforce_inumber.'%,'.$enforce_inumber.'%,'.$enforce_inumber.'%\))|(rgba\('.$enforce_inumber.','.$enforce_inumber.','.$enforce_inumber.','.$enforce_inumber.'\))|(\#[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f])|'.$enforce_color.'|ActiveBorder|ActiveCaption|AppWorkspace|Background|Buttonface|ButtonHighlight|ButtonShadow|ButtonText|CaptionText|GrayText|Highlight|HighlightText|InactiveBorder|InactiveCaption|InactiveCaptionText|InfoBackground|InfoText|Menu|MenuText|Scrollbar|ThreeDDarkShadow|ThreeDFace|ThreeDHighlight|ThreeDLightShadow|ThreeDShadow|Window|WindowFrame|WindowText)';
+	$enforce_css_color='((rgb\('.$enforce_inumber.'%,'.$enforce_inumber.'%,'.$enforce_inumber.'%\))|(rgb\('.$enforce_inumber.','.$enforce_inumber.','.$enforce_inumber.'\))|(rgba\('.$enforce_inumber.'%,'.$enforce_inumber.'%,'.$enforce_inumber.'%,'.$enforce_inumber.'%\))|(rgba\('.$enforce_inumber.','.$enforce_inumber.','.$enforce_inumber.','.$enforce_inumber.'\.\d+\))|(\#[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f])|'.$enforce_color.'|ActiveBorder|ActiveCaption|AppWorkspace|Background|Buttonface|ButtonHighlight|ButtonShadow|ButtonText|CaptionText|GrayText|Highlight|HighlightText|InactiveBorder|InactiveCaption|InactiveCaptionText|InfoBackground|InfoText|Menu|MenuText|Scrollbar|ThreeDDarkShadow|ThreeDFace|ThreeDHighlight|ThreeDLightShadow|ThreeDShadow|Window|WindowFrame|WindowText)';
 	$enforce_transparent_or_color='(transparent|'.$enforce_css_color.')';
 	$enforce_fraction='(\d%|\d\d%|100%|0\.\d+|1\.0|0|1)';
 	$_enforce_font_list="(cursive|fantasy|monospace|serif|sans-serif|Georgia|Times|Trebuchet|Tahoma|Geneva|Verdana|Arial|Helvetica|Courier|Courier New|Impact|'Georgia'|'Times'|'Trebuchet'|'Tahoma'|'Geneva'|'Verdana'|'Arial'|'Helvetica'|'Courier'|'Courier New'|'Impact')";
@@ -249,10 +249,9 @@ function init__validation2()
 	$_counter_increment='((\w+( \d+)?)+)';
 	$enforce_counter_increment=$_counter_increment.'( '.$_counter_increment.')*';
 	$enforce_transition_timing_function='(linear|ease|ease-in|ease-out|ease-in-out|cubic-bezier\('.$enforce_fraction.' '.$enforce_fraction.' '.$enforce_fraction.' '.$enforce_fraction.'\))';
-	$enforce_transition_property='\w+';
 	$enforce_time='\d[\d\.]*s';
-	$enforce_box_shadow='((inset )?'.$enforce_length.'( '.$enforce_length.'( '.$enforce_length.')?)? '.$enforce_css_color.')';
-	$enforce_transition_property='[\w\-]+';
+	$enforce_box_shadow='((inset )?'.$enforce_length.'( '.$enforce_length.'( '.$enforce_length.'( '.$enforce_length.')?)?)? '.$enforce_css_color.')';
+	$enforce_transition_property='[\w,\-]+';
 	$enforce_transform_origin='(left|center|right|'.$enforce_length.')';
 	$enforce_transform_style='(flat|preserve-3d)';
 
@@ -267,7 +266,7 @@ function init__validation2()
 		'border'=>$enforce_border,
 		'border-collapse'=>'(collapse|separate)',
 		'border-color'=>$enforce_transparent_or_color.'( '.$enforce_transparent_or_color.'( '.$enforce_transparent_or_color.'( '.$enforce_transparent_or_color.'|)|)|)',
-		'border-spacing'=>$enforce_length.' '.$enforce_length,
+		'border-spacing'=>$enforce_length.'( '.$enforce_length.')?',
 		'border-style'=>$enforce_border_style,
 		'border-width'=>$enforce_potential_4d_border_width,
 		'border-bottom'=>$enforce_border,

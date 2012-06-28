@@ -2349,10 +2349,6 @@ custom_ratings
 --------------
  - sources_custom/feedback.php
 
-related_members
----------------
- - themes/default/templates_custom/OCF_MEMBER_PROFILE_SCREEN.tpl
-
 downloads_carousel
 ------------------
  - sources_custom/miniblocks/main_downloads_carousel.php

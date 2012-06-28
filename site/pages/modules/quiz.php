@@ -762,7 +762,7 @@ class Module_quiz
 			$_answers=do_template('QUIZ_ANSWERS_MAIL',array('_GUID'=>'381f392c8e491b6e078bcae34adc45e8','ANSWERS'=>$_answers,'MEMBER_PROFILE_URL'=>is_guest()?'':$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),false,true),'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
 
 			// Send mail of answers to the staff
-			dispatch_notification('quiz_results',strval($id),$mail_title,$_answers->evaluate(get_site_default_lang()));
+			dispatch_notification('quiz_results',strval($id),$notification_title,$_answers->evaluate(get_site_default_lang()));
 
 			syndicate_described_activity('quiz:ACTIVITY_FILLED_SURVEY',get_translated_text($quiz['q_name']),'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
 		}

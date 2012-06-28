@@ -46,26 +46,17 @@ You may choose dates in the past also, if you wish to back-date your posts.
 
 [title="3"]Enabling member blogs[/title]
 
-Blog posts are just news posts that exist in a category that is owned by a member. Assuming you don't apply a filter, they'll show up everywhere news can be seen (in the news block, and the news archive). There is also a link in each member's profile to see that member's blog.
+Blog posts are just news posts that exist in a category that is owned by a member. A member's blog is displayed in a tab on their member profile (OCF-only). Depending on how you set up your news block on your main site, they may or may not display in it.
 
-When a member goes to the [tt]cms:cms_news:ad[/tt] page-link (they might do this by clicking 'Add news' on the news block, or you might provide a link for them on your menu), they'll by default be posting to their blog.
+There is a dedicated blog posting module in the Content Management zone. It is a stripped down version of the main news posting module, designed to make blog posting simpler.
+
 Permissions required for blogs are:
- - Permission to access the [tt]cms[/tt] zone [set in permission tree editor]
- - Permissions to access the [tt]cms:cms_news[/tt] page (it's on by default) [set in permission tree editor]
- - The 'have personal categories permission' [set in privileges]
- - The 'add mid-level content permission' [set in privileges, or in the permission tree editor if you want to set it just to apply for [tt]cms:cms_news[/tt]]
+ - Permission to access the [tt]cms[/tt] zone [set in Admin Zone > Security > Permission tree editor]
+ - Permissions to access the [tt]cms:cms_blogs[/tt] page (it's on by default) [set in Admin Zone > Security > Permission tree editor]
+ - The 'have personal categories permission' [set in Admin Zone > Security > Global privileges]
+ - The 'add mid-level content permission' [set in Admin Zone > Security > Privileges, or in the permission tree editor if you want to set it just to apply for [tt]cms:cms_blogs[/tt]]
 
-[title="3"]Don't show Blog posts on the main page[/title]
-
-Administrators can disable showing [concept]Blog[/concept] posts on the front page. To do this, click the 'Edit Page' link at the bottom of the front page. Then find this:
-[code][block="14"]main_news[/block][/code]
-
-This needs to be changed to filter in only the categories you want. This is done by using a filter list ([concept]ocFilter support[/concept] format). The default seven categories are 1-7. If these were the only categories you wanted to show, you would change this line on your front page to this:
-[code][block="14" filter="1-7"]main_news[/block][/code]
-
-If you have added more news categories, you will need to find their IDs. This can be done by going to the "edit news category" page in your [concept]Admin Zone[/concept]. All of your categories will be listed, with their IDs written beside them.
-
-[title="3"]Pinging[/title]
+[title="3"]Advanced: Pinging[/title]
 
 'Pinging' (in the context of blogging) refers to an automatic alert feature that some software (including ocPortal) has. When you write a news post the URL to the news post can automatically be given to one or more ping services (defined in the Configuration, under the 'Feature options' category). These ping services typically are blog search engines, and the ping action automatically tells the search engine to go and index your new article.
 
@@ -78,7 +69,9 @@ The ping descriptors are just normal URLs, except you can put these three little
 
 Pinging will only happen for news categories which may be accessed by guests.
 
-[title="3"]Show RSS feeds[/title]
+[title="2"]Alternative strategies[/title]
+
+[title="2"]Show RSS feeds[/title]
 
 RSS feeds can be displayed by placing the [tt]main_rss[/tt] block. This block is very straight-forward to configure, and like any block, may be added using the 'Add block' button when editing a Comcode page.
 

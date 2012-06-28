@@ -1678,7 +1678,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'MULT':
 				if (isset($param[1]))
 				{
-					$value=float_to_raw_string(floatval($param[0])*floatval($param[1]));
+					$value=float_to_raw_string(floatval($param[0])*floatval($param[1]),20,true);
 				}
 				break;
 
@@ -1788,7 +1788,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'DIV_FLOAT':
 				if (isset($param[1]))
 				{
-					$value=float_to_raw_string(floatval($param[0])/floatval($param[1]));
+					$value=float_to_raw_string(floatval($param[0])/floatval($param[1]),20,true);
 				}
 				break;
 
@@ -1802,14 +1802,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'SUBTRACT':
 				if (isset($param[1]))
 				{
-					$value=float_to_raw_string(floatval(str_replace(',','',$param[0]))-floatval(str_replace(',','',$param[1])));
+					$value=float_to_raw_string(floatval(str_replace(',','',$param[0]))-floatval(str_replace(',','',$param[1])),20,true);
 				}
 				break;
 
 			case 'ADD':
 				if (isset($param[1]))
 				{
-					$value=float_to_raw_string(floatval(str_replace(',','',$param[0]))+floatval(str_replace(',','',$param[1])));
+					$value=float_to_raw_string(floatval(str_replace(',','',$param[0]))+floatval(str_replace(',','',$param[1])),20,true);
 				}
 				break;
 

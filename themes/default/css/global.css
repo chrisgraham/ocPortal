@@ -3121,7 +3121,7 @@ ul.nl, .nl ul {
 
 .menu_type__embossed a:hover, .menu_type__top a:hover, .menu_type__dropdown a.toplevel_link:hover {
 	background-color: {$GET,area_highlight_right_complement_background} !important;
-	{$BETA_CSS_PROPERTY,transition: color,background-color 0.5s linear;}
+	{$BETA_CSS_PROPERTY,transition: color\,background-color 0.5s linear;}
 }
 
 .menu_type__top a, .menu_type__dropdown a.toplevel_link {
@@ -3171,7 +3171,7 @@ ul.nl, .nl ul {
 	{+START,IF,{$MOBILE}}
 		font-size: 0.8em;
 	{+END}
-	{$BETA_CSS_PROPERTY,transition: color,background-color 0.5s linear;}
+	{$BETA_CSS_PROPERTY,transition: color\,background-color 0.5s linear;}
 }
 
 .menu_type__top li.last, .menu_type__dropdown li.toplevel.last {

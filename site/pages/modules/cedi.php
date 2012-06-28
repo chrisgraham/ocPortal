@@ -920,7 +920,7 @@ class Module_cedi
 		$notify=($GLOBALS['SITE_DB']->query_value_null_ok('seedy_changes','MAX(date_and_time)',array('the_page'=>$page_id))<time()-60*10);
 		$radios=form_input_radio_entry('send_notification','0',!$notify,do_lang_tempcode('NO'));
 		$radios->attach(form_input_radio_entry('send_notification','1',$notify,do_lang_tempcode('YES')));
-		$specialisation->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),$radios));
+		$specialisation->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),'send_notification',$radios));
 
 		if (addon_installed('captcha'))
 		{

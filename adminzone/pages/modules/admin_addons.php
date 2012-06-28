@@ -256,8 +256,8 @@ class Module_admin_addons
 
 		$url_map=array('page'=>'_SELF','type'=>'multi_action');
 
-		$_url=post_param('url','');
-		foreach (explode(',',$_url) as $i=>$url)
+		$__url=post_param('url','');
+		foreach (explode(',',$__url) as $i=>$url)
 		{
 			if (is_numeric($url))
 			{

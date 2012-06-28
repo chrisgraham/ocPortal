@@ -746,19 +746,19 @@ class Module_cms_catalogues extends standard_aed_module
 		$new_handling_options=new ocp_tempcode();
 		$new_handling_options->attach(form_input_radio_entry('new_handling','add',true,do_lang_tempcode('NEW_HANDLING_ADD')));
 		$new_handling_options->attach(form_input_radio_entry('new_handling','skip',false,do_lang_tempcode('NEW_HANDLING_SKIP')));
-		$fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_NEW_HANDLING'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_NEW_HANDLING'),$new_handling_options));
+		$fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_NEW_HANDLING'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_NEW_HANDLING'),'new_handling',$new_handling_options));
 
 		$delete_handling_options=new ocp_tempcode();
 		$delete_handling_options->attach(form_input_radio_entry('delete_handling','delete',false,do_lang_tempcode('DELETE_HANDLING_DELETE')));
 		$delete_handling_options->attach(form_input_radio_entry('delete_handling','leave',true,do_lang_tempcode('DELETE_HANDLING_LEAVE')));
-		$fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_DELETE_HANDLING'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_DELETE_HANDLING'),$delete_handling_options));
+		$fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_DELETE_HANDLING'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_DELETE_HANDLING'),'delete_handling',$delete_handling_options));
 
 		$update_handling_options=new ocp_tempcode();
 		$update_handling_options->attach(form_input_radio_entry('update_handling','overwrite',true,do_lang_tempcode('UPDATE_HANDLING_OVERWRITE')));
 		$update_handling_options->attach(form_input_radio_entry('update_handling','freshen',false,do_lang_tempcode('UPDATE_HANDLING_FRESHEN')));
 		$update_handling_options->attach(form_input_radio_entry('update_handling','skip',false,do_lang_tempcode('UPDATE_HANDLING_SKIP')));
 		$update_handling_options->attach(form_input_radio_entry('update_handling','delete',false,do_lang_tempcode('UPDATE_HANDLING_DELETE')));
-		$fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_UPDATE_HANDLING'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_UPDATE_HANDLING'),$update_handling_options));
+		$fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_UPDATE_HANDLING'),do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_UPDATE_HANDLING'),'update_handling',$update_handling_options));
 
 		$javascript='
 			var key_field=document.getElementById(\'key_field\');

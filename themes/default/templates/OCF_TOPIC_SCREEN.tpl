@@ -81,7 +81,7 @@
 					<div class="inline">
 						<label for="tma_type">{!TOPIC_ACTIONS}:
 						<select class="dropdown_actions" id="tma_type" name="type">
-							<option value="-1">-</option>
+							<option value="misc">-</option>
 							{MODERATOR_ACTIONS}
 						</select>
 						</label>
@@ -98,7 +98,7 @@
 							<div class="inline">
 								<label for="mpa_type">{!MARKED_POST_ACTIONS}:
 								<select id="mpa_type" name="type">
-									<option value="-1">-</option>
+									<option value="misc">-</option>
 									{MARKED_POST_ACTIONS}
 								</select>
 								</label>

@@ -148,7 +148,7 @@ function init__site()
 
 		$old_style=get_option('htm_short_urls')!='1';
 
-		if ((!headers_sent()) && (running_script('index')) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
+		if ((!headers_sent()) && (running_script('index')) && ($GLOBALS['NON_PAGE_SCRIPT']==0) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
 		{
 			$GLOBALS['HTTP_STATUS_CODE']='301';
 			header('HTTP/1.0 301 Moved Permanently');

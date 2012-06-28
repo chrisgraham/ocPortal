@@ -168,7 +168,6 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 .upload_field_msg {
 	white-space: nowrap;
 }
-	list.className='ajax_people_list';
 
 .people_list {
 	background-color: {$GET,area_background};

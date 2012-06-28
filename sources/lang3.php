@@ -411,7 +411,7 @@ function _comcode_lang_string($lang_code)
 	global $COMCODE_LANG_STRING_CACHE;
 	if (array_key_exists($lang_code,$COMCODE_LANG_STRING_CACHE)) return $COMCODE_LANG_STRING_CACHE[$lang_code];
 
-	if ((substr($lang_code,0,4)=='DOC_') && (is_wide())) return new ocp_tempcode(); // Not needed if wide, and we might be going wide to reduce chance of errors occuring
+	if ((substr($lang_code,0,4)=='DOC_') && (is_wide()==1)) return new ocp_tempcode(); // Not needed if wide, and we might be going wide to reduce chance of errors occuring
 
 	$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=string_index',array('string_index','text_parsed'),array('the_page'=>$lang_code,'the_zone'=>'!'),'',1);
 	if ((array_key_exists(0,$comcode_page)) && (!is_browser_decacheing()))

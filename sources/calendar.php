@@ -1070,5 +1070,5 @@ function monthly_spec_type_chooser($day_of_month,$month,$year,$default_monthly_s
 		$radios->attach(form_input_radio_entry('monthly_spec_type',$monthly_spec_type,$monthly_spec_type==$default_monthly_spec_type,$text,NULL,$description));
 	}
 
-	return form_input_radio(do_lang_tempcode('MONTHLY_SPEC_TYPE'),do_lang_tempcode('DESCRIPTION_MONTHLY_SPEC_TYPE'),$radios,true);
+	return form_input_radio(do_lang_tempcode('MONTHLY_SPEC_TYPE'),do_lang_tempcode('DESCRIPTION_MONTHLY_SPEC_TYPE'),'monthly_spec_type',$radios,true);
 }

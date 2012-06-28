@@ -403,7 +403,7 @@
 {+START,WHILE,{$NEQ,{$GET,i},3}}
 	<p>
 		Should see this text 3 times.
-		{$INC,i}
+{$INC,i}
 	</p>
 {+END}
 

@@ -134,7 +134,7 @@ class Module_cms_cedi
 		$notify=($page_id==-1) || ($GLOBALS['SITE_DB']->query_value_null_ok('seedy_changes','MAX(date_and_time)',array('the_page'=>$page_id))<time()-60*10);
 		$radios=form_input_radio_entry('send_notification','0',!$notify,do_lang_tempcode('NO'));
 		$radios->attach(form_input_radio_entry('send_notification','1',$notify,do_lang_tempcode('YES')));
-		$fields2->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),$radios));
+		$fields2->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),'send_notification',$radios));
 
 		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 		if (get_value('disable_staff_notes')!=='1')
