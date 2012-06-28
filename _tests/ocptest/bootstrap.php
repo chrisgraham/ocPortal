@@ -111,7 +111,7 @@ function testset_do_header($title)
 
 		<style type="text/css">
 END;
-@print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents(get_file_base().'/themes/default/css/global.css'))))));
+@print(file_get_contents(css_enforce('global','default',false)));
 echo <<<END
 			.screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }

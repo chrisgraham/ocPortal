@@ -1553,22 +1553,22 @@ table.scrollable_inside {
 	margin: 1em 0;
 }
 
-.results_table thead tr:first-child *:first-child, .results_table tbody tr:first-child *:first-child {
+.results_table>thead>tr:first-child *:first-child, .results_table>tbody>tr:first-child>*:first-child {
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 5px;}
 }
-.results_table thead tr:first-child *:last-child, .results_table tbody tr:first-child *:last-child {
+.results_table>thead>tr:first-child *:last-child, .results_table>tbody>tr:first-child>*:last-child {
 	{$BETA_CSS_PROPERTY,border-top-right-radius: 5px;}
 }
-.results_table[summary="{!COLUMNED_TABLE}"] tbody tr:first-child *:first-child {
+.results_table[summary="{!COLUMNED_TABLE}"]>tbody>tr:first-child>*:first-child {
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 0px;}
 }
-.results_table[summary="{!COLUMNED_TABLE}"] tbody tr:first-child *:last-child {
+.results_table[summary="{!COLUMNED_TABLE}"]>tbody>tr:first-child>*:last-child {
 	{$BETA_CSS_PROPERTY,border-top-right-radius: 0px;}
 }
-.results_table tbody tr:last-child *:first-child {
+.results_table>tbody>tr:last-child>*:first-child {
 	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 5px;}
 }
-.results_table tbody tr:last-child *:last-child {
+.results_table>tbody>tr:last-child>*:last-child {
 	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 5px;}
 }
 

@@ -121,6 +121,8 @@ function upgrade_script()
 					$closed=comcode_to_tempcode(get_option('closed'),NULL,true);
 					$closed_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'SITE'),get_module_zone('admin_config'),NULL,false,false,false,'group_CLOSED_SITE');
 
+					$l_columned_table=do_lang('COLUMNED_TABLE');
+
 					echo "
 <p>{$l_choices}</p>
 
@@ -143,7 +145,7 @@ function upgrade_script()
 
 	<h3>{$l_upgrade_steps}</h3>
 
-	<div class=\"wide_table_wrap\"><table style=\"margin-top: 5px\" class=\"results_table wide_table spaced_table\">
+	<div class=\"wide_table_wrap\"><table summary=\"{$l_columned_table}\" style=\"margin-top: 5px\" class=\"autosized_table results_table wide_table spaced_table\">
 		<thead>
 			<tr>
 				<th>{$l_step}</th>
@@ -208,7 +210,7 @@ function upgrade_script()
 					{
 						echo '<br /><label for="upload">'.do_lang('UPLOAD').'</label> <input type="file" id="upload" name="upload" />';
 					}
-					echo '<input type="submit" value="'.do_lang('PROCEED').'" />';
+					echo '<input class="button_page" type="submit" value="'.do_lang('PROCEED').'" />';
 					echo '</form>';
 					$show_more_link=false;
 					break;
@@ -431,7 +433,7 @@ function upgrade_script()
 
 			if ($show_more_link)
 			{
-				echo '<hr /><div>'.fu_link('upgrader.php?type=misc',do_lang('MORE_OPTIONS')).'</div>';
+				echo '<hr class="spaced_rule" /><div>'.fu_link('upgrader.php?type=misc',do_lang('MORE_OPTIONS')).'</div>';
 			}
 		} else
 		{
@@ -688,14 +690,19 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 			}
 		}
 
-		$alien=check_alien(file_exists(get_file_base().'/data/files_previous.dat')?unserialize(file_get_contents(get_file_base().'/data/files_previous.dat',FILE_TEXT)):array(),$master_data,get_file_base().'/');
+		$addon_files=collapse_2d_complexity('filename','addon_name',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename','addon_name')));
+		list($alien,$addon)=check_alien($addon_files,file_exists(get_file_base().'/data/files_previous.dat')?unserialize(file_get_contents(get_file_base().'/data/files_previous.dat',FILE_TEXT)):array(),$master_data,get_file_base().'/');
 		if ($alien!='')
 		{
 			$ret_str.=do_lang('WARNING_FILE_ALIEN',$alien);
 		}
+		if ($addon!='')
+		{
+			$ret_str.=do_lang('WARNING_FILE_ADDON',$addon);
+		}
 		if (($moved!='') || ($alien!=''))
 		{
-			$ret_str.='<input accesskey="c" style="margin: 1px; padding: 0" type="submit" value="'.do_lang('FU_AUTO_HANDLE').'" />';
+			$ret_str.='<input class="button_page" accesskey="c" style="margin: 1px; padding: 0" type="submit" value="'.do_lang('FU_AUTO_HANDLE').'" />';
 		}
 		$ret_str.='</form>';
 	}
@@ -732,7 +739,7 @@ function fu_link($url,$text,$disabled=false,$js='')
 	$hidden=(strpos($url,'http://ocportal.com')!==false)?'':post_fields_relay();
 	if (get_param_integer('keep_safe_mode',0)==1) $url.='&keep_safe_mode=1';
 	if (get_param_integer('keep_show_loading',0)==1) $url.='&keep_show_loading=1';
-	return '<form title="'.escape_html($text).'" style="display: inline" action="'.escape_html($url).'" method="post">'.$hidden.'<input '.(empty($js)?'':'onclick="return window.confirm(\''.addslashes($js).'\');" ').'accesskey="c" style="margin: 1px; padding: 0" '.($disabled?'disabled="disabled"':'').' type="submit" value="'.escape_html($text).'" /></form>';
+	return '<form title="'.escape_html($text).'" style="display: inline" action="'.escape_html($url).'" method="post">'.$hidden.'<input '.(empty($js)?'':'onclick="return window.confirm(\''.addslashes($js).'\');" ').'accesskey="c" style="margin: 1px; padding: 0" '.($disabled?'disabled="disabled"':'').' class="button_page" type="submit" value="'.escape_html($text).'" /></form>';
 }
 
 /**
@@ -803,7 +810,7 @@ function up_do_login($message=NULL)
 	} else
 	{
 		echo "
-		<hr />
+		<hr class=\"spaced_rule\" />
 		{$l_ftp_info}
 		<table>
 			<tr><th>{$l_ftp_domain}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_domain\" value=\"".escape_html($ftp_domain)."\" /></td></tr>
@@ -811,19 +818,19 @@ function up_do_login($message=NULL)
 			<tr><th>{$l_ftp_username}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_username\" value=\"".escape_html($ftp_username)."\" /></td></tr>
 			<tr><th>{$l_ftp_password}:</th><td><input size=\"50\" type=\"password\" name=\"ftp_password\" /></td></tr>
 		</table>
-		<hr />
+		<hr class=\"spaced_rule\" />
 		";
 	}
 
 	echo "
 	<p>
-		<input type=\"submit\" value=\"{$l_login}\" />
+		<input class=\"button_page\" type=\"submit\" value=\"{$l_login}\" />
 	</p>
 	</form>
 	";
 
 	echo "
-	<hr />
+	<hr class=\"spaced_rule\" />
 	<div style=\"font-size: 0.8em\">
 	<h2>{$l_login_forgot_password_q}</h2>
 	<p>{$l_login_info_pass_forget}</p>
@@ -853,7 +860,7 @@ function up_do_header()
 
 		<style type="text/css">
 END;
-@print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{[\$+].*\}#','',file_get_contents(get_file_base().'/themes/default/css/global.css'))))));
+@print(file_get_contents(css_enforce('global','default',false)));
 echo <<<END
 			.screen_title { text-decoration: underline; display: block; background: url('themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
@@ -863,7 +870,7 @@ echo <<<END
 	</head>
 	<body class="website_body"><div class="global_middle">
 		<h1 class="screen_title">{$upgrader_title}</h1>
-		<p>{$upgrader_intro}</p><hr />
+		<p>{$upgrader_intro}</p><hr class="spaced_rule" />
 END;
 }
 
@@ -1293,16 +1300,18 @@ function check_outdated__handle_overrides($dir,$rela,&$master_data,&$hook_files,
 /**
  * Check for alien files.
  *
+ * @param  array			List of files from non-bundled addons (a map: relative file paths as keys of map)
  * @param  array			List of files from old version
  * @param  array			List of verbatim files
  * @param  SHORT_TEXT	The directory we are scanning relative to
  * @param  SHORT_TEXT	The directory (relative) we are scanning
  * @param  boolean		Whether to give raw output (no UI)
- * @return string			HTML list of alien files
+ * @return array			A pair: HTML list of alien files, HTML list of addon files
  */
-function check_alien($old_files,$files,$dir,$rela='',$raw=false)
+function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 {
 	$alien='';
+	$addon='';
 
 	$dh=@opendir($dir);
 	if ($dh!==false)
@@ -1354,7 +1363,9 @@ function check_alien($old_files,$files,$dir,$rela='',$raw=false)
 						if (!$ok) continue;
 					}
 
-					$alien.=check_alien($old_files,$files,$dir.$file.'/',$rela.$file.'/',$raw);
+					list($_alien,$_addon)=check_alien($addon_files,$old_files,$files,$dir.$file.'/',$rela.$file.'/',$raw);
+					$alien.=$_alien;
+					$addon.=$_addon;
 				}
 			} else
 			{
@@ -1377,15 +1388,23 @@ function check_alien($old_files,$files,$dir,$rela='',$raw=false)
 					$checked='';
 
 					if (array_key_exists($rela.$file,$old_files)) $checked='checked="checked" ';
-					$alien.='<li>';
-					if (!$raw) $alien.='<input '.$disabled.$checked.'type="checkbox" name="'.uniqid('').'" value="delete:'.escape_html($rela.$file).'" /> ';
-					$alien.='<kbd>'.escape_html($rela.$file).'</kbd></li>';
+					$file_html='';
+					$file_html.='<li>';
+					if (!$raw) $file_html.='<input '.$disabled.$checked.'type="checkbox" name="'.uniqid('').'" value="delete:'.escape_html($rela.$file).'" /> ';
+					$file_html.='<kbd>'.escape_html($rela.$file).'</kbd></li>';
+					if (array_key_exists($rela.$file,$addon_files))
+					{
+						$addon.=$file_html;
+					} else
+					{
+						$alien.=$file_html;
+					}
 				}
 			}
 		}
 	}
 
-	return $alien;
+	return array($alien,$addon);
 }
 
 /**
