@@ -79,7 +79,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 			<div class="global_middle_outer float_surrounder">
 				{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,left}}}
 					<div id="panel_left" class="global_side_panel" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
-						{$LOAD_PANEL,left}
+						<div class="stuck_nav">{$LOAD_PANEL,left}</div>
 					</div>
 				{+END}
 

@@ -122,6 +122,25 @@ function script_load_stuff()
 		}
 	{+END}
 
+	/* Pinning to top if scroll out */
+	var stuck_navs=get_elements_by_class_name(document,'stuck_nav');
+	if (stuck_navs.length>0)
+	{
+		add_event_listener_abstract(window,'scroll',function () {
+			for (var i=0;i<stuck_navs.length;i++)
+			{
+				var stuck_nav=stuck_navs[i];
+				var stuck_nav_height=find_height(stuck_nav,true,true);
+				var pos=find_pos_y(stuck_nav.parentNode);
+				stuck_nav.style.paddingTop='0';
+				if (stuck_nav_height<get_window_height())
+				{
+					stuck_nav.style.paddingTop=(get_window_scroll_y()-pos)+'px';
+				}
+			}
+		} );
+	}
+
 	if (typeof window.script_load_stuff_b!='undefined') window.script_load_stuff_b(); // This is designed to allow you to easily define additional initialisation code in JAVASCRIPT_CUSTOM_GLOBALS.tpl
 
 	page_loaded=true;

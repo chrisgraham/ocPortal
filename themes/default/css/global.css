@@ -712,7 +712,7 @@ footer {
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,footer_background}\, {$GET,footer_2_background});}
 
 	color: {$GET,footer_text};
-	padding: 1em;
+	padding: 1.5em;
 	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
 		{$BETA_CSS_PROPERTY,box-shadow: 0 0 2px 2px {$GET,footer_tinting};}
 	{+END}
