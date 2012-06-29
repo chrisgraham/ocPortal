@@ -91,6 +91,8 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 	global $MEMBER_CACHED;
 	$MEMBER_CACHED=$member;
 
+	if (($invisible) && (get_option('is_on_invisibility')=='0')) $invisible=false;
+
 	$new_session=mixed();
 	$restored_session=delete_expired_sessions_or_recover($member);
 	if (is_null($restored_session)) // We're force to make a new one

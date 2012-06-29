@@ -72,7 +72,10 @@ class Module_login
 	 */
 	function get_entry_points()
 	{
-		return is_guest()?array('misc'=>'_LOGIN'):array('misc'=>'_LOGIN','logout'=>'LOGOUT','concede'=>'CONCEDED_MODE','invisible'=>'INVISIBLE');
+		if (is_guest()) return array('misc'=>'_LOGIN');
+		$ret=array('misc'=>'_LOGIN','logout'=>'LOGOUT','concede'=>'CONCEDED_MODE');
+		if (get_option('is_on_invisibility')=='1') $ret['invisible']='INVISIBLE';
+		return $ret;
 	}
 
 	/**
@@ -271,7 +274,13 @@ class Module_login
 	 */
 	function invisible()
 	{
-		$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
+		if (get_option('is_on_invisibility')=='1')
+		{
+			$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
+		} else
+		{
+			$visible=false; // Small fudge: always say thay are not visible now, so this will make them visible -- because they don't have permission to be invisible
+		}
 
 		$title=get_page_title($visible?'INVISIBLE':'BE_VISIBLE');
 
@@ -285,6 +294,8 @@ class Module_login
 				persistant_cache_set('SESSION_CACHE',$SESSION_CACHE);
 			}
 		}
+
+		decache('side_users_online');
 
 		// Store in cookie, if we have login cookies around
 		if (array_key_exists(get_member_cookie(),$_COOKIE))
