@@ -47,7 +47,7 @@ function generate_text_summary($_temp_summary,$words_searched)
 
 	// Add in some highlighting direct to XHTML
 	$all_occurrences=array();
-	foreach (is_null($SEARCH__CONTENT_BITS)?array():$SEARCH__CONTENT_BITS as $content_bit)
+	foreach ($words_searched as $content_bit)
 	{
 		if ($content_bit=='') continue;
 

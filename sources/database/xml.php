@@ -2221,6 +2221,7 @@ class Database_Static_xml
 		}
 
 		$this->_bad_query($query,false,'Internal error evaluating expression, '.$expr[0].' not recognised in evaluation context');
+		return NULL;
 	}
 
 	/**
@@ -2302,6 +2303,7 @@ class Database_Static_xml
 		}
 
 		if (!$this->_parsing_check_ended($at,$tokens,$query)) return NULL;
+		return NULL;
 	}
 
 	/**

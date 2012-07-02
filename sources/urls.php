@@ -910,7 +910,6 @@ function find_id_moniker($url_parts)
 	// Does this URL arrangement support monikers?
 	global $CONTENT_OBS;
 	load_moniker_hooks();
-	$found=false;
 	$looking_for='_SEARCH:'.$url_parts['page'].':'.$url_parts['type'].':_WILD';
 	$ob_info=isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:NULL;
 

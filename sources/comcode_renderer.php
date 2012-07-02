@@ -1829,7 +1829,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$temp_tpl=do_template('WARNING_TABLE',array('WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','exp_ref',escape_html($_embed))));
 					if (array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS))
 					{
-						$GLOBALS['COMCODE_BROKEN_URLS'][]=array($url,NULL);
+						$GLOBALS['COMCODE_BROKEN_URLS'][]=array($_embed,NULL);
 					} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 					{
 						require_code('failure');
@@ -1874,7 +1874,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$temp_tpl=do_template('WARNING_TABLE',array('WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','exp_thumb',escape_html($_embed))));
 					if (array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS))
 					{
-						$GLOBALS['COMCODE_BROKEN_URLS'][]=$url_full;
+						$GLOBALS['COMCODE_BROKEN_URLS'][]=$_embed;
 					} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 					{
 						require_code('failure');

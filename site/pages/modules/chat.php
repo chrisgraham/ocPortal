@@ -640,7 +640,6 @@ class Module_chat
 		// This function instantiates a private room...WE MUST BE TIGHT ON SECURITY WITH THIS ONE!
 		$title=get_page_title('CREATE_PRIVATE_ROOM');
 
-		$fields=new ocp_tempcode();
 		require_code('form_templates');
 
 		$fields=get_chatroom_fields(true,do_lang('CHAT_PRIVATE_DEFAULT_ROOM_NAME',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),'','',strval(get_member()));
@@ -817,6 +816,7 @@ class Module_chat
 			$url=build_url($map,'_SELF');
 			return do_template('CONFIRM_SCREEN',array('_GUID'=>'3b76b0e41541d5a38671134e92128d9f','TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url,'PREVIEW'=>$preview));
 		}
+		return NULL;
 	}
 
 	/**

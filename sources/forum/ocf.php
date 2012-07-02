@@ -403,7 +403,7 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		// Check member exists
 		$username=$this->get_username($member);
-		if (is_null($username)) return;
+		if (is_null($username)) return NULL;
 
 		require_code('ocf_members');
 

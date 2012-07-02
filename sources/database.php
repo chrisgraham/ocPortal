@@ -739,7 +739,7 @@ class database_driver
 				else $update.=$key.'=\''.$this->static_ob->db_escape_string($value).'\'';
 			}
 		}
-		if ($update=='') return;
+		if ($update=='') return NULL;
 
 		if ($where=='')
 		{

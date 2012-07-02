@@ -543,7 +543,6 @@ function log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='')
  */
 function check_word_filter($a,$name=NULL,$no_die=false,$try_patterns=false,$perm_check=true)
 {
-	unset($a);
 	unset($name);
 	unset($no_die);
 	unset($try_patterns);

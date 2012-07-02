@@ -100,8 +100,6 @@ class Module_cms_booking extends standard_aed_module
 	 */
 	function nice_get_choose_table($url_map)
 	{
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$current_ordering=get_param('sort','sort_order ASC');
@@ -354,8 +352,6 @@ class Module_cms_booking_supplements extends standard_aed_module
 	 */
 	function nice_get_choose_table($url_map)
 	{
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$current_ordering=get_param('sort','sort_order ASC');
@@ -551,8 +547,6 @@ class Module_cms_booking_blacks extends standard_aed_module
 	 */
 	function nice_get_choose_table($url_map)
 	{
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$current_ordering=get_param('sort','blacked_from_year,blacked_from_month,blacked_from_day ASC');
@@ -574,8 +568,6 @@ class Module_cms_booking_blacks extends standard_aed_module
 		$header_row=results_field_title($fh,$sortables,'sort',$sortable.' '.$sort_order);
 
 		$fields=new ocp_tempcode();
-
-		$request=get_booking_request_from_db(collapse_1d_complexity('id',$bookings));
 
 		require_code('form_templates');
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering);
@@ -815,8 +807,6 @@ class Module_cms_booking_bookings extends standard_aed_module
 	 */
 	function nice_get_choose_table($url_map)
 	{
-		$table=new ocp_tempcode();
-
 		attach_message(do_lang_tempcode('EASIER_TO_EDIT_BOOKING_VIA_MEMBER'),'inform');
 
 		require_code('templates_results_table');

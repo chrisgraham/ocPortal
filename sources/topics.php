@@ -205,6 +205,8 @@ class OCP_Topic
 				'SERIALIZED_OPTIONS'=>$serialized_options,
 			));
 		}
+
+		return new ocp_tempcode();
 	}
 
 	/**
@@ -280,8 +282,6 @@ class OCP_Topic
 		$this->reverse=$reverse;
 
 		$this->is_threaded=$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id);
-
-		$all_posts_ordered=array();
 
 		$posts=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts(
 			$topic_id,
@@ -887,8 +887,6 @@ class OCP_Topic
 		require_css('swfupload');
 
 		$em=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
-
-		$comcode_help=build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false));
 
 		$comment_text=get_option('comment_text');
 

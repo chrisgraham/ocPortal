@@ -111,6 +111,7 @@ function _param_invalid($name,$ret,$posted)
 
 	require_lang('javascript');
 	warn_exit(do_lang_tempcode('NOT_INTEGER'));
+	return NULL;
 }
 
 /**

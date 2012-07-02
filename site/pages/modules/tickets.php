@@ -621,7 +621,7 @@ class Module_tickets
 
 		} else // Guest has posted ticket successfully. Actually, this code problem never runs (as they in fact see a separate screen from do_update_ticket), but it's here as a fail safe.
 		{
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
+			return inform_screen(get_page_title('ADD_TICKET'),do_lang_tempcode('SUCCESS'));
 		}
 	}
 

@@ -283,6 +283,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		return NULL;
 	}
 	warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',$module_name));
+	return NULL;
 }
 
 /**

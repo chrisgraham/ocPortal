@@ -126,6 +126,7 @@ function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 			break;
 	}
 	if (!is_null($temptext)) unlink($temptext);
+	return array(array(),array());
 }
 
 /**
@@ -260,14 +261,7 @@ function aspell_init()
 		mkdir($p_dict_path,02770);
 	}
 
-	if (!is_null($temptext))
-	{
-		if ((file_exists($p_dict_path) && (is_writable($p_dict_path))))
-		{
-			// Good To Go!
-			$aspell_args.=' --home-dir='.$p_dict_path;
-		}
-	} else
+	if (is_null($temptext))
 	{
 		list($lang_stub,)=explode('_',$lang);
 
@@ -448,9 +442,6 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 						$lineindex++;
 					}
 				}
-			} else
-			{
-				$return='failed to open!';
 			}
 		} else
 		{

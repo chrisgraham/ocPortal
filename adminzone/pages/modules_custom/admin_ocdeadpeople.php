@@ -309,7 +309,6 @@ class Module_admin_ocdeadpeople extends standard_aed_module
 	{
 		$id=intval($id);
 		$name=post_param('name','');
-		$image=post_param('image','');
 		$cure=post_param('cure','');
 		$cure_price=post_param('cure_price',0);
 		$immunization=post_param('immunization','');

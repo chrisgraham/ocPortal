@@ -9,6 +9,8 @@
 
 /**
  * Inject workflow code into the galleries module.
+ *
+ * @return  string Altered code
  */
 function init__cms__pages__modules_custom__cms_galleries($code)
 {

@@ -204,8 +204,6 @@ class Module_booking
 	 */
 	function choose_bookables_and_dates()
 	{
-		global $M_SORT_KEY;
-
 		$title=get_page_title('CREATE_BOOKING');
 
 		$query='SELECT * FROM '.get_table_prefix().'bookable WHERE enabled=1';

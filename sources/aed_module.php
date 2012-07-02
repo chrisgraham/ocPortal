@@ -34,6 +34,7 @@ class standard_aed_module
 	var $archive_entry_point=NULL;
 	var $archive_label=NULL;
 	var $view_entry_point=NULL;
+	var $view_label=NULL;
 	var $protect_first=0;
 	var $permission_page=NULL; // Usually just get_page_name()
 	var $permission_module=NULL; // E.g. 'catalogues_catalogue' if we are AEDing a catalogue
@@ -79,11 +80,17 @@ class standard_aed_module
 	var $do_next_description=NULL;
 	var $appended_actions_already=false;
 	var $select_name_description=NULL;
+	var $select_name=NULL;
 	var $menu_label=NULL;
 	var $care_please=true;
 	var $new_id=NULL;
 	var $no_blank_ids=true;
 	var $posting_field_required=true;
+	var $donext_type=NULL;
+	var $donext_category_id=NULL;
+	var $cached_entry_rows=NULL;
+	var $cached_max_rows=NULL;
+	var $lang_type=NULL;
 
 	// These only needed if we are generate nice_get_entries automatically
 	var $table_prefix='';

@@ -317,8 +317,6 @@ class Module_quiz
 			}
 		}
 
-		$content=new ocp_tempcode();
-
 		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
 		$num_pages=intval(ceil(floatval($max_rows)/floatval($max)));
 

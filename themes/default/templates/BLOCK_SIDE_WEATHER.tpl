@@ -7,7 +7,7 @@
 		{+END}
 
 		<ul class="nl">
-			<li class="compact_list associated_link_to_small"><b>{TITLE}</b></li>
+			<li class="compact_list associated_link_to_small"><strong>{TITLE}</strong></li>
 			{+START,IF_NON_EMPTY,{COND}}
 				<li class="compact_list associated_link_to_small">
 					{COND`}

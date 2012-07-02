@@ -124,10 +124,6 @@ class Mx_chat extends Module_chat
 		$room_id=get_param('id');
 
 		$posting_name=do_lang_tempcode('SEND_MESSAGE');
-		$keep=symbol_tempcode('KEEP');
-
-		$user_colour=((array_key_exists(0,$prefs)) && ($prefs[0]!=''))?$prefs[0]:get_option('chat_default_post_colour');
-		$line_contents=((array_key_exists(1,$prefs)) && ($prefs[1]!=''))?$prefs[1]:get_option('chat_default_post_font');
 
 		$cs_post_url=build_url(array('page'=>'_SELF','type'=>'options','id'=>$room_id),'_SELF');
 

@@ -118,8 +118,6 @@ class Module_cms_ocf_groups extends standard_aed_module
 	 */
 	function nice_get_choose_table($url_map)
 	{
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$default_order='g_name ASC';

@@ -67,6 +67,7 @@ function date_from_week_of_year($year,$week)
 			return array(intval($exploded[0]),intval($exploded[1]),intval($exploded[2]));
 		}
 	}
+	return array(NULL,NULL,NULL);
 }
 
 /**

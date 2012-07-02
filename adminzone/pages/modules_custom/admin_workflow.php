@@ -391,7 +391,7 @@ class Module_admin_workflow extends standard_aed_module
 		// Find any points which are already defined
 		$all_points = get_all_approval_points();
 		$point_ids = array();
-		foreach($points as $p)
+		foreach ($points as $p)
 		{
 			if (in_array($p, array_values($all_points)))
 			{
@@ -802,7 +802,7 @@ class Module_admin_workflow extends standard_aed_module
 		// Grab our data
 		list($workflow_id,$workflow_name,$approval_points,$is_default)=$this->read_in_data(false);
 
-		
+		// TODO
 	}
 
 	/**

@@ -823,7 +823,6 @@ function show_gallery_media($url,$thumb_url,$width,$height,$length,$orig_filenam
 					break;
 				}
 			default:
-				$matches=array();
 				$ve_hooks=find_all_hooks('systems','video_embed');
 				foreach (array_keys($ve_hooks) as $ve_hook)
 				{

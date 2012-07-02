@@ -212,7 +212,6 @@ class Module_lostpassword
 		if (get_value('no_password_hashing')==='1')
 		{
 			$password_compatibility_scheme='plain';
-			$salt='';
 			$new=$new_password;
 		} else
 		{

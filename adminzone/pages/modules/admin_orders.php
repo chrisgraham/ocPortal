@@ -275,8 +275,6 @@ class Module_admin_orders
 
 		$title		=	get_page_title('MY_ORDER_DETAILS');
 
-		$products	=	array();
-
 		$order_title	=	do_lang('CART_ORDER',$id);
 
 		//pagination
@@ -321,8 +319,6 @@ class Module_admin_orders
 			$product_info_url	=	build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['p_id']),get_module_zone('catalogues'));
 
 			$product_name	=	$row['p_name'];
-
-			$quantity	=	$row['p_quantity'];
 
 			$product	=	hyperlink($product_info_url,$product_name,false,false,do_lang('INDEX'));
 

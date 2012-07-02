@@ -52,6 +52,7 @@ class breadcrumb_substitution_loader
 	var $tag_stack,$attribute_stack,$text_so_far;
 	var $substitution_current_match_key,$substitution_current_label,$links,$substitutions;
 	var $current_breadcrumbs;
+	var $breadcrumb_tpl;
 
 	/**
 	 * Run the loader, to load up field-restrictions from the XML file.

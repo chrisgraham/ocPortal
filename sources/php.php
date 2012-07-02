@@ -320,6 +320,7 @@ function _read_php_function_line($_line)
 	$parameters=array();
 	$arg_default='';
 	$arg_name='';
+	$ref=false;
 
 	for ($k=0;$k<strlen($_line);$k++)
 	{

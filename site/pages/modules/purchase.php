@@ -560,6 +560,7 @@ class Module_purchase
 		}
 
 		inform_exit(do_lang_tempcode('PRODUCT_PURCHASE_CANCEL'));
+		return new ocp_tempcode(); // Will never get here
 	}
 
 	/**

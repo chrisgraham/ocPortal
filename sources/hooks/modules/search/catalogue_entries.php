@@ -415,7 +415,7 @@ class Hook_search_catalogue_entries
 	 * Standard modular run function for rendering a search result.
 	 *
 	 * @param  array		The data row stored when we retrieved the result
-	 * @return tempcode	The output
+	 * @return ?tempcode	The output (NULL: compound output)
 	 */
 	function render($row)
 	{
@@ -443,6 +443,7 @@ class Hook_search_catalogue_entries
 				$CATALOGUE_ENTRIES_BUILDUP[$catalogue_name]=array();
 			$CATALOGUE_ENTRIES_BUILDUP[$catalogue_name][]=$row;
 		}
+		return NULL;
 	}
 
 }

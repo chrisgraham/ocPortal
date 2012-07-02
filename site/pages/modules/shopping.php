@@ -293,7 +293,6 @@ class Module_shopping
 
 			$i=1;
 			$sub_tot=0.0;
-			$tot_tax=0.0;
 			$shipping_cost=0.0;
 
 			foreach ($result as $value)
@@ -387,8 +386,6 @@ class Module_shopping
 		}
 
 		$title=get_page_title('SHOPPING');	
-
-		$_hooks=find_all_hooks('systems','ecommerce');
 
 		$product_details=get_product_details();
 
@@ -607,6 +604,7 @@ class Module_shopping
 		}
 
 		warn_exit(do_lang_tempcode('PRODUCT_PURCHASE_CANCEL'));
+		return new ocp_tempcode(); // Will never get here
 	}
 
 	/**
@@ -668,8 +666,6 @@ class Module_shopping
 
 		$products=array();
 
-		$order_title=do_lang('CART_ORDER',$id);
-
 		$rows=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$id));
 
 		breadcrumb_set_parents(array(array('_SELF:orders:misc',do_lang_tempcode('MY_ORDERS'))));
@@ -677,10 +673,6 @@ class Module_shopping
 		foreach ($rows as $row)
 		{
 			$product_info_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['p_id']),get_module_zone('catalogues'));
-
-			$product_name=$row['p_name'];
-
-			$quantity=$row['p_quantity'];
 
 			$products[]=array('PRODUCT_NAME'=>$row['p_name'],'ID'=>strval($row['p_id']),'AMOUNT'=>strval($row['p_price']),'QUANTITY'=>strval($row['p_quantity']),'DISPATCH_STATUS'=>do_lang_tempcode($row['dispatch_status']),'PRODUCT_DET_URL'=>$product_info_url,'DELIVERABLE'=>'');
 		}

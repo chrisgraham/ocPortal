@@ -418,9 +418,9 @@ class Hook_secpay
 	 */
 	function store_shipping_address($order_id)
 	{
-		if(is_null(post_param('first_name',NULL))) return;
+		if (is_null(post_param('first_name',NULL))) return NULL;
 
-		if(is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_addresses','id',array('order_id'=>$order_id))))
+		if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_addresses','id',array('order_id'=>$order_id))))
 		{
 			$shipping_address=array();
 			$shipping_address['order_id']			=	$order_id;
@@ -433,6 +433,8 @@ class Hook_secpay
 
 			return $GLOBALS['SITE_DB']->query_insert('shopping_order_addresses',$shipping_address,true);	
 		}
+
+		return NULL;
 	}
 
 }

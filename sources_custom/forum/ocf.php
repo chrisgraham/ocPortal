@@ -41,4 +41,5 @@ function ocjester_name_filter($in)
 	{
 		return $alphabetic[ord(strtoupper($in[0]))-ord('A')].' '.$in;
 	}
+	return $in;
 }

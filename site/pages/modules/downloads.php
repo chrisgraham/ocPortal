@@ -666,7 +666,6 @@ class Module_downloads
 		if (addon_installed('galleries'))
 		{
 			// Images
-			$_out=new ocp_tempcode();
 			require_lang('galleries');
 			$cat='download_'.strval($id);
 			$map=array('cat'=>$cat);

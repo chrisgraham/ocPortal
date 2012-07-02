@@ -388,6 +388,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 	}
 
 	if ($owner_cheat) ocw_refresh_with_message(do_lang_tempcode('W_ENTER_CHEAT'),'warn');
+	return NULL;
 }
 
 /**

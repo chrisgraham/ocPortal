@@ -23,7 +23,7 @@ function activities_addon_syndicate_described_activity($a_language_string_code='
 	require_code('activities');
 	require_lang('activities');
 
-	if ((get_db_type()=='xml') && (get_param_integer('keep_testing_logging',0)!=1)) return;
+	if ((get_db_type()=='xml') && (get_param_integer('keep_testing_logging',0)!=1)) return NULL;
 
 	$stored_id=0;
 	if (is_null($a_member_id)) $a_member_id=get_member();

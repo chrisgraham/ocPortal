@@ -147,6 +147,7 @@ class comcode_xml_to_tempcode
 			$this->tempcode=$this->tempcode_stack[0];
 		}
 		@xml_parser_free($xml_parser);
+		return $this->tempcode;
 	}
 
 	/**

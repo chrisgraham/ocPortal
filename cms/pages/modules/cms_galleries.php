@@ -195,10 +195,6 @@ class Module_cms_galleries extends standard_aed_module
 		{
 			$condition='only_conventional_galleries';
 			$member_id=NULL;
-			$default='';
-		} else
-		{
-			$default='';
 		}
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_gimp'),'_SELF',NULL,false,true);
 		require_code('form_templates');
@@ -291,7 +287,6 @@ class Module_cms_galleries extends standard_aed_module
 					if ((!in_array('uploads/galleries/'.str_replace('%2F','/',rawurlencode($file)),$test1)) && (!in_array('uploads/galleries/'.str_replace('%2F','/',rawurlencode($file)),$test2)))
 					{
 						$orphaned_content->attach(form_input_list_entry($file,($time>=$last_time-60*60*3) || (strpos($file,'/')!==false),$file));
-						$o_url=get_custom_base_url().'/uploads/galleries/'.rawurlencode($file);
 					}
 				}
 			}

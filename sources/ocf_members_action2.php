@@ -334,11 +334,9 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	if (has_actual_page_access(get_member(),'admin_ocf_join'))
 	{
 		$dob_optional=true;
-		$email_required=false;
 	} else
 	{
 		$dob_optional=(get_option('no_dob_ask')=='2');
-		$email_required=true;
 	}
 
 	if ($member_id===$GLOBALS['OCF_DRIVER']->get_guest_id()) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));

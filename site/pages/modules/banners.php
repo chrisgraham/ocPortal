@@ -248,8 +248,6 @@ class Module_banners
 	{
 		$title=get_page_title('BANNERS');
 
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$current_ordering=get_param('sort','name ASC');

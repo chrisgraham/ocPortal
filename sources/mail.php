@@ -242,7 +242,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			'm_template'=>$mail_template,
 		),false,!$through_queue); // No errors if we don't NEED this to work
 
-		if ($through_queue) return;
+		if ($through_queue) return NULL;
 	}
 
 	if (count($attachments)==0) $attachments=NULL;
@@ -367,7 +367,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 		$headers='From: "'.$from_name.'" <'.$website_email.'>'.$line_term;
 	} else
 	{
-		$headers.='From: <'.$from_email.'>'.$line_term;
+		$headers='From: <'.$from_email.'>'.$line_term;
 	}
 	$headers.='Reply-To: <'.$from_email.'>'.$line_term;
 	$headers.='Return-Path: <'.$website_email.'>'.$line_term;

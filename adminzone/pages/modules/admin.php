@@ -23,6 +23,7 @@
  */
 class Module_admin
 {
+	var $keywords;
 
 	/**
 	 * Standard modular info function.
