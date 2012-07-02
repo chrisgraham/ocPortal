@@ -136,7 +136,7 @@
 /* The timer countdown */
 .changer {
 	font-weight: bold;
-	font-family: Courier;
+	font-family: Courier, monospace;
 	font-size: 1.2em;
 }
 

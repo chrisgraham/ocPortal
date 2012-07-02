@@ -117,7 +117,7 @@
 }
 
 textarea.mono_textbox {
-	font-family: 'Courier';
+	font-family: Courier, monospace;
 }
 
 .popup_blocker_warning {

@@ -52,7 +52,6 @@
 	min-height: 116px;
 }
 #news_ticker h1 {
-	font-family: Arial;
 	color: {$GET,bubble_text};
 	font-weight: bold;
 	float: left;
@@ -112,7 +111,6 @@
 #real_time_indicator {
 	background: url('{$IMG;,realtime_rain/realtime-bubble}') no-repeat 0 0;
 	overflow: hidden;
-	height: auto;
 	font-size: 0.75em;
 	width: 80px;
 	height: 43px;

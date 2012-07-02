@@ -1,4 +1,4 @@
-.crossword { font-family: Courier; font-size: 10pt; }
+.crossword { font-family: Courier, monospace; font-size: 10pt; }
 .questionTable { float:left; }
 .questionTable td, .questionTable th { width: 100px; }
 .crossTable { border-spacing:0px !important;  border-collapse: collapse !important; }

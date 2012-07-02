@@ -174,7 +174,7 @@ html, body {
 
 body, textarea, input, td, th {
 	/* 'Open Sans' is a Google font, and only will be enabled if uncommented in HTML_HEAD.tpl -- so normally it is Segoe UI (Windows, newer version of Tahoma) or Tahoma that is active (available on Windows and Mac since Leopard) or a similar humanist sans-serif font */
-	font-family: 'Open Sans', 'Segoe UI', 'Tahoma', 'Verdana', 'Arial', 'Helvetica', sans-serif;
+	font-family: 'Open Sans', 'Segoe UI', Tahoma, Verdana, Arial, Helvetica, sans-serif;
 }
 
 tt, kbd, samp {
@@ -2305,7 +2305,6 @@ dl.compact_list {
 	overflow: hidden;
 }
 dl.compact_list>dt {
-	display: inline;
 	display: list-item;
 	list-style-type: circle;
 	float: left;
@@ -3663,21 +3662,21 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 
 	a[target="_blank"] {
 		background: url('{$IMG;,filetypes/external_link}') no-repeat right top;
-		padding-right:10px;
+		padding-right: 10px;
 	}
 
 	a[onclick$="window.open"], body div a.external_link {
 		background: url('{$IMG;,filetypes/external_link}') no-repeat right top !important;
-		padding-right:10px !important;
+		padding-right: 10px !important;
 	}
 
 	body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"] {
-		background-image:none;
-		padding:0px;
+		background-image: none;
+		padding: 0px;
 	}
 
 	body a.link_exempt2 {
-		background-image:none;
+		background-image: none;
 	}
 
 	{+START,IF,{$ADDON_INSTALLED,recommend}}
