@@ -182,8 +182,6 @@ class Module_cms_catalogues extends standard_aed_module
 	 */
 	function nice_get_choose_table($url_map)
 	{
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$current_ordering=get_param('sort','title ASC');
@@ -383,7 +381,6 @@ class Module_cms_catalogues extends standard_aed_module
 
 			$_cf_name=get_translated_text($field['cf_name']);
 			$field_cat='';
-			$matches=array();
 			if (strpos($_cf_name,': ')!==false)
 			{
 				$field_cat=substr($_cf_name,0,strpos($_cf_name,': '));
@@ -1301,8 +1298,6 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	 */
 	function nice_get_choose_table($url_map)
 	{
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$current_ordering=get_param('sort','cc_title ASC');
@@ -1576,7 +1571,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 
 		actual_delete_catalogue_category(intval($id));
 
-		$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$category_id));
+		$catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$id));
 		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$this->donext_catalogue_name=$catalogue_name;

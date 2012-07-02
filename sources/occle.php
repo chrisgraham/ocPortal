@@ -1880,6 +1880,7 @@ class virtual_fs
 	{
 		$success=$this->copy_file($to_move,$destination);
 		if ($success) return $this->remove_file($to_move);
+		return false;
 	}
 
 	/**

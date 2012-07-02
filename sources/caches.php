@@ -177,7 +177,7 @@ function decache($cached_for,$identifier=NULL)
  */
 function find_cache_on($codename)
 {
-	if (defined('HIPHOP_PHP')) return;
+	if (defined('HIPHOP_PHP')) return NULL;
 
 	// See if we have it cached
 	global $CACHE_ON;

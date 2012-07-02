@@ -302,8 +302,6 @@ class Module_admin_ocf_groups extends standard_aed_module
 	 */
 	function nice_get_choose_table($url_map)
 	{
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$default_order='g_promotion_threshold ASC,id ASC';
@@ -646,6 +644,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 			$GLOBALS['SITE_DB']->query_delete('group_category_access',array('group_id'=>intval($id)));
 			$GLOBALS['SITE_DB']->query_delete('group_page_access',array('group_id'=>intval($id)));
 		}
+		return NULL;
 	}
 
 	/**

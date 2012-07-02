@@ -1399,13 +1399,10 @@ class Module_galleries
 	 */
 	function build_set_navigation($where,$join,$category_name,$current_id,$root,$current_type,$slideshow,$wide_high,$start,$max,$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,$image_select,$video_select)
 	{
-		$our_table=$current_type.'s';
-
 		$sv=has_specific_permission(get_member(),'see_unvalidated');
 		if (!$sv) $where.=' AND validated=1';
 
 		$days=get_param('days','');
-		$where_sup='';
 		if ($days!='') $where.=' AND add_date>='.strval(time()-intval($days)*60*60*24);
 
 		require_code('ocfiltering');

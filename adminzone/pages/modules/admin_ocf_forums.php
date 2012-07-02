@@ -540,7 +540,6 @@ class Module_admin_ocf_forums extends standard_aed_module
 			require_code('ocf_groups_action');
 			require_code('ocf_groups_action2');
 
-			$members_to_test=array();
 			$lost_groups=array();
 			foreach ($old_access_mapping as $group_id)
 			{

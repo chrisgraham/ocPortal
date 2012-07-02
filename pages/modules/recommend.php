@@ -302,9 +302,6 @@ class Module_recommend
 		$submit_name=do_lang_tempcode('PROCEED');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 
-		$name=post_param('name',is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
-		$recommender_email_address=post_param('recommender_email_address',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()));
-
 		$fields=new ocp_tempcode();
 		$hidden=new ocp_tempcode();
 		$already=array();
@@ -463,7 +460,6 @@ class Module_recommend
 
 							while (($csv_line=fgetcsv($myfile,10240,$del))!==false) // Reading a CSV record
 							{
-								$row_exploded=array('','');
 								$row_exploded=(array_key_exists(0,$csv_line) && strlen($csv_line['0'])>0)?explode(';',$csv_line[0]):array('','');
 
 								$found_email_address=(strlen($row_exploded[$email_index])>0)?$row_exploded[$email_index]:'';

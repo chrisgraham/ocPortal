@@ -444,7 +444,6 @@ class Module_topics
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('TOPIC_TITLE_WILL_BE'),'title',$default_title,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE_IF_EMPTY'),do_lang_tempcode('DESCRIPTION_DELETE_IF_EMPTY'),'delete_if_empty',true));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'reason','',false));
-		$default_title=$GLOBALS['FORUM_DB']->query_value('f_posts','p_title',array('id'=>$posts[0]));
 
 		$title=get_screen_title('MOVE_POSTS');
 		$submit_name=do_lang_tempcode('MOVE_POSTS');
@@ -2255,8 +2254,9 @@ END;
 				$post_id=get_param_integer('id');
 
 				$post_url=build_url(array('page'=>'_SELF','type'=>get_param('type')),'_SELF',NULL,true);
-				$hidden=form_input_hidden('id',strval($post_id));
-				$hidden=form_input_hidden('reason',post_param('reason'));
+				$hidden=new ocp_tempcode();
+				$hidden->attach(form_input_hidden('id',strval($post_id)));
+				$hidden->attach(form_input_hidden('reason',post_param('reason')));
 
 				$stuff=new ocp_tempcode();
 				foreach ($posts as $post)

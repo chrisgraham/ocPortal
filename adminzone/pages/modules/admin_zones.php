@@ -637,8 +637,6 @@ class Module_admin_zones
 		$url_map=array('page'=>'_SELF','type'=>$type);
 		if ($type=='_editor') $url_map['wide']=1;
 
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$current_ordering='name ASC';

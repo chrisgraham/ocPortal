@@ -577,8 +577,9 @@ msgstr ""
 			}
 			if ($fields->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 			$post_url=build_url(array('page'=>'_SELF','type'=>'_code2'),'_SELF');
-			$hidden=form_input_hidden('redirect',get_self_url(true));
-			$hidden=form_input_hidden('lang',$lang);
+			$hidden=new ocp_tempcode();
+			$hidden->attach(form_input_hidden('redirect',get_self_url(true)));
+			$hidden->attach(form_input_hidden('lang',$lang));
 			return do_template('FORM_SCREEN',array('_GUID'=>'2d7356fd2c4497ceb19450e65331c9c5','TITLE'=>$title,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>'','SUBMIT_NAME'=>do_lang('TRANSLATE_CODE')));
 		}
 		$lang_file=get_param('lang_file');

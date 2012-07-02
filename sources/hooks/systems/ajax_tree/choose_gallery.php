@@ -46,8 +46,6 @@ class Hook_choose_gallery
 
 		if (!has_actual_page_access(NULL,'galleries')) $tree=array();
 
-		$out='';
-
 		if ($compound_list)
 		{
 			list($tree,)=$tree;

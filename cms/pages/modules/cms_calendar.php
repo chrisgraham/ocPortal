@@ -196,8 +196,6 @@ class Module_cms_calendar extends standard_aed_module
 	 */
 	function nice_get_choose_table($url_map)
 	{
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$current_ordering=get_param('sort','e_title ASC',true);
@@ -1111,8 +1109,6 @@ class Module_cms_calendar_cat extends standard_aed_module
 	 */
 	function nice_get_choose_table($url_map)
 	{
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$current_ordering=get_param('sort','t_title ASC',true);

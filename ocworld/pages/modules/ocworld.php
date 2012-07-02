@@ -787,6 +787,7 @@ class Module_ocworld
 		}
 
 		ocw_refresh_with_message(do_lang('SUCCESS'));
+		return new ocp_tempcode();
 	}
 
 }

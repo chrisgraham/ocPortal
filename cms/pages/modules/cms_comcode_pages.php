@@ -340,8 +340,6 @@ class Module_cms_comcode_pages
 			}
 		}
 
-		$table=new ocp_tempcode();
-
 		require_code('templates_results_table');
 
 		$current_ordering=get_param('sort','page_title ASC');
@@ -449,7 +447,6 @@ class Module_cms_comcode_pages
 			if (!array_key_exists(2,$path_bits))
 			{
 				$rows=$GLOBALS['SITE_DB']->query_select('comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone',array('c.*','cc_page_title'),array('c.the_zone'=>$zone,'c.the_page'=>$page),'',1);
-				$page_title=make_string_tempcode(do_lang('UNKNOWN'));
 				if ((!array_key_exists(0,$rows)) && ($number_pages_parsed_for_titles<15))
 				{
 					$result=request_page($page,false,$zone,'comcode_custom_pure',true);
@@ -894,8 +891,6 @@ class Module_cms_comcode_pages
 		if ($renaming_page)
 		{
 			if (!is_alphanumeric($new_file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
-
-			$fullpath2=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.$lang.'/'.$new_file.'.txt');
 
 			$langs=find_all_langs(true);
 			$rename_map=array();

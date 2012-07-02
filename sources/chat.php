@@ -1340,6 +1340,7 @@ function _deal_with_chatcode_tags($text,$tag,$pm_user,$pm_message,$username,$cut
 		case 'private':
 			return _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_id,$system_message);
 	}
+	return array(NULL,NULL);
 }
 
 /**

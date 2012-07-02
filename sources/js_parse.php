@@ -565,6 +565,7 @@ function precedence_sort($op_list)
 	echo '!';
 	print_r($op_list);
 //	print_r(debug_backtrace());
+	return array();
 }
 
 /**

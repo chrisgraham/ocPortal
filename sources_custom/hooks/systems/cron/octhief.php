@@ -235,8 +235,8 @@ class Hook_cron_octhief
 					$post_id=ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,NULL,NULL,NULL,$give_to_member,NULL,NULL,NULL,false,true,NULL,true,$subject,0,NULL,true,true,true);
 
 					require_code('ocf_topics_action2');
-					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
-					send_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
+					send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$octhief_number);
+					send_pt_notification($post_id,$subject,$topic_id,$octhief_number,$give_to_member);
 				}
 			}
 		}

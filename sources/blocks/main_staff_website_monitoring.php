@@ -221,6 +221,7 @@ class Block_main_staff_website_monitoring
 			$pr=str_replace("\n",'',$pr);
 			return $pr;
 		}
+		return NULL;
 	}
 
 	//return the pagerank figure

@@ -15,6 +15,8 @@
 
 /**
  * Inject workflow code into the galleries view.
+ *
+ * @return  string Altered code
  */
 function init__site__pages__modules_custom__galleries($code)
 {

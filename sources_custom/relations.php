@@ -13,8 +13,6 @@ function get_all_tables()
 	$all_tables=array();
 	foreach ($_tables as $t)
 	{
-		$t['m_table']=$t['m_table'];
-
 //		if (substr($t['m_table'],0,2)=='w_') continue; // Don't want ocworld
 //		if (substr($t['m_table'],0,4)=='test') continue; // Don't want tester addon
 

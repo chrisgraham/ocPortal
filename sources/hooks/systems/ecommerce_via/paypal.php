@@ -263,7 +263,7 @@ class Hook_paypal
 	 */
 	function store_shipping_address($order_id)
 	{
-		if (is_null(post_param('address_name',NULL))) return;
+		if (is_null(post_param('address_name',NULL))) return NULL;
 
 		if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_addresses','id',array('order_id'=>$order_id))))
 		{
@@ -278,6 +278,8 @@ class Hook_paypal
 
 			return $GLOBALS['SITE_DB']->query_insert('shopping_order_addresses',$shipping_address,true);	
 		}
+
+		return NULL;
 	}
 }
 

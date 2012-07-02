@@ -257,7 +257,7 @@ class Module_cms_authors
 			require_code('fields');
 			if (has_tied_catalogue('author'))
 			{
-				delete_form_custom_fields('author',author);
+				delete_form_custom_fields('author',$author);
 			}
 		} else
 		{

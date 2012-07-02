@@ -122,7 +122,6 @@ class Module_topicview
 		$GLOBALS['META_DATA']+=$topic_info['meta_data'];
 		global $SEO_TITLE;
 		$SEO_TITLE=do_lang('_VIEW_TOPIC',$topic_info['title']);
-		$may_reply=(array_key_exists('may_reply',$topic_info)) && (($topic_info['is_open']) || (array_key_exists('may_post_closed',$topic_info)));
 
 		// Render posts according to whether threaded or not
 		$threaded=($topic_info['is_threaded']==1);

@@ -386,6 +386,7 @@ class Module_admin_backup
 
 		$url=build_url(array('page'=>'_SELF'),'_SELF');
 		redirect_screen($title,$url,do_lang_tempcode('BACKUP_INFO_1',$file));
+		return new ocp_tempcode();
 	}
 
 }

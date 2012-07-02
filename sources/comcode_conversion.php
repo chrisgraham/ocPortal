@@ -1211,6 +1211,7 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme=N
 	$params=0;
 	$starting=true;
 	$matches=array();
+	$dirty_param=false;
 
 	//$quicker=$GLOBALS['PREG_MATCH_OFFSET'];
 
@@ -1402,6 +1403,7 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme=N
 			return array(array(),TC_KNOWN,'',NULL);
 		}
 	}
+	return array(array(),TC_KNOWN,'',NULL);
 }
 
 class ocp_tempcode_static

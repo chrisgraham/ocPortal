@@ -317,7 +317,6 @@ class Module_admin_setupwizard
 				$is_hidden_on_by_default=in_array($row['addon_name'],$addon_list_advanced_on_by_default);
 				$is_hidden_off_by_default=in_array($row['addon_name'],$addon_list_advanced_off_by_default);
 				$install_by_default=(is_null($addon_list_on_by_default) || in_array($row['addon_name'],$addon_list_on_by_default) || $is_hidden_on_by_default) && (!$is_hidden_off_by_default);
-				$description=$row['addon_description'];
 				if ((substr($row['addon_description'],-1)!='.') && ($row['addon_description']!='')) $row['addon_description'].='.';
 				$field=form_input_tick($row['addon_name'],$row['addon_description'],'addon_'.$row['addon_name'],$install_by_default);
 				if ((!$is_hidden_on_by_default) && (!$is_hidden_off_by_default))

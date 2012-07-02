@@ -9,7 +9,7 @@
 
 if (!function_exists('init__chat'))
 {
-	function init__chat($code)
+	function init__chat()
 	{
 		global $MEMBERS_BEFRIENDED;
 		$MEMBERS_BEFRIENDED=NULL;

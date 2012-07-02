@@ -264,14 +264,6 @@ class Module_admin_ocf_emoticons extends standard_aed_module
 				default:
 					if (is_image($file))
 					{
-						if (file_exists(get_file_base().'/themes/default/images/emoticons/index.html'))
-						{
-							$path=get_custom_file_base().'/themes/default/images_custom/emoticons__'.basename($file);
-						} else
-						{
-							$path=get_custom_file_base().'/themes/default/images_custom/ocf_emoticons__'.basename($file);
-						}
-
 						$urls=get_url('',$attach_name,'themes/default/images_custom');
 						$path=$urls[0];
 						$this->_import_emoticon($path);

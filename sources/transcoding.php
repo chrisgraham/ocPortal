@@ -119,7 +119,7 @@ function transcode_video($url,$table,$url_field,$orig_filename_field,$width_fiel
 					't_orig_filename_field'=>is_null($orig_filename_field)?'':$orig_filename_field,
 					't_width_field'=>is_null($width_field)?'':$width_field,
 					't_height_field'=>is_null($height_field)?'':$height_field,
-					't_output_filename'=>$transcoded_filename,
+					't_output_filename'=>rawurldecode(basename($url)),
 				));
 
 				return $url;

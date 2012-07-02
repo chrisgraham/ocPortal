@@ -97,9 +97,6 @@ function transcode($path)
 		//video bitrate to be set
 		$video_bitrate=VIDEO_BITRATE;//250;
 
-		//prepare the input and output filepaths and the command to be executed
-		$base_dir=getcwd();
-
 		$file_path=preg_replace('#\\\#','/',$path);
 
 		$matches=array();

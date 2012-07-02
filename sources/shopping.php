@@ -25,8 +25,6 @@
  */
 function get_product_details()
 {
-	$products=array();
-
 	$_hook=get_param('hook');
 
 	require_code('hooks/systems/ecommerce/'.filter_naughty_harsh($_hook));
@@ -285,8 +283,6 @@ function payment_form()
 	require_code('ecommerce');
 
 	$title=get_screen_title('PAYMENT_HEADING');
-
-	$cart_items=array();
 
 	$cart_items=find_products_in_cart();
 

@@ -52,7 +52,7 @@ if (get_magic_quotes_gpc())
 }
 
 global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
-$HTML_ESCAPE_1_STRREP=array('&'/*,'“','”'*/,'"','\'','<','>'/*,'£'*/);
+$HTML_ESCAPE_1_STRREP=array('&'/*,'ï¿½','ï¿½'*/,'"','\'','<','>'/*,'ï¿½'*/);
 $HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
 
 /**
@@ -195,7 +195,7 @@ function code_editor_do_login()
 			if ($file_owner!==false)
 			{
 				$u_info=posix_getpwuid($file_owner);
-				if ($u_info!==false) $ftp_username=$u_info['name'];
+				if ($u_info!==false) $ftp_username=$u_info['name']; else $ftp_username='';
 			} else $ftp_username='';
 		} else $ftp_username='';
 		if (is_null($ftp_username)) $ftp_username='';

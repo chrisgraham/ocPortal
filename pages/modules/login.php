@@ -72,7 +72,10 @@ class Module_login
 	 */
 	function get_entry_points()
 	{
-		return is_guest()?array('misc'=>'_LOGIN'):array('misc'=>'_LOGIN','logout'=>'LOGOUT','concede'=>'CONCEDED_MODE','invisible'=>'INVISIBLE');
+		if (is_guest()) return array('misc'=>'_LOGIN');
+		$ret=array('misc'=>'_LOGIN','logout'=>'LOGOUT','concede'=>'CONCEDED_MODE');
+		if (get_option('is_on_invisibility')=='1') $ret['invisible']='INVISIBLE';
+		return $ret;
 	}
 
 	/**
@@ -198,6 +201,7 @@ class Module_login
 		} else
 		{
 			$title=get_screen_title('USER_LOGIN_ERROR');
+
 			$text=$feedback['error'];
 
 			attach_message($text,'warn');
@@ -271,9 +275,15 @@ class Module_login
 	 */
 	function invisible()
 	{
-		$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
+		if (get_option('is_on_invisibility')=='1')
+		{
+			$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
+		} else
+		{
+			$visible=false; // Small fudge: always say thay are not visible now, so this will make them visible -- because they don't have permission to be invisible
+		}
 
-		$title=get_page_title($visible?'INVISIBLE':'BE_VISIBLE');
+		$title=get_screen_title($visible?'INVISIBLE':'BE_VISIBLE');
 
 		$GLOBALS['SITE_DB']->query_update('sessions',array('session_invisible'=>$visible?1:0),array('the_user'=>get_member(),'the_session'=>get_session_id()),'',1);
 		global $SESSION_CACHE;
@@ -285,6 +295,8 @@ class Module_login
 				persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 			}
 		}
+
+		decache('side_users_online');
 
 		// Store in cookie, if we have login cookies around
 		if (array_key_exists(get_member_cookie(),$_COOKIE))

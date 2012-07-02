@@ -45,7 +45,6 @@ class Block_main_google_map
 		require_lang('google_map');
 
 		// Set up config/defaults
-		$geolocate_user=array_key_exists('geolocate_user',$map)?$map['geolocate_user']:'1';
 		if (!array_key_exists('title',$map)) $map['title']='';
 		if (!array_key_exists('region',$map)) $map['region']='';
 		if (!array_key_exists('latitude',$map)) $map['latitude']='0';

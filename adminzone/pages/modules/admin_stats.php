@@ -206,6 +206,7 @@ class Module_admin_stats
 				if (method_exists($ob,$type)) return call_user_func_array(array(&$ob,$type),array(&$this,$type));
 			}
 		}
+		return new ocp_tempcode();
 	}
 
 	/**

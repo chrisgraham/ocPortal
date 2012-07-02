@@ -638,7 +638,6 @@ function handle_symbol_preprocessing($bit,&$children)
 			if ($GLOBALS['RECORD_TEMPLATES_TREE'])
 			{
 				if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) return;
-				$param=$bit[3];
 
 				$temp=css_tempcode();
 

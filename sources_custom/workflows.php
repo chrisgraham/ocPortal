@@ -549,6 +549,8 @@ function get_requirement_position($requirement_id, $workflow_id)
  */
 function get_groups_for_point($approval_id,$only_validated=true)
 {
+	// TODO: Implement $only_validated
+
 	if (is_null($approval_id))
 	{
 		warn_exit(do_lang_tempcode('_MISSING_RESOURCE', 'NULL approval'));

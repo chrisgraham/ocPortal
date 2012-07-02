@@ -46,7 +46,6 @@ class Hook_fields_user_multi
 	function inputted_to_sql_for_search($row,$i)
 	{
 		$param=get_param('option_'.strval($row['id']),'');
-		$where_clause='';
 		if ($param!='')
 		{
 			$param=strval($GLOBALS['FORUM_DRIVER']->get_member_from_username($param));

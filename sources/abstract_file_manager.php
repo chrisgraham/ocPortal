@@ -272,7 +272,7 @@ function _ftp_info($light_fail=false)
 				echo '<strong>';
 				$temp->evaluate_echo();
 				echo '</strong>';
-				return;
+				return NULL;
 			} else
 			{
 				set_value('ftp_password',''); // Wipe out password, because we need the user to see FTP login screen again
@@ -291,7 +291,7 @@ function _ftp_info($light_fail=false)
 			{
 				$temp=do_lang_tempcode('NO_FTP_LOGIN',@strval($php_errormsg));
 				$temp->evaluate_echo();
-				return;
+				return NULL;
 			} else
 			{
 				set_value('ftp_password',''); // Wipe out password, because we need the user to see FTP login screen again
@@ -309,7 +309,7 @@ function _ftp_info($light_fail=false)
 			{
 				$temp=do_lang_tempcode('NO_FTP_DIR',@strval($php_errormsg),'1');
 				$temp->evaluate_echo();
-				return;
+				return NULL;
 			} else
 			{
 				set_value('ftp_password',''); // Wipe out password, because we need the user to see FTP login screen again
@@ -330,7 +330,7 @@ function _ftp_info($light_fail=false)
 			{
 				$temp=do_lang_tempcode('NO_FTP_DIR',@strval($php_errormsg),'2');
 				$temp->evaluate_echo();
-				return;
+				return NULL;
 			} else
 			{
 				set_value('ftp_password',''); // Wipe out password, because we need the user to see FTP login screen again

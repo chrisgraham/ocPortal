@@ -679,7 +679,6 @@ class Module_calendar
 			{
 				$date=date_range($real_from,$real_to,!is_null($event['e_start_hour']));
 				//$date2=date('H:i',$to);
-				$test=date('d',$to);
 				if ($to>=$period_end-60/*1 minute gap we use to stop stuff spanning to start of next day*/)
 				{
 					$to_h=24;

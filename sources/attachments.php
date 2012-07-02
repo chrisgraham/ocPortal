@@ -244,7 +244,9 @@ function attachment_popup_script()
 
 	$connection=(get_page_name()=='topics')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
-	$members=array(get_member()=>$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+	$members=array();
+	if (!is_guest())
+		$members[get_member()]=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 	if (has_specific_permission(get_member(),'reuse_others_attachments'))
 	{
 		$_members=$connection->query_select('attachments',array('DISTINCT a_member_id'));
@@ -280,7 +282,12 @@ function attachment_popup_script()
 
 	$content=do_template('ATTACHMENTS_BROWSER',array('_GUID'=>'7773aad46fb0bfe563a142030beb1a36','LIST'=>$list,'CONTENT'=>$content,'URL'=>$post_url));
 
+	global $EXTRA_HEAD;
+	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
+	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+
 	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ATTACHMENT_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
+
 	$echo->evaluate_echo();
 }
 

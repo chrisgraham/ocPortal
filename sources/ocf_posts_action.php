@@ -68,6 +68,7 @@ function ocf_check_post($post,$topic_id=NULL,$poster=NULL)
 
 		return $last_posts;
 	}
+	return NULL;
 }
 
 /**

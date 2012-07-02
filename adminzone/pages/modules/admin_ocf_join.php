@@ -1056,7 +1056,7 @@ class Module_admin_ocf_join
 						$custom_fields[$cpf['id']]=substr(str_replace(chr(10),', ',str_replace(','.chr(10),chr(10),$custom_fields[$cpf['id']])),0,255);
 					} elseif (($cpf['cf_type']=='long_text') || ($cpf['cf_type']=='long_trans'))
 					{
-						$custom_fields[$cpf['id']]=$custom_fields[$cpf['id']];
+						//$custom_fields[$cpf['id']]=$custom_fields[$cpf['id']];
 					} elseif ($cpf['cf_type']=='float')
 					{
 						if (preg_match('#^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\n(\d\d\d\d)$#',$custom_fields[$cpf['id']])!=0) // Convert to float based date

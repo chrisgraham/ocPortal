@@ -3,6 +3,7 @@
 # NB: This script is not needed if you have suexec
 
 # Reset to good start state first
+touch info.php
 find . -type f -not -path "./sites/*" -path "./servers/*" -not -path "./_old/*" -not -path "./uploads/*" -exec chmod 644 {} \;
 find . -type d -not -path "./sites/*" -path "./servers/*" -not -path "./_old/*" -exec chmod 755 {} \;
 
