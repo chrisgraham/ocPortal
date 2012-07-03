@@ -78,7 +78,7 @@ function get_video_details($file_path,$filename,$delay_errors=false)
 				if (class_exists('getID3'))
 				{
 					$id3_ob=new getID3();
-					$_info=$id3_ob->analyze($file_path,$filename);
+					$_info=$id3_ob->analyze($file_path);
 					$info=array(
 						isset($_info['video']['resolution_x'])?$_info['video']['resolution_x']:NULL,
 						isset($_info['video']['resolution_y'])?$_info['video']['resolution_y']:NULL,

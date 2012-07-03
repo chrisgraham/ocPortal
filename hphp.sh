@@ -6,9 +6,9 @@
 	export HPHP_HOME=~/dev/hiphop-php
 	export HPHP_LIB=~/dev/hiphop-php/bin
 	export MAKEOPTS=-j4
-	export MAKEOPTS="-j4"
 #fi
 
+# If called as "sh hphp.sh continue" it will not rebuild the file list, it will just jump back into cmake
 if [ "$1" == "continue" ]
 then
 	cd hphp
@@ -23,24 +23,18 @@ fi
 	echo "./sources/forum/ocf.php" >> hphp.files.list
 #fi
 
+# compile_in_ocportal_includes.php is an ocPortal hook for additional specification of what files to include in hphp.files.list
 if [ -e "compile_in_ocportal_includes.php" ]
 then
 	php compile_in_ocportal_includes.php
 fi
-
-#if [ -e "hphp/CMakeFiles/program.dir/php" ]
-#then
-#	mv hphp/CMakeFiles/program.dir/php php.obj.bak
-#	echo "Backed up old object files. When hphp compiling you can ctrl+c and do ..."
-#	echo "rm -rf hphp/CMakeFiles/program.dir/php ; mv php.obj.bak hphp/CMakeFiles/program.dir/php ; cd hphp ; make"
-#fi
 
 echo "ocP: Compiling..."
 if [ ! -e "hphp" ]
 then
 	mkdir hphp
 fi
-$HPHP_HOME/src/hphp/hphp --input-list=hphp.files.list --log=3 -v "AllDynamic=true" --output-dir=hphp --force=1 --optimize-level=2 --file-cache=hphp-static-cache --sync-dir=/tmp/hphp_sync --keep-tempdir=true
+$HPHP_HOME/src/hphp/hphp --input-list=hphp.files.list --log=3 -v "AllDynamic=true" --output-dir=hphp --force=1 --optimize-level=2 --file-cache=hphp-static-cache --keep-tempdir=true
 # --cluster-count=200
 
 echo "ocP: Running..."

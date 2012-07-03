@@ -26,5 +26,6 @@ data_custom/latest_activity.txt
 _tests/codechecker/functions.dat
 hphp-static-cache
 hphp.files.list
+hphp
 ocportal-git.clpprj
 
