@@ -108,12 +108,11 @@ function zip_open($zip_file)
 
 		return constant('ZIPARCHIVE::ER_INTERNAL');
 	}
-	shell_exec($unzip_cmd,$unused_array_result,$res);
-	unset($unused_array_result);
+	$res=shell_exec($unzip_cmd);
 
 	// IT IS IMPORTANT THAT YOUR COMMANDLINE ZUNZIP TOOL CORRECTLY SETS RESULT CODE
 	// result code 0 == NO ERROR as in:
-	if ($res!=0)
+	if (is_null($res))
 	{
 		m_deldir($zip_dir);
 		return constant('ZIPARCHIVE::ER_INTERNAL');

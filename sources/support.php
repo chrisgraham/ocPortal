@@ -322,7 +322,7 @@ function is_writable_wrap($path)
 /**
  * Discern the cause of a file-write error, and show an appropriate error message.
  *
- * @param PATH			File path that could not be written
+ * @param PATH			File path that could not be written (full path, not relative)
  */
 function intelligent_write_error($path)
 {

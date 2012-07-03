@@ -25,4 +25,11 @@ ocp_sitemap.xml
 ocportal-git.clpprj
 data_custom/latest_activity.txt
 _tests/codechecker/functions.dat
+<<<<<<< HEAD
+=======
+hphp-static-cache
+hphp.files.list
+hphp
+ocportal-git.clpprj
+>>>>>>> master
 

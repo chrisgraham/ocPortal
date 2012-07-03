@@ -284,7 +284,7 @@ function tar_add_folder(&$resource,$logfile,$path,$max_size=NULL,$subpath='',$av
  * Extract all the files in the specified TAR file to the specified path.
  *
  * @param  array			The TAR file handle
- * @param  PATH			The full path to the folder to extract to
+ * @param  PATH			The path to the folder to extract to, relative to the base directory
  * @param  boolean		Whether to extract via the AFM (assumes AFM has been set up prior to this function call)
  * @param  ?array			The files to extract (NULL: all)
  * @param  boolean		Whether to take backups of Comcode pages
@@ -306,9 +306,9 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 			{
 				if (!$use_afm)
 				{
-					@mkdir($path.$file['path'],0777);
-					fix_permissions($path.$file['path'],0777);
-					sync_file($path.$file['path']);
+					@mkdir(get_custom_file_base().'/'.$path.$file['path'],0777);
+					fix_permissions(get_custom_file_base().'/'.$path.$file['path'],0777);
+					sync_file(get_custom_file_base().'/'.$path.$file['path']);
 				} else
 				{
 					afm_make_directory($path.$file['path'],true);
@@ -316,6 +316,7 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 				continue;
 			}
 
+			// Make directory where file will be extracted to
 			$data=tar_get_file($resource,$file['path']);
 			$path_components=explode('/',$file['path']);
 			$buildup='';
@@ -328,11 +329,11 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 						$buildup.=$component.'/';
 						if (!$use_afm)
 						{
-							if (!file_exists($path.$buildup))
+							if (!file_exists(get_custom_file_base().'/'.$path.$buildup))
 							{
-								@mkdir($path.$buildup,0777);
-								fix_permissions($path.$buildup,0777);
-								sync_file($path.$buildup);
+								@mkdir(get_custom_file_base().'/'.$path.$buildup,0777);
+								fix_permissions(get_custom_file_base().'/'.$path.$buildup,0777);
+								sync_file(get_custom_file_base().'/'.$path.$buildup);
 							}
 						} else
 						{
@@ -350,7 +351,7 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 					if (!$use_afm)
 					{
 						if (file_exists(get_custom_file_base().'/'.$path.$file['path']))
-							copy(get_custom_file_base().'/'.$path.$file['path'],$path.$file['path'].'.'.strval(time()));
+							copy(get_custom_file_base().'/'.$path.$file['path'],get_custom_file_base().'/'.$path.$file['path'].'.'.strval(time()));
 					} else
 					{
 						if (file_exists(get_custom_file_base().'/'.$path.$file['path']))
@@ -381,11 +382,18 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 			}
 			if (!$use_afm)
 			{
+				if (file_exists(get_custom_file_base().'/'.$path.$file['path']))
+				{
+					$changed=(file_get_contents(get_custom_file_base().'/'.$path.$file['path'])!=$data['data']);
+					if (!$changed) continue; // So old mtime can stay as is
+				}
+
 				$myfile=@fopen(get_custom_file_base().'/'.$path.$file['path'],'wb');
-				if ($myfile===false) intelligent_write_error($path.$file['path']);
+				if ($myfile===false) intelligent_write_error(get_custom_file_base().'/'.$path.$file['path']);
 				if (fwrite($myfile,$data['data'])<strlen($data['data'])) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 				$fullpath=get_custom_file_base().'/'.$path.$file['path'];
 				@chmod($fullpath,$data['mode']);
+				@touch($fullpath,$data['mtime']);
 				fclose($myfile);
 				fix_permissions($fullpath);
 				sync_file($fullpath);

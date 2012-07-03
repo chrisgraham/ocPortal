@@ -49,7 +49,7 @@ require_code('database_action');
 require_code('config2');
 require_code('menus2');
 require_css('global');
-$out=get_dropbox_dir();
+get_dropbox_dir();
 
 
 

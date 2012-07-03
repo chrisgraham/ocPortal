@@ -344,7 +344,7 @@ class Module_cms_downloads extends standard_aed_module
 
 		// Show it worked / Refresh
 		$title=get_screen_title('FILESYSTEM_DOWNLOADS');
-		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS_ADDED_DOWNLOADS',escape_html(integer_format($num_added))),NULL,$destination);
+		return $this->do_next_manager($title,do_lang_tempcode('SUCCESS_ADDED_DOWNLOADS',escape_html(integer_format($num_added))),NULL);
 	}
 
 	/**

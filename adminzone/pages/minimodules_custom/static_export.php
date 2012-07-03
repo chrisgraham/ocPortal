@@ -63,11 +63,11 @@ set_value('no_frames','1');
 
 $filename='static-'.get_site_name().'.'.date('Y-m-d').'.tar';
 
-@ob_end_clean();
-@ob_end_clean();
-
-if (get_param_integer('do__headers',1)==1)
+if ((get_param_integer('do__headers',1)==1) && (get_param_integer('dir',0)==0))
 {
+	@ob_end_clean();
+	@ob_end_clean();
+
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
 	if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
 		header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
@@ -78,7 +78,15 @@ if (get_param_integer('do__headers',1)==1)
 global $STATIC_EXPORT_TAR,$STATIC_EXPORT_WARNINGS;
 $STATIC_EXPORT_WARNINGS=array();
 if (get_forum_type()!='none') $STATIC_EXPORT_WARNINGS[]='Not on \'none\' forum driver, you may possibly still have some bundled login links etc to remove';
-$STATIC_EXPORT_TAR=tar_open(NULL,'wb');
+$tar_path=mixed();
+if (get_param_integer('dir',0)==0)
+{
+	$tar_path=NULL;
+} else
+{
+	$tar_path=ocp_tempnam('');
+}
+$STATIC_EXPORT_TAR=tar_open($tar_path,'wb');
 
 $GLOBALS['NO_QUERY_LIMIT']=true;
 
@@ -302,5 +310,23 @@ if (file_exists(get_custom_file_base().'/ocp_sitemap.xml'))
 
 tar_close($STATIC_EXPORT_TAR);
 
-$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
-exit();
+if (get_param_integer('dir',0)==0)
+{
+	$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
+	exit();
+}
+
+// Extract
+$myfile=tar_open($tar_path,'rb');
+if (!file_exists(get_custom_file_base().'/exports/static'))
+{
+	mkdir(get_custom_file_base().'/exports/static',0777);
+	fix_permissions(get_custom_file_base().'/exports/static',0777);
+	sync_file(get_custom_file_base().'/exports/static');
+}
+tar_extract_to_folder($myfile,'exports/static');
+unlink($tar_path);
+
+$title=get_screen_title('Exported to static',false);
+$title->evaluate_echo();
+echo do_lang('SUCCESS');

@@ -96,7 +96,7 @@ function init__comcode_text()
 
 	// These tags have contents that are not interpreted as Comcode (so no HTML tags either), but are formatted for white-space
 	global $CODE_TAGS;
-	$CODE_TAGS=array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/'flash'=>1,'thumb'=>1,'menu'=>1,'no_parse'=>1,'code'=>1,'sql'=>1,'php'=>1,'tt'=>1,'samp'=>1,'codebox'=>1);
+	$CODE_TAGS=array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/'flash'=>1,'thumb'=>1,'menu'=>1,'no_parse'=>1,'code'=>1,'sql'=>1,'php'=>1,'tt'=>1,'samp'=>1,'codebox'=>1,'staff_note'=>1);
 
 	// ALSO:
 	// See $non_text_tags list in comcode_renderer.php

@@ -214,9 +214,9 @@ class Block_main_multi_content
 		$x1='';
 		$x2='';
 		if (($filter!='') && (!is_null($category_field_filter)))
-			$x1=$this->build_filter($filter,$info,'r.'.$category_field_filter,'r.'.(is_array($info['category_is_string'])?$info['category_is_string'][0]:$info['category_is_string']));
+			$x1=$this->build_filter($filter,$info,'r.'.$category_field_filter/*,'r.'.(is_array($info['category_is_string'])?$info['category_is_string'][0]:$info['category_is_string'])*/);
 		if (($filter_b!='') && (!is_null($category_field_access)))
-			$x2=$this->build_filter($filter_b,$info,'r.'.$category_field_access,'r.'.(is_array($info['category_is_string'])?$info['category_is_string'][1]:$info['category_is_string']));
+			$x2=$this->build_filter($filter_b,$info,'r.'.$category_field_access/*,'r.'.(is_array($info['category_is_string'])?$info['category_is_string'][1]:$info['category_is_string'])*/);
 
 		if (!is_null($days))
 		{

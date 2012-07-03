@@ -239,8 +239,8 @@ class LightOpenID
 	 */
 	protected function htmlTag($content, $tag, $attrName, $attrValue, $valueName)
 	{
-		preg_match_all("#<{$tag}[^>]*$attrName=['\"].*?$attrValue.*?['\"][^>]*$valueName=['\"](.+?)['\"][^>]*/?>#i", $content, $matches1);
-		preg_match_all("#<{$tag}[^>]*$valueName=['\"](.+?)['\"][^>]*$attrName=['\"].*?$attrValue.*?['\"][^>]*/?>#i", $content, $matches2);
+		preg_match_all("#<{$tag}[^>]*$attrName=['\"].*?$attrValue.*?['\"][^>]*$valueName=['\"](.+?)['\"][^>]*/?'.'>#i", $content, $matches1);
+		preg_match_all("#<{$tag}[^>]*$valueName=['\"](.+?)['\"][^>]*$attrName=['\"].*?$attrValue.*?['\"][^>]*/?'.'>#i", $content, $matches2);
 
 		$result = array_merge($matches1[1], $matches2[1]);
 		return empty($result)?false:$result[0];
@@ -286,11 +286,11 @@ class LightOpenID
 
 						# OpenID 2
 						$ns = preg_quote('http://specs.openid.net/auth/2.0/');
-						if (preg_match('#<Service.*?>(.*)<Type>\s*'.$ns.'(.*?)\s*</Type>(.*)</Service>#s', $content, $m)) {
+						if (preg_match('#<Service.*?'.'>(.*)<Type>\s*'.$ns.'(.*?)\s*</Type>(.*)</Service>#s', $content, $m)) {
 							$content = ' ' . $m[1] . $m[3]; # The space is added, so that strpos doesn't return 0.
 							if ($m[2] == 'server') $this->identifier_select = true;
 
-							preg_match('#<URI.*?>(.*)</URI>#', $content, $server);
+							preg_match('#<URI.*?'.'>(.*)</URI>#', $content, $server);
 							preg_match('#<(Local|Canonical)ID>(.*)</\1ID>#', $content, $delegate);
 							if (empty($server)) {
 								return false;
@@ -310,10 +310,10 @@ class LightOpenID
 
 						# OpenID 1.1
 						$ns = preg_quote('http://openid.net/signon/1.1');
-						if (preg_match('#<Service.*?>(.*)<Type>\s*'.$ns.'\s*</Type>(.*)</Service>#s', $content, $m)) {
+						if (preg_match('#<Service.*?'.'>(.*)<Type>\s*'.$ns.'\s*</Type>(.*)</Service>#s', $content, $m)) {
 							$content = ' ' . $m[1] . $m[2];
 
-							preg_match('#<URI.*?>(.*)</URI>#', $content, $server);
+							preg_match('#<URI.*?'.'>(.*)</URI>#', $content, $server);
 							preg_match('#<.*?Delegate>(.*)</.*?Delegate>#', $content, $delegate);
 							if (empty($server)) {
 								return false;

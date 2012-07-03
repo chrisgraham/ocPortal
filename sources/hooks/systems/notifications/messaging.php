@@ -36,7 +36,7 @@ class Hook_Notification_messaging extends Hook_Notification__Staff
 	 */
 	function create_category_tree($notification_code,$id)
 	{
-		return parent::create_category_tree($notification_code,$id,true);
+		return parent::create_category_tree($notification_code,$id);
 	}
 
 	/**

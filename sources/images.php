@@ -450,8 +450,8 @@ function check_memory_limit_for($file_path,$exit_on_error=true)
 						$output_arr=array();
 						if (strpos(@ini_get('disable_functions'),'shell_exec')===false)
 						{
-							@shell_exec($shrink_command,$output_arr,$err_cond);
-							if ($err_cond===0) return true;
+							$err_cond=@shell_exec($shrink_command);
+							if (!is_null($err_cond)) return true;
 						}
 					}
 

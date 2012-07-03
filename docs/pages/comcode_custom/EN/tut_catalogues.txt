@@ -174,7 +174,6 @@ CATALOGUE_<catalogue-name>_ADD_TEXT=Shown on add screen.
 CATALOGUE_<catalogue-name>_EDIT_TEXT=Shown on edit screen.
 [/codebox]
 
-[staff_note]
 [title="3"]eCommerce catalogues[/title]
 
 ocPortal can have special eCommerce catalogues, which integrate with the ocPortal shopping cart. These catalogues provide the following special functionality:
@@ -199,7 +198,6 @@ The special eCommerce fields are:
  - tax_type
  - weight
  - description
-[/staff_note]
 
 [title="2"]Classified ads[/title]
 

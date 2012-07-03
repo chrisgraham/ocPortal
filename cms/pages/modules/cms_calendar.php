@@ -620,7 +620,7 @@ class Module_cms_calendar extends standard_aed_module
 
 		check_edit_permission(($myrow['e_is_public']==1)?'mid':'low',$myrow['e_submitter']);
 		$content=get_translated_text($myrow['e_content']);
-		$fields=$this->get_form_fields($myrow['e_type'],$myrow['e_start_year'],$myrow['e_start_month'],$myrow['e_start_day'],$myrow['e_start_monthly_spec_type'],$myrow['e_start_hour'],$myrow['e_start_minute'],get_translated_text($myrow['e_title']),$content,$myrow['e_recurrence'],$myrow['e_recurrences'],$myrow['e_seg_recurrences'],$myrow['e_is_public'],$myrow['e_priority'],$myrow['e_end_year'],$myrow['e_end_month'],$myrow['e_end_day'],$myrow['e_end_monthly_spec_type'],$myrow['e_end_hour'],$myrow['e_end_minute'],$myrow['e_timezone'],$myrow['e_do_timezone_conv'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['validated']);
+		$fields=$this->get_form_fields($myrow['e_type'],$myrow['e_start_year'],$myrow['e_start_month'],$myrow['e_start_day'],$myrow['e_start_monthly_spec_type'],$myrow['e_start_hour'],$myrow['e_start_minute'],get_translated_text($myrow['e_title']),$content,$myrow['e_recurrence'],$myrow['e_recurrences'],$myrow['e_seg_recurrences'],$myrow['e_is_public'],$myrow['e_priority'],$myrow['e_end_year'],$myrow['e_end_month'],$myrow['e_end_day'],$myrow['e_end_monthly_spec_type'],$myrow['e_end_hour'],$myrow['e_end_minute'],$myrow['e_timezone'],$myrow['e_do_timezone_conv'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']);
 
 		if (has_delete_permission('low',get_member(),$myrow['e_submitter'],'cms_calendar'))
 		{
