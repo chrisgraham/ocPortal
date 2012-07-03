@@ -254,7 +254,7 @@ function do_form_preview(form,preview_url,has_separate_preview)
 
 	if ((has_separate_preview) || (window.has_separate_preview))
 	{
-		form.setAttribute('action',old_action+'&preview=1');
+		form.setAttribute('action',old_action+((old_action.indexOf('?')==-1)?'?':'&')+'preview=1');
 		return true;
 	}
 

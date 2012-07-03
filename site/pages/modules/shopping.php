@@ -226,7 +226,6 @@ class Module_shopping
 		if ($type=='update_cart') return $this->update_cart();
 		if ($type=='empty_cart') return $this->empty_cart();
 		if ($type=='pay') return $this->pay();
-		if ($type=='order') return $this->order();
 		if ($type=='finish') return $this->finish();
 		if ($type=='my_orders') return $this->my_orders();
 		if ($type=='order_det') return $this->order_det();

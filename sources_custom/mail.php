@@ -170,7 +170,7 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 	{
 		$html_evaluated=preg_replace_callback('#<img\s([^>]*)src="(http://[^"]*)"#U','_mail_img_rep_callback',$html_evaluated);
 		$matches=array();
-		foreach (array('#<([^"<>]*\s)style="([^"]*)"#','#<style( [^<>]*)?>(.*)</style>#Us') as $over)
+		foreach (array('#<([^"<>]*\s)style="([^"]*)"#','#<style( [^<>]*)?'.'>(.*)</style>#Us') as $over)
 		{
 			$num_matches=preg_match_all($over,$html_evaluated,$matches);
 			for ($i=0;$i<$num_matches;$i++)

@@ -102,7 +102,7 @@ class PHP_Crossword_Grid
 	 */
 	function placeWord($word, $x, $y, $axis)
 	{
-		$w = new PHP_Crossword_Word($word, $axis, $this->cells[$x][$y]);
+		$w = new PHP_Crossword_Word($word, $axis);
 
 		++$this->inum; // sandy addition
 		++$this->maxinum; // sandy addition

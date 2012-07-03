@@ -112,7 +112,7 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 	{
 		$new_session=$restored_session;
 		$prior_session_row=$SESSION_CACHE[$new_session];
-		$new_session_row=array('the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>substr(either_param('type','',true),0,80),'the_id'=>substr(either_param('id','',true),0,80),'last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed);
+		$new_session_row=array('the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>substr(either_param('type','',true),0,80),'the_id'=>substr(either_param('id',''),0,80),'last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed);
 		$big_change=($prior_session_row['last_activity']<time()-10) || ($prior_session_row['session_confirmed']!=$session_confirmed) || ($prior_session_row['ip']!=$new_session_row['ip']);
 		if ($big_change)
 			$GLOBALS['SITE_DB']->query_update('sessions',$new_session_row,array('the_session'=>$new_session),'',1,NULL,false,true);

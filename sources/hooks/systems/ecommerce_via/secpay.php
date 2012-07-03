@@ -174,7 +174,7 @@ class Hook_secpay
 	 * @param  string		Transaction ID to cancel
 	 * @return ?boolean	True: yes. False: no. (NULL: cancels via a user-URL-directioning)
 	 */
-	function auto_cancel($trans_id)
+	/*function auto_cancel($trans_id)
 	{
 		require_lang('ecommerce');
 		$username=$this->_get_username();
@@ -183,7 +183,7 @@ class Hook_secpay
 		$result=$this->_xml_rpc('https://www.secpay.com:443/secxmlrpc/make_call','SECVPN.repeatCardFullAddr',array($username,$password_2,$trans_id,-1,$password,'','','','','','repeat_change=true,repeat=false'),true);
 		if (is_null($result)) return false;
 		return (strpos($result,'&code=A&')!==false);
-	}
+	}*/
 
 	/**
 	 * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.

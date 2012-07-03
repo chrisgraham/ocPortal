@@ -258,7 +258,7 @@ class Module_cms_iotds extends standard_aed_module
 
 		check_edit_permission(($myrow['is_current']==1)?'high':'mid',$myrow['submitter']);
 
-		return $this->get_form_fields($myrow['url'],$myrow['thumb_url'],$title,$caption,$myrow['is_current'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['allow_rating']==1,$myrow['allow_comments']==1,$myrow['allow_trackbacks']==1,$myrow['notes']);
+		return $this->get_form_fields($myrow['url'],$myrow['thumb_url'],$title,$caption,$myrow['is_current'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']);
 	}
 
 	/**

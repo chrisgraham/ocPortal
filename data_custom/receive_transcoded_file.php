@@ -51,15 +51,8 @@ if (!file_exists($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html PUBLIC 
 require_code('database_action');
 require_code('config2');
 require_code('menus2');
-$out=run();
-if (!headers_sent())
-{
-	header('Content-Type: text/plain');
-	@ini_set('ocproducts.xss_detect','0');
-	if (!is_null($out)) echo is_object($out)?$out->evaluate():$out;
-	//echo do_lang('SUCCESS');
-}
 
+run();
 
 function run()
 {
@@ -120,5 +113,3 @@ function run()
 
 	file_get_contents($transcoding_server.'/move_to_sent.php?file='.$_GET['url']) ;
 }
-
-?>

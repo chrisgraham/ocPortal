@@ -816,7 +816,7 @@ class Module_cms_catalogues extends standard_aed_module
 		while (($data=fgetcsv($handle,100000,$del))!==false)
 		{
 			if ($data===array(NULL)) continue; // blank line
-			$this->import_csv_lines($catalogue_name,$data,$root_cat,$fields,$categories,$csv_field_titles,$catalog_root);
+			$this->import_csv_lines($catalogue_name,$data,$root_cat,$fields,$categories,$csv_field_titles);
 			//$count++;
 		}
 

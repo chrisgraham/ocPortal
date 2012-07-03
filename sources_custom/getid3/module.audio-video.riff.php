@@ -875,7 +875,7 @@ class getid3_riff
 							break;
 
 						default:
-							$ThisFileInfo['warning'][] = 'Unexpected sCompression value in 8SVX.VHDR chunk - expecting 0 or 1, found "'.sCompression.'"';
+							$ThisFileInfo['warning'][] = 'Unexpected sCompression value in 8SVX.VHDR chunk - expecting 0 or 1, found "'.$thisfile_riff_RIFFsubtype_VHDR_0['sCompression'].'"';
 							break;
 					}
 				}

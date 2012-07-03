@@ -112,7 +112,7 @@ function php_addslashes_twice($in)
  * Convert a string to tempcode.
  *
  * @param  string			String
- * @return tempcode		 Tempcode
+ * @return tempcode		Tempcode
  */
 function make_string_tempcode($string)
 {
@@ -187,11 +187,11 @@ function apply_tempcode_escaping_inline($escaped,$value)
 /**
  * This will create a new tempcode object that is containing a single specifed language code
  *
- * @param  ID_TEXT		  The ID of the symbol to use
+ * @param  ID_TEXT		The ID of the symbol to use
  * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
  * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
  * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
- * @return tempcode		 A language tempcode object
+ * @return tempcode		A language tempcode object
  */
 function do_lang_tempcode($symbol,$token1=NULL,$token2=NULL,$token3=NULL)
 {
@@ -233,10 +233,10 @@ function symbol_tempcode($symbol,$parameters=NULL,$escape=NULL)
 /**
  * This will create a new tempcode object that is containing a single specifed directive
  *
- * @param  ID_TEXT		  The ID of the symbol to use
- * @param  tempcode		 The contents
+ * @param  ID_TEXT		The ID of the symbol to use
+ * @param  tempcode		The contents
  * @param  ?array			Directive parameters (NULL: none)
- * @return tempcode		 A directive tempcode object
+ * @return tempcode		A directive tempcode object
  */
 function directive_tempcode($directive,$content,$parameters=NULL)
 {
@@ -824,9 +824,9 @@ class ocp_tempcode
 	/**
 	 * Attach the specified tempcode to the right of the current tempcode object.
 	 *
-	 * @param  mixed			  The tempcode/string to attach
-	 * @param  ?array			 Extra escaping (NULL: none)
-	 * @param  boolean			If we've already merged the children from what we're attaching into the child tree (at bind stage)
+	 * @param  mixed			The tempcode/string to attach
+	 * @param  ?array			Extra escaping (NULL: none)
+	 * @param  boolean		If we've already merged the children from what we're attaching into the child tree (at bind stage)
 	 */
 	function attach($attach,$escape=NULL,$avoid_children_merge=false)
 	{
@@ -1154,8 +1154,8 @@ class ocp_tempcode
 	/**
 	 * Parse the current tempcode object, then echo it to the browser.
 	 *
-	 * @param  ?LANGUAGE_NAME The language to evaluate with (NULL: current users language)
-	 * @param  mixed			 Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
+	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current users language)
+	 * @param  mixed				Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
 	 * @return string				Blank string. Allows chaining within echo statements
 	 */
 	function evaluate_echo($lang=NULL,$_escape=false)
@@ -1216,7 +1216,7 @@ class ocp_tempcode
 	/**
 	 * Tests to see if something would evaluate to empty or not
 	 *
-	 * @return boolean		  Whether it is really empty
+	 * @return boolean		Whether it is really empty
 	 */
 	function is_definitely_empty()
 	{
@@ -1226,7 +1226,7 @@ class ocp_tempcode
 	/**
 	 * Find whether the current tempcode object is empty or not.
 	 *
-	 * @return boolean		  Whether the tempcode object is empty
+	 * @return boolean		Whether the tempcode object is empty
 	 */
 	function is_empty()
 	{
@@ -1236,7 +1236,7 @@ class ocp_tempcode
 	/**
 	 * Tests to see if something would evaluate to empty or not
 	 *
-	 * @return boolean		  Whether it is really empty
+	 * @return boolean		Whether it is really empty
 	 */
 	function is_really_empty()
 	{
@@ -1269,9 +1269,9 @@ class ocp_tempcode
 	/**
 	 * Parses the current tempcode object, then return the parsed string
 	 *
-	 * @param  ?LANGUAGE_NAME The language to evaluate with (NULL: current user's language)
-	 * @param  mixed			 Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
-	 * @return string			The evaluated thing. Voila, it's all over!
+	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current user's language)
+	 * @param  mixed				Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
+	 * @return string				The evaluated thing. Voila, it's all over!
 	 */
 	function evaluate($lang=NULL,$_escape=false)
 	{

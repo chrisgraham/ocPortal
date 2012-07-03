@@ -1700,9 +1700,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 		}
 		$myrow=$rows[0];
 
-		$gallery_owner	=	$GLOBALS['FORUM_DRIVER']->get_username($myrow['g_owner']);
-
-		return $this->get_form_fields($id,get_translated_text($myrow['fullname']),get_translated_text($myrow['description']),get_translated_text($myrow['teaser']),$myrow['notes'],$myrow['parent_id'],$myrow['accept_images'],$myrow['accept_videos'],$myrow['is_member_synched'],$myrow['flow_mode_interface'],$myrow['rep_image'],$myrow['watermark_top_left'],$myrow['watermark_top_right'],$myrow['watermark_bottom_left'],$myrow['watermark_bottom_right'],$myrow['allow_rating'],$myrow['allow_comments'],$gallery_owner);
+		return $this->get_form_fields($id,get_translated_text($myrow['fullname']),get_translated_text($myrow['description']),get_translated_text($myrow['teaser']),$myrow['notes'],$myrow['parent_id'],$myrow['accept_images'],$myrow['accept_videos'],$myrow['is_member_synched'],$myrow['flow_mode_interface'],$myrow['rep_image'],$myrow['watermark_top_left'],$myrow['watermark_top_right'],$myrow['watermark_bottom_left'],$myrow['watermark_bottom_right'],$myrow['allow_rating'],$myrow['allow_comments']);
 	}
 
 	/**

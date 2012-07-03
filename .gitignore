@@ -24,3 +24,7 @@ data_custom/modules/admin_stats/*
 ocp_sitemap.xml
 data_custom/latest_activity.txt
 _tests/codechecker/functions.dat
+hphp-static-cache
+hphp.files.list
+ocportal-git.clpprj
+
