@@ -1500,7 +1500,7 @@ class ocp_tempcode_static
 					if ((($bit[2]=='IF_NON_ADJACENT') && ($this->last_attach!=$bit[3][0]->evaluate()))
 						|| (($bit[2]=='IF_ADJACENT') && ($this->last_attach==$bit[3][0]->evaluate())))
 					{
-						$this->attach($bit[3][1],NULL,$avoid_children_merge);
+						$this->attach($bit[3][1],$avoid_children_merge);
 						$last=count($this->bits)-1;
 					}
 				} else

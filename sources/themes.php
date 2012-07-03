@@ -216,6 +216,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		$path=$IMG_CODES[$site][$id];
 
 		global $SITE_INFO;
+
 		if (($path!='') && ((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0')) && (url_is_local($path)) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Missing image, so erase to re-search for it
 		{
 			unset($IMG_CODES[$site][$id]);

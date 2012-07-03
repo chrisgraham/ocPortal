@@ -91,7 +91,7 @@ function require_code($codename,$light_exit=false)
 			$codename='tempcode_compiler__runtime';
 	}
 
-	global $_REQUIRED_CODE,$FILE_BASE;
+	global $_REQUIRED_CODE,$FILE_BASE,$SITE_INFO;
 	if (isset($_REQUIRED_CODE[$codename])) return;
 	$_REQUIRED_CODE[$codename]=1;
 
@@ -144,6 +144,8 @@ function require_code($codename,$light_exit=false)
 	{
 		$has_override=is_file($path_a);
 	}
+
+	if ((isset($SITE_INFO['safe_mode'])) && ($SITE_INFO['safe_mode']=='1')) $has_override=false;
 
 	if (($has_override) && ((!function_exists('in_safe_mode')) || (!in_safe_mode()) || (!is_file($path_b))))
 	{

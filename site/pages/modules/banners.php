@@ -291,7 +291,7 @@ class Module_banners
 		if ($max_rows==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 		$max=get_param_integer('max',20);
 		$start=get_param_integer('start',0);
-		$rows=$GLOBALS['SITE_DB']->query_select('banners',array('*'),$only_owned,'ORDER BY '.$current_ordering,$max,$start);
+		$rows=$GLOBALS['SITE_DB']->query_select('banners',array('*'),is_null($only_owned)?NULL:array('submitter'=>$only_owned),'ORDER BY '.$current_ordering,$max,$start);
 		foreach ($rows as $row)
 		{
 			$view_link=build_url($url_map+array('source'=>$row['name']),'_SELF');
