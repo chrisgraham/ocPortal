@@ -14,7 +14,7 @@
  */
 
 /*
-Not doing (from Zend's Code Anaylzer):
+Not doing (from Zend's Code Analyzer):
  - if-else-else check (Reason: doesn't confuse us)
  - unnecessary reference check (Reason: lies!)
  - error for breaking with a variable (Reason: would only get used for a good reason, so let programmers do it if they have one)
