@@ -18,7 +18,10 @@ Not doing (from Zend's Code Analyzer):
  - if-else-else check (Reason: doesn't confuse us)
  - unnecessary reference check (Reason: lies!)
  - error for breaking with a variable (Reason: would only get used for a good reason, so let programmers do it if they have one)
- - Values overwritten before use (Reason: difficult to do, and annoying)
+ - Values overwritten before use (Reason: we may be initialising them for code clarity; PHPStorm's inspector can show these)
+Not doing (from HPHP's warnings):
+ - Wrong number of parameters, on method of subclass (Reason: very hard to do)
+ - Undeclared constant (Reason: we don't track these)
 */
 
 @ini_set('memory_limit','-1');
