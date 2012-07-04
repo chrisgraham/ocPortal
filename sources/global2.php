@@ -676,13 +676,14 @@ function disable_php_memory_limit()
  */
 function get_charset()
 {
-	global $CHARSET;
+	global $CHARSET,$XSS_DETECT;
 	if (isset($CHARSET)) return $CHARSET;
 
 	global $SITE_INFO;
 	if (isset($SITE_INFO['charset'])) // An optimisation, if you want to put it in here
 	{
 		$CHARSET=$SITE_INFO['charset'];
+		if ($XSS_DETECT) ocp_mark_as_escaped($CHARSET);
 		return $CHARSET;
 	}
 
@@ -730,6 +731,7 @@ function get_charset()
 	if (preg_match('#\[strings\].*charset=([\w\-]+)\n#s',$contents,$matches)!=0)
 	{
 		$TEMP_CHARSET=$matches[1];
+		if ($XSS_DETECT) ocp_mark_as_escaped($TEMP_CHARSET);
 		return $TEMP_CHARSET;
 	}
 	$TEMP_CHARSET='iso-8859-1';
@@ -1667,7 +1669,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
-	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($js_cache_path)!=0) && (!is_browser_decacheing()) && (!in_safe_mode());
+	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($js_cache_path)!==0) && (!is_browser_decacheing()) && (!in_safe_mode());
 
 	if (($support_smart_decaching) || (!$is_cached))
 	{
@@ -1858,7 +1860,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
-	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($css_cache_path)!=0) && (!is_browser_decacheing()) && (!in_safe_mode());
+	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($css_cache_path)!==0) && (!is_browser_decacheing()) && (!in_safe_mode());
 
 	if (($support_smart_decaching) || (!$is_cached) || ($text_only))
 	{

@@ -219,11 +219,11 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$internal_
 
 		// Update the counts (ones done per-view)
 		if (get_db_type()!='xml')
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET views_to=(views_to+1) WHERE '.db_string_equal_to('name',$name),1,false,true);
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET views_to=(views_to+1) WHERE '.db_string_equal_to('name',$name),1,NULL,false,true);
 		if ($source!='')
 		{
 			if (get_db_type()!='xml')
-				$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET views_from=(views_from+1) WHERE '.db_string_equal_to('name',$name),1,false,true);
+				$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'banners SET views_from=(views_from+1) WHERE '.db_string_equal_to('name',$name),1,NULL,false,true);
 		}
 
 		// Display!

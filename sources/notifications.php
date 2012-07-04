@@ -1044,7 +1044,7 @@ class Hook_Notification__Staff extends Hook_Notification
 			$test=notifications_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$GLOBALS['FORUM_DRIVER']->pname_id($row));
 			if (is_null($test)) $test=$initial_setting;
 
-			if ($test!=A_NA)
+			if ($test)
 				$new_rows[$GLOBALS['FORUM_DRIVER']->pname_id($row)]=$test;
 		}
 
