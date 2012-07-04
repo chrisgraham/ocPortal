@@ -98,7 +98,7 @@ function require_code($codename,$light_exit=false)
 	$shorthand=(strpos($codename,'.php')===false);
 	if (!$shorthand)
 	{
-		$non_custom_codename=str_replace('_custom','',$codename);
+		$non_custom_codename=str_replace('_custom/','/',$codename);
 		$_REQUIRED_CODE[$non_custom_codename]=1;
 	}
 

@@ -1352,7 +1352,7 @@ function post_param($name,$default=false,$html=false,$conv_from_wysiwyg=true)
 	$a=__param($_POST,$name,$default,false,true);
 
 	if ($a===NULL) return NULL;
-	if ((trim($a)=='') && ($default!='') && (array_key_exists('require__'.$name,$_POST)) && ($_POST['require__'.$name]!='0'))
+	if ((trim($a)=='') && ($default!=='') && (array_key_exists('require__'.$name,$_POST)) && ($_POST['require__'.$name]!='0'))
 	{
 		require_code('failure');
 		improperly_filled_in_post($name);
