@@ -261,7 +261,7 @@ if (@is_resource($MYFILE))
 			fclose($tmp);
 			ftp_put($conn,'install_locked',get_file_base().'/ocp_inst_tmp/tmp',FTP_BINARY);
 			ftp_put($conn,'install_ok',get_file_base().'/ocp_inst_tmp/tmp',FTP_BINARY);
-			unlink(get_file_base().'/ocp_inst_tmp/tmp');
+			@unlink(get_file_base().'/ocp_inst_tmp/tmp'); // Might not be able to unlink on a Windows server, if has permission to create but not delete
 			@unlink(get_file_base().'/ocp_inst_tmp');
 			@ftp_rmdir($conn,'ocp_inst_tmp');
 			if (function_exists('ftp_close'))
@@ -1352,7 +1352,7 @@ function step_5_ftp()
 	if (!is_suexec_like())
 	{
 		if (!file_exists(get_file_base().'/ocp_inst_tmp/tmp')) warn_exit(do_lang_tempcode('DOUBLE_INSTALL_DO'));
-		unlink(get_file_base().'/ocp_inst_tmp/tmp');
+		@unlink(get_file_base().'/ocp_inst_tmp/tmp');
 	}
 
 	test_htaccess(is_suexec_like()?NULL:$conn);
