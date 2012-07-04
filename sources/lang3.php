@@ -166,6 +166,12 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 {
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
+	if ((is_null($id)) && (multi_lang())) // Needed as MySQL auto-increment works separately for each combo of other key values (i.e. language in this case). We can't let a language string ID get assigned to something entirely different in another language. This MySQL behaviour is not well documented, it may work differently on different versions.
+	{
+		$id=$connection->query_value('translate','MAX(id)');
+		$id=is_null($id)?NULL:($id+1);
+	}
+
 	if (get_page_name()=='admin_import') $comcode=false; // For speed, and to avoid instantly showing Comcode errors from sloppy bbcode
 
 	if (is_null($lang)) $lang=user_lang();
