@@ -26,19 +26,19 @@ class Hook_cron_bank
 		$to_be_restored=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'bank WHERE add_time<'.strval(time()-(30*24*60*60)),NULL,NULL,true);
 		if (is_null($to_be_restored)) return;
 
-		require_code('points2');
-		require_lang('bank');
-
-		$bank_divident=intval(get_option('bank_divident'));
+		$bank_dividend=intval(get_option('bank_divident'));
 
 		foreach ($to_be_restored as $deposit)
 		{
-			if(isset($deposit['amount']) && ($deposit['amount']>0))
+			if ($deposit['amount']>0)
 			{
-				$restore_amount=round($deposit['amount'] + $deposit['amount']*($bank_divident/100));
+				require_code('points2');
+				require_lang('bank');
+
+				$restore_amount=round(floatval($deposit['amount'])*(1.0+floatval($bank_dividend)/100.0));
 				system_gift_transfer(do_lang('RESTORED_DEPOSIT'),intval($restore_amount),$deposit['user_id']);
 
-				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'bank WHERE id='.strval($deposit['id']));
+				$GLOBALS['SITE_DB']->query_delete('bank',array('id'=>$deposit['id']),'',1);
 			}
 		}
 

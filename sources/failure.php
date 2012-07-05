@@ -580,6 +580,7 @@ function get_webservice_result($error_message)
 	// Talk to web service
 	$brand=get_value('rebrand_name');
 	if (is_null($brand)) $brand='ocPortal';
+
 	$result=http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/errorservice.php?version='.float_to_raw_string(ocp_version_number()).'&error_message='.rawurlencode($error_message).'&product='.rawurlencode($brand),NULL,false);
 	if ($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE']!='text/plain') return NULL;
 
