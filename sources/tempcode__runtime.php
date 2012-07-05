@@ -799,10 +799,10 @@ class ocp_tempcode
 	 * Attach the specified tempcode to the right of the current tempcode object.
 	 *
 	 * @param  mixed			The tempcode/string to attach
-	 * @param  ?array			Extra escaping (NULL: none)
 	 * @param  boolean		If we've already merged the children from what we're attaching into the child tree (at bind stage)
+	 * @param  ?array       Extra escaping (NULL: none)
 	 */
-	function attach($attach,$escape=NULL,$avoid_children_merge=false)
+	function attach($attach,$avoid_children_merge=false,$escape=NULL)
 	{
 		if ($attach==='') return;
 
@@ -823,7 +823,7 @@ class ocp_tempcode
 					if ((($bit[2]=='IF_NON_ADJACENT') && ($this->last_attach!=$bit[3][0]->evaluate()))
 						|| (($bit[2]=='IF_ADJACENT') && ($this->last_attach==$bit[3][0]->evaluate())))
 					{
-						$this->attach($bit[3][1],NULL,$avoid_children_merge);
+						$this->attach($bit[3][1],$avoid_children_merge,$escape);
 						$last=count($this->bits)-1;
 					}
 				} else
@@ -1096,7 +1096,7 @@ class ocp_tempcode
 					$param_value=$parameters[$bit_2];
 					$looked_up=(is_array($param_value))?((count($param_value)==0)?'':strval(count($param_value))):$param_value;
 
-					$out->attach($looked_up,$bit[0]);
+					$out->attach($looked_up,false,$bit[0]);
 					continue;
 				}
 
@@ -1113,7 +1113,7 @@ class ocp_tempcode
 			if (($last_param) && ($bit_1==TC_KNOWN)) // Try and attach it, because we may save some space
 			{
 				$last_param=false;
-				$out->attach($bit[2],$bit[0]);
+				$out->attach($bit[2],false,$bit[0]);
 				continue;
 			}
 

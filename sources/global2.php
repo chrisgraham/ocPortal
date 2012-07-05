@@ -691,13 +691,14 @@ function disable_php_memory_limit()
  */
 function get_charset()
 {
-	global $CHARSET;
+	global $CHARSET,$XSS_DETECT;
 	if (isset($CHARSET)) return $CHARSET;
 
 	global $SITE_INFO;
 	if (isset($SITE_INFO['charset'])) // An optimisation, if you want to put it in here
 	{
 		$CHARSET=$SITE_INFO['charset'];
+		if ($XSS_DETECT) ocp_mark_as_escaped($CHARSET);
 		return $CHARSET;
 	}
 
@@ -745,6 +746,7 @@ function get_charset()
 	if (preg_match('#\[strings\].*charset=([\w\-]+)\n#s',$contents,$matches)!=0)
 	{
 		$TEMP_CHARSET=$matches[1];
+		if ($XSS_DETECT) ocp_mark_as_escaped($TEMP_CHARSET);
 		return $TEMP_CHARSET;
 	}
 	$TEMP_CHARSET='iso-8859-1';
@@ -1168,6 +1170,9 @@ function get_site_name()
  */
 function in_safe_mode()
 {
+	global $SITE_INFO;
+	if ((isset($SITE_INFO['safe_mode'])) && ($SITE_INFO['safe_mode']=='1')) return true; // Useful for testing HPHP support
+
 	global $CHECKING_SAFEMODE;
 	if ($CHECKING_SAFEMODE) return false; // Stops infinite loops (e.g. Check safe mode > Check access > Check usergroups > Check implicit usergroup hooks > Check whether to look at custom implicit usergroup hooks [i.e. if not in safe mode])
 	$CHECKING_SAFEMODE=true;
@@ -1373,7 +1378,7 @@ function post_param($name,$default=false,$html=false,$conv_from_wysiwyg=true)
 	$a=__param($_POST,$name,$default,false,true);
 
 	if ($a===NULL) return NULL;
-	if ((trim($a)=='') && ($default!='') && (array_key_exists('require__'.$name,$_POST)) && ($_POST['require__'.$name]!='0'))
+	if ((trim($a)=='') && ($default!=='') && (array_key_exists('require__'.$name,$_POST)) && ($_POST['require__'.$name]!='0'))
 	{
 		require_code('failure');
 		improperly_filled_in_post($name);
@@ -1690,7 +1695,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
-	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($js_cache_path)!=0) && (!is_browser_decacheing()) && (!in_safe_mode());
+	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($js_cache_path)!==0) && (!is_browser_decacheing()) && (!in_safe_mode());
 
 	if (($support_smart_decaching) || (!$is_cached))
 	{
@@ -1872,7 +1877,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
-	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($css_cache_path)!=0) && (!is_browser_decacheing()) && (!in_safe_mode());
+	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($css_cache_path)!==0) && (!is_browser_decacheing()) && (!in_safe_mode());
 
 	if (($support_smart_decaching) || (!$is_cached) || ($text_only))
 	{

@@ -24,6 +24,7 @@
 class Module_admin
 {
 	var $keywords;
+	var $and_query=true;
 
 	/**
 	 * Standard modular info function.
@@ -133,7 +134,8 @@ class Module_admin
 			array('staff','moderator','admin', 'administrator','operator'),
 			array('open','closed','live','activate','activation',/*'enable',*/'turn'),
 			array('iotd','potd','image of the day'),
-			array('import','convert','migrate'),
+			array('import','convert','migrate','upload'),
+			array('export','download'),
 			array('email','e-mail'),
 			array('center','centre'),
 			array('license','licence'),
@@ -230,13 +232,29 @@ class Module_admin
 	function _keyword_match($t)
 	{
 		static $regexp='';
-		if ($regexp=='')
+		if (($regexp=='') || ($this->and_query))
 		{
-			foreach ($this->keywords as $keyword)
+			foreach ($this->keywords as $keyword_group)
 			{
-				if ($regexp!='') $regexp.='|';
-				$regexp.='((^|\.|\#|\s|\/|\-|>|\)|\(|\})'.str_replace('#','\#',preg_quote($keyword)).')';
+				if ($this->and_query)
+				{
+					$regexp='';
+				}
+				foreach ($keyword_group as $keyword)
+				{
+					if ($regexp!='') $regexp.='|';
+					$regexp_for_keyword='((^|\.|\#|\s|\/|\-|>|\)|\(|\})'.str_replace('#','\#',preg_quote($keyword)).')';
+					$regexp.=$regexp_for_keyword;
+				}
+				if ($this->and_query)
+				{
+					if (preg_match('#'.$regexp.'#i',$t)==0) return false;
+				}
 			}
+		}
+		if ($this->and_query)
+		{
+			return true;
 		}
 		return (preg_match('#'.$regexp.'#i',$t)!=0);
 	}
@@ -309,6 +327,7 @@ class Module_admin
 		$section_limitations=array();
 		foreach ($_keywords as $xi=>$keyword)
 		{
+			$_keywords=array();
 			$keyword=trim($keyword);
 			if ($keyword=='') continue;
 
@@ -322,39 +341,45 @@ class Module_admin
 			{
 				if ((in_array(strtolower($keyword),$synonyms)) || ((array_key_exists($xi+1,$_keywords)) && (in_array(strtolower($_keywords[$xi].' '.$_keywords[$xi+1]),$synonyms))))
 				{
-					$keywords=array_merge($keywords,$synonyms);
+					$_keywords=array_merge($_keywords,$synonyms);
 				}
 			}
 
-			$keywords[]=$keyword;
+			$_keywords[]=$keyword;
+			$keywords[]=$_keywords;
 		}
 
 		// Stemming, if available (needs Stemmer class like http://www.chuggnutt.com/stemmer-source.php which we can't redistribute due to it being GPL not LGPL)
-		if (file_exists(get_file_base().'/sources_custom/stemmer_'.user_lang().'.php'))
+		if ((file_exists(get_file_base().'/sources_custom/stemmer_'.user_lang().'.php')) && (!in_safe_mode()))
 		{
-			$_keywords=$keywords;
 			require_code('stemmer_'.user_lang());
 			$stemmer=object_factory('Stemmer_'.user_lang());
-			foreach ($keywords as $keyword)
+			foreach ($keywords as $i=>$keyword_group)
 			{
-				// Special stemmer exceptions
-				if ($keyword=='news') continue;
-				if ($keyword=='defaultness') continue;
+				$_keyword_group=$keyword_group;
+				foreach ($keyword_group as $keyword)
+				{
+					// Special stemmer exceptions
+					if ($keyword=='news') continue;
+					if ($keyword=='defaultness') continue;
 
-				$_keywords[]=$stemmer->stem($keyword);
+					$_keyword_group[]=$stemmer->stem($keyword);
+				}
+				$keywords[$i]=array_unique($_keyword_group);
 			}
-			$keywords=$_keywords;
-			$keywords=array_unique($keywords);
 		} else
 		{
-			$keywords=array_unique($keywords);
-			$e_keywords=$keywords;
-			foreach ($e_keywords as $kw) // Lame pluralisation fudge, if we don't have stemming
+			foreach ($keywords as $i=>$keyword_group)
 			{
-				if ((strlen($kw)>3) && (substr($kw,-1)=='s'))
-					$keywords[]=substr($kw,0,strlen($kw)-1);
-				else
-					$keywords[]=$kw.'s';
+				$_keyword_group=$keyword_group;
+				foreach ($keyword_group as $keyword) // Lame pluralisation fudge, if we don't have stemming
+				{
+					if ((strlen($keyword)>3) && (substr($keyword,-1)=='s'))
+						$_keyword_group[]=substr($keyword,0,strlen($keyword)-1);
+					else
+						$_keyword_group[]=$keyword.'s';
+				}
+				$keywords[$i]=array_unique($_keyword_group);
 			}
 		}
 
@@ -1064,7 +1089,7 @@ class Module_admin
 						$_url=build_url(array('page'=>'admin_themes','type'=>'edit_css','theme'=>$default_theme,'file'=>$file),'adminzone');
 						$url=$_url->evaluate();
 						if (isset($keywords[0]))
-							$url.='#'.$keywords[0];
+							$url.='#'.$keywords[0][0];
 						$breadcrumbs=new ocp_tempcode();
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'style'),'adminzone'),do_lang_tempcode('STYLE')));
 						$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
@@ -1099,6 +1124,12 @@ class Module_admin
 			}
 		}
 		$post=((strpos($raw_search_string,'"')!==false) || (!$found_some))?new ocp_tempcode():do_lang_tempcode('ADMINZONE_SEARCH_TIP',escape_html(preg_replace('#\s@\w+#','',$raw_search_string)));
+
+		if ((!$found_some) && ($this->and_query)) // Oh well, try as an OR query then
+		{
+			$this->and_query=false;
+			return $this->search();
+		}
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('TITLE'=>get_screen_title('ADMIN_ZONE_SEARCH_RESULTS'),'EMPTY'=>$found_some?NULL:true,'ARRAY'=>true,'CONTENT'=>$content,'PRE'=>$pre,'POST'=>$post));
 	}

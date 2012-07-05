@@ -14,12 +14,15 @@
  */
 
 /*
-Not doing (from Zend's Code Anaylzer):
+Not doing (from Zend's Code Analyzer):
  - if-else-else check (Reason: doesn't confuse us)
  - unnecessary reference check (Reason: lies!)
  - error for breaking with a variable (Reason: would only get used for a good reason, so let programmers do it if they have one)
- - Values overwritten before use (Reason: difficult to do, and annoying)
-
+ - Values overwritten before use (Reason: we may be initialising them for code clarity; PHPStorm's inspector can show these)
+Not doing (from HPHP's warnings):
+ - Anything specific to compilation (Reason: we must manually ensure that works, often code branching structures will be involved but warnings still happen)
+ - Wrong number of parameters, on method of subclass (Reason: very hard to do)
+ - Undeclared constant (Reason: we don't track these)
 Not doing (from CodeLobster Errors):
  - IF and ELSEIF have same conditions (theoretically the prior IF might have changed the state)
 */
