@@ -135,7 +135,7 @@ class Hook_Preview_ocf_post
 		} else
 		{
 			$poster_details=new ocp_tempcode();
-			$custom_fields=do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>(get_ip_address())));
+			$custom_fields=do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>(get_ip_address())));
 			$poster_details=do_template('OCF_GUEST_DETAILS',array('_GUID'=>'2db48e17db9f060c04386843f2d0f105','CUSTOM_FIELDS'=>$custom_fields));
 			$poster_username=post_param('poster_name_if_guest',do_lang('GUEST'));
 			$ip_link=has_actual_page_access(get_member(),'admin_lookup')?build_url(array('page'=>'admin_lookup','param'=>get_ip_address()),get_module_zone('admin_lookup')):new ocp_tempcode();

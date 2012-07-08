@@ -25,6 +25,8 @@ Not doing (from HPHP's warnings):
  - Undeclared constant (Reason: we don't track these)
 Not doing (from CodeLobster Errors):
  - IF and ELSEIF have same conditions (theoretically the prior IF might have changed the state)
+Not doing (from PhpStorm Code Inspector):
+ - Many (lots of false positives in here)
 */
 
 @ini_set('memory_limit','-1');

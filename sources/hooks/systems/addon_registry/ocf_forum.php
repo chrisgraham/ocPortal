@@ -138,7 +138,7 @@ class Hook_addon_registry_ocf_forum
 			'OCF_TOPIC_POLL_BUTTON.tpl',
 			'OCF_TOPIC_POLL_VIEW_RESULTS.tpl',
 			'OCF_TOPIC_POST.tpl',
-			'OCF_TOPIC_POST_CUSTOM_FIELD.tpl',
+			'OCF_MEMBER_BOX_CUSTOM_FIELD.tpl',
 			'OCF_TOPIC_ROW_LINK.tpl',
 			'OCF_TOPIC_ROW_MODIFIER.tpl',
 			'OCF_TOPIC_SCREEN.tpl',
@@ -293,7 +293,7 @@ class Hook_addon_registry_ocf_forum
 			'OCF_FORUM_TOPIC_LIST_LINE.tpl'=>'ocf_forum_topic_list_line',
 			'OCF_FORUM_LIST_LINE.tpl'=>'ocf_forum_list_line',
 			'OCF_FORUM_INTRO_QUESTION_POPUP.tpl'=>'ocf_forum_intro_question_popup',
-			'OCF_TOPIC_POST_CUSTOM_FIELD.tpl'=>'ocf_topic_screen',
+			'OCF_MEMBER_BOX_CUSTOM_FIELD.tpl'=>'ocf_topic_screen',
 			'OCF_POSTER_MEMBER.tpl'=>'ocf_topic_screen',
 			'OCF_GUEST_DETAILS.tpl'=>'ocf_topic_screen',
 			'OCF_POSTER_GUEST.tpl'=>'ocf_isolated_post',
@@ -479,7 +479,7 @@ class Hook_addon_registry_ocf_forum
 			'LAST_EDIT_USERNAME'=>lorem_word()
 		));
 
-		$custom_fields=do_lorem_template('OCF_TOPIC_POST_CUSTOM_FIELD', array(
+		$custom_fields=do_lorem_template('OCF_MEMBER_BOX_CUSTOM_FIELD', array(
 			'NAME'=>lorem_phrase(),
 			'VALUE'=>placeholder_ip()
 		));
@@ -1489,7 +1489,7 @@ class Hook_addon_registry_ocf_forum
 				'LAST_EDIT_USERNAME'=>lorem_word()
 			));
 
-			$custom_fields=do_lorem_template('OCF_TOPIC_POST_CUSTOM_FIELD', array(
+			$custom_fields=do_lorem_template('OCF_MEMBER_BOX_CUSTOM_FIELD', array(
 				'NAME'=>lorem_phrase(),
 				'VALUE'=>placeholder_ip()
 			));

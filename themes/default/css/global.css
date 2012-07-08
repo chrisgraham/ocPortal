@@ -13,7 +13,7 @@ Most sizes are defined in 'em' units. 1em is roughly 10px, depending on font siz
 
 {!en_left} and {!en_right} usually resolve to left and right respectively. Right-to-left languages (commonly Arabic and Hebrew) will be the opposite. We only test with Left-to-right, but are likely to accept patches to fix any little glitches that may have developed over time.
 
-When editing theme CSS we recommend you comment out code your removing and heavily comment your own changes - this will make it much easier for you to upgrade your theme to new versions. ocPortal minifies outputted CSS, so there is no performance penalty for doing this.
+When editing theme CSS we recommend you comment out code you're removing and heavily comment your own changes - this will make it much easier for you to upgrade your theme to new versions. ocPortal minifies outputted CSS, so there is no performance penalty for doing this.
 */
 
 /*
@@ -113,6 +113,8 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#325180,area_text,76% seed + 24% BW}
 {$THEME_WIZARD_COLOR,#2a3d5a,area_key_text,53% (seed sat_to 53) + 47% BW}
 {$THEME_WIZARD_COLOR,#0d2d5d,area_link,55% (seed sat_to 86) + 45% BW}
+{$THEME_WIZARD_COLOR,#0a1019,area_2_link,15% seed + 85% BW}
+{$THEME_WIZARD_COLOR,#1a2a44,area_2_link_hover,40% seed + 60% BW}
 {$THEME_WIZARD_COLOR,#8497b3,point_of_interest_border,50% dark_border + 50% WB}
 /* Text, employing color wheel theory */
 {$THEME_WIZARD_COLOR,#214f55,slightly_seeded_left_complement_text,50% (seed hue_add -21) + 50% BW}
@@ -138,8 +140,6 @@ When editing theme CSS we recommend you comment out code your removing and heavi
 {$THEME_WIZARD_COLOR,#4b5a71,message_highlighted_part,70% standard_border + 30% BW}
 
 /* Footer */
-{$THEME_WIZARD_COLOR,#0a1019,footer_link,15% seed + 85% BW}
-{$THEME_WIZARD_COLOR,#1a2a44,footer_link_hover,40% seed + 60% BW}
 {$THEME_WIZARD_COLOR,#8ba4ca,footer_tinting,61% seed + 39% WB}
 {$THEME_WIZARD_COLOR,#ffffff,footer_text,100% WB}
 {$THEME_WIZARD_COLOR,#dbe6f7,inverted_text,35% footer_tinting + 65% WB}
@@ -727,11 +727,11 @@ footer a:link,
 footer a:visited,
 footer a:active,
 footer .horizontal_links {
-	color: {$GET,footer_link};
+	color: {$GET,area_2_link};
 }
 
 footer a:hover {
-	color: {$GET,footer_link_hover};
+	color: {$GET,area_2_link_hover};
 }
 
 footer .global_footer_left {
@@ -991,6 +991,8 @@ input.button_hyperlink {
 .trinav_wrap {
 	overflow: hidden;
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,main_2_background}\, {$GET,main_background});}
+	margin-bottom: 2em;
+	{$BETA_CSS_PROPERTY,border-radius: 20px;}
 }
 .trinav_wrap.nograd {
 	background-image: none;
@@ -1083,15 +1085,18 @@ div.red_alert, p.red_alert {
 	text-align: center;
 	width: 1.1em;
 	font-size: 0.9em;
+	position: relative;
 }
 .comment_count:hover {
 	border-right-color: transparent;
 }
 .comment_count strong {
+	background: {$GET,main_background} !important;
 }
 .comment_count span {
 	display: none;
 	padding-right: 2px;
+	background: {$GET,main_background} !important;
 }
 .comment_count:hover span {
 	display: inline-block;
@@ -1214,7 +1219,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	text-decoration: none !important;
 }
 .box_inner>h1 a:hover, .box_inner>h2 a:hover, .box_inner>h3 a:hover, .box_inner>h4 a:hover, .box_inner>h5 a:hover, .box_inner>h6 a:hover, .toggleable_tray_title a:hover {
-	color: {$GET,footer_link_hover};
+	color: {$GET,area_2_link_hover};
 }
 
 /* If we want a box to standout less, give it 'pale_box' */
@@ -1281,6 +1286,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	display: block;
 	margin: 0 auto;
 	border-top: 2px dotted {$GET,pale_border} !important;
+	padding-top: 0.4em;
 }
 .boxless_space .box + .fp_col_blocks_wrap {
 	padding-top: 0;
@@ -1289,9 +1295,11 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 /* Boxes under boxes shouldn't have the title style - would be ugly */
 
 .box .box .box_inner>h1, .box .box .box_inner>h2, .box .box .box_inner>h3, .box .box .box_inner>h4, .box .box .box_inner>h5, .box .box .box_inner>h6, .box .box .toggleable_tray_title, #standalone_html_wrap .box .box .box .box_inner>h2, #standalone_html_wrap .box .box .box .box_inner>h3 {
-	background: none;
+	background: none !important;
 	color: inherit;
-} /* This rule is not applied to boxes under the top level box in the preview (#standalone_html_wrap) as those should show verbatim*/
+	padding-left: 0;
+	font-size: 1.1em;
+} /* This rule is not applied to boxes under the top level box in the preview (#standalone_html_wrap) as those should show verbatim */
 
 /* Expanding and contracting, mostly for boxes but not necessarily always */
 
@@ -1379,6 +1387,9 @@ h3+.meta_details, .newscat_img+.meta_details {
 	border-bottom: 0;
 	margin-top: -1em;
 	margin-bottom: 0.5em;
+}
+.box_inner>h3+.meta_details {
+	margin-top: 0;
 }
 
 .meta_details a {
@@ -1553,6 +1564,9 @@ table.scrollable_inside {
 	border-spacing: 0;
 	margin: 1em 0;
 }
+.wide_table_wrap>.results_table {
+	margin: 0; /* As overflow would cause margin doubling */
+}
 
 .results_table>thead>tr:first-child *:first-child, .results_table>tbody>tr:first-child>*:first-child {
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 5px;}
@@ -1702,6 +1716,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	border-right: 1px solid {$GET,dark_border};
 	font-weight: bold !important;
 	padding-right: 1em;
+	white-space: nowrap;
 }
 .tooltip_fields td {
 	padding-left: 1em;
@@ -2422,6 +2437,7 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 	padding: 0.5em;
 	{$BETA_CSS_PROPERTY,opacity: 0.4;}
 	{$BETA_CSS_PROPERTY,transition: opacity 0.6s linear;}
+	margin-top: 3em;
 }
 .quick_self_edit_link:hover {
 	{$BETA_CSS_PROPERTY,opacity: 1;}
@@ -2522,7 +2538,7 @@ ul.associated_links_block_group.horizontal_links>li:before,
 .horizontal_meta_details li:before,
 .horizontal_ticker li:before {
 	content: "\00b7" !important; /* a &middot; */
-	padding: 0 0.4em 0 0.1em;
+	padding: 0 0.5em 0 0.1em;
 }
 .horizontal_buttons li {
 	padding-left: 3px !important;
@@ -2592,10 +2608,10 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 	margin-top: 1.5em !important;
 }
 .buttons_group>* {
-	padding-left: 5px;
+	padding-left: 5px !important;
 }
 .buttons_group>*:first-child {
-	padding-left: 0;
+	padding-left: 0 !important;
 }
 
 .associated_link.suggested {
@@ -2837,7 +2853,7 @@ Form buttons are wrapped in either:
 	border-right: 1px dotted {$GET,standard_border};
 }
 
-.carousel .move_left_hover {
+.carousel .move_left:hover {
 	background-image: url('{$IMG;,carousel/button_left_hover}');
 }
 
@@ -2849,7 +2865,7 @@ Form buttons are wrapped in either:
 	border-left: 1px dotted {$GET,standard_border};
 }
 
-.carousel .move_right_hover {
+.carousel .move_right:hover {
 	background-image: url('{$IMG;,carousel/button_right_hover}');
 }
 
@@ -2909,7 +2925,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 }
 
 .tab_active {
-	font-weight: bold;
+	text-shadow: 1px 1px 1px {$GET,standard_border};
 	{$BETA_CSS_PROPERTY,opacity: 1 !important;}
 }
 
@@ -3129,7 +3145,7 @@ ul.nl, .nl ul {
 }
 
 .menu_type__embossed a {
-	padding: 0.5em 0.7em !important;
+	padding: 0.7em 0.7em 0.5em 0.7em !important;
 }
 
 .menu_type__embossed a, .menu_type__top a, .menu_type__dropdown a.toplevel_link {
@@ -3155,6 +3171,11 @@ ul.nl, .nl ul {
 
 .menu_type__embossed li {
 	border-top: 1px solid {$GET,standard_border};
+}
+
+.menu_type__embossed img {
+	vertical-align: middle;
+	margin-right: 3px;
 }
 
 .menu_type__top, .menu_type__dropdown {
@@ -3525,12 +3546,16 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	margin-bottom: 20px;
 }
 
+.ticker_wrap {
+	display: inline-block;
+}
 .ticker {
 	margin: 0 auto;
 	height: 1.5em;
 	white-space: nowrap;
 	overflow: hidden;
 	text-align: left;
+	display: inline-block;
 }
 
 .shocker {

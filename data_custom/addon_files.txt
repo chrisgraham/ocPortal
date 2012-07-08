@@ -1044,7 +1044,6 @@ oc_icon
  - themes/default/images_custom/menu_items/calendar.png
  - themes/default/images_custom/menu_items/camera_unmount.png
  - themes/default/images_custom/menu_items/chat.png
- - themes/default/images_custom/menu_items/comment.png
  - themes/default/images_custom/menu_items/database.png
  - themes/default/images_custom/menu_items/delete_user.png
  - themes/default/images_custom/menu_items/edit_user.png
@@ -1073,10 +1072,16 @@ oc_icon
  - themes/default/images_custom/menu_items/search.png
  - themes/default/images_custom/menu_items/signature.png
  - themes/default/images_custom/menu_items/tree_explorer.gif
- - themes/default/images_custom/menu_items/tree_win.png
- - themes/default/images_custom/menu_items/user_properties.png
  - themes/default/images_custom/menu_items/webarchiver.png
  - themes/default/images_custom/menu_items/wiki.png
+ - themes/default/images_custom/menu_items/question.png
+ - themes/default/images_custom/menu_items/evolution-contacts.png
+ - themes/default/images_custom/menu_items/bookmarks_list_add.png
+ - themes/default/images_custom/menu_items/configure_toolbars.png
+ - themes/default/images_custom/menu_items/bookcase.png
+ - themes/default/images_custom/menu_items/knotes.png
+ - themes/default/images_custom/menu_items/tool_clipboard.png
+ - themes/default/images_custom/menu_items/insert_link.png
  - data_custom/icon_map.csv
  - data_custom/ocicon_install.php
 
@@ -1234,7 +1239,6 @@ oc_world
  - ocworld/index.php
  - ocworld/map.php
  - ocworld/wmessages.php
- - ocworld/pages/.htaccess
  - ocworld/pages/comcode/.htaccess
  - ocworld/pages/comcode/EN/.htaccess
  - ocworld/pages/comcode/EN/docs.txt
@@ -1252,8 +1256,6 @@ oc_world
  - ocworld/pages/html/EN/.htaccess
  - ocworld/pages/html/EN/index.html
  - ocworld/pages/html/index.html
- - ocworld/pages/html_custom/.htaccess
- - ocworld/pages/html_custom/EN/.htaccess
  - ocworld/pages/html_custom/EN/index.html
  - ocworld/pages/html_custom/index.html
  - ocworld/pages/index.html
@@ -1285,7 +1287,6 @@ oc_world
  - themes/default/css_custom/ocworld.css
  - sources_custom/hooks/modules/members/ocworld.php
  - sources_custom/hooks/modules/topicview/ocworld.php
- - sources_custom/hooks/systems/addon_registry/ocworld.php
  - uploads/ocworld/index.html
  - data_custom/modules/ocworld/docs/basics2.0.png
  - data_custom/modules/ocworld/docs/basics2.1.png
@@ -1914,7 +1915,7 @@ direct_video_link_posting
 member_directory_boxes
 ----------------------
  - themes/default/templates_custom/OCF_MEMBER_BOX.tpl
- - themes/default/templates_custom/OCF_TOPIC_POST_CUSTOM_FIELD.tpl
+ - themes/default/templates_custom/OCF_MEMBER_BOX_CUSTOM_FIELD.tpl
  - themes/default/templates_custom/OCF_MEMBER_DIRECTORY_SCREEN.tpl
  - themes/default/templates_custom/OCF_MEMBER_DIRECTORY_SCREEN_FILTER.tpl
  - themes/default/css_custom/member_directory_boxes.css

@@ -2051,7 +2051,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'HONEYPOT_LINK':
 				$honeypot_url=get_option('honeypot_url',true);
-				if ($honeypot_url!=='')
+				if (($honeypot_url!=='') && (!is_null($honeypot_url)))
 				{
 					$first_char=substr(md5(get_page_name()),0,1);
 					$bot_phrase=get_option('honeypot_phrase');

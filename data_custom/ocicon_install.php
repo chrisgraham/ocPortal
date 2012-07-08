@@ -51,20 +51,22 @@ while (($line=fgetcsv($icons,1024))!==false)
 {
 	if (count($line)==2)
 	{
+		$where='';
 		switch ($line[0])
 		{
 			case 'collab_features':
 				$map=array('i_menu'=>$line[0],'i_url'=>'');
+				$where=db_string_equal_to('i_menu',$line[0]).' AND '.db_string_equal_to('i_url','');
 				break;
 
 			case 'forum_base_url':
-				$map=array('i_url'=>get_forum_base_url(true));
+				$where=db_string_equal_to('i_url',get_forum_base_url(true));
 				break;
 
 			default:
-				$map=array('i_url'=>$line[0]);
+				$where=db_string_equal_to('i_url',$line[0]);
 		}
-		$GLOBALS['SITE_DB']->query_update('menu_items',array('i_theme_img_code'=>'menu_items/'.$line[1]),$map);
+		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'menu_items SET i_theme_img_code=\'menu_items/'.db_escape_string($line[1]).'\''.' WHERE '.db_string_not_equal_to('i_menu','zone_menu').' AND '.$where);
 	}
 }
 

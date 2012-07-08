@@ -1,5 +1,5 @@
 [block="collab_website" title="{!_COLLABORATION}"]side_stored_menu[/block]
-[block="collab_features" title="{!FEATURES}"]side_stored_menu[/block]
+[block="collab_features" type="tree" title="{!FEATURES}"]side_stored_menu[/block]
 [block failsafe="1"]side_users_online[/block]
 [block failsafe="1"]side_stats[/block]
 [block]side_personal_stats[/block]

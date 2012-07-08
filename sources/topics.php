@@ -763,7 +763,7 @@ class OCP_Topic
 						$custom_fields=new ocp_tempcode();
 						if (array_key_exists('ip_address',$post))
 						{
-							$custom_fields->attach(do_template('OCF_TOPIC_POST_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>($post['ip_address']))));
+							$custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>($post['ip_address']))));
 							$poster_details=do_template('OCF_GUEST_DETAILS',array('_GUID'=>'df42e7d5003834a60fdb3bf476b393c5','CUSTOM_FIELDS'=>$custom_fields));
 						} else
 						{
