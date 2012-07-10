@@ -229,7 +229,7 @@ function _css_ocp_include($matches)
 			$fullpath=get_file_base().'/themes/'.filter_naughty($theme).'/'.filter_naughty($matches[2]).'/'.filter_naughty($c).'.css';
 	}
 	if (!is_file($fullpath)) return array(false,'');
-	return _css_compile($CSS_COMPILE_ACTIVE_THEME,$theme,$c,$fullpath); // TODO
+	return _css_compile($CSS_COMPILE_ACTIVE_THEME,$theme,$c,$fullpath);
 }
 
 /**
