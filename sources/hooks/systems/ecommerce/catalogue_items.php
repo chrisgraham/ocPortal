@@ -527,7 +527,7 @@ class Hook_catalogue_items
 		$image=NULL;
 
 		if (array_key_exists(7,$map))
-			return $map[7]['effective_value'];
+			return is_object($map[7]['effective_value'])?$map[7]['effective_value']->evaluate():$map[7]['effective_value'];
 		else
 			return NULL;
 	}
