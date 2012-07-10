@@ -652,7 +652,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											if (($ret->parameterless(0)) && ($pos<$len)) // We want to take the lang string reference as Comcode if it's a simple lang string reference with no parameters
 											{
 												$matches=array();
-												if (preg_match('#\{\!([\w\d\_\:]+)(\}|$)#U',substr($comcode,$less_pos),$matches)!=0) // Hacky code to extract the lang string name
+												if (preg_match('#\{\!([\w\d\_\:]+)(\}|$)#U',substr($comcode,$less_pos,$p_len-$less_pos),$matches)!=0) // Hacky code to extract the lang string name
 												{
 													$temp_lang_string=$matches[1];
 													$ret=comcode_lang_string($temp_lang_string); // Recreate as a Comcode lang string
@@ -821,7 +821,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								}
 							}
 
-							if ((!$in_code_tag) && (trim($next)!='') && (!$differented))
+							if (($textual_area) && (!$in_code_tag) && (trim($next)!='') && (!$differented))
 							{
 								// Shortcut lookahead
 								if (!$differented)
