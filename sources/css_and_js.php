@@ -181,7 +181,7 @@ function js_compile($j,$js_cache_path,$minify=true)
  * @param  PATH			Full path to where the cached CSS file will go
  * @param  boolean		Whether to also do minification
  */
-function css_compile($theme,$c,$fullpath,$css_cache_path,$minify=true)
+function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify=true)
 {
 	list($success_status,$out)=_css_compile($active_theme,$theme,$c,$fullpath,$minify);
 	$css_file=@fopen($css_cache_path,'wt');
