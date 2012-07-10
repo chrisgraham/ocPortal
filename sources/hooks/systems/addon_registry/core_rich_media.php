@@ -1965,6 +1965,7 @@ class Hook_addon_registry_core_rich_media
 				'A_ORIGINAL_FILENAME'=>lorem_word(),
 				'CLEAN_SIZE'=>placeholder_random(),
 				'SUP_PARAMS'=>placeholder_blank(),
+				'MIME_TYPE'=>placeholder_id(),
 				'FORUM_DB_BIN'=>placeholder_blank()
 			)), NULL, '', true)
 		);

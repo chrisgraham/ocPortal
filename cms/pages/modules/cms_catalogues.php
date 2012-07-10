@@ -1225,7 +1225,7 @@ class Module_cms_catalogues extends standard_aed_module
 		{
 			$entry_rows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('c_name'=>$catalogue_name),'ORDER BY ce_add_date ASC',4000,$start);
 
-			foreach($entry_rows as $entry_row)
+			foreach ($entry_rows as $entry_row)
 			{
 				if (is_null($entry_row)) $entry_row=array();
 				if (isset($entry_row[0])) $entry_row=$entry_row[0];

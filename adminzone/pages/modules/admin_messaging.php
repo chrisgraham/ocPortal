@@ -130,6 +130,7 @@ class Module_admin_messaging
 			foreach ($rows as $i=>$row)
 			{
 				$name=$row['firsttitle'];
+				if (trim($name)=='') $name=do_lang('UNKNOWN');
 				$looking_at=$row['title'];
 				if ($row['description']!='') $looking_at=$row['description'];
 				$id=substr($looking_at,strrpos($looking_at,'_')+1);

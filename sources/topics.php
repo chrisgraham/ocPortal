@@ -366,6 +366,7 @@ class OCP_Topic
 		{
 			$queue=$this->_grab_at_and_underneath($parent_post_id,$queue);
 		}
+		if (is_null($this->is_threaded)) $this->is_threaded=false;
 		if ((is_null($num_to_show_limit)) || (!$this->is_threaded))
 		{
 			$posts=$queue;

@@ -40,6 +40,8 @@ function init__form_templates()
 	$DOING_ALTERNATE_FIELDS_SET=mixed();
 
 	require_css('forms');
+
+	@header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
 }
 
 /**

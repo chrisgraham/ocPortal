@@ -328,13 +328,15 @@ class Module_cms_calendar extends standard_aed_module
 			{
 				$date2=explode(' ',$date);
 				$exploded=explode('-',$date2[0]);
-				if (count($exploded)!=3) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+				//if (count($exploded)!=3) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 				$start_year=intval($exploded[0]);
 				$start_month=intval($exploded[1]);
 				$start_day=intval($exploded[2]);
 				if (array_key_exists(1,$date2))
 				{
 					$exploded=explode(':',$date2[1]);
+					//if (count($exploded)!=2) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+
 					$start_hour=intval($exploded[0]);
 					$start_minute=intval($exploded[1]);
 				}

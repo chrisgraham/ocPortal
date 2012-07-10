@@ -2,7 +2,7 @@
 
 <div class="box ocf_notification"><div class="box_inner">
 	<p>
-		{!NEW_PT_NOTIFICATION_DETAILS,<span class="ocf_notification_type">{TYPE*}</span>,{U_TITLE*},<a href="{PROFILE_URL*}">{BY*}</a>,{TIME*}}
+		{!NEW_PT_NOTIFICATION_DETAILS,<span class="ocf_notification_type">{TYPE*}</span>,{U_TITLE*},{$?,{$IS_EMPTY,{PROFILE_LINK}},{BY*},<a href="{PROFILE_LINK*}">{BY*}</a>},{TIME*}}
 	</p>
 
 	<div class="ocf_notification_post">

@@ -152,7 +152,8 @@ function generate_notifications($member_id)
 		$num_unread_pps=0;
 		foreach ($unread_pps as $unread_pp)
 		{
-			$by=$GLOBALS['OCF_DRIVER']->get_username((is_null($unread_pp['t_cache_first_member_id']) || !is_null($unread_pp['t_forum_id']))?$unread_pp['p_poster']:$unread_pp['t_cache_first_member_id']);
+			$by_id=(is_null($unread_pp['t_cache_first_member_id']) || !is_null($unread_pp['t_forum_id']))?$unread_pp['p_poster']:$unread_pp['t_cache_first_member_id'];
+			$by=$GLOBALS['OCF_DRIVER']->get_username($by_id);
 			if (is_null($by)) $by=do_lang('UNKNOWN');
 			$u_title=$unread_pp['t_cache_first_title'];
 			if (is_null($unread_pp['t_forum_id']))
@@ -176,7 +177,7 @@ function generate_notifications($member_id)
 			$post=get_translated_tempcode($unread_pp['p_post'],$GLOBALS['FORUM_DB']);
 			$description=$unread_pp['t_description'];
 			if ($description!='') $description=' ('.$description.')';
-			$profile_link=$GLOBALS['OCF_DRIVER']->member_profile_url((is_null($unread_pp['t_cache_first_member_id']) || !is_null($unread_pp['t_forum_id']))?$unread_pp['p_poster']:$unread_pp['t_cache_first_member_id'],false,true);
+			$profile_link=is_guest($by_id)?new ocp_tempcode():$GLOBALS['OCF_DRIVER']->member_profile_url($by_id,false,true);
 			$redirect=get_self_url(true,true);
 			$ignore_url=build_url(array('page'=>'topics','type'=>'mark_read_topic','id'=>$unread_pp['p_topic_id'],'redirect'=>$redirect),get_module_zone('topics'));
 			$ignore_url_2=build_url(array('page'=>'topics','type'=>'mark_read_topic','id'=>$unread_pp['p_topic_id'],'redirect'=>$redirect,'ajax'=>1),get_module_zone('topics'));
