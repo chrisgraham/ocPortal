@@ -1531,7 +1531,7 @@ function _check_labelling($tag,$attributes,$self_close,$close)
 			{
 				if (!isset($attributes['id'])) $attributes['id']='unnamed_'.strval(mt_rand(0,10000));
 
-				if ((!isset($FOR_LABEL_IDS[$attributes['id']])) && ($attributes['id']!='x'))
+				if ((!isset($FOR_LABEL_IDS[$attributes['id']])) && ($attributes['id']!='x') && (preg_match('#<label[^<>]+for="'.preg_quote($attributes['id'],'#').'"#',$OUT)==0))
 				{
 					$errors[]=array('WCAG_NO_INPUT_LABEL',$attributes['id']);
 				}

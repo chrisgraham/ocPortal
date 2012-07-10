@@ -111,7 +111,7 @@ function _param_invalid($name,$ret,$posted)
 
 	require_lang('javascript');
 	warn_exit(do_lang_tempcode('NOT_INTEGER'));
-	return NULL;
+	return '';
 }
 
 /**
@@ -248,8 +248,11 @@ function _generic_exit($text,$template)
 	{
 		if (($text_eval==do_lang('NO_MARKERS_SELECTED')) || ($text_eval==do_lang('NOTHING_SELECTED')))
 		{
-			$GLOBALS['HTTP_STATUS_CODE']='400';
-			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
+			if (!headers_sent())
+			{
+				$GLOBALS['HTTP_STATUS_CODE']='400';
+				if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
+			}
 		}
 		elseif (($text_eval==do_lang('MISSING_RESOURCE')) || ($text_eval==do_lang('USER_NO_EXIST')))
 		{

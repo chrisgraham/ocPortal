@@ -36,7 +36,7 @@ function init__form_templates()
 
 	require_code('input_filter');
 
-	header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
+	@header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
 }
 
 /**

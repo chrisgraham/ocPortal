@@ -1,6 +1,6 @@
 <div class="solidborder ocf_notification ocf_row1">
 	<span class="ocf_notification_type">{TYPE*}</span><br />
-	{!NEW_PT_NOTIFICATION_DETAILS,{U_TITLE*},,{$?,{$IS_EMPTY,{PROFILE_LINK},{BY*},<a href="{PROFILE_LINK*}">{BY*}</a>},{TIME*}}
+	{!NEW_PT_NOTIFICATION_DETAILS,{U_TITLE*},,{$?,{$IS_EMPTY,{PROFILE_LINK}},{BY*},<a href="{PROFILE_LINK*}">{BY*}</a>},{TIME*}}
 	<div class="ocf_notification_post">{$TRUNCATE_LEFT,{POST},1000,0,1}</div>
 
 	<div class="ocf_notification_view">

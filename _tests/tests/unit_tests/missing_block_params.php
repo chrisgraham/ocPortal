@@ -41,8 +41,10 @@ class missing_block_params_test_set extends ocp_test_case
 				$count=preg_match_all('/\$map\[\'([^\']+)\'\]/',$contents,$matches);
 				for ($i=0;$i<$count;$i++)
 				{
+					if ($matches[1][$i]=='block') continue;
+
 					// Check param defined in block definition
-					if (preg_match('/\$info\[\'parameters\'\]=array\([^\n]*\''.preg_quote($matches[1][$i]).'\'[^\n]*\);/',$contents)==0)
+					if ((preg_match('/\$info\[\'parameters\'\]=array\([^\n]*\''.preg_quote($matches[1][$i]).'\'[^\n]*\);/',$contents)==0))
 					{
 						$this->assertTrue(false,'Missing block param: <strong>'.basename($f,'.php').'</strong>/'.$matches[1][$i]);
 					}

@@ -990,10 +990,10 @@ class Module_cms_catalogues extends standard_aed_module
 				if ($k==0)
 				{
 					echo 'CATEGORY';
-					foreach (array_keys($better_results) as $k)
+					foreach (array_keys($better_results) as $k2)
 					{
 						echo ',';
-						echo '"'.str_replace('"','""',$k).'"';
+						echo '"'.str_replace('"','""',$k2).'"';
 					}
 					echo chr(10);
 				}

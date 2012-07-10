@@ -186,7 +186,7 @@ class Block_main_activities
 		// No entries
 		return do_template('BLOCK_MAIN_ACTIVITIES',array(
 			'TITLE'=>$title,
-			'MODE'=>strval($mode),
+			'MODE'=>$mode,
 			'CONTENT'=>$content,
 			'MEMBER_IDS'=>'',
 			'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),

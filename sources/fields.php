@@ -360,9 +360,9 @@ function nice_get_field_type($type='',$limit_to_storage_set=false)
 				$sub_types=array($_type=>do_lang_tempcode('FIELD_TYPE_'.$_type));
 			}
 
-			foreach ($sub_types as $_type=>$_title)
+			foreach ($sub_types as $__type=>$_title)
 			{
-				$type_list->attach(form_input_list_entry($_type,($_type==$type),$_title));
+				$type_list->attach(form_input_list_entry($_type,($__type==$type),$_title));
 			}
 		}
 	}

@@ -28,6 +28,9 @@ function unit_testing_run()
 
 	header('Content-Type: text/html');
 
+	@ini_set('ocproducts.type_strictness','0');
+	@ini_set('ocproducts.xss_detect','0');
+
 	require_code('_tests/simpletest/unit_tester.php');
 	require_code('_tests/simpletest/web_tester.php');
 	require_code('_tests/simpletest/mock_objects.php');
@@ -37,6 +40,8 @@ function unit_testing_run()
 	$id=get_param('id',NULL);
 	if (!is_null($id))
 	{
+		//ob_start();
+
 		if ($id=='!')
 		{
 			testset_do_header('Running all test sets');
@@ -55,6 +60,9 @@ function unit_testing_run()
 		testset_do_header('Running test set: '.escape_html($id));
 		run_testset($id);
 		testset_do_footer();
+
+		//ob_end_flush();
+
 		return;
 	}
 

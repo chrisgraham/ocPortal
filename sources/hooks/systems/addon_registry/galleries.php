@@ -275,6 +275,7 @@ class Hook_addon_registry_galleries
 			'ID'=>placeholder_id(),
 			'NOTES'=>'',
 			'GALLERY_TITLE'=>lorem_phrase(),
+			'TITLE'=>lorem_phrase(),
 			'CAT'=>placeholder_id(),
 			'VIEWS'=>placeholder_number(),
 			'URL'=>placeholder_url(),
@@ -303,6 +304,7 @@ class Hook_addon_registry_galleries
 			'ID'=>placeholder_id(),
 			'NOTES'=>'',
 			'GALLERY_TITLE'=>lorem_phrase(),
+			'TITLE'=>lorem_phrase(),
 			'CAT'=>placeholder_id(),
 			'VIEWS'=>placeholder_number(),
 			'URL'=>placeholder_url(),
@@ -513,7 +515,7 @@ class Hook_addon_registry_galleries
 		$input = do_lorem_template('FORM_SCREEN_INPUT_LIST',array('TABINDEX'=>placeholder_id(),'REQUIRED'=>'_required','NAME'=>'files','CONTENT'=>$orphaned_content,'INLINE_LIST'=>true));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED'=>true,'SKIP_LABEL'=>false,'BORING_NAME'=>'files','NAME'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph_html(),'DESCRIPTION_SIDE'=>'','INPUT'=>$input,'COMCODE'=>new ocp_tempcode())));
 
-		$form  = do_lorem_template('FORM',array('TABINDEX'=>placeholder_number(),'FIELDS'=>$fields,'SUBMIT_NAME'=>lorem_word(),'URL'=>placeholder_url(),'HIDDEN'=>'','BATCH_IMPORT_ARCHIVE_CONTENTS'=>lorem_phrase()));
+		$form  = do_lorem_template('FORM',array('TABINDEX'=>placeholder_number(),'TEXT'=>lorem_sentence_html(),'FIELDS'=>$fields,'SUBMIT_NAME'=>lorem_word(),'URL'=>placeholder_url(),'HIDDEN'=>'','BATCH_IMPORT_ARCHIVE_CONTENTS'=>lorem_phrase()));
 
 		return array(
 			lorem_globalise(

@@ -1946,6 +1946,7 @@ class Hook_addon_registry_core_rich_media
 					'CLEAN_SIZE'=>placeholder_random(),
 					'SUP_PARAMS'=>placeholder_blank(),
 					'FORUM_DB_BIN'=>placeholder_blank(),
+					'MIME_TYPE'=>placeholder_id(),
 						)
 			),NULL,'',true),
 		);

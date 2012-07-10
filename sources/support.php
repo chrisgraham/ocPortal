@@ -698,7 +698,7 @@ function fix_id($param)
 				break;
 			default:
 				$ascii=ord($char);
-				if ((($ascii>=48) && ($ascii<=57)) || (($ascii>=65) && ($ascii<=90)) || (($ascii>=97) && ($ascii<=122)))
+				if ((($i!=0) && ($char=='_')) || (($ascii>=48) && ($ascii<=57)) || (($ascii>=65) && ($ascii<=90)) || (($ascii>=97) && ($ascii<=122)))
 				{
 					$new.=$char;
 				} else
@@ -708,6 +708,8 @@ function fix_id($param)
 				break;
 		}
 	}
+	if ($new=='') $new='zero_length';
+	if ($new[0]=='_') $new='und_'.$new;
 	return $new;
 }
 

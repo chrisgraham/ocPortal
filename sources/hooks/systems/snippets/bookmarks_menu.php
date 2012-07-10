@@ -35,7 +35,7 @@ class Hook_bookmarks_menu
 			if (is_null($built)) return new ocp_tempcode();
 			return $built;
 		}
-		return NULL;
+		return new ocp_tempcode();
 	}
 
 }
