@@ -33,7 +33,13 @@ class Hook_profile_tab
 
 		$hook=filter_naughty_harsh(get_param('tab'));
 
-		set_execution_context(array('page'=>'members','type'=>'view','id'=>$member_id_of));
+		$keep_get=array();
+		foreach (array_keys($_GET) as $key)
+		{
+			if (in_array($key,array('snippet','tab','url','title','member_id'))) continue;
+			$keep_get[$key]=get_param($key,NULL,true);
+		}
+		set_execution_context(array('page'=>'members','type'=>'view','id'=>$member_id_of)+$keep_get);
 
 		require_code('hooks/systems/profiles_tabs/'.$hook);
 		$ob=object_factory('Hook_Profiles_Tabs_'.$hook);

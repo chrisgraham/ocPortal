@@ -733,7 +733,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 				case '=':
 					if ($alt!='') $alt.=' OR ';
 					if ((is_numeric($filter_val)) && (($field_type=='integer') || ($field_type=='float') || ($field_type=='')))
-						$alt.=$filter_key.'='.strval($filter_val);
+						$alt.=$filter_key.'='.$filter_val;
 					else
 						$alt.=db_string_equal_to($filter_key,$filter_val);
 					break;

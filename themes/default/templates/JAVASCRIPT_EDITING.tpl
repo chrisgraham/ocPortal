@@ -536,7 +536,7 @@ function do_emoticon(field_name,p,_opener)
 	var element;
 	if (_opener)
 	{
-		element=opener.document.getElementById(field_name);
+		element=get_main_ocp_window().document.getElementById(field_name);
 	} else
 	{
 		element=document.getElementById(field_name);
@@ -551,7 +551,7 @@ function do_emoticon(field_name,p,_opener)
 
 	if (_opener)
 	{
-		insert_textboxOpener(element,text,null,true,get_inner_html(p));
+		insert_textbox_opener(element,text,null,true,get_inner_html(p));
 	} else
 	{
 		insert_textbox(element,text,null,true,get_inner_html(p));
@@ -560,11 +560,11 @@ function do_emoticon(field_name,p,_opener)
 
 function do_attachment(field_name,id,description)
 {
-	if (!opener.wysiwyg_editors) return;
+	if (!get_main_ocp_window().wysiwyg_editors) return;
 
 	if (typeof description=='undefined') var description='';
 
-	var element=opener.document.getElementById(field_name);
+	var element=get_main_ocp_window().document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
 
 	var comcode;
@@ -576,7 +576,7 @@ function do_attachment(field_name,id,description)
 		comcode='<br /><br /><attachment type="island"><attachmentDescription>'+description+'</attachmentDescription>'+id+'</attachment>';
 	}
 
-	insert_textboxOpener(element,comcode);
+	insert_textbox_opener(element,comcode);
 }
 
 function ensure_true_id(element,field_name) // Works around IE bug
@@ -726,11 +726,11 @@ function insert_textbox(element,text,sel,plain_insert,html)
 		set_selection_range(element,from+text.length,from+text.length);
 	}
 }
-function insert_textboxOpener(element,text,sel,plain_insert,html)
+function insert_textbox_opener(element,text,sel,plain_insert,html)
 {
-	if ((typeof sel=='undefined') || (!sel)) var sel=opener.document.selection?opener.document.selection:null;
+	if ((typeof sel=='undefined') || (!sel)) var sel=get_main_ocp_window().document.selection?get_main_ocp_window().document.selection:null;
 
-	opener.insert_textbox(element,text,sel,plain_insert,html);
+	get_main_ocp_window().insert_textbox(element,text,sel,plain_insert,html);
 }
 
 function get_selected_html(editor)

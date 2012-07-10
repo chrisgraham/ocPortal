@@ -228,14 +228,15 @@
 	border-top: 0;
 	border-bottom: 1px solid;
 	border-color: {$GET,pale_border};
-	height: 21px;
+	min-height: 21px;
+	overflow: hidden;
 }
 
 .chat_lobby_convos_tab_first {
 }
 
 .chat_lobby_convos_current_tab {
-	font-weight: bold;
+	text-shadow: 1px 1px 1px {$GET,standard_border};
 }
 
 .chat_lobby_convos_tab_new_messages {

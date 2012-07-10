@@ -483,6 +483,14 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 	}
 }
 
+/* Find the main ocPortal window */
+function get_main_ocp_window()
+{
+	if (opener) return opener;
+	if (parent) return parent;
+	return window;
+}
+
 /* Do-next document tooltips */
 function doc_onmouseout()
 {
@@ -1625,6 +1633,9 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	if (!ac.onmouseout) ac.onmouseout=function(event) { deactivate_tooltip(ac,event); };
 	if (!ac.onmousemove) ac.onmousemove=function(event) { reposition_tooltip(ac,event); };
  
+	if (typeof tooltip=='function') tooltip=tooltip();
+	if (tooltip=='') return;
+
 	ac.is_over=true;
 	ac.tooltip_on=false;
 	ac.initial_width=width;
@@ -1636,6 +1647,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	if ((typeof ac.tooltipId!='undefined') && (document.getElementById(ac.tooltipId)))
 	{
 		tooltip_element=document.getElementById(ac.tooltipId);
+		tooltip_element.style.display='none';
 		set_inner_html(tooltip_element,'');
 		reposition_tooltip(ac,myevent,bottom,true,tooltip_element,force_width);
 	} else
@@ -1694,9 +1706,6 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	window.setTimeout(function() {
 		if (!ac.is_over) return;
 
-		if (typeof tooltip=='function') tooltip=tooltip();
-		if (tooltip=='') return;
-
 		if (!ac.tooltip_on) set_inner_html(tooltip_element,tooltip,true);
 
 		ac.tooltip_on=true;
@@ -1704,7 +1713,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 
 		if (!no_delay)
 		{
-			// If delayed we'll sub in what the currently known global mouse coordinate is
+			// If delayed we will sub in what the currently known global mouse coordinate is
 			myevent_copy.pageX=window.mouseX;
 			myevent_copy.pageY=window.mouseY;
 		}

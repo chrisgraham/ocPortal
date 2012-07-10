@@ -8,7 +8,7 @@
 	{+END}
 
 	{+START,IF_NON_EMPTY,{BIRTHDAYS}}
-		<p>{BIRTHDAYS}</p>
+		<div>{BIRTHDAYS}</div>
 	{+END}
 
 	{+START,IF,{$AND,{$HAS_ACTUAL_PAGE_ACCESS,onlinemembers},{$OCF}}}

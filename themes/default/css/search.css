@@ -73,9 +73,10 @@
 		max-width: 100%;
 	}
 
-	.search_option_value {
-		width: 200px;
+	.search_option_value, .search_option select {
+		width: 20em;
 		max-width: 100%;
+		font-size: 1em; /* Makes em units consistent for both input types */
 	}
 {+END}
 

@@ -243,6 +243,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 		{
 			list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering);
 		}
+
 		require_code('form_templates');
 		foreach ($rows as $row)
 		{
@@ -450,7 +451,7 @@ class Module_admin_ocf_customprofilefields extends standard_aed_module
 			if (!is_null($row[$f_name]))
 			{
 				$val=$row[$f_name];
-				$lines->attach(do_template('OCF_CPF_STATS_LINE',array('CNT'=>integer_format($row['cnt']),'VAL'=>is_integer($val)?number_format($val):$val)));
+				$lines->attach(do_template('OCF_CPF_STATS_LINE',array('CNT'=>integer_format($row['cnt']),'VAL'=>is_integer($val)?integer_format($val):$val)));
 			}
 		}
 		if ($lines->is_empty()) warn_exit(do_lang_tempcode('NO_DATA'));

@@ -733,7 +733,7 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 			{
 				if ($source_theme=='default')
 				{
-					$needed=array('washed_out','do_next_border','area_background','lgrad','dgrad','dark_border','comcode_quote_left','comcode_quote_right','a.link','a.hover','a.link__dark','a.hover__dark','special_borderer','navigation_top','navigation_bot','navigation_peak','ocfredirectindicator','ocfpostindicator','header_background','slightly_seeded_text','special_middle',);
+					$needed=array('washed_out','area_background','lgrad','dgrad','dark_border','comcode_quote_left','comcode_quote_right','a.link','a.hover','a.link__dark','a.hover__dark','special_borderer','navigation_top','navigation_bot','navigation_peak','ocfredirectindicator','ocfpostindicator','header_background','slightly_seeded_text','special_middle',);
 					foreach ($needed as $colour_needed)
 					{
 						if (!array_key_exists($colour_needed,$colours))

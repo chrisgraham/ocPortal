@@ -479,7 +479,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 			if ($out_and!='') $out_and.=' AND ';
 			$out_and.=_ocfilter_neq($field_name,$matches[1],$numeric_record_set_ids);
 		}
-		elseif (preg_match('#^(.+)\-(.+)$#',$token,$matches)!=0) // e.g. '1-3')
+		elseif (preg_match('#^(\d+)\-(\d+)$#',$token,$matches)!=0) // e.g. '1-3')
 		{
 			for ($i=intval($matches[1]);$i<=intval($matches[2]);$i++)
 			{
@@ -487,7 +487,7 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 				$out_or.=_ocfilter_eq($field_name,strval($i),$numeric_record_set_ids);
 			}
 		}
-		elseif (preg_match('#^(.+)\+$#',$token,$matches)!=0) // e.g. '3+'
+		elseif (preg_match('#^(\d+)\+$#',$token,$matches)!=0) // e.g. '3+'
 		{
 			if ($out_or!='') $out_or.=' OR ';
 			$out_or.=$field_name.'>='.strval(intval($matches[1]));

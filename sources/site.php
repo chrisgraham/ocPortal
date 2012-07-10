@@ -54,7 +54,12 @@ function init__site()
 
 	global $NON_CANONICAL_PARAMS;
 	// We only bother listing ones the software itself may inject - otherwise admin responsible for their own curation of canonical settings
-	$NON_CANONICAL_PARAMS=array(/*'wide_high','wide',Would be passed consistently*/'keep_wide_high','keep_wide','keep_theme','utheme','active_filter','keep_has_js','keep_session','redirected','redirect_url','redirect','redirect_passon','keep_devtest','keep_su','wide_print','keep_cache','keep_markers','keep_print','keep_novalidate','keep_no_query_limit','keep_avoid_memory_limit','keep_no_swfupload','keep_no_xhtml','keep_no_minify','keep_no_frames','keep_su_online','keep_show_parse_errors','keep_firephp_queries','keep_firephp','keep_fatalistic','keep_currency','keep_country','keep_mobile','keep_textonly','keep_noiepng','keep_no_dev_mode','keep_referrer','keep_timezone','rand');
+	$NON_CANONICAL_PARAMS=array('wide_high','wide','wide_print','root','filtered','utheme','active_filter','redirected','redirect_url','redirect','redirect_passon');
+	$canonical_keep_params=explode(',',is_null(get_value('canonical_keep_params'))?'':get_value('canonical_keep_params'));
+	foreach (array_keys($_GET) as $key)
+	{
+		if ((substr($key,0,5)=='keep_') && (!in_array($key,$canonical_keep_params))) $NON_CANONICAL_PARAMS[]=$key;
+	}
 
 	global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES,$LATE_ATTACHED_MESSAGES_RAW;
 	$ATTACHED_MESSAGES=new ocp_tempcode();

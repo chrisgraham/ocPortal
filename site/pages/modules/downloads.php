@@ -207,7 +207,7 @@ class Module_downloads
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
-			add_config_option('DOWNLOADS_SUBCAT_NARROWIN','downloads_subcat_narrowin','tick','return \'1\';','FEATURE','SECTION_DOWNLOADS');
+			add_config_option('DOWNLOADS_SUBCAT_NARROWIN','downloads_subcat_narrowin','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS');
 		}
 	}
 

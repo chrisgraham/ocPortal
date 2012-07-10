@@ -479,12 +479,11 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								{
 									$eval=@eval('return '.$first_directive_param.';');
 									if (!is_string($eval)) $eval='';
-									$theme=isset($GLOBALS['FORUM_DRIVER'])?filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme()):'default';
 									$found=find_template_place($eval,'',$theme,'.tpl','templates');
-									$theme=$found[0];
-									$fullpath=get_custom_file_base().'/themes/'.$theme.$found[1].$eval.'.tpl';
+									$_theme=$found[0];
+									$fullpath=get_custom_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
 									if (!is_file($fullpath))
-										$fullpath=get_file_base().'/themes/'.$theme.$found[1].$eval.'.tpl';
+										$fullpath=get_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
 									$filecontents=@file_get_contents($fullpath,FILE_TEXT);
 									if ($filecontents===false) $filecontents='';
 									list($_current_level_data,$_preprocessable_bits)=compile_template($filecontents,$eval,$theme,$lang);

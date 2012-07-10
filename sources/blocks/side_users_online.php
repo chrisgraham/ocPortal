@@ -153,6 +153,7 @@ class Block_side_users_online
 			{
 				require_code('ocf_members');
 				$_birthdays=ocf_find_birthdays();
+
 				foreach ($_birthdays as $_birthday)
 				{
 					$colour=get_group_colour(ocf_get_member_primary_group($_birthday['id']));

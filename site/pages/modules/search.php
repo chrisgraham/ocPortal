@@ -590,7 +590,7 @@ class Module_search
 	 */
 	function results($id,$author,$author_id,$days,$sort,$direction,$only_titles,$search_under)
 	{
-		$title=get_screen_title('RESULTS');
+		$title=get_screen_title('SEARCH_RESULTS');
 
 		cache_module_installed_status();
 

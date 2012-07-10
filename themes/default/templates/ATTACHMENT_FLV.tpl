@@ -1,7 +1,7 @@
 <figure>
 	{+START,IF_NON_PASSED_OR_FALSE,WYSIWYG_SAFE}
 		{+START,IF_EMPTY,{$META_DATA,video}}
-			{$META_DATA,video,{SCRIPT}?id={ID}{SUP_PARAMS}{$KEEP,0,1}&thumb=0&for_session={$SESSION_HASHED*}&no_count=1}
+			{$META_DATA,video,{SCRIPT}?id={ID}{SUP_PARAMS}{$KEEP,0,1}&thumb=0{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&for_session={$SESSION_HASHED}{+END}&no_count=1}
 			{$META_DATA,video:height,{A_HEIGHT}}
 			{$META_DATA,video:width,{A_WIDTH}}
 			{$META_DATA,video:type,{MIME_TYPE}}
@@ -28,7 +28,7 @@
 				width: {A_WIDTH*},
 				height: {A_HEIGHT*},
 				players: [
-					{ type: "flash", src: "{$BASE_URL#}/data/flvplayer.swf?rand={$RAND*}" },
+					{ type: "flash", src: "{$BASE_URL#}/data/flvplayer.swf{+START,IF,{$NOT,{$BROWSER_MATCHES,bot}}}?rand={$RAND*}{+END}" },
 					{ type: "html5" }
 				],
 				provider: '{$?,{$EQ,{$SUBSTR,{A_URL},-4},.mp3},sound,video}'

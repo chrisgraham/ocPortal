@@ -112,7 +112,7 @@ class Module_admin_themewizard
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PARAMETERS'))));
 
-		$fields->attach(form_input_colour(do_lang_tempcode('SEED_COLOUR'),do_lang_tempcode('DESCRIPTION_SEED_COLOUR'),'seed','#'.get_param('seed',find_theme_seed('default')),true));
+		$fields->attach(form_input_colour(do_lang_tempcode('SEED_COLOUR'),do_lang_tempcode('DESCRIPTION_SEED_COLOUR'),'seed','#'.preg_replace('/^\#/','',get_param('seed',find_theme_seed('default'))),true));
 
 		if (count(find_all_themes())!=1)
 		{
@@ -170,7 +170,7 @@ class Module_admin_themewizard
 
 		$source_theme=get_param('source_theme');
 		$algorithm=get_param('algorithm');
-		$seed=get_param('seed');
+		$seed=preg_replace('/^\#/','',get_param('seed'));
 		$dark=get_param_integer('dark',0);
 		$inherit_css=get_param_integer('inherit_css',0);
 		$themename=get_param('themename');

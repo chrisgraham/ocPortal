@@ -1,4 +1,4 @@
-{$SET,fancy_screen,{$OR,{$RUNNING_SCRIPT,iframe},{$MATCH_KEY_MATCH,site:members},{$MATCH_KEY_MATCH,site:search}}}
+{$SET,fancy_screen,{$AND,{$NOT,{$MATCH_KEY_MATCH,site:members:view}},{$OR,{$RUNNING_SCRIPT,iframe},{$MATCH_KEY_MATCH,site:members},{$MATCH_KEY_MATCH,site:search}}}}
 
 {+START,IF,{$GET,fancy_screen}}
 	{+START,SET,ADDITIONAL_DETAILS}
@@ -15,7 +15,7 @@
 		{+END}
 		<tr>
 			<th class="de_th">{!USERGROUPS}:</th>
-			<td>{+START,LOOP,OTHER_USERGROUPS}{_loop_var*}{+START,IF,{$NEQ,{_loop_key},0}}, {+END}{+END}</td>
+			<td>{+START,LOOP,OTHER_USERGROUPS}{+START,IF,{$NEQ,{_loop_key},0}}, {+END}{_loop_var*}{+END}</td>
 		</tr>
 	{+END}
 
@@ -30,8 +30,8 @@
 			{$SET,main,1}
 			{CUSTOM_FIELDS}
 
-			{+START,IF,{$ADDON_INSTALLED,oc_gift_giver,1}}
-				<p class="associated_link associated_links_block_group">
+			{+START,IF,{$ADDON_INSTALLED,ocGiftGiver,1}}
+				<p class="associated_link">
 					{+START,IF,{$NEQ,{$USER},{POSTER}}}
 						<a href="{$PAGE_LINK*,site:pointstore:action:ocgifts:username={$USERNAME,{POSTER}}}">{!ocgifts:GIVE_A_GIFT}</a>
 					{+END}

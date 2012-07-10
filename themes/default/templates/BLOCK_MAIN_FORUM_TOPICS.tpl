@@ -11,7 +11,7 @@
 		{CONTENT}
 
 		{+START,IF_NON_EMPTY,{SUBMIT_URL}}
-			<ul class="horizontal_links associated_links_block_group">
+			<ul class="horizontal_links associated_links_block_group force_margin">
 				<li><a href="{SUBMIT_URL*}">{!ADD_TOPIC}</a></li>
 			</ul>
 		{+END}

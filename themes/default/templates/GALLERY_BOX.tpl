@@ -1,5 +1,5 @@
 {+START,IF_NON_EMPTY,{THUMB}}
-	<div class="right"><a href="{URL*}">{$TRIM,{THUMB}}</a></div>
+	<div class="right float_separation"><a href="{URL*}">{$TRIM,{THUMB}}</a></div>
 {+END}
 <a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{TITLE},fullname,_SEARCH:cms_galleries:type=__ec:id={ID}}{TITLE*}{+END}</a>
 

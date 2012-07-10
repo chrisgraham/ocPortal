@@ -471,14 +471,15 @@ header h1 {
 	{+START,IF,{$NOT,{$MOBILE}}}
 		text-align: right;
 		margin-top: 60px;
-		padding: 5px 5px 9px 0;
+		padding: 5px 5px 0 0;
 		background: url('{$IMG;,zone_gradient}') repeat-x;
 	{+END}
-	min-height: 15px;
+	min-height: 24px;
 	font-weight: bold;
 	color: {$GET,navigation_text};
 	background-color: {$GET,navigation_background};
 	background-position: left bottom;
+	background-size: 100% 100%;
 }
 
 .global_banner {
@@ -1865,10 +1866,14 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	overflow: auto;
 }
 .category_list>li {
+	border-top: 2px solid {$GET,standard_border} !important;
 	padding: 0.5em 0;
 	margin: 0.5em 0;
 	clear: both;
 	overflow: hidden;
+}
+.category_list>li:first-child {
+	border-top: 0 !important;
 }
 .category_list>li.box { /* For a variety of combined box and category_list */
 	padding: 0 !important;
@@ -2568,6 +2573,10 @@ ul.associated_link, ul.horizontal_meta_details, ul.horizontal_links, ul.horizont
 .horizontal_buttons {
 	list-style: none;
 }
+ul.horizontal_links_comma {
+	vertical-align: baseline !important;
+	width: auto !important;
+}
 ul.associated_link {
 	display: block;
 }
@@ -3233,10 +3242,6 @@ ul.nl, .nl ul {
 
 .menu_type__tree ul ul {
 	padding-{!en_left}: 5px;
-}
-
-.menu_type__zone {
-	max-height: 15px;
 }
 
 .menu_type__zone ul {

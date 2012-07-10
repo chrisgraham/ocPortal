@@ -11,8 +11,8 @@
 {+END}
 
 {+START,IF_PASSED,BREADCRUMBS}
-	<p class="breadcrumbs">
+	<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p>
 		<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />
 		{BREADCRUMBS}
-	</p>
+	</p></nav>
 {+END}

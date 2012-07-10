@@ -1,10 +1,9 @@
 <div class="box box___download_box"><div class="box_inner">
-	{+START,SET,BOX_TITLE}
-		<h3><a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:type=__ed:id={ID}}{NAME*}{+END}</a> {!BY_SIMPLE_LOWER,{AUTHOR*}}</h3>
-	{+END}
+	<h3><a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:type=__ed:id={ID}}{NAME*}{+END}</a></h3>
 
 	<div class="meta_details" role="contentinfo">
 		<dl class="meta_details_list">
+			<dt class="field_name">{!BY}:</dt> <dd>{AUTHOR*}</dd>
 			{+START,IF,{$INLINE_STATS}}
 				<dt class="field_name">{!COUNT_DOWNLOADS}:</dt> <dd>{DOWNLOADS*}</dd>
 			{+END}
@@ -39,7 +38,7 @@
 		</div>
 
 		{+START,IF_NON_EMPTY,{BREADCRUMBS}}
-			<p>{!LOCATED_IN,{BREADCRUMBS}}</p>
+			<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p>{!LOCATED_IN,{BREADCRUMBS}}</p></nav>
 		{+END}
 	</div>
 
@@ -49,7 +48,7 @@
 		{+END}
 		{+START,IF_NON_PASSED,LICENCE}
 			<li><a href="{URL*}">{!MORE_INFO}</a></li>
-			<li><a title="{!DOWNLOAD_NOW}: {$CLEAN_FILE_SIZE*,{FILE_SIZE}}" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*}&amp;for_session={$SESSION_HASHED}">{!DOWNLOAD_NOW}</a></li>
+			<li><a title="{!DOWNLOAD_NOW}: {$CLEAN_FILE_SIZE*,{FILE_SIZE}}" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}">{!DOWNLOAD_NOW}</a></li>
 		{+END}
 	</ul>
 </div></div>

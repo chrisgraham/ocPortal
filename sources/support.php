@@ -723,7 +723,7 @@ function fix_id($param)
 				break;
 			default:
 				$ascii=ord($char);
-				if ((($ascii>=48) && ($ascii<=57)) || (($ascii>=65) && ($ascii<=90)) || (($ascii>=97) && ($ascii<=122)))
+				if (($char=='_') || (($ascii>=48) && ($ascii<=57)) || (($ascii>=65) && ($ascii<=90)) || (($ascii>=97) && ($ascii<=122)))
 				{
 					$new.=$char;
 				} else
@@ -1454,7 +1454,7 @@ function brand_base_url()
  * See's if the current browser matches some special property code. Assumes users are keeping up on newish browsers (except for IE users, who are 6+)
  *
  * @param  string			The property code
- * @set    android ios wysiwyg windows mac linux odd_os mobile opera ie ie8 ie8+ ie9 ie9+ gecko konqueror safari odd_browser chrome
+ * @set    android ios wysiwyg windows mac linux odd_os mobile opera ie ie8 ie8+ ie9 ie9+ gecko konqueror safari odd_browser chrome bot
  * @return boolean		Whether there is a match
  */
 function browser_matches($code)
@@ -1477,6 +1477,9 @@ function browser_matches($code)
 
 	switch ($code)
 	{
+		case 'bot':
+			$BROWSER_MATCHES_CACHE[$code]=!is_null(get_bot_type());
+			return $BROWSER_MATCHES_CACHE[$code];
 		case 'android':
 			$BROWSER_MATCHES_CACHE[$code]=strpos($browser,'android')!==false;
 			return $BROWSER_MATCHES_CACHE[$code];

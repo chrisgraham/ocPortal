@@ -51,7 +51,7 @@ function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filte
 	$new_filter_key=$filter_key;
 	if (is_numeric($filter_key))
 	{
-		$new_filter_key='field_'.strval($new_filter_key);
+		$new_filter_key='field_'.$new_filter_key;
 	}
 	elseif (preg_match('#^field\_\d+$#',$filter_key)==0) // If it's not already correct
 	{
@@ -68,7 +68,7 @@ function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filte
 }
 
 /**
- * Get tempcode for a mouseover for a member. For use with OCF_POSTER_MEMBER.tpl.
+ * Get a member display box. Some terminology refers to a member here as a 'poster', as this function is used in forum topics also.
  *
  * @param  mixed			Either a member ID or an array containing: ip_address, poster_num_warnings, poster, poster_posts, poster_points, poster_join_date_string, primary_group_name.
  * @param  boolean		Whether only to show 'preview' details
@@ -76,29 +76,29 @@ function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filte
  * @param  ?array			An array of hook objects that allow us to collect additional mouse-over member information. (NULL: lookup)
  * @param  boolean		Whether to show the avatar
  * @param  ?array			Map of extra fields to show (NULL: none)
- * @return tempcode		The mouseover tempcode
+ * @return tempcode		The member box
  */
-function render_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_objects=NULL,$show_avatar=true,$extra_fields=NULL)
+function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_objects=NULL,$show_avatar=true,$extra_fields=NULL)
 {
 	require_lang('ocf');
 	require_css('ocf');
 
-	// Have to build up $_postdetails instead?
-	if (!is_array($_postdetails))
+	// Have to build up $poster_details instead?
+	if (!is_array($poster_details))
 	{
 		if (addon_installed('points'))
 		{
 			require_code('points');
-			$points=integer_format(total_points($_postdetails));
+			$points=integer_format(total_points($poster_details));
 		} else $points='';
-		$primary_group=ocf_get_member_primary_group($_postdetails);
+		$primary_group=ocf_get_member_primary_group($poster_details);
 		if (is_null($primary_group)) return new ocp_tempcode();
 		require_code('ocf_groups');
-		$_postdetails=array('poster'=>$_postdetails,'poster_posts'=>$GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails,'m_cache_num_posts'),'poster_join_date'=>$GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails,'m_join_time'),'poster_join_date_string'=>get_timezoned_date($GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails,'m_join_time')),'primary_group_name'=>ocf_get_group_name($primary_group));
-		$_postdetails['custom_fields']=ocf_get_all_custom_fields_match_member(
-			$_postdetails['poster'],
-			((get_member()!=$_postdetails['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // public view
-			((get_member()==$_postdetails['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // owner view
+		$poster_details=array('poster'=>$poster_details,'poster_posts'=>$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_cache_num_posts'),'poster_join_date'=>$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_join_time'),'poster_join_date_string'=>get_timezoned_date($GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_join_time')),'primary_group_name'=>ocf_get_group_name($primary_group));
+		$poster_details['custom_fields']=ocf_get_all_custom_fields_match_member(
+			$poster_details['poster'],
+			((get_member()!=$poster_details['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // public view
+			((get_member()==$poster_details['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // owner view
 			NULL, // owner set
 			0, // encrypted
 			NULL, // required
@@ -107,29 +107,29 @@ function render_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_object
 		);
 		if ($preview)
 		{
-			$_postdetails['custom_fields_full']=ocf_get_all_custom_fields_match_member(
-				$_postdetails['poster'],
-				((get_member()!=$_postdetails['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // public view
-				((get_member()==$_postdetails['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // owner view
+			$poster_details['custom_fields_full']=ocf_get_all_custom_fields_match_member(
+				$poster_details['poster'],
+				((get_member()!=$poster_details['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // public view
+				((get_member()==$poster_details['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // owner view
 				NULL, // owner set
 				0, // encrypted
 				NULL, // required
 				1, // show in posts
 				0 // show in post previews
 			);
-		} else $_postdetails['custom_fields_full']=array();
+		} else $poster_details['custom_fields_full']=array();
 		if ((has_specific_permission(get_member(),'see_warnings')) && (addon_installed('ocf_warnings')))
 		{
-			$num_warnings=$GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails['poster'],'m_cache_warnings');
-			/*if ($num_warnings!=0)*/ $_postdetails['poster_num_warnings']=$num_warnings;
+			$num_warnings=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details['poster'],'m_cache_warnings');
+			/*if ($num_warnings!=0)*/ $poster_details['poster_num_warnings']=$num_warnings;
 		}
-		if (has_specific_permission(get_member(),'see_ip')) $_postdetails['ip_address']=$GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails['poster'],'m_ip_address');
+		if (has_specific_permission(get_member(),'see_ip')) $poster_details['ip_address']=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details['poster'],'m_ip_address');
 	} else
 	{
-		$points=array_key_exists('points',$_postdetails)?integer_format($_postdetails['points']):'';
+		$points=array_key_exists('points',$poster_details)?integer_format($poster_details['points']):'';
 	}
 
-	$member_id=$_postdetails['poster'];
+	$member_id=$poster_details['poster'];
 
 	if (is_null($hooks))
 	{
@@ -146,26 +146,26 @@ function render_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_object
 	}
 
 	$custom_fields=new ocp_tempcode();
-	foreach ($_postdetails['custom_fields'] as $name=>$value)
+	foreach ($poster_details['custom_fields'] as $name=>$value)
 	{
 		if ((!is_null($value)) && ($value!==''))
 			$custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'10b72cd1ec240c315e56bc8a0f3a92a1','NAME'=>$name,'RAW'=>$value['RAW'],'VALUE'=>is_object($value['RENDERED'])?protect_from_escaping($value['RENDERED']):$value['RENDERED'])));
 	}
 	$custom_fields_full=new ocp_tempcode();
-	if (array_key_exists('custom_fields_full',$_postdetails))
+	if (array_key_exists('custom_fields_full',$poster_details))
 	{
-		foreach ($_postdetails['custom_fields_full'] as $name=>$value)
+		foreach ($poster_details['custom_fields_full'] as $name=>$value)
 		{
 			if ((!is_null($value)) && ($value!==''))
 				$custom_fields_full->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'20b72cd1ec240c315e56bc8a0f3a92a1','NAME'=>$name,'RAW'=>$value['RAW'],'VALUE'=>is_object($value['RENDERED'])?protect_from_escaping($value['RENDERED']):$value['RENDERED'])));
 		}
 	}
 	$ip_address=NULL;
-	if (array_key_exists('ip_address',$_postdetails))
-		$ip_address=$_postdetails['ip_address'];
+	if (array_key_exists('ip_address',$poster_details))
+		$ip_address=$poster_details['ip_address'];
 	$num_warnings=NULL;
-	if ((array_key_exists('poster_num_warnings',$_postdetails)) && (addon_installed('ocf_warnings')))
-		$num_warnings=integer_format($_postdetails['poster_num_warnings']);
+	if ((array_key_exists('poster_num_warnings',$poster_details)) && (addon_installed('ocf_warnings')))
+		$num_warnings=integer_format($poster_details['poster_num_warnings']);
 	$galleries=NULL;
 	if ((addon_installed('galleries')) && (get_option('show_gallery_counts')=='1'))
 	{
@@ -218,11 +218,11 @@ function render_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_object
 	return do_template('OCF_MEMBER_BOX',array(
 		'_GUID'=>'dfskfdsf9',
 		'POSTER'=>strval($member_id),
-		'POSTS'=>integer_format($_postdetails['poster_posts']),
+		'POSTS'=>integer_format($poster_details['poster_posts']),
 		'POINTS'=>$points,
-		'JOIN_DATE_RAW'=>strval($_postdetails['poster_join_date']),
-		'JOIN_DATE'=>$_postdetails['poster_join_date_string'],
-		'PRIMARY_GROUP_NAME'=>$_postdetails['primary_group_name'],
+		'JOIN_DATE_RAW'=>strval($poster_details['poster_join_date']),
+		'JOIN_DATE'=>$poster_details['poster_join_date_string'],
+		'PRIMARY_GROUP_NAME'=>$poster_details['primary_group_name'],
 		'OTHER_USERGROUPS'=>$usergroups,
 		'CUSTOM_FIELDS'=>$custom_fields,
 		'CUSTOM_FIELDS_FULL'=>$custom_fields_full,

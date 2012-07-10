@@ -1,11 +1,13 @@
 <section class="box box___gallery_video_box"><div class="box_inner">
-	<h3>{!VIDEO}: {TITLE*}</h3>
+	{+START,IF_NON_EMPTY,{TITLE}}
+		<h3>{!VIDEO}: {TITLE*}</h3>
+	{+END}
 
 	<div>
 		<a href="{URL*}">{THUMB}</a>
 	</div>
 
 	{+START,IF_NON_EMPTY,{BREADCRUMBS}}
-		<p>{BREADCRUMBS}</p>
+		<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p>{!LOCATED_IN,{BREADCRUMBS}}</p></nav>
 	{+END}
 </div></section>

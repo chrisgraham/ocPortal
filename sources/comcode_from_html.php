@@ -279,14 +279,14 @@ function semihtml_to_comcode($semihtml)
 	{
 		foreach (array('&amp;thumb=0[^"]*'=>' thumb="0"','&amp;thumb=1[^"]*'=>' thumb="1"',''=>'') as $thumb_bit=>$comcode_to)
 		{
-			$semihtml=preg_replace('#<div [^>]*class="attachment_left"[^>]*>\s*<img src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'&amp;for_session=[\w\d]+" /></div>#i','[attachment_safe'.$comcode_to.' type="inline_left"]${1}[/attachment_safe]',$semihtml);
-			$semihtml=preg_replace('#<div [^>]*class="attachment_right"[^>]*>\s*<img src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'&amp;for_session=[\w\d]+" /></div>#i','[attachment_safe'.$comcode_to.' type="inline_right"]${1}[/attachment_safe]',$semihtml);
+			$semihtml=preg_replace('#<div [^>]*class="attachment_left"[^>]*>\s*<img src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'(&amp;for_session=[\w\d]+)?" /></div>#i','[attachment_safe'.$comcode_to.' type="inline_left"]${1}[/attachment_safe]',$semihtml);
+			$semihtml=preg_replace('#<div [^>]*class="attachment_right"[^>]*>\s*<img src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'(&amp;for_session=[\w\d]+)?" /></div>#i','[attachment_safe'.$comcode_to.' type="inline_right"]${1}[/attachment_safe]',$semihtml);
 			$regexp='#';
 			$regexp.=($comcode_to==' thumb="1"')?'(<a [^>]*>)?\s*':'()';
-			$regexp.='<img [^>]*[^>]*src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'&amp;for_session=[\w\d]+" [^>]*title="([^"]*)" [^>]*/?'.'>\s*';
+			$regexp.='<img [^>]*[^>]*src="[^"]*?id=(\d+)[^"]*'.$thumb_bit.'(&amp;for_session=[\w\d]+)?" [^>]*title="([^"]*)" [^>]*/?'.'>\s*';
 			$regexp.=($comcode_to==' thumb="1"')?'(</a>)?':'()';
 			$regexp.='#i';
-			$semihtml=preg_replace($regexp,'[attachment_safe'.$comcode_to.' type="inline" description="${3}"]${2}[/attachment_safe]',$semihtml);
+			$semihtml=preg_replace($regexp,'[attachment_safe'.$comcode_to.' type="inline" description="${4}"]${2}[/attachment_safe]',$semihtml);
 		}
 	}
 	$semihtml=preg_replace('#&amp;keep_session=[\d]*(&amp;for_session=[\w\d]*)?#','',$semihtml); // This is useful for generally stripping sensitive information anyway. Should be null-op if anti-leech was on, but worth doing just-in-case.

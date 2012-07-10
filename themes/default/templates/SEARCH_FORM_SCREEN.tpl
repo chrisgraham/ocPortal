@@ -1,7 +1,7 @@
 {TITLE}
 
 {+START,IF_PASSED,RESULTS}
-	<h2>{!SEARCH_RESULTS_ARE,{NUM_RESULTS*},{SEARCH_TERM*}}</h2>
+	<h2>{$?,{$IS_EMPTY,{SEARCH_TERM}},{!SEARCH_RESULTS_ARE_UNNAMED,{NUM_RESULTS*}},{!SEARCH_RESULTS_ARE,{NUM_RESULTS*},{SEARCH_TERM*}}}</h2>
 
 	{+START,IF_EMPTY,{RESULTS}}
 		<p class="nothing_here">{!NO_RESULTS_SEARCH}</p>
@@ -19,7 +19,7 @@
 	{+END}
 {+END}
 
-<div>
+<div class="box">
 	{+START,IF_PASSED,RESULTS}
 		<h2 class="toggleable_tray_title">
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!SETTINGS}</a>

@@ -39,7 +39,7 @@ class Hook_fields_tick
 		$special->attach(form_input_list_entry('',get_param('option_'.strval($row['id']),'')=='',do_lang_tempcode('NA_EM')));
 		$special->attach(form_input_list_entry('0',get_param('option_'.strval($row['id']),'')=='0',do_lang_tempcode('NO')));
 		$special->attach(form_input_list_entry('1',get_param('option_'.strval($row['id']),'')=='1',do_lang_tempcode('YES')));
-		$display=get_translated_text($row['cf_name']);
+		$display=array_key_exists('trans_name',$row)?$row['trans_name']:get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
 		$fields[]=array('NAME'=>strval($row['id']),'DISPLAY'=>$display,'TYPE'=>$type,'SPECIAL'=>$special);
 		return $fields;
 	}

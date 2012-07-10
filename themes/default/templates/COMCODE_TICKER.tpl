@@ -2,7 +2,7 @@
 
 {$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
 
-<div role="marquee" id="ticktickticker{$GET,RAND_ID_TICKER}"></div>
+<div class="ticker_wrap" role="marquee" id="ticktickticker{$GET,RAND_ID_TICKER}"></div>
 
 <script type="text/javascript">// <![CDATA[
 	add_event_listener_abstract(window,'load',function () {

@@ -521,7 +521,7 @@ class OCP_Topic
 	/**
 	 * Grab posts at or underneath a reference post.
 	 *
-	 * @param  AUTO_LINK		Reference post in thread
+	 * @param  ?AUTO_LINK	Reference post in thread (NULL: root)
 	 * @param  array			Posts to choose from
 	 * @return array			Relevant posts
 	 */
@@ -529,16 +529,19 @@ class OCP_Topic
 	{
 		$posts_out=array();
 
-		if (isset($posts_in['post_'.strval($parent_post_id)]))
+		if (!is_null($parent_post_id))
 		{
-			$grabbed=$posts_in['post_'.strval($parent_post_id)];
-			$posts_out['post_'.strval($parent_post_id)]=$grabbed;
+			if (isset($posts_in['post_'.strval($parent_post_id)]))
+			{
+				$grabbed=$posts_in['post_'.strval($parent_post_id)];
+				$posts_out['post_'.strval($parent_post_id)]=$grabbed;
+			}
 		}
 
 		// Underneath
 		foreach ($posts_in as $x)
 		{
-			if ($x['parent_id']==$parent_post_id)
+			if ($x['parent_id']===$parent_post_id)
 			{
 				$underneath=$this->_grab_at_and_underneath($x['id'],$posts_in);
 				foreach ($underneath as $id=>$y)

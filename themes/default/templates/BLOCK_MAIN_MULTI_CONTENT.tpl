@@ -15,7 +15,7 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{SUBMIT_URL}{ARCHIVE_URL}}
-	<ul class="horizontal_links associated_links_block_group">
+	<ul class="horizontal_links associated_links_block_group force_margin">
 		{+START,IF_NON_EMPTY,{SUBMIT_URL}}
 			<li><a rel="add" href="{SUBMIT_URL*}">{!ADD}</a></li>
 		{+END}

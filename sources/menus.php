@@ -599,6 +599,8 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 				$current_page=true;
 				foreach ($map as $k=>$v)
 				{
+					if (is_integer($v)) $v=strval($v);
+					if (is_object($v)) $v=$v->evaluate();
 					if (($v=='') && ($k=='page'))
 					{
 						$v='start';

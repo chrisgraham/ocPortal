@@ -540,7 +540,6 @@ function ModalWindow()
 							var popup_spacer=iframe.contentWindow.document.getElementById('popup_spacer');
 							if (popup_spacer) popup_spacer.id='';
 
-							iframe.contentWindow.opener=window;
 							var bases=iframe.contentWindow.document.getElementsByTagName('base');
 							var baseElement;
 							if (!bases[0])

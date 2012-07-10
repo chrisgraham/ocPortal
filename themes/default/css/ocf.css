@@ -545,6 +545,9 @@ hr.ocf_sig_barrier {
 	text-align: center;
 	width: 30px;
 }
+.ocf_forum_topic_row_emoticon img {
+	max-width: 100%;
+}
 
 .ocf_forum_topic_row_preview {
 	padding: 0.5em;
@@ -950,7 +953,7 @@ h2.ocf_post_history_header {
 		float: right;
 		width: 156px;
 		padding: 1em;
-		font-size: 0.85em;
+		font-size: 0.9em;
 	}
 
 	.ocf_profile_column h2 {
@@ -1111,7 +1114,7 @@ ul.ocf_profile_friends li {
 	border: 1px solid {$GET,standard_border};
 	background: {$GET,area_background};
 	display: block;
-	min-height: 4em;
+	min-height: 3.6em;
 }
 
 ul.ocf_profile_friends li a {
@@ -1215,6 +1218,7 @@ ul.ocf_profile_friends li .associated_details {
 .ocf_member_box_avatar {
 	float: left;
 	margin-right: 1em;
+	max-width: 245px; /* Based on tooltip size */
 }
 
 .ocf_isolated_post_meta_column {

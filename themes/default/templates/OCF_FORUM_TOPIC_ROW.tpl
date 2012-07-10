@@ -23,7 +23,7 @@
 			{PAGES}
 
 			{+START,IF_PASSED,BREADCRUMBS}{+START,IF_NON_EMPTY,{BREADCRUMBS}}
-				<p class="associated_details">{BREADCRUMBS}</p>
+				<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p class="associated_details">{BREADCRUMBS}</p></nav>
 			{+END}{+END}
 		</div>
 		{+START,IF_NON_EMPTY,{DESCRIPTION}}

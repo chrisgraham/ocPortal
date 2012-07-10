@@ -57,7 +57,7 @@ function date_from_week_of_year($year,$week)
 {
 	$basis=strval($year).'-'.str_pad(strval($week),2,'0',STR_PAD_LEFT);
 	$time=mktime(0,0,0,1,1,$year);
-	for ($i=0;$i<366;$i++)
+	for ($i=($week==52)?300/*conditional to stop it finding week as previous year overlap week of same number*/:0;$i<366;$i++)
 	{
 		$new_time=$time+60*60*24*$i;
 		$test=get_week_number_for($new_time);

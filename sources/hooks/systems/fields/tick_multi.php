@@ -38,7 +38,7 @@ class Hook_fields_tick_multi
 		$special=new ocp_tempcode();
 		$special->attach(form_input_list_entry('',get_param('option_'.strval($row['id']),'')=='','---'));
 		$list=explode('|',$row['cf_default']);
-		$display=get_translated_text($row['cf_name']);
+		$display=array_key_exists('trans_name',$row)?$row['trans_name']:get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
 		foreach ($list as $l)
 		{
 			$special->attach(form_input_list_entry($l,get_param('option_'.strval($row['id']),'')==$l));

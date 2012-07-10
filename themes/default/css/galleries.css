@@ -9,10 +9,6 @@
 	margin-bottom: 1em;
 }
 
-.gallery_entry_details .box {
-	margin-top: 0;
-}
-
 .gallery_entry_field_name_column {
 	width: 8.5em.
 }
@@ -72,7 +68,7 @@
 	max-height: {$GET,gallery_thumb_size};
 }
 
-.gallery_regular_thumb p {
+.gallery_regular_thumb p, .gallery_regular_thumb .grating {
 	margin: 0.5em;
 }
 

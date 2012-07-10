@@ -29,7 +29,7 @@
 					<div class="box_inner">
 					{+END}
 						<div class="download_now" itemprop="significantLinks">
-							<p class="download_link associated_link suggested_link"><a rel="nofollow" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*,0,1}&amp;for_session={$SESSION_HASHED}"><strong>{!DOWNLOAD_NOW}</strong></a></p>
+							<p class="download_link associated_link suggested_link"><a rel="nofollow" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*,0,1}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}"><strong>{!DOWNLOAD_NOW}</strong></a></p>
 							<p class="download_filesize">({FILE_SIZE*})</p>
 						</div>
 					</div>
@@ -135,8 +135,8 @@
 			{$SET,carousel_id,{$RAND}}
 
 			<div id="carousel_{$GET*,carousel_id}" class="carousel" style="display: none">
-				<div class="move_left" onmousedown="carousel_move({$GET*,carousel_id},-100); return false;" onmouseover="this.className='move_left move_left_hover';" onmouseout="this.className='move_left';"></div>
-				<div class="move_right" onmousedown="carousel_move({$GET*,carousel_id},+100); return false;" onmouseover="this.className='move_right move_right_hover';" onmouseout="this.className='move_right';"></div>
+				<div class="move_left" onmousedown="carousel_move({$GET*,carousel_id},-100); return false;"></div>
+				<div class="move_right" onmousedown="carousel_move({$GET*,carousel_id},+100); return false;"></div>
 
 				<div class="main">
 				</div>

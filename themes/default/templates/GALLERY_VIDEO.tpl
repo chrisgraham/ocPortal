@@ -39,7 +39,7 @@
 					</tr>
 				{+END}
 
-				{$PREG_REPLACE,</(table|div)>,,{$PREG_REPLACE,<(table|div)[^>]*>,,{VIDEO_DETAILS}}}
+				{$PREG_REPLACE,</(table|div|tbody|colgroup|col)>,,{$PREG_REPLACE,<(table|div|tbody|colgroup|col)[^>]*>,,{VIDEO_DETAILS}}}
 			</tbody>
 		</table>
 	</div>

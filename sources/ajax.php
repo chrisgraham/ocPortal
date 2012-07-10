@@ -534,6 +534,7 @@ function snippet_script()
 	require_code('hooks/systems/snippets/'.$hook,true);
 	$object=object_factory('Hook_'.$hook);
 	$tempcode=$object->run();
+	$tempcode->handle_symbol_preprocessing();
 	$out=$tempcode->evaluate();
 
 	// End early execution listening (this means register_shutdown_function will run after connection closed - faster)

@@ -246,23 +246,32 @@ function _generic_exit($text,$template)
 
 	$text_eval=is_object($text)?$text->evaluate():$text;
 
-	if ($text_eval==do_lang('MISSING_RESOURCE'))
+	if ($GLOBALS['HTTP_STATUS_CODE']=='200')
 	{
-		if (!headers_sent())
+		if (($text_eval==do_lang('NO_MARKERS_SELECTED')) || ($text_eval==do_lang('NOTHING_SELECTED')))
 		{
-			$GLOBALS['HTTP_STATUS_CODE']='404';
-			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+			$GLOBALS['HTTP_STATUS_CODE']='400';
+			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
 		}
-		if (ocp_srv('HTTP_REFERER')!='')
+		elseif (($text_eval==do_lang('MISSING_RESOURCE')) || ($text_eval==do_lang('USER_NO_EXIST')))
 		{
-			relay_error_notification($text_eval.' '.do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false,'error_occurred_missing_resource');
+			if (!headers_sent())
+			{
+				$GLOBALS['HTTP_STATUS_CODE']='404';
+				if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+			}
+			if (ocp_srv('HTTP_REFERER')!='')
+			{
+				relay_error_notification($text_eval.' '.do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false,'error_occurred_missing_resource');
+			}
 		}
-	} else
-	{
-		if (!headers_sent())
+		elseif ($template=='WARN_SCREEN')
 		{
-			$GLOBALS['HTTP_STATUS_CODE']='500';
-			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 500 Internal server error');
+			if (!headers_sent())
+			{
+				$GLOBALS['HTTP_STATUS_CODE']='500';
+				if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 500 Internal server error');
+			}
 		}
 	}
 

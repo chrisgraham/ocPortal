@@ -59,10 +59,10 @@
 
 {+START,IF_PASSED,ID}
 	<div class="non_accessibility_redundancy">
-		<div class="breadcrumbs">
+		<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
 			<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />
 			{BREADCRUMBS}
-		</div>
+		</nav>
 	</div>
 {+END}
 

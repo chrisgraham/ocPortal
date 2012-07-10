@@ -358,6 +358,7 @@ function init__validation2()
 		'box-sizing'=>'(border-box|content-box|padding-box)', // should be vendor prefixed (for Firefox)
 
 		// CSS3, not supported on IE8 but irrelevant as these just add flashiness; should be vendor prefixed
+		'background-size'=>'('.$enforce_length.' '.$enforce_length.')',
 		'box-shadow'=>'(none|('.$enforce_box_shadow.'(,\s*'.$enforce_box_shadow.'(,\s*'.$enforce_box_shadow.'(,\s*'.$enforce_box_shadow.')?)?)?))',
 		'text-shadow'=>'(none|('.$enforce_length.' '.$enforce_length.'( '.$enforce_length.')?( '.$enforce_css_color.')?))',
 		'border-radius'=>$enforce_length.'( '.$enforce_length.'( '.$enforce_length.'( '.$enforce_length.')?)?)?',

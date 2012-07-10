@@ -18,7 +18,7 @@
 	<form title="{!SEARCH}" action="{$SELF_URL*}" target="_self" method="post" class="advanced_member_search">
 		{+START,IF_NON_PASSED_OR_FALSE,GET}{$INSERT_SPAMMER_BLACKHOLE}{+END}
 
-		{+START,SET,active_filter}{+START,LOOP,{$GET,filters_row_a}\,{$GET,filters_row_b}}{_loop_key}~=<{$FIX_ID,{_loop_key}}>,{+END}{+END}
+		{+START,SET,active_filter}{+START,LOOP,{$GET,filters_row_a}\,{$GET,filters_row_b}}{_loop_key}{$?,{$IS_EMPTY,{$CPF_LIST,{_loop_key}}},~=,=}<{$FIX_ID,{_loop_key}}>,{+END}{+END}
 
 		<input type="hidden" name="active_filter" value="{$GET*,active_filter}" />
 
@@ -82,9 +82,13 @@
 			<input type="hidden" name="result__member_{_loop_var*}" value="1" />
 		{+END}
 
-		<p class="proceed_button">
-			<input class="button_page" type="submit" value="{!newsletter:NEWSLETTER_SEND_TO_ALL}" />
-		</p>
+		<hr />
+
+		<div class="float_surrounder">
+			<p class="proceed_button right">
+				<input class="button_page" type="submit" value="{!newsletter:NEWSLETTER_SEND_TO_ALL}" />
+			</p>
+		</div>
 	</form>
 {+END}
 

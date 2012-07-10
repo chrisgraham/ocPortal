@@ -51,11 +51,11 @@
 	</div>
 {+END}
 
-{+START,IF,{$EQ,{_GUID},043ac7d15ce02715ac02309f6e8340ff}}
+{+START,IF,{$GET,gallery_carousel}}
 	<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET^;*,TOOLTIP}','auto',null,null,false,true);" href="{VIEW_URL*}"><img height="140" src="{$THUMBNAIL*,{THUMB_URL},140x140,website_specific,,,height}" /></a>
 {+END}
 
-{+START,IF,{$NEQ,{_GUID},043ac7d15ce02715ac02309f6e8340ff}}
+{+START,IF,{$NOT,{$GET,gallery_carousel}}}
 	<div class="gallery_regular_thumb" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET^;*,TOOLTIP}','auto',null,null,false,true);">
 		<div class="img_thumb_wrap">
 			<a href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>

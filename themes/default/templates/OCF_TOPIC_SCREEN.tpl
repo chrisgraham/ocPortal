@@ -149,12 +149,12 @@
 		</div>
 
 		{+START,IF,{$NOT,{$VALUE_OPTION,disable_forum_dupe_buttons}}}
-			<div class="non_accessibility_redundancy float_surrounder">
+			<div class="non_accessibility_redundancy float_surrounder"><nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
 				<p class="breadcrumbs">
 					<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />
 					{BREADCRUMBS}
 				</p>
-			</div>
+			</div></div>
 		{+END}
 	</div>
 

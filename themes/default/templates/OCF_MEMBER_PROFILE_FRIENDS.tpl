@@ -3,10 +3,14 @@
 
 	<ul class="ocf_profile_friends actions_list">
 		{+START,LOOP,FRIENDS_A}
-			<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');"><a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span></li>
+			<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');">
+				<a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span>
+			</li>
 		{+END}
 		{+START,LOOP,FRIENDS_B}
-			<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');"><a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span></li>
+			<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');">#
+				<a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span>
+			</li>
 		{+END}
 	</ul>
 {+END}

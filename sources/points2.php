@@ -93,14 +93,14 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 		if ($anonymous)
 		{
 			$message_raw=do_lang('GIVEN_POINTS_FOR_ANON',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url)),get_lang($recipient_id));
-			dispatch_notification('received_points',NULL,do_lang('YOU_GIVEN_POINTS',number_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($recipient_id),A_FROM_SYSTEM_UNPRIVILEGED);
+			dispatch_notification('received_points',NULL,do_lang('YOU_GIVEN_POINTS',integer_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($recipient_id),A_FROM_SYSTEM_UNPRIVILEGED);
 		} else
 		{
 			$message_raw=do_lang('GIVEN_POINTS_FOR',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_username)),get_lang($recipient_id));
-			dispatch_notification('received_points',NULL,do_lang('YOU_GIVEN_POINTS',number_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($recipient_id),$sender_id);
+			dispatch_notification('received_points',NULL,do_lang('YOU_GIVEN_POINTS',integer_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($recipient_id),$sender_id);
 		}
 		$message_raw=do_lang('USER_GIVEN_POINTS_FOR',comcode_escape($their_username),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_username)),get_site_default_lang());
-		dispatch_notification('receive_points_staff',NULL,do_lang('USER_GIVEN_POINTS',number_format($amount),NULL,NULL,get_site_default_lang()),$message_raw,NULL,$sender_id);
+		dispatch_notification('receive_points_staff',NULL,do_lang('USER_GIVEN_POINTS',integer_format($amount),NULL,NULL,get_site_default_lang()),$message_raw,NULL,$sender_id);
 	}
 
 	if (get_forum_type()=='ocf')
@@ -120,7 +120,7 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 	if (!$anonymous)
 	{
 		if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'points'))
-			syndicate_described_activity(((is_null($recipient_id)) || (is_guest($recipient_id)))?'points:_ACTIVITY_GIVE_POINTS':'points:ACTIVITY_GIVE_POINTS',$reason,number_format($amount),'','_SEARCH:points:member:'.strval($recipient_id),'','','points',1,NULL,false,$recipient_id);
+			syndicate_described_activity(((is_null($recipient_id)) || (is_guest($recipient_id)))?'points:_ACTIVITY_GIVE_POINTS':'points:ACTIVITY_GIVE_POINTS',$reason,integer_format($amount),'','_SEARCH:points:member:'.strval($recipient_id),'','','points',1,NULL,false,$recipient_id);
 	}
 }
 

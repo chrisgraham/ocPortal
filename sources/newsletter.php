@@ -196,7 +196,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 		foreach ($send_details as $_id=>$is_on)
 		{
-			if ((substr($_id,0,1)=='g') && ($is_on==1))
+			if ((is_string($_id)) && (substr($_id,0,1)=='g') && ($is_on==1))
 			{
 				$id=intval(substr($_id,1));
 				global $SITE_INFO;

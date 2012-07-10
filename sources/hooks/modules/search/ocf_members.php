@@ -95,7 +95,7 @@ class Hook_search_ocf_members
 		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
 		if ($group_count>300) $map['g_is_private_club']=0;
 		if ($map==array()) $map=NULL;
-		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),$map);
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),$map,'ORDER BY g_order');
 		$groups=form_input_list_entry('',true,'---');
 		$default_group=get_param('option__user_group','');
 		$group_titles=array();
@@ -315,8 +315,7 @@ class Hook_search_ocf_members
 		require_code('ocf_members2');
 		$GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']]=$row;
 		$box=render_member_box($row['id']);
-		$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['id']);
-		return do_template('SIMPLE_PREVIEW_BOX',array('SUMMARY'=>$box,'URL'=>$url));
+		return $box;
 	}
 
 	/**

@@ -296,7 +296,7 @@ class Module_galleries
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<8))
 		{
-			add_config_option('GALLERIES_SUBCAT_NARROWIN','galleries_subcat_narrowin','tick','return \'1\';','FEATURE','GALLERIES');
+			add_config_option('GALLERIES_SUBCAT_NARROWIN','galleries_subcat_narrowin','tick','return \'0\';','FEATURE','GALLERIES');
 		}
 	}
 

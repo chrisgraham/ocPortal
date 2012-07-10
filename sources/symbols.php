@@ -282,12 +282,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						case 'site_newestmember':
 							$value=get_value('ocf_newest_member_username');
+							if (is_null($value)) $value='';
 							break;
 						case 'site_nummembers':
 							$value=strval($GLOBALS['FORUM_DRIVER']->get_members());
 							break;
 						case 'site_bestmember':
 							$value=get_value('site_bestmember');
+							if (is_null($value)) $value='';
 							break;
 						case 'forum_numtopics':
 							$value=strval($GLOBALS['FORUM_DRIVER']->get_topics());
@@ -612,7 +614,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if ($DISPLAYED_TITLE!==NULL) $_displayed_title=$DISPLAYED_TITLE->evaluate();
 					if (($DISPLAYED_TITLE!==NULL) && (strip_tags($_displayed_title)!=''))
 					{
-						$value=strip_tags($_displayed_title);
+						$value=html_entity_decode(strip_tags(str_replace(array('&ndash;','&mdash;','&middot;'),array('-','-','|'),$_displayed_title)),ENT_QUOTES,get_charset());
 					} else
 					{
 						$value=$ZONE['zone_header_text_trans'];

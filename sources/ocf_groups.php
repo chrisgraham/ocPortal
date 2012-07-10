@@ -37,7 +37,7 @@ function init__ocf_groups()
 }
 
 /**
- * Get a nice list for selection from the usergroups.
+ * Get a nice list for selection from the usergroups. Suitable for admin use only (does not check hidden status).
  *
  * @param  ?AUTO_LINK	Usergroup selected by default (NULL: no specific default).
  * @return tempcode		The list.
@@ -45,7 +45,7 @@ function init__ocf_groups()
 function ocf_nice_get_usergroups($it=NULL)
 {
 	$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
-	$_m=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),($group_count>200)?array('g_is_private_club'=>0):NULL);
+	$_m=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),($group_count>200)?array('g_is_private_club'=>0):NULL,'ORDER BY g_order');
 	$entries=new ocp_tempcode();
 	foreach ($_m as $m)
 	{

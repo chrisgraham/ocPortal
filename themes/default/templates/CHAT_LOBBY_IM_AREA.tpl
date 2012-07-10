@@ -5,7 +5,7 @@
 			<textarea class="input_required im_post_field" onkeypress="if (enter_pressed(event)) { cancel_bubbling(event); return false; } return true;" onkeyup="{+START,IF,{$NOT,{$MOBILE}}}manage_scroll_height(this); {+END}if (enter_pressed(event)) { return chat_post(event,{ROOM_ID*},'post_{ROOM_ID*}','',''); set_cookie('last_chat_msg_{ROOM_ID;}',''); return true; } else { set_cookie('last_chat_msg_{ROOM_ID;}',this.value); } " id="post_{ROOM_ID*}" name="post_{ROOM_ID*}" cols="30" rows="1"></textarea>
 
 			{+START,IF,{$AND,{$OCF},{$JS_ON}}}
-				<a class="horiz_field_sep" href="#" title="{!EMOTICONS}: {!LINK_NEW_WINDOW}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post_{ROOM_ID*}{$KEEP*;,0,1}'),'emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;"><img alt="" src="{$IMG*,ocf_emoticons/smile}" /></a>
+				<a rel="nofollow" class="horiz_field_sep" href="#" title="{!EMOTICONS}: {!LINK_NEW_WINDOW}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post_{ROOM_ID*}{$KEEP*;,0,1}'),'emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;"><img alt="" src="{$IMG*,ocf_emoticons/smile}" /></a>
 			{+END}
 
 			<input class="button_micro" type="button" onclick="return chat_post(event,{ROOM_ID*},'post_{ROOM_ID*}','','');" value="{!_POST}" />

@@ -272,7 +272,7 @@ class Module_catalogues
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'projects','group_id'=>$group_id));
 			}
 			//add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_PROJECTS_TITLE','_SEARCH:catalogues:type=index:id=projects');
-			$projects=add_menu_item_simple('collab_features',NULL,'DEFAULT_CATALOGUE_PROJECTS_TITLE');
+			$projects=add_menu_item_simple('collab_features',NULL,'_DEFAULT_CATALOGUE_PROJECTS_TITLE');
 			add_menu_item_simple('collab_features',$projects,'VIEW','_SEARCH:catalogues:type=index:id=projects',0,0,true,do_lang('ZONE_BETWEEN'),1);
 			add_menu_item_simple('collab_features',$projects,'ADD','_SEARCH:cms_catalogues:type=add_entry:catalogue_name=projects',0,0,true,do_lang('ZONE_BETWEEN'),1);
 
@@ -341,7 +341,7 @@ class Module_catalogues
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'faqs','group_id'=>$group_id));
 			}
-			add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_FAQS_TITLE','_SEARCH:catalogues:type=index:id=faqs');
+			add_menu_item_simple('main_content',NULL,'_DEFAULT_CATALOGUE_FAQS_TITLE','_SEARCH:catalogues:type=index:id=faqs',0,0,true,do_lang('DEFAULT_CATALOGUE_FAQS_TITLE'));
 
 			// Contacts
 			actual_add_catalogue('contacts',lang_code_to_default_content('CONTACTS',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_CONTACTS_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',30);
@@ -524,7 +524,7 @@ class Module_catalogues
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
-			add_config_option('CATALOGUES_SUBCAT_NARROWIN','catalogues_subcat_narrowin','tick','return \'1\';','FEATURE','CATALOGUES');
+			add_config_option('CATALOGUES_SUBCAT_NARROWIN','catalogues_subcat_narrowin','tick','return \'0\';','FEATURE','CATALOGUES');
 		}
 	}
 

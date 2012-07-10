@@ -11,9 +11,9 @@
 	{+END}
 
 	{+START,IF_PASSED,BREADCRUMBS}{+START,IF_NON_EMPTY,{BREADCRUMBS}}
-		<p>
+		<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p>
 			{!LOCATED_IN,{BREADCRUMBS}}
-		</p>
+		</p></nav>
 	{+END}{+END}
 
 	{+START,IF_PASSED,URL}

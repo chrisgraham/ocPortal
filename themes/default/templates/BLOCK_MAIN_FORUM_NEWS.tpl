@@ -6,7 +6,7 @@
 	</div>
 
 	{+START,IF_NON_EMPTY,{ARCHIVE_URL}}
-		<ul class="horizontal_links associated_links_block_group">
+		<ul class="horizontal_links associated_links_block_group force_margin">
 			<li><a href="{ARCHIVE_URL*}">{!VIEW_ARCHIVE}</a></li>
 		</ul>
 	{+END}

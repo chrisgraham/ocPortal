@@ -4,7 +4,7 @@
 	</h3>
 	<ul role="navigation" class="actions_list">
 		<li>
-			<form title="{!LOAD} {$STRIP_TAGS,{TITLE|}}" action="#" method="post" class="inline" onsubmit="var explanation=opener.document.getElementById('explanation'); var message=opener.document.getElementById('message'); explanation.value='{EXPLANATION*^;}'; message.value='{MESSAGE*^;}'; if (typeof window.faux_close!='undefined') window.faux_close(); else window.close();">
+			<form title="{!LOAD} {$STRIP_TAGS,{TITLE|}}" action="#" method="post" class="inline" onsubmit="var explanation=get_main_ocp_window().document.getElementById('explanation'); var message=get_main_ocp_window().document.getElementById('message'); explanation.value='{EXPLANATION*^;}'; message.value='{MESSAGE*^;}'; if (typeof window.faux_close!='undefined') window.faux_close(); else window.close();">
 				<div class="inline">
 					<input class="button_hyperlink" type="submit" value="{!LOAD} {$STRIP_TAGS,{TITLE|}}" />
 				</div>
