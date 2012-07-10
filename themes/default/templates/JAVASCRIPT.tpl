@@ -439,6 +439,14 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 	}
 }
 
+/* Find the main ocPortal window */
+function get_main_ocp_window()
+{
+	if (opener) return opener;
+	if (parent) return parent;
+	return window;
+}
+
 function doc_onmouseout()
 {
 	if (typeof window.orig_helper_text!='undefined')

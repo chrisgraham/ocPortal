@@ -591,7 +591,7 @@ function do_emoticon(field_name,p,_opener)
 	var element;
 	if (_opener)
 	{
-		element=opener.document.getElementById(field_name);
+		element=get_main_ocp_window().document.getElementById(field_name);
 	} else
 	{
 		element=document.getElementById(field_name);
@@ -614,11 +614,11 @@ function do_emoticon(field_name,p,_opener)
 
 function do_attachment(field_name,id,description)
 {
-	if (!opener.areaedit_editors) return;
+	if (!get_main_ocp_window().areaedit_editors) return;
 
 	if (typeof description=='undefined') var description='';
 
-	var element=opener.document.getElementById(field_name);
+	var element=get_main_ocp_window().document.getElementById(field_name);
 	element=ensure_true_id(element,field_name);
 
 	var comcode;
@@ -784,9 +784,9 @@ function insertTextbox(element,text,sel,plain_insert,html)
 }
 function insertTextboxOpener(element,text,sel,plain_insert,html)
 {
-	if ((typeof sel=='undefined') || (!sel)) var sel=opener.document.selection?opener.document.selection:null;
+	if ((typeof sel=='undefined') || (!sel)) var sel=get_main_ocp_window().document.selection?get_main_ocp_window().document.selection:null;
 
-	opener.insertTextbox(element,text,sel,plain_insert,html);
+	get_main_ocp_window().insertTextbox(element,text,sel,plain_insert,html);
 }
 
 function getSelectedHTML(editor)
