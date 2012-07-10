@@ -396,6 +396,15 @@ class Hook_addon_registry_core_abstract_components
 				'WIDTH'=>'',
 		));
 		$boxes->attach($box);
+		$box=do_lorem_template('STANDARDBOX_' . $type, array(
+				'CONTENT'=>lorem_sentence(),
+				'LINKS'=>$links,
+				'META'=>$meta,
+				'OPTIONS'=>placeholder_array(),
+				'TITLE'=>'',
+				'TOP_LINKS'=>placeholder_link(),
+				'WIDTH'=>'',
+		));
 		$boxes->attach($box);
 
 		return array(

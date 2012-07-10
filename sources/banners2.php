@@ -35,7 +35,7 @@
  * @param  SHORT_INTEGER	The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
  * @param  ?TIME				The banner expiry date (NULL: never expires)
- * @param  ?USER				The banners submitter (NULL: current member)
+ * @param  ?MEMBER			The banners submitter (NULL: current member)
  * @param  BINARY				Whether the banner has been validated
  * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
  * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)

@@ -132,10 +132,13 @@ function script_load_stuff()
 				var stuck_nav=stuck_navs[i];
 				var stuck_nav_height=find_height(stuck_nav,true,true);
 				var pos=find_pos_y(stuck_nav.parentNode);
-				stuck_nav.style.paddingTop='0';
 				if (stuck_nav_height<get_window_height())
 				{
-					stuck_nav.style.paddingTop=(get_window_scroll_y()-pos)+'px';
+					var new_pt=(get_window_scroll_y()-pos)+'px';
+					stuck_nav.style.paddingTop=new_pt;
+				} else
+				{
+					stuck_nav.style.paddingTop='0';
 				}
 			}
 		} );

@@ -247,7 +247,7 @@ function ocp_mb_ucwords($in)
 
 	if (function_exists('mb_convert_case')) return @mb_convert_case($in,MB_CASE_TITLE,get_charset());
 
-	return /*ucwords*/($in);
+	return is_ascii_string($in)?ucwords($in):$in;
 }
 
 /**
@@ -262,7 +262,7 @@ function ocp_mb_strtolower($in)
 
 	if (function_exists('mb_strtolower')) return @mb_strtolower($in,get_charset());
 
-	return /*strtolower*/($in);
+	return is_ascii_string($in)?strtolower($in):$in;
 }
 
 /**
@@ -277,7 +277,23 @@ function ocp_mb_strtoupper($in)
 
 	if (function_exists('mb_strtoupper')) return @mb_strtoupper($in,get_charset());
 
-	return /*strtoupper*/($in);
+	return is_ascii_string($in)?strtoupper($in):$in;
+}
+
+/**
+ * Find if we a string is ASCII, and hence we can use non-UTF-safe functions on it.
+ *
+ * @param  string			String to test
+ * @return boolean		Whether it is ASCII
+ */
+function is_ascii_string($x)
+{
+	$l=strlen($x);
+	for ($i=0;$i<$l;$i++)
+	{
+		if (ord($x[$i])>=128) return false;
+	}
+	return true;
 }
 
 /**

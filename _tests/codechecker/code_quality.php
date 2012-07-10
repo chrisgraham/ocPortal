@@ -1732,7 +1732,7 @@ function check_expression($e,$assignment=false,$equate_false=false,$function_gua
 		$type_b=check_expression($e[2],false,false,$function_guard);
 		ensure_type(array('integer','float','string'),$type_a,$c_pos-1,'Can only use arithmetical comparators with numbers or strings');
 		ensure_type(array('integer','float','string'),$type_b,$c_pos,'Can only use arithmetical comparators with numbers or strings');
-		ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symettric operands ('.$type_a.' vs '.$type_b.')');
+		ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symmetric operands ('.$type_a.' vs '.$type_b.')');
 		return 'boolean';
 	}
 	if (in_array($e[0],array('IS_EQUAL','IS_IDENTICAL','IS_NOT_IDENTICAL','IS_NOT_EQUAL')))
@@ -1765,7 +1765,7 @@ function check_expression($e,$assignment=false,$equate_false=false,$function_gua
 		if (strpos($e[0],'IDENTICAL')===false)
 		{
 			if ($type_b=='NULL') log_warning('Comparing to NULL is considered bad',$c_pos);
-			$passes=ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symettric operands ('.$type_a.' vs '.$type_b.')');
+			$passes=ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symmetric operands ('.$type_a.' vs '.$type_b.')');
 			if ($passes) infer_expression_type_to_variable_type($type_a,$e[2]);
 		}
 		return 'boolean';

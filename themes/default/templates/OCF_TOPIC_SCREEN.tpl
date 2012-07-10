@@ -154,7 +154,7 @@
 					<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />
 					{BREADCRUMBS}
 				</p>
-			</div></div>
+			</nav></div>
 		{+END}
 	</div>
 

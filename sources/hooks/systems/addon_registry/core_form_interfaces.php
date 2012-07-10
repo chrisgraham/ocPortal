@@ -1381,7 +1381,7 @@ class Hook_addon_registry_core_form_interfaces
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>true,
-			'NAME'=>$name,
+			'NAME'=>'',
 			'PRETTY_NAME'=>lorem_word(),
 			'DESCRIPTION'=>lorem_sentence_html(),
 			'DESCRIPTION_SIDE'=>'',
@@ -1629,7 +1629,7 @@ class Hook_addon_registry_core_form_interfaces
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>true,
-			'NAME'=>$name,
+			'NAME'=>'',
 			'PRETTY_NAME'=>lorem_word(),
 			'DESCRIPTION'=>lorem_sentence_html(),
 			'DESCRIPTION_SIDE'=>'',

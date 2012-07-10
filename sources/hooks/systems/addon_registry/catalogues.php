@@ -455,7 +455,7 @@ class Hook_addon_registry_catalogues
 
 
 		$row=new ocp_tempcode();
-		$entries=new ocp_tempcode();
+		$entry_fields=new ocp_tempcode();
 		$head=new ocp_tempcode();
 		foreach (placeholder_array() as $v)
 		{
@@ -470,26 +470,21 @@ class Hook_addon_registry_catalogues
 				'FIELD'=>$v,
 				'FIELDTYPE'=>'text'
 			)));
-			$entries->attach(do_lorem_template('CATALOGUE_links_TABULAR_ENTRY_FIELD', array(
+			$entry_fields->attach(do_lorem_template('CATALOGUE_links_TABULAR_ENTRY_FIELD', array(
 				'FIELDID'=>placeholder_random_id(),
 				'ENTRYID'=>placeholder_random_id(),
 				'VALUE'=>lorem_phrase()
 			)));
 		}
 		$row->attach(do_lorem_template('CATALOGUE_links_TABULAR_ENTRY_WRAP', array(
-			'FIELDS_TABULAR'=>$head,
-			'VIEW_URL'=>placeholder_url(),
-			'EDIT_URL'=>placeholder_url(),
-			'FIELD_1_PLAIN'=>lorem_phrase()
-		)));
-		$row->attach(do_lorem_template('CATALOGUE_links_TABULAR_ENTRY_WRAP', array(
-			'FIELDS_TABULAR'=>$entries,
+			'FIELDS_TABULAR'=>$entry_fields,
 			'VIEW_URL'=>placeholder_url(),
 			'EDIT_URL'=>placeholder_url(),
 			'FIELD_1_PLAIN'=>lorem_phrase()
 		)));
 		$content=do_lorem_template('CATALOGUE_links_TABULAR_WRAP', array(
 			'CATALOGUE'=>lorem_word(),
+			'HEAD'=>$head,
 			'CONTENT'=>$row,
 			'FIELD_COUNT'=>"3"
 		));
