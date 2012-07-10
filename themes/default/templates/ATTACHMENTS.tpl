@@ -22,5 +22,5 @@
 {+END}
 
 <!--
-<p>[ <a target="_blank" href="{$FIND_SCRIPT*,attachment_popup}?field_name=post{$KEEP*;,0,1}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,attachment_popup}?field_name=post{$KEEP*;,0,1}'),'site_attachment_chooser','width=550,height=600,status=no,resizable=yes,scrollbars=yes'); return false;" class="external_link posting_form_sup_link">{!ATTACHMENT_POPUP}</a> ]</p>
+<p>[ <a rel="nofollow" target="_blank" href="{$FIND_SCRIPT*,attachment_popup}?field_name=post{$KEEP*;,0,1}" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,attachment_popup}?field_name=post{$KEEP*;,0,1}'),'site_attachment_chooser','width=550,height=600,status=no,resizable=yes,scrollbars=yes'); return false;" class="external_link posting_form_sup_link">{!ATTACHMENT_POPUP}</a> ]</p>
 -->

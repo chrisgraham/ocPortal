@@ -19,7 +19,16 @@
  */
 
 /**
- * Inerit from a CSS file to create a string for a (possibly theme-gen) modified version of that file.
+ * Standard code module initialisation function.
+ */
+function init__css_and_js()
+{
+	global $CSS_COMPILE_ACTIVE_THEME;
+	$CSS_COMPILE_ACTIVE_THEME='default';
+}
+
+/**
+ * Inherit from a CSS file to create a string for a (possibly theme-gen) modified version of that file.
  *
  * @param  ID_TEXT		Source CSS file
  * @param  ID_TEXT		Source theme
@@ -82,7 +91,7 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 	fix_permissions($temp_file);
 
 	// Load up as Tempcode
-	$_sheet=_css_compile($destination_theme,$css_file.'__tmp_copy',$temp_file,false);
+	$_sheet=_css_compile($destination_theme,$theme,$css_file.'__tmp_copy',$temp_file,false);
 	unlink($temp_file);
 	sync_file($temp_file);
 	$sheet=$_sheet[1];
@@ -165,6 +174,7 @@ function js_compile($j,$js_cache_path,$minify=true)
 /**
  * Compile a CSS file.
  *
+ * @param  ID_TEXT		The theme the file is being loaded for
  * @param  ID_TEXT		The theme the file is in
  * @param  ID_TEXT		Name of the CSS file
  * @param  PATH			Full path to the CSS file
@@ -173,7 +183,7 @@ function js_compile($j,$js_cache_path,$minify=true)
  */
 function css_compile($theme,$c,$fullpath,$css_cache_path,$minify=true)
 {
-	list($success_status,$out)=_css_compile($theme,$c,$fullpath,$minify);
+	list($success_status,$out)=_css_compile($active_theme,$theme,$c,$fullpath,$minify);
 	$css_file=@fopen($css_cache_path,'wt');
 	if ($css_file===false) intelligent_write_error($css_cache_path);
 	if (fwrite($css_file,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
@@ -194,6 +204,8 @@ function css_compile($theme,$c,$fullpath,$css_cache_path,$minify=true)
  */
 function _css_ocp_include($matches)
 {
+	global $CSS_COMPILE_ACTIVE_THEME;
+
 	$theme=$matches[1];
 	$c=$matches[3];
 	if (($theme=='default') && ($matches[2]=='css'))
@@ -206,19 +218,20 @@ function _css_ocp_include($matches)
 			$fullpath=get_file_base().'/themes/'.filter_naughty($theme).'/'.filter_naughty($matches[2]).'/'.filter_naughty($c).'.css';
 	}
 	if (!is_file($fullpath)) return array(false,'');
-	return _css_compile($theme,$c,$fullpath);
+	return _css_compile($CSS_COMPILE_ACTIVE_THEME,$theme,$c,$fullpath);
 }
 
 /**
  * Return a specific compiled CSS file.
  *
+ * @param  ID_TEXT		The theme the file is being loaded for
  * @param  string			Theme name
  * @param  string			The CSS file required
  * @param  PATH			Full path to CSS file (file is in uncompiled Tempcode format)
  * @param  boolean		Whether to also do minification
  * @return array			A pair: success status, The text of the compiled file
  */
-function _css_compile($theme,$c,$fullpath,$minify=true)
+function _css_compile($active_theme,$theme,$c,$fullpath,$minify=true)
 {
 	global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
 	$keep_markers=$KEEP_MARKERS;
@@ -234,9 +247,11 @@ function _css_compile($theme,$c,$fullpath,$minify=true)
 	require_code('tempcode_compiler');
 	global $ATTACHED_MESSAGES_RAW;
 	$num_msgs_before=count($ATTACHED_MESSAGES_RAW);
-	$css=_do_template($theme,(strpos($fullpath,'/css_custom/')!==false)?'/css_custom/':'/css/',$c,$c,user_lang(),'.css');
+	$css=_do_template($theme,(strpos($fullpath,'/css_custom/')!==false)?'/css_custom/':'/css/',$c,$c,user_lang(),'.css',$active_theme);
 	$out=$css->evaluate();
 	$num_msgs_after=count($ATTACHED_MESSAGES_RAW);
+	global $CSS_COMPILE_ACTIVE_THEME;
+	$CSS_COMPILE_ACTIVE_THEME=$active_theme;
 	$out=preg_replace_callback('#\@ocp\_include\(\'?(\w+)/(\w+)/(\w+)\'?\);#','_css_ocp_include',$out);
 	$out=preg_replace('#/\*\s*\*/#','',$out); // strip empty comments (would have encapsulated Tempcode comments)
 	if (get_custom_file_base()!=get_file_base())

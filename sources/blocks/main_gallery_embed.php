@@ -180,7 +180,7 @@ class Block_main_gallery_embed
 						$thumb_url=ensure_thumbnail($row_image['url'],$row_image['thumb_url'],'galleries','images',$row_image['id']);
 						$thumb=do_image_thumb($thumb_url,'',true);
 						$full_url=$row_image['url'];
-						$file_size=url_is_local($full_url)?strval(filesize(get_custom_file_base().'/'.rawurldecode($full_url))):'';
+						$file_size=url_is_local($full_url)?file_exists(get_custom_file_base().'/'.rawurldecode($full_url))?strval(filesize(get_custom_file_base().'/'.rawurldecode($full_url))):'':'';
 						if (url_is_local($full_url)) $full_url=get_custom_base_url().'/'.$full_url;
 						$thumb_url=$row_image['thumb_url'];
 						if (url_is_local($thumb_url)) $thumb_url=get_custom_base_url().'/'.$thumb_url;

@@ -153,6 +153,7 @@ function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=N
 				// See if it gets filtered
 				if (!array_key_exists(substr($row['trans_name'],4),$to_keep)) continue;
 
+				require_lang('ocf');
 				$test=do_lang('SPECIAL_CPF__'.$row['trans_name'],NULL,NULL,NULL,NULL,false);
 				if (!is_null($test)) $row['trans_name']=$test;
 			}

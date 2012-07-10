@@ -514,16 +514,22 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 					$found=$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type];
 				}
 
-				if (isset($GLOBALS['CURRENT_SHARE_USER']))
+				if (!is_null($found))
 				{
-					$file_path=get_custom_file_base().'/themes/'.$found[0].$found[1].$codename.$suffix;
-					if (!is_file($file_path))
-						$file_path=get_file_base().'/themes/'.$found[0].$found[1].$codename.$suffix;
+					if (isset($GLOBALS['CURRENT_SHARE_USER']))
+					{
+						$file_path=get_custom_file_base().'/themes/'.$found[0].$found[1].$codename.$suffix;
+						if (!is_file($file_path))
+							$file_path=get_file_base().'/themes/'.$found[0].$found[1].$codename.$suffix;
+					} else
+					{
+						$file_path=((($theme=='default') && ($suffix!='.css'))?get_file_base():get_custom_file_base()).'/themes/'.$found[0].$found[1].$codename.$suffix;
+					}
+					$tcp_time=@filemtime($tcp_path);
 				} else
 				{
-					$file_path=((($theme=='default') && ($suffix!='.css'))?get_file_base():get_custom_file_base()).'/themes/'.$found[0].$found[1].$codename.$suffix;
+					$tcp_time=false;
 				}
-				$tcp_time=@filemtime($tcp_path);
 			}
 			if ((!$support_smart_decaching) || (($tcp_time!==false) && (is_file($file_path)))/*if in install can be found yet no file at path due to running from data.ocp*/ && ($found!==NULL))
 			{

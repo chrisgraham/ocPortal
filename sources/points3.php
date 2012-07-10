@@ -112,7 +112,7 @@ function points_profile($member_id_of,$member_id_viewing)
 				$reason=get_translated_tempcode($myrow['reason']);
 			}
 
-			$charges->attach(results_entry(array(escape_html($date),escape_html($amount),escape_html($fromname),escape_html($toname),$reason)));
+			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($fromname),escape_html($toname),$reason)));
 		}
 		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'start',$max,'max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fgfdgfdgfdgfdger4gtrhg',false,'tab__points');
 
@@ -251,7 +251,7 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 			$reason=get_translated_tempcode($myrow['reason']);
 		}
 
-		$out->attach(results_entry(array(escape_html($date),escape_html($amount),$_fromname,$_toname,$reason)));
+		$out->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),$_fromname,$_toname,$reason)));
 	}
 	$out=results_table(do_lang_tempcode('_POINTS',escape_html($viewing_name)),$start,'gift_start',$max,'gift_max',$max_rows,$fields_title,$out,$sortables,$sortable,$sort_order,'gift_sort',NULL,NULL,NULL,8,'gfhfghtrhhjghgfhfgf',false,'tab__points');
 

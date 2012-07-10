@@ -398,8 +398,12 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 			{
 				$keep=symbol_tempcode('KEEP');
 				$_url=new ocp_tempcode();
-				$_url->attach(find_script('attachment').'?id='.urlencode($attachment['id']).$keep->evaluate().'&for_session=');
-				$_url->attach(symbol_tempcode('SESSION_HASHED'));
+				$_url->attach(find_script('attachment').'?id='.urlencode($attachment['id']).$keep->evaluate());
+				if (get_option('anti_leech')=='1')
+				{
+					$_url->attach('&for_session=');
+					$_url->attach(symbol_tempcode('SESSION_HASHED'));
+				}
 			}
 
 			$temp_tpl=hyperlink($_url,($attachment['a_description']!='')?$attachment['a_description']:$attachment['a_original_filename'],true);

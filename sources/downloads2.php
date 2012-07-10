@@ -843,6 +843,7 @@ function delete_download($id,$leave=false)
 
 	// Delete from database
 	$GLOBALS['SITE_DB']->query_delete('download_downloads',array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_delete('download_logging',array('id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'downloads','rating_for_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'downloads','trackback_for_id'=>$id));
 

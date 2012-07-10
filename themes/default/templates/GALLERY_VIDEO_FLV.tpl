@@ -31,7 +31,7 @@ addEventListenerAbstract(window,'load',function () {
 		autostart: false,
 		duration: {LENGTH*},
 		players: [
-			{ type: "flash", src: "{$BASE_URL#}/data/flvplayer.swf?rand={$RAND*}" },
+			{ type: "flash", src: "{$BASE_URL#}/data/flvplayer.swf{+START,IF,{$NOT,{$BROWSER_MATCHES,bot}}}?rand={$RAND*}{+END}" },
 			{ type: "html5" }
 		],
 		provider: '{$?,{$EQ,{$SUBSTR,{URL},-4},.mp3},sound,video}',

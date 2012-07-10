@@ -1669,7 +1669,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
-	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($js_cache_path)!==0) && (!is_browser_decacheing()) && (!in_safe_mode());
+	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@(filesize($js_cache_path)!=0)) && (!is_browser_decacheing()) && (!in_safe_mode());
 
 	if (($support_smart_decaching) || (!$is_cached))
 	{
@@ -1838,6 +1838,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 	// Make sure the CSS file exists
 	if ($theme===NULL)
 		$theme=@method_exists($GLOBALS['FORUM_DRIVER'],'get_theme')?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
+	$active_theme=$theme;
 	$dir=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.filter_naughty(user_lang());
 	if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))
 	{
@@ -1860,7 +1861,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 
 	global $CACHE_TEMPLATES;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
-	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@filesize($css_cache_path)!==0) && (!is_browser_decacheing()) && (!in_safe_mode());
+	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@(filesize($css_cache_path)!=0)) && (!is_browser_decacheing()) && (!in_safe_mode());
 
 	if (($support_smart_decaching) || (!$is_cached) || ($text_only))
 	{
@@ -1876,7 +1877,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 	if (((!$is_cached) || (($support_smart_decaching) && (@(filemtime($css_cache_path)<filemtime($fullpath)) && (@filemtime($fullpath)<time())))))
 	{
 		require_code('css_and_js');
-		css_compile($theme,$c,$fullpath,$css_cache_path,$minify);
+		css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify);
 	}
 
 	if (filesize($css_cache_path)==0) return '';

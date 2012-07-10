@@ -324,7 +324,7 @@ class Module_groups
 		$title=get_page_title($club?'CLUB':'USERGROUP',true,array(escape_html($name)));
 
 		// Leadership
-		if (!is_null($group['g_group_leader']))
+		if ((!is_null($group['g_group_leader'])) && (!is_null($GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader']))))
 		{
 			$leader_name=$GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader']);
 			if (is_null($leader_name)) $leader_name=do_lang('UNKNOWN');
@@ -596,7 +596,7 @@ class Module_groups
 				$text=do_lang_tempcode('ABOUT_TO_APPLY_FREE_ACCESS',escape_html($name));
 			} else
 			{
-				if (is_null($_leader))
+				if ((is_null($_leader)) || (is_null($GLOBALS['FORUM_DRIVER']->get_username($_leader))))
 				{
 					$text=do_lang_tempcode('ABOUT_TO_APPLY_STAFF',escape_html($name),escape_html(get_site_name()));
 				} else

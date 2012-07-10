@@ -100,9 +100,8 @@ function _symbol_thumbnail($param)
 			}
 			if (strpos($thumb_save_dir,'/')===false) $thumb_save_dir='uploads/'.$thumb_save_dir;
 			if (!file_exists(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
-			$filename=rawurldecode(basename((isset($param[3]) && $param[3] != '')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
+			$filename=rawurldecode(basename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url)); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
 			$save_path=get_custom_file_base().'/'.$thumb_save_dir.'/'.$dimensions.'__'.$filename; // Conclusion... We will save to here
-
 			$value=get_custom_base_url().'/'.$thumb_save_dir.'/'.rawurlencode($dimensions.'__'.$filename);
 
 			// We put a branch in here to preserve the old behaviour when
@@ -125,7 +124,7 @@ function _symbol_thumbnail($param)
 					if (trim($param[5]) == 'width' || trim($param[5]) == 'height')
 					{
 						// We just need to scale to the given dimension
-						$result = convert_image($orig_url,$save_path,(trim($param[5]) == 'width')?$exp_dimensions[0]:-1,(trim($param[5]) == 'height')?$exp_dimensions[1]:-1,-1,false,NULL,false,$only_make_smaller);
+						$result = convert_image($orig_url,$save_path,(trim($param[5]) == 'width')?intval($exp_dimensions[0]):-1,(trim($param[5]) == 'height')?intval($exp_dimensions[1]):-1,-1,false,NULL,false,$only_make_smaller);
 					}
 					elseif (trim($param[5]) == 'crop' || trim($param[5]) == 'pad' || trim($param[5]) == 'pad_horiz_crop_horiz' || trim($param[5]) == 'pad_vert_crop_vert')
 					{
@@ -502,13 +501,15 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		} else
 		{
 			$from_file=http_download_file($from,1024*1024*20/*reasonable limit*/,false);
+			if (is_null($from_file)) $from_file=false;
 		}
 	}
 	if ($from_file===false)
 	{
 		if ($exit_on_error) fatal_exit(do_lang_tempcode('UPLOAD_PERMISSION_ERROR',escape_html($from)));
 		require_code('site');
-		attach_message(do_lang_tempcode('UPLOAD_PERMISSION_ERROR',escape_html($from)),'warn');
+		if (!file_exists(get_custom_file_base().'/uploads/missing_ok'))
+			attach_message(do_lang_tempcode('UPLOAD_PERMISSION_ERROR',escape_html($from)),'warn');
 		return false;
 	}
 	$source=@imagecreatefromstring($from_file);

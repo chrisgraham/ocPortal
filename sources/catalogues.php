@@ -789,8 +789,8 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 					$fields[$i]['effective_value_pure']=do_lang('INTERNAL_ERROR');
 					break;
 				}
-				$fields[$i]['effective_value']=get_translated_tempcode($fields[$i]['effective_value_nontrans']);
-				$fields[$i]['effective_value_pure']=get_translated_text($fields[$i]['effective_value_nontrans']);
+				$fields[$i]['effective_value']=get_translated_tempcode(intval($fields[$i]['effective_value_nontrans']));
+				$fields[$i]['effective_value_pure']=get_translated_text(intval($fields[$i]['effective_value_nontrans']));
 				break;
 			case 'long_trans':
 				$fields[$i]['effective_value_nontrans']=_get_catalogue_entry_field($field_id,$entry_id,'long_trans',$only_field_ids);
@@ -800,8 +800,8 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 					$fields[$i]['effective_value_pure']=do_lang('INTERNAL_ERROR');
 					break;
 				}
-				$fields[$i]['effective_value']=get_translated_tempcode($fields[$i]['effective_value_nontrans']);
-				$fields[$i]['effective_value_pure']=get_translated_text($fields[$i]['effective_value_nontrans']);
+				$fields[$i]['effective_value']=get_translated_tempcode(intval($fields[$i]['effective_value_nontrans']));
+				$fields[$i]['effective_value_pure']=get_translated_text(intval($fields[$i]['effective_value_nontrans']));
 				break;
 			case 'long_text':
 				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,'long',$only_field_ids);

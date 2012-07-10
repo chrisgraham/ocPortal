@@ -28,11 +28,6 @@ function restricted_manually_enabled_backdoor()
 	global $IS_A_COOKIE_LOGIN;
 	$IS_A_COOKIE_LOGIN=true;
 
-	global $SESSION_CONFIRMED;
-	$SESSION_CONFIRMED=1;
-	require_code('users_inactive_occasionals');
-	set_session_id(mt_rand(0,10000000));
-
 	$ks=get_param('keep_su',NULL);
 	if (!is_null($ks))
 	{
@@ -50,6 +45,9 @@ function restricted_manually_enabled_backdoor()
 	{
 		$ret=$GLOBALS['FORUM_DRIVER']->get_guest_id()+1;
 	}
+
+	require_code('users_inactive_occasionals');
+	create_session($ret,1);
 
 	return $ret;
 }

@@ -25,7 +25,7 @@
 		{$SET,dbox_title,<a href="{URL*}">{!VIEW}</a>}
 	{+END}
 	{+START,IF_NON_PASSED,LICENCE}
-		{$SET,dbox_title,<a href="{URL*}">{!MORE_INFO}</a>|<a href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*}&amp;for_session={$SESSION_HASHED}">{!DOWNLOAD_NOW}</a> ({FILE_SIZE*})}
+		{$SET,dbox_title,<a href="{URL*}">{!MORE_INFO}</a>|<a href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}">{!DOWNLOAD_NOW}</a> ({FILE_SIZE*})}
 	{+END}
 	{+START,BOX,{$GET,BOX_TITLE},,med,,{$GET,META},{$GET,dbox_title}}
 		{+START,IF_NON_EMPTY,{IMGCODE}}

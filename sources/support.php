@@ -1429,7 +1429,7 @@ function brand_base_url()
  * See's if the current browser matches some special property code. Assumes users are keeping up on newish browsers (except for IE users, who are 6+)
  *
  * @param  string			The property code
- * @set    android ios wysiwyg windows mac linux odd_os mobile opera ie_decent ie_new ie ie_old gecko konqueror safari odd_browser has_artificial_monopoly has_fanboys quirk__internalised_list_indent quirk__quirk__list_indent_in_ul_instead_of_li chrome ie5 ie6 ie7+ ie8+ ie9+
+ * @set    android ios wysiwyg windows mac linux odd_os mobile opera ie_decent ie_new ie ie_old gecko konqueror safari odd_browser has_artificial_monopoly has_fanboys quirk__internalised_list_indent quirk__quirk__list_indent_in_ul_instead_of_li chrome ie5 ie6 ie7+ ie8+ ie9+ bot
  * @return boolean		Whether there is a match
  */
 function browser_matches($code)
@@ -1457,6 +1457,9 @@ function browser_matches($code)
 
 	switch ($code)
 	{
+		case 'bot':
+			$BROWSER_MATCHES_CACHE[$code]=!is_null(get_bot_type());
+			return $BROWSER_MATCHES_CACHE[$code];
 		case 'android':
 			$BROWSER_MATCHES_CACHE[$code]=strpos($browser,'android')!==false;
 			return $BROWSER_MATCHES_CACHE[$code];

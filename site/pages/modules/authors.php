@@ -223,7 +223,8 @@ class Module_authors
 					if ($i!=0)
 						$downloads_released->attach(do_template('BLOCK_SEPARATOR',array('_GUID'=>'ea789367b15bsddsdsdsc586e6e6536')));
 
-					$downloads_released->attach(get_download_html($myrow));
+					if (has_category_access(get_member(),'downloads',strval($myrow['category_id'])))
+						$downloads_released->attach(get_download_html($myrow));
 				}
 			}
 		}
@@ -243,14 +244,17 @@ class Module_authors
 				$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('author'=>$author,'validated'=>1));
 				foreach ($rows as $i=>$row)
 				{
-					$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),get_module_zone('news'));
-					$_title=get_translated_tempcode($row['title']);
-					$title_plain=get_translated_text($row['title']);
-					$seo_bits=seo_meta_get_for('news',strval($row['id']));
-					$map=array('ID'=>strval($row['id']),'TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'SUBMITTER'=>strval($row['submitter']),'DATE'=>get_timezoned_date($row['date_and_time']),'DATE_RAW'=>strval($row['date_and_time']),'URL'=>$url,'TITLE_PLAIN'=>$title_plain,'TITLE'=>$_title);
-					if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($row['allow_comments']>=1)) $map['COMMENT_COUNT']='1';
-					$tpl=do_template('NEWS_BRIEF',$map);
-					$news_released->attach($tpl);
+					if (has_category_access(get_member(),'news',strval($row['news_category'])))
+					{
+						$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),get_module_zone('news'));
+						$_title=get_translated_tempcode($row['title']);
+						$title_plain=get_translated_text($row['title']);
+						$seo_bits=seo_meta_get_for('news',strval($row['id']));
+						$map=array('ID'=>strval($row['id']),'TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'SUBMITTER'=>strval($row['submitter']),'DATE'=>get_timezoned_date($row['date_and_time']),'DATE_RAW'=>strval($row['date_and_time']),'URL'=>$url,'TITLE_PLAIN'=>$title_plain,'TITLE'=>$_title);
+						if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($row['allow_comments']>=1)) $map['COMMENT_COUNT']='1';
+						$tpl=do_template('NEWS_BRIEF',$map);
+						$news_released->attach($tpl);
+					}
 				}
 			}
 		}
