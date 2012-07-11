@@ -131,14 +131,35 @@ function script_load_stuff()
 			{
 				var stuck_nav=stuck_navs[i];
 				var stuck_nav_height=find_height(stuck_nav,true,true);
-				var pos=find_pos_y(stuck_nav.parentNode);
+				var pos_y=find_pos_y(stuck_nav.parentNode);
 				if (stuck_nav_height<get_window_height())
 				{
-					var new_pt=(get_window_scroll_y()-pos)+'px';
-					stuck_nav.style.paddingTop=new_pt;
+					var extra_height=(get_window_scroll_y()-pos_y);
+					if (extra_height>0)
+					{
+						var width=find_width(stuck_nav);
+						var height=find_height(stuck_nav);
+						var stuck_nav_width=find_width(stuck_nav,true,true);
+						stuck_nav.parentNode.style.width=width+'px';
+						stuck_nav.parentNode.style.height=height+'px';
+						stuck_nav.style.position='fixed';
+						stuck_nav.style.top='0px';
+						stuck_nav.style.width=stuck_nav_width+'px';
+					} else
+					{
+						stuck_nav.parentNode.style.width='';
+						stuck_nav.parentNode.style.height='';
+						stuck_nav.style.position='';
+						stuck_nav.style.top='';
+						stuck_nav.style.width='';
+					}
 				} else
 				{
-					stuck_nav.style.paddingTop='0';
+					stuck_nav.parentNode.style.width='';
+					stuck_nav.parentNode.style.height='';
+					stuck_nav.style.position='';
+					stuck_nav.style.top='';
+					stuck_nav.style.width='';
 				}
 			}
 		} );
