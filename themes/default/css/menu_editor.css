@@ -40,7 +40,7 @@
 }
 
 .docked .menu_editor_rh_side {
-	overflow-y: hidden;
+	overflow-y: scroll;
 	max-height: 280px;
 }
 
