@@ -317,7 +317,7 @@ function sitemaps_xml_initialise($file_path)
 	load_up_all_module_category_permissions($guest_id);
 
 	// Start of file
-	$blob='<'.'?xml version="1.0" encoding="UTF-8"?'.'>
+	$blob='<'.'?xml version="1.0" encoding="'.get_charset().'"?'.'>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	';
 	fwrite($SITEMAPS_OUT_FILE,$blob);
