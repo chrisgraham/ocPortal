@@ -477,6 +477,10 @@ function install_addon($file,$files=NULL)
 	$incompatibilities=explode(',',array_key_exists('incompatibilities',$info)?$info['incompatibilities']:'');
 	$description=$info['description'];
 
+	$GLOBALS['SITE_DB']->query_delete('addons_files',array('addon_name'=>$addon));
+	$GLOBALS['SITE_DB']->query_delete('addons_dependencies',array('addon_name'=>$addon));
+	$GLOBALS['SITE_DB']->query_delete('addons',array('addon_name'=>$addon),'',1);
+
 	$GLOBALS['SITE_DB']->query_delete('addons',array('addon_name'=>$addon),'',1);
 	$GLOBALS['SITE_DB']->query_insert('addons',array(
 		'addon_name'=>$addon,
