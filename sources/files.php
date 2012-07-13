@@ -328,6 +328,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 	$ignore_filename_patterns=array(
 		'\..*\.(png|gif|jpeg|jpg)'=>'.*', // Image meta data file, e.g. ".example.png"
 		'\_vti\_.*'=>'.*', // Frontpage
+		'\.\_.*'=>'.*', // MacOS extended attributes
 	);
 	if (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS)!=0) // Ignore all override directories, for both users and addons
 	{

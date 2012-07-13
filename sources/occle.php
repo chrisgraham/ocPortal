@@ -237,6 +237,8 @@ class virtual_bash
 		unset($table['&amp;']);
 		unset($table['&gt;']);
 		unset($table['&lt;']);
+		unset($table['&quot;']);
+		$html_bak=$this->output[STREAM_STDHTML];
 		$this->output[STREAM_STDHTML]=strtr($this->output[STREAM_STDHTML],$table);
 
 		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
@@ -252,7 +254,7 @@ class virtual_bash
 </response>';
 
 		if ($GLOBALS['XSS_DETECT'])
-			if (ocp_is_escaped($this->output[STREAM_STDHTML])) ocp_mark_as_escaped($output);
+			if (ocp_is_escaped($html_bak)) ocp_mark_as_escaped($output);
 
 		echo $output;
 

@@ -18,7 +18,7 @@
 	<form title="{!SEARCH}" action="{$SELF_URL*}" target="_self" method="post" class="advanced_member_search">
 		{+START,IF_NON_PASSED_OR_FALSE,GET}{$INSERT_SPAMMER_BLACKHOLE}{+END}
 
-		{+START,SET,active_filter}{+START,LOOP,{$GET,filters_row_a}\,{$GET,filters_row_b}}{_loop_key}{$?,{$IS_EMPTY,{$CPF_LIST,{_loop_key}}},~=,=}<{$FIX_ID,{_loop_key}}>,{+END}{+END}
+		{+START,SET,active_filter}{+START,LOOP,{$GET,filters_row_a}\,{$GET,filters_row_b}}{_loop_key}{$?,{$IS_EMPTY,{$CPF_LIST,{_loop_var}}},~=,=}<{$FIX_ID,{_loop_key}}>,{+END}{+END}
 
 		<input type="hidden" name="active_filter" value="{$GET*,active_filter}" />
 
@@ -52,15 +52,15 @@
 	</form>
 </div></div>
 
-{+START,IF_EMPTY,{$_GET,filter}}
+{+START,IF_EMPTY,{$POST,active_filter}}
 	<p>{!member_directory_boxes:MEMBER_BOXES_UNFILTERED,{$SITE_NAME*}}</p>
 {+END}
-{+START,IF_NON_EMPTY,{$_GET,filter}}
-	{+START,IF_EMPTY,{MEMBER_BOXES}}
+{+START,IF_NON_EMPTY,{$_POST,active_filter}}
+	{+START,IF_NON_EMPTY,{MEMBER_BOXES}}
 		<p>{!member_directory_boxes:MEMBER_BOXES_FILTERED,{$SITE_NAME*}}</p>
 	{+END}
 
-	{+START,IF_NON_EMPTY,{MEMBER_BOXES}}
+	{+START,IF_EMPTY,{MEMBER_BOXES}}
 		<p class="nothing_here red_alert">{!search:NO_RESULTS_SEARCH}</p>
 	{+END}
 {+END}

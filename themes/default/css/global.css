@@ -1649,7 +1649,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .field_name_column_shorter {
-	width: 8em;
+	width: 11em;
 }
 
 .field_input_column, .field_value_column {
@@ -3339,13 +3339,9 @@ ul.nl, .nl ul {
 div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;} display: inline-block;/*Needed for IE8*/
 }
-.box___block_side_stored_menu_tree>.box_inner {
-	position: relative;
-}
 .edit_page_link_inline, .edit_menu_link_inline {
 	position: absolute;
 	right: 1px;
-	bottom: 1px;
 	z-index: 10000;
 	margin-top: 3px;
 }

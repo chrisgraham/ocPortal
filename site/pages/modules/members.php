@@ -218,10 +218,6 @@ class Module_members
 
 		$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT r.*'.$extra_select_sql.' '.$query,$max,$start);
-		if (count($rows)==0)
-		{
-			return inform_screen($title,do_lang_tempcode('NO_RESULTS'));
-		}
 		$members=new ocp_tempcode();
 		$member_boxes=array();
 		require_code('templates_results_table');
@@ -241,7 +237,7 @@ class Module_members
 			$box=render_member_box($row['id'],true);
 			$member_boxes[]=$box;
 		}
-		$results_table=results_table(do_lang_tempcode('MEMBERS'),$start,'md_start',$max,'md_max',$max_rows,$fields_title,$members,$sortables,$sortable,$sort_order,'md_sort');
+		$results_table=(count($rows)==0)?new ocp_tempcode():results_table(do_lang_tempcode('MEMBERS'),$start,'md_start',$max,'md_max',$max_rows,$fields_title,$members,$sortables,$sortable,$sort_order,'md_sort');
 
 		$other_ids=array();
 		$_max_rows_to_preload=get_value('max_rows_to_preload');
@@ -261,6 +257,7 @@ class Module_members
 			}
 		}
 
+		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('MEMBERS'),NULL,$start,'md_start',$max,'md_max',$max_rows,NULL,NULL,true,true);
 
 		$symbols=NULL;

@@ -132,7 +132,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 /* Tone it all down for forms inside tabs */
-.tab_surround th, .tab_surround td, .tab_surround .form_table .required {
+.tab_surround tbody th, .tab_surround tbody td, .tab_surround .form_table .required {
 	background: none !important;
 }
 

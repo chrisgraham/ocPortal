@@ -111,6 +111,8 @@ class Hook_Preview_comments
 			'UNVALIDATED'=>'',
 			'IS_SPACER_POST'=>false,
 			'NUM_TO_SHOW_LIMIT'=>'0',
+			'LAST_EDITED_RAW'=>'',
+			'LAST_EDITED'=>'',
 		));
 		return array($tpl,NULL);
 	}

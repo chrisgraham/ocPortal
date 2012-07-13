@@ -774,11 +774,7 @@ msgstr ""
 		$for_base_lang_2=get_lang_file_map($lang,$lang_file,false);
 		$descriptions=get_lang_file_descriptions(fallback_lang(),$lang_file);
 
-		// Just to make sure the posted data is at least partially there, before we wipe out the old file
-		foreach (array_unique(array_merge(array_keys($for_base_lang),array_keys($for_base_lang_2))) as $key)
-		{
-			$val=post_param($key);
-		}
+		if ((count($_POST)==0) && (strtolower(ocp_srv('REQUEST_METHOD'))!='post')) warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 
 		$path=get_custom_file_base().'/lang_custom/'.filter_naughty($lang).'/'.filter_naughty($lang_file).'.ini';
 		$path_backup=$path.'.'.strval(time());
@@ -798,8 +794,8 @@ msgstr ""
 		fwrite($myfile,"[strings]\n");
 		foreach (array_unique(array_merge(array_keys($for_base_lang),array_keys($for_base_lang_2))) as $key)
 		{
-			$val=post_param($key);
-			if (($val!='') && ((!array_key_exists($key,$for_base_lang)) || (str_replace(chr(10),'\n',$val)!=$for_base_lang[$key])))
+			$val=post_param($key,NULL);
+			if (($val!==NULL) && ((!array_key_exists($key,$for_base_lang)) || (str_replace(chr(10),'\n',$val)!=$for_base_lang[$key])))
 			{
 				if (fwrite($myfile,$key.'='.str_replace(chr(10),'\n',$val)."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			}

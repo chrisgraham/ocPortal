@@ -632,7 +632,7 @@ function _fatal_exit($text,$return=false)
 		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <response>
 	<result>
-		<command>'.post_param('command','').'</command>
+		<command>'.xmlentities(post_param('command','')).'</command>
 		<stdcommand></stdcommand>
 		<stdhtml><div xmlns="http://www.w3.org/1999/xhtml">'.((get_param_integer('keep_fatalistic',0)==1)?static_evaluate_tempcode(get_html_trace()):'').'</div></stdhtml>
 		<stdout>'.xmlentities(is_object($text)?str_replace(array('&ldquo;','&rdquo;'),array('"','"'),html_entity_decode(strip_tags($text->evaluate()),ENT_QUOTES,get_charset())):$text).'</stdout>

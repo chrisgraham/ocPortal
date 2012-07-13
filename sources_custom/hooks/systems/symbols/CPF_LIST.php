@@ -18,7 +18,7 @@ class Hook_symbol_CPF_LIST
 			static $cache=array();
 			if (isset($cache[$param[0]])) return $cache[$param[0]];
 
-			if ($param[0]=='m_usergroup')
+			if (($param[0]=='m_primary_group') || ($param[0]==do_lang('GROUP')))
 			{
 				$map=has_specific_permission(get_member(),'see_hidden_groups')?array():array('g_hidden'=>0);
 				$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
