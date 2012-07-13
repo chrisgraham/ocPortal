@@ -53,7 +53,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 		$_cpf_fields=post_param('cpf_fields',NULL);
 		if ($_cpf_fields!==NULL)
 		{
-			$cpf_fields=explode(',', $_cpf_fields);
+			$cpf_fields=explode(',',$_cpf_fields);
 
 			foreach ($cpf_fields as $_field_id)
 			{
@@ -111,7 +111,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 		$tmp_groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true);
 
 		$cpf_ids=array();
-		foreach ($member_cpfs as $cpf_id => $cpf)
+		foreach ($member_cpfs as $cpf_id=>$cpf)
 		{
 			if ((preg_replace('#^((\s)|(<br\s*/?'.'>)|(&nbsp;))*#','',$cpf)==='') && (count($member_cpfs)>15)) continue; // If there are lots of CPFs, and this one seems to have a blank name, skip it (likely corrupt data)
 
@@ -133,7 +133,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 				$view_by_friends=true;
 
 				$view_by_groups=array();
-				foreach ($tmp_groups as $gr_key => $group)
+				foreach ($tmp_groups as $gr_key=>$group)
 				{
 					$view_by_groups[]=$gr_key;
 				}
@@ -142,7 +142,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 				$view_by_guests=($cpf_permissions[0]['guest_view']==1);
 				$view_by_members=($cpf_permissions[0]['member_view']==1);
 				$view_by_friends=($cpf_permissions[0]['friend_view']==1);
-				$view_by_groups=(strlen($cpf_permissions[0]['group_view'])>0)?explode(',',$cpf_permissions[0]['group_view']):array();
+				$view_by_groups=(strlen($cpf_permissions[0]['group_view'])>0)?array_map('intval',explode(',',$cpf_permissions[0]['group_view'])):array();
 			}
 
 			// Work out the CPF name
