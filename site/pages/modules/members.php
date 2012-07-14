@@ -208,6 +208,7 @@ class Module_members
 			$where_clause.=')';
 		}
 		$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members r'.$extra_join_sql.' WHERE '.$where_clause;
+		if (can_arbitrary_groupby()) $query.=' GROUP BY r.id';
 		if ($sortable=='m_join_time')
 		{
 			$query.=' ORDER BY m_join_time '.$sort_order.','.'id '.$sort_order;
@@ -253,7 +254,7 @@ class Module_members
 			$rows=$GLOBALS['FORUM_DB']->query('SELECT r.id'.$extra_select_sql.' '.$query.$or_list);
 			foreach ($rows as $row)
 			{
-				$other_ids[]=$row['id'];
+				$other_ids[]=strval($row['id']);
 			}
 		}
 

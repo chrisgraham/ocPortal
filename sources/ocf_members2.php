@@ -206,7 +206,7 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 			$custom_fields->attach($hook_result);
 	}
 
-	$_usergroups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
+	$_usergroups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id,true);
 	$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true,false,false,$_usergroups);
 	$usergroups=array();
 	foreach ($_usergroups as $u)

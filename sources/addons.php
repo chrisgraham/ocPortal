@@ -50,16 +50,17 @@ function find_updated_addons()
 			if ($available_addon['name']==$addon[3])
 			{
 				$found=true;
-				if ((is_null($addon[0])) || ($available_addon['mtime']<$addon[0]))
+				if ((!is_null($addon[0])) && ($available_addon['mtime']<$addon[0])) // If known to server, and updated
 				{
-					if (!is_null($addon[0])) // If not known to server, we can't say is updated
-						$updated_addons[$addon[3]]=array($addon[1]); // Is known to server though
+					$updated_addons[$addon[3]]=array($addon[1]); // Is known to server though
 				}
 			}
 		}
 		if (!$found) // Don't have our original .tar, so lets say we need to reinstall
 		{
-			$updated_addons[$addon[3]]=array($addon[1]);
+			$mtime=find_addon_effective_mtime($addon[3]);
+			if ((!is_null($addon[0])) && (!is_null($mtime)) && ($mtime<$addon[0])) // If server has it and is newer
+				$updated_addons[$addon[3]]=array($addon[1]);
 		}
 	}
 	return $updated_addons;
@@ -181,6 +182,27 @@ function find_installed_addons($just_non_bundled=false)
 }
 
 /**
+ * Find effective modification date of an addon.
+ *
+ * @param  string		The name of the addon
+ * @return ?TIME		Modification time (NULL: could not find any files)
+ */
+function find_addon_effective_mtime($addon_name)
+{
+	$files_rows=array_unique(collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename'),array('addon_name'=>$addon_name))));
+	$mtime=mixed();
+	foreach ($files_rows as $filename)
+	{
+		if (file_exists(get_file_base().'/'.$filename))
+		{
+			$_mtime=filemtime(get_file_base().'/'.$filename);
+			$mtime=is_null($mtime)?$_mtime:max($mtime,$_mtime);
+		}
+	}
+	return $mtime;
+}
+
+/**
  * Find all the available addons (addons in imports/mods that are not necessarily installed).
  *
  * @return array		List of maps describing the available addons
@@ -219,11 +241,12 @@ function find_available_addons()
 
 			$files_rows=tar_get_directory($tar);
 			$info['files']='';
+			$mtime=filemtime($full);
 			foreach ($files_rows as $file_row)
 			{
 				$info['files'].=$file_row['path'].chr(10);
 			}
-			$info['mtime']=filemtime($full);
+			$info['mtime']=$mtime;
 
 			$addons_available_for_installation[$file]=$info;
 		}
