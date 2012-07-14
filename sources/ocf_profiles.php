@@ -55,6 +55,7 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 	uasort($tabs,'multi_sort');
 
 	require_javascript('javascript_profile');
+	require_javascript('javascript_ajax');
 
 	load_up_all_self_page_permissions($member_id_viewing);
 

@@ -84,7 +84,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 			} else
 			{
 				$stock=post_param('avatar_stock');
-				$avatar_url=find_theme_image($stock,false,true);
+				$avatar_url=($stock=='')?'':find_theme_image($stock,false,true);
 			}
 
 			require_code('ocf_members_action');

@@ -57,6 +57,9 @@ class Hook_Profiles_Tabs_edit
 	{
 		$title=do_lang_tempcode('EDIT_EM');
 
+		require_lang('ocf');
+		require_css('ocf');
+
 		$order=200;
 
 		if (($leave_to_ajax_if_possible) && (strtoupper(ocp_srv('REQUEST_METHOD'))!='POST')) return array($title,NULL,$order);
