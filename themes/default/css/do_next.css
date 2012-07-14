@@ -45,6 +45,19 @@
 	height: 90px;
 }
 
+.do_next_item>div {
+	display: table;
+	height: 100%;
+	width: 100%;
+}
+.do_next_item>div>div {
+	display: table-row;
+}
+.do_next_item>div>div>div {
+	display: table-cell;
+	vertical-align: middle;
+}
+
 .do_next_item:hover, .do_theme_item:hover {
 	background-color: {$GET,area_hover_background};
 	cursor: pointer;

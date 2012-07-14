@@ -4,16 +4,22 @@
 	{+START,IF_NON_EMPTY,{DOC}}<div id="doc_{I2}" style="display: none">{DOC}</div>{+END}
 
 	<div>
-		{+START,IF_EMPTY,{WARNING}}
-			<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{LINK*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
-		{+END}
-		{+START,IF_NON_EMPTY,{WARNING}}
-			<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event); var t=this; window.fauxmodal_confirm('{WARNING*;}',function(answer) { if (answer) click_link(t); }); return false;" href="{LINK*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
-		{+END}
-	</div>
+		<div>
+			<div>
+				<div>
+					{+START,IF_EMPTY,{WARNING}}
+						<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{LINK*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
+					{+END}
+					{+START,IF_NON_EMPTY,{WARNING}}
+						<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event); var t=this; window.fauxmodal_confirm('{WARNING*;}',function(answer) { if (answer) click_link(t); }); return false;" href="{LINK*}"><img alt="{$STRIP_TAGS*,{DESCRIPTION}}" src="{$IMG*,bigicons/{PICTURE*}}" /></a>
+					{+END}
+				</div>
 
-	<div>
-		<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{LINK*}">{DESCRIPTION*}</a>
+				<div>
+					<a {+START,IF_PASSED,TARGET}target="{TARGET*}" {+END}onclick="cancel_bubbling(event);" href="{LINK*}">{DESCRIPTION*}</a>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	{+START,IF_PASSED,AUTO_ADD}
