@@ -19,8 +19,6 @@
 	</div>
 
 	<div class="comcode_overlay_dismiss">
-		<hr class="spaced_rule" />
-
 		<p class="associated_link suggested_link"><a href="#" onclick="var bi=document.getElementById('main_website_inner'); if (bi) set_opacity(bi,1.0); document.getElementById('{$GET,RAND_ID_OVERLAY}').style.display='none'; if ('{ID;}'!='') set_cookie('og_{ID*;}','1',365); return false;">{!DISMISS}</a></p>
 	</div>
 </div></div>
