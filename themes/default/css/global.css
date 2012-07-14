@@ -267,7 +267,7 @@ th, .fake_th {
 	font-weight: bold;
 	text-align: center;
 }
-th a, th a:hover {
+th a, th a:hover, th a:visited {
 	color: {$GET,box_title_text};
 }
 thead>tr>th {
@@ -284,7 +284,7 @@ td, th.de_th {
 	font-weight: normal;
 	border: 0;
 }
-th.de_th a, th.de_th a:hover {
+th.de_th a, th.de_th a:hover, th.de_th a:visited {
 	color: {$GET,slightly_seeded_text};
 }
 
@@ -509,6 +509,7 @@ header h1 {
 	margin-top: 0.35em;
 	margin-bottom: 0.8em;
 	min-width: 300px;
+	padding-bottom: 3px; /* For better alignment with breadcrumbs to the right */
 }
 .screen_title li span {
 	display: block;
@@ -724,9 +725,8 @@ footer {
 }
 
 footer .button_hyperlink,
-footer a:link,
+footer a,
 footer a:visited,
-footer a:active,
 footer .horizontal_links {
 	color: {$GET,area_2_link};
 }
@@ -938,7 +938,7 @@ a.fancy_user_link em {
 	padding: 4px 0;
 	letter-spacing: 1px;
 }
-a.fancy_user_link:link, a.fancy_user_link:active, a.fancy_user_link:visited, a.fancy_user_link:hover {
+a.fancy_user_link, a.fancy_user_link:visited, a.fancy_user_link:hover {
 	font-size: 1em;
 	font-weight: bold;
 	border: 1px dashed {$GET,point_of_interest_border};
@@ -950,7 +950,7 @@ a.fancy_user_link:link, a.fancy_user_link:active, a.fancy_user_link:visited, a.f
 	text-decoration: none;
 	padding: 2px 2px;
 }
-.post_poster a.fancy_user_link:link, .post_poster a.fancy_user_link:active, .post_poster a.fancy_user_link:visited, .post_poster a.fancy_user_link:hover {
+.post_poster a.fancy_user_link, .post_poster a.fancy_user_link:visited, .post_poster a.fancy_user_link:hover {
 	display: inline-block;
 }
 a.fancy_user_link:hover {
@@ -980,10 +980,8 @@ input.button_hyperlink {
 
 /* Makes a link tag (a) look like it's not anything special (we use these tags as tab points sometimes) */
 .non_link,
-.non_link:link,
 .non_link:visited,
-.non_link:hover,
-.non_link:active {
+.non_link:hover {
 	color: {$GET,slightly_seeded_text} !important;
 	text-decoration: none;
 	cursor: default;
@@ -1212,7 +1210,7 @@ th.meta_data_title {
 	vertical-align: top;
 }
 
-.box_inner>h1 a, .box_inner>h2 a, .box_inner>h3 a, .box_inner>h4 a, .box_inner>h5 a, .box_inner>h6 a, .toggleable_tray_title a {
+.box_inner>h1 a, .box_inner>h2 a, .box_inner>h3 a, .box_inner>h4 a, .box_inner>h5 a, .box_inner>h6 a, .toggleable_tray_title a, .box_inner>h1 a:visited, .box_inner>h2 a:visited, .box_inner>h3 a:visited, .box_inner>h4 a:visited, .box_inner>h5 a:visited, .box_inner>h6 a:visited, .toggleable_tray_title a:visited {
 	color: inherit;
 	text-decoration: underline;
 }
@@ -1270,6 +1268,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	text-align: left;
 }
 
+/* ... Dividers within boxless area... */
 .boxless_space .box + .box, .boxless_space .box + .fp_col_blocks_wrap, .boxless_space .fp_col_blocks_wrap + .box {
 	border-top: 2px solid {$GET,standard_border} !important;
 	margin-top: 1.5em;
@@ -1393,7 +1392,7 @@ h3+.meta_details, .newscat_img+.meta_details {
 	margin-top: 0;
 }
 
-.meta_details a {
+.meta_details a, .meta_details a:visited {
 	text-decoration: none;
 	color: {$GET,area_link};
 }
@@ -1631,7 +1630,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 }
 
 .table_heading_cell {
-	padding: 1em 0;
+	padding: 1em 0.5em !important;
 	text-align: {!en_left};
 	background-color: {$GET,area_background} !important; /*  !important so precedence over th.dh */
 	font-weight: normal;
@@ -1705,7 +1704,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 .tooltip h2 {
 	margin-top: 0;
 }
-.tooltip a, .tooltip a:visited, .tooltip a:link, .tooltip a:active, .tooltip a:hover {
+.tooltip a, .tooltip a:visited, .tooltip a:hover {
 	text-decoration: none !important;
 	color: inherit !important;
 }
@@ -1813,15 +1812,13 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	display: inline;
 }
 
-.pagination a:link,
+.pagination a,
 .pagination a:visited,
 .pagination a:hover,
-.pagination a:active,
 .pagination span,
-.results_launcher a:link,
+.results_launcher a,
 .results_launcher a:visited,
 .results_launcher a:hover,
-.results_launcher a:active,
 .results_launcher span {
 	display: inline-block;
 	text-decoration: none;
@@ -1834,15 +1831,13 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 .results_launcher a:hover {
 	background-color: {$GET,area_hover_2_background};
 }
-.pagination a:link,
+.pagination a,
 .pagination a:visited,
 .pagination a:hover,
-.pagination a:active,
 .pagination span,
-.results_launcher a:link,
+.results_launcher a,
 .results_launcher a:visited,
 .results_launcher a:hover,
-.results_launcher a:active,
 .results_launcher span {
 	padding: 2px {$?,{$MOBILE},10,5}px;
 }
@@ -1852,10 +1847,9 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	display: inline;
 	padding-{!en_left}: 20px;
 }
-.results_launcher a:link,
+.results_launcher a,
 .results_launcher a:visited,
 .results_launcher a:hover,
-.results_launcher a:active,
 .results_launcher span {
 	padding: 0 3px;
 }
@@ -2919,7 +2913,7 @@ Form buttons are wrapped in either:
 	height: 22px;
 }
 
-a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
+a.tab, a.tab:visited, a.tab:hover {
 	text-decoration: none;
 }
 
@@ -3064,7 +3058,7 @@ ul.nl, .nl ul {
 	background-color: {$GET,area_background} !important;
 }
 
-.menu_type__popup li a:link, .menu_type__popup li a:visited, .menu_type__popup li a:active {
+.menu_type__popup li a, .menu_type__popup li a:visited {
 	color: {$GET,a.link};
 }
 .menu_type__popup li a:hover {
@@ -3075,7 +3069,7 @@ ul.nl, .nl ul {
 	margin-top: -1px;
 }
 
-.menu_type__popup a:link, .menu_type__popup a:visited, .menu_type__popup a:active, .menu_type__dropdown .nlevel a:link, .menu_type__dropdown .nlevel a:visited, .menu_type__dropdown .nlevel a:active {
+.menu_type__popup a, .menu_type__popup a:visited, .menu_type__dropdown .nlevel a, .menu_type__dropdown .nlevel a:visited {
 	text-decoration: none;
 }
 
@@ -3086,6 +3080,7 @@ ul.nl, .nl ul {
 
 .menu_type__dropdown .nlevel li, .menu_type__dropdown .nlevel .menu_spacer {
 	background-color: {$GET,dropdown_menu_background};
+	font-weight: normal;
 }
 
 .menu_type__dropdown .nlevel li:hover {
@@ -3097,7 +3092,7 @@ ul.nl, .nl ul {
 	padding-{!en_right}: 0;
 }
 
-.menu_type__dropdown .nlevel, .menu_type__dropdown .nlevel a:active, .menu_type__dropdown .nlevel a:link, .menu_type__dropdown .nlevel a:visited, .menu_type__dropdown .nlevel a:hover {
+.menu_type__dropdown .nlevel, .menu_type__dropdown .nlevel a, .menu_type__dropdown .nlevel a:visited, .menu_type__dropdown .nlevel a:hover {
 	color: {$GET,slightly_seeded_text} !important;
 }
 
@@ -3140,7 +3135,7 @@ ul.nl, .nl ul {
 	font-weight: bold;
 }
 
-.menu_type__embossed a:link, .menu_type__embossed a:visited, .menu_type__embossed a:hover, .menu_type__embossed a:active, .menu_type__top a:link, .menu_type__top a:visited, .menu_type__top a:hover, .menu_type__top a:active {
+.menu_type__embossed a, .menu_type__embossed a:visited, .menu_type__embossed a:hover, .menu_type__top a, .menu_type__top a:visited, .menu_type__top a:hover {
 	text-decoration: none;
 }
 
@@ -3150,7 +3145,7 @@ ul.nl, .nl ul {
 }
 
 .menu_type__top a, .menu_type__dropdown a.toplevel_link {
-	padding: 0.4em 0.5em !important;
+	padding: 0.5em 0.5em 0.6em 0.5em !important;
 }
 
 .menu_type__embossed a {
@@ -3278,11 +3273,11 @@ ul.nl, .nl ul {
 	vertical-align: middle;
 }
 
-.global_navigation .menu_type__zone a:link, .global_navigation .menu_type__zone a:visited, .global_navigation .menu_type__zone a:active {
+.global_navigation .menu_type__zone a, .global_navigation .menu_type__zone a:visited {
 	color: {$GET,global_navigation_text};
 }
 
-.menu_type__zone a:link, .menu_type__zone a:visited, .menu_type__zone a:active {
+.menu_type__zone a, .menu_type__zone a:visited {
 	margin-{!en_right}: 1px;
 	text-decoration: none;
 }
@@ -3471,7 +3466,7 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	margin: 1px;
 }
 
-.comcode_concept_inline, a.comcode_concept_inline:link, a.comcode_concept_inline:visited, a.comcode_concept_inline:hover, a.comcode_concept_inline:active {
+.comcode_concept_inline, a.comcode_concept_inline, a.comcode_concept_inline:visited, a.comcode_concept_inline:hover {
 	border-bottom: 1px dashed {$GET,divider_line};
 	display: inline-block;
 }

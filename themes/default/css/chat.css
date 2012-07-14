@@ -173,7 +173,7 @@
 .chat_message>div:hover {
 	{$BETA_CSS_PROPERTY,opacity: 1;}
 }
-.chat_operator_staff a:visited, .chat_operator_staff a:active, .chat_operator_staff a:hover, .chat_operator_staff a:link {
+.chat_operator_staff a, .chat_operator_staff a:visited, .chat_operator_staff a:hover {
 	color: {$GET,red_highlight_text};
 }
 .chat_message_by {

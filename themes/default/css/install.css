@@ -52,9 +52,8 @@
 }
 
 .installer_version,
-.installer_version a:link,
-.installer_version a:visited,
-.installer_version a:active {
+.installer_version a,
+.installer_version a:visited {
 	color: {$GET,installer_background_text};
 }
 

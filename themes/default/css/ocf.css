@@ -799,49 +799,49 @@ hr.ocf_sig_barrier {
 	white-space: nowrap;
 }
 
-a.ocf_gcol_1:link, a.ocf_gcol_1:visited, a.ocf_gcol_1:hover, a.ocf_gcol_1:active {
+a.ocf_gcol_1, a.ocf_gcol_1:visited, a.ocf_gcol_1:hover {
 	color: {$GET,gcol_1};
 }
-a.ocf_gcol_2:link, a.ocf_gcol_2:visited, a.ocf_gcol_2:hover, a.ocf_gcol_2:active {
+a.ocf_gcol_2, a.ocf_gcol_2:visited, a.ocf_gcol_2:hover {
 	color: {$GET,gcol_2};
 }
-a.ocf_gcol_3:link, a.ocf_gcol_3:visited, a.ocf_gcol_3:hover, a.ocf_gcol_3:active {
+a.ocf_gcol_3, a.ocf_gcol_3:visited, a.ocf_gcol_3:hover {
 	color: {$GET,gcol_3};
 }
-a.ocf_gcol_4:link, a.ocf_gcol_4:visited, a.ocf_gcol_4:hover, a.ocf_gcol_4:active {
+a.ocf_gcol_4, a.ocf_gcol_4:visited, a.ocf_gcol_4:hover {
 	color: {$GET,gcol_4};
 }
-a.ocf_gcol_5:link, a.ocf_gcol_5:visited, a.ocf_gcol_5:hover, a.ocf_gcol_5:active {
+a.ocf_gcol_5, a.ocf_gcol_5:visited, a.ocf_gcol_5:hover {
 	color: {$GET,gcol_5};
 }
-a.ocf_gcol_6:link, a.ocf_gcol_6:visited, a.ocf_gcol_6:hover, a.ocf_gcol_6:active {
+a.ocf_gcol_6, a.ocf_gcol_6:visited, a.ocf_gcol_6:hover {
 	color: {$GET,gcol_6};
 }
-a.ocf_gcol_7:link, a.ocf_gcol_7:visited, a.ocf_gcol_7:hover, a.ocf_gcol_7:active {
+a.ocf_gcol_7, a.ocf_gcol_7:visited, a.ocf_gcol_7:hover {
 	color: {$GET,gcol_7};
 }
-a.ocf_gcol_8:link, a.ocf_gcol_8:visited, a.ocf_gcol_8:hover, a.ocf_gcol_8:active {
+a.ocf_gcol_8, a.ocf_gcol_8:visited, a.ocf_gcol_8:hover {
 	color: {$GET,gcol_8};
 }
-a.ocf_gcol_9:link, a.ocf_gcol_9:visited, a.ocf_gcol_9:hover, a.ocf_gcol_9:active {
+a.ocf_gcol_9, a.ocf_gcol_9:visited, a.ocf_gcol_9:hover {
 	color: {$GET,gcol_9};
 }
-a.ocf_gcol_10:link, a.ocf_gcol_10:visited, a.ocf_gcol_10:hover, a.ocf_gcol_10:active {
+a.ocf_gcol_10, a.ocf_gcol_10:visited, a.ocf_gcol_10:hover {
 	color: {$GET,gcol_10};
 }
-a.ocf_gcol_11:link, a.ocf_gcol_11:visited, a.ocf_gcol_11:hover, a.ocf_gcol_11:active {
+a.ocf_gcol_11, a.ocf_gcol_11:visited, a.ocf_gcol_11:hover {
 	color: {$GET,gcol_11};
 }
-a.ocf_gcol_12:link, a.ocf_gcol_12:visited, a.ocf_gcol_12:hover, a.ocf_gcol_12:active {
+a.ocf_gcol_12, a.ocf_gcol_12:visited, a.ocf_gcol_12:hover {
 	color: {$GET,gcol_12};
 }
-a.ocf_gcol_13:link, a.ocf_gcol_13:visited, a.ocf_gcol_13:hover, a.ocf_gcol_13:active {
+a.ocf_gcol_13, a.ocf_gcol_13:visited, a.ocf_gcol_13:hover {
 	color: {$GET,gcol_13};
 }
-a.ocf_gcol_14:link, a.ocf_gcol_14:visited, a.ocf_gcol_14:hover, a.ocf_gcol_14:active {
+a.ocf_gcol_14, a.ocf_gcol_14:visited, a.ocf_gcol_14:hover {
 	color: {$GET,gcol_14};
 }
-a.ocf_gcol_15:link, a.ocf_gcol_15:visited, a.ocf_gcol_15:hover, a.ocf_gcol_15:active {
+a.ocf_gcol_15, a.ocf_gcol_15:visited, a.ocf_gcol_15:hover {
 	color: {$GET,gcol_15};
 }
 
