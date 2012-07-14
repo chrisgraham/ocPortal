@@ -37,3 +37,7 @@
 .notifications_form td div {
 	display: inline;
 }
+
+.notification_code th {
+	text-align: left;
+}

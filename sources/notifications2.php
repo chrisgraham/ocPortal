@@ -376,7 +376,7 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 			'NOTIFICATION_CATEGORY'=>$notification_category,
 			'NOTIFICATION_TYPES'=>$notification_types,
 			'CATEGORY_TITLE'=>$c['title'],
-			'CHECKED'=>notifications_enabled($notification_code,$notification_category)!=A_NA,
+			'CHECKED'=>notifications_enabled($notification_code,$notification_category),
 			'CHILDREN'=>$children,
 		);
 	}
