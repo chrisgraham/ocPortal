@@ -640,6 +640,8 @@ class Module_admin_addons
 		$out=array();
 		foreach (array_keys($temp) as $file)
 		{
+			if (is_integer($file)) $file=strval($file);
+
 			if (is_dir($full.$file)) // If there is a custom equiv we don't do it: we only do custom, or indeterminate-custom
 			{
 				if ((!array_key_exists($file.'_custom',$temp)) || (substr($dir,0,7)=='themes/'))

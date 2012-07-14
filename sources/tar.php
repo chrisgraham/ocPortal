@@ -45,6 +45,7 @@ function tar_open($path,$mode)
 	}
 	$resource=array();
 	$resource['new']=!$exists;
+	$resource['mode']=$mode;
 	$resource['myfile']=$myfile;
 	$resource['full']=$path;
 	$resource['already_at_end']=false;
@@ -637,17 +638,23 @@ function tar_crc($header)
  */
 function tar_close($resource)
 {
-	if (is_null($resource['myfile']))
+	if (substr($resource['mode'],0,1)!='r')
 	{
-		$chunk=pack('a1024','');
-		echo $chunk;
+		if (is_null($resource['myfile']))
+		{
+			$chunk=pack('a1024','');
+			echo $chunk;
+		} else
+		{
+			$chunk=pack('a1024','');
+			if (fwrite($resource['myfile'],$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+
+			fclose($resource['myfile']);
+			fix_permissions($resource['full']);
+		}
 	} else
 	{
-		$chunk=pack('a1024','');
-		if (fwrite($resource['myfile'],$chunk)<strlen($chunk)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-
 		fclose($resource['myfile']);
-		fix_permissions($resource['full']);
 	}
 }
 

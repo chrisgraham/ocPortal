@@ -82,7 +82,17 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 							if (is_null($value)) continue;
 							if ($list!='') $list.=',';
 							$list.="'".(is_string($name)?$name:strval($name))."'=>";
-							if (!is_integer($value)) $list.='"'.php_addslashes($value).'"'; else $list.=strval($value);
+							if (is_integer($value))
+							{
+								$list.=strval($value);
+							}
+							elseif (is_float($value))
+							{
+								$list.=float_to_raw_string($value);
+							} else
+							{
+								$list.='"'.php_addslashes($value).'"';
+							}
 						}
 						fwrite($install_php_file,preg_replace('#^#m','//',"   \$GLOBALS['SITE_DB']->query_insert('$table',array($list));\n"));
 					}

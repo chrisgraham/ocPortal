@@ -44,7 +44,7 @@ div.comcode_supported {
 	font-size: 0.9em;
 	display: block;
 	text-align: center;
-	padding: 1em;
+	padding: 1em 1em 1em 35px;
 	border: 1px solid {$GET,light_error_border};
 	background: url('{$IMG;,messageicons/notice}') 0.6em 0.75em no-repeat {$GET,light_error_background};
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
