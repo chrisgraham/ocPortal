@@ -4,6 +4,8 @@
 
 {$BLOCK,block=main_activities,member={MEMBER_ID},mode=some_members,param=}
 
+<hr />
+
 {+START,INCLUDE,NOTIFICATION_BUTTONS}
 	NOTIFICATIONS_TYPE=activity
 	NOTIFICATIONS_ID={MEMBER_ID}

@@ -391,9 +391,9 @@ class Module_admin_permissions
 		{
 			$tmp_file=file_get_contents($css_path);
 			$matches=array();
-			if (preg_match('#\nth[\s,][^\}]*\sbackground-color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
+			if (preg_match('#(\n|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
 			{
-				$color=$matches[1];
+				$color=$matches[3].'&fgcolor='.$matches[4];
 			}
 		}
 
@@ -422,9 +422,9 @@ class Module_admin_permissions
 		{
 			$tmp_file=file_get_contents($css_path);
 			$matches=array();
-			if (preg_match('#\nth[\s,][^\}]*\sbackground-color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
+			if (preg_match('#(\n|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
 			{
-				$color=$matches[1];
+				$color=$matches[3].'&fgcolor='.$matches[4];
 			}
 		}
 
