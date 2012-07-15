@@ -1,12 +1,12 @@
 [title sub="Written by Chris Graham, ocProducts"]ocPortal Tutorial: Performing an upgrade[/title]
 
-This tutorial will give background information for this process of upgrading ocPortal. ocProducts does release basic details with the news pieces associated with a new release, but further information will be given here so that you may gain a further understanding.
+This tutorial will give background information for this process of upgrading ocPortal. The ocPortal upgrader does step you through the process, but further information will be given here so that you may gain a further understanding.
 
 [contents]decimal,lower-alpha[/contents]
 
 [title="2"]Types of upgrade[/title]
 
-When the developers make a release they will state whether they recommend users upgrade to it. If they have corrected a security issue, or a major bug (such as one that causes data loss), they are likely to strongly recommend upgrade. We usually list the main changes made in a releases, but do not explicitly detail vulnerabilities as it makes it a bit too easy for casual hackers.
+When the developers make a release they will state whether they recommend users upgrade to it. If they have corrected a security issue, or a major bug (such as one that causes data loss), they are likely to strongly recommend upgrade. You can see the fixes included in a release by looking at the bugs database for the release before it.
 
 Upgrades may be roughly categorised under:
  - patch releases -- these are likely to involve bug fixes, with very few, if any new features. Any new features would have been implemented solely to provide important functionality that was obviously missing. Patch releases are very easy to upgrade to
@@ -48,13 +48,15 @@ The upgrade process involves a number of stages (the upgrader will step you thro
  - transferring new/updated files (this will copy your customised TAR upgrade file between ocportal.com and your server, and then extract it)
   - if your server's connection to the ocportal.com server is slow, you could download the [tt]TAR[/tt] file yourself, upload it to your own server, and then use that copy's URL in step 3
   - on modern server environments the extraction happens in a separated framed process, so that if timeouts occur it can't leave your website in an inconsistent state
-  - if in the unlikely event that you do end up with a consistent state then you can download the TAR file yourself, extract it manually, and then continue
+  - if in the unlikely event that you do end up with an inconsistent state then you can download the TAR file yourself, extract it manually, and then continue; this is not ideal but the file integrity check should help remove files from uninstalled bundled addons that don't belong
  - resolve file integrity issues
   - if you have made any ocPortal overrides in place you may need to change these overrides to be consistent with ocPortal's latest structure; or if the overrides came from addons, you may need to overwrite the addon(s) with a newer version
-  - the above guidance applies to totally new code also, such as new modules
+  - the above guidance applies to totally new code also, such as new modules from non-bundled addons
   - resolving any conflicts with templates, as necessary (for example, if there was a change in the verbatim version of a template, and the upgraded website had also changed that template, then changes might [depending on importance] need to be incorporated manually
   - removing any files from previous versions of ocPortal that are no longer required
- - upgrading your database
+  - removing any files relating to bundled addons that you have previously uninstalled
+ - upgrading your database; this is the most key step, which upgrades all modules and blocks, as well as doing some cross-system updates, and updating OCF -- if any errors happen they'll be displayed and you should note them down and report them, but ocPortal will generally try and continue anyway if there are minor errors happening
+ - performing an automatic theme upgrade (if available for the version jump you're doing)
  - clearing caches
  - re-opening your website
 
