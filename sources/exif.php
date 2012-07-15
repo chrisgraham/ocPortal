@@ -141,9 +141,9 @@ function get_exif_image_caption($path,$filename)
 		$x_start=strpos($file_cap100,'<x:xmpmeta');
 		$x_end=strpos($file_cap100,'</x:xmpmeta');
 		if (($x_start!==false) && ($x_end!==false))
-			$file_cap=substr($file_cap100, $x_start, ($x_end+12)-$x_start);
+			$file_cap=substr($file_cap100,$x_start,($x_end+12)-$x_start);
 		else
-			$file_cap=substr($file_cap100, $x_start);
+			$file_cap=($x_start===false)?$file_cap100:substr($file_cap100,$x_start);
 
 		if (isset($file_cap))
 		{
@@ -314,7 +314,7 @@ function cleanup_exif($meta_data)
 					{
 						$val=floatval($temp[0])/floatval($temp[1]);
 					}
-					if ($key=='FocalLength') $val.='mm';
+					if ($key==='FocalLength') $val=float_format($val).'mm';
 				}
 			}
 		}
