@@ -263,7 +263,7 @@ function has_page_access($member,$page,$zone,$at_now=false)
 	}
 	$select.=',group_id';
 	$perhaps=((array_key_exists($groups,$GLOBALS['TOTAL_PP_CACHE'])) && (!$at_now))?$GLOBALS['TOTAL_PP_CACHE'][$groups]:$GLOBALS['SITE_DB']->query('SELECT '.$select.' FROM '.get_table_prefix().'group_page_access WHERE ('.$pg_where.') AND ('.$groups.')');
-	$groups2=$GLOBALS['FORUM_DRIVER']->get_members_groups($member,false);
+	$groups2=filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups($member,false));
 
 	$found_match_key_one=false;
 	$denied_groups=array();
@@ -426,7 +426,7 @@ function _get_where_clause_groups($member)
 {
 	if ($GLOBALS['FORUM_DRIVER']->is_super_admin($member)) return NULL;
 
-	$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member,false);
+	$groups=filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups($member,false));
 	$out='';
 	foreach ($groups as $id)
 	{
@@ -438,6 +438,32 @@ function _get_where_clause_groups($member)
 	if ($out=='') fatal_exit(do_lang_tempcode('USER_NO_GROUP')); // Shouldn't happen
 
 	return $out;
+}
+
+/**
+ * Find which of a list of usergroups are permissive ones.
+ *
+ * @param  array			List of groups to filter
+ * @return array			List of permissive groups, filtered from those given
+ */
+function filter_group_permissivity($groups)
+{
+	if (get_forum_type()=='ocf')
+	{
+		static $permissive_groups=NULL;
+		if ($permissive_groups===NULL)
+		{
+			$permissive_groups=collapse_1d_complexity('id',$GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array('g_is_private_club'=>0)));
+		}
+
+		$groups_new=array();
+		foreach ($groups as $id)
+		{
+			if (in_array($id,$permissive_groups)) $groups_new[]=$id;
+		}
+		return $groups_new;
+	}
+	return $groups;
 }
 
 /**
@@ -569,7 +595,7 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 		return $result;
 	}
 
-	$groups_list=$GLOBALS['FORUM_DRIVER']->get_members_groups($member,false);
+	$groups_list=filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups($member,false));
 
 	global $SITE_INFO;
 	$where='';
