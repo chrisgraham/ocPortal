@@ -1162,8 +1162,8 @@ ul.ocf_profile_friends li .associated_details {
 
 .ocf_sig_requirements {
 	{+START,IF,{$NOT,{$MOBILE}}}
-		width: 28em;
-		margin: 0 auto;
+		width: 25em;
+		margin: 1em auto;
 	{+END}
 }
 
@@ -1176,13 +1176,6 @@ ul.ocf_profile_friends li .associated_details {
 .ocf_current_sig_wrap {
 	margin-bottom: 1.5em;
 }
-
-{+START,IF,{$NOT,{$MOBILE}}}
-	.ocf_current_sig {
-		width: 80%;
-		margin: 0 auto;
-	}
-{+END}
 
 .ocf_whisper_lead_in {
 	margin: 1.5em 0;

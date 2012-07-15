@@ -319,7 +319,7 @@ function ocf_make_boiler_custom_field($type)
 {
 	$_type='long_trans';
 
-	if (substr($type,0,3)=='im_' || substr($type,0,3)=='sm_') $_type='short_text';
+	if (substr($type,0,3)=='im_' || substr($type,0,3)=='sn_') $_type='short_text';
 
 	elseif ($type=='location') $_type='short_text';
 	elseif ($type=='occupation') $_type='short_text';
