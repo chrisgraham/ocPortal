@@ -58,10 +58,10 @@
 	{OVERRIDES}
 
 	{+START,IF,{$OR,{FORCE_PRESETS},{$IS_NON_EMPTY,{OVERRIDES}}}}
-	{+START,IF,{$JS_ON}}
-		<td class="form_table_field_input">
-			<button class="button_micro button_pageitem_tall" type="button" id="copy_button_access_{GROUP_ID*}" onclick="permission_repeating(this,'access_{GROUP_ID%}'); return false;">{!REPEAT_PERMISSION}</button>
-		</td>
-	{+END}
+		{+START,IF,{$JS_ON}}
+			<td class="form_table_field_input">
+				<button class="button_micro button_pageitem_tall" type="button" id="copy_button_access_{GROUP_ID*}" onclick="permission_repeating(this,'access_{GROUP_ID%}'); return false;">{!REPEAT_PERMISSION}</button>
+			</td>
+		{+END}
 	{+END}
 </tr>

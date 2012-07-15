@@ -1157,7 +1157,7 @@ th.meta_data_title {
 	*/
 	background: url('{$IMG;,block_background}') {$GET,area_background};
 	/* If the browser supports gradients, we'll put a nice box-filling gradient in here instead */
-	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_2_background});}
+	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_4_background});}
 
 	overflow: hidden;
 }

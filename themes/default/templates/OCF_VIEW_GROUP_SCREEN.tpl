@@ -42,7 +42,7 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{APPLY_URL}}
-	<ul class="actions_list" role="navigation">
+	<ul class="force_margin actions_list" role="navigation">
 		<li><a href="{APPLY_URL*}">{APPLY_TEXT*}</a></li>
 	</ul>
 {+END}

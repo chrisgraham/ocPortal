@@ -517,7 +517,7 @@ class Module_news
 
 		$rows=$GLOBALS['SITE_DB']->query($query,$max,$start);
 		$rows=remove_duplicate_rows($rows,'p_id');
-		$max_rows=count(remove_duplicate_rows($GLOBALS['SITE_DB']->query($query),'p_id')); // Not doing COUNT(*) because of the "GROUP BY" which messes with the query counting
+		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT r.id) FROM '.get_table_prefix().'news r'.$join.' WHERE '.$q_filter.((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1':''));
 		$rcount=count($rows);
 
 		$blogger=NULL;

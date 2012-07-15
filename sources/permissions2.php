@@ -279,12 +279,12 @@ function get_permissions_matrix($server_id,$access,$overridables,$specific_permi
 	// Find out colour for our vertical text image headings (CSS can't rotate text), using the CSS as a basis
 	$tmp_file=@file_get_contents(get_custom_file_base().'/themes/'.$GLOBALS['FORUM_DRIVER']->get_theme().'/templates_cached/'.user_lang().'/global.css');
 	$color='FF00FF';
-	$matches=array();
 	if ($tmp_file!==false)
 	{
-		if (preg_match('#\nth.*\sbackground-color:\s*\#([\dA-Fa-f]*);.*\}#sU',$tmp_file,$matches)!=0)
+		$matches=array();
+		if (preg_match('#(\n|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches)!=0)
 		{
-			$color=$matches[1];
+			$color=$matches[3].'&fgcolor='.$matches[4];
 		}
 	}
 

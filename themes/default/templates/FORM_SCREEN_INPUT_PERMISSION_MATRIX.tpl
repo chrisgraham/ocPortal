@@ -3,7 +3,7 @@
 //]]></script>
 
 <div class="permissions_matrix_wrap" id="enter_the_matrix">
-	<table summary="{!MAP_TABLE}" class="autosized_table results_table">
+	<table summary="{!COLUMNED_TABLE}" class="autosized_table results_table">
 		<thead>
 			<tr>
 				<th>
@@ -31,21 +31,21 @@
 			{PERMISSION_ROWS}
 
 			<tr>
-				<td class="form_table_field_name sp_cell">
+				<td class="form_table_field_name">
 				</td>
 
-				<td class="form_table_field_input sp_cell">
+				<td class="form_table_field_input">
 					<input class="button_micro" type="button" value="+/-" onclick="permissions_toggle(this.parentNode);" />
 				</td>
 
 				{+START,LOOP,OVERRIDES}
-					<td class="form_table_field_input sp_cell">
+					<td class="form_table_field_input">
 						<input class="button_micro" type="button" value="+/-" onclick="permissions_toggle(this.parentNode);" />
 					</td>
 				{+END}
 
 				{+START,IF,{$JS_ON}}
-					<td class="form_table_field_input sp_cell">
+					<td class="form_table_field_input">
 					</td>
 				{+END}
 			</tr>

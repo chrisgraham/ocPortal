@@ -208,6 +208,9 @@ class Module_members
 			$where_clause.=')';
 		}
 		$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members r'.$extra_join_sql.' WHERE '.$where_clause;
+
+		$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT r.id) '.$query);
+
 		if (can_arbitrary_groupby()) $query.=' GROUP BY r.id';
 		if ($sortable=='m_join_time')
 		{
@@ -216,9 +219,9 @@ class Module_members
 		{
 			$query.=' ORDER BY '.$sortable.' '.$sort_order;
 		}
-
-		$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT r.*'.$extra_select_sql.' '.$query,$max,$start);
+		$rows=remove_duplicate_rows($rows,'id');
+
 		$members=new ocp_tempcode();
 		$member_boxes=array();
 		require_code('templates_results_table');

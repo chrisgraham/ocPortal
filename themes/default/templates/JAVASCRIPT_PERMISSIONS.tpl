@@ -427,7 +427,7 @@ function update_permission_box(setting)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='none';
 					var button=document.getElementById('access_'+known_groups[k]+'_sp_container').getElementsByTagName('button')[0]
-					if (typeof button!='undefined') button.style.display='none';
+					if (typeof button!='undefined') button.disabled=true;
 				}
 			} else
 			{
@@ -436,7 +436,7 @@ function update_permission_box(setting)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='block';
 					var button=document.getElementById('access_'+known_groups[k]+'_sp_container').getElementsByTagName('button')[0]
-					if (typeof button!='undefined') button.style.display='block';
+					if (typeof button!='undefined') button.disabled=false;
 				}
 			}
 
