@@ -2676,8 +2676,6 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 
 	var post=form.elements['post'];
 
-	post.value='';
-
 	smoothScroll(findPosY(form));
 
 	if (document.getElementById('comments_posting_form_outer').style.display=='none')
@@ -2690,7 +2688,11 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 		post.style.color='';
 	} else
 	{
-		post.value='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[/quote]\n\n';
+		if (typeof post.strip_on_focus!='undefined' && post.value==post.strip_on_focus)
+			post.value='';
+		else if (post.value!='') post.value+='\n\n';
+
+		post.value+='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[/quote]\n\n';
 		post.default_substring_to_strip=post.value;
 		post.focus();
 	}
