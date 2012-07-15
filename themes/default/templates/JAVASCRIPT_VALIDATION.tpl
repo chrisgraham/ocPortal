@@ -536,7 +536,7 @@ function standard_alternate_fields(field_names,something_required,second_run)
 	var fields=[];
 	for (var i=0;i<field_names.length;i++)
 	{
-		var field=_standard_alternate_fieldsGetObject(field_names[i]);
+		var field=_standard_alternate_fields_get_object(field_names[i]);
 		fields.push(field);
 	}
 
@@ -616,7 +616,7 @@ function __standard_alternate_field_create_listeners(field,refreshFunction)
 	field.alternating=true;
 }
 
-function _standard_alternate_fieldsGetObject(field_name)
+function _standard_alternate_fields_get_object(field_name)
 {
 	var field=document.getElementById(field_name);
 	if (field) return field;

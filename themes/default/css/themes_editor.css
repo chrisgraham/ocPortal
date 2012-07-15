@@ -28,7 +28,7 @@
 }
 
 .theme_manage_table {
-	margin: 1em;
+	margin: 1em 0;
 }
 
 .theme_manage_table table {
@@ -45,7 +45,7 @@
 }
 
 .manage_theme_theme_usage, .theme_manage_footnote {
-	font-size: 0.9em;
+	font-size: 0.95em;
 }
 
 .theme_manage_footnote {

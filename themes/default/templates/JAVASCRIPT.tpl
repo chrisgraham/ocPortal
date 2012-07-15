@@ -132,7 +132,7 @@ function script_load_stuff()
 				var stuck_nav=stuck_navs[i];
 				var stuck_nav_height=find_height(stuck_nav,true,true);
 				var pos_y=find_pos_y(stuck_nav.parentNode);
-				if (stuck_nav_height<get_window_height())
+				if (stuck_nav_height<get_window_height()-260) /* 260 leaves space for footer */
 				{
 					var extra_height=(get_window_scroll_y()-pos_y);
 					if (extra_height>0)

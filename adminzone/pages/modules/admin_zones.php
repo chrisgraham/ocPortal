@@ -486,7 +486,7 @@ class Module_admin_zones
 			{
 				$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('THEME_LOGO',escape_html($theme_name)))));
 
-				$set_name='image';
+				$set_name='logo_choose_'.$theme;
 				$required=true;
 				$set_title=do_lang_tempcode('LOGO');
 				$field_set=alternate_fields_set__start($set_name);

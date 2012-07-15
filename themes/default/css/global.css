@@ -410,16 +410,7 @@ header {
 	{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
 		{$BETA_CSS_PROPERTY,box-shadow: 0 0 2px 2px {$GET,navigation_background};}
 	{+END}
-	margin-bottom: 0.8em;
 }
-{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
-	.zone_running_ header {
-		margin-bottom: 0; /* Splash page style design, tighter spacing */
-	}
-	.zone_running_ .global_side_panel {
-		margin-top: 0.8em;
-	}
-{+END}
 
 header h1 {
 	margin: 0;
@@ -509,7 +500,7 @@ header h1 {
 	margin-top: 0.35em;
 	margin-bottom: 0.8em;
 	min-width: 300px;
-	padding-bottom: 3px; /* For better alignment with breadcrumbs to the right */
+	padding-bottom: 6px; /* For better alignment with breadcrumbs to the right */
 }
 .screen_title li span {
 	display: block;
@@ -603,6 +594,18 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 	/*background: url('{$IMG;,inner_background}');*/
 }
 
+.global_middle_outer {
+	margin-top: 0.8em;
+}
+{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
+	.zone_running_ .global_middle_outer {
+		margin-top: 0; /* Splash page style design, tighter spacing */
+	}
+	.zone_running_ .global_side_panel {
+		margin-top: 0.8em;
+	}
+{+END}
+
 .global_middle {
 	/*overflow: hidden; Breaks Safari so we'll let the surrounding element contain floats*/
 
@@ -624,9 +627,6 @@ body.popup_spacer h2 {
 	margin: 0 1em;
 }
 
-#panel_top {
-	margin-top: -0.8em;
-}
 #panel_top .ocf_member_bar_etc { /* Should not be flush with site borders (but the menu above it will be, so don't do the whole panel */
 	margin: 0 1em;
 }
