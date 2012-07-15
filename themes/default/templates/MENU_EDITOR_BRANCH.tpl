@@ -5,8 +5,8 @@
 
 	<ul class="actions_list">
 		<li>
-			<a rel="add" href="#" id="add_new_menu_linka_{I*}" onclick="return add_new_menu_item(this.id.substr(20),{CLICKABLE_SECTIONS*});"><img alt="" src="{$IMG*,treefield/plus}" /></a>
-			<a rel="add" href="#" id="add_new_menu_linkb_{I*}" onclick="return add_new_menu_item(this.id.substr(20),{CLICKABLE_SECTIONS*});">{!ADD_BRANCH}</a>
+			<a rel="add" href="#" id="add_new_menu_linka_{I*}" onclick="return add_new_menu_item(this.id.substr(19),{CLICKABLE_SECTIONS*});"><img alt="" src="{$IMG*,treefield/plus}" /></a>
+			<a rel="add" href="#" id="add_new_menu_linkb_{I*}" onclick="return add_new_menu_item(this.id.substr(19),{CLICKABLE_SECTIONS*});">{!ADD_BRANCH}</a>
 		</li>
 	</ul>
 </div>

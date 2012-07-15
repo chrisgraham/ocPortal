@@ -2079,10 +2079,6 @@ div.wysiwyg_toolbar_color_finder {
 	padding-left: 20px;
 }
 
-.rating_inner {
-	white-space: nowrap;
-}
-
 .rating_inner img {
 	cursor: pointer;
 }
@@ -3587,6 +3583,10 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 
 .attachment_details {
 	margin-top: 0.2em;
+}
+
+.attachment_details .actions_list_strong {
+	background-position: left 4px;
 }
 
 .attachment_left {
