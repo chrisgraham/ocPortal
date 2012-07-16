@@ -394,7 +394,10 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 		{
 			$mode=fileperms($themed_version);
 			$mtime=0;
+<<<<<<< HEAD
 			// Too slow
+=======
+>>>>>>> master
 			//if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($themed_version)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
 			//{
 			//	$_themed_version=dirname($val).'/'.$themed_suffix.basename($val);
@@ -884,9 +887,17 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 		{
 			$post_fields=build_keep_post_fields();
 			foreach ($dependencies as $in)
-				$post_fields->attach(form_input_hidden('uninstall_'.$in,$in));
-			$post_fields->attach(form_input_hidden('uninstall_'.$addon,$addon));
-			warn_exit(do_lang_tempcode('_ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies,escape_html($addon),array(escape_html(get_self_url(true,false,array('type'=>'multi_action','name'=>NULL))),$post_fields)));
+				$post_fields->attach(form_input_hidden('install_'.$in.'.tar',$in.'.tar'));
+
+			if (get_param('type','misc')=='addon_install')
+			{
+				$post_fields->attach(form_input_hidden('install_'.$file,$file));
+				$url=static_evaluate_tempcode(build_url(array('page'=>'_SELF','type'=>'multi_action'),'_SELF'));
+			} else
+			{
+				$url=get_self_url(true);
+			}
+			warn_exit(do_lang_tempcode('_ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str->evaluate(),escape_html($addon),array(escape_html($url),$post_fields)));
 		} else
 		{
 			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str,escape_html($file)))));
@@ -986,11 +997,11 @@ function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=N
 		if (in_array($d,$dependencies)) unset($dependencies[array_search($d,$dependencies)]);
 	}
 	$warnings=new ocp_tempcode();
-	$_dependencies=new ocp_tempcode();
+	$_dependencies_str=new ocp_tempcode();
 	foreach ($dependencies as $in)
 	{
-		if (!$_dependencies->is_empty()) $_dependencies->attach(do_lang_tempcode('LIST_SEP'));
-		$_dependencies->attach(escape_html($in));
+		if (!$_dependencies_str->is_empty()) $_dependencies_str->attach(do_lang_tempcode('LIST_SEP'));
+		$_dependencies_str->attach(escape_html($in));
 	}
 	if (count($dependencies)!=0)
 	{
@@ -999,10 +1010,18 @@ function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=N
 			$post_fields=build_keep_post_fields();
 			foreach ($dependencies as $in)
 				$post_fields->attach(form_input_hidden('uninstall_'.$in,$in));
-			warn_exit(do_lang_tempcode('_ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies,escape_html($name),array(escape_html(get_self_url(true)),$post_fields)));
+			if (get_param('type','misc')=='addon_uninstall')
+			{
+				$post_fields->attach(form_input_hidden('uninstall_'.$name,$name));
+				$url=static_evaluate_tempcode(build_url(array('page'=>'_SELF','type'=>'multi_action'),'_SELF'));
+			} else
+			{
+				$url=get_self_url(true);
+			}
+			warn_exit(do_lang_tempcode('_ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies_str->evaluate(),escape_html($name),array(escape_html($url),$post_fields)));
 		} else
 		{
-			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies,escape_html($name)))));
+			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies_str,escape_html($name)))));
 		}
 	}
 

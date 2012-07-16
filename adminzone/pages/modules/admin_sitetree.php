@@ -259,7 +259,11 @@ class Module_admin_sitetree
 				$list_existing_used->attach(form_input_list_entry($row['i_menu'],$selected,$menu_name));
 			} else
 			{
+<<<<<<< HEAD
 				$list_existing_unused->attach(form_input_list_entry($row['i_menu'],false,$menu_name));
+=======
+				$list2->attach(form_input_list_entry($row['i_menu'],false,($row['i_menu']=='zone_menu')?$menu_name:do_lang('MENU_UNUSED',$menu_name)));
+>>>>>>> master
 			}
 		}
 		// Now see if there are any menus pending creation
@@ -559,6 +563,8 @@ class Module_admin_sitetree
 				if (substr($type,0,7)=='modules') $_page=$page.'.php';
 				elseif (substr($type,0,7)=='comcode') $_page=$page.'.txt';
 				elseif (substr($type,0,4)=='html') $_page=$page.'.htm';
+
+				$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$zone.':'.$page));
 
 				if ((substr($type,0,7)=='comcode') || (substr($type,0,4)=='html'))
 				{

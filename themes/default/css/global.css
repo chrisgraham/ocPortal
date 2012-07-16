@@ -359,6 +359,9 @@ body.website_body {
 	color: {$GET,slightly_seeded_text};
 	background: {$GET,main_background};
 }
+body.website_body.frame {
+	background: transparent; /* Don't assume too much for a frame, it may be nested inside a box for example */
+}
 
 {+START,IF,{$CONFIG_OPTION,fixed_width}}{+START,IF,{$NOT,{$MOBILE}}}
 	html>body#main_website { /* #main_website targets only the main site screen, avoiding frames etc */
@@ -645,6 +648,9 @@ body.popup_spacer h2 {
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
 	width: 13em;
 	color: {$GET,slightly_seeded_gray_text};
+}
+.global_middle_faux>.global_side_panel {
+	width: auto;
 }
 
 /* Spacing around middle column if it adjoins panels */
@@ -1231,18 +1237,21 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 
 /* If you want to mark a region as box-less, wrap a div with class 'boxless_space' around it -- it'll invoke a very different kind of modern styling */
-.boxless_space .box:last-child {
-	margin-bottom: 0;
-}
 .boxless_space .box {
 	background: none;
 	border: none !important;
 	padding: 0;
-	margin: 1em 0;
+	margin: 1em 0; /* Big margin, necessary as the boxes have no border around them */
 	{$BETA_CSS_PROPERTY,border-radius: 0;}
 }
+.frame>.boxless_space .box:first-child {
+	margin-top: 0; /* No top margin for boxes in a frame */
+}
+.boxless_space .box:last-child {
+	margin-bottom: 0; /* No margin on the last box */
+}
 .boxless_space .fp_col_blocks_wrap .box {
-	margin: 0.5em 0;
+	margin: 0.5em 0; /* Half-sized margins for the fake-columns on front pages, as the overflow blocks margin collapsing */
 }
 .boxless_space .box>.box_inner {
 	margin: 0;

@@ -799,7 +799,8 @@ class Module_admin_zones
 						$theme_img_code=post_param('logo_select_'.$theme,'');
 						if ($theme_img_code=='')
 						{
-							warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+							continue; // Probably a theme was added half-way
+							//warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
 						}
 						$iurl=find_theme_image($theme_img_code,false,true,$theme);
 					}

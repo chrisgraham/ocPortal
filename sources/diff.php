@@ -485,7 +485,7 @@ class Text_Diff3 extends Text_Diff {
 			if ($edit->isConflict()) {
 				/* FIXME: this should probably be moved somewhere else. */
 				$lines=array_merge($lines,
-											array('<<<'.'<<<<' . ($label1 ? ' ' . $label1 : '')),
+											array('<<<'.'<<<'.'<' . ($label1 ? ' ' . $label1 : '')),
 											$edit->final1,
 											array("======="),
 											$edit->final2,

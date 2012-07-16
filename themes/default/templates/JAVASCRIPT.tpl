@@ -44,6 +44,14 @@ function script_load_stuff()
 	{
 		new_html__initialise(document.forms[i]);
 	}
+	for (i=0;i<document.links.length;i++)
+	{
+		new_html__initialise(document.links[i]);
+	}
+	for (i=0;i<document.images.length;i++)
+	{
+		new_html__initialise(document.images[i]);
+	}
 
 	/* Staff functionality */
 	if (typeof window.script_load_stuffStaff!='undefined') script_load_stuffStaff();
@@ -71,56 +79,6 @@ function script_load_stuff()
 			}
 		}
 	}
-
-	/* Lightboxes */
-	{+START,IF,{$CONFIG_OPTION,js_overlays}}
-		for (i=0;i<document.links.length;i++)
-		{
-			var j=document.links[i];
-			var rel=j.getAttribute('rel');
-			if (rel && rel.match(/(^|\s)lightbox($|\s)/))
-			{
-				j.onclick=function(j) { return function() {
-					open_image_into_lightbox(j);
-					return false;
-				} }(j);
-			}
-		}
-	{+END}
-
-	/* Convert a/img title attributes into ocPortal tooltips */
-	{+START,IF,{$CONFIG_OPTION,js_overlays}}
-		for (i=0;i<document.links.length;i++)
-		{
-			convert_tooltip(document.links[i]);
-		}
-		for (i=0;i<document.images.length;i++)
-		{
-			convert_tooltip(document.images[i]);
-		}
-		for (i=0;i<document.forms.length;i++)
-		{
-			//convert_tooltip(document.forms[i]);	Not useful
-
-			var elements,j;
-			elements=document.forms[i].elements;
-			for (j=0;j<elements.length;j++)
-			{
-				if (typeof elements[j].title!='undefined')
-				{
-					convert_tooltip(elements[j]);
-				}
-			}
-			elements=document.forms[i].getElementsByTagName('input'); // Lame, but JS DOM does not include type="image" ones in form.elements
-			for (j=0;j<elements.length;j++)
-			{
-				if ((elements[j].type=='image') && (typeof elements[j].title!='undefined'))
-				{
-					convert_tooltip(elements[j]);
-				}
-			}
-		}
-	{+END}
 
 	/* Pinning to top if scroll out */
 	var stuck_navs=get_elements_by_class_name(document,'stuck_nav');
@@ -181,6 +139,32 @@ function new_html__initialise(element)
 {
 	switch (element.nodeName.toLowerCase())
 	{
+		case 'img':
+			/* Convert a/img title attributes into ocPortal tooltips */
+			{+START,IF,{$CONFIG_OPTION,js_overlays}}
+				convert_tooltip(element);
+			{+END}
+			break;
+
+		case 'a':
+			/* Lightboxes */
+			{+START,IF,{$CONFIG_OPTION,js_overlays}}
+				var rel=element.getAttribute('rel');
+				if (rel && rel.match(/(^|\s)lightbox($|\s)/))
+				{
+					element.onclick=function(element) { return function() {
+						open_image_into_lightbox(element);
+						return false;
+					} }(element);
+				}
+			{+END}
+
+			/* Convert a/img title attributes into ocPortal tooltips */
+			{+START,IF,{$CONFIG_OPTION,js_overlays}}
+				convert_tooltip(element);
+			{+END}
+			break;
+
 		case 'form':
 			if (element.className.indexOf('autocomplete')!=-1)
 			{
@@ -201,6 +185,32 @@ function new_html__initialise(element)
 			/* Remove tooltips from forms for mouse users as they are for screenreader accessibility only */
 			if (element.getAttribute('target')!='_blank')
 				add_event_listener_abstract(element,'mouseover',function() { try {element.setAttribute('title','');element.title='';}catch(e){};/*IE6 does not like*/ } );
+
+			/* Convert a/img title attributes into ocPortal tooltips */
+			{+START,IF,{$CONFIG_OPTION,js_overlays}}
+				//convert_tooltip(element);	Not useful
+
+				/* Convert a/img title attributes into ocPortal tooltips */
+				var elements,j;
+				elements=element.elements;
+				for (j=0;j<elements.length;j++)
+				{
+					if (typeof elements[j].title!='undefined')
+					{
+						convert_tooltip(elements[j]);
+					}
+				}
+				elements=element.getElementsByTagName('input'); // Lame, but JS DOM does not include type="image" ones in form.elements
+				for (j=0;j<elements.length;j++)
+				{
+					if ((elements[j].type=='image') && (typeof elements[j].title!='undefined'))
+					{
+						convert_tooltip(elements[j]);
+					}
+				}
+			{+END}
+
+			break;
 	}
 }
 
@@ -508,10 +518,24 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 }
 
 /* Find the main ocPortal window */
-function get_main_ocp_window()
+function get_main_ocp_window(any_large_ok)
 {
-	if (opener) return opener;
-	if (parent) return parent;
+	if (typeof any_large_ok=='undefined') var any_large_ok=false;
+
+	if (document.getElementById('main_website')) return window;
+
+	if ((any_large_ok) && (get_window_width()>300)) return window;
+
+	try
+	{
+		if ((window.parent) && (typeof window.parent.get_main_ocp_window!='undefined')) return window.parent.get_main_ocp_window();
+	}
+	catch (e) {};
+	try
+	{
+		if ((window.opener) && (typeof window.opener.get_main_ocp_window!='undefined')) return window.opener.get_main_ocp_window();
+	}
+	catch (e) {};
 	return window;
 }
 
@@ -1345,18 +1369,20 @@ function change_class(box,theId,to,from)
 }
 
 /* Dimension functions */
-function get_mouse_xy(e)
+function get_mouse_xy(e,win)
 {
-	window.mouseX=get_mouse_x(e);
-	window.mouseY=get_mouse_y(e);
-	window.ctrlPressed=e.ctrlKey;
-	window.altPressed=e.altKey;
-	window.metaPressed=e.metaKey;
-	window.shiftPressed=e.shiftKey;
+	if (typeof win=='undefined') var win=window;
+	win.mouseX=get_mouse_x(e,win);
+	win.mouseY=get_mouse_y(e,win);
+	win.ctrlPressed=e.ctrlKey;
+	win.altPressed=e.altKey;
+	win.metaPressed=e.metaKey;
+	win.shiftPressed=e.shiftKey;
 	return true
 }
-function get_mouse_x(event)
+function get_mouse_x(event,win)
 {
+	if (typeof win=='undefined') var win=window;
 	try
 	{
 		if ((typeof event.pageX!='undefined') && (event.pageX))
@@ -1364,14 +1390,15 @@ function get_mouse_x(event)
 			return event.pageX;
 		} else if ((typeof event.clientX!='undefined')&& (event.clientX))
 		{
-			return event.clientX+get_window_scroll_x()
+			return event.clientX+get_window_scroll_x(win)
 		}
 	}
 	catch (err) {}
 	return 0;
 }
-function get_mouse_y(event)
+function get_mouse_y(event,win)
 {
+	if (typeof win=='undefined') var win=window;
 	try
 	{
 		if ((typeof event.pageY!='undefined') && (event.pageY))
@@ -1379,24 +1406,26 @@ function get_mouse_y(event)
 			return event.pageY;
 		} else if ((typeof event.clientY!='undefined') && (event.clientY))
 		{
-			return event.clientY+get_window_scroll_y()
+			return event.clientY+get_window_scroll_y(win)
 		}
 	}
 	catch (err) {}
 	return 0;
 }
-function get_window_width()
+function get_window_width(win)
 {
-	if (typeof window.innerWidth!='undefined') return window.innerWidth-18;
-	if ((document.documentElement) && (document.documentElement.clientWidth)) return document.documentElement.clientWidth;
-	if ((document.body) && (document.body.clientWidth)) return document.body.clientWidth;
+	if (typeof win=='undefined') var win=window;
+	if (typeof win.innerWidth!='undefined') return win.innerWidth-18;
+	if ((win.document.documentElement) && (win.document.documentElement.clientWidth)) return win.document.documentElement.clientWidth;
+	if ((win.document.body) && (win.document.body.clientWidth)) return win.document.body.clientWidth;
 	return 0;
 }
-function get_window_height()
+function get_window_height(win)
 {
-	if (typeof window.innerHeight!='undefined') return window.innerHeight-18;
-	if ((document.documentElement) && (document.documentElement.clientHeight)) return document.documentElement.clientHeight;
-	if ((document.body) && (document.body.clientHeight)) return document.body.clientHeight;
+	if (typeof win=='undefined') var win=window;
+	if (typeof win.innerHeight!='undefined') return win.innerHeight-18;
+	if ((win.document.documentElement) && (win.document.documentElement.clientHeight)) return win.document.documentElement.clientHeight;
+	if ((win.document.body) && (win.document.body.clientHeight)) return win.document.body.clientHeight;
 	return 0;
 }
 function get_window_scroll_width(win)
@@ -1413,20 +1442,22 @@ function get_window_scroll_height(win)
 	if (((win.document.body.scrollHeight>best) && (best<150) && (win.document.body.scrollHeight!=150)) || (best==150)) best=win.document.body.scrollHeight;
 	return best;
 }
-function get_window_scroll_x()
+function get_window_scroll_x(win)
 {
-  	if (typeof window.pageXOffset!='undefined') return window.pageXOffset;
-  	if ((document.documentElement) && (document.documentElement.scrollLeft)) return document.documentElement.scrollLeft;
-  	if ((document.body) && (document.body.scrollLeft)) return document.body.scrollLeft;
-  	if (typeof window.scrollX!='undefined') return window.scrollX;
+ 	if (typeof win=='undefined') var win=window;
+ 	if (typeof win.pageXOffset!='undefined') return win.pageXOffset;
+  	if ((win.document.documentElement) && (win.document.documentElement.scrollLeft)) return win.document.documentElement.scrollLeft;
+  	if ((win.document.body) && (win.document.body.scrollLeft)) return win.document.body.scrollLeft;
+  	if (typeof win.scrollX!='undefined') return win.scrollX;
 	return 0;
 }
-function get_window_scroll_y()
+function get_window_scroll_y(win)
 {
-  	if (typeof window.pageYOffset!='undefined') return window.pageYOffset;
-  	if ((document.documentElement) && (document.documentElement.scrollTop)) return document.documentElement.scrollTop;
-  	if ((document.body) && (document.body.scrollTop)) return document.body.scrollTop;
-  	if (typeof window.scrollTop!='undefined') return window.scrollTop;
+	if (typeof win=='undefined') var win=window;
+  	if (typeof win.pageYOffset!='undefined') return win.pageYOffset;
+  	if ((win.document.documentElement) && (win.document.documentElement.scrollTop)) return win.document.documentElement.scrollTop;
+  	if ((win.document.body) && (win.document.body.scrollTop)) return win.document.body.scrollTop;
+  	if (typeof win.scrollTop!='undefined') return win.scrollTop;
 	return 0;
 }
 function find_pos_x(obj,not_relative) /* Courtesy of quirksmode */	/* if not_relative is true it gets the position relative to the browser window, else it will be relative to the most recent position:absolute/relative going up the element tree */
@@ -1598,33 +1629,34 @@ function convert_tooltip(element)
 			else if (title==element.innerText) return;
 		}
 
-		// Stop the tooltip code adding to these events, by defining our own (it'll not overwrite existing events).
+		// Stop the tooltip code adding to these events, by defining our own (it will not overwrite existing events).
 		if (!element.onmouseout) element.onmouseout=function() {};
 		if (!element.onmousemove) element.onmouseover=function() {};
 
 		// And now define nice listeners for it all...
+		var win=get_main_ocp_window();
 
-		add_event_listener_abstract(
+		win.add_event_listener_abstract(
 			element,
 			'mouseover',
 			function(event) {
-				activate_tooltip(element,event,title);
+				win.activate_tooltip(element,event,title,null,null,null,null,false,false,false,win);
 			}
 		);
 
-		add_event_listener_abstract(
-			element,
-			'mouseout',
-			function(event) {
-				deactivate_tooltip(element,event);
-			}
-		);
-
-		add_event_listener_abstract(
+		win.add_event_listener_abstract(
 			element,
 			'mousemove',
 			function(event) {
-				reposition_tooltip(element,event);
+				win.reposition_tooltip(element,event,false,false,null,false,win);
+			}
+		);
+
+		win.add_event_listener_abstract(
+			element,
+			'mouseout',
+			function(event) {
+				win.deactivate_tooltip(element,event);
 			}
 		);
 	}
@@ -1641,8 +1673,10 @@ function convert_tooltip(element)
 //  no_delay is set to true if the tooltip should appear instantly
 //  lights_off is set to true if the image is to be dimmed
 //  force_width is set to true if you want width to not be a max width
-function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,lights_off,force_width)
+function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,lights_off,force_width,win)
 {
+	if (typeof win=='undefined') var win=window;
+
 	if (!page_loaded) return;
 	if ((typeof tooltip!='function') && (tooltip=='')) return;
 
@@ -1654,8 +1688,8 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	}
 
 	// Add in move/leave events if needed
-	if (!ac.onmouseout) ac.onmouseout=function(event) { deactivate_tooltip(ac,event); };
-	if (!ac.onmousemove) ac.onmousemove=function(event) { reposition_tooltip(ac,event); };
+	if (!ac.onmouseout) ac.onmouseout=function(event) { win.deactivate_tooltip(ac,event); };
+	if (!ac.onmousemove) ac.onmousemove=function(event) { win.reposition_tooltip(ac,event,false,false,null,false,win); };
  
 	if (typeof tooltip=='function') tooltip=tooltip();
 	if (tooltip=='') return;
@@ -1670,13 +1704,13 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	var tooltip_element;
 	if ((typeof ac.tooltipId!='undefined') && (document.getElementById(ac.tooltipId)))
 	{
-		tooltip_element=document.getElementById(ac.tooltipId);
+		tooltip_element=win.document.getElementById(ac.tooltipId);
 		tooltip_element.style.display='none';
 		set_inner_html(tooltip_element,'');
 		reposition_tooltip(ac,myevent,bottom,true,tooltip_element,force_width);
 	} else
 	{
-		tooltip_element=document.createElement('div');
+		tooltip_element=win.document.createElement('div');
 		tooltip_element.role='tooltip';
 		tooltip_element.style.display='none';
 		tooltip_element.className="tooltip";
@@ -1699,7 +1733,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 
 	if (pic)
 	{
-		var img=document.createElement('img');
+		var img=win.document.createElement('img');
 		img.src=pic;
 		img.className='tooltip_img';
 		if (lights_off) img.className+=' faded_tooltip_img';
@@ -1738,15 +1772,17 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		if (!no_delay)
 		{
 			// If delayed we will sub in what the currently known global mouse coordinate is
-			myevent_copy.pageX=window.mouseX;
-			myevent_copy.pageY=window.mouseY;
+			myevent_copy.pageX=win.mouseX;
+			myevent_copy.pageY=win.mouseY;
 		}
 
-		reposition_tooltip(ac,myevent_copy,bottom,true,tooltip_element,force_width);
+		reposition_tooltip(ac,myevent_copy,bottom,true,tooltip_element,force_width,win);
 	}, no_delay?0:666);
 }
-function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width)
+function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width,win)
 {
+	if (typeof win=='undefined') var win=window;
+
 	if (!starting) // Real JS mousemove event, so we assume not a screen reader and have to remove natural tooltip
 	{
 		if (ac.getAttribute('title')) ac.setAttribute('title','');
@@ -1770,8 +1806,8 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 		var style__offset_y=18;
 
 		var x,y;
-		x=get_mouse_x(event);
-		y=get_mouse_y(event);
+		x=get_mouse_x(event,win);
+		y=get_mouse_y(event,win);
 		x+=style__offset_x;
 		y+=style__offset_y;
 		try
@@ -1780,11 +1816,20 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 			{
 				if (event.type!='focus') ac.done_none_focus=true;
 				if ((event.type=='focus') && (ac.done_none_focus)) return;
-				x=(event.type=='focus')?(get_window_scroll_x()+get_window_width()/2):(get_mouse_x(event)+style__offset_x);
-				y=(event.type=='focus')?(get_window_scroll_y()+get_window_height()/2-40):(get_mouse_y(event)+style__offset_y);
+				x=(event.type=='focus')?(get_window_scroll_x(win)+get_window_width(win)/2):(get_mouse_x(event,win)+style__offset_x);
+				y=(event.type=='focus')?(get_window_scroll_y(win)+get_window_height(win)/2-40):(get_mouse_y(event,win)+style__offset_y);
 			}
 		}
 		catch(ignore) {};
+
+		if ((typeof event.target!='undefined') || (typeof event.srcElement!='undefined'))
+		{
+			if (((typeof event.target=='undefined')?event.target:event.srcElement).ownerDocument!=win.document)
+			{
+				x=win.mouseX+style__offset_x;
+				y=win.mouseY+style__offset_y;
+			}
+		}
 
 		if (!force_width)
 		{
@@ -1797,7 +1842,7 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 
 		var _width=find_width(tooltip_element);
 		if ((_width==0) || (_width>width)) _width=width;
-		var x_excess=x-get_window_width()-get_window_scroll_x()+_width+20;
+		var x_excess=x-get_window_width(win)-get_window_scroll_x(win)+_width+20;
 		if (x_excess>0) /* Either we explicitly gave too much width, or the width auto-calculated exceeds what we THINK is the maximum width in which case we have to re-compensate with an extra contingency to stop CSS/JS vicious disagreement cycles */
 		{
 			x-=x_excess+20;
@@ -1807,9 +1852,9 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 			tooltip_element.style.top=(y-height)+'px';
 		} else
 		{
-			var y_excess=y-get_window_height()-get_window_scroll_y()+height+10;
+			var y_excess=y-get_window_height(win)-get_window_scroll_y(win)+height+10;
 			if (y_excess>0) y-=y_excess;
-			var scrollY=get_window_scroll_y();
+			var scrollY=get_window_scroll_y(win);
 			if (y<scrollY) y=scrollY;
 			tooltip_element.style.top=y+'px';
 		}
@@ -2701,8 +2746,6 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 
 	var post=form.elements['post'];
 
-	post.value='';
-
 	smooth_scroll(find_pos_y(form));
 
 	if (document.getElementById('comments_posting_form_outer').style.display=='none')
@@ -2715,7 +2758,11 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 		post.style.color='';
 	} else
 	{
-		post.value='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[/quote]\n\n';
+		if (typeof post.strip_on_focus!='undefined' && post.value==post.strip_on_focus)
+			post.value='';
+		else if (post.value!='') post.value+='\n\n';
+
+		post.value+='[quote="'+replying_to_username+'"]\n'+replying_to_post+'\n[/quote]\n\n';
 		post.default_substring_to_strip=post.value;
 		post.focus();
 	}
