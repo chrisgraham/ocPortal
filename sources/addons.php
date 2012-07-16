@@ -923,7 +923,15 @@ function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=N
 			$post_fields=build_keep_post_fields();
 			foreach ($dependencies as $in)
 				$post_fields->attach(form_input_hidden('uninstall_'.$in,$in));
-			warn_exit(do_lang_tempcode('_ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies,escape_html($name),array(escape_html(get_self_url(true)),$post_fields)));
+			if (get_param('type','misc')=='addon_uninstall')
+			{
+				$post_fields->attach(form_input_hidden('uninstall_'.$name,$name));
+				$url=static_evaluate_tempcode(build_url(array('page'=>'_SELF','type'=>'multi_action'),'_SELF'));
+			} else
+			{
+				$url=get_self_url(true);
+			}
+			warn_exit(do_lang_tempcode('_ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies,escape_html($name),array(escape_html($url),$post_fields)));
 		} else
 		{
 			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies,escape_html($name)))));
