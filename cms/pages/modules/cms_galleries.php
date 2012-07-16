@@ -1339,7 +1339,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 		}
 
 		$set_name='thumbnail';
-		$required=true;
+		$required=(!$no_thumb_needed) && (get_option('allow_audio_videos')=='0');
 		$set_title=do_lang_tempcode('THUMBNAIL');
 		$field_set=alternate_fields_set__start($set_name);
 

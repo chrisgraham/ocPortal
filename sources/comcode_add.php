@@ -468,7 +468,7 @@ function comcode_helper_script()
 								$field=form_input_list($parameter_name,'',$param,$list,NULL,false,false);
 							} elseif ($param=='width' || $param=='height')
 							{
-								$field=form_input_integer($parameter_name,protect_from_escaping($descriptiont),$param,$default,false);
+								$field=form_input_integer($parameter_name,protect_from_escaping($descriptiont),$param,($default=='')?NULL:intval($default),false);
 							} else
 							{
 								if ($supports_comcode)

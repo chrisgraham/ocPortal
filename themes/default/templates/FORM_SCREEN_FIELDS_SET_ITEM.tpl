@@ -1,4 +1,4 @@
-<div>
+<div class="fields_set_radio">
 	<label class="accessibility_hidden" for="choose_{NAME*}">{!USE}: {PRETTY_NAME*}</label>
 	<input type="radio" name="{SET_NAME*}" id="choose_{NAME*}" />
 
@@ -12,7 +12,7 @@
 	{+END}
 </div>
 
-<div class="mini_indent">
+<div class="mini_indent fields_set_contents">
 	{INPUT}
 
 	{+START,IF_NON_EMPTY,{DESCRIPTION}}

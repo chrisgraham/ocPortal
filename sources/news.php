@@ -528,6 +528,14 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 	$M_SORT_KEY='nice_title';
 	usort($_cats,'multi_sort');
 
+	// Sort so blogs go after news
+	$title_ordered_cats=$_cats;
+	$_cats=array();
+	foreach ($title_ordered_cats as $cat)
+		if (is_null($cat['nc_owner'])) $_cats[]=$cat;
+	foreach ($title_ordered_cats as $cat)
+		if (!is_null($cat['nc_owner'])) $_cats[]=$cat;
+
 	$categories=new ocp_tempcode();
 	$add_cat=true;
 

@@ -5198,20 +5198,20 @@ function plUploadLoaded(ob) {
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
 	var old_onclick=btnSubmit.onclick;
 	ob.originalClickHandler = old_onclick;
-	btnSubmit.onclick = function(event) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob); };
+	btnSubmit.onclick = function(event,_ob,form,recurse) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob,recurse); };
 
 	// Preview button too
 	var btnSubmit2 = document.getElementById('preview_button');
 	if (btnSubmit2)
 	{
 		var old_onclick2=btnSubmit2.onclick;
-		btnSubmit2.onclick = function(event) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick2; return doSubmit(event,ob); };
+		btnSubmit2.onclick = function(event,_ob,form,recurse) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick2; return doSubmit(event,ob,recurse); };
 	}
 }
 
 // Called by the submit button to start the upload
-function doSubmit(e,ob) {
-	window.just_checking_requirements=false;
+function doSubmit(e,ob,recurse) {
+	window.just_checking_requirements=true;
 
 	ob.submitting=true;
 
@@ -5225,20 +5225,20 @@ function doSubmit(e,ob) {
 		{
 			set_field_error(document.getElementById(ob.settings.txtName),"{!REQUIRED_NOT_FILLED_IN^#}");
 			ret=false;
-			window.just_checking_requirements=true;
 		}
 		window.form_submitting=btnSubmit.form; // For IE
 		if (typeof ob.originalClickHandler=='undefined')
 		{
 			if ((btnSubmit.form.onsubmit) && (false===btnSubmit.form.onsubmit())) return false;
 			if (!ret) return false;
-			btnSubmit.form.submit();
+			if (!recurse) btnSubmit.form.submit();
 			return true;
 		}
 
-		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form);
+		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form,true);
 		if (ret2 && !ret)
 			window.fauxmodal_alert("{!REQUIRED_NOT_FILLED_IN^#}");
+		if (!recurse && ret && ret2) btnSubmit.form.submit();
 		return ret && ret2;
 	}
 
@@ -5262,13 +5262,13 @@ function doSubmit(e,ob) {
 		if (typeof ob.originalClickHandler=='undefined')
 		{
 			if ((btnSubmit.form.onsubmit) && (false===btnSubmit.form.onsubmit())) return false;
-			btnSubmit.form.submit();
+			if (!recurse) btnSubmit.form.submit();
 			return true;
 		}
 
-		if (ob.originalClickHandler(e,ob,btnSubmit.form))
+		if (ob.originalClickHandler(e,ob,btnSubmit.form,true))
 		{
-			btnSubmit.form.submit();
+			if (!recurse) btnSubmit.form.submit();
 			return true;
 		}
 	}
