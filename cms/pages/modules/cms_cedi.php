@@ -523,25 +523,8 @@ class Module_cms_cedi
 				$GLOBALS['SITE_DB']->query_delete('seedy_children',array('parent_id'=>$id,'child_id'=>$child_id),'',1); // Just in case it was repeated
 				$GLOBALS['SITE_DB']->query_insert('seedy_children',array('parent_id'=>$id,'child_id'=>$child_id,'the_order'=>$i,'title'=>$title));
 
-				// Copy notifications over to new children
-				$start=0;
-				do
-				{
-					$notifications_to=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('t_member_id','l_setting'),array('l_notification_code'=>'cedi','l_code_category'=>strval($id)),'',100,$start);
-
-					foreach ($notifications_to as $notification_to)
-					{
-						$GLOBALS['SITE_DB']->query_insert('notifications_enabled',array(
-							'l_member_id'=>$notification_to['t_member_id'],
-							'l_notification_code'=>'cedi',
-							'l_code_category'=>strval($child_id),
-							'l_setting'=>$notification_to['l_setting'],
-						));
-					}
-
-					$start+=100;
-				}
-				while (count($notifications_to)!=0);
+				require_code('notifications2');
+				copy_notifications_to_new_child('cedi',strval($id),strval($child_id));
 			}
 			$start=$start+$length+1;
 		}

@@ -128,6 +128,9 @@ function ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_
 
 	log_it('ADD_FORUM',strval($forum_id),$name);
 
+	require_code('notifications2');
+	copy_notifications_to_new_child('catalogue_entry',strval($parent_forum),strval($forum_id));
+
 	return $forum_id;
 }
 

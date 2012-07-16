@@ -230,18 +230,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	$_notification_types=_get_available_notification_types(get_member());
 
 	$notification_category=get_param('id',NULL);
-	if (!is_null($notification_category))
-	{
-		if (notifications_enabled($notification_code,$notification_category))
-		{
-			enable_notifications($notification_code,$notification_category,NULL,A_NA);
-			attach_message($disable_message,'inform');
-		} else
-		{
-			enable_notifications($notification_code,$notification_category);
-			attach_message($enable_message,'inform');
-		}
-	} else
+	if (is_null($notification_category))
 	{
 		if (count($_POST)!=0) // If we've just saved
 		{
@@ -275,6 +264,15 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 			{
 				return redirect_screen($title,$redirect,do_lang_tempcode('SUCCESS'));
 			}
+		}
+	} else
+	{
+		if (notifications_enabled($notification_code,$notification_category))
+		{
+			attach_message($disable_message,'inform');
+		} else
+		{
+			attach_message($enable_message,'inform');
 		}
 	}
 
@@ -320,9 +318,10 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
  * @param  object			Notificiation hook object
  * @param  ?ID_TEXT		Category we're looking under (NULL: root)
  * @param  integer		Recursion depth
+ * @param  ?boolean		Value to change setting to (NULL: do not change)
  * @return tempcode		UI
  */
-function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth=0)
+function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth=0,$force_change_children_to=NULL)
 {
 	$_notification_categories=$ob->create_category_tree($notification_code,$id);
 
@@ -335,6 +334,24 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 
 		$current_setting=notifications_setting($notification_code,$notification_category);
 		if ($current_setting==A__STATISTICAL) $current_setting=_find_member_statistical_notification_type(get_member());
+
+		$notification_category_being_changed=get_param('id',NULL);
+		if (($notification_category_being_changed===$notification_category) || ($force_change_children_to!==NULL))
+		{
+			if (($force_change_children_to===false) || (($force_change_children_to==NULL) && ($current_setting!=A_NA)))
+			{
+				enable_notifications($notification_code,$notification_category,NULL,A_NA);
+				$force_change_children_to=false;
+			} else
+			{
+				enable_notifications($notification_code,$notification_category);
+				$force_change_children_to=true;
+			}
+		}
+
+		$current_setting=notifications_setting($notification_code,$notification_category);
+		if ($current_setting==A__STATISTICAL) $current_setting=_find_member_statistical_notification_type(get_member());
+
 		$notification_types=array();
 		foreach ($_notification_types as $possible=>$ntype)
 		{
@@ -367,7 +384,7 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 		$children=new ocp_tempcode();
 		if ((array_key_exists('num_children',$c)) && ($c['num_children']!=0))
 		{
-			$children=_notifications_build_category_tree($_notification_types,$notification_code,$ob,$notification_category,$depth+1);
+			$children=_notifications_build_category_tree($_notification_types,$notification_code,$ob,$notification_category,$depth+1,$force_change_children_to);
 		}
 
 		$notification_categories[]=array(
@@ -387,4 +404,34 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 	));
 
 	return $tree;
+}
+
+/**
+ * Copy notification settings from a parent category to a child category.
+ *
+ * @param  ID_TEXT		Parent category type
+ * @param  ID_TEXT		Parent category ID
+ * @param  ID_TEXT		Child category ID
+ */
+function copy_notifications_to_new_child($notification_code,$id,$child_id)
+{
+	// Copy notifications over to new children
+	$_start=0;
+	do
+	{
+		$notifications_to=$GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_member_id','l_setting'),array('l_notification_code'=>$notification_code,'l_code_category'=>$id),'',100,$_start);
+
+		foreach ($notifications_to as $notification_to)
+		{
+			$GLOBALS['SITE_DB']->query_insert('notifications_enabled',array(
+				'l_member_id'=>$notification_to['l_member_id'],
+				'l_notification_code'=>$notification_code,
+				'l_code_category'=>$child_id,
+				'l_setting'=>$notification_to['l_setting'],
+			));
+		}
+
+		$_start+=100;
+	}
+	while (count($notifications_to)!=0);
 }
