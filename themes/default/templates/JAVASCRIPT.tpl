@@ -157,23 +157,27 @@ function initialise_error_mechanism()
 			if (typeof msg.indexOf=='undefined') return null;
 
 			if (
-				(((msg.indexOf("'null' is not an object")!=-1) || (msg.indexOf("'undefined' is not a function")!=-1)) && ((typeof file=='undefined') || (file=='undefined'))) || // Weird errors coming from outside
-				((file) && (file.indexOf('TODO: FIXME')!=-1)) || // Too generic, can be caused by extensions
-				((code=='0') && (msg.indexOf('Script error.')!=-1)) || // Too generic, can be caused by user's connection error
-				(msg.indexOf("attempt to run compile-and-go script on a cleared scope")!=-1) || // Intermittent buggyness from Firefox
-				(msg.indexOf('UnnamedClass.toString')!=-1) || // Weirdness from Firefox
-				(msg.indexOf('ASSERT: ')!=-1) || // Something from Firefox too generic
-				(msg.indexOf('TODO: FIXME')!=-1) || // Too generic, can be caused by extensions
-				(msg.indexOf('Location.toString')!=-1) || // Buggy extensions may generate 
-				(msg.indexOf('Error loading script')!=-1) || // User's connection error
-				(msg.indexOf('NS_ERROR_FAILURE')!=-1) || // Usually an internal error in Firefox
 				(msg.indexOf('AJAX_REQUESTS is not defined')!=-1) || // Intermittent during page out-clicks
-				(msg.indexOf('can only be used in extension processes')!=-1) // Can come up in Chrome with MeasureIt
 
-				// These probably aren't issues nowadays
-				//(msg.indexOf('chrome.tabs is not supported in content script')!=-1) ||
-				//(msg.indexOf('convert to string')!=-1) ||
-				//(msg.indexOf('Array.constructor')!=-1) ||
+				// Internet Explorer false positives
+				(((msg.indexOf("'null' is not an object")!=-1) || (msg.indexOf("'undefined' is not a function")!=-1)) && ((typeof file=='undefined') || (file=='undefined'))) || // Weird errors coming from outside
+				((code=='0') && (msg.indexOf('Script error.')!=-1)) || // Too generic, can be caused by user's connection error
+
+				// Firefox false positives
+				(msg.indexOf("attempt to run compile-and-go script on a cleared scope")!=-1) || // Intermittent buggyness
+				(msg.indexOf('UnnamedClass.toString')!=-1) || // Weirdness
+				(msg.indexOf('ASSERT: ')!=-1) || // Something too generic
+				((file) && (file.indexOf('TODO: FIXME')!=-1)) || // Something too generic / Can be caused by extensions
+				(msg.indexOf('TODO: FIXME')!=-1) || // Something too generic / Can be caused by extensions
+				(msg.indexOf('Location.toString')!=-1) || // Buggy extensions may generate
+				(msg.indexOf('Error loading script')!=-1) || // User's connection error
+				(msg.indexOf('NS_ERROR_FAILURE')!=-1) || // Usually an internal error
+
+				// Google Chrome false positives
+				(msg.indexOf('can only be used in extension processes')!=-1) || // Can come up with MeasureIt
+				(msg.indexOf('extension.')!=-1) || // E.g. "Uncaught Error: Invocation of form extension.getURL() doesn't match definition extension.getURL(string path) schema_generated_bindings"
+
+				false // Just to allow above lines to be reordered
 			)
 				return null; {$,Comes up on due to various Firefox/extension/etc bugs}
 
