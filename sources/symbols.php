@@ -614,7 +614,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if ($DISPLAYED_TITLE!==NULL) $_displayed_title=$DISPLAYED_TITLE->evaluate();
 					if (($DISPLAYED_TITLE!==NULL) && (strip_tags($_displayed_title)!=''))
 					{
-						$value=html_entity_decode(strip_tags(str_replace(array('&ndash;','&mdash;','&middot;'),array('-','-','|'),$_displayed_title)),ENT_QUOTES,get_charset());
+						$value=html_entity_decode(strip_tags(str_replace(array('&ndash;','&mdash;','&middot;','&ldquo;','&rdquo;','&lsquo;','&rsquo;'),array('-','-','|','"','"',"'","'"),$_displayed_title)),ENT_QUOTES,get_charset());
 					} else
 					{
 						$value=$ZONE['zone_header_text_trans'];

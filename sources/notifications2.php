@@ -341,12 +341,15 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 			if (($force_change_children_to===false) || (($force_change_children_to==NULL) && ($current_setting!=A_NA)))
 			{
 				enable_notifications($notification_code,$notification_category,NULL,A_NA);
-				$force_change_children_to=false;
+				$force_change_children_to_children=false;
 			} else
 			{
 				enable_notifications($notification_code,$notification_category);
-				$force_change_children_to=true;
+				$force_change_children_to_children=true;
 			}
+		} else
+		{
+			$force_change_children_to_children=$force_change_children_to;
 		}
 
 		$current_setting=notifications_setting($notification_code,$notification_category);
@@ -384,7 +387,7 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 		$children=new ocp_tempcode();
 		if ((array_key_exists('num_children',$c)) && ($c['num_children']!=0))
 		{
-			$children=_notifications_build_category_tree($_notification_types,$notification_code,$ob,$notification_category,$depth+1,$force_change_children_to);
+			$children=_notifications_build_category_tree($_notification_types,$notification_code,$ob,$notification_category,$depth+1,$force_change_children_to_children);
 		}
 
 		$notification_categories[]=array(

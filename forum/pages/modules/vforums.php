@@ -75,7 +75,7 @@ class Module_vforums
 			$content=new ocp_tempcode();
 		}
 
-		return do_template('OCF_VFORUM',array('_GUID'=>'8dca548982d65500ab1800ceec2ddc61','TITLE'=>$title,'CONTENT'=>$content));
+		return do_template('OCF_VFORUM_SCREEN',array('_GUID'=>'8dca548982d65500ab1800ceec2ddc61','TITLE'=>$title,'CONTENT'=>$content));
 	}
 
 	/**
