@@ -884,7 +884,7 @@ function block_helper_script()
 			$value=post_param($parameter,NULL);
 			if (is_null($value))
 			{
-				if (post_param_integer('tick_on_form__'.$value,0)!=1) continue;
+				if (post_param_integer('tick_on_form__'.$parameter,0)==0) continue; // If not on form, continue, otherwise must be 0
 				$value='0';
 			}
 			if (($value!='') && (($parameter!='failsafe') || ($value=='1')) && (($parameter!='cache') || ($value=='0')) && (($parameter!='quick_cache') || ($value=='1')))
