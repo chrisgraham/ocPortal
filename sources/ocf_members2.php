@@ -157,7 +157,7 @@ function ocf_show_member_box($_postdetails,$preview=false,$hooks=NULL,$hook_obje
 			$custom_fields->attach($hook_result);
 	}
 
-	$_usergroups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
+	$_usergroups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id,true);
 	$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true,false,false,$_usergroups);
 	$usergroups=array();
 	foreach ($_usergroups as $u)
