@@ -395,22 +395,28 @@ class OCP_Topic
 		if (!is_null($this->topic_id)) // If FALSE then Posts will have been passed in manually as full already anyway
 			$posts=$this->_grab_full_post_details($posts);
 
-		$tree=$this->_arrange_posts_in_tree($parent_post_id,$posts/*passed by reference*/,$queue,$max_thread_depth);
-		if (count($posts)!=0) // E.g. if parent was deleted at some time
+		if ($this->is_threaded)
 		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY='date';
-			usort($posts,'multi_sort');
-			while (count($posts)!=0)
+			$tree=$this->_arrange_posts_in_tree($parent_post_id,$posts/*passed by reference*/,$queue,$max_thread_depth);
+			if (count($posts)!=0) // E.g. if parent was deleted at some time
 			{
-				$orphaned_post=array_shift($posts);
+				global $M_SORT_KEY;
+				$M_SORT_KEY='date';
+				usort($posts,'multi_sort');
+				while (count($posts)!=0)
+				{
+					$orphaned_post=array_shift($posts);
 
-				$tree2=$this->_arrange_posts_in_tree($orphaned_post['id'],$posts/*passed by reference*/,$queue,$max_thread_depth);
+					$tree2=$this->_arrange_posts_in_tree($orphaned_post['id'],$posts/*passed by reference*/,$queue,$max_thread_depth);
 
-				$orphaned_post['parent_id']=NULL;
-				$orphaned_post['children']=$tree2;
-				$tree[0][]=$orphaned_post;
+					$orphaned_post['parent_id']=NULL;
+					$orphaned_post['children']=$tree2;
+					$tree[0][]=$orphaned_post;
+				}
 			}
+		} else
+		{
+			$tree=array($posts);
 		}
 
 		$ret=$this->_render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
