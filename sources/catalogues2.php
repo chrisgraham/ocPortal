@@ -445,8 +445,11 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 
 	store_in_catalogue_cat_treecache($id,$parent_id);
 
-	require_code('notifications2');
-	copy_notifications_to_new_child('catalogue_entry',strval($parent_id),strval($id));
+	if (!is_null($parent_id))
+	{
+		require_code('notifications2');
+		copy_notifications_to_new_child('catalogue_entry',strval($parent_id),strval($id));
+	}
 
 	return $id;
 }

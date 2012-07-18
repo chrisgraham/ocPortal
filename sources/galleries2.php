@@ -937,8 +937,11 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
 
 	log_it('ADD_GALLERY',$name,$fullname);
 
-	require_code('notifications2');
-	copy_notifications_to_new_child('gallery_entry',$parent_id,$name);
+	if ($parent_id!='')
+	{
+		require_code('notifications2');
+		copy_notifications_to_new_child('gallery_entry',$parent_id,$name);
+	}
 
 	require_code('seo2');
 	seo_meta_set_for_implicit('gallery',$name,array($fullname,$description),$description);

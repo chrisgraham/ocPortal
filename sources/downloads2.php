@@ -249,8 +249,11 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 
 	decache('main_download_category');
 
-	require_code('notifications2');
-	copy_notifications_to_new_child('download',strval($parent_id),strval($id));
+	if (!is_null($parent_id))
+	{
+		require_code('notifications2');
+		copy_notifications_to_new_child('download',strval($parent_id),strval($id));
+	}
 
 	return $id;
 }

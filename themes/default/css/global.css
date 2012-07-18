@@ -3709,18 +3709,18 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	body a.link_exempt2 {
 		background-image: none;
 	}
+{+END}
 
-	{+START,IF,{$ADDON_INSTALLED,recommend}}
-		.print_icon {
-			background: url('{$IMG;,recommend/print}') no-repeat left top !important;
-			padding: 0 0 5px 22px !important;
-		}
-	{+END}
-
-	a[title="{!VIRTUAL_ROOT}"]:hover {
-		color: {$GET,red_highlight_text};
+{+START,IF,{$ADDON_INSTALLED,recommend}}
+	.print_icon {
+		background: url('{$IMG;,recommend/print}') no-repeat left top !important;
+		padding: 0 0 5px 22px !important;
 	}
 {+END}
+
+a[title="{!VIRTUAL_ROOT}"]:hover {
+	color: {$GET,red_highlight_text};
+}
 
 /*
 =========================
