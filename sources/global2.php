@@ -787,6 +787,7 @@ function catch_fatal_errors()
 	if (!function_exists('error_get_last')) return;
 
 	$error=error_get_last();
+
 	if (!is_null($error))
 	{
 		if (!array_key_exists('message',$error)) return; // Needed for HipHop PHP

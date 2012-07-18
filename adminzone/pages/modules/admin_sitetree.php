@@ -254,16 +254,12 @@ class Module_admin_sitetree
 
 			$selected=(($zone=='forum') && ($row['i_menu']=='forum_features')) || (($zone=='collaboration') && ($row['i_menu']=='collab_website')) || ((($zone=='site') || (($zone=='') && (get_option('collapse_user_zones')=='1'))) && (($row['i_menu']=='site') || ($row['i_menu']=='main_website'))) || (($zone=='') && ($row['i_menu']=='root_website'));
 
-			if ($found)
+			if (($found) || ($row['i_menu']=='zone_menu'))
 			{
 				$list_existing_used->attach(form_input_list_entry($row['i_menu'],$selected,$menu_name));
 			} else
 			{
-<<<<<<< HEAD
 				$list_existing_unused->attach(form_input_list_entry($row['i_menu'],false,$menu_name));
-=======
-				$list2->attach(form_input_list_entry($row['i_menu'],false,($row['i_menu']=='zone_menu')?$menu_name:do_lang('MENU_UNUSED',$menu_name)));
->>>>>>> master
 			}
 		}
 		// Now see if there are any menus pending creation

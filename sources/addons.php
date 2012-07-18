@@ -394,10 +394,6 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 		{
 			$mode=fileperms($themed_version);
 			$mtime=0;
-<<<<<<< HEAD
-			// Too slow
-=======
->>>>>>> master
 			//if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($themed_version)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
 			//{
 			//	$_themed_version=dirname($val).'/'.$themed_suffix.basename($val);
