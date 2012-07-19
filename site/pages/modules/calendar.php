@@ -724,20 +724,20 @@ class Module_calendar
 				{
 					$class='free_time_hourly';
 					$text='&nbsp;';
-					$entry=do_template('CALENDAR_DAY_ENTRY_FREE',array('_GUID'=>'0091fbb877164ac797cb88b4571b5d35','CLASS'=>$class,'TEXT'=>$text));
+					$entry=static_evaluate_tempcode(do_template('CALENDAR_DAY_ENTRY_FREE',array('_GUID'=>'0091fbb877164ac797cb88b4571b5d35','CLASS'=>$class,'TEXT'=>$text))); /*HTMLHTML*/
 				} else
 				{
 					if ($stream[$i]['TPL']!='-1')
 					{
 						$down=$stream[$i]['DOWN'];
 						$priority=$stream[$i]['PRIORITY'];
-						$entry=do_template($stream[$i]['TPL'],$stream[$i]);
+						$entry=static_evaluate_tempcode(do_template($stream[$i]['TPL'],$stream[$i])); /*HTMLHTML*/
 					}
 					else $entry='';
 				}
 
 				if ($down=='0') $down='1';
-				if ((is_object($entry)) && (!$entry->is_empty()))
+				if /*((is_object($entry)) && (!$entry->is_empty()))*/($entry!='')
 				{
 					$timestamp=$period_start+$i*60*60;
 					if ((has_actual_page_access(NULL,'cms_calendar',NULL,NULL)) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_calendar')))
@@ -745,7 +745,7 @@ class Module_calendar
 						$and_filter=$this->get_and_filter();
 						$add_url=build_url(array('page'=>'cms_calendar','type'=>'ad','date'=>date('Y-m-d H:i:s',$timestamp),'e_type'=>(count($and_filter)==1)?$and_filter[0]:NULL),get_module_zone('cms_calendar'));
 					} else $add_url=new ocp_tempcode();
-					$_streams->attach(do_template('CALENDAR_DAY_STREAM_HOUR',array('_GUID'=>'93a8fb53183a4225ec3bf7f2ea07cfc5','CURRENT'=>date('Y-m-d H',utctime_to_usertime())==date('Y-m-d H',$timestamp),'ADD_URL'=>$add_url,'PRIORITY'=>$priority,'DOWN'=>$down,'ENTRY'=>$entry)));
+					$_streams->attach(/*HTMLHTML*/static_evaluate_tempcode(do_template('CALENDAR_DAY_STREAM_HOUR',array('_GUID'=>'93a8fb53183a4225ec3bf7f2ea07cfc5','CURRENT'=>date('Y-m-d H',utctime_to_usertime())==date('Y-m-d H',$timestamp),'ADD_URL'=>$add_url,'PRIORITY'=>$priority,'DOWN'=>$down,'ENTRY'=>$entry))));
 				}
 			}
 
