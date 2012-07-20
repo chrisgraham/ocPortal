@@ -203,6 +203,11 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 .input_tick_required, .input_float_required, .input_text_required, .input_upload_required {
 }
 
+.radio_description {
+	margin-top: -1.3em !important;
+	margin-bottom: 1em !important;
+}
+
 .various_ticks {
 	margin: -0.5em 0 -0.5em -0.5em;
 	white-space: nowrap;

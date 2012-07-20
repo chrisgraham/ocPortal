@@ -122,8 +122,8 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 	$dif_month=0;
 	$dif_year=0;
 	$day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
-	$dif=utctime_to_usertime()-utctime_to_usertime(mktime($start_hour,$start_minute,0,$start_month,$day_of_month,$start_year));
-	$start_day_of_month=$start_day;
+	$dif=utctime_to_usertime($period_start)-utctime_to_usertime(mktime($start_hour,$start_minute,0,$start_month,$day_of_month,$start_year));
+	$start_day_of_month=$day_of_month;
 	switch ($recurrence) // If a long way out of range, accelerate forward before steadedly looping forward till we might find a match (doesn't jump fully forward, due to possibility of timezones complicating things)
 	{
 		case 'daily':
@@ -144,7 +144,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$dif_month=1;
 			if ($dif>60*60*24*31*10)
 			{
-				$start_month+=$dif_month*intval(floor(floatval($dif)/(60.0*60.0*24.0*31.0)))-10;
+				$start_month+=$dif_month*intval(floor(floatval($dif)/(60.0*60.0*24.0*28.0)))-10;
 				$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
 			}
 			break;
@@ -156,7 +156,6 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			}
 			break;
 	}
-
 	$_b=mixed();
 	$b=mixed();
 
@@ -971,15 +970,17 @@ function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type)
 			$day_of_month=intval(date('d',mktime(0,0,0,$month+1,0,$year)))-$day+1;
 			break;
 		case 'dow_of_month':
-			$days=array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+			$days=array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'); // Used to set the repeating sequence $day is for (e.g. 0 means first Monday, 7 means second Monday, and so on)
 			$month_start=mktime(0,0,0,$month,1,$year);
-			$timestamp=strtotime('+'.strval(intval(1.0+floatval($day)/7.0)).' '.strval($days[$day%7]),$month_start);
+			$nth=intval(1.0+floatval($day)/7.0);
+			$timestamp=strtotime('+'.strval($nth).' '.($days[$day%7]),$month_start-1); /* The "-1" is because it counts passed these days, it does not directly find the nth day -- so if $month_start was on that day we'd make an error */
 			$day_of_month=intval(date('d',$timestamp));
 			break;
 		case 'dow_of_month_backwards':
 			$days=array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
 			$month_end=mktime(0,0,0,$month+1,0,$year);
-			$timestamp=strtotime('-'.strval(intval(1.0+floatval($day)/7.0)).' '.strval($days[$day%7]),$month_end);
+			$nth=intval(1.0+floatval($day)/7.0);
+			$timestamp=strtotime('-'.strval($nth).' '.($days[$day%7]),$month_end+1);
 			$day_of_month=intval(date('d',$timestamp));
 			break;
 	}

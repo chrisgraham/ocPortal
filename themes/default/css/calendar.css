@@ -87,7 +87,7 @@ abbr.dtstart, abbr.dtend {
 }
 
 .calendar_month th {
-	width: 12%;
+	font-size: 0.9em;
 	border: 1px solid {$GET,box_title_background}; /* Obscures border */
 }
 
@@ -107,7 +107,7 @@ abbr.dtstart, abbr.dtend {
 }
 
 .calendar_month_column_heading {
-	width: 9%;
+	width: 7%;
 }
 .calendar_month_column_day {
 	width: 13%;

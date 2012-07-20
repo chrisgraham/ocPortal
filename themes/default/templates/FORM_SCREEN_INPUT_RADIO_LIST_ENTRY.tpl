@@ -3,6 +3,6 @@
 </p>
 
 {+START,IF_NON_EMPTY,{DESCRIPTION}}
-	<div class="associated_details">{DESCRIPTION*}</div>
+	<div class="associated_details radio_description">{DESCRIPTION*}</div>
 {+END}
 
