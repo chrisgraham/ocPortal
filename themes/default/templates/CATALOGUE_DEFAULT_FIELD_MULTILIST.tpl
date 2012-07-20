@@ -9,6 +9,10 @@
 			{+END}
 
 			{OPTION*}
+
+			{+START,IF_PASSED_AND_TRUE,IS_OTHER}
+				<span class="associated_details">({!fields:ADDITIONAL_CUSTOM})</span>
+			{+END}
 		</p>
 	{+END}
 </div>

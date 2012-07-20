@@ -18,7 +18,7 @@
  * @package		core_fields
  */
 
-class Hook_fields_multilist
+class Hook_fields_combo_multi
 {
 
 	// ==============
@@ -37,7 +37,7 @@ class Hook_fields_multilist
 		$type='_LIST';
 		$special=new ocp_tempcode();
 		$special->attach(form_input_list_entry('',get_param('option_'.strval($row['id']),'')=='','---'));
-		$list=($row['cf_default']=='')?array():explode('|',$row['cf_default']);
+		$list=explode('|',$row['cf_default']);
 		$display=array_key_exists('trans_name',$row)?$row['trans_name']:get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
 		foreach ($list as $l)
 		{
@@ -74,10 +74,10 @@ class Hook_fields_multilist
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
 		unset($field);
-		if (!is_null($required))
+		/*if (!is_null($required))
 		{
-			if (($required) && ($default=='')) $default=preg_replace('#\|.*#','',$default);
-		}
+			Nothing special for this hook
+		}*/
 		return array('long_unescaped',$default,'long');
 	}
 
@@ -92,13 +92,21 @@ class Hook_fields_multilist
 	{
 		if (is_object($ev)) return $ev;
 		$all=array();
-		$exploded=explode(chr(10),$ev);
-		foreach (explode('|',$field['cf_default']) as $option)
+		$exploded_inbuilt=explode('|',$field['cf_default']);
+		$exploded_chosen=explode(chr(10),$ev);
+		foreach ($exploded_inbuilt as $option)
 		{
-			if (in_array($option,$exploded)) $all[]=array('OPTION'=>$option,'HAS'=>true);
+			$all[]=array('OPTION'=>$option,'HAS'=>in_array($option,$exploded_chosen));
+		}
+		foreach ($exploded_chosen as $chosen)
+		{
+			if (!in_array($chosen,$exploded_inbuilt))
+			{
+				$all[]=array('OPTION'=>$chosen,'HAS'=>true,'IS_OTHER'=>true);
+			}
 		}
 		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
-		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_FIELD_MULTILIST',array('ALL'=>$all),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
+		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_MULTILIST',array('ALL'=>$all),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
 	}
 
 	// ======================
@@ -117,16 +125,23 @@ class Hook_fields_multilist
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value)
 	{
 		$default=$field['cf_default'];
-		$list=($default=='')?array():explode('|',$default);
-		$_list=new ocp_tempcode();
-		$exploded=explode(chr(10),$actual_value);
-		if (($field['cf_required']==0) && (($actual_value=='') || (is_null($actual_value))))
-			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
-		foreach ($list as $l)
+		$exploded_inbuilt=explode('|',$default);
+		$_list=array();
+		$exploded_chosen=explode(chr(10),$actual_value);
+		$custom_value=mixed();
+		foreach ($exploded_inbuilt as $i=>$l)
 		{
-			$_list->attach(form_input_list_entry($l,in_array($l,$exploded)));
+			$_list[]=array($l,'field_'.strval($field['id']).'_'.strval($i),in_array($l,$exploded_chosen),'');
 		}
-		return form_input_multi_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,5,$field['cf_required']==1);
+		foreach ($exploded_chosen as $chosen)
+		{
+			if (!in_array($chosen,$exploded_inbuilt))
+			{
+				if (!is_null($custom_value)) $custom_value.=', '; else $custom_value='';
+				$custom_value.=$chosen;
+			}
+		}
+		return form_input_various_ticks($_list,$_cf_description,NULL,$_cf_name,false,'field_'.strval($field['id']).'_other',$custom_value);
 	}
 
 	/**
@@ -140,13 +155,31 @@ class Hook_fields_multilist
 	 */
 	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
 	{
+		$default=$field['cf_default'];
+		$list=explode('|',$default);
+
+		if (fractional_edit()) return $editing?STRING_MAGIC_NULL:'';
+
 		$id=$field['id'];
-		$tmp_name='field_'.strval($id);
-		if (!isset($_POST[$tmp_name]))
+		$value='';
+		foreach ($list as $i=>$l)
 		{
-			return ($editing && (is_null(post_param('require__field_'.strval($field['id']),NULL))))?STRING_MAGIC_NULL:'';
+			$tmp_name='field_'.strval($id).'_'.strval($i);
+			if (post_param_integer($tmp_name,0)==1)
+			{
+				if ($value!='') $value.=chr(10);
+				$value.=$l;
+			}
 		}
-		return implode(chr(10),$_POST[$tmp_name]);
+
+		$tmp_name='field_'.strval($id).'_other';
+		$custom=post_param($tmp_name.'_value','');
+		if ((post_param_integer($tmp_name,0)==1) && ($custom!=''))
+		{
+			if ($value!='') $value.=chr(10);
+			$value.=$custom;
+		}
+		return $value;
 	}
 
 }

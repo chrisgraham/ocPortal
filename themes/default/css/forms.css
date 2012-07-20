@@ -208,12 +208,20 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	white-space: nowrap;
 }
 
-.various_ticks .input_individual_tick {
-	border-{!en_right}: 1px dotted {$GET,pale_border};
+.various_ticks .input_individual_tick, .various_ticks .input_other_tick {
 	padding: 1em; /* Designed to make it fill whole box, i.e. equalise against the th's (to the left) height */
 	float: {!en_left};
 	font-size: 0.9em;
 	vertical-align: middle;
+	border-{!en_right}: 1px dotted {$GET,pale_border};
+}
+
+.various_ticks .input_individual_tick {
+}
+
+.various_ticks .input_other_tick {
+	margin-top: 0.5em;
+	border-top: 1px dotted {$GET,pale_border};
 }
 
 .various_ticks .input_individual_tick input {

@@ -879,7 +879,6 @@ class Hook_addon_registry_core_form_interfaces
 			'VALUE'=>lorem_phrase()
 		));
 
-		$name=placeholder_random_id();
 		foreach (placeholder_array() as $key=>$value)
 		{
 			$list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
@@ -890,6 +889,25 @@ class Hook_addon_registry_core_form_interfaces
 				'TEXT'=>lorem_phrase()
 			)));
 		}
+
+		$name=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_COMBO', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME'=>$name,
+			'CONTENT'=>$list,
+			'DEFAULT'=>''
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
 
 		$name=placeholder_random_id();
 		$input=do_lorem_template('FORM_SCREEN_INPUT_LIST', array(
@@ -1142,6 +1160,7 @@ class Hook_addon_registry_core_form_interfaces
 				'EXPANDED'=>$_option[1],
 				'SIMPLE_STYLE'=>false,
 				'BRETHREN_COUNT'=>"3",
+				'CUSTOM_NAME'=>placeholder_random_id(),
 				'OUT'=>$out
 			)));
 		}

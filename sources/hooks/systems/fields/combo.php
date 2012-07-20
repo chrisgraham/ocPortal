@@ -18,7 +18,7 @@
  * @package		core_fields
  */
 
-class Hook_fields_multilist
+class Hook_fields_combo
 {
 
 	// ==============
@@ -56,7 +56,7 @@ class Hook_fields_multilist
 	 */
 	function inputted_to_sql_for_search($row,$i)
 	{
-		return nl_delim_match_sql($row,$i,'long');
+		return exact_match_sql($row,$i,'long');
 	}
 
 	// ===================
@@ -91,14 +91,7 @@ class Hook_fields_multilist
 	function render_field_value($field,$ev)
 	{
 		if (is_object($ev)) return $ev;
-		$all=array();
-		$exploded=explode(chr(10),$ev);
-		foreach (explode('|',$field['cf_default']) as $option)
-		{
-			if (in_array($option,$exploded)) $all[]=array('OPTION'=>$option,'HAS'=>true);
-		}
-		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
-		return do_template('CATALOGUE_'.$field['c_name'].'_FIELD_FIELD_MULTILIST',array('ALL'=>$all),NULL,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
+		return escape_html($ev);
 	}
 
 	// ======================
@@ -119,14 +112,23 @@ class Hook_fields_multilist
 		$default=$field['cf_default'];
 		$list=($default=='')?array():explode('|',$default);
 		$_list=new ocp_tempcode();
-		$exploded=explode(chr(10),$actual_value);
-		if (($field['cf_required']==0) && (($actual_value=='') || (is_null($actual_value))))
+		if (($field['cf_required']==0) || ($actual_value=='') || (is_null($actual_value)))
 			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
 		foreach ($list as $l)
 		{
-			$_list->attach(form_input_list_entry($l,in_array($l,$exploded)));
+			$_list->attach(form_input_list_entry($l,false));
 		}
-		return form_input_multi_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,5,$field['cf_required']==1);
+
+		$required=$field['cf_required']==1;
+		$name='field_'.strval($field['id']);
+
+		$tabindex=get_form_field_tabindex(NULL);
+
+		$_required=($required)?'_required':'';
+
+		$input=do_template('FORM_SCREEN_INPUT_COMBO',array('DEFAULT'=>($actual_value==$field['cf_default'])?'':$actual_value,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'CONTENT'=>$_list));
+
+		return _form_input($name,$_cf_name,$_cf_description,$input,$required,false,$tabindex);
 	}
 
 	/**
@@ -142,11 +144,7 @@ class Hook_fields_multilist
 	{
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		if (!isset($_POST[$tmp_name]))
-		{
-			return ($editing && (is_null(post_param('require__field_'.strval($field['id']),NULL))))?STRING_MAGIC_NULL:'';
-		}
-		return implode(chr(10),$_POST[$tmp_name]);
+		return post_param($tmp_name,STRING_MAGIC_NULL);
 	}
 
 }
