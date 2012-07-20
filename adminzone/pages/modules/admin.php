@@ -497,11 +497,11 @@ class Module_admin
 													require_lang('menus');
 													require_lang('security');
 
-													$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+													$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 													$breadcrumbs->attach(hyperlink($_url,do_lang_tempcode(strtoupper($i[0]))));
 													if ($type!='misc')
 													{
-														$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+														$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 														$breadcrumbs->attach(hyperlink(build_url(array('page'=>$page,'type'=>'misc'),$zone),$i[3]));
 													}
 													break 2;
@@ -510,7 +510,7 @@ class Module_admin
 										}
 									} else
 									{
-										$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+										$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 										$breadcrumbs->attach(hyperlink(build_url(array('page'=>$page),$zone),$page));
 									}
 								}
@@ -595,11 +595,11 @@ class Module_admin
 							if (is_null($t)) $t='';
 							$breadcrumbs=new ocp_tempcode();
 							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'setup'),'adminzone'),do_lang_tempcode('SETUP')));
-							$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'misc'),'adminzone'),do_lang_tempcode('CONFIGURATION')));
-							$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'category','id'=>$p['the_page']),'adminzone'),do_lang('CONFIG_CATEGORY_'.$p['the_page'])));
-							$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 							$breadcrumbs->attach(hyperlink($url,do_lang($p['section'])));
 							$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 							$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'f7271912ccbe0358fe263ed61f7ed427','NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>protect_from_escaping($t),'SUP'=>$sup)));
@@ -633,7 +633,7 @@ class Module_admin
 					$description=do_lang_tempcode('CONFIG_CATEGORY_DESCRIPTION__'.$p);
 					$breadcrumbs=new ocp_tempcode();
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'setup'),'adminzone'),do_lang_tempcode('SETUP')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'misc'),'adminzone'),do_lang_tempcode('CONFIGURATION')));
 					$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'eec6e7cc57e660bdcbf123db8419e24e','NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>$description,'SUP'=>$sup)));
@@ -660,9 +660,9 @@ class Module_admin
 						$url.='#group_'.$group;
 						$breadcrumbs=new ocp_tempcode();
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'setup'),'adminzone'),do_lang_tempcode('SETUP')));
-						$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+						$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'misc'),'adminzone'),do_lang_tempcode('CONFIGURATION')));
-						$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+						$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_config','type'=>'category','id'=>$p),'adminzone'),do_lang('CONFIG_CATEGORY_'.$p)));
 						$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 						$content[$current_results_type_2]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'e95b87d01c839e41ee1ea484feeb5cd7','NAME'=>$n2,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>$group_description,'SUP'=>$sup)));
@@ -687,9 +687,9 @@ class Module_admin
 					$url=$_url->evaluate();
 					$breadcrumbs=new ocp_tempcode();
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'security'),'adminzone'),do_lang_tempcode('SECURITY')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_ocf_groups','type'=>'misc'),'adminzone'),do_lang_tempcode('USERGROUPS')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_ocf_groups','type'=>'ed'),'adminzone'),do_lang_tempcode('EDIT_GROUP')));
 					$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'785e7208a7b10dfd095197754cedf505','NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>'','SUP'=>$sup)));
@@ -711,7 +711,7 @@ class Module_admin
 					$url=$_url->evaluate();
 					$breadcrumbs=new ocp_tempcode();
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'style'),'adminzone'),do_lang_tempcode('STYLE')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'misc'),'adminzone'),do_lang_tempcode('THEMES')));
 					$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'00bb6ce930058afc298ce206b703322b','NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>'','SUP'=>$sup)));
@@ -739,9 +739,9 @@ class Module_admin
 					$url=$_url->evaluate();
 					$breadcrumbs=new ocp_tempcode();
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'setup'),'adminzone'),do_lang_tempcode('STRUCTURE')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_zones','type'=>'misc'),'adminzone'),do_lang_tempcode('ZONES')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_zones','type'=>'edit'),'adminzone'),do_lang_tempcode('EDIT_ZONE')));
 					$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'d9e5c8d9ba1aedb920ac7c719d4ace69','NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>escape_html($t),'SUP'=>$sup)));
@@ -784,9 +784,9 @@ class Module_admin
 					$_url=build_url(array('page'=>'admin_permissions','type'=>'specific','id'=>$p['p_section']),'adminzone');
 					$breadcrumbs=new ocp_tempcode();
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'security'),'adminzone'),do_lang_tempcode('SECURITY')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_permissions','type'=>'specific'),'adminzone'),do_lang_tempcode('PRIVILEGES')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink($_url,do_lang($p['p_section'])));
 					$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'52a412bd158c7dd16f3f9d0e84ae1b0b','NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>'','SUP'=>$sup)));
@@ -804,7 +804,7 @@ class Module_admin
 					$_url=build_url(array('page'=>'admin_permissions','type'=>'specific','id'=>$p),'adminzone');
 					$breadcrumbs=new ocp_tempcode();
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'security'),'adminzone'),do_lang_tempcode('SECURITY')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_permissions','type'=>'specific'),'adminzone'),do_lang_tempcode('PRIVILEGES')));
 					$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'43bfb229943e0bb1d2c2e4512e0e5ec9','NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>'','SUP'=>$sup)));
@@ -848,7 +848,7 @@ class Module_admin
 						$descrip=array_key_exists(1,$array)?do_lang_tempcode($array[1]):new ocp_tempcode();
 						$breadcrumbs=new ocp_tempcode();
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'security'),'adminzone'),do_lang_tempcode('SECURITY')));
-						$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+						$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_ocf_groups','type'=>'misc'),'adminzone'),do_lang_tempcode('USERGROUPS')));
 						$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'d0baedf2ee9cf0bdd00e604bd4c7f3b4','NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>$descrip,'SUP'=>$sup)));
@@ -915,7 +915,7 @@ class Module_admin
 						$descrip=array_key_exists(1,$array)?do_lang_tempcode($array[1]):new ocp_tempcode();
 						$breadcrumbs=new ocp_tempcode();
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'structure'),'adminzone'),do_lang_tempcode('STRUCTURE')));
-						$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+						$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_zones','type'=>'misc'),'adminzone'),do_lang_tempcode('ZONES')));
 						$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'9c2cadfe9be9776c91c4d99050e0c187','NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>$descrip,'SUP'=>$sup)));
@@ -1002,9 +1002,9 @@ class Module_admin
 				$url.='#jmp_'.$n;
 				$breadcrumbs=new ocp_tempcode();
 				$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'style'),'adminzone'),do_lang_tempcode('STYLE')));
-				$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+				$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 				$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_lang','type'=>'misc'),'adminzone'),do_lang_tempcode('TRANSLATE_CONTENT')));
-				$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+				$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 				$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_lang','type'=>'misc','lang'=>user_lang(),'lang_file'=>$lang_file),'adminzone'),$lang_file));
 				$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 				$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'cafa14d50ce6ecc1db1486017b364ce5','NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>escape_html($n_value),'SUP'=>$sup)));
@@ -1026,11 +1026,11 @@ class Module_admin
 					$_url=build_url(array('page'=>'admin_themes','type'=>'edit_image','theme'=>$image['theme'],'lang'=>$image['lang'],'id'=>$n),'adminzone');
 					$breadcrumbs=new ocp_tempcode();
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'style'),'adminzone'),do_lang_tempcode('STYLE')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'misc'),'adminzone'),do_lang_tempcode('THEMES')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'edit_css','theme'=>$image['theme']),'adminzone'),do_lang_tempcode('EDIT_THEME_IMAGE')));
-					$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(escape_html($image['theme']));
 					$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 					$lang=$image['lang'];
@@ -1060,9 +1060,9 @@ class Module_admin
 							$_url=build_url(array('page'=>'admin_themes','type'=>'_edit_templates','theme'=>$default_theme,'f0file'=>$file),'adminzone');
 							$breadcrumbs=new ocp_tempcode();
 							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'style'),'adminzone'),do_lang_tempcode('STYLE')));
-							$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'misc'),'adminzone'),do_lang_tempcode('THEMES')));
-							$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+							$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 							$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'edit_templates','theme'=>$default_theme),'adminzone'),do_lang_tempcode('EDIT_TEMPLATES')));
 							$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 							$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'5cd222ad77fe4bfdf05b4856a5f7b8ac','NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>'','SUP'=>$sup)));
@@ -1092,9 +1092,9 @@ class Module_admin
 							$url.='#'.$keywords[0][0];
 						$breadcrumbs=new ocp_tempcode();
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'style'),'adminzone'),do_lang_tempcode('STYLE')));
-						$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+						$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'misc'),'adminzone'),do_lang_tempcode('THEMES')));
-						$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+						$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 						$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_themes','type'=>'choose_css','theme'=>$default_theme),'adminzone'),do_lang_tempcode('EDIT_CSS')));
 						$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'3ac82fa3d03b3367a03116f57993769b','NAME'=>$n,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>'','SUP'=>$sup)));

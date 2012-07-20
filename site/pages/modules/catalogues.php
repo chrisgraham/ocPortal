@@ -920,7 +920,7 @@ class Module_catalogues
 		if ($catalogue['c_is_tree']==1)
 		{
 			$breadcrumbs=catalogue_category_breadcrumbs($id,$root);
-			if (!$breadcrumbs->is_empty()) $breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+			if (!$breadcrumbs->is_empty()) $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 			if (has_specific_permission(get_member(),'open_virtual_roots'))
 			{
 				$url=get_self_url(false,false,(is_null(get_param('root',NULL)))?array('root'=>$id):array('root'=>($id==-1)?NULL:$id));
@@ -932,7 +932,7 @@ class Module_catalogues
 			$url=build_url(array('page'=>'_SELF','type'=>'index','id'=>$catalogue_name),'_SELF');
 			$catalogue_title=get_translated_text($catalogue['c_title']);
 			$breadcrumbs->attach(hyperlink($url,escape_html($catalogue_title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',escape_html($catalogue_name))));
-			$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 			$breadcrumbs->attach('<span>'.escape_html($_title).'</span>');
 		}
 

@@ -400,7 +400,7 @@ function download_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$
 	$title=get_translated_text($PT_PAIR_CACHE_D[$category_id]['category']);
 	if (!$no_link_for_me_sir)
 	{
-		$tpl_url=do_template('BREADCRUMB_ESCAPED');
+		$tpl_url=do_template('BREADCRUMB_SEPARATOR');
 		$tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
 	} else $tpl_url=new ocp_tempcode();
 

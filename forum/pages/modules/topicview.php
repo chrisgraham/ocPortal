@@ -512,7 +512,7 @@ class Module_topicview
 		{
 			$breadcrumbs=new ocp_tempcode();
 			$breadcrumbs->attach(hyperlink(build_url(array('page'=>'members'),get_module_zone('members')),do_lang_tempcode('MEMBERS'),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
-			$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 			if (has_specific_permission(get_member(),'view_other_pt'))
 			{
 				$of_member=($topic_info['pt_from']==get_member())?$topic_info['pt_from']:$topic_info['pt_to'];

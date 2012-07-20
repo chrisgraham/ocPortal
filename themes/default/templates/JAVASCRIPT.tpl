@@ -1314,15 +1314,14 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 		return;
 	{+END}
 
-	var scrollY=window.scrollY;
+	var scroll_y=get_window_scroll_y();
 	if (typeof dest_y=='string') dest_y=find_pos_y(document.getElementById(dest_y));
 	if (dest_y<0) dest_y=0;
-
-	if ((typeof expected_scroll_y!="undefined") && (expected_scroll_y!=null) && (expected_scroll_y!=scrollY)) return; /* We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already */
-	if (typeof dir=='undefined' || !null) var dir=((dest_y-scrollY)>0)?1:-1;
+	if ((typeof expected_scroll_y!="undefined") && (expected_scroll_y!=null) && (expected_scroll_y!=scroll_y)) return; /* We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already */
+	if (typeof dir=='undefined' || !null) var dir=(dest_y>scroll_y)?1:-1;
 	var dist=dir*17;
 
-	if (((dir==1) && (scrollY+dist>=dest_y)) || ((dir==-1) && (scrollY+dist<=dest_y)) || ((dest_y-scrollY)*dir>2000))
+	if (((dir==1) && (scroll_y+dist>=dest_y)) || ((dir==-1) && (scroll_y+dist<=dest_y)) || ((dest_y-scroll_y)*dir>2000))
 	{
 		try
 		{
@@ -1338,8 +1337,7 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 	}
 	catch (e) {return;}; // May be stopped by popup blocker
 
-	scrollY=window.scrollY;
-	window.setTimeout(function() { smooth_scroll(dest_y,scrollY,dir,event_after); } , 30);
+	window.setTimeout(function() { smooth_scroll(dest_y,scroll_y,dir,event_after); } , 30);
 }
 
 /* Get what an elements current style is for a particular CSS property */
@@ -1826,14 +1824,18 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 		}
 		catch(ignore) {};
 
-		if ((typeof event.target!='undefined') || (typeof event.srcElement!='undefined'))
+		try
 		{
-			if (((typeof event.target=='undefined')?event.target:event.srcElement).ownerDocument!=win.document)
+			if ((typeof event.target!='undefined') || (typeof event.srcElement!='undefined'))
 			{
-				x=win.mouseX+style__offset_x;
-				y=win.mouseY+style__offset_y;
+				if (((typeof event.target!='undefined')?event.target:event.srcElement).ownerDocument!=win.document)
+				{
+					x=win.mouseX+style__offset_x;
+					y=win.mouseY+style__offset_y;
+				}
 			}
 		}
+		catch(ignore) {};
 
 		if (!force_width)
 		{
@@ -1858,8 +1860,8 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 		{
 			var y_excess=y-get_window_height(win)-get_window_scroll_y(win)+height+10;
 			if (y_excess>0) y-=y_excess;
-			var scrollY=get_window_scroll_y(win);
-			if (y<scrollY) y=scrollY;
+			var scroll_y=get_window_scroll_y(win);
+			if (y<scroll_y) y=scroll_y;
 			tooltip_element.style.top=y+'px';
 		}
 		tooltip_element.style.left=x+'px';

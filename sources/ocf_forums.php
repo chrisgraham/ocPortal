@@ -215,7 +215,7 @@ function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NU
 	if ($end_point_forum!==get_param_integer('keep_forum_root',db_get_first_id()))
 	{
 		$out=ocf_forum_breadcrumbs($parent_forum,NULL,NULL,false);
-		if (!$out->is_empty()) $out->attach(do_template('BREADCRUMB_ESCAPED'));
+		if (!$out->is_empty()) $out->attach(do_template('BREADCRUMB_SEPARATOR'));
 	} else $out=new ocp_tempcode();
 	$out->attach($_this_name);
 

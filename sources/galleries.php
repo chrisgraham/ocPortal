@@ -658,7 +658,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 	$title=get_translated_text($PT_PAIR_CACHE_G[$category_id]['fullname']);
 	if (!$no_link_for_me_sir)
 	{
-		$tpl_url=do_template('BREADCRUMB_ESCAPED');
+		$tpl_url=do_template('BREADCRUMB_SEPARATOR');
 		$tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
 	} else $tpl_url=new ocp_tempcode();
 
@@ -676,7 +676,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 				list($zone,$map,$hash)=page_link_decode($page_link);
 				if (get_page_name()=='galleries') $map+=propagate_ocselect();
 				$url=build_url($map,$zone,NULL,false,false,false,$hash);
-				if ($i!=0) $below->attach(do_template('BREADCRUMB_ESCAPED'));
+				if ($i!=0) $below->attach(do_template('BREADCRUMB_SEPARATOR'));
 				$below->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
 			}
 			$below->attach($tpl_url);

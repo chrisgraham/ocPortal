@@ -326,7 +326,7 @@ function breadcrumbs()
 	$out->attach($BREADCRUMBS);
 	if (!$BREADCRUMB_EXTRA_SEGMENTS->is_empty())
 	{
-		if (!$out->is_empty()) $out->attach(do_template('BREADCRUMB_ESCAPED'));
+		if (!$out->is_empty()) $out->attach(do_template('BREADCRUMB_SEPARATOR'));
 		$out->attach($BREADCRUMB_EXTRA_SEGMENTS);
 	}
 
@@ -382,7 +382,7 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint=true)
 		list($entrypoint,$title)=$bit;
 		$title=symbol_truncator(array(is_object($title)?$title:escape_html($title),BREADCRUMB_CROP_LENGTH,'1','1'),'spread');
 
-		if (!$stub->is_empty()) $stub->attach(do_template('BREADCRUMB_ESCAPED'));
+		if (!$stub->is_empty()) $stub->attach(do_template('BREADCRUMB_SEPARATOR'));
 		if ($entrypoint==='')
 		{
 			$stub->attach($title);
@@ -403,7 +403,7 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint=true)
 	// Self-link
 	if ($link_to_self_entrypoint)
 	{
-		if (!$stub->is_empty()) $stub->attach(do_template('BREADCRUMB_ESCAPED'));
+		if (!$stub->is_empty()) $stub->attach(do_template('BREADCRUMB_SEPARATOR'));
 		$title=($BREADCRUMB_SET_SELF===NULL)?$DISPLAYED_TITLE:$BREADCRUMB_SET_SELF;
 		if ($title!==NULL)
 		{
@@ -440,7 +440,7 @@ function breadcrumb_add_segment($segment,$final_title=NULL)
 				list($entrypoint,$title)=$bit;
 				$title=symbol_truncator(array(is_object($title)?$title:escape_html($title),BREADCRUMB_CROP_LENGTH,'1','1'),'spread');
 
-				$BREADCRUMB_EXTRA_SEGMENTS->attach(do_template('BREADCRUMB_ESCAPED'));
+				$BREADCRUMB_EXTRA_SEGMENTS->attach(do_template('BREADCRUMB_SEPARATOR'));
 
 				if ($entrypoint==='')
 				{
@@ -461,7 +461,7 @@ function breadcrumb_add_segment($segment,$final_title=NULL)
 		} else
 		{
 			$title=$final_title;
-			$BREADCRUMB_EXTRA_SEGMENTS->attach(do_template('BREADCRUMB_ESCAPED'));
+			$BREADCRUMB_EXTRA_SEGMENTS->attach(do_template('BREADCRUMB_SEPARATOR'));
 			$title=symbol_truncator(array(is_object($title)?$title:escape_html($title),BREADCRUMB_CROP_LENGTH,'1','1'),'spread');
 			$BREADCRUMB_EXTRA_SEGMENTS->attach($title);
 		}
@@ -1409,7 +1409,7 @@ function comcode_breadcrumbs($the_page,$the_zone,$root='',$no_link_for_me_sir=tr
 	if ($title===NULL) $title=$the_page;
 	if (!$no_link_for_me_sir)
 	{
-		$tpl_url=($PT_PAIR_CACHE_CP[$the_page]['p_parent_page']=='')?new ocp_tempcode():do_template('BREADCRUMB_ESCAPED');
+		$tpl_url=($PT_PAIR_CACHE_CP[$the_page]['p_parent_page']=='')?new ocp_tempcode():do_template('BREADCRUMB_SEPARATOR');
 		$_title=is_object($title)?$title->evaluate():$title;
 		$tooltip=($jumps==0)?do_lang_tempcode('VIRTUAL_ROOT'):do_lang_tempcode('GO_BACKWARDS_TO',@html_entity_decode(strip_tags($_title),ENT_QUOTES,get_charset()));
 
@@ -1420,7 +1420,7 @@ function comcode_breadcrumbs($the_page,$the_zone,$root='',$no_link_for_me_sir=tr
 		$tpl_url=new ocp_tempcode();
 		if ($jumps==0)
 		{
-			$tpl_url=($PT_PAIR_CACHE_CP[$the_page]['p_parent_page']=='')?new ocp_tempcode():do_template('BREADCRUMB_ESCAPED');
+			$tpl_url=($PT_PAIR_CACHE_CP[$the_page]['p_parent_page']=='')?new ocp_tempcode():do_template('BREADCRUMB_SEPARATOR');
 			$_title=is_object($title)?$title->evaluate():$title;
 			if ($_title!='')
 				$tpl_url->attach('<span>'.$_title.'</span>');

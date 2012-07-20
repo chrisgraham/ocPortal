@@ -110,7 +110,7 @@ class Hook_search_filedump
 					if (array_key_exists($i2+1,$dirs))
 					{
 						$breadcrumbs_url=build_url(array('page'=>'filedump','place'=>$pre.$dirs[$i2].'/'),get_module_zone('filedump'));
-						if (!$file_breadcrumbs->is_empty()) $file_breadcrumbs->attach(do_template('BREADCRUMB',array('_GUID'=>'7ee62e230d53344a7d9667dc59be21c4')));
+						if (!$file_breadcrumbs->is_empty()) $file_breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR',array('_GUID'=>'7ee62e230d53344a7d9667dc59be21c4')));
 						$file_breadcrumbs->attach(hyperlink($breadcrumbs_url,$d));
 					}
 					$pre.=$dirs[$i2].'/';

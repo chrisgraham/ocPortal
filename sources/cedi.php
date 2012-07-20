@@ -371,14 +371,14 @@ function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 			}
 			else
 			{
-				$insbreadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+				$insbreadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 				$insbreadcrumbs->attach($content);
 			}
 		} else
 		{
 			if (!$insbreadcrumbs->is_empty())
 			{
-				$insbreadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+				$insbreadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 			}
 			if (is_null($current_title))
 			{

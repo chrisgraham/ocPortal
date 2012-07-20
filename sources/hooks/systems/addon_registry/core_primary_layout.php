@@ -86,7 +86,7 @@ class Hook_addon_registry_core_primary_layout
 			'MAIL.tpl',
 			'MAIL_SUBJECT.tpl',
 			'BREADCRUMB.tpl',
-			'BREADCRUMB_ESCAPED.tpl',
+			'BREADCRUMB_SEPARATOR.tpl',
 			'CSS_NEED_FULL.tpl'
 		);
 	}
@@ -100,7 +100,7 @@ class Hook_addon_registry_core_primary_layout
 	function tpl_previews()
 	{
 		return array(
-			'BREADCRUMB_ESCAPED.tpl'=>'breadcrumb',
+			'BREADCRUMB_SEPARATOR.tpl'=>'breadcrumb',
 			'BREADCRUMB.tpl'=>'breadcrumb',
 			'CLOSED_SITE.tpl'=>'closed_site',
 			'CSS_NEED_FULL.tpl'=>'css_need_full',
@@ -127,10 +127,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		$out=new ocp_tempcode();
 		$out->attach(lorem_phrase());
-		$bc=do_lorem_template('BREADCRUMB', array());
-		$out->attach($bc->evaluate());
-		$out->attach(lorem_phrase());
-		$out->attach(do_lorem_template('BREADCRUMB_ESCAPED', array()));
+		$out->attach(do_lorem_template('BREADCRUMB_SEPARATOR', array()));
 		$out->attach(lorem_phrase());
 		return array(
 			lorem_globalise($out, NULL, '', true)

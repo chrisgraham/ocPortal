@@ -584,7 +584,7 @@ class Module_galleries
 
 		$breadcrumbs=gallery_breadcrumbs($cat,$root,true,get_module_zone('galleries'));
 		if (!$breadcrumbs->is_empty())
-			$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 		if (has_specific_permission(get_member(),'open_virtual_roots'))
 		{
 			$url=get_self_url(false,false,array('root'=>$cat));

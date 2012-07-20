@@ -159,7 +159,7 @@ class Module_filedump
 			if (array_key_exists($i+1,$dirs))
 			{
 				$breadcrumbs_url=build_url(array('page'=>'_SELF','place'=>$pre.$dirs[$i].'/'),'_SELF');
-				if (!$file_tree->is_empty()) $file_tree->attach(do_template('BREADCRUMB',array('_GUID'=>'7ee62e230d53344a7d9667dc59be21c6')));
+				if (!$file_tree->is_empty()) $file_tree->attach(do_template('BREADCRUMB_SEPARATOR',array('_GUID'=>'7ee62e230d53344a7d9667dc59be21c6')));
 				$file_tree->attach(hyperlink($breadcrumbs_url,$d));
 			}
 			$pre.=$dirs[$i].'/';

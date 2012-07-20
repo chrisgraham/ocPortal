@@ -1293,7 +1293,7 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 	// Children of this category
 	$breadcrumbs2=new ocp_tempcode();
 	$breadcrumbs2->attach($breadcrumbs);
-	$breadcrumbs2->attach(do_template('BREADCRUMB'));
+	$breadcrumbs2->attach(do_template('BREADCRUMB_SEPARATOR'));
 	$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title'),array('c_name'=>$catalogue_name,'cc_parent_id'=>$category_id),'ORDER BY id DESC',300/*reasonable limit to stop it dying*/);
 	foreach ($rows as $i=>$child)
 	{
@@ -1376,7 +1376,7 @@ function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_
 	if (!$no_link_for_me_sir)
 	{
 		$title=get_translated_text($PT_PAIR_CACHE[$category_id]['cc_title']);
-   	if (!$below->is_empty()) $tpl_url=do_template('BREADCRUMB_ESCAPED'); else $tpl_url=new ocp_tempcode();
+   	if (!$below->is_empty()) $tpl_url=do_template('BREADCRUMB_SEPARATOR'); else $tpl_url=new ocp_tempcode();
    	$tpl_url->attach(hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up'));
 	} else $tpl_url=new ocp_tempcode();
 
@@ -1536,7 +1536,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 		$map['BREADCRUMBS']=new ocp_tempcode();
 		$url=build_url(array('page'=>'_SELF','type'=>'index','id'=>$catalogue_name),'_SELF');
 		$map['BREADCRUMBS']->attach(hyperlink($url,escape_html(get_translated_text($catalogue['c_title'])),false,false,do_lang('INDEX')));
-		$map['BREADCRUMBS']->attach(do_template('BREADCRUMB_ESCAPED'));
+		$map['BREADCRUMBS']->attach(do_template('BREADCRUMB_SEPARATOR'));
 		$url_map=array('page'=>'_SELF','type'=>'category','id'=>$category['id']);
 		if (get_page_name()=='catalogues') $url_map+=propagate_ocselect();
 		$url=build_url($url_map,'_SELF');

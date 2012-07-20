@@ -483,7 +483,7 @@ function placeholder_breadcrumbs()
 {
 	$tpl_url=new ocp_tempcode();
 	$tpl_url->attach(hyperlink(placeholder_url(),escape_html(lorem_phrase()),false,false,do_lang_tempcode('GO_BACKWARDS_TO',lorem_phrase()),NULL,NULL,'up'));
-	$tpl_url->attach(do_lorem_template('BREADCRUMB_ESCAPED'));
+	$tpl_url->attach(do_lorem_template('BREADCRUMB_SEPARATOR'));
 	$tpl_url->attach(hyperlink(placeholder_url(),escape_html(lorem_phrase()),false,false,do_lang_tempcode('GO_BACKWARDS_TO',lorem_phrase()),NULL,NULL,'up'));
 	return $tpl_url;
 }

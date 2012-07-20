@@ -397,7 +397,7 @@ class Module_downloads
 		$breadcrumbs=download_breadcrumbs($id,$root,true,get_zone_name());
 		if (!$breadcrumbs->is_empty())
 		{
-			$breadcrumbs->attach(do_template('BREADCRUMB_ESCAPED'));
+			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 		}
 		if (has_specific_permission(get_member(),'open_virtual_roots'))
 		{

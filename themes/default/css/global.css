@@ -559,13 +559,13 @@ header h1 {
 	font-weight: bold;
 }
 
-.breadcrumbs a:after {
+.breadcrumbs>.sep:after {
 	content: " \00A0\00BB " !important;
 	display: inline-block;
 	font-size: 0.9em;
 	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 }
-.breadcrumbs a:last-child:after {
+.breadcrumbs>.sep:last-child:after {
 	content: "" !important;
 }
 
