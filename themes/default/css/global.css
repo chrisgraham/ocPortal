@@ -267,7 +267,7 @@ th, .fake_th {
 	font-weight: bold;
 	text-align: center;
 }
-th a, th a:hover, th a:visited {
+th a, th a:hover, th a:visited, .fake_th a, .fake_th a:hover, .fake_th a:visited {
 	color: {$GET,box_title_text};
 }
 thead>tr>th {
