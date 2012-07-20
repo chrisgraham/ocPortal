@@ -542,7 +542,7 @@ class Module_tickets
 				$comment_form=new ocp_tempcode();
 			}
 
-			$post_url=build_url(array('page'=>'_SELF','id'=>$id,'type'=>'post','redirect'=>get_param('redirect',NULL)),'_SELF');
+			$post_url=build_url(array('page'=>'_SELF','id'=>$id,'type'=>'post','redirect'=>get_param('redirect',NULL),'start_comments'=>get_param('start_comments',NULL),'max_comments'=>get_param('max_comments',NULL)),'_SELF');
 
 			require_code('form_templates');
 			require_code('feedback');
