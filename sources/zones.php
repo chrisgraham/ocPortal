@@ -610,6 +610,24 @@ function find_all_hooks($type,$entry)
 	return $out;
 }
 
+ /**
+ * Find the default caching setting for a block.
+ *
+ * @param  ID_TEXT             The block name
+ * @return ID_TEXT             The default caching setting
+ */
+function block_cache_default($codename)
+{
+	if ((cron_installed()) && (running_script('index')))
+	{
+		if ($codename=='side_weather' || $codename=='side_rss' || $codename=='main_rss') // Special cases to stop external dependencies causing slowdowns
+		{
+			return '2';
+		}
+	}
+	return '1';
+}
+
 /**
  * Get the processed tempcode for the specified block. Please note that you pass multiple parameters in as an array, but single parameters go in as a string or other flat variable.
  *
@@ -624,14 +642,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 
 	$DO_NOT_CACHE_THIS=false;
 
-	if ((cron_installed()) && (running_script('index')))
-	{
-		if ($codename=='side_weather' || $codename=='side_rss' || $codename=='main_rss') // Special cases to stop external dependencies causing issues
-		{
-			if (!array_key_exists('cache',$map))
-				$map['cache']='2';
-		}
-	}
+	if (!array_key_exists('cache',$map))
+		$map['cache']=block_cache_default($codename);
 
 	$object=NULL;
 	if (((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1) || (get_param_integer('cache_blocks',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache_blocks',NULL)!==0) && (get_param_integer('cache',NULL)!==0)) && (strpos(get_param('special_page_type',''),'t')===false))

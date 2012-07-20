@@ -565,6 +565,7 @@ function block_helper_script()
 		$parameters[]='failsafe';
 		$parameters[]='cache';
 		$parameters[]='quick_cache';
+		if (!isset($defaults['cache'])) $defaults['cache']=block_cache_default($block);
 		if (is_null($parameters)) $parameters=array();
 		$advanced_ind=do_lang('BLOCK_IND_ADVANCED');
 		$param_classes=array('normal'=>array(),'advanced'=>array());
@@ -887,7 +888,7 @@ function block_helper_script()
 				if (post_param_integer('tick_on_form__'.$parameter,0)==0) continue; // If not on form, continue, otherwise must be 0
 				$value='0';
 			}
-			if (($value!='') && (($parameter!='failsafe') || ($value=='1')) && (($parameter!='cache') || ($value=='0')) && (($parameter!='quick_cache') || ($value=='1')))
+			if (($value!='') && (($parameter!='failsafe') || ($value=='1')) && (($parameter!='cache') || ($value!=block_cache_default($block))) && (($parameter!='quick_cache') || ($value=='1')))
 			{
 				if ($parameter=='param')
 				{
