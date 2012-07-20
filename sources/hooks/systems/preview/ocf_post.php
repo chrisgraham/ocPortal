@@ -144,7 +144,7 @@ class Hook_Preview_ocf_post
 
 		// Rank images
 		$rank_images=new ocp_tempcode();
-		$posters_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($post_owner);
+		$posters_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($post_owner,true);
 		foreach ($posters_groups as $group)
 		{
 			$rank_image=ocf_get_group_property($group,'rank_image');
