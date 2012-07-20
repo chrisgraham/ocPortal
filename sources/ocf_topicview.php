@@ -587,6 +587,7 @@ function ocf_cache_member_details($members)
  */
 function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 {
+	require_lang('ocf');
 	require_code('ocf_members2');
 	$buttons=new ocp_tempcode();
 	if ((array_key_exists('may_validate_posts',$topic_info)) && ((($topic_info['validated']==0) && ($_postdetails['id']==$topic_info['first_post_id'])) || ($_postdetails['validated']==0)))
