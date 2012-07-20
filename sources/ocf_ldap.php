@@ -227,7 +227,7 @@ function ocf_get_ldap_hash($cn)
 {
 	global $LDAP_CONNECTION;
 
-	$results=@ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.utf8_encode(clean_cn($cn)).'))',array('userPassword'));
+	$results=@ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.utf8_encode(clean_cn($cn)).'))',array('userpassword'));
 	if ($results===false)
 	{
 		require_code('site');
