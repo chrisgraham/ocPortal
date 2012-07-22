@@ -89,13 +89,13 @@ class Module_admin_ocf_ldap
 			add_config_option('WINDOWS_AUTHENTICATION','windows_auth_is_enabled','tick','return \'0\';','SECTION_FORUMS','LDAP');
 			add_config_option('LDAP_LOGIN_QUALIFIER','ldap_login_qualifier','line','return is_null($old=get_value(\'ldap_login_qualifier\'))?\'\':$old;','SECTION_FORUMS','LDAP');
 
-			add_config_option('LDAP_GROUP_SEARCH_QUALIFIER','ldap_group_search_qualifier','line','return \'ou=Group\';','SECTION_FORUMS','LDAP');
-			add_config_option('LDAP_MEMBER_SEARCH_QUALIFIER','ldap_member_search_qualifier','line','return (get_option(\'ldap_is_windows\')==\'0\')?\'cn=Users\':\'ou=People\';','SECTION_FORUMS','LDAP');
-			add_config_option('LDAP_MEMBER_PROPERTY','ldap_member_property','line','return (get_option(\'ldap_is_windows\')==\'0\')?\'uid\':\'sAMAccountName\';','SECTION_FORUMS','LDAP');
-			add_config_option('LDAP_NONE_BIND_LOGINS','ldap_none_bind_logins','tick','return \'1\';','SECTION_FORUMS','LDAP');
+			add_config_option('LDAP_GROUP_SEARCH_QUALIFIER','ldap_group_search_qualifier','line','return \'\';','SECTION_FORUMS','LDAP');
+			add_config_option('LDAP_MEMBER_SEARCH_QUALIFIER','ldap_member_search_qualifier','line','return \'\';','SECTION_FORUMS','LDAP');
+			add_config_option('LDAP_MEMBER_PROPERTY','ldap_member_property','line','return \'cn\';','SECTION_FORUMS','LDAP');
+			add_config_option('LDAP_NONE_BIND_LOGINS','ldap_none_bind_logins','tick','return \'0\';','SECTION_FORUMS','LDAP');
 			add_config_option('LDAP_VERSION','ldap_version','integer','return \'3\';','SECTION_FORUMS','LDAP');
-			add_config_option('LDAP_GROUP_CLASS','ldap_group_class','line','return \'posixGroup\';','SECTION_FORUMS','LDAP');
-			add_config_option('LDAP_MEMBER_CLASS','ldap_member_class','line','return \'posixAccount\';','SECTION_FORUMS','LDAP');
+			add_config_option('LDAP_GROUP_CLASS','ldap_group_class','line','return (get_option(\'ldap_is_windows\')==\'1\')?\'group\':\'posixGroup\';','SECTION_FORUMS','LDAP');
+			add_config_option('LDAP_MEMBER_CLASS','ldap_member_class','line','return (get_option(\'ldap_is_windows\')==\'1\')?\'user\':\'posixAccount\';','SECTION_FORUMS','LDAP');
 		}
 	}
 
@@ -154,7 +154,7 @@ class Module_admin_ocf_ldap
 		{
 			if (is_null(ocf_group_ldapcn_to_ocfid($group)))
 			{
-				$_group=str_replace(' ','_space_',strval($group));
+				$_group=str_replace(' ','_space_',$group);
 				$tpl=do_template('OCF_LDAP_LIST_ENTRY',array('_GUID'=>'99aa6dd1a7a4caafd0199f8b5512cf29','NAME'=>'add_group_'.$_group,'NICE_NAME'=>$group));
 				$groups_add->attach($tpl);
 			}
@@ -207,9 +207,9 @@ class Module_admin_ocf_ldap
 		$all_ldap_groups=ocf_get_all_ldap_groups();
 		foreach ($all_ldap_groups as $group)
 		{
-			if (post_param_integer('add_group_'.$group,0)==1)
+			if (post_param_integer('add_group_'.str_replace(' ','_space_',$group),0)==1)
 			{
-				ocf_make_group(str_replace('_space_',' ',$group),0,0,0,'');
+				ocf_make_group($group,0,0,0,'');
 			}
 		}
 		$all_ocp_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
