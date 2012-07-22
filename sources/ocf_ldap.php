@@ -218,12 +218,18 @@ function ocf_ldap_bind()
 			$login=$pre.$cn;
 		} else
 		{
-			if (strpos($cn,'=')===false)
+			if (get_value('sam_bind')==='1')
 			{
-				$login=member_property().'='.$cn.','.member_search_qualifier().get_option('ldap_base_dn');
+				$login=$cn.'@'.preg_replace('#^\.#','',str_replace('dn=','.',get_option('ldap_base_dn')));
 			} else
 			{
-				$login=$cn;
+				if (strpos($cn,'=')===false)
+				{
+					$login=member_property().'='.$cn.','.member_search_qualifier().get_option('ldap_base_dn');
+				} else
+				{
+					$login=$cn;
+				}
 			}
 		}
 
@@ -379,12 +385,18 @@ function ocf_ldap_authorise_login($cn,$password)
 		$login=$pre.$cn;
 	} else
 	{
-		if (strpos($cn,'=')===false)
+		if (get_value('sam_bind')==='1')
 		{
-			$login=member_property().'='.$cn.','.member_search_qualifier().get_option('ldap_base_dn');
+			$login=$cn.'@'.preg_replace('#^\.#','',str_replace('dn=','.',get_option('ldap_base_dn')));
 		} else
 		{
-			$login=$cn;
+			if (strpos($cn,'=')===false)
+			{
+				$login=member_property().'='.$cn.','.member_search_qualifier().get_option('ldap_base_dn');
+			} else
+			{
+				$login=$cn;
+			}
 		}
 	}
 	$test=@ldap_bind($LDAP_CONNECTION,$login,$password);
