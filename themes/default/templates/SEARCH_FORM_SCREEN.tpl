@@ -19,7 +19,9 @@
 	{+END}
 {+END}
 
+{+START,IF_PASSED,RESULTS}
 <div class="box">
+{+END}
 	{+START,IF_PASSED,RESULTS}
 		<h2 class="toggleable_tray_title">
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{!SETTINGS}</a>
@@ -151,7 +153,9 @@
 			</p>
 		</form>
 	</div>
+{+START,IF_PASSED,RESULTS}
 </div>
+{+END}
 
 {+START,SET,commented_out}
 	<form title="{!SEARCH}: Google" alass="google_search_box" method="get" action="http://www.google.com/search">

@@ -145,7 +145,7 @@ class Hook_search_comcode_pages
 			if ($row['the_zone']=='!') continue;
 			if (array_key_exists($row['the_zone'].':'.$row['the_page'],$pages_found)) continue;
 			$pages_found[$row['the_zone'].':'.$row['the_page']]=1;
-			$out[$i]['data']=array($row['the_zone'],$row['the_page'],$limit_to);
+			$out[$i]['data']=$row+array('extra'=>array($row['the_zone'],$row['the_page'],$limit_to));
 			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
 
 			if (!has_page_access(get_member(),$row['the_page'],$row['the_zone'])) $out[$i]['restricted']=true;
@@ -194,7 +194,7 @@ class Hook_search_comcode_pages
 
 						if (in_memory_search_match(array('content'=>$content,'conjunctive_operator'=>$boolean_operator),$contents))
 						{
-							$out[$i]['data']=array($zone,$page,$limit_to);
+							$out[$i]['data']=$row+array('extra'=>array($row['the_zone'],$row['the_page'],$limit_to));
 							if ($remapped_orderer=='the_page') $out[$i]['orderer']=$page;
 							elseif ($remapped_orderer=='the_zone') $out[$i]['orderer']=$zone;
 
@@ -222,7 +222,7 @@ class Hook_search_comcode_pages
 	 */
 	function render($row)
 	{
-		list($zone,$page,$limit_to)=$row;
+		list($zone,$page,$limit_to)=$row['extra'];
 		return $this->decide_template($zone,$page,$limit_to);
 	}
 
