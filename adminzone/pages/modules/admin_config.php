@@ -478,9 +478,9 @@ class Module_admin_config
 
 			$count=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($myrow['cnt'])));
 
-			$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'6ba2b09432d06e7502c71e7aac2d3527','COUNT'=>$count,'TITLE'=>do_lang_tempcode('CONFIGURATION'),'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>do_lang_tempcode('CONFIG_CATEGORY_DESCRIPTION__'.$myrow['the_page']))));
+			$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'6ba2b09432d06e7502c71e7aac2d3527','COUNT'=>$count,'TITLE'=>protect_from_escaping(do_lang('CONFIGURATION').': '.$_name),'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>do_lang_tempcode('CONFIG_CATEGORY_DESCRIPTION__'.$myrow['the_page']))));
 		}
-		$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('COUNT'=>NULL,'TITLE'=>do_lang_tempcode('CONFIGURATION'),'URL'=>get_base_url().'/config_editor.php','NAME'=>do_lang_tempcode('BASE_CONFIGURATION'),'DESCRIPTION'=>do_lang_tempcode('DOC_BASE_CONFIGURATION'))));
+		$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('COUNT'=>NULL,'TITLE'=>protect_from_escaping(do_lang('CONFIGURATION').': '.do_lang('BASE_CONFIGURATION')),'URL'=>get_base_url().'/config_editor.php','NAME'=>do_lang_tempcode('BASE_CONFIGURATION'),'DESCRIPTION'=>do_lang_tempcode('DOC_BASE_CONFIGURATION'))));
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'c8fdb2b481625d58b0b228c897fda72f','PRE'=>paragraph(do_lang_tempcode('CHOOSE_A_CONFIG_CATEGORY')),'POST'=>'','TITLE'=>$title,'CONTENT'=>$content));
 	}
