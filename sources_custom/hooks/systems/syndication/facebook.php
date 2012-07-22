@@ -47,6 +47,11 @@ class Hook_Syndication_facebook
 
 		// oauth apparently worked
 		$access_token=$FACEBOOK_CONNECT->getAccessToken();
+		if (is_null($access_token)) // Actually it didn't
+		{
+			attach_message(do_lang_tempcode('FACEBOOK_OAUTH_FAIL',escape_html(do_lang('UNKNOWN'))),'warn');
+			return false;
+		}
 
 		if (is_null($member_id))
 		{
