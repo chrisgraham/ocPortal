@@ -371,6 +371,7 @@ class Module_chat
 		if ($type=='blocking_set') return $this->blocking_set();
 		if ($type=='blocking_add') return $this->blocking_add();
 		if ($type=='blocking_remove') return $this->blocking_remove();
+		if ($type=='buddy_add') return $this->friend_add(); // TODO: Remove after a while. This is legacy, as emails may have gone out using the old URL, from before upgrade
 		if ($type=='friend_add') return $this->friend_add();
 		if ($type=='friend_remove') return $this->friend_remove();
 		if ($type=='friends_list') return $this->friends_list();
