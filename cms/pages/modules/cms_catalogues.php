@@ -659,7 +659,11 @@ class Module_cms_catalogues extends standard_aed_module
 	function may_delete_this($id)
 	{		
 		if (!is_ecommerce_catalogue_entry(intval($id))) return true;
-		return is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_details','id',array('p_id'=>intval($id),'p_type'=>'catalogue_items')));
+		return
+			is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_details','id',array('p_id'=>intval($id),'p_type'=>'catalogue_items')))
+			&&
+			is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_cart','product_id',array('product_id'=>intval($id),'product_type'=>'catalogue_items')))
+			;
 	}
 
 	/**
