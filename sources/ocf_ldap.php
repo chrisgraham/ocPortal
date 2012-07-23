@@ -224,26 +224,7 @@ function ocf_ldap_bind()
 		}
 	} else
 	{
-		$pre=get_option('ldap_login_qualifier');
-		if ($pre!='')
-		{
-			$login=$pre.$cn;
-		} else
-		{
-			if (member_property()=='sAMAccountName')
-			{
-				$login=$cn.'@'.preg_replace('#^dc=#','',str_replace(',dc=','.',get_option('ldap_base_dn')));
-			} else
-			{
-				if (strpos($cn,'=')===false)
-				{
-					$login=member_property().'='.$cn.','.member_search_qualifier().get_option('ldap_base_dn');
-				} else
-				{
-					$login=$cn;
-				}
-			}
-		}
+		$login=ldap_get_login_string($cn);
 
 		/*
 		Example for Active Directory, if domain is chris4.com
@@ -368,6 +349,37 @@ function ocf_ldap_hash($cn,$password)
 }
 
 /**
+ * Get an LDAP login string to do a bind against.
+ *
+ * @param  string			The username.
+ * @return string			The login string.
+ */
+function ldap_get_login_string($cn)
+{
+	$pre=get_option('ldap_login_qualifier');
+	if ($pre!='')
+	{
+		$login=$pre.$cn;
+	} else
+	{
+		if (member_property()=='sAMAccountName')
+		{
+			$login=$cn.'@'.preg_replace('#^dc=#','',str_replace(',dc=','.',get_option('ldap_base_dn')));
+		} else
+		{
+			if (strpos($cn,'=')===false)
+			{
+				$login=member_property().'='.$cn.','.member_search_qualifier().get_option('ldap_base_dn');
+			} else
+			{
+				$login=$cn;
+			}
+		}
+	}
+	return $login;
+}
+
+/**
  * Authorise an LDAP login.
  *
  * @param  string			The username.
@@ -392,26 +404,8 @@ function ocf_ldap_authorise_login($cn,$password)
 		return array('m_pass_hash_salted'=>'!!!','m_password_compat_scheme'=>'md5'); // Access will be denied
 	}
 
-	$pre=get_option('ldap_login_qualifier');
-	if ($pre!='')
-	{
-		$login=$pre.$cn;
-	} else
-	{
-		if (member_property()=='sAMAccountName')
-		{
-			$login=$cn.'@'.preg_replace('#^dc=#','',str_replace(',dc=','.',get_option('ldap_base_dn')));
-		} else
-		{
-			if (strpos($cn,'=')===false)
-			{
-				$login=member_property().'='.$cn.','.member_search_qualifier().get_option('ldap_base_dn');
-			} else
-			{
-				$login=$cn;
-			}
-		}
-	}
+	$login=ldap_get_login_string($cn);
+
 	$test=@ldap_bind($LDAP_CONNECTION,$login,$password);
 	if ($test!==false) // Note, for Windows Active Directory the CN is the full user name, not the login name. Therefore users log in with this.
 	{
