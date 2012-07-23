@@ -91,7 +91,7 @@ class Module_admin_ocf_ldap
 
 			add_config_option('LDAP_GROUP_SEARCH_QUALIFIER','ldap_group_search_qualifier','line','return \'\';','SECTION_FORUMS','LDAP');
 			add_config_option('LDAP_MEMBER_SEARCH_QUALIFIER','ldap_member_search_qualifier','line','return \'\';','SECTION_FORUMS','LDAP');
-			add_config_option('LDAP_MEMBER_PROPERTY','ldap_member_property','line','return \'cn\';','SECTION_FORUMS','LDAP');
+			add_config_option('LDAP_MEMBER_PROPERTY','ldap_member_property','line','return (get_option(\'ldap_is_windows\')==\'1\')?\'sAMAccountName\':\'cn\';','SECTION_FORUMS','LDAP');
 			add_config_option('LDAP_NONE_BIND_LOGINS','ldap_none_bind_logins','tick','return \'0\';','SECTION_FORUMS','LDAP');
 			add_config_option('LDAP_VERSION','ldap_version','integer','return \'3\';','SECTION_FORUMS','LDAP');
 			add_config_option('LDAP_GROUP_CLASS','ldap_group_class','line','return (get_option(\'ldap_is_windows\')==\'1\')?\'group\':\'posixGroup\';','SECTION_FORUMS','LDAP');

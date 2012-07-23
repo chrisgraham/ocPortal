@@ -20,6 +20,18 @@
  * @package		ldap
  */
 
+/*
+Note: when we say 'cn' we mean whatever member_property() is. It might not actually be the 'cn' (isn't for Active Directory).
+
+Group membership mechanism is hard-coded for Linux and Active Directory LDAP:
+ - Linux, using gidnumber on user record (secondary memberships for member) and memberuid on group record (primary memberships for group)
+ - Active Directory, using memberof on user record
+
+We assume groups are always referenced as 'cn'.
+
+When looping over results, we always have to skip non-numeric keys, which are for meta-data returned within result set (e.g. 'count'). Ugly, I know - you'd think LDAP would be neater ;).
+*/
+
 /**
  * Standard code module initialisation function.
  */
@@ -218,9 +230,9 @@ function ocf_ldap_bind()
 			$login=$pre.$cn;
 		} else
 		{
-			if (get_value('sam_bind')==='1')
+			if (member_property()=='sAMAccountName')
 			{
-				$login=$cn.'@'.preg_replace('#^\.#','',str_replace('dn=','.',get_option('ldap_base_dn')));
+				$login=$cn.'@'.preg_replace('#^dc=#','',str_replace(',dc=','.',get_option('ldap_base_dn')));
 			} else
 			{
 				if (strpos($cn,'=')===false)
@@ -236,8 +248,8 @@ function ocf_ldap_bind()
 		/*
 		Example for Active Directory, if domain is chris4.com
 
-		$login='cn=Administrator,cn=Users,dc=chris4,dc=com';
-		$login='Administrator@chris4.com';
+		$login='cn=Administrator,cn=Users,dc=chris4,dc=com'; // Log in using full name (cn) [in this case, same as username, but not always]
+		$login='Administrator@chris4.com'; // Log in using username (sAMAccountName)
 		*/
 		$test=@ldap_bind($LDAP_CONNECTION,$login,get_option('ldap_bind_password')); // This sometimes causes errors, and isn't always needed. Hence error output is suppressed
 		if ($test===false)
@@ -306,6 +318,7 @@ function ocf_get_ldap_hash($cn)
 	}
 	if (!array_key_exists('userpassword',$entries[0]))
 	{
+		require_code('site');
 		attach_message(do_lang_tempcode('LDAP_CANNOT_CHECK_PASSWORDS'),'warn');
 		return uniqid('');
 	}
@@ -385,9 +398,9 @@ function ocf_ldap_authorise_login($cn,$password)
 		$login=$pre.$cn;
 	} else
 	{
-		if (get_value('sam_bind')==='1')
+		if (member_property()=='sAMAccountName')
 		{
-			$login=$cn.'@'.preg_replace('#^\.#','',str_replace('dn=','.',get_option('ldap_base_dn')));
+			$login=$cn.'@'.preg_replace('#^dc=#','',str_replace(',dc=','.',get_option('ldap_base_dn')));
 		} else
 		{
 			if (strpos($cn,'=')===false)
@@ -581,7 +594,7 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 						if ($non_validated) $members[]=array('gm_member_id'=>$member_id,'gm_validated'=>1,'m_username'=>ldap_unescape($member)); else $members[]=$member_id;
 					}
 				}
-				$gid=$entries[0]['gidnumber'];
+				$gid=$entries[0]['gidnumber']; // Picked up for performance reasons
 				ldap_free_result($results);
 			}
 		}
@@ -614,7 +627,6 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 			// Groups under member (Active Directory makes no distinction)
 			$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.group_property().'='.ldap_escape($cn).'))',array('memberof')); // We do ldap_search as Active Directory can be fussy when looking at large sets, like all members
 			$entries=ldap_get_entries($LDAP_CONNECTION,$results);
-
 			if ((array_key_exists(0,$entries)) && (array_key_exists('memberof',$entries[0]))) // Might not exist in LDAP
 			{
 				foreach ($entries[0]['memberof'] as $key=>$member)
@@ -686,11 +698,11 @@ function ocf_get_members_groups_ldap($member_id)
 		$results=ldap_search($LDAP_CONNECTION,member_search_qualifier().get_option('ldap_base_dn'),'(&(objectclass='.get_member_class().')('.member_property().'='.ldap_escape($cn).'))',array('gidnumber'));
 		$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 		$group_id_use=NULL;
-		foreach ($entries as $key=>$member) // There will only be one, but I wrote a loop so lets use a loop
+		foreach ($entries as $key=>$group) // There will only be one, but I wrote a loop so lets use a loop
 		{
 			if (!is_numeric($key)) continue;
 
-			$group_id=ocf_group_ldapgid_to_ocfid($member['gidnumber'][0]);
+			$group_id=ocf_group_ldapgid_to_ocfid($group['gidnumber'][0]);
 			if (!is_null($group_id)) $group_id_use=$group_id;
 		}
 		ldap_free_result($results);
@@ -704,11 +716,11 @@ function ocf_get_members_groups_ldap($member_id)
 		$group_id_use=NULL;
 		if ((array_key_exists(0,$entries)) && (array_key_exists('memberof',$entries[0]))) // Might not exist in LDAP
 		{
-			foreach ($entries[0]['memberof'] as $key=>$member) // There will only be one, but I wrote a loop so lets use a loop
+			foreach ($entries[0]['memberof'] as $key=>$group) // There will only be one, but I wrote a loop so lets use a loop
 			{
 				if (!is_numeric($key)) continue;
 
-				$group_id=ocf_group_ldapcn_to_ocfid(ocf_long_cn_to_short_cn($member,member_property()));
+				$group_id=ocf_group_ldapcn_to_ocfid(ocf_long_cn_to_short_cn($group,group_property()));
 				if (!is_null($group_id)) $groups[$group_id]=1;
 			}
 		}
@@ -746,8 +758,8 @@ function ocf_ldap_get_member_primary_group($member_id)
 		$entries=ldap_get_entries($LDAP_CONNECTION,$results);
 		if ((array_key_exists(0,$entries)) && (array_key_exists('memberof',$entries[0]))) // Might not exist in LDAP
 		{
-			$member=$entries[0]['memberof'][count($entries[0]['memberof'])-2]; // Last is -2 due to count index
-			$cn=ocf_long_cn_to_short_cn($member,group_property());
+			$group=$entries[0]['memberof'][count($entries[0]['memberof'])-2]; // Last is -2 due to count index
+			$cn=ocf_long_cn_to_short_cn($group,group_property());
 			$gid=ocf_group_ldapcn_to_ocfid($cn);
 			if (is_null($gid)) $gid=get_first_default_group();
 		} else
