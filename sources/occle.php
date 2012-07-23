@@ -133,7 +133,7 @@ class virtual_bash
 	 * @param  string	The inputted command, unparsed
 	 * @param  ?array	An array of prior output to be prepended (NULL: none)
 	 * @param  ?array	An array of prior parameters (NULL: none)
-	*/
+	 */
 	function virtual_bash($inputted_command,$prior_output=NULL,$parameters=NULL)
 	{
 		if (!defined('MODE_NORMAL'))
@@ -187,7 +187,7 @@ class virtual_bash
 	 * Returns the parse tree for the command just parsed.
 	 *
 	 * @return ~array			The parse tree (false: failure)
-	*/
+	 */
 	function return_parse_tree()
 	{
 		if (count($this->parsed_input)>=1) return $this->parsed_input;
@@ -198,7 +198,7 @@ class virtual_bash
 	 * Returns the output for the command just parsed.
 	 *
 	 * @return ~array			The output (false: failure)
-	*/
+	 */
 	function return_output()
 	{
 		if (count($this->output)>=1) return $this->output;
@@ -209,7 +209,7 @@ class virtual_bash
 	 * Output an XML-RPC packet (hopefully) to the AJAX in the frontend.
 	 *
 	 * @return boolean			Success?
-	*/
+	 */
 	function output_xml()
 	{
 		if (count($this->parsed_input)<1) return false;
@@ -248,7 +248,7 @@ class virtual_bash
 	 *
 	 * @param  boolean		  Whether it is okay to have blank output
 	 * @return ~tempcode		  The HTML (false: error)
-	*/
+	 */
 	function output_html($blank_ok=false)
 	{
 		if (count($this->parsed_input)<1) return false;
@@ -276,7 +276,7 @@ class virtual_bash
 
 	/**
 	 * Extract the command name from the input.
-	*/
+	 */
 	function _extract_command()
 	{
 		if ($this->current_input=='')
@@ -337,7 +337,7 @@ class virtual_bash
 
 	/**
 	 * Extract options (switches) from the input.
-	*/
+	 */
 	function _extract_options()
 	{
 		//Add each option to the options array...an option *should* be prefixed with a dash ('-'), and can *optionally* have a value, shown through the use of equals ('=') - this can be a quoted value
@@ -500,7 +500,7 @@ class virtual_bash
 
 	/**
 	 * Extract parameters from the input.
-	*/
+	 */
 	function _extract_parameters()
 	{
 		//Add each parameter to the parameters array...a parameter *should not* have spaces unless it's a quoted value
@@ -644,7 +644,7 @@ class virtual_bash
 
 	/**
 	 * Extract extra tokens from the input.
-	*/
+	 */
 	function _extract_extras()
 	{
 		//Add the extra instructions to the extras array
@@ -814,7 +814,7 @@ class virtual_bash
 	 * Is the current block a valid redirection instruction?
 	 *
 	 * @return boolean			Redirection instruction?
-	*/
+	 */
 	function _check_is_redirection()
 	{
 		//Take the current block (delimited by spaces (' ')), and check to see if it's a valid redirect instruction
@@ -831,7 +831,7 @@ class virtual_bash
 
 	/**
 	 * Parses input setup in constructor, and creates a parse tree.
-	*/
+	 */
 	function parse_input()
 	{
 		/*We need to break the $this->parsed_input[SECTION_COMMAND] up into several distinct parts:
@@ -1083,7 +1083,7 @@ class virtual_bash
 	 * @param  array				Stream 1
 	 * @param  array				Stream 2
 	 * @return array				Combined streams
-	*/
+	 */
 	function _combine_streams($stream1,$stream2)
 	{
 		//Combine two streams, taking account of arrays, tempcode and other stuff
@@ -1138,7 +1138,7 @@ class virtual_bash
 	 *
 	 * @param  array				Array to display
 	 * @return tempcode			Tempcode for array
-	*/
+	 */
 	function _array_to_html($array)
 	{
 		//Convert an array to an HTML format
@@ -1158,7 +1158,7 @@ class virtual_bash
 	 * @param  array				Array to display
 	 * @param  integer			Global indentation
 	 * @return string				Text representation of array
-	*/
+	 */
 	function _array_to_text($array,$indentation=0)
 	{
 		//Convert an array to a text format
@@ -1177,7 +1177,7 @@ class virtual_bash
 	 *
 	 * @param  integer			Number of tabs to return
 	 * @return string				Tabs
-	*/
+	 */
 	function _do_indentation($indentation)
 	{
 		//Return some tabs
@@ -1187,8 +1187,8 @@ class virtual_bash
 	}
 
 	/**
-	* Handle a PHP command by executing it, dealing with variables from the class.
-	*/
+	 * Handle a PHP command by executing it, dealing with variables from the class.
+	 */
 	function _handle_php_command()
 	{
 		//NOTE: Variables throughout this function use the $occle_ prefix to avoid conflicts with any created through executing PHP commands from the CL
@@ -1295,7 +1295,7 @@ class virtual_bash
 	 * @param  string					Script name
 	 * @param  ?string				Directory (NULL: OcCLE module data dir)
 	 * @return ~string				Path or failure (false: failure)
-	*/
+	 */
 	function _find_script_file($script_name,$dir=NULL)
 	{
 		if (is_null($dir)) $dir=get_custom_file_base().'/data/modules/admin_occle/';
@@ -1321,7 +1321,7 @@ class virtual_fs
 {
 	/**
 	 * Constructor function. Setup a virtual filesystem, but do nothing with it.
-	*/
+	 */
 	function virtual_fs()
 	{
 		//Initialise a new virtual filesystem; setup the vfs array, and fetch the pwd from a cookie
@@ -1370,7 +1370,7 @@ class virtual_fs
 	 * Fetch the current directory from a cookie, or the default.
 	 *
 	 * @return array					Current directory
-	*/
+	 */
 	function _start_pwd()
 	{
 		//Fetch the pwd from a cookie, or generate a new one
@@ -1393,7 +1393,7 @@ class virtual_fs
 	 * @param  ?array				Directory (NULL: current directory is used)
 	 * @param  boolean			Whether to use full paths
 	 * @return ~array				Directory contents (false: failure)
-	*/
+	 */
 	function _get_current_dir_contents($dir=NULL,$full_paths=false)
 	{
 		if (is_null($dir)) $dir=$this->pwd;
@@ -1457,7 +1457,7 @@ class virtual_fs
 	 *
 	 * @param  string				Path
 	 * @return array				Array-form path
-	*/
+	 */
 	function _pwd_to_array($pwd)
 	{
 		//Convert a string-form pwd to an array-form pwd, and sanitise it
@@ -1474,7 +1474,7 @@ class virtual_fs
 	 * @param  array				Absolute path
 	 * @param  array				Non-absolute path
 	 * @return array				Merged path
-	*/
+	 */
 	function _merge_pwds($pwd1,$pwd2)
 	{
 		//Merge two array-form pwds, assuming the former is absolute and the latter isn't
@@ -1492,7 +1492,7 @@ class virtual_fs
 	 *
 	 * @param  ?array				Path (NULL: use $this->pwd)
 	 * @return string				String-form path
-	*/
+	 */
 	function _pwd_to_string($pwd=NULL)
 	{
 		if (is_null($pwd)) $pwd=$this->pwd;
@@ -1507,7 +1507,7 @@ class virtual_fs
 	 *
 	 * @param  string			Path
 	 * @return string			Filename
-	*/
+	 */
 	function _get_filename($filename)
 	{
 		//Make sure no directories are included with the filename
@@ -1520,7 +1520,7 @@ class virtual_fs
 	 *
 	 * @param  ?array				Path to check (NULL: current dir is used)
 	 * @return boolean			Directory?
-	*/
+	 */
 	function _is_dir($dir=NULL)
 	{
 		if (is_null($dir)) $dir=$this->pwd;
@@ -1542,7 +1542,7 @@ class virtual_fs
 	 *
 	 * @param  array					Path (with filename) to use
 	 * @return boolean				Directory?
-	*/
+	 */
 	function _is_file($dir)
 	{
 		$filename=$dir[count($dir)-1];
@@ -1568,7 +1568,7 @@ class virtual_fs
 	 * @param  string				Meta root node type
 	 * @param  ?array				Directory (NULL: current directory is used)
 	 * @return ~array				Current directory (false: error)
-	*/
+	 */
 	function _discern_meta_dir(&$meta_dir,&$meta_root_node,&$meta_root_node_type,$dir=NULL)
 	{
 		//Get the details of the current meta dir (re: object creation) and where the pwd is in relation to it
@@ -1603,7 +1603,7 @@ class virtual_fs
 	 *
 	 * @param  boolean			Return the pwd in array form?
 	 * @return mixed				The current working directory (array or string)
-	*/
+	 */
 	function print_working_directory($array_form=false)
 	{
 		//Return the current working directory
@@ -1619,7 +1619,7 @@ class virtual_fs
 	 *
 	 * @param  ?array				An alternate directory in which to perform the action (NULL: current directory is used)
 	 * @return array				Directories and files in the current working directory
-	*/
+	 */
 	function listing($dir=NULL)
 	{
 		//Return an array list of all the directories and files in the pwd
@@ -1660,7 +1660,7 @@ class virtual_fs
 	 * @param  boolean			Should directories be included in the results?
 	 * @param  ?array				Directory (NULL: current directory is used)
 	 * @return array				The search results
-	*/
+	 */
 	function search($pattern,$regexp=false,$recursive=false,$files=true,$directories=false,$dir=NULL)
 	{
 		//Search!
@@ -1715,7 +1715,7 @@ class virtual_fs
 	 *
 	 * @param  array				The target directory path
 	 * @return boolean			Success?
-	*/
+	 */
 	function change_directory($target_directory)
 	{
 		//Change the current directory
@@ -1734,7 +1734,7 @@ class virtual_fs
 	 *
 	 * @param  array			The new directory's path and name
 	 * @return boolean		Success?
-	*/
+	 */
 	function make_directory($directory)
 	{
 		$directory_name=array_pop($directory);
@@ -1758,7 +1758,7 @@ class virtual_fs
 	 *
 	 * @param  array			The directory-to-remove's path and name
 	 * @return boolean		Success?
-	*/
+	 */
 	function remove_directory($directory)
 	{
 		$directory_name=$directory[count($directory)-1];
@@ -1791,7 +1791,7 @@ class virtual_fs
 	 * @param  array				The directory to copy
 	 * @param  array				The destination path
 	 * @return boolean			Success?
-	*/
+	 */
 	function copy_directory($to_copy,$destination)
 	{
 		$directory_contents=$this->_get_current_dir_contents($to_copy);
@@ -1830,7 +1830,7 @@ class virtual_fs
 	 * @param  array				The directory to move
 	 * @param  array				The destination path
 	 * @return boolean			Success?
-	*/
+	 */
 	function move_directory($to_move,$destination)
 	{
 		$success=$this->copy_directory($to_move,$destination);
@@ -1844,7 +1844,7 @@ class virtual_fs
 	 * @param  array				The file to copy
 	 * @param  array				The destination path
 	 * @return boolean			Success?
-	*/
+	 */
 	function copy_file($to_copy,$destination)
 	{
 		$contents=$this->read_file($to_copy);
@@ -1858,7 +1858,7 @@ class virtual_fs
 	 * @param  array				The file to move
 	 * @param  array				The destination path
 	 * @return boolean			Success?
-	*/
+	 */
 	function move_file($to_move,$destination)
 	{
 		$success=$this->copy_file($to_move,$destination);
@@ -1871,7 +1871,7 @@ class virtual_fs
 	 *
 	 * @param  array				The file to remove
 	 * @return boolean			Success?
-	*/
+	 */
 	function remove_file($to_remove)
 	{
 		$filename=array_pop($to_remove);
@@ -1895,7 +1895,7 @@ class virtual_fs
 	 *
 	 * @param  array				The file to read
 	 * @return ~string			The file contents (false: failure)
-	*/
+	 */
 	function read_file($to_read)
 	{
 		$filename=array_pop($to_read);
@@ -1920,7 +1920,7 @@ class virtual_fs
 	 * @param  array			The file to write
 	 * @param  string			The contents to write
 	 * @return boolean		Success?
-	*/
+	 */
 	function write_file($to_write,$contents)
 	{
 		$filename=array_pop($to_write);
@@ -1945,7 +1945,7 @@ class virtual_fs
 	 * @param  array			The file to which to append
 	 * @param  string			The contents to append
 	 * @return boolean		Success?
-	*/
+	 */
 	function append_file($to_append,$contents)
 	{
 		$filename=array_pop($to_append);

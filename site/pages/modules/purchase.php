@@ -568,7 +568,7 @@ class Module_purchase
 	 *
 	 * @param  tempcode	The page title.
 	 * @return tempcode	The result of execution.
-	*/
+	 */
 	function product_info($title)
 	{
 		$this->ensure_in();

@@ -769,7 +769,7 @@ function comcode_strip_html_tags($matches)
 /**
  * Do a regular expression match, locked correctly to single Comcode elements. This is necessary to make sure nesting is handled correctly, which regular expressions cannot do on their own.
  * This is a good test case:
- *	exit(comcode_preg_replace('test','#\[test\](.*)\[/test\]#','>${1}<','[test]x[test a]y[/test]z[/test]'));
+ * exit(comcode_preg_replace('test','#\[test\](.*)\[/test\]#','>${1}<','[test]x[test a]y[/test]z[/test]'));
  *
  * @param  string			The element name to replace over
  * @param  string			Pattern

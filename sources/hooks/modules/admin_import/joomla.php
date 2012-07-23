@@ -22,10 +22,10 @@ class Hook_joomla
 {
 
 	/**
-	* Standard modular info function.
-	*
-	* @return ?array	Map of module info (NULL: module is disabled).
-	*/
+	 * Standard modular info function.
+	 *
+	 * @return ?array	Map of module info (NULL: module is disabled).
+	 */
 	function info()
 	{
 		$info=array();

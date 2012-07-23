@@ -3446,22 +3446,22 @@ class Database_Static_xml
 	}
 
 	/**
-	* Escape a value for use in a filesystem path.
-	*
-	* @param  string	Value to escape (original value)
-	* @return string	Escaped value
-	*/
+	 * Escape a value for use in a filesystem path.
+	 *
+	 * @param  string	Value to escape (original value)
+	 * @return string	Escaped value
+	 */
 	function _escape_name($in)
 	{
 		return str_replace(array('=',':',',','/','|'),array('!equals!','!colon!','!comma!','!slash!','!pipe!'),$in);
 	}
 
 	/**
-	* Unescape a value from a filesystem path back to the original.
-	*
-	* @param  string	Escaped value
-	* @return string	Original value
-	*/
+	 * Unescape a value from a filesystem path back to the original.
+	 *
+	 * @param  string	Escaped value
+	 * @return string	Original value
+	 */
 	function _unescape_name($in)
 	{
 		return str_replace(array('!equals!','!colon!','!comma!','!slash!','!pipe!'),array('=',':',',','/','|'),$in);

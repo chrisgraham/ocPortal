@@ -107,13 +107,13 @@ function _hash_crypt_private($password, $setting, &$itoa64)
 	}
 
 	/**
-	* We're kind of forced to use MD5 here since it's the only
-	* cryptographic primitive available in all versions of PHP
-	* currently in use.  To implement our own low-level crypto
-	* in PHP would result in much worse performance and
-	* consequently in lower iteration counts and hashes that are
-	* quicker to crack (by non-PHP code).
-	*/
+	 * We're kind of forced to use MD5 here since it's the only
+	 * cryptographic primitive available in all versions of PHP
+	 * currently in use.  To implement our own low-level crypto
+	 * in PHP would result in much worse performance and
+	 * consequently in lower iteration counts and hashes that are
+	 * quicker to crack (by non-PHP code).
+	 */
 	$hash = pack('H*', md5($salt . $password));
 	do
 	{

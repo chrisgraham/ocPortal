@@ -229,7 +229,7 @@ function get_rating_box($content_url,$content_title,$content_type,$content_id,$a
 
 /**
  * Display rating using images
- *	
+ * 
  * @param  mixed			The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
  * @param  ?string		The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
  * @param  ID_TEXT		The type (download, etc) that this rating is for

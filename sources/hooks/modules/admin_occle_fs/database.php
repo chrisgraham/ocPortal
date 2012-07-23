@@ -21,14 +21,14 @@
 class Hook_database
 {
 	/**
-	* Standard modular listing function for OcCLE FS hooks.
-	*
-	* @param  array		The current meta-directory path
-	* @param  string		The root node of the current meta-directory
-	* @param  array		The current directory listing
-	* @param  array		A reference to the OcCLE filesystem object
-	* @return ~array	 	The final directory listing (false: failure)
-	*/
+	 * Standard modular listing function for OcCLE FS hooks.
+	 *
+	 * @param  array		The current meta-directory path
+	 * @param  string		The root node of the current meta-directory
+	 * @param  array		The current directory listing
+	 * @param  array		A reference to the OcCLE filesystem object
+	 * @return ~array	 	The final directory listing (false: failure)
+	 */
 	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
@@ -94,14 +94,14 @@ class Hook_database
 	}
 
 	/**
-	* Standard modular directory creation function for OcCLE FS hooks.
-	*
-	* @param  array		The current meta-directory path
-	* @param  string		The root node of the current meta-directory
-	* @param  string		The new directory name
-	* @param  array		A reference to the OcCLE filesystem object
-	* @return boolean		Success?
-	*/
+	 * Standard modular directory creation function for OcCLE FS hooks.
+	 *
+	 * @param  array		The current meta-directory path
+	 * @param  string		The root node of the current meta-directory
+	 * @param  string		The new directory name
+	 * @param  array		A reference to the OcCLE filesystem object
+	 * @return boolean		Success?
+	 */
 	function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
@@ -143,14 +143,14 @@ class Hook_database
 	}
 
 	/**
-	* Standard modular directory removal function for OcCLE FS hooks.
-	*
-	* @param  array	The current meta-directory path
-	* @param  string	The root node of the current meta-directory
-	* @param  string	The directory name
-	* @param  array	A reference to the OcCLE filesystem object
-	* @return boolean	Success?
-	*/
+	 * Standard modular directory removal function for OcCLE FS hooks.
+	 *
+	 * @param  array	The current meta-directory path
+	 * @param  string	The root node of the current meta-directory
+	 * @param  string	The directory name
+	 * @param  array	A reference to the OcCLE filesystem object
+	 * @return boolean	Success?
+	 */
 	function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
@@ -172,14 +172,14 @@ class Hook_database
 	}
 
 	/**
-	* Standard modular file removal function for OcCLE FS hooks.
-	*
-	* @param  array		The current meta-directory path
-	* @param	string		The root node of the current meta-directory
-	* @param	string		The file name
-	* @param  array		A reference to the OcCLE filesystem object
-	* @return  boolean	Success?
-	*/
+	 * Standard modular file removal function for OcCLE FS hooks.
+	 *
+	 * @param  array		The current meta-directory path
+	 * @param	string		The root node of the current meta-directory
+	 * @param	string		The file name
+	 * @param  array		A reference to the OcCLE filesystem object
+	 * @return  boolean	Success?
+	 */
 	function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
@@ -209,14 +209,14 @@ class Hook_database
 	}
 
 	/**
-	* Standard modular file reading function for OcCLE FS hooks.
-	*
-	* @param  array		The current meta-directory path
-	* @param  string		The root node of the current meta-directory
-	* @param  string		The file name
-	* @param  array		A reference to the OcCLE filesystem object
-	* @return ~string		The file contents (false: failure)
-	*/
+	 * Standard modular file reading function for OcCLE FS hooks.
+	 *
+	 * @param  array		The current meta-directory path
+	 * @param  string		The root node of the current meta-directory
+	 * @param  string		The file name
+	 * @param  array		A reference to the OcCLE filesystem object
+	 * @return ~string		The file contents (false: failure)
+	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
@@ -237,15 +237,15 @@ class Hook_database
 	}
 
 	/**
-	* Standard modular file writing function for OcCLE FS hooks.
-	*
-	* @param  array	The current meta-directory path
-	* @param  string	The root node of the current meta-directory
-	* @param  string	The file name
-	* @param  mixed	The new file contents (string or integer)
-	* @param  array	A reference to the OcCLE filesystem object
-	* @return boolean	Success?
-	*/
+	 * Standard modular file writing function for OcCLE FS hooks.
+	 *
+	 * @param  array	The current meta-directory path
+	 * @param  string	The root node of the current meta-directory
+	 * @param  string	The file name
+	 * @param  mixed	The new file contents (string or integer)
+	 * @param  array	A reference to the OcCLE filesystem object
+	 * @return boolean	Success?
+	 */
 	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
@@ -282,12 +282,12 @@ class Hook_database
 	}
 
 	/**
-	* Take a provided key-value map from the path and generate a DB query WHERE map array.
-	*
-	* @param  string	Database table name
-	* @param  string	Key-value map ("key:value,key2:value2")
-	* @return ~array	WHERE map array (false: if an invalid key was referenced)
-	*/
+	 * Take a provided key-value map from the path and generate a DB query WHERE map array.
+	 *
+	 * @param  string	Database table name
+	 * @param  string	Key-value map ("key:value,key2:value2")
+	 * @return ~array	WHERE map array (false: if an invalid key was referenced)
+	 */
 	function _do_where($table_name,$keys)
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
@@ -325,22 +325,22 @@ class Hook_database
 	}
 
 	/**
-	* Escape a value for use in a filesystem path.
-	*
-	* @param  string	Value to escape (original value)
-	* @return string	Escaped value
-	*/
+	 * Escape a value for use in a filesystem path.
+	 *
+	 * @param  string	Value to escape (original value)
+	 * @return string	Escaped value
+	 */
 	function escape_name($in)
 	{
 		return str_replace(array(':',',','/'),array('!colon!','!comma!','!slash!'),$in);
 	}
 
 	/**
-	* Unescape a value from a filesystem path back to the original.
-	*
-	* @param  string	Escaped value
-	* @return string	Original value
-	*/
+	 * Unescape a value from a filesystem path back to the original.
+	 *
+	 * @param  string	Escaped value
+	 * @return string	Original value
+	 */
 	function unescape_name($in)
 	{
 		return str_replace(array('!colon!','!comma!','!slash!'),array(':',',','/'),$in);

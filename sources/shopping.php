@@ -161,7 +161,7 @@ function log_cart_actions($action)
 }
 
 /**
- *	Delete incomplete orders from ages ago.
+ * Delete incomplete orders from ages ago.
  */
 function delete_incomplete_orders()
 {

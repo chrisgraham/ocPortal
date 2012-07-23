@@ -428,7 +428,7 @@ function delete_quiz($id)
  * Get quiz data for exporting it as csv
  *
  * @param	AUTO_LINK	Quiz ID
- *	@return	array			Quiz data array	
+ * @return	array			Quiz data array	
  */
 function get_quizz_data_for_csv($quiz_id)
 {
@@ -489,7 +489,7 @@ function get_quizz_data_for_csv($quiz_id)
  * Get quiz data for exporting it as csv
  *
  * @param	array			The quiz questions
- *	@return	tempcode		The rendered quiz	
+ * @return	tempcode		The rendered quiz	
  */
 function render_quiz($questions)
 {

@@ -21,13 +21,13 @@
 class Hook_closed
 {
 	/**
-	* Standard modular run function for OcCLE hooks.
-	*
-	* @param  array	The options with which the command was called
-	* @param  array	The parameters with which the command was called
-	* @param  array	A reference to the OcCLE filesystem object
-	* @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
-	*/
+	 * Standard modular run function for OcCLE hooks.
+	 *
+	 * @param  array	The options with which the command was called
+	 * @param  array	The parameters with which the command was called
+	 * @param  array	A reference to the OcCLE filesystem object
+	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
+	 */
 	function run($options,$parameters,&$occle_fs)
 	{
 		require_code('config2');

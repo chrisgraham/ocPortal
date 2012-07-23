@@ -21,10 +21,10 @@
 class Hook_catalogue_items
 {
 	/**
-	 *	Get the products handled by this eCommerce hook.
-    *
+	 * Get the products handled by this eCommerce hook.
+	 *
 	 * IMPORTANT NOTE TO PROGRAMMERS: This function may depend only on the database, and not on get_member() or any GET/POST values.
-    *  Such dependencies will break IPN, which works via a Guest and no dependable environment variables. It would also break manual transactions from the Admin Zone.
+	 *  Such dependencies will break IPN, which works via a Guest and no dependable environment variables. It would also break manual transactions from the Admin Zone.
 	 *
 	 * @param  boolean	Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
 	 * @param  ?ID_TEXT	Product being searched for (NULL: none).
@@ -222,10 +222,10 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 *	Get the products details
+	 * Get the products details
 	 *
-	 *	@param	?AUTO_LINK	Product ID (NULL: read from environment, product_id)
-	 *	@return 	array			A map of product name to list of product details.
+	 * @param	?AUTO_LINK	Product ID (NULL: read from environment, product_id)
+	 * @return 	array			A map of product name to list of product details.
 	 */
 	function get_product_details($pid=NULL)
 	{
@@ -265,9 +265,9 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 *	Add an order
+	 * Add an order
 	 *
-	 *	@param  array	Array of product details.
+	 * @param  array	Array of product details.
 	 * @return AUTO_LINK	Order id of newly added order.
 	 */
 	function add_order($product_det)
@@ -391,7 +391,7 @@ class Hook_catalogue_items
 	/**
 	 * Show shopping cart entries
 	 *
-	 *	@param  tempcode	Tempcode object of shopping cart result table.
+	 * @param  tempcode	Tempcode object of shopping cart result table.
 	 * @param  array		Details of new entry to the shopping cart.
 	 * @return tempcode	Tempcode object of shopping cart result table.
 	 */
@@ -622,8 +622,8 @@ class Hook_catalogue_items
 	/**
 	 * Get custom fields for ecommerce product
 	 *
-	 *	@param	AUTO_LINK	Product entry ID
-	 *	@param	array			Map where product details are placed
+	 * @param	AUTO_LINK	Product entry ID
+	 * @param	array			Map where product details are placed
 	 */
 	function get_custom_product_map_fields($id,&$map)
 	{
