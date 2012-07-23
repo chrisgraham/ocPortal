@@ -42,6 +42,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 	if ($for_member!==NULL)
 	{
 		$member=$for_member;
+		if (is_null($insert_as_admin)) $insert_as_admin=false;
 	} else
 	{
 		if (function_exists('get_member'))
