@@ -80,7 +80,7 @@ class Hook_catalogue_items
 				$product_weight=0.0;
 
 				if (array_key_exists(2,$map))
-					$item_price=$map[2]['effective_value'];
+					$item_price=is_object($map[2]['effective_value'])?$map[2]['effective_value']->evaluate():$map[2]['effective_value'];
 
 				if (array_key_exists(6,$map))
 					$tax=floatval(is_object($map[6]['effective_value'])?$map[6]['effective_value']->evaluate():$map[6]['effective_value']);
@@ -124,8 +124,10 @@ class Hook_catalogue_items
 
 		if (!array_key_exists(3,$fields)) return true;
 
+		if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
 		if ((is_null($fields[4]['effective_value'])) || (intval($fields[4]['effective_value'])==0)) return true;
 
+		if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
 		if ($fields[3]['effective_value']!='')
 		{
 			$available_stock=intval($fields[3]['effective_value']);
@@ -164,6 +166,7 @@ class Hook_catalogue_items
 
 		$str=NULL;
 
+		if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
 		if ((is_null($fields[3]['effective_value'])) || (intval($fields[3]['effective_value'])==0)) return NULL;
 
 		if ($fields[3]['effective_value']!='')
@@ -560,6 +563,8 @@ class Hook_catalogue_items
 
 		if (array_key_exists(3,$fields))	//Stock level
 		{
+			if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
+
 			if ($fields[3]['effective_value']=='')	return;
 
 			$stock_field=$fields[3]['id'];
@@ -568,14 +573,18 @@ class Hook_catalogue_items
 
 		if (array_key_exists(4,$fields))	//Stock maintained
 		{
-			if (is_null($fields[4]['effective_value']))	return;
+			if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
+
+			if (is_null($fields[4]['effective_value'])) return;
 
 			$stock_maintained=intval($fields[4]['effective_value'])==1;
 		}
 
 		if (array_key_exists(5,$fields))	//Stock level warn threshold
 		{
-			if (is_null($fields[5]['effective_value']))	return;
+			if (is_object($fields[5]['effective_value'])) $fields[5]['effective_value']=$fields[5]['effective_value']->evaluate();
+
+			if (is_null($fields[5]['effective_value'])) return;
 
 			$stock_level_warn_threshold=intval($fields[5]['effective_value']);
 		}
