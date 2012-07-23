@@ -349,6 +349,7 @@
 
 .ocf_topic_post_member_details {
 	text-align: center;
+	vertical-align: top !important;
 	{+START,IF,{$MOBILE}}
 		width: 80px;
 	{+END}
