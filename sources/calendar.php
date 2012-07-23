@@ -1014,8 +1014,7 @@ function find_abstract_day($year,$month,$day_of_month,$monthly_spec_type)
 			// Monday is 0 in my mind, not Sunday
 			$day_code--;
 			if ($day_code==-1) $day_code=6;
-
-			$day=$day_code+7*intval(floatval($day_of_month)/7.0);
+			$day=$day_code+7*intval(floatval($day_of_month-1)/7.0); // -1 is because we are counting from 0 in our new scale, whilst $day_of_month was counting from 1
 			break;
 		case 'dow_of_month_backwards':
 			$day_code=intval(date('w',mktime(0,0,0,$month,$day_of_month,$year)));
@@ -1027,7 +1026,7 @@ function find_abstract_day($year,$month,$day_of_month,$monthly_spec_type)
 			$month_end=mktime(0,0,0,$month+1,0,$year);
 			$days_in_month=intval(date('d',$month_end));
 
-			$day=$day_code+7*intval(floatval($days_in_month-$day_of_month)/7.0);
+			$day=$day_code+7*intval(floatval($days_in_month-($day_of_month-1))/7.0);
 			break;
 	}
 	return $day;
@@ -1053,7 +1052,6 @@ function monthly_spec_type_chooser($day_of_month,$month,$year,$default_monthly_s
 	foreach (array('day_of_month','day_of_month_backwards','dow_of_month','dow_of_month_backwards') as $monthly_spec_type)
 	{
 		$day=find_abstract_day($year,$month,$day_of_month,$monthly_spec_type);
-
 		$timestamp=mktime(0,0,0,$month,$day_of_month,$year);
 
 		if (substr($monthly_spec_type,0,4)=='dow_')
