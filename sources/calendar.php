@@ -102,6 +102,13 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 	if (is_null($period_start)) $period_start=utctime_to_usertime(time());
 	if (is_null($period_end)) $period_end=utctime_to_usertime(time()+60*60*24*360*20);
 
+	$initial_start_year=$start_year;
+	$initial_start_month=$start_month;
+	$initial_start_day=$start_day;
+	$initial_end_year=$end_year;
+	$initial_end_month=$end_month;
+	$initial_end_day=$end_day;
+
 	$times=array();
 	$i=0;
 	$parts=explode(' ',$recurrence);
@@ -191,6 +198,15 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$start_hour=NULL;
 			$end_minute=NULL;
 			$end_hour=NULL;
+		} else
+		{
+			// Work out using deltas
+			if ($end_monthly_spec_type!='day_of_month')
+			{
+				$end_day=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type)+($initial_end_day-$initial_start_day);
+				$end_month=$start_month+($initial_end_month-$initial_start_month);
+				$end_year=$start_year+($initial_end_year-$initial_start_year);
+			}
 		}
 		if (is_null($end_year) || is_null($end_month) || is_null($end_day))
 		{
@@ -198,7 +214,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$b=NULL;
 		} else
 		{
-			$_b=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$do_timezone_conv==1);
+			$_b=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,'day_of_month'/*$end_monthly_spec_type*/,$end_hour,$end_minute,$do_timezone_conv==1);
 			$b=cal_utctime_to_usertime(
 				$_b,
 				$timezone,
@@ -232,7 +248,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 				$end_day+=$dif_day;
 			} else
 			{
-				$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type);
+				//$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type);		Can't work right, or you can get negative time periods. We will just do it as deltas, which is a different method entirely.
 			}
 		}
 
