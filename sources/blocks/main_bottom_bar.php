@@ -51,6 +51,8 @@ class Block_main_bottom_bar
 		require_code('ocf_groups');
 		require_css('ocf');
 
+		require_lang('ocf');
+
 		$stats=ocf_get_forums_stats();
 
 		// Users online

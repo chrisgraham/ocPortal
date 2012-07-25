@@ -90,7 +90,7 @@ class Module_admin_orders
 
 	/**
 	 * The do-next manager for order module
-	 *	
+	 * 
 	 * @return tempcode		The UI
 	 */
 	function misc()
@@ -449,7 +449,7 @@ class Module_admin_orders
 	 * Function to dispatch an order
 	 *
 	 * @return tempcode	The interface.
-	*/
+	 */
 	function dispatch()
 	{
 		$title=get_screen_title('ORDER_STATUS_dispatched');
@@ -471,8 +471,8 @@ class Module_admin_orders
 	/**
 	 * Function to dispatch an order
 	 *
-	 *	@param	AUTO_LINK	Order Id
-	*/
+	 * @param	AUTO_LINK	Order Id
+	 */
 	function send_dispatch_notification($order_id)
 	{
 		// Mail dispatch notification to customer

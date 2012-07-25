@@ -1396,7 +1396,7 @@ class Module_admin_stats
 	 * @param  integer	The steps of hours to use
 	 * @param  integer	The total hours to plot
 	 * @return array		A linear array containing the graph and list tempcode objects, respectively
-	*/
+	 */
 	function views_per_x($page,$type,$graph_title,$graph_description,$hours=1,$total=24)
 	{
 		//Return a graph with the views per hour for a specified page
@@ -1470,7 +1470,7 @@ class Module_admin_stats
 	 * @param  string		Language identifier for the graph description
 	 * @param  string		Language identifier for the list title
 	 * @return array		A linear array containing the graph and list tempcode objects, respectively
-	*/
+	 */
 	function page_x_share($page,$type,$graph_title,$graph_description,$list_title)
 	{
 		//Return a pie chart with the $type used to view this page
@@ -1551,7 +1551,7 @@ class Module_admin_stats
 	 *
 	 * @param  string		Name of the graph (no path or extension)
 	 * @param  string		SVG markup
-	*/
+	 */
 	function save_graph($path,$graph)
 	{
 		$path=get_custom_file_base().'/data_custom/modules/admin_stats/'.filter_naughty_harsh($path).'.xml';

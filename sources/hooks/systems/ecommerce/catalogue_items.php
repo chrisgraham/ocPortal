@@ -21,10 +21,10 @@
 class Hook_catalogue_items
 {
 	/**
-	 *	Get the products handled by this eCommerce hook.
-    *
+	 * Get the products handled by this eCommerce hook.
+	 *
 	 * IMPORTANT NOTE TO PROGRAMMERS: This function may depend only on the database, and not on get_member() or any GET/POST values.
-    *  Such dependencies will break IPN, which works via a Guest and no dependable environment variables. It would also break manual transactions from the Admin Zone.
+	 *  Such dependencies will break IPN, which works via a Guest and no dependable environment variables. It would also break manual transactions from the Admin Zone.
 	 *
 	 * @param  boolean	Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
 	 * @param  ?ID_TEXT	Product being searched for (NULL: none).
@@ -80,7 +80,7 @@ class Hook_catalogue_items
 				$product_weight=0.0;
 
 				if (array_key_exists(2,$map))
-					$item_price=$map[2]['effective_value'];
+					$item_price=is_object($map[2]['effective_value'])?$map[2]['effective_value']->evaluate():$map[2]['effective_value'];
 
 				if (array_key_exists(6,$map))
 					$tax=floatval(is_object($map[6]['effective_value'])?$map[6]['effective_value']->evaluate():$map[6]['effective_value']);
@@ -124,9 +124,12 @@ class Hook_catalogue_items
 
 		if (!array_key_exists(3,$fields)) return ECOMMERCE_PRODUCT_INTERNAL_ERROR;
 
+		if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
+
 		if ((is_null($fields[4]['effective_value'])) || (intval($fields[4]['effective_value'])==0))
 			return ECOMMERCE_PRODUCT_AVAILABLE;
 
+		if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
 		if ($fields[3]['effective_value']!='')
 		{
 			$available_stock=intval($fields[3]['effective_value']);
@@ -165,6 +168,7 @@ class Hook_catalogue_items
 
 		$str=NULL;
 
+		if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
 		if ((is_null($fields[3]['effective_value'])) || (intval($fields[3]['effective_value'])==0)) return NULL;
 
 		if ($fields[3]['effective_value']!='')
@@ -223,10 +227,10 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 *	Get the products details
+	 * Get the products details
 	 *
-	 *	@param	?AUTO_LINK	Product ID (NULL: read from environment, product_id)
-	 *	@return 	array			A map of product name to list of product details.
+	 * @param	?AUTO_LINK	Product ID (NULL: read from environment, product_id)
+	 * @return 	array			A map of product name to list of product details.
 	 */
 	function get_product_details($pid=NULL)
 	{
@@ -266,9 +270,9 @@ class Hook_catalogue_items
 	}
 
 	/**
-	 *	Add an order
+	 * Add an order
 	 *
-	 *	@param  array			Array of product details.
+	 * @param  array			Array of product details.
 	 * @return AUTO_LINK		Order ID of newly added order.
 	 */
 	function add_order($product_det)
@@ -393,7 +397,7 @@ class Hook_catalogue_items
 	/**
 	 * Show shopping cart entries
 	 *
-	 *	@param  tempcode	Tempcode object of shopping cart result table.
+	 * @param  tempcode	Tempcode object of shopping cart result table.
 	 * @param  array		Details of new entry to the shopping cart.
 	 * @return tempcode	Tempcode object of shopping cart result table.
 	 */
@@ -565,6 +569,8 @@ class Hook_catalogue_items
 
 		if (array_key_exists(3,$fields))	//Stock level
 		{
+			if (is_object($fields[3]['effective_value'])) $fields[3]['effective_value']=$fields[3]['effective_value']->evaluate();
+
 			if ($fields[3]['effective_value']=='')	return;
 
 			$stock_field=$fields[3]['id'];
@@ -573,14 +579,18 @@ class Hook_catalogue_items
 
 		if (array_key_exists(4,$fields))	//Stock maintained
 		{
-			if (is_null($fields[4]['effective_value']))	return;
+			if (is_object($fields[4]['effective_value'])) $fields[4]['effective_value']=$fields[4]['effective_value']->evaluate();
+
+			if (is_null($fields[4]['effective_value'])) return;
 
 			$stock_maintained=intval($fields[4]['effective_value'])==1;
 		}
 
 		if (array_key_exists(5,$fields))	//Stock level warn threshold
 		{
-			if (is_null($fields[5]['effective_value']))	return;
+			if (is_object($fields[5]['effective_value'])) $fields[5]['effective_value']=$fields[5]['effective_value']->evaluate();
+
+			if (is_null($fields[5]['effective_value'])) return;
 
 			$stock_level_warn_threshold=intval($fields[5]['effective_value']);
 		}
@@ -627,8 +637,8 @@ class Hook_catalogue_items
 	/**
 	 * Get custom fields for ecommerce product
 	 *
-	 *	@param	AUTO_LINK	Product entry ID
-	 *	@param	array			Map where product details are placed
+	 * @param	AUTO_LINK	Product entry ID
+	 * @param	array			Map where product details are placed
 	 */
 	function get_custom_product_map_fields($id,&$map)
 	{

@@ -114,7 +114,7 @@ class Hook_cart_orders
 	 *
 	 * @param  SHORT_TEXT	Item ID
 	 * @return SHORT_TEXT 	Dispatch type
-	*/
+	 */
 	function get_product_dispatch_type($order_id)
 	{		
 		$row=$GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id'=>$order_id));
@@ -141,7 +141,7 @@ class Hook_cart_orders
 	 *
 	 * @param  SHORT_TEXT	item id
 	 * @return SHORT_TEXT 	dispatch type
-	*/
+	 */
 	function set_needed_fields($item_name)
 	{
 		return str_replace('#','',$item_name);

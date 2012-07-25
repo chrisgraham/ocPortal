@@ -536,7 +536,7 @@ class standard_aed_module
 			}
 		}
 
-		if (!is_object($this->add_text)) $this->add_text=make_string_tempcode($this->add_text);
+		if (!is_object($this->add_text)) $this->add_text=make_string_tempcode(is_null($this->add_text)?'':$this->add_text);
 		if ($this->user_facing)
 		{
 			if (($this->care_please) && (do_lang('CARE_PLEASE')!='')) $this->add_text->attach(paragraph(do_lang_tempcode('CARE_PLEASE')));
@@ -1039,7 +1039,7 @@ class standard_aed_module
 		}
 		$fields2->attach($action_fields);
 
-		if (!is_object($this->edit_text)) $this->edit_text=make_string_tempcode($this->edit_text);
+		if (!is_object($this->edit_text)) $this->edit_text=make_string_tempcode(is_null($this->edit_text)?'':$this->edit_text);
 		if (!is_null($this->upload))
 		{
 			if ($this->upload=='image')

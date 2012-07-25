@@ -723,7 +723,7 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	if (is_null($submitter)) $submitter=get_member();
 
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
-	$catalogue_title=$GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name));
+	$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
 	$_fields=list_to_map('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
 	$fields=collapse_2d_complexity('id','cf_type',$_fields);
 
@@ -828,7 +828,7 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords='',$meta_description='')
 {
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
-	$catalogue_title=$GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name));
+	$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
 	$_fields=list_to_map('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$catalogue_name)));
 	$fields=collapse_2d_complexity('id','cf_type',$_fields);
 
