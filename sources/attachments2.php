@@ -357,7 +357,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 				// Search backwards from $marker
 				$tag_end_start=$marker-strlen('[/'.$attachment['tag_type'].']'); // </attachment> would be correct if it is Comcode-XML, but they have the same length, so it's irrelevant
 				$tag_start_end=$tag_end_start;
-				while (($tag_start_end>1) && ($new_comcode[$tag_start_end-1]!=']') && ($new_comcode[$tag_start_end-1]!='>')) $tag_start_end--;
+				while (($tag_start_end>1) && ((!isset($new_comcode[$tag_start_end-1])) || (($new_comcode[$tag_start_end-1]!=']') && ($new_comcode[$tag_start_end-1]!='>')))) $tag_start_end--;
 				$param_keep=substr($new_comcode,0,$tag_start_end-1);
 				$end_keep=substr($new_comcode,$tag_end_start);
 				if ($comcode_text)
