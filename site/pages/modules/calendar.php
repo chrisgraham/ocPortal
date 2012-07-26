@@ -1437,35 +1437,39 @@ class Module_calendar
 			$explode=explode('-',$day);
 			if (count($explode)==3)
 			{
+				$orig_start_year=$event['e_start_year'];
+				$orig_start_month=$event['e_start_month'];
+				$orig_start_day=$event['e_start_day'];
+
+				$event['e_start_year']=intval($explode[0]);
+				$event['e_start_month']=intval($explode[1]);
+				$event['e_start_day']=intval($explode[2]);
+				$start_day_of_month=$event['e_start_day'];
+				$event['e_start_monthly_spec_type']='day_of_month';
+
 				if (is_null($event['e_start_hour'])) // All day event
 				{
 					if (is_null($event['e_end_year']) || is_null($event['e_end_month']) || is_null($event['e_end_day']))
 					{
-						$event['e_end_day']=$start_day_of_month;
-						$event['e_end_month']=$event['e_start_month'];
-						$event['e_end_year']=$event['e_start_year'];
+						$event['e_end_day']=$orig_start_day;
+						$event['e_end_month']=$orig_start_month;
+						$event['e_end_year']=$orig_start_year;
 					}
 				}
 				if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 				{
-					$event['e_end_year']+=intval($explode[0])-$event['e_start_year'];
-					$event['e_end_month']+=intval($explode[1])-$event['e_start_month'];
 					if ($event['e_start_monthly_spec_type']!='day_of_month')
 					{
-						$event['e_end_day']=find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']);
-					} else
-					{
-						$event['e_end_day']+=intval($explode[2])-$event['e_start_day'];
+						//$event['e_end_day']=find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']);
+						$event['e_end_day']=$event['e_start_day']+get_days_between($orig_start_year,$orig_start_month,$orig_start_day,$event['e_end_year'],$event['e_end_month'],$event['e_end_day']);
+						$event['e_end_month']=$event['e_start_month'];
+						$event['e_end_year']=$event['e_start_year'];
+						$event['e_end_monthly_spec_type']='day_of_month';
 					}
+					$event['e_end_day']+=intval($explode[2])-$orig_start_day;
+					$event['e_end_month']+=intval($explode[1])-$orig_start_month;
+					$event['e_end_year']+=intval($explode[0])-$orig_start_year;
 				}
-				$event['e_start_year']=intval($explode[0]);
-				$event['e_start_month']=intval($explode[1]);
-				$event['e_start_day']=intval($explode[2]);
-
-				// Been 'fixed' at this point
-				$event['e_start_monthly_spec_type']='day_of_month';
-				$event['e_end_monthly_spec_type']='day_of_month';
-				$event['e_start_day']=$start_day_of_month;
 			}
 		}
 		$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
@@ -1473,6 +1477,15 @@ class Module_calendar
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));
 		if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 		{
+			if ($event['e_end_monthly_spec_type']!='day_of_month')
+			{
+				$event['e_end_monthly_spec_type']='day_of_month';
+				$dif_days=get_days_between($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day']);
+				$event['e_end_year']=$event['e_start_year'];
+				$event['e_end_month']=$event['e_start_month'];
+				$event['e_end_day']=$event['e_start_day']+$dif_days;
+			}
+
 			$to_raw=cal_get_end_utctime_for_event($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],$event['e_end_hour'],$event['e_end_minute'],$event['e_do_timezone_conv']==1);
 			$to=cal_utctime_to_usertime($to_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			$to_day_formatted=locale_filter(date(do_lang('calendar_date'),$to));

@@ -203,9 +203,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			// Work out using deltas
 			if ($end_monthly_spec_type!='day_of_month')
 			{
-				$a_new=mktime(12,0,0,$initial_start_month,$initial_start_day,$initial_start_year);
-				$b_new=mktime(12,0,0,$initial_end_month,$initial_end_day,$initial_end_year);
-				$dif_days=intval(round(floatval($b_new-$a_new)/86400.0));
+				$dif_days=get_days_between($initial_start_month,$initial_start_day,$initial_start_year,$initial_end_month,$initial_end_day,$initial_end_year);
 
 				$end_day=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type)+$dif_days;
 				$end_month=$start_month;
@@ -269,6 +267,24 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 	while (($recurrence!='') && ($recurrence!='none') && ($a<$period_end) && ((is_null($recurrences)) || ($i<$recurrences)));
 
 	return $times;
+}
+
+/**
+ * Get the number of days between two dates (so first+dif=second).
+ *
+ * @param  integer			Start month
+ * @param  integer			Start day
+ * @param  integer			Start year
+ * @param  integer			End month
+ * @param  integer			End day
+ * @param  integer			End year
+ * @return integer			The number of days
+ */
+function get_days_between($initial_start_month,$initial_start_day,$initial_start_year,$initial_end_month,$initial_end_day,$initial_end_year)
+{
+	$a_new=mktime(12,0,0,$initial_start_month,$initial_start_day,$initial_start_year);
+	$b_new=mktime(12,0,0,$initial_end_month,$initial_end_day,$initial_end_year);
+	return intval(round(floatval($b_new-$a_new)/86400.0));
 }
 
 /**
