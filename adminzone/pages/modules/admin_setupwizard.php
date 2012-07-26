@@ -669,22 +669,6 @@ class Module_admin_setupwizard
 			}
 			delete_menu_item_simple('site:');
 
-			// Remove panel_top
-			if (addon_installed('redirects_editor'))
-			{
-				$GLOBALS['SITE_DB']->query_delete('redirects',array('r_to_page'=>'panel_top'));
-			}
-			$fullpath=get_custom_file_base().'/pages/comcode_custom/'.get_site_default_lang().'/panel_top.txt';
-			if (file_exists($fullpath)) @copy($fullpath,$fullpath.'.'.strval(time()));
-			$myfile=@fopen($fullpath,'wt');
-			if ($myfile!==false)
-			{
-				fwrite($myfile,'');
-				fclose($myfile);
-				fix_permissions($fullpath);
-				sync_file($fullpath);
-			}
-
 			// Run any specific code for the profile
 			require_code('hooks/modules/admin_setupwizard_installprofiles/'.$installprofile);
 			$object=object_factory('Hook_admin_setupwizard_installprofiles_'.$installprofile);
