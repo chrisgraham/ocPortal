@@ -203,9 +203,13 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			// Work out using deltas
 			if ($end_monthly_spec_type!='day_of_month')
 			{
-				$end_day=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type)+($initial_end_day-$initial_start_day);
-				$end_month=$start_month+($initial_end_month-$initial_start_month);
-				$end_year=$start_year+($initial_end_year-$initial_start_year);
+				$a_new=mktime(12,0,0,$initial_start_month,$initial_start_day,$initial_start_year);
+				$b_new=mktime(12,0,0,$initial_end_month,$initial_end_day,$initial_end_year);
+				$dif_days=intval(round(floatval($b_new-$a_new)/86400.0));
+
+				$end_day=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type)+$dif_days;
+				$end_month=$start_month;
+				$end_year=$start_year;
 			}
 		}
 		if (is_null($end_year) || is_null($end_month) || is_null($end_day))
