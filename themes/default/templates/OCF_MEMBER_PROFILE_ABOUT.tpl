@@ -17,6 +17,25 @@
 
 		<h2>{!MORE_ACCOUNT_LINKS,{USERNAME*}}</h2>
 
+		{+START,IF,{VIEW_PROFILES}}
+			{+START,LOOP,CUSTOM_FIELDS}
+				{$SET,is_messenger_field,{$EQ,{NAME},{!DEFAULT_CPF_im_msn_NAME},{!DEFAULT_CPF_im_aim_NAME},{!DEFAULT_CPF_im_yahoo_NAME},{!DEFAULT_CPF_im_skype_NAME},{!DEFAULT_CPF_im_icq_NAME},{!DEFAULT_CPF_im_jabber_NAME},{!DEFAULT_CPF_sn_twitter_NAME},{!DEFAULT_CPF_sn_facebook_NAME},{!DEFAULT_CPF_sn_google_NAME}}}
+				{+START,IF,{$GET,is_messenger_field}}
+					{+START,SET,messenger_fields}
+						{$GET,messenger_fields}
+						{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_msn_NAME}}}<li><a title="{!ADD_AS_FRIEND}: {!LINK_NEW_WINDOW}" href="msnim:add?contact={VALUE*}">{!ADD_AS_FRIEND}</a> (Windows Live Messenger)</li>{+END}
+						{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_aim_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="aim:goim?screename={VALUE*}">{!MESSAGE_THEM}</a> (AOL Instant Messenger)</li>{+END}
+						{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_yahoo_NAME}}}<li><a title="{!ADD_AS_FRIEND}: {!LINK_NEW_WINDOW}" href="ymsgr:addfriend?{VALUE*}">{!ADD_AS_FRIEND}</a> (Yahoo Messenger)</li>{+END}
+						{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_skype_NAME}}}<li><a title="{!PHONE_THEM_UP}: {!LINK_NEW_WINDOW}" href="skype:{VALUE*}?call">{!PHONE_THEM_UP}</a> (Skype)</li>{+END}
+						{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_icq_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="http://www.icq.com/people/cmd.php?uin={VALUE*}&amp;action=message">{!MESSAGE_THEM}</a> (ICQ)</li>{+END}
+						{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_jabber_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="xmpp:{VALUE*}">{!MESSAGE_THEM}</a> (Jabber/XMPP)</li>{+END}
+						{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_sn_twitter_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="http://twitter.com/{VALUE*}" rel="me">@{VALUE*}</a> (Twitter)</li>{+END}
+						{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_sn_facebook_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="{VALUE*}" rel="me">Facebook</a></li>{+END}
+						{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_sn_google_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="{VALUE*}" rel="me">Google+</a></li>{+END}
+					{+END}
+				{+END}
+			{+END}
+		{+END}
 		{+START,IF_NON_EMPTY,{ACTIONS_contact}{$GET,messenger_fields}}
 			<div>
 				<h3>
@@ -100,20 +119,6 @@
 					{+START,IF,{VIEW_PROFILES}}
 						{+START,LOOP,CUSTOM_FIELDS}
 							{$SET,is_messenger_field,{$EQ,{NAME},{!DEFAULT_CPF_im_msn_NAME},{!DEFAULT_CPF_im_aim_NAME},{!DEFAULT_CPF_im_yahoo_NAME},{!DEFAULT_CPF_im_skype_NAME},{!DEFAULT_CPF_im_icq_NAME},{!DEFAULT_CPF_im_jabber_NAME},{!DEFAULT_CPF_sn_twitter_NAME},{!DEFAULT_CPF_sn_facebook_NAME},{!DEFAULT_CPF_sn_google_NAME}}}
-							{+START,IF,{$GET,is_messenger_field}}
-								{+START,SET,messenger_fields}
-									{$GET,messenger_fields}
-									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_msn_NAME}}}<li><a title="{!ADD_AS_FRIEND}: {!LINK_NEW_WINDOW}" href="msnim:add?contact={VALUE*}">{!ADD_AS_FRIEND}</a> (Windows Live Messenger)</li>{+END}
-									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_aim_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="aim:goim?screename={VALUE*}">{!MESSAGE_THEM}</a> (AOL Instant Messenger)</li>{+END}
-									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_yahoo_NAME}}}<li><a title="{!ADD_AS_FRIEND}: {!LINK_NEW_WINDOW}" href="ymsgr:addfriend?{VALUE*}">{!ADD_AS_FRIEND}</a> (Yahoo Messenger)</li>{+END}
-									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_skype_NAME}}}<li><a title="{!PHONE_THEM_UP}: {!LINK_NEW_WINDOW}" href="skype:{VALUE*}?call">{!PHONE_THEM_UP}</a> (Skype)</li>{+END}
-									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_icq_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="http://www.icq.com/people/cmd.php?uin={VALUE*}&amp;action=message">{!MESSAGE_THEM}</a> (ICQ)</li>{+END}
-									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_im_jabber_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="xmpp:{VALUE*}">{!MESSAGE_THEM}</a> (Jabber/XMPP)</li>{+END}
-									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_sn_twitter_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="http://twitter.com/{VALUE*}" rel="me">@{VALUE*}</a> (Twitter)</li>{+END}
-									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_sn_facebook_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="{VALUE*}" rel="me">Facebook</a></li>{+END}
-									{+START,IF,{$EQ,{NAME},{!DEFAULT_CPF_sn_google_NAME}}}<li><a title="{!MESSAGE_THEM}: {!LINK_NEW_WINDOW}" href="{VALUE*}" rel="me">Google+</a></li>{+END}
-								{+END}
-							{+END}
 							{+START,IF,{$NOT,{$GET,is_messenger_field}}}
 								<tr>
 									<th class="de_th">
