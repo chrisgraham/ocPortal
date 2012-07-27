@@ -1788,7 +1788,7 @@ function javascript_tempcode($position=NULL)
 			$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'b5886d9dfc4d528b7e1b0cd6f0eb1670','CODE'=>$j)));
 		}
 	}
-	$js->attach($JAVASCRIPT);
+	if (!is_null($JAVASCRIPT)) $js->attach($JAVASCRIPT);
 	return $js;
 }
 
