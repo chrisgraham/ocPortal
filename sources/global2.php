@@ -213,7 +213,7 @@ function init__global2()
 
 	$SERVER_TIMEZONE=function_exists('date_default_timezone_get')?@date_default_timezone_get():ini_get('date.timezone');
 	@ini_set('date.timezone','UTC');
-	if (function_exists('date_default_timezone_set')) date_default_timezone_set('UTC'); // Needed for HPHP
+	if (function_exists('date_default_timezone_set')) date_default_timezone_set('UTC'); else putenv('TZ=UTC');
 
 	$HAS_SET_ERROR_HANDLER=false;
 	$DYING_BADLY=false; // If ocPortal is bailing out uncontrollably, setting this will make sure the error hander does not try and suppress
