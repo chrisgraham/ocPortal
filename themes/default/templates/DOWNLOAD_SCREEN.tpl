@@ -95,8 +95,6 @@
 				</table></div>
 			</div>
 
-			{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{$BLOCK,failsafe=1,block=main_screen_actions,title={NAME}}{+END}
-
 			{+START,IF_NON_EMPTY,{RATING_DETAILS}}
 				<div class="ratings right">
 					{RATING_DETAILS}
@@ -155,6 +153,8 @@
 			{$,<p class="download_start_slideshow"><a class="associated_link" target="_blank" title="\{!galleries:_SLIDESHOW\}: \{!LINK_NEW_WINDOW\}" href="\{$PAGE_LINK*,_SEARCH:galleries:image:\{$GET*,FIRST_IMAGE_ID\}:slideshow=1:wide_high=1\}">\{!galleries:_SLIDESHOW\}</a></p>}
 		</div></div>
 	{+END}
+
+	{+START,IF,{$CONFIG_OPTION,show_screen_actions}}{$BLOCK,failsafe=1,block=main_screen_actions,title={NAME}}{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 

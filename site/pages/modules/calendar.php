@@ -1374,7 +1374,7 @@ class Module_calendar
 			}
 		}
 
-		$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']);
+		$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
 		$__first_date=mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$start_day_of_month,$event['e_start_year']);
 		$_first_date=cal_utctime_to_usertime(
 			$__first_date,
@@ -1447,6 +1447,13 @@ class Module_calendar
 				$start_day_of_month=$event['e_start_day'];
 				$event['e_start_monthly_spec_type']='day_of_month';
 
+				// Crossing a DST in our reference timezone? (as we store in UTC, which is DST-less, we need to specially accomodate for this)
+				if (!is_null($event['e_start_hour']))
+				{
+					$event['e_start_hour']-=intval(date('H',tz_time(mktime(0,0,0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']),$event['e_timezone'])))-intval(date('H',tz_time(mktime(0,0,0,$orig_start_month,$orig_start_day,$orig_start_year),$event['e_timezone'])));
+					$event['e_start_minute']-=intval(date('i',tz_time(mktime(0,0,0,$event['e_start_month'],$event['e_start_day'],$event['e_start_year']),$event['e_timezone'])))-intval(date('i',tz_time(mktime(0,0,0,$orig_start_month,$orig_start_day,$orig_start_year),$event['e_timezone'])));
+				}
+
 				if (is_null($event['e_start_hour'])) // All day event
 				{
 					if (is_null($event['e_end_year']) || is_null($event['e_end_month']) || is_null($event['e_end_day']))
@@ -1458,22 +1465,45 @@ class Module_calendar
 				}
 				if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 				{
+					$orig_end_year=$event['e_end_year'];
+					$orig_end_month=$event['e_end_month'];
+					$orig_end_day=$event['e_end_day'];
+
 					if ($event['e_start_monthly_spec_type']!='day_of_month')
 					{
-						//$event['e_end_day']=find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']);
+						//$event['e_end_day']=find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
 						$event['e_end_day']=$event['e_start_day']+get_days_between($orig_start_year,$orig_start_month,$orig_start_day,$event['e_end_year'],$event['e_end_month'],$event['e_end_day']);
 						$event['e_end_month']=$event['e_start_month'];
 						$event['e_end_year']=$event['e_start_year'];
 						$event['e_end_monthly_spec_type']='day_of_month';
 					}
+
 					$event['e_end_day']+=intval($explode[2])-$orig_start_day;
 					$event['e_end_month']+=intval($explode[1])-$orig_start_month;
 					$event['e_end_year']+=intval($explode[0])-$orig_start_year;
+
+					// Crossing a DST in our reference timezone? (as we store in UTC, which is DST-less, we need to specially accomodate for this)
+					if (!is_null($event['e_end_hour']))
+					{
+						$event['e_end_hour']-=intval(date('H',tz_time(mktime(0,0,0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'])))-intval(date('H',tz_time(mktime(0,0,0,$orig_end_month,$orig_end_day,$orig_end_year),$event['e_timezone'])));
+						$event['e_end_minute']-=intval(date('i',tz_time(mktime(0,0,0,$event['e_end_month'],$event['e_end_day'],$event['e_end_year']),$event['e_timezone'])))-intval(date('i',tz_time(mktime(0,0,0,$orig_end_month,$orig_end_day,$orig_end_year),$event['e_timezone'])));
+					}
 				}
 			}
 		}
 		$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
 		$from=cal_utctime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+		if ($day!='')
+		{
+			if (date('Y-m-d',$from)!=$day) // Possibly the day given in URL is invalid due to a day shift across timezones, adjust if required and recalculate
+			{
+				$day_dif=$event['e_start_day']-intval(date('d',$from));
+				$event['e_start_day']+=$day_dif;
+				$event['e_end_day']+=$day_dif;
+				$time_raw=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
+				$from=cal_utctime_to_usertime($time_raw,$event['e_timezone'],$event['e_do_timezone_conv']==1);
+			}
+		}
 		$day_formatted=locale_filter(date(do_lang('calendar_date'),$from));
 		if (!is_null($event['e_end_year']) && !is_null($event['e_end_month']) && !is_null($event['e_end_day']))
 		{
@@ -1637,7 +1667,7 @@ class Module_calendar
 
 		if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($event['e_type']))))
 		{
-			$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']);
+			$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			$_from=cal_get_start_utctime_for_event($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],$event['e_start_hour'],$event['e_start_minute'],$event['e_do_timezone_conv']==1);
 			$from=cal_utctime_to_usertime($_from,$event['e_timezone'],$event['e_do_timezone_conv']==1);
 			$to=mixed();

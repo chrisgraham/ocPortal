@@ -128,7 +128,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 	$dif_day=0;
 	$dif_month=0;
 	$dif_year=0;
-	$day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
+	$day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 	$dif=utctime_to_usertime($period_start)-utctime_to_usertime(mktime($start_hour,$start_minute,0,$start_month,$day_of_month,$start_year));
 	$start_day_of_month=$day_of_month;
 	switch ($recurrence) // If a long way out of range, accelerate forward before steadedly looping forward till we might find a match (doesn't jump fully forward, due to possibility of timezones complicating things)
@@ -152,7 +152,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			if ($dif>60*60*24*31*10)
 			{
 				$start_month+=$dif_month*intval(floor(floatval($dif)/(60.0*60.0*24.0*28.0)))-10;
-				$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
+				$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 			}
 			break;
 		case 'yearly':
@@ -205,7 +205,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			{
 				$dif_days=get_days_between($initial_start_month,$initial_start_day,$initial_start_year,$initial_end_month,$initial_end_day,$initial_end_year);
 
-				$end_day=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type)+$dif_days;
+				$end_day=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1)+$dif_days;
 				$end_month=$start_month;
 				$end_year=$start_year;
 			}
@@ -239,7 +239,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$start_day+=$dif_day;
 		} else
 		{
-			$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
+			$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 		}
 		if (!is_null($end_year) && !is_null($end_month) && !is_null($end_day))
 		{
@@ -250,7 +250,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 				$end_day+=$dif_day;
 			} else
 			{
-				//$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type);		Can't work right, or you can get negative time periods. We will just do it as deltas, which is a different method entirely.
+				//$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,$timezone,$do_timezone_conv==1);		Can't work right, or you can get negative time periods. We will just do it as deltas, which is a different method entirely.
 			}
 		}
 
@@ -260,6 +260,15 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$end_day=NULL;
 			$end_month=NULL;
 			$end_year=NULL;
+		}
+
+		// Crossing a DST in our reference timezone? (as we store in UTC, which is DST-less, we need to specially accomodate for this)
+		$start_hour-=intval(date('H',tz_time(mktime(0,0,0,$start_month,$start_day,$start_year),$timezone)))-intval(date('H',tz_time(mktime(0,0,0,$start_month-$dif_month,$start_day-$dif_day,$start_year-$dif_year),$timezone)));
+		$start_minute-=intval(date('i',tz_time(mktime(0,0,0,$start_month,$start_day,$start_year),$timezone)))-intval(date('i',tz_time(mktime(0,0,0,$start_month-$dif_month,$start_day-$dif_day,$start_year-$dif_year),$timezone)));
+		if (!is_null($end_hour))
+		{
+			$end_hour-=intval(date('H',tz_time(mktime(0,0,0,$end_month,$end_day,$end_year),$timezone)))-intval(date('H',tz_time(mktime(0,0,0,$end_month-$dif_month,$end_day-$dif_day,$end_year-$dif_year),$timezone)));
+			$end_minute-=intval(date('i',tz_time(mktime(0,0,0,$end_month,$end_day,$end_year),$timezone)))-intval(date('i',tz_time(mktime(0,0,0,$end_month-$dif_month,$end_day-$dif_day,$end_year-$dif_year),$timezone)));
 		}
 
 		if ($i==300) break; // Let's be reasonable
@@ -676,7 +685,7 @@ function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_da
  */
 function find_timezone_start_hour_in_utc($timezone,$year,$month,$day,$monthly_spec_type)
 {
-	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,0,0,$timezone,true);
 	$t1=mktime(0,0,0,$month,$day,$year);
 	$t2=tz_time($t1,$timezone);
 	$t2-=2*($t2-$t1);
@@ -697,7 +706,7 @@ function find_timezone_start_hour_in_utc($timezone,$year,$month,$day,$monthly_sp
  */
 function find_timezone_start_minute_in_utc($timezone,$year,$month,$day,$monthly_spec_type)
 {
-	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,0,0,$timezone,true);
 	$t1=mktime(0,0,0,$month,$day,$year);
 	$t2=tz_time($t1,$timezone);
 	$t2-=2*($t2-$t1);
@@ -718,7 +727,7 @@ function find_timezone_start_minute_in_utc($timezone,$year,$month,$day,$monthly_
  */
 function find_timezone_end_hour_in_utc($timezone,$year,$month,$day,$monthly_spec_type)
 {
-	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,0,0,$timezone,true);
 	$t1=mktime(23,59,0,$month,$day,$year);
 	$t2=tz_time($t1,$timezone);
 	$t2-=2*($t2-$t1);
@@ -739,7 +748,7 @@ function find_timezone_end_hour_in_utc($timezone,$year,$month,$day,$monthly_spec
  */
 function find_timezone_end_minute_in_utc($timezone,$year,$month,$day,$monthly_spec_type)
 {
-	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,0,0,$timezone,true);
 	$t1=mktime(23,59,0,$month,$day,$year);
 	$t2=tz_time($t1,$timezone);
 	$t2-=2*($t2-$t1);
@@ -763,7 +772,7 @@ function find_timezone_end_minute_in_utc($timezone,$year,$month,$day,$monthly_sp
  */
 function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$monthly_spec_type,$hour,$minute,$show_in_users_timezone)
 {
-	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,$hour,$minute,$timezone,$show_in_users_timezone);
 
 	$_hour=is_null($hour)?0:$hour;
 	$_minute=is_null($minute)?0:$minute;
@@ -828,7 +837,7 @@ function cal_get_start_utctime_for_event($timezone,$year,$month,$day,$monthly_sp
  */
 function cal_get_end_utctime_for_event($timezone,$year,$month,$day,$monthly_spec_type,$hour,$minute,$show_in_users_timezone)
 {
-	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type);
+	$day=find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,$hour,$minute,$timezone,$show_in_users_timezone);
 
 	$_hour=is_null($hour)?23:$hour;
 	$_minute=is_null($minute)?59:$minute;
@@ -992,9 +1001,13 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
  * @param  integer		The encoded day of month
  * @param  ID_TEXT		In-month specification type
  * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
+ * @param  integer		The concrete hour
+ * @param  integer		The concrete minute
+ * @param  ID_TEXT		The timezone
+ * @param  boolean		Whether to do a timezone conversion (NB: unused, as this is before conversion to what dates users see - we are only using timezones here to push the nth weekday appropriately to the correct timezone, due to alignment problems)
  * @return integer		Concrete day
  */
-function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type)
+function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type,$hour,$minute,$timezone,$show_in_users_timezone)
 {
 	switch ($monthly_spec_type)
 	{
@@ -1009,8 +1022,11 @@ function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type)
 			$days=array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'); // Used to set the repeating sequence $day is for (e.g. 0 means first Monday, 7 means second Monday, and so on)
 			$month_start=mktime(0,0,0,$month,1,$year);
 			$nth=intval(1.0+floatval($day)/7.0);
-			$timestamp=strtotime('+'.strval($nth).' '.($days[$day%7]),$month_start-1); /* The "-1" is because it counts passed these days, it does not directly find the nth day -- so if $month_start was on that day we'd make an error */
+			$timestamp=strtotime('+'.strval($nth).' '.($days[$day%7]),$month_start);
+
 			$day_of_month=intval(date('d',$timestamp));
+			$timestamp2=tz_time(mktime($hour,$minute,0,$month,$day_of_month,$year),$timezone);
+			$day_of_month=2*$day_of_month-intval(date('d',$timestamp2));
 			break;
 		case 'dow_of_month_backwards':
 			$days=array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
@@ -1018,6 +1034,8 @@ function find_concrete_day_of_month($year,$month,$day,$monthly_spec_type)
 			$nth=intval(1.0+floatval($day)/7.0);
 			$timestamp=strtotime('-'.strval($nth).' '.($days[$day%7]),$month_end+1);
 			$day_of_month=intval(date('d',$timestamp));
+			$timestamp2=tz_time(mktime($hour,$minute,0,$month,$day_of_month,$year),$timezone);
+			$day_of_month=2*$day_of_month-intval(date('d',$timestamp2));
 			break;
 	}
 	return $day_of_month;

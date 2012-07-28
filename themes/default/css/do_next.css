@@ -11,7 +11,7 @@
 }
 
 .do_next_section_wrap {
-	margin: 1em auto;
+	margin: 2em auto;
 	{+START,IF,{$NOT,{$MOBILE}}}
 		width: 606px;
 	{+END}
@@ -42,7 +42,7 @@
 	font-size: 0.9em;
 	{$BETA_CSS_PROPERTY,transition: background-color 0.5s linear;}
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
-	height: 90px;
+	min-height: 90px;
 }
 
 .do_next_item>div {

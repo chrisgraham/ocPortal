@@ -134,14 +134,14 @@ function output_ical()
 				}
 				while (count($_comments)==1000);
 
-				$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']);
+				$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
 				$time=mktime(is_null($event['e_start_hour'])?12:$event['e_start_hour'],is_null($event['e_start_minute'])?0:$event['e_start_minute'],0,$event['e_start_month'],$start_day_of_month,$event['e_start_year']);
 				if (is_null($event['e_end_year']) || is_null($event['e_end_month']) || is_null($event['e_end_day']))
 				{
 					$time2=mixed();
 				} else
 				{
-					$end_day_of_month=find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']);
+					$end_day_of_month=find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
 					$time2=mktime(is_null($event['e_end_hour'])?12:$event['e_end_hour'],is_null($event['e_end_minute'])?0:$event['e_end_minute'],0,$event['e_end_month'],$end_day_of_month,$event['e_end_year']);
 				}
 				if ($event['e_recurrence']!='none')
@@ -540,12 +540,12 @@ function get_event_data_ical($calendar_nodes)
 
 	if ($start_monthly_spec_type!='day_of_month')
 	{
-		$start_day=find_abstract_day($start_year,$start_month,$start_day,$start_monthly_spec_type);
+		$start_day=find_abstract_day(intval(date('Y',$start)),intval(date('m',$start)),intval(date('d',$start)),$start_monthly_spec_type);
 	}
 
 	if ($end_monthly_spec_type!='day_of_month')
 	{
-		$end_day=find_abstract_day($end_year,$end_month,$end_day,$start_monthly_spec_type/*not encoded differently in iCalendar*/);
+		$end_day=find_abstract_day(intval(date('Y',$end)),intval(date('m',$end)),intval(date('d',$end)),$start_monthly_spec_type/*not encoded differently in iCalendar*/);
 	}
 
 	$ret=array($url,$typeid,$e_recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);

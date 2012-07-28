@@ -46,12 +46,13 @@ abbr.dtstart, abbr.dtend {
 	{+END}
 	vertical-align: top;
 	text-align: center;
+	padding: 0.5em;
 }
 
 .calendar_year_month table {
 	border-collapse: collapse;
-	width: 90%;
-	margin: 0 auto;
+	width: 100%;
+	table-layout: fixed;
 }
 
 .calendar_year_month th {
@@ -321,6 +322,7 @@ abbr.dtstart, abbr.dtend {
 
 .event_subscriptions {
 	margin: 1em 0;
+	padding: 0;
 	overflow: hidden;
 }
 
@@ -331,21 +333,27 @@ abbr.dtstart, abbr.dtend {
 
 	.event_right {
 		float: right;
-		width: 22em;
+		width: 17em;
 		margin-bottom: 1em;
 	}
 
 	.event_left {
-		margin-right: 23em;
+		margin-right: 18em;
 	}
 
 	.event_subscriptions>li {
 		font-size: 0.9em;
 		vertical-align: middle;
-		margin-{!en_left}: 6px;
-		float: {!en_right};
 	}
 {+END}
+
+.event_left .box, .event_right .box {
+	margin-top: 0;
+}
+
+.event_right .trackbacks {
+	width: auto;
+}
 
 {+START,IF,{$MOBILE}}
 	.event_right {
@@ -403,6 +411,13 @@ abbr.dtstart, abbr.dtend {
 
 .events_listing_table th, .events_listing_table td {
 	vertical-align: middle;
+}
+
+.global_side_panel .events_listing_table th {
+	padding: 0;
+}
+.global_side_panel .events_listing_table th img {
+	width: 25px;
 }
 
 .event_listing_day {

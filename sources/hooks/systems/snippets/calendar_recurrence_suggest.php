@@ -33,6 +33,10 @@ class Hook_calendar_recurrence_suggest
 		$day_of_month=get_param_integer('day');
 		$month=get_param_integer('month');
 		$year=get_param_integer('year');
+		$hour=get_param_integer('hour');
+		$minute=get_param_integer('minute');
+		$do_timezone_conv=get_param_integer('do_timezone_conv');
+		$all_day_event=get_param_integer('all_day_event');
 
 		$default_monthly_spec_type=get_param('monthly_spec_type');
 

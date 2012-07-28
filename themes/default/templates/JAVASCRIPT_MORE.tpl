@@ -308,7 +308,7 @@ Array.prototype.inArray = function(needle)
 /**
  * arrayDelete
  *
- * Removes the first occurance of a value from an array. This function is NEW (24/2/06) by ocProducts.
+ * Removes the first occurence of a value from an array. This function is NEW (24/2/06) by ocProducts.
  *
  * object array
  * param  mixed

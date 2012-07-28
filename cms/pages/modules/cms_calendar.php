@@ -84,6 +84,10 @@ class Module_cms_calendar extends standard_aed_module
 			var start_day=document.getElementById('start_day');
 			var start_month=document.getElementById('start_month');
 			var start_year=document.getElementById('start_year');
+			var start_hour=document.getElementById('start_hour');
+			var start_minute=document.getElementById('start_minute');
+			var do_timezone_conv=document.getElementById('do_timezone_conv');
+			var all_day_event=document.getElementById('all_day_event');
 
 			var crf=function(event) {
 				var s=(form.elements['recurrence'][0].checked);
@@ -93,7 +97,7 @@ class Module_cms_calendar extends standard_aed_module
 
 				if ((typeof event!='undefined') && (start_day.selectedIndex!=0) && (start_month.selectedIndex!=0) && (start_year.selectedIndex!=0)) // Something changed
 				{
-					var new_data=load_snippet('calendar_recurrence_suggest&monthly_spec_type='+window.encodeURIComponent(radio_value(form.elements['monthly_spec_type']))+'&day='+window.encodeURIComponent(start_day.options[start_day.selectedIndex].value)+'&month='+window.encodeURIComponent(start_month.options[start_month.selectedIndex].value)+'&year='+window.encodeURIComponent(start_year.options[start_year.selectedIndex].value));
+					var new_data=load_snippet('calendar_recurrence_suggest&monthly_spec_type='+window.encodeURIComponent(radio_value(form.elements['monthly_spec_type']))+'&day='+window.encodeURIComponent(start_day.options[start_day.selectedIndex].value)+'&month='+window.encodeURIComponent(start_month.options[start_month.selectedIndex].value)+'&year='+window.encodeURIComponent(start_year.options[start_year.selectedIndex].value)+'&hour='+window.encodeURIComponent(start_hour.options[start_hour.selectedIndex].value)+'&minute='+window.encodeURIComponent(start_minute.options[start_minute.selectedIndex].value)+'&do_timezone_conv='+(do_timezone_conv.checked?'1':'0')+'&all_day_event='+(all_day_event.checked?'1':'0'));
 					var tr=form.elements['monthly_spec_type'][0];
 					while (tr.nodeName.toLowerCase()!='tr')
 					{
@@ -112,6 +116,8 @@ class Module_cms_calendar extends standard_aed_module
 			start_day.onchange=crf;
 			start_month.onchange=crf;
 			start_year.onchange=crf;
+			start_hour.onchange=crf;
+			start_minute.onchange=crf;
 
 			var crf2=function() {
 				var s=document.getElementById('all_day_event').checked;
@@ -245,7 +251,7 @@ class Module_cms_calendar extends standard_aed_module
 				$types[$row['e_type']]=$type;
 			}
 
-			$start_day_of_month=find_concrete_day_of_month($row['e_start_year'],$row['e_start_month'],$row['e_start_day'],$row['e_start_monthly_spec_type']);
+			$start_day_of_month=find_concrete_day_of_month($row['e_start_year'],$row['e_start_month'],$row['e_start_day'],$row['e_start_monthly_spec_type'],is_null($row['e_start_hour'])?find_timezone_start_hour_in_utc($row['e_timezone'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],$row['e_start_monthly_spec_type']):$row['e_start_hour'],is_null($row['e_start_minute'])?find_timezone_start_minute_in_utc($row['e_timezone'],$row['e_start_year'],$row['e_start_month'],$row['e_start_day'],$row['e_start_monthly_spec_type']):$row['e_start_minute'],$row['e_timezone'],$row['e_do_timezone_conv']==1);
 			$time_raw=mktime($row['e_start_hour'],$row['e_start_minute'],0,$row['e_start_month'],$start_day_of_month,$row['e_start_year']);
 			$date=get_timezoned_date($time_raw,!is_null($row['e_start_hour']));
 
@@ -380,9 +386,9 @@ class Module_cms_calendar extends standard_aed_module
 
 		// Dates
 		$fields->attach(form_input_tick(do_lang_tempcode('ALL_DAY_EVENT'),do_lang_tempcode('DESCRIPTION_ALL_DAY_EVENT'),'all_day_event',is_null($start_hour)));
-		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
+		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',false,false,true,array(is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,$start_month,$start_day_of_month,$start_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
-		$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type);
+		$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,$timezone,$do_timezone_conv==1);
 		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,$end_month,$end_day_of_month,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
 		//$hidden->attach(form_input_hidden('start_monthly_spec_type',$start_monthly_spec_type));
 		//$hidden->attach(form_input_hidden('end_monthly_spec_type',$end_monthly_spec_type));
@@ -439,7 +445,12 @@ class Module_cms_calendar extends standard_aed_module
 		$fields2->attach(form_input_line(do_lang_tempcode('RECURRENCE_PATTERN'),do_lang_tempcode('DESCRIPTION_RECURRENCE_PATTERN'),'recurrence_pattern',$recurrence_pattern,false));
 		$fields2->attach(form_input_integer(do_lang_tempcode('RECURRENCES'),do_lang_tempcode('DESCRIPTION_RECURRENCES'),'recurrences',$recurrences,false));
 		$fields2->attach(form_input_tick(do_lang_tempcode('SEG_RECURRENCES'),do_lang_tempcode('DESCRIPTION_SEG_RECURRENCES'),'seg_recurrences',$seg_recurrences==1));
-		$fields2->attach(monthly_spec_type_chooser($start_day_of_month,$start_month,$start_year,$start_monthly_spec_type));
+		$start_time=mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year);
+		$start_time=tz_time($start_time,get_users_timezone());
+		$conv_month=intval(date('n',$start_time));
+		$conv_day=intval(date('j',$start_time));
+		$conv_year=intval(date('Y',$start_time));
+		$fields2->attach(monthly_spec_type_chooser($conv_day,$conv_month,$conv_year,$start_monthly_spec_type));
 
 		if (($adding) && (cron_installed()) && (has_specific_permission(get_member(),'set_reminders'))) // Some more stuff only when adding
 		{
@@ -519,7 +530,7 @@ class Module_cms_calendar extends standard_aed_module
 			$start_monthly_spec_type=post_param('start_monthly_spec_type',post_param('monthly_spec_type','day_of_month')); // We actually don't suppose separate spec-types for the ends and starts in the UI
 			if ($start_monthly_spec_type!='day_of_month')
 			{
-				$start_day=find_abstract_day($start_year,$start_month,$start_day,$start_monthly_spec_type);
+				$start_day=find_abstract_day(post_param_integer('start_year'),post_param_integer('start_month'),post_param_integer('start_day'),$start_monthly_spec_type);
 			}
 		}
 		if (fractional_edit())
@@ -551,7 +562,7 @@ class Module_cms_calendar extends standard_aed_module
 				$end_monthly_spec_type=post_param('end_monthly_spec_type',$start_monthly_spec_type);
 				if ($end_monthly_spec_type!='day_of_month')
 				{
-					$end_day=find_abstract_day($end_year,$end_month,$end_day,$end_monthly_spec_type);
+					$end_day=find_abstract_day(post_param_integer('end_year'),post_param_integer('end_month'),post_param_integer('end_day'),$end_monthly_spec_type);
 				} else
 				{
 					// Error if wrong way around
@@ -742,7 +753,7 @@ class Module_cms_calendar extends standard_aed_module
 		$_description=is_null($conflicts)?paragraph(do_lang_tempcode('SUBMIT_THANKYOU')):$conflicts;
 
 		$this->donext_type=$type;
-		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
+		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day_of_month);
 
 		if ($validated==1)
@@ -908,7 +919,7 @@ class Module_cms_calendar extends standard_aed_module
 		} else $_description=do_lang_tempcode('SUCCESS');
 
 		$this->donext_type=$type;
-		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type);
+		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
 		$this->donext_date=strval($start_year).'-'.strval($start_month).'-'.strval($start_day_of_month);
 
 		return $_description;
@@ -1226,7 +1237,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 	 * @param  tempcode		Some description to show, saying what happened
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @param  ?AUTO_LINK	The category ID we were working in (NULL: N/A)
-	 * @param  string			The Y-m-d of the added/edited event (first occurance) (blank: whatever)
+	 * @param  string			The Y-m-d of the added/edited event (first occurence) (blank: whatever)
 	 * @return tempcode		The UI
 	 */
 	function _do_next_manager($title,$description,$id,$type,$date)

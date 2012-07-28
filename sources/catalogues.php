@@ -439,7 +439,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 	// Convert the filters to SQL
 	require_code('ocselect');
 	list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],$filters,'catalogue_entry',$catalogue_name);
-	$where_clause.=$extra_where;
+	$where_clause.=$extra_where.' AND '.db_string_equal_to('r.c_name',$catalogue_name);
 
 	// If we're listing what IDs to look at, work out SQL for this
 	if ((is_null($category_id)) && (!is_null($select)))
