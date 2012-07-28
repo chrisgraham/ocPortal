@@ -42,9 +42,10 @@ class Hook_whats_news_news
 	 * @param  TIME				The time that the entries found must be newer than
 	 * @param  LANGUAGE_NAME	The language the entries found must be in
 	 * @param  string				Category filter to apply
+	 * @param  BINARY				Whether to use full article instead of summary
 	 * @return array				Tuple of result details
 	 */
-	function run($cutoff_time,$lang,$filter)
+	function run($cutoff_time,$lang,$filter,$in_full=1)
 	{
 		if (!addon_installed('news')) return array();
 
@@ -63,10 +64,10 @@ class Hook_whats_news_news
 			$_url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),get_module_zone('news'),NULL,false,false,true);
 			$url=$_url->evaluate();
 			$name=get_translated_text($row['title'],NULL,$lang);
-			$description=get_translated_text($row['news'],NULL,$lang);
+			$description=get_translated_text($row[($in_full==1)?'news_article':'news'],NULL,$lang);
 			if ($description=='')
 			{
-				$description=get_translated_text($row['news_article'],NULL,$lang);
+				$description=get_translated_text($row[($in_full==1)?'news':'news_article'],NULL,$lang);
 			}
 			$member_id=(is_guest($row['submitter']))?NULL:strval($row['submitter']);
 			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'4eaf5ec00db1f0b89cef5120c2486521','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
