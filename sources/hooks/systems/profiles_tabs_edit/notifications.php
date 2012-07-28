@@ -58,7 +58,7 @@ class Hook_Profiles_Tabs_Edit_notifications
 			unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id_of]);
 		}
 
-		if ($leave_to_ajax_if_possible) return NULL;
+		if (($leave_to_ajax_if_possible) && (strtoupper(ocp_srv('REQUEST_METHOD'))!='POST')) return NULL;
 
 		require_code('notifications2');
 
