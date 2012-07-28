@@ -76,6 +76,32 @@ It is important to understand that there are two sides to the security of file u
 
 The client-side HTML situation is unfortunate, as in theory, ocPortal should be able to control how a downloaded file is treated by something called a 'mime-type': if ocPortal defines a mime-type for an unknown file-type, or dangerous file-type, as that of a plain-download, it should never do anything but download-directly. However, Microsoft Internet Explorer does not comply with the mime-format and will execute based on file type even when a mime-type is explicitly given: if you do not like this situation, I suggest you direct your disdain toward Microsoft as you consider appropriate. [b]Update:[/b] Microsoft saw the light and IE8 has improved things. ocPortal will set the switch IE8 has introduced to disable this functionality.
 
+[title="2"]Protect your domain name[/title]
+
+It is important that you don't use a public domain name, or give people access to upload their own sites to your domain. If you do, basic web browser security walls will be broken down, and someone malicious could use techniques to extract your access from you. Giving other's access to subdomains is generally okay, so long as you are careful to configure your cookies so that only the main domain can read them.
+
+[title="2"]Protect your session security[/title]
+
+We recommend the 'Enforce IP addresses for sessions' option is left enabled. If you are on some kind of network such as TOR where your IP address may randomly change, we advise to not use this when administering ocPortal -- it will greatly reduce your security. If you have an ISP where your IP address changes very frequently, you may want to consider a more reliable ISP.
+
+For a break-down of the risk of disabling this option, see this tracker discussion:
+http://ocportal.com/tracker/view.php?id=708
+
+[title="2"]Client-side measures[/title]
+
+[title="3"]Referrers[/title]
+
+All users with privileged access should have referrers enabled in their web browser. Without this, ocPortal can't prevent malicious requests being redirected through to your own website's forms from other (malicious) websites.
+By default browsers do have referrers enabled, but some firewall products may disable them for very minor privacy reasons (to stop a website knowing what link you followed to get to it, which most people would agree is not really a privacy issue to them at all).
+
+To check you have referrers enabled, go to OcCLE (Admin Zone > Tools > OcCLE) and type:
+[code]
+:echo ocp_srv('HTTP_REFERER');
+[/code]
+You'll get a URL back that is a URL under your own website.
+
+If you get a blank result, or something like 'unset' or 'hidden', you need to find out why referrers are disabled and re-enable them.
+
 [title="2"]Techniques for increasing security further[/title]
 
 This section details some techniques to increase the security of your site. Most of these techniques are either advanced, or unattractive for most ocPortal users, which is why they are not included in the default ocPortal configuration.
@@ -167,7 +193,7 @@ It means:
 
 [title="2"]Denial Of Service prevention[/title]
 
-ocPortal is a sophisticated system and comes with an unavoidable overhead. This increases the opportunity for a maliceous individual/group to try and take down a server by flooding it with requests. ocPortal is designed to prevent against this -- it will ban flooders and hackattack repeaters after a point. However, the normal IP banning that ocPortal uses works via the database, and hence a significant overhead is taken before the ban can be detected. To workaround this, ocPortal can write IP bans directly into the Apache .htaccess file (obviously, Apache only) -- to do this, the .htaccess file must be writeable by the web server (typically, 666 permissions, although as explained, a well configured environment won't need that).
+ocPortal is a sophisticated system and comes with an unavoidable overhead. This increases the opportunity for a malicious individual/group to try and take down a server by flooding it with requests. ocPortal is designed to prevent against this -- it will ban flooders and hackattack repeaters after a point. However, the normal IP banning that ocPortal uses works via the database, and hence a significant overhead is taken before the ban can be detected. To workaround this, ocPortal can write IP bans directly into the Apache .htaccess file (obviously, Apache only) -- to do this, the .htaccess file must be writeable by the web server (typically, 666 permissions, although as explained, a well configured environment won't need that).
 
 [title="2"]Rooted-website prevention[/title]
 
