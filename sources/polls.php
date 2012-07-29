@@ -417,7 +417,7 @@ function set_poll($id)
 	require_code('notifications');
 	$subject=do_lang('POLL_CHOSEN_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$question);
 	$poll_url=build_url(array('page'=>'polls','type'=>'view','id'=>$id),get_module_zone('polls'),NULL,false,false,true);
-	$mail=do_lang('POLL_CHOSEN_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($question),$poll_url->evaluate());
+	$mail=do_lang('POLL_CHOSEN_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(get_translated_text($question)),$poll_url->evaluate());
 	dispatch_notification('poll_chosen',NULL,$subject,$mail);
 }
 
