@@ -376,21 +376,19 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 .posting_form_insert_buttons {
-	float: {!en_left};
 	background-color: {$GET,area_background};
-	margin-left: 1em;
 }
 
 .posting_form_wrap_buttons {
-	float: {!en_right};
 	background-color: {$GET,point_of_interest_background};
-	margin-right: 28px;
 }
 
 .posting_form_wrap_buttons, .posting_form_insert_buttons {
+	float: {!en_right};
 	border: 1px dotted {$GET,standard_border};
 	padding: 0.5em;
 	margin-top: 0.5em;
+	margin-left: 0.5em;
 }
 
 .posting_form_insert_buttons span, .posting_form_insert_buttons img, .posting_form_wrap_buttons img, .posting_form_insert_buttons input, .posting_form_wrap_buttons input, .posting_form_wrap_buttons select {

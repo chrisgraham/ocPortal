@@ -79,7 +79,7 @@ function _toggle_wysiwyg(name,saving_cookies)
 		{
 			disable_wysiwyg(forms,so,so2,true);
 		} else
-		if ((typeof window.areaedit_original_comcode[id]=='undefined') || (window.areaedit_original_comcode[id].indexOf('&#8203;')!=-1) || (window.areaedit_original_comcode[id].indexOf('ocp_keep')!=-1))
+		if ((typeof window.wysiwyg_original_comcode[id]=='undefined') || (window.wysiwyg_original_comcode[id].indexOf('&#8203;')!=-1) || (window.wysiwyg_original_comcode[id].indexOf('ocp_keep')!=-1))
 		{
 			disable_wysiwyg(forms,so,so2,false);
 		} else
