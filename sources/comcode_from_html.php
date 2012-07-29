@@ -246,7 +246,7 @@ function semihtml_to_comcode($semihtml)
 
 	$semihtml=preg_replace('#(\[[\w\_]+)&nbsp;#','${1} ',$semihtml);
 
-	if (((get_option('eager_wysiwyg')=='0') && (has_specific_permission(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
+	if (((get_option('eager_wysiwyg')=='0') && ((strpos($semihtml,'://')===false) || (count(find_all_hooks('systems','comcode_link_handlers'))==0)) && (has_specific_permission(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
 	{
 		$count=substr_count($semihtml,'[/')+substr_count($semihtml,'{')+substr_count($semihtml,'[[')+substr_count($semihtml,'<h1');
 		if ($count==0) return ($semihtml=='')?'':('[html]'.$semihtml.'[/html]');

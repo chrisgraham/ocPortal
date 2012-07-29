@@ -1176,7 +1176,13 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 											$tag_output->attach($continuation);
 											$continuation='';
-											$tag_output->attach($embed_output);
+											if (!$semiparse_mode)
+											{
+												$tag_output->attach($embed_output);
+											} else
+											{
+												$tag_output->attach(escape_html($auto_link));
+											}
 											$pos+=$link_end_pos-$pos;
 											$differented=true;
 										}
