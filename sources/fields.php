@@ -362,7 +362,7 @@ function nice_get_field_type($type='',$limit_to_storage_set=false)
 
 			foreach ($sub_types as $__type=>$_title)
 			{
-				$type_list->attach(form_input_list_entry($_type,($__type==$type),$_title));
+				$type_list->attach(form_input_list_entry($__type,($__type==$type),$_title));
 			}
 		}
 	}
