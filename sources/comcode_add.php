@@ -416,6 +416,13 @@ function comcode_helper_script()
 
 						$default=array_key_exists($param,$defaults)?$defaults[$param]:get_param('default_'.$param,'');
 
+						// Special exceptions for defaults
+						if (($default=='') && (!array_key_exists($param,$defaults)))
+						{
+							if (($param=='thumb') && ($tag=='attachment'))
+								$default='1';
+						}
+
 						$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
 						$supports_comcode=(strpos($descriptiont,do_lang('BLOCK_IND_SUPPORTS_COMCODE'))!==false);
 						$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
