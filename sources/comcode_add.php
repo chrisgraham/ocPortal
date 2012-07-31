@@ -414,20 +414,22 @@ function comcode_helper_script()
 						$parameter_name=do_lang('COMCODE_TAG_'.$tag.'_NAME_OF_PARAM_'.$param,NULL,NULL,NULL,NULL,false);
 						if (is_null($parameter_name)) $parameter_name=ucwords(str_replace('_',' ',$param));
 
-						$default=array_key_exists($param,$defaults)?$defaults[$param]:get_param('default_'.$param,'');
-
-						// Special exceptions for defaults
-						if (($default=='') && (!array_key_exists($param,$defaults)))
-						{
-							if (($param=='thumb') && ($tag=='attachment'))
-								$default='1';
-						}
-
 						$descriptiont=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
 						$supports_comcode=(strpos($descriptiont,do_lang('BLOCK_IND_SUPPORTS_COMCODE'))!==false);
 						$descriptiont=trim(str_replace(do_lang('BLOCK_IND_SUPPORTS_COMCODE'),'',$descriptiont));
 						$is_advanced=(strpos($descriptiont,do_lang('BLOCK_IND_ADVANCED'))!==false);
 						$descriptiont=trim(str_replace(do_lang('BLOCK_IND_ADVANCED'),'',$descriptiont));
+
+						$default=array_key_exists($param,$defaults)?$defaults[$param]:get_param('default_'.$param,'');
+						if (!array_key_exists($param,$defaults))
+						{
+							$matches=array();
+							if (preg_match('#'.do_lang('BLOCK_IND_DEFAULT').': ["\']([^"]*)["\']#Ui',$descriptiont,$matches)!=0)
+							{
+								$default=$matches[1];
+							}
+						}
+						$descriptiont=preg_replace('#\s*'.do_lang('BLOCK_IND_DEFAULT').': ["\']([^"]*)["\'](?-U)\.?(?U)#Ui','',$descriptiont);
 
 						if (($tag=='page') && ($param=='param') && (substr_count($default,':')==1))
 						{
