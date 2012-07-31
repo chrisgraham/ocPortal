@@ -34,7 +34,7 @@
 										if (!result)
 										{
 											var e=document.getElementById('j_{NAME;}_0');
-											if (e e.checked=true;
+											if (e) e.checked=true;
 										}
 									}
 								);
