@@ -268,14 +268,15 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 	if ($text->evaluate()==do_lang('SUCCESS'))
 	{
 		attach_message($text,'inform');
+		$text=mixed();
 	} else
 	{
-		$GLOBALS['HELPER_PANEL_TEXT']=$text;
+		//$GLOBALS['HELPER_PANEL_TEXT']=$text;
 	}
 
 	if (is_null($title)) return $sections;
 
-	return do_template('DO_NEXT_SCREEN',array('_GUID'=>'a00e89bece6b7ce870ad5096930d5a94','INTRO'=>$intro,'QUESTION'=>$question,'TITLE'=>$title,'SECTIONS'=>$sections));
+	return do_template('DO_NEXT_SCREEN',array('_GUID'=>'a00e89bece6b7ce870ad5096930d5a94','INTRO'=>$intro,'TEXT'=>$text,'QUESTION'=>$question,'TITLE'=>$title,'SECTIONS'=>$sections));
 }
 
 /**
