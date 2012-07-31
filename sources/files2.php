@@ -873,14 +873,14 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		$input_len=0;
 		$first_fail_time=mixed();
 		$chunked=false;
-		$chunk_buffer_unprocessed='';
+		$buffer_unprocessed='';
 		while (($chunked) || (!@feof($mysock))) // @'d because socket might have died. If so fread will will return false and hence we'll break
 		{
-			$line=@fread($mysock,(($chunked) && (strlen($chunk_buffer_unprocessed)>10))?10:1024);
+			$line=@fread($mysock,(($chunked) && (strlen($buffer_unprocessed)>10))?10:1024);
 
 			if ($line===false)
 			{
-				if ((!$chunked) || ($chunk_buffer_unprocessed=='')) break;
+				if ((!$chunked) || ($buffer_unprocessed=='')) break;
 				$line='';
 			}
 			if ($line=='')
@@ -892,8 +892,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			} else $first_fail_time=NULL;
 			if ($data_started)
 			{
-				$line=$chunk_buffer_unprocessed.$line;
-				$chunk_buffer_unprocessed='';
+				$line=$buffer_unprocessed.$line;
+				$buffer_unprocessed='';
 
 				if ($chunked)
 				{
@@ -903,10 +903,10 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						$amount_wanted=hexdec($matches[2]);
 						if (strlen($matches[4])<$amount_wanted) // Chunk was more than what we grabbed, so we need to iterate more to parse
 						{
-							$chunk_buffer_unprocessed=$line;
+							$buffer_unprocessed=$line;
 							continue;
 						}
-						$chunk_buffer_unprocessed=substr($matches[4],$amount_wanted); // May be some more extra read
+						$buffer_unprocessed=substr($matches[4],$amount_wanted); // May be some more extra read
 						$line=substr($matches[4],0,$amount_wanted);
 						if ($line=='')
 						{
@@ -1053,10 +1053,24 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					{
 						$data_started=true;
 						$input_len+=max(0,strlen($old_line)-$tally);
-						$chunk_buffer_unprocessed=substr($old_line,$tally);
-						if ($chunk_buffer_unprocessed===false) $chunk_buffer_unprocessed='';
+						$buffer_unprocessed=substr($old_line,$tally);
+						if ($buffer_unprocessed===false) $buffer_unprocessed='';
 						break;
 					}
+				}
+			}
+		}
+
+		// Process any non-chunked extra buffer (chunked would have been handled in main loop)
+		if (!$chunked)
+		{
+			if ($buffer_unprocessed!='')
+			{
+				if (is_null($write_to_file)) $input.=$buffer_unprocessed; else fwrite($write_to_file,$buffer_unprocessed);
+				$input_len+=strlen($line);
+				if ((!is_null($byte_limit)) && ($input_len>=$byte_limit))
+				{
+					$input=substr($input,0,$byte_limit);
 				}
 			}
 		}
