@@ -2364,3 +2364,86 @@ static_export
  - adminzone/pages/minimodules_custom/static_export.php
  - sources_custom/static_export.php
  - sources_custom/hooks/systems/do_next_menus/static_export.php
+
+ad_success
+----------
+ - adminzone/pages/minimodules_custom/ad_success.php
+ - sources_custom/hooks/systems/do_next_menus/ad_success.php
+
+ocportal_release_build
+----------------------
+
+ocportalcom_support_credits
+---------------------------
+ - adminzone/pages/minimodules_custom/outstanding_credits.php
+ - sources_custom/hooks/systems/do_next_menus/support_credits.php
+ - adminzone/pages/modules_custom/admin_customers.php
+ - lang_custom/EN/customers.ini
+ - text_custom/EN/support_credits_licence.txt
+ - sources_custom/hooks/modules/members/customers.php
+ - sources_custom/hooks/systems/config_default/support_credit_value.php
+ - sources_custom/hooks/systems/ecommerce/support_credits.php
+ - sources_custom/hooks/systems/ocf_cpf_filter/customers.php
+ - sources_custom/miniblocks/credit_exps.php
+ - sources_custom/miniblocks/show_credits.php
+ - themes/default/templates_custom/BLOCK_CREDIT_EXPS.tpl
+ - themes/default/templates_custom/POINTS_PROFILE.tpl
+ - themes/default/templates_custom/CUSTOMER_CREDIT_INFO.tpl
+ - sources_custom/points.php
+ - sources_custom/points3.php
+
+ocportalcom
+-----------
+ - adminzone/pages/modules_custom/admin_ocpusers.php
+ - adminzone/pages/minimodules_custom/make_ocportal_release.php
+ - sources_custom/hooks/systems/do_next_menus/ocportalcom.php
+ - data_custom/ocpcom_web_service.php
+ - data_custom/tracker.php
+ - adminzone/pages/modules_custom/admin_sites.php
+ - lang_custom/EN/sites.ini
+ - lang_custom/EN/ocpcom.ini
+ - pages/minimodules_custom/licence.php
+ - site/pages/modules_custom/sites.php
+ - sources_custom/ocpcom.php
+ - sources_custom/hooks/systems/cron/site_cleanup.php
+ - uploads/website_specific/ocportal.com/myocp/template.sql
+ - uploads/website_specific/ocportal.com/myocp/template.tar
+ - sources_custom/errorservice.php
+ - sources_custom/hooks/systems/symbols/MANTIS_TOTAL.php
+ - sources_custom/hooks/systems/symbols/MANTIS_WEEK_ACTIVITY.php
+ - sources_custom/mantis.php
+ - sources_custom/miniblocks/fp_animation.php
+ - sources_custom/miniblocks/main_mantis_tracker.php
+ - sources_custom/miniblocks/ocpcom_featuretray.php
+ - sources_custom/miniblocks/ocpcom_make_upgrader.php
+ - sources_custom/miniblocks/ocpcom_new_tutorials.php
+ - themes/default/images_custom/tracker/credit.png
+ - themes/default/images_custom/tracker/easy.png
+ - themes/default/images_custom/tracker/hard.png
+ - themes/default/images_custom/tracker/minus.png
+ - themes/default/images_custom/tracker/my.png
+ - themes/default/images_custom/tracker/plus.png
+ - themes/default/images_custom/tracker/popular.png
+ - themes/default/images_custom/tracker/recent.gif
+ - themes/default/images_custom/tracker/tutorials.png
+ - themes/default/templates_custom/MO_NEW_WEBSITE.tpl
+ - themes/default/templates_custom/OC_DOWNLOAD_RELEASES.tpl
+ - themes/default/templates_custom/OC_DOWNLOAD_SCREEN.tpl
+ - themes/default/templates_custom/OC_HOSTING_COPY_SUCCESS_PAGE.tpl
+ - themes/default/templates_custom/OC_SITE.tpl
+ - themes/default/templates_custom/OC_SITES.tpl
+ - uploads/website_specific/ocportal.com/.htaccess
+ - uploads/website_specific/ocportal.com/logos
+ - uploads/website_specific/ocportal.com/logos/a.png
+ - uploads/website_specific/ocportal.com/logos/b.png
+ - uploads/website_specific/ocportal.com/logos/choice.php
+ - uploads/website_specific/ocportal.com/logos/default.png
+ - uploads/website_specific/ocportal.com/logos/index.html
+ - uploads/website_specific/ocportal.com/scripts/addon_manifest.php
+ - uploads/website_specific/ocportal.com/scripts/errorservice.php
+ - uploads/website_specific/ocportal.com/scripts/fetch_release_details.php
+ - uploads/website_specific/ocportal.com/scripts/newsletter_join.php
+ - uploads/website_specific/ocportal.com/scripts/user.php
+ - uploads/website_specific/ocportal.com/scripts/version.php
+ - uploads/website_specific/ocportal.com/upgrades/make_upgrader.php
+ - uploads/website_specific/ocportal.com/upgrades/tarring.log

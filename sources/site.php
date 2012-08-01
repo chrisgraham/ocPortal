@@ -734,10 +734,9 @@ function do_site()
 		// Track very basic details of what sites use ocPortal. You can remove if you like.
 		if ((preg_match('#^localhost[\.\:$]?#',ocp_srv('HTTP_HOST'))==0) && (get_value('no_call_home')!=='1'))
 		{
-			global $EXPIRE,$KEY;
 			$timeout_before=@ini_get('default_socket_timeout');
 			@ini_set('default_socket_timeout','3');
-			http_download_file('http://ocportal.com/user.php?url='.urlencode(get_base_url()).'&name='.urlencode(get_site_name()).'&registered=2&key='.(($KEY===NULL)?'':strval($KEY)).'&expire='.(($EXPIRE===NULL)?'':strval($EXPIRE)).'&version='.urlencode(ocp_version_full()),NULL,false);
+			http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/user.php?url='.urlencode(get_base_url()).'&name='.urlencode(get_site_name()).'&version='.urlencode(ocp_version_full()),NULL,false);
 			@ini_set('default_socket_timeout',$timeout_before);
 		}
 	}

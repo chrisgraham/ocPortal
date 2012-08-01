@@ -562,7 +562,7 @@ function step_3()
 	if ($email==do_lang('EMAIL_ADDRESS')) $email='';
 	if (($email!='') || ($advertise_on==1))
 	{
-		$call='/join_hook.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$LANG;
+		$call='/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$LANG;
 		$errno=0;
 		$errstr='';
 		$mysock=@fsockopen('ocportal.com',80,$errno,$errstr,6.0);

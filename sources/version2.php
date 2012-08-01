@@ -40,14 +40,7 @@ function get_future_version_information()
 
 		$data=convert_to_internal_encoding($data);
 
-		$table=new ocp_tempcode();
-		$lines=explode(chr(10),$data);
-		foreach ($lines as $line)
-		{
-			if (trim($line)!='') $table->attach(paragraph($line));
-		}
-
-		$table=make_string_tempcode(preg_replace('#<p>\s*</p>#','',$table->evaluate()));
+		$table=make_string_tempcode($data);
 	} else $table=paragraph(do_lang_tempcode('CANNOT_CONNECT_HOME'),'dfsdff32ffd');
 
 	require_code('xhtml');
