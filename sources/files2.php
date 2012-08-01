@@ -676,7 +676,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_user.':'.$proxy_password);
 					}
 				}
-				if (!is_null($byte_limit)) curl_setopt($ch,CURLOPT_RANGE,'0-'.strval($byte_limit));
+				if (!is_null($byte_limit)) curl_setopt($ch,CURLOPT_RANGE,'0-'.strval(($byte_limit==0)?0:($byte_limit-1)));
 				$line=curl_exec($ch);
 				if (substr($line,0,25)=="HTTP/1.1 100 Continue\r\n\r\n") $line=substr($line,25);
 				if (substr($line,0,25)=="HTTP/1.0 100 Continue\r\n\r\n") $line=substr($line,25);
@@ -691,7 +691,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				$HTTP_DOWNLOAD_MIME_TYPE=curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
 				$HTTP_DOWNLOAD_SIZE=curl_getinfo($ch,CURLINFO_CONTENT_LENGTH_DOWNLOAD);
 				$HTTP_DOWNLOAD_URL=curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
-				$HTTP_MESSAGE=curl_getinfo($ch,CURLINFO_HTTP_CODE);
+				$HTTP_MESSAGE=strval(curl_getinfo($ch,CURLINFO_HTTP_CODE));
+				if ($HTTP_MESSAGE=='206') $HTTP_MESSAGE='200'; // We don't care about partial-content return code, as ocP implementation gets ranges differently and we check '200' as a return result
 				if (strpos($HTTP_DOWNLOAD_MIME_TYPE,';')!==false)
 				{
 					$HTTP_CHARSET=substr($HTTP_DOWNLOAD_MIME_TYPE,8+strpos($HTTP_DOWNLOAD_MIME_TYPE,'charset='));
