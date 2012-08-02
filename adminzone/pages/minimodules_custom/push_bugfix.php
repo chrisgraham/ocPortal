@@ -7,15 +7,10 @@
 
 */
 
-global $ocPortal_path;
+$title=get_screen_title('ocPortal bugfix tool',false);
+$title->evaluate_echo();
 
-error_reporting(E_ALL);
-ini_set('display_errors','1');
-
-require_once('lib.php');
 $type=isset($_GET['type'])?$_GET['type']:'0';
-
-echo do_header('ocPortal bug fix deployment tool');
 
 global $git_path;
 $git_path='git';
@@ -44,7 +39,6 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	} else
 	{
 		$fixed_files=array();
-		chdir($ocPortal_path);
 		$git_command=$git_path.' show --pretty="format:" --name-only '.$git_commit_id;
 		$git_result=shell_exec($git_command.' 2>&1');
 		$_fixed_files=explode(chr(10),$git_result);
@@ -63,7 +57,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 		if (strpos($file,'_custom')!==false)
 		{
 			$is_addon=true;
-			$addon_files=explode(chr(10),file_get_contents($ocPortal_path.'/data_custom/addon_files.txt'));
+			$addon_files=explode(chr(10),file_get_contents(get_file_base().'/data_custom/addon_files.txt'));
 			$current_addon='';
 			foreach ($addon_files as $line)
 			{
@@ -83,7 +77,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	$submit_to=$_POST['submit_to'];
 	global $remote_base_url;
 
-	$remote_base_url=($submit_to=='live')?('http://ocportal.com'):('http://'.$_SERVER['HTTP_HOST'].dirname(dirname($_SERVER['REQUEST_URI'])).'/our-website/dev');
+	$remote_base_url=($submit_to=='live')?(brand_base_url()):(get_base_url());
 
 	// If no tracker issue number was given, one is made
 	$tracker_id=intval($_POST['tracker_id']);
@@ -127,7 +121,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	// Make tracker comment with fix link
 	$tracker_comment_message='';
 	if ($git_commit_id!==NULL)
-		$tracker_comment_message.='Fixed in git commit '.htmlentities($git_commit_id).' ('.htmlentities($git_url).' - link will become active once code pushed)'."\n\n";
+		$tracker_comment_message.='Fixed in git commit '.escape_html($git_commit_id).' ('.escape_html($git_url).' - link will become active once code pushed)'."\n\n";
 	$tracker_comment_message.='A hotfix (a TAR of files to upload) have been uploaded to this issue. These files are made to the latest intra-version state (i.e. may roll in earlier fixes too if made to the same files) - so only upload files newer than what you have already. Always take backups of files you are replacing or keep a copy of the manual installer for your version, and only apply fixes you need. These hotfixes are not necessarily reliable or well supported. Not sure how to extract TAR files to your Windows computer? Try 7-zip (http://www.7-zip.org/).';
 	create_tracker_post($tracker_id,$tracker_comment_message);
 	// A tar of fixed files is uploaded to the tracker issue (correct relative file paths intact)
@@ -175,27 +169,25 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	echo '<ol>';
 	foreach ($done as $done_title=>$done_url)
 	{
-		echo '<li><a href="'.htmlentities($done_url).'">'.htmlentities($done_title).'</a></li>';
+		echo '<li><a href="'.escape_html($done_url).'">'.escape_html($done_title).'</a></li>';
 	}
 	echo '</ol>';
 
 	if (($is_addon) && (count($addons_involved)!=0))
 	{
-		echo '<p><strong>This was for an addon.</strong> Remember to run <kbd>data_custom/build_addons.php?addon_limit='.htmlentities(urlencode(implode(',',$addons_involved))).'</kbd> out of the repository URL, and then upload the appropriate addon TARs and post the has-updated comments.</p>';
+		echo '<p><strong>This was for an addon.</strong> Remember to run <kbd>data_custom/build_addons.php?addon_limit='.escape_html(urlencode(implode(',',$addons_involved))).'</kbd> out of the repository URL, and then upload the appropriate addon TARs and post the has-updated comments.</p>';
 	}
 
-	echo do_footer();
-	exit();
+	return;
 }
 
 // UI
 // ==
 
-require_once($ocPortal_path.'/sources/version.php');
 $on_disk_release=strval(ocp_version());
 if (ocp_version_minor()!='') $on_disk_release.='.'.ocp_version_minor();
 
-chdir($ocPortal_path);
+chdir(get_file_base());
 $git_command=$git_path.' status';
 $git_result=shell_exec($git_command.' 2>&1');
 $lines=explode(chr(10),$git_result);
@@ -206,10 +198,10 @@ foreach ($lines as $line)
 	if (preg_match('#\tmodified:\s+(.*)$#',$line,$matches)!=0)
 	{
 		if (($matches[1]!='data/files.dat') && ($matches[1]!='ocportal-git.clpprj') && ($matches[1]!='data_custom/execute_temp.php'))
-			$git_found[$ocPortal_path.$matches[1]]=true;
+			$git_found[get_file_base().'/'.$matches[1]]=true;
 	}
 }
-$files=(@$_GET['full_scan']=='1')?do_dir($ocPortal_path,$git_found):array_keys($git_found);
+$files=(@$_GET['full_scan']=='1')?do_dir(get_file_base(),$git_found):array_keys($git_found);
 
 if (count($files)==0)
 {
@@ -305,8 +297,8 @@ END;
 		foreach ($files as $file)
 		{
 			$git_dirty=isset($git_found[$file]);
-			$file=preg_replace('#^'.preg_quote($ocPortal_path,'#').'#','',$file);
-			echo '<option'.($git_dirty?' selected="selected"':'').'>'.htmlentities($file).'</option>';
+			$file=preg_replace('#^'.preg_quote(get_file_base().'/','#').'#','',$file);
+			echo '<option'.($git_dirty?' selected="selected"':'').'>'.escape_html($file).'</option>';
 		}
 echo <<<END
 		</select>
@@ -338,7 +330,7 @@ echo <<<END
 	</fieldset>
 
 	<p style="margin-left: 440px;">
-		<input type="submit" value="Submit fix" />
+		<input class="button_page" type="submit" value="Submit fix" />
 	</p>
 
 	<p>
@@ -346,8 +338,6 @@ echo <<<END
 	</p>
 </form>
 END;
-
-echo do_footer();
 
 // API
 // ===
@@ -366,9 +356,9 @@ function create_tracker_post($tracker_id,$tracker_comment_message)
 
 function do_git_commit($git_commit_message,$files)
 {
-	global $git_path,$ocPortal_path;
+	global $git_path;
 
-	chdir($ocPortal_path);
+	chdir(get_file_base());
 
 	$cmd=$git_path.' commit';
 	foreach ($files as $file)
@@ -389,8 +379,7 @@ function do_git_commit($git_commit_message,$files)
 	}
 
 	// Error
-	echo '<p>Failed to make a git commit: '.htmlentities($result).'</p><p>Command was: '.htmlentities($cmd).'</p>';
-	//echo do_footer();
+	echo '<p>Failed to make a git commit: '.escape_html($result).'</p><p>Command was: '.escape_html($cmd).'</p>';
 	//exit();
 	return NULL;
 }
@@ -403,13 +392,17 @@ function close_tracker_issue($tracker_id)
 
 function create_hotfix_tar($tracker_id,$files)
 {
-	global $ocPortal_path,$builds_path;
-	if (!file_exists($builds_path.'/builds')) mkdir($builds_path.'/builds',0777);
-	if (!file_exists($builds_path.'/builds/hotfixes')) mkdir($builds_path.'/builds/hotfixes',0777);
+	require_code('make_release');
+	$builds_path=get_builds_path();
+	if (!file_exists($builds_path.'/builds/hotfixes'))
+	{
+		mkdir($builds_path.'/builds/hotfixes',0777);
+		fix_permissions($builds_path.'/builds/hotfixes',0777);
+	}
 	chdir($builds_path.'/builds/hotfixes');
 	$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'tar');
 	$tar_path=$builds_path.'/builds/hotfixes/hotfix-'.strval($tracker_id).', '.date('Y-m-d ga').'.tar';
-	$cmd=$tar.' cvf '.escapeshellarg(basename($tar_path)).' -C '.escapeshellarg($ocPortal_path); // Windows doesn't allow absolute path for 'f' option so we need to use 'f' & 'C' to do it
+	$cmd=$tar.' cvf '.escapeshellarg(basename($tar_path)).' -C '.escapeshellarg(get_file_base()); // Windows doesn't allow absolute path for 'f' option so we need to use 'f' & 'C' to do it
 	foreach ($files as $file)
 	{
 		$cmd.=' '.escapeshellarg($file);
@@ -470,7 +463,6 @@ function make_call($call,$params,$file=NULL)
 	if ($result=='Access Denied')
 	{
 		echo '<p>Access denied</p>';
-		echo do_footer();
 	}
 	return $result;
 }

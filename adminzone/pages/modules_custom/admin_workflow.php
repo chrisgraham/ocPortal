@@ -358,7 +358,7 @@ class Module_admin_workflow extends standard_aed_module
 		}
 		else
 		{
-			warn_exit(do_lang('_MISSING_RESOURCE',$name));
+			warn_exit(do_lang_tempcode('_MISSING_RESOURCE',escape_html($name)));
 		}
 
 		// Grab all of the requested points

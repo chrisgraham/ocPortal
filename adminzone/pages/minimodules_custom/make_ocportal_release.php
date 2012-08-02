@@ -13,7 +13,7 @@
  * @package		ocportalcom
  */
 
-/* To be called by make_release.php */
+/* To be called by make_release.php - not directly linked from menus */
 
 restrictify();
 $groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);

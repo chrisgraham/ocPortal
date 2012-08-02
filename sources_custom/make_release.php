@@ -61,688 +61,675 @@ function scan_for_files($dir,$rela='',$pretend_dir='')
 	return $files;
 }
 
-
-<?php /*
-
- ocPortal
- Copyright (c) ocProducts, 2004-2011
-
- See text/en/licence.txt for full licencing information.
-
- Meta Script:
-	Build up the big install.php
-
-*/
-
-$FILE_ARRAY=array();
-$DIR_ARRAY=array();
-
-global $current_application;
-$current_application='make_installer';
-
-require_once('lib.php');
-
-$start_time=_microtime();
-header('Content-Type: application/xhtml+xml;');
-
-$skip_file_grab=(isset($_GET['skip_file_grab']) && ($_GET['skip_file_grab']=='1'));
-
-do_output(do_header('ocProducts automated installer creator').'<p>The ocPortal repository specified using the <var>$_GET</var> variable <var>repos</var> is being compiled and packed up into installation packages.</p>');
-
-global $ocPortal_path;
-
-if (!$skip_file_grab)
-	require_once('make_files.php'); // Build up-to-date files.dat into main source code repository
-
-global $current_application;
-$current_application='make_installer';
-
-$total_files=0;
-$total_dirs=0;
-
-if (!file_exists($builds_path.'/builds/'))
-	mkdir($builds_path.'/builds/') OR exit('Could not make master build folder');
-if (!file_exists($builds_path.'/builds/build/'))
-	mkdir($builds_path.'/builds/build/') OR exit('Could not make temporary build folder');
-if (!$skip_file_grab)
-	deldir_contents($builds_path.'/builds/build/'.$_GET['repos'].'/');
-if (!file_exists($builds_path.'/builds/build/'.$_GET['repos'].'/'))
-	mkdir($builds_path.'/builds/build/'.$_GET['repos'].'/') OR exit('Could not make repository build folder');
-
-include($ocPortal_path.'/sources/version.php');
-
-global $version;
-$version=ocp_version().'.'.ocp_version_minor();
-if (!file_exists($builds_path.'/builds/'.$version.'/'))
-	mkdir($builds_path.'/builds/'.$version.'/') OR exit('Could not make version build folder');
-
-if (!$skip_file_grab)
+function make_installers()
 {
-	@copy($ocPortal_path.'/install.php',$builds_path.'/builds/build/'.$_GET['repos'].'/install.php');
-	if (!file_exists($ocPortal_path.'/sites'))
+	$FILE_ARRAY=array();
+	$DIR_ARRAY=array();
+
+	global $current_application;
+	$current_application='make_installer';
+
+	require_once('lib.php');
+
+	$start_time=_microtime();
+	header('Content-Type: application/xhtml+xml;');
+
+	$skip_file_grab=(isset($_GET['skip_file_grab']) && ($_GET['skip_file_grab']=='1'));
+
+	do_output(do_header('ocProducts automated installer creator').'<p>The ocPortal repository specified using the <var>$_GET</var> variable <var>repos</var> is being compiled and packed up into installation packages.</p>');
+
+	global $ocPortal_path;
+
+	if (!$skip_file_grab)
+		require_once('make_files.php'); // Build up-to-date files.dat into main source code repository
+
+	global $current_application;
+	$current_application='make_installer';
+
+	$total_files=0;
+	$total_dirs=0;
+
+	$builds_path=get_builds_path();
+	if (!file_exists($builds_path.'/builds/build/'))
+		mkdir($builds_path.'/builds/build/') OR exit('Could not make temporary build folder');
+	if (!$skip_file_grab)
+		deldir_contents($builds_path.'/builds/build/'.$_GET['repos'].'/');
+	if (!file_exists($builds_path.'/builds/build/'.$_GET['repos'].'/'))
+		mkdir($builds_path.'/builds/build/'.$_GET['repos'].'/') OR exit('Could not make repository build folder');
+
+	include($ocPortal_path.'/sources/version.php');
+
+	global $version;
+	$version=ocp_version().'.'.ocp_version_minor();
+	if (!file_exists($builds_path.'/builds/'.$version.'/'))
+		mkdir($builds_path.'/builds/'.$version.'/') OR exit('Could not make version build folder');
+
+	if (!$skip_file_grab)
 	{
-		if (!file_exists($ocPortal_path.'/data_custom/errorlog.php'))
+		@copy($ocPortal_path.'/install.php',$builds_path.'/builds/build/'.$_GET['repos'].'/install.php');
+		if (!file_exists($ocPortal_path.'/sites'))
 		{
-			$myfile=fopen($ocPortal_path.'/data_custom/errorlog.php','wb');
-			fwrite($myfile,"<?php return; ?'.'>\n");
-			fclose($myfile);
+			if (!file_exists($ocPortal_path.'/data_custom/errorlog.php'))
+			{
+				$myfile=fopen($ocPortal_path.'/data_custom/errorlog.php','wb');
+				fwrite($myfile,"<?php return; ?'.'>\n");
+				fclose($myfile);
+			}
+			if (!file_exists($ocPortal_path.'/data_custom/permissioncheckslog.php'))
+			{
+				$myfile=fopen($ocPortal_path.'/data_custom/permissioncheckslog.php','wb');
+				fwrite($myfile,"<?php return; ?'.'>\n");
+				fclose($myfile);
+			}
 		}
-		if (!file_exists($ocPortal_path.'/data_custom/permissioncheckslog.php'))
-		{
-			$myfile=fopen($ocPortal_path.'/data_custom/permissioncheckslog.php','wb');
-			fwrite($myfile,"<?php return; ?'.'>\n");
-			fclose($myfile);
-		}
+
+		// Get file data array
+		do_output('<ul>');
+		do_dir();
+		do_output('</ul>');
 	}
+	global $FILE_ARRAY;
 
-	// Get file data array
-	do_output('<ul>');
-	do_dir();
-	do_output('</ul>');
-}
-global $FILE_ARRAY;
+	// What we'll be building
+	$bundled='ocportal-'.$version.'.tar';
+	$quick_zip='ocportal_quick_installer-'.$version.'.zip';
+	$manual_zip='ocportal_manualextraction_installer-'.$version.'.zip';
+	$debian='debian-'.$version.'.tar';
+	$mszip='ocportal-'.$version.'-webpi.zip'; // Aka msappgallery, related to webmatrix
 
-// What we'll be building
-$bundled='ocportal-'.$version.'.tar';
-$quick_zip='ocportal_quick_installer-'.$version.'.zip';
-$manual_zip='ocportal_manualextraction_installer-'.$version.'.zip';
-$debian='debian-'.$version.'.tar';
-$mszip='ocportal-'.$version.'-webpi.zip'; // Aka msappgallery, related to webmatrix
+	chdir($builds_path.'/builds/'.$version.'/');
 
-chdir($builds_path.'/builds/'.$version.'/');
+	// Flags
+	$make_quick=!isset($_GET['skip_quick']);
+	$make_manual=!isset($_GET['skip_manual']);
+	$make_bundled=!isset($_GET['skip_bundled']);
+	$make_mszip=!isset($_GET['skip_mszip']);
+	$make_debian=false;//!isset($_GET['skip_debian']);
 
-// Flags
-$make_quick=!isset($_GET['skip_quick']);
-$make_manual=!isset($_GET['skip_manual']);
-$make_bundled=!isset($_GET['skip_bundled']);
-$make_mszip=!isset($_GET['skip_mszip']);
-$make_debian=false;//!isset($_GET['skip_debian']);
-
-// Build quick installer
-if ($make_quick)
-{
-	// Write out our installer data file
-	$data_file=fopen($builds_path.'/builds/'.$version.'/data.ocp','wb');
-	if ($_GET['repos']!='3.0.x')
+	// Build quick installer
+	if ($make_quick)
 	{
-		require_once($ocPortal_path.'/sources/zip.php');
-		$zip_file_array=array();
-		foreach ($FILE_ARRAY as $filename=>$data)
+		// Write out our installer data file
+		$data_file=fopen($builds_path.'/builds/'.$version.'/data.ocp','wb');
+		if ($_GET['repos']!='3.0.x')
 		{
-			$zip_file_array[]=array('time'=>filemtime($ocPortal_path.'/'.$filename),'data'=>$data,'name'=>$filename);
-		}
-		list($data,$offsets,$sizes)=create_zip_file($zip_file_array,false,true);
-		fwrite($data_file,$data);
-	} else
-	{
-		foreach ($FILE_ARRAY as $filename=>$data)
-		{
-			$offsets[$filename]=ftell($data_file);
-			$sizes[$filename]=strlen($data);
+			require_once($ocPortal_path.'/sources/zip.php');
+			$zip_file_array=array();
+			foreach ($FILE_ARRAY as $filename=>$data)
+			{
+				$zip_file_array[]=array('time'=>filemtime($ocPortal_path.'/'.$filename),'data'=>$data,'name'=>$filename);
+			}
+			list($data,$offsets,$sizes)=create_zip_file($zip_file_array,false,true);
 			fwrite($data_file,$data);
+		} else
+		{
+			foreach ($FILE_ARRAY as $filename=>$data)
+			{
+				$offsets[$filename]=ftell($data_file);
+				$sizes[$filename]=strlen($data);
+				fwrite($data_file,$data);
+			}
 		}
-	}
-	fclose($data_file);
-	$archive_size=filesize($builds_path.'/builds/'.$version.'/data.ocp');
-	$md5_test_path='uploads/banners/advertise_here.png';
-	if (!file_exists($_GET['repos'].'/'.$md5_test_path)) $md5_test_path='data/images/advertise_here.png';
-	$md5=md5(file_get_contents($builds_path.'/builds/build/'.$_GET['repos'].'/'.$md5_test_path));
+		fclose($data_file);
+		$archive_size=filesize($builds_path.'/builds/'.$version.'/data.ocp');
+		$md5_test_path='uploads/banners/advertise_here.png';
+		if (!file_exists($_GET['repos'].'/'.$md5_test_path)) $md5_test_path='data/images/advertise_here.png';
+		$md5=md5(file_get_contents($builds_path.'/builds/build/'.$_GET['repos'].'/'.$md5_test_path));
 
-	// Write out our PHP installer file
-	$file_count=count($FILE_ARRAY);
-	$size_list='';
-	$offset_list='';
-	$file_list='';
-	foreach ($FILE_ARRAY as $path=>$_) // Current path->contents. We need number->path, so we can count through them without having to have the array with us. We end up with this in string form, as it goes in our file
+		// Write out our PHP installer file
+		$file_count=count($FILE_ARRAY);
+		$size_list='';
+		$offset_list='';
+		$file_list='';
+		foreach ($FILE_ARRAY as $path=>$_) // Current path->contents. We need number->path, so we can count through them without having to have the array with us. We end up with this in string form, as it goes in our file
+		{
+			do_file_output($path);
+			$size_list.='\''.$path.'\'=>'.$sizes[$path].','."\n";
+			$offset_list.='\''.$path.'\'=>'.$offsets[$path].','."\n";
+			$file_list.='\''.$path.'\',';
+		}
+
+		$code=file_get_contents($ocPortal_path.'/install.php');
+		$auto_installer=fopen($builds_path.'/builds/'.$version.'/install.php','wb');
+		$installer_start="<?php
+	global \$FILE_ARRAY,\$SIZE_ARRAY,\$OFFSET_ARRAY,\$DIR_ARRAY,\$myfile;
+	\$OFFSET_ARRAY=array({$offset_list});
+	\$SIZE_ARRAY=array({$size_list});
+	\$FILE_ARRAY=array({$file_list});
+	\$myfile=fopen('data.ocp','rb');
+	if (\$myfile===false) exit('data.ocp missing / inaccessible');
+	if (filesize('data.ocp')!={$archive_size}) exit('data.ocp not fully uploaded, or wrong version for this installer');
+	if (md5(file_array_get('{$md5_test_path}'))!='{$md5}') exit('data.ocp corrupt. Must not be uploaded in text mode');
+
+	function file_array_get(\$path)
 	{
-		do_file_output($path);
-		$size_list.='\''.$path.'\'=>'.$sizes[$path].','."\n";
-		$offset_list.='\''.$path.'\'=>'.$offsets[$path].','."\n";
-		$file_list.='\''.$path.'\',';
-	}
+	global \$OFFSET_ARRAY,\$SIZE_ARRAY,\$myfile,\$FILE_BASE;
 
-	$code=file_get_contents($ocPortal_path.'/install.php');
-	$auto_installer=fopen($builds_path.'/builds/'.$version.'/install.php','wb');
-	$installer_start="<?php
-global \$FILE_ARRAY,\$SIZE_ARRAY,\$OFFSET_ARRAY,\$DIR_ARRAY,\$myfile;
-\$OFFSET_ARRAY=array({$offset_list});
-\$SIZE_ARRAY=array({$size_list});
-\$FILE_ARRAY=array({$file_list});
-\$myfile=fopen('data.ocp','rb');
-if (\$myfile===false) exit('data.ocp missing / inaccessible');
-if (filesize('data.ocp')!={$archive_size}) exit('data.ocp not fully uploaded, or wrong version for this installer');
-if (md5(file_array_get('{$md5_test_path}'))!='{$md5}') exit('data.ocp corrupt. Must not be uploaded in text mode');
+	if (substr(\$path,0,strlen(\$FILE_BASE.'/'))==\$FILE_BASE.'/')
+		\$path=substr(\$path,strlen(\$FILE_BASE.'/'));
 
-function file_array_get(\$path)
-{
-global \$OFFSET_ARRAY,\$SIZE_ARRAY,\$myfile,\$FILE_BASE;
-
-if (substr(\$path,0,strlen(\$FILE_BASE.'/'))==\$FILE_BASE.'/')
-	\$path=substr(\$path,strlen(\$FILE_BASE.'/'));
-
-if (!isset(\$OFFSET_ARRAY[\$path])) return;
-\$offset=\$OFFSET_ARRAY[\$path];
-\$size=\$SIZE_ARRAY[\$path];
-if (\$size==0) return '';
-fseek(\$myfile,\$offset,SEEK_SET);
-if (\$size>1024*1024)
-{
-	return array(\$size,\$myfile,\$offset);
-}
-\$data=fread(\$myfile,\$size);
-return \$data;
-}
-
-function file_array_exists(\$path)
-{
-global \$OFFSET_ARRAY;
-return (isset(\$OFFSET_ARRAY[\$path]));
-}
-
-function file_array_get_at(\$i)
-{
-global \$FILE_ARRAY;
-\$name=\$FILE_ARRAY[\$i];
-return array(\$name,file_array_get(\$name));
-}
-
-function file_array_count()
-{
-return {$file_count};
-}
-";
-
-	fputs($auto_installer,$installer_start);
-
-	global $DIR_ARRAY;
-	foreach ($DIR_ARRAY as $dir)
+	if (!isset(\$OFFSET_ARRAY[\$path])) return;
+	\$offset=\$OFFSET_ARRAY[\$path];
+	\$size=\$SIZE_ARRAY[\$path];
+	if (\$size==0) return '';
+	fseek(\$myfile,\$offset,SEEK_SET);
+	if (\$size>1024*1024)
 	{
-		fputs($auto_installer,'$DIR_ARRAY[]=\''.$dir.'\';'."\n");
+		return array(\$size,\$myfile,\$offset);
 	}
-	fputs($auto_installer,'?'.'>');
-	fputs($auto_installer,$code);
-	fclose($auto_installer);
+	\$data=fread(\$myfile,\$size);
+	return \$data;
+	}
 
-	@unlink($quick_zip);
-	$zip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\zip"'):'zip');
-	//if (!file_exists($zip)) exit('InfoZip zip tool missing from install dir [or missing from Linux installation]');
-	$cmd=$zip.' -r -9 "'.$quick_zip.'" data.ocp install.php';
-	$output2=$cmd.':'."\n".shell_exec($cmd);
-	$dir=getcwd();
-	chdir(dirname(__FILE__));
-	$cmd=$zip.' -r -9 "'.$dir.'/'.$quick_zip.'" readme.txt';
-	$output2.=$cmd.':'."\n".shell_exec($cmd);
-	chdir($dir);
-	do_zip_output($quick_zip,$output2);
-}
+	function file_array_exists(\$path)
+	{
+	global \$OFFSET_ARRAY;
+	return (isset(\$OFFSET_ARRAY[\$path]));
+	}
+
+	function file_array_get_at(\$i)
+	{
+	global \$FILE_ARRAY;
+	\$name=\$FILE_ARRAY[\$i];
+	return array(\$name,file_array_get(\$name));
+	}
+
+	function file_array_count()
+	{
+	return {$file_count};
+	}
+	";
+
+		fputs($auto_installer,$installer_start);
+
+		global $DIR_ARRAY;
+		foreach ($DIR_ARRAY as $dir)
+		{
+			fputs($auto_installer,'$DIR_ARRAY[]=\''.$dir.'\';'."\n");
+		}
+		fputs($auto_installer,'?'.'>');
+		fputs($auto_installer,$code);
+		fclose($auto_installer);
+
+		@unlink($quick_zip);
+		$zip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\zip"'):'zip');
+		//if (!file_exists($zip)) exit('InfoZip zip tool missing from install dir [or missing from Linux installation]');
+		$cmd=$zip.' -r -9 "'.$quick_zip.'" data.ocp install.php';
+		$output2=$cmd.':'."\n".shell_exec($cmd);
+		$dir=getcwd();
+		chdir(dirname(__FILE__));
+		$cmd=$zip.' -r -9 "'.$dir.'/'.$quick_zip.'" readme.txt';
+		$output2.=$cmd.':'."\n".shell_exec($cmd);
+		chdir($dir);
+		do_zip_output($quick_zip,$output2);
+	}
 
 /*
-The other ones are built up file-by-file
+	The other ones are built up file-by-file
 */
 
-@mkdir('../build');
-@mkdir('../build/'.$_GET['repos']);
-chdir('../build/'.$_GET['repos']);
+	@mkdir('../build');
+	@mkdir('../build/'.$_GET['repos']);
+	chdir('../build/'.$_GET['repos']);
 
-// Build manual
-if ($make_manual)
-{
-	@unlink('../'.$manual_zip);
-	$zip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\zip"'):'zip');
-	$zip=str_replace('..\\..\\','..\\..\\..\\',$zip);
-	$cmd=$zip.' -r -9 "../../'.$version.'/'.$manual_zip.'" *';
-	$output2=shell_exec($cmd);
-	do_zip_output($manual_zip,$output2);
+	// Build manual
+	if ($make_manual)
+	{
+		@unlink('../'.$manual_zip);
+		$zip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\zip"'):'zip');
+		$zip=str_replace('..\\..\\','..\\..\\..\\',$zip);
+		$cmd=$zip.' -r -9 "../../'.$version.'/'.$manual_zip.'" *';
+		$output2=shell_exec($cmd);
+		do_zip_output($manual_zip,$output2);
+	}
+
+	// Build bundled version (Installatron, Bitnami, ...)
+	if ($make_bundled)
+	{
+		@unlink('../'.$bundled);
+		@unlink('../'.$bundled.'.gz');
+		copy($ocPortal_path.'/install.sql','install.sql');
+		copy($ocPortal_path.'/info.php.template','info.php.template');
+		$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'tar');
+		$cmd=$tar.' -cvf "../../'.$version.'/'.$bundled.'" * --mode=a+X';
+		$output2=shell_exec($cmd);
+		$dir=getcwd();
+		chdir(dirname(__FILE__));
+		$cmd=$tar.' -rvf "'.$dir.'/../../'.$version.'/'.$bundled.'" readme.txt --mode=a+X';
+		$output2.=shell_exec($cmd);
+		chdir($dir);
+		//$output2=do_zip($v,$output2);
+		$gzip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\gzip"'):'gzip');
+		$cmd=$gzip.' -n "../../'.$version.'/'.$bundled.'"';
+		shell_exec($cmd);
+		unlink('../../'.$version.'/'.$bundled);
+		do_zip_output($bundled.'.gz',$output2);
+	}
+
+	// Build debian version
+	if ($make_debian)
+	{
+		// To our correct versioned builds directory
+		if (file_exists('../debian-build')) deldir_contents('../debian-build');
+		@mkdir('../debian-build');
+		chdir('../debian-build');
+
+		// Take existing .tar.gz package, extract into "ocportal-<version>"
+		@mkdir('ocportal-'.$version);
+		copy($builds_path.'/builds/'.$version.'/ocportal-'.$version.'.tar.gz','ocportal-'.$version.'.tar.gz');
+		$gunzip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\gunzip"'):'gunzip');
+		$cmd=$gunzip.' ocportal-'.$version.'.tar.gz';
+		shell_exec($cmd);
+		$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'tar');
+		@mkdir('ocportal-'.$version);
+		chdir('ocportal-'.$version);
+		$cmd=$tar.' xvf ../ocportal-'.$version.'.tar';
+		echo shell_exec($cmd);
+		chdir('..');
+
+		// Filter out non-free stuff from "ocportal-<version>"
+		unlink('ocportal-'.$version.'/sources/hooks/systems/addon_registry/jwplayer.php');
+		unlink('ocportal-'.$version.'/data/flvplayer.swf');
+		unlink('ocportal-'.$version.'/themes/default/templates/ATTACHMENT_FLV.tpl');
+		unlink('ocportal-'.$version.'/themes/default/templates/COMCODE_FLV.tpl');
+		unlink('ocportal-'.$version.'/themes/default/templates/GALLERY_VIDEO_FLV.tpl');
+		unlink('ocportal-'.$version.'/themes/default/templates/JAVASCRIPT_JWPLAYER.tpl');
+		unlink('ocportal-'.$version.'/sources/jsmin.php');
+		unlink('ocportal-'.$version.'/themes/default/images/cedi_link.png');
+		unlink('ocportal-'.$version.'/themes/default/images/calendar/birthday.png');
+		unlink('ocportal-'.$version.'/themes/default/images/calendar/anniversary.png');
+		unlink('ocportal-'.$version.'/themes/default/images/calendar/appointment.png');
+		unlink('ocportal-'.$version.'/themes/default/images/calendar/general.png');
+		unlink('ocportal-'.$version.'/themes/default/images/calendar/activity.png');
+		unlink('ocportal-'.$version.'/themes/default/images/calendar/system_command.png');
+		unlink('ocportal-'.$version.'/themes/default/images/calendar/duty.png');
+		unlink('ocportal-'.$version.'/themes/default/images/calendar/festival.png');
+		unlink('ocportal-'.$version.'/themes/default/images/calendar/commitment.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/move.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/of_catalogues.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/language.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/forums.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/chatrooms.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/view_this.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/polls.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/awards.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/set-own-profile.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/phpinfo.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/download_csv.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/ocp-logo.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/custom-comcode.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/permissionstree.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/redirect.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/orders.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one_catalogue.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/manage_images.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/top_keywords.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/ldap.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/show_orders.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/xml.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/actionlog.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/multimods.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_css.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/geolocate.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/bulkupload.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/ssl.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/page_views.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/newsletters.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/statistics_search.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/messaging.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/transactions.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/statistics_posting_rates.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/import_subscribers.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/security.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/cash_flow.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/usergroups.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/usergroups_temp.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/zones.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/occle.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/view_archive.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/pagewizard.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/deletelurkers.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/cms_home.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/import.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one_image.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/ipban.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/multisitenetwork.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/tickets.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/export.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/themewizard.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/findwinners.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/calendar.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/main_home.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/catalogues.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/addmember.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/authors.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/wordfilter.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/delete.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/cleanup.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one_catalogue.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/errorlog.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/newsletter_from_changes.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/top_referrers.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/posttemplates.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/users_online.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/downloads.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/survey_results.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/import_csv.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/matchkeysecurity.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/subscribers.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/baseconfig.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one_category.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/securitylog.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/backups.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/statistics.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/clear_stats.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/sitetree.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/invoices.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/news.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/admin_home.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_this_catalogue.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one_video.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/comcode_page_edit.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/view_this_category.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/config.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/back.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/trackbacks.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/criticise_language.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one_image.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_video_to_this.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/merge.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_templates.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/debrand.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one_category.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/emoticons.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/statistics_demographics.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/pointslog.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_this_category.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_image_to_this.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/zone_editor.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/profit_loss.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_to_catalogue.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/ecommerce.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/manage_themes.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/staff.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/pointstorelog.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/iotds.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/galleries.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/setupwizard.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one_licence.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one_video.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/pointstore.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/make_logo.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/addons.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/submits.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/load_times.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/undispatched.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/searchstats.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/investigateuser.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/quotes.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/banners.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/privileges.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/welcome_emails.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/realtime_rain.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one_licence.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_to_category.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/cedi.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/menus.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/customprofilefields.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/quiz.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/clubs.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/merge_members.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_this.png');
+		unlink('ocportal-'.$version.'/themes/default/images/bigicons/editmember.png');
+		unlink('ocportal-'.$version.'/themes/default/images/newscats/entertainment.jpg');
+		unlink('ocportal-'.$version.'/themes/default/images/newscats/art.jpg');
+		unlink('ocportal-'.$version.'/themes/default/images/newscats/business.jpg');
+		unlink('ocportal-'.$version.'/themes/default/images/newscats/general.jpg');
+		unlink('ocportal-'.$version.'/themes/default/images/newscats/difficulties.jpg');
+		unlink('ocportal-'.$version.'/themes/default/images/newscats/community.jpg');
+		unlink('ocportal-'.$version.'/themes/default/images/newscats/technology.jpg');
+		unlink('ocportal-'.$version.'/themes/default/images/cedi_link_hover.png');
+		unlink('ocportal-'.$version.'/themes/default/images/recommend/twitter.gif');
+		unlink('ocportal-'.$version.'/themes/default/images/recommend/stumbleupon.gif');
+		unlink('ocportal-'.$version.'/themes/default/images/recommend/print.gif');
+		unlink('ocportal-'.$version.'/themes/default/images/recommend/recommend.gif');
+		unlink('ocportal-'.$version.'/themes/default/images/recommend/favorites.gif');
+		unlink('ocportal-'.$version.'/themes/default/images/recommend/digg.gif');
+		unlink('ocportal-'.$version.'/themes/default/images/recommend/facebook.gif');
+		unlink('ocportal-'.$version.'/themes/default/images/results/dispatch.png');
+		unlink('ocportal-'.$version.'/themes/default/images/results/hold.png');
+		unlink('ocportal-'.$version.'/themes/default/images/results/add_note.png');
+		unlink('ocportal-'.$version.'/themes/default/images/results/return.gif');
+		unlink('ocportal-'.$version.'/themes/default/images/results/view.gif');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/move.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/language.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/forums.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/loadtimes.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/chatrooms.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/polls.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/awards.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/phpinfo.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/installgeolocationdata.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/unvalidated.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/ocp-logo.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_clear.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/redirect.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/ldap.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/xml.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/actionlog.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/configwizard.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/importdata.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_google.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/ssl.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_search.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_usersonline.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/messaging.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/transactions.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/cash_flow.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/usergroups.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/usergroups_temp.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/zones.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/occle.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/deletelurkers.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/ipban.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/tickets.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/export.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/themewizard.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/findwinners.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/calendar.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/catalogues.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/addmember.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/authors.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/wordfilter.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/cleanup.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/sitetreeeditor.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/errorlog.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/newsletter_from_changes.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/addpagewizard.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/posttemplates.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/ocpmainpage.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/customcomcode.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/downloads.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/survey_results.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/import_csv.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/matchkeysecurity.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/securitylog.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/backups.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/multimoderations.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_referrers.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/invoices.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/news.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/newsletter.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/comcode_page_edit.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/bulkuploadassistant.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/config.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/deletepage.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/trackbacks.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/criticise_language.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/setauthorprofile.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/mergemembers.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/debrand.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/emoticons.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/profit_loss.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/ecommerce.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/themes.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/staff.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/iotds.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_pageviews.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/permissiontree.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/pointstore.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/addons.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/submits.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/investigateuser.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/quotes.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/multisitenetworking.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/banners.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/privileges.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/welcome_emails.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/logowizard.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/points.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/cedi.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/menus.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/customprofilefields.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/quiz.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/flagrant.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/clubs.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/images.png');
+		unlink('ocportal-'.$version.'/themes/default/images/pagepics/editmember.png');
+		unlink('ocportal-'.$version.'/themes/default/images/under_construction_animated.gif');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/amend.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/edit.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/redirect.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/cart_empty.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/all2.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/new.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/no_next.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/search.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/slideshow.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/cart_update.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/cart_checkout.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/next.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/convert.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/cart_view.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/discard.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/shopping_buy_now.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/quick_reply.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/delete.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/closed.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/changes.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/new_post.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/add_event.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/simple.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/cart_add.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/no.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/edit_tree.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/close.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/join.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/mark_unread.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/rename.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/cancel.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/ok.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/reply.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/staff_only_reply.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/login.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/no_previous.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/invite_member.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/mark_read.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/new_topic.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/shopping_continue.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/advanced.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/all.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/previous.png');
+		unlink('ocportal-'.$version.'/themes/default/images/EN/page/ignore.png');
+		unlink('ocportal-'.$version.'/themes/default/images/background_image.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_ods.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_media.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_archive.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_odp.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_torrent.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/feed.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_doc.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_txt.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_odt.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_xls.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_ppt.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/external_link.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/email_link.png');
+		unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_pdf.png');
+		unlink('ocportal-'.$version.'/themes/default/images/awarded.png');
+
+		// Create "ocportal-<version>.orig.tar.gz" package from "ocportal-<version>"
+		$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'tar');
+		$cmd=$tar.' -cvf "ocportal-'.$version.'.tar" ocportal-'.$version.'/* --mode=a+X';
+		$output2=shell_exec($cmd);
+		$gzip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\gzip"'):'gzip');
+		$cmd=$gzip.' -n "ocportal-'.$version.'.tar"';
+		shell_exec($cmd);
+
+		// Copy "debian" directory into "ocportal-<version>"
+		copy_r(dirname(__FILE__).'/debian','ocportal-'.$version.'/debian');
+
+		// Tar up "ocportal-<version>" and "ocportal-<version>.tar.gz" together into "debian-<version>.tar"
+		$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'tar');
+		$cmd=$tar.' -cvf "../../'.$version.'/'.$debian.'" ocportal-'.$version.'/* ocportal-'.$version.'.tar.gz --mode=a+X';
+		$output2=shell_exec($cmd);
+
+		do_zip_output($debian,$output2);
+
+		chdir('../'.$_GET['repos']);
+	}
+
+	// Build Microsoft version
+	if ($make_mszip)
+	{
+		chdir('../');
+
+		@unlink('../'.$version.'/'.$mszip);
+		copy($ocPortal_path.'/info.php.template','info.php.template');
+		rename($_GET['repos'].'/info.php','info.php');
+		rename($_GET['repos'].'/install.sql','install.sql');
+		rename($_GET['repos'].'/install.php','install.php');
+		$zip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\zip"'):'zip');
+		copy($ocPortal_path.'/install1.sql','install1.sql');
+		copy($ocPortal_path.'/install2.sql','install2.sql');
+		copy($ocPortal_path.'/install3.sql','install3.sql');
+		copy($ocPortal_path.'/install4.sql','install4.sql');
+		copy($ocPortal_path.'/user.sql','user.sql');
+		copy($ocPortal_path.'/postinstall.sql','postinstall.sql');
+		copy($ocPortal_path.'/manifest.xml','manifest.xml');
+		copy($ocPortal_path.'/parameters.xml','parameters.xml');
+		if (file_exists($builds_path.'/builds/build/ocportal/')) deldir_contents($builds_path.'/builds/build/ocportal/');
+		rename($_GET['repos'],'ocportal');
+		$cmd=$zip.' -r -9 -v "../'.$version.'/'.$mszip.'" ocportal manifest.xml parameters.xml install1.sql install2.sql install3.sql install4.sql user.sql postinstall.sql';
+		$output2=shell_exec($cmd);
+		rename('ocportal',$_GET['repos']);
+		do_zip_output($mszip,$output2);
+		rename('info.php',$_GET['repos'].'/info.php');
+		rename('install.sql',$_GET['repos'].'/install.sql');
+		rename('install.php',$_GET['repos'].'/install.php');
+	}
+
+	$finish_time=_microtime();
+
+	$details='';
+	if ($make_quick) $details.='<li>'.$quick_zip.' file size: '.filesize('../'.$version.'/'.$quick_zip).'KB</li>';
+	if ($make_manual) $details.='<li>'.$manual_zip.' file size: '.filesize('../'.$version.'/'.$manual_zip).'KB</li>';
+	if ($make_debian) $details.='<li>'.$debian.' file size: '.filesize('../'.$version.'/'.$debian).'KB</li>';
+	if ($make_mszip) $details.='<li>'.$mszip.' file size: '.filesize('../'.$version.'/'.$mszip).'KB</li>';
+	if ($make_bundled) $details.='<li>'.$bundled.'.gz file size: '.filesize('../'.$version.'/'.$bundled.'.gz').'KB</li>';
+
+	do_output('
+		<h2>Statistics</h2>
+		<ul>
+			<li>Total files compiled: '.$total_files.'</li>
+			<li>Total directories traversed: '.$total_dirs.'</li>
+			'.$details.'
+			<li>Total execution time: '.($finish_time-$start_time).' seconds</li>
+		</ul>'.do_footer());
 }
-
-// Build bundled version (Installatron, Bitnami, ...)
-if ($make_bundled)
-{
-	@unlink('../'.$bundled);
-	@unlink('../'.$bundled.'.gz');
-	copy($ocPortal_path.'/install.sql','install.sql');
-	copy($ocPortal_path.'/info.php.template','info.php.template');
-	$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'tar');
-	$cmd=$tar.' -cvf "../../'.$version.'/'.$bundled.'" * --mode=a+X';
-	$output2=shell_exec($cmd);
-	$dir=getcwd();
-	chdir(dirname(__FILE__));
-	$cmd=$tar.' -rvf "'.$dir.'/../../'.$version.'/'.$bundled.'" readme.txt --mode=a+X';
-	$output2.=shell_exec($cmd);
-	chdir($dir);
-	//$output2=do_zip($v,$output2);
-	$gzip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\gzip"'):'gzip');
-	$cmd=$gzip.' -n "../../'.$version.'/'.$bundled.'"';
-	shell_exec($cmd);
-	unlink('../../'.$version.'/'.$bundled);
-	do_zip_output($bundled.'.gz',$output2);
-}
-
-// Build debian version
-if ($make_debian)
-{
-	// To our correct versioned builds directory
-	if (file_exists('../debian-build')) deldir_contents('../debian-build');
-	@mkdir('../debian-build');
-	chdir('../debian-build');
-
-	// Take existing .tar.gz package, extract into "ocportal-<version>"
-	@mkdir('ocportal-'.$version);
-	copy($builds_path.'/builds/'.$version.'/ocportal-'.$version.'.tar.gz','ocportal-'.$version.'.tar.gz');
-	$gunzip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\gunzip"'):'gunzip');
-	$cmd=$gunzip.' ocportal-'.$version.'.tar.gz';
-	shell_exec($cmd);
-	$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'tar');
-	@mkdir('ocportal-'.$version);
-	chdir('ocportal-'.$version);
-	$cmd=$tar.' xvf ../ocportal-'.$version.'.tar';
-	echo shell_exec($cmd);
-	chdir('..');
-
-	// Filter out non-free stuff from "ocportal-<version>"
-	unlink('ocportal-'.$version.'/sources/hooks/systems/addon_registry/jwplayer.php');
-	unlink('ocportal-'.$version.'/data/flvplayer.swf');
-	unlink('ocportal-'.$version.'/themes/default/templates/ATTACHMENT_FLV.tpl');
-	unlink('ocportal-'.$version.'/themes/default/templates/COMCODE_FLV.tpl');
-	unlink('ocportal-'.$version.'/themes/default/templates/GALLERY_VIDEO_FLV.tpl');
-	unlink('ocportal-'.$version.'/themes/default/templates/JAVASCRIPT_JWPLAYER.tpl');
-	unlink('ocportal-'.$version.'/sources/jsmin.php');
-	unlink('ocportal-'.$version.'/themes/default/images/cedi_link.png');
-	unlink('ocportal-'.$version.'/themes/default/images/calendar/birthday.png');
-	unlink('ocportal-'.$version.'/themes/default/images/calendar/anniversary.png');
-	unlink('ocportal-'.$version.'/themes/default/images/calendar/appointment.png');
-	unlink('ocportal-'.$version.'/themes/default/images/calendar/general.png');
-	unlink('ocportal-'.$version.'/themes/default/images/calendar/activity.png');
-	unlink('ocportal-'.$version.'/themes/default/images/calendar/system_command.png');
-	unlink('ocportal-'.$version.'/themes/default/images/calendar/duty.png');
-	unlink('ocportal-'.$version.'/themes/default/images/calendar/festival.png');
-	unlink('ocportal-'.$version.'/themes/default/images/calendar/commitment.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/move.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/of_catalogues.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/language.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/forums.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/chatrooms.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/view_this.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/polls.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/awards.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/set-own-profile.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/phpinfo.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/download_csv.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/ocp-logo.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/custom-comcode.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/permissionstree.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/redirect.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/orders.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one_catalogue.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/manage_images.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/top_keywords.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/ldap.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/show_orders.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/xml.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/actionlog.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/multimods.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_css.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/geolocate.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/bulkupload.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/ssl.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/page_views.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/newsletters.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/statistics_search.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/messaging.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/transactions.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/statistics_posting_rates.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/import_subscribers.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/security.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/cash_flow.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/usergroups.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/usergroups_temp.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/zones.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/occle.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/view_archive.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/pagewizard.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/deletelurkers.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/cms_home.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/import.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one_image.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/ipban.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/multisitenetwork.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/tickets.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/export.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/themewizard.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/findwinners.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/calendar.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/main_home.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/catalogues.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/addmember.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/authors.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/wordfilter.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/delete.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/cleanup.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one_catalogue.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/errorlog.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/newsletter_from_changes.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/top_referrers.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/posttemplates.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/users_online.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/downloads.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/survey_results.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/import_csv.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/matchkeysecurity.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/subscribers.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/baseconfig.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one_category.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/securitylog.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/backups.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/statistics.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/clear_stats.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/sitetree.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/invoices.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/news.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/admin_home.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_this_catalogue.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one_video.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/comcode_page_edit.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/view_this_category.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/config.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/back.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/trackbacks.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/criticise_language.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one_image.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_video_to_this.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/merge.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_templates.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/debrand.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one_category.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/emoticons.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/statistics_demographics.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/pointslog.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_this_category.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_image_to_this.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/zone_editor.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/profit_loss.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_to_catalogue.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/ecommerce.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/manage_themes.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/staff.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/pointstorelog.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/iotds.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/galleries.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/setupwizard.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one_licence.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_one_video.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/pointstore.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/make_logo.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/addons.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/submits.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/load_times.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/undispatched.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/searchstats.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/investigateuser.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/quotes.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/banners.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/privileges.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/welcome_emails.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/realtime_rain.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_one_licence.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/add_to_category.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/cedi.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/menus.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/customprofilefields.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/quiz.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/clubs.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/merge_members.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/edit_this.png');
-	unlink('ocportal-'.$version.'/themes/default/images/bigicons/editmember.png');
-	unlink('ocportal-'.$version.'/themes/default/images/newscats/entertainment.jpg');
-	unlink('ocportal-'.$version.'/themes/default/images/newscats/art.jpg');
-	unlink('ocportal-'.$version.'/themes/default/images/newscats/business.jpg');
-	unlink('ocportal-'.$version.'/themes/default/images/newscats/general.jpg');
-	unlink('ocportal-'.$version.'/themes/default/images/newscats/difficulties.jpg');
-	unlink('ocportal-'.$version.'/themes/default/images/newscats/community.jpg');
-	unlink('ocportal-'.$version.'/themes/default/images/newscats/technology.jpg');
-	unlink('ocportal-'.$version.'/themes/default/images/cedi_link_hover.png');
-	unlink('ocportal-'.$version.'/themes/default/images/recommend/twitter.gif');
-	unlink('ocportal-'.$version.'/themes/default/images/recommend/stumbleupon.gif');
-	unlink('ocportal-'.$version.'/themes/default/images/recommend/print.gif');
-	unlink('ocportal-'.$version.'/themes/default/images/recommend/recommend.gif');
-	unlink('ocportal-'.$version.'/themes/default/images/recommend/favorites.gif');
-	unlink('ocportal-'.$version.'/themes/default/images/recommend/digg.gif');
-	unlink('ocportal-'.$version.'/themes/default/images/recommend/facebook.gif');
-	unlink('ocportal-'.$version.'/themes/default/images/results/dispatch.png');
-	unlink('ocportal-'.$version.'/themes/default/images/results/hold.png');
-	unlink('ocportal-'.$version.'/themes/default/images/results/add_note.png');
-	unlink('ocportal-'.$version.'/themes/default/images/results/return.gif');
-	unlink('ocportal-'.$version.'/themes/default/images/results/view.gif');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/move.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/language.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/forums.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/loadtimes.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/chatrooms.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/polls.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/awards.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/phpinfo.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/installgeolocationdata.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/unvalidated.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/ocp-logo.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_clear.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/redirect.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/ldap.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/xml.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/actionlog.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/configwizard.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/importdata.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_google.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/ssl.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_search.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_usersonline.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/messaging.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/transactions.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/cash_flow.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/usergroups.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/usergroups_temp.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/zones.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/occle.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/deletelurkers.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/ipban.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/tickets.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/export.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/themewizard.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/findwinners.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/calendar.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/catalogues.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/addmember.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/authors.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/wordfilter.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/cleanup.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/sitetreeeditor.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/errorlog.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/newsletter_from_changes.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/addpagewizard.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/posttemplates.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/ocpmainpage.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/customcomcode.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/downloads.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/survey_results.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/import_csv.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/matchkeysecurity.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/securitylog.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/backups.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/multimoderations.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_referrers.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/invoices.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/news.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/newsletter.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/comcode_page_edit.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/bulkuploadassistant.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/config.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/deletepage.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/trackbacks.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/criticise_language.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/setauthorprofile.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/mergemembers.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/debrand.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/emoticons.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/profit_loss.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/ecommerce.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/themes.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/staff.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/iotds.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/statistics_pageviews.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/permissiontree.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/pointstore.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/addons.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/submits.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/investigateuser.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/quotes.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/multisitenetworking.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/banners.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/privileges.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/welcome_emails.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/logowizard.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/points.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/cedi.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/menus.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/customprofilefields.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/quiz.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/flagrant.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/clubs.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/images.png');
-	unlink('ocportal-'.$version.'/themes/default/images/pagepics/editmember.png');
-	unlink('ocportal-'.$version.'/themes/default/images/under_construction_animated.gif');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/amend.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/edit.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/redirect.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/cart_empty.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/all2.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/new.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/no_next.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/search.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/slideshow.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/cart_update.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/cart_checkout.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/next.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/convert.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/cart_view.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/discard.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/shopping_buy_now.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/quick_reply.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/delete.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/closed.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/changes.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/new_post.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/add_event.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/simple.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/cart_add.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/no.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/edit_tree.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/close.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/join.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/mark_unread.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/rename.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/cancel.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/ok.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/reply.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/staff_only_reply.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/login.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/no_previous.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/invite_member.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/mark_read.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/new_topic.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/shopping_continue.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/advanced.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/all.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/previous.png');
-	unlink('ocportal-'.$version.'/themes/default/images/EN/page/ignore.png');
-	unlink('ocportal-'.$version.'/themes/default/images/background_image.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_ods.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_media.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_archive.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_odp.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_torrent.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/feed.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_doc.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_txt.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_odt.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_xls.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_ppt.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/external_link.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/email_link.png');
-	unlink('ocportal-'.$version.'/themes/default/images/filetypes/page_pdf.png');
-	unlink('ocportal-'.$version.'/themes/default/images/awarded.png');
-
-	// Create "ocportal-<version>.orig.tar.gz" package from "ocportal-<version>"
-	$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'tar');
-	$cmd=$tar.' -cvf "ocportal-'.$version.'.tar" ocportal-'.$version.'/* --mode=a+X';
-	$output2=shell_exec($cmd);
-	$gzip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\gzip"'):'gzip');
-	$cmd=$gzip.' -n "ocportal-'.$version.'.tar"';
-	shell_exec($cmd);
-
-	// Copy "debian" directory into "ocportal-<version>"
-	copy_r(dirname(__FILE__).'/debian','ocportal-'.$version.'/debian');
-
-	// Tar up "ocportal-<version>" and "ocportal-<version>.tar.gz" together into "debian-<version>.tar"
-	$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'tar');
-	$cmd=$tar.' -cvf "../../'.$version.'/'.$debian.'" ocportal-'.$version.'/* ocportal-'.$version.'.tar.gz --mode=a+X';
-	$output2=shell_exec($cmd);
-
-	do_zip_output($debian,$output2);
-
-	chdir('../'.$_GET['repos']);
-}
-
-// Build Microsoft version
-if ($make_mszip)
-{
-	chdir('../');
-
-	@unlink('../'.$version.'/'.$mszip);
-	copy($ocPortal_path.'/info.php.template','info.php.template');
-	rename($_GET['repos'].'/info.php','info.php');
-	rename($_GET['repos'].'/install.sql','install.sql');
-	rename($_GET['repos'].'/install.php','install.php');
-	$zip=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\zip"'):'zip');
-	copy($ocPortal_path.'/install1.sql','install1.sql');
-	copy($ocPortal_path.'/install2.sql','install2.sql');
-	copy($ocPortal_path.'/install3.sql','install3.sql');
-	copy($ocPortal_path.'/install4.sql','install4.sql');
-	copy($ocPortal_path.'/user.sql','user.sql');
-	copy($ocPortal_path.'/postinstall.sql','postinstall.sql');
-	copy($ocPortal_path.'/manifest.xml','manifest.xml');
-	copy($ocPortal_path.'/parameters.xml','parameters.xml');
-	if (file_exists($builds_path.'/builds/build/ocportal/')) deldir_contents($builds_path.'/builds/build/ocportal/');
-	rename($_GET['repos'],'ocportal');
-	$cmd=$zip.' -r -9 -v "../'.$version.'/'.$mszip.'" ocportal manifest.xml parameters.xml install1.sql install2.sql install3.sql install4.sql user.sql postinstall.sql';
-	$output2=shell_exec($cmd);
-	rename('ocportal',$_GET['repos']);
-	do_zip_output($mszip,$output2);
-	rename('info.php',$_GET['repos'].'/info.php');
-	rename('install.sql',$_GET['repos'].'/install.sql');
-	rename('install.php',$_GET['repos'].'/install.php');
-}
-
-$finish_time=_microtime();
-
-$details='';
-if ($make_quick) $details.='<li>'.$quick_zip.' file size: '.filesize('../'.$version.'/'.$quick_zip).'KB</li>';
-if ($make_manual) $details.='<li>'.$manual_zip.' file size: '.filesize('../'.$version.'/'.$manual_zip).'KB</li>';
-if ($make_debian) $details.='<li>'.$debian.' file size: '.filesize('../'.$version.'/'.$debian).'KB</li>';
-if ($make_mszip) $details.='<li>'.$mszip.' file size: '.filesize('../'.$version.'/'.$mszip).'KB</li>';
-if ($make_bundled) $details.='<li>'.$bundled.'.gz file size: '.filesize('../'.$version.'/'.$bundled.'.gz').'KB</li>';
-
-do_output('
-	<h2>Statistics</h2>
-	<ul>
-		<li>Total files compiled: '.$total_files.'</li>
-		<li>Total directories traversed: '.$total_dirs.'</li>
-		'.$details.'
-		<li>Total execution time: '.($finish_time-$start_time).' seconds</li>
-	</ul>'.do_footer());
-
-flush_output();
 
 function do_dir($dir='',$pretend_dir='')
 {
@@ -848,84 +835,6 @@ function copy_r( $path, $dest )
 	{
 		return false;
 	}
-}
-
-
-<?php /*
-
- ocPortal
- Copyright (c) ocProducts, 2004-2012
-
- See text/en/licence.txt for full licencing information.
-
- Meta Script:
-	Functions for making installers/upgraders.
-
-*/
-
-error_reporting(E_ALL);
-@set_time_limit(0);
-assert_options(ASSERT_ACTIVE,0);
-ini_set('assert.active','0');
-ini_set('ocportal.type_strictness','0');
-@ini_set('memory_limit','-1');
-
-global $ocPortal_path,$current_application,$SKIP_LINES,$output,$meta_path,$builds_path;
-if ((array_key_exists('path',$_SERVER)) && (array_key_exists('path',$_SERVER['argv'])))
-{
-	$ocPortal_path=$_SERVER['argv']['path'];
-}
-elseif (array_key_exists('path',$_REQUEST))
-{
-	$ocPortal_path=$_REQUEST['path'];
-}
-elseif ((array_key_exists('root',$_REQUEST)) && (array_key_exists('repos',$_REQUEST)))
-{
-	$ocPortal_path=$_REQUEST['root'].$_REQUEST['repos'].'/';
-}
-elseif (file_exists('./codechecker/checker.ini'))
-{
-	$config_settings=parse_ini_file('./codechecker/checker.ini');
-	$ocPortal_path=$config_settings['projectPath'].'/';
-} else
-{
-	// Customise these paths for your own system if you don't want to pass them in by URL and haven't configured the Code Quality Checker
-	$search_paths=array(
-		'/Library/WebServer/Documents/git/', // Mac
-		'/var/www/git/', // Linux
-		'C:/Program Files (x86)/Apache Software Foundation/Apache2.2/htdocs/git/', // Windows Apache
-		'C:/Inetpub/wwwroot/git/', // Windows IIS
-	);
-	foreach ($search_paths as $ocPortal_path)
-	{
-		if (file_exists($ocPortal_path)) break;
-	}
-	if (!file_exists($ocPortal_path)) exit('Could not find the ocPortal git directory');
-}
-$SKIP_LINES=NULL;
-if (file_exists(dirname($ocPortal_path).'/builds'))
-{
-	$builds_path=dirname($ocPortal_path);
-} else
-{
-	$meta_path=dirname(__FILE__);
-	$builds_path=$meta_path;
-	$_pos=strpos(strtolower($builds_path),'dropbox');
-	if ($_pos!==false) $builds_path=dirname($builds_path);
-}
-
-if ((substr($ocPortal_path,-1)!='\\') && (substr($ocPortal_path,-1)!='/')) $ocPortal_path.='/';
-
-// We can derive these from ocPortal_path if they were not passed
-if ((!isset($_GET['repos'])) || (!isset($_GET['root'])))
-{
-	$path_bits=preg_split('#[\\\\/]#',$ocPortal_path);
-	unset($path_bits[count($path_bits)-1]);
-	$_REQUEST['repos']=$path_bits[count($path_bits)-1];
-	$_GET['repos']=$path_bits[count($path_bits)-1];
-	unset($path_bits[count($path_bits)-1]);
-	$_REQUEST['root']=implode('/',$path_bits).'/';
-	$_GET['root']=implode('/',$path_bits).'/';
 }
 
 // Similar to ocPortal's should_ignore_file function, but has to be more specific. It is both more and less judicial - has to try and match what should bundle exactly including looking into custom dirs for stuff we know we must give templates for, ignores rest. Less configurable.
@@ -1046,53 +955,6 @@ function _microtime()
 	return $time[1]+$time[0];
 }
 
-function do_header($title='')
-{
-	if ($title=='')
-	{
-		$file_contents=file_get_contents($_SERVER['SCRIPT_FILENAME']);
-		$matches=array();
-		preg_match('#Meta Script:\r?\n(.*)#',$file_contents,$matches);
-		$title=trim($matches[1]);
-	}
-
-	return '
-		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-			<head>
-				<title>'.htmlentities($title).' &bull; ocProducts meta scripts</title>
-				<style type="text/css">
-					html {background-color: #AAAAAA;}
-					body {margin: 5px;background-color: #FFFFFF;padding: 5px;border-left: 1px solid #999999;border-top: 1px solid #999999;border-bottom: 1px solid #000000;border-right: 1px solid #000000;} /*border: 1px solid #4E6890;*/
-					h1 {}
-					h2 {background-color: #DDDDDD;border: 1px dashed #000000;}
-					h3 {}
-					p.message {text-indent: 5px;background-color: #558768;border-top: 1px dotted #4E6890;border-bottom: 1px dotted 	#4E6890;margin-left: 10px;}
-					p.warning {text-indent: 5px;background-color: #BEB967;border-top: 1px dotted #4E6890;border-bottom: 1px dotted #4E6890;margin-left: 10px;}
-					p.error {text-indent: 5px;background-color: #983535;border-top: 1px dotted #4E6890;border-bottom: 1px dotted #4E6890;margin-left: 10px;}
-				</style>
-			</head>
-			<body>
-				<h1>'.htmlentities($title).'</h1>
-				'.((strpos($_SERVER['SCRIPT_FILENAME'],'index.php')===false)?'<p>&laquo; <a href="index.php">Back to index</a></p>':'');
-}
-
-function do_footer()
-{
-	return '
-				<hr /><p style="font-size: 0.8em">Copyright &copy; ocProducts Ltd 2004-2012</p>
-			</body>
-		</html>
-	';
-}
-
-function do_output($new_output)
-{
-	global $output;
-	$output.=$new_output;
-	echo $new_output;
-}
-
 function flush_output()
 {
 	global $output,$current_application;
@@ -1101,4 +963,15 @@ function flush_output()
 	fclose($fh);
 
 	die();
+}
+
+function get_builds_path()
+{
+	$builds_path=dirname(get_file_base()).'/builds';
+	if (!file_exists($builds_path.'/builds'))
+	{
+		mkdir($builds_path.'/builds',0777) OR exit('Could not make master build folder');
+		fix_permissions($builds_path.'/builds',0777);
+	}
+	return $builds_path;
 }
