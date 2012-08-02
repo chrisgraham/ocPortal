@@ -7,24 +7,24 @@
 
 */
 
-require_once('lib.php');
-global $ocPortal_path;
-
 global $FOUND_GUID;
 $FOUND_GUID=array();
 global $GUID_LANDSCAPE;
 $GUID_LANDSCAPE=array();
 global $FILENAME,$IN;
 
-@ob_end_clean();
+require_code('files2');
 
 $limit_file=isset($_GET['file'])?$_GET['file']:'';
-if ($limit_file=='') $files=do_dir($ocPortal_path); else $files=array($limit_file);
+if ($limit_file=='') $files=get_directory_contents(get_file_base()); else $files=array($limit_file);
 foreach ($files as $i=>$file)
 {
+	if (substr($file,-4)!='.php') continue;
+	if (strpos($file,'plug_guid')!==false) continue;
+
 	$FILENAME=substr($file,strlen($ocPortal_path)+1);
 
-	echo 'Doing '.$file.'<br />';
+	echo 'Doing '.escape_html($file).'<br />';
 
 	$IN=file_get_contents($file);
 
@@ -36,19 +36,18 @@ foreach ($files as $i=>$file)
 
 	if ($IN!=$out)
 	{
-		echo 'Done '.$file.'<br />';
-		$myfile=fopen($file,'wb');
+		echo '<span style="color: orange">Re-saved '.escape_html($file).'</span><br />';
+
+		$myfile=fopen(get_file_base().'/'.$file,'wb');
 		fwrite($myfile,$out);
 		fclose($myfile);
-
-		flush();
 	}
 }
 echo 'Finished!';
 
 if ($limit_file=='')
 {
-	$guid_file=fopen($ocPortal_path.'/data/guids.dat','wb');
+	$guid_file=fopen(get_file_base().'/data/guids.dat','wb');
 	fwrite($guid_file,serialize($GUID_LANDSCAPE));
 	fclose($guid_file);
 }
@@ -63,7 +62,7 @@ function callback($match)
 	$line=substr_count(substr($IN,0,strpos($IN,$match[0])),chr(10))+1;
 	if ($match[2]!='_GUID')
 	{
-		echo 'Inserted for '.$match[1].'<br />';
+		echo 'Insert needed for '.escape_html($match[1]).'<br />';
 		$GUID_LANDSCAPE[$match[1]][]=array($FILENAME,$line,$new_guid);
 		return "do_template('".$match[1]."',array('_GUID'=>'".$new_guid."','".$match[2].'\'=>'.$match[3];
 	}
@@ -71,7 +70,7 @@ function callback($match)
 	$guid_value=str_replace('\'','',$match[3]);
 	if (array_key_exists($guid_value,$FOUND_GUID))
 	{
-		echo 'Repaired for '.$match[1].'<br />';
+		echo 'Repair needed for '.escape_html($match[1]).'<br />';
 		$GUID_LANDSCAPE[$match[1]][]=array($FILENAME,$line,$new_guid);
 		return "do_template('".$match[1]."',array('_GUID'=>'".$new_guid."'";
 	}
@@ -79,37 +78,3 @@ function callback($match)
 	$GUID_LANDSCAPE[$match[1]][]=array($FILENAME,$line,$guid_value);
 	return $match[0];
 }
-
-function do_dir($dir,$no_custom=false)
-{
-	$out=array();
-	$_dir=($dir=='')?'.':$dir;
-	$dh=opendir($_dir);
-	if ($dh)
-	{
-		while (($file=readdir($dh))!==false)
-		{
-			if ((strpos($file,'_custom')!==false) && ($no_custom)) continue;
-
-			if ($file{0}!='.')
-			{
-				if (is_file($_dir.DIRECTORY_SEPARATOR.$file))
-				{
-					if (substr($file,-4,4)=='.php')
-					{
-						$path=$dir.(($dir!='')?DIRECTORY_SEPARATOR:'').$file;
-						$alt=str_replace('modules/','modules_custom/',str_replace('sources/','sources_custom/',$path));
-						if (($alt==$path) || (!file_exists($alt)))
-							$out[]=$path;
-					}
-				} elseif (is_dir($_dir.DIRECTORY_SEPARATOR.$file))
-				{
-					$out=array_merge($out,do_dir($dir.(($dir!='')?DIRECTORY_SEPARATOR:'').$file));
-				}
-			}
-		}
-	}
-	return $out;
-}
-
-

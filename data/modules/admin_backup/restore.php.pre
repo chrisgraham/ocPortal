@@ -194,7 +194,7 @@ if ($sql_buildup!='')
 
 require_code('tempcode_compiler');
 $css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-$tpl=do_template('RESTORE_HTML_WRAP',array('CSS_NOCACHE'=>$css_nocache,'MESSAGE'=>do_lang('SUCCESS')));
+$tpl=do_template('RESTORE_HTML_WRAP',array('_GUID'=>'8e3b9d894d8ef06b5057fb654f7db59b','CSS_NOCACHE'=>$css_nocache,'MESSAGE'=>do_lang('SUCCESS')));
 echo $tpl->evaluate();
 
 /**

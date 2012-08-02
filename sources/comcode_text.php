@@ -998,7 +998,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END',array('END_HEAD'=>!$finished_thead)));
 												}
 
-												$tag_output->attach(do_template('COMCODE_REAL_TABLE_END',array('END_BODY'=>$finished_thead)));
+												$tag_output->attach(do_template('COMCODE_REAL_TABLE_END',array('_GUID'=>'6a843e072e92b60cc950f69576231fe1','END_BODY'=>$finished_thead)));
 											}
 
 											$pos=$end_tbl+3;
