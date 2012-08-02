@@ -5695,7 +5695,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		// General settings
 		runtimes : 'html5,silverlight,flash,gears,browserplus',
 		url : "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true),
-		max_file_size : (typeof mfs=='undefined')?'2000mb':(mfs.value+'b'),
+		max_file_size : (typeof mfs=='undefined')?'2000mb':(((typeof mfs[0]!='undefined')?mfs[0].value:mfs.value)+'b'),
 
 		// Specify what files to browse for
 		filters : (name.indexOf('file_novalidate')!=-1)

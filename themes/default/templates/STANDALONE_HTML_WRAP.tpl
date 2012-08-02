@@ -18,6 +18,7 @@
 		{$JS_TEMPCODE,footer}
 
 		<script type="text/javascript">// <![CDATA[
+
 			{+START,IF_PASSED_AND_TRUE,FRAME}
 				add_event_listener_abstract(window,'real_load',function () {
 					if (typeof window.trigger_resize!='undefined') trigger_resize();

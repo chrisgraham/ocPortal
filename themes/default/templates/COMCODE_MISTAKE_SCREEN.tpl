@@ -33,11 +33,13 @@
 		</div>
 	</div>
 
-	<h2>{!REPAIR_HELP}</h2>
+	<div>
+		<h2>{!REPAIR_HELP}</h2>
 
-	<a id="help"></a>
+		<a id="help"></a>
 
-	{!COMCODE_ERROR_HELP_B}
+		{!COMCODE_ERROR_HELP_B}
+	</div>
 </div></div>
 
 

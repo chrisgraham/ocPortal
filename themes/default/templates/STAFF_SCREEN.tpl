@@ -29,13 +29,13 @@
 			{+START,IF,{$OCF}}
 				<tr>
 					<th>{!ocf:ADD_PRIVATE_TOPIC}</th>
-					<td><a class="associated_link" href="{$PAGE_LINK*,_SEARCH:topics:new_pt:{MEMBER_ID}}">{!ocf:ADD_PRIVATE_TOPIC}</a></td>
+					<td><span class="associated_link"><a href="{$PAGE_LINK*,_SEARCH:topics:new_pt:{MEMBER_ID}}">{!ocf:ADD_PRIVATE_TOPIC}</a></span></td>
 				</tr>
 			{+END}
 			{+START,IF,{$NOT,{$OCF}}}
 				<tr>
 					<th>{!EMAIL}</th>
-					<td><a class="associated_link" href="{$MAILTO}{$OBFUSCATE,{ADDRESS}}">{!EMAIL}</a></td>
+					<td><span class="associated_link"><a href="{$MAILTO}{$OBFUSCATE,{ADDRESS}}">{!EMAIL}</a></span></td>
 				</tr>
 			{+END}
 		{+END}

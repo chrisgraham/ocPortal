@@ -1483,14 +1483,14 @@ hr.spaced_rule {
 	float: {!en_left};
 }
 .left.float_separation {
-	padding-{!en_right}: 1em;
+	margin-{!en_right}: 1em;
 }
 
 .right {
 	float: {!en_right};
 }
 .right.float_separation {
-	padding-{!en_left}: 1em;
+	margin-{!en_left}: 1em;
 }
 
 /* Something being shown for previewing, on its own so needs focus */
@@ -1583,10 +1583,10 @@ table.scrollable_inside {
 .results_table>thead>tr:first-child *:last-child, .results_table>tbody>tr:first-child>*:last-child {
 	{$BETA_CSS_PROPERTY,border-top-right-radius: 5px;}
 }
-.results_table[summary="{!COLUMNED_TABLE}"]>tbody>tr:first-child>*:first-child {
+.results_table[summary*="{!COLUMNED_TABLE}"]>tbody>tr:first-child>*:first-child {
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 0px;}
 }
-.results_table[summary="{!COLUMNED_TABLE}"]>tbody>tr:first-child>*:last-child {
+.results_table[summary*="{!COLUMNED_TABLE}"]>tbody>tr:first-child>*:last-child {
 	{$BETA_CSS_PROPERTY,border-top-right-radius: 0px;}
 }
 .results_table>tbody>tr:last-child>*:first-child {
@@ -2342,12 +2342,12 @@ ul.spaced_list, .spaced_list ul, ol.spaced_list, .spaced_list ol {
 	padding: 0 !important;
 	list-style-type: square;
 }
-.spaced_list>li {
-	margin: 0 0 10px 25px !important;
+.spaced_list li {
+	margin: 0.5em 0 0.5em 25px !important;
 	padding: 0;
 }
 
-ul.tick_list, ul.tick_list>li {
+ul.tick_list, ul.tick_list li {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
@@ -2464,6 +2464,7 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 }
 .staff_actions .box_inner {
 	padding-right: 25px;
+	margin-bottom: 0.54em; /* Fixes weird bug on Chrome where bottom border disappears when not hovered */
 }
 .staff_actions .field_name.standard_field_name {
 	display: none;
@@ -2502,7 +2503,7 @@ div.associated_details {
 }
 
 /*
-a.associated_link / form.associated_link - a single associated link displayed inline, with CSS-generated brackets around
+a.associated_link / form.associated_link / span.associated_link - a single associated link displayed inline, with CSS-generated brackets around
 p.associated_link / div.associated_link - a single associated link displayed in a block, with CSS-generated brackets around
 ul.associated_links_block_group - a group of associated links displayed in a block, each link on its own line with its own CSS-generated brackets around
 ul.horizontal_links / ul.horizontal_links_comma - a group of associated links displayed in a block, the links on the same line with a CSS-generated separation character; often used to represent block actions; often used in conjunction with associated_links_block_group to get the CSS-generated brackets
@@ -2522,17 +2523,17 @@ ul.associated_links_block_group.horizontal_links>li:last-child:after, p.associat
 	{$BETA_CSS_PROPERTY,opacity: 0.7;}
 	font-size: 0.8em;
 }
-a.associated_link, form.associated_link {
+span.associated_link, a.associated_link, form.associated_link {
 	white-space: nowrap;
 }
-ul.associated_links_block_group>li:before, a.associated_link:before, form.associated_link:before {
+ul.associated_links_block_group>li:before, span.associated_link:before, a.associated_link:before, form.associated_link:before {
 	content: "(" !important;
 	{$BETA_CSS_PROPERTY,opacity: 0.7;}
 }
 ul.associated_links_block_group.horizontal_links>li:after { /* Undoes the above rules for if 'horizontal_links' is set (the rule further up will run instead and the middot one below) */
 	content: "" !important;
 }
-ul.associated_links_block_group>li:after, a.associated_link:after, form.associated_link:after {
+ul.associated_links_block_group>li:after, span.associated_link:after, a.associated_link:after, form.associated_link:after {
 	content: ")" !important;
 	{$BETA_CSS_PROPERTY,opacity: 0.7;}
 }
@@ -3459,6 +3460,7 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 
 .comcode_exp_thumb {
 	width: 150px;
+	padding: 0.5em;
 }
 
 .comcode_exp_thumb p {
@@ -3507,12 +3509,12 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 
 .comcode_table_of_contents ol {
 	list-style-position: inside;
-	padding-{!en_left}: 12px;
-	margin: 0;
+	padding-{!en_left}: 12px !important;
+	margin: 0 !important;
 }
 .comcode_table_of_contents li {
-	margin: 0;
-	padding: 0;
+	margin: 0.2em 0 !important;
+	padding: 0 !important;
 }
 
 .comcode_table_of_contents a {

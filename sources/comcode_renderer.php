@@ -331,7 +331,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 		$echo->handle_symbol_preprocessing();
 	} else
 	{
-		$echo->attach(do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'TARGET'=>'_top','CONTENT'=>$output)));
+		$echo->attach(do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>running_script('preview'),'TARGET'=>'_top','CONTENT'=>$output)));
 	}
 	$echo->evaluate_echo();
 	exit();
@@ -413,7 +413,7 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
 {
 	$_embed=mixed();
 	$title=mixed();
-	if ((file_exists(get_file_base().'/sources/geshi/'.filter_naughty(strtolower($type)).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty($type).'.php')))
+	if ((file_exists(get_file_base().'/sources/geshi/'.filter_naughty(($type=='HTML')?'html4strict':strtolower($type)).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty(($type=='HTML')?'html4strict':strtolower($type)).'.php')))
 	{
 		$evaluated=$embed->evaluate();
 
@@ -428,7 +428,7 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
 		{
 			require_code('developer_tools');
 			destrictify();
-			$geshi=new GeSHi($evaluated,strtolower($type));
+			$geshi=new GeSHi($evaluated,($type=='HTML')?'html4strict':strtolower($type));
 			$geshi->set_header_type(GESHI_HEADER_DIV);
 			if ($numbers) $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
 			require_lang('comcode');

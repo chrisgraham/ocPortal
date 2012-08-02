@@ -55,7 +55,7 @@
 <p class="lonely_label">{!THEMES_AND_ZONES}</p>
 <ul>
 	{+START,LOOP,ZONES}
-		<li>{1*} <a class="associated_link" title="edit: {!EDIT_ZONE}: {1*}" onclick="var t=this; window.fauxmodal_confirm('{!SWITCH_MODULE_WARNING=;}',function(result) { if (result) { click_link(t); } }); return false;" href="{$PAGE_LINK*,_SEARCH:admin_zones:_edit:{0}:redirect={$SELF_URL&}}">edit</a></li>
+		<li>{1*} <span class="associated_link"><a title="edit: {!EDIT_ZONE}: {1*}" onclick="var t=this; window.fauxmodal_confirm('{!SWITCH_MODULE_WARNING=;}',function(result) { if (result) { click_link(t); } }); return false;" href="{$PAGE_LINK*,_SEARCH:admin_zones:_edit:{0}:redirect={$SELF_URL&}}">{!EDIT}</a></span></li>
 	{+END}
 </ul>
 

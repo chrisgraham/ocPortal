@@ -22,7 +22,7 @@
 			<input type="button" name="post_now" onclick="return chat_post(event,'{ROOM_ID*}','post');" value="{SUBMIT_VALUE*}" />
 		</form>
 		{+START,IF,{$OCF}}
-			<a class="horiz_field_sep associated_link" tabindex="6" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post{$KEEP*;}'),'emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a>
+			<span class="horiz_field_sep associated_link"><a tabindex="6" href="#" onclick="window.faux_open(maintain_theme_in_link('{$FIND_SCRIPT*,emoticons}?field_name=post{$KEEP*;}'),'emoticon_chooser','width=300,height=320,status=no,resizable=yes,scrollbars=no'); return false;">{!EMOTICONS_POPUP}</a></span>
 		{+END}
 	</div>
 	<div class="right">

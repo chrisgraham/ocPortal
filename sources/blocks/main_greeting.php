@@ -87,7 +87,7 @@ class Block_main_greeting
 		$message=get_option('welcome_message');
 		if (has_actual_page_access(get_member(),'admin_config'))
 		{
-			if ($message!='') $message.=' [semihtml]<a class="associated_link" href="{$PAGE_LINK*,_SEARCH:admin_config:category:SITE#group_GENERAL}">'.do_lang('EDIT').'</a>[/semihtml]';
+			if ($message!='') $message.=' [semihtml]<span class="associated_link"><a href="{$PAGE_LINK*,_SEARCH:admin_config:category:SITE#group_GENERAL}">'.do_lang('EDIT').'</a></span>[/semihtml]';
 		}
 		$out->attach(comcode_to_tempcode($message,NULL,true));
 

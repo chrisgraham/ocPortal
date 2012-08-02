@@ -7,7 +7,7 @@
 
 			<div>#<span class="theme_wizard_info_box_label">{SEED*}</span></div>
 			<div>({!RED}: <span class="theme_wizard_colour">{RED*}</span>, {!GREEN}: <span class="theme_wizard_colour">{GREEN*}</span>, {!BLUE}: <span class="theme_wizard_colour">{BLUE*}</span>)</div>
-			<div><a class="theme_wizard_change_colour horiz_field_sep associated_link" href="{CHANGE_URL*}">{!CHANGE}</a></div>
+			<div><span class="theme_wizard_change_colour horiz_field_sep associated_link"><a href="{CHANGE_URL*}">{!CHANGE}</a></span></div>
 		</div></div>
 	</div>
 

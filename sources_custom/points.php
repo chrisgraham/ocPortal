@@ -42,8 +42,11 @@ function total_points($member)
 	$points_cedi=intval(get_option('points_cedi',true));
 	$points_gained_auto=$points_per_day*intval(floor(floatval(time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member))/floatval(60*60*24)));
 	$points=$points_joining+$points_gained_chat*$points_chat+$points_gained_cedi*$points_cedi+$points_gained_posting*$points_posting+$points_gained_given+$points_gained_rating*$points_rating+$points_gained_voting*$points_voting+$points_gained_auto;
-	$credits=$GLOBALS['SITE_DB']->query_value('credit_purchases','SUM(num_credits)',array('member_id'=>$member,'purchase_validated'=>1));
-	$points+=$credits*50;
+	if ($GLOBALS['SITE_DB']->table_exists('credit_purchases'))
+	{
+		$credits=$GLOBALS['SITE_DB']->query_value('credit_purchases','SUM(num_credits)',array('member_id'=>$member,'purchase_validated'=>1));
+		$points+=$credits*50;
+	}
 
 	$TOTAL_POINTS_CACHE[$member]=$points;
 

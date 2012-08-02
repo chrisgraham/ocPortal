@@ -18,16 +18,16 @@
 		</td>
 	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
-		<td><a class="associated_link" title="{!VIEW_PROFILE}: {NAME*}" href="{PROFILE_URL*}">{!VIEW_PROFILE}</a></td>
+		<td><span class="associated_link"><a title="{!VIEW_PROFILE}: {NAME*}" href="{PROFILE_URL*}">{!VIEW_PROFILE}</a></span></td>
 		{+START,IF,{$ADDON_INSTALLED,authors}}
-			<td><a class="associated_link" title="{!VIEW_AUTHOR}: {NAME*}" href="{AUTHOR_URL*}">{!VIEW_AUTHOR}</a></td>
+			<td><span class="associated_link"><a title="{!VIEW_AUTHOR}: {NAME*}" href="{AUTHOR_URL*}">{!VIEW_AUTHOR}</a></span></td>
 		{+END}
 		{+START,IF,{$ADDON_INSTALLED,points}}
 			{+START,IF_NON_EMPTY,{POINTS_URL}}
-				<td><a class="associated_link" title="{!VIEW_POINTS}: {NAME*}" href="{POINTS_URL*}">{!VIEW_POINTS}</a></td>
+				<td><span class="associated_link"><a title="{!VIEW_POINTS}: {NAME*}" href="{POINTS_URL*}">{!VIEW_POINTS}</a></span></td>
 			{+END}
 		{+END}
-		<td><a class="associated_link" title="{!SEND_PM}: {NAME*}" href="{PM_URL*}">{!SEND_PM}</a></td>
+		<td><span class="associated_link"><a title="{!SEND_PM}: {NAME*}" href="{PM_URL*}">{!SEND_PM}</a></span></td>
 	{+END}
 	<td>{+START,IF_EMPTY,{SKILLS}}<em>{!NOT_SPECIFIED}</em>{+END}{SKILLS}</td>
 </tr>

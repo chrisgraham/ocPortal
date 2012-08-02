@@ -13,7 +13,7 @@
 	</td>
 
 	<td>
-		<a class="associated_link" href="{BUG_REPORT_URL*}" target="_blank" title="{!CREATE_BUG_REPORT}: {ID*} {!LINK_NEW_WINDOW}">{!CREATE_BUG_REPORT}</a>
+		<span class="associated_link"><a href="{BUG_REPORT_URL*}" target="_blank" title="{!CREATE_BUG_REPORT}: {ID*} {!LINK_NEW_WINDOW}">{!CREATE_BUG_REPORT}</a></span>
 	</td>
 </tr>
 

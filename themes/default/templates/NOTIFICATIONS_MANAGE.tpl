@@ -49,7 +49,7 @@
 
 					<td class="associated_details">
 						{+START,IF,{SUPPORTS_CATEGORIES}}
-							<a class="associated_link" onclick="return open_link_as_overlay(this,null,null,'_self');" href="{$PAGE_LINK*,_SEARCH:notifications:advanced:notification_code={NOTIFICATION_CODE}}">{!ADVANCED}</a>
+							<span class="associated_link"><a onclick="return open_link_as_overlay(this,null,null,'_self');" href="{$PAGE_LINK*,_SEARCH:notifications:advanced:notification_code={NOTIFICATION_CODE}}">{!ADVANCED}</a></span>
 						{+END}
 					</td>
 				</tr>

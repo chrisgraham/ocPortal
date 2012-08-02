@@ -396,9 +396,9 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 .posting_form_insert_buttons .divider {
-	margin-left: 0.5em;
+	margin-left: 0.2em;
 	border-left: 1px solid {$GET,standard_border};
-	padding-left: 0.5em;
+	padding-left: 0.4em;
 }
 
 .emoticon_chooser {

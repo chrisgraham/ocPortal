@@ -84,11 +84,11 @@ function init__comcode_text()
 
 	// The contents of these tags is human readable text. It may be altered for reasons of bork, or word-wrapping, or textcode; they have hard white space
 	global $TEXTUAL_TAGS;
-	$TEXTUAL_TAGS=array('overlay'=>1,'tooltip'=>1,'section'=>1,'surround'=>1,'if_in_group'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'box'=>1,'internal_table'=>1,'external_table'=>1,'hide'=>1,'quote'=>1,'tab'=>1,'big_tab'=>1);
+	$TEXTUAL_TAGS=array('overlay'=>1,'tooltip'=>1,'section'=>1,'surround'=>1,'if_in_group'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'box'=>1,'hide'=>1,'quote'=>1,'tab'=>1,'big_tab'=>1);
 
 	// These tags don't have <br />'s done right after them because they are their own block-end (like a paragraph). They may contain textcode lists and rules
 	global $BLOCK_TAGS;
-	$BLOCK_TAGS=array('section'=>1,'section_controller'=>1,'tabs'=>1,'tab'=>1,'big_tab'=>1,'big_tab_controller'=>1,'carousel'=>1,'surround'=>1,'if_in_group'=>1,'exp_thumb'=>1,'contents'=>1,'concepts'=>1,'php'=>1,'codebox'=>1,'sql'=>1,'code'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'staff_note'=>1,'reference'=>1,'menu'=>1,'title'=>1,'box'=>1,'internal_table'=>1,'external_table'=>1,'quote'=>1,'block'=>1,'hide'=>1);
+	$BLOCK_TAGS=array('section'=>1,'section_controller'=>1,'tabs'=>1,'tab'=>1,'big_tab'=>1,'big_tab_controller'=>1,'carousel'=>1,'surround'=>1,'if_in_group'=>1,'exp_thumb'=>1,'contents'=>1,'concepts'=>1,'php'=>1,'codebox'=>1,'sql'=>1,'code'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'staff_note'=>1,'reference'=>1,'menu'=>1,'title'=>1,'box'=>1,'quote'=>1,'block'=>1,'hide'=>1);
 
 	// These tags can only be used by privileged members
 	global $DANGEROUS_TAGS;
@@ -957,15 +957,25 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 												{
 													$tag_output->attach(do_template('COMCODE_REAL_TABLE_START_SUMMARY',array('_GUID'=>'0c5674fba61ba14b4b9fa39ea31ff54f','CAPTION'=>$caption)));
 												}
+												$finished_thead=false;
 												foreach ($rows as $table_row)
 												{
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START'));
-
 													$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$table_row,-1,PREG_SPLIT_DELIM_CAPTURE);
 													array_shift($cells); // First one is non-existant empty
 													$spec=true;
 													$c_type='';
 													$cell_i=0;
+													$finished_thead_prior=$finished_thead;
+													foreach ($cells as $i=>$cell)
+													{
+														if ($spec)
+														{
+															if (strpos($cell,'!')===false) $finished_thead=true;
+														}
+														$spec=!$spec;
+													}
+													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START',array('START_HEAD'=>!$finished_thead,'START_BODY'=>(!$finished_thead_prior) && ($finished_thead))));
+													$spec=true;
 													foreach ($cells as $i=>$cell)
 													{
 														if ($spec)
@@ -985,10 +995,10 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 														$spec=!$spec;
 													}
 
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END'));
+													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END',array('END_HEAD'=>!$finished_thead)));
 												}
 
-												$tag_output->attach(do_template('COMCODE_REAL_TABLE_END'));
+												$tag_output->attach(do_template('COMCODE_REAL_TABLE_END',array('END_BODY'=>$finished_thead)));
 											}
 
 											$pos=$end_tbl+3;
@@ -1795,7 +1805,7 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
 	$textual_area=isset($TEXTUAL_TAGS[$current_tag]);
 
 	$white_space_area=$textual_area;
-	if (((($current_tag=='code') || ($current_tag=='codebox')) && (isset($attribute_map['param'])) && ((strtolower($attribute_map['param'])=='php') || (file_exists(get_file_base().'/sources/geshi/'.filter_naughty(strtolower($attribute_map['param'])).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty($attribute_map['param']).'.php')))) || ($current_tag=='php') || ($current_tag=='attachment') || ($current_tag=='attachment_safe') || ($current_tag=='menu'))
+	if (((($current_tag=='code') || ($current_tag=='codebox')) && (isset($attribute_map['param'])) && ((strtolower($attribute_map['param'])=='php') || (file_exists(get_file_base().'/sources/geshi/'.filter_naughty(($attribute_map['param']=='HTML')?'html4strict':strtolower($attribute_map['param'])).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty(($attribute_map['param']=='HTML')?'html4strict':strtolower($attribute_map['param'])).'.php')))) || ($current_tag=='php') || ($current_tag=='attachment') || ($current_tag=='attachment_safe') || ($current_tag=='menu'))
 	{
 		$in_separate_parse_section=true;
 	} else

@@ -690,8 +690,6 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 				if (!is_null($byte_limit)) curl_setopt($ch,CURLOPT_RANGE,'0-'.strval($byte_limit));
 				$line=curl_exec($ch);
-				if (substr($line,0,25)=="HTTP/1.1 100 Continue\r\n\r\n") $line=substr($line,25);
-				if (substr($line,0,25)=="HTTP/1.0 100 Continue\r\n\r\n") $line=substr($line,25);
 				if ($line===false)
 				{
 					$error=curl_error($ch);
@@ -700,11 +698,13 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						warn_exit($error);
 					return NULL;
 				}
+				if (substr($line,0,25)=="HTTP/1.1 100 Continue\r\n\r\n") $line=substr($line,25);
+				if (substr($line,0,25)=="HTTP/1.0 100 Continue\r\n\r\n") $line=substr($line,25);
 				$HTTP_DOWNLOAD_MIME_TYPE=curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
 				$HTTP_DOWNLOAD_SIZE=curl_getinfo($ch,CURLINFO_CONTENT_LENGTH_DOWNLOAD);
 				$HTTP_DOWNLOAD_URL=curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
 				$HTTP_DOWNLOAD_MTIME=curl_getinfo($ch,CURLINFO_FILETIME);
-				$HTTP_MESSAGE=curl_getinfo($ch,CURLINFO_HTTP_CODE);
+				$HTTP_MESSAGE=strval(curl_getinfo($ch,CURLINFO_HTTP_CODE));
 				if (strpos($HTTP_DOWNLOAD_MIME_TYPE,';')!==false)
 				{
 					$HTTP_CHARSET=substr($HTTP_DOWNLOAD_MIME_TYPE,8+strpos($HTTP_DOWNLOAD_MIME_TYPE,'charset='));

@@ -207,7 +207,7 @@ class Database_Static_mysql extends Database_super_mysql
 			if (!is_array($test_result)) return NULL;
 			if (intval($test_result[0]['Value'])<intval(strlen($query)*1.2))
 			{
-				//@mysql_query('SET @@max_allowed_packet='.strval(intval(strlen($query)*1.3)),$db); // Does not work
+				/*@mysql_query('SET session max_allowed_packet='.strval(intval(strlen($query)*1.3)),$db); Does not work well, as MySQL server has gone away error will likely just happen instead */
 
 				if ($get_insert_id) fatal_exit(do_lang_tempcode('QUERY_FAILED_TOO_BIG',escape_html($query)));
 				return NULL;

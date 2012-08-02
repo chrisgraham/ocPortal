@@ -1,0 +1,166 @@
+[title sub="For ocPortal version 9.0"]ocPortal Code Book[/title]
+
+[surround="spaced_list"]
+The Code Book contains documentation to teach experienced developers how to program for ocPortal.
+
+This guide is not a substitute for learning PHP, HTML, CSS, or other languages. Some introductory material for learning web development is available in our [page="docs:"]main set of tutorials[/page]. There is an excellent PHP book available for free online. In addition to this Code Book, we also have some tutorials with worked examples of making addons:
+ - [page="docs:tut_hardcore_1"]Making an addon (part 1)[/page]
+ - [page="docs:tut_hardcore_2"]Making an addon (part 2)[/page]
+ - [page="docs:tut_hardcore_3"]Making an addon (part 3)[/page]
+ - [url="Example addon"]http://ocportal.com/docs/league_standings__example_addon.zip[/url]
+and an introduction to the ocPortal framework:
+ - [page="docs:tut_framework"]The ocPortal programming framework[/page]
+and information about integrating third-party code:
+ - [page="docs:tut_integration"]Integration of ocPortal and other installed scripts/applications[/page]
+
+To learn ocPortal's API, see the phpdoc comments in the source files. The source files are logically named, so it should be relatively easy to get a handle on it all. Alternatively, view the [url="auto-generated documentation"]http://ocportal.com/docs/api/[/url].
+
+[contents][/contents]
+
+[title="2"]Technology overview[/title]
+
+[title="3"]ocPortal structure[/title]
+
+ocPortal's file system is basically split up into:
+[list]
+[*]Zones (the root directory itself, the 'site' directory, the 'adminzone' directory, the 'cms' directory, the 'forum' directory, and in a way the 'data' directory). Zones contain entry scripts (such as [tt]index.php[/tt]) and page sets. Zones are basically just subdirectories that group pages, making them convenient for creating different 'sections' of the website. Pages may be:[list]
+[*]Modules (.php files matching a certain class interface). Modules provide a set of related screens; e.g. all the screens for the user portion of the 'downloads' addon are in the 'downloads' module.
+[*]Comcode (.txt files)
+[*]HTML (.htm files)[/list]
+[*]'sources' which contain code to be included
+[*]'sources/hooks' which contain hooks that tie addons together so they can interoperate
+[*]'sources/blocks' and 'sources/miniblocks' which contain block files. Blocks are plugable units that are can be included within Comcode pages and templates. They are usually rendered as a box, e.g. a menu, or a list of recent forum discussions.
+[*]'themes' which contain images, CSS and templates.
+[*]'lang' which contains language strings.
+[/list]
+
+When you make modifications to any of ocPortal's default files, There is no need to overwrite the existing files, because ocPortal comes with a file-based override/inheritance system. This allows files to be overridden with replacements whilst leaving the old files intact for reference. This is done by saving your modified files in the [tt]*_custom[/tt] directories. i.e. if we need to make modifications in [tt]site/pages/modules/iotds.php[/tt], then we need to save our modified version as [tt]site/pages/modules_custom/iotds.php[/tt]) .
+
+ocPortal is written to the '[url="front controller"]http://en.wikipedia.org/wiki/Front_controller[/url]' and MVC '[url="design patterns"]http://en.wikipedia.org/wiki/Model-view-controller[/url]':
+ - Model/API: Most of the scripts from the 'sources' directory represent the model/API.
+ - View: The templates (see 'themes/default/templates' directory) represent the 'view'. Comcode Pages could also be considered part of the view (though they are also content).
+ - Controller: The entry scripts (e.g. the [tt]index.php[/tt] files, or files like [tt]site/dload.php[/tt]) represent the 'front controllers'. The modules (i.e. scripts from the '*/pages/modules' directories) and blocks (i.e. scripts from the 'sources/[mini]blocks' directory) represent the controllers. [tt]sources/site.php[/tt] and the initialisation functions in [tt]sources/global.php[/tt] and [tt]sources/global2.php[/tt] bind the entry scripts to the modules and control final output.
+
+Dynamic pages (modules) are written in PHP and can output a set of different 'screens'. Screens are constructed out of templates (nested in a tree structure), with the PHP code specifying a certain kind of template structure, calling up templates with appropriate parameters to match the data being displayed.
+
+Static pages are simpler. Static pages may be easily developed and edited by regular ocPortal webmasters. To create a static page, you can just add a Comcode page (via 'adminzone' and 'Add New Page Wizard' functioanlity) and either write it in Comcode (for more info see the [page="userguide_comcode"]Comcode tutorial[/page]), or just put your HTML between Comcode '[tt][html][/tt]' tags.
+
+Page output is displayed  by wrapping the primary page output within  the GLOBAL template, prefixed with the HEADER template, and followed by the FOOTER template. The GLOBAL template references panels, and if those panels exist, they will also be included. Typically zones will include a 'panel_left' and a 'panel_right', so any pages within said zone will be surrounded by these panels.
+
+[title="3"]ocPortal terms[/title]
+
+Here is a glossary of some of the terms that are used to describe ocPortal concepts:
+ - Addon, A defined set of ocPortal files that work together towards a common purpose. Many addons come with ocPortal, and even the 'core' of the system is considered to consist of non-optional addons.
+ - AED module, (Add/Edit/Delete module) a module that inherits from the AED base class, in order to abstract away standard content management interfaces, speeding implementation and improving consistency. Most content management modules are AED module. The AED module base class is very rich and provides a lot of optional functionality that AED modules can choose to inherit.
+ - Block, A self-contained section of output that can be used repeatedly by a Comcode or module page. e.g. IOTD (Image Of The Day), or RSS/Atom Feed. . By convention, a block could be either a "main block" or a "side block" or a "bottom block", but this doesn't cause ocPortal to use it differently (it is to help webmasters identify where blocks were designed to be placed).
+ - Catalogue, A high-level abstraction of a collection of categorised entries. From within ocPortal you can create these catalogues as you need them. In many respects it is similar to a database with separate "tables", designed to allow non-programmers do what traditionally programmers would have to. The ocPortal webmaster determines the field names and field types that the entries in the collection (the 'catalogue') will hold. There is no limit for the number of catalogues or catalogue entries which a site may have. The catalogues entries can be organised either in a tree or in a flat-category structure. Often developers have to make a choice of whether to configure and customise a catalogue, or whether to create a new module. It comes down really to whether new interactions, functionality, and/or complex layouts are required -- if they are, a new module should probably be written.
+ - [page="docs:tut_adv_comcode"]Comcode[/page], A simple mark-up language, for use within ocPortal. Similar in use and format to 'BBCode'. This basic form of Comcode is formally known as '[page="docs:tut_adv_comcode#title__395"]Comcode-Text[/page]'. Since version 3 of ocPortal there is also [page="docs:tut_adv_comcode#title__3951"]Comcode-XML[/page].
+ - Content, Custom data within the system; the term is used in most contexts as data specifically designed for viewing (as opposed to a member profile, for example, which is automatically updated and is more of a gateway to other information).
+ - Custom Profile Field (CPF's), A custom field for members. Such fields are supported by some forum/member software including our own OCF. In OCF CPF's can be assigned to individual usergroups. CPF's are an important tool on most websites, as it is very common to need to assign extra data to members that is specific to an individual website. CPF data is always entered manually, either by the member themselves, or by staff.
+ - Do-next manager, An full-screen icon-based menu interface that lays out the available/suggested routes a user may take.
+ - [url="Emoticons"]http://en.wikipedia.org/wiki/Emoticon[/url], Little images of faces to represent emotions.
+ - Entry points, See 'Page links'.
+ - Entry scripts, Scripts such as [tt]site/dload.php[/tt] or [tt]index.php[/tt] that are launched directly by URL. These might be called 'front controllers' by some programmers.
+ - Feedback, A system for collecting and returning feedback from any ocPortal resource (e.g. rating and posting comments on a download).
+ - Forum, A place where forum topics sit (and posts site within the topics). Forums may be organised in a tree structure. We do not use the term 'board'  that some software uses.
+ - Forum Driver, A piece of code that allows ocPortal to integrate with third-party forum software.
+ - Fractional Edit, The process of editing a piece of data (usually a title), by interactively modifying it at its point of display.
+ - Hooks, Elements (special objects) that plug into a module/block to provide different implementations of functionality for that module/block. For example, the stats block calls upon other module's hooks (such as 'downloads') in order to generate each kind of stat; and the search blocks calls on other hooks to search each kind of content. By using hooks, modularity can be maintained and functionality extended by addition of hooks, not modification of existing code.
+ - Join, the process of becoming a member.
+ - Member, a user with an account.Note that in occasional contexts we may refer to members, when actually the member is using the "guest account" -- the key point here is that a member is identifiable in at least some way, even if it's just identified to the guest account
+ - OCF, the ocPortal forum/member system (optional).
+ - Pages, These are just pages a user might wish to view; they can be:
+  - 'comcode pages' -- written in Comcode
+  - 'html pages' -- written in HTML
+  - modules pages -- pages, that belong to a modules.
+ - Panels, These are pages (usually Comcode pages) that are named with the prefix 'panel_'. They may be referenced in the templates using the 'LOAD_PANEL' symbol. The default ocPortal templates automatically place panels named 'panel_left' or 'panel_right'.
+ - Page link, These are paths formatted like "zone:page:screentype:id:param=value(:...)" that ocPortal uses for detailing links. They are like URLs, but local to an ocPortal website. Page links are converted to URLs and this conversion sometimes adds extra URL parameters (for instance, any parameters prefixed 'keep_' are propagated across screens). Entry points are a special case of page link -- entry points are the page links to screens that modules provide regardless of the current state of the modules content (e.g. the catalogue index will always be there -- it is a stable entry point into the system).
+ - Personal post, a post either within a personal topic or within a normal topic, that can only be seen by the sender, the recipient, and administration staff
+ - Private topic, a topic only seen by a select group of members (currently, the initiator and target members)
+ - Points, Members of a site can earn 'points' by participating in site activities. The site administrator can adjust the value of different activities. Members can then gift these points to each other or redeem them at the point-store.
+ - Point-store, The place where members can spend hard-earned points on gifts such as e-mail addresses or flagrant text banners
+ - Standard box, The type of box that wraps most ocPortal content, like side-blocks (e.g. 'Site statistics', 'Users online', 'Shoutbox', etc.). There are different styles of standard box.
+ - Splurgh, A system for compressing tree structures of links, so that large tree structures may be transmitted efficiently to visitor's web browsers. These compressed structures can be decompressed by JavaScript (Javascript functions in the [tt]JAVASCRIPT_SPLURGH[/tt] template interpret the compressed format, expanding it into a full uncompressed page). Splurgh functionality is rarely used -- usually only to provide a single tree overview screen for a new module's category structure. Out-of-the-box ocPortal uses it to provide such screens for the download system, the galleries system, and the CEDI system.
+ - System, A large aspect of ocPortal that has an influence spanning multiple files (e.g. IOTD system, Addon system, Award system). This is an informal term -- addon is used more formerly and refers to a defined set of files.
+ - [page="docs:tut_tempcode"]Tempcode[/page], An intermediary format between Comcode and XHTML, used for transmission and storage of screens in ocPortal. Also, the written programming language used in templates. The two things are different representations of the same thing.
+ - Theme, A set of templates, images and CSS style-sheets that can be used on a website to completely change the layout, look and feel of the website. Different themes can be used concurrently by many members, with no impact on the system
+ - [page="docs:tut_forum_tracking#title__4024"]Notifications[/page], The process of tracking content for reply via e-mail notification. In other words: you can mark topics for notification and when a new reply is posted, you will be notified by e-mail of its presence.
+ - User, Someone visiting an ocPortal site, that may or may not be a member.
+ - Usergroup, sometimes called a group, this is a group of members and is how roles are implemented. Each usergroup is configured with it's own permissions and nothing is hard-coded. Usergroups may be configured as 'Super administrators' which have full access to everything, bypassing permissions. Members may be in multiple usergroups, and receive the best combined permissions from all of them.
+ - Whisper, the process of creating a personal post embedded within a public topic (this is used to carry on entirely private conversations, and allow members to whisper secret messages to each other inside a public topic)
+ - Zones, Different areas of a website, each with its own security levels, layout and feel. e.g. The Admin Zone is a different zone to the Site Zone. They are separated into a subdirectories of the main site (like subdirectory "site" for the 'Site' zone and the subdirectory "adminzone" for the "Admin Zone" zone). For the special "root" zone, called the "Welcome Zone", the files are stored in the main directory.
+
+The following ocPortal concepts are used to describe content:
+ - Category. Categories hold entries, or sometimes, other categories, or both; they themselves tend to be designed for organisation or navigation rather than direct viewing. Galleries, forums and forum groups, are all kinds of categories; even a topic is a category in some contexts, as it holds posts.
+ - Entry. An entry is a piece of content.
+ - Resource. A resource is a very general term that may mean anything from entries to categories to files.
+
+At the time of writing, 'resource' is often used loosely, and 'category' and 'entry' are used differently depending on the context. This is not a design flaw, but merely indicative of the diversity of context in ocPortal and the difficulty of being consistent across different contexts (e.g. a topic is a category for posts, but really we would usually consider the categories of the forum system to be the actual forums).
+
+There are many other terms in ocPortal that belong to certain addons (such as 'Download' or 'CEDI'), but these won't be explained here.
+
+[title="3"]Feature architecting standards, and implementation notes[/title]
+
+ocPortal contains many "cross-cutting" features that are often present in different areas of the system. These need to be individually implemented/referenced all throughout the code. These features are:
+ - AED/CMS functionality (this will be provided to you when you write your CMS module to inherit from the standard AED module code. Most ocPortal CMS modules are AED module)
+ - SEO meta-data keywords/description (instructions for implementation provided in this book)
+ - Feedback: rating, commenting, trackbacks (instructions for implementation provided in this book)
+ - Permissions (instructions for implementation provided in this book)
+ - Virtual roots (see how breadcrumb code for the news addon handles virtual roots -- it provides the capability to define them, and also applies them in the way it decides the root of a breadcrumb trail)
+ - Edit lists (filtered according to what the logged-in user can actually see) (just define a [tt]nice_get_whatever function[/tt] like other similar functions)
+ - Do-next interface (instructions for implementation provided in this book)
+ - Blocking guests trying to edit something owned by Guest (a bug if it isn't, but it would be good to try and abstract this)
+ - Ditto blocking editing interface for something you don't have category access to
+ - Attachments, Comcode, Multi-language support (instructions for implementation provided in this book)
+ - Splurgh views (see the [tt]Module_downloads::tree_view_screen[/tt] function for an example)
+ - Validation, validation-required e-mails, Unvalidated warnings, and permissions to determine who may view unvalidated content, and a hook to identify all unvalidated resources (see how it's done in existing modules, it's quite straight-forward- just identify the lines of code that involve validation and basically copy&paste them to the right spots in your own code)
+ - Control actions links (see the [tt]{+START,INCLUDE,STAFF_ACTIONS}[/tt] code in [tt]DOWNLOAD_SCREEN.tpl[/tt])
+ - Logging (use the [tt]log_it[/tt] function in your model code, for adding, editing, and deleting)
+ - Mass action, and policy for deletion of categories (implementation varies, but consider what happens to a categories entry when you delete that category)
+ - View counts and edit dates (implementation varies, but you should track them in your tables and pass them into templates)
+ - Newsletter "added since" hooks (just implement a hook)
+ - Importing (define an import-type in the [tt]admin_import[/tt] module code, and implement code for this import-type in all the import hooks hook)
+ - Search (just implement a hook)
+ - Preview support (just implement a hook)
+ - AJAX fractional-edit support where appropriate (see how CMS AED module's use INTEGER_MAGIC_NULL and STRING_MAGIC_NULL, and how their view templates use the FRACTIONAL_EDITABLE directive)
+ - Rep-images (implementation varies, but basically these are icons for a module's categories)
+ - RSS (just implement a hook, and set [tt]$GLOBALS['FEED_URL'][/tt] in the code when viewing what the RSS feed subscribes to)
+ - awards (just implement a hook)
+ - Possible others I've forgotten to list
+
+[title="2"]Back-end[/title]
+
+&raquo; See [page="_SEARCH:codebook_1"]Back-end document (a)[/page].
+&raquo; See [page="_SEARCH:codebook_1b"]Back-end document (b)[/page].
+
+[title="2"]Front-end[/title]
+
+&raquo; See [page="_SEARCH:codebook_2"]Front-end document[/page].
+
+[title="2"]Troubleshooting[/title]
+
+&raquo; See [page="_SEARCH:codebook_3"]Final document[/page].
+
+[title="2"]Tips[/title]
+
+&raquo; See [page="_SEARCH:codebook_3"]Final document[/page].
+
+[title="2"]Advanced deployment and customisation[/title]
+
+&raquo; See [page="_SEARCH:codebook_3"]Final document[/page].
+
+[title="2"]Conclusion[/title]
+
+&raquo; See [page="_SEARCH:codebook_3"]Final document[/page].
+
+[title="2"]Resources[/title]
+
+The documentation and tools on the ocPortal website may be out of date between ocPortal versions. For the latest resources, see our repositories and work tools:
+ - [url="Github"]https://github.com/chrisgraham/ocPortal/[/url] (contains ocPortal, unit tests, all unbundled addons and support tools)
+ - [url="Tracker"]http://ocportal.com/tracker/my_view_page.php[/url]
+ - [url="Written test sets"]https://www.dropbox.com/sh/07d7we9bu3voj8v/SPa1GlArQd[/url] (when tracker tasks are carried out, tests may be pasted onto the tracker issue; there is also a master list of manual test sets on ocportal.com, but access is limited is its within an interactive tool)
+ - [url="Developer documentation source files"]https://www.dropbox.com/sh/qouvnrbmbwr09ad/tMZjhcyn7i[/url]
+ - Patches for future https://www.dropbox.com/sh/2lg5c6qb035jw2c/ZEaKNhbE4z
+ - Graphics https://www.dropbox.com/sh/3lt8yaj60wxeb24/PxztQ4hGJR
+ - [url="Community documentation"]http://ocportal.com/site/cedi.htm[/url]
+[/surround]
