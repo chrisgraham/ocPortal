@@ -22,7 +22,7 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{ADD_FRIEND_URL}{REMOVE_FRIEND_URL}{ALL_FRIENDS_URL}}
-	<ul class="ocf_profile_add_friend horizontal_links associated_links_block_group force_margin">
+	<ul class="horizontal_links associated_links_block_group force_margin">
 		{+START,IF_NON_EMPTY,{ADD_FRIEND_URL}}
 			<li><a href="{ADD_FRIEND_URL*}">{!_ADD_AS_FRIEND,{$USERNAME*,{MEMBER_ID}}}</a></li>
 		{+END}

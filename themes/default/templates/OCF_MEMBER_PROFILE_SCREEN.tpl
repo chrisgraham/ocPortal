@@ -19,7 +19,7 @@
 					{+END}
 
 					{+START,IF_NON_PASSED,TAB_CONTENT}
-						<p class="ajax_tree_list_loading"><img class="inline_image_2" src="{$IMG*,loading}" /></p>
+						<p class="ajax_tree_list_loading"><img class="vertical_alignment" src="{$IMG*,loading}" /></p>
 
 						<script type="text/javascript">// <![CDATA[
 							function load_tab__{TAB_CODE%}()

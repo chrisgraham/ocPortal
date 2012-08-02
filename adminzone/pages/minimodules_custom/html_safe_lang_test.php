@@ -1,15 +1,16 @@
 <?php /*
 
  ocPortal
- Copyright (c) ocProducts, 2004-2009
+ Copyright (c) ocProducts, 2004-2012
 
- See text/en/licence.txt for full licencing information.
+ See text/EN/licence.txt for full licencing information.
 
- Meta Script:
-	Search for language entries that are used for both HTML and non-HTML contexts
-	Pass find_html_no_go=1 if to find a full list, otherwise it will just find bugs where HTML-symbols (<>"& -- but not ' because that's almost safe) have already been used in both contexts
-	Note that this script can't find everything due to dynamicness of ocPortal language calls. As a general rule, don't use HTML or HTML-sensitive-symbols where not needed, and consider it carefully before doing so
+*/
 
+/*
+Search for language entries that are used for both HTML and non-HTML contexts
+Pass find_html_no_go=1 if to find a full list, otherwise it will just find bugs where HTML-symbols (<>"& -- but not ' because that's almost safe) have already been used in both contexts
+Note that this script can't find everything due to dynamicness of ocPortal language calls. As a general rule, don't use HTML or HTML-sensitive-symbols where not needed, and consider it carefully before doing so
 */
 
 function better_parse_ini_file($filename,$file=NULL)

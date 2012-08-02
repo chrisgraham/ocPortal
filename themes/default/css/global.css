@@ -2789,10 +2789,6 @@ div.proceed_button_left_2 {
 	margin-{!en_left}: -2em;
 }
 
-.mini_proceed_button {
-	padding-top: 2em;
-}
-
 .shunted_button {
 	text-align: {!en_right};
 }
@@ -3801,9 +3797,8 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 	.global_side_panel,
 	.toggleable_tray_button,
 	.post_buttons,
-	.quick_self_edit_link, .control_functions, .staff_actions,
+	.quick_self_edit_link, .staff_actions,
 	.comments_form,
-	.members_viewing,
 	.community_message,
 	.ratings, .trackbacks {
 		display: none;

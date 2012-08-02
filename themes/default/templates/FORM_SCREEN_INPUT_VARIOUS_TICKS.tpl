@@ -5,7 +5,7 @@
 			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);">{SECTION_TITLE*}</a>
 		</h3>
 		<div class="toggleable_tray" style="display: {$JS_ON,{$?,{EXPANDED},block,none},block}"{+START,IF,{$NOT,{EXPANDED}}} aria-expanded="false"{+END}>
-			<div class="comcode_quote_content comcode_quote_content_titled">
+			<div>
 	{+END}
 
 

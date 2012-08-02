@@ -77,7 +77,6 @@ function open_link_as_overlay(ob,width,height,target)
 				modal.resetDimensions(width,height);
 
 				var sup=modal.topWindow.document.getElementById('lightbox_image').parentNode;
-				img.className='no_alpha';
 				img.width=width;
 				img.height=height;
 				sup.removeChild(sup.childNodes[0]);
