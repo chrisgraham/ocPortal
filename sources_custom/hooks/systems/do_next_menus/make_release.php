@@ -25,12 +25,9 @@ class Hook_do_next_menus_ocportal_release_build
 	function run()
 	{
 		return array(
-			array('tools','admin_home',array('html_safe_lang_test',array(),'adminzone'),make_string_tempcode('Check for language string XHTML safeness')),
-			array('tools','admin_home',array('css_check',array(),'adminzone'),make_string_tempcode('Look for unused CSS')),
-			array('tools','admin_home',array('plug_guid',array(),'adminzone'),make_string_tempcode('Plug in missing GUIDs')),
-
-			array('tools','admin_home',array('make_release',array(),'adminzone'),make_string_tempcode('Make an ocPortal release')),
-			array('tools','admin_home',array('push_bugfix',array(),'adminzone'),make_string_tempcode('Push an ocPortal bugfix')),
+			array('tools','admin_home',array('plug_guid',array(),'adminzone'),make_string_tempcode('Release tools: Plug in missing GUIDs')),
+			array('tools','admin_home',array('make_release',array(),'adminzone'),make_string_tempcode('Release tools: Make an ocPortal release')),
+			array('tools','admin_home',array('push_bugfix',array(),'adminzone'),make_string_tempcode('Release tools: Push an ocPortal bugfix')),
 		);
 	}
 

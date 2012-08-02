@@ -25,8 +25,8 @@ class Hook_do_next_menus_ocportalcom_support_credits
 	function run()
 	{
 		return array(
-			array('tools','admin_home',array('outstanding_credits',array(),'adminzone'),make_string_tempcode('Unspent support credits')),
-			array('tools','admin_home',array('admin_customers',array(),'adminzone'),make_string_tempcode('Charge customer support credits')),
+			array('tools','admin_home',array('outstanding_credits',array(),'adminzone'),make_string_tempcode('ocPortal.com: Unspent support credits')),
+			array('tools','admin_home',array('admin_customers',array(),'adminzone'),make_string_tempcode('ocPortal.com: Charge customer support credits')),
 		);
 	}
 

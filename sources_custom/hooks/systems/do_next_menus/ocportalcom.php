@@ -25,7 +25,7 @@ class Hook_do_next_menus_ocportalcom
 	function run()
 	{
 		return array(
-			array('tools','admin_home',array('admin_ocpusers',array(),'adminzone'),make_string_tempcode('Table of ocP users')),
+			array('tools','admin_home',array('admin_ocpusers',array(),'adminzone'),make_string_tempcode('ocPortal.com: Table of ocP users')),
 		);
 	}
 
