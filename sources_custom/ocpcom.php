@@ -18,10 +18,10 @@ function init__ocpcom()
 	define('MYOCP_DEMO_LAST_DAYS',30);
 }
 
-function server__create_tracker_issue($version,$tracker_title,$tracker_message,$tracker_additional)
+function server__create_tracker_issue($version_dotted,$tracker_title,$tracker_message,$tracker_additional)
 {
 	require_code('mantis');
-	echo strval(create_tracker_issue($version,$tracker_title,$tracker_message,$tracker_additional));
+	echo strval(create_tracker_issue($version_dotted,$tracker_title,$tracker_message,$tracker_additional));
 }
 
 function server__create_tracker_post($tracker_id,$tracker_comment_message)
@@ -36,11 +36,11 @@ function server__close_tracker_issue($tracker_id)
 	close_tracker_issue(intval($tracker_id));
 }
 
-function server__post_in_bugs_catalogue($version,$ce_title,$ce_description,$ce_affects,$ce_fix)
+function server__post_in_bugs_catalogue($version_pretty,$ce_title,$ce_description,$ce_affects,$ce_fix)
 {
 	require_code('catalogues2');
 
-	$bug_category_id=get_bug_category_id($version);
+	$bug_category_id=get_bug_category_id($version_pretty);
 
 	$map=array(
 		// HACKHACK: Hard-coded IDs
@@ -55,7 +55,7 @@ function server__post_in_bugs_catalogue($version,$ce_title,$ce_description,$ce_a
 	echo strval($entry_id);
 }
 
-function get_bug_category_id($version)
+function get_bug_category_id($version_pretty)
 {
 	require_code('catalogues');
 	require_code('catalogues2');
@@ -74,10 +74,10 @@ function get_bug_category_id($version)
 			$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'bugs','group_id'=>$group_id));
 	}
 
-	$bug_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('text_original'=>strval($version)));
+	$bug_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('text_original'=>strval($version_pretty)));
 	if (is_null($bug_category_id))
 	{
-		$bug_category_id=actual_add_catalogue_category('bugs',strval($version),'','',NULL);
+		$bug_category_id=actual_add_catalogue_category('bugs',strval($version_pretty),'','',NULL);
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 		foreach (array_keys($groups) as $group_id)
 			$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($bug_category_id),'group_id'=>$group_id));
@@ -115,21 +115,6 @@ function server__upload_to_tracker_issue($tracker_id)
 {
 	require_code('mantis');
 	upload_to_tracker_issue(intval($tracker_id),$_FILES['upload']);
-}
-
-function versioning__get_version_nice($version)
-{
-	$version_nice=str_replace('.beta',' beta',str_replace('.RC',' RC',$version));
-	$version_nice=trim(preg_replace('#(\.0)?\.0($| )#',' ',$version_nice)); // Canonical to not have extra .0's on end. Don't really care about what ocPortal stores as we clean this up in our server's version.php - it is crucial that news post and download names are canonical though so version.php works. NB: Latest recommended versions are done via download name and description labelling.
-	$version_nice=str_replace('alpha ','alpha',$version_nice);
-	$version_nice=str_replace('beta ','beta',$version_nice);
-	$version_nice=str_replace('RC ','RC',$version_nice);
-	return $version_nice;
-}
-
-function versioning__get_version_stripped($version)
-{
-	return preg_replace('#(\.0)?\.0$#','',$version);
 }
 
 function myocp_add_site($codename,$name,$email_address,$password,$description,$category,$show_in_directory)

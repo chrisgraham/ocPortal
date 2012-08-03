@@ -417,11 +417,21 @@ function warn_exit($text)
 }
 
 /**
+ * Get the major version of your installation.
+ *
+ * @return integer		The major version number of your installation
+ */
+function ocp_version()
+{
+	return intval(ocp_version_number());
+}
+
+/**
  * Get the full string version of ocPortal that you are running.
  *
  * @return string			The string saying the full ocPortal version number
  */
-function ocp_version_full()
+function ocp_version_pretty()
 {
 	return '';
 }

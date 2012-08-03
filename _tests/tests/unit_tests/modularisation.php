@@ -27,7 +27,7 @@ class modularisation_test_set extends ocp_test_case
 
 	function testModularisation()
 	{
-		global $GFILE_ARRAY,$DIR_ARRAY;
+		global $GFILE_ARRAY;
 
 		// Volatile files not in git that are referenced by addons
 		@touch('site/pages/html_custom/EN/download_tree_made.htm');
@@ -59,7 +59,6 @@ class modularisation_test_set extends ocp_test_case
 		}
 
 		$GFILE_ARRAY=array();
-		//$DIR_ARRAY=array();
 		$this->do_dir();
 		$unput_files=array();
 		foreach ($GFILE_ARRAY as $path)
@@ -136,19 +135,16 @@ class modularisation_test_set extends ocp_test_case
 
 	function do_dir($dir='')
 	{
-		global $GFILE_ARRAY,$DIR_ARRAY;
+		global $GFILE_ARRAY;
 
 		$full_dir=get_file_base().'/'.$dir;
 		$dh=opendir($full_dir);
 		while (($file=readdir($dh))!==false)
 		{
-			$is_dir=is_dir(get_file_base().'/'.$dir.$file);
-
-			if (must_skip($is_dir,$file,$dir,false,true)) continue;
+			if (should_ignore_file($dir.$file,IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_NON_REGISTERED | IGNORE_NON_REGISTERED)) continue;
 
 			if ($is_dir)
 			{
-	//			$DIR_ARRAY[]=$dir.$file;
 				$this->do_dir($dir.$file.'/');
 			}
 			else

@@ -311,7 +311,7 @@ function upgrade_script()
 							//  - it's a new addon (addon that is not installed or uninstalled i.e. does not have an exported mod file)
 							//  - it's a file in an addon we have installed
 							//  - we're upgrading from an ocPortal version that doesn't support addons yet
-							if ((is_null($found)) || (!file_exists(get_file_base().'/imports/mods/'.$found.'.tar')) || (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$found.'.php')) || (!file_exists(get_file_base().'/sources/hooks/systems/addon_registry')))
+							if ((is_null($found)) || (!file_exists(get_file_base().'/imports/addons/'.$found.'.tar')) || (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$found.'.php')) || (!file_exists(get_file_base().'/sources/hooks/systems/addon_registry')))
 							{
 								if (substr($upgrade_file['path'],-1)=='/')
 								{
@@ -335,10 +335,10 @@ function upgrade_script()
 							if (substr($upgrade_file['path'],-1)!='/')
 							{
 								// If true: We need to copy it into our archived addon so that addon is kept up-to-date
-								if ((!is_null($found)) && (file_exists(get_file_base().'/imports/mods/'.$found.'.tar')))
+								if ((!is_null($found)) && (file_exists(get_file_base().'/imports/addons/'.$found.'.tar')))
 								{
-									$old_mod_file=tar_open(get_file_base().'/imports/mods/'.$found.'.tar','rb');
-									$new_mod_file=tar_open(get_file_base().'/imports/mods/'.$found.'.new.tar','wb');
+									$old_mod_file=tar_open(get_file_base().'/imports/addons/'.$found.'.tar','rb');
+									$new_mod_file=tar_open(get_file_base().'/imports/addons/'.$found.'.new.tar','wb');
 									$directory2=tar_get_directory($old_mod_file,true);
 									if (!is_null($directory2))
 									{
@@ -356,8 +356,8 @@ function upgrade_script()
 										tar_add_file($new_mod_file,$upgrade_file['path'],$file_data['data'],$upgrade_file['mode'],$upgrade_file['mtime']);
 										tar_close($new_mod_file);
 										tar_close($old_mod_file);
-										unlink(get_file_base().'/imports/mods/'.$found.'.tar');
-										rename(get_file_base().'/imports/mods/'.$found.'.new.tar',get_file_base().'/imports/mods/'.$found.'.tar');
+										unlink(get_file_base().'/imports/addons/'.$found.'.tar');
+										rename(get_file_base().'/imports/addons/'.$found.'.new.tar',get_file_base().'/imports/addons/'.$found.'.tar');
 
 										echo do_lang('U_PACKING_MESSAGE',escape_html($upgrade_file['path'])).'<br />';
 									}
@@ -1192,9 +1192,7 @@ function check_outdated__handle_overrides($dir,$rela,&$master_data,&$hook_files,
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES | IGNORE_USER_CUSTOMISE)) continue;
-			if ($file=='files.dat') continue;
-			if ($file=='files_previous.dat') continue;
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_THEMES | IGNORE_USER_CUSTOMISE | IGNORE_BUNDLED_VOLATILE)) continue;
 
 			$is_dir=@is_dir($dir.$file);
 
@@ -1336,14 +1334,10 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 		}
 		while (($file=readdir($dh))!==false)
 		{
-			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_THEMES | IGNORE_USER_CUSTOMISE)) continue;
-			if ($rela.$file=='data/images') continue;
-			if ($rela.$file=='data/areaedit/plugins/SpellChecker/aspell') continue;
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_THEMES | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_NON_REGISTERED)) continue;
 
 			$is_dir=@is_dir($dir.$file);
 			if (!is_readable($dir.$file)) continue;
-
-			if ($file=='index.php') continue; // New zone
 
 			if ($is_dir)
 			{

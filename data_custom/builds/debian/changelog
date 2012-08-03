@@ -1,0 +1,5 @@
+ocportal (6.1.1-1) unstable; urgency=low
+
+  * Initial release (Closes: #625865)  <nnnn is the bug number of your ITP>
+
+ -- Chris Warburton <chrisw@ocproducts.com>  Wed, 18 May 2011 14:40:00 +0000

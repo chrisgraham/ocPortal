@@ -1,0 +1,15 @@
+ocportal for Debian
+-------------------
+
+This package creates an ocPortal installation in /use/share/ocportal/www and
+gives it a MySQL database to use (chosen at install time via debconf; to
+re-run the configuration use "dpkg-reconfigure ocportal"). In order to access
+this installation you will need to configure your Web server to grant access.
+accessible
+The simplest method 
+With these in place, ocPortal's install wizard can be run from a browser. To
+access the wizard, visit http://url-of-ocportal/install.php. If you don't
+run this installer then all attempts to access your site will give a critical
+error.
+
+ -- Chris Warburton <chrisw@ocproducts.com>  Wed, 18 May 2011 14:40:00 +0000

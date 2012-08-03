@@ -38,5 +38,6 @@ if (!file_exists($FILE_BASE.'/sources/global.php')) exit('<html><head><title>Cri
 
 $website_url=substr(get_param('url',false,true),0,255);
 $website_name=substr(get_param('name',false,true),0,255);
-$version=get_param('version');
+require_code('version2');
+$version=get_version_dotted__from_anything(get_param('version')); // May be passed through in 'pretty' format for legacy reasons, although not anymore
 $GLOBALS['SITE_DB']->query_insert('logged',array('website_url'=>$website_url,'website_name'=>$website_name,'is_registered'=>0,'log_key'=>0,'expire'=>0,'l_version'=>$version,'hittime'=>time()));

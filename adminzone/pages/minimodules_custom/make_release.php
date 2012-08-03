@@ -13,6 +13,14 @@
  * @package		ocportal_release_build
  */
 
+/*
+This code is the frontend to make ocPortal builds.
+
+If running on Windows, you need to install the following commands in your path...
+ - Infozip's zip.exe and unzip.exe
+ - gunzip.exe, gzip.exe, and tar.exe
+*/
+
 $type=get_param('type','0');
 
 $title=get_screen_title('ocPortal release assistance tool',false);
@@ -37,8 +45,8 @@ function phase_0()
 	$skip=isset($_GET['skip'])?'1':'0';
 	if ($skip=='1') $skip_check='checked="checked"'; else $skip_check='';
 
-	require_code('version3');
-	$on_disk_release=get_version_dotted(ocp_version(),ocp_version_minor());
+	require_code('version2');
+	$on_disk_version=get_version_dotted();
 
 	echo '
 	<p>Have you run a code quality check on the non-module files (at the very least?). I am assuming that any non-trivial fixes have been tested.</p>
@@ -49,7 +57,7 @@ function phase_0()
 		<fieldset>
 			<legend>Version number</legend>
 			<label for="version">What is the full version number (no bloody A, B, C, or D)?</label>
-			<input maxlength="14" size="14" readonly="readonly" type="text" name="version" id="version" value="'.escape_html($on_disk_release).'" />
+			<input maxlength="14" size="14" readonly="readonly" type="text" name="version" id="version" value="'.escape_html($on_disk_version).'" />
 		</fieldset>
 		<fieldset>
 			<legend>Description</legend>
@@ -116,9 +124,9 @@ function phase_1_pre()
 // Build release files
 function phase_1()
 {
-	$version=post_param('version');
+	$version_dotted=post_param('version');
 	$is_bleeding_edge=(post_param_integer('bleeding_edge',0)==1);
-	$is_substantial=(substr($version,-2)=='.0') || (strpos(strtolower($version),'beta1')!==false) || (strpos(strtolower($version),'rc1')!==false);
+	$is_substantial=(substr($version_dotted,-2)=='.0') || (strpos($version_dotted,'beta1')!==false) || (strpos($version_dotted,'RC1')!==false);
 
 	if ((!isset($_POST['intermediary_tasks'])) && ($is_substantial) && (!$is_bleeding_edge))
 	{
@@ -127,7 +135,6 @@ function phase_1()
 	}
 
 	require_code('make_release');
-	make_files_manifest();
 
 	$needed=post_param('needed');
 	$justification=post_param('justification');
@@ -145,7 +152,7 @@ function phase_1()
 		<form action="'.escape_html(static_evaluate_tempcode(build_url(array('page'=>'_SELF','type'=>'2'),'_SELF'))).'" method="post">
 			<input type="hidden" name="needed" value="'.escape_html($needed.'" />
 			<input type="hidden" name="justification" value="'.escape_html($justification).'" />
-			<input type="hidden" name="version" value="'.escape_html($version).'" />
+			<input type="hidden" name="version" value="'.escape_html($version_dotted).'" />
 			<input type="hidden" name="bleeding_edge" value="'.escape_html($bleeding_edge).'" />
 			<input type="hidden" name="changes" value="'.escape_html($changes).'" />
 			<input type="hidden" name="descrip" value="'.escape_html($descrip).'" />
@@ -166,11 +173,11 @@ function phase_2()
 	$changes=post_param('changes');
 	$descrip=post_param('descrip');
 
-	$version=post_param('version');
+	$version_dotted=post_param('version');
 	$is_bleeding_edge=(post_param_integer('bleeding_edge',0)==1);
-	$is_substantial=(substr($version,-2)=='.0') || (strpos(strtolower($version),'beta1')!==false) || (strpos(strtolower($version),'rc1')!==false);
+	$is_substantial=(substr($version_dotted,-2)=='.0') || (strpos($version_dotted,'beta1')!==false) || (strpos($version_dotted,'RC1')!==false);
 
-	$push_url=brand_base_url().'/adminzone/index.php?page=make_ocportal_release&version='.urlencode($version).'&is_bleeding_edge='.($is_bleeding_edge?'1':'0').'&descrip='.urlencode($descrip).'&needed='.urlencode($needed).'&justification='.urlencode($justification);
+	$push_url=brand_base_url().'/adminzone/index.php?page=make_ocportal_release&version='.urlencode($version_dotted).'&is_bleeding_edge='.($is_bleeding_edge?'1':'0').'&descrip='.urlencode($descrip).'&needed='.urlencode($needed).'&justification='.urlencode($justification);
 
 	echo '
 	<p>Here\'s a list of things for you to do. Get to it!</p>
@@ -196,8 +203,7 @@ function phase_2()
 	if (!$is_bleeding_edge)
 	{
 		$builds_path=get_builds_path();
-		$version_stripped=preg_replace('#(\.0)?\.0$#','',$version);
-		$webpi=$builds_path.'/builds/'.$version.'/ocportal-'.$version_stripped.'-webpi.zip';
+		$webpi=$builds_path.'/builds/'.$version.'/ocportal-'.$version_dotted.'-webpi.zip';
 		$ms_filesize=number_format(filesize($webpi)).' bytes';
 		$ms_sha1=sha1_file($webpi);
 
@@ -205,14 +211,14 @@ function phase_2()
 			<li>Go into <a href="http://installatron.com/editor">Installatron</a> and setup a new release with the new version number (Main tab), update the URL (Version Info tab), and publish.</li>
 			<li>E-mail <a href="mailto:punit@softaculous.com,brijesh@softaculous.com?subject=New ocPortal release&amp;body=Hi, this is an automated notification that a new release of ocPortal has been released - regards, the ocPortal team.">Softaculous people</a></li>
 			<li><a href="http://www.microsoft.com/web/gallery/appsubmit.aspx?id=460">Submit the new MS Web App Gallery file to Microsoft</a>. Change the \'Version\' the \'Package Location URL\' and set the shasum to <kbd>'.escape_html($ms_sha1).'</kbd></li>
-			<!--Disabled for now as not ready <li>Take "debian-'.escape_html($version).'.tar" to a debian box with correct signing key installed and do "tar xvf debian-'.escape_html($version_stripped).'.tar; cd ocportal-'.escape_html($version_stripped).' ; dpkg-buildpackage" and send \'ocportal_'.escape_html($version_stripped).'-1_i386.changes\' and \'ocportal_'.escape_html($version_stripped).'-1_i386.changes\' and \'ocportal_'.escape_html($version_stripped).'-1_all.deb\' over</li>-->
+			<!--Disabled for now as not ready <li>Take "debian-'.escape_html($version_dotted).'.tar" to a debian box with correct signing key installed and do "tar xvf debian-'.escape_html($version_dotted).'.tar; cd ocportal-'.escape_html($version_dotted).' ; dpkg-buildpackage" and send \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_all.deb\' over</li>-->
 		';
 	}
 
 	if ($is_substantial && !$is_bleeding_edge)
 	{
 		echo '
-			<li>Import into Launchpad (run this from the <tt>lang/EN</tt> directory: <tt>ini2po . . -P ; tar -czvf "'.escape_html($version_nice).'.tar.gz" --transform="s,\(.*\)\.pot,\1/\1.pot," *.pot ; rm *.pot ; mv *.gz ~/Desktop</tt>). Also set as the new active branch and the old branch as \'supported\' and the prior one as \'defunct\'</li>
+			<li>Import into Launchpad (run this from the <tt>lang/EN</tt> directory: <tt>ini2po . . -P ; tar -czvf "'.escape_html($version_dotted).'.tar.gz" --transform="s,\(.*\)\.pot,\1/\1.pot," *.pot ; rm *.pot ; mv *.gz ~/Desktop</tt>). Also set as the new active branch and the old branch as \'supported\' and the prior one as \'defunct\'</li>
 			<li>Update MyOCP (personal demo system)</li>
 		';
 	}

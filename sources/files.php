@@ -34,11 +34,12 @@ function init__files()
 	define('IGNORE_EDITFROM_FILES',8);
 	define('IGNORE_REVISION_FILES',16);
 	define('IGNORE_CUSTOM_ZONES',32);
-	define('IGNORE_THEMES',64);
-	define('IGNORE_CUSTOM_DIR_CONTENTS_CASUAL_OVERRIDE',128);
+	define('IGNORE_CUSTOM_THEMES',64);
+	define('IGNORE_NON_REGISTERED',128);
 	define('IGNORE_USER_CUSTOMISE',256);
 	define('IGNORE_NONBUNDLED_SCATTERED',512); // Has by default
 	define('IGNORE_BUNDLED_VOLATILE',1024); // Has by default
+	define('IGNORE_NON_EN_SCATTERED_LANGS',2048);
 }
 
 /**
@@ -173,7 +174,7 @@ function better_parse_ini_file($filename,$file=NULL)
 /**
  * Find whether a file is known to be something that should/could be there but isn't an ocPortal distribution file, or for some other reason should be ignored.
  *
- * @param  string			File path
+ * @param  string			File path (relative to ocPortal base directory)
  * @param  integer		Bitmask of extra stuff to ignore (see IGNORE_* constants)
  * @param  integer		Set this to 0 if you don't want the default IGNORE_* constants to carry through
  * @return boolean		Whether it should be ignored
@@ -197,32 +198,49 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 	$ignore_filenames=array(
 		'.'=>'.*',
 		'..'=>'.*',
+
+		// Files other stuff makes
 		'__macosx'=>'.*',
 		'.bash_history'=>'.*',
 		'error_log'=>'.*',
 		'thumbs.db:encryptable'=>'.*',
 		'thumbs.db'=>'.*',
 		'.ds_store'=>'.*',
-		'_old'=>'.*',
+
+		// Source code control systems
 		'.svn'=>'.*',
 		'.git'=>'',
 		'.gitattributes'=>'',
+		'.gitignore'=>'',
 		'cvs'=>'.*',
+
+		// Web server extensions / leave-behinds
 		'web-inf'=>'.*',
+		'www.pid'=>'',
+
+		// Specially-recognised naming conventions
+		'_old'=>'.*',
+
+		// Syntax's used during ocPortal testing
+		'gibb'=>'.*',
+		'gibberish'=>'.*',
+
+		// Files you are sometimes expected to leave around, but outside ocPortal's direct remit
 		'bingsiteauth.xml'=>'',
-		'parameters.xml'=>'',
-		'manifest.xml'=>'',
-		'nbproject'=>'',
-		'no_mem_cache'=>'',
 		'php.ini'=>'.*',
 		'.htpasswd'=>'.*',
-		'closed.html'=>'',
 		'iirf.ini'=>'',
 		'robots.txt'=>'',
-		'data.ocp'=>'',
-		'install_ok'=>'',
-		'install_locked'=>'',
+		'400.shtml'=>'',
+		'500.shtml'=>'',
+		'404.shtml'=>'',
+		'403.shtml'=>'',
+		'.htaccess'=>'',
+
+		// Installer files
 		'install.php'=>'',
+		'info.php.template'=>'',
+		'data.ocp'=>'',
 		'install.sql'=>'',
 		'install1.sql'=>'',
 		'install2.sql'=>'',
@@ -231,48 +249,53 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		'user.sql'=>'',
 		'postinstall.sql'=>'',
 		'restore.php'=>'',
-		'info.php.template'=>'',
-		'make_files-output-log.html'=>'',
-		'400.shtml'=>'',
-		'500.shtml'=>'',
-		'404.shtml'=>'',
-		'403.shtml'=>'',
-		'old'=>'.*',
-		'gibb'=>'.*',
-		'gibberish'=>'.*',
-		'.gitignore'=>'',
+		'parameters.xml'=>'',
+		'manifest.xml'=>'',
+
+		// IDE projects
+		'nbproject'=>'',
 		'.project'=>'',
+
+		// ocPortal control files
+		'closed.html'=>'',
+		'install_ok'=>'',
+		'install_locked'=>'',
 		'if_hosted_service.txt'=>'',
+
+		// MyOCP
+		'sites'=>'',
+
+		// PHP compiler temporary files
 		'subs.inc'=>'',
-		'docs'=>'data/images',
-		'uploads'=>'',
+		'hphp-static-cache'=>'',
+		'hphp.files.list'=>'',
+		'hphp'=>'',
+		'ocportal.heap'=>'',
+		'ocportal.sch'=>'',
+		'libocportal_u.dll'=>'',
 	);
-	if (($bitmask & IGNORE_NONBUNDLED_SCATTERED)!=0)
+	if (($bitmask & IGNORE_NON_REGISTERED)!=0) // These aren't registered in any addon_registry hook, yet are bundled and in non-custom directories
 	{
 		$ignore_filenames+=array(
-			// Non-bundled addon stuff that we can't detect automatically
-			'_tests'=>'',
-			'_old'=>'',
-			'killjunk.sh'=>'',
-			'transcoder'=>'',
-			'facebook_connect.php'=>'',
-			'ocworld'=>'',
-		);
+			//'files.dat'=>'data', Actually is now (core.php)
+			//'files_previous.dat'=>'data', Actually is now (core.php)
+		}
 	}
 	if (($bitmask & IGNORE_BUNDLED_VOLATILE)!=0)
 	{
 		$ignore_filenames+=array(
 			// Bundled stuff that is not necessarily in a *_custom dir yet is volatile
-			'map.ini'=>'themes',
 			'info.php'=>'',
+			'map.ini'=>'themes',
+			'functions.dat'=>'data_custom',
+			'download_tree_made.htm'=>'pages/html_custom/EN',
+			'cedi_tree_made.htm'=>'site/pages/html_custom/EN',
 			'ocp_sitemap.xml'=>'',
 			'errorlog.php'=>'data_custom',
-			'functions.dat'=>'data_custom',
+			'execute_temp.php'=>'data_custom',
+			// These two too, although in git we don't change these as builds will not rebuild them
 			'breadcrumbs.xml'=>'data_custom',
 			'fields.xml'=>'data_custom',
-			'execute_temp.php'=>'data_custom',
-			'output.log'=>'data_custom/spelling',
-			'write.log'=>'data_custom/spelling',
 		);
 	}
 	if (($bitmask & IGNORE_ACCESS_CONTROLLERS)!=0)
@@ -282,7 +305,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 			'index.html'=>'.*',
 		);
 	}
-	if (($bitmask & IGNORE_USER_CUSTOMISE)!=0) // Ignores directories that user override files go in
+	if (($bitmask & IGNORE_USER_CUSTOMISE)!=0) // Ignores directories that user override files go in, not code (which IGNORE_CUSTOM_DIR_CONTENTS would cover), but stuff edited through frontend to override bundled files
 	{
 		$ignore_filenames+=array(
 			'comcode_custom'=>'.*',
@@ -291,31 +314,41 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 			'templates_custom'=>'.*',
 			'images_custom'=>'.*',
 			'lang_custom'=>'.*',
-			'data_custom'=>'.*',
-			'file_backups'=>'.*',
-			'text_custom'=>'.*',
+			'file_backups'=>'exports',
+			'text_custom'=>'',
 			'theme.ini'=>'themes/[^/]*',
 		);
 	}
 
 	$ignore_extensions=array(
+		// Exports (effectively these are like temporary files - only intended for file transmission)
 		'tar'=>'(imports|exports)/.*',
 		'gz'=>'(imports|exports)/.*',
+
+		// Cache files
 		'lcd'=>'lang_cached(/.*)?',
 		'gcd'=>'persistent_cache',
 		'tcp'=>'themes/[^/]*/templates_cached/.*',
 		'tcd'=>'themes/[^/]*/templates_cached/.*',
 		'css'=>'themes/[^/]*/templates_cached/.*',
 		'js'=>'themes/[^/]*/templates_cached/.*',
+
+		// Logs
 		'log'=>'.*',
+
+		// IDE projects
 		'clpprj'=>'',
 		'tmproj'=>'',
 		'zpj'=>'',
+
+		// PHP compiler temporary files
 		'o'=>'',
 		'scm'=>'',
 		'heap'=>'',
 		'sch'=>'',
 		'dll'=>'',
+
+		// CGI files
 		'fcgi'=>'',
 	);
 	if (($bitmask & IGNORE_EDITFROM_FILES)!=0)
@@ -329,20 +362,24 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		'\..*\.(png|gif|jpeg|jpg)'=>'.*', // Image meta data file, e.g. ".example.png"
 		'\_vti\_.*'=>'.*', // Frontpage
 		'\.\_.*'=>'.*', // MacOS extended attributes
+
+		// Exports (effectively these are like temporary files - only intended for file transmission)
+		'.*\.\d+'=>'exports/file_backups',
 	);
 	if (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS)!=0) // Ignore all override directories, for both users and addons
 	{
-		$ignore_filename_patterns+=array(
-			'.*\_custom'=>'.*',
-			'.*'=>'.*\_custom(/.*)?',
-		);
-	}
-	elseif (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS_CASUAL_OVERRIDE)!=0) // Slightly different approach to IGNORE_USER_CUSTOMISE, useful when talking more about original files that may have been overridden
-	{
-		$ignore_filename_patterns+=array(
-			'(comcode|html|lang|templates|images)\_custom'=>'.*',
-			'.*'=>'(^|/)(lang|templates|images)\_custom(/.*)?',
-		);
+		if (($dir=='data_custom') && (in_array($filename,array('breadcrumbs.xml','fields.xml','errorlog.php','execute_temp.php','functions.dat'))))
+		{
+			// These are allowed, as they are volatile yet bundled. Use IGNORE_BUNDLED_VOLATILE if you don't want them.
+		} else
+		{
+			$ignore_filename_patterns+=array(
+				//'.*\_custom'=>'.*', Let it find them, but work on the contents
+				'(?!index.html$)(?!\.htaccess$).*'=>'.*\_custom(/.*)?',
+				'(?!index.html$)(?!\.htaccess$).*'=>'data/areaedit/plugins/SpellChecker/aspell',
+				'(?!index.html$)(?!\.htaccess$).*'=>'data_custom/modules/admin_stats',
+			);
+		}
 	}
 	if (($bitmask & IGNORE_HIDDEN_FILES)!=0)
 	{
@@ -350,7 +387,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 			'\..*'=>'.*',
 		);
 	}
-	if (($bitmask & IGNORE_REVISION_FILES)!=0)
+	if (($bitmask & IGNORE_REVISION_FILES)!=0) // E.g. global.css.<timestamp>
 	{
 		$ignore_filename_patterns+=array(
 			'.*\.\d+'=>'.*',
@@ -380,7 +417,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		return true;
 	}
 
-	if (($bitmask & IGNORE_THEMES)!=0)
+	if (($bitmask & IGNORE_CUSTOM_THEMES)!=0)
 	{
 		if ((preg_match('#^themes($|/)#',$dir)!=0) && (!in_array($filename,array('default','index.html','map.ini')))) return true;
 	}
@@ -389,6 +426,33 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 	{
 		if ((file_exists(get_file_base().$filepath.'/index.php')) && (file_exists(get_file_base().$filepath.'/pages')) && (!in_array($filename,array('adminzone','collaboration','cms','forum','site'))))
 			return true;
+	}
+
+	if (($bitmask & IGNORE_NONBUNDLED_SCATTERED)!=0)
+	{
+		if ($filepath=='exports/static') return true; // Empty directory, so has to be a special exception
+		if (file_exists(get_custom_file_base().'/data_custom/addon_files.txt'))
+		{
+			if (strpos(get_file_contents(unixify_line_format(get_custom_file_base().'/data_custom/addon_files.txt')),' - '.$filepath.chr(10))!==false)
+			{
+				return true;
+			}
+		} else
+		{
+			static $addon_files=NULL;
+			if ($addon_files===NULL) $addon_files=collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename')));
+			if (in_array($filepath,$addon_files)) return true;
+		}
+		// Note that we have no support for identifying directories related to addons, only files inside. Code using this function should detect directories with no usable files in as relating to addons.
+	}
+
+	if (($bitmask & IGNORE_NON_EN_SCATTERED_LANGS)!=0)
+	{
+		// Wrong lang packs
+		if (((strlen($filename)==2) && (strtoupper($filename)==$filename) && (strtolower($filename)!=$filename) && ($filename!='EN')) || ($filename=='EN_us') || ($filename=='ZH-TW') || ($filename=='ZH-CN'))
+		{
+			return true;
+		}
 	}
 
 	return false;

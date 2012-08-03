@@ -469,8 +469,8 @@
   </parameter> 
 
   <parameter
-    name="SetAclParameter36" description="Sets the ACL on the right file" defaultValue="{Application Path}/imports/mods" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/imports/mods" />
+    name="SetAclParameter36" description="Sets the ACL on the right file" defaultValue="{Application Path}/imports/addons" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/imports/addons" />
   </parameter>
 
   <parameter
@@ -484,8 +484,8 @@
   </parameter>
 
   <parameter
-    name="SetAclParameter40" description="Sets the ACL on the right file" defaultValue="{Application Path}/exports/mods" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/exports/mods" />
+    name="SetAclParameter40" description="Sets the ACL on the right file" defaultValue="{Application Path}/exports/addons" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/exports/addons" />
   </parameter> 
 
   <parameter

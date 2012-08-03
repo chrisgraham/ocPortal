@@ -1195,7 +1195,7 @@ function step_5_ftp()
 		} else
 		{
 			@ftp_mkdir($conn,$dir);
-			if (($dir=='exports/mods') && (!is_suexec_like()))
+			if (($dir=='exports/addons') && (!is_suexec_like()))
 			{
 				@ftp_site($conn,'CHMOD 777 '.$dir);
 			} else
@@ -2636,7 +2636,7 @@ ErrorDocument 404 {$base}/index.php?page=404
 </FilesMatch>
 END;
 
-	if ((is_writable_wrap(get_file_base().'/exports/mods')) && ((!file_exists(get_file_base().'/.htaccess')) || (trim(file_get_contents(get_file_base().'/.htaccess'))=='')))
+	if ((is_writable_wrap(get_file_base().'/exports/addons')) && ((!file_exists(get_file_base().'/.htaccess')) || (trim(file_get_contents(get_file_base().'/.htaccess'))=='')))
 	{
 		global $HTTP_MESSAGE;
 
@@ -2653,7 +2653,7 @@ END;
 
 		foreach ($clauses as $i=>$clause)
 		{
-			$myfile=fopen(get_file_base().'/exports/mods/index.php','wt');
+			$myfile=fopen(get_file_base().'/exports/addons/index.php','wt');
 			fwrite($myfile,"<"."?php
 			@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
 			@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
@@ -2661,13 +2661,13 @@ END;
 			");
 			fclose($myfile);
 
-			$myfile=fopen(get_file_base().'/exports/mods/.htaccess','wt');
+			$myfile=fopen(get_file_base().'/exports/addons/.htaccess','wt');
 			fwrite($myfile,$clause);
 			fclose($myfile);
 			$HTTP_MESSAGE='';
-			http_download_file($base_url.'/exports/mods/index.php',NULL,false);
+			http_download_file($base_url.'/exports/addons/index.php',NULL,false);
 			if ($HTTP_MESSAGE!='200') $clauses[$i]=NULL;
-			unlink(get_file_base().'/exports/mods/.htaccess');
+			unlink(get_file_base().'/exports/addons/.htaccess');
 		}
 
 		$out='';

@@ -462,7 +462,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-ocPortal-Export-Date: '.gmdate('Y-m-d H:i',$mtime).'+0000\n"
-"X-Generator: ocPortal ('.ocp_version_full().')\n"
+"X-Generator: ocPortal ('.ocp_version_pretty().')\n"
 
 ';
 					$entries2=array();

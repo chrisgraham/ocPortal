@@ -35,7 +35,7 @@ if (get_param_integer('export_bundled_addons',0)==1)
 
 		$addon_row=read_addon_info($name);
 
-		// Archive it off to exports/mods
+		// Archive it off to exports/addons
 		if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
 		{
 			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
@@ -51,9 +51,9 @@ if (get_param_integer('export_bundled_addons',0)==1)
 				$new_addon_files[]=$_file;
 		}
 
-		create_addon($file,$new_addon_files,$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'exports/mods');
+		create_addon($file,$new_addon_files,$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'exports/addons');
 	}
-	if ($only!==NULL) echo "<p>All bundled addons have been exported to 'export/mods/'</p>\n";
+	if ($only!==NULL) echo "<p>All bundled addons have been exported to 'export/addons/'</p>\n";
 }
 
 if (get_param_integer('export_addons',1)==1)
@@ -90,18 +90,18 @@ if (get_param_integer('export_addons',1)==1)
 		$dependencies='';
 		foreach ($vs as $_v)
 		{
-			if ((!addon_installed($_v)) || (array_key_exists($_v,$addon_list)) || (!file_exists(get_file_base().'/exports/mods/'.$_v.'.tar')) || (!file_exists(get_file_base().'/imports/mods/'.$_v.'.tar')))
+			if ((!addon_installed($_v)) || (array_key_exists($_v,$addon_list)) || (!file_exists(get_file_base().'/exports/addons/'.$_v.'.tar')) || (!file_exists(get_file_base().'/imports/addons/'.$_v.'.tar')))
 			{
 				if ($dependencies!='') $dependencies.=',';
 				$dependencies.=$_v;
 			}
 		}
 
-		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/mods');
+		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/addons');
 
 		echo nl2br(escape_html(show_updated_comments_code($file,$name)));
 	}
-	if ($only!==NULL) echo "<p>All non-bundled addons have been exported to 'export/mods/'</p>\n";
+	if ($only!==NULL) echo "<p>All non-bundled addons have been exported to 'export/addons/'</p>\n";
 }
 
 if (get_param_integer('export_themes',0)==1)
@@ -149,12 +149,12 @@ if (get_param_integer('export_themes',0)==1)
 		}
 		$_GET['keep_theme_test']='1';
 		$_GET['theme']=$theme;
-		create_addon($file,$files2,$name,'','',$author,'ocProducts Ltd','1.0',$description,'exports/mods');
+		create_addon($file,$files2,$name,'','',$author,'ocProducts Ltd','1.0',$description,'exports/addons');
 
 		echo escape_html(nl2br(show_updated_comments_code($file,$name)));
 	}
 
-	if ($only!==NULL) echo "<p>All themes have been exported to 'export/mods/'</p>\n";
+	if ($only!==NULL) echo "<p>All themes have been exported to 'export/addons/'</p>\n";
 }
 
 echo "<p>Done</p>\n";

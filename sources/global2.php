@@ -280,7 +280,7 @@ function init__global2()
 	require_code_no_override('version');
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0))
 	{
-		@header('X-Powered-By: ocPortal '.ocp_version_full().' (PHP '.phpversion().')');
+		@header('X-Powered-By: ocPortal '.ocp_version_pretty().' (PHP '.phpversion().')');
 
 		$QUERY_LOG=false;
 		if ((isset($_REQUEST['special_page_type'])) && ($_REQUEST['special_page_type']=='query'))
@@ -1059,14 +1059,25 @@ function make_seed()
 }
 
 /**
- * Get the full string version of ocPortal that you are running.
+ * Get the major version of your installation.
+ *
+ * @return integer		The major version number of your installation
+ */
+function ocp_version()
+{
+	return intval(ocp_version_number());
+}
+
+/**
+ * Get the full string version of ocPortal that you are running, in 'pretty' format.
+ * This is (and must be kept) equivalent to get_version_pretty__from_dotted(get_version_dotted())
  *
  * @return string			The string saying the full ocPortal version number
  */
-function ocp_version_full()
+function ocp_version_pretty()
 {
 	$minor=ocp_version_minor();
-	return strval(ocp_version()).(($minor=='')?'':(is_numeric($minor[0])?'.':'-').$minor);
+	return preg_replace('#\.(alpha|beta|RC)#',' ${1}',strval(ocp_version()).(($minor=='')?'':'.'.$minor));
 }
 
 /**

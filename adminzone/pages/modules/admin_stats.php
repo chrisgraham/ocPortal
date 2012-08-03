@@ -1284,7 +1284,7 @@ class Module_admin_stats
 		{
 			while (false!==($file=readdir($handle)))
 			{
-				if (($file!='.') && ($file!='..') && ($file!='index.html') && ($file!='Thumbs.db') && ($file!='Thumbs.db:encryptable') && ($file!='.htaccess') && ($file!='IP_Country.txt') && (!is_dir($file)))
+				if ((!should_ignore_file(get_custom_file_base().'/data_custom/modules/admin_stats/'.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES)) && ($file!='IP_Country.txt') && (!is_dir($file)))
 				{
 					$path=get_custom_file_base().'/data_custom/modules/admin_stats/'.$file;
 					@unlink($path)

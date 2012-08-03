@@ -596,7 +596,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'VERSION_NUMBER':
-				$value=ocp_version_full();
+				$value=ocp_version_pretty();
 				break;
 
 			case 'CHARSET':

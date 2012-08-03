@@ -47,14 +47,7 @@ if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 		$base_url='http://'.$domain.str_replace('%2F','/',rawurlencode(preg_replace('#/'.str_replace('#','\#',preg_quote($GLOBALS['RELATIVE_PATH'])).'$#','',dirname($_SERVER['PHP_SELF']))));
 	} else
 	{
-		/*if (is_file($FILE_BASE.'/use_comp_name'))
-		{
-			@include($FILE_BASE.'/'.filter_naughty((array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME'])).'.php');
-		} else
-		{*/
-			@include($FILE_BASE.'/info.php');
-			/*@include($FILE_BASE.'/info-override.php');
-		}*/
+		@include($FILE_BASE.'/info.php');
 		if (array_key_exists('base_url',$SITE_INFO))
 		{
 			$base_url=$SITE_INFO['base_url'];
@@ -524,14 +517,7 @@ if (is_file($FILE_BASE.'/sources_custom/critical_errors.php'))
 	}
 }
 
-/*if (is_file($FILE_BASE.'/use_comp_name'))
-{
-	@include($FILE_BASE.'/'.filter_naughty((array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME'])).'.php');
-} else
-{*/
-	@include($FILE_BASE.'/info.php');
-/*	@include($FILE_BASE.'/info-override.php');
-}*/
+@include($FILE_BASE.'/info.php');
 
 global $SITE_INFO;
 if (!isset($SITE_INFO))

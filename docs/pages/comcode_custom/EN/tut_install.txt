@@ -83,12 +83,12 @@ Set the following to [b]777[/b]: (full directory permissions)
  - data_custom/spelling/personal_dicts
  - exports/backups
  - exports/file_backups
- - exports/mods
+ - exports/addons
  - forum/pages/comcode_custom
  - forum/pages/comcode_custom/<for-each-language>
  - forum/pages/html_custom/<for-each-language>
  - forum/pages/html_custom
- - imports/mods
+ - imports/addons
  - lang_cached
  - lang_cached/<for-each-language>
  - lang_custom

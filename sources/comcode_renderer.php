@@ -1526,8 +1526,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			elseif (file_exists($stub.$_embed.'.jpeg')) $url=$stub2.$_embed.'.jpeg';
 			else
 			{
-				$stub=get_file_base().'/data/images/docs/';
-				$stub2=get_base_url().'/data/images/docs/';
+				$stub=get_file_base().'/data_custom/images/docs/';
+				$stub2=get_base_url().'/data_custom/images/docs/';
 				if (substr($_embed,0,1)=='/') $_embed=substr($_embed,1);
 				if (file_exists($stub.$_embed.'.png')) $url=$stub2.$_embed.'.png';
 				elseif (file_exists($stub.$_embed.'.gif')) $url=$stub2.$_embed.'.gif';

@@ -331,8 +331,8 @@ sites/www/exports
 sites/www/exports/backups
 sites/www/exports/backups/index.html
 sites/www/exports/index.html
-sites/www/exports/mods
-sites/www/exports/mods/index.html
+sites/www/exports/addons
+sites/www/exports/addons/index.html
 sites/www/forum
 sites/www/forum/pages
 sites/www/forum/pages/comcode_custom
@@ -349,7 +349,7 @@ sites/www/forum/pages/html_custom/EN/index.html
 sites/www/forum/pages/html_custom/index.html
 sites/www/imports
 sites/www/imports/index.html
-sites/www/imports/mods
+sites/www/imports/addons
 sites/www/lang_cached
 sites/www/lang_cached/.htaccess
 sites/www/lang_cached/EN

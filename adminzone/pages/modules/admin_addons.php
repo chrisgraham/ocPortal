@@ -61,7 +61,7 @@ class Module_admin_addons
 		$GLOBALS['SITE_DB']->drop_if_exists('addons_files');
 		$GLOBALS['SITE_DB']->drop_if_exists('addons_dependencies');
 
-		deldir_contents(get_custom_file_base().'/exports/mods',true);
+		deldir_contents(get_custom_file_base().'/exports/addons',true);
 	}
 
 	/**
@@ -266,7 +266,7 @@ class Module_admin_addons
 
 			//if ($url=='')
 			//{
-				$urls=get_url('url','file','imports/mods',0,0,false,'','',true);
+				$urls=get_url('url','file','imports/addons',0,0,false,'','',true);
 			//}
 			//else
 			//{
@@ -373,7 +373,7 @@ class Module_admin_addons
 
 				$addon_row=read_addon_info($name);
 
-				// Archive it off to exports/mods
+				// Archive it off to exports/addons
 				if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
 				{
 					$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
@@ -381,7 +381,7 @@ class Module_admin_addons
 				{
 					$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).date('-dmY-Hm',time()).'.tar';
 				}
-				create_addon($file,$addon_row['addon_files'],$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/mods');
+				create_addon($file,$addon_row['addon_files'],$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
 
 				uninstall_addon($name);
 			}
@@ -503,7 +503,7 @@ class Module_admin_addons
 
 		$addon_row=read_addon_info($name);
 
-		// Archive it off to exports/mods
+		// Archive it off to exports/addons
 		if (file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php')) // New ocProducts style (assumes maintained by ocProducts if it's done like this)
 		{
 			$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$name)).'.tar';
@@ -519,7 +519,7 @@ class Module_admin_addons
 				$new_addon_files[]=$_file;
 		}
 
-		create_addon($file,$new_addon_files,$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/mods');
+		create_addon($file,$new_addon_files,$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
 
 		uninstall_addon($name);
 
@@ -818,7 +818,7 @@ class Module_admin_addons
 
 		create_addon($file,$files,post_param('name'),post_param('incompatibilities'),post_param('dependencies'),post_param('author'),post_param('organisation'),post_param('version'),post_param('description'));
 
-		$download_url=get_custom_base_url().'/exports/mods/'.$file;
+		$download_url=get_custom_base_url().'/exports/addons/'.$file;
 
 		log_it('EXPORT_ADDON',$file);
 

@@ -12,6 +12,8 @@ $title->evaluate_echo();
 
 $type=isset($_GET['type'])?$_GET['type']:'0';
 
+require_code('version2');
+
 global $git_path;
 $git_path='git';
 $git_result=shell_exec($git_path.' --help 2>&1');
@@ -26,16 +28,16 @@ if (strpos($git_result,'git: command not found')!==false)
 
 if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 {
-	$git_commit_id=$_POST['git_commit_id'];
+	$git_commit_id=post_param('git_commit_id');
 
 	$done=array();
-	$version=$_POST['version'];
-	$title=$_POST['title'];
-	$notes=$_POST['notes'];
-	$affects=$_POST['affects'];
-	if (isset($_POST['fixed_files']))
+	$version_dotted=post_param('version');
+	$title=post_param('title');
+	$notes=post_param('notes','');
+	$affects=post_param('affects','');
+	if (!is_null(post_param('fixed_files')))
 	{
-		$fixed_files=$_POST['fixed_files'];
+		$fixed_files=post_param('fixed_files');
 	} else
 	{
 		$fixed_files=array();
@@ -74,13 +76,13 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 		}
 	}
 
-	$submit_to=$_POST['submit_to'];
+	$submit_to=post_param('submit_to');
 	global $remote_base_url;
 
 	$remote_base_url=($submit_to=='live')?(brand_base_url()):(get_base_url());
 
 	// If no tracker issue number was given, one is made
-	$tracker_id=intval($_POST['tracker_id']);
+	$tracker_id=post_param_integer('tracker_id');
 	$tracker_title=$title;
 	$tracker_message=$notes;
 	$tracker_additional='';
@@ -88,7 +90,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	if ($tracker_id==0)
 	{
 		// Make tracker issue
-		$tracker_id=create_tracker_issue($version,$tracker_title,$tracker_message,$tracker_additional);
+		$tracker_id=create_tracker_issue($version_dotted,$tracker_title,$tracker_message,$tracker_additional);
 	} else
 	{
 		// Make tracker comment
@@ -112,7 +114,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	if ($git_commit_id!==NULL)
 	{
 		$git_url='https://github.com/chrisgraham/ocPortal/commit/'.$git_commit_id;
-		if ($_POST['git_commit_id']=='') $done['Commited to git']=$git_url;
+		if (post_param('git_commit_id','')=='') $done['Commited to git']=$git_url;
 	} else
 	{
 		$git_url=NULL;
@@ -128,27 +130,27 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	upload_to_tracker_issue($tracker_id,create_hotfix_tar($tracker_id,$fixed_files));
 	// The tracker issue gets closed
 	close_tracker_issue($tracker_id);
-	$done[($_POST['tracker_id']=='')?'Created new tracker issue':'Responded to existing tracker issue']=$tracker_url;
+	$done[(post_param('tracker_id','')=='')?'Created new tracker issue':'Responded to existing tracker issue']=$tracker_url;
 
 	// A bug is posted in the bugs catalogue, linking to the tracker
-	$post_to_bug_catalogue=isset($_POST['post_to_bug_catalogue']);
+	$post_to_bug_catalogue=!is_null(post_param('post_to_bug_catalogue',NULL));
 	if ($post_to_bug_catalogue)
 	{
 		$ce_title=$title;
 		$ce_description=$notes;
 		$ce_affects=$affects;
 		$ce_fix='This issue is properly filed (and managed) on the tracker. See issue [url="#'.strval($tracker_id).'"]'.$tracker_url.'[/url].';
-		$entry_id=post_in_bugs_catalogue($version,$ce_title,$ce_description,$ce_affects,$ce_fix);
+		$entry_id=post_in_bugs_catalogue(get_version_pretty__from_dotted($version_dotted),$ce_title,$ce_description,$ce_affects,$ce_fix);
 		$ce_url=$remote_base_url.'/site/catalogues/entry/'.strval($entry_id).'.htm';
 		$done['Added to bugs catalogue']=$ce_url;
 	}
 
 	// If a forum post ID was given, an automatic reply is given pointing to the tracker issue
-	$post_id=intval($_POST['post_id']);
-	if ($post_id!=0)
+	$post_id=post_param_integer('post_id',NULL);
+	if ($post_id!==NULL)
 	{
 		$post_reply_title='Automated fix message';
-		$post_reply_message='This issue has been filed on the tracker '.(($_POST['tracker_id']=='')?'as':'in').' issue [url="#'.strval($tracker_id).'"]'.$tracker_url.'[/url], with a fix.';
+		$post_reply_message='This issue has been filed on the tracker '.((post_param('tracker_id','')=='')?'as':'in').' issue [url="#'.strval($tracker_id).'"]'.$tracker_url.'[/url], with a fix.';
 		$post_important=1;
 		$reply_id=create_forum_post($post_id,$post_reply_title,$post_reply_message,$post_important);
 		$reply_url=$remote_base_url.'/forum/topicview/findpost/'.strval($reply_id).'.htm';
@@ -156,7 +158,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	}
 
 	// Problem solution system
-	$recog_error_substring=$_POST['recog_error_substring'];
+	$recog_error_substring=post_param('recog_error_substring','');
 	if ($recog_error_substring!='')
 	{
 		$recog_post='Your error seems to match a known and fixed bug in ocPortal ('.$title.').'.chr(10).chr(10).'[title="2"]How did this happen?[/title]'.chr(10).chr(10).'The bug description is as follows...'.chr(10).chr(10).$notes.chr(10).chr(10).'[title="2"]How do I fix it?[/title]'.chr(10).chr(10).'A hotfix is available under issue [url="#'.strval($tracker_id).'"]'.$tracker_url.'[/url].';
@@ -184,8 +186,8 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 // UI
 // ==
 
-$on_disk_release=strval(ocp_version());
-if (ocp_version_minor()!='') $on_disk_release.='.'.ocp_version_minor();
+require_code('version2');
+$on_disk_version=get_version_dotted();
 
 chdir(get_file_base());
 $git_command=$git_path.' status';
@@ -232,7 +234,7 @@ label {
 
 		<div>
 			<label for="version">Version</label>
-			<input step="0.1" required="required" name="version" id="version" type="text" value="{$on_disk_release}" />
+			<input step="0.1" required="required" name="version" id="version" type="text" value="{$on_disk_version}" />
 		</div>
 
 		<div>
@@ -342,7 +344,7 @@ END;
 // API
 // ===
 
-function create_tracker_issue($version,$tracker_title,$tracker_message,$tracker_additional)
+function create_tracker_issue($version_dotted,$tracker_title,$tracker_message,$tracker_additional)
 {
 	$args=func_get_args();
 	return intval(make_call(__FUNCTION__,array('parameters'=>$args)));
@@ -411,7 +413,7 @@ function create_hotfix_tar($tracker_id,$files)
 	return $tar_path;
 }
 
-function post_in_bugs_catalogue($version,$ce_title,$ce_description,$ce_affects,$ce_fix)
+function post_in_bugs_catalogue($version_pretty,$ce_title,$ce_description,$ce_affects,$ce_fix)
 {
 	$args=func_get_args();
 	return intval(make_call(__FUNCTION__,array('parameters'=>$args)));
@@ -437,7 +439,7 @@ function upload_to_tracker_issue($tracker_id,$tar_path)
 function make_call($call,$params,$file=NULL)
 {
 	$data=$params;
-	$data['password']=$_POST['password'];
+	$data['password']=post_param('password');
 	if (is_null($file))
 	{
 		$data_url=http_build_query($data);

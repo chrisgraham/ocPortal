@@ -736,7 +736,8 @@ function do_site()
 		{
 			$timeout_before=@ini_get('default_socket_timeout');
 			@ini_set('default_socket_timeout','3');
-			http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/user.php?url='.urlencode(get_base_url()).'&name='.urlencode(get_site_name()).'&version='.urlencode(ocp_version_full()),NULL,false);
+			require_code('version2');
+			http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/user.php?url='.urlencode(get_base_url()).'&name='.urlencode(get_site_name()).'&version='.urlencode(get_version_dotted()),NULL,false);
 			@ini_set('default_socket_timeout',$timeout_before);
 		}
 	}

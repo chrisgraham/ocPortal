@@ -170,7 +170,7 @@ function find_installed_addons($just_non_bundled=false)
 				'addon_name'=>$hook,
 				'addon_author'=>'Core Team',
 				'addon_organisation'=>'ocProducts',
-				'addon_version'=>($version==ocp_version_number())?ocp_version_full():float_format($version,1),
+				'addon_version'=>($version==ocp_version_number())?ocp_version_pretty():float_format($version,1),
 				'addon_description'=>$description,
 				'addon_install_time'=>filemtime(get_file_base().'/sources/hooks/systems/addon_registry/'.$hook.'.php'),
 				'addon_files'=>implode(chr(10),make_global_file_list($file_list)),
@@ -203,21 +203,21 @@ function find_addon_effective_mtime($addon_name)
 }
 
 /**
- * Find all the available addons (addons in imports/mods that are not necessarily installed).
+ * Find all the available addons (addons in imports/addons that are not necessarily installed).
  *
  * @return array		List of maps describing the available addons
  */
 function find_available_addons()
 {
 	// Find addons available for installation
-	$dh=opendir(get_custom_file_base().'/imports/mods/');
+	$dh=opendir(get_custom_file_base().'/imports/addons/');
 	$addons_available_for_installation=array();
 	$files=array();
 	while (($file=readdir($dh))!==false)
 	{
 		if (substr($file,-4)=='.tar')
 		{
-			$files[]=array($file,filemtime(get_custom_file_base().'/imports/mods/'.$file));
+			$files[]=array($file,filemtime(get_custom_file_base().'/imports/addons/'.$file));
 		}
 	}
 	closedir($dh);
@@ -230,7 +230,7 @@ function find_available_addons()
 	{
 		$file=$_file[0];
 
-		$full=get_custom_file_base().'/imports/mods/'.$file;
+		$full=get_custom_file_base().'/imports/addons/'.$file;
 		require_code('tar');
 		$tar=tar_open($full,'rb');
 		$info_file=tar_get_file($tar,'mod.inf',true);
@@ -340,7 +340,7 @@ function read_addon_info($name)
 			'addon_name'=>$name,
 			'addon_author'=>'Core Team',
 			'addon_organisation'=>'ocProducts',
-			'addon_version'=>($version==ocp_version_number())?ocp_version_full():float_format($version,1),
+			'addon_version'=>($version==ocp_version_number())?ocp_version_pretty():float_format($version,1),
 			'addon_description'=>$description,
 			'addon_install_time'=>filemtime(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php'),
 			'addon_files'=>make_global_file_list($file_list),
@@ -356,7 +356,7 @@ function read_addon_info($name)
 /**
  * Create an addon to spec.
  *
- * @param  string			Filename to create in exports/mods directory (should end in .tar)
+ * @param  string			Filename to create in exports/addons directory (should end in .tar)
  * @param  array			List of files to include
  * @param  string			Addon name
  * @param  string			Addon incompatibilities (comma-separated)
@@ -367,7 +367,7 @@ function read_addon_info($name)
  * @param  string			Addon description
  * @param  PATH			Directory to save to
  */
-function create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,$organisation,$version,$description,$dir='exports/mods')
+function create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,$organisation,$version,$description,$dir='exports/addons')
 {
 	require_code('tar');
 
@@ -477,7 +477,7 @@ description=".$description."
  */
 function install_addon($file,$files=NULL)
 {
-	$full=get_custom_file_base().'/imports/mods/'.$file;
+	$full=get_custom_file_base().'/imports/addons/'.$file;
 
 	require_code('zones2');
 	require_code('zones3');
@@ -736,7 +736,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	if (is_null($also_uninstalling)) $also_uninstalling=array();
 	if (is_null($also_installing)) $also_installing=array();
 
-	$full=get_custom_file_base().'/imports/mods/'.$file;
+	$full=get_custom_file_base().'/imports/addons/'.$file;
 
 	// Look in the tar
 	require_code('tar');

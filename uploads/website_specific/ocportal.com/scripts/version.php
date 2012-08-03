@@ -40,8 +40,6 @@ require_lang('ocpcom');
 
 //if (get_ip_address()!='86.141.238.33') return old_style();
 
-$version=get_param('version');
-
 header('Content-type: text/plain');
 if (get_param_integer('html',0)==1)
 {
@@ -49,56 +47,17 @@ if (get_param_integer('html',0)==1)
 	echo '<script type="text/javascript" src="/themes/default/templates_cached/EN/javascript.js"></script>';
 }
 
-// Tidy ups
-// Canonical before we split is like "3.3.3" or "3 RC2" or "3.2 beta2" or "3"
-$version=preg_replace('#[-\s]*final#i','',$version);
-$version=str_replace('rc','RC',$version);
-$version=str_replace('RC-','RC',$version);
-$version=str_replace('.RC',' RC',$version);
-$version=str_replace('-RC',' RC',$version);
-$version=preg_replace('#([^ ])RC#','${1} RC',$version);
-$version=str_replace('Beta','beta',$version);
-$version=str_replace('beta-','beta',$version);
-$version=str_replace('.beta',' beta',$version);
-$version=str_replace('-beta',' beta',$version);
-$version=preg_replace('#([^ ])beta#','${1} beta',$version);
-$version=str_replace('Alpha','alpha',$version);
-$version=str_replace('alpha-','alpha',$version);
-$version=str_replace('.alpha',' alpha',$version);
-$version=str_replace('-alpha',' alpha',$version);
-$version=preg_replace('#([^ ])alpha#','${1} alpha',$version);
-$version=str_replace('alpha ','alpha',$version);
-$version=str_replace('beta ','beta',$version);
-$version=str_replace('RC ','RC',$version);
-$version=str_replace('-','.',$version);
-$version=preg_replace('#^([^ ]*)(\.0)+( [^ ]*)?$#','${1}${3}',$version); // Remove any trailing zeroes
-
-// Now split it up
-$qualifier=NULL;
-$qualifier_number=NULL;
-$intended=NULL;
-foreach (array('RC','beta','alpha') as $type)
-{
-	if (strpos($version,' '.$type)!==false)
-	{
-		$qualifier=$type;
-		$qualifier_number=intval(substr($version,strpos($version,' '.$type)+strlen(' '.$type)));
-		$intended=substr($version,0,strpos($version,' '.$type));
-		break;
-	}
-}
-if (is_null($intended))
-{
-	$intended=$version;
-}
-
-$long_version=$intended;
-$long_version.=str_repeat('.0',max(0,2-substr_count($long_version,'.')));
+// Different ways at looking at the version number
+require_code('version2');
+$dotted=get_version_dotted__from_anything(get_param('version'));
+list($intended,$qualifier,$qualifier_numer,$long_version)=get_version_components__from_dotted($dotted);
+$version_pretty=get_version_pretty__from_dotted($dotted);
+if (!is_null($qualifier)) $long_version_with_qualifier=$long_version.' '.$qualifier.$qualifier_number;
 
 /*
 VARIABLE KEY:
 
-version: complete minimal version string
+version: complete minimal version string intended for humans
 long_version: maximal dotted version number
 intended: minimal dotted version number
 qualifier: NULL or alpha or beta or RC
@@ -109,11 +68,11 @@ qualifier_number: NULL or integer
 $our_version=NULL;
 if (preg_match('#^[\d\.]+$#',$intended)!=0) // If we understand the format
 {
-	$download_row=find_download($version);
+	$download_row=find_download($version_pretty);
 	if (!is_null($download_row))
 	{
 		$our_version=array(
-			'version'=>$version,
+			'version'=>$version_pretty,
 			'download_description'=>strip_download_description($download_row['nice_description']),
 			'add_date'=>$download_row['add_date'],
 		);
@@ -128,7 +87,6 @@ for ($i=0;$i<3;$i++)
 }
 $possible_next_versions=array();
 $stub='';
-if (!is_null($qualifier)) $long_version.=' '.$qualifier.$qualifier_number;
 for ($i=0;$i<3;$i++)
 {
 	if ((is_null($qualifier)) || ($i!=2))
@@ -177,7 +135,7 @@ $possible_next_versions=array_reverse($possible_next_versions);
 $next_upgrade_version=NULL;
 foreach ($possible_next_versions as $pos_version)
 {
-	if ($pos_version==$version) continue;
+	if ($pos_version==$version_pretty) continue;
 	
 	$row=find_version($pos_version);
 	if (!is_null($row))
@@ -279,7 +237,7 @@ for ($i=0;$i<3;$i++)
 
 // Output it all (descriptions, news links, etc)
 // Current version
-echo '<h3 class="notes_about">Notes about your current version ('.escape_html($long_version).')</h3>';
+echo '<h3 class="notes_about">Notes about your current version ('.escape_html($long_version_with_qualifier).')</h3>';
 $has_jump=(!is_null($higher_versions[0])) || (!is_null($higher_versions[1])) || (!is_null($higher_versions[2]));
 if (!is_null($our_version))
 {
@@ -340,7 +298,7 @@ if ($has_jump)
 
 			$tooltip=comcode_to_tempcode('[title="2"]Inbetween versions[/title]'.$higher_versions[$i]['download_description']);
 
-			$upgrade_url='http://ocportal.com/site/news/view/'.strval($higher_versions[$i]['news_id']).'.htm?wide_high=1&from_version='.$long_version;
+			$upgrade_url='http://ocportal.com/site/news/view/'.strval($higher_versions[$i]['news_id']).'.htm?wide_high=1&from_version='.$long_version_with_qualifier;
 			echo '<p class="version"><span class="version_number">'.escape_html($higher_versions[$i]['version']).'</span> <span class="version_news_link">[ <a onclick="window.open(this.href,null,\'status=yes,toolbar=no,location=no,menubar=no,resizable=yes,scrollbars=yes,width=976,height=600\'); return false;" target="_blank" title="'.$upgrade_type[$i].' news post (this link will open in a new window)" href="'.escape_html($upgrade_url).'">view news post</a> ]</span> <span class="version_details">('.$upgrade_type[$i].', released '.display_time_period(time()-$higher_versions[$i]['add_date']).' ago)</span> <span class="version_note">'.$note.'</span> <img class="version_help_icon" onmouseout="if (typeof window.deactivateTooltip!=\'undefined\') deactivateTooltip(this,event);" onmousemove="if (typeof window.activateTooltip!=\'undefined\') repositionTooltip(this,event);" onmouseover="if (this.parentNode.title!=undefined) this.parentNode.title=\'\'; if (typeof window.activateTooltip!=\'undefined\') activateTooltip(this,event,\''.escape_html(str_replace("\n",'\n',addslashes($tooltip->evaluate()))).'\',\'600px\',null,null,false,true);" alt="Help" src="'.escape_html(find_theme_image('help')).'" /> ';
 
 			// Output upgrader link
@@ -387,23 +345,23 @@ function strip_download_description($d)
 	return static_evaluate_tempcode(comcode_to_tempcode(preg_replace('#A new version, [\.\d\w]+ is available\. #','',preg_replace('# There may have been other upgrades since .* - see .+\.#','',$d))));
 }
 
-function find_version($version)
+function find_version($version_pretty)
 {
 	global $NEWS_ROWS;
 	load_news_rows();
 
 	foreach ($NEWS_ROWS as $news_row)
 	{
-		if ($news_row['nice_title']==$version.' released') return $news_row;
-		if ($news_row['nice_title']=='ocPortal '.$version.' released') return $news_row;
-		if ($news_row['nice_title']==$version.' released!') return $news_row;
-		if ($news_row['nice_title']=='ocPortal '.$version.' released!') return $news_row;
+		if ($news_row['nice_title']==$version_pretty.' released') return $news_row;
+		if ($news_row['nice_title']=='ocPortal '.$version_pretty.' released') return $news_row;
+		if ($news_row['nice_title']==$version_pretty.' released!') return $news_row;
+		if ($news_row['nice_title']=='ocPortal '.$version_pretty.' released!') return $news_row;
 	}
 
 	return NULL;
 }
 
-function find_download($version)
+function find_download($version_pretty)
 {
 	global $DOWNLOAD_ROWS;
 	load_download_rows();
@@ -412,7 +370,7 @@ function find_download($version)
 	$download_row=NULL;
 	foreach ($DOWNLOAD_ROWS as $_download_row)
 	{
-		if (((preg_replace('# \(.*#','',$_download_row['nice_title'])=='ocPortal Version '.$version) || (preg_replace('#(\.0)* \(.*#','',$_download_row['nice_title'])=='ocPortal Version '.preg_replace('#(\.0)*#','',$version))) && (strpos($_download_row['nice_title'],'manual')===false))
+		if (((preg_replace('# \(.*#','',$_download_row['nice_title'])=='ocPortal Version '.$version_pretty) || (preg_replace('#(\.0)* \(.*#','',$_download_row['nice_title'])=='ocPortal Version '.preg_replace('#(\.0)*#','',$version_pretty))) && (strpos($_download_row['nice_title'],'manual')===false))
 		{
 			$download_row=$_download_row;
 			break;
@@ -472,16 +430,12 @@ function load_download_rows()
 
 function old_style()
 {
-	$version=get_param('version');
-	$version=str_replace('-','.',$version);
+	require_code('version2');
+	$dotted=get_version_dotted__from_anything(get_param('version'));
+	$version_pretty=get_version_pretty__from_dotted($dotted);
 
-	$_description=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.name','description',array('validated'=>1,'text_original'=>'ocPortal Version '.$version));
+	$_description=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.name','description',array('validated'=>1,'text_original'=>'ocPortal Version '.$version_pretty));
 
-	if (is_null($_description))
-	{
-		$version=str_replace('-','.',get_param('version'));
-		$_description=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.name','description',array('validated'=>1,'text_original'=>'ocPortal Version '.$version));
-	}
 	if (is_null($_description))
 	{
 		echo do_lang('OC_NON_EXISTANT_VERSION');

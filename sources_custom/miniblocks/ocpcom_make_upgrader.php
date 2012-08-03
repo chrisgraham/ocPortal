@@ -91,19 +91,18 @@ echo <<<END
 END;
 		return;
 	}
-	if ((strlen($b)==2) && ($b[0]=='0')) $b=substr($b,1);
-	$from_version=$a.'.'.$b;
-	if (($c!='0') && ($c!='')) $from_version.='.'.$c;
-	if ($d!='')
-	{
-		if (substr($d,0,2)=='rc') $d=strtoupper($d);
-		if (substr($d,0,2)!='RC') $d=strtolower($d);
-		$d=str_replace(' ','',$d);
-		$d=str_replace('-','',$d);
-		if ($d!='final') $from_version.=' '.$d;
-	}
+
+	$a=rtrim(preg_replace('#^(0\s)#','',$a));
+	$b=rtrim(preg_replace('#^(0\s)#','',$b));
+	$c=rtrim(preg_replace('#^(0\s)#','',$c));
+	$d=rtrim(preg_replace('#^(0\s)#','',$d));
+
+	$from_version=$a;
+	if ($b!='') $from_version.='.'.$b;
+	if ($c!='') $from_version.='.'.$c;
+	if ($d!='') $from_version.='.'.$d;
 }
-$from_version=preg_replace('#^(?U)([^ ]*)(?-U)(\.0)+( [^ ]*)?$#','${1}${3}',$from_version); // Remove any trailing zeroes
+$from_version=get_version_dotted__from_anything($from_version); // Canonicalise
 
 require_code('uploads/website_specific/ocportal.com/upgrades/make_upgrader.php');
 $ret=make_upgrade_get_path($from_version,$to_version);

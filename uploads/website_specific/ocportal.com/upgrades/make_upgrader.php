@@ -114,7 +114,7 @@ function make_upgrade_get_path($from_version,$to_version)
 	return array($tar_path,$err);
 }
 
-function find_download($version)
+function find_download($version_pretty)
 {
 	global $DOWNLOAD_ROWS;
 	load_download_rows();
@@ -123,16 +123,16 @@ function find_download($version)
 	foreach ($DOWNLOAD_ROWS as $_download_row)
 	{
 		// When debugging, check downloads are validated
-		if (($_download_row['nice_title']=='ocPortal Version '.$version.' (manual)') || ($_download_row['nice_title']=='ocPortal Version '.$version.' (bleeding-edge, manual)'))
+		if (($_download_row['nice_title']=='ocPortal Version '.$version_pretty.' (manual)') || ($_download_row['nice_title']=='ocPortal Version '.$version_pretty.' (bleeding-edge, manual)'))
 		{
 			$download_row=$_download_row;
 			break;
 		}
 	}
 	
-	if ((is_null($download_row)) && (substr_count($version,'.')<2))
+	if ((is_null($download_row)) && (substr_count($version_pretty,'.')<2))
 	{
-		return find_download($version.'.0');
+		return find_download($version_pretty.'.0');
 	}
 	
 	return $download_row;
@@ -194,30 +194,15 @@ function make_upgrader_do_dir($build_path,$new_base_path,$old_base_path,$dir='',
 	{
 		$is_dir=is_dir($new_base_path.'/'.$dir.$file);
 
-		if (($file=='.') || ($file=='..')) continue;
-		if ($pretend_dir.$file=='info.php') continue;
-		if ($pretend_dir.$file=='install.php') continue;
-		if ($pretend_dir.$file=='data_custom/functions.dat') continue;
-		if ($pretend_dir.$file=='data_custom/errorlog.php') continue;
-		if ($pretend_dir.$file=='data_custom/execute_temp.php') continue;
-		if ($pretend_dir.$file=='data_custom/files.xml') continue;
-		if ($file=='download_tree_made.htm') continue;
-		if ($file=='seedy_tree_made.htm') continue;
-		if (substr($pretend_dir.$file,-4)=='.log') continue;
+		if (should_ignore_file($pretend_dir.$file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_VOLATILE,0)) continue;
 
 		if ($is_dir)
 		{
-			if ($file!='sites')
-			{
-				@mkdir($build_path.'/'.$pretend_dir.$file);
-				make_upgrader_do_dir($build_path,$new_base_path,$old_base_path,$dir.$file.'/',$pretend_dir.$file.'/');
+			@mkdir($build_path.'/'.$pretend_dir.$file);
+			make_upgrader_do_dir($build_path,$new_base_path,$old_base_path,$dir.$file.'/',$pretend_dir.$file.'/');
 
-				// If it's empty still, delete it
-				@rmdir($build_path.'/'.$pretend_dir.$file);
-			} else
-			{
-				make_upgrader_do_dir($build_path,$new_base_path,$old_base_path,$dir.$file.'/',$pretend_dir);
-			}
+			// If it's empty still, delete it
+			@rmdir($build_path.'/'.$pretend_dir.$file);
 		}
 		else
 		{

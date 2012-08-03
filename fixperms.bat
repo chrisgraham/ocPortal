@@ -32,11 +32,11 @@ cacls data_custom\errorlog.php /e /g %user%:F
 cacls data_custom\ocp_sitemap.xml /e /g %user%:F
 cacls data_custom\modules\admin_stats /e /g %user%:F
 cacls imports\* /e /g %user%:F
-cacls imports\mods\* /e /g %user%:F
+cacls imports\addons\* /e /g %user%:F
 cacls exports\* /e /g %user%:F
 cacls exports\backups\* /e /g %user%:F
 cacls exports\file_backups\* /e /g %user%:F
-cacls exports\mods\* /e /g %user%:F
+cacls exports\addons\* /e /g %user%:F
 cacls uploads\* /e /g %user%:F
 cacls uploads\banners\* /e /g %user%:F
 cacls uploads\catalogues\* /e /g %user%:F
@@ -173,11 +173,11 @@ icacls data_custom\errorlog.php /grant %user%:(M)
 icacls ocp_sitemap.xml /grant %user%:(M)
 icacls data_custom\modules\admin_stats /grant %user%:(M)
 icacls imports\* /grant %user%:(M)
-icacls imports\mods\* /grant %user%:(M)
+icacls imports\addons\* /grant %user%:(M)
 icacls exports\* /grant %user%:(M)
 icacls exports\backups\* /grant %user%:(M)
 icacls exports\file_backups\* /grant %user%:(M)
-icacls exports\mods\* /grant %user%:(M)
+icacls exports\addons\* /grant %user%:(M)
 icacls uploads\* /grant %user%:(M)
 icacls uploads\banners\* /grant %user%:(M)
 icacls uploads\catalogues\* /grant %user%:(M)

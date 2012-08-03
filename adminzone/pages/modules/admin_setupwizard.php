@@ -91,7 +91,7 @@ class Module_admin_setupwizard
 
 		require_code('form_templates');
 
-		$dh=opendir(get_custom_file_base().'/imports/mods/');
+		$dh=opendir(get_custom_file_base().'/imports/addons/');
 		$addons_available=array();
 		while (($file=readdir($dh))!==false)
 		{
@@ -766,9 +766,9 @@ class Module_admin_setupwizard
 
 						if (count($dependencies)==0)
 						{
-							// Archive it off to exports/mods
+							// Archive it off to exports/addons
 							$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_row['addon_name'])).'.tar';
-							create_addon($file,explode(chr(10),$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/mods');
+							create_addon($file,explode(chr(10),$addon_row['addon_files']),$addon_row['addon_name'],implode(',',$addon_row['addon_incompatibilities']),implode(',',$addon_row['addon_dependencies']),$addon_row['addon_author'],$addon_row['addon_organisation'],$addon_row['addon_version'],$addon_row['addon_description'],'imports/addons');
 
 							uninstall_addon($addon_row['addon_name']);
 						}

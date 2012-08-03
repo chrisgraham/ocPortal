@@ -665,9 +665,9 @@ function _fatal_exit($text,$return=false)
 	}
 
 	// Supplement error message with some useful info
-	if ((function_exists('ocp_version_full')) && (function_exists('ocp_srv')))
+	if ((function_exists('ocp_version_pretty')) && (function_exists('ocp_srv')))
 	{
-		$sup=' (version: '.ocp_version_full().', PHP version: '.phpversion().', URL: '.ocp_srv('REQUEST_URI').')';
+		$sup=' (version: '.ocp_version_pretty().', PHP version: '.phpversion().', URL: '.ocp_srv('REQUEST_URI').')';
 	} else
 	{
 		$sup='';
@@ -793,13 +793,13 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 	)
 	{
 		require_code('mail');
-		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);
+		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_pretty(),$mail,array('errors_final'.strval(ocp_version()).'@ocportal.com'),'','','',3,NULL,true,NULL,true);
 	}
 	if (($ocproducts) && (!is_null(get_value('agency_email_address'))))
 	{
 		require_code('mail');
 		$agency_email_address=get_value('agency_email_address');
-		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_full(),$mail,array($agency_email_address),'','','',3,NULL,true,NULL,true);
+		mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()).' '.ocp_version_pretty(),$mail,array($agency_email_address),'','','',3,NULL,true,NULL,true);
 	}
 }
 

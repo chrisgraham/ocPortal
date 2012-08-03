@@ -146,7 +146,7 @@ if ($type=='auto_probe')
 				}
 			} else
 			{
-				if (!should_ignore_file($file,IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_HIDDEN_FILES | IGNORE_THEMES | IGNORE_CUSTOM_ZONES | IGNORE_REVISION_FILES | IGNORE_EDITFROM_FILES))
+				if (!should_ignore_file($file,IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_HIDDEN_FILES | IGNORE_CUSTOM_THEMES | IGNORE_CUSTOM_ZONES | IGNORE_REVISION_FILES | IGNORE_EDITFROM_FILES))
 					$manual_changes['maybe_delete'][$file]=NULL;
 			}
 		}
@@ -208,7 +208,7 @@ if ($type=='go')
 
 	require_code('tar');
 	$generate_filename='upgrade-to-git--'.get_timezoned_date(time(),false,false,false,true).'.tar';
-	$gpath=get_custom_file_base().'/exports/mods/'.$generate_filename;
+	$gpath=get_custom_file_base().'/exports/addons/'.$generate_filename;
 	$tar=tar_open($gpath,'wb');
 
 	$probe_dir=post_param('probe_dir','');
