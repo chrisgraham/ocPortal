@@ -16,6 +16,9 @@
 function init__make_release()
 {
 	require_code('files2');
+
+	// Make sure builds folder exists
+	get_builds_path();
 }
 
 function make_files_manifest()
@@ -713,7 +716,7 @@ function make_installers($skip_file_grab=false)
 
 function get_builds_path()
 {
-	$builds_path=dirname(get_file_base()).'/exports';
+	$builds_path=get_file_base().'/exports';
 	if (!file_exists($builds_path.'/builds'))
 	{
 		mkdir($builds_path.'/builds',0777) OR warn_exit('Could not make master build folder');

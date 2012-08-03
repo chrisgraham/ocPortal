@@ -2383,6 +2383,7 @@ ocportal_release_build
  - sources_custom/hooks/systems/do_next_menus/make_release.php
  - adminzone/pages/minimodules_custom/push_bugfix.php
  - adminzone/pages/minimodules_custom/plug_guid.php
+ - exports/builds/index.html
  - data_custom/builds
  - data_custom/builds/.DS_Store
  - data_custom/builds/debian

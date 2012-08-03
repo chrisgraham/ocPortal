@@ -220,6 +220,8 @@ if (count($files)==0)
 	$git_status_3='Git commit ID';
 }
 
+$post_url=escape_html(static_evaluate_tempcode(get_self_url()));
+
 echo <<<END
 <p>This script will push individual bug fixes to all the right places. Run it after you've developed a fix, and tell it how to link the fix in and what the fix is.</p>
 
@@ -230,7 +232,7 @@ echo <<<END
 }
 </style>
 
-<form action="#" method="post" id="bugfix_form">
+<form action="{$post_url}" method="post" id="bugfix_form">
 	<fieldset>
 		<legend>Classification</legend>
 

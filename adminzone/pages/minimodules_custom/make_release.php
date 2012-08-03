@@ -21,6 +21,8 @@ If running on Windows, you need to install the following commands in your path..
  - gunzip.exe, gzip.exe, and tar.exe
 */
 
+disable_php_memory_limit();
+
 $type=get_param('type','0');
 
 $title=get_screen_title('ocPortal release assistance tool',false);
@@ -48,10 +50,28 @@ function phase_0()
 	require_code('version2');
 	$on_disk_version=get_version_dotted();
 
+	if (strpos($on_disk_version,'alpha')!==false)
+		$release_description='This version is an alpha release of the next major version of ocPortal';
+	elseif (strpos($on_disk_version,'beta')!==false)
+		$release_description='This version is a beta release of the next major version of ocPortal';
+	elseif (strpos($on_disk_version,'RC')!==false)
+		$release_description='This version is a release candidate for the next major version of ocPortal';
+	elseif (substr_count($on_disk_version,'.')<2)
+		$release_description='This version is the gold release of the next version of ocPortal';
+	else
+		$release_description='This version is a patch release that introduces a number of bug fixes since the last release';
+
+	$changes='All reported bugs since the last release have been fixed';
+	if (strpos($release_description,'patch release')!==false)
+		$changes.=' (for a full list, see the [page="site:catalogues:index:bugs"]bugs catalogue[/page]).';
+	if (strpos($release_description,'gold')!==false) $changes='TODO';
+
+	$post_url=static_evaluate_tempcode(get_self_url(false,false,array('type'=>'1')));
+
 	echo '
 	<p>Have you run a code quality check on the non-module files (at the very least?). I am assuming that any non-trivial fixes have been tested.</p>
 
-	<form method="post" action="make_release.php?type=1">
+	<form method="post" action="'.escape_html($post_url).'">
 		<p>I am going to ask you some questions which will allow you to quickly make the decisions needed to get the whole release out without any additional thought. If you don\'t like these questions (such as finding them personally intrusive), I don\'t care&hellip; I am merely a machine, a device, working against a precomputed script. Now that is out of the way&hellip;</p>
 		<hr />
 		<fieldset>
@@ -59,30 +79,33 @@ function phase_0()
 			<label for="version">What is the full version number (no bloody A, B, C, or D)?</label>
 			<input maxlength="14" size="14" readonly="readonly" type="text" name="version" id="version" value="'.escape_html($on_disk_version).'" />
 		</fieldset>
+		<br />
 		<fieldset>
 			<legend>Description</legend>
 			<label for="descrip">Release description.</label>
-			<input type="text" size="100" name="descrip" id="descrip" value="This version is a patch release that introduces a number of bug fixes since the last release" />
+			<input type="text" size="100" name="descrip" id="descrip" value="'.escape_html($release_description).'" />
 		</fieldset>
+		<br />
 		<fieldset>
 			<legend>Changes</legend>
 			<label for="changes">What are the changes in this release? You might find the <a href="http://ocportal.com/site/pg/catalogues/index/bugs">bug report database</a> handy, as well as git diffs and sweet-smelling roses.</label>
-			<textarea name="changes" id="changes" style="width: 100%" cols="40" rows="20">All reported bugs since the last release have been fixed (for a full list, see the [page="site:catalogues:index:bugs"]bugs catalogue[/page]).</textarea>
+			<textarea name="changes" id="changes" style="width: 100%" cols="40" rows="20">'.escape_html($changes).'</textarea>
 			</fieldset>
 			<fieldset>
-				<legend>Upgrade necessity</legend>
+			<legend>Upgrade necessity</legend>
 			<p>Upgrading is&hellip;</p>
-			<input type="radio" name="needed" id="unrecommended" value="not recommended for live sites" /><label for="unrecommended">&hellip;not recommended for live sites&hellip;</label><br />
+			<input type="radio" name="needed" id="unrecommended" '.((strpos($release_description,'patch release')===false)?'checked="checked" ':'').'value="not recommended for live sites" /><label for="unrecommended">&hellip;not recommended for live sites&hellip;</label><br />
 			<input type="radio" name="needed" id="not_needed" value="not necessary" /><label for="not_needed">&hellip;not necessary&hellip;</label><br />
 			<input type="radio" name="needed" id="suggested" value="suggested" /><label for="suggested">&hellip;suggested&hellip;</label><br />
-			<input type="radio" name="needed" id="advised" checked="checked" value="strongly advised" /><label for="advised">&hellip;strongly advised&hellip;</label><br />
+			<input type="radio" name="needed" id="advised" '.((strpos($release_description,'patch release')!==false)?'checked="checked" ':'').'value="strongly advised" /><label for="advised">&hellip;strongly advised&hellip;</label><br />
 			<label for="justification">&hellip;due to</label><input type="text" name="justification" id="justification" value="" />
 		</fieldset>
+		<br />
 		<fieldset>
 			<legend style="display: none;">Submit</legend>
 			<input type="checkbox" name="skip" id="skip" value="1" '.$skip_check.' /><label for="skip">Installer already compiled</label>
-			<input type="checkbox" name="bleeding_edge" id="bleeding_edge" value="1" /><label for="bleeding_edge">Bleeding-edge release</label>
-			<input type="submit" value="Shake it baby" />
+			<input type="checkbox" name="bleeding_edge" '.(((strpos($release_description,'patch release')===false) && (strpos($release_description,'gold')===false))?'checked="checked" ':'').'id="bleeding_edge" value="1" /><label for="bleeding_edge">Bleeding-edge release</label>
+			<p><input type="submit" class="button_page" value="Shake it baby" /></p>
 		</fieldset>
 	</form>
 	';
@@ -96,17 +119,28 @@ function phase_1_pre()
 	<ul>
 		<li>Run the <a href="'.escape_html(static_evaluate_tempcode(build_url(array('page'=>'plug_guid'),'adminzone'))).'" target="_blank">plug_guid</a> tool to build needed GUIDs into the PHP.</li>
 		<li>Update copyright dates in PHP code for the current year ('.escape_html($year).').</li>
-		<li>Build install.sql (taking into account it must run on different PHP versions- make sure the CREATE TABLE code is equivalent to the old version of the file, i.e. <tt>DEFAULT CHARSET=utf8</tt> is stripped).</li>
-		<li>Build install*.sql by cutting up install.sql to the same boundaries as was used in the old versions of the files.</li>
-		<li>Run the unit tests, with debug mode on, on the custom ocPortal PHP version.</li>
+		<li>Build <kbd>install.sql</kbd> (taking into account it must run on different PHP versions<!--- make sure the CREATE TABLE code is equivalent to the old version of the file, i.e. <tt>DEFAULT CHARSET=utf8</tt> is stripped)-->.</li>
+		<li>Build <kbd>install*.sql</kbd> by cutting up <kbd>install.sql</kbd> to the same boundaries as was used in the old versions of the files.</li>
+		<li>Run the <a href="'.escape_html(get_base_url().'/_test').'">unit tests</a><!--, with debug mode on, on the custom ocPortal PHP version-->.</li>
 		<li>Run a HipHop PHP compile and looking at <kbd>hphp/CodeError.js</kbd> and make sure distributed code has no expected warnings</li>
 		<li>Run a PHPStorm Code Inspection and see if any warning stands out as a bug</li>
 		<li>Write custom theme upgrading code into <kbd>sources/upgrade.php</kbd>. Make sure all ocProducts themes are up-to-date (CSS changes, template changes, theme image changes).</li>
 	</ul>
 	';
 
+	if (strpos(file_get_contents(get_file_base().'/install.sql'),'DEFAULT CHARSET=')!==false)
+	{
+		warn_exit('install.sql is not properly stripped down.');
+	}
+	if (strpos(file_get_contents(get_file_base().'/install1.sql'),file_get_contents(get_file_base().'/install.sql'))===false)
+	{
+		warn_exit('install1.sql seems out-dated, make sure install.sql is chopped up between install*.sql properly.');
+	}
+
+	$post_url=static_evaluate_tempcode(get_self_url(false,false,array('type'=>'1')));
+
 	echo '
-		<form action="make_release.php?type=1" method="post">
+		<form action="'.escape_html($post_url).'" method="post">
 			<input type="hidden" name="intermediary_tasks" value="1" />
 	';
 	foreach ($_POST as $key=>$val)
@@ -148,8 +182,10 @@ function phase_1()
 		echo make_installers();
 	}
 
+	$post_url=static_evaluate_tempcode(get_self_url(false,false,array('type'=>'2')));
+
 	echo '
-		<form action="'.escape_html(static_evaluate_tempcode(build_url(array('page'=>'_SELF','type'=>'2'),'_SELF'))).'" method="post">
+		<form action="'.escape_html($post_url).'" method="post">
 			<input type="hidden" name="needed" value="'.escape_html($needed).'" />
 			<input type="hidden" name="justification" value="'.escape_html($justification).'" />
 			<input type="hidden" name="version" value="'.escape_html($version_dotted).'" />
