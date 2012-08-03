@@ -541,7 +541,7 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 	sort($files_to_check);
 	foreach ($files_to_check as $file)
 	{
-		if (should_ignore_file($file,IGNORE_BUNDLED_VOLATILE)) continue;
+		if (should_ignore_file($file,IGNORE_BUNDLED_VOLATILE | IGNORE_NONBUNDLED_SCATTERED)) continue;
 
 		if (preg_match('#^[^/]+\.tpl$#',$file)!=0)
 			$real_file='themes/default/templates/'.$file;
@@ -963,7 +963,8 @@ function check_perms()
 					$dh=@opendir(get_file_base().'/'.$_chmod);
 					if ($dh!==false)
 					{
-						while (($file=readdir($dh))!==false) if (!should_ignore_file($_chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS)) $array[]=$_chmod.'/'.$file;
+						while (($file=readdir($dh))!==false)
+							if (!should_ignore_file($_chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS)) $array[]=$_chmod.'/'.$file;
 						closedir($dh);
 					}
 				}
@@ -972,7 +973,8 @@ function check_perms()
 				$dh=@opendir(get_file_base().'/'.$chmod);
 				if ($dh!==false)
 				{
-					while (($file=readdir($dh))!==false) if (!should_ignore_file($chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS)) $array[]=$chmod.'/'.$file;
+					while (($file=readdir($dh))!==false)
+						if (!should_ignore_file($chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS)) $array[]=$chmod.'/'.$file;
 					closedir($dh);
 				}
 			}
@@ -1038,7 +1040,7 @@ function fix_perms()
 					{
 						while (($file=readdir($dh))!==false)
 						{
-							if (!should_ignore_file($_chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS)) $array[]=$_chmod.'/'.$file;
+							if (!should_ignore_file($_chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_NONBUNDLED_SCATTERED)) $array[]=$_chmod.'/'.$file;
 						}
 						closedir($dh);
 					}
@@ -1050,7 +1052,7 @@ function fix_perms()
 				{
 					while (($file=readdir($dh))!==false)
 					{
-						if (!should_ignore_file($chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS)) $array[]=$chmod.'/'.$file;
+						if (!should_ignore_file($chmod.'/'.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_NONBUNDLED_SCATTERED)) $array[]=$chmod.'/'.$file;
 					}
 					closedir($dh);
 				}
@@ -1148,7 +1150,7 @@ function check_excess_perms($array,$rel='')
 
 			$is_dir=@is_dir($dir.$file);
 
-			if ((should_ignore_file($dir.$file,IGNORE_ACCESS_CONTROLLERS)) && ($is_dir)) continue;
+			if ((should_ignore_file($dir.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_NONBUNDLED_SCATTERED)) && ($is_dir)) continue;
 
 			$relpath=$rel.(($rel=='')?'':'/').$file;
 			$ok=(in_array($relpath,$array)) || (in_array(preg_replace('#^[^/]+/#','site/',$relpath),$array)) || (in_array(preg_replace('#^themes/[^/]+/#','themes/default/',$relpath),$array));
@@ -1192,7 +1194,7 @@ function check_outdated__handle_overrides($dir,$rela,&$master_data,&$hook_files,
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_THEMES | IGNORE_USER_CUSTOMISE | IGNORE_BUNDLED_VOLATILE)) continue;
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_THEMES | IGNORE_USER_CUSTOMISE | IGNORE_BUNDLED_VOLATILE | IGNORE_NONBUNDLED_SCATTERED)) continue;
 
 			$is_dir=@is_dir($dir.$file);
 
@@ -1334,7 +1336,7 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 		}
 		while (($file=readdir($dh))!==false)
 		{
-			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_THEMES | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_NON_REGISTERED)) continue;
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_THEMES | IGNORE_USER_CUSTOMISE | IGNORE_CUSTOM_ZONES | IGNORE_NON_REGISTERED)) continue;
 
 			$is_dir=@is_dir($dir.$file);
 			if (!is_readable($dir.$file)) continue;

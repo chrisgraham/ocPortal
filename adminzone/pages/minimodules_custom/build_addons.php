@@ -7,11 +7,19 @@
 
 */
 
+$_title=get_screen_title('ocPortal addon building tool',false);
+$_title->evaluate_echo();
+
+echo '<p>This has built all the addons into <kbd>exports/addons</kbd>. The next step is to upload them to ocPortal.com, and the <kbd>data_custom/addon_files.txt</kbd> and <kbd>data_custom/addon_details.csv</kbd> files too, and run the <kbd>publish_addons_as_downloads</kbd> Admin Zone minimodule on there.</p>';
+
+echo '<p>What follows is details if you are republishing addons and want to easily put out "This is updated" messages into the comment topics. It\'s not necessary because just uploading the TARs will make the inbuilt ocPortal check script see the addon is updated compared to when a user installed it. However, it is nice to keep users updated if you have time.</p>';
+
+echo '<hr />';
+
 require_code('addons');
 require_code('version');
+require_code('version2');
 require_code('dump_addons');
-$version=ocp_version_number();
-$version_for_name=preg_replace('/\./','',float_to_raw_string($version));
 
 if (!file_exists(get_file_base().'/data_custom/addon_files.txt'))
 {
@@ -74,7 +82,7 @@ if (get_param_integer('export_addons',1)==1)
 
 		if (($only!==NULL) && ($only!==$addon_codename)) continue;
 
-		$file=preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$addon_codename)).$version_for_name.'.tar';
+		$file=$addon_codename.'-'.get_version_branch().'.tar';
 
 		$name=titleify($addon_list[$addon_codename]['Addon name']);
 		$author=$addon_list[$addon_codename]['Author'];
@@ -129,7 +137,7 @@ if (get_param_integer('export_themes',0)==1)
 			if ((array_key_exists('author',$details)) && ($details['author']!='admin')) $author=$details['author'];
 		}
 
-		$file='theme-'.preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$theme)).$version_for_name.'.tar';
+		$file='theme-'.preg_replace('#^[\_\.\-]#','x',preg_replace('#[^\w\.\-]#','_',$theme)).'-'.get_version_branch().'.tar';
 
 		$files2=array();
 		$theme_files=get_directory_contents(get_custom_file_base().'/themes/'.$theme,'themes/'.$theme);
@@ -157,7 +165,7 @@ if (get_param_integer('export_themes',0)==1)
 	if ($only!==NULL) echo "<p>All themes have been exported to 'export/addons/'</p>\n";
 }
 
-echo "<p>Done</p>\n";
+echo "<hr /><p><strong>Done</strong></p>\n";
 
 function show_updated_comments_code($file,$name)
 {

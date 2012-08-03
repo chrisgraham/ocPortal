@@ -192,7 +192,7 @@ function tar_add_folder_incremental(&$resource,$logfile,$path,$threshold,$max_si
 			if (($entry=='.') || ($entry=='..')) continue;
 
 			$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
-			if ((($all_files) || (!should_ignore_file($_subpath))) && ($entry!='backups'))
+			if (($all_files) || (!should_ignore_file($_subpath)))
 			{
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
 				if (!is_readable($full)) continue;
@@ -256,7 +256,7 @@ function tar_add_folder(&$resource,$logfile,$path,$max_size=NULL,$subpath='',$av
 			if ($tick) @print(' ');
 
 			$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
-			if ((($all_files) || (!should_ignore_file($_subpath))) && ($entry!='backups'))
+			if (($all_files) || (!should_ignore_file($_subpath)))
 			{
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
 				if (!is_readable($full)) continue;

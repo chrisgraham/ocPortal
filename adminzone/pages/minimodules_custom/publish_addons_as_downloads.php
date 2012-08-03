@@ -10,9 +10,8 @@
 require_code('addons');
 require_code('dump_addons');
 require_code('version');
+require_code('version2');
 require_code('downloads2');
-
-$version_for_name=float_to_raw_string(ocp_version_number());
 
 $get_cat=get_param('cat',NULL);
 if($get_cat === NULL)
@@ -36,8 +35,8 @@ if (get_param_integer('import_addons',1)==1)
 		$addon_arr=get_addons_list_under_category($category);
 		foreach ($addon_arr as $addon)
 		{
-			$file=$addon.'-'.$version_for_name.'.tar';
-			$from=get_custom_file_base().'/exports/addons/'.$addon.'-'.$version_for_name.'.tar';
+			$file=$addon.'-'.get_version_branch().'.tar';
+			$from=get_custom_file_base().'/exports/addons/'.$addon.'-'.get_version_branch().'.tar';
 			$to=get_custom_file_base()."/uploads/downloads/".$file;
 			@unlink($to);
 			copy($from, $to);
@@ -104,7 +103,7 @@ if (get_param_integer('import_themes',1)==1)
 		if (preg_match('#^theme-.*\.tar$#',$file)!=0)
 		{
 			$from=get_custom_file_base().'/exports/addons/'.$file;
-			$new_file=basename($file,'.tar').'-'.$version_for_name.'.tar';
+			$new_file=basename($file,'.tar').'-'.get_version_branch().'.tar';
 			$to=get_custom_file_base()."/uploads/downloads/".$new_file;
 			@unlink($to);
 			copy($from, $to);

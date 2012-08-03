@@ -57,7 +57,7 @@ function get_version_branch($general=NULL)
 {
 	if (is_null($general)) $general=ocp_version_number();
 
-	return float_to_raw_string($general).'.x';
+	return float_to_raw_string($general,10,true).'.x';
 }
 
 /**

@@ -482,12 +482,6 @@ if (!function_exists('file_get_contents'))
 	}
 }
 
-// These are allowed for accessible form reasons
-/*foreach ($_GET as $key=>$val)
-	if ($val=='****') $val='';
-foreach ($_POST as $key=>$val)
-	if ($val=='****') $val='';*/
-
 global $_REQUIRED_CODE;
 $_REQUIRED_CODE=array();
 

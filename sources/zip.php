@@ -36,7 +36,7 @@ function zip_scan_folder($path,$subpath='')
 		while (($entry=readdir($dh))!==false)
 		{
 			$_subpath=($subpath=='')?$entry:($subpath.'/'.$entry);
-			if ((!should_ignore_file($_subpath)) && ($entry!='backups'))
+			if (!should_ignore_file($_subpath))
 			{
 				$full=($path=='')?$_subpath:($path.'/'.$_subpath);
 				if (!is_readable($full)) continue;

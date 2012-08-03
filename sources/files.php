@@ -37,8 +37,8 @@ function init__files()
 	define('IGNORE_CUSTOM_THEMES',64);
 	define('IGNORE_NON_REGISTERED',128);
 	define('IGNORE_USER_CUSTOMISE',256);
-	define('IGNORE_NONBUNDLED_SCATTERED',512); // Has by default
-	define('IGNORE_BUNDLED_VOLATILE',1024); // Has by default
+	define('IGNORE_NONBUNDLED_SCATTERED',512);
+	define('IGNORE_BUNDLED_VOLATILE',1024);
 	define('IGNORE_NON_EN_SCATTERED_LANGS',2048);
 }
 
@@ -179,7 +179,7 @@ function better_parse_ini_file($filename,$file=NULL)
  * @param  integer		Set this to 0 if you don't want the default IGNORE_* constants to carry through
  * @return boolean		Whether it should be ignored
  */
-function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
+function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 {
 	$bitmask=$bitmask | $bitmask_defaults;
 
@@ -279,7 +279,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		$ignore_filenames+=array(
 			//'files.dat'=>'data', Actually is now (core.php)
 			//'files_previous.dat'=>'data', Actually is now (core.php)
-		}
+		);
 	}
 	if (($bitmask & IGNORE_BUNDLED_VOLATILE)!=0)
 	{
@@ -433,7 +433,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		if ($filepath=='exports/static') return true; // Empty directory, so has to be a special exception
 		if (file_exists(get_custom_file_base().'/data_custom/addon_files.txt'))
 		{
-			if (strpos(get_file_contents(unixify_line_format(get_custom_file_base().'/data_custom/addon_files.txt')),' - '.$filepath.chr(10))!==false)
+			if (strpos(file_get_contents(unixify_line_format(get_custom_file_base().'/data_custom/addon_files.txt')),' - '.$filepath.chr(10))!==false)
 			{
 				return true;
 			}
