@@ -982,7 +982,7 @@ class virtual_bash
 				{
 					//It *is* a script, so let's run it :)
 					$this->parse_runtime['occle_command']=COMMAND_SCRIPT;
-					$script_contents=unixify_line_format(file_get_contents($script_file,FILE_TEXT));
+					$script_contents=unixify_line_format(file_get_contents($script_file));
 					$script_lines=explode("\n",$script_contents);
 
 					foreach ($script_lines as $script_line)

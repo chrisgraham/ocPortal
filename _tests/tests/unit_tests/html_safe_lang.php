@@ -31,7 +31,7 @@ class html_safe_lang_test_set extends ocp_test_case
 
 		//echo '<h2>Pre-Processing&hellip;</h2>';
 		$LANGUAGE_STRINGS=array();
-		if ($dh=opendir(get_file_base().'/lang/EN'))
+		if (($dh=opendir(get_file_base().'/lang/EN'))!==false)
 		{
 			while (($FILE=readdir($dh))!==false)
 			{
@@ -58,10 +58,10 @@ class html_safe_lang_test_set extends ocp_test_case
 		//echo '<h2>Processing for plain-usages&hellip;</h2>';
 		$LANGUAGE_CURRENT=array();
 		$forms=array(
-						 '#do_lang\(\'(.+?)\'(,|\))#ims',
-						 '#do_lang\(\\\\\'(.+?)\\\\\'(,|\))#ims',
-						 '#log_it\(\'(.+?)\'(\,|\))#ims',
-						 );
+			'#do_lang\(\'(.+?)\'(,|\))#ims',
+			'#do_lang\(\\\\\'(.+?)\\\\\'(,|\))#ims',
+			'#log_it\(\'(.+?)\'(\,|\))#ims',
+		);
 		foreach ($forms as $php)
 		{
 			$this->do_dir(get_file_base(),$php,'php');
@@ -71,10 +71,10 @@ class html_safe_lang_test_set extends ocp_test_case
 		//echo '<h2>Processing for HTML-usages&hellip;</h2>';
 		$LANGUAGE_CURRENT=array();
 		$forms=array(
-						 '#do_lang_tempcode\(\'(.+?)\'(,|\))#ims',
-						 '#do_lang_tempcode\(\\\\\'(.+?)\\\\\'(,|\))#ims',
-						 '#get_page_title\(\'(.+?)\'(\,|\))#ims',
-						 );
+			'#do_lang_tempcode\(\'(.+?)\'(,|\))#ims',
+			'#do_lang_tempcode\(\\\\\'(.+?)\\\\\'(,|\))#ims',
+			'#get_page_title\(\'(.+?)\'(\,|\))#ims',
+		);
 		foreach ($forms as $php)
 		{
 			$this->do_dir(get_file_base(),$php,'php');
@@ -123,7 +123,7 @@ class html_safe_lang_test_set extends ocp_test_case
 	function do_dir($dir,$exp,$ext)
 	{
 		global $FILE2;
-		if ($dh=opendir($dir))
+		if (($dh=opendir($dir))!==false)
 		{
 			while (($file=readdir($dh))!==false)
 			{
@@ -137,7 +137,7 @@ class html_safe_lang_test_set extends ocp_test_case
 							//echo htmlentities($file).', ';
 							$this->do_file($exp);
 						}
-					} else if (is_dir($dir.'/'.$file))
+					} elseif (is_dir($dir.'/'.$file))
 					{
 						$this->do_dir($dir.'/'.$file,$exp,$ext);
 					}

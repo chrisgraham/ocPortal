@@ -19,10 +19,9 @@
 *
 */
 
-// FIX PATH
+// Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
 $deep='data_custom/upload-crop/';
 $FILE_BASE=str_replace($deep,'',$FILE_BASE);
 $FILE_BASE=str_replace(str_replace('/','\\',$deep),'',$FILE_BASE);
@@ -30,7 +29,7 @@ if (substr($FILE_BASE,-4)=='.php')
 {
    $a=strrpos($FILE_BASE,'/');
    $b=strrpos($FILE_BASE,'\\');
-   $FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+   $FILE_BASE=dirname($FILE_BASE);
 }
 $RELATIVE_PATH='';
 @chdir($FILE_BASE);

@@ -36,7 +36,7 @@ class Hook_themewizard_equation
 		$css_path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom/global.css';
 		if (!file_exists($css_path))
 			$css_path=get_file_base().'/themes/default/css/global.css';
-		$css_file_contents=file_get_contents($css_path,FILE_TEXT);
+		$css_file_contents=file_get_contents($css_path);
 
 		$seed=find_theme_seed($theme);
 		$dark=(strpos($css_file_contents,',#000000,WB,')!==false);

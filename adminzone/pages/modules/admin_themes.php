@@ -1154,7 +1154,7 @@ class Module_admin_themes
 			foreach ($filesarray as $file)
 			{
 				$full_path=((strpos($file,'/default/templates/')!==false)?get_file_base():get_custom_file_base()).'/themes/'.$file;
-				$contents=file_get_contents($full_path,FILE_TEXT);
+				$contents=file_get_contents($full_path);
 				if ((strpos(strtolower($contents),strtolower($search))!==false) || (strpos(strtolower($file),strtolower($search))!==false))
 				{
 					$_url=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>$file),'_SELF');
@@ -1272,13 +1272,13 @@ class Module_admin_themes
 			if (file_exists(get_file_base().'/themes/'.$restore_from))
 			{
 				$path=get_file_base().'/themes/'.$restore_from;
-				$contents=file_get_contents($path,FILE_TEXT);
+				$contents=file_get_contents($path);
 				$last_path=$path;
 			}
 			elseif (file_exists(get_custom_file_base().'/themes/'.$restore_from))
 			{
 				$path=get_custom_file_base().'/themes/'.$restore_from;
-				$contents=file_get_contents($path,FILE_TEXT);
+				$contents=file_get_contents($path);
 				$last_path=$path;
 			} else
 			{
@@ -1357,7 +1357,7 @@ class Module_admin_themes
 				$old_contents=@file_get_contents(get_file_base().'/themes/default/css/'.$_file);
 			} else
 			{
-				$old_contents=@file_get_contents(get_file_base().'/themes/default/templates/'.$_file,FILE_TEXT);
+				$old_contents=@file_get_contents(get_file_base().'/themes/default/templates/'.$_file);
 			}
 			if ($old_contents===false) $old_contents='';
 
@@ -1468,7 +1468,7 @@ class Module_admin_themes
 			$guids=array();
 			$file_bits=explode('/',$file);
 			$clean_file=str_replace('.tpl','',$file_bits[count($file_bits)-1]);
-			$_guids=@unserialize(@file_get_contents(get_file_base().'/data/guids.dat',FILE_TEXT));
+			$_guids=@unserialize(@file_get_contents(get_file_base().'/data/guids.dat'));
 			if (($_guids!==false) && (array_key_exists($clean_file,$_guids)))
 			{
 				foreach ($_guids[$clean_file] as $_guid)
@@ -1617,7 +1617,7 @@ class Module_admin_themes
 					// Make base-hash-thingy
 					$myfile=@fopen($fullpath.'.editfrom','wt');
 					if ($myfile===false) intelligent_write_error($fullpath);
-					$hash=file_get_contents(get_file_base().'/themes/'.post_param('f'.$i.'file'),FILE_TEXT);
+					$hash=file_get_contents(get_file_base().'/themes/'.post_param('f'.$i.'file'));
 					if (fwrite($myfile,$hash)<strlen($hash)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 					fclose($myfile);
 					fix_permissions($fullpath.'.editfrom');

@@ -28,25 +28,15 @@ if ((!array_key_exists('type',$_GET)) && (file_exists('install_locked')))
 global $IN_MINIKERNEL_VERSION;
 $IN_MINIKERNEL_VERSION=1;
 
-// FIX PATH
+// Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
-if (substr($FILE_BASE,-4)=='.php')
-{
-	$a=strrpos($FILE_BASE,'/');
-	if ($a===false) $a=0;
-	$b=strrpos($FILE_BASE,'\\');
-	if ($b===false) $b=0;
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
-}
+$FILE_BASE=dirname($FILE_BASE);
 $RELATIVE_PATH='';
 @chdir($FILE_BASE);
 
 error_reporting(E_ALL);
 
-if (!defined('FILE_TEXT')) define('FILE_TEXT',false);
-if (!defined('FILE_BINARY')) define('FILE_BINARY',false);
 @ini_set('display_errors','1');
 @ini_set('assert.active','0');
 
@@ -293,7 +283,7 @@ function step_1()
 				$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('INSTALL_SLOW_SERVER'))));
 		} else
 		{
-			$files=@unserialize(file_get_contents(get_file_base().'/data/files.dat',FILE_TEXT));
+			$files=@unserialize(file_get_contents(get_file_base().'/data/files.dat'));
 			if (($files!==false) && (!file_exists(get_file_base().'/.svn')))
 			{
 				$missing=array();
@@ -316,7 +306,7 @@ function step_1()
 					if ($file=='data/areaedit/plugins/SpellChecker/aspell/bin/en-only.rws') continue;
 					if (substr($file,-4)=='.ttf') continue;
 
-					$contents=@file_get_contents(get_file_base().'/'.$file,FILE_BINARY);
+					$contents=@file_get_contents(get_file_base().'/'.$file);
 					if (!file_exists(get_file_base().'/'.$file))
 					{
 						$missing[]=$file;
@@ -537,8 +527,8 @@ function step_2()
 	}
 	else
 	{
-		$licence=@file_get_contents(get_file_base().'/text/'.$_POST['default_lang'].'/licence.txt',FILE_TEXT);
-		if ($licence=='') $licence=file_get_contents(get_file_base().'/text/EN/licence.txt',FILE_TEXT);
+		$licence=@file_get_contents(get_file_base().'/text/'.$_POST['default_lang'].'/licence.txt');
+		if ($licence=='') $licence=file_get_contents(get_file_base().'/text/EN/licence.txt');
 	}
 
 	$hidden=build_keep_post_fields();
@@ -2248,7 +2238,7 @@ function handle_self_referencing_embedment()
 				if (!file_exists(get_file_base().'/themes/default/css/'.$css_file.'.css'))
 				{
 					$file=file_array_get('themes/default/css/'.$css_file.'.css');
-				} else $file=file_get_contents(get_file_base().'/themes/default/css/'.$css_file.'.css',FILE_TEXT);
+				} else $file=file_get_contents(get_file_base().'/themes/default/css/'.$css_file.'.css');
 				$file=preg_replace('#\{\$IMG;?\,([^,\}\']+)\}#','install.php?type=themes/default/images/${1}.png',$file);
 
 				require_code('tempcode_compiler');
@@ -2269,7 +2259,7 @@ function handle_self_referencing_embedment()
 			{
 				$file=file_array_get('themes/default/css/install.css');
 				echo $file;
-			} else $file=file_get_contents(get_file_base().'/themes/default/css/install.css',FILE_TEXT);
+			} else $file=file_get_contents(get_file_base().'/themes/default/css/install.css');
 			$file=preg_replace('#\{\$IMG\,([^,\}\']+)\}#','themes/default/images/${1}.png',$file);
 
 			require_code('tempcode_compiler');

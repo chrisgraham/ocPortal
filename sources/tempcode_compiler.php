@@ -484,7 +484,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 									$fullpath=get_custom_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
 									if (!is_file($fullpath))
 										$fullpath=get_file_base().'/themes/'.$_theme.$found[1].$eval.'.tpl';
-									$filecontents=@file_get_contents($fullpath,FILE_TEXT);
+									$filecontents=@file_get_contents($fullpath);
 									if ($filecontents===false) $filecontents='';
 									list($_current_level_data,$_preprocessable_bits)=compile_template($filecontents,$eval,$theme,$lang);
 									$current_level_data=array_merge($current_level_data,$_current_level_data);
@@ -582,7 +582,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	if (isset($FILE_ARRAY))
 	{
 		$html=unixify_line_format(file_array_get('themes/'.$theme.$path.$codename.$suffix));
-	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix,FILE_TEXT));
+	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix));
 
 	if (($GLOBALS['SEMI_DEV_MODE']) && (strpos($html,'.innerHTML')!==false) && (!running_script('install')) && (strpos($html,'Parser hint: .innerHTML okay')===false))
 	{

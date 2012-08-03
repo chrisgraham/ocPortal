@@ -34,12 +34,12 @@ function make_upgrade_get_path($from_version,$to_version)
 		return array(NULL,$err);
 	}
 
-	@set_time_limit(0);
+	if (function_exists('set_time_limit')) @set_time_limit(0);
 	require_code('tar');
 	require_code('m_zip');
 
 	// Find out path/filenames for the upgrade file we're making
-  	$filename=$from_version.'-'.$to_version.'.tar';
+	$filename=$from_version.'-'.$to_version.'.tar';
 	$tar_path=dirname(__FILE__).'/tars/'.$filename;
 	$wip_path=dirname(__FILE__).'/tar_build/'.$filename;
 
@@ -80,19 +80,19 @@ function make_upgrade_get_path($from_version,$to_version)
 	// Unzip old
 	if (!is_null($old_download_row))
 	{
-		@mkdir($old_base_path);
+		@mkdir($old_base_path,0777);
 		if (!url_is_local($old_download_row['url'])) return array(NULL,escape_html('Non-local URL found ('.$old_download_row['url'].'). Unexpected.'));
 		recursive_unzip(get_file_base().'/'.rawurldecode($old_download_row['url']),$old_base_path);
 	}
 
 	// Unzip new
-	@mkdir($new_base_path);
+	@mkdir($new_base_path,0777);
 	if (!url_is_local($new_download_row['url'])) return array(NULL,escape_html('Non-local URL found ('.$new_download_row['url'].'). Unexpected.'));
 	recursive_unzip(get_file_base().'/'.rawurldecode($new_download_row['url']),$new_base_path);
 
 	// Make actual upgrader
 	require_code('files2');
-	@mkdir($wip_path);
+	@mkdir($wip_path,0777);
 	make_upgrader_do_dir($wip_path,$new_base_path,$old_base_path);
 	@copy($old_base_path.'/data/files.dat',$wip_path.'/data/files_previous.dat');
 	$log_file=fopen(dirname(__FILE__).'/tarring.log','wt');
@@ -198,7 +198,7 @@ function make_upgrader_do_dir($build_path,$new_base_path,$old_base_path,$dir='',
 
 		if ($is_dir)
 		{
-			@mkdir($build_path.'/'.$pretend_dir.$file);
+			@mkdir($build_path.'/'.$pretend_dir.$file,0777);
 			make_upgrader_do_dir($build_path,$new_base_path,$old_base_path,$dir.$file.'/',$pretend_dir.$file.'/');
 
 			// If it's empty still, delete it
@@ -211,7 +211,7 @@ function make_upgrader_do_dir($build_path,$new_base_path,$old_base_path,$dir='',
 			{
 				copy($new_base_path.'/'.$dir.$file,$build_path.'/'.$pretend_dir.$file);
 				touch($build_path.'/'.$pretend_dir.$file,filemtime($new_base_path.'/'.$dir.$file));
-	 		}
+			}
 		}
 	}
 }

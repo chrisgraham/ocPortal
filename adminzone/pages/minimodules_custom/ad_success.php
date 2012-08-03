@@ -32,6 +32,7 @@ foreach ($advertiser_sessions as $session)
 	if (array_key_exists($session['the_user'],$users_done)) continue;
 	$users_done[$session['the_user']]=1;
 
+	$matches=array();
 	if (!preg_match('#<param>from=([\w\d]+)</param>#',$session['get'],$matches)) continue;
 	$from=$matches[1];
 	$user=$session['the_user'];

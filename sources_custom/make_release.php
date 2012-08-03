@@ -24,14 +24,14 @@ function make_files_manifest()
 	$files=array();
 	foreach ($_files as $file)
 	{
-		$contents=file_get_contents(get_file_base().'/'.$file,FILE_BINARY);
+		$contents=file_get_contents(get_file_base().'/'.$file);
 		if (basename($file)=='version.php') $contents=preg_replace('/\d{10}/','',$contents);
 		$files[$file]=array(sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',$contents))));
 	}
 	$myfile=fopen(get_file_base().'/data/files.dat','wb');
 	fwrite($myfile,serialize($files));
 	fclose($myfile);
-	fix_permissions(get_file_base().'/data/files.dat','wb');
+	fix_permissions(get_file_base().'/data/files.dat');
 }
 
 function make_installers($skip_file_grab=false)
@@ -188,14 +188,14 @@ function make_installers($skip_file_grab=false)
 				return {$file_count};
 			}";
 		$installer_start=preg_replace('#^\t{3}#m','',$installer_start); // Format it correctly
-		fputs($auto_installer,$installer_start);
+		fwrite($auto_installer,$installer_start);
 		global $DIR_ARRAY;
 		foreach ($DIR_ARRAY as $dir)
 		{
-			fputs($auto_installer,'$DIR_ARRAY[]=\''.$dir.'\';'."\n");
+			fwrite($auto_installer,'$DIR_ARRAY[]=\''.$dir.'\';'."\n");
 		}
-		fputs($auto_installer,'/* QUICK INSTALLER CODE ends */ ?'.'>');
-		fputs($auto_installer,$code);
+		fwrite($auto_installer,'/* QUICK INSTALLER CODE ends */ ?'.'>');
+		fwrite($auto_installer,$code);
 		fclose($auto_installer);
 		fix_permissions($builds_path.'/builds/'.$version_dotted.'/install.php');
 
@@ -276,7 +276,7 @@ function make_installers($skip_file_grab=false)
 		chdir($builds_path.'/builds/debian-build');
 		@mkdir($builds_path.'/builds/debian-build/ocportal-'.$version_dotted,0777);
 		fix_permissions($builds_path.'/builds/debian-build/ocportal-'.$version_dotted,0777);
-		copy($bundled'.gz',$builds_path.'/builds/debian-build/ocportal-'.$version_dotted.'.tar.gz');
+		copy($bundled.'.gz',$builds_path.'/builds/debian-build/ocportal-'.$version_dotted.'.tar.gz');
 		fix_permissions($builds_path.'/builds/debian-build/ocportal-'.$version_dotted.'.tar.gz');
 		$cmd='gunzip '.escapeshellarg($builds_path.'/builds/debian-build/ocportal-'.$version_dotted.'.tar.gz');
 		shell_exec($cmd);
@@ -789,6 +789,8 @@ function populate_build_files_array($dir='',$pretend_dir='')
 {
 	global $FILE_ARRAY,$DIR_ARRAY;
 
+	$builds_path=get_builds_path();
+
 	$out='';
 
 	$version_branch=get_version_branch();
@@ -860,7 +862,7 @@ function populate_build_files_array($dir='',$pretend_dir='')
 
 			// Write the file out
 			$tmp=fopen($builds_path.'/builds/build/'.$version_branch.'/'.$pretend_dir.$file,'wb');
-	 		fwrite($tmp,$FILE_ARRAY[$pretend_dir.$file]);
+			fwrite($tmp,$FILE_ARRAY[$pretend_dir.$file]);
 			fclose($tmp);
 			fix_permissions($builds_path.'/builds/build/'.$version_branch.'/'.$pretend_dir.$file);
 		}

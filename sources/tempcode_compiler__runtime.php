@@ -41,7 +41,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	if (isset($FILE_ARRAY))
 	{
 		$html=unixify_line_format(file_array_get('themes/'.$theme.$path.$codename.$suffix));
-	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix,FILE_TEXT));
+	} else $html=unixify_line_format(file_get_contents($base_dir.filter_naughty($theme.$path.$codename).$suffix));
 
 	if (strpos($html,'{$,Parser hint: pure}')!==false)
 	{

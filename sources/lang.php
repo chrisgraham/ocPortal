@@ -103,7 +103,7 @@ function init__lang()
 			$PAGE_CACHE_FILE=$cache_path;
 		} else
 		{
-			$contents=@file_get_contents($cache_path,FILE_TEXT);
+			$contents=@file_get_contents($cache_path);
 			if ($contents!==false)
 			{
 				$PAGE_CACHE_LANG_LOADED=@unserialize($contents);
@@ -556,7 +556,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 			if (!is_file($lang_file_default)) $lang_file_default=$lang_file;
 			if ((is_file($cache_path)) && ((!is_file($lang_file)) || ((@/*race conditions*/filemtime($cache_path)>filemtime($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file_default)))))
 			{
-				$tmp=@file_get_contents($cache_path,FILE_TEXT);
+				$tmp=@file_get_contents($cache_path);
 				if ($tmp!='')
 				{
 					$unserialized=@unserialize($tmp);

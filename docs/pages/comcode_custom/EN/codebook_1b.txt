@@ -789,4 +789,20 @@ The following steps are required for correct use of ocPortal's language/Comcode/
 3) insert/update/delete your data using the correct Comcode/language/attachment functions. When used correctly, the special functions in ocPortal's API automatically handle Comcode parsing, and attachment uploading. For example, to add some Comcode, you use the [tt]insert_lang_comcode[/tt] function as a filter to convert between Comcode-format string, to translate-table ID number -- and this ID number is then inserted using the normal [tt]query_insert[/tt] function. See how the news addon code does it all for a better example -- it is best understood by copying how existing addons do it.
 4) Retrieve your data using the [tt]get_translated_*[/tt] functions.
 5) Attachment-support requires attachment hooks. These hooks work to grant users permissions to access attachments via their permission to access the resources that reference those attachments. For example, someone can access an attachment to a news article if they have access to that news article, or access to anything else that also references that attachment (such as a forum post).
+
+[title="3"]Non-bundled addons[/title]
+
+If you are working with the ocPortal git repository, you can commit addons into git without them having to be a part of ocPortal.
+
+Only do this if the addon would generally be useful to a decent number of people -- things specific to one website, or one specific kind of website, should not be in git.
+
+To add the addon as non-bundled:
+ - Decide on the informal and formal names for your addon (e.g. "Fun time" and "fun_time")
+ - Save files into [tt]*_custom[/tt] directories wherever possible.
+ - Create a section in [tt]data_custom/addon_files.txt[/tt] and list [i]all[/i] the files relating to your addon.
+ - Add a row to [tt]data_custom/addon_details.csv[/tt]
+ - Ideally put a screenshot in [tt]data_custom/addon_screenshots[/tt]
+ - 'Add' the files to git, commit and push
+
+Your addon can then be managed through the bugfix push system, and will be pushed when the addons are bulk-uploaded (done as a part of the new version release process).
 [/surround]

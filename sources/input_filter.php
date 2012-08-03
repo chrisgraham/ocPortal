@@ -277,7 +277,7 @@ class field_restriction_loader
 		xml_set_character_data_handler($xml_parser,'startText');
 
 		// Run the parser
-		$data=file_get_contents(get_custom_file_base().'/data_custom/fields.xml',FILE_TEXT);
+		$data=file_get_contents(get_custom_file_base().'/data_custom/fields.xml');
 		if (trim($data)=='') return;
 		if (@xml_parse($xml_parser,$data,true)==0)
 		{

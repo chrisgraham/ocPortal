@@ -14,10 +14,9 @@
  * @package		ocportalcom
  */
 
-// FIX PATH
+// Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=realpath(__FILE__);
-$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
 $deep='uploads/website_specific/ocportal.com/scripts/';
 $FILE_BASE=str_replace($deep,'',$FILE_BASE);
 $FILE_BASE=str_replace(str_replace('/','\\',$deep),'',$FILE_BASE);
@@ -25,7 +24,7 @@ if (substr($FILE_BASE,-4)=='.php')
 {
 	$a=strrpos($FILE_BASE,'/');
 	$b=strrpos($FILE_BASE,'\\');
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+	$FILE_BASE=dirname($FILE_BASE);
 }
 $RELATIVE_PATH='';
 @chdir($FILE_BASE);
@@ -50,7 +49,7 @@ if (get_param_integer('html',0)==1)
 // Different ways at looking at the version number
 require_code('version2');
 $dotted=get_version_dotted__from_anything(get_param('version'));
-list($intended,$qualifier,$qualifier_numer,$long_version)=get_version_components__from_dotted($dotted);
+list($intended,$qualifier,$qualifier_number,$long_version)=get_version_components__from_dotted($dotted);
 $version_pretty=get_version_pretty__from_dotted($dotted);
 if (!is_null($qualifier)) $long_version_with_qualifier=$long_version.' '.$qualifier.$qualifier_number;
 
@@ -162,11 +161,11 @@ for ($i=0;$i<3;$i++)
 
 	foreach (array_reverse($DOWNLOAD_ROWS) as $row) // Iterate, newest to oldest
 	{
-		if ((substr($row['nice_title'],0,strlen($looking_for))==$looking_for) && (((!is_null($qualifier)) && ($i!=0)) || ((strpos($row['nice_title'],'RC')===false) && (strpos($row['nice_title'],'beta')===false) && (strpos($row['nice_title'],'alpha')===false) && (strpos($row['nice_title'],'(')==false) && (strpos($row['nice_title'],'RC')==false) && (strpos($row['nice_title'],'beta')==false) && (strpos($row['nice_title'],'alpha')==false))))
+		if ((substr($row['nice_title'],0,strlen($looking_for))==$looking_for) && (((!is_null($qualifier)) && ($i!=0)) || ((strpos($row['nice_title'],'RC')===false) && (strpos($row['nice_title'],'beta')===false) && (strpos($row['nice_title'],'alpha')===false) && (strpos($row['nice_title'],'(')===false) && (strpos($row['nice_title'],'RC')===false) && (strpos($row['nice_title'],'beta')===false) && (strpos($row['nice_title'],'alpha')===false))))
 		{
 			$this_version=preg_replace('# \(.*#','',substr($row['nice_title'],strlen($looking_for)-strlen($stub)));
 			$this_bits=explode('.',preg_replace('# .*$#','',$this_version));
-			$this_qualifier=(strpos($this_version,' ')===false)?NULL:preg_replace('#^.* #','',$this_version);
+			$this_qualifier=(strpos($this_version,' ')===false)?mixed():preg_replace('#^.* #','',$this_version);
 			$different=false;
 			for ($j=0;$j<=$i;$j++)
 			{
@@ -180,7 +179,7 @@ for ($i=0;$i<3;$i++)
 				if (!array_key_exists($j,$this_bits)) $this_bits[$j]='0';
 			}
 			if (!is_null($this_qualifier))
-				if ($this_qualifier!=($qualifier.strval($qualifier_number))) $different=true;
+				if ($this_qualifier!==($qualifier.strval($qualifier_number))) $different=true;
 			$news_row=find_version($this_version);
 
 			if ((version_compare(implode('.',$this_bits).(is_null($this_qualifier)?'':('.'.$this_qualifier)),implode('.',$bits).(is_null($qualifier)?'':('.'.$qualifier.$qualifier_number)))>=0) && ($different) && (!is_null($news_row)))

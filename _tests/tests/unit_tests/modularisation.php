@@ -143,6 +143,8 @@ class modularisation_test_set extends ocp_test_case
 		{
 			if (should_ignore_file($dir.$file,IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_NON_REGISTERED | IGNORE_NON_REGISTERED)) continue;
 
+			$is_dir=is_dir($full_dir.$file);
+
 			if ($is_dir)
 			{
 				$this->do_dir($dir.$file.'/');

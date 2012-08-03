@@ -151,7 +151,7 @@ function create_zip_file($file_array,$stream=false,$get_offsets=false)
 		{
 			if ((!array_key_exists('data',$file)) || (is_null($file['data'])))
 			{
-				$out.=file_get_contents($file['full_path'],FILE_BINARY);
+				$out.=file_get_contents($file['full_path']);
 			} else
 			{
 				$out.=$file['data'];

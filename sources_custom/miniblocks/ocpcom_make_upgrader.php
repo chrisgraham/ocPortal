@@ -82,7 +82,7 @@ if (is_null($from_version))
 	$d=post_param('from_version_d',NULL);
 	if ((is_null($a)) || (is_null($b)) || (is_null($c)))
 	{
-	 	mu_ui();
+		mu_ui();
 echo <<<END
 				</div></div>
 			</div>

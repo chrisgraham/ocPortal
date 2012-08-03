@@ -458,7 +458,7 @@ if (ini_get('register_globals')=='1') // Unregister globals
 
 /*if (is_file('closed'))
 {
-	exit(file_get_contents('closed',FILE_TEXT));
+	exit(file_get_contents('closed'));
 }*/
 
 if (!function_exists('file_get_contents'))
@@ -467,13 +467,12 @@ if (!function_exists('file_get_contents'))
 	 * Get the contents of a file.
 	 *
 	 * @param  SHORT_TEXT	The file name.
-	 * @param  integer		Either FILE_TEXT or FILE_BINARY.
 	 * @return ~LONG_TEXT	The file contents (false: error).
 	 */
-	function file_get_contents($filename,$type=0)
+	function file_get_contents($filename)
 	{
 		$data='';
-		$file=@fopen($filename,($type==FILE_TEXT)?'rt':'rb');
+		$file=@fopen($filename,'rb');
 		if ($file)
 		{
 			while (!feof($file)) $data.=fread($file,1024);
@@ -533,10 +532,8 @@ if ((strpos(PHP_VERSION,'hiphop')!==false) || (array_key_exists('ZERO_HOME',$_EN
 get_custom_file_base(); // Make sure $CURRENT_SHARE_USER is set if it is a shared site, so we can use CURRENT_SHARE_USER as an indicator of it being one.
 
 @ini_set('allow_url_fopen','0');
-if (!defined('FILE_TEXT')) define('FILE_TEXT',false);
 
 //require_code('critical_errors');
-if (!defined('FILE_BINARY')) define('FILE_BINARY',false);
 $GLOBALS['PURE_POST']=$_POST;
 require_code('global2');
 $GLOBALS['NO_QUERY_LIMIT']=true;

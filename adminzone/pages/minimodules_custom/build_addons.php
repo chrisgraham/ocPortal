@@ -13,16 +13,16 @@ require_code('dump_addons');
 $version=ocp_version_number();
 $version_for_name=preg_replace('/\./','',float_to_raw_string($version));
 
-if (!file_exists($FILE_BASE.'/data_custom/addon_files.txt'))
+if (!file_exists(get_file_base().'/data_custom/addon_files.txt'))
 {
-	exit("File missing : <br />".$FILE_BASE.'/data_custom/addon_files.txt');
+	exit("File missing : <br />".get_file_base().'/data_custom/addon_files.txt');
 }
-if (!file_exists($FILE_BASE.'/data_custom/addon_details.csv'))
+if (!file_exists(get_file_base().'/data_custom/addon_details.csv'))
 {
-	exit("File missing : <br />".$FILE_BASE.'/data_custom/addon_details.csv');
+	exit("File missing : <br />".get_file_base().'/data_custom/addon_details.csv');
 }
 
-@set_time_limit(0);
+if (function_exists('set_time_limit')) @set_time_limit(0);
 
 $only=get_param('only',NULL);
 
@@ -97,7 +97,7 @@ if (get_param_integer('export_addons',1)==1)
 			}
 		}
 
-		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd', @strval($version), $description,'exports/addons');
+		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd',float_to_raw_string($version),$description,'exports/addons');
 
 		echo nl2br(escape_html(show_updated_comments_code($file,$name)));
 	}

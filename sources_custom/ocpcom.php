@@ -279,7 +279,7 @@ function find_all_servers()
 	$servers=array();
 	while (($e=readdir($d))!==false)
 	{
-		if ($e{0}!='.')
+		if ($e[0]!='.')
 		//if (substr_count($e,'.')==4)
 		{
 			$servers[]=$e;
@@ -578,8 +578,8 @@ function myocp_delete_old_sites()
 	$sites=$GLOBALS['SITE_DB']->query('SELECT s_codename FROM '.get_table_prefix().'sites WHERE s_add_time<'.strval(time()-60*60*24*20).' AND '.db_string_not_equal_to('s_codename','shareddemo').' AND s_sent_expire_message=0');
 	foreach ($sites as $site)
 	{
-		$subject=do_lang('MO_EMAIL_EXPIRE_SUBJECT',$codename);
-		$message=do_lang('MO_EMAIL_EXPIRE_BODY',comcode_escape($codename));
+		$subject=do_lang('MO_EMAIL_EXPIRE_SUBJECT',$site['s_codename']);
+		$message=do_lang('MO_EMAIL_EXPIRE_BODY',comcode_escape($site['s_codename']));
 		$email_address=$GLOBALS['SITE_DB']->query_value_null_ok('sites_email','s_email_to',array('s_codename'=>$site['s_codename'],'s_email_from'=>'staff'));
 		if (!is_null($email_address))
 			mail_wrap($subject,$message,array($email_address));

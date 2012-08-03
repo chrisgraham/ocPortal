@@ -163,7 +163,7 @@ function find_theme_seed($theme,$no_easy_anchor=false)
 		if (!is_file($css_path))
 			$css_path=get_file_base().'/themes/default/css/global.css';
 		if (!is_file($css_path)) return '426aa9'; // Not ideal, but default theme is this
-		$css_file_contents=file_get_contents($css_path,FILE_TEXT);
+		$css_file_contents=file_get_contents($css_path);
 		$matches=array();
 		if (preg_match('#\{\$THEME\_WIZARD\_COLOR,\#(.{6}),seed,.*\}#',$css_file_contents,$matches)!=0)
 		{
@@ -201,7 +201,7 @@ function find_theme_dark($theme)
 	if (!is_file($css_path))
 		$css_path=get_file_base().'/themes/default/css/global.css';
 	if (!is_file($css_path)) return false;
-	$css_file_contents=file_get_contents($css_path,FILE_TEXT);
+	$css_file_contents=file_get_contents($css_path);
 	$matches=array();
 	if (preg_match('#\{\$THEME\_WIZARD\_COLOR,\#(.{6}),WB,.*\}#',$css_file_contents,$matches)!=0)
 	{
@@ -852,7 +852,7 @@ function calculate_dynamic_css_colours($colours,$source_theme)
 		if (substr($sheet,-4)=='.css')
 		{
 			$path=get_file_base().'/themes/'.$theme.'/'.$css_dir.'/'.$sheet;
-			$contents=unixify_line_format(file_get_contents($path,FILE_TEXT));
+			$contents=unixify_line_format(file_get_contents($path));
 
 			$matches=array();
 			$num_matches=preg_match_all('#\{\$THEME_WIZARD_COLOR,(.*),(.*),(.*)\}#',$contents,$matches);
@@ -1309,16 +1309,16 @@ function theme_wizard_colours_to_sheet($sheet,$landscape,$source_theme,$algorith
 
 	if (file_exists(get_file_base().'/themes/'.$theme.'/css_custom/'.filter_naughty($sheet)))
 	{
-		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/'.$theme.'/css_custom/'.filter_naughty($sheet),FILE_TEXT));
+		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/'.$theme.'/css_custom/'.filter_naughty($sheet)));
 	} elseif (file_exists(get_file_base().'/themes/'.$theme.'/css/'.filter_naughty($sheet)))
 	{
-		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/'.$theme.'/css/'.filter_naughty($sheet),FILE_TEXT));
+		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/'.$theme.'/css/'.filter_naughty($sheet)));
 	} elseif (file_exists(get_file_base().'/themes/default/css_custom/'.filter_naughty($sheet)))
 	{
-		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/default/css_custom/'.filter_naughty($sheet),FILE_TEXT));
+		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/default/css_custom/'.filter_naughty($sheet)));
 	} else/*if (file_exists(get_file_base().'/themes/default/css/'.filter_naughty($sheet)))*/
 	{
-		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/default/css/'.filter_naughty($sheet),FILE_TEXT));
+		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/default/css/'.filter_naughty($sheet)));
 	}
 
 	return theme_wizard_colours_to_css($contents,$landscape,$source_theme,$algorithm,$seed);

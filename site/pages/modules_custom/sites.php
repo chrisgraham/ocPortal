@@ -242,7 +242,7 @@ class Module_sites
 	function _hostingcopy_do_dir($conn_id,$directory='/',$depth=0)
 	{
 		if ($directory=='') $directory='/';
-		if ($directory{strlen($directory)-1}!='/') $directory.='/';
+		if ($directory[strlen($directory)-1]!='/') $directory.='/';
 
 		$list=form_input_list_entry($directory,($directory=='/public_html/') || ($directory=='/www/') || ($directory=='/httpdocs/') || ($directory=='/htdocs/'));
 		if ($depth==2) return $list;
@@ -258,7 +258,7 @@ class Module_sites
 				if (!array_key_exists(count($parts)-2,$parts)) continue;
 				$entry=$parts[count($parts)-2];
 			}
-			if (($entry=='.') || ($entry=='..') || ($entry=='') || ($entry=='conf') || ($entry=='anon_ftp') || ($entry=='logs') || ($entry=='imap') || ($entry=='statistics') || ($entry=='error_docs') || ($entry=='tmp') || ($entry=='mail') || ($entry{0}=='.') || ($entry=='etc') || (strpos($entry,'logs')!==false) || ($entry=='public_ftp')) continue;
+			if (($entry=='.') || ($entry=='..') || ($entry=='') || ($entry=='conf') || ($entry=='anon_ftp') || ($entry=='logs') || ($entry=='imap') || ($entry=='statistics') || ($entry=='error_docs') || ($entry=='tmp') || ($entry=='mail') || ($entry[0]=='.') || ($entry=='etc') || (strpos($entry,'logs')!==false) || ($entry=='public_ftp')) continue;
 
 			//Is the entry a directory?
 			if (@ftp_chdir($conn_id,$directory.'/'.$entry))

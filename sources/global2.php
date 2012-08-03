@@ -527,7 +527,7 @@ function init__global2()
 
 		if ((ocp_srv('SCRIPT_FILENAME')!='') && ($GLOBALS['DEV_MODE']) && (strpos(ocp_srv('SCRIPT_FILENAME'),'data_custom')===false))
 		{
-			if (@strlen(file_get_contents(ocp_srv('SCRIPT_FILENAME'),FILE_TEXT))>4500)
+			if (@strlen(file_get_contents(ocp_srv('SCRIPT_FILENAME')))>4500)
 			{
 				fatal_exit('Entry scripts (front controllers) should not be shoved full of code.');
 			}
@@ -1778,7 +1778,7 @@ function javascript_tempcode($position=NULL)
 				$merge_from=javascript_enforce($j2);
 				if (is_file($merge_from))
 				{
-					$data.=unixify_line_format(file_get_contents($merge_from,FILE_TEXT));
+					$data.=unixify_line_format(file_get_contents($merge_from));
 				} else // race condition
 				{
 					$good_to_merge=false;

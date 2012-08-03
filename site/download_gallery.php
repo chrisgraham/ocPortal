@@ -13,26 +13,14 @@
  * @package		galleries
  */
 
-// FIX PATH
+// Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
-if (substr($FILE_BASE,-4)=='.php')
+$FILE_BASE=dirname($FILE_BASE);
+if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level further perhaps?
 {
-	$a=strrpos($FILE_BASE,'/');
-	if ($a===false) $a=0;
-	$b=strrpos($FILE_BASE,'\\');
-	if ($b===false) $b=0;
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
-}
-if (!is_file($FILE_BASE.'/sources/global.php'))
-{
-	$a=strrpos($FILE_BASE,'/');
-	if ($a===false) $a=0;
-	$b=strrpos($FILE_BASE,'\\');
-	if ($b===false) $b=0;
-	$RELATIVE_PATH=substr($FILE_BASE,(($a>$b)?$a:$b)+1);
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+	$RELATIVE_PATH=basename($FILE_BASE);
+	$FILE_BASE=dirname($FILE_BASE);
 } else
 {
 	$RELATIVE_PATH='';

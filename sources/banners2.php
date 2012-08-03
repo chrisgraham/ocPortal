@@ -164,7 +164,7 @@ function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name=
 			$test_url=$url;
 			if (url_is_local($test_url))
 			{
-				$data=file_get_contents(get_custom_file_base().'/'.rawurldecode($test_url),FILE_BINARY);
+				$data=file_get_contents(get_custom_file_base().'/'.rawurldecode($test_url));
 				$test_url=get_custom_base_url().'/'.$test_url;
 			} else
 			{

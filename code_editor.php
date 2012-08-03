@@ -13,26 +13,14 @@
  * @package		code_editor
  */
 
-// FIX PATH
+// Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=str_replace('\\\\','\\',$FILE_BASE);
-if (substr($FILE_BASE,-4)=='.php')
+$FILE_BASE=dirname($FILE_BASE);
+if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level further perhaps?
 {
-	$a=strrpos($FILE_BASE,'/');
-	if ($a===false) $a=0;
-	$b=strrpos($FILE_BASE,'\\');
-	if ($b===false) $b=0;
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
-}
-if (!is_file($FILE_BASE.'/sources/global.php'))
-{
-	$a=strrpos($FILE_BASE,'/');
-	if ($a===false) $a=0;
-	$b=strrpos($FILE_BASE,'\\');
-	if ($b===false) $b=0;
-	$RELATIVE_PATH=substr($FILE_BASE,(($a>$b)?$a:$b)+1);
-	$FILE_BASE=substr($FILE_BASE,0,($a>$b)?$a:$b);
+	$RELATIVE_PATH=basename($FILE_BASE);
+	$FILE_BASE=dirname($FILE_BASE);
 } else
 {
 	$RELATIVE_PATH='';
@@ -75,13 +63,12 @@ if (!function_exists('file_get_contents'))
 	 * Get the contents of a file.
 	 *
 	 * @param  SHORT_TEXT	The file name.
-	 * @param  integer		Either FILE_TEXT or FILE_BINARY.
 	 * @return ~LONG_TEXT	The file contents (false: error).
 	 */
-	function file_get_contents($filename,$type=0)
+	function file_get_contents($filename)
 	{
 		$data='';
-		$file=@fopen($filename,($type==FILE_TEXT)?'rt':'rb');
+		$file=@fopen($filename,'rb');
 		if ($file)
 		{
 			while (!feof($file)) $data.=fread($file, 1024);

@@ -494,7 +494,7 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 		$hook_files[$hook]=file_get_contents($path);
 	}
 	unset($hook_keys);
-	$master_data=@unserialize(file_get_contents(get_file_base().'/data/files.dat',FILE_TEXT));
+	$master_data=@unserialize(file_get_contents(get_file_base().'/data/files.dat'));
 	if ($master_data===false) $master_data=array();
 
 	// Moved module handling
@@ -565,7 +565,7 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 		{
 			if (@filesize(get_file_base().'/'.$real_file)>1024*1024) continue; // Too big, so special exception
 
-			$file_contents=@file_get_contents(get_file_base().'/'.$real_file,FILE_BINARY);
+			$file_contents=@file_get_contents(get_file_base().'/'.$real_file);
 			if ($file_contents===false) continue;
 			if (strpos($real_file,'/version.php')!==false) $file_contents=preg_replace('/\d{10}/','',$file_contents);
 			$true_hash=sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',$file_contents)));
@@ -691,7 +691,7 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 		}
 
 		$addon_files=collapse_2d_complexity('filename','addon_name',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename','addon_name')));
-		list($alien,$addon)=check_alien($addon_files,file_exists(get_file_base().'/data/files_previous.dat')?unserialize(file_get_contents(get_file_base().'/data/files_previous.dat',FILE_TEXT)):array(),$master_data,get_file_base().'/');
+		list($alien,$addon)=check_alien($addon_files,file_exists(get_file_base().'/data/files_previous.dat')?unserialize(file_get_contents(get_file_base().'/data/files_previous.dat')):array(),$master_data,get_file_base().'/');
 		if ($alien!='')
 		{
 			$ret_str.=do_lang('WARNING_FILE_ALIEN',$alien);
@@ -1218,14 +1218,14 @@ function check_outdated__handle_overrides($dir,$rela,&$master_data,&$hook_files,
 						{
 							if (file_exists($dir.$file.'.editfrom')) // If we edited-from, then we use that to do the compare
 							{
-								$hash_on_disk=sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',file_get_contents($dir.$file.'.editfrom',FILE_BINARY))));
+								$hash_on_disk=sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',file_get_contents($dir.$file.'.editfrom'))));
 								$only_if_noncustom=false;
 							} else
 							{
-								$hash_on_disk=sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',file_get_contents($dir.$file,FILE_BINARY))));
+								$hash_on_disk=sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',file_get_contents($dir.$file))));
 								$only_if_noncustom=true;
 							}
-							$_true_hash=sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',file_get_contents($equiv_file,FILE_BINARY))));
+							$_true_hash=sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',file_get_contents($equiv_file))));
 							if (array_key_exists($file,$master_data)) // Get hash from perfection table
 							{
 								$true_hash=$master_data[$rela.$file][0];

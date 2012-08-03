@@ -370,7 +370,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						$GLOBALS['JAVASCRIPTS'][$param[0]]=1;
 						$file=javascript_enforce($param[0]);
-						$_value=do_template('JAVASCRIPT_NEED_INLINE',array('_GUID'=>'d6c907e26c5a8dd8c65f1d36a1a674a9','CODE'=>file_get_contents($file,FILE_TEXT)));
+						$_value=do_template('JAVASCRIPT_NEED_INLINE',array('_GUID'=>'d6c907e26c5a8dd8c65f1d36a1a674a9','CODE'=>file_get_contents($file)));
 						$value=$_value->evaluate();
 					}*/
 				}
@@ -853,7 +853,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						$GLOBALS['CSSS'][$param[0]]=1;
 						$file=css_enforce($param[0]);
-						$_value=do_template('CSS_NEED_INLINE',array('_GUID'=>'9de994d2f6d47a622d49347feb7ebe96','CSS'=>str_replace('../../../../',get_base_url().'/',file_get_contents($file,FILE_TEXT))));
+						$_value=do_template('CSS_NEED_INLINE',array('_GUID'=>'9de994d2f6d47a622d49347feb7ebe96','CSS'=>str_replace('../../../../',get_base_url().'/',file_get_contents($file))));
 						$value=$_value->evaluate();
 					}*/
 				}

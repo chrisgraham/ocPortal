@@ -134,7 +134,7 @@ function actual_add_theme($name)
 		if (strtolower(substr($file,-4,4))=='.css')
 		{
 			$path='themes/'.$name.'/css_custom/'.$file;
-			$new_css_file="@import url(../../../default/css/$file);\n\n".file_get_contents(get_custom_file_base().'/themes/default/css/'.$file,FILE_TEXT);
+			$new_css_file="@import url(../../../default/css/$file);\n\n".file_get_contents(get_custom_file_base().'/themes/default/css/'.$file);
 			afm_make_file($path,$new_css_file,false);
 		}
 	}

@@ -7,20 +7,22 @@
 
 */
 
-$title=get_screen_title('ocPortal bugfix tool',false);
-$title->evaluate_echo();
+define('SOLUTION_FORUM',283); // The forum ID on ocPortal.com for problem solution posts
+
+$_title=get_screen_title('ocPortal bugfix tool',false);
+$_title->evaluate_echo();
 
 $type=isset($_GET['type'])?$_GET['type']:'0';
 
 require_code('version2');
 
-global $git_path;
-$git_path='git';
-$git_result=shell_exec($git_path.' --help 2>&1');
+global $GIT_PATH;
+$GIT_PATH='git';
+$git_result=shell_exec($GIT_PATH.' --help 2>&1');
 if (strpos($git_result,'git: command not found')!==false)
 {
-	if (file_exists('/usr/local/git/bin/git')) $git_path='/usr/local/git/bin/git';
-	elseif (file_exists('C:\\Program Files (x86)\\Git\\bin\\git.exe')) $git_path='"C:\\Program Files (x86)\\Git\\bin\\git.exe"';
+	if (file_exists('/usr/local/git/bin/git')) $GIT_PATH='/usr/local/git/bin/git';
+	elseif (file_exists('C:\\Program Files (x86)\\Git\\bin\\git.exe')) $GIT_PATH='"C:\\Program Files (x86)\\Git\\bin\\git.exe"';
 }
 
 // Actualisation
@@ -37,11 +39,11 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	$affects=post_param('affects','');
 	if (!is_null(post_param('fixed_files')))
 	{
-		$fixed_files=post_param('fixed_files');
+		$fixed_files=explode(chr(10),post_param('fixed_files'));
 	} else
 	{
 		$fixed_files=array();
-		$git_command=$git_path.' show --pretty="format:" --name-only '.$git_commit_id;
+		$git_command=$GIT_PATH.' show --pretty="format:" --name-only '.$git_commit_id;
 		$git_result=shell_exec($git_command.' 2>&1');
 		$_fixed_files=explode(chr(10),$git_result);
 		$fixed_files=array();
@@ -77,9 +79,9 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	}
 
 	$submit_to=post_param('submit_to');
-	global $remote_base_url;
+	global $REMOTE_BASE_URL;
 
-	$remote_base_url=($submit_to=='live')?(brand_base_url()):(get_base_url());
+	$REMOTE_BASE_URL=($submit_to=='live')?(brand_base_url()):(get_base_url());
 
 	// If no tracker issue number was given, one is made
 	$tracker_id=post_param_integer('tracker_id');
@@ -97,7 +99,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 		$tracker_comment_message='Automated response: '.$tracker_title."\n\n".$tracker_message."\n\n".$tracker_additional;
 		create_tracker_post($tracker_id,$tracker_comment_message);
 	}
-	$tracker_url=$remote_base_url.'/tracker/view.php?id='.strval($tracker_id);
+	$tracker_url=$REMOTE_BASE_URL.'/tracker/view.php?id='.strval($tracker_id);
 
 	// A git commit and push happens on the changed files, with the ID number of the tracker issue in it
 	if ($git_commit_id=='')
@@ -141,7 +143,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 		$ce_affects=$affects;
 		$ce_fix='This issue is properly filed (and managed) on the tracker. See issue [url="#'.strval($tracker_id).'"]'.$tracker_url.'[/url].';
 		$entry_id=post_in_bugs_catalogue(get_version_pretty__from_dotted($version_dotted),$ce_title,$ce_description,$ce_affects,$ce_fix);
-		$ce_url=$remote_base_url.'/site/catalogues/entry/'.strval($entry_id).'.htm';
+		$ce_url=$REMOTE_BASE_URL.'/site/catalogues/entry/'.strval($entry_id).'.htm';
 		$done['Added to bugs catalogue']=$ce_url;
 	}
 
@@ -153,7 +155,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 		$post_reply_message='This issue has been filed on the tracker '.((post_param('tracker_id','')=='')?'as':'in').' issue [url="#'.strval($tracker_id).'"]'.$tracker_url.'[/url], with a fix.';
 		$post_important=1;
 		$reply_id=create_forum_post($post_id,$post_reply_title,$post_reply_message,$post_important);
-		$reply_url=$remote_base_url.'/forum/topicview/findpost/'.strval($reply_id).'.htm';
+		$reply_url=$REMOTE_BASE_URL.'/forum/topicview/findpost/'.strval($reply_id).'.htm';
 		$done['Posted reply']=$reply_url;
 	}
 
@@ -162,8 +164,8 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	if ($recog_error_substring!='')
 	{
 		$recog_post='Your error seems to match a known and fixed bug in ocPortal ('.$title.').'.chr(10).chr(10).'[title="2"]How did this happen?[/title]'.chr(10).chr(10).'The bug description is as follows...'.chr(10).chr(10).$notes.chr(10).chr(10).'[title="2"]How do I fix it?[/title]'.chr(10).chr(10).'A hotfix is available under issue [url="#'.strval($tracker_id).'"]'.$tracker_url.'[/url].';
-		$recog_topic_id=create_forum_topic($forum_id,$recog_error_substring,$recog_post);
-		$recog_topic_url=$remote_base_url.'/forum/topicview/misc/'.strval($recog_topic_id).'.htm';
+		$recog_topic_id=create_forum_topic(SOLUTION_FORUM,$recog_error_substring,$recog_post);
+		$recog_topic_url=$REMOTE_BASE_URL.'/forum/topicview/misc/'.strval($recog_topic_id).'.htm';
 		$done['Posted recognition signature']=$recog_topic_url;
 	}
 
@@ -190,7 +192,7 @@ require_code('version2');
 $on_disk_version=get_version_dotted();
 
 chdir(get_file_base());
-$git_command=$git_path.' status';
+$git_command=$GIT_PATH.' status';
 $git_result=shell_exec($git_command.' 2>&1');
 $lines=explode(chr(10),$git_result);
 $git_found=array();
@@ -358,11 +360,11 @@ function create_tracker_post($tracker_id,$tracker_comment_message)
 
 function do_git_commit($git_commit_message,$files)
 {
-	global $git_path;
+	global $GIT_PATH;
 
 	chdir(get_file_base());
 
-	$cmd=$git_path.' commit';
+	$cmd=$GIT_PATH.' commit';
 	foreach ($files as $file)
 	{
 		$cmd.=' '.escapeshellarg($file);
@@ -374,7 +376,7 @@ function do_git_commit($git_commit_message,$files)
 	if (preg_match('# ([\da-z]+)\]#',$result,$matches)!=0)
 	{
 		// Success, do a push too
-		$cmd=$git_path.' push origin master';
+		$cmd=$GIT_PATH.' push origin master';
 		echo '<!--'.shell_exec($cmd.' 2>&1').'-->';
 
 		return $matches[1];
@@ -460,8 +462,8 @@ function make_call($call,$params,$file=NULL)
 
 	$context=stream_context_create($opts);
 
-	global $remote_base_url;
-	$result=file_get_contents($remote_base_url.'/data_custom/ocpcom_web_service.php?call='.urlencode($call),false,$context);
+	global $REMOTE_BASE_URL;
+	$result=file_get_contents($REMOTE_BASE_URL.'/data_custom/ocpcom_web_service.php?call='.urlencode($call),false,$context);
 	if ($result=='Access Denied')
 	{
 		echo '<p>Access denied</p>';

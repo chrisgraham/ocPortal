@@ -37,13 +37,12 @@ function init__minikernel()
 		 * Get the contents of a file.
 		 *
 		 * @param  SHORT_TEXT	The file name.
-		 * @param  integer		Either FILE_TEXT or FILE_BINARY.
 		 * @return ~LONG_TEXT	The file contents (false: error).
 		 */
-		function file_get_contents($filename,$type=0)
+		function file_get_contents($filename)
 		{
 			$data='';
-			$file=@fopen($filename,($type==FILE_TEXT)?'rt':'rb');
+			$file=@fopen($filename,'rb');
 			if ($file)
 			{
 				while (!feof($file)) $data.=fread($file, 1024);

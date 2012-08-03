@@ -52,7 +52,7 @@ function phase_0()
 	<p>Have you run a code quality check on the non-module files (at the very least?). I am assuming that any non-trivial fixes have been tested.</p>
 
 	<form method="post" action="make_release.php?type=1">
-		<p>I am going to ask you some questions which will allow you to quickly make the decisions needed to get the whole release out without any additional thought. If you don't like these questions (such as finding them personally intrusive), I don't care&hellip; I am merely a machine, a device, working against a precomputed script. Now that is out of the way&hellip;</p>
+		<p>I am going to ask you some questions which will allow you to quickly make the decisions needed to get the whole release out without any additional thought. If you don\'t like these questions (such as finding them personally intrusive), I don\'t care&hellip; I am merely a machine, a device, working against a precomputed script. Now that is out of the way&hellip;</p>
 		<hr />
 		<fieldset>
 			<legend>Version number</legend>
@@ -150,7 +150,7 @@ function phase_1()
 
 	echo '
 		<form action="'.escape_html(static_evaluate_tempcode(build_url(array('page'=>'_SELF','type'=>'2'),'_SELF'))).'" method="post">
-			<input type="hidden" name="needed" value="'.escape_html($needed.'" />
+			<input type="hidden" name="needed" value="'.escape_html($needed).'" />
 			<input type="hidden" name="justification" value="'.escape_html($justification).'" />
 			<input type="hidden" name="version" value="'.escape_html($version_dotted).'" />
 			<input type="hidden" name="bleeding_edge" value="'.escape_html($bleeding_edge).'" />
@@ -203,7 +203,7 @@ function phase_2()
 	if (!$is_bleeding_edge)
 	{
 		$builds_path=get_builds_path();
-		$webpi=$builds_path.'/builds/'.$version.'/ocportal-'.$version_dotted.'-webpi.zip';
+		$webpi=$builds_path.'/builds/'.$version_dotted.'/ocportal-'.$version_dotted.'-webpi.zip';
 		$ms_filesize=number_format(filesize($webpi)).' bytes';
 		$ms_sha1=sha1_file($webpi);
 

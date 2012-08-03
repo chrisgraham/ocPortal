@@ -494,7 +494,7 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 	persistent_cache_delete('IP_BANS');
 	if ((is_writable_wrap(get_file_base().'/.htaccess')) && (is_null($ban_until)))
 	{
-		$original_contents=file_get_contents(get_file_base().'/.htaccess',FILE_TEXT);
+		$original_contents=file_get_contents(get_file_base().'/.htaccess');
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
@@ -536,7 +536,7 @@ function remove_ip_ban($ip)
 	persistent_cache_delete('IP_BANS');
 	if (is_writable_wrap(get_file_base().'/.htaccess'))
 	{
-		$contents=file_get_contents(get_file_base().'/.htaccess',FILE_TEXT);
+		$contents=file_get_contents(get_file_base().'/.htaccess');
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);

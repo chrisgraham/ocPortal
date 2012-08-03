@@ -732,7 +732,7 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
  * @param  LONG_TEXT			The description of the download
  * @param  ID_TEXT			The author of the download (not necessarily same as the submitter)
  * @param  LONG_TEXT			The comments for the download
- * @param  AUTO_LINK			The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting
+ * @param  ?AUTO_LINK		The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (NULL: none)
  * @param  integer			The ordered number of the gallery image to use as the download representative image
  * @param  BINARY				Whether the download has been validated
  * @param  BINARY				Whether the download may be rated

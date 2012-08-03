@@ -631,7 +631,7 @@ class Module_cms_comcode_pages
 				$file_base=get_file_base();
 			if (file_exists($file_base.'/'.$restore_from))
 			{
-				$contents=file_get_contents($file_base.'/'.$restore_from,FILE_TEXT);
+				$contents=file_get_contents($file_base.'/'.$restore_from);
 				if (is_null(get_param('restore_from',NULL)))
 				{
 					$string_index=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','string_index',array('the_zone'=>$zone,'the_page'=>$file));
@@ -983,7 +983,7 @@ class Module_cms_comcode_pages
 		require_code('attachments2');
 		$_new=do_comcode_attachments($new,'comcode_page',$zone.':'.$file);
 		$new=$_new['comcode'];
-		if ((!file_exists($fullpath)) || ($new!=file_get_contents($fullpath,FILE_TEXT)))
+		if ((!file_exists($fullpath)) || ($new!=file_get_contents($fullpath)))
 		{
 			$myfile=@fopen($fullpath,'wt');
 			if ($myfile===false) intelligent_write_error($fullpath);
@@ -1145,14 +1145,14 @@ class Module_cms_comcode_pages
 			$file_base=get_custom_file_base();
 		}
 		if (!file_exists($file_base.'/'.$path)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$export=file_get_contents($file_base.'/'.$path,FILE_TEXT);
+		$export=file_get_contents($file_base.'/'.$path);
 
 		$matches=array();
 		preg_match_all('#\[attachment(.*)\](\d+)\[/attachment\]#',$export,$matches);
 		for ($i=0;$i<count($matches[0]);$i++)
 		{
 			$attachment=$GLOBALS['SITE_DB']->query_select('attachments',array('a_url','a_original_filename'),array('id'=>$matches[2][$i]),'',1);
-			$file=file_get_contents(get_custom_file_base().'/'.filter_naughty(rawurldecode($attachment[0]['a_url'])),FILE_TEXT);
+			$file=file_get_contents(get_custom_file_base().'/'.filter_naughty(rawurldecode($attachment[0]['a_url'])));
 			$replace='[attachment filename="'.$attachment[0]['a_original_filename'].'"'.$matches[1][$i].']'.chunk_split(base64_encode($file)).'[/attachment]';
 			$export=str_replace($matches[0][$i],$replace,$export);
 		}

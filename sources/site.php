@@ -334,9 +334,9 @@ function breadcrumbs()
 	$segment_substitutions=array();
 	if ((addon_installed('breadcrumbs')) && (function_exists('xml_parser_create')))
 	{
-		$data=@file_get_contents(get_custom_file_base().'/data_custom/breadcrumbs.xml',FILE_TEXT);
+		$data=@file_get_contents(get_custom_file_base().'/data_custom/breadcrumbs.xml');
 		if (($data===false) && (get_custom_file_base()!=get_file_base()))
-			$data=@file_get_contents(get_file_base().'/data_custom/breadcrumbs.xml',FILE_TEXT);
+			$data=@file_get_contents(get_file_base().'/data_custom/breadcrumbs.xml');
 		if (trim($data)!='')
 		{
 			require_code('breadcrumbs');

@@ -251,7 +251,7 @@ class Module_admin_zones
 				if (!file_exists($fullpath)) $fullpath=zone_black_magic_filterer((($page_info[0]=='comcode' || $pure)?get_file_base():get_custom_file_base()).'/'.$current_zone.'/pages/'.strtolower($page_info[0]).'/'.get_site_default_lang().'/'.$current_for.'.txt');
 				if (file_exists($fullpath))
 				{
-					$comcode=file_get_contents($fullpath,FILE_TEXT);
+					$comcode=file_get_contents($fullpath);
 					$default_parsed=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true);
 				} else
 				{

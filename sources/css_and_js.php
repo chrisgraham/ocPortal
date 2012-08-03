@@ -62,7 +62,7 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 	}
 
 	// Read a raw
-	$sheet=file_get_contents($fullpath,FILE_TEXT);
+	$sheet=file_get_contents($fullpath);
 
 	// Re-seed
 	if (!is_null($seed))

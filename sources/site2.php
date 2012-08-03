@@ -283,7 +283,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
 	// Not cached :(
-	$result=file_get_contents($file_base.'/'.$string,FILE_TEXT);
+	$result=file_get_contents($file_base.'/'.$string);
 
 	// Fix bad unicode
 	if (get_charset()=='utf-8')
@@ -417,7 +417,7 @@ function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_co
 	$temp=$LAX_COMCODE;
 	$LAX_COMCODE=true;
 	require_code('attachments2');
-	$_new=do_comcode_attachments(file_get_contents($file_base.'/'.$string,FILE_TEXT),'comcode_page',$zone.':'.$codename,false,NULL,(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member());
+	$_new=do_comcode_attachments(file_get_contents($file_base.'/'.$string),'comcode_page',$zone.':'.$codename,false,NULL,(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member());
 	$html=$_new['tempcode'];
 	$LAX_COMCODE=$temp;
 	$title_to_use=is_null($COMCODE_PARSE_TITLE)?NULL:clean_html_title($COMCODE_PARSE_TITLE);

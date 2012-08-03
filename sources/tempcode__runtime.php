@@ -355,7 +355,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		{
 			$_data=new ocp_tempcode();
 			$tcp_path=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.$lang.'/'.$_codename.$suffix.'.tcd';
-			$data=@file_get_contents($tcp_path,FILE_BINARY);
+			$data=@file_get_contents($tcp_path);
 			if ($data==='') $data=false; // '' needed for PHP4 - weird
 			if ($data!==false)
 			{

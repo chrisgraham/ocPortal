@@ -34,7 +34,7 @@ function load_html_page($string,$file_base=NULL)
 	global $PAGE_STRING;
 	if (is_null($PAGE_STRING)) $PAGE_STRING=$string;
 
-	$html=file_get_contents($file_base.'/'.$string,FILE_TEXT);
+	$html=file_get_contents($file_base.'/'.$string);
 
 	// Post-processing
 	if (strpos($html,'<html')!==false)

@@ -2002,7 +2002,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					if (substr($pg_name,0,strlen($prefix))==$prefix)
 					{
 						$i=count($STRUCTURE_LIST);
-						comcode_to_tempcode(file_get_contents(zone_black_magic_filterer(get_file_base().'/'.$s_zone.'/pages/'.$pg_type.'/'.$pg_name.'.txt'),FILE_TEXT),$source_member,$as_admin,60,NULL,$connection,false,false,false,true,false,NULL,$on_behalf_of_member);
+						comcode_to_tempcode(file_get_contents(zone_black_magic_filterer(get_file_base().'/'.$s_zone.'/pages/'.$pg_type.'/'.$pg_name.'.txt')),$source_member,$as_admin,60,NULL,$connection,false,false,false,true,false,NULL,$on_behalf_of_member);
 						$page_url=build_url(array('page'=>$pg_name),$s_zone);
 						while (array_key_exists($i,$STRUCTURE_LIST))
 						{

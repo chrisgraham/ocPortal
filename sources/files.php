@@ -147,7 +147,7 @@ function better_parse_ini_file($filename,$file=NULL)
 	{
 		global $FILE_ARRAY;
 		if (@is_array($FILE_ARRAY)) $file=file_array_get($filename);
-		else $file=file_get_contents($filename,FILE_TEXT);
+		else $file=file_get_contents($filename);
 	}
 
 	$ini_array=array();

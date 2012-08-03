@@ -190,7 +190,7 @@ class Hook_search_comcode_pages
 
 						$path=zone_black_magic_filterer((($dir=='comcode_custom')?get_custom_file_base():get_file_base()).'/'.$zone.'/pages/'.$dir.'/'.$page.'.txt');
 						if ((!is_null($cutoff)) && (filemtime($path)<$cutoff)) continue;
-						$contents=file_get_contents($path,FILE_TEXT);
+						$contents=file_get_contents($path);
 
 						if (in_memory_search_match(array('content'=>$content,'conjunctive_operator'=>$boolean_operator),$contents))
 						{
@@ -263,7 +263,7 @@ class Hook_search_comcode_pages
 			{
 				global $LAX_COMCODE;
 				$LAX_COMCODE=true;
-				/*$temp_summary=comcode_to_tempcode(file_get_contents($comcode_file,FILE_TEXT),NULL,true); Tempcode compiler slowed things down so easier just to show full thing
+				/*$temp_summary=comcode_to_tempcode(file_get_contents($comcode_file),NULL,true); Tempcode compiler slowed things down so easier just to show full thing
 				$_temp_summary=$temp_summary->evaluate();
 				if (strlen($_temp_summary)<500)
 				{
