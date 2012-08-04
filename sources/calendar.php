@@ -305,7 +305,7 @@ function date_range($from,$to,$do_time=true)
 {
 	if (($to-$from>60*60*24) || (!$do_time))
 	{
-		$_length=do_lang('DAYS',integer_format(intval(round(($to-$from)/(60*60*24.0)))));
+		$_length=do_lang('DAYS',integer_format(intval(ceil(($to-$from)/(60*60*24.0)))));
 		if (!$do_time) return $_length;
 		$date=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$from));
 		$date2=locale_filter(date(do_lang(($to-$from>60*60*24*5)?'calendar_date_range_single_long':'calendar_date_range_single'),$to));
