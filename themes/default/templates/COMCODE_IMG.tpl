@@ -1,6 +1,6 @@
 {$SET,RAND_ID_IMG,rand{$RAND}}
 
-<img{+START,IF_NON_EMPTY,{ALIGN}} style="vertical-align: {ALIGN|}"{+END} src="{URL*}" title="{+START,IF_PASSED,TOOLTIP}{$STRIP_TAGS,{TOOLTIP}}{+END}{+START,IF_NON_PASSED,TOOLTIP}{$STRIP_TAGS,{CAPTION}}{+END}" alt="{$STRIP_TAGS,{CAPTION}}" />
+<img{+START,IF_NON_EMPTY,{ALIGN}} style="vertical-align: {ALIGN|}"{+END} src="{URL*}" {+START,IF_PASSED,ROLLOVER}id="{$GET%,RAND_ID_IMG}" {+END}title="{+START,IF_PASSED,TOOLTIP}{$STRIP_TAGS,{TOOLTIP}}{+END}{+START,IF_NON_PASSED,TOOLTIP}{$STRIP_TAGS,{CAPTION}}{+END}" alt="{$STRIP_TAGS,{CAPTION}}" />
 {+START,IF_PASSED,ROLLOVER}
 	<script type="text/javascript">// <![CDATA[
 		addEventListenerAbstract(window,'load',function () {
