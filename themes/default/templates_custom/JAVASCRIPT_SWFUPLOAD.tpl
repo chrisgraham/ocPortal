@@ -1790,7 +1790,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 			file_post_name: "file",
 
 			// Flash file settings
-			file_size_limit : (typeof mfs=='undefined')?'2 GB':(mfs.value+' B'),
+			file_size_limit : (typeof mfs=='undefined')?'2 GB':(((typeof mfs[0]!='undefined')?mfs[0].value:mfs.value)+' B'),
 			file_types : (name.indexOf('file_novalidate')==-1)?filter:"*.*",
 			file_types_description : "{!ALLOWED_FILES^#}",
 			file_upload_limit : "0",
