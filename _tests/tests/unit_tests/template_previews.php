@@ -80,7 +80,7 @@ class template_previews_test_set extends ocp_test_case
 			$hook=$list[0];
 			$function=$list[1];
 
-			if (is_file(get_file_base().'/_tests/screens_tested/'.$function)) continue; // To make easier to debug through
+			if (is_file(get_file_base().'/_tests/screens_tested/'.$function.'.tmp')) continue; // To make easier to debug through
 
 			if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -125,9 +125,8 @@ class template_previews_test_set extends ocp_test_case
 			{
 				if (!$flag)
 				{
-					fclose(fopen(get_file_base().'/_tests/screens_tested/'.$function,'wb'));
-					sync_file(get_file_base().'/_tests/screens_tested/'.$function);
-					fix_permissions(get_file_base().'/_tests/screens_tested/'.$function);
+					fclose(fopen(get_file_base().'/_tests/screens_tested/'.$function.'.tmp','wb'));
+					fix_permissions(get_file_base().'/_tests/screens_tested/'.$function.'.tmp');
 				}
 			}
 		}
@@ -148,7 +147,7 @@ class template_previews_test_set extends ocp_test_case
 			$template=$tpls[0];
 			$hook=NULL;
 
-			if (is_file(get_file_base().'/_tests/screens_tested/consistency__'.$function)) continue; // To make easier to debug through
+			if (is_file(get_file_base().'/_tests/screens_tested/consistency__'.$function.'.tmp')) continue; // To make easier to debug through
 
 			if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -171,22 +170,19 @@ class template_previews_test_set extends ocp_test_case
 
 			if (!$different)
 			{
-				fclose(fopen(get_file_base().'/_tests/screens_tested/consistency__'.$function,'wb'));
-				sync_file(get_file_base().'/_tests/screens_tested/consistency__'.$function);
-				fix_permissions(get_file_base().'/_tests/screens_tested/consistency__'.$function);
+				fclose(fopen(get_file_base().'/_tests/screens_tested/consistency__'.$function.'.tmp','wb'));
+				fix_permissions(get_file_base().'/_tests/screens_tested/consistency__'.$function.'.tmp');
 			} else
 			{
-				$myfile=fopen(get_file_base().'/_tests/screens_tested/v1__','wb');
+				$myfile=fopen(get_file_base().'/_tests/screens_tested/v1__'.'.tmp','wb');
 				fwrite($myfile,$_out1);
 				fclose($myfile);
-				sync_file(get_file_base().'/_tests/screens_tested/v1__');
-				fix_permissions(get_file_base().'/_tests/screens_tested/v1__');
+				fix_permissions(get_file_base().'/_tests/screens_tested/v1__'.'.tmp');
 
-				$myfile=fopen(get_file_base().'/_tests/screens_tested/v2__','wb');
+				$myfile=fopen(get_file_base().'/_tests/screens_tested/v2__'.'.tmp','wb');
 				fwrite($myfile,$_out2);
 				fclose($myfile);
-				sync_file(get_file_base().'/_tests/screens_tested/v2__');
-				fix_permissions(get_file_base().'/_tests/screens_tested/v2__');
+				fix_permissions(get_file_base().'/_tests/screens_tested/v2__'.'.tmp');
 
 				require_code('diff');
 				var_dump(diff_simple_2($_out1,$_out2));
@@ -209,7 +205,7 @@ class template_previews_test_set extends ocp_test_case
 			$template=$tpls[0];
 			$hook=NULL;
 
-			if (is_file(get_file_base().'/_tests/screens_tested/nonemissing__'.$function)) continue; // To make easier to debug through
+			if (is_file(get_file_base().'/_tests/screens_tested/nonemissing__'.$function.'.tmp')) continue; // To make easier to debug through
 
 			if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -222,9 +218,8 @@ class template_previews_test_set extends ocp_test_case
 
 			if (!$put_out)
 			{
-				fclose(fopen(get_file_base().'/_tests/screens_tested/nonemissing__'.$function,'wb'));
-				sync_file(get_file_base().'/_tests/screens_tested/nonemissing__'.$function);
-				fix_permissions(get_file_base().'/_tests/screens_tested/nonemissing__'.$function);
+				fclose(fopen(get_file_base().'/_tests/screens_tested/nonemissing__'.$function.'.tmp','wb'));
+				fix_permissions(get_file_base().'/_tests/screens_tested/nonemissing__'.$function.'.tmp');
 			}
 
 			unset($out1);

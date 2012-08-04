@@ -51,11 +51,10 @@ class ocp_test_case extends WebTestCase
 		$path=get_file_base().'/_tests/html_dump/'.get_class($this);
 		if (!file_exists($path)) mkdir($path,0777);
 		$content=$this->_browser->getContent();
-		$outfile=fopen($path.'/'.url_to_filename($url).'.htm','wb');
+		$outfile=fopen($path.'/'.url_to_filename($url).'.htm.tmp','wb');
 		fwrite($outfile,$content);
 		fclose($outfile);
-		sync_file($path.'/'.url_to_filename($url).'.htm');
-		fix_permissions($path.'/'.url_to_filename($url).'.htm');
+		fix_permissions($path.'/'.url_to_filename($url).'.htm.tmp');
 
 		// Save the text so we can run through Word's grammar checker
 		$text_content=$content;
@@ -69,9 +68,10 @@ class ocp_test_case extends WebTestCase
 		$text_content=str_replace('&mdash;','-',$text_content);
 		$text_content=str_replace('&hellip;','...',$text_content);
 		$text_content=@html_entity_decode($text_content,ENT_QUOTES);
-		$outfile=fopen($path.'/'.url_to_filename($url).'.txt','wb');
+		$outfile=fopen($path.'/'.url_to_filename($url).'.txt.tmp','wb');
 		fwrite($outfile,$text_content);
 		fclose($outfile);
+		fix_permissions($path.'/'.url_to_filename($url).'.txt.tmp');
 
 		return $ret;
 	}

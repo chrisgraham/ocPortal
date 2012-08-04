@@ -651,7 +651,7 @@ function ocp_tempnam($prefix)
 	$local_path=get_custom_file_base().'/safe_mode_temp/';
 	$server_path='/tmp/';
 	$tmp_path=$problem_saving?$local_path:$server_path;
-	$tempnam=tempnam($tmp_path,$prefix);
+	$tempnam=tempnam($tmp_path,'tmpfile__'.$prefix);
 	if (($tempnam===false) && (!$problem_saving))
 	{
 		$problem_saving=true;

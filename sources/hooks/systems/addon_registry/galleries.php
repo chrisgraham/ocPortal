@@ -74,6 +74,7 @@ class Hook_addon_registry_galleries
 	{
 		return array(
 
+			'data/zencoder_receive.php',
 			'sources/hooks/modules/admin_import/galleries.php',
 			'sources/hooks/systems/notifications/gallery_entry.php',
 			'sources/hooks/systems/fields/video.php',

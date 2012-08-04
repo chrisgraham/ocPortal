@@ -508,7 +508,7 @@ function init__global2()
 				// Use the info from ocProduct's custom PHP version to make sure that all files that were created/modified got synched as they should have been.
 				foreach ($_CREATED_FILES as $file)
 				{
-					if ((substr($file,0,strlen(get_file_base()))==get_file_base()) && (substr($file,-4)!='.log') && (basename($file)!='permissioncheckslog.php'))
+					if ((substr($file,0,strlen(get_file_base()))==get_file_base()) && (substr($file,-4)!='.tmp') && (substr($file,-4)!='.log') && (basename($file)!='permissioncheckslog.php'))
 						@exit(escape_html('File not permission-synched: '.$file));
 				}
 				foreach ($_MODIFIED_FILES as $file)

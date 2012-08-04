@@ -44,8 +44,7 @@ switch ($type)
 // Gather details
 function phase_0()
 {
-	$skip=isset($_GET['skip'])?'1':'0';
-	if ($skip=='1') $skip_check='checked="checked"'; else $skip_check='';
+	$skip_check=(get_param_integer('skip',0)==1)?'checked="checked"':'';
 
 	require_code('version2');
 	$on_disk_version=get_version_dotted();
@@ -162,7 +161,7 @@ function phase_1()
 	$is_bleeding_edge=(post_param_integer('bleeding_edge',0)==1);
 	$is_substantial=(substr($version_dotted,-2)=='.0') || (strpos($version_dotted,'beta1')!==false) || (strpos($version_dotted,'RC1')!==false);
 
-	if ((!isset($_POST['intermediary_tasks'])) && ($is_substantial) && (!$is_bleeding_edge))
+	if ((post_param_integer('intermediary_tasks',0)==0) && ($is_substantial) && (!$is_bleeding_edge))
 	{
 		phase_1_pre();
 		return;

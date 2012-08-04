@@ -11,6 +11,9 @@ oc_thumbs_up
  - data_custom/upload-crop/upload_crop_v1.2.php
  - data_custom/upload-crop/js/jquery.imgareaselect.min.js
  - data_custom/upload-crop/js/jquery-pack.js
+ - data_custom/upload-crop/index.html
+ - data_custom/upload-crop/js/index.html
+ - data_custom/upload-crop/upload_pic/index.html
 
 oc_banter
 ---------
@@ -47,6 +50,7 @@ oc_gift_giver
  - themes/default/templates_custom/POINTSTORE_OCGIFTS.tpl
  - themes/default/templates_custom/POINTSTORE_OCGIFTS_GIFTS.tpl
  - themes/default/templates_custom/OCF_MEMBER_SCREEN_GIFTS_WRAP.tpl
+ - uploads/ocgifts_addon/index.html
  - uploads/ocgifts_addon/2a kiss.jpg
  - uploads/ocgifts_addon/2Football_(soccer).gif
  - uploads/ocgifts_addon/2Muga_Glass_of_red_wine.png
@@ -271,6 +275,7 @@ facebook_support
  - sources_custom/facebook/jsonwrapper/JSON/JSON.php
  - sources_custom/facebook/jsonwrapper/JSON/LICENSE
  - facebook_connect.php
+ - sources_custom/hooks/modules/members/facebook.php
 
 twitter_support
 ---------------
@@ -289,6 +294,7 @@ google_search
  - themes/default/templates_custom/BLOCK_SIDE_GOOGLE_SEARCH.tpl
  - themes/default/templates_custom/BLOCK_MAIN_GOOGLE_SEARCH_RESULTS.tpl
  - pages/comcode_custom/EN/google_search.txt
+ - site/pages/comcode_custom/EN/results_page.txt
 
 justgiving
 ----------
@@ -332,6 +338,7 @@ oc_user_map
 
 geshi
 -----
+ - sources_custom/geshi/.htaccess
  - sources_custom/geshi/index.html
  - sources_custom/geshi/4cs.php
  - sources_custom/geshi/abap.php
@@ -494,6 +501,8 @@ geshi
 
 getid3
 ------
+ - sources_custom/getid3/!delete any module you don't like, but check dependencies.txt/.htaccess
+ - sources_custom/getid3/.htaccess
  - sources_custom/getid3/index.html
  - sources_custom/getid3/!delete any module you don't like, but check dependencies.txt/index.html
  - sources_custom/getid3/extension.cache.dbm.php
@@ -599,6 +608,8 @@ google_translate
 
 octavius
 --------
+ - sources_custom/programe/.htaccess
+ - sources_custom/programe/aiml/.htaccess
  - sources_custom/programe/aiml/index.html
  - sources_custom/programe/index.html
  - sources_custom/hooks/modules/chat_bots/knowledge.txt
@@ -618,6 +629,44 @@ java_uploader_ftp_source_code
 -----------------------------
  - data_custom/javaupload/Checker.class
  - data_custom/javaupload/Checker.java
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/examples/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/examples/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/examples/nntp/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/examples/nntp/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/examples/ntp/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/examples/ntp/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/bsd/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/bsd/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/ftp/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/ftp/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/ftp/parser/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/ftp/parser/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/io/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/io/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/nntp/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/nntp/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/ntp/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/ntp/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/pop3/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/pop3/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/smtp/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/smtp/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/telnet/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/telnet/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/tftp/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/tftp/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/util/class-use/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/commons/net/util/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/apache/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/org/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/resources/index.html
+ - data_custom/javaupload/commons-net-1.4.1/docs/index.html
+ - data_custom/javaupload/commons-net-1.4.1/index.html
+ - data_custom/javaupload/index.html
  - data_custom/javaupload/commons-net-1.4.1/commons-net-1.4.1.jar
  - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/allclasses-frame.html
  - data_custom/javaupload/commons-net-1.4.1/docs/apidocs/allclasses-noframe.html
@@ -1096,10 +1145,12 @@ oc_worrdss
  - sources_custom/php-crossword/php_crossword_word.class.php
  - sources_custom/miniblocks/main_crossword.php
  - themes/default/css_custom/crossword.css
+ - sources_custom/php-crossword/.htaccess
 
 xmppchat
 --------
  - data_custom/jabber-logs/index.html
+ - data_custom/jabber-logs/.htaccess
  - themes/default/templates_custom/JAVASCRIPT_XMPP_CRYPTO.tpl
  - themes/default/templates_custom/JAVASCRIPT_XMPP_DOM-ALL.tpl
  - themes/default/templates_custom/JAVASCRIPT_XMPP_PROTOTYPE.tpl
@@ -1256,8 +1307,9 @@ oc_world
  - ocworld/pages/html/EN/.htaccess
  - ocworld/pages/html/EN/index.html
  - ocworld/pages/html/index.html
- - ocworld/pages/html_custom/EN/index.html
  - ocworld/pages/html_custom/index.html
+ - ocworld/pages/html_custom/EN/.htaccess
+ - ocworld/pages/html_custom/EN/index.html
  - ocworld/pages/index.html
  - ocworld/pages/minimodules/.htaccess
  - ocworld/pages/minimodules/index.html
@@ -1427,6 +1479,12 @@ ocportal_tutorials
  - docs/pages/comcode_custom/EN/codebook_1b.txt
  - docs/pages/comcode_custom/EN/codebook_2.txt
  - docs/pages/comcode_custom/EN/codebook_3.txt
+ - docs/pages/comcode_custom/EN/atag.txt
+ - docs/pages/comcode_custom/EN/tut_designer_themes.txt
+ - docs/pages/comcode_custom/EN/tut_intl_users.txt
+ - docs/pages/comcode_custom/EN/tut_ocselect.txt
+ - docs/pages/modules/index.html
+ - docs/pages/.htaccess
  - docs/pages/comcode_custom/index.html
  - docs/pages/html/.htaccess
  - docs/pages/html/EN/.htaccess
@@ -1442,6 +1500,9 @@ ocportal_tutorials
  - docs/pages/modules/.htaccess
  - docs/pages/modules_custom/.htaccess
  - docs/pages/modules_custom/index.html
+ - data_custom/images/docs/ocselect_html.png
+ - data_custom/images/docs/ocselect_main_content_filtering.png
+ - data_custom/images/docs/ocselect_refined_filter.png
  - data_custom/images/docs/tempcode_object.png
  - data_custom/images/docs/accessibility_colour_useful_not_needed.png
  - data_custom/images/docs/accessibility_enable_validator.png
@@ -1863,6 +1924,7 @@ transcoder
  - transcoder/fail/index.html
  - transcoder/queue/index.html
  - transcoder/sent/index.html
+ - transcoder/index.html
 
 stress_test
 -----------
@@ -1881,12 +1943,14 @@ db_schema
  - adminzone/pages/minimodules_custom/sql_show_tables_by_addon.php
  - sources_custom/relations.php
  - sources_custom/hooks/systems/do_next_menus/db_schema.php
+ - sources_custom/database_toolkit.php
 
 xml_db_manage
 -------------
  - adminzone/pages/minimodules_custom/sql_dump.php
  - data_custom/xml_db_import.php
  - sources_custom/hooks/systems/do_next_menus/developer_sync.php
+ - sources_custom/database_toolkit.php
 
 addon_publish
 -------------
@@ -1895,6 +1959,8 @@ addon_publish
  - sources_custom/dump_addons.php
  - adminzone/pages/minimodules_custom/admin_generate_adhoc_upgrade.php
  - sources_custom/hooks/systems/do_next_menus/addon_publish.php
+ - data_custom/addon_details.csv
+ - data_custom/addon_files.txt
 
 release_compile
 ---------------
@@ -1926,6 +1992,7 @@ member_directory_boxes
  - themes/default/templates_custom/OCF_MEMBER_DIRECTORY_SCREEN_FILTER.tpl
  - themes/default/css_custom/member_directory_boxes.css
  - lang_custom/EN/member_directory_boxes.ini
+ - sources_custom/hooks/systems/symbols/CPF_LIST.php
 
 related_members
 ---------------

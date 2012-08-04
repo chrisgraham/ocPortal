@@ -23,18 +23,26 @@ function init__make_release()
 
 function make_files_manifest()
 {
-	$_files=get_directory_contents(get_file_base());
+	global $FILE_ARRAY;
+
 	$files=array();
-	foreach ($_files as $file)
+	foreach ($FILE_ARRAY as $file=>$contents)
 	{
-		$contents=file_get_contents(get_file_base().'/'.$file);
-		if (basename($file)=='version.php') $contents=preg_replace('/\d{10}/','',$contents);
+		if ($file=='data_custom/files.dat') continue;
+
+		if ($file=='sources/version.php') $contents=preg_replace('/\d{10}/','',$contents); // Not interested in differences in file time
+
 		$files[$file]=array(sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',$contents))));
 	}
+
+	$file_manifest=serialize($files);
+
 	$myfile=fopen(get_file_base().'/data/files.dat','wb');
-	fwrite($myfile,serialize($files));
+	fwrite($myfile,$file_manifest);
 	fclose($myfile);
 	fix_permissions(get_file_base().'/data/files.dat');
+
+	$FILE_ARRAY['data_custom/files.dat']=$file_manifest;
 }
 
 function make_installers($skip_file_grab=false)
@@ -50,15 +58,11 @@ function make_installers($skip_file_grab=false)
 	$out='';
 	$out.='<p>An ocPortal build is being compiled and packed up into installation packages.</p>';
 
-	// Build manifest
-	if (!$skip_file_grab)
-		make_files_manifest();
-
 	require_code('version2');
 	$version_dotted=get_version_dotted();
 	$version_branch=get_version_branch();
 
-	// Make requisite directories
+	// Make necessary directories
 	$builds_path=get_builds_path();
 	if (!file_exists($builds_path.'/builds/build/'))
 	{
@@ -87,6 +91,8 @@ function make_installers($skip_file_grab=false)
 		$out.='<ul>';
 		$out.=populate_build_files_array();
 		$out.='</ul>';
+
+		make_files_manifest();
 	}
 
 	// What we'll be building
@@ -97,11 +103,11 @@ function make_installers($skip_file_grab=false)
 	$mszip=$builds_path.'/builds/'.$version_dotted.'/ocportal-'.$version_dotted.'-webpi.zip'; // Aka msappgallery, related to webmatrix
 
 	// Flags
-	$make_quick=!isset($_GET['skip_quick']);
-	$make_manual=!isset($_GET['skip_manual']);
-	$make_bundled=!isset($_GET['skip_bundled']);
-	$make_mszip=!isset($_GET['skip_mszip']);
-	$make_debian=false;//!isset($_GET['skip_debian']);
+	$make_quick=(get_param_integer('skip_quick',0)==0);
+	$make_manual=(get_param_integer('skip_manual',0)==0);
+	$make_bundled=(get_param_integer('skip_bundled',0)==0);
+	$make_mszip=(get_param_integer('skip_mszip',0)==0);
+	$make_debian=false;//(get_param_integer('skip_debian',0)==0);
 
 	disable_php_memory_limit();
 
@@ -654,7 +660,6 @@ function make_installers($skip_file_grab=false)
 
 		// Move files out temporarily
 		rename($builds_path.'/builds/build/'.$version_branch.'/info.php',$builds_path.'/builds/build/info.php');
-		rename($builds_path.'/builds/build/'.$version_branch.'/install.sql',$builds_path.'/builds/build/install.sql');
 		rename($builds_path.'/builds/build/'.$version_branch.'/install.php',$builds_path.'/builds/build/install.php');
 
 		// Copy some stuff we need
@@ -688,7 +693,6 @@ function make_installers($skip_file_grab=false)
 
 		// Move files moved out temporarily back
 		rename($builds_path.'/builds/build/info.php',$builds_path.'/builds/build/'.$version_branch.'/info.php');
-		rename($builds_path.'/builds/build/install.sql',$builds_path.'/builds/build/'.$version_branch.'/install.sql');
 		rename($builds_path.'/builds/build/install.php',$builds_path.'/builds/build/'.$version_branch.'/install.php');
 
 		chdir(get_file_base());
@@ -710,6 +714,11 @@ function make_installers($skip_file_grab=false)
 			<li>Total directories traversed: '.integer_format($TOTAL_DIRS).'</li>
 			'.$details.'
 		</ul>';
+
+	// To stop ocProducts-PHP complaining about non-synched files
+	global $_CREATED_FILES,$_MODIFIED_FILES;
+	$_CREATED_FILES=array();
+	$_MODIFIED_FILES=array();
 
 	return $out;
 }
@@ -780,12 +789,12 @@ function do_build_zip_output($file,$new_output)
 	$version_dotted=get_version_dotted();
 
 	$builds_path=get_builds_path();
-	do_output('
+	return '
 		<div class="zip_surround">
-		<h2>Compiling ZIP file "<a href="'.escape_html($file).'" title="Download the file.">'.escape_html(builds_path().$version_dotted.'/'.$file).'</a>"</h2>
+		<h2>Compiling ZIP file "<a href="'.escape_html($file).'" title="Download the file.">'.escape_html($builds_path.$version_dotted.'/'.$file).'</a>"</h2>
 		<p>'.trim(escape_html($new_output)).'</p>
 		</div>'
-	);
+	;
 }
 
 function populate_build_files_array($dir='',$pretend_dir='')
@@ -798,13 +807,21 @@ function populate_build_files_array($dir='',$pretend_dir='')
 
 	$version_branch=get_version_branch();
 
+	// Imply files into the root that we would have skipped
+	if ($pretend_dir=='')
+	{
+		$FILE_ARRAY[$pretend_dir.'info.php']='';
+	}
+
+	// Go over files in the directory
 	$full_dir=get_file_base().'/'.$dir;
 	$dh=opendir($full_dir);
 	while (($file=readdir($dh))!==false)
 	{
 		$is_dir=is_dir(get_file_base().'/'.$dir.$file);
 
-		if (should_ignore_file($pretend_dir.$file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS,0)) continue;
+		if (should_ignore_file($pretend_dir.$file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_UNSHIPPED_VOLATILE,0))
+			continue;
 
 		if ($is_dir)
 		{
@@ -821,32 +838,11 @@ function populate_build_files_array($dir='',$pretend_dir='')
 			{
 				$out.=$_out;
 			}
-
-			// Imply some extra dirs into sources_custom that we would have skipped
-			if ($pretend_dir=='sources_custom')
-			{
-				$extra_dirs=array(
-					'sources_custom/blocks',
-					'sources_custom/database',
-					'sources_custom/hooks',
-					'sources_custom/hooks/blocks',
-					'sources_custom/hooks/modules',
-					'sources_custom/hooks/systems',
-					'sources_custom/miniblocks',
-				);
-				foreach ($extra_dirs as $extra_dir)
-				{
-					$DIR_ARRAY[]=$extra_dir;
-					@mkdir($builds_path.'/builds/build/'.$version_branch.'/'.$extra_dir,0777);
-					fix_permissions($builds_path.'/builds/build/'.$version_branch.'/'.$extra_dir,0777);
-				}
-			}
 		}
 		else
 		{
 			// Reset volatile files to how they should be by default
-			if (($pretend_dir.$file)=='info.php') $FILE_ARRAY[$pretend_dir.$file]='';
-			elseif (($pretend_dir.$file)=='themes/map.ini') $FILE_ARRAY[$pretend_dir.$file]='default=default'.chr(10);
+			if (($pretend_dir.$file)=='themes/map.ini') $FILE_ARRAY[$pretend_dir.$file]='default=default'.chr(10);
 			elseif ($pretend_dir.$file=='data_custom/functions.dat') $FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='pages/html_custom/EN/download_tree_made.htm') $FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/cedi_tree_made.htm') $FILE_ARRAY[$pretend_dir.$file]='';

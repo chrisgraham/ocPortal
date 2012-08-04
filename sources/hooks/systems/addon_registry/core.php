@@ -545,6 +545,7 @@ class Hook_addon_registry_core
 			'data/guids.dat',
 			'data/iframe.php',
 			'data/images/index.html',
+			'data_custom/images/index.html',
 			'data/index.html',
 			'data/javascript.php',
 			'data/modules/index.html',

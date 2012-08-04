@@ -39,7 +39,8 @@ function init__files()
 	define('IGNORE_USER_CUSTOMISE',256);
 	define('IGNORE_NONBUNDLED_SCATTERED',512);
 	define('IGNORE_BUNDLED_VOLATILE',1024);
-	define('IGNORE_NON_EN_SCATTERED_LANGS',2048);
+	define('IGNORE_BUNDLED_UNSHIPPED_VOLATILE',2048);
+	define('IGNORE_NON_EN_SCATTERED_LANGS',4096);
 }
 
 /**
@@ -183,8 +184,10 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 {
 	$bitmask=$bitmask | $bitmask_defaults;
 
+	$is_dir=@is_dir(get_file_base().'/'.$filepath);
+	$is_file=@is_file(get_file_base().'/'.$filepath);
+
 	// Normalise
-	$filepath=strtolower($filepath);
 	if (strpos($filepath,'/')!==false)
 	{
 		$dir=dirname($filepath);
@@ -195,7 +198,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		$filename=$filepath;
 	}
 
-	$ignore_filenames=array(
+	$ignore_filenames_and_dir_names=array( // Case insensitive, define in lower case
 		'.'=>'.*',
 		'..'=>'.*',
 
@@ -274,56 +277,12 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'ocportal.sch'=>'',
 		'libocportal_u.dll'=>'',
 	);
-	if (($bitmask & IGNORE_NON_REGISTERED)!=0) // These aren't registered in any addon_registry hook, yet are bundled and in non-custom directories
-	{
-		$ignore_filenames+=array(
-			//'files.dat'=>'data', Actually is now (core.php)
-			//'files_previous.dat'=>'data', Actually is now (core.php)
-		);
-	}
-	if (($bitmask & IGNORE_BUNDLED_VOLATILE)!=0)
-	{
-		$ignore_filenames+=array(
-			// Bundled stuff that is not necessarily in a *_custom dir yet is volatile
-			'info.php'=>'',
-			'map.ini'=>'themes',
-			'functions.dat'=>'data_custom',
-			'download_tree_made.htm'=>'pages/html_custom/EN',
-			'cedi_tree_made.htm'=>'site/pages/html_custom/EN',
-			'ocp_sitemap.xml'=>'',
-			'errorlog.php'=>'data_custom',
-			'execute_temp.php'=>'data_custom',
-			// These two too, although in git we don't change these as builds will not rebuild them
-			'breadcrumbs.xml'=>'data_custom',
-			'fields.xml'=>'data_custom',
-		);
-	}
-	if (($bitmask & IGNORE_ACCESS_CONTROLLERS)!=0)
-	{
-		$ignore_filenames+=array(
-			'.htaccess'=>'.*',
-			'index.html'=>'.*',
-		);
-	}
-	if (($bitmask & IGNORE_USER_CUSTOMISE)!=0) // Ignores directories that user override files go in, not code (which IGNORE_CUSTOM_DIR_CONTENTS would cover), but stuff edited through frontend to override bundled files
-	{
-		$ignore_filenames+=array(
-			'comcode_custom'=>'.*',
-			'html_custom'=>'.*',
-			'css_custom'=>'.*',
-			'templates_custom'=>'.*',
-			'images_custom'=>'.*',
-			'lang_custom'=>'.*',
-			'file_backups'=>'exports',
-			'text_custom'=>'',
-			'theme.ini'=>'themes/[^/]*',
-		);
-	}
 
-	$ignore_extensions=array(
+	$ignore_extensions=array( // Case insensitive, define in lower case
 		// Exports (effectively these are like temporary files - only intended for file transmission)
 		'tar'=>'(imports|exports)/.*',
 		'gz'=>'(imports|exports)/.*',
+		'txt'=>'(imports|exports)/.*',
 
 		// Cache files
 		'lcd'=>'lang_cached(/.*)?',
@@ -335,6 +294,9 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 		// Logs
 		'log'=>'.*',
+
+		// Temporary files
+		'tmp'=>'.*',
 
 		// IDE projects
 		'clpprj'=>'',
@@ -351,6 +313,76 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		// CGI files
 		'fcgi'=>'',
 	);
+
+	$ignore_filename_and_dir_name_patterns=array( // Case insensitive
+		array('\..*\.(png|gif|jpeg|jpg)','.*'), // Image meta data file, e.g. ".example.png"
+		array('\_vti\_.*','.*'), // Frontpage
+		array('\.\_.*','.*'), // MacOS extended attributes
+		array('tmpfile__.*','.*'), // ocp_tempnam produced temporarily files (unfortunately we can't specify a .tmp suffix)
+		array('.*\.\d+','exports/file_backups'), // File backups (saved as revisions)
+	);
+	$ignore_filename_patterns=array( // Case insensitive; we'll use this only when we *need* directories that would match to be valid
+	);
+
+	if (($bitmask & IGNORE_NON_REGISTERED)!=0) // These aren't registered in any addon_registry hook, yet are bundled and in non-custom directories
+	{
+		$ignore_filenames_and_dir_names+=array(
+			//'files.dat'=>'data', Actually is now (core.php)
+			//'files_previous.dat'=>'data', Actually is now (core.php)
+		);
+	}
+
+	if (($bitmask & IGNORE_BUNDLED_VOLATILE)!=0)
+	{
+		$ignore_filenames_and_dir_names+=array(
+			// Bundled stuff that is not necessarily in a *_custom dir yet is volatile
+			'info.php'=>'',
+			'map.ini'=>'themes',
+			'functions.dat'=>'data_custom',
+			'download_tree_made.htm'=>'pages/html_custom/EN',
+			'cedi_tree_made.htm'=>'site/pages/html_custom/EN',
+			'ocp_sitemap.xml'=>'',
+			'errorlog.php'=>'data_custom',
+			'execute_temp.php'=>'data_custom',
+			// These two too, although in git we don't change these as builds will not rebuild them
+			'breadcrumbs.xml'=>'data_custom',
+			'fields.xml'=>'data_custom',
+		);
+	}
+
+	if ((($bitmask & IGNORE_BUNDLED_VOLATILE)!=0) || (($bitmask & IGNORE_BUNDLED_UNSHIPPED_VOLATILE)!=0))
+	{
+		$ignore_filenames_and_dir_names+=array(
+			// Bundled stuff that is not necessarily in a *_custom dir yet is volatile and should not be included in shipped builds
+			'chat_last_full_check.dat'=>'data_custom/modules/chat',
+			'chat_last_msg.dat'=>'data_custom/modules/chat',
+			'permissioncheckslog.php'=>'data_custom',
+		);
+	}
+
+	if (($bitmask & IGNORE_ACCESS_CONTROLLERS)!=0)
+	{
+		$ignore_filenames_and_dir_names+=array(
+			'.htaccess'=>'.*',
+			'index.html'=>'.*',
+		);
+	}
+
+	if (($bitmask & IGNORE_USER_CUSTOMISE)!=0) // Ignores directories that user override files go in, not code or uploads (which IGNORE_CUSTOM_DIR_CONTENTS would cover): stuff edited through frontend to override bundled files
+	{
+		$ignore_filenames_and_dir_names+=array(
+			'comcode_custom'=>'.*',
+			'html_custom'=>'.*',
+			'css_custom'=>'.*',
+			'templates_custom'=>'.*',
+			'images_custom'=>'.*',
+			'lang_custom'=>'.*',
+			'file_backups'=>'exports',
+			'text_custom'=>'',
+			'theme.ini'=>'themes/[^/]*',
+		);
+	}
+
 	if (($bitmask & IGNORE_EDITFROM_FILES)!=0)
 	{
 		$ignore_extensions+=array(
@@ -358,14 +390,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		);
 	}
 
-	$ignore_filename_patterns=array(
-		'\..*\.(png|gif|jpeg|jpg)'=>'.*', // Image meta data file, e.g. ".example.png"
-		'\_vti\_.*'=>'.*', // Frontpage
-		'\.\_.*'=>'.*', // MacOS extended attributes
-
-		// Exports (effectively these are like temporary files - only intended for file transmission)
-		'.*\.\d+'=>'exports/file_backups',
-	);
 	if (($bitmask & IGNORE_CUSTOM_DIR_CONTENTS)!=0) // Ignore all override directories, for both users and addons
 	{
 		if (($dir=='data_custom') && (in_array($filename,array('breadcrumbs.xml','fields.xml','errorlog.php','execute_temp.php','functions.dat'))))
@@ -373,42 +397,52 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 			// These are allowed, as they are volatile yet bundled. Use IGNORE_BUNDLED_VOLATILE if you don't want them.
 		} else
 		{
-			$ignore_filename_patterns+=array(
+			$ignore_filename_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
+				array('(?!index.html$)(?!\.htaccess$).*','.*_custom(/.*)?'),
+			));
+			$ignore_filename_and_dir_name_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
 				//'.*\_custom'=>'.*', Let it find them, but work on the contents
-				'(?!index.html$)(?!\.htaccess$).*'=>'.*\_custom(/.*)?',
-				'(?!index.html$)(?!\.htaccess$).*'=>'data/areaedit/plugins/SpellChecker/aspell',
-				'(?!index.html$)(?!\.htaccess$).*'=>'data_custom/modules/admin_stats',
-			);
+				array('(?!index.html$)(?!\.htaccess$).*','sources_custom/hooks/[^/]*'), // We don't want deep sources_custom hook directories either
+				array('(?!index.html$)(?!\.htaccess$).*','data/areaedit/plugins/SpellChecker/aspell'),
+				array('(?!index.html$)(?!\.htaccess$).*','data_custom/modules/admin_stats'),
+				array('(?!index.html$)(?!\.htaccess$).*','uploads/.*'),
+			));
 		}
 	}
+
 	if (($bitmask & IGNORE_HIDDEN_FILES)!=0)
 	{
-		$ignore_filename_patterns+=array(
-			'\..*'=>'.*',
-		);
-	}
-	if (($bitmask & IGNORE_REVISION_FILES)!=0) // E.g. global.css.<timestamp>
-	{
-		$ignore_filename_patterns+=array(
-			'.*\.\d+'=>'.*',
-		);
+		$ignore_filename_and_dir_name_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
+			array('\..*','.*'),
+		));
 	}
 
-	if (isset($ignore_filenames[$filename]))
+	if (($bitmask & IGNORE_REVISION_FILES)!=0) // E.g. global.css.<timestamp>
 	{
-		if (preg_match('#^'.$ignore_filenames[$filename].'$#',$dir)!=0) return true; // Check dir context
+		$ignore_filename_and_dir_name_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
+			array('.*\.\d+','.*'),
+		));
+	}
+
+	if (isset($ignore_filenames_and_dir_names[strtolower($filename)]))
+	{
+		if (preg_match('#^'.$ignore_filenames_and_dir_names[strtolower($filename)].'$#i',$dir)!=0) return true; // Check dir context
 	}
 
 	$extension=get_file_extension($filename);
-	if (isset($ignore_extensions[$extension]))
+	if (isset($ignore_extensions[strtolower($extension)]))
 	{
-		if (preg_match('#^'.$ignore_extensions[$extension].'$#',$dir)!=0) return true; // Check dir context
+		if (preg_match('#^'.$ignore_extensions[strtolower($extension)].'$#i',$dir)!=0) return true; // Check dir context
 	}
-	foreach ($ignore_filename_patterns as $filename_pattern=>$dir_pattern)
+	foreach (array_merge($is_file?$ignore_filename_patterns:array(),$ignore_filename_and_dir_name_patterns) as $pattern)
 	{
-		if (preg_match('#^'.$filename_pattern.'$#',$filename)!=0)
+		list($filename_pattern,$dir_pattern)=$pattern;
+		if (preg_match('#^'.$filename_pattern.'$#i',$filename)!=0)
 		{
-			if (preg_match('#^'.$dir_pattern.'$#',$dir)!=0) return true; // Check dir context
+			if (preg_match('#^'.$dir_pattern.'$#i',$dir)!=0) // Check dir context
+			{
+				return true;
+			}
 		}
 	}
 
@@ -419,29 +453,33 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 	if (($bitmask & IGNORE_CUSTOM_THEMES)!=0)
 	{
-		if ((preg_match('#^themes($|/)#',$dir)!=0) && (!in_array($filename,array('default','index.html','map.ini')))) return true;
+		if ((preg_match('#^themes($|/)#i',$dir)!=0) && (!in_array(strtolower($filename),array('default','index.html','map.ini')))) return true;
 	}
 
 	if (($bitmask & IGNORE_CUSTOM_ZONES)!=0)
 	{
-		if ((file_exists(get_file_base().$filepath.'/index.php')) && (file_exists(get_file_base().$filepath.'/pages')) && (!in_array($filename,array('adminzone','collaboration','cms','forum','site'))))
+		if ((file_exists(get_file_base().$filepath.'/index.php')) && (file_exists(get_file_base().$filepath.'/pages')) && (!in_array(strtolower($filename),array('adminzone','collaboration','cms','forum','site'))))
 			return true;
 	}
 
 	if (($bitmask & IGNORE_NONBUNDLED_SCATTERED)!=0)
 	{
-		if ($filepath=='exports/static') return true; // Empty directory, so has to be a special exception
+		if (strtolower($filepath)=='data_custom/addon_screenshots') return true; // Relating to addon build, but not defined in addons
+		if (strtolower($filepath)=='exports/static') return true; // Empty directory, so has to be a special exception
+		if (strtolower($filepath)=='exports/builds') return true; // Needed to stop build recursion
 		if (file_exists(get_custom_file_base().'/data_custom/addon_files.txt'))
 		{
-			if (strpos(file_get_contents(unixify_line_format(get_custom_file_base().'/data_custom/addon_files.txt')),' - '.$filepath.chr(10))!==false)
+			static $addon_list=NULL;
+			if ($addon_list===NULL) $addon_list=strtolower(file_get_contents(unixify_line_format(get_custom_file_base().'/data_custom/addon_files.txt')));
+			if (strpos($addon_list,' - '.strtolower($filepath).chr(10))!==false)
 			{
 				return true;
 			}
 		} else
 		{
 			static $addon_files=NULL;
-			if ($addon_files===NULL) $addon_files=collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename')));
-			if (in_array($filepath,$addon_files)) return true;
+			if ($addon_files===NULL) $addon_files=array_map('strtolower',collapse_1d_complexity('filename',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename'))));
+			if (in_array(strtolower($filepath),$addon_files)) return true;
 		}
 		// Note that we have no support for identifying directories related to addons, only files inside. Code using this function should detect directories with no usable files in as relating to addons.
 	}
