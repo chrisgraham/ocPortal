@@ -291,9 +291,12 @@ function step_1()
 
 				foreach ($files as $file=>$file_info)
 				{
+					// Volatile files (see also list in make_release.php)
 					if ($file=='data_custom/errorlog.php') continue;
 					if ($file=='ocp_sitemap.xml') continue;
-					if ($file=='data_custom/spelling/output.log') continue;
+					if ($file=='site/pages/html_custom/EN/download_tree_made.htm') continue;
+					if ($file=='site/pages/html_custom/EN/cedi_tree_made.htm') continue;
+					if ($file=='data_custom/execute_temp.php') continue;
 					if ($file=='info.php') continue;
 					if ($file=='themes/map.ini') continue;
 					if ($file=='sources/version.php') continue;
@@ -2226,7 +2229,7 @@ function handle_self_referencing_embedment()
 
 			exit();
 		}
-		if (($type=='css') || ($type=='css_2'))
+		if (($type=='css') || ($type=='css_2')/*So colours are parsed initially*/)
 		{
 			header('Content-Type: text/css');
 
@@ -2258,7 +2261,6 @@ function handle_self_referencing_embedment()
 			if (!file_exists(get_file_base().'/themes/default/css/install.css'))
 			{
 				$file=file_array_get('themes/default/css/install.css');
-				echo $file;
 			} else $file=file_get_contents(get_file_base().'/themes/default/css/install.css');
 			$file=preg_replace('#\{\$IMG\,([^,\}\']+)\}#','themes/default/images/${1}.png',$file);
 

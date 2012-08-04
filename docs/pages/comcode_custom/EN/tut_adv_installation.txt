@@ -79,7 +79,7 @@ It has been reported to us that some systems require PHP scripts to be given exe
  - All PHP files in the data directory
  - data/areaedit/ddt/ddt.php
  - data/areaedit/plugins/SpellChecker/backend.php
- - All PHP files in any zone (e.g. /, and /adminzone) directories
+ - All PHP files in the main directory for a zone (e.g. /, and /adminzone) directories
 
 The quick installer handles this automatically.
 

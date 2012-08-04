@@ -25,7 +25,7 @@ disable_php_memory_limit();
 
 $type=get_param('type','0');
 
-$title=get_screen_title('ocPortal release assistance tool',false);
+$title=get_screen_title('ocPortal release assistance tool - step '.strval(intval($type)+1).'/3',false);
 $title->evaluate_echo();
 
 switch ($type)
@@ -268,7 +268,7 @@ function phase_2()
 	';
 
 	echo '
-		<li>Where applicable upgrade client/our-own sites running ocPortal to the new version (see <tt>ocProducts documents/support and support:security accounts/clients_to_upgrade.txt</tt> and <tt>ocProducts documents/support and support:security accounts/clients_to_give_security_advice_to.txt</tt>).</li>
+		<li>Where applicable upgrade client/our-own sites running ocPortal to the new version (see <tt>ocProducts documents/support &amp; security accounts/clients_to_upgrade.txt</tt> and <tt>ocProducts documents/support &amp; security accounts/clients_to_give_security_advice_to.txt</tt>).</li>
 	';
 
 	if ($is_substantial && !$is_bleeding_edge)

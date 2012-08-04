@@ -21,38 +21,14 @@ function init__make_release()
 	get_builds_path();
 }
 
-function make_files_manifest()
-{
-	global $FILE_ARRAY;
-
-	$files=array();
-	foreach ($FILE_ARRAY as $file=>$contents)
-	{
-		if ($file=='data_custom/files.dat') continue;
-
-		if ($file=='sources/version.php') $contents=preg_replace('/\d{10}/','',$contents); // Not interested in differences in file time
-
-		$files[$file]=array(sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',$contents))));
-	}
-
-	$file_manifest=serialize($files);
-
-	$myfile=fopen(get_file_base().'/data/files.dat','wb');
-	fwrite($myfile,$file_manifest);
-	fclose($myfile);
-	fix_permissions(get_file_base().'/data/files.dat');
-
-	$FILE_ARRAY['data_custom/files.dat']=$file_manifest;
-}
-
 function make_installers($skip_file_grab=false)
 {
 	// Tracking
-	global $FILE_ARRAY,$DIR_ARRAY,$TOTAL_DIRS,$TOTAL_FILES;
-	$FILE_ARRAY=array();
-	$DIR_ARRAY=array();
-	$TOTAL_DIRS=0;
-	$TOTAL_FILES=0;
+	global $MAKE_INSTALLERS__FILE_ARRAY,$MAKE_INSTALLERS__DIR_ARRAY,$MAKE_INSTALLERS__TOTAL_DIRS,$MAKE_INSTALLERS__TOTAL_FILES;
+	$MAKE_INSTALLERS__FILE_ARRAY=array();
+	$MAKE_INSTALLERS__DIR_ARRAY=array();
+	$MAKE_INSTALLERS__TOTAL_DIRS=0;
+	$MAKE_INSTALLERS__TOTAL_FILES=0;
 
 	// Start output
 	$out='';
@@ -95,6 +71,8 @@ function make_installers($skip_file_grab=false)
 		make_files_manifest();
 	}
 
+	//header('Content-type: text/plain');var_dump(array_keys($MAKE_INSTALLERS__FILE_ARRAY));exit(); Useful for testing quickly what files will be built
+
 	// What we'll be building
 	$bundled=$builds_path.'/builds/'.$version_dotted.'/ocportal-'.$version_dotted.'.tar';
 	$quick_zip=$builds_path.'/builds/'.$version_dotted.'/ocportal_quick_installer-'.$version_dotted.'.zip';
@@ -118,7 +96,7 @@ function make_installers($skip_file_grab=false)
 		$data_file=fopen($builds_path.'/builds/'.$version_dotted.'/data.ocp','wb');
 		require_code('zip');
 		$zip_file_array=array();
-		foreach ($FILE_ARRAY as $filename=>$data)
+		foreach ($MAKE_INSTALLERS__FILE_ARRAY as $filename=>$data)
 		{
 			$zip_file_array[]=array('time'=>filemtime(get_file_base().'/'.$filename),'data'=>$data,'name'=>$filename);
 		}
@@ -132,11 +110,11 @@ function make_installers($skip_file_grab=false)
 		$md5=md5(file_get_contents($builds_path.'/builds/build/'.$version_branch.'/'.$md5_test_path));
 
 		// Write out our PHP installer file
-		$file_count=count($FILE_ARRAY);
+		$file_count=count($MAKE_INSTALLERS__FILE_ARRAY);
 		$size_list='';
 		$offset_list='';
 		$file_list='';
-		foreach (array_keys($FILE_ARRAY) as $path) // $FILE_ARRAY is Current path->contents. We need number->path, so we can count through them without having to have the array with us. We end up with this in string form, as it goes in our file
+		foreach (array_keys($MAKE_INSTALLERS__FILE_ARRAY) as $path) // $MAKE_INSTALLERS__FILE_ARRAY is Current path->contents. We need number->path, so we can count through them without having to have the array with us. We end up with this in string form, as it goes in our file
 		{
 			$out.=do_build_file_output($path);
 			$size_list.='\''.$path.'\'=>'.$sizes[$path].','."\n";
@@ -198,8 +176,8 @@ function make_installers($skip_file_grab=false)
 			}";
 		$installer_start=preg_replace('#^\t{3}#m','',$installer_start); // Format it correctly
 		fwrite($auto_installer,$installer_start);
-		global $DIR_ARRAY;
-		foreach ($DIR_ARRAY as $dir)
+		global $MAKE_INSTALLERS__DIR_ARRAY;
+		foreach ($MAKE_INSTALLERS__DIR_ARRAY as $dir)
 		{
 			fwrite($auto_installer,'$DIR_ARRAY[]=\''.$dir.'\';'."\n");
 		}
@@ -662,9 +640,11 @@ function make_installers($skip_file_grab=false)
 		rename($builds_path.'/builds/build/'.$version_branch.'/info.php',$builds_path.'/builds/build/info.php');
 		rename($builds_path.'/builds/build/'.$version_branch.'/install.php',$builds_path.'/builds/build/install.php');
 
+		// Put temporary files in main folder
+		copy(get_file_base().'/info.php.template',$builds_path.'/builds/build/'.$version_branch.'/info.php.template');
+		fix_permissions($builds_path.'/builds/build/'.$version_branch.'/info.php.template');
+
 		// Copy some stuff we need
-		copy(get_file_base().'/info.php.template',$builds_path.'/builds/build/info.php.template');
-		fix_permissions($builds_path.'/builds/build/info.php.template');
 		for ($i=1;$i<=4;$i++)
 		{
 			copy(get_file_base().'/install'.strval($i).'.sql',$builds_path.'/builds/build/install'.strval($i).'.sql');
@@ -691,9 +671,12 @@ function make_installers($skip_file_grab=false)
 		// Undo temporary renaming
 		rename($builds_path.'/builds/build/ocportal',$builds_path.'/builds/build/'.$version_branch);
 
-		// Move files moved out temporarily back
+		// Move back files moved out temporarily
 		rename($builds_path.'/builds/build/info.php',$builds_path.'/builds/build/'.$version_branch.'/info.php');
 		rename($builds_path.'/builds/build/install.php',$builds_path.'/builds/build/'.$version_branch.'/install.php');
+
+		// Remove temporary files from main folder
+		unlink($builds_path.'/builds/build/'.$version_branch.'/info.php.template');
 
 		chdir(get_file_base());
 	}
@@ -710,8 +693,8 @@ function make_installers($skip_file_grab=false)
 	$out.='
 		<h2>Statistics</h2>
 		<ul>
-			<li>Total files compiled: '.integer_format($TOTAL_FILES).'</li>
-			<li>Total directories traversed: '.integer_format($TOTAL_DIRS).'</li>
+			<li>Total files compiled: '.integer_format($MAKE_INSTALLERS__TOTAL_FILES).'</li>
+			<li>Total directories traversed: '.integer_format($MAKE_INSTALLERS__TOTAL_DIRS).'</li>
 			'.$details.'
 		</ul>';
 
@@ -772,15 +755,15 @@ function copy_r($path,$dest)
 
 function do_build_file_output($path)
 {
-	global $TOTAL_FILES;
-	$TOTAL_FILES++;
+	global $MAKE_INSTALLERS__TOTAL_FILES;
+	$MAKE_INSTALLERS__TOTAL_FILES++;
 	return '<li>File "'.escape_html($path).'" compiled.</li>';
 }
 
 function do_build_directory_output($path)
 {
-	global $TOTAL_DIRS;
-	$TOTAL_DIRS++;
+	global $MAKE_INSTALLERS__TOTAL_DIRS;
+	$MAKE_INSTALLERS__TOTAL_DIRS++;
 	return '<li>Directory "'.escape_html($path).'" traversed.</li>';
 }
 
@@ -792,14 +775,14 @@ function do_build_zip_output($file,$new_output)
 	return '
 		<div class="zip_surround">
 		<h2>Compiling ZIP file "<a href="'.escape_html($file).'" title="Download the file.">'.escape_html($builds_path.$version_dotted.'/'.$file).'</a>"</h2>
-		<p>'.trim(escape_html($new_output)).'</p>
+		<p>'.nl2br(trim(escape_html($new_output))).'</p>
 		</div>'
 	;
 }
 
 function populate_build_files_array($dir='',$pretend_dir='')
 {
-	global $FILE_ARRAY,$DIR_ARRAY;
+	global $MAKE_INSTALLERS__FILE_ARRAY,$MAKE_INSTALLERS__DIR_ARRAY;
 
 	$builds_path=get_builds_path();
 
@@ -810,7 +793,7 @@ function populate_build_files_array($dir='',$pretend_dir='')
 	// Imply files into the root that we would have skipped
 	if ($pretend_dir=='')
 	{
-		$FILE_ARRAY[$pretend_dir.'info.php']='';
+		$MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.'info.php']='';
 	}
 
 	// Go over files in the directory
@@ -825,14 +808,14 @@ function populate_build_files_array($dir='',$pretend_dir='')
 
 		if ($is_dir)
 		{
-			$num_files=count($FILE_ARRAY);
-			$DIR_ARRAY[]=$pretend_dir.$file;
+			$num_files=count($MAKE_INSTALLERS__FILE_ARRAY);
+			$MAKE_INSTALLERS__DIR_ARRAY[]=$pretend_dir.$file;
 			@mkdir($builds_path.'/builds/build/'.$version_branch.'/'.$pretend_dir.$file,0777);
 			fix_permissions($builds_path.'/builds/build/'.$version_branch.'/'.$pretend_dir.$file,0777);
 			$_out=populate_build_files_array($dir.$file.'/',$pretend_dir.$file.'/');
-			if ($num_files==count($FILE_ARRAY)) // Empty, effectively (maybe was from a non-bundled addon) - don't use it
+			if ($num_files==count($MAKE_INSTALLERS__FILE_ARRAY)) // Empty, effectively (maybe was from a non-bundled addon) - don't use it
 			{
-				array_pop($DIR_ARRAY);
+				array_pop($MAKE_INSTALLERS__DIR_ARRAY);
 				rmdir($builds_path.'/builds/build/'.$version_branch.'/'.$pretend_dir.$file);
 			} else
 			{
@@ -841,27 +824,26 @@ function populate_build_files_array($dir='',$pretend_dir='')
 		}
 		else
 		{
-			// Reset volatile files to how they should be by default
-			if (($pretend_dir.$file)=='themes/map.ini') $FILE_ARRAY[$pretend_dir.$file]='default=default'.chr(10);
-			elseif ($pretend_dir.$file=='data_custom/functions.dat') $FILE_ARRAY[$pretend_dir.$file]='';
-			elseif ($pretend_dir.$file=='pages/html_custom/EN/download_tree_made.htm') $FILE_ARRAY[$pretend_dir.$file]='';
-			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/cedi_tree_made.htm') $FILE_ARRAY[$pretend_dir.$file]='';
-			elseif ($pretend_dir.$file=='data_custom/spelling/output.log') $FILE_ARRAY[$pretend_dir.$file]='';
-			elseif ($pretend_dir.$file=='data_custom/spelling/write.log') $FILE_ARRAY[$pretend_dir.$file]='';
-			elseif ($pretend_dir.$file=='ocp_sitemap.xml') $FILE_ARRAY[$pretend_dir.$file]='';
-			elseif ($pretend_dir.$file=='data_custom/errorlog.php') $FILE_ARRAY[$pretend_dir.$file]="<?php return; ?".">\n"; // So that code can't be executed
-			elseif ($pretend_dir.$file=='data_custom/execute_temp.php') $FILE_ARRAY[$pretend_dir.$file]=preg_replace('#function execute_temp\(\)\n\n\{\n.*\}\n\n#s',"function execute_temp()\n\n{\n}\n\n#",file_get_contents(get_file_base().'/'.$dir.$file));
+			// Reset volatile files to how they should be by default (see also list in install.php)
+			if (($pretend_dir.$file)=='info.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
+			elseif (($pretend_dir.$file)=='themes/map.ini') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='default=default'.chr(10);
+			elseif ($pretend_dir.$file=='data_custom/functions.dat') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
+			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/download_tree_made.htm') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
+			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/cedi_tree_made.htm') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
+			elseif ($pretend_dir.$file=='ocp_sitemap.xml') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
+			elseif ($pretend_dir.$file=='data_custom/errorlog.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]="<?php return; ?".">\n"; // So that code can't be executed
+			elseif ($pretend_dir.$file=='data_custom/execute_temp.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]=preg_replace('#function execute_temp\(\)\n\n\{\n.*\}\n\n#s',"function execute_temp()\n\n{\n}\n\n#",file_get_contents(get_file_base().'/'.$dir.$file));
 			// NB: 'data_custom/breadcrumbs.xml' and 'data_custom/fields.xml' are also volatile for users, but in git we're not allowed to mess with these without commit/release intent.
 
 			// Update time of version in version.php
-			elseif ($pretend_dir.$file=='sources/version.php') $FILE_ARRAY[$pretend_dir.$file]=preg_replace('/\d{10}/',strval(time()),file_get_contents(get_file_base().'/'.$dir.$file),1);
+			elseif ($pretend_dir.$file=='sources/version.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]=preg_replace('/\d{10}/',strval(time()),file_get_contents(get_file_base().'/'.$dir.$file),1);
 
 			// Copy file as-is
-			else $FILE_ARRAY[$pretend_dir.$file]=file_get_contents(get_file_base().'/'.$dir.$file);
+			else $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]=file_get_contents(get_file_base().'/'.$dir.$file);
 
 			// Write the file out
 			$tmp=fopen($builds_path.'/builds/build/'.$version_branch.'/'.$pretend_dir.$file,'wb');
-			fwrite($tmp,$FILE_ARRAY[$pretend_dir.$file]);
+			fwrite($tmp,$MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]);
 			fclose($tmp);
 			fix_permissions($builds_path.'/builds/build/'.$version_branch.'/'.$pretend_dir.$file);
 		}
@@ -869,4 +851,28 @@ function populate_build_files_array($dir='',$pretend_dir='')
 
 	$out.=do_build_directory_output($pretend_dir);
 	return $out;
+}
+
+function make_files_manifest() // Builds files.dat, the ocPortal file manifest (used for integrity checks)
+{
+	global $MAKE_INSTALLERS__FILE_ARRAY;
+
+	$files=array();
+	foreach ($MAKE_INSTALLERS__FILE_ARRAY as $file=>$contents)
+	{
+		if ($file=='data/files.dat') continue;
+
+		if ($file=='sources/version.php') $contents=preg_replace('/\d{10}/','',$contents); // Not interested in differences in file time
+
+		$files[$file]=array(sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',$contents))));
+	}
+
+	$file_manifest=serialize($files);
+
+	$myfile=fopen(get_file_base().'/data/files.dat','wb');
+	fwrite($myfile,$file_manifest);
+	fclose($myfile);
+	fix_permissions(get_file_base().'/data/files.dat');
+
+	$MAKE_INSTALLERS__FILE_ARRAY['data/files.dat']=$file_manifest;
 }

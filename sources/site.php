@@ -55,10 +55,13 @@ function init__site()
 	global $NON_CANONICAL_PARAMS;
 	// We only bother listing ones the software itself may inject - otherwise admin responsible for their own curation of canonical settings
 	$NON_CANONICAL_PARAMS=array('wide_high','wide','wide_print','root','filtered','utheme','active_filter','redirected','redirect_url','redirect','redirect_passon');
-	$canonical_keep_params=explode(',',is_null(get_value('canonical_keep_params'))?'':get_value('canonical_keep_params'));
-	foreach (array_keys($_GET) as $key)
+	if (function_exists('get_value'))
 	{
-		if ((substr($key,0,5)=='keep_') && (!in_array($key,$canonical_keep_params))) $NON_CANONICAL_PARAMS[]=$key;
+		$canonical_keep_params=explode(',',is_null(get_value('canonical_keep_params'))?'':get_value('canonical_keep_params'));
+		foreach (array_keys($_GET) as $key)
+		{
+			if ((substr($key,0,5)=='keep_') && (!in_array($key,$canonical_keep_params))) $NON_CANONICAL_PARAMS[]=$key;
+		}
 	}
 
 	global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES,$LATE_ATTACHED_MESSAGES_RAW;
@@ -83,7 +86,13 @@ function init__site()
 	$BREADCRUMB_EXTRA_SEGMENTS=new ocp_tempcode();
 	$DISPLAYED_TITLE=NULL;
 	$BREADCRUMB_SET_SELF=NULL;
-	$bcl=get_value('breadcrumb_crop_length');
+	if (function_exists('get_value'))
+	{
+		$bcl=get_value('breadcrumb_crop_length');
+	} else
+	{
+		$bcl=mixed();
+	}
 	define('BREADCRUMB_CROP_LENGTH',is_null($bcl)?26:intval($bcl));
 
 	global $PT_PAIR_CACHE_CP;

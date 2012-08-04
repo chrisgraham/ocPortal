@@ -362,10 +362,10 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 	if (($bitmask & IGNORE_ACCESS_CONTROLLERS)!=0)
 	{
-		$ignore_filenames_and_dir_names+=array(
+		$ignore_filenames_and_dir_names=array(
 			'.htaccess'=>'.*',
 			'index.html'=>'.*',
-		);
+		)+$ignore_filenames_and_dir_names; // Done in this order as we are overriding .htaccess to block everywhere (by default blocks root only). PHP has weird array merge precedence rules.
 	}
 
 	if (($bitmask & IGNORE_USER_CUSTOMISE)!=0) // Ignores directories that user override files go in, not code or uploads (which IGNORE_CUSTOM_DIR_CONTENTS would cover): stuff edited through frontend to override bundled files
@@ -398,14 +398,15 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		} else
 		{
 			$ignore_filename_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
-				array('(?!index.html$)(?!\.htaccess$).*','.*_custom(/.*)?'),
+				array('(?!cedi_tree_made\.htm$)(?!download_tree_made\.htm$)(?!index\.html$)(?!\.htaccess$).*','.*_custom(/.*)?'), // Stuff under custom folders; cedi_tree_made/download_tree_made is defined as an exception - it allows setting fewer permissions on the html_custom directory if wanted (ideally we would do this in a more modular way, but not worth the overhead)
 			));
 			$ignore_filename_and_dir_name_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
 				//'.*\_custom'=>'.*', Let it find them, but work on the contents
-				array('(?!index.html$)(?!\.htaccess$).*','sources_custom/hooks/[^/]*'), // We don't want deep sources_custom hook directories either
-				array('(?!index.html$)(?!\.htaccess$).*','data/areaedit/plugins/SpellChecker/aspell'),
-				array('(?!index.html$)(?!\.htaccess$).*','data_custom/modules/admin_stats'),
-				array('(?!index.html$)(?!\.htaccess$).*','uploads/.*'),
+				array('(?!index\.html$)(?!\.htaccess$).*','sources_custom/hooks/[^/]*'), // We don't want deep sources_custom hook directories either
+				array('(?!index\.html$)(?!\.htaccess$).*','themes/default/images_custom'), // We don't want deep images_custom directories either
+				array('(?!index\.html$)(?!\.htaccess$).*','data/areaedit/plugins/SpellChecker/aspell'), // We don't supply aspell outside git, too much space taken
+				array('(?!index\.html$)(?!\.htaccess$).*','data_custom/modules/admin_stats'), // Various temporary XML files get created under here, for SVG graphs
+				array('(?!pre_transcoding$)(?!index.html$)(?!\.htaccess$).*','uploads/.*'), // Uploads
 			));
 		}
 	}
@@ -453,7 +454,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 	if (($bitmask & IGNORE_CUSTOM_THEMES)!=0)
 	{
-		if ((preg_match('#^themes($|/)#i',$dir)!=0) && (!in_array(strtolower($filename),array('default','index.html','map.ini')))) return true;
+		if ((preg_match('#^themes($|/)#i',$dir)!=0) && (substr($filepath,0,strlen('themes/default/'))!='themes/default/') && (!in_array(strtolower($filepath),array('themes/default','themes/index.html','themes/map.ini')))) return true;
 	}
 
 	if (($bitmask & IGNORE_CUSTOM_ZONES)!=0)

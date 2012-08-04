@@ -53,8 +53,7 @@
 
   <setAcl path="ocportal/data_custom/modules/chat" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/data_custom/modules/admin_backup" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
-  <setAcl path="ocportal/data_custom/spelling/output.log" setAclResourceType="File" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
-  <setAcl path="ocportal/data_custom/spelling/write.log" setAclResourceType="File" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
+  <setAcl path="ocportal/data_custom/spelling" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/data_custom/spelling/personal_dicts" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/themes" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/text_custom" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />

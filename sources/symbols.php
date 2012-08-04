@@ -2238,11 +2238,17 @@ function ecv($lang,$escaped,$type,$name,$param)
 				global $EXTRA_SYMBOLS;
 				if (is_null($EXTRA_SYMBOLS))
 				{
-					$EXTRA_SYMBOLS=array();
-					$hooks=find_all_hooks('systems','symbols');
-					foreach (array_keys($hooks) as $hook)
+					if (running_script('install'))
 					{
-						$EXTRA_SYMBOLS[$hook]=array();
+						$EXTRA_SYMBOLS=array('BETA_CSS_PROPERTY'=>array()); // Needed for installer to look good ('find_all_hooks' won't run in initial steps of quick installer)
+					} else
+					{
+						$EXTRA_SYMBOLS=array();
+						$hooks=find_all_hooks('systems','symbols');
+						foreach (array_keys($hooks) as $hook)
+						{
+							$EXTRA_SYMBOLS[$hook]=array();
+						}
 					}
 				}
 				if (array_key_exists($name,$EXTRA_SYMBOLS))
@@ -2261,8 +2267,11 @@ function ecv($lang,$escaped,$type,$name,$param)
 					break;
 				}
 				$value='';
-				require_code('site');
-				attach_message(do_lang_tempcode('MISSING_SYMBOL',escape_html($name)),'warn');
+				if (!running_script('install'))
+				{
+					require_code('site');
+					attach_message(do_lang_tempcode('MISSING_SYMBOL',escape_html($name)),'warn');
+				}
 		}
 
 		if ($escaped!=array())

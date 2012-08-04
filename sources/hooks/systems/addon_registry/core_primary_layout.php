@@ -85,7 +85,6 @@ class Hook_addon_registry_core_primary_layout
 			'MINOR_TITLE.tpl',
 			'MAIL.tpl',
 			'MAIL_SUBJECT.tpl',
-			'BREADCRUMB.tpl',
 			'BREADCRUMB_SEPARATOR.tpl',
 			'CSS_NEED_FULL.tpl'
 		);
@@ -101,7 +100,6 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			'BREADCRUMB_SEPARATOR.tpl'=>'breadcrumb',
-			'BREADCRUMB.tpl'=>'breadcrumb',
 			'CLOSED_SITE.tpl'=>'closed_site',
 			'CSS_NEED_FULL.tpl'=>'css_need_full',
 			'MESSAGE.tpl'=>'message',

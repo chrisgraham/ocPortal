@@ -125,7 +125,7 @@ function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 function wrap_exec($cmd)
 {
 	//echo htmlentities($cmd.' > '.get_custom_file_base().'/data_custom/spelling/output.log').'<br />';
-	if (shell_exec($cmd.' > output.log')===false)
+	if (shell_exec($cmd.' > '.get_custom_file_base().'/data_custom/spelling/output.log')===false)
 	{
 		return false;
 	}

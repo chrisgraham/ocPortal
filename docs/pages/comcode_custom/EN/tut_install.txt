@@ -80,6 +80,7 @@ Set the following to [b]777[/b]: (full directory permissions)
  - data_custom/modules/chat
  - data_custom/modules/admin_stats
  - data_custom/modules/admin_backup
+ - data_custom/spelling
  - data_custom/spelling/personal_dicts
  - exports/backups
  - exports/file_backups
@@ -140,17 +141,15 @@ Set the following to [b]777[/b]: (full directory permissions)
  - uploads/website_specific
 
 Set the following to [b]666[/b]: (full read/write permissions)
- - data_custom/errorlog.php (if it exists)
- - data_custom/fields.xml (if it exists)
- - data_custom/breadcrumbs.xml (if it exists)
- - data_custom/functions.dat (if it exists)
- - data_custom/spelling/output.log (if it exists)
- - data_custom/spelling/write.log (if it exists)
- - data_custom/modules/chat/chat_last_msg.dat (if it exists)
- - data_custom/modules/chat/chat_last_event.dat (if it exists)
+ - data_custom/errorlog.php
+ - data_custom/fields.xml
+ - data_custom/breadcrumbs.xml
+ - data_custom/functions.dat
+ - data_custom/modules/chat/chat_last_msg.dat
+ - data_custom/modules/chat/chat_last_event.dat
  - data_custom/permissioncheckslog.php (if it exists)
  - info.php
- - ocp_sitemap.xml (if it exists)
+ - ocp_sitemap.xml
 
 Remember -- if you chose the quick install option, it's likely that none of these permission settings are required.
 

@@ -364,13 +364,8 @@
   </parameter>
 
   <parameter
-    name="SetAclParameter2" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/spelling/output.log" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/spelling/output.log" />
-  </parameter>
-
-  <parameter
-    name="SetAclParameter3" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/spelling/write.log" tags="Hidden">
-    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/spelling/write.log" />
+    name="SetAclParameter3" description="Sets the ACL on the right file" defaultValue="{Application Path}/data_custom/spelling" tags="Hidden">
+    <parameterEntry type="ProviderPath" scope="setAcl" match="ocportal/data_custom/spelling" />
   </parameter> 
 
   <parameter
