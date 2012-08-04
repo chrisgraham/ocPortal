@@ -311,7 +311,7 @@ function get_max_file_size($source_member=NULL,$connection=NULL)
 			$daily_quota=ocf_get_member_best_group_property($source_member,'max_daily_upload_mb');
 		} else
 		{
-			$daily_quota=5; // 5 is a hard coded default for non-OCF forums
+			$daily_quota=5; // 5 is a hard-coded default for non-OCF forums
 		}
 		if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 		$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval((integer)$source_member).' AND a_add_time>'.strval(time()-60*60*24));
@@ -678,8 +678,6 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 				if (!is_null($byte_limit)) curl_setopt($ch,CURLOPT_RANGE,'0-'.strval(($byte_limit==0)?0:($byte_limit-1)));
 				$line=curl_exec($ch);
-				if (substr($line,0,25)=="HTTP/1.1 100 Continue\r\n\r\n") $line=substr($line,25);
-				if (substr($line,0,25)=="HTTP/1.0 100 Continue\r\n\r\n") $line=substr($line,25);
 				if ($line===false)
 				{
 					$error=curl_error($ch);
@@ -688,6 +686,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						warn_exit($error);
 					return NULL;
 				}
+				if (substr($line,0,25)=="HTTP/1.1 100 Continue\r\n\r\n") $line=substr($line,25);
+				if (substr($line,0,25)=="HTTP/1.0 100 Continue\r\n\r\n") $line=substr($line,25);
 				$HTTP_DOWNLOAD_MIME_TYPE=curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
 				$HTTP_DOWNLOAD_SIZE=curl_getinfo($ch,CURLINFO_CONTENT_LENGTH_DOWNLOAD);
 				$HTTP_DOWNLOAD_URL=curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);

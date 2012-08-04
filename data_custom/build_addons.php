@@ -206,6 +206,7 @@ echo "Done\n";
 
 function show_updated_commnets_code($file,$name)
 {
+ini_set('ocproducts.xss_detect','0');
 return <<<END
 	Paste into ocPortal.com's OcCLE if this addon is updated: {$file}...
 
