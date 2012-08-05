@@ -597,6 +597,8 @@ class Module_admin_ocf_groups extends standard_aed_module
 			return form_confirm_screen(get_page_title('EDIT_GROUP'),paragraph(do_lang_tempcode('MAKE_MEMBER_GROUP_LEADER',post_param('group_leader'))),'__ed','_ed',array('confirm'=>1));
 		}
 
+		$was_club=($GLOBALS['FORUM_DB']->query_value('f_groups','g_is_private_club',array('id'=>intval($id)))==1);
+
 		$rank_img=get_theme_img_code('ocf_rank_images',true,'file','theme_img_code',$GLOBALS['FORUM_DB']);
 		ocf_edit_group(intval($id),post_param('name'),post_param_integer('is_default',0),post_param_integer('is_super_admin',0),post_param_integer('is_super_moderator',0),post_param('title'),$rank_img,$promotion_target,$promotion_threshold,$group_leader,post_param_integer('flood_control_submit_secs'),post_param_integer('flood_control_access_secs'),post_param_integer('max_daily_upload_mb'),post_param_integer('max_attachments_per_post'),post_param_integer('max_avatar_width',100),post_param_integer('max_avatar_height',100),post_param_integer('max_post_length_comcode'),post_param_integer('max_sig_length_comcode',10000),post_param_integer('gift_points_base',0),post_param_integer('gift_points_per_day',0),post_param_integer('enquire_on_new_ips',0),post_param_integer('is_presented_at_install',0),post_param_integer('hidden',0),post_param_integer('order'),post_param_integer('rank_image_pri_only',0),post_param_integer('open_membership',0),post_param_integer('is_private_club',0));
 
@@ -615,7 +617,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 		$absorb=post_param_integer('absorb',-1);
 		if ($absorb!=-1) ocf_group_absorb_privileges_of(intval($id),$absorb);
 
-		if (post_param_integer('is_private_club',0)==1)
+		if ((post_param_integer('is_private_club',0)==1) && (!$was_club))
 		{
 			$GLOBALS['SITE_DB']->query_delete('gsp',array('group_id'=>intval($id)));
 			$GLOBALS['SITE_DB']->query_delete('group_zone_access',array('group_id'=>intval($id)));
