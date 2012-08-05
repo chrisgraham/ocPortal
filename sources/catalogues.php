@@ -486,7 +486,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 			if (!is_null($bits)) list($virtual_order_by,)=$bits;
 		} elseif (is_numeric($order_by)) // Ah, so it's saying the nth field of this catalogue
 		{
-			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,'field_'.strval($order_by),'',array());
+			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,'field_'.$order_by,'',array());
 			if (!is_null($bits))
 			{
 				list($new_key,)=$bits;

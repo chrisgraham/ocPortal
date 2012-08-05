@@ -156,7 +156,6 @@ class Hook_addon_registry_galleries
 			'uploads/galleries_thumbs/index.html',
 			'uploads/grepimages/index.html',
 			'uploads/watermarks/index.html',
-			'data/zencoder_receive.php',
 			'galleries.css',
 			'themes/default/images/bigicons/galleries.png',
 			'cms/pages/modules/cms_galleries.php',
@@ -170,6 +169,7 @@ class Hook_addon_registry_galleries
 			'sources/galleries.php',
 			'sources/galleries2.php',
 			'sources/galleries3.php',
+			'sources/hooks/modules/admin_import/galleries.php',
 			'sources/hooks/modules/admin_newsletter/galleries.php',
 			'sources/hooks/modules/admin_setupwizard/galleries.php',
 			'sources/hooks/modules/galleries_users/.htaccess',
@@ -500,7 +500,7 @@ class Hook_addon_registry_galleries
 					'IMAGES'=>array(),
 					'IMAGES_FULL'=>array(),
 					'HTML'=>array(),
-					'MILL'=>3000,
+					'MILL'=>'3000',
 				)
 			),NULL,'',true),
 		);

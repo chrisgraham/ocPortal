@@ -131,6 +131,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 		require_code('notifications');
 		do
 		{
+			$ob=_get_notification_ob_for_code('comment_posted');
 			list($members,$possibly_has_more)=$ob->list_members_who_have_enabled('comment_posted',$topic_identifier,NULL,$start,$max);
 
 			foreach ($members as $to_member_id=>$setting)

@@ -1576,6 +1576,9 @@ table.scrollable_inside {
 .wide_table_wrap>.results_table {
 	margin: 0; /* As overflow would cause margin doubling */
 }
+.wide_table_wrap + .wide_table_wrap>.results_table {
+	margin-top: 1em;
+}
 
 .results_table>thead>tr:first-child *:first-child, .results_table>tbody>tr:first-child>*:first-child {
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 5px;}
@@ -2263,30 +2266,30 @@ div.wysiwyg_toolbar_color_finder {
 .comments_posting_form_end {
 	overflow: hidden;
 	{+START,IF,{$MOBILE}}
-		margin: 0.5em 2em 1em 0;
+		margin: 0 2em 1em 0;
 		padding: 0;
 		text-align: center;
 	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
-		margin: 1em 0 1em 160px;
+		margin: 0 0 1em 160px;
 	{+END}
 }
 
 .comments_posting_form_end .proceed_button {
-	margin-top: 0;
+	margin-top: 1em;
 	text-align: center !important;
+}
+
+.comments_captcha {
+	width: 200px;
+	margin: 1em auto 0 auto;
+	font-size: 0.85em;
+	text-align: center;
 }
 
 .comments_captcha img, .comments_captcha iframe, .comments_captcha input {
 	margin: 0 5px 2px 5px;
 	vertical-align: middle;
-}
-
-.comments_captcha {
-	width: 200px;
-	margin: 20px auto 0 auto;
-	font-size: 0.85em;
-	text-align: center;
 }
 
 {+START,IF,{$MOBILE}}
@@ -2544,6 +2547,7 @@ ul.associated_links_block_group.horizontal_links>li:before,
 .horizontal_ticker li:before {
 	content: "\00b7" !important; /* a &middot; */
 	padding: 0 0.5em 0 0.1em;
+	vertical-align: middle;
 }
 .horizontal_buttons li {
 	padding-left: 3px !important;
@@ -2617,10 +2621,10 @@ table+ul.associated_links_block_group, .wide_table_wrap+ul.associated_links_bloc
 	margin-top: 1.5em !important;
 }
 .buttons_group>* {
-	padding-left: 5px !important;
+	margin-left: 5px !important;
 }
 .buttons_group>*:first-child {
-	padding-left: 0 !important;
+	margin-left: 0 !important;
 }
 
 .associated_link.suggested {

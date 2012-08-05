@@ -26,13 +26,13 @@
 		</div>
 	</div>
 
-	<a name="downloadj" id="downloadj"></a>
+	<a id="downloadj"></a>
 
 	<div class="float_surrounder_downloads" id="s_download">
 		{RELEASES}
 	</div>
 
-	<a name="transferj" id="transferj"></a>
+	<a id="transferj"></a>
 
 	<div class="float_surrounder" id="s_transfer">
 		{HOSTINGCOPY_FORM}

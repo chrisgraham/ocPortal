@@ -612,7 +612,7 @@ function find_all_hooks($type,$entry)
 	return $out;
 }
 
- /**
+/**
  * Find the default caching setting for a block.
  *
  * @param  ID_TEXT             The block name

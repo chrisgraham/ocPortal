@@ -54,6 +54,7 @@ function points_profile($member_id_of,$member_id_viewing)
 	$gift_points_used=get_gift_points_used($member_id_of); //$_point_info['gift_points_used'];
 	$gift_points_available=get_gift_points_to_give($member_id_of);
 	$points_gained_credits=$GLOBALS['SITE_DB']->query_value('credit_purchases','SUM(num_credits)',array('member_id'=>$member_id_of,'purchase_validated'=>1));
+	if (is_null($points_gained_credits)) $points_gained_credits=0;
 
 	$points_posting=intval(get_option('points_posting'));
 	$points_rating=intval(get_option('points_rating'));
@@ -76,7 +77,7 @@ function points_profile($member_id_of,$member_id_viewing)
 	if (has_specific_permission($member_id_viewing,'view_charge_log'))
 	{
 		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',50);
+		$max=get_param_integer('max',10);
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
 		$test=explode(' ',get_param('sort','date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
@@ -109,16 +110,16 @@ function points_profile($member_id_of,$member_id_viewing)
 				$reason=get_translated_tempcode($myrow['reason']);
 			}
 
-			$charges->attach(results_entry(array(escape_html($date),escape_html($amount),escape_html($fromname),escape_html($toname),$reason)));
+			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($fromname),escape_html($toname),$reason)));
 		}
 		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'start',$max,'max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'sort');
-
-		$chargelog_details->attach(do_template('POINTS_CHARGE',array('_GUID'=>'f1e2d45a7d920ab91553a5fd0728a5ad','URL'=>build_url(array('page'=>'admin_points','type'=>'charge','redirect'=>get_self_url(true)),get_module_zone('admin_points')),'USER'=>strval($member_id_of))));
 	}
 
 	// Show giving form
-	if (is_guest($member_id_viewing)) $give_template=do_lang_tempcode('POINTS_MUST_LOGIN');
-	else
+	if (is_guest($member_id_viewing))
+	{
+		$give_template=do_lang_tempcode('POINTS_MUST_LOGIN');
+	} else
 	{
 		$have_negative_gift_points=has_specific_permission($member_id_viewing,'have_negative_gift_points');
 		$enough_ok=(($viewer_gift_points_available>0) || ($have_negative_gift_points));
@@ -127,7 +128,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		{
 			// Show how many points are available also
 			$give_url=build_url(array('page'=>'points','type'=>'give','id'=>$member_id_of),get_module_zone('points'));
-			$give_template=do_template('POINTS_GIVE',array('_GUID'=>'b2477877a817cdf66cd7a171edc0c278','GIVE_URL'=>$give_url,'USER'=>strval($member_id_of),'VIEWER_GIFT_POINTS_AVAILABLE'=>$have_negative_gift_points?'':integer_format($viewer_gift_points_available)));
+			$give_template=do_template('POINTS_GIVE',array('_GUID'=>'fa1749d5a803d86b1efbcfde2ad81702','GIVE_URL'=>$give_url,'USER'=>strval($member_id_of),'VIEWER_GIFT_POINTS_AVAILABLE'=>$have_negative_gift_points?'':integer_format($viewer_gift_points_available)));
 		}
 		else $give_template=do_lang_tempcode('PE_LACKING_GIFT_POINTS');
 		if (!$give_ok) $give_template=new ocp_tempcode();
@@ -137,7 +138,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		'_GUID'=>'f91208ef0f9a1e1a8633ce307a778a8d',
 		'TITLE'=>$title,
 		'MEMBER'=>strval($member_id_of),
-		'PROFILE_LINK'=>$profile_link,
+		'PROFILE_URL'=>$profile_link,
 		'NAME'=>$name,
 
 		'POINTS_JOINING'=>integer_format($points_joining),
@@ -151,9 +152,9 @@ function points_profile($member_id_of,$member_id_viewing)
 		'MULT_POINTS_PER_DAY'=>integer_format($points_per_day*$days_joined),
 		'POINTS_GAINED_AUTO'=>integer_format($points_gained_auto), // This isn't needed now, it is same as MULT_POINTS_PER_DAY
 
-		'CEDI_POST_COUNT'=>integer_format($cedi_post_count),
-		'POINTS_CEDI_POSTING'=>integer_format($points_cedi_posting),
-		'MULT_POINTS_CEDI_POSTING'=>integer_format($cedi_post_count*$points_cedi_posting),
+		'WIKI_POST_COUNT'=>integer_format($cedi_post_count),
+		'POINTS_WIKI_POSTING'=>integer_format($points_cedi_posting),
+		'MULT_POINTS_WIKI_POSTING'=>integer_format($cedi_post_count*$points_cedi_posting),
 
 		'CHAT_POST_COUNT'=>integer_format($chat_post_count),
 		'POINTS_CHAT_POSTING'=>integer_format($points_chat_posting),

@@ -64,7 +64,7 @@ class Hook_fields_auto_increment
 	{
 		if (((is_null($default)) || ($default=='')) && (!is_null($field)) && (!is_null($field['id']))) // We need to calculate a default even if not required, because the defaults are progmattic
 		{
-			$default=is_null($field)?'0':strval($this->get_field_auto_increment($field['id'],intval($default)));
+			$default=is_null($field)?'0':$this->get_field_auto_increment($field['id'],intval($default));
 		}
 		return array('integer_unescaped',$default,'integer');
 	}

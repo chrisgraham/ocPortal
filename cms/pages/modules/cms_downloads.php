@@ -413,9 +413,6 @@ class Module_cms_downloads extends standard_aed_module
 								$filesize=filesize($full_path);
 								add_download($dest_cat,titleify($entry),$full_url,'',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'',NULL,1,1,1,1,'',$entry,$filesize,0,0);
 								$num_added++;
-							} else
-							{
-								@exit("!\n\n\n".strlen($shouldbe)."\n\n\n".strlen($actuallyis));
 							}
 						}
 					}

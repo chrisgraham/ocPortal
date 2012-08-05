@@ -2822,7 +2822,7 @@ function threaded_load_more(ob,ids,id)
 				var _ids=ids.split(',');
 				for (var i=0;i<_ids.length;i++)
 				{
-					var element=document.getElementById('post_'+_ids[i]);
+					var element=document.getElementById('post_wrap_'+_ids[i]);
 					if (element)
 					{
 						set_opacity(element,0);

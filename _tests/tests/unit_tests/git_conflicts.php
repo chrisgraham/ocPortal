@@ -28,7 +28,7 @@ class git_conflicts_test_set extends ocp_test_case
 		{
 			if ((substr($c,-4)=='.php') && (basename($c)!='errorlog.php') && (basename($c)!='phpstub.php') && (basename($c)!='permissioncheckslog.php'))
 			{
-				$this->assertTrue(strpos(file_get_contents($c),'<<<<')===false,$c);
+				$this->assertTrue(strpos(file_get_contents($c),'<<<'.'<')===false,$c);
 			}
 		}
 	}

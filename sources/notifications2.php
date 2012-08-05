@@ -338,7 +338,7 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 		$notification_category_being_changed=get_param('id',NULL);
 		if (($notification_category_being_changed===$notification_category) || ($force_change_children_to!==NULL))
 		{
-			if (($force_change_children_to===false) || (($force_change_children_to==NULL) && ($current_setting!=A_NA)))
+			if (($force_change_children_to===false/*If recursively disabling*/) || (($force_change_children_to===NULL) && ($current_setting!=A_NA)/*If explicitly toggling this one to disabled*/))
 			{
 				enable_notifications($notification_code,$notification_category,NULL,A_NA);
 				$force_change_children_to_children=false;

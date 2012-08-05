@@ -107,7 +107,7 @@ class Hook_addon_registry_core_primary_layout
 			'MAIL.tpl'=>'mail',
 			'GLOBAL_HTML_WRAP.tpl'=>'global_html_wrap',
 			'GLOBAL_HTML_WRAP_mobile.tpl'=>'global_html_wrap',
-			'GLOBAL_HELPER_PANEL.tpl'=>'global',
+			'GLOBAL_HELPER_PANEL.tpl'=>'global_html_wrap',
 			'SCREEN_TITLE.tpl'=>'screen_title',
 			'MINOR_TITLE.tpl'=>'minor_title',
 			'SECTION_TITLE.tpl'=>'section_title'

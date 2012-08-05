@@ -534,6 +534,7 @@ function standard_alternate_fields(field_names,something_required,second_run)
 
 	// Look up field objects
 	var fields=[];
+
 	for (var i=0;i<field_names.length;i++)
 	{
 		var field=_standard_alternate_fields_get_object(field_names[i]);
@@ -546,8 +547,8 @@ function standard_alternate_fields(field_names,something_required,second_run)
 		var field=fields[i];
 		if (typeof field.alternating=='undefined') // ... but only if not already set
 		{
-			var selfFunction=function (e) { standard_alternate_fields(field_names,something_required,true); } ; // We'll re-call ourself on change
-			_standard_alternate_field_create_listeners(field,selfFunction);
+			var self_function=function (e) { standard_alternate_fields(field_names,something_required,true); } ; // We'll re-call ourself on change
+			_standard_alternate_field_create_listeners(field,self_function);
 		}
 	}
 
@@ -573,6 +574,7 @@ function _standard_alternate_field_is_filled_in(field,second_run,force)
 	var is_set=force || ((field.value!='') && (field.value!='-1')) || ((typeof field.virtual_value!='undefined') && (field.virtual_value!='') && (field.virtual_value!='-1'));
 
 	var radio_button=document.getElementById('choose_'+field.name.replace(/\[\]$/,'')); // Radio button handles field alternation
+	if (!radio_button) radio_button=document.getElementById('choose_'+field.name.replace(/\_\d+$/,'_'));
 	if (second_run)
 	{
 		if (radio_button) return radio_button.checked;
@@ -604,6 +606,7 @@ function _standard_alternate_field_create_listeners(field,refreshFunction)
 function __standard_alternate_field_create_listeners(field,refreshFunction)
 {
 	var radio_button=document.getElementById('choose_'+field.name.replace(/\[\]$/,''));
+	if (!radio_button) radio_button=document.getElementById('choose_'+field.name.replace(/\_\d+$/,'_'));
 	if (radio_button) // Radio button handles field alternation
 	{
 		add_event_listener_abstract(radio_button,'change',refreshFunction);
@@ -631,7 +634,7 @@ function _standard_alternate_fields_get_object(field_name)
 		{
 			e=document.forms[i].elements[j];
 
-			if (e.name.replace(/\[\]$/,'')==field_name)
+			if ((e.name.replace(/\[\]$/,'')==field_name) || (e.name.replace(/\_\d+$/,'_')==field_name))
 			{
 				radio_buttons.push(e);
 				if (e.checked) // This is the checked radio equivalent to our text field, copy the value through to the text field
@@ -675,32 +678,19 @@ function __standard_alternate_field_update_editability(field,chosen_field,is_loc
 function ___standard_alternate_field_update_editability(field,chosen_field,is_locked,is_chosen,something_required)
 {
 	var radio_button=document.getElementById('choose_'+field.name.replace(/\[\]$/,''));
+	if (!radio_button) radio_button=document.getElementById('choose_'+field.name.replace(/\_\d+$/,'_'));
 
 	set_locked(field,is_locked,chosen_field);
 	if (something_required)
 	{
 		set_required(field.name.replace(/\[\]$/,''),is_chosen);
 	}
-	var field_input=field;
-	while ((field_input) && (!element_has_class(field_input,'field_input')))
-	{
-		field_input=field_input.parentNode;
-	}
-	if ((field_input) && (field_input.className=='field_input') && (!radio_button))
-	{
-		if (is_locked)
-		{
-			field_input.className+=' locked_field';
-		} else
-		{
-			field_input.className=field_input.className.replace(' locked_field','');
-		}
-	}
 }
 
 function set_locked(field,is_locked,chosen_ob)
 {
 	var radio_button=document.getElementById('choose_'+field.name.replace(/\[\]$/,''));
+	if (!radio_button) radio_button=document.getElementById('choose_'+field.name.replace(/\_\d+$/,'_'));
 
 	// For All-and-not,Line-multi,Compound-Tick,Radio-List,Date/Time: set_locked assumes that the calling code is clever
 	// special input types are coded to observe their master input field readonly status)
@@ -721,7 +711,7 @@ function set_locked(field,is_locked,chosen_ob)
 		{
 			if (label)
 			{
-				var label_nice=get_inner_html(label).replace('&raquo;','').replace('�','').replace(/^\s*/,'').replace(/\s*$/,'');
+				var label_nice=get_inner_html(label).replace('&raquo;','').replace(/^\s*/,'').replace(/\s*$/,'');
 				if (field.type=='file')
 				{
 					set_field_error(field,'{!DISABLED_FORM_FIELD_ENCHANCEDMSG_UPLOAD^;}'.replace(/\\{1\\}/,label_nice));

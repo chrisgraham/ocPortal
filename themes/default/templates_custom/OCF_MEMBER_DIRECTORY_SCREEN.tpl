@@ -66,7 +66,7 @@
 {+END}
 
 {+START,IF,{$HAS_ACTUAL_PAGE_ACCESS,_SEARCH:admin_newsletter}}
-	<form action="{$PAGE_LINK*,_SEARCH:admin_newsletter:new}" method="post">
+	<form title="{!NEWSLETTER}" action="{$PAGE_LINK*,_SEARCH:admin_newsletter:new}" method="post">
 {+END}
 
 {$SET,fancy_screen,1}

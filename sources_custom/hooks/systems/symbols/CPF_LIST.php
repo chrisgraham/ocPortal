@@ -31,6 +31,7 @@ class Hook_symbol_CPF_LIST
 					$value.=strval($m['id']).'='.get_translated_text($m['g_name'],$GLOBALS['FORUM_DB']);
 				}
 			}
+			require_code('ocf_members');
 			$cpf_id=find_cpf_field_id($param[0]);
 			if (!is_null($cpf_id))
 			{

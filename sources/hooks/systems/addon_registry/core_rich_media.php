@@ -1728,9 +1728,12 @@ class Hook_addon_registry_core_rich_media
 			'CAPTION'=>lorem_word()
 		)));
 
-		foreach (placeholder_array(2) as $table_row)
+		foreach (placeholder_array(2) as $i=>$table_row)
 		{
-			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_START'));
+			$map=array();
+			if ($i==0)
+				$map['START_BODY']=true;
+			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_START',$map));
 
 			foreach (placeholder_array(2) as $i=>$cell)
 			{
@@ -1743,16 +1746,20 @@ class Hook_addon_registry_core_rich_media
 			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_END'));
 		}
 
-		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_END'));
+		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_END',array('END_BODY'=>true)));
 
 
 		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START_SUMMARY', array(
-			'CAPTION'=>lorem_word()
+			'CAPTION'=>lorem_word(),
+			'START_BODY'=>true
 		)));
 
-		foreach (placeholder_array(2) as $table_row)
+		foreach (placeholder_array(2) as $i=>$table_row)
 		{
-			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_START'));
+			$map=array();
+			if ($i==0)
+				$map['START_BODY']=true;
+			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_START',$map));
 
 			foreach (placeholder_array(2) as $i=>$cell)
 			{
@@ -1765,7 +1772,7 @@ class Hook_addon_registry_core_rich_media
 			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_END'));
 		}
 
-		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_END'));
+		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_END',array('END_BODY'=>true)));
 
 		return array(
 			lorem_globalise($tag_output, NULL, '', true)

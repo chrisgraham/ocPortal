@@ -1,10 +1,10 @@
 <div class="points_boxes">
 	<div class="points_box medborder">
-		{+START,IF,{$HAS_SPECIFIC_PERMISSION,use_points,{MEMBER}}}
+		{+START,IF,{$HAS_PRIVILEGE,use_points,{MEMBER}}}
 			<p class="intro">{!CURRENT_POINTS}:</p>
 			<p>{!POINTS_TO_SPEND,<span class="figure">{REMAINING*}</span>}</p>
 		{+END}
-		{+START,IF,{$NOT,{$HAS_SPECIFIC_PERMISSION,use_points,{MEMBER}}}}
+		{+START,IF,{$NOT,{$HAS_PRIVILEGE,use_points,{MEMBER}}}}
 			{!NO_PERMISSION_TO_USE_POINTS}
 		{+END}
 	</div>
@@ -102,7 +102,7 @@
 {+END}
 
 {+START,IF_NON_EMPTY,{GIVE}}
-	{+START,BOX,,,light}
+	{+START,BOX}
 		{GIVE}
 	{+END}
 {+END}

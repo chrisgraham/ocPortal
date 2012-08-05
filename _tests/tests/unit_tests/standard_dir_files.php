@@ -41,8 +41,10 @@ class standard_dir_files_test_set extends ocp_test_case
 		{
 			while (($file=readdir($dh))!==false)
 			{
-				if ($file[0]=='.') continue;
-				if ($file=='_old') continue;
+				if (should_ignore_file(preg_replace('#^'.preg_quote(get_file_base().'/','#').'#','',$dir.'/').$file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_UNSHIPPED_VOLATILE,0))
+					continue;
+
+				if ($file=='tracker') continue; // Ideally would not hard-code for a non-bundled addon, but we need to for this one
 
 				if (is_dir($dir.'/'.$file))
 				{

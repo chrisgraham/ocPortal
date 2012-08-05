@@ -98,6 +98,8 @@ class Hook_addon_registry_core_forum_drivers
 			'sources/forum/wowbb.php',
 			'sources/forum/aef.php',
 			'sources/forum/mybb.php',
+			'sources_custom/forum/.htaccess',
+			'sources_custom/forum/index.html',
 		);
 	}
 

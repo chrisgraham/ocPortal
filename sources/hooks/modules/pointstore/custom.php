@@ -259,7 +259,7 @@ class Hook_pointstore_custom
 		$subject_line=get_translated_text($row['c_mail_subject']);
 		if ($subject_line!='')
 		{
-			$message_raw=get_translated_text($row['cp_mail_body']);
+			$message_raw=get_translated_text($row['c_mail_body']);
 			$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member);
 			$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member);
 			mail_wrap($subject_line,$message_raw,array($email),$to_name,'','',3,NULL,false,NULL,true);

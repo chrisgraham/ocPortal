@@ -51,6 +51,9 @@ class template_previews_test_set extends ocp_test_case
 		{
 			$this->assertFalse(((!array_key_exists($t,$all_previews)) && (substr($t,0,11)!='JAVASCRIPT_') && ($t!='JAVASCRIPT.tpl')),'Missing preview for: '.$t);
 		}
+
+		@ini_set('ocproducts.type_strictness','0');
+		@ini_set('ocproducts.xss_detect','0');
 	}
 
 	function testScreenPreview()
@@ -130,6 +133,9 @@ class template_previews_test_set extends ocp_test_case
 				}
 			}
 		}
+
+		@ini_set('ocproducts.type_strictness','0');
+		@ini_set('ocproducts.xss_detect','0');
 	}
 
 	function testRepeatConsistency()
@@ -193,6 +199,9 @@ class template_previews_test_set extends ocp_test_case
 			unset($out1);
 			unset($out2);
 		}
+
+		@ini_set('ocproducts.type_strictness','0');
+		@ini_set('ocproducts.xss_detect','0');
 	}
 
 	function testNoMissingParams()
@@ -224,6 +233,9 @@ class template_previews_test_set extends ocp_test_case
 
 			unset($out1);
 		}
+
+		@ini_set('ocproducts.type_strictness','0');
+		@ini_set('ocproducts.xss_detect','0');
 	}
 
 	function testNoRedundantFunctions()
@@ -246,6 +258,9 @@ class template_previews_test_set extends ocp_test_case
 				$this->assertTrue(in_array($matches[1][$i],$used),'Non-used screen function '.$matches[1][$i]);
 			}
 		}
+
+		@ini_set('ocproducts.type_strictness','0');
+		@ini_set('ocproducts.xss_detect','0');
 	}
 
 	function testNoDoublePreviews()
@@ -266,6 +281,9 @@ class template_previews_test_set extends ocp_test_case
 			}
 			$all_used+=$used;
 		}
+
+		@ini_set('ocproducts.type_strictness','0');
+		@ini_set('ocproducts.xss_detect','0');
 	}
 
 

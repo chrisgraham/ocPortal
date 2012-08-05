@@ -297,6 +297,8 @@ class Hook_addon_registry_core_form_interfaces
 			'data/areaedit/backend.php',
 			'data/areaedit/plugins/SpellChecker/personal_dicts/.htaccess',
 			'data/areaedit/plugins/SpellChecker/personal_dicts/index.html',
+			'data/areaedit/plugins/SpellChecker/aspell/.htaccess',
+			'data/areaedit/plugins/SpellChecker/aspell/index.html',
 			'data/areaedit/plugins/SpellChecker/spell-check-logic.php',
 			'data/areaedit/plugins/SpellChecker/spell-check-savedicts.php',
 			'data_custom/spelling/index.html',
@@ -328,7 +330,8 @@ class Hook_addon_registry_core_form_interfaces
 			'themes/default/images/date_chooser/index.html',
 			'themes/default/images/date_chooser/pdate.gif',
 			'data/namelike.php',
-			'data/username_exists.php'
+			'data/username_exists.php',
+			'FORM_SCREEN_INPUT_COMBO.tpl',
 		);
 	}
 
@@ -341,6 +344,7 @@ class Hook_addon_registry_core_form_interfaces
 	function tpl_previews()
 	{
 		return array(
+			'FORM_SCREEN_INPUT_COMBO.tpl'=>'form_screen_2',
 			'FORM_STANDARD_SIZING.tpl'=>'form_screen_2',
 			'FORM_SCREEN.tpl'=>'form_screen_2',
 			'FORM_SCREEN_FIELD_SPACER.tpl'=>'form_screen_1',

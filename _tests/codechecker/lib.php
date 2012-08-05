@@ -58,8 +58,29 @@ function cnl()
 	return !isset($_SERVER['argv'])?'<br />':"\n";
 }
 
+function get_custom_file_base()
+{
+	global $OCPORTAL_PATH;
+	return $OCPORTAL_PATH;
+}
+
+function get_file_base()
+{
+	global $OCPORTAL_PATH;
+	return $OCPORTAL_PATH;
+}
+
+function unixify_line_format($x)
+{
+	return $x;
+}
+
 function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)
 {
+	global $OCPORTAL_PATH;
+	require_once($OCPORTAL_PATH.'/sources/files.php');
+	init__files();
+
 	$out=array();
 	$_dir=($dir=='')?'.':$dir;
 	$dh=opendir($_dir);
@@ -70,13 +91,16 @@ function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)
 			if ((!is_null($avoid)) && (in_array($file,$avoid))) continue;
 			if (((strpos($file,'_custom')!==false) || ($file=='exports') || ($file=='_old') || ($file=='_tests') || ($file=='ocworld')) && ($no_custom)) continue;
 
+			if (should_ignore_file(preg_replace('#^'.preg_quote($OCPORTAL_PATH.'/','#').'#','',$dir.'/').$file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_UNSHIPPED_VOLATILE,0))
+				continue;
+
 			if ($file[0]!='.')
 			{
-				if (is_file($_dir.DIRECTORY_SEPARATOR.$file))
+				if (is_file($_dir.'/'.$file))
 				{
 					if (substr($file,-4,4)=='.php')
 					{
-						$path=$dir.(($dir!='')?DIRECTORY_SEPARATOR:'').$file;
+						$path=$dir.(($dir!='')?'/':'').$file;
 						if ($orig_priority)
 						{
 							$alt=str_replace('_custom','',$path);
@@ -87,9 +111,9 @@ function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)
 						if (($alt==$path) || (!file_exists($alt)))
 							$out[]=$path;
 					}
-				} elseif (is_dir($_dir.DIRECTORY_SEPARATOR.$file))
+				} elseif (is_dir($_dir.'/'.$file))
 				{
-					$out=array_merge($out,do_dir($dir.(($dir!='')?DIRECTORY_SEPARATOR:'').$file,$no_custom,$orig_priority));
+					$out=array_merge($out,do_dir($dir.(($dir!='')?'/':'').$file,$no_custom,$orig_priority));
 				}
 			}
 		}

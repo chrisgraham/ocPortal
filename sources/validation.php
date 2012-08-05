@@ -127,6 +127,7 @@ function init__validation()
 		'textarea'=>1,
 		'button'=>1,
 		'script'=>1, // If we have one of these as self-closing in IE... it kills it!
+		'noscript'=>1,
 		'li'=>1,
 	);
 	if ($strict_form_accessibility) unset($POSSIBLY_EMPTY_TAGS['textarea']);

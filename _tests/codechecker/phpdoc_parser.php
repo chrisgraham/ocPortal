@@ -118,12 +118,6 @@ function require_code($codename)
 	require_once($OCPORTAL_PATH.'/sources/'.$codename.'.php');
 }
 
-function get_file_base()
-{
-	global $OCPORTAL_PATH;
-	return $OCPORTAL_PATH;
-}
-
 function filter_naughty($in)
 {
 	return $in;

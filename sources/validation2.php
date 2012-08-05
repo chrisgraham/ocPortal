@@ -700,7 +700,7 @@ function init__validation2()
 		'html.manifest'=>'.+',
 		'input.height'=>$enforce_inumber,
 		'input.width'=>$enforce_inumber,
-		'input.step'=>$enforce_number,
+		'input.step'=>'(-?[0-9]+(\.[0-9]+)?)',
 		'input.required'=>'(required)',
 		'input.placeholder'=>'.+',
 		'input.pattern'=>'.+',
@@ -790,7 +790,7 @@ function init__validation2()
 		'textarea.wrap'=>'(hard|soft)',
 		'menu.label'=>'.*',
 		'menu.type'=>'(context|toolbar|list)',
-		'form.autocomplete'=>'(autocomplete)',
+		'form.autocomplete'=>'(on|off)',
 		'form.novalidate'=>'(novalidate)',
 		'details.open'=>'(open)',
 		'iframe.srcdoc'=>'.+',
@@ -839,7 +839,7 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 	global $XML_CONSTRAIN,$TAG_STACK,$ATT_STACK,$TABS_SEEN,$KEYS_SEEN,$IDS_SO_FAR,$ANCESTER_BLOCK,$ANCESTER_INLINE,$EXPECTING_TAG,$OUT,$POS,$LAST_A_TAG,$TAG_RANGES;
 
 	// Dodgy mouse events.
-	if ((isset($attributes['onclick'])) && (!isset($attributes['onkeypress'])) && (!isset($attributes['onkeydown'])) && (!isset($attributes['onkeyup'])) && (!in_array($tag,array('a','input','textarea','select','button'))))
+	if ((isset($attributes['onclick'])) && (strpos($attributes['onclick'],'/*Access-note: code has other activation*/')===false) && (!isset($attributes['onkeypress'])) && (!isset($attributes['onkeydown'])) && (!isset($attributes['onkeyup'])) && (!in_array($tag,array('a','input','textarea','select','button'))))
 		$errors[]=array('WCAG_MOUSE_EVENT_UNMATCHED');
 	if ($GLOBALS['VALIDATION_MANUAL'])
 	{

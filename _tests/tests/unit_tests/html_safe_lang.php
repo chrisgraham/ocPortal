@@ -26,6 +26,8 @@ class html_safe_lang_test_set extends ocp_test_case
 {
 	function testHtmlSafeLang()
 	{
+ 		if (function_exists('set_time_limit')) @set_time_limit(0);
+
 		global $LANGUAGE_STRINGS,$LANGUAGE_HTML,$LANGUAGE_LITERAL,$LANGUAGE_CURRENT,$FILE,$FIND_NO_GO_HTML_SPOTS;
 		$FIND_NO_GO_HTML_SPOTS=(@$_GET['find_html_no_go']=='1');
 

@@ -109,7 +109,6 @@ function get_version_dotted__from_anything($any_format)
  * Analyse a dotted version number into components.
  *
  * @param  string			Dotted version number
- * @param  string			Minor version number (may be blank, if this is the gold release of a new version)
  * @return array			Tuple of components: dotted basis version (i.e. with no alpha/beta/RC component and no trailing zeros), qualifier (blank, or alpha, or beta, or RC), qualifier number (NULL if not an alpha/beta/RC), dotted version number with trailing zeros to always cover 3 components
  */
 function get_version_components__from_dotted($dotted)
