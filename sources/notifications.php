@@ -494,6 +494,8 @@ function enable_notifications($notification_code,$notification_category,$member_
 	{
 		$ob=_get_notification_ob_for_code($notification_code);
 		$setting=$ob->get_default_auto_setting($notification_code,$notification_category);
+		if (!_notification_setting_available($setting,$member_id))
+			$setting=_find_member_statistical_notification_type($member_id);
 	}
 
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
