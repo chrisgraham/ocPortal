@@ -217,7 +217,7 @@ class Hook_pointstore_custom
 
 		post_param_integer('confirm'); // Make sure POSTed
 		$id=get_param_integer('sub_id');
-		$rows=$GLOBALS['SITE_DB']->query_select('pstore_customs',array('id','c_title','c_cost','c_one_per_member'),array('id'=>$id,'c_enabled'=>1));
+		$rows=$GLOBALS['SITE_DB']->query_select('pstore_customs',array('*'),array('id'=>$id,'c_enabled'=>1));
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$row=$rows[0];
