@@ -510,6 +510,13 @@ function enable_notifications($notification_code,$notification_category,$member_
 		'l_setting'=>$setting,
 	));
 
+	if (($notification_code=='comment_posted') && (get_forum_type()=='ocf')) // Sync comment_posted ones to also monitor the forum ones; no need for opposite way as comment ones already trigger forum ones
+	{
+		$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'),$notification_category);
+		if (!is_null($topic_id))
+			enable_notifications('ocf_topic',strval($topic_id),$member_id);
+	}
+
 	global $NOTIFICATION_SETTING_CACHE;
 	$NOTIFICATION_SETTING_CACHE=array();
 }
@@ -532,6 +539,13 @@ function disable_notifications($notification_code,$notification_category,$member
 		'l_notification_code'=>$notification_code,
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 	));
+
+	if (($notification_code=='comment_posted') && (get_forum_type()=='ocf')) // Sync comment_posted ones to the forum ones
+	{
+		$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'),$notification_category);
+		if (!is_null($topic_id))
+			disable_notifications('ocf_topic',strval($topic_id),$member_id);
+	}
 
 	global $NOTIFICATION_SETTING_CACHE;
 	$NOTIFICATION_SETTING_CACHE=array();

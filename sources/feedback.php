@@ -724,14 +724,6 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		}
 		else $forum_id=(integer)$forum;
 
-		// Is the user gonna automatically enable notifications for this?
-		if (get_forum_type()=='ocf')
-		{
-			$auto_monitor_contrib_content=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_auto_monitor_contrib_content');
-			if (($auto_monitor_contrib_content==1) && (has_category_access(get_member(),'forums',strval($forum_id))))
-				enable_notifications('ocf_topic',strval($topic_id),get_member());
-		}
-
 		if ((get_forum_type()=='ocf') && (!is_null($GLOBALS['LAST_POST_ID'])))
 		{
 			$extra_review_ratings=array();
