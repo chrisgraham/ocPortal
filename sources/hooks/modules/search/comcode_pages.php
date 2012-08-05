@@ -117,7 +117,7 @@ class Hook_search_comcode_pages
 		}
 
 		require_lang('zones');
-		$g_or=_get_where_clause_groups(get_member());
+		$g_or=_get_where_clause_groups(get_member(),false);
 
 		// Calculate and perform query
 		if ($g_or=='')

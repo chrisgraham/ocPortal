@@ -339,7 +339,7 @@ class Module_cms_downloads extends standard_aed_module
 		decache('main_recent_downloads');
 		decache('main_download_tease');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS')),array('_SELF:_SELF:import',do_lang_tempcode('FTP_DOWNLOADS'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS')),array('_SELF:_SELF:import',do_lang_tempcode('FILESYSTEM_DOWNLOADS'))));
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 		// Show it worked / Refresh
@@ -413,6 +413,9 @@ class Module_cms_downloads extends standard_aed_module
 								$filesize=filesize($full_path);
 								add_download($dest_cat,titleify($entry),$full_url,'',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),'',NULL,1,1,1,1,'',$entry,$filesize,0,0);
 								$num_added++;
+							} else
+							{
+								@exit("!\n\n\n".strlen($shouldbe)."\n\n\n".strlen($actuallyis));
 							}
 						}
 					}

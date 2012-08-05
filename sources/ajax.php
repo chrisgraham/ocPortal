@@ -537,6 +537,9 @@ function snippet_script()
 	$tempcode->handle_symbol_preprocessing();
 	$out=$tempcode->evaluate();
 
+	require_code('xhtml');
+	$out=xhtmlise_html($out);
+
 	// End early execution listening (this means register_shutdown_function will run after connection closed - faster)
 	if (function_exists('apache_setenv')) @apache_setenv('no-gzip','1');
 	@ini_set('zlib.output_compression','Off');

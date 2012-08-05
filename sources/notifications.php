@@ -113,10 +113,12 @@ function _get_notification_ob_for_code($notification_code)
  * @range  1 5
  * @param  boolean		Whether to create a topic for discussion (ignored if the staff_messaging addon not installed)
  * @param  boolean		Whether to NOT CC to the CC address
+ * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
+ * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
  */
-function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false)
+function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL)
 {
-	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc);
+	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category);
 	if (get_param_integer('keep_debug_notifications',0)==1)
 	{
 		$dispatcher->dispatch();
@@ -140,6 +142,8 @@ class Notification_dispatcher
 	var $priority=NULL;
 	var $store_in_staff_messaging_system=NULL;
 	var $no_cc=NULL;
+	var $no_notify_for__notification_code=NULL;
+	var $no_notify_for__code_category=NULL;
 
 	/**
 	 * Construct notification dispatcher.
@@ -154,8 +158,10 @@ class Notification_dispatcher
 	 * @range  1 5
 	 * @param  boolean		Whether to create a topic for discussion (ignored if the staff_messaging addon not installed)
 	 * @param  boolean		Whether to NOT CC to the CC address
+	 * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
+	 * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
 	 */
-	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc)
+	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category)
 	{
 		$this->notification_code=$notification_code;
 		$this->code_category=$code_category;
@@ -166,6 +172,8 @@ class Notification_dispatcher
 		$this->priority=$priority;
 		$this->store_in_staff_messaging_system=$store_in_staff_messaging_system;
 		$this->no_cc=$no_cc;
+		$this->no_notify_for__notification_code=$no_notify_for__notification_code;
+		$this->no_notify_for__code_category=$no_notify_for__code_category;
 	}
 
 	/**
@@ -226,6 +234,11 @@ class Notification_dispatcher
 
 			foreach ($members as $to_member_id=>$setting)
 			{
+				if (!is_null($this->no_notify_for__notification_code))
+				{
+					if (notifications_enabled($this->no_notify_for__notification_code,$this->no_notify_for__code_category,$to_member_id)) continue; // Signal they are getting some other notification for this
+				}
+
 				if (($to_member_id!==$this->from_member_id) || ($testing))
 					$no_cc=_dispatch_notification_to_member($to_member_id,$setting,$this->notification_code,$this->code_category,$subject,$message,$this->from_member_id,$this->priority,$no_cc);
 			}
@@ -481,6 +494,8 @@ function enable_notifications($notification_code,$notification_category,$member_
 	{
 		$ob=_get_notification_ob_for_code($notification_code);
 		$setting=$ob->get_default_auto_setting($notification_code,$notification_category);
+		if (!_notification_setting_available($setting,$member_id))
+			$setting=_find_member_statistical_notification_type($member_id);
 	}
 
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
@@ -496,6 +511,13 @@ function enable_notifications($notification_code,$notification_category,$member_
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 		'l_setting'=>$setting,
 	));
+
+	if (($notification_code=='comment_posted') && (get_forum_type()=='ocf')) // Sync comment_posted ones to also monitor the forum ones; no need for opposite way as comment ones already trigger forum ones
+	{
+		$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'),$notification_category);
+		if (!is_null($topic_id))
+			enable_notifications('ocf_topic',strval($topic_id),$member_id);
+	}
 
 	global $NOTIFICATION_SETTING_CACHE;
 	$NOTIFICATION_SETTING_CACHE=array();
@@ -519,6 +541,13 @@ function disable_notifications($notification_code,$notification_category,$member
 		'l_notification_code'=>$notification_code,
 		'l_code_category'=>is_null($notification_category)?'':$notification_category,
 	));
+
+	if (($notification_code=='comment_posted') && (get_forum_type()=='ocf')) // Sync comment_posted ones to the forum ones
+	{
+		$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'),$notification_category);
+		if (!is_null($topic_id))
+			disable_notifications('ocf_topic',strval($topic_id),$member_id);
+	}
 
 	global $NOTIFICATION_SETTING_CACHE;
 	$NOTIFICATION_SETTING_CACHE=array();

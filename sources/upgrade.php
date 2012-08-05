@@ -1111,7 +1111,7 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 	}
 
 	// And some special help for unix geeks
-	if ($unix_help)
+	if (($unix_help) && (function_exists('escapeshellcmd')) && (strpos(@ini_get('disable_functions'),'escapeshellcmd')===false))
 	{
 		$unix_out='OCP_EXTRACTED_AT="<manual-extracted-at-dir>";'."\n".'cd "<temp-dir-to-upload-from>";'."\n";
 		$directories_to_make=array();

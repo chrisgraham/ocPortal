@@ -82,9 +82,11 @@ function _helper_apply_emoticons($this_ref,$member_id=NULL)
  * @param  SHORT_TEXT	The name of the poster
  * @param  ?AUTO_LINK	ID of post being replied to (NULL: N/A)
  * @param  boolean		Whether the reply is only visible to staff
+ * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
+ * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
  * @return array			Topic ID (may be NULL), and whether a hidden post has been made
  */
-function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only)
+function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only,$no_notify_for__notification_code,$no_notify_for__code_category)
 {
 	if (is_null($time)) $time=time();
 	if (is_null($ip)) $ip=get_ip_address();
@@ -123,6 +125,23 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 		require_code('ocf_topics_action');
 		$topic_id=ocf_make_topic($forum_id,$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'',$topic_validated,1,0,0,0,NULL,NULL,false,0,NULL,$content_url);
 
+		// Sync comment_posted ones to also monitor the forum ones; no need for opposite way as comment ones already trigger forum ones
+		$start=0;
+		$max=300;
+		require_code('notifications');
+		do
+		{
+			list($members,$possibly_has_more)=$ob->list_members_who_have_enabled('comment_posted',$topic_identifier,NULL,$start,$max);
+
+			foreach ($members as $to_member_id=>$setting)
+			{
+				enable_notifications('ocf_topic',strval($topic_id),$to_member_id);
+			}
+
+			$start+=$max;
+		}
+		while ($possibly_has_more);
+
 		// Make spacer post
 		if (!is_null($content_url))
 		{
@@ -158,7 +177,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 	// Send out notifications
 	$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$post_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
 	$url=$_url->evaluate();
-	ocf_send_topic_notification($url,$topic_id,$forum_id,$member_id,!$is_new,$post,$content_title);
+	ocf_send_topic_notification($url,$topic_id,$forum_id,$member_id,!$is_new,$post,$content_title,NULL,false,$no_notify_for__notification_code,$no_notify_for__code_category);
 
 	$is_hidden=false;
 	if ((!running_script('stress_test_loader')) && (get_page_name()!='admin_import'))

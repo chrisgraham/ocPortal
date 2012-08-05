@@ -2345,7 +2345,22 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 			} else
 			{
 				dom_node=dom_node.appendChild(this_node);
-				new_html__initialise(this_node);
+				var _new_html__initialise=function() {
+					var found=0,i;
+
+					for (i=0;i<script_tag_dependencies['to_load'].length;i++)
+					{
+						if (script_tag_dependencies['to_load'][i]===this_node)
+							delete script_tag_dependencies['to_load'][i];
+						else if (typeof script_tag_dependencies['to_load'][i]!=='undefined') found++;
+					}
+
+					if (found==0)
+						new_html__initialise(this_node);
+					else
+						window.setTimeout(_new_html__initialise,0); // Can't do it yet
+				};
+				window.setTimeout(_new_html__initialise,0);
 			}
 		}
 		else if (xml_doc.nodeType==3) {
@@ -2421,15 +2436,24 @@ function set_inner_html(element,tHTML,append)
 		var clone=element.cloneNode(true);
 		try
 		{
-			var scripts_jump=0;
+			var scripts_jump=0,already_offset=0;
 			if (append)
 			{
 				scripts_jump=element.getElementsByTagName('script').length;
 				element.innerHTML+=tHTML;
+				already_offset=element.getElementsByTagName('*').length
 			} else
 			{
 				element.innerHTML=tHTML;
 			}
+
+			window.setTimeout(function() {
+				var elements=element.getElementsByTagName('*');
+				for (var i=already_offset;i<elements.length;i++)
+				{
+					new_html__initialise(elements[i]);
+				}
+			}, 0); // Delayed so we know DOM has loaded
 
 			if (tHTML.toLowerCase().indexOf('<script')!=-1)
 			{

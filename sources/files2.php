@@ -321,7 +321,7 @@ function get_max_file_size($source_member=NULL,$connection=NULL)
 			$daily_quota=ocf_get_member_best_group_property($source_member,'max_daily_upload_mb');
 		} else
 		{
-			$daily_quota=5; // 5 is a hard coded default for non-OCF forums
+			$daily_quota=5; // 5 is a hard-coded default for non-OCF forums
 		}
 		if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 		$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval((integer)$source_member).' AND a_add_time>'.strval(time()-60*60*24));
@@ -688,7 +688,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_user.':'.$proxy_password);
 					}
 				}
-				if (!is_null($byte_limit)) curl_setopt($ch,CURLOPT_RANGE,'0-'.strval($byte_limit));
+				if (!is_null($byte_limit)) curl_setopt($ch,CURLOPT_RANGE,'0-'.strval(($byte_limit==0)?0:($byte_limit-1)));
 				$line=curl_exec($ch);
 				if ($line===false)
 				{
@@ -703,8 +703,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				$HTTP_DOWNLOAD_MIME_TYPE=curl_getinfo($ch,CURLINFO_CONTENT_TYPE);
 				$HTTP_DOWNLOAD_SIZE=curl_getinfo($ch,CURLINFO_CONTENT_LENGTH_DOWNLOAD);
 				$HTTP_DOWNLOAD_URL=curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
-				$HTTP_DOWNLOAD_MTIME=curl_getinfo($ch,CURLINFO_FILETIME);
 				$HTTP_MESSAGE=strval(curl_getinfo($ch,CURLINFO_HTTP_CODE));
+				if ($HTTP_MESSAGE=='206') $HTTP_MESSAGE='200'; // We don't care about partial-content return code, as ocP implementation gets ranges differently and we check '200' as a return result
 				if (strpos($HTTP_DOWNLOAD_MIME_TYPE,';')!==false)
 				{
 					$HTTP_CHARSET=substr($HTTP_DOWNLOAD_MIME_TYPE,8+strpos($HTTP_DOWNLOAD_MIME_TYPE,'charset='));
@@ -886,14 +886,14 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 		$input_len=0;
 		$first_fail_time=mixed();
 		$chunked=false;
-		$chunk_buffer_unprocessed='';
+		$buffer_unprocessed='';
 		while (($chunked) || (!@feof($mysock))) // @'d because socket might have died. If so fread will will return false and hence we'll break
 		{
-			$line=@fread($mysock,(($chunked) && (strlen($chunk_buffer_unprocessed)>10))?10:1024);
+			$line=@fread($mysock,(($chunked) && (strlen($buffer_unprocessed)>10))?10:1024);
 
 			if ($line===false)
 			{
-				if ((!$chunked) || ($chunk_buffer_unprocessed=='')) break;
+				if ((!$chunked) || ($buffer_unprocessed=='')) break;
 				$line='';
 			}
 			if ($line=='')
@@ -905,8 +905,8 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 			} else $first_fail_time=NULL;
 			if ($data_started)
 			{
-				$line=$chunk_buffer_unprocessed.$line;
-				$chunk_buffer_unprocessed='';
+				$line=$buffer_unprocessed.$line;
+				$buffer_unprocessed='';
 
 				if ($chunked)
 				{
@@ -916,10 +916,10 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 						$amount_wanted=hexdec($matches[2]);
 						if (strlen($matches[4])<$amount_wanted) // Chunk was more than what we grabbed, so we need to iterate more to parse
 						{
-							$chunk_buffer_unprocessed=$line;
+							$buffer_unprocessed=$line;
 							continue;
 						}
-						$chunk_buffer_unprocessed=substr($matches[4],$amount_wanted); // May be some more extra read
+						$buffer_unprocessed=substr($matches[4],$amount_wanted); // May be some more extra read
 						$line=substr($matches[4],0,$amount_wanted);
 						if ($line=='')
 						{
@@ -1070,10 +1070,24 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					{
 						$data_started=true;
 						$input_len+=max(0,strlen($old_line)-$tally);
-						$chunk_buffer_unprocessed=substr($old_line,$tally);
-						if ($chunk_buffer_unprocessed===false) $chunk_buffer_unprocessed='';
+						$buffer_unprocessed=substr($old_line,$tally);
+						if ($buffer_unprocessed===false) $buffer_unprocessed='';
 						break;
 					}
+				}
+			}
+		}
+
+		// Process any non-chunked extra buffer (chunked would have been handled in main loop)
+		if (!$chunked)
+		{
+			if ($buffer_unprocessed!='')
+			{
+				if (is_null($write_to_file)) $input.=$buffer_unprocessed; else fwrite($write_to_file,$buffer_unprocessed);
+				$input_len+=strlen($line);
+				if ((!is_null($byte_limit)) && ($input_len>=$byte_limit))
+				{
+					$input=substr($input,0,$byte_limit);
 				}
 			}
 		}

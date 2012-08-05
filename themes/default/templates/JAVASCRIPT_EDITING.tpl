@@ -411,6 +411,7 @@ function find_tags_in_editor(editor,element)
 				comcodes[i].readOnly=true;
 				comcodes[i].contentEditable=true; // Undoes what ckeditor sets. Fixes weirdness with copy and paste in Chrome (adding extra block on end)
 				comcodes[i].ondblclick=function(event) {
+					if (this.onmouseout) this.onmouseout();
 					var field_name=editor.name;
 					if ((typeof window.event!='undefined') && (window.event)) window.event.returnValue=false;
 					if (this.id=='') this.id='comcode_tag_'+Math.round(Math.random()*10000000);
@@ -482,7 +483,7 @@ function find_tags_in_editor(editor,element)
 								},'data='+window.encodeURIComponent('[semihtml]'+tag_text.replace(/<\/?span[^>]*>/gi,'')).substr(0,1000).replace(new RegExp(String.fromCharCode(8203),'g'),'')+'[/semihtml]');
 							} else if (typeof this.rendered_tooltip!='undefined')
 							{
-									activate_tooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'400px',null,null,false,true);
+								activate_tooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'400px',null,null,false,true);
 							}
 						}
 					}

@@ -214,7 +214,7 @@ function has_actual_page_access($member=NULL,$page=NULL,$zone=NULL,$cats=NULL,$s
 function load_up_all_self_page_permissions($member)
 {
 	global $TOTAL_PP_CACHE;
-	$groups=_get_where_clause_groups($member);
+	$groups=_get_where_clause_groups($member,false);
 	if (is_null($groups)) return;
 	if (array_key_exists($groups,$TOTAL_PP_CACHE)) return;
 	$TOTAL_PP_CACHE[$groups]=$GLOBALS['SITE_DB']->query('SELECT page_name,zone_name,group_id FROM '.get_table_prefix().'group_page_access WHERE '.$groups);
@@ -246,7 +246,7 @@ function has_page_access($member,$page,$zone,$at_now=false)
 		return $PAGE_ACCESS_CACHE[$member][$zone.':'.$page];
 	}
 
-	$groups=_get_where_clause_groups($member);
+	$groups=_get_where_clause_groups($member,false);
 	if ($groups===NULL) return true;
 
 	$pg_where='('.db_string_equal_to('zone_name',$zone).' AND '.db_string_equal_to('page_name',$page).')';
@@ -423,13 +423,15 @@ function has_category_access($member,$module,$category)
  * Get the SQL WHERE clause to select for any the given member is in (gets combined with some condition, to check against every).
  *
  * @param  MEMBER			The member who's usergroups will be OR'd
+ * @param  boolean		Whether to consider clubs (pass this false if considering page permissions, which work via explicit-denys across all groups, which could not happen for clubs as those denys could not have been set in the UI)
  * @return ?string		The SQL query fragment (NULL: admin, so permission regardless)
  */
-function _get_where_clause_groups($member)
+function _get_where_clause_groups($member,$consider_clubs=true)
 {
 	if ($GLOBALS['FORUM_DRIVER']->is_super_admin($member)) return NULL;
 
-	$groups=filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups($member,false));
+	$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member,false);
+	if (!$consider_clubs) $groups=filter_group_permissivity($groups);
 	$out='';
 	foreach ($groups as $id)
 	{
@@ -603,8 +605,6 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 		handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),($cats===NULL)?array():$cats),$result);
 		return $result;
 	}
-
-	$groups_list=filter_group_permissivity($GLOBALS['FORUM_DRIVER']->get_members_groups($member,false));
 
 	global $SITE_INFO;
 	$where='';

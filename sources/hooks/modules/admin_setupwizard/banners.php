@@ -33,8 +33,6 @@ class Hook_sw_banners
 
 		require_lang('banners');
 		$fields=new ocp_tempcode();
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'hosting'));
-		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_HOSTING'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_HOSTING'),'have_default_banners_hosting',array_key_exists('have_default_banners_hosting',$field_defaults)?($field_defaults['have_default_banners_hosting']=='1'):false));
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'donate'));
 		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_DONATION'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_DONATION'),'have_default_banners_donation',array_key_exists('have_default_banners_donation',$field_defaults)?($field_defaults['have_default_banners_donation']=='1'):false));
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'advertise_here'));

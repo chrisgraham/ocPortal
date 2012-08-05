@@ -46,6 +46,8 @@ function xhtmlise_html($html,$definitely_want=false)
 		return $html; // One day, this will get removed and we'll ensure all our output is always XHTML. But so far there's no point as IE doesn't support true XHTML
 	}
 
+	$is_escaped=(($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($html)));
+
 	$html=preg_replace('#<\!--.*($|-->)#Us','',$html); // Strip comments
 
 	require_code('obfuscate');
@@ -189,6 +191,8 @@ function xhtmlise_html($html,$definitely_want=false)
 
 	unset($OUT);
 	unset($TAG_STACK);
+
+	if ($is_escaped) ocp_mark_as_escaped($new);
 
 	return $new;
 }

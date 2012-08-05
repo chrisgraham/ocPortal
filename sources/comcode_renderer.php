@@ -1703,6 +1703,16 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$tooltip=$caption;
 			}
 			$rollover=array_key_exists('rollover',$attributes)?$attributes['rollover']:NULL;
+			if (url_is_local($rollover))
+			{
+				if ((file_exists(get_file_base().'/'.$rollover)) && (!file_exists(get_custom_file_base().'/'.$rollover)))
+				{
+					$rollover=get_base_url().'/'.$rollover;
+				} else
+				{
+					$rollover=get_custom_base_url().'/'.$rollover;
+				}
+			}
 			$refresh_time=array_key_exists('refresh_time',$attributes)?strval(intval($attributes['refresh_time'])):'0';
 			$temp_tpl->attach(do_template('COMCODE_IMG',array('_GUID'=>'70166d8dbb0aff064b99c0dd30ed77a8','REFRESH_TIME'=>$refresh_time,'ROLLOVER'=>$rollover,'ALIGN'=>$align,'URL'=>$url_full,'TOOLTIP'=>$tooltip,'CAPTION'=>$caption)));
 

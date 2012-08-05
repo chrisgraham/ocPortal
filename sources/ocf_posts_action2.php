@@ -100,8 +100,10 @@ function ocf_member_handle_promotion($member_id=NULL)
  * @param  SHORT_TEXT	The topic title (blank: look it up from the $topic_id). If non-blank we must use it as it is implying the database might not have the correct value yet.
  * @param  ?MEMBER		Only send the notification to this member (NULL: no such limit).
  * @param  boolean		Whether this is for a Private Topic.
+ * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
+ * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
  */
-function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,$is_starter,$post,$topic_title,$_limit_to=NULL,$is_pt=false)
+function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,$is_starter,$post,$topic_title,$_limit_to=NULL,$is_pt=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL)
 {
 	if ((is_null($forum_id)) && ($is_starter)) return;
 
@@ -130,7 +132,7 @@ function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,
 	}
 
 	require_code('notifications');
-	dispatch_notification('ocf_topic',strval($topic_id),$subject,$mail,(count($limit_to)==0)?NULL:$limit_to,$sender_member_id);
+	dispatch_notification('ocf_topic',strval($topic_id),$subject,$mail,(count($limit_to)==0)?NULL:$limit_to,$sender_member_id,3,false,false,$no_notify_for__notification_code,$no_notify_for__code_category);
 }
 
 /**

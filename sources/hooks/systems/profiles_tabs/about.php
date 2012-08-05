@@ -187,17 +187,12 @@ class Hook_Profiles_Tabs_about
 			if (is_data_encrypted($value))
 			{
 				$encrypted_value=remove_magic_encryption_marker($value);
-			}
-			elseif ((is_string($value)) && (substr($value,0,7)=='http://'))
-			{
-				$_value=hyperlink($value,$value,true,true);
-				$value=$_value->evaluate();
 			} elseif (is_integer($value))
 			{
-				$value=escape_html(integer_format($value));
-			} else
+				$value=strval($value);
+			} elseif (is_float($value))
 			{
-				if (!is_object($value)) $value=escape_html($value);
+				$value=float_to_raw_string($value);
 			}
 
 			if (((!is_object($value)) && ($value!='')) || ((is_object($value)) && (!$value->is_empty())))

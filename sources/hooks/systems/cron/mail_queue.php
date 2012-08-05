@@ -51,7 +51,7 @@ class Hook_cron_mail_queue
 
 					mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true,$row['m_template']);
 
-					$GLOBALS['SITE_DB']->query_delete('logged_mail_messages',array('id'=>$row['id']),'',1);
+					$GLOBALS['SITE_DB']->query_update('logged_mail_messages',array('m_queued'=>0),array('id'=>$row['id']),'',1);
 				}
 			}
 		}
