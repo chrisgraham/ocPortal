@@ -204,12 +204,14 @@ class forum_driver_ocf extends forum_driver_base
 	 * @param  SHORT_TEXT	The name of the poster
 	 * @param  ?AUTO_LINK	ID of post being replied to (NULL: N/A)
 	 * @param  boolean		Whether the reply is only visible to staff
+	 * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
+	 * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
 	 * @return array			Topic ID (may be NULL), and whether a hidden post has been made
 	 */
-	function make_post_forum_topic($forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url=NULL,$time=NULL,$ip=NULL,$validated=NULL,$topic_validated=1,$skip_post_checks=false,$poster_name_if_guest='',$parent_id=NULL,$staff_only=false)
+	function make_post_forum_topic($forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url=NULL,$time=NULL,$ip=NULL,$validated=NULL,$topic_validated=1,$skip_post_checks=false,$poster_name_if_guest='',$parent_id=NULL,$staff_only=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL)
 	{
 		require_code('ocf_forum_driver_helper');
-		return _helper_make_post_forum_topic($this,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only);
+		return _helper_make_post_forum_topic($this,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only,$no_notify_for__notification_code,$no_notify_for__code_category);
 	}
 
 	/**

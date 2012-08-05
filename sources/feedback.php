@@ -98,7 +98,7 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 				if (is_array($category_field))
 				{
 					$category_field=array_pop($category_field);
-					$category_id=$content[$category_field];
+					$category_id=is_integer($content[$category_field])?strval($content[$category_field]):$content[$category_field];
 					if ($award_hook=='catalogue_entry')
 					{
 						$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
@@ -107,7 +107,7 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 					}
 				} else
 				{
-					$category_id=$content[$category_field];
+					$category_id=is_integer($content[$category_field])?strval($content[$category_field]):$content[$category_field];
 				}
 			}
 		}
@@ -708,7 +708,12 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 		$explicit_allow?1:NULL,
 		$explicit_allow,
 		$poster_name_if_guest,
-		$parent_id
+		$parent_id,
+		false,
+
+		// Do not send notifications to someone also getting one defined by the following
+		((!$private) && ($post!=''))?'comment_posted':NULL,
+		((!$private) && ($post!=''))?($content_type.'_'.$content_id):NULL
 	);
 
 	if (!is_null($topic_id))

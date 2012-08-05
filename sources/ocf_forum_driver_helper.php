@@ -82,9 +82,11 @@ function _helper_apply_emoticons($this_ref,$member_id=NULL)
  * @param  SHORT_TEXT	The name of the poster
  * @param  ?AUTO_LINK	ID of post being replied to (NULL: N/A)
  * @param  boolean		Whether the reply is only visible to staff
+ * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
+ * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
  * @return array			Topic ID (may be NULL), and whether a hidden post has been made
  */
-function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only)
+function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only,$no_notify_for__notification_code,$no_notify_for__code_category)
 {
 	if (is_null($time)) $time=time();
 	if (is_null($ip)) $ip=get_ip_address();
@@ -158,7 +160,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 	// Send out notifications
 	$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$post_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
 	$url=$_url->evaluate();
-	ocf_send_topic_notification($url,$topic_id,$forum_id,$member_id,!$is_new,$post,$content_title);
+	ocf_send_topic_notification($url,$topic_id,$forum_id,$member_id,!$is_new,$post,$content_title,NULL,false,$no_notify_for__notification_code,$no_notify_for__code_category);
 
 	$is_hidden=false;
 	if ((!running_script('stress_test_loader')) && (get_page_name()!='admin_import'))

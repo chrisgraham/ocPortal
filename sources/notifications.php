@@ -113,10 +113,12 @@ function _get_notification_ob_for_code($notification_code)
  * @range  1 5
  * @param  boolean		Whether to create a topic for discussion (ignored if the staff_messaging addon not installed)
  * @param  boolean		Whether to NOT CC to the CC address
+ * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
+ * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
  */
-function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false)
+function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL)
 {
-	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc);
+	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category);
 	if (get_param_integer('keep_debug_notifications',0)==1)
 	{
 		$dispatcher->dispatch();
@@ -154,8 +156,10 @@ class Notification_dispatcher
 	 * @range  1 5
 	 * @param  boolean		Whether to create a topic for discussion (ignored if the staff_messaging addon not installed)
 	 * @param  boolean		Whether to NOT CC to the CC address
+	 * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
+	 * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
 	 */
-	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc)
+	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category)
 	{
 		$this->notification_code=$notification_code;
 		$this->code_category=$code_category;
@@ -166,6 +170,8 @@ class Notification_dispatcher
 		$this->priority=$priority;
 		$this->store_in_staff_messaging_system=$store_in_staff_messaging_system;
 		$this->no_cc=$no_cc;
+		$this->no_notify_for__notification_code=$no_notify_for__notification_code;
+		$this->no_notify_for__code_category=$no_notify_for__code_category;
 	}
 
 	/**
@@ -226,6 +232,11 @@ class Notification_dispatcher
 
 			foreach ($members as $to_member_id=>$setting)
 			{
+				if (!is_null($this->no_notify_for__notification_code))
+				{
+					if (notifications_enabled($this->no_notify_for__notification_code,$this->no_notify_for__code_category,$to_member_id)) continue; // Signal they are getting some other notification for this
+				}
+
 				if (($to_member_id!==$this->from_member_id) || ($testing))
 					$no_cc=_dispatch_notification_to_member($to_member_id,$setting,$this->notification_code,$this->code_category,$subject,$message,$this->from_member_id,$this->priority,$no_cc);
 			}
