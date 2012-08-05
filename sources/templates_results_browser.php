@@ -65,7 +65,13 @@ function results_browser($title,$category_id,$start,$start_name,$max,$max_name,$
 	if ($max<$max_rows) // If they don't all fit on one page
 	{
 		$part=new ocp_tempcode();
-		$get_url=get_base_url().((get_zone_name()=='')?'':'/').get_zone_name().'/index.php';
+		if (strpos(ocp_srv('REQUEST_URI'),'/iframe.php')!==false)
+		{
+			$get_url=find_script('iframe');
+		} else
+		{
+			$get_url=get_base_url().((get_zone_name()=='')?'':'/').get_zone_name().'/index.php';
+		}
 		$num_pages=($max==0)?1:intval(ceil(floatval($max_rows)/floatval($max)));
 
 		// How many to show per page
