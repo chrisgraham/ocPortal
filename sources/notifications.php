@@ -142,6 +142,8 @@ class Notification_dispatcher
 	var $priority=NULL;
 	var $store_in_staff_messaging_system=NULL;
 	var $no_cc=NULL;
+	var $no_notify_for__notification_code=NULL;
+	var $no_notify_for__code_category=NULL;
 
 	/**
 	 * Construct notification dispatcher.
