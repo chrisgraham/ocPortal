@@ -1823,7 +1823,11 @@ function javascript_tempcode($position=NULL)
 			if ($https) $j.='_ssl';
 			if ($mobile) $j.='_mobile';
 
-			$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'b5886d9dfc4d528b7e1b0cd6f0eb1670','CODE'=>$j)));
+			global $SITE_INFO;
+			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+			$sup=($support_smart_decaching)?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
+
+			$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'b5886d9dfc4d528b7e1b0cd6f0eb1670','CODE'=>$j,'SUP'=>$sup)));
 		}
 	}
 	if (!is_null($JAVASCRIPT)) $js->attach($JAVASCRIPT);
@@ -1973,7 +1977,13 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 			if ($https) $c.='_ssl';
 			if ($mobile) $c.='_mobile';
 			if ($temp!='')
-				$css->attach(do_template('CSS_NEED',array('_GUID'=>'ed35fac857214000f69a1551cd483096','CODE'=>$c),user_lang(),false,NULL,'.tpl','templates',$theme));
+			{
+				global $SITE_INFO;
+				$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+				$sup=($support_smart_decaching)?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
+
+				$css->attach(do_template('CSS_NEED',array('_GUID'=>'ed35fac857214000f69a1551cd483096','CODE'=>$c,'SUP'=>$sup),user_lang(),false,NULL,'.tpl','templates',$theme));
+			}
 		}
 	}
 	$css_need_inline->attach($css);
