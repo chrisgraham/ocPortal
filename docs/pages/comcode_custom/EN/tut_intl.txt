@@ -321,6 +321,14 @@ ul.compact_list li {
 [/code]
 Therefore to make things display neatly you will need to make a modified theme that makes these kinds of changes for margin settings, padding settings, and background settings.
 
+[title="2"]Advanced: just one language[/title]
+
+If you don't want multiple languages, just your own, you can do this. In other words, you can disable the English language pack as a choice (anything non-translated would still be in English, e.g. most of the admin stuff if you didn't translate that).
+
+Two steps are required:
+1) Disable the 'Enable regionalisation' option
+2) Open up [tt]http://yoursite/config_editor.php[/tt] and change the default language
+
 [title="2"]Cheating[/title]
 
 If you don't want to worry about a proper translation, but do want to support multiple languages, Google provide some code for Google Translate that you can easily include in your site footer (or header, or a panel) to allow people to translate the site.
