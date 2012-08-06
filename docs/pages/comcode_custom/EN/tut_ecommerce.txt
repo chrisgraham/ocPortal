@@ -181,7 +181,7 @@ Usergroup subscriptions are implemented on top of subscriptions. Set up a usergr
 2) Assign additional access to this usergroup (or remove access from some of the other usergroups!).
 3) Go to the Setup section of the Admin Zone, then the eCommerce icon, then the 'Add usergroup subscription' icon
 4) Fill in the form. Be aware that a '5' 'monthly' subscription means someone pays 'every 5 months'. It does not mean a subscription is paid every month and lasts for 5 months -- subscriptions last indefinitely until the user chooses to cancel them.
-5) Provide a path for members to visit the purchase page so that they may activate their subscription. You do this via the [tt]site:purchase[/tt] page-link, which can be inserted into a template, Comcode page, or most simply, onto your menu using the menu editor.
+5) Provide a path for members to visit the purchase page so that they may activate their subscription. By default this is possible via upgrade links shown in the logged-in box. You do also this via the [tt]site:purchase[/tt] page-link, which can be inserted into a template, Comcode page, or most simply, onto your menu using the menu editor.
 
 You can add as many usergroup subscriptions as you like. For example, [by adding more subscriptions] you could make it cheaper to subscribe yearly than monthly.
 [/surround]
