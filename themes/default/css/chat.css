@@ -134,10 +134,6 @@
 	margin: 0.6em 0;
 }
 
-.chat_message:last-child {
-	border-bottom: 0;
-}
-
 .chat_message blockquote {
 	margin: 0 0 1em 0;
 }
@@ -216,10 +212,9 @@
 
 .chat_lobby_convos {
 	float: {!en_left};
-	width: 25em;
-	margin-{!en_right}: 1em;
+	width: 24em;
+	margin-{!en_right}: 0.5em;
 	border-{!en_right}: 1px solid {$GET,pale_border};
-	padding: 0 5px;
 }
 
 .chat_lobby_convos_tabs {
@@ -247,7 +242,6 @@
 	background: url('{$IMG;,tab}');
 	background-repeat: no-repeat;
 	float: {!en_left};
-	margin-top: -1px;
 	padding: 3px 5px 0 5px;
 	height: 20px;
 	border-right: 1px solid {$GET,pale_border};
@@ -269,7 +263,7 @@
 }
 
 .chat_lobby_convos_area_main {
-	width: 15em;
+	width: 14em;
 	overflow: hidden;
 	float: left;
 }
@@ -280,6 +274,10 @@
 }
 
 .im_post_bits {
+}
+
+.im_post_bits .horiz_field_sep {
+	display: inline !important;
 }
 
 .im_post_bits input, .im_post_bits img {

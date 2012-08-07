@@ -2168,7 +2168,7 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .post_buttons a {
-	{$BETA_CSS_PROPERTY,opacity: 0.0;} display: inline-block;/*Needed for IE8*/
+	{$BETA_CSS_PROPERTY,opacity: 0.1;} display: inline-block;/*Needed for IE8*/
 	{$BETA_CSS_PROPERTY,transition-property : opacity;}
 	{$BETA_CSS_PROPERTY,transition-duration : 0.5s;}
 }

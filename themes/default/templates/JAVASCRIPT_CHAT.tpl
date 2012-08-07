@@ -936,11 +936,12 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 	} else
 	{
 		// Open popup
-		var new_window=window.open('{$BASE_URL;,0}'.replace(/^http:/,window.location.protocol)+'/data/empty.html','room_'+room_id,'width=440,height=520,menubar=no,toolbar=no,location=no,resizable=no,scrollbars=yes,top='+((screen.height-520)/2)+',left='+((screen.width-440)/2));
+		var new_window=window.open('{$BASE_URL;,0}'.replace(/^http:/,window.location.protocol)+'/data/empty.html','room_'+room_id,'width=370,height=415,menubar=no,toolbar=no,location=no,resizable=no,scrollbars=yes,top='+((screen.height-520)/2)+',left='+((screen.width-440)/2));
 		window.setTimeout(function() // Needed for Safari to set the right domain
 		{
 			opened_popups['room_'+room_id]=new_window;
-			if (new_window)
+
+			if ((new_window) && (typeof new_window.document!='undefined'))
 			{
 				new_window.document.open();
 				new_window.document.write(new_one);

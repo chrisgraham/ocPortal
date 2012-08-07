@@ -386,6 +386,10 @@
 	vertical-align: top;
 }
 
+.ocf_post_main_column.buttons_group {
+	margin: 0;
+}
+
 .ocf_topic_post_area {
 	padding: 0.5em;
 }
