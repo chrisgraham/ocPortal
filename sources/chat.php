@@ -502,6 +502,11 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$room_id));
 		if (array_key_exists(0,$room_check))
 			chat_room_prune($room_id,$room_check[0]);
+	} elseif ($room_id!=-2)
+	{
+		// Note that *we are still here*
+		$GLOBALS['SITE_DB']->query_delete('chat_active',array('member_id'=>get_member(),'room_id'=>($room_id==-1)?NULL:$room_id));
+		$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>($room_id==-1)?NULL:$room_id),'',1);
 	}
 
 	if (is_null($room_check))
