@@ -343,7 +343,7 @@ function ModalWindow()
 		resetDimensions: function(width, height) { // Don't re-call this for an iframe-based overlay, doesn't work retro-actively on the iframe size (but CSS sized inards are fine)
 			var dim=this.getPageSize();
 
-			if (width>dim.pageWidth) width=dim.pageWidth;
+			if (width>dim.pageWidth) width=dim.pageWidth-30;
 
 			var boxWidth=((width) ? (width + 8) : (dim.pageWidth / 4))  + "px";
 			var extra_box_height=(this.type=="iframe" ) ? 160 : 120;

@@ -153,7 +153,7 @@ function generate_notifications($member_id)
 		foreach ($unread_pps as $unread_pp)
 		{
 			$by_id=(is_null($unread_pp['t_cache_first_member_id']) || !is_null($unread_pp['t_forum_id']))?$unread_pp['p_poster']:$unread_pp['t_cache_first_member_id'];
-			$by=$GLOBALS['OCF_DRIVER']->get_username($by_id);
+			$by=is_guest($by_id)?do_lang('SYSTEM'):$GLOBALS['OCF_DRIVER']->get_username($by_id);
 			if (is_null($by)) $by=do_lang('UNKNOWN');
 			$u_title=$unread_pp['t_cache_first_title'];
 			if (is_null($unread_pp['t_forum_id']))

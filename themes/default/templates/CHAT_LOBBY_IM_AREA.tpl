@@ -15,7 +15,7 @@
 			<h3>{!PARTICIPANTS}</h3>
 
 			<div class="chat_lobby_convos_area_participants" id="participants__{ROOM_ID*}">
-				<em>{!NONE}</em>
+				<em class="loading">{!LOADING}</em>
 			</div>
 			<div class="im_close_button">
 				<input id="close_button_{ROOM_ID*}" class="button_micro" type="button" value="{!END_CHAT}" onclick="close_chat_conversation(this,{ROOM_ID%});" />

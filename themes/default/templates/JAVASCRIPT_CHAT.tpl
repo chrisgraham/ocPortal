@@ -550,7 +550,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 						parent.removeChild(tmp_element);
 						if (parent.childNodes.length==0)
 						{
-							set_inner_html(parent,'<em>{!NONE^;}</em>');
+							set_inner_html(parent,'<em class="none">{!NONE^;}</em>');
 						}
 						if (typeof window.play_chat_sound!='undefined') play_chat_sound('contact_off',member_id);
 					}
@@ -967,7 +967,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 
 					// Tell server we've joined
 					do_ajax_request(url,handle_signals,false);
-				},4000);
+				},0);
 			}
 		},1000);
 	}
@@ -1000,7 +1000,10 @@ function add_im_member(room_id,member_id,username,away,avatar_url)
 		var element=doc.getElementById('participants__'+room_id);
 		if (element) // If we've actually got the HTML for the room setup
 		{
-			if (get_inner_html(element).toLowerCase().indexOf('>{!NONE^;}</em>'.toLowerCase())!=-1) set_inner_html(element,'');
+			var p_list=get_inner_html(element).toLowerCase();
+
+			if ((p_list.indexOf('<em class="none">')!=-1) || (p_list.indexOf('<em class="loading">')!=-1))
+				set_inner_html(element,'');
 			element.appendChild(new_participant);
 			if (doc.getElementById('friend_img_'+member_id)) doc.getElementById('friend__'+member_id).style.display='none';
 		}

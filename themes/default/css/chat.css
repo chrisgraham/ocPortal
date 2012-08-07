@@ -332,6 +332,10 @@
 	overflow: auto;
 }
 
+.chat_lobby_convos_area_participants .none {
+	color: {$GET,red_highlight_text};
+}
+
 .chat_lobby_im_participant .float_surrounder a {
 	display: block;
 }
