@@ -92,8 +92,10 @@ class Block_main_quotes
 		while (true)
 		{
 			$line[$i]=fgets($myfile,1024);
+
 			if (($line[$i]===false) || (is_null($line[$i]))) break;
-			$i++;
+
+			if (trim($line[$i])!='') $i++;
 		}
 		if ($i==0) return '';
 		$r=mt_rand(0,$i-1);
