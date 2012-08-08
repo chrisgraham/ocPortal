@@ -30,7 +30,7 @@
 			window.pending_eval_function=function(ob) { // In webkit you can't get a node until it's been closed, so we need to set our code into a function and THEN run it
 				{+START,IF_PASSED,TICKER_TEXT}
 					window.setTimeout( function() {
-						set_inner_html(document.getElementById('news_go_here'),'{TICKER_TEXT^;}');
+						set_inner_html(document.getElementById('news_go_here'),'{TICKER_TEXT;^}');
 					} , {RELATIVE_TIMESTAMP%}*1000 );
 				{+END}
 
@@ -39,14 +39,14 @@
 				ob.lines_for=[];
 				/*	We'll only do the group's, not the member lines, for performance
 				{+START,IF_PASSED,FROM_ID}
-					ob.lines_for.push('{FROM_ID^;}');
+					ob.lines_for.push('{FROM_ID;^}');
 				{+END}
 				{+START,IF_PASSED,TO_ID}
-					ob.lines_for.push('{TO_ID^;}');
+					ob.lines_for.push('{TO_ID;^}');
 				{+END}
 				*/
 				{+START,IF_PASSED,GROUP_ID}
-					ob.lines_for.push('{GROUP_ID^;}');
+					ob.lines_for.push('{GROUP_ID;^}');
 				{+END}
 				{+START,IF_PASSED,SPECIAL_ICON}
 					{+START,IF,{$EQ,{SPECIAL_ICON},email-icon}}

@@ -7,7 +7,7 @@
 {$SET,IMAGE_TYPES,{IMAGE_TYPES}}
 
 <script type="text/javascript">// <![CDATA[
-	var attachment_template='{ATTACHMENT_TEMPLATE/^;}';
+	var attachment_template='{ATTACHMENT_TEMPLATE;^/}';
 //]]></script>
 
 <div id="attachment_store">

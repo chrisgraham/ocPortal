@@ -9,14 +9,14 @@ function menu_editor_add_new_page()
 	var form=document.getElementById('edit_form');
 
 	window.fauxmodal_prompt(
-		'{$?,{$CONFIG_OPTION,collapse_user_zones},{!javascript:ENTER_ZONE_SPZ^;},{!javascript:ENTER_ZONE^;}}',
+		'{$?,{$CONFIG_OPTION,collapse_user_zones},{!javascript:ENTER_ZONE_SPZ;^},{!javascript:ENTER_ZONE;^}}',
 		'',
 		function(zone)
 		{
 			if (zone!==null)
 			{
 				window.fauxmodal_prompt(
-					'{!javascript:ENTER_PAGE^;}',
+					'{!javascript:ENTER_PAGE;^}',
 					'',
 					function(page)
 					{
@@ -341,7 +341,7 @@ function magic_copier(object,caption,url,error_message,confirm_message)
 			yes=true;
 		}
 	}
-	if (!yes) window.fauxmodal_alert('{!RADIO_NOTHING_SELECTED^;}');
+	if (!yes) window.fauxmodal_alert('{!RADIO_NOTHING_SELECTED;^}');
 
 	return false;
 }
@@ -475,32 +475,32 @@ function delete_menu_branch(ob)
 
 	if ((typeof window.showModalDialog!='undefined'{+START,IF,{$CONFIG_OPTION,js_overlays}} || true{+END}) || (ob.form.elements['branch_type_'+id]!='page'))
 	{
-		var choices=['{!INPUTSYSTEM_CANCEL^;}','{!DELETE^;}','{!MOVETO_MENU^;}'];
+		var choices=['{!INPUTSYSTEM_CANCEL;^}','{!DELETE;^}','{!MOVETO_MENU;^}'];
 		generate_question_ui(
-			'{!CONFIRM_DELETE_LINK_NICE^;,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
+			'{!CONFIRM_DELETE_LINK_NICE;^,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
 			choices,
-			'{!DELETE_MENU_ITEM^;}',
+			'{!DELETE_MENU_ITEM;^}',
 			null,
 			function(result)
 			{
-				if (result.toLowerCase()=='{!DELETE^;}'.toLowerCase())
+				if (result.toLowerCase()=='{!DELETE;^}'.toLowerCase())
 				{
 					delete_branch('branch_wrap_'+ob.name.substr(4,ob.name.length));
-				} else if (result.toLowerCase()=='{!MOVETO_MENU^;}'.toLowerCase())
+				} else if (result.toLowerCase()=='{!MOVETO_MENU;^}'.toLowerCase())
 				{
-					var choices=['{!INPUTSYSTEM_CANCEL^;}'];
+					var choices=['{!INPUTSYSTEM_CANCEL;^}'];
 					for (var i=0;i<window.all_menus.length;i++)
 					{
 						choices.push(window.all_menus[i]);
 					}
 					generate_question_ui(
-						'{!CONFIRM_MOVE_LINK_NICE^;,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
+						'{!CONFIRM_MOVE_LINK_NICE;^,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
 						choices,
-						'{!MOVE_MENU_ITEM^;}',
+						'{!MOVE_MENU_ITEM;^}',
 						null,
 						function(result)
 						{
-							if (result.toLowerCase()!='{!INPUTSYSTEM_CANCEL^;}'.toLowerCase())
+							if (result.toLowerCase()!='{!INPUTSYSTEM_CANCEL;^}'.toLowerCase())
 							{
 								var post='',name,value;
 								for (var i=0;i<ob.form.elements.length;i++)
@@ -533,7 +533,7 @@ function delete_menu_branch(ob)
 	} else
 	{
 		window.fauxmodal_confirm(
-			'{!CONFIRM_DELETE_LINK^;,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
+			'{!CONFIRM_DELETE_LINK;^,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
 			function(result)
 			{
 				if (result)

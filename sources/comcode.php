@@ -77,7 +77,7 @@ function html_to_comcode($html)
 
 	require_code('comcode_from_html');
 
-	return semihtml_to_comcode($html);
+	return semihtml_to_comcode($html,true);
 }
 
 /**

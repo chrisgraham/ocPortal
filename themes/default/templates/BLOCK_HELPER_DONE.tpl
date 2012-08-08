@@ -1,6 +1,6 @@
 <div aria-busy="true" class="spaced">
 	<div class="ajax_tree_list_loading vertical_alignment">
-		<img id="loading_image" src="{$IMG*,loading}" title="{!LOADING^;}" alt="{!LOADING^;}" />
+		<img id="loading_image" src="{$IMG*,loading}" title="{!LOADING}" alt="{!LOADING}" />
 		<span>{!LOADING}</span>
 	</div>
 </div>
@@ -22,12 +22,12 @@
 		var comcode,comcode_semihtml;
 		if (is_comcode_xml(element))
 		{
-			comcode='<br /><br />{COMCODE_XML/^;}';
+			comcode='<br /><br />{COMCODE_XML;^/}';
 			comcode_semihtml=comcode;
 		} else
 		{
-			comcode='{COMCODE/^;}';
-			comcode_semihtml='{COMCODE_SEMIHTML/^;}';
+			comcode='{COMCODE;^/}';
+			comcode_semihtml='{COMCODE_SEMIHTML;^/}';
 		}
 		var win=window;
 		if ('{$_GET%,save_to_id}'!='')

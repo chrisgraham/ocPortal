@@ -1235,9 +1235,10 @@ side_ocf_personal_topics=
 
 .topic_list_title {
 	font-weight: bold;
-	width: 100%;
-	text-align: center;
-	padding: 0.5em;
+}
+
+.topic_list_title * {
+	white-space: inherit !important;
 }
 
 .topic_list_meta {

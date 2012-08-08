@@ -224,9 +224,10 @@ function debuttonise($matches)
  * Convert Semi-HTML into comcode. Cleanup where possible
  *
  * @param  LONG_TEXT		The Semi-HTML to converted
+ * @param  boolean		Whether to force full conversion regardless of settings
  * @return LONG_TEXT		The equivalent comcode
  */
-function semihtml_to_comcode($semihtml)
+function semihtml_to_comcode($semihtml,$force=false)
 {
 	require_code('obfuscate');
 	$semihtml=trim($semihtml);
@@ -246,7 +247,7 @@ function semihtml_to_comcode($semihtml)
 
 	$semihtml=preg_replace('#(\[[\w\_]+)&nbsp;#','${1} ',$semihtml);
 
-	if (((get_option('eager_wysiwyg')=='0') && ((strpos($semihtml,'://')===false) || (count(find_all_hooks('systems','comcode_link_handlers'))==0)) && (has_specific_permission(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
+	if ((!$force) && ((get_option('eager_wysiwyg')=='0') && ((strpos($semihtml,'://')===false) || (count(find_all_hooks('systems','comcode_link_handlers'))==0)) && (has_specific_permission(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
 	{
 		$count=substr_count($semihtml,'[/')+substr_count($semihtml,'{')+substr_count($semihtml,'[[')+substr_count($semihtml,'<h1');
 		if ($count==0) return ($semihtml=='')?'':('[html]'.$semihtml.'[/html]');
@@ -268,10 +269,10 @@ function semihtml_to_comcode($semihtml)
 	}
 
 	// Safety from if these are typed in (could cause problems)
-	$semihtml=str_replace('[html','[ html',$semihtml);
-	$semihtml=str_replace('[semihtml','[ semihtml',$semihtml);
-	$semihtml=str_replace('[/html','[ / html',$semihtml);
-	$semihtml=str_replace('[/semihtml','[ / semihtml',$semihtml);
+	$semihtml=str_replace('[html'.($force?']':''),$force?'':'[ html',$semihtml);
+	$semihtml=str_replace('[semihtml'.($force?']':''),$force?'':'[ semihtml',$semihtml);
+	$semihtml=str_replace('[/html'.($force?']':''),$force?'':'[ / html',$semihtml);
+	$semihtml=str_replace('[/semihtml'.($force?']':''),$force?'':'[ / semihtml',$semihtml);
 
 	// Try and retain image attachments
 	$semihtml=preg_replace('#<script[^>]*>(//\s*<!\[CDATA\[)?(<!--)?\s*var te_[\d\w\-]*="[^"]*&for\_session=[^"]*";\s*(//\]\]>)?(-->)?</script>#','',$semihtml);
@@ -648,7 +649,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	$semihtml=str_replace('[ / semihtml','[/semihtml',$semihtml);
 
 	// People without comcode_dangerous have further cleanups, that might lose some quality...
-	if (!has_specific_permission(get_member(),'allow_html'))
+	if ((!has_specific_permission(get_member(),'allow_html')) || ($force))
 	{
 		$semihtml2=$semihtml;
 

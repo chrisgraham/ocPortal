@@ -127,12 +127,12 @@ function comcode_to_clean_text($message_plain)
 	if (preg_match("#\[semihtml\](.*)\[\/semihtml\]#Us",$message_plain,$match)!=0)
 	{
 		require_code('comcode_from_html');
-		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0]),$message_plain);
+		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0],true),$message_plain);
 	}
 	if (preg_match("#\[html\](.*)\[\/html\]#Us",$message_plain,$match)!=0)
 	{
 		require_code('comcode_from_html');
-		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0]),$message_plain);
+		$message_plain=str_replace($match[0],semihtml_to_comcode($match[0],true),$message_plain);
 	}
 	$message_plain=array_key_exists(1,$match) ? $match[1] : $message_plain;
 

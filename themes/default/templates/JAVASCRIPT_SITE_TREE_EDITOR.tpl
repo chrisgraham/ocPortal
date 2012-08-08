@@ -11,7 +11,7 @@ function update_details_box(element)
 	var target=document.getElementById('details_target');
 	if (element.value=='')
 	{
-		set_inner_html(target,'{!NO_ENTRY_POINT_SELECTED^;}');
+		set_inner_html(target,'{!NO_ENTRY_POINT_SELECTED;^}');
 		return;
 	}
 
@@ -28,14 +28,14 @@ function update_details_box(element)
 	switch (full_type)
 	{
 		case 'root':
-			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!ADD_ZONE^;}').replace(/\[2\]/,add_zone_url);
+			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!ADD_ZONE;^}').replace(/\[2\]/,add_zone_url);
 			break;
 
 		case 'zone':
-			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!ZONE_EDITOR^;}').replace(/\[2\]/,zone_editor_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
-			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!permissions:PERMISSIONS_TREE^;}').replace(/\[2\]/,permission_tree_editor_url.replace(/%21/,page_link.replace(/:/,'%3A',page_link)));
-			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!EDIT_ZONE^;}').replace(/\[2\]/,edit_zone_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
-			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!PAGE_WIZARD^;}').replace(/\[2\]/,add_page_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
+			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!ZONE_EDITOR;^}').replace(/\[2\]/,zone_editor_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
+			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!permissions:PERMISSIONS_TREE;^}').replace(/\[2\]/,permission_tree_editor_url.replace(/%21/,page_link.replace(/:/,'%3A',page_link)));
+			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!EDIT_ZONE;^}').replace(/\[2\]/,edit_zone_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
+			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!PAGE_WIZARD;^}').replace(/\[2\]/,add_page_url.replace(/%21/,page_link.replace(/:/,'',page_link)));
 			break;
 
 		case 'modules':
@@ -44,16 +44,16 @@ function update_details_box(element)
 		case 'minimodule_custom':
 			path=page_link_bits[0]+((page_link_bits[0]=='')?'':'/')+'pages/'+type+'/'+page_link_bits[1]+'.php';
 			{+START,IF,{$ADDON_INSTALLED,code_editor}}{+START,IF,{$NOT,{$CONFIG_OPTION,collapse_user_zones}}}
-			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!EDIT^;}').replace(/\[2\]/,'{$BASE_URL;,0}/code_editor.php?path='+window.encodeURIComponent(path));
+			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!EDIT;^}').replace(/\[2\]/,'{$BASE_URL;,0}/code_editor.php?path='+window.encodeURIComponent(path));
 			{+END}{+END}
 			switch (type)
 			{
 				case 'modules':
 				case 'modules_custom':
-					action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!permissions:PERMISSIONS_TREE^;}').replace(/\[2\]/,permission_tree_editor_url.replace(/%21/,page_link.replace(/:/,'%3A',page_link)));
-					if (node.getAttribute('author')) info_buildup+=info_tpl_item.replace(/\[1\]/,'{!AUTHOR^;}').replace(/\[2\]/,node.getAttribute('author').htmlEntities());
-					if (node.getAttribute('organisation')) info_buildup+=info_tpl_item.replace(/\[1\]/,'{!ORGANISATION^;}').replace(/\[2\]/,node.getAttribute('organisation').htmlEntities());
-					if (node.getAttribute('version')) info_buildup+=info_tpl_item.replace(/\[1\]/,'{!VERSION^;}').replace(/\[2\]/,node.getAttribute('version').htmlEntities());
+					action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!permissions:PERMISSIONS_TREE;^}').replace(/\[2\]/,permission_tree_editor_url.replace(/%21/,page_link.replace(/:/,'%3A',page_link)));
+					if (node.getAttribute('author')) info_buildup+=info_tpl_item.replace(/\[1\]/,'{!AUTHOR;^}').replace(/\[2\]/,node.getAttribute('author').htmlEntities());
+					if (node.getAttribute('organisation')) info_buildup+=info_tpl_item.replace(/\[1\]/,'{!ORGANISATION;^}').replace(/\[2\]/,node.getAttribute('organisation').htmlEntities());
+					if (node.getAttribute('version')) info_buildup+=info_tpl_item.replace(/\[1\]/,'{!VERSION;^}').replace(/\[2\]/,node.getAttribute('version').htmlEntities());
 					break;
 				case 'minimodule':
 				case 'minimodule_custom':
@@ -64,9 +64,9 @@ function update_details_box(element)
 		case 'comcode':
 		case 'comcode_custom':
 			path=page_link_bits[0]+'/pages/'+full_type+'/'+page_link_bits[1]+'.txt';
-			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!permissions:PERMISSIONS_TREE^;}').replace(/\[2\]/,permission_tree_editor_url.replace(/%21/,page_link.replace(/:/,'%3A',page_link)));
-			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!EDIT^;}').replace(/\[2\]/,edit_page_url.replace(/%21/,page_link));
-			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!EXPORT_COMCODE_PAGE^;}').replace(/\[2\]/,export_page_url.replace(/%21/,page_link));
+			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!permissions:PERMISSIONS_TREE;^}').replace(/\[2\]/,permission_tree_editor_url.replace(/%21/,page_link.replace(/:/,'%3A',page_link)));
+			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!EDIT;^}').replace(/\[2\]/,edit_page_url.replace(/%21/,page_link));
+			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!EXPORT_COMCODE_PAGE;^}').replace(/\[2\]/,export_page_url.replace(/%21/,page_link));
 			break;
 
 		case 'html':
@@ -81,19 +81,19 @@ function update_details_box(element)
 	// Pages
 	if (Array('modules','modules_custom','comcode','comcode_custom','html','html_custom').inArray(full_type))
 	{
-		action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!DELETE^;}').replace(/\[2\]/,delete_url.replace(/%5B1%5D/,page_link_bits[0]).replace(/\[2\]/,page_link_bits[1]));
+		action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!DELETE;^}').replace(/\[2\]/,delete_url.replace(/%5B1%5D/,page_link_bits[0]).replace(/\[2\]/,page_link_bits[1]));
 		{+START,IF,{$ADDON_INSTALLED,stats}}
-			if (stats_url!='') action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!stats:PAGES_STATISTICS^;}').replace(/\[2\]/,stats_url.replace(/%21/,path));
+			if (stats_url!='') action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!stats:PAGES_STATISTICS;^}').replace(/\[2\]/,stats_url.replace(/%21/,path));
 		{+END}
 	}
 
 	// All
 	if (full_type!='root')
 	{
-		action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!VIEW^;}').replace(/\[2\]/,('{$BASE_URL;,0}/data/pagelink_redirect.php?id='+window.encodeURIComponent(page_link)+keep_stub()).htmlEntities());
-		info_buildup+=info_tpl_item.replace(/\[1\]/,'{!PAGE_LINK^;}').replace(/\[2\]/,'<kbd>'+page_link.htmlEntities()+'</kbd>');
+		action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!VIEW;^}').replace(/\[2\]/,('{$BASE_URL;,0}/data/pagelink_redirect.php?id='+window.encodeURIComponent(page_link)+keep_stub()).htmlEntities());
+		info_buildup+=info_tpl_item.replace(/\[1\]/,'{!PAGE_LINK;^}').replace(/\[2\]/,'<kbd>'+page_link.htmlEntities()+'</kbd>');
 		if (element.selected_editlink)
-			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!EDIT^;}').replace(/\[2\]/,escape_html('{$FIND_SCRIPT_NOHTTP;,pagelink_redirect}?id='+element.selected_editlink+keep_stub()));
+			action_buildup+=actions_tpl_item.replace(/\[1\]/,'{!EDIT;^}').replace(/\[2\]/,escape_html('{$FIND_SCRIPT_NOHTTP;,pagelink_redirect}?id='+element.selected_editlink+keep_stub()));
 	}
 
 	// Output

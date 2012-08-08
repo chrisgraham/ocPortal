@@ -66,8 +66,8 @@
 					</div>
 
 					<script type="text/javascript"> // <![CDATA[
-						var im_area_template='{IM_AREA_TEMPLATE/^;}';
-						var im_participant_template='{IM_PARTICIPANT_TEMPLATE/^;}';
+						var im_area_template='{IM_AREA_TEMPLATE;^/}';
+						var im_participant_template='{IM_PARTICIPANT_TEMPLATE;^/}';
 						var all_conversations=[];
 						var top_window=window;
 
@@ -132,7 +132,7 @@
 					// <![CDATA[
 						{+START,LOOP,FRIENDS}
 							{+START,IF,{$NEQ,{ONLINE_TEXT*},{!ACTIVE}}}
-								document.getElementById('friend_img_{MEMBER_ID/^;}').className='friend_inactive';
+								document.getElementById('friend_img_{MEMBER_ID;^/}').className='friend_inactive';
 							{+END}
 						{+END}
 					// ]]>

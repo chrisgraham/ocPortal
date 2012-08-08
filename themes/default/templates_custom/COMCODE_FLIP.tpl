@@ -22,10 +22,10 @@
 			} else
 			{
 				e.flip({
-					color:'{+START,IF,{$NOT,{$IN_STR,{FINAL_COLOR},#}}}#{+END}{FINAL_COLOR/^;}',
+					color:'{+START,IF,{$NOT,{$IN_STR,{FINAL_COLOR},#}}}#{+END}{FINAL_COLOR;^/}',
 					speed:{SPEED%},
 					direction:'tb',
-					content:'{CONTENT/^;}'
+					content:'{CONTENT;^/}'
 				})
 			};
 			_e.flipped=!_e.flipped;

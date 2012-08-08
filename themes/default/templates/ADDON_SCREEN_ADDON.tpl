@@ -1,9 +1,9 @@
 <tr class="{$CYCLE,results_table_zebra,zebra_0,zebra_1}">
 	<td class="addon_name">
-		<p onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{DESCRIPTION*^;}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
+		<p onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{DESCRIPTION*;^}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
 			{NAME*}
 		</p>
-		<p onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{FILE_LIST*^;}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
+		<p onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{FILE_LIST*;^}'.replace(/\n/g,'\n&lt;br /&gt;'),'50%');">
 			{FILENAME*}
 		</p>
 	</td>

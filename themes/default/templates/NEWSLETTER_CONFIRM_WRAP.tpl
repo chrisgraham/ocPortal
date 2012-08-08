@@ -10,12 +10,12 @@
 
 		<script type="text/javascript">// <![CDATA[
 			window.setTimeout(function() {
-				var adjustedPreview='{PREVIEW^/;}'.replace(/<!DOCTYPE[^>]*>/i,'').replace(/<html[^>]*>/i,'').replace(/<\/html>/i,'');
+				var adjusted_preview='{PREVIEW;^/}'.replace(/<!DOCTYPE[^>]*>/i,'').replace(/<html[^>]*>/i,'').replace(/<\/html>/i,'');
 				var de=window.frames['preview_frame'].document.documentElement;
 				var body=de.getElementsByTagName('body');
 				if (body.length==0)
 				{
-					set_inner_html(de,adjustedPreview);
+					set_inner_html(de,adjusted_preview);
 				} else
 				{
 					var head_element=de.getElementsByTagName('head')[0];
@@ -24,9 +24,9 @@
 						head_element=document.createElement('head');
 						de.appendChild(head_element);
 					}
-					if (de.getElementsByTagName('style').length==0 && adjustedPreview.indexOf('<head')!=-1) {$,The conditional is needed for Firefox - for some odd reason it is unable to parse any head tags twice}
-						set_inner_html(head_element,adjustedPreview.replace(/^(.|\n)*<head[^>]*>((.|\n)*)<\/head>(.|\n)*$/i,'$2'));
-					set_inner_html(body[0],adjustedPreview.replace(/^(.|\n)*<body[^>]*>((.|\n)*)<\/body>(.|\n)*$/i,'$2'));
+					if (de.getElementsByTagName('style').length==0 && adjusted_preview.indexOf('<head')!=-1) {$,The conditional is needed for Firefox - for some odd reason it is unable to parse any head tags twice}
+						set_inner_html(head_element,adjusted_preview.replace(/^(.|\n)*<head[^>]*>((.|\n)*)<\/head>(.|\n)*$/i,'$2'));
+					set_inner_html(body[0],adjusted_preview.replace(/^(.|\n)*<body[^>]*>((.|\n)*)<\/body>(.|\n)*$/i,'$2'));
 				}
 
 				resize_frame('preview_frame',300);

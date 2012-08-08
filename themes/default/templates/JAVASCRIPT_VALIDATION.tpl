@@ -150,7 +150,7 @@ function try_to_simplify_iframe_form()
 				if ((iframe.contentDocument) && (iframe.contentDocument.getElementsByTagName('form').length!=0))
 				{
 					window.fauxmodal_confirm(
-						'{!Q_SURE_LOSE^;}',
+						'{!Q_SURE_LOSE;^}',
 						function(result)
 						{
 							if (result)
@@ -329,14 +329,14 @@ function check_field(the_element,the_form,for_preview)
 	{
 		var valid_types='{$VALID_FILE_TYPES;}'.split(/,/);
 		var type_ok=false;
-		var theFileType=the_element.value.indexOf('.')?the_element.value.substr(the_element.value.lastIndexOf('.')+1):'{!NONE^;}';
+		var theFileType=the_element.value.indexOf('.')?the_element.value.substr(the_element.value.lastIndexOf('.')+1):'{!NONE;^}';
 		for (var k=0;k<valid_types.length;k++)
 		{
 			if (valid_types[k].toLowerCase()==theFileType.toLowerCase()) type_ok=true;
 		}
 		if (!type_ok)
 		{
-			error_msg='{!INVALID_FILE_TYPE^;,xx1xx,{$VALID_FILE_TYPES}}'.replace(/xx1xx/g,theFileType).replace(/<[^>]*>/g,'').replace(/&[lr][sd]quo;/g,"'").replace(/,/g,', ');
+			error_msg='{!INVALID_FILE_TYPE;^,xx1xx,{$VALID_FILE_TYPES}}'.replace(/xx1xx/g,theFileType).replace(/<[^>]*>/g,'').replace(/&[lr][sd]quo;/g,"'").replace(/,/g,', ');
 			if (!alerted) window.fauxmodal_alert(error_msg);
 			alerted=true;
 		}
@@ -373,7 +373,7 @@ function check_field(the_element,the_form,for_preview)
 
 	if ((required) && ((my_value.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (my_value=='****')))
 	{
-		error_msg='{!REQUIRED_NOT_FILLED_IN^;}';
+		error_msg='{!REQUIRED_NOT_FILLED_IN;^}';
 	} else
 	{
 		if ((the_element.className.indexOf('date')!=-1) && (the_element.name.match(/\_(day|month|year)$/)) && (my_value!=''))
@@ -382,29 +382,29 @@ function check_field(the_element,the_form,for_preview)
 			var month=the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_month')].options[the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_month')].selectedIndex].value;
 			var year=the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_year')].options[the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_year')].selectedIndex].value;
 			var source_date=new Date(year,month-1,day);
-			if (year!=source_date.getFullYear()) error_msg='{!NOT_A_DATE^;}';
-			if (month!=source_date.getMonth()+1) error_msg='{!NOT_A_DATE^;}';
-			if (day!=source_date.getDate()) error_msg='{!NOT_A_DATE^;}';
+			if (year!=source_date.getFullYear()) error_msg='{!NOT_A_DATE;^}';
+			if (month!=source_date.getMonth()+1) error_msg='{!NOT_A_DATE;^}';
+			if (day!=source_date.getDate()) error_msg='{!NOT_A_DATE;^}';
 		}
 		if (((the_class=='input_email') || (the_class=='input_email_required')) && (my_value!='') && (my_value!='****') && (!my_value.match(/^[a-zA-Z0-9\._\-\+]+@[a-zA-Z0-9\._\-]+$/)))
 		{
-			error_msg='{!NOT_A_EMAIL^;}'.replace('xxx',my_value);
+			error_msg='{!NOT_A_EMAIL;^}'.replace('xxx',my_value);
 		}
 		if (((the_class=='input_username') || (the_class=='input_username_required')) && (my_value!='') && (my_value!='****') && (window.do_ajax_field_test) && (!do_ajax_field_test('{$FIND_SCRIPT_NOHTTP;,username_exists}?username='+encodeURIComponent(my_value))))
 		{
-			error_msg='{!NOT_USERNAME^;}'.replace('xxx',my_value);
+			error_msg='{!NOT_USERNAME;^}'.replace('xxx',my_value);
 		}
 		if (((the_class=='input_codename') || (the_class=='input_codename_required')) && (my_value!='') && (my_value!='****') && (!my_value.match(/^[a-zA-Z0-9\-\.\_]*$/)))
 		{
-			error_msg='{!NOT_CODENAME^;}'.replace('xxx',my_value);
+			error_msg='{!NOT_CODENAME;^}'.replace('xxx',my_value);
 		}
 		if (((the_class=='input_integer') || (the_class=='input_integer_required')) && (my_value!='') && (my_value!='****') && (parseInt(my_value,10)!=my_value-0))
 		{
-			error_msg='{!NOT_INTEGER^;}'.replace('xxx',my_value);
+			error_msg='{!NOT_INTEGER;^}'.replace('xxx',my_value);
 		}
 		if (((the_class=='input_float') || (the_class=='input_float_required')) && (my_value!='') && (my_value!='****') && (parseFloat(my_value)!=my_value-0))
 		{
-			error_msg='{!NOT_FLOAT^;}'.replace('xxx',my_value);
+			error_msg='{!NOT_FLOAT;^}'.replace('xxx',my_value);
 		}
 	}
 
@@ -482,7 +482,7 @@ function check_form(the_form,for_preview)
 			}
 			if (!alerted)
 			{
-				window.fauxmodal_alert('{!TOO_MUCH_FILE_DATA^;}'.replace(new RegExp('\\\\{'+'1'+'\\\\}','g'),Math.round(total_file_size/1024)).replace(new RegExp('\\\\{'+'2'+'\\\\}','g'),Math.round(the_form.elements['MAX_FILE_SIZE'].value/1024)));
+				window.fauxmodal_alert('{!TOO_MUCH_FILE_DATA;^}'.replace(new RegExp('\\\\{'+'1'+'\\\\}','g'),Math.round(total_file_size/1024)).replace(new RegExp('\\\\{'+'2'+'\\\\}','g'),Math.round(the_form.elements['MAX_FILE_SIZE'].value/1024)));
 			}
 			alerted=true;
 		}
@@ -490,7 +490,7 @@ function check_form(the_form,for_preview)
 
 	if (erroneous)
 	{
-		if (!alerted) window.fauxmodal_alert('{!IMPROPERLY_FILLED_IN^;}');
+		if (!alerted) window.fauxmodal_alert('{!IMPROPERLY_FILLED_IN;^}');
 		var posy=find_pos_y(error_element,true);
 		if (posy==0)
 		{
@@ -714,14 +714,14 @@ function set_locked(field,is_locked,chosen_ob)
 				var label_nice=get_inner_html(label).replace('&raquo;','').replace(/^\s*/,'').replace(/\s*$/,'');
 				if (field.type=='file')
 				{
-					set_field_error(field,'{!DISABLED_FORM_FIELD_ENCHANCEDMSG_UPLOAD^;}'.replace(/\\{1\\}/,label_nice));
+					set_field_error(field,'{!DISABLED_FORM_FIELD_ENCHANCEDMSG_UPLOAD;^}'.replace(/\\{1\\}/,label_nice));
 				} else
 				{
-					set_field_error(field,'{!DISABLED_FORM_FIELD_ENCHANCEDMSG^;}'.replace(/\\{1\\}/,label_nice));
+					set_field_error(field,'{!DISABLED_FORM_FIELD_ENCHANCEDMSG;^}'.replace(/\\{1\\}/,label_nice));
 				}
 			} else
 			{
-				set_field_error(field,'{!DISABLED_FORM_FIELD^;}');
+				set_field_error(field,'{!DISABLED_FORM_FIELD;^}');
 			}
 		}
 		field.className=field.className.replace(/( input_erroneous($| ))+/g,' ');
@@ -891,7 +891,7 @@ function disable_preview_scripts(under)
 
 	var elements,i;
 	var no_go=function() {
-		window.fauxmodal_alert('{!NOT_IN_PREVIEW_MODE^;}');
+		window.fauxmodal_alert('{!NOT_IN_PREVIEW_MODE;^}');
 		return false;
 	};
 	elements=under.getElementsByTagName('button');
@@ -971,7 +971,7 @@ function assign_tick_deletion_confirm(name)
 		if (this.checked)
 		{
 			window.fauxmodal_confirm(
-				'{!ARE_YOU_SURE_DELETE^;}',
+				'{!ARE_YOU_SURE_DELETE;^}',
 				function(result)
 				{
 					if (!result) document.getElementById(name).checked=false;
@@ -993,7 +993,7 @@ function assign_radio_deletion_confirm(name)
 				if (this.checked)
 				{
 					window.fauxmodal_confirm(
-						'{!ARE_YOU_SURE_DELETE^;}',
+						'{!ARE_YOU_SURE_DELETE;^}',
 						function(result)
 						{
 							if (!result)

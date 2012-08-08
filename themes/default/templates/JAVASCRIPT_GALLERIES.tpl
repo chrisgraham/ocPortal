@@ -149,7 +149,7 @@ function slideshow_ensure_loaded(slide,immediate)
 
 function _slideshow_read_in_slide(ajax_result_raw,slide)
 {
-	slideshow_slides[slide]=ajax_result_raw.responseText.replace(/(.|\n)*<div id="gallery_entry_screen"[^<>]*>/i,'').replace(/<!--DO_NOT_REMOVE_THIS_COMMENT-->\s*<\/div>(.|\n)*/i,'');
+	slideshow_slides[slide]=ajax_result_raw.responseText.replace(/(.|\n)*<div class="gallery_entry_screen"[^<>]*>/i,'').replace(/<!--DO_NOT_REMOVE_THIS_COMMENT-->\s*<\/div>(.|\n)*/i,'');
 }
 
 function slideshow_show_slide(slide)
@@ -160,26 +160,27 @@ function slideshow_show_slide(slide)
 	{
 		var slideshow_from=document.getElementById('slideshow_from');
 
-		var fadeElements_old=get_elements_by_class_name(document.body,'scale_down');
-		if (typeof fadeElements_old[0]!='undefined')
+		var fade_elements_old=get_elements_by_class_name(document.body,'scale_down');
+		if (typeof fade_elements_old[0]!='undefined')
 		{
-			var fadeElement_old=fadeElements_old[0];
-			fadeElement_old.style.position='absolute';
-			var left_pos=find_width(fadeElement_old.parentNode)/2-find_width(fadeElement_old)/2;
-			fadeElement_old.style.left=left_pos+'px';
+			var fade_element_old=fade_elements_old[0];
+			fade_element_old.style.position='absolute';
+			var left_pos=find_width(fade_element_old.parentNode)/2-find_width(fade_element_old)/2;
+			fade_element_old.style.left=left_pos+'px';
 		} // else probably a video
 
-		set_inner_html(document.getElementById('gallery_entry_screen'),slideshow_slides[slide].replace(/<script[^>]*>(.|\n)*?<\/script>/gi,''));
+		var cleaned_slide_html=slideshow_slides[slide].replace(/<!DOCTYPE [^>]*>/i,'').replace(/<script[^>]*>(.|\n)*?<\/script>/gi,'');
+		set_inner_html(document.getElementById('gallery_entry_screen'),cleaned_slide_html);
 
-		var fadeElements=get_elements_by_class_name(document.body,'scale_down');
-		if ((typeof fadeElements[0]!='undefined') && (typeof fadeElements_old[0]!='undefined'))
+		var fade_elements=get_elements_by_class_name(document.body,'scale_down');
+		if ((typeof fade_elements[0]!='undefined') && (typeof fade_elements_old[0]!='undefined'))
 		{
-			var fadeElement=fadeElements[0];
-			set_opacity(fadeElement,0);
-			fadeElement.parentNode.insertBefore(fadeElement_old,fadeElement);
-			fade_transition(fadeElement,100.0,30,10);
-			set_opacity(fadeElement_old,1.0);
-			fade_transition(fadeElement_old,0.0,30,-10,true);
+			var fade_element=fade_elements[0];
+			set_opacity(fade_element,0);
+			fade_element.parentNode.insertBefore(fade_element_old,fade_element);
+			fade_transition(fade_element,100.0,30,10);
+			set_opacity(fade_element_old,1.0);
+			fade_transition(fade_element_old,0.0,30,-10,true);
 		} // else probably a video
 
 		document.getElementById('slideshow_from').value=slideshow_from.value; // Make sure stays the same
@@ -189,8 +190,8 @@ function slideshow_show_slide(slide)
 		if (typeof window.show_slide_callback!='undefined') show_slide_callback();
 	}
 
-	var fadeElements=get_elements_by_class_name(document.body,'scale_down');
-	if (typeof fadeElements[0]!='undefined')
+	var fade_elements=get_elements_by_class_name(document.body,'scale_down');
+	if (typeof fade_elements[0]!='undefined')
 	{
 		start_slideshow_timer();
 		reset_slideshow_countdown();

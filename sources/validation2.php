@@ -1061,6 +1061,11 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 						if (!isset($attributes['name'])) $errors[]=array('XHTML_MISSING_ATTRIBUTE',$tag,'name');
 					}
 
+					if ((isset($attributes['size'])) && (isset($attributes['type'])) && (($attributes['type']=='time') || ($attributes['type']=='week') || ($attributes['type']=='hidden') || ($attributes['type']=='color') || ($attributes['type']=='date') || ($attributes['type']=='datetime') || ($attributes['type']=='datetime-local') || ($attributes['type']=='month') || ($attributes['type']=='range') || ($attributes['type']=='radio') || ($attributes['type']=='checkbox') || ($attributes['type']=='number')))
+					{
+						$errors[]=array('XHTML_NO_SIZE_FOR');
+					}
+
 					if (($attributes['type']=='image') && (!isset($attributes['alt'])))
 					{
 						$errors[]=array('XHTML_MISSING_ATTRIBUTE','input','alt');

@@ -23,12 +23,19 @@ class Hook_symbol_CPF_LIST
 				$map=has_specific_permission(get_member(),'see_hidden_groups')?array():array('g_hidden'=>0);
 				$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
 				$_m=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),($group_count>200)?(array('g_is_private_club'=>0)+$map):$map,'ORDER BY g_order');
+				foreach ($_m as $i=>$m)
+				{
+					$_m[$i]['text']=get_translated_text($m['g_name'],$GLOBALS['FORUM_DB']);
+				}
+				global $M_SORT_KEY;
+				$M_SORT_KEY='text';
+				usort($_m,'multi_sort');
 				foreach ($_m as $m)
 				{
 					if ($m['id']==db_get_first_id()) continue;
 
 					if ($value!='') $value.=',';
-					$value.=strval($m['id']).'='.get_translated_text($m['g_name'],$GLOBALS['FORUM_DB']);
+					$value.=strval($m['id']).'='.$m['text'];
 				}
 			}
 			require_code('ocf_members');
