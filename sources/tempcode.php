@@ -356,7 +356,7 @@ function make_string_tempcode($string)
 function apply_tempcode_escaping($escaped,&$value)
 {
 	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
-	foreach ((isset($escaped[1])?array_reverse($escaped):$escaped) as $escape)
+	foreach ($escaped as $escape)
 	{
 		//if ($escape==NL_ESCAPED) echo str_replace(chr(10),'',$value)."\n\n\n\n\n";
 
@@ -389,7 +389,7 @@ function apply_tempcode_escaping($escaped,&$value)
 function apply_tempcode_escaping_inline($escaped,$value)
 {
 	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
-	foreach ((isset($escaped[1])?array_reverse($escaped):$escaped) as $escape)
+	foreach ($escaped as $escape)
 	{
 		//if ($escape==NL_ESCAPED) echo str_replace(chr(10),'',$value)."\n\n\n\n\n";
 

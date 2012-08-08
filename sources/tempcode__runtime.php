@@ -132,7 +132,7 @@ function make_string_tempcode($string)
 function apply_tempcode_escaping($escaped,&$value)
 {
 	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
-	foreach (array_reverse($escaped) as $escape)
+	foreach ($escaped as $escape)
 	{
 		if ($escape==ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==FORCIBLY_ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
@@ -163,7 +163,7 @@ function apply_tempcode_escaping($escaped,&$value)
 function apply_tempcode_escaping_inline($escaped,$value)
 {
 	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
-	foreach (array_reverse($escaped) as $escape)
+	foreach ($escaped as $escape)
 	{
 		if ($escape==ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==FORCIBLY_ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);

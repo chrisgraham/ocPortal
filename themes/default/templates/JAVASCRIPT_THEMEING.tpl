@@ -41,7 +41,7 @@ function load_template_previews()
 function preview_generator_mouseover(event)
 {
 	if (typeof event=='undefined') var event=window.event;
-	if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'<iframe frameBorder="0" title="{!PREVIEW^;*}" style="width: 800px; height: 400px" src="'+escape_html(this.href)+'">{!PREVIEW^;}</iframe>','800px');
+	if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'<iframe frameBorder="0" title="{!PREVIEW*;^}" style="width: 800px; height: 400px" src="'+escape_html(this.href)+'">{!PREVIEW^;}</iframe>','800px');
 }
 
 function preview_generator_mousemove(event)

@@ -56,11 +56,11 @@
 
 				{+START,IF,{$IN_STR,{CLASS},wysiwyg}}
 					<script type="text/javascript">// <![CDATA[
-						if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('edit_{ID;*}_textarea').readOnly=true;
+						if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('edit_{ID*;}_textarea').readOnly=true;
 					//]]></script>
 				{+END}
 				{+START,IF_PASSED,DEFAULT_PARSED}
-					<textarea cols="1" rows="1" style="display: none" readonly="readonly" name="edit_{ID;*}_textarea_parsed">{DEFAULT_PARSED*}</textarea>
+					<textarea cols="1" rows="1" style="display: none" readonly="readonly" name="edit_{ID*;}_textarea_parsed">{DEFAULT_PARSED*}</textarea>
 				{+END}
 			</div>
 		</form>
@@ -94,13 +94,13 @@
 					<label for="redirect_{ID*}" class="field_name">{!DRAWS_FROM}:</label>
 				</p>
 				{+START,IF_NON_EMPTY,{ZONES}}
-					<select onchange="set_edited_panel(null,'{ID*;}'); var editor=document.getElementById('edit_tab_{ID;*}'); if (editor) editor.style.display=(this.options[this.selectedIndex].value=='{CURRENT_ZONE;*}')?'block':'none';" id="redirect_{ID*}" name="redirect_{ID*}">
+					<select onchange="set_edited_panel(null,'{ID*;}'); var editor=document.getElementById('edit_tab_{ID*;}'); if (editor) editor.style.display=(this.options[this.selectedIndex].value=='{CURRENT_ZONE*;}')?'block':'none';" id="redirect_{ID*}" name="redirect_{ID*}">
 						<option value="{ZONE*}">{!NA}</option>
 						{ZONES}
 					</select>
 				{+END}
 				{+START,IF_EMPTY,{ZONES}}
-					<input maxlength="80" onchange="set_edited_panel(null,'{ID*;}'); var editor=document.getElementById('edit_tab_{ID;*}'); if (editor) editor.style.display=(this.value=='{CURRENT_ZONE;*}')?'block':'none';" size="20" id="redirect_{ID*}" name="redirect_{ID*}" value="{CURRENT_ZONE*}" type="text" />
+					<input maxlength="80" onchange="set_edited_panel(null,'{ID*;}'); var editor=document.getElementById('edit_tab_{ID*;}'); if (editor) editor.style.display=(this.value=='{CURRENT_ZONE*;}')?'block':'none';" size="20" id="redirect_{ID*}" name="redirect_{ID*}" value="{CURRENT_ZONE*}" type="text" />
 				{+END}
 			</form>
 		{+END}

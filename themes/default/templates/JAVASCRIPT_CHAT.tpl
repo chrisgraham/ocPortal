@@ -809,19 +809,19 @@ function find_im_convo_room_ids()
 function close_chat_conversation(ob,room_id)
 {
 	generate_question_ui(
-		'{!WANT_TO_DOWNLOAD_LOGS^;*}',
-		{cancel: '{!INPUTSYSTEM_CANCEL^;*}',ok: '{!YES^;*}',no: '{!NO^;*}'},
-		'{!CHAT_DOWNLOAD_LOGS^;*}',
+		'{!WANT_TO_DOWNLOAD_LOGS*;^}',
+		{cancel: '{!INPUTSYSTEM_CANCEL*;^}',ok: '{!YES*;^}',no: '{!NO*;^}'},
+		'{!CHAT_DOWNLOAD_LOGS*;^}',
 		null,
 		function(logs)
 		{
-			if (logs.toLowerCase()!='{!INPUTSYSTEM_CANCEL^;*}'.toLowerCase())
+			if (logs.toLowerCase()!='{!INPUTSYSTEM_CANCEL*;^}'.toLowerCase())
 			{
-				if (logs.toLowerCase()=='{!YES^;*}'.toLowerCase())
+				if (logs.toLowerCase()=='{!YES*;^}'.toLowerCase())
 				{
-					window.open('{$FIND_SCRIPT*;,dllogs}?room='+room_id+'{$KEEP^;*}');
+					window.open('{$FIND_SCRIPT*;,dllogs}?room='+room_id+'{$KEEP*;^}');
 				}
-				deinvolve_im(room_id,logs=='{!YES^;*}',true);
+				deinvolve_im(room_id,logs=='{!YES*;^}',true);
 				window.setTimeout(function() { if (document.body.className.indexOf('sitewide_im_popup_body')!=-1) window.close(); } ,1000);
 			}
 		}

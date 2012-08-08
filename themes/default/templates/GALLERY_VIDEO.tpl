@@ -45,7 +45,7 @@
 	</div>
 {+END}
 
-<div class="gallery_regular_thumb" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET^;*,TOOLTIP}','auto',null,null,false,true);">
+<div class="gallery_regular_thumb" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','auto',null,null,false,true);">
 	<div class="img_thumb_wrap">
 		<a href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
 	</div>

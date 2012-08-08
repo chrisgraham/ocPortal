@@ -77,8 +77,8 @@
 
 	<script type="text/javascript">// <![CDATA[
 		if (typeof window.try_to_simplify_iframe_form!='undefined') try_to_simplify_iframe_form();
-		var non_iframe_url='{URL;*}';
-		var iframe_url='{IFRAME_URL;*}';
+		var non_iframe_url='{URL*;}';
+		var iframe_url='{IFRAME_URL*;}';
 		window.setInterval(function() { resize_frame('iframe_under'); },1500);
 	//]]></script>
 {+END}
