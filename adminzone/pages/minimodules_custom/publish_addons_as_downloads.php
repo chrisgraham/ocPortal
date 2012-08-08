@@ -22,16 +22,16 @@ if($get_cat === NULL)
 $addon_list=get_details_of_addons();
 
 $parent_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>1,'t.text_original'=>'Addons'));
-$c_main_id=check_and_add_category($get_cat,$parent_id);
+$c_main_id=find_addon_category_download_category($get_cat,$parent_id);
 
 $admin=2;
 
 if (get_param_integer('import_addons',1)==1)
 {
-	$categories=category_list_from_details();
+	$categories=find_addon_category_list();
 	foreach ($categories as $category)
 	{
-		$cid=check_and_add_category($category, $c_main_id);
+		$cid=find_addon_category_download_category($category, $c_main_id);
 		$addon_arr=get_addons_list_under_category($category);
 		foreach ($addon_arr as $addon)
 		{
@@ -94,8 +94,8 @@ $attribute";
 
 if (get_param_integer('import_themes',1)==1)
 {
-	$cid=check_and_add_category('Themes', $c_main_id);
-	$cid=check_and_add_category('Professional Themes', $cid);
+	$cid=find_addon_category_download_category('Themes', $c_main_id);
+	$cid=find_addon_category_download_category('Professional Themes', $cid);
 
 	$dh=opendir(get_custom_file_base().'/exports/addons');
 	while (($file=readdir($dh))!==false)

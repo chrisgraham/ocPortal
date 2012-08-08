@@ -123,6 +123,7 @@ echo <<<END
 	<body class="website_body"><div class="global_middle">
 		<h1 class="screen_title">{$title}</h1>
 END;
+flush();
 }
 
 function testset_do_footer()

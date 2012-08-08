@@ -31,7 +31,7 @@ function get_file_list_of_addons()
 			$path=substr($val,3);   // Remove ' - ' in every path
 			$files[]=$path;
 		}
-		elseif (@$text[$i+1][0]=='-') // New block of files
+		elseif ((isset($text[$i+1][0])) && ($text[$i+1][0]=='-')) // New block of files
 		{
 			if (count($files)!=0)
 			{
@@ -49,7 +49,7 @@ function get_file_list_of_addons()
 	return $file_list;
 }
 
-// Returns details of the addons
+// Returns a list of the addons, addon names mapping to details on them
 function get_details_of_addons()
 {
 	if (!file_exists(get_file_base().'/data_custom/addon_details.csv'))
@@ -101,7 +101,7 @@ function get_details_of_addons()
 }
 
 // Returns list of category
-function category_list_from_details()
+function find_addon_category_list()
 {
 	$categories=array();
 	$addons=get_details_of_addons();
@@ -114,13 +114,15 @@ function category_list_from_details()
 }
 
 // Insert into database if the category does not exist
-function check_and_add_category($category, $parentid=1)
+function find_addon_category_download_category($category_name,$parent_id=NULL)
 {
+	if (is_null($parent_id)) $parent_id=db_get_first_id();
+
 	require_code('downloads2');
-	$id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$parentid,'t.text_original'=>$category));
+	$id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$parent_id,'t.text_original'=>$category_name));
 	if (is_null($id))
 	{
-		$cat_id=add_download_category($category,$parentid,'','','');
+		$cat_id=add_download_category($category_name,$parent_id,'','','');
 		$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
 		foreach (array_keys($all_groups) as $_group_id)
 		{
@@ -128,26 +130,18 @@ function check_and_add_category($category, $parentid=1)
 		}
 		return $cat_id;
 	}
-	else
-		return $id;
+
+	return $id;
 }
 
-// Returns the category ID of a named category
-function fetch_category_id($category)
-{
-	$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>1,'t.text_original'=>$category));
-
-	return $category_id;
-}
-
-function get_addons_list_under_category($category)
+function get_addons_list_under_category($category_name)
 {
 	$categories=array();
 	$addons=get_details_of_addons();
 	$addons_here=array();
 	foreach ($addons as $k=>$addon)
 	{
-		if ($addon['Category']==$category) $addons_here[]=$k;
+		if ($addon['Category']==$category_name) $addons_here[]=$k;
 	}
 	return $addons_here;
 }

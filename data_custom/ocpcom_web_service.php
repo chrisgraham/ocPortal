@@ -37,9 +37,16 @@ require_code('ocpcom');
 
 header('Content-type: text/plain');
 
-$password_given=post_param('password');
-if (!check_master_password($password_given)) exit('Access Denied');
-
 $parameters=isset($_POST['parameters'])?$_POST['parameters']:array();
 if (get_magic_quotes_gpc()) $parameters=array_map('stripslashes',$parameters);
-call_user_func_array('server__'.get_param('call'),$parameters);
+
+$password_given=post_param('password',NULL);
+if ($password_given===NULL)
+{
+	call_user_func_array('server__public__'.get_param('call'),$parameters);
+} else
+{
+	if (!check_master_password($password_given)) exit('Access Denied');
+
+	call_user_func_array('server__'.get_param('call'),$parameters);
+}

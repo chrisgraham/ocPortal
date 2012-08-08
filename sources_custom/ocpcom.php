@@ -18,6 +18,12 @@ function init__ocpcom()
 	define('MYOCP_DEMO_LAST_DAYS',30);
 }
 
+function server__public__get_tracker_categories()
+{
+	$categories=collapse_1d_complexity('name',$GLOBALS['SITE_DB']->query('SELECT DISTINCT name FROM mantis_category_table WHERE status=0'));
+	echo serialize($categories);
+}
+
 function server__create_tracker_issue($version_dotted,$tracker_title,$tracker_message,$tracker_additional)
 {
 	require_code('mantis');
