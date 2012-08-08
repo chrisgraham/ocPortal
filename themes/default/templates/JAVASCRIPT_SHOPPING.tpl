@@ -14,7 +14,7 @@ function update_cart(pro_ids)
 
 		if (isNaN(qval))
 		{
-			window.fauxmodal_alert('{!CART_VALIDATION_REQUIRE_NUMBER^;}');
+			window.fauxmodal_alert('{!CART_VALIDATION_REQUIRE_NUMBER;^}');
 			return false;
 		}
 	}	
@@ -46,7 +46,7 @@ function confirm_admin_order_actions(action_event,form)
 	if (action_event=='dispatch')
 	{
 		window.fauxmodal_confirm(
-			'{!DISPATCH_CONFIRMATION_MESSAGE^;}',
+			'{!DISPATCH_CONFIRMATION_MESSAGE;^}',
 			function(result)
 			{
 				if (result)
@@ -60,7 +60,7 @@ function confirm_admin_order_actions(action_event,form)
 	if (action_event=='del_order')
 	{
 		window.fauxmodal_confirm(
-			'{!CANCEL_ORDER_CONFIRMATION_MESSAGE^;}',
+			'{!CANCEL_ORDER_CONFIRMATION_MESSAGE;^}',
 			function(result)
 			{
 				if (result)

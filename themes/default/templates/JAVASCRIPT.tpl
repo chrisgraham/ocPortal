@@ -249,8 +249,8 @@ function initialise_error_mechanism()
 			if ((typeof window.done_one_error=='undefined') || (!window.done_one_error))
 			{
 				window.done_one_error=true;
-				var alert='{!JAVASCRIPT_ERROR^;}\n\n'+code+': '+msg+'\n'+file;
-				window.fauxmodal_alert(alert,null,'{!ERROR_OCCURRED^;}');
+				var alert='{!JAVASCRIPT_ERROR;^}\n\n'+code+': '+msg+'\n'+file;
+				window.fauxmodal_alert(alert,null,'{!ERROR_OCCURRED;^}');
 			}
 			return false;
 		};
@@ -280,7 +280,7 @@ function staff_unload_action()
 	div.style.position='absolute';
 	div.style.zIndex=10000;
 	div.style.textAlign='center';
-	set_inner_html(div,'<span aria-busy="true" class="loading_box box"><h2>{!LOADING^;}</h2><img id="loading_image" alt="" src="'+'{$IMG;,loading}'.replace(/^http:/,window.location.protocol)+'" /></span>');
+	set_inner_html(div,'<span aria-busy="true" class="loading_box box"><h2>{!LOADING;^}</h2><img id="loading_image" alt="" src="'+'{$IMG;,loading}'.replace(/^http:/,window.location.protocol)+'" /></span>');
 	window.setTimeout( function() { if (document.getElementById('loading_image')) document.getElementById('loading_image').src+=''; } , 100); // Stupid workaround for Google Chrome not loading an image on unload even if in cache
 	document.body.appendChild(div);
 	if (typeof window.scrollTo!='undefined')
@@ -332,7 +332,7 @@ function check_field_for_blankness(field,event)
 
 	var ee=document.getElementById('error_'+field.id);
 
-	if ((value.replace(/\s/g,'')=='') || (value=='****') || (value=='{!POST_WARNING^;}'))
+	if ((value.replace(/\s/g,'')=='') || (value=='****') || (value=='{!POST_WARNING;^}'))
 	{
 		if (event)
 		{
@@ -342,10 +342,10 @@ function check_field_for_blankness(field,event)
 		if (ee!==null)
 		{
 			ee.style.display='block';
-			set_inner_html(ee,'{!REQUIRED_NOT_FILLED_IN^;}');
+			set_inner_html(ee,'{!REQUIRED_NOT_FILLED_IN;^}');
 		}
 
-		window.fauxmodal_alert('{!IMPROPERLY_FILLED_IN^;}');
+		window.fauxmodal_alert('{!IMPROPERLY_FILLED_IN;^}');
 		return false;
 	}
 
@@ -478,7 +478,7 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 	{
 		if (!fallback_message)
 		{
-			message+='\n\n{!INPUTSYSTEM_TYPE_EITHER^;}';
+			message+='\n\n{!INPUTSYSTEM_TYPE_EITHER;^}';
 			for (var i=0;i<button_set.length;i++)
 			{
 				message+=button_set[i]+',';
@@ -639,7 +639,7 @@ function help_panel(show)
 		if (read_cookie('hide_help_panel')=='')
 		{
 			window.fauxmodal_confirm(
-				'{!CLOSING_HELP_PANEL_CONFIRM^;}',
+				'{!CLOSING_HELP_PANEL_CONFIRM;^}',
 				function(answer)
 				{
 					if (answer)
@@ -736,7 +736,7 @@ function set_cookie(cookie_name,cookie_value,num_days)
 	if ((read!=cookie_value) && (read))
 	{
 		{+START,IF,{$DEV_MODE}}
-			if (!window.done_cookie_alert) window.fauxmodal_alert('{!COOKIE_CONFLICT_DELETE_COOKIES^;}'+'... '+document.cookie+' ('+to_set+')',null,'{!ERROR_OCCURRED^;}');
+			if (!window.done_cookie_alert) window.fauxmodal_alert('{!COOKIE_CONFLICT_DELETE_COOKIES;^}'+'... '+document.cookie+' ('+to_set+')',null,'{!ERROR_OCCURRED;^}');
 		{+END}
 		window.done_cookie_alert=true;
 	}
@@ -892,7 +892,7 @@ function confirm_session(callback)
 	if (ret.responseText=='{!GUEST;}') // Hmm, actually whole login was lost, so we need to ask for username too
 	{
 		window.fauxmodal_prompt(
-			'{!USERNAME^;}',
+			'{!USERNAME;^}',
 			'',
 			function(promptt)
 			{
@@ -908,7 +908,7 @@ function confirm_session(callback)
 function _confirm_session(callback,username,url)
 {
 	window.fauxmodal_prompt(
-		'{$?,{$NOT,{$CONFIG_OPTION,js_overlays}},{!ENTER_PASSWORD_JS^;},{!ENTER_PASSWORD_JS_2^;}}',
+		'{$?,{$NOT,{$CONFIG_OPTION,js_overlays}},{!ENTER_PASSWORD_JS;^},{!ENTER_PASSWORD_JS_2;^}}',
 		'',
 		function(promptt)
 		{
@@ -1262,7 +1262,7 @@ function illustrate_frame_load(pf,frame)
 		var body=de.getElementsByTagName('body');
 		if (body.length==0)
 		{
-			set_inner_html(de,'<head>'+head+'<\/head><body aria-busy="true" class="website_body"><div class="spaced"><div class="ajax_tree_list_loading vertical_alignment"><img id="loading_image" src="'+'{$IMG*,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> <span class="vertical_alignment">{!LOADING^;}<\/span><\/div><\/div><\/body>');
+			set_inner_html(de,'<head>'+head+'<\/head><body aria-busy="true" class="website_body"><div class="spaced"><div class="ajax_tree_list_loading vertical_alignment"><img id="loading_image" src="'+'{$IMG*,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div><\/body>');
 		} else
 		{
 			body[0].className='website_body';
@@ -1276,7 +1276,7 @@ function illustrate_frame_load(pf,frame)
 
 			if (de.getElementsByTagName('style').length==0) /* The conditional is needed for Firefox - for some odd reason it is unable to parse any head tags twice */
 				set_inner_html(head_element,head);
-			set_inner_html(body[0],'<div aria-busy="true" class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="vertical_alignment" src="'+'{$IMG*,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> <span class="vertical_alignment">{!LOADING^;}<\/span><\/div><\/div>');
+			set_inner_html(body[0],'<div aria-busy="true" class="spaced"><div class="ajax_tree_list_loading"><img id="loading_image" class="vertical_alignment" src="'+'{$IMG*,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span class="vertical_alignment">{!LOADING;^}<\/span><\/div><\/div>');
 		}
 		var the_frame=window.frames[frame];
 		window.setTimeout( // Stupid workaround for Google Chrome not loading an image on unload even if in cache
@@ -1788,7 +1788,7 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 	if (!starting) // Real JS mousemove event, so we assume not a screen reader and have to remove natural tooltip
 	{
 		if (ac.getAttribute('title')) ac.setAttribute('title','');
-		if ((ac.parentNode.nodeName.toLowerCase()=='a') && (ac.parentNode.getAttribute('title')) && ((ac.nodeName.toLowerCase()=='abbr') || (ac.parentNode.getAttribute('title').indexOf('{!LINK_NEW_WINDOW^;}')!=-1)))
+		if ((ac.parentNode.nodeName.toLowerCase()=='a') && (ac.parentNode.getAttribute('title')) && ((ac.nodeName.toLowerCase()=='abbr') || (ac.parentNode.getAttribute('title').indexOf('{!LINK_NEW_WINDOW;^}')!=-1)))
 			ac.parentNode.setAttribute('title',''); /* Do not want second tooltips that are not useful */
 	}
 
@@ -2783,7 +2783,7 @@ function topic_reply(is_threaded,ob,id,replying_to_username,replying_to_post,rep
 
 	if (is_threaded)
 	{
-		post.value='{!QUOTED_REPLY_MESSAGE^;}'.replace(/\\{1\\}/g,replying_to_username).replace(/\\{2\\}/g,replying_to_post_plain);
+		post.value='{!QUOTED_REPLY_MESSAGE;^}'.replace(/\\{1\\}/g,replying_to_username).replace(/\\{2\\}/g,replying_to_post_plain);
 		post.strip_on_focus=post.value;
 		post.style.color='';
 	} else

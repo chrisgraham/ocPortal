@@ -41,7 +41,7 @@ function load_template_previews()
 function preview_generator_mouseover(event)
 {
 	if (typeof event=='undefined') var event=window.event;
-	if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'<iframe frameBorder="0" title="{!PREVIEW*;^}" style="width: 800px; height: 400px" src="'+escape_html(this.href)+'">{!PREVIEW^;}</iframe>','800px');
+	if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'<iframe frameBorder="0" title="{!PREVIEW*;^}" style="width: 800px; height: 400px" src="'+escape_html(this.href)+'">{!PREVIEW;^}</iframe>','800px');
 }
 
 function preview_generator_mousemove(event)
@@ -158,7 +158,7 @@ function _get_parameter_parameters(definite_gets,parameter,arity,box,name,value,
 	if (num_done<definite_gets)
 	{
 		window.fauxmodal_prompt(
-			'{!INPUT_NECESSARY_PARAMETER^;}'+', '+parameter[num_done],
+			'{!INPUT_NECESSARY_PARAMETER;^}'+', '+parameter[num_done],
 			'',
 			function(v)
 			{
@@ -175,7 +175,7 @@ function _get_parameter_parameters(definite_gets,parameter,arity,box,name,value,
 		if ((arity=='0+') || (arity=='1+'))
 		{
 			window.fauxmodal_prompt(
-				'{!INPUT_OPTIONAL_PARAMETER^;}',
+				'{!INPUT_OPTIONAL_PARAMETER;^}',
 				'',
 				function(v)
 				{
@@ -191,7 +191,7 @@ function _get_parameter_parameters(definite_gets,parameter,arity,box,name,value,
 		else if ((arity=='0-1') || (arity=='3-4'))
 		{
 			window.fauxmodal_prompt(
-				'{!INPUT_OPTIONAL_PARAMETER^;}',
+				'{!INPUT_OPTIONAL_PARAMETER;^}',
 				'',
 				function(v)
 				{

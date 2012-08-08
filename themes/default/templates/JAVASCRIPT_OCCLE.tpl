@@ -106,7 +106,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 
 	if (!ajax_result)
 	{
-		var stderr_text=document.createTextNode('{!ERROR_NON_TERMINAL^;}\n{!INTERNAL_ERROR^;}');
+		var stderr_text=document.createTextNode('{!ERROR_NON_TERMINAL;^}\n{!INTERNAL_ERROR;^}');
 		var stderr_text_p=document.createElement('p');
 		stderr_text_p.setAttribute('class','error_output');
 		stderr_text_p.appendChild(stderr_text);
@@ -143,7 +143,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 			notification=document.createElement('div');
 			notification.setAttribute('class','occle_notification');
 			notification_p=document.createElement('p');
-			notification_p_text=document.createTextNode('{!NOTIFICATION_SECTION^;} '+stdnotifications.childNodes[i].getAttribute('section')+'{!NOTIFICATION_TYPE^;} '+stdnotifications.childNodes[i].getAttribute('type'));
+			notification_p_text=document.createTextNode('{!NOTIFICATION_SECTION;^} '+stdnotifications.childNodes[i].getAttribute('section')+'{!NOTIFICATION_TYPE;^} '+stdnotifications.childNodes[i].getAttribute('type'));
 			notification_p.appendChild(notification_p_text);
 			notification.appendChild(notification_p);
 			for(var a=0;a<stdnotifications.childNodes[i].childNodes.length;a++)
@@ -190,7 +190,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 		// Javascript commands; eval() them.
 		eval(stdcommand);
 
-		var stdcommand_text=document.createTextNode('{!JAVASCRIPT_EXECUTED^;}');
+		var stdcommand_text=document.createTextNode('{!JAVASCRIPT_EXECUTED;^}');
 		var stdcommand_text_p=document.createElement('p');
 		stdcommand_text_p.setAttribute('class','command_output');
 		stdcommand_text_p.appendChild(stdcommand_text);
@@ -200,8 +200,8 @@ function occle_command_response(ajax_result_frame,ajax_result)
 	if ((stdcommand=='') && (!stdhtml.childNodes) && (stdout==''))
 	{
 		// Exit with an error.
-		if (stderr!='') var stderr_text=document.createTextNode('{!PROBLEM_ACCESSING_RESPONSE^;}\n'+stderr);
-		else var stderr_text=document.createTextNode('{!TERMINAL_PROBLEM_ACCESSING_RESPONSE^;}');
+		if (stderr!='') var stderr_text=document.createTextNode('{!PROBLEM_ACCESSING_RESPONSE;^}\n'+stderr);
+		else var stderr_text=document.createTextNode('{!TERMINAL_PROBLEM_ACCESSING_RESPONSE;^}');
 		var stderr_text_p=document.createElement('p');
 		stderr_text_p.setAttribute('class','error_output');
 		stderr_text_p.appendChild(stderr_text);
@@ -211,7 +211,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 	}
 	else if (stderr!='')
 	{
-		var stderr_text=document.createTextNode('{!ERROR_NON_TERMINAL^;}\n'+stderr);
+		var stderr_text=document.createTextNode('{!ERROR_NON_TERMINAL;^}\n'+stderr);
 		var stderr_text_p=document.createElement('p');
 		stderr_text_p.setAttribute('class','error_output');
 		stderr_text_p.appendChild(stderr_text);

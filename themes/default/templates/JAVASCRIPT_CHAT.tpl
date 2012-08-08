@@ -79,7 +79,7 @@ function check_chat_options(ob)
 {
 	if (!ob.elements['text_colour'].value.match(/^#[0-9A-F][0-9A-F][0-9A-F]([0-9A-F][0-9A-F][0-9A-F])?$/))
 	{
-		window.fauxmodal_alert('{!BAD_HTML_COLOUR^;}');
+		window.fauxmodal_alert('{!BAD_HTML_COLOUR;^}');
 		return false;
 	}
 
@@ -150,7 +150,7 @@ function get_ticked_people(form)
 
 	if (people=='')
 	{
-		window.fauxmodal_alert('{!NOONE_SELECTED_YET^;}');
+		window.fauxmodal_alert('{!NOONE_SELECTED_YET;^}');
 		return false;
 	}
 
@@ -476,16 +476,16 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 					tmp_element=document.getElementById('online_'+member_id);
 					if (tmp_element)
 					{
-						set_inner_html(tmp_element,'{!ACTIVE^;}');
+						set_inner_html(tmp_element,'{!ACTIVE;^}');
 						document.getElementById('friend_img_'+member_id).className='friend_active';
 						var alert_box_wrap=document.getElementById('alert_box_wrap');
 						alert_box_wrap.style.display='block';
 						var alert_box=document.getElementById('alert_box');
-						set_inner_html(alert_box,'{!NOW_ONLINE^;}'.replace('{'+'1}',username));
+						set_inner_html(alert_box,'{!NOW_ONLINE;^}'.replace('{'+'1}',username));
 						window.setTimeout(function () { if (get_inner_html(alert_box)==get_inner_html(document.getElementById('alert_box'))) alert_box_wrap.style.display='none'; } , 7000);
 					} else if (!document.getElementById('chat_lobby_convos_tabs'))
 					{
-						create_overlay_event(member_id,'{!NOW_ONLINE^;}'.replace('{'+'1}',username),function() { start_im(member_id); return false; } ,avatar_url);
+						create_overlay_event(member_id,'{!NOW_ONLINE;^}'.replace('{'+'1}',username),function() { start_im(member_id); return false; } ,avatar_url);
 					}
 					rooms=find_im_convo_room_ids();
 					for (var r in rooms)
@@ -500,7 +500,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 						tmp_element=doc.getElementById('participant_online__'+room_id+'__'+member_id);
 						if (tmp_element)
 						{
-							set_inner_html(tmp_element,'{!ACTIVE^;}');
+							set_inner_html(tmp_element,'{!ACTIVE;^}');
 						}
 					}
 					play_chat_sound=window.play_chat_sound;
@@ -510,7 +510,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 					tmp_element=document.getElementById('online_'+member_id);
 					if (tmp_element)
 					{
-						set_inner_html(tmp_element,'{!INACTIVE^;}');
+						set_inner_html(tmp_element,'{!INACTIVE;^}');
 						document.getElementById('friend_img_'+member_id).className='friend_inactive';
 					}
 					rooms=find_im_convo_room_ids();
@@ -524,7 +524,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 							doc=opened_popups['room_'+room_id].document;
 						}
 						tmp_element=doc.getElementById('participant_online__'+room_id+'__'+member_id);
-						if (tmp_element) set_inner_html(tmp_element,'{!INACTIVE^;}');
+						if (tmp_element) set_inner_html(tmp_element,'{!INACTIVE;^}');
 					}
 					play_chat_sound=window.play_chat_sound;
 					if (typeof window.play_chat_sound!='undefined') play_chat_sound('contact_off',member_id);
@@ -550,7 +550,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 						parent.removeChild(tmp_element);
 						if (parent.childNodes.length==0)
 						{
-							set_inner_html(parent,'<em class="none">{!NONE^;}</em>');
+							set_inner_html(parent,'<em class="none">{!NONE;^}</em>');
 						}
 						if (typeof window.play_chat_sound!='undefined') play_chat_sound('contact_off',member_id);
 					}
@@ -574,7 +574,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 				if (((is_new) || (by_you)) && (!window.instant_go) && (!document.getElementById('chat_lobby_convos_tabs')))
 				{
 					opened_popups['room_'+room_id]='pending';
-					create_overlay_event(messages[i].getAttribute('inviter'),'{!IM_INFO_CHAT_WITH^;}'.replace('{'+'1}',room_name),function() { detected_conversation(room_id,room_name,participants); return false; } ,avatar_url,room_id);
+					create_overlay_event(messages[i].getAttribute('inviter'),'{!IM_INFO_CHAT_WITH;^}'.replace('{'+'1}',room_name),function() { detected_conversation(room_id,room_name,participants); return false; } ,avatar_url,room_id);
 				} else
 				{
 					detected_conversation(room_id,room_name,participants);
@@ -658,14 +658,14 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 			if (room_id)
 			{
 				generate_question_ui(
-					'{!HOW_REMOVE_CHAT_NOTIFICATION^;}',
-					{/*cancel: '{!INPUTSYSTEM_CANCEL^;}',*/close: '{!CLOSE^;}',ignore: '{!HIDE^;}'},
-					'{!REMOVE_CHAT_NOTIFICATION^;}',
+					'{!HOW_REMOVE_CHAT_NOTIFICATION;^}',
+					{/*cancel: '{!INPUTSYSTEM_CANCEL;^}',*/close: '{!CLOSE;^}',ignore: '{!HIDE;^}'},
+					'{!REMOVE_CHAT_NOTIFICATION;^}',
 					null,
 					function(answer)
 					{
-						/*if (answer.toLowerCase()=='{!INPUTSYSTEM_CANCEL^;}'.toLowerCase()) return;*/
-						if (answer.toLowerCase()=='{!CLOSE^;}'.toLowerCase())
+						/*if (answer.toLowerCase()=='{!INPUTSYSTEM_CANCEL;^}'.toLowerCase()) return;*/
+						if (answer.toLowerCase()=='{!CLOSE;^}'.toLowerCase())
 						{
 							deinvolve_im(room_id,false,true);
 						}
@@ -702,7 +702,7 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 	var a3=document.createElement('a');
 	a3.onclick=function() { click_event(); document.body.removeChild(div); div=null; return false; };
 	a3.href='#';
-	set_inner_html(a3,'{!OPEN_IM_POPUP^;}');
+	set_inner_html(a3,'{!OPEN_IM_POPUP;^}');
 	a3.className='im_popup_link';
 	var opened_popups_cnt=0;
 	for (var i=0;i<opened_popups.length;i++)
@@ -713,7 +713,7 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 	var a4=document.createElement('a');
 	a4.href=window.lobby_link.replace('%21%21',member_id);
 	a4.onclick=close_popup;
-	set_inner_html(a4,'{!GOTO_CHAT_LOBBY^;}');
+	set_inner_html(a4,'{!GOTO_CHAT_LOBBY;^}');
 	a4.className='im_event_lobby_link';
 	div.appendChild(a4);
 	div.style.left=(get_window_width()/2-140)+'px';
@@ -724,7 +724,7 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 
 function start_im(people)
 {
-	var message=(people.indexOf(',')==-1)?'{!ALREADY_HAVE_THIS_SINGLE^;}':'{!ALREADY_HAVE_THIS^;}';
+	var message=(people.indexOf(',')==-1)?'{!ALREADY_HAVE_THIS_SINGLE;^}':'{!ALREADY_HAVE_THIS;^}';
 	if (all_conversations[people])
 	{
 		window.fauxmodal_confirm(
@@ -746,7 +746,7 @@ function _start_im(people)
 
 	var div=document.createElement('div');
 	div.className='loading_overlay';
-	set_inner_html(div,'{!LOADING^;}');
+	set_inner_html(div,'{!LOADING;^}');
 	document.body.appendChild(div);
 	var result=do_ajax_request(maintain_theme_in_link('{$FIND_SCRIPT;,messages}?action=start_im&people='+people+'&message_id='+window.encodeURIComponent(top_window.last_message_id)+'&event_id='+window.encodeURIComponent(top_window.last_event_id)+keep_stub(false)));
 	var responses=result.responseXML.getElementsByTagName('result');
@@ -764,7 +764,7 @@ function invite_im(people)
 	var room_id=find_current_im_room();
 	if (!room_id)
 	{
-		window.fauxmodal_alert('{!NO_IM_ACTIVE^;}');
+		window.fauxmodal_alert('{!NO_IM_ACTIVE;^}');
 	} else
 	{
 		do_ajax_request('{$FIND_SCRIPT;,messages}?action=invite_im&room_id='+window.encodeURIComponent(room_id)+'&people='+people+keep_stub(false));
@@ -836,7 +836,7 @@ function deinvolve_im(room,logs,is_not_window)
 		if (typeof body[0]!='undefined')
 		{
 			body[0].className+=' site_unloading';
-			set_inner_html(body[0],'<div class="spaced"><div aria-busy="true" class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG*,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING^;}" /> <span>{!LOADING^;}<\/span><\/div><\/div>');
+			set_inner_html(body[0],'<div class="spaced"><div aria-busy="true" class="ajax_tree_list_loading vertical_alignment"><img src="'+'{$IMG*,loading}'.replace(/^http:/,window.location.protocol)+'" alt="{!LOADING;^}" /> <span>{!LOADING;^}<\/span><\/div><\/div>');
 		}
 	}
 
@@ -985,7 +985,7 @@ function add_im_member(room_id,member_id,username,away,avatar_url)
 		if (away)
 		{
 			var tmp_element=doc.getElementById('online_'+member_id);
-			if ((tmp_element) && (get_inner_html(tmp_element)=='{!ACTIVE^;}')) away=false;
+			if ((tmp_element) && (get_inner_html(tmp_element)=='{!ACTIVE;^}')) away=false;
 		}
 		if (doc.getElementById('participant__'+room_id+'__'+member_id)) return; // They're already put in it
 		var new_participant=doc.createElement('div');
@@ -994,7 +994,7 @@ function add_im_member(room_id,member_id,username,away,avatar_url)
 		new_participant_inner=new_participant_inner.replace(/\_\_room\_id\_\_/g,room_id);
 		new_participant_inner=new_participant_inner.replace(/\_\_avatar\_url\_\_/g,avatar_url);
 		if (avatar_url=='') new_participant_inner=new_participant_inner.replace('style="display: block" id="avatar__','style="display: none" id="avatar__');
-		new_participant_inner=new_participant_inner.replace(/\_\_online\_\_/g,away?'{!INACTIVE^;}':'{!ACTIVE^;}');
+		new_participant_inner=new_participant_inner.replace(/\_\_online\_\_/g,away?'{!INACTIVE;^}':'{!ACTIVE;^}');
 		set_inner_html(new_participant,new_participant_inner);
 		new_participant.setAttribute('id','participant__'+room_id+'__'+member_id);
 		var element=doc.getElementById('participants__'+room_id);

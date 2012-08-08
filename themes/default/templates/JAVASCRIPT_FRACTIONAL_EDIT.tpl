@@ -70,7 +70,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 							);
 						} else
 						{
-							window.fauxmodal_alert('{!ERROR_FRACTIONAL_EDIT^;}');
+							window.fauxmodal_alert('{!ERROR_FRACTIONAL_EDIT;^}');
 						}
 					} else
 					{
@@ -116,7 +116,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 				if (form.parentNode)
 				{
 					form.parentNode.removeChild(form);
-					window.fauxmodal_alert('{!FRACTIONAL_EDIT_CANCELLED^;}');
+					window.fauxmodal_alert('{!FRACTIONAL_EDIT_CANCELLED;^}');
 				}
 			}
 

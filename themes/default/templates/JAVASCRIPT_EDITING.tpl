@@ -21,7 +21,7 @@ function toggle_wysiwyg(name)
 {
 	if (!browser_matches('wysiwyg'))
 	{
-		window.fauxmodal_alert('{!TOGGLE_WYSIWYG_ERROR^;}');
+		window.fauxmodal_alert('{!TOGGLE_WYSIWYG_ERROR;^}');
 		return false;
 	}
 
@@ -85,19 +85,19 @@ function _toggle_wysiwyg(name,saving_cookies)
 		} else
 		{
 			generate_question_ui(
-				'{!DISCARD_WYSIWYG_CHANGES_NICE^;}',
-				{cancel: '{!INPUTSYSTEM_CANCEL^;}',convert: '{!DISCARD_WYSIWYG_CHANGES_LINE_CONVERT^;}',discard: '{!DISCARD_WYSIWYG_CHANGES_LINE^;}'},
-				'{!DISABLE_WYSIWYG^;}',
-				'{!DISCARD_WYSIWYG_CHANGES^;}',
+				'{!DISCARD_WYSIWYG_CHANGES_NICE;^}',
+				{cancel: '{!INPUTSYSTEM_CANCEL;^}',convert: '{!DISCARD_WYSIWYG_CHANGES_LINE_CONVERT;^}',discard: '{!DISCARD_WYSIWYG_CHANGES_LINE;^}'},
+				'{!DISABLE_WYSIWYG;^}',
+				'{!DISCARD_WYSIWYG_CHANGES;^}',
 				function(prompt)
 				{
-					if ((!prompt) || (prompt.toLowerCase()=='{!INPUTSYSTEM_CANCEL^;}'.toLowerCase()))
+					if ((!prompt) || (prompt.toLowerCase()=='{!INPUTSYSTEM_CANCEL;^}'.toLowerCase()))
 					{
 						if (saving_cookies)
 							set_cookie('use_wysiwyg','1',3000);
 						return false;
 					}
-					var discard=(prompt.toLowerCase()=='{!DISCARD_WYSIWYG_CHANGES_LINE^;}'.toLowerCase());
+					var discard=(prompt.toLowerCase()=='{!DISCARD_WYSIWYG_CHANGES_LINE;^}'.toLowerCase());
 
 					disable_wysiwyg(forms,so,so2,discard);
 				}
@@ -160,7 +160,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 					if ((textarea.value.indexOf('{\$,page hint: no_wysiwyg}')==-1) && (textarea.value!='')) textarea.value+='{\$,page hint: no_wysiwyg}';
 				}
 				if (document.getElementById('toggle_wysiwyg_'+id))
-					set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'{!ENABLE_WYSIWYG^;}');
+					set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'{!ENABLE_WYSIWYG;^}');
 
 				// Unload editor
 				window.wysiwyg_editors[id].elementMode=CKEDITOR.ELEMENT_MODE_NONE;
@@ -232,7 +232,7 @@ function load_html_edit(posting_form,ajax_copy)
 
 			count++;
 			if (document.getElementById('toggle_wysiwyg_'+id))
-				set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'{!DISABLE_WYSIWYG^;}');
+				set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'{!DISABLE_WYSIWYG;^}');
 
 			window.wysiwyg_original_comcode[id]=e.value;
 			if (!ajax_copy)
@@ -511,7 +511,7 @@ function convert_xml(name)
 
 	if (is_wysiwyg_field(element))
 	{
-		window.fauxmodal_alert('{!COMCODE_XML_CONVERT_NOT_WITH_WYSIWYG^;}');
+		window.fauxmodal_alert('{!COMCODE_XML_CONVERT_NOT_WITH_WYSIWYG;^}');
 		return false;
 	}
 
@@ -526,7 +526,7 @@ function convert_xml(name)
 		var error_window=window.open();
 		error_window.document.write(request.responseText);
 		error_window.document.close();
-		window.fauxmodal_alert('{!COMCODE_XML_CONVERT_PARSE_ERROR^;}');
+		window.fauxmodal_alert('{!COMCODE_XML_CONVERT_PARSE_ERROR;^}');
 	}
 
 	return false;

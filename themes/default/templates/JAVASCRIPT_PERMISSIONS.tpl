@@ -80,7 +80,7 @@ function show_permission_setting(ob,event)
 		ob.full_setting=ret.responseText;
 	}
 
-	ob.title+=' [{!DEFAULT_PERMISSION^;} '+ob.full_setting+']';
+	ob.title+=' [{!DEFAULT_PERMISSION;^} '+ob.full_setting+']';
 }
 
 function cleanup_permission_list(name)
@@ -96,7 +96,7 @@ function permissions_overridden(select)
 	if (element.options[0].id!=select+'_custom_option')
 	{
 		var new_option=document.createElement('option');
-		set_inner_html(new_option,'{!PINTERFACE_LEVEL_CUSTOM^;}');
+		set_inner_html(new_option,'{!PINTERFACE_LEVEL_CUSTOM;^}');
 		new_option.id=select+'_custom_option';
 		new_option.value='';
 		element.insertBefore(new_option,element.options[0]);
@@ -166,7 +166,7 @@ function copy_permission_presets(name,value,just_track)
 
 	if ((!just_track) && (elements.length==2) && (made_change))
 	{
-		window.fauxmodal_alert('{!JUST_PRESETS^;}');
+		window.fauxmodal_alert('{!JUST_PRESETS;^}');
 	}
 
 	return made_change;
@@ -205,7 +205,7 @@ function permission_repeating(button,name)
 	{
 		button.style.textDecoration='blink';
 		window.permission_copying=name;
-		window.fauxmodal_alert('{!REPEAT_PERMISSION_NOTICE^;}');
+		window.fauxmodal_alert('{!REPEAT_PERMISSION_NOTICE;^}');
 		for (var i=0;i<trs.length;i++)
 		{
 			if (trs[i]!=tr) trs[i].onclick=copy_permissions_function(trs[i],tr,name);
@@ -253,7 +253,7 @@ function update_permission_box(setting)
 	{
 		document.getElementById('selection_form_fields').style.display='none';
 		document.getElementById('selection_button').disabled=true;
-		set_inner_html(document.getElementById('selection_message'),'{!PERMISSIONS_TREE_EDITOR_NONE_SELECTED^;}');
+		set_inner_html(document.getElementById('selection_message'),'{!PERMISSIONS_TREE_EDITOR_NONE_SELECTED;^}');
 	} else
 	{
 		// Go through and set maximum permissions/override from those selected
@@ -288,7 +288,7 @@ function update_permission_box(setting)
 					if (element.options[0].id!='access_'+group+'_custom_option')
 					{
 						new_option=document.createElement('option');
-						set_inner_html(new_option,'{!PINTERFACE_LEVEL_CUSTOM^;}');
+						set_inner_html(new_option,'{!PINTERFACE_LEVEL_CUSTOM;^}');
 						new_option.id='access_'+group+'_custom_option';
 						new_option.value='';
 						element.insertBefore(new_option,element.options[0]);
@@ -369,7 +369,7 @@ function update_permission_box(setting)
 							row=document.getElementById('access_'+group+'_sp_container');
 							new_cell=row.insertBefore(document.createElement('td'),row.cells[row.cells.length-1]);
 							new_cell.className='form_table_field_input sp_cell';
-							set_inner_html(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_sp_'+sp+'">{!OVERRIDE^;}</label></div><select title="'+escape_html(sp_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_sp_'+sp+'" name="access_'+group+'_sp_'+sp+'"><option selected="selected" value="-1">&mdash;</option><option value="0">{!NO_COMPACT^;}</option><option value="1">{!YES_COMPACT^;}</option></select>');
+							set_inner_html(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_sp_'+sp+'">{!OVERRIDE;^}</label></div><select title="'+escape_html(sp_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_sp_'+sp+'" name="access_'+group+'_sp_'+sp+'"><option selected="selected" value="-1">&mdash;</option><option value="0">{!NO_COMPACT;^}</option><option value="1">{!YES_COMPACT;^}</option></select>');
 
 							element=document.getElementById('access_'+group+'_sp_'+sp);
 
@@ -422,7 +422,7 @@ function update_permission_box(setting)
 			// Hide certain things if we only have view settings here, else show them
 			if (num_sp_total==0)
 			{
-				set_inner_html(matrix.getElementsByTagName('tr')[0].cells[0],'{!GROUP^;}');
+				set_inner_html(matrix.getElementsByTagName('tr')[0].cells[0],'{!GROUP;^}');
 				for (k=0;k<known_groups.length;k++)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='none';
@@ -431,7 +431,7 @@ function update_permission_box(setting)
 				}
 			} else
 			{
-				set_inner_html(matrix.getElementsByTagName('tr')[0].cells[0],'<div>{!GROUP^;}</div><br /><div>{!PINTERFACE_PRESETS^;}</div>');
+				set_inner_html(matrix.getElementsByTagName('tr')[0].cells[0],'<div>{!GROUP;^}</div><br /><div>{!PINTERFACE_PRESETS;^}</div>');
 				for (k=0;k<known_groups.length;k++)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='block';
@@ -454,7 +454,7 @@ function update_permission_box(setting)
 
 		document.getElementById('selection_form_fields').style.display='block';
 		document.getElementById('selection_button').disabled=false;
-		set_inner_html(document.getElementById('selection_message'),(values.length<=1)?'{!PERMISSIONS_TREE_EDITOR_ONE_SELECTED^;}':'{!PERMISSIONS_TREE_EDITOR_MULTI_SELECTED^;}');
+		set_inner_html(document.getElementById('selection_message'),(values.length<=1)?'{!PERMISSIONS_TREE_EDITOR_ONE_SELECTED;^}':'{!PERMISSIONS_TREE_EDITOR_MULTI_SELECTED;^}');
 	}
 }
 
@@ -540,7 +540,7 @@ function set_permissions(setting)
 		// Send AJAX request
 		if (set_request!='') do_ajax_request("{$BASE_URL_NOHTTP#}/data/site_tree.php?set_perms=1"+keep_stub(),null,set_request);
 	}
-	window.fauxmodal_alert('{!PERMISSIONS_TREE_EDITOR_SAVED^;}');
+	window.fauxmodal_alert('{!PERMISSIONS_TREE_EDITOR_SAVED;^}');
 }
 
 function permissions_img_func_1(node,id)
@@ -563,24 +563,24 @@ function permissions_img_func_1_b(node,id)
 	if (((window.attributes_full[id]['gsp_delete_highrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_highrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_delete_midrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_midrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_delete_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_lowrange_content_'+group]=='1')))
-			return Array('{$IMG;,permlevels/3}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_3^;}');
+			return Array('{$IMG;,permlevels/3}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_3;^}');
 	else
 	if (((window.attributes_full[id]['gsp_bypass_validation_highrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_highrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_bypass_validation_midrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_midrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_bypass_validation_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_lowrange_content_'+group]=='1')))
-			return Array('{$IMG;,permlevels/2}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_2^;}');
+			return Array('{$IMG;,permlevels/2}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_2;^}');
 	else
 	if (((window.attributes_full[id]['gsp_submit_highrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_highrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_submit_midrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_midrange_content_'+group]=='1')) ||
 		 ((window.attributes_full[id]['gsp_submit_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_lowrange_content_'+group]=='1')))
-			return Array('{$IMG;,permlevels/1}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_1^;}');
+			return Array('{$IMG;,permlevels/1}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_1;^}');
 	else
 	if (window.attributes_full[id]['inherits_something'])
-			return Array('{$IMG;,permlevels/inherit}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_GLOBAL^;}');
+			return Array('{$IMG;,permlevels/inherit}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_GLOBAL;^}');
 	else
 	if (window.attributes_full[id]['no_sps']) return Array('{$IMG;,blank}'.replace(/^http:/,window.location.protocol),'');
 
-	return Array('{$IMG;,permlevels/0}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_0^;}');
+	return Array('{$IMG;,permlevels/0}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_0;^}');
 }
 
 function permissions_img_func_2(node,id)
@@ -598,8 +598,8 @@ function permissions_img_func_2_b(node,id)
 	var group=document.getElementById('group').value;
 
 	if (node.getAttribute('g_view_'+group)=='true')
-		return Array('{$IMG;,led_on}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_VIEW^;}');
-	return Array('{$IMG;,led_off}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_VIEW_NO^;}');
+		return Array('{$IMG;,led_on}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_VIEW;^}');
+	return Array('{$IMG;,led_off}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_VIEW_NO;^}');
 }
 
 function update_group_displayer(setting)

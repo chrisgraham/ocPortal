@@ -6,7 +6,7 @@
 			{!UNLINK_EXISTING_UPLOAD}
 		{+END}
 		{+START,IF,{IS_IMAGE}}
-			{!UNLINK_EXISTING_UPLOAD_IMAGE,&lt;img src=&quot;{EXISTING_URL*;^}&quot; title=&quot;&quot; alt=&quot;{!EXISTING^;}&quot; /&gt;}
+			{!UNLINK_EXISTING_UPLOAD_IMAGE,&lt;img src=&quot;{EXISTING_URL*;^}&quot; title=&quot;&quot; alt=&quot;{!EXISTING;^}&quot; /&gt;}
 		{+END}
 	</label>
 {+END}

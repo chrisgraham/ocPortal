@@ -179,7 +179,7 @@ if (count($langs)!=1) // Handling language detection
 		{
 			if (($lang!=fallback_lang()) && (count(get_directory_contents(get_custom_file_base().'/lang_custom/'.$lang,'',true,false,true))<5)) continue; // Probably this is just the utf8 addon
 
-			$data.='RewriteCond %{HTTP:Accept-Language} ('.strtolower($lang).') [NC]'.chr(10);
+			$data.='RewriteCond %{HTTP:Accept-Language} (^'.strtolower($lang).') [NC]'.chr(10);
 			$data.='RewriteRule (^.*\.htm.*$) '.$lang.'/$1 [L]'.chr(10);
 
 			$data.=chr(10);

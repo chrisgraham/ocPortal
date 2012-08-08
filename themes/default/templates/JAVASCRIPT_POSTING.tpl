@@ -341,8 +341,8 @@ function do_input_thumb(field_name,va)
 			{
 				generate_question_ui(
 					"{!THUMB_OR_IMG_2^#}",
-					{thumbnail: '{!THUMBNAIL^;}',fullsize: '{!IMAGE^;}'},
-					'{!_ATTACHMENT^;}',
+					{thumbnail: '{!THUMBNAIL;^}',fullsize: '{!IMAGE;^}'},
+					'{!_ATTACHMENT;^}',
 					null,
 					function(vb)
 					{
@@ -355,7 +355,7 @@ function do_input_thumb(field_name,va)
 
 								var element=document.getElementById(field_name);
 								element=ensure_true_id(element,field_name);
-								if (vb.toLowerCase()=='{!IMAGE^;}'.toLowerCase())
+								if (vb.toLowerCase()=='{!IMAGE;^}'.toLowerCase())
 								{
 									if (is_comcode_xml(element))
 									{
@@ -678,7 +678,7 @@ function init_form_saving(form_id)
 		var key;
 		if (biggest_length_data.length>100) biggest_length_data=biggest_length_data.substr(0,100)+'...';
 		window.fauxmodal_confirm(
-			'{!RESTORE_SAVED_FORM_DATA^;}\n\n'+biggest_length_data.replace(/<[^>]*>/g,''),
+			'{!RESTORE_SAVED_FORM_DATA;^}\n\n'+biggest_length_data.replace(/<[^>]*>/g,''),
 			function(result)
 			{
 				if (result)

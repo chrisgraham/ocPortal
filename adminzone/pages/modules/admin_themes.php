@@ -1104,6 +1104,7 @@ class Module_admin_themes
 			$files_tmp.=$temp->evaluate(); // XHTMLXHTML
 		}
 		$temp=form_input_list_group($new_stub,make_string_tempcode($files_tmp));
+		$files.=$temp->evaluate(); // XHTMLXHTML
 		$fields=new ocp_tempcode();
 
 		$set_name='template';

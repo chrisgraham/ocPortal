@@ -396,7 +396,7 @@ function handle_image_click(event,ob,force)
 
 		if (src.indexOf('{$BASE_URL_NOHTTP;}/themes/')!=-1)
 			ob.edit_window=window.open('{$BASE_URL;,0}/adminzone/index.php?page=admin_themes&type=edit_image&lang='+window.encodeURIComponent(window.ocp_lang)+'&theme='+window.encodeURIComponent(window.ocp_theme)+'&url='+window.encodeURIComponent(src.replace('{$BASE_URL;,0}/',''))+keep_stub(),'edit_theme_image_'+ob.id);
-		else window.fauxmodal_alert('{!NOT_THEME_IMAGE^;}');
+		else window.fauxmodal_alert('{!NOT_THEME_IMAGE;^}');
 
 		return false;
 	}
