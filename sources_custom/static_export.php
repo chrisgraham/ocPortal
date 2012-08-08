@@ -30,6 +30,12 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 	{
 		global $STATIC_EXPORT_TAR,$STATIC_EXPORT_WARNINGS;
 
+		$only_pagelinks=get_param('only_pagelinks',NULL);
+		if (!is_null($only_pagelinks))
+		{
+			if (!in_array($pagelink,explode(',',$only_pagelinks))) return;
+		}
+
 		$date=time();
 		if (get_param_integer('dir',0)==0) // For dir export we actually use times to represent overall change times, to benefit upload
 		{
