@@ -44,6 +44,7 @@ class Hook_Profiles_Tabs_friends
 	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
 	{
 		require_lang('chat');
+		require_lang('ocf');
 
 		$title=do_lang_tempcode('FRIENDS');
 

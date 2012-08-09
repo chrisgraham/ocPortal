@@ -70,9 +70,10 @@ function get_file_base()
 	return $OCPORTAL_PATH;
 }
 
-function unixify_line_format($x)
+function unixify_line_format($in)
 {
-	return $x;
+	$in=str_replace(chr(13).chr(10),chr(10),$in);
+	return str_replace(chr(13),chr(10),$in);
 }
 
 function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)

@@ -1735,7 +1735,7 @@ class Hook_addon_registry_core_rich_media
 				$map['START_BODY']=true;
 			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_START',$map));
 
-			foreach (placeholder_array(2) as $i=>$cell)
+			foreach (placeholder_array(2) as $cell)
 			{
 				$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_CELL', array(
 					'WIDTH'=>'',
@@ -1761,7 +1761,7 @@ class Hook_addon_registry_core_rich_media
 				$map['START_BODY']=true;
 			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_START',$map));
 
-			foreach (placeholder_array(2) as $i=>$cell)
+			foreach (placeholder_array(2) as $cell)
 			{
 				$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_CELL', array(
 					'WIDTH'=>'',

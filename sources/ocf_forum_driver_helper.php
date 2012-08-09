@@ -129,6 +129,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 		$start=0;
 		$max=300;
 		require_code('notifications');
+		$ob=_get_notification_ob_for_code('comment_posted');
 		do
 		{
 			$ob=_get_notification_ob_for_code('comment_posted');

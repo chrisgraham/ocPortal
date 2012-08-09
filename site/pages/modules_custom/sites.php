@@ -70,7 +70,7 @@ class Module_sites
 			's_codename'=>'*ID_TEXT',
 			's_name'=>'SHORT_TEXT',
 			's_description'=>'LONG_TEXT',
-			's_category'=>'SHORT_TEXT',
+			's_category'=>'SHORT_TEXT', // Entertainment, Computers, Sport, Art, Music, Television/Movies, Businesses, Other, Informative/Factual, Political, Humour, Geographical/Regional, Games, Personal/Family, Hobbies, Culture/Community, Religious, Health
 			's_domain_name'=>'SHORT_TEXT',
 			's_server'=>'ID_TEXT',
 			's_member_id'=>'USER',
@@ -83,7 +83,9 @@ class Module_sites
 		));
 		$GLOBALS['SITE_DB']->create_index('sites','sponsored',array('s_sponsored_in_category'));
 		$GLOBALS['SITE_DB']->create_index('sites','timeorder',array('s_add_time'));
-		$GLOBALS['SITE_DB']->create_index('sites','#s_name',array('s_name','s_description','s_codename'));
+		$GLOBALS['SITE_DB']->create_index('sites','#s_name',array('s_name'));
+		$GLOBALS['SITE_DB']->create_index('sites','#s_description',array('s_description'));
+		$GLOBALS['SITE_DB']->create_index('sites','#s_codename',array('s_codename'));
 
 		$GLOBALS['SITE_DB']->create_table('sites_email',array(
 			's_codename'=>'*ID_TEXT',

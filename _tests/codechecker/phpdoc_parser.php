@@ -165,9 +165,3 @@ function fatal_exit($message)
 	echo('ISSUE "'.$TO_USE.'" '.strval($LINE).' 0 '.$message.cnl());
 }
 
-function unixify_line_format($in)
-{
-	$in=str_replace(chr(13).chr(10),chr(10),$in);
-	return str_replace(chr(13),chr(10),$in);
-}
-

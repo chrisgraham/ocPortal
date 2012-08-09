@@ -3912,6 +3912,7 @@ testing_platform
  - _tests/tests/testatom.cms
  - _tests/tests/testrss.cms
  - _tests/tests/unit_tests/.htaccess
+ - _tests/tests/unit_tests/tracker_categories.php
  - _tests/tests/unit_tests/authors.php
  - _tests/tests/unit_tests/awards.php
  - _tests/tests/unit_tests/banners.php
