@@ -628,6 +628,7 @@ function fast_spider_cache($bot=true)
 	$fast_cache_path=get_custom_file_base().'/persistent_cache/'.md5(serialize(get_self_url_easy()));
 	if (!$bot) $fast_cache_path.='__non-bot';
 	if (!array_key_exists('js_on',$_COOKIE)) $fast_cache_path.='__no-js';
+	if (is_mobile()) $fast_cache_path.='_mobile';
 	$fast_cache_path.='.gcd';
 	if (is_file($fast_cache_path))
 	{

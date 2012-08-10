@@ -644,6 +644,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 
 	$DO_NOT_CACHE_THIS=false;
 
+	if (is_null($map)) $map=array();
+
 	if (!array_key_exists('cache',$map))
 		$map['cache']=block_cache_default($codename);
 
@@ -651,7 +653,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 	if (((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1) || (get_param_integer('cache_blocks',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache_blocks',NULL)!==0) && (get_param_integer('cache',NULL)!==0)) && (strpos(get_param('special_page_type',''),'t')===false))
 	{
 		// See if the block may be cached (else cannot, or is yet unknown)
-		if (($map!==NULL) && (isset($map['cache'])) && ($map['cache']=='0'))
+		if ($map['cache']=='0')
 		{
 			$row=NULL;
 		} else // We may allow it to be cached but not store the cache signature, as it is too complex
@@ -667,7 +669,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 						$row=array('cached_for'=>$codename,'cache_on'=>$info['cache_on'],'cache_ttl'=>$info['ttl']);
 				}
 			}
-			if (($row===NULL) && ((isset($map['cache'])) && ($map['cache']=='1') || (isset($map['quick_cache'])) && ($map['quick_cache']=='1')))
+			if (($row===NULL) && (isset($map['quick_cache'])) && ($map['quick_cache']=='1'))
 			{
 				$row=array('cached_for'=>$codename,'cache_on'=>'$map','cache_ttl'=>60);
 			}
@@ -746,7 +748,6 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 	if (is_null($object)) $object=do_block_hunt_file($codename,$map);
 	if (is_object($object))
 	{
-		if ($map===NULL) $map=array();
 		$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 		$backup_langs_requested=$LANGS_REQUESTED;
