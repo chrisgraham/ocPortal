@@ -59,16 +59,10 @@ function init__global2()
 
 	if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']=='0')))
 	{
-		if (is_file('closed.html'))
+		if ((is_file('closed.html')) || (@is_file('../closed.html')))
 		{
 			if ((@strpos($_SERVER['SERVER_SOFTWARE'],'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
-			header('Location: closed.html');
-			exit();
-		}
-		if (@is_file('../closed.html'))
-		{
-			if ((@strpos($_SERVER['SERVER_SOFTWARE'],'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
-			header('Location: ../closed.html');
+			header('Location: '.get_base_url().'closed.html');
 			exit();
 		}
 	}

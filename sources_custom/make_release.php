@@ -19,16 +19,18 @@ function init__make_release()
 
 	// Make sure builds folder exists
 	get_builds_path();
-}
 
-function make_installers($skip_file_grab=false)
-{
 	// Tracking
 	global $MAKE_INSTALLERS__FILE_ARRAY,$MAKE_INSTALLERS__DIR_ARRAY,$MAKE_INSTALLERS__TOTAL_DIRS,$MAKE_INSTALLERS__TOTAL_FILES;
 	$MAKE_INSTALLERS__FILE_ARRAY=array();
 	$MAKE_INSTALLERS__DIR_ARRAY=array();
 	$MAKE_INSTALLERS__TOTAL_DIRS=0;
 	$MAKE_INSTALLERS__TOTAL_FILES=0;
+}
+
+function make_installers($skip_file_grab=false)
+{
+	global $MAKE_INSTALLERS__FILE_ARRAY,$MAKE_INSTALLERS__DIR_ARRAY,$MAKE_INSTALLERS__TOTAL_DIRS,$MAKE_INSTALLERS__TOTAL_FILES;
 
 	// Start output
 	$out='';
@@ -856,6 +858,10 @@ function populate_build_files_array($dir='',$pretend_dir='')
 function make_files_manifest() // Builds files.dat, the ocPortal file manifest (used for integrity checks)
 {
 	global $MAKE_INSTALLERS__FILE_ARRAY;
+
+	require_code('version2');
+
+	if (count($MAKE_INSTALLERS__FILE_ARRAY)==0) populate_build_files_array();
 
 	$files=array();
 	foreach ($MAKE_INSTALLERS__FILE_ARRAY as $file=>$contents)

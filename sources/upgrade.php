@@ -2394,7 +2394,7 @@ function upgrade_sharedinstall_sites($from=0)
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
-		if ($i<$from) continue;
+		if (($i<$from) && ($site!='shareddemo')) continue;
 
 		// Change active site
 		$CURRENT_SHARE_USER=$site;
