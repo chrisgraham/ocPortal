@@ -3672,6 +3672,7 @@ ocportalcom
  - sources_custom/hooks/systems/cron/site_cleanup.php
  - uploads/website_specific/ocportal.com/myocp/template.sql
  - uploads/website_specific/ocportal.com/myocp/template.tar
+ - data_custom/myocp_upgrade.php
  - sources_custom/errorservice.php
  - sources_custom/miniblocks/fp_animation.php
  - sources_custom/miniblocks/ocpcom_featuretray.php

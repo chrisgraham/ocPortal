@@ -39,7 +39,6 @@ class Hook_cron_site_cleanup
 			$password='demo123';
 			$email_address='';
 			myocp_add_site_raw($server,$codename,$email_address,$password);
-
 		}
 	}
 

@@ -57,7 +57,9 @@ function upgrade_script()
 				if (!is_null($u))
 				{
 					upgrade_sharedinstall_sites();
-					echo '<p>Now regenerate <kbd>template.sql</kbd>, using something like <kbd>mysqldump -uroot -p myocp_site_shareddemo > ~/public_html/template.sql</kbd></p>';
+					global $SITE_INFO;
+					$cmd='mysqldump -u'.escapeshellarg($SITE_INFO['db_site_user'].'_shareddemo').' -p'.escapeshellarg($SITE_INFO['db_site_password']).' '.escapeshellarg($SITE_INFO['db_site']).'_shareddemo';
+					echo '<p>Now regenerate <kbd>template.sql</kbd>, using something like <kbd>'.escape_html($cmd).' > ~/public_html/uploads/website_specific/ocportal.com/myocp/template.sql</kbd></p>';
 					up_do_footer();
 					return;
 				}
@@ -1339,7 +1341,7 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 		}
 		while (($file=readdir($dh))!==false)
 		{
-			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_THEMES | IGNORE_USER_CUSTOMISE | IGNORE_CUSTOM_ZONES | IGNORE_NON_REGISTERED)) continue;
+			if (should_ignore_file($rela.$file,IGNORE_ACCESS_CONTROLLERS | IGNORE_CUSTOM_THEMES | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_NON_REGISTERED)) continue;
 
 			$is_dir=@is_dir($dir.$file);
 			if (!is_readable($dir.$file)) continue;
@@ -2366,8 +2368,10 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 
 /**
  * Upgrade shared installs.
+ *
+ * @param   integer	Position to proceed from
  */
-function upgrade_sharedinstall_sites()
+function upgrade_sharedinstall_sites($from=0)
 {
 	global $CURRENT_SHARE_USER,$SITE_INFO,$TABLE_LANG_FIELDS;
 
@@ -2384,9 +2388,13 @@ function upgrade_sharedinstall_sites()
 
 	disable_php_memory_limit();
 
+	$total=count($sites);
+
 	foreach ($sites as $i=>$site)
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(0);
+
+		if ($i<$from) continue;
 
 		// Change active site
 		$CURRENT_SHARE_USER=$site;
@@ -2404,7 +2412,7 @@ function upgrade_sharedinstall_sites()
 		// Go!
 		automate_upgrade();
 
-		echo 'Upgraded '.htmlentities($site).'<br />';
+		echo 'Upgraded '.escape_html($site).' ('.escape_html(number_format($i+1).' of '.number_format($total)).')<br />';
 		flush();
 	}
 }

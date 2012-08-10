@@ -18,6 +18,22 @@ function init__ocpcom()
 	define('MYOCP_DEMO_LAST_DAYS',30);
 }
 
+function server__public__demo_reset()
+{
+	require_lang('sites');
+
+	set_value('last_demo_set_time',strval(time()));
+	
+	require_lang('ocpcom');
+
+	$servers=find_all_servers();
+	$server=array_shift($servers);
+	$codename='shareddemo';
+	$password='demo123';
+	$email_address='';
+	myocp_add_site_raw($server,$codename,$email_address,$password);
+}
+
 function server__public__get_tracker_categories()
 {
 	$categories=collapse_1d_complexity('name',$GLOBALS['SITE_DB']->query('SELECT DISTINCT name FROM mantis_category_table WHERE status=0'));
@@ -209,7 +225,13 @@ function myocp_add_site_raw($server,$codename,$email_address,$password)
 
 	// Create default file structure
 	$path=special_myocp_dir().'/servers/'.filter_naughty($server).'/sites/'.filter_naughty($codename);
-	if (!file_exists($path)) mkdir($path,0744);
+	if (file_exists($path))
+	{
+		deldir_contents($path);
+	} else
+	{
+		mkdir($path,0744);
+	}
 	require_code('tar');
 	$tar=tar_open(special_myocp_dir().'/template.tar','rb');
 	tar_extract_to_folder($tar,$path);

@@ -264,6 +264,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 		// ocPortal control files
 		'closed.html'=>'',
+		'closed.html.old'=>'',
 		'install_ok'=>'',
 		'install_locked'=>'',
 		'if_hosted_service.txt'=>'',
