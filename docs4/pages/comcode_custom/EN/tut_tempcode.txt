@@ -502,7 +502,7 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$BROWSER_MATCHES,wysiwyg}</td>
-		<td>Find whether the current browser matches a named property / has a feature. Possible properties: wysiwyg, windows, mac, linux, mobile, opera, ie, ie6, ie7+, ie8+, gecko, konqueror, safari (covers Google Chrome also), ios, android</td>
+		<td>Find whether the current browser matches a named property / has a feature. Possible properties: wysiwyg, windows, mac, linux, mobile, opera, ie, ie6, ie7+, ie8+, gecko, konqueror, safari (covers Google Chrome also), ios, android, bot</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$USER_AGENT}</td>
