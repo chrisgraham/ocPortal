@@ -498,8 +498,12 @@ class Module_cms_blogs extends standard_aed_module
 		{
 			$is_blog=true;
 
+			$submitter=$GLOBALS['SITE_DB']->query_value('news','submitter',array('id'=>$id));
+			$activity_title=($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS');
+			$activity_title_validate=($is_blog?'news:ACTIVITY_VALIDATE_NEWS_BLOG':'news:ACTIVITY_VALIDATE_NEWS');
+
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
-				syndicate_described_activity($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,$GLOBALS['SITE_DB']->query_value('news','submitter',array('id'=>$id)),true);
+				syndicate_described_activity(($submitter!=get_member())?$activity_title_validate:$activity_title,$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,$submitter,true);
 		}
 
 		edit_news(intval($id),$title,post_param('news',STRING_MAGIC_NULL),post_param('author',STRING_MAGIC_NULL),$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$url,$add_time);

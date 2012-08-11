@@ -3985,3 +3985,4 @@ testing_platform
  - _tests/tests/unit_tests/usergroup.php
  - _tests/tests/unit_tests/warning.php
  - _tests/tests/unit_tests/welcome_emails.php
+ - _tests/tests/unit_tests/bot_list_sync.php

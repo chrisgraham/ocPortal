@@ -359,8 +359,10 @@ class Module_cms_quiz extends standard_aed_module
 
 		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('quizzes','q_validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
+			$submitter=$GLOBALS['SITE_DB']->query_value('quizzes','q_submitter',array('id'=>$id));
+
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'quiz'))
-				syndicate_described_activity('quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes',1,$GLOBALS['SITE_DB']->query_value('quizzes','q_submitter',array('id'=>$id)));
+				syndicate_described_activity(($submitter!=get_member())?'quiz:ACTIVITY_VALIDATE_QUIZ':'quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes',1,$submitter);
 		}
 
 		edit_quiz($id,$name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),$validated,post_param('text'),post_param('meta_keywords',''),post_param('meta_description',''),post_param_integer('points_for_passing',0),$tied_newsletter);

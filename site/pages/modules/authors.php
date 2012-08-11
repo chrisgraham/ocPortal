@@ -121,7 +121,7 @@ class Module_authors
 	function show_author()
 	{
 		$author=get_param('id',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
-		if ($author=='') warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // Really don't want to have to search on this
+		if ((is_null($author)) || ($author=='')) warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // Really don't want to have to search on this
 		if (addon_installed('awards'))
 		{
 			require_code('awards');

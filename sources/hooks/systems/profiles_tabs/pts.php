@@ -59,6 +59,9 @@ class Hook_Profiles_Tabs_pts
 
 		$root=get_param_integer('keep_forum_root',db_get_first_id());
 
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='start';
+
 		$max=get_param_integer('max',10);
 		$start=get_param_integer('start',get_param_integer('kfs',0));
 

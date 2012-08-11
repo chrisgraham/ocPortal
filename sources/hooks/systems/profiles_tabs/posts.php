@@ -59,12 +59,12 @@ class Hook_Profiles_Tabs_posts
 			require_code('ocf_forumview');
 
 			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='start';
-			$NON_CANONICAL_PARAMS[]='max';
+			$NON_CANONICAL_PARAMS[]='post_start';
+			$NON_CANONICAL_PARAMS[]='post_max';
 
 			// Last 15 topics that member contributed to
-			$n=get_param_integer('max',10);
-			$start=get_param_integer('start',0);
+			$n=get_param_integer('post_max',10);
+			$start=get_param_integer('post_start',0);
 			$forum1=NULL;//$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('comments_forum_name'));
 			$tf=get_option('ticket_forum_name',true);
 			if (!is_null($tf)) $forum2=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($tf); else $forum2=NULL;
@@ -101,7 +101,7 @@ class Hook_Profiles_Tabs_posts
 					$marker='';
 					$breadcrumbs=new ocp_tempcode();
 					require_code('templates_pagination');
-					$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'start',$n,'max',$max_rows,NULL,'view',true,false,7,NULL,'tab__posts');
+					$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'post_start',$n,'post_max',$max_rows,NULL,'view',true,false,7,NULL,'tab__posts');
 					$topics=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'8723270b128b4eea47ab3c756b342e14','ORDER'=>'','MAX'=>'15','MAY_CHANGE_MAX'=>false,'BREADCRUMBS'=>$breadcrumbs,'ACTION_URL'=>get_self_url(),'BUTTONS'=>'','STARTER_TITLE'=>'','MARKER'=>$marker,'FORUM_NAME'=>$forum_name,'TOPICS'=>$topics,'PAGINATION'=>$pagination,'MODERATOR_ACTIONS'=>''));
 				}
 			}

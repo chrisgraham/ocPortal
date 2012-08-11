@@ -904,7 +904,9 @@ class Module_cms_calendar extends standard_aed_module
 					$to=cal_utctime_to_usertime($_to,$timezone,false);
 				}
 
-				syndicate_described_activity('calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,$GLOBALS['SITE_DB']->query_value('calendar_events','submitter',array('id'=>$id)),true);
+				$submitter=$GLOBALS['SITE_DB']->query_value('calendar_events','submitter',array('id'=>$id));
+
+				syndicate_described_activity(($submitter!=get_member())?'calendar:ACTIVITY_VALIDATE_CALENDAR_EVENT':'calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,$submitter,true);
 			}
 		}
 
