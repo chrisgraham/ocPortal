@@ -209,12 +209,13 @@ function find_addon_effective_mtime($addon_name)
  */
 function find_available_addons()
 {
+	$addons_available_for_installation=array();
+	$files=array();
+
 	// Find addons available for installation
 	$dh=@opendir(get_custom_file_base().'/imports/addons/');
 	if ($dh!==false)
 	{
-		$addons_available_for_installation=array();
-		$files=array();
 		while (($file=readdir($dh))!==false)
 		{
 			if (substr($file,-4)=='.tar')
