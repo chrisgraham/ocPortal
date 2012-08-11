@@ -234,7 +234,6 @@ abbr.dtstart, abbr.dtend {
 {+END}
 
 .calendar_main_page_hidden_data {
-	width: 24em;
 	padding: 0.5em;
 }
 
@@ -327,10 +326,6 @@ abbr.dtstart, abbr.dtend {
 }
 
 {+START,IF,{$NOT,{$MOBILE}}}
-	.event_interested {
-		width: 20em;
-	}
-
 	.event_right {
 		float: right;
 		width: 17em;
