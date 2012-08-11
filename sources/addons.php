@@ -210,17 +210,20 @@ function find_addon_effective_mtime($addon_name)
 function find_available_addons()
 {
 	// Find addons available for installation
-	$dh=opendir(get_custom_file_base().'/imports/addons/');
-	$addons_available_for_installation=array();
-	$files=array();
-	while (($file=readdir($dh))!==false)
+	$dh=@opendir(get_custom_file_base().'/imports/addons/');
+	if ($dh!==false)
 	{
-		if (substr($file,-4)=='.tar')
+		$addons_available_for_installation=array();
+		$files=array();
+		while (($file=readdir($dh))!==false)
 		{
-			$files[]=array($file,filemtime(get_custom_file_base().'/imports/addons/'.$file));
+			if (substr($file,-4)=='.tar')
+			{
+				$files[]=array($file,filemtime(get_custom_file_base().'/imports/addons/'.$file));
+			}
 		}
+		closedir($dh);
 	}
-	closedir($dh);
 
 	global $M_SORT_KEY;
 	$M_SORT_KEY='1';
