@@ -616,10 +616,12 @@ class Module_cms_catalogues extends standard_aed_module
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name)) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_category',strval($category_id))))
 			{
+				$submitter=$GLOBALS['SITE_DB']->query_value('catalogue_entries','ce_submitter',array('id'=>$id));
+
 				$map_copy=$map;
 				$title=array_shift($map_copy);
 				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$catalogue_name)));
-				syndicate_described_activity('catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues',1,$GLOBALS['SITE_DB']->query_value('catalogue_entries','ce_submitter',array('id'=>$id)));
+				syndicate_described_activity(($submitter!=get_member())?'calendar:ACTIVITY_VALIDATE_CATALOGUE_GENERIC':'catalogues:ACTIVITY_CATALOGUE_GENERIC_ADD',$catalogue_title,$title,'','_SEARCH:catalogues:entry:'.strval($id),'','','catalogues',1,$submitter);
 			}
 		}
 
