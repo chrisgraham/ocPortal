@@ -78,16 +78,18 @@ function points_profile($member_id_of,$member_id_viewing)
 	$chargelog_details=new ocp_tempcode();
 	if (has_specific_permission($member_id_viewing,'view_charge_log'))
 	{
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',10);
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='charge_start';
+		$NON_CANONICAL_PARAMS[]='charge_sort';
+
+		$start=get_param_integer('charge_start',0);
+		$max=get_param_integer('charge_max',10);
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
-		$test=explode(' ',get_param('sort','date_and_time DESC'),2);
+		$test=explode(' ',get_param('charge_sort','date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
 
 		$max_rows=$GLOBALS['SITE_DB']->query_value('chargelog','COUNT(*)',array('user_id'=>$member_id_of));
 		$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('user_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
@@ -96,7 +98,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		$toname=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 		if (is_null($toname)) $toname=do_lang('UNKNOWN');
 		require_code('templates_results_table');
-		$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON')),$sortables,'sort',$sortable.' '.$sort_order);
+		$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON')),$sortables,'charge_sort',$sortable.' '.$sort_order);
 		foreach ($rows as $myrow)
 		{
 			$date=get_timezoned_date($myrow['date_and_time']);
@@ -114,7 +116,7 @@ function points_profile($member_id_of,$member_id_viewing)
 
 			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($fromname),escape_html($toname),$reason)));
 		}
-		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'start',$max,'max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fgfdgfdgfdgfdger4gtrhg',false,'tab__points');
+		$chargelog_details=results_table(do_lang_tempcode('CHARGES'),$start,'charge_start',$max,'charge_max',$max_rows,$fields_title,$charges,$sortables,$sortable,$sort_order,'charge_sort',NULL,NULL,NULL,8,'fgfdgfdgfdgfdger4gtrhg',false,'tab__points');
 
 		$chargelog_details->attach(do_template('POINTS_CHARGE',array('_GUID'=>'f1e2d45a7d920ab91553a5fd0728a5ad','URL'=>build_url(array('page'=>'admin_points','type'=>'charge','redirect'=>get_self_url(true)),get_module_zone('admin_points')),'USER'=>strval($member_id_of))));
 	}
@@ -198,23 +200,24 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 {
 	$where=array('gift_'.$type=>$member_id_of);
 	if ($type=='from') $where['anonymous']=0;
-	$start=get_param_integer('gift_start',0);
-	$max=get_param_integer('gift_max',10);
+	$start=get_param_integer('gift_start_'.$type,0);
+	$max=get_param_integer('gift_max_'.$type,10);
 	$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
-	$test=explode(' ',get_param('gift_sort','date_and_time DESC'));
+	$test=explode(' ',get_param('gift_sort_'.$type,'date_and_time DESC'));
 	if (count($test)==1) $test[1]='DESC';
 	list($sortable,$sort_order)=$test;
 	if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 		log_hack_attack_and_exit('ORDERBY_HACK');
 	global $NON_CANONICAL_PARAMS;
-	$NON_CANONICAL_PARAMS[]='gift_sort';
+	$NON_CANONICAL_PARAMS[]='gift_sort_'.$type;
+	$NON_CANONICAL_PARAMS[]='gift_start_'.$type;
 	$max_rows=$GLOBALS['SITE_DB']->query_value('gifts','COUNT(*)',$where);
 	$rows=$GLOBALS['SITE_DB']->query_select('gifts g LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=g.reason',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 	$out=new ocp_tempcode();
 	$viewing_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 	if (is_null($viewing_name)) $viewing_name=do_lang('UNKNOWN');
 	require_code('templates_results_table');
-	$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON')),$sortables,'gift_sort',$sortable.' '.$sort_order);
+	$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('AMOUNT'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('REASON')),$sortables,'gift_sort_'.$type,$sortable.' '.$sort_order);
 	foreach ($rows as $myrow)
 	{
 		if (($myrow['anonymous']==1) && ($type=='from')) continue;
@@ -253,7 +256,7 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 
 		$out->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),$_fromname,$_toname,$reason)));
 	}
-	$out=results_table(do_lang_tempcode('_POINTS',escape_html($viewing_name)),$start,'gift_start',$max,'gift_max',$max_rows,$fields_title,$out,$sortables,$sortable,$sort_order,'gift_sort',NULL,NULL,NULL,8,'gfhfghtrhhjghgfhfgf',false,'tab__points');
+	$out=results_table(do_lang_tempcode('_POINTS',escape_html($viewing_name)),$start,'gift_start_'.$type,$max,'gift_max_'.$type,$max_rows,$fields_title,$out,$sortables,$sortable,$sort_order,'gift_sort_'.$type,NULL,NULL,NULL,8,'gfhfghtrhhjghgfhfgf',false,'tab__points');
 
 	if ($type=='to') $title=do_lang_tempcode('POINTS_TO'); else $title=do_lang_tempcode('POINTS_FROM');
 	return do_template('POINTS_TRANSACTIONS_WRAP',array('_GUID'=>'f19e3eedeb0b8bf398251b24e8389723','CONTENT'=>$out,'TITLE'=>$title));
