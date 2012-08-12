@@ -118,22 +118,21 @@ function phase_1_pre()
 	<ul>
 		<li>Run the <a href="'.escape_html(static_evaluate_tempcode(build_url(array('page'=>'plug_guid'),'adminzone'))).'" target="_blank">plug_guid</a> tool to build needed GUIDs into the PHP.</li>
 		<li>Update copyright dates in PHP code for the current year ('.escape_html($year).').</li>
-		<li>Build <kbd>install.sql</kbd> (taking into account it must run on different PHP versions<!--- make sure the CREATE TABLE code is equivalent to the old version of the file, i.e. <tt>DEFAULT CHARSET=utf8</tt> is stripped)-->.</li>
-		<li>Build <kbd>install*.sql</kbd> by cutting up <kbd>install.sql</kbd> to the same boundaries as was used in the old versions of the files.</li>
+		<li>Build <kbd>install.sql</kbd> (taking into account it must run on different MySQL versions<!--- make sure the CREATE TABLE code is equivalent to the old version of the file, i.e. <tt>DEFAULT CHARSET=utf8</tt> is stripped-->). If you think you\'ve done it then the <a href="'.get_base_url().'/_tests/?id=unit_tests/installsql" target="_blank">installsql unit test</a> will confirm.</li>
+		<!--<li>Build <kbd>install*.sql</kbd> by cutting up <kbd>install.sql</kbd> to the same boundaries as was used in the old versions of the files.</li>-->
 		<li>Run the <a href="'.escape_html(get_base_url().'/_test').'">unit tests</a><!--, with debug mode on, on the custom ocPortal PHP version-->.</li>
+		<li>Write custom theme upgrading code into <kbd>sources/upgrade.php</kbd>. Make sure all ocProducts themes are up-to-date (CSS changes, template changes, theme image changes).</li>
+	</ul>
+	<p>Ideally do these at least on some major versions:</p>
+	<ul>
 		<li>Run a HipHop PHP compile and looking at <kbd>hphp/CodeError.js</kbd> and make sure distributed code has no expected warnings</li>
 		<li>Run a PHPStorm Code Inspection and see if any warning stands out as a bug</li>
-		<li>Write custom theme upgrading code into <kbd>sources/upgrade.php</kbd>. Make sure all ocProducts themes are up-to-date (CSS changes, template changes, theme image changes).</li>
 	</ul>
 	';
 
-	if (strpos(file_get_contents(get_file_base().'/install.sql'),'DEFAULT CHARSET=')!==false)
+	if (strpos(file_get_contents(get_file_base().'/install.sql'),file_get_contents(get_file_base().'/install1.sql'))===false)
 	{
-		warn_exit('install.sql is not properly stripped down.');
-	}
-	if (strpos(file_get_contents(get_file_base().'/install1.sql'),file_get_contents(get_file_base().'/install.sql'))===false)
-	{
-		warn_exit('install1.sql seems out-dated, make sure install.sql is chopped up between install*.sql properly.');
+		warn_exit('install1.sql seems out-dated. Run the \'installsql\' unit test.');
 	}
 
 	$post_url=static_evaluate_tempcode(get_self_url(false,false,array('type'=>'1')));
@@ -237,6 +236,7 @@ function phase_2()
 
 	if (!$is_bleeding_edge)
 	{
+		require_code('make_release');
 		$builds_path=get_builds_path();
 		$webpi=$builds_path.'/builds/'.$version_dotted.'/ocportal-'.$version_dotted.'-webpi.zip';
 		$ms_filesize=number_format(filesize($webpi)).' bytes';

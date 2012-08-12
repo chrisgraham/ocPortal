@@ -5,7 +5,7 @@
 	</div>
 </form>
 
-<form title="{!PRIMARY_PAGE_FORM}" action="install.php?step=3" method="post">
+<form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
 	{HIDDEN}
 
 	<div class="float_surrounder">

@@ -508,10 +508,13 @@ END;
 		}
 	}
 
+	$url='install.php?step=2';
+	if (in_safe_mode()) $url.='&keep_safe_mode=1';
+
 	$hidden=build_keep_post_fields();
 	$max=strval(get_param_integer('max',1000));
 	$hidden->attach(form_input_hidden('max',$max));
-	return do_template('INSTALLER_STEP_1',array('_GUID'=>'83f0ca881b9f63ab9378264c6ff507a3','WARNINGS'=>$warnings,'HIDDEN'=>$hidden,'LANGUAGES'=>$tlanguages));
+	return do_template('INSTALLER_STEP_1',array('_GUID'=>'83f0ca881b9f63ab9378264c6ff507a3','URL'=>$url,'WARNINGS'=>$warnings,'HIDDEN'=>$hidden,'LANGUAGES'=>$tlanguages));
 }
 
 /**
@@ -534,8 +537,11 @@ function step_2()
 		if ($licence=='') $licence=file_get_contents(get_file_base().'/text/EN/licence.txt');
 	}
 
+	$url='install.php?step=3';
+	if (in_safe_mode()) $url.='&keep_safe_mode=1';
+
 	$hidden=build_keep_post_fields();
-	return do_template('INSTALLER_STEP_2',array('_GUID'=>'b08b0268784c9a0f44863ae3aece6789','HIDDEN'=>$hidden,'LICENCE'=>$licence));
+	return do_template('INSTALLER_STEP_2',array('_GUID'=>'b08b0268784c9a0f44863ae3aece6789','URL'=>$url,'HIDDEN'=>$hidden,'LICENCE'=>$licence));
 }
 
 /**
@@ -657,8 +663,11 @@ function step_3()
 	$js->attach(chr(10));
 	$js->attach(do_template('JAVASCRIPT_AJAX'));
 
+	$url='install.php?step=4';
+	if (in_safe_mode()) $url.='&keep_safe_mode=1';
+
 	$hidden=build_keep_post_fields();
-	return do_template('INSTALLER_STEP_3',array('_GUID'=>'af52ecea73e9a8e2a92c12adbabbf4ab','JS'=>$js,'HIDDEN'=>$hidden,'SIMPLE_FORUMS'=>$simple_forums,'FORUM_PATH_DEFAULT'=>get_file_base().DIRECTORY_SEPARATOR.'forums','FORUMS'=>$tforums,'DATABASES'=>$tdatabase,'VERSION'=>$default_version));
+	return do_template('INSTALLER_STEP_3',array('_GUID'=>'af52ecea73e9a8e2a92c12adbabbf4ab','URL'=>$url,'JS'=>$js,'HIDDEN'=>$hidden,'SIMPLE_FORUMS'=>$simple_forums,'FORUM_PATH_DEFAULT'=>get_file_base().DIRECTORY_SEPARATOR.'forums','FORUMS'=>$tforums,'DATABASES'=>$tdatabase,'VERSION'=>$default_version));
 }
 
 /**
@@ -927,7 +936,10 @@ function step_4()
 	if (($forum_type!='none') && ($forum_type!='ocf'))
 		$message->attach(paragraph(do_lang_tempcode('FORUM_DRIVER_NATIVE_LOGIN')));
 
-	return do_template('INSTALLER_STEP_4',array('_GUID'=>'73c3ac0a7108709b74b2e89cae30be12','JS'=>$js,'MESSAGE'=>$message,'LANG'=>$LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>$forum_type,'BOARD_PATH'=>$board_path,'SECTIONS'=>$sections,'MAX'=>strval(post_param_integer('max',1000))));
+	$url='install.php?step=5';
+	if (in_safe_mode()) $url.='&keep_safe_mode=1';
+
+	return do_template('INSTALLER_STEP_4',array('_GUID'=>'73c3ac0a7108709b74b2e89cae30be12','URL'=>$url,'JS'=>$js,'MESSAGE'=>$message,'LANG'=>$LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>$forum_type,'BOARD_PATH'=>$board_path,'SECTIONS'=>$sections,'MAX'=>strval(post_param_integer('max',1000))));
 }
 
 /**
@@ -942,6 +954,7 @@ function step_5()
 	if (function_exists('set_time_limit')) @set_time_limit(180);
 
 	$url='install.php?step=6';
+	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	$use_msn=post_param_integer('use_msn',0);
 	if ($use_msn==0) $use_msn=post_param_integer('use_multi_db',0);
@@ -1031,6 +1044,7 @@ function step_5()
 		if ($ftp_status[1]!=-1)
 		{
 			$url='install.php?step=5&start_from='.strval($ftp_status[1]);
+			if (in_safe_mode()) $url.='&keep_safe_mode=1';
 			$still_ftp=true;
 		}
 	}
@@ -1757,6 +1771,7 @@ function step_6()
 	if (count($_POST)==0) exit(do_lang('INST_POST_ERROR'));
 
 	$url='install.php?step=7';
+	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	$log=new ocp_tempcode();
 
@@ -1837,6 +1852,7 @@ function step_7()
 	}
 
 	$url='install.php?step=8';
+	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	return do_template('INSTALLER_STEP_LOG',array('_GUID'=>'c016b2a364d20cf711af7e14c60a7921','PREVIOUS_STEP'=>'6','URL'=>$url,'LOG'=>$log,'HIDDEN'=>build_keep_post_fields()));
 }
@@ -1860,6 +1876,7 @@ function step_8()
 	}
 
 	$url='install.php?step=9';
+	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	return do_template('INSTALLER_STEP_LOG',array('_GUID'=>'27fad5aa7f96d26a51e6afb6b7e5c7b1','PREVIOUS_STEP'=>'7','URL'=>$url,'LOG'=>$log,'HIDDEN'=>build_keep_post_fields()));
 }
@@ -1897,6 +1914,7 @@ function step_9()
 	}
 
 	$url='install.php?step=10';
+	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	return do_template('INSTALLER_STEP_LOG',array('_GUID'=>'b20121b8f4f84dd8e625e3b821c753b3','PREVIOUS_STEP'=>'8','URL'=>$url,'LOG'=>$log,'HIDDEN'=>build_keep_post_fields()));
 }

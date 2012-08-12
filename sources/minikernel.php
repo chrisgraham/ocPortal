@@ -313,7 +313,7 @@ function is_guest($member_id=NULL)
  */
 function in_safe_mode()
 {
-	return false;
+	return get_param_integer('keep_safe_mode',0)==1;
 }
 
 /**

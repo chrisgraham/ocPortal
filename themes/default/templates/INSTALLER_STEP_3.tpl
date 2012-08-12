@@ -4,7 +4,7 @@
 //]]></script>
 {+END}
 
-<form title="{!PRIMARY_PAGE_FORM}" method="post" action="install.php?step=4">
+<form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}">
 	{HIDDEN}
 
 	<div class="installer_main_min">

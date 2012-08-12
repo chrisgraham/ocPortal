@@ -1,4 +1,4 @@
-<form title="{!PRIMARY_PAGE_FORM}" action="install.php?step=2" method="post">
+<form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
 	{HIDDEN}
 
 	<div class="installer_main_min">

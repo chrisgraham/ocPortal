@@ -190,6 +190,7 @@ class Hook_addon_registry_installer
 			$languages->attach($entry);
 		}
 		$content=do_lorem_template('INSTALLER_STEP_1', array(
+			'URL'=>placeholder_url(),
 			'WARNINGS'=>$warning,
 			'HIDDEN'=>'',
 			'LANGUAGES'=>$languages
@@ -224,6 +225,7 @@ class Hook_addon_registry_installer
 		require_lang('version');
 
 		$content=do_lorem_template('INSTALLER_STEP_2', array(
+			'URL'=>placeholder_url(),
 			'HIDDEN'=>'',
 			'LICENCE'=>lorem_chunk()
 		));
@@ -310,6 +312,7 @@ class Hook_addon_registry_installer
 		}
 
 		$step3=do_lorem_template('INSTALLER_STEP_3', array(
+			'URL'=>placeholder_url(),
 			'JS'=>'',
 			'HIDDEN'=>'',
 			'SIMPLE_FORUMS'=>$simple_forums,
@@ -429,6 +432,7 @@ class Hook_addon_registry_installer
 		)));
 
 		$content=do_lorem_template('INSTALLER_STEP_4', array(
+			'URL'=>placeholder_url(),
 			'JS'=>'',
 			'MESSAGE'=>lorem_phrase(),
 			'LANG'=>fallback_lang(),
