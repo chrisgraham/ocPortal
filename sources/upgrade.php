@@ -1499,6 +1499,18 @@ function version_specific()
 		{
 			actual_delete_zone_lite('personalzone');
 		}
+		if ($version_database<9.0)
+		{
+			$dh=@opendir(get_custom_file_base().'/imports/mods');
+			if ($dh!==false)
+			{
+				while (($f=readdir($dh))!==false)
+				{
+					if (substr($f,-4)=='.tar')
+						@rename(get_custom_file_base().'/imports/mods/'.$f,get_file_base().'/imports/addons/'.$f);
+				}
+			}
+		}
 		set_value('version',float_to_raw_string($version_files,10,true));
 
 		return true;
