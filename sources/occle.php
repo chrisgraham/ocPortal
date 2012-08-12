@@ -1240,7 +1240,8 @@ class virtual_bash
 				{
 					if (!is_scalar($occle_val)) continue;
 
-					if ((!is_integer($occle_val)) && (!is_float($occle_val))) eval('$'.$occle_key.'=\''.addslashes($occle_val).'\';');
+					if (is_bool($occle_val)) eval('$'.$occle_key.'='.($occle_val?'true':'false').';');
+					elseif ((!is_integer($occle_val)) && (!is_float($occle_val))) eval('$'.$occle_key.'=\''.addslashes($occle_val).'\';');
 					else eval('$'.$occle_key.'='.$occle_val.';');
 				}
 			}
