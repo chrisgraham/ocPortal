@@ -20,6 +20,10 @@
 
 /*EXTRA FUNCTIONS: apc\_.+*/
 
+/**
+ * Cache Driver.
+ * @package		core
+ */
 class apccache
 {
 	/**

@@ -39,6 +39,10 @@ function init__database__sqlserver()
 	@ini_set('mssql.textsize','300000');
 }
 
+/**
+ * Database Driver.
+ * @package		core_database_drivers
+ */
 class Database_Static_sqlserver
 {
 

@@ -106,6 +106,9 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 	}
 }
 
+/**
+ * eCommerce product hook.
+ */
 class Hook_usergroup
 {
 

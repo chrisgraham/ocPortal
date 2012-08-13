@@ -399,6 +399,10 @@ function microtime_diff($a,$b)
 	}
 }
 
+/**
+ * Database handling.
+ * @package		core
+ */
 class database_driver
 {
 	var $table_prefix;

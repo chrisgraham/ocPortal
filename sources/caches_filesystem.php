@@ -18,6 +18,10 @@
  * @package		core
  */
 
+/**
+ * Cache Driver.
+ * @package		core
+ */
 class filecache
 {
 	/**

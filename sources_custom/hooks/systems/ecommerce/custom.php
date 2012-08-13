@@ -50,6 +50,9 @@ function handle_custom_purchase($purchase_id,$details,$product)
 	}
 }
 
+/**
+ * Points Store product hook.
+ */
 class Hook_custom
 {
 

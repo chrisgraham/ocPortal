@@ -30,6 +30,9 @@ function init__hooks__modules__admin_import__smf()
 	$STRICT_FILE=false; // Disable this for a quicker import that is quite liable to go wrong if you don't have the files in the right place
 }
 
+/**
+ * Forum Driver.
+ */
 class Hook_smf
 {
 

@@ -86,6 +86,9 @@ function make_functions_dat_do_dir($dir,$no_custom=false)
 	return $out;
 }
 
+/**
+ * OcCLE command hook.
+ */
 class Hook_find_function
 {
 	/**

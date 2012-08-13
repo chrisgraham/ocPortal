@@ -1454,6 +1454,7 @@ ocportal_tutorials
  - docs/pages/comcode/index.html
  - docs/pages/comcode_custom/.htaccess
  - docs/pages/comcode_custom/EN/.htaccess
+ - docs/pages/comcode_custom/EN/panel_top.txt
  - docs/pages/comcode_custom/EN/faq.txt
  - docs/pages/comcode_custom/EN/index.html
  - docs/pages/comcode_custom/EN/tut_accessibility.txt
@@ -1557,10 +1558,16 @@ ocportal_tutorials
  - docs/pages/comcode_custom/EN/codebook_1b.txt
  - docs/pages/comcode_custom/EN/codebook_2.txt
  - docs/pages/comcode_custom/EN/codebook_3.txt
+ - docs/pages/comcode_custom/EN/tutorials.txt
  - docs/pages/comcode_custom/EN/atag.txt
  - docs/pages/comcode_custom/EN/tut_designer_themes.txt
  - docs/pages/comcode_custom/EN/tut_intl_users.txt
  - docs/pages/comcode_custom/EN/tut_ocselect.txt
+ - default.png
+ - themes/default/images_custom/tutorial_icons/flashy.png
+ - themes/default/images_custom/tutorial_icons/index.html
+ - themes/default/images_custom/tutorial_icons/occle.png
+ - themes/default/images_custom/tutorial_icons/video.png
  - docs/pages/modules/index.html
  - docs/pages/.htaccess
  - docs/pages/comcode_custom/index.html
@@ -1973,6 +1980,87 @@ ocportal_tutorials
  - data_custom/images/docs/windows_perm1.png
  - data_custom/images/docs/windows_perm2.png
  - data_custom/images/docs/windows_perm_reset.png
+ - docs/ocportal-api-template/README.md
+ - docs/ocportal-api-template/class.xsl
+ - docs/ocportal-api-template/composer.json
+ - docs/ocportal-api-template/css/bootstrap-responsive.css
+ - docs/ocportal-api-template/css/bootstrap-responsive.min.css
+ - docs/ocportal-api-template/css/bootstrap.css
+ - docs/ocportal-api-template/css/bootstrap.min.css
+ - docs/ocportal-api-template/css/jquery.iviewer.css
+ - docs/ocportal-api-template/css/prettify.css
+ - docs/ocportal-api-template/css/template.css
+ - docs/ocportal-api-template/elements/class.xsl
+ - docs/ocportal-api-template/elements/common.xsl
+ - docs/ocportal-api-template/elements/constant.xsl
+ - docs/ocportal-api-template/elements/function.xsl
+ - docs/ocportal-api-template/elements/namespace.xsl
+ - docs/ocportal-api-template/elements/package.xsl
+ - docs/ocportal-api-template/elements/property.xsl
+ - docs/ocportal-api-template/graph.html
+ - docs/ocportal-api-template/graphs/class.xsl
+ - docs/ocportal-api-template/img/apple-touch-icon-114x114.png
+ - docs/ocportal-api-template/img/apple-touch-icon-72x72.png
+ - docs/ocportal-api-template/img/apple-touch-icon.png
+ - docs/ocportal-api-template/img/favicon.ico
+ - docs/ocportal-api-template/img/glyphicons-halflings-white.png
+ - docs/ocportal-api-template/img/glyphicons-halflings.png
+ - docs/ocportal-api-template/img/icons/class.png
+ - docs/ocportal-api-template/img/icons/constant.png
+ - docs/ocportal-api-template/img/icons/function.png
+ - docs/ocportal-api-template/img/icons/icon-folder-open-big.png
+ - docs/ocportal-api-template/img/icons/icon-th-big.png
+ - docs/ocportal-api-template/img/icons/icon_template.svg
+ - docs/ocportal-api-template/img/icons/interface.png
+ - docs/ocportal-api-template/img/icons/method.png
+ - docs/ocportal-api-template/img/icons/property.png
+ - docs/ocportal-api-template/img/iviewer/grab.cur
+ - docs/ocportal-api-template/img/iviewer/hand.cur
+ - docs/ocportal-api-template/img/iviewer/iviewer.rotate_left.png
+ - docs/ocportal-api-template/img/iviewer/iviewer.rotate_right.png
+ - docs/ocportal-api-template/img/iviewer/iviewer.zoom_fit.png
+ - docs/ocportal-api-template/img/iviewer/iviewer.zoom_fit2.gif
+ - docs/ocportal-api-template/img/iviewer/iviewer.zoom_in.png
+ - docs/ocportal-api-template/img/iviewer/iviewer.zoom_in2.gif
+ - docs/ocportal-api-template/img/iviewer/iviewer.zoom_out.png
+ - docs/ocportal-api-template/img/iviewer/iviewer.zoom_out2.gif
+ - docs/ocportal-api-template/img/iviewer/iviewer.zoom_zero.png
+ - docs/ocportal-api-template/img/iviewer/iviewer.zoom_zero2.gif
+ - docs/ocportal-api-template/img/loader.gif
+ - docs/ocportal-api-template/index.xsl
+ - docs/ocportal-api-template/js/bootstrap.js
+ - docs/ocportal-api-template/js/bootstrap.min.js
+ - docs/ocportal-api-template/js/jquery.iviewer.js
+ - docs/ocportal-api-template/js/jquery.iviewer.min.js
+ - docs/ocportal-api-template/js/jquery.mousewheel.min.js
+ - docs/ocportal-api-template/js/prettify/lang-apollo.js
+ - docs/ocportal-api-template/js/prettify/lang-clj.js
+ - docs/ocportal-api-template/js/prettify/lang-css.js
+ - docs/ocportal-api-template/js/prettify/lang-go.js
+ - docs/ocportal-api-template/js/prettify/lang-hs.js
+ - docs/ocportal-api-template/js/prettify/lang-lisp.js
+ - docs/ocportal-api-template/js/prettify/lang-lua.js
+ - docs/ocportal-api-template/js/prettify/lang-ml.js
+ - docs/ocportal-api-template/js/prettify/lang-n.js
+ - docs/ocportal-api-template/js/prettify/lang-proto.js
+ - docs/ocportal-api-template/js/prettify/lang-scala.js
+ - docs/ocportal-api-template/js/prettify/lang-sql.js
+ - docs/ocportal-api-template/js/prettify/lang-tex.js
+ - docs/ocportal-api-template/js/prettify/lang-vb.js
+ - docs/ocportal-api-template/js/prettify/lang-vhdl.js
+ - docs/ocportal-api-template/js/prettify/lang-wiki.js
+ - docs/ocportal-api-template/js/prettify/lang-xq.js
+ - docs/ocportal-api-template/js/prettify/lang-yaml.js
+ - docs/ocportal-api-template/js/prettify/prettify.min.js
+ - docs/ocportal-api-template/js/template.js
+ - docs/ocportal-api-template/layout.xsl
+ - docs/ocportal-api-template/namespaces.xsl
+ - docs/ocportal-api-template/packages.xsl
+ - docs/ocportal-api-template/reports/deprecated.xsl
+ - docs/ocportal-api-template/reports/errors.xsl
+ - docs/ocportal-api-template/reports/markers.xsl
+ - docs/ocportal-api-template/search.json.xsl
+ - docs/ocportal-api-template/template.xml
 
 openid
 ------
@@ -3913,6 +4001,7 @@ testing_platform
  - _tests/tests/testatom.cms
  - _tests/tests/testrss.cms
  - _tests/tests/unit_tests/.htaccess
+ - _tests/tests/unit_tests/api_classes_documented.php
  - _tests/tests/unit_tests/tracker_categories.php
  - _tests/tests/unit_tests/authors.php
  - _tests/tests/unit_tests/awards.php

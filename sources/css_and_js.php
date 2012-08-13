@@ -343,6 +343,7 @@ function js_minify($js)
  * @copyright 	2008 Joe Scylla <joe.scylla@gmail.com>
  * @license 	http://opensource.org/licenses/mit-license.php MIT License
  * @version 	1.0 (2008-01-31)
+ * @package		core
  */
 
 /**

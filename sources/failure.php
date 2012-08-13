@@ -1056,6 +1056,10 @@ function syndicate_spammer_report($ip_addr,$username,$email,$reason,$trigger_err
 
 		if (!class_exists('TornUserinfoClass'))
 		{
+			/**
+			 * Tornevall interfacing class (antispam).
+			 * @package		core_database_drivers
+			 */
 			class TornUserinfoClass
 			{
 				var $Username;

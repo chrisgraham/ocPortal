@@ -219,6 +219,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'.gitattributes'=>'',
 		'.gitignore'=>'',
 		'cvs'=>'.*',
+		'phpdoc.dist.xml'=>'',
 
 		// Web server extensions / leave-behinds
 		'web-inf'=>'.*',
@@ -277,9 +278,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'hphp-static-cache'=>'',
 		'hphp.files.list'=>'',
 		'hphp'=>'',
-		'ocportal.heap'=>'',
-		'ocportal.sch'=>'',
-		'libocportal_u.dll'=>'',
 	);
 
 	$ignore_extensions=array( // Case insensitive, define in lower case

@@ -93,8 +93,8 @@ function phase_0()
 			<fieldset>
 			<legend>Upgrade necessity</legend>
 			<p>Upgrading is&hellip;</p>
-			<input type="radio" name="needed" id="unrecommended" '.((strpos($release_description,'patch release')===false)?'checked="checked" ':'').'value="not recommended for live sites" /><label for="unrecommended">&hellip;not recommended for live sites&hellip;</label><br />
-			<input type="radio" name="needed" id="not_needed" value="not necessary" /><label for="not_needed">&hellip;not necessary&hellip;</label><br />
+			<input type="radio" name="needed" id="unrecommended" '.((strpos($release_description,'patch release')===false && strpos($release_description,'gold')===false)?'checked="checked" ':'').'value="not recommended for live sites" /><label for="unrecommended">&hellip;not recommended for live sites&hellip;</label><br />
+			<input type="radio" name="needed" id="not_needed" '.((strpos($release_description,'gold')!==false)?'checked="checked" ':'').'value="not necessary" /><label for="not_needed">&hellip;not necessary&hellip;</label><br />
 			<input type="radio" name="needed" id="suggested" value="suggested" /><label for="suggested">&hellip;suggested&hellip;</label><br />
 			<input type="radio" name="needed" id="advised" '.((strpos($release_description,'patch release')!==false)?'checked="checked" ':'').'value="strongly advised" /><label for="advised">&hellip;strongly advised&hellip;</label><br />
 			<label for="justification">&hellip;due to</label><input type="text" name="justification" id="justification" value="" />
@@ -118,7 +118,7 @@ function phase_1_pre()
 	<ul>
 		<li>Run the <a href="'.escape_html(static_evaluate_tempcode(build_url(array('page'=>'plug_guid'),'adminzone'))).'" target="_blank">plug_guid</a> tool to build needed GUIDs into the PHP.</li>
 		<li>Update copyright dates in PHP code for the current year ('.escape_html($year).').</li>
-		<li>Build <kbd>install.sql</kbd> (taking into account it must run on different MySQL versions<!--- make sure the CREATE TABLE code is equivalent to the old version of the file, i.e. <tt>DEFAULT CHARSET=utf8</tt> is stripped-->). If you think you\'ve done it then the <a href="'.get_base_url().'/_tests/?id=unit_tests/installsql" target="_blank">installsql unit test</a> will confirm.</li>
+		<li>Build <kbd>install.sql</kbd> (taking into account it must run on different MySQL versions<!--- make sure the CREATE TABLE code is equivalent to the old version of the file, i.e. <kbd>DEFAULT CHARSET=utf8</kbd> is stripped-->). If you think you\'ve done it then the <a href="'.get_base_url().'/_tests/?id=unit_tests/installsql" target="_blank">installsql unit test</a> will confirm.</li>
 		<!--<li>Build <kbd>install*.sql</kbd> by cutting up <kbd>install.sql</kbd> to the same boundaries as was used in the old versions of the files.</li>-->
 		<li>Run the <a href="'.escape_html(get_base_url().'/_test').'">unit tests</a><!--, with debug mode on, on the custom ocPortal PHP version-->.</li>
 		<li>Write custom theme upgrading code into <kbd>sources/upgrade.php</kbd>. Make sure all ocProducts themes are up-to-date (CSS changes, template changes, theme image changes).</li>
@@ -217,20 +217,20 @@ function phase_2()
 	<p>Here\'s a list of things for you to do. Get to it!</p>
 	<ol>
 	';
-	if (!$is_bleeding_edge)
+	if (!$is_bleeding_edge && !$is_substantial)
 	{
 		echo '
 			<li>
-				If you are fixing a security issue, follow the security process. This may mean delaying the release for around a week and sending a newsletter telling people when exactly the upgrade will come.
+				Security Advice (<em>Optional</em>): If you are fixing a security issue, follow the security process. This may mean delaying the release for around a week and sending a newsletter telling people when exactly the upgrade will come.
 			</li>
 		';
 	}
 	echo '
 		<li>
-			Upload all built files to ocPortal.com server (<kbd>uploads/downloads</kbd>)
+			<strong>Upload</strong>: Upload all built files to ocPortal.com server (<kbd>uploads/downloads</kbd>)
 		</li>
 		<li>
-			Run the <form target="_blank" style="display: inline" action="'.escape_html($push_url).'" method="post"><input type="hidden" name="changes" value="'.escape_html($changes).'" /><input type="submit" value="ocPortal.com setup script" /></form>. Note if you are re-releasing, this will still work &ndash; it will update existing entries appropriately.
+			<strong>Add to ocPortal.com</strong>: Run the <form target="_blank" style="display: inline" action="'.escape_html($push_url).'" method="post"><input type="hidden" name="changes" value="'.escape_html($changes).'" /><input type="submit" value="ocPortal.com setup script" /></form>. Note if you are re-releasing, this will still work &ndash; it will update existing entries appropriately.
 		</li>
 	';
 
@@ -243,56 +243,68 @@ function phase_2()
 		$ms_sha1=sha1_file($webpi);
 
 		echo '
-			<li>Go into <a href="http://installatron.com/editor">Installatron</a> and setup a new release with the new version number (Main tab), update the URL (Version Info tab), and publish.</li>
-			<li>E-mail <a href="mailto:punit@softaculous.com,brijesh@softaculous.com?subject=New ocPortal release&amp;body=Hi, this is an automated notification that a new release of ocPortal has been released - regards, the ocPortal team.">Softaculous people</a></li>
-			<li><a href="http://www.microsoft.com/web/gallery/appsubmit.aspx?id=460">Submit the new MS Web App Gallery file to Microsoft</a>. Change the \'Version\' the \'Package Location URL\' and set the shasum to <kbd>'.escape_html($ms_sha1).'</kbd></li>
-			<!--Disabled for now as not ready <li>Take "debian-'.escape_html($version_dotted).'.tar" to a debian box with correct signing key installed and do "tar xvf debian-'.escape_html($version_dotted).'.tar; cd ocportal-'.escape_html($version_dotted).' ; dpkg-buildpackage" and send \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_all.deb\' over</li>-->
+			<li><strong>Installatron</strong>: Go into <a target="_blank" href="http://installatron.com/editor">Installatron</a> and setup a new release with the new version number (Main tab), update the URL (Version Info tab), and publish.</li>
+			<li><strong>Softaculous</strong>: E-mail <a href="mailto:punit@softaculous.com,brijesh@softaculous.com?subject=New ocPortal release&amp;body=Hi, this is an automated notification that a new release of ocPortal has been released - regards, the ocPortal team.">Softaculous people</a></li>
+			<li><strong>Microsoft Web Platform</strong>: <a target="_blank" href="http://www.microsoft.com/web/gallery/appsubmit.aspx?id=460">Submit the new MS Web App Gallery file to Microsoft</a>. Change the \'Version\' the \'Package Location URL\' and set the shasum to <kbd>'.escape_html($ms_sha1).'</kbd></li>
+			<!--Disabled for now as not ready <li><strong>Debian</strong>: Take "debian-'.escape_html($version_dotted).'.tar" to a debian box with correct signing key installed and do "tar xvf debian-'.escape_html($version_dotted).'.tar; cd ocportal-'.escape_html($version_dotted).' ; dpkg-buildpackage" and send \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_all.deb\' over</li>-->
 		';
 	}
 
 	if ($is_substantial && !$is_bleeding_edge)
 	{
 		echo '
-			<li>Import into Launchpad (run this from the <tt>lang/EN</tt> directory: <tt>ini2po . . -P ; tar -czvf "'.escape_html($version_dotted).'.tar.gz" --transform="s,\(.*\)\.pot,\1/\1.pot," *.pot ; rm *.pot ; mv *.gz ~/Desktop</tt>). Also set as the new active branch and the old branch as \'supported\' and the prior one as \'defunct\'</li>
-			<li>Update MyOCP (personal demo system)</li>
+			<li><strong>Launchpad</strong>: Import into Launchpad<ul>
+				<li>Install <a target="_blank" href="http://translate.sourceforge.net/wiki/toolkit/installation">Translation Tookit</a></li>
+				<li>Install python iniparse using something like: <kbd>sudo easy_install iniparse</kbd></li>
+				<li>Run this, or equivalent from the local base directory: <kbd>cd lang/EN; ini2po . . -P ; gnutar -czvf "'.escape_html($version_dotted).'.tar.gz" --transform="s,\(.*\)\.pot,\1/\1.pot," *.pot ; rm *.pot ; mv *.gz ~/Desktop</kbd> (must be <kbd>gnutar</kbd> on Mac but probably just <kbd>tar</kbd> on Windows or Linux)</li>
+				<li>Go to Launchpad and add the new branch, then import the generated tar.gz file</li>
+				<li>Also set as the new active branch and the old branch as \'supported\' and the prior one as \'defunct\'</li>
+			</ul></li>
+			<li><strong>Personal demos</strong>: Update MyOCP by generating an upgrade tar, extracting using wget, then calling <a target="_blank" href="http://shareddemo.myocp.com/data_custom/myocp_upgrade.php">the upgrade script</a> (<kbd>myocp_upgrade.php</kbd> contains some usage documentation)</li>
 		';
 	}
 
 	echo '
-	</ol>
-	';
-
-	echo '
-	<p>Marketing/management tasks (share the workload with other people):</p>
-	<ul>
-	';
-
-	echo '
-		<li>Where applicable upgrade client/our-own sites running ocPortal to the new version (see <tt>ocProducts documents/support &amp; security accounts/clients_to_upgrade.txt</tt> and <tt>ocProducts documents/support &amp; security accounts/clients_to_give_security_advice_to.txt</tt>).</li>
+		<li>Clients (<em>Optional</em>): Where applicable upgrade client/our-own sites running ocPortal to the new version (see <kbd>ocProducts documents/support &amp; security accounts/clients_to_upgrade.txt</kbd> and <kbd>ocProducts documents/support &amp; security accounts/clients_to_give_security_advice_to.txt</kbd>).</li>
 	';
 
 	if ($is_substantial && !$is_bleeding_edge)
 	{
 		echo '
-			<li><a href="http://ocportal.com/tracker/manage_proj_edit_page.php?project_id=1">add to tracker configuration</a> and also define any new addons in tracker</li>
-			<li>Generate the new addon set (build_addons minimodule), upload them (publish_addons_as_downloads minimodule on server), and update the community page to point to the new addon locations</li>
-			<li>Upload the latest new documentation (including changing the zone structure appropriately using symlinks - docs symlink to latest docs(version) zone)</li>
-			<li>Update release history details on the ocPortal.com vision page</li>
-			<li>Get someone to update our release history on Wikipedia</li>
-			<li>Update listing on Hotscripts</li>
-			<li><a href="http://ocportal.com/forum/topicview/misc/10343.htm">Syndicate news</a> (post in <a href="http://ocportal.com/forum/forumview/misc/marketing.htm">Marketing forum</a>)</li>
-			<li>Send newsletter</li>
+			<li><strong>Tracker</strong>: <a target="_blank" href="http://ocportal.com/tracker/manage_proj_edit_page.php?project_id=1">Add to tracker configuration</a> (under "Versions") and also define any new addons in tracker (although a unit test should have told you already if they are missing)</li>
+			<li><strong>Addons</strong>: Generate the new addon set (<a target="_blank" href="'.get_base_url().'/index.php/adminzone/index.php?page=build_addons">build_addons minimodule</a>), upload <kbd>data_custom/addon_files.txt</kbd> and <kbd>data_custom/addon_details.csv</kbd>, and upload them (<a target="_blank" href="http://ocportal.com/data_custom/publish_addons_as_downloads.php">publish_addons_as_downloads</a> minimodule on ocPortal.com server), and update the <kbd>community page</kbd> to point to the new addon locations</li>
+			<li><strong>Documentation</strong>: Upload the latest new documentation&hellip;<ul>
+				<li>Create <a target="_blank" href="http://ocportal.com/adminzone/index.php?page=admin_zones&amp;type=add">docs'.strval(intval(ocp_version_number())).' zone</a> (Codename "docs'.strval(intval(ocp_version_number())).'", Title "Documentation (version '.strval(intval(ocp_version_number())).')", Theme "ocProducts", Default page "tutorials")</li>
+				<li>Do this in a Linux shell on the ocPortal.com server: <kbd>rm docs'.strval(intval(ocp_version_number())-1).' ; mv docs docs'.strval(intval(ocp_version_number())-1).' ; rm -f docs'.strval(intval(ocp_version_number())).'/pages/comcode_custom/EN/*.txt; ln -s docs'.strval(intval(ocp_version_number())).' docs; cd docs'.strval(intval(ocp_version_number()-1)).'; mv api *.doc *.pdf *.zip *.xls ../docs/ ; cd ..</kbd></li>
+				<li>Upload the latest <kbd>.txt</kbd> files from git for <kbd>docs/pages/comcode_custom/EN/</kbd></li>
+			</ul></li>
+			<li>API docs (<em>Optional</em>): Recompile the API docs&hellip;<ul>
+				<li><a href="http://graphviz.org/Download..php">Install Graphviz</a></li>
+				<li>Make sure you have a very high PHP memory limit in php.ini; I set it to 1024M</li>
+				<li>Install PEAR if you don\'t have it already, with something like <kbd>curl http://pear.php.net/go-pear.phar &gt; go-pear.php ; sudo php -q go-pear.php</kbd></li>
+				<li>Install phpdocumentor if you don\'t have it already, with something like <kbd>sudo pear channel-discover pear.phpdoc.org ; sudo pear install phpdoc/phpDocumentor-alpha</kbd></li>
+				<li>In your phpdocumentor\'s <kbd>data/templates</kbd> directory, create a symbolic link to your ocPortal <kbd>docs/ocportal-api-template</kbd> directory.
+				<li>Build documentation with <kbd><!--rm -rf docs/api 2&lt; /dev/null ; -->phpdoc --sourcecode --force --template ocportal-api-template</kbd></li>
+				<li>Upload <kbd>docs/api</kbd></li>
+			</ul></li>
+			<li>ERD (<em>Optional</em>): Compile new ERD diagrams using <a target="_blank" href="http://www.malcolmhardie.com/sqleditor/">SQLEditor</a> (mac) (you need to create a new MySQL database by importing the output of <a target="_blank" href="'.get_base_url().'/adminzone/index.php?page=sql_schema_generate">SQLEditor</a>)</li>
+			<li>API docs (<em>Optional</em>): Use <a target="_blank" href="http://www.phpdoc.org/">phpDocumentor</a> to recompile the API docs</li>
+			<li><strong>History</strong>: Update release history details on the ocPortal.com <kbd>vision page</kbd></li>
+			<li><strong>Wikipedia</strong>: <form target="_blank" style="display: inline" action="http://ocportal.com/forum/topics/new_topic/161.htm" method="post"><input type="hidden" name="title" value="Wikipedia listing needs updating (for version '.strval(intval(ocp_version_number())).')" /><input type="hidden" name="post" value="(This is a standard post we make each time a new major release comes out)&#10;&#10;As ocPortal version '.strval(intval(ocp_version_number())).' is out now, ideally someone will update the [url=&quot;ocPortal Wikipedia page&quot;]http://en.wikipedia.org/wiki/OcPortal[/url]. The developers don\'t maintain this because it\'d be inappropriate for us to maintain our own Wikipedia entry (neutrality reasons). The version details need updating, but generally it is worth reviewing the page is still accurate and up-to-date.&#10;&#10;Thanks to anyone who helps here, it\'s important we keep the outside world updated on ocPortal." /><input class="hyperlink_button" type="submit" value="Get someone to update our release history on Wikipedia" /></form></li>
+			<li><strong>Hotscripts</strong>: Update <a target="_blank" href="http://www.hotscripts.com/listing/ocportal/">listing on Hotscripts</a></li>
+			<li><strong>Syndication</strong>: <a target="_blank" href="http://ocportal.com/forum/topicview/misc/10343.htm">Syndicate news</a> (post in <a target="_blank" href="http://ocportal.com/forum/topicview/misc/marketing/websites_to_send.htm">Marketing forum</a>)</li>
+			<li>Newsletter (<em>Optional</em>): Send <a target="_blank" href="http://ocportal.com/adminzone/index.php?page=admin_newsletter">newsletter</a></li>
 		';
 	}
 
 	if ($is_substantial && $is_bleeding_edge)
 	{
 		echo '
-			<li>Contact VIPs with sneak previews? (If this is needed, don\'t post as a public release&hellip;)</li>
+			<li><strong>VIPs</strong>: Contact VIPs with sneak previews? (If this is needed, don\'t post as a public release&hellip;)</li>
 		';
 	}
 
 	echo '
-	</ul>
+	</ol>
 	';
 }

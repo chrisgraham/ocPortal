@@ -33,6 +33,9 @@ function init__hooks__modules__admin_import__mybb()
 	$OLD_BASE_URL=NULL;
 }
 
+/**
+ * Forum Driver.
+ */
 class Hook_mybb
 {
 

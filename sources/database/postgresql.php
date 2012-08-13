@@ -29,6 +29,10 @@ function init__database__postgresql()
 	$CACHE_DB=array();
 }
 
+/**
+ * Database Driver.
+ * @package		core_database_drivers
+ */
 class Database_Static_postgresql
 {
 

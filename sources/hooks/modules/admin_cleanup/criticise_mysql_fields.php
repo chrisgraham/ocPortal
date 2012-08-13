@@ -44,6 +44,9 @@ function list_to_map_2($map_value,$list)
 	return array();
 }
 
+/**
+ * OcCLE command hook.
+ */
 class Hook_criticise_mysql_fields
 {
 

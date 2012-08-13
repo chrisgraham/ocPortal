@@ -123,6 +123,10 @@ function occle_script()
 	}
 }
 
+/**
+ * OcCLE.
+ * @package		occle
+ */
 class virtual_bash
 {
 	var $current_input;
@@ -1337,6 +1341,10 @@ class virtual_bash
 	}
 }
 
+/**
+ * Virtual filesystems.
+ * @package		occle
+ */
 class virtual_fs
 {
 	/**

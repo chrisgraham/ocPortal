@@ -41,6 +41,9 @@ function init__hooks__modules__admin_import__phpbb3()
 	define('FIELD_DATE', 6);
 }
 
+/**
+ * Forum Driver.
+ */
 class Hook_phpbb3
 {
 

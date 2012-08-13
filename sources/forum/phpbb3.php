@@ -128,9 +128,12 @@ function _hash_crypt_private($password, $setting, &$itoa64)
 	return $output;
 }
 
+/**
+ * Forum Driver.
+ * @package		core_forum_drivers
+ */
 class forum_driver_phpbb3 extends forum_driver_base
 {
-
 	/**
 	 * Check the connected DB is valid for this forum driver.
 	 *

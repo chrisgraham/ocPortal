@@ -52,6 +52,9 @@ function handle_support_credits($_key,$details,$product)
 	$GLOBALS['SITE_DB']->query_update('credit_purchases',array('purchase_validated'=>1),array('purchase_id'=>intval($_key)));
 }
 
+/**
+ * eCommerce product hook.
+ */
 class Hook_support_credits
 {
 	/**

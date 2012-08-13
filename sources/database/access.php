@@ -39,6 +39,10 @@ function init__database__access()
 	$CACHE_DB=array();
 }
 
+/**
+ * Database Driver.
+ * @package		core_database_drivers
+ */
 class Database_Static_access
 {
 

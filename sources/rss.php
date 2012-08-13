@@ -29,6 +29,10 @@ function extract_plain_links($matches)
 	return '<a href="'.@html_entity_decode($matches[0],ENT_QUOTES,get_charset()).'">'.$matches[0].'</a>';
 }
 
+/**
+ * RSS loader.
+ * @package		core
+ */
 class rss
 {
 	// Used during parsing

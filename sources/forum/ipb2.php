@@ -20,9 +20,12 @@
 
 require_code('forum/shared/ipb');
 
+/**
+ * Forum Driver.
+ * @package		core_forum_drivers
+ */
 class forum_driver_ipb2 extends forum_driver_ipb_shared
 {
-
 	/**
 	 * From a member profile-row, get the member's name.
 	 *

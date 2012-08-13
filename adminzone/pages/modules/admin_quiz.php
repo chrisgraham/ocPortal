@@ -151,7 +151,7 @@ class Module_admin_quiz
 	{
 		require_code('files2');
 		$quiz_id=post_param_integer('quiz_id');
-		$data=get_quizz_data_for_csv($quiz_id);
+		$data=get_quiz_data_for_csv($quiz_id);
 		make_csv($data,'quiz.csv');
 	}
 

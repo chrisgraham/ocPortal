@@ -244,6 +244,10 @@ function load_field_restrictions($this_page=NULL,$this_type=NULL)
 	return $FIELD_RESTRICTIONS;
 }
 
+/**
+ * Field restriction loader.
+ * @package		core
+ */
 class field_restriction_loader
 {
 	// Used during parsing

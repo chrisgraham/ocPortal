@@ -931,6 +931,10 @@ function handle_symbol_preprocessing($bit,&$children)
 	}
 }
 
+/**
+ * Tempcode (compiled implementation).
+ * @package		core
+ */
 class ocp_tempcode
 {
 	var $code_to_preexecute;

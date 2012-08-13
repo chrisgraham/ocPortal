@@ -61,6 +61,10 @@ function init__comcode_xml()
 	);
 }
 
+/**
+ * Converts Comcode XML to Tempcode.
+ * @package		core_rich_media
+ */
 class comcode_xml_to_tempcode
 {
 	// Used during parsing

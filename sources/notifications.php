@@ -128,9 +128,11 @@ function dispatch_notification($notification_code,$code_category,$subject,$messa
 	}
 }
 
-/*
-Dispatcher object. Used to create a closure for a notification dispatch, so we can then tell that to send in the background (register_shutdown_function), for performance reasons.
-*/
+/**
+ * Dispatcher object.
+ * Used to create a closure for a notification dispatch, so we can then tell that to send in the background (register_shutdown_function), for performance reasons.
+ * @package		core_notifications
+ */
 class Notification_dispatcher
 {
 	var $notification_code=NULL;
@@ -636,6 +638,7 @@ function delete_all_notifications_on($notification_code,$notification_category)
 
 /**
  * Base class for notification hooks. Provides default implementations for all methods that provide full access to everyone, and interact with enabled table.
+ * @package		core_notifications
  */
 class Hook_Notification
 {
@@ -979,6 +982,7 @@ class Hook_Notification
 
 /**
  * Derived abstract base class of notification hooks that provides only staff access.
+ * @package		core_notifications
  */
 class Hook_Notification__Staff extends Hook_Notification
 {

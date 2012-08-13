@@ -33,6 +33,10 @@ function init__database__mysql_dbx()
 	$LAST_SELECT_DB=NULL;
 }
 
+/**
+ * Database Driver.
+ * @package		core_database_drivers
+ */
 class Database_Static_mysql_dbx extends Database_super_mysql
 {
 

@@ -54,6 +54,9 @@ function handle_product_orders($purchase_id,$details,$product)
 	}
 }
 
+/**
+ * eCommerce product hook.
+ */
 class Hook_cart_orders
 {
 	/**

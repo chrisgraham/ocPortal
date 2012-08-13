@@ -430,7 +430,7 @@ function delete_quiz($id)
  * @param	AUTO_LINK	Quiz ID
  * @return	array			Quiz data array	
  */
-function get_quizz_data_for_csv($quiz_id)
+function get_quiz_data_for_csv($quiz_id)
 {
 	$questions_rows=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$quiz_id),'ORDER BY q_order');
 

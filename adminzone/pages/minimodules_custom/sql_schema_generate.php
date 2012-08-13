@@ -10,7 +10,7 @@
 /*
 Used to generate a database schema in the form of SQL code that can be imported into MySQL Workbench
 
-First run this, then import it all into a new database (existing is problematic as it needs to be InnoDB), then run SQLEditor on that database -- or if you like try your luck importing, but that was crashing for me.
+First run this, then import it all into a new database (existing is problematic as it needs to be InnoDB), then run SQLEditor (http://www.malcolmhardie.com/sqleditor/) on that database -- or if you like try your luck importing, but that was crashing for me.
 */
 
 $filename='ocportal-erd.sql';

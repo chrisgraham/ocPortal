@@ -35,6 +35,10 @@ The non-threaded ocf_forum view has its own rendering.
 
 */
 
+/**
+ * Manage threaded topics / comment topics.
+ * @package		core_feedback_features
+ */
 class OCP_Topic
 {
 	// Settable...

@@ -40,9 +40,12 @@ function init__forum__ocf()
 	$TOPIC_IS_THREADED=array();
 }
 
+/**
+ * Forum Driver.
+ * @package		core_forum_drivers
+ */
 class forum_driver_ocf extends forum_driver_base
 {
-
 	/**
 	 * Initialise LDAP. To see if LDAP is running we check LDAP_CONNECTION for NULL. ldap_is_enabled is not good enough - we don't want ocPortal to bomb out under faulty LDAP settings, hence making it unfixable.
 	 */

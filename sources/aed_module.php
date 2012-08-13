@@ -18,6 +18,10 @@
  * @package		core
  */
 
+/**
+ * AED module (Add/Edit/Delete), for operations on content types (aka: CRUD, create update delete).
+ * @package		core
+ */
 class standard_aed_module
 {
 	var $module_type;

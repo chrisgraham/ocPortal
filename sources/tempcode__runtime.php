@@ -677,6 +677,10 @@ function handle_symbol_preprocessing($bit,&$children)
 	}
 }
 
+/**
+ * Tempcode (non-compiled implementation).
+ * @package		core
+ */
 class ocp_tempcode
 {
 	// An array of bits where each bit is array($escape,$type,$value[,$params])

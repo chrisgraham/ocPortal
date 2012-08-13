@@ -18,6 +18,10 @@
  * @package		core_database_drivers
  */
 
+/**
+ * Base class for MySQL database drivers.
+ * @package		core_database_drivers
+ */
 class Database_super_mysql
 {
 

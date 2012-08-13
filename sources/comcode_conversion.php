@@ -1406,6 +1406,10 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme=N
 	return array(array(),TC_KNOWN,'',NULL);
 }
 
+/**
+ * Static implementation of Tempcode.
+ * @package		core_rich_media
+ */
 class ocp_tempcode_static
 {
 	// An array of bits where each bit is array($escape,$type,$value)

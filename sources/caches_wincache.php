@@ -20,6 +20,10 @@
 
 /*EXTRA FUNCTIONS: wincache\_.+*/
 
+/**
+ * Cache Driver.
+ * @package		core
+ */
 class wincache
 {
 	/**

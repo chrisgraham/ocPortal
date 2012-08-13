@@ -24,6 +24,7 @@ require_code('database/shared/mysql');
 
 /**
  * Standard code module initialisation function.
+ * @package		core_database_drivers
  */
 function init__database__mysql()
 {
@@ -33,6 +34,10 @@ function init__database__mysql()
 	$CACHE_DB=array();
 }
 
+/**
+ * Database Driver.
+ * @package		core_database_drivers
+ */
 class Database_Static_mysql extends Database_super_mysql
 {
 

@@ -20,6 +20,10 @@
 
 /*EXTRA FUNCTIONS: xcache\_.+*/
 
+/**
+ * Cache Driver.
+ * @package		core
+ */
 class xcache
 {
 	/**
