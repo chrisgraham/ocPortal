@@ -177,7 +177,7 @@ foreach ($all_downloads_to_add as $i=>$d)
 
 // Edit past download
 
-if (!$is_bleeding_edge)
+if ((!$is_bleeding_edge) && (isset($all_downloads_to_add[0]['download_id'])))
 {
 	$last_version_str=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d JOIN '.get_table_prefix().'translate t ON d.comments=t.id','t.id',array('text_original'=>'This is the latest version.'));
 	if (!is_null($last_version_str))

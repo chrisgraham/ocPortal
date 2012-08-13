@@ -72,7 +72,7 @@ function get_version_dotted($main=NULL,$minor=NULL)
 	if (is_null($main)) $main=ocp_version();
 	if (is_null($minor)) $minor=ocp_version_minor();
 
-	return strval($main).(($minor=='')?'':('.'.$minor));
+	return strval($main).(($minor=='0')?'':('.'.$minor));
 }
 
 /**
