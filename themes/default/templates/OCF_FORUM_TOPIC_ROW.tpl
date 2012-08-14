@@ -19,9 +19,9 @@
 			{PAGES}
 			{+START,IF_PASSED,BREADCRUMBS}{+START,IF_NON_EMPTY,{BREADCRUMBS}}<br /><span class="associated_details">{BREADCRUMBS}</span>{+END}{+END}
 		</div>
-		{+START,IF_NON_EMPTY,{DESCRIPTION}}
-		<div class="ocf_forum_topic_description">{DESCRIPTION*}</div>
-		{+END}
+		{+START,IF_NON_EMPTY,{DESCRIPTION}}{+START,IF,{$NEQ,{TITLE},{DESCRIPTION}}}
+			<div class="ocf_forum_topic_description">{DESCRIPTION*}</div>
+		{+END}{+END}
 
 		{+START,IF,{$MOBILE}}
 			<p class="associated_details">

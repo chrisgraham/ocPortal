@@ -298,7 +298,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 
 	// Buttons
 	$button_array=array();
-	if (!is_guest())
+	if ((!is_guest()) && ($type!='pt'))
 	{
 		if ((get_value('disable_mark_forum_read')!=='1') && ($num_unread!=0))
 		{
