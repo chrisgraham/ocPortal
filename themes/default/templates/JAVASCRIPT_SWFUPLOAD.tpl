@@ -1190,6 +1190,12 @@ function swfUploadLoaded(ob) {
 
 // Called by the submit button to start the upload
 function doSubmit(e,ob,recurse) {
+	/*
+	This routine is rather complex. Essentially the uploader takes control of form submission, sitting in front of it, cancelling the form submission in it's own code.
+	Rather than a normal form submit, click handlers on the submit button are chained after the upload is confirmed okay.
+	If the full chain of click handlers returns true (same as checking the top click handler, which is put in originalClickHandler) then the form submit is manually triggered.
+	*/
+
 	if (formChecker != null) {
 		clearInterval(formChecker);
 		formChecker = null;
@@ -1201,8 +1207,7 @@ function doSubmit(e,ob,recurse) {
 
 	var btnSubmit=document.getElementById(ob.settings.btnSubmitID);
 	var txtFileName = document.getElementById(ob.settings.txtFileNameID);
-
-	if (txtFileName.value == '')
+	if (txtFileName.value == '') // Field not filled in
 	{
 		var ret=true;
 		if (ob.settings.required)
@@ -1222,8 +1227,8 @@ function doSubmit(e,ob,recurse) {
 		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form,true);
 		if (ret2 && !ret)
 			window.fauxmodal_alert("{!REQUIRED_NOT_FILLED_IN^#}");
-		if (!recurse && ret && ret2) btnSubmit.form.submit();
-		return ret && ret2;
+		if (!recurse && ret && ret2) btnSubmit.form.submit(); // If we aren't stuck in a recursion, and the field did not need filling in, and submit handler says otherwise okay, trigger the form to submit explicitly
+		return ret && ret2; // Whether submit may happen (the field did not need filling in, and submit handler says otherwise okay)
 	}
 
 	e = e || window.event;
@@ -1234,12 +1239,12 @@ function doSubmit(e,ob,recurse) {
 	}
 
 	var txtID = document.getElementById(ob.settings.txtFileDbID);
-	if (txtID.value == '-1')
+	if (txtID.value == '-1') // Has not uploaded yet
 	{
 		btnSubmit.disabled = true;
-		ob.startUpload();
+		ob.startUpload(); // Start the upload
 		smooth_scroll(find_pos_y(txtFileName,true));
-	} else
+	} else // Has uploaded
 	{
 		window.form_submitting=btnSubmit.form; // For IE
 
@@ -1257,7 +1262,7 @@ function doSubmit(e,ob,recurse) {
 		}
 	}
 
-	return false;
+	return false; // Either has not uploaaded yet, or a submit handler otherwise blocked submission (which we must relay)
 }
 
 function fileDialogStart(ob) {
@@ -1411,15 +1416,7 @@ function uploadComplete(file, ob) {
 
 		if ((typeof ob.submitting!='undefined') && (ob.submitting))
 		{
-			window.form_submitting=btnSubmit.form; // For IE
-			if (typeof ob.originalClickHandler!='undefined')
-			{
-				ob.originalClickHandler(null,ob,btnSubmit.form);
-			} else
-			{
-				if ((btnSubmit.form.onsubmit) && (false===btnSubmit.form.onsubmit())) return;
-				btnSubmit.form.submit();
-			}
+			btnSubmit.onclick(null,ob,btnSubmit.form);
 			ob.submitting=false;
 		}
 	} else {
