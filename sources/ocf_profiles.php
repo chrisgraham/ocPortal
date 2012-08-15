@@ -65,6 +65,7 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 		$awards=find_awards_for('member',strval($member_id_of));
 	} else $awards=array();
 
+	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of); // Get it again, in case it changed
 	$title=get_page_title('MEMBER_PROFILE',true,array(escape_html($username)),NULL,$awards);
 
 	$_tabs=array();
