@@ -62,6 +62,7 @@ class forum_driver_base
 			if ($username_click_im=='1')
 			{
 				$url=build_url(array('page'=>'chat','type'=>'misc','enter_im'=>$id),get_module_zone('chat'));
+				if (!$tempcode_okay) $url=$url->evaluate();
 				return $url;
 			}
 		}
@@ -72,6 +73,7 @@ class forum_driver_base
 		if ((get_forum_type()!='none') && (get_forum_type()!='ocf') && (get_option('forum_in_portal',true)=='1'))
 		{
 			$url=build_url(array('page'=>'forums','url'=>$url),get_module_zone('forums'));
+			if (!$tempcode_okay) $url=$url->evaluate();
 		}
 		return $url;
 	}
