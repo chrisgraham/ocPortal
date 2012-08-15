@@ -234,7 +234,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'IMG':
-				if ((isset($param[0])) && (isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0))
+				if ((isset($param[0])) && (isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0) && ($GLOBALS['FORUM_DRIVER']!==NULL))
 				{
 					$value=find_theme_image($param[0],((isset($param[3])) && ($param[3]=='1')),false,(array_key_exists(2,$param) && $param[2]!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
 				}
@@ -285,17 +285,17 @@ function ecv($lang,$escaped,$type,$name,$param)
 							if (is_null($value)) $value='';
 							break;
 						case 'site_nummembers':
-							$value=strval($GLOBALS['FORUM_DRIVER']->get_members());
+							if (!is_null($GLOBALS['FORUM_DRIVER'])) $value=strval($GLOBALS['FORUM_DRIVER']->get_members());
 							break;
 						case 'site_bestmember':
 							$value=get_value('site_bestmember');
 							if (is_null($value)) $value='';
 							break;
 						case 'forum_numtopics':
-							$value=strval($GLOBALS['FORUM_DRIVER']->get_topics());
+							if (!is_null($GLOBALS['FORUM_DRIVER'])) $value=strval($GLOBALS['FORUM_DRIVER']->get_topics());
 							break;
 						case 'forum_numposts':
-							$value=strval($GLOBALS['FORUM_DRIVER']->get_num_forum_posts());
+							if (!is_null($GLOBALS['FORUM_DRIVER'])) $value=strval($GLOBALS['FORUM_DRIVER']->get_num_forum_posts());
 							break;
 
 						case 'meta_description':
@@ -643,7 +643,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'CANONICAL_URL':
 				global $NON_CANONICAL_PARAMS;
 				$non_canonical=array();
-				foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
+				if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
 				$value=get_self_url(true,false,$non_canonical);
 				break;
 
@@ -1411,21 +1411,25 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'EXTRA_HEAD':
-				$_value=$GLOBALS['EXTRA_HEAD'];
-				if ($_value===NULL) $_value=new ocp_tempcode();
-				$value=$_value->evaluate();
+				if (isset($GLOBALS['EXTRA_HEAD']))
+				{
+					$_value=$GLOBALS['EXTRA_HEAD'];
+					$value=$_value->evaluate();
+				}
 				break;
 
 			case 'EXTRA_FOOT':
-				if ($GLOBALS['EXTRA_FOOT']===NULL) $GLOBALS['EXTRA_FOOT']=new ocp_tempcode();
-				$_value=$GLOBALS['EXTRA_FOOT'];
+				if (isset($GLOBALS['EXTRA_FOOT']))
+				{
+					$_value=$GLOBALS['EXTRA_FOOT'];
 
-				if (array_key_exists(0,$param)) // Set
-				{
-					$GLOBALS['EXTRA_FOOT']->attach($param[0]);
-				} else // Get
-				{
-					$value=$_value->evaluate();
+					if (array_key_exists(0,$param)) // Set
+					{
+						$GLOBALS['EXTRA_FOOT']->attach($param[0]);
+					} else // Get
+					{
+						$value=$_value->evaluate();
+					}
 				}
 				break;
 
@@ -1503,28 +1507,28 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'HAS_PRIVILEGE':
-				if (isset($param[0]))
+				if ((isset($param[0])) && (function_exists('has_specific_permission')))
 				{
 					$value=has_specific_permission(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'1':'0';
 				}
 				break;
 
 			case 'HAS_ZONE_ACCESS':
-				if (isset($param[0]))
+				if ((isset($param[0])) && (function_exists('has_zone_access')))
 				{
 					$value=has_zone_access(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'1':'0';
 				}
 				break;
 
 			case 'HAS_PAGE_ACCESS':
-				if ((isset($param[0])) && (isset($param[1])))
+				if ((isset($param[0])) && (isset($param[1])) && (function_exists('has_page_access')))
 				{
 					$value=has_page_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1],((!is_null($param)) && (isset($param[3])))?($param[3]=='1'):false)?'1':'0';
 				}
 				break;
 
 			case 'HAS_CATEGORY_ACCESS':
-				if (isset($param[0]))
+				if ((isset($param[0])) && (function_exists('has_category_access')))
 				{
 					$value=has_category_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1])?'1':'0';
 				}
