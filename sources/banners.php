@@ -324,6 +324,8 @@ function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$u
 			$content=do_template('BANNER_TEXT',array('_GUID'=>'18ff8f7b14f5ca30cc19a2ad11ecdd62','B_TYPE'=>$b_type,'TITLE_TEXT'=>$title_text,'CAPTION'=>$caption,'SOURCE'=>$source,'DEST'=>$name,'URL'=>$url,'FILTERED_URL'=>$filtered_url));
 		} else // HTML/PHP
 		{
+			load_user_stuff();
+			require_code('permissions');
 			if (has_specific_permission($submitter,'use_html_banner'))
 			{
 				if (get_file_base()==get_custom_file_base()) // Only allow PHP code if not a shared install

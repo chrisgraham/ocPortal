@@ -3,7 +3,11 @@
 
 <html lang="{$LANG*}" dir="{!dir}">
 	<head>
-		{+START,INCLUDE,HTML_HEAD}{+END}
+		{$,The character set of the page}
+		<meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
+
+		{$,Page title}
+		<title>{+START,IF_NON_PASSED,TITLE}{+START,IF_NON_EMPTY,{$HEADER_TEXT}}{$HEADER_TEXT*} &ndash; {+END}{$SITE_NAME*}{+END}{+START,IF_PASSED,TITLE}{TITLE}{+END}</title>
 	</head>
 
 	<body class="website_body" id="basic_html_wrap" itemscope="itemscope" itemtype="http://schema.org/WebPage">
