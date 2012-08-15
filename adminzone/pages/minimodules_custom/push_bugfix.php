@@ -30,16 +30,16 @@ if (strpos($git_result,'git: command not found')!==false)
 
 if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 {
-	$git_commit_id=post_param('git_commit_id');
+	$git_commit_id=post_param('git_commit_id','');
 
 	$done=array();
 	$version_dotted=post_param('version');
 	$title=post_param('title');
 	$notes=post_param('notes','');
 	$affects=post_param('affects','');
-	if (!is_null(post_param('fixed_files')))
+	if (!is_null(post_param('fixed_files',NULL)))
 	{
-		$fixed_files=explode(chr(10),post_param('fixed_files'));
+		$fixed_files=explode(',',post_param('fixed_files'));
 	} else
 	{
 		$fixed_files=array();
@@ -84,12 +84,12 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 	$REMOTE_BASE_URL=($submit_to=='live')?(brand_base_url()):(get_base_url());
 
 	// If no tracker issue number was given, one is made
-	$tracker_id=post_param_integer('tracker_id');
+	$tracker_id=post_param_integer('tracker_id',NULL);
 	$tracker_title=$title;
 	$tracker_message=$notes;
 	$tracker_additional='';
 	if ($affects!='') $tracker_additional='Affects: '.$affects;
-	if ($tracker_id==0)
+	if ($tracker_id===NULL)
 	{
 		// Make tracker issue
 		$tracker_id=create_tracker_issue($version_dotted,$tracker_title,$tracker_message,$tracker_additional);
