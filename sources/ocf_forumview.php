@@ -298,7 +298,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 
 	// Buttons
 	$button_array=array();
-	if (!is_guest())
+	if ((!is_guest()) && ($type!='pt'))
 	{
 		if ((get_value('disable_mark_forum_read')!=='1') && ($num_unread!=0))
 		{
@@ -562,7 +562,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 	if ($topic['emoticon']!='') $emoticon=do_template('OCF_TOPIC_EMOTICON',array('_GUID'=>'dfbe0e4a11b3caa4d2da298ff23ca221','EMOTICON'=>$topic['emoticon']));
 	else $emoticon=do_template('OCF_TOPIC_EMOTICON_NONE');
 
-	if ($topic['first_member_id']!=$GLOBALS['OCF_DRIVER']->get_guest_id())
+	if (!is_guest($topic['first_member_id']))
 	{
 		$poster_profile_url=$GLOBALS['OCF_DRIVER']->member_profile_url($topic['first_member_id'],false,true);
 		//$colour=get_group_colour(ocf_get_member_primary_group($topic['first_member_id']));
@@ -573,7 +573,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 									));
 	} else
 	{
-		$poster=make_string_tempcode(escape_html($topic['first_username']));
+		$poster=make_string_tempcode(escape_html(($topic['first_username']=='')?do_lang('SYSTEM'):$topic['first_username']));
 	}
 	if ($pt)
 	{
