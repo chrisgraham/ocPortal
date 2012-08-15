@@ -26,9 +26,9 @@
 				<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p class="associated_details">{BREADCRUMBS}</p></nav>
 			{+END}{+END}
 		</div>
-		{+START,IF_NON_EMPTY,{DESCRIPTION}}
+		{+START,IF_NON_EMPTY,{DESCRIPTION}}{+START,IF,{$NEQ,{TITLE},{DESCRIPTION}}}
 			<div class="ocf_forum_topic_description">{DESCRIPTION*}</div>
-		{+END}
+		{+END}{+END}
 
 		{+START,IF,{$MOBILE}}
 			<ul class="horizontal_meta_details associated_details" role="contentinfo">

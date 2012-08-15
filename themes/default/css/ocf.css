@@ -92,6 +92,7 @@
 	font-size: 0.85em;
 	vertical-align: middle;
 	display: table-cell;
+	word-wrap: break-word;
 }
 
 .ocf_column4, .ocf_column5 {
