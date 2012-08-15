@@ -159,7 +159,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 						{+START,IF,{$ADDON_INSTALLED,bookmarks}}{+START,IF,{$NOT,{$IS_GUEST}}}
 							<li>
 								<span class="global_footer_button_ref_point" id="bookmarks_menu_rel"></span>
-								<a accesskey="n" id="bookmarks_menu_button" onclick="if (typeof window.load_management_menu=='undefined') { require_javascript('javascript_staff'); window.setTimeout(document.getElementById('bookmarks_menu_button').onclick,10); return false; } else return load_management_menu('bookmarks',true);" href="{$PAGE_LINK*,_SEARCH:bookmarks}&amp;url={$SELF_URL*&}"><img width="20" height="20" id="bookmarks_menu_img" class="no_theme_img_click" title="{!BOOKMARKS}" alt="{!BOOKMARKS}" src="{$IMG*,footer/bookmarksmenu}" /></a>
+								<a accesskey="n" id="bookmarks_menu_button" onclick="if (typeof window.load_management_menu=='undefined') { require_javascript('javascript_staff'); window.setTimeout(document.getElementById('bookmarks_menu_button').onclick,10); return false; } else return load_management_menu('bookmarks',true);" href="{$PAGE_LINK*,_SEARCH:bookmarks}&amp;url={$SELF_URL&*}"><img width="20" height="20" id="bookmarks_menu_img" class="no_theme_img_click" title="{!BOOKMARKS}" alt="{!BOOKMARKS}" src="{$IMG*,footer/bookmarksmenu}" /></a>
 							</li>
 						{+END}{+END}
 						{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$ADDON_INSTALLED,realtime_rain}}{+START,IF,{$CONFIG_OPTION,bottom_show_realtime_rain_button}}{+START,IF,{$NEQ,{$ZONE}:{$PAGE},adminzone:admin_realtime_rain}}
@@ -239,7 +239,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 								<li><a rel="site_privacy" accesskey="8" href="{$PAGE_LINK*,_SEARCH:privacy}">{!PRIVACY}</a></li>
 							{+END}
 							{+START,IF,{$CONFIG_OPTION,bottom_show_feedback_link}}
-								<li><a rel="site_contact" accesskey="9" href="{$PAGE_LINK*,_SEARCH:feedback}{+START,IF,{$NOT,{$IN_STR,{$PAGE_LINK,:feedback},?}}}?{+END}{+START,IF,{$NOT,{$NOT,{$IN_STR,{$PAGE_LINK,:feedback},?}}}}&amp;{+END}redirect={$SELF_URL*&,1}">{!FEEDBACK}</a></li>
+								<li><a rel="site_contact" accesskey="9" href="{$PAGE_LINK*,_SEARCH:feedback}{+START,IF,{$NOT,{$IN_STR,{$PAGE_LINK,:feedback},?}}}?{+END}{+START,IF,{$NOT,{$NOT,{$IN_STR,{$PAGE_LINK,:feedback},?}}}}&amp;{+END}redirect={$SELF_URL&*,1}">{!FEEDBACK}</a></li>
 							{+END}
 							{+START,IF,{$CONFIG_OPTION,mobile_support}}{+START,IF,{$MOBILE,1}}
 								<li><a href="{$SELF_URL*,1,0,0,keep_mobile=0}">{!NONMOBILE_VERSION}</a>{+END}
@@ -251,7 +251,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 								<li><form title="{!LOGOUT}" class="inline" method="post" action="{$PAGE_LINK*,:login:logout}"><input class="button_hyperlink" type="submit" title="{!_LOGOUT,{$USERNAME*}}" value="{!LOGOUT}" /></form></li>
 							{+END}
 							{+START,IF,{$OR,{$IS_HTTPAUTH_LOGIN},{$IS_GUEST}}}
-								<li><a href="{$PAGE_LINK*,:login:{$?,{$NOR,{$GET,login_screen},{$EQ,{$ZONE}:{$PAGE},:login}},redirect={$SELF_URL*&,1}}}">{!_LOGIN}</a></li>
+								<li><a href="{$PAGE_LINK*,:login:{$?,{$NOR,{$GET,login_screen},{$EQ,{$ZONE}:{$PAGE},:login}},redirect={$SELF_URL&*,1}}}">{!_LOGIN}</a></li>
 							{+END}
 							{+START,IF_NON_EMPTY,{$HONEYPOT_LINK}}
 								<li class="accessibility_hidden">{$HONEYPOT_LINK}</li>

@@ -9,7 +9,7 @@
 	<div class="stumbleupon"><a class="link_exempt" target="_blank" title="{!ADD_TO_STUMBLEUPON}: {!LINK_NEW_WINDOW}" href="http://www.stumbleupon.com/submit?url={EASY_SELF_URL*}"></a></div>
 	<div class="digg"><a class="link_exempt" target="_blank" title="{!ADD_TO_DIGG}: {!LINK_NEW_WINDOW}" href="http://digg.com/submit?phase=2&amp;url={EASY_SELF_URL*}"></a></div>
 	{+START,IF,{$ADDON_INSTALLED,bookmarks}}
-		{$,<div class="favorites"><a class="link_exempt" title="Bookmark this" href="{$FIND_SCRIPT*,bookmarks}?no_redirect=1&amp;type=ad&amp;url={$SELF_URL*&}&amp;title={TITLE*&}" onclick="window.faux_open(maintain_theme_in_link(this.getAttribute('href')),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;"></a></div>}
+		{$,<div class="favorites"><a class="link_exempt" title="Bookmark this" href="{$FIND_SCRIPT*,bookmarks}?no_redirect=1&amp;type=ad&amp;url={$SELF_URL&*}&amp;title={TITLE&*}" onclick="window.faux_open(maintain_theme_in_link(this.getAttribute('href')),'','width=600,height=500,status=yes,resizable=yes,scrollbars=yes'); return false;"></a></div>}
 	{+END}
 
 	<div class="google_plusone">

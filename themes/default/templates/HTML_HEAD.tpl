@@ -48,7 +48,7 @@
 	{+START,IF_NON_EMPTY,{$META_DATA,modified}}<meta name="DCTERMS.Modified" content="{$META_DATA*,modified}" />{+END}
 	{+START,IF_NON_EMPTY,{$META_DATA,type}}<meta name="DC.Type" content="{$META_DATA*,type}" />{+END}
 	{+START,IF_NON_EMPTY,{$META_DATA,title}}<meta name="DC.Title" content="{$META_DATA*,title}" />{+END}
-	{+START,IF_NON_EMPTY,{$META_DATA,identifier}}<meta name="DC.Identifier" content="{$FIND_SCRIPT*,pagelink_redirect}?id={$META_DATA*&,identifier}" />{+END}
+	{+START,IF_NON_EMPTY,{$META_DATA,identifier}}<meta name="DC.Identifier" content="{$FIND_SCRIPT*,pagelink_redirect}?id={$META_DATA&*,identifier}" />{+END}
 	{+START,IF_NON_EMPTY,{$META_DATA,description}}<meta name="DC.Description" content="{$META_DATA*,description}" />{+END}
 {+END}
 {+START,IF_NON_EMPTY,{$META_DATA,title}}<meta property="og:title" content="{$META_DATA*,title}"/>{+END}
