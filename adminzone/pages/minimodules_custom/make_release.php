@@ -210,6 +210,7 @@ function phase_2()
 	require_code('version2');
 
 	$version_dotted=post_param('version');
+	$version_branch=get_version_branch();
 	$version_pretty=get_version_pretty__from_dotted($version_dotted);
 	$is_bleeding_edge=(post_param_integer('bleeding_edge',0)==1);
 	$is_substantial=(substr($version_dotted,-2)=='.0') || (strpos($version_dotted,'beta1')!==false) || (strpos($version_dotted,'RC1')!==false);
@@ -247,8 +248,8 @@ function phase_2()
 
 		echo '
 			<li><strong>Installatron</strong>: Go into <a target="_blank" href="http://installatron.com/editor">Installatron</a>, login with the privileged management account, and setup a new release with the new version number (Main tab), update the URL (Version Info tab), and publish.</li>
-			<li><strong>Softaculous</strong>: E-mail <a href="mailto:punit@softaculous.com,brijesh@softaculous.com?subject=New ocPortal release&amp;body=Hi, this is an automated notification that a new release of ocPortal has been released - regards, the ocPortal team.">Softaculous people</a></li>
 			<li><strong>Microsoft Web Platform</strong>: <a target="_blank" href="http://www.microsoft.com/web/gallery/appsubmit.aspx?id=460">Submit the new MS Web App Gallery file to Microsoft</a> using the privileged management account. Change the \'Version\' the \'Package Location URL\' and set the shasum to <kbd>'.escape_html($ms_sha1).'</kbd></li>
+			<li><strong>Other integrations</strong>: E-mail <a href="mailto:?bcc=punit@softaculous.com,brijesh@softaculous.com,support@simplescripts.com&amp;subject=New ocPortal release&amp;body=Hi, this is an automated notification that a new release of ocPortal has been released - regards, the ocPortal team.">integration partners</a></li>
 			<!--Disabled for now as not ready <li><strong>Debian</strong>: Take "debian-'.escape_html($version_dotted).'.tar" to a debian box with correct signing key installed and do "tar xvf debian-'.escape_html($version_dotted).'.tar; cd ocportal-'.escape_html($version_dotted).' ; dpkg-buildpackage" and send \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_all.deb\' over</li>-->
 		';
 	}
@@ -284,13 +285,14 @@ function phase_2()
 				<li>Upload the generated <kbd>exports/addons/*.tar</kbd> files to the same directory on the server</li>
 				<li>Upload <kbd>data_custom/addon_files.txt</kbd> and <kbd>data_custom/addon_details.csv</kbd></li>
 				<li>Upload <kbd>data_custom/addon_screenshots/*.png</kbd> (do not delete old files, as these files are directly referenced by old addons still in the database)</li>
-				<li>Add them (<a target="_blank" href="http://ocportal.com/data_custom/publish_addons_as_downloads.php">publish_addons_as_downloads</a> minimodule on ocPortal.com server)</li>
+				<li>Add them (<a target="_blank" href="http://ocportal.com/adminzone/index.php?page=publish_addons_as_downloads&amp;cat=Version%20&amp;'.escape_html(urlencode($version_pretty)).'&amp;version_branch='.escape_html(urlencode($version_branch)).'">publish_addons_as_downloads</a> minimodule on ocPortal.com server)</li>
 				<li>Update the <kbd>community page</kbd> to point to the new addon locations</li>
 			</ul></li>
 			<li><strong>Documentation</strong>: Upload the latest new documentation&hellip;<ul>
 				<li>Create <a target="_blank" href="http://ocportal.com/adminzone/index.php?page=admin_zones&amp;type=add">docs'.strval(intval(ocp_version_number())).' zone</a> (Codename "docs'.strval(intval(ocp_version_number())).'", Title "Documentation (version '.strval(intval(ocp_version_number())).')", Theme "ocProducts", Default page "tutorials")</li>
 				<li>Do this in a Linux shell on the ocPortal.com server: <kbd>rm docs'.strval(intval(ocp_version_number())-1).' ; mv docs docs'.strval(intval(ocp_version_number())-1).' ; rm -f docs'.strval(intval(ocp_version_number())).'/pages/comcode_custom/EN/*.txt; ln -s docs'.strval(intval(ocp_version_number())).' docs; cd docs'.strval(intval(ocp_version_number()-1)).'; mv api *.doc *.pdf *.zip *.xls ../docs/ ; cd ..</kbd></li>
-				<li>Upload the latest <kbd>.txt</kbd> files from git for <kbd>docs/pages/comcode_custom/EN/</kbd></li>
+				<li>Upload the latest <kbd>.txt</kbd> files from git for <kbd>docs/pages/comcode_custom/EN/</kbd> to the ocPortal.com server</li>
+				<li>Upload <kbd>data_custom/images/docs</kbd> files from git to the ocPortal.com server</li>
 			</ul></li>
 			<li>API docs (<em>Optional</em>): Recompile the API docs&hellip;<ul>
 				<li><a href="http://graphviz.org/Download..php">Install Graphviz</a></li>
@@ -304,8 +306,12 @@ function phase_2()
 			<li>ERD (<em>Optional</em>): Compile new ERD diagrams using <a target="_blank" href="http://www.malcolmhardie.com/sqleditor/">SQLEditor</a> (mac) (you need to create a new MySQL database by importing the output of <a target="_blank" href="'.get_base_url().'/adminzone/index.php?page=sql_schema_generate&amp;keep_devtest=1">the exported SQL</a>)</li>
 			<li><strong>History</strong>: Update release history details on the ocPortal.com <kbd>vision page</kbd></li>
 			<li><strong>Wikipedia</strong>: <form target="_blank" style="display: inline" action="http://ocportal.com/forum/topics/new_topic/161.htm" method="post"><input type="hidden" name="title" value="Wikipedia listing needs updating (for version '.strval(intval(ocp_version_number())).')" /><input type="hidden" name="post" value="(This is a standard post we make each time a new major release comes out)&#10;&#10;As ocPortal version '.strval(intval(ocp_version_number())).' is out now, ideally someone will update the [url=&quot;ocPortal Wikipedia page&quot;]http://en.wikipedia.org/wiki/OcPortal[/url]. The developers don\'t maintain this because it\'d be inappropriate for us to maintain our own Wikipedia entry (neutrality reasons). The version details need updating, but generally it is worth reviewing the page is still accurate and up-to-date.&#10;&#10;Thanks to anyone who helps here, it\'s important we keep the outside world updated on ocPortal." /><input class="hyperlink_button" type="submit" value="Get someone to update our release history on Wikipedia" /></form></li>
-			<li><strong>Hotscripts</strong>: Update <a target="_blank" href="http://www.hotscripts.com/listing/ocportal/">listing on Hotscripts</a></li>
-			<li><strong>Syndication</strong>: <a target="_blank" href="http://ocportal.com/forum/topicview/misc/10343.htm">Syndicate news</a> (post in <a target="_blank" href="http://ocportal.com/forum/topicview/misc/marketing/websites_to_send.htm">Marketing forum</a>)</li>
+			<li><strong>Syndication</strong>: <a target="_blank" href="http://ocportal.com/forum/topicview/misc/10343.htm">Syndicate news</a> (post in <a target="_blank" href="http://ocportal.com/forum/topicview/misc/marketing/websites_to_send.htm">Marketing forum</a>). If you don\'t have access to this forum, or aren\'t doing a huge marketing push, it is essentially these sites:<ul>
+				<li>Update <a target="_blank" href="http://www.cmsmatrix.org/">listing on CMS Matrix</a></li>
+				<li>Update <a target="_blank" href="http://www.hotscripts.com/listing/ocportal/">listing on Hotscripts</a></li>
+				<li>Add news on the <a target="_blank" href="http://members.opensourcecms.com/login.php">Open Source CMS site</a></li>
+				<li>CMS Wire &ndash; <em>No need to do anything, Dee-Ann regularly asks us for news</em></li>
+			</ul></li>
 			<li>Newsletter (<em>Optional</em>): Send <a target="_blank" href="http://ocportal.com/adminzone/index.php?page=admin_newsletter">newsletter</a></li>
 		';
 	}

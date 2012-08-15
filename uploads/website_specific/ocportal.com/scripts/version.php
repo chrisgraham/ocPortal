@@ -154,19 +154,22 @@ foreach ($possible_next_versions as $pos_version)
 $stub='';
 $higher_versions=array(NULL,NULL,NULL);
 global $DOWNLOAD_ROWS;
-for ($i=0;$i<3;$i++)
+for ($i=0;$i<3;$i++) // Loop over each release level
 {
 	$found=NULL;
 	$looking_for='ocPortal Version '.$stub; // Starts with blank stub, which will match highest version. Subsequent iterations bind to the version numbers and find boundewd maximum highest version under that version prefix.
 
 	foreach (array_reverse($DOWNLOAD_ROWS) as $row) // Iterate, newest to oldest
 	{
-		if ((substr($row['nice_title'],0,strlen($looking_for))==$looking_for) && (((!is_null($qualifier)) && ($i!=0)) || ((strpos($row['nice_title'],'RC')===false) && (strpos($row['nice_title'],'beta')===false) && (strpos($row['nice_title'],'alpha')===false) && (strpos($row['nice_title'],'(')===false) && (strpos($row['nice_title'],'RC')===false) && (strpos($row['nice_title'],'beta')===false) && (strpos($row['nice_title'],'alpha')===false))))
+		// If it's on the release level being inspected, and we're either on a qualifier (alpha/beta/RC) already, or this isn't having a qualifier (i.e. we don't want to suggest someone go to a bleeding-edge version)
+		if ((substr($row['nice_title'],0,strlen($looking_for))==$looking_for) && ((!is_null($qualifier)) || ((strpos($row['nice_title'],'RC')===false) && (strpos($row['nice_title'],'beta')===false) && (strpos($row['nice_title'],'alpha')===false))))
 		{
+			// $this_version will hold the version we're currently looking at, comparing to the version the user has
+			// Lots of work to split up version numbering
 			$this_version=preg_replace('# \(.*#','',substr($row['nice_title'],strlen($looking_for)-strlen($stub)));
 			$this_bits=explode('.',preg_replace('# .*$#','',$this_version));
-			$this_qualifier=(strpos($this_version,' ')===false)?mixed():preg_replace('#^.* #','',$this_version);
-			$different=false;
+			$this_qualifier=(strpos($this_version,' ')===false)?mixed():preg_replace('#^.* #','',$this_version); // Extract qualifier from $this_version, which btw is a "pretty version" format version number
+			$different=false; // Used to ensure the version really is different to the one we're on
 			for ($j=0;$j<=$i;$j++)
 			{
 				if (!array_key_exists($j,$this_bits)) $this_bits[$j]='0';
@@ -179,10 +182,17 @@ for ($i=0;$i<3;$i++)
 				if (!array_key_exists($j,$this_bits)) $this_bits[$j]='0';
 			}
 			if (!is_null($this_qualifier))
+			{
 				if ($this_qualifier!==($qualifier.strval($qualifier_number))) $different=true;
+			}
+			elseif (!is_null($qualifier)) $different=true;
+
 			$news_row=find_version($this_version);
 
-			if ((version_compare(implode('.',$this_bits).(is_null($this_qualifier)?'':('.'.$this_qualifier)),implode('.',$bits).(is_null($qualifier)?'':('.'.$qualifier.$qualifier_number)))>=0) && ($different) && (!is_null($news_row)))
+			// If different and better version
+			$this_assembled=implode('.',$this_bits).(is_null($this_qualifier)?'':('.'.$this_qualifier));
+			$assembled=implode('.',$bits).(is_null($qualifier)?'':('.'.$qualifier.$qualifier_number));
+			if ((version_compare($this_assembled,$assembled)>=0) && ($different) && (!is_null($news_row)))
 			{
 				if (get_param_integer('test',0)==1)
 				{
@@ -190,9 +200,9 @@ for ($i=0;$i<3;$i++)
 					@var_dump(implode('.',$bits).(is_null($qualifier)?'':('.'.$qualifier.$qualifier_number)));
 				}
 
-				if (is_null($found))
+				if (is_null($found)) // Only set $found if not already. We were iterating downloads in reverse order, so the newest is found first via this
 				{
-					$found=array(
+					$found=array( // Outside 
 						'version'=>$this_version,
 						'news_id'=>$news_row['id'],
 						'download_description'=>'', // We set this blank here as if this is the latest version then the download description is only going to say that, which is not interesting to us.
@@ -200,7 +210,7 @@ for ($i=0;$i<3;$i++)
 					);
 				} else
 				{
-					if (strlen($found['download_description'])<3000)
+					if (strlen($found['download_description'])<3000) // If was already found and we have release details in this download description, append it, it's still good advice for the upgrade level
 					{
 						if ($found['download_description']!='') $found['download_description'].="\n---\n";
 						$found['download_description'].=strip_download_description($row['nice_description']); // We chain all the download descriptions together; each says why the version involved is out of date, so together it is like a "why upgrade" history. The news posts on the other hand say what a new version itself offers.
@@ -219,7 +229,8 @@ for ($i=0;$i<3;$i++)
 			}
 		}
 	}
-	
+
+	// If the best yet for any valid release level, remember it
 	if (!is_null($found))
 	{
 		for ($_i=0;$_i<$i;$_i++)

@@ -10,7 +10,7 @@
 $_title=get_screen_title('ocPortal addon building tool',false);
 $_title->evaluate_echo();
 
-echo '<p>This has built all the addons into <kbd>exports/addons</kbd>. The next step is to upload them to the same directory on ocPortal.com, and the <kbd>data_custom/addon_files.txt</kbd> and <kbd>data_custom/addon_details.csv</kbd> files too, and run the <a target="_blank" href="http://ocportal.com/data_custom/publish_addons_as_downloads.php">Admin Zone minimodule on ocPortal.com</a>.</p>';
+echo '<p>This has built all the addons into <kbd>exports/addons</kbd>. The make_release script you probably came from gives details on how to get these live on ocPortal.com.</p>';
 
 echo '<p>What follows is details if you are republishing addons and want to easily put out "This is updated" messages into the comment topics. It\'s not necessary because just uploading the TARs will make the inbuilt ocPortal check script see the addon is updated compared to when a user installed it. However, it is nice to keep users updated if you have time.</p>';
 
