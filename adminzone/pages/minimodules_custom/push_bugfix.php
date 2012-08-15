@@ -199,10 +199,10 @@ $git_found=array();
 foreach ($lines as $line)
 {
 	$matches=array();
-	if (preg_match('#\tmodified:\s+(.*)$#',$line,$matches)!=0)
+	if (preg_match('#\t(both )?modified:\s+(.*)$#',$line,$matches)!=0)
 	{
-		if (($matches[1]!='data/files.dat') && ($matches[1]!='ocportal-git.clpprj') && ($matches[1]!='data_custom/execute_temp.php'))
-			$git_found[get_file_base().'/'.$matches[1]]=true;
+		if (($matches[2]!='data/files.dat') && ($matches[2]!='ocportal-git.clpprj') && ($matches[2]!='data_custom/execute_temp.php'))
+			$git_found[get_file_base().'/'.$matches[2]]=true;
 	}
 }
 $files=(@$_GET['full_scan']=='1')?do_dir(get_file_base(),$git_found):array_keys($git_found);
