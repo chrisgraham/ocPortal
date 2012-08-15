@@ -98,7 +98,8 @@ a.top_left_toggleicon:hover {
 }
 
 .staff_new_versions .version {
-	margin: 0.8em 0.8em 1.2em 0.8em;
+	margin: 0.5em 0;
+	padding: 0.3em;
 	border: 1px solid {$GET,standard_border};
 	background-color: {$GET,area_background};
 	overflow: hidden;
@@ -108,7 +109,6 @@ a.top_left_toggleicon:hover {
 .staff_new_versions .version_number {
 	font-weight: bold;
 	float: right;
-	padding: 0 1.5em;
 	color: {$GET,area_text};
 	font-size: 1.2em;
 }
@@ -125,7 +125,7 @@ a.top_left_toggleicon:hover {
 }
 
 .staff_new_versions .version_details {
-	margin-top: 1.8em;
+	margin-top: 0.61em; /* 0.61 to workaround weird bug where border for surrounding box was disappearing */
 	float: left;
 	width: 100%;
 }
