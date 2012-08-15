@@ -18,7 +18,9 @@
 </div></div>
 
 <noscript>
-	{_loop_var}
+	{+START,LOOP,HTML}
+		{_loop_var}
+	{+END}
 </noscript>
 
 <script type="text/javascript">// <![CDATA[
