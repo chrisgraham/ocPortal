@@ -47,7 +47,7 @@
 
 				<ul class="horizontal_links associated_links_block_group">
 					{+START,IF,{$ADDON_INSTALLED,recommend}}
-						<li class="vertical_alignment"><img src="{$IMG*,filetypes/email_link}" alt="" /> <a href="{$PAGE_LINK*,:recommend:misc:subject={!ECARD_FOR_YOU_SUBJECT}:page_title={!SEND_AS_ECARD}:s_message={!ECARD_FOR_YOU,{$SELF_URL},{FULL_URL*},{$SITE_NAME}}}">{!SEND_AS_ECARD}</a></li>
+						<li><img class="vertical_alignment" src="{$IMG*,filetypes/email_link}" alt="" /> <a href="{$PAGE_LINK*,:recommend:misc:subject={!ECARD_FOR_YOU_SUBJECT}:page_title={!SEND_AS_ECARD}:s_message={!ECARD_FOR_YOU,{$SELF_URL},{FULL_URL*},{$SITE_NAME}}}">{!SEND_AS_ECARD}</a></li>
 					{+END}
 					<li><a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a></li>
 				</ul>
