@@ -323,7 +323,13 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/ocf_auth/index.html',
 			'POSTING_FIELD.tpl',
 			'OCF_MEMBER_BOX.tpl',
-			'OCF_RANK_IMAGE.tpl'
+			'OCF_RANK_IMAGE.tpl',
+			'themes/default/images/menu_items/community_navigation/forums.png',
+			'themes/default/images/menu_items/community_navigation/groups.png',
+			'themes/default/images/menu_items/community_navigation/index.html',
+			'themes/default/images/menu_items/community_navigation/members.png',
+			'themes/default/images/menu_items/community_navigation/rules.png',
+			'themes/default/images/menu_items/community_navigation/unread_topics.png',
 		);
 	}
 
