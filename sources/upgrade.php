@@ -1375,11 +1375,15 @@ function check_alien($old_files,$files,$dir,$rela='',$raw=false)
 					if (array_key_exists($rela.$file,$old_files)) $checked='checked="checked" ';
 					$alien.='<li>';
 					if (!$raw) $alien.='<input '.$disabled.$checked.'type="checkbox" name="'.uniqid('').'" value="delete:'.escape_html($rela.$file).'" /> ';
-					$alien.='<kbd>'.escape_html($rela.$file).'</kbd></li>';
+
+					if (strlen($alien)<=100000) // Reasonable limit
+						$alien.='<kbd>'.escape_html($rela.$file).'</kbd></li>';
 				}
 			}
 		}
 	}
+
+	if (strlen($alien)>100000) $alien=''; // Reasonable limit
 
 	return $alien;
 }
