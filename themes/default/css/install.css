@@ -213,6 +213,10 @@ textarea.mono_textbox {
 	margin: 2em auto;
 }
 
+.installer_section kbd {
+	word-wrap: break-word;
+}
+
 /* After Step 4 */
 
 .install_log_table {

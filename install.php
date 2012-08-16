@@ -1022,7 +1022,11 @@ function step_5()
 			global $LANG;
 			$sections=build_keep_post_fields(array('forum_type','db_type','board_path','default_lang'));
 			$sections->attach(form_input_hidden('confirm','1'));
-			return do_template('INSTALLER_STEP_4',array('_GUID'=>'aaf0386966dd4b75c8027a6b1f7454c6','MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE'),'LANG'=>$LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>post_param('forum_type'),'BOARD_PATH'=>post_param('board_path'),'SECTIONS'=>$sections));
+
+			$url='install.php?step=5';
+			if (in_safe_mode()) $url.='&keep_safe_mode=1';
+
+			return do_template('INSTALLER_STEP_4',array('_GUID'=>'aaf0386966dd4b75c8027a6b1f7454c6','URL'=>$url,'MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE'),'LANG'=>$LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>post_param('forum_type'),'BOARD_PATH'=>post_param('board_path'),'SECTIONS'=>$sections));
 		}
 	}
 
