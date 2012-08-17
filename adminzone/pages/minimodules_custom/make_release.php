@@ -21,6 +21,9 @@ If running on Windows, you need to install the following commands in your path..
  - gunzip.exe, gzip.exe, and tar.exe
 */
 
+restrictify();
+@ini_set('ocproducts.xss_detect','0');
+
 disable_php_memory_limit();
 
 $type=get_param('type','0');

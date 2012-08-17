@@ -344,7 +344,7 @@ function read_addon_info($name)
 			'addon_name'=>$name,
 			'addon_author'=>'Core Team',
 			'addon_organisation'=>'ocProducts',
-			'addon_version'=>($version==ocp_version_number())?ocp_version_pretty():float_format($version,1),
+			'addon_version'=>float_to_raw_string($version,2,true),
 			'addon_description'=>$description,
 			'addon_install_time'=>filemtime(get_file_base().'/sources/hooks/systems/addon_registry/'.$name.'.php'),
 			'addon_files'=>make_global_file_list($file_list),
