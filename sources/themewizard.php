@@ -523,7 +523,7 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 					$fp=@fopen($saveat,'wt') OR intelligent_write_error(get_custom_file_base().'/themes/'.filter_naughty($themename).'/css_custom/'.$sheet);
 					if ($inherit_css)
 					{
-						$output='{+START,CSS_INHERIT,'.basename($sheet,'.css').','.filter_naughty($source_theme).','.$seed.','.$algorithm.'}{+END}';
+						$output='{+START,CSS_INHERIT,'.basename($sheet,'.css').','.filter_naughty($source_theme).','.$seed.','.($dark?'1':'0').','.$algorithm.'}{+END}';
 					} else
 					{
 						$output=theme_wizard_colours_to_sheet($sheet,$landscape,$source_theme,$algorithm,$seed);
