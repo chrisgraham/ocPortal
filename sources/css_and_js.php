@@ -67,19 +67,20 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 	// Re-seed
 	if (!is_null($seed))
 	{
-		require_code('themewizard');
+		// Not actually needed
+		$sheet=preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},seed,100% [A-Fa-f0-9]{6}\}#','{$THEME_WIZARD_COLOR,#'.$seed.',seed,100% '.$seed.'}',$sheet);
+		$sheet=preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},WB,100% [A-Fa-f0-9]{6}\}#','{$THEME_WIZARD_COLOR,#'.$seed.',WB,100% '.($dark?'000000':'FFFFFF').'}',$sheet);
+		$sheet=preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},BW,100% [A-Fa-f0-9]{6}\}#','{$THEME_WIZARD_COLOR,#'.$seed.',BW,100% '.($dark?'FFFFFF':'000000').'}',$sheet);
 
+		require_code('themewizard');
 		list($colours,$landscape)=calculate_theme($seed,$theme,$algorithm,'colours',$dark);
+
+		// The main thing (THEME_WIZARD_COLOR is not executed in full by Tempcode, so we need to sub it according to our theme wizard landscape)
 		foreach ($landscape as $peak)
 		{
-			$matches=array();
-
-			$num_matches=preg_match_all('#\#[A-Fa-f0-9]{6}(.*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$sheet,$matches);
-			for ($i=0;$i<$num_matches;$i++)
-				$sheet=str_replace($matches[0][$i],'#'.$peak[3].$matches[1][$i].$peak[2],$sheet);
-			$num_matches=preg_match_all('#\#[A-Fa-f0-9]{3}([^A-Fa-f0-9].*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$sheet,$matches);
-			for ($i=0;$i<$num_matches;$i++)
-				$sheet=str_replace($matches[0][$i],'#'.$peak[3].$matches[1][$i].$peak[2],$sheet);
+			$from=$peak[2];
+			$to=preg_replace('#\{\$THEME_WIZARD_COLOR,\#[\da-fA-F]{6},#','{$THEME_WIZARD_COLOR,#'.$peak[3].',',$peak[2]);
+			$sheet=str_replace($from,$to,$sheet);
 		}
 	}
 
@@ -91,7 +92,7 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 	fix_permissions($temp_file);
 
 	// Load up as Tempcode
-	$_sheet=_css_compile($destination_theme,$theme,$css_file.'__tmp_copy',$temp_file,false);
+	$_sheet=_css_compile($destination_theme,$destination_theme,$css_file.'__tmp_copy',$temp_file,false);
 	unlink($temp_file);
 	sync_file($temp_file);
 	$sheet=$_sheet[1];

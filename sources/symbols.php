@@ -2314,7 +2314,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=$_value->evaluate();
 				break;
 
-			case 'CSS_INHERIT': // e.g. {+START,CSS_INHERIT,global,default,#886aa9}{+END}
+			case 'CSS_INHERIT': // e.g. {+START,CSS_INHERIT,global,default,0,#886aa9}{+END}
 				if (isset($param[0]))
 				{
 					require_code('css_and_js');
