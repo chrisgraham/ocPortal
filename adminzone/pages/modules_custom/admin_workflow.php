@@ -13,9 +13,9 @@
  * @package		core
  */
 
-require_code('aed_module');
+require_code('crud_module');
 
-class Module_admin_workflow extends standard_aed_module
+class Module_admin_workflow extends standard_crud_module
 {
 	var $lang_type='WORKFLOW';
 	var $select_name='NAME';
@@ -127,7 +127,7 @@ class Module_admin_workflow extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module run_start.
+	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
@@ -273,7 +273,7 @@ class Module_admin_workflow extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
@@ -291,7 +291,7 @@ class Module_admin_workflow extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete possibility checker.
+	 * Standard crud_module delete possibility checker.
 	 *
 	 * @param  ID_TEXT		The entry being potentially deleted
 	 * @return boolean		Whether it may be deleted
@@ -304,7 +304,7 @@ class Module_admin_workflow extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A triple: fields, hidden-fields, delete-fields
@@ -492,7 +492,7 @@ class Module_admin_workflow extends standard_aed_module
 	{
 		// We override the add screen here so that we can provide multiple screens
 
-		/* Standard AED stuff */
+		/* Standard CRUD stuff */
 		if (!is_null($this->permissions_require)) check_submit_permission($this->permissions_require,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b)));
 
 		$doing='ADD_'.$this->lang_type;
@@ -527,14 +527,14 @@ class Module_admin_workflow extends standard_aed_module
 
 		if (!is_null($this->upload)) require_code('uploads');
 
-		/* Interrupt standard AED stuff, so we can choose our screen */
+		/* Interrupt standard CRUD stuff, so we can choose our screen */
 		if ($this->need_second_screen())
 		{
 			// We need more info from the user. Ask for it here.
 			return $this->second_screen();
 		}
 
-		/* If we reach here, the form is complete so we resume the AED process */
+		/* If we reach here, the form is complete so we resume the CRUD process */
 
 		$temp=$this->add_actualisation();
 
@@ -596,11 +596,11 @@ class Module_admin_workflow extends standard_aed_module
 	 */
 	function __ed()
 	{
-		// We override the standard AED edit actualiser in order to redirect to a
+		// We override the standard CRUD edit actualiser in order to redirect to a
 		// second edit screen if certain conditions are met. Other than this, the
-		// rest of this method's code is copypasta'd from the standard AED module
+		// rest of this method's code is copypasta'd from the standard CRUD module
 
-		// AED stuff to begin with
+		// CRUD stuff to begin with
 
 		$id=mixed(); // Define type as mixed
 		$id=$this->non_integer_id?get_param('id',false,true):strval(get_param_integer('id'));
@@ -713,7 +713,7 @@ class Module_admin_workflow extends standard_aed_module
 					$_POST['validated']='0';
 			}
 
-			// Here we interrupt the regular AED code see if we should redirect to
+			// Here we interrupt the regular CRUD code see if we should redirect to
 			// a second data entry screen
 			if ($this->need_second_screen())
 			{
@@ -766,7 +766,7 @@ class Module_admin_workflow extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
@@ -786,7 +786,7 @@ class Module_admin_workflow extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return ?tempcode		Confirm message (NULL: continue)
@@ -801,7 +801,7 @@ class Module_admin_workflow extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */

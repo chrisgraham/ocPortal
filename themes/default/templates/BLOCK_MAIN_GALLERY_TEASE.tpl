@@ -10,4 +10,8 @@
 	</div>
 {+END}
 
-{BROWSE}
+{+START,IF_NON_EMPTY,{PAGINATION}}
+	<div class="pagination_spacing float_surrounder">
+		{PAGINATION}
+	</div>
+{+END}

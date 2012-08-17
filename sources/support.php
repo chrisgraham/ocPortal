@@ -553,7 +553,7 @@ function multi_sort($a,$b)
 }
 
 /*!*
- * Finds if a function is being run underneath another function, and exit if there is a death message to output. This function should only be used when coding and does not work on <PHP4.3.
+ * Finds if a function is being run underneath another function, and exit if there is a death message to output. This function should only be used when coding.
  *
  * @param  string			The function to check running underneath
  * @param  ?string		The message to exit with (NULL: return, do not exit)
@@ -561,8 +561,6 @@ function multi_sort($a,$b)
  */
 /*function debug_running_underneath($function,$death_message=NULL)
 {
-	if (!function_exists('debug_backtrace')) return false;
-
 	$stack=debug_backtrace();
 	foreach ($stack as $level)
 	{
@@ -2066,9 +2064,7 @@ function best_hash($to_hash,$salt)
 		return substr(crypt(md5($to_hash),$_salt),strlen($_salt));
 	}
 
-	if (function_exists('sha1')) return sha1($to_hash.$salt);
-
-	return md5($to_hash.$salt);
+	return sha1($to_hash.$salt);
 }
 
 /**

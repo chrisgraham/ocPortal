@@ -61,7 +61,7 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 		}
 		fwrite($install_php_file,preg_replace('#^#m','//',"   \$GLOBALS['SITE_DB']->create_table('$table',array(\n$array),true,true);\n"));
 
-		if (($table=='stats') || ($table=='incoming_uploads') || ($table=='cache') || ($table=='url_title_cache') || ($table=='ip_country'))
+		if (($table=='stats') || ($table=='incoming_uploads') || ($table=='cache') || ($table=='url_title_cache') || ($table=='ip_country')) // These are not things we want to back up
 		{
 			$data=array();
 		} else

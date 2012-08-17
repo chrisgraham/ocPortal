@@ -21,15 +21,11 @@
  */
 
 /*
-
-This file is designed to be usable from outside ocPortal, as a library.
-
-It is designed for a special blend between uber-modern-standards and cross-browser stability - to only allow XHTML5 and CSS3 that runs (or gracefully degrades) on IE8.
+The validation is designed for a special blend between uber-modern-standards and cross-browser stability - to only allow XHTML5 and CSS3 that runs (or gracefully degrades) on IE8.
 
 We favour the W3C standard over the WHATWG living document.
 
-We continue to maintain much of what was deprecated in XHTML but brought back into HTML5 (e.g. 'b' tag).
-
+We continue to prohibit much of what was deprecated in XHTML but brought back into HTML5 (e.g. 'b' tag).
 */
 
 /**
@@ -440,11 +436,6 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 							$errors[]=_xhtml_error('XHTML_BAD_CHILD',$basis_token,$PARENT_TAG);
 					}
 
-					/*if (isset($PROHIBITIONS[$PARENT_TAG]))
-					{
-						$prohibitions=$PROHIBITIONS[$PARENT_TAG];
-						if (in_array($basis_token,$prohibitions)) $errors[]=_xhtml_error('XHTML_PROHIBITION',$basis_token,$PARENT_TAG);
-					}*/
 					foreach ($TAG_STACK as $parent_tag)
 					{
 						if (isset($PROHIBITIONS[$parent_tag]))

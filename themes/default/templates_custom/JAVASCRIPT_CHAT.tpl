@@ -1,6 +1,6 @@
-window.hasFocus=true;
-add_event_listener_abstract(window,'blur',function() { window.hasFocus=false; });
-add_event_listener_abstract(window,'focus',function() { window.hasFocus=true; });
+window.has_focus=true;
+add_event_listener_abstract(window,'blur',function() { window.has_focus=false; });
+add_event_listener_abstract(window,'focus',function() { window.has_focus=true; });
 
 function play_sound_url(url) // Used for testing different sounds
 {

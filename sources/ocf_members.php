@@ -220,12 +220,12 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 			if ((is_object($member_value)) && ($member_value->is_empty())) $member_value='';
 		}
 
-		// get custom permissions for the current CPF
+		// Get custom permissions for the current CPF
 		$cpf_permissions=array_key_exists($field_to_show['id'],$all_cpf_permissions)?$all_cpf_permissions[$field_to_show['id']]:array();
 
 		$display_cpf=true;
 
-		// if there are custom permissions set and we are not showing to all
+		// If there are custom permissions set and we are not showing to all
 		if ((array_key_exists(0,$cpf_permissions)) && (!is_null($public_view)))
 		{
 			$display_cpf=false;

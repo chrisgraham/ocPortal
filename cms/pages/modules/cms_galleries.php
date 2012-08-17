@@ -18,12 +18,12 @@
  * @package		galleries
  */
 
-require_code('aed_module');
+require_code('crud_module');
 
 /**
  * Module page class.
  */
-class Module_cms_galleries extends standard_aed_module
+class Module_cms_galleries extends standard_crud_module
 {
 	var $lang_type='IMAGE';
 	var $select_name_description='DESCRIPTION_IMAGE';
@@ -62,7 +62,7 @@ class Module_cms_galleries extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module run_start.
+	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
@@ -78,11 +78,11 @@ class Module_cms_galleries extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_galleries';
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/images';
 
-		$this->cat_aed_module=new Module_cms_galleries_cat();
-		$this->alt_aed_module=new Module_cms_galleries_alt();
+		$this->cat_crud_module=new Module_cms_galleries_cat();
+		$this->alt_crud_module=new Module_cms_galleries_alt();
 		$GLOBALS['MODULE_CMS_GALLERIES']=$this;
 
-		$this->alt_aed_module->add_text=new ocp_tempcode();
+		$this->alt_crud_module->add_text=new ocp_tempcode();
 
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='cat';
@@ -99,23 +99,23 @@ class Module_cms_galleries extends standard_aed_module
 				}
 			} elseif (strpos($type,'v')!==false)
 			{
-				$remaining=$this->alt_aed_module->check_videos_allowed($cat,true);
+				$remaining=$this->alt_crud_module->check_videos_allowed($cat,true);
 				if (!is_null($remaining))
 				{
-					$this->alt_aed_module->add_text->attach(paragraph(do_lang_tempcode('X_ENTRIES_REMAINING',integer_format($remaining))));
+					$this->alt_crud_module->add_text->attach(paragraph(do_lang_tempcode('X_ENTRIES_REMAINING',integer_format($remaining))));
 				}
 			}
 		}
 		if (get_option('allow_audio_videos')=='1')
 		{
-			$this->alt_aed_module->add_text->attach(paragraph(do_lang_tempcode('ALSO_AUDIO')));
+			$this->alt_crud_module->add_text->attach(paragraph(do_lang_tempcode('ALSO_AUDIO')));
 		}
 
 		if ($type=='ac')
 		{
 			require_javascript('javascript_ajax');
 			$script=find_script('snippet');
-			$this->cat_aed_module->javascript.="
+			$this->cat_crud_module->javascript.="
 				var form=document.getElementById('main_form');
 				form.old_submit=form.onsubmit;
 				form.onsubmit=function()
@@ -495,7 +495,7 @@ class Module_cms_galleries extends standard_aed_module
 			return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 		}
 
-		return $this->cat_aed_module->_do_next_manager($title,do_lang_tempcode('SUCCESS'),$cat);
+		return $this->cat_crud_module->_do_next_manager($title,do_lang_tempcode('SUCCESS'),$cat);
 	}
 
 	/**
@@ -570,7 +570,7 @@ class Module_cms_galleries extends standard_aed_module
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('GALLERY_IMPORT'))));
 
-		return $this->cat_aed_module->_do_next_manager($title,do_lang_tempcode('SUCCESS'),$cat);
+		return $this->cat_crud_module->_do_next_manager($title,do_lang_tempcode('SUCCESS'),$cat);
 	}
 
 	/**
@@ -835,7 +835,7 @@ class Module_cms_galleries extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
@@ -944,7 +944,7 @@ class Module_cms_galleries extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module submitter getter.
+	 * Standard crud_module submitter getter.
 	 *
 	 * @param  AUTO_LINK		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
@@ -957,7 +957,7 @@ class Module_cms_galleries extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module cat getter.
+	 * Standard crud_module cat getter.
 	 *
 	 * @param  AUTO_LINK		The entry for which the cat is sought
 	 * @return mixed			The cat
@@ -970,7 +970,7 @@ class Module_cms_galleries extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
@@ -1003,7 +1003,7 @@ class Module_cms_galleries extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The ID of the entry added
 	 */
@@ -1053,7 +1053,7 @@ class Module_cms_galleries extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -1110,7 +1110,7 @@ class Module_cms_galleries extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -1135,7 +1135,7 @@ class Module_cms_galleries extends standard_aed_module
 	 */
 	function do_next_manager($title,$description,$id)
 	{
-		return $this->cat_aed_module->_do_next_manager($title,$description,$this->donext_type,is_null($id)?NULL:intval($id));
+		return $this->cat_crud_module->_do_next_manager($title,$description,$this->donext_type,is_null($id)?NULL:intval($id));
 	}
 
 }
@@ -1143,7 +1143,7 @@ class Module_cms_galleries extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_galleries_alt extends standard_aed_module
+class Module_cms_galleries_alt extends standard_crud_module
 {
 	var $lang_type='VIDEO';
 	var $select_name='NAME';
@@ -1251,7 +1251,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
@@ -1370,7 +1370,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module submitter getter.
+	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
@@ -1383,7 +1383,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module cat getter.
+	 * Standard crud_module cat getter.
 	 *
 	 * @param  AUTO_LINK		The entry for which the cat is sought
 	 * @return mixed			The cat
@@ -1396,7 +1396,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
@@ -1430,7 +1430,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The ID of the entry added
 	 */
@@ -1480,7 +1480,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -1546,7 +1546,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -1571,7 +1571,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 	 */
 	function do_next_manager($title,$description,$id)
 	{
-		return $GLOBALS['MODULE_CMS_GALLERIES']->cat_aed_module->_do_next_manager($title,$description,$this->donext_type,is_null($id)?NULL:intval($id),true);
+		return $GLOBALS['MODULE_CMS_GALLERIES']->cat_crud_module->_do_next_manager($title,$description,$this->donext_type,is_null($id)?NULL:intval($id),true);
 	}
 
 }
@@ -1579,7 +1579,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_galleries_cat extends standard_aed_module
+class Module_cms_galleries_cat extends standard_crud_module
 {
 	var $lang_type='GALLERY';
 	var $select_name='NAME';
@@ -1594,7 +1594,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	var $javascript="var fn=document.getElementById('fullname'); if (fn) { var form=fn.form; fn.onchange=function() { if ((form.elements['name']) && (form.elements['name'].value=='')) form.elements['name'].value=fn.value.toLowerCase().replace(/[^\w\d\.\-]/g,'_').replace(/\_+\$/,''); }; }";
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
@@ -1714,7 +1714,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module submitter getter.
+	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
@@ -1727,7 +1727,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return tempcode		The edit form
@@ -1745,7 +1745,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
@@ -1783,7 +1783,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -1838,7 +1838,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete possibility checker.
+	 * Standard crud_module delete possibility checker.
 	 *
 	 * @param  ID_TEXT		The entry being potentially deleted
 	 * @return boolean		Whether it may be deleted
@@ -1849,7 +1849,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */

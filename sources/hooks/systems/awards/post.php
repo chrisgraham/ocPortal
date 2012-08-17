@@ -24,9 +24,10 @@ class Hook_awards_post
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		if (get_forum_type()!='ocf') return NULL;
 		require_lang('ocf');
@@ -48,7 +49,7 @@ class Hook_awards_post
 		$info['title']=do_lang_tempcode('SPECIFIC_FORUM_POSTS');
 		$info['validated_field']='p_validated';
 		$info['category_is_string']=false;
-		$info['archive_url']=build_url(array('page'=>'forumview'),get_module_zone('forumview'));
+		$info['archive_url']=build_url(array('page'=>'forumview'),(!is_null($zone))?$zone:get_module_zone('forumview'));
 		$info['cms_page']='topics';
 		$info['supports_custom_fields']=true;
 

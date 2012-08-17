@@ -260,12 +260,10 @@ class Module_polls
 	 */
 	function view_polls()
 	{
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='max';
+		$title=get_screen_title('POLL_ARCHIVE');
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
-		$title=get_screen_title('POLL_ARCHIVE');
 
 		$total_polls=$GLOBALS['SITE_DB']->query_value('poll','COUNT(*)');
 		if ($total_polls<500)
@@ -285,14 +283,10 @@ class Module_polls
 		}
 		if ($content->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
-		$num_pages=intval(ceil(floatval($max_rows)/floatval($max)));
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang_tempcode('POLLS'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
 
-		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>($start-$max==0)?NULL:$start-$max),'_SELF');
-		$next_url=(count($rows)!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'47ab31dd5c4baf64c524beaaa666a984','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
-
-		return do_template('NEXT_BROWSER_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
+		return do_template('PAGINATION_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$title,'CONTENT'=>$content,'PAGINATION'=>$pagination));
 	}
 
 	/**

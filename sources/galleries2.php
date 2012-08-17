@@ -410,7 +410,6 @@ function add_image($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 	decache('side_root_galleries');
 	decache('main_gallery_embed');
 
-	decache('main_download_category');
 	decache('main_image_fader');
 
 	return $id;
@@ -474,7 +473,6 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 	require_code('seo2');
 	seo_meta_set_for_explicit('image',strval($id),$meta_keywords,$meta_description);
 
-	decache('main_download_category');
 	decache('main_image_fader');
 
 	require_lang('galleries');

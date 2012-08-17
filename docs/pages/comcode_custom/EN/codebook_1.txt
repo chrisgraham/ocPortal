@@ -70,7 +70,7 @@ Recall that ocPortal zones are sub-directories of your site, which operate with 
 
 [title="4"]How do you create a new full-module?[/title]
 
-A module is a PHP file that defines one class. For a page in the 'site' zone named 'example', the file would be [tt]site/pages/modules/example.php[/tt] (or [tt]site/pages/modules_custom/example.php[/tt] if this module is non-official, or a modified version of an official module). Our module 'example' would contain a class named 'Module_example'. Usually this class does not inherit, although some modules do inherit from a class named 'standard_aed_module', which is used for acceleration/standardising development of add/edit/delete user interfaces.
+A module is a PHP file that defines one class. For a page in the 'site' zone named 'example', the file would be [tt]site/pages/modules/example.php[/tt] (or [tt]site/pages/modules_custom/example.php[/tt] if this module is non-official, or a modified version of an official module). Our module 'example' would contain a class named 'Module_example'. Usually this class does not inherit, although some modules do inherit from a class named 'standard_crud_module', which is used for acceleration/standardising development of add/edit/delete user interfaces.
 
 [title="5"]The '[tt]info[/tt]' function[/title]
 
@@ -619,7 +619,7 @@ For performance ocPortal doesn't use any symbol hooks for any default functional
 [title="3"]Content types[/title]
 
 In ocPortal content types are implemented via a lot of different files. The best way to find out how to add a content type is to search for all the files named after an existing content type. 'iotds' is a good example as this is a fairly simple ocPortal content type, and these are the files for it:
- - [tt]lang/EN/iotds.ini[/tt] -- This is the file defining the language strings for the content type. Most of the strings are just ones specific to the code for IOTDs, but some will be used as standard by the AED module: [tt]ADD_IOTD[/tt], [tt]EDIT_IOTD[/tt], [tt]DELETE_IOTD[/tt]. For any IOTD strings to be used in code/templates the require_lang('iotds'); command would need to be run in the PHP code first (often in a module's [tt]run[/tt] function).
+ - [tt]lang/EN/iotds.ini[/tt] -- This is the file defining the language strings for the content type. Most of the strings are just ones specific to the code for IOTDs, but some will be used as standard by the CRUD module: [tt]ADD_IOTD[/tt], [tt]EDIT_IOTD[/tt], [tt]DELETE_IOTD[/tt]. For any IOTD strings to be used in code/templates the require_lang('iotds'); command would need to be run in the PHP code first (often in a module's [tt]run[/tt] function).
  - [tt]site/pages/modules/iotds.php[/tt] -- This is the main site module (a kind of page) that provides the user-focused IOTD functionality. It provides screens for viewing IOTDs, etc.
  - [tt]sources/blocks/main_iotd.php[/tt] -- This is a block for showing the current IOTD. Webmasters may place it on their Comcode pages (such as their start page) via this Comcode:
  - [tt][block]main_iotd[/block][/tt]
@@ -642,7 +642,7 @@ You don't need to worry about these pics, they are just for 'eye-candy' in the o
  - [tt]themes/default/templates_cached/EN/iotds.css[/tt] -- This is a cached CSS file, and is what the HTML will actually reference. It is generated when ocPortal automatically parses the Tempcode in the main iotds.css file.
  - [tt]uploads/iotds[/tt] -- This is where IOTD images are placed. It is referenced by the [tt]get_url[/tt] function call, when uploads are saved in the [tt]cms_iotds[/tt] module.
  - [tt]uploads/iotds_thumbs[/tt] -- As above, but for thumbnails.
- - [tt]cms/pages/modules/cms_iotds.php[/tt] -- This is the CMS module, that adds/edits/deletes IOTDs. It's an AED module, and thus is structured in a standard way. From an MVC perspective it's the controller that glues the IOTDs API (the model) and the forms interface (providing the view), defining form fields and reading/passing them for saving.
+ - [tt]cms/pages/modules/cms_iotds.php[/tt] -- This is the CMS module, that adds/edits/deletes IOTDs. It's an CRUD module, and thus is structured in a standard way. From an MVC perspective it's the controller that glues the IOTDs API (the model) and the forms interface (providing the view), defining form fields and reading/passing them for saving.
  - (various templates) -- There are various templates relating to IOTDs also. These are used by the block and by the screens in the site module and are specific to the content type.
 
 [title="3"]Installation code[/title]

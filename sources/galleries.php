@@ -34,7 +34,7 @@ function init__galleries()
 /**
  * Render an image box.
  *
- * @param  array			The video row
+ * @param  array			The image row
  * @param  ID_TEXT		The zone the galleries module is in
  * @return tempcode		The rendered box
  */

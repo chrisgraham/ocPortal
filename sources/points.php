@@ -147,6 +147,8 @@ function point_info($member)
 function get_gift_points_used($member)
 {
 	return intval($GLOBALS['SITE_DB']->query_value_null_ok('gifts','SUM(amount)',array('gift_from'=>$member)));
+
+	// We won't do it this way, number may not be reliable enough
 	//$_used=point_info($member);
 	//$used=$_used['gift_points_used'];
 	//return $used;

@@ -858,10 +858,7 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 	is_swf_upload(true);
 	foreach ($_FILES as $file)
 	{
-		//if (is_uploaded_file($file['tmp_name']))
-		{
-			$attachments[$file['tmp_name']]=$file['name'];
-		}
+		$attachments[$file['tmp_name']]=$file['name'];
 	}
 
 	if (addon_installed('captcha'))

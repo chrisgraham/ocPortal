@@ -59,8 +59,6 @@ function add_to_cart($product_det)
  */
 function update_cart($product_det)
 {
-	if (!is_array($product_det) || count($product_det)==0) return;
-
 	foreach ($product_det as $product)
 	{
 		$where=array('product_id'=>$product['product_id'],'is_deleted'=>0);
@@ -88,13 +86,11 @@ function update_cart($product_det)
 		}
 	}
 
-	//Update tax opt out status to the current order
-	$tax_opted_out=post_param_integer('tax_opted_out',0);	
-
-	$order_id=get_current_order_id();
-
+	// Update tax opt out status to the current order
 	if (get_option('allow_opting_out_of_tax')=='1')
 	{
+		$order_id=get_current_order_id();
+		$tax_opted_out=post_param_integer('tax_opted_out',0);	
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('tax_opted_out'=>$tax_opted_out),array('id'=>$order_id),'',1);
 	}	
 }
@@ -106,8 +102,6 @@ function update_cart($product_det)
  */
 function remove_from_cart($product_to_remove)
 {	
-	if (!is_array($product_to_remove) || count($product_to_remove)==0) return;
-
 	foreach ($product_to_remove as $product_id)
 	{
 		$where=array('product_id'=>$product_id);
@@ -390,7 +384,7 @@ function payment_form()
 
 		$fields=is_null($order_id)?new ocp_tempcode():get_transaction_form_fields(NULL,$order_id,$item_name,float_to_raw_string($price),NULL,'');
 
-		/*$via	=get_option('payment_gateway');
+		/*$via=get_option('payment_gateway');
 		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 		$object=object_factory('Hook_'.$via);
 		$ipn_url=$object->get_ipn_url();*/

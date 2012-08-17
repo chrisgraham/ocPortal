@@ -10,7 +10,7 @@ function dec_to_hex(number)
 	return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 }
 
-function hexToDec(number)
+function hex_to_dec(number)
 {
 	return parseInt(number,16);
 }
@@ -60,7 +60,7 @@ function do_color_change(e)
 
 		var element=document.getElementById('cc_target_'+_id);
 		var bgColor=element.style.backgroundColor;
-		if (bgColor.substr(0,1)=='#') bgColor='rgb('+hexToDec(bgColor.substr(1,2))+','+hexToDec(bgColor.substr(3,2))+','+hexToDec(bgColor.substr(5,2))+')';
+		if (bgColor.substr(0,1)=='#') bgColor='rgb('+hex_to_dec(bgColor.substr(1,2))+','+hex_to_dec(bgColor.substr(3,2))+','+hex_to_dec(bgColor.substr(5,2))+')';
 
 		var s_rgb=bgColor.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
 		var _rgb=s_rgb.split(',');
@@ -84,7 +84,7 @@ function update_chooser(chooser)
 
 function update_choose(id,d,i)
 {
-	i=hexToDec(i);
+	i=hex_to_dec(i);
 	i=i-i%4;
 
 	var tid='cc_col_'+d+'_'+i+'#'+id;
@@ -101,7 +101,7 @@ function update_choose(id,d,i)
 
 	var element=document.getElementById('cc_target_'+id);
 	var bgColor=element.style.backgroundColor;
-	if (bgColor.substr(0,1)=='#') bgColor='rgb('+hexToDec(bgColor.substr(1,2))+','+hexToDec(bgColor.substr(3,2))+','+hexToDec(bgColor.substr(5,2))+')';
+	if (bgColor.substr(0,1)=='#') bgColor='rgb('+hex_to_dec(bgColor.substr(1,2))+','+hex_to_dec(bgColor.substr(3,2))+','+hex_to_dec(bgColor.substr(5,2))+')';
 	var s_rgb=bgColor.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
 	rgb=s_rgb.split(',');
 	rgb[d]=i;
@@ -140,7 +140,7 @@ function do_color_chooser_element(element)
 	var source=document.getElementById('cc_source_'+id);
 	var bgColor=source.style.backgroundColor;
 	if ((bgColor.substr(0,1)!='#') && (bgColor.substr(0,3)!='rgb')) bgColor='#000000';
-	if (bgColor.substr(0,1)=='#') bgColor='rgb('+hexToDec(bgColor.substr(1,2))+','+hexToDec(bgColor.substr(3,2))+','+hexToDec(bgColor.substr(5,2))+')';
+	if (bgColor.substr(0,1)=='#') bgColor='rgb('+hex_to_dec(bgColor.substr(1,2))+','+hex_to_dec(bgColor.substr(3,2))+','+hex_to_dec(bgColor.substr(5,2))+')';
 	var s_rgb=bgColor.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
 	var rgb=s_rgb.split(',');
 	rgb[0]=Math.round(rgb[0]/4)*4;

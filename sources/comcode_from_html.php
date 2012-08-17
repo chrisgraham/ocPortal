@@ -780,17 +780,6 @@ function comcode_strip_html_tags($matches)
  */
 function comcode_preg_replace($element,$pattern,$replacement,$semihtml)
 {
-	if (version_compare('4.3.0',phpversion())>=0) // No PREG_OFFSET_CAPTURE, which we need
-	{
-		if (is_array($replacement))
-		{
-			return preg_replace_callback(str_replace('$','',str_replace('^','',$pattern)),$replacement[0],$semihtml);
-		} else
-		{
-			return preg_replace(str_replace('$','',str_replace('^','',$pattern)),$replacement,$semihtml);
-		}
-	}
-
 	$old_semihtml='';
 	do
 	{
@@ -851,16 +840,6 @@ function comcode_preg_replace($element,$pattern,$replacement,$semihtml)
  */
 function array_html_preg_replace($element,$array,$semihtml)
 {
-	if (version_compare('4.3.0',phpversion())>=0)
-	{
-		foreach ($array as $temp)
-		{
-			list($pattern,$replacement)=$temp;
-			$semihtml=preg_replace(str_replace('$','',str_replace('^','',$pattern)),$replacement,$semihtml);
-		}
-		return $semihtml;
-	}
-
 	$old_semihtml='';
 	do
 	{

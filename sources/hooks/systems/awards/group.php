@@ -24,9 +24,10 @@ class Hook_awards_group
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		if (get_forum_type()!='ocf') return NULL;
 
@@ -42,7 +43,7 @@ class Hook_awards_group
 		require_lang('ocf');
 		$info['title']=do_lang_tempcode('USERGROUPS');
 		$info['category_is_string']=false;
-		$info['archive_url']=build_url(array('page'=>'groups'),get_module_zone('groups'));
+		$info['archive_url']=build_url(array('page'=>'groups'),(!is_null($zone))?$zone:get_module_zone('groups'));
 		$info['cms_page']='groups';
 		$info['supports_custom_fields']=true;
 

@@ -29,6 +29,8 @@ No support for:
  - New 'HTML5' APIs (not well supported yet)
  - checking against argument types	REASON: Javascript extension, but we could do. Not a lot of advantage, quite a lot of work
  - checking for locked	REASON: Javascript extension, but we could do. Not a lot of advantage, quite a lot of work
+
+Some checks are commented out, as practical Javascript does not tend to be at all type-strict.
 */
 
 /**
@@ -829,7 +831,7 @@ function js_check_variable($variable,$reference=false,$function_duality=false,$c
 					break;
 				}
 			}
-			if (/*($class!='self') && ($class!='Window') && */($identifier!=$class) && ($class!='Object')) // We're allowed to freely add to Object because we need to to make our own. It's also not likely people will "mistakingly" handle things they think Object has but it doesn't.
+			if (($class!='self') && ($class!='Window') && ($identifier!=$class) && ($class!='Object')) // We're allowed to freely add to Object because we need to to make our own. It's also not likely people will "mistakingly" handle things they think Object has but it doesn't.
 			{
 				if (($GLOBALS['JS_PARSING_CONDITIONAL']) && (count($variable[2])==0)) // We're running a conditional on this, meaning the user is likely checking to see if it exists (if it's a boolean that doesn't exist, we're in trouble, but unfortunately it's ambiguous).
 				{
@@ -843,7 +845,7 @@ function js_check_variable($variable,$reference=false,$function_duality=false,$c
 			}
 			if (is_null($found))
 			{
-				if (/*($class!='self') && ($class!='Window') && */($identifier!=$class) && ($class!='Object')) // We're allowed to freely add to Object because we need to to make our own. It's also not likely people will "mistakingly" handle things they think Object has but it doesn't.
+				if (($class!='self') && ($class!='Window') && ($identifier!=$class) && ($class!='Object')) // We're allowed to freely add to Object because we need to to make our own. It's also not likely people will "mistakingly" handle things they think Object has but it doesn't.
 				{
 					if ((!$GLOBALS['JS_PARSING_CONDITIONAL']) || (count($variable[2])!=0)) // We're running a conditional on this, meaning the user is likely checking to see if it exists (if it's a boolean that doesn't exist, we're in trouble, but unfortunately it's ambiguous).
 					{
@@ -1005,7 +1007,7 @@ function js_add_variable_reference($identifier,$first_mention,$instantiation=tru
 }
 
 /**
- * If the given expression is a direct variable expression, this function will infer the type as the given type. This therefore allows type infering on usage as well as on assignment.
+ * If the given expression is a direct variable expression, this function will infer the type as the given type. This therefore allows type inferring on usage as well as on assignment.
  *
  * @param  string				The type
  * @param  list				The expression
@@ -1014,7 +1016,7 @@ function js_infer_expression_type_to_variable_type($type,$expr)
 {
 	unset($type);
 	unset($expr);
-/*	if (($expression[0]=='VARIABLE') && (count($expression[1][2])==0))
+/*	if (($expression[0]=='VARIABLE') && (count($expression[1][2])==0))		Not reliable enough, JS is very dynamic
 	{
 		$identifier=$expression[1][1];
 		js_set_ocportal_type($identifier,$type);

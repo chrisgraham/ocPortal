@@ -253,7 +253,7 @@ class Block_main_gallery_embed
 			}
 		}
 
-		// Results browser
+		// Pagination
 		require_code('templates_pagination');
 		$_selectors=array_map('intval',explode(',',get_option('gallery_selectors')));
 		$root=get_param('root','root');

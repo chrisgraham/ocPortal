@@ -65,7 +65,7 @@ function _redirect_screen($title,$url,$text,$intermediatory_hop=false,$msg_type=
 				$hash_bit=substr($url,$hash_pos);
 				$url=substr($url,0,$hash_pos);
 			} else $hash_bit='';
-			$url.=(((strpos($url,'?')===false)/*&&(strpos($url,'/pg/')===false)*/)?'?':'&').'redirected=1'.$hash_bit;
+			$url.=((strpos($url,'?')===false)?'?':'&').'redirected=1'.$hash_bit;
 		}
 	}
 

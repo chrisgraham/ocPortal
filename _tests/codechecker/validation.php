@@ -24,212 +24,6 @@ This file is designed to be usable from outside ocPortal, as a library.
  */
 function init__validation()
 {
-	if (!function_exists('html_entity_decode'))
-	{
-		/**
-		 * Decode the HTML entitity encoded input string. Can give warning if unrecognised character set.
-		 *
-		 * @param  string		The text to decode
-		 * @param  integer	The quote style code
-		 * @return string		The decoded text
-		 */
-		function html_entity_decode($input,$quote_style)
-		{
-			unset($quote_style);
-			/*			// NB: &nbsp does not go to <space>. It's not something you use with html escaping, it's for hard-space-formatting. URL's don't contain spaces, but that's due to URL escaping (%20)
-			$replace_array=array(
-				'&amp;'=>'&',
-				'&gt;'=>'>',
-				'&lt;'=>'<',
-				'&#039;'=>'\'',
-				'&quot;'=>'"',
-			);
-
-			foreach ($replace_array as $from=>$to)
-			{
-				$input=str_replace($from,$to,$input);
-			}
-
-			return $input;
-*/
-
-			$trans_tbl=get_html_translation_table(HTML_ENTITIES);
-			$trans_tbl=array_flip($trans_tbl);
-			return strtr($input,$trans_tbl);
-		}
-	}
-	if (!function_exists('str_word_count'))
-	{
-		/**
-		 * Isolate the words in the input string.
-		 *
-		 * @param  string			String to count words in
-		 * @param  integer		The format
-		 * @set	 0 1
-		 * @return mixed			Typically a list - the words of the input string
-		 */
-		function str_word_count($input,$format=0)
-		{
-			//count words
-			$pattern="/[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-\-|:|\&|@)]+/";
-			$all_words=trim(preg_replace($pattern,' ',$input));
-			$a=explode(' ',$all_words);
-			return ($format==0)?count($a):$a;
-		}
-	}
-
-	if (!function_exists('qualify_url'))
-	{
-		/**
-		 * Take a URL and base-URL, and fully qualify the URL according to it.
-		 *
-		 * @param  URLPATH		The URL to fully qualified
-		 * @param  URLPATH		The base-URL
-		 * @return URLPATH		Fully qualified URL
-		 */
-		function qualify_url($url,$url_base)
-		{
-			if (($url!='') && ($url[0]!='#') && (substr($url,0,7)!='mailto:'))
-			{
-				if (strpos($url,'://')===false)
-				{
-					if ($url[0]=='/')
-					{
-						$parsed=parse_url($url_base);
-						if (!array_key_exists('scheme',$parsed)) $parsed['scheme']='http';
-						if (!array_key_exists('host',$parsed)) $parsed['host']='localhost';
-						if (substr($url,0,2)=='//')
-						{
-							$url=$parsed['scheme'].':'.$url;
-						} else
-						{
-							$url=$parsed['scheme'].'://'.$parsed['host'].(array_key_exists('port',$parsed)?(':'.$parsed['port']):'').$url;
-						}
-					} else $url=$url_base.'/'.$url;
-				}
-			} else return '';
-			return $url;
-		}
-	}
-
-	if (!function_exists('http_download_file'))
-	{
-		/**
-		 * Return the file in the URL by downloading it over HTTP. If a byte limit is given, it will only download that many bytes. It outputs warnings, returning NULL, on error.
-		 *
-		 * @param  URLPATH		The URL to download
-		 * @param  ?integer		The number of bytes to download. This is not a guarantee, it is a minimum (NULL: all bytes)
-		 * @range  1 max
-		 * @param  boolean		Whether to throw an ocPortal error, on error
-		 * @param  boolean		Whether to block redirects (returns NULL when found)
-		 * @param  string			The user-agent to identify as
-		 * @param  ?array			An optional array of POST parameters to send; if this is NULL, a GET request is used (NULL: none)
-		 * @param  ?array			An optional array of cookies to send (NULL: none)
-		 * @param  ?string		'accept' header value (NULL: don't pass one)
-		 * @param  ?string		'accept-charset' header value (NULL: don't pass one)
-		 * @param  ?string		'accept-language' header value (NULL: don't pass one)
-		 * @param  ?resource		File handle to write to (NULL: do not do that)
-		 * @param  ?string		The HTTP referer (NULL: none)
-		 * @param  ?array			A pair: authentication username and password (NULL: none)
-		 * @param  float			The timeout
-		 * @param  boolean		Whether to treat the POST parameters as a raw POST (rather than using MIME)
-		 * @param  ?array			Files to send. Map between field to file path (NULL: none)
-		 * @return ?string		The data downloaded (NULL: error)
-		 */
-		function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$is_xml=false,$files=NULL)
-		{
-			ini_set('allow_url_fopen','1');
-			return @file_get_contents($url); // Assumes URL-wrappers is on, whilst ocPortal's is much more sophisticated
-		}
-	}
-
-	if (!function_exists('do_lang'))
-	{
-		/**
-		 * Get the human-readable form of a language id, or a language entry from a language INI file. (STUB)
-		 *
-		 * @param  ID_TEXT		The language id
-		 * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
-		 * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
-		 * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
-		 * @param  ?LANGUAGE_NAME The language to use (NULL: users language)
-		 * @param  boolean		Whether to cause ocPortal to exit if the lookup does not succeed
-		 * @return ?mixed			The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
-		 */
-		function do_lang($a,$param_a=NULL,$param_b=NULL,$param_c=NULL,$lang=NULL,$require_result=true)
-		{
-			if (function_exists('_do_lang')) return _do_lang($a,$param_a,$param_b,$param_c,$lang,$require_result);
-
-			unset($lang);
-			unset($allow_fail);
-
-			switch ($a)
-			{
-				case 'LINK_NEW_WINDOW':
-					return 'new window';
-				case 'SPREAD_TABLE':
-					return 'Spread table';
-				case 'MAP_TABLE':
-					return 'Item to value mapper table';
-			}
-
-			return array($a,$param_a,$param_b,$param_c);
-		}
-	}
-
-	if (!function_exists('get_forum_type'))
-	{
-		/**
-		 * Get the type of forums installed.
-		 *
-		 * @return string			The type of forum installed
-		 */
-		function get_forum_type()
-		{
-			return 'none';
-		}
-	}
-
-	if (!function_exists('ocp_srv'))
-	{
-		/**
-		 * Get server environment variables. (STUB)
-		 *
-		 * @param  string			The variable name
-		 * @return string			The variable value ('' means unknown)
-		 */
-		function ocp_srv($value)
-		{
-			return '';
-		}
-	}
-
-	if (!function_exists('mailto_obfuscated'))
-	{
-		/**
-		 * Get obfuscate version of 'mailto:' (which'll hopefully fool e-mail scavengers to not pick up these e-mail addresses).
-		 *
-		 * @return string		The obfuscated 'mailto:' string
-		 */
-		function mailto_obfuscated()
-		{
-			return 'mailto:';
-		}
-	}
-
-	if (!function_exists('mixed'))
-	{
-		/**
-		 * Assign this to explicitly declare that a variable may be of mixed type, and initialise to NULL.
-		 *
-		 * @return ?mixed	Of mixed type (NULL: default)
-		 */
-		function mixed()
-		{
-			return NULL;
-		}
-	}
-
 	define('DOCTYPE_HTML','<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">');
 	define('DOCTYPE_HTML_STRICT','<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
 	define('DOCTYPE_XHTML','<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">');
@@ -3131,12 +2925,10 @@ function _get_next_tag()
 					if ($next=='<')
 					{
 						$errors[]=array('XML_TAG_OPEN_ANOMALY','6');
-//						return array(NULL,$errors);
 					}
 					elseif ($next=='>')
 					{
 						$errors[]=array('XML_TAG_CLOSE_ANOMALY');
-//						return array(NULL,$errors);
 					}
 
 					if ($GLOBALS['XML_CONSTRAIN']) $errors[]=array('XML_ATTRIBUTE_ERROR');
@@ -3169,7 +2961,6 @@ function _get_next_tag()
 					if ($next=='<')
 					{
 						$errors[]=array('XML_TAG_OPEN_ANOMALY','7');
-	//					return array(NULL,$errors);
 					}
 
 					$current_attribute_value.=$next;
@@ -3209,12 +3000,10 @@ function _get_next_tag()
 					if ($next=='<')
 					{
 						$errors[]=array('XML_TAG_OPEN_ANOMALY','7');
-	//					return array(NULL,$errors);
 					}
 					elseif ($next=='>')
 					{
 						$errors[]=array('XML_TAG_CLOSE_ANOMALY');
-	//					return array(NULL,$errors);
 					}
 
 					$current_attribute_value.=$next;
@@ -3234,12 +3023,10 @@ function _get_next_tag()
 					if ($next=='<')
 					{
 						$errors[]=array('XML_TAG_OPEN_ANOMALY','7');
-	//					return array(NULL,$errors);
 					}
 					elseif ($next=='>')
 					{
 						$errors[]=array('XML_TAG_CLOSE_ANOMALY');
-	//					return array(NULL,$errors);
 					}
 
 					$current_attribute_value.=$next;
@@ -3411,9 +3198,6 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 				if (!is_null($tmp)) $errors=array_merge($errors,$tmp);
 			}
 
-			// Embed is a special case
-//			if (($tag=='embed') && (!$self_close)) $EXPECTING_TAG='noembed';
-
 			if (($tag=='fieldset') && (!$self_close)) $EXPECTING_TAG='legend';
 		} else
 		{
@@ -3537,7 +3321,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 
 						if ((!isset($attributes['id'])) || ((isset($attributes['id'])) && ($attributes['id']!=$attributes['name'])))
 							$errors[]=array('XHTML_NAME_ID_DEPRECATED');
-					}// elseif ((isset($attributes['id'])) && (!isset($attributes['href']))) $errors[]=array('XHTML_NAME_ID_DEPRECATED');
+					}
 					break;
 
 				case 'input':
@@ -3639,7 +3423,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 					break;
 			}
 
-			/*if (($tag[0]=='h') && (is_numeric(substr($tag,1))))	 Excessive check
+			/*if (($tag[0]=='h') && (is_numeric(substr($tag,1))))	 Excessive check. HTML5 dictates how to resolve these kinds of heading issues in a standards-compliant way.
 			{
 				global $LAST_HEADING;
 				if ($LAST_HEADING<intval(substr($tag,1))-1) $errors[]=array('WCAG_HEADING_ORDER');
@@ -3729,9 +3513,6 @@ function _check_blockyness($tag,$attributes,$self_close,$close)
  */
 function _check_attributes($tag,$attributes,$self_close,$close)
 {
-	//unset($self_close);
-	//unset($close);
-
 	global $PSPELL_LINK,$THE_LANGUAGE,$XML_CONSTRAIN,$TAGS_DEPRECATE_ALLOW,$THE_DOCTYPE,$HYPERLINK_URLS,$CRAWLED_URLS,$EMBED_URLS,$TAGS_INLINE,$TAGS_BLOCK,$TAGS_NORMAL,$TAGS_INLINE_DEPRECATED,$TAGS_BLOCK_DEPRECATED,$TAGS_NORMAL_DEPRECATED,$TAG_ATTRIBUTES,$TAG_ATTRIBUTES_DEPRECATED,$IDS_SO_FAR,$ANCESTER_BLOCK,$ANCESTER_INLINE,$EXPECTING_TAG,$OUT,$POS,$LAST_A_TAG,$TAG_ATTRIBUTES_REQUIRED;
 
 	$errors=array();
@@ -3759,7 +3540,7 @@ function _check_attributes($tag,$attributes,$self_close,$close)
 			if ((!isset($TAGS_BLOCK_DEPRECATED[$tag])) && (!isset($TAGS_INLINE_DEPRECATED[$tag])) && (!isset($TAGS_NORMAL_DEPRECATED[$tag]))) continue;
 			if (strpos($attribute,':')!==false) continue;
 
-			//if ($tag=='embed') continue; // Hack, to allow rich media to work in multiple browsers
+			//if ($tag=='embed') continue; // Hack, to allow rich media to work in multiple browsers			Actually there are better ways than using embed nowadays
 			$errors[]=array('XHTML_UNKNOWN_ATTRIBUTE',$tag,$attribute);
 			continue;
 		} else
@@ -3829,10 +3610,7 @@ function validate_spelling($value)
 
 	$lang=strtolower($THE_LANGUAGE);
 	$sub_lang='';
-	/*if ($lang=='en')
-	{
-		$sub_lang='british';
-	}*/
+
 	if (is_null($PSPELL_LINK)) $PSPELL_LINK=@pspell_new($lang,$sub_lang,'','',PSPELL_FAST);
 	if ($PSPELL_LINK===false) return array();
 	$words=array();
@@ -3945,7 +3723,7 @@ function _check_link_accessibility($tag,$attributes,$self_close,$close)
 
 	$errors=array();
 
-	// Check positioning - not anymore "until user agents"
+	// Check positioning.   Not doing this anymore as WCAG dictates the requirement with a qualifier of "until user agents"
 	/*if ((!is_null($LAST_A_TAG)) && (isset($attributes['href'])))
 	{
 		$between=substr($OUT,$LAST_A_TAG+1,$TAG_RANGES[count($TAG_RANGES)-1][0]-$LAST_A_TAG-2);
@@ -3978,7 +3756,7 @@ function _check_link_accessibility($tag,$attributes,$self_close,$close)
 				if (in_array($string,$in_strings)!==false) $errors[]=array('WCAG_DODGY_LINK_2',$string);
 			}
 		}
-		//if ((strlen(@html_entity_decode($_content,ENT_QUOTES,get_charset()))>40) && (isset($attributes['href'])) && (strpos($attributes['href'],'tut_')===false)) $errors[]=array('WCAG_ATTRIBUTE_TOO_LONG','a');
+		//if ((strlen(@html_entity_decode($_content,ENT_QUOTES,get_charset()))>40) && (isset($attributes['href'])) && (strpos($attributes['href'],'tut_')===false)) $errors[]=array('WCAG_ATTRIBUTE_TOO_LONG','a');		Not a really WCAG rule and is problematic sometimes
 		if ($title=='')
 		{
 			if (strtolower($content)=='more') $errors[]=array('WCAG_DODGY_LINK_2',$string);
@@ -4220,7 +3998,6 @@ function _validate_css_sheet($data)
 				{
 					$status=CSS_IN_CLASS_NAME;
 					$class_name='';
-					//$left_no_mans_land_once=true;
 				}
 				elseif ($next=='@')
 				{
@@ -4236,12 +4013,10 @@ function _validate_css_sheet($data)
 				{
 					$status=CSS_IN_CLASS_NAME;
 					$class_name='*';
-					//$left_no_mans_land_once=true;
 				}
 				else
 				{
 					$errors[]=array(0=>'CSS_UNEXPECTED_CHARACTER',1=>$next,2=>number_format($line),'pos'=>$i);
-//					return $errors;
 				}
 				break;
 
@@ -4268,7 +4043,6 @@ function _validate_css_sheet($data)
 				else
 				{
 					$errors[]=array(0=>'CSS_UNEXPECTED_CHARACTER',1=>$next,2=>number_format($line),'pos'=>$i);
-//					return $errors;
 				}
 				break;
 
@@ -4325,7 +4099,6 @@ function _validate_css_sheet($data)
 						} else
 						{
 							$errors[]=array(0=>'CSS_UNEXPECTED_CHARACTER',1=>$next,2=>number_format($line),'pos'=>$i);
-		//					return $errors;
 						}
 					}
 				}
@@ -4360,7 +4133,6 @@ function _validate_css_sheet($data)
 				else
 				{
 					$errors[]=array(0=>'CSS_UNEXPECTED_CHARACTER',1=>$next,2=>number_format($line),'pos'=>$i);
-//					return $errors;
 				}
 				break;
 
@@ -4467,7 +4239,6 @@ function _validate_css_class($data,$_i,$line=0)
 				} else
 				{
 					$errors[]=array(0=>'CSS_UNEXPECTED_CHARACTER_CLASS',1=>$next,2=>number_format($line),'pos'=>$_i);
-//					return $errors;
 				}
 				break;
 

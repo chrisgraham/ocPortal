@@ -196,37 +196,9 @@ class Module_iotds
 	{
 		$title=get_screen_title('IOTD_ARCHIVE');
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='max';
+		$content=do_block('main_multi_content',array('param'=>'iotd','efficient'=>'1','zone'=>'_SEARCH','mode'=>'recent','max'=>'10','no_links'=>'1','pagination'=>'1'));
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',20);
-
-		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),array('used'=>1),'ORDER BY date_and_time DESC',$max,$start);
-		$max_rows=$GLOBALS['SITE_DB']->query_value('iotd','COUNT(*)',array('used'=>1));
-		$content=new ocp_tempcode();
-		foreach ($rows as $myrow)
-		{
-			$date=get_timezoned_date($myrow['date_and_time']);
-			$url=build_url(array('page'=>'_SELF','type'=>'view','wide'=>1,'id'=>$myrow['id']),'_SELF');
-			$thumb_url=$myrow['thumb_url'];
-			$caption=get_translated_tempcode($myrow['i_title']);
-
-			require_code('images');
-			$thumb_url=ensure_thumbnail($myrow['url'],$thumb_url,'iotds','iotd',$myrow['id']);
-			$thumb=do_image_thumb($thumb_url,'');
-			$content->attach(do_template('IOTD_ARCHIVE_SCREEN_IOTD',array('SUBMITTER'=>strval($myrow['submitter']),'ID'=>strval($myrow['id']),'VIEWS'=>integer_format($myrow['iotd_views']),'THUMB'=>$thumb,'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'URL'=>$url,'CAPTION'=>$caption)));
-		}
-		if ($content->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
-
-		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
-		$num_pages=intval(ceil(floatval($max_rows)/floatval($max)));
-
-		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>($start-$max==0)?NULL:$start-$max),'_SELF');
-		$next_url=(count($rows)!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'b6933ab44e16fef7e1bec62014254383','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
-
-		return do_template('NEXT_BROWSER_SCREEN',array('_GUID'=>'d8a493c2b007d98074f104ea433c8091','TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
+		return do_template('PAGINATION_SCREEN',array('_GUID'=>'d8a493c2b007d98074f104ea433c8091','TITLE'=>$title,'CONTENT'=>$content));
 	}
 
 	/**

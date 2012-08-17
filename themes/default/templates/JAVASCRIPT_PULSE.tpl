@@ -27,19 +27,19 @@ function dec_to_hex(number)
 	return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 }
 
-function hexToDec(number)
+function hex_to_dec(number)
 {
 	return parseInt(number,16);
 }
 
 function color_interpolation(max_color,min_color,fraction)
 {
-	var min_color_r=hexToDec(min_color.substr(0,2));
-	var min_color_g=hexToDec(min_color.substr(2,2));
-	var min_color_b=hexToDec(min_color.substr(4,2));
-	var max_color_r=hexToDec(max_color.substr(0,2));
-	var max_color_g=hexToDec(max_color.substr(2,2));
-	var max_color_b=hexToDec(max_color.substr(4,2));
+	var min_color_r=hex_to_dec(min_color.substr(0,2));
+	var min_color_g=hex_to_dec(min_color.substr(2,2));
+	var min_color_b=hex_to_dec(min_color.substr(4,2));
+	var max_color_r=hex_to_dec(max_color.substr(0,2));
+	var max_color_g=hex_to_dec(max_color.substr(2,2));
+	var max_color_b=hex_to_dec(max_color.substr(4,2));
 
 	var color_r=min_color_r+fraction*(max_color_r-min_color_r);
 	var color_g=min_color_g+fraction*(max_color_g-min_color_g);

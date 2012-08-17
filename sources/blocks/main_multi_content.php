@@ -35,7 +35,7 @@ class Block_main_multi_content
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('ocselect','param','efficient','filter','filter_b','title','zone','mode','max','days','lifetime','pinned','no_links');
+		$info['parameters']=array('ocselect','param','efficient','filter','filter_b','title','zone','mode','max','days','lifetime','pinned','no_links','pagination');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_multi_content
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'mode\',$map)?$map[\'mode\']:\'recent\'):NULL';
+		$info['cache_on']='((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'0\')?array(array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'mode\',$map)?$map[\'mode\']:\'recent\'):NULL';
 		$info['ttl']=30;
 		return $info;
 	}
@@ -88,6 +88,8 @@ class Block_main_multi_content
 		require_lang('awards');
 		require_code('awards');
 
+		$block_id=md5(serialize($map));
+
 		if (array_key_exists('param',$map))
 		{
 			$type_id=$map['param'];
@@ -109,7 +111,9 @@ class Block_main_multi_content
 		$zone=array_key_exists('zone',$map)?$map['zone']:'_SEARCH';
 		$efficient=(array_key_exists('efficient',$map)?$map['efficient']:'1')=='1';
 		$title=array_key_exists('title',$map)?$map['title']:'';
-		$max=array_key_exists('max',$map)?intval($map['max']):10;
+		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):10);
+		$start=get_param_integer($block_id.'_start',0);
+		$do_pagination=(array_key_exists('pagination',$map)?$map['pagination']:'0')=='1';
 		$days=((array_key_exists('days',$map)) && ($map['days']!=''))?intval($map['days']):NULL;
 		$lifetime=((array_key_exists('lifetime',$map)) && ($map['lifetime']!=''))?intval($map['lifetime']):NULL;
 		$pinned=((array_key_exists('pinned',$map)) && ($map['pinned']!=''))?explode(',',$map['pinned']):array();
@@ -119,7 +123,7 @@ class Block_main_multi_content
 
 		require_code('hooks/systems/awards/'.filter_naughty_harsh($type_id),true);
 		$object=object_factory('Hook_awards_'.$type_id);
-		$info=$object->info(($filter_b=='')?NULL:$filter_b);
+		$info=$object->info($zone,($filter_b=='')?NULL:$filter_b);
 		if (is_null($info)) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
 
 		$submit_url=$info['add_url'];
@@ -289,20 +293,20 @@ class Block_main_multi_content
 			case 'recent':
 				if ((array_key_exists('date_field',$info)) && (!is_null($info['date_field'])))
 				{
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['date_field'].' DESC',$max,NULL);
+					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['date_field'].' DESC',$max,$start);
 					break;
 				}
 			case 'views':
 				if ((array_key_exists('views_field',$info)) && (!is_null($info['views_field'])))
 				{
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['views_field'].' DESC',$max,NULL);
+					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['views_field'].' DESC',$max,$start);
 					break;
 				}
 			case 'top':
 				if ((array_key_exists('feedback_type',$info)) && (!is_null($info['feedback_type'])))
 				{
 					$select_rating=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type']).' AND rating_for_id='.$info['id_field'].') AS compound_rating';
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,NULL,'ORDER BY compound_rating DESC');
+					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,$start,'ORDER BY compound_rating DESC');
 					break;
 				}
 			case 'all':
@@ -310,19 +314,21 @@ class Block_main_multi_content
 				{
 					if ($info['title_field_dereference'])
 					{
-						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY t.text_original ASC',$max,NULL);
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY t.text_original ASC',$max,$start);
 					} else
 					{
-						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['title_field'].' ASC',$max,NULL);
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['title_field'].' ASC',$max,$start);
 					}
 				} else
 				{
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['id_field'].' ASC',$max,NULL);
+					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['id_field'].' ASC',$max,$start);
 				}
 				break;
 			default:
 				$rows=array();
 		}
+
+		$max_rows=$info['connection']->query_value_null_ok_full('SELECT COUNT(*)'.$extra_select_sql.' '.$query);
 
 		$pinned_order=array();
 
@@ -528,7 +534,15 @@ class Block_main_multi_content
 			$archive_url='';
 		}
 
-		return do_template('BLOCK_MAIN_MULTI_CONTENT',array('TYPE'=>$info['title'],'TITLE'=>$title,'CONTENT'=>$rendered_content,'CONTENT_DATA'=>$content_data,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url));
+		// Pagination
+		$pagination=mixed();
+		if ($do_pagination)
+		{
+			require_code('templates_pagination');
+			$pagination=pagination($info['title'],NULL,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows,NULL,NULL,true);
+		}
+
+		return do_template('BLOCK_MAIN_MULTI_CONTENT',array('TYPE'=>$info['title'],'TITLE'=>$title,'CONTENT'=>$rendered_content,'CONTENT_DATA'=>$content_data,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'PAGINATION'=>$pagination));
 	}
 
 	/**

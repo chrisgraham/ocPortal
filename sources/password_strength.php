@@ -33,55 +33,55 @@ function test_password($password)
 
 	$strength=0;
 
-	/*** get the length of the password ***/
+	// Get the length of the password
 	$length=strlen($password);
 
-	/*** check if password is not all lower case ***/
+	// Check if password is not all lower case
 	if (strtolower($password)!=$password)
 	{
 		$strength+=1;
 	}
 
-	/*** check if password is not all upper case ***/
+	// Check if password is not all upper case
 	if (strtoupper($password)==$password)
 	{
 		$strength+=1;
 	}
 
-	/*** check string length is 8 -15 chars ***/
+	// Check string length is 8 -15 chars
 	if ($length>=8 && $length<=15)
 	{
 		$strength+=1;
 	}
 
-	/*** check if length is 16 - 35 chars ***/
+	// Check if length is 16 - 35 chars
 	if ($length>=16 && $length<=35)
 	{
 		$strength+=2;
 	}
 
-	/*** check if length greater than 35 chars ***/
+	// Check if length greater than 35 chars
 	if ($length>35)
 	{
 		$strength+=3;
 	}
 
-	/*** get the numbers in the password ***/
+	// Get the numbers in the password
 	$numbers=array();
 	preg_match_all('/[0-9]/', $password, $numbers);
 	$strength+=count($numbers[0]);
 
-	/*** check for special chars ***/
+	// Check for special chars
 	$specialchars=array();
 	preg_match_all('/[|!@#$%&*\/=?,;.:\-_+~^]/', $password, $specialchars);
 	$strength+=count($specialchars[0]);
 
-	/*** get the number of unique chars ***/
+	// Get the number of unique chars
 	$chars=preg_split('#(.)#',$password,NULL,PREG_SPLIT_DELIM_CAPTURE);
 	$num_unique_chars=count(array_unique($chars)) - 1;
 	$strength+=$num_unique_chars * 2;
 
-	/*** strength is a number 1-10; ***/
+	// Strength is a number 1-10
 	$strength=$strength > 99 ? 99 : $strength;
 	$strength=intval(floor($strength / 10 + 1));
 

@@ -339,12 +339,7 @@ class Hook_addon_registry_news
 				'CONTENT'=>$content,
 				'SUBMIT_URL'=>placeholder_url(),
 				'BLOG'=>false,
-				'BROWSE'=>do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
-					'PREVIOUS_URL'=>placeholder_url(),
-					'NEXT_URL'=>placeholder_url(),
-					'PAGE_NUM'=>placeholder_number(),
-					'NUM_PAGES'=>placeholder_number()
-				))
+				'PAGINATION'=>placeholder_pagination(),
 			)), NULL, '', true)
 		);
 	}

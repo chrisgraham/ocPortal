@@ -712,8 +712,7 @@ function render_php_function($function,$class,$show_filename=false)
 		$_code="<"."?php\n".$function['code']."\n?".">";
 		ob_start();
 		highlight_string($_code);
-		$code=ob_get_contents();
-		ob_end_clean();
+		$code=ob_get_clean();
 		$code=str_replace('&lt;?php<br />','',$code);
 		$code=str_replace('?&gt;','',$code);
 		require_code('xhtml');

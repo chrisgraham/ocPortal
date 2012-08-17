@@ -24,9 +24,10 @@ class Hook_awards_comcode_page
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
@@ -42,7 +43,7 @@ class Hook_awards_comcode_page
 		$info['title']=do_lang_tempcode('COMCODE_PAGES');
 		$info['validated_field']='p_validated';
 		$info['category_is_string']=true;
-		$info['archive_url']=build_url(array('page'=>'sitemap'),get_page_zone('sitemap'));
+		$info['archive_url']=build_url(array('page'=>'sitemap'),(!is_null($zone))?$zone:get_page_zone('sitemap'));
 		$info['cms_page']='cms_comcode_pages';
 
 		return $info;

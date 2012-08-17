@@ -32,14 +32,11 @@ function get_exif_data($path,$filename=NULL)
 
 	if (is_null($filename)) $filename=rawurldecode(basename($path));
 
-	if (function_exists('exif_read_data'))
-	{
-		$meta_data=@exif_read_data($path,'ANY_TAG');
+	$meta_data=@exif_read_data($path,'ANY_TAG');
 
-		if ($meta_data!==false)
-		{
-			$out+=cleanup_exif($meta_data);
-		}
+	if ($meta_data!==false)
+	{
+		$out+=cleanup_exif($meta_data);
 	}
 
 	$caption=get_exif_image_caption($path,$filename);
@@ -169,7 +166,7 @@ function get_exif_image_caption($path,$filename)
 
 		fclose($file_pointer);
 	}
-	if ((function_exists('exif_read_data')) && ($comments=='')) //If XMP fails, attempt EXIF
+	if ($comments=='') //If XMP fails, attempt EXIF
 	{
 		$meta_data=@exif_read_data($path);
 

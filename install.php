@@ -13,7 +13,7 @@
  * @package		installer
  */
 
-if (!function_exists('preg_match')) exit('The PHP preg extension required for PHP 4.1, or the PHP preg support may not be disabled for PHP 4.2+');
+if (!function_exists('preg_match')) exit('The PHP preg support may not be disabled');
 $functions=array('fopen');
 foreach ($functions as $function)
 {
@@ -133,8 +133,7 @@ handle_self_referencing_embedment();
 
 // Requirements check
 $phpv=phpversion();
-if (substr($phpv,0,2)=='3.') exit(do_lang('PHP_OLD'));
-if (substr($phpv,0,3)=='4.0') exit(do_lang('PHP_OLD'));
+if ((substr($phpv,0,2)=='3.') || (substr($phpv,0,2)=='4.') || (substr($phpv,0,4)=='5.0.')) exit(do_lang('PHP_OLD'));
 if (ini_get('file_uploads')=='0') exit(do_lang('NO_UPLOAD'));
 
 // Set up some globals
@@ -423,6 +422,15 @@ function step_1()
 		gzuncompress hypot ignore_user_abort
 		gzclose gzopen gzwrite ftp_chdir ftp_close ftp_connect ftp_delete ftp_fput
 		ftp_login ftp_mkdir ftp_nlist ftp_put ftp_rename ftp_rmdir ftp_site ftp_size
+		file_get_contents str_word_count html_entity_decode array_combine array_diff_uassoc array_udiff
+		array_udiff_assoc array_udiff_uassoc array_walk_recursive array_uintersect_assoc array_uintersect_uassoc
+		array_uintersect str_split strpbrk substr_compare file_put_contents get_headers headers_list
+		http_build_query image_type_to_extension imagefilter scandir str_shuffle image_type_to_mime_type sha1
+		exif_imagetype ob_get_clean array_diff_assoc glob debug_backtrace date_default_timezone_set
+		date_default_timezone_get array_diff_key inet_pton array_product array_diff_ukey array_intersect_ukey
+		libxml_get_errors inet_ntop fputcsv
+		is_nan is_finite is_infinite ob_flush array_chunk array_fill array_change_key_case
+		exif_read_data var_export
 END;
 	foreach (preg_split('#\s+#',$needed_functions) as $function)
 	{

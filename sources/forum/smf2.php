@@ -1037,7 +1037,6 @@ class forum_driver_smf2 extends forum_driver_base
 
 		$a=md5(($new_key^str_repeat(chr(0x5c),64)).pack('H*',md5(($new_key^str_repeat(chr(0x36),64)).$data))); // SMF 1.0 style
 		if ($just_first) return $a;
-		if (!function_exists('sha1')) return $a;
 		$b=sha1($key.$data); // SMF 1.1 style
 
 		return $a.'::'.$b;
@@ -1057,13 +1056,13 @@ class forum_driver_smf2 extends forum_driver_base
 
 		list($stub,)=explode(':',get_member_cookie());
 
-		if ((!$GLOBALS['SMF_NEW']) || (!function_exists('sha1'))) // SMF 1.0 style
+		if (!$GLOBALS['SMF_NEW']) // SMF 1.0 style
 		{
 			$row=$this->get_member_row($id);
 			$_password=$this->forum_md5($row['passwd'],'ys');
 			$bits=explode('::',$_password);
 			$_password=$bits[0];
-		} elseif (function_exists('sha1')) // SMF 1.1 style
+		} else // SMF 1.1 style
 		{
 			$row=$this->get_member_row($id);
 			$_password=sha1($row['passwd'].$row['password_salt']);
@@ -1123,13 +1122,13 @@ class forum_driver_smf2 extends forum_driver_base
 			return $out;
 		}
 
-		$GLOBALS['SMF_NEW']=array_key_exists('pm_ignore_list',$row) && function_exists('sha1');
+		$GLOBALS['SMF_NEW']=array_key_exists('pm_ignore_list',$row);
 
 		// Main authentication
 		$bits=explode('::',$password_hashed);
 		if (!array_key_exists(1,$bits)) $bits[1]=$bits[0];
-		$test1=((!$GLOBALS['SMF_NEW']) || (!function_exists('sha1'))) && ((($from_cookie) && ($this->forum_md5($row['passwd'],'ys',true)==$bits[0])) || ((!$from_cookie) && ($row['passwd']==$bits[0])));
-		$test2=($GLOBALS['SMF_NEW']) && (function_exists('sha1')) && ((($from_cookie) && (sha1($row['passwd'].$row['password_salt'])==$bits[1])) || ((!$from_cookie) && ($row['passwd']==$bits[1])));
+		$test1=((!$GLOBALS['SMF_NEW'])) && ((($from_cookie) && ($this->forum_md5($row['passwd'],'ys',true)==$bits[0])) || ((!$from_cookie) && ($row['passwd']==$bits[0])));
+		$test2=($GLOBALS['SMF_NEW']) && ((($from_cookie) && (sha1($row['passwd'].$row['password_salt'])==$bits[1])) || ((!$from_cookie) && ($row['passwd']==$bits[1])));
 		if ((!$test1) && (!$test2))
 		{
 			$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));

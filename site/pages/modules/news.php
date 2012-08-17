@@ -584,13 +584,8 @@ class Module_news
 			}
 		}
 
-		if ($max==0) $max=1;
-		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
-		$num_pages=intval(ceil(floatval($max_rows)/floatval($max)));
-
-		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','type'=>'misc','blog'=>$blog,'start'=>($start-$max==0)?NULL:$start-$max)+propagate_ocselect()+(($filter=='*')?array():array('filter'=>$filter))+((($filter_and=='*')?array():array('filter_and'=>$filter_and))+(($max==20)?array():array('max'=>$max))),'_SELF');
-		$next_url=($rcount!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','type'=>'misc','blog'=>$blog,'start'=>$start+$max)+propagate_ocselect()+(($filter=='*')?array():array('filter'=>$filter))+((($filter_and=='*')?array():array('filter_and'=>$filter_and))+(($max==20)?array():array('max'=>$max))),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'264a8412dfd0b5bb80cd767702bdd600','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang_tempcode('NEWS'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
 
 		if ($blog===1)
 		{
@@ -612,7 +607,7 @@ class Module_news
 			$submit_url=build_url($map,get_module_zone('cms_news'));
 		} else $submit_url=new ocp_tempcode();
 
-		return do_template('NEWS_ARCHIVE_SCREEN',array('_GUID'=>'228918169ab1db445ee0c2d71f85983c','CAT'=>is_numeric($filter)?$filter:NULL,'SUBMIT_URL'=>$submit_url,'BLOGGER'=>is_null($blogger)?NULL:strval($blogger),'BLOG'=>$blog===1,'TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
+		return do_template('NEWS_ARCHIVE_SCREEN',array('_GUID'=>'228918169ab1db445ee0c2d71f85983c','CAT'=>is_numeric($filter)?$filter:NULL,'SUBMIT_URL'=>$submit_url,'BLOGGER'=>is_null($blogger)?NULL:strval($blogger),'BLOG'=>$blog===1,'TITLE'=>$title,'CONTENT'=>$content,'PAGINATION'=>$pagination));
 	}
 
 	/**

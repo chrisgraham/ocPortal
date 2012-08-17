@@ -130,14 +130,7 @@ function has_zone_access($member,$zone)
 	$groups=_get_where_clause_groups($member);
 	if ($groups===NULL) return true;
 
-	global $SITE_INFO;
-	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
-	{
-		$rows=$GLOBALS['SITE_DB']->query('SELECT DISTINCT zone_name FROM '.get_table_prefix().'group_zone_access WHERE ('.$groups.')',NULL,NULL,false,true);
-	} else
-	{
-		$rows=$GLOBALS['SITE_DB']->query('SELECT DISTINCT zone_name FROM '.get_table_prefix().'group_zone_access WHERE ('.$groups.') UNION ALL SELECT DISTINCT zone_name FROM '.get_table_prefix().'member_zone_access WHERE member_id='.strval((integer)$member).' AND active_until>'.strval(time()),NULL,NULL,false,true);
-	}
+	$rows=$GLOBALS['SITE_DB']->query('SELECT DISTINCT zone_name FROM '.get_table_prefix().'group_zone_access WHERE ('.$groups.') UNION ALL SELECT DISTINCT zone_name FROM '.get_table_prefix().'member_zone_access WHERE member_id='.strval((integer)$member).' AND active_until>'.strval(time()),NULL,NULL,false,true);
 	$ZONE_ACCESS_CACHE[$member]=array();
 	foreach ($rows as $row)
 	{
@@ -349,14 +342,7 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 	}
 	$db=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB'];
 	if ($db->query_value_null_ok_full('SELECT COUNT(*) FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.')')>1000) return; // Performance issue
-	global $SITE_INFO;
-	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
-	{
-		$perhaps=$db->query('SELECT '.$select.' FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.')',NULL,NULL,false,true);
-	} else
-	{
-		$perhaps=$db->query('SELECT '.$select.' FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.') UNION ALL SELECT '.$select.' FROM '.$db->get_table_prefix().'member_category_access WHERE '.$catclause.'(member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',NULL,NULL,false,true);
-	}
+	$perhaps=$db->query('SELECT '.$select.' FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.') UNION ALL SELECT '.$select.' FROM '.$db->get_table_prefix().'member_category_access WHERE '.$catclause.'(member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',NULL,NULL,false,true);
 
 	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR[$module]=true;
 
@@ -404,14 +390,7 @@ function has_category_access($member,$module,$category)
 	$_category=db_string_equal_to('category_name',$category);
 
 	$db=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB'];
-	global $SITE_INFO;
-	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))) || ($member==$GLOBALS['FORUM_DRIVER']->get_guest_id()))
-	{
-		$perhaps=$db->query('SELECT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.')',1,NULL,false,true);
-	} else
-	{
-		$perhaps=$db->query('SELECT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.') UNION ALL SELECT category_name FROM '.$db->get_table_prefix().'member_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND (member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',1,NULL,false,true);
-	}
+	$perhaps=$db->query('SELECT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.') UNION ALL SELECT category_name FROM '.$db->get_table_prefix().'member_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND (member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',1,NULL,false,true);
 
 	$result=(count($perhaps)>0);
 	handle_permission_check_logging($member,'has_category_access',array($module,$category),$result);
@@ -606,23 +585,12 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 		return $result;
 	}
 
-	global $SITE_INFO;
 	$where='';
 	if ($member!=get_member()) $where.=' AND '.db_string_equal_to('specific_permission',$permission);
-	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
+	$perhaps=$GLOBALS['SITE_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gsp WHERE ('.$groups.')'.$where.' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'msp WHERE member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true);
+	if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))
 	{
-		$perhaps=$GLOBALS['SITE_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gsp WHERE ('.$groups.')'.$where,NULL,NULL,false,true);
-		if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))
-		{
-			$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').$where,NULL,NULL,false,true));
-		}
-	} else
-	{
-		$perhaps=$GLOBALS['SITE_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gsp WHERE ('.$groups.')'.$where.' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'msp WHERE member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true);
-		if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))
-		{
-			$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').$where.' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'msp WHERE '.db_string_equal_to('module_the_name','forums').' AND member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true));
-		}
+		$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').$where.' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'msp WHERE '.db_string_equal_to('module_the_name','forums').' AND member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true));
 	}
 	$PRIVILEGE_CACHE[$member]=array();
 	foreach ($perhaps as $p)

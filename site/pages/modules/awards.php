@@ -186,9 +186,6 @@ class Module_awards
 		$info=$object->info();
 		if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='max';
-
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
 		$title=get_screen_title('_AWARD',true,array(escape_html(get_translated_text($award_type_row['a_title']))));
@@ -229,16 +226,12 @@ class Module_awards
 			inform_exit(do_lang_tempcode('NO_ENTRIES'));
 		}
 
-		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
-		$num_pages=intval(ceil(floatval($max_rows)/floatval($max)));
-
-		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>($start-$max==0)?NULL:$start-$max),'_SELF');
-		$next_url=(count($rows)!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'54690cd3d6ea1ee0722271ab428e6a31','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang_tempcode('AWARD_HISTORY'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
 
 		$sub_title=do_lang_tempcode('AWARD_HISTORY');
 
-		return do_template('NEXT_BROWSER_SCREEN',array('_GUID'=>'b9cf3a37300aced490003f79d7bb4914','TITLE'=>$title,'SUB_TITLE'=>$sub_title,'DESCRIPTION'=>$description,'CONTENT'=>$content,'BROWSE'=>$browse));
+		return do_template('PAGINATION_SCREEN',array('_GUID'=>'b9cf3a37300aced490003f79d7bb4914','TITLE'=>$title,'SUB_TITLE'=>$sub_title,'DESCRIPTION'=>$description,'CONTENT'=>$content,'PAGINATION'=>$pagination));
 	}
 
 }

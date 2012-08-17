@@ -66,8 +66,14 @@ class Module_leader_board
 
 		$start_date=intval(get_option('leaderboard_start_date'));
 
-		$weeks=$GLOBALS['SITE_DB']->query('SELECT DISTINCT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date).' ORDER BY date_and_time DESC');
+		$start=get_param_integer('start',0);
+		$max=get_param_integer('max',52);
+
+		$weeks=$GLOBALS['SITE_DB']->query('SELECT DISTINCT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date).' ORDER BY date_and_time DESC',$max,$start);
 		if (count($weeks)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+
+		$num_weeks=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT date_and_time) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date));
+
 		$first_week=$weeks[count($weeks)-1]['date_and_time'];
 		$weeks=collapse_1d_complexity('date_and_time',$weeks);
 		$out=new ocp_tempcode();
@@ -87,7 +93,10 @@ class Module_leader_board
 			$out->attach(do_template('POINTS_LEADERBOARD_WEEK',array('_GUID'=>'3a0f71bf20f9098e5711e85cf25f6549','WEEK'=>integer_format($nice_week),'ROWS'=>$week_tpl)));
 		}
 
-		return do_template('POINTS_LEADERBOARD_SCREEN',array('_GUID'=>'bab5f7b661435b83800532d3eebd0d54','TITLE'=>$title,'WEEKS'=>$out));
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang_tempcode('POINT_LEADERBOARD'),NULL,$start,'start',$max,'max',$num_weeks,NULL,get_param('type','misc'),true);
+
+		return do_template('POINTS_LEADERBOARD_SCREEN',array('_GUID'=>'bab5f7b661435b83800532d3eebd0d54','TITLE'=>$title,'WEEKS'=>$out,'PAGINATION'=>$pagination));
 	}
 
 }

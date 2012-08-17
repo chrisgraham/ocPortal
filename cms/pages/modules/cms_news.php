@@ -18,12 +18,12 @@
  * @package		news
  */
 
-require_code('aed_module');
+require_code('crud_module');
 
 /**
  * Module page class.
  */
-class Module_cms_news extends standard_aed_module
+class Module_cms_news extends standard_crud_module
 {
 	var $lang_type='NEWS';
 	var $select_name='TITLE';
@@ -65,7 +65,7 @@ class Module_cms_news extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module run_start.
+	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
@@ -75,7 +75,7 @@ class Module_cms_news extends standard_aed_module
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/news';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_news';
 
-		$this->cat_aed_module=new Module_cms_news_cat();
+		$this->cat_crud_module=new Module_cms_news_cat();
 		$this->posting_form_title=do_lang_tempcode('NEWS_ARTICLE');
 
 		require_css('news');
@@ -113,7 +113,7 @@ class Module_cms_news extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -193,7 +193,7 @@ class Module_cms_news extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
@@ -311,7 +311,7 @@ class Module_cms_news extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module submitter getter.
+	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
@@ -324,7 +324,7 @@ class Module_cms_news extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module cat getter.
+	 * Standard crud_module cat getter.
 	 *
 	 * @param  AUTO_LINK		The entry for which the cat is sought
 	 * @return string			The cat
@@ -337,7 +337,7 @@ class Module_cms_news extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
@@ -382,7 +382,7 @@ class Module_cms_news extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The ID of the entry added
 	 */
@@ -462,7 +462,7 @@ class Module_cms_news extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -553,7 +553,7 @@ class Module_cms_news extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -574,7 +574,7 @@ class Module_cms_news extends standard_aed_module
 	 */
 	function do_next_manager($title,$description,$id)
 	{
-		return $this->cat_aed_module->_do_next_manager($title,$description,is_null($id)?NULL:intval($id),$this->donext_type);
+		return $this->cat_crud_module->_do_next_manager($title,$description,is_null($id)?NULL:intval($id),$this->donext_type);
 	}
 
 	/**
@@ -831,7 +831,7 @@ class Module_cms_news extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_news_cat extends standard_aed_module
+class Module_cms_news_cat extends standard_crud_module
 {
 	var $lang_type='NEWS_CATEGORY';
 	var $select_name='TITLE';
@@ -843,7 +843,7 @@ class Module_cms_news_cat extends standard_aed_module
 	var $title_is_multi_lang=true;
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
@@ -890,7 +890,7 @@ class Module_cms_news_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
@@ -960,7 +960,7 @@ class Module_cms_news_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A pair: The input fields, Hidden fields
@@ -980,7 +980,7 @@ class Module_cms_news_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
@@ -999,7 +999,7 @@ class Module_cms_news_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -1019,7 +1019,7 @@ class Module_cms_news_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module submitter getter.
+	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return ?MEMBER		The submitter (NULL: none)
@@ -1030,7 +1030,7 @@ class Module_cms_news_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */

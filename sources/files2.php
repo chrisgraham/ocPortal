@@ -458,7 +458,7 @@ function check_shared_bandwidth_usage($extra)
 	}
 	if (array_key_exists('throttle_bandwidth_complementary',$SITE_INFO))
 	{
-//		$timestamp_start=$SITE_INFO['custom_user_'].current_share_user();
+//		$timestamp_start=$SITE_INFO['custom_user_'].current_share_user();	Actually we'll do by views
 //		$days_till_now=(time()-$timestamp_start)/(24*60*60);
 		$views_till_now=intval(get_value('page_views'));
 		$bandwidth_allowed=$SITE_INFO['throttle_bandwidth_complementary']+$SITE_INFO['throttle_bandwidth_views_per_meg']*$views_till_now;
@@ -485,7 +485,7 @@ function check_shared_space_usage($extra)
 	}
 	if (array_key_exists('throttle_space_complementary',$SITE_INFO))
 	{
-//		$timestamp_start=$SITE_INFO['custom_user_'].current_share_user();
+//		$timestamp_start=$SITE_INFO['custom_user_'].current_share_user();	Actually we'll do by views
 //		$days_till_now=(time()-$timestamp_start)/(24*60*60);
 		$views_till_now=intval(get_value('page_views'));
 		$space_allowed=$SITE_INFO['throttle_space_complementary']+$SITE_INFO['throttle_space_views_per_meg']*$views_till_now;

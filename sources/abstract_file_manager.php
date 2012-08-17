@@ -25,7 +25,7 @@ The abstract file manager allows easy and transparent file system maintenance, e
 /**
  * Standard code module initialisation function.
  */
-function init__abstract_file_manager()
+function init__controller__abstract_file_manager()
 {
 	require_lang('abstract_file_manager');
 	require_lang('installer');
@@ -33,21 +33,6 @@ function init__abstract_file_manager()
 
 	global $AFM_FTP_CONN;
 	$AFM_FTP_CONN=NULL;
-
-	if (!function_exists('ftp_chmod')) // This was new in PHP5
-	{
-		/**
-		 * FTP: Change a file's permissions.
-		 *
-		 * @param  resource  The FTP connection.
-		 * @param  integer	The permissions desired.
-		 * @param  PATH		The file path.
-		 */
-		function ftp_chmod($conn,$access,$path)
-		{
-			@ftp_site($conn,'CHMOD '._access_string($access).' '.$path);
-		}
-	}
 }
 
 /**
@@ -73,20 +58,10 @@ function force_have_afm_details()
 		return;
 	}
 
-	/*$ftp_domain=get_value('ftp_domain');
-	if (!is_null($ftp_domain))
-	{
-		$_POST['ftp_username']=get_value('ftp_username');
-		$_POST['ftp_directory']=get_value('ftp_directory');
-		$_POST['ftp_domain']=get_value('ftp_domain');
-		$_POST['uses_ftp']=get_value('uses_ftp');
-//		if ($_POST['uses_ftp']==0) return;
-	}*/
-
 	$got_ftp_details=post_param_integer('got_ftp_details',0);
 	$ftp_password=get_value('ftp_password');
 	if (is_null($ftp_password)) $ftp_password='';
-	//$uses_ftp=get_value('uses_ftp');    We can't use this because there's no reliable way to trust this is always going to be write (permissions change/differ, and we can't accurately run a test and trust the result going forward for everything)
+	//$uses_ftp=get_value('uses_ftp');    We can't use this because there's no reliable way to trust this is always going to be right (permissions change/differ, and we can't accurately run a test and trust the result going forward for everything)
 	if (/*($uses_ftp==='0') || */(strlen($ftp_password)>0)) // Permanently stored
 	{
 		return;

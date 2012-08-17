@@ -25,25 +25,6 @@
  */
 function init__lang()
 {
-	if (!function_exists('do_lang'))
-	{
-		/**
-		 * Get the human-readable form of a language id, or a language entry from a language INI file.
-		 *
-		 * @param  ID_TEXT		The language id
-		 * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
-		 * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
-		 * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
-		 * @param  ?LANGUAGE_NAME The language to use (NULL: users language)
-		 * @param  boolean		Whether to cause ocPortal to exit if the lookup does not succeed
-		 * @return ?mixed			The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
-		 */
-		function do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$require_result=true)
-		{
-			return _do_lang($codename,$token1,$token2,$token3,$lang,$require_result);
-		}
-	}
-
 	global $COMCODE_LANG_STRING_CACHE;
 	$COMCODE_LANG_STRING_CACHE=array();
 
@@ -146,6 +127,22 @@ function init__lang()
 // ====
 // CODE
 // ====
+
+/**
+ * Get the human-readable form of a language id, or a language entry from a language INI file.
+ *
+ * @param  ID_TEXT		The language id
+ * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
+ * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
+ * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
+ * @param  ?LANGUAGE_NAME The language to use (NULL: users language)
+ * @param  boolean		Whether to cause ocPortal to exit if the lookup does not succeed
+ * @return ?mixed			The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
+ */
+function do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$require_result=true)
+{
+	return _do_lang($codename,$token1,$token2,$token3,$lang,$require_result);
+}
 
 /**
  * Open up our language cache file for appending.

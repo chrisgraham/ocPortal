@@ -18,12 +18,12 @@
  * @package		core_ocf
  */
 
-require_code('aed_module');
+require_code('crud_module');
 
 /**
  * Module page class.
  */
-class Module_admin_ocf_groups extends standard_aed_module
+class Module_admin_ocf_groups extends standard_crud_module
 {
 	var $lang_type='GROUP';
 	var $select_name='NAME';
@@ -50,7 +50,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module run_start.
+	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
@@ -295,7 +295,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -412,7 +412,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
@@ -441,7 +441,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete possibility checker.
+	 * Standard crud_module delete possibility checker.
 	 *
 	 * @param  ID_TEXT		The entry being potentially deleted
 	 * @return boolean		Whether it may be deleted
@@ -452,7 +452,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A triple: fields, hidden-fields, delete-fields
@@ -563,7 +563,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
@@ -603,7 +603,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return ?tempcode		Confirm message (NULL: continue)
@@ -650,7 +650,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */

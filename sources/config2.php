@@ -59,7 +59,6 @@ function find_lost_option($name)
 		$matches=array();
 		foreach ($search as $s)
 		{
-//			echo $s.'<br />';
 			$code=file_get_contents($s);
 			if (preg_match('#add_config_option\(\'\w+\',\''.str_replace('#','\#',preg_quote($name)).'\',\'\w+\',\'.+\',\'\w+\',\'\w+\'(,1)?\);#',$code,$matches)>0)
 			{
@@ -67,9 +66,11 @@ function find_lost_option($name)
 				$upgrade_from=NULL; // In case referenced in add_config_option line
 				eval($matches[0]);
 
+				// We could put out a message, but no need to scare people
+				//	attach_message(do_lang_tempcode('CONFIG_OPTION_FETCHED',escape_html($name)),'warn');	 CONFIG_OPTION_FETCHED=A config option ({1}) was missing, but has been hunted down and installed. This is an unexpected inconsistency, please refresh the page, and hopefully it has been permanently corrected.
+
 				load_options();
 				break;
-//				fatal_exit(do_ lang_tempcode('CONFIG_OPTION_FETCHED',escape_html($name)));	 CONFIG_OPTION_FETCHED=A config option ({1}) was missing, but has been hunted down and installed. This is an unexpected inconsistency, please refresh the page, and hopefully it has been permanently corrected.
 			}
 		}
 	}

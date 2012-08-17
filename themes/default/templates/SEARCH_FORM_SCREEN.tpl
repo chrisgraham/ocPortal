@@ -76,18 +76,18 @@
 						<th class="form_table_field_name">{!OPTIONS}</th>
 						<td class="form_table_field_input" colspan="2">
 							{+START,IF,{$NOT,{$VALUE_OPTION,disable_boolean_search}}}
-								{+START,IF,{$NOT,{OLD_MYSQL}}}
+								{+START,IF,{HAS_FULLTEXT_SEARCH}
 								<input type="checkbox" id="boolean_search" {+START,IF,{BOOLEAN_SEARCH}}checked="checked" {+END}name="boolean_search" value="1" onclick="document.getElementById('boolean_options').style.display=this.checked?'block':'none'; trigger_resize();" /> <label for="boolean_search">{!BOOLEAN_SEARCH}</label>
 								<div style="display: {$JS_ON,none,block}" class="boolean_options" id="boolean_options">
 								{+END}
-									{+START,IF,{OLD_MYSQL}}
+									{+START,IF,{$NOT,{HAS_FULLTEXT_SEARCH}}}
 										<p>
 											<input type="radio" {+START,IF,{AND}}checked="checked" {+END}id="conjunctive_operator_and" name="conjunctive_operator" value="AND" /><label for="conjunctive_operator_and">{!SEARCH_AND}</label>
 											<input type="radio" {+START,IF,{$NOT,{AND}}}checked="checked" {+END}id="conjunctive_operator_or" name="conjunctive_operator" value="OR" /><label for="conjunctive_operator_or">{!SEARCH_OR}</label>
 										</p>
 									{+END}
 									<p>{!BOOLEAN_HELP}</p>
-								{+START,IF,{$NOT,{OLD_MYSQL}}}
+								{+START,IF,{HAS_FULLTEXT_SEARCH}}
 								</div>
 								{+END}
 							{+END}

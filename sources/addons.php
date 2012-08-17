@@ -733,9 +733,10 @@ function uninstall_addon($name)
  * @param  string			Filename of the addon TAR file
  * @param  ?array			List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (NULL: none)
  * @param  ?array			List of addons that we're currently installing (so dependencies to these are irrelevant). (NULL: none)
+ * @param  boolean		Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
  * @return array			Triple: warnings, files, addon info array
  */
-function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installing=NULL)
+function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installing=NULL,$always_return=false)
 {
 	if (is_null($also_uninstalling)) $also_uninstalling=array();
 	if (is_null($also_installing)) $also_installing=array();
@@ -883,7 +884,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	}
 	if (count($dependencies)!=0)
 	{
-		if ($info['author']=='Core Team')
+		if (($info['author']=='Core Team') && (!$always_return))
 		{
 			$post_fields=build_keep_post_fields();
 			foreach ($dependencies as $in)
@@ -967,9 +968,10 @@ function has_feature($dependency)
  * @param  string			Name of the addon
  * @param  ?array			List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (NULL: none)
  * @param  ?array			Addon details. (NULL: load in function)
+ * @param  boolean		Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
  * @return array			Pair: warnings, files
  */
-function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=NULL)
+function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=NULL,$always_return=false)
 {
 	if (is_null($also_uninstalling)) $also_uninstalling=array();
 
@@ -1005,7 +1007,7 @@ function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=N
 	}
 	if (count($dependencies)!=0)
 	{
-		if ($addon_row['addon_author']=='Core Team')
+		if (($addon_row['addon_author']=='Core Team') && (!$always_return))
 		{
 			$post_fields=build_keep_post_fields();
 			foreach ($dependencies as $in)

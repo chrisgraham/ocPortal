@@ -107,7 +107,6 @@ function ocf_get_all_subordinate_forums($forum_id,$create_or_list=NULL,$tree=NUL
 		}
 	}
 
-//	$subordinates=$direct_subordinates;
 	$subordinates=array();
 	foreach ($tree as $subordinate)
 	{
@@ -132,7 +131,7 @@ function ocf_get_all_subordinate_forums($forum_id,$create_or_list=NULL,$tree=NUL
 	return $subordinates;
 }
 
-/*function ocf_is_up_to_date_on_forum($forum_id,$member_id=NULL)
+/*function ocf_is_up_to_date_on_forum($forum_id,$member_id=NULL)		Interesting function, not currently needed
 {
 	$_last_topic=$GLOBALS['FORUM_DB']->query_select('f_forums',array('f_cache_last_time','f_cache_last_topic_id'),array('id'=>$forum_id));
 	if (!array_key_exists(0,$_last_topic)) return false; // Data error, but let's just trip past

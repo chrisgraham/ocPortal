@@ -444,8 +444,6 @@ function block_helper_script()
 				{
 					$matches=array();
 					$contents=file_get_contents(zone_black_magic_filterer(((substr($type,0,15)=='comcode_custom/')?get_custom_file_base():get_file_base()).'/'.(($zone=='')?'':($zone.'/')).'pages/'.$type.'/'.$filename));
-					//$fallback=get_file_base().'/'.(($zone=='')?'':($zone.'/')).'pages/comcode/'.fallback_lang().'/'.$filename;
-					//if (file_exists($fallback)) $contents.=file_get_contents($fallback);
 					$num_matches=preg_match_all('#\[block[^\]]*\](.*)\[/block\]#U',$contents,$matches);
 					for ($i=0;$i<$num_matches;$i++)
 					{
@@ -683,12 +681,6 @@ function block_helper_script()
 				{
 					require_code('galleries');
 					$list=nice_get_gallery_tree($default);
-					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
-				}
-				elseif (($parameter=='param') && (in_array($block,array('main_download_category')))) // download category list
-				{
-					require_code('downloads');
-					$list=nice_get_download_category_tree(($default=='')?NULL:intval($default));
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
 				elseif ((($parameter=='param') && (in_array($block,array('main_contact_catalogues')))) || (($parameter=='catalogue') && (in_array($block,array('main_recent_cc_entries'))))) // catalogue list

@@ -45,7 +45,7 @@ function ocf_make_category($title,$description,$expanded_by_default=1)
  * @param  SHORT_TEXT 	The name of the forum.
  * @param  SHORT_TEXT 	The description for the forum.
  * @param  ?AUTO_LINK	What forum category the forum will be filed with (NULL: this is the root forum).
- * @param  ?array			Permission map (NULL: do it the standard way, outside of this function). This parameter is for import/compatibility only and works upon an emulation of 'access levels' (ala ocPortal 2.5/2.6), and it is recommended to use the normal aed_module functionality for permissions setting.
+ * @param  ?array			Permission map (NULL: do it the standard way, outside of this function). This parameter is for import/compatibility only and works upon an emulation of 'access levels' (ala ocPortal 2.5/2.6), and it is recommended to use the normal crud_module functionality for permissions setting.
  * @param  ?AUTO_LINK 	The ID of the parent forum (NULL: this is the root forum).
  * @param  integer		The position of this forum relative to other forums viewable on the same screen (if parent forum hasn't specified automatic ordering).
  * @param  BINARY			Whether post counts will be incremented if members post in the forum.

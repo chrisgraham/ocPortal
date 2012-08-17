@@ -863,8 +863,7 @@ function do_block_hunt_file($codename,$map=NULL)
 			{
 				require($file_base.'/sources_custom/miniblocks/'.$codename.'.php');
 			}
-			$object=ob_get_contents();
-			ob_end_clean();
+			$object=ob_get_clean();
 			restrictify();
 
 			if (!isset($BLOCKS_AT_CACHE[$codename]))
@@ -885,8 +884,7 @@ function do_block_hunt_file($codename,$map=NULL)
 			{
 				require($file_base.'/sources/miniblocks/'.$codename.'.php');
 			}
-			$object=ob_get_contents();
-			ob_end_clean();
+			$object=ob_get_clean();
 			restrictify();
 
 			if (!isset($BLOCKS_AT_CACHE[$codename]))
@@ -1057,7 +1055,7 @@ function extract_module_functions($path,$functions,$params=NULL)
 			}
 			$CLASS_CACHE[$path]=$new_classes;
 		}
-		if ((array_key_exists(0,$new_classes)) && ($new_classes[0]=='standard_aed_module')) array_shift($new_classes);
+		if ((array_key_exists(0,$new_classes)) && ($new_classes[0]=='standard_crud_module')) array_shift($new_classes);
 		if (array_key_exists(0,$new_classes))
 		{
 			$c=$new_classes[0];

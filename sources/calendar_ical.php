@@ -371,7 +371,7 @@ function get_event_data_ical($calendar_nodes)
 	$rec_by_day=array('MO','TU','WE','TH','FR','SA','SU');
 
 //	if (array_key_exists('LOCATION',$calendar_nodes))
-//		$geo_position=$calendar_nodes['LOCATION'];
+//		$geo_position=$calendar_nodes['LOCATION'];		We don't support these in ocPortal, at least not yet
 
 
 	if (array_key_exists('RRULE',$calendar_nodes))

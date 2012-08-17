@@ -18,8 +18,6 @@
  * @package		core
  */
 
-/*EXTRA FUNCTIONS: var_export*/
-
 /**
  * Standard code module initialisation function.
  */
@@ -609,47 +607,31 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}
 
 		// Work out main query
-		global $SITE_INFO;
-		if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
+		$query='';
+		foreach ($where_alternative_matches as $parts) // We UNION them, because doing OR's on MATCH's is insanely slow in MySQL (sometimes I hate SQL...)
 		{
-			$_query='';
-			foreach ($where_alternative_matches as $parts)
+			list($where_clause_2,$where_clause_3,$_select,$_table_clause,$tid)=$parts;
+
+			if ($query!='') $query.=' UNION ';
+
+			if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where=='') || true)
 			{
-				list($where_clause_2,$where_clause_3,$_select,,)=$parts;
 				$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
 
-				$select.=(($_select=='')?'':',').$_select;
-				$_query.=(($where_clause_3!='')?((($_query=='')?' WHERE ':' OR ').$where_clause_3):'');
-			}
-			$query='SELECT '.$select.' FROM '.$table_clause.$_query;
-		} else
-		{
-			$query='';
-			foreach ($where_alternative_matches as $parts) // We UNION them, because doing OR's on MATCH's is insanely slow in MySQL (sometimes I hate SQL...)
+				$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
+			} else // Optimised using subqueries. We need the fulltext search to run first to avoid non-bounded joins over potentially huge tables
 			{
-				list($where_clause_2,$where_clause_3,$_select,$_table_clause,$tid)=$parts;
-
-				if ($query!='') $query.=' UNION ';
-
-				if ((!db_has_subqueries($db->connection_read)) || (is_null($tid)) || ($content_where=='') || true)
+				$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM './*str_replace(' LEFT JOIN ',' JOIN ',*/$_table_clause/*)*/;
+				if (($where_clause_2!='') || ($where_clause_3!=''))
 				{
-					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
-
-					$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
-				} else // Optimised using subqueries. We need the fulltext search to run first to avoid non-bounded joins over potentially huge tables
-				{
-					$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM './*str_replace(' LEFT JOIN ',' JOIN ',*/$_table_clause/*)*/;
-					if (($where_clause_2!='') || ($where_clause_3!=''))
-					{
-						$query.=' WHERE '.$where_clause_2;
-						$query.=(($where_clause_3!='')?((($where_clause_2=='')?'':' AND ').$tid.'.id IN (SELECT '.$tid.'.id FROM '.$_table_clause.' WHERE '.$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3)).')'):'');
-					}
+					$query.=' WHERE '.$where_clause_2;
+					$query.=(($where_clause_3!='')?((($where_clause_2=='')?'':' AND ').$tid.'.id IN (SELECT '.$tid.'.id FROM '.$_table_clause.' WHERE '.$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3)).')'):'');
 				}
 			}
 		}
 		// Work out COUNT(*) query using one of a few possible methods. It's not efficient and stops us doing proper merge-sorting between content types (and possible not accurate - if we use an efficient but non-deduping COUNT strategy) if we have to use this, so we only do it if there are too many rows to fetch in one go.
 		$_query='';
-		if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))) || (strpos(get_db_type(),'mysql')===false))
+		if (strpos(get_db_type(),'mysql')===false)
 		{
 			foreach ($where_alternative_matches as $parts)
 			{
@@ -670,7 +652,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				}
 			}
 			$_count_query_main_search='SELECT COUNT(*) FROM '.$table_clause.$_query;
-		} else // This is inaccurate (does ot filter dupes from each +'d query) but much more efficient on MySQL
+		} else // This is inaccurate (does not filter dupes from each +'d query) but much more efficient on MySQL
 		{
 			foreach ($where_alternative_matches as $parts) // We "+" them, because doing OR's on MATCH's is insanely slow in MySQL (sometimes I hate SQL...)
 			{

@@ -99,7 +99,10 @@ ocPortal contains a number of hidden 'values', 'keep' parameters, and empty file
 The presence of the following empty files in the root directory have a special meaning to ocPortal:
  - [tt]install_ok[/tt] -- don't complain if [tt]install.php[/tt] is left present (DO NOT use this unless your install is not connected to the Internet or if you definitely have an install_locked file)
  - [tt]install_locked[/tt] -- whether to lock the installer (prevent it running)
- - [tt]old_mysql[/tt] -- degrade mySQL functionality so that old (official unsupported) versions will basically work with ocPortal
+
+[title="3"]Other special files[/title]
+
+If you put a file called [tt]closed.html[/tt] then this will be shown to people rather than the normal closed-site screen, regardless of whether the site is currently closed or not.
 
 [title="3"]Hidden 'values'[/title]
 
@@ -137,6 +140,7 @@ The values you might want to manually change are:
  - [tt]mails_per_send[/tt] -- set this to the number of e-mails to send out in each e-mail send batch (default is 60).
  - [tt]primary_paypal_email[/tt] -- set this to your primary PayPal email address, if you have set up PayPal to work against a secondary PayPal address instead. Without it ocPortal will fail to validate payments, causing all eCommerce to fail.
  - [tt]simplify_wysiwyg_by_permissions[/tt] -- set this to '1' if you want to show a simpler WYSIWYG editor to members with limited Comcode permissions.
+ - [tt]chat_interval_time[/tt] -- the number of milliseconds between chat message retrieval requests; don't set it too low or server-performance will be hurt.
 
 We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:
  - [tt]stupidity_mode[/tt] -- set to 'leet' or 'bork', for a fun April Fools-style Comcode joke (clear the Comcode cache after you're done though)

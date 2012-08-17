@@ -23,9 +23,6 @@
  */
 function init__comcode_conversion()
 {
-	global $PREG_MATCH_OFFSET;
-	$PREG_MATCH_OFFSET=(version_compare(phpversion(),'4.3.3')!=-1);
-
 	if (!defined('SYMBOL_PARSE_NAME'))
 	{
 		define('SYMBOL_PARSE_NAME',0);
@@ -1213,11 +1210,9 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme=N
 	$matches=array();
 	$dirty_param=false;
 
-	//$quicker=$GLOBALS['PREG_MATCH_OFFSET'];
-
 	while (true)
 	{
-		/*if ($quicker)
+		/*if ($quicker)		Possibly flaky, we don't need this code to be super-fast so we'll do the full parse
 		{
 			preg_match('#[^\\\\\{\}\,\+\!\'\$:%\*;\#~\.\^|\&/@=`]*#m',$text,$matches,0,$symbol_pos); // Guarded by $quicker, as only works on newer PHP versions
 			$next=$matches[0];

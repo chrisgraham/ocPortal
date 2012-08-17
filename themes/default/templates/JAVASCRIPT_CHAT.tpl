@@ -1,5 +1,10 @@
 "use strict";
 
+var chat_interval_time=10000;
+{+START,IF_NON_EMPTY,{$VALUE_OPTION,chat_interval_time}}
+	chat_interval_time={$VALUE_OPTION,chat_interval_time};
+{+END}
+
 var last_message_id=0;
 var last_timestamp=0;
 var last_event_id=0;
@@ -7,12 +12,12 @@ var message_checking=false;
 var no_im_html;
 var picker,picker_node,text_colour;
 var opened_popups=[];
-var topZIndex=800;
+var top_z_index=800;
 var load_from_room_id;
 
-window.hasFocus=true;
-add_event_listener_abstract(window,'blur',function() { window.hasFocus=false; });
-add_event_listener_abstract(window,'focus',function() { window.hasFocus=true; });
+window.has_focus=true;
+add_event_listener_abstract(window,'blur',function() { window.has_focus=false; });
+add_event_listener_abstract(window,'focus',function() { window.has_focus=true; });
 
 function play_sound_url(url) // Used for testing different sounds
 {
@@ -92,19 +97,19 @@ function dec_to_hex(number)
 	return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 }
 
-function hexToDec(number)
+function hex_to_dec(number)
 {
 	return parseInt(number,16);
 }
 
 function update_picker_colour()
 {
-	picker.setValue([hexToDec(text_colour.value.substr(1,2)),hexToDec(text_colour.value.substr(3,2)),hexToDec(text_colour.value.substr(5,2))],false);
+	picker.setValue([hex_to_dec(text_colour.value.substr(1,2)),hex_to_dec(text_colour.value.substr(3,2)),hex_to_dec(text_colour.value.substr(5,2))],false);
 	picker_node.style.left=find_pos_x(text_colour)+'px';
 	picker_node.style.top=(find_pos_y(text_colour)+25)+'px';
 }
 
-function onRgbChange(o)
+function chat_on_rgb_change(o)
 {
 	var value='#'+dec_to_hex(o.newValue[0])+dec_to_hex(o.newValue[1])+dec_to_hex(o.newValue[2]);
 	text_colour.value=value;
@@ -113,7 +118,7 @@ function onRgbChange(o)
 	//document.getElementById('post').style.color=value;
 }
 
-function onFontChange(o)
+function on_font_change(o)
 {
 	var value=o.options[o.selectedIndex].value;
 	document.getElementById('font').value=value;
@@ -134,7 +139,7 @@ function load_colour_picker()
 	text_colour.form.appendChild(picker_node);
 	picker=new YAHOO.widget.ColorPicker("colour_picker", { showhexsummary: false, showrgbcontrols: false, showwebsafe: false });
 	update_picker_colour();
-	picker.on("rgbChange",onRgbChange);
+	picker.on("rgbChange",chat_on_rgb_change);
 	picker_node.ondblclick=function() { picker_node.style.visibility='hidden'; };
 }
 
@@ -256,7 +261,7 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 			}
 
 			// Reschedule the next check
-			top_window.cc_timer=top_window.setTimeout("chat_check(false,"+top_window.last_message_id+","+top_window.last_event_id+");",10000);
+			top_window.cc_timer=top_window.setTimeout(function() { chat_check(false,top_window.last_message_id.top_window.last_event_id); },window.chat_interval_time);
 
 			try
 			{
@@ -290,9 +295,9 @@ function chat_check(backlog,message_id,event_id)
 	if ((typeof window.do_ajax_request!='undefined') && (window.do_ajax_request))
 	{
 		// AJAX!
-		window.setTimeout("chat_check_timeout("+backlog+","+message_id+","+event_id+");",11000);
+		window.setTimeout(function() { chat_check_timeout(backlog,message_id,event_id); },window.chat_interval_time*1.1);
 		var the_date=new Date();
-		if ((!window.message_checking) || (parseInt(window.message_checking)+10000<=the_date.getTime())) // If not currently in process, or process stalled
+		if ((!window.message_checking) || (parseInt(window.message_checking)+window.chat_interval_time<=the_date.getTime())) // If not currently in process, or process stalled
 		{
 			window.message_checking=the_date.getTime();
 			var url;
@@ -338,7 +343,7 @@ function chat_check_response(ajax_result_frame,ajax_result)
 
 	// Schedule the next check
 	if (window.cc_timer) {	window.clearTimeout(window.cc_timer); window.cc_timer=null; }
-	window.cc_timer=window.setTimeout("chat_check(false,"+window.last_message_id+","+window.last_event_id+");",10000);
+	window.cc_timer=window.setTimeout(function() { chat_check(false,window.last_message_id,window.last_event_id); },window.chat_interval_time);
 
 	window.message_checking=false; // All must be ok so say we are happy we got a response and scheduled the next check
 
@@ -442,7 +447,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 
 				if (!first_set) // Only if no other message sound already for this event update
 				{
-					if (!skip_incoming_sound) if (typeof window.play_chat_sound!='undefined') play_chat_sound(window.hasFocus?'message_received':'message_background',messages[i].getAttribute('sender_id'));
+					if (!skip_incoming_sound) if (typeof window.play_chat_sound!='undefined') play_chat_sound(window.has_focus?'message_received':'message_background',messages[i].getAttribute('sender_id'));
 					flashable_alert=true;
 				}
 			} else // First message
@@ -683,7 +688,7 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 
 	var div=document.createElement('div');
 	div.className='im_event';
-	div.style.zIndex=topZIndex++;
+	div.style.zIndex=top_z_index++;
 	var imgclose=document.createElement('img');
 	imgclose.setAttribute('src','{$IMG;,tableitem/delete}'.replace(/^http:/,window.location.protocol));
 	imgclose.className='im_popup_close_button blend';
@@ -717,7 +722,7 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 	a4.className='im_event_lobby_link';
 	div.appendChild(a4);
 	div.style.left=(get_window_width()/2-140)+'px';
-	div.style.top=(get_window_height()+get_window_scroll_y()-(topZIndex-800)*100)+'px';
+	div.style.top=(get_window_height()+get_window_scroll_y()-(top_z_index-800)*100)+'px';
 
 	document.body.appendChild(div);
 }

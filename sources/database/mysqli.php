@@ -141,7 +141,7 @@ class Database_Static_mysqli extends Database_super_mysql
 	{
 		if ($this->using_innodb()) return false;
 
-		return (version_compare(mysqli_get_server_info($db[0]),'4.0.0','>='));
+		return true;
 	}
 
 	/**
@@ -152,7 +152,7 @@ class Database_Static_mysqli extends Database_super_mysql
 	 */
 	function db_has_subqueries($db)
 	{
-		return (version_compare(mysqli_get_server_info($db[0]),'4.1.0','>='));
+		return true;
 	}
 
 	/**
@@ -173,7 +173,7 @@ class Database_Static_mysqli extends Database_super_mysql
 	 */
 	function db_has_collate_settings($db)
 	{
-		return (version_compare(mysqli_get_server_info($db[0]),'4.1.0','>='));
+		return true;
 	}
 
 	/**

@@ -48,7 +48,7 @@ To embed entries you may use the '[tt]main_content[/tt]' block. This is describe
 
 [title="3"]Embedding categories[/title]
 
-The '[tt]main_download_category[/tt]', '[tt]main_cc_embed[/tt]', '[tt]main_gallery_embed'[/tt] and '[tt]main_news[/tt]' blocks allow you to combine categories with your own personal wrapping Comcode, which is a very useful tool if you wish to integrate them tightly into your site. We do not, however, provide this functionality for all kinds of module because it would become over-complex. We provide a special module->block feature to bridge this (further details in the 'Provided featured content' tutorial).
+The '[tt]main_multi_content[/tt]', '[tt]main_cc_embed[/tt]', '[tt]main_gallery_embed'[/tt] and '[tt]main_news[/tt]' blocks allow you to combine categories with your own personal wrapping Comcode, which is a very useful tool if you wish to integrate them tightly into your site. We do not, however, provide this functionality for all kinds of module because it would become over-complex. We provide a special module->block feature to bridge this (further details in the 'Provided featured content' tutorial).
 
 [title="2"]Exporting attachments[/title]
 

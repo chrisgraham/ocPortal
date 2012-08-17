@@ -25,19 +25,6 @@
  */
 function init__validation2()
 {
-	if (!function_exists('mailto_obfuscated'))
-	{
-		/**
-		 * Get obfuscate version of 'mailto:' (which'll hopefully fool e-mail scavengers to not pick up these e-mail addresses).
-		 *
-		 * @return string		The obfuscated 'mailto:' string
-		 */
-		function mailto_obfuscated()
-		{
-			return 'mailto:';
-		}
-	}
-
 	global $TAGS_BLOCK;
 	$TAGS_BLOCK=array(
 		'div'=>1,

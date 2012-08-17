@@ -44,40 +44,40 @@ function init__ocf_install()
 {
 	global $OCF_TRUE_PERMISSIONS,$OCF_FALSE_PERMISSIONS;
 	$OCF_TRUE_PERMISSIONS=array(
-									'run_multi_moderations',
-									'use_pt',
-									'edit_personal_topic_posts',
-									'may_unblind_own_poll',
-									'may_report_post',
-									'view_member_photos',
-									'use_quick_reply',
-									'view_profiles',
-									'own_avatars',
-									//'decide_comment_type'
+		'run_multi_moderations',
+		'use_pt',
+		'edit_personal_topic_posts',
+		'may_unblind_own_poll',
+		'may_report_post',
+		'view_member_photos',
+		'use_quick_reply',
+		'view_profiles',
+		'own_avatars',
+		//'decide_comment_type'
 	);
 	$OCF_FALSE_PERMISSIONS=array(
-									'rename_self',
-									'use_special_emoticons',
-									'view_any_profile_field',
-									'disable_lost_passwords',
-									'close_own_topics',
-									'edit_own_polls',
-									'double_post',
-									'see_warnings',
-									'see_ip',
-									'may_choose_custom_title',
-									'delete_account',
-									'view_other_pt',
-									'view_poll_results_before_voting',
-									'moderate_personal_topic',
-									'member_maintenance',
-									'probate_members',
-									'warn_members',
-									'control_usergroups',
-									'multi_delete_topics',
-									'show_user_browsing',
-									'see_hidden_groups',
-									'pt_anyone',
+		'rename_self',
+		'use_special_emoticons',
+		'view_any_profile_field',
+		'disable_lost_passwords',
+		'close_own_topics',
+		'edit_own_polls',
+		'double_post',
+		'see_warnings',
+		'see_ip',
+		'may_choose_custom_title',
+		'delete_account',
+		'view_other_pt',
+		'view_poll_results_before_voting',
+		'moderate_personal_topic',
+		'member_maintenance',
+		'probate_members',
+		'warn_members',
+		'control_usergroups',
+		'multi_delete_topics',
+		'show_user_browsing',
+		'see_hidden_groups',
+		'pt_anyone',
 	);
 }
 
@@ -124,16 +124,13 @@ function uninstall_ocf_everytime()
 	delete_config_option('minimum_username_length');
 	delete_config_option('maximum_username_length');
 	delete_config_option('prohibit_password_whitespace');
-	delete_config_option('prohibit_password_dictionary');
 	delete_config_option('prohibit_username_whitespace');
 	delete_config_option('random_avatars');
 	delete_config_option('club_forum_parent_forum');
 	delete_config_option('club_forum_parent_category');
 	delete_config_option('delete_trashed_pts');
-	delete_config_option('allow_member_integration');
 	delete_config_option('probation_usergroup');
 	delete_config_option('threaded_comments');
-	//delete_config_option('threaded_topics_default');
 	delete_config_option('show_first_join_page');
 	delete_config_option('skip_email_confirm_join');
 	delete_config_option('no_dob_ask');
@@ -366,13 +363,11 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('MINIMUM_USERNAME_LENGTH','minimum_username_length','integer','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('MAXIMUM_USERNAME_LENGTH','maximum_username_length','integer','return \'20\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('PROHIBIT_PASSWORD_WHITESPACE','prohibit_password_whitespace','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		//add_config_option('PROHIBIT_PASSWORD_DICTIONARY','prohibit_password_dictionary','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('PROHIBIT_USERNAME_WHITESPACE','prohibit_username_whitespace','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('ASSIGN_RANDOM_AVATARS','random_avatars','tick','return addon_installed(\'ocf_member_avatars\')?\'1\':NULL;','SECTION_FORUMS','GENERAL');
 		add_config_option('CLUB_FORUM_PARENT_FORUM','club_forum_parent_forum','forum','return has_no_forum()?NULL:strval(db_get_first_id());','SECTION_FORUMS','GENERAL');
 		add_config_option('CLUB_FORUM_PARENT_CATEGORY','club_forum_parent_category','category','return has_no_forum()?NULL:strval(db_get_first_id());','SECTION_FORUMS','GENERAL');
 		add_config_option('DELETE_TRASHED_PTS','delete_trashed_pts','tick','return has_no_forum()?NULL:\'0\';','SECTION_FORUMS','GENERAL');
-		//add_config_option('ALLOW_MEMBER_INTEGRATION','allow_member_integration','list','return \'off\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS',0,'strict|on|hidden|off');
 		add_config_option('PROBATION_USERGROUP','probation_usergroup','usergroup','return do_lang(\'PROBATION\');','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('SHOW_FIRST_JOIN_PAGE','show_first_join_page','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 		add_config_option('SKIP_EMAIL_CONFIRM_JOIN','skip_email_confirm_join','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
@@ -534,14 +529,13 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_table('f_member_custom_fields',array(
 			'mf_member_id'=>'*USER'
 		));
-		//$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','fields_for_member',array('mf_member_id'));
 
 		ocf_make_boiler_custom_field('SELF_DESCRIPTION');
-		//ocf_make_boiler_custom_field('im_aim');
-		//ocf_make_boiler_custom_field('im_msn');
-		//ocf_make_boiler_custom_field('im_yahoo');
-		//ocf_make_boiler_custom_field('im_icq');
-		//ocf_make_boiler_custom_field('im_jabber');
+		//ocf_make_boiler_custom_field('im_aim'); Old-school
+		//ocf_make_boiler_custom_field('im_msn'); Old-school
+		//ocf_make_boiler_custom_field('im_yahoo'); Old-school
+		//ocf_make_boiler_custom_field('im_icq'); Old-school
+		//ocf_make_boiler_custom_field('im_jabber'); Old-school
 		ocf_make_boiler_custom_field('im_skype');
 		ocf_make_boiler_custom_field('sn_facebook');
 		ocf_make_boiler_custom_field('sn_google');
@@ -633,56 +627,59 @@ function install_ocf($upgrade_from=NULL)
 	if ((is_null($upgrade_from)) || ($upgrade_from<2.5))
 	{
 		$no_use_topics=array('party'=>1,'christmas'=>1,'offtopic'=>1,'rockon'=>1,'guitar'=>1,'sinner'=>1,'wink'=>1,'kiss'=>1,'nod'=>1,'smile'=>1,'mellow'=>1,'whistle'=>1,'shutup'=>1,'cyborg'=>1);
-		$core_emoticons=array(':P'=>'cheeky',
-										":'("=>'cry',
-										':dry:'=>'dry',
-										':$'=>'blush',
-										';)'=>'wink',
-										'O_o'=>'blink',
-										':wub:'=>'wub',
-										':cool:'=>'cool',
-										':lol:'=>'lol',
-										':('=>'sad',
-										':)'=>'smile',
-										':thumbs:'=>'thumbs',
-										':offtopic:'=>'offtopic',
-										':|'=>'mellow',
-										':ninja:'=>'ph34r',
-										':o'=>'shocked');
+		$core_emoticons=array(
+			':P'=>'cheeky',
+			":'("=>'cry',
+			':dry:'=>'dry',
+			':$'=>'blush',
+			';)'=>'wink',
+			'O_o'=>'blink',
+			':wub:'=>'wub',
+			':cool:'=>'cool',
+			':lol:'=>'lol',
+			':('=>'sad',
+			':)'=>'smile',
+			':thumbs:'=>'thumbs',
+			':offtopic:'=>'offtopic',
+			':|'=>'mellow',
+			':ninja:'=>'ph34r',
+			':o'=>'shocked'
+		);
 		$supported_emoticons=array(
-										':rolleyes:'=>'rolleyes',
-										':D'=>'grin',
-										'^_^'=>'glee',
-										'(K)'=>'kiss',
-										':S'=>'confused',
-										':@'=>'angry',
-										':shake:'=>'shake',
-										':hand:'=>'hand',
-										':drool:'=>'drool',
-										':devil:'=>'devil',
-										':party:'=>'party',
-										':constipated:'=>'constipated',
-										':depressed:'=>'depressed',
-										':zzz:'=>'zzz',
-										':whistle:'=>'whistle',
-										':upsidedown:'=>'upsidedown',
-										':sick:'=>'sick',
-										':shutup:'=>'shutup',
-										':sarcy:'=>'sarcy',
-										':puppyeyes:'=>'puppyeyes',
-										':nod:'=>'nod',
-										':nerd:'=>'nerd',
-										':king:'=>'king',
-										':birthday:'=>'birthday',
-										':cyborg:'=>'cyborg',
-										':hippie:'=>'hippie',
-										':ninja2:'=>'ninja2',
-										':rockon:'=>'rockon',
-										':sinner:'=>'sinner',
-										':guitar:'=>'guitar',
-										);
+			':rolleyes:'=>'rolleyes',
+			':D'=>'grin',
+			'^_^'=>'glee',
+			'(K)'=>'kiss',
+			':S'=>'confused',
+			':@'=>'angry',
+			':shake:'=>'shake',
+			':hand:'=>'hand',
+			':drool:'=>'drool',
+			':devil:'=>'devil',
+			':party:'=>'party',
+			':constipated:'=>'constipated',
+			':depressed:'=>'depressed',
+			':zzz:'=>'zzz',
+			':whistle:'=>'whistle',
+			':upsidedown:'=>'upsidedown',
+			':sick:'=>'sick',
+			':shutup:'=>'shutup',
+			':sarcy:'=>'sarcy',
+			':puppyeyes:'=>'puppyeyes',
+			':nod:'=>'nod',
+			':nerd:'=>'nerd',
+			':king:'=>'king',
+			':birthday:'=>'birthday',
+			':cyborg:'=>'cyborg',
+			':hippie:'=>'hippie',
+			':ninja2:'=>'ninja2',
+			':rockon:'=>'rockon',
+			':sinner:'=>'sinner',
+			':guitar:'=>'guitar',
+		);
 		$unused_emoticons=array(
-										':christmas:'=>'christmas');
+			':christmas:'=>'christmas'
+		);
 		foreach ($core_emoticons as $a=>$b)
 			ocf_make_emoticon($a,'ocf_emoticons/'.$b,0,array_key_exists($b,$no_use_topics)?0:1);
 		foreach ($supported_emoticons as $a=>$b)
@@ -793,9 +790,7 @@ function install_ocf($upgrade_from=NULL)
 		$staff_post_access=array($guest_group=>1,$administrator_group=>5,$super_moderator_group=>5,$probation_group=>1,$super_member_group=>2,$member_group_0=>1,$member_group_1=>1,$member_group_2=>1,$member_group_3=>1,$member_group_4=>1);
 		$staff_access=array($administrator_group=>5,$super_moderator_group=>5);
 		$root_forum=ocf_make_forum(do_lang('ROOT_FORUM'),'',NULL,$staff_post_access,NULL);
-		//ocf_make_forum(do_lang('NEWS'),'',$category_id,$staff_post_access,$root_forum);
 		ocf_make_forum(do_lang('DEFAULT_FORUM_TITLE'),'',$category_id,$typical_access,$root_forum);
-		//ocf_make_forum(do_lang('_FEEDBACK'),'',$category_id,$typical_access,$root_forum);	We already have a feedback page
 		ocf_make_forum(do_lang('REPORTED_POSTS_FORUM'),'',$category_id_staff,$staff_access,$root_forum);
 		$trash_forum_id=ocf_make_forum(do_lang('TRASH'),'',$category_id_staff,$staff_access,$root_forum);
 		ocf_make_forum(do_lang('COMMENT_FORUM_NAME'),'',$category_id,$typical_access,$root_forum,1,1,0,'','','','last_post',1);
@@ -1053,7 +1048,6 @@ function install_ocf($upgrade_from=NULL)
 		add_specific_permission('SECTION_FORUMS','member_maintenance',false);
 		add_specific_permission('SECTION_FORUMS','probate_members',false);
 		add_specific_permission('SECTION_FORUMS','own_avatars',true);
-		//add_specific_permission('SECTION_FORUMS','decide_comment_type',true); if we add threads
 		add_specific_permission('SECTION_FORUMS','control_usergroups',false,true);
 		add_specific_permission('SECTION_FORUMS','edit_personal_topic_posts',true);
 		add_specific_permission('SECTION_FORUMS','multi_delete_topics',false);

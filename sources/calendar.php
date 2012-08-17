@@ -418,7 +418,7 @@ function date_range($from,$to,$do_time=true)
  * @param  ?TIME			The timestamp that found times must exceed. In user-time (NULL: use find_periods_recurrence default)
  * @param  ?TIME			The timestamp that found times must not exceed. In user-time (NULL: use find_periods_recurrence default)
  * @param  ?array			The type filter (NULL: none)
- * @param  boolean		Whether to include RSS events in the results
+ * @param  boolean		Whether to include RSS/iCal events in the results
  * @return array			A list of events happening, with time details
  */
 function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter=NULL,$do_rss=true)
@@ -447,7 +447,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	if ($where!='') $where.=' AND ';
 	$where.='(validated=1 OR e_is_public=0)';
 
-	if (addon_installed('syndication_blocks'))
+	if ((addon_installed('syndication_blocks')) && ($do_rss))
 	{
 		// Determine what feeds to overlay
 		$feed_urls_todo=array();

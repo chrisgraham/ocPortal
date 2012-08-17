@@ -18,12 +18,12 @@
  * @package		polls
  */
 
-require_code('aed_module');
+require_code('crud_module');
 
 /**
  * Module page class.
  */
-class Module_cms_polls extends standard_aed_module
+class Module_cms_polls extends standard_crud_module
 {
 	var $lang_type='POLL';
 	var $archive_entry_point='_SEARCH:polls:type=misc';
@@ -39,7 +39,7 @@ class Module_cms_polls extends standard_aed_module
 	var $award_type='poll';
 
 	/**
-	 * Standard aed_module run_start.
+	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
@@ -103,7 +103,7 @@ class Module_cms_polls extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -175,7 +175,7 @@ class Module_cms_polls extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
@@ -241,7 +241,7 @@ class Module_cms_polls extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module submitter getter.
+	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
@@ -254,7 +254,7 @@ class Module_cms_polls extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A quartet: fields, hidden, delete-fields, text
@@ -274,7 +274,7 @@ class Module_cms_polls extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
@@ -325,7 +325,7 @@ class Module_cms_polls extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -398,7 +398,7 @@ class Module_cms_polls extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */

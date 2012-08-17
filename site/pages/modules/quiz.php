@@ -283,14 +283,11 @@ class Module_quiz
 	 */
 	function archive()
 	{
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='max';
-
-		$start=get_param_integer('start',0);
 		$title=get_screen_title('QUIZZES');
 
 		require_code('quiz');
 
+		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.((!has_specific_permission(get_member(),'see_unvalidated'))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).') ORDER BY q_type ASC,id DESC',$max,$start);
@@ -317,14 +314,10 @@ class Module_quiz
 			}
 		}
 
-		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
-		$num_pages=intval(ceil(floatval($max_rows)/floatval($max)));
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang_tempcode('QUIZZES'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
 
-		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>($start-$max==0)?NULL:$start-$max),'_SELF');
-		$next_url=(count($rows)!=$max)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'ab0d27890dd2c1476dcdf82a46d5be90','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
-
-		return do_template('QUIZ_ARCHIVE_SCREEN',array('_GUID'=>'3073f74b500deba96b7a3031a2e9c8d8','TITLE'=>$title,'CONTENT_SURVEYS'=>$content_surveys,'CONTENT_COMPETITIONS'=>$content_competitions,'CONTENT_TESTS'=>$content_tests,'BROWSE'=>$browse));
+		return do_template('QUIZ_ARCHIVE_SCREEN',array('_GUID'=>'3073f74b500deba96b7a3031a2e9c8d8','TITLE'=>$title,'CONTENT_SURVEYS'=>$content_surveys,'CONTENT_COMPETITIONS'=>$content_competitions,'CONTENT_TESTS'=>$content_tests,'PAGINATION'=>$pagination));
 	}
 
 	/**

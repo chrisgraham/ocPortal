@@ -5198,7 +5198,7 @@ function ftp_systype($ftp_stream)
  *
  * @param  resource  File handle.
  * @param  integer	Cut off size.
- * @return boolean	Success status (< PHP4.3, this is a BINARY).
+ * @return boolean	Success status.
  */
 function ftruncate($file,$size)
 {
@@ -5961,4 +5961,580 @@ function ocp_is_escaped($var)
 	return true;
 }
 
+/**
+ * Get the contents of a file.
+ *
+ * @param  SHORT_TEXT	The file name.
+ * @return ~LONG_TEXT	The file contents (false: error).
+ */
+function file_get_contents($filename)
+{
+	return '';
+}
 
+/**
+ * Isolate the words in the input string.
+ *
+ * @param  string			String to count words in
+ * @param  integer		The format
+ * @set    0 1 2
+ * @return mixed			Typically a list - the words of the input string
+ */
+function str_word_count($input,$format=0)
+{
+	return array();
+}
+
+/**
+ * Decode the HTML entitity encoded input string.
+ *
+ * @param  string			The text to decode
+ * @param  integer		The quote style code
+ * @param  ?string		Character set to decode to (NULL: default)
+ * @return string			The decoded text
+ */
+function html_entity_decode($input,$quote_style,$charset=NULL)
+{
+	return '';
+}
+
+/**
+ * Creates an array by using one array for keys and another for its values.
+ *
+ * @param  array 	 		Keys
+ * @param  array 	 		Values
+ * @return array			Combined
+ */
+function array_combine($keys,$values)
+{
+	return array();
+}
+
+/**
+ * Computes the difference of arrays with additional index check which is performed by a user supplied callback function.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @return array			Result
+ */
+function array_diff_uassoc($a,$b)
+{
+	return array();
+}
+
+/**
+ * Computes the difference of arrays by using a callback function for data comparison.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @return array			Result
+ */
+function array_udiff($a,$b)
+{
+	return array();
+}
+
+/**
+ * Computes the difference of arrays with additional index check. The data is compared by using a callback function.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @return array			Result
+ */
+function array_udiff_assoc($a,$b)
+{
+	return array();
+}
+
+/**
+ * Computes the difference of arrays with additional index check. The data is compared by using a callback function. The index check is done by a callback function also.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @return array			Result
+ */
+function array_udiff_uassoc($a,$b)
+{
+	return array();
+}
+
+/**
+ * Apply a user function recursively to every member of an array.
+ *
+ * @param  array 	 		The input array
+ * @param  mixed 	 		Callback
+ * @param  mixed 	 		If the optional userdata parameter is supplied, it will be passed as the third parameter to the callback funcname
+ * @return boolean		Result
+ */
+function array_walk_recursive($input,$funcname,$userdata=NULL)
+{
+	return true;
+}
+
+/**
+ * Computes the intersection of arrays with additional index check. The data is compared by using a callback function.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @return array			Result
+ */
+function array_uintersect_assoc($a,$b)
+{
+	return array();
+}
+
+/**
+ * Computes the intersection of arrays with additional index check. Both the data and the indexes are compared by using separate callback functions.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @return array			Result
+ */
+function array_uintersect_uassoc($a,$b)
+{
+	return array();
+}
+
+/**
+ * Computes the intersection of arrays. The data is compared by using a callback function.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @return array			Result
+ */
+function array_uintersect($a,$b)
+{
+	return array();
+}
+
+/**
+ * Convert a string to an array.
+ *
+ * @param  string	 		The input string
+ * @param  integer 		Maximum length of the chunk
+ * @return array			Result
+ */
+function str_split($str,$split_length=1)
+{
+	return array();
+}
+
+/**
+ * Search a string for any of a set of characters.
+ *
+ * @param  string  		The string where char_list is looked for
+ * @param  string  		The character list
+ * @return ~string		String starting from the character found, or FALSE if it is not found (false: not found)
+ */
+function strpbrk($haystack,$char_list)
+{
+	return '';
+}
+
+/**
+ * Binary safe optionally case insensitive comparison of two strings from an offset, up to length characters.
+ *
+ * @param  string	 		The main string being compared
+ * @param  string  		The secondary string being compared
+ * @param  integer  		The start position for the comparison. If negative, it starts counting from the end of the string
+ * @param  ?integer		The length of the comparison (NULL: the largest of the length of the str compared to the length of main_str less the offset)
+ * @param  boolean  		Whether to compare as case insensitive
+ * @return ~integer		Returns < 0 if main_str from position offset is less than str, > 0 if it is greater than str, and 0 if they are equal (false: out of bounds)
+ */
+function substr_compare($main_str,$str,$offset,$length=NULL,$case_insensitivity=false)
+{
+	return 0;
+}
+
+/**
+ * Write a string to a file.
+ *
+ * @param  PATH 	 		Path to the file where to write the data
+ * @param  string	 		The data to write
+ * @param  integer 		Supported flags
+ * @return ~integer		Bytes written (false: error)
+ */
+function file_put_contents($filename,$data,$flags=0)
+{
+	return 0;
+}
+
+/**
+ * Fetches all the headers sent by the server in response to a HTTP request.
+ *
+ * @param  URLPATH 	 	The target URL
+ * @param  BINARY			Whether to parse into a map
+ * @return array			Result
+ */
+function get_headers($url)
+{
+	return array();
+}
+
+/**
+ * Returns a list of response headers sent (or ready to send).
+ *
+ * @return array			List of headers
+ */
+function headers_list()
+{
+	return array();
+}
+
+/**
+ * Generate URL-encoded query string.
+ *
+ * @param  array 	 		URL parameters
+ * @return string			URL
+ */
+function http_build_query($query_data)
+{
+	return '';
+}
+
+/**
+ * Get file extension for image-type returned by .
+ *
+ * @param  integer 		One of the IMAGETYPE_XXX constants
+ * @param  boolean 		Whether to prepend a dot to the extension or not
+ * @return string			A string with the extension corresponding to the given image type
+ */
+function image_type_to_extension($imagetype,$include_dot=true)
+{
+	return '';
+}
+
+/**
+ * Applies a filter to an image using custom arguments.
+ *
+ * @param  resource 	 	Image
+ * @param  integer 	 	A constant indicating the filter type
+ * @param  mixed	 	 	Parameter
+ * @param  mixed	 	 	Parameter
+ * @param  mixed	 	 	Parameter
+ * @param  mixed	 	 	Parameter
+ * @return boolean		Success status
+ */
+function imagefilter($image,$filtertype,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL)
+{
+	return true;
+}
+
+/**
+ * List files and directories inside the specified path.
+ *
+ * @param  PATH 	 		Directory
+ * @return ~array			Files (false: error)
+ */
+function scandir($directory)
+{
+	return array();
+}
+
+/**
+ * Randomly shuffles a string.
+ *
+ * @param  string 		In
+ * @return string			Out
+ */
+function str_shuffle($in)
+{
+	return '';
+}
+
+/**
+ * Get Mime-Type for image-type returned by getimagesize, exif_read_data, exif_thumbnail, exif_imagetype.
+ *
+ * @param  integer 	 	Image type
+ * @return string			Mime type
+ */
+function image_type_to_mime_type($image_type)
+{
+	return '';
+}
+
+/**
+ * Calculate the sha1 hash of a string.
+ *
+ * @param  string 		The input string
+ * @return string			Hash
+ */
+function sha1($str)
+{
+	return '';
+}
+
+/**
+ * Determine the type of an image.
+ *
+ * @param  PATH 	 		Image path
+ * @return integer		Image type
+ */
+function exif_imagetype($filename)
+{
+	return 0;
+}
+
+/**
+ * Get current buffer contents and delete current output buffer.
+ *
+ * @return ~string		Contents of the buffer (false: no buffer was open)
+ */
+function ob_get_clean()
+{
+	return '';
+}
+
+/**
+ * Computes the difference of arrays with additional index check.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @return array			Result
+ */
+function array_diff_assoc($a,$b)
+{
+	return array();
+}
+
+/**
+ * Find pathnames matching a pattern.
+ *
+ * @param  string 	 	Pattern according to the rules used by the libc glob
+ * @param  integer 	 	Flags
+ * @return ~array			Files found (false: error)
+ */
+function glob($pattern,$flags=0)
+{
+	return array();
+}
+
+/**
+ * Generates a backtrace.
+ *
+ * @return array			Backtrace
+ */
+function debug_backtrace()
+{
+	return array();
+}
+
+/**
+ * Sets the default timezone used by all date/time functions in a script.
+ *
+ * @param  string 	 	Timezone identifier
+ * @return boolean		Success status
+ */
+function date_default_timezone_set($timezone_identifier)
+{
+	return true;
+}
+
+/**
+ * Gets the default timezone used by all date/time functions in a script.
+ *
+ * @return string			The timezone identifier
+ */
+function date_default_timezone_get()
+{
+	return '';
+}
+
+/**
+ * Computes the difference of arrays using keys for comparison.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @return array			Result
+ */
+function array_diff_key($array1,$array2)
+{
+	return array();
+}
+
+/**
+ * Converts a human readable IP address to its packed in_addr representation.
+ *
+ * @param  string 	 	A human readable IPv4 or IPv6 address
+ * @return ~string		The in_addr representation of the given address (false: error)
+ */
+function inet_pton($address)
+{
+	return '';
+}
+
+/**
+ * Calculate the product of values in an array.
+ *
+ * @param  array 	 		Input
+ * @return float			Result
+ */
+function array_product($array)
+{
+	return 0.0;
+}
+
+/**
+ * Computes the difference of arrays using a callback function on the keys for comparison.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @param  mixed 	 		Callback
+ * @return array			Result
+ */
+function array_diff_ukey($array1,$array2,$callback)
+{
+	return array();
+}
+
+/**
+ * Computes the intersection of arrays using a callback function on the keys for comparison.
+ *
+ * @param  array 	 		Array 1
+ * @param  array 	 		Array 2
+ * @param  mixed 	 		Callback
+ * @return array			Result
+ */
+function array_intersect_ukey($array1,$array2,$callback)
+{
+	return array();
+}
+
+/**
+ * Retrieve array of errors.
+ *
+ * @return array			Array of errors
+ */
+function libxml_get_errors()
+{
+	return array();
+}
+
+/**
+ * Converts a packed internet address to a human readable representation.
+ *
+ * @param  string	 		Converts a packed internet address to a human readable representation
+ * @return string			A string representation of the address (false: error)
+ */
+function inet_ntop($in_addr)
+{
+	return '';
+}
+
+/**
+ * Format line as CSV and write to file pointer.
+ *
+ * @param  resource 	 	File pointer
+ * @param  array 	 		An array of values
+ * @param  string	 		The optional delimiter parameter sets the field delimiter (one character only)
+ * @param  string	 		The optional enclosure parameter sets the field enclosure (one character only)
+ * @return ~integer		The length of the written string (false: error)
+ */
+function fputcsv($handle,$fields,$delimiter=',',$enclosure='"')
+{
+	return 0;
+}
+
+/**
+ * Finds whether a value is not a number.
+ *
+ * @param  float	 		The value to check
+ * @return boolean		Answer
+ */
+function is_nan($val)
+{
+	return true;
+}
+
+/**
+ * Finds whether a value is a legal finite number.
+ *
+ * @param  float	 		The value to check
+ * @return boolean		Answer
+ */
+function is_finite($val)
+{
+	return true;
+}
+
+/**
+ * Finds whether a value is infinite.
+ *
+ * @param  float	 		The value to check
+ * @return boolean		Answer
+ */
+function is_infinite($val)
+{
+	return true;
+}
+
+/**
+ * Flush (send) the output buffer.
+ */
+function ob_flush()
+{
+}
+
+/**
+ * Split an array into chunks.
+ *
+ * @param  array 			The array to work on
+ * @param  integer 		The size of each chunk
+ * @param  boolean 		When set to TRUE keys will be preserved. Default is FALSE which will reindex the chunk numerically
+ * @return array			A multidimensional numerically indexed array, starting with zero, with each dimension containing size elements
+ */
+function array_chunk($input,$size,$preserve_keys=false)
+{
+	return array();
+}
+
+/**
+ * Fill an array with values.
+ *
+ * @param  integer 		The first index of the returned array. If start_index is negative, the first index of the returned array will be start_index and the following indices will start from zero.
+ * @param  integer 		Number of elements to insert. Must be greater than zero.
+ * @param  mixed	 		Value to use for filling
+ * @return array			The filled array
+ */
+function array_fill($start_index,$num,$value)
+{
+	return array();
+}
+
+/**
+ * Changes all keys in an array.
+ *
+ * @param  array 			The array to work on
+ * @param  integer 		Either CASE_UPPER or CASE_LOWER
+ * @return array			An array with its keys lower or uppercased
+ */
+function array_change_key_case($input,$case)
+{
+	return array();
+}
+
+/**
+ * Reads the EXIF headers from JPEG or TIFF.
+ *
+ * @param  PATH	 		The name of the image file being read. This cannot be an URL.
+ * @param  ?string 		Is a comma separated list of sections that need to be present in file to produce a result array (NULL: no filter)
+ * @param  boolean 		Specifies whether or not each section becomes an array
+ * @param  boolean 		When set to TRUE the thumbnail itself is read. Otherwise, only the tagged data is read.
+ * @return ~array			An associative array where the array indexes are the header names and the array values are the values associated with those headers (false: error)
+ */
+function exif_read_data($filename,$sections=NULL,$arrays=false,$thumbnail=false)
+{
+	return array();
+}
+
+/**
+ * Outputs or returns a parsable string representation of a variable.
+ *
+ * @param  mixed	 		The variable you want to export
+ * @param  boolean 		If used and set to TRUE, var_export() will return the variable representation instead of outputting it
+ * @return ?string		Variable representation (NULL: asked to not return a value)
+ */
+function var_export($expression,$return=false)
+{
+	return '';
+}

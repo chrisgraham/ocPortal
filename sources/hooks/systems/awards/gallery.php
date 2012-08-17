@@ -24,9 +24,10 @@ class Hook_awards_gallery
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
@@ -45,7 +46,7 @@ class Hook_awards_gallery
 		require_lang('galleries');
 		$info['title']=do_lang_tempcode('GALLERIES');
 		$info['category_is_string']=true;
-		$info['archive_url']=build_url(array('page'=>'galleries'),get_module_zone('galleries'));
+		$info['archive_url']=build_url(array('page'=>'galleries'),(!is_null($zone))?$zone:get_module_zone('galleries'));
 		$info['cms_page']='cms_galleries';
 		$info['where']='name NOT LIKE \''.db_encode_like('download\_%').'\'';
 		$info['supports_custom_fields']=true;

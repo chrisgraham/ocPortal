@@ -564,7 +564,6 @@ function precedence_sort($op_list)
 	// Should never get here
 	echo '!';
 	print_r($op_list);
-//	print_r(debug_backtrace());
 	return array();
 }
 
@@ -752,7 +751,7 @@ function _js_parse_identify_chain($variable)
 			if (is_null($parameters)) return NULL;
 			if (is_null(parser_expect('BRACKET_CLOSE'))) return NULL;
 			$expression=array('CALL',$variable,$parameters,$GLOBALS['JS_PARSE_POSITION']);
-			//log_special('functions',$next[1].'/'.count($parameters));
+			//log_special('functions',$next[1].'/'.count($parameters));	Useful for debugging
 
 			// Now, it is possible we are actually part of a larger variable
 			$next_2=parser_peek();
@@ -833,13 +832,7 @@ function _js_parse_variable_actual()
 				return NULL;
 			}
 			if (is_null(parser_expect('IDENTIFIER'))) return NULL;
-//			if ($next_2[0]=='IDENTIFIER')
-//			{
-				$dereference=array('VARIABLE',$next_2[1],array(),$GLOBALS['JS_PARSE_POSITION']);
-//			} else
-//			{
-//				$dereference=_js_parse_variable();
-//			}
+			$dereference=array('VARIABLE',$next_2[1],array(),$GLOBALS['JS_PARSE_POSITION']);
 			$tunnel=array();
 			$next_3=parser_peek();
 			$next_4=parser_peek_dist(1);

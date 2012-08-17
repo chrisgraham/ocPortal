@@ -156,6 +156,6 @@ function send_trackbacks($_urls,$title,$excerpt)
 		http_download_file($url,NULL,false,false,'ocPortal',array('url'=>get_custom_base_url(),'title'=>$title,'blog_name'=>get_site_name(),'excerpt'=>$excerpt));
 	}
 
-	return true; // To be honest, I can't be bothered to code a proper status return, and it wouldn't do anything, so I won't.
+	return true; // To be honest, I can't be bothered to code a proper status return, and it wouldn't do anything, so I won't ;-).
 }
 

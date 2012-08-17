@@ -189,20 +189,13 @@ class Hook_addon_registry_quizzes
 		$content_tests->attach($link);
 		$content_competitions->attach($link);
 
-		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
-			'NEXT_URL'=>placeholder_url(),
-			'PREVIOUS_URL'=>placeholder_url(),
-			'PAGE_NUM'=>placeholder_number(),
-			'NUM_PAGES'=>placeholder_number()
-		));
-
 		return array(
 			lorem_globalise(do_lorem_template('QUIZ_ARCHIVE_SCREEN', array(
 				'TITLE'=>lorem_title(),
 				'CONTENT_SURVEYS'=>$content_surveys,
 				'CONTENT_COMPETITIONS'=>$content_competitions,
 				'CONTENT_TESTS'=>$content_tests,
-				'BROWSE'=>$browse
+				'PAGINATION'=>placeholder_pagination()
 			)), NULL, '', true)
 		);
 	}

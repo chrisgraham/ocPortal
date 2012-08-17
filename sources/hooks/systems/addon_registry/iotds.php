@@ -76,6 +76,7 @@ class Hook_addon_registry_iotds
 			'sources/hooks/systems/config_default/iotd_update_time.php',
 			'sources/hooks/systems/config_default/points_ADD_IOTD.php',
 			'sources/hooks/systems/config_default/points_CHOOSE_IOTD.php',
+			'sources/hooks/systems/awards/iotd.php',
 			'sources/hooks/systems/content_meta_aware/iotd.php',
 			'sources/hooks/systems/addon_registry/iotds.php',
 			'sources/hooks/modules/admin_setupwizard/iotds.php',
@@ -200,7 +201,7 @@ class Hook_addon_registry_iotds
 	 */
 	function tpl_preview__iotd_view_screen_iotd()
 	{
-		//Wrap 'IOTD_ARCHIVE_SCREEN_IOTD' with 'NEXT_BROWSER_SCREEN'
+		//Wrap 'IOTD_ARCHIVE_SCREEN_IOTD' with 'PAGINATION_SCREEN'
 
 		$content=new ocp_tempcode();
 		$content->attach(do_lorem_template('IOTD_ARCHIVE_SCREEN_IOTD', array(
@@ -214,18 +215,11 @@ class Hook_addon_registry_iotds
 			'CAPTION'=>lorem_phrase()
 		)));
 
-		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
-			'NEXT_URL'=>placeholder_url(),
-			'PREVIOUS_URL'=>placeholder_url(),
-			'PAGE_NUM'=>placeholder_number(),
-			'NUM_PAGES'=>placeholder_number()
-		));
-
 		return array(
-			lorem_globalise(do_lorem_template('NEXT_BROWSER_SCREEN', array(
+			lorem_globalise(do_lorem_template('PAGINATION_SCREEN', array(
 				'TITLE'=>lorem_title(),
 				'CONTENT'=>$content,
-				'BROWSE'=>$browse
+				'PAGINATION'=>placeholder_pagination()
 			)), NULL, '', true)
 		);
 	}

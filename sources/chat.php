@@ -230,11 +230,10 @@ function shoutbox_script($ret=false,$room_id=NULL,$num_messages=NULL)
 	require_code('chat');
 	require_css('chat');
 
-//	if (is_guest()) return; // No guests
-
 	if (is_null($room_id))
 	{
-		$room_id=$GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','MIN(id)',array('is_im'=>0/*,'room_language'=>user_lang()*/));
+		$room_id=$GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','MIN(id)',array('is_im'=>0,'room_language'=>user_lang()));
+		if (is_null($room_id)) $room_id=$GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','MIN(id)',array('is_im'=>0));
 		if (is_null($room_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	}
 
@@ -556,7 +555,6 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			{
 				$ban_url=build_url(array('page'=>'admin_actionlog','type'=>'toggle_submitter_ban','id'=>$_message['member_id']),'adminzone');
 			}
-			//$ban_url=build_url(array('page'=>'admin_actionlog','type'=>'multi_ban','id'=>$_message['ip_address'].':'.$_message['username']),'adminzone');
 		}
 		else $ban_url=new ocp_tempcode();
 
@@ -822,10 +820,6 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 	if ($message=='') $return='0';
 	else
 	{
-		//$prefs=@$_COOKIE['ocp_chat_prefs'];
-		//$prefs=@explode(';',$prefs);
-		//$font=isset($prefs[1])?$prefs[1]:get_option('chat_default_post_font');
-		//$colour=isset($prefs[0])?$prefs[0]:get_option('chat_default_post_colour');
 		if (chat_post_message($room_id,$message,$font,$colour,60)) $return='1';
 		else $return='0';
 	}
@@ -854,34 +848,29 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 					}
 					if (!array_key_exists($allow,$active_members))
 					{
-						//if (get_forum_type()=='ocf') // Send PT  -- Actually, this'd just get annoying
-						//{
-						//} else // Send e-mail
-						{
-							$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
-								'e_type_code'=>'INVITED_TO_IM',
-								'e_member_id'=>$allow,
-								'e_room_id'=>$room_id,
-								'e_date_and_time'=>time()
-							),true);
-							$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
-							fwrite($myfile,strval($event_id));
-							fclose($myfile);
-							sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+						$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
+							'e_type_code'=>'INVITED_TO_IM',
+							'e_member_id'=>$allow,
+							'e_room_id'=>$room_id,
+							'e_date_and_time'=>time()
+						),true);
+						$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+						fwrite($myfile,strval($event_id));
+						fclose($myfile);
+						sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
 
-							require_lang('chat');
+						require_lang('chat');
 
-							$zone=get_module_zone('chat');
-							$_lobby_url=build_url(array('page'=>'chat'),$zone,NULL,false,false,true);
-							$lobby_url=$_lobby_url->evaluate();
-							$subject=do_lang('IM_INVITED_SUBJECT',NULL,NULL,NULL,get_lang($allow));
-							$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-							$username2=$GLOBALS['FORUM_DRIVER']->get_username($allow);
-							$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username,array($lobby_url,$username2,$message),get_lang($allow));
+						$zone=get_module_zone('chat');
+						$_lobby_url=build_url(array('page'=>'chat'),$zone,NULL,false,false,true);
+						$lobby_url=$_lobby_url->evaluate();
+						$subject=do_lang('IM_INVITED_SUBJECT',NULL,NULL,NULL,get_lang($allow));
+						$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+						$username2=$GLOBALS['FORUM_DRIVER']->get_username($allow);
+						$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username,array($lobby_url,$username2,$message),get_lang($allow));
 
-							require_code('notifications');
-							dispatch_notification('im_invited',NULL,$subject,$message,array($allow),$room_check[0]['room_owner'],1);
-						}
+						require_code('notifications');
+						dispatch_notification('im_invited',NULL,$subject,$message,array($allow),$room_check[0]['room_owner'],1);
 					}
 				}
 			}

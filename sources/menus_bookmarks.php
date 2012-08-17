@@ -41,7 +41,6 @@ function build_bookmarks_menu()
 	$self_url=get_param('url','');
 	if ($self_url=='') $self_url=get_self_url(true);
 	$rand_id=mt_rand(0,1000000);
-	//$url=build_url(array('page'=>'bookmarks','type'=>'ad','url'=>$self_url,'title'=>get_param('title','',true)),get_module_zone('bookmarks'));
 	$keep=symbol_tempcode('KEEP');
 	$url=find_script('bookmarks').'?no_redirect=1&type=ad&url='.urlencode(base64_encode($self_url)).'&title='.urlencode(get_param('title','',true)).$keep->evaluate();
 	$items[]=array('id'=>$rand_id,'i_parent'=>NULL,'cap'=>do_lang('ADD_BOOKMARK'),'i_popup'=>1,'i_width'=>600,'i_height'=>500,'i_url'=>$url,'i_check_permissions'=>0,'i_expanded'=>0,'i_new_window'=>1,'i_page_only'=>'');

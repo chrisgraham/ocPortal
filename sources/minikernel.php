@@ -30,28 +30,6 @@
  */
 function init__minikernel()
 {
-	// Cover up a hole in old PHP versions functionality
-	if (!function_exists('file_get_contents'))
-	{
-		/**
-		 * Get the contents of a file.
-		 *
-		 * @param  SHORT_TEXT	The file name.
-		 * @return ~LONG_TEXT	The file contents (false: error).
-		 */
-		function file_get_contents($filename)
-		{
-			$data='';
-			$file=@fopen($filename,'rb');
-			if ($file)
-			{
-				while (!feof($file)) $data.=fread($file, 1024);
-				fclose($file);
-			}
-			return $data;
-		}
-	}
-
 	if ((!array_key_exists('REQUEST_URI',$_SERVER)) && (!array_key_exists('REQUEST_URI',$_ENV)))
 	{
 		$_SERVER['REQUEST_URI']=$_SERVER['PHP_SELF'];
@@ -105,8 +83,6 @@ function sync_file($filename)
  */
 function get_html_trace()
 {
-	if (!function_exists('debug_backtrace')) return new ocp_tempcode();
-	if (!function_exists('var_export')) return new ocp_tempcode();
 	$x=@ob_get_contents(); @ob_end_clean(); if (is_string($x)) @print($x);
 	$GLOBALS['SUPRESS_ERROR_DEATH']=true;
 	$_trace=debug_backtrace();
@@ -135,9 +111,8 @@ function get_html_trace()
 						} else
 						{
 							@ob_start();
-							/*var_dump*/var_export($param);
-							$__value=ob_get_contents();
-							ob_end_clean();
+							var_export($param);
+							$__value=ob_get_clean();
 						}
 						if (strlen($__value)<3000)
 						{
@@ -163,7 +138,7 @@ function get_html_trace()
 				} else
 				{
 					@ob_start();
-					/*var_dump*/var_export($value);
+					var_export($value);
 					$_value=make_string_tempcode(escape_html(ob_get_contents()));
 					ob_end_clean();
 				}

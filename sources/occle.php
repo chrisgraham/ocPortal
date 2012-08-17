@@ -749,19 +749,6 @@ class virtual_bash
 					break;	
 				case IN_EXTRA_VALUE:
 					//Get the value, if applicable
-					/*if ($this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT]==REDIRECT_PIPE)
-					{
-						//A pipe was used, so what follows will be a completely new command
-						/*$subsequent_command=substr($this->current_input,$this->parse_runtime['parse_position']);
-
-						$virtual_bash=new virtual_bash($subsequent_command);
-						$parse_tree=$virtual_bash->return_parse_tree();
-
-						$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]=$parse_tree;
-						$this->parse_runtime['parse_position']+=strlen($parse_tree);*
-						$extra_mode=OUT_EXTRA;
-					}
-					elseif ($next_char=='"')*/
 					if ($next_char=='"')
 					{
 						//Quotes!

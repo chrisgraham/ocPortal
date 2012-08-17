@@ -827,8 +827,6 @@ function may_see_stack_dumps()
  */
 function die_html_trace($message)
 {
-	if (!function_exists('debug_backtrace')) critical_error('EMERGENCY',$message);
-	if (!function_exists('var_export')) critical_error('EMERGENCY',$message);
 	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
 	$_trace=debug_backtrace();
 	$trace='<div class="box guid_{_GUID}"><div class="box_inner"><h2>Stack trace&hellip;</h2>';
@@ -843,9 +841,8 @@ function die_html_trace($message)
 			} else
 			{
 				@ob_start();
-				/*var_dump*/var_export($value);
-				$_value=ob_get_contents();
-				ob_end_clean();
+				var_export($value);
+				$_value=ob_get_clean();
 			}
 
 			global $SITE_INFO;
@@ -873,8 +870,6 @@ function die_html_trace($message)
  */
 function get_html_trace()
 {
-	if (!function_exists('debug_backtrace')) return new ocp_tempcode();
-	if (!function_exists('var_export')) return new ocp_tempcode();
 	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
 	$GLOBALS['SUPRESS_ERROR_DEATH']=true;
 	$_trace=debug_backtrace();
@@ -903,9 +898,8 @@ function get_html_trace()
 						} else
 						{
 							@ob_start();
-							/*var_dump*/var_export($param);
-							$__value=ob_get_contents();
-							ob_end_clean();
+							var_export($param);
+							$__value=ob_get_clean();
 						}
 						if ((strlen($__value)<MAX_STACK_TRACE_VALUE_LENGTH) || (defined('HIPHOP_PHP')))
 						{
@@ -931,7 +925,7 @@ function get_html_trace()
 				} else
 				{
 					@ob_start();
-					/*var_dump*/var_export($value);
+					var_export($value);
 					$_value=make_string_tempcode(escape_html(ob_get_contents()));
 					ob_end_clean();
 				}

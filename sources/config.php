@@ -444,4 +444,3 @@ function invert_value($old)
 	return '1';
 }
 
-

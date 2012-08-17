@@ -14,6 +14,14 @@
 	<p class="nothing_here">{!NO_ENTRIES}</p>
 {+END}
 
+{+START,IF_PASSED,PAGINATION}
+	{+START,IF_NON_EMPTY,{PAGINATION}}
+		<div class="pagination_spacing float_surrounder">
+			{PAGINATION}
+		</div>
+	{+END}
+{+END}
+
 {+START,IF_NON_EMPTY,{SUBMIT_URL}{ARCHIVE_URL}}
 	<ul class="horizontal_links associated_links_block_group force_margin">
 		{+START,IF_NON_EMPTY,{SUBMIT_URL}}

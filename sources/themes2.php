@@ -118,27 +118,11 @@ function actual_add_theme($name)
 	{
 		$path='themes/'.$name.'/'.$dir;
 		afm_make_directory($path,true);
-		if (!in_array($dir,$dir_list_access))
-		{
-//			$path='themes/'.$name.'/'.$dir.'/.htaccess';
-//			afm_copy('themes/default/templates_cached/.htaccess',$path,false);
-		}
 		$path='themes/'.$name.'/'.(($dir=='')?'':($dir.'/')).'index.html';
 		if (file_exists(get_file_base().'/themes/default/templates_cached/index.html'))
 			afm_copy('themes/default/templates_cached/index.html',$path,false);
 	}
 	afm_copy('themes/default/theme.ini','themes/'.$name.'/theme.ini',true);
-	/*$_dir=opendir(get_custom_file_base().'/themes/default/css');
-	while (false!==($file=readdir($_dir)))
-	{
-		if (strtolower(substr($file,-4,4))=='.css')
-		{
-			$path='themes/'.$name.'/css_custom/'.$file;
-			$new_css_file="@import url(../../../default/css/$file);\n\n".file_get_contents(get_custom_file_base().'/themes/default/css/'.$file);
-			afm_make_file($path,$new_css_file,false);
-		}
-	}
-	closedir($_dir);*/
 
 	// Copy image references from default
 	$start=0;
@@ -196,8 +180,6 @@ function actual_add_theme_image($theme,$lang,$id,$path,$fail_ok=false)
 function get_theme_img_code($type,$allow_skip=false,$field_file='file',$field_choose='theme_img_code',$db=NULL)
 {
 	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
-
-	// TODO: Image won't upload to central site. So perhaps we should not allow uploads if not editing on central site.
 
 	if ((substr($type,0,4)=='ocf_') && (file_exists(get_file_base().'/themes/default/images/avatars/index.html'))) // Allow debranding of theme img dirs
 	{
@@ -547,7 +529,7 @@ function nice_get_themes($theme=NULL,$no_rely=false,$show_everything=false,$defa
 	$themes=find_all_themes();
 	foreach ($themes as $_theme=>$title)
 	{
-		if (/*($_theme=='default') || */ ($show_everything) || (has_category_access(get_member(),'theme',$_theme)))
+		if (($show_everything) || (has_category_access(get_member(),'theme',$_theme)))
 		{
 			$selected=($theme==$_theme);
 			$entries->attach(form_input_list_entry($_theme,$selected,$title));

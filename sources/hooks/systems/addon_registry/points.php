@@ -304,13 +304,10 @@ class Hook_addon_registry_points
 			'MULT_POINTS_PER_DAY'=>placeholder_number()
 		));
 
-		//Create the 'NEXT_BROWSER_BROWSE_NEXT' template
-		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL'=>placeholder_url(),'PREVIOUS_URL'=>placeholder_url(),'PAGE_NUM'=>placeholder_number(),'NUM_PAGES'=>placeholder_number()));
-
 		return array(
 			lorem_globalise(do_lorem_template('POINTS_SCREEN', array(
 				'TITLE'=>lorem_title(),
-				'BROWSE'=>$browse,
+				'PAGINATION'=>$pagination,
 				'CONTENT'=>$content
 			)), NULL, '', true)
 		);

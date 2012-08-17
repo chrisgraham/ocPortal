@@ -74,8 +74,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		return array(
 			'sources/hooks/systems/addon_registry/core_abstract_interfaces.php',
 			'QUESTION_UI_BUTTONS.tpl',
-			'NEXT_BROWSER_BROWSE_NEXT.tpl',
-			'NEXT_BROWSER_SCREEN.tpl',
+			'PAGINATION_SCREEN.tpl',
 			'CONFIRM_SCREEN.tpl',
 			'WARN_SCREEN.tpl',
 			'JAVASCRIPT_SPLURGH.tpl',
@@ -184,7 +183,6 @@ class Hook_addon_registry_core_abstract_interfaces
 			'MAP_TABLE_SCREEN.tpl'=>'map_table_screen',
 			'COLUMNED_TABLE_ACTION_DELETE_CATEGORY.tpl'=>'columned_table_action_delete_category',
 			'SPLURGH.tpl'=>'splurgh_screen',
-			'NEXT_BROWSER_BROWSE_NEXT.tpl'=>'next_browser_screen',
 			'WARNING_BOX.tpl'=>'warning_box',
 			'PAGINATION_SORTER.tpl'=>'result_table_screen',
 			'PAGINATION_SORT.tpl'=>'result_table_screen',
@@ -224,7 +222,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			'DO_NEXT_ITEM.tpl'=>'administrative__do_next_screen',
 			'DO_NEXT_SECTION.tpl'=>'administrative__do_next_screen',
 			'QUESTION_UI_BUTTONS.tpl'=>'question_ui_buttons',
-			'NEXT_BROWSER_SCREEN.tpl'=>'next_browser_screen',
+			'PAGINATION_SCREEN.tpl'=>'pagination_screen',
 			'SPLURGH_SCREEN.tpl'=>'splurgh_screen',
 			'FULL_MESSAGE_SCREEN.tpl'=>'full_message_screen',
 			'INDEX_SCREEN_FANCY_SCREEN.tpl'=>'index_screen_fancy_screen',
@@ -667,20 +665,13 @@ class Hook_addon_registry_core_abstract_interfaces
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__next_browser_screen()
+	function tpl_preview__pagination_screen()
 	{
-		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
-			'NEXT_URL'=>placeholder_url(),
-			'PREVIOUS_URL'=>placeholder_url(),
-			'PAGE_NUM'=>placeholder_number(),
-			'NUM_PAGES'=>placeholder_number()
-		));
-
 		return array(
-			lorem_globalise(do_lorem_template('NEXT_BROWSER_SCREEN', array(
+			lorem_globalise(do_lorem_template('PAGINATION_SCREEN', array(
 				'TITLE'=>lorem_title(),
 				'CONTENT'=>lorem_phrase(),
-				'BROWSE'=>$browse
+				'BROWSE'=>placeholder_pagination()
 			)), NULL, '', true)
 		);
 	}

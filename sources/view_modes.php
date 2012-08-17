@@ -968,8 +968,7 @@ function display_validation_results($out,$error,$preview_mode=false,$ret=false)
 		$echo->evaluate_echo();
 		exit();
 	}
-	$out=ob_get_contents();
-	ob_end_clean();
+	$out=ob_get_clean();
 	return $out;
 }
 

@@ -24,9 +24,10 @@ class Hook_awards_seedy_page
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
@@ -44,7 +45,7 @@ class Hook_awards_seedy_page
 		require_lang('cedi');
 		$info['title']=do_lang_tempcode('CEDI_PAGES');
 		$info['category_is_string']=false;
-		$info['archive_url']=build_url(array('page'=>'cedi'),get_module_zone('cedi'));
+		$info['archive_url']=build_url(array('page'=>'cedi'),(!is_null($zone))?$zone:get_module_zone('cedi'));
 		$info['cms_page']='cedi';
 		$info['supports_custom_fields']=true;
 

@@ -50,14 +50,6 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 	$current_level=$root_branch;
 
 	if (count($lines)==0) return new ocp_tempcode();
-	// Fix up if lines aren't indented by one  -- Junk code, don't need it
-/*	if ($lines[0][0]!=' ')
-	{
-		for ($j=0;$j<count($lines);$j++)
-		{
-			$lines[$j]=' '.$lines[$j];
-		}
-	}*/
 
 	foreach ($lines as $line)
 	{

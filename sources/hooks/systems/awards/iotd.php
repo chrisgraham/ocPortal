@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		downloads
+ * @package		iotds
  */
 
-class Hook_awards_download
+class Hook_awards_iotd
 {
 
 	/**
@@ -31,25 +31,25 @@ class Hook_awards_download
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
-		$info['table']='download_downloads';
-		$info['date_field']='add_date';
+		$info['table']='iotd';
+		$info['date_field']='date_and_time'; // add_date is the technical add date, but date_and_time is when it went live
 		$info['id_field']='id';
-		$info['add_url']=(has_submit_permission('mid',get_member(),get_ip_address(),'cms_downloads'))?build_url(array('page'=>'cms_downloads','type'=>'ad'),get_module_zone('cms_downloads')):new ocp_tempcode();
-		$info['category_field']='category_id';
-		$info['category_type']='downloads';
-		$info['parent_spec__table_name']='download_categories';
-		$info['parent_spec__parent_name']='parent_id';
-		$info['parent_spec__field_name']='id';
-		$info['parent_field_name']='id';
+		$info['add_url']=(has_submit_permission('mid',get_member(),get_ip_address(),'cms_iotds'))?build_url(array('page'=>'cms_iotds','type'=>'ad'),get_module_zone('cms_iotds')):new ocp_tempcode();
+		$info['category_field']=NULL;
+		$info['category_type']=NULL;
+		$info['parent_spec__table_name']=NULL;
+		$info['parent_spec__parent_name']=NULL;
+		$info['parent_spec__field_name']=NULL;
+		$info['parent_field_name']=NULL;
 		$info['submitter_field']='submitter';
 		$info['id_is_string']=false;
-		require_lang('downloads');
-		$info['title']=do_lang_tempcode('SECTION_DOWNLOADS');
-		$info['validated_field']='validated';
-		$info['category_is_string']=false;
-		$info['archive_url']=build_url(array('page'=>'downloads'),(!is_null($zone))?$zone:get_module_zone('downloads'));
-		$info['cms_page']='cms_downloads';
-		$info['views_field']='download_views';
+		require_lang('iotds');
+		$info['title']=do_lang_tempcode('IOTDS');
+		$info['validated_field']='used';
+		$info['category_is_string']=true;
+		$info['archive_url']=build_url(array('page'=>'iotds'),(!is_null($zone))?$zone:get_module_zone('iotds'));
+		$info['cms_page']='cms_iotds';
+		$info['views_field']='iotd_views';
 		$info['supports_custom_fields']=true;
 
 		return $info;
@@ -64,9 +64,8 @@ class Hook_awards_download
 	 */
 	function run($row,$zone)
 	{
-		require_code('downloads');
-
-		return render_download_box($row,true,true,$zone);
+		require_code('iotds');
+		return render_iotd_box($row,$zone);
 	}
 
 }

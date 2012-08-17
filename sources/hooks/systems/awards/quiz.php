@@ -24,9 +24,10 @@ class Hook_awards_quiz
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
@@ -45,7 +46,7 @@ class Hook_awards_quiz
 		$info['title']=do_lang_tempcode('QUIZZES');
 		$info['validated_field']='q_validated';
 		$info['category_is_string']=true;
-		$info['archive_url']=build_url(array('page'=>'quiz'),get_module_zone('quiz'));
+		$info['archive_url']=build_url(array('page'=>'quiz'),(!is_null($zone))?$zone:get_module_zone('quiz'));
 		$info['cms_page']='cms_quiz';
 		$info['supports_custom_fields']=true;
 

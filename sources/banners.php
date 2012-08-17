@@ -341,8 +341,7 @@ function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$u
 							ob_start();
 							$evaled=eval($php_code);
 							if (!is_string($evaled)) $evaled='';
-							$evaled.=ob_get_contents();
-							ob_end_clean();
+							$evaled.=ob_get_clean();
 						} else
 						{
 							$evaled=do_lang('BANNER_PHP_NOT_RUN');

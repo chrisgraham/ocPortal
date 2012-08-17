@@ -272,7 +272,7 @@ function convert_to_internal_encoding($data,$input_charset=NULL,$internal_charse
 
 	if (is_null($internal_charset)) $internal_charset=get_charset();
 
-	if (((version_compare(phpversion(),'4.3.0')>=0) || (strtolower($internal_charset)=='iso-8859-1')) && (strtolower($input_charset)=='utf-8') && /*test method works...*/(will_be_unicode_neutered($data)) && (in_array(strtolower($internal_charset),array('iso-8859-1','iso-8859-15','koi8-r','big5','gb2312','big5-hkscs','shift_jis','euc-jp')))) // Preferred as it will sub entities where there's no equivalent character
+	if ((strtolower($input_charset)=='utf-8') && /*test method works...*/(will_be_unicode_neutered($data)) && (in_array(strtolower($internal_charset),array('iso-8859-1','iso-8859-15','koi8-r','big5','gb2312','big5-hkscs','shift_jis','euc-jp')))) // Preferred as it will sub entities where there's no equivalent character
 	{
 		$test=entity_utf8_decode($data,$internal_charset);
 		if ($test!==false) $data=$test;
@@ -332,12 +332,8 @@ function entity_utf8_decode($data,$internal_charset)
 	if ((strlen($encoded)==0) && ($data!='')) $encoded=htmlentities($data,ENT_COMPAT);
 
 	$test=mixed();
-	$test=false;
-	if (version_compare(phpversion(),'4.3.0')>=0)
-	{
-		$test=@html_entity_decode($encoded,ENT_COMPAT,$internal_charset); // this is nice because it will leave equivalent entities where it can't get a character match; Comcode supports those entities
-		if ((strlen($test)==0) && ($data!='')) $test=false;
-	}
+	$test=@html_entity_decode($encoded,ENT_COMPAT,$internal_charset); // this is nice because it will leave equivalent entities where it can't get a character match; Comcode supports those entities
+	if ((strlen($test)==0) && ($data!='')) $test=false;
 	if ($test===false)
 	{
 		$test=preg_replace_callback('/&#x([0-9a-f]+);/i','unichrm_hex',$encoded); // imperfect as it can only translate lower ascii back, but better than nothing. htmlentities would have encoded key other ones as named entities though which get_html_translation_table can handle

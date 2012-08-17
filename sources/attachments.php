@@ -93,8 +93,6 @@ function attachments_script()
 		return;
 	}
 
-//	$breakdown=pathinfo($full);
-//	$filename=$breakdown['basename'];
 	$_full=get_custom_file_base().'/'.rawurldecode($full);
 	if (!file_exists($_full)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','url:'.escape_html($full))); // File is missing, we can't do anything
 	$size=filesize($_full);
@@ -107,11 +105,6 @@ function attachments_script()
 	require_code('mime_types');
 	$mime_type=get_mime_type($extension);
 
-	/*$myfile2=fopen('test','wb');
-	fwrite($myfile2,var_export($_SERVER,true));
-	fwrite($myfile2,var_export($_ENV,true));
-	fclose($myfile2);*/
-
 	// Send header
 	if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
@@ -121,10 +114,7 @@ function attachments_script()
 		if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
 		{
 			header('Content-Disposition: filename="'.$original_filename.'"');
-		}/* elseif (substr($original_filename,-4)=='.pdf')
-		{
-			header('Content-Disposition: attachment; filename="'.$original_filename.'"');
-		} */else
+		} else
 		{
 			header('Content-Disposition: inline; filename="'.$original_filename.'"');
 		}

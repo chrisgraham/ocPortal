@@ -393,6 +393,7 @@ class Module_groups
 
 		$edit_url=new ocp_tempcode();
 
+		// Secondary members
 		$s_start=get_param_integer('s_start',0);
 		$s_max=get_param_integer('s_max',50);
 		$_secondary_members=ocf_get_group_members_raw($id,false,true,true,ocf_may_control_group($id,get_member()),$s_max,$s_start);

@@ -465,8 +465,7 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
 				{
 					ob_start();
 					highlight_string($evaluated);
-					$h_result=ob_get_contents();
-					ob_end_clean();
+					$h_result=ob_get_clean();
 				}
 				$_embed=xhtmlise_html($h_result);
 				if ($strip)

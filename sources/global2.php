@@ -23,10 +23,9 @@
  */
 function init__global2()
 {
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BAD_WORD_CHARS,$FIXED_WORD_CHARS,$FIXED_WORD_CHARS_HTML,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING;
+	if (ini_get('output_buffering')=='1') @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
-	if (ini_get('output_buffering')=='1') @ob_end_clean();
-
+	// Fixup some inconsistencies in parameterisation on different PHP platforms
 	if (array_key_exists('HTTP_X_REWRITE_URL',$_SERVER))
 	{
 		foreach ($_GET as $key=>$val)
@@ -52,11 +51,13 @@ function init__global2()
 	if ((array_key_exists('SCRIPT_FILENAME',$_SERVER)) && (!array_key_exists('PHP_SELF',$_SERVER))) $_SERVER['PHP_SELF']=$_SERVER['SCRIPT_FILENAME'];
 	elseif ((array_key_exists('SCRIPT_NAME',$_SERVER)) && (defined('HIPHOP_PHP'))) $_SERVER['PHP_SELF']=$_SERVER['SCRIPT_NAME'];
 
+	// Don't want the browser caching PHP output, explicitly say this
 	@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
 	@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 	//@header('Cache-Control: no-cache, must-revalidate'); // DISABLED AS MAKES IE RELOAD ON 'BACK' AND LOSE FORM CONTENTS
 	@header('Pragma: no-cache'); // for proxies, and also IE
 
+	// Closed site message
 	if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']=='0')))
 	{
 		if ((is_file('closed.html')) || (@is_file('../closed.html')))
@@ -67,128 +68,8 @@ function init__global2()
 		}
 	}
 
-	// Cover up holes in old PHP versions functionality
-	if (!function_exists('str_word_count'))
-	{
-		/**
-		 * Isolate the words in the input string.
-		 *
-		 * @param  string			String to count words in
-		 * @param  integer		The format
-		 * @set    0 1 2
-		 * @return mixed			Typically a list - the words of the input string
-		 */
-		function str_word_count($input,$format=0)
-		{
-			//count words
-			$pattern="/[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-\-|:|\&|@)]+/";
-			$all_words=trim(preg_replace($pattern,' ',$input));
-			$a=array();
-			$pos=0;
-			while (true)
-			{
-				$old_pos=$pos;
-				$pos=strpos($all_words,' ',$pos);
-				if ($pos===false)
-				{
-					$a[$old_pos]=substr($all_words,$old_pos);
-					break;
-				}
-				$a[$old_pos]=substr($all_words,$old_pos,$pos-$old_pos);
-			}
-			if ($format==0) return count($a);
-			return $a;
-		}
-	}
-	if (!function_exists('html_entity_decode'))
-	{
-		/**
-		 * Decode the HTML entitity encoded input string.
-		 *
-		 * @param  string			The text to decode
-		 * @param  integer		The quote style code
-		 * @param  ?string		Character set to decode to (NULL: default)
-		 * @return string			The decoded text
-		 */
-		function html_entity_decode($input,$quote_style,$charset=NULL)
-		{
-			unset($quote_style);
-			unset($charset);
-			/*			// NB: &nbsp does not go to <space>. It's not something you use with html escaping, it's for hard-space-formatting. URL's don't contain spaces, but that's due to URL escaping (%20)
-			$replace_array=array(
-				'&amp;'=>'&',
-				'&gt;'=>'>',
-				'&lt;'=>'<',
-				'&#039;'=>'\'',
-				'&quot;'=>'"',
-			);
-
-			foreach ($replace_array as $from=>$to)
-			{
-				$input=str_replace($from,$to,$input);
-			}
-
-			return $input;*/
-
-			$trans_tbl=get_html_translation_table(HTML_ENTITIES);
-			$trans_tbl=array_flip($trans_tbl);
-			return strtr($input,$trans_tbl);
-		}
-	}
-	if (version_compare(phpversion(),'4.3.0')>=0)
-	{
-		if (!function_exists('unichrm_hex'))
-		{
-			/**
-			 * Convert a unicode character number to a unicode string. Callback for preg_replace.
-			 *
-			 * @param  array					Regular expression match array.
-			 * @return ~string				Converted data (false: could not convert).
-			 */
-			function unichrm_hex($matches)
-			{
-				return unichr(hexdec($matches[1]));
-			}
-		}
-
-		if (!function_exists('unichrm'))
-		{
-			/**
-			 * Convert a unicode character number to a unicode string. Callback for preg_replace.
-			 *
-			 * @param  array					Regular expression match array.
-			 * @return ~string				Converted data (false: could not convert).
-			 */
-			function unichrm($matches)
-			{
-				return unichr(intval($matches[1]));
-			}
-		}
-
-		if (!function_exists('unichr'))
-		{
-			/**
-			 * Convert a unicode character number to a HTML-entity enabled string, using lower ASCII characters where possible.
-			 *
-			 * @param  integer				Character number.
-			 * @return ~string				Converted data (false: could not convert).
-			 */
-			function unichr($c)
-			{
-				if ($c<=0x7F)
-				{
-					return chr($c);
-				} else
-				{
-					return '#&'.strval($c).';';
-				}
-			}
-		}
-	}
-
-	$BOOTSTRAPPING=1;
-	$CHECKING_SAFEMODE=false;
-
+	// Initialise some globals
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BAD_WORD_CHARS,$FIXED_WORD_CHARS,$FIXED_WORD_CHARS_HTML,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING;
 	$BAD_WORD_CHARS=array(chr(128),chr(130),chr(131),chr(132),chr(133),chr(134),chr(135),chr(136),chr(137),chr(138),chr(139),chr(140),chr(142),chr(145),chr(146),chr(147),chr(148),chr(149),chr(150),chr(151),chr(152),chr(153),chr(154),chr(155),chr(156),chr(158),chr(159));
 	$FIXED_WORD_CHARS=array('(EUR-)',',','{f.}','"','...','-|-','=|=','^','{%o}','{~S}','<','CE','{~Z}',"'","'",'"','"','-','-','--','~','(TM)','{~s}','>','ce','{~z}','{.Y.}'); // some of these are Comcode shortcuts. We can't use entities as we can't assume we're converting into Comcode.
 	$FIXED_WORD_CHARS_HTML=array('&#8364;','&#8218;','&#402;','&#8222;','&hellip;','&#8224;','&#8225;','&#710;','&#8240;','&#352;','&#8249;','&#338;','&#381;',"&lsquo;","&rsquo;",'&ldquo;','&rdquo;','&bull;','&ndash;','&mdash;','&#732;','&trade;','&#353;','&#8250;','&#339;','&#382;','&#376;');
@@ -199,21 +80,28 @@ function init__global2()
 	$CURRENTLY_HTTPS=NULL;
 	$CACHE_FIND_SCRIPT=array();
 	$WHAT_IS_RUNNING=current_script();
+	$WORDS_TO_FILTER=NULL;
+	$FIELD_RESTRICTIONS=NULL;
+	$VALID_ENCODING=false;
+	$CONVERTED_ENCODING=false;
+	if (!isset($MICRO_BOOTUP)) $MICRO_BOOTUP=0;
+	if (!isset($MICRO_AJAX_BOOTUP)) $MICRO_AJAX_BOOTUP=0;
 
+	// Keep check of our bootstrapping
+	$BOOTSTRAPPING=1;
+	$CHECKING_SAFEMODE=false;
+
+	// Initialise timezones
+	$SERVER_TIMEZONE=@date_default_timezone_get();
+	date_default_timezone_set('UTC');
+
+	// Initialise some error handling
 	error_reporting(E_ALL);
-	@ini_set('html_errors','1');
-	@ini_set('docref_root','http://www.php.net/manual/en/');
-	@ini_set('docref_ext','.php');
-
-	$SERVER_TIMEZONE=function_exists('date_default_timezone_get')?@date_default_timezone_get():ini_get('date.timezone');
-	@ini_set('date.timezone','UTC');
-	if (function_exists('date_default_timezone_set')) date_default_timezone_set('UTC'); else putenv('TZ=UTC');
-
 	$HAS_SET_ERROR_HANDLER=false;
 	$DYING_BADLY=false; // If ocPortal is bailing out uncontrollably, setting this will make sure the error hander does not try and suppress
 
+	// Dev mode stuff
 	$XSS_DETECT=function_exists('ocp_mark_as_escaped');
-
 	$GLOBALS['DEV_MODE']=(((!array_key_exists('dev_mode',$SITE_INFO) || ($SITE_INFO['dev_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))) && ((!array_key_exists('keep_no_dev_mode',$_GET) || ($_GET['keep_no_dev_mode']=='0'))));
 	$GLOBALS['SEMI_DEV_MODE']=(((!array_key_exists('dev_mode',$SITE_INFO) || ($SITE_INFO['dev_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))));
 	$GLOBALS['SEMI_DEBUG_MODE']=$GLOBALS['SEMI_DEV_MODE']; // TODO: Remove (legacy)
@@ -229,23 +117,11 @@ function init__global2()
 		require_code('developer_tools');
 	}
 
+	// Register basic CSS and Javascript requirements
 	$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
-	if (($GLOBALS['CURRENT_SHARE_USER']!==NULL) || (get_domain()=='myocp.com')) $JAVASCRIPTS['javascript_ajax']=1;
+	if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) $JAVASCRIPTS['javascript_ajax']=1; // AJAX needed by shared installs
 	$CSSS=array('no_cache'=>1,'global'=>1);
-
-	// Try and make the PHP environment as we need it
-	if (function_exists('set_magic_quotes_runtime')) @set_magic_quotes_runtime(0); // @'d because it's deprecated and PHP 5.3 may give an error
-
-	@ini_set('auto_detect_line_endings','0');
-	@ini_set('include_path','');
-	@ini_set('default_socket_timeout','60');
-
-	@ini_set('allow_url_fopen','0');
-	@ini_set('suhosin.executor.disable_emodifier','1'); // Extra security if suhosin is available
-	@ini_set('suhosin.executor.multiheader','1'); // Extra security if suhosin is available
-	@ini_set('suhosin.executor.disable_eval','0');
-	@ini_set('suhosin.executor.eval.whitelist','');
-	@ini_set('suhosin.executor.func.whitelist','');
+	$CACHE_TEMPLATES=true;
 
 	// Load most basic config
 	$IN_MINIKERNEL_VERSION=0;
@@ -256,26 +132,17 @@ function init__global2()
 		$SITE_INFO['ocf_table_prefix']=$SITE_INFO['table_prefix'];
 	}
 
-	$CACHE_TEMPLATES=true;
-
 	// The URL to our install (no trailing /)
 	$BASE_URL_HTTP=NULL;
 	$BASE_URL_HTTPS=NULL;
 
-	$WORDS_TO_FILTER=NULL;
-	$FIELD_RESTRICTIONS=NULL;
-
-	$VALID_ENCODING=false;
-	$CONVERTED_ENCODING=false;
-
-	if (!isset($MICRO_BOOTUP)) $MICRO_BOOTUP=0;
-	if (!isset($MICRO_AJAX_BOOTUP)) $MICRO_AJAX_BOOTUP=0;
-
 	require_code_no_override('version');
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0))
 	{
+		// Marker that ocPortal running
 		@header('X-Powered-By: ocPortal '.ocp_version_pretty().' (PHP '.phpversion().')');
 
+		// Get ready for query logging if requested
 		$QUERY_LOG=false;
 		if ((isset($_REQUEST['special_page_type'])) && ($_REQUEST['special_page_type']=='query'))
 		{
@@ -361,16 +228,17 @@ function init__global2()
 	if (function_exists('error_get_last')) register_shutdown_function('catch_fatal_errors');
 	$HAS_SET_ERROR_HANDLER=true;
 
+	// Initialise members
 	if ($MICRO_BOOTUP==0)
 	{
 		if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_layer_initialise')) $GLOBALS['FORUM_DRIVER']->forum_layer_initialise();
 	}
 
+	// More things to initialise
 	if ($MICRO_AJAX_BOOTUP==0)
 	{
 		$JAVASCRIPT=new ocp_tempcode();
 	}
-
 	if ($MICRO_BOOTUP==0)
 	{
 		if (($IN_MINIKERNEL_VERSION!=1) && ($MICRO_AJAX_BOOTUP==0))
@@ -381,7 +249,15 @@ function init__global2()
 	}
 	require_code('urls'); // URL building is crucial
 
+	// Register Internationalisation settings
 	@header('Content-type: text/html; charset='.get_charset());
+	if ((function_exists('setlocale')) && ($MICRO_AJAX_BOOTUP==0))
+	{
+		$locales=explode(',',do_lang('locale'));
+		setlocale(LC_ALL,$locales[0]);
+		@setlocale(LC_ALL,$locales);
+		unset($locales);
+	}
 
 	// Check RBL's
 	$spam_check_level=get_option('spam_check_level',true);
@@ -420,14 +296,7 @@ function init__global2()
 	// G-zip?
 	@ini_set('zlib.output_compression',(get_option('gzip_output')=='1')?'On':'Off');
 
-	if ((function_exists('setlocale')) && ($MICRO_AJAX_BOOTUP==0))
-	{
-		$locales=explode(',',do_lang('locale'));
-		setlocale(LC_ALL,$locales[0]);
-		@setlocale(LC_ALL,$locales);
-		unset($locales);
-	}
-
+	// Check installer not left behind
 	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0) && ((!isset($SITE_INFO['no_installer_checks'])) || ($SITE_INFO['no_installer_checks']=='0')))
 	{
 		if ((is_file(get_file_base().'/install.php')) && (!is_file(get_file_base().'/install_ok')) && (running_script('index')))
@@ -436,6 +305,7 @@ function init__global2()
 
 	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0))
 	{
+		// Clear cacheing if needed
 		$changed_base_url=!array_key_exists('base_url',$SITE_INFO) && get_long_value('last_base_url')!==get_base_url(false);
 		if ((running_script('index')) && ((is_browser_decacheing()) || ($changed_base_url)))
 		{
@@ -453,6 +323,7 @@ function init__global2()
 			}
 		}
 
+		// Load requirements for admins
 		if (has_zone_access(get_member(),'adminzone'))
 		{
 			$JAVASCRIPTS['javascript_staff']=1;
@@ -465,12 +336,7 @@ function init__global2()
 	$func=get_defined_functions();
 	print_r($func['user']);*/
 
-	if (((ocp_srv('HTTPS')!='') && (ocp_srv('HTTPS')!='off')) && (((!defined('HIPHOP_PHP')) || (tacit_https()) || (is_page_https(get_zone_name(),get_page_name()))))) // Fix IE bug
-	{
-		@header('Cache-Control: private');
-		@header('Pragma: private');
-	}
-
+	// Okay, we've loaded everything critical. Don't need to tell ocPortal to be paranoid now.
 	$BOOTSTRAPPING=0;
 
 	if (($GLOBALS['SEMI_DEV_MODE']) && ($MICRO_AJAX_BOOTUP==0)) // Lots of code that only runs if you're a programmer. It tries to make sure coding standards are met.
@@ -534,6 +400,7 @@ function init__global2()
 		require_code('firephp');
 	}
 
+	// Reduce down memory limit / raise if requested
 	$default_memory_limit=get_value('memory_limit');
 	if ((is_null($default_memory_limit)) || ($default_memory_limit=='') || ($default_memory_limit=='0') || ($default_memory_limit=='-1'))
 		$default_memory_limit='64M';
@@ -551,6 +418,7 @@ function init__global2()
 		}
 	}
 
+	// Initialise site-wide IM
 	if ((get_option('sitewide_im',true)==='1') && (running_script('index')) /* i.e. not running script */ && (get_param('type','misc',true)!='room'))
 	{
 		require_code('chat');
@@ -881,7 +749,6 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 function ocp_memory_profile_2($id,&$struct)
 {
 	if (!function_exists('memory_get_usage')) return;
-	if (!function_exists('var_export')) return;
 	@ob_end_clean();
 	echo memory_get_usage().'  ('.$id.')'.(is_null($struct)?'':(' ['.strlen(var_export($struct,true)).']')).'<br />';
 }*/
@@ -2064,7 +1931,7 @@ function convert_data_encodings($known_utf8=false)
 
 		$done_something=true;
 	}
-	elseif (($known_utf8) && ((version_compare(phpversion(),'4.3.0')>=0) || (strtolower($charset)=='iso-8859-1')) && /*test method works...*/(will_be_unicode_neutered(serialize($_GET).serialize($_POST))) && (in_array(strtolower($charset),array('iso-8859-1','iso-8859-15','koi8-r','big5','gb2312','big5-hkscs','shift_jis','euc-jp')))) // Preferred as it will sub entities where there's no equivalent character
+	elseif (($known_utf8) && /*test method works...*/(will_be_unicode_neutered(serialize($_GET).serialize($_POST))) && (in_array(strtolower($charset),array('iso-8859-1','iso-8859-15','koi8-r','big5','gb2312','big5-hkscs','shift_jis','euc-jp')))) // Preferred as it will sub entities where there's no equivalent character
 	{
 		require_code('character_sets');
 
@@ -2175,6 +2042,45 @@ function will_be_unicode_neutered($data)
 		if (ord($data[$i])>0x7F) return false;
 	}
 	return true;
+}
+
+/**
+ * Convert a unicode character number to a unicode string. Callback for preg_replace.
+ *
+ * @param  array					Regular expression match array.
+ * @return ~string				Converted data (false: could not convert).
+ */
+function unichrm_hex($matches)
+{
+	return unichr(hexdec($matches[1]));
+}
+
+/**
+ * Convert a unicode character number to a unicode string. Callback for preg_replace.
+ *
+ * @param  array					Regular expression match array.
+ * @return ~string				Converted data (false: could not convert).
+ */
+function unichrm($matches)
+{
+	return unichr(intval($matches[1]));
+}
+
+/**
+ * Convert a unicode character number to a HTML-entity enabled string, using lower ASCII characters where possible.
+ *
+ * @param  integer				Character number.
+ * @return ~string				Converted data (false: could not convert).
+ */
+function unichr($c)
+{
+	if ($c<=0x7F)
+	{
+		return chr($c);
+	} else
+	{
+		return '#&'.strval($c).';';
+	}
 }
 
 /**

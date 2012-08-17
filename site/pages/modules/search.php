@@ -530,8 +530,7 @@ class Module_search
 		$NON_CANONICAL_PARAMS[]='content';
 		$NON_CANONICAL_PARAMS[]='author';
 
-		$test=db_has_full_text($GLOBALS['SITE_DB']->connection_read);
-		$old_mysql=!$test;
+		$has_fulltext_search=db_has_full_text($GLOBALS['SITE_DB']->connection_read);
 
 		$can_order_by_rating=db_has_subqueries($GLOBALS['SITE_DB']->connection_read);
 
@@ -550,7 +549,7 @@ class Module_search
 			}
 		}
 
-		return do_template('SEARCH_FORM_SCREEN',array('_GUID'=>'8bb208185740183323a6fe6e89d55de5','SEARCH_TERM'=>is_null($content)?'':$content,'HAS_TEMPLATE_SEARCH'=>$has_template_search,'NUM_RESULTS'=>integer_format($num_results),'CAN_ORDER_BY_RATING'=>$can_order_by_rating,'EXTRA_SORT_FIELDS'=>$extra_sort_fields,'USER_LABEL'=>$user_label,'DAYS_LABEL'=>$days_label,'BOOLEAN_SEARCH'=>$this->_is_boolean_search(),'AND'=>$boolean_operator=='AND','ONLY_TITLES'=>$only_titles,'DAYS'=>strval($days),'SORT'=>$sort,'DIRECTION'=>$direction,'CONTENT'=>$content,'RESULTS'=>$out,'PAGINATION'=>$pagination,'OLD_MYSQL'=>$old_mysql,'TITLE'=>$title,'AUTHOR'=>$author,'SPECIALISATION'=>$specialisation,'URL'=>$url));
+		return do_template('SEARCH_FORM_SCREEN',array('_GUID'=>'8bb208185740183323a6fe6e89d55de5','SEARCH_TERM'=>is_null($content)?'':$content,'HAS_TEMPLATE_SEARCH'=>$has_template_search,'NUM_RESULTS'=>integer_format($num_results),'CAN_ORDER_BY_RATING'=>$can_order_by_rating,'EXTRA_SORT_FIELDS'=>$extra_sort_fields,'USER_LABEL'=>$user_label,'DAYS_LABEL'=>$days_label,'BOOLEAN_SEARCH'=>$this->_is_boolean_search(),'AND'=>$boolean_operator=='AND','ONLY_TITLES'=>$only_titles,'DAYS'=>strval($days),'SORT'=>$sort,'DIRECTION'=>$direction,'CONTENT'=>$content,'RESULTS'=>$out,'PAGINATION'=>$pagination,'HAS_FULLTEXT_SEARCH'=>$has_fulltext_search,'TITLE'=>$title,'AUTHOR'=>$author,'SPECIALISATION'=>$specialisation,'URL'=>$url));
 	}
 
 	/**

@@ -19,10 +19,10 @@
  */
 
 /**
- * AED module (Add/Edit/Delete), for operations on content types (aka: CRUD, create update delete).
+ * CRUD module (Create/Update/Delete), for operations on content types.
  * @package		core
  */
-class standard_aed_module
+class standard_crud_module
 {
 	var $module_type;
 	var $redirect_type=NULL;
@@ -41,11 +41,11 @@ class standard_aed_module
 	var $view_label=NULL;
 	var $protect_first=0;
 	var $permission_page=NULL; // Usually just get_page_name()
-	var $permission_module=NULL; // E.g. 'catalogues_catalogue' if we are AEDing a catalogue
+	var $permission_module=NULL; // E.g. 'catalogues_catalogue' if we are CRUDing a catalogue
 	var $permissions_require=NULL;  // E.g. 'mid'
-	var $permissions_cat_require=NULL; // E.g. 'catalogues_catalogue' if we are AEDing a catalogue entry
-	var $permissions_cat_name=NULL; // E.g. 'catalogue_name' if we are AEDing a catalogue entry
-	var $permissions_cat_require_b=NULL; // E.g. 'catalogues_category' if we are AEDing a catalogue entry
+	var $permissions_cat_require=NULL; // E.g. 'catalogues_catalogue' if we are CRUDing a catalogue entry
+	var $permissions_cat_name=NULL; // E.g. 'catalogue_name' if we are CRUDing a catalogue entry
+	var $permissions_cat_require_b=NULL; // E.g. 'catalogues_category' if we are CRUDing a catalogue entry
 	var $permissions_cat_name_b=NULL; // E.g. 'cat'
 	var $add_text='';
 	var $edit_text='';
@@ -57,8 +57,8 @@ class standard_aed_module
 	var $special_edit_frontend=false;
 	var $upload=NULL;
 	var $possibly_some_kind_of_upload=false;
-	var $cat_aed_module=NULL; // Allows chaining of a secondary aed module on, to listen for cat aed (c)
-	var $alt_aed_module=NULL; // Allows chaining of a secondary aed module on, to listen for some other aed (v)
+	var $cat_crud_module=NULL; // Allows chaining of a secondary CRUD module on, to listen for cat CRUD (c)
+	var $alt_crud_module=NULL; // Allows chaining of a secondary CRUD module on, to listen for some other CRUD (v)
 	var $seo_type=NULL;
 	var $award_type=NULL;
 	var $posting_form_title=NULL;
@@ -130,10 +130,10 @@ class standard_aed_module
 		$entry_points=array();
 		if (method_exists($this,'add_actualisation'))
 			$entry_points=array_merge($entry_points,array('ad'=>'ADD_'.$this->lang_type,'ed'=>'EDIT_'.$this->lang_type));
-		if (!is_null($this->cat_aed_module))
-			$entry_points=array_merge($entry_points,array('ac'=>'ADD_'.$this->cat_aed_module->lang_type,'ec'=>'EDIT_'.$this->cat_aed_module->lang_type));
-		if (!is_null($this->alt_aed_module))
-			$entry_points=array_merge($entry_points,array('av'=>'ADD_'.$this->alt_aed_module->lang_type,'ev'=>'EDIT_'.$this->alt_aed_module->lang_type));
+		if (!is_null($this->cat_crud_module))
+			$entry_points=array_merge($entry_points,array('ac'=>'ADD_'.$this->cat_crud_module->lang_type,'ec'=>'EDIT_'.$this->cat_crud_module->lang_type));
+		if (!is_null($this->alt_crud_module))
+			$entry_points=array_merge($entry_points,array('av'=>'ADD_'.$this->alt_crud_module->lang_type,'ev'=>'EDIT_'.$this->alt_crud_module->lang_type));
 		return $entry_points;
 	}
 
@@ -203,29 +203,29 @@ class standard_aed_module
 			if ((!is_null($ret)) && (!$ret->is_empty())) return $ret;
 		}
 
-		if (!is_null($this->cat_aed_module)) $this->cat_aed_module->type_code='d';
+		if (!is_null($this->cat_crud_module)) $this->cat_crud_module->type_code='d';
 		if ($type=='ad') return $this->ad();
 		if ($type=='_ad') return $this->_ad();
 		if ($type=='ed') return $this->ed();
 		if ($type=='_ed') return $this->_ed();
 		if ($type=='__ed') return $this->__ed();
-		if (!is_null($this->cat_aed_module))
+		if (!is_null($this->cat_crud_module))
 		{
-			$this->cat_aed_module->type_code='c';
-			if ($type=='ac') return $this->cat_aed_module->ad();
-			if ($type=='_ac') return $this->cat_aed_module->_ad();
-			if ($type=='ec') return $this->cat_aed_module->ed();
-			if ($type=='_ec') return $this->cat_aed_module->_ed();
-			if ($type=='__ec') return $this->cat_aed_module->__ed();
+			$this->cat_crud_module->type_code='c';
+			if ($type=='ac') return $this->cat_crud_module->ad();
+			if ($type=='_ac') return $this->cat_crud_module->_ad();
+			if ($type=='ec') return $this->cat_crud_module->ed();
+			if ($type=='_ec') return $this->cat_crud_module->_ed();
+			if ($type=='__ec') return $this->cat_crud_module->__ed();
 		}
-		if (!is_null($this->alt_aed_module))
+		if (!is_null($this->alt_crud_module))
 		{
-			$this->alt_aed_module->type_code='v';
-			if ($type=='av') return $this->alt_aed_module->ad();
-			if ($type=='_av') return $this->alt_aed_module->_ad();
-			if ($type=='ev') return $this->alt_aed_module->ed();
-			if ($type=='_ev') return $this->alt_aed_module->_ed();
-			if ($type=='__ev') return $this->alt_aed_module->__ed();
+			$this->alt_crud_module->type_code='v';
+			if ($type=='av') return $this->alt_crud_module->ad();
+			if ($type=='_av') return $this->alt_crud_module->_ad();
+			if ($type=='ev') return $this->alt_crud_module->ed();
+			if ($type=='_ev') return $this->alt_crud_module->_ed();
+			if ($type=='__ev') return $this->alt_crud_module->__ed();
 		}
 
 		// These ones are for catalogues only...
@@ -234,23 +234,23 @@ class standard_aed_module
 		if ($type=='edit_entry') return $this->ed();
 		if ($type=='_edit_entry') return $this->_ed();
 		if ($type=='__edit_entry') return $this->__ed();
-		if (!is_null($this->cat_aed_module))
+		if (!is_null($this->cat_crud_module))
 		{
-			$this->cat_aed_module->type_code='c';
-			if ($type=='add_category') return $this->cat_aed_module->ad();
-			if ($type=='_add_category') return $this->cat_aed_module->_ad();
-			if ($type=='edit_category') return $this->cat_aed_module->ed();
-			if ($type=='_edit_category') return $this->cat_aed_module->_ed();
-			if ($type=='__edit_category') return $this->cat_aed_module->__ed();
+			$this->cat_crud_module->type_code='c';
+			if ($type=='add_category') return $this->cat_crud_module->ad();
+			if ($type=='_add_category') return $this->cat_crud_module->_ad();
+			if ($type=='edit_category') return $this->cat_crud_module->ed();
+			if ($type=='_edit_category') return $this->cat_crud_module->_ed();
+			if ($type=='__edit_category') return $this->cat_crud_module->__ed();
 		}
-		if (!is_null($this->alt_aed_module))
+		if (!is_null($this->alt_crud_module))
 		{
-			$this->alt_aed_module->type_code='v';
-			if ($type=='add_catalogue') return $this->alt_aed_module->ad();
-			if ($type=='_add_catalogue') return $this->alt_aed_module->_ad();
-			if ($type=='edit_catalogue') return $this->alt_aed_module->ed();
-			if ($type=='_edit_catalogue') return $this->alt_aed_module->_ed();
-			if ($type=='__edit_catalogue') return $this->alt_aed_module->__ed();
+			$this->alt_crud_module->type_code='v';
+			if ($type=='add_catalogue') return $this->alt_crud_module->ad();
+			if ($type=='_add_catalogue') return $this->alt_crud_module->_ad();
+			if ($type=='edit_catalogue') return $this->alt_crud_module->ed();
+			if ($type=='_edit_catalogue') return $this->alt_crud_module->_ed();
+			if ($type=='__edit_catalogue') return $this->alt_crud_module->__ed();
 		}
 
 		return new ocp_tempcode();

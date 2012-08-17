@@ -43,5 +43,5 @@ Description: Content Management System for building dynamic websites
  currently at least some support for: AEF, Burning Board, IPB, Joomla, MKPortal,
  MyBB, phpBB, phpNuke, SMF, static HTML, vB, Wordpress and WowBB.
  .
- ocPortal requires PHP 4.2+ or HipHop, MySQL and a Web server such as Apache.
+ ocPortal requires PHP 5.0+ or HipHop, MySQL and a Web server such as Apache.
  ocPortal development is supported by ocProducts Ltd.

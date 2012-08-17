@@ -84,9 +84,6 @@ function init__tempcode__runtime()
 	$PHP_REP_TO=array('\\\\','\n','\$','\\"');
 	$PHP_REP_TO_TWICE=array('\\\\\\\\','\\n','\\\\$','\\\\\"');
 
-	global $PREG_MATCH_OFFSET;
-	$PREG_MATCH_OFFSET=(version_compare(phpversion(),'4.3.3')!=-1);
-
 	require_code('symbols');
 	require_code('tempcode_compiler');
 }
@@ -1082,11 +1079,8 @@ class ocp_tempcode
 						{
 							$parameters['_GUID']='';
 
-							if (function_exists('debug_backtrace'))
-							{
-								$trace=debug_backtrace();
-								$parameters['_GUID']=array_key_exists(3,$trace)?($trace[3]['function'].'/'.$trace[2]['function']):(array_key_exists(2,$trace)?$trace[2]['function']:$trace[1]['function']);
-							}
+							$trace=debug_backtrace();
+							$parameters['_GUID']=array_key_exists(3,$trace)?($trace[3]['function'].'/'.$trace[2]['function']):(array_key_exists(2,$trace)?$trace[2]['function']:$trace[1]['function']);
 						} else
 						{
 							//$out->bits[]=array($bit[0],$bit_1,$bit_2,$bit[3]);

@@ -25,7 +25,10 @@
  */
 function adminzone_special_cases($codename)
 {
-/*	if (($codename=='start') && (get_page_name()=='start') && (get_option('show_docs')!=='0'))
+/*
+	The current design does not require these, but this code may be useful in the future...
+
+	if (($codename=='start') && (get_page_name()=='start') && (get_option('show_docs')!=='0'))
 	{
 		require_lang('menus');
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/ocpmainpage';
@@ -38,7 +41,8 @@ function adminzone_special_cases($codename)
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/multisitenetworking';
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_NETLINK');
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_msn';
-	}        */
+	}
+*/
 }
 
 /**

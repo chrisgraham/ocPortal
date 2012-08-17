@@ -247,8 +247,6 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 	require_code('seo2');
 	seo_meta_set_for_implicit('downloads_category',strval($id),array($category,$description),$description);
 
-	decache('main_download_category');
-
 	if (!is_null($parent_id))
 	{
 		require_code('notifications2');
@@ -300,8 +298,6 @@ function edit_download_category($category,$parent_id,$description,$category_id,$
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('downloads_category',strval($category_id),$meta_keywords,$meta_description);
-
-	decache('main_download_category');
 }
 
 /**
@@ -336,8 +332,6 @@ function delete_download_category($category_id)
 
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
 	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
-
-	decache('main_download_category');
 }
 
 /**
@@ -716,7 +710,6 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 
 	decache('main_recent_downloads');
 	decache('main_top_downloads');
-	decache('main_download_category');
 	decache('main_download_tease');
 
 	return $id;
@@ -815,7 +808,6 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 
 	decache('main_recent_downloads');
 	decache('main_top_downloads');
-	decache('main_download_category');
 	decache('main_download_tease');
 
 	require_code('feedback');
@@ -868,7 +860,6 @@ function delete_download($id,$leave=false)
 
 	decache('main_recent_downloads');
 	decache('main_top_downloads');
-	decache('main_download_category');
 	decache('main_download_tease');
 }
 

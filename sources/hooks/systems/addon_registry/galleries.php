@@ -548,7 +548,6 @@ class Hook_addon_registry_galleries
 	 */
 	function tpl_preview__block_main_gallery_tease()
 	{
-		//Create the 'GALLERY_TEASE_PIC' template
 		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
@@ -556,15 +555,11 @@ class Hook_addon_registry_galleries
 			$content->attach($sub);
 		}
 
-		//Create the 'NEXT_BROWSER_BROWSE_NEXT' template
-		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL'=>placeholder_url(),'PREVIOUS_URL'=>placeholder_url(),'PAGE_NUM'=>placeholder_number(),'NUM_PAGES'=>placeholder_number()));
-
-		//Create the 'BLOCK_MAIN_GALLERY_TEASE' template with 'GALLERY_TEASE_PIC' and 'NEXT_BROWSER_BROWSE_NEXT' as sub-templates
 		return array(
 			lorem_globalise(
 				do_lorem_template('BLOCK_MAIN_GALLERY_TEASE',array(
 					'CONTENT'=>$content,
-					'BROWSE'=>$browse,
+					'PAGINATION'=>placeholder_pagination(),
 				)
 			),NULL,'',true),
 		);
@@ -781,8 +776,6 @@ class Hook_addon_registry_galleries
 
 		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
 
-		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL'=>placeholder_url(),'PREVIOUS_URL'=>placeholder_url(),'PAGE_NUM'=>placeholder_number(),'NUM_PAGES'=>placeholder_number()));
-
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_FLOW_MODE_SCREEN',array(
@@ -804,7 +797,7 @@ class Hook_addon_registry_galleries
 					'TAGS'=>$tags,
 					'RATING_DETAILS'=>lorem_sentence_html(),
 					'COMMENT_DETAILS'=>$comment_details,
-					'BROWSE'=>$browse,
+					'PAGINATION'=>placeholder_pagination(),
 					'REP_IMAGE_URL'=>placeholder_image_url(),
 					'TITLE'=>lorem_title(),
 					'MEMBER_DETAILS'=>lorem_phrase(),
@@ -862,8 +855,6 @@ class Hook_addon_registry_galleries
 
 		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
 
-		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT',array('NEXT_URL'=>placeholder_url(),'PREVIOUS_URL'=>placeholder_url(),'PAGE_NUM'=>placeholder_number(),'NUM_PAGES'=>placeholder_number()));
-
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_FLOW_MODE_SCREEN',array(
@@ -882,7 +873,7 @@ class Hook_addon_registry_galleries
 					'TAGS'=>$tags,
 					'RATING_DETAILS'=>lorem_sentence_html(),
 					'COMMENT_DETAILS'=>$comment_details,
-					'BROWSE'=>$browse,
+					'PAGINATION'=>placeholder_pagination(),
 					'REP_IMAGE_URL'=>placeholder_image_url(),
 					'TITLE'=>lorem_title(),
 					'MEMBER_DETAILS'=>lorem_paragraph_html(),

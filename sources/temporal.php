@@ -389,21 +389,9 @@ function get_input_date($stub,$get_also=false)
 function tz_time($time,$zone)
 {
 	if ($zone=='') $zone=get_server_timezone();
-	if (function_exists('date_default_timezone_set'))
-	{
-		date_default_timezone_set($zone);
-	} else
-	{
-		@ini_set('date.timezone',$zone);
-	}
+	date_default_timezone_set($zone);
 	$ret=$time+intval(60.0*60.0*floatval(date('O',$time))/100.0);
-	if (function_exists('date_default_timezone_set'))
-	{
-		date_default_timezone_set('UTC');
-	} else
-	{
-		@ini_set('date.timezone','UTC');
-	}
+	date_default_timezone_set('UTC');
 	return $ret;
 }
 

@@ -45,18 +45,9 @@ class Hook_ocf_auth_smf
 			$usr=strtolower(post_param('login_username',NULL)); //prepare inputted username
 			$passwrd=strtr(stripslashes(post_param('password',NULL)), array_flip(get_html_translation_table(HTML_SPECIALCHARS, ENT_QUOTES)) + array('&#039;' => '\'', '&nbsp;' => ' ')); //prepare inputted password
 
-			if (function_exists('sha1'))
+			if (sha1($usr.$passwrd)!=$row['m_pass_hash_salted'])
 			{
-				if (sha1($usr.$passwrd)!=$row['m_pass_hash_salted'])
-				{
-					return do_lang_tempcode('USER_BAD_PASSWORD');
-				}
-			} else
-			{
-				if (md5($usr.$passwrd)!=$row['m_pass_hash_salted'])
-				{
-					return do_lang_tempcode('USER_BAD_PASSWORD');
-				}
+				return do_lang_tempcode('USER_BAD_PASSWORD');
 			}
 		}
 

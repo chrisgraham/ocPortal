@@ -364,9 +364,11 @@ class Module_downloads
 	function category_screen()
 	{
 		$id=get_param_integer('id',db_get_first_id());
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=downloads&filter='.strval($id);
+		$root=get_param_integer('root',db_get_first_id());
+		$cat_order=get_param('cat_order','t.text_original ASC');
+		$order=get_param('order','t.text_original ASC');
 
-		$root=get_param_integer('root',db_get_first_id(),true);
+		$GLOBALS['FEED_URL']=find_script('backend').'?mode=downloads&filter='.strval($id);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
@@ -379,11 +381,111 @@ class Module_downloads
 
 		if (!has_category_access(get_member(),'downloads',strval($id))) access_denied('CATEGORY_ACCESS');
 
-		$cat_order=get_param('cat_order','t.text_original ASC');
-		$order=get_param('order',NULL);
+		$rows=$GLOBALS['SITE_DB']->query_select('download_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.category=t.id',array('rep_image','c.id','category','text_original','description'),array('parent_id'=>$category_id),(($order=='t.text_original ASC')?'':('ORDER BY '.$order)),400/*reasonable limit*/);
+		if ($order=='t.text_original ASC')
+		{
+			global $M_SORT_KEY;
+			$M_SORT_KEY='text_original';
+			usort($rows,'multi_sort');
+		}
+		if (count($rows)==400) $rows=array(); // Too much, performance issue
+		$out=new ocp_tempcode();
+		foreach ($rows as $myrow)
+		{
+			if (!has_category_access(get_member(),'downloads',strval($myrow['id']))) continue;
 
-		$subcategories=get_download_sub_categories($id,$root,get_zone_name(),$cat_order);
-		$downloads=get_category_downloads($id,$root,$order);
+			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($myrow['text_original'])) $myrow['text_original']=get_translated_text($myrow['category']);
+
+			$child_id=$myrow['id'];
+			$child_title=$myrow['text_original'];
+
+			$info=count_download_category_children($child_id);
+			$num_children=$info['num_children'];
+			$num_downloads=$info['num_downloads_children'];
+			$display_string=do_lang_tempcode('CATEGORY_SUBORDINATE',integer_format($num_downloads),integer_format($num_children));
+
+			$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>($child_id==db_get_first_id())?NULL:$child_id,'root'=>($root==db_get_first_id())?NULL:$root,'order'=>get_param('order',NULL))+propagate_ocselect(),'_SELF');
+
+			if ($myrow['rep_image']!='')
+			{
+				require_code('images');
+				$rep_image=do_image_thumb($myrow['rep_image'],'');
+			} else $rep_image=new ocp_tempcode();
+
+			$ajax_edit_url='_SEARCH:cms_downloads:type=__ec:id='.strval($child_id);
+
+			$description=get_translated_tempcode($myrow['description']);
+
+			$out->attach(do_template('CATEGORY_ENTRY',array('_GUID'=>'8bfb36d75a85e2a7fbf5222f8fc61c7d','DESCRIPTION'=>$description,'ID'=>strval($child_id),'NAME_FIELD'=>'category','AJAX_EDIT_URL'=>$ajax_edit_url,'URL'=>$url,'REP_IMAGE'=>$rep_image,'CHILDREN'=>$display_string,'NAME'=>$child_title,'NAME_PLAIN'=>$child_title)));
+		}
+		$subcategories=do_template('CATEGORY_LIST',array('_GUID'=>'2de3e2cdd0180a584b4f4ec72652716f','CONTENT'=>$out));
+
+		$max=get_param_integer('max',30);
+		$start=get_param_integer('start',0);
+
+		// WHERE clause
+		if (get_option('downloads_subcat_narrowin')=='1')
+		{
+			require_code('ocfiltering');
+			$map=ocfilter_to_sqlfragment(strval($category_id).'*','id','download_categories','parent_id','category_id','id');
+		} else
+		{
+			$map='category_id='.strval($category_id);
+		}
+		if (!has_specific_permission(get_member(),'see_unvalidated')) $map.=' AND validated=1';
+
+		// ocSelect
+		$ocselect=either_param('active_filter','');
+		if ($ocselect!='')
+		{
+			require_code('ocselect');
+			$content_type='download';
+			list($ocselect_extra_select,$ocselect_extra_join,$ocselect_extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($ocselect),$content_type,'');
+			$extra_select_sql=implode('',$ocselect_extra_select);
+			$extra_join_sql=implode('',$ocselect_extra_join);
+			$map.=$ocselect_extra_where;
+		} else
+		{
+			$extra_select_sql='';
+			$extra_join_sql='';
+		}
+
+		// How many might there have been? (So we know how to browse pages nicely)
+		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'download_downloads r'.$extra_join_sql.' WHERE '.$map);
+
+		// Quick security check
+		if (is_null($order))
+		{
+			$order=get_param('order',NULL);
+			if (is_null($order))
+			{
+				if ($max_rows<1000)
+				{
+					$order='t.text_original ASC';
+				} else
+				{
+					$order='num_downloads DESC';
+				}
+			}
+		}
+		if ((strtoupper($order)!=strtoupper('t.text_original ASC')) && (strtoupper($order)!=strtoupper('t.text_original DESC')) && (strtoupper($order)!=strtoupper('file_size ASC')) && (strtoupper($order)!=strtoupper('file_size DESC'))
+			&& (strtoupper($order)!=strtoupper('num_downloads DESC')) && (strtoupper($order)!=strtoupper('add_date ASC'))
+			&& (strtoupper($order)!=strtoupper('add_date DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');
+		global $NON_CANONICAL_PARAMS;
+		$NON_CANONICAL_PARAMS[]='order';
+
+		// Fetch entries
+		$rows=$GLOBALS['SITE_DB']->query('SELECT r.*,t.text_original'.$extra_select_sql.' FROM '.get_table_prefix().'download_downloads r'.$extra_join_sql.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('t.language',user_lang()).' AND r.name=t.id WHERE '.$map.' ORDER BY '.$order,$max,$start);
+		$downloads=new ocp_tempcode();
+		foreach ($rows as $myrow)
+		{
+			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($myrow['text_original'])) $myrow['text_original']=get_translated_text($myrow['description']);
+
+			$downloads->attach(render_download_box($myrow,true,false));
+		}
+
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang_tempcode('SECTION_DOWNLOADS'),$category_id,$start,'start',$max,'max',$max_rows,$root,'misc',true);
 
 		$title_to_use=get_translated_text($category['category']);
 
@@ -459,7 +561,7 @@ class Module_downloads
 		}
 
 		breadcrumb_add_segment($breadcrumbs);
-		return do_template('DOWNLOAD_CATEGORY_SCREEN',array('_GUID'=>'ebb3c8708695f6a30dbd4a03f8632047','ID'=>strval($id),'TAGS'=>get_loaded_tags('download_categories'),'TITLE'=>$title,'SUBMIT_URL'=>$submit_url,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'DESCRIPTION'=>$description,'SUBCATEGORIES'=>$subcategories,'DOWNLOADS'=>$downloads,'SORTING'=>$sorting));
+		return do_template('DOWNLOAD_CATEGORY_SCREEN',array('_GUID'=>'ebb3c8708695f6a30dbd4a03f8632047','ID'=>strval($id),'TAGS'=>get_loaded_tags('download_categories'),'TITLE'=>$title,'SUBMIT_URL'=>$submit_url,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'DESCRIPTION'=>$description,'SUBCATEGORIES'=>$subcategories,'DOWNLOADS'=>$downloads,'SORTING'=>$sorting,'PAGINATION'=>$pagination));
 	}
 
 	/**

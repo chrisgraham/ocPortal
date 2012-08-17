@@ -891,8 +891,7 @@ function get_gd_version()
 
 	ob_start();
 	phpinfo();
-	$_info=ob_get_contents();
-	ob_end_clean();
+	$_info=ob_get_clean();
 	$a=explode("\n",$_info);
 	foreach ($a as $line)
 	{

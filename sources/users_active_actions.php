@@ -181,7 +181,6 @@ function handle_active_login($username)
 function handle_active_logout()
 {
 	// Kill cookie
-//	$expire=time()-300;
 	$member_cookie_name=get_member_cookie();
 	$colon_pos=strpos($member_cookie_name,':');
 	if ($colon_pos!==false)

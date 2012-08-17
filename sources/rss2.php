@@ -19,7 +19,7 @@
  */
 
 /**
- * Handle cloud registrations.
+ * Handle RSS cloud registrations.
  */
 function backend_cloud_script()
 {
@@ -39,13 +39,13 @@ function backend_cloud_script()
 	if (($protocol=='xml-rpc') && (!function_exists('xmlrpc_encode'))) exit('false');
 	$port=post_param_integer('port','80');
 //	$watching_channel=$_POST['channels'];
-	$status=register_them($path,$procedure,$protocol,$port,get_param('type',''));
+	$status=_cloud_register_them($path,$procedure,$protocol,$port,get_param('type',''));
 	if (!$status) exit('false');
 	exit('true');
 }
 
 /**
- * Set up a cloud registration.
+ * Set up an RSS cloud registration.
  *
  * @param  SHORT_TEXT	The news category title
  * @param  ID_TEXT		The procedure they are interested in
@@ -54,7 +54,7 @@ function backend_cloud_script()
  * @param  string			The channel they are interested in
  * @return boolean		Success status
  */
-function register_them($path,$procedure,$protocol,$port,$watching_channel)
+function _cloud_register_them($path,$procedure,$protocol,$port,$watching_channel)
 {
 	$before=$GLOBALS['SITE_DB']->query_value_null_ok('news_rss_cloud','register_time',array('watching_channel'=>$watching_channel,'rem_path'=>$path,'rem_ip'=>get_ip_address()));
 	if (!is_null($before)) return false;
@@ -65,7 +65,7 @@ function register_them($path,$procedure,$protocol,$port,$watching_channel)
 /**
  * Handle RSS/Atom output.
  */
-function backend_script()
+function rss_backend_script()
 {
 	// Closed site
 	$site_closed=get_option('site_closed');

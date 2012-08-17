@@ -490,7 +490,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 				{
 					$hidden->attach(form_input_hidden('views_signatures','1'));
 				}
-				//$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));
+				//$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));	Now on notifications tab, even though it is technically an account setting
 				$usergroup_list=new ocp_tempcode();
 				$lgroups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
 				foreach ($lgroups as $key=>$val)
@@ -616,51 +616,48 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 	require_code('fields');
 	foreach ($_custom_fields as $custom_field)
 	{
-//		if (($custom_field['cf_locked']==0) || (!is_null($member_id)))
-//		{
-			$ob=get_fields_hook($custom_field['cf_type']);
-			list(,,$storage_type)=$ob->get_field_value_row_bits($custom_field);
+		$ob=get_fields_hook($custom_field['cf_type']);
+		list(,,$storage_type)=$ob->get_field_value_row_bits($custom_field);
 
-			$existing_field=(!is_null($custom_fields)) && (array_key_exists($custom_field['id'],$custom_fields));
-			if ($existing_field)
+		$existing_field=(!is_null($custom_fields)) && (array_key_exists($custom_field['id'],$custom_fields));
+		if ($existing_field)
+		{
+			$value=mixed();
+			$value=$custom_fields[$custom_field['id']];
+			if (strpos($storage_type,'_trans')!==false)
 			{
-				$value=mixed();
-				$value=$custom_fields[$custom_field['id']];
-				if (strpos($storage_type,'_trans')!==false)
-				{
-					$value=((is_null($value)) || ($value==0))?'':get_translated_text($value,$GLOBALS['FORUM_DB']);
-				}
-				if (($custom_field['cf_encrypted']==1) && (is_encryption_enabled()))
-					$value=remove_magic_encryption_marker($value);
+				$value=((is_null($value)) || ($value==0))?'':get_translated_text($value,$GLOBALS['FORUM_DB']);
+			}
+			if (($custom_field['cf_encrypted']==1) && (is_encryption_enabled()))
+				$value=remove_magic_encryption_marker($value);
+		} else
+		{
+			$value=$custom_field['cf_default'];
+		}
+		$result=new ocp_tempcode();
+		$_description=escape_html(get_translated_text($custom_field['cf_description'],$GLOBALS['FORUM_DB']));
+		$field_cat='';
+		$matches=array();
+		if (strpos($custom_field['trans_name'],': ')!==false)
+		{
+			$field_cat=substr($custom_field['trans_name'],0,strpos($custom_field['trans_name'],': '));
+			if ($field_cat.': '==$custom_field['trans_name'])
+			{
+				$custom_field['trans_name']=$field_cat; // Just been pulled out as heading, nothing after ": "
 			} else
 			{
-				$value=$custom_field['cf_default'];
+				$custom_field['trans_name']=substr($custom_field['trans_name'],strpos($custom_field['trans_name'],': ')+2);
 			}
-			$result=new ocp_tempcode();
-			$_description=escape_html(get_translated_text($custom_field['cf_description'],$GLOBALS['FORUM_DB']));
-			$field_cat='';
-			$matches=array();
-			if (strpos($custom_field['trans_name'],': ')!==false)
-			{
-				$field_cat=substr($custom_field['trans_name'],0,strpos($custom_field['trans_name'],': '));
-				if ($field_cat.': '==$custom_field['trans_name'])
-				{
-					$custom_field['trans_name']=$field_cat; // Just been pulled out as heading, nothing after ": "
-				} else
-				{
-					$custom_field['trans_name']=substr($custom_field['trans_name'],strpos($custom_field['trans_name'],': ')+2);
-				}
-			}
-			elseif (preg_match('#(^\([A-Z][^\)]*\) )|( \([A-Z][^\)]*\)$)#',$custom_field['trans_name'],$matches)!=0)
-			{
-				$field_cat=trim($matches[0],'() ');
-				$custom_field['trans_name']=str_replace($matches[0],'',$custom_field['trans_name']);
-			}
-			$result=$ob->get_field_inputter($custom_field['trans_name'],$_description,$custom_field,$value,!$existing_field);
-			if (!array_key_exists($field_cat,$field_groups)) $field_groups[$field_cat]=new ocp_tempcode();
-			$field_groups[$field_cat]->attach($result);
-			$hidden->attach(form_input_hidden('label_for__custom_'.strval($custom_field['id']).'_value',$custom_field['trans_name']));
-//		}
+		}
+		elseif (preg_match('#(^\([A-Z][^\)]*\) )|( \([A-Z][^\)]*\)$)#',$custom_field['trans_name'],$matches)!=0)
+		{
+			$field_cat=trim($matches[0],'() ');
+			$custom_field['trans_name']=str_replace($matches[0],'',$custom_field['trans_name']);
+		}
+		$result=$ob->get_field_inputter($custom_field['trans_name'],$_description,$custom_field,$value,!$existing_field);
+		if (!array_key_exists($field_cat,$field_groups)) $field_groups[$field_cat]=new ocp_tempcode();
+		$field_groups[$field_cat]->attach($result);
+		$hidden->attach(form_input_hidden('label_for__custom_'.strval($custom_field['id']).'_value',$custom_field['trans_name']));
 	}
 	if (array_key_exists('',$field_groups)) // Blank prefix must go first
 	{
@@ -1492,10 +1489,10 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	require_code('notifications');
 	dispatch_notification('ocf_choose_photo',NULL,do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$urls[0],$urls[1],$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)));
 
-	// If no avatar, or default avatar, or avatars not installed, use photo for it
+	// If Avatars addon not installed, use photo for it
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 	$default_avatar_url=find_theme_image('ocf_default_avatars/default',true,true);
-	if (/*($avatar_url=='') || ($avatar_url==$default_avatar_url) || */(!addon_installed('ocf_avatars')))
+	if (!addon_installed('ocf_avatars'))
 	{
 		$avatar_url=$urls[0];
 		if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')))

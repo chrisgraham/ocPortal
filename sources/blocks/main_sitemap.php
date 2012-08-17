@@ -125,7 +125,7 @@ class Block_main_sitemap
 							if (is_null($entrypoints))
 							{
 								$path=zone_black_magic_filterer($zone.(($zone=='')?'':'/').'pages/'.$page_type.'/'.$page.'.php',true);
-								if (($low_memory) && (!defined('HIPHOP_PHP')) && (strpos(file_get_contents(get_file_base().'/'.$path),' extends standard_aed_module')!==false)) // Hackerish code when we have a memory limit. It's unfortunate, we'd rather execute in full
+								if (($low_memory) && (!defined('HIPHOP_PHP')) && (strpos(file_get_contents(get_file_base().'/'.$path),' extends standard_crud_module')!==false)) // Hackerish code when we have a memory limit. It's unfortunate, we'd rather execute in full
 								{
 									$new_code=str_replace(',parent::get_entry_points()','',str_replace('parent::get_entry_points(),','',$__entrypoints[0]));
 									if (strpos($new_code,'parent::')!==false) continue;

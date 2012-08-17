@@ -211,8 +211,8 @@ API described in [url="http://ocportal.com/docs/api/core/_sources---support.php.
 [tt]sources/zones3.php[/tt] (see [tt]zones.php[/tt] API doc -- has since been split)
 | Needs [tt]require_code[/tt] if you need anything in [tt]zones2.php[/tt] or [tt]zones3.php[/tt].
 |-
-| [color="green"]Add/edit/delete forms[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---aed_module.php.html"][tt]sources/aed_module.php[/tt][/url]
+| [color="green"]Create/edit/delete forms[/color]
+| [url="http://ocportal.com/docs/api/core/_sources---crud_module.php.html"][tt]sources/crud_module.php[/tt][/url]
 | Needs [tt]require_code[/tt].
 |}
 
@@ -566,14 +566,14 @@ This function [tt]seo_meta_set_for_implicit()[/tt] implicitly (by virtue of extr
 seo_meta_set_for_implicit('downloads_download',strval($id),
 	array($name,$description,$comments),$description);
 [/code]
-The function [tt]seo_get_fields[/tt] gets templated form fields to insert into a form page, for manipulation of seo fields. Add it in the AED CMS-module, [tt]get_form_fields[/tt] function:
+The function [tt]seo_get_fields[/tt] gets templated form fields to insert into a form page, for manipulation of seo fields. Add it in the CRUD CMS-module, [tt]get_form_fields[/tt] function:
 [code="PHP"]
 $fields->attach(
 	seo_get_fields('downloads_download',strval($id))
 );
 [/code]
 
-In the AED CMS-module, you need extra parameters to the call to the model [tt]edit_download[/tt] function:
+In the CRUD CMS-module, you need extra parameters to the call to the model [tt]edit_download[/tt] function:
 [tt],post_param('meta_keywords'),post_param('meta_description')[/tt]
 
 In the model [tt]edit_download[/tt] function you need to take the extra parameters:
@@ -626,18 +626,18 @@ In the [tt]run[/tt] function for your module...
 require_code('feedback');
 [/code]
 
-In the [tt]get_form_fields[/tt] function header of your AED CMS module...
+In the [tt]get_form_fields[/tt] function header of your CRUD CMS module...
 [code="PHP"]
 ,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes=''
 [/code]
 
-In the [tt]get_form_fields[/tt] function of your AED CMS module...
+In the [tt]get_form_fields[/tt] function of your CRUD CMS module...
 [code="PHP"]
 $fields->attach(feedback_fields($allow_rating,$allow_comments,
 $allow_trackbacks,$notes));
 [/code]
 
-In the add_actualisation and [tt]edit_actualisation[/tt] functions of your AED CMS module...
+In the add_actualisation and [tt]edit_actualisation[/tt] functions of your CRUD CMS module...
 [code="PHP"]
 $allow_rating=post_param_integer('allow_rating',0);
 $allow_comments=post_param_integer('allow_comments',0);
@@ -645,7 +645,7 @@ $allow_trackbacks=post_param_integer('allow_trackbacks',0);
 $notes=post_param('notes');
 [/code]
 
-In the [tt]fill_in_edit_form[/tt] function of your AED CMS module, where the [tt]get_form_fields[/tt] function is called...
+In the [tt]fill_in_edit_form[/tt] function of your CRUD CMS module, where the [tt]get_form_fields[/tt] function is called...
 [code="PHP"]
 ,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']
 [/code]
@@ -695,9 +695,9 @@ In the main template call to display your content on it's own screen...
 'COMMENTS_DETAILS'=>$comment_details,
 [/code]
 
-[title="3"]AED modules[/title]
+[title="3"]CRUD modules[/title]
 
-Most ocPortal add/edit/delete interfaces are done via an AED module, as this saves code and makes it easy to be consistent. AED modules get the following automatic functionality:
+Most ocPortal create/edit/delete interfaces are done via an CRUD module, as this saves code and makes it easy to be consistent. CRUD modules get the following automatic functionality:
  - Add/edit forms
  - 'Choose what to edit' forms
  - Permission checking
@@ -714,33 +714,33 @@ Most ocPortal add/edit/delete interfaces are done via an AED module, as this sav
  - Standard 'Do next' screens after performing an action
  - Point awarding for content submissions
 
-There are lots of AED module's to look at as examples in the CMS zone. This section describes how they work in general terms.
+There are lots of CRUD module's to look at as examples in the CMS zone. This section describes how they work in general terms.
 
-Each AED module extends the 'standard_aed_module' base class. This class has many internal methods that abstract the interface and actualisation functions of the AED functionality, and it actually takes hold of the whole AED process, limiting the burden on us just to defining a few special methods/properties. We inherit from the AED class in our module to use its functionality. To do this it must first require up that class, just before the module is defined:
+Each CRUD module extends the 'standard_crud_module' base class. This class has many internal methods that abstract the interface and actualisation functions of the CRUD functionality, and it actually takes hold of the whole CRUD process, limiting the burden on us just to defining a few special methods/properties. We inherit from the CRUD class in our module to use its functionality. To do this it must first require up that class, just before the module is defined:
 [code="PHP"]
-require_code('aed_module');
+require_code('crud_module');
 [/code]
 
-Rather than an AED module having a '[tt]run[/tt]' method like most modules, they instead are given a 'run_start' method. This method is called automatically from the base class's own 'run' method, which handles screen types that are standard to all AED modules. The AED module defines the default screen type to be the 'ad' screen type, unless you define a '[tt]misc[/tt]' method within your own code.
+Rather than an CRUD module having a '[tt]run[/tt]' method like most modules, they instead are given a 'run_start' method. This method is called automatically from the base class's own 'run' method, which handles screen types that are standard to all CRUD modules. The CRUD module defines the default screen type to be the 'ad' screen type, unless you define a '[tt]misc[/tt]' method within your own code.
 
-AED module's define entry-points in a [tt]get_entry_point[/tt] method like other module's do, however they also tie into the base class's function to return a compound result, as follows:
+CRUD module's define entry-points in a [tt]get_entry_point[/tt] method like other module's do, however they also tie into the base class's function to return a compound result, as follows:
 [code="PHP"]
 function get_entry_points()
 {
 	return array_merge(array('misc'=>'IOTDS'),parent::get_entry_points());
 }
 [/code]
-(in this example the AED module adds one extra entry-point, 'misc').
+(in this example the CRUD module adds one extra entry-point, 'misc').
 
-The standard entry-points defined by an AED module are:
+The standard entry-points defined by an CRUD module are:
  - ad, The UI to add a resource.
  - _ad, The actualiser to add a resource.
  - ed, To choose a resource to edit/delete.
  - _ed, The UI to edit/delete a resource.
  - __ed, The actualiser to edit/delete a resource.
-(additional sets if a category or alternate AED module has been chained on, via cat_aed_module [ac, _ac, ec, _ec, __ec]/alt_aed_module [av, _av, ev, _ev, __ev]).
+(additional sets if a category or alternate CRUD module has been chained on, via cat_crud_module [ac, _ac, ec, _ec, __ec]/alt_crud_module [av, _av, ev, _ev, __ev]).
 
-AED modules define the following standard methods:
+CRUD modules define the following standard methods:
  - [tt]get_form_fields[/tt], To get form fields for the add/edit forms; this function takes parameters, but they must all be optional -- the parameters will only be passed for an edit form (see below).
  - [tt]fill_in_edit_form[/tt], To pass in existing field values to 'get_form_fields' for an edit form; this function is passed the ID of the record being edited/deleted, which allows you to load up the data from the database in order to pass it through to 'get_form_fields'.
  - [tt]add_actualisation[/tt], To handle 'add' actions (usually ties into a model function).
@@ -752,12 +752,12 @@ Often they also define the following:
  - [tt]nice_get_ajax_tree[/tt], If we are using tree list control in edit page, we need to define [tt]nice_get_ajax_tree[/tt] function in our module. That tree list is using for selecting the editable data. We need to give the name of an '[tt]systems/ajax_tree[/tt]' hook file which create the data for tree list to the ocPortal [tt]form_input_tree_list[/tt] function. The hook file will return XML data for the tree list and the built-in ocPortal AJAX functions (called up by 'form_input_tree_list') will receive that data and fill it in tree list. In every node expansion in the tree list another AJAX request is generated to expand the particular node's ID. The AJAX script will find the child data for that parent ID and return it's child data.
  - [tt]get_submitter[/tt], If there is a complex calculation required for who submitted a resource (required for the purposes of permission checking).
  - [tt]do_next_manager[/tt], If the standard do-next results screen is too basic (e.g. if extra icons are needed).
- - [tt]misc[/tt], The function to show the screen when the module is loaded up. If we do not define this, 'misc' acts the same as 'ad'. If you define a [tt]misc[/tt] method (which many AED modules do do) then you must call it yourself from your 'run_start' method. Often 'misc' methods are used with do-next-manager interfaces, to provide a front end for choosing different options.
+ - [tt]misc[/tt], The function to show the screen when the module is loaded up. If we do not define this, 'misc' acts the same as 'ad'. If you define a [tt]misc[/tt] method (which many CRUD modules do do) then you must call it yourself from your 'run_start' method. Often 'misc' methods are used with do-next-manager interfaces, to provide a front end for choosing different options.
 
-AED modules usually define the following standard properties:
+CRUD modules usually define the following standard properties:
  - [tt]lang_type[/tt], the stem for languages strings the module would use. E.g. if you say 'FOO', the 'ADD_FOO', 'EDIT_FOO', and 'DELETE_FOO' language strings would all need to exist.
- - [tt]archive_entry_point[/tt], an entry-point where a user can browse everything of the resource-type handled by the AED module.
- - [tt]view_entry_point[/tt], an entry-point where a resource handled by the AED module can be viewed, with '_ID' in place of where the ID value would be.
+ - [tt]archive_entry_point[/tt], an entry-point where a user can browse everything of the resource-type handled by the CRUD module.
+ - [tt]view_entry_point[/tt], an entry-point where a resource handled by the CRUD module can be viewed, with '_ID' in place of where the ID value would be.
  - [tt]permissions_require[/tt], a value of either 'low', 'mid', or 'high' -- for the kind of permissions used for resources being edited.
  - [tt]permission_module[/tt], the permission category code that identifies the module w.r.t. category access checks.
  - [tt]permissions_cat_require[/tt] (usually the same as permission_module).
@@ -773,12 +773,12 @@ Often they also define the following:
  - [tt]upload[/tt], if set it should be 'image' or 'file', and has the effect of extra 'maximum file size' messages being output, as well as other extra mechanism preparation.
  - [tt]javascript[/tt], Javascript code to be included when add/edit forms are shown; it is common to put code in here to handle field alternation ([tt]standard_alternate_fields[/tt]), automatic field disabling based on values in other fields (e.g. not allowing specifying of the fine details to something if that something is not entered at all), or extra custom field value validations.
  - [tt]non_integer_id[/tt], whether the ID field for the table is a string (a 'codename' in ocPortal terminology).
-(there are also many more to choose from -- see what is defaulted at the top of [tt]aed_module.php[/tt]).
+(there are also many more to choose from -- see what is defaulted at the top of [tt]crud_module.php[/tt]).
 
 Often the following are overridden at run-time, from the run_start method:
  - [tt]add_text[/tt], a message shown on the add screen (usually set via [tt]do_lang_tempcode[/tt]).
  - [tt]edit_text[/tt], a message shown on the edit screen (usually set via [tt]do_lang_tempcode[/tt]).
- - [tt]cat_aed_module[/tt], a reference to a second AED module instance used for managing add/edit/delete of categories; AED modules can only add/edit/delete one resource set, but you can use this to pair up add/edit/delete of entries (the main module) to add/edit/delete of categories (the referenced one). Once you set 'cat_aed_module', the main module will automatically relay ac/ec/_ec/__ec requests to the cat module, but continue to handle ad/ed/_ed/__ed requests itself.
+ - [tt]cat_crud_module[/tt], a reference to a second CRUD module instance used for managing add/edit/delete of categories; CRUD modules can only add/edit/delete one resource set, but you can use this to pair up add/edit/delete of entries (the main module) to add/edit/delete of categories (the referenced one). Once you set 'cat_crud_module', the main module will automatically relay ac/ec/_ec/__ec requests to the cat module, but continue to handle ad/ed/_ed/__ed requests itself.
 
 [title="3"]Attachment-supporting fields: Language lookup, Comcode, and attachments[/title]
 

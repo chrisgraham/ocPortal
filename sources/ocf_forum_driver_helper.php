@@ -96,7 +96,6 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 
 	require_code('ocf_topics');
 	require_code('ocf_posts');
-	//require_code('ocf_forums');
 	require_lang('ocf');
 	require_code('ocf_posts_action');
 	require_code('ocf_posts_action2');
@@ -243,10 +242,9 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$hot_topic_definition=intval(get_option('hot_topic_definition'));
 		$topic_filter_sup=' AND t_cache_num_posts/((t_cache_last_time-t_cache_first_time)/60/60/24+1)>'.strval($hot_topic_definition);
 	} else $topic_filter_sup='';
-	global $SITE_INFO;
-	if (!(((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old')))))
+	if (($filter_topic_title=='') && ($filter_topic_description==''))
 	{
-		if (($filter_topic_title=='') && ($filter_topic_description==''))
+		if (($filter_topic_title=='') && ($filter_topic_description=='')
 		{
 			$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics WHERE ('.$id_list.')'.$topic_filter_sup;
 		} else
@@ -265,14 +263,17 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		}
 	} else
 	{
-		$topic_filter='';
+		$query='';
+		$topic_filters=array();
 		if ($filter_topic_title!='')
-			$topic_filter.='t_cache_first_title LIKE \''.db_encode_like($filter_topic_title).'\'';
+			$topic_filters[]='t_cache_first_title LIKE \''.db_encode_like($filter_topic_title).'\'';
 		if ($filter_topic_description!='')
-			$topic_filter.=' OR t_description LIKE \''.db_encode_like($filter_topic_description).'\'';
-		if ($topic_filter!='')
-			$topic_filter=' AND ('.$topic_filter.')';
-		$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics WHERE ('.$id_list.') '.$topic_filter.$topic_filter_sup;
+			$topic_filters[]='t_description LIKE \''.db_encode_like($filter_topic_description).'\'';
+		foreach ($topic_filters as $topic_filter)
+		{
+			if ($query!='') $query.=' UNION ';
+			$query.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
+		}
 	}
 	$max_rows=$this_ref->connection->query_value_null_ok_full(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true);
 	if ($limit==0) return array();

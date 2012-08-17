@@ -18,12 +18,12 @@
  * @package		catalogues
  */
 
-require_code('aed_module');
+require_code('crud_module');
 
 /**
  * Module page class.
  */
-class Module_cms_catalogues extends standard_aed_module
+class Module_cms_catalogues extends standard_crud_module
 {
 	var $lang_type='CATALOGUE_ENTRY';
 	var $select_name='ENTRY';
@@ -68,23 +68,23 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module run_start.
+	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
 	 */
 	function run_start($type)
 	{
-		$this->cat_aed_module=new Module_cms_catalogues_cat();
-		$this->alt_aed_module=new Module_cms_catalogues_alt();
+		$this->cat_crud_module=new Module_cms_catalogues_cat();
+		$this->alt_crud_module=new Module_cms_catalogues_alt();
 		$GLOBALS['MODULE_CMS_CATALOGUES']=$this;
 
 		if (get_value('disable_cat_cat_perms')==='1')
 		{
 			$this->permissions_cat_require_b=NULL;
 			$this->permissions_cat_name_b=NULL;
-			$this->cat_aed_module->permissions_cat_require=NULL;
-			$this->cat_aed_module->permissions_cat_name=NULL;
+			$this->cat_crud_module->permissions_cat_require=NULL;
+			$this->cat_crud_module->permissions_cat_name=NULL;
 		}
 
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_catalogues';
@@ -98,7 +98,7 @@ class Module_cms_catalogues extends standard_aed_module
 		{
 			require_javascript('javascript_ajax');
 			$script=find_script('snippet');
-			$this->alt_aed_module->javascript.="
+			$this->alt_crud_module->javascript.="
 				var form=document.getElementById('new_field_0_name').form;
 				form.old_submit=form.onsubmit;
 				form.onsubmit=function()
@@ -175,7 +175,7 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -274,7 +274,7 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return ?array				A triple: The tree field (tempcode), Search URL, Archive URL (NULL: nothing here)
 	 */
@@ -454,7 +454,7 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module submitter getter.
+	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
@@ -467,7 +467,7 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module cat getter.
+	 * Standard crud_module cat getter.
 	 *
 	 * @param  AUTO_LINK		The entry for which the cat is sought
 	 * @return string			The cat
@@ -480,7 +480,7 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module cat getter.
+	 * Standard crud_module cat getter.
 	 *
 	 * @param  AUTO_LINK		The entry for which the cat is sought
 	 * @return string			The cat
@@ -492,7 +492,7 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
@@ -544,7 +544,7 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The ID of the entry added
 	 */
@@ -591,7 +591,7 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -632,7 +632,7 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -653,7 +653,7 @@ class Module_cms_catalogues extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete possibility checker.
+	 * Standard crud_module delete possibility checker.
 	 *
 	 * @param  ID_TEXT		The entry being potentially deleted
 	 * @return boolean		Whether it may be deleted
@@ -1276,7 +1276,7 @@ class Module_cms_catalogues extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_catalogues_cat extends standard_aed_module
+class Module_cms_catalogues_cat extends standard_crud_module
 {
 	var $lang_type='CATALOGUE_CATEGORY';
 	var $select_name='NAME';
@@ -1297,7 +1297,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	var $donext_catalogue_name;
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -1348,7 +1348,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return ?array				A triple: The tree field (tempcode), Search URL, Archive URL (NULL: nothing here)
 	 */
@@ -1434,7 +1434,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module cat getter.
+	 * Standard crud_module cat getter.
 	 *
 	 * @param  AUTO_LINK		The entry for which the cat is sought
 	 * @return string			The cat
@@ -1445,7 +1445,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
@@ -1468,7 +1468,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete possibility checker.
+	 * Standard crud_module delete possibility checker.
 	 *
 	 * @param  ID_TEXT		The entry being potentially deleted
 	 * @return boolean		Whether it may be deleted
@@ -1481,7 +1481,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return AUTO_LINK		The ID of what was added
 	 */
@@ -1520,7 +1520,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -1567,7 +1567,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -1632,7 +1632,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_catalogues_alt extends standard_aed_module
+class Module_cms_catalogues_alt extends standard_crud_module
 {
 	var $lang_type='CATALOGUE';
 	var $select_name='CATALOGUE';
@@ -1647,7 +1647,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	var $javascript="var fn=document.getElementById('title'); if (fn) { var form=fn.form; fn.onchange=function() { if ((form.elements['name']) && (form.elements['name'].value=='')) form.elements['name'].value=fn.value.toLowerCase().replace(/[^\w\d\.\-]/g,'_').replace(/\_+\$/,''); }; }";
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
@@ -1821,7 +1821,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return tempcode		The edit form
@@ -1842,7 +1842,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
@@ -1885,7 +1885,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 
 		$category_id=actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce,$send_view_reports);
 		$this->set_permissions($name);
-		if (!is_null($category_id)) $GLOBALS['MODULE_CMS_CATALOGUES']->cat_aed_module->set_permissions(strval($category_id));
+		if (!is_null($category_id)) $GLOBALS['MODULE_CMS_CATALOGUES']->cat_crud_module->set_permissions(strval($category_id));
 
 		// Now onto the fields
 		foreach ($new as $field)
@@ -1963,7 +1963,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -2137,7 +2137,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */

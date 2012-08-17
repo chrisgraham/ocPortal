@@ -541,7 +541,6 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php=false)
 	foreach ($URL_REMAPPINGS as $_remapping)
 	{
 		list($remapping,$target,$require_full_coverage)=$_remapping;
-//		if (count($remapping)!=$num_vars) continue;
 		$good=true;
 
 		$last_key_num=count($remapping);

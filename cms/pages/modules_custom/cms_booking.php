@@ -13,12 +13,12 @@
  * @package		booking
  */
 
-require_code('aed_module');
+require_code('crud_module');
 
 /**
  * Module page class.
  */
-class Module_cms_booking extends standard_aed_module
+class Module_cms_booking extends standard_crud_module
 {
 	var $lang_type='BOOKABLE';
 	var $select_name='TITLE';
@@ -54,25 +54,25 @@ class Module_cms_booking extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module run_start.
+	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
 	 */
 	function run_start($type)
 	{
-		$this->cat_aed_module=new Module_cms_booking_blacks(); // Blacks
-		$this->alt_aed_module=new Module_cms_booking_supplements(); // Supplements
-		$this->bookings_aed_module=new Module_cms_booking_bookings(); // Bookings
+		$this->cat_crud_module=new Module_cms_booking_blacks(); // Blacks
+		$this->alt_crud_module=new Module_cms_booking_supplements(); // Supplements
+		$this->bookings_crud_module=new Module_cms_booking_bookings(); // Bookings
 
 		require_code('booking2');
 
 		if ($type=='misc') return $this->misc();
-		if ($type=='ab') return $this->bookings_aed_module->ad();
-		if ($type=='_ab') return $this->bookings_aed_module->_ad();
-		if ($type=='eb') return $this->bookings_aed_module->ed();
-		if ($type=='_eb') return $this->bookings_aed_module->_ed();
-		if ($type=='__eb') return $this->bookings_aed_module->__ed();
+		if ($type=='ab') return $this->bookings_crud_module->ad();
+		if ($type=='_ab') return $this->bookings_crud_module->_ad();
+		if ($type=='eb') return $this->bookings_crud_module->ed();
+		if ($type=='_eb') return $this->bookings_crud_module->_ed();
+		if ($type=='__eb') return $this->bookings_crud_module->__ed();
 
 		return new ocp_tempcode();
 	}
@@ -88,7 +88,7 @@ class Module_cms_booking extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -245,7 +245,7 @@ class Module_cms_booking extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
@@ -269,7 +269,7 @@ class Module_cms_booking extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The ID of the entry added
 	 */
@@ -283,7 +283,7 @@ class Module_cms_booking extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -297,7 +297,7 @@ class Module_cms_booking extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -325,7 +325,7 @@ class Module_cms_booking extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_booking_supplements extends standard_aed_module
+class Module_cms_booking_supplements extends standard_crud_module
 {
 	var $lang_type='BOOKABLE_SUPPLEMENT';
 	var $select_name='EXPLANATION';
@@ -340,7 +340,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 	var $donext_type=NULL;
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -442,7 +442,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
@@ -464,7 +464,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The ID of the entry added
 	 */
@@ -478,7 +478,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -492,7 +492,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -520,7 +520,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_booking_blacks extends standard_aed_module
+class Module_cms_booking_blacks extends standard_crud_module
 {
 	var $lang_type='BOOKABLE_BLACKED';
 	var $select_name='EXPLANATION';
@@ -535,7 +535,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 	var $donext_type=NULL;
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -628,7 +628,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
@@ -650,7 +650,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The ID of the entry added
 	 */
@@ -664,7 +664,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -678,7 +678,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -706,7 +706,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_booking_bookings extends standard_aed_module
+class Module_cms_booking_bookings extends standard_crud_module
 {
 	var $lang_type='BOOKING';
 	var $select_name='MEMBER_ID';
@@ -795,7 +795,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -952,7 +952,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
@@ -965,7 +965,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The ID of the entry added
 	 */
@@ -996,7 +996,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -1020,7 +1020,7 @@ class Module_cms_booking_bookings extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */

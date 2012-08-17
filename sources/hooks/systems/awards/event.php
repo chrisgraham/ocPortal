@@ -24,9 +24,10 @@ class Hook_awards_event
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
@@ -45,7 +46,7 @@ class Hook_awards_event
 		$info['title']=do_lang_tempcode('EVENT');
 		$info['validated_field']='validated';
 		$info['category_is_string']=false;
-		$info['archive_url']=build_url(array('page'=>'calendar'),get_module_zone('calendar'));
+		$info['archive_url']=build_url(array('page'=>'calendar'),(!is_null($zone))?$zone:get_module_zone('calendar'));
 		$info['cms_page']='cms_calendar';
 		$info['views_field']='e_views';
 		$info['supports_custom_fields']=true;

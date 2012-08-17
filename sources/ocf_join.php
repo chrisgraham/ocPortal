@@ -324,12 +324,6 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	if (!$coppa_if_enabled) $coppa=false;
 	$validated=($require_new_member_validation || $coppa)?0:1;
 	if (is_null($member_id)) $member_id=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,($additional_group!=-1)?$additional_group:NULL,$validated,time(),time(),'',NULL,'',0,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'','','',1,(get_value('no_auto_notifications')==='1')?0:1,$language,$allow_emails,$allow_emails_from_staff,'',get_ip_address(),$validated_email_confirm_code,true,'','');
-	/*if ($additional_group!=-1)
-	{
-		require_code('ocf_groups_action');
-		require_code('ocf_groups_action2');
-		ocf_add_member_to_group($member_id,$additional_group,1);
-	}*/
 
 	// Send confirm mail
 	if (!$skip_confirm)

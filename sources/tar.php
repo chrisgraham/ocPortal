@@ -118,7 +118,7 @@ function tar_get_directory(&$resource,$tolerate_errors=false)
 			$mtime=octdec(trim(substr($header,136,12)));
 			$chksum=octdec(trim(substr($header,148,8)));
 			$block_size=file_size_to_tar_block_size($size);
-//			$is_ok=substr($header,156,1)=='0';
+//			$is_ok=substr($header,156,1)=='0';	Actually, this isn't consistently useful
 
 			$header2=substr($header,0,148);
 			$header2.='        ';
@@ -212,7 +212,7 @@ function tar_add_folder_incremental(&$resource,$logfile,$path,$threshold,$max_si
 							tar_add_file($resource,$_subpath,$full,fileperms($full),filemtime($full),true);
 							if (!is_null($logfile) && fwrite($logfile,'Backed up file '.$full.' ('.clean_file_size(filesize($full)).')'."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 						}
-/*						$owner=fileowner($full);
+/*						$owner=fileowner($full);	We don't store all this stuff, it's not in ocPortal's remit
 						$group=filegroup($full);
 						if (function_exists('posix_getpwuid')) $owner=posix_getpwuid($owner);
 						if (function_exists('posix_getgrgid')) $group=posix_getgrgid($group);*/
@@ -510,7 +510,7 @@ function tar_add_file(&$resource,$target_path,$data,$_mode,$_mtime,$data_is_path
 
 	$myfile=$resource['myfile'];
 
-//	if (!$resource['already_at_end'])
+//	if (!$resource['already_at_end'])	Don't trust this as reliable at the moment and seeking is not a problem
 	{
 		if (!is_null($myfile))
 		{

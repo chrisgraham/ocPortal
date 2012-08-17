@@ -35,8 +35,7 @@ class Hook_phpinfo
 		{
 			ob_start();
 			phpinfo();
-			$out=ob_get_contents();
-			ob_end_clean();
+			$out=ob_get_clean();
 			require_code('xhtml');
 
 			$out=preg_replace('#<!DOCTYPE[^>]*>#s','',preg_replace('#</body[^>]*>#','',preg_replace('#<body[^>]*>#','',preg_replace('#</html[^>]*>#','',preg_replace('#<html[^>]*>#','',$out)))));
@@ -48,7 +47,7 @@ class Hook_phpinfo
 				if ($end!==false)
 				{
 					$style=substr($out,$offset-strlen($matches[0]),$end-$offset+strlen('</style>')+strlen($matches[0]));
-					//$GLOBALS['EXTRA_HEAD']=make_string_tempcode($style);
+					//$GLOBALS['EXTRA_HEAD']=make_string_tempcode($style);		Not relevant due to running in OcCLE
 
 					$out=substr($out,0,$offset).substr($out,$end);
 				}

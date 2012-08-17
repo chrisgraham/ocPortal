@@ -19,22 +19,13 @@
  */
 
 /**
- * Standard code module initialisation function.
+ * Get obfuscate version of 'mailto:' (which'll hopefully fool e-mail scavengers to not pick up these e-mail addresses).
+ *
+ * @return string		The obfuscated 'mailto:' string
  */
-function init__obfuscate()
+function mailto_obfuscated()
 {
-	if (!function_exists('mailto_obfuscated'))
-	{
-		/**
-		 * Get obfuscate version of 'mailto:' (which'll hopefully fool e-mail scavengers to not pick up these e-mail addresses).
-		 *
-		 * @return string		The obfuscated 'mailto:' string
-		 */
-		function mailto_obfuscated()
-		{
-			return 'm'.obfuscate_entities('ailto:');
-		}
-	}
+	return 'm'.obfuscate_entities('ailto:');
 }
 
 /**

@@ -71,11 +71,7 @@ class Block_main_gallery_tease
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='max';
-
 		$max=get_param_integer('max',5);
-		if ($max<1) $max=1;
 		$start=get_param_integer('start',0);
 
 		// For all galleries off the given gallery
@@ -121,16 +117,12 @@ class Block_main_gallery_tease
 			$content->attach($sub);
 		}
 
-		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
-		$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
-		$num_pages=intval(ceil(floatval($count)/floatval($max)));
-		if ($num_pages==0) $page_num=0;
+		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
 
-		$previous_url=($start==0)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start-$max),'_SELF');
-		$next_url=($page_num==$num_pages)?new ocp_tempcode():build_url(array('page'=>'_SELF','start'=>$start+$max),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'6fb2def18957c246ddb2f19bf74abf9a','NEXT_URL'=>$next_url,'PREVIOUS_URL'=>$previous_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang_tempcode('MEDIA_ENTRIES'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
 
-		return do_template('BLOCK_MAIN_GALLERY_TEASE',array('_GUID'=>'0e7f84042ab0c873155998eae41b8a16','CONTENT'=>$content,'BROWSE'=>$browse));
+		return do_template('BLOCK_MAIN_GALLERY_TEASE',array('_GUID'=>'0e7f84042ab0c873155998eae41b8a16','CONTENT'=>$content,'PAGINATION'=>$pagination));
 	}
 
 }

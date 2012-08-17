@@ -672,7 +672,7 @@ class Hook_addon_registry_core
 			'site/pages/modules_custom/index.html',
 			'sources/.htaccess',
 			'sources/abstract_file_manager.php',
-			'sources/aed_module.php',
+			'sources/crud_module.php',
 			'sources/ajax.php',
 			'sources/blocks/.htaccess',
 			'sources/blocks/index.html',

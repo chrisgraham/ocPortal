@@ -18,12 +18,12 @@
  * @package		banners
  */
 
-require_code('aed_module');
+require_code('crud_module');
 
 /**
  * Module page class.
  */
-class Module_cms_banners extends standard_aed_module
+class Module_cms_banners extends standard_crud_module
 {
 	var $lang_type='BANNER';
 	var $view_entry_point='_SEARCH:banners:type=view:source=_ID';
@@ -41,7 +41,7 @@ class Module_cms_banners extends standard_aed_module
 	var $do_next_type=NULL;
 
 	/**
-	 * Standard aed_module run_start.
+	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
@@ -55,7 +55,7 @@ class Module_cms_banners extends standard_aed_module
 			attach_message(do_lang_tempcode('PERMISSION_BANNER_SKIP'),'inform');
 		}
 
-		$this->cat_aed_module=new Module_cms_banners_cat();
+		$this->cat_crud_module=new Module_cms_banners_cat();
 
 		require_code('banners');
 		require_code('banners2');
@@ -110,7 +110,7 @@ class Module_cms_banners extends standard_aed_module
 		{
 			require_javascript('javascript_ajax');
 			$script=find_script('snippet');
-			$this->cat_aed_module->javascript.="
+			$this->cat_crud_module->javascript.="
 				var form=document.getElementById('main_form');
 				form.old_submit=form.onsubmit;
 				form.onsubmit=function()
@@ -180,7 +180,7 @@ class Module_cms_banners extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
@@ -262,7 +262,7 @@ class Module_cms_banners extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
@@ -316,7 +316,7 @@ class Module_cms_banners extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module submitter getter.
+	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
@@ -329,7 +329,7 @@ class Module_cms_banners extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			Bits
@@ -347,7 +347,7 @@ class Module_cms_banners extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return array			A pair: The entry added, Description about usage
 	 */
@@ -393,7 +393,7 @@ class Module_cms_banners extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -423,7 +423,7 @@ class Module_cms_banners extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -445,14 +445,14 @@ class Module_cms_banners extends standard_aed_module
 	 */
 	function do_next_manager($title,$description,$id)
 	{
-		return $this->cat_aed_module->_do_next_manager($title,$description,$id,$this->donext_type);
+		return $this->cat_crud_module->_do_next_manager($title,$description,$id,$this->donext_type);
 	}
 }
 
 /**
  * Module page class.
  */
-class Module_cms_banners_cat extends standard_aed_module
+class Module_cms_banners_cat extends standard_crud_module
 {
 	var $lang_type='BANNER_TYPE';
 	var $select_name='_BANNER_TYPE';
@@ -468,7 +468,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	var $no_blank_ids=false;
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
@@ -556,7 +556,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
@@ -573,7 +573,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return array			A pair: The entry added, description about usage
 	 */
@@ -592,7 +592,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return tempcode		Description about usage
@@ -613,7 +613,7 @@ class Module_cms_banners_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */

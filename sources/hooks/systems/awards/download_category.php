@@ -24,9 +24,10 @@ class Hook_awards_download_category
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
@@ -44,7 +45,7 @@ class Hook_awards_download_category
 		require_lang('downloads');
 		$info['title']=do_lang_tempcode('DOWNLOAD_CATEGORY');
 		$info['category_is_string']=false;
-		$info['archive_url']=build_url(array('page'=>'downloads'),get_module_zone('downloads'));
+		$info['archive_url']=build_url(array('page'=>'downloads'),(!is_null($zone))?$zone:get_module_zone('downloads'));
 		$info['cms_page']='cms_downloads';
 		$info['supports_custom_fields']=true;
 

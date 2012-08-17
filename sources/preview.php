@@ -76,7 +76,7 @@ function build_preview($multi_return=false)
 		{
 			if (!is_string($val)) continue;
 
-			$val=post_param($key,''); // stripslashes, and wysiwyg output handling
+			$val=post_param($key,''); // stripslashes, and WYSIWYG output handling
 
 			$tempcodecss=(post_param_integer('tempcodecss__'.$key,0)==1);
 			$supports_comcode=(post_param_integer('comcode__'.$key,0)==1);
@@ -137,7 +137,7 @@ function build_preview($multi_return=false)
 
 		if ((!is_null($limit_to)) && (!in_array($key,$limit_to))) continue;
 
-		$val=post_param($key,''); // stripslashes, and wysiwyg output handling
+		$val=post_param($key,''); // stripslashes, and WYSIWYG output handling
 		if ($val=='0') $val=do_lang('NO');
 		if ($val=='1') $val=do_lang('YES');
 

@@ -456,31 +456,22 @@ if (ini_get('register_globals')=='1') // Unregister globals
 	}
 }
 
-/*if (is_file('closed'))
-{
-	exit(file_get_contents('closed'));
-}*/
-
-if (!function_exists('file_get_contents'))
-{
-	/**
-	 * Get the contents of a file.
-	 *
-	 * @param  SHORT_TEXT	The file name.
-	 * @return ~LONG_TEXT	The file contents (false: error).
-	 */
-	function file_get_contents($filename)
-	{
-		$data='';
-		$file=@fopen($filename,'rb');
-		if ($file)
-		{
-			while (!feof($file)) $data.=fread($file,1024);
-			fclose($file);
-		}
-		return $data;
-	}
-}
+// Sanetise the PHP environment some more
+@ini_set('track_errors','1'); // so $php_errormsg is available
+@ini_set('allow_url_fopen','0');
+@ini_set('allow_url_fopen','0');
+@ini_set('suhosin.executor.disable_emodifier','1'); // Extra security if suhosin is available
+@ini_set('suhosin.executor.multiheader','1'); // Extra security if suhosin is available
+@ini_set('suhosin.executor.disable_eval','0');
+@ini_set('suhosin.executor.eval.whitelist','');
+@ini_set('suhosin.executor.func.whitelist','');
+@ini_set('auto_detect_line_endings','0');
+@ini_set('include_path','');
+@ini_set('default_socket_timeout','60');
+if (function_exists('set_magic_quotes_runtime')) @set_magic_quotes_runtime(0); // @'d because it's deprecated and PHP 5.3 may give an error
+@ini_set('html_errors','1');
+@ini_set('docref_root','http://www.php.net/manual/en/');
+@ini_set('docref_ext','.php');
 
 global $_REQUIRED_CODE;
 $_REQUIRED_CODE=array();
@@ -494,8 +485,6 @@ if ((!isset($CURRENT_SHARE_USER)) || (isset($_SERVER['REQUEST_METHOD'])))
 	$CURRENT_SHARE_USER=NULL;
 
 global $FILE_BASE;
-
-@ini_set('track_errors','1'); // so $php_errormsg is available
 
 if (is_file($FILE_BASE.'/sources_custom/critical_errors.php'))
 {
@@ -525,9 +514,6 @@ if ((strpos(PHP_VERSION,'hiphop')!==false) || (array_key_exists('ZERO_HOME',$_EN
 
 get_custom_file_base(); // Make sure $CURRENT_SHARE_USER is set if it is a shared site, so we can use CURRENT_SHARE_USER as an indicator of it being one.
 
-@ini_set('allow_url_fopen','0');
-
-//require_code('critical_errors');
 $GLOBALS['PURE_POST']=$_POST;
 require_code('global2');
 $GLOBALS['NO_QUERY_LIMIT']=true;

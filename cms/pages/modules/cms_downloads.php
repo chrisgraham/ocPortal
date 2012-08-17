@@ -18,12 +18,12 @@
  * @package		downloads
  */
 
-require_code('aed_module');
+require_code('crud_module');
 
 /**
  * Module page class.
  */
-class Module_cms_downloads extends standard_aed_module
+class Module_cms_downloads extends standard_crud_module
 {
 	var $lang_type='DOWNLOAD';
 	var $select_name='NAME';
@@ -62,15 +62,15 @@ class Module_cms_downloads extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module run_start.
+	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
 	 */
 	function run_start($type)
 	{
-		$this->cat_aed_module=new Module_cms_downloads_cat();
-		$this->alt_aed_module=new Module_cms_downloads_alt();
+		$this->cat_crud_module=new Module_cms_downloads_cat();
+		$this->alt_crud_module=new Module_cms_downloads_alt();
 
 		$GLOBALS['MODULE_CMS_DOWNLOADS']=$this;
 
@@ -424,7 +424,7 @@ class Module_cms_downloads extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
@@ -566,7 +566,7 @@ class Module_cms_downloads extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module submitter getter.
+	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
@@ -579,7 +579,7 @@ class Module_cms_downloads extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module cat getter.
+	 * Standard crud_module cat getter.
 	 *
 	 * @param  AUTO_LINK		The entry for which the cat is sought
 	 * @return mixed			The cat
@@ -592,7 +592,7 @@ class Module_cms_downloads extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
@@ -624,7 +624,7 @@ class Module_cms_downloads extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT			The ID of the new entry
 	 */
@@ -694,7 +694,7 @@ class Module_cms_downloads extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -759,7 +759,7 @@ class Module_cms_downloads extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -781,7 +781,7 @@ class Module_cms_downloads extends standard_aed_module
 	 */
 	function do_next_manager($title,$description,$id)
 	{
-		return $this->cat_aed_module->_do_next_manager($title,$description,is_null($id)?NULL:intval($id),$this->donext_type);
+		return $this->cat_crud_module->_do_next_manager($title,$description,is_null($id)?NULL:intval($id),$this->donext_type);
 	}
 
 }
@@ -789,7 +789,7 @@ class Module_cms_downloads extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_downloads_alt extends standard_aed_module
+class Module_cms_downloads_alt extends standard_crud_module
 {
 	var $lang_type='DOWNLOAD_LICENCE';
 	var $select_name='TITLE';
@@ -827,7 +827,7 @@ class Module_cms_downloads_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return tempcode		The fields
@@ -849,7 +849,7 @@ class Module_cms_downloads_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT			The ID of the new entry
 	 */
@@ -861,7 +861,7 @@ class Module_cms_downloads_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -873,7 +873,7 @@ class Module_cms_downloads_alt extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -894,7 +894,7 @@ class Module_cms_downloads_alt extends standard_aed_module
 	 */
 	function do_next_manager($title,$description,$id)
 	{
-		return $GLOBALS['MODULE_CMS_DOWNLOADS']->cat_aed_module->_do_next_manager($title,$description,NULL,NULL,$id);
+		return $GLOBALS['MODULE_CMS_DOWNLOADS']->cat_crud_module->_do_next_manager($title,$description,NULL,NULL,$id);
 	}
 
 }
@@ -902,7 +902,7 @@ class Module_cms_downloads_alt extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_downloads_cat extends standard_aed_module
+class Module_cms_downloads_cat extends standard_crud_module
 {
 	var $lang_type='DOWNLOAD_CATEGORY';
 	var $select_name='NAME';
@@ -915,7 +915,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 	var $menu_label='SECTION_DOWNLOADS';
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
@@ -971,7 +971,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return tempcode		The edit form
@@ -991,7 +991,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
@@ -1011,7 +1011,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -1039,7 +1039,7 @@ class Module_cms_downloads_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */

@@ -107,10 +107,8 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 						{
 							if (!is_guest($subforum['last_member_id']))
 							{
-								//$colour=get_group_colour(ocf_get_member_primary_group($subforum['last_member_id']));
 								$poster=do_template('OCF_USER_MEMBER',array(
 									'_GUID'=>'39r932rwefldjfldjlf',
-									/*'COLOUR'=>$colour,*/
 									'USERNAME'=>$subforum['last_username'],
 									'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($subforum['last_member_id'],false,true)
 								));
@@ -325,6 +323,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	}
 	if ($type=='pt')
 	{
+		//There has been debate in the past whether to have a link from PTs to the forum or not! Currently using the Social menu is considered canon - templating could add a button in though.
 		//$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id());
 		//$button_array[]=array('immediate'=>false,'title'=>do_lang_tempcode('ROOT_FORUM'),'url'=>$archive_url,'img'=>'forum');
 	}
@@ -469,9 +468,6 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 	{
 		require_code('ocf_posts_action2');
 		ocf_force_update_topic_cacheing($topic_row['id'],NULL,true,true);
-		//$_topic_row=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_row['id']),'',1);
-		//$topic_row=$_topic_row[0];
-		//$topic['first_member_id']=$GLOBALS['OCF_DRIVER']->get_guest_id();
 	}
 	if (!is_null($topic_row['t_cache_last_post_id']))
 	{
@@ -523,9 +519,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 		{
 			if ($topic['last_member_id']!=$GLOBALS['OCF_DRIVER']->get_guest_id())
 			{
-				//$colour=get_group_colour(ocf_get_member_primary_group($topic['last_member_id']));
 				$poster=do_template('OCF_USER_MEMBER',array(
-					/*'COLOUR'=>$colour,*/
 					'USERNAME'=>$topic['last_username'],
 					'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($topic['last_member_id'],false,true)
 				));
@@ -565,9 +559,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 	if (!is_guest($topic['first_member_id']))
 	{
 		$poster_profile_url=$GLOBALS['OCF_DRIVER']->member_profile_url($topic['first_member_id'],false,true);
-		//$colour=get_group_colour(ocf_get_member_primary_group($topic['first_member_id']));
 		$poster=do_template('OCF_USER_MEMBER',array(
-										/*'COLOUR'=>$colour,*/
 										'PROFILE_URL'=>$poster_profile_url,
 										'USERNAME'=>$topic['first_username']
 									));
@@ -735,8 +727,6 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 
 			$category_id=$subforum_row['f_category_id'];
 
-//			if (!array_key_exists('position',$categories[$category_id])) $categories[$category_id]['position']=$subforum_row['f_position'];
-
 			$subforum=array();
 			$subforum['id']=$subforum_row['id'];
 			$subforum['name']=$subforum_row['f_name'];
@@ -846,13 +836,15 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 
 	$description=get_translated_tempcode($forum_info[0]['f_description'],$GLOBALS['FORUM_DB']);
 	$description_text=get_translated_text($forum_info[0]['f_description'],$GLOBALS['FORUM_DB']);
-	$out=array('name'=>$forum_info[0]['f_name'],
-					'description'=>$description,
-					'categories'=>$categories,
-					'topics'=>$topics,
-					'max_rows'=>$max_rows,
-					'order'=>$order,
-					'parent_forum'=>$forum_info[0]['f_parent_forum']);
+	$out=array(
+		'name'=>$forum_info[0]['f_name'],
+		'description'=>$description,
+		'categories'=>$categories,
+		'topics'=>$topics,
+		'max_rows'=>$max_rows,
+		'order'=>$order,
+		'parent_forum'=>$forum_info[0]['f_parent_forum']
+	);
 
 	$GLOBALS['META_DATA']+=array(
 		'created'=>'',

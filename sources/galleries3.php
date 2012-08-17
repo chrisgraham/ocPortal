@@ -109,9 +109,6 @@ function download_gallery_script()
 
 	@ini_set('zlib.output_compression','Off');
 
-	//$zip_file=create_zip_file($array);
-	//header('Content-Length: '.strval(strlen($zip_file)));
-	//echo $zip_file;
 	create_zip_file($array,true);
 }
 

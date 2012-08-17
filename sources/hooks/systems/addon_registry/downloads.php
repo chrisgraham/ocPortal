@@ -104,7 +104,6 @@ class Hook_addon_registry_downloads
 			'DOWNLOAD_LIST_LINE.tpl',
 			'DOWNLOAD_LIST_LINE_2.tpl',
 			'DOWNLOAD_SCREEN.tpl',
-			'BLOCK_MAIN_DOWNLOAD_CATEGORY.tpl',
 			'BLOCK_MAIN_DOWNLOAD_TEASE.tpl',
 			'BLOCK_MAIN_RECENT_DOWNLOADS.tpl',
 			'BLOCK_MAIN_TOP_DOWNLOADS.tpl',
@@ -141,7 +140,6 @@ class Hook_addon_registry_downloads
 			'themes/default/images/bigicons/edit_one_licence.png',
 			'site/dload.php',
 			'site/download_licence.php',
-			'sources/blocks/main_download_category.php',
 			'sources/blocks/main_download_tease.php'
 		);
 	}
@@ -156,7 +154,6 @@ class Hook_addon_registry_downloads
 	{
 		return array(
 			'BLOCK_MAIN_DOWNLOAD_TEASE.tpl'=>'block_main_download_tease',
-			'BLOCK_MAIN_DOWNLOAD_CATEGORY.tpl'=>'block_main_download_category',
 			'BLOCK_MAIN_RECENT_DOWNLOADS.tpl'=>'block_main_recent_downloads',
 			'BLOCK_MAIN_TOP_DOWNLOADS.tpl'=>'block_main_top_downloads',
 			'DOWNLOAD_LIST_LINE.tpl'=>'download_list_line',
@@ -222,36 +219,10 @@ class Hook_addon_registry_downloads
 			$content->attach($tpl);
 		}
 
-		$browse=do_lorem_template('NEXT_BROWSER_BROWSE_NEXT', array(
-			'NEXT_URL'=>placeholder_url(),
-			'PREVIOUS_URL'=>placeholder_url(),
-			'PAGE_NUM'=>placeholder_number(),
-			'NUM_PAGES'=>placeholder_number()
-		));
-
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_DOWNLOAD_TEASE', array(
 				'CONTENT'=>$content,
-				'BROWSE'=>$browse
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__block_main_download_category()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_DOWNLOAD_CATEGORY', array(
-				'SUBMIT_URL'=>placeholder_url(),
-				'SUBCATEGORIES'=>lorem_phrase(),
-				'DOWNLOADS'=>lorem_phrase(),
-				'TITLE'=>lorem_word()
+				'PAGINATION'=>placeholder_pagination()
 			)), NULL, '', true)
 		);
 	}

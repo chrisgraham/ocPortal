@@ -1019,15 +1019,6 @@ function execute_css_colour_expression($expression,$colours)
 	$operation=$expression[0];
 	$operand_a=execute_css_colour_expression($expression[1],$colours);
 	if (is_null($operand_a)) return NULL;
-	/*if (($operation=='+') && ($expression[2][0]=='*') && (!is_array($expression[2][1])) && ((($expression[2][2]=='WB') && ($colours['LD']=='light')) || (($expression[2][2]=='BW') && ($colours['LD']=='dark'))))
-	{
-		$operation='-';
-		$expression[2][2]='FFFFFF';
-	} else
-	{
-//	if (($operation=='-') && ($expression[2][0]=='*') && (!is_array($expression[2][1])) && ((($expression[2][2]=='WB') && ($colours['LD']=='light')) || (($expression[2][2]=='BW') && ($colours['LD']=='dark'))))
-//		$operation='+';
-	}*/
 	$operand_b=execute_css_colour_expression($expression[2],$colours);
 	if (is_null($operand_b)) return NULL;
 
@@ -1107,12 +1098,6 @@ function execute_css_colour_expression($expression,$colours)
 			$red=intval(round(floatval(hexdec(substr($operand_b,0,2))*intval($operand_a))/(100.0)));
 			$green=intval(round(floatval(hexdec(substr($operand_b,2,2))*intval($operand_a))/(100.0)));
 			$blue=intval(round(floatval(hexdec(substr($operand_b,4,2))*intval($operand_a))/(100.0)));
-			/*if ((($expression[2]==='WB') && ($colours['LD']=='dark')) || (($expression[2]==='BW') && ($colours['LD']=='light')))
-			{
-				$red=255-$red;
-				$green=255-$green;
-				$blue=255-$blue;
-			}*/
 			$result=str_pad(dechex($red),2,'0',STR_PAD_LEFT).str_pad(dechex($green),2,'0',STR_PAD_LEFT).str_pad(dechex($blue),2,'0',STR_PAD_LEFT);
 			break;
 

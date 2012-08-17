@@ -1422,8 +1422,7 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 		$temp=form_input_list_entry($_minute,$minute===$default_minute,($minute<10)?str_pad($_minute,2,'0',STR_PAD_LEFT):$_minute);
 		$temp->evaluate_echo();
 	}
-	$minutes=ob_get_contents();
-	ob_end_clean();
+	$minutes=ob_get_clean();
 	ob_start();
 	for ($hour=0;$hour<24;$hour++)
 	{
@@ -1431,8 +1430,7 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 		$temp=form_input_list_entry(strval($hour),$hour===$default_hour,$text_hour);
 		$temp->evaluate_echo();
 	}
-	$hours=ob_get_contents();
-	ob_end_clean();
+	$hours=ob_get_clean();
 
 	$time=($do_time)?do_template('FORM_SCREEN_INPUT_TIME',array('_GUID'=>'2d5886e54c7a14e69a8f84bbe62ec84a','NULL_OK'=>$null_ok,'DISABLED'=>$null_default && has_js(),'TABINDEX'=>strval($tabindex),'MINUTES'=>$minutes,'HOURS'=>$hours,'STUB'=>$stub)):new ocp_tempcode();
 	if (!$do_date)
@@ -1444,8 +1442,7 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 		$temp=form_input_list_entry(strval($i),($i===$default_day));
 		$temp->evaluate_echo();
 	}
-	$days=ob_get_contents();
-	ob_end_clean();
+	$days=ob_get_clean();
 	ob_start();
 	for ($i=1;$i<=12;$i++)
 	{
@@ -1492,8 +1489,7 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 		$temp=form_input_list_entry(strval($i),($i===$default_month),$month_text);
 		$temp->evaluate_echo();
 	}
-	$months=ob_get_contents();
-	ob_end_clean();
+	$months=ob_get_clean();
 	ob_start();
 	if ((!is_null($total_years_to_show)) && ($total_years_to_show<0))
 	{
@@ -1518,8 +1514,7 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 			$temp->evaluate_echo();
 		}
 	}
-	$years=ob_get_contents();
-	ob_end_clean();
+	$years=ob_get_clean();
 	$input=do_template('FORM_SCREEN_INPUT_DATE',array('_GUID'=>'5ace58dd0f540f70fb3bd440fb02a430','NULL_OK'=>$null_ok,'DISABLED'=>$null_default,'TABINDEX'=>strval($tabindex),'YEARS'=>$years,'MONTHS'=>$months,'DAYS'=>$days,'STUB'=>$stub,'NULL'=>$null,'TIME'=>$time,'UNLIMITED'=>is_null($total_years_to_show)));
 	return _form_input($stub,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }

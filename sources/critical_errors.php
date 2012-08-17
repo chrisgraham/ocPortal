@@ -101,7 +101,7 @@ if (!function_exists('critical_error'))
 
 		$extra='';
 
-		if ((function_exists('debug_backtrace')) && (strpos($error,'Allowed memory')===false) && ((is_null($relay)) || (strpos($relay,'Stack trace')===false)) && (function_exists('ocp_srv')) && (((ocp_srv('REMOTE_ADDR')==ocp_srv('SERVER_ADDR')) && (ocp_srv('HTTP_X_FORWARDED_FOR')=='')) || (preg_match('#^localhost(\.|\:|$)#',ocp_srv('HTTP_HOST'))!=0) && (function_exists('get_base_url')) && (substr(get_base_url(),0,16)=='http://localhost')))
+		if ((strpos($error,'Allowed memory')===false) && ((is_null($relay)) || (strpos($relay,'Stack trace')===false)) && (function_exists('ocp_srv')) && (((ocp_srv('REMOTE_ADDR')==ocp_srv('SERVER_ADDR')) && (ocp_srv('HTTP_X_FORWARDED_FOR')=='')) || (preg_match('#^localhost(\.|\:|$)#',ocp_srv('HTTP_HOST'))!=0) && (function_exists('get_base_url')) && (substr(get_base_url(),0,16)=='http://localhost')))
 		{
 			$_trace=debug_backtrace();
 			$extra='<div class="box guid_{_GUID}"><div class="box_inner"><h2>Stack trace&hellip;</h2>';
@@ -130,10 +130,8 @@ if (!function_exists('critical_error'))
 						} else
 						{
 							@ob_start();
-							if (function_exists('var_export'))
-								/*var_dump*/var_export($value);
-							$_value=ob_get_contents();
-							ob_end_clean();
+							var_export($value);
+							$_value=ob_get_clean();
 						}
 					}
 

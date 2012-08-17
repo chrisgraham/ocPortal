@@ -19,6 +19,26 @@
  */
 
 /**
+ * Render an IOTD box.
+ *
+ * @param  array			The IOTD row
+ * @param  ID_TEXT		The zone the iotds module is in
+ * @return tempcode		The rendered box
+ */
+function render_iotd_box($myrow,$zone='_SEARCH')
+{
+	$date=get_timezoned_date($myrow['date_and_time']);
+	$url=build_url(array('page'=>'iotds','type'=>'view','wide'=>1,'id'=>$myrow['id']),$zone);
+	$thumb_url=$myrow['thumb_url'];
+	$caption=get_translated_tempcode($myrow['i_title']);
+
+	require_code('images');
+	$thumb_url=ensure_thumbnail($myrow['url'],$thumb_url,'iotds','iotd',$myrow['id']);
+	$thumb=do_image_thumb($thumb_url,'');
+	return do_template('IOTD_ARCHIVE_SCREEN_IOTD',array('SUBMITTER'=>strval($myrow['submitter']),'ID'=>strval($myrow['id']),'VIEWS'=>integer_format($myrow['iotd_views']),'THUMB'=>$thumb,'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'URL'=>$url,'CAPTION'=>$caption));
+}
+
+/**
  * Add an IOTD to the database and return the ID of the new entry.
  *
  * @param  URLPATH			The URL to the IOTD image

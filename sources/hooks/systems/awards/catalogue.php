@@ -24,9 +24,10 @@ class Hook_awards_catalogue
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
@@ -40,7 +41,7 @@ class Hook_awards_catalogue
 		require_lang('catalogues');
 		$info['title']=do_lang_tempcode('CATALOGUES');
 		$info['category_is_string']=true;
-		$info['archive_url']=build_url(array('page'=>'catalogues'),get_module_zone('catalogues'));
+		$info['archive_url']=build_url(array('page'=>'catalogues'),(!is_null($zone))?$zone:get_module_zone('catalogues'));
 		$info['cms_page']='cms_catalogues';
 
 		return $info;

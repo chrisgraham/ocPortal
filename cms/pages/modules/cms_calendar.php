@@ -18,12 +18,12 @@
  * @package		calendar
  */
 
-require_code('aed_module');
+require_code('crud_module');
 
 /**
  * Module page class.
  */
-class Module_cms_calendar extends standard_aed_module
+class Module_cms_calendar extends standard_crud_module
 {
 	var $lang_type='CALENDAR_EVENT';
 	var $select_name='TITLE';
@@ -69,14 +69,14 @@ class Module_cms_calendar extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module run_start.
+	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
 	 */
 	function run_start($type)
 	{
-		$this->cat_aed_module=new Module_cms_calendar_cat();
+		$this->cat_crud_module=new Module_cms_calendar_cat();
 
 		$this->javascript="
 			var form=document.getElementById('recurrence_pattern').form;
@@ -195,7 +195,7 @@ class Module_cms_calendar extends standard_aed_module
 
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -265,7 +265,7 @@ class Module_cms_calendar extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
@@ -589,7 +589,7 @@ class Module_cms_calendar extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module submitter getter.
+	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
@@ -602,7 +602,7 @@ class Module_cms_calendar extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module cat getter.
+	 * Standard crud_module cat getter.
 	 *
 	 * @param  AUTO_LINK		The entry for which the cat is sought
 	 * @return mixed			The cat
@@ -615,7 +615,7 @@ class Module_cms_calendar extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields, parsed WYSIWYG editable text)
@@ -647,7 +647,7 @@ class Module_cms_calendar extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return array			A pair: the entry added, and a description
 	 */
@@ -777,7 +777,7 @@ class Module_cms_calendar extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return tempcode		Description shown after editing
@@ -928,7 +928,7 @@ class Module_cms_calendar extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
@@ -955,7 +955,7 @@ class Module_cms_calendar extends standard_aed_module
 	 */
 	function do_next_manager($title,$description,$id)
 	{
-		return $this->cat_aed_module->_do_next_manager($title,$description,is_null($id)?NULL:intval($id),$this->donext_type,$this->donext_date);
+		return $this->cat_crud_module->_do_next_manager($title,$description,is_null($id)?NULL:intval($id),$this->donext_type,$this->donext_date);
 	}
 
 	/**
@@ -1055,7 +1055,7 @@ class Module_cms_calendar extends standard_aed_module
 /**
  * Module page class.
  */
-class Module_cms_calendar_cat extends standard_aed_module
+class Module_cms_calendar_cat extends standard_crud_module
 {
 	var $lang_type='EVENT_TYPE';
 	var $select_name='EVENT_TYPE';
@@ -1117,7 +1117,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module table function.
+	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
@@ -1163,7 +1163,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit form filler.
+	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A pair: The input fields, Hidden fields
@@ -1180,7 +1180,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module add actualiser.
+	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
@@ -1194,7 +1194,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module edit actualiser.
+	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
@@ -1210,7 +1210,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */

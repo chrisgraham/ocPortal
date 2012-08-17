@@ -370,12 +370,6 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 		delete_upload('uploads/grepimages','news','news_image','id',$id,$image);
 	}
 
-	/*$news_categories=$news_category[0];
-	foreach ($news_category as $key=>$value)
-	{
-		if($key>0) $news_categories.=','.$value;
-	}*/
-
 	if (!is_null($news_category))
 	{
 		$GLOBALS['SITE_DB']->query_delete('news_category_entries',array('news_entry'=>$id));

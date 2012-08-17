@@ -109,7 +109,6 @@ $SITE_INFO['no_extra_closed_file']='1'; // Don't support reading closed.html for
 $SITE_INFO['no_installer_checks']='1'; // Don't check the installer is not there
 $SITE_INFO['assume_full_mobile_support']='1'; // Don't check the theme supports mobile devices (via loading theme.ini), assume it always does
 $SITE_INFO['no_extra_mobiles']='1'; // Don't read in extra mobile device signatures from disk
-$SITE_INFO['old_mysql']='0'; // We don't support old MySQL versions, don't check for a file called old_mysql to confirm this
 [/codebox]
 They all have effects, so be careful! There are reasons these settings aren't the defaults.
 

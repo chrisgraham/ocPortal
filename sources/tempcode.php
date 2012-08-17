@@ -1430,14 +1430,8 @@ class ocp_tempcode
 		{
 			$parameters['_GUID']='';
 
-			static $dbt=NULL;
-			if ($dbt===NULL)
-				$dbt=function_exists('debug_backtrace');
-			if ($dbt)
-			{
-				$trace=debug_backtrace();
-				$parameters['_GUID']=isset($trace[3])?($trace[3]['function'].'/'.$trace[2]['function']):(isset($trace[2])?$trace[2]['function']:$trace[1]['function']);
-			}
+			$trace=debug_backtrace();
+			$parameters['_GUID']=isset($trace[3])?($trace[3]['function'].'/'.$trace[2]['function']):(isset($trace[2])?$trace[2]['function']:$trace[1]['function']);
 		}
 
 		$out=new ocp_tempcode();

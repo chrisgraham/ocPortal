@@ -436,7 +436,7 @@ class Module_admin
 						{
 							$path=zone_black_magic_filterer(filter_naughty($zone).(($zone=='')?'':'/').'pages/modules_custom/'.filter_naughty($page).'.php',true);
 							if (!file_exists(get_file_base().'/'.$path)) $path=zone_black_magic_filterer(filter_naughty($zone).'/pages/modules/'.filter_naughty($page).'.php',true);
-							if ((!defined('HIPHOP_PHP')) && ((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0') || (get_option('has_low_memory_limit')==='1')) && (strpos(file_get_contents(get_file_base().'/'.$path),' extends standard_aed_module')!==false)) // Hackerish code when we have a memory limit. It's unfortunate, we'd rather execute in full
+							if ((!defined('HIPHOP_PHP')) && ((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0') || (get_option('has_low_memory_limit')==='1')) && (strpos(file_get_contents(get_file_base().'/'.$path),' extends standard_crud_module')!==false)) // Hackerish code when we have a memory limit. It's unfortunate, we'd rather execute in full
 							{
 								$new_code=str_replace(',parent::get_entry_points()','',str_replace('parent::get_entry_points(),','',$_entrypoints[0]));
 								if (strpos($new_code,'parent::')!==false) continue;

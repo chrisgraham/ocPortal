@@ -301,41 +301,28 @@ function _get_lang_file_map($b,&$entries,$descriptions=NULL,$given_whole_file=fa
 		return;
 	}
 
-//	if (!is_null($descriptions)) // Full parsing needed for this then (this algorithm would support non-descriptions, but it's just slower)
-//	{
-		$in_lang=false;
+	// Parse ini file
+	$in_lang=false;
+	$nl="\r\n";
+	foreach ($lines as $line)
+	{
+		$line=rtrim($line,$nl);
+		if ($line=='') continue;
 
-		$nl="\r\n";
-
-		foreach ($lines as $line)
+		if ($line[0]=='[')
 		{
-			$line=rtrim($line,$nl);
-			if ($line=='') continue;
+			if ($line=='[strings]') $in_lang=($descriptions!==true);
+			elseif ($line=='[descriptions]') $in_lang=($descriptions===true);
+		}
 
-			if ($line[0]=='[')
+		if ($in_lang)
+		{
+			$parts=explode('=',$line,2);
+
+			if (isset($parts[1]))
 			{
-				if ($line=='[strings]') $in_lang=($descriptions!==true);
-				elseif ($line=='[descriptions]') $in_lang=($descriptions===true);
-			}
-
-			if ($in_lang)
-			{
-				$parts=explode('=',$line,2);
-
-				if (isset($parts[1]))
-				{
-					$entries[$parts[0]]=rtrim($parts[1],$nl);/*str_replace('\n',"\n",$parts[1]);*/
-				}
+				$entries[$parts[0]]=rtrim($parts[1],$nl);/*str_replace('\n',"\n",$parts[1]);*/
 			}
 		}
-//	} else // Efficient parsing possible
-//	{
-//		foreach ($lines as $line) // [descriptions] now comes before [strings], so we don't need to filter (it'll just overwrite correctly if there's a dupe between them)
-//		{
-//			$parts=explode('=',$line,2);
-//
-//			if (isset($parts[1]))
-//				$entries[$parts[0]]=rtrim($parts[1]);/*str_replace('\n',"\n",$parts[1]);*/
-//		}
-//	}
+	}
 }

@@ -22,8 +22,6 @@
 		</div></div>
 	{+END}
 
-	{BROWSE}
-
 	{CURRENT_ENTRY}
 
 	{+START,IF_NON_EMPTY,{CHILDREN}{CURRENT_ENTRY}{BROWSE}}
@@ -62,6 +60,12 @@
 
 			{SORTING}
 		</div></div>
+	{+END}
+
+	{+START,IF_NON_EMPTY,{PAGINATION}}
+		<div class="pagination_spacing float_surrounder">
+			{PAGINATION}
+		</div>
 	{+END}
 
 	{+START,IF_EMPTY,{ENTRIES}{CURRENT_ENTRY}}

@@ -235,19 +235,8 @@ class Module_cms_comcode_pages
 	{
 		$filesarray=array();
 		$dir=(((substr($subdir,0,14)=='comcode_custom') && (!$also_checking_base))?get_custom_file_base():get_file_base()).'/'.filter_naughty($zone).(($zone=='')?'':'/').'pages/'.filter_naughty($subdir);
-		$_dir=function_exists('glob')?@glob($dir.'/'.$find_for.'*'):@opendir($dir);
-		if (($_dir===false) && (function_exists('glob'))) $_dir=array();
-		if ($_dir===false)
-		{
-			if (@mkdir($dir,0777)===false)
-			{
-				if (substr($subdir,0,14)!='comcode_custom') return array();
-				warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
-			}
-			fix_permissions($dir,0777);
-			sync_file($dir);
-			$_dir=opendir($dir);
-		}
+		$_dir=@glob($dir.'/'.$find_for.'*');
+		if ($_dir===false) $_dir=array();
 		if ((get_custom_file_base()!=get_file_base()) && (substr($subdir,0,14)=='comcode_custom') && (!$also_checking_base))
 		{
 			$filesarray=$this->get_comcode_revisions($zone,$subdir,$find_for,true);

@@ -430,7 +430,7 @@ class Hook_addon_registry_search
 				'CONTENT'=>lorem_phrase(),
 				'RESULTS'=>NULL,
 				'PAGINATION'=>'',
-				'OLD_MYSQL'=>false,
+				'HAS_FULLTEXT_SEARCH'=>true,
 				'TITLE'=>lorem_title(),
 				'AUTHOR'=>lorem_phrase(),
 				'SPECIALISATION'=>$specialisation,

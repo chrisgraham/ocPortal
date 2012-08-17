@@ -103,7 +103,7 @@ class Module_admin_quiz
 	}
 
 	/**
-	 * Standard aed_module list function.
+	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
@@ -122,7 +122,7 @@ class Module_admin_quiz
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 *
 	 * @return tempcode		The UI
 	 */
@@ -145,7 +145,7 @@ class Module_admin_quiz
 	}
 
 	/**
-	 * Standard aed_module delete actualiser.
+	 * Standard crud_module delete actualiser.
 	 */
 	function	_export_quiz()
 	{

@@ -292,22 +292,10 @@ class Module_points
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND'))));
 
-		// Previous/Next URLs
-		$max_rows=$GLOBALS['FORUM_DRIVER']->get_members();
-		$page_num=intval(floor(floatval($member_id_of-1)/1.0))+1;
-		$num_pages=intval(ceil(floatval($max_rows)/1.0));
-		$tempid=$GLOBALS['FORUM_DRIVER']->get_previous_member($member_id_of);
-		if (is_null($tempid)) $previous_url=new ocp_tempcode();
-			else $previous_url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$tempid),'_SELF');
-		$tempid=$GLOBALS['FORUM_DRIVER']->get_next_member($member_id_of);
-		if (is_null($tempid)) $next_url=new ocp_tempcode();
-			else $next_url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$tempid),'_SELF');
-		$browse=do_template('NEXT_BROWSER_BROWSE_NEXT',array('_GUID'=>'188c059239b39ca8ee70f85b38019490','PREVIOUS_URL'=>$previous_url,'NEXT_URL'=>$next_url,'PAGE_NUM'=>integer_format($page_num),'NUM_PAGES'=>integer_format($num_pages)));
-
 		require_code('points3');
 		$content=points_profile($member_id_of,get_member());
 
-		return do_template('POINTS_SCREEN',array('_GUID'=>'7fadfc2886ba063008f6333fb3f19e75','TITLE'=>$title,'CONTENT'=>$content,'BROWSE'=>$browse));
+		return do_template('POINTS_SCREEN',array('_GUID'=>'7fadfc2886ba063008f6333fb3f19e75','TITLE'=>$title,'CONTENT'=>$content));
 	}
 
 	/**

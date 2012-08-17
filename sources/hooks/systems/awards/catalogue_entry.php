@@ -24,10 +24,11 @@ class Hook_awards_catalogue_entry
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @param  ?ID_TEXT	Catalogue we'll be using (NULL: unknown).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($catalogue_name=NULL)
+	function info($zone=NULL,$catalogue_name=NULL)
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
@@ -47,7 +48,7 @@ class Hook_awards_catalogue_entry
 		$info['title']=do_lang_tempcode('CATALOGUE_ENTRIES');
 		$info['validated_field']='ce_validated';
 		$info['category_is_string']=array(true,false);
-		$info['archive_url']=build_url(array('page'=>'catalogues'),get_module_zone('catalogues'));
+		$info['archive_url']=build_url(array('page'=>'catalogues'),(!is_null($zone))?$zone:get_module_zone('catalogues'));
 		$info['cms_page']='cms_catalogues';
 		$info['views_field']='ce_views';
 

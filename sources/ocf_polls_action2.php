@@ -18,7 +18,6 @@
  * @package		core_ocf
  */
 
-
 /**
  * Edit a forum poll.
  *

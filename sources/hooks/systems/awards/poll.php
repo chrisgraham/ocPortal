@@ -24,9 +24,10 @@ class Hook_awards_poll
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
@@ -46,7 +47,7 @@ class Hook_awards_poll
 		$info['title']=do_lang_tempcode('POLL');
 		$info['validated_field']=NULL;
 		$info['category_is_string']=false;
-		$info['archive_url']=build_url(array('page'=>'polls'),get_module_zone('polls'));
+		$info['archive_url']=build_url(array('page'=>'polls'),(!is_null($zone))?$zone:get_module_zone('polls'));
 		$info['cms_page']='cms_polls';
 		$info['seo_type']='polls';
 		$info['feedback_type']='polls';

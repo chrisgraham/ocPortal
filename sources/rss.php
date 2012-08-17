@@ -75,8 +75,6 @@ class rss
 
 		if (!$is_filesystem_path && url_is_local($url)) $url=get_base_url().'/'.$url;
 
-		//echo $url;exit();
-
 		if ($is_filesystem_path)
 		{
 			$GLOBALS['HTTP_CHARSET']='';
@@ -84,13 +82,8 @@ class rss
 		}
 		else
 		{
-			// Run the parser
-//			for ($i=0;$i<10;$i++)		Don't retry now that we have the DO_NOT_CACHE_THIS flagged in main_rss.php for errors (i.e. because we don't cache errors we can afford to fail more naturally)
-			{
-				$GLOBALS['HTTP_CHARSET']='';
-				$data=http_download_file($url,NULL,false);
-//				if (!is_null($data)) break;
-			}
+			$GLOBALS['HTTP_CHARSET']='';
+			$data=http_download_file($url,NULL,false);
 		}
 
 		if (is_null($data))
@@ -275,7 +268,7 @@ class rss
 		if ($name=='RSS')
 		{
 			$this->type='RSS';
-			/*		$version=explode('.',$attributes['VERSION']);
+			/*		$version=explode('.',$attributes['VERSION']);		Actually we won't try and detect versions, RSS usage is too much of a mess
 			if ($version[0]=='0') && ($version[1]=='90') $this->version=0.9; // rdf
 			elseif ($version[0]=='0') && ($version[1][0]=='9') $this->version=0.91;
 			elseif ($version[0]=='1') $this->version=1; // rdf

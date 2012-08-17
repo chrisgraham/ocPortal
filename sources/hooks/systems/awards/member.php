@@ -24,9 +24,10 @@ class Hook_awards_member
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		if (get_forum_type()!='ocf') return NULL;
 
@@ -42,7 +43,7 @@ class Hook_awards_member
 		$info['title']=do_lang_tempcode('MEMBERS');
 		$info['validated_field']='m_validated';
 		$info['category_is_string']=false;
-		$info['archive_url']=build_url(array('page'=>'members'),get_module_zone('members'));
+		$info['archive_url']=build_url(array('page'=>'members'),(!is_null($zone))?$zone:get_module_zone('members'));
 		$info['cms_page']='admin_ocf_join';
 
 		return $info;

@@ -20,6 +20,12 @@
 {+START,IF_NON_EMPTY,{DOWNLOADS}}
 	{DOWNLOADS}
 
+	{+START,IF_NON_EMPTY,{PAGINATION}}
+		<div class="pagination_spacing float_surrounder">
+			{PAGINATION}
+		</div>
+	{+END}
+
 	<div class="box category_sorter inline_block"><div class="box_inner">
 		{$SET,show_sort_button,1}
 		{SORTING}
