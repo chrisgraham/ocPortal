@@ -7133,8 +7133,8 @@ CREATE TABLE `ocp_values` (
   KEY `date_and_time` (`date_and_time`)
 ) ENGINE=MyISAM;
 
-insert into `ocp_values` values('version','8','1332090660'),
- ('ocf_version','8','1332090660');
+insert into `ocp_values` values('version','8.1','1332090660'),
+ ('ocf_version','8.1','1332090660');
 
 DROP TABLE IF EXISTS `ocp_video_transcoding`;
 
