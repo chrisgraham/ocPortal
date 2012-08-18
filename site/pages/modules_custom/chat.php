@@ -94,7 +94,7 @@ class Mx_chat extends Module_chat
 		$seteffectslink=hyperlink(build_url(array('page'=>'_SELF','type'=>'set_effects'/*,'redirect'=>get_self_url(true,true)*/),'_SELF'),do_lang_tempcode('CHAT_SET_EFFECTS'),true);
 
 		$friends=array();
-		$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('*'),array('member_likes'=>get_member()));
+		$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_friends',array('*'),array('member_likes'=>get_member()));
 		foreach ($friend_rows as $br)
 		{
 			$u=$GLOBALS['FORUM_DRIVER']->get_username($br['member_liked']);

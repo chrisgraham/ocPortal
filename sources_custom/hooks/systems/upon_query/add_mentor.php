@@ -57,12 +57,12 @@ class upon_query_add_mentor
 			$member_id=$ret;
 			$time=time();
 
-			$GLOBALS['SITE_DB']->query_delete('chat_buddies',array(
+			$GLOBALS['SITE_DB']->query_delete('chat_friends',array(
 				'member_likes'=>$mentor_id,
 				'member_liked'=>$member_id
 			),'',1); // Just in case page refreshed
 
-			$GLOBALS['SITE_DB']->query_insert('chat_buddies',array(
+			$GLOBALS['SITE_DB']->query_insert('chat_friends',array(
 				'member_likes'=>$mentor_id,
 				'member_liked'=>$member_id,
 				'date_and_time'=>$time

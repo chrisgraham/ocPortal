@@ -392,7 +392,7 @@ function namelike_script()
 	{
 		if ((strlen($id)==0) && (addon_installed('chat')))
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()),'ORDER BY date_and_time',100);
+			$rows=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),array('member_likes'=>get_member()),'ORDER BY date_and_time',100);
 			$names=array();
 			foreach ($rows as $row)
 			{

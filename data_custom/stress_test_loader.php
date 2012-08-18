@@ -66,7 +66,7 @@ function do_work()
 		enable_notifications('ocf_topic',strval(db_get_first_id()),$member_id);
 
 		// number of friends to a single member
-		$GLOBALS['SITE_DB']->query_insert('chat_buddies',array(
+		$GLOBALS['SITE_DB']->query_insert('chat_friends',array(
 			'member_likes'=>$member_id,
 			'member_liked'=>db_get_first_id()+1,
 			'date_and_time'=>time()
@@ -80,9 +80,9 @@ function do_work()
 		give_points(10,$member_id,mt_rand(db_get_first_id(),/*don't want wide distribution as points cacheing then eats RAM*/min(100,$num_wanted-1)),random_line(),false,false);
 	}
 	// number of friends of a single member
-	for ($j=intval(floatval($GLOBALS['SITE_DB']->query_select_value('chat_buddies','COUNT(*)'))/2.0);$j<$num_wanted;$j++)
+	for ($j=intval(floatval($GLOBALS['SITE_DB']->query_select_value('chat_friends','COUNT(*)'))/2.0);$j<$num_wanted;$j++)
 	{
-		$GLOBALS['SITE_DB']->query_insert('chat_buddies',array(
+		$GLOBALS['SITE_DB']->query_insert('chat_friends',array(
 			'member_likes'=>$member_id,
 			'member_liked'=>$j+db_get_first_id(),
 			'date_and_time'=>time()

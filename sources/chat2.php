@@ -70,12 +70,12 @@ function friend_add($likes,$liked,$time=NULL)
 {
 	if (is_null($time)) $time=time();
 
-	$GLOBALS['SITE_DB']->query_delete('chat_buddies',array(
+	$GLOBALS['SITE_DB']->query_delete('chat_friends',array(
 		'member_likes'=>$likes,
 		'member_liked'=>$liked
 	),'',1); // Just in case page refreshed
 
-	$GLOBALS['SITE_DB']->query_insert('chat_buddies',array(
+	$GLOBALS['SITE_DB']->query_insert('chat_friends',array(
 		'member_likes'=>$likes,
 		'member_liked'=>$liked,
 		'date_and_time'=>$time
@@ -104,7 +104,7 @@ function friend_add($likes,$liked,$time=NULL)
  */
 function friend_remove($likes,$liked)
 {
-	$GLOBALS['SITE_DB']->query_delete('chat_buddies',array(
+	$GLOBALS['SITE_DB']->query_delete('chat_friends',array(
 		'member_likes'=>$likes,
 		'member_liked'=>$liked
 	),'',1); // Just in case page refreshed

@@ -1424,7 +1424,7 @@ class Hook_phpbb3
 
 			if ($row['friend']==1)
 			{
-				$GLOBALS['SITE_DB']->query_insert('chat_buddies',array('member_likes'=>$likes,'member_liked'=>$liked,'date_and_time'=>time()));
+				$GLOBALS['SITE_DB']->query_insert('chat_friends',array('member_likes'=>$likes,'member_liked'=>$liked,'date_and_time'=>time()));
 			}
 
 			if ($row['foe']==1)

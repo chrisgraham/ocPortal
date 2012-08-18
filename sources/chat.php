@@ -203,11 +203,11 @@ function member_befriended($member_id)
 	global $MEMBERS_BEFRIENDED;
 	if (is_null($MEMBERS_BEFRIENDED))
 	{
-		$MEMBERS_BEFRIENDED=collapse_1d_complexity('member_liked',$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()),'',100));
+		$MEMBERS_BEFRIENDED=collapse_1d_complexity('member_liked',$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),array('member_likes'=>get_member()),'',100));
 	}
 	if (count($MEMBERS_BEFRIENDED)==100) // Ah, too much to preload
 	{
-		return !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_buddies','member_liked',array('member_liked'=>$member_id,'member_likes'=>get_member())));
+		return !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_liked',array('member_liked'=>$member_id,'member_likes'=>get_member())));
 	}
 	return (in_array($member_id,$MEMBERS_BEFRIENDED));
 }

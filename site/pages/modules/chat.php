@@ -36,7 +36,7 @@ class Module_chat
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=11;
+		$info['version']=12;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -50,7 +50,7 @@ class Module_chat
 		$GLOBALS['SITE_DB']->drop_table_if_exists('chat_rooms');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('chat_messages');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('chat_blocking');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('chat_buddies');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('chat_friends');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('chat_active');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('chat_events');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('chat_sound_effects');
@@ -133,34 +133,17 @@ class Module_chat
 
 			require_lang('chat');
 			add_menu_item_simple('main_community',NULL,'CHAT_LOBBY','_SEARCH:chat:type=misc',0,0,true,'',0,'menu_items/community_navigation/chat');
-		}
-		if (($upgrade_from<3) || (is_null($upgrade_from)))
-		{
+
 			add_config_option('CHAT_OPTIONS_COLOUR_NAME','chat_default_post_colour','colour','return \'inherit\';','FEATURE','SECTION_CHAT'); // NB: compressed up due to 256 character limit
 			add_config_option('CHAT_OPTIONS_TEXT_NAME','chat_default_post_font','list','return \'Verdana\';','FEATURE','SECTION_CHAT',0,'Arial|Courier|Georgia|Impact|Times| Trebuchet|Verdana|Tahoma|Geneva|Helvetica');
 			add_config_option('PRIVATE_ROOM_DELETION_TIME','chat_private_room_deletion_time','integer','return \'1440\';','FEATURE','SECTION_CHAT');
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('chat_rooms','allow_list_groups','LONG_TEXT');
-			$GLOBALS['SITE_DB']->add_table_field('chat_rooms','disallow_list','LONG_TEXT');
-			$GLOBALS['SITE_DB']->add_table_field('chat_rooms','disallow_list_groups','LONG_TEXT');
-			$GLOBALS['SITE_DB']->add_table_field('chat_rooms','c_welcome','LONG_TRANS');
-			$GLOBALS['SITE_DB']->add_table_field('chat_messages','ip_address','IP','127.0.0.1');
 
-			$GLOBALS['SITE_DB']->query_update('chat_rooms',array('allow_list'=>''),array('allow_list'=>NULL));
-			$GLOBALS['SITE_DB']->alter_table_field('chat_rooms','allow_list','LONG_TEXT');
-		}
-		if ((is_null($upgrade_from)) || ($upgrade_from<5))
-		{
 			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($usergroups) as $id)
 			{
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'cms_chat','zone_name'=>'cms','group_id'=>$id)); // Don't want to let anyone do chat room moderation just because we let them manage content
 			}
-		}
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
+
 			add_privilege('SECTION_CHAT','create_private_room',true);
 			add_privilege('SECTION_CHAT','start_im',true);
 			add_config_option('USERNAME_CLICK_IM','username_click_im','tick','return \'0\';','FEATURE','SECTION_CHAT');
@@ -171,7 +154,7 @@ class Module_chat
 				'date_and_time'=>'TIME'
 			));
 
-			$GLOBALS['SITE_DB']->create_table('chat_buddies',array(
+			$GLOBALS['SITE_DB']->create_table('chat_friends',array(
 				'member_likes'=>'*USER',
 				'member_liked'=>'*USER',
 				'date_and_time'=>'TIME'
@@ -186,29 +169,11 @@ class Module_chat
 			));
 
 			$GLOBALS['SITE_DB']->create_index('chat_events','event_ordering',array('e_date_and_time'));
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('chat_rooms','is_im','BINARY');
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
-		{
-			$GLOBALS['SITE_DB']->query_delete('db_meta_indices',array('i_table'=>'chat_active','i_name'=>'member_active_select','i_fields'=>'member_id'));
-			$GLOBALS['SITE_DB']->query('DROP INDEX member_active_select ON '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_active');
-		}
-		if ((is_null($upgrade_from)) || ($upgrade_from<8))
-		{
+
 			add_config_option('CHATTING','points_chat','integer','return addon_installed(\'points\')?\'1\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('COUNT_CHATTERS','chat_show_stats_count_users','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('ROOMS','chat_show_stats_count_rooms','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('COUNT_CHATPOSTS','chat_show_stats_count_messages','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<9))
-		{
-			$GLOBALS['SITE_DB']->promote_text_field_to_comcode('chat_messages','the_message','id',4,true);
-			$GLOBALS['SITE_DB']->query_delete('chat_messages');
-			delete_config_option('is_on_chat');
-			$GLOBALS['SITE_DB']->add_table_field('chat_messages','system_message','BINARY');
 		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<10))
 		{
@@ -251,6 +216,10 @@ class Module_chat
 		if ((is_null($upgrade_from)) || ($upgrade_from<11))
 		{
 			add_config_option('GROUP_PRIVATE_CHATROOMS','group_private_chatrooms','tick','return is_null($old=get_value(\'no_group_private_chatrooms\'))?\'1\':invert_value($old);','FEATURE','SECTION_CHAT');
+		}
+		if ((!is_null($upgrade_from)) && ($upgrade_from<12))
+		{
+			$GLOBALS['SITE_DB']->rename_table('chat_buddies','chat_friends');
 		}
 	}
 
@@ -371,7 +340,6 @@ class Module_chat
 		if ($type=='blocking_set') return $this->blocking_set();
 		if ($type=='blocking_add') return $this->blocking_add();
 		if ($type=='blocking_remove') return $this->blocking_remove();
-		if ($type=='buddy_add') return $this->friend_add(); // TODO: Remove after a while. This is legacy, as emails may have gone out using the old URL, from before upgrade
 		if ($type=='friend_add') return $this->friend_add();
 		if ($type=='friend_remove') return $this->friend_remove();
 		if ($type=='friends_list') return $this->friends_list();
@@ -478,7 +446,7 @@ class Module_chat
 		$online_url=$GLOBALS['FORUM_DRIVER']->online_members_url();
 		$can_im=has_privilege(get_member(),'start_im');
 		$friends=array();
-		$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('*'),array('member_likes'=>$member_id),'ORDER BY date_and_time',100);
+		$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_friends',array('*'),array('member_likes'=>$member_id),'ORDER BY date_and_time',100);
 		$friend_active=get_chatters_in_room(NULL);
 		global $SESSION_CACHE;
 		$users_online_time_seconds=CHAT_ACTIVITY_PRUNE;
@@ -908,7 +876,7 @@ class Module_chat
 
 		// Can't befriend oneself (yes, this may happen!)
 		if ($member_id==get_member()) warn_exit(do_lang_tempcode('CANNOT_BEFRIEND_ONESELF'));
-		if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_buddies','date_and_time',array('member_likes'=>get_member(),'member_liked'=>$member_id))))
+		if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','date_and_time',array('member_likes'=>get_member(),'member_liked'=>$member_id))))
 			warn_exit(do_lang('ALREADY_FRIENDS',escape_html($username)));
 
 		$test=$this->handle_repost('ADD_FRIEND_ACTION_DESCRIPTION',$username);
@@ -955,7 +923,7 @@ class Module_chat
 			$members=array($member_id);
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 
-			if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_buddies','date_and_time',array('member_likes'=>get_member(),'member_liked'=>$member_id))))
+			if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','date_and_time',array('member_likes'=>get_member(),'member_liked'=>$member_id))))
 				warn_exit(do_lang('NOT_CURRENTLY_FRIENDS',escape_html($username)));
 		}
 
@@ -997,11 +965,11 @@ class Module_chat
 
 		if ($mode=='both')
 		{
-			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_buddies a LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_buddies b ON a.member_liked=b.member_likes AND a.member_liked='.strval($member_id).' WHERE (a.member_likes='.strval(intval($member_id)).' OR a.member_liked='.strval(intval($member_id)).') AND b.member_liked IS NULL';
+			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends a LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends b ON a.member_liked=b.member_likes AND a.member_liked='.strval($member_id).' WHERE (a.member_likes='.strval(intval($member_id)).' OR a.member_liked='.strval(intval($member_id)).') AND b.member_liked IS NULL';
 			$rows=$GLOBALS['SITE_DB']->query('SELECT a.* FROM '.$query.' ORDER BY date_and_time',$max,$start);
 		} else
 		{
-			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_buddies WHERE member_likes='.strval(intval($member_id));
+			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends WHERE member_likes='.strval(intval($member_id));
 			$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$query.' ORDER BY date_and_time',$max,$start);
 		}
 		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$query);
@@ -1015,7 +983,7 @@ class Module_chat
 
 			if (($f_id==$row['member_likes']) || (!in_array($f_id,$blocked)))
 			{
-				$appears_twice=(/*if was member_liked we already know it is not twice as our query filters those dupes away*/$row['member_likes']==$member_id) && !is_null($GLOBALS['SITE_DB']->query_select_value('chat_buddies','member_likes',array('member_liked'=>$member_id)));
+				$appears_twice=(/*if was member_liked we already know it is not twice as our query filters those dupes away*/$row['member_likes']==$member_id) && !is_null($GLOBALS['SITE_DB']->query_select_value('chat_friends','member_likes',array('member_liked'=>$member_id)));
 				require_code('ocf_members2');
 				$friend_username=$GLOBALS['FORUM_DRIVER']->get_username($f_id);
 				$friend_usergroup_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($f_id,'m_primary_group');
@@ -1175,10 +1143,10 @@ class Module_chat
 		$setting_blocks->attach($block);
 
 		// Per-friend overrides
-		$friend_count=$GLOBALS['SITE_DB']->query_select_value('chat_buddies','COUNT(*)',array('member_likes'=>get_member()));
+		$friend_count=$GLOBALS['SITE_DB']->query_select_value('chat_friends','COUNT(*)',array('member_likes'=>get_member()));
 		if ($friend_count<200)
 		{
-			$friends=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()));
+			$friends=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),array('member_likes'=>get_member()));
 			foreach ($friends as $friend)
 			{
 				$effect_settings=get_effect_settings(false,$friend['member_liked']); // Find what the member has it set to
@@ -1209,11 +1177,11 @@ class Module_chat
 		require_code('uploads');
 
 		// Find all our suffixes to check for
-		$friend_count=$GLOBALS['SITE_DB']->query_select_value('chat_buddies','COUNT(*)',array('member_likes'=>get_member()));
+		$friend_count=$GLOBALS['SITE_DB']->query_select_value('chat_friends','COUNT(*)',array('member_likes'=>get_member()));
 		$suffixes=array();
 		if ($friend_count<200)
 		{
-			$friends=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>get_member()));
+			$friends=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),array('member_likes'=>get_member()));
 			$suffixes=array('');
 			foreach ($friends as $friend)
 			{

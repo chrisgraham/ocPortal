@@ -49,7 +49,7 @@ class Hook_cron_ocf_birthdays
 
 				if (addon_installed('chat'))
 				{
-					$friends=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_likes'),array('member_liked'=>$_birthday['id']));
+					$friends=$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_likes'),array('member_liked'=>$_birthday['id']));
 					dispatch_notification('ocf_friend_birthday',NULL,$subject,$mail,collapse_1d_complexity('member_likes',$friends));
 				}
 

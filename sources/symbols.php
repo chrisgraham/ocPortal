@@ -2202,7 +2202,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IS_FRIEND':
 				if (isset($param[0]))
 				{
-					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_buddies','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
+					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
 					$value=is_null($test)?'0':'1';
 				}
 				break;

@@ -91,7 +91,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				$_whereville.='a_also_involving='.strval($member_id);
 				if (addon_installed('chat'))
 				{
-					$_whereville.=' AND a_member_id IN (SELECT member_liked FROM '.get_table_prefix().'chat_buddies WHERE member_likes='.strval(get_member()).')';
+					$_whereville.=' AND a_member_id IN (SELECT member_liked FROM '.get_table_prefix().'chat_friends WHERE member_likes='.strval(get_member()).')';
 				}
 				$_whereville.=')';
 				$_whereville.=')';
@@ -109,7 +109,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 						else
 							$friends_check_where='(member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).')';
 
-						$view_private=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_likes FROM '.get_table_prefix().'chat_buddies WHERE '.$friends_check_where);
+						$view_private=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_likes FROM '.get_table_prefix().'chat_friends WHERE '.$friends_check_where);
 					}
 
 					if (is_null($view_private)) //If not friended by this person, the view is filtered.
@@ -129,7 +129,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				//Exclusions will be based on whether they like and have not blocked you.
 
 				//Select mutual likes you haven't blocked.
-				$tables_and_joins ='chat_buddies a JOIN '.get_table_prefix().'chat_buddies b';
+				$tables_and_joins ='chat_friends a JOIN '.get_table_prefix().'chat_friends b';
 				$tables_and_joins.=' ON (a.member_liked=b.member_likes AND a.member_likes=b.member_liked AND a.member_likes=';
 				$tables_and_joins.=strval($viewer_id);
 
@@ -161,7 +161,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 
 					$lm_ids=substr($lm_ids, 1);
 
-					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).' AND member_liked NOT IN('.$lm_ids.')'.$extra_not);
+					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_friends', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).' AND member_liked NOT IN('.$lm_ids.')'.$extra_not);
 
 					if (count($like_outgoing)>1) //Likes more than one non-mutual friend
 					{
@@ -186,7 +186,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				}
 				elseif (count($like_mutual)>0) //Has one mutual friend
 				{
-					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).' AND member_liked!='.strval($like_mutual[0]['liked']).$extra_not);
+					$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_friends', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).' AND member_liked!='.strval($like_mutual[0]['liked']).$extra_not);
 
 					if (count($like_outgoing)>1) //Likes more than one non-mutual friend
 					{
@@ -212,7 +212,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				else //Has no mutual friends
 				{
 					if (!$is_guest)
-						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).$extra_not);
+						$like_outgoing=$GLOBALS['SITE_DB']->query_select('chat_friends', array('member_liked'), NULL, ' WHERE (member_likes='.strval($viewer_id).$extra_not);
 
 					if (count($like_outgoing)>1) //Likes more than one person
 					{
@@ -245,7 +245,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 				if (strlen($blocked_by)>0)
 					$friends_check_where='('.$friends_check_where.' AND member_likes NOT IN ('.$blocked_by.'))';
 
-				$view_private=$GLOBALS['SITE_DB']->query_select('chat_buddies', array('member_likes'), NULL, ' WHERE '.$friends_check_where.';');
+				$view_private=$GLOBALS['SITE_DB']->query_select('chat_friends', array('member_likes'), NULL, ' WHERE '.$friends_check_where.';');
 				$view_private[]=array('member_likes'=>$viewer_id);
 			}
 

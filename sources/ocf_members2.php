@@ -268,7 +268,7 @@ function ocf_may_whisper($target,$member_id=NULL)
 
 	if ((!$answer) && (addon_installed('chat')))
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('date_and_time'),array('member_likes'=>$target,'member_liked'=>$member_id),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('chat_friends',array('date_and_time'),array('member_likes'=>$target,'member_liked'=>$member_id),'',1);
 		if (count($rows)!=0) $answer=true;
 	}
 
