@@ -299,6 +299,7 @@ class Module_admin_setupwizard
 			'textbased_persistent_cacheing',
 			'rootkit_detector',
 			'msn',
+			'staff',
 			'backup',
 			'bookmarks',
 			'devguide',
