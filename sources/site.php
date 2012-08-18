@@ -253,7 +253,7 @@ function attach_message($message,$type='inform')
 	$ATTACH_MESSAGE_CALLED++;
 	if ($ATTACH_MESSAGE_CALLED>5)
 	{
-		critical_error('EMERGENCY',is_object($message)?$message->evaluate():$message);
+		critical_error('EMERGENCY',is_object($message)?$message->evaluate():escape_html($message));
 	}
 
 	if (($type=='warn') && (strlen(is_object($message)?$message->evaluate():$message)<130))

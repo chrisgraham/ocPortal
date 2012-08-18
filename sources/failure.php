@@ -287,7 +287,7 @@ function _generic_exit($text,$template)
 	global $EXITING;
 	if (running_script('upgrader')) critical_error('PASSON',is_object($text)?$text->evaluate():$text);
 
-	if (($EXITING==1) || (!function_exists('get_member'))) critical_error('EMERGENCY',is_object($text)?$text->evaluate():$text);
+	if (($EXITING==1) || (!function_exists('get_member'))) critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
 	$EXITING++;
 	if (!function_exists('do_header')) require_code('site');
 
@@ -690,10 +690,10 @@ function _fatal_exit($text,$return=false)
 	{
 		if (($EXITING<3) && (function_exists('may_see_stack_dumps')) && (may_see_stack_dumps()) && ($GLOBALS['HAS_SET_ERROR_HANDLER']))
 		{
-			die_html_trace(is_object($text)?$text->evaluate():$text);
+			die_html_trace(is_object($text)?$text->evaluate():escape_html($text));
 		} else
 		{
-			critical_error('EMERGENCY',is_object($text)?$text->evaluate():$text);
+			critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
 		}
 	}
 

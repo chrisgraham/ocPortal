@@ -2260,7 +2260,7 @@ function entities_to_unicode(din)
 	}
 	return din;
 }
-/* load the HTML as XML */
+/* load the HTML as XHTML */
 function inner_html_load(xml_string) {
 	var xml;
 	if (typeof DOMParser!="undefined") xml=(new DOMParser()).parseFromString(xml_string,"application/xml");
@@ -2489,7 +2489,7 @@ function set_inner_html(element,tHTML,append)
 	tHTML=entities_to_unicode(tHTML);
 
 	/* load the XML and copies to DOM */
-	tHTML="<root>"+tHTML+"</root>";
+	tHTML="<root>"+tHTML.replace(/^\s*\<\!DOCTYPE[^<>]*\>/,'')+"</root>";
 	var xml_doc=inner_html_load(tHTML);
 	if (element && xml_doc) {
 		if (!append) while (element.lastChild) element.removeChild(element.lastChild);

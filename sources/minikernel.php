@@ -196,7 +196,7 @@ function fatal_exit($text)
 			die_html_trace($text);
 		} else
 		{
-			critical_error('RELAY',$text);
+			critical_error('RELAY',is_object($text)?$text->evaluate():escape_html($text));
 		}
 	}
 	$EXITING=1;
@@ -389,7 +389,7 @@ function warn_exit($text)
 			die_html_trace($text);
 		} else
 		{
-			critical_error('RELAY',$text);
+			critical_error('RELAY',is_object($text)?$text->evaluate():escape_html($text));
 		}
 	}
 	$EXITING=1;
