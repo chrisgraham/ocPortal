@@ -47,12 +47,12 @@ if (get_magic_quotes_gpc())
 
 /*if (file_exists($FILE_BASE.'/use_comp_name'))
 	require_once($FILE_BASE.'/'.(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']).'.php');
-else */require_once($FILE_BASE.'/info.php');
+else */require_once($FILE_BASE.'/_config.php');
 
-if (!is_writable($FILE_BASE.'/info.php'))
+if (!is_writable($FILE_BASE.'/_config.php'))
 {
 	ce_do_header();
-	echo('<em>info.php is not writeable, so the config editor cannot edit it. Please either edit the file manually or change it\'s permissions appropriately.</em>');
+	echo('<em>_config.php is not writeable, so the config editor cannot edit it. Please either edit the file manually or change it\'s permissions appropriately.</em>');
 	ce_do_footer();
 	exit();
 }
@@ -410,7 +410,7 @@ function do_set()
 		echo '<p><strong>You have changed your cookie settings. Your old login cookies have been deleted, and the software will try and delete all cookie variations from your member\'s computers when they log out. However there is a chance you may need to let some members know that they need to delete their old cookies manually.</strong></p>';
 	}
 
-	// info.php
+	// _config.php
 	global $FILE_BASE;
 	$info_file=((file_exists('use_comp_name'))?(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']):'info').'.php';
 	$path=$FILE_BASE.'/exports/file_backups/'.$info_file.'.'.strval(time());
@@ -444,7 +444,7 @@ function do_set()
 	co_sync_file($info_file);
 
 	echo '<hr /><p>Edited configuration. If you wish to continue editing you must <a href="config_editor.php">login again.</a></p>';
-	echo '<hr /><p>The info.php file was backed up at '.htmlentities($path).'</p>';
+	echo '<hr /><p>The _config.php file was backed up at '.htmlentities($path).'</p>';
 }
 
 /**
@@ -499,7 +499,7 @@ function co_sync_file_move($old,$new)
 function co_check_master_password($password_given)
 {
 	global $SITE_INFO;
-	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in info.php currently so cannot authenticate');
+	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
 	$actual_password_hashed=$SITE_INFO['admin_password'];
 	$salt='';
 	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))

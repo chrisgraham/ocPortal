@@ -246,7 +246,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 		// Installer files
 		'install.php'=>'',
-		'info.php.template'=>'',
+		'_config.php.template'=>'',
 		'data.ocp'=>'',
 		'install.sql'=>'',
 		'install1.sql'=>'',
@@ -338,7 +338,8 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 	{
 		$ignore_filenames_and_dir_names+=array(
 			// Bundled stuff that is not necessarily in a *_custom dir yet is volatile
-			'info.php'=>'',
+			'_config.php'=>'',
+			'info.php'=>'', // Pre-v10 equivalent to _config.php
 			'map.ini'=>'themes',
 			'functions.dat'=>'data_custom',
 			'download_tree_made.htm'=>'pages/html_custom/EN',

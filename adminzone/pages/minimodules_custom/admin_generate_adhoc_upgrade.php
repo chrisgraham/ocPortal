@@ -47,7 +47,7 @@ if ($type=='auto_probe')
 		// Via addons table (non-bundled ones)
 		global $SITE_INFO;
 		$backup=$SITE_INFO;
-		require_once($probe_dir.'/info.php');
+		require_once($probe_dir.'/_config.php');
 		$linked_db=new database_driver(get_db_site(),get_db_site_host(),get_db_site_user(),get_db_site_password(),get_table_prefix());
 		$auto_probe+=collapse_1d_complexity('addon_name',$linked_db->query_select('addons',array('addon_name')));
 		$SITE_INFO=$backup;
@@ -221,7 +221,7 @@ if ($type=='go')
 		{
 			foreach ($files as $file)
 			{
-				if (preg_match('#^(data\_custom/|ocp_sitemap.xml$|info.php$)#',$file)==0)
+				if (preg_match('#^(data\_custom/|ocp_sitemap.xml$|_config.php$)#',$file)==0)
 				{
 					if (filemtime(get_file_base().'/'.$file)>$cutoff_point)
 					{
@@ -265,7 +265,7 @@ echo '
 		</p>
 
 		<p class="associated_details">
-			Only run this on projects you trust - as info.php will be executed so as to connect to the project\'s database.
+			Only run this on projects you trust - as _config.php will be executed so as to connect to the project\'s database.
 		</p>
 
 		<p class="proceed_button">

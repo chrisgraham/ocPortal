@@ -89,12 +89,12 @@ To configure access permissions, you may edit the resource the permissions are f
 
 [title="2"]Installation options (base-configuration)[/title]
 
-If your core configuration settings change, if you move servers for example, then ocPortal may cease to function. To ameliorate this, an external configuration editor is provided that can reconfigure the [tt]info.php[/tt] that stores core configuration settings, such as database access details.
+If your core configuration settings change, if you move servers for example, then ocPortal may cease to function. To ameliorate this, an external configuration editor is provided that can reconfigure the [tt]_config.php[/tt] that stores core configuration settings, such as database access details.
 
 To launch the external config editor, go to the Setup section of the Admin Zone and choose the 'Installation Options' icon.
 If you are locked outside ocPortal, you will need to open up the [tt]<base-url>/config_editor.php[/tt] URL manually.
 
-The password to enter the config editor is the password you specified during installation (the 'Master password'). If you have forgotten it, you will need to edit [tt]info.php[/tt] by hand.
+The password to enter the config editor is the password you specified during installation (the 'Master password'). If you have forgotten it, you will need to edit [tt]_config.php[/tt] by hand.
 
 [box="Note" width="25em" float="right"]If you change servers you will also need to set file permissions. Please read the advanced installation tutorial for details on this. If you upload new themes, you will need to set permissions on the [tt]templates_cached/<lang>[/tt] and [tt]*_custom[/tt] directories after uploading.[/box]
 You may use the config editor to:
@@ -246,8 +246,8 @@ Set up multiple website profiles in IIS manager (or the Apache configuration fil
 b ii) For complex hierarchies:
 Set up virtual directories in IIS manage (or the Apache configuration file, if you're using Apache). These virtual directories must all point to the ocPortal installation directory (not the zone you're linking the subdomain to).
 
-c) ocPortal is now set up to receive requests on the various domain names / paths that you have configured. Extra information needs adding to the ocPortal [tt]info.php[/tt], to tell ocPortal how to map these individual source locations, into zone accesses.
-Let's pretend we've added a new subdomain 'forum.mydomain.com' ([i]for the forum zone[/i]), and a new virtual directory under our normal website entry, under 'example/path'; we'll point this to the 'xyz' (i.e. we'll map to a zone unrelated to the subdomain name or virtual directory path). You would add this to [tt]info.php[/tt]
+c) ocPortal is now set up to receive requests on the various domain names / paths that you have configured. Extra information needs adding to the ocPortal [tt]_config.php[/tt], to tell ocPortal how to map these individual source locations, into zone accesses.
+Let's pretend we've added a new subdomain 'forum.mydomain.com' ([i]for the forum zone[/i]), and a new virtual directory under our normal website entry, under 'example/path'; we'll point this to the 'xyz' (i.e. we'll map to a zone unrelated to the subdomain name or virtual directory path). You would add this to [tt]_config.php[/tt]
 Please note it is essential to configure your cookie domain to be encompassing of all the subdomains you use. In the above example you would need [tt].mydomain.com[/tt] to be set as the cookie domain. You cannot use a blank cookie domain.
 
 [code]
@@ -264,7 +264,7 @@ Please note it is essential to configure your cookie domain to be encompassing o
 ocPortal has some residual support for running many websites of a single install, although not officially supported. We informally refer to this functionality as 'MyOCP', named after our non-extinct ocPortal-based web hosting service.
 If run like this, certain functions of ocPortal, such as email settings, or addon management, are disabled.
 
-The support is activated by setting options in the [tt]info.php[/tt], like:
+The support is activated by setting options in the [tt]_config.php[/tt], like:
 [codebox]
 $SITE_INFO['throttle_space_complementary']=100; // Allow 100MB of disk space per user
 $SITE_INFO['throttle_space_views_per_meg']=10; // Every MB of disk space must be accessed 10 times to justify it

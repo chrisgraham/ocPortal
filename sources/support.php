@@ -2076,7 +2076,7 @@ function best_hash($to_hash,$salt)
 function check_master_password($password_given)
 {
 	global $SITE_INFO;
-	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in info.php currently so cannot authenticate');
+	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
 	$actual_password_hashed=$SITE_INFO['admin_password'];
 	$salt='';
 	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))

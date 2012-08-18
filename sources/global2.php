@@ -1582,7 +1582,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 		$globals_custom=str_replace('default/templates/JAVASCRIPT.tpl',filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme()).'/templates_custom/JAVASCRIPT_CUSTOM_GLOBALS.tpl',$fullpath);
 	}
 
-	if ((($support_smart_decaching) && ((@(filemtime($js_cache_path)<filemtime($fullpath)) && (@filemtime($fullpath)<time())) || (@filemtime(get_file_base().'/info.php')>@filemtime($js_cache_path)) || ((is_file($globals_custom)) && (@filemtime($globals_custom)>@filemtime($js_cache_path))))) || (!$is_cached))
+	if ((($support_smart_decaching) && ((@(filemtime($js_cache_path)<filemtime($fullpath)) && (@filemtime($fullpath)<time())) || (@filemtime(get_file_base().'/_config.php')>@filemtime($js_cache_path)) || ((is_file($globals_custom)) && (@filemtime($globals_custom)>@filemtime($js_cache_path))))) || (!$is_cached))
 	{
 		require_code('css_and_js');
 		js_compile($j,$js_cache_path,$minify);

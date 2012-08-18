@@ -548,7 +548,7 @@ class Module_calendar
 		}
 
 		// Nofollow stuff
-		$previous_no_follow=($previous_timestamp<filectime(get_file_base().'/info.php'));
+		$previous_no_follow=($previous_timestamp<filectime(get_file_base().'/_config.php'));
 		$next_no_follow=($next_timestamp>time());
 
 		$map=array_merge($filter,array('page'=>'_SELF','view'=>$view,'id'=>$previous));

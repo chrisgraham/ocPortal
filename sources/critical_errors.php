@@ -73,7 +73,7 @@ if (!function_exists('critical_error'))
 				$error='This website was prompted to download a file ('.htmlentities($relay).') which seemingly has a never-ending chain of redirections. Because this could be a denial of service attack, execution has been terminated.';
 				break;
 			case 'DATABASE_FAIL':
-				$error='The website\'s first database query (checking the page request is not from a banned IP address) has failed. This almost always means that the database is not set up correctly, which in turns means that either backend database configuration has changed (perhaps the database has been emptied), or the configuration file (info.php) has been incorrectly altered (perhaps to point to an empty database), or you have moved servers and not updated your info.php settings properly or placed your database. It could also mean that the <kbd>'.get_table_prefix().'usersubmitban_ip</kbd> table or <kbd>'.get_table_prefix().'config</kbd> table alone is missing or corrupt, but this is unlikely. As this is an error due to the website\'s environment being externally altered by unknown means, the website cannot continue to function or solve the problem itself.';
+				$error='The website\'s first database query (checking the page request is not from a banned IP address) has failed. This almost always means that the database is not set up correctly, which in turns means that either backend database configuration has changed (perhaps the database has been emptied), or the configuration file (_config.php) has been incorrectly altered (perhaps to point to an empty database), or you have moved servers and not updated your _config.php settings properly or placed your database. It could also mean that the <kbd>'.get_table_prefix().'usersubmitban_ip</kbd> table or <kbd>'.get_table_prefix().'config</kbd> table alone is missing or corrupt, but this is unlikely. As this is an error due to the website\'s environment being externally altered by unknown means, the website cannot continue to function or solve the problem itself.';
 				break;
 			case 'INFO.PHP':
 				$install_url='install.php';
@@ -83,12 +83,12 @@ if (!function_exists('critical_error'))
 					$likely='ocPortal files have been placed, yet installation not completed. To install ocPortal, <a href="'.$install_url.'">run the installer</a>.';
 				} else
 				{
-					$likely='ocPortal files have been placed by direct copying from a non-standard source that included neither a configuration file nor installation script, or info.php has become corrupt after installation. The installer (install.php) is not present: it is advised that you replace info.php from backup, or if you have not yet installed, use an official ocProducts installation package.';
+					$likely='ocPortal files have been placed by direct copying from a non-standard source that included neither a configuration file nor installation script, or _config.php has become corrupt after installation. The installer (install.php) is not present: it is advised that you replace _config.php from backup, or if you have not yet installed, use an official ocProducts installation package.';
 				}
-				$error='The top-level configuration file (info.php) is either not-present or empty. This file is created upon installation, and the likely cause of this error is that '.$likely;
+				$error='The top-level configuration file (_config.php) is either not-present or empty. This file is created upon installation, and the likely cause of this error is that '.$likely;
 				break;
 			case 'INFO.PHP_CORRUPTED':
-				$error='The top-level configuration file (info.php) appears to be corrupt. Perhaps it was incorrectly uploaded, or a typo was made. It must be valid PHP code.';
+				$error='The top-level configuration file (_config.php) appears to be corrupt. Perhaps it was incorrectly uploaded, or a typo was made. It must be valid PHP code.';
 				break;
 			case 'CRIT_LANG':
 				$error='The most basic critical error language file (lang/'.fallback_lang().'/critical_error.ini) is missing. It is likely that other files are also, for whatever reason, missing from this ocPortal installation.';
@@ -185,7 +185,7 @@ END;
 		}
 		flush();
 		echo $extra,chr(10);
-		echo '<p>Details here are intended only for the website/system-administrator, not for regular website users.<br />&raquo; <strong>If you are a regular website user, please let the website staff deal with this problem.</strong></p>'.chr(10).'<p class="associated_details">Depending on the error, and only if the website installation finished, you may need to <a href="#" onclick="if (!window.confirm(\'Are you staff on this site?\')) return false; this.href=\''.htmlentities($edit_url).'\';">edit the installation options</a> (the <kbd>info.php</kbd> file).</p>'.chr(10).'<p class="associated_details">ocProducts maintains full documentation for all procedures and tools. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p>'.chr(10).'<hr />'.chr(10).'<p style="font-size: 0.8em"><a href="http://ocportal.com/">ocPortal</a> is a <abbr title="Content Management System">CMS</abbr> for building websites, developed by ocProducts.</p>'.chr(10);
+		echo '<p>Details here are intended only for the website/system-administrator, not for regular website users.<br />&raquo; <strong>If you are a regular website user, please let the website staff deal with this problem.</strong></p>'.chr(10).'<p class="associated_details">Depending on the error, and only if the website installation finished, you may need to <a href="#" onclick="if (!window.confirm(\'Are you staff on this site?\')) return false; this.href=\''.htmlentities($edit_url).'\';">edit the installation options</a> (the <kbd>_config.php</kbd> file).</p>'.chr(10).'<p class="associated_details">ocProducts maintains full documentation for all procedures and tools. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p>'.chr(10).'<hr />'.chr(10).'<p style="font-size: 0.8em"><a href="http://ocportal.com/">ocPortal</a> is a <abbr title="Content Management System">CMS</abbr> for building websites, developed by ocProducts.</p>'.chr(10);
 		echo '</div></body>'.chr(10).'</html>';
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 		if ($exit) exit();

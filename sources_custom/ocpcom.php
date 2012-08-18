@@ -318,13 +318,13 @@ function find_all_servers()
 }
 
 /**
- * Cause the info.php file to be rebuilt.
+ * Cause the _config.php file to be rebuilt.
  *
  * @param  ID_TEXT	The server.
  */
 function reset_info_php($server)
 {
-	$path=special_myocp_dir().'/servers/'.filter_naughty($server).'/info.php';
+	$path=special_myocp_dir().'/servers/'.filter_naughty($server).'/_config.php';
 	$myfile=fopen($path,'wt');
 	$contents="<"."?php
 global \$SITE_INFO;

@@ -27,7 +27,7 @@
        the package
   -->
 
-  <alias from="ocportal/info.php.template" to="ocportal/info.php" />
+  <alias from="ocportal/_config.php.template" to="ocportal/_config.php" />
 
   <!-- setAcl is used to set access permissions on a file or a folder.
        The path specifies the object to apply the ACL to.  The setAclAccess
@@ -101,6 +101,6 @@
   <setAcl path="ocportal/site/pages/comcode_custom/EN" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/adminzone/pages/comcode_custom/EN" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
   <setAcl path="ocportal/collaboration/pages/comcode_custom/EN" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
-  <setAcl path="ocportal/info.php" setAclResourceType="File" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
+  <setAcl path="ocportal/_config.php" setAclResourceType="File" setAclAccess="Modify" setAclUser="anonymousAuthenticationUser" />
 
 </MSDeploy.iisApp>

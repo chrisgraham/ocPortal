@@ -73,7 +73,7 @@ if (substr(phpversion(),0,3)=='4.0') die(do_lang('PHP_OLD'));
 if (ini_get('file_uploads')==0) die(do_lang('NO_UPLOAD'));
 
 // Tunnel into some ocPortal code we can use
-include('info.php');
+include('_config.php');
 require_code('critical_errors');
 require_code('permissions');
 require_code('minikernel');

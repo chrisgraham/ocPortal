@@ -255,10 +255,10 @@ function upgrade_script()
 					foreach ($directory as $offset=>$upgrade_file)
 					{
 						// skip over these, from manually installer package (which may be used for an upgrade)
-						if ($upgrade_file['path']=='info.php') continue;
+						if ($upgrade_file['path']=='_config.php') continue;
 						if ($upgrade_file['path']=='install.php') continue;
 						if ($upgrade_file['path']=='install.sql') continue;
-						if ($upgrade_file['path']=='info.php.template') continue;
+						if ($upgrade_file['path']=='_config.php.template') continue;
 
 						if (!$popup_simple_extract)
 						{
@@ -1348,7 +1348,7 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 
 			if ($is_dir)
 			{
-				if (!file_exists($dir.$file.'/info.php'))
+				if (!file_exists($dir.$file.'/_config.php'))
 				{
 					if (($rela=='') && (!file_exists($dir.$file.'/pages'))) // Scan to make sure it's not some other system placed under the webroot
 					{

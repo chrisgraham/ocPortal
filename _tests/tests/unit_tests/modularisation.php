@@ -82,7 +82,7 @@ class modularisation_test_set extends ocp_test_case
 							if (($m_count!=0) && ($matches[1]!=$section_name))
 							{
 								$this->assertTrue(false,'@package wrong for <a href="txmt://open?url=file://'.htmlentities(get_file_base().'/'.$file).'">'.htmlentities($path).'</a> (should be '.$section_name.')');
-							} elseif (($m_count==0) && ($file!='info.php') && ($file!='data_custom/errorlog.php'))
+							} elseif (($m_count==0) && ($file!='_config.php') && ($file!='data_custom/errorlog.php'))
 							{
 								$this->assertTrue(false,'No @package for <a href="txmt://open?url=file://'.htmlentities(get_file_base().'/'.$file).'">'.htmlentities($path).'</a> (should be '.$section_name.')');
 							}

@@ -55,7 +55,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 	{
 		if (!function_exists('dbx_connect'))
 		{
-			$error='dbx not on server (anymore?). Try using the \'mysql\' database driver. To use it, edit the info.php config file.';
+			$error='dbx not on server (anymore?). Try using the \'mysql\' database driver. To use it, edit the _config.php config file.';
 			if ($fail_ok)
 			{
 				echo $error;

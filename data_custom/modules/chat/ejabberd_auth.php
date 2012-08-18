@@ -28,7 +28,7 @@ Altered for ocPortal by ocProducts
 error_reporting(0);
 $auth=new JabberAuth();
 chdir(dirname(__FILE__));
-require('../../../info.php');
+require('../../../_config.php');
 $auth->dbhost=isset($SITE_INFO['db_site_host'])?$SITE_INFO['db_site_host']:'localhost';
 $auth->dbuser=$SITE_INFO['db_site_user'];
 $auth->dbpass=$SITE_INFO['db_site_password'];

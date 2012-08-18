@@ -125,9 +125,9 @@ If you use vBulletin 3.5 or earlier put:
 [code]
 $SITE_INFO[vb_version]=3.5;
 [/code]
-into [tt]info.php[/tt].
+into [tt]_config.php[/tt].
 
-(this flipped around in ocPortal 4 -- previously you had to change info.php for 3.6 to work)
+(this flipped around in ocPortal 4 -- previously you had to change _config.php for 3.6 to work)
 
 [title="3"]phpBB2[/title]
 
@@ -145,7 +145,7 @@ If you use IPB stronghold cookies (version 2.2 and later) put:
 [code]
 $SITE_INFO['stronghold_cookies']=1;
 [/code]
-into [tt]info.php[/tt].
+into [tt]_config.php[/tt].
 
 ocPortal doesn't support IPB permission masks. This is because IPB permission masks are used to define which forums a member may moderate, not a user's overall user-level. ocPortal uses usergroups to control access.
 

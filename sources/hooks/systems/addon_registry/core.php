@@ -358,7 +358,7 @@ class Hook_addon_registry_core
 			'safe_mode_temp/index.html',
 			'config_editor.php',
 			'index.php',
-			'info.php',
+			'_config.php',
 			'uploads/auto_thumbs/index.html',
 			'uploads/auto_thumbs/.htaccess',
 			'exports/file_backups/.htaccess',

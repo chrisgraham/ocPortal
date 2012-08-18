@@ -229,8 +229,8 @@ function make_installers($skip_file_grab=false)
 		// Copy some files we need
 		copy(get_file_base().'/install.sql',$builds_path.'/builds/build/'.$version_branch.'/install.sql');
 		fix_permissions($builds_path.'/builds/build/'.$version_branch.'/install.sql');
-		copy(get_file_base().'/info.php.template',$builds_path.'/builds/build/'.$version_branch.'/info.php.template');
-		fix_permissions($builds_path.'/builds/build/'.$version_branch.'/info.php.template');
+		copy(get_file_base().'/_config.php.template',$builds_path.'/builds/build/'.$version_branch.'/_config.php.template');
+		fix_permissions($builds_path.'/builds/build/'.$version_branch.'/_config.php.template');
 
 		// Do the main work
 		chdir($builds_path.'/builds/build/'.$version_branch);
@@ -248,7 +248,7 @@ function make_installers($skip_file_grab=false)
 
 		// Remove those files we copied
 		unlink($builds_path.'/builds/build/'.$version_branch.'/install.sql');
-		unlink($builds_path.'/builds/build/'.$version_branch.'/info.php.template');
+		unlink($builds_path.'/builds/build/'.$version_branch.'/_config.php.template');
 
 		chdir(get_file_base());
 	}
@@ -637,12 +637,12 @@ function make_installers($skip_file_grab=false)
 		if (file_exists($builds_path.'/builds/build/ocportal/')) deldir_contents($builds_path.'/builds/build/ocportal/');
 
 		// Move files out temporarily
-		rename($builds_path.'/builds/build/'.$version_branch.'/info.php',$builds_path.'/builds/build/info.php');
+		rename($builds_path.'/builds/build/'.$version_branch.'/_config.php',$builds_path.'/builds/build/_config.php');
 		rename($builds_path.'/builds/build/'.$version_branch.'/install.php',$builds_path.'/builds/build/install.php');
 
 		// Put temporary files in main folder
-		copy(get_file_base().'/info.php.template',$builds_path.'/builds/build/'.$version_branch.'/info.php.template');
-		fix_permissions($builds_path.'/builds/build/'.$version_branch.'/info.php.template');
+		copy(get_file_base().'/_config.php.template',$builds_path.'/builds/build/'.$version_branch.'/_config.php.template');
+		fix_permissions($builds_path.'/builds/build/'.$version_branch.'/_config.php.template');
 
 		// Copy some stuff we need
 		for ($i=1;$i<=4;$i++)
@@ -672,11 +672,11 @@ function make_installers($skip_file_grab=false)
 		rename($builds_path.'/builds/build/ocportal',$builds_path.'/builds/build/'.$version_branch);
 
 		// Move back files moved out temporarily
-		rename($builds_path.'/builds/build/info.php',$builds_path.'/builds/build/'.$version_branch.'/info.php');
+		rename($builds_path.'/builds/build/_config.php',$builds_path.'/builds/build/'.$version_branch.'/_config.php');
 		rename($builds_path.'/builds/build/install.php',$builds_path.'/builds/build/'.$version_branch.'/install.php');
 
 		// Remove temporary files from main folder
-		unlink($builds_path.'/builds/build/'.$version_branch.'/info.php.template');
+		unlink($builds_path.'/builds/build/'.$version_branch.'/_config.php.template');
 
 		chdir(get_file_base());
 	}
@@ -793,7 +793,7 @@ function populate_build_files_array($dir='',$pretend_dir='')
 	// Imply files into the root that we would have skipped
 	if ($pretend_dir=='')
 	{
-		$MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.'info.php']='';
+		$MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.'_config.php']='';
 	}
 
 	// Go over files in the directory
@@ -825,7 +825,7 @@ function populate_build_files_array($dir='',$pretend_dir='')
 		else
 		{
 			// Reset volatile files to how they should be by default (see also list in install.php)
-			if (($pretend_dir.$file)=='info.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
+			if (($pretend_dir.$file)=='_config.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
 			elseif (($pretend_dir.$file)=='themes/map.ini') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='default=default'.chr(10);
 			elseif ($pretend_dir.$file=='data_custom/functions.dat') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/download_tree_made.htm') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';

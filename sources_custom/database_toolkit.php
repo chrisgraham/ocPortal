@@ -21,7 +21,7 @@ function xml_dump_script()
 		$chain_db=new database_driver($SITE_INFO['db_chain'],$SITE_INFO['db_chain_host'],$SITE_INFO['db_chain_user'],$SITE_INFO['db_chain_password'],get_table_prefix(),false,object_factory('Database_Static_'.$SITE_INFO['db_chain_type']));
 	} else
 	{
-		warn_exit('It makes no sense to run this script if you have not set up the following config options in info.php: db_chain_type, db_chain_host, db_chain_user, db_chain_password, db_chain');
+		warn_exit('It makes no sense to run this script if you have not set up the following config options in _config.php: db_chain_type, db_chain_host, db_chain_user, db_chain_password, db_chain');
 	}
 	$chain_connection=&$chain_db->connection_write;
 	if (count($chain_connection)>4) // Okay, we can't be lazy anymore

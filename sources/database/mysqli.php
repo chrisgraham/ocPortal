@@ -57,7 +57,7 @@ class Database_Static_mysqli extends Database_super_mysql
 
 		if (!function_exists('mysqli_connect'))
 		{
-			$error='mySQLi not on server (anymore?). Try using the \'mysql\' database driver. To use it, edit the info.php config file.';
+			$error='mySQLi not on server (anymore?). Try using the \'mysql\' database driver. To use it, edit the _config.php config file.';
 			if ($fail_ok)
 			{
 				echo $error;

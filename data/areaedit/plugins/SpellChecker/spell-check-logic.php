@@ -239,7 +239,7 @@ function aspell_init()
 	// Personal dictionaries
 	global $SITE_INFO;
 	if (!isset($SITE_INFO))
-		require_once('../../../../info.php');
+		require_once('../../../../_config.php');
 	$cookie_member_id=$SITE_INFO['user_cookie'];
 	$p_dicts_name=(array_key_exists($cookie_member_id,$_COOKIE))?_filter_naughty_harsh($_COOKIE[$cookie_member_id]):'guest';
 	$p_dict_path=get_custom_file_base().'/data_custom/spelling/personal_dicts'.DIRECTORY_SEPARATOR.$p_dicts_name;

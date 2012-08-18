@@ -32,7 +32,7 @@ At the time of writing, the following types of alert are defined:
  - [b]SCRIPT_TAG_HACK[/b], The user tried to introduce a script tag. This would be likely to be a hack attempt if it wasn't for the fact that by default, ordinary members cannot submit any HTML at all; it is therefore likely that a privileged user has out-stepped the norm, or a privileged member is not to be trusted
  - [b]SCRIPT_URL_HACK[/b], This is highly likely to be a hack attempt, as a user explicitly specified a URL which was code and not a real URL
  - [b]LAME_SPAM_HACK[/b], This is a blocked spam attempt, where a Guest user posted with the terms [tt][link[/tt] and [tt]<a [/tt] within a single post, almost certainly a common kind of "try everything" attempt to get spam links posted (ocPortal does not even support a 'link' bbcode tag)
- - [b]TRY_TO_DOWNLOAD_SCRIPT[/b], The user tried to add a download with a manual URL that links to private files that are not meant to be downloadable. This may be an honest mistake -- but if it is info.php, then it is very likely to be a hack attempt
+ - [b]TRY_TO_DOWNLOAD_SCRIPT[/b], The user tried to add a download with a manual URL that links to private files that are not meant to be downloadable. This may be an honest mistake -- but if it is _config.php, then it is very likely to be a hack attempt
  - [b]TICKET_OTHERS_HACK[/b], The user tried to access support tickets from another user. This is either a bug (we know of no way it would happen normally), or a hack attempt
  - [b]TICKET_SYSTEM_WEIRD[/b], The user tried to access a support ticket with an non-standard name. This is either a bug, or a hack attempt; if it is a hack attempt, it is probably not one that would get anywhere even if it was not blocked
  - [b]ORDERBY_HACK[/b], Tried to change the SQL ordering attribute, perhaps for SQL injection
@@ -165,15 +165,15 @@ The main issue with shared hosting, is that, unless either:
 [/list]
 then every web-server-created/writeable file, and your database, is fully writeable to by any other account holder.
 
-If you are fortunate enough to be in situation 2, but not fortunate enough to be in situation 1 (fortunate, depending on your needs of course), then ocPortal needs special configuration to make use of it. You need to make it so that no files are 'world writeable' (which is the case unless you have suddenly switched to this environment) and so that info.php is not world writeable or world readable (to protect your database password). ocPortal is clever enough to detect your situation, and hence will not [concept]chmod[/concept] any PHP-created-files to a world-writeable state as it normal does (it normally does this so that both the account holder user and the web server user have write access to this file- and making them world writeable is the only way to achieve this in a hosting environment).
+If you are fortunate enough to be in situation 2, but not fortunate enough to be in situation 1 (fortunate, depending on your needs of course), then ocPortal needs special configuration to make use of it. You need to make it so that no files are 'world writeable' (which is the case unless you have suddenly switched to this environment) and so that _config.php is not world writeable or world readable (to protect your database password). ocPortal is clever enough to detect your situation, and hence will not [concept]chmod[/concept] any PHP-created-files to a world-writeable state as it normal does (it normally does this so that both the account holder user and the web server user have write access to this file- and making them world writeable is the only way to achieve this in a hosting environment).
 
-[title="2"]info.php[/title]
+[title="2"]_config.php[/title]
 
-By default, [tt]info.php[/tt] is left 'world-writeable' by the installer. This allows the configuration editor to work with it, and allowed the file to be initially filled, but does represent a potential security risk on a shared server.
+By default, [tt]_config.php[/tt] is left 'world-writeable' by the installer. This allows the configuration editor to work with it, and allowed the file to be initially filled, but does represent a potential security risk on a shared server.
 
 Whilst many files are world writeable, this file is a particular target, because it may be executed. Therefore if someone on a shared server can write to the file, perhaps via shell access, then they can execute code on your site, possibly unnoticed. It is worth noting that if they had shell access, they could trash your database and uploads anyway, but not so easily execute code on your domain.
 
-To solve this problem, simply remove execute permission for the info.php file.
+To solve this problem, simply remove execute permission for the _config.php file.
 
 It may seem an obvious solution, to not use an executable file to store configuration information. However this file contains critical data, and therefore if it was a file that would be downloaded if accessed instead of executed, this critical data would be exposed; the usual advice is to put the file outside of a downloadable location, or to restrict download, but this is tenuous due to differing web environments ocPortal must on: in trying to increase security, there would be a big likelihood we could incidentally decrease it.
 
@@ -183,12 +183,12 @@ For added security you can remove the:
 [code]
 $SITE_INFO['admin_password']='...';
 [/code]
-line from [tt]info.php[/tt].
+line from [tt]_config.php[/tt].
 
 It is best to remove it completely, not comment it out. This prevents master password based logins to tools such as the code editor and upgrader.
 
 It means:
-1) If someone found a vulnerability that allowed them to read the hashed master password out of [tt]info.php[/tt], they could not use ocPortal-specific rainbow tables to get the original password and therefore login.
+1) If someone found a vulnerability that allowed them to read the hashed master password out of [tt]_config.php[/tt], they could not use ocPortal-specific rainbow tables to get the original password and therefore login.
 2) Bruce force login attempts cannot work.
 
 [title="2"]Denial Of Service prevention[/title]

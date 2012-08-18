@@ -51,7 +51,7 @@ rm install.php -f
 
 Many web hosting control panels allow you to unzip uploaded files, using their file manager. You can do this on the manual installer archive.
 
-You can avoid setting permissions on all files except [tt]info.php[/tt] by using the [tt]upgrader.php[/tt] script after installing, to do a 'fix permissions'. This only works if you have FTP working though, and if you did, you probably would have used the quick installer anyway -- so it might not be an option for you. If you have shell access you can try [tt]fixperms.sh[/tt] (see above), but otherwise you'll need to manually set permissions.
+You can avoid setting permissions on all files except [tt]_config.php[/tt] by using the [tt]upgrader.php[/tt] script after installing, to do a 'fix permissions'. This only works if you have FTP working though, and if you did, you probably would have used the quick installer anyway -- so it might not be an option for you. If you have shell access you can try [tt]fixperms.sh[/tt] (see above), but otherwise you'll need to manually set permissions.
 
 [title="2"]Installing on Windows (IIS)[/title]
 
@@ -75,7 +75,7 @@ Due to these problems, we would have to recommend that if you have a choice, tha
 
 It has been reported to us that some systems require PHP scripts to be given execute permissions. This is a very rare (and insecure) configuration, but if there is this requirement, the following files need to be given execute permission...
  - Any index.php file
- - All PHP files in the root directory, except info.php
+ - All PHP files in the root directory, except _config.php
  - All PHP files in the data directory
  - data/areaedit/ddt/ddt.php
  - data/areaedit/plugins/SpellChecker/backend.php

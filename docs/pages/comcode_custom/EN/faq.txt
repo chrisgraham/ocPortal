@@ -210,7 +210,7 @@ There is no way to do this. Skins/themes define the visual appearance of applica
 
 [b]Can I switch to OCF from my existing forum?[/b]
 This is only supported if there is an available importer to perform this. Currently this is only the case for IPB and vBulletin.
-It may seem possible to perform this action by editing the info.php file, but this is highly ill-advised because it will result in misassociated members and usergroups.
+It may seem possible to perform this action by editing the _config.php file, but this is highly ill-advised because it will result in misassociated members and usergroups.
 
 [b]Can I switch from OCF to another forum?[/b]
 This is not supported.

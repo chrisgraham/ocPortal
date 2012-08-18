@@ -175,7 +175,7 @@ You may need to add something like:
 [code]
 $SITE_INFO['database_charset']='utf8';
 [/code]
-to your [tt]info.php[/tt] file if you set a MySQL character set different to the server default (substitute 'utf8' for the actual character set you're using).
+to your [tt]_config.php[/tt] file if you set a MySQL character set different to the server default (substitute 'utf8' for the actual character set you're using).
 After doing this you may need to clear the cache from inside the [tt]upgrader.php[/tt] script, as ocPortal's cache data will no longer be read out in the same way it had been written in.
 
 The normal Western European collation (used by English) is 'latin1_swedish_ci'. If anybody wonders why 'Swedish' is used for 'English', it is because English does not use accented characters and hence was considered a subset of Swedish, which does.

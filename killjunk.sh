@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf _tests install.php install.sql install_ok info.php.template
+rm -rf _tests install.php install.sql install_ok _config.php.template
 
 exec<data_custom/addon_files.txt
 while read line

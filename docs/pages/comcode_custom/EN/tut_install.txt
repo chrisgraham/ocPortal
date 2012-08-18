@@ -53,7 +53,7 @@ When you successfully connect, find your webroot, and navigate into a subfolder 
 Regardless whether or not you chose to make a new subfolder, you need to put these files in the same folder. This can usually be done by dragging and dropping the files from your computer to your web host in your FTP client [[exp_ref]install_upload_ftp[/exp_ref]]. If your FTP client presents a choice of whether to upload in 'Binary' or 'ASCII'/'Text' mode, choose 'Binary' mode.
 
 [title="2"]Permissions[/title]
-[box="Tip" width="25em" float="right"]Note for Linux-server users: If you are on a suexec-system (where the PHP script is run as your own user), the default 744 and 644 permissions should be suitable (with info.php being 600 for additional security). The installer will tell you if you are on a suexec-system, otherwise assume you are not and you still will need to set the permissions.[/box]
+[box="Tip" width="25em" float="right"]Note for Linux-server users: If you are on a suexec-system (where the PHP script is run as your own user), the default 744 and 644 permissions should be suitable (with _config.php being 600 for additional security). The installer will tell you if you are on a suexec-system, otherwise assume you are not and you still will need to set the permissions.[/box]
 [box="Tip" width="25em" float="right"]Note for Windows-server users: Permission setting can be complex and is discussed in depth in the [page="tut_adv_installation"]advanced installation[/page] tutorial. You may be able to avoid setting any permissions at all though.[/box]
 If you chose the manual installer, you now need to set the appropriate permissions for your files and folders (read on). You usually do not need to set any permissions if you chose the quick installer.
 
@@ -148,7 +148,7 @@ Set the following to [b]666[/b]: (full read/write permissions)
  - data_custom/modules/chat/chat_last_msg.dat
  - data_custom/modules/chat/chat_last_event.dat
  - data_custom/permissioncheckslog.php (if it exists)
- - info.php
+ - _config.php
  - ocp_sitemap.xml
 
 Remember -- if you chose the quick install option, it's likely that none of these permission settings are required.

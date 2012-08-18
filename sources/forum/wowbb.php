@@ -115,7 +115,7 @@ class forum_driver_wowbb extends forum_driver_base
 	/**
 	 * Get an array of attributes to take in from the installer. Almost all forums require a table prefix, which the requirement there-of is defined through this function.
 	 * The attributes have 4 values in an array
-	 * - name, the name of the attribute for info.php
+	 * - name, the name of the attribute for _config.php
 	 * - default, the default value (perhaps obtained through autodetection from forum config)
 	 * - description, a textual description of the attributes
 	 * - title, a textual title of the attribute

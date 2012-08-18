@@ -158,10 +158,10 @@ class Module_admin_ocpusers
 			$rt['KEY_EXPIRE']=strval(round((time()-$r['expire'])/60/60/24));
 			if ($i<100)
 			{
-				$active=get_long_value_newer_than('testing__'.$r['website_url'].'/info.php',time()-60*60*10);
+				$active=get_long_value_newer_than('testing__'.$r['website_url'].'/_config.php',time()-60*60*10);
 				if (is_null($active))
 				{
-					$test=http_download_file($r['website_url'].'/info.php',10,false,false,'Simple install stats',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,2.0);
+					$test=http_download_file($r['website_url'].'/_config.php',10,false,false,'Simple install stats',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,2.0);
 					if (!is_null($test))
 					{
 						$active=do_lang('YES');
@@ -173,7 +173,7 @@ class Module_admin_ocpusers
 						else
 							$active.=do_lang('OC_WHEN_CHECKING');
 					}
-					set_long_value('testing__'.$r['website_url'].'/info.php',$active);
+					set_long_value('testing__'.$r['website_url'].'/_config.php',$active);
 				}
 				$rt['OCP_ACTIVE']=$active;
 			} else

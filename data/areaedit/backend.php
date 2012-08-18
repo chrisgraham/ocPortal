@@ -52,7 +52,7 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 @chdir($FILE_BASE);
 
 define("AREAEDIT_INSTALL_ROOT",$FILE_BASE.'/data/areaedit');
-require($FILE_BASE.'/info.php');
+require($FILE_BASE.'/_config.php');
 global $SITE_INFO;
 define("AREAEDIT_BACKEND_URL",AREAEDIT_INSTALL_ROOT."/backend.php" );
 require_once(AREAEDIT_INSTALL_ROOT."/ddt/ddt.php" );

@@ -160,21 +160,21 @@ class Hook_ocp_merge
 		}
 
 		// Check actually is ocPortal file path (ERROR)
-		if ((!file_exists($file_base.'/info.php')) || (!file_exists($file_base.'/sources_custom')))
+		if ((!file_exists($file_base.'/_config.php')) || (!file_exists($file_base.'/sources_custom')))
 		{
 			attach_message(do_lang_tempcode('ERROR_NOT_CORRECT_FILES'),'warn');
-			if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (!file_exists($file_base.'/info.php')))
+			if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (!file_exists($file_base.'/_config.php')))
 				attach_message(do_lang_tempcode('ERROR_NOT_CORRECT_LINKING_POSSIBLY'),'warn');
 			$bad=true;
 		}
 
 		// Check is on same MSN or is OCF (WARNING)
-		if (file_exists($file_base.'/info.php'))
+		if (file_exists($file_base.'/_config.php'))
 		{
 			global $SITE_INFO;
 			$backup_site_info=$SITE_INFO;
 			$SITE_INFO=NULL;
-			@include($file_base.'/info.php');
+			@include($file_base.'/_config.php');
 			if (is_null($SITE_INFO))
 			{
 				$SITE_INFO=$backup_site_info;
@@ -220,7 +220,7 @@ class Hook_ocp_merge
 		global $SITE_INFO;
 		$backup_site_info=$SITE_INFO;
 		$SITE_INFO=mixed();
-		@include($file_base.'/info.php');
+		@include($file_base.'/_config.php');
 		$sites_site_info=$SITE_INFO;
 		$SITE_INFO=$backup_site_info;
 

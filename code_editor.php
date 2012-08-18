@@ -80,7 +80,7 @@ if (!function_exists('file_get_contents'))
 
 /*if (file_exists($FILE_BASE.'/use_comp_name'))
 	require_once($FILE_BASE.'/'.(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']).'.php');
-else */require_once($FILE_BASE.'/info.php');
+else */require_once($FILE_BASE.'/_config.php');
 
 if ((array_key_exists('given_password',$_POST)))
 {
@@ -376,9 +376,9 @@ function open_up_ftp_connection()
 	if ($files===false) // :(. Weird bug on some systems
 	{
 		$files=array();
-		if (@ftp_rename($conn,'info.php','info.php')) $files=array('info.php');
+		if (@ftp_rename($conn,'_config.php','_config.php')) $files=array('_config.php');
 	}
-	if (!in_array('info.php',$files))
+	if (!in_array('_config.php',$files))
 	{
 		return 'This does not appear to be the correct FTP directory.';
 	}
@@ -694,7 +694,7 @@ function ce_sync_file_move($old,$new)
 function ce_check_master_password($password_given)
 {
 	global $SITE_INFO;
-	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in info.php currently so cannot authenticate');
+	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
 	$actual_password_hashed=$SITE_INFO['admin_password'];
 	$salt='';
 	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))

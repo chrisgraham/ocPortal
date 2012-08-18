@@ -79,7 +79,7 @@ cacls adminzone\pages\comcode_custom\EN\* /e /g %user%:F
 cacls collaboration\pages\comcode_custom /e /g %user%:F
 cacls collaboration\pages\comcode_custom\* /e /g %user%:F
 cacls collaboration\pages\comcode_custom\EN\* /e /g %user%:F
-cacls info.php /e /g %user%:F
+cacls _config.php /e /g %user%:F
 cacls pages\html_custom /e /g %user%:F
 cacls pages\html_custom\* /e /g %user%:F
 cacls pages\html_custom\EN\* /e /g %user%:F
@@ -220,7 +220,7 @@ icacls adminzone\pages\comcode_custom\EN\* /grant %user%:(M)
 icacls collaboration\pages\comcode_custom /grant %user%:(M)
 icacls collaboration\pages\comcode_custom\* /grant %user%:(M)
 icacls collaboration\pages\comcode_custom\EN\* /grant %user%:(M)
-icacls info.php /grant %user%:(M)
+icacls _config.php /grant %user%:(M)
 icacls pages\html_custom /grant %user%:(M)
 icacls pages\html_custom\* /grant %user%:(M)
 icacls pages\html_custom\EN\* /grant %user%:(M)

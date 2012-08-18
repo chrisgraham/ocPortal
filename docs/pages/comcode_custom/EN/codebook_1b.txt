@@ -415,7 +415,7 @@ At the time of writing most forum drivers have corresponding importers to suppor
 
 There's not a lot to say about this, as there are so many existing forum drivers in ocPortal to look-at/refer-to and they all follow a pattern. The API is mature and simple.
 
-To make a new forum driver just copy an existing one and give it a new filename corresponding to the software being imported. To use the driver the [tt]info.php[/tt] file will need to reference the stub of the filename you chose in it's 'forum_type' option. You shouldn't switch forum drivers on a real ocPortal site because it breaks foreign key references in ocPortal tables (member ID's are group ID's) -- but you can do it when developing. It's probably best to install ocPortal using OCF, write your new forum driver and switch to it whilst you debug it -- then install again from scratch using your new forum driver from the offset.
+To make a new forum driver just copy an existing one and give it a new filename corresponding to the software being imported. To use the driver the [tt]_config.php[/tt] file will need to reference the stub of the filename you chose in it's 'forum_type' option. You shouldn't switch forum drivers on a real ocPortal site because it breaks foreign key references in ocPortal tables (member ID's are group ID's) -- but you can do it when developing. It's probably best to install ocPortal using OCF, write your new forum driver and switch to it whilst you debug it -- then install again from scratch using your new forum driver from the offset.
 
 [title="4"]Writing an importer[/title]
 

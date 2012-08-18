@@ -70,7 +70,7 @@ class Database_Static_mysql extends Database_super_mysql
 
 		if (!function_exists('mysql_connect'))
 		{
-			$error='The mySQL PHP extension not installed (anymore?). You need to contact the system administrator of this server, or use a different mySQL database driver (drivers can be chosen by editing info.php).';
+			$error='The mySQL PHP extension not installed (anymore?). You need to contact the system administrator of this server, or use a different mySQL database driver (drivers can be chosen by editing _config.php).';
 			if ($fail_ok)
 			{
 				echo $error.chr(10);

@@ -296,9 +296,9 @@ function _ftp_info($light_fail=false)
 		if ($files===false) // :(. Weird bug on some systems
 		{
 			$files=array();
-			if (@ftp_rename($conn,'info.php','info.php')) $files=array('info.php');
+			if (@ftp_rename($conn,'_config.php','_config.php')) $files=array('_config.php');
 		}
-		if (!in_array('info.php',$files))
+		if (!in_array('_config.php',$files))
 		{
 			set_value('ftp_password','');
 			if ($light_fail)

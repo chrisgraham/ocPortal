@@ -48,7 +48,7 @@ It is usually best to rely on PHP's SMTP-connection code, so it can be managed o
 1) PHP doesn't support SMTP authentication, so if the only e-mail server available requires this, you'll need to use ocPortal's SMTP-connection code (which does).
 2) If the PHP mail configuration is misconfigured or faulty and you can't repair it (see below).
 
-If you want to use PHP's SMTP-connection code but your PHP mail configuration [i]is[/i] misconfigured, sometimes you can repair it by putting some special code in the [tt]info.php[/tt] file.
+If you want to use PHP's SMTP-connection code but your PHP mail configuration [i]is[/i] misconfigured, sometimes you can repair it by putting some special code in the [tt]_config.php[/tt] file.
 For Windows (which connects to SMTP via opening a TCP/IP connection):
 [code]
 ini_set('SMTP','whatever.your.smtp.host.needs.to.be');

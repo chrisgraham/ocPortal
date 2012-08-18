@@ -296,7 +296,7 @@ function step_1()
 					if ($file=='site/pages/html_custom/EN/download_tree_made.htm') continue;
 					if ($file=='site/pages/html_custom/EN/cedi_tree_made.htm') continue;
 					if ($file=='data_custom/execute_temp.php') continue;
-					if ($file=='info.php') continue;
+					if ($file=='_config.php') continue;
 					if ($file=='themes/map.ini') continue;
 					if ($file=='sources/version.php') continue;
 					if ($file=='data_custom/functions.dat') continue;
@@ -459,7 +459,7 @@ END;
 		elseif (is_writable_wrap(get_file_base().'/install.php'))
 			$warnings->attach(do_template('INSTALLER_NOTICE',array('MESSAGE'=>do_lang_tempcode('RECURSIVE_SERVER'))));
 	}
-	if ((file_exists(get_file_base().'/info.php')) && (!is_writable_wrap(get_file_base().'/info.php')) && (!function_exists('posix_getuid')) && ((strpos(PHP_OS,'WIN')!==false)))
+	if ((file_exists(get_file_base().'/_config.php')) && (!is_writable_wrap(get_file_base().'/_config.php')) && (!function_exists('posix_getuid')) && ((strpos(PHP_OS,'WIN')!==false)))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('TROUBLESOME_WINDOWS_SERVER'))));
 
 	// Some sanity checks
@@ -597,9 +597,9 @@ function step_3()
 		$classes[$class][]=$forum;
 	}
 	global $DEFAULT_FORUM;
-	if ((file_exists(get_file_base().'/info.php')) && (filesize(get_file_base().'/info.php')!=0))
+	if ((file_exists(get_file_base().'/_config.php')) && (filesize(get_file_base().'/_config.php')!=0))
 	{
-		require_once(get_file_base().'/info.php');
+		require_once(get_file_base().'/_config.php');
 		global $SITE_INFO;
 		if (array_key_exists('forum_type',$SITE_INFO)) $DEFAULT_FORUM=$SITE_INFO['forum_type'];
 	}
@@ -783,11 +783,11 @@ function step_4()
 
 	$specifics=$GLOBALS['FORUM_DRIVER']->install_specifics();
 
-	// Now we've gone through all the work of detecting it, lets grab from info.php to see what we had last time we installed
+	// Now we've gone through all the work of detecting it, lets grab from _config.php to see what we had last time we installed
 	global $SITE_INFO;
-	if ((file_exists(get_file_base().'/info.php')) && (filesize(get_file_base().'/info.php')!=0))
+	if ((file_exists(get_file_base().'/_config.php')) && (filesize(get_file_base().'/_config.php')!=0))
 	{
-		require_once(get_file_base().'/info.php');
+		require_once(get_file_base().'/_config.php');
 		if ($INFO['sql_database']!='')
 		{
 			if ((!array_key_exists('forum_type',$SITE_INFO)) || ($SITE_INFO['forum_type']!=$forum_type)) // Don't want to throw detected versions of these away
@@ -1177,7 +1177,7 @@ function step_5_ftp()
 	{
 		$overwrite_ok=true;
 		$files=array();
-		if (file_exists(get_file_base().'/info.php')) $files[]='info.php';
+		if (file_exists(get_file_base().'/_config.php')) $files[]='_config.php';
 	}
 
 	// Make folders
@@ -1239,7 +1239,7 @@ function step_5_ftp()
 			list($file_size,$dump_myfile,$dump_offset)=$contents;
 		}
 
-		if (($filename!='info.php') || (!in_array('info.php',$files)))
+		if (($filename!='_config.php') || (!in_array('_config.php',$files)))
 		{
 			if (
 				(($overwrite_ok) || (!file_exists(get_file_base().'/'.$filename)) || (/*@ for possible race condition reported in #53910*/@filemtime(get_file_base().'/'.$filename)<filemtime(get_file_base().'/install.php')) || (filesize(get_file_base().'/'.$filename)!=$file_size))
@@ -1422,9 +1422,9 @@ function step_5_checks()
 
 	// Check permissions
 	global $CHMOD_ARRAY;
-	if (!file_exists(get_file_base().'/info.php'))
+	if (!file_exists(get_file_base().'/_config.php'))
 	{
-		$myfile=@fopen(get_file_base().'/info.php','wt');
+		$myfile=@fopen(get_file_base().'/_config.php','wt');
 		@fclose($myfile);
 	}
 	foreach ($CHMOD_ARRAY as $chmod)
@@ -1449,7 +1449,7 @@ function step_5_write_config()
 	$base_url=post_param('base_url');
 	if (substr($base_url,-1)=='/') $base_url=substr($base_url,0,strlen($base_url)-1);
 
-	// info.php
+	// _config.php
 	$info_file=((file_exists('use_comp_name'))?(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']):'info').'.php';
 	$info=fopen(get_file_base().'/'.$info_file,'wt');
 	fwrite($info,"<"."?php\nglobal \$SITE_INFO;\n");
@@ -1505,7 +1505,7 @@ function step_5_write_config()
 		ftp_chdir($conn,$ftp_folder);
 		if (!is_suexec_like())
 		{
-			@ftp_site($conn,'CHMOD 666 info.php'); // Can't be 644, because it might have been uploaded (thus not nobodies)
+			@ftp_site($conn,'CHMOD 666 _config.php'); // Can't be 644, because it might have been uploaded (thus not nobodies)
 		}
 		if (function_exists('ftp_close'))
 		{

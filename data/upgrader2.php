@@ -71,7 +71,7 @@ if (!function_exists('file_get_contents'))
 
 $hashed_password=$_GET['hashed_password'];
 global $SITE_INFO;
-require_once($FILE_BASE.'/info.php');
+require_once($FILE_BASE.'/_config.php');
 if (!upgrader2_check_master_password($hashed_password)) exit('Access Denied');
 
 // Open TAR file

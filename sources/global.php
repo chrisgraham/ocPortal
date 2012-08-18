@@ -47,7 +47,7 @@ if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 		$base_url='http://'.$domain.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',dirname($_SERVER['PHP_SELF']))));
 	} else
 	{
-		@include($FILE_BASE.'/info.php');
+		@include($FILE_BASE.'/_config.php');
 		if (array_key_exists('base_url',$SITE_INFO))
 		{
 			$base_url=$SITE_INFO['base_url'];
@@ -499,12 +499,12 @@ if (is_file($FILE_BASE.'/sources_custom/critical_errors.php'))
 	}
 }
 
-@include($FILE_BASE.'/info.php');
+@include($FILE_BASE.'/_config.php');
 
 global $SITE_INFO;
 if (!isset($SITE_INFO))
 {
-	if ((!is_file($FILE_BASE.'/info.php')) || (filesize($FILE_BASE.'/info.php')==0))
+	if ((!is_file($FILE_BASE.'/_config.php')) || (filesize($FILE_BASE.'/_config.php')==0))
 		critical_error('INFO.PHP');
 	critical_error('INFO.PHP_CORRUPTED');
 }

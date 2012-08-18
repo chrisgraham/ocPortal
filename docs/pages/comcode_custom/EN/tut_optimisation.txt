@@ -69,7 +69,7 @@ ocPortal does not cache processed content in memory that has no special featured
 
 [title="2"]Aggressive cacheing for bots[/title]
 
-If you want to serve cached pages to bots, put a line like this into your [tt]info.php[/tt] file:
+If you want to serve cached pages to bots, put a line like this into your [tt]_config.php[/tt] file:
 [code]
 $SITE_INFO['fast_spider_cache']=3;
 [/code]
@@ -91,7 +91,7 @@ $SITE_INFO['no_keep_params']='1'; // Disable 'keep_' parameters, which can lead 
 
 [title="2"]Disk activity[/title]
 
-If you have a hard disk that is slow, for whatever reason, you can put these settings into [tt]info.php[/tt] to reduce access significantly:
+If you have a hard disk that is slow, for whatever reason, you can put these settings into [tt]_config.php[/tt] to reduce access significantly:
 [codebox]
 /* The best ones, can also be enabled via the config_editor.php interface */
 $SITE_INFO['disable_smart_decaching']='1'; // Don't check file times to check caches aren't stale
@@ -243,7 +243,7 @@ function master__sync_file_move($old,$new)
 }
 [/codebox]
 
-In order to implement replication, just change the 'db_site_host' and 'db_forums_host' values using [tt]config_editor.php[/tt] (or editing [tt]info.php[/tt] by hand in a text editor) so that they contain a comma-separated list of host names. The first host in the list must be the master server. It is assumed that each server has equivalent credentials and database naming. Due to the master server being a bottleneck, it will never be picked as a read-access server in the randomisation process, unless there is only one slave.
+In order to implement replication, just change the 'db_site_host' and 'db_forums_host' values using [tt]config_editor.php[/tt] (or editing [tt]_config.php[/tt] by hand in a text editor) so that they contain a comma-separated list of host names. The first host in the list must be the master server. It is assumed that each server has equivalent credentials and database naming. Due to the master server being a bottleneck, it will never be picked as a read-access server in the randomisation process, unless there is only one slave.
 It is advised to not set replication for the ocPortal 'sessions' table, as this is highly volatile. Instead you should remove any display of 'users online' from your templates because if you're at the point of replication there will be too many to list anyway (and ocPortal will have realised this and stopped showing it consistently in many cases, to stop performance issues).
 
 Round-Robin DNS could be used to choose a frontend server from the farm randomly, or some other form of load balancing such as one based on a reverse proxy server.

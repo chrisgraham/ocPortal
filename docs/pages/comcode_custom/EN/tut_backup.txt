@@ -56,7 +56,7 @@ If your server supports 'gzip' then you will get a '.tar.gz' version of your bac
 You may extract the .tar.gz file using any good extraction program, including the free 7-zip program. Alternatively, web-hosting control panels should be able to extract it.
 You can use the backup archive as a means of restoring single files, or you can use it much like the installation package you originally installed with, except that the backup's installer will restore the site to the operational state from when the backup was taken.
 
-It is important to test the ocPortal backups actually work from time to time. Do this on a different server (or at least a different directory and a different database), so as not to overwrite your site from the backup. You will need to edit the info.php file if database details are different.
+It is important to test the ocPortal backups actually work from time to time. Do this on a different server (or at least a different directory and a different database), so as not to overwrite your site from the backup. You will need to edit the _config.php file if database details are different.
 Loading up the backup's [tt]restore.php[/tt] from a web browser should trigger restoration.
 
 The reason we ask that users test the backup is that unfortunately, it is unreliable beyond our control on some servers. PHP was designed to run quick scripts, not to do large background tasks such as backup generation. If you know it works on your server for your first full backup, and afterwards only do incremental backups, you do not need to test each of those.

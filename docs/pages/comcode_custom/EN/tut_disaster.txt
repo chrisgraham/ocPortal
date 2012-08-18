@@ -55,7 +55,7 @@ You should now be able to log in to ocPortal using your new password.
 
 Go to http://www.myipaddress.com/ to find your IP address:
 
-Open up [tt]info.php[/tt] in a text editor and add a line:
+Open up [tt]_config.php[/tt] in a text editor and add a line:
 [codebox]
 $SITE_INFO['backdoor_ip']='<your ip address>';
 [/codebox]
@@ -84,7 +84,7 @@ and then clear the Comcode page cache from Admin Zone > Tools > Cleanup tools.
 
 [title="2"]Changing base configuration[/title]
 
-If your server base configuration has changed (such as your database password, for example) then you need to update ocPortal's [tt]info.php[/tt] config file to reflect this. You can either do this directly, or you can do it via launching the [tt]config_editor.php[/tt] script installed at the base of your website (you will need your master password to do this).
+If your server base configuration has changed (such as your database password, for example) then you need to update ocPortal's [tt]_config.php[/tt] config file to reflect this. You can either do this directly, or you can do it via launching the [tt]config_editor.php[/tt] script installed at the base of your website (you will need your master password to do this).
 
 [title="2"]See also[/title]
 
