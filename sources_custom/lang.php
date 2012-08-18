@@ -151,7 +151,7 @@ if (!function_exists('_do_lang'))
 				{
 					global $USER_LANG_LOOP,$REQUIRE_LANG_LOOP;
 					//print_r(debug_backtrace());
-					if ($USER_LANG_LOOP==1) critical_error('RELAY','Missing language code: '.$codename.'. This language code is required to produce error messages, and thus a critical error was prompted by the non-ability to show less-critical error messages. It is likely the source language files (lang/'.fallback_lang().'/*.ini) for ocPortal on this website have been corrupted.');
+					if ($USER_LANG_LOOP==1) critical_error('RELAY','Missing language code: '.escape_html($codename).'. This language code is required to produce error messages, and thus a critical error was prompted by the non-ability to show less-critical error messages. It is likely the source language files (lang/'.fallback_lang().'/*.ini) for ocPortal on this website have been corrupted.');
 					if ($REQUIRE_LANG_LOOP>=2) return ''; // Probably failing to load global.ini, so just output with some text missing
 					require_code('view_modes');
 					erase_cached_language();
