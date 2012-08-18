@@ -37,7 +37,7 @@ class Hook_sw_ocf_forum
 		$dbs_back=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('f_groups','id',array('id'=>db_get_first_id()+7));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_groups','id',array('id'=>db_get_first_id()+7));
 		if (!is_null($test))
 			$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_RANK_SET'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_RANK_SET'),'have_default_rank_set',array_key_exists('have_default_rank_set',$field_defaults)?($field_defaults['have_default_rank_set']=='1'):false));
 
@@ -48,7 +48,7 @@ class Hook_sw_ocf_forum
 		$fields_l=array('im_aim','im_msn','im_jabber','im_yahoo','im_skype','interests','location','occupation','sn_google','sn_facebook','sn_twitter');
 		foreach ($fields_l as $field)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));
 			if (!is_null($test))
 			{
 				$fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_CPF_SET'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_CPF_SET'),'have_default_cpf_set',array_key_exists('have_default_cpf_set',$field_defaults)?($field_defaults['have_default_cpf_set']=='1'):false));
@@ -74,7 +74,7 @@ class Hook_sw_ocf_forum
 		require_lang('ocf');
 		if (post_param_integer('have_default_rank_set',0)==0)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('f_groups','id',array('id'=>db_get_first_id()+8));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_groups','id',array('id'=>db_get_first_id()+8));
 			if (!is_null($test))
 			{
 				$promotion_target=ocf_get_group_property(db_get_first_id()+8,'promotion_target');
@@ -102,7 +102,7 @@ class Hook_sw_ocf_forum
 			$fields=array('im_aim','im_msn','im_yahoo','im_skype','interests','location','occupation');
 			foreach ($fields as $field)
 			{
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));
 				if (!is_null($test))
 				{
 					require_code('ocf_members_action');

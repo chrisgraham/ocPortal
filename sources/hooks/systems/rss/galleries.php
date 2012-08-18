@@ -45,7 +45,7 @@ class Hook_rss_galleries
 
 		$content=new ocp_tempcode();
 		$_galleries=array();
-		if ($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'galleries WHERE '.$filters_1)<3000)
+		if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'galleries WHERE '.$filters_1)<3000)
 		{
 			$_galleries=$GLOBALS['SITE_DB']->query('SELECT fullname,name FROM '.get_table_prefix().'galleries WHERE '.$filters_1);
 			foreach ($_galleries as $i=>$_gallery)
@@ -73,7 +73,7 @@ class Hook_rss_galleries
 
 			if (!array_key_exists($row['cat'],$galleries))
 			{
-				$_fullname=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$row['cat']));
+				$_fullname=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name'=>$row['cat']));
 				if (is_null($_fullname)) continue;
 				$galleries[$row['cat']]=get_translated_text($_fullname);
 			}

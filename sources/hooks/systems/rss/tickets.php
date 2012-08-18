@@ -64,7 +64,7 @@ class Hook_rss_tickets
 			if ($row['lasttime']<$cutoff) continue;
 
 			$ticket_id=extract_topic_identifier($row['description']);
-			$ticket_type=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+			$ticket_type=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
 
 			$author=$row['firstusername'];
 			$date=date($date_string,$row['firsttime']);

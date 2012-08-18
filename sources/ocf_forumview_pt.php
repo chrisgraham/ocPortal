@@ -59,7 +59,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 		{
 			$query2='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list;
 			$union=' UNION SELECT * '.$query2;
-			$max_rows+=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query2);
+			$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query2);
 		}
 	}
 	$order=get_param('order','last_time');
@@ -69,7 +69,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 	if (get_value('disable_sunk')!=='1')
 		$order2='t_sunk ASC,'.$order2;
 	$topic_rows=$GLOBALS['FORUM_DB']->query('SELECT * '.$query.$union.' ORDER BY t_pinned DESC,'.$order2,$max,$start,false,true);
-	$max_rows+=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
+	$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query);
 	$topics=array();
 	$hot_topic_definition=intval(get_option('hot_topic_definition'));
 	foreach ($topic_rows as $topic_row)

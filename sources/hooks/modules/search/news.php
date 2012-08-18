@@ -31,7 +31,7 @@ class Hook_search_news
 		if (!module_installed('news')) return NULL;
 
 		if (!has_actual_page_access(get_member(),'news')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('news','COUNT(*)')==0) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)')==0) return NULL;
 
 		require_lang('news');
 

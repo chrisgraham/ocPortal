@@ -56,7 +56,7 @@ function do_work()
 	require_code('authors');
 	require_code('ocf_members_action');
 	require_code('notifications');
-	for ($i=$GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$member_id=ocf_make_member(uniqid(''),uniqid(''),uniqid('').'@example.com',array(),intval(date('d')),intval(date('m')),intval(date('Y')),array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
 		add_author(random_line(),'',$member_id,random_text(),random_text());
@@ -75,12 +75,12 @@ function do_work()
 	$member_id=db_get_first_id()+2;
 	// point earn list / gift points to a single member
 	require_code('points2');
-	for ($j=$GLOBALS['SITE_DB']->query_value('gifts','COUNT(*)');$j<$num_wanted;$j++)
+	for ($j=$GLOBALS['SITE_DB']->query_select_value('gifts','COUNT(*)');$j<$num_wanted;$j++)
 	{
 		give_points(10,$member_id,mt_rand(db_get_first_id(),/*don't want wide distribution as points cacheing then eats RAM*/min(100,$num_wanted-1)),random_line(),false,false);
 	}
 	// number of friends of a single member
-	for ($j=intval(floatval($GLOBALS['SITE_DB']->query_value('chat_buddies','COUNT(*)'))/2.0);$j<$num_wanted;$j++)
+	for ($j=intval(floatval($GLOBALS['SITE_DB']->query_select_value('chat_buddies','COUNT(*)'))/2.0);$j<$num_wanted;$j++)
 	{
 		$GLOBALS['SITE_DB']->query_insert('chat_buddies',array(
 			'member_likes'=>$member_id,
@@ -94,7 +94,7 @@ function do_work()
 
 	// banners
 	require_code('banners2');
-	for ($i=$GLOBALS['SITE_DB']->query_value('banners','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('banners','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_banner(uniqid(''),get_logo_url(),random_line(),random_text(),'',100,get_base_url(),3,'',db_get_first_id(),NULL,db_get_first_id()+1,1);
 	}
@@ -105,7 +105,7 @@ function do_work()
 	// comcode pages
 	require_code('files');
 	require_code('files2');
-	for ($i=$GLOBALS['SITE_DB']->query_value('comcode_pages','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('comcode_pages','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$file=uniqid('');
 		/*$path=get_custom_file_base().'/site/pages/comcode_custom/'.fallback_lang().'/'.$file.'.txt';
@@ -132,7 +132,7 @@ function do_work()
 	// zones
 	require_code('zones2');
 	require_code('abstract_file_manager');
-	for ($i=$GLOBALS['SITE_DB']->query_value('zones','COUNT(*)');$i<min($num_wanted,1000/* lets be somewhat reasonable! */);$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)');$i<min($num_wanted,1000/* lets be somewhat reasonable! */);$i++)
 	{
 		actual_add_zone(uniqid(''),random_line(),'start',random_line(),'default',0,0,0);
 	}
@@ -142,7 +142,7 @@ function do_work()
 
 	// calendar events
 	require_code('calendar2');
-	for ($i=$GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_calendar_event(db_get_first_id(),'',NULL,0,random_line(),random_text(),1,1,intval(date('Y')),intval(date('m')),intval(date('d')),'day_of_month',0,0);
 	}
@@ -153,13 +153,13 @@ function do_work()
 	// chat rooms
 	require_code('chat2');
 	require_code('chat');
-	for ($i=$GLOBALS['SITE_DB']->query_value('chat_rooms','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$room_id=add_chatroom(random_text(),random_line(),mt_rand(db_get_first_id()+1,$num_wanted-1),strval(db_get_first_id()+1),'','','',fallback_lang());
 	}
 	$room_id=db_get_first_id()+1;
 	// messages in chat room
-	for ($j=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)');$j<$num_wanted;$j++)
+	for ($j=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)');$j<$num_wanted;$j++)
 	{
 		$_message_parsed=insert_lang_comcode(random_text(),4);
 		$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>'','room_id'=>$room_id,'user_id'=>db_get_first_id(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')));
@@ -171,7 +171,7 @@ function do_work()
 	// download categories under a subcategory
 	require_code('downloads2');
 	$subcat_id=add_download_category(random_line(),db_get_first_id(),random_text(),'');
-	for ($i=$GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_download_category(random_line(),$subcat_id,random_text(),'');
 	}
@@ -179,14 +179,14 @@ function do_work()
 	require_code('downloads2');
 	require_code('awards');
 	$time=time();
-	for ($i=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$content_id=add_download(db_get_first_id(),random_line(),get_logo_url(),random_text(),'admin',random_text(),NULL,1,1,1,1,'',uniqid('').'.jpg',100,110,1);
 		give_award(db_get_first_id(),strval($content_id),$time-$i);
 	}
 	$content_id=db_get_first_id();
 	$content_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$content_id),'site');
-	for ($j=$GLOBALS['SITE_DB']->query_value('trackbacks','COUNT(*)');$j<$num_wanted;$j++)
+	for ($j=$GLOBALS['SITE_DB']->query_select_value('trackbacks','COUNT(*)');$j<$num_wanted;$j++)
 	{
 		// trackbacks
 		$GLOBALS['SITE_DB']->query_insert('trackbacks',array('trackback_for_type'=>'downloads','trackback_for_id'=>$content_id,'trackback_ip'=>'','trackback_time'=>time(),'trackback_url'=>'','trackback_title'=>random_line(),'trackback_excerpt'=>random_text(),'trackback_name'=>random_line()));
@@ -216,7 +216,7 @@ function do_work()
 
 	// forums under a forum (don't test it can display, just make sure the main index still works)
 	require_code('ocf_forums_action');
-	for ($i=$GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		ocf_make_forum(random_line(),random_text(),db_get_first_id(),array(),db_get_first_id()+3);
 	}
@@ -225,7 +225,7 @@ function do_work()
 	require_code('ocf_posts_action');
 	require_code('ocf_forums');
 	require_code('ocf_topics');
-	for ($i=intval(floatval($GLOBALS['FORUM_DB']->query_value('f_topics','COUNT(*)'))/2.0);$i<$num_wanted;$i++)
+	for ($i=intval(floatval($GLOBALS['FORUM_DB']->query_select_value('f_topics','COUNT(*)'))/2.0);$i<$num_wanted;$i++)
 	{
 		$topic_id=ocf_make_topic(db_get_first_id(),'','',NULL,1,0,0,0,NULL,NULL,false);
 		ocf_make_post($topic_id,random_line(),random_text(),0,true,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,false,false);
@@ -234,7 +234,7 @@ function do_work()
 	require_code('ocf_topics_action');
 	require_code('ocf_posts_action');
 	$topic_id=ocf_make_topic(db_get_first_id()+1,'','',NULL,1,0,0,0,NULL,NULL,false);
-	for ($i=intval(floatval($GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)'))/3.0);$i<$num_wanted;$i++)
+	for ($i=intval(floatval($GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)'))/3.0);$i<$num_wanted;$i++)
 	{
 		ocf_make_post($topic_id,random_line(),random_text(),0,true,0,0,NULL,NULL,NULL,mt_rand(db_get_first_id(),$num_wanted-1),NULL,NULL,NULL,false,false);
 	}
@@ -245,7 +245,7 @@ function do_work()
 	// clubs
 	require_code('ocf_groups_action');
 	require_code('ocf_groups');
-	for ($i=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		ocf_make_group(random_line(),0,0,0,random_line(),'',NULL,NULL,NULL,5,0,70,50,100,100,30000,700,25,1,0,0,0,$i,1,0,1);
 	}
@@ -257,19 +257,19 @@ function do_work()
 	require_code('galleries2');
 	$xsubcat_id=uniqid('');
 	add_gallery($xsubcat_id,random_line(),random_text(),'','','root');
-	for ($i=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_gallery(uniqid(''),random_line(),random_text(),'','',$xsubcat_id);
 	}
 	// images
 	require_code('galleries2');
-	for ($i=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_image('','root',random_text(),get_logo_url(),get_logo_url(),1,1,1,1,'');
 	}
 	// videos / validation queue
 	require_code('galleries2');
-	for ($i=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_video('','root',random_text(),get_logo_url(),get_logo_url(),0,1,1,1,'',0,0,0);
 	}
@@ -279,7 +279,7 @@ function do_work()
 
 	// newsletter subscribers
 	require_code('newsletter');
-	for ($i=$GLOBALS['SITE_DB']->query_value('newsletter','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('newsletter','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		basic_newsletter_join(uniqid('').'@example.com');
 	}
@@ -289,13 +289,13 @@ function do_work()
 
 	// polls (remember to test poll archive)
 	require_code('polls');
-	for ($i=$GLOBALS['SITE_DB']->query_value('poll','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('poll','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$poll_id=add_poll(random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),10,0,0,0,0,'');
 	}
 	// votes on a poll
 	$poll_id=db_get_first_id();
-	for ($j=$GLOBALS['SITE_DB']->query_value('poll_votes','COUNT(*)');$j<$num_wanted;$j++)
+	for ($j=$GLOBALS['SITE_DB']->query_select_value('poll_votes','COUNT(*)');$j<$num_wanted;$j++)
 	{
 		$cast=mt_rand(1,6);
 		$ip=uniqid('');
@@ -313,7 +313,7 @@ function do_work()
 
 	// quizzes
 	require_code('quiz');
-	for ($i=$GLOBALS['SITE_DB']->query_value('quizzes','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('quizzes','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_quiz(random_line(),0,random_text(),random_text(),random_text(),'',0,time(),NULL,3,300,'SURVEY',1,'1) Some question');
 	}
@@ -327,7 +327,7 @@ function do_work()
 	// Wiki+ pages (do a long descendant tree for some, and orphans for others)
 	// Wiki+ posts (remember to test Wiki+ changes screen)
 	require_code('cedi');
-	for ($i=$GLOBALS['SITE_DB']->query_value('seedy_pages','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('seedy_pages','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$page_id=cedi_add_page(random_line(),random_text(),'',1);
 		cedi_add_post($page_id,random_text(),1,NULL,false);
@@ -338,7 +338,7 @@ function do_work()
 
 	// iotds
 	require_code('iotds');
-	for ($i=$GLOBALS['SITE_DB']->query_value('iotd','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('iotd','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_iotd(get_logo_url(),random_line(),random_text(),get_logo_url(),1,0,0,0,'');
 	}
@@ -347,7 +347,7 @@ function do_work()
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
 	// logged hack attempts
-	for ($i=$GLOBALS['SITE_DB']->query_value('hackattack','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('hackattack','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$GLOBALS['SITE_DB']->query_insert('hackattack',array(
 			'url'=>get_base_url(),
@@ -365,7 +365,7 @@ function do_work()
 	}
 	// logged hits in one day
 	require_code('site');
-	for ($i=$GLOBALS['SITE_DB']->query_value('stats','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('stats','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		log_stats('/testing'.uniqid(''),mt_rand(100,2000));
 	}
@@ -375,7 +375,7 @@ function do_work()
 
 	// blogs and news entries (remember to test both blogs [categories] list, and a list of all news entries)
 	require_code('news');
-	for ($i=$GLOBALS['SITE_DB']->query_value('news','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_news(random_line(),random_text(),'admin',1,1,1,1,'',random_text(),NULL,NULL,NULL,db_get_first_id()+$i);
 	}
@@ -386,7 +386,7 @@ function do_work()
 	// support tickets
 	require_code('tickets');
 	require_code('tickets2');
-	for ($i=intval(floatval($GLOBALS['FORUM_DB']->query_value('f_topics','COUNT(*)'))/2.0);$i<$num_wanted;$i++)
+	for ($i=intval(floatval($GLOBALS['FORUM_DB']->query_select_value('f_topics','COUNT(*)'))/2.0);$i<$num_wanted;$i++)
 	{
 		ticket_add_post(mt_rand(db_get_first_id(),$num_wanted-1),uniqid(''),db_get_first_id(),random_line(),random_text(),'','');
 	}
@@ -397,7 +397,7 @@ function do_work()
 	// catalogues
 	require_code('catalogues2');
 	$root_id=db_get_first_id();
-	for ($i=$GLOBALS['SITE_DB']->query_value('catalogues','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('catalogues','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$catalogue_name=uniqid('');
 		$root_id=actual_add_catalogue($catalogue_name,random_line(),random_text(),mt_rand(0,3),1,'',30);
@@ -405,7 +405,7 @@ function do_work()
 	// catalogue categories under a subcategory (remember to test all catalogue views: atoz, index, and root cat)
 	$catalogue_name='products';
 	$subcat_id=actual_add_catalogue_category($catalogue_name,random_line(),random_text(),'',$root_id);
-	for ($j=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)');$j<$num_wanted;$j++)
+	for ($j=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)');$j<$num_wanted;$j++)
 	{
 		actual_add_catalogue_category($catalogue_name,random_line(),random_text(),'',$subcat_id);
 	}
@@ -415,9 +415,9 @@ function do_work()
 
 	// items in ecommerce store
 	require_code('catalogues2');
-	$cat_id=$GLOBALS['SITE_DB']->query_value('catalogue_categories','MIN(id)',array('c_name'=>'products'));
+	$cat_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>'products'));
 	$fields=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id'),array('c_name'=>'products')));
-	for ($i=$GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)');$i<$num_wanted;$i++)
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$map=array(
 			$fields[0]=>random_line(),
@@ -435,9 +435,9 @@ function do_work()
 		unset($map);
 	}
 	// outstanding ecommerce orders
-	$pid=$GLOBALS['SITE_DB']->query_value('catalogue_entries','MIN(id)',array('c_name'=>'products'));
+	$pid=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','MIN(id)',array('c_name'=>'products'));
 	require_code('shopping');
-	for ($j=$GLOBALS['SITE_DB']->query_value('shopping_cart','COUNT(*)');$j<$num_wanted;$j++)
+	for ($j=$GLOBALS['SITE_DB']->query_select_value('shopping_cart','COUNT(*)');$j<$num_wanted;$j++)
 	{
 		$product_det=array(
 						'product_id'	=>	$pid,
@@ -467,7 +467,7 @@ function do_work()
 				)
 		);
 	}
-	for ($j=$GLOBALS['SITE_DB']->query_value('shopping_order','COUNT(*)');$j<$num_wanted;$j++)
+	for ($j=$GLOBALS['SITE_DB']->query_select_value('shopping_order','COUNT(*)');$j<$num_wanted;$j++)
 	{
 		$order_id=$GLOBALS['SITE_DB']->query_insert('shopping_order',array(
 					'c_member'		=>	mt_rand(db_get_first_id()+1,$num_wanted-1),

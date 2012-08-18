@@ -79,7 +79,7 @@ function occle_script()
 		// We're confirming a received message
 		if (ocp_srv('HTTP_USER_AGENT')=='ocPortal')
 		{
-			$results=$GLOBALS['SITE_DB']->query_value_null_ok('occlechat','COUNT(*)',array('c_message'=>get_param('message'),'c_incoming'=>false));
+			$results=$GLOBALS['SITE_DB']->query_select_value_if_there('occlechat','COUNT(*)',array('c_message'=>get_param('message'),'c_incoming'=>false));
 			if (!is_null($results)) echo '1';
 			else echo '0';
 		}

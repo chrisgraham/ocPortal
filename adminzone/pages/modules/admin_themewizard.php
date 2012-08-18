@@ -321,13 +321,13 @@ class Module_admin_themewizard
 		require_code('form_templates');
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_LOGO_NAME'),'name',get_option('site_name'),true));
-		$a=$GLOBALS['SITE_DB']->query_value('zones','zone_title',array('zone_name'=>''));
+		$a=$GLOBALS['SITE_DB']->query_select_value('zones','zone_title',array('zone_name'=>''));
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_LOGO_SLOGAN'),'title',get_translated_text($a),true));
 
 		// Find the most appropriate theme to edit for
-		$theme=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_theme',array('zone_name'=>'site'));
+		$theme=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_theme',array('zone_name'=>'site'));
 		if (is_null($theme)) // Just in case the 'site' zone no longer exists
-			$theme=$GLOBALS['SITE_DB']->query_value('zones','zone_theme',array('zone_name'=>''));
+			$theme=$GLOBALS['SITE_DB']->query_select_value('zones','zone_theme',array('zone_name'=>''));
 		if ($theme=='-1')
 		{
 			$theme=preg_replace('#[^A-Za-z\d]#','_',get_site_name());

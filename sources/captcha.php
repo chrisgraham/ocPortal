@@ -31,11 +31,11 @@ function init__captcha()
  */
 function captcha_script()
 {
-	$_code_needed=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',array('si_session_id'=>get_session_id()));
+	$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('security_images','si_code',array('si_session_id'=>get_session_id()));
 	if (is_null($_code_needed))
 	{
 		generate_captcha();
-		$_code_needed=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',array('si_session_id'=>get_session_id()));
+		$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('security_images','si_code',array('si_session_id'=>get_session_id()));
 
 		/*$GLOBALS['HTTP_STATUS_CODE']='500';		This would actually be very slightly insecure, as it could be used to probe (binary) login state via rogue sites that check if CAPTCHAs had been generated
 		if (!headers_sent())
@@ -249,7 +249,7 @@ function generate_captcha()
 	// HACKHACK Run a test to see if large numbers are supported
 	$insert_map=array('si_time'=>time(),'si_session_id'=>$session);
 	$GLOBALS['SITE_DB']->query_insert('security_images',$insert_map+array('si_code'=>333333333333),false,true);
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',$insert_map);
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('security_images','si_code',$insert_map);
 
 	// Create code
 	$numbers_only=($test!==333333333333);
@@ -320,7 +320,7 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 {
 	if (use_captcha())
 	{
-		$_code_needed=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',array('si_session_id'=>get_session_id()));
+		$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('security_images','si_code',array('si_session_id'=>get_session_id()));
 		if (get_value('captcha_single_guess')==='1')
 		{
 			$GLOBALS['SITE_DB']->query_delete('security_images',array('si_session_id'=>get_session_id())); // Only allowed to check once

@@ -74,10 +74,10 @@ class Hook_Preview_ocf_post
 		$post_id=post_param_integer('post_id',NULL);
 		if (!is_null($post_id))
 		{
-			$post_owner=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_poster',array('id'=>$post_id));
+			$post_owner=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_poster',array('id'=>$post_id));
 			if (is_null($post_owner)) $post_owner=get_member();
 
-			$_post_date=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_time',array('id'=>$post_id));
+			$_post_date=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_time',array('id'=>$post_id));
 			if (is_null($_post_date)) $_post_date=time();
 		}
 		$post_date=get_timezoned_date($_post_date);

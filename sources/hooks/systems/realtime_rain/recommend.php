@@ -41,7 +41,7 @@ class Hook_realtime_rain_recommend
 				$timestamp=$row['timestamp'];
 				$member_id=$row['member_id'];
 
-				$invited_member=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_email_address'=>$row['i_email_address']));
+				$invited_member=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_email_address'=>$row['i_email_address']));
 
 				$drops[]=rain_get_special_icons(NULL,$timestamp)+array(
 					'TYPE'=>'recommend',

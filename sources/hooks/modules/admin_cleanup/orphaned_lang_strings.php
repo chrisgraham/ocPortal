@@ -28,7 +28,7 @@ class Hook_orphaned_lang_strings
 	 */
 	function info()
 	{
-		if ($GLOBALS['SITE_DB']->query_value('translate','COUNT(*)')>10000) return NULL; // Too much, and we don't have much use for it outside development anyway
+		if ($GLOBALS['SITE_DB']->query_select_value('translate','COUNT(*)')>10000) return NULL; // Too much, and we don't have much use for it outside development anyway
 
 		$info=array();
 		$info['title']=do_lang_tempcode('ORPHANED_LANG_STRINGS');

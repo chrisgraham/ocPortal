@@ -56,7 +56,7 @@ class Module_admin_notifications
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('notification_lockdown');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('notification_lockdown');
 	}
 
 	/**

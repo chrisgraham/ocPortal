@@ -163,7 +163,7 @@ function load_options()
  */
 function get_tutorial_link($name)
 {
-	return $GLOBALS['SITE_DB']->query_value_null_ok('tutorial_links','the_value',array('the_name'=>$name));
+	return $GLOBALS['SITE_DB']->query_select_value_if_there('tutorial_links','the_value',array('the_name'=>$name));
 }
 
 /**
@@ -186,7 +186,7 @@ function set_tutorial_link($name,$value)
  */
 function get_long_value($name)
 {
-	return $GLOBALS['SITE_DB']->query_value_null_ok('long_values','the_value',array('the_name'=>$name));
+	return $GLOBALS['SITE_DB']->query_select_value_if_there('long_values','the_value',array('the_name'=>$name));
 }
 
 /**
@@ -198,7 +198,7 @@ function get_long_value($name)
  */
 function get_long_value_newer_than($name,$cutoff)
 {
-	return $GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'long_values WHERE date_and_time>'.strval($cutoff).' AND '.db_string_equal_to('the_name',$name));
+	return $GLOBALS['SITE_DB']->query_value_if_there('SELECT the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'long_values WHERE date_and_time>'.strval($cutoff).' AND '.db_string_equal_to('the_name',$name));
 }
 
 /**

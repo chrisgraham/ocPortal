@@ -218,7 +218,7 @@ function config_option_exists($name)
  */
 function permission_exists($name)
 {
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('sp_list','the_name',array('the_name'=>$name));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('sp_list','the_name',array('the_name'=>$name));
 	return !is_null($test);
 }
 
@@ -363,7 +363,7 @@ function delete_attachments($type,$connection=NULL)
 		$connection->query_delete('attachment_refs',array('id'=>$ref['id']),'',1);
 
 		// Was that the last reference to this attachment? (if so -- delete attachment)
-		$test=$connection->query_value_null_ok('attachment_refs','id',array('a_id'=>$ref['a_id']));
+		$test=$connection->query_select_value_if_there('attachment_refs','id',array('a_id'=>$ref['a_id']));
 		if (is_null($test))
 		{
 			_delete_attachment($ref['a_id'],$connection);

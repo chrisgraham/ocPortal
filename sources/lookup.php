@@ -111,7 +111,7 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 	{
 		$query.='ip LIKE \''.db_encode_like(str_replace('*','%',$ip)).'\'';
 	}
-	$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE '.$query);
+	$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE '.$query);
 	$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,date_and_time,get,post,browser,operating_system FROM '.get_table_prefix().'stats WHERE '.$query.' ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 
 	$out=new ocp_tempcode();
@@ -168,7 +168,7 @@ function find_security_alerts($where)
 	$_fields=array(do_lang_tempcode('FROM'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('IP_ADDRESS'),do_lang_tempcode('REASON'));
 	if (has_js()) $_fields[]=new ocp_tempcode();
 	$fields_title=results_field_title($_fields,$sortables,'alert_sort',$sortable.' '.$sort_order);
-	$max_rows=$GLOBALS['SITE_DB']->query_value('hackattack','COUNT(*)',$where);
+	$max_rows=$GLOBALS['SITE_DB']->query_select_value('hackattack','COUNT(*)',$where);
 	$rows=$GLOBALS['SITE_DB']->query_select('hackattack',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 	$fields=new ocp_tempcode();
 	foreach ($rows as $row)

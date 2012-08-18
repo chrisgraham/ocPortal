@@ -105,7 +105,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 	if ((!$truism) && (!$pure_only)) // Separate lookup, cannot go through $IMG_CODES
 	{
-		$path=$db->query_value_null_ok('theme_images','path',array('theme'=>$theme,'lang'=>$lang,'id'=>$id));
+		$path=$db->query_select_value_if_there('theme_images','path',array('theme'=>$theme,'lang'=>$lang,'id'=>$id));
 		if ($path!==NULL)
 		{
 			if ((url_is_local($path)) && (!$leave_local))
@@ -163,7 +163,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 				$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 				$GLOBALS['NO_QUERY_LIMIT']=true;
 				$truism_b=($priority[0]==$true_theme) && ((!multi_lang()) || ($priority[1]=='') || ($priority[1]===$true_lang));
-				$path=$truism_b?NULL:$db->query_value_null_ok('theme_images','path',$smap);
+				$path=$truism_b?NULL:$db->query_select_value_if_there('theme_images','path',$smap);
 				$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 
 				if ($path!==NULL) // Make sure this isn't just the result file we should find at a lower priority

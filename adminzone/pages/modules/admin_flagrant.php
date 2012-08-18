@@ -57,7 +57,7 @@ class Module_admin_flagrant extends standard_crud_module
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('text');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('text');
 
 		delete_config_option('system_flagrant');
 	}

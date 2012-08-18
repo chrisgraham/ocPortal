@@ -52,7 +52,7 @@ function render_image_box($row,$zone='_SEARCH')
 	$image_url=$row['url'];
 	if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
 
-	$title=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$row['cat']));
+	$title=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name'=>$row['cat']));
 	if (is_null($title))
 	{
 		$gallery_title=do_lang('UNKNOWN');
@@ -85,7 +85,7 @@ function render_video_box($row,$zone='_SEARCH')
 	$video_url=$row['url'];
 	if (url_is_local($video_url)) $video_url=get_custom_base_url().'/'.$video_url;
 
-	$title=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$row['cat']));
+	$title=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name'=>$row['cat']));
 	if (is_null($title))
 	{
 		$gallery_title=do_lang('UNKNOWN');
@@ -123,7 +123,7 @@ function gallery_has_content($name)
 	global $GALLERY_ENTRIES_CATS_USED;
 	if (is_null($GALLERY_ENTRIES_CATS_USED))
 	{
-		$num_galleries=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');
+		$num_galleries=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 
 		$GALLERY_ENTRIES_CATS_USED=array();
 		$images_cats=$GLOBALS['SITE_DB']->query_select('images',array('DISTINCT cat'),($num_galleries<300)?array('validated'=>1):array('validated'=>1,'cat'=>$name));
@@ -144,14 +144,14 @@ function gallery_has_content($name)
 	if (is_null($GALLERY_PAIRS))
 	{
 		if (is_null($num_galleries))
-			$num_galleries=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');
+			$num_galleries=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 
 		if ($num_galleries<300)
 		{
 			$GALLERY_PAIRS=collapse_2d_complexity('name','parent_id',$GLOBALS['SITE_DB']->query_select('galleries',array('name','parent_id')));
 		} else
 		{
-			return !is_null($GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('parent_id'=>$name)));
+			return !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('parent_id'=>$name)));
 		}
 	}
 	foreach ($GALLERY_PAIRS as $_parent_id)
@@ -237,7 +237,7 @@ function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=
 	if (get_option('reverse_thumb_order')=='1') $thumb_order='ORDER BY id DESC';
 	if ($pic=='')
 	{
-		$pic=$GLOBALS['SITE_DB']->query_value_null_ok('images','thumb_url',array('cat'=>$child['name'],'validated'=>1),$thumb_order);
+		$pic=$GLOBALS['SITE_DB']->query_select_value_if_there('images','thumb_url',array('cat'=>$child['name'],'validated'=>1),$thumb_order);
 		if ($pic==='')
 		{
 			require_code('images');
@@ -247,7 +247,7 @@ function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=
 	}
 	if (is_null($pic))
 	{
-		$pic=$GLOBALS['SITE_DB']->query_value_null_ok('videos','thumb_url',array('cat'=>$child['name'],'validated'=>1),$thumb_order);
+		$pic=$GLOBALS['SITE_DB']->query_select_value_if_there('videos','thumb_url',array('cat'=>$child['name'],'validated'=>1),$thumb_order);
 	}
 	if (is_null($pic)) $pic='';
 	if (($pic!='') && (url_is_local($pic))) $pic=get_custom_base_url().'/'.$pic;
@@ -299,10 +299,10 @@ function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=
 function get_recursive_gallery_details($name,$test_videos=true,$test_images=true)
 {
 	static $total_categories=NULL;
-	if (is_null($total_categories)) $total_categories=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');
+	if (is_null($total_categories)) $total_categories=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 
-	$num_images=$test_images?$GLOBALS['SITE_DB']->query_value('images','COUNT(*)',array('cat'=>$name)):0;
-	$num_videos=$test_videos?$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)',array('cat'=>$name)):0;
+	$num_images=$test_images?$GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)',array('cat'=>$name)):0;
+	$num_videos=$test_videos?$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)',array('cat'=>$name)):0;
 
 	if ($total_categories<200) // Make sure not too much, performance issue
 	{
@@ -324,7 +324,7 @@ function get_recursive_gallery_details($name,$test_videos=true,$test_images=true
 		return array($num_children,$num_images,$num_videos);
 	}
 
-	$num_children=(strpos($name,'member_')!==false)?0:$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)',array('parent_id'=>$name));
+	$num_children=(strpos($name,'member_')!==false)?0:$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)',array('parent_id'=>$name));
 	return array($num_children,$num_images,$num_videos);
 }
 
@@ -464,8 +464,8 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 			}
 			$children[0]['child_count']=$good_row_count;
 			if (($good_row_count==0) && (!$purity) && ($gallery_info['is_member_synched'])) $children[0]['child_count']=1; // XHTMLXHTML
-			$children[0]['video_count']=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)',array('cat'=>$category_id));
-			$children[0]['image_count']=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)',array('cat'=>$category_id));
+			$children[0]['video_count']=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)',array('cat'=>$category_id));
+			$children[0]['image_count']=$GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)',array('cat'=>$category_id));
 		}
 		$sub=true;
 	}
@@ -643,7 +643,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 	if (($category_id==$root) || ($category_id=='root'))
 	{
 		if ($no_link_for_me_sir) return new ocp_tempcode();
-		$title=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$category_id)));
+		$title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$category_id)));
 		return hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up');
 	}
 
@@ -745,7 +745,7 @@ function get_gallery_content_tree($table,$submitter=NULL,$gallery=NULL,$breadcru
 	if (is_null($breadcrumbs)) $breadcrumbs='';
 
 	// Put our title onto our breadcrumbs
-	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$gallery)));
+	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$gallery)));
 	$breadcrumbs.=$title;
 
 	// We'll be putting all children in this entire tree into a single list

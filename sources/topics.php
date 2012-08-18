@@ -171,7 +171,7 @@ class OCP_Topic
 			{
 				foreach ($this->reviews_rating_criteria as $review_title)
 				{
-					$_rating=$GLOBALS['SITE_DB']->query_value('review_supplement','AVG(r_rating)',array('r_rating_type'=>$review_title,'r_topic_id'=>$topic_id));
+					$_rating=$GLOBALS['SITE_DB']->query_select_value('review_supplement','AVG(r_rating)',array('r_rating_type'=>$review_title,'r_topic_id'=>$topic_id));
 					$rating=mixed();
 					$rating=is_null($_rating)?NULL:$_rating;
 					$reviews_rating_criteria[]=array('REVIEW_TITLE'=>$review_title,'REVIEW_RATING'=>make_string_tempcode(is_null($rating)?'':float_format($rating)));

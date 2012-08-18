@@ -139,7 +139,7 @@ class Module_admin_sitetree
 			return do_template('REDIRECT_SCREEN',array('_GUID'=>'a801d4cb71aa0c680eff4469e29cf4c7','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_ADVANCED_SCREEN_SITE_TREE')));
 		}
 
-		if (count($GLOBALS['SITE_DB']->query_value('zones','COUNT(*)'))>=300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL',escape_html(integer_format(50))),'warn');
+		if (count($GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)'))>=300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL',escape_html(integer_format(50))),'warn');
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_more');

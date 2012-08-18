@@ -748,7 +748,7 @@ class Module_admin_config
 						$current_setting=get_option($myrow['the_name']);
 						if (!is_numeric($current_setting))
 						{
-							$_current_setting=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','id',array('f_name'=>$current_setting));
+							$_current_setting=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array('f_name'=>$current_setting));
 							if (is_null($_current_setting))
 							{
 								if ($myrow['the_type']=='?forum')
@@ -773,7 +773,7 @@ class Module_admin_config
 				case 'category':
 					if (get_forum_type()=='ocf')
 					{
-						$tmp_value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>get_option($myrow['the_name'])));
+						$tmp_value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>get_option($myrow['the_name'])));
 
 						require_code('ocf_forums2');
 						$_list=ocf_nice_get_categories(NULL,$tmp_value);
@@ -786,7 +786,7 @@ class Module_admin_config
 				case 'usergroup':
 					if (get_forum_type()=='ocf')
 					{
-						$tmp_value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>get_option($myrow['the_name'])));
+						$tmp_value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>get_option($myrow['the_name'])));
 
 						require_code('ocf_groups');
 						$_list=ocf_nice_get_usergroups($tmp_value);
@@ -914,19 +914,19 @@ class Module_admin_config
 			{
 				$value=post_param($myrow['the_name']);
 				if (is_numeric($value))
-					$value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('id'=>post_param_integer($myrow['the_name'])));
+					$value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_name',array('id'=>post_param_integer($myrow['the_name'])));
 				if (is_null($value)) $value='';
 			}
 			elseif (($myrow['the_type']=='category') && (get_forum_type()=='ocf'))
 			{
 				$value=post_param($myrow['the_name']);
 				if (is_numeric($value))
-					$value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','c_title',array('id'=>post_param_integer($myrow['the_name'])));
+					$value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','c_title',array('id'=>post_param_integer($myrow['the_name'])));
 				if (is_null($value)) $value='';
 			}
 			elseif (($myrow['the_type']=='usergroup') && (get_forum_type()=='ocf'))
 			{
-				$value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','text_original',array('g.id'=>post_param_integer($myrow['the_name'])));
+				$value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','text_original',array('g.id'=>post_param_integer($myrow['the_name'])));
 				if (is_null($value)) $value='';
 			} else
 			{

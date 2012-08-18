@@ -49,7 +49,7 @@ function find_awards_for($content_type,$id)
 	{
 		require_lang('awards');
 		$awards[]=array(
-			'AWARD_TYPE'=>get_translated_text($GLOBALS['SITE_DB']->query_value('award_types','a_title',array('id'=>$row['a_type_id']))),
+			'AWARD_TYPE'=>get_translated_text($GLOBALS['SITE_DB']->query_select_value('award_types','a_title',array('id'=>$row['a_type_id']))),
 			'AWARD_TIMESTAMP'=>strval($row['date_and_time'])
 		);
 	}
@@ -150,9 +150,9 @@ function add_award_type($title,$description,$points,$content_type,$hide_awardee,
  */
 function edit_award_type($id,$title,$description,$points,$content_type,$hide_awardee,$update_time_hours)
 {
-	$_title=$GLOBALS['SITE_DB']->query_value_null_ok('award_types','a_title',array('id'=>$id));
+	$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('award_types','a_title',array('id'=>$id));
 	if (is_null($_title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$_description=$GLOBALS['SITE_DB']->query_value('award_types','a_description',array('id'=>$id));
+	$_description=$GLOBALS['SITE_DB']->query_select_value('award_types','a_description',array('id'=>$id));
 	$GLOBALS['SITE_DB']->query_update('award_types',array('a_title'=>lang_remap_comcode($_title,$title),'a_description'=>lang_remap($_description,$description),'a_points'=>$points,'a_content_type'=>filter_naughty_harsh($content_type),'a_hide_awardee'=>$hide_awardee,'a_update_time_hours'=>$update_time_hours),array('id'=>$id));
 	log_it('EDIT_AWARD_TYPE',strval($id),$_title);
 }
@@ -164,9 +164,9 @@ function edit_award_type($id,$title,$description,$points,$content_type,$hide_awa
  */
 function delete_award_type($id)
 {
-	$_title=$GLOBALS['SITE_DB']->query_value_null_ok('award_types','a_title',array('id'=>$id));
+	$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('award_types','a_title',array('id'=>$id));
 	if (is_null($_title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$_description=$GLOBALS['SITE_DB']->query_value('award_types','a_description',array('id'=>$id));
+	$_description=$GLOBALS['SITE_DB']->query_select_value('award_types','a_description',array('id'=>$id));
 	log_it('DELETE_AWARD_TYPE',strval($id),get_translated_text($_title));
 	$GLOBALS['SITE_DB']->query_delete('award_types',array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('award_archive',array('a_type_id'=>$id),'',1);
@@ -196,7 +196,7 @@ function get_award_fields($content_type,$id=NULL)
 		{
 			if (!is_null($id))
 			{
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('award_archive','content_id',array('a_type_id'=>$row['id']),'ORDER BY date_and_time DESC');
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','content_id',array('a_type_id'=>$row['id']),'ORDER BY date_and_time DESC');
 				$has_award=($test===$id);
 			} else $has_award=(get_param_integer('award',NULL)===$row['id']);
 
@@ -233,7 +233,7 @@ function handle_award_setting($content_type,$id)
 	{
 		if (has_category_access(get_member(),'award',strval($row['id'])))
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('award_archive','content_id',array('a_type_id'=>$row['id']),'ORDER BY date_and_time DESC');
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','content_id',array('a_type_id'=>$row['id']),'ORDER BY date_and_time DESC');
 			$has_award=(!is_null($test)) && ($test===$id);
 			$will_have_award=(post_param_integer('award_'.strval($row['id']),0)==1);
 

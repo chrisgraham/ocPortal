@@ -48,9 +48,9 @@ class Module_admin_stats
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('stats');
-		$GLOBALS['SITE_DB']->drop_if_exists('usersonline_track');
-		$GLOBALS['SITE_DB']->drop_if_exists('ip_country');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('stats');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('usersonline_track');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('ip_country');
 
 		delete_config_option('super_logging');
 		delete_config_option('stats_store_time');
@@ -220,7 +220,7 @@ class Module_admin_stats
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_statistics';
 
 		require_code('templates_donext');
-		$test=$GLOBALS['SITE_DB']->query_value('ip_country','COUNT(*)');
+		$test=$GLOBALS['SITE_DB']->query_select_value('ip_country','COUNT(*)');
 		$actions=array(
 			/*	 type							  page	 params													 zone	  */
 			array('statistics',array('_SELF',array('type'=>'overview'),'_SELF'),do_lang('OVERVIEW_STATISTICS'),('DESCRIPTION_OVERVIEW_STATISTICS')),
@@ -271,7 +271,7 @@ class Module_admin_stats
 			$prior_year--;
 		}
 		$prior_month_start=utctime_to_usertime(mktime(0,0,0,$prior_month,1,$prior_year));
-		$first_stat=$stats_table?$GLOBALS['SITE_DB']->query_value_null_ok('stats','MIN(date_and_time)'):NULL;
+		$first_stat=$stats_table?$GLOBALS['SITE_DB']->query_select_value_if_there('stats','MIN(date_and_time)'):NULL;
 		if (is_null($first_stat))
 		{
 			$year_start=intval(date('Y'))-5;
@@ -406,7 +406,7 @@ class Module_admin_stats
 
 		$rows=$GLOBALS['SITE_DB']->query_select('adminlogs',array('date_and_time','COUNT(*) AS cnt'),NULL,'GROUP BY date_and_time ORDER BY '.$sortable.' '.$sort_order,3000/*reasonable limit*/);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
-		//$max_rows=$GLOBALS['SITE_DB']->query_value('adminlogs','COUNT(DISTINCT date_and_time)');	Cannot do this as the DB does not do all the processing
+		//$max_rows=$GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(DISTINCT date_and_time)');	Cannot do this as the DB does not do all the processing
 
 		$data=array();
 		$base=$rows[0]['date_and_time'];
@@ -466,7 +466,7 @@ class Module_admin_stats
 		if (!is_null($time_end)) $time_end+=60*60*24-1; // So it is end of day not start
 		if (is_null($time_start)) $time_start=0;
 		if (is_null($time_end)) $time_end=time();
-		$first_stat=$GLOBALS['SITE_DB']->query_value_null_ok('stats','MIN(date_and_time)');
+		$first_stat=$GLOBALS['SITE_DB']->query_select_value_if_there('stats','MIN(date_and_time)');
 		if ($time_end<$first_stat) warn_exit(do_lang_tempcode('NO_DATA_SPECIFIC'));
 
 		$start=get_param_integer('start',0);
@@ -571,7 +571,7 @@ class Module_admin_stats
 		if (!is_null($time_end)) $time_end+=60*60*24-1; // So it is end of day not start
 		if (is_null($time_start)) $time_start=0;
 		if (is_null($time_end)) $time_end=time();
-		$first_stat=$GLOBALS['SITE_DB']->query_value_null_ok('stats','MIN(date_and_time)');
+		$first_stat=$GLOBALS['SITE_DB']->query_select_value_if_there('stats','MIN(date_and_time)');
 		if ($time_end<$first_stat) warn_exit(do_lang_tempcode('NO_DATA_SPECIFIC'));
 
 		$start=get_param_integer('start',0);
@@ -688,7 +688,7 @@ class Module_admin_stats
 		if (!is_null($time_end)) $time_end+=60*60*24-1; // So it is end of day not start
 		if (is_null($time_start)) $time_start=0;
 		if (is_null($time_end)) $time_end=time();
-		$first_stat=$GLOBALS['SITE_DB']->query_value_null_ok('stats','MIN(date_and_time)');
+		$first_stat=$GLOBALS['SITE_DB']->query_select_value_if_there('stats','MIN(date_and_time)');
 		if ($time_end<$first_stat) warn_exit(do_lang_tempcode('NO_DATA_SPECIFIC'));
 
 		$start=get_param_integer('start',0);
@@ -811,7 +811,7 @@ class Module_admin_stats
 		if (!is_null($time_end)) $time_end+=60*60*24-1; // So it is end of day not start
 		if (is_null($time_start)) $time_start=0;
 		if (is_null($time_end)) $time_end=time();
-		$first_stat=$GLOBALS['SITE_DB']->query_value_null_ok('stats','MIN(date_and_time)');
+		$first_stat=$GLOBALS['SITE_DB']->query_select_value_if_there('stats','MIN(date_and_time)');
 		if ($time_end<$first_stat) warn_exit(do_lang_tempcode('NO_DATA_SPECIFIC'));
 
 		$start=get_param_integer('start',0);
@@ -837,7 +837,7 @@ class Module_admin_stats
 		{
 			$page=$row['the_page'];
 			$matches=array();
-			if ((preg_match('#^/?([^/]+)/pages/([^/]+)/(\w\w/)?([^/\.]+)\.(php|txt|htm)$#',$page,$matches)==1) && ($matches[4]=='catalogues') && (addon_installed('catalogues')) && ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',NULL,'',true)<300))
+			if ((preg_match('#^/?([^/]+)/pages/([^/]+)/(\w\w/)?([^/\.]+)\.(php|txt|htm)$#',$page,$matches)==1) && ($matches[4]=='catalogues') && (addon_installed('catalogues')) && ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',NULL,'',true)<300))
 			{
 				require_lang('catalogues');
 				$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title'),NULL,'',NULL,NULL,true);
@@ -845,7 +845,7 @@ class Module_admin_stats
 				{
 					$where=db_string_equal_to('the_page',$page);
 					if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-					$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND get LIKE \''.db_encode_like("<param>page=catalogues</param>\n<param>type=category</param>\n<param>id=".strval($cat['id'])."</param>%").'\' AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end));
+					$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND get LIKE \''.db_encode_like("<param>page=catalogues</param>\n<param>type=category</param>\n<param>id=".strval($cat['id'])."</param>%").'\' AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end));
 					$views[do_lang('CATALOGUE_CATEGORY').': '.get_translated_text($cat['cc_title'])]=array($count,$page);
 					$total+=$count;
 				}
@@ -857,7 +857,7 @@ class Module_admin_stats
 			}
 			$where=db_string_equal_to('the_page',$page);
 			if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-			$views[$page2]=array($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end)),$page);
+			$views[$page2]=array($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end)),$page);
 			$total+=$views[$page2][0];
 		}
 		$views[do_lang('_ALL')]=array($total,NULL);
@@ -1111,7 +1111,7 @@ class Module_admin_stats
 		//************************************************************************************************
 		// Regionalities
 		//************************************************************************************************
-		$regionalities_test=$GLOBALS['SITE_DB']->query_value('ip_country','COUNT(*)');
+		$regionalities_test=$GLOBALS['SITE_DB']->query_select_value('ip_country','COUNT(*)');
 		if ($regionalities_test>0)
 		{
 			$start=get_param_integer('start_regionalities',0);
@@ -1324,7 +1324,7 @@ class Module_admin_stats
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/installgeolocationdata';
 
-		$test=$GLOBALS['SITE_DB']->query_value('ip_country','COUNT(*)');
+		$test=$GLOBALS['SITE_DB']->query_select_value('ip_country','COUNT(*)');
 		if ($test>=$last)
 		{
 			$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

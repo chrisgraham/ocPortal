@@ -111,7 +111,7 @@ class Hook_support_credits
 	 */
 	function member_for($key)
 	{
-		return $GLOBALS['SITE_DB']->query_value_null_ok('credit_purchases','member_id',array('purchase_id'=>intval($key)));
+		return $GLOBALS['SITE_DB']->query_select_value_if_there('credit_purchases','member_id',array('purchase_id'=>intval($key)));
 	}
 
 	function get_needed_fields()

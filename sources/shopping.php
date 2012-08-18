@@ -128,7 +128,7 @@ function remove_from_cart($product_to_remove)
  */
 function log_cart_actions($action)
 {
-	$id=$GLOBALS['SITE_DB']->query_value_null_ok('shopping_logging','id',array('e_member_id'=>get_member(),'session_id'=>get_session_id()));
+	$id=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_logging','id',array('e_member_id'=>get_member(),'session_id'=>get_session_id()));
 
 	if (is_null($id))
 	{
@@ -180,7 +180,7 @@ function show_cart_image()
 	{
 		$where['ordered_by']=get_member();
 	}
-	$item_count=$GLOBALS['SITE_DB']->query_value_null_ok('shopping_cart','count(*)',$where);
+	$item_count=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_cart','count(*)',$where);
 
 	if ($item_count>0)
 		$title=do_lang_tempcode('CART_ITEMS',strval($item_count));
@@ -197,7 +197,7 @@ function show_cart_image()
  */
 function purchase_done_staff_mail($order_id)
 {
-	$member_id=$GLOBALS['SITE_DB']->query_value('shopping_order','c_member',array('id'=>$order_id));
+	$member_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','c_member',array('id'=>$order_id));
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 	$subject=do_lang('ORDER_PLACED_MAIL_SUBJECT',get_site_name(),strval($order_id),get_site_default_lang());
 	$message=do_lang('ORDER_PLACED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($username),array(strval($order_id)),get_site_default_lang());
@@ -298,7 +298,7 @@ function payment_form()
 			'tax_opted_out'=>$tax_opt_out,
 		);
 
-		if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','id')))
+		if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','id')))
 		{
 			$insert['id']=hexdec('1701D'); // Start offset
 		}

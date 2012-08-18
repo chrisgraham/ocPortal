@@ -53,7 +53,7 @@ foreach ($topic_filters as $topic_filter)
 	if ($query!='') $query.=' + ';
 	$query.='(SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_forum_id='.strval(get_ticket_forum_id(NULL,NULL,false)).' AND '.$topic_filter.' AND t_is_open=1)';
 }
-$tickets_open=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT '.$query,false,true);
+$tickets_open=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT '.$query,false,true);
 
 $username_link=hyperlink($GLOBALS['FORUM_DRIVER']->member_profile_url(get_member()),escape_html($username));
 $logout_url=build_url(array('page'=>'login','type'=>'logout','redirect'=>get_self_url(true,true)),'');

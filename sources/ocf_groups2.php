@@ -33,7 +33,7 @@ function ocf_get_group_members_raw_count($group_id,$include_primaries=true,$non_
 	// Find for conventional members
 	$where=array('gm_group_id'=>$group_id);
 	if (!$non_validated) $where['gm_validated']=1;
-	$a=$GLOBALS['FORUM_DB']->query_value('f_group_members','COUNT(*)',$where,'ORDER BY gm_member_id');
+	$a=$GLOBALS['FORUM_DB']->query_select_value('f_group_members','COUNT(*)',$where,'ORDER BY gm_member_id');
 	if ($include_primaries)
 	{
 		$map=array('m_primary_group'=>$group_id);
@@ -42,7 +42,7 @@ function ocf_get_group_members_raw_count($group_id,$include_primaries=true,$non_
 			//$map['m_validated_confirm_code']='';
 			$map['m_validated']=1;
 		}
-		$b=$GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)',$map);
+		$b=$GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)',$map);
 	} else $b=0;
 
 	// Now implicit usergroup hooks

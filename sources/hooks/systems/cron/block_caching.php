@@ -39,7 +39,7 @@ class Hook_cron_block_caching
 					if (($theme=='default') || (has_category_access(get_member(),'theme',$theme)))
 					{
 						$where=array('c_theme'=>$theme,'c_lang'=>$lang);
-						$count=$GLOBALS['SITE_DB']->query_value('cron_caching_requests','COUNT(*)',$where);
+						$count=$GLOBALS['SITE_DB']->query_select_value('cron_caching_requests','COUNT(*)',$where);
 						if ($count>0)
 						{
 							$url=get_base_url().'/data/cron_bridge.php?limit_hook=block_caching&keep_lang='.urlencode($lang).'&keep_theme='.urlencode($theme);

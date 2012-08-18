@@ -82,7 +82,7 @@ function get_bug_category_id($version_pretty)
 	require_code('catalogues');
 	require_code('catalogues2');
 
-	if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'bugs'))))
+	if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'bugs'))))
 	{
 		actual_add_catalogue('bugs','Bugs','',C_DT_MAPS,0,'',0);
 		$fields=array(
@@ -96,7 +96,7 @@ function get_bug_category_id($version_pretty)
 			$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'bugs','group_id'=>$group_id));
 	}
 
-	$bug_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('text_original'=>strval($version_pretty)));
+	$bug_category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('text_original'=>strval($version_pretty)));
 	if (is_null($bug_category_id))
 	{
 		$bug_category_id=actual_add_catalogue_category('bugs',strval($version_pretty),'','',NULL);
@@ -113,7 +113,7 @@ function server__create_forum_post($_replying_to_post,$post_reply_title,$post_re
 	$replying_to_post=intval($_replying_to_post);
 	$post_important=intval($_post_important);
 
-	$topic_id=$GLOBALS['FORUM_DB']->query_value('f_posts','p_topic_id',array('id'=>$replying_to_post));
+	$topic_id=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_topic_id',array('id'=>$replying_to_post));
 
 	require_code('ocf_posts_action');
 	require_code('mantis'); // Defines LEAD_DEVELOPER_MEMBER_ID
@@ -150,7 +150,7 @@ function myocp_add_site($codename,$name,$email_address,$password,$description,$c
 	}
 
 	// Check named site available
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('sites','s_server',array('s_codename'=>$codename));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('sites','s_server',array('s_codename'=>$codename));
 	if (!is_null($test))
 	{
 		// Did it fail adding before? It's useful to not have to fiddle around manually cleaning up when debugging
@@ -608,7 +608,7 @@ function myocp_delete_old_sites()
 	{
 		$subject=do_lang('MO_EMAIL_EXPIRE_SUBJECT',$site['s_codename']);
 		$message=do_lang('MO_EMAIL_EXPIRE_BODY',comcode_escape($site['s_codename']));
-		$email_address=$GLOBALS['SITE_DB']->query_value_null_ok('sites_email','s_email_to',array('s_codename'=>$site['s_codename'],'s_email_from'=>'staff'));
+		$email_address=$GLOBALS['SITE_DB']->query_select_value_if_there('sites_email','s_email_to',array('s_codename'=>$site['s_codename'],'s_email_from'=>'staff'));
 		if (!is_null($email_address))
 			mail_wrap($subject,$message,array($email_address));
 		

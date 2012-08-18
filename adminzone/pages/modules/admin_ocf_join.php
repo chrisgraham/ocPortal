@@ -196,7 +196,7 @@ class Module_admin_ocf_join
 		{
 			require_code('ocf_groups_action2');
 			$members_groups=array();
-			$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
+			$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 			$groups=list_to_map('id',$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),($group_count>200)?array('g_is_private_club'=>0):NULL));
 			foreach ($_POST['secondary_groups'] as $group_id)
 			{
@@ -263,7 +263,7 @@ class Module_admin_ocf_join
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',100);
-		$max_rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_value('f_group_member_timeouts','COUNT(*)');
+		$max_rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_group_member_timeouts','COUNT(*)');
 		$fields_title=results_field_title(array(
 			do_lang_tempcode('USERNAME'),
 			do_lang_tempcode('_USERGROUP'),
@@ -394,7 +394,7 @@ class Module_admin_ocf_join
 		$fields->attach(form_input_integer(do_lang_tempcode('DELURK_MIN_DAYS_SINCE_LOGIN'),do_lang_tempcode('DELURK_MIN_DAYS_SINCE_LOGIN_DESCRIPTION'),'min_days_since_login',$min_days_since_login,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('DELURK_MIN_DAYS_SINCE_JOIN'),do_lang_tempcode('DELURK_MIN_DAYS_SINCE_JOIN_DESCRIPTION'),'min_days_since_join',$min_days_since_join,true));
 		$groups=new ocp_tempcode();
-		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
+		$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),($group_count>200)?array('g_is_private_club'=>0):NULL);
 		foreach ($rows as $row)
 		{
@@ -443,7 +443,7 @@ class Module_admin_ocf_join
 				{
 					if (in_array($g_id,$usergroups)) continue 2;
 				}
-				$num_actions=$GLOBALS['SITE_DB']->query_value('adminlogs','COUNT(*)',array('the_user'=>$row['id']));
+				$num_actions=$GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(*)',array('the_user'=>$row['id']));
 				if ($num_actions>$max_logged_actions) continue;
 
 				if (count($out)==500)
@@ -589,13 +589,13 @@ class Module_admin_ocf_join
 		if (addon_installed('ocf_member_avatars')) $fields[]='m_avatar_url';
 		if (addon_installed('ocf_member_photos')) $fields[]='m_photo_url';
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,false,true);
-		$member_groups_count=$GLOBALS['FORUM_DB']->query_value('f_group_members','COUNT(*)',array('gm_validated'=>1));
+		$member_groups_count=$GLOBALS['FORUM_DB']->query_select_value('f_group_members','COUNT(*)',array('gm_validated'=>1));
 		if ($member_groups_count<500)
 		{
 			$member_groups=$GLOBALS['FORUM_DB']->query_select('f_group_members',array('gm_member_id','gm_group_id'),array('gm_validated'=>1));
 		} else $member_groups=array();
 		$cpfs=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type','cf_name'),NULL,'ORDER BY cf_order');
-		$member_count=$GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)');
+		$member_count=$GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)');
 		if ($member_count<700)
 		{
 			$member_cpfs=list_to_map('mf_member_id',$GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*')));

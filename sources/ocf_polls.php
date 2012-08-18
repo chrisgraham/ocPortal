@@ -115,7 +115,7 @@ function ocf_poll_get_results($poll_id,$request_results=true)
 	if ($request_results)
 	{
 		// Forfeighting this by viewing results?
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_poll_votes','pv_answer_id',array('pv_poll_id'=>$poll_id,'pv_member_id'=>get_member()));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_poll_votes','pv_answer_id',array('pv_poll_id'=>$poll_id,'pv_member_id'=>get_member()));
 		if (is_null($test))
 		{
 			$forfeight=!has_specific_permission(get_member(),'view_poll_results_before_voting');

@@ -31,7 +31,7 @@ class Hook_search_ocf_own_pt
 		if (get_forum_type()!='ocf') return NULL;
 		if (!has_actual_page_access(get_member(),'topicview')) return NULL;
 		if (get_member()==$GLOBALS['OCF_DRIVER']->get_guest_id()) return NULL;
-		if ($GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_from='.strval(get_member()).' OR '.'t_pt_to='.strval(get_member()))==0) return NULL;
+		if ($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_from='.strval(get_member()).' OR '.'t_pt_to='.strval(get_member()))==0) return NULL;
 
 		require_lang('ocf');
 

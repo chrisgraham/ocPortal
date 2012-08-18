@@ -41,7 +41,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 
 		require_code('ocf_forumview_pt');
 		$details=ocf_get_private_topics($start,$max,$of_member_id);
-		$root_forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$root));
+		$root_forum_name=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>$root));
 		$breadcrumbs=hyperlink(build_url(array('page'=>'_SELF','id'=>($root==db_get_first_id())?NULL:$root),'_SELF'),escape_html($root_forum_name),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$root_forum_name),NULL,NULL,'up');
 		$breadcrumbs->attach(' &gt; ');
 		$pt_username=$GLOBALS['FORUM_DRIVER']->get_username($of_member_id);
@@ -654,7 +654,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	$order=$forum_info[0]['f_order_sub_alpha']?'f_name':'f_position';
 	$_max_forum_detail=get_value('max_forum_detail');
 	$max_forum_detail=is_null($_max_forum_detail)?100:intval($_max_forum_detail);
-	$huge_forums=$GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)')>$max_forum_detail;
+	$huge_forums=$GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>$max_forum_detail;
 	if ($huge_forums)
 	{
 		$_max_forum_inspect=get_value('max_forum_inspect');
@@ -815,7 +815,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	}
 	$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start);
 	if (($start==0) && (count($topic_rows)<$max)) $max_rows=$max; // We know that they're all on this screen
-	else $max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$where);
+	else $max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$where);
 	$topics=array();
 	$hot_topic_definition=intval(get_option('hot_topic_definition'));
 	$or_list='';
@@ -863,10 +863,10 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	if (!$question->is_empty())
 	{
 		$is_guest=($member_id==$GLOBALS['OCF_DRIVER']->get_guest_id());
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forum_intro_ip','i_ip',array('i_forum_id'=>$forum_id,'i_ip'=>get_ip_address(3)));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_intro_ip','i_ip',array('i_forum_id'=>$forum_id,'i_ip'=>get_ip_address(3)));
 		if ((is_null($test)) && (!$is_guest))
 		{
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forum_intro_member','i_member_id',array('i_forum_id'=>$forum_id,'i_member_id'=>$member_id));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_intro_member','i_member_id',array('i_forum_id'=>$forum_id,'i_member_id'=>$member_id));
 		}
 		if (is_null($test))
 		{

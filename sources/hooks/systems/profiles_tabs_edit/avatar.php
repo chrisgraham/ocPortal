@@ -68,7 +68,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 					{
 						if ((url_is_local($stock)) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin($member_id_viewing)))
 						{
-							$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_avatar_url',array('id'=>$member_id_of));
+							$old=$GLOBALS['FORUM_DB']->query_select_value('f_members','m_avatar_url',array('id'=>$member_id_of));
 							if ($old!=$stock) access_denied('ASSOCIATE_EXISTING_FILE');
 						}
 						$urls[0]=$stock; // URL

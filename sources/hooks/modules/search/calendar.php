@@ -31,7 +31,7 @@ class Hook_search_calendar
 		if (!module_installed('calendar')) return NULL;
 
 		if (!has_actual_page_access(get_member(),'calendar')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)')==0) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)')==0) return NULL;
 
 		require_lang('calendar');
 

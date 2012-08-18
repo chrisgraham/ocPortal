@@ -262,7 +262,7 @@ function delete_ticket_by_topic_id($topic_id)
 function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_url,$staff_only=false)
 {
 	// Get the forum ID first
-	$fid=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','forum_id',array('ticket_id'=>$ticket_id));
+	$fid=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','forum_id',array('ticket_id'=>$ticket_id));
 	if (is_null($fid)) $fid=get_ticket_forum_id($member,$ticket_type);
 
 	$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
@@ -313,14 +313,14 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 
 	$new_ticket=($ticket_type_if_new!=-1);
 
-	$ticket_type_id=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+	$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
 
 	$ticket_type_text=mixed();
 
 	if (($uid!=get_member()) && (!is_guest($uid)))
 	{
 		// Reply from staff, notification to user
-		$ticket_type_text=$GLOBALS['SITE_DB']->query_value_null_ok('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
+		$ticket_type_text=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
 		$their_lang=get_lang($uid);
 		$subject=do_lang('TICKET_REPLY',$ticket_type_text,$ticket_type_text,($title=='')?do_lang('UNKNOWN'):$title,$their_lang);
 		$post_tempcode=comcode_to_tempcode($post);

@@ -34,7 +34,7 @@ function actual_edit_theme_image($old_id,$theme,$lang,$id,$path,$quick=false)
 	{
 		$where_map=array('theme'=>$theme,'id'=>$id);
 		if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','id',$where_map);
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','id',$where_map);
 		if (!is_null($test))
 		{
 			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($id)));
@@ -131,7 +131,7 @@ function actual_add_theme($name)
 		$theme_images=$GLOBALS['SITE_DB']->query_select('theme_images',array('*'),array('theme'=>'default'),'',100,$start);
 		foreach ($theme_images as $theme_image)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','id',array('theme'=>$name,'id'=>$theme_image['id'],'lang'=>$theme_image['lang']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','id',array('theme'=>$name,'id'=>$theme_image['id'],'lang'=>$theme_image['lang']));
 			if (is_null($test))
 				$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$theme_image['id'],'theme'=>$name,'path'=>$theme_image['path'],'lang'=>$theme_image['lang']));
 		}
@@ -153,7 +153,7 @@ function actual_add_theme($name)
  */
 function actual_add_theme_image($theme,$lang,$id,$path,$fail_ok=false)
 {
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','id',array('id'=>$id,'theme'=>$theme,'lang'=>$lang));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','id',array('id'=>$id,'theme'=>$theme,'lang'=>$lang));
 	if (!is_null($test))
 	{
 		if ($fail_ok) return;
@@ -613,10 +613,10 @@ function tidy_theme_img_code($new,$old,$table,$field,$db=NULL)
 	$path=find_theme_image($old,true,true);
 	if ((is_null($path)) || ($path=='')) return;
 
-	if ((strpos($path,'/images_custom/')!==false) && ($GLOBALS['SITE_DB']->query_value('theme_images','COUNT(DISTINCT id)',array('path'=>$path))==1))
+	if ((strpos($path,'/images_custom/')!==false) && ($GLOBALS['SITE_DB']->query_select_value('theme_images','COUNT(DISTINCT id)',array('path'=>$path))==1))
 	{
 		if (is_null($db)) $db=$GLOBALS['SITE_DB'];
-		$count=$db->query_value($table,'COUNT(*)',array($field=>$old));
+		$count=$db->query_select_value($table,'COUNT(*)',array($field=>$old));
 		if ($count==0)
 		{
 			@unlink(get_custom_file_base().'/'.$path);

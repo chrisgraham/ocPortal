@@ -132,7 +132,7 @@ class Module_admin_emaillog
 				do_template('CROP_TEXT_MOUSE_OVER',array('TEXT_LARGE'=>escape_html($row['m_message']),'TEXT_SMALL'=>escape_html($row['m_subject']))),
 			)));
 		}
-		$max_rows=$GLOBALS['SITE_DB']->query_value('logged_mail_messages','COUNT(*)');
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('logged_mail_messages','COUNT(*)');
 		$results_table=results_table(do_lang_tempcode('EMAIL_LOG'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort',new ocp_tempcode());
 
 		$mass_delete_url=build_url(array('page'=>'_SELF','type'=>'mass_delete'),'_SELF');
@@ -303,7 +303,7 @@ class Module_admin_emaillog
 	{
 		$title=get_screen_title('DELETE_ALL');
 
-		$count=$GLOBALS['SITE_DB']->query_value('logged_mail_messages','COUNT(*)',array('m_queued'=>1));
+		$count=$GLOBALS['SITE_DB']->query_select_value('logged_mail_messages','COUNT(*)',array('m_queued'=>1));
 
 		$GLOBALS['SITE_DB']->query_delete('logged_mail_messages',array('m_queued'=>1));
 

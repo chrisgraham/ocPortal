@@ -120,7 +120,7 @@ class Hook_ipb_base
 				$promotion_threshold=NULL;
 			}
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['g_title']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['g_title']),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group(@html_entity_decode($row['g_title'],ENT_QUOTES,get_charset()),0,$row['g_access_cp'],$row['g_is_supmod'],'','',$promotion_target,$promotion_threshold,NULL,$row['g_avoid_flood']?0:$row['g_search_flood'],0,5,5,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode);
@@ -142,7 +142,7 @@ class Hook_ipb_base
 			{
 				list($page,$zone)=$deny;
 				if (is_null($zone)) continue;
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('group_page_access','group_id',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('group_page_access','group_id',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
 				if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('group_page_access',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
 			}
 
@@ -527,7 +527,7 @@ class Hook_ipb_base
 			if ($row['ftype']=='text') $type='short_text';
 			elseif ($row['ftype']=='area') $type='long_text';
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$row['ftitle']));
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$row['ftitle']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_custom_field($row['ftitle'],0,$row['fdesc'],'',1-$row['fhide'],1-$row['fhide'],$row['fedit'],0,$type,$row['freq'],0,0,$row['forder'],'',true);
@@ -662,7 +662,7 @@ class Hook_ipb_base
 					$forum_id=$TOPIC_FORUM_CACHE[$topic_id];
 				} else
 				{
-					$forum_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_forum_id',array('id'=>$topic_id));
+					$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_forum_id',array('id'=>$topic_id));
 					if (is_null($forum_id)) continue;
 					$TOPIC_FORUM_CACHE[$topic_id]=$forum_id;
 				}

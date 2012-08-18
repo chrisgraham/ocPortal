@@ -15,7 +15,7 @@ function init__uploads($old)
 
 	if (!$GLOBALS['SITE_DB']->table_exists('image_url_sub_for')) return $old;
 
-	$old=str_replace("'tmp_name'=>get_custom_file_base().'/'.\$incoming_uploads_row[0]['i_save_url'],","'tmp_name'=>get_custom_file_base().'/'.(is_null(\$sub=\$GLOBALS['SITE_DB']->query_value_null_ok('image_url_sub_for','url_to',array('url_from'=>\$incoming_uploads_row[0]['i_save_url'],'member_id'=>get_member()),'ORDER BY expire DESC'))?\$incoming_uploads_row[0]['i_save_url']:\$sub),",$old);
+	$old=str_replace("'tmp_name'=>get_custom_file_base().'/'.\$incoming_uploads_row[0]['i_save_url'],","'tmp_name'=>get_custom_file_base().'/'.(is_null(\$sub=\$GLOBALS['SITE_DB']->query_select_value_if_there('image_url_sub_for','url_to',array('url_from'=>\$incoming_uploads_row[0]['i_save_url'],'member_id'=>get_member()),'ORDER BY expire DESC'))?\$incoming_uploads_row[0]['i_save_url']:\$sub),",$old);
 	return $old;
 }
 

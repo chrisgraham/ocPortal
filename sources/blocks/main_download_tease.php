@@ -70,7 +70,7 @@ class Block_main_download_tease
 		$start=get_param_integer('start',0);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('validated'=>1),'ORDER BY num_downloads DESC',$max,$start);
-		$max_rows=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)',array('validated'=>1));
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)',array('validated'=>1));
 
 		$content=new ocp_tempcode();
 		foreach ($rows as $row)

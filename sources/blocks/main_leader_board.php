@@ -82,7 +82,7 @@ class Block_main_leader_board
 	function uninstall()
 	{
 		delete_config_option('leaderboard_start_date');
-		$GLOBALS['SITE_DB']->drop_if_exists('leader_board');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('leader_board');
 	}
 
 	/**

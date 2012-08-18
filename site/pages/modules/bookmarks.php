@@ -46,7 +46,7 @@ class Module_bookmarks
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('bookmarks');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('bookmarks');
 	}
 
 	/**

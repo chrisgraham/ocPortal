@@ -428,7 +428,7 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
 	$bookable_details['calendar_type']=$_old_bookable[0]['calendar_type'];
 	require_code('calendar2');
 	$external_feed=find_script('bookings_ical').'?id='.strval($bookable_id).'&pass='.md5('booking_salt_'.$GLOBALS['SITE_INFO']['admin_password']);
-	if ((is_null($bookable_details['calendar_type'])) && (is_null($GLOBALS['SITE_DB']->query_value_null_ok('calendar_types','id',array('id'=>$bookable_details['calendar_type'])))))
+	if ((is_null($bookable_details['calendar_type'])) && (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('calendar_types','id',array('id'=>$bookable_details['calendar_type'])))))
 	{
 		$bookable_details['calendar_type']=add_event_type($title,'calendar/booking',$external_feed);
 	} else
@@ -481,7 +481,7 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
  */
 function delete_bookable($bookable_id)
 {
-	if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('booking','id',array('bookable_id'=>$bookable_id))))
+	if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('booking','id',array('bookable_id'=>$bookable_id))))
 		warn_exit(do_lang_tempcode('CANNOT_DELETE_BOOKINGS_EXIST'));
 
 	$_old_bookable=$GLOBALS['SITE_DB']->query_select('bookable',array('*'),array('id'=>$bookable_id),'',1);
@@ -494,7 +494,7 @@ function delete_bookable($bookable_id)
 	delete_lang($_old_bookable[0]['categorisation']);
 
 	$calendar_type=$_old_bookable[0]['calendar_type'];
-	if ((is_null($calendar_type)) && (is_null($GLOBALS['SITE_DB']->query_value_null_ok('calendar_types','id',array('id'=>$calendar_type)))) && ($GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)',array('e_type'=>$calendar_type))==0))
+	if ((is_null($calendar_type)) && (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('calendar_types','id',array('id'=>$calendar_type)))) && ($GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)',array('e_type'=>$calendar_type))==0))
 	{
 		require_code('calendar2');
 		delete_event_type($calendar_type);

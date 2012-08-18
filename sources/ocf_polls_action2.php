@@ -79,7 +79,7 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 		));
 	}
 
-	$name=$GLOBALS['FORUM_DB']->query_value('f_polls','po_question',array('id'=>$poll_id));
+	$name=$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question',array('id'=>$poll_id));
 	require_code('ocf_general_action2');
 	ocf_mod_log_it('EDIT_TOPIC_POLL',strval($poll_id),$name,$reason);
 
@@ -102,7 +102,7 @@ function ocf_delete_poll($poll_id,$reason)
 		access_denied('I_ERROR');
 	$topic_id=$topic_info[0]['id'];
 
-	$name=$GLOBALS['FORUM_DB']->query_value('f_polls','po_question',array('id'=>$poll_id));
+	$name=$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question',array('id'=>$poll_id));
 
 	$GLOBALS['FORUM_DB']->query_delete('f_polls',array('id'=>$poll_id),'',1);
 	$GLOBALS['FORUM_DB']->query_delete('f_poll_answers',array('pa_poll_id'=>$poll_id));
@@ -137,7 +137,7 @@ function ocf_vote_in_poll($poll_id,$votes,$member_id=NULL,$topic_info=NULL)
 	$topic_id=$topic_info[0]['id'];
 	$forum_id=$topic_info[0]['t_forum_id'];
 	if ((!has_category_access($member_id,'forums',strval($forum_id))) && (!is_null($forum_id))) warn_exit(do_lang_tempcode('VOTE_CHEAT'));
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_poll_votes','pv_member_id',array('pv_poll_id'=>$poll_id,'pv_member_id'=>$member_id));
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_poll_votes','pv_member_id',array('pv_poll_id'=>$poll_id,'pv_member_id'=>$member_id));
 	if (!is_null($test)) warn_exit(do_lang_tempcode('NOVOTE'));
 
 	// Check their vote is valid

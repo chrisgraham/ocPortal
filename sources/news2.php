@@ -44,7 +44,7 @@ function import_wordpress_db()
 	{
 		if (get_forum_type()=='ocf')
 		{
-			$member_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$values['user_login']));
+			$member_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$values['user_login']));
 
 			if (is_null($member_id))
 			{
@@ -93,7 +93,7 @@ function import_wordpress_db()
 					}
 				}
 
-				$owner_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$member_id));
+				$owner_category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','id',array('nc_owner'=>$member_id));
 
 				if ($post['post_type']=='post') // Posts
 				{
@@ -113,7 +113,7 @@ function import_wordpress_db()
 					$fullpath=zone_black_magic_filterer(get_custom_file_base().'/'.$zone.'/pages/comcode_custom/'.$lang.'/'.$file.'.txt');
 
 					// Check existancy of new page
-					$submiter=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
+					$submiter=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 
 					if (!is_null($submiter)) continue; // Skip existing titled articles	- may need change
 
@@ -161,7 +161,7 @@ function import_wordpress_db()
 						$submitter=NULL;
 						foreach ($post['COMMENTS'] as $comment)
 						{
-							$submitter=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$comment['comment_author']));
+							$submitter=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$comment['comment_author']));
 
 							if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id(); // If comment is made by a non-member, assign comment to guest account
 

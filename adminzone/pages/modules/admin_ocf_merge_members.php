@@ -155,7 +155,7 @@ class Module_admin_ocf_merge_members
 
 		// Members
 		ocf_force_update_member_post_count($to_id);
-		$num_warnings=$GLOBALS['FORUM_DB']->query_value('f_warnings','COUNT(*)',array('w_member_id'=>$to_id));
+		$num_warnings=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','COUNT(*)',array('w_member_id'=>$to_id));
 		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings'=>$num_warnings),array('id'=>$to_id),'',1);
 
 		// Topics and posts

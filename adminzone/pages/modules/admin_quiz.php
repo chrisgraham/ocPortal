@@ -201,7 +201,7 @@ class Module_admin_quiz
 		if (!array_key_exists(0,$winners))
 		{
 			// Close competition
-			$close_time=$GLOBALS['SITE_DB']->query_value('quizzes','q_close_time',array('id'=>$id));
+			$close_time=$GLOBALS['SITE_DB']->query_select_value('quizzes','q_close_time',array('id'=>$id));
 			if (is_null($close_time))
 			{
 				$GLOBALS['SITE_DB']->query_update('quizzes',array('q_close_time'=>time()),array('id'=>$id),'',1);
@@ -211,7 +211,7 @@ class Module_admin_quiz
 			$entries=$GLOBALS['SITE_DB']->query('SELECT id,q_member,q_results FROM '.get_table_prefix().'quiz_entries WHERE q_quiz='.strval($id).' AND q_member<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' ORDER BY q_results DESC');
 
 			// Choose the maximum number of rows we'll need who could potentially win
-			$num_winners=$GLOBALS['SITE_DB']->query_value('quizzes','q_num_winners',array('id'=>$id));
+			$num_winners=$GLOBALS['SITE_DB']->query_select_value('quizzes','q_num_winners',array('id'=>$id));
 			if ($num_winners==0) $num_winners=3; // Having 0 helps nobody, and having more than 0 if zero set hurts nobody
 			if ($num_winners<0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 			if ($num_winners>=count($entries)) $min=0; else $min=$entries[$num_winners]['q_results'];
@@ -259,7 +259,7 @@ class Module_admin_quiz
 		$_winners=new ocp_tempcode();
 		foreach ($winners as $i=>$winner)
 		{
-			$member_id=$GLOBALS['SITE_DB']->query_value('quiz_entries','q_member',array('id'=>$winner['q_entry']));
+			$member_id=$GLOBALS['SITE_DB']->query_select_value('quiz_entries','q_member',array('id'=>$winner['q_entry']));
 			$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
 			switch ($i)
 			{
@@ -350,7 +350,7 @@ class Module_admin_quiz
 			foreach ($answer_rows as $i=>$a)
 			{
 				$answer=get_translated_text($a['q_answer_text']);
-				$count=$GLOBALS['SITE_DB']->query_value('quiz_entry_answer','COUNT(*)',array('q_answer'=>strval($a['id'])));
+				$count=$GLOBALS['SITE_DB']->query_select_value('quiz_entry_answer','COUNT(*)',array('q_answer'=>strval($a['id'])));
 
 				$all_answers[serialize(array($answer,$i))]=$count;
 			}
@@ -378,7 +378,7 @@ class Module_admin_quiz
 			log_hack_attack_and_exit('ORDERBY_HACK');
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
-		$max_rows=$GLOBALS['SITE_DB']->query_value('quiz_entries','COUNT(*)');
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('quiz_entries','COUNT(*)');
 		$rows=$GLOBALS['SITE_DB']->query_select('quiz_entries',array('id','q_time','q_member'),array('q_quiz'=>$id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		if (count($rows)==0)
 		{

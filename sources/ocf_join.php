@@ -66,7 +66,7 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 	if (($additional_group!=-1) && (!in_array($additional_group,$groups)))
 	{
 		// Check security
-		$test=$GLOBALS['FORUM_DB']->query_value('f_groups','g_is_presented_at_install',array('id'=>$additional_group));
+		$test=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id'=>$additional_group));
 		if ($test==1)
 		{
 			$groups=ocf_get_all_default_groups(false);
@@ -236,7 +236,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	{
 		if (get_option('is_on_invites')=='1')
 		{
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_email_address'=>$email_address,'i_taken'=>0));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','i_inviter',array('i_email_address'=>$email_address,'i_taken'=>0));
 			if (is_null($test)) warn_exit(do_lang_tempcode('NO_INVITE'));
 		}
 
@@ -255,7 +255,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	if (($additional_group!=-1) && (!in_array($additional_group,$groups)))
 	{
 		// Check security
-		$test=$GLOBALS['FORUM_DB']->query_value('f_groups','g_is_presented_at_install',array('id'=>$additional_group));
+		$test=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id'=>$additional_group));
 		if ($test==1)
 		{
 			$groups=ocf_get_all_default_groups(false);
@@ -264,7 +264,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 	} else $additional_group=-1;
 	if ($additional_group==-1)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array('g_is_presented_at_install'=>1));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array('g_is_presented_at_install'=>1));
 		if (!is_null($test)) $additional_group=$test;
 	}
 	$custom_fields=ocf_get_all_custom_fields_match($groups,NULL,NULL,NULL,NULL,NULL,NULL,0,true);
@@ -375,7 +375,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		$forum_id=get_option('intro_forum_id');
 		if ($forum_id!='')
 		{
-			if (!is_numeric($forum_id)) $forum_id=strval($GLOBALS['FORUM_DB']->query_value('f_forums','id',array('f_name'=>$forum_id)));
+			if (!is_numeric($forum_id)) $forum_id=strval($GLOBALS['FORUM_DB']->query_select_value('f_forums','id',array('f_name'=>$forum_id)));
 
 			$intro_title=post_param('intro_title','');
 			$intro_post=post_param('intro_post','');

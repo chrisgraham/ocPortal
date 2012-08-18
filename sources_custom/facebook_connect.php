@@ -148,7 +148,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 			}
 			//if (($username!=$member[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member[0]['m_timezone_offset'])) || ($email_address!=$member[0]['m_email_address']))
 			{
-				$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
+				$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$username));
 				if (!is_null($test)) // Make sure there's no conflict
 				{
 					$update_map=array('m_username'=>$username,'m_dob_day'=>$dob_day,'m_dob_month'=>$dob_month,'m_dob_year'=>$dob_year);

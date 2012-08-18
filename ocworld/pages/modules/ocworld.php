@@ -42,16 +42,16 @@ class Module_ocworld
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('w_attempts');
-		$GLOBALS['SITE_DB']->drop_if_exists('w_inventory');
-		$GLOBALS['SITE_DB']->drop_if_exists('w_itemdef');
-		$GLOBALS['SITE_DB']->drop_if_exists('w_items');
-		$GLOBALS['SITE_DB']->drop_if_exists('w_members');
-		$GLOBALS['SITE_DB']->drop_if_exists('w_messages');
-		$GLOBALS['SITE_DB']->drop_if_exists('w_portals');
-		$GLOBALS['SITE_DB']->drop_if_exists('w_realms');
-		$GLOBALS['SITE_DB']->drop_if_exists('w_rooms');
-		$GLOBALS['SITE_DB']->drop_if_exists('w_travelhistory');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('w_attempts');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('w_inventory');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('w_itemdef');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('w_items');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('w_members');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('w_messages');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('w_portals');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('w_realms');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('w_rooms');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('w_travelhistory');
 
 		deldir_contents(get_custom_file_base().'/uploads/ocworld',true);
 
@@ -348,8 +348,8 @@ class Module_ocworld
 			while (($trolled & (255<<($i*8)))!=0)
 			{
 				$q_num=($trolled>>($i*8)) & 255;
-				$q[$i+1]=$GLOBALS['SITE_DB']->query_value('w_realms','q'.strval($q_num),array('id'=>$realm));
-				$a[$i+1]=$GLOBALS['SITE_DB']->query_value('w_realms','a'.strval($q_num),array('id'=>$realm));
+				$q[$i+1]=$GLOBALS['SITE_DB']->query_select_value('w_realms','q'.strval($q_num),array('id'=>$realm));
+				$a[$i+1]=$GLOBALS['SITE_DB']->query_select_value('w_realms','a'.strval($q_num),array('id'=>$realm));
 				$i++;
 			}
 			$num_questions=$i;
@@ -395,7 +395,7 @@ class Module_ocworld
 
 			} else // Answer question screen
 			{
-				$troll_name=$GLOBALS['SITE_DB']->query_value('w_realms','troll_name',array('id'=>$realm));
+				$troll_name=$GLOBALS['SITE_DB']->query_select_value('w_realms','troll_name',array('id'=>$realm));
 				$title=get_screen_title('W_TROLL_Q',true,array(escape_html($troll_name)));
 				$questions=new ocp_tempcode();
 				for ($i=1;$i<=$num_questions;$i++)
@@ -449,7 +449,7 @@ class Module_ocworld
 			$rows=$GLOBALS['SITE_DB']->query_select('items',array('*'),array('copy_owner'=>NULL));
 			foreach ($rows as $myrow)
 			{
-				$owner=$GLOBALS['SITE_DB']->query_value('w_itemdef','owner',array('name'=>$myrow['name']));
+				$owner=$GLOBALS['SITE_DB']->query_select_value('w_itemdef','owner',array('name'=>$myrow['name']));
 				if (!is_null($owner))
 				{
 					$GLOBALS['SITE_DB']->query_update('w_items',array('copy_owner'=>$owner),array('name'=>$myrow['name'],'copy_owner'=>NULL));
@@ -578,7 +578,7 @@ class Module_ocworld
 			if ($name=='')
 			{
 				$fortnights=(time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp(get_member()))/(60*60*24*7*2);
-				$made=$GLOBALS['SITE_DB']->query_value('w_realms','COUNT(*)',array('owner'=>get_member()));
+				$made=$GLOBALS['SITE_DB']->query_select_value('w_realms','COUNT(*)',array('owner'=>get_member()));
 				$left=round($fortnights-$made);
 
 				$_qa=new ocp_tempcode();
@@ -694,8 +694,8 @@ class Module_ocworld
 				$user=get_param_integer('user');
 				list($realm,$x,$y)=get_loc_details($member_id);
 
-				$cost=$GLOBALS['SITE_DB']->query_value('w_items','cost',array('copy_owner'=>$user,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'name'=>get_param('item')));
-				$not_infinite=$GLOBALS['SITE_DB']->query_value('w_items','not_infinite',array('copy_owner'=>$user,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'name'=>get_param('item')));
+				$cost=$GLOBALS['SITE_DB']->query_select_value('w_items','cost',array('copy_owner'=>$user,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'name'=>get_param('item')));
+				$not_infinite=$GLOBALS['SITE_DB']->query_select_value('w_items','not_infinite',array('copy_owner'=>$user,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'name'=>get_param('item')));
 
 				$tpl=do_template('W_ITEMCOPY_SCREEN',array('_GUID'=>'a8d28f6516408dba96a8b57ddcd7cee6','TITLE'=>get_screen_title('W_EDIT_ITEM_COPY_TITLE'),'PAGE_TYPE'=>'edititemcopy','NOT_INFINITE'=>strval($not_infinite),'X'=>strval($x),'Y'=>strval($y),'REALM'=>strval($realm),'ITEM'=>get_param('item'),'OWNER'=>strval($user),'COST'=>strval($cost)));
 				return $tpl;

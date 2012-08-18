@@ -425,7 +425,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	// Try and locate the product
 	if (($item_name=='')/* && ($payment_status[0]=='S')*/) // Subscription
 	{
-		$product=$GLOBALS['SITE_DB']->query_value_null_ok('subscriptions','s_type_code',array('id'=>intval($purchase_id))); // Note that s_type_code is not numeric, it is a $product
+		$product=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_type_code',array('id'=>intval($purchase_id))); // Note that s_type_code is not numeric, it is a $product
 		if (is_null($product)) warn_exit(do_lang_tempcode('NO_SUCH_SUBSCRIPTION',strval($purchase_id)));
 		$item_name='_'.$product;
 
@@ -507,7 +507,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	// Invoice: Check price
 	if ($found[0]==PRODUCT_INVOICE)
 	{
-		$price=$GLOBALS['SITE_DB']->query_value('invoices','i_amount',array('id'=>intval($purchase_id)));
+		$price=$GLOBALS['SITE_DB']->query_select_value('invoices','i_amount',array('id'=>intval($purchase_id)));
 		if ($price!=$mc_gross)
 		{
 			if (substr($txn_id,0,6)!='manual')
@@ -708,7 +708,7 @@ function delete_usergroup_subscription($id,$uhoh_mail)
 		$test=in_array($new_group,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id));
 		if ($test)
 		{
-			if (is_null($GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_value_null_ok('f_group_member_timeouts','member_id',array('member_id'=>$member_id,'group_id'=>$new_group))))
+			if (is_null($GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value_if_there('f_group_member_timeouts','member_id',array('member_id'=>$member_id,'group_id'=>$new_group))))
 			{
 				// Remove them from the group
 
@@ -776,7 +776,7 @@ function make_cart_payment_button($order_id,$currency)
 
 	if (!method_exists($object,'make_cart_transaction_button'))
 	{
-		$amount=$GLOBALS['SITE_DB']->query_value('shopping_order','tot_price',array('id'=>$order_id));
+		$amount=$GLOBALS['SITE_DB']->query_select_value('shopping_order','tot_price',array('id'=>$order_id));
 		return $object->make_transaction_button($order_id,do_lang('CART_ORDER',$order_id),$order_id,$amount,$currency);
 	}
 

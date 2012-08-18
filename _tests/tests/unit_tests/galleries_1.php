@@ -29,14 +29,14 @@ class galleries_1_test_set extends ocp_test_case
 
 		$this->glry_id=add_image('','','','http://www.msn.com','images/test.jpg',0,0,0,0,'',NULL,NULL,NULL,0,NULL);
 
-		$this->assertTrue('http://www.msn.com'==$GLOBALS['SITE_DB']->query_value('images','url',array('id'=>$this->glry_id)));
+		$this->assertTrue('http://www.msn.com'==$GLOBALS['SITE_DB']->query_select_value('images','url',array('id'=>$this->glry_id)));
 	}
 
 	function testEditGalleries()
 	{
 		edit_image($this->glry_id,'','','','http://www.google.com','images/sample.jpg',0,0,0,0,'','','');
 
-		$this->assertTrue('http://www.google.com'==$GLOBALS['SITE_DB']->query_value('images','url',array('id'=>$this->glry_id)));
+		$this->assertTrue('http://www.google.com'==$GLOBALS['SITE_DB']->query_select_value('images','url',array('id'=>$this->glry_id)));
 	}
 
 	function tearDown()

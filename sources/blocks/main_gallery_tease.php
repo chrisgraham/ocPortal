@@ -107,8 +107,8 @@ class Block_main_gallery_tease
 			if (($num_images==0) && ($num_videos==0)) continue;
 			$thumb_order='ORDER BY id ASC';
 			if ((array_key_exists('reverse_thumb_order',$map)) && ($map['reverse_thumb_order']=='1')) $thumb_order='ORDER BY id DESC';
-			if ($pic=='') $pic=$GLOBALS['SITE_DB']->query_value_null_ok('images','thumb_url',array('cat'=>$child['name']),$thumb_order);
-			if (is_null($pic)) $pic=$GLOBALS['SITE_DB']->query_value_null_ok('videos','thumb_url',array('cat'=>$child['name']),$thumb_order);
+			if ($pic=='') $pic=$GLOBALS['SITE_DB']->query_select_value_if_there('images','thumb_url',array('cat'=>$child['name']),$thumb_order);
+			if (is_null($pic)) $pic=$GLOBALS['SITE_DB']->query_select_value_if_there('videos','thumb_url',array('cat'=>$child['name']),$thumb_order);
 			if (is_null($pic)) $pic='';
 			if (($pic!='') && (url_is_local($pic))) $pic=get_custom_base_url().'/'.$pic;
 			$add_date=get_timezoned_date($child['add_date'],false);
@@ -117,7 +117,7 @@ class Block_main_gallery_tease
 			$content->attach($sub);
 		}
 
-		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) '.$query);
 
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('MEDIA_ENTRIES'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);

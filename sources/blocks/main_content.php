@@ -99,7 +99,7 @@ class Block_main_content
 			$object_cm=object_factory('Hook_content_meta_aware_'.$type_id);
 			$info_cm=$object_cm->info();
 			list(,$resource_page,$resource_type)=explode(':',$info_cm['view_pagelink_pattern']);
-			$content_id=$info['connection']->query_value_null_ok('url_id_monikers','m_resource_id',array('m_resource_page'=>$resource_page,'m_resource_type'=>$resource_type,'m_moniker'=>$content_id));
+			$content_id=$info['connection']->query_select_value_if_there('url_id_monikers','m_resource_id',array('m_resource_page'=>$resource_page,'m_resource_type'=>$resource_type,'m_moniker'=>$content_id));
 			if (is_null($content_id)) return new ocp_tempcode();
 		}
 

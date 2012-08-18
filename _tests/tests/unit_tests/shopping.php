@@ -36,7 +36,7 @@ class shopping_test_set extends ocp_test_case
 		require_lang('shopping');
 		require_lang('ecommerce');
 
-		if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'storetesting'.strval(get_member())))))
+		if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'storetesting'.strval(get_member())))))
 			actual_delete_catalogue('storetesting'.strval(get_member()));
 
 		$this->access_mapping=array(db_get_first_id()=>4);
@@ -139,7 +139,7 @@ class shopping_test_set extends ocp_test_case
 
 	function testHandleTransaction()
 	{
-		$purchase_id=$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
+		$purchase_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
 		$item_name='Test field value';
 		$payment_status='Completed';
 		$reason_code='';

@@ -292,7 +292,7 @@ class Hook_smf
 			$is_super_admin=($row['groupName']=='Administrator')?1:0;
 			$is_super_moderator=($row['groupName']=='Global Moderator')?1:0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['groupName']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['groupName']),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['groupName'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$avatar_max_width,$avatar_max_height,30000);
@@ -626,7 +626,7 @@ class Hook_smf
 			$title=$row['name'];
 			$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
 				import_id_remap_put('category',strval($row['ID_CAT']),$test);

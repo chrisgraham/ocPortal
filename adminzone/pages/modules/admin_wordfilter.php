@@ -47,7 +47,7 @@ class Module_admin_wordfilter
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('wordfilter');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('wordfilter');
 	}
 
 	/**
@@ -179,7 +179,7 @@ class Module_admin_wordfilter
 	 */
 	function _add_word($word,$replacement,$substr)
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('wordfilter','word',array('word'=>$word));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('wordfilter','word',array('word'=>$word));
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($word)));
 
 		$GLOBALS['SITE_DB']->query_insert('wordfilter',array('word'=>$word,'w_replacement'=>$replacement,'w_substr'=>$substr));

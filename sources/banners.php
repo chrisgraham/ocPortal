@@ -54,7 +54,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		if (is_null($dest)) $dest=get_param('dest','');
 
 		// Has the banner been clicked before?
-		$test=$GLOBALS['SITE_DB']->query_value('banner_clicks','MAX(c_date_and_time)',array('c_ip_address'=>get_ip_address(),'c_banner_id'=>$dest));
+		$test=$GLOBALS['SITE_DB']->query_select_value('banner_clicks','MAX(c_date_and_time)',array('c_ip_address'=>get_ip_address(),'c_banner_id'=>$dest));
 		$unique=(is_null($test)) || ($test<time()-60*60*24);
 
 		// Find the information about the dest

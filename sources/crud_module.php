@@ -181,7 +181,7 @@ class standard_crud_module
 			{
 				if (($this->catalogue) && (either_param('catalogue_name','')!=''))
 				{
-					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>either_param('catalogue_name'))));
+					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>either_param('catalogue_name'))));
 					breadcrumb_set_parents(array(array('_SELF:_SELF:misc:catalogue_name='.either_param('catalogue_name',''),$catalogue_title)));
 				} else
 				{
@@ -268,19 +268,19 @@ class standard_crud_module
 	{
 		if (is_null($allow_rating))
 		{
-			$val=$GLOBALS['SITE_DB']->query_value($this->table,'AVG(allow_rating)');
+			$val=$GLOBALS['SITE_DB']->query_select_value($this->table,'AVG(allow_rating)');
 			$allow_rating=is_null($val)?1:intval(round($val));
 		}
 
 		if (is_null($allow_comments))
 		{
-			$val=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT allow_comments,count(allow_comments) AS qty FROM '.get_table_prefix().$this->table.' GROUP BY allow_comments ORDER BY qty DESC',1); // We need the mode here, not the mean
+			$val=$GLOBALS['SITE_DB']->query_value_if_there('SELECT allow_comments,count(allow_comments) AS qty FROM '.get_table_prefix().$this->table.' GROUP BY allow_comments ORDER BY qty DESC',1); // We need the mode here, not the mean
 			$allow_comments=is_null($val)?1:$val;
 		}
 
 		if (is_null($allow_trackbacks))
 		{
-			$val=$GLOBALS['SITE_DB']->query_value($this->table,'AVG(allow_trackbacks)');
+			$val=$GLOBALS['SITE_DB']->query_select_value($this->table,'AVG(allow_trackbacks)');
 			$allow_trackbacks=is_null($val)?1:intval(round($val));
 		}
 
@@ -459,7 +459,7 @@ class standard_crud_module
 		$doing='ADD_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title));
@@ -615,7 +615,7 @@ class standard_crud_module
 		$doing='ADD_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title));
@@ -737,7 +737,7 @@ class standard_crud_module
 			$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		}
-		$max_rows=$db->query_value($table.' r '.$join,'COUNT(*)',$where,'ORDER BY '.$orderer);
+		$max_rows=$db->query_select_value($table.' r '.$join,'COUNT(*)',$where,'ORDER BY '.$orderer);
 		if ($max_rows==0) return array(array(),0);
 		$rows=$db->query_select($table.' r '.$join,array('r.*'),$where,'ORDER BY '.$orderer,get_param_integer('max',20),get_param_integer('start',0));
 		if ($force_site_db)
@@ -802,7 +802,7 @@ class standard_crud_module
 		$doing='EDIT_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
@@ -909,7 +909,7 @@ class standard_crud_module
 		$doing='EDIT_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
@@ -1027,7 +1027,7 @@ class standard_crud_module
 
 			if ((addon_installed('points')) && (!is_null($submitter)) && (!is_null($date_and_time)))
 			{
-				$points_test=$GLOBALS['SITE_DB']->query_value_null_ok('gifts','id',array('date_and_time'=>$date_and_time,'gift_to'=>$submitter,'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()));
+				$points_test=$GLOBALS['SITE_DB']->query_select_value_if_there('gifts','id',array('date_and_time'=>$date_and_time,'gift_to'=>$submitter,'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()));
 				if (!is_null($points_test))
 				{
 					require_lang('points');
@@ -1135,7 +1135,7 @@ class standard_crud_module
 		$doing='EDIT_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
@@ -1195,7 +1195,7 @@ class standard_crud_module
 			$doing='DELETE_'.$this->lang_type;
 			if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 			{
-				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
 				if ($this->type_code=='d')
 				{
 					$doing=do_lang('CATALOGUE_GENERIC_DELETE',escape_html($catalogue_title));

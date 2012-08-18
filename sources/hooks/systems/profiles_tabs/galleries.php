@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_galleries
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return has_specific_permission($member_id_of,'have_personal_category','cms_galleries') && !is_null($GLOBALS['SITE_DB']->query_value_null_ok('galleries','is_member_synched',array('is_member_synched'=>1)));
+		return has_specific_permission($member_id_of,'have_personal_category','cms_galleries') && !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('galleries','is_member_synched',array('is_member_synched'=>1)));
 	}
 
 	/**

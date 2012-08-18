@@ -213,7 +213,7 @@ class Module_admin_lookup
 					$ip_banned=is_null($ban_until[0]['i_ban_until']) || $ban_until[0]['i_ban_until']>time();
 				}
 			}
-			$banned_test_2=$GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_member','the_member',array('the_member'=>$id));
+			$banned_test_2=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$id));
 			$submitter_banned=!is_null($banned_test_2);
 
 			$member_ban_link=NULL;

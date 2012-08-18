@@ -67,8 +67,8 @@ class Module_cms_comcode_pages
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('comcode_pages');
-		$GLOBALS['SITE_DB']->drop_if_exists('cached_comcode_pages');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('comcode_pages');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('cached_comcode_pages');
 
 		delete_config_option('store_revisions');
 		delete_config_option('number_revisions_show');
@@ -211,7 +211,7 @@ class Module_cms_comcode_pages
 			{
 				if (is_integer($page)) $page=strval($page);
 
-				$resource_owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$page));
+				$resource_owner=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$page));
 				if (!has_edit_permission('high',get_member(),$resource_owner,'cms_comcode_pages'))
 					continue;
 
@@ -394,7 +394,7 @@ class Module_cms_comcode_pages
 				$where_map.=' AND submitter='.strval(get_member());
 			$ttable=get_table_prefix().'comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone LEFT JOIN '.get_table_prefix().'translate t ON t.id=a.cc_page_title';
 			$page_rows=$GLOBALS['SITE_DB']->query('SELECT c.*,cc_page_title FROM '.$ttable.' WHERE '.$where_map.$group_by.' ORDER BY '.$orderer,$max,$start);
-			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT c.the_zone,c.the_page) FROM '.$ttable.' WHERE '.$where_map);
+			$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT c.the_zone,c.the_page) FROM '.$ttable.' WHERE '.$where_map);
 
 			$filesarray=array();
 			foreach ($page_rows as $row)
@@ -587,7 +587,7 @@ class Module_cms_comcode_pages
 		require_code('type_validation');
 		if (!is_alphanumeric($file)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
-		$resource_owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
+		$resource_owner=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 		check_edit_permission('high',$resource_owner);
 		if (is_null($resource_owner))
 			check_submit_permission('high');
@@ -597,7 +597,7 @@ class Module_cms_comcode_pages
 		// Check no redirects in our way
 		if (addon_installed('redirects_editor'))
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('redirects','r_to_zone',array('r_from_page'=>$file,'r_from_zone'=>$zone));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('redirects','r_to_zone',array('r_from_page'=>$file,'r_from_zone'=>$zone));
 			if (!is_null($test))
 			{
 				$redirect_url=build_url(array('page'=>'admin_redirects'),get_module_zone('admin_redirects'));
@@ -623,7 +623,7 @@ class Module_cms_comcode_pages
 				$contents=file_get_contents($file_base.'/'.$restore_from);
 				if (is_null(get_param('restore_from',NULL)))
 				{
-					$string_index=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','string_index',array('the_zone'=>$zone,'the_page'=>$file));
+					$string_index=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','string_index',array('the_zone'=>$zone,'the_page'=>$file));
 					if (!is_null($string_index)) $parsed=get_translated_tempcode($string_index,NULL,$lang);
 				}
 
@@ -668,7 +668,7 @@ class Module_cms_comcode_pages
 				list($filepath,$time)=$stuff;
 
 				// Find who did the revision
-				$editor=$GLOBALS['SITE_DB']->query_value_null_ok('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'COMCODE_PAGE_EDIT','param_a'=>$file));
+				$editor=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'COMCODE_PAGE_EDIT','param_a'=>$file));
 				if ((has_specific_permission(get_member(),'view_revision_history')) || ($editor==get_member()))
 				{
 					if (is_null($editor))
@@ -912,7 +912,7 @@ class Module_cms_comcode_pages
 		$parent_page=post_param('parent_page','');
 		$show_as_edit=post_param_integer('show_as_edit',0);
 
-		$resource_owner=$GLOBALS['SITE_DB']->query_value_null_ok('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
+		$resource_owner=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 		check_edit_permission('high',$resource_owner);
 		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // TODO: Make a proper permission
 		{
@@ -1000,7 +1000,7 @@ class Module_cms_comcode_pages
 		$completion_text=($validated==0)?do_lang_tempcode('SUBMIT_UNVALIDATED'):do_lang_tempcode('SUCCESS');
 
 		// Update cache  NO WE CAN'T - THEY'RE MULTI-THEME NOW
-	/*	$string_index=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','string_index',array('the_zone'=>$zone,'the_page'=>$file));
+	/*	$string_index=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','string_index',array('the_zone'=>$zone,'the_page'=>$file));
 		if (!is_null($string_index))
 		{
 			lang_remap_comcode($string_index,$new);

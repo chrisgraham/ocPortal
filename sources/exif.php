@@ -261,11 +261,11 @@ function store_exif($content_type,$content_id,$exif,$map=NULL)
 	}
 	if (count($map)==0) return;
 
-	$first_cat=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
+	$first_cat=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
 
 	require_code('catalogues2');
 
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entry_linkage','catalogue_entry_id',array(
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entry_linkage','catalogue_entry_id',array(
 		'content_type'=>$content_type,
 		'content_id'=>$content_id,
 	));

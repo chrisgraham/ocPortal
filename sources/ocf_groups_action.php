@@ -55,7 +55,7 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 
 	if (!running_script('stress_test_loader'))
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 	}
 
@@ -66,7 +66,7 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 	{
 		if (is_null($order))
 		{
-			$order=$GLOBALS['FORUM_DB']->query_value('f_groups','MAX(g_order)');
+			$order=$GLOBALS['FORUM_DB']->query_select_value('f_groups','MAX(g_order)');
 			if (is_null($order)) $order=0; else $order++;
 		}
 	} else $order=100;

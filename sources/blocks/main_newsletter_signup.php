@@ -52,7 +52,7 @@ class Block_main_newsletter_signup
 
 		$newsletter_id=array_key_exists('param',$map)?intval($map['param']):db_get_first_id();
 
-		$_newsletter_title=$GLOBALS['SITE_DB']->query_value_null_ok('newsletters','title',array('id'=>$newsletter_id));
+		$_newsletter_title=$GLOBALS['SITE_DB']->query_select_value_if_there('newsletters','title',array('id'=>$newsletter_id));
 		if (is_null($_newsletter_title)) return paragraph(do_lang_tempcode('MISSING_RESOURCE'));
 		$newsletter_title=get_translated_text($_newsletter_title);
 

@@ -312,7 +312,7 @@ class Hook_mybb
 			$is_super_admin=($row['title']=='Administrator')?1:0;
 			$is_super_moderator=($row['title']=='Universal Moderator')?1:0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['title']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['title']),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$avatar_max_width,$avatar_max_height,30000);
@@ -629,7 +629,7 @@ class Hook_mybb
 			$title=$row['name'];
 			$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
 				import_id_remap_put('category',strval($row['fid']),$test);
@@ -1206,7 +1206,7 @@ class Hook_mybb
 			$tag_enabled=$row['active'];//'tag_enabled'
 
 			global $VALID_COMCODE_TAGS;
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$custom_tag));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$custom_tag));
 			if ((array_key_exists($custom_tag,$VALID_COMCODE_TAGS)) || (!is_null($test)))
 			{
 				import_id_remap_put('custom_comcode',strval($row['cid']),1);
@@ -1249,7 +1249,7 @@ class Hook_mybb
 			if ($row['type']=='text') $type='short_text';
 			elseif ($row['type']=='textarea') $type='long_text';
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$row['name']));
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$row['name']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_custom_field($row['name'],0,$row['description'],'',1-$row['hidden'],1-$row['hidden'],$row['editable'],0,$type,$row['required'],0,0,$row['disporder'],'',true);

@@ -80,7 +80,7 @@ function ocf_get_topic_tree($forum_id=NULL,$breadcrumbs=NULL,$title=NULL,$levels
 	if (!has_category_access(get_member(),'forums',strval($forum_id))) return array();
 
 	// Put our title onto our breadcrumbs
-	if (is_null($title)) $title=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$forum_id));
+	if (is_null($title)) $title=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>$forum_id));
 	$breadcrumbs.=$title;
 
 	// We'll be putting all children in this entire tree into a single list
@@ -145,7 +145,7 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 	if (is_null($order_sub_alpha))
 	{
 		if (is_null($base_forum)) $order_sub_alpha=false;
-		else $order_sub_alpha=$GLOBALS['FORUM_DB']->query_value('f_forums','f_order_sub_alpha',array('id'=>$base_forum));
+		else $order_sub_alpha=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_order_sub_alpha',array('id'=>$base_forum));
 	}
 
 	$out=array();
@@ -154,7 +154,7 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 	if (is_null($FORUM_TREE_SECURE_CACHE))
 	{
 		$FORUM_TREE_SECURE_CACHE=mixed();
-		$num_forums=$GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)');
+		$num_forums=$GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)');
 		$FORUM_TREE_SECURE_CACHE=($num_forums>=300); // Mark it as 'huge'
 	}
 	if ($FORUM_TREE_SECURE_CACHE===true)
@@ -232,7 +232,7 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 				$element=array('id'=>$forum['id'],'compound_list'=>(!$use_compound_list?strval($forum['id']):(strval($forum['id']).','.$_compound_list)),'second_cat'=>$cat_bit,'title'=>$forum['f_name'],'group'=>$forum['f_category_id'],'children'=>ocf_get_forum_tree_secure($member_id,$forum['id'],false,$selected_forum,$breadcrumbs,$skip,false,false,$levels,$do_stats));
 				if ($do_stats)
 				{
-					$element['child_count']=$GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)',array('f_parent_forum'=>$forum['id']));
+					$element['child_count']=$GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)',array('f_parent_forum'=>$forum['id']));
 				}
 				if (!array_key_exists($cat_sort_key,$out))
 				{

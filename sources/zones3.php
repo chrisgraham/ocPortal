@@ -64,7 +64,7 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		// Check doesn't already exist
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_header_text',array('zone_name'=>$new_zone));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name'=>$new_zone));
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($new_zone)));
 
 		require_code('abstract_file_manager');
@@ -72,13 +72,13 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		afm_move($zone,$new_zone);
 	}
 
-	$_header_text=$GLOBALS['SITE_DB']->query_value('zones','zone_header_text',array('zone_name'=>$zone));
-	$_title=$GLOBALS['SITE_DB']->query_value('zones','zone_title',array('zone_name'=>$zone));
+	$_header_text=$GLOBALS['SITE_DB']->query_select_value('zones','zone_header_text',array('zone_name'=>$zone));
+	$_title=$GLOBALS['SITE_DB']->query_select_value('zones','zone_title',array('zone_name'=>$zone));
 
 	if (get_translated_text($_title)!=$title)
 	{
 		// Update menu item
-		$i_caption=$GLOBALS['SITE_DB']->query_value_null_ok('menu_items','i_caption',array('i_menu'=>'zone_menu','i_url'=>$zone.':'));
+		$i_caption=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','i_caption',array('i_menu'=>'zone_menu','i_url'=>$zone.':'));
 		if (!is_null($i_caption))
 		{
 			if (get_translated_text($i_caption)==get_translated_text($_title))
@@ -200,9 +200,9 @@ function actual_delete_zone($zone)
  */
 function actual_delete_zone_lite($zone)
 {
-	$zone_header_text=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_header_text',array('zone_name'=>$zone));
+	$zone_header_text=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name'=>$zone));
 	if (is_null($zone_header_text)) return;
-	$zone_title=$GLOBALS['SITE_DB']->query_value('zones','zone_title',array('zone_name'=>$zone));
+	$zone_title=$GLOBALS['SITE_DB']->query_select_value('zones','zone_title',array('zone_name'=>$zone));
 	delete_lang($zone_header_text);
 	delete_lang($zone_title);
 

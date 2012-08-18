@@ -689,7 +689,7 @@ function block_helper_script()
 					$list=nice_get_catalogues($default,false);
 					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
 				}
-				elseif (($parameter=='param') && (in_array($block,array('main_cc_embed'))) && ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)')<500)) // catalogue category
+				elseif (($parameter=='param') && (in_array($block,array('main_cc_embed'))) && ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)')<500)) // catalogue category
 				{
 					$list=new ocp_tempcode();
 					$structured_list=new ocp_tempcode();

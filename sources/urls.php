@@ -960,7 +960,7 @@ function find_id_moniker($url_parts)
 		{
 			$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('url_id_monikers','m_moniker',array('m_deprecated'=>0,'m_resource_page'=>$url_parts['page'],'m_resource_type'=>$url_parts['type'],'m_resource_id'=>is_integer($url_parts['id'])?strval($url_parts['id']):$url_parts['id']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',array('m_deprecated'=>0,'m_resource_page'=>$url_parts['page'],'m_resource_type'=>$url_parts['type'],'m_resource_id'=>is_integer($url_parts['id'])?strval($url_parts['id']):$url_parts['id']));
 			$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 			$LOADED_MONIKERS[$url_parts['page']][$url_parts['type']][$url_parts['id']]=$test;
 		}

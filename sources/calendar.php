@@ -571,7 +571,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	$where.='(((e_start_month>='.strval(intval(date('m',$period_start))-1).' OR e_start_year>'.date('Y',$period_start).') AND (e_end_month<='.strval(intval(date('m',$period_end))+1).' OR e_end_year<'.date('Y',$period_end).')) OR '.db_string_not_equal_to('e_recurrence','').')';
 
 	$where=' WHERE '.$where;
-	$event_count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
+	$event_count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
 	if ($event_count>2000)
 	{
 		attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'inform');
@@ -611,7 +611,7 @@ function nice_get_events($only_owned,$it,$edit_viewable_events=true)
 	$where=array();
 	if (!is_null($only_owned)) $where['e_submitter']=$only_owned;
 	if (!$edit_viewable_events) $where['e_is_public']=0;
-	if ($GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)')>500) warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
+	if ($GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)')>500) warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 	$events=$GLOBALS['SITE_DB']->query_select('calendar_events',array('id','e_title','e_type'),$where);
 	$list=new ocp_tempcode();
 	foreach ($events as $event)

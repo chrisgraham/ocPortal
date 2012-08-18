@@ -68,7 +68,7 @@ function ocf_make_poll($topic_id,$question,$is_private,$is_open,$minimum_selecti
 	// Now make the topic validated if this is attaching immediately
 	if (get_param_integer('re_validate',0)==1)
 	{
-		$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
+		$forum_id=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_forum_id',array('id'=>$topic_id));
 
 		if ((is_null($forum_id)) || (has_specific_permission(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id))))
 			$map['t_validated']=1;

@@ -46,7 +46,7 @@ class Module_invoices
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('invoices');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('invoices');
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Module_invoices
 	 */
 	function get_entry_points()
 	{
-		return ((is_guest()) || ($GLOBALS['SITE_DB']->query_value('invoices','COUNT(*)',array('i_member_id'=>get_member()))==0))?array():array('misc'=>'MY_INVOICES');
+		return ((is_guest()) || ($GLOBALS['SITE_DB']->query_select_value('invoices','COUNT(*)',array('i_member_id'=>get_member()))==0))?array():array('misc'=>'MY_INVOICES');
 	}
 
 	/**

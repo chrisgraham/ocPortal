@@ -46,14 +46,14 @@ class Module_booking
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('bookable');
-		$GLOBALS['SITE_DB']->drop_if_exists('bookable_blacked');
-		$GLOBALS['SITE_DB']->drop_if_exists('bookable_blacked_for');
-		$GLOBALS['SITE_DB']->drop_if_exists('bookable_codes');
-		$GLOBALS['SITE_DB']->drop_if_exists('booking');
-		$GLOBALS['SITE_DB']->drop_if_exists('bookable_supplement');
-		$GLOBALS['SITE_DB']->drop_if_exists('bookable_supplement_for');
-		$GLOBALS['SITE_DB']->drop_if_exists('booking_supplement');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('bookable');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('bookable_blacked');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('bookable_blacked_for');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('bookable_codes');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('booking');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('bookable_supplement');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('bookable_supplement_for');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('booking_supplement');
 
 		delete_config_option('bookings_show_warnings_for_months');
 		delete_config_option('bookings_max_ahead_months');
@@ -287,7 +287,7 @@ class Module_booking
 			if (!array_key_exists($category,$categories))
 				$categories[$category]=array('CATEGORY_TITLE'=>$category,'BOOKABLES'=>array());
 
-			$quantity_available=$GLOBALS['SITE_DB']->query_value('bookable_codes','COUNT(*)',array('bookable_id'=>$bookable['id']));
+			$quantity_available=$GLOBALS['SITE_DB']->query_select_value('bookable_codes','COUNT(*)',array('bookable_id'=>$bookable['id']));
 
 			list($quantity,$date_from,$date_to)=$this->_read_chosen_bookable_settings($bookable);
 

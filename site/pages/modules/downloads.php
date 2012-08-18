@@ -47,10 +47,10 @@ class Module_downloads
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('download_categories');
-		$GLOBALS['SITE_DB']->drop_if_exists('download_downloads');
-		$GLOBALS['SITE_DB']->drop_if_exists('download_logging');
-		$GLOBALS['SITE_DB']->drop_if_exists('download_licences');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('download_categories');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('download_downloads');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('download_logging');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('download_licences');
 
 		delete_config_option('maximum_download');
 		delete_config_option('is_on_downloads');
@@ -451,7 +451,7 @@ class Module_downloads
 		}
 
 		// How many might there have been? (So we know how to browse pages nicely)
-		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'download_downloads r'.$extra_join_sql.' WHERE '.$map);
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'download_downloads r'.$extra_join_sql.' WHERE '.$map);
 
 		// Quick security check
 		if (is_null($order))
@@ -578,7 +578,7 @@ class Module_downloads
 		require_code('ocfiltering');
 		$sql_filter=ocfilter_to_sqlfragment(is_numeric($id)?($id.'*'):$id,'p.category_id','download_categories','parent_id','p.category_id','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
-		if ($GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)')>1000)
+		if ($GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)')>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
 		$cats=array();
@@ -804,7 +804,7 @@ class Module_downloads
 		$licence=$myrow['download_licence'];
 		if (!is_null($licence))
 		{
-			$licence_title=$GLOBALS['SITE_DB']->query_value_null_ok('download_licences','l_title',array('id'=>$licence));
+			$licence_title=$GLOBALS['SITE_DB']->query_select_value_if_there('download_licences','l_title',array('id'=>$licence));
 			if (!is_null($licence_title))
 			{
 				$keep=symbol_tempcode('KEEP');
@@ -846,11 +846,11 @@ class Module_downloads
 
 		require_code('splurgh');
 
-		if ($GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)')>1000)
+		if ($GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)')>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
 		$url_stub=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,false,false,true);
-		$last_change_time=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories','MAX(add_date)');
+		$last_change_time=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','MAX(add_date)');
 
 		$category_rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category','parent_id'));
 		$map=array();

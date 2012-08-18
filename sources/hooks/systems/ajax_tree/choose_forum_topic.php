@@ -58,11 +58,11 @@ class Hook_choose_forum_topic
 		// Mark parent cats for pre-expansion
 		if ((!is_null($default)) && ($default!=''))
 		{
-			$cat=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_forum_id',array('id'=>intval($default)));
+			$cat=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_forum_id',array('id'=>intval($default)));
 			while (!is_null($cat))
 			{
 				$out.='<expand>'.strval($cat).'</expand>';
-				$cat=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_parent_forum',array('id'=>$cat));
+				$cat=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_parent_forum',array('id'=>$cat));
 			}
 		}
 

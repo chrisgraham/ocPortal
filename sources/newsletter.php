@@ -38,7 +38,7 @@ function basic_newsletter_join($email,$interest_level=4,$lang=NULL,$get_confirm_
 
 	$password=get_rand_password();
 	$code_confirm=$get_confirm_mail?mt_rand(1,9999999):0;
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('newsletter_subscribe','the_level',array('newsletter_id'=>$newsletter_id,'email'=>$email));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('newsletter_subscribe','the_level',array('newsletter_id'=>$newsletter_id,'email'=>$email));
 	if ($test===0)
 	{
 		$GLOBALS['SITE_DB']->query_delete('newsletter_subscribe',array('newsletter_id'=>$newsletter_id,'email'=>$email),'',1);
@@ -48,7 +48,7 @@ function basic_newsletter_join($email,$interest_level=4,$lang=NULL,$get_confirm_
 	{
 		require_lang('newsletter');
 
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('newsletter','email',array('email'=>$email));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('newsletter','email',array('email'=>$email));
 		if (is_null($test))
 		{
 			$salt=produce_salt();
@@ -156,13 +156,13 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 			$temp=$GLOBALS['SITE_DB']->query('SELECT n.id,n.email,the_password,n_forename,n_surname'.$query,$max,$start);
 			if ($start==0)
 			{
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'newsletter_subscribe WHERE newsletter_id='.strval($newsletter['id']).' AND the_level>='.strval((integer)$this_level));
+				$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'newsletter_subscribe WHERE newsletter_id='.strval($newsletter['id']).' AND the_level>='.strval((integer)$this_level));
 				if ($test>10000) // Inaccurace, for performance reasons
 				{
 					$total[strval($newsletter['id'])]=$test;
 				} else
 				{
-					$total[strval($newsletter['id'])]=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$query);
+					$total[strval($newsletter['id'])]=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$query);
 				}
 			}
 			foreach ($temp as $_temp)
@@ -205,7 +205,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 				if (get_option('allow_email_from_staff_disable')=='1') $query.=' AND m_allow_emails=1';
 				$_rows=$GLOBALS['FORUM_DB']->query(str_replace('xxxxx','m.id,m.m_email_address,m.m_username',$query),$max,$start,false,true);
 				if ($start==0)
-					$total['g'.strval($id)]=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT ('.str_replace(' UNION ',') + (',str_replace('xxxxx','COUNT(*)',$query)).')',false,true);
+					$total['g'.strval($id)]=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT ('.str_replace(' UNION ',') + (',str_replace('xxxxx','COUNT(*)',$query)).')',false,true);
 
 				foreach ($_rows as $row) // For each member
 				{
@@ -235,7 +235,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 			if (get_option('allow_email_from_staff_disable')=='1') $query.=' AND m_allow_emails=1';
 			$_rows=$GLOBALS['FORUM_DB']->query('SELECT id,m_email_address,m_username'.$query,$max,$start);
 			if ($start==0)
-				$total['-1']=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$query);
+				$total['-1']=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*)'.$query);
 			foreach ($_rows as $_temp)
 			{
 				if (!in_array($_temp['m_email_address'],$emails)) // If not already added
@@ -448,8 +448,8 @@ function add_newsletter($title,$description)
  */
 function edit_newsletter($id,$title,$description)
 {
-	$_title=$GLOBALS['SITE_DB']->query_value('newsletters','title',array('id'=>$id));
-	$_description=$GLOBALS['SITE_DB']->query_value('newsletters','description',array('id'=>$id));
+	$_title=$GLOBALS['SITE_DB']->query_select_value('newsletters','title',array('id'=>$id));
+	$_description=$GLOBALS['SITE_DB']->query_select_value('newsletters','description',array('id'=>$id));
 	$GLOBALS['SITE_DB']->query_update('newsletters',array('title'=>lang_remap($_title,$title),'description'=>lang_remap($_description,$description)),array('id'=>$id),'',1);
 	log_it('EDIT_NEWSLETTER',strval($id),$_title);
 }
@@ -461,8 +461,8 @@ function edit_newsletter($id,$title,$description)
  */
 function delete_newsletter($id)
 {
-	$_title=$GLOBALS['SITE_DB']->query_value('newsletters','title',array('id'=>$id));
-	$_description=$GLOBALS['SITE_DB']->query_value('newsletters','description',array('id'=>$id));
+	$_title=$GLOBALS['SITE_DB']->query_select_value('newsletters','title',array('id'=>$id));
+	$_description=$GLOBALS['SITE_DB']->query_select_value('newsletters','description',array('id'=>$id));
 	log_it('DELETE_NEWSLETTER',strval($id),get_translated_text($_title));
 	$GLOBALS['SITE_DB']->query_delete('newsletters',array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('newsletter_subscribe',array('newsletter_id'=>$id));

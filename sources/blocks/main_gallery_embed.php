@@ -117,8 +117,8 @@ class Block_main_gallery_embed
 			$extra_join_sql='';
 		}
 
-		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup);
-		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup);
+		$total_images=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$image_select.')'.$where_sup);
+		$total_videos=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE ('.$cat_select.') AND ('.$video_select.')'.$where_sup);
 
 		if ($_sort=='random')
 		{

@@ -35,7 +35,7 @@ if (count($_POST)!=0)
 			{
 				if ($matches[1]=='existing')
 				{
-					$_label=$GLOBALS['SITE_DB']->query_value_null_ok('classifieds_prices','c_label',array('id'=>intval($matches[2])));
+					$_label=$GLOBALS['SITE_DB']->query_select_value_if_there('classifieds_prices','c_label',array('id'=>intval($matches[2])));
 					if (is_null($_label)) $matches[1]='new'; // Was lost, so add as new
 				}
 				if ($matches[1]=='existing')

@@ -46,7 +46,7 @@ class Module_authors
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('authors');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('authors');
 
 		delete_menu_item_simple('_SELF:authors:type=misc');
 		delete_menu_item_simple('_SEARCH:cms_authors:type=_ad');
@@ -210,7 +210,7 @@ class Module_authors
 			require_code('downloads');
 			require_lang('downloads');
 
-			$count=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)',array('author'=>$author,'validated'=>1));
+			$count=$GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)',array('author'=>$author,'validated'=>1));
 			if ($count>50)
 			{
 				$downloads_released=paragraph(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
@@ -232,7 +232,7 @@ class Module_authors
 		{
 			require_lang('news');
 
-			$count=$GLOBALS['SITE_DB']->query_value('news','COUNT(*)',array('author'=>$author,'validated'=>1));
+			$count=$GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)',array('author'=>$author,'validated'=>1));
 			if ($count>50)
 			{
 				$news_released=paragraph(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));

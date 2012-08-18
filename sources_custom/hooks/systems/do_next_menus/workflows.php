@@ -29,7 +29,7 @@ class Hook_do_next_menus_workflows
 		require_lang('workflows');
 
 		return array(
-			array('cms','workflows',array('admin_workflow',array('type'=>'misc'),get_module_zone('admin_workflow')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('WORKFLOWS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value('workflow_requirements','COUNT(DISTINCT workflow_name)'))))),('DOC_WORKFLOWS')),
+			array('cms','workflows',array('admin_workflow',array('type'=>'misc'),get_module_zone('admin_workflow')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('WORKFLOWS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value('workflow_requirements','COUNT(DISTINCT workflow_name)'))))),('DOC_WORKFLOWS')),
 		);
 	}
 

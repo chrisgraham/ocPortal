@@ -72,7 +72,7 @@ class Module_leader_board
 		$weeks=$GLOBALS['SITE_DB']->query('SELECT DISTINCT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date).' ORDER BY date_and_time DESC',$max,$start);
 		if (count($weeks)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		$num_weeks=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT date_and_time) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date));
+		$num_weeks=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT date_and_time) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date));
 
 		$first_week=$weeks[count($weeks)-1]['date_and_time'];
 		$weeks=collapse_1d_complexity('date_and_time',$weeks);

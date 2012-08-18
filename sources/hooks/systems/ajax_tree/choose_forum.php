@@ -77,7 +77,7 @@ class Hook_choose_forum
 			while (!is_null($cat))
 			{
 				$out.='<expand>'.strval($cat).'</expand>';
-				$cat=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_parent_forum',array('id'=>$cat));
+				$cat=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_parent_forum',array('id'=>$cat));
 			}
 		}
 

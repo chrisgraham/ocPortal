@@ -31,7 +31,7 @@ class Hook_search_ocf_posts
 		if (get_forum_type()!='ocf') return NULL;
 
 		if (!has_actual_page_access(get_member(),'topicview')) return NULL;
-		if ($GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)')==0) return NULL;
+		if ($GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)')==0) return NULL;
 
 		require_lang('ocf');
 
@@ -176,7 +176,7 @@ class Hook_search_ocf_posts
 		$date=get_timezoned_date($row['p_time']);
 		if ($row['t_cache_first_title']=='')
 		{
-			$row['t_cache_first_title']=$GLOBALS['FORUM_DB']->query_value('f_posts','p_title',array('p_topic_id'=>$row['p_topic_id']),'ORDER BY p_time ASC',1);
+			$row['t_cache_first_title']=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('p_topic_id'=>$row['p_topic_id']),'ORDER BY p_time ASC',1);
 		}
 		$link=hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($row['p_topic_id']),$row['t_cache_first_title']);
 		$title=do_lang_tempcode('FORUM_POST_SEARCH_RESULT',escape_html($row['id']),$poster,array(escape_html($date),$link));

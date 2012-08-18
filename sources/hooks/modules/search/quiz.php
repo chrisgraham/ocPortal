@@ -31,7 +31,7 @@ class Hook_search_quiz
 		if (!module_installed('quiz')) return NULL;
 
 		if (!has_actual_page_access(get_member(),'quiz')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('quizzes','COUNT(*)')==0) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('quizzes','COUNT(*)')==0) return NULL;
 
 		require_lang('quiz');
 

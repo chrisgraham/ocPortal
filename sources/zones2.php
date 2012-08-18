@@ -47,7 +47,7 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 	if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 	// Check doesn't already exist
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_header_text',array('zone_name'=>$zone));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name'=>$zone));
 	if (!is_null($test))
 	{
 		if (file_exists(get_file_base().'/'.$zone)) // Ok it's here completely, so we can't create
@@ -98,7 +98,7 @@ END;
 	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($title,1),'zone_default_page'=>$default_page,'zone_header_text'=>insert_lang($header_text,1),'zone_theme'=>$theme,'zone_wide'=>$wide,'zone_require_session'=>$require_session,'zone_displayed_in_menu'=>$displayed_in_menu));
 
 	require_code('menus2');
-	$menu_item_count=$GLOBALS['SITE_DB']->query_value('menu_items','COUNT(*)',array('i_menu'=>'zone_menu'));
+	$menu_item_count=$GLOBALS['SITE_DB']->query_select_value('menu_items','COUNT(*)',array('i_menu'=>'zone_menu'));
 	if ($menu_item_count<40)
 		add_menu_item_simple('zone_menu',NULL,($zone=='forum')?do_lang('SECTION_SOCIAL'):$title,$zone.':',0,1);
 

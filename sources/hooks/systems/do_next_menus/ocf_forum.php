@@ -30,7 +30,7 @@ class Hook_do_next_menus_ocf_forum
 	function run()
 	{
 		return array(
-			(get_forum_type()!='ocf' || !addon_installed('ocf_clubs'))?NULL:array('cms','clubs',array('cms_ocf_groups',array('type'=>'misc'),get_module_zone('cms_ocf_groups')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('CLUBS'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','COUNT(*)',array('g_is_private_club'=>1),'',true))))),('DOC_CLUBS')),
+			(get_forum_type()!='ocf' || !addon_installed('ocf_clubs'))?NULL:array('cms','clubs',array('cms_ocf_groups',array('type'=>'misc'),get_module_zone('cms_ocf_groups')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('CLUBS'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','COUNT(*)',array('g_is_private_club'=>1),'',true))))),('DOC_CLUBS')),
 			(get_forum_type()!='ocf')?NULL:array('structure','forums',array('admin_ocf_forums',array('type'=>'misc'),get_module_zone('admin_ocf_forums')),do_lang_tempcode('SECTION_FORUMS'),('DOC_FORUMS')),
 		);
 	}

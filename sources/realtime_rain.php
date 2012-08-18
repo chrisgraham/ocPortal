@@ -169,7 +169,7 @@ function rain_get_special_icons($ip_address,$timestamp,$user_agent=NULL,$news=NU
 			$tooltip=do_lang('RTEV_PHONE');
 		} else
 		{
-			$mails_sent=$GLOBALS['SITE_DB']->query_value('logged_mail_messages','COUNT(*)',array('m_date_and_time'=>$timestamp));
+			$mails_sent=$GLOBALS['SITE_DB']->query_select_value('logged_mail_messages','COUNT(*)',array('m_date_and_time'=>$timestamp));
 			if ($mails_sent>0)
 			{
 				$multiplicity=$mails_sent;

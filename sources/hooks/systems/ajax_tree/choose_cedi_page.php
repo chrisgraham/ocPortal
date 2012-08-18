@@ -94,7 +94,7 @@ class Hook_choose_cedi_page
 
 				$_id=strval($orphan['id']);
 				$title=$orphan['text_original'];
-				$has_children=($GLOBALS['SITE_DB']->query_value('seedy_children','COUNT(*)',array('parent_id'=>$orphan['id']))!=0);
+				$has_children=($GLOBALS['SITE_DB']->query_select_value('seedy_children','COUNT(*)',array('parent_id'=>$orphan['id']))!=0);
 				$selectable=true;
 
 				$tag='category'; // category

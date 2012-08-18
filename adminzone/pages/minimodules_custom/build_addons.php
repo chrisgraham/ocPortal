@@ -173,7 +173,7 @@ return <<<END
 	Paste into ocPortal.com's OcCLE if this addon is updated: {$file}...
 
 	:require_code('feedback');
-	\$id=\$GLOBALS['SITE_DB']->query_value('download_downloads','id',array('url'=>'uploads/downloads/'.rawurlencode('{$file}')));
+	\$id=\$GLOBALS['SITE_DB']->query_select_value('download_downloads','id',array('url'=>'uploads/downloads/'.rawurlencode('{$file}')));
 	\$content_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>\$id),get_module_zone('downloads'));
 	\$_POST['title']='';
 	\$_POST['post']='[i]Automated message[/i]: This addon has been updated with fixes.';

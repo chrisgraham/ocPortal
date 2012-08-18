@@ -30,7 +30,7 @@ function get_num_chatters()
 	{
 		define('CHAT_ACTIVITY_PRUNE',25);
 	}
-	return $GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.the_user=a.member_id WHERE session_invisible=0 AND date_and_time>='.strval((integer)time()-CHAT_ACTIVITY_PRUNE).' GROUP BY member_id');
+	return $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.the_user=a.member_id WHERE session_invisible=0 AND date_and_time>='.strval((integer)time()-CHAT_ACTIVITY_PRUNE).' GROUP BY member_id');
 }
 
 /**
@@ -40,7 +40,7 @@ function get_num_chatters()
 */
 function get_num_chatrooms()
 {
-	return $GLOBALS['SITE_DB']->query_value('chat_rooms','COUNT(*)',array('is_im'=>0));
+	return $GLOBALS['SITE_DB']->query_select_value('chat_rooms','COUNT(*)',array('is_im'=>0));
 }
 
 /**
@@ -50,6 +50,6 @@ function get_num_chatrooms()
 */
 function get_num_chatposts()
 {
-	return $GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)');
+	return $GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)');
 }
 

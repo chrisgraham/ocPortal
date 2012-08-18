@@ -74,7 +74,7 @@ class Hook_Profiles_Tabs_posts
 			$rows=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_poster='.strval((integer)$member_id_of).$where_more.' ORDER BY p_time DESC',$n,$start);
 			if (count($rows)!=0)
 			{
-				$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT p_topic_id) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_poster='.strval((integer)$member_id_of).$where_more);
+				$max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(DISTINCT p_topic_id) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_poster='.strval((integer)$member_id_of).$where_more);
 
 				$where='';
 				foreach ($rows as $row)

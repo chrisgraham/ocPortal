@@ -57,7 +57,7 @@ class Hook_mysql_table_sizes
 					$out.='<h2>'.escape_html($p).'</h2>';
 					if (array_key_exists(get_table_prefix().$p,$sizes))
 					{
-						$num_rows=$db->query_value($p,'COUNT(*)');
+						$num_rows=$db->query_select_value($p,'COUNT(*)');
 						if ($num_rows>0)
 						{
 							$row=$db->query_select($p,array('*'),NULL,'',1,mt_rand(0,$num_rows-1));

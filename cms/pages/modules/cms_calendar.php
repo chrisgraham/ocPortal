@@ -247,7 +247,7 @@ class Module_cms_calendar extends standard_crud_module
 				$type=$types[$row['e_type']];
 			} else
 			{
-				$type=get_translated_text($GLOBALS['SITE_DB']->query_value('calendar_types','t_title',array('id'=>$row['e_type'])));
+				$type=get_translated_text($GLOBALS['SITE_DB']->query_select_value('calendar_types','t_title',array('id'=>$row['e_type'])));
 				$types[$row['e_type']]=$type;
 			}
 
@@ -609,7 +609,7 @@ class Module_cms_calendar extends standard_crud_module
 	 */
 	function get_cat($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events','e_type',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_select_value_if_there('calendar_events','e_type',array('id'=>$id));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return $temp;
 	}
@@ -891,7 +891,7 @@ class Module_cms_calendar extends standard_crud_module
 			}
 		}
 
-		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('calendar_events','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('calendar_events','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($type))))
 			{
@@ -904,7 +904,7 @@ class Module_cms_calendar extends standard_crud_module
 					$to=cal_utctime_to_usertime($_to,$timezone,false);
 				}
 
-				$submitter=$GLOBALS['SITE_DB']->query_value('calendar_events','submitter',array('id'=>$id));
+				$submitter=$GLOBALS['SITE_DB']->query_select_value('calendar_events','submitter',array('id'=>$id));
 
 				syndicate_described_activity(($submitter!=get_member())?'calendar:ACTIVITY_VALIDATE_CALENDAR_EVENT':'calendar:ACTIVITY_CALENDAR_EVENT',$title,date_range($from,$to,!is_null($start_hour)),'','_SEARCH:calendar:view:'.strval($id),'','','calendar',1,$submitter,true);
 			}
@@ -1151,7 +1151,7 @@ class Module_cms_calendar_cat extends standard_crud_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$total=$GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)',array('e_type'=>$row['id']));
+			$total=$GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)',array('e_type'=>$row['id']));
 
 			$fields->attach(results_entry(array(get_translated_text($row['t_title']),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}

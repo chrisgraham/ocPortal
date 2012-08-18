@@ -42,7 +42,7 @@ class Hook_send_chatmessage
 			elseif ($parameters[0]=='first-watched')
 			{
 				$_chatroom=get_value('occle_watched_chatroom');
-				$chatroom=is_null($_chatroom)?$GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','id',NULL,'ORDER BY id'):intval($_chatroom);
+				$chatroom=is_null($_chatroom)?$GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','id',NULL,'ORDER BY id'):intval($_chatroom);
 			}
 			else $chatroom=get_chatroom_id($parameters[0]);
 

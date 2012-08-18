@@ -47,9 +47,9 @@ class Module_cedi
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('seedy_children');
-		$GLOBALS['SITE_DB']->drop_if_exists('seedy_pages');
-		$GLOBALS['SITE_DB']->drop_if_exists('seedy_changes');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('seedy_children');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('seedy_pages');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('seedy_changes');
 
 		delete_config_option('is_on_seedy');
 		delete_config_option('points_cedi');
@@ -69,7 +69,7 @@ class Module_cedi
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'seedy_page'));
 
-		$GLOBALS['SITE_DB']->drop_if_exists('seedy_posts');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('seedy_posts');
 
 		delete_attachments('seedy_post');
 		delete_attachments('cedi_post');
@@ -372,7 +372,7 @@ class Module_cedi
 	{
 		attach_message(do_lang_tempcode('TAKEN_RANDOM_WIKI_PAGE'),'inform');
 
-		$num_pages=$GLOBALS['SITE_DB']->query_value('seedy_pages','MAX(id)');
+		$num_pages=$GLOBALS['SITE_DB']->query_select_value('seedy_pages','MAX(id)');
 		$pages=array();
 		do // Loop. picking random pages between 0 and max-id till we find one that exists
 		{
@@ -400,7 +400,7 @@ class Module_cedi
 		$find=get_param('find','');
 		if ($find!='')	// Allow quick 'find' remapping to a real id
 		{
-			$id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages p LEFT JOIN '.get_table_prefix().'translate t ON p.title=t.id','p.id',array('text_original'=>$find));
+			$id=$GLOBALS['SITE_DB']->query_select_value_if_there('seedy_pages p LEFT JOIN '.get_table_prefix().'translate t ON p.title=t.id','p.id',array('text_original'=>$find));
 			if (is_null($id))
 			{
 				$title=get_screen_title('ERROR_OCCURRED');
@@ -469,8 +469,8 @@ class Module_cedi
 			$_child_title=$subpage['title'];
 			$child_title=get_translated_text($_child_title);
 
-			$my_child_posts=$GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)',array('page_id'=>$child_id));
-			$my_child_children=$GLOBALS['SITE_DB']->query_value('seedy_children','COUNT(*)',array('parent_id'=>$child_id));
+			$my_child_posts=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','COUNT(*)',array('page_id'=>$child_id));
+			$my_child_children=$GLOBALS['SITE_DB']->query_select_value('seedy_children','COUNT(*)',array('parent_id'=>$child_id));
 
 			$my_child_posts_string=do_lang_tempcode('POST_PLU',integer_format($my_child_posts));
 			$my_child_children_string=do_lang_tempcode('CHILD_PLU',integer_format($my_child_children));
@@ -630,7 +630,7 @@ class Module_cedi
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
 
-		$max_rows=$GLOBALS['SITE_DB']->query_value('seedy_changes','COUNT(*)',array('the_action'=>'CEDI_MAKE_POST'));
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('seedy_changes','COUNT(*)',array('the_action'=>'CEDI_MAKE_POST'));
 		$_id=get_param('id',NULL);
 		$id=NULL;
 		if (!is_null($_id))
@@ -645,7 +645,7 @@ class Module_cedi
 		{
 			if (!has_category_access(get_member(),'seedy_page',strval($myrow['the_page']))) continue;
 
-			$l=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','title',array('id'=>$myrow['the_page']));
+			$l=$GLOBALS['SITE_DB']->query_select_value_if_there('seedy_pages','title',array('id'=>$myrow['the_page']));
 			if (!is_null($l))
 			{
 				$chain=is_null($id)?cedi_derive_chain($myrow['the_page']):$_id;
@@ -769,9 +769,9 @@ class Module_cedi
 		$id=$_id[0];
 		$post_id=get_param_integer('post_id');
 
-		$original_poster=$GLOBALS['SITE_DB']->query_value('seedy_posts','the_user',array('id'=>$post_id));
+		$original_poster=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','the_user',array('id'=>$post_id));
 
-		$true_page_id=$GLOBALS['SITE_DB']->query_value('seedy_posts','page_id',array('id'=>$post_id));
+		$true_page_id=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','page_id',array('id'=>$post_id));
 		if (!has_category_access(get_member(),'seedy_page',strval($true_page_id))) access_denied('CATEGORY_ACCESS');
 		check_edit_permission('low',$original_poster,array('seedy_page',$true_page_id),'cms_cedi');
 
@@ -802,10 +802,10 @@ class Module_cedi
 		$_id=get_param_cedi_chain('id');
 		$id=$_id[0];
 
-		$true_page_id=$GLOBALS['SITE_DB']->query_value('seedy_posts','page_id',array('id'=>$post_id));
+		$true_page_id=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','page_id',array('id'=>$post_id));
 		if (!has_category_access(get_member(),'seedy_page',strval($true_page_id))) access_denied('CATEGORY_ACCESS');
 
-		$original_poster=$GLOBALS['SITE_DB']->query_value('seedy_posts','the_user',array('id'=>$post_id));
+		$original_poster=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','the_user',array('id'=>$post_id));
 		check_edit_permission('low',$original_poster,array('seedy_page',$true_page_id),'cms_cedi');
 
 		// Check user info
@@ -847,7 +847,7 @@ class Module_cedi
 
 		if ($mode=='edit')
 		{
-			$_id=get_param_cedi_chain('id',strval($GLOBALS['SITE_DB']->query_value('seedy_posts','page_id',array('id'=>$post_id))));
+			$_id=get_param_cedi_chain('id',strval($GLOBALS['SITE_DB']->query_select_value('seedy_posts','page_id',array('id'=>$post_id))));
 			$id=$_id[0];
 
 			$rows=$GLOBALS['SITE_DB']->query_select('seedy_posts',array('*'),array('id'=>$post_id),'',1);
@@ -884,7 +884,7 @@ class Module_cedi
 			$_id=get_param_cedi_chain('id');
 			$id=$_id[0];
 
-			if ($GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)',array('page_id'=>$id))>=300)
+			if ($GLOBALS['SITE_DB']->query_select_value('seedy_posts','COUNT(*)',array('page_id'=>$id))>=300)
 			{
 				warn_exit(do_lang_tempcode('TOO_MANY_CEDI_POSTS'));
 			}
@@ -917,7 +917,7 @@ class Module_cedi
 
 		list($page_id,)=get_param_cedi_chain('id',strval(db_get_first_id()));
 		require_lang('notifications');
-		$notify=($GLOBALS['SITE_DB']->query_value_null_ok('seedy_changes','MAX(date_and_time)',array('the_page'=>$page_id))<time()-60*10);
+		$notify=($GLOBALS['SITE_DB']->query_select_value_if_there('seedy_changes','MAX(date_and_time)',array('the_page'=>$page_id))<time()-60*10);
 		$radios=form_input_radio_entry('send_notification','0',!$notify,do_lang_tempcode('NO'));
 		$radios->attach(form_input_radio_entry('send_notification','1',$notify,do_lang_tempcode('YES')));
 		$specialisation->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),'send_notification',$radios));
@@ -997,7 +997,7 @@ class Module_cedi
 		{
 			$title=get_screen_title('CEDI_MAKE_POST');
 
-			if ($GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)',array('id'=>$id))>=300)
+			if ($GLOBALS['SITE_DB']->query_select_value('seedy_posts','COUNT(*)',array('id'=>$id))>=300)
 			{
 				warn_exit(do_lang_tempcode('TOO_MANY_CEDI_POSTS'));
 			}
@@ -1094,11 +1094,11 @@ class Module_cedi
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CEDI'))));
 
-		if ($GLOBALS['SITE_DB']->query_value('seedy_pages','COUNT(*)')>3000)
+		if ($GLOBALS['SITE_DB']->query_select_value('seedy_pages','COUNT(*)')>3000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
 		$url_stub=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,false,false,true);
-		$last_change_time=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_changes','date_and_time',NULL,'ORDER BY date_and_time DESC');
+		$last_change_time=$GLOBALS['SITE_DB']->query_select_value_if_there('seedy_changes','date_and_time',NULL,'ORDER BY date_and_time DESC');
 
 		$children_rows=$GLOBALS['SITE_DB']->query_select('seedy_children',array('child_id','parent_id'),NULL,'ORDER BY the_order');
 		$page_rows=$GLOBALS['SITE_DB']->query_select('seedy_pages',array('id','title'));

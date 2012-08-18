@@ -436,9 +436,9 @@ function ocf_ldap_authorise_login($cn,$password)
  */
 function ocf_member_ldapcn_to_ocfid($cn)
 {
-	$ret=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$cn,'m_password_compat_scheme'=>'ldap'));
+	$ret=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$cn,'m_password_compat_scheme'=>'ldap'));
 	if (is_null($ret))
-		$ret=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$cn,'m_password_compat_scheme'=>'httpauth'));
+		$ret=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$cn,'m_password_compat_scheme'=>'httpauth'));
 	return $ret;
 }
 
@@ -450,9 +450,9 @@ function ocf_member_ldapcn_to_ocfid($cn)
  */
 function ocf_member_ocfid_to_ldapcn($id)
 {
-	$ret=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','m_username',array('id'=>$id,'m_password_compat_scheme'=>'ldap'));
+	$ret=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','m_username',array('id'=>$id,'m_password_compat_scheme'=>'ldap'));
 	if (is_null($ret))
-		$ret=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','m_username',array('id'=>$id,'m_password_compat_scheme'=>'httpauth'));
+		$ret=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','m_username',array('id'=>$id,'m_password_compat_scheme'=>'httpauth'));
 	return $ret;
 }
 

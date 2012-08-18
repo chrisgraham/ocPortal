@@ -33,9 +33,9 @@ class Hook_sw_banners
 
 		require_lang('banners');
 		$fields=new ocp_tempcode();
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'donate'));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>'donate'));
 		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_DONATION'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_DONATION'),'have_default_banners_donation',array_key_exists('have_default_banners_donation',$field_defaults)?($field_defaults['have_default_banners_donation']=='1'):false));
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'advertise_here'));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>'advertise_here'));
 		if (!is_null($test)) $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_ADVERTISING'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_ADVERTISING'),'have_default_banners_advertising',array_key_exists('have_default_banners_advertising',$field_defaults)?($field_defaults['have_default_banners_advertising']=='1'):false));
 		return $fields;
 	}
@@ -51,7 +51,7 @@ class Hook_sw_banners
 
 		if (post_param_integer('have_default_banners_donation',0)==0)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'donate'));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>'donate'));
 			if (!is_null($test))
 			{
 				require_code('banners2');
@@ -62,7 +62,7 @@ class Hook_sw_banners
 		}
 		if (post_param_integer('have_default_banners_advertising',0)==0)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>'advertise_here'));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>'advertise_here'));
 			if (!is_null($test))
 			{
 				require_code('banners2');

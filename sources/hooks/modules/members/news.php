@@ -31,7 +31,7 @@ class Hook_members_news
 	{
 		if (!addon_installed('news')) return array();
 
-		$nc_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$member_id));
+		$nc_id=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','id',array('nc_owner'=>$member_id));
 		if (!is_null($nc_id))
 		{
 			require_lang('news');

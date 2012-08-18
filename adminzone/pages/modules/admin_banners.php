@@ -100,7 +100,7 @@ class Module_admin_banners
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
 
-		$_sum=$GLOBALS['SITE_DB']->query_value('banners','SUM(views_from)');
+		$_sum=$GLOBALS['SITE_DB']->query_select_value('banners','SUM(views_from)');
 		$has_banner_network=$_sum!=0.0;
 
 		require_code('templates_results_table');
@@ -112,7 +112,7 @@ class Module_admin_banners
 		$fields_title=results_field_title($field_titles_arr,$sortables,'sort',$sortable.' '.$sort_order);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('banners',array('*'),NULL,'',$max,$start);
-		$max_rows=$GLOBALS['SITE_DB']->query_value('banners','COUNT(*)');
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('banners','COUNT(*)');
 		$fields=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{

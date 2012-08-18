@@ -169,7 +169,7 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 	$galleries=NULL;
 	if ((addon_installed('galleries')) && (get_option('show_gallery_counts')=='1'))
 	{
-		$gallery_cnt=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) AS cnt FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name LIKE \''.db_encode_like('member_'.strval($member_id).'_%').'\'');
+		$gallery_cnt=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) AS cnt FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name LIKE \''.db_encode_like('member_'.strval($member_id).'_%').'\'');
 
 		if ($gallery_cnt>1)
 		{

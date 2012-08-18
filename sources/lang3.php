@@ -180,7 +180,7 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 
 	if ((is_null($id)) && (multi_lang())) // Needed as MySQL auto-increment works separately for each combo of other key values (i.e. language in this case). We can't let a language string ID get assigned to something entirely different in another language. This MySQL behaviour is not well documented, it may work differently on different versions.
 	{
-		$id=$connection->query_value('translate','MAX(id)');
+		$id=$connection->query_select_value('translate','MAX(id)');
 		$id=is_null($id)?NULL:($id+1);
 	}
 
@@ -267,7 +267,7 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$so
 
 	$lang=user_lang();
 
-	$test=$connection->query_value_null_ok('translate','text_original',array('id'=>$id,'language'=>$lang));
+	$test=$connection->query_select_value_if_there('translate','text_original',array('id'=>$id,'language'=>$lang));
 
 	// Mark old as out-of-date
 	if ($test!==$text)
@@ -341,8 +341,8 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 			return NULL;
 		}
 
-		$result=$connection->query_value_null_ok('translate','text_parsed',array('id'=>$entry,'language'=>get_site_default_lang()));
-		if (is_null($result)) $result=$connection->query_value_null_ok('translate','text_parsed',array('id'=>$entry));
+		$result=$connection->query_select_value_if_there('translate','text_parsed',array('id'=>$entry,'language'=>get_site_default_lang()));
+		if (is_null($result)) $result=$connection->query_select_value_if_there('translate','text_parsed',array('id'=>$entry));
 
 		if ((!is_null($result)) && ($result!=''))
 		{

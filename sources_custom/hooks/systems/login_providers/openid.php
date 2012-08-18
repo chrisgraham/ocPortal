@@ -66,7 +66,7 @@ class Hook_login_provider_openid
 					$attributes=$openid->getAttributes();
 
 					// If member already existed, no action needed - just create a session to existing record
-					$member=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_password_compat_scheme'=>'openid','m_pass_hash_salted'=>$openid->identity));
+					$member=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_password_compat_scheme'=>'openid','m_pass_hash_salted'=>$openid->identity));
 					if (!is_null($member))
 					{
 						require_code('users_inactive_occasionals');
@@ -99,7 +99,7 @@ class Hook_login_provider_openid
 							$i=1;
 							do
 							{
-								$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$_username));
+								$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$_username));
 								if (!is_null($test))
 								{
 									$i++;

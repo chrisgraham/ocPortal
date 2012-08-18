@@ -17,7 +17,7 @@ class Hook_symbol_MANTIS_TOTAL
 {
 	function run($param)
 	{
-		$cnt=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM mantis_bug_table WHERE status<80');
+		$cnt=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM mantis_bug_table WHERE status<80');
 		return strval($cnt);
 	}
 }

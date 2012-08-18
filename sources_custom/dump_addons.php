@@ -119,7 +119,7 @@ function find_addon_category_download_category($category_name,$parent_id=NULL)
 	if (is_null($parent_id)) $parent_id=db_get_first_id();
 
 	require_code('downloads2');
-	$id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$parent_id,'t.text_original'=>$category_name));
+	$id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$parent_id,'t.text_original'=>$category_name));
 	if (is_null($id))
 	{
 		$cat_id=add_download_category($category_name,$parent_id,'','','');

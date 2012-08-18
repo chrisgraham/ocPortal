@@ -330,7 +330,7 @@ function find_booking_price($request)
  */
 function find_bookable_price($bookable_id)
 {
-	return $GLOBALS['SITE_DB']->query_value('bookable','price',array('id'=>$bookable_id));
+	return $GLOBALS['SITE_DB']->query_select_value('bookable','price',array('id'=>$bookable_id));
 }
 
 /**
@@ -381,7 +381,7 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore
 	$_bookable_row=$GLOBALS['SITE_DB']->query_select('bookable',array('*'),array('id'=>$bookable_id),'',1);
 	if (!array_key_exists(0,$_bookable_row)) return do_lang_tempcode('INTERNAL_ERROR');
 	$bookable_row=$_bookable_row[0];
-	$codes_in_total=$GLOBALS['SITE_DB']->query_value('bookable_codes','COUNT(*)',array('bookable_id'=>$bookable_id));
+	$codes_in_total=$GLOBALS['SITE_DB']->query_select_value('bookable_codes','COUNT(*)',array('bookable_id'=>$bookable_id));
 
 	// Check bookable enabled
 	if ($bookable_row['enabled']==0) return do_lang_tempcode('INTERNAL_ERROR');
@@ -416,7 +416,7 @@ function booking_date_available($bookable_id,$day,$month,$year,$quantity,$ignore
 	// Check no overlap
 	$query='SELECT COUNT(*) FROM '.get_table_prefix().'booking WHERE b_day='.strval($day).' AND b_month='.strval($month).' AND b_year='.strval($year);
 	foreach ($ignore_bookings as $b) $query.=' AND id<>'.strval($b);
-	$codes_taken_already=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
+	$codes_taken_already=$GLOBALS['SITE_DB']->query_value_if_there($query);
 	if ($codes_taken_already+$quantity>$codes_in_total) return do_lang_tempcode('BOOKING_IMPOSSIBLE_FULL',get_timezoned_date($asked,false,true,true));
 
 	// Good!

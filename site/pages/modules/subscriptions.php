@@ -47,11 +47,11 @@ class Module_subscriptions
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('subscriptions');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('subscriptions');
 
 		$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		$GLOBALS['SITE_DB']->drop_if_exists('f_usergroup_subs');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('f_usergroup_subs');
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
 	}
 
@@ -116,7 +116,7 @@ class Module_subscriptions
 	 */
 	function get_entry_points()
 	{
-		return ((is_guest()) || ($GLOBALS['SITE_DB']->query_value('subscriptions','COUNT(*)')==0))?array():array('misc'=>'MY_SUBSCRIPTIONS');
+		return ((is_guest()) || ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)')==0))?array():array('misc'=>'MY_SUBSCRIPTIONS');
 	}
 
 	/**
@@ -189,7 +189,7 @@ class Module_subscriptions
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MY_SUBSCRIPTIONS'))));
 
 		$id=get_param_integer('id');
-		$via=$GLOBALS['SITE_DB']->query_value('subscriptions','s_via',array('id'=>$id));
+		$via=$GLOBALS['SITE_DB']->query_select_value('subscriptions','s_via',array('id'=>$id));
 
 		if (($via!='manual') && ($via!=''))
 		{
@@ -198,7 +198,7 @@ class Module_subscriptions
 			if ($hook->auto_cancel($id)!==true)
 			{
 				require_code('notifications');
-				$trans_id=$GLOBALS['SITE_DB']->query_value('transactions','id',array('purchase_id'=>strval($id)));
+				$trans_id=$GLOBALS['SITE_DB']->query_select_value('transactions','id',array('purchase_id'=>strval($id)));
 				$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 				dispatch_notification('subscription_cancelled_staff',NULL,do_lang('SUBSCRIPTION_CANCELLED_SUBJECT',NULL,NULL,NULL,get_site_default_lang()),do_lang('SUBSCRIPTION_CANCELLED_BODY',$trans_id,$username,NULL,get_site_default_lang()));
 			}

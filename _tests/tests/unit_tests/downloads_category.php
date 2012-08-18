@@ -29,14 +29,14 @@ class downloads_category_test_set extends ocp_test_case
 
 		$this->dwn_cat_id=add_download_category('test',1,'test','test','',NULL);
 
-		$this->assertTrue('test'==$GLOBALS['SITE_DB']->query_value('download_categories','notes',array('id'=>$this->dwn_cat_id)));
+		$this->assertTrue('test'==$GLOBALS['SITE_DB']->query_select_value('download_categories','notes',array('id'=>$this->dwn_cat_id)));
 	}
 
 	function testEditDownloads_category()
 	{
 		edit_download_category('test',1,'test',$this->dwn_cat_id,'edit_test','','','');
 
-		$this->assertTrue('edit_test'==$GLOBALS['SITE_DB']->query_value('download_categories','notes',array('id'=>$this->dwn_cat_id)));
+		$this->assertTrue('edit_test'==$GLOBALS['SITE_DB']->query_select_value('download_categories','notes',array('id'=>$this->dwn_cat_id)));
 	}
 
 	function tearDown()

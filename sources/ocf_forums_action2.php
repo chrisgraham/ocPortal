@@ -28,7 +28,7 @@
  */
 function ocf_edit_category($category_id,$title,$description,$expanded_by_default)
 {
-	$old_title=$GLOBALS['FORUM_DB']->query_value('f_categories','c_title',array('id'=>$category_id));
+	$old_title=$GLOBALS['FORUM_DB']->query_select_value('f_categories','c_title',array('id'=>$category_id));
 
 	$GLOBALS['FORUM_DB']->query_update('f_categories',array(
 		'c_title'=>$title,
@@ -38,7 +38,7 @@ function ocf_edit_category($category_id,$title,$description,$expanded_by_default
 
 	if ($old_title!=$title)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','c_title',array('c_title'=>$old_title));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','c_title',array('c_title'=>$old_title));
 		if (is_null($test)) // Ok, so we know there was only 1 forum named that and now it is gone
 			$GLOBALS['FORUM_DB']->query_update('config',array('config_value'=>$title),array('the_type'=>'category','config_value'=>$old_title));
 	}
@@ -54,7 +54,7 @@ function ocf_edit_category($category_id,$title,$description,$expanded_by_default
  */
 function ocf_delete_category($category_id,$target_category_id)
 {
-	$title=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','c_title',array('id'=>$category_id));
+	$title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','c_title',array('id'=>$category_id));
 	if (is_null($title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_category_id'=>$target_category_id),array('f_category_id'=>$category_id));
 	$GLOBALS['FORUM_DB']->query_delete('f_categories',array('id'=>$category_id),'',1);
@@ -99,7 +99,7 @@ function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$p
 	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))
 	{
 		if ($forum_id==$under_category_id) warn_exit(do_lang_tempcode('FORUM_CANNOT_BE_OWN_PARENT'));
-		$under_category_id=$GLOBALS['FORUM_DB']->query_value('f_forums','f_parent_forum',array('id'=>$under_category_id));
+		$under_category_id=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_parent_forum',array('id'=>$under_category_id));
 	}
 
 	if (($reset_intro_acceptance) && (trim(get_translated_text($forum_info[0]['f_intro_question'],$GLOBALS['FORUM_DB']))!=trim($intro_question)) && ($intro_question!=STRING_MAGIC_NULL))
@@ -125,7 +125,7 @@ function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$p
 
 	if ($old_name!=$name)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('f_name'=>$old_name));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_name',array('f_name'=>$old_name));
 		if (is_null($test)) // Ok, so we know there was only 1 forum named that and now it is gone
 			$GLOBALS['FORUM_DB']->query_update('config',array('config_value'=>$name),array('the_type'=>'forum','config_value'=>$old_name));
 	}
@@ -174,7 +174,7 @@ function ocf_delete_forum($forum_id,$target_forum_id,$delete_topics=0)
 	delete_lang($forum_info[0]['f_description'],$GLOBALS['FORUM_DB']);
 	delete_lang($forum_info[0]['f_intro_question'],$GLOBALS['FORUM_DB']);
 
-	$name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$forum_id));
+	$name=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>$forum_id));
 	$GLOBALS['FORUM_DB']->query_update('f_multi_moderations',array('mm_move_to'=>NULL),array('mm_move_to'=>$forum_id));
 	$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_parent_forum'=>db_get_first_id()),array('f_parent_forum'=>$forum_id));
 	$GLOBALS['FORUM_DB']->query_delete('f_forums',array('id'=>$forum_id),'',1);
@@ -243,7 +243,7 @@ function ocf_ping_forum_unread_all($forum_id)
  */
 function ocf_ensure_category_exists($category_id)
 {
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('id'=>$category_id));
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('id'=>$category_id));
 	if (is_null($test))
 	{
 		warn_exit(do_lang_tempcode('CAT_NOT_FOUND',strval($category_id)));
@@ -258,7 +258,7 @@ function ocf_ensure_category_exists($category_id)
  */
 function ocf_ensure_forum_exists($forum_id)
 {
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('id'=>$forum_id));
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_name',array('id'=>$forum_id));
 	if (is_null($test))
 	{
 		warn_exit(do_lang_tempcode('FORUM_NOT_FOUND',strval($forum_id)));

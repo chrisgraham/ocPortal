@@ -90,7 +90,7 @@ class Module_admin_occle
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('occlechat');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('occlechat');
 
 		delete_value('last_occle_command');
 

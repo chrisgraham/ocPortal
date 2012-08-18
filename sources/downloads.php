@@ -102,7 +102,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	$licence=$row['download_licence'];
 	if (!is_null($licence))
 	{
-		$licence_title=$GLOBALS['SITE_DB']->query_value_null_ok('download_licences','l_title',array('id'=>$licence));
+		$licence_title=$GLOBALS['SITE_DB']->query_select_value_if_there('download_licences','l_title',array('id'=>$licence));
 		if (!is_null($licence_title))
 		{
 			$keep=symbol_tempcode('KEEP');
@@ -199,7 +199,7 @@ function get_downloads_tree($submitter=NULL,$category_id=NULL,$breadcrumbs=NULL,
 	if (is_null($breadcrumbs)) $breadcrumbs='';
 
 	// Put our title onto our breadcrumbs
-	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_value('download_categories','category',array('id'=>$category_id)));
+	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('download_categories','category',array('id'=>$category_id)));
 	$breadcrumbs.=$title;
 
 	$compound_list=strval($category_id).',';
@@ -326,7 +326,7 @@ function get_download_category_tree($category_id=NULL,$breadcrumbs=NULL,$title=N
 	if (is_null($breadcrumbs)) $breadcrumbs='';
 
 	// Put our title onto our breadcrumbs
-	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_value('download_categories','category',array('id'=>$category_id)));
+	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('download_categories','category',array('id'=>$category_id)));
 	$breadcrumbs.=$title;
 
 	// We'll be putting all children in this entire tree into a single list
@@ -337,7 +337,7 @@ function get_download_category_tree($category_id=NULL,$breadcrumbs=NULL,$title=N
 	$children[0]['breadcrumbs']=$breadcrumbs;
 	$children[0]['compound_list']=strval($category_id).',';
 	if ($addable_filter) $children[0]['addable']=has_submit_permission('mid',get_member(),get_ip_address(),'cms_downloads',array('downloads',$category_id));
-	if ($do_stats) $children[0]['filecount']=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)',array('category_id'=>$category_id));
+	if ($do_stats) $children[0]['filecount']=$GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)',array('category_id'=>$category_id));
 
 	// Children of this category
 	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category'),array('parent_id'=>$category_id),'',300/*reasonable*/);
@@ -385,7 +385,7 @@ function download_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$
 	if (($category_id==$root) || ($category_id==db_get_first_id()))
 	{
 		if ($no_link_for_me_sir) return new ocp_tempcode();
-		$title=get_translated_text($GLOBALS['SITE_DB']->query_value('download_categories','category',array('id'=>$category_id)));
+		$title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('download_categories','category',array('id'=>$category_id)));
 		return hyperlink($url,escape_html($title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$title),NULL,NULL,'up');
 	}
 
@@ -420,11 +420,11 @@ function download_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$
 function count_download_category_children($category_id)
 {
 	static $total_categories=NULL;
-	if (is_null($total_categories)) $total_categories=$GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)');
+	if (is_null($total_categories)) $total_categories=$GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)');
 
 	$out=array();
-	$out['num_children']=$GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)',array('parent_id'=>$category_id));
-	$out['num_downloads']=$GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)',array('category_id'=>$category_id,'validated'=>1));
+	$out['num_children']=$GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)',array('parent_id'=>$category_id));
+	$out['num_downloads']=$GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)',array('category_id'=>$category_id,'validated'=>1));
 
 	$out['num_downloads_children']=$out['num_downloads'];
 	if ($total_categories<200) // Make sure not too much, performance issue

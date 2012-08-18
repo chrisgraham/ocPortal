@@ -67,7 +67,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('custom_comcode');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('custom_comcode');
 	}
 
 	/**
@@ -273,7 +273,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 		$tag=post_param('tag');
 
 		global $VALID_COMCODE_TAGS;
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$tag));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$tag));
 		if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
 
 		$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
@@ -304,7 +304,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 		$tag=post_param('tag');
 
 		global $VALID_COMCODE_TAGS;
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$tag));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$tag));
 		if ($id==$tag) $test=NULL;
 		if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
 

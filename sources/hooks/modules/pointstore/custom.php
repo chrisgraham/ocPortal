@@ -167,7 +167,7 @@ class Hook_pointstore_custom
 			if ($row['c_one_per_member']==1)
 			{
 				// Test to see if it's been bought
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('sales','id',array('purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details2'=>strval($rows[0]['id']),'memberid'=>get_member()));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('sales','id',array('purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details2'=>strval($rows[0]['id']),'memberid'=>get_member()));
 				if (!is_null($test)) continue;
 			}
 
@@ -237,7 +237,7 @@ class Hook_pointstore_custom
 		if ($row['c_one_per_member']==1)
 		{
 			// Test to see if it's been bought
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('sales','id',array('purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details2'=>strval($row['id']),'memberid'=>get_member()));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('sales','id',array('purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details2'=>strval($row['id']),'memberid'=>get_member()));
 			if (!is_null($test))
 				warn_exit(do_lang_tempcode('ONE_PER_MEMBER_ONLY'));
 		}

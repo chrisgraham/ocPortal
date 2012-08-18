@@ -103,7 +103,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 				{
 					if (strpos($code,'ocp_fanatic')!==false) continue;
 
-					$count=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT SUM(m_cache_num_posts) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_equal_to('m_avatar_url',find_theme_image($code,false,true)));
+					$count=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT SUM(m_cache_num_posts) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_equal_to('m_avatar_url',find_theme_image($code,false,true)));
 					if (is_null($count)) $count=0;
 					$results[$code]=$count;
 				}
@@ -231,7 +231,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 		// If it was an invite/recommendation, award the referrer
 		if (addon_installed('recommend'))
 		{
-			$inviter=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_email_address'=>$email_address),'ORDER BY i_time');
+			$inviter=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','i_inviter',array('i_email_address'=>$email_address),'ORDER BY i_time');
 			if (!is_null($inviter))
 			{
 				if (addon_installed('points'))
@@ -434,7 +434,7 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 
 	if ($no_name_dupe)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
 		if (!is_null($test))
 		{
 			$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;
@@ -444,7 +444,7 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 
 	if (is_null($order))
 	{
-		$order=$GLOBALS['FORUM_DB']->query_value('f_custom_fields','MAX(cf_order)');
+		$order=$GLOBALS['FORUM_DB']->query_select_value('f_custom_fields','MAX(cf_order)');
 		if (is_null($order)) $order=0; else $order++;
 	}
 
@@ -474,7 +474,7 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 	$GLOBALS['FORUM_DB']->add_table_field('f_member_custom_fields','field_'.strval($id),$_type); // Default will be made explicit when we insert rows
 	if ($index)
 	{
-		$indices_count=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'f_custom_fields WHERE '.db_string_not_equal_to('cf_type','integer').' AND '.db_string_not_equal_to('cf_type','tick').' AND '.db_string_not_equal_to('cf_type','long_trans').' AND '.db_string_not_equal_to('cf_type','short_trans'));
+		$indices_count=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'f_custom_fields WHERE '.db_string_not_equal_to('cf_type','integer').' AND '.db_string_not_equal_to('cf_type','tick').' AND '.db_string_not_equal_to('cf_type','long_trans').' AND '.db_string_not_equal_to('cf_type','short_trans'));
 		if ($indices_count<60) // Could be 64 but trying to be careful here...
 		{
 			$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');

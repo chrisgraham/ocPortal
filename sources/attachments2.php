@@ -412,7 +412,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 					$connection->query_delete('attachment_refs',array('id'=>$ref['id']),'',1);
 
 					// Was that the last reference to this attachment? (if so -- delete attachment)
-					$test=$connection->query_value_null_ok('attachment_refs','id',array('a_id'=>$ref['a_id']));
+					$test=$connection->query_select_value_if_there('attachment_refs','id',array('a_id'=>$ref['a_id']));
 					if (is_null($test))
 					{
 						require_code('attachments3');

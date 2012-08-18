@@ -33,7 +33,7 @@ function handle_product_orders($purchase_id,$details,$product)
 {
 	require_code('shopping');
 
-	$old_status=$GLOBALS['SITE_DB']->query_value('shopping_order_details','dispatch_status',array('order_id'=>$purchase_id));
+	$old_status=$GLOBALS['SITE_DB']->query_select_value('shopping_order_details','dispatch_status',array('order_id'=>$purchase_id));
 
 	if ($old_status != $details['ORDER_STATUS'])
 	{
@@ -91,7 +91,7 @@ class Hook_cart_orders
 
 		if (is_null($search))
 		{
-			$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'shopping_order WHERE '.$where);
+			$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'shopping_order WHERE '.$where);
 			if ($count>50) return array(); // Too many to list
 		}
 

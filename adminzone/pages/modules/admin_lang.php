@@ -168,7 +168,7 @@ class Module_admin_lang
 		$potentials=$GLOBALS['SITE_DB']->query_select('translate',array('id'),array('text_original'=>$old,'language'=>get_site_default_lang()));
 		foreach ($potentials as $potential)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('translate','text_original',array('id'=>$potential['id'],'language'=>$lang));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','text_original',array('id'=>$potential['id'],'language'=>$lang));
 			if (!is_null($test)) return $test;
 		}
 
@@ -315,7 +315,7 @@ class Module_admin_lang
 			$query='FROM '.get_table_prefix().'translate a LEFT JOIN '.get_table_prefix().'translate b ON a.id=b.id AND b.broken=0 AND '.db_string_equal_to('b.language',$lang).' WHERE b.id IS NULL AND '.db_string_not_equal_to('a.language',$lang).' AND '.db_string_not_equal_to('a.text_original','');
 			$to_translate=$GLOBALS['SITE_DB']->query('SELECT a.* '.$query.(can_arbitrary_groupby()?' GROUP BY a.id':'').' ORDER BY a.importance_level',$max/*reasonable limit*/);
 		}
-		$total=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
+		$total=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) '.$query);
 		if (count($to_translate)==0) inform_exit(do_lang_tempcode('NOTHING_TO_TRANSLATE'));
 
 		require_all_lang($lang,true);
@@ -386,7 +386,7 @@ class Module_admin_lang
 			if ($val!='')
 			{
 				$GLOBALS['SITE_DB']->query_delete('translate',array('language'=>$lang,'id'=>$lang_id),'',1);
-				$importance_level=$GLOBALS['SITE_DB']->query_value_null_ok('translate','importance_level',array('id'=>$lang_id));
+				$importance_level=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','importance_level',array('id'=>$lang_id));
 				if (!is_null($importance_level))
 					$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$lang_id,'source_user'=>get_member(),'language'=>$lang,'importance_level'=>$importance_level,'text_original'=>$val,'text_parsed'=>'','broken'=>0));
 			}

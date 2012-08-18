@@ -33,7 +33,7 @@ function actual_delete_theme_image($id,$theme=NULL,$lang=NULL)
 
 		$where_map=array('theme'=>$theme,'id'=>$id);
 		if (($lang!='') && (!is_null($lang))) $where_map['lang']=$lang;
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','path',$where_map);
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',$where_map);
 		if (!is_null($test))
 		{
 			$GLOBALS['SITE_DB']->query_delete('theme_images',array('id'=>$id,'path'=>$test));

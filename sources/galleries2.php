@@ -437,8 +437,8 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 	require_code('urls2');
 	suggest_new_idmoniker_for('galleries','image',strval($id),($title=='')?$comments:$title);
 
-	$_comments=$GLOBALS['SITE_DB']->query_value('images','comments',array('id'=>$id));
-	$_title=$GLOBALS['SITE_DB']->query_value('images','title',array('id'=>$id));
+	$_comments=$GLOBALS['SITE_DB']->query_select_value('images','comments',array('id'=>$id));
+	$_title=$GLOBALS['SITE_DB']->query_select_value('images','title',array('id'=>$id));
 
 	decache('main_gallery_embed');
 
@@ -712,8 +712,8 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 	require_code('urls2');
 	suggest_new_idmoniker_for('galleries','video',strval($id),($title=='')?$comments:$title);
 
-	$_title=$GLOBALS['SITE_DB']->query_value('videos','title',array('id'=>$id));
-	$_comments=$GLOBALS['SITE_DB']->query_value('videos','comments',array('id'=>$id));
+	$_title=$GLOBALS['SITE_DB']->query_select_value('videos','title',array('id'=>$id));
+	$_comments=$GLOBALS['SITE_DB']->query_select_value('videos','comments',array('id'=>$id));
 
 	require_code('files2');
 	delete_upload('uploads/galleries','videos','url','id',$id,$url);
@@ -918,7 +918,7 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
 
 	if (!$skip_exists_check)
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>$name));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$name));
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 	}
 
@@ -987,7 +987,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 	while (($under_category_id!='') && ($under_category_id!=STRING_MAGIC_NULL))
 	{
 		if ($name==$under_category_id) warn_exit(do_lang_tempcode('OWN_PARENT_ERROR'));
-		$under_category_id=$GLOBALS['SITE_DB']->query_value('galleries','parent_id',array('name'=>$under_category_id));
+		$under_category_id=$GLOBALS['SITE_DB']->query_select_value('galleries','parent_id',array('name'=>$under_category_id));
 	}
 
 	if (is_null($parent_id)) $parent_id='';
@@ -999,7 +999,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 		require_code('type_validation');
 		if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>$name));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$name));
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 
 		seo_meta_erase_storage('gallery',$old_name);
@@ -1144,7 +1144,7 @@ function make_member_gallery_if_needed($cat)
 	if (substr($cat,0,7)!='member_') return;
 
 	// Test to see if it exists
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>$cat));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$cat));
 	if (is_null($test))
 	{
 		$parts=explode('_',$cat,3);

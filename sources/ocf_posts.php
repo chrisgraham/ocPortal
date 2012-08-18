@@ -47,7 +47,7 @@ function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id=NULL,$member_
 		if (!has_specific_permission($member_id,'double_post')) return false;
 	}
 
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_warnings WHERE (p_silence_from_topic='.strval($topic_id).' OR p_silence_from_forum='.strval($forum_id).') AND w_member_id='.strval($member_id));
+	$test=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_warnings WHERE (p_silence_from_topic='.strval($topic_id).' OR p_silence_from_forum='.strval($forum_id).') AND w_member_id='.strval($member_id));
 	if (!is_null($test)) return false;
 
 	return true;

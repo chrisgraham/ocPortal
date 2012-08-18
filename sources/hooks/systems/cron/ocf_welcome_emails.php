@@ -115,7 +115,7 @@ class Hook_cron_ocf_welcome_emails
 
 					if (get_value('notification_safety_testing')==='1')
 					{
-						$test=$GLOBALS['SITE_DB']->query_value_null_ok('logged_mail_messages','m_date_and_time',array('m_subject'=>$subject,'m_to_email'=>serialize(array($member['m_email_address']))));
+						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('logged_mail_messages','m_date_and_time',array('m_subject'=>$subject,'m_to_email'=>serialize(array($member['m_email_address']))));
 						if (!is_null($test))
 						{
 							if ($test>$member['m_join_time'])

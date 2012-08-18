@@ -31,7 +31,7 @@ class Hook_search_download_categories
 		if (!module_installed('downloads')) return NULL;
 
 		if (!has_actual_page_access(get_member(),'downloads')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('download_categories','COUNT(*)')<=1) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)')<=1) return NULL;
 
 		require_lang('downloads');
 

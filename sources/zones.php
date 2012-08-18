@@ -522,7 +522,7 @@ function module_installed($module)
 {
 	global $MODULE_INSTALLED_CACHE;
 	if (array_key_exists($module,$MODULE_INSTALLED_CACHE)) return $MODULE_INSTALLED_CACHE[$module];
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('modules','module_the_name',array('module_the_name'=>$module));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('modules','module_the_name',array('module_the_name'=>$module));
 	$answer=!is_null($test);
 	$MODULE_INSTALLED_CACHE[$module]=$answer;
 	return $answer;
@@ -967,7 +967,7 @@ function _get_block_path($block)
  */
 function block_installed($block)
 {
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('blocks','block_name',array('block_name'=>$block));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('blocks','block_name',array('block_name'=>$block));
 	return !is_null($test);
 }
 

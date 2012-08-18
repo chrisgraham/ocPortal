@@ -338,14 +338,14 @@ class forum_driver_smf2 extends forum_driver_base
 		$ret=$this->get_member_row_field($member,'avatar');
 		if ($ret=='')
 		{
-			$attach_id=$this->connection->query_value_null_ok('attachments','id_attach',array('id_member'=>$member));
+			$attach_id=$this->connection->query_select_value_if_there('attachments','id_attach',array('id_member'=>$member));
 			if (is_null($attach_id)) return '';
 			return get_forum_base_url().'/index.php?action=dlattach;attach='.strval($attach_id).';type=avatar';
 		}
 		if (url_is_local($ret))
 		{
 			static $base_url=NULL; //get_forum_base_url().'/avatars';
-			if (is_null($base_url)) $base_url=$this->connection->query_value_null_ok('settings','value',array('variable'=>'avatar_url'));
+			if (is_null($base_url)) $base_url=$this->connection->query_select_value_if_there('settings','value',array('variable'=>'avatar_url'));
 			$ret=$base_url.'/'.$ret;
 		}
 		return $ret;
@@ -423,7 +423,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function forum_id_from_name($forum_name)
 	{
-		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_value_null_ok('boards','id_board',array('name'=>$forum_name));
+		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_select_value_if_there('boards','id_board',array('name'=>$forum_name));
 	}
 
 	/**
@@ -437,7 +437,7 @@ class forum_driver_smf2 extends forum_driver_base
 	{
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);
-		return $this->connection->query_value_null_ok_full('SELECT t.id_topic FROM '.$this->connection->get_table_prefix().'topics t LEFT JOIN '.$this->connection->get_table_prefix().'messages p ON t.id_first_msg=p.id_msg WHERE t.id_board='.strval((integer)$forum_id).' AND ('.db_string_equal_to('subject',$topic_identifier).' OR subject LIKE \'%: #'.db_encode_like($topic_identifier).'\')');
+		return $this->connection->query_value_if_there('SELECT t.id_topic FROM '.$this->connection->get_table_prefix().'topics t LEFT JOIN '.$this->connection->get_table_prefix().'messages p ON t.id_first_msg=p.id_msg WHERE t.id_board='.strval((integer)$forum_id).' AND ('.db_string_equal_to('subject',$topic_identifier).' OR subject LIKE \'%: #'.db_encode_like($topic_identifier).'\')');
 	}
 
 	/**
@@ -480,7 +480,7 @@ class forum_driver_smf2 extends forum_driver_base
 
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'boards SET num_posts=(num_posts+1), num_topics=(num_topics+1) WHERE id_board='.strval((integer)$forum_id),1);
 			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET id_first_msg='.strval((integer)$post_id).' WHERE id_topic='.strval((integer)$topic_id),1);
-		} else $post_id=$this->connection->query_value('messages','MIN(id_msg)',array('id_topic'=>$topic_id));
+		} else $post_id=$this->connection->query_select_value('messages','MIN(id_msg)',array('id_topic'=>$topic_id));
 
 		if ($post=='') return array($topic_id,false);
 
@@ -511,7 +511,7 @@ class forum_driver_smf2 extends forum_driver_base
 		if (is_null($topic_id)) return (-2);
 		$order=$reverse?'poster_time DESC':'poster_time';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'messages WHERE id_topic='.strval((integer)$topic_id).' AND body NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
-		$count=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'messages WHERE id_topic='.strval((integer)$topic_id).' AND body NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
+		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'messages WHERE id_topic='.strval((integer)$topic_id).' AND body NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
 		$out=array();
 		foreach ($rows as $myrow)
 		{
@@ -555,7 +555,7 @@ class forum_driver_smf2 extends forum_driver_base
 	function post_url($id,$forum)
 	{
 		unset($forum);
-		$topic_id=$this->connection->query_value_null_ok('messages','id_topic',array('id_msg'=>$id));
+		$topic_id=$this->connection->query_select_value_if_there('messages','id_topic',array('id_msg'=>$id));
 		if (is_null($topic_id)) return '?';
 		$url=get_forum_base_url().'/index.php?topic='.strval($topic_id).'.msg'.strval($id).'#msg'.strval($id);
 		return $url;
@@ -604,7 +604,7 @@ class forum_driver_smf2 extends forum_driver_base
 
 		$topic_filter=($filter_topic_title!='')?'AND p.subject LIKE \''.db_encode_like($filter_topic_title).'\'':'';
 		$rows=$this->connection->query('SELECT t.num_replies, t.id_topic AS t_id_topic, t.id_member_updated AS t_id_member_updated, t.id_member_started AS t_id_member_started, t.locked AS t_locked, p.subject AS p_subject FROM '.$this->connection->get_table_prefix().'topics t LEFT JOIN '.$this->connection->get_table_prefix().'messages p ON t.id_first_msg=p.id_msg WHERE ('.$id_list.') '.$topic_filter.' ORDER BY '.(($date_key=='lasttime')?'id_last_msg':'id_first_msg').' DESC',$limit,$start);
-		$max_rows=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics t LEFT JOIN '.$this->connection->get_table_prefix().'messages p ON t.ID_FIRST_MSG=p.ID_MSG WHERE ('.$id_list.') '.$topic_filter);
+		$max_rows=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics t LEFT JOIN '.$this->connection->get_table_prefix().'messages p ON t.ID_FIRST_MSG=p.ID_MSG WHERE ('.$id_list.') '.$topic_filter);
 		$out=array();
 		foreach ($rows as $i=>$r)
 		{
@@ -668,7 +668,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function get_previous_member($member)
 	{
-		$tempid=$this->connection->query_value_null_ok_full('SELECT id_member FROM '.$this->connection->get_table_prefix().'members WHERE id_member<'.strval((integer)$member).' ORDER BY id_member DESC');
+		$tempid=$this->connection->query_value_if_there('SELECT id_member FROM '.$this->connection->get_table_prefix().'members WHERE id_member<'.strval((integer)$member).' ORDER BY id_member DESC');
 		return $tempid;
 	}
 
@@ -681,7 +681,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function get_next_member($member)
 	{
-		$tempid=$this->connection->query_value_null_ok_full('SELECT id_member FROM '.$this->connection->get_table_prefix().'members WHERE id_member>'.strval((integer)$member).' ORDER BY id_member');
+		$tempid=$this->connection->query_value_if_there('SELECT id_member FROM '.$this->connection->get_table_prefix().'members WHERE id_member>'.strval((integer)$member).' ORDER BY id_member');
 		return $tempid;
 	}
 
@@ -784,7 +784,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function get_topic_count($member)
 	{
-		return $this->connection->query_value('topics','COUNT(*)',array('id_member_started'=>$member));
+		return $this->connection->query_select_value('topics','COUNT(*)',array('id_member_started'=>$member));
 	}
 
 	/**
@@ -868,7 +868,7 @@ class forum_driver_smf2 extends forum_driver_base
 				$skin=$this->get_member_row_field($member,'id_theme'); else $skin=0;
 			if ($skin>0) // User has a custom theme
 			{
-				$obb=$this->connection->query_value('themes','value',array('variable'=>'name','id_theme'=>$skin));
+				$obb=$this->connection->query_select_value('themes','value',array('variable'=>'name','id_theme'=>$skin));
 				$def=array_key_exists($obb,$map)?$map[$obb]:$obb;
 			}
 		}
@@ -876,7 +876,7 @@ class forum_driver_smf2 extends forum_driver_base
 		// Look for a skin according to our site name (we bother with this instead of 'default' because ocPortal itself likes to never choose a theme when forum-theme integration is on: all forum [via map] or all ocPortal seems cleaner, although it is complex)
 		if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base().'/themes/'.$def)))
 		{
-			$obb=$this->connection->query_value_null_ok('themes','value',array('variable'=>'name','value'=>get_site_name()));
+			$obb=$this->connection->query_select_value_if_there('themes','value',array('variable'=>'name','value'=>get_site_name()));
 			if (!is_null($obb)) $def=array_key_exists($obb,$map)?$map[$obb]:$obb;
 		}
 
@@ -918,7 +918,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function get_num_users_forums()
 	{
-		return $this->connection->query_value_null_ok_full('SELECT COUNT(DISTINCT session_id) FROM '.$this->connection->get_table_prefix().'sessions WHERE last_update>'.strval(time()-60*intval(get_option('users_online_time'))));
+		return $this->connection->query_value_if_there('SELECT COUNT(DISTINCT session_id) FROM '.$this->connection->get_table_prefix().'sessions WHERE last_update>'.strval(time()-60*intval(get_option('users_online_time'))));
 	}
 
 	/**
@@ -928,7 +928,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function get_members()
 	{
-		return $this->connection->query_value('members','COUNT(*)');
+		return $this->connection->query_select_value('members','COUNT(*)');
 	}
 
 	/**
@@ -938,7 +938,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function get_topics()
 	{
-		return $this->connection->query_value('topics','COUNT(*)');
+		return $this->connection->query_select_value('topics','COUNT(*)');
 	}
 
 	/**
@@ -948,7 +948,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function get_num_forum_posts()
 	{
-		return $this->connection->query_value('messages','COUNT(*)');
+		return $this->connection->query_select_value('messages','COUNT(*)');
 	}
 
 	/**
@@ -958,7 +958,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function _get_num_new_forum_posts()
 	{
-		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'messages WHERE poster_time>'.strval(time()-60*60*24));
+		return $this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'messages WHERE poster_time>'.strval(time()-60*60*24));
 	}
 
 	/**
@@ -969,7 +969,7 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function get_member_from_username($name)
 	{
-		return $this->connection->query_value_null_ok('members','id_member',array('real_name'=>$name));
+		return $this->connection->query_select_value_if_there('members','id_member',array('real_name'=>$name));
 	}
 
 	/**

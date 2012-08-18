@@ -148,7 +148,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 
 		if (is_null($position))
 		{
-			$position=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','MAX(f_position)')+1;
+			$position=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','MAX(f_position)')+1;
 		}
 
 		$fields=new ocp_tempcode();
@@ -162,7 +162,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 		{
 			$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT_FORUM'),'parent_forum',NULL,'choose_forum',array(),true,is_null($parent_forum)?'':strval($parent_forum)));
 		}
-		if ($GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)')>300)
+		if ($GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>300)
 		{
 			$fields->attach(form_input_integer(do_lang_tempcode('ORDER'),do_lang_tempcode('DESCRIPTION_FORUM_ORDER'),'position',$position,true));
 		} else
@@ -221,7 +221,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 		if (is_null($order_sub_alpha))
 		{
 			$parent_order_sub_alpha=0;
-			$order_sub_alpha=$GLOBALS['FORUM_DB']->query_value('f_forums','f_order_sub_alpha',array('id'=>$id));
+			$order_sub_alpha=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_order_sub_alpha',array('id'=>$id));
 		}
 
 		global $C_TITLE;
@@ -340,10 +340,10 @@ class Module_admin_ocf_forums extends standard_crud_module
 	{
 		$title=get_screen_title('EDIT_FORUM');
 
-		$huge=($GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)')>300);
+		$huge=($GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>300);
 
 		$all_forums=array();
-		$forums=$this->get_forum_tree(db_get_first_id(),$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>db_get_first_id())),$all_forums,0,1,NULL,NULL,$huge);
+		$forums=$this->get_forum_tree(db_get_first_id(),$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>db_get_first_id())),$all_forums,0,1,NULL,NULL,$huge);
 
 		if ($huge)
 		{
@@ -415,7 +415,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 
 		if ($id==db_get_first_id()) return false;
 
-		$fname=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$id));
+		$fname=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>$id));
 		$all_configured_forums=$GLOBALS['SITE_DB']->query_select('config',array('*'),array('the_type'=>'forum'));
 		foreach ($all_configured_forums as $f)
 		{

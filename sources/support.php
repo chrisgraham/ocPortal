@@ -433,7 +433,7 @@ function addon_installed($addon,$non_bundled_too=false)
 	$answer=is_file(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty($addon).'.php') || is_file(get_file_base().'/sources_custom/hooks/addon_registry/'.filter_naughty($addon).'.php');
 	if ((!$answer) && ($non_bundled_too))
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('addons','addon_name',array('addon_name'=>$addon));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('addons','addon_name',array('addon_name'=>$addon));
 		if (!is_null($test)) $answer=true;
 	}
 	$ADDON_INSTALLED_CACHE[$addon]=$answer;
@@ -1137,7 +1137,7 @@ function get_flagrant()
 		$_flagrant=persistent_cache_get('FLAGRANT');
 		if ($_flagrant===NULL)
 		{
-			$flagrant=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT the_message FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
+			$flagrant=$GLOBALS['SITE_DB']->query_value_if_there('SELECT the_message FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
 			if ($flagrant===NULL)
 			{
 				persistent_cache_set('FLAGRANT',false);
@@ -1394,7 +1394,7 @@ function get_num_users_site()
 		$PEAK_USERS_EVER=get_value_newer_than('user_peak',time()-$users_online_time_seconds*10);
 		if (($PEAK_USERS_EVER===NULL) || ($PEAK_USERS_EVER==''))
 		{
-			$_peak_users_user=$GLOBALS['SITE_DB']->query_value_null_ok('usersonline_track','MAX(peak)',NULL,'',true);
+			$_peak_users_user=$GLOBALS['SITE_DB']->query_select_value_if_there('usersonline_track','MAX(peak)',NULL,'',true);
 			$PEAK_USERS_EVER=($_peak_users_user===NULL)?$NUM_USERS_SITE:strval($_peak_users_user);
 			set_value('user_peak',$PEAK_USERS_EVER);
 		}

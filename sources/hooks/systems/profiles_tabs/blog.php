@@ -67,8 +67,8 @@ class Hook_Profiles_Tabs_blog
 			$rss_url=make_string_tempcode(find_script('backend').'?type=rss2&mode=news&filter='.strval($news_cat[0]['id']));
 
 			// How many results? (not 100% accurate, if a news item is in a primary cat and same secondary cat)
-			$max_rows+=$GLOBALS['SITE_DB']->query_value('news','COUNT(*)',array('news_category'=>$news_cat[0]['id']));
-			$max_rows+=$GLOBALS['SITE_DB']->query_value('news n LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries c ON n.id=c.news_entry','COUNT(*)',array('news_category'=>$news_cat[0]['id']));
+			$max_rows+=$GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)',array('news_category'=>$news_cat[0]['id']));
+			$max_rows+=$GLOBALS['SITE_DB']->query_select_value('news n LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries c ON n.id=c.news_entry','COUNT(*)',array('news_category'=>$news_cat[0]['id']));
 
 			// Fetch and sort
 			$news1=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('news_category'=>$news_cat[0]['id']),'ORDER BY date_and_time DESC',$max+$start);

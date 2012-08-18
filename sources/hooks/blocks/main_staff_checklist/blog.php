@@ -46,7 +46,7 @@ class Hook_checklist_blog
 		if ($or_list=='') return array();
 
 		$query='SELECT MAX(date_and_time) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news n JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_categories c ON n.news_category=c.id WHERE validated=1 AND ('.$or_list.')';
-		$date=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
+		$date=$GLOBALS['SITE_DB']->query_value_if_there($query);
 
 		$limit_hours=intval(get_option('blog_update_time'));
 

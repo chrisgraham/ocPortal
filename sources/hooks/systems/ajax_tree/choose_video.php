@@ -60,11 +60,11 @@ class Hook_choose_video
 		// Mark parent cats for pre-expansion
 		if ((!is_null($default)) && ($default!=''))
 		{
-			$cat=$GLOBALS['SITE_DB']->query_value_null_ok('videos','cat',array('id'=>intval($default)));
+			$cat=$GLOBALS['SITE_DB']->query_select_value_if_there('videos','cat',array('id'=>intval($default)));
 			while ((!is_null($cat)) && ($cat!=''))
 			{
 				$out.='<expand>'.$cat.'</expand>';
-				$cat=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','parent_id',array('name'=>$cat));
+				$cat=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>$cat));
 			}
 		}
 

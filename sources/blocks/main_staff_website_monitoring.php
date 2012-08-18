@@ -55,7 +55,7 @@ class Block_main_staff_website_monitoring
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('sitewatchlist');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('sitewatchlist');
 	}
 
 	/**
@@ -266,7 +266,7 @@ class Block_main_staff_website_monitoring
 					{
 						$link=$q;
 
-						$site_name=$GLOBALS['SITE_DB']->query_value_null_ok('url_title_cache','t_title',array('t_url'=>$link));
+						$site_name=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>$link));
 
 						if ((is_null($site_name)) || (substr($site_name,0,1)=='!'))
 						{

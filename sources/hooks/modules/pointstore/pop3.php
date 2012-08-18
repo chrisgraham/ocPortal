@@ -125,7 +125,7 @@ class Hook_pointstore_pop3
 
 		$title=get_screen_title('TITLE_POP3');
 
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('sales','details',array('memberid'=>get_member(),'purchasetype'=>'pop3'));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('sales','details',array('memberid'=>get_member(),'purchasetype'=>'pop3'));
 		if (is_null($test))
 		{
 			$quota=new ocp_tempcode();

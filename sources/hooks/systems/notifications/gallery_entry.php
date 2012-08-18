@@ -40,7 +40,7 @@ class Hook_Notification_gallery_entry extends Hook_Notification
 
 		if (is_null($id))
 		{
-			$total=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','COUNT(*)');
+			$total=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','COUNT(*)');
 			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 		}
 

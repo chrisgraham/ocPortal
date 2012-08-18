@@ -64,7 +64,7 @@ function ocf_may_post_topic($forum_id,$member_id=NULL)
 	if (!has_specific_permission($member_id,'submit_midrange_content','topics',array('forums',$forum_id))) return false;
 	if (is_null($forum_id)) return true;
 
-	/*$test=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_warnings WHERE p_silence_from_forum='.strval($forum_id).' AND w_member_id='.strval($member_id));
+	/*$test=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_warnings WHERE p_silence_from_forum='.strval($forum_id).' AND w_member_id='.strval($member_id));
 	if (!is_null($test)) return false;*/
 
 	return true;
@@ -92,7 +92,7 @@ function ocf_may_report_post($member_id=NULL)
  */
 function ocf_has_replied_topic($topic_id,$member_id=NULL)
 {
-	$test=$GLOBALS['FORUM_DB']->query_value('f_posts','id',array('p_topic_id'=>$topic_id,'p_poster'=>$member_id));
+	$test=$GLOBALS['FORUM_DB']->query_select_value('f_posts','id',array('p_topic_id'=>$topic_id,'p_poster'=>$member_id));
 	return !is_null($test);
 }
 
@@ -157,7 +157,7 @@ function ocf_has_read_topic($topic_id,$topic_last_time=NULL,$member_id=NULL,$mem
 	if ($member_id==$GLOBALS['OCF_DRIVER']->get_guest_id()) return true;
 
 	if (is_null($topic_last_time))
-		$topic_last_time=$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_last_time',array('id'=>$topic_id));
+		$topic_last_time=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_last_time',array('id'=>$topic_id));
 
 	$seven_days_ago=time()-60*60*24*intval(get_option('post_history_days'));
 
@@ -169,7 +169,7 @@ function ocf_has_read_topic($topic_id,$topic_last_time=NULL,$member_id=NULL,$mem
 
 	if ($topic_last_time<$seven_days_ago) return true; // We don't store that old
 	if (is_null($member_last_time))
-		$member_last_time=$GLOBALS['FORUM_DB']->query_value_null_ok('f_read_logs','l_time',array('l_member_id'=>$member_id,'l_topic_id'=>$topic_id));
+		$member_last_time=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_read_logs','l_time',array('l_member_id'=>$member_id,'l_topic_id'=>$topic_id));
 	if (is_null($member_last_time)) return false;
 	if ($member_last_time<$topic_last_time) return false;
 	return true;

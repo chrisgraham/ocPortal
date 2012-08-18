@@ -55,7 +55,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	function uninstall()
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		$GLOBALS['SITE_DB']->drop_if_exists('f_welcome_emails');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('f_welcome_emails');
 		$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 	}
 

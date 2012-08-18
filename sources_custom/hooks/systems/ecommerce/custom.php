@@ -105,7 +105,7 @@ class Hook_custom
 			if ($row['c_one_per_member']==1)
 			{
 				// Test to see if it's been bought
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('sales','id',array('purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details2'=>strval($rows[0]['id']),'memberid'=>$member));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('sales','id',array('purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details2'=>strval($rows[0]['id']),'memberid'=>$member));
 				if (!is_null($test)) return ECOMMERCE_PRODUCT_ALREADY_HAS;
 			}
 

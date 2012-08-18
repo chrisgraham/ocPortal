@@ -47,8 +47,8 @@ class Module_tickets
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('ticket_types');
-		$GLOBALS['SITE_DB']->drop_if_exists('tickets');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('ticket_types');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('tickets');
 
 		delete_config_option('ticket_text');
 		delete_config_option('ticket_forum_name');
@@ -440,7 +440,7 @@ class Module_tickets
 				$title=get_screen_title('ADD_TICKET');
 			} else
 			{
-				$ticket_type=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','ticket_type',array('ticket_id'=>$id));
+				$ticket_type=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$id));
 				$ticket_type_text=get_translated_text($ticket_type);
 				$ticket_type_details=get_ticket_type($ticket_type);
 
@@ -766,7 +766,7 @@ class Module_tickets
 		if (is_null($info)) return NULL;
 
 		// Get the ID of the default FAQ catalogue
-		$catalogue_id=$GLOBALS['SITE_DB']->query_value('catalogue_categories','id',array('c_name'=>'faqs'),'',1);
+		$catalogue_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','id',array('c_name'=>'faqs'),'',1);
 		if (is_null($catalogue_id)) return NULL;
 
 		// Category filter

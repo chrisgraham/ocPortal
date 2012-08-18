@@ -248,7 +248,7 @@ class Module_cms_downloads extends standard_crud_module
 				if ($make_subfolders)
 				{
 					// Do we need to make new category, or is it already existant?
-					$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$dest_cat,'text_original'=>$entry));
+					$category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$dest_cat,'text_original'=>$entry));
 					if (is_null($category_id))
 					{
 						// Add the directory
@@ -267,7 +267,7 @@ class Module_cms_downloads extends standard_crud_module
 				$full_url=$url.$entry;
 
 				// Test to see if the file is already in our database
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$full_url));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','url',array('url'=>$full_url));
 				if (is_null($test))
 				{
 					// It is a file, so add it
@@ -378,7 +378,7 @@ class Module_cms_downloads extends standard_crud_module
 						if ($make_subfolders)
 						{
 							// Do we need to make new category, or is it already existant?
-							$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$dest_cat,'text_original'=>$entry));
+							$category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$dest_cat,'text_original'=>$entry));
 							if (is_null($category_id))
 							{
 								// Add the directory
@@ -395,7 +395,7 @@ class Module_cms_downloads extends standard_crud_module
 					} elseif (!is_link($full_path))
 					{
 						// Test to see if the file is already in our database
-						$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$full_url));
+						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','url',array('url'=>$full_url));
 						if (is_null($test))
 						{
 							// First let's see if we are allowed to add this (accessible by URL already)
@@ -430,7 +430,7 @@ class Module_cms_downloads extends standard_crud_module
 	 */
 	function nice_get_ajax_tree()
 	{
-		if ($GLOBALS['SITE_DB']->query_value('download_downloads','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+		if ($GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$search_url=build_url(array('page'=>'search','id'=>'downloads'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'downloads'),get_module_zone('downloads'));
@@ -516,7 +516,7 @@ class Module_cms_downloads extends standard_crud_module
 		{
 			if ($author=='')
 			{
-				$author=$GLOBALS['SITE_DB']->query_value_null_ok('authors','author',array('forum_handle'=>get_member()));
+				$author=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','author',array('forum_handle'=>get_member()));
 				if (is_null($author)) $author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 			}
 		}
@@ -586,7 +586,7 @@ class Module_cms_downloads extends standard_crud_module
 	 */
 	function get_cat($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','category_id',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','category_id',array('id'=>$id));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return $temp;
 	}
@@ -741,9 +741,9 @@ class Module_cms_downloads extends standard_crud_module
 
 		$this->donext_type=$category_id;
 
-		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('download_downloads','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('download_downloads','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
-			$submitter=$GLOBALS['SITE_DB']->query_value('download_downloads','submitter',array('id'=>$id));
+			$submitter=$GLOBALS['SITE_DB']->query_select_value('download_downloads','submitter',array('id'=>$id));
 
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'downloads',strval($category_id))))
 				syndicate_described_activity(($submitter!=get_member())?'downloads:ACTIVITY_VALIDATE_DOWNLOAD':'downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads',1,$submitter);

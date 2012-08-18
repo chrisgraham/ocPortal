@@ -87,7 +87,7 @@ class Hook_admin_stats_downloads
 		{
 			if (!array_key_exists('num_downloads',$row))
 			{
-				$row['num_downloads']=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'download_logging WHERE id='.strval($row['id']));
+				$row['num_downloads']=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'download_logging WHERE id='.strval($row['id']));
 				$rows[$i]=$row;
 			}
 			$downloads[get_translated_text($row['name']).' (#'.strval($row['id']).')']=$row['num_downloads'];

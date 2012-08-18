@@ -227,7 +227,7 @@ function ocf_force_update_topic_cacheing($topic_id,$post_count_dif=NULL,$last=tr
 		((!is_null($post_count_dif)?
 		('t_cache_num_posts=(t_cache_num_posts+'.strval($post_count_dif).')')
 		:
-		('t_cache_num_posts='.strval($GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval($topic_id).' AND p_intended_solely_for IS NULL'))))).
+		('t_cache_num_posts='.strval($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval($topic_id).' AND p_intended_solely_for IS NULL'))))).
 		' WHERE id='.strval($topic_id)
 	);
 }
@@ -305,7 +305,7 @@ function ocf_force_update_forum_cacheing($forum_id,$num_topics_increment=NULL,$n
 	// Now, are there any parents who need updating?
 	if (!is_null($forum_id))
 	{
-		$parent_forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_parent_forum',array('id'=>$forum_id));
+		$parent_forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_parent_forum',array('id'=>$forum_id));
 		if ((!is_null($parent_forum)) && ($parent_forum!=db_get_first_id()))
 		{
 			ocf_force_update_forum_cacheing($parent_forum,$num_topics_increment,$num_posts_increment);

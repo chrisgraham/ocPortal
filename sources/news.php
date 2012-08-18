@@ -139,7 +139,7 @@ function delete_news_category($id)
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
 
-	$min=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval((integer)$id));
+	$min=$GLOBALS['SITE_DB']->query_value_if_there('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval((integer)$id));
 	if (is_null($min))
 	{
 		warn_exit(do_lang_tempcode('YOU_MUST_KEEP_ONE_NEWS_CAT'));
@@ -197,7 +197,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 
 	if (is_null($main_news_category))
 	{
-		$main_news_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$submitter));
+		$main_news_category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','id',array('nc_owner'=>$submitter));
 		if (is_null($main_news_category_id))
 		{
 			if (!has_specific_permission(get_member(),'have_personal_category','cms_news')) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -425,7 +425,7 @@ function dispatch_news_notification($id,$title,$main_news_category)
 {
 	$self_url=build_url(array('page'=>'news','type'=>'view','id'=>$id),get_module_zone('news'),NULL,false,false,true);
 
-	$is_blog=!is_null($GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>$main_news_category)));
+	$is_blog=!is_null($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>$main_news_category)));
 
 	require_code('notifications');
 	require_lang('news');
@@ -507,7 +507,7 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 	{
 		$where='WHERE 1=1';
 	}
-	$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'news_categories '.$where.' ORDER BY id');
+	$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'news_categories '.$where.' ORDER BY id');
 	if ($count>500) // Uh oh, loads, need to limit things more
 	{
 		$where.=' AND (nc_owner IS NULL OR nc_owner='.strval(get_member()).')';

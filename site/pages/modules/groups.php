@@ -284,7 +284,7 @@ class Module_groups
 		$max_rows=count($_others);
 		if ($start>count($_others)) $_others=array();
 		$_others=array_merge($_others,$GLOBALS['FORUM_DB']->query_select('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id',array('g.*','text_original'),$map,'ORDER BY g_order,g.id',$max,max(0,$start-$max_rows)));
-		$max_rows+=$GLOBALS['FORUM_DB']->query_value('f_groups g','COUNT(*)',$map);
+		$max_rows+=$GLOBALS['FORUM_DB']->query_select_value('f_groups g','COUNT(*)',$map);
 		$fields_title=results_field_title(array(do_lang_tempcode('NAME'),do_lang_tempcode('COUNT_MEMBERS')),$sortables);
 		$others=new ocp_tempcode();
 		$i=0;
@@ -456,7 +456,7 @@ class Module_groups
 		$club_forum=NULL;
 		if ($group['g_is_private_club']==1)
 		{
-			$club_forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.f_description','f.id',array('text_original'=>do_lang('FORUM_FOR_CLUB',$name)));
+			$club_forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.f_description','f.id',array('text_original'=>do_lang('FORUM_FOR_CLUB',$name)));
 		}
 
 		$group_name=get_translated_text($group['g_name'],$GLOBALS['FORUM_DB']);
@@ -479,7 +479,7 @@ class Module_groups
 		$forum_id=NULL;
 		if ($club)
 		{
-			$forum_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','id',array('f_name'=>$group_name,'f_category_id'=>intval(get_option('club_forum_parent_category')),'f_parent_forum'=>intval(get_option('club_forum_parent_forum'))));
+			$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array('f_name'=>$group_name,'f_category_id'=>intval(get_option('club_forum_parent_category')),'f_parent_forum'=>intval(get_option('club_forum_parent_forum'))));
 		}
 
 		return do_template('OCF_VIEW_GROUP_SCREEN',array('_GUID'=>'fc6cac5c73f92ab4410b492d58976dbe','GROUP_NAME'=>$group_name,'ID'=>strval($id),'FORUM'=>is_null($forum_id)?'':strval($forum_id),'CLUB'=>$club,'EDIT_URL'=>$edit_url,'TITLE'=>$title,'LEADER'=>$leader,'PROMOTION_INFO'=>$promotion_info,'ADD_URL'=>$add_url,'APPLY_URL'=>$apply_url,'APPLY_TEXT'=>$apply_text,'PRIMARY_MEMBERS'=>$primary_members,'SECONDARY_MEMBERS'=>$secondary_members,'PROSPECTIVE_MEMBERS'=>$prospective_members));
@@ -502,7 +502,7 @@ class Module_groups
 			$id=intval($_id);
 		} else // Collaboration zone has a text link like this
 		{
-			$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
+			$id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
 			if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 
@@ -579,7 +579,7 @@ class Module_groups
 				$id=intval($_id);
 			} else // Collaboration zone has a text link like this
 			{
-				$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
+				$id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
 				if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			}
 			if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -613,7 +613,7 @@ class Module_groups
 		}
 		if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		$_name=$GLOBALS['FORUM_DB']->query_value('f_groups','g_name',array('id'=>$id));
+		$_name=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_name',array('id'=>$id));
 		$name=get_translated_text($_name,$GLOBALS['FORUM_DB']);
 		$title=get_screen_title('_APPLY_TO_GROUP',true,array(escape_html($name)));
 		$free_access=(ocf_get_group_property($id,'open_membership')==1);

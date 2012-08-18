@@ -209,7 +209,7 @@ class Module_members
 		}
 		$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members r'.$extra_join_sql.' WHERE '.$where_clause;
 
-		$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT r.id) '.$query);
+		$max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(DISTINCT r.id) '.$query);
 
 		if (can_arbitrary_groupby()) $query.=' GROUP BY r.id';
 		if ($sortable=='m_join_time')

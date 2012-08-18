@@ -28,7 +28,7 @@ class usergroup_test_set extends ocp_test_case
 		$this->usr_grp_id=add_usergroup_subscription('test','test','123',12,'2',1,1,1,' ',' ',' ');
 
 		// Test the forum was actually created
-		$this->assertTrue(12==$GLOBALS['FORUM_DB']->query_value('f_usergroup_subs','s_length',array('id'=>$this->usr_grp_id)));
+		$this->assertTrue(12==$GLOBALS['FORUM_DB']->query_select_value('f_usergroup_subs','s_length',array('id'=>$this->usr_grp_id)));
 	}
 
 	function testEditusergroup()
@@ -37,7 +37,7 @@ class usergroup_test_set extends ocp_test_case
 		edit_usergroup_subscription($this->usr_grp_id,'Edit_group','new edit','122',3,'12',0,1,1,' ',' ',' ');
 
 		// Test the forum was actually created
-		$this->assertTrue(3==$GLOBALS['FORUM_DB']->query_value('f_usergroup_subs','s_length',array('id'=>$this->usr_grp_id)));
+		$this->assertTrue(3==$GLOBALS['FORUM_DB']->query_select_value('f_usergroup_subs','s_length',array('id'=>$this->usr_grp_id)));
 	}
 
 	function tearDown()

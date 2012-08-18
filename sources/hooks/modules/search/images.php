@@ -31,7 +31,7 @@ class Hook_search_images
 		if (!module_installed('galleries')) return NULL;
 
 		if (!has_actual_page_access(get_member(),'galleries')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('images','COUNT(*)')==0) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)')==0) return NULL;
 
 		require_lang('galleries');
 

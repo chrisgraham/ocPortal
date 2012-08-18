@@ -35,7 +35,7 @@ class Hook_catalogue_items
 	{
 		if (is_null($search))
 		{
-			$cnt=$GLOBALS['SITE_DB']->query_value('catalogue_entries t1 LEFT JOIN '.get_table_prefix().'catalogues t2 ON t1.c_name=t2.c_name','COUNT(*)',array('c_ecommerce'=>1));
+			$cnt=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries t1 LEFT JOIN '.get_table_prefix().'catalogues t2 ON t1.c_name=t2.c_name','COUNT(*)',array('c_ecommerce'=>1));
 			if ($cnt>50)
 				return array(); // Too many to list
 		}
@@ -207,7 +207,7 @@ class Hook_catalogue_items
 	{
 		require_code('catalogues');
 
-		$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$product));
+		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$product));
 
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 
@@ -245,7 +245,7 @@ class Hook_catalogue_items
 
 		$qty=post_param_integer('quantity',1);
 
-		$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$pid));
+		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$pid));
 
 		$product_det=get_catalogue_entry_field_values($catalogue_name,$pid,NULL,NULL,true);
 
@@ -291,7 +291,7 @@ class Hook_catalogue_items
 		{
 			$where['ordered_by']=get_member();
 		}
-		$qty=$GLOBALS['SITE_DB']->query_value_null_ok('shopping_cart','quantity',$where);
+		$qty=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_cart','quantity',$where);
 
 		if ($qty==0)
 		{
@@ -424,7 +424,7 @@ class Hook_catalogue_items
 			)
 		);
 
-		$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$entry['product_id']));
+		$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$entry['product_id']));
 
 		$image=$this->get_product_image($catalogue_name,$entry['product_id']);
 

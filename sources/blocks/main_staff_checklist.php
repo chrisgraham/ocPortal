@@ -108,7 +108,7 @@ class Block_main_staff_checklist
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('customtasks');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('customtasks');
 	}
 
 	/**

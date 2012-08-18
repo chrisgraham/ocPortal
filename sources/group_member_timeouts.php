@@ -57,7 +57,7 @@ function bump_member_group_timeout($member_id,$group_id,$num_minutes,$prefer_for
 	}
 
 	// Extend or add, depending on whether they're in it yet
-	$existing_timeout=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_value_null_ok('f_group_member_timeouts','timeout',array('member_id'=>$member_id,'group_id'=>$group_id));
+	$existing_timeout=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value_if_there('f_group_member_timeouts','timeout',array('member_id'=>$member_id,'group_id'=>$group_id));
 	if (is_null($existing_timeout))
 	{
 		// Add

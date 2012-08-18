@@ -47,10 +47,10 @@ class Module_galleries
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('galleries');
-		$GLOBALS['SITE_DB']->drop_if_exists('images');
-		$GLOBALS['SITE_DB']->drop_if_exists('videos');
-		$GLOBALS['SITE_DB']->drop_if_exists('video_transcoding');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('galleries');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('images');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('videos');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('video_transcoding');
 
 		delete_config_option('default_video_width');
 		delete_config_option('default_video_height');
@@ -325,7 +325,7 @@ class Module_galleries
 
 		$permission_page='cms_galleries';
 
-		$category_data_count=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');
+		$category_data_count=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 		if ($category_data_count>2000) $dont_care_about_categories=true;
 
 		require_code('galleries');
@@ -367,7 +367,7 @@ class Module_galleries
 		// We read in all data for efficiency
 		if (is_null($category_data))
 		{
-			$category_data_count=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');
+			$category_data_count=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 			if ($category_data_count>2000)
 			{
 				$category_data=$GLOBALS['SITE_DB']->query('SELECT name AS id,name AS title,parent_id,add_date FROM '.get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('member\_%').'\'');
@@ -378,12 +378,12 @@ class Module_galleries
 		}
 		if (is_null($image_data))
 		{
-			$image_data_count=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)');
+			$image_data_count=$GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)');
 			$image_data=($image_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('images d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title',array('d.title','d.id','t.text_original AS ntitle','cat AS category_id','add_date','edit_date'));
 		}
 		if (is_null($video_data))
 		{
-			$video_data_count=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)');
+			$video_data_count=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)');
 			$video_data=($video_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('videos d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title',array('d.title','d.id','t.text_original AS ntitle','cat AS category_id','add_date','edit_date'));
 		}
 
@@ -485,7 +485,7 @@ class Module_galleries
 
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=galleries&filter=';
 
-		$count=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');
+		$count=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 		if ($count>500) warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'));
 		$out=new ocp_tempcode();
@@ -495,10 +495,10 @@ class Module_galleries
 
 			if (get_option('show_empty_galleries')!='1')
 			{
-				$count=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)',array('cat'=>$myrow['name']));
+				$count=$GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)',array('cat'=>$myrow['name']));
 				if ($count==0)
 				{
-					$count2=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)',array('cat'=>$myrow['name']));
+					$count2=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)',array('cat'=>$myrow['name']));
 					if ($count2==0) continue;
 				}
 			}
@@ -1020,8 +1020,8 @@ class Module_galleries
 		}
 
 		// Work out totals
-		$num_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images r'.$extra_join_sql_images.' WHERE '.$where.$ocselect_extra_where_images);
-		$num_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos r'.$extra_join_sql_videos.' WHERE '.$where.$ocselect_extra_where_videos);
+		$num_images=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'images r'.$extra_join_sql_images.' WHERE '.$where.$ocselect_extra_where_images);
+		$num_videos=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'videos r'.$extra_join_sql_videos.' WHERE '.$where.$ocselect_extra_where_videos);
 		$total_rows=$num_images+$num_videos;
 		$total_pages=($max==0)?1:intval(ceil(floatval($total_rows)/floatval($max)));
 		if ($total_pages==0) $total_pages=1;
@@ -1124,7 +1124,7 @@ class Module_galleries
 		$cat=$myrow['cat'];
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=galleries&filter='.$cat;
 
-		if ((get_value('no_individual_gallery_view')==='1') && ($GLOBALS['SITE_DB']->query_value('galleries','flow_mode_interface',array('name'=>$cat))=='1'))
+		if ((get_value('no_individual_gallery_view')==='1') && ($GLOBALS['SITE_DB']->query_select_value('galleries','flow_mode_interface',array('name'=>$cat))=='1'))
 		{
 			require_code('site2');
 			assign_refresh(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'probe_id'=>$id,'probe_type'=>'video'),'_SELF'),0.0);
@@ -1132,7 +1132,7 @@ class Module_galleries
 
 		if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
-		$true_category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
+		$true_category_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$cat)));
 		if (is_null($category_name))
 			$category_name=$true_category_name;
 
@@ -1250,13 +1250,13 @@ class Module_galleries
 		$cat=$myrow['cat'];
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=galleries&filter='.urlencode($cat);
 
-		if ((get_value('no_individual_gallery_view')==='1') && ($GLOBALS['SITE_DB']->query_value('galleries','flow_mode_interface',array('name'=>$cat))=='1'))
+		if ((get_value('no_individual_gallery_view')==='1') && ($GLOBALS['SITE_DB']->query_select_value('galleries','flow_mode_interface',array('name'=>$cat))=='1'))
 		{
 			require_code('site2');
 			assign_refresh(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'probe_id'=>$id,'probe_type'=>'image'),'_SELF'),0.0);
 		}
 
-		$true_category_name=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$cat)));
+		$true_category_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$cat)));
 		if (is_null($category_name))
 			$category_name=$true_category_name;
 
@@ -1398,8 +1398,8 @@ class Module_galleries
 		$video_select_sql=ocfilter_to_sqlfragment($video_select,'e.id');
 		$where_videos=$where.' AND '.$video_select_sql;
 
-		$total_images=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where_images);
-		$total_videos=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where_videos);
+		$total_images=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where_images);
+		$total_videos=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where_videos);
 
 		// These will hopefully be replaced with proper values
 		$position=1;

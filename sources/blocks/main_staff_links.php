@@ -40,7 +40,7 @@ class Block_main_staff_links
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('stafflinks');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('stafflinks');
 	}
 
 	/**
@@ -146,7 +146,7 @@ class Block_main_staff_links
 						$link=$q;
 					}
 
-					$link_title=$GLOBALS['SITE_DB']->query_value_null_ok('url_title_cache','t_title',array('t_url'=>$link));
+					$link_title=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>$link));
 
 					if ((is_null($link_title)) || (substr($link_title,0,1)=='!'))
 					{

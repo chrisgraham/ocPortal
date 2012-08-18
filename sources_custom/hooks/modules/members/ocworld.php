@@ -30,7 +30,7 @@ class Hook_members_ocworld
 		if (is_null($zone)) return array();
 		if (!has_zone_access(get_member(),$zone)) return array();
 
-		$id=$GLOBALS['SITE_DB']->query_value_null_ok('w_members','id',array('id'=>$member_id),'',true);
+		$id=$GLOBALS['SITE_DB']->query_select_value_if_there('w_members','id',array('id'=>$member_id),'',true);
 		if (!is_null($id))
 		{
 			require_lang('ocworld');

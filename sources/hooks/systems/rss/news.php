@@ -88,7 +88,7 @@ class Hook_rss_news
 
 				if (!array_key_exists($row['news_category'],$categories))
 				{
-					$categories[$row['news_category']]=get_translated_text($GLOBALS['SITE_DB']->query_value('news_categories','nc_title',array('id'=>$row['news_category'])));
+					$categories[$row['news_category']]=get_translated_text($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_title',array('id'=>$row['news_category'])));
 				}
 				$category=$categories[$row['news_category']];
 				$category_raw=strval($row['news_category']);

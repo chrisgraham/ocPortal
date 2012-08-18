@@ -47,19 +47,19 @@ class Module_catalogues
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogues');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_fields');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_categories');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_entries');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_long_trans');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_short_trans');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_long');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_short');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_float');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_efv_integer');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_entry_linkage');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_cat_treecache');
-		$GLOBALS['SITE_DB']->drop_if_exists('catalogue_childcountcache');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogues');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_fields');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_categories');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_entries');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_efv_long_trans');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_efv_short_trans');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_efv_long');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_efv_short');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_efv_float');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_efv_integer');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_entry_linkage');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_cat_treecache');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('catalogue_childcountcache');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_category'));
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_catalogue'));
@@ -73,7 +73,7 @@ class Module_catalogues
 		delete_specific_permission('high_catalogue_entry_timeout');
 
 		delete_menu_item_simple('_SEARCH:catalogues:type=misc');
-		$cf=$GLOBALS['SITE_DB']->query_value_null_ok('menu_items','id',array('i_menu'=>'collab_features','i_url'=>''));
+		$cf=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','id',array('i_menu'=>'collab_features','i_url'=>''));
 		if (!is_null($cf))
 			delete_menu_item($cf);
 		delete_menu_item_simple('_SEARCH:catalogues:id=projects:type=index');
@@ -569,7 +569,7 @@ class Module_catalogues
 			{
 				$category_id=($matches[1]=='')?NULL:intval($matches[1]);
 				$adjusted_max_depth=is_null($max_depth)?NULL:(is_null($category_id)?$max_depth:$max_depth);
-				$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
+				$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
 				$children=$dont_care_about_categories?array():get_catalogue_category_tree($catalogue_name,$category_id,NULL,NULL,$adjusted_max_depth,false);
 				return array($children,$permission_page,'_SELF:_SELF:type=category:id=!','catalogues_category');
 			}
@@ -652,7 +652,7 @@ class Module_catalogues
 		if (is_null($category_data))
 		{
 			$query='SELECT c_name,d.id,t.text_original AS title,cc_add_date AS edit_date';
-			$lots=($GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','COUNT(*)')>1000) && (db_has_subqueries($GLOBALS['SITE_DB']->connection_read));
+			$lots=($GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)')>1000) && (db_has_subqueries($GLOBALS['SITE_DB']->connection_read));
 			if ($lots)
 			{
 				$query.=',NULL AS parent_id';
@@ -768,7 +768,7 @@ class Module_catalogues
 		$id=get_param_integer('id',-1);
 		if ($id==-1)
 		{
-			$id=$GLOBALS['SITE_DB']->query_value('catalogue_categories','MIN(id)',array('c_name'=>get_param('catalogue_name'),'cc_parent_id'=>NULL));
+			$id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>get_param('catalogue_name'),'cc_parent_id'=>NULL));
 		}
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=catalogues&filter='.strval($id);
 
@@ -1001,7 +1001,7 @@ class Module_catalogues
 
 		if ($id==-1)
 		{
-			$id=$GLOBALS['SITE_DB']->query_value('catalogue_categories','MIN(id)',array('c_name'=>get_param('catalogue_name'),'cc_parent_id'=>NULL));
+			$id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>get_param('catalogue_name'),'cc_parent_id'=>NULL));
 		}
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=catalogues&filter='.strval($id);
 
@@ -1022,7 +1022,7 @@ class Module_catalogues
 
 		$root=get_param_integer('root',NULL);
 
-		$category=$GLOBALS['SITE_DB']->query_value('catalogue_categories','cc_title',array('id'=>$id));
+		$category=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','cc_title',array('id'=>$id));
 
 		$category_name=get_translated_text($category);
 
@@ -1042,7 +1042,7 @@ class Module_catalogues
 		require_code('ocfiltering');
 		$sql_filter=ocfilter_to_sqlfragment(strval($id).'*','cc_id','catalogue_categories','cc_parent_id','cc_id','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
-		if ($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries p WHERE ce_validated=1 AND ('.$sql_filter.')')>1000)
+		if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries p WHERE ce_validated=1 AND ('.$sql_filter.')')>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 		$cats=array();
 
@@ -1137,7 +1137,7 @@ class Module_catalogues
 			access_denied('CATALOGUE_ACCESS');
 		}
 
-		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000)
+		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 		$rows_subcategories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('c_name'=>$catalogue_name));
 		foreach ($rows_subcategories as $i=>$subcategory) // Dereference language
@@ -1212,11 +1212,11 @@ class Module_catalogues
 		$query.=is_null($ecommerce)?'1=1':('c_ecommerce='.strval($ecommerce));
 		$query.=' AND c.c_name NOT LIKE \''.db_encode_like('\_%').'\'';
 		$rows=$GLOBALS['SITE_DB']->query('SELECT c.* '.$query.(can_arbitrary_groupby()?' GROUP BY c.c_name':''),$max,$start);
-		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT c.c_name) '.$query);
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT c.c_name) '.$query);
 		$out=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{
-			$first_category=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>$myrow['c_name'],'cc_parent_id'=>NULL));
+			$first_category=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name'=>$myrow['c_name'],'cc_parent_id'=>NULL));
 			if (is_null($first_category)) continue;
 
 			if (!has_category_access(get_member(),'catalogues_catalogue',$myrow['c_name'])) continue;
@@ -1230,8 +1230,8 @@ class Module_catalogues
 			}
 			$name=get_translated_text($myrow['c_title']);
 
-			$num_entries=$GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)',array('c_name'=>$myrow['c_name'],'ce_validated'=>1));
-			$num_children=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$myrow['c_name']));
+			$num_entries=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$myrow['c_name'],'ce_validated'=>1));
+			$num_children=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$myrow['c_name']));
 			if ($myrow['c_is_tree']==1) $num_children--;
 
 			$description=get_translated_tempcode($myrow['c_description']);
@@ -1258,13 +1258,13 @@ class Module_catalogues
 
 		$catalogue_name=get_param('id');
 
-		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000)
+		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=catalogues&filter=';
 
 		$url_stub=build_url(array('page'=>'_SELF','type'=>'category'),'_SELF',NULL,false,false,true);
-		$last_change_time=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MAX(cc_add_date)');
+		$last_change_time=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MAX(cc_add_date)');
 
 		if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'catalogues_catalogue',$catalogue_name))
 		{

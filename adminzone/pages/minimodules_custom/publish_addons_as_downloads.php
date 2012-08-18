@@ -28,7 +28,7 @@ if ($version_branch===NULL)
 
 $addon_list=get_details_of_addons();
 
-$parent_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>1,'t.text_original'=>'Addons'));
+$parent_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>1,'t.text_original'=>'Addons'));
 $c_main_id=find_addon_category_download_category($get_cat,$parent_id);
 
 if (get_param_integer('import_addons',1)==1)
@@ -53,7 +53,7 @@ if (get_param_integer('import_addons',1)==1)
 
 			$fsize=filesize($addon_path);
 
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$addon_path));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','url',array('url'=>$addon_path));
 			if (is_null($test))
 			{
 				$name=titleify($addon_list[$addon]['Addon name']);
@@ -121,7 +121,7 @@ if (get_param_integer('import_themes',1)==1)
 
 			$fsize=filesize($addon_path);
 
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','url',array('url'=>$addon_path));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','url',array('url'=>$addon_path));
 			if (is_null($test))
 			{
 				require_code('tar');

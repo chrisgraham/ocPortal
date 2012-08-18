@@ -32,7 +32,7 @@ class Hook_do_next_menus_galleries
 		if (!addon_installed('galleries')) return array();
 
 		return array(
-			array('cms','galleries',array('cms_galleries',array('type'=>'misc'),get_module_zone('cms_galleries')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('GALLERIES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('images','COUNT(*)',NULL,'',true)+$GLOBALS['SITE_DB']->query_value_null_ok('videos','COUNT(*)',NULL,'',true))))),('DOC_GALLERIES')),
+			array('cms','galleries',array('cms_galleries',array('type'=>'misc'),get_module_zone('cms_galleries')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('GALLERIES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('images','COUNT(*)',NULL,'',true)+$GLOBALS['SITE_DB']->query_select_value_if_there('videos','COUNT(*)',NULL,'',true))))),('DOC_GALLERIES')),
 		);
 	}
 

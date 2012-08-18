@@ -54,11 +54,11 @@ class Module_calendar
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('calendar_events');
-		$GLOBALS['SITE_DB']->drop_if_exists('calendar_types');
-		$GLOBALS['SITE_DB']->drop_if_exists('calendar_reminders');
-		$GLOBALS['SITE_DB']->drop_if_exists('calendar_interests');
-		$GLOBALS['SITE_DB']->drop_if_exists('calendar_jobs');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('calendar_events');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('calendar_types');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('calendar_reminders');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('calendar_interests');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('calendar_jobs');
 
 		$perms=array('set_reminders','view_event_subscriptions','view_calendar','add_public_events','edit_viewable_events','edit_owned_events','view_personal_events','sense_personal_conflicts');
 		foreach ($perms as $perm)
@@ -577,7 +577,7 @@ class Module_calendar
 				$interested='';
 			} else
 			{
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_interests','i_member_id',array('i_member_id'=>get_member(),'t_type'=>$type['id']));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('calendar_interests','i_member_id',array('i_member_id'=>get_member(),'t_type'=>$type['id']));
 				$interested=(!is_null($test))?'not_interested':'interested';
 			}
 			$event_types_1->attach(do_template('CALENDAR_EVENT_TYPE',array('_GUID'=>'104b723d5211f400267345f616c4a677','S'=>'I','INTERESTED'=>$interested,'TYPE'=>get_translated_text($type['t_title']),'TYPE_ID'=>strval($type['id']))));

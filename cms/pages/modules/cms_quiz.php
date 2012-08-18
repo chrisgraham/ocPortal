@@ -357,9 +357,9 @@ class Module_cms_quiz extends standard_crud_module
 		$name=post_param('name');
 		$validated=post_param_integer('validated',0);
 
-		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('quizzes','q_validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('quizzes','q_validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
-			$submitter=$GLOBALS['SITE_DB']->query_value('quizzes','q_submitter',array('id'=>$id));
+			$submitter=$GLOBALS['SITE_DB']->query_select_value('quizzes','q_submitter',array('id'=>$id));
 
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'quiz'))
 				syndicate_described_activity(($submitter!=get_member())?'quiz:ACTIVITY_VALIDATE_QUIZ':'quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes',1,$submitter);

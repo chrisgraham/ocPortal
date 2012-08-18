@@ -275,7 +275,7 @@ class Hook_phpbb3
 			if ($row['group_name']=='REGISTERED') $id_new=9;
 			elseif ($row['group_name']=='REGISTERED_COPPA') $id_new=9;
 			elseif ($row['group_name']=='GLOBAL_MODERATORS') $id_new=3;
-			else $id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['group_name']),'g.id');
+			else $id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['group_name']),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,5,0,5,5,$row['group_avatar_width'],$row['group_avatar_height'],30000,$row['group_sig_chars']);
@@ -1242,7 +1242,7 @@ class Hook_phpbb3
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'bbcodes');
 		foreach ($rows as $row)
 		{
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$row['bbcode_tag']));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$row['bbcode_tag']));
 			if (!is_null($test)) continue;
 
 			$parameters='';
@@ -1324,7 +1324,7 @@ class Hook_phpbb3
 			if (import_check_if_imported('cpf',$row['field_ident'])) continue;
 
 			$name=$row['field_name'];
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
 			if (is_null($id_new))
 			{
 				$default=$row['field_default_value'];

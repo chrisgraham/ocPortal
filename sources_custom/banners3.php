@@ -46,7 +46,7 @@ function add_banner_quiet($name,$imgurl,$title_text,$caption,$campaign_remaining
 	if (is_null($time)) $time=time();
 	if (is_null($submitter)) $submitter=get_member();
 
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>$name));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>$name));
 	if (is_null($test))
 	{
 		if (!addon_installed('unvalidated')) $validated=1;

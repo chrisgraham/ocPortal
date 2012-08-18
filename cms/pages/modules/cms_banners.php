@@ -399,7 +399,7 @@ class Module_cms_banners extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
-		$orig_submitter=$GLOBALS['SITE_DB']->query_value_null_ok('banners','submitter',array('name'=>$id));
+		$orig_submitter=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','submitter',array('name'=>$id));
 		if (is_null($orig_submitter)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$b_type=post_param('b_type');
@@ -515,7 +515,7 @@ class Module_cms_banners_cat extends standard_crud_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$total=integer_format($GLOBALS['SITE_DB']->query_value('banners','COUNT(*)',array('b_type'=>$row['id'])));
+			$total=integer_format($GLOBALS['SITE_DB']->query_select_value('banners','COUNT(*)',array('b_type'=>$row['id'])));
 
 			$fields->attach(results_entry(array(($row['id']=='')?do_lang('GENERAL'):$row['id'],($row['t_is_textual']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),integer_format($row['t_image_width']),integer_format($row['t_image_height']),clean_file_size($row['t_max_file_size']*1024),($row['t_comcode_inline']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),$total,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}

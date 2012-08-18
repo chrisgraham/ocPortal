@@ -48,7 +48,7 @@ class Hook_implicit_usergroups_under18s
 	 */
 	function get_member_list_count()
 	{
-		return $GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.$this->_where());
+		return $GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.$this->_where());
 	}
 
 	/**
@@ -59,7 +59,7 @@ class Hook_implicit_usergroups_under18s
 	 */
 	function is_member_within($member_id)
 	{
-		return !is_null($GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE ('.$this->_where().') AND id='.strval($member_id)));
+		return !is_null($GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE ('.$this->_where().') AND id='.strval($member_id)));
 	}
 
 }

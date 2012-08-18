@@ -29,7 +29,7 @@ function get_num_cedi_pages()
 
 	if (is_null($value))
 	{
-		$_value=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','COUNT(*)');
+		$_value=$GLOBALS['SITE_DB']->query_select_value_if_there('seedy_pages','COUNT(*)');
 		if (!($_value>0)) $_value=0;
 		$value=strval($_value);
 		set_value('num_seedy_pages',$value);
@@ -49,7 +49,7 @@ function get_num_cedi_posts()
 
 	if (is_null($value))
 	{
-		$_value=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_posts','COUNT(*)');
+		$_value=$GLOBALS['SITE_DB']->query_select_value_if_there('seedy_posts','COUNT(*)');
 		if (!($_value>0)) $_value=0;
 		$value=strval($_value);
 		set_value('num_seedy_posts',$value);

@@ -66,7 +66,7 @@ class Hook_checklist_flagrant
 	 */
 	function get_num_flagrant_queue()
 	{
-		$c=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'text WHERE activation_time IS NULL');
+		$c=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'text WHERE activation_time IS NULL');
 		if (is_null($c)) return 0;
 		return $c;
 	}

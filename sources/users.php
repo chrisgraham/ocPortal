@@ -534,7 +534,7 @@ function get_online_members($longer_time,$filter,&$count)
 	if (get_value('session_prudence')==='1')
 	{
 		// If we have multiple servers this many not be accurate as we probably turned replication off for the sessions table. The site design should be updated to not show this kind of info
-		$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds));
+		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds));
 		if (!is_null($filter))
 			return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds).' AND the_user='.strval($filter),1);
 		return NULL;

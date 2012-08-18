@@ -145,14 +145,14 @@ class Hook_ocp_merge
 		$bad=false;
 
 		// Check actually is ocPortal DB (ERROR)
-		$test=$db->query_value('zones','zone_name');
+		$test=$db->query_select_value('zones','zone_name');
 		if (is_null($test))
 		{
 			return warn_screen($title,do_lang_tempcode('ERROR_NOT_CORRECT_DATABASE'));
 		}
 
 		// Check version (WARNING)
-		$test=$db->query_value_null_ok('values','the_value',array('the_name'=>'version'));
+		$test=$db->query_select_value_if_there('values','the_value',array('the_name'=>'version'));
 		if ((is_null($test)) || (intval($test)!=ocp_version()))
 		{
 			attach_message(do_lang_tempcode('ERROR_NOT_CORRECT_VERSION'),'warn');
@@ -625,7 +625,7 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('authors','author',array('author'=>$row['author']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','author',array('author'=>$row['author']));
 			if (is_null($test)) add_author($row['author'],$row['url'],$row['forum_handle'],$this->get_lang_string($db,$row['description']),$this->get_lang_string($db,$row['skills']));
 		}
 	}
@@ -645,7 +645,7 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('banner_types','id',array('id'=>$row['id']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banner_types','id',array('id'=>$row['id']));
 			if (is_null($test))
 			{
 				add_banner_type($row['id'],$row['t_is_textual'],$row['t_image_width'],$row['t_image_height'],$row['t_max_file_size'],$row['t_comcode_inline']);
@@ -657,7 +657,7 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>$row['name']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>$row['name']));
 			if (is_null($test))
 			{
 				$submitter=$on_same_msn?$row['submitter']:import_id_remap_get('member',$row['submitter'],true);
@@ -1054,7 +1054,7 @@ class Hook_ocp_merge
 			if (is_null($id)) continue;
 			$user=$on_same_msn?$row['the_user']:import_id_remap_get('member',$row['the_user'],true);
 			if (is_null($user)) $user=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_logging','ip',array('id'=>$id,'the_user'=>$user));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('download_logging','ip',array('id'=>$id,'the_user'=>$user));
 			if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('download_logging',array('id'=>$id,'the_user'=>$user,'ip'=>$row['ip'],'date_and_time'=>$row['date_and_time']));
 		}
 	}
@@ -1074,7 +1074,7 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>$row['name']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$row['name']));
 			if (is_null($test))
 			{
 				add_gallery($row['name'],$this->get_lang_string($db,$row['fullname']),$this->get_lang_string($db,$row['description']),$this->get_lang_string($db,$row['teaser']),$row['notes'],$row['parent_id'],$row['accept_images'],$row['accept_videos'],$row['is_member_synched'],$row['flow_mode_interface'],$row['rep_image'],$row['watermark_top_left'],$row['watermark_top_right'],$row['watermark_bottom_left'],$row['watermark_bottom_right'],$row['allow_rating'],$row['allow_comments'],false,$row['add_date']);
@@ -1197,7 +1197,7 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$row['tag_tag']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$row['tag_tag']));
 			if (!is_null($test)) continue;
 
 			$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
@@ -1437,7 +1437,7 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'zones');
 		foreach ($rows as $row)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_name',array('zone_name'=>$row['zone_name']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_name',array('zone_name'=>$row['zone_name']));
 			if ((is_null($test)) && ($test!='seedy') && ($test!='supermembercentre') && ($test!='admincentre') && ($test!='membersonly') && ($test!='personalcentre') && ($test!='membercentre'))
 			{
 				if (!array_key_exists('zone_displayed_in_menu',$row)) $row['zone_displayed_in_menu']=1;
@@ -1468,7 +1468,7 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>$row['c_name']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>$row['c_name']));
 			if (is_null($test))
 			{
 				$row['c_title']=insert_lang($this->get_lang_string($db,$row['c_title']),2);
@@ -1583,7 +1583,7 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','id',array('room_name'=>$row['room_name']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','id',array('room_name'=>$row['room_name']));
 			if (!is_null($test)) continue;
 
 			$row['room_owner']=$on_same_msn?$row['room_owner']:import_id_remap_get('member',$row['room_owner'],true);
@@ -1848,7 +1848,7 @@ class Hook_ocp_merge
 			if (import_check_if_imported('group',strval($row['id']))) continue;
 
 			$name=$this->get_lang_string($db,$row['g_name']);
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');
 			if (is_null($id_new))
 			{
 				$title=$this->get_lang_string($db,$row['g_title']);
@@ -2017,7 +2017,7 @@ class Hook_ocp_merge
 
 			$title=$row['c_title'];
 
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
 				import_id_remap_put('category',strval($row['id']),$test);
@@ -2188,7 +2188,7 @@ class Hook_ocp_merge
 					$forum_id=$TOPIC_FORUM_CACHE[$topic_id];
 				} else
 				{
-					$forum_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_forum_id',array('id'=>$topic_id));
+					$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_forum_id',array('id'=>$topic_id));
 					$TOPIC_FORUM_CACHE[$topic_id]=$forum_id;
 				}
 
@@ -2286,7 +2286,7 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_emoticons');
 		foreach ($rows as $row)
 		{
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_emoticons','e_code',array('e_code'=>$row['e_code']));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons','e_code',array('e_code'=>$row['e_code']));
 			if (is_null($test))
 			{
 				$GLOBALS['FORUM_DB']->query_insert('f_emoticons',$row);
@@ -2351,7 +2351,7 @@ class Hook_ocp_merge
 		foreach ($rows as $row)
 		{
 			$name=$this->get_lang_string($db,$row['mm_name']);
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_multi_moderations m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON m.mm_name=t.id','m.id',array('text_original'=>$name));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_multi_moderations m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON m.mm_name=t.id','m.id',array('text_original'=>$name));
 			if (is_null($test))
 			{
 				$move_to=is_null($row['mm_move_to'])?NULL:import_id_remap_get('forum',strval($row['mm_move_to']));

@@ -207,7 +207,7 @@ function member_befriended($member_id)
 	}
 	if (count($MEMBERS_BEFRIENDED)==100) // Ah, too much to preload
 	{
-		return !is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_liked',array('member_liked'=>$member_id,'member_likes'=>get_member())));
+		return !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_buddies','member_liked',array('member_liked'=>$member_id,'member_likes'=>get_member())));
 	}
 	return (in_array($member_id,$MEMBERS_BEFRIENDED));
 }
@@ -232,8 +232,8 @@ function shoutbox_script($ret=false,$room_id=NULL,$num_messages=NULL)
 
 	if (is_null($room_id))
 	{
-		$room_id=$GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','MIN(id)',array('is_im'=>0,'room_language'=>user_lang()));
-		if (is_null($room_id)) $room_id=$GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','MIN(id)',array('is_im'=>0));
+		$room_id=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','MIN(id)',array('is_im'=>0,'room_language'=>user_lang()));
+		if (is_null($room_id)) $room_id=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','MIN(id)',array('is_im'=>0));
 		if (is_null($room_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	}
 
@@ -623,7 +623,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 						}
 					}
 
-					$num_posts=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$room['id']));
+					$num_posts=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room['id']));
 
 					$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($room['room_owner']);
 
@@ -670,7 +670,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			}
 		} else
 		{
-			$max_id=$GLOBALS['SITE_DB']->query_value('chat_events','MAX(id)');
+			$max_id=$GLOBALS['SITE_DB']->query_select_value('chat_events','MAX(id)');
 			if (is_null($max_id)) $max_id=db_get_first_id()-1;
 			$events_output.='<chat_event type="NULL">'.strval($max_id).'</chat_event>';
 		}
@@ -734,7 +734,7 @@ function chatter_active($member_id,$room_id=NULL)
 	{
 		$room_clause='room_id='.strval($room_id);
 	}
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT member_id FROM '.get_table_prefix().'chat_active WHERE '.$room_clause.' AND date_and_time>='.strval((integer)time()-CHAT_ACTIVITY_PRUNE).' AND member_id='.(string)$member_id);
+	$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM '.get_table_prefix().'chat_active WHERE '.$room_clause.' AND date_and_time>='.strval((integer)time()-CHAT_ACTIVITY_PRUNE).' AND member_id='.(string)$member_id);
 	return !is_null($test);
 }
 
@@ -1024,9 +1024,9 @@ function get_chatroom_name($room_id,$allow_null=false)
 {
 	if ($allow_null)
 	{
-		return $GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','room_name',array('id'=>$room_id));
+		return $GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','room_name',array('id'=>$room_id));
 	}
-	return $GLOBALS['SITE_DB']->query_value('chat_rooms','room_name',array('id'=>$room_id));
+	return $GLOBALS['SITE_DB']->query_select_value('chat_rooms','room_name',array('id'=>$room_id));
 }
 
 /**
@@ -1040,7 +1040,7 @@ function get_chatroom_id($room_name,$must_not_be_im=false)
 {
 	$map=array('room_name'=>$room_name);
 	if ($must_not_be_im) $map['is_im']=0;
-	return $GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','id',$map);
+	return $GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','id',$map);
 }
 
 /**
@@ -1059,13 +1059,13 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 	if ((strpos($message,'[')!==false) && (strpos($message,']')!==false)) $wrap_pos=NULL;
 
 	// Have we been blocked by flood control?
-	$is_im=$GLOBALS['SITE_DB']->query_value('chat_rooms','is_im',array('id'=>$room_id));
+	$is_im=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','is_im',array('id'=>$room_id));
 	if ($is_im) // No flood control for IMs
 	{
 		$time_last_message=NULL;
 	} else
 	{
-		$time_last_message=$GLOBALS['SITE_DB']->query_value_null_ok('chat_messages','MAX(date_and_time)',array('user_id'=>get_member(),'system_message'=>0));
+		$time_last_message=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_messages','MAX(date_and_time)',array('user_id'=>get_member(),'system_message'=>0));
 		if (!is_null($time_last_message)) $time_left=$time_last_message-time()+intval(get_option('chat_flood_timelimit'));
 	}
 	if ((is_null($time_last_message)) || ($time_left<=0))
@@ -1195,8 +1195,8 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 			sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
 		}
 
-		$room_name=$GLOBALS['SITE_DB']->query_value('chat_rooms','room_name',array('id'=>$room_id));
-		$room_language=$GLOBALS['SITE_DB']->query_value('chat_rooms','room_language',array('id'=>$room_id));
+		$room_name=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','room_name',array('id'=>$room_id));
+		$room_language=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','room_language',array('id'=>$room_id));
 
 		require_code('notifications');
 		$subject=do_lang('MEC_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$their_username,$room_name,$room_language);
@@ -1223,7 +1223,7 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 		{
 			if (get_db_type()=='xml')
 			{
-				$timestamp=$GLOBALS['SITE_DB']->query_value_null_ok('chat_messages','date_and_time',array('id'=>$uptoid));
+				$timestamp=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_messages','date_and_time',array('id'=>$uptoid));
 				if (is_null($timestamp)) $timestamp=0;
 				if ($where!='') $where.=' AND ';
 				$where.='main.date_and_time>'.strval((integer)$timestamp);

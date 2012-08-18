@@ -174,35 +174,35 @@ function uninstall_ocf_everytime()
 function uninstall_ocf()
 {
 	require_code('database_action');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_emoticons');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_forum_group_access');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_custom_fields');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_member_custom_fields');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_groups');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_categories');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_forums');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_forum_intro_ip');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_forum_intro_member');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_topics');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_posts');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_post_history');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_polls');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_poll_answers');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_poll_votes');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_post_templates');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_warnings');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_moderator_logs');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_member_known_login_ips');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_members');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_group_members');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_read_logs');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_forum_tracking');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_topic_tracking');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_multi_moderations');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_invites');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_forum_group_access');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_special_pt_access');
-	$GLOBALS['FORUM_DB']->drop_if_exists('f_saved_warnings');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_emoticons');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_group_access');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_custom_fields');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_member_custom_fields');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_groups');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_categories');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forums');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_intro_ip');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_intro_member');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_topics');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_posts');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_post_history');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_polls');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_poll_answers');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_poll_votes');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_post_templates');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_warnings');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_moderator_logs');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_member_known_login_ips');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_members');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_group_members');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_read_logs');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_tracking');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_topic_tracking');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_multi_moderations');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_invites');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_group_access');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_special_pt_access');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_saved_warnings');
 	$GLOBALS['FORUM_DB']->query_delete('gsp',array('module_the_name'=>'forums'));
 }
 
@@ -259,7 +259,7 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('ALLOW_EMAIL_DISABLE','allow_email_disable','tick','return is_null($old=get_value(\'disable_allow_emails_field\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
 		add_config_option('MAX_MEMBER_TITLE_LENGTH','max_member_title_length','integer','return addon_installed(\'ocf_member_titles\')?\'20\':NULL;','SECTION_FORUMS','GENERAL');
 
-		$GLOBALS['FORUM_DB']->drop_if_exists('f_member_cpf_perms');
+		$GLOBALS['FORUM_DB']->drop_table_if_exists('f_member_cpf_perms');
 		$GLOBALS['FORUM_DB']->create_table('f_member_cpf_perms',array(
 						'member_id'=>'*USER',
 						'field_id'=>'*AUTO_LINK',
@@ -343,7 +343,7 @@ function install_ocf($upgrade_from=NULL)
 			if ($row['a_level']>1)
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'forums','category_name'=>strval($row['a_forum_id']),'group_id'=>$row['a_group_id']));
 		}
-		$GLOBALS['FORUM_DB']->drop_if_exists('f_forum_group_access');
+		$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_group_access');
 		delete_specific_permission('allow_deletive_moderation');
 		$GLOBALS['FORUM_DB']->delete_table_field('f_post_templates','t_minimum_access_level');
 		$GLOBALS['FORUM_DB']->add_table_field('f_groups','g_is_presented_at_install','BINARY',0);
@@ -418,8 +418,8 @@ function install_ocf($upgrade_from=NULL)
 		}
 		while (count($rows)==100);
 
-		$GLOBALS['FORUM_DB']->drop_if_exists('f_forum_tracking');
-		$GLOBALS['FORUM_DB']->drop_if_exists('f_topic_tracking');
+		$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_tracking');
+		$GLOBALS['FORUM_DB']->drop_table_if_exists('f_topic_tracking');
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<4.2))
 	{
@@ -483,7 +483,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->promote_text_field_to_comcode('f_forums','f_description');
 		$GLOBALS['FORUM_DB']->alter_table_field('f_members','m_pass_hash_salted','SHORT_TEXT');
 
-		$GLOBALS['FORUM_DB']->drop_if_exists('f_groups');
+		$GLOBALS['FORUM_DB']->drop_table_if_exists('f_groups');
 		$GLOBALS['FORUM_DB']->query_delete('f_emoticons');
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<3.1))

@@ -96,12 +96,12 @@ function set_option($name,$value,$type=NULL,$current_value=NULL)
 		if ($GET_OPTION_LOOP!=1)
 			get_option($name); // Ensure it's installed
 
-		$type=$OPTIONS[$name]['the_type']; //$type=$GLOBALS['SITE_DB']->query_value('config','the_type',array('the_name'=>$name));
+		$type=$OPTIONS[$name]['the_type']; //$type=$GLOBALS['SITE_DB']->query_select_value('config','the_type',array('the_name'=>$name));
 	}
 
 	if (($type=='transline') || ($type=='transtext'))
 	{
-//		$current_value=$GLOBALS['SITE_DB']->query_value('config','config_value',array('the_name'=>$name));
+//		$current_value=$GLOBALS['SITE_DB']->query_select_value('config','config_value',array('the_name'=>$name));
 
 		if ((array_key_exists('c_set',$OPTIONS[$name])) && ($OPTIONS[$name]['c_set']==0))
 		{

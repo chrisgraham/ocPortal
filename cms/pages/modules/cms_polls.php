@@ -228,7 +228,7 @@ class Module_cms_polls extends standard_crud_module
 		{
 			if ($question=='')
 			{
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('poll','is_current',array('is_current'=>1));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('poll','is_current',array('is_current'=>1));
 				if (is_null($test)) $current=true;
 			}
 			$fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'),do_lang_tempcode('DESCRIPTION_IMMEDIATE_USE'),'validated',$current));
@@ -372,9 +372,9 @@ class Module_cms_polls extends standard_crud_module
 
 		$current=post_param_integer('validated',0);
 
-		if (($current==1) && ($GLOBALS['SITE_DB']->query_value('poll','is_current',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($current==1) && ($GLOBALS['SITE_DB']->query_select_value('poll','is_current',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
-			$submitter=$GLOBALS['SITE_DB']->query_value('poll','submitter',array('id'=>$id));
+			$submitter=$GLOBALS['SITE_DB']->query_select_value('poll','submitter',array('id'=>$id));
 
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'polls'))
 				syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls',1,$submitter);

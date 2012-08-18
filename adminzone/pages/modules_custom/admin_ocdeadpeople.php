@@ -100,8 +100,8 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('diseases');
-		$GLOBALS['SITE_DB']->drop_if_exists('members_diseases');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('diseases');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('members_diseases');
 
 		//deldir_contents(get_custom_file_base().'/uploads/diseases_addon',true);
 	}

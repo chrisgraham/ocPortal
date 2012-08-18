@@ -47,8 +47,8 @@ class Module_purchase
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('transactions');
-		$GLOBALS['SITE_DB']->drop_if_exists('trans_expecting');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('transactions');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('trans_expecting');
 		delete_config_option('currency');
 		delete_config_option('ecommerce_test_mode');
 		delete_config_option('ipn_test');

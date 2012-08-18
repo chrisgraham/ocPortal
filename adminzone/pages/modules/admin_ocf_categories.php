@@ -186,7 +186,7 @@ class Module_admin_ocf_categories extends standard_crud_module
 	{
 		unset($id);
 
-		$count=$GLOBALS['FORUM_DB']->query_value('f_categories','COUNT(*)');
+		$count=$GLOBALS['FORUM_DB']->query_select_value('f_categories','COUNT(*)');
 		return $count>1;
 	}
 

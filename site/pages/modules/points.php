@@ -47,8 +47,8 @@ class Module_points
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('chargelog');
-		$GLOBALS['SITE_DB']->drop_if_exists('gifts');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('chargelog');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('gifts');
 
 		delete_config_option('points_joining');
 		delete_config_option('points_posting');

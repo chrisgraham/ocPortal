@@ -1382,7 +1382,7 @@ function comcode_breadcrumbs($the_page,$the_zone,$root='',$no_link_for_me_sir=tr
 	if ($the_page==$root)
 	{
 		if ($no_link_for_me_sir) return new ocp_tempcode();
-		$_title=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','cc_page_title',array('the_page'=>$the_page,'the_zone'=>$the_zone));
+		$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','cc_page_title',array('the_page'=>$the_page,'the_zone'=>$the_zone));
 		$title=NULL;
 		if ($_title!==NULL) $title=get_translated_text($_title,NULL,NULL,true);
 		if ($_title===NULL) $title=escape_html($the_page);

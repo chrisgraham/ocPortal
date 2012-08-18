@@ -465,6 +465,82 @@ class database_driver
 	}
 
 	/**
+	 * Initialise a filesystem DB that we can use for caching.
+	 */
+	function initialise_filesystem_db()
+	{
+		global $FILECACHE_OBJECT;
+		require_code('database/xml');
+		$chain_db=new database_driver(get_custom_file_base().'/persistent_cache','','','',get_table_prefix(),false,object_factory('Database_Static_xml'));
+		$chain_connection=&$chain_db->connection_write;
+		if (count($chain_connection)>4) // Okay, we can't be lazy anymore
+		{
+			$chain_connection=call_user_func_array(array($chain_db->static_ob,'db_get_connection'),$chain_connection);
+			_general_db_init();
+		}
+		$FILECACHE_OBJECT=$chain_db;
+	}
+
+	/**
+	 * Check if a table exists.
+	 *
+	 * @param  ID_TEXT		The table name
+	 * @return boolean		Whether it exists
+	 */
+	function table_exists($tablename)
+	{
+		/*
+		// Just works with MySQL (too complex to do for all SQL's http://forums.whirlpool.net.au/forum-replies-archive.cfm/523219.html)
+
+		$full_tablename=$this->get_table_prefix().$tablename;
+
+		$rows=$this->query("SHOW TABLES LIKE '".$full_tablename."'");
+		foreach ($rows as $row)
+			foreach ($row as $field)
+				if ($field==$full_tablename) return true;
+		return false;
+		*/
+
+		if (array_key_exists($tablename,$this->table_exists_cache))
+		{
+			return $this->table_exists_cache[$tablename];
+		}
+
+		$test=$this->query_select_value_if_there('db_meta','m_name',array('m_table'=>$tablename));
+		$this->table_exists_cache[$tablename]=($test!==NULL);
+		return $this->table_exists_cache[$tablename];
+	}
+
+	/**
+	 * Create a table with the given name and the given array of field name to type mappings.
+	 * If a field type starts '*', then it is part of that field's key. If it starts '?', then it is an optional field.
+	 *
+	 * @param  ID_TEXT		The table name
+	 * @param  array			The fields
+	 * @param  boolean		Whether to skip the size check for the table (only do this for addon modules that don't need to support anything other than mySQL)
+	 * @param  boolean		Whether to skip the check for NULL string fields
+	 */
+	function create_table($table_name,$fields,$skip_size_check=false,$skip_null_check=false)
+	{
+		require_code('database_helper');
+		_helper_create_table($this,$table_name,$fields,$skip_size_check,$skip_null_check);
+	}
+
+	/**
+	 * Add an index to a table without disturbing the contents, after the table has been created.
+	 *
+	 * @param  ID_TEXT		The table name
+	 * @param  ID_TEXT		The index name
+	 * @param  array			The fields
+	 * @param  ID_TEXT		The name of the unique key field for the table
+	 */
+	function create_index($table_name,$index_name,$fields,$unique_key_field='id')
+	{
+		require_code('database_helper');
+		_helper_create_index($this,$table_name,$index_name,$fields,$unique_key_field);
+	}
+
+	/**
 	 * Insert a row.
 	 *
 	 * @param  string			The table name
@@ -544,218 +620,6 @@ class database_driver
 	}
 
 	/**
-	 * Check if a table exists.
-	 *
-	 * @param  ID_TEXT		The table name
-	 * @return boolean		Whether it exists
-	 */
-	function table_exists($tablename)
-	{
-		/*
-		// Just works with MySQL (too complex to do for all SQL's http://forums.whirlpool.net.au/forum-replies-archive.cfm/523219.html)
-
-		$full_tablename=$this->get_table_prefix().$tablename;
-
-		$rows=$this->query("SHOW TABLES LIKE '".$full_tablename."'");
-		foreach ($rows as $row)
-			foreach ($row as $field)
-				if ($field==$full_tablename) return true;
-		return false;
-		*/
-
-		if (array_key_exists($tablename,$this->table_exists_cache))
-		{
-			return $this->table_exists_cache[$tablename];
-		}
-
-		$test=$this->query_value_null_ok('db_meta','m_name',array('m_table'=>$tablename));
-		$this->table_exists_cache[$tablename]=($test!==NULL);
-		return $this->table_exists_cache[$tablename];
-	}
-
-	/**
-	 * Get the specified value from the database. This is a first value of the first row returned.
-	 *
-	 * @param  string			The table name
-	 * @param  string			The field to select
-	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no where conditions)
-	 * @param  string			Something to tack onto the end
-	 * @return mixed			The first value of the first row returned
-	 */
-	function query_value($table,$select,$where_map=NULL,$end='')
-	{
-		$values=$this->query_select($table,array($select),$where_map,$end,1,NULL);
-		if ($values===NULL) return NULL; // error
-		if (!array_key_exists(0,$values)) fatal_exit(do_lang_tempcode('QUERY_NULL',escape_html($this->_get_where_expand($this->table_prefix.$table,array($select),$where_map,$end)))); // No result found
-		return $this->_query_value($values);
-	}
-
-	/**
-	 * Extract the first of the first of the list of maps.
-	 *
-	 * @param  array			The list of maps
-	 * @return mixed			The first value of the first row in the list
-	 */
-	function _query_value($values)
-	{
-		if (!array_key_exists(0,$values)) return NULL; // No result found
-		$first=$values[0];
-		$v=current($first); // Result found. Maybe a value of 'null'
-		return $v;
-	}
-
-	/**
-	 * Get the specified value from the database, or NULL if it is not there (or if the value itself is NULL). This is good for detection existence of records, or for use if they might may or may not be present.
-	 *
-	 * @param  string			The table name
-	 * @param  string			The field to select
-	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no where conditions)
-	 * @param  string			Something to tack onto the end
-	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
-	 * @return ?mixed			The first value of the first row returned (NULL: nothing found, or null value found)
-	 */
-	function query_value_null_ok($table,$select,$where_map=NULL,$end='',$fail_ok=false)
-	{
-		$values=$this->query_select($table,array($select),$where_map,$end,1,NULL,$fail_ok);
-		if ($values===NULL) return NULL; // error
-		return $this->_query_value($values);
-	}
-
-	/**
-	 * This function is a variant of query_value_null_ok, by the fact that it only accepts a complete (and perfect) SQL query, instead of assembling one itself from the specified parameters.
-	 *
-	 * @param  string			The complete SQL query
-	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
-	 * @param  boolean		Whether to skip the query safety check
-	 * @return ?mixed			The first value of the first row returned (NULL: nothing found, or null value found)
-	 */
-	function query_value_null_ok_full($query,$fail_ok=false,$skip_safety_check=false)
-	{
-		$values=$this->query($query,1,NULL,$fail_ok,$skip_safety_check);
-		if ($values===NULL) return NULL; // error
-		return $this->_query_value($values);
-	}
-
-	/**
-	 * Deletes rows from the specified table, that match the specified conditions (if any). It may be limited to a row range (it is likely, only a maximum, of 1, will be used, if any kind of range at all).
-	 *
-	 * @param  string			The table name
-	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no conditions)
-	 * @param  string			Something to tack onto the end of the statement
-	 * @param  ?integer		The maximum number of rows to delete (NULL: no limit)
-	 * @param  ?integer		The starting row to delete (NULL: no specific start)
-	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
-	 */
-	function query_delete($table,$where_map=NULL,$end='',$max=NULL,$start=NULL,$fail_ok=false)
-	{
-		if (($table=='cache') && (get_db_type()!='xml') && (get_option('filesystem_caching',true)==='1'))
-		{
-			global $FILECACHE_OBJECT;
-			if ($FILECACHE_OBJECT===NULL) $this->initialise_filesystem_db();
-			if ($FILECACHE_OBJECT!=$this)
-			{
-				$FILECACHE_OBJECT->query_delete($table,$where_map,$end,$max,$start,$fail_ok);
-				return;
-			}
-		}
-
-		if ($where_map===NULL)
-		{
-			$this->_query('DELETE FROM '.$this->table_prefix.$table.' '.$end,$max,$start,$fail_ok);
-			return;
-		}
-
-		$where='';
-
-		foreach ($where_map as $key=>$value)
-		{
-			if ($where!='') $where.=' AND ';
-
-			if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
-			elseif (is_integer($value)) $where.=$key.'='.strval($value);
-			elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
-			else
-			{
-				if ($value===NULL) $where.=$key.' IS NULL';
-				else
-				{
-					if ((is_string($value)) && ($value=='') && ($this->static_ob->db_empty_is_null())) $where.=$key.' IS NULL'; //$value=' ';
-					else $where.=db_string_equal_to($key,$value);
-				}
-			}
-		}
-
-		$query='DELETE FROM '.$this->table_prefix.$table.' WHERE ('.$where.') '.$end;
-		$this->_query($query,$max,$start,$fail_ok);
-	}
-
-	/**
-	 * Update (edit) a row in the database.
-	 *
-	 * @param  string			The table name
-	 * @param  array			The UPDATE map
-	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no conditions)
-	 * @param  string			Something to tack onto the end of the statement
-	 * @param  ?integer		The maximum number of rows to update (NULL: no limit)
-	 * @param  ?integer		The starting row to update (NULL: no specific start)
-	 * @param  boolean		Whether to get the number of touched rows. WARNING: Do not use in core ocPortal code as it does not work on all database drivers
-	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
-	 * @return ?integer		The number of touched records (NULL: hasn't been asked / error)
-	 */
-	function query_update($table,$update_map,$where_map=NULL,$end='',$max=NULL,$start=NULL,$num_touched=false,$fail_ok=false)
-	{
-		$where='';
-		$update='';
-
-		$value=mixed();
-
-		if ($where_map!==NULL)
-		{
-			foreach ($where_map as $key=>$value)
-			{
-				if ($where!='') $where.=' AND ';
-
-				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
-				elseif (is_integer($value)) $where.=$key.'='.strval($value);
-				elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
-				else
-				{
-					if ($value===NULL) $where.=$key.' IS NULL';
-					else
-					{
-						if ((is_string($value)) && ($value=='') && ($this->static_ob->db_empty_is_null())) /*$where.=$key.' IS NULL';*/  $value=' ';
-						/*else */$where.=db_string_equal_to($key,$value);
-					}
-				}
-			}
-		}
-
-		foreach ($update_map as $key=>$value)
-		{
-			if (($value===STRING_MAGIC_NULL) || ($value===INTEGER_MAGIC_NULL)) continue;
-			if ($update!='') $update.=', ';
-
-			if ($value===NULL) $update.=$key.'=NULL';
-			else
-			{
-				if (is_float($value)) $update.=$key.'='.float_to_raw_string($value);
-				elseif (is_integer($value)) $update.=$key.'='.strval($value);
-				elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
-				else $update.=$key.'=\''.$this->static_ob->db_escape_string($value).'\'';
-			}
-		}
-		if ($update=='') return NULL;
-
-		if ($where=='')
-		{
-			return $this->_query('UPDATE '.$this->table_prefix.$table.' SET '.$update.' '.$end,$max,$start,$fail_ok,$num_touched);
-		} else
-		{
-			return $this->_query('UPDATE '.$this->table_prefix.$table.' SET '.$update.' WHERE ('.$where.') '.$end,$max,$start,$fail_ok,$num_touched);
-		}
-	}
-
-	/**
 	 * Create a SELECT query from some abstract data.
 	 *
 	 * @param  string			The table to select from
@@ -811,20 +675,66 @@ class database_driver
 	}
 
 	/**
-	 * Initialise a filesystem DB that we can use for caching.
+	 * Get the specified value from the database. This is a first value of the first row returned.
+	 *
+	 * @param  string			The table name
+	 * @param  string			The field to select
+	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no where conditions)
+	 * @param  string			Something to tack onto the end
+	 * @return mixed			The first value of the first row returned
 	 */
-	function initialise_filesystem_db()
+	function query_select_value($table,$select,$where_map=NULL,$end='')
 	{
-		global $FILECACHE_OBJECT;
-		require_code('database/xml');
-		$chain_db=new database_driver(get_custom_file_base().'/persistent_cache','','','',get_table_prefix(),false,object_factory('Database_Static_xml'));
-		$chain_connection=&$chain_db->connection_write;
-		if (count($chain_connection)>4) // Okay, we can't be lazy anymore
-		{
-			$chain_connection=call_user_func_array(array($chain_db->static_ob,'db_get_connection'),$chain_connection);
-			_general_db_init();
-		}
-		$FILECACHE_OBJECT=$chain_db;
+		$values=$this->query_select($table,array($select),$where_map,$end,1,NULL);
+		if ($values===NULL) return NULL; // error
+		if (!array_key_exists(0,$values)) fatal_exit(do_lang_tempcode('QUERY_NULL',escape_html($this->_get_where_expand($this->table_prefix.$table,array($select),$where_map,$end)))); // No result found
+		return $this->_query_select_value($values);
+	}
+
+	/**
+	 * Extract the first of the first of the list of maps.
+	 *
+	 * @param  array			The list of maps
+	 * @return mixed			The first value of the first row in the list
+	 */
+	function _query_select_value($values)
+	{
+		if (!array_key_exists(0,$values)) return NULL; // No result found
+		$first=$values[0];
+		$v=current($first); // Result found. Maybe a value of 'null'
+		return $v;
+	}
+
+	/**
+	 * Get the specified value from the database, or NULL if it is not there (or if the value itself is NULL). This is good for detection existence of records, or for use if they might may or may not be present.
+	 *
+	 * @param  string			The table name
+	 * @param  string			The field to select
+	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no where conditions)
+	 * @param  string			Something to tack onto the end
+	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
+	 * @return ?mixed			The first value of the first row returned (NULL: nothing found, or null value found)
+	 */
+	function query_select_value_if_there($table,$select,$where_map=NULL,$end='',$fail_ok=false)
+	{
+		$values=$this->query_select($table,array($select),$where_map,$end,1,NULL,$fail_ok);
+		if ($values===NULL) return NULL; // error
+		return $this->_query_select_value($values);
+	}
+
+	/**
+	 * This function is a variant of query_select_value_if_there, by the fact that it only accepts a complete (and perfect) SQL query, instead of assembling one itself from the specified parameters.
+	 *
+	 * @param  string			The complete SQL query
+	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
+	 * @param  boolean		Whether to skip the query safety check
+	 * @return ?mixed			The first value of the first row returned (NULL: nothing found, or null value found)
+	 */
+	function query_value_if_there($query,$fail_ok=false,$skip_safety_check=false)
+	{
+		$values=$this->query($query,1,NULL,$fail_ok,$skip_safety_check);
+		if ($values===NULL) return NULL; // error
+		return $this->_query_select_value($values);
 	}
 
 	/**
@@ -1127,32 +1037,122 @@ class database_driver
 	}
 
 	/**
-	 * Create a table with the given name and the given array of field name to type mappings.
-	 * If a field type starts '*', then it is part of that field's key. If it starts '?', then it is an optional field.
+	 * Update (edit) a row in the database.
 	 *
-	 * @param  ID_TEXT		The table name
-	 * @param  array			The fields
-	 * @param  boolean		Whether to skip the size check for the table (only do this for addon modules that don't need to support anything other than mySQL)
-	 * @param  boolean		Whether to skip the check for NULL string fields
+	 * @param  string			The table name
+	 * @param  array			The UPDATE map
+	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no conditions)
+	 * @param  string			Something to tack onto the end of the statement
+	 * @param  ?integer		The maximum number of rows to update (NULL: no limit)
+	 * @param  ?integer		The starting row to update (NULL: no specific start)
+	 * @param  boolean		Whether to get the number of touched rows. WARNING: Do not use in core ocPortal code as it does not work on all database drivers
+	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
+	 * @return ?integer		The number of touched records (NULL: hasn't been asked / error)
 	 */
-	function create_table($table_name,$fields,$skip_size_check=false,$skip_null_check=false)
+	function query_update($table,$update_map,$where_map=NULL,$end='',$max=NULL,$start=NULL,$num_touched=false,$fail_ok=false)
 	{
-		require_code('database_helper');
-		_helper_create_table($this,$table_name,$fields,$skip_size_check,$skip_null_check);
+		$where='';
+		$update='';
+
+		$value=mixed();
+
+		if ($where_map!==NULL)
+		{
+			foreach ($where_map as $key=>$value)
+			{
+				if ($where!='') $where.=' AND ';
+
+				if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
+				elseif (is_integer($value)) $where.=$key.'='.strval($value);
+				elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
+				else
+				{
+					if ($value===NULL) $where.=$key.' IS NULL';
+					else
+					{
+						if ((is_string($value)) && ($value=='') && ($this->static_ob->db_empty_is_null())) /*$where.=$key.' IS NULL';*/  $value=' ';
+						/*else */$where.=db_string_equal_to($key,$value);
+					}
+				}
+			}
+		}
+
+		foreach ($update_map as $key=>$value)
+		{
+			if (($value===STRING_MAGIC_NULL) || ($value===INTEGER_MAGIC_NULL)) continue;
+			if ($update!='') $update.=', ';
+
+			if ($value===NULL) $update.=$key.'=NULL';
+			else
+			{
+				if (is_float($value)) $update.=$key.'='.float_to_raw_string($value);
+				elseif (is_integer($value)) $update.=$key.'='.strval($value);
+				elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
+				else $update.=$key.'=\''.$this->static_ob->db_escape_string($value).'\'';
+			}
+		}
+		if ($update=='') return NULL;
+
+		if ($where=='')
+		{
+			return $this->_query('UPDATE '.$this->table_prefix.$table.' SET '.$update.' '.$end,$max,$start,$fail_ok,$num_touched);
+		} else
+		{
+			return $this->_query('UPDATE '.$this->table_prefix.$table.' SET '.$update.' WHERE ('.$where.') '.$end,$max,$start,$fail_ok,$num_touched);
+		}
 	}
 
 	/**
-	 * Add an index to a table without disturbing the contents, after the table has been created.
+	 * Deletes rows from the specified table, that match the specified conditions (if any). It may be limited to a row range (it is likely, only a maximum, of 1, will be used, if any kind of range at all).
 	 *
-	 * @param  ID_TEXT		The table name
-	 * @param  ID_TEXT		The index name
-	 * @param  array			The fields
-	 * @param  ID_TEXT		The name of the unique key field for the table
+	 * @param  string			The table name
+	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no conditions)
+	 * @param  string			Something to tack onto the end of the statement
+	 * @param  ?integer		The maximum number of rows to delete (NULL: no limit)
+	 * @param  ?integer		The starting row to delete (NULL: no specific start)
+	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
 	 */
-	function create_index($table_name,$index_name,$fields,$unique_key_field='id')
+	function query_delete($table,$where_map=NULL,$end='',$max=NULL,$start=NULL,$fail_ok=false)
 	{
-		require_code('database_helper');
-		_helper_create_index($this,$table_name,$index_name,$fields,$unique_key_field);
+		if (($table=='cache') && (get_db_type()!='xml') && (get_option('filesystem_caching',true)==='1'))
+		{
+			global $FILECACHE_OBJECT;
+			if ($FILECACHE_OBJECT===NULL) $this->initialise_filesystem_db();
+			if ($FILECACHE_OBJECT!=$this)
+			{
+				$FILECACHE_OBJECT->query_delete($table,$where_map,$end,$max,$start,$fail_ok);
+				return;
+			}
+		}
+
+		if ($where_map===NULL)
+		{
+			$this->_query('DELETE FROM '.$this->table_prefix.$table.' '.$end,$max,$start,$fail_ok);
+			return;
+		}
+
+		$where='';
+
+		foreach ($where_map as $key=>$value)
+		{
+			if ($where!='') $where.=' AND ';
+
+			if (is_float($value)) $where.=$key.'='.float_to_raw_string($value);
+			elseif (is_integer($value)) $where.=$key.'='.strval($value);
+			elseif (($key=='begin_num') || ($key=='end_num')) $where.=$key.'='.$value; // Fudge, for all our known large unsigned integers
+			else
+			{
+				if ($value===NULL) $where.=$key.' IS NULL';
+				else
+				{
+					if ((is_string($value)) && ($value=='') && ($this->static_ob->db_empty_is_null())) $where.=$key.' IS NULL'; //$value=' ';
+					else $where.=db_string_equal_to($key,$value);
+				}
+			}
+		}
+
+		$query='DELETE FROM '.$this->table_prefix.$table.' WHERE ('.$where.') '.$end;
+		$this->_query($query,$max,$start,$fail_ok);
 	}
 
 	/**
@@ -1172,10 +1172,10 @@ class database_driver
 	 *
 	 * @param  ID_TEXT		The table name
 	 */
-	function drop_if_exists($table)
+	function drop_table_if_exists($table)
 	{
 		require_code('database_helper');
-		_helper_drop_if_exists($this,$table);
+		_helper_drop_table_if_exists($this,$table);
 	}
 
 	/**

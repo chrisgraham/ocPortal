@@ -40,11 +40,11 @@ function add_item_wrap($member_id,$name,$cost,$not_infinite,$bribable,$healthy,$
 	// Get $realm,$x,$y from $member_id
 	list($realm,$x,$y)=get_loc_details($member_id);
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_value('w_realms','r_private',array('id'=>$realm))==1))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$realm))==1))
 		ocw_refresh_with_message(do_lang_tempcode('W_NO_EDIT_ACCESS_PRIVATE_REALM'),'warn');
 
 	// Make sure the item does not already exist! (people aren't allowed to arbitarily duplicate items for security reasons)
-	$r=$GLOBALS['SITE_DB']->query_value_null_ok('w_itemdef','bribable',array('name'=>$name));
+	$r=$GLOBALS['SITE_DB']->query_select_value_if_there('w_itemdef','bribable',array('name'=>$name));
 	if (!is_null($r)) ocw_refresh_with_message(do_lang_tempcode('W_DUPE_ITEM'),'warn');
 
 	// Make sure that they aren't in the brig and adding a bribable!
@@ -108,14 +108,14 @@ function add_item_wrap_copy($member_id,$name,$cost,$not_infinite)
 	// Get $realm,$x,$y from $member_id
 	list($realm,$x,$y)=get_loc_details($member_id);
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_value('w_realms','r_private',array('id'=>$realm))==1))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$realm))==1))
 		ocw_refresh_with_message(do_lang_tempcode('W_NO_EDIT_ACCESS_PRIVATE_REALM'),'warn');
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_itemdef','owner',array('name'=>$name))!=$member_id) && ($GLOBALS['SITE_DB']->query_value('w_itemdef','replicateable',array('name'=>$name))==0))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_itemdef','owner',array('name'=>$name))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_itemdef','replicateable',array('name'=>$name))==0))
 		ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	// Make sure that they aren't in the brig and adding a bribable!
-	$bribable=$GLOBALS['SITE_DB']->query_value('w_itemdef','bribable',array('name'=>$name));
+	$bribable=$GLOBALS['SITE_DB']->query_select_value('w_itemdef','bribable',array('name'=>$name));
 	if (($x==0) && ($y==2) && ($bribable==1)) ocw_refresh_with_message(do_lang_tempcode('W_NICE_TRY'),'warn');
 
 	// Charge them
@@ -163,27 +163,27 @@ function add_room_wrap($member_id,$relative,$name,$text,$password_question,$pass
 	// Get $realm,$x,$y from $member_id, $relative
 	list($realm,$x,$y)=get_loc_details($member_id);
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_value('w_realms','r_private',array('id'=>$realm))==1))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$realm))==1))
 		ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	if ($relative==0)
 	{
-		$l=$GLOBALS['SITE_DB']->query_value('w_rooms','locked_up',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+		$l=$GLOBALS['SITE_DB']->query_select_value('w_rooms','locked_up',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 		if ($l==1) ocw_refresh_with_message(do_lang_tempcode('W_WALL_LOCKED'),'warn');
 	}
 	if ($relative==1)
 	{
-		$l=$GLOBALS['SITE_DB']->query_value('w_rooms','locked_down',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+		$l=$GLOBALS['SITE_DB']->query_select_value('w_rooms','locked_down',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 		if ($l==1) ocw_refresh_with_message(do_lang_tempcode('W_WALL_LOCKED'),'warn');
 	}
 	if ($relative==2)
 	{
-		$l=$GLOBALS['SITE_DB']->query_value('w_rooms','locked_right',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+		$l=$GLOBALS['SITE_DB']->query_select_value('w_rooms','locked_right',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 		if ($l==1) ocw_refresh_with_message(do_lang_tempcode('W_WALL_LOCKED'),'warn');
 	}
 	if ($relative==3)
 	{
-		$l=$GLOBALS['SITE_DB']->query_value('w_rooms','locked_left',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+		$l=$GLOBALS['SITE_DB']->query_select_value('w_rooms','locked_left',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 		if ($l==1) ocw_refresh_with_message(do_lang_tempcode('W_WALL_LOCKED'),'warn');
 	}
 	if ($relative==0)
@@ -208,7 +208,7 @@ function add_room_wrap($member_id,$relative,$name,$text,$password_question,$pass
 	}
 
 	// Check there is no room already there
-	$r=$GLOBALS['SITE_DB']->query_value_null_ok('w_rooms','name',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
+	$r=$GLOBALS['SITE_DB']->query_select_value_if_there('w_rooms','name',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
 	if (!is_null($r)) ocw_refresh_with_message(do_lang_tempcode('W_ROOM_ALREADY'),'warn');
 
 	// Charge them
@@ -300,7 +300,7 @@ function add_realm_wrap($member_id,$name,$troll_name,$jail_name,$jail_text,$jail
 	{
 		// Have they been a member long enough for a new realm?
 		$fortnights=(time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member_id))/(60*60*24*7*2);
-		$made=$GLOBALS['SITE_DB']->query_value('w_realms','COUNT(*)',array('owner'=>$member_id));
+		$made=$GLOBALS['SITE_DB']->query_select_value('w_realms','COUNT(*)',array('owner'=>$member_id));
 		if ($fortnights<$made) ocw_refresh_with_message(do_lang_tempcode('W_MEMBER_NOT_LONG_ENOUGH'),'warn');
 
 		$price=get_price('mud_realm');
@@ -310,13 +310,13 @@ function add_realm_wrap($member_id,$name,$troll_name,$jail_name,$jail_text,$jail
 	}
 
 	// Find the next available $realm
-	$temp=$GLOBALS['SITE_DB']->query_value_null_ok('w_realms','id');
+	$temp=$GLOBALS['SITE_DB']->query_select_value_if_there('w_realms','id');
 	if (is_null($temp))
 	{
 		$realm=0; // Our first realm
 	} else
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value('w_realms','MAX(id)');
+		$temp=$GLOBALS['SITE_DB']->query_select_value('w_realms','MAX(id)');
 		$realm=$temp+1;
 	}
 
@@ -411,22 +411,22 @@ function add_portal_wrap($member_id,$name,$text,$end_location_realm,$end_locatio
 	if ($name=='') ocw_refresh_with_message(do_lang_tempcode('W_MISSING_NAME'),'warn');
 
 	// Check $end_location_realm exists
-	$allow_portal=$GLOBALS['SITE_DB']->query_value_null_ok('w_rooms','allow_portal',array('location_x'=>$end_location_x,'location_y'=>$end_location_y,'location_realm'=>$end_location_realm));
+	$allow_portal=$GLOBALS['SITE_DB']->query_select_value_if_there('w_rooms','allow_portal',array('location_x'=>$end_location_x,'location_y'=>$end_location_y,'location_realm'=>$end_location_realm));
 	if (is_null($allow_portal))
 		ocw_refresh_with_message(do_lang_tempcode('W_NO_END'),'warn');
 	if ($allow_portal==0) ocw_refresh_with_message(do_lang_tempcode('W_BAD_END'),'warn');
 
 	// Check we don't have a portal to this realm here already
-	$t=$GLOBALS['SITE_DB']->query_value_null_ok('w_portals','name',array('start_location_x'=>$x,'start_location_y'=>$y,'start_location_realm'=>$realm,'end_location_realm'=>$end_location_realm));
+	$t=$GLOBALS['SITE_DB']->query_select_value_if_there('w_portals','name',array('start_location_x'=>$x,'start_location_y'=>$y,'start_location_realm'=>$realm,'end_location_realm'=>$end_location_realm));
 	if (!is_null($t)) ocw_refresh_with_message(do_lang_tempcode('W_DUPE_END'),'warn');
 
-	if ($GLOBALS['SITE_DB']->query_value('w_rooms','allow_portal',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm))==0)
+	if ($GLOBALS['SITE_DB']->query_select_value('w_rooms','allow_portal',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm))==0)
 		ocw_refresh_with_message(do_lang_tempcode('W_BAD_START'),'warn');
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_value('w_realms','r_private',array('id'=>$realm))==1))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$realm))==1))
 		ocw_refresh_with_message(do_lang_tempcode('W_NO_EDIT_ACCESS_PRIVATE_REALM'),'warn');
 
-/*	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_realms','owner',array('id'=>$end_location_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_value('w_realms','r_private',array('id'=>$end_location_realm))==1))
+/*	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$end_location_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$end_location_realm))==1))
 		ocw_refresh_with_message(do_lang_tempcode('W_NO_EDIT_ACCESS_PRIVATE_REALM'),'warn');*/
 
 	// Charge them
@@ -440,7 +440,7 @@ function add_portal_wrap($member_id,$name,$text,$end_location_realm,$end_locatio
 
 	add_portal($name,$text,$realm,$x,$y,$end_location_realm,$member_id,$end_location_x,$end_location_y);
 
-	$destname=$GLOBALS['SITE_DB']->query_value('w_realms','name',array('id'=>$end_location_realm));
+	$destname=$GLOBALS['SITE_DB']->query_select_value('w_realms','name',array('id'=>$end_location_realm));
 
 	ocw_refresh_with_message(do_lang_tempcode('W_PORTAL_CREATED',escape_html($name),escape_html($destname)));
 }
@@ -481,11 +481,11 @@ function add_portal($name,$text,$realm,$x,$y,$end_location_realm,$owner,$end_loc
 function delete_item_wrap($name)
 {
 	$attempt_member=get_member();
-	if ((!has_specific_permission($attempt_member,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_itemdef','owner',array('name'=>$name))!=$attempt_member)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
+	if ((!has_specific_permission($attempt_member,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_itemdef','owner',array('name'=>$name))!=$attempt_member)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 	//if (!has_specific_permission($attempt_member,'administer_ocworld'))
 	//{
-	if ($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_inventory WHERE '.db_string_equal_to('item_name',$name).' AND item_owner<>'.strval((integer)$attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_CONFISCATE_1'),'warn');
-	if ($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_items WHERE '.db_string_equal_to('name',$name).' AND copy_owner<>'.strval((integer)$attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_CONFISCATE_2'),'warn');
+	if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_inventory WHERE '.db_string_equal_to('item_name',$name).' AND item_owner<>'.strval((integer)$attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_CONFISCATE_1'),'warn');
+	if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_items WHERE '.db_string_equal_to('name',$name).' AND copy_owner<>'.strval((integer)$attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_CONFISCATE_2'),'warn');
 	//}
 
 	// Refund them
@@ -513,11 +513,11 @@ function delete_room_wrap($member_id)
 	list($realm,$x,$y)=get_loc_details($member_id);
 
 	$attempt_member=$member_id;
-	if ((!has_specific_permission($attempt_member,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_rooms','owner',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm))!=$attempt_member)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
+	if ((!has_specific_permission($attempt_member,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_rooms','owner',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm))!=$attempt_member)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	if (($x==0) && (($y==0) || ($y==1) || ($y==2))) ocw_refresh_with_message(do_lang_tempcode('W_DEL_MAIN'),'warn');
 
-	$name=$GLOBALS['SITE_DB']->query_value('w_rooms','name',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+	$name=$GLOBALS['SITE_DB']->query_select_value('w_rooms','name',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 
 	// Refund them
 	require_code('points2');
@@ -559,9 +559,9 @@ function delete_portal_wrap($member_id,$dest_realm)
 	list($realm,$x,$y)=get_loc_details($member_id);
 
 	$attempt_member=$member_id;
-	if ((!has_specific_permission($attempt_member,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_portals','owner',array('start_location_x'=>$x,'start_location_y'=>$y,'start_location_realm'=>$realm,'end_location_realm'=>$dest_realm))!=$attempt_member)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
+	if ((!has_specific_permission($attempt_member,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_portals','owner',array('start_location_x'=>$x,'start_location_y'=>$y,'start_location_realm'=>$realm,'end_location_realm'=>$dest_realm))!=$attempt_member)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
-	$name=$GLOBALS['SITE_DB']->query_value('w_portals','name',array('start_location_x'=>$x,'start_location_y'=>$y,'start_location_realm'=>$realm));
+	$name=$GLOBALS['SITE_DB']->query_select_value('w_portals','name',array('start_location_x'=>$x,'start_location_y'=>$y,'start_location_realm'=>$realm));
 
 	// Refund them
 	require_code('points2');
@@ -596,12 +596,12 @@ function delete_realm_wrap($member_id)
 {
 	$attempt_member=$member_id;
 
-	$realm=$GLOBALS['SITE_DB']->query_value('w_members','location_realm',array('id'=>$member_id));
+	$realm=$GLOBALS['SITE_DB']->query_select_value('w_members','location_realm',array('id'=>$member_id));
 	if ($realm==0) ocw_refresh_with_message(do_lang_tempcode('W_DEL_PRIMARY_REALM'),'warn');
 
-	if ((!has_specific_permission($attempt_member,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_realms','owner',array('id'=>$realm))!=$attempt_member)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
+	if ((!has_specific_permission($attempt_member,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))!=$attempt_member)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
-	if ($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_rooms WHERE location_realm='.strval((integer)$realm).' AND owner<>'.strval((integer)$attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_DEL_OTHERS_ROOMS_REALM'),'warn');
+	if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_rooms WHERE location_realm='.strval((integer)$realm).' AND owner<>'.strval((integer)$attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_DEL_OTHERS_ROOMS_REALM'),'warn');
 
 	// Refund them
 	require_code('points2');
@@ -669,16 +669,16 @@ function edit_room_wrap($member_id,$name,$text,$password_question,$password_answ
 	// Get $realm,$x,$y from $member_id
 	list($realm,$x,$y)=get_loc_details($member_id);
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_rooms','owner',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm))!=$member_id))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_rooms','owner',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm))!=$member_id))
 		ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_realms','owner',array('id'=>$new_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_value('w_realms','r_private',array('id'=>$new_realm))==1))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$new_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$new_realm))==1))
 		ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	// Make sure the new x,y,realm is free
 	if (($x!=$new_x) || ($y!=$new_y) || ($realm!=$new_realm))
 	{
-		$r=$GLOBALS['SITE_DB']->query_value_null_ok('w_rooms','name',array('location_realm'=>$new_realm,'location_x'=>$new_x,'location_y'=>$new_y));
+		$r=$GLOBALS['SITE_DB']->query_select_value_if_there('w_rooms','name',array('location_realm'=>$new_realm,'location_x'=>$new_x,'location_y'=>$new_y));
 		if (!is_null($r)) ocw_refresh_with_message(do_lang_tempcode('W_ROOM_ALREADY'),'warn');
 	}
 
@@ -734,9 +734,9 @@ function edit_realm_wrap($member_id,$name,$troll_name,$qa,$private,$new_owner)
 	if (is_null($new_owner)) $new_owner=$member_id;
 	if ($troll_name=='') ocw_refresh_with_message(do_lang_tempcode('W_MISSING_TROLL_NAME'),'warn');
 
-	$realm=$GLOBALS['SITE_DB']->query_value('w_members','location_realm',array('id'=>$member_id));
+	$realm=$GLOBALS['SITE_DB']->query_select_value('w_members','location_realm',array('id'=>$member_id));
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_realms','owner',array('id'=>$realm))!=$member_id))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))!=$member_id))
 		ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	edit_realm($realm,$name,$troll_name,$qa,$private,$new_owner);
@@ -799,20 +799,20 @@ function edit_portal_wrap($member_id,$dest_realm,$name,$text,$end_location_realm
 	// Get $realm,$x,$y from $member_id
 	list($realm,$x,$y)=get_loc_details($member_id);
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_portals','owner',array('start_location_x'=>$x,'start_location_y'=>$y,'start_location_realm'=>$realm,'end_location_realm'=>$dest_realm))!=$member_id))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_portals','owner',array('start_location_x'=>$x,'start_location_y'=>$y,'start_location_realm'=>$realm,'end_location_realm'=>$dest_realm))!=$member_id))
 		ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_realms','owner',array('id'=>$new_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_value('w_realms','r_private',array('id'=>$new_realm))==1))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$new_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$new_realm))==1))
 		ocw_refresh_with_message(do_lang_tempcode('W_PORTAL_TO_PRIVATE'),'warn');
 
 	if ($new_realm!=$realm)
 	{
-		if ($GLOBALS['SITE_DB']->query_value('w_rooms','allow_portal',array('location_x'=>$new_x,'location_y'=>$new_y,'location_realm'=>$new_realm))==0)
+		if ($GLOBALS['SITE_DB']->query_select_value('w_rooms','allow_portal',array('location_x'=>$new_x,'location_y'=>$new_y,'location_realm'=>$new_realm))==0)
 			ocw_refresh_with_message(do_lang_tempcode('W_BAD_START'),'warn');
 	}
 
 	// Check $end_location_realm exists
-	$allow_portal=$GLOBALS['SITE_DB']->query_value_null_ok('w_rooms','allow_portal',array('location_x'=>$end_location_x,'location_y'=>$end_location_y,'location_realm'=>$end_location_realm));
+	$allow_portal=$GLOBALS['SITE_DB']->query_select_value_if_there('w_rooms','allow_portal',array('location_x'=>$end_location_x,'location_y'=>$end_location_y,'location_realm'=>$end_location_realm));
 	if (is_null($allow_portal))
 		ocw_refresh_with_message(do_lang_tempcode('W_NO_END'),'warn');
 	if (($allow_portal==0) && ($dest_realm==$end_location_realm)) ocw_refresh_with_message(do_lang_tempcode('W_BAD_END'),'warn');
@@ -820,7 +820,7 @@ function edit_portal_wrap($member_id,$dest_realm,$name,$text,$end_location_realm
 	if (($dest_realm!=$end_location_realm) || ($x!=$new_x) || ($y!=$new_y) || ($realm!=$new_realm))
 	{
 		// Check we don't have a portal to this realm here already
-		$t=$GLOBALS['SITE_DB']->query_value_null_ok('w_portals','name',array('start_location_x'=>$new_x,'start_location_y'=>$new_y,'start_location_realm'=>$new_realm,'end_location_realm'=>$end_location_realm));
+		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('w_portals','name',array('start_location_x'=>$new_x,'start_location_y'=>$new_y,'start_location_realm'=>$new_realm,'end_location_realm'=>$end_location_realm));
 		if (!is_null($t)) ocw_refresh_with_message(do_lang_tempcode('W_DUPE_END'),'warn');
 	}
 
@@ -847,7 +847,7 @@ function edit_item_wrap($member_id,$original_name,$name,$bribable,$healthy,$pict
 {
 	if ($name=='') ocw_refresh_with_message(do_lang_tempcode('W_MISSING_NAME'),'warn');
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_itemdef','owner',array('name'=>$original_name))!=$member_id))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_itemdef','owner',array('name'=>$original_name))!=$member_id))
 		ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	if ($healthy!=1) $healthy=0;
@@ -882,7 +882,7 @@ function edit_item($name,$original_name,$bribable,$healthy,$picture_url,$new_own
 	// Support renaming
 	if ((strlen($name)>0) && ($name!=$original_name))
 	{
-		$r=$GLOBALS['SITE_DB']->query_value_null_ok('w_itemdef','bribable',array('name'=>$name));
+		$r=$GLOBALS['SITE_DB']->query_select_value_if_there('w_itemdef','bribable',array('name'=>$name));
 		if (!is_null($r)) ocw_refresh_with_message(do_lang_tempcode('W_DUPE_ITEM'),'warn');
 		$GLOBALS['SITE_DB']->query_update('w_itemdef',array('name'=>$name),array('name'=>$original_name),'',1);
 		$GLOBALS['SITE_DB']->query_update('w_items',array('name'=>$name),array('name'=>$original_name),'',1);
@@ -909,24 +909,24 @@ function edit_item_wrap_copy($member_id,$name,$cost,$not_infinite,$new_x,$new_y,
 {
 	if (!($cost>0)) $cost=0;
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_items','copy_owner',array('name'=>$name))!=$member_id))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_items','copy_owner',array('name'=>$name))!=$member_id))
 		ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	// Get $realm,$x,$y from $member_id
 	list($realm,$x,$y)=get_loc_details($member_id);
 
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_value('w_realms','owner',array('id'=>$new_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_value('w_realms','r_private',array('id'=>$new_realm))==1))
+	if ((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$new_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$new_realm))==1))
 		ocw_refresh_with_message(do_lang_tempcode('W_NO_ACCESS_MOVE'),'warn');
 
 	if (($x!=$new_x) || ($y!=$new_y) || ($realm!=$new_realm))
 	{
 		// Check we don't have a copy of this item at new dest already
-		$t=$GLOBALS['SITE_DB']->query_value_null_ok('w_items','name',array('location_x'=>$new_x,'location_y'=>$new_y,'location_realm'=>$new_realm,'copy_owner'=>$user,'name'=>$name));
+		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('w_items','name',array('location_x'=>$new_x,'location_y'=>$new_y,'location_realm'=>$new_realm,'copy_owner'=>$user,'name'=>$name));
 		if (!is_null($t)) ocw_refresh_with_message(do_lang_tempcode('W_COPY_SOURCE_ALREADY'),'warn');
 	}
 
 	// Fix infinity source thing... we can never make a non-infinite source into an infinite source
-	$old_not_infinite=$GLOBALS['SITE_DB']->query_value_null_ok('w_items','not_infinite',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'copy_owner'=>$user,'name'=>$name));
+	$old_not_infinite=$GLOBALS['SITE_DB']->query_select_value_if_there('w_items','not_infinite',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'copy_owner'=>$user,'name'=>$name));
 	if (is_null($old_not_infinite)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	if ($old_not_infinite==1) $not_infinite=1; elseif ($not_infinite!=1) $not_infinite=0;
 

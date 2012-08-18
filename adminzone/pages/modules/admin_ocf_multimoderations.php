@@ -198,7 +198,7 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 					break;
 			}
 
-			$destination=is_null($row['mm_move_to'])?NULL:$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('id'=>$row['mm_move_to']));
+			$destination=is_null($row['mm_move_to'])?NULL:$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_name',array('id'=>$row['mm_move_to']));
 			if (is_null($destination)) $destination=do_lang_tempcode('NA_EM');
 
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');

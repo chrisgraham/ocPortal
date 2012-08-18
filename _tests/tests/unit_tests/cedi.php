@@ -34,7 +34,7 @@ class cedi_test_set extends ocp_test_case
 		set_category_permissions_from_environment('seedy_page',strval($this->id),'cms_cedi');
 
 		//Check the page was actully created
-		$this->assertTrue('test notes'==$GLOBALS['FORUM_DB']->query_value('seedy_pages','notes',array('id'=>$this->id)));
+		$this->assertTrue('test notes'==$GLOBALS['FORUM_DB']->query_select_value('seedy_pages','notes',array('id'=>$this->id)));
 	}
 
 	function testEditCediPage()
@@ -44,7 +44,7 @@ class cedi_test_set extends ocp_test_case
 		cedi_edit_page($this->id,'title-edited','test description','notes_edited',0,'','');
 
 		//Check the page was edited
-		$this->assertTrue('notes_edited'==$GLOBALS['FORUM_DB']->query_value('seedy_pages','notes',array('id'=>$this->id)));
+		$this->assertTrue('notes_edited'==$GLOBALS['FORUM_DB']->query_select_value('seedy_pages','notes',array('id'=>$this->id)));
 	}
 
 	function testDeleteCedipage()

@@ -47,9 +47,9 @@ class Module_banners
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('banners');
-		$GLOBALS['SITE_DB']->drop_if_exists('banner_types');
-		$GLOBALS['SITE_DB']->drop_if_exists('banner_clicks');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('banners');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('banner_types');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('banner_clicks');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'banners'));
 
@@ -298,7 +298,7 @@ class Module_banners
 
 		require_code('form_templates');
 		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_banners')?NULL:get_member();
-		$max_rows=$GLOBALS['SITE_DB']->query_value('banners','COUNT(*)',is_null($only_owned)?NULL:array('submitter'=>$only_owned));
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('banners','COUNT(*)',is_null($only_owned)?NULL:array('submitter'=>$only_owned));
 		if ($max_rows==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 		$max=get_param_integer('max',20);
 		$start=get_param_integer('start',0);
@@ -381,7 +381,7 @@ class Module_banners
 			$click_through=protect_from_escaping(escape_html(float_format(round(100.0*($myrow['hits_to']/$myrow['views_to'])))));
 		else $click_through=do_lang_tempcode('NA_EM');
 
-		$has_banner_network=$GLOBALS['SITE_DB']->query_value('banners','SUM(views_from)')!=0.0;
+		$has_banner_network=$GLOBALS['SITE_DB']->query_select_value('banners','SUM(views_from)')!=0.0;
 
 		$fields=new ocp_tempcode();
 		require_code('templates_map_table');

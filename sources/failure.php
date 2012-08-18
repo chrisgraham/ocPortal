@@ -361,11 +361,11 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		$post.=$key.'=>'.$val."\n\n";
 	}
 
-	$count=$GLOBALS['SITE_DB']->query_value('hackattack','COUNT(*)',array('ip'=>$ip));
+	$count=$GLOBALS['SITE_DB']->query_select_value('hackattack','COUNT(*)',array('ip'=>$ip));
 	$alt_ip=false;
 	if (!is_null($ip2))
 	{
-		$count2=$GLOBALS['SITE_DB']->query_value('hackattack','COUNT(*)',array('ip'=>$ip2));
+		$count2=$GLOBALS['SITE_DB']->query_select_value('hackattack','COUNT(*)',array('ip'=>$ip2));
 		if ($count2>$count)
 		{
 			$count=$count2;

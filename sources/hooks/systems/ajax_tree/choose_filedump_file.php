@@ -44,7 +44,7 @@ class Hook_choose_filedump_file
 			$files=get_directory_contents($fullpath,'',false,false);
 			foreach ($files as $f)
 			{
-				$description=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>basename($f),'path'=>$id.'/'));
+				$description=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','description',array('name'=>basename($f),'path'=>$id.'/'));
 
 				if ((isset($options['attachment_ready'])) && ($options['attachment_ready']))
 				{

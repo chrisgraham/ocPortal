@@ -44,7 +44,7 @@ class Hook_checklist_awards
 			$details=$hook_object->info();
 			if (!is_null($details))
 			{
-				$date=$GLOBALS['SITE_DB']->query_value_null_ok('award_archive','date_and_time',array('a_type_id'=>$award['id']),'ORDER BY date_and_time DESC');
+				$date=$GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','date_and_time',array('a_type_id'=>$award['id']),'ORDER BY date_and_time DESC');
 
 				$seconds_ago=mixed();
 				$limit_hours=$award['a_update_time_hours'];
@@ -70,7 +70,7 @@ class Hook_checklist_awards
 				if ((!is_null($date)) && (!is_null($details['date_field'])))
 				{
 					$where=filter_naughty_harsh($details['date_field']).'>'.strval(intval($date));
-					$num_queue=$details['connection']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$details['connection']->get_table_prefix().str_replace('1=1',$where,$details['table']).' r WHERE '.$where);
+					$num_queue=$details['connection']->query_value_if_there('SELECT COUNT(*) FROM '.$details['connection']->get_table_prefix().str_replace('1=1',$where,$details['table']).' r WHERE '.$where);
 					$_num_queue=integer_format($num_queue);
 					$num_new_since=do_lang_tempcode('NUM_NEW_SINCE',$_num_queue);
 				} else $num_new_since=new ocp_tempcode();

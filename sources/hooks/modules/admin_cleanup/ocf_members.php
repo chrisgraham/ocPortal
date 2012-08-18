@@ -30,7 +30,7 @@ class Hook_ocf_members
 	{
 		if (get_forum_type()!='ocf') return NULL; else ocf_require_all_forum_stuff();
 
-		if (($GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)')>5000) && ($GLOBALS['FORUM_DB']->query_value('f_members','MAX(m_cache_num_posts)')>50)) // Too much work, unless we have due to an obvious issue
+		if (($GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)')>5000) && ($GLOBALS['FORUM_DB']->query_select_value('f_members','MAX(m_cache_num_posts)')>50)) // Too much work, unless we have due to an obvious issue
 			return NULL;
 
 		require_lang('ocf');
@@ -65,7 +65,7 @@ class Hook_ocf_members
 			foreach ($members as $member)
 			{
 				ocf_force_update_member_post_count($member['id']);
-				$num_warnings=$GLOBALS['FORUM_DB']->query_value('f_warnings','COUNT(*)',array('w_member_id'=>$member['id']));
+				$num_warnings=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','COUNT(*)',array('w_member_id'=>$member['id']));
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings'=>$num_warnings),array('id'=>$member['id']),'',1);
 			}
 			$start+=500;

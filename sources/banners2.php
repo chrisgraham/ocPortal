@@ -105,7 +105,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 		$radios->attach(form_input_radio_entry('the_type',strval(BANNER_DEFAULT),($the_type==BANNER_DEFAULT),do_lang_tempcode('BANNER_DEFAULT')));
 		$fields->attach(form_input_radio(do_lang_tempcode('DEPLOYMENT_AGREEMENT'),do_lang_tempcode('DESCRIPTION_BANNER_TYPE'),'the_type',$radios));
 		$fields->attach(form_input_integer(do_lang_tempcode('HITS_ALLOCATED'),do_lang_tempcode('DESCRIPTION_HITS_ALLOCATED'),'campaignremaining',$campaignremaining,false));
-		$fields->attach(form_input_integer(do_lang_tempcode('IMPORTANCE_MODULUS'),do_lang_tempcode('DESCRIPTION_IMPORTANCE_MODULUS',strval($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT SUM(importance_modulus) FROM '.get_table_prefix().'banners WHERE '.db_string_not_equal_to('name',$name))),strval($importancemodulus)),'importancemodulus',$importancemodulus,true));
+		$fields->attach(form_input_integer(do_lang_tempcode('IMPORTANCE_MODULUS'),do_lang_tempcode('DESCRIPTION_IMPORTANCE_MODULUS',strval($GLOBALS['SITE_DB']->query_value_if_there('SELECT SUM(importance_modulus) FROM '.get_table_prefix().'banners WHERE '.db_string_not_equal_to('name',$name))),strval($importancemodulus)),'importancemodulus',$importancemodulus,true));
 	}
 	$fields->attach(form_input_date(do_lang_tempcode('EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_EXPIRY_DATE'),'expiry_date',true,is_null($expiry_date),true,$expiry_date,2));
 
@@ -250,7 +250,7 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 	if (is_null($time)) $time=time();
 	if (is_null($submitter)) $submitter=get_member();
 
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>$name));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>$name));
 	if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 
 	if (!addon_installed('unvalidated')) $validated=1;
@@ -309,11 +309,11 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 {
 	if ($old_name!=$name)
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banners','name',array('name'=>$name));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>$name));
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 	}
 
-	$_caption=$GLOBALS['SITE_DB']->query_value('banners','caption',array('name'=>$old_name));
+	$_caption=$GLOBALS['SITE_DB']->query_select_value('banners','caption',array('name'=>$old_name));
 
 	require_code('files2');
 	delete_upload('uploads/banners','banners','img_url','name',$old_name,$imgurl);
@@ -358,7 +358,7 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
  */
 function delete_banner($name)
 {
-	$caption=$GLOBALS['SITE_DB']->query_value_null_ok('banners','caption',array('name'=>$name));
+	$caption=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','caption',array('name'=>$name));
 	if (is_null($caption))
 	{
 		warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -390,7 +390,7 @@ function delete_banner($name)
  */
 function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline)
 {
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('banner_types','id',array('id'=>$id));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banner_types','id',array('id'=>$id));
 	if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',$id));
 
 	$GLOBALS['SITE_DB']->query_insert('banner_types',array(
@@ -420,7 +420,7 @@ function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$ma
 {
 	if ($old_id!=$id)
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('banner_types','id',array('id'=>$id));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banner_types','id',array('id'=>$id));
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',strval($id)));
 		$GLOBALS['SITE_DB']->query_update('banners',array('b_type'=>$id),array('b_type'=>$old_id));
 	}

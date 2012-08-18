@@ -40,7 +40,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 
 		if (is_null($id))
 		{
-			$total=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','COUNT(*)');
+			$total=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','COUNT(*)');
 			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 		} else
 		{
@@ -64,7 +64,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			{
 				if (is_numeric($type['l_code_category']))
 				{
-					$title=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_cache_first_title',array('id'=>intval($type['l_code_category'])));
+					$title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_cache_first_title',array('id'=>intval($type['l_code_category'])));
 					if (!is_null($title))
 					{
 						$pagelinks[]=array(

@@ -161,7 +161,7 @@ function bookings_ical_script()
 	echo "VERSION:2.0\n";
 	echo "PRODID:-//ocProducts/ocPortal//NONSGML v1.0//EN\n";
 	echo "CALSCALE:GREGORIAN\n";
-	$bookable_category=get_translated_text($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$id)));
+	$bookable_category=get_translated_text($GLOBALS['SITE_DB']->query_select_value('bookable','title',array('id'=>$id)));
 	echo "X-WR-CALNAME:".ical_escape(get_site_name().': '.do_lang('BOOKINGS').': '.$bookable_category)."\n";
 
 	require_code('booking2');

@@ -42,7 +42,7 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
 
 		if (is_null($id))
 		{
-			$total=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','COUNT(*)',array('c_name'=>$name));
+			$total=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)',array('c_name'=>$name));
 			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 		}
 

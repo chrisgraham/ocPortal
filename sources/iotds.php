@@ -85,8 +85,8 @@ function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_
  */
 function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes)
 {
-	$_caption=$GLOBALS['SITE_DB']->query_value('iotd','caption',array('id'=>$id));
-	$_title=$GLOBALS['SITE_DB']->query_value('iotd','i_title',array('id'=>$id));
+	$_caption=$GLOBALS['SITE_DB']->query_select_value('iotd','caption',array('id'=>$id));
+	$_title=$GLOBALS['SITE_DB']->query_select_value('iotd','i_title',array('id'=>$id));
 
 	require_code('files2');
 	delete_upload('uploads/iotds','iotd','url','id',$id,$url);
@@ -112,8 +112,8 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
  */
 function delete_iotd($id)
 {
-	$caption=$GLOBALS['SITE_DB']->query_value('iotd','caption',array('id'=>$id));
-	$title=$GLOBALS['SITE_DB']->query_value('iotd','i_title',array('id'=>$id));
+	$caption=$GLOBALS['SITE_DB']->query_select_value('iotd','caption',array('id'=>$id));
+	$title=$GLOBALS['SITE_DB']->query_select_value('iotd','i_title',array('id'=>$id));
 
 	log_it('DELETE_IOTD',strval($id),get_translated_text($caption));
 

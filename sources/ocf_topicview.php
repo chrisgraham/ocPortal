@@ -29,11 +29,11 @@ function find_post_id_url($post_id)
 	$max=intval(get_option('forum_posts_per_page'));
 	if ($max==0) $max=1;
 
-	$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_topic_id',array('id'=>$post_id));
+	$id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_topic_id',array('id'=>$post_id));
 	if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	// What page is it on?
-	$before=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval((integer)$post_id).' AND '.ocf_get_topic_where($id));
+	$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval((integer)$post_id).' AND '.ocf_get_topic_where($id));
 	$start=intval(floor(floatval($before)/floatval($max)))*$max;
 
 	// Now redirect accordingly
@@ -58,7 +58,7 @@ function find_first_unread_url($id)
 	$max=intval(get_option('forum_posts_per_page'));
 	if ($max==0) $max=1;
 
-	$last_read_time=$GLOBALS['FORUM_DB']->query_value_null_ok('f_read_logs','l_time',array('l_member_id'=>get_member(),'l_topic_id'=>$id));
+	$last_read_time=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_read_logs','l_time',array('l_member_id'=>get_member(),'l_topic_id'=>$id));
 	if (is_null($last_read_time))
 	{
 		// Assumes that everything made in the last two weeks has not been read
@@ -68,18 +68,18 @@ function find_first_unread_url($id)
 			$last_read_time=$unread_details[0]['p_time']-1;
 		} else $last_read_time=0;
 	}
-	$first_unread_id=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval((integer)$id).' AND p_time>'.strval((integer)$last_read_time).' ORDER BY id');
+	$first_unread_id=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval((integer)$id).' AND p_time>'.strval((integer)$last_read_time).' ORDER BY id');
 	if (!is_null($first_unread_id))
 	{
 		// What page is it on?
-		$before=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval((integer)$first_unread_id).' AND '.ocf_get_topic_where($id));
+		$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval((integer)$first_unread_id).' AND '.ocf_get_topic_where($id));
 		$start=intval(floor(floatval($before)/floatval($max)))*$max;
 	} else
 	{
 		$first_unread_id=-2;
 
 		// What page is it on?
-		$before=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.ocf_get_topic_where($id));
+		$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.ocf_get_topic_where($id));
 		$start=intval(floor(floatval($before)/floatval($max)))*$max;
 		if ($start==$before) $start=$before-$max;
 	}
@@ -313,7 +313,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 		if (!is_null($topic_info['t_poll_id']))
 		{
 			require_code('ocf_polls');
-			$voted_already=$GLOBALS['FORUM_DB']->query_value_null_ok('f_poll_votes','pv_member_id',array('pv_poll_id'=>$topic_info['t_poll_id'],'pv_member_id'=>get_member()));
+			$voted_already=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_poll_votes','pv_member_id',array('pv_poll_id'=>$topic_info['t_poll_id'],'pv_member_id'=>get_member()));
 			$out['poll']=ocf_poll_get_results($topic_info['t_poll_id'],$view_poll_results || (!is_null($voted_already)));
 			$out['poll']['voted_already']=$voted_already;
 			$out['poll_id']=$topic_info['t_poll_id'];
@@ -354,7 +354,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 	{
 		$_postdetailss=list_to_map('id',$GLOBALS['FORUM_DB']->query($query,$max,$start));
 		if (($start==0) && (count($_postdetailss)<$max)) $out['max_rows']=$max; // We know that they're all on this screen
-		else $out['max_rows']=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$where);
+		else $out['max_rows']=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$where);
 		$posts=array();
 		// Precache member/group details in one fell swoop
 		$members=array();

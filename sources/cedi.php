@@ -144,7 +144,7 @@ function cedi_edit_post($id,$message,$validated,$member=NULL)
 	$original_poster=$myrow['the_user'];
 	$page_id=$myrow['page_id'];
 
-	$_message=$GLOBALS['SITE_DB']->query_value('seedy_posts','the_message',array('id'=>$id));
+	$_message=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','the_message',array('id'=>$id));
 
 	require_code('attachments2');
 	require_code('attachments3');
@@ -184,9 +184,9 @@ function cedi_delete_post($post_id,$member=NULL)
 {
 	if (is_null($member)) $member=get_member();
 
-	$original_poster=$GLOBALS['SITE_DB']->query_value('seedy_posts','the_user',array('id'=>$post_id));
+	$original_poster=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','the_user',array('id'=>$post_id));
 
-	$_message=$GLOBALS['SITE_DB']->query_value('seedy_posts','the_message',array('id'=>$post_id));
+	$_message=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','the_message',array('id'=>$post_id));
 
 	require_code('attachments2');
 	require_code('attachments3');
@@ -361,7 +361,7 @@ function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 		$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($id==strval(db_get_first_id()))?NULL:$id)+(($this_link_virtual_root&&($next_token===false))?array('keep_cedi_root'=>$id):array()),get_module_zone('cedi'));
 		if ($next_token!==false) // If not the last token (i.e. current page)
 		{
-			$title=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','title',array('id'=>intval($token)));
+			$title=$GLOBALS['SITE_DB']->query_select_value_if_there('seedy_pages','title',array('id'=>intval($token)));
 			if (is_null($title)) continue;
 			$token_title=get_translated_text($title);
 			$content=($links)?hyperlink($url,escape_html($token_title),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$token_title),NULL,NULL,'up'):make_string_tempcode(escape_html($token_title));
@@ -382,7 +382,7 @@ function cedi_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
 			}
 			if (is_null($current_title))
 			{
-				$_current_title=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','title',array('id'=>intval($token)));
+				$_current_title=$GLOBALS['SITE_DB']->query_select_value_if_there('seedy_pages','title',array('id'=>intval($token)));
 				$current_title=is_null($_current_title)?do_lang('MISSING_RESOURCE'):get_translated_text($_current_title);
 			}
 			if ($final_link)
@@ -416,7 +416,7 @@ function cedi_derive_chain($id)
 	$root=get_param_integer('keep_cedi_root',db_get_first_id());
 	while ($temp_id>$root)
 	{
-		$temp_id=array_key_exists($temp_id,$parents)?$parents[$temp_id]:$GLOBALS['SITE_DB']->query_value_null_ok('seedy_children','parent_id',array('child_id'=>$temp_id));
+		$temp_id=array_key_exists($temp_id,$parents)?$parents[$temp_id]:$GLOBALS['SITE_DB']->query_select_value_if_there('seedy_children','parent_id',array('child_id'=>$temp_id));
 		$parents[$temp_id]=$temp_id;
 		if (array_key_exists($temp_id,$seen_before)) break;
 		$seen_before[$temp_id]=1;
@@ -441,10 +441,10 @@ function cedi_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 {
 	if (is_null($id)) $id=db_get_first_id();
 
-	if ($GLOBALS['SITE_DB']->query_value('seedy_pages','COUNT(*)')>1000) return new ocp_tempcode();
+	if ($GLOBALS['SITE_DB']->query_select_value('seedy_pages','COUNT(*)')>1000) return new ocp_tempcode();
 
 	$cedi_seen=array();
-	$title=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$id)));
+	$title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('seedy_pages','title',array('id'=>$id)));
 	$out=_cedi_show_tree($cedi_seen,$select,$id,$breadcrumbs,$title,$use_compound_list,$ins_format);
 
 	if ($include_orphans)
@@ -563,7 +563,7 @@ function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$breadcrumbs=NULL,$title=N
 	if (is_null($breadcrumbs)) $breadcrumbs='';
 
 	// Put our title onto our breadcrumbs
-	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$page_id)));
+	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('seedy_pages','title',array('id'=>$page_id)));
 	$breadcrumbs.=$title;
 
 	// We'll be putting all children in this entire tree into a single list
@@ -573,7 +573,7 @@ function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$breadcrumbs=NULL,$title=N
 	$children[0]['title']=$title;
 	$children[0]['breadcrumbs']=$breadcrumbs;
 	$children[0]['compound_list']=strval($page_id).',';
-	if ($do_stats) $children[0]['filecount']=$GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)',array('page_id'=>$page_id));
+	if ($do_stats) $children[0]['filecount']=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','COUNT(*)',array('page_id'=>$page_id));
 
 	// Children of this category
 	$rows=$GLOBALS['SITE_DB']->query_select('seedy_children',array('*'),array('parent_id'=>$page_id),'ORDER BY title',300/*reasonable limit*/);
@@ -623,9 +623,9 @@ function get_cedi_page_tree(&$cedi_seen,$page_id=NULL,$breadcrumbs=NULL,$title=N
  */
 function dispatch_cedi_post_notification($post_id,$type)
 {
-	$page_id=$GLOBALS['SITE_DB']->query_value('seedy_posts','page_id',array('id'=>$post_id));
-	$the_message=$GLOBALS['SITE_DB']->query_value('seedy_posts','the_message',array('id'=>$post_id));
-	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$page_id)));
+	$page_id=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','page_id',array('id'=>$post_id));
+	$the_message=$GLOBALS['SITE_DB']->query_select_value('seedy_posts','the_message',array('id'=>$post_id));
+	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('seedy_pages','title',array('id'=>$page_id)));
 	$_the_message=get_translated_text($the_message);
 
 	$_view_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),'_SELF',NULL,false,false,true);
@@ -648,8 +648,8 @@ function dispatch_cedi_post_notification($post_id,$type)
  */
 function dispatch_cedi_page_notification($page_id,$type)
 {
-	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','title',array('id'=>$page_id)));
-	$_the_message=get_translated_text($GLOBALS['SITE_DB']->query_value('seedy_pages','description',array('id'=>$page_id)));
+	$page_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('seedy_pages','title',array('id'=>$page_id)));
+	$_the_message=get_translated_text($GLOBALS['SITE_DB']->query_select_value('seedy_pages','description',array('id'=>$page_id)));
 
 	$_view_url=build_url(array('page'=>'cedi','type'=>'misc','id'=>($page_id==db_get_first_id())?NULL:$page_id),'_SELF',NULL,false,false,true);
 	$view_url=$_view_url->evaluate();

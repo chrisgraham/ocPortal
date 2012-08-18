@@ -47,8 +47,8 @@ class Module_admin_ipban
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('usersubmitban_ip');
-		$GLOBALS['SITE_DB']->drop_if_exists('usersubmitban_member');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('usersubmitban_ip');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('usersubmitban_member');
 	}
 
 	/**
@@ -74,7 +74,7 @@ class Module_admin_ipban
 		}
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
-			$GLOBALS['SITE_DB']->drop_if_exists('usersubmit');
+			$GLOBALS['SITE_DB']->drop_table_if_exists('usersubmit');
 		}
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{

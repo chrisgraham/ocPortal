@@ -33,7 +33,7 @@
  */
 function ocf_edit_multi_moderation($id,$name,$post_text,$move_to,$pin_state,$sink_state,$open_state,$forum_multi_code,$title_suffix)
 {
-	$_name=$GLOBALS['FORUM_DB']->query_value('f_multi_moderations','mm_name',array('id'=>$id));
+	$_name=$GLOBALS['FORUM_DB']->query_select_value('f_multi_moderations','mm_name',array('id'=>$id));
 
 	if ($move_to==-1) $move_to=NULL;
 	if ($pin_state==-1) $pin_state=NULL;
@@ -61,7 +61,7 @@ function ocf_edit_multi_moderation($id,$name,$post_text,$move_to,$pin_state,$sin
  */
 function ocf_delete_multi_moderation($id)
 {
-	$_name=$GLOBALS['FORUM_DB']->query_value('f_multi_moderations','mm_name',array('id'=>$id));
+	$_name=$GLOBALS['FORUM_DB']->query_select_value('f_multi_moderations','mm_name',array('id'=>$id));
 	$name=get_translated_text($_name,$GLOBALS['FORUM_DB']);
 	$GLOBALS['FORUM_DB']->query_delete('f_multi_moderations',array('id'=>$id),'',1);
 	delete_lang($_name,$GLOBALS['FORUM_DB']);
@@ -234,13 +234,13 @@ function ocf_edit_warning($warning_id,$explanation,$is_warning=1)
 {
 	if (!ocf_may_warn_members()) access_denied('PRIVILEGE','warn_members');
 
-   $member_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_warnings','w_member_id',array('id'=>$warning_id));
+   $member_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_warnings','w_member_id',array('id'=>$warning_id));
    if (is_null($member_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	$GLOBALS['FORUM_DB']->query_update('f_warnings',array('w_explanation'=>$explanation,'w_is_warning'=>$is_warning),array('id'=>$warning_id),'',1);
 
-	$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$warning_id));
-	$num_warnings=$GLOBALS['FORUM_DB']->query_value('f_warnings','COUNT(*)',array('w_is_warning'=>1,'w_member_id'=>$member_id));
+	$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$warning_id));
+	$num_warnings=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','COUNT(*)',array('w_is_warning'=>1,'w_member_id'=>$member_id));
 
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings'=>$num_warnings),array('id'=>$member_id),'',1);
 }
@@ -254,7 +254,7 @@ function ocf_delete_warning($warning_id)
 {
 	if (!ocf_may_warn_members()) access_denied('PRIVILEGE','warn_members');
 
-	$member_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_warnings','w_member_id',array('id'=>$warning_id));
+	$member_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_warnings','w_member_id',array('id'=>$warning_id));
 	if (is_null($member_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_warnings=(m_cache_warnings-1) WHERE id='.strval((integer)$member_id),1);

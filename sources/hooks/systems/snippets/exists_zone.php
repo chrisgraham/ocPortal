@@ -33,7 +33,7 @@ class Hook_exists_zone
 		$test=file_exists(get_file_base().'/'.$zone);
 		if (!$test) return new ocp_tempcode();
 
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_header_text',array('zone_name'=>$zone));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name'=>$zone));
 		if (is_null($test)) return new ocp_tempcode();
 
 		return make_string_tempcode(str_replace(array('&lsquo;','&rsquo;','&ldquo;','&rdquo;'),array('"','"','"','"'),html_entity_decode(do_lang('ALREADY_EXISTS',escape_html($zone)),ENT_QUOTES)));

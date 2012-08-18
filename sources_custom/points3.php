@@ -53,7 +53,7 @@ function points_profile($member_id_of,$member_id_viewing)
 	$remaining=available_points($member_id_of);
 	$gift_points_used=get_gift_points_used($member_id_of); //$_point_info['gift_points_used'];
 	$gift_points_available=get_gift_points_to_give($member_id_of);
-	$points_gained_credits=$GLOBALS['SITE_DB']->query_value('credit_purchases','SUM(num_credits)',array('member_id'=>$member_id_of,'purchase_validated'=>1));
+	$points_gained_credits=$GLOBALS['SITE_DB']->query_select_value('credit_purchases','SUM(num_credits)',array('member_id'=>$member_id_of,'purchase_validated'=>1));
 	if (is_null($points_gained_credits)) $points_gained_credits=0;
 
 	$points_posting=intval(get_option('points_posting'));
@@ -87,7 +87,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
 
-		$max_rows=$GLOBALS['SITE_DB']->query_value('chargelog','COUNT(*)',array('user_id'=>$member_id_of));
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chargelog','COUNT(*)',array('user_id'=>$member_id_of));
 		$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('user_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$charges=new ocp_tempcode();
 		$fromname=get_site_name();

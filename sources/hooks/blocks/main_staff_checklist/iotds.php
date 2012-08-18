@@ -34,7 +34,7 @@ class Hook_checklist_iotds
 
 		require_lang('iotds');
 
-		$date=$GLOBALS['SITE_DB']->query_value_null_ok('iotd','date_and_time',array('is_current'=>1));
+		$date=$GLOBALS['SITE_DB']->query_select_value_if_there('iotd','date_and_time',array('is_current'=>1));
 
 		$limit_hours=intval(get_option('iotd_update_time'));
 
@@ -73,7 +73,7 @@ class Hook_checklist_iotds
 	 */
 	function get_num_iotd_queue()
 	{
-		$c=$GLOBALS['SITE_DB']->query_value_null_ok('iotd','COUNT(*)',array('is_current'=>0,'used'=>0));
+		$c=$GLOBALS['SITE_DB']->query_select_value_if_there('iotd','COUNT(*)',array('is_current'=>0,'used'=>0));
 		if (is_null($c)) return 0;
 		return $c;
 	}

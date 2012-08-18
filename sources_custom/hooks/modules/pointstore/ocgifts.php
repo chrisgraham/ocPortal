@@ -60,7 +60,7 @@ class Hook_pointstore_ocgifts
 			$map=array('category'=>$category);
 		}
 
-		$max_rows=$GLOBALS['SITE_DB']->query_value('ocgifts','COUNT(*)',$map);
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('ocgifts','COUNT(*)',$map);
 
 		$max=get_param_integer('max',20);
 		$start=get_param_integer('start',0);

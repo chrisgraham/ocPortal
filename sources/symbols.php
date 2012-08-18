@@ -2116,7 +2116,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					$db=$GLOBALS['SITE_DB'];
 					if ((isset($param[1])) && ($param[1]=='1')) $db=$GLOBALS['FORUM_DB'];
-					$_value=$db->query_value_null_ok('attachments','a_num_downloads',array('id'=>intval($param[0])));
+					$_value=$db->query_select_value_if_there('attachments','a_num_downloads',array('id'=>intval($param[0])));
 					$value=is_null($_value)?'?':strval($_value);
 				}
 				break;
@@ -2158,7 +2158,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'AWARD_ID':
 				if (array_key_exists(0,$param))
 				{
-					$value=$GLOBALS['SITE_DB']->query_value_null_ok('award_archive','content_id',array('a_type_id'=>intval($param[0])),'ORDER BY date_and_time DESC');
+					$value=$GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','content_id',array('a_type_id'=>intval($param[0])),'ORDER BY date_and_time DESC');
 					if (is_null($value)) $value='';
 				}
 				break;
@@ -2201,7 +2201,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IS_FRIEND':
 				if (isset($param[0]))
 				{
-					$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
+					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_buddies','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
 					$value=is_null($test)?'0':'1';
 				}
 				break;
@@ -2232,7 +2232,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$id_field=/*isset($param[4])?$param[4]:*/'id'; // Not allowed for security reasons
 					if (preg_match('#^\w*views\w*$#',$param[1])!=0)
 					{
-						$test=$GLOBALS['SITE_DB']->query_value_null_ok($param[0],$param[1],array($id_field=>$param[2]));
+						$test=$GLOBALS['SITE_DB']->query_select_value_if_there($param[0],$param[1],array($id_field=>$param[2]));
 						if (!is_null($test)) $value=integer_format($test);
 					}
 				}

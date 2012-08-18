@@ -48,9 +48,9 @@ function set_coordinates()
 	$coords=explode('_',$_coords);
 
 
-	$latitude_cpf_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>'ocp_latitude'));
+	$latitude_cpf_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>'ocp_latitude'));
 
-	$longitude_cpf_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>'ocp_longitude'));
+	$longitude_cpf_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>'ocp_longitude'));
 
 	//are there latitude and longtitude custom profile fields ?
 	if(is_null($longitude_cpf_id) || is_null($latitude_cpf_id)) return;

@@ -103,7 +103,7 @@ class Module_admin_realtime_rain
 			return do_template('REDIRECT_SCREEN',array('_GUID'=>'7b7f4d3e565f010723aa5c414a64b467','URL'=>$url,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('NO_JS_ADVANCED_SCREEN_REALTIME_RAIN')));
 		}
 
-		$min_time=$GLOBALS['SITE_DB']->query_value('stats','MIN(date_and_time)');
+		$min_time=$GLOBALS['SITE_DB']->query_select_value('stats','MIN(date_and_time)');
 		if (is_null($min_time)) $min_time=time();
 		return do_template('REALTIME_RAIN_OVERLAY',array('MIN_TIME'=>strval($min_time)));
 	}

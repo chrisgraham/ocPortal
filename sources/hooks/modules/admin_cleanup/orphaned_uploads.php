@@ -34,7 +34,7 @@ class Hook_orphaned_uploads
 		$count=0;
 		foreach ($urlpaths as $urlpath)
 		{
-			$count+=$GLOBALS['SITE_DB']->query_value($urlpath['m_table'],'COUNT(*)');
+			$count+=$GLOBALS['SITE_DB']->query_select_value($urlpath['m_table'],'COUNT(*)');
 			if ($count>10000) return NULL; // Too much!
 		}
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;

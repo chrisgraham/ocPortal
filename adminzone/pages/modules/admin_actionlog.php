@@ -99,7 +99,7 @@ class Module_admin_actionlog
 		$_member_choice_list=array();
 		if (get_forum_type()=='ocf')
 		{
-			if ($GLOBALS['FORUM_DB']->query_value('f_moderator_logs','COUNT(DISTINCT l_by)')<5000)
+			if ($GLOBALS['FORUM_DB']->query_select_value('f_moderator_logs','COUNT(DISTINCT l_by)')<5000)
 			{
 				$members=list_to_map('l_by',$GLOBALS['FORUM_DB']->query_select('f_moderator_logs',array('l_by','COUNT(*) AS cnt'),NULL,'GROUP BY l_by ORDER BY cnt DESC'));
 				foreach ($members as $member)
@@ -110,7 +110,7 @@ class Module_admin_actionlog
 				}
 			}
 		}
-		if ($GLOBALS['SITE_DB']->query_value('adminlogs','COUNT(DISTINCT the_user)')<5000)
+		if ($GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(DISTINCT the_user)')<5000)
 		{
 			$_staff=list_to_map('the_user',$GLOBALS['SITE_DB']->query_select('adminlogs',array('the_user','COUNT(*) AS cnt'),NULL,'GROUP BY the_user ORDER BY cnt DESC'));
 			foreach ($_staff as $staff)
@@ -225,7 +225,7 @@ class Module_admin_actionlog
 
 			// Fetch
 			$rows1=$GLOBALS['FORUM_DB']->query('SELECT l_reason,id,l_by AS the_user,l_date_and_time AS date_and_time,l_the_type AS the_type,l_param_a AS param_a,l_param_b AS param_b FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_moderator_logs WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max+$start);
-			$max_rows+=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_moderator_logs WHERE '.$where);
+			$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_moderator_logs WHERE '.$where);
 		} else $rows1=array();
 
 		// Pull up our rows: site
@@ -242,7 +242,7 @@ class Module_admin_actionlog
 
 			// Fetch
 			$rows2=$GLOBALS['SITE_DB']->query('SELECT id,the_user,date_and_time,the_type,param_a,param_b,ip FROM '.get_table_prefix().'adminlogs WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max+$start);
-			$max_rows+=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'adminlogs WHERE '.$where);
+			$max_rows+=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'adminlogs WHERE '.$where);
 			$rows=array_merge($rows1,$rows2);
 		}
 
@@ -298,7 +298,7 @@ class Module_admin_actionlog
 				if (addon_installed('securitylogging'))
 				{
 					$banned_test_1=array_key_exists('ip',$myrow)?ip_banned($myrow['ip'],true):false;
-					$banned_test_2=!is_null($GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_member','the_member',array('the_member'=>$myrow['the_user'])));
+					$banned_test_2=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$myrow['the_user'])));
 					$banned_test_3=$GLOBALS['FORUM_DRIVER']->is_banned($myrow['the_user']);
 					$banned=(((!$banned_test_1)) && ((!$banned_test_2)) && (!$banned_test_3))?do_lang_tempcode('NO'):do_lang_tempcode('YES');
 
@@ -369,7 +369,7 @@ class Module_admin_actionlog
 					}
 				}
 			}
-			$banned_test_2=$GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_member','the_member',array('the_member'=>$row['the_user']));
+			$banned_test_2=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$row['the_user']));
 			$fields['SUBMITTER_BANNED']=is_null($banned_test_2)?do_lang_tempcode('NO'):do_lang_tempcode('YES');
 			if ((!is_guest($row['the_user'])) && ($row['the_user']!=get_member()))
 			{
@@ -458,7 +458,7 @@ class Module_admin_actionlog
 	{
 		$id=get_param_integer('id');
 
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_member','the_member',array('the_member'=>$id));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$id));
 
 		if (is_null($test))
 		{

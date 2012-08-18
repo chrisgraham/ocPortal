@@ -80,12 +80,12 @@ function grant_catalogue_full_access($category_id)
 function count_catalogue_category_children($category_id)
 {
 	static $total_categories=NULL;
-	if (is_null($total_categories)) $total_categories=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)');
+	if (is_null($total_categories)) $total_categories=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)');
 
 	$out=array();
 
-	$out['num_children']=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('cc_parent_id'=>$category_id));
-	$out['num_entries']=$GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)',array('cc_id'=>$category_id,'ce_validated'=>1));
+	$out['num_children']=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('cc_parent_id'=>$category_id));
+	$out['num_entries']=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('cc_id'=>$category_id,'ce_validated'=>1));
 
 	$rec_record=$GLOBALS['SITE_DB']->query_select('catalogue_childcountcache',array('c_num_rec_children','c_num_rec_entries'),array('cc_id'=>$category_id),'',1);
 	if (!array_key_exists(0,$rec_record)) $rec_record[0]=array('c_num_rec_children'=>0,'c_num_rec_entries'=>0);
@@ -492,7 +492,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 				list($new_key,)=$bits;
 				if (strpos($new_key,'.text_original')!==false)
 				{
-					$num_entries=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause);
+					$num_entries=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause);
 					if ($num_entries>300) // For large data sets too slow as after two MySQL joins it can't then use index for ordering
 					{
 						$virtual_order_by='r.id';
@@ -516,7 +516,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 	}
 
 	if (is_null($num_entries))
-		$num_entries=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause);
+		$num_entries=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause);
 
 	if ($num_entries>300) // Needed to stop huge slow down, so reduce to sorting by ID
 	{
@@ -871,7 +871,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 			$fields=$CAT_FIELDS_CACHE[$catalogue_name];
 		} else
 		{
-			if (is_null($catalogue_name)) $catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$entry_id));
+			if (is_null($catalogue_name)) $catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$entry_id));
 			$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY '.($natural_order?'id':'cf_order'));
 		}
 	}
@@ -1049,7 +1049,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 		$value=isset($catalogue_entry_cache[$entry_id][$field_id])?$catalogue_entry_cache[$entry_id][$field_id]:NULL;
 	} else
 	{
-		$value=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$type,'cv_value',array('cf_id'=>$field_id,'ce_id'=>$entry_id));
+		$value=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_'.$type,'cv_value',array('cf_id'=>$field_id,'ce_id'=>$entry_id));
 	}
 
 	if (is_integer($value)) $value=strval($value);
@@ -1102,12 +1102,12 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 {
 	if ((is_null($category_id)) && (is_null($levels)))
 	{
-		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return array(); // Too many!
+		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return array(); // Too many!
 	}
 
 	if (is_null($category_id))
 	{
-		$is_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$catalogue_name),'',1);
+		$is_tree=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_is_tree',array('c_name'=>$catalogue_name),'',1);
 		if (is_null($is_tree)) return array();
 		if ($is_tree==0)
 		{
@@ -1135,7 +1135,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 	if ((get_value('disable_cat_cat_perms')!=='1') && (!has_category_access(get_member(),'catalogues_category',strval($category_id)))) return array();
 
 	// Put our title onto our breadcrumbs
-	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogue_categories','cc_title',array('id'=>$category_id)));
+	if (is_null($title)) $title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','cc_title',array('id'=>$category_id)));
 	$breadcrumbs.=$title;
 
 	// We'll be putting all children in this entire tree into a single list
@@ -1210,7 +1210,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
  */
 function nice_get_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filter=false,$use_compound_list=false)
 {
-	if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return new ocp_tempcode(); // Too many!
+	if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return new ocp_tempcode(); // Too many!
 
 	$tree=array();
 	$temp_rows=$GLOBALS['SITE_DB']->query('SELECT id,cc_title FROM '.get_table_prefix().'catalogue_categories WHERE '.db_string_equal_to('c_name',$catalogue_name).' AND cc_parent_id IS NULL ORDER BY id DESC',300/*reasonable limit to stop it dying*/);
@@ -1263,10 +1263,10 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 	{
 		if (is_null($category_id))
 		{
-			$_title=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','cc_title',array('id'=>$category_id));
+			$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','cc_title',array('id'=>$category_id));
 		} else
 		{
-			$_title=$GLOBALS['SITE_DB']->query_value('catalogue_categories','cc_title',array('id'=>$category_id));
+			$_title=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','cc_title',array('id'=>$category_id));
 		}
 		$title=is_null($_title)?do_lang('HOME'):get_translated_text($_title);
 	}
@@ -1274,7 +1274,7 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 
 	// We'll be putting all children in this entire tree into a single list
 	$children=array();
-	$is_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$catalogue_name));
+	$is_tree=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_is_tree',array('c_name'=>$catalogue_name));
 	if (is_null($is_tree)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','catalogue:'.escape_html($catalogue_name)));
 	if ((!is_null($category_id))/* || ($is_tree==1)*/)
 	{
@@ -1282,7 +1282,7 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 		$children[0]['title']=$title;
 		$children[0]['breadcrumbs']=$breadcrumbs;
 		$children[0]['compound_list']=strval($category_id).',';
-		$children[0]['count']=$GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)',array('cc_id'=>$category_id));
+		$children[0]['count']=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('cc_id'=>$category_id));
 		if ($addable_filter) $children[0]['addable']=has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$catalogue_name,'catalogues_category',$category_id));
 	}
 
@@ -1391,7 +1391,7 @@ function is_ecommerce_catalogue($catalogue_name)
 	if (!addon_installed('ecommerce')) return false;
 	if (!addon_installed('shopping')) return false;
 
-	if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>$catalogue_name,'c_ecommerce'=>1))))
+	if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>$catalogue_name,'c_ecommerce'=>1))))
 		return false;
 	else
 		return true;
@@ -1405,7 +1405,7 @@ function is_ecommerce_catalogue($catalogue_name)
 */
 function is_ecommerce_catalogue_entry($entry_id)
 {
-	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$entry_id));
+	$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$entry_id));
 
 	return is_ecommerce_catalogue($catalogue_name);
 }

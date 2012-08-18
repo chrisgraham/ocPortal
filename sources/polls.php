@@ -130,14 +130,14 @@ function may_vote_in_poll($myrow)
 	{
 		if (is_guest())
 		{
-			return is_null($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'poll_votes WHERE v_poll_id='.strval($myrow['id']).' AND '.db_string_equal_to('v_voter_ip',get_ip_address())));
+			return is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.get_table_prefix().'poll_votes WHERE v_poll_id='.strval($myrow['id']).' AND '.db_string_equal_to('v_voter_ip',get_ip_address())));
 		} else
 		{
-			return is_null($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'poll_votes WHERE v_poll_id='.strval($myrow['id']).' AND v_voter_id='.strval(get_member())));
+			return is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.get_table_prefix().'poll_votes WHERE v_poll_id='.strval($myrow['id']).' AND v_voter_id='.strval(get_member())));
 		}
 	}
 
-	return is_null($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'poll_votes WHERE v_poll_id='.strval($myrow['id']).' AND (v_voter_id='.strval(get_member()).' OR '.db_string_equal_to('v_voter_ip',get_ip_address()).')'));
+	return is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.get_table_prefix().'poll_votes WHERE v_poll_id='.strval($myrow['id']).' AND (v_voter_id='.strval(get_member()).' OR '.db_string_equal_to('v_voter_ip',get_ip_address()).')'));
 }
 
 /**

@@ -236,7 +236,7 @@ class Hook_vb3
 			$is_super_admin=(($row['adminpermissions']&2)!=0)?1:0;
 			$is_super_moderator=(($row['adminpermissions']&1)!=0)?1:0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['title']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['title']),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,$row['usertitle'],'',$row_promotion_target,$row['reputation'],$row_group_leader,5,0,5,$row['attachlimit'],$row['avatarmaxwidth'],$row['avatarmaxheight'],$INFO['postmaxchars'],array_key_exists('sigmax',$INFO)?$INFO['sigmax']:700);
@@ -256,7 +256,7 @@ class Hook_vb3
 			foreach ($denies as $deny)
 			{
 				list($page,$zone)=$deny;
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('group_page_access','group_id',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('group_page_access','group_id',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
 				if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('group_page_access',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
 			}
 
@@ -482,10 +482,10 @@ class Hook_vb3
 
 			if (!array_key_exists('title',$row))
 			{
-				$row['title']=$db->query_value_null_ok_full('SELECT text FROM '.$table_prefix.'phrase WHERE '.db_string_equal_to('product','vbulletin').' AND '.db_string_equal_to('varname','field'.strval($row['profilefieldid']).'_title'));
-				$row['description']=$db->query_value_null_ok_full('SELECT text FROM '.$table_prefix.'phrase WHERE '.db_string_equal_to('product','vbulletin').' AND '.db_string_equal_to('varname','field'.strval($row['profilefieldid']).'_desc'));
+				$row['title']=$db->query_value_if_there('SELECT text FROM '.$table_prefix.'phrase WHERE '.db_string_equal_to('product','vbulletin').' AND '.db_string_equal_to('varname','field'.strval($row['profilefieldid']).'_title'));
+				$row['description']=$db->query_value_if_there('SELECT text FROM '.$table_prefix.'phrase WHERE '.db_string_equal_to('product','vbulletin').' AND '.db_string_equal_to('varname','field'.strval($row['profilefieldid']).'_desc'));
 			}
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$row['title']));
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$row['title']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_custom_field($row['title'],0,$row['description'],'',1-$row['hidden'],1-$row['hidden'],$row['editable'],0,$type,$row['required'],$row['memberlist'],$row['memberlist'],$row['displayorder'],'',true);
@@ -518,7 +518,7 @@ class Hook_vb3
 
 			$title=$row['title'];
 
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
 				import_id_remap_put('category',strval($row['forumid']),$test);
@@ -702,7 +702,7 @@ class Hook_vb3
 					$forum_id=$TOPIC_FORUM_CACHE[$topic_id];
 				} else
 				{
-					$forum_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_forum_id',array('id'=>$topic_id));
+					$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_forum_id',array('id'=>$topic_id));
 					if (is_null($forum_id)) continue;
 					$TOPIC_FORUM_CACHE[$topic_id]=$forum_id;
 				}
@@ -1140,7 +1140,7 @@ class Hook_vb3
 			if (import_check_if_imported('custom_comcode',strval($row['bbcodeid']))) continue;
 
 			global $VALID_COMCODE_TAGS;
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$row['bbcodetag']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$row['bbcodetag']));
 			if ((array_key_exists($row['bbcodetag'],$VALID_COMCODE_TAGS)) || (!is_null($test)))
 			{
 				import_id_remap_put('custom_comcode',strval($row['bbcodeid']),1);

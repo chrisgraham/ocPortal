@@ -324,7 +324,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function forum_id_from_name($forum_name)
 	{
-		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_value_null_ok('forums','id',array('name'=>$this->ipb_escape($forum_name)));
+		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_select_value_if_there('forums','id',array('name'=>$this->ipb_escape($forum_name)));
 	}
 
 	/**
@@ -341,7 +341,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		$query='SELECT tid FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval((integer)$forum_id);
 		$query.=' AND ('.db_string_equal_to('description',$topic_identifier).' OR description LIKE \'%: #'.db_encode_like($topic_identifier).'\')';
 
-		return $this->connection->query_value_null_ok_full($query);
+		return $this->connection->query_value_if_there($query);
 	}
 
 	/**
@@ -367,7 +367,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	function post_url($id,$forum)
 	{
 		unset($forum);
-		$topic_id=$this->connection->query_value_null_ok('posts','topic_id',array('pid'=>$id));
+		$topic_id=$this->connection->query_select_value_if_there('posts','topic_id',array('pid'=>$id));
 		if (is_null($topic_id)) return '?';
 		$url=get_forum_base_url().'/index.php?act=findpost&pid='.strval($id);
 		return $url;
@@ -400,7 +400,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function get_previous_member($member)
 	{
-		$tempid=$this->connection->query_value_null_ok_full('SELECT id FROM '.$this->connection->get_table_prefix().'members WHERE id<'.strval((integer)$member).' AND id<>0 ORDER BY id DESC');
+		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'members WHERE id<'.strval((integer)$member).' AND id<>0 ORDER BY id DESC');
 		return $tempid;
 	}
 
@@ -413,7 +413,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function get_next_member($member)
 	{
-		$tempid=$this->connection->query_value_null_ok_full('SELECT id FROM '.$this->connection->get_table_prefix().'members WHERE id>'.strval((integer)$member).' ORDER BY id');
+		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'members WHERE id>'.strval((integer)$member).' ORDER BY id');
 		return $tempid;
 	}
 
@@ -449,7 +449,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function get_member_photo_url($member)
 	{
-		$pic=$this->connection->query_value_null_ok('member_extra','photo_location',array('id'=>$member));
+		$pic=$this->connection->query_select_value_if_there('member_extra','photo_location',array('id'=>$member));
 		if (is_null($pic)) $pic='';
 		elseif ((url_is_local($pic)) && ($pic!='')) $pic=get_forum_base_url().'/uploads/'.$pic;
 
@@ -501,7 +501,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function get_topic_count($member)
 	{
-		return $this->connection->query_value('topics','COUNT(*)',array('starter_id'=>$member));
+		return $this->connection->query_select_value('topics','COUNT(*)',array('starter_id'=>$member));
 	}
 
 	/**
@@ -513,7 +513,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	function is_banned($member)
 	{
 		// Are they banned
-		$banned=$this->connection->query_value_null_ok('groups','g_id',array('g_view_board'=>0));
+		$banned=$this->connection->query_select_value_if_there('groups','g_id',array('g_view_board'=>0));
 		if (is_null($banned)) return false;
 		$group=$this->get_member_row_field($member,'mgroup');
 		if (($group==$banned) || (is_null($group)))
@@ -533,7 +533,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	function _is_staff($member)
 	{
 		$usergroup=$this->get_member_row_field($member,'mgroup');
-		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('groups','g_is_supmod',array('g_id'=>$usergroup))==1)) return true;
+		if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('groups','g_is_supmod',array('g_id'=>$usergroup))==1)) return true;
 		return false;
 	}
 
@@ -546,7 +546,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	function _is_super_admin($member)
 	{
 		$usergroup=$this->get_member_row_field($member,'mgroup');
-		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('groups','g_access_cp',array('g_id'=>$usergroup))==1)) return true;
+		if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('groups','g_access_cp',array('g_id'=>$usergroup))==1)) return true;
 		return false;
 	}
 
@@ -557,7 +557,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function get_num_users_forums()
 	{
-		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'sessions WHERE running_time>'.strval(time()-60*intval(get_option('users_online_time'))));
+		return $this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'sessions WHERE running_time>'.strval(time()-60*intval(get_option('users_online_time'))));
 	}
 
 	/**
@@ -567,7 +567,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function _get_num_new_forum_posts()
 	{
-		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts WHERE post_date>'.strval(time()-60*60*24));
+		return $this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts WHERE post_date>'.strval(time()-60*60*24));
 	}
 
 	/**

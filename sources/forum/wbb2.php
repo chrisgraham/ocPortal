@@ -33,7 +33,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	 */
 	function _get_guest_group()
 	{
-		$guest_group=$this->connection->query_value_null_ok('groups','groupid',array('default_group'=>1));
+		$guest_group=$this->connection->query_select_value_if_there('groups','groupid',array('default_group'=>1));
 		if (is_null($guest_group)) $guest_group=5;
 		return $guest_group;
 	}
@@ -78,7 +78,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	{
 		// Are they banned
 		$group=$this->get_member_row_field($member,'groupid');
-		$notbanned=$this->connection->query_value_null_ok('groups','canviewboard',array('groupid'=>$group));
+		$notbanned=$this->connection->query_select_value_if_there('groups','canviewboard',array('groupid'=>$group));
 		if ($notbanned==0)
 		{
 			return true;
@@ -123,7 +123,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 				$skin=$this->get_member_row_field($member,'styleid'); else $skin=0;
 			if ($skin>0) // User has a custom theme
 			{
-				$bb=$this->connection->query_value('styles','stylename',array('styleid'=>$skin));
+				$bb=$this->connection->query_select_value('styles','stylename',array('styleid'=>$skin));
 				$def=array_key_exists($bb,$map)?$map[$bb]:$bb;
 			}
 		}
@@ -131,14 +131,14 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 		// Look for a skin according to our site name (we bother with this instead of 'default' because ocPortal itself likes to never choose a theme when forum-theme integration is on: all forum [via map] or all ocPortal seems cleaner, although it is complex)
 		if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base().'/themes/'.$def)))
 		{
-			$bb=$this->connection->query_value_null_ok('styles','stylename',array('stylename'=>get_site_name()));
+			$bb=$this->connection->query_select_value_if_there('styles','stylename',array('stylename'=>get_site_name()));
 			if (!is_null($bb)) $def=array_key_exists($bb,$map)?$map[$bb]:$bb;
 		}
 
 		// Hmm, just the very-default then
 		if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base().'/themes/'.$def)))
 		{
-			$bb=$this->connection->query_value_null_ok('styles','stylename',array('default_style'=>1));
+			$bb=$this->connection->query_select_value_if_there('styles','stylename',array('default_style'=>1));
 			if (!is_null($bb)) $def=array_key_exists($bb,$map)?$map[$bb]:$bb;
 		}
 
@@ -158,7 +158,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	function _is_staff($member)
 	{
 		$usergroup=$this->get_member_row_field($member,'groupid');
-		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('groups','ismod',array('groupid'=>$usergroup))==1)) return true;
+		if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('groups','ismod',array('groupid'=>$usergroup))==1)) return true;
 		return false;
 	}
 
@@ -171,7 +171,7 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
 	function _is_super_admin($member)
 	{
 		$usergroup=$this->get_member_row_field($member,'groupid');
-		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('groups','canuseacp',array('groupid'=>$usergroup))==1)) return true;
+		if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('groups','canuseacp',array('groupid'=>$usergroup))==1)) return true;
 		return false;
 	}
 

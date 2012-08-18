@@ -52,7 +52,7 @@ class Hook_whats_news_galleries
 
 		$new=new ocp_tempcode();
 
-		$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download\_%').'\'');
+		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download\_%').'\'');
 		if ($count<500)
 		{
 			$_galleries=$GLOBALS['SITE_DB']->query('SELECT name,fullname FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download\_%').'\'',300);
@@ -73,7 +73,7 @@ class Hook_whats_news_galleries
 			$url=$_url->evaluate();
 			if (!array_key_exists($row['cat'],$galleries))
 			{
-				$galleries[$row['cat']]=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$row['cat'])));
+				$galleries[$row['cat']]=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$row['cat'])));
 			}
 			$name=$galleries[$row['cat']];
 			$description=get_translated_text($row['comments'],NULL,$lang);

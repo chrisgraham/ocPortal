@@ -385,7 +385,7 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
 		return;
 	}
 
-	$root_cat=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
+	$root_cat=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
 
 	$locations=$GLOBALS['SITE_DB']->query_select('locations',array('*'),array('l_country'=>$country));
 
@@ -435,7 +435,7 @@ function create_catalogue_category_tree($catalogue_name='places',$country=NULL)
 
 	// Create root nodes under catalogue root
 	$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>'_catalogue_category'),'ORDER BY cf_order');
-	$first_cat=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>'_catalogue_category'));
+	$first_cat=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name'=>'_catalogue_category'));
 	if (is_null($first_cat)) // Repair needed, must have a category
 	{
 		require_code('catalogues2');
@@ -530,7 +530,7 @@ function _create_catalogue_position($catalogue_name,$tree_pos,$cat,$location,&$t
 
 		if (!isset($tree['cc_id']))
 		{
-			$tree['cc_id']=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('cc_parent_id'=>$cat,'text_original'=>$name));
+			$tree['cc_id']=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('cc_parent_id'=>$cat,'text_original'=>$name));
 
 			if (is_null($tree['cc_id']))
 			{
@@ -548,10 +548,10 @@ function recalculate_continent_bounds($catalogue_name='places')
 {
 	require_code('locations');
 	$continents=find_continents();
-	$first_cat=$GLOBALS['SITE_DB']->query_value('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
+	$first_cat=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
 	foreach ($continents as $continent)
 	{
-		$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('cc_parent_id'=>$first_cat,'text_original'=>$continent));
+		$category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('cc_parent_id'=>$first_cat,'text_original'=>$continent));
 		recalculate_bounding_long_lat($category_id);
 	}
 }
@@ -572,10 +572,10 @@ function recalculate_bounding_long_lat($category)
 	{
 		$assocated_catalogue_entry_id=get_bound_content_entry('catalogue_category',strval($subcat['id']));
 
-		$_min_latitude=$GLOBALS['SITE_DB']->query_value('catalogue_efv_float','cv_value',array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[2]['id']));
-		$_max_latitude=$GLOBALS['SITE_DB']->query_value('catalogue_efv_float','cv_value',array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[3]['id']));
-		$_min_longitude=$GLOBALS['SITE_DB']->query_value('catalogue_efv_float','cv_value',array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[4]['id']));
-		$_max_longitude=$GLOBALS['SITE_DB']->query_value('catalogue_efv_float','cv_value',array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[5]['id']));
+		$_min_latitude=$GLOBALS['SITE_DB']->query_select_value('catalogue_efv_float','cv_value',array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[2]['id']));
+		$_max_latitude=$GLOBALS['SITE_DB']->query_select_value('catalogue_efv_float','cv_value',array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[3]['id']));
+		$_min_longitude=$GLOBALS['SITE_DB']->query_select_value('catalogue_efv_float','cv_value',array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[4]['id']));
+		$_max_longitude=$GLOBALS['SITE_DB']->query_select_value('catalogue_efv_float','cv_value',array('ce_id'=>$assocated_catalogue_entry_id,'cf_id'=>$fields[5]['id']));
 
 		if ((is_null($min_latitude)) || ($_min_latitude<$min_latitude)) $min_latitude=$_min_latitude;
 		if ((is_null($max_latitude)) || ($_max_latitude>$max_latitude)) $max_latitude=$_max_latitude;

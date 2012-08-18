@@ -354,7 +354,7 @@ class forum_driver_base
 
 		if ($zone_for!==NULL)
 		{
-			$zone_theme=$GLOBALS['SITE_DB']->query_value('zones','zone_theme',array('zone_name'=>$zone_for));
+			$zone_theme=$GLOBALS['SITE_DB']->query_select_value('zones','zone_theme',array('zone_name'=>$zone_for));
 			if ($zone_theme!='-1')
 			{
 				if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))
@@ -387,7 +387,7 @@ class forum_driver_base
 			} else
 			{
 				global $ZONE;
-				$zone_theme=($ZONE===NULL)?$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_theme',array('zone_name'=>get_zone_name())):$ZONE['zone_theme'];
+				$zone_theme=($ZONE===NULL)?$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_theme',array('zone_name'=>get_zone_name())):$ZONE['zone_theme'];
 
 				if (($CACHED_THEME=='default') || ($CACHED_THEME==$zone_theme) || (has_category_access(get_member(),'theme',$CACHED_THEME)))
 				{
@@ -404,8 +404,8 @@ class forum_driver_base
 
 		// Try hardcoded in ocPortal
 		global $ZONE;
-		$zone_theme=($ZONE===NULL)?$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_theme',array('zone_name'=>get_zone_name())):$ZONE['zone_theme'];
-		$default_theme=((get_page_name()=='login') && (get_option('root_zone_login_theme')=='1'))?$GLOBALS['SITE_DB']->query_value('zones','zone_theme',array('zone_name'=>'')):$zone_theme;
+		$zone_theme=($ZONE===NULL)?$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_theme',array('zone_name'=>get_zone_name())):$ZONE['zone_theme'];
+		$default_theme=((get_page_name()=='login') && (get_option('root_zone_login_theme')=='1'))?$GLOBALS['SITE_DB']->query_select_value('zones','zone_theme',array('zone_name'=>'')):$zone_theme;
 		if (($default_theme!==NULL) && ($default_theme!='-1'))
 		{
 			if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))

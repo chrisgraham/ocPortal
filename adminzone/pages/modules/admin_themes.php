@@ -47,7 +47,7 @@ class Module_admin_themes
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('theme_images');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('theme_images');
 
 		delete_config_option('templates_store_revisions');
 		delete_config_option('templates_number_revisions_show');
@@ -152,7 +152,7 @@ class Module_admin_themes
 				{
 					foreach (array_keys($langs) as $lang)
 					{
-						$test=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','path',array('theme'=>$theme,'lang'=>$lang,'id'=>$id));
+						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',array('theme'=>$theme,'lang'=>$lang,'id'=>$id));
 						if (is_null($test))
 						{
 							$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$id,'theme'=>$theme,'lang'=>$lang,'path'=>$path));
@@ -850,7 +850,7 @@ class Module_admin_themes
 		foreach ($filesarray as $time)
 		{
 			// Find who did the revision
-			$editor=$GLOBALS['SITE_DB']->query_value_null_ok('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'EDIT_CSS','param_a'=>$theme));
+			$editor=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'EDIT_CSS','param_a'=>$theme));
 			if (is_null($editor))
 			{
 				$editor=do_lang('UNKNOWN');
@@ -1296,7 +1296,7 @@ class Module_admin_themes
 			foreach ($filesarray as $time)
 			{
 				// Find who did the revision
-				$editor=$GLOBALS['SITE_DB']->query_value_null_ok('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'EDIT_TEMPLATES','param_a'=>$file));
+				$editor=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'EDIT_TEMPLATES','param_a'=>$file));
 				if (is_null($editor))
 				{
 					$editor=do_lang('UNKNOWN');
@@ -1835,7 +1835,7 @@ class Module_admin_themes
 			$pos=strpos($url,'themes/');
 			if ($pos===false) warn_exit(do_lang_tempcode('NOT_THEME_IMAGE'));
 			$path=substr($url,$pos);
-			$id=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','id',array('path'=>$path,'theme'=>$theme));
+			$id=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','id',array('path'=>$path,'theme'=>$theme));
 			if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		} else
 		{
@@ -1845,8 +1845,8 @@ class Module_admin_themes
 		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 		$where_map=array('theme'=>$theme,'id'=>$id);
 		if ($lang!='') $where_map['lang']=$lang;
-		$path=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','path',$where_map);
-		if (is_null($path)) $path=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','path',array('theme'=>$theme,'lang'=>get_site_default_lang(),'id'=>$id));
+		$path=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',$where_map);
+		if (is_null($path)) $path=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',array('theme'=>$theme,'lang'=>get_site_default_lang(),'id'=>$id));
 		if (is_null($path)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$GLOBALS['SEO_TITLE']=$id;

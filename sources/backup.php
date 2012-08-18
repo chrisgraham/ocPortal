@@ -49,7 +49,7 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 
 		$fields=$GLOBALS['SITE_DB']->query_select($db_meta,array('*'),array('m_table'=>$table));
 
-		fwrite($install_php_file,preg_replace('#^#m','//',"   \$GLOBALS['SITE_DB']->drop_if_exists('$table');\n"));
+		fwrite($install_php_file,preg_replace('#^#m','//',"   \$GLOBALS['SITE_DB']->drop_table_if_exists('$table');\n"));
 		$array='';
 		foreach ($fields as $field)
 		{
@@ -166,14 +166,14 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 	fwrite($install_data_php_file,"<"."?php
 
 //COMMANDS BEGIN
-//\$GLOBALS['SITE_DB']->drop_if_exists('db_meta');
+//\$GLOBALS['SITE_DB']->drop_table_if_exists('db_meta');
 //\$GLOBALS['SITE_DB']->create_table('db_meta',array(
 //	'm_table'=>'*ID_TEXT',
 //	'm_name'=>'*ID_TEXT',
 //	'm_type'=>'ID_TEXT'
 //));
 //
-//\$GLOBALS['SITE_DB']->drop_if_exists('db_meta_indices');
+//\$GLOBALS['SITE_DB']->drop_table_if_exists('db_meta_indices');
 //\$GLOBALS['SITE_DB']->create_table('db_meta_indices',array(
 //	'i_table'=>'*ID_TEXT',
 //	'i_name'=>'*ID_TEXT',

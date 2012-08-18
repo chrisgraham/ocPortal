@@ -36,7 +36,7 @@ class Hook_ocworld
 		if ((!is_null($rows)) && (array_key_exists(0,$rows)))
 		{
 			$row=$rows[0];
-			$room=$GLOBALS['SITE_DB']->query_value_null_ok('w_rooms','name',array('location_x'=>$row['location_x'],'location_y'=>$row['location_y'],'location_realm'=>$row['location_realm']));
+			$room=$GLOBALS['SITE_DB']->query_select_value_if_there('w_rooms','name',array('location_x'=>$row['location_x'],'location_y'=>$row['location_y'],'location_realm'=>$row['location_realm']));
 			if (is_null($room)) return NULL;
 
 			require_lang('ocworld');

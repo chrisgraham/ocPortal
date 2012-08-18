@@ -31,7 +31,7 @@ class authors_test_set extends ocp_test_case
 		add_author($author='author2',$url='www.yahoo.com',$forum_handle=3,$description='welcome',$skills='drama',$meta_keywords='',$meta_description='');
 
 		// Test the forum was actually created
-		$this->assertTrue('author1'==$GLOBALS['FORUM_DB']->query_value('authors','author',array('author'=>'author1')));
+		$this->assertTrue('author1'==$GLOBALS['FORUM_DB']->query_select_value('authors','author',array('author'=>'author1')));
 	}
 
 	function testMergeauthors()

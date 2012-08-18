@@ -31,7 +31,7 @@ class Hook_search_polls
 		if (!module_installed('polls')) return NULL;
 
 		if (!has_actual_page_access(get_member(),'polls')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('poll','COUNT(*)')==0) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('poll','COUNT(*)')==0) return NULL;
 
 		require_lang('polls');
 

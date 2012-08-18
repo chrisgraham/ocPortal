@@ -286,7 +286,7 @@ class Module_cms_blogs extends standard_crud_module
 	 */
 	function get_cat($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('news','news_category',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_select_value_if_there('news','news_category',array('id'=>$id));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return strval($temp);
 	}
@@ -383,14 +383,14 @@ class Module_cms_blogs extends standard_crud_module
 
 		if (!is_null($main_news_category))
 		{
-			$owner=$GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
+			$owner=$GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
 			if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
 		}
 
 		$time=$add_time;
 		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,NULL,0,NULL,NULL,$url);
 
-		$main_news_category=$GLOBALS['SITE_DB']->query_value('news','news_category',array('id'=>$id));
+		$main_news_category=$GLOBALS['SITE_DB']->query_select_value('news','news_category',array('id'=>$id));
 		$this->donext_type=$main_news_category;
 
 		if ($validated==1)
@@ -461,7 +461,7 @@ class Module_cms_blogs extends standard_crud_module
 			$url=STRING_MAGIC_NULL;
 		}
 
-		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
+		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
 		if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
 
 		$schedule=get_input_date('schedule');
@@ -471,7 +471,7 @@ class Module_cms_blogs extends standard_crud_module
 		{
 			require_code('calendar2');
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
-			$past_event=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id','e.id',array('text_original'=>$schedule_code));
+			$past_event=$GLOBALS['SITE_DB']->query_select_value_if_there('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id','e.id',array('text_original'=>$schedule_code));
 			require_code('calendar');
 			if (!is_null($past_event))
 			{
@@ -494,11 +494,11 @@ class Module_cms_blogs extends standard_crud_module
 
 		$title=post_param('title',STRING_MAGIC_NULL);
 
-		if (($validated==1) && ($main_news_category!=STRING_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($main_news_category!=STRING_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_select_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
 		{
 			$is_blog=true;
 
-			$submitter=$GLOBALS['SITE_DB']->query_value('news','submitter',array('id'=>$id));
+			$submitter=$GLOBALS['SITE_DB']->query_select_value('news','submitter',array('id'=>$id));
 			$activity_title=($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS');
 			$activity_title_validate=($is_blog?'news:ACTIVITY_VALIDATE_NEWS_BLOG':'news:ACTIVITY_VALIDATE_NEWS');
 
@@ -702,7 +702,7 @@ class Module_cms_blogs extends standard_crud_module
 
 				//if(is_null($submitter_id))	continue;	//Skip importing posts of nonexisting users
 
-				$owner_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','id',array('nc_owner'=>$submitter_id));
+				$owner_category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','id',array('nc_owner'=>$submitter_id));
 
 				if(is_null($cat_id))
 				{

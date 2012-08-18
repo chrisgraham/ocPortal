@@ -123,7 +123,7 @@ class Module_cms_chat
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('ROOM_NAME'),do_lang_tempcode('ROOM_OWNER'),do_lang_tempcode('ROOM_LANG'),do_lang_tempcode('MESSAGES')),$sortables,'sort',$sortable.' '.$sort_order);
 
-		$max_rows=$GLOBALS['SITE_DB']->query_value('chat_rooms','COUNT(*)',array('is_im'=>0));
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','COUNT(*)',array('is_im'=>0));
 		$sort_clause=($sortable=='room_name')?('ORDER BY room_name '.$sort_order):'';
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('is_im'=>0),$sort_clause,$max,$start);
 		if ($sortable=='messages')
@@ -139,7 +139,7 @@ class Module_cms_chat
 			if ((!handle_chatroom_pruning($row)) && ($has_mod_access))
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$row['id']),'_SELF');
-				$messages=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$row['id']));
+				$messages=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$row['id']));
 				$username=$GLOBALS['FORUM_DRIVER']->get_username($row['room_owner']);
 				if (is_null($username)) $username='';//do_lang('UNKNOWN');
 				$fields->attach(results_entry(array(hyperlink($url,escape_html($row['room_name'])),escape_html($username),escape_html($row['room_language']),escape_html($messages))));
@@ -160,8 +160,8 @@ class Module_cms_chat
 	 */
 	function _sort_chat_browse_rows($a,$b)
 	{
-		$messages_a=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$a['id']));
-		$messages_b=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$b['id']));
+		$messages_a=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$a['id']));
+		$messages_b=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$b['id']));
 		if ($messages_a<$messages_b) return (-1);
 		elseif ($messages_a==$messages_b) return 0;
 		else return 1;
@@ -196,7 +196,7 @@ class Module_cms_chat
 			log_hack_attack_and_exit('ORDERBY_HACK');
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
-		$max_rows=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$room_id));
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room_id));
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_messages',array('*'),array('room_id'=>$room_id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$fields=new ocp_tempcode();
 		require_code('templates_results_table');
@@ -409,7 +409,7 @@ class Module_cms_chat
 		{
 			$message_id=get_param_integer('id');
 
-			$room_id=$GLOBALS['SITE_DB']->query_value_null_ok('chat_messages','room_id',array('id'=>$message_id));
+			$room_id=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_messages','room_id',array('id'=>$message_id));
 			if (is_null($room_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			check_chatroom_access($room_id);
 
@@ -624,7 +624,7 @@ class Module_cms_chat
 
 		decache('side_shoutbox');
 
-		$num_remaining=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$room_id));
+		$num_remaining=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room_id));
 		if ($num_remaining==0)
 		{
 			$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');

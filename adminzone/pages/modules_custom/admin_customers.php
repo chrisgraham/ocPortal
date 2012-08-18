@@ -43,7 +43,7 @@ class Module_admin_customers
 	{
 		/* NB: Does not delete CPFs and multi-mods. But that doesn't actually matter */
 		delete_config_option('support_credit_value');
-		$GLOBALS['SITE_DB']->drop_if_exists('credit_purchases');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('credit_purchases');
 	}
 
 	/**

@@ -117,7 +117,7 @@ function upgrade_script()
 					$l_step=do_lang('FU_STEP');
 					$l_estimated_time=do_lang('FU_ESTIMATED_TIME');
 					$l_safe_mode=fu_link('index.php?keep_safe_mode=1',do_lang('FU_SAFE_MODE'));
-					$num_addons=$GLOBALS['SITE_DB']->query_value('addons','COUNT(*)');
+					$num_addons=$GLOBALS['SITE_DB']->query_select_value('addons','COUNT(*)');
 					$l_addon_management=fu_link('adminzone/index.php?page=admin_addons&keep_safe_mode=1',do_lang('FU_ADDON_MANAGEMENT',integer_format($num_addons)),$num_addons==0);
 					$l_customisations=do_lang('FU_CUSTOMISATIONS');
 					$closed=comcode_to_tempcode(get_option('closed'),NULL,true);
@@ -1492,7 +1492,7 @@ function version_specific()
 		if ($version_database<5.1)
 		{
 			// Installaton code got moved over
-			$sitetree_version=$GLOBALS['SITE_DB']->query_value('modules','module_version',array('module_the_name'=>'admin_sitetree'));
+			$sitetree_version=$GLOBALS['SITE_DB']->query_select_value('modules','module_version',array('module_the_name'=>'admin_sitetree'));
 			$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$sitetree_version),array('module_the_name'=>'cms_comcode_pages'),'',1);
 		}
 		if ($version_database<8.0)

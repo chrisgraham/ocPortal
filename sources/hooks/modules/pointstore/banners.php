@@ -60,7 +60,7 @@ class Hook_pointstore_banners
 
 		$title=get_screen_title('TITLE_BANNER');
 
-		$banner_name=$GLOBALS['SITE_DB']->query_value_null_ok('sales','details',array('memberid'=>get_member(),'purchasetype'=>'banner'));
+		$banner_name=$GLOBALS['SITE_DB']->query_select_value_if_there('sales','details',array('memberid'=>get_member(),'purchasetype'=>'banner'));
 		if (!is_null($banner_name))
 		{
 			$activate=new ocp_tempcode();
@@ -82,7 +82,7 @@ class Hook_pointstore_banners
 	function handle_has_banner_already()
 	{
 		$member_id=get_member();
-		$has_one=$GLOBALS['SITE_DB']->query_value_null_ok('sales','details',array('memberid'=>$member_id,'purchasetype'=>'banner'));
+		$has_one=$GLOBALS['SITE_DB']->query_select_value_if_there('sales','details',array('memberid'=>$member_id,'purchasetype'=>'banner'));
 		if (!is_null($has_one))
 		{
 			$myrows=$GLOBALS['SITE_DB']->query_select('banners',array('campaign_remaining','importance_modulus','name'),array('name'=>$has_one),'',1);
@@ -235,7 +235,7 @@ class Hook_pointstore_banners
 	{
 		$member_id=get_member();
 
-		$details=$GLOBALS['SITE_DB']->query_value_null_ok('sales','details',array('memberid'=>$member_id,'purchasetype'=>'banner'));
+		$details=$GLOBALS['SITE_DB']->query_select_value_if_there('sales','details',array('memberid'=>$member_id,'purchasetype'=>'banner'));
 
 		// If we don't own a banner account, stop right here.
 		if (is_null($details))

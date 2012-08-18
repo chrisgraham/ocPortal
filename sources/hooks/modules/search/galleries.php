@@ -31,7 +31,7 @@ class Hook_search_galleries
 		if (!module_installed('galleries')) return NULL;
 
 		if (!has_actual_page_access(get_member(),'galleries')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)')<=1) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)')<=1) return NULL;
 
 		require_lang('galleries');
 

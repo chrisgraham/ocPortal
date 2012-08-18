@@ -140,7 +140,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 
 		$fields=new ocp_tempcode();
 
-		$count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)',array('g_is_private_club'=>1));
+		$count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)',array('g_is_private_club'=>1));
 		require_code('form_templates');
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,($count>300 || (!has_specific_permission(get_member(),'control_usergroups')))?array('g_group_leader'=>get_member(),'g_is_private_club'=>1):array('g_is_private_club'=>1));
 		foreach ($rows as $row)
@@ -171,7 +171,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 	function nice_get_entries()
 	{
 		$fields=new ocp_tempcode();
-		$count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)',array('g_is_private_club'=>1));
+		$count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)',array('g_is_private_club'=>1));
 		if ($count<500)
 		{
 			$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name','g_promotion_target','g_is_super_admin','g_group_leader'),array('g_is_private_club'=>1),'ORDER BY g_name');
@@ -248,8 +248,8 @@ class Module_cms_ocf_groups extends standard_crud_module
 			$cat=intval($_cat);
 		} else
 		{
-			$cat=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$_cat));
-			if (is_null($cat)) $cat=$GLOBALS['FORUM_DB']->query_value('f_categories','MIN(id)');
+			$cat=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$_cat));
+			if (is_null($cat)) $cat=$GLOBALS['FORUM_DB']->query_select_value('f_categories','MIN(id)');
 		}
 		$_forum=get_option('club_forum_parent_forum');
 		if (is_numeric($_forum))
@@ -257,10 +257,10 @@ class Module_cms_ocf_groups extends standard_crud_module
 			$forum=intval($_forum);
 		} else
 		{
-			$forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','id',array('f_name'=>$_forum));
-			if (is_null($forum)) $forum=$GLOBALS['FORUM_DB']->query_value('f_forums','MIN(id)');
+			$forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array('f_name'=>$_forum));
+			if (is_null($forum)) $forum=$GLOBALS['FORUM_DB']->query_select_value('f_forums','MIN(id)');
 		}
-		$is_threaded=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_is_threaded',array('id'=>$forum));
+		$is_threaded=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_is_threaded',array('id'=>$forum));
 		$forum_id=ocf_make_forum($name,do_lang('FORUM_FOR_CLUB',$name),$cat,$access_mapping,$forum,1,1,0,'','','','last_post',$is_threaded);
 		$this->_set_permissions($id,$forum_id);
 
@@ -335,7 +335,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 		ocf_edit_group($group_id,$name,NULL,NULL,NULL,NULL,NULL,NULL,NULL,$group_leader,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,post_param_integer('open_membership',0),1);
 
 		$forum_where=array('f_name'=>$old_name,'f_category_id'=>intval(get_option('club_forum_parent_category')),'f_parent_forum'=>intval(get_option('club_forum_parent_forum')));
-		$forum_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','id',$forum_where);
+		$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',$forum_where);
 		if (!is_null($forum_id))
 		{
 			$this->_set_permissions(intval($id),$forum_id);

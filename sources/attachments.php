@@ -33,7 +33,7 @@ function attachments_script()
 
 	$id=get_param_integer('id',0);
 	$connection=$GLOBALS[(get_param_integer('forum_db',0)==1)?'FORUM_DB':'SITE_DB'];
-	$has_no_restricts=!is_null($connection->query_value_null_ok('attachment_refs','id',array('r_referer_type'=>'null','a_id'=>$id)));
+	$has_no_restricts=!is_null($connection->query_select_value_if_there('attachment_refs','id',array('r_referer_type'=>'null','a_id'=>$id)));
 
 	if (!$has_no_restricts)
 	{

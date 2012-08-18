@@ -307,6 +307,6 @@ function request_via_cron($codename,$map,$tempcode)
 		'c_is_bot'=>is_null(get_bot_type())?0:1,
 		'c_store_as_tempcode'=>$tempcode?1:0,
 	);
-	if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('cron_caching_requests','id',$map)))
+	if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('cron_caching_requests','id',$map)))
 		$GLOBALS['SITE_DB']->query_insert('cron_caching_requests',$map);
 }

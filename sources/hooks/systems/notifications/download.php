@@ -40,7 +40,7 @@ class Hook_Notification_download extends Hook_Notification
 
 		if (is_null($id))
 		{
-			$total=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories','COUNT(*)');
+			$total=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','COUNT(*)');
 			if ($total>300) return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
 		}
 

@@ -122,7 +122,7 @@ function render_post_box($row,$use_post_title=false)
 		$post_title=$row['p_title'];
 	} else
 	{
-		$post_title=$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$row['p_topic_id']));
+		$post_title=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id'=>$row['p_topic_id']));
 		if ($row['p_title']!=$post_title) $post_title.=': '.$row['p_title'];
 	}
 	//if ($post_title=='') $post_title=do_lang_tempcode('ISOLATED_POST_TITLE',strval($row['id']));

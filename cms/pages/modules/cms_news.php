@@ -165,7 +165,7 @@ class Module_cms_news extends standard_crud_module
 				$nc_title=$news_cat_titles[$row['news_category']];
 			} else
 			{
-				$nc_title=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','nc_title',array('id'=>$row['news_category']));
+				$nc_title=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_title',array('id'=>$row['news_category']));
 				$news_cat_titles[$row['news_category']]=$nc_title;
 			}
 			if (!is_null($nc_title))
@@ -331,7 +331,7 @@ class Module_cms_news extends standard_crud_module
 	 */
 	function get_cat($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('news','news_category',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_select_value_if_there('news','news_category',array('id'=>$id));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return strval($temp);
 	}
@@ -426,19 +426,19 @@ class Module_cms_news extends standard_crud_module
 
 		if (!is_null($main_news_category))
 		{
-			$owner=$GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
+			$owner=$GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
 			if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
 		}
 
 		$time=$add_time;
 		$id=add_news($title,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,NULL,0,NULL,NULL,$url);
 
-		$main_news_category=$GLOBALS['SITE_DB']->query_value('news','news_category',array('id'=>$id));
+		$main_news_category=$GLOBALS['SITE_DB']->query_select_value('news','news_category',array('id'=>$id));
 		$this->donext_type=$main_news_category;
 
 		if ($validated==1)
 		{
-			$is_blog=!is_null($GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>$main_news_category)));
+			$is_blog=!is_null($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>$main_news_category)));
 
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news'))
 				syndicate_described_activity($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS',$title,'','','_SEARCH:news:view:'.strval($id),'','','news',1,NULL,true);
@@ -504,7 +504,7 @@ class Module_cms_news extends standard_crud_module
 			$url=STRING_MAGIC_NULL;
 		}
 
-		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
+		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
 		if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
 
 		$schedule=get_input_date('schedule');
@@ -514,7 +514,7 @@ class Module_cms_news extends standard_crud_module
 		{
 			require_code('calendar2');
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
-			$past_event=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id','e.id',array('text_original'=>$schedule_code));
+			$past_event=$GLOBALS['SITE_DB']->query_select_value_if_there('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id','e.id',array('text_original'=>$schedule_code));
 			require_code('calendar');
 			if (!is_null($past_event))
 			{
@@ -537,11 +537,11 @@ class Module_cms_news extends standard_crud_module
 
 		$title=post_param('title',STRING_MAGIC_NULL);
 
-		if (($validated==1) && ($main_news_category!=STRING_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($main_news_category!=STRING_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_select_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
 		{
-			$is_blog=!is_null($GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>$main_news_category)));
+			$is_blog=!is_null($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>$main_news_category)));
 
-			$submitter=$GLOBALS['SITE_DB']->query_value('news','submitter',array('id'=>$id));
+			$submitter=$GLOBALS['SITE_DB']->query_select_value('news','submitter',array('id'=>$id));
 			$activity_title=($is_blog?'news:ACTIVITY_ADD_NEWS_BLOG':'news:ACTIVITY_ADD_NEWS');
 			$activity_title_validate=($is_blog?'news:ACTIVITY_VALIDATE_NEWS_BLOG':'news:ACTIVITY_VALIDATE_NEWS');
 
@@ -747,8 +747,8 @@ class Module_cms_news extends standard_crud_module
 			$news_article=$item['import__news_article'];
 			$this->_grab_images_and_fix_links($download_images==1,$news,$rss->gleamed_items);
 			$this->_grab_images_and_fix_links($download_images==1,$news_article,$rss->gleamed_items);
-			lang_remap_comcode($GLOBALS['SITE_DB']->query_value('news','news',array('id'=>$item['import_id'])),$news);
-			lang_remap_comcode($GLOBALS['SITE_DB']->query_value('news','news_article',array('id'=>$item['import_id'])),$news_article);
+			lang_remap_comcode($GLOBALS['SITE_DB']->query_select_value('news','news',array('id'=>$item['import_id'])),$news);
+			lang_remap_comcode($GLOBALS['SITE_DB']->query_select_value('news','news_article',array('id'=>$item['import_id'])),$news_article);
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWS')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_NEWS'))));
@@ -880,8 +880,8 @@ class Module_cms_news_cat extends standard_crud_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$total=$GLOBALS['SITE_DB']->query_value('news','COUNT(*)',array('news_category'=>$row['id']));
-			$total+=$GLOBALS['SITE_DB']->query_value('news_category_entries','COUNT(*)',array('news_entry_category'=>$row['id']));
+			$total=$GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)',array('news_category'=>$row['id']));
+			$total+=$GLOBALS['SITE_DB']->query_select_value('news_category_entries','COUNT(*)',array('news_entry_category'=>$row['id']));
 
 			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'news','type'=>'archive','filter'=>$row['id']),get_module_zone('news')),get_translated_text($row['nc_title']))),integer_format($total),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}
@@ -1026,7 +1026,7 @@ class Module_cms_news_cat extends standard_crud_module
 	 */
 	function get_submitter($id)
 	{
-		return $GLOBALS['SITE_DB']->query_value_null_ok('news_categories','nc_owner',array('id'=>intval($id)));
+		return $GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>intval($id)));
 	}
 
 	/**

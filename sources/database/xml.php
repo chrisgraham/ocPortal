@@ -310,12 +310,12 @@ class Database_Static_xml
 	 * @param  ID_TEXT		The table name
 	 * @param  array			The DB connection to delete on
 	 */
-	function db_drop_if_exists($table_name,$db)
+	function db_drop_table_if_exists($table_name,$db)
 	{
 		if (!is_null($GLOBALS['XML_CHAIN_DB']))
 		{
 			// DB chaining: It's a write query, so needs doing on chained DB too
-			$GLOBALS['XML_CHAIN_DB']->static_ob->db_drop_if_exists($table_name,$GLOBALS['XML_CHAIN_DB']->connection_write);
+			$GLOBALS['XML_CHAIN_DB']->static_ob->db_drop_table_if_exists($table_name,$GLOBALS['XML_CHAIN_DB']->connection_write);
 		}
 
 		$file_path=$db[0].'/'.$table_name;
@@ -1511,7 +1511,7 @@ class Database_Static_xml
 		} elseif ($type=='TABLE')
 		{
 			$table_name=$this->_parsing_read($at,$tokens,$query);
-			$this->db_drop_if_exists($table_name,$db);
+			$this->db_drop_table_if_exists($table_name,$db);
 		} else
 		{
 			return $this->_bad_query($query,$fail_ok,'Unrecognised DROP type, '.$type);

@@ -47,8 +47,8 @@ class Module_search
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('searches_saved');
-		$GLOBALS['SITE_DB']->drop_if_exists('searches_logged');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('searches_saved');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('searches_logged');
 		delete_menu_item_simple('_SEARCH:search:type=misc:id=ocf_posts');
 	}
 
@@ -289,7 +289,7 @@ class Module_search
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
 		$fields_title=results_field_title(array(do_lang_tempcode('TITLE'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('DELETE'),do_lang_tempcode('RUN_SEARCH')),$sortables,'sort',$sortable.' '.$sort_order);
-		$max_rows=$GLOBALS['SITE_DB']->query_value('searches_saved','COUNT(*)',array('s_member_id'=>get_member()));
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('searches_saved','COUNT(*)',array('s_member_id'=>get_member()));
 		$rows=$GLOBALS['SITE_DB']->query_select('searches_saved',array('*'),array('s_member_id'=>get_member()),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$fields=new ocp_tempcode();
 		foreach ($rows as $row)

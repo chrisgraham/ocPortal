@@ -162,7 +162,7 @@ class Module_cms_booking extends standard_crud_module
 
 		if (is_null($details))
 		{
-			$max_sort_order=$GLOBALS['SITE_DB']->query_value('bookable','MAX(sort_order)');
+			$max_sort_order=$GLOBALS['SITE_DB']->query_select_value('bookable','MAX(sort_order)');
 			if (is_null($max_sort_order)) $max_sort_order=0;
 
 			$details=array(
@@ -201,7 +201,7 @@ class Module_cms_booking extends standard_crud_module
 		$categorisation=is_null($details['categorisation'])?'':get_translated_text($details['categorisation']);
 		if ($categorisation=='')
 		{
-			$_categorisation=$GLOBALS['SITE_DB']->query_value_null_ok('bookable','categorisation',NULL,'GROUP BY categorisation ORDER BY COUNT(*) DESC');
+			$_categorisation=$GLOBALS['SITE_DB']->query_select_value_if_there('bookable','categorisation',NULL,'GROUP BY categorisation ORDER BY COUNT(*) DESC');
 			if (is_null($_categorisation))
 				$categorisation=do_lang('GENERAL');
 			else
@@ -400,7 +400,7 @@ class Module_cms_booking_supplements extends standard_crud_module
 
 		if (is_null($details))
 		{
-			$max_sort_order=$GLOBALS['SITE_DB']->query_value('bookable_supplement','MAX(sort_order)');
+			$max_sort_order=$GLOBALS['SITE_DB']->query_select_value('bookable_supplement','MAX(sort_order)');
 			if (is_null($max_sort_order)) $max_sort_order=0;
 
 			$details=array(
@@ -838,7 +838,7 @@ class Module_cms_booking_bookings extends standard_crud_module
 			$edit_link=build_url($url_map+array('id'=>$row['_id']),'_SELF');
 
 			$fr=array();
-			$fr[]=get_translated_text($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$row['bookable_id'])));
+			$fr[]=get_translated_text($GLOBALS['SITE_DB']->query_select_value('bookable','title',array('id'=>$row['bookable_id'])));
 			$fr[]=get_timezoned_date(mktime(0,0,0,$row['start_month'],$row['start_day'],$row['start_year']),false,true,true);
 			$fr[]=get_timezoned_date(mktime(0,0,0,$row['end_month'],$row['end_day'],$row['end_year']),false,true,true);
 			$fr[]=$GLOBALS['FORUM_DRIVER']->get_username($row['_rows'][0]['member_id']);

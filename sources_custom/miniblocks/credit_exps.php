@@ -22,7 +22,7 @@ $credit_kinds=array();
 foreach ($products as $p=>$v)
 {
 	$num_credits=str_replace('CREDITS','',$p);
-	if ((intval($num_credits)<9) && (is_null($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM mantis_sponsorship_table WHERE user_id='.strval(get_member())))))
+	if ((intval($num_credits)<9) && (is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM mantis_sponsorship_table WHERE user_id='.strval(get_member())))))
 	{
 		continue;
 	}

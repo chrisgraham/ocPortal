@@ -203,7 +203,7 @@ class Hook_wowbb
 			$group_name_remap=array('Unregistered'=>'Guests','Moderators'=>'Super-members','Super Moderators'=>'Super-moderators');
 			if (array_key_exists($row['user_group_name'],$group_name_remap)) $row['user_group_name']=$group_name_remap[$row['user_group_name']];
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['user_group_name']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['user_group_name']),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['user_group_name'],0,$is_super_admin,$is_super_moderator,$row['user_group_title'],'',NULL,NULL,NULL,constant('FLOOD_INTERVAL'),0,($row['post_attachments']==0)?0:5,5,constant('AVATAR_DIMENSIONS_MAX'),constant('AVATAR_DIMENSIONS_MAX'),30000,700,25,$row['add_mana']);
@@ -224,7 +224,7 @@ class Hook_wowbb
 			foreach ($denies as $deny)
 			{
 				list($page,$zone)=$deny;
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('group_page_access','group_id',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('group_page_access','group_id',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
 				if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('group_page_access',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
 			}
 
@@ -374,7 +374,7 @@ class Hook_wowbb
 
 			$title=$row['category_name'];
 
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
 				import_id_remap_put('category',strval($row['category_id']),$test);
@@ -497,7 +497,7 @@ class Hook_wowbb
 				$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
 
 				$title='';
-				$test=$db->query_value('posts','MIN(post_id)',array('topic_id'=>$row['topic_id']));
+				$test=$db->query_select_value('posts','MIN(post_id)',array('topic_id'=>$row['topic_id']));
 				$first_post=$test==$row['post_id'];
 				if ($first_post)
 				{
@@ -621,7 +621,7 @@ class Hook_wowbb
 			{
 				if (import_check_if_imported('post_files',strval($row['attachment_id']))) continue;
 
-				$post_id=$db->query_value_null_ok('posts','post_id',array('attachment_id'=>$row['attachment_id']));
+				$post_id=$db->query_select_value_if_there('posts','post_id',array('attachment_id'=>$row['attachment_id']));
 
 				$post_row=array();
 				if (!is_null($post_id))

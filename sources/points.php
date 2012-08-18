@@ -39,7 +39,7 @@ function init__points()
  */
 function get_price($item)
 {
-	return $GLOBALS['SITE_DB']->query_value('prices','price',array('name'=>$item));
+	return $GLOBALS['SITE_DB']->query_select_value('prices','price',array('name'=>$item));
 }
 
 /**
@@ -146,7 +146,7 @@ function point_info($member)
  */
 function get_gift_points_used($member)
 {
-	return intval($GLOBALS['SITE_DB']->query_value_null_ok('gifts','SUM(amount)',array('gift_from'=>$member)));
+	return intval($GLOBALS['SITE_DB']->query_select_value_if_there('gifts','SUM(amount)',array('gift_from'=>$member)));
 
 	// We won't do it this way, number may not be reliable enough
 	//$_used=point_info($member);

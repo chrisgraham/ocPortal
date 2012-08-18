@@ -230,7 +230,7 @@ class Database_Static_access
 	 * @param  ID_TEXT			The table name
 	 * @param  array			The DB connection to delete on
 	 */
-	function db_drop_if_exists($table,$db)
+	function db_drop_table_if_exists($table,$db)
 	{
 		$this->db_query('DROP TABLE '.$table,$db,NULL,NULL,true);
 	}

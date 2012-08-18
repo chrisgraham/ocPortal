@@ -34,7 +34,7 @@ class Hook_checklist_news
 
 		require_lang('news');
 
-		$date=$GLOBALS['SITE_DB']->query_value_null_ok('news n JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_categories c ON n.news_category=c.id','MAX(date_and_time)',array('validated'=>1,'nc_owner'=>NULL));
+		$date=$GLOBALS['SITE_DB']->query_select_value_if_there('news n JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_categories c ON n.news_category=c.id','MAX(date_and_time)',array('validated'=>1,'nc_owner'=>NULL));
 
 		$limit_hours=intval(get_option('news_update_time'));
 

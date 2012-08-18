@@ -31,7 +31,7 @@ class Hook_search_catalogue_categories
 		if (!has_actual_page_access(get_member(),'catalogues')) return NULL;
 
 		if (!module_installed('catalogues')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)')==0) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)')==0) return NULL;
 
 		require_lang('catalogues');
 

@@ -1023,7 +1023,7 @@ function step_5()
 	if (post_param_integer('confirm',0)==0)
 	{
 		$tmp=new database_driver(trim(post_param('db_site')),trim(post_param('db_site_host')),trim(post_param('db_site_user')),trim(post_param('db_site_password')),$table_prefix);
-		$test=$tmp->query_value_null_ok('config','the_type',array('the_name'=>'is_on_gd'),'',true);
+		$test=$tmp->query_select_value_if_there('config','the_type',array('the_name'=>'is_on_gd'),'',true);
 		unset($tmp);
 		if (!is_null($test))
 		{
@@ -1037,7 +1037,7 @@ function step_5()
 	if (($_POST['db_forums']!=$_POST['db_site']) && (get_forum_type()=='ocf'))
 	{
 		$tmp=new database_driver(trim(post_param('db_forums')),trim(post_param('db_forums_host')),trim(post_param('db_forums_user')),trim(post_param('db_forums_password')),$table_prefix);
-		if (is_null($tmp->query_value_null_ok('db_meta','COUNT(*)',NULL,'',true))) warn_exit(do_lang_tempcode('MSN_FORUM_DB_NOT_OCF_ALREADY'));
+		if (is_null($tmp->query_select_value_if_there('db_meta','COUNT(*)',NULL,'',true))) warn_exit(do_lang_tempcode('MSN_FORUM_DB_NOT_OCF_ALREADY'));
 	}
 
 	global $FILE_ARRAY;
@@ -1553,7 +1553,7 @@ function step_5_uninstall()
  */
 function step_5_core()
 {
-	$GLOBALS['SITE_DB']->drop_if_exists('db_meta');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('db_meta');
 	$GLOBALS['SITE_DB']->create_table('db_meta',array(
 		'm_table'=>'*ID_TEXT',
 		'm_name'=>'*ID_TEXT',
@@ -1561,14 +1561,14 @@ function step_5_core()
 	));
 	$GLOBALS['SITE_DB']->create_index('db_meta','findtransfields',array('m_type'));
 
-	$GLOBALS['SITE_DB']->drop_if_exists('db_meta_indices');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('db_meta_indices');
 	$GLOBALS['SITE_DB']->create_table('db_meta_indices',array(
 		'i_table'=>'*ID_TEXT',
 		'i_name'=>'*ID_TEXT',
 		'i_fields'=>'*ID_TEXT',
 	));
 
-	$GLOBALS['SITE_DB']->drop_if_exists('translate');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('translate');
 //	if (array_key_exists('multi_lang',$_POST))
 	{
 		$GLOBALS['SITE_DB']->create_table('translate',array(
@@ -1591,7 +1591,7 @@ function step_5_core()
 		}
 	}
 
-	$GLOBALS['SITE_DB']->drop_if_exists('values');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('values');
 	$GLOBALS['SITE_DB']->create_table('values',array(
 		'the_name'=>'*ID_TEXT',
 		'the_value'=>'ID_TEXT',
@@ -1599,7 +1599,7 @@ function step_5_core()
 	));
 	$GLOBALS['SITE_DB']->create_index('values','date_and_time',array('date_and_time'));
 
-	$GLOBALS['SITE_DB']->drop_if_exists('config');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('config');
 	$GLOBALS['SITE_DB']->create_table('config',array(
 		'the_name'=>'*ID_TEXT',
 		'human_name'=>'ID_TEXT',
@@ -1615,7 +1615,7 @@ function step_5_core()
 	));
 
 	// Privileges
-	$GLOBALS['SITE_DB']->drop_if_exists('gsp');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('gsp');
 	$GLOBALS['SITE_DB']->create_table('gsp',array(
 		'group_id'=>'*INTEGER',
 		'specific_permission'=>'*ID_TEXT',
@@ -1625,14 +1625,14 @@ function step_5_core()
 		'the_value'=>'BINARY'
 	));
 
-	$GLOBALS['SITE_DB']->drop_if_exists('sp_list');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('sp_list');
 	$GLOBALS['SITE_DB']->create_table('sp_list',array(
 		'p_section'=>'ID_TEXT',
 		'the_name'=>'*ID_TEXT',
 		'the_default'=>'*BINARY'
 	));
 
-	$GLOBALS['SITE_DB']->drop_if_exists('attachments');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('attachments');
 	$GLOBALS['SITE_DB']->create_table('attachments',array(
 		'id'=>'*AUTO',
 		'a_member_id'=>'USER',
@@ -1646,7 +1646,7 @@ function step_5_core()
 		'a_add_time'=>'INTEGER'
 	));
 
-	$GLOBALS['SITE_DB']->drop_if_exists('attachment_refs');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('attachment_refs');
 	$GLOBALS['SITE_DB']->create_table('attachment_refs',array(
 		'id'=>'*AUTO',
 		'r_referer_type'=>'ID_TEXT',
@@ -1668,7 +1668,7 @@ function step_5_core_2()
 {
 	global $LANG;
 
-	$GLOBALS['SITE_DB']->drop_if_exists('zones');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('zones');
 	$GLOBALS['SITE_DB']->create_table('zones',array(
 		'zone_name'=>'*ID_TEXT',
 		'zone_title'=>'SHORT_TRANS',
@@ -1702,7 +1702,7 @@ function step_5_core_2()
 		$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>1,'zone_name'=>'forum','zone_title'=>insert_lang(do_lang('SECTION_FORUMS'),1),'zone_default_page'=>'forumview','zone_header_text'=>$trans5,'zone_theme'=>'-1','zone_wide'=>NULL,'zone_require_session'=>0));
 	}
 
-	$GLOBALS['SITE_DB']->drop_if_exists('modules');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('modules');
 	$GLOBALS['SITE_DB']->create_table('modules',array(
 		'module_the_name'=>'*ID_TEXT',
 		'module_author'=>'ID_TEXT',
@@ -1712,7 +1712,7 @@ function step_5_core_2()
 		'module_version'=>'INTEGER'
 	));
 
-	$GLOBALS['SITE_DB']->drop_if_exists('blocks');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('blocks');
 	$GLOBALS['SITE_DB']->create_table('blocks',array(
 		'block_name'=>'*ID_TEXT',
 		'block_author'=>'ID_TEXT',
@@ -1722,7 +1722,7 @@ function step_5_core_2()
 		'block_version'=>'INTEGER'
 	));
 
-	$GLOBALS['SITE_DB']->drop_if_exists('sessions');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('sessions');
 	$GLOBALS['SITE_DB']->create_table('sessions',array(
 		'the_session'=>'*INTEGER',
 		'last_activity'=>'TIME',
@@ -1741,20 +1741,20 @@ function step_5_core_2()
 	$GLOBALS['SITE_DB']->create_index('sessions','the_user',array('the_user'));
 	$GLOBALS['SITE_DB']->create_index('sessions','userat',array('the_zone','the_page','the_type','the_id'));
 
-	$GLOBALS['SITE_DB']->drop_if_exists('https_pages');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('https_pages');
 	$GLOBALS['SITE_DB']->create_table('https_pages',array(
 		'https_page_name'=>'*ID_TEXT'
 	));
 
 	// What usergroups may view this category
-	$GLOBALS['SITE_DB']->drop_if_exists('group_category_access');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('group_category_access');
 	$GLOBALS['SITE_DB']->create_table('group_category_access',array(
 		'module_the_name'=>'*ID_TEXT',
 		'category_name'=>'*ID_TEXT',
 		'group_id'=>'*GROUP'
 	));
 
-	$GLOBALS['SITE_DB']->drop_if_exists('seo_meta');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('seo_meta');
 	$GLOBALS['SITE_DB']->create_table('seo_meta',array(
 		'id'=>'*AUTO',
 		'meta_for_type'=>'ID_TEXT',

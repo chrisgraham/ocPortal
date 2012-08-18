@@ -55,10 +55,10 @@ class Module_admin_workflow extends standard_crud_module
 	{
 		require_lang('workflows');
 		// Remove database tables
-		$GLOBALS['SITE_DB']->drop_if_exists('workflow_permissions');
-		$GLOBALS['SITE_DB']->drop_if_exists('workflow_requirements');
-		$GLOBALS['SITE_DB']->drop_if_exists('workflow_content');
-		$GLOBALS['SITE_DB']->drop_if_exists('workflow_content_status');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('workflow_permissions');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('workflow_requirements');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('workflow_content');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('workflow_content_status');
 	}
 
 	/**
@@ -498,7 +498,7 @@ class Module_admin_workflow extends standard_crud_module
 		$doing='ADD_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title));
@@ -608,7 +608,7 @@ class Module_admin_workflow extends standard_crud_module
 		$doing='EDIT_'.$this->lang_type;
 		if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 		{
-			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+			$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
 			if ($this->type_code=='d')
 			{
 				$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
@@ -668,7 +668,7 @@ class Module_admin_workflow extends standard_crud_module
 			$doing='DELETE_'.$this->lang_type;
 			if (($this->catalogue) && (get_param('catalogue_name','')!=''))
 			{
-				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
+				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
 				if ($this->type_code=='d')
 				{
 					$doing=do_lang('CATALOGUE_GENERIC_DELETE',escape_html($catalogue_title));

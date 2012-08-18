@@ -196,7 +196,7 @@ class Hook_aef
 			$is_super_admin=($row['mem_gr_name']=='Administrator')?1:0;
 			$is_super_moderator=($row['mem_gr_name']=='Universal Moderator')?1:0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['mem_gr_name']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['mem_gr_name']),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['mem_gr_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$INFO['av_width'],$INFO['av_height'],30000,$INFO['usersiglen']);
@@ -205,7 +205,7 @@ class Hook_aef
 			// privileges
 			set_specific_permission($id_new,'comcode_dangerous',true);
 
-			$check_id_exists=$GLOBALS['FORUM_DB']->query_value_null_ok('import_id_remap WHERE id_old='.strval($row['member_group']).' AND id_type=\'group\' AND id_session='.strval(get_session_id()), 'id_old');
+			$check_id_exists=$GLOBALS['FORUM_DB']->query_select_value_if_there('import_id_remap WHERE id_old='.strval($row['member_group']).' AND id_type=\'group\' AND id_session='.strval(get_session_id()), 'id_old');
 
 			if (is_null($check_id_exists))
 				import_id_remap_put('group',strval($row['member_group']),$id_new);
@@ -499,7 +499,7 @@ class Hook_aef
 			$title=$row['name'];
 			$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
 				import_id_remap_put('category',strval($row['cid']),$test);

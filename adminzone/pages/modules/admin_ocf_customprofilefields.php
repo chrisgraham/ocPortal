@@ -141,7 +141,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		$fields->attach(form_input_tick(do_lang_tempcode('REQUIRED'),do_lang_tempcode('DESCRIPTION_REQUIRED'),'required',$required==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('SHOW_ON_JOIN_FORM'),do_lang_tempcode('DESCRIPTION_SHOW_ON_JOIN_FORM'),'show_on_join_form',$show_on_join_form==1));
 		$orderlist=new ocp_tempcode();
-		$num_cpfs=$GLOBALS['FORUM_DB']->query_value('f_custom_fields','COUNT(*)');
+		$num_cpfs=$GLOBALS['FORUM_DB']->query_select_value('f_custom_fields','COUNT(*)');
 		if ($name=='') $num_cpfs++;
 		$selected_one=false;
 		for ($i=0;$i<(is_null($order)?$num_cpfs:max($num_cpfs,$order));$i++)
@@ -262,7 +262,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
 			$orderlist=new ocp_tempcode();
-			$num_cpfs=$GLOBALS['FORUM_DB']->query_value('f_custom_fields','COUNT(*)');
+			$num_cpfs=$GLOBALS['FORUM_DB']->query_select_value('f_custom_fields','COUNT(*)');
 			$selected_one=false;
 			$order=$row['cf_order'];
 			for ($i=0;$i<max($num_cpfs,$order);$i++)
@@ -311,7 +311,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	function may_delete_this($_id)
 	{
 		$id=intval($_id);
-		$locked=$GLOBALS['FORUM_DB']->query_value('f_custom_fields','cf_locked',array('id'=>$id));
+		$locked=$GLOBALS['FORUM_DB']->query_select_value('f_custom_fields','cf_locked',array('id'=>$id));
 		return ($locked==0);
 	}
 

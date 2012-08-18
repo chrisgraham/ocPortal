@@ -52,10 +52,10 @@ class Module_sites
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('sites');
-		$GLOBALS['SITE_DB']->drop_if_exists('sites_email');
-		$GLOBALS['SITE_DB']->drop_if_exists('sites_deletion_codes');
-		$GLOBALS['SITE_DB']->drop_if_exists('sites_advert_pings');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('sites');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('sites_email');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('sites_deletion_codes');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('sites_advert_pings');
 	}
 
 	/**
@@ -169,7 +169,7 @@ class Module_sites
 		$hostingcopy_form=do_template('FORM',array('HIDDEN'=>'','URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('OC_COPYWAIT'),'SUBMIT_NAME'=>$submit_name));
 
 		// Put together details about releases
-		$t=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.comments','name',array('text_original'=>'This is the latest version.'));
+		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.comments','name',array('text_original'=>'This is the latest version.'));
 		if (!is_null($t))
 		{
 			$releases=new ocp_tempcode();
@@ -351,7 +351,7 @@ class Module_sites
 		}
 
 		// Find latest version
-		$t=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.comments','url',array('text_original'=>'This is the latest version.'));
+		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.comments','url',array('text_original'=>'This is the latest version.'));
 		if (is_null($t)) warn_exit(do_lang_tempcode('ARCHIVE_NOT_AVAILABLE'));
 		if (url_is_local($t)) $t=get_custom_file_base().'/'.rawurldecode($t);
 

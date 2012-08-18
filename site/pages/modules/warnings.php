@@ -146,8 +146,8 @@ class Module_warnings extends standard_crud_module
 		$title=get_screen_title('UNDO_CHARGE');
 
 		$id=post_param_integer('id');
-		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
-		$charged_points=$GLOBALS['FORUM_DB']->query_value('f_warnings','p_charged_points',array('id'=>$id));
+		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
+		$charged_points=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_charged_points',array('id'=>$id));
 		require_code('points2');
 		charge_member($member_id,-$charged_points,do_lang('UNDO_CHARGE_FOR',strval($id)));
 		$GLOBALS['FORUM_DB']->query_update('f_warnings',array('p_charged_points'=>0),array('id'=>$id),'',1);
@@ -169,8 +169,8 @@ class Module_warnings extends standard_crud_module
 		$title=get_screen_title('UNDO_PROBATION');
 
 		$id=post_param_integer('id');
-		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
-		$probation=$GLOBALS['FORUM_DB']->query_value('f_warnings','p_probation',array('id'=>$id));
+		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
+		$probation=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_probation',array('id'=>$id));
 		$on_probation_until=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_on_probation_until');
 		if (!is_null($on_probation_until))
 			$GLOBALS['FORUM_DB']->query_update('f_members',array('m_on_probation_until'=>$on_probation_until-$probation*60*60*24),array('id'=>$member_id),'',1);
@@ -195,8 +195,8 @@ class Module_warnings extends standard_crud_module
 		require_code('failure');
 
 		$id=post_param_integer('id');
-		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
-		$banned_ip=$GLOBALS['FORUM_DB']->query_value('f_warnings','p_banned_ip',array('id'=>$id));
+		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
+		$banned_ip=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_banned_ip',array('id'=>$id));
 		remove_ip_ban($banned_ip);
 		$GLOBALS['FORUM_DB']->query_update('f_warnings',array('p_banned_ip'=>''),array('id'=>$id),'',1);
 
@@ -217,8 +217,8 @@ class Module_warnings extends standard_crud_module
 		$title=get_screen_title('UNBAN_MEMBER');
 
 		$id=post_param_integer('id');
-		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
-		$banned_member=$GLOBALS['FORUM_DB']->query_value('f_warnings','p_banned_member',array('id'=>$id));
+		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
+		$banned_member=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_banned_member',array('id'=>$id));
 		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_is_perm_banned'=>0),array('id'=>$member_id),'',1);
 		$GLOBALS['FORUM_DB']->query_update('f_warnings',array('p_banned_member'=>0),array('id'=>$id),'',1);
 
@@ -239,8 +239,8 @@ class Module_warnings extends standard_crud_module
 		$title=get_screen_title('UNSILENCE_TOPIC');
 
 		$id=post_param_integer('id');
-		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
-		$silence_from_topic=$GLOBALS['FORUM_DB']->query_value('f_warnings','p_silence_from_topic',array('id'=>$id));
+		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
+		$silence_from_topic=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_silence_from_topic',array('id'=>$id));
 		$GLOBALS['SITE_DB']->query_delete('msp',array(
 			'member_id'=>$member_id,
 			'specific_permission'=>'submit_lowrange_content',
@@ -267,8 +267,8 @@ class Module_warnings extends standard_crud_module
 		$title=get_screen_title('UNSILENCE_FORUM');
 
 		$id=post_param_integer('id');
-		$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$id));
-		$silence_from_forum=$GLOBALS['FORUM_DB']->query_value('f_warnings','p_silence_from_forum',array('id'=>$id));
+		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
+		$silence_from_forum=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_silence_from_forum',array('id'=>$id));
 		$GLOBALS['SITE_DB']->query_delete('msp',array(
 			'member_id'=>$member_id,
 			'specific_permission'=>'submit_lowrange_content',
@@ -331,15 +331,15 @@ class Module_warnings extends standard_crud_module
 
 			if (!is_null($post_id))
 			{
-				$topic_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_topic_id',array('id'=>$post_id));
+				$topic_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_topic_id',array('id'=>$post_id));
 				if (!is_null($topic_id))
 				{
-					$forum_id=$GLOBALS['FORUM_DB']->query_value('f_topics','t_forum_id',array('id'=>$topic_id));
+					$forum_id=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_forum_id',array('id'=>$topic_id));
 					$hidden->attach(form_input_hidden('topic_id',strval($topic_id)));
 					$hidden->attach(form_input_hidden('forum_id',strval($forum_id)));
 					$silence_topic_time=NULL;//time()+60*60*24*7;
 					$silence_forum_time=NULL;//time()+60*60*24*7;
-					$active_until=$GLOBALS['SITE_DB']->query_value_null_ok('msp','active_until',array(
+					$active_until=$GLOBALS['SITE_DB']->query_select_value_if_there('msp','active_until',array(
 						'member_id'=>$member_id,
 						'specific_permission'=>'submit_lowrange_content',
 						'the_page'=>'',
@@ -347,7 +347,7 @@ class Module_warnings extends standard_crud_module
 						'category_name'=>strval($topic_id),
 					));
 					if (!is_null($active_until)) $silence_topic_time=$active_until;
-					$active_until=$GLOBALS['SITE_DB']->query_value_null_ok('msp','active_until',array(
+					$active_until=$GLOBALS['SITE_DB']->query_select_value_if_there('msp','active_until',array(
 						'member_id'=>$member_id,
 						'specific_permission'=>'submit_lowrange_content',
 						'the_page'=>'',
@@ -413,7 +413,7 @@ class Module_warnings extends standard_crud_module
 			$message='';
 			if (!is_null($post_id))
 			{
-				$_postdetails_text=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','p_post',array('id'=>$post_id));
+				$_postdetails_text=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_post',array('id'=>$post_id));
 				if (!is_null($_postdetails_text))
 				{
 					$message='[quote="'.$username.'"]'.chr(10).get_translated_text($_postdetails_text).chr(10).'[/quote]';

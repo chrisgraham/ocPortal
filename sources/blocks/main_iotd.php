@@ -79,7 +79,7 @@ class Block_main_iotd
 			if (!array_key_exists(0,$iotd)) return do_template('BLOCK_NO_ENTRIES',array('HIGH'=>true,'TITLE'=>do_lang_tempcode('IOTD'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_IOTD'),'SUBMIT_URL'=>$submit_url));
 		} else
 		{
-			$cnt=$GLOBALS['SITE_DB']->query_value('iotd','COUNT(*)',array('used'=>1));
+			$cnt=$GLOBALS['SITE_DB']->query_select_value('iotd','COUNT(*)',array('used'=>1));
 			if ($cnt==0) return do_template('BLOCK_NO_ENTRIES',array('HIGH'=>true,'TITLE'=>do_lang_tempcode('IOTD'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_IOTD'),'SUBMIT_URL'=>$submit_url));
 			$at=mt_rand(0,$cnt-1);
 			$iotd=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),array('used'=>1),'',1,$at);

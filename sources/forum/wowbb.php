@@ -428,7 +428,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function forum_id_from_name($forum_name)
 	{
-		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_value_null_ok('forums','forum_id',array('forum_name'=>$forum_name));
+		return is_numeric($forum_name)?intval($forum_name):$this->connection->query_select_value_if_there('forums','forum_id',array('forum_name'=>$forum_name));
 	}
 
 	/**
@@ -445,7 +445,7 @@ class forum_driver_wowbb extends forum_driver_base
 		$query='SELECT tid FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval((integer)$forum_id);
 		$query.=' AND ('.db_string_equal_to('topic_description',$topic_identifier).' OR topic_description LIKE \'%: #'.db_encode_like($topic_identifier).'\')';
 
-		return $this->connection->query_value_null_ok_full($query);
+		return $this->connection->query_value_if_there($query);
 	}
 
 	/**
@@ -514,7 +514,7 @@ class forum_driver_wowbb extends forum_driver_base
 		//$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'posts_text d ON p.post_id=d.post_id WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_time');
 		$order=$reverse?'post_date_time DESC':'post_date_time';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts d ON p.post_id=d.post_id WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
-		$count=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts d ON p.post_id=d.post_id WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_date_time');
+		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts d ON p.post_id=d.post_id WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_date_time');
 		$out=array();
 		foreach ($rows as $myrow)
 		{
@@ -559,7 +559,7 @@ class forum_driver_wowbb extends forum_driver_base
 	function post_url($id,$forum)
 	{
 		unset($forum);
-		$topic_id=$this->connection->query_value_null_ok('posts','topic_id',array('post_id'=>$id));
+		$topic_id=$this->connection->query_select_value_if_there('posts','topic_id',array('post_id'=>$id));
 		if (is_null($topic_id)) return '?';
 		$url=get_forum_base_url().'/view_topic.php?id='.strval($topic_id).'#p'.strval($id);
 		return $url;
@@ -610,7 +610,7 @@ class forum_driver_wowbb extends forum_driver_base
 		if ($filter_topic_description!='')
 			$topic_filter.=' AND topic_description LIKE \''.db_encode_like($filter_topic_description).'\'';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter,$limit*2,$start);
-		$max_rows=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter);
+		$max_rows=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter);
 		$i=0;
 		$firsttime=array();
 		$username=array();
@@ -711,7 +711,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_previous_member($member)
 	{
-		$tempid=$this->connection->query_value_null_ok_full('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id<'.strval((integer)$member).' ORDER BY user_id DESC');
+		$tempid=$this->connection->query_value_if_there('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id<'.strval((integer)$member).' ORDER BY user_id DESC');
 		return $tempid;
 	}
 
@@ -724,7 +724,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_next_member($member)
 	{
-		$tempid=$this->connection->query_value_null_ok_full('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id>'.strval((integer)$member).' ORDER BY user_id');
+		$tempid=$this->connection->query_value_if_there('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id>'.strval((integer)$member).' ORDER BY user_id');
 		return $tempid;
 	}
 
@@ -736,7 +736,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function probe_ip($ip)
 	{
-		//$test=$this->connection->query_value_null_ok('users','user_id',array('regip'=>$ip));
+		//$test=$this->connection->query_select_value_if_there('users','user_id',array('regip'=>$ip));
 		//if (!is_null($test)) return $test;
 
 		// Not sure if this is valid! Is useip something else entirely maybe, like usesig?
@@ -825,7 +825,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_topic_count($member)
 	{
-		return $this->connection->query_value('topics','COUNT(*)',array('topic_starter_id'=>$member));
+		return $this->connection->query_select_value('topics','COUNT(*)',array('topic_starter_id'=>$member));
 	}
 
 	/**
@@ -839,8 +839,8 @@ class forum_driver_wowbb extends forum_driver_base
 		if ($member==$this->get_guest_id()) return false;
 
 		// Are they banned
-		$group=$this->connection->query_value('users','user_group_id',array('user_id'=>$member)); // Members usergroup
-		$test=$this->connection->query_value('user_groups','view_board',array('user_group_id'=>$group)); // Get view board for members usergroup
+		$group=$this->connection->query_select_value('users','user_group_id',array('user_id'=>$member)); // Members usergroup
+		$test=$this->connection->query_select_value('user_groups','view_board',array('user_group_id'=>$group)); // Get view board for members usergroup
 		return ($test==0);
 	}
 
@@ -918,7 +918,7 @@ class forum_driver_wowbb extends forum_driver_base
 		{
 			// Work out
 			$member=get_member();
-			if ($member!=$this->get_guest_id()) $skin=$this->connection->query_value_null_ok('users','user_theme',array('user_id'=>$member));
+			if ($member!=$this->get_guest_id()) $skin=$this->connection->query_select_value_if_there('users','user_theme',array('user_id'=>$member));
 			else $skin='';
 			if (strlen($skin)>0) $def=array_key_exists($skin,$map)?$map[$skin]:$skin;
 		}
@@ -975,7 +975,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_num_users_forums()
 	{
-		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'sessions WHERE last_visit>\''.$this->_timestamp_to_date(time()-60*intval(get_option('users_online_time'))).'\'');
+		return $this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'sessions WHERE last_visit>\''.$this->_timestamp_to_date(time()-60*intval(get_option('users_online_time'))).'\'');
 	}
 
 	/**
@@ -985,7 +985,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_members()
 	{
-		return $this->connection->query_value('users','COUNT(*)');
+		return $this->connection->query_select_value('users','COUNT(*)');
 	}
 
 	/**
@@ -995,7 +995,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_topics()
 	{
-		return $this->connection->query_value('topics','COUNT(*)');
+		return $this->connection->query_select_value('topics','COUNT(*)');
 	}
 
 	/**
@@ -1005,7 +1005,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_num_forum_posts()
 	{
-		return $this->connection->query_value('posts','COUNT(*)');
+		return $this->connection->query_select_value('posts','COUNT(*)');
 	}
 
 	/**
@@ -1015,7 +1015,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function _get_num_new_forum_posts()
 	{
-		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts WHERE post_date_time>\''.$this->_timestamp_to_date(time()-60*60*24).'\'');
+		return $this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts WHERE post_date_time>\''.$this->_timestamp_to_date(time()-60*60*24).'\'');
 	}
 
 	/**
@@ -1026,7 +1026,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_member_from_username($name)
 	{
-		return $this->connection->query_value_null_ok('users','user_id',array('user_name'=>$name));
+		return $this->connection->query_select_value_if_there('users','user_id',array('user_name'=>$name));
 	}
 
 	/**
@@ -1159,8 +1159,8 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_member_ip($member)
 	{
-		//return $this->connection->query_value_null_ok('users','regip',array('uid'=>$member));
-		return $this->connection->query_value_null_ok('posts','post_ip',array('user_id'=>$member));
+		//return $this->connection->query_select_value_if_there('users','regip',array('uid'=>$member));
+		return $this->connection->query_select_value_if_there('posts','post_ip',array('user_id'=>$member));
 	}
 
 	/**

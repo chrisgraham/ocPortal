@@ -90,7 +90,7 @@ Make a block that acts as a good old-style hit counter. To do this you'll probab
 Make a block that detects if the current logged in member has ever posted on the forum. If they have, don't do any output, but if they haven't output a suggestion that they make a post.
 You might go about this in one of two ways:
  - Writing it by checking post count, which can be read via the ocPortal forum driver system ([tt]$count=$GLOBALS['FORUM_DRIVER']->get_post_count(get_member());[/tt]
- - Assuming a forum type, such as OCF, and querying the database ([tt]$count=$GLOBALS['FORUM_DB']->query_value('<post table name>','COUNT(*)',array('<poster field id>'=>get_member()));[/tt])
+ - Assuming a forum type, such as OCF, and querying the database ([tt]$count=$GLOBALS['FORUM_DB']->query_select_value('<post table name>','COUNT(*)',array('<poster field id>'=>get_member()));[/tt])
 
 The second is more adventurous and help you get used to using the database, which is always helpful.
 

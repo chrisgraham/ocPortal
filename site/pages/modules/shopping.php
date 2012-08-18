@@ -47,11 +47,11 @@ class Module_shopping
 	 */
 	function uninstall()
 	{		
-		$GLOBALS['SITE_DB']->drop_if_exists('shopping_cart');
-		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order_details');
-		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order');
-		$GLOBALS['SITE_DB']->drop_if_exists('shopping_logging');
-		$GLOBALS['SITE_DB']->drop_if_exists('shopping_order_addresses');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('shopping_cart');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('shopping_order_details');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('shopping_order');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('shopping_logging');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('shopping_order_addresses');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'shopping'));
 
@@ -352,7 +352,7 @@ class Module_shopping
 			$proceed_box=new ocp_tempcode();
 		}
 
-		$ecom_catalogue=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_ecommerce'=>1));
+		$ecom_catalogue=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_ecommerce'=>1));
 
 		$cont_shopping=is_null($ecom_catalogue)?new ocp_tempcode():build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
 

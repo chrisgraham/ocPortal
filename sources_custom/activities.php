@@ -109,7 +109,7 @@ function find_activities($viewer_id,$mode,$member_ids)
 						else
 							$friends_check_where='(member_likes='.strval($member_id).' AND member_liked='.strval($viewer_id).')';
 
-						$view_private=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT member_likes FROM '.get_table_prefix().'chat_buddies WHERE '.$friends_check_where);
+						$view_private=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_likes FROM '.get_table_prefix().'chat_buddies WHERE '.$friends_check_where);
 					}
 
 					if (is_null($view_private)) //If not friended by this person, the view is filtered.

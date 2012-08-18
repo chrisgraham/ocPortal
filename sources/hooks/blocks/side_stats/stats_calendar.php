@@ -33,7 +33,7 @@ class Hook_stats_calendar
 		require_lang('calendar');
 
 		$bits=new ocp_tempcode();
-		if (get_option('calendar_show_stats_count_events',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('EVENTS'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value('calendar_events','COUNT(*)')))));
+		if (get_option('calendar_show_stats_count_events',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('EVENTS'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)')))));
 		if (get_option('calendar_show_stats_count_events_this_week',true)=='1')
 		{
 			require_code('calendar');

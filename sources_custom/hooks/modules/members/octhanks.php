@@ -23,8 +23,8 @@ class Hook_members_octhanks
 	 */
 	function get_info_details($member_id)
 	{
-		$topics_opened=$GLOBALS['FORUM_DB']->query_value('f_topics','COUNT(*)',array('t_cache_first_member_id'=>$member_id));
-		$num_replies=$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(DISTINCT p_topic_id)',array('p_poster'=>$member_id))-$topics_opened;
+		$topics_opened=$GLOBALS['FORUM_DB']->query_select_value('f_topics','COUNT(*)',array('t_cache_first_member_id'=>$member_id));
+		$num_replies=$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(DISTINCT p_topic_id)',array('p_poster'=>$member_id))-$topics_opened;
 		return array('Forum contributions'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id).' has opened '.integer_format($topics_opened).' '.(($topics_opened==1)?'topic':'topics').' and replied to '.integer_format($num_replies).' '.(($num_replies==1)?'topic':'topics').' by other people.');
 	}
 

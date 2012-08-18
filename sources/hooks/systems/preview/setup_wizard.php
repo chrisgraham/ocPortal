@@ -44,7 +44,7 @@ class Hook_Preview_setup_wizard
 		$_GET['keep_theme_source']='default';
 		$_GET['keep_theme_algorithm']='equations';
 
-		$preview=request_page($GLOBALS['SITE_DB']->query_value('zones','zone_default_page'),true,'');
+		$preview=request_page($GLOBALS['SITE_DB']->query_select_value('zones','zone_default_page'),true,'');
 
 		return array($preview,NULL);
 	}

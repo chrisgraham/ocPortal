@@ -32,7 +32,7 @@ function ocf_list_multi_moderations($forum_id)
 	$out=array();
 	if (count($rows)==0) return $out;
 
-	$lots_of_forums=$GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)')>200;
+	$lots_of_forums=$GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>200;
 	if (!$lots_of_forums)
 	{
 		$all_forums=collapse_2d_complexity('id','f_parent_forum',$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_parent_forum')));
@@ -45,7 +45,7 @@ function ocf_list_multi_moderations($forum_id)
 		if ($lots_of_forums)
 		{
 			$sql=ocfilter_to_sqlfragment($row['mm_forum_multi_code'],'id','f_forums','f_parent_forum','f_parent_forum','id',true,true,$GLOBALS['FORUM_DB']);
-			if (!is_null($GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($forum_id).' AND ('.$sql.')')))
+			if (!is_null($GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($forum_id).' AND ('.$sql.')')))
 				$out[$row['id']]=$row['_mm_name'];
 		} else
 		{

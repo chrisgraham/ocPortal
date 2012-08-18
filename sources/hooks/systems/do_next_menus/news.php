@@ -31,8 +31,8 @@ class Hook_do_next_menus_news
 	{
 		if (!addon_installed('news')) return array();
 
-		$cnt=$GLOBALS['SITE_DB']->query_value_null_ok('news','COUNT(*)',NULL,'',true);
-		$cnt_blogs=$cnt-$GLOBALS['SITE_DB']->query_value_null_ok('news n LEFT JOIN '.get_table_prefix().'news_categories c ON c.id=n.news_category','COUNT(*)',array('nc_owner'=>NULL),'',true);
+		$cnt=$GLOBALS['SITE_DB']->query_select_value_if_there('news','COUNT(*)',NULL,'',true);
+		$cnt_blogs=$cnt-$GLOBALS['SITE_DB']->query_select_value_if_there('news n LEFT JOIN '.get_table_prefix().'news_categories c ON c.id=n.news_category','COUNT(*)',array('nc_owner'=>NULL),'',true);
 
 		return array(
 			array('cms','news',array('cms_news',array('type'=>'misc'),get_module_zone('cms_news')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('NEWS'),make_string_tempcode(escape_html(integer_format($cnt)))),('DOC_NEWS')),

@@ -203,7 +203,7 @@ class Module_lostpassword
 		}
 		if ($code!=$correct_code)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('adminlogs','date_and_time',array('the_type'=>'RESET_PASSWORD','param_a'=>strval($member),'param_b'=>$code));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','date_and_time',array('the_type'=>'RESET_PASSWORD','param_a'=>strval($member),'param_b'=>$code));
 			if (!is_null($test)) warn_exit(do_lang_tempcode('INCORRECT_PASSWORD_RESET_CODE'));
 			log_hack_attack_and_exit('HACK_ATTACK_PASSWORD_CHANGE');
 		}

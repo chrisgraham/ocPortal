@@ -29,7 +29,7 @@ class awards_test_set extends ocp_test_case
 		$this->award_id=add_award_type('test','test',1,'download',0,250);
 
 		// Test the forum was actually created
-		$this->assertTrue('download'==$GLOBALS['SITE_DB']->query_value('award_types','a_content_type',array('id'=>$this->award_id)));
+		$this->assertTrue('download'==$GLOBALS['SITE_DB']->query_select_value('award_types','a_content_type',array('id'=>$this->award_id)));
 	}
 
 	function testEditawards()
@@ -38,7 +38,7 @@ class awards_test_set extends ocp_test_case
 		edit_award_type($this->award_id,'test','test',2,'songs',0,194);
 
 		// Test the forum was actually created
-		$this->assertTrue('songs'==$GLOBALS['SITE_DB']->query_value('award_types','a_content_type',array('id'=>$this->award_id)));
+		$this->assertTrue('songs'==$GLOBALS['SITE_DB']->query_select_value('award_types','a_content_type',array('id'=>$this->award_id)));
 	}
 
 	function tearDown()

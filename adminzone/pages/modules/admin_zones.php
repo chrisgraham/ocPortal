@@ -520,7 +520,7 @@ class Module_admin_zones
 			{
 				if (in_array($id,$admin_groups)) continue;
 
-				$perhaps=is_null($zone)?true:$GLOBALS['SITE_DB']->query_value_null_ok('group_zone_access','zone_name',array('zone_name'=>$zone,'group_id'=>$id));
+				$perhaps=is_null($zone)?true:$GLOBALS['SITE_DB']->query_select_value_if_there('group_zone_access','zone_name',array('zone_name'=>$zone,'group_id'=>$id));
 				$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('ACCESS_FOR',escape_html($name)),do_lang_tempcode('DESCRIPTION_ACCESS_FOR',escape_html($name)),'access_'.strval($id),!is_null($perhaps)));
 			}
 		}
@@ -658,7 +658,7 @@ class Module_admin_zones
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
-		$max_rows=$GLOBALS['SITE_DB']->query_value('zones','COUNT(*)');
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)');
 		foreach ($_zones as $_zone_details)
 		{
 			list($zone_name,$zone_title,$zone_show_in_menu,$zone_default_page,$remaining_row)=$_zone_details;

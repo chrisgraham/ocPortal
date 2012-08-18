@@ -1294,7 +1294,7 @@ function check_call($c,$c_pos,$class=NULL,$function_guard='')
 				check_db_fields($table,$param[1],$c_pos);
 				if (isset($param[2])) check_db_map($table,$param[2],$c_pos);
 			}
-			if (($function=='query_value') || ($function=='query_value_null_ok'))
+			if (($function=='query_select_value') || ($function=='query_select_value_if_there'))
 			{
 				check_db_field($table,$param[1],$c_pos);
 				if (isset($param[2])) check_db_map($table,$param[2],$c_pos);
@@ -1518,7 +1518,7 @@ function get_insecure_functions()
 					 'better_parse_ini_file','deldir_contents',
 					 'include','include_once','require','require_once',
 					 'escapeshellarg','escapeshellcmd','exec','passthru','proc_open','shell_exec','system',
-					 'database_driver.query','database_driver._query','database_driver.query_value_null_ok_full');
+					 'database_driver.query','database_driver._query','database_driver.query_value_if_there');
 }
 
 /*

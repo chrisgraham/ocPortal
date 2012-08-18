@@ -132,7 +132,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
 	{
 		// Are they banned
 		$group=$this->get_member_row_field($member,'usergroupid');
-		$notbanned=$this->connection->query_value_null_ok('usergroup','canview',array('usergroupid'=>$group));
+		$notbanned=$this->connection->query_select_value_if_there('usergroup','canview',array('usergroupid'=>$group));
 		if ($notbanned==0)
 		{
 			return true;
@@ -150,7 +150,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
 	function _is_staff($member)
 	{
 		$usergroup=$this->get_member_row_field($member,'usergroupid');
-		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('usergroup','ismoderator',array('usergroupid'=>$usergroup))==1)) return true;
+		if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('usergroup','ismoderator',array('usergroupid'=>$usergroup))==1)) return true;
 		return false;
 	}
 
@@ -163,7 +163,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
 	function _is_super_admin($member)
 	{
 		$usergroup=$this->get_member_row_field($member,'usergroupid');
-		if ((!is_null($usergroup)) && ($this->connection->query_value_null_ok('usergroup','cancontrolpanel',array('usergroupid'=>$usergroup))==1)) return true;
+		if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('usergroup','cancontrolpanel',array('usergroupid'=>$usergroup))==1)) return true;
 		return false;
 	}
 

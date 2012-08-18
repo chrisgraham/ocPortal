@@ -158,7 +158,7 @@ class Hook_database
 		if (count($meta_dir)<1)
 		{
 			//We're at the top level, and removing a table
-			$GLOBALS['SITE_DB']->drop_if_exists($dir_name);
+			$GLOBALS['SITE_DB']->drop_table_if_exists($dir_name);
 		}
 		elseif (count($meta_dir)==1)
 		{
@@ -188,7 +188,7 @@ class Hook_database
 		{
 			//We're in a row, and deleting a field entry for this row
 			$where=$this->_do_where($meta_dir[0],$meta_dir[1]);
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('db_meta','m_type',array('m_table'=>$meta_dir[0],'m_name'=>$file_name));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('db_meta','m_type',array('m_table'=>$meta_dir[0],'m_name'=>$file_name));
 			if (is_null($test)) return false;
 			$test=str_replace('?','',str_replace('*','',$test));
 			if (in_array($test,array('AUTO','USER','INTEGER','UINTEGER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
@@ -225,7 +225,7 @@ class Hook_database
 		{
 			//We're in a row, and reading a field entry for this row
 			$where=$this->_do_where($meta_dir[0],$meta_dir[1]);
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('db_meta','m_type',array('m_table'=>$meta_dir[0],'m_name'=>$this->unescape_name($file_name)));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('db_meta','m_type',array('m_table'=>$meta_dir[0],'m_name'=>$this->unescape_name($file_name)));
 			if (is_null($test)) return false;
 			$output=$GLOBALS['SITE_DB']->query_select($meta_dir[0],array($file_name),$where);
 			if (!array_key_exists(0,$output)) return false;
@@ -254,7 +254,7 @@ class Hook_database
 		{
 			//We're in a row, and writing a field entry for this row
 			$where=$this->_do_where($meta_dir[0],$meta_dir[1]);
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('db_meta','m_type',array('m_table'=>$meta_dir[0],'m_name'=>$this->unescape_name($file_name)));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('db_meta','m_type',array('m_table'=>$meta_dir[0],'m_name'=>$this->unescape_name($file_name)));
 			if (is_null($test)) return false;
 			$accepts_null=(strpos($test,'?')!==false);
 			$test=str_replace('?','',str_replace('*','',$test));

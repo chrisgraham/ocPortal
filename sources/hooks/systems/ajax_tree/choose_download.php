@@ -41,13 +41,13 @@ class Hook_choose_download
 				do
 				{
 					$str='Version './*preg_replace('#\.0$#','',*/float_to_raw_string($id_float,1)/*)*/;
-					$_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=c.category','c.id',array('parent_id'=>3,'text_original'=>$str));
+					$_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=c.category','c.id',array('parent_id'=>3,'text_original'=>$str));
 					if (is_null($_id)) $id_float-=0.1;
 				}
 				while ((is_null($_id)) && ($id_float!=0.0));
 			} else
 			{
-				$_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=c.category','c.id',array('text_original'=>$id));
+				$_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=c.category','c.id',array('text_original'=>$id));
 			}
 			if (is_null($_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$id=strval($_id);
@@ -139,11 +139,11 @@ class Hook_choose_download
 		// Mark parent cats for pre-expansion
 		if ((!is_null($default)) && ($default!=''))
 		{
-			$cat=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads','category_id',array('id'=>intval($default)));
+			$cat=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','category_id',array('id'=>intval($default)));
 			while (!is_null($cat))
 			{
 				$out.='<expand>'.strval($cat).'</expand>';
-				$cat=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories','parent_id',array('id'=>$cat));
+				$cat=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','parent_id',array('id'=>$cat));
 			}
 		}
 

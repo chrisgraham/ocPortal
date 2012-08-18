@@ -153,8 +153,8 @@ class Module_cms_galleries extends standard_crud_module
 	 */
 	function misc()
 	{
-		$allow_images=($GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)',array('accept_images'=>1))>0);
-		$allow_videos=($GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)',array('accept_videos'=>1))>0);
+		$allow_images=($GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)',array('accept_images'=>1))>0);
+		$allow_videos=($GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)',array('accept_videos'=>1))>0);
 
 		require_code('templates_donext');
 		require_code('fields');
@@ -219,7 +219,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		if (substr($cat,0,7)!='member_')
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>$cat));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$cat));
 			if (is_null($test)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 
@@ -259,7 +259,7 @@ class Module_cms_galleries extends standard_crud_module
 		// Orphaned upload form
 		// To choose to batch import what already exists in gallery directory, but is orphaned
 		$orphaned_content=new ocp_tempcode();
-		if (($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) && ($GLOBALS['SITE_DB']->query_value('images','COUNT(*)')+$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)')<4000))
+		if (($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) && ($GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)')+$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)')<4000))
 		{
 			require_code('images');
 			$there=array();
@@ -824,7 +824,7 @@ class Module_cms_galleries extends standard_crud_module
 		if ((!has_specific_permission(get_member(),'no_personal_gallery_limit')) && ($owner==get_member()))
 		{
 			$limit=has_specific_permission(get_member(),'high_personal_gallery_limit')?intval(get_option('max_personal_gallery_images_high')):intval(get_option('max_personal_gallery_images_low'));
-			$count_already=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)',array('cat'=>$cat));
+			$count_already=$GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)',array('cat'=>$cat));
 			if ($count_already>=$limit)
 				warn_exit(do_lang_tempcode('TOO_MANY_GALLERY_IMAGES'));
 
@@ -841,7 +841,7 @@ class Module_cms_galleries extends standard_crud_module
 	 */
 	function nice_get_ajax_tree()
 	{
-		if ($GLOBALS['SITE_DB']->query_value('images','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+		if ($GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$search_url=build_url(array('page'=>'search','id'=>'images'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'galleries'),get_module_zone('galleries'));
@@ -964,7 +964,7 @@ class Module_cms_galleries extends standard_crud_module
 	 */
 	function get_cat($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('images','cat',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_select_value_if_there('images','cat',array('id'=>$id));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return $temp;
 	}
@@ -1093,9 +1093,9 @@ class Module_cms_galleries extends standard_crud_module
 
 		$this->donext_type=$cat;
 
-		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('images','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('images','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
-			$submitter=$GLOBALS['SITE_DB']->query_value('images','submitter',array('id'=>$id));
+			$submitter=$GLOBALS['SITE_DB']->query_select_value('images','submitter',array('id'=>$id));
 
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
 				syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_IMAGE':'galleries:ACTIVITY_ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries',1,$submitter);
@@ -1190,7 +1190,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		if ((!has_specific_permission(get_member(),'no_personal_gallery_limit')) && ($owner==get_member()))
 		{
 			$limit=has_specific_permission(get_member(),'high_personal_gallery_limit')?intval(get_option('max_personal_gallery_videos_high')):intval(get_option('max_personal_gallery_videos_low'));
-			$count_already=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)',array('cat'=>$cat));
+			$count_already=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)',array('cat'=>$cat));
 			if ($count_already>=$limit)
 				warn_exit(do_lang_tempcode('TOO_MANY_GALLERY_VIDEOS'));
 
@@ -1257,7 +1257,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 	 */
 	function nice_get_ajax_tree()
 	{
-		if ($GLOBALS['SITE_DB']->query_value('videos','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
+		if ($GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)')==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$search_url=build_url(array('page'=>'search','id'=>'videos'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'galleries'),get_module_zone('galleries'));
@@ -1390,7 +1390,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 	 */
 	function get_cat($id)
 	{
-		$temp=$GLOBALS['SITE_DB']->query_value_null_ok('videos','cat',array('id'=>$id));
+		$temp=$GLOBALS['SITE_DB']->query_select_value_if_there('videos','cat',array('id'=>$id));
 		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		return $temp;
 	}
@@ -1534,9 +1534,9 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		$this->donext_type=$cat;
 
-		if (($validated==1) && ($GLOBALS['SITE_DB']->query_value('videos','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('videos','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
-			$submitter=$GLOBALS['SITE_DB']->query_value('videos','submitter',array('id'=>$id));
+			$submitter=$GLOBALS['SITE_DB']->query_select_value('videos','submitter',array('id'=>$id));
 
 			if ((has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries')) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'galleries',$cat)))
 				syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_VIDEO':'galleries:ACTIVITY_ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries',1,$submitter);
@@ -1642,13 +1642,13 @@ class Module_cms_galleries_cat extends standard_crud_module
 
 		if (is_null($flow_mode_interface))
 		{
-			$cnt=$GLOBALS['SITE_DB']->query_value('galleries','COUNT(*)');
+			$cnt=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 			if ($cnt<5000)
 			{
-				$flow_mode_interface=intval(round($GLOBALS['SITE_DB']->query_value('galleries','AVG(flow_mode_interface)'))); // Determine default based on what is 'the norm' currently. Sometimes maths is beautiful :)
+				$flow_mode_interface=intval(round($GLOBALS['SITE_DB']->query_select_value('galleries','AVG(flow_mode_interface)'))); // Determine default based on what is 'the norm' currently. Sometimes maths is beautiful :)
 			} else
 			{
-				$flow_mode_interface=intval(round($GLOBALS['SITE_DB']->query_value('galleries','AVG(flow_mode_interface)',array('parent_id'=>'root')))); // Determine default based on what is 'the norm' currently. Sometimes maths is beautiful :)
+				$flow_mode_interface=intval(round($GLOBALS['SITE_DB']->query_select_value('galleries','AVG(flow_mode_interface)',array('parent_id'=>'root')))); // Determine default based on what is 'the norm' currently. Sometimes maths is beautiful :)
 			}
 		}
 
@@ -1822,7 +1822,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$g_owner_name=post_param('g_owner',NULL);
 		if(is_null($g_owner_name))
-			$g_owner=$GLOBALS['SITE_DB']->query_value('galleries','g_owner',array('name'=>$name));
+			$g_owner=$GLOBALS['SITE_DB']->query_select_value('galleries','g_owner',array('name'=>$name));
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
 

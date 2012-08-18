@@ -29,7 +29,7 @@ class Hook_do_next_menus_trackbacks
 	 */
 	function run()
 	{
-		if ((get_option('is_on_trackbacks')=='0') || ($GLOBALS['SITE_DB']->query_value_null_ok('trackbacks','COUNT(*)',NULL,'',true)==0)) return array();
+		if ((get_option('is_on_trackbacks')=='0') || ($GLOBALS['SITE_DB']->query_select_value_if_there('trackbacks','COUNT(*)',NULL,'',true)==0)) return array();
 		return array(
 			array('usage','trackbacks',array('admin_trackbacks',array('type'=>'misc'),get_module_zone('admin_trackbacks')),do_lang_tempcode('MANAGE_TRACKBACKS'),('DOC_TRACKBACKS')),
 		);

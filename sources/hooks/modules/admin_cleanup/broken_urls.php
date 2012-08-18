@@ -39,7 +39,7 @@ class Hook_broken_urls
 			if ($urlpath['m_table']=='url_title_cache') continue;
 			if ($urlpath['m_table']=='theme_images') continue;
 			if (array_key_exists($urlpath['m_table'],$skip_hooks)) continue;
-			$count+=$GLOBALS['SITE_DB']->query_value($urlpath['m_table'],'COUNT(*)');
+			$count+=$GLOBALS['SITE_DB']->query_select_value($urlpath['m_table'],'COUNT(*)');
 			if ($count>10000) return NULL; // Too much!
 		}
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;

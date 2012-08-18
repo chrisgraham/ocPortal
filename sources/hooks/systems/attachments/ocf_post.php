@@ -48,11 +48,11 @@ class Hook_attachments_ocf_post
 		if (!is_null($tf)) $forum2=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($tf); else $forum2=NULL;
 		if ($forum2==$forum_id)
 		{
-			$title=$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$info[0]['p_topic_id']));
+			$title=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id'=>$info[0]['p_topic_id']));
 			if (substr($title,0,strlen(strval(get_member()))+1)==strval(get_member()).'_') return true;
 			require_lang('tickets');
 
-			$description=$GLOBALS['FORUM_DB']->query_value('f_topics','t_description',array('id'=>$info[0]['p_topic_id']));
+			$description=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_description',array('id'=>$info[0]['p_topic_id']));
 			if (substr($description,0,strlen(do_lang('SUPPORT_TICKET').': #'.strval(get_member()))+1)==do_lang('SUPPORT_TICKET').': #'.strval(get_member()).'_') return true;
 		}
 		return (has_category_access(get_member(),'forums',strval($forum_id)));

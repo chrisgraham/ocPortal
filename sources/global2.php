@@ -895,7 +895,7 @@ function log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='')
 */
 function handle_has_checked_recently($id_code)
 {
-	$last_check_test=$GLOBALS['SITE_DB']->query_value_null_ok('url_title_cache','t_title',array('t_url'=>'!'.$id_code));
+	$last_check_test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>'!'.$id_code));
 	if ((is_null($last_check_test)) || (substr($last_check_test,0,1)!='!') || (intval(substr($last_check_test,1))+60*60*24*30<time())) // only re-checks every 30 days
 	{
 		// Show when it was last tested

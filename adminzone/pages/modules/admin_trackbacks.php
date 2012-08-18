@@ -112,7 +112,7 @@ class Module_admin_trackbacks
 					case '2':
 						if (addon_installed('securitylogging'))
 						{
-							$trackback_ip=$GLOBALS['SITE_DB']->query_value_null_ok('trackbacks','trackback_ip',array('id'=>$id));
+							$trackback_ip=$GLOBALS['SITE_DB']->query_select_value_if_there('trackbacks','trackback_ip',array('id'=>$id));
 							if (is_null($trackback_ip)) break;
 							require_code('failure');
 							add_ip_ban($trackback_ip,do_lang('TRACKBACK_SPAM'));

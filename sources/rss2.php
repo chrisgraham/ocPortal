@@ -56,7 +56,7 @@ function backend_cloud_script()
  */
 function _cloud_register_them($path,$procedure,$protocol,$port,$watching_channel)
 {
-	$before=$GLOBALS['SITE_DB']->query_value_null_ok('news_rss_cloud','register_time',array('watching_channel'=>$watching_channel,'rem_path'=>$path,'rem_ip'=>get_ip_address()));
+	$before=$GLOBALS['SITE_DB']->query_select_value_if_there('news_rss_cloud','register_time',array('watching_channel'=>$watching_channel,'rem_path'=>$path,'rem_ip'=>get_ip_address()));
 	if (!is_null($before)) return false;
 	$GLOBALS['SITE_DB']->query_insert('news_rss_cloud',array('watching_channel'=>$watching_channel,'rem_procedure'=>$procedure,'rem_port'=>$port,'rem_path'=>$path,'rem_protocol'=>$protocol,'rem_ip'=>get_ip_address(),'register_time'=>time()));
 	return true;

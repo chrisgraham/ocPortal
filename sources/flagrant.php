@@ -46,7 +46,7 @@ function add_flagrant($message,$days,$notes,$validated)
  */
 function edit_flagrant($id,$message,$notes,$validated)
 {
-	$_message=$GLOBALS['SITE_DB']->query_value('text','the_message',array('id'=>$id));
+	$_message=$GLOBALS['SITE_DB']->query_select_value('text','the_message',array('id'=>$id));
 	log_it('EDIT_FLAGRANT',strval($id),$message);
 	$GLOBALS['SITE_DB']->query_update('text',array('notes'=>$notes,'the_message'=>lang_remap_comcode($_message,$message),'active_now'=>$validated),array('id'=>$id),'',1);
 	if ($validated==1) choose_flagrant($id); else persistent_cache_delete('FLAGRANT');
@@ -59,7 +59,7 @@ function edit_flagrant($id,$message,$notes,$validated)
  */
 function delete_flagrant($id)
 {
-	$message=$GLOBALS['SITE_DB']->query_value('text','the_message',array('id'=>$id));
+	$message=$GLOBALS['SITE_DB']->query_select_value('text','the_message',array('id'=>$id));
 	$_message=get_translated_text($message);
 	log_it('DELETE_FLAGRANT',strval($id),$_message);
 	$GLOBALS['SITE_DB']->query_delete('text',array('id'=>$id),'',1);
@@ -75,7 +75,7 @@ function delete_flagrant($id)
  */
 function choose_flagrant($id)
 {
-	$message=$GLOBALS['SITE_DB']->query_value('text','the_message',array('id'=>$id));
+	$message=$GLOBALS['SITE_DB']->query_select_value('text','the_message',array('id'=>$id));
 	$message=get_translated_text($message);
 	log_it('CHOOSE_FLAGRANT',strval($id),$message);
 	$GLOBALS['SITE_DB']->query_update('text',array('active_now'=>0));
@@ -92,7 +92,7 @@ function choose_flagrant($id)
 function nice_get_flagrant()
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('text',array('*'),NULL,'ORDER BY order_time ASC');
-	$time=$GLOBALS['SITE_DB']->query_value_null_ok('text','activation_time',array('active_now'=>1));
+	$time=$GLOBALS['SITE_DB']->query_select_value_if_there('text','activation_time',array('active_now'=>1));
 	$out=new ocp_tempcode();
 	foreach ($rows as $row)
 	{

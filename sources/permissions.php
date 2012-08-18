@@ -282,7 +282,7 @@ function has_page_access($member,$page,$zone,$at_now=false)
 
 	if (count($denied_groups)==count($groups2))
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT member_id FROM '.get_table_prefix().'member_page_access WHERE ('.$pg_where.') AND (member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')');
+		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM '.get_table_prefix().'member_page_access WHERE ('.$pg_where.') AND (member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')');
 		if (!is_null($test))
 		{
 			$result=true;
@@ -341,7 +341,7 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 		$select='category_name,module_the_name';
 	}
 	$db=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB'];
-	if ($db->query_value_null_ok_full('SELECT COUNT(*) FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.')')>1000) return; // Performance issue
+	if ($db->query_value_if_there('SELECT COUNT(*) FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.')')>1000) return; // Performance issue
 	$perhaps=$db->query('SELECT '.$select.' FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.') UNION ALL SELECT '.$select.' FROM '.$db->get_table_prefix().'member_category_access WHERE '.$catclause.'(member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',NULL,NULL,false,true);
 
 	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR[$module]=true;
@@ -644,7 +644,7 @@ function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
 
 	if (addon_installed('securitylogging'))
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('usersubmitban_member','the_member',array('the_member'=>$member));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$member));
 		if (!is_null($test)) $result=false;
 	}
 

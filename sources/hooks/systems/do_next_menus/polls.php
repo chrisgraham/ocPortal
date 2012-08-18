@@ -32,7 +32,7 @@ class Hook_do_next_menus_polls
 		if (!addon_installed('polls')) return array();
 
 		return array(
-			array('cms','polls',array('cms_polls',array('type'=>'misc'),get_module_zone('cms_polls')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('POLLS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_null_ok('poll','COUNT(*)',NULL,'',true))))),('DOC_POLLS')),
+			array('cms','polls',array('cms_polls',array('type'=>'misc'),get_module_zone('cms_polls')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('POLLS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('poll','COUNT(*)',NULL,'',true))))),('DOC_POLLS')),
 		);
 	}
 

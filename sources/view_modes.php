@@ -555,7 +555,7 @@ function erase_tempcode_cache()
  */
 function erase_comcode_cache()
 {
-	if ((substr(get_db_type(),0,5)=='mysql') && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('db_meta_indices','i_fields',array('i_table'=>'translate','i_name'=>'decache')))))
+	if ((substr(get_db_type(),0,5)=='mysql') && (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_fields',array('i_table'=>'translate','i_name'=>'decache')))))
 	{
 		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate FORCE INDEX (decache) SET text_parsed=\'\' WHERE text_parsed>\'\''/*this where is so indexing helps*/);
 	} else
@@ -687,7 +687,7 @@ function do_xhtml_validation($out,$display_regardless=false,$preview_mode=0,$ret
 	if ((!$display_regardless) && ($preview_mode==0))
 	{
 		$hash=md5($out);
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('validated_once','hash',array('hash'=>$hash));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('validated_once','hash',array('hash'=>$hash));
 		if (!is_null($test)) return '';
 	}
 

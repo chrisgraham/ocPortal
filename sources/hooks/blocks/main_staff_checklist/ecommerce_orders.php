@@ -28,7 +28,7 @@ class Hook_checklist_ecommerce_orders
 
 		require_lang('shopping');
 
-		$to_dispatch_order_cnt=$GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','count(id)',array('order_status'=>'ORDER_STATUS_payment_received'));
+		$to_dispatch_order_cnt=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','count(id)',array('order_status'=>'ORDER_STATUS_payment_received'));
 
 		if($to_dispatch_order_cnt>0)
 		{

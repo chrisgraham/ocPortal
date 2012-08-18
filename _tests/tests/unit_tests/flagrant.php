@@ -28,14 +28,14 @@ class flagrant_test_set extends ocp_test_case
 
 		$this->flag_id=add_flagrant('test',3,'Welcome to ocPortal',1);
 
-		$this->assertTrue('Welcome to ocPortal'==$GLOBALS['SITE_DB']->query_value('text','notes',array('id'=>$this->flag_id)));
+		$this->assertTrue('Welcome to ocPortal'==$GLOBALS['SITE_DB']->query_select_value('text','notes',array('id'=>$this->flag_id)));
 	}
 
 	function testEditFlagrant()
 	{
 		edit_flagrant($this->flag_id,'Tested','Thank you',0);
 
-		$this->assertTrue('Thank you'==$GLOBALS['SITE_DB']->query_value('text','notes',array('id'=>$this->flag_id)));
+		$this->assertTrue('Thank you'==$GLOBALS['SITE_DB']->query_select_value('text','notes',array('id'=>$this->flag_id)));
 	}
 
 	function tearDown()

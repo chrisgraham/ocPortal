@@ -1309,7 +1309,7 @@ function workflow_choose_ui($include_inherit=false,$include_current=false)
  */
 function get_workflow_of_content($type,$id)
 {
-	return $GLOBALS['SITE_DB']->query_value_null_ok('workflow_content','workflow_name',array('source_type'=>$type,'source_id'=>$id));
+	return $GLOBALS['SITE_DB']->query_select_value_if_there('workflow_content','workflow_name',array('source_type'=>$type,'source_id'=>$id));
 }
 
 /**

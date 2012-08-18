@@ -88,11 +88,11 @@ class Hook_classifieds
 		$matches=array();
 		if (preg_match('#^CLASSIFIEDS\_ADVERT\_(\d+)$#',$product,$matches)!=0)
 		{
-			$entry_catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','c_name',array('id'=>$entry_id));
+			$entry_catalogue_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','c_name',array('id'=>$entry_id));
 			if (is_null($entry_catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 			// Check this is a valid purchase for the product
-			$classified_price_catalogue_name=$GLOBALS['SITE_DB']->query_value_null_ok('classifieds_prices','c_catalogue_name',array('id'=>intval($matches[1])));
+			$classified_price_catalogue_name=$GLOBALS['SITE_DB']->query_select_value_if_there('classifieds_prices','c_catalogue_name',array('id'=>intval($matches[1])));
 			if ($classified_price_catalogue_name!=$entry_catalogue_name)
 				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		} else
@@ -114,16 +114,16 @@ class Hook_classifieds
  */
 function handle_classifieds_advert($purchase_id,$details,$product)
 {
-	$days=$GLOBALS['SITE_DB']->query_value_null_ok('classifieds_prices','c_days',array('id'=>intval(substr($product,19))));
+	$days=$GLOBALS['SITE_DB']->query_select_value_if_there('classifieds_prices','c_days',array('id'=>intval(substr($product,19))));
 
 	// Make validated, bump up timer
-	$time=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','ce_last_moved',array('id'=>intval($purchase_id)));
+	$time=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','ce_last_moved',array('id'=>intval($purchase_id)));
 	if (!is_null($time))
 	{
 		$time+=$days*60*60*24;
 		$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_validated'=>1,'ce_last_moved'=>$time),array('id'=>intval($purchase_id)),'',1);
 		require_code('catalogues2');
-		$cc_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entries','cc_id',array('id'=>intval($purchase_id)));
+		$cc_id=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','cc_id',array('id'=>intval($purchase_id)));
 		calculate_category_child_count_cache($cc_id);
 	}
 }

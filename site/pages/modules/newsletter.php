@@ -47,12 +47,12 @@ class Module_newsletter
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('newsletter');
-		$GLOBALS['SITE_DB']->drop_if_exists('newsletters');
-		$GLOBALS['SITE_DB']->drop_if_exists('newsletter_archive');
-		$GLOBALS['SITE_DB']->drop_if_exists('newsletter_subscribe');
-		$GLOBALS['SITE_DB']->drop_if_exists('newsletter_drip_send');
-		$GLOBALS['SITE_DB']->drop_if_exists('newsletter_periodic');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('newsletter');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('newsletters');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('newsletter_archive');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('newsletter_subscribe');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('newsletter_drip_send');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('newsletter_periodic');
 
 		delete_config_option('newsletter_text');
 		delete_config_option('newsletter_title');
@@ -221,7 +221,7 @@ class Module_newsletter
 	 */
 	function get_entry_points()
 	{
-		return ($GLOBALS['SITE_DB']->query_value('newsletters','COUNT(*)')==0)?array():array('misc'=>'NEWSLETTER_JOIN');
+		return ($GLOBALS['SITE_DB']->query_select_value('newsletters','COUNT(*)')==0)?array():array('misc'=>'NEWSLETTER_JOIN');
 	}
 
 	/**
@@ -350,7 +350,7 @@ class Module_newsletter
 		}
 
 		$message=do_lang_tempcode('NEWSLETTER_UPDATE');
-		$old_confirm=$GLOBALS['SITE_DB']->query_value_null_ok('newsletter','code_confirm',array('email'=>$email));
+		$old_confirm=$GLOBALS['SITE_DB']->query_select_value_if_there('newsletter','code_confirm',array('email'=>$email));
 
 		if (is_null($old_confirm)) // New
 		{
@@ -383,8 +383,8 @@ class Module_newsletter
 		}
 
 		// Change/make settings
-		$old_password=$GLOBALS['SITE_DB']->query_value('newsletter','the_password',array('email'=>$email));
-		$old_salt=$GLOBALS['SITE_DB']->query_value('newsletter','pass_salt',array('email'=>$email));
+		$old_password=$GLOBALS['SITE_DB']->query_select_value('newsletter','the_password',array('email'=>$email));
+		$old_salt=$GLOBALS['SITE_DB']->query_select_value('newsletter','pass_salt',array('email'=>$email));
 		if ((!has_specific_permission(get_member(),'change_newsletter_subscriptions')) && ($old_password!='') && ($old_password!=md5($password.$old_salt))) // Access denied. People who can change any subscriptions can't get denied.
 		{
 			$_reset_url=build_url(array('page'=>'_SELF','type'=>'reset','email'=>$email),'_SELF');
@@ -428,8 +428,8 @@ class Module_newsletter
 		$title=get_screen_title(get_option('newsletter_title'),false);
 
 		$email=trim(get_param('email'));
-		$lang=$GLOBALS['SITE_DB']->query_value('newsletter','language',array('email'=>$email));
-		$salt=$GLOBALS['SITE_DB']->query_value('newsletter','pass_salt',array('email'=>$email));
+		$lang=$GLOBALS['SITE_DB']->query_select_value('newsletter','language',array('email'=>$email));
+		$salt=$GLOBALS['SITE_DB']->query_select_value('newsletter','pass_salt',array('email'=>$email));
 		$new_password=produce_salt();
 		$GLOBALS['SITE_DB']->query_update('newsletter',array('the_password'=>md5($new_password.$salt)),array('email'=>$email),'',1);
 
@@ -506,7 +506,7 @@ class Module_newsletter
 
 		$code_confirm=get_param_integer('confirm');
 		$email=trim(get_param('email'));
-		$correct_confirm=$GLOBALS['SITE_DB']->query_value('newsletter','code_confirm',array('email'=>$email));
+		$correct_confirm=$GLOBALS['SITE_DB']->query_select_value('newsletter','code_confirm',array('email'=>$email));
 		if ($correct_confirm==$code_confirm)
 		{
 			$GLOBALS['SITE_DB']->query_update('newsletter',array('code_confirm'=>0),array('email'=>$email),'',1);

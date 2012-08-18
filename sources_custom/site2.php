@@ -74,7 +74,7 @@ if (!function_exists('_load_comcode_page_not_cached'))
 		$LAX_COMCODE=$temp;
 
 		// Check it still needs inserting (it might actually be there, but not translated)
-		$trans_key=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','string_index',array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
+		$trans_key=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','string_index',array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
 		if (is_null($COMCODE_PARSE_TITLE)) $COMCODE_PARSE_TITLE='';
 		$title_to_use=clean_html_title($COMCODE_PARSE_TITLE);
 		if (!is_null($trans_key))
@@ -105,7 +105,7 @@ if (!function_exists('_load_comcode_page_not_cached'))
 			$comcode_page_row=$_comcode_page_row[0];
 
 			// Check to see if it needs translating
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('translate','id',array('id'=>$trans_key,'language'=>$lang));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','id',array('id'=>$trans_key,'language'=>$lang));
 			if (is_null($test))
 			{
 				$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$trans_key,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$result,'text_parsed'=>$text2,'language'=>$lang));

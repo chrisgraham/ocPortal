@@ -74,7 +74,7 @@ class Block_main_multi_content
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('feature_lifetime_monitor');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('feature_lifetime_monitor');
 	}
 
 	/**
@@ -287,7 +287,7 @@ class Block_main_multi_content
 		switch ($mode)
 		{
 			case 'random':
-				$cnt=$info['connection']->query_value_null_ok_full('SELECT COUNT(*) as cnt '.$query);
+				$cnt=$info['connection']->query_value_if_there('SELECT COUNT(*) as cnt '.$query);
 				$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query,$max,mt_rand(0,max(0,$cnt-$max)));
 				break;
 			case 'recent':
@@ -328,7 +328,7 @@ class Block_main_multi_content
 				$rows=array();
 		}
 
-		$max_rows=$info['connection']->query_value_null_ok_full('SELECT COUNT(*)'.$extra_select_sql.' '.$query);
+		$max_rows=$info['connection']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' '.$query);
 
 		$pinned_order=array();
 

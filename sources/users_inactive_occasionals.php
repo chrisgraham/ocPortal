@@ -135,7 +135,7 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 		if ($points_per_daily_visit!=0)
 		{
 			// See if this is the first visit today
-			$test=$GLOBALS['SITE_DB']->query_value('stats','MAX(date_and_time)',array('the_user'=>$member));
+			$test=$GLOBALS['SITE_DB']->query_select_value('stats','MAX(date_and_time)',array('the_user'=>$member));
 			if ($test<time()-60*60*24)
 			{
 				require_code('points');

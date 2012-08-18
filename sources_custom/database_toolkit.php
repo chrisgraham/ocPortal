@@ -66,7 +66,7 @@ function xml_dump_script()
 			;
 
 			$missing=!in_array(get_table_prefix().$table_name,$mysql_tables);
-			$count_mismatch=!$missing && $chain_db->query_value($table_name,'COUNT(*)')!=$GLOBALS['SITE_DB']->query_value($table_name,'COUNT(*)');
+			$count_mismatch=!$missing && $chain_db->query_select_value($table_name,'COUNT(*)')!=$GLOBALS['SITE_DB']->query_select_value($table_name,'COUNT(*)');
 			$date_mismatch=false;
 			if ((!$missing) && (!$count_mismatch))
 			{

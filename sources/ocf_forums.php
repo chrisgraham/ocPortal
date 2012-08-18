@@ -82,7 +82,7 @@ function ocf_get_all_subordinate_forums($forum_id,$create_or_list=NULL,$tree=NUL
 		{
 			$_max_forum_detail=get_value('max_forum_detail');
 			$max_forum_detail=is_null($_max_forum_detail)?100:intval($_max_forum_detail);
-			$huge_forums=$GLOBALS['FORUM_DB']->query_value('f_forums','COUNT(*)')>$max_forum_detail;
+			$huge_forums=$GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>$max_forum_detail;
 			if ($huge_forums)
 			{
 				$_max_forum_inspect=get_value('max_forum_inspect');
@@ -167,7 +167,7 @@ function ocf_get_forum_parent_or_list($forum_id,$parent_id=-1)
 {
 	if (is_null($forum_id)) return '';
 
-	if ($parent_id==-1) $parent_id=$GLOBALS['FORUM_DB']->query_value('f_forums','f_parent_forum',array('id'=>$forum_id));
+	if ($parent_id==-1) $parent_id=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_parent_forum',array('id'=>$forum_id));
 
 	$from_below=ocf_get_forum_parent_or_list($parent_id);
 	$term='t_forum_id='.strval((integer)$forum_id);

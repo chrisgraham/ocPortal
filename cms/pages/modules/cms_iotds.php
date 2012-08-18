@@ -161,7 +161,7 @@ class Module_cms_iotds extends standard_crud_module
 		{
 			if ($caption=='')
 			{
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('iotd','is_current',array('is_current'=>1));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('iotd','is_current',array('is_current'=>1));
 				if (is_null($test)) $current=true;
 			}
 			$fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'),do_lang_tempcode('DESCRIPTION_IMMEDIATE_USE'),'validated',$current));
@@ -180,7 +180,7 @@ class Module_cms_iotds extends standard_crud_module
 	 */
 	function ed()
 	{
-		$count=$GLOBALS['SITE_DB']->query_value('iotd','COUNT(*)');
+		$count=$GLOBALS['SITE_DB']->query_select_value('iotd','COUNT(*)');
 		if ($count==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$used=get_param_integer('used',0);
@@ -368,9 +368,9 @@ class Module_cms_iotds extends standard_crud_module
 		$current=post_param_integer('validated',0);
 		$title=post_param('title');
 
-		if (($current==1) && ($GLOBALS['SITE_DB']->query_value('iotd','is_current',array('id'=>$id))==0)) // Just became validated, syndicate as just added
+		if (($current==1) && ($GLOBALS['SITE_DB']->query_select_value('iotd','is_current',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
-			$submitter=$GLOBALS['SITE_DB']->query_value('iotd','submitter',array('id'=>$id));
+			$submitter=$GLOBALS['SITE_DB']->query_select_value('iotd','submitter',array('id'=>$id));
 
 			if (has_actual_page_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'iotds'))
 				syndicate_described_activity('iotds:ACTIVITY_ADD_IOTD',$title,'','','_SEARCH:iotds:view:'.strval($id),'','','iotds',1,$submitter);

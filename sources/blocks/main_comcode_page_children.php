@@ -69,7 +69,7 @@ class Block_main_comcode_page_children
 		$children=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','the_zone'),$qmap);
 		foreach ($children as $i=>$child)
 		{
-			$_title=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','cc_page_title',array('the_page'=>$child['the_page'],'the_zone'=>$child['the_zone']));
+			$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','cc_page_title',array('the_page'=>$child['the_page'],'the_zone'=>$child['the_zone']));
 			if (!is_null($_title))
 			{
 				$title=get_translated_text($_title,NULL,NULL,true);
@@ -81,7 +81,7 @@ class Block_main_comcode_page_children
 				if (get_option('is_on_comcode_page_cache')=='1') // Try and force a parse of the page
 				{
 					request_page($child['the_page'],false,$child['the_zone'],NULL,true);
-					$_title=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','cc_page_title',array('the_page'=>$child['the_page'],'the_zone'=>$child['the_zone']));
+					$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','cc_page_title',array('the_page'=>$child['the_page'],'the_zone'=>$child['the_zone']));
 					if (!is_null($_title))
 					{
 						$title=get_translated_text($_title);

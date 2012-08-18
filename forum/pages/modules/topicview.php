@@ -614,7 +614,7 @@ class Module_topicview
 				$moderator_actions.='<option value="delete_poll">'.do_lang('DELETE_TOPIC_POLL').'</option>';
 			if (array_key_exists('may_attach_poll',$topic_info))
 				$moderator_actions.='<option value="add_poll">'.do_lang('ADD_TOPIC_POLL').'</option>';
-			if ((has_specific_permission(get_member(),'view_content_history')) && ($GLOBALS['FORUM_DB']->query_value('f_post_history','COUNT(*)',array('h_topic_id'=>$id))!=0))
+			if ((has_specific_permission(get_member(),'view_content_history')) && ($GLOBALS['FORUM_DB']->query_select_value('f_post_history','COUNT(*)',array('h_topic_id'=>$id))!=0))
 				$moderator_actions.='<option value="topic_history">'.do_lang('POST_HISTORY').'</option>';
 			if ((array_key_exists('may_make_personal',$topic_info)) && (!is_null($topic_info['forum_id'])))
 				$moderator_actions.='<option value="make_personal">'.do_lang('MAKE_PERSONAL').'</option>';
@@ -699,7 +699,7 @@ class Module_topicview
 
 		if (is_null($id)) // Just inline personal posts
 		{
-			$root_forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>db_get_first_id()));
+			$root_forum_name=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>db_get_first_id()));
 			$breadcrumbs=hyperlink(build_url(array('page'=>'forumview','id'=>db_get_first_id()),get_module_zone('forumview')),escape_html($root_forum_name),false,false,do_lang('GO_BACKWARDS_TO'));
 			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('INLINE_PERSONAL_POSTS').'</span>'));
 		}

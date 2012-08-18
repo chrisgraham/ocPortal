@@ -115,7 +115,7 @@ class Block_main_forum_topics
 		$forum_name=array_key_exists('param',$map)?$map['param']:'General chat';
 		if ((is_numeric($forum_name)) && (get_forum_type()=='ocf'))
 		{
-			$forum_name=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('id'=>intval($forum_name)));
+			$forum_name=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_name',array('id'=>intval($forum_name)));
 			if (is_null($forum_name)) return paragraph(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$_title=do_lang_tempcode('ACTIVE_TOPICS_IN',escape_html($forum_name));

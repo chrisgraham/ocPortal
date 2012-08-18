@@ -94,7 +94,7 @@ class Block_side_root_galleries
 			}
 		}
 
-		$_title=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','fullname',array('name'=>$parent_id));
+		$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name'=>$parent_id));
 		if (!is_null($_title))
 		{
 			$title=get_translated_text($_title);

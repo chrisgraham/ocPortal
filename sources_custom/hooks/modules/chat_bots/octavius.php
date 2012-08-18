@@ -54,7 +54,7 @@ class Hook_chat_bot_octavius
 
 		if (running_script('shoutbox')) return NULL; // Messes up shoutbox
 
-		$is_im=$GLOBALS['SITE_DB']->query_value('chat_rooms','is_im',array('id'=>$room_id));
+		$is_im=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','is_im',array('id'=>$room_id));
 		if ($is_im==1) return NULL;
 
 		$message=preg_replace('#\[[^\[\]]*\]#U','',$string);

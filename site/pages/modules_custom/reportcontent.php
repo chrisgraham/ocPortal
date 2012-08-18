@@ -45,7 +45,7 @@ class Module_reportcontent
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('reported_content');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('reported_content');
 
 		delete_config_option('reported_times');
 	}
@@ -112,7 +112,7 @@ class Module_reportcontent
 
 		require_code('content');
 
-		if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('reported_content','r_counts',array(
+		if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('reported_content','r_counts',array(
 			'r_session_id'=>get_session_id(),
 			'r_content_type'=>$content_type,
 			'r_content_id'=>$content_id,
@@ -182,7 +182,7 @@ class Module_reportcontent
 		$content_type=post_param('content_type'); // Equates to a content_meta_aware hook
 		$content_id=post_param('content_id');
 
-		if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('reported_content','r_counts',array(
+		if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('reported_content','r_counts',array(
 			'r_session_id'=>get_session_id(),
 			'r_content_type'=>$content_type,
 			'r_content_id'=>$content_id,
@@ -196,7 +196,7 @@ class Module_reportcontent
 		// See if post already reported...
 		$post=post_param('post');
 		$anonymous=post_param_integer('anonymous',0);
-		$topic_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id','t.id',array('p.p_title'=>$content_title,'t.t_forum_id'=>$forum_id));
+		$topic_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id','t.id',array('p.p_title'=>$content_title,'t.t_forum_id'=>$forum_id));
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
 		require_code('ocf_posts_action');
@@ -220,7 +220,7 @@ class Module_reportcontent
 		));
 
 		// If hit threshold, mark down r_counts and unvalidate the content
-		$count=$GLOBALS['SITE_DB']->query_value('reported_content','COUNT(*)',array(
+		$count=$GLOBALS['SITE_DB']->query_select_value('reported_content','COUNT(*)',array(
 			'r_content_type'=>$content_type,
 			'r_content_id'=>$content_id,
 			'r_counts'=>1,

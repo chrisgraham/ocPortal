@@ -88,7 +88,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	 */
 	function get_member_from_username($name)
 	{
-		return $this->connection->query_value_null_ok('members','id',array('members_display_name'=>$name));
+		return $this->connection->query_select_value_if_there('members','id',array('members_display_name'=>$name));
 	}
 
 	/**
@@ -120,7 +120,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	function install_create_custom_field($name,$length,$locked=1,$viewable=0,$settable=0)
 	{
 		$name='ocp_'.$name;
-		$id=$this->connection->query_value_null_ok('pfields_data','pf_id',array('pf_title'=>$name));
+		$id=$this->connection->query_select_value_if_there('pfields_data','pf_id',array('pf_title'=>$name));
 		if (is_null($id))
 		{
 			$id=$this->connection->query_insert('pfields_data',array('pf_input_format'=>'','pf_topic_format'=>'{title} : {content}','pf_content'=>'','pf_title'=>$name,'pf_type'=>'text','pf_member_hide'=>1-$viewable,'pf_max_input'=>$length,'pf_member_edit'=>$settable,'pf_position'=>0),true);
@@ -138,9 +138,9 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	 */
 	function set_custom_field($member,$field,$amount)
 	{
-		$id=$this->connection->query_value_null_ok('pfields_data','pf_id',array('pf_title'=>'ocp_'.$field));
+		$id=$this->connection->query_select_value_if_there('pfields_data','pf_id',array('pf_title'=>'ocp_'.$field));
 		if (is_null($id)) return;
-		$old=$this->connection->query_value_null_ok('pfields_content','member_id',array('member_id'=>$member));
+		$old=$this->connection->query_select_value_if_there('pfields_content','member_id',array('member_id'=>$member));
 		if (is_null($old)) $this->connection->query_insert('pfields_content',array('member_id'=>$member));
 		$this->connection->query_update('pfields_content',array('field_'.strval($id)=>$amount),array('member_id'=>$member),'',1);
 	}
@@ -224,7 +224,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	 */
 	function get_member_avatar_url($member)
 	{
-		$avatar=$this->connection->query_value_null_ok('member_extra','avatar_location',array('id'=>$member));
+		$avatar=$this->connection->query_select_value_if_there('member_extra','avatar_location',array('id'=>$member));
 		if ($avatar=='noavatar') $avatar='';
 		elseif (is_null($avatar)) $avatar='';
 		elseif (substr($avatar,0,7)=='upload:') $avatar=get_forum_base_url().'/uploads/'.substr($avatar,7);
@@ -317,7 +317,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 		if (is_null($topic_id)) return (-2);
 		$order=$reverse?'post_date DESC':'post_date';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval((integer)$topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
-		$count=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval((integer)$topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
+		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval((integer)$topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
 		$out=array();
 		$emoticons_set_dir=$this->get_emo_dir();
 		foreach ($rows as $myrow)
@@ -397,7 +397,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 		if ($filter_topic_description!='')
 			$topic_filter.=' AND description LIKE \''.db_encode_like($this->ipb_escape($filter_topic_description)).'\'';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter.' ORDER BY '.(($date_key=='lasttime')?'last_post':'start_date').' DESC',$limit,$start);
-		$max_rows=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter);
+		$max_rows=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter);
 		$emoticons_set_dir=$this->get_emo_dir();
 		$out=array();
 		foreach ($rows as $i=>$r)
@@ -493,7 +493,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 		global $EMOTICON_SET_DIR;
 		if (is_null($EMOTICON_SET_DIR))
 		{
-			$EMOTICON_SET_DIR=$this->connection->query_value_null_ok('skin_sets','set_emoticon_folder',array('set_image_dir'=>$this->get_theme()));
+			$EMOTICON_SET_DIR=$this->connection->query_select_value_if_there('skin_sets','set_emoticon_folder',array('set_image_dir'=>$this->get_theme()));
 			if (is_null($EMOTICON_SET_DIR)) $EMOTICON_SET_DIR='default';
 		}
 		return get_forum_base_url().'/style_emoticons/'.$EMOTICON_SET_DIR.'/';
@@ -561,7 +561,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 				$skin=$this->get_member_row_field($member,'skin'); else $skin=0;
 			if ($skin>0) // User has a custom theme
 			{
-				$ipb=$this->connection->query_value_null_ok('skin_sets','set_image_dir',array('set_skin_set_id'=>$skin));
+				$ipb=$this->connection->query_select_value_if_there('skin_sets','set_image_dir',array('set_skin_set_id'=>$skin));
 				if (!is_null($ipb)) $def=array_key_exists($ipb,$map)?$map[$ipb]:$ipb;
 			}
 		}
@@ -569,14 +569,14 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 		// Look for a skin according to our site name (we bother with this instead of 'default' because ocPortal itself likes to never choose a theme when forum-theme integration is on: all forum [via map] or all ocPortal seems cleaner, although it is complex)
 		if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base().'/themes/'.$def)))
 		{
-			$ipb=$this->connection->query_value_null_ok('skin_sets','set_image_dir',array('set_name'=>get_site_name()));
+			$ipb=$this->connection->query_select_value_if_there('skin_sets','set_image_dir',array('set_name'=>get_site_name()));
 			if (!is_null($ipb)) $def=array_key_exists($ipb,$map)?$map[$ipb]:$ipb;
 		}
 
 		// Hmm, just the very-default then
 		if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base().'/themes/'.$def)))
 		{
-			$ipb=$this->connection->query_value_null_ok('skin_sets','set_image_dir',array('set_default'=>1));
+			$ipb=$this->connection->query_select_value_if_there('skin_sets','set_image_dir',array('set_default'=>1));
 			if (!is_null($ipb)) $def=array_key_exists($ipb,$map)?$map[$ipb]:$ipb;
 		}
 
@@ -605,7 +605,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	 */
 	function get_topics()
 	{
-		return $this->connection->query_value('topics','COUNT(*)');
+		return $this->connection->query_select_value('topics','COUNT(*)');
 	}
 
 	/**
@@ -615,7 +615,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	 */
 	function get_num_forum_posts()
 	{
-		return $this->connection->query_value('posts','COUNT(*)');
+		return $this->connection->query_select_value('posts','COUNT(*)');
 	}
 
 	/**

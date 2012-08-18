@@ -1179,7 +1179,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$__id=intval($id);
 
 				// Check we have permission to re-use this
-				$owner=$connection->query_value_null_ok('attachments','a_member_id',array('id'=>$__id));
+				$owner=$connection->query_select_value_if_there('attachments','a_member_id',array('id'=>$__id));
 				if (is_null($owner)) // Missing attachment!
 				{
 					$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','attachment',escape_html(strval($__id)))));
@@ -1914,10 +1914,10 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					if (($page=='topicview') && (array_key_exists('id',$attributes)))
 					{
 						if (!is_numeric($attributes['id']))
-							$attributes['id']=$GLOBALS['SITE_DB']->query_value_null_ok('url_id_monikers','m_resource_id',array('m_resource_page'=>$page,'m_moniker'=>$attributes['id']));
+							$attributes['id']=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_resource_id',array('m_resource_page'=>$page,'m_moniker'=>$attributes['id']));
 						if (!is_null($attributes['id']))
 						{
-							$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','id',array('id'=>$attributes['id']));
+							$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','id',array('id'=>$attributes['id']));
 							if (is_null($test)) $ptest=false;
 						} else $ptest=false;
 					}

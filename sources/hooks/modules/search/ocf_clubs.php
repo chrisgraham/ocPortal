@@ -31,7 +31,7 @@ class Hook_search_ocf_clubs
 		if (get_forum_type()!='ocf') return NULL;
 
 		if (!has_actual_page_access(get_member(),'groups')) return NULL;
-		if ($GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)',array('g_is_private_club'=>1))==0) return NULL;
+		if ($GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)',array('g_is_private_club'=>1))==0) return NULL;
 
 		require_lang('ocf');
 

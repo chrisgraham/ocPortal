@@ -57,8 +57,8 @@ class Module_tester
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('test_sections');
-		$GLOBALS['SITE_DB']->drop_if_exists('tests');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('test_sections');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('tests');
 
 		delete_specific_permission('perform_tests');
 		delete_specific_permission('add_tests');
@@ -150,9 +150,9 @@ class Module_tester
 	{
 		$title=get_screen_title('TEST_STATISTICS');
 
-		$num_tests_successful=$GLOBALS['SITE_DB']->query_value('tests','COUNT(*)',array('t_status'=>1,'t_enabled'=>1));
-		$num_tests_failed=$GLOBALS['SITE_DB']->query_value('tests','COUNT(*)',array('t_status'=>2,'t_enabled'=>1));
-		$num_tests_incomplete=$GLOBALS['SITE_DB']->query_value('tests','COUNT(*)',array('t_status'=>0,'t_enabled'=>1));
+		$num_tests_successful=$GLOBALS['SITE_DB']->query_select_value('tests','COUNT(*)',array('t_status'=>1,'t_enabled'=>1));
+		$num_tests_failed=$GLOBALS['SITE_DB']->query_select_value('tests','COUNT(*)',array('t_status'=>2,'t_enabled'=>1));
+		$num_tests_incomplete=$GLOBALS['SITE_DB']->query_select_value('tests','COUNT(*)',array('t_status'=>0,'t_enabled'=>1));
 		$num_tests=$num_tests_successful+$num_tests_failed+$num_tests_incomplete;
 
 		$testers=new ocp_tempcode();
@@ -164,9 +164,9 @@ class Module_tester
 			$t_username=$GLOBALS['FORUM_DRIVER']->get_username($tester);
 			if (is_null($t_username)) continue;
 
-			$num_tests_successful=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=1 AND (t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))');
-			$num_tests_failed=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=2 AND (t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))');
-			$num_tests_incomplete=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=0 AND (t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))');
+			$num_tests_successful=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=1 AND (t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))');
+			$num_tests_failed=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=2 AND (t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))');
+			$num_tests_incomplete=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=0 AND (t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))');
 			$num_tests=$num_tests_successful+$num_tests_failed+$num_tests_incomplete;
 
 			$t=do_template('TESTER_STATISTICS_MEMBER',array('_GUID'=>'80778fd574859f966686212566ba67bc','TESTER'=>$t_username,'NUM_TESTS'=>integer_format($num_tests),'NUM_TESTS_SUCCESSFUL'=>integer_format($num_tests_successful),'NUM_TESTS_FAILED'=>integer_format($num_tests_failed),'NUM_TESTS_INCOMPLETE'=>integer_format($num_tests_incomplete)));
@@ -228,7 +228,7 @@ class Module_tester
 				$_tests_2=$GLOBALS['SITE_DB']->query_select('tests',array('*'),array('t_section'=>$test['t_inherit_section']));
 				if (count($_tests_2)!=0)
 				{
-					$section_notes=$GLOBALS['SITE_DB']->query_value('test_sections','s_notes',array('id'=>$test['t_inherit_section']));
+					$section_notes=$GLOBALS['SITE_DB']->query_select_value('test_sections','s_notes',array('id'=>$test['t_inherit_section']));
 					if ($section_notes!='') $a_test->attach(paragraph(escape_html($section_notes)));
 
 					$a_test->attach(do_template('TESTER_TEST_SET',array('TESTS'=>map_keys_to_upper($_tests_2))));
@@ -339,7 +339,7 @@ class Module_tester
 		{
 			$section=$_section['s_section'];
 			$id=$_section['id'];
-			$count=$GLOBALS['SITE_DB']->query_value('tests','COUNT(*)',array('t_section'=>$id));
+			$count=$GLOBALS['SITE_DB']->query_select_value('tests','COUNT(*)',array('t_section'=>$id));
 			$extra=new ocp_tempcode();
 			if (!$unassigned)
 			{

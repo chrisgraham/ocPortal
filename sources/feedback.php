@@ -101,7 +101,7 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 					$category_id=is_integer($content[$category_field])?strval($content[$category_field]):$content[$category_field];
 					if ($award_hook=='catalogue_entry')
 					{
-						$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$category_id));
+						$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id));
 						if (!has_category_access($member_id,'catalogues_catalogue',$catalogue_name))
 							return false;
 					}
@@ -140,7 +140,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 		$auto_monitor_contrib_content=$GLOBALS['OCF_DRIVER']->get_member_row_field($submitter,'m_auto_monitor_contrib_content');
 		if ($auto_monitor_contrib_content==1)
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('notifications_enabled','l_setting',array(
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('notifications_enabled','l_setting',array(
 				'l_member_id'=>$submitter,
 				'l_notification_code'=>'comment_posted',
 				'l_code_category'=>$page_name.'_'.$content_id,
@@ -400,7 +400,7 @@ function already_rated($rating_for_types,$content_id)
 		$query.='1=0';
 	}
 	$query.=$more.')';
-	$has_rated=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
+	$has_rated=$GLOBALS['SITE_DB']->query_value_if_there($query);
 
 	return ($has_rated>=count($rating_for_types));
 }
@@ -515,7 +515,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 		// Special case. Would prefer not to hard-code, but important for usability
 		if (($content_type=='post') && ($content_title=='') && (get_forum_type()=='ocf'))
 		{
-			$content_title=do_lang('POST_IN',$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$GLOBALS['FORUM_DB']->query_value('f_posts','p_topic_id',array('id'=>intval($content_id))))));
+			$content_title=do_lang('POST_IN',$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id'=>$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_topic_id',array('id'=>intval($content_id))))));
 		}
 
 		if ((!is_null($submitter)) && (!is_guest($submitter)))
@@ -842,11 +842,11 @@ function update_spacer_post($allow_comments,$content_type,$content_id,$content_u
 	{
 		$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum_id,$content_type.'_'.$content_id);
 		if (is_null($topic_id)) return;
-		$post_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_posts','MIN(id)',array('p_topic_id'=>$topic_id));
+		$post_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','MIN(id)',array('p_topic_id'=>$topic_id));
 		if (is_null($post_id)) return;
 	} else
 	{
-		$topic_id=$GLOBALS['FORUM_DB']->query_value('f_posts','p_topic_id',array('id'=>$post_id));
+		$topic_id=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_topic_id',array('id'=>$post_id));
 	}
 
 	$spacer_title=is_null($content_title)?($content_type.'_'.$content_id):($content_title.' (#'.$content_type.'_'.$content_id.')');

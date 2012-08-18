@@ -57,9 +57,9 @@ class Module_admin_addons
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('addons');
-		$GLOBALS['SITE_DB']->drop_if_exists('addons_files');
-		$GLOBALS['SITE_DB']->drop_if_exists('addons_dependencies');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('addons');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('addons_files');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('addons_dependencies');
 
 		deldir_contents(get_custom_file_base().'/exports/addons',true);
 	}
@@ -367,7 +367,7 @@ class Module_admin_addons
 
 				if (
 					(!file_exists(get_file_base().'/sources/hooks/systems/addon_registry/'.filter_naughty_harsh($name,true).'.php')) &&
-					(is_null($GLOBALS['SITE_DB']->query_value_null_ok('addons','addon_name',array('addon_name'=>$name))))
+					(is_null($GLOBALS['SITE_DB']->query_select_value_if_there('addons','addon_name',array('addon_name'=>$name))))
 				)
 					continue;
 

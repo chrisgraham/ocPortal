@@ -47,7 +47,7 @@ class Module_filedump
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('filedump');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('filedump');
 
 		delete_specific_permission('delete_anything_filedump');
 		delete_specific_permission('upload_filedump');
@@ -334,10 +334,10 @@ class Module_filedump
 			return do_template('CONFIRM_SCREEN',array('_GUID'=>'19503cf5dc795b9c85d26702b79e3202','TITLE'=>$title,'FIELDS'=>$hidden,'PREVIEW'=>$text,'URL'=>$url));
 		}
 
-		$owner=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','the_member',array('name'=>$file,'path'=>$place));
+		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','the_member',array('name'=>$file,'path'=>$place));
 		if (((!is_null($owner)) && ($owner==get_member())) || (has_specific_permission(get_member(),'delete_anything_filedump')))
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>$file,'path'=>$place));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','description',array('name'=>$file,'path'=>$place));
 			if (!is_null($test)) delete_lang($test);
 
 			$path=get_custom_file_base().'/uploads/filedump'.$place.$file;
@@ -479,7 +479,7 @@ class Module_filedump
 
 			$return_url=build_url(array('page'=>'_SELF','place'=>$place),'_SELF');
 
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('filedump','description',array('name'=>$file,'path'=>$place));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','description',array('name'=>$file,'path'=>$place));
 			if (!is_null($test)) delete_lang($test);
 			$GLOBALS['SITE_DB']->query_delete('filedump',array('name'=>$file,'path'=>$place),'',1);
 			$description=post_param('description');

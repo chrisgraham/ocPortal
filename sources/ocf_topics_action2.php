@@ -150,7 +150,7 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 
 	if (!is_null($post_target_topic_id))
 	{
-		$to=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','t_forum_id',array('id'=>$post_target_topic_id));
+		$to=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_forum_id',array('id'=>$post_target_topic_id));
 		if (is_null($to)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	}
 
@@ -347,7 +347,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET t_forum_id='.strval((integer)$to).',t_pt_from=NULL,t_pt_to=NULL WHERE t_forum_id'.(is_null($from)?' IS NULL':('='.strval((integer)$from))).' AND ('.$or_list.')');
 		log_it('MOVE_TOPICS',do_lang('MULTIPLE'));
 
-		$post_count=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT SUM(t_cache_num_posts) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list);
+		$post_count=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT SUM(t_cache_num_posts) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list);
 
 		// Update forum IDs' for posts
 		$or_list_2=str_replace('id','p_topic_id',$or_list);
@@ -442,7 +442,7 @@ function ocf_invite_to_pt($member_id,$topic_id)
 	if (($topic_info[0]['t_pt_from']==$member_id) || ($topic_info[0]['t_pt_to']==$member_id))
 		warn_exit(do_lang_tempcode('NO_INVITE_SENSE'));
 
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_special_pt_access','s_member_id',array(
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_special_pt_access','s_member_id',array(
 		's_member_id'=>$member_id,
 		's_topic_id'=>$topic_id,
 	));
@@ -482,7 +482,7 @@ function send_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$
 {
 	if (is_null($from_id)) $from_id=get_member();
 
-	$post_lang_id=is_integer($post)?$post:$GLOBALS['FORUM_DB']->query_value('f_posts','p_post',array('id'=>$post_id));
+	$post_lang_id=is_integer($post)?$post:$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_post',array('id'=>$post_id));
 	$post_comcode=get_translated_text((integer)$post_lang_id,$GLOBALS['FORUM_DB']);
 
 	require_code('notifications');

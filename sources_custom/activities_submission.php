@@ -155,7 +155,7 @@ function activities_ajax_update_list_handler()
 {
 	$map=array();
 
-	$map['max']=$GLOBALS['SITE_DB']->query_value_null_ok('values', 'the_value', array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
+	$map['max']=$GLOBALS['SITE_DB']->query_select_value_if_there('values', 'the_value', array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
 
 	if (is_null($map['max']))
 	{
@@ -244,7 +244,7 @@ function activities_ajax_removal_handler()
 	$response.='<response>';
 
 	$stat_id=post_param_integer('removal_id',-1);
-	$stat_owner=($stat_id!=-1)?$GLOBALS['SITE_DB']->query_value_null_ok('activities', 'a_member_id', array('id'=>$stat_id)):NULL;
+	$stat_owner=($stat_id!=-1)?$GLOBALS['SITE_DB']->query_select_value_if_there('activities', 'a_member_id', array('id'=>$stat_id)):NULL;
 
 	if (($is_guest!==true) && (!is_null($stat_owner)))
 	{

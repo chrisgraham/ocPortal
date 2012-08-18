@@ -167,7 +167,7 @@ class Module_admin_setupwizard
 		$site_name=get_option('site_name');
 		$description=get_option('description');
 		$site_scope=get_option('site_scope');
-		$_header_text=$GLOBALS['SITE_DB']->query_value('zones','zone_header_text',array('zone_name'=>''));
+		$_header_text=$GLOBALS['SITE_DB']->query_select_value('zones','zone_header_text',array('zone_name'=>''));
 		$header_text=get_translated_text($_header_text);
 		$copyright=get_option('copyright');
 		$staff_address=get_option('staff_address');
@@ -721,9 +721,9 @@ class Module_admin_setupwizard
 			set_option('keywords',post_param('keywords'));
 			set_option('google_analytics',post_param('google_analytics'));
 			set_option('fixed_width',post_param('fixed_width','0'));
-			$a=$GLOBALS['SITE_DB']->query_value('zones','zone_header_text',array('zone_name'=>''));
+			$a=$GLOBALS['SITE_DB']->query_select_value('zones','zone_header_text',array('zone_name'=>''));
 			lang_remap($a,$header_text);
-			$b=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_header_text',array('zone_name'=>'site'));
+			$b=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name'=>'site'));
 			if (!is_null($b)) lang_remap($b,$header_text);
 		}
 
@@ -807,11 +807,11 @@ class Module_admin_setupwizard
 			{
 				if ($collapse_zones)
 				{
-					$test=$GLOBALS['SITE_DB']->query_value_null_ok('redirects','r_from_page',array('r_from_page'=>'panel_left','r_from_zone'=>'site'));
+					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('redirects','r_from_page',array('r_from_page'=>'panel_left','r_from_zone'=>'site'));
 					if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'panel_left','r_from_zone'=>'site','r_to_page'=>'panel_left','r_to_zone'=>'','r_is_transparent'=>1));
-					$test=$GLOBALS['SITE_DB']->query_value_null_ok('redirects','r_from_page',array('r_from_page'=>'panel_right','r_from_zone'=>'site'));
+					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('redirects','r_from_page',array('r_from_page'=>'panel_right','r_from_zone'=>'site'));
 					if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'panel_right','r_from_zone'=>'site','r_to_page'=>'panel_right','r_to_zone'=>'','r_is_transparent'=>1));
-					$test=$GLOBALS['SITE_DB']->query_value_null_ok('redirects','r_from_page',array('r_from_page'=>'start','r_from_zone'=>'site'));
+					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('redirects','r_from_page',array('r_from_page'=>'start','r_from_zone'=>'site'));
 					if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'start','r_from_zone'=>'site','r_to_page'=>'start','r_to_zone'=>'','r_is_transparent'=>1));
 				} else
 				{
@@ -823,7 +823,7 @@ class Module_admin_setupwizard
 			if (post_param_integer('guest_zone_access',0)==1)
 			{
 				$guest_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($GLOBALS['FORUM_DRIVER']->get_guest_id());
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('group_zone_access','zone_name',array('zone_name'=>'site','group_id'=>$guest_groups[0]));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('group_zone_access','zone_name',array('zone_name'=>'site','group_id'=>$guest_groups[0]));
 				if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name'=>'site','group_id'=>$guest_groups[0]));
 			}
 		}

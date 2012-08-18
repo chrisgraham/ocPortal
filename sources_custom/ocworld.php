@@ -106,7 +106,7 @@ function merge_items($from,$to)
 	$rows=$GLOBALS['SITE_DB']->query_select('w_items',array('*'),array('name'=>$from));
 	foreach ($rows as $myrow)
 	{
-		$amount=$GLOBALS['SITE_DB']->query_value_null_ok('w_items','i_count',array('location_x'=>$myrow['location_x'],'location_y'=>$myrow['location_y'],'location_realm'=>$myrow['location_realm'],'name'=>$to,'copy_owner'=>$myrow['copy_owner']));
+		$amount=$GLOBALS['SITE_DB']->query_select_value_if_there('w_items','i_count',array('location_x'=>$myrow['location_x'],'location_y'=>$myrow['location_y'],'location_realm'=>$myrow['location_realm'],'name'=>$to,'copy_owner'=>$myrow['copy_owner']));
 		if (is_null($amount))
 		{
 			$GLOBALS['SITE_DB']->query_update('w_items',array('name'=>$to),array('location_x'=>$myrow['location_x'],'location_y'=>$myrow['location_y'],'location_realm'=>$myrow['location_realm'],'copy_owner'=>$myrow['copy_owner'],'name'=>$from));
@@ -120,7 +120,7 @@ function merge_items($from,$to)
 	$rows=$GLOBALS['SITE_DB']->query_select('w_inventory',array('*'),array('item_name'=>$from));
 	foreach ($rows as $myrow)
 	{
-		$amount=$GLOBALS['SITE_DB']->query_value_null_ok('w_inventory','item_count',array('item_owner'=>$myrow['item_owner'],'item_name='=>$to));
+		$amount=$GLOBALS['SITE_DB']->query_select_value_if_there('w_inventory','item_count',array('item_owner'=>$myrow['item_owner'],'item_name='=>$to));
 		if (is_null($amount))
 		{
 			$GLOBALS['SITE_DB']->query_update('w_inventory',array('item_name'=>$to),array('item_owner'=>$myrow['item_owner'],'item_name'=>$from));
@@ -144,7 +144,7 @@ function destick($member_id)
 	// Make sure people can't get stuck
 	require_code('ocworld');
 	list($realm,$x,$y)=get_loc_details($member_id);
-	$name=$GLOBALS['SITE_DB']->query_value_null_ok('w_rooms','name',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+	$name=$GLOBALS['SITE_DB']->query_select_value_if_there('w_rooms','name',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 	if (is_null($name))
 	{
 		$GLOBALS['SITE_DB']->query_update('w_members',array('location_x'=>0,'location_y'=>0,'location_realm'=>0),array('id'=>$member_id),'',1);
@@ -183,7 +183,7 @@ function portal($member_id,$dest_realm)
 	$dest_y=$portals[0]['end_location_y'];
 
 	// Check $end_location_realm exists
-	$name=$GLOBALS['SITE_DB']->query_value_null_ok('w_rooms','name',array('location_x'=>$dest_x,'location_y'=>$dest_y,'location_realm'=>$dest_realm));
+	$name=$GLOBALS['SITE_DB']->query_select_value_if_there('w_rooms','name',array('location_x'=>$dest_x,'location_y'=>$dest_y,'location_realm'=>$dest_realm));
 	if (is_null($name)) ocw_refresh_with_message(do_lang_tempcode('INTERNAL_ERROR'),'warn');
 
 	// Move member there
@@ -203,9 +203,9 @@ function take_items($member_id)
 	list($realm,,)=get_loc_details($member_id);
 	$realm_troll=-$realm-1;
 
-	while ($GLOBALS['SITE_DB']->query_value('w_inventory','COUNT(*)',array('item_owner'=>$member_id))>0)
+	while ($GLOBALS['SITE_DB']->query_select_value('w_inventory','COUNT(*)',array('item_owner'=>$member_id))>0)
 	{
-		$item_name=$GLOBALS['SITE_DB']->query_value('w_inventory','item_name',array('item_owner'=>$member_id));
+		$item_name=$GLOBALS['SITE_DB']->query_select_value('w_inventory','item_name',array('item_owner'=>$member_id));
 
 		remove_item_person($member_id,$item_name);
 		add_item_person($realm_troll,$item_name);
@@ -246,7 +246,7 @@ function message($member_id,$message,$destination)
  */
 function room_exists($x,$y,$realm)
 {
-	$r=$GLOBALS['SITE_DB']->query_value_null_ok('w_rooms','name',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
+	$r=$GLOBALS['SITE_DB']->query_select_value_if_there('w_rooms','name',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
 	return !is_null($r);
 }
 
@@ -270,10 +270,10 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 	$_y=$y+$dy;
 
 	// Make sure they are not passing through a locked (solid) wall
-	if ($dx==1) $locked=$GLOBALS['SITE_DB']->query_value('w_rooms','locked_right',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
-	elseif ($dx==-1) $locked=$GLOBALS['SITE_DB']->query_value('w_rooms','locked_left',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
-	elseif ($dy==1) $locked=$GLOBALS['SITE_DB']->query_value('w_rooms','locked_down',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
-	elseif ($dy==-1) $locked=$GLOBALS['SITE_DB']->query_value('w_rooms','locked_up',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
+	if ($dx==1) $locked=$GLOBALS['SITE_DB']->query_select_value('w_rooms','locked_right',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
+	elseif ($dx==-1) $locked=$GLOBALS['SITE_DB']->query_select_value('w_rooms','locked_left',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
+	elseif ($dy==1) $locked=$GLOBALS['SITE_DB']->query_select_value('w_rooms','locked_down',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
+	elseif ($dy==-1) $locked=$GLOBALS['SITE_DB']->query_select_value('w_rooms','locked_up',array('location_realm'=>$realm,'location_x'=>$x,'location_y'=>$y));
 	if ($locked==1) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	// Does the room exist?
@@ -319,7 +319,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 		if ($required_item=='BRIBE')
 		{
 			// Check we have one
-			$item_name=$GLOBALS['SITE_DB']->query_value_null_ok('w_inventory LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'w_itemdef on item_name=name','item_name',array('bribable'=>1,'item_owner'=>$member_id));
+			$item_name=$GLOBALS['SITE_DB']->query_select_value_if_there('w_inventory LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'w_itemdef on item_name=name','item_name',array('bribable'=>1,'item_owner'=>$member_id));
 			if (is_null($item_name)) ocw_refresh_with_message(do_lang_tempcode('W_NO_BRIBE'),'warn');
 
 			// Transfer it to the troll
@@ -332,7 +332,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 
 		} else // Otherwise just a simple check
 		{
-			$item_name=$GLOBALS['SITE_DB']->query_value_null_ok('w_inventory','item_name',array('item_owner'=>$member_id,'item_name'=>$required_item));
+			$item_name=$GLOBALS['SITE_DB']->query_select_value_if_there('w_inventory','item_name',array('item_owner'=>$member_id,'item_name'=>$required_item));
 			if (is_null($item_name))
 			{
 				if ((!has_specific_permission($member_id,'administer_ocworld')) && ($owner!=$member_id))
@@ -349,7 +349,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 	basic_enter_room($member_id,$realm,$_x,$_y);
 
 	// Is there a troll here?
-	$troll_id=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_members WHERE location_x='.strval((integer)$_x).' AND location_y='.strval((integer)$_y).' AND location_realm='.strval((integer)$realm).' AND id<0');
+	$troll_id=$GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_members WHERE location_x='.strval((integer)$_x).' AND location_y='.strval((integer)$_y).' AND location_realm='.strval((integer)$realm).' AND id<0');
 	if (!is_null($troll_id))
 	{
 		// Are they unlucky enough for an encounter?
@@ -393,7 +393,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
  */
 function hurt($member_id)
 {
-	$health=$GLOBALS['SITE_DB']->query_value('w_members','health',array('id'=>$member_id))-1;
+	$health=$GLOBALS['SITE_DB']->query_select_value('w_members','health',array('id'=>$member_id))-1;
 	$GLOBALS['SITE_DB']->query_update('w_members',array('health'=>$health),array('id'=>$member_id),'',1);
 }
 
@@ -404,7 +404,7 @@ function hurt($member_id)
  */
 function dehurt($member_id)
 {
-	$health=$GLOBALS['SITE_DB']->query_value('w_members','health',array('id'=>$member_id))+1;
+	$health=$GLOBALS['SITE_DB']->query_select_value('w_members','health',array('id'=>$member_id))+1;
 	$GLOBALS['SITE_DB']->query_update('w_members',array('health'=>$health),array('id'=>$member_id),'',1);
 }
 
@@ -485,7 +485,7 @@ function findperson($dest_member_name)
 			if (is_null($dest_member_name)) $dest_member_name=do_lang('UNKNOWN');
 		} else
 		{
-			$dest_member_name=$GLOBALS['SITE_DB']->query_value('w_realms','troll_name',array('id'=>(-$dest_member_id-1)));
+			$dest_member_name=$GLOBALS['SITE_DB']->query_select_value('w_realms','troll_name',array('id'=>(-$dest_member_id-1)));
 		}
 	}
 
@@ -494,20 +494,20 @@ function findperson($dest_member_name)
 	$dest_member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($dest_member_name);
 	if (is_null($dest_member_id))
 	{
-		$dest_member_id=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_realms WHERE troll_name LIKE \''.db_encode_like($dest_member_name).'\'');
+		$dest_member_id=$GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_realms WHERE troll_name LIKE \''.db_encode_like($dest_member_name).'\'');
 		if (is_null($dest_member_id))
 			ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 		$dest_member_id=-$dest_member_id-1;
 	}
 
 	// Get coordinates
-	$location_x=$GLOBALS['SITE_DB']->query_value_null_ok('w_members','location_x',array('id'=>$dest_member_id));
+	$location_x=$GLOBALS['SITE_DB']->query_select_value_if_there('w_members','location_x',array('id'=>$dest_member_id));
 	if (is_null($location_x)) ocw_refresh_with_message(do_lang_tempcode('W_NOT_PLAYING'),'warn');
 	list($location_realm,$location_x,$location_y)=get_loc_details($dest_member_id);
 
 	// Get pleasant name
-	$room_name=$GLOBALS['SITE_DB']->query_value('w_rooms','name',array('location_x'=>$location_x,'location_y'=>$location_y,'location_realm'=>$location_realm));
-	$realm_name=$GLOBALS['SITE_DB']->query_value('w_realms','name',array('id'=>$location_realm));
+	$room_name=$GLOBALS['SITE_DB']->query_select_value('w_rooms','name',array('location_x'=>$location_x,'location_y'=>$location_y,'location_realm'=>$location_realm));
+	$realm_name=$GLOBALS['SITE_DB']->query_select_value('w_realms','name',array('id'=>$location_realm));
 
 	// Now give them a screen with the info
 	ocw_refresh_with_message(do_lang_tempcode('W_FOUND_PERSON',escape_html($dest_member_name),strval($location_realm),array(strval($location_x),strval($location_y),escape_html($realm_name),escape_html($room_name))));
@@ -523,13 +523,13 @@ function findperson($dest_member_name)
 function steal($member_id,$target)
 {
 	// Check they have at least one item
-	$count=$GLOBALS['SITE_DB']->query_value('w_inventory','COUNT(*)',array('item_owner'=>$target));
+	$count=$GLOBALS['SITE_DB']->query_select_value('w_inventory','COUNT(*)',array('item_owner'=>$target));
 	if (!($count>=1)) ocw_refresh_with_message(do_lang_tempcode('W_NOTHING_STEAL'),'warn');
 
 	// Pick one item name from their inventory at random
 	$item_nth=mt_rand(0,$count-1);
 	for ($i=0;$i<=$item_nth;$i++)
-		$item_name=$GLOBALS['SITE_DB']->query_value('w_inventory','item_name',array('item_owner'=>$target));
+		$item_name=$GLOBALS['SITE_DB']->query_select_value('w_inventory','item_name',array('item_owner'=>$target));
 
 	remove_item_person($target,$item_name);
 	add_item_person($member_id,$item_name);
@@ -571,7 +571,7 @@ function useitem($member_id,$item_name)
 	if (!item_held($member_id,$item_name)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	// Is it a healthy item?
-	$healthy=$GLOBALS['SITE_DB']->query_value('w_itemdef','healthy',array('name'=>$item_name));
+	$healthy=$GLOBALS['SITE_DB']->query_select_value('w_itemdef','healthy',array('name'=>$item_name));
 	if ($healthy==0) ocw_refresh_with_message(do_lang_tempcode('W_USELESS')); else
 	{
 		dehurt($member_id);
@@ -611,7 +611,7 @@ function basic_enter_room($member_id,$realm,$x,$y)
 function item_held($member_id,$item_name)
 {
 	// Is the item held by the user
-	$r=$GLOBALS['SITE_DB']->query_value_null_ok('w_inventory','item_count',array('item_owner'=>$member_id,'item_name'=>$item_name));
+	$r=$GLOBALS['SITE_DB']->query_select_value_if_there('w_inventory','item_count',array('item_owner'=>$member_id,'item_name'=>$item_name));
 	return !is_null($r);
 }
 
@@ -682,7 +682,7 @@ function buy($member_id,$item_name,$copy_owner)
 {
 	// Check we have the points and that it exists
 	list($realm,$x,$y)=get_loc_details($member_id);
-	$cost=$GLOBALS['SITE_DB']->query_value_null_ok('w_items','cost',array('name'=>$item_name,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'copy_owner'=>$copy_owner));
+	$cost=$GLOBALS['SITE_DB']->query_select_value_if_there('w_items','cost',array('name'=>$item_name,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'copy_owner'=>$copy_owner));
 	if (is_null($cost)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	if ($cost>available_points($member_id)) ocw_refresh_with_message(do_lang_tempcode('W_EXPENSIVE',integer_format($cost)),'warn');
@@ -716,13 +716,13 @@ function take($member_id,$item_name,$copy_owner)
 {
 	// Check its free and exists
 	list($realm,$x,$y)=get_loc_details($member_id);
-	$cost=$GLOBALS['SITE_DB']->query_value_null_ok('w_items','cost',array('name'=>$item_name,'copy_owner'=>$copy_owner,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+	$cost=$GLOBALS['SITE_DB']->query_select_value_if_there('w_items','cost',array('name'=>$item_name,'copy_owner'=>$copy_owner,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 	if (is_null($cost)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	if ($cost!=0) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
-	$max_per_player=$GLOBALS['SITE_DB']->query_value('w_itemdef','max_per_player',array('name'=>$item_name));
-	$count=$GLOBALS['SITE_DB']->query_value_null_ok('w_inventory','item_count',array('item_name'=>$item_name,'item_owner'=>$member_id));
+	$max_per_player=$GLOBALS['SITE_DB']->query_select_value('w_itemdef','max_per_player',array('name'=>$item_name));
+	$count=$GLOBALS['SITE_DB']->query_select_value_if_there('w_inventory','item_count',array('item_name'=>$item_name,'item_owner'=>$member_id));
 	if (($count>=$max_per_player) && ($count>=1)) ocw_refresh_with_message(do_lang_tempcode('W_EXCESS'),'warn');
 
 	basic_pickup($member_id,$item_name,$copy_owner);
@@ -760,11 +760,11 @@ function take_an_item_from_room($realm,$x,$y,$item_name,$copy_owner)
 	// Does the item need to be removed? (is it infinite, Or maybe it has a count to be decremented?)
 	// =================================
 
-	$not_infinite=$GLOBALS['SITE_DB']->query_value('w_items','not_infinite',array('name'=>$item_name,'copy_owner'=>$copy_owner,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+	$not_infinite=$GLOBALS['SITE_DB']->query_select_value('w_items','not_infinite',array('name'=>$item_name,'copy_owner'=>$copy_owner,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 	if ($not_infinite==1)
 	{
 		// Not an infinite one, so decrement the count / delete it
-		$count=$GLOBALS['SITE_DB']->query_value('w_items','i_count',array('name'=>$item_name,'copy_owner'=>$copy_owner,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+		$count=$GLOBALS['SITE_DB']->query_select_value('w_items','i_count',array('name'=>$item_name,'copy_owner'=>$copy_owner,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 		if ($count==0) fatal_exit(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
 		if ($count>1)
 		{
@@ -793,10 +793,10 @@ function add_item_to_room($realm,$x,$y,$item_name,$not_infinite,$cost,$copy_owne
 	// Does the item need to be created or is it there? (and is it infinite, or maybe it has a count to be incremented?)
 	// ================================================
 
-	$count=$GLOBALS['SITE_DB']->query_value_null_ok('w_items','i_count',array('name'=>$item_name,'copy_owner'=>$copy_owner,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+	$count=$GLOBALS['SITE_DB']->query_select_value_if_there('w_items','i_count',array('name'=>$item_name,'copy_owner'=>$copy_owner,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 	if (!is_null($count)) // It already exists
 	{
-		$_not_infinite=$GLOBALS['SITE_DB']->query_value('w_items','not_infinite',array('name'=>$item_name,'copy_owner'=>$copy_owner,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
+		$_not_infinite=$GLOBALS['SITE_DB']->query_select_value('w_items','not_infinite',array('name'=>$item_name,'copy_owner'=>$copy_owner,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm));
 		if ($_not_infinite==1)
 		{
 			// Not an infinite one, so increment the count
@@ -827,7 +827,7 @@ function add_item_to_room($realm,$x,$y,$item_name,$not_infinite,$cost,$copy_owne
 function remove_item_person($member_id,$item_name)
 {
 	// Make sure we don't remove all items of the same name at once (decrement count if count>1)
-	$count=$GLOBALS['SITE_DB']->query_value_null_ok('w_inventory','item_count',array('item_name'=>$item_name,'item_owner'=>$member_id));
+	$count=$GLOBALS['SITE_DB']->query_select_value_if_there('w_inventory','item_count',array('item_name'=>$item_name,'item_owner'=>$member_id));
 	if ($count>1)
 	{
 		$GLOBALS['SITE_DB']->query_update('w_inventory',array('item_count'=>$count-1),array('item_name'=>$item_name,'item_owner'=>$member_id));
@@ -846,7 +846,7 @@ function remove_item_person($member_id,$item_name)
 function add_item_person($member_id,$item_name)
 {
 	// Do they already have one
-	$count=$GLOBALS['SITE_DB']->query_value_null_ok('w_inventory','item_count',array('item_name'=>$item_name,'item_owner'=>$member_id));
+	$count=$GLOBALS['SITE_DB']->query_select_value_if_there('w_inventory','item_count',array('item_name'=>$item_name,'item_owner'=>$member_id));
 	if (!is_null($count))
 	{
 		$GLOBALS['SITE_DB']->query_update('w_inventory',array('item_count'=>$count+1),array('item_name'=>$item_name,'item_owner'=>$member_id));

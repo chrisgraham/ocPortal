@@ -90,7 +90,7 @@ class Hook_ipb2 extends Hook_ipb_base
 			if (import_check_if_imported('custom_comcode',strval($row['bbcode_id']))) continue;
 
 			global $VALID_COMCODE_TAGS;
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$row['bbcode_tag']));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$row['bbcode_tag']));
 			if ((array_key_exists($row['bbcode_tag'],$VALID_COMCODE_TAGS)) || (!is_null($test)))
 			{
 				import_id_remap_put('custom_comcode',strval($row['bbcode_id']),1);
@@ -132,7 +132,7 @@ class Hook_ipb2 extends Hook_ipb_base
 
 			$title=@html_entity_decode($row['name'],ENT_QUOTES,get_charset());
 
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
 				import_id_remap_put('category',strval($row['id']),$test);

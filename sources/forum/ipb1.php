@@ -97,7 +97,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	 */
 	function get_member_from_username($name)
 	{
-		return $this->connection->query_value_null_ok('members','id',array('name'=>$name));
+		return $this->connection->query_select_value_if_there('members','id',array('name'=>$name));
 	}
 
 	/**
@@ -110,7 +110,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	function install_create_custom_field($name,$length)
 	{
 		$name='ocp_'.$name;
-		$id=$this->connection->query_value_null_ok('pfields_data','fid',array('ftitle'=>$name));
+		$id=$this->connection->query_select_value_if_there('pfields_data','fid',array('ftitle'=>$name));
 		if (is_null($id))
 		{
 			$id=$this->connection->query_insert('pfields_data',array('ftitle'=>$name,'ftype'=>'text','fhide'=>1,'fmaxinput'=>$length,'fedit'=>0,'forder'=>0),true);
@@ -128,9 +128,9 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	 */
 	function set_custom_field($member,$field,$amount)
 	{
-		$id=$this->connection->query_value_null_ok('pfields_data','fid',array('ftitle'=>'ocp_'.$field));
+		$id=$this->connection->query_select_value_if_there('pfields_data','fid',array('ftitle'=>'ocp_'.$field));
 		if (is_null($id)) return;
-		$old=$this->connection->query_value_null_ok('pfields_content','member_id',array('member_id'=>$member));
+		$old=$this->connection->query_select_value_if_there('pfields_content','member_id',array('member_id'=>$member));
 		if (is_null($old)) $this->connection->query_insert('pfields_content',array('member_id'=>$member));
 		$this->connection->query_update('pfields_content',array('field_'.strval($id)=>$amount),array('member_id'=>$member),'',1);
 	}
@@ -287,7 +287,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		if (is_null($topic_id)) return (-2);
 		$order=$reverse?'post_date DESC':'post_date';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval((integer)$topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
-		$count=$this->connection->query_value_null_ok_full('SELECT COUNT(*) '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval((integer)$topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
+		$count=$this->connection->query_value_if_there('SELECT COUNT(*) '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval((integer)$topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
 		$out=array();
 		foreach ($rows as $myrow)
 		{
@@ -347,7 +347,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 
 		$topic_filter=($filter_topic_title!='')?'AND title LIKE \''.db_encode_like($this->ipb_escape($filter_topic_title)).'\'':'';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter.' ORDER BY '.(($date_key=='lasttime')?'last_post':'start_date').' DESC',$limit,$start);
-		$max_rows=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter);
+		$max_rows=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'topics WHERE ('.$id_list.') '.$topic_filter);
 		$out=array();
 		foreach ($rows as $i=>$r)
 		{
@@ -447,7 +447,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 				$skin=$this->get_member_row_field($member,'skin'); else $skin=0;
 			if ($skin>0) // User has a custom theme
 			{
-				$ipb=$this->connection->query_value('skins','img_dir',array('sid'=>$skin));
+				$ipb=$this->connection->query_select_value('skins','img_dir',array('sid'=>$skin));
 				$def=array_key_exists($ipb,$map)?$map[$ipb]:$ipb;
 			}
 		}
@@ -455,14 +455,14 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 		// Look for a skin according to our site name (we bother with this instead of 'default' because ocPortal itself likes to never choose a theme when forum-theme integration is on: all forum [via map] or all ocPortal seems cleaner, although it is complex)
 		if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base().'/themes/'.$def)))
 		{
-			$ipb=$this->connection->query_value_null_ok('skins','img_dir',array('img_dir'=>get_site_name()));
+			$ipb=$this->connection->query_select_value_if_there('skins','img_dir',array('img_dir'=>get_site_name()));
 			if (!is_null($ipb)) $def=array_key_exists($ipb,$map)?$map[$ipb]:$ipb;
 		}
 
 		// Hmm, just the very-default then
 		if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base().'/themes/'.$def)))
 		{
-			$ipb=$this->connection->query_value('skins','img_dir',array('default_set'=>1));
+			$ipb=$this->connection->query_select_value('skins','img_dir',array('default_set'=>1));
 			$def=array_key_exists($ipb,$map)?$map[$ipb]:$ipb;
 		}
 

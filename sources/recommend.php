@@ -51,7 +51,7 @@ function get_num_invites($member_id)
 {
 	if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) return 1; // Admin can always have another invite
 
-	$used=$GLOBALS['FORUM_DB']->query_value('f_invites','COUNT(*)',array('i_inviter'=>$member_id));
+	$used=$GLOBALS['FORUM_DB']->query_select_value('f_invites','COUNT(*)',array('i_inviter'=>$member_id));
 	$per_day=floatval(get_option('invites_per_day'));
 	return intval($per_day*floor((time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member_id))/(60*60*24))-$used);
 }

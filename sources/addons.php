@@ -560,7 +560,7 @@ function install_addon($file,$files=NULL)
 			{
 				$zone=$matches[1];
 
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_name',array('zone_name'=>$zone));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_name',array('zone_name'=>$zone));
 				if (is_null($test))
 				{
 					require_code('menus2');
@@ -691,7 +691,7 @@ function uninstall_addon($name)
 	{
 		if (file_exists(get_file_base().'/'.$filename))
 		{
-			$test=$GLOBALS['SITE_DB']->query_value('addons_files','COUNT(*)',array('filename'=>$filename));
+			$test=$GLOBALS['SITE_DB']->query_select_value('addons_files','COUNT(*)',array('filename'=>$filename));
 			if ($test<=1) // Make sure it's not shared with other addons
 			{
 				if (substr($filename,0,37)=='sources/hooks/systems/addon_registry/')
@@ -935,7 +935,7 @@ function has_feature($dependency)
 	if (array_key_exists($dependency,$remapping)) $dependency=$remapping[$dependency];
 
 	// Non-bundled addon
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('addons','addon_name',array('addon_name'=>$dependency));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('addons','addon_name',array('addon_name'=>$dependency));
 	if (!is_null($test)) return true;
 
 	// Bundled addon

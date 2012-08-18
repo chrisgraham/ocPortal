@@ -266,7 +266,7 @@ class Module_admin_newsletter extends standard_crud_module
 						$jointime=array_key_exists($jointime_index,$csv_line)?strtotime($csv_line[$jointime_index]):time();
 						if ($jointime===false) $jointime=time();
 
-						$test=$GLOBALS['SITE_DB']->query_value_null_ok('newsletter','id',array('email'=>$email));
+						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('newsletter','id',array('email'=>$email));
 						if (is_null($test))
 						{
 							$GLOBALS['SITE_DB']->query_insert('newsletter',array(
@@ -1660,7 +1660,7 @@ class Module_admin_newsletter extends standard_crud_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$num_readers=$GLOBALS['SITE_DB']->query_value('newsletter n JOIN '.get_table_prefix().'newsletter_subscribe s ON n.id=s.newsletter_id','COUNT(*)',array('code_confirm'=>0));
+			$num_readers=$GLOBALS['SITE_DB']->query_select_value('newsletter n JOIN '.get_table_prefix().'newsletter_subscribe s ON n.id=s.newsletter_id','COUNT(*)',array('code_confirm'=>0));
 
 			$fields->attach(results_entry(array(get_translated_text($row['title']),integer_format($num_readers),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id']))))),true);
 		}

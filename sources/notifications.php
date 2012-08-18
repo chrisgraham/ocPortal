@@ -592,16 +592,16 @@ function notifications_setting($notification_code,$notification_category,$member
 
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown','l_setting',array(
 		'l_notification_code'=>$notification_code,
 	));
 	if (is_null($test))
 	{
-		$test=$db->query_value_null_ok('notifications_enabled','l_setting',$specific_where);
+		$test=$db->query_select_value_if_there('notifications_enabled','l_setting',$specific_where);
 
 		if ((is_null($test)) && (!is_null($notification_category)))
 		{
-			$test=$db->query_value_null_ok('notifications_enabled','l_setting',array(
+			$test=$db->query_select_value_if_there('notifications_enabled','l_setting',array(
 				'l_member_id'=>$member_id,
 				'l_notification_code'=>$notification_code,
 				'l_code_category'=>'',
@@ -928,7 +928,7 @@ class Hook_Notification
 
 		$db=(substr($only_if_enabled_on__notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_setting',array(
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown','l_setting',array(
 			'l_notification_code'=>$only_if_enabled_on__notification_code,
 		));
 		if ((!is_null($test)) && (get_forum_type()=='ocf'))

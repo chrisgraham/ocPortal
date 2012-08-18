@@ -48,7 +48,7 @@ class Module_awards
 	 */
 	function get_entry_points()
 	{
-		return ($GLOBALS['SITE_DB']->query_value('award_types','COUNT(*)')==0)?array():array('misc'=>'AWARDS','overview'=>'AWARD_OVERVIEW');
+		return ($GLOBALS['SITE_DB']->query_select_value('award_types','COUNT(*)')==0)?array():array('misc'=>'AWARDS','overview'=>'AWARD_OVERVIEW');
 	}
 
 	/**
@@ -192,7 +192,7 @@ class Module_awards
 		$description=paragraph(get_translated_tempcode($award_type_row['a_description']),'grdgdfghdfgodfs');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('award_archive',array('*'),array('a_type_id'=>$id),'ORDER BY date_and_time DESC',$max,$start);
-		$max_rows=$GLOBALS['SITE_DB']->query_value('award_archive','COUNT(*)',array('a_type_id'=>$id));
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('award_archive','COUNT(*)',array('a_type_id'=>$id));
 		$content=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{

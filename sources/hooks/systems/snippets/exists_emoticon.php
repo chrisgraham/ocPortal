@@ -30,7 +30,7 @@ class Hook_exists_emoticon
 	{
 		$val=get_param('name');
 
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_emoticons','e_code',array('e_code'=>$val));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons','e_code',array('e_code'=>$val));
 		if (is_null($test)) return new ocp_tempcode();
 
 		require_lang('ocf');

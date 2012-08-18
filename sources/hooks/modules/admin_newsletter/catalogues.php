@@ -58,25 +58,25 @@ class Hook_whats_news_catalogues
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
 		{
-			$c_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>$row['cc_id']));
+			$c_name=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','c_name',array('id'=>$row['cc_id']));
 			if (is_null($c_name)) continue; // Corruption
-			$c_title=$GLOBALS['SITE_DB']->query_value('catalogues','c_title',array('c_name'=>$c_name));
+			$c_title=$GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>$c_name));
 			$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_type'),array('c_name'=>$c_name),'ORDER BY id',1);
 			$name='';
 			switch ($fields[0]['cf_type'])
 			{
 				case 'short_trans':
-					$_name=$GLOBALS['SITE_DB']->query_value('catalogue_efv_short_trans','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
+					$_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_efv_short_trans','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
 					$name=get_translated_text($_name,NULL,$lang);
 					break;
 				case 'short_text':
-					$name=$GLOBALS['SITE_DB']->query_value('catalogue_efv_short','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
+					$name=$GLOBALS['SITE_DB']->query_select_value('catalogue_efv_short','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id']));
 					break;
 				case 'float':
-					$name=float_to_raw_string($GLOBALS['SITE_DB']->query_value('catalogue_efv_float','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id'])));
+					$name=float_to_raw_string($GLOBALS['SITE_DB']->query_select_value('catalogue_efv_float','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id'])));
 					break;
 				case 'integer':
-					$name=strval($GLOBALS['SITE_DB']->query_value('catalogue_efv_integer','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id'])));
+					$name=strval($GLOBALS['SITE_DB']->query_select_value('catalogue_efv_integer','cv_value',array('ce_id'=>$row['id'],'cf_id'=>$fields[0]['id'])));
 					break;
 			}
 

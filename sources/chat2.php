@@ -301,7 +301,7 @@ function add_chatroom($welcome,$roomname,$room_owner,$allow2,$allow2_groups,$dis
  */
 function edit_chatroom($id,$welcome,$roomname,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$roomlang)
 {
-	$c_welcome=$GLOBALS['SITE_DB']->query_value('chat_rooms','c_welcome',array('id'=>$id));
+	$c_welcome=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','c_welcome',array('id'=>$id));
 
 	$GLOBALS['SITE_DB']->query_update('chat_rooms',array('c_welcome'=>lang_remap($c_welcome,$welcome),'room_name'=>$roomname,'room_owner'=>$room_owner,'allow_list'=>$allow2,'allow_list_groups'=>$allow2_groups,'disallow_list'=>$disallow2,'disallow_list_groups'=>$disallow2_groups,'room_language'=>$roomlang),array('id'=>$id),'',1);
 
@@ -388,7 +388,7 @@ function chatroom_ban_to($member_id,$id)
 {
 	log_it('CHAT_BAN',strval($id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
 
-	$disallow_list=$GLOBALS['SITE_DB']->query_value('chat_rooms','disallow_list',array('id'=>$id));
+	$disallow_list=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','disallow_list',array('id'=>$id));
 	if ($disallow_list=='') $disallow_list=strval($member_id); else $disallow_list.=','.strval($member_id);
 	$GLOBALS['SITE_DB']->query_update('chat_rooms',array('disallow_list'=>$disallow_list),array('id'=>$id),'',1);
 }
@@ -403,7 +403,7 @@ function chatroom_unban_to($member_id,$id)
 {
 	log_it('CHAT_UNBAN',strval($id),$GLOBALS['FORUM_DRIVER']->get_username($member_id));
 
-	$disallow_list=$GLOBALS['SITE_DB']->query_value('chat_rooms','disallow_list',array('id'=>$id));
+	$disallow_list=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','disallow_list',array('id'=>$id));
 	$_disallow_list=explode(',',$disallow_list);
 	$_disallow_list2=array();
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);

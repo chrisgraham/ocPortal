@@ -38,8 +38,8 @@ if (!function_exists('parse_translated_text'))
 				return NULL;
 			}
 
-			$result=$connection->query_value_null_ok('translate','text_parsed',array('id'=>$entry,'language'=>get_site_default_lang()));
-			if (is_null($result)) $result=$connection->query_value_null_ok('translate','text_parsed',array('id'=>$entry));
+			$result=$connection->query_select_value_if_there('translate','text_parsed',array('id'=>$entry,'language'=>get_site_default_lang()));
+			if (is_null($result)) $result=$connection->query_select_value_if_there('translate','text_parsed',array('id'=>$entry));
 
 			if ((is_null($result)) || ($result==''))
 			{

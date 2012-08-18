@@ -47,10 +47,10 @@ class Module_pointstore
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('prices');
-		$GLOBALS['SITE_DB']->drop_if_exists('sales');
-		$GLOBALS['SITE_DB']->drop_if_exists('pstore_customs');
-		$GLOBALS['SITE_DB']->drop_if_exists('pstore_permissions');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('prices');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('sales');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('pstore_customs');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('pstore_permissions');
 
 		delete_config_option('is_on_banner_buy');
 		delete_config_option('initial_banner_hits');
@@ -272,7 +272,7 @@ class Module_pointstore
 		{
 			$forwarding_url=build_url(array('page'=>'_SELF','type'=>'newforwarding','id'=>'forwarding'),'_SELF');
 
-			if ($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'prices WHERE name LIKE \''.db_encode_like('forw_%').'\'')>0)
+			if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'prices WHERE name LIKE \''.db_encode_like('forw_%').'\'')>0)
 				$_pointstore_mail_forwarding_link=$forwarding_url;
 			else $_pointstore_mail_forwarding_link=NULL;
 			$pointstore_mail_forwarding_link=do_template('POINTSTORE_MFORWARDING_LINK',array('_GUID'=>'e93666809dc3e47e3660245711f545ee','FORWARDING_URL'=>$_pointstore_mail_forwarding_link));
@@ -282,7 +282,7 @@ class Module_pointstore
 		{
 			$pop3_url=build_url(array('page'=>'_SELF','type'=>'pop3info','id'=>'pop3'),'_SELF');
 
-			if ($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'prices WHERE name LIKE \''.db_encode_like('pop3_%').'\'')>0)
+			if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'prices WHERE name LIKE \''.db_encode_like('pop3_%').'\'')>0)
 				$_pointstore_mail_pop3_link=$pop3_url;
 			else $_pointstore_mail_pop3_link=NULL;
 			$pointstore_mail_pop3_link=do_template('POINTSTORE_MPOP3_LINK',array('_GUID'=>'42925a17262704450e451ad8502bce0d','POP3_URL'=>$_pointstore_mail_pop3_link));

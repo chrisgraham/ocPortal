@@ -289,7 +289,7 @@ class forum_driver_ocf extends forum_driver_base
 		global $TOPIC_IS_THREADED;
 		if (array_key_exists($topic_id,$TOPIC_IS_THREADED)) return $TOPIC_IS_THREADED[$topic_id]==1;
 
-		$TOPIC_IS_THREADED[$topic_id]=$this->connection->query_value_null_ok('f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id','f_is_threaded',array('t.id'=>$topic_id));
+		$TOPIC_IS_THREADED[$topic_id]=$this->connection->query_select_value_if_there('f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id','f_is_threaded',array('t.id'=>$topic_id));
 		return $TOPIC_IS_THREADED[$topic_id]==1;
 	}
 
@@ -655,7 +655,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		global $TOPIC_IDENTIFIERS_TO_IDS;
 		if (array_key_exists($key,$TOPIC_IDENTIFIERS_TO_IDS)) return $TOPIC_IDENTIFIERS_TO_IDS[$key];
-		$result=is_numeric($forum)?intval($forum):$this->connection->query_value_null_ok('f_forums','id',array('f_name'=>$forum));
+		$result=is_numeric($forum)?intval($forum):$this->connection->query_select_value_if_there('f_forums','id',array('f_name'=>$forum));
 
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);
@@ -775,7 +775,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function get_previous_member($member)
 	{
-		$tempid=$this->connection->query_value_null_ok_full('SELECT id FROM '.$this->connection->get_table_prefix().'f_members WHERE id<'.strval((integer)$member).' AND id>0 ORDER BY id DESC');
+		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'f_members WHERE id<'.strval((integer)$member).' AND id>0 ORDER BY id DESC');
 		if ($tempid==$this->get_guest_id()) return NULL;
 		return $tempid;
 	}
@@ -789,7 +789,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function get_next_member($member)
 	{
-		$tempid=$this->connection->query_value_null_ok_full('SELECT id FROM '.$this->connection->get_table_prefix().'f_members WHERE id>'.strval((integer)$member).' ORDER BY id');
+		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'f_members WHERE id>'.strval((integer)$member).' ORDER BY id');
 		return $tempid;
 	}
 
@@ -974,7 +974,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function get_topic_count($member)
 	{
-		return $this->connection->query_value('f_topics','COUNT(*)',array('t_cache_first_member_id'=>$member));
+		return $this->connection->query_select_value('f_topics','COUNT(*)',array('t_cache_first_member_id'=>$member));
 	}
 
 	/**
@@ -1035,7 +1035,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		if ($value==0)
 		{
-			$value=$this->connection->query_value('f_members','COUNT(*)')-1;
+			$value=$this->connection->query_select_value('f_members','COUNT(*)')-1;
 			set_value('ocf_member_count',strval($value));
 		}
 
@@ -1053,7 +1053,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		if ($value==0)
 		{
-			$value=$this->connection->query_value('f_topics','COUNT(*)');
+			$value=$this->connection->query_select_value('f_topics','COUNT(*)');
 			set_value('ocf_topic_count',strval($value));
 		}
 
@@ -1071,7 +1071,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		if ($value==0)
 		{
-			$value=$this->connection->query_value('f_posts','COUNT(*)');
+			$value=$this->connection->query_select_value('f_posts','COUNT(*)');
 			set_value('ocf_post_count',strval($value));
 		}
 
@@ -1085,7 +1085,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function _get_num_new_forum_posts()
 	{
-		return $this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_posts WHERE p_time>'.strval(time()-60*60*24));
+		return $this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_posts WHERE p_time>'.strval(time()-60*60*24));
 	}
 
 	/**
@@ -1168,7 +1168,7 @@ class forum_driver_ocf extends forum_driver_base
 		if ($hide_hidden) $select.=',g.g_hidden';
 		$sup=' ORDER BY g_order,g.id';
 		if (running_script('upgrader')) $sup='';
-		$count=$this->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_groups g'.$where);
+		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'f_groups g'.$where);
 		if (($count>100) && ((!$force_show_all) || ($count>4000)))
 		{
 			if (is_null($force_find)) $force_find=NULL;
@@ -1262,7 +1262,7 @@ class forum_driver_ocf extends forum_driver_base
 		$user_id=$this->get_member_from_username($username);
 		if (((is_null($GLOBALS['LDAP_CONNECTION'])) || (!ocf_is_on_ldap($username))) && (is_null($user_id)))
 		{
-			$user_id=$this->connection->query_value_null_ok('f_members','id',array('m_email_address'=>$username));
+			$user_id=$this->connection->query_select_value_if_there('f_members','id',array('m_email_address'=>$username));
 			if (is_null($user_id))
 			{
 				return '!'; // Invalid user logging in
@@ -1479,7 +1479,7 @@ class forum_driver_ocf extends forum_driver_base
 		{
 			global $SENT_OUT_VALIDATE_NOTICE;
 			$ip=get_ip_address(3);
-			$test2=$this->connection->query_value_null_ok('f_member_known_login_ips','i_val_code',array('i_member_id'=>$row['id'],'i_ip'=>$ip));
+			$test2=$this->connection->query_select_value_if_there('f_member_known_login_ips','i_val_code',array('i_member_id'=>$row['id'],'i_ip'=>$ip));
 			if (((is_null($test2)) || ($test2!='')) && (!compare_ip_address($ip,$row['m_ip_address'])))
 			{
 				if (!$SENT_OUT_VALIDATE_NOTICE)
@@ -1563,7 +1563,7 @@ class forum_driver_ocf extends forum_driver_base
 			$time_threshold=30;
 			$count_threshold=50;
 			$query='SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE date_and_time>'.strval(time()-$time_threshold).' AND date_and_time<'.strval(time()).' AND '.db_string_equal_to('ip',get_ip_address());
-			$count=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
+			$count=$GLOBALS['SITE_DB']->query_value_if_there($query);
 			if (($count>=$count_threshold) && (addon_installed('securitylogging')))
 			{
 				$ip=get_ip_address();

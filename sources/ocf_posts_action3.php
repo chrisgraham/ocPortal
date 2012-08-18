@@ -225,7 +225,7 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 	}
 
 	// Update member post counts
-	$post_counts=is_null($forum_id)?1:$GLOBALS['FORUM_DB']->query_value('f_forums','f_post_count_increment',array('id'=>$forum_id));
+	$post_counts=is_null($forum_id)?1:$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_post_count_increment',array('id'=>$forum_id));
 	if ($post_counts==1)
 	{
 		$_member_post_counts=$GLOBALS['FORUM_DB']->query('SELECT p_poster FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list);
@@ -252,7 +252,7 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 	$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$or_list);
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'review_supplement WHERE '.str_replace('id=','r_post_id=',$or_list));
 
-	$test=$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)',array('p_topic_id'=>$topic_id));
+	$test=$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)',array('p_topic_id'=>$topic_id));
 	if ($test==0)
 	{
 		require_code('ocf_topics_action');
@@ -376,7 +376,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 		}
 	}
 
-	$test=$delete_if_empty?$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)',array('p_topic_id'=>$from_topic_id)):1;
+	$test=$delete_if_empty?$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)',array('p_topic_id'=>$from_topic_id)):1;
 	if ($test==0)
 	{
 		require_code('ocf_topics_action');
@@ -387,9 +387,9 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 	{
 		// Make informative post
 		$me_link='[page="'.get_module_zone('members').':members:view:'.strval(get_member()).'"]'.$GLOBALS['OCF_DRIVER']->get_username(get_member()).'[/page]';
-		$topic_title=$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_first_title',array('id'=>$to_topic_id));
+		$topic_title=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id'=>$to_topic_id));
 		$lang=do_lang('INLINE_POSTS_MOVED_MESSAGE',$me_link,integer_format(count($posts)),array('[page="'.get_module_zone('topicview').':topicview:misc:'.strval($to_topic_id).'"]'.str_replace('"','\"',str_replace('[','\\[',$topic_title)).'[/page]'));
-		ocf_make_post($from_topic_id,'',$lang,0,false,1,1,NULL,NULL,$GLOBALS['FORUM_DB']->query_value('f_posts','p_time',array('id'=>$posts[0]))+1,NULL,NULL,NULL,NULL,false);
+		ocf_make_post($from_topic_id,'',$lang,0,false,1,1,NULL,NULL,$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_time',array('id'=>$posts[0]))+1,NULL,NULL,NULL,NULL,false);
 
 		require_code('ocf_general_action2');
 		ocf_mod_log_it('MOVE_POSTS',strval($to_topic_id),strval(count($posts)),$reason);

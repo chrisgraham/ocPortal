@@ -41,10 +41,10 @@ if (uninstall_check_master_password(post_param('given_password')))
 	$tables=collapse_1d_complexity('m_table',$GLOBALS['SITE_DB']->query_select('db_meta',array('DISTINCT m_table')));
 	foreach ($tables as $table)
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists($table);
+		$GLOBALS['SITE_DB']->drop_table_if_exists($table);
 	}
-	$GLOBALS['SITE_DB']->drop_if_exists('db_meta_indices');
-	$GLOBALS['SITE_DB']->drop_if_exists('db_meta');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('db_meta_indices');
+	$GLOBALS['SITE_DB']->drop_table_if_exists('db_meta');
 
 	$uninstalled->evaluate_echo();
 

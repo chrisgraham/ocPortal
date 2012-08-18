@@ -31,7 +31,7 @@ class Hook_search_iotds
 		if (!module_installed('iotds')) return NULL;
 
 		if (!has_actual_page_access(get_member(),'iotds')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('iotd','COUNT(*)')==0) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('iotd','COUNT(*)')==0) return NULL;
 
 		require_lang('iotds');
 

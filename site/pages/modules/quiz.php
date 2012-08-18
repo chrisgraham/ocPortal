@@ -47,13 +47,13 @@ class Module_quiz
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('quizzes');
-		$GLOBALS['SITE_DB']->drop_if_exists('quiz_questions');
-		$GLOBALS['SITE_DB']->drop_if_exists('quiz_question_answers');
-		$GLOBALS['SITE_DB']->drop_if_exists('quiz_entries');
-		$GLOBALS['SITE_DB']->drop_if_exists('quiz_member_last_visit');
-		$GLOBALS['SITE_DB']->drop_if_exists('quiz_winner');
-		$GLOBALS['SITE_DB']->drop_if_exists('quiz_entry_answer');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('quizzes');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_questions');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_question_answers');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_entries');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_member_last_visit');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_winner');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_entry_answer');
 		delete_config_option('points_ADD_QUIZ');
 		delete_config_option('quiz_show_stats_count_total_open');
 		delete_specific_permission('bypass_quiz_repeat_time_restriction');
@@ -291,7 +291,7 @@ class Module_quiz
 		$max=get_param_integer('max',20);
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.((!has_specific_permission(get_member(),'see_unvalidated'))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).') ORDER BY q_type ASC,id DESC',$max,$start);
-		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.((!has_specific_permission(get_member(),'see_unvalidated'))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).')');
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.((!has_specific_permission(get_member(),'see_unvalidated'))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).')');
 		if (count($rows)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 		$content_tests=new ocp_tempcode();
 		$content_competitions=new ocp_tempcode();
@@ -334,7 +334,7 @@ class Module_quiz
 		// Check they are on the necessary newsletter, if appropriate
 		if ((!is_null($quiz['q_tied_newsletter'])) && (addon_installed('newsletter')))
 		{
-			$on=$GLOBALS['SITE_DB']->query_value_null_ok('newsletter_subscribe','email',array('newsletter_id'=>$quiz['q_tied_newsletter'],'email'=>$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())));
+			$on=$GLOBALS['SITE_DB']->query_select_value_if_there('newsletter_subscribe','email',array('newsletter_id'=>$quiz['q_tied_newsletter'],'email'=>$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member())));
 			if (is_null($on)) warn_exit(do_lang_tempcode('NOT_ON_NEWSLETTER'));
 		}
 
@@ -345,7 +345,7 @@ class Module_quiz
 		// Check they are allowed to do this (if repeating)
 		if ((!has_specific_permission(get_member(),'bypass_quiz_repeat_time_restriction')) && (!is_null($quiz['q_redo_time'])))
 		{
-			$last_entry=$GLOBALS['SITE_DB']->query_value_null_ok('quiz_entries','q_time',array('q_member'=>get_member(),'q_quiz'=>$quiz['id']),'ORDER BY q_time DESC');
+			$last_entry=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_entries','q_time',array('q_member'=>get_member(),'q_quiz'=>$quiz['id']),'ORDER BY q_time DESC');
 			if ((!is_null($last_entry)) && ($last_entry+$quiz['q_redo_time']*60*60>time()) && ((is_null($quiz['q_timeout'])) || (time()-$last_entry>=$quiz['q_timeout']))) // If passed timeout and less than redo time, error
 				warn_exit(do_lang_tempcode('REPEATING_TOO_SOON',get_timezoned_date($last_entry+$quiz['q_redo_time']*60*60)));
 		}
@@ -377,7 +377,7 @@ class Module_quiz
 		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 		seo_meta_load_for('quiz',strval($id),$title_to_use_2);
 
-		$last_visit_time=$GLOBALS['SITE_DB']->query_value_null_ok('quiz_member_last_visit','v_time',array('v_quiz_id'=>$id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
+		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
 		if (!is_null($last_visit_time)) // Refresh / new attempt
 		{
 			$timer_offset=time()-$last_visit_time;
@@ -483,7 +483,7 @@ class Module_quiz
 		$quiz=$quizzes[0];
 		$this->enforcement_checks($quiz);
 
-		$last_visit_time=$GLOBALS['SITE_DB']->query_value_null_ok('quiz_member_last_visit','v_time',array('v_quiz_id'=>$id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
+		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
 		if (is_null($last_visit_time)) warn_exit(do_lang_tempcode('QUIZ_TWICE'));
 		if (!is_null($quiz['q_timeout']))
 		{

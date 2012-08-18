@@ -321,7 +321,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 								$topic_validated=has_specific_permission($poster,'bypass_validation_midrange_content','topics',array('forums',$forum_id))?1:0;
 							} else
 							{
-								$topic_validated=$GLOBALS['FORUM_DB']->query_value('f_topics','t_validated',array('id'=>$topic_id));
+								$topic_validated=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_validated',array('id'=>$topic_id));
 							}
 						}
 
@@ -334,7 +334,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		// Update post count
 		if (!is_null($forum_id))
 		{
-			$post_counts=is_null($forum_id)?1:$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_post_count_increment',array('id'=>$forum_id));
+			$post_counts=is_null($forum_id)?1:$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_post_count_increment',array('id'=>$forum_id));
 			if (($post_counts===1) && (!$anonymous)) ocf_force_update_member_post_count($poster,1);
 
 			if ($check_permissions) ocf_decache_ocp_blocks($forum_id,NULL,$intended_solely_for); // i.e. we don't run this if in installer
@@ -373,10 +373,10 @@ function ocf_force_update_member_post_count($member_id,$member_post_count_dif=NU
 		{
 			if ($post_count_increment==1)
 			{
-				$member_post_count+=$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)',array('p_poster'=>$member_id,'p_cache_forum_id'=>$forum_id));
+				$member_post_count+=$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)',array('p_poster'=>$member_id,'p_cache_forum_id'=>$forum_id));
 			}
 		}
-		$member_post_count+=$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)',array('p_poster'=>$member_id,'p_cache_forum_id'=>NULL));
+		$member_post_count+=$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)',array('p_poster'=>$member_id,'p_cache_forum_id'=>NULL));
 		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_num_posts='.strval((integer)$member_post_count).' WHERE id='.strval((integer)$member_id));
 	}
 	else
@@ -394,7 +394,7 @@ function ocf_force_update_member_post_count($member_id,$member_post_count_dif=NU
  */
 function ocf_decache_ocp_blocks($updated_forum_id,$forum_name=NULL,$member=NULL)
 {
-	if (is_null($forum_name)) $forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$updated_forum_id));
+	if (is_null($forum_name)) $forum_name=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id'=>$updated_forum_id));
 	decache('main_forum_news');
 	decache('main_forum_topics');
 	decache('side_forum_news');

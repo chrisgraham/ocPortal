@@ -40,7 +40,7 @@ class Block_main_activities
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('activities');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('activities');
 	}
 
 	/**
@@ -150,7 +150,7 @@ class Block_main_activities
 
 		if ($proceed_selection===true)
 		{
-			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'activities WHERE '.$whereville);
+			$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'activities WHERE '.$whereville);
 
 			require_code('templates_pagination');
 			$pagination=pagination(do_lang('ACTIVITIES_TITLE'),NULL,$start,'act_start',$max,'act_max',$max_rows,NULL,NULL,true,false,7,NULL,'tab__activities');

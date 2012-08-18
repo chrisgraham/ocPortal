@@ -132,8 +132,8 @@ class Module_supermembers
 			if (addon_installed('authors'))
 			{
 				// Work out their skills from their author profile
-				$_skills=$GLOBALS['SITE_DB']->query_value_null_ok('authors','skills',array('forum_handle'=>$id));
-				if (is_null($_skills)) $_skills=$GLOBALS['SITE_DB']->query_value_null_ok('authors','skills',array('author'=>$name));
+				$_skills=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','skills',array('forum_handle'=>$id));
+				if (is_null($_skills)) $_skills=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','skills',array('author'=>$name));
 				$skills=(!is_null($_skills))?get_translated_tempcode($_skills):new ocp_tempcode();
 			} else $skills=new ocp_tempcode();
 

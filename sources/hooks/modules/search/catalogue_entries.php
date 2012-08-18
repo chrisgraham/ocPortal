@@ -29,7 +29,7 @@ class Hook_search_catalogue_entries
 	function info()
 	{
 		if (!module_installed('catalogues')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('catalogue_entries','COUNT(*)')==0) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)')==0) return NULL;
 
 		global $SEARCH_CATALOGUE_ENTRIES_CATALOGUES;
 		$SEARCH_CATALOGUE_ENTRIES_CATALOGUES=array();
@@ -334,7 +334,7 @@ class Hook_search_catalogue_entries
 			}
 		} else
 		{
-			if ($GLOBALS['SITE_DB']->query_value('translate','COUNT(*)')>10000) // Big sites can't do indescriminate catalogue translatable searches for performance reasons
+			if ($GLOBALS['SITE_DB']->query_select_value('translate','COUNT(*)')>10000) // Big sites can't do indescriminate catalogue translatable searches for performance reasons
 			{
 				$trans_fields=array();
 				$join=' JOIN '.get_table_prefix().'catalogue_efv_short c ON (r.id=c.ce_id AND f.id=c.cf_id)';

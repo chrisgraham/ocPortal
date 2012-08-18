@@ -47,9 +47,9 @@ class Module_admin_permissions
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('group_zone_access');
-		$GLOBALS['SITE_DB']->drop_if_exists('group_page_access');
-		$GLOBALS['SITE_DB']->drop_if_exists('match_key_messages');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('group_zone_access');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('group_page_access');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('match_key_messages');
 
 		delete_specific_permission('edit_own_lowrange_content');
 		delete_specific_permission('submit_highrange_content');
@@ -295,7 +295,7 @@ class Module_admin_permissions
 		{
 			if (in_array($id,$admin_groups)) continue;
 
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('gsp','group_id',array('group_id'=>$id));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('gsp','group_id',array('group_id'=>$id));
 			if (is_null($test)) $groups_without[$id]=$name;
 
 			$list1->attach(form_input_list_entry($id,is_null($test),$name));

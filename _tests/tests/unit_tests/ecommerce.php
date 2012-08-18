@@ -154,7 +154,7 @@ class ecommerce_test_set extends ocp_test_case
 
 	function testOrderDetails()
 	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
+		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
 		$_GET['id']=$this->order_id;
 		return $this->admin_orders->order_details();
 	}
@@ -166,7 +166,7 @@ class ecommerce_test_set extends ocp_test_case
 
 	function testAddNoteToOrderActuliser()
 	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
+		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
 		$_POST['order_id']=$this->order_id;
 		$_POST['note']='Test note';	
 		$this->admin_orders->_add_note();
@@ -174,7 +174,7 @@ class ecommerce_test_set extends ocp_test_case
 
 	function	testorderDispatch()
 	{
-		$order_id=$GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','max(id)',array('order_status'=>'ORDER_STATUS_payment_received'));
+		$order_id=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','max(id)',array('order_status'=>'ORDER_STATUS_payment_received'));
 		if(!is_null($order_id))
 		{	
 			$this->order_id=$order_id;
@@ -185,27 +185,27 @@ class ecommerce_test_set extends ocp_test_case
 
 	function	testOrderDispatchNotification()
 	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
+		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
 		$this->admin_orders->send_dispatch_notification($this->order_id);
 	}
 
 	function	testDeleteOrder()
 	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
+		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
 		$_GET['id']=$this->order_id;
 		$this->admin_orders->delete_order();
 	}
 
 	function testReturnOrder()
 	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
+		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
 		$_GET['id']=$this->order_id;
 		$this->admin_orders->return_order();		
 	}
 
 	function testholdOrder()
 	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_value('shopping_order','max(id)',array());
+		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
 		$_GET['id']=$this->order_id;
 		$this->admin_orders->hold_order();		
 	}

@@ -58,8 +58,8 @@ class Module_admin_awards extends standard_crud_module
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('award_archive');
-		$GLOBALS['SITE_DB']->drop_if_exists('award_types');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('award_archive');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('award_types');
 	}
 
 	/**
@@ -229,7 +229,7 @@ class Module_admin_awards extends standard_crud_module
 				}
 			}
 			$fr[]=$hook_title;
-			$fr[]=integer_format($GLOBALS['SITE_DB']->query_value('award_archive','COUNT(*)',array('a_type_id'=>$row['id'])));
+			$fr[]=integer_format($GLOBALS['SITE_DB']->query_select_value('award_archive','COUNT(*)',array('a_type_id'=>$row['id'])));
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.strval($row['id'])));
 
 			$fields->attach(results_entry($fr,true));

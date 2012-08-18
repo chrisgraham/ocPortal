@@ -169,7 +169,7 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
 			{
 				$_field=preg_replace('#\(.*\)$#','',$field);
 
-				$db_type=$this_ref->query_value_null_ok('db_meta','m_type',array('m_table'=>$table_name,'m_name'=>$_field));
+				$db_type=$this_ref->query_select_value_if_there('db_meta','m_type',array('m_table'=>$table_name,'m_name'=>$_field));
 				if (is_null($db_type)) $db_type='SHORT_TEXT';
 				if (substr($db_type,0,1)!='*') $db_type='*'.$db_type;
 				$fields_full[$field]=$db_type;
@@ -227,7 +227,7 @@ function _helper_delete_index_if_exists($this_ref,$table_name,$index_name)
  * @param  object			Link to the real database object
  * @param  ID_TEXT		The table name
  */
-function _helper_drop_if_exists($this_ref,$table)
+function _helper_drop_table_if_exists($this_ref,$table)
 {
 	if (($table!='db_meta') && ($table!='db_meta_indices'))
 	{
@@ -250,7 +250,7 @@ function _helper_drop_if_exists($this_ref,$table)
 		$this_ref->connection_write=call_user_func_array(array($this_ref->static_ob,'db_get_connection'),$this_ref->connection_write);
 		_general_db_init();
 	}
-	$this_ref->static_ob->db_drop_if_exists($this_ref->table_prefix.$table,$this_ref->connection_write);
+	$this_ref->static_ob->db_drop_table_if_exists($this_ref->table_prefix.$table,$this_ref->connection_write);
 
 	if (function_exists('persistent_cache_set'))
 		persistent_cache_delete('TABLE_LANG_FIELDS');

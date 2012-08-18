@@ -113,7 +113,7 @@ class Module_admin_ocf_history
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',40);
 
-		$max_rows=$GLOBALS['FORUM_DB']->query_value('f_post_history','COUNT(*)',$where);
+		$max_rows=$GLOBALS['FORUM_DB']->query_select_value('f_post_history','COUNT(*)',$where);
 
 		$posts=$GLOBALS['FORUM_DB']->query_select('f_post_history',array('*'),$where,'ORDER BY h_action_date_and_time DESC',$max,$start);
 		$content=new ocp_tempcode();
@@ -125,7 +125,7 @@ class Module_admin_ocf_history
 			$alterer_member=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($post['h_alterer_member_id']);
 
 			// Action/Link
-			$topic_exists=$GLOBALS['FORUM_DB']->query_value_null_ok('f_topics','id',array('id'=>$post['h_topic_id']));
+			$topic_exists=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','id',array('id'=>$post['h_topic_id']));
 			if (!is_null($topic_exists))
 			{
 				if (($post['h_action']=='EDIT_POST'))

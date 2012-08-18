@@ -94,7 +94,7 @@ class Module_admin_points
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
 
-		$max_rows=$GLOBALS['SITE_DB']->query_value('gifts','COUNT(*)');
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('gifts','COUNT(*)');
 		$rows=$GLOBALS['SITE_DB']->query_select('gifts',array('*'),NULL,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		if (count($rows)==0)
 		{

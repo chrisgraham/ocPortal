@@ -131,7 +131,7 @@ class Module_cms_cedi
 		$fields2->attach(form_input_tick(do_lang_tempcode('HIDE_POSTS'),do_lang_tempcode('DESCRIPTION_HIDE_POSTS'),'hide_posts',$hide_posts==1));
 
 		require_lang('notifications');
-		$notify=($page_id==-1) || ($GLOBALS['SITE_DB']->query_value_null_ok('seedy_changes','MAX(date_and_time)',array('the_page'=>$page_id))<time()-60*10);
+		$notify=($page_id==-1) || ($GLOBALS['SITE_DB']->query_select_value_if_there('seedy_changes','MAX(date_and_time)',array('the_page'=>$page_id))<time()-60*10);
 		$radios=form_input_radio_entry('send_notification','0',!$notify,do_lang_tempcode('NO'));
 		$radios->attach(form_input_radio_entry('send_notification','1',$notify,do_lang_tempcode('YES')));
 		$fields2->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),'send_notification',$radios));
@@ -304,7 +304,7 @@ class Module_cms_cedi
 		$restore_from=get_param_integer('restore_from',-1);
 		if ($restore_from!=-1)
 		{
-			$description=$GLOBALS['SITE_DB']->query_value('translate_history','text_original',array('id'=>$restore_from,'lang_id'=>$page['description'])); // Double selection to stop hacking
+			$description=$GLOBALS['SITE_DB']->query_select_value('translate_history','text_original',array('id'=>$restore_from,'lang_id'=>$page['description'])); // Double selection to stop hacking
 			$_description=NULL;
 		}
 
@@ -472,7 +472,7 @@ class Module_cms_cedi
 		$member=get_member();
 		check_specific_permission('seedy_manage_tree',array('seedy_page',$id));
 
-		$hide_posts=$GLOBALS['SITE_DB']->query_value('seedy_pages','hide_posts',array('id'=>$id));
+		$hide_posts=$GLOBALS['SITE_DB']->query_select_value('seedy_pages','hide_posts',array('id'=>$id));
 
 		if ((substr($childlinks,-1,1)!="\n") && (strlen($childlinks)>0)) $childlinks.="\n";
 		$no_children=substr_count($childlinks,"\n");
@@ -495,7 +495,7 @@ class Module_cms_cedi
 					$title=substr($newlink,$q_pos+1);
 					$child_id=intval(substr($newlink,0,$q_pos));
 					if ($child_id==$id) continue;
-					$title_id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','title',array('id'=>$child_id));
+					$title_id=$GLOBALS['SITE_DB']->query_select_value_if_there('seedy_pages','title',array('id'=>$child_id));
 					if (is_null($title_id)) continue;
 					if ($title=='')
 					{

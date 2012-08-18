@@ -44,7 +44,7 @@ class Block_side_weather
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('cached_weather_codes');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('cached_weather_codes');
 	}
 
 	/**
@@ -93,7 +93,7 @@ class Block_side_weather
 
 		if (!is_numeric($loc_code))
 		{
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok('cached_weather_codes','w_code',array('w_string'=>$loc_code));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_weather_codes','w_code',array('w_string'=>$loc_code));
 			if (is_null($test))
 			{
 				require_code('files');

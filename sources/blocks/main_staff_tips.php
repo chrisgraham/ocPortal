@@ -44,7 +44,7 @@ class Block_main_staff_tips
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('staff_tips_dismissed');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('staff_tips_dismissed');
 	}
 
 	/**

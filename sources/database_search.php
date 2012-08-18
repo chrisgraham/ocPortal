@@ -510,7 +510,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$_count_query_keywords_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_keywords_search);
 			}
 
-			$t_keyword_search_rows_count=$db->query_value_null_ok_full($_count_query_keywords_search);
+			$t_keyword_search_rows_count=$db->query_value_if_there($_count_query_keywords_search);
 			if ($t_keyword_search_rows_count>500) // Too much to sort in memory, so we will just put up with overlapping content types that aren't sorted together right
 			{
 				$t_keyword_search_rows=$db->query($keywords_query,$max+$start);
@@ -705,7 +705,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$_count_query_main_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_main_search);
 		}
 
-		$t_main_search_rows_count=$db->query_value_null_ok_full($_count_query_main_search);
+		$t_main_search_rows_count=$db->query_value_if_there($_count_query_main_search);
 		$_max_rows_to_preload=get_value('max_rows_to_preload');
 		$max_rows_to_preload=is_null($_max_rows_to_preload)?500:intval($_max_rows_to_preload);
 		if ($t_main_search_rows_count>$max_rows_to_preload) // Too much to sort in memory, so we will just put up with overlapping content types that aren't sorted together right

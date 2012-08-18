@@ -444,7 +444,7 @@ function old_style()
 	$dotted=get_version_dotted__from_anything(get_param('version'));
 	$version_pretty=get_version_pretty__from_dotted($dotted);
 
-	$_description=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.name','description',array('validated'=>1,'text_original'=>'ocPortal Version '.$version_pretty));
+	$_description=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.name','description',array('validated'=>1,'text_original'=>'ocPortal Version '.$version_pretty));
 
 	if (is_null($_description))
 	{

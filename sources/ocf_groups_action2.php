@@ -65,7 +65,7 @@ function ocf_may_control_group($group_id,$member_id)
  */
 function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_moderator,$title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club)
 {
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');
 	if ((!is_null($test)) && ($test!=$group_id)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 
 	$_group_info=$GLOBALS['FORUM_DB']->query_select('f_groups',array('g_name','g_title','g_rank_image'),array('id'=>$group_id),'',1);
@@ -171,7 +171,7 @@ function ocf_member_ask_join_group($group_id,$member_id=NULL)
 
 	if (ocf_is_ldap_member($member_id)) return;
 
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_group_members','gm_validated',array('gm_member_id'=>$member_id,'gm_group_id'=>$group_id));
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_group_members','gm_validated',array('gm_member_id'=>$member_id,'gm_group_id'=>$group_id));
 	if (!is_null($test))
 	{
 		if ($test==1) warn_exit(do_lang_tempcode('ALREADY_IN_GROUP'));
@@ -182,7 +182,7 @@ function ocf_member_ask_join_group($group_id,$member_id=NULL)
 	$in=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
 //	if (count($in)==1)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value('f_groups','g_is_presented_at_install',array('id'=>$group_id));
+		$test=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id'=>$group_id));
 		if ($test==1) $validated=1;
 	}
 
@@ -226,7 +226,7 @@ function ocf_member_leave_group($group_id,$member_id=NULL)
 
 	if (ocf_is_ldap_member($member_id)) return;
 
-	$group_leader=$GLOBALS['FORUM_DB']->query_value('f_groups','g_group_leader',array('id'=>$group_id));
+	$group_leader=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_group_leader',array('id'=>$group_id));
 	if ($group_leader==$member_id) $GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>NULL),array('id'=>$group_id),'',1);
 
 	$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_group_id'=>$group_id,'gm_member_id'=>$member_id),'',1);
@@ -243,7 +243,7 @@ function ocf_add_member_to_group($member_id,$id,$validated=1)
 {
 	if (ocf_is_ldap_member($member_id)) return;
 
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','g_is_presented_at_install',array('id'=>$id));
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','g_is_presented_at_install',array('id'=>$id));
 	if (is_null($test)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	$GLOBALS['FORUM_DB']->query_insert('f_group_members',array(

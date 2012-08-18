@@ -29,7 +29,7 @@ class Hook_search_cedi_pages
 	function info()
 	{
 		if (!has_actual_page_access(get_member(),'cedi')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('seedy_pages','COUNT(*)')<=1) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('seedy_pages','COUNT(*)')<=1) return NULL;
 
 		require_lang('cedi');
 

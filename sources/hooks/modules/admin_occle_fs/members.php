@@ -37,7 +37,7 @@ class Hook_members
 		if (count($meta_dir)<1)
 		{
 			//We're listing the users
-			$cnt=$GLOBALS['SITE_DB']->query_value('f_members','COUNT(*)');
+			$cnt=$GLOBALS['SITE_DB']->query_select_value('f_members','COUNT(*)');
 			if ($cnt>1000) return false; // Too much to process
 
 			$users=$GLOBALS['SITE_DB']->query_select('f_members',array('m_username'));
@@ -87,7 +87,7 @@ class Hook_members
 			while (array_key_exists('field_'.strval($i),$member_custom_fields))
 			{
 				if ($member_custom_fields['field_'.strval($i)]!='')
-					$listing[]=get_translated_text($GLOBALS['SITE_DB']->query_value('f_custom_fields','cf_name',array('id'=>$i)));
+					$listing[]=get_translated_text($GLOBALS['SITE_DB']->query_select_value('f_custom_fields','cf_name',array('id'=>$i)));
 				$i++;
 			}
 		}
@@ -202,11 +202,11 @@ class Hook_members
 
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
-			$field_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
+			$field_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
 			if (is_null($field_id)) // Should never happen, but sometimes on upgrades/corruption...
 			{
 				$GLOBALS['FORUM_DRIVER']->install_create_custom_field($file_name,10);
-				$field_id=$GLOBALS['FORUM_DB']->query_value('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
+				$field_id=$GLOBALS['FORUM_DB']->query_select_value('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
 			}
 
 			ocf_delete_custom_field($field_id);
@@ -270,18 +270,18 @@ class Hook_members
 				'wide'=>'m_zone_wide',
 				'max_attach_size'=>'m_max_email_attach_size_mb'
 			);
-			if (array_key_exists($file_name,$coded_fields)) return $GLOBALS['FORUM_DB']->query_value_null_ok('f_members',$coded_fields[$file_name],array('id'=>$GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0])));
+			if (array_key_exists($file_name,$coded_fields)) return $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members',$coded_fields[$file_name],array('id'=>$GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0])));
 
 			require_code('ocf_members');
 			$fields=ocf_get_custom_fields_member($GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]));
 
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
-			$field_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
+			$field_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
 			if (is_null($field_id)) // Should never happen, but sometimes on upgrades/corruption...
 			{
 				$GLOBALS['FORUM_DRIVER']->install_create_custom_field($file_name,10);
-				$field_id=$GLOBALS['FORUM_DB']->query_value('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
+				$field_id=$GLOBALS['FORUM_DB']->query_select_value('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
 			}
 
 			if (array_key_exists($field_id,$fields)) return $fields[$field_id];
@@ -349,11 +349,11 @@ class Hook_members
 			}
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
-			$field_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
+			$field_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
 			if (is_null($field_id)) // Should never happen, but sometimes on upgrades/corruption...
 			{
 				$GLOBALS['FORUM_DRIVER']->install_create_custom_field($file_name,10);
-				$field_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
+				$field_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$file_name));
 			}
 
 			if (is_null($field_id)) $field_id=ocf_make_custom_field($file_name);

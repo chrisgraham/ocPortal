@@ -180,7 +180,7 @@ class Module_admin_orders
 
 		global $NO_DB_SCOPE_CHECK;
 		$NO_DB_SCOPE_CHECK=true;
-		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond);
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond);
 
 		$pagination=pagination(do_lang_tempcode('ORDERS'),NULL,$start,'start',$max,'max',$max_rows,NULL,'show_orders',true,true);
 
@@ -300,7 +300,7 @@ class Module_admin_orders
 			),$sortables,'sort',$sortable.' '.$sort_order
 		);
 
-		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok('shopping_order_details','COUNT(*)',array('order_id'=>$id));
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order_details','COUNT(*)',array('order_id'=>$id));
 
 		$pagination=pagination(do_lang_tempcode('ORDERS'),NULL,$start,'start',$max,'max',$max_rows,NULL,'show_orders',true,true);
 
@@ -386,7 +386,7 @@ class Module_admin_orders
 
 		$fields=new ocp_tempcode();
 
-		$note=$GLOBALS['SITE_DB']->query_value('shopping_order','notes',array('id'=>$id));
+		$note=$GLOBALS['SITE_DB']->query_select_value('shopping_order','notes',array('id'=>$id));
 
 		if (!is_null($last_action))
 		{

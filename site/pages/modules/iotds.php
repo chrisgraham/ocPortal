@@ -47,7 +47,7 @@ class Module_iotds
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('iotd');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('iotd');
 
 		delete_specific_permission('choose_iotd');
 

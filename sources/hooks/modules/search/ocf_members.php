@@ -29,7 +29,7 @@ class Hook_search_ocf_members
 	function info()
 	{
 		if (get_forum_type()!='ocf') return NULL;
-		if (($GLOBALS['FORUM_DB']->query_value('f_members','COUNT(*)')<=3) && (get_param('id','')!='ocf_members') && (get_param_integer('search_ocf_members',0)!=1)) return NULL;
+		if (($GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)')<=3) && (get_param('id','')!='ocf_members') && (get_param_integer('search_ocf_members',0)!=1)) return NULL;
 
 		require_lang('ocf');
 
@@ -92,7 +92,7 @@ class Hook_search_ocf_members
 		}
 
 		$map=has_specific_permission(get_member(),'see_hidden_groups')?array():array('g_hidden'=>0);
-		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
+		$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 		if ($group_count>300) $map['g_is_private_club']=0;
 		if ($map==array()) $map=NULL;
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),$map,'ORDER BY g_order');

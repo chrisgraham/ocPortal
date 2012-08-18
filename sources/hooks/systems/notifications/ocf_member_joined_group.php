@@ -97,7 +97,7 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 
 		if (is_numeric($category)) // Also merge in people monitoring forum
 		{
-			$hidden=$GLOBALS['FORUM_DB']->query_value('f_groups','g_hidden',array('id'=>intval($category)));
+			$hidden=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_hidden',array('id'=>intval($category)));
 
 			if ($hidden==1)
 			{

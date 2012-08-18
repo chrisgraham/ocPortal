@@ -174,8 +174,8 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name','g_is_super_admin'),array('g_is_private_club'=>0));
 		$orderlist=new ocp_tempcode();
-		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
-		$num_groups=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)',($group_count>200)?array('g_is_private_club'=>0):NULL);
+		$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
+		$num_groups=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)',($group_count>200)?array('g_is_private_club'=>0):NULL);
 		if (is_null($id)) $num_groups++;
 		for ($i=0;$i<$num_groups;$i++)
 		{
@@ -347,7 +347,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		$fields=new ocp_tempcode();
 
-		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
+		$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 
 		require_code('form_templates');
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,($group_count>300)?array('g_is_private_club'=>0):NULL);
@@ -369,7 +369,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			if (($row['id']==db_get_first_id()+8) && ($GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)',array('g_is_presented_at_install'=>'1'))==0))
+			if (($row['id']==db_get_first_id()+8) && ($GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)',array('g_is_presented_at_install'=>'1'))==0))
 				$row['g_is_presented_at_install']=1;
 
 			$fr=array(
@@ -420,7 +420,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 	{
 		$fields=new ocp_tempcode();
 		$order=(get_param_integer('keep_id_order',0)==0)?'g_promotion_threshold,id':'id';
-		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
+		$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_order','g_name','g_promotion_target'),($group_count>300)?array('g_is_private_club'=>0):NULL,'ORDER BY '.$order);
 		require_code('ocf_groups2');
 		foreach ($rows as $row)
@@ -469,7 +469,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['g_group_leader']);
 		if (is_null($username)) $username='';//do_lang('UNKNOWN');
 
-		if ((intval($id)==db_get_first_id()+8) && ($GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)',array('g_is_presented_at_install'=>'1'))==0))
+		if ((intval($id)==db_get_first_id()+8) && ($GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)',array('g_is_presented_at_install'=>'1'))==0))
 			$myrow['g_is_presented_at_install']=1;
 
 		list($fields,$hidden)=$this->get_form_fields(intval($id),get_translated_text($myrow['g_name'],$GLOBALS['FORUM_DB']),$myrow['g_is_default'],$myrow['g_is_super_admin'],$myrow['g_is_super_moderator'],$username,get_translated_text($myrow['g_title'],$GLOBALS['FORUM_DB']),$myrow['g_rank_image'],$myrow['g_promotion_target'],$myrow['g_promotion_threshold'],$myrow['g_flood_control_submit_secs'],$myrow['g_flood_control_access_secs'],$myrow['g_gift_points_base'],$myrow['g_gift_points_per_day'],$myrow['g_max_daily_upload_mb'],$myrow['g_max_attachments_per_post'],$myrow['g_max_avatar_width'],$myrow['g_max_avatar_height'],$myrow['g_max_post_length_comcode'],$myrow['g_max_sig_length_comcode'],$myrow['g_enquire_on_new_ips'],$myrow['g_is_presented_at_install'],$myrow['g_hidden'],$myrow['g_order'],$myrow['g_rank_image_pri_only'],$myrow['g_open_membership'],$myrow['g_is_private_club']);
@@ -477,7 +477,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 		$default_group=get_first_default_group();
 
 		$groups=new ocp_tempcode();
-		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
+		$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 		if (($myrow['g_is_private_club']==1) && ($group_count>300))
 		{
 			$delete_fields=form_input_integer(do_lang_tempcode('NEW_USERGROUP'),do_lang_tempcode('DESCRIPTION_NEW_USERGROUP'),'new_usergroup',NULL,false);
@@ -619,7 +619,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 			return confirm_screen(get_screen_title('EDIT_GROUP'),paragraph(do_lang_tempcode('MAKE_MEMBER_GROUP_LEADER',post_param('group_leader'))),'__ed','_ed',array('confirm'=>1));
 		}
 
-		$was_club=($GLOBALS['FORUM_DB']->query_value('f_groups','g_is_private_club',array('id'=>intval($id)))==1);
+		$was_club=($GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_private_club',array('id'=>intval($id)))==1);
 
 		$rank_img=get_theme_img_code('ocf_rank_images',true,'file','theme_img_code',$GLOBALS['FORUM_DB']);
 		ocf_edit_group(intval($id),post_param('name'),post_param_integer('is_default',0),post_param_integer('is_super_admin',0),post_param_integer('is_super_moderator',0),post_param('title'),$rank_img,$promotion_target,$promotion_threshold,$group_leader,post_param_integer('flood_control_submit_secs'),post_param_integer('flood_control_access_secs'),post_param_integer('max_daily_upload_mb'),post_param_integer('max_attachments_per_post'),post_param_integer('max_avatar_width',100),post_param_integer('max_avatar_height',100),post_param_integer('max_post_length_comcode'),post_param_integer('max_sig_length_comcode',10000),post_param_integer('gift_points_base',0),post_param_integer('gift_points_per_day',0),post_param_integer('enquire_on_new_ips',0),post_param_integer('is_presented_at_install',0),post_param_integer('hidden',0),post_param_integer('order'),post_param_integer('rank_image_pri_only',0),post_param_integer('open_membership',0),post_param_integer('is_private_club',0));

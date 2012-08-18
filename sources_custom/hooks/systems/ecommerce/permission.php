@@ -134,7 +134,7 @@ class Hook_permission
 			}
 
 			$map=get_sales_permission_map($row,$member);
-			$test=$GLOBALS['SITE_DB']->query_value_null_ok(filter_naughty_harsh($row['p_type']),'member_id',$map);
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there(filter_naughty_harsh($row['p_type']),'member_id',$map);
 			return is_null($test)?ECOMMERCE_PRODUCT_AVAILABLE:ECOMMERCE_PRODUCT_ALREADY_HAS;
 		}
 

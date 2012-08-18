@@ -79,10 +79,10 @@ function download_map($realm,$sx,$sy)
 	$roomnameclip=15;
 
 	// Get realm mins/maxs/size
-	$x_min=$GLOBALS['SITE_DB']->query_value('w_rooms','MIN(location_x)',array('location_realm'=>$realm));
-	$y_min=$GLOBALS['SITE_DB']->query_value('w_rooms','MIN(location_y)',array('location_realm'=>$realm));
-	$x_max=$GLOBALS['SITE_DB']->query_value('w_rooms','MAX(location_x)',array('location_realm'=>$realm));
-	$y_max=$GLOBALS['SITE_DB']->query_value('w_rooms','MAX(location_y)',array('location_realm'=>$realm));
+	$x_min=$GLOBALS['SITE_DB']->query_select_value('w_rooms','MIN(location_x)',array('location_realm'=>$realm));
+	$y_min=$GLOBALS['SITE_DB']->query_select_value('w_rooms','MIN(location_y)',array('location_realm'=>$realm));
+	$x_max=$GLOBALS['SITE_DB']->query_select_value('w_rooms','MAX(location_x)',array('location_realm'=>$realm));
+	$y_max=$GLOBALS['SITE_DB']->query_select_value('w_rooms','MAX(location_y)',array('location_realm'=>$realm));
 	$x_rooms=$x_max-$x_min+1;
 	$y_rooms=$y_max-$y_min+1;
 
@@ -116,7 +116,7 @@ function download_map($realm,$sx,$sy)
 			$portal=($room['allow_portal']==1)?do_lang('W_PORTAL_SPOT'):'';
 
 			// Check user has been in room, to see if we perhaps need to mask the room name
-			$yes=$GLOBALS['SITE_DB']->query_value_null_ok('w_travelhistory','member_id',array('x'=>$x,'y'=>$y,'realm'=>$realm,'member_id'=>$member_id));
+			$yes=$GLOBALS['SITE_DB']->query_select_value_if_there('w_travelhistory','member_id',array('x'=>$x,'y'=>$y,'realm'=>$realm,'member_id'=>$member_id));
 			if (!isset($yes)) $name=do_lang('W_UNKNOWN_ROOM_NAME');
 
 			// Room surrounding ordinates

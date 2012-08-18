@@ -70,7 +70,7 @@ function delete_comcode_attachments($type,$id,$connection=NULL)
 	foreach ($refs as $ref)
 	{
 		// Was that the last reference to this attachment? (if so -- delete attachment)
-		$test=$connection->query_value_null_ok('attachment_refs','id',array('a_id'=>$ref['a_id']));
+		$test=$connection->query_select_value_if_there('attachment_refs','id',array('a_id'=>$ref['a_id']));
 		if (is_null($test))
 			_delete_attachment($ref['a_id'],$connection);
 	}
@@ -116,7 +116,7 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 
 	_check_attachment_count();
 
-	$test=$connection->query_value_null_ok('translate','text_original',array('id'=>$id,'language'=>user_lang()));
+	$test=$connection->query_select_value_if_there('translate','text_original',array('id'=>$id,'language'=>user_lang()));
 
 	if ($backup_string)
 	{

@@ -95,7 +95,7 @@ function manage_custom_fields_donext_link($content_type)
 
 		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']))
 		{
-			$exists=!is_null($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'_'.$content_type)));
+			$exists=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'_'.$content_type)));
 
 			return array(
 				array('edit_one_catalogue',array('cms_catalogues',array('type'=>$exists?'_edit_catalogue':'add_catalogue','id'=>'_'.$content_type,'redirect'=>get_self_url(true)),get_module_zone('cms_catalogues')),do_lang('EDIT_CUSTOM_FIELDS',$info['title'])),
@@ -121,10 +121,10 @@ function has_tied_catalogue($content_type)
 		$info=$ob->info();
 		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']))
 		{
-			$exists=!is_null($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'_'.$content_type)));
+			$exists=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'_'.$content_type)));
 			if ($exists)
 			{
-				$first_cat=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
+				$first_cat=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
 				if (is_null($first_cat)) // Repair needed, must have a category
 				{
 					require_code('catalogues2');
@@ -148,7 +148,7 @@ function has_tied_catalogue($content_type)
  */
 function get_bound_content_entry($content_type,$id)
 {
-	return $GLOBALS['SITE_DB']->query_value_null_ok('catalogue_entry_linkage','catalogue_entry_id',array(
+	return $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entry_linkage','catalogue_entry_id',array(
 		'content_type'=>$content_type,
 		'content_id'=>$id,
 	));
@@ -266,7 +266,7 @@ function save_form_custom_fields($content_type,$id)
 		$map[$field['id']]=$value;
 	}
 
-	$first_cat=$GLOBALS['SITE_DB']->query_value('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
+	$first_cat=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
 
 	require_code('catalogues2');
 

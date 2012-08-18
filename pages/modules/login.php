@@ -46,7 +46,7 @@ class Module_login
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('failedlogins');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('failedlogins');
 	}
 
 	/**

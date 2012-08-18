@@ -41,7 +41,7 @@ $id_float=floatval($version);
 do
 {
 	$str='Version './*preg_replace('#\.0$#','',*/float_to_raw_string($id_float,1)/*)*/;
-	$_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=c.category','c.id',array('parent_id'=>3,'text_original'=>$str));
+	$_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=c.category','c.id',array('parent_id'=>3,'text_original'=>$str));
 	if (is_null($_id)) $id_float-=0.1;
 }
 while ((is_null($_id)) && ($id_float!=0.0));

@@ -264,7 +264,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template'
 
 	if (is_null($theme))
 	{
-		$theme=$GLOBALS['SITE_DB']->query_value('zones','zone_theme',array('zone_name'=>''));
+		$theme=$GLOBALS['SITE_DB']->query_select_value('zones','zone_theme',array('zone_name'=>''));
 		if (($theme=='') || ($theme=='-1')) $theme='default';
 	}
 
@@ -278,7 +278,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template'
 	$ini_path=get_file_base().'/themes/default/theme.ini';
 	$logo_wizard_details+=better_parse_ini_file($ini_path);
 
-	$logo_url=$GLOBALS['SITE_DB']->query_value_null_ok('theme_images','path',array('theme'=>$theme,'id'=>$use));
+	$logo_url=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',array('theme'=>$theme,'id'=>$use));
 	if (!is_null($logo_url)) $file_path_stub=convert_url_to_path($logo_url);
 	if ((is_null($logo_url)) || (!file_exists($file_path_stub)))
 	{

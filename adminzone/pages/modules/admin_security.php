@@ -47,7 +47,7 @@ class Module_admin_security
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('hackattack');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('hackattack');
 	}
 
 	/**
@@ -143,7 +143,7 @@ class Module_admin_security
 		$fields_title=results_field_title(array(do_lang_tempcode('USERNAME'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('IP_ADDRESS')),$sortables,'failed_sort',$_sortable.' '.$sort_order);
 		$member_id=post_param_integer('member_id',NULL);
 		$map=(!is_null($member_id))?array('failed_account'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id)):NULL;
-		$max_rows=$GLOBALS['SITE_DB']->query_value('failedlogins','COUNT(*)',$map);
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('failedlogins','COUNT(*)',$map);
 		$rows=$GLOBALS['SITE_DB']->query_select('failedlogins',array('*'),$map,'ORDER BY '.$_sortable.' '.$sort_order,$max,$start);
 		$fields=new ocp_tempcode();
 		foreach ($rows as $row)

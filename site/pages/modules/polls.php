@@ -47,8 +47,8 @@ class Module_polls
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('poll');
-		$GLOBALS['SITE_DB']->drop_if_exists('poll_votes');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('poll');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('poll_votes');
 
 		delete_specific_permission('choose_poll');
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'polls'));
@@ -265,15 +265,15 @@ class Module_polls
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
 
-		$total_polls=$GLOBALS['SITE_DB']->query_value('poll','COUNT(*)');
+		$total_polls=$GLOBALS['SITE_DB']->query_select_value('poll','COUNT(*)');
 		if ($total_polls<500)
 		{
 			$rows=$GLOBALS['SITE_DB']->query('SELECT id,date_and_time FROM '.get_table_prefix().'poll WHERE votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10<>0 ORDER BY date_and_time DESC',$max,$start);
-			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'poll WHERE votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10<>0');
+			$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'poll WHERE votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10<>0');
 		} else
 		{
 			$rows=$GLOBALS['SITE_DB']->query('SELECT id,date_and_time FROM '.get_table_prefix().'poll WHERE date_and_time IS NOT NULL ORDER BY date_and_time DESC',$max,$start);
-			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'poll WHERE date_and_time IS NOT NULL');
+			$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'poll WHERE date_and_time IS NOT NULL');
 		}
 		$content=new ocp_tempcode();
 		foreach ($rows as $myrow)

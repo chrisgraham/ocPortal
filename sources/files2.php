@@ -422,14 +422,14 @@ function delete_upload($upload_path,$table,$field,$id_field,$id,$new_url=NULL)
 	if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) // This isn't really a permission - more a failsafe in case there is a security hole. Staff can cleanup leftover files from the Cleanup module anyway
 	{
 		$where=is_array($id_field)?$id_field:array($id_field=>$id);
-		$url=$GLOBALS['SITE_DB']->query_value($table,$field,$where);
+		$url=$GLOBALS['SITE_DB']->query_select_value($table,$field,$where);
 		if ($url=='') return;
 
 		if ((is_null($new_url)) || (($url!=$new_url) && ($new_url!=STRING_MAGIC_NULL)))
 		{
 			if ((url_is_local($url)) && (substr($url,0,strlen($upload_path)+1)==$upload_path.'/'))
 			{
-				$count=$GLOBALS['SITE_DB']->query_value($table,'COUNT(*)',array($field=>$url));
+				$count=$GLOBALS['SITE_DB']->query_select_value($table,'COUNT(*)',array($field=>$url));
 
 				if ($count<=1)
 				{

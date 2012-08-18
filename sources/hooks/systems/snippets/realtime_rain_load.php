@@ -30,7 +30,7 @@ class Hook_realtime_rain_load
 	{
 		require_lang('realtime_rain');
 
-		$min_time=$GLOBALS['SITE_DB']->query_value('stats','MIN(date_and_time)');
+		$min_time=$GLOBALS['SITE_DB']->query_select_value('stats','MIN(date_and_time)');
 		return do_template('REALTIME_RAIN_OVERLAY',array('MIN_TIME'=>strval($min_time)));
 	}
 

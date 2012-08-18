@@ -148,7 +148,7 @@ function generate_notifications($member_id)
 				$num_unread_pps++;
 				$reply_url=build_url(array('page'=>'topics','type'=>'new_post','id'=>$unread_pp['p_topic_id'],'quote'=>$unread_pp['id']),get_module_zone('topics'));
 
-				$additional_posts=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) AS cnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval($unread_pp['p_topic_id']).' AND id>'.strval($unread_pp['id']));
+				$additional_posts=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) AS cnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval($unread_pp['p_topic_id']).' AND id>'.strval($unread_pp['id']));
 			} else
 			{
 				$type=do_lang_tempcode('ADD_INLINE_PERSONAL_POST');

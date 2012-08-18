@@ -37,7 +37,7 @@ function set_from_referrer_field()
 	$referrer=post_param('referrer','');
 	if ($referrer=='') return; // NB: This doesn't mean failure, it may already have been set by the recommend module when the recommendation was *made*
 
-	$referrer_member=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_equal_to('m_username',$referrer).' OR '.db_string_equal_to('m_email_address',$referrer));
+	$referrer_member=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_equal_to('m_username',$referrer).' OR '.db_string_equal_to('m_email_address',$referrer));
 	if (!is_null($referrer_member))
 	{
 		$GLOBALS['FORUM_DB']->query_delete('f_invites',array(
@@ -63,7 +63,7 @@ function assign_referral_awards($referee,$trigger)
 	require_lang('referrals');
 	require_code('notifications');
 
-	$referrer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_taken'=>0,'i_email_address'=>$referee_email),'ORDER BY i_time');
+	$referrer=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','i_inviter',array('i_taken'=>0,'i_email_address'=>$referee_email),'ORDER BY i_time');
 	if (is_null($referrer)) // Was not actually a referral, member joined site on own accord
 	{
 		if ((isset($ini_file['notify_if_join_but_no_referral'])) && ($ini_file['notify_if_join_but_no_referral']=='1'))
@@ -93,8 +93,8 @@ function assign_referral_awards($referee,$trigger)
 
 	$report_url=find_script('referrer_report').'?csv=1';
 
-	$num_total_qualified_by_referrer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','COUNT(*)',array('i_inviter'=>$referrer,'i_taken'=>1),'ORDER BY i_time');
-	$num_total_by_referrer=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','COUNT(*)',array('i_inviter'=>$referrer),'ORDER BY i_time');
+	$num_total_qualified_by_referrer=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','COUNT(*)',array('i_inviter'=>$referrer,'i_taken'=>1),'ORDER BY i_time');
+	$num_total_by_referrer=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','COUNT(*)',array('i_inviter'=>$referrer),'ORDER BY i_time');
 
 	$referrer_is_qualified=referrer_is_qualified($referrer);
 
@@ -257,7 +257,7 @@ function referrer_is_qualified($member_id)
 	{
 		if ((isset($ini_file['referrer_qualified_for__misc_purchase'])) && ($ini_file['referrer_qualified_for__misc_purchase']=='1'))
 		{
-			if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.get_table_prefix().'shopping_order WHERE c_member='.strval($member_id).' AND '.(db_string_equal_to('order_status','payment_received').' OR '.db_string_equal_to('order_status','dispatched')))))
+			if (!is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.get_table_prefix().'shopping_order WHERE c_member='.strval($member_id).' AND '.(db_string_equal_to('order_status','payment_received').' OR '.db_string_equal_to('order_status','dispatched')))))
 				return true;
 		}
 	}
@@ -270,7 +270,7 @@ function referrer_is_qualified($member_id)
 		{
 			if (preg_match('#^referrer\_qualified\_for\_\_purchase\_(\d+)$#',$key,$matches)!=0)
 			{
-				if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT o.id FROM '.get_table_prefix().'shopping_order o JOIN '.get_table_prefix().'shopping_order_details d ON o.id=d.order_id WHERE p_id='.strval(intval($matches[1])).' AND c_member='.strval($member_id).' AND '.(db_string_equal_to('order_status','payment_received').' OR '.db_string_equal_to('order_status','dispatched')))))
+				if (!is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT o.id FROM '.get_table_prefix().'shopping_order o JOIN '.get_table_prefix().'shopping_order_details d ON o.id=d.order_id WHERE p_id='.strval(intval($matches[1])).' AND c_member='.strval($member_id).' AND '.(db_string_equal_to('order_status','payment_received').' OR '.db_string_equal_to('order_status','dispatched')))))
 					return true;
 			}
 		}
@@ -309,7 +309,7 @@ function referrer_report_script($ret=false)
 		$max,
 		$start
 	);
-	$max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().$table.' WHERE '.$where);
+	$max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().$table.' WHERE '.$where);
 	if (count($referrals)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 	foreach ($referrals as $ref)
 	{
@@ -332,7 +332,7 @@ function referrer_report_script($ret=false)
 		$deleted=false;
 		if (is_null($ref['referee']))
 		{
-			$deleted=($ref['qualified']==1);//!is_null($GLOBALS['SITE_DB']->query_value_null_ok('adminlogs','id',array('the_type'=>'DELETE_MEMBER','param_b'=>TODO Unfortunately we can't tell)));
+			$deleted=($ref['qualified']==1);//!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','id',array('the_type'=>'DELETE_MEMBER','param_b'=>TODO Unfortunately we can't tell)));
 		}
 		if ($csv)
 		{

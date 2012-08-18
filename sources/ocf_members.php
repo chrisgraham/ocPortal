@@ -46,7 +46,7 @@ function ocf_get_filter_cats($only_exists_now=false)
 	$filter_cats=array(''=>1);
 	if (!$only_exists_now)
 		$filter_cats[do_lang('TRASH')]=1;
-	if ($GLOBALS['FORUM_DB']->query_value('f_special_pt_access','COUNT(*)',array('s_member_id'=>get_member()))>0)
+	if ($GLOBALS['FORUM_DB']->query_select_value('f_special_pt_access','COUNT(*)',array('s_member_id'=>get_member()))>0)
 	$filter_cats[do_lang('INVITED_TO_PTS')]=1;
 	foreach ($filter_rows_a as $filter_row)
 		$filter_cats[$filter_row['t_pt_from_category']]=1;
@@ -64,9 +64,9 @@ function ocf_get_filter_cats($only_exists_now=false)
  */
 function ocf_authusername_is_bound_via_httpauth($authusername)
 {
-	$ret=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_password_compat_scheme'=>'httpauth','m_pass_hash_salted'=>$authusername));
+	$ret=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_password_compat_scheme'=>'httpauth','m_pass_hash_salted'=>$authusername));
 	if (is_null($ret))
-		$ret=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_not_equal_to('m_password_compat_scheme','').' AND '.db_string_equal_to('m_username',$authusername));
+		$ret=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_not_equal_to('m_password_compat_scheme','').' AND '.db_string_equal_to('m_username',$authusername));
 	return $ret;
 }
 
@@ -241,7 +241,7 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 			{
 				if ($cpf_permissions[0]['friend_view']==1)
 				{
-					if (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_liked',array('member_likes'=>$member_id,'member_liked'=>get_member()))))
+					if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_buddies','member_liked',array('member_likes'=>$member_id,'member_liked'=>get_member()))))
 						$display_cpf=true;
 				}
 

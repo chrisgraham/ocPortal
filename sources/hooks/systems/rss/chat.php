@@ -43,7 +43,7 @@ class Hook_rss_chat
 		require_code('chat');
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT m.* FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_messages m LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_rooms r ON r.id=m.room_id WHERE r.is_im=0 AND date_and_time>'.strval(time()-$cutoff).' AND '.$filters.' ORDER BY date_and_time DESC',$max);
-		$count=$GLOBALS['SITE_DB']->query_value('chat_rooms','COUNT(*)',array('is_im'=>0));
+		$count=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','COUNT(*)',array('is_im'=>0));
 		$categories=array();
 		if ($count<100)
 		{

@@ -30,7 +30,7 @@ class Hook_email_exists
 	{
 		$val=get_param('name');
 
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','m_username',array('m_email_address'=>$val));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','m_username',array('m_email_address'=>$val));
 		if (is_null($test)) return new ocp_tempcode();
 
 		require_lang('ocf');

@@ -1130,7 +1130,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											$auto_link_tempcode->attach($auto_link);
 											if (!$check_only)
 											{
-												$link_captions_title=$GLOBALS['SITE_DB']->query_value_null_ok('url_title_cache','t_title',array('t_url'=>$auto_link));
+												$link_captions_title=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>$auto_link));
 
 												if ((is_null($link_captions_title)) || (substr($link_captions_title,0,1)=='!'))
 												{

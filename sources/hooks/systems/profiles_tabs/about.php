@@ -104,7 +104,7 @@ class Hook_Profiles_Tabs_about
 			$modules[]=array('content',do_lang_tempcode('SEARCH'),build_url(array('page'=>'search','type'=>'misc','author'=>$username),get_module_zone('search')),'search');
 		if (addon_installed('authors'))
 		{
-			$author=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT author FROM '.get_table_prefix().'authors WHERE (forum_handle='.strval($member_id_viewing).') OR (forum_handle IS NULL AND '.db_string_equal_to('author',$username).')');
+			$author=$GLOBALS['SITE_DB']->query_value_if_there('SELECT author FROM '.get_table_prefix().'authors WHERE (forum_handle='.strval($member_id_viewing).') OR (forum_handle IS NULL AND '.db_string_equal_to('author',$username).')');
 			if ((has_actual_page_access($member_id_viewing,'authors')) && (!is_null($author)))
 			{
 				$modules[]=array('content',do_lang_tempcode('AUTHOR'),build_url(array('page'=>'authors','type'=>'misc','id'=>$author),get_module_zone('authors')),'me');
@@ -272,7 +272,7 @@ class Hook_Profiles_Tabs_about
 
 		$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_join_time');
 		$days_joined=intval(round((time()-$join_time)/60/60/24));
-		$total_posts=$GLOBALS['FORUM_DB']->query_value('f_posts','COUNT(*)');
+		$total_posts=$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)');
 		$join_date=($join_time==0)?'':get_timezoned_date($join_time,false);
 		$count_posts=do_lang_tempcode('_COUNT_POSTS',integer_format($post_count),float_format(floatval($post_count)/floatval(($days_joined==0)?1:$days_joined)),array(float_format(floatval(100*$post_count)/floatval(($total_posts==0)?1:$total_posts))));
 
@@ -361,7 +361,7 @@ class Hook_Profiles_Tabs_about
 				}
 
 				$club_name=get_translated_text($club_row['g_name']);
-				$club_forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.f_description','f.id',array('text_original'=>do_lang('FORUM_FOR_CLUB',$club_name)));
+				$club_forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.f_description','f.id',array('text_original'=>do_lang('FORUM_FOR_CLUB',$club_name)));
 
 				$clubs[]=array(
 					'CLUB_NAME'=>$club_name,

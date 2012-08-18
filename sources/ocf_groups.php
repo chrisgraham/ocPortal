@@ -44,7 +44,7 @@ function init__ocf_groups()
  */
 function ocf_nice_get_usergroups($it=NULL)
 {
-	$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
+	$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 	$_m=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),($group_count>200)?array('g_is_private_club'=>0):NULL,'ORDER BY g_order');
 	$entries=new ocp_tempcode();
 	foreach ($_m as $m)
@@ -81,7 +81,7 @@ function ocf_get_all_default_groups($include_primary=false)
 	$groups=collapse_1d_complexity('id',$rows);
 	if ($include_primary)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array('id'=>db_get_first_id()+8));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array('id'=>db_get_first_id()+8));
 		if (!is_null($test))
 			$groups[]=db_get_first_id()+8;
 	}
@@ -100,7 +100,7 @@ function ocf_ensure_groups_cached($groups)
 
 	if ($groups==='*')
 	{
-		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
+		$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),($group_count>200)?array('g_is_private_club'=>0):NULL);
 		foreach ($rows as $row)
 		{
@@ -267,7 +267,7 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 			if (is_null($PROBATION_GROUP))
 			{
 				$probation_group=get_option('probation_usergroup');
-				$PROBATION_GROUP=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$probation_group));
+				$PROBATION_GROUP=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$probation_group));
 				if (is_null($PROBATION_GROUP)) $PROBATION_GROUP=false;
 			}
 			if ($PROBATION_GROUP!==false) return array($PROBATION_GROUP=>1);

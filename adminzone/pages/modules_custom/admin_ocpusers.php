@@ -41,8 +41,8 @@ class Module_admin_ocpusers
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('mayfeature');
-		$GLOBALS['SITE_DB']->drop_if_exists('logged');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('mayfeature');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('logged');
 	}
 
 	/**
@@ -144,7 +144,7 @@ class Module_admin_ocpusers
 			// Test that they give feature permission
 			$url_parts=parse_url($r['website_url']);
 			if (!array_key_exists('host',$url_parts)) continue;
-			$perm=$GLOBALS['SITE_DB']->query_value_null_ok('mayfeature','id',array('url'=>$url_parts['scheme'].'://'.$url_parts['host']));
+			$perm=$GLOBALS['SITE_DB']->query_select_value_if_there('mayfeature','id',array('url'=>$url_parts['scheme'].'://'.$url_parts['host']));
 			if ((is_null($perm)) && (get_param_integer('no_feature',0)==1)) continue;
 
 			$seen_before[$r['website_url']]=1;

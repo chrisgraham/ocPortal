@@ -28,7 +28,7 @@ class upon_query_banner_points
 
 				$dest=get_param('dest','');
 
-				$cnt=$GLOBALS['SITE_DB']->query_value('banner_clicks','COUNT(*)',array(
+				$cnt=$GLOBALS['SITE_DB']->query_select_value('banner_clicks','COUNT(*)',array(
 					'c_member_id'=>$member_id,
 					'c_banner_id'=>$dest,
 				));

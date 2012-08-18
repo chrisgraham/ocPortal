@@ -200,7 +200,7 @@ class Module_admin_ecommerce extends standard_crud_module
 				$where['purchase_id']=$id;
 			}
 		}
-		$max_rows=$GLOBALS['SITE_DB']->query_value('transactions','COUNT(*)',$where);
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('transactions','COUNT(*)',$where);
 		$rows=$GLOBALS['SITE_DB']->query_select('transactions',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		if (count($rows)==0)
 		{
@@ -657,7 +657,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('MAIL_UHOH'),do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_MAIL_UHOH'),'mail_uhoh',$mail_uhoh,false,NULL,true));
 
 		$delete_fields=NULL;
-		if ($GLOBALS['SITE_DB']->query_value('subscriptions','COUNT(*)',array('s_type_code'=>'USERGROUP'.strval($id)))>0)
+		if ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)',array('s_type_code'=>'USERGROUP'.strval($id)))>0)
 		{
 			$delete_fields=new ocp_tempcode();
 			$delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_USERGROUP_SUB_DANGER'),'delete',false));

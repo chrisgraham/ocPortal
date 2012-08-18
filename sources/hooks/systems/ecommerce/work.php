@@ -48,7 +48,7 @@ class Hook_work
 	 */
 	function member_for($purchase_id)
 	{
-		return $GLOBALS['SITE_DB']->query_value_null_ok('invoices','i_member_id',array('id'=>intval($purchase_id)));
+		return $GLOBALS['SITE_DB']->query_select_value_if_there('invoices','i_member_id',array('id'=>intval($purchase_id)));
 	}
 
 	/**

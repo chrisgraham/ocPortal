@@ -29,7 +29,7 @@ class Hook_search_cedi_posts
 	function info()
 	{
 		if (!has_actual_page_access(get_member(),'cedi')) return NULL;
-		if ($GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)')==0) return NULL;
+		if ($GLOBALS['SITE_DB']->query_select_value('seedy_posts','COUNT(*)')==0) return NULL;
 
 		require_lang('cedi');
 

@@ -71,7 +71,7 @@ function validate_ip_script()
 
 	// If we're still here, we're ok to go
 	require_lang('ocf');
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_member_known_login_ips','i_val_code',array('i_val_code'=>$code));
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_member_known_login_ips','i_val_code',array('i_val_code'=>$code));
 	if (is_null($test)) warn_exit(do_lang_tempcode('ALREADY_VALIDATED'));
 	$GLOBALS['FORUM_DB']->query_update('f_member_known_login_ips',array('i_val_code'=>''),array('i_val_code'=>$code),'',1);
 
@@ -95,7 +95,7 @@ function get_username_from_human_name($username)
 	$i=1;
 	do
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$_username));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$_username));
 		if (!is_null($test))
 		{
 			$i++;
@@ -191,7 +191,7 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true,
 	if (($additional_group!=-1) && (!in_array($additional_group,$groups)))
 	{
 		// Check security
-		$test=$GLOBALS['FORUM_DB']->query_value('f_groups','g_is_presented_at_install',array('id'=>$additional_group));
+		$test=$GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id'=>$additional_group));
 		if ($test==1)
 		{
 			$groups=ocf_get_all_default_groups(false);
@@ -200,14 +200,14 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true,
 	} else $additional_group=-1;
 	if ($additional_group==-1)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array('g_is_presented_at_install'=>1));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array('g_is_presented_at_install'=>1));
 		if (!is_null($test)) $additional_group=$test;
 	}
 
 	// Check that the given address isn't already used (if one_per_email_address on)
 	if ((get_option('one_per_email_address')=='1') && ($email_address!='') && ($email_check))
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','m_username',array('m_email_address'=>$email_address));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','m_username',array('m_email_address'=>$email_address));
 		if (!is_null($test))
 		{
 			global $MEMBER_CACHED;
@@ -238,7 +238,7 @@ function ocf_read_in_custom_fields($custom_fields,$member_id=NULL)
 	foreach ($custom_fields as $custom_field)
 	{
 		$ob=get_fields_hook($custom_field['cf_type']);
-		$old_value=is_null($member_id)?NULL:$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval($custom_field['id']),array('mf_member_id'=>$member_id));
+		$old_value=is_null($member_id)?NULL:$GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields','field_'.strval($custom_field['id']),array('mf_member_id'=>$member_id));
 		$actual_custom_fields[$custom_field['id']]=$ob->inputted_to_field_value(true,$custom_field,'uploads/ocf_cpf_upload',$old_value);
 	}
 	return $actual_custom_fields;
@@ -416,8 +416,8 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$doing_langs=(multi_lang()) && ($special_type!='remote');
 	$doing_email_option=(get_option('allow_email_disable')=='1');
 	$doing_email_from_staff_option=(get_option('allow_email_from_staff_disable')=='1');
-	$unspecced_width_zone_exists=$GLOBALS['SITE_DB']->query_value_null_ok('zones','zone_name',array('zone_wide'=>NULL));
-	$unspecced_theme_zone_exists=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'zones WHERE '.db_string_equal_to('zone_theme','').' OR '.db_string_equal_to('zone_theme','-1'));
+	$unspecced_width_zone_exists=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_name',array('zone_wide'=>NULL));
+	$unspecced_theme_zone_exists=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'zones WHERE '.db_string_equal_to('zone_theme','').' OR '.db_string_equal_to('zone_theme','-1'));
 	$doing_wide_option=($special_type!='remote') && (!is_null($unspecced_width_zone_exists)) && (!$mini_mode);
 	$doing_theme_option=($unspecced_theme_zone_exists!=0) && (!$mini_mode);
 	$doing_local_forum_options=(addon_installed('ocf_forum')) && ($special_type!='remote') && (!$mini_mode);
@@ -507,7 +507,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		}
 
 		// Prepare list of usergroups, if maybe we are gonna let (a) usergroup-change field(s)
-		$group_count=$GLOBALS['FORUM_DB']->query_value('f_groups','COUNT(*)');
+		$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name','g_hidden','g_open_membership'),($group_count>200)?array('g_is_private_club'=>0):NULL,'ORDER BY g_order');
 		$_groups=new ocp_tempcode();
 		$default_primary_group=get_first_default_group();
@@ -1057,7 +1057,7 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
 	if ($index)
 	{
-		$indices_count=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'f_custom_fields WHERE '.db_string_not_equal_to('cf_type','integer').' AND '.db_string_not_equal_to('cf_type','tick').' AND '.db_string_not_equal_to('cf_type','long_trans').' AND '.db_string_not_equal_to('cf_type','short_trans'));
+		$indices_count=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'f_custom_fields WHERE '.db_string_not_equal_to('cf_type','integer').' AND '.db_string_not_equal_to('cf_type','tick').' AND '.db_string_not_equal_to('cf_type','long_trans').' AND '.db_string_not_equal_to('cf_type','short_trans'));
 		if ($indices_count<60) // Could be 64 but trying to be careful here...
 		{
 			$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');
@@ -1107,21 +1107,21 @@ function ocf_delete_custom_field($id)
  */
 function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 {
-	if (is_null($type)) $type=$GLOBALS['FORUM_DB']->query_value('f_custom_fields','cf_type',array('id'=>$field));
+	if (is_null($type)) $type=$GLOBALS['FORUM_DB']->query_select_value('f_custom_fields','cf_type',array('id'=>$field));
 
 	ocf_get_custom_field_mappings($member_id); // This will do an auto-repair if CPF storage row is missing
 
 	global $ANY_FIELD_ENCRYPTED;
 	if ($ANY_FIELD_ENCRYPTED===NULL)
-		$ANY_FIELD_ENCRYPTED=!is_null($GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields','cf_encrypted',array('cf_encrypted'=>1)));
+		$ANY_FIELD_ENCRYPTED=!is_null($GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','cf_encrypted',array('cf_encrypted'=>1)));
 
 	if ($ANY_FIELD_ENCRYPTED)
 	{
-		$encrypted=$GLOBALS['FORUM_DB']->query_value('f_custom_fields','cf_encrypted',array('id'=>$field));
+		$encrypted=$GLOBALS['FORUM_DB']->query_select_value('f_custom_fields','cf_encrypted',array('id'=>$field));
 		if ($encrypted)
 		{
 			require_code('encryption');
-			$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
+			$current=$GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
 			if ((remove_magic_encryption_marker($value)==remove_magic_encryption_marker($current)) && (is_data_encrypted($current))) return NULL;
 			$value=encrypt_data($value);
 		}
@@ -1135,7 +1135,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 	{
 		if (is_integer($value)) $value=get_translated_text($value,$GLOBALS['FORUM_DB']);
 
-		$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
+		$current=$GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
 		if (is_null($current))
 		{
 			if ($type=='posting_field')
@@ -1194,7 +1194,7 @@ function ocf_check_name_valid(&$username,$member_id=NULL,$password=NULL,$return_
 	if ($striped_username!='') warn_exit(do_lang_tempcode('USERNAME_BAD_SYMBOLS'));*/
 
 	// Check it doesn't already exist
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$username));
 	if ((!is_null($test)) && ($test!=$member_id))
 	{
 		if (get_option('signup_fullname')=='0')
@@ -1355,7 +1355,7 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_avatar_url',array('id'=>$member_id));
+	$old=$GLOBALS['FORUM_DB']->query_select_value('f_members','m_avatar_url',array('id'=>$member_id));
 	if ($old==$avatar_url) return;
 
 	// Check it has valid dimensions
@@ -1452,7 +1452,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 		$x=post_param($param_name,'');
 		if (($x!='') && (url_is_local($x)) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 		{
-			$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_photo_url',array('id'=>$member_id));
+			$old=$GLOBALS['FORUM_DB']->query_select_value('f_members','m_photo_url',array('id'=>$member_id));
 			if ($old!=$x) access_denied('ASSOCIATE_EXISTING_FILE');
 		}
 	}
@@ -1464,7 +1464,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 			if ($field=='') warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
 			if (($field!='') && (url_is_local($field)) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 			{
-				$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_photo_thumb_url',array('id'=>$member_id));
+				$old=$GLOBALS['FORUM_DB']->query_select_value('f_members','m_photo_thumb_url',array('id'=>$member_id));
 				if ($old!=$field) access_denied('ASSOCIATE_EXISTING_FILE');
 			}
 		}
@@ -1479,7 +1479,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	if (((get_base_url()!=get_forum_base_url()) || ((array_key_exists('on_msn',$GLOBALS['SITE_INFO'])) && ($GLOBALS['SITE_INFO']['on_msn']=='1'))) && ($urls[1]!='') && (url_is_local($urls[1]))) $urls[1]=get_base_url().'/'.$urls[1];
 
 	// Cleanup old photo
-	$old=$GLOBALS['FORUM_DB']->query_value('f_members','m_photo_url',array('id'=>$member_id));
+	$old=$GLOBALS['FORUM_DB']->query_select_value('f_members','m_photo_url',array('id'=>$member_id));
 	if ($old==$urls[0]) return;
 	if ((url_is_local($old)) && ((substr($old,0,19)=='uploads/ocf_photos/') || (substr($old,0,15)=='uploads/photos/')))
 		@unlink(get_custom_file_base().'/'.rawurldecode($old));

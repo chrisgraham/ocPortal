@@ -27,7 +27,7 @@
  */
 function handle_usergroup_subscription($purchase_id,$details,$product)
 {
-	$member_id=$GLOBALS['SITE_DB']->query_value_null_ok('subscriptions','s_member_id',array('id'=>intval($purchase_id)));
+	$member_id=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_member_id',array('id'=>intval($purchase_id)));
 
 	if (is_null($member_id)) return;
 
@@ -53,7 +53,7 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 		return; // The usergroup subscription has been deleted, and this was to remove the payment for it
 	}
 
-	$test=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'subscriptions WHERE ('.db_string_equal_to('s_state','cancelled').') AND '.db_string_equal_to('id',$purchase_id));
+	$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'subscriptions WHERE ('.db_string_equal_to('s_state','cancelled').') AND '.db_string_equal_to('id',$purchase_id));
 	if (!is_null($test))
 	{
 		$test=in_array($new_group,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id));
@@ -61,7 +61,7 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 		{
 			// Remove them from the group
 
-			if (is_null($GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_value_null_ok('f_group_member_timeouts','member_id',array('member_id'=>$member_id,'group_id'=>$new_group))))
+			if (is_null($GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value_if_there('f_group_member_timeouts','member_id',array('member_id'=>$member_id,'group_id'=>$new_group))))
 			{
 				if ((get_value('unofficial_ecommerce')=='1') && (get_forum_type()!='ocf'))
 				{
@@ -139,7 +139,7 @@ class Hook_usergroup
 	 */
 	function member_for($purchase_id)
 	{
-		return $GLOBALS['SITE_DB']->query_value_null_ok('subscriptions','s_member_id',array('id'=>intval($purchase_id)));
+		return $GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_member_id',array('id'=>intval($purchase_id)));
 	}
 
 	/**
@@ -184,7 +184,7 @@ class Hook_usergroup
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
 		$id=intval(substr($product,9));
-		$_description=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_value('f_usergroup_subs','s_description',array('id'=>$id));
+		$_description=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_usergroup_subs','s_description',array('id'=>$id));
 		$ret=get_translated_tempcode($_description,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
@@ -217,7 +217,7 @@ class Hook_usergroup
 		$id=intval(substr($product,9));
 		$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		$group_id=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_value('f_usergroup_subs','s_group_id',array('id'=>$id));
+		$group_id=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_usergroup_subs','s_group_id',array('id'=>$id));
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
 
 		$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member);

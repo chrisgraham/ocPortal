@@ -82,7 +82,7 @@ class Hook_choose_gallery
 				while ((!is_null($cat)) && ($cat!=''))
 				{
 					$out.='<expand>'.$cat.'</expand>';
-					$cat=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','parent_id',array('name'=>$cat));
+					$cat=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>$cat));
 				}
 			}
 		}

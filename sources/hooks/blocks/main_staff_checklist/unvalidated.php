@@ -62,7 +62,7 @@ class Hook_checklist_unvalidated
 			$info=$object->info();
 			if (is_null($info)) continue;
 			$db=array_key_exists('db',$info)?$info['db']:$GLOBALS['SITE_DB'];
-			$amount=$db->query_value($info['db_table'],'COUNT(*)',array($info['db_validated']=>0));
+			$amount=$db->query_select_value($info['db_table'],'COUNT(*)',array($info['db_validated']=>0));
 			if ((is_null($info)) || ((array_key_exists('is_minor',$info)) && ($info['is_minor']))) $sum2+=$amount; else $sum+=$amount;
 		}
 

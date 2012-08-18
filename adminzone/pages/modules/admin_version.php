@@ -47,39 +47,39 @@ class Module_admin_version
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('url_id_monikers');
-		$GLOBALS['SITE_DB']->drop_if_exists('cache');
-		$GLOBALS['SITE_DB']->drop_if_exists('cache_on');
-		$GLOBALS['SITE_DB']->drop_if_exists('security_images');
-		$GLOBALS['SITE_DB']->drop_if_exists('rating');
-		$GLOBALS['SITE_DB']->drop_if_exists('member_tracking');
-		$GLOBALS['SITE_DB']->drop_if_exists('trackbacks');
-		$GLOBALS['SITE_DB']->drop_if_exists('menu_items');
-		$GLOBALS['SITE_DB']->drop_if_exists('long_values');
-		$GLOBALS['SITE_DB']->drop_if_exists('tutorial_links');
-		$GLOBALS['SITE_DB']->drop_if_exists('translate_history');
-		$GLOBALS['SITE_DB']->drop_if_exists('edit_pings');
-		$GLOBALS['SITE_DB']->drop_if_exists('validated_once');
-		$GLOBALS['SITE_DB']->drop_if_exists('msp');
-		$GLOBALS['SITE_DB']->drop_if_exists('member_zone_access');
-		$GLOBALS['SITE_DB']->drop_if_exists('member_page_access');
-		$GLOBALS['SITE_DB']->drop_if_exists('member_category_access');
-		$GLOBALS['SITE_DB']->drop_if_exists('tracking');
-		$GLOBALS['SITE_DB']->drop_if_exists('sms_log');
-		$GLOBALS['SITE_DB']->drop_if_exists('confirmed_mobiles');
-		$GLOBALS['SITE_DB']->drop_if_exists('autosave');
-		$GLOBALS['SITE_DB']->drop_if_exists('messages_to_render');
-		$GLOBALS['SITE_DB']->drop_if_exists('url_title_cache');
-		$GLOBALS['SITE_DB']->drop_if_exists('review_supplement');
-		$GLOBALS['SITE_DB']->drop_if_exists('logged_mail_messages');
-		$GLOBALS['SITE_DB']->drop_if_exists('link_tracker');
-		$GLOBALS['SITE_DB']->drop_if_exists('incoming_uploads');
-		$GLOBALS['SITE_DB']->drop_if_exists('f_group_member_timeouts');
-		$GLOBALS['SITE_DB']->drop_if_exists('temp_block_permissions');
-		$GLOBALS['SITE_DB']->drop_if_exists('cron_caching_requests');
-		$GLOBALS['SITE_DB']->drop_if_exists('notifications_enabled');
-		$GLOBALS['SITE_DB']->drop_if_exists('digestives_tin');
-		$GLOBALS['SITE_DB']->drop_if_exists('digestives_consumed');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('url_id_monikers');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('cache');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('cache_on');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('security_images');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('rating');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('member_tracking');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('trackbacks');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('menu_items');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('long_values');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('tutorial_links');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('translate_history');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('edit_pings');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('validated_once');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('msp');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('member_zone_access');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('member_page_access');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('member_category_access');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('tracking');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('sms_log');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('confirmed_mobiles');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('autosave');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('messages_to_render');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('url_title_cache');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('review_supplement');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('logged_mail_messages');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('link_tracker');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('incoming_uploads');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('f_group_member_timeouts');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('temp_block_permissions');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('cron_caching_requests');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('notifications_enabled');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('digestives_tin');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('digestives_consumed');
 		delete_specific_permission('reuse_others_attachments');
 		delete_specific_permission('use_sms');
 		delete_specific_permission('sms_higher_limit');
@@ -498,7 +498,7 @@ class Module_admin_version
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<12))
 		{
-			$GLOBALS['SITE_DB']->drop_if_exists('cache');
+			$GLOBALS['SITE_DB']->drop_table_if_exists('cache');
 			$GLOBALS['SITE_DB']->create_table('cache',array(
 				'cached_for'=>'*ID_TEXT',
 				'identifier'=>'*MINIID_TEXT',
@@ -538,7 +538,7 @@ class Module_admin_version
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<14))
 		{
-			$GLOBALS['SITE_DB']->drop_if_exists('tracking');
+			$GLOBALS['SITE_DB']->drop_table_if_exists('tracking');
 			$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_template','ID_TEXT');
 		}
 

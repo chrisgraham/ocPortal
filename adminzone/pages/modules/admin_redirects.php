@@ -47,7 +47,7 @@ class Module_admin_redirects
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('redirects');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('redirects');
 	}
 
 	/**
@@ -136,7 +136,7 @@ class Module_admin_redirects
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 		$fields=new ocp_tempcode();
 		$rows=$GLOBALS['SITE_DB']->query_select('redirects',array('*'));
-		$num_zones=$GLOBALS['SITE_DB']->query_value('zones','COUNT(*)');
+		$num_zones=$GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)');
 		require_code('zones3');
 		foreach ($rows as $i=>$row)
 		{

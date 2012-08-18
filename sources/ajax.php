@@ -111,7 +111,7 @@ function retrieve_autosave()
 
 	@ini_set('ocproducts.xss_detect','0');
 
-	echo $GLOBALS['SITE_DB']->query_value_null_ok('autosave','a_value',array('a_member_id'=>$member_id,'a_key'=>$key),'ORDER BY a_time DESC');
+	echo $GLOBALS['SITE_DB']->query_select_value_if_there('autosave','a_value',array('a_member_id'=>$member_id,'a_key'=>$key),'ORDER BY a_time DESC');
 }
 
 /**
@@ -405,7 +405,7 @@ function namelike_script()
 			{
 				if ($special=='author')
 				{
-					$num_authors=$GLOBALS['SITE_DB']->query_value('authors','COUNT(*)');
+					$num_authors=$GLOBALS['SITE_DB']->query_select_value('authors','COUNT(*)');
 					$like=($num_authors<1000)?db_encode_like('%'.$id.'%'):db_encode_like($id.'%'); // performance issue
 					$rows=$GLOBALS['SITE_DB']->query('SELECT author FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'authors WHERE author LIKE \''.$like.'\' ORDER BY author',15);
 					$names=collapse_1d_complexity('author',$rows);

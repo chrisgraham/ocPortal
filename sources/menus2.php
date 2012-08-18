@@ -97,11 +97,11 @@ function add_menu_item_simple($menu,$parent,$caption,$url='',$expanded=0,$check_
 {
 	global $ADD_MENU_COUNTER;
 
-	$id=$GLOBALS['SITE_DB']->query_value_null_ok('menu_items','id',array('i_url'=>$url,'i_menu'=>$menu));
+	$id=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','id',array('i_url'=>$url,'i_menu'=>$menu));
 	if (!is_null($id)) return $id; // Already exists
 	if (is_string($parent))
 	{
-		$parent=$GLOBALS['SITE_DB']->query_value_null_ok('menu_items','i_parent',array('i_url'=>$parent));
+		$parent=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','i_parent',array('i_url'=>$parent));
 	}
 
 	$_caption=(strpos($caption,':')===false)?do_lang($caption,NULL,NULL,NULL,NULL,false):NULL;
@@ -182,8 +182,8 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
  */
 function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code)
 {
-	$_caption=$GLOBALS['SITE_DB']->query_value('menu_items','i_caption',array('id'=>$id));
-	$_caption_long=$GLOBALS['SITE_DB']->query_value('menu_items','i_caption_long',array('id'=>$id));
+	$_caption=$GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption',array('id'=>$id));
+	$_caption_long=$GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption_long',array('id'=>$id));
 
 	$GLOBALS['SITE_DB']->query_update('menu_items',array(
 		'i_menu'=>$menu,
@@ -208,8 +208,8 @@ function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permission
  */
 function delete_menu_item($id)
 {
-	$_caption=$GLOBALS['SITE_DB']->query_value('menu_items','i_caption',array('id'=>$id));
-	$_caption_long=$GLOBALS['SITE_DB']->query_value('menu_items','i_caption_long',array('id'=>$id));
+	$_caption=$GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption',array('id'=>$id));
+	$_caption_long=$GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption_long',array('id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('id'=>$id),'',1);
 	$caption=get_translated_text($_caption);
 	delete_lang($_caption);

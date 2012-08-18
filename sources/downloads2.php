@@ -63,7 +63,7 @@ function dload_script()
 		access_denied('CATEGORY_ACCESS');
 
 	// Cost?
-	$got_before=$GLOBALS['SITE_DB']->query_value_null_ok('download_logging','the_user',array('the_user'=>get_member(),'id'=>$id));
+	$got_before=$GLOBALS['SITE_DB']->query_select_value_if_there('download_logging','the_user',array('the_user'=>get_member(),'id'=>$id));
 	if (addon_installed('points'))
 	{
 		if ($myrow['download_cost']>0)
@@ -122,7 +122,7 @@ function dload_script()
 	$size=filesize($_full);
 	if (is_null($got_before))
 	{
-		$bandwidth=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT SUM(file_size) AS answer FROM '.get_table_prefix().'download_logging l LEFT JOIN '.get_table_prefix().'download_downloads d ON l.id=d.id WHERE date_and_time>'.strval(time()-24*60*60*32));
+		$bandwidth=$GLOBALS['SITE_DB']->query_value_if_there('SELECT SUM(file_size) AS answer FROM '.get_table_prefix().'download_logging l LEFT JOIN '.get_table_prefix().'download_downloads d ON l.id=d.id WHERE date_and_time>'.strval(time()-24*60*60*32));
 		if ((($bandwidth+floatval($size))>(floatval(get_option('maximum_download'))*1024*1024*1024)) && (!has_specific_permission(get_member(),'bypass_bandwidth_restriction')))
 			warn_exit(do_lang_tempcode('TOO_MUCH_DOWNLOAD'));
 
@@ -274,7 +274,7 @@ function edit_download_category($category,$parent_id,$description,$category_id,$
 	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))
 	{
 		if ($category_id==$under_category_id) warn_exit(do_lang_tempcode('OWN_PARENT_ERROR'));
-		$under_category_id=$GLOBALS['SITE_DB']->query_value('download_categories','parent_id',array('id'=>$under_category_id));
+		$under_category_id=$GLOBALS['SITE_DB']->query_select_value('download_categories','parent_id',array('id'=>$under_category_id));
 	}
 
 	require_code('urls2');
@@ -307,7 +307,7 @@ function edit_download_category($category,$parent_id,$description,$category_id,$
  */
 function delete_download_category($category_id)
 {
-	$root_category=$GLOBALS['SITE_DB']->query_value('download_categories','MIN(id)');
+	$root_category=$GLOBALS['SITE_DB']->query_select_value('download_categories','MIN(id)');
 	if ($category_id==$root_category) warn_exit(do_lang_tempcode('NO_DELETE_ROOT'));
 
 	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('category','description','parent_id'),array('id'=>$category_id),'',1);
@@ -682,7 +682,7 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 	// Make its gallery
 	if ((addon_installed('galleries')) && (!running_script('stress_test_loader')))
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>'download_'.strval($id)));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>'download_'.strval($id)));
 		if (is_null($test))
 		{
 			require_code('galleries2');
@@ -801,7 +801,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 		require_code('galleries2');
 		$download_gallery_root=get_option('download_gallery_root');
 		if (is_null($download_gallery_root)) $download_gallery_root='root';
-		$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','parent_id',array('name'=>'download_'.strval($id)));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>'download_'.strval($id)));
 		if (!is_null($test))
 			edit_gallery('download_'.strval($id),'download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','','',$download_gallery_root);
 	}
@@ -853,7 +853,7 @@ function delete_download($id,$leave=false)
 		// Delete gallery
 		$name='download_'.strval($id);
 		require_code('galleries2');
-		$test=$GLOBALS['SITE_DB']->query_value('galleries','parent_id',array('name'=>'download_'.strval($id)));
+		$test=$GLOBALS['SITE_DB']->query_select_value('galleries','parent_id',array('name'=>'download_'.strval($id)));
 		if (!is_null($test))
 			delete_gallery($name);
 	}

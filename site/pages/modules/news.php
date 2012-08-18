@@ -47,10 +47,10 @@ class Module_news
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_if_exists('news');
-		$GLOBALS['SITE_DB']->drop_if_exists('news_categories');
-		$GLOBALS['SITE_DB']->drop_if_exists('news_rss_cloud');
-		$GLOBALS['SITE_DB']->drop_if_exists('news_category_entries');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('news');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('news_categories');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('news_rss_cloud');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('news_category_entries');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'news'));
 
@@ -362,16 +362,16 @@ class Module_news
 		{
 			$map=array();
 			$categories=$GLOBALS['SITE_DB']->query_select('news_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.nc_title',array('c.*','text_original'),$map,'ORDER BY nc_owner',$max,$start); // Ordered to show non-blogs first (nc_owner=NULL)
-			$max_rows=$GLOBALS['SITE_DB']->query_value('news_categories','COUNT(*)',$map);
+			$max_rows=$GLOBALS['SITE_DB']->query_select_value('news_categories','COUNT(*)',$map);
 		} elseif ($blogs==1)
 		{
 			$categories=$GLOBALS['SITE_DB']->query('SELECT c.*,text_original FROM '.get_table_prefix().'news_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.nc_title WHERE nc_owner IS NOT NULL ORDER BY nc_owner DESC',$max,$start); // Ordered to show newest blogs first
-			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'news_categories WHERE nc_owner IS NOT NULL');
+			$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'news_categories WHERE nc_owner IS NOT NULL');
 		} else
 		{
 			$map=array('nc_owner'=>NULL);
 			$categories=$GLOBALS['SITE_DB']->query_select('news_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.nc_title',array('c.*','text_original'),$map,'ORDER BY text_original ASC',$max,$start); // Ordered by title (can do efficiently as limited numbers of non-blogs)
-			$max_rows=$GLOBALS['SITE_DB']->query_value('news_categories','COUNT(*)',$map);
+			$max_rows=$GLOBALS['SITE_DB']->query_select_value('news_categories','COUNT(*)',$map);
 		}
 		if ($max_rows==count($categories)) // We'll implement better title-based sorting only if we can show all rows on one screen, otherwise too slow
 		{
@@ -399,7 +399,7 @@ class Module_news
 			if (has_category_access(get_member(),'news',strval($category['id'])))
 			{
 				$query='SELECT COUNT(*) FROM '.get_table_prefix().'news p'.$join.' WHERE '.((!has_specific_permission(get_member(),'see_unvalidated'))?'validated=1 AND ':'').' (news_entry_category='.strval($category['id']).' OR news_category='.strval($category['id']).') AND '.$q_filter.' ORDER BY date_and_time DESC';
-				$count=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
+				$count=$GLOBALS['SITE_DB']->query_value_if_there($query);
 				if ($count>0)
 				{
 					if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($category['text_original'])) $category['text_original']=get_translated_text($category['nc_title']);
@@ -517,7 +517,7 @@ class Module_news
 
 		$rows=$GLOBALS['SITE_DB']->query($query,$max,$start);
 		$rows=remove_duplicate_rows($rows,'p_id');
-		$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT r.id) FROM '.get_table_prefix().'news r'.$join.' WHERE '.$q_filter.((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1':''));
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT r.id) FROM '.get_table_prefix().'news r'.$join.' WHERE '.$q_filter.((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1':''));
 		$rcount=count($rows);
 
 		$blogger=NULL;
