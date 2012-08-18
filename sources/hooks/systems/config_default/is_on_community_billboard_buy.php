@@ -18,7 +18,7 @@
  * @package		pointstore
  */
 
-class Hook_config_default_is_on_flagrant_buy
+class Hook_config_default_is_on_community_billboard_buy
 {
 
 	/**
@@ -32,8 +32,8 @@ class Hook_config_default_is_on_flagrant_buy
 			'human_name'=>'ENABLE_PURCHASE',
 			'the_type'=>'tick',
 			'the_page'=>'POINTSTORE',
-			'section'=>'FLAGRANT_MESSAGE',
-			'explanation'=>'CONFIG_OPTION_is_on_flagrant_buy',
+			'section'=>'COMMUNITY_BILLBOARD_MESSAGE',
+			'explanation'=>'CONFIG_OPTION_is_on_community_billboard_buy',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
@@ -48,7 +48,7 @@ class Hook_config_default_is_on_flagrant_buy
 	 */
 	function get_default()
 	{
-		if (!addon_installed('flagrant')) return NULL;
+		if (!addon_installed('community_billboard')) return NULL;
 		return '1';
 	}
 

@@ -9,7 +9,7 @@ There are a number of ocPortal systems that provide featured content, rather tha
  - image of the day
  - random quotes
  - polls (although these are covered in the 'Feedback' tutorial)
- - flagrant text (although this is covered in the 'Points' tutorial)
+ - community billboard messages (although this is covered in the 'Points' tutorial)
 
 This is a short tutorial briefly covering these systems, and featured content in general.
 

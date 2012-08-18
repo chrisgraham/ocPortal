@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		flagrant
+ * @package		community_billboard
  */
 
 require_code('crud_module');
@@ -23,14 +23,14 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_flagrant extends standard_crud_module
+class Module_admin_community_billboard extends standard_crud_module
 {
-	var $lang_type='FLAGRANT';
+	var $lang_type='COMMUNITY_BILLBOARD';
 	var $special_edit_frontend=true;
 	var $redirect_type='ed';
-	var $menu_label='FLAGRANT_TEXT';
+	var $menu_label='COMMUNITY_BILLBOARD_TEXT';
 	var $select_name='MESSAGE';
-	var $table='text';
+	var $table='community_billboard_messages';
 	var $orderer='the_message';
 	var $title_is_multi_lang=true;
 
@@ -47,7 +47,7 @@ class Module_admin_flagrant extends standard_crud_module
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
 		$info['update_require_upgrade']=1;
-		$info['version']=3;
+		$info['version']=4;
 		$info['locked']=false;
 		return $info;
 	}
@@ -57,9 +57,9 @@ class Module_admin_flagrant extends standard_crud_module
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_table_if_exists('text');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('community_billboard_messages');
 
-		delete_config_option('system_flagrant');
+		delete_config_option('system_community_billboard');
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Module_admin_flagrant extends standard_crud_module
 	{
 		if (is_null($upgrade_from))
 		{
-			$GLOBALS['SITE_DB']->create_table('text',array(
+			$GLOBALS['SITE_DB']->create_table('community_billboard_messages',array(
 				'id'=>'*AUTO',
 				'user_id'=>'USER',
 				'the_message'=>'SHORT_TRANS',	// Comcode
@@ -83,16 +83,16 @@ class Module_admin_flagrant extends standard_crud_module
 				'notes'=>'LONG_TEXT'
 			));
 
-			$GLOBALS['SITE_DB']->create_index('text','findflagrant',array('active_now'));
+			$GLOBALS['SITE_DB']->create_index('community_billboard','find_active_billboard_msg',array('active_now'));
 
-			add_config_option('SYSTEM_FLAGRANT','system_flagrant','transline','return \'\';','SITE','GENERAL');
-		} else
+			add_config_option('SYSTEM_COMMUNITY_BILLBOARD','community_billboard','transline','return \'\';','SITE','GENERAL');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{
-			if ($upgrade_from<3)
-			{
-				delete_config_option('system_flagrant');
-				add_config_option('SYSTEM_FLAGRANT','system_flagrant','transline','return \'\';','SITE','GENERAL');
-			}
+			rename_config_option('system_flagrant','community_billboard');
+
+			$GLOBALS['SITE_DB']->rename_table('text','community_billboard_messages');
 		}
 	}
 
@@ -104,15 +104,15 @@ class Module_admin_flagrant extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		//$GLOBALS['HELPER_PANEL_PIC']='flagrant';
+		//$GLOBALS['HELPER_PANEL_PIC']='community_billboard';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_points';
 
-		require_lang('flagrant');
-		require_code('flagrant');
+		require_lang('community_billboard');
+		require_code('community_billboard');
 
-		$this->add_one_label=do_lang_tempcode('ADD_FLAGRANT');
-		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_FLAGRANT');
-		$this->edit_one_label=do_lang_tempcode('EDIT_FLAGRANT');
+		$this->add_one_label=do_lang_tempcode('ADD_COMMUNITY_BILLBOARD');
+		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_COMMUNITY_BILLBOARD');
+		$this->edit_one_label=do_lang_tempcode('EDIT_COMMUNITY_BILLBOARD');
 
 		if ($type=='misc') return $this->misc();
 
@@ -127,13 +127,13 @@ class Module_admin_flagrant extends standard_crud_module
 	function misc()
 	{
 		require_code('templates_donext');
-		return do_next_manager(get_screen_title('FLAGRANT_TEXT'),comcode_lang_string('DOC_FLAGRANT'),
+		return do_next_manager(get_screen_title('COMMUNITY_BILLBOARD_TEXT'),comcode_lang_string('DOC_COMMUNITY_BILLBOARD'),
 					array(
 						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_FLAGRANT')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('FLAGRANT_MANAGE')),
+						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_COMMUNITY_BILLBOARD')),
+						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('COMMUNITY_BILLBOARD_MANAGE')),
 					),
-					do_lang('FLAGRANT_TEXT')
+					do_lang('COMMUNITY_BILLBOARD_TEXT')
 		);
 	}
 
@@ -155,7 +155,7 @@ class Module_admin_flagrant extends standard_crud_module
 	 */
 	function get_entry_points()
 	{
-		return array('misc'=>'FLAGRANT_MANAGE');
+		return array('misc'=>'COMMUNITY_BILLBOARD_MANAGE');
 	}
 
 	/**
@@ -211,7 +211,7 @@ class Module_admin_flagrant extends standard_crud_module
 	}
 
 	/**
-	 * Get tempcode for a flagrant-message adding/editing form.
+	 * Get tempcode for a community billboard message adding/editing form.
 	 *
 	 * @param  SHORT_TEXT	The message
 	 * @param  integer		The number of days to display for
@@ -239,7 +239,7 @@ class Module_admin_flagrant extends standard_crud_module
 	 */
 	function fill_in_edit_form($id)
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('text',array('*'),array('id'=>intval($id)));
+		$rows=$GLOBALS['SITE_DB']->query_select('community_billboard_messages',array('*'),array('id'=>intval($id)));
 		if (!array_key_exists(0,$rows))
 		{
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -251,7 +251,7 @@ class Module_admin_flagrant extends standard_crud_module
 
 		$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['user_id']);
 
-		$text=do_template('FLAGRANT_DETAILS',array('_GUID'=>'dcc7a8b027d450a3c17c79b23b39cd87','USERNAME'=>$username,'DAYS_ORDERED'=>integer_format($myrow['days']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date));
+		$text=do_template('COMMUNITY_BILLBOARD_DETAILS',array('_GUID'=>'dcc7a8b027d450a3c17c79b23b39cd87','USERNAME'=>$username,'DAYS_ORDERED'=>integer_format($myrow['days']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date));
 
 		return array($fields,new ocp_tempcode(),new ocp_tempcode(),$text);
 	}
@@ -285,7 +285,7 @@ class Module_admin_flagrant extends standard_crud_module
 		$notes=post_param('notes','');
 		$validated=post_param_integer('validated',0);
 
-		return strval(add_flagrant($message,post_param_integer('days'),$notes,$validated));
+		return strval(add_community_billboard_message($message,post_param_integer('days'),$notes,$validated));
 	}
 
 	/**
@@ -298,7 +298,7 @@ class Module_admin_flagrant extends standard_crud_module
 		$message=post_param('message');
 		$notes=post_param('notes','');
 		$validated=post_param_integer('validated',0);
-		edit_flagrant(intval($id),$message,$notes,$validated);
+		edit_community_billboard_message(intval($id),$message,$notes,$validated);
 	}
 
 	/**
@@ -308,7 +308,7 @@ class Module_admin_flagrant extends standard_crud_module
 	 */
 	function delete_actualisation($id)
 	{
-		delete_flagrant(intval($id));
+		delete_community_billboard_message(intval($id));
 	}
 }
 

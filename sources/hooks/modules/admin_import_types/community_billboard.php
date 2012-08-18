@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		flagrant
+ * @package		community_billboard
  */
 
-class Hook_admin_import_types_flagrant
+class Hook_admin_import_types_community_billboard
 {
 
 	/**
@@ -29,7 +29,7 @@ class Hook_admin_import_types_flagrant
 	function run()
 	{
 		return array(
-			'flagrant'=>'FLAGRANT_ARCHIVE',
+			'community_billboard'=>'COMMUNITY_BILLBOARD_ARCHIVE',
 		);
 	}
 

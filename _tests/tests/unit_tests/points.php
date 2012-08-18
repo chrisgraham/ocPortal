@@ -106,7 +106,7 @@ class points_test_set extends ocp_test_case
 	function testAddFlagmsg()
 	{
 		$browser=new SimpleBrowser();
-		$browser->get(get_base_url().'/site/index.php?page=pointstore&type=text&id=flagrant');
+		$browser->get(get_base_url().'/site/index.php?page=pointstore&type=text&id=community_billboard');
 
 		$browser->setField('login_username', 'admin');
 		$browser->setField('password', 'welcome');

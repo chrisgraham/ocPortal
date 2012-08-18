@@ -76,7 +76,7 @@ class Hook_addon_registry_pointstore
 
 			'themes/default/images/menu_items/community_navigation/pointstore.png',
 			'sources/hooks/systems/notifications/pointstore_request_custom.php',
-			'sources/hooks/systems/notifications/pointstore_request_flagrant.php',
+			'sources/hooks/systems/notifications/pointstore_request_community_billboard.php',
 			'sources/hooks/systems/notifications/pointstore_request_forwarding.php',
 			'sources/hooks/systems/notifications/pointstore_request_pop3.php',
 			'sources/hooks/systems/notifications/pointstore_request_quota.php',
@@ -89,7 +89,7 @@ class Hook_addon_registry_pointstore
 			'sources/hooks/systems/config_default/initial_banner_hits.php',
 			'sources/hooks/systems/config_default/initial_quota.php',
 			'sources/hooks/systems/config_default/is_on_banner_buy.php',
-			'sources/hooks/systems/config_default/is_on_flagrant_buy.php',
+			'sources/hooks/systems/config_default/is_on_community_billboard_buy.php',
 			'sources/hooks/systems/config_default/is_on_forw_buy.php',
 			'sources/hooks/systems/config_default/is_on_gambling_buy.php',
 			'sources/hooks/systems/config_default/is_on_highlight_name_buy.php',
@@ -117,8 +117,8 @@ class Hook_addon_registry_pointstore
 			'POINTSTORE_TOPIC_PIN.tpl',
 			'POINTSTORE_SCREEN.tpl',
 			'POINTSTORE_CONFIRM_SCREEN.tpl',
-			'POINTSTORE_FLAGRANT_SCREEN.tpl',
-			'POINTSTORE_FLAGRANT_2.tpl',
+			'POINTSTORE_COMMUNITY_BILLBOARD_SCREEN.tpl',
+			'POINTSTORE_COMMUNITY_BILLBOARD_2.tpl',
 			'POINTSTORE_FORWARDER_MAIL.tpl',
 			'POINTSTORE_ITEM.tpl',
 			'POINTSTORE_LOG_SCREEN.tpl',
@@ -175,8 +175,8 @@ class Hook_addon_registry_pointstore
 				'POINTSTORE_QUOTA_MAIL.tpl'=>'pointstore_quota_mail',
 				'POINTSTORE_CUSTOM_ITEM_SCREEN.tpl'=>'pointstore_custom_item_screen',
 				'POINTSTORE_HIGHLIGHT_NAME_SCREEN.tpl'=>'pointstore_highlight_name_screen',
-				'POINTSTORE_FLAGRANT_2.tpl'=>'pointstore_flagrant_2',
-				'POINTSTORE_FLAGRANT_SCREEN.tpl'=>'pointstore_flagrant_screen',
+				'POINTSTORE_COMMUNITY_BILLBOARD_2.tpl'=>'pointstore_community_billboard_2',
+				'POINTSTORE_COMMUNITY_BILLBOARD_SCREEN.tpl'=>'pointstore_community_billboard_screen',
 				'POINTSTORE_ITEM.tpl'=>'pointstore_screen',
 				'POINTSTORE_MFORWARDING_LINK.tpl'=>'pointstore_screen',
 				'POINTSTORE_MPOP3_LINK.tpl'=>'pointstore_screen',
@@ -452,11 +452,11 @@ class Hook_addon_registry_pointstore
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__pointstore_flagrant_2()
+	function tpl_preview__pointstore_community_billboard_2()
 	{
 		return array(
 			lorem_globalise(
-				do_lorem_template('POINTSTORE_FLAGRANT_2',array(
+				do_lorem_template('POINTSTORE_COMMUNITY_BILLBOARD_2',array(
 					'TEXT_URL'=>placeholder_url(),
 				)
 			),NULL,'',true),
@@ -470,11 +470,11 @@ class Hook_addon_registry_pointstore
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__pointstore_flagrant_screen()
+	function tpl_preview__pointstore_community_billboard_screen()
 	{
 		return array(
 			lorem_globalise(
-				do_lorem_template('POINTSTORE_FLAGRANT_SCREEN',array(
+				do_lorem_template('POINTSTORE_COMMUNITY_BILLBOARD_SCREEN',array(
 					'TITLE'=>lorem_title(),
 					'TEXT_URL'=>placeholder_url(),
 					'QUEUE'=>placeholder_number(),

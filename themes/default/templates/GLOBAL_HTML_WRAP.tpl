@@ -216,9 +216,9 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 				</div>
 
 				<div class="global_footer_right">
-					{+START,IF,{$ADDON_INSTALLED,flagrant}}{+START,IF_NON_EMPTY,{$FLAGRANT}}
+					{+START,IF,{$ADDON_INSTALLED,community_billboard}}{+START,IF_NON_EMPTY,{$COMMUNITY_BILLBOARD}}
 						<div class="global_community_message">
-							{$FLAGRANT`}
+							{$COMMUNITY_BILLBOARD`}
 						</div>
 					{+END}{+END}
 

@@ -18,7 +18,7 @@
  * @package		pointstore
  */
 
-class Hook_config_default_text
+class Hook_config_default_community_billboard
 {
 
 	/**
@@ -29,11 +29,11 @@ class Hook_config_default_text
 	function get_details()
 	{
 		return array(
-			'human_name'=>'COST_text',
+			'human_name'=>'COST_community_billboard',
 			'the_type'=>'integer',
 			'the_page'=>'POINTSTORE',
-			'section'=>'FLAGRANT_MESSAGE',
-			'explanation'=>'CONFIG_OPTION_text',
+			'section'=>'COMMUNITY_BILLBOARD_MESSAGE',
+			'explanation'=>'CONFIG_OPTION_community_billboard',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
@@ -48,7 +48,7 @@ class Hook_config_default_text
 	 */
 	function get_default()
 	{
-		if (!addon_installed('flagrant')) return NULL;
+		if (!addon_installed('community_billboard')) return NULL;
 		return '700';
 	}
 

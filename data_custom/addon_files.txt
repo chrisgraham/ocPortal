@@ -1900,11 +1900,11 @@ ocportal_tutorials
  - data_custom/images/docs/points_admin_monitor.png
  - data_custom/images/docs/points_block.png
  - data_custom/images/docs/points_config.png
- - data_custom/images/docs/points_default_flagrant.png
- - data_custom/images/docs/points_flagrant_actual.png
- - data_custom/images/docs/points_flagrant_add.png
- - data_custom/images/docs/points_flagrant_manage.png
- - data_custom/images/docs/points_flagrant_register.png
+ - data_custom/images/docs/points_default_community_billboard.png
+ - data_custom/images/docs/points_community_billboard_actual.png
+ - data_custom/images/docs/points_community_billboard_add.png
+ - data_custom/images/docs/points_community_billboard_manage.png
+ - data_custom/images/docs/points_community_billboard_register.png
  - data_custom/images/docs/points_leaderboard.png
  - data_custom/images/docs/points_lucky.png
  - data_custom/images/docs/points_page.png
@@ -4037,7 +4037,7 @@ testing_platform
  - _tests/tests/unit_tests/downloads_category.php
  - _tests/tests/unit_tests/ecommerce.php
  - _tests/tests/unit_tests/emoticon.php
- - _tests/tests/unit_tests/flagrant.php
+ - _tests/tests/unit_tests/community_billboard.php
  - _tests/tests/unit_tests/forum.php
  - _tests/tests/unit_tests/forum_category.php
  - _tests/tests/unit_tests/galleries.php

@@ -66,7 +66,7 @@ class Hook_ocp_merge
 								'redirects',
 								'cedi', // including rating, trackbacks, seo
 								'stats',
-								'flagrant',
+								'community_billboard',
 								'themes',
 								'support_tickets',
 								'useronline_tracking',
@@ -97,7 +97,7 @@ class Hook_ocp_merge
 								'polls'=>array('ocf_members'),
 								'pointstore'=>array('ocf_members'),
 								'cedi'=>array('ocf_members','attachments'),
-								'flagrant'=>array('ocf_members'),
+								'community_billboard'=>array('ocf_members'),
 								'useronline_tracking'=>array('ocf_members'),
 								'ip_bans'=>array('ocf_members'),
 								'points_gifts_and_charges'=>array('ocf_members'),
@@ -976,7 +976,7 @@ class Hook_ocp_merge
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_flagrant($db,$table_prefix,$file_base)
+	function import_community_billboard($db,$table_prefix,$file_base)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'text',NULL,NULL,true);
 		if (is_null($rows)) return;

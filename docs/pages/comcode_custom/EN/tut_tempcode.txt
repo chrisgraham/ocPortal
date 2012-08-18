@@ -842,8 +842,8 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 		<td>Get the total points in the specified member's account; some of these will probably have been spent already</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$FLAGRANT}</td>
-		<td>Place the active flagrant text</td>
+		<td>{$COMMUNITY_BILLBOARD}</td>
+		<td>Place the active community billboard message</td>
 	</tr>
 	<tr style="background: #FFDDDD">
 		<td>{$OCF}</td>

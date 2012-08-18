@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		flagrant
+ * @package		community_billboard
  */
 
-class Hook_pointstore_flagrant
+class Hook_pointstore_community_billboard
 {
 
 	/**
@@ -26,7 +26,7 @@ class Hook_pointstore_flagrant
 	 */
 	function init()
 	{
-		require_lang('flagrant');
+		require_lang('community_billboard');
 	}
 
 	/**
@@ -36,13 +36,13 @@ class Hook_pointstore_flagrant
 	 */
 	function info()
 	{
-		if (!addon_installed('flagrant')) return array();
+		if (!addon_installed('community_billboard')) return array();
 
-		if (get_option('is_on_flagrant_buy')=='1')
+		if (get_option('is_on_community_billboard_buy')=='1')
 		{
-			$text_url=build_url(array('page'=>'_SELF','type'=>'text','id'=>'flagrant'),'_SELF');
+			$community_billboard_url=build_url(array('page'=>'_SELF','type'=>'community_billboard','id'=>'community_billboard'),'_SELF');
 
-			return array(do_template('POINTSTORE_FLAGRANT_2',array('_GUID'=>'c4e067ab5eca19875f8d92a276cfcf05','TEXT_URL'=>$text_url)));
+			return array(do_template('POINTSTORE_COMMUNITY_BILLBOARD_2',array('_GUID'=>'c4e067ab5eca19875f8d92a276cfcf05','COMMUNITY_BILLBOARD_URL'=>$community_billboard_url)));
 		}
 		return array();
 	}
@@ -52,19 +52,19 @@ class Hook_pointstore_flagrant
 	 *
 	 * @return tempcode		The UI
 	 */
-	function text()
+	function community_billboard()
 	{
-		if (get_option('is_on_flagrant_buy')=='0') return new ocp_tempcode();
+		if (get_option('is_on_community_billboard_buy')=='0') return new ocp_tempcode();
 
 		$title=get_screen_title('TITLE_NEWTEXT');
 
-		$results=$GLOBALS['SITE_DB']->query('SELECT SUM(days) As days FROM '.get_table_prefix().'text WHERE activation_time IS NULL');
+		$results=$GLOBALS['SITE_DB']->query('SELECT SUM(days) As days FROM '.get_table_prefix().'community_billboard WHERE activation_time IS NULL');
 		$queue=$results[0]['days'];
 		if (is_null($queue)) $queue=0;
-		$text_link=build_url(array('page'=>'_SELF','type'=>'_text','id'=>'flagrant'),'_SELF');
-		$cost=intval(get_option('text'));
+		$community_billboard_url=build_url(array('page'=>'_SELF','type'=>'_community_billboard','id'=>'community_billboard'),'_SELF');
+		$cost=intval(get_option('community_billboard'));
 
-		return do_template('POINTSTORE_FLAGRANT_SCREEN',array('_GUID'=>'92d51c5b87745c31397d9165595262d3','TITLE'=>$title,'TEXT_URL'=>$text_link,'QUEUE'=>integer_format($queue),'COST'=>integer_format($cost)));
+		return do_template('POINTSTORE_COMMUNITY_BILLBOARD_SCREEN',array('_GUID'=>'92d51c5b87745c31397d9165595262d3','TITLE'=>$title,'COMMUNITY_BILLBOARD_URL'=>$community_billboard_url,'QUEUE'=>integer_format($queue),'COST'=>integer_format($cost)));
 	}
 
 	/**
@@ -72,9 +72,9 @@ class Hook_pointstore_flagrant
 	 *
 	 * @return tempcode		The UI
 	 */
-	function _text()
+	function _community_billboard()
 	{
-		if (get_option('is_on_flagrant_buy')=='0') return new ocp_tempcode();
+		if (get_option('is_on_community_billboard_buy')=='0') return new ocp_tempcode();
 
 		$title=get_screen_title('TITLE_NEWTEXT');
 
@@ -83,11 +83,11 @@ class Hook_pointstore_flagrant
 		$fields=form_input_line_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('MESSAGE_DESCRIPTION'),'message','',true);
 		$fields->attach(form_input_integer(do_lang_tempcode('NUMBER_DAYS'),do_lang_tempcode('NUMBER_DAYS_DESCRIPTION'),'days',1,true));
 
-		$price=intval(get_option('text'));
-		$text=paragraph(do_lang_tempcode('FLAGRANT_GUIDE',integer_format($price)));
+		$price=intval(get_option('community_billboard'));
+		$text=paragraph(do_lang_tempcode('COMMUNITY_BILLBOARD_GUIDE',integer_format($price)));
 
 		// Return template
-		$post_url=build_url(array('page'=>'_SELF','type'=>'__text','id'=>'flagrant'),'_SELF');
+		$post_url=build_url(array('page'=>'_SELF','type'=>'__community_billboard','id'=>'community_billboard'),'_SELF');
 		return do_template('FORM_SCREEN',array('_GUID'=>'3584ba6a16c9a51829dc3b25b58067f6','HIDDEN'=>'','TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWTEXT'),'TEXT'=>$text,'URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),'FIELDS'=>$fields));
 	}
 
@@ -96,9 +96,9 @@ class Hook_pointstore_flagrant
 	 *
 	 * @return tempcode		The UI
 	 */
-	function __text()
+	function __community_billboard()
 	{
-		if (get_option('is_on_flagrant_buy')=='0') return new ocp_tempcode();
+		if (get_option('is_on_community_billboard_buy')=='0') return new ocp_tempcode();
 
 		$title=get_screen_title('TITLE_NEWTEXT');
 
@@ -111,24 +111,24 @@ class Hook_pointstore_flagrant
 
 		//First we need to know the price of the number of days we ordered. After that, compare that price
 		//with our users current number of points.
-		$dayprice=intval(get_option('text'));
+		$dayprice=intval(get_option('community_billboard'));
 		$total=$dayprice*$days;
 
 		if (!($days>=1))
 		{
-			return warn_screen($title,do_lang_tempcode('FLAGRANT_POSITIVE_DAYS'));
+			return warn_screen($title,do_lang_tempcode('COMMUNITY_BILLBOARD_POSITIVE_DAYS'));
 		}
 
 		if (($pointsleft<$total) && (!has_specific_permission(get_member(),'give_points_self')))
 		{
-			return warn_screen($title,do_lang_tempcode('FLAGRANT_LACK_POINTS',integer_format($days),integer_format($total),array(integer_format($pointsleft))));
+			return warn_screen($title,do_lang_tempcode('COMMUNITY_BILLBOARD_LACK_POINTS',integer_format($days),integer_format($total),array(integer_format($pointsleft))));
 		}
 
 		// the order screen...
-		$action=do_lang_tempcode('CONFIRM_FLAGRANT',integer_format($days));
+		$action=do_lang_tempcode('CONFIRM_COMMUNITY_BILLBOARD',integer_format($days));
 		$keep=form_input_hidden('message',$message);
 		$keep->attach(form_input_hidden('days',strval($days)));
-		$proceed_url=build_url(array('page'=>'_SELF','type'=>'___text','id'=>'flagrant'),'_SELF');
+		$proceed_url=build_url(array('page'=>'_SELF','type'=>'___community_billboard','id'=>'community_billboard'),'_SELF');
 
 		return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'e2b139122d95af6a1930e84b41609145','TITLE'=>$title,'KEEP'=>$keep,'ACTION'=>$action,'COST'=>integer_format($total),'POINTS_AFTER'=>integer_format($pointsleft-$total),'PROCEED_URL'=>$proceed_url,'MESSAGE'=>comcode_to_tempcode($message),'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF')));
 	}
@@ -138,9 +138,9 @@ class Hook_pointstore_flagrant
 	 *
 	 * @return tempcode		The UI
 	 */
-	function ___text()
+	function ___community_billboard()
 	{
-		if (get_option('is_on_flagrant_buy')=='0') return new ocp_tempcode();
+		if (get_option('is_on_community_billboard_buy')=='0') return new ocp_tempcode();
 
 		$title=get_screen_title('TITLE_NEWTEXT');
 
@@ -151,29 +151,29 @@ class Hook_pointstore_flagrant
 		$points_left=available_points($member_id);
 
 		// First we need to know the price of the number of days we ordered. After that, compare that price with our users current number of points.
-		$dayprice=intval(get_option('text'));
+		$dayprice=intval(get_option('community_billboard'));
 		$total=$dayprice*$days;
 
 		if (($points_left<$total) && (!has_specific_permission(get_member(),'give_points_self')))
 		{
-			return warn_screen($title,do_lang_tempcode('FLAGRANT_LACK_POINTS',integer_format($days),integer_format($total),integer_format($points_left)));
+			return warn_screen($title,do_lang_tempcode('COMMUNITY_BILLBOARD_LACK_POINTS',integer_format($days),integer_format($total),integer_format($points_left)));
 		}
 
 		// Add this to the database
-		$GLOBALS['SITE_DB']->query_insert('text',array('notes'=>'','activation_time'=>NULL,'active_now'=>0,'user_id'=>$member_id,'the_message'=>insert_lang_comcode($message,2),'days'=>$days,'order_time'=>time()));
+		$GLOBALS['SITE_DB']->query_insert('community_billboard',array('notes'=>'','activation_time'=>NULL,'active_now'=>0,'user_id'=>$member_id,'the_message'=>insert_lang_comcode($message,2),'days'=>$days,'order_time'=>time()));
 
 		// Mail off the notice
 		require_code('notifications');
-		$_url=build_url(array('page'=>'admin_flagrant'),'adminzone',NULL,false,false,true);
+		$_url=build_url(array('page'=>'admin_community_billboard'),'adminzone',NULL,false,false,true);
 		$manage_url=$_url->evaluate();
-		dispatch_notification('pointstore_request_flagrant',NULL,do_lang('TITLE_NEWTEXT',NULL,NULL,NULL,get_site_default_lang()),do_lang('MAIL_FLAGRANT_TEXT',$message,comcode_escape($manage_url),NULL,get_site_default_lang()));
+		dispatch_notification('pointstore_request_community_billboard',NULL,do_lang('TITLE_NEWTEXT',NULL,NULL,NULL,get_site_default_lang()),do_lang('MAIL_COMMUNITY_BILLBOARD_TEXT',$message,comcode_escape($manage_url),NULL,get_site_default_lang()));
 
 		// Now, deduct the points from our user's account
 		require_code('points2');
-		charge_member($member_id,$total,do_lang('PURCHASED_FLAGRANT'));
+		charge_member($member_id,$total,do_lang('PURCHASED_COMMUNITY_BILLBOARD'));
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($title,$url,do_lang_tempcode('ORDER_FLAGRANT_DONE'));
+		return redirect_screen($title,$url,do_lang_tempcode('ORDER_COMMUNITY_BILLBOARD_DONE'));
 	}
 
 }

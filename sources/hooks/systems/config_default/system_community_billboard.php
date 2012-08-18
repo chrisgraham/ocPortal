@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		flagrant
+ * @package		community_billboard
  */
 
-class Hook_config_default_system_flagrant
+class Hook_config_default_system_community_billboard
 {
 
 	/**
@@ -29,15 +29,15 @@ class Hook_config_default_system_flagrant
 	function get_details()
 	{
 		return array(
-			'human_name'=>'SYSTEM_FLAGRANT',
+			'human_name'=>'SYSTEM_COMMUNITY_BILLBOARD',
 			'the_type'=>'transline',
 			'the_page'=>'SITE',
 			'section'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_system_flagrant',
+			'explanation'=>'CONFIG_OPTION_system_community_billboard',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 
-			'addon'=>'flagrant',
+			'addon'=>'community_billboard',
 		);
 	}
 

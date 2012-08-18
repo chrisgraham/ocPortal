@@ -26,7 +26,7 @@ Please have fun with the system and use your gift-points well.
 {$ANCHOR,POINT_STORE}The [page="_SEARCH:pointstore"]Point Store[/page] contains all the items you can buy using your points. You can then select some and buy them.
 
 The items that are purchasable may include:
- - Flagrant text messages. These are messages displayed in a prominent position on the website. All flagrant messages are placed in a queue and activated manually (and thus subject to moderation).
+ - Community billboard messages. These are messages displayed in a prominent position on the website. All community billboard messages are placed in a queue and activated manually (and thus subject to moderation).
  - Banner advertisements, and upgrades. Through this you may advertise something of your own that ordinarily the staff would not allocate advertising space for.
  - E-mail addresses. You may be able to purchase forwarding and POP3 e-mail addresses
 

@@ -1121,40 +1121,40 @@ function compare_ip_address_ip6($wild,$full_parts)
 }
 
 /**
- * Get the XHTML for the flagrant text message.
+ * Get the XHTML for the community billboard message.
  *
- * @return tempcode		The flagrant text message
+ * @return tempcode		The community billboard message
  */
-function get_flagrant()
+function get_community_billboard_message()
 {
-	if (!addon_installed('flagrant')) return new ocp_tempcode();
+	if (!addon_installed('community_billboard')) return new ocp_tempcode();
 
 	$system=(mt_rand(0,1)==0);
-	$_flagrant=NULL;
+	$_community_billboard=NULL;
 
-	if ((!$system) || (get_option('system_flagrant')==''))
+	if ((!$system) || (get_option('system_community_billboard')==''))
 	{
-		$_flagrant=persistent_cache_get('FLAGRANT');
-		if ($_flagrant===NULL)
+		$_community_billboard=persistent_cache_get('COMMUNITY_BILLBOARD');
+		if ($_community_billboard===NULL)
 		{
-			$flagrant=$GLOBALS['SITE_DB']->query_value_if_there('SELECT the_message FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
-			if ($flagrant===NULL)
+			$community_billboard=$GLOBALS['SITE_DB']->query_value_if_there('SELECT the_message FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
+			if ($community_billboard===NULL)
 			{
-				persistent_cache_set('FLAGRANT',false);
+				persistent_cache_set('COMMUNITY_BILLBOARD',false);
 			} else
 			{
-				$_flagrant=get_translated_tempcode($flagrant);
-				persistent_cache_set('FLAGRANT',$_flagrant);
+				$_community_billboard=get_translated_tempcode($community_billboard);
+				persistent_cache_set('COMMUNITY_BILLBOARD',$_community_billboard);
 			}
 		}
-		if ($_flagrant===false) $_flagrant=NULL;
+		if ($_community_billboard===false) $_community_billboard=NULL;
 	}
-	if ($_flagrant===NULL)
+	if ($_community_billboard===NULL)
 	{
-		return make_string_tempcode(get_option('system_flagrant'));
+		return make_string_tempcode(get_option('system_community_billboard'));
 	} else
 	{
-		return do_lang_tempcode('_COMMUNITY_MESSAGE',$_flagrant);
+		return do_lang_tempcode('_COMMUNITY_MESSAGE',$_community_billboard);
 	}
 }
 

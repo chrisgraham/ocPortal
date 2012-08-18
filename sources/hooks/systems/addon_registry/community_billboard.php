@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		flagrant
+ * @package		community_billboard
  */
 
-class Hook_addon_registry_flagrant
+class Hook_addon_registry_community_billboard
 {
 	/**
 	 * Get a list of file permissions to set
@@ -47,7 +47,7 @@ class Hook_addon_registry_flagrant
 	 */
 	function get_description()
 	{
-		return 'Flagrant text messages, designed to work with the pointstore to allow members to buy text advertising on the website.';
+		return 'Community billboard messages, designed to work with the pointstore to allow members to buy community billboard advertising on the website.';
 	}
 
 	/**
@@ -74,17 +74,17 @@ class Hook_addon_registry_flagrant
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/config_default/system_flagrant.php',
-			'themes/default/images/pagepics/flagrant.png',
-			'sources/hooks/systems/addon_registry/flagrant.php',
-			'sources/hooks/modules/admin_import_types/flagrant.php',
-			'FLAGRANT_DETAILS.tpl',
-			'FLAGRANT_STORE_LIST_LINE.tpl',
-			'adminzone/pages/modules/admin_flagrant.php',
-			'lang/EN/flagrant.ini',
-			'sources/flagrant.php',
-			'sources/hooks/blocks/main_staff_checklist/flagrant.php',
-			'sources/hooks/modules/pointstore/flagrant.php'
+			'sources/hooks/systems/config_default/system_community_billboard.php',
+			'themes/default/images/pagepics/community_billboard.png',
+			'sources/hooks/systems/addon_registry/community_billboard.php',
+			'sources/hooks/modules/admin_import_types/community_billboard.php',
+			'COMMUNITY_BILLBOARD_DETAILS.tpl',
+			'COMMUNITY_BILLBOARD_STORE_LIST_LINE.tpl',
+			'adminzone/pages/modules/admin_community_billboard.php',
+			'lang/EN/community_billboard.ini',
+			'sources/community_billboard.php',
+			'sources/hooks/blocks/main_staff_checklist/community_billboard.php',
+			'sources/hooks/modules/pointstore/community_billboard.php'
 		);
 	}
 
@@ -97,8 +97,8 @@ class Hook_addon_registry_flagrant
 	function tpl_previews()
 	{
 		return array(
-			'FLAGRANT_DETAILS.tpl'=>'administrative__flagrant_manage_screen',
-			'FLAGRANT_STORE_LIST_LINE.tpl'=>'administrative__flagrant_manage_screen'
+			'COMMUNITY_BILLBOARD_DETAILS.tpl'=>'administrative__community_billboard_manage_screen',
+			'COMMUNITY_BILLBOARD_STORE_LIST_LINE.tpl'=>'administrative__community_billboard_manage_screen'
 		);
 	}
 
@@ -109,11 +109,11 @@ class Hook_addon_registry_flagrant
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__flagrant_manage_screen()
+	function tpl_preview__administrative__community_billboard_manage_screen()
 	{
 		require_css('forms');
 
-		$about_current=do_lorem_template('FLAGRANT_DETAILS', array(
+		$about_current=do_lorem_template('COMMUNITY_BILLBOARD_DETAILS', array(
 			'USERNAME'=>lorem_word_html(),
 			'DAYS_ORDERED'=>lorem_phrase(),
 			'DATE_RAW'=>placeholder_time(),
@@ -123,7 +123,7 @@ class Hook_addon_registry_flagrant
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $key=>$value)
 		{
-			$text=do_lorem_template('FLAGRANT_STORE_LIST_LINE', array(
+			$text=do_lorem_template('COMMUNITY_BILLBOARD_STORE_LIST_LINE', array(
 				'MESSAGE'=>$value,
 				'STATUS'=>do_lang('NEW')
 			));
@@ -154,7 +154,7 @@ class Hook_addon_registry_flagrant
 			'COMCODE'=>''
 		));
 
-		//Create 'FLAGRANT_MANAGE_SCREEN' using the sub-templates 'FLAGRANT_DETAILS' and 'FLAGRANT_STORE_LIST_LINE'
+		//Create 'COMMUNITY_BILLBOARD_MANAGE_SCREEN' using the sub-templates 'COMMUNITY_BILLBOARD_DETAILS' and 'COMMUNITY_BILLBOARD_STORE_LIST_LINE'
 		return array(
 			lorem_globalise(do_lorem_template('FORM_SCREEN', array(
 				'TITLE'=>lorem_title(),

@@ -286,6 +286,17 @@ function delete_config_option($name)
 }
 
 /**
+ * Rename a config option.
+ *
+ * @param  ID_TEXT		The old name
+ * @param  ID_TEXT		The new name
+ */
+function rename_config_option($old,$new)
+{
+	$GLOBALS['SITE_DB']->query_update('config',array('the_name'=>$new),array('the_name'=>$old),'',1);
+}
+
+/**
  * Add a privilege, and apply it to every usergroup.
  *
  * @param  ID_TEXT		The section the privilege is filled under
