@@ -60,9 +60,9 @@ class Module_tester
 		$GLOBALS['SITE_DB']->drop_table_if_exists('test_sections');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('tests');
 
-		delete_specific_permission('perform_tests');
-		delete_specific_permission('add_tests');
-		delete_specific_permission('edit_own_tests');
+		delete_privilege('perform_tests');
+		delete_privilege('add_tests');
+		delete_privilege('edit_own_tests');
 
 		delete_config_option('tester_forum_name');
 		delete_config_option('bug_report_text');
@@ -94,9 +94,9 @@ class Module_tester
 			't_inherit_section'=>'?AUTO_LINK' // NULL: none
 		));
 
-		add_specific_permission('TESTER','perform_tests',false);
-		add_specific_permission('TESTER','add_tests',true);
-		add_specific_permission('TESTER','edit_own_tests',true);
+		add_privilege('TESTER','perform_tests',false);
+		add_privilege('TESTER','add_tests',true);
+		add_privilege('TESTER','edit_own_tests',true);
 
 		add_config_option('TESTER_FORUM_NAME','tester_forum_name','forum','return do_lang(\'DEFAULT_TESTER_FORUM\');','FEATURE','TESTER');
 		add_config_option('BUG_REPORT_TEXT','bug_report_text','text','return do_lang(\'DEFAULT_BUG_REPORT_TEMPLATE\');','FEATURE','TESTER');
@@ -121,7 +121,7 @@ class Module_tester
 	{
 		require_lang('tester');
 		require_css('tester');
-		check_specific_permission('perform_tests');
+		check_privilege('perform_tests');
 
 		// Decide what we're doing
 		$type=get_param('type','go');
@@ -210,7 +210,7 @@ class Module_tester
 			if ((!is_null($current)) && ($current!=$test['t_section']))
 			{
 				$edit_test_section_url=new ocp_tempcode();
-				if ((has_specific_permission(get_member(),'edit_own_tests')) && (($test['s_assigned_to']==get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))))
+				if ((has_privilege(get_member(),'edit_own_tests')) && (($test['s_assigned_to']==get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))))
 				{
 					$edit_test_section_url=build_url(array('page'=>'_SELF','type'=>'_ed','id'=>$current),'_SELF');
 				}
@@ -244,7 +244,7 @@ class Module_tester
 		} else
 		{
 			$edit_test_section_url=new ocp_tempcode();
-			if ((has_specific_permission(get_member(),'edit_own_tests')) && (($test['s_assigned_to']==get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))))
+			if ((has_privilege(get_member(),'edit_own_tests')) && (($test['s_assigned_to']==get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))))
 			{
 				$edit_test_section_url=build_url(array('page'=>'_SELF','type'=>'_ed','id'=>$test['t_section']),'_SELF');
 			}
@@ -253,7 +253,7 @@ class Module_tester
 		}
 
 		$add_test_section_url=new ocp_tempcode();
-		if (has_specific_permission(get_member(),'add_tests'))
+		if (has_privilege(get_member(),'add_tests'))
 		{
 			$add_test_section_url=build_url(array('page'=>'_SELF','type'=>'ad'),'_SELF');
 		}
@@ -361,7 +361,7 @@ class Module_tester
 	 */
 	function get_tester_list($it)
 	{
-		$tester_groups=collapse_1d_complexity('group_id',$GLOBALS['SITE_DB']->query_select('gsp',array('group_id'),array('specific_permission'=>'perform_tests')));
+		$tester_groups=collapse_1d_complexity('group_id',$GLOBALS['SITE_DB']->query_select('group_privileges',array('group_id'),array('privilege'=>'perform_tests')));
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$moderator_groups=$GLOBALS['FORUM_DRIVER']->get_moderator_groups();
 
@@ -438,7 +438,7 @@ class Module_tester
 	{
 		$title=get_screen_title('ADD_TEST');
 
-		check_specific_permission('add_tests');
+		check_privilege('add_tests');
 
 		$list=$this->get_section_list(get_param_integer('id',-1));
 		if ($list->is_empty())
@@ -464,7 +464,7 @@ class Module_tester
 	{
 		$title=get_screen_title('ADD_TEST');
 
-		check_specific_permission('add_tests');
+		check_privilege('add_tests');
 
 		$section_id=post_param_integer('id');
 		$this->_add_new_tests($section_id);
@@ -483,7 +483,7 @@ class Module_tester
 	{
 		$title=get_screen_title('ADD_TEST_SECTION');
 
-		check_specific_permission('add_tests');
+		check_privilege('add_tests');
 
 		$fields=$this->get_test_section_form_fields();
 		$add_template=do_template('TESTER_TEST_GROUP_NEW',array('_GUID'=>'8a7642944a36d2f9d1ee8c076a516f43','ID'=>'add_-REPLACEME-','FIELDS'=>$this->get_test_form_fields('add_-REPLACEME-')));
@@ -536,7 +536,7 @@ class Module_tester
 	{
 		$title=get_screen_title('ADD_TEST_SECTION');
 
-		check_specific_permission('add_tests');
+		check_privilege('add_tests');
 
 		$assigned_to=post_param_integer('assigned_to');
 		if ($assigned_to==-1) $assigned_to=NULL;
@@ -564,7 +564,7 @@ class Module_tester
 	{
 		$title=get_screen_title('EDIT_TEST_SECTION');
 
-		check_specific_permission('edit_own_tests');
+		check_privilege('edit_own_tests');
 		if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) access_denied('STAFF_ONLY');
 
 		$list=$this->get_section_list();
@@ -591,7 +591,7 @@ class Module_tester
 	{
 		$title=get_screen_title('EDIT_TEST_SECTION');
 
-		check_specific_permission('edit_own_tests');
+		check_privilege('edit_own_tests');
 
 		$id=get_param_integer('id');
 		$rows=$GLOBALS['SITE_DB']->query_select('test_sections',array('*'),array('id'=>$id),'',1);
@@ -601,7 +601,7 @@ class Module_tester
 		}
 		$section=$rows[0];
 
-		if (!((has_specific_permission(get_member(),'edit_own_tests')) && (($section['s_assigned_to']==get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))))
+		if (!((has_privilege(get_member(),'edit_own_tests')) && (($section['s_assigned_to']==get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))))
 			access_denied('ACCESS_DENIED');
 
 		$fields=$this->get_test_section_form_fields($section['s_section'],$section['s_notes'],$section['s_assigned_to'],$section['s_inheritable']);
@@ -633,7 +633,7 @@ class Module_tester
 	 */
 	function __ed()
 	{
-		check_specific_permission('edit_own_tests');
+		check_privilege('edit_own_tests');
 
 		$id=get_param_integer('id');
 		$rows=$GLOBALS['SITE_DB']->query_select('test_sections',array('*'),array('id'=>$id),'',1);
@@ -643,7 +643,7 @@ class Module_tester
 		}
 		$section=$rows[0];
 
-		if (!((has_specific_permission(get_member(),'edit_own_tests')) && (($section['s_assigned_to']==get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))))
+		if (!((has_privilege(get_member(),'edit_own_tests')) && (($section['s_assigned_to']==get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))))
 			access_denied('ACCESS_DENIED');
 
 		if (post_param_integer('delete',0)==1)

@@ -299,7 +299,7 @@ class Hook_smf
 			}
 
 			// privileges
-			set_specific_permission($id_new,'allow_html',true);
+			set_privilege($id_new,'allow_html',true);
 
 			if (!import_check_if_imported('group',strval($row['ID_GROUP'])))
 				import_id_remap_put('group',strval($row['ID_GROUP']),$id_new);

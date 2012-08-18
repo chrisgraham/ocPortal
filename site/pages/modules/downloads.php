@@ -432,7 +432,7 @@ class Module_downloads
 		{
 			$map='category_id='.strval($category_id);
 		}
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $map.=' AND validated=1';
+		if (!has_privilege(get_member(),'see_unvalidated')) $map.=' AND validated=1';
 
 		// ocSelect
 		$ocselect=either_param('active_filter','');
@@ -501,7 +501,7 @@ class Module_downloads
 		{
 			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 		}
-		if (has_specific_permission(get_member(),'open_virtual_roots'))
+		if (has_privilege(get_member(),'open_virtual_roots'))
 		{
 			$url=get_self_url(false,false,array('root'=>$id));
 			$breadcrumbs->attach(hyperlink($url,escape_html($title_to_use),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
@@ -699,7 +699,7 @@ class Module_downloads
 		// Validation
 		if ($myrow['validated']==0)
 		{
-			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'5b1781b8fbb1ef9b8f47693afcff02b9','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
@@ -755,7 +755,7 @@ class Module_downloads
 			require_lang('galleries');
 			$cat='download_'.strval($id);
 			$map=array('cat'=>$cat);
-			if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
+			if (!has_privilege(get_member(),'see_unvalidated')) $map['validated']=1;
 			$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'ORDER BY id',200/*Stop sillyness, could be a DOS attack*/);
 			$div=2;
 			$_out=new ocp_tempcode();

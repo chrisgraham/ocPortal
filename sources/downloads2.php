@@ -36,7 +36,7 @@ function dload_script()
 {
 	// Closed site
 	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));
@@ -84,7 +84,7 @@ function dload_script()
 					access_denied('NOT_AS_GUEST');
 
 				$dif=$cost-available_points($member);
-				if (($dif>0) && (!has_specific_permission(get_member(),'have_negative_gift_points')))
+				if (($dif>0) && (!has_privilege(get_member(),'have_negative_gift_points')))
 					warn_exit(do_lang_tempcode('LACKING_POINTS',integer_format($dif)));
 				require_code('points2');
 				charge_member($member,$cost,do_lang('DOWNLOADED_THIS',get_translated_text($myrow['name'])));
@@ -123,7 +123,7 @@ function dload_script()
 	if (is_null($got_before))
 	{
 		$bandwidth=$GLOBALS['SITE_DB']->query_value_if_there('SELECT SUM(file_size) AS answer FROM '.get_table_prefix().'download_logging l LEFT JOIN '.get_table_prefix().'download_downloads d ON l.id=d.id WHERE date_and_time>'.strval(time()-24*60*60*32));
-		if ((($bandwidth+floatval($size))>(floatval(get_option('maximum_download'))*1024*1024*1024)) && (!has_specific_permission(get_member(),'bypass_bandwidth_restriction')))
+		if ((($bandwidth+floatval($size))>(floatval(get_option('maximum_download'))*1024*1024*1024)) && (!has_privilege(get_member(),'bypass_bandwidth_restriction')))
 			warn_exit(do_lang_tempcode('TOO_MUCH_DOWNLOAD'));
 
 		require_code('files2');
@@ -331,7 +331,7 @@ function delete_download_category($category_id)
 	seo_meta_erase_storage('downloads_category',strval($category_id));
 
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
 }
 
 /**

@@ -60,7 +60,7 @@ class forum_driver_base
 	{
 		$url=mixed();
 
-		if ((!$definitely_profile) && ($id!=$this->get_guest_id()) && (addon_installed('chat')) && (has_specific_permission(get_member(),'start_im')))
+		if ((!$definitely_profile) && ($id!=$this->get_guest_id()) && (addon_installed('chat')) && (has_privilege(get_member(),'start_im')))
 		{
 			$username_click_im=get_option('username_click_im',true);
 			if ($username_click_im=='1')

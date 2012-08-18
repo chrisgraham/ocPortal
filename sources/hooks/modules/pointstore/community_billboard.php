@@ -119,7 +119,7 @@ class Hook_pointstore_community_billboard
 			return warn_screen($title,do_lang_tempcode('COMMUNITY_BILLBOARD_POSITIVE_DAYS'));
 		}
 
-		if (($pointsleft<$total) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($pointsleft<$total) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('COMMUNITY_BILLBOARD_LACK_POINTS',integer_format($days),integer_format($total),array(integer_format($pointsleft))));
 		}
@@ -154,7 +154,7 @@ class Hook_pointstore_community_billboard
 		$dayprice=intval(get_option('community_billboard'));
 		$total=$dayprice*$days;
 
-		if (($points_left<$total) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($points_left<$total) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('COMMUNITY_BILLBOARD_LACK_POINTS',integer_format($days),integer_format($total),integer_format($points_left)));
 		}

@@ -97,8 +97,8 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 		$poster_details=array('poster'=>$poster_details,'poster_posts'=>$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_cache_num_posts'),'poster_join_date'=>$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_join_time'),'poster_join_date_string'=>get_timezoned_date($GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_join_time')),'primary_group_name'=>ocf_get_group_name($primary_group));
 		$poster_details['custom_fields']=ocf_get_all_custom_fields_match_member(
 			$poster_details['poster'],
-			((get_member()!=$poster_details['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // public view
-			((get_member()==$poster_details['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // owner view
+			((get_member()!=$poster_details['poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // public view
+			((get_member()==$poster_details['poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // owner view
 			NULL, // owner set
 			0, // encrypted
 			NULL, // required
@@ -109,8 +109,8 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 		{
 			$poster_details['custom_fields_full']=ocf_get_all_custom_fields_match_member(
 				$poster_details['poster'],
-				((get_member()!=$poster_details['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // public view
-				((get_member()==$poster_details['poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // owner view
+				((get_member()!=$poster_details['poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // public view
+				((get_member()==$poster_details['poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // owner view
 				NULL, // owner set
 				0, // encrypted
 				NULL, // required
@@ -118,12 +118,12 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 				0 // show in post previews
 			);
 		} else $poster_details['custom_fields_full']=array();
-		if ((has_specific_permission(get_member(),'see_warnings')) && (addon_installed('ocf_warnings')))
+		if ((has_privilege(get_member(),'see_warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$num_warnings=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details['poster'],'m_cache_warnings');
 			/*if ($num_warnings!=0)*/ $poster_details['poster_num_warnings']=$num_warnings;
 		}
-		if (has_specific_permission(get_member(),'see_ip')) $poster_details['ip_address']=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details['poster'],'m_ip_address');
+		if (has_privilege(get_member(),'see_ip')) $poster_details['ip_address']=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details['poster'],'m_ip_address');
 	} else
 	{
 		$points=array_key_exists('points',$poster_details)?integer_format($poster_details['points']):'';
@@ -252,7 +252,7 @@ function ocf_may_whisper($target,$member_id=NULL)
 		return true;
 	}
 
-	if (has_specific_permission($member_id,'pt_anyone')) return true;
+	if (has_privilege($member_id,'pt_anyone')) return true;
 	$pt_allow=$GLOBALS['OCF_DRIVER']->get_member_row_field($target,'m_pt_allow');
 	if ($pt_allow=='*') return true;
 

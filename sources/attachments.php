@@ -25,7 +25,7 @@ function attachments_script()
 {
 	// Closed site
 	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));
@@ -237,7 +237,7 @@ function attachment_popup_script()
 	$members=array();
 	if (!is_guest())
 		$members[get_member()]=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-	if (has_specific_permission(get_member(),'reuse_others_attachments'))
+	if (has_privilege(get_member(),'reuse_others_attachments'))
 	{
 		$_members=$connection->query_select('attachments',array('DISTINCT a_member_id'));
 		foreach ($_members as $_member)

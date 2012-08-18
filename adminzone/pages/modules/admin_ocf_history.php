@@ -78,7 +78,7 @@ class Module_admin_ocf_history
 	 */
 	function gui()
 	{
-		check_specific_permission('view_content_history');
+		check_privilege('view_content_history');
 
 		$member_id=get_param_integer('member_id',-1);
 		$post_id=get_param_integer('post_id',-1);
@@ -147,17 +147,17 @@ class Module_admin_ocf_history
 
 			// Buttons
 			$buttons=new ocp_tempcode();
-			if (has_specific_permission(get_member(),'delete_content_history')) // Delete permanently
+			if (has_privilege(get_member(),'delete_content_history')) // Delete permanently
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'delete','h_id'=>$post['id']),'_SELF',NULL,true);
 				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'11c9f9ef4a646493544cb29778134960','IMMEDIATE'=>true,'URL'=>$url,'IMG'=>'delete','TITLE'=>do_lang_tempcode('DELETE_HISTORY_POST'))));
 			}
-			if ((has_specific_permission(get_member(),'restore_content_history')) && (!is_null($topic_exists)) && ($post['h_action']=='DELETE_POST')) // Restore
+			if ((has_privilege(get_member(),'restore_content_history')) && (!is_null($topic_exists)) && ($post['h_action']=='DELETE_POST')) // Restore
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'restore','h_id'=>$post['id']),'_SELF',NULL,true);
 				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'49623e00065f488bb27097bb722232dc','IMMEDIATE'=>true,'URL'=>$url,'IMG'=>'restore','TITLE'=>do_lang_tempcode('RESTORE_HISTORY_POST'))));
 			}
-			if ((has_specific_permission(get_member(),'restore_content_history')) && (!is_null($topic_exists)) && ($post['h_action']=='EDIT_POST')) // Restore
+			if ((has_privilege(get_member(),'restore_content_history')) && (!is_null($topic_exists)) && ($post['h_action']=='EDIT_POST')) // Restore
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'revert','h_id'=>$post['id']),'_SELF',NULL,true);
 				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'3f41d4d399676972c01ebb14f6ee56db','IMMEDIATE'=>true,'URL'=>$url,'IMG'=>'choose','TITLE'=>do_lang_tempcode('REVERT_HISTORY_POST'))));
@@ -199,7 +199,7 @@ class Module_admin_ocf_history
 	 */
 	function restore()
 	{
-		check_specific_permission('restore_content_history');
+		check_privilege('restore_content_history');
 
 		$title=get_screen_title('POST_HISTORY');
 
@@ -224,7 +224,7 @@ class Module_admin_ocf_history
 	 */
 	function revert()
 	{
-		check_specific_permission('restore_content_history');
+		check_privilege('restore_content_history');
 
 		$title=get_screen_title('POST_HISTORY');
 
@@ -251,7 +251,7 @@ class Module_admin_ocf_history
 	 */
 	function delete()
 	{
-		check_specific_permission('delete_content_history');
+		check_privilege('delete_content_history');
 
 		$title=get_screen_title('POST_HISTORY');
 

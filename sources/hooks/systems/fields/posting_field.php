@@ -129,7 +129,7 @@ class Hook_fields_posting_field
 		$comcode_editor=get_comcode_editor('field_'.strval($field['id']));
 		$comcode_editor_small=get_comcode_editor('field_'.strval($field['id']),true);
 
-		$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($actual_value,'{$,page hint: no_wysiwyg}')===false));
+		$w=/* (has_privilege(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($actual_value,'{$,page hint: no_wysiwyg}')===false));
 
 		$class='';
 		global $JAVASCRIPT,$WYSIWYG_ATTACHED;

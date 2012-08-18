@@ -47,7 +47,7 @@ class Block_main_rating
 	/*
 	function cacheing_environment() // We can't cache this block, because it needs to execute in order to allow commenting
 	{
-		$info['cache_on']='array(has_specific_permission(get_member(),\'rate\'),array_key_exists(\'extra_param_from\',$map)?$map[\'extra_param_from\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:\'main\',array_key_exists(\'page\',$map)?$map[\'page\']:get_page_name())';
+		$info['cache_on']='array(has_privilege(get_member(),\'rate\'),array_key_exists(\'extra_param_from\',$map)?$map[\'extra_param_from\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:\'main\',array_key_exists(\'page\',$map)?$map[\'page\']:get_page_name())';
 		$info['ttl']=60*5;
 		return $info;
 	}*/

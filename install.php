@@ -1615,18 +1615,18 @@ function step_5_core()
 	));
 
 	// Privileges
-	$GLOBALS['SITE_DB']->drop_table_if_exists('gsp');
-	$GLOBALS['SITE_DB']->create_table('gsp',array(
+	$GLOBALS['SITE_DB']->drop_table_if_exists('group_privileges');
+	$GLOBALS['SITE_DB']->create_table('group_privileges',array(
 		'group_id'=>'*INTEGER',
-		'specific_permission'=>'*ID_TEXT',
+		'privilege'=>'*ID_TEXT',
 		'the_page'=>'*ID_TEXT',
 		'module_the_name'=>'*ID_TEXT',
 		'category_name'=>'*ID_TEXT',
 		'the_value'=>'BINARY'
 	));
 
-	$GLOBALS['SITE_DB']->drop_table_if_exists('sp_list');
-	$GLOBALS['SITE_DB']->create_table('sp_list',array(
+	$GLOBALS['SITE_DB']->drop_table_if_exists('privilege_list');
+	$GLOBALS['SITE_DB']->create_table('privilege_list',array(
 		'p_section'=>'ID_TEXT',
 		'the_name'=>'*ID_TEXT',
 		'the_default'=>'*BINARY'

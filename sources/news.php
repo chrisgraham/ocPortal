@@ -154,7 +154,7 @@ function delete_news_category($id)
 	$GLOBALS['SITE_DB']->query_delete('news_category_entries',array('news_entry_category'=>$id));
 
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'news','category_name'=>strval($id)));
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'news','category_name'=>strval($id)));
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'news','category_name'=>strval($id)));
 
 	require_code('themes2');
 	tidy_theme_img_code(NULL,$myrow['nc_img'],'news_categories','nc_img');
@@ -200,7 +200,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		$main_news_category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','id',array('nc_owner'=>$submitter));
 		if (is_null($main_news_category_id))
 		{
-			if (!has_specific_permission(get_member(),'have_personal_category','cms_news')) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			if (!has_privilege(get_member(),'have_personal_category','cms_news')) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 			$p_nc_title=insert_lang(do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter)),2);
 
@@ -546,12 +546,12 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 			$categories->attach($li);
 		} else
 		{
-			if ((((!is_null($cat['nc_owner'])) && (has_specific_permission(get_member(),'can_submit_to_others_categories'))) || (($cat['nc_owner']==get_member()) && (!is_guest()))) || ($show_all_personal_categories))
+			if ((((!is_null($cat['nc_owner'])) && (has_privilege(get_member(),'can_submit_to_others_categories'))) || (($cat['nc_owner']==get_member()) && (!is_guest()))) || ($show_all_personal_categories))
 				$categories->attach(form_input_list_entry(strval($cat['id']),(($cat['nc_owner']==get_member()) && ((!$prefer_not_blog_selected) && (in_array(NULL,$it)))) || (in_array($cat['id'],$it)),do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($cat['nc_owner'])).' (#'.strval($cat['id']).')'));
 		}
 	}
 
-	if ((!$only_existing) && (has_specific_permission(get_member(),'have_personal_category','cms_news')) && ($add_cat) && (!is_guest()))
+	if ((!$only_existing) && (has_privilege(get_member(),'have_personal_category','cms_news')) && ($add_cat) && (!is_guest()))
 	{
 		$categories->attach(form_input_list_entry('personal',(!$prefer_not_blog_selected) && in_array(NULL,$it),do_lang_tempcode('MEMBER_CATEGORY',do_lang_tempcode('_NEW',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))))));
 	}

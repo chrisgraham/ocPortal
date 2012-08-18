@@ -651,7 +651,7 @@ function detect_conflicts($member_id,$skip_id,$start_year,$start_month,$start_da
 {
 	$our_times=find_periods_recurrence(get_users_timezone(),1,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$recurrence,$recurrences);
 
-	$conflicts=detect_happening_at($member_id,$skip_id,$our_times,!has_specific_permission(get_member(),'sense_personal_conflicts'));
+	$conflicts=detect_happening_at($member_id,$skip_id,$our_times,!has_privilege(get_member(),'sense_personal_conflicts'));
 
 	$out=new ocp_tempcode();
 	$found_ids=array();

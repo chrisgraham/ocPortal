@@ -434,7 +434,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 			$where_clause='r.cc_id='.strval($category_id);
 		}
 	}
-	if (!has_specific_permission(get_member(),'see_unvalidated')) $where_clause.=' AND r.ce_validated=1';
+	if (!has_privilege(get_member(),'see_unvalidated')) $where_clause.=' AND r.ce_validated=1';
 
 	// Convert the filters to SQL
 	require_code('ocselect');
@@ -836,7 +836,7 @@ function nice_get_catalogues($it=NULL,$prefer_ones_with_entries=false,$only_subm
 	{
 		if (!has_category_access(get_member(),'catalogues_catalogue',$row['c_name'])) continue;
 
-		if (($only_submittable) && (!has_specific_permission(get_member(),'submit_midrange_content','cms_catalogues',array('catalogues_catalogue',$row['c_name'])))) continue;
+		if (($only_submittable) && (!has_privilege(get_member(),'submit_midrange_content','cms_catalogues',array('catalogues_catalogue',$row['c_name'])))) continue;
 
 		if (($row['c_ecommerce']==0) || (addon_installed('shopping')))
 		{
@@ -1478,7 +1478,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 	// Validation
 	if ($entry['ce_validated']==0)
 	{
-		if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+		if (!has_privilege(get_member(),'jump_to_unvalidated'))
 			access_denied('PRIVILEGE','jump_to_unvalidated');
 
 		$map['WARNINGS']=do_template('WARNING_BOX',array('_GUID'=>'bf604859a572ca53e969bec3d91f9cfb','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));

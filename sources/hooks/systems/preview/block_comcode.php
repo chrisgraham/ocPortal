@@ -28,7 +28,7 @@ class Hook_Preview_block_comcode
 	 */
 	function applies()
 	{
-		if (!has_specific_permission(get_member(),'comcode_dangerous')) return array(false,NULL,false);
+		if (!has_privilege(get_member(),'comcode_dangerous')) return array(false,NULL,false);
 
 		$applies=!is_null(post_param('block',NULL));
 		return array($applies,NULL,false);
@@ -41,7 +41,7 @@ class Hook_Preview_block_comcode
 	 */
 	function run()
 	{
-		if (!has_specific_permission(get_member(),'comcode_dangerous')) exit();
+		if (!has_privilege(get_member(),'comcode_dangerous')) exit();
 
 		require_code('zones2');
 		require_code('zones3');

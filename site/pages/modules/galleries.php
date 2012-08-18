@@ -79,9 +79,9 @@ class Module_galleries
 		delete_config_option('video_height_setting');
 		delete_config_option('galleries_subcat_narrowin');
 
-		delete_specific_permission('may_download_gallery');
-		delete_specific_permission('high_personal_gallery_limit');
-		delete_specific_permission('no_personal_gallery_limit');
+		delete_privilege('may_download_gallery');
+		delete_privilege('high_personal_gallery_limit');
+		delete_privilege('no_personal_gallery_limit');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'galleries'));
 
@@ -189,7 +189,7 @@ class Module_galleries
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
-			add_specific_permission('GALLERIES','may_download_gallery',false);
+			add_privilege('GALLERIES','may_download_gallery',false);
 
 			$GLOBALS['SITE_DB']->create_table('videos',array(
 				'id'=>'*AUTO',
@@ -225,8 +225,8 @@ class Module_galleries
 			add_config_option('GALLERY_IMAGE_LIMIT_HIGH','max_personal_gallery_images_high','integer','return \'10\';','FEATURE','GALLERIES');
 			add_config_option('GALLERY_VIDEO_LIMIT_LOW','max_personal_gallery_videos_low','integer','return \'2\';','FEATURE','GALLERIES');
 			add_config_option('GALLERY_VIDEO_LIMIT_HIGH','max_personal_gallery_videos_high','integer','return \'5\';','FEATURE','GALLERIES');
-			add_specific_permission('GALLERIES','high_personal_gallery_limit',false);
-			add_specific_permission('GALLERIES','no_personal_gallery_limit',false);
+			add_privilege('GALLERIES','high_personal_gallery_limit',false);
+			add_privilege('GALLERIES','no_personal_gallery_limit',false);
 
 			// Add root gallery
 			add_gallery('root',do_lang('GALLERIES_HOME'),'','','','',1,1,0,1);
@@ -580,12 +580,12 @@ class Module_galleries
 			$add_gallery_url=build_url(array('page'=>'cms_galleries','type'=>'ac','cat'=>$cat),get_module_zone('cms_galleries'));
 		} else $add_gallery_url=new ocp_tempcode();
 
-		$may_download_gallery=has_specific_permission(get_member(),'may_download_gallery','galleries',array('galleries',$cat));
+		$may_download_gallery=has_privilege(get_member(),'may_download_gallery','galleries',array('galleries',$cat));
 
 		$breadcrumbs=gallery_breadcrumbs($cat,$root,true,get_module_zone('galleries'));
 		if (!$breadcrumbs->is_empty())
 			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-		if (has_specific_permission(get_member(),'open_virtual_roots'))
+		if (has_privilege(get_member(),'open_virtual_roots'))
 		{
 			$url=get_self_url(false,false,array('root'=>$cat));
 			$breadcrumbs->attach(hyperlink($url,escape_html($fullname),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
@@ -760,7 +760,7 @@ class Module_galleries
 		if ($probe_type=='first')
 		{
 			$where=db_string_equal_to('cat',$cat);
-			if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+			if (!has_privilege(get_member(),'see_unvalidated')) $where.=' AND validated=1';
 			if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
 			$first_video=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_videos.' FROM '.get_table_prefix().'videos e WHERE '.$where.' ORDER BY '.$sort,1);
 			if (array_key_exists(0,$first_video))
@@ -771,7 +771,7 @@ class Module_galleries
 			} else
 			{
 				$where=db_string_equal_to('cat',$cat);
-				if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+				if (!has_privilege(get_member(),'see_unvalidated')) $where.=' AND validated=1';
 				if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
 				$first_image=$GLOBALS['SITE_DB']->query('SELECT *'.$sql_suffix_images.' FROM '.get_table_prefix().'images e WHERE '.$where.' ORDER BY '.$sort,1);
 				if (array_key_exists(0,$first_image))
@@ -784,7 +784,7 @@ class Module_galleries
 		}
 		if ((!is_null($row)) && ($row['validated']==0))
 		{
-			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
@@ -795,7 +795,7 @@ class Module_galleries
 				if (is_null($row))
 				{
 					$map=array('cat'=>$cat,'id'=>$probe_id);
-					if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
+					if (!has_privilege(get_member(),'see_unvalidated')) $map['validated']=1;
 					$rows=$GLOBALS['SITE_DB']->query_select('videos',array('*'),$map,'',1);
 					if (!array_key_exists(0,$rows))
 					{
@@ -839,7 +839,7 @@ class Module_galleries
 				if (is_null($row))
 				{
 					$map=array('cat'=>$cat,'id'=>$probe_id);
-					if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
+					if (!has_privilege(get_member(),'see_unvalidated')) $map['validated']=1;
 					$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'',1);
 					if (!array_key_exists(0,$rows))
 					{
@@ -886,7 +886,7 @@ class Module_galleries
 
 		// Display entries
 		$where=db_string_equal_to('cat',$cat);
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+		if (!has_privilege(get_member(),'see_unvalidated')) $where.=' AND validated=1';
 		if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
 		$_max_entries=get_value('flow_mode_max');
 		if (is_null($_max_entries)) $max_entries=50; else $max_entries=intval($_max_entries);
@@ -991,7 +991,7 @@ class Module_galleries
 		{
 			$where=db_string_equal_to('cat',$cat);
 		}
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND validated=1';
+		if (!has_privilege(get_member(),'see_unvalidated')) $where.=' AND validated=1';
 		if (get_param('days','')!='') $where.=' AND add_date>'.strval(time()-get_param_integer('days')*60*60*24);
 
 		// ocSelect
@@ -1177,7 +1177,7 @@ class Module_galleries
 		// Validation
 		if ($myrow['validated']==0)
 		{
-			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details=do_template('WARNING_BOX',array('_GUID'=>'c32faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
@@ -1303,7 +1303,7 @@ class Module_galleries
 		// Validation
 		if ($myrow['validated']==0)
 		{
-			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details=do_template('WARNING_BOX',array('_GUID'=>'b32faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
@@ -1386,7 +1386,7 @@ class Module_galleries
 	 */
 	function build_set_navigation($where,$join,$category_name,$current_id,$root,$current_type,$slideshow,$wide_high,$start,$max,$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,$image_select,$video_select)
 	{
-		$sv=has_specific_permission(get_member(),'see_unvalidated');
+		$sv=has_privilege(get_member(),'see_unvalidated');
 		if (!$sv) $where.=' AND validated=1';
 
 		$days=get_param('days','');

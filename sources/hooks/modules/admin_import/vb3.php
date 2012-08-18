@@ -197,8 +197,8 @@ class Hook_vb3
 			if (array_key_exists('sigmax',$map)) $map['g_max_sig_length_comcode']=$INFO['sigmax'];
 			$GLOBALS['FORUM_DB']->query_update('f_groups',$map,array('id'=>$id),'',1);
 
-			set_specific_permission($id,'use_quick_reply',$INFO['quickreply']);
-			set_specific_permission($id,'comcode_dangerous',$INFO['allowhtml']);
+			set_privilege($id,'use_quick_reply',$INFO['quickreply']);
+			set_privilege($id,'comcode_dangerous',$INFO['allowhtml']);
 		}
 	}
 
@@ -261,15 +261,15 @@ class Hook_vb3
 			}
 
 			// privileges
-			set_specific_permission($id_new,'comcode_dangerous',$INFO['allowhtml']==1);
-			set_specific_permission($id_new,'bypass_word_filter',$INFO['censorwords']==0);
-			set_specific_permission($id_new,'use_quick_reply',$INFO['quickreply']==1);
-			set_specific_permission($id_new,'vote_in_polls',($row['forumpermissions']&32768)!=0);
-			set_specific_permission($id_new,'view_member_photos',($row['genericpermissions']&4096)!=0);
-			set_specific_permission($id_new,'view_any_profile_field',($row['genericpermissions']&262144)!=0);
-			set_specific_permission($id_new,'see_warnings',($row['genericpermissions']&8)!=0);
-			set_specific_permission($id_new,'warn_members',($row['genericpermissions']&16384)!=0);
-			set_specific_permission($id_new,'may_choose_custom_title',($row['genericpermissions']&2048)!=0);
+			set_privilege($id_new,'comcode_dangerous',$INFO['allowhtml']==1);
+			set_privilege($id_new,'bypass_word_filter',$INFO['censorwords']==0);
+			set_privilege($id_new,'use_quick_reply',$INFO['quickreply']==1);
+			set_privilege($id_new,'vote_in_polls',($row['forumpermissions']&32768)!=0);
+			set_privilege($id_new,'view_member_photos',($row['genericpermissions']&4096)!=0);
+			set_privilege($id_new,'view_any_profile_field',($row['genericpermissions']&262144)!=0);
+			set_privilege($id_new,'see_warnings',($row['genericpermissions']&8)!=0);
+			set_privilege($id_new,'warn_members',($row['genericpermissions']&16384)!=0);
+			set_privilege($id_new,'may_choose_custom_title',($row['genericpermissions']&2048)!=0);
 
 			$remap_id[$row['usergroupid']]=$id_new;
 			import_id_remap_put('group',strval($row['usergroupid']),$id_new);

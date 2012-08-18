@@ -58,14 +58,14 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	{
 		$fields->attach(form_input_hidden('b_type',$b_type));
 	}
-	if (has_specific_permission(get_member(),'full_banner_setup'))
+	if (has_privilege(get_member(),'full_banner_setup'))
 	{
 		$fields->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_SUBMITTER'),'submitter',$GLOBALS['FORUM_DRIVER']->get_username(is_null($submitter)?get_member():$submitter),true));
 	}
 	if (get_value('disable_staff_notes')!=='1')
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
-	if (has_specific_permission(get_member(),'bypass_validation_midrange_content','cms_banners'))
+	if (has_privilege(get_member(),'bypass_validation_midrange_content','cms_banners'))
 	{
 		if ($validated==0)
 		{
@@ -89,7 +89,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 
 	$field_set->attach(form_input_line_comcode(do_lang_tempcode('BANNER_TITLE_TEXT'),do_lang_tempcode('DESCRIPTION_BANNER_TITLE_TEXT'),'title_text',$title_text,false));
 
-	if (has_specific_permission(get_member(),'use_html_banner'))
+	if (has_privilege(get_member(),'use_html_banner'))
 		$field_set->attach(form_input_text(do_lang_tempcode('BANNER_DIRECT_CODE'),do_lang_tempcode('DESCRIPTION_BANNER_DIRECT_CODE'),'direct_code',$direct_code,false));
 
 	$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
@@ -97,7 +97,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	$fields->attach(form_input_line_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_BANNER_DESCRIPTION'),'caption',$caption,false));
 
 	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('DEPLOYMENT_DETERMINATION'))));
-	if (has_specific_permission(get_member(),'full_banner_setup'))
+	if (has_privilege(get_member(),'full_banner_setup'))
 	{
 		$radios=new ocp_tempcode();
 		$radios->attach(form_input_radio_entry('the_type',strval(BANNER_PERMANENT),($the_type==BANNER_PERMANENT),do_lang_tempcode('BANNER_PERMANENT')));
@@ -197,10 +197,10 @@ function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name=
 			}
 		} else
 		{
-			check_specific_permission('use_html_banner');
+			check_privilege('use_html_banner');
 			if (strpos($direct_code,'<?')!==false)
 			{
-				check_specific_permission('use_php_banner');
+				check_privilege('use_php_banner');
 				if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 			}
 		}

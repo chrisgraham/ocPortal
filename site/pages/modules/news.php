@@ -398,7 +398,7 @@ class Module_news
 		{
 			if (has_category_access(get_member(),'news',strval($category['id'])))
 			{
-				$query='SELECT COUNT(*) FROM '.get_table_prefix().'news p'.$join.' WHERE '.((!has_specific_permission(get_member(),'see_unvalidated'))?'validated=1 AND ':'').' (news_entry_category='.strval($category['id']).' OR news_category='.strval($category['id']).') AND '.$q_filter.' ORDER BY date_and_time DESC';
+				$query='SELECT COUNT(*) FROM '.get_table_prefix().'news p'.$join.' WHERE '.((!has_privilege(get_member(),'see_unvalidated'))?'validated=1 AND ':'').' (news_entry_category='.strval($category['id']).' OR news_category='.strval($category['id']).') AND '.$q_filter.' ORDER BY date_and_time DESC';
 				$count=$GLOBALS['SITE_DB']->query_value_if_there($query);
 				if ($count>0)
 				{
@@ -425,7 +425,7 @@ class Module_news
 		}
 		if ($content->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
-		if ((($blogs!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blogs===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
+		if ((($blogs!==1) || (has_privilege(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blogs===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
 		{
 			$map=array('page'=>($blogs===1)?'cms_blogs':'cms_news','type'=>'ad');
 			if (is_numeric($filter)) $map['cat']=$filter;
@@ -513,11 +513,11 @@ class Module_news
 			$extra_select_sql='';
 		}
 
-		$query='SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.get_table_prefix().'news r'.$join.' WHERE '.$q_filter.((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY date_and_time DESC';
+		$query='SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.get_table_prefix().'news r'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY date_and_time DESC';
 
 		$rows=$GLOBALS['SITE_DB']->query($query,$max,$start);
 		$rows=remove_duplicate_rows($rows,'p_id');
-		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT r.id) FROM '.get_table_prefix().'news r'.$join.' WHERE '.$q_filter.((!has_specific_permission(get_member(),'see_unvalidated'))?' AND validated=1':''));
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT r.id) FROM '.get_table_prefix().'news r'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':''));
 		$rcount=count($rows);
 
 		$blogger=NULL;
@@ -600,7 +600,7 @@ class Module_news
 		}
 		breadcrumb_set_parents(array($first_bc));
 
-		if ((($blog!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
+		if ((($blog!==1) || (has_privilege(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))
 		{
 			$map=array('page'=>($blog===1)?'cms_blogs':'cms_news','type'=>'ad');
 			if (is_numeric($filter)) $map['cat']=$filter;
@@ -722,7 +722,7 @@ class Module_news
 		// Validation
 		if ($myrow['validated']==0)
 		{
-			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details=do_template('WARNING_BOX',array('_GUID'=>'5fd82328dc2ac9695dc25646237065b0','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));
@@ -735,7 +735,7 @@ class Module_news
 			$GLOBALS['SITE_DB']->query_update('news',array('news_views'=>$myrow['news_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
-		if ((($blog!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news',array('news',$myrow['news_category']))))
+		if ((($blog!==1) || (has_privilege(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news',array('news',$myrow['news_category']))))
 		{
 			$map=array('page'=>($blog===1)?'cms_blogs':'cms_news','type'=>'ad');
 			if (is_numeric($filter)) $map['cat']=$filter;

@@ -49,7 +49,7 @@ class Module_iotds
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('iotd');
 
-		delete_specific_permission('choose_iotd');
+		delete_privilege('choose_iotd');
 
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'iotds'));
 
@@ -95,7 +95,7 @@ class Module_iotds
 			$GLOBALS['SITE_DB']->create_index('iotd','iadd_date',array('add_date'));
 			$GLOBALS['SITE_DB']->create_index('iotd','date_and_time',array('date_and_time'));
 
-			add_specific_permission('IOTDS','choose_iotd',false);
+			add_privilege('IOTDS','choose_iotd',false);
 
 			add_config_option('CHOOSE_IOTD','points_CHOOSE_IOTD','integer','return addon_installed(\'points\')?\'35\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('ADD_IOTD','points_ADD_IOTD','integer','return addon_installed(\'points\')?\'150\':NULL;','POINTS','COUNT_POINTS_GIVEN');

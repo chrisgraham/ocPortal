@@ -43,7 +43,7 @@ class Hook_members_chat
 					if (!member_blocked($member_id))
 					{
 						$modules[]=array('contact',do_lang_tempcode('EXPLAINED_BLOCK_MEMBER'),build_url(array('page'=>'chat','type'=>'blocking_add','member_id'=>$member_id,'redirect'=>get_self_url(true)),get_module_zone('chat')));
-						if (has_specific_permission(get_member(),'start_im'))
+						if (has_privilege(get_member(),'start_im'))
 						{
 							$modules[]=array('contact',do_lang_tempcode('START_IM'),build_url(array('page'=>'chat','type'=>'misc','enter_im'=>$member_id),get_module_zone('chat')));
 						}

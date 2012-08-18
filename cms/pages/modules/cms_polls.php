@@ -75,9 +75,9 @@ class Module_cms_polls extends standard_crud_module
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
-	 * @return array	A map of privileges that are overridable; sp to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
-	function get_sp_overrides()
+	function get_privilege_overrides()
 	{
 		require_lang('polls');
 		return array('submit_midrange_content'=>array(0,'ADD_POLL'),'bypass_validation_midrange_content'=>array(0,'BYPASS_VALIDATION_POLL'),'edit_own_midrange_content'=>array(0,'EDIT_OWN_POLL'),'edit_midrange_content'=>array(0,'EDIT_POLL'),'delete_own_midrange_content'=>array(0,'DELETE_OWN_POLL'),'delete_midrange_content'=>array(0,'DELETE_POLL'),'edit_own_highrange_content'=>array(0,'EDIT_OWN_LIVE_POLL'),'edit_highrange_content'=>array(0,'EDIT_LIVE_POLL'),'delete_own_highrange_content'=>array(0,'DELETE_OWN_LIVE_POLL'),'delete_highrange_content'=>array(0,'DELETE_LIVE_POLL'),'vote_in_polls'=>0);
@@ -95,8 +95,8 @@ class Module_cms_polls extends standard_crud_module
 		return do_next_manager(get_screen_title('MANAGE_POLLS'),comcode_lang_string('DOC_POLLS'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
-						has_specific_permission(get_member(),'submit_midrange_content','cms_polls')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POLL')):NULL,
-						has_specific_permission(get_member(),'edit_own_midrange_content','cms_polls')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_POLL')):NULL,
+						has_privilege(get_member(),'submit_midrange_content','cms_polls')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POLL')):NULL,
+						has_privilege(get_member(),'edit_own_midrange_content','cms_polls')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_POLL')):NULL,
 					),manage_custom_fields_donext_link('poll')),
 					do_lang('MANAGE_POLLS')
 		);
@@ -152,7 +152,7 @@ class Module_cms_polls extends standard_crud_module
 
 		$fields=new ocp_tempcode();
 
-		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_polls')?NULL:get_member();
+		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_polls')?NULL:get_member();
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,(is_null($only_owned)?array():array('submitter'=>$only_owned)));
 		require_code('form_templates');
 		foreach ($rows as $row)
@@ -181,7 +181,7 @@ class Module_cms_polls extends standard_crud_module
 	 */
 	function nice_get_entries()
 	{
-		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_polls')?NULL:get_member();
+		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_polls')?NULL:get_member();
 		$poll_list=nice_get_polls(NULL,$only_owned);
 		return $poll_list;
 	}
@@ -224,7 +224,7 @@ class Module_cms_polls extends standard_crud_module
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(8)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option8',$a8,false));
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(9)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option9',$a9,false));
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(10)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option10',$a10,false));
-		if (has_specific_permission(get_member(),'choose_poll'))
+		if (has_privilege(get_member(),'choose_poll'))
 		{
 			if ($question=='')
 			{
@@ -310,7 +310,7 @@ class Module_cms_polls extends standard_crud_module
 		$current=post_param_integer('validated',0);
 		if ($current==1)
 		{
-			if (!has_specific_permission(get_member(),'choose_poll'))
+			if (!has_privilege(get_member(),'choose_poll'))
 				log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
 			set_poll($id);
 		}
@@ -388,7 +388,7 @@ class Module_cms_polls extends standard_crud_module
 			{
 				if ($is_current==0)
 				{
-					if (!has_specific_permission(get_member(),'choose_poll'))
+					if (!has_privilege(get_member(),'choose_poll'))
 						log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
 
 					set_poll(intval($id));

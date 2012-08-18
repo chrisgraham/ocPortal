@@ -50,7 +50,7 @@ class Module_polls
 		$GLOBALS['SITE_DB']->drop_table_if_exists('poll');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('poll_votes');
 
-		delete_specific_permission('choose_poll');
+		delete_privilege('choose_poll');
 		$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'polls'));
 
 		delete_config_option('points_ADD_POLL');
@@ -110,7 +110,7 @@ class Module_polls
 			$GLOBALS['SITE_DB']->create_index('poll','padd_time',array('add_time'));
 			$GLOBALS['SITE_DB']->create_index('poll','date_and_time',array('date_and_time'));
 
-			add_specific_permission('POLLS','choose_poll',false);
+			add_privilege('POLLS','choose_poll',false);
 
 			add_config_option('ADD_POLL','points_ADD_POLL','integer','return addon_installed(\'points\')?\'150\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('CHOOSE_POLL','points_CHOOSE_POLL','integer','return addon_installed(\'points\')?\'35\':NULL;','POINTS','COUNT_POINTS_GIVEN');

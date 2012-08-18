@@ -59,9 +59,9 @@ class Module_cms_catalogues extends standard_crud_module
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
-	 * @return array	A map of privileges that are overridable; sp to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
-	function get_sp_overrides()
+	function get_privilege_overrides()
 	{
 		require_lang('catalogues');
 		return array('mass_import'=>0,'high_catalogue_entry_timeout'=>1,'submit_cat_highrange_content'=>array(0,'ADD_CATALOGUE'),'edit_cat_highrange_content'=>array(0,'EDIT_CATALOGUE'),'delete_cat_highrange_content'=>array(0,'DELETE_CATALOGUE'),'submit_cat_midrange_content'=>array(0,'ADD_CATALOGUE_CATEGORY'),'edit_cat_midrange_content'=>array(0,'EDIT_CATALOGUE_CATEGORY'),'delete_cat_midrange_content'=>array(0,'DELETE_CATALOGUE_CATEGORY'),'submit_midrange_content'=>array(1,'ADD_CATALOGUE_ENTRY'),'bypass_validation_midrange_content'=>array(1,'BYPASS_VALIDATION_CATALOGUE_ENTRY'),'edit_own_midrange_content'=>array(1,'EDIT_OWN_CATALOGUE_ENTRY'),'edit_midrange_content'=>array(1,'EDIT_CATALOGUE_ENTRY'),'delete_own_midrange_content'=>array(1,'DELETE_OWN_CATALOGUE_ENTRY'),'delete_midrange_content'=>array(1,'DELETE_CATALOGUE_ENTRY'));
@@ -161,13 +161,13 @@ class Module_cms_catalogues extends standard_crud_module
 		return do_next_manager(($catalogue_name!='')?get_screen_title(escape_html(get_translated_text($cat_title)),false):get_screen_title('MANAGE_CATALOGUES'),($catalogue_name!='')?get_translated_tempcode($cat_description):comcode_lang_string('DOC_CATALOGUES'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
-						(has_specific_permission(get_member(),'submit_cat_highrange_content','cms_catalogues') && ($catalogue_name==''))?array('add_one_catalogue',array('_SELF',array_merge($extra_map,array('type'=>'add_catalogue')),'_SELF'),do_lang('ADD_CATALOGUE')):NULL,
-						has_specific_permission(get_member(),'edit_cat_highrange_content','cms_catalogues')?array('edit_one_catalogue',array('_SELF',array_merge($extra_map_2,array('type'=>($catalogue_name=='')?'edit_catalogue':'_edit_catalogue')),'_SELF'),do_lang('EDIT_CATALOGUE')):NULL,
-						has_specific_permission(get_member(),'submit_cat_midrange_content','cms_catalogues')?array('add_one_category',array('_SELF',array_merge($extra_map,array('type'=>'add_category')),'_SELF'),($catalogue_name!='')?do_lang('NEXT_ITEM_add_one_category'):do_lang('ADD_CATALOGUE_CATEGORY')):NULL,
-						has_specific_permission(get_member(),'edit_cat_midrange_content','cms_catalogues')?array('edit_one_category',array('_SELF',array_merge($extra_map,array('type'=>'edit_category')),'_SELF'),($catalogue_name!='')?do_lang('NEXT_ITEM_edit_one_category'):do_lang('EDIT_CATALOGUE_CATEGORY')):NULL,
-						(!$has_categories)?NULL:(has_specific_permission(get_member(),'submit_midrange_content','cms_catalogues')?array('add_one',array('_SELF',array_merge($extra_map,array('type'=>'add_entry')),'_SELF'),($catalogue_name!='')?do_lang('NEXT_ITEM_add_one'):do_lang('ADD_CATALOGUE_ENTRY')):NULL),
-						(!$has_categories)?NULL:(has_specific_permission(get_member(),'edit_midrange_content','cms_catalogues')?array('edit_one',array('_SELF',array_merge($extra_map,array('type'=>'edit_entry')),'_SELF'),($catalogue_name!='')?do_lang('NEXT_ITEM_edit_one'):do_lang('EDIT_CATALOGUE_ENTRY')):NULL),
-						(!$has_categories)?NULL:(has_specific_permission(get_member(),'mass_import','cms_catalogues')?array('import',array('_SELF',array_merge($extra_map,array('type'=>'import')),'_SELF'),do_lang('IMPORT_CATALOGUE_ENTRIES')):NULL),
+						(has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues') && ($catalogue_name==''))?array('add_one_catalogue',array('_SELF',array_merge($extra_map,array('type'=>'add_catalogue')),'_SELF'),do_lang('ADD_CATALOGUE')):NULL,
+						has_privilege(get_member(),'edit_cat_highrange_content','cms_catalogues')?array('edit_one_catalogue',array('_SELF',array_merge($extra_map_2,array('type'=>($catalogue_name=='')?'edit_catalogue':'_edit_catalogue')),'_SELF'),do_lang('EDIT_CATALOGUE')):NULL,
+						has_privilege(get_member(),'submit_cat_midrange_content','cms_catalogues')?array('add_one_category',array('_SELF',array_merge($extra_map,array('type'=>'add_category')),'_SELF'),($catalogue_name!='')?do_lang('NEXT_ITEM_add_one_category'):do_lang('ADD_CATALOGUE_CATEGORY')):NULL,
+						has_privilege(get_member(),'edit_cat_midrange_content','cms_catalogues')?array('edit_one_category',array('_SELF',array_merge($extra_map,array('type'=>'edit_category')),'_SELF'),($catalogue_name!='')?do_lang('NEXT_ITEM_edit_one_category'):do_lang('EDIT_CATALOGUE_CATEGORY')):NULL,
+						(!$has_categories)?NULL:(has_privilege(get_member(),'submit_midrange_content','cms_catalogues')?array('add_one',array('_SELF',array_merge($extra_map,array('type'=>'add_entry')),'_SELF'),($catalogue_name!='')?do_lang('NEXT_ITEM_add_one'):do_lang('ADD_CATALOGUE_ENTRY')):NULL),
+						(!$has_categories)?NULL:(has_privilege(get_member(),'edit_midrange_content','cms_catalogues')?array('edit_one',array('_SELF',array_merge($extra_map,array('type'=>'edit_entry')),'_SELF'),($catalogue_name!='')?do_lang('NEXT_ITEM_edit_one'):do_lang('EDIT_CATALOGUE_ENTRY')):NULL),
+						(!$has_categories)?NULL:(has_privilege(get_member(),'mass_import','cms_catalogues')?array('import',array('_SELF',array_merge($extra_map,array('type'=>'import')),'_SELF'),do_lang('IMPORT_CATALOGUE_ENTRIES')):NULL),
 						(!$has_categories)?NULL:($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?array('export',array('_SELF',array_merge($extra_map,array('type'=>'export')),'_SELF'),do_lang('EXPORT_CATALOGUE_ENTRIES')):NULL),
 					),manage_custom_fields_donext_link('catalogue'),manage_custom_fields_donext_link('catalogue_category')),
 					($catalogue_name!='')?escape_html(get_translated_text($cat_title)):do_lang('MANAGE_CATALOGUES')
@@ -215,7 +215,7 @@ class Module_cms_catalogues extends standard_crud_module
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
-		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_catalogues')?NULL:get_member();
+		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_catalogues')?NULL:get_member();
 		list($rows,$max_rows)=$this->get_entry_rows(false,($current_ordering=='title ASC' || $current_ordering=='title DESC')?'ce_add_date ASC':$current_ordering,is_null($only_owned)?array('c_name'=>get_param('catalogue_name')):array('c_name'=>get_param('catalogue_name'),'ce_submitter'=>$only_owned));
 		$_fields=array();
 		$cat_titles=array();
@@ -290,7 +290,7 @@ class Module_cms_catalogues extends standard_crud_module
 		$search_url=build_url(array('page'=>'search','id'=>'catalogue_entries','catalogue_name'=>$catalogue_name),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues'));
 
-		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_catalogues')?NULL:get_member();
+		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_catalogues')?NULL:get_member();
 		$tree=form_input_tree_list(do_lang_tempcode('ENTRY'),'','id',NULL,'choose_catalogue_entry',array('catalogue_name'=>$catalogue_name,'only_owned'=>$only_owned,'editable_filter'=>true),true);
 		return array($tree,$search_url,$archive_url);
 	}
@@ -437,7 +437,7 @@ class Module_cms_catalogues extends standard_crud_module
 			$validated=get_param_integer('validated',0);
 			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
-		if ((has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require_b)) || (has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require)))
+		if ((has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require_b)) || (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require)))
 		{
 			if (addon_installed('unvalidated'))
 			{
@@ -690,13 +690,13 @@ class Module_cms_catalogues extends standard_crud_module
 					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
 					/*	 page	 params				  zone	  */
 					array('_SELF',array('type'=>'add_entry','catalogue_name'=>$c_name,'category_id'=>$category_id),'_SELF'),								  // Add one
-					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_midrange_content','cms_catalogues',array('catalogues_category',$category_id))))?NULL:array('_SELF',array('type'=>'_edit_entry','id'=>$id,'catalogue_name'=>$c_name),'_SELF'),				 // Edit this
-					has_specific_permission(get_member(),'edit_own_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_entry','catalogue_name'=>$c_name),'_SELF'):NULL, // Edit one
+					(is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_catalogues',array('catalogues_category',$category_id))))?NULL:array('_SELF',array('type'=>'_edit_entry','id'=>$id,'catalogue_name'=>$c_name),'_SELF'),				 // Edit this
+					has_privilege(get_member(),'edit_own_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_entry','catalogue_name'=>$c_name),'_SELF'):NULL, // Edit one
 					is_null($id)?NULL:array('catalogues',array('type'=>'entry','id'=>$id),get_module_zone('catalogues')),						  // View this
 					NULL,																						// View archive
 					NULL,																						// Add to category
-					has_specific_permission(get_member(),'submit_cat_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'add_category','catalogue_name'=>$c_name),'_SELF'):NULL,			  // Add one category
-					has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_category','catalogue_name'=>$c_name),'_SELF'):NULL,			  // Edit one category
+					has_privilege(get_member(),'submit_cat_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'add_category','catalogue_name'=>$c_name),'_SELF'):NULL,			  // Add one category
+					has_privilege(get_member(),'edit_own_cat_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_category','catalogue_name'=>$c_name),'_SELF'):NULL,			  // Edit one category
 
 					NULL,																						// Edit this category
 					NULL,																						// View this category
@@ -705,9 +705,9 @@ class Module_cms_catalogues extends standard_crud_module
 					array(),
 					array(
 						/*	 type							  page	 params													 zone	  */
-						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_catalogues')?array('add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')):NULL,
-						has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$c_name),'_SELF')):NULL,
-						has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')):NULL,
+						has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')?array('add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')):NULL,
+						has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$c_name),'_SELF')):NULL,
+						has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')):NULL,
 						array('view_this',array('catalogues',array('type'=>'index','id'=>$c_name),get_module_zone('catalogues')),do_lang('VIEW_CATALOGUE'))
 					),
 					do_lang('MANAGE_CATALOGUES')
@@ -721,7 +721,7 @@ class Module_cms_catalogues extends standard_crud_module
 	 */
 	function import_catalogue()
 	{
-		check_specific_permission('mass_import');
+		check_privilege('mass_import');
 
 		$title=get_screen_title('CATALOGUE_IMPORT');
 
@@ -802,7 +802,7 @@ class Module_cms_catalogues extends standard_crud_module
 
 		require_code('catalogues2');
 
-		check_specific_permission('mass_import');
+		check_privilege('mass_import');
 
 		$catalogue_name=get_param('catalogue_name');
 
@@ -1605,22 +1605,22 @@ class Module_cms_catalogues_cat extends standard_crud_module
 					/*	 page	 params				  zone	  */
 					(!is_null($id))?NULL:array('_SELF',array('type'=>'add_entry','catalogue_name'=>$catalogue_name),'_SELF'),// Add one
 					NULL,																						// Edit this
-					has_specific_permission(get_member(),'edit_own_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_entry','catalogue_name'=>$catalogue_name),'_SELF'):NULL,  // Edit one
+					has_privilege(get_member(),'edit_own_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_entry','catalogue_name'=>$catalogue_name),'_SELF'):NULL,  // Edit one
 					NULL,																						// View this
 					NULL,																						// View archive
 					is_null($id)?NULL:array('_SELF',array('type'=>'add_entry','category_id'=>$id,'catalogue_name'=>$catalogue_name),'_SELF'),// Add to category
-					has_specific_permission(get_member(),'submit_cat_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'add_category','catalogue_name'=>$catalogue_name),'_SELF'):NULL, // Add one category
-					has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_category','catalogue_name'=>$catalogue_name),'_SELF'):NULL, // Edit one category
-					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_cat_midrange_content','cms_catalogues')))?NULL:array('_SELF',array('type'=>'_edit_category','id'=>$id,'catalogue_name'=>$catalogue_name),'_SELF'), // Edit this category
+					has_privilege(get_member(),'submit_cat_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'add_category','catalogue_name'=>$catalogue_name),'_SELF'):NULL, // Add one category
+					has_privilege(get_member(),'edit_own_cat_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_category','catalogue_name'=>$catalogue_name),'_SELF'):NULL, // Edit one category
+					(is_null($id) || (!has_privilege(get_member(),'edit_own_cat_midrange_content','cms_catalogues')))?NULL:array('_SELF',array('type'=>'_edit_category','id'=>$id,'catalogue_name'=>$catalogue_name),'_SELF'), // Edit this category
 					is_null($id)?NULL:array('catalogues',array('type'=>'category','id'=>$id),get_module_zone('catalogues')),// View this category
 
 					/*	  SPECIALLY TYPED 'LINKS'				  */
 					array(),array(),
 					array(
 						/*	 type							  page	 params													 zone	  */
-						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_catalogues')?array('add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')):NULL,
-						has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$catalogue_name),'_SELF')):NULL,
-						has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')):NULL,
+						has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')?array('add_one_catalogue',array('_SELF',array('type'=>'add_catalogue'),'_SELF')):NULL,
+						has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_this_catalogue',array('_SELF',array('type'=>'_edit_catalogue','id'=>$catalogue_name),'_SELF')):NULL,
+						has_privilege(get_member(),'edit_own_cat_highrange_content','cms_catalogues')?array('edit_one_catalogue',array('_SELF',array('type'=>'edit_catalogue'),'_SELF')):NULL,
 						array('view_this',array('catalogues',array('type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues')),do_lang('INDEX'))
 					),
 					do_lang('MANAGE_CATALOGUES')
@@ -2174,7 +2174,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 					/*	 page	 params				  zone	  */
 					(is_null($name)||(!$has_categories))?NULL:array('_SELF',array('type'=>'add_entry','catalogue_name'=>$name),'_SELF'),								  // Add one
 					NULL,				 // Edit this
-					(is_null($name)||(!$has_categories))?NULL:(has_specific_permission(get_member(),'edit_own_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_entry','catalogue_name'=>$name),'_SELF'):NULL), // Edit one
+					(is_null($name)||(!$has_categories))?NULL:(has_privilege(get_member(),'edit_own_midrange_content','cms_catalogues')?array('_SELF',array('type'=>'edit_entry','catalogue_name'=>$name),'_SELF'):NULL), // Edit one
 					NULL,																						// View this
 					NULL,																						// View archive
 					NULL,																						// Add to category

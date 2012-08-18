@@ -179,7 +179,7 @@ function ocf_delete_forum($forum_id,$target_forum_id,$delete_topics=0)
 	$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_parent_forum'=>db_get_first_id()),array('f_parent_forum'=>$forum_id));
 	$GLOBALS['FORUM_DB']->query_delete('f_forums',array('id'=>$forum_id),'',1);
 	$GLOBALS['FORUM_DB']->query_delete('group_category_access',array('module_the_name'=>'forums','category_name'=>strval($forum_id)));
-	$GLOBALS['FORUM_DB']->query_delete('gsp',array('module_the_name'=>'forums','category_name'=>strval($forum_id)));
+	$GLOBALS['FORUM_DB']->query_delete('group_privileges',array('module_the_name'=>'forums','category_name'=>strval($forum_id)));
 	require_code('notifications');
 	delete_all_notifications_on('ocf_forum',strval($forum_id));
 	$GLOBALS['FORUM_DB']->query_delete('f_forum_intro_member',array('i_forum_id'=>$forum_id));

@@ -109,16 +109,16 @@ function ocf_make_forum($name,$description,$forum_grouping_id,$access_mapping,$p
 
 				if ($level==1) // May not post - so specifically override to say this
 				{
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>0));
 				}
 				if ($level>=3)
 				{
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_lowrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
 				}
 				if ($level>=4)
 				{
-					$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+					$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_midrange_content','group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
 				}
 
 				// 2=May post, [3=May post instantly , 4=May start topics instantly , 5=Moderator  --  these ones will not be treated specially, so as to avoid overriding permissions unnecessary - let the admins configure it optimally manually]

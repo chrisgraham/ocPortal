@@ -163,8 +163,8 @@ function delete_author($author)
 function has_edit_author_permission($member,$author)
 {
 	if (is_guest($member)) return false;
-	if ((get_author_id_from_name($author)==$member) && (has_specific_permission($member,'set_own_author_profile'))) return true;
-	if (has_specific_permission($member,'edit_midrange_content','cms_authors')) return true;
+	if ((get_author_id_from_name($author)==$member) && (has_privilege($member,'set_own_author_profile'))) return true;
+	if (has_privilege($member,'edit_midrange_content','cms_authors')) return true;
 	return false;
 }
 
@@ -178,8 +178,8 @@ function has_edit_author_permission($member,$author)
 function has_delete_author_permission($member,$author)
 {
 	if (is_guest($member)) return false;
-	if ((get_author_id_from_name($author)==$member) && (has_specific_permission($member,'delete_own_midrange_content'))) return true;
-	if (has_specific_permission($member,'delete_midrange_content','cms_authors')) return true;
+	if ((get_author_id_from_name($author)==$member) && (has_privilege($member,'delete_own_midrange_content'))) return true;
+	if (has_privilege($member,'delete_midrange_content','cms_authors')) return true;
 	return false;
 }
 

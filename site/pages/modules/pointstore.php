@@ -169,12 +169,12 @@ class Module_pointstore
 					'p_enabled'=>'BINARY',
 					'p_cost'=>'INTEGER',
 					'p_hours'=>'INTEGER',
-					'p_type'=>'ID_TEXT', // msp,member_category_access,member_page_access,member_zone_access
-					'p_specific_permission'=>'ID_TEXT', // sp only
+					'p_type'=>'ID_TEXT', // member_privileges,member_category_access,member_page_access,member_zone_access
+					'p_privilege'=>'ID_TEXT', // privilege only
 					'p_zone'=>'ID_TEXT', // zone and page only
-					'p_page'=>'ID_TEXT', // page and ?sp only
-					'p_module'=>'ID_TEXT', // category and ?sp only
-					'p_category'=>'ID_TEXT', // category and ?sp only
+					'p_page'=>'ID_TEXT', // page and ?privilege only
+					'p_module'=>'ID_TEXT', // category and ?privilege only
+					'p_category'=>'ID_TEXT', // category and ?privilege only
 				));
 		}
 

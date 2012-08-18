@@ -63,7 +63,7 @@ class Module_calendar
 		$perms=array('set_reminders','view_event_subscriptions','view_calendar','add_public_events','edit_viewable_events','edit_owned_events','view_personal_events','sense_personal_conflicts');
 		foreach ($perms as $perm)
 		{
-			delete_specific_permission($perm);
+			delete_privilege($perm);
 		}
 
 		delete_menu_item_simple('_SEARCH:calendar:type=misc:member_id={$USER_OVERIDE}');
@@ -86,11 +86,11 @@ class Module_calendar
 
 		if (is_null($upgrade_from))
 		{
-			add_specific_permission('CALENDAR','view_calendar',true);
-			add_specific_permission('CALENDAR','add_public_events',true);
-			add_specific_permission('CALENDAR','view_personal_events',false,true);
-			add_specific_permission('CALENDAR','sense_personal_conflicts',false);
-			add_specific_permission('CALENDAR','view_event_subscriptions',false);
+			add_privilege('CALENDAR','view_calendar',true);
+			add_privilege('CALENDAR','add_public_events',true);
+			add_privilege('CALENDAR','view_personal_events',false,true);
+			add_privilege('CALENDAR','sense_personal_conflicts',false);
+			add_privilege('CALENDAR','view_event_subscriptions',false);
 
 			$GLOBALS['SITE_DB']->create_table('calendar_events',array(
 				'id'=>'*AUTO',
@@ -192,8 +192,8 @@ class Module_calendar
 			$GLOBALS['SITE_DB']->add_table_field('calendar_events','allow_trackbacks','BINARY',0);
 			$GLOBALS['SITE_DB']->add_table_field('calendar_events','notes','LONG_TEXT');
 			$GLOBALS['SITE_DB']->add_table_field('calendar_events','validated','BINARY',1);
-			delete_specific_permission('edit_owned_events');
-			delete_specific_permission('edit_viewable_events');
+			delete_privilege('edit_owned_events');
+			delete_privilege('edit_viewable_events');
 			add_config_option('ADD_CALENDAR_EVENT','points_ADD_CALENDAR_EVENT','integer','return addon_installed(\'points\')?\'2\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 			$GLOBALS['SITE_DB']->rename_table('calendar_declarations_of_interest','calendar_interests');
 		}
@@ -252,7 +252,7 @@ class Module_calendar
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
 		{
-			add_specific_permission('CALENDAR','set_reminders',false);
+			add_privilege('CALENDAR','set_reminders',false);
 		}
 	}
 
@@ -453,7 +453,7 @@ class Module_calendar
 	 */
 	function view_calendar()
 	{
-		check_specific_permission('view_calendar');
+		check_privilege('view_calendar');
 
 		$view=get_param('view','day');
 		$member_id=get_param_integer('member_id',get_member());
@@ -1312,7 +1312,7 @@ class Module_calendar
 	 */
 	function view_event()
 	{
-		check_specific_permission('view_calendar');
+		check_privilege('view_calendar');
 
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='back';
@@ -1335,7 +1335,7 @@ class Module_calendar
 		$warning_details=new ocp_tempcode();
 		if (($event['validated']==0) && ($event['e_is_public']==1))
 		{
-			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'332faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
@@ -1357,7 +1357,7 @@ class Module_calendar
 		$content=($event['e_type']==db_get_first_id())?make_string_tempcode(get_translated_text($event['e_content'])):get_translated_tempcode($event['e_content']);
 		$type=get_translated_text($event['t_title']);
 		$subscribed=new ocp_tempcode();
-		if ((has_specific_permission(get_member(),'view_event_subscriptions')) && (cron_installed()))
+		if ((has_privilege(get_member(),'view_event_subscriptions')) && (cron_installed()))
 		{
 			$subscriptions=$GLOBALS['SITE_DB']->query_select('calendar_reminders',array('DISTINCT n_member_id'),array('e_id'=>$id),'',100);
 			if (count($subscriptions)<100)
@@ -1623,7 +1623,7 @@ class Module_calendar
 
 		// Check access
 		$id=get_param_integer('id');
-		check_specific_permission('view_calendar');
+		check_privilege('view_calendar');
 		$rows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
 		{

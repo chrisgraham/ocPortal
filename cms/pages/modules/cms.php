@@ -63,7 +63,7 @@ class Module_cms
 
 		require_all_lang();
 
-		if (((!has_specific_permission(get_member(),'avoid_simplified_adminzone_look')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) && (num_staff_icons()<MIN_STAFF_ICONS_BEFORE_COLLAPSE))
+		if (((!has_privilege(get_member(),'avoid_simplified_adminzone_look')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) && (num_staff_icons()<MIN_STAFF_ICONS_BEFORE_COLLAPSE))
 		{
 			return do_next_manager_admin_simplified();
 		}

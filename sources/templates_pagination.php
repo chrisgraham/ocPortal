@@ -70,7 +70,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 
 		// How many to show per page
 		if (is_null($_selectors)) $_selectors=array(10,25,50,100,300);
-		if (has_specific_permission(get_member(),'remove_page_split')) $_selectors[]=$max_rows;
+		if (has_privilege(get_member(),'remove_page_split')) $_selectors[]=$max_rows;
 		$_selectors[]=$max;
 		sort($_selectors);
 		$_selectors=array_unique($_selectors);

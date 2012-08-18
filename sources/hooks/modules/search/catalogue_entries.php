@@ -212,7 +212,7 @@ class Hook_search_catalogue_entries
 			$where_clause.=' AND ';
 			$where_clause.='p.category_name IS NOT NULL';
 		}
-		if (!has_specific_permission(get_member(),'see_unvalidated'))
+		if (!has_privilege(get_member(),'see_unvalidated'))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='ce_validated=1';

@@ -166,7 +166,7 @@ function output_room_screen($member_id)
 	{
 		$dest_realm=$myrow['end_location_realm'];
 
-		$editable=((has_specific_permission($member_id,'administer_ocworld')) || ($myrow['owner']==$member_id));
+		$editable=((has_privilege($member_id,'administer_ocworld')) || ($myrow['owner']==$member_id));
 
 		$portals->attach(do_template('W_MAIN_PORTAL',array('_GUID'=>'f5582c18b71be98d74dfb8d2b777afc0','NAME'=>$myrow['name'],'EDITABLE'=>$editable,'DEST_REALM'=>strval($dest_realm))));
 	}
@@ -234,7 +234,7 @@ function output_room_screen($member_id)
 		if (($myrow2['healthy']==1) && ($myrow2['bribable']==1)) $aux=do_lang_tempcode('W_IS_HEALTH_AND_BRIBABLE');
 		elseif ($myrow2['healthy']==1) $aux=do_lang_tempcode('W_IS_HEALTHY');
 		elseif ($myrow2['bribable']==1) $aux=do_lang_tempcode('W_IS_BRIBABLE');
-		$edit_item_copy_access=((has_specific_permission($member_id,'administer_ocworld')) || ($myrow['copy_owner']==$member_id));
+		$edit_item_copy_access=((has_privilege($member_id,'administer_ocworld')) || ($myrow['copy_owner']==$member_id));
 
 		$count=($myrow['not_infinite']==1)?make_string_tempcode(integer_format($myrow['i_count'])):do_lang_tempcode('W_INFINITE');
 
@@ -258,7 +258,7 @@ function output_room_screen($member_id)
 		if (($myrow2['healthy']==1) && ($myrow2['bribable']==1)) $aux=do_lang_tempcode('W_IS_HEALTH_AND_BRIBABLE');
 		elseif ($myrow2['healthy']==1) $aux=do_lang_tempcode('W_IS_HEALTHY');
 		elseif ($myrow2['bribable']==1) $aux=do_lang_tempcode('W_IS_BRIBABLE');
-		$edit_item_copy_access=((has_specific_permission($member_id,'administer_ocworld')) || ($myrow['copy_owner']==$member_id));
+		$edit_item_copy_access=((has_privilege($member_id,'administer_ocworld')) || ($myrow['copy_owner']==$member_id));
 
 		$count=($myrow['not_infinite']==1)?make_string_tempcode(integer_format($myrow['i_count'])):do_lang_tempcode('W_INFINITE');
 
@@ -286,7 +286,7 @@ function output_room_screen($member_id)
 		$selected=(($myrow['id']==$other_person) && (!is_null($other_person))) || ($myrow['id']==$other_person);
 		$people_here->attach(do_template('W_MAIN_PERSON_HERE',array('_GUID'=>'4fd3908b7b47338a4f47710c85a060ac','THIS_MEMBER_NAME'=>$this_member_name,'ID'=>strval($myrow['id']),'SELECTED'=>$selected)));
 	}
-	if (has_specific_permission($member_id,'administer_ocworld'))
+	if (has_privilege($member_id,'administer_ocworld'))
 	{
 		$people_here->attach(do_template('W_MAIN_PEOPLE_SEP'));
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_members WHERE location_x<>'.strval((integer)$x).' AND location_y<>'.strval((integer)$y).' AND location_realm<>'.strval((integer)$realm).' ORDER BY lastactive DESC',30);
@@ -326,7 +326,7 @@ function output_room_screen($member_id)
 		$tpl=do_template('W_MAIN_ITEM_OWNED',array('_GUID'=>'dfa2971a5196b3c60d9bbd5240b0d269','SELECTED'=>$selected,'NAME'=>$myrow['name']));
 		$_items_owned->attach($tpl);
 	}
-	if (has_specific_permission($member_id,'administer_ocworld'))
+	if (has_privilege($member_id,'administer_ocworld'))
 	{
 		$_items_owned->attach(do_template('W_MAIN_ITEM_OWNED_SEP'));
 
@@ -342,12 +342,12 @@ function output_room_screen($member_id)
 	$items_owned_2=do_template('W_MAIN_ITEMS_OWNED',array('_GUID'=>'471f3536533e534fe29ac910cb854c04','NAME'=>'item2','CONTENT'=>$_items_owned));
 
 	$is_room_owner=((!is_null($member_id)) || ($GLOBALS['SITE_DB']->query_select_value('w_rooms','owner',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm))==$member_id));
-	$is_realm_owner=((has_specific_permission($member_id,'administer_ocworld')) || ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))==$member_id));
+	$is_realm_owner=((has_privilege($member_id,'administer_ocworld')) || ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))==$member_id));
 
-	$may_do_stuff=(!((!has_specific_permission($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$realm))==1)));
+	$may_do_stuff=(!((!has_privilege($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$realm))==1)));
 	$may_add_portal=($GLOBALS['SITE_DB']->query_select_value('w_rooms','allow_portal',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm))==1);
 
-	$is_staff=(has_specific_permission($member_id,'administer_ocworld'));
+	$is_staff=(has_privilege($member_id,'administer_ocworld'));
 
 	return do_template('W_MAIN_SCREEN',array(
 		'TITLE'=>$title,

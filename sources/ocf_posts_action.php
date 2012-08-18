@@ -161,7 +161,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 
 		if ($check_permissions)
 		{
-			if (((($info[0]['t_pt_from']!=get_member()) && ($info[0]['t_pt_to']!=get_member()) && (!ocf_has_special_pt_access($topic_id))) && (!has_specific_permission(get_member(),'view_other_pt')) && (is_null($forum_id))))
+			if (((($info[0]['t_pt_from']!=get_member()) && ($info[0]['t_pt_to']!=get_member()) && (!ocf_has_special_pt_access($topic_id))) && (!has_privilege(get_member(),'view_other_pt')) && (is_null($forum_id))))
 				access_denied('I_ERROR');
 		}
 	}
@@ -184,7 +184,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 
 	if ((is_null($validated)) || (($validated==1) && ($check_permissions)))
 	{
-		if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
+		if ((!is_null($forum_id)) && (!has_privilege(get_member(),'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
 	}
 
 	if (!$support_attachments)
@@ -318,7 +318,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 						{
 							if ($is_starter)
 							{
-								$topic_validated=has_specific_permission($poster,'bypass_validation_midrange_content','topics',array('forums',$forum_id))?1:0;
+								$topic_validated=has_privilege($poster,'bypass_validation_midrange_content','topics',array('forums',$forum_id))?1:0;
 							} else
 							{
 								$topic_validated=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_validated',array('id'=>$topic_id));

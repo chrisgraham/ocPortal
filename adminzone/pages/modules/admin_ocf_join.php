@@ -103,7 +103,7 @@ class Module_admin_ocf_join
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('addmember',array('admin_ocf_join',array('type'=>'misc'),get_module_zone('admin_ocf_join')),do_lang_tempcode('ADD_MEMBER'),('DOC_ADD_MEMBER')),
-						(!has_specific_permission(get_member(),'member_maintenance'))?NULL:array('editmember',array('members',array('type'=>'misc'),get_module_zone('members'),do_lang_tempcode('SWITCH_ZONE_WARNING')),do_lang_tempcode('EDIT_MEMBER'),('DOC_EDIT_MEMBER')),
+						(!has_privilege(get_member(),'member_maintenance'))?NULL:array('editmember',array('members',array('type'=>'misc'),get_module_zone('members'),do_lang_tempcode('SWITCH_ZONE_WARNING')),do_lang_tempcode('EDIT_MEMBER'),('DOC_EDIT_MEMBER')),
 						array('merge_members',array('admin_ocf_merge_members',array('type'=>'misc'),get_module_zone('admin_ocf_merge_members')),do_lang_tempcode('MERGE_MEMBERS'),('DOC_MERGE_MEMBERS')),
 						array('deletelurkers',array('admin_ocf_join',array('type'=>'delurk'),get_module_zone('admin_ocf_join')),do_lang_tempcode('DELETE_LURKERS'),('DOC_DELETE_LURKERS')),
 						array('download_csv',array('admin_ocf_join',array('type'=>'download_csv'),get_module_zone('admin_ocf_join')),do_lang_tempcode('DOWNLOAD_MEMBER_CSV'),('DOC_DOWNLOAD_MEMBER_CSV')),
@@ -166,7 +166,7 @@ class Module_admin_ocf_join
 		$custom_fields=ocf_get_all_custom_fields_match(ocf_get_all_default_groups(true));
 		$actual_custom_fields=ocf_read_in_custom_fields($custom_fields);
 		$validated=post_param_integer('validated',0);
-		$primary_group=(has_specific_permission(get_member(),'assume_any_member'))?post_param_integer('primary_group'):NULL;
+		$primary_group=(has_privilege(get_member(),'assume_any_member'))?post_param_integer('primary_group'):NULL;
 		$theme=post_param('theme','');
 		$views_signatures=post_param_integer('views_signatures',0);
 		$preview_posts=post_param_integer('preview_posts',0);
@@ -202,9 +202,9 @@ class Module_admin_ocf_join
 			{
 				$group=$groups[intval($group_id)];
 
-				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_specific_permission(get_member(),'see_hidden_groups'))) continue;
+				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_privilege(get_member(),'see_hidden_groups'))) continue;
 
-				if ((in_array($group['id'],$members_groups)) || (has_specific_permission(get_member(),'assume_any_member')) || ($group['g_open_membership']==1))
+				if ((in_array($group['id'],$members_groups)) || (has_privilege(get_member(),'assume_any_member')) || ($group['g_open_membership']==1))
 					ocf_add_member_to_group($id,$group['id']);
 			}
 		}

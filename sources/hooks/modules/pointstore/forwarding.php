@@ -179,7 +179,7 @@ class Hook_pointstore_forwarding
 
 		pointstore_handle_error_already_has('forwarding');
 
-		if (($points_after<0) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($points_after<0) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('NOT_ENOUGH_POINTS',escape_html($suffix)));
 		}
@@ -234,7 +234,7 @@ class Hook_pointstore_forwarding
 		pointstore_handle_error_already_has('forwarding');
 
 		// If the price is more than we can afford...
-		if (($suffix_price>$pointsleft) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($suffix_price>$pointsleft) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('NOT_ENOUGH_POINTS',escape_html($_suffix)));
 		}

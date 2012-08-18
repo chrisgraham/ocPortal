@@ -1124,7 +1124,7 @@ function delete_gallery($name)
 	seo_meta_erase_storage('gallery',$name);
 
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'galleries','category_name'=>$name));
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'galleries','category_name'=>$name));
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'galleries','category_name'=>$name));
 
 	decache('main_top_galleries');
 	decache('main_recent_galleries');
@@ -1150,7 +1150,7 @@ function make_member_gallery_if_needed($cat)
 		$parts=explode('_',$cat,3);
 		$member=intval($parts[1]); // Almost certainly going to be same as get_member(), but we might as well be general here
 
-		if (!has_specific_permission($member,'have_personal_category','cms_galleries')) return;
+		if (!has_privilege($member,'have_personal_category','cms_galleries')) return;
 
 		// Find about parent (new gallery inherits)
 		$parent_id=$parts[2];

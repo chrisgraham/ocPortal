@@ -142,7 +142,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 
 		$count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)',array('g_is_private_club'=>1));
 		require_code('form_templates');
-		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,($count>300 || (!has_specific_permission(get_member(),'control_usergroups')))?array('g_group_leader'=>get_member(),'g_is_private_club'=>1):array('g_is_private_club'=>1));
+		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,($count>300 || (!has_privilege(get_member(),'control_usergroups')))?array('g_group_leader'=>get_member(),'g_is_private_club'=>1):array('g_is_private_club'=>1));
 		foreach ($rows as $row)
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
@@ -183,7 +183,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 		foreach ($rows as $row)
 		{
 			$is_super_admin=$row['g_is_super_admin'];
-			if ((!has_specific_permission(get_member(),'control_usergroups')) || ($is_super_admin==1))
+			if ((!has_privilege(get_member(),'control_usergroups')) || ($is_super_admin==1))
 			{
 				$leader=$row['g_group_leader'];
 				if ($leader!=get_member()) continue;
@@ -282,7 +282,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 	function _set_permissions($id,$forum_id)
 	{
 		// Cleanup
-		$GLOBALS['FORUM_DB']->query_delete('gsp',array('group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id)));
+		$GLOBALS['FORUM_DB']->query_delete('group_privileges',array('group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id)));
 		$GLOBALS['FORUM_DB']->query_delete('group_category_access',array(
 			'module_the_name'=>'forums',
 			'category_name'=>strval($forum_id),
@@ -290,13 +290,13 @@ class Module_cms_ocf_groups extends standard_crud_module
 		));
 
 		// Create permissions
-		$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_midrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-		$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_own_midrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-		$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_midrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-		$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'submit_lowrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-		$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'edit_own_lowrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-		$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'delete_own_lowrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
-		$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>'bypass_validation_lowrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+		$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_midrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+		$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_own_midrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+		$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_midrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+		$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'submit_lowrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+		$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'edit_own_lowrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+		$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'delete_own_lowrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
+		$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>'bypass_validation_lowrange_content','group_id'=>$id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>1));
 		$GLOBALS['FORUM_DB']->query_insert('group_category_access',array(
 			'module_the_name'=>'forums',
 			'category_name'=>strval($forum_id),
@@ -316,7 +316,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 		require_code('ocf_groups');
 		$leader=ocf_get_group_property($group_id,'group_leader');
 		$is_super_admin=ocf_get_group_property($group_id,'is_super_admin');
-		if ((!has_specific_permission(get_member(),'control_usergroups')) || ($is_super_admin==1))
+		if ((!has_privilege(get_member(),'control_usergroups')) || ($is_super_admin==1))
 		{
 			if ($leader!=get_member()) access_denied('I_ERROR');
 		}
@@ -361,7 +361,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 		require_code('ocf_groups');
 		$leader=ocf_get_group_property($group_id,'group_leader');
 		$is_super_admin=ocf_get_group_property($group_id,'is_super_admin');
-		if ((!has_specific_permission(get_member(),'control_usergroups')) || ($is_super_admin==1))
+		if ((!has_privilege(get_member(),'control_usergroups')) || ($is_super_admin==1))
 		{
 			if ($leader!=get_member()) access_denied('I_ERROR');
 		}

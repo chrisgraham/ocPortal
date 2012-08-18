@@ -94,7 +94,7 @@ function ocf_get_topic_tree($forum_id=NULL,$breadcrumbs=NULL,$title=NULL,$levels
 	$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name'),array('f_parent_forum'=>$forum_id),'ORDER BY f_forum_grouping_id,f_position',200);
 	if (count($rows)==200) $rows=array(); // Too many, this method will suck
 	$tmap=array('t_forum_id'=>$forum_id);
-	if (!has_specific_permission(get_member(),'see_unvalidated')) $tmap['t_validated']=1;
+	if (!has_privilege(get_member(),'see_unvalidated')) $tmap['t_validated']=1;
 	$children[0]['entries']=collapse_2d_complexity('id','t_cache_first_title',$GLOBALS['FORUM_DB']->query_select('f_topics',array('id','t_cache_first_title'),$tmap,'ORDER BY t_cache_first_time DESC',12));
 	$children[0]['child_entry_count']=count($children[0]['entries']);
 	if ($levels===0) // We throw them away now because they're not on the desired level

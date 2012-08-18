@@ -814,10 +814,10 @@ function may_see_stack_dumps()
 	if ((function_exists('ocp_srv')) && (ocp_srv('REQUEST_METHOD')=='')) return true; // Command line
 	if ((function_exists('running_script')) && (running_script('upgrader'))) return true;
 	if (!function_exists('get_member')) return false;
-	if (!function_exists('has_specific_permission')) return false;
+	if (!function_exists('has_privilege')) return false;
 	if ($GLOBALS['IS_ACTUALLY_ADMIN']) return true;
 
-	return (get_domain()=='localhost') || (has_specific_permission(get_member(),'see_stack_dump'));
+	return (get_domain()=='localhost') || (has_privilege(get_member(),'see_stack_dump'));
 }
 
 /**
@@ -985,7 +985,7 @@ function _access_denied($class,$param,$force_login)
 			$message=make_string_tempcode($class);
 		} else
 		{
-			if ($class=='PRIVILEGE') $param=do_lang('PT_'.$param);
+			if ($class=='PRIVILEGE') $param=do_lang('PRIVILEGE_'.$param);
 			$message=do_lang_tempcode('ACCESS_DENIED__'.$class,escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())),escape_html($param));
 		}
 	}

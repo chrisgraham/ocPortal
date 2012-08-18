@@ -162,7 +162,7 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 	$comcode_editor=get_comcode_editor();
 	$comcode_editor_small=get_comcode_editor('post',true);
 
-	$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($post,'{$,page hint: no_wysiwyg}')===false));
+	$w=/* (has_privilege(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($post,'{$,page hint: no_wysiwyg}')===false));
 
 	$class='';
 	global $JAVASCRIPT,$WYSIWYG_ATTACHED;
@@ -222,7 +222,7 @@ function get_comcode_editor($field_name='post',$cut_down=false)
 
 	// Non-wrappers
 	if (!$cut_down) $_buttons[]=(get_option('is_on_gd')=='0')?'img':'thumb';
-	if (has_specific_permission(get_member(),'comcode_dangerous'))
+	if (has_privilege(get_member(),'comcode_dangerous'))
 	{
 		$_buttons[]='block';
 	}
@@ -239,11 +239,11 @@ function get_comcode_editor($field_name='post',$cut_down=false)
 
 	// Wrappers
 	$_buttons[]='quote';
-	if ((get_value('simplify_wysiwyg_by_permissions')!=='1') || (has_specific_permission(get_member(),'allow_html')))
+	if ((get_value('simplify_wysiwyg_by_permissions')!=='1') || (has_privilege(get_member(),'allow_html')))
 		$_buttons[]='box';
 	$_buttons[]='code';
 	//$_buttons[]='hide';
-	if (has_specific_permission(get_member(),'allow_html'))
+	if (has_privilege(get_member(),'allow_html'))
 	{
 		if (!$cut_down) $_buttons[]='html';
 	}
@@ -733,7 +733,7 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
 		$WYSIWYG_ATTACHED=true;
 		@header('Content-type: text/html; charset='.get_charset());
 
-		$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
+		$w=/* (has_privilege(get_member(),'comcode_dangerous')) && */(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
 		if ($w) $_required.=' wysiwyg';
 		global $LAX_COMCODE;
 		$temp=$LAX_COMCODE;
@@ -787,7 +787,7 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 	$WYSIWYG_ATTACHED=true;
 	@header('Content-type: text/html; charset='.get_charset());
 
-	$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
+	$w=/* (has_privilege(get_member(),'comcode_dangerous')) && */(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
 	if ($w) $_required.=' wysiwyg';
 	global $LAX_COMCODE;
 	$temp=$LAX_COMCODE;

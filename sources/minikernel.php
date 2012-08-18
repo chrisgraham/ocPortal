@@ -166,7 +166,7 @@ function fatal_exit($text)
 	global $EXITING;
 	if ((!is_null($EXITING)) || (!class_exists('ocp_tempcode')))
 	{
-		if ((get_domain()=='localhost') || ((function_exists('get_member')) && (has_specific_permission(get_member(),'see_stack_dump'))))
+		if ((get_domain()=='localhost') || ((function_exists('get_member')) && (has_privilege(get_member(),'see_stack_dump'))))
 		{
 			die_html_trace($text);
 		} else
@@ -359,7 +359,7 @@ function warn_exit($text)
 	global $EXITING;
 	if ((!is_null($EXITING)) || (!class_exists('ocp_tempcode')))
 	{
-		if ((get_domain()=='localhost') || ((function_exists('get_member')) && (has_specific_permission(get_member(),'see_stack_dump'))))
+		if ((get_domain()=='localhost') || ((function_exists('get_member')) && (has_privilege(get_member(),'see_stack_dump'))))
 		{
 			die_html_trace($text);
 		} else

@@ -49,7 +49,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		$id=substr($id,4);
 	}
 
-	if ((isset($_GET['keep_theme_seed'])) && (get_param('keep_theme_seed',NULL)!==NULL) && (function_exists('has_specific_permission')) && (has_specific_permission(get_member(),'view_profiling_modes')))
+	if ((isset($_GET['keep_theme_seed'])) && (get_param('keep_theme_seed',NULL)!==NULL) && (function_exists('has_privilege')) && (has_privilege(get_member(),'view_profiling_modes')))
 	{
 		require_code('themewizard');
 		$test=find_theme_image_themewizard_preview($id);

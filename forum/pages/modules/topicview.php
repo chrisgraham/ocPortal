@@ -405,7 +405,7 @@ class Module_topicview
 					unset($topic_info['may_use_quick_reply']);
 				}
 			}
-			elseif (((is_null($topic_info['forum_id'])) || (has_specific_permission(get_member(),'submit_lowrange_content','topics',array('forums',$topic_info['forum_id'])))) && ($topic_info['last_poster']==get_member()) && (!is_guest()) && (ocf_may_edit_post_by(get_member(),$topic_info['forum_id'])))
+			elseif (((is_null($topic_info['forum_id'])) || (has_privilege(get_member(),'submit_lowrange_content','topics',array('forums',$topic_info['forum_id'])))) && ($topic_info['last_poster']==get_member()) && (!is_guest()) && (ocf_may_edit_post_by(get_member(),$topic_info['forum_id'])))
 			{
 				$map=array('page'=>'topics','type'=>'edit_post','id'=>$topic_info['last_post_id']);
 				$test=get_param_integer('kfs'.strval($topic_info['forum_id']),-1);
@@ -453,7 +453,7 @@ class Module_topicview
 					$button=do_lang_tempcode('POLL_REQUIRES_REPLY');
 				} else
 				{
-					if ((!has_specific_permission(get_member(),'vote_in_polls')) || (is_guest()))
+					if ((!has_privilege(get_member(),'vote_in_polls')) || (is_guest()))
 					{
 						$button=do_lang_tempcode('VOTE_DENIED');
 					} else
@@ -513,7 +513,7 @@ class Module_topicview
 			$breadcrumbs=new ocp_tempcode();
 			$breadcrumbs->attach(hyperlink(build_url(array('page'=>'members'),get_module_zone('members')),do_lang_tempcode('MEMBERS'),false,false,do_lang_tempcode('GO_BACKWARDS_TO',do_lang_tempcode('MEMBERS')),NULL,NULL,'up'));
 			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-			if (has_specific_permission(get_member(),'view_other_pt'))
+			if (has_privilege(get_member(),'view_other_pt'))
 			{
 				$of_member=($topic_info['pt_from']==get_member())?$topic_info['pt_from']:$topic_info['pt_to'];
 			} else $of_member=get_member();
@@ -614,7 +614,7 @@ class Module_topicview
 				$moderator_actions.='<option value="delete_poll">'.do_lang('DELETE_TOPIC_POLL').'</option>';
 			if (array_key_exists('may_attach_poll',$topic_info))
 				$moderator_actions.='<option value="add_poll">'.do_lang('ADD_TOPIC_POLL').'</option>';
-			if ((has_specific_permission(get_member(),'view_content_history')) && ($GLOBALS['FORUM_DB']->query_select_value('f_post_history','COUNT(*)',array('h_topic_id'=>$id))!=0))
+			if ((has_privilege(get_member(),'view_content_history')) && ($GLOBALS['FORUM_DB']->query_select_value('f_post_history','COUNT(*)',array('h_topic_id'=>$id))!=0))
 				$moderator_actions.='<option value="topic_history">'.do_lang('POST_HISTORY').'</option>';
 			if ((array_key_exists('may_make_personal',$topic_info)) && (!is_null($topic_info['forum_id'])))
 				$moderator_actions.='<option value="make_personal">'.do_lang('MAKE_PERSONAL').'</option>';
@@ -683,7 +683,7 @@ class Module_topicview
 					$num_members++;
 					$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
 					$map=array('PROFILE_URL'=>$profile_url,'USERNAME'=>$username);
-					if ((has_specific_permission(get_member(),'show_user_browsing')) || ((in_array($at_details['the_page'],array('topics','topicview'))) && ($at_details['the_id']==strval($id))))
+					if ((has_privilege(get_member(),'show_user_browsing')) || ((in_array($at_details['the_page'],array('topics','topicview'))) && ($at_details['the_id']==strval($id))))
 					{
 						$map['AT']=escape_html($at_details['the_title']);
 					}
@@ -739,7 +739,7 @@ class Module_topicview
 			'HASH'=>$hash,
 			'ID'=>strval($id),
 			'_TITLE'=>$topic_info['title'],
-			'MAY_DOUBLE_POST'=>has_specific_permission(get_member(),'double_post'),
+			'MAY_DOUBLE_POST'=>has_privilege(get_member(),'double_post'),
 			'LAST_POSTER'=>array_key_exists('last_poster',$topic_info)?(is_null($topic_info['last_poster'])?'':strval($topic_info['last_poster'])):'',
 			'WARNING_DETAILS'=>$warning_details,
 			'MAX'=>strval($max),

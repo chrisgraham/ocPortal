@@ -20,7 +20,7 @@ class Hook_symbol_CPF_LIST
 
 			if (($param[0]=='m_primary_group') || ($param[0]==do_lang('GROUP')))
 			{
-				$map=has_specific_permission(get_member(),'see_hidden_groups')?array():array('g_hidden'=>0);
+				$map=has_privilege(get_member(),'see_hidden_groups')?array():array('g_hidden'=>0);
 				$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 				$_m=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),($group_count>200)?(array('g_is_private_club'=>0)+$map):$map,'ORDER BY g_order');
 				foreach ($_m as $i=>$m)

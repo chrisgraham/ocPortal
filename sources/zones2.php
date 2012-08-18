@@ -110,16 +110,16 @@ END;
 }
 
 /**
- * Get a list of overridable SP's for a module.
+ * Get a list of overridable privileges for a module.
  *
  * @param  ID_TEXT		The zone it is in
  * @param  ID_TEXT		The page name
- * @return array			A pair: List of overridable SP's, SP-page
+ * @return array			A pair: List of overridable privileges, privilege-page
  */
 function get_module_overridables($zone,$page)
 {
 	$overridables=array();
-	$sp_page=$page;
+	$privilege_page=$page;
 
 	$_pagelinks=extract_module_functions_page($zone,$page,array('get_page_links'),array(NULL,false,NULL,true));
 	if (!is_null($_pagelinks[0])) // If it's a CMS-supporting module (e.g. downloads)
@@ -127,23 +127,23 @@ function get_module_overridables($zone,$page)
 		$pagelinks=is_array($_pagelinks[0])?call_user_func_array($_pagelinks[0][0],$_pagelinks[0][1]):eval($_pagelinks[0]);
 		if ((!is_null($pagelinks[0])) && (!is_null($pagelinks[1]))) // If it's not disabled
 		{
-			$_overridables=extract_module_functions_page(get_module_zone($pagelinks[1]),$pagelinks[1],array('get_sp_overrides'));
-			if (!is_null($_overridables[0])) // If it's a CMS-supporting module with SP overrides
+			$_overridables=extract_module_functions_page(get_module_zone($pagelinks[1]),$pagelinks[1],array('get_privilege_overrides'));
+			if (!is_null($_overridables[0])) // If it's a CMS-supporting module with privilege overrides
 			{
 				$overridables=is_array($_overridables[0])?call_user_func_array($_overridables[0][0],$_overridables[0][1]):eval($_overridables[0]);
 			}
-			$sp_page=$pagelinks[1];
+			$privilege_page=$pagelinks[1];
 		}
 	} else
 	{
-		$_overridables=extract_module_functions_page($zone,$page,array('get_sp_overrides'));
-		if (!is_null($_overridables[0])) // If it's a CMS-supporting module with SP overrides
+		$_overridables=extract_module_functions_page($zone,$page,array('get_privilege_overrides'));
+		if (!is_null($_overridables[0])) // If it's a CMS-supporting module with privilege overrides
 		{
 			$overridables=is_array($_overridables[0])?call_user_func_array($_overridables[0][0],$_overridables[0][1]):eval($_overridables[0]);
 		}
 	}
 
-	return array($overridables,$sp_page);
+	return array($overridables,$privilege_page);
 }
 
 /**
@@ -295,7 +295,7 @@ function uninstall_module($zone,$module)
 	require_code('files2');
 	$GLOBALS['SITE_DB']->query_delete('modules',array('module_the_name'=>$module),'',1);
 	$GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name'=>$module)); // As some modules will try and install this themselves. Entry point permissions they won't.
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('the_page'=>$module)); // Ditto
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('the_page'=>$module)); // Ditto
 
 	if (file_exists($module_path))
 	{

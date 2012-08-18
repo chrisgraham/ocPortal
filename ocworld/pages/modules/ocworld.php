@@ -63,7 +63,7 @@ class Module_ocworld
 			$GLOBALS['SITE_DB']->query_delete('prices',array('name'=>$name),'',1);
 		}
 
-		delete_specific_permission('administer_ocworld');
+		delete_privilege('administer_ocworld');
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Module_ocworld
 	{
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
-			add_specific_permission('OCWORLD','administer_ocworld');
+			add_privilege('OCWORLD','administer_ocworld');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
@@ -442,7 +442,7 @@ class Module_ocworld
 		}
 		if ($command=='reallocate')
 		{
-			if (!has_specific_permission(get_member(),'administer_ocworld')) ocw_refresh_with_message(do_lang_tempcode('W_ONLY_STAFF_REALLOC'),'warn');
+			if (!has_privilege(get_member(),'administer_ocworld')) ocw_refresh_with_message(do_lang_tempcode('W_ONLY_STAFF_REALLOC'),'warn');
 
 			$out=new ocp_tempcode();
 
@@ -513,7 +513,7 @@ class Module_ocworld
 		if ($command=='emergency') basic_enter_room($member_id,0,0,0);
 		if ($command=='delete-message-by-person')
 		{
-			if ((!has_specific_permission($member_id,'administer_ocworld')) && ($member_id!=$dest_member_id)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
+			if ((!has_privilege($member_id,'administer_ocworld')) && ($member_id!=$dest_member_id)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 			delete_message($member_id,$dest_member_id,addslashes($param));
 		}
 
@@ -645,7 +645,7 @@ class Module_ocworld
 		}
 
 		// Admin commands
-		if (has_specific_permission($member_id,'administer_ocworld'))
+		if (has_privilege($member_id,'administer_ocworld'))
 		{
 			if ($command=='mergeitems') merge_items($item,either_param('item2'));
 			if ($command=='teleport-person')

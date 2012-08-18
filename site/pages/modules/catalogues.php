@@ -70,7 +70,7 @@ class Module_catalogues
 
 		delete_config_option('catalogues_subcat_narrowin');
 
-		delete_specific_permission('high_catalogue_entry_timeout');
+		delete_privilege('high_catalogue_entry_timeout');
 
 		delete_menu_item_simple('_SEARCH:catalogues:type=misc');
 		$cf=$GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','id',array('i_menu'=>'collab_features','i_url'=>''));
@@ -429,7 +429,7 @@ class Module_catalogues
 
 			add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_PRODUCTS_TITLE','_SEARCH:catalogues:type=category:catalogue_name=products');
 
-			add_specific_permission('CATALOGUES','high_catalogue_entry_timeout',false);
+			add_privilege('CATALOGUES','high_catalogue_entry_timeout',false);
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
@@ -921,7 +921,7 @@ class Module_catalogues
 		{
 			$breadcrumbs=catalogue_category_breadcrumbs($id,$root);
 			if (!$breadcrumbs->is_empty()) $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-			if (has_specific_permission(get_member(),'open_virtual_roots'))
+			if (has_privilege(get_member(),'open_virtual_roots'))
 			{
 				$url=get_self_url(false,false,(is_null(get_param('root',NULL)))?array('root'=>$id):array('root'=>($id==-1)?NULL:$id));
 				$breadcrumbs->attach(hyperlink($url,escape_html($_title),false,false,do_lang_tempcode('VIRTUAL_ROOT')));

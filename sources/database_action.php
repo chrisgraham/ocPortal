@@ -218,7 +218,7 @@ function config_option_exists($name)
  */
 function permission_exists($name)
 {
-	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('sp_list','the_name',array('the_name'=>$name));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('privilege_list','the_name',array('the_name'=>$name));
 	return !is_null($test);
 }
 
@@ -304,7 +304,7 @@ function rename_config_option($old,$new)
  * @param  boolean		Whether this permission is granted to all usergroups by default
  * @param  boolean		Whether this permission is not granted to supermoderators by default (something very sensitive)
  */
-function add_specific_permission($section,$name,$default=false,$not_even_mods=false)
+function add_privilege($section,$name,$default=false,$not_even_mods=false)
 {
 	if (!$not_even_mods) // NB: Don't actually need to explicitly give admins privileges
 	{
@@ -314,12 +314,12 @@ function add_specific_permission($section,$name,$default=false,$not_even_mods=fa
 		{
 			if (($default) || (in_array($id,$admin_groups)))
 			{
-				$GLOBALS['SITE_DB']->query_insert('gsp',array('specific_permission'=>$name,'group_id'=>$id,'the_page'=>'','module_the_name'=>'','category_name'=>'','the_value'=>1));
+				$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>$name,'group_id'=>$id,'the_page'=>'','module_the_name'=>'','category_name'=>'','the_value'=>1));
 			}
 		}
 	}
 
-	$GLOBALS['SITE_DB']->query_insert('sp_list',array('p_section'=>$section,'the_name'=>$name,'the_default'=>($default?1:0)));
+	$GLOBALS['SITE_DB']->query_insert('privilege_list',array('p_section'=>$section,'the_name'=>$name,'the_default'=>($default?1:0)));
 }
 
 /**
@@ -332,14 +332,14 @@ function add_specific_permission($section,$name,$default=false,$not_even_mods=fa
  * @param  ?ID_TEXT		The category-type for the permission (NULL: none required)
  * @param  ?ID_TEXT		The category-name/value for the permission (NULL: none required)
  */
-function set_specific_permission($group_id,$permission,$value,$page=NULL,$category_type=NULL,$category_name=NULL)
+function set_privilege($group_id,$permission,$value,$page=NULL,$category_type=NULL,$category_name=NULL)
 {
 	if (is_null($page)) $page='';
 	if (is_null($category_type)) $category_type='';
 	if (is_null($category_name)) $category_name='';
 
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('specific_permission'=>$permission,'group_id'=>$group_id,'the_page'=>$page,'module_the_name'=>$category_type,'category_name'=>$category_name),'',1);
-	$GLOBALS['SITE_DB']->query_insert('gsp',array('specific_permission'=>$permission,'group_id'=>$group_id,'the_page'=>$page,'module_the_name'=>$category_type,'category_name'=>$category_name,'the_value'=>$value?1:0));
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$permission,'group_id'=>$group_id,'the_page'=>$page,'module_the_name'=>$category_type,'category_name'=>$category_name),'',1);
+	$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>$permission,'group_id'=>$group_id,'the_page'=>$page,'module_the_name'=>$category_type,'category_name'=>$category_name,'the_value'=>$value?1:0));
 }
 
 /**
@@ -347,10 +347,10 @@ function set_specific_permission($group_id,$permission,$value,$page=NULL,$catego
  *
  * @param  ID_TEXT		The codename of the permission
  */
-function delete_specific_permission($name)
+function delete_privilege($name)
 {
-	$GLOBALS['SITE_DB']->query_delete('sp_list',array('the_name'=>$name),'',1);
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'gsp WHERE '.db_string_not_equal_to('module_the_name','forums').' AND '.db_string_equal_to('specific_permission',$name));
+	$GLOBALS['SITE_DB']->query_delete('privilege_list',array('the_name'=>$name),'',1);
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'group_privileges WHERE '.db_string_not_equal_to('module_the_name','forums').' AND '.db_string_equal_to('privilege',$name));
 }
 
 /**

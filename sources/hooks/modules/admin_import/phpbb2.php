@@ -165,7 +165,7 @@ class Hook_phpbb2
 			if (in_array($id,$super_admin_groups)) continue;
 
 			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_avatar_width'=>$INFO['avatar_max_width'],'g_max_avatar_height'=>$INFO['avatar_max_height'],'g_max_sig_length_comcode'=>$INFO['max_sig_chars']),array('id'=>$id),'',1);
-			set_specific_permission($id,'comcode_dangerous',$INFO['allow_html']);
+			set_privilege($id,'comcode_dangerous',$INFO['allow_html']);
 		}
 	}
 
@@ -205,7 +205,7 @@ class Hook_phpbb2
 			}
 
 			// privileges
-			set_specific_permission($id_new,'comcode_dangerous',$INFO['allow_html']);
+			set_privilege($id_new,'comcode_dangerous',$INFO['allow_html']);
 
 			import_id_remap_put('group',strval($row['group_id']),$id_new);
 		}

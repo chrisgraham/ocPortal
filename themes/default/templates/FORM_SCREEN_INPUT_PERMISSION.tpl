@@ -1,4 +1,4 @@
-<tr id="access_{GROUP_ID*}_sp_container" class="{$CYCLE,permissions_zebra,zebra_0,zebra_1}">
+<tr id="access_{GROUP_ID*}_privilege_container" class="{$CYCLE,permissions_zebra,zebra_0,zebra_1}">
 	<th class="de_th">
 		<p class="form_field_name field_name">{GROUP_NAME*}</p>
 		{+START,IF,{$OR,{FORCE_PRESETS},{$IS_NON_EMPTY,{OVERRIDES}}}}

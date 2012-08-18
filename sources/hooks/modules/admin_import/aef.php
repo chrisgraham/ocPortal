@@ -203,7 +203,7 @@ class Hook_aef
 			}
 
 			// privileges
-			set_specific_permission($id_new,'comcode_dangerous',true);
+			set_privilege($id_new,'comcode_dangerous',true);
 
 			$check_id_exists=$GLOBALS['FORUM_DB']->query_select_value_if_there('import_id_remap WHERE id_old='.strval($row['member_group']).' AND id_type=\'group\' AND id_session='.strval(get_session_id()), 'id_old');
 

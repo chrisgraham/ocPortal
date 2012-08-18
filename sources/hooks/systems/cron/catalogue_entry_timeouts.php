@@ -41,7 +41,7 @@ class Hook_cron_catalogue_entry_timeouts
 				$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id','ce_submitter','ce_last_moved'),array('cc_id'=>$row['id']),'',1000,$start);
 				foreach ($entries as $entry)
 				{
-					$higher=has_specific_permission($entry['ce_submitter'],'high_catalogue_entry_timeout');
+					$higher=has_privilege($entry['ce_submitter'],'high_catalogue_entry_timeout');
 					$time_diff=time()-$entry['ce_last_moved'];
 					$move_days=$higher?$row['cc_move_days_higher']:$row['cc_move_days_lower'];
 					if ($time_diff/(60*60*24)>$move_days)

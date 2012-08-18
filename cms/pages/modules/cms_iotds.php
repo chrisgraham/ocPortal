@@ -80,9 +80,9 @@ class Module_cms_iotds extends standard_crud_module
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
-	 * @return array	A map of privileges that are overridable; sp to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
-	function get_sp_overrides()
+	function get_privilege_overrides()
 	{
 		require_lang('iotds');
 		return array('submit_midrange_content'=>array(0,'ADD_IOTD'),'bypass_validation_midrange_content'=>array(0,'BYPASS_VALIDATION_IOTD'),'edit_own_midrange_content'=>array(0,'EDIT_OWN_IOTD'),'edit_midrange_content'=>array(0,'EDIT_IOTD'),'delete_own_midrange_content'=>array(0,'DELETE_OWN_IOTD'),'delete_midrange_content'=>array(0,'DELETE_IOTD'),'edit_own_highrange_content'=>array(0,'EDIT_OWN_LIVE_IOTD'),'edit_highrange_content'=>array(0,'EDIT_LIVE_IOTD'),'delete_own_highrange_content'=>array(0,'DELETE_OWN_LIVE_IOTD'),'delete_highrange_content'=>array(0,'DELETE_LIVE_IOTD'));
@@ -99,8 +99,8 @@ class Module_cms_iotds extends standard_crud_module
 		return do_next_manager(get_screen_title('MANAGE_IOTDS'),comcode_lang_string('DOC_IOTDS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
-						has_specific_permission(get_member(),'submit_midrange_content','cms_iotds')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_IOTD')):NULL,
-						has_specific_permission(get_member(),'edit_own_midrange_content','cms_iotds')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_IOTD')):NULL,
+						has_privilege(get_member(),'submit_midrange_content','cms_iotds')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_IOTD')):NULL,
+						has_privilege(get_member(),'edit_own_midrange_content','cms_iotds')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_IOTD')):NULL,
 					),
 					do_lang('MANAGE_IOTDS')
 		);
@@ -157,7 +157,7 @@ class Module_cms_iotds extends standard_crud_module
 			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required));
 		}
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('CAPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'caption',$caption,false));
-		if (has_specific_permission(get_member(),'choose_iotd'))
+		if (has_privilege(get_member(),'choose_iotd'))
 		{
 			if ($caption=='')
 			{
@@ -187,7 +187,7 @@ class Module_cms_iotds extends standard_crud_module
 
 		$title=get_screen_title('EDIT_OR_CHOOSE_IOTD');
 
-		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_iotds')?NULL:get_member();
+		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_iotds')?NULL:get_member();
 
 		$current_iotd=$this->nice_get_iotds_link(1,1);
 		$unused_iotd=$this->nice_get_iotds_link(0,0,$only_owned);
@@ -320,7 +320,7 @@ class Module_cms_iotds extends standard_crud_module
 		$current=post_param_integer('validated',0);
 		if ($current==1)
 		{
-			if (!has_specific_permission(get_member(),'choose_iotd'))
+			if (!has_privilege(get_member(),'choose_iotd'))
 				log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
 
 			set_iotd($id);
@@ -382,7 +382,7 @@ class Module_cms_iotds extends standard_crud_module
 		{
 			if ($is_current==0)
 			{
-				if (!has_specific_permission(get_member(),'choose_iotd'))
+				if (!has_privilege(get_member(),'choose_iotd'))
 					log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
 
 				set_iotd($id);
@@ -397,7 +397,7 @@ class Module_cms_iotds extends standard_crud_module
 	 */
 	function set_iotd()
 	{
-		check_specific_permission('choose_iotd');
+		check_privilege('choose_iotd');
 
 		$title=get_screen_title('CHOOSE_IOTD');
 

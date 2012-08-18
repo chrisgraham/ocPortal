@@ -55,8 +55,8 @@ class Module_tickets
 		delete_config_option('ticket_member_forums');
 		delete_config_option('ticket_type_forums');
 
-		delete_specific_permission('view_others_tickets');
-		delete_specific_permission('support_operator');
+		delete_privilege('view_others_tickets');
+		delete_privilege('support_operator');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets'));
 
@@ -84,7 +84,7 @@ class Module_tickets
 		}
 
 		if (($upgrade_from<3) || (is_null($upgrade_from)))
-			add_specific_permission('SUPPORT_TICKETS','support_operator',false);
+			add_privilege('SUPPORT_TICKETS','support_operator',false);
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<4))
 		{
@@ -138,7 +138,7 @@ class Module_tickets
 			add_config_option('PAGE_TEXT','ticket_text','transtext','return do_lang(\'NEW_TICKET_WELCOME\');','FEATURE','SUPPORT_TICKETS');
 			add_config_option('TICKET_FORUM_NAME','ticket_forum_name','forum','require_lang(\'tickets\'); return do_lang(\'TICKET_FORUM_NAME\',\'\',\'\',\'\',get_site_default_lang());','FEATURE','SUPPORT_TICKETS');
 
-			add_specific_permission('SUPPORT_TICKETS','view_others_tickets',false);
+			add_privilege('SUPPORT_TICKETS','view_others_tickets',false);
 
 			add_menu_item_simple('main_website',NULL,'SUPPORT_TICKETS','_SEARCH:tickets:type=misc');
 		}
@@ -291,7 +291,7 @@ class Module_tickets
 		// Check we are allowed
 		$_temp=explode('_',$id);
 		if (array_key_exists(2,$_temp)) log_hack_attack_and_exit('TICKET_SYSTEM_WEIRD');
-		if ((!has_specific_permission(get_member(),'view_others_tickets')) && (intval($_temp[0])!=get_member()))
+		if ((!has_privilege(get_member(),'view_others_tickets')) && (intval($_temp[0])!=get_member()))
 		{
 			if (is_guest()) access_denied('NOT_AS_GUEST');
 			if (is_guest(intval($_temp[0])))
@@ -329,14 +329,14 @@ class Module_tickets
 			// List (our?) tickets
 			if (!is_null($tickets))
 			{
-				if (has_specific_permission(get_member(),'support_operator'))
+				if (has_privilege(get_member(),'support_operator'))
 					$message=do_lang_tempcode('TICKETS_STAFF');
 				else
 					$message=do_lang_tempcode('TICKETS_USER');
 
 				foreach ($tickets as $topic)
 				{
-					if (($topic['closed']) && (has_specific_permission(get_member(),'support_operator')) && (count($tickets)>3)) continue; // Staff don't see closed tickets
+					if (($topic['closed']) && (has_privilege(get_member(),'support_operator')) && (count($tickets)>3)) continue; // Staff don't see closed tickets
 
 					$ticket_id=extract_topic_identifier($topic['description']);
 
@@ -469,7 +469,7 @@ class Module_tickets
 				if (is_object($test_tpl)) return $test_tpl;
 
 				if (is_null($_comments)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-				if (has_specific_permission(get_member(),'support_operator'))
+				if (has_privilege(get_member(),'support_operator'))
 					$staff_details=make_string_tempcode($GLOBALS['FORUM_DRIVER']->topic_url($topic_id,escape_html(get_option('ticket_forum_name'))));
 				else $staff_details=new ocp_tempcode();
 

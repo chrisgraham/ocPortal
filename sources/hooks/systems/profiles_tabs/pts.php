@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_pts
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return (($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'view_other_pt')));
+		return (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'view_other_pt')));
 	}
 
 	/**

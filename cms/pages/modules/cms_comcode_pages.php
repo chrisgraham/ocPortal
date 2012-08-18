@@ -55,9 +55,9 @@ class Module_cms_comcode_pages
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
-	 * @return array	A map of privileges that are overridable; sp to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
-	function get_sp_overrides()
+	function get_privilege_overrides()
 	{
 		return array('submit_highrange_content'=>array(0,'COMCODE_PAGE_ADD'),'edit_highrange_content'=>array(0,'COMCODE_PAGE_EDIT'),'edit_own_highrange_content'=>array(0,'COMCODE_PAGE_OWN_EDIT'));
 	}
@@ -285,8 +285,8 @@ class Module_cms_comcode_pages
 
 		require_code('form_templates');
 
-		$add_new_permission=has_specific_permission(get_member(),'submit_highrange_content');
-		if ((!$add_new_permission) && (!has_specific_permission(get_member(),'edit_highrange_content')) && (!has_specific_permission(get_member(),'edit_own_highrange_content')))
+		$add_new_permission=has_privilege(get_member(),'submit_highrange_content');
+		if ((!$add_new_permission) && (!has_privilege(get_member(),'edit_highrange_content')) && (!has_privilege(get_member(),'edit_own_highrange_content')))
 			check_edit_permission('high',NULL);
 
 		$fields=new ocp_tempcode();
@@ -390,7 +390,7 @@ class Module_cms_comcode_pages
 				$group_by='GROUP BY c.the_zone,c.the_page';
 
 			$where_map='('.db_string_equal_to('language',$lang).' OR language IS NULL)';
-			if (!has_specific_permission(get_member(),'edit_highrange_content'))
+			if (!has_privilege(get_member(),'edit_highrange_content'))
 				$where_map.=' AND submitter='.strval(get_member());
 			$ttable=get_table_prefix().'comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone LEFT JOIN '.get_table_prefix().'translate t ON t.id=a.cc_page_title';
 			$page_rows=$GLOBALS['SITE_DB']->query('SELECT c.*,cc_page_title FROM '.$ttable.' WHERE '.$where_map.$group_by.' ORDER BY '.$orderer,$max,$start);
@@ -669,7 +669,7 @@ class Module_cms_comcode_pages
 
 				// Find who did the revision
 				$editor=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'COMCODE_PAGE_EDIT','param_a'=>$file));
-				if ((has_specific_permission(get_member(),'view_revision_history')) || ($editor==get_member()))
+				if ((has_privilege(get_member(),'view_revision_history')) || ($editor==get_member()))
 				{
 					if (is_null($editor))
 					{
@@ -780,7 +780,7 @@ class Module_cms_comcode_pages
 		if (!$simple_add) // We don't want to imply the 'validated' has an effect on the menu addition for the add new page wizard, so we don't show validation for that wizard at all
 		{
 			if (!$validated) $validated=(get_param_integer('validated',0)==1);
-			if (has_specific_permission(get_member(),'bypass_validation_highrange_content'))
+			if (has_privilege(get_member(),'bypass_validation_highrange_content'))
 				if (addon_installed('unvalidated'))
 					$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated));
 
@@ -908,7 +908,7 @@ class Module_cms_comcode_pages
 
 		$validated=post_param_integer('validated',0);
 		inject_action_spamcheck();
-		if (!has_specific_permission(get_member(),'bypass_validation_highrange_content')) $validated=0;
+		if (!has_privilege(get_member(),'bypass_validation_highrange_content')) $validated=0;
 		$parent_page=post_param('parent_page','');
 		$show_as_edit=post_param_integer('show_as_edit',0);
 

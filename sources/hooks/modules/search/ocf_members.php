@@ -42,7 +42,7 @@ class Hook_search_ocf_members
 		$info['days_label']=do_lang_tempcode('JOINED_AGO');
 
 		$extra_sort_fields=array();
-		if (has_specific_permission(get_member(),'view_profiles'))
+		if (has_privilege(get_member(),'view_profiles'))
 		{
 			require_code('ocf_members');
 			$rows=ocf_get_all_custom_fields_match(NULL,1,1);
@@ -68,7 +68,7 @@ class Hook_search_ocf_members
 		$indexes=collapse_2d_complexity('i_fields','i_name',$GLOBALS['FORUM_DB']->query_select('db_meta_indices',array('i_fields','i_name'),array('i_table'=>'f_member_custom_fields')));
 
 		$fields=array();
-		if (has_specific_permission(get_member(),'view_profiles'))
+		if (has_privilege(get_member(),'view_profiles'))
 		{
 			$rows=ocf_get_all_custom_fields_match(NULL,1,1);
 			require_code('fields');
@@ -91,7 +91,7 @@ class Hook_search_ocf_members
 			$fields[]=array('NAME'=>'_age_range','DISPLAY'=>do_lang_tempcode('AGE_RANGE'),'TYPE'=>'_TEXT','SPECIAL'=>$age_range);
 		}
 
-		$map=has_specific_permission(get_member(),'see_hidden_groups')?array():array('g_hidden'=>0);
+		$map=has_privilege(get_member(),'see_hidden_groups')?array():array('g_hidden'=>0);
 		$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
 		if ($group_count>300) $map['g_is_private_club']=0;
 		if ($map==array()) $map=NULL;
@@ -119,7 +119,7 @@ class Hook_search_ocf_members
 			$groups->attach(form_input_list_entry(strval($default_group),true,do_lang_tempcode('USERGROUP_SEARCH_COMBO',escape_html($combination))));
 		}
 		$fields[]=array('NAME'=>'_user_group','DISPLAY'=>do_lang_tempcode('GROUP'),'TYPE'=>'_LIST','SPECIAL'=>$groups);
-		if (has_specific_permission(get_member(),'see_hidden_groups'))
+		if (has_privilege(get_member(),'see_hidden_groups'))
 //      $fields[]=array('NAME'=>'_photo_thumb_url','DISPLAY'=>do_lang('PHOTO'),'TYPE'=>'','SPECIAL'=>'','CHECKED'=>false);
 		{
 			//$fields[]=array('NAME'=>'_emails_only','DISPLAY'=>do_lang_tempcode('EMAILS_ONLY'),'TYPE'=>'_TICK','SPECIAL'=>'');	CSV export better now
@@ -262,7 +262,7 @@ class Hook_search_ocf_members
 			$where_clause.='('.$group_where_clause.')';
 		}
 
-		if (!has_specific_permission(get_member(),'see_unvalidated'))
+		if (!has_privilege(get_member(),'see_unvalidated'))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='m_validated=1';
@@ -347,7 +347,7 @@ class Hook_search_ocf_members
 		{
 			return array();
 		}
-		//if (has_specific_permission(get_member(),'view_profiles'))
+		//if (has_privilege(get_member(),'view_profiles'))
 		{
 			if ((get_option('show_gallery_counts')=='1') && (addon_installed('galleries')))
 			{
@@ -375,8 +375,8 @@ class Hook_search_ocf_members
 			}
 			$fields=ocf_get_all_custom_fields_match_member(
 				$member_id,
-				((get_member()!=$member_id) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // public view
-				((get_member()==$member_id) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL, // owner view
+				((get_member()!=$member_id) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // public view
+				((get_member()==$member_id) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // owner view
 				NULL, // owner set
 				0, // encrypted
 				NULL, // required

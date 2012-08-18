@@ -77,7 +77,7 @@ function site_tree_script()
 				$zone=$matches[1];
 				$page=$matches[2];
 
-				list($overridables,$sp_page)=get_module_overridables($zone,$page);
+				list($overridables,$privilege_page)=get_module_overridables($zone,$page);
 			}
 
 			if ($type=='root')
@@ -87,16 +87,16 @@ function site_tree_script()
 				{
 					if (!in_array($group,$admin_groups))
 					{
-						// SP's
-						foreach (array_keys($root_perms) as $overide) // For all SP's supported here (some will be passed that aren't - so we can't work back from GET params)
+						// Privileges
+						foreach (array_keys($root_perms) as $overide) // For all privileges supported here (some will be passed that aren't - so we can't work back from GET params)
 						{
-							$val=post_param_integer(strval($i).'gsp_'.$overide.'_'.strval($group),-2);
+							$val=post_param_integer(strval($i).'group_privileges_'.$overide.'_'.strval($group),-2);
 							if ($val!=-2)
 							{
-								$GLOBALS['SITE_DB']->query_delete('gsp',array('specific_permission'=>$overide,'group_id'=>$group,'the_page'=>'','module_the_name'=>'','category_name'=>''));
+								$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$overide,'group_id'=>$group,'the_page'=>'','module_the_name'=>'','category_name'=>''));
 								if ($val!=-1)
 								{
-									$GLOBALS['SITE_DB']->query_insert('gsp',array('specific_permission'=>$overide,'group_id'=>$group,'module_the_name'=>'','category_name'=>'','the_page'=>'','the_value'=>$val));
+									$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>$overide,'group_id'=>$group,'module_the_name'=>'','category_name'=>'','the_page'=>'','the_value'=>$val));
 								}
 							}
 						}
@@ -139,16 +139,16 @@ function site_tree_script()
 								$GLOBALS['SITE_DB']->query_insert('group_page_access',array('zone_name'=>$zone,'page_name'=>$page,'group_id'=>$group));
 						}
 
-						// SP's
-						foreach (array_keys($overridables) as $overide) // For all SP's supported here (some will be passed that aren't - so we can't work back from GET params)
+						// Privileges
+						foreach (array_keys($overridables) as $overide) // For all privileges supported here (some will be passed that aren't - so we can't work back from GET params)
 						{
-							$val=post_param_integer(strval($i).'gsp_'.$overide.'_'.strval($group),-2);
+							$val=post_param_integer(strval($i).'group_privileges_'.$overide.'_'.strval($group),-2);
 							if ($val!=-2)
 							{
-								$GLOBALS['SITE_DB']->query_delete('gsp',array('specific_permission'=>$overide,'group_id'=>$group,'the_page'=>$sp_page));
+								$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$overide,'group_id'=>$group,'the_page'=>$privilege_page));
 								if ($val!=-1)
 								{
-									$GLOBALS['SITE_DB']->query_insert('gsp',array('specific_permission'=>$overide,'group_id'=>$group,'module_the_name'=>'','category_name'=>'','the_page'=>$sp_page,'the_value'=>$val));
+									$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>$overide,'group_id'=>$group,'module_the_name'=>'','category_name'=>'','the_page'=>$privilege_page,'the_value'=>$val));
 								}
 							}
 						}
@@ -174,20 +174,20 @@ function site_tree_script()
 								$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>$module,'category_name'=>$category,'group_id'=>$group));
 						}
 
-						// SP's
-						foreach ($overridables as $overide=>$cat_support) // For all SP's supported here (some will be passed that aren't - so we can't work back from GET params)
+						// Privileges
+						foreach ($overridables as $overide=>$cat_support) // For all privileges supported here (some will be passed that aren't - so we can't work back from GET params)
 						{
 							if (is_array($cat_support)) $cat_support=$cat_support[0];
 							if ($cat_support==0) continue;
 
-							$val=post_param_integer(strval($i).'gsp_'.$overide.'_'.strval($group),-2);
+							$val=post_param_integer(strval($i).'group_privileges_'.$overide.'_'.strval($group),-2);
 							if ($val!=-2)
 							{
-								$GLOBALS['SITE_DB']->query_delete('gsp',array('specific_permission'=>$overide,'group_id'=>$group,'module_the_name'=>$module,'category_name'=>$category,'the_page'=>''));
+								$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$overide,'group_id'=>$group,'module_the_name'=>$module,'category_name'=>$category,'the_page'=>''));
 								if ($val!=-1)
 								{
-									$new_settings=array('specific_permission'=>$overide,'group_id'=>$group,'module_the_name'=>$module,'category_name'=>$category,'the_page'=>'','the_value'=>$val);
-									$GLOBALS['SITE_DB']->query_insert('gsp',$new_settings);
+									$new_settings=array('privilege'=>$overide,'group_id'=>$group,'module_the_name'=>$module,'category_name'=>$category,'the_page'=>'','the_value'=>$val);
+									$GLOBALS['SITE_DB']->query_insert('group_privileges',$new_settings);
 								}
 							}
 						}
@@ -219,12 +219,12 @@ function site_tree_script()
 	require_lang('permissions');
 	require_lang('zones');
 	$page_link=get_param('id',NULL,true);
-	$_sp_access=$GLOBALS['SITE_DB']->query_select('gsp',array('*'));
-	$sp_access=array();
-	foreach ($_sp_access as $a)
+	$_privilege_access=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'));
+	$privilege_access=array();
+	foreach ($_privilege_access as $a)
 	{
-		if (!isset($sp_access[$a['group_id']])) $sp_access[$a['group_id']]=array();
-		$sp_access[$a['group_id']][]=$a;
+		if (!isset($privilege_access[$a['group_id']])) $privilege_access[$a['group_id']]=array();
+		$privilege_access[$a['group_id']][]=$a;
 	}
 
 	if ((!is_null($page_link)) && ($page_link!='') && ((strpos($page_link,':')===false) || (strpos($page_link,':')===strlen($page_link)-1))) // Expanding a zone
@@ -307,37 +307,37 @@ function site_tree_script()
 					$overridables=array();
 				} else
 				{
-					list($overridables,$sp_page)=get_module_overridables($zone,$page);
+					list($overridables,$privilege_page)=get_module_overridables($zone,$page);
 				}
-				$sp_perms='';
+				$privilege_perms='';
 				foreach ($overridables as $overridable=>$cat_support)
 				{
-					$lang_string=do_lang('PT_'.$overridable);
+					$lang_string=do_lang('PRIVILEGE_'.$overridable);
 					if (is_array($cat_support)) $lang_string=do_lang($cat_support[1]);
 					if ((strlen($lang_string)>20) && (strpos($lang_string,'(')!==false))
 						$lang_string=preg_replace('# \([^\)]*\)#','',$lang_string);
-					$sp_perms.='sp_'.$overridable.'="'.xmlentities($lang_string).'" ';
+					$privilege_perms.='privilege_'.$overridable.'="'.xmlentities($lang_string).'" ';
 					foreach ($groups as $group=>$group_name)
 					{
 						if (!in_array($group,$admin_groups))
 						{
 							$override_value=-1;
-							foreach ($sp_access[$group] as $test)
+							foreach ($privilege_access[$group] as $test)
 							{
-								if (($test['specific_permission']==$overridable) && ($test['the_page']==$sp_page))
+								if (($test['privilege']==$overridable) && ($test['the_page']==$privilege_page))
 									$override_value=$test['the_value'];
 							}
-							if ($override_value!=-1) $sp_perms.='gsp_'.$overridable.'_'.strval($group).'="'.strval($override_value).'" ';
+							if ($override_value!=-1) $privilege_perms.='group_privileges_'.$overridable.'_'.strval($group).'="'.strval($override_value).'" ';
 						}
 					}
 				}
-				if (count($overridables)==0) $sp_perms='no_sps="1" ';
+				if (count($overridables)==0) $privilege_perms='no_privileges="1" ';
 
-				$has_children=($sp_perms!='');
+				$has_children=($privilege_perms!='');
 
-				if (count(array_diff(array_keys($overridables),array('add_highrange_content','add_midrange_content','add_lowrange_content')))!=0) $sp_perms.='inherits_something="1" ';
+				if (count(array_diff(array_keys($overridables),array('add_highrange_content','add_midrange_content','add_lowrange_content')))!=0) $privilege_perms.='inherits_something="1" ';
 				$serverid=$zone.':'.(is_string($page)?$page:strval($page));
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'description="'.xmlentities($description).'" img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="true" '.$view_perms.$sp_perms.' id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($page_title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'description="'.xmlentities($description).'" img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="true" '.$view_perms.$privilege_perms.' id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($page_title).'" has_children="'.($has_children?'true':'false').'" selectable="true">';
 			} else
 			{
 				$extra='';
@@ -388,8 +388,8 @@ function site_tree_script()
 			$pagelinks=is_array($_pagelinks[0])?call_user_func_array($_pagelinks[0][0],$_pagelinks[0][1]):eval($_pagelinks[0]);
 			if ((!is_null($pagelinks[0])) && (!is_null($pagelinks[1]))) // If it's not disabled and does have permissions
 			{
-				$_overridables=extract_module_functions_page(get_module_zone($pagelinks[1]),$pagelinks[1],array('get_sp_overrides'));
-				if (!is_null($_overridables[0])) // If it's a CMS-supporting module with SP overrides
+				$_overridables=extract_module_functions_page(get_module_zone($pagelinks[1]),$pagelinks[1],array('get_privilege_overrides'));
+				if (!is_null($_overridables[0])) // If it's a CMS-supporting module with privilege overrides
 				{
 					$overridables=is_array($_overridables[0])?call_user_func_array($_overridables[0][0],$_overridables[0][1]):eval($_overridables[0]);
 				} else $overridables=array();
@@ -462,7 +462,7 @@ function site_tree_script()
 					$highlight=($module_the_name=='catalogues_catalogue')?'true':'false';
 
 					$view_perms='';
-					$sp_perms='';
+					$privilege_perms='';
 					if (!is_null($module_the_name))
 					{
 						foreach ($groups as $group=>$group_name)
@@ -474,34 +474,34 @@ function site_tree_script()
 						{
 							foreach ($overridables as $overridable=>$cat_support)
 							{
-								$lang_string=do_lang('PT_'.$overridable);
+								$lang_string=do_lang('PRIVILEGE_'.$overridable);
 								if (is_array($cat_support)) $lang_string=do_lang($cat_support[1]);
 								if ((strlen($lang_string)>20) && (strpos($lang_string,'(')!==false))
 									$lang_string=preg_replace('# \([^\)]*\)#','',$lang_string);
 								if (is_array($cat_support)) $cat_support=$cat_support[0];
 								if ($cat_support==0) continue;
 
-								$sp_perms.='sp_'.$overridable.'="'.xmlentities($lang_string).'" ';
+								$privilege_perms.='privilege_'.$overridable.'="'.xmlentities($lang_string).'" ';
 								foreach ($groups as $group=>$group_name)
 								{
 									if (!in_array($group,$admin_groups))
 									{
 										$override_value=-1;
-										foreach ($sp_access[$group] as $test)
+										foreach ($privilege_access[$group] as $test)
 										{
-											if (($test['specific_permission']==$overridable) && ($test['the_page']=='') && ($test['category_name']==$category_name) && ($test['module_the_name']==$module_the_name))
+											if (($test['privilege']==$overridable) && ($test['the_page']=='') && ($test['category_name']==$category_name) && ($test['module_the_name']==$module_the_name))
 												$override_value=$test['the_value'];
 										}
-										if ($override_value!=-1) $sp_perms.='gsp_'.$overridable.'_'.strval($group).'="'.strval($override_value).'" ';
+										if ($override_value!=-1) $privilege_perms.='group_privileges_'.$overridable.'_'.strval($group).'="'.strval($override_value).'" ';
 									}
 								}
 							}
 						}
 					}
 
-					if (count(array_diff(array_keys($overridables),array('add_highrange_content','add_midrange_content','add_lowrange_content')))!=0) $sp_perms.='inherits_something="1" ';
+					if (count(array_diff(array_keys($overridables),array('add_highrange_content','add_midrange_content','add_lowrange_content')))!=0) $privilege_perms.='inherits_something="1" ';
 					$serverid=$actual_page_link;
-					echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="'.$highlight.'" '.$view_perms.$sp_perms.' id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.(!is_null($module_the_name)?'true':'false').'">';
+					echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" highlighted="'.$highlight.'" '.$view_perms.$privilege_perms.' id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.(!is_null($module_the_name)?'true':'false').'">';
 				} else
 				{
 					$serverid=$actual_page_link;
@@ -523,29 +523,29 @@ function site_tree_script()
 				if (!in_array($group,$admin_groups))
 					$view_perms.='g_view_'.strval($group).'="true" '; // This isn't actually displayed in the editor
 			}
-			$sp_perms='';
-			$sp_perms_opera_hack='';
+			$privilege_perms='';
+			$privilege_perms_opera_hack='';
 			foreach (array_keys($root_perms) as $overridable)
 			{
-				$sp_perms.='sp_'.$overridable.'="'.xmlentities(do_lang('PT_'.$overridable)).'" ';
-				$sp_perms_opera_hack.='<attribute key="'.'sp_'.$overridable.'" value="'.xmlentities(do_lang('PT_'.$overridable)).'" />';
+				$privilege_perms.='privilege_'.$overridable.'="'.xmlentities(do_lang('PRIVILEGE_'.$overridable)).'" ';
+				$privilege_perms_opera_hack.='<attribute key="'.'privilege_'.$overridable.'" value="'.xmlentities(do_lang('PRIVILEGE_'.$overridable)).'" />';
 				foreach ($groups as $group=>$group_name)
 				{
 					if (!in_array($group,$admin_groups))
 					{
 						$override_value=0;
-						foreach ($sp_access[$group] as $test)
+						foreach ($privilege_access[$group] as $test)
 						{
-							if (($test['specific_permission']==$overridable) && ($test['the_page']=='') && ($test['module_the_name']=='') && ($test['category_name']==''))
+							if (($test['privilege']==$overridable) && ($test['the_page']=='') && ($test['module_the_name']=='') && ($test['category_name']==''))
 								$override_value=$test['the_value'];
 						}
-						$sp_perms.='gsp_'.$overridable.'_'.strval($group).'="'.strval($override_value).'" ';
-						$sp_perms_opera_hack.='<attribute key="'.'gsp_'.$overridable.'_'.strval($group).'" value="'.strval($override_value).'" />';
+						$privilege_perms.='group_privileges_'.$overridable.'_'.strval($group).'="'.strval($override_value).'" ';
+						$privilege_perms_opera_hack.='<attribute key="'.'group_privileges_'.$overridable.'_'.strval($group).'" value="'.strval($override_value).'" />';
 					}
 				}
 			}
 			echo '<category serverid="_root" expanded="true" title="'.do_lang('ROOT').'" has_children="true" selectable="true" img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" id="'.uniqid('').'" '.$view_perms.'>';
-			echo $sp_perms_opera_hack;
+			echo $privilege_perms_opera_hack;
 		} else
 		{
 			echo '<category serverid="_root" expanded="true" title="'.do_lang('ROOT').'" has_children="true" selectable="false" type="root" id="'.uniqid('').'">';
@@ -583,7 +583,7 @@ function site_tree_script()
 						$view_perms.='g_view_'.strval($group).'="'.(in_array(array('zone_name'=>$zone,'group_id'=>$group),$zone_access)?'true':'false').'" ';
 				}
 
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" no_sps="1" highlighted="true" '.$view_perms.' id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities(do_lang('ZONE').': '.$zone_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" no_privileges="1" highlighted="true" '.$view_perms.' id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities(do_lang('ZONE').': '.$zone_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';
 			} else
 			{
 				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="zone" droppable="page" id="'.uniqid('').'" serverid="'.xmlentities($serverid).'" title="'.xmlentities(do_lang('ZONE').': '.$zone_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';

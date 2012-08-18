@@ -241,9 +241,9 @@ class Module_warnings extends standard_crud_module
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
 		$silence_from_topic=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_silence_from_topic',array('id'=>$id));
-		$GLOBALS['SITE_DB']->query_delete('msp',array(
+		$GLOBALS['SITE_DB']->query_delete('member_privileges',array(
 			'member_id'=>$member_id,
-			'specific_permission'=>'submit_lowrange_content',
+			'privilege'=>'submit_lowrange_content',
 			'the_page'=>'',
 			'module_the_name'=>'topics',
 			'category_name'=>strval($silence_from_topic),
@@ -269,9 +269,9 @@ class Module_warnings extends standard_crud_module
 		$id=post_param_integer('id');
 		$member_id=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_member_id',array('id'=>$id));
 		$silence_from_forum=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','p_silence_from_forum',array('id'=>$id));
-		$GLOBALS['SITE_DB']->query_delete('msp',array(
+		$GLOBALS['SITE_DB']->query_delete('member_privileges',array(
 			'member_id'=>$member_id,
-			'specific_permission'=>'submit_lowrange_content',
+			'privilege'=>'submit_lowrange_content',
 			'the_page'=>'',
 			'module_the_name'=>'forums',
 			'category_name'=>strval($silence_from_forum),
@@ -339,17 +339,17 @@ class Module_warnings extends standard_crud_module
 					$hidden->attach(form_input_hidden('forum_id',strval($forum_id)));
 					$silence_topic_time=NULL;//time()+60*60*24*7;
 					$silence_forum_time=NULL;//time()+60*60*24*7;
-					$active_until=$GLOBALS['SITE_DB']->query_select_value_if_there('msp','active_until',array(
+					$active_until=$GLOBALS['SITE_DB']->query_select_value_if_there('member_privileges','active_until',array(
 						'member_id'=>$member_id,
-						'specific_permission'=>'submit_lowrange_content',
+						'privilege'=>'submit_lowrange_content',
 						'the_page'=>'',
 						'module_the_name'=>'topics',
 						'category_name'=>strval($topic_id),
 					));
 					if (!is_null($active_until)) $silence_topic_time=$active_until;
-					$active_until=$GLOBALS['SITE_DB']->query_select_value_if_there('msp','active_until',array(
+					$active_until=$GLOBALS['SITE_DB']->query_select_value_if_there('member_privileges','active_until',array(
 						'member_id'=>$member_id,
-						'specific_permission'=>'submit_lowrange_content',
+						'privilege'=>'submit_lowrange_content',
 						'the_page'=>'',
 						'module_the_name'=>'forums',
 						'category_name'=>strval($forum_id),
@@ -360,7 +360,7 @@ class Module_warnings extends standard_crud_module
 				}
 			}
 
-			if (has_specific_permission(get_member(),'probate_members'))
+			if (has_privilege(get_member(),'probate_members'))
 			{
 				$fields->attach(form_input_integer(do_lang_tempcode('EXTEND_PROBATION'),do_lang_tempcode('DESCRIPTION_EXTEND_PROBATION'),'probation',0,true));
 			}
@@ -385,7 +385,7 @@ class Module_warnings extends standard_crud_module
 					$fields->attach(form_input_integer(do_lang_tempcode('CHARGED_POINTS'),do_lang_tempcode('DESCRIPTION_CHARGED_POINTS',escape_html(integer_format($num_points_currently))),'charged_points',0,true));
 				}
 			}
-			if (has_specific_permission(get_member(),'member_maintenance'))
+			if (has_privilege(get_member(),'member_maintenance'))
 			{
 				$fields->attach(form_input_tick(do_lang_tempcode('BANNED_MEMBER'),do_lang_tempcode('DESCRIPTION_BANNED_MEMBER'),'banned_member',false));
 
@@ -582,9 +582,9 @@ class Module_warnings extends standard_crud_module
 		if (!is_null($silence_from_topic))
 		{
 			$_silence_from_topic=get_input_date('silence_from_topic');
-			$GLOBALS['SITE_DB']->query_delete('msp',array(
+			$GLOBALS['SITE_DB']->query_delete('member_privileges',array(
 				'member_id'=>$member_id,
-				'specific_permission'=>'submit_lowrange_content',
+				'privilege'=>'submit_lowrange_content',
 				'the_page'=>'',
 				'module_the_name'=>'topics',
 				'category_name'=>strval($silence_from_topic),
@@ -592,10 +592,10 @@ class Module_warnings extends standard_crud_module
 		} else $_silence_from_topic=NULL;
 		if (!is_null($_silence_from_topic))
 		{
-			$GLOBALS['SITE_DB']->query_insert('msp',array(
+			$GLOBALS['SITE_DB']->query_insert('member_privileges',array(
 				'active_until'=>$_silence_from_topic,
 				'member_id'=>$member_id,
-				'specific_permission'=>'submit_lowrange_content',
+				'privilege'=>'submit_lowrange_content',
 				'the_page'=>'',
 				'module_the_name'=>'topics',
 				'category_name'=>strval($silence_from_topic),
@@ -607,16 +607,16 @@ class Module_warnings extends standard_crud_module
 		$silence_from_forum=post_param_integer('forum_id',NULL);
 		if (!is_null($silence_from_forum))
 		{
-			$GLOBALS['SITE_DB']->query_delete('msp',array(
+			$GLOBALS['SITE_DB']->query_delete('member_privileges',array(
 				'member_id'=>$member_id,
-				'specific_permission'=>'submit_lowrange_content',
+				'privilege'=>'submit_lowrange_content',
 				'the_page'=>'',
 				'module_the_name'=>'forums',
 				'category_name'=>strval($silence_from_forum),
 			));
-			$GLOBALS['SITE_DB']->query_delete('msp',array(
+			$GLOBALS['SITE_DB']->query_delete('member_privileges',array(
 				'member_id'=>$member_id,
-				'specific_permission'=>'submit_midrange_content',
+				'privilege'=>'submit_midrange_content',
 				'the_page'=>'',
 				'module_the_name'=>'forums',
 				'category_name'=>strval($silence_from_forum),
@@ -625,19 +625,19 @@ class Module_warnings extends standard_crud_module
 		} else $_silence_from_forum=NULL;
 		if (!is_null($_silence_from_forum))
 		{
-			$GLOBALS['SITE_DB']->query_insert('msp',array(
+			$GLOBALS['SITE_DB']->query_insert('member_privileges',array(
 				'active_until'=>$_silence_from_forum,
 				'member_id'=>$member_id,
-				'specific_permission'=>'submit_lowrange_content',
+				'privilege'=>'submit_lowrange_content',
 				'the_page'=>'',
 				'module_the_name'=>'forums',
 				'category_name'=>strval($silence_from_forum),
 				'the_value'=>'0'
 			));
-			$GLOBALS['SITE_DB']->query_insert('msp',array(
+			$GLOBALS['SITE_DB']->query_insert('member_privileges',array(
 				'active_until'=>$_silence_from_forum,
 				'member_id'=>$member_id,
-				'specific_permission'=>'submit_midrange_content',
+				'privilege'=>'submit_midrange_content',
 				'the_page'=>'',
 				'module_the_name'=>'forums',
 				'category_name'=>strval($silence_from_forum),
@@ -647,7 +647,7 @@ class Module_warnings extends standard_crud_module
 
 		// Probation
 		$probation=post_param_integer('probation',0);
-		if (has_specific_permission(get_member(),'probate_members'))
+		if (has_privilege(get_member(),'probate_members'))
 		{
 			if ($probation!=0)
 			{
@@ -659,7 +659,7 @@ class Module_warnings extends standard_crud_module
 		}
 
 		// Ban member
-		if (has_specific_permission(get_member(),'member_maintenance'))
+		if (has_privilege(get_member(),'member_maintenance'))
 		{
 			$banned_member=post_param_integer('banned_member',0);
 			if ($banned_member==1)
@@ -695,7 +695,7 @@ class Module_warnings extends standard_crud_module
 
 		// Change group
 		$changed_usergroup_from=NULL;
-		if (has_specific_permission(get_member(),'member_maintenance'))
+		if (has_privilege(get_member(),'member_maintenance'))
 		{
 			$__changed_usergroup_from=post_param('changed_usergroup_from');
 			if ($__changed_usergroup_from=='')

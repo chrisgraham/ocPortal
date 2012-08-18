@@ -50,7 +50,7 @@ function get_price($item)
  */
 function total_points($member)
 {
-	if (!has_specific_permission($member,'use_points')) return 0;
+	if (!has_privilege($member,'use_points')) return 0;
 
 	global $TOTAL_POINTS_CACHE;
 	if (array_key_exists($member,$TOTAL_POINTS_CACHE)) return $TOTAL_POINTS_CACHE[$member];
@@ -103,7 +103,7 @@ function points_used($member)
  */
 function available_points($member)
 {
-	if (!has_specific_permission($member,'use_points')) return 0;
+	if (!has_privilege($member,'use_points')) return 0;
 
 	return total_points($member)-points_used($member);
 }

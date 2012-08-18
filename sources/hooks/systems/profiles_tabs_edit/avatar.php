@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return (($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')) || (has_specific_permission($member_id_viewing,'member_maintenance')));
+		return (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')));
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 		if (post_param_integer('submitting_avatar_tab',0)==1)
 		{
 			require_code('uploads');
-			if (has_specific_permission($member_id_viewing,'own_avatars'))
+			if (has_privilege($member_id_viewing,'own_avatars'))
 			{
 				if (((!array_key_exists('avatar_file',$_FILES)) || (!is_uploaded_file($_FILES['avatar_file']['tmp_name']))) && (!is_swf_upload())) // No upload -> URL or stock or none
 				{
@@ -115,7 +115,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 			if ($selected) $found_it=true;
 		}
 		$hidden=new ocp_tempcode();
-		if (has_specific_permission($member_id_viewing,'own_avatars'))
+		if (has_privilege($member_id_viewing,'own_avatars'))
 		{
 			$set_name='avatar';
 			$required=false;

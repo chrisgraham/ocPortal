@@ -21,7 +21,7 @@
  */
 function total_points($member)
 {
-	if (!has_specific_permission($member,'use_points')) return 0;
+	if (!has_privilege($member,'use_points')) return 0;
 
 	global $TOTAL_POINTS_CACHE;
 	if (array_key_exists($member,$TOTAL_POINTS_CACHE)) return $TOTAL_POINTS_CACHE[$member];

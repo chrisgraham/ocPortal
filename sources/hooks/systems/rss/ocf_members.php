@@ -36,7 +36,7 @@ class Hook_rss_ocf_members
 	{
 		if (!has_actual_page_access(get_member(),'members')) return NULL;
 
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_members p WHERE m_join_time>'.strval($cutoff).((!has_specific_permission(get_member(),'see_unvalidated'))?' AND m_validated=1 AND m_validated_email_confirm_code=\'\' ':'').' ORDER BY m_join_time DESC',$max);
+		$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_members p WHERE m_join_time>'.strval($cutoff).((!has_privilege(get_member(),'see_unvalidated'))?' AND m_validated=1 AND m_validated_email_confirm_code=\'\' ':'').' ORDER BY m_join_time DESC',$max);
 		$categories=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
 
 		$content=new ocp_tempcode();

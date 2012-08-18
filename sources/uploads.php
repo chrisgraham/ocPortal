@@ -207,7 +207,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	}
 	if (($attach_name!='') && (array_key_exists($attach_name,$_FILES)) && ((is_uploaded_file($_FILES[$attach_name]['tmp_name'])) || ($swf_uploaded))) // If we uploaded
 	{
-		if (!has_specific_permission(get_member(),'exceed_filesize_limit'))
+		if (!has_privilege(get_member(),'exceed_filesize_limit'))
 		{
 			if ($_FILES[$attach_name]['size']>$max_size)
 			{
@@ -298,7 +298,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				$_file=$HTTP_FILENAME;
 				$place=get_custom_file_base().'/'.$upload_folder.'/'.$_file;
 			}
-			if (!has_specific_permission(get_member(),'exceed_filesize_limit'))
+			if (!has_privilege(get_member(),'exceed_filesize_limit'))
 			{
 				$max_size=intval(get_option('max_download_size'))*1024;
 				if (strlen($file)>$max_size)

@@ -105,11 +105,11 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 		// Copy permissions from members
 		require_code('ocf_groups');
 		$group_members=get_first_default_group();
-		$member_access=$GLOBALS['SITE_DB']->query_select('gsp',array('*'),array('group_id'=>$group_members));
+		$member_access=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('group_id'=>$group_members));
 		foreach ($member_access as $access)
 		{
 			$access['group_id']=$group_id;
-			$GLOBALS['SITE_DB']->query_insert('gsp',$access,false,true); // failsafe, in case we have put in some permissions for a group since deleted (can happen during install)
+			$GLOBALS['SITE_DB']->query_insert('group_privileges',$access,false,true); // failsafe, in case we have put in some permissions for a group since deleted (can happen during install)
 		}
 		$member_access=$GLOBALS['SITE_DB']->query_select('group_category_access',array('*'),array('group_id'=>$group_members));
 		foreach ($member_access as $access)

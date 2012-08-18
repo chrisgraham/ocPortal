@@ -429,7 +429,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	max-width: 11em;
 }
 
-.permissions_matrix_wrap .sp_header, .permissions_matrix_wrap .view_header {
+.permissions_matrix_wrap .privilege_header, .permissions_matrix_wrap .view_header {
 	vertical-align: bottom;
 }
 

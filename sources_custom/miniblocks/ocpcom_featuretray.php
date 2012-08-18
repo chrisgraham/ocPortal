@@ -152,7 +152,7 @@ $featuretree=array(
 		'ecommerce'=>array(
 			'eCommerce and subscriptions <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of eCommerce" href="http://shareddemo.myocp.com/site/index.php?page=catalogues&amp;type=category&amp;id=home"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>',
 			array(
-				array('Paid membership','Sell access to sections of your website, or offer members specific permissions'),
+				array('Paid membership','Sell access to sections of your website, or offer members privileges'),
 				array('Shopping cart for running an online store'),
 				array('Multiple payment gateways','Accepts payments via PayPal, WorldPay, SecPay, and manual transactions (cash/cheque)'),
 				array('Extendable framework','Programmers can easily add new product types to sell, or payment gateways'),

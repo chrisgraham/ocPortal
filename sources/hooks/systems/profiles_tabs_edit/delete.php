@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_Edit_delete
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return has_specific_permission($member_id_viewing,'delete_account') && (($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')));
+		return has_privilege($member_id_viewing,'delete_account') && (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')));
 	}
 
 	/**

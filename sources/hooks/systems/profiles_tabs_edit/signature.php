@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_Edit_signature
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return (($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')) || (has_specific_permission($member_id_viewing,'member_maintenance')));
+		return (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')));
 	}
 
 	/**
@@ -120,7 +120,7 @@ class Hook_Profiles_Tabs_Edit_signature
 		$comcode_editor=get_comcode_editor();
 		$comcode_editor_small=get_comcode_editor('signature',true);
 
-		$w=/* (has_specific_permission($member_id_viewing,'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($_signature_original,'{$,page hint: no_wysiwyg}')===false));
+		$w=/* (has_privilege($member_id_viewing,'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($_signature_original,'{$,page hint: no_wysiwyg}')===false));
 
 		$class='';
 		global $JAVASCRIPT,$WYSIWYG_ATTACHED;

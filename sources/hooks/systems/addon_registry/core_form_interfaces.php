@@ -1579,7 +1579,7 @@ class Hook_addon_registry_core_form_interfaces
 					'VIEW_ACCESS'=>'',
 					'TABINDEX'=>placeholder_number(),
 					'GROUP_ID'=>placeholder_random_id(),
-					'SP'=>strval($_k),
+					'PRIVILEGE'=>strval($_k),
 					'ALL_GLOBAL'=>true,
 					'TITLE'=>lorem_phrase(),
 					'DEFAULT_ACCESS'=>placeholder_number(),

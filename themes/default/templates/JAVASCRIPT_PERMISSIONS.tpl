@@ -26,7 +26,7 @@ function permissions_toggle(cell)
 				input.selectedIndex=((state_list!=input.options.length-1)?(input.options.length-1):(input.options.length-2));
 				input.disabled=false;
 
-				permissions_overridden(table.rows[i].id.replace(/_sp_container$/,''));
+				permissions_overridden(table.rows[i].id.replace(/_privilege_container$/,''));
 			}
 		}
 	}
@@ -113,9 +113,9 @@ function copy_permission_presets(name,value,just_track)
 	var usual_suspects=['bypass_validation_xrange_content','edit_xrange_content','edit_own_xrange_content','delete_xrange_content','delete_own_xrange_content','submit_xrange_content'];
 	var access=[2,3,2,3,2,1]; // The minimum access level that turns on each of the above permissions
 
-	var holder=document.getElementById(name+'_sp_container');
+	var holder=document.getElementById(name+'_privilege_container');
 	var elements=holder.getElementsByTagName('select');
-	var i,j,test,stub=name+'_sp_',name2,x;
+	var i,j,test,stub=name+'_privilege_',name2,x;
 
 	var node=null;
 	if (typeof window.site_tree!='undefined') node=site_tree.getElementByIdHack(document.getElementById('tree_list').value.split(',')[0]);
@@ -172,14 +172,14 @@ function copy_permission_presets(name,value,just_track)
 	return made_change;
 }
 
-function setup_sp_override_selector(name,default_access,sp,title,all_global)
+function setup_privilege_override_selector(name,default_access,privilege,title,all_global)
 {
-	eval('window.'+name+'_sp_'+sp+'='+default_access);
-	var selectElement=document.getElementById(name+'_sp_'+sp);
+	eval('window.'+name+'_privilege_'+privilege+'='+default_access);
+	var selectElement=document.getElementById(name+'_privilege_'+privilege);
 	if (all_global)
 	{
 		// Any disabled ones will be set to show the default permission rather than the "use-default" one, WHILST all-global is on
-		selectElement.selectedIndex=eval(name+'_sp_'+sp)+1; // -1 is at index 0
+		selectElement.selectedIndex=eval(name+'_privilege_'+privilege)+1; // -1 is at index 0
 		if (typeof window.site_tree=='undefined') selectElement.disabled=true;
 	}
 }
@@ -258,9 +258,9 @@ function update_permission_box(setting)
 	{
 		// Go through and set maximum permissions/override from those selected
 		var values=setting.value.split(',');
-		var id,name,value,i,node,j,group,element,sp,sp_title,known_groups=[],known_sps=[],k,html,new_option,num_sp_default,num_sp,ths,tds,cells,new_cell,row;
+		var id,name,value,i,node,j,group,element,privilege,privilege_title,known_groups=[],known_privileges=[],k,html,new_option,num_privilege_default,num_privilege,ths,tds,cells,new_cell,row;
 		var matrix=document.getElementById('enter_the_matrix').getElementsByTagName('table')[0];
-		var num_sp_total=0;
+		var num_privilege_total=0;
 		var is_cms=null;
 		for (i=0;i<values.length;i++) // For all items that we are loading permissions for (we usually just do it for one, but sometimes we load whole sets if we are batch setting permissions)
 		{
@@ -278,7 +278,7 @@ function update_permission_box(setting)
 					}
 				}
 
-				// Blank out everything in the permissions box, remove all SP's
+				// Blank out everything in the permissions box, remove all privileges
 				for (j=0;j<known_groups.length;j++)
 				{
 					group=known_groups[j];
@@ -295,7 +295,7 @@ function update_permission_box(setting)
 					}
 					element.selectedIndex=0;
 
-					// Delete existing SP nodes
+					// Delete existing privilege nodes
 					ths=matrix.getElementsByTagName('th');
 					tds=matrix.getElementsByTagName('td');
 					cells=[];
@@ -303,7 +303,7 @@ function update_permission_box(setting)
 					for (k=0;k<tds.length;k++) cells.push(tds[k]);
 					for (k=0;k<cells.length;k++)
 					{
-						if ((cells[k].className.match(/(^|\s)sp\_header($|\s)/)) || (cells[k].className.match(/(^|\s)sp\_cell($|\s)/)))
+						if ((cells[k].className.match(/(^|\s)privilege\_header($|\s)/)) || (cells[k].className.match(/(^|\s)privilege\_cell($|\s)/)))
 						{
 							cells[k].parentNode.removeChild(cells[k]);
 						}
@@ -335,62 +335,62 @@ function update_permission_box(setting)
 				}
 			}
 
-			// Create SP nodes
-			num_sp=0;
-			known_sps=[];
+			// Create privilege nodes
+			num_privilege=0;
+			known_privileges=[];
 			id=node.getAttribute('id');
 			if (typeof window.attributes_full=='undefined') window.attributes_full=[];
 			if (typeof window.attributes_full[id]=='undefined') window.attributes_full[id]=node.attributes;
 			for (name in window.attributes_full[id])
 			{
 				value=window.attributes_full[id][name];
-				if (name.substr(0,3)=='sp_')
+				if (name.substr(0,3)=='privilege_')
 				{
-					sp=name.substr(3);
-					sp_title=value;
+					privilege=name.substr(3);
+					privilege_title=value;
 					for (k=0;k<known_groups.length;k++)
 					{
 						group=known_groups[k];
 
-						element=document.getElementById('access_'+group+'_sp_'+sp);
+						element=document.getElementById('access_'+group+'_privilege_'+privilege);
 						if (!element) // We haven't added it yet for one of the resources we're doing permissions for
 						{
 							if (k==0)
 							{
 								row=matrix.getElementsByTagName('tr')[0];
 								new_cell=row.insertBefore(document.createElement('th'),row.cells[row.cells.length-1]);
-								new_cell.className='sp_header';
-								set_inner_html(new_cell,'<img src="'+'{$BASE_URL*;,0}'.replace(/^http:/,window.location.protocol)+'/data/gd_text.php?color='+column_color+'&amp;text='+window.encodeURIComponent(sp_title)+escape_html(keep_stub())+'" title="'+escape_html(sp_title)+'" alt="'+escape_html(sp_title)+'" />');
+								new_cell.className='privilege_header';
+								set_inner_html(new_cell,'<img src="'+'{$BASE_URL*;,0}'.replace(/^http:/,window.location.protocol)+'/data/gd_text.php?color='+column_color+'&amp;text='+window.encodeURIComponent(privilege_title)+escape_html(keep_stub())+'" title="'+escape_html(privilege_title)+'" alt="'+escape_html(privilege_title)+'" />');
 
-								num_sp_total++;
+								num_privilege_total++;
 							}
 
 							// Manually build up cell
-							row=document.getElementById('access_'+group+'_sp_container');
+							row=document.getElementById('access_'+group+'_privilege_container');
 							new_cell=row.insertBefore(document.createElement('td'),row.cells[row.cells.length-1]);
-							new_cell.className='form_table_field_input sp_cell';
-							set_inner_html(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_sp_'+sp+'">{!OVERRIDE;^}</label></div><select title="'+escape_html(sp_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_sp_'+sp+'" name="access_'+group+'_sp_'+sp+'"><option selected="selected" value="-1">&mdash;</option><option value="0">{!NO_COMPACT;^}</option><option value="1">{!YES_COMPACT;^}</option></select>');
+							new_cell.className='form_table_field_input privilege_cell';
+							set_inner_html(new_cell,'<div class="accessibility_hidden"><label for="access_'+group+'_privilege_'+privilege+'">{!OVERRIDE;^}</label></div><select title="'+escape_html(privilege_title)+'" onmouseover="if (this.options[this.selectedIndex].value==\'-1\') show_permission_setting(this,event);" id="access_'+group+'_privilege_'+privilege+'" name="access_'+group+'_privilege_'+privilege+'"><option selected="selected" value="-1">&mdash;</option><option value="0">{!NO_COMPACT;^}</option><option value="1">{!YES_COMPACT;^}</option></select>');
 
-							element=document.getElementById('access_'+group+'_sp_'+sp);
+							element=document.getElementById('access_'+group+'_privilege_'+privilege);
 
-							setup_sp_override_selector('access_'+group,'-1',sp,sp_title,false);
+							setup_privilege_override_selector('access_'+group,'-1',privilege,privilege_title,false);
 						}
 						element.options[0].disabled=((values.length==1) && (node.getAttribute('serverid')=='_root'));
 					}
-					known_sps.push(sp);
-					num_sp++;
+					known_privileges.push(privilege);
+					num_privilege++;
 				}
 			}
 
-			// Set SP's for all usergroups (to highest permissions from all usergroups selected)
+			// Set privileges for all usergroups (to highest permissions from all usergroups selected)
 			for (name in window.attributes_full[id])
 			{
 				value=window.attributes_full[id][name];
-				if (name.substr(0,4)=='gsp_')
+				if (name.substr(0,'group_privilegess_'.length)=='group_privilegess_')
 				{
 					group=name.substr(name.lastIndexOf('_')+1);
-					sp=name.substr(4,name.length-group.length-5);
-					element=document.getElementById('access_'+group+'_sp_'+sp);
+					privilege=name.substr('group_privilegess_'.length,name.length-group.length-1-'group_privileges_'.length);
+					element=document.getElementById('access_'+group+'_privilege_'+privilege);
 					if (element.selectedIndex<value+1)
 						element.selectedIndex=parseInt(value)+1; // -1 corresponds to 0.
 				}
@@ -400,33 +400,33 @@ function update_permission_box(setting)
 			for (k=0;k<known_groups.length;k++)
 			{
 				group=known_groups[k];
-				num_sp_default=0;
-				for (j=0;j<known_sps.length;j++)
+				num_privilege_default=0;
+				for (j=0;j<known_privileges.length;j++)
 				{
-					element=document.getElementById('access_'+group+'_sp_'+known_sps[j]);
-					if (element.selectedIndex==0) num_sp_default++;
+					element=document.getElementById('access_'+group+'_privilege_'+known_privileges[j]);
+					if (element.selectedIndex==0) num_privilege_default++;
 				}
-				if (num_sp_default==num_sp)
+				if (num_privilege_default==num_privilege)
 				{
 					element=document.getElementById('access_'+group+'_presets');
 					element.selectedIndex=1;
 					cleanup_permission_list('access_'+group);
-					for (j=0;j<known_sps.length;j++)
+					for (j=0;j<known_privileges.length;j++)
 					{
-						element=document.getElementById('access_'+group+'_sp_'+known_sps[j]);
+						element=document.getElementById('access_'+group+'_privilege_'+known_privileges[j]);
 						if (typeof window.site_tree=='undefined') element.disabled=true;
 					}
 				}
 			}
 
 			// Hide certain things if we only have view settings here, else show them
-			if (num_sp_total==0)
+			if (num_privilege_total==0)
 			{
 				set_inner_html(matrix.getElementsByTagName('tr')[0].cells[0],'{!GROUP;^}');
 				for (k=0;k<known_groups.length;k++)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='none';
-					var button=document.getElementById('access_'+known_groups[k]+'_sp_container').getElementsByTagName('button')[0]
+					var button=document.getElementById('access_'+known_groups[k]+'_privilege_container').getElementsByTagName('button')[0]
 					if (typeof button!='undefined') button.disabled=true;
 				}
 			} else
@@ -435,7 +435,7 @@ function update_permission_box(setting)
 				for (k=0;k<known_groups.length;k++)
 				{
 					document.getElementById('access_'+known_groups[k]+'_presets').style.display='block';
-					var button=document.getElementById('access_'+known_groups[k]+'_sp_container').getElementsByTagName('button')[0]
+					var button=document.getElementById('access_'+known_groups[k]+'_privilege_container').getElementsByTagName('button')[0]
 					if (typeof button!='undefined') button.disabled=false;
 				}
 			}
@@ -470,7 +470,7 @@ function set_permissions(setting)
 	{
 		// Go through and set maximum permissions/override from those selected
 		var values=setting.value.split(',');
-		var id,i,node,j,group,element,sp,known_groups=[],k,serverid,set_request='',set_request_b,new_value;
+		var id,i,node,j,group,element,privilege,known_groups=[],k,serverid,set_request='',set_request_b,new_value;
 		for (i=0;i<values.length;i++)
 		{
 			node=site_tree.getElementByIdHack(values[i]);
@@ -502,29 +502,29 @@ function set_permissions(setting)
 				}
 			}
 
-			// Set SP's for all usergroups
+			// Set privileges for all usergroups
 			id=node.getAttribute('id');
 			if (typeof window.attributes_full=='undefined') window.attributes_full=[];
 			if (typeof window.attributes_full[id]=='undefined') window.attributes_full[id]=node.attributes;
 			for (var name in window.attributes_full[id])
 			{
 				var value=window.attributes_full[id][name];
-				if (name.substr(0,3)=='sp_')
+				if (name.substr(0,'privilege_'.length)=='privilege_')
 				{
 					for (j=0;j<known_groups.length;j++)
 					{
 						group=known_groups[j];
-						sp=name.substr(3);
-						value=window.attributes_full[id]['gsp_'+sp+'_'+group];
+						privilege=name.substr(3);
+						value=window.attributes_full[id]['group_privileges_'+privilege+'_'+group];
 						if (!value) value=-1;
-						element=document.getElementById('access_'+group+'_sp_'+sp);
+						element=document.getElementById('access_'+group+'_privilege_'+privilege);
 						if (element)
 						{
 							new_value=element.selectedIndex-1;
 							if (new_value!=value)
 							{
-								window.attributes_full[id]['gsp_'+sp+'_'+group]=new_value;
-								set_request_b=set_request_b+'&'+i+'gsp_'+sp+'_'+group+'='+new_value;
+								window.attributes_full[id]['group_privileges_'+privilege+'_'+group]=new_value;
+								set_request_b=set_request_b+'&'+i+'group_privileges_'+privilege+'_'+group+'='+new_value;
 							}
 						}
 					}
@@ -560,25 +560,25 @@ function permissions_img_func_1_b(node,id)
 	if (typeof window.attributes_full=='undefined') window.attributes_full=[];
 	if (typeof window.attributes_full[id]=='undefined') window.attributes_full[id]=node.attributes;
 
-	if (((window.attributes_full[id]['gsp_delete_highrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_highrange_content_'+group]=='1')) ||
-		 ((window.attributes_full[id]['gsp_delete_midrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_midrange_content_'+group]=='1')) ||
-		 ((window.attributes_full[id]['gsp_delete_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_delete_lowrange_content_'+group]=='1')))
+	if (((window.attributes_full[id]['group_privileges_delete_highrange_content_'+group]) && (window.attributes_full[id]['group_privileges_delete_highrange_content_'+group]=='1')) ||
+		 ((window.attributes_full[id]['group_privileges_delete_midrange_content_'+group]) && (window.attributes_full[id]['group_privileges_delete_midrange_content_'+group]=='1')) ||
+		 ((window.attributes_full[id]['group_privileges_delete_lowrange_content_'+group]) && (window.attributes_full[id]['group_privileges_delete_lowrange_content_'+group]=='1')))
 			return Array('{$IMG;,permlevels/3}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_3;^}');
 	else
-	if (((window.attributes_full[id]['gsp_bypass_validation_highrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_highrange_content_'+group]=='1')) ||
-		 ((window.attributes_full[id]['gsp_bypass_validation_midrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_midrange_content_'+group]=='1')) ||
-		 ((window.attributes_full[id]['gsp_bypass_validation_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_bypass_validation_lowrange_content_'+group]=='1')))
+	if (((window.attributes_full[id]['group_privileges_bypass_validation_highrange_content_'+group]) && (window.attributes_full[id]['group_privileges_bypass_validation_highrange_content_'+group]=='1')) ||
+		 ((window.attributes_full[id]['group_privileges_bypass_validation_midrange_content_'+group]) && (window.attributes_full[id]['group_privileges_bypass_validation_midrange_content_'+group]=='1')) ||
+		 ((window.attributes_full[id]['group_privileges_bypass_validation_lowrange_content_'+group]) && (window.attributes_full[id]['group_privileges_bypass_validation_lowrange_content_'+group]=='1')))
 			return Array('{$IMG;,permlevels/2}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_2;^}');
 	else
-	if (((window.attributes_full[id]['gsp_submit_highrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_highrange_content_'+group]=='1')) ||
-		 ((window.attributes_full[id]['gsp_submit_midrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_midrange_content_'+group]=='1')) ||
-		 ((window.attributes_full[id]['gsp_submit_lowrange_content_'+group]) && (window.attributes_full[id]['gsp_submit_lowrange_content_'+group]=='1')))
+	if (((window.attributes_full[id]['group_privileges_submit_highrange_content_'+group]) && (window.attributes_full[id]['group_privileges_submit_highrange_content_'+group]=='1')) ||
+		 ((window.attributes_full[id]['group_privileges_submit_midrange_content_'+group]) && (window.attributes_full[id]['group_privileges_submit_midrange_content_'+group]=='1')) ||
+		 ((window.attributes_full[id]['group_privileges_submit_lowrange_content_'+group]) && (window.attributes_full[id]['group_privileges_submit_lowrange_content_'+group]=='1')))
 			return Array('{$IMG;,permlevels/1}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_1;^}');
 	else
 	if (window.attributes_full[id]['inherits_something'])
 			return Array('{$IMG;,permlevels/inherit}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_GLOBAL;^}');
 	else
-	if (window.attributes_full[id]['no_sps']) return Array('{$IMG;,blank}'.replace(/^http:/,window.location.protocol),'');
+	if (window.attributes_full[id]['no_privileges']) return Array('{$IMG;,blank}'.replace(/^http:/,window.location.protocol),'');
 
 	return Array('{$IMG;,permlevels/0}'.replace(/^http:/,window.location.protocol),'{!PINTERFACE_LEVEL_0;^}');
 }

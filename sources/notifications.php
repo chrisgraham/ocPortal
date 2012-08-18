@@ -281,7 +281,7 @@ function _notification_setting_available($setting,$member_id=NULL)
 			$system_wide=(addon_installed('sms')) && (get_option('sms_api_id')!='');
 			if ($system_wide && !is_null($member_id))
 			{
-				if (has_specific_permission($member_id,'use_sms'))
+				if (has_privilege($member_id,'use_sms'))
 				{
 					require_code('sms');
 					$cpf_values=$GLOBALS['FORUM_DRIVER']->get_custom_fields($member_id);
@@ -294,7 +294,7 @@ function _notification_setting_available($setting,$member_id=NULL)
 			break;
 		case A_INSTANT_PT:
 			$system_wide=(get_forum_type()=='ocf') && (addon_installed('ocf_forum'));
-			if ($system_wide && !is_null($member_id)) $for_member=has_specific_permission($member_id,'use_pt');
+			if ($system_wide && !is_null($member_id)) $for_member=has_privilege($member_id,'use_pt');
 			break;
 	}
 	$ret=$system_wide && (is_null($member_id) || $for_member);
@@ -779,13 +779,13 @@ class Hook_Notification
 	 * @param  integer		Maximum (for pagination)
 	 * @return array			A pair: Map of members to their notification setting, and whether there may be more
 	 */
-	function _all_members_who_have_enabled_with_sp($to_filter,$sp,$only_if_enabled_on__notification_code,$only_if_enabled_on__category,$to_member_ids,$start,$max)
+	function _all_members_who_have_enabled_with_privilege($to_filter,$privilege,$only_if_enabled_on__notification_code,$only_if_enabled_on__category,$to_member_ids,$start,$max)
 	{
 		list($_members,$possibly_has_more)=$to_filter;
 		$members=array();
 		foreach ($_members as $member=>$setting)
 		{
-			if (has_specific_permission($member,$sp))
+			if (has_privilege($member,$privilege))
 				$members[$member]=$setting;
 		}
 		return array($members,$possibly_has_more);
@@ -1058,7 +1058,7 @@ class Hook_Notification__Staff extends Hook_Notification
 
 		$db=(substr($only_if_enabled_on__notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 
-		$admin_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),collapse_1d_complexity('group_id',$db->query_select('gsp',array('group_id'),array('specific_permission'=>'may_enable_staff_notifications'))));
+		$admin_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),collapse_1d_complexity('group_id',$db->query_select('group_privileges',array('group_id'),array('privilege'=>'may_enable_staff_notifications'))));
 		$rows=$GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups,$max,$start);
 		$possibly_has_more=(count($rows)>=$max);
 		if (!is_null($to_member_ids))
@@ -1096,6 +1096,6 @@ class Hook_Notification__Staff extends Hook_Notification
 	{
 		$test=is_null($only_if_enabled_on__notification_code)?true:notifications_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id);
 
-		return (($test) && (has_specific_permission($member_id,'may_enable_staff_notifications')));
+		return (($test) && (has_privilege($member_id,'may_enable_staff_notifications')));
 	}
 }

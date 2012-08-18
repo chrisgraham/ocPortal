@@ -137,20 +137,20 @@ END;
 	{
 		$results.="Zone-access: {$row['zone_name']}/{$row['group_id']}=N/A\n";
 	}
-	$r=mysql_query('SELECT * FROM '.$prefix.'gsp WHERE the_value=1 ORDER BY specific_permission,the_page,module_the_name,category_name,group_id',$db);
+	$r=mysql_query('SELECT * FROM '.$prefix.'group_privileges WHERE the_value=1 ORDER BY privilege,the_page,module_the_name,category_name,group_id',$db);
 	while (($row=mysql_fetch_assoc($r))!==false)
 	{
-		$results.="Privileges: {$row['specific_permission']}/{$row['the_page']}/{$row['module_the_name']}/{$row['category_name']}/{$row['group_id']}={$row['the_value']}\n";
+		$results.="Privileges: {$row['privilege']}/{$row['the_page']}/{$row['module_the_name']}/{$row['category_name']}/{$row['group_id']}={$row['the_value']}\n";
 	}
 	$r=mysql_query('SELECT * FROM '.$prefix.'member_zone_access WHERE zone_name=\'cms\' OR zone_name=\'adminzone\' OR zone_name=\'collaboration\' ORDER BY zone_name,member_id',$db);
 	while (($row=mysql_fetch_assoc($r))!==false)
 	{
 		$results.="Member-Zone-access: {$row['zone_name']}/{$row['member_id']}=N/A\n";
 	}
-	$r=mysql_query('SELECT * FROM '.$prefix.'msp WHERE the_value=1 ORDER BY specific_permission,the_page,module_the_name,category_name,member_id',$db);
+	$r=mysql_query('SELECT * FROM '.$prefix.'member_privileges WHERE the_value=1 ORDER BY privilege,the_page,module_the_name,category_name,member_id',$db);
 	while (($row=mysql_fetch_assoc($r))!==false)
 	{
-		$results.="Member-Privileges: {$row['specific_permission']}/{$row['the_page']}/{$row['module_the_name']}/{$row['category_name']}/{$row['member_id']}={$row['the_value']}\n";
+		$results.="Member-Privileges: {$row['privilege']}/{$row['the_page']}/{$row['module_the_name']}/{$row['category_name']}/{$row['member_id']}={$row['the_value']}\n";
 	}
 
 	// Check files

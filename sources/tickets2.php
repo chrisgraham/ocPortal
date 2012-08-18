@@ -59,7 +59,7 @@ function delete_ticket_type($ticket_type)
 {
 	$_ticket_type=get_translated_text($ticket_type);
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>strval($_ticket_type)));
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'tickets','category_name'=>strval($_ticket_type)));
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'tickets','category_name'=>strval($_ticket_type)));
 
 	//delete_lang($ticket_type);	Needed for if existing ticket looked up
 
@@ -151,7 +151,7 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 
 	$restrict='';
 	$restrict_description='';
-	$view_others_tickets=(!$override_view_others_tickets) && (has_specific_permission($member,'view_others_tickets'));
+	$view_others_tickets=(!$override_view_others_tickets) && (has_privilege($member,'view_others_tickets'));
 
 	if (!$view_others_tickets)
 	{

@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_blog
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return has_specific_permission($member_id_of,'have_personal_category','cms_news');
+		return has_privilege($member_id_of,'have_personal_category','cms_news');
 	}
 
 	/**

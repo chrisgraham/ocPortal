@@ -210,13 +210,13 @@ class Hook_wowbb
 			}
 
 			// privileges
-			set_specific_permission($id_new,'vote_in_polls',$row['vote_on_polls']);
-			set_specific_permission($id_new,'use_pt',$row['pm']);
-			set_specific_permission($id_new,'submit_lowrange_content',$row['post_new_topics']);
-			set_specific_permission($id_new,'view_member_photos',$row['view_member_info']);
-			set_specific_permission($id_new,'edit_lowrange_content',$row['edit_own_posts']);
-			set_specific_permission($id_new,'add_public_events',$row['post_public_events']);
-			set_specific_permission($id_new,'view_calendar',$row['view_public_events']);
+			set_privilege($id_new,'vote_in_polls',$row['vote_on_polls']);
+			set_privilege($id_new,'use_pt',$row['pm']);
+			set_privilege($id_new,'submit_lowrange_content',$row['post_new_topics']);
+			set_privilege($id_new,'view_member_photos',$row['view_member_info']);
+			set_privilege($id_new,'edit_lowrange_content',$row['edit_own_posts']);
+			set_privilege($id_new,'add_public_events',$row['post_public_events']);
+			set_privilege($id_new,'view_calendar',$row['view_public_events']);
 
 			$denies=array();
 			if ($row['view_board']==0) $denies[]=array('forumview',get_module_zone('forumview'));

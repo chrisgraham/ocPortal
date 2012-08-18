@@ -247,7 +247,7 @@ function semihtml_to_comcode($semihtml,$force=false)
 
 	$semihtml=preg_replace('#(\[[\w\_]+)&nbsp;#','${1} ',$semihtml);
 
-	if ((!$force) && ((get_option('eager_wysiwyg')=='0') && ((strpos($semihtml,'://')===false) || (count(find_all_hooks('systems','comcode_link_handlers'))==0)) && (has_specific_permission(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
+	if ((!$force) && ((get_option('eager_wysiwyg')=='0') && ((strpos($semihtml,'://')===false) || (count(find_all_hooks('systems','comcode_link_handlers'))==0)) && (has_privilege(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
 	{
 		$count=substr_count($semihtml,'[/')+substr_count($semihtml,'{')+substr_count($semihtml,'[[')+substr_count($semihtml,'<h1');
 		if ($count==0) return ($semihtml=='')?'':('[html]'.$semihtml.'[/html]');
@@ -649,7 +649,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	$semihtml=str_replace('[ / semihtml','[/semihtml',$semihtml);
 
 	// People without comcode_dangerous have further cleanups, that might lose some quality...
-	if ((!has_specific_permission(get_member(),'allow_html')) || ($force))
+	if ((!has_privilege(get_member(),'allow_html')) || ($force))
 	{
 		$semihtml2=$semihtml;
 

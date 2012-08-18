@@ -124,7 +124,7 @@ function poll_script($ret=false,$param=NULL)
  */
 function may_vote_in_poll($myrow)
 {
-	if (!has_specific_permission(get_member(),'vote_in_polls','cms_polls')) return false;
+	if (!has_privilege(get_member(),'vote_in_polls','cms_polls')) return false;
 
 	if (get_value('poll_no_member_ip_restrict')==='1')
 	{

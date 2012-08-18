@@ -30,10 +30,10 @@ function _handle_permission_check_logging($member,$op,$params,$result)
 {
 	global $PERMISSION_CHECK_LOGGER;
 
-	if ($op=='has_specific_permission')
+	if ($op=='has_privilege')
 	{
 		require_all_lang();
-		$params[0]=$params[0].' ("'.do_lang('PT_'.$params[0]).'")';
+		$params[0]=$params[0].' ("'.do_lang('PRIVILEGE_'.$params[0]).'")';
 	}
 
 	$str=$op;
@@ -74,7 +74,7 @@ function _handle_permission_check_logging($member,$op,$params,$result)
  * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
  * @return boolean		Whether the member has the permission
  */
-function has_specific_permission_group($group_id,$permission,$page=NULL,$cats=NULL)
+function has_privilege_group($group_id,$permission,$page=NULL,$cats=NULL)
 {
 	if (is_null($page)) $page=get_page_name();
 
@@ -106,19 +106,19 @@ function has_specific_permission_group($group_id,$permission,$page=NULL,$cats=NU
 		return false;
 	}
 
-	$perhaps=$GLOBALS['SITE_DB']->query_select('gsp',array('*'),array('group_id'=>$group_id));
+	$perhaps=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('group_id'=>$group_id));
 	if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))
 	{
-		$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE group_id='.strval($group_id).' AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true));
+		$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_privileges WHERE group_id='.strval($group_id).' AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true));
 	}
 	$GROUP_PRIVILEGE_CACHE[$group_id]=array();
 	foreach ($perhaps as $p)
 	{
-		if (@$GROUP_PRIVILEGE_CACHE[$group_id][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]!=1)
-			$GROUP_PRIVILEGE_CACHE[$group_id][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]=$p['the_value'];
+		if (@$GROUP_PRIVILEGE_CACHE[$group_id][$p['privilege']][$p['the_page']][$p['module_the_name']][$p['category_name']]!=1)
+			$GROUP_PRIVILEGE_CACHE[$group_id][$p['privilege']][$p['the_page']][$p['module_the_name']][$p['category_name']]=$p['the_value'];
 	}
 
-	return has_specific_permission_group($group_id,$permission,$page,$cats);
+	return has_privilege_group($group_id,$permission,$page,$cats);
 }
 
 /**
@@ -159,16 +159,16 @@ function get_category_permissions_for_environment($module,$category,$page=NULL,$
 	}
 
 	// privileges
-	$specific_permissions=array();
-	$access_rows=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB']->query_select('gsp',array('group_id','specific_permission','the_value'),array('module_the_name'=>$module,'category_name'=>$category));
+	$privileges=array();
+	$access_rows=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB']->query_select('group_privileges',array('group_id','privilege','the_value'),array('module_the_name'=>$module,'category_name'=>$category));
 	foreach ($access_rows as $row)
 	{
-		$specific_permissions[$row['specific_permission']][$row['group_id']]=strval($row['the_value']);
+		$privileges[$row['privilege']][$row['group_id']]=strval($row['the_value']);
 	}
 
 	// Heading
 	require_code('zones2');
-	$_overridables=extract_module_functions_page(get_module_zone($page),$page,array('get_sp_overrides'));
+	$_overridables=extract_module_functions_page(get_module_zone($page),$page,array('get_privilege_overrides'));
 	$out=new ocp_tempcode;
 	if (is_null($_overridables[0]))
 	{
@@ -199,13 +199,13 @@ function get_category_permissions_for_environment($module,$category,$page=NULL,$
 
 				$default_access[$id][$override]=array();
 				if ($cat_support==0) continue;
-				$default_access[$id][$override]=has_specific_permission_group($id,$override,$page)?'1':'0';
+				$default_access[$id][$override]=has_privilege_group($id,$override,$page)?'1':'0';
 			}
 		}
 	}
 
 	// Render actual permissions matrix
-	$out->attach(get_permissions_matrix($server_id,$access,$overridables,$specific_permissions,$default_access,false,$pinterface_view));
+	$out->attach(get_permissions_matrix($server_id,$access,$overridables,$privileges,$default_access,false,$pinterface_view));
 
 	return $out;
 }
@@ -222,7 +222,7 @@ function get_category_permissions_for_environment($module,$category,$page=NULL,$
  * @param  ?tempcode		Label for view permissions (NULL: default)
  * @return tempcode		The form field matrix
  */
-function get_permissions_matrix($server_id,$access,$overridables,$specific_permissions,$default_access,$no_outer=false,$pinterface_view=NULL)
+function get_permissions_matrix($server_id,$access,$overridables,$privileges,$default_access,$no_outer=false,$pinterface_view=NULL)
 {
 	require_lang('permissions');
 	require_javascript('javascript_permissions');
@@ -250,16 +250,16 @@ function get_permissions_matrix($server_id,$access,$overridables,$specific_permi
 			$all_global=true;
 			foreach (array_keys($overridables) as $override)
 			{
-				if (isset($specific_permissions[$override][$id])) $all_global=false;
+				if (isset($privileges[$override][$id])) $all_global=false;
 			}
 			foreach ($overridables as $override=>$cat_support)
 			{
-				$lang_string=do_lang_tempcode('PT_'.$override);
+				$lang_string=do_lang_tempcode('PRIVILEGE_'.$override);
 				if (is_array($cat_support)) $lang_string=do_lang_tempcode($cat_support[1]);
 				if (is_array($cat_support)) $cat_support=$cat_support[0];
 				if ($cat_support==0) continue;
 
-				$overrides->attach(do_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE',array('_GUID'=>'115fbf91873be9016c5e192f5a5e090b','FORCE_PRESETS'=>$no_outer,'GROUP_NAME'=>$group_name,'VIEW_ACCESS'=>$view_access,'TABINDEX'=>strval($tabindex),'GROUP_ID'=>strval($id),'SP'=>$override,'ALL_GLOBAL'=>$all_global,'TITLE'=>$lang_string,'DEFAULT_ACCESS'=>$default_access[$id][$override],'CODE'=>isset($specific_permissions[$override][$id])?$specific_permissions[$override][$id]:'-1')));
+				$overrides->attach(do_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE',array('_GUID'=>'115fbf91873be9016c5e192f5a5e090b','FORCE_PRESETS'=>$no_outer,'GROUP_NAME'=>$group_name,'VIEW_ACCESS'=>$view_access,'TABINDEX'=>strval($tabindex),'GROUP_ID'=>strval($id),'PRIVILEGE'=>$override,'ALL_GLOBAL'=>$all_global,'TITLE'=>$lang_string,'DEFAULT_ACCESS'=>$default_access[$id][$override],'CODE'=>isset($privileges[$override][$id])?$privileges[$override][$id]:'-1')));
 			}
 			$permission_rows->attach(do_template('FORM_SCREEN_INPUT_PERMISSION',array('_GUID'=>'e2c4459ae995d33376c07e498f1d973a','FORCE_PRESETS'=>$no_outer,'GROUP_NAME'=>$group_name,'OVERRIDES'=>$overrides->evaluate()/*FUDGEFUDGE*/,'ALL_GLOBAL'=>$all_global,'VIEW_ACCESS'=>$view_access,'TABINDEX'=>strval($tabindex),'GROUP_ID'=>strval($id),'PINTERFACE_VIEW'=>$pinterface_view)));
 		} else
@@ -292,7 +292,7 @@ function get_permissions_matrix($server_id,$access,$overridables,$specific_permi
 	$overrides_array=array();
 	foreach ($overridables as $override=>$cat_support)
 	{
-		$lang_string=do_lang_tempcode('PT_'.$override);
+		$lang_string=do_lang_tempcode('PRIVILEGE_'.$override);
 		if (is_array($cat_support)) $lang_string=do_lang_tempcode($cat_support[1]);
 		if (is_array($cat_support)) $cat_support=$cat_support[0];
 		if ($cat_support==0) continue;
@@ -340,7 +340,7 @@ function set_category_permissions_from_environment($module,$category,$page=NULL)
 		$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB']->query_delete('group_category_access',array('module_the_name'=>$module,'category_name'=>$category,'group_id'=>$group_id));
 	}
 
-	$_overridables=extract_module_functions_page(get_module_zone($page),$page,array('get_sp_overrides'));
+	$_overridables=extract_module_functions_page(get_module_zone($page),$page,array('get_privilege_overrides'));
 	if (is_null($_overridables[0]))
 	{
 		$overridables=array();
@@ -352,7 +352,7 @@ function set_category_permissions_from_environment($module,$category,$page=NULL)
 	foreach ($overridables as $override=>$cat_support)
 	{
 		if (is_array($cat_support)) $cat_support=$cat_support[0];
-		$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB']->query_delete('gsp',array('specific_permission'=>$override,'module_the_name'=>$module,'category_name'=>$category));
+		$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB']->query_delete('group_privileges',array('privilege'=>$override,'module_the_name'=>$module,'category_name'=>$category));
 	}
 	foreach (array_keys($groups) as $group_id)
 	{
@@ -368,10 +368,10 @@ function set_category_permissions_from_environment($module,$category,$page=NULL)
 			if (is_array($cat_support)) $cat_support=$cat_support[0];
 			if ($cat_support==0) continue;
 
-			$value=post_param_integer('access_'.strval($group_id).'_sp_'.$override,-1);
+			$value=post_param_integer('access_'.strval($group_id).'_privilege_'.$override,-1);
 			if ($value!=-1)
 			{
-				$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB']->query_insert('gsp',array('specific_permission'=>$override,'group_id'=>$group_id,'module_the_name'=>$module,'category_name'=>$category,'the_page'=>'','the_value'=>$value));
+				$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB']->query_insert('group_privileges',array('privilege'=>$override,'group_id'=>$group_id,'module_the_name'=>$module,'category_name'=>$category,'the_page'=>'','the_value'=>$value));
 			}
 		}
 	}

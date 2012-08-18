@@ -115,7 +115,7 @@ class Hook_search_downloads
 			$where_clause.='add_date>'.strval(intval($cutoff));
 		}
 
-		if (!has_specific_permission(get_member(),'see_unvalidated'))
+		if (!has_privilege(get_member(),'see_unvalidated'))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='validated=1';

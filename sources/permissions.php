@@ -158,7 +158,7 @@ function has_zone_access($member,$zone)
  * @param  ?mixed			Either the ID code of a privilege, an array of alternatives that are acceptable (NULL: none required)
  * @return boolean		Whether the member has zone and page access
  */
-function has_actual_page_access($member=NULL,$page=NULL,$zone=NULL,$cats=NULL,$sp=NULL)
+function has_actual_page_access($member=NULL,$page=NULL,$zone=NULL,$cats=NULL,$privilege=NULL)
 {
 	if (running_script('upgrader')) return true;
 
@@ -185,15 +185,15 @@ function has_actual_page_access($member=NULL,$page=NULL,$zone=NULL,$cats=NULL,$s
 			if (!has_category_access($member,$cats[$i*2+0],$cats[$i*2+1])) return false;
 		}
 	}
-	if ($sp!==NULL)
+	if ($privilege!==NULL)
 	{
-		if (!is_array($sp)) $sp=array($sp);
-		$sp_acceptable=false;
-		foreach ($sp as $perm)
+		if (!is_array($privilege)) $privilege=array($privilege);
+		$privilege_acceptable=false;
+		foreach ($privilege as $perm)
 		{
-			if (has_specific_permission($member,$perm,$page,$cats)) $sp_acceptable=true;
+			if (has_privilege($member,$perm,$page,$cats)) $privilege_acceptable=true;
 		}
-		if (!$sp_acceptable) return false;
+		if (!$privilege_acceptable) return false;
 	}
 
 	return true;
@@ -463,9 +463,9 @@ function enforce_personal_access($member_id,$permission=NULL,$permission2=NULL,$
 	if (is_null($member_viewing)) $member_viewing=get_member();
 
 	if (is_guest($member_id)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-	if ((!has_specific_permission($member_viewing,'assume_any_member')) && ((is_null($permission2)) || (!has_specific_permission($member_viewing,$permission2))))
+	if ((!has_privilege($member_viewing,'assume_any_member')) && ((is_null($permission2)) || (!has_privilege($member_viewing,$permission2))))
 	{
-		if (($member_id!=$member_viewing) || ((!is_null($permission)) && (!has_specific_permission($member_viewing,$permission))))
+		if (($member_id!=$member_viewing) || ((!is_null($permission)) && (!has_privilege($member_viewing,$permission))))
 		{
 			if (!is_null($permission)) access_denied('PRIVILEGE',$permission);
 			else access_denied('PRIVILEGE',is_null($permission2)?'assume_any_member':$permission2);
@@ -480,10 +480,10 @@ function enforce_personal_access($member_id,$permission=NULL,$permission2=NULL,$
  * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
  * @param  ?MEMBER		Member to check for (NULL: current user)
  */
-function check_specific_permission($permission,$cats=NULL,$member_id=NULL)
+function check_privilege($permission,$cats=NULL,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
-	if (!has_specific_permission($member_id,$permission,get_page_name(),$cats)) access_denied('PRIVILEGE',$permission);
+	if (!has_privilege($member_id,$permission,get_page_name(),$cats)) access_denied('PRIVILEGE',$permission);
 }
 
 /**
@@ -495,9 +495,9 @@ function check_specific_permission($permission,$cats=NULL,$member_id=NULL)
  * @param  ID_TEXT		The ID code for the permission module being checked for
  * @return boolean		Whether the member has the permission
  */
-function has_some_cat_specific_permission($member,$permission,$page,$permission_module)
+function has_some_cat_privilege($member,$permission,$page,$permission_module)
 {
-	$page_wide_test=has_specific_permission($member,$permission,$page); // To make sure permissions are cached, and test if page-wide or site-wide exists
+	$page_wide_test=has_privilege($member,$permission,$page); // To make sure permissions are cached, and test if page-wide or site-wide exists
 	if ($page_wide_test) return true;
 
 	global $PRIVILEGE_CACHE;
@@ -521,7 +521,7 @@ function has_some_cat_specific_permission($member,$permission,$page,$permission_
  * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
  * @return boolean		Whether the member has the permission
  */
-function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
+function has_privilege($member,$permission,$page=NULL,$cats=NULL)
 {
 	if (running_script('upgrader')) return true;
 	if ($GLOBALS['IN_MINIKERNEL_VERSION']==1) return true;
@@ -551,7 +551,7 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 					$result=$PRIVILEGE_CACHE[$member][$permission][''][$cats[$i*2+0]][$cats[$i*2+1]]==1;
 					if (!$result)
 					{
-						handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+						handle_permission_check_logging($member,'has_privilege',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
 						return $result;
 					}
 					$okay=true;
@@ -560,7 +560,7 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 			if ($okay)
 			{
 				$result=$okay;
-				handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+				handle_permission_check_logging($member,'has_privilege',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
 				return $result;
 			}
 		}
@@ -569,40 +569,40 @@ function has_specific_permission($member,$permission,$page=NULL,$cats=NULL)
 			if (isset($PRIVILEGE_CACHE[$member][$permission][$page]['']['']))
 			{
 				$result=$PRIVILEGE_CACHE[$member][$permission][$page]['']['']==1;
-				handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+				handle_permission_check_logging($member,'has_privilege',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
 				return $result;
 			}
 		}
 		if (isset($PRIVILEGE_CACHE[$member][$permission]['']['']['']))
 		{
 			$result=$PRIVILEGE_CACHE[$member][$permission]['']['']['']==1;
-			handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+			handle_permission_check_logging($member,'has_privilege',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
 			return $result;
 		}
 		$result=false;
 
-		handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),($cats===NULL)?array():$cats),$result);
+		handle_permission_check_logging($member,'has_privilege',array_merge(array($permission,$page),($cats===NULL)?array():$cats),$result);
 		return $result;
 	}
 
 	$where='';
-	if ($member!=get_member()) $where.=' AND '.db_string_equal_to('specific_permission',$permission);
-	$perhaps=$GLOBALS['SITE_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gsp WHERE ('.$groups.')'.$where.' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'msp WHERE member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true);
+	if ($member!=get_member()) $where.=' AND '.db_string_equal_to('privilege',$permission);
+	$perhaps=$GLOBALS['SITE_DB']->query('SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_privileges WHERE ('.$groups.')'.$where.' UNION ALL SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'member_privileges WHERE member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true);
 	if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))
 	{
-		$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gsp WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').$where.' UNION ALL SELECT specific_permission,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'msp WHERE '.db_string_equal_to('module_the_name','forums').' AND member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true));
+		$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_privileges WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').$where.' UNION ALL SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_privileges WHERE '.db_string_equal_to('module_the_name','forums').' AND member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true));
 	}
 	$PRIVILEGE_CACHE[$member]=array();
 	foreach ($perhaps as $p)
 	{
-		if (@$PRIVILEGE_CACHE[$member][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]!=1)
-			$PRIVILEGE_CACHE[$member][$p['specific_permission']][$p['the_page']][$p['module_the_name']][$p['category_name']]=$p['the_value'];
+		if (@$PRIVILEGE_CACHE[$member][$p['privilege']][$p['the_page']][$p['module_the_name']][$p['category_name']]!=1)
+			$PRIVILEGE_CACHE[$member][$p['privilege']][$p['the_page']][$p['module_the_name']][$p['category_name']]=$p['the_value'];
 	}
 
 	// Note: due to the way the "detect at override level" code works, the "best of" permission system does not hold with inconsistant overriding against all usergroups
 
-	$result=has_specific_permission($member,$permission,$page,$cats);
-	handle_permission_check_logging($member,'has_specific_permission',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
+	$result=has_privilege($member,$permission,$page,$cats);
+	handle_permission_check_logging($member,'has_privilege',array_merge(array($permission,$page),is_null($cats)?array():$cats),$result);
 	if ($member!=get_member()) unset($PRIVILEGE_CACHE[$member]);
 	return $result;
 }
@@ -650,7 +650,7 @@ function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
 
 	if (is_null($result))
 	{
-		$result=has_specific_permission($member,'submit_'.$range.'range_content',$page,$cats);
+		$result=has_privilege($member,'submit_'.$range.'range_content',$page,$cats);
 	}
 
 	$SUBMIT_PERMISSION_CACHE[$range][$member][$ip][$page][serialize($cats)]=$result;
@@ -670,8 +670,8 @@ function check_some_edit_permission($range,$cats=NULL)
 	$ret=false;
 	$member=get_member();
 	if (is_guest($member)) $ret=false;
-	if (has_specific_permission($member,'edit_'.$range.'range_content',get_page_name(),$cats)) $ret=true;
-	if (has_specific_permission($member,'edit_own_'.$range.'range_content',get_page_name(),$cats)) $ret=true;
+	if (has_privilege($member,'edit_'.$range.'range_content',get_page_name(),$cats)) $ret=true;
+	if (has_privilege($member,'edit_own_'.$range.'range_content',get_page_name(),$cats)) $ret=true;
 
 	if (!$ret) access_denied('PRIVILEGE','edit_own_'.$range.'range_content');
 }
@@ -707,8 +707,8 @@ function check_edit_permission($range,$resource_owner,$cats=NULL,$page=NULL)
 function has_edit_permission($range,$member,$resource_owner,$page,$cats=NULL)
 {
 	if (is_guest($member)) return false;
-	if ((!is_null($resource_owner)) && ($member==$resource_owner) && (has_specific_permission($member,'edit_own_'.$range.'range_content',$page,$cats))) return true;
-	if (has_specific_permission($member,'edit_'.$range.'range_content',$page,$cats)) return true;
+	if ((!is_null($resource_owner)) && ($member==$resource_owner) && (has_privilege($member,'edit_own_'.$range.'range_content',$page,$cats))) return true;
+	if (has_privilege($member,'edit_'.$range.'range_content',$page,$cats)) return true;
 	return false;
 }
 
@@ -743,8 +743,8 @@ function check_delete_permission($range,$resource_owner,$cats=NULL,$page=NULL)
 function has_delete_permission($range,$member,$resource_owner,$page,$cats=NULL)
 {
 	if (is_guest($member)) return false;
-	if ((!is_null($resource_owner)) && ($member==$resource_owner) && (has_specific_permission($member,'delete_own_'.$range.'range_content',$page,$cats))) return true;
-	if (has_specific_permission($member,'delete_'.$range.'range_content',$page,$cats)) return true;
+	if ((!is_null($resource_owner)) && ($member==$resource_owner) && (has_privilege($member,'delete_own_'.$range.'range_content',$page,$cats))) return true;
+	if (has_privilege($member,'delete_'.$range.'range_content',$page,$cats)) return true;
 	return false;
 }
 

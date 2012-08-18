@@ -65,12 +65,12 @@ class Module_points
 		delete_config_option('points_show_personal_profile_link');
 		delete_config_option('points_per_currency_unit');
 
-		delete_specific_permission('give_points_self');
-		delete_specific_permission('have_negative_gift_points');
-		delete_specific_permission('give_negative_points');
-		delete_specific_permission('view_charge_log');
-		delete_specific_permission('use_points');
-		delete_specific_permission('trace_anonymous_gifts');
+		delete_privilege('give_points_self');
+		delete_privilege('have_negative_gift_points');
+		delete_privilege('give_negative_points');
+		delete_privilege('view_charge_log');
+		delete_privilege('use_points');
+		delete_privilege('trace_anonymous_gifts');
 
 		delete_menu_item_simple('_SEARCH:points:type=member:id={$USER_OVERIDE}');
 		delete_menu_item_simple('_SEARCH:points:type=member');
@@ -86,7 +86,7 @@ class Module_points
 	{
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
-			add_specific_permission('POINTS','use_points',true);
+			add_privilege('POINTS','use_points',true);
 		}
 
 		if (is_null($upgrade_from))
@@ -116,10 +116,10 @@ class Module_points
 			add_config_option('RATING','points_rating','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('VOTING','points_voting','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
 
-			add_specific_permission('POINTS','give_points_self',false);
-			add_specific_permission('POINTS','have_negative_gift_points',false);
-			add_specific_permission('POINTS','give_negative_points',false);
-			add_specific_permission('POINTS','view_charge_log',false);
+			add_privilege('POINTS','give_points_self',false);
+			add_privilege('POINTS','have_negative_gift_points',false);
+			add_privilege('POINTS','give_negative_points',false);
+			add_privilege('POINTS','view_charge_log',false);
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
@@ -146,7 +146,7 @@ class Module_points
 			add_config_option('COUNT_GIFT_POINTS_USED','points_show_personal_stats_gift_points_used','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
 			add_config_option('COUNT_POINTS_EVER','points_show_personal_stats_total_points','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
 
-			add_specific_permission('POINTS','trace_anonymous_gifts',false);
+			add_privilege('POINTS','trace_anonymous_gifts',false);
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<4))
@@ -319,7 +319,7 @@ class Module_points
 		$worked=false;
 
 		$member_id_viewing=get_member();
-		if (($member_id_of==$member_id_viewing) && (!has_specific_permission($member_id_viewing,'give_points_self'))) // No cheating
+		if (($member_id_of==$member_id_viewing) && (!has_privilege($member_id_viewing,'give_points_self'))) // No cheating
 		{
 			$message=do_lang_tempcode('PE_SELF');
 		}
@@ -334,11 +334,11 @@ class Module_points
 				$viewer_gift_points_available=get_gift_points_to_give($member_id_viewing);
 				//$viewer_gift_points_used=get_gift_points_used($member_id_viewing);
 
-				if (($viewer_gift_points_available<$amount) && (!has_specific_permission($member_id_viewing,'have_negative_gift_points'))) // Validate we have enough for this, and add to usage
+				if (($viewer_gift_points_available<$amount) && (!has_privilege($member_id_viewing,'have_negative_gift_points'))) // Validate we have enough for this, and add to usage
 				{
 					$message=do_lang_tempcode('PE_LACKING_GIFT_POINTS');
 				}
-				elseif (($amount<0) && (!has_specific_permission($member_id_viewing,'give_negative_points'))) // Trying to be negative
+				elseif (($amount<0) && (!has_privilege($member_id_viewing,'give_negative_points'))) // Trying to be negative
 				{
 					$message=do_lang_tempcode('PE_NEGATIVE_GIFT');
 				}

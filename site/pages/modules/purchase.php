@@ -63,7 +63,7 @@ class Module_purchase
 		delete_config_option('pd_email');
 		delete_config_option('pd_number');
 		delete_config_option('callback_password');
-		delete_specific_permission('access_ecommerce_in_test_mode');
+		delete_privilege('access_ecommerce_in_test_mode');
 
 		delete_menu_item_simple('_SELF:purchase:type=misc');
 		delete_menu_item_simple('_SELF:invoices:type=misc');
@@ -102,7 +102,7 @@ class Module_purchase
 			add_config_option('POSTAL_ADDRESS','pd_address','text','return \'\';','ECOMMERCE','ECOMMERCE'); // SecPay: not needed
 			add_config_option('EMAIL_ADDRESS','pd_email','line','return get_option(\'staff_address\');','ECOMMERCE','ECOMMERCE'); // SecPay: not needed
 			add_config_option('PHONE_NUMBER','pd_number','line','return \'\';','ECOMMERCE','ECOMMERCE'); // SecPay: not needed
-			add_specific_permission('ECOMMERCE','access_ecommerce_in_test_mode',false);
+			add_privilege('ECOMMERCE','access_ecommerce_in_test_mode',false);
 
 			$GLOBALS['SITE_DB']->create_table('trans_expecting',array(
 				'id'=>'*ID_TEXT',
@@ -181,7 +181,7 @@ class Module_purchase
 		require_css('ecommerce');
 
 		// Kill switch
-		if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_specific_permission(get_member(),'access_ecommerce_in_test_mode')))
+		if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_privilege(get_member(),'access_ecommerce_in_test_mode')))
 			warn_exit(do_lang_tempcode('PURCHASE_DISABLED'));
 
 		$type=get_param('type','misc');

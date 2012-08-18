@@ -40,11 +40,11 @@ function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id=NULL,$member_
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (!has_specific_permission($member_id,'submit_lowrange_content','topics',array('forums',$forum_id,'topics',$topic_id))) return false;
+	if (!has_privilege($member_id,'submit_lowrange_content','topics',array('forums',$forum_id,'topics',$topic_id))) return false;
 	if (is_null($last_member_id)) return true;
 	if (($last_member_id==$member_id) && (!is_null($forum_id)))
 	{
-		if (!has_specific_permission($member_id,'double_post')) return false;
+		if (!has_privilege($member_id,'double_post')) return false;
 	}
 
 	$test=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_warnings WHERE (p_silence_from_topic='.strval($topic_id).' OR p_silence_from_forum='.strval($forum_id).') AND w_member_id='.strval($member_id));
@@ -67,7 +67,7 @@ function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL)
 
 	if (is_null($forum_id))
 	{
-		if (($resource_owner==$member_id) && (has_specific_permission($member_id,'edit_personal_topic_posts'))) return true;
+		if (($resource_owner==$member_id) && (has_privilege($member_id,'edit_personal_topic_posts'))) return true;
 	}
 
 	if (!has_category_access($member_id,'forums',strval($forum_id))) return false;
@@ -89,7 +89,7 @@ function ocf_may_delete_post_by($resource_owner,$forum_id,$member_id=NULL)
 
 	if (is_null($forum_id))
 	{
-		if (($resource_owner!=$member_id) || (!has_specific_permission($member_id,'delete_personal_topic_posts'))) return false;
+		if (($resource_owner!=$member_id) || (!has_privilege($member_id,'delete_personal_topic_posts'))) return false;
 	}
 
 	if (is_null($forum_id)) return false;

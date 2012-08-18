@@ -30,9 +30,9 @@ function ocf_may_edit_poll_by($forum_id,$poll_owner,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (has_specific_permission($member_id,'edit_midrange_content','topics',array('forums',$forum_id))) return true;
+	if (has_privilege($member_id,'edit_midrange_content','topics',array('forums',$forum_id))) return true;
 
-	if ((has_specific_permission($member_id,'edit_own_polls','topics',array('forums',$forum_id))) && ($member_id==$poll_owner)) return true;
+	if ((has_privilege($member_id,'edit_own_polls','topics',array('forums',$forum_id))) && ($member_id==$poll_owner)) return true;
 
 	return false;
 }
@@ -79,9 +79,9 @@ function ocf_may_delete_poll_by($forum_id,$poll_owner,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (has_specific_permission($member_id,'delete_midrange_content','topics',array('forums',$forum_id))) return true;
+	if (has_privilege($member_id,'delete_midrange_content','topics',array('forums',$forum_id))) return true;
 
-	if ((has_specific_permission($member_id,'delete_own_midrange_content','topics',array('forums',$forum_id))) && ($member_id==$poll_owner)) return true;
+	if ((has_privilege($member_id,'delete_own_midrange_content','topics',array('forums',$forum_id))) && ($member_id==$poll_owner)) return true;
 
 	return false;
 }
@@ -118,7 +118,7 @@ function ocf_poll_get_results($poll_id,$request_results=true)
 		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_poll_votes','pv_answer_id',array('pv_poll_id'=>$poll_id,'pv_member_id'=>get_member()));
 		if (is_null($test))
 		{
-			$forfeight=!has_specific_permission(get_member(),'view_poll_results_before_voting');
+			$forfeight=!has_privilege(get_member(),'view_poll_results_before_voting');
 			if ($forfeight)
 			{
 				$GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array(

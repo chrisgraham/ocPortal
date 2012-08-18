@@ -49,9 +49,9 @@ class Module_filedump
 	{
 		$GLOBALS['SITE_DB']->drop_table_if_exists('filedump');
 
-		delete_specific_permission('delete_anything_filedump');
-		delete_specific_permission('upload_filedump');
-		delete_specific_permission('upload_anything_filedump');
+		delete_privilege('delete_anything_filedump');
+		delete_privilege('upload_filedump');
+		delete_privilege('upload_anything_filedump');
 
 		//deldir_contents(get_custom_file_base().'/uploads/filedump',true);
 
@@ -79,9 +79,9 @@ class Module_filedump
 				'the_member'=>'USER'
 			));
 
-			add_specific_permission('FILE_DUMP','upload_anything_filedump',false);
-			add_specific_permission('FILE_DUMP','upload_filedump',true);
-			add_specific_permission('FILE_DUMP','delete_anything_filedump',false);
+			add_privilege('FILE_DUMP','upload_anything_filedump',false);
+			add_privilege('FILE_DUMP','upload_filedump',true);
+			add_privilege('FILE_DUMP','delete_anything_filedump',false);
 
 			require_lang('filedump');
 			if (addon_installed('collaboration_zone'))
@@ -177,7 +177,7 @@ class Module_filedump
 		$fullpath=get_custom_file_base().'/uploads/filedump'.$place;
 		if (!file_exists(get_custom_file_base().'/uploads/filedump'.$place))
 		{
-			if (has_specific_permission(get_member(),'upload_filedump'))
+			if (has_privilege(get_member(),'upload_filedump'))
 			{
 				@mkdir($fullpath,0777) OR warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',escape_html($fullpath),escape_html(dirname($fullpath))));
 				fix_permissions($fullpath,0777);
@@ -207,7 +207,7 @@ class Module_filedump
 				$dbrows=$GLOBALS['SITE_DB']->query_select('filedump',array('description','the_member'),array('name'=>$file,'path'=>$place));
 				if (!array_key_exists(0,$dbrows)) $description[$i]=($directory[$i])?do_lang_tempcode('NA_EM'):do_lang_tempcode('NONE_EM'); else $description[$i]=make_string_tempcode(get_translated_text($dbrows[0]['description']));
 				if ($description[$i]->is_empty()) $description[$i]=do_lang_tempcode('NONE_EM');
-				$deletable[$i]=(array_key_exists(0,$dbrows) && ($dbrows[0]['the_member']==get_member())) || (has_specific_permission(get_member(),'delete_anything_filedump'));
+				$deletable[$i]=(array_key_exists(0,$dbrows) && ($dbrows[0]['the_member']==get_member())) || (has_privilege(get_member(),'delete_anything_filedump'));
 				if ($directory[$i])
 				{
 					$size=get_directory_size(get_custom_file_base().'/uploads/filedump'.$place.$file);
@@ -270,7 +270,7 @@ class Module_filedump
 		}
 
 		// Do a form so people can upload their own stuff
-		if (has_specific_permission(get_member(),'upload_filedump'))
+		if (has_privilege(get_member(),'upload_filedump'))
 		{
 			$post_url=build_url(array('page'=>'_SELF','type'=>'ad','uploading'=>1),'_SELF');
 			$submit_name=do_lang_tempcode('FILEDUMP_UPLOAD');
@@ -335,7 +335,7 @@ class Module_filedump
 		}
 
 		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','the_member',array('name'=>$file,'path'=>$place));
-		if (((!is_null($owner)) && ($owner==get_member())) || (has_specific_permission(get_member(),'delete_anything_filedump')))
+		if (((!is_null($owner)) && ($owner==get_member())) || (has_privilege(get_member(),'delete_anything_filedump')))
 		{
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','description',array('name'=>$file,'path'=>$place));
 			if (!is_null($test)) delete_lang($test);
@@ -435,7 +435,7 @@ class Module_filedump
 	 */
 	function module_do_upload()
 	{
-		if (!has_specific_permission(get_member(),'upload_filedump')) access_denied('I_ERROR');
+		if (!has_privilege(get_member(),'upload_filedump')) access_denied('I_ERROR');
 
 		$title=get_screen_title('FILEDUMP_UPLOAD');
 
@@ -458,7 +458,7 @@ class Module_filedump
 		$file=$_FILES['file']['name'];
 		if (get_magic_quotes_gpc()) $file=stripslashes($file);
 
-		if (!has_specific_permission(get_member(),'upload_anything_filedump')) check_extension($file);
+		if (!has_privilege(get_member(),'upload_anything_filedump')) check_extension($file);
 		$file=str_replace('.','-',basename($file,'.'.get_file_extension($file))).'.'.get_file_extension($file);
 
 		if (!file_exists(get_custom_file_base().'/uploads/filedump'.$place.$file))

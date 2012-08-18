@@ -92,7 +92,7 @@ class Hook_search_quiz
 			$where_clause.='q_add_date>'.strval((integer)$cutoff);
 		}
 
-		if (!has_specific_permission(get_member(),'see_unvalidated'))
+		if (!has_privilege(get_member(),'see_unvalidated'))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='q_validated=1';

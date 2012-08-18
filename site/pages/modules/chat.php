@@ -68,10 +68,10 @@ class Module_chat
 		delete_config_option('sitewide_im');
 		delete_config_option('group_private_chatrooms');
 
-		delete_specific_permission('create_private_room');
-		delete_specific_permission('start_im');
-		delete_specific_permission('moderate_my_private_rooms');
-		delete_specific_permission('ban_chatters_from_rooms');
+		delete_privilege('create_private_room');
+		delete_privilege('start_im');
+		delete_privilege('moderate_my_private_rooms');
+		delete_privilege('ban_chatters_from_rooms');
 
 		$GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name'=>'cms_chat'));
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'chat'));
@@ -161,8 +161,8 @@ class Module_chat
 		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))
 		{
-			add_specific_permission('SECTION_CHAT','create_private_room',true);
-			add_specific_permission('SECTION_CHAT','start_im',true);
+			add_privilege('SECTION_CHAT','create_private_room',true);
+			add_privilege('SECTION_CHAT','start_im',true);
 			add_config_option('USERNAME_CLICK_IM','username_click_im','tick','return \'0\';','FEATURE','SECTION_CHAT');
 
 			$GLOBALS['SITE_DB']->create_table('chat_blocking',array(
@@ -242,8 +242,8 @@ class Module_chat
 				}
 			}
 
-			add_specific_permission('SECTION_CHAT','moderate_my_private_rooms',true);
-			add_specific_permission('SECTION_CHAT','ban_chatters_from_rooms',false);
+			add_privilege('SECTION_CHAT','moderate_my_private_rooms',true);
+			add_privilege('SECTION_CHAT','ban_chatters_from_rooms',false);
 			// NB: edit_lowrange_content may be overridden for the chat module also, allowing editing messages in rooms
 
 			add_config_option('SITEWIDE_IM','sitewide_im','tick','return \'0\';','FEATURE','SECTION_CHAT');
@@ -460,7 +460,7 @@ class Module_chat
 		{
 			$blocking_link=hyperlink(build_url(array('page'=>'_SELF','type'=>'blocking_interface'),'_SELF'),do_lang_tempcode('MEMBER_BLOCKING'));
 		} else $blocking_link=new ocp_tempcode();
-		if ((has_specific_permission($member_id,'create_private_room')) && (!is_guest()))
+		if ((has_privilege($member_id,'create_private_room')) && (!is_guest()))
 		{
 			$private_room=hyperlink(build_url(array('page'=>'_SELF','type'=>'private'),'_SELF'),do_lang_tempcode('CREATE_PRIVATE_ROOM'));
 		} else $private_room=new ocp_tempcode();
@@ -476,7 +476,7 @@ class Module_chat
 			$post_url_remove_friends=new ocp_tempcode();
 		}
 		$online_url=$GLOBALS['FORUM_DRIVER']->online_members_url();
-		$can_im=has_specific_permission(get_member(),'start_im');
+		$can_im=has_privilege(get_member(),'start_im');
 		$friends=array();
 		$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('*'),array('member_likes'=>$member_id),'ORDER BY date_and_time',100);
 		$friend_active=get_chatters_in_room(NULL);
@@ -561,7 +561,7 @@ class Module_chat
 			'code',
 			'hide'
 		);
-		if (has_specific_permission(get_member(),'comcode_dangerous')) $_buttons[]='html';
+		if (has_privilege(get_member(),'comcode_dangerous')) $_buttons[]='html';
 		foreach ($_buttons as $button) $buttons->attach(do_template('COMCODE_EDITOR_BUTTON',array('_GUID'=>'4fd75edb2d091b1c78a71c653efb18f0','DIVIDER'=>false,'FIELD_NAME'=>'post','TITLE'=>do_lang_tempcode('INPUT_COMCODE_'.$button),'B'=>$button)));
 
 		if (!is_guest())
@@ -636,7 +636,7 @@ class Module_chat
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
-		check_specific_permission('create_private_room');
+		check_privilege('create_private_room');
 
 		// This function instantiates a private room...WE MUST BE TIGHT ON SECURITY WITH THIS ONE!
 		$title=get_screen_title('CREATE_PRIVATE_ROOM');
@@ -668,7 +668,7 @@ class Module_chat
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
-		check_specific_permission('create_private_room');
+		check_privilege('create_private_room');
 
 		// Check the input
 		$room_name=post_param('room_name',do_lang('CHAT_PRIVATE_DEFAULT_ROOM_NAME',$GLOBALS['FORUM_DRIVER']->get_username(get_member())));

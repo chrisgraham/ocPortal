@@ -62,7 +62,7 @@ class Hook_pointstore_gambling
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action_done','id'=>$class),'_SELF');
 
 		// Check points
-		if (($points_left<$cost) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($points_left<$cost) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('_CANT_AFFORD',integer_format($cost),integer_format($points_left)));
 		}
@@ -95,7 +95,7 @@ class Hook_pointstore_gambling
 		$cost=intval(get_option('minimum_gamble_amount'));
 		$points_left=available_points(get_member());
 		$max=min(intval(get_option('maximum_gamble_amount')),$points_left);
-		if ((!has_specific_permission(get_member(),'give_points_self')) || ($amount<0))
+		if ((!has_privilege(get_member(),'give_points_self')) || ($amount<0))
 		{
 			if (($amount<$cost) || ($amount>$max)) warn_exit(do_lang_tempcode('INVALID_GAMBLE_AMOUNT'));
 			if ($points_left<$amount)

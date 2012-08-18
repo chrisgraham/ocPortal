@@ -61,18 +61,18 @@ function sms_wrap($message,$to_sms)
 
 	// Check current user has not trigered too many
 	$triggered_already=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'sms_log WHERE s_time>'.strval(time()-60*60*24*31).' AND '.db_string_equal_to('s_trigger_ip',get_ip_address(2)));
-	$trigger_limit=intval(get_option('sms_'.(has_specific_permission(get_member(),'sms_higher_trigger_limit')?'high':'low').'_trigger_limit'));
+	$trigger_limit=intval(get_option('sms_'.(has_privilege(get_member(),'sms_higher_trigger_limit')?'high':'low').'_trigger_limit'));
 	if ($triggered_already+count($to_sms)>$trigger_limit) return 0;
 
 	$num_sent=0;
 
 	foreach ($to_sms as $to_member)
 	{
-		if (!has_specific_permission($to_member,'use_sms')) continue;
+		if (!has_privilege($to_member,'use_sms')) continue;
 
 		// Check that not one over quota
 		$sent_in_month=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'sms_log WHERE s_member_id='.strval($to_member).' AND s_time>'.strval($threshold));
-		$limit=intval(get_option('sms_'.(has_specific_permission($to_member,'sms_higher_limit')?'high':'low').'_limit'));
+		$limit=intval(get_option('sms_'.(has_privilege($to_member,'sms_higher_limit')?'high':'low').'_limit'));
 		if ($sent_in_month+1>$limit) continue;
 
 		// If just gone over quota, tell them instead of sending the real notification

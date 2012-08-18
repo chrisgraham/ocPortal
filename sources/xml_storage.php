@@ -25,7 +25,7 @@
  */
 function find_all_xml_tables()
 {
-	$skip=array('group_category_access','gsp','seo_meta','sessions','ip_country','f_moderator_logs','download_logging','url_title_cache','cached_comcode_pages','stats','import_id_remap','import_parts_done','import_session','cache','cache_on','blocks','modules','addons','addon_dependencies','db_meta','db_meta_indices','adminlogs','autosave','translate','translate_history');
+	$skip=array('group_category_access','group_privileges','seo_meta','sessions','ip_country','f_moderator_logs','download_logging','url_title_cache','cached_comcode_pages','stats','import_id_remap','import_parts_done','import_session','cache','cache_on','blocks','modules','addons','addon_dependencies','db_meta','db_meta_indices','adminlogs','autosave','translate','translate_history');
 	$all_tables=$GLOBALS['SITE_DB']->query_select('db_meta',array('DISTINCT m_table'));
 	$tables=array();
 	foreach ($all_tables as $table)
@@ -115,9 +115,9 @@ function _export_table_to_xml($table,$comcode_xml)
 	}
 
 	$xml_data='';
-	$db_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_type,m_table FROM '.get_table_prefix().'db_meta WHERE '.db_string_equal_to('m_table',$table).' OR '.db_string_equal_to('m_table','seo_meta').' OR '.db_string_equal_to('m_table','group_category_access').' OR '.db_string_equal_to('m_table','gsp'));
+	$db_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_type,m_table FROM '.get_table_prefix().'db_meta WHERE '.db_string_equal_to('m_table',$table).' OR '.db_string_equal_to('m_table','seo_meta').' OR '.db_string_equal_to('m_table','group_category_access').' OR '.db_string_equal_to('m_table','group_privileges'));
 	$where=mixed();
-	if ($table=='gsp') $where=array('category_name'=>'');
+	if ($table=='group_privileges') $where=array('category_name'=>'');
 	if (is_null($parent_field))
 	{
 		$rows=$GLOBALS['SITE_DB']->query_select($table,array('*'),$where,'',NULL,NULL,false,array());
@@ -272,9 +272,9 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 		$rows=$GLOBALS['SITE_DB']->query_select('group_category_access',array('*'),array('module_the_name'=>$permissions_type_code,'category_name'=>is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]));
 		foreach ($rows as $_row)
 			$xml_data.=_tab(_export_xml_row('group_category_access',array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
-		$rows=$GLOBALS['SITE_DB']->query_select('gsp',array('*'),array('module_the_name'=>$permissions_type_code,'category_name'=>is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]));
+		$rows=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('module_the_name'=>$permissions_type_code,'category_name'=>is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]));
 		foreach ($rows as $_row)
-			$xml_data.=_tab(_export_xml_row('gsp',array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
+			$xml_data.=_tab(_export_xml_row('group_privileges',array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
 	}
 
 	if ($include_end) $xml_data.='</'.$table.'>';

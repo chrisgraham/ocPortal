@@ -266,7 +266,7 @@ class Hook_mybb
 
 			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_attachments_per_post'=>$additional_data['maxattachments'],'g_max_avatar_width'=>$additional_data['avatar_max_width'],'g_max_avatar_height'=>$additional_data['avatar_max_height']),array('id'=>$id),'',1);
 
-			set_specific_permission($id,'use_quick_reply',$additional_data['quickreply']);
+			set_privilege($id,'use_quick_reply',$additional_data['quickreply']);
 		}
 
 		$INFO['board_prefix']=$board_url;
@@ -319,7 +319,7 @@ class Hook_mybb
 			}
 
 			// privileges
-			set_specific_permission($id_new,'allow_html',true);
+			set_privilege($id_new,'allow_html',true);
 
 			if (!import_check_if_imported('group',strval($row['gid'])))
 				import_id_remap_put('group',strval($row['gid']),$id_new);

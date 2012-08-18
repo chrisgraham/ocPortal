@@ -32,7 +32,7 @@ class Hook_Profiles_Tabs_edit
 	{
 		if (is_guest($member_id_viewing)) return false;
 
-		if (!(($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')))) return false;
+		if (!(($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')))) return false;
 
 		$hooks=find_all_hooks('systems','profiles_tabs_edit');
 		foreach (array_keys($hooks) as $hook)

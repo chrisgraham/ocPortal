@@ -72,7 +72,7 @@ class Module_admin_awards extends standard_crud_module
 	{
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
-			delete_specific_permission('choose_dotw');
+			delete_privilege('choose_dotw');
 			delete_config_option('dotw_update_time');
 			$GLOBALS['SITE_DB']->rename_table('dotw','award_archive');
 			$GLOBALS['SITE_DB']->add_table_field('award_archive','a_type_id','AUTO_LINK',db_get_first_id());

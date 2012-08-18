@@ -288,7 +288,7 @@ function init__global2()
 		if (addon_installed('errorlog'))
 			@ini_set('error_log',get_custom_file_base().'/data_custom/errorlog.php');
 	}
-	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0) && ((get_option('display_php_errors')=='1') || (running_script('upgrader')) || (has_specific_permission(get_member(),'see_php_errors'))))
+	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0) && ((get_option('display_php_errors')=='1') || (running_script('upgrader')) || (has_privilege(get_member(),'see_php_errors'))))
 	{
 		@ini_set('display_errors','1');
 	} elseif (!$GLOBALS['DEV_MODE']) @ini_set('display_errors','0');
@@ -1794,7 +1794,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 	global $CSSS;
 
 	$seed='';
-	if (has_specific_permission(get_member(),'view_profiling_modes'))
+	if (has_privilege(get_member(),'view_profiling_modes'))
 	{
 		$seed=get_param('keep_theme_seed','');
 	}

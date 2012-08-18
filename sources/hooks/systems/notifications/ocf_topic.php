@@ -146,7 +146,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 			if (is_null($forum_id))
 			{
 				require_code('ocf_topics');
-				if (!(($forum_details[0]['t_pt_from']==$member_id) || ($forum_details[0]['t_pt_to']==$member_id) || (ocf_has_special_pt_access(intval($only_if_enabled_on__category),$member_id)) || (!has_specific_permission($member_id,'view_other_pt'))))
+				if (!(($forum_details[0]['t_pt_from']==$member_id) || ($forum_details[0]['t_pt_to']==$member_id) || (ocf_has_special_pt_access(intval($only_if_enabled_on__category),$member_id)) || (!has_privilege($member_id,'view_other_pt'))))
 					return false;
 			}
 		}
@@ -186,7 +186,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 				$members_new=$members;
 				foreach ($members as $member_id=>$setting)
 				{
-					if (($forum_details[0]['t_pt_from']==$member_id) || ($forum_details[0]['t_pt_to']==$member_id) || (ocf_has_special_pt_access(intval($category),$member_id)) || (!has_specific_permission($member_id,'view_other_pt')))
+					if (($forum_details[0]['t_pt_from']==$member_id) || ($forum_details[0]['t_pt_to']==$member_id) || (ocf_has_special_pt_access(intval($category),$member_id)) || (!has_privilege($member_id,'view_other_pt')))
 						$members_new[$member_id]=$setting;
 				}
 				$members=$members_new;

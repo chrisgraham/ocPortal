@@ -70,7 +70,7 @@ function ocf_may_perform_multi_moderation($forum_id,$member_id=NULL)
 
 	if (!ocf_may_moderate_forum($forum_id,$member_id)) return false;
 
-	return has_specific_permission($member_id,'run_multi_moderations');
+	return has_privilege($member_id,'run_multi_moderations');
 }
 
 /**
@@ -83,7 +83,7 @@ function ocf_may_warn_members($member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	return has_specific_permission($member_id,'warn_members');
+	return has_privilege($member_id,'warn_members');
 }
 
 /**

@@ -85,7 +85,7 @@ class Hook_pointstore_bank
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action_done','id'=>$class),'_SELF');
 
 		// Check points
-		if (($points_left<0) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($points_left<0) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('_CANT_AFFORD_BANK'));
 		}
@@ -121,7 +121,7 @@ class Hook_pointstore_bank
 		// Check points
 		$points_left=available_points(get_member());
 
-		if (!has_specific_permission(get_member(),'give_points_self'))
+		if (!has_privilege(get_member(),'give_points_self'))
 		{
 			if ($points_left<$amount)
 			{

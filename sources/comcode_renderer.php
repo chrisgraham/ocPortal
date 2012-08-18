@@ -44,7 +44,7 @@ function check_naughty_javascript_url($source_member,$url,$as_admin)
 {
 	global $POTENTIAL_JS_NAUGHTY_ARRAY;
 
-	if ((!$as_admin) && (!has_specific_permission($source_member,'use_very_dangerous_comcode')))
+	if ((!$as_admin) && (!has_privilege($source_member,'use_very_dangerous_comcode')))
 	{
 		$url2=strtolower($url);
 
@@ -191,7 +191,7 @@ function _comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap
 	{
 		require_code('comcode_xml');
 
-		if (!$as_admin) check_specific_permission('comcode_dangerous',NULL,$source_member);
+		if (!$as_admin) check_privilege('comcode_dangerous',NULL,$source_member);
 		$parser=new comcode_xml_to_tempcode($comcode,$source_member,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$on_behalf_of_member);
 		$ret=$parser->tempcode;
 	} else
@@ -957,7 +957,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$id=$embed->evaluate();
 			global $COMCODE_ATTACHMENTS;
 
-			if ((!is_numeric($id)) && (!$as_admin) && (!has_specific_permission($source_member,'exceed_filesize_limit')))
+			if ((!is_numeric($id)) && (!$as_admin) && (!has_privilege($source_member,'exceed_filesize_limit')))
 			{
 				// We work all this out before we do any downloads, to make sure orphaned files aren't dumped on the file system (possible hack method)
 				if (get_forum_type()=='ocf')
@@ -1099,7 +1099,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 				elseif (substr($id,0,4)=='url_')
 				{
-					if ((!has_specific_permission($source_member,'draw_to_server')) && (!$as_admin)) break;
+					if ((!has_privilege($source_member,'draw_to_server')) && (!$as_admin)) break;
 
 					$_id='!';
 					$attributes['type']=post_param('attachmenttype'.$_id,array_key_exists('type',$attributes)?$attributes['type']:'auto');
@@ -1195,7 +1195,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$attachment=$_attachment[0];
 
 				$already_referenced=array_key_exists($__id,$GLOBALS['ATTACHMENTS_ALREADY_REFERENCED']);
-				if (($already_referenced) || ($as_admin) || (/*(!is_guest($source_member)) && */($source_member===$owner)) || (((has_specific_permission($source_member,'reuse_others_attachments')) || ($owner==$source_member)) && (has_attachment_access($source_member,$__id))))
+				if (($already_referenced) || ($as_admin) || (/*(!is_guest($source_member)) && */($source_member===$owner)) || (((has_privilege($source_member,'reuse_others_attachments')) || ($owner==$source_member)) && (has_attachment_access($source_member,$__id))))
 				{
 					if (!array_key_exists('type',$attributes)) $attributes['type']='auto';
 					$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>$attachment['a_add_time'],'type'=>'existing','id'=>$__id,'attachmenttype'=>$attributes['type'],'marker'=>$marker,'comcode'=>$comcode);
@@ -1634,7 +1634,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$url_full=$_embed;
 			}
 			$align=array_key_exists('align',$attributes)?$attributes['align']:'bottom';
-			if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')) || ((!has_specific_permission($source_member,'draw_to_server')) && (!$as_admin)))
+			if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')) || ((!has_privilege($source_member,'draw_to_server')) && (!$as_admin)))
 			{
 				$url_thumb=$url_full;
 			} else
@@ -1818,7 +1818,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			// Render
 			if (!array_key_exists('target',$attributes)) $attributes['target']=$local?'_top':'_blank';
 			if ($attributes['target']=='blank') $attributes['target']='_blank';
-			$rel=(($as_admin) || has_specific_permission($source_member,'search_engine_links'))?'':'nofollow';
+			$rel=(($as_admin) || has_privilege($source_member,'search_engine_links'))?'':'nofollow';
 			if ($attributes['target']=='_blank')
 			{
 				$title=do_lang_tempcode('LINK_NEW_WINDOW');
@@ -2028,7 +2028,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				{
 					require_code('comcode_xml');
 
-					if (!$as_admin) check_specific_permission('comcode_dangerous',NULL,$source_member);
+					if (!$as_admin) check_privilege('comcode_dangerous',NULL,$source_member);
 					$_=new comcode_xml_to_tempcode($comcode,$source_member,60,NULL,$connection,false,false,false,true,false,$on_behalf_of_member);
 				} else
 				{

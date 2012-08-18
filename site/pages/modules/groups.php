@@ -151,7 +151,7 @@ class Module_groups
 	{
 		$title=get_screen_title('USERGROUPS');
 
-		$map=has_specific_permission(get_member(),'see_hidden_groups')?array('g_is_private_club'=>0):array('g_is_private_club'=>0,'g_hidden'=>0);
+		$map=has_privilege(get_member(),'see_hidden_groups')?array('g_is_private_club'=>0):array('g_is_private_club'=>0,'g_hidden'=>0);
 		$groups=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),$map,'ORDER BY g_order,id');
 		$staff_groups=array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
 
@@ -280,7 +280,7 @@ class Module_groups
 		//-Others
 		$start=get_param_integer('others_start',0);
 		$max=get_param_integer('others_max',20);
-		$map=has_specific_permission(get_member(),'see_hidden_groups')?array('g_is_private_club'=>1):array('g_is_private_club'=>1,'g_hidden'=>0);
+		$map=has_privilege(get_member(),'see_hidden_groups')?array('g_is_private_club'=>1):array('g_is_private_club'=>1,'g_hidden'=>0);
 		$max_rows=count($_others);
 		if ($start>count($_others)) $_others=array();
 		$_others=array_merge($_others,$GLOBALS['FORUM_DB']->query_select('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id',array('g.*','text_original'),$map,'ORDER BY g_order,g.id',$max,max(0,$start-$max_rows)));
@@ -313,7 +313,7 @@ class Module_groups
 
 		if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		$map=has_specific_permission(get_member(),'see_hidden_groups')?array('id'=>$id):array('id'=>$id,'g_hidden'=>0);
+		$map=has_privilege(get_member(),'see_hidden_groups')?array('id'=>$id):array('id'=>$id,'g_hidden'=>0);
 		$groups=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),$map,'',1);
 		if (!array_key_exists(0,$groups)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$group=$groups[0];
@@ -432,7 +432,7 @@ class Module_groups
 		elseif (has_actual_page_access(get_member(),'cms_ocf_groups',get_module_zone('cms_ocf_groups')))
 		{
 			$is_super_admin=$group['g_is_super_admin'];
-			if ((!has_specific_permission(get_member(),'control_usergroups')) || ($is_super_admin==1))
+			if ((!has_privilege(get_member(),'control_usergroups')) || ($is_super_admin==1))
 			{
 				$leader_tmp=$group['g_group_leader'];
 				if ($leader_tmp==get_member())

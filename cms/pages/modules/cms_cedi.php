@@ -55,9 +55,9 @@ class Module_cms_cedi
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
-	 * @return array	A map of privileges that are overridable; sp to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
-	function get_sp_overrides()
+	function get_privilege_overrides()
 	{
 		require_lang('cedi');
 		return array('edit_cat_lowrange_content'=>array(1,'CEDI_EDIT_PAGE'),'delete_cat_lowrange_content'=>array(1,'CEDI_DELETE_PAGE'),'submit_lowrange_content'=>array(1,'CEDI_MAKE_POST'),'bypass_validation_lowrange_content'=>array(1,'BYPASS_CEDI_VALIDATION'),'edit_own_lowrange_content'=>array(1,'CEDI_EDIT_OWN_POST'),'edit_lowrange_content'=>array(1,'CEDI_EDIT_POST'),'delete_own_lowrange_content'=>array(1,'CEDI_DELETE_OWN_POST'),'delete_lowrange_content'=>array(1,'CEDI_DELETE_POST'),'seedy_manage_tree'=>1);
@@ -416,7 +416,7 @@ class Module_cms_cedi
 
 		list($id,$chain)=get_param_cedi_chain('id');
 
-		check_specific_permission('seedy_manage_tree',array('seedy_page',$id));
+		check_privilege('seedy_manage_tree',array('seedy_page',$id));
 
 		if (!has_category_access(get_member(),'seedy_page',strval($id))) access_denied('CATEGORY_ACCESS');
 
@@ -470,7 +470,7 @@ class Module_cms_cedi
 		$childlinks=post_param('children');
 
 		$member=get_member();
-		check_specific_permission('seedy_manage_tree',array('seedy_page',$id));
+		check_privilege('seedy_manage_tree',array('seedy_page',$id));
 
 		$hide_posts=$GLOBALS['SITE_DB']->query_select_value('seedy_pages','hide_posts',array('id'=>$id));
 

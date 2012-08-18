@@ -191,7 +191,7 @@ class Block_side_news
 		$is_on_rss=is_null($_is_on_rss)?0:intval($_is_on_rss); // Set to zero if we don't want to show RSS links
 		$submit_url=new ocp_tempcode();
 
-		if ((($blogs!==1) || (has_specific_permission(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blogs===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),($blogs===1)?'cms_blogs':'cms_news')))
+		if ((($blogs!==1) || (has_privilege(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blogs===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),($blogs===1)?'cms_blogs':'cms_news')))
 		{
 			$map2=array('page'=>($blogs===1)?'cms_blogs':'cms_news','type'=>'ad','redirect'=>SELF_REDIRECT);
 			if (is_numeric($filter))

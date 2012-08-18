@@ -156,7 +156,7 @@ function ocf_get_group_link($id)
 
 	$name=ocf_get_group_name($row['id']);
 
-	$see_hidden=has_specific_permission(get_member(),'see_hidden_groups');
+	$see_hidden=has_privilege(get_member(),'see_hidden_groups');
 	if ((!$see_hidden) && ($row['g_hidden']==1))
 	{
 		return make_string_tempcode(escape_html($name));
@@ -190,7 +190,7 @@ function ocf_get_group_property($group,$property)
 	ocf_ensure_groups_cached(array($group));
 	global $USER_GROUPS_CACHED;
 
-	if (($property=='name') && ($USER_GROUPS_CACHED[$group]['g_hidden']==1) && (!has_specific_permission(get_member(),'see_hidden_groups')))
+	if (($property=='name') && ($USER_GROUPS_CACHED[$group]['g_hidden']==1) && (!has_privilege(get_member(),'see_hidden_groups')))
 	{
 		return do_lang('UNKNOWN');
 	}
@@ -291,7 +291,7 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 	require_code('ocf_members');
 	if ((!function_exists('ocf_is_ldap_member')/*can happen if said in safe mode and detecting safe mode when choosing whether to avoid a custom file via admin permission which requires this function to run*/) || (!ocf_is_ldap_member($member_id)))
 	{
-		$no_hidden=(($skip_secret) && ((/*For installer*/!function_exists('get_member')) || ($member_id!=get_member())) && ((!function_exists('has_specific_permission')) || (!has_specific_permission(get_member(),'see_hidden_groups'))));
+		$no_hidden=(($skip_secret) && ((/*For installer*/!function_exists('get_member')) || ($member_id!=get_member())) && ((!function_exists('has_privilege')) || (!has_privilege(get_member(),'see_hidden_groups'))));
 		$_groups=$GLOBALS['FORUM_DB']->query_select('f_group_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g ON g.id=m.gm_group_id',array('gm_group_id','g_hidden'),array('gm_member_id'=>$member_id,'gm_validated'=>1),'ORDER BY g.g_order');
 		foreach ($_groups as $group)
 			$groups[$group['gm_group_id']]=1;

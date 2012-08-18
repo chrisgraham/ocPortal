@@ -47,7 +47,7 @@ class Block_main_emoticon_codes
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(has_specific_permission(get_member(),\'use_special_emoticons\'))';
+		$info['cache_on']='array(has_privilege(get_member(),\'use_special_emoticons\'))';
 		$info['ttl']=60*2;
 		return $info;
 	}

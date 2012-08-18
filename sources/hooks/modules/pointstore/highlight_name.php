@@ -64,7 +64,7 @@ class Hook_pointstore_highlight_name
 		$points_left=available_points(get_member());
 
 		// Check points
-		if (($points_left<$cost) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($points_left<$cost) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('_CANT_AFFORD',integer_format($cost),integer_format($points_left)));
 		}
@@ -91,7 +91,7 @@ class Hook_pointstore_highlight_name
 		// Check points
 		$cost=intval(get_option($class));
 		$points_left=available_points(get_member());
-		if (($points_left<$cost) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($points_left<$cost) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('_CANT_AFFORD',integer_format($cost),integer_format($points_left)));
 		}

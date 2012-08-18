@@ -194,7 +194,7 @@ function get_table_descriptions()
 		'group_category_access'=>'defines what groups may access what categories',
 		'group_page_access'=>'defines what groups may access what pages',
 		'group_zone_access'=>'defines what groups may access what zones',
-		'gsp'=>'defines what groups have what privileges',
+		'group_privileges'=>'defines what groups have what privileges',
 		'https_pages'=>'lists pages that the webmaster has decided need to run over SSL',
 		'incoming_uploads'=>'temporary storage of uploaded files, before main form submission',
 		'link_tracker'=>'outgoing click tracking (not really used much)',
@@ -207,7 +207,7 @@ function get_table_descriptions()
 		'menu_items'=>'stores all the items shown on menus (except auto-generated ones)',
 		'messages_to_render'=>'stores messages that have been queued up for display on a members browser (e.g. if they have just been redirected after completing something, so a status message will be queued for display after they\'ve been redirected)',
 		'modules'=>'registry of all installed modules',
-		'msp'=>'defines what members have what privileges (rarely used, no admin UI)',
+		'member_privileges'=>'defines what members have what privileges (rarely used, no admin UI)',
 		'notifications_enabled'=>'what notifications members receive',
 		'rating'=>'stores ratings for all kinds of content (rating_for_type determines what kind of content, rating_for_id determines what ID of content within that type)',
 		'review_supplement'=>'stores reviews for all kinds of content',
@@ -215,7 +215,7 @@ function get_table_descriptions()
 		'seo_meta'=>'stores meta keywords and descriptions for all kinds of content',
 		'sessions'=>'stores user sessions, for guests and members (session ID\'s are treated with high security)',
 		'sms_log'=>'logs what SMS messages were sent out on behalf of what users and when',
-		'sp_list'=>'a list of all the privileges available (aka privileges)',
+		'privilege_list'=>'a list of all the privileges available (aka privileges)',
 		'staff_tips_dismissed'=>'stores what webmaster tips (Admin Zone front page) have been read so far',
 		'trackbacks'=>'stores trackbacks for all kinds of content',
 		'tracking'=>'stores tracking for all content that supports it except forum/topic tracking (ocPortal 4.2 doesn\'t really use this table much, except for the staff-messaging tracking)',
@@ -257,12 +257,12 @@ function get_relation_map()
 		'member_zone_access.zone_name'=>'zones.zone_name',
 		'member_page_access.zone_name'=>'zones.zone_name',
 		'member_page_access.page_name'=>'modules.module_the_name',
-		'msp.specific_permission'=>'sp_list.the_name',
-		'msp.category_name'=>'anything.id',
-		'msp.the_page'=>'modules.module_the_name',
-		'gsp.specific_permission'=>'sp_list.the_name',
-		'gsp.the_page'=>'modules.module_the_name',
-		'gsp.category_name'=>'anything.id',
+		'member_privileges.privilege'=>'privilege_list.the_name',
+		'member_privileges.category_name'=>'anything.id',
+		'member_privileges.the_page'=>'modules.module_the_name',
+		'group_privileges.privilege'=>'privilege_list.the_name',
+		'group_privileges.the_page'=>'modules.module_the_name',
+		'group_privileges.category_name'=>'anything.id',
 		'tracking.r_resource_id'=>'anything.id',
 		'url_id_monikers.m_resource_id'=>'anything.id',
 		'url_monikers.m_resource_page'=>'modules.module_the_name',
@@ -274,7 +274,7 @@ function get_relation_map()
 		'redirects.r_to_zone'=>'zones.zone_name',
 		'group_zone_access.zone_name'=>'zones.zone_name',
 		'group_page_access.zone_name'=>'zones.zone_name',
-		'pstore_permissions.p_specific_permission'=>'sp_list.the_name',
+		'pstore_permissions.p_privilege'=>'privilege_list.the_name',
 		'pstore_permissions.p_zone'=>'zones.zone_name',
 		'pstore_permissions.p_page'=>'modules.module_the_name',
 		'pstore_permissions.p_category'=>'anything.id',
@@ -448,8 +448,8 @@ function get_code_to_fix_foreign_keys() //Temp code to help fixup AUTO/AUTO_LINK
 	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option9` (option9) REFERENCES ocp4_translate (id);
 	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option10` (option10) REFERENCES ocp4_translate (id);
 	ALTER TABLE ocp4_group_category_access ADD FOREIGN KEY `group_category_access.category_name` (category_name) REFERENCES ocp4_anything (id);
-	ALTER TABLE ocp4_gsp ADD FOREIGN KEY `gsp.category_name` (category_name) REFERENCES ocp4_anything (id);
-	ALTER TABLE ocp4_gsp ADD FOREIGN KEY `gsp.the_page` (the_page) REFERENCES ocp4_modules (module_the_name);
+	ALTER TABLE ocp4_group_privileges ADD FOREIGN KEY `group_privileges.category_name` (category_name) REFERENCES ocp4_anything (id);
+	ALTER TABLE ocp4_group_privileges ADD FOREIGN KEY `group_privileges.the_page` (the_page) REFERENCES ocp4_modules (module_the_name);
 	ALTER TABLE ocp4_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp4_f_members (id);
 	ALTER TABLE ocp4_seo_meta ADD FOREIGN KEY `seo_meta.meta_for_id` (meta_for_id) REFERENCES ocp4_anything (id);
 	ALTER TABLE ocp4_url_id_monikers ADD FOREIGN KEY `url_id_monikers.m_resource_id` (m_resource_id) REFERENCES ocp4_anything (id);

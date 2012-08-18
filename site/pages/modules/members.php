@@ -188,7 +188,7 @@ class Module_members
 		}
 
 		$where_clause='id<>'.strval(db_get_first_id()).$ocselect_extra_where;
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $where_clause.=' AND m_validated=1';
+		if (!has_privilege(get_member(),'see_unvalidated')) $where_clause.=' AND m_validated=1';
 
 		if ($group_filter!='')
 		{
@@ -203,7 +203,7 @@ class Module_members
 		if ($search!='')
 		{
 			$where_clause.=' AND (m_username LIKE \''.db_encode_like(str_replace('*','%',$search)).'\'';
-			if (has_specific_permission(get_member(),'member_maintenance'))
+			if (has_privilege(get_member(),'member_maintenance'))
 				$where_clause.=' OR m_email_address LIKE \''.db_encode_like(str_replace('*','%',$search)).'\'';
 			$where_clause.=')';
 		}

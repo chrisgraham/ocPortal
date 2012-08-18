@@ -599,7 +599,7 @@ function do_site()
 		require_code('view_modes');
 		initialise_special_page_types($special_page_type);
 	}
-	$doing_special_page_type=($special_page_type!='view') && ($special_page_type!='show_markers') && ($special_page_type!='show_edit_links') && ($special_page_type!='memory') && ((has_specific_permission(get_member(),'view_profiling_modes')) || ($GLOBALS['IS_ACTUALLY_ADMIN']));
+	$doing_special_page_type=($special_page_type!='view') && ($special_page_type!='show_markers') && ($special_page_type!='show_edit_links') && ($special_page_type!='memory') && ((has_privilege(get_member(),'view_profiling_modes')) || ($GLOBALS['IS_ACTUALLY_ADMIN']));
 
 	// Set up Xdebug profiling
 	if ($special_page_type=='profile')
@@ -615,7 +615,7 @@ function do_site()
 
 	// Allow the site to be closed
 	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
 		require_code('site2');
 		closed_site();
@@ -1332,7 +1332,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		global $PT_PAIR_CACHE_CP;
 		$PT_PAIR_CACHE_CP[$codename]['cc_page_title']=($title_to_use===NULL)?do_lang_tempcode('NA_EM'):make_string_tempcode($title_to_use);
 		$PT_PAIR_CACHE_CP[$codename]['p_parent_page']=$comcode_page_row['p_parent_page'];
-		$comcode_breadcrumbs=comcode_breadcrumbs($codename,$zone,get_param('root',''),($comcode_page_row['p_parent_page']=='') || !has_specific_permission(get_member(),'open_virtual_roots'));
+		$comcode_breadcrumbs=comcode_breadcrumbs($codename,$zone,get_param('root',''),($comcode_page_row['p_parent_page']=='') || !has_privilege(get_member(),'open_virtual_roots'));
 		breadcrumb_add_segment($comcode_breadcrumbs);
 
 		$GLOBALS['META_DATA']+=array(

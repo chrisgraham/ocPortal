@@ -89,11 +89,11 @@ function uninstall_ocf()
 
 	foreach ($OCF_TRUE_PERMISSIONS as $permission)
 	{
-		delete_specific_permission($permission);
+		delete_privilege($permission);
 	}
 	foreach ($OCF_FALSE_PERMISSIONS as $permission)
 	{
-		delete_specific_permission($permission);
+		delete_privilege($permission);
 	}
 
 	$GLOBALS['FORUM_DB']->query_delete('group_category_access',array('module_the_name'=>'forums'));
@@ -195,7 +195,7 @@ function uninstall_ocf()
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_special_pt_access');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_saved_warnings');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_member_cpf_perms');
-	$GLOBALS['FORUM_DB']->query_delete('gsp',array('module_the_name'=>'forums'));
+	$GLOBALS['FORUM_DB']->query_delete('group_privileges',array('module_the_name'=>'forums'));
 }
 
 /**
@@ -884,11 +884,11 @@ function install_ocf($upgrade_from=NULL)
 		global $OCF_TRUE_PERMISSIONS,$OCF_FALSE_PERMISSIONS;
 		foreach ($OCF_TRUE_PERMISSIONS as $permission)
 		{
-			add_specific_permission('SECTION_FORUMS',$permission,true);
+			add_privilege('SECTION_FORUMS',$permission,true);
 		}
 		foreach ($OCF_FALSE_PERMISSIONS as $permission)
 		{
-			add_specific_permission('SECTION_FORUMS',$permission,false,($permission=='view_other_pt'));
+			add_privilege('SECTION_FORUMS',$permission,false,($permission=='view_other_pt'));
 		}
 	}
 }

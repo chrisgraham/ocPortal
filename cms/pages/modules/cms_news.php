@@ -56,9 +56,9 @@ class Module_cms_news extends standard_crud_module
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
-	 * @return array	A map of privileges that are overridable; sp to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
-	function get_sp_overrides()
+	function get_privilege_overrides()
 	{
 		require_lang('news');
 		return array('mass_import'=>0,'have_personal_category'=>0,'submit_cat_highrange_content'=>array(0,'ADD_NEWS_CATEGORY'),'edit_own_cat_highrange_content'=>array(0,'EDIT_OWN_NEWS_CATEGORY'),'edit_cat_highrange_content'=>array(0,'EDIT_NEWS_CATEGORY'),'delete_own_cat_highrange_content'=>array(0,'DELETE_OWN_NEWS_CATEGORY'),'delete_cat_highrange_content'=>array(0,'DELETE_NEWS_CATEGORY'),'submit_highrange_content'=>array(1,'ADD_NEWS'),'bypass_validation_highrange_content'=>array(1,'BYPASS_NEWS_VALIDATION'),'edit_own_highrange_content'=>array(1,'EDIT_OWN_NEWS'),'edit_highrange_content'=>array(1,'EDIT_NEWS'),'delete_own_highrange_content'=>array(1,'DELETE_OWN_NEWS'),'delete_highrange_content'=>array(1,'DELETE_NEWS'));
@@ -102,11 +102,11 @@ class Module_cms_news extends standard_crud_module
 		return do_next_manager(get_screen_title('MANAGE_NEWS'),comcode_lang_string('DOC_NEWS'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
-						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_news')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_NEWS_CATEGORY')):NULL,
-						has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_NEWS_CATEGORY')):NULL,
-						has_specific_permission(get_member(),'submit_highrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS')):NULL,
-						has_specific_permission(get_member(),'edit_own_highrange_content','cms_news')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWS')):NULL,
-						has_specific_permission(get_member(),'mass_import','cms_news')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_NEWS')):NULL,
+						has_privilege(get_member(),'submit_cat_highrange_content','cms_news')?array('add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_NEWS_CATEGORY')):NULL,
+						has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_NEWS_CATEGORY')):NULL,
+						has_privilege(get_member(),'submit_highrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS')):NULL,
+						has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWS')):NULL,
+						has_privilege(get_member(),'mass_import','cms_news')?array('import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_NEWS')):NULL,
 					),manage_custom_fields_donext_link('news')),
 					do_lang('MANAGE_NEWS')
 		);
@@ -151,7 +151,7 @@ class Module_cms_news extends standard_crud_module
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
-		$only_owned=has_specific_permission(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
+		$only_owned=has_privilege(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,is_null($only_owned)?NULL:array('submitter'=>$only_owned));
 		$news_cat_titles=array();
 		foreach ($rows as $row)
@@ -199,7 +199,7 @@ class Module_cms_news extends standard_crud_module
 	 */
 	function nice_get_entries()
 	{
-		$only_owned=has_specific_permission(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
+		$only_owned=has_privilege(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
 		return nice_get_news(NULL,$only_owned,false);
 	}
 
@@ -290,7 +290,7 @@ class Module_cms_news extends standard_crud_module
 			$validated=get_param_integer('validated',0);
 			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
-		if (has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
+		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
 			if (addon_installed('unvalidated'))
 				$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
@@ -300,7 +300,7 @@ class Module_cms_news extends standard_crud_module
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');
 		$fields2->attach(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_NEWS_IMAGE_OVERRIDE'),'file',false,$image,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')))
+		if ((addon_installed('calendar')) && (has_privilege(get_member(),'scheduled_publication_times')))
 			$fields2->attach(form_input_date__scheduler(do_lang_tempcode('PUBLICATION_TIME'),do_lang_tempcode('DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true,$scheduled,intval(date('Y'))-1970+2,1970));
 
 		$fields2->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,$send_trackbacks==1,$notes,$allow_comments==2));
@@ -419,7 +419,7 @@ class Module_cms_news extends standard_crud_module
 
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?time():$schedule;
-		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')) && (!is_null($schedule)) && ($schedule>time()))
+		if ((addon_installed('calendar')) && (has_privilege(get_member(),'scheduled_publication_times')) && (!is_null($schedule)) && ($schedule>time()))
 		{
 			$validated=0;
 		} else $schedule=NULL;
@@ -427,7 +427,7 @@ class Module_cms_news extends standard_crud_module
 		if (!is_null($main_news_category))
 		{
 			$owner=$GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
-			if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
+			if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category));
 		}
 
 		$time=$add_time;
@@ -505,12 +505,12 @@ class Module_cms_news extends standard_crud_module
 		}
 
 		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
-		if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
+		if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category));
 
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?mixed():$schedule;
 
-		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')))
+		if ((addon_installed('calendar')) && (has_privilege(get_member(),'scheduled_publication_times')))
 		{
 			require_code('calendar2');
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
@@ -584,7 +584,7 @@ class Module_cms_news extends standard_crud_module
 	 */
 	function import_news()
 	{
-		check_specific_permission('mass_import');
+		check_privilege('mass_import');
 
 		$lang=post_param('lang',user_lang());
 
@@ -625,7 +625,7 @@ class Module_cms_news extends standard_crud_module
 	 */
 	function _import_news()
 	{
-		check_specific_permission('mass_import');
+		check_privilege('mass_import');
 
 		$title=get_screen_title('IMPORT_NEWS');
 
@@ -1076,12 +1076,12 @@ class Module_cms_news_cat extends standard_crud_module
 						/*	 page	 params				  zone	  */
 						array('_SELF',array('type'=>'ad'),'_SELF'),							// Add one
 						NULL,							 // Edit this
-						has_specific_permission(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
+						has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
 						NULL,							// View this
 						array('news',array('type'=>'misc'),get_module_zone('news')),									 // View archive
 						NULL,	  // Add to category
-						has_specific_permission(get_member(),'submit_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
-						has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
+						has_privilege(get_member(),'submit_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
+						has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
 						NULL,			 // Edit this category
 						NULL																						 // View this category
 			);
@@ -1093,14 +1093,14 @@ class Module_cms_news_cat extends standard_crud_module
 					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
 					/*	 page	 params				  zone	  */
 					array('_SELF',array('type'=>'ad','cat'=>$cat),'_SELF'),							// Add one
-					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_highrange_content','cms_news',array('news',$cat))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
-					has_specific_permission(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
+					(is_null($id) || (!has_privilege(get_member(),'edit_own_highrange_content','cms_news',array('news',$cat))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
+					has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
 					is_null($id)?NULL:array('news',array('type'=>'view','id'=>$id),get_module_zone('news')),							// View this
 					array('news',array('type'=>'misc'),get_module_zone('news')),									 // View archive
 					(!is_null($id))?NULL:array('_SELF',array('type'=>'ad','cat'=>$cat),'_SELF'),	  // Add to category
-					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
-					has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
-					is_null($cat)?NULL:has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
+					has_privilege(get_member(),'submit_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
+					has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
+					is_null($cat)?NULL:has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('_SELF',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
 					NULL																						 // View this category
 		);
 	}

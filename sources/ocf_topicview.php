@@ -173,7 +173,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		}
 
 		// Any custom fields to show?
-		$post['custom_fields']=ocf_get_all_custom_fields_match_member($_postdetails['p_poster'],((get_member()!=$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,((get_member()==$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,NULL,NULL,NULL,NULL,NULL,0,true);
+		$post['custom_fields']=ocf_get_all_custom_fields_match_member($_postdetails['p_poster'],((get_member()!=$_postdetails['p_poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,((get_member()==$_postdetails['p_poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,NULL,NULL,NULL,NULL,NULL,0,true);
 
 		// Usergroup
 		$post['primary_group']=$primary_group;
@@ -187,7 +187,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		}
 
 		// Any warnings?
-		if ((has_specific_permission(get_member(),'see_warnings')) && (addon_installed('ocf_warnings')))
+		if ((has_privilege(get_member(),'see_warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$num_warnings=$GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails['p_poster'],'m_cache_warnings');
 			/*if ($num_warnings!=0)*/ $post['poster_num_warnings']=$num_warnings;
@@ -211,7 +211,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 	if ((ocf_may_delete_post_by($_postdetails['p_poster'],$forum_id)) && (!$only_post)) $post['may_delete']=true;
 
 	// More
-	if (has_specific_permission(get_member(),'see_ip')) $post['ip_address']=$_postdetails['p_ip_address'];
+	if (has_privilege(get_member(),'see_ip')) $post['ip_address']=$_postdetails['p_ip_address'];
 	if (!is_null($_postdetails['p_intended_solely_for'])) $post['intended_solely_for']=$_postdetails['p_intended_solely_for'];
 
 	return $post;
@@ -250,7 +250,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			$from=$topic_info['t_pt_from'];
 			$to=$topic_info['t_pt_to'];
 
-			if (($from!=get_member()) && ($to!=get_member()) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt')))
+			if (($from!=get_member()) && ($to!=get_member()) && (!ocf_has_special_pt_access($topic_id)) && (!has_privilege(get_member(),'view_other_pt')))
 			{
 				access_denied('PRIVILEGE','view_other_pt');
 			}
@@ -261,7 +261,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 		// Check validated
 		if ($topic_info['t_validated']==0)
 		{
-			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 		}
 
@@ -469,7 +469,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 		if (ocf_may_warn_members()) $out['may_warn_members']=true;
 		if (ocf_may_delete_topics_by($forum_id,get_member(),$topic_info['t_cache_first_member_id'])) $out['may_delete_topic']=true;
 		if (ocf_may_perform_multi_moderation($forum_id)) $out['may_multi_moderate']=true;
-		if (has_specific_permission(get_member(),'use_quick_reply')) $out['may_use_quick_reply']=true;
+		if (has_privilege(get_member(),'use_quick_reply')) $out['may_use_quick_reply']=true;
 		$may_moderate_forum=ocf_may_moderate_forum($forum_id);
 		if ($may_moderate_forum)
 		{
@@ -486,7 +486,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			$out['may_change_max']=1;
 		} else
 		{
-			if (($topic_info['t_cache_first_member_id']==get_member()) && (has_specific_permission(get_member(),'close_own_topics')) && ($topic_info['t_is_open']==1))
+			if (($topic_info['t_cache_first_member_id']==get_member()) && (has_privilege(get_member(),'close_own_topics')) && ($topic_info['t_is_open']==1))
 			{
 				$out['may_close_topic']=1;
 			}
@@ -682,7 +682,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$_title->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
 		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'2698c51b06a72773ac7135bbfe791318','IMMEDIATE'=>false,'IMG'=>'punish','TITLE'=>$_title,'URL'=>$action_url)));
 	}
-	if ((has_specific_permission(get_member(),'view_content_history')) && ($_postdetails['has_history']))
+	if ((has_privilege(get_member(),'view_content_history')) && ($_postdetails['has_history']))
 	{
 		$action_url=build_url(array('page'=>'admin_ocf_history','type'=>'misc','post_id'=>$_postdetails['id']),'adminzone');
 		$_title=do_lang_tempcode('POST_HISTORY');

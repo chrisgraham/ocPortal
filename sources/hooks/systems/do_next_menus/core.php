@@ -38,7 +38,7 @@ class Hook_do_next_menus_core
 			array('','permissionstree',array('admin',array('type'=>'security'),get_module_zone('admin')),do_lang_tempcode('SECURITY_GROUP_SETUP'),('DOC_SECURITY')),
 			array('','cms_home',array('cms',array('type'=>'cms'),get_module_zone('cms')),do_lang_tempcode('CMS'),('DOC_CMS')),
 
-			(has_specific_permission(get_member(),'edit_highrange_content')||has_specific_permission(get_member(),'edit_own_highrange_content'))?array('cms','comcode_page_edit',array('cms_comcode_pages',array('type'=>'misc'),get_module_zone('cms_comcode_pages')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('_COMCODE_PAGES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT the_zone,the_page) FROM '.get_table_prefix().'comcode_pages WHERE '.db_string_not_equal_to('the_zone','!')))))),('DOC_COMCODE_PAGE_EDIT')):NULL,
+			(has_privilege(get_member(),'edit_highrange_content')||has_privilege(get_member(),'edit_own_highrange_content'))?array('cms','comcode_page_edit',array('cms_comcode_pages',array('type'=>'misc'),get_module_zone('cms_comcode_pages')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('_COMCODE_PAGES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT the_zone,the_page) FROM '.get_table_prefix().'comcode_pages WHERE '.db_string_not_equal_to('the_zone','!')))))),('DOC_COMCODE_PAGE_EDIT')):NULL,
 
 			array('structure','zones',array('admin_zones',array('type'=>'misc'),get_module_zone('admin_zones')),do_lang_tempcode('ZONES'),('DOC_ZONES')),
 			array('structure','zone_editor',array('admin_zones',array('type'=>'editor'),get_module_zone('admin_zones')),do_lang_tempcode('ZONE_EDITOR'),('DOC_ZONE_EDITOR')),
@@ -66,14 +66,14 @@ class Hook_do_next_menus_core
 
 			(get_forum_type()!='ocf')?NULL:array('tools','editmember',array('admin_ocf_join',array('type'=>'menu'),get_module_zone('admin_ocf_join')),do_lang_tempcode('MEMBERS'),('DOC_MEMBERS')),
 
-			//((get_forum_type()!='ocf')||(!has_specific_permission(get_member(),'control_usergroups')))?NULL:array('tools','usergroups',array('groups',array('type'=>'misc'),get_module_zone('groups'),do_lang_tempcode('SWITCH_ZONE_WARNING')),do_lang_tempcode('SECONDARY_GROUP_MEMBERSHIP'),('DOC_SECONDARY_GROUP_MEMBERSHIP')),
+			//((get_forum_type()!='ocf')||(!has_privilege(get_member(),'control_usergroups')))?NULL:array('tools','usergroups',array('groups',array('type'=>'misc'),get_module_zone('groups'),do_lang_tempcode('SWITCH_ZONE_WARNING')),do_lang_tempcode('SECONDARY_GROUP_MEMBERSHIP'),('DOC_SECONDARY_GROUP_MEMBERSHIP')),
 			array('tools','cleanup',array('admin_cleanup',array('type'=>'misc'),get_module_zone('admin_cleanup')),do_lang_tempcode('CLEANUP_TOOLS'),('DOC_CLEANUP_TOOLS')),
 
 			array('security','permissionstree',array('admin_permissions',array('type'=>'misc'),get_module_zone('admin_permissions')),do_lang_tempcode('PERMISSIONS_TREE'),('DOC_PERMISSIONS_TREE')),
 			addon_installed('match_key_permissions')?array('security','matchkeysecurity',array('admin_permissions',array('type'=>'keys'),get_module_zone('admin_permissions')),do_lang_tempcode('PAGE_MATCH_KEY_ACCESS'),('DOC_PAGE_MATCH_KEY_ACCESS')):NULL,
 			//array('security','sitetree',array('admin_permissions',array('type'=>'page'),get_module_zone('admin_permissions')),do_lang_tempcode('PAGE_ACCESS'), ('DOC_PAGE_PERMISSIONS')),  // Disabled as not needed - but tree permission editor will redirect to it if no javascript available
 			addon_installed('securitylogging')?array('security','ipban',array('admin_ipban',array('type'=>'misc'),get_module_zone('admin_ipban')),do_lang_tempcode('BANNED_ADDRESSES'),('DOC_IPBAN')):NULL,
-			array('security','privileges',array('admin_permissions',array('type'=>'specific'),get_module_zone('admin_permissions')),do_lang_tempcode('GLOBAL_PRIVILEGES'),('DOC_PRIVILEGES')),
+			array('security','privileges',array('admin_permissions',array('type'=>'privileges'),get_module_zone('admin_permissions')),do_lang_tempcode('GLOBAL_PRIVILEGES'),('DOC_PRIVILEGES')),
 			(get_forum_type()!='ocf')?NULL:array('security','usergroups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups')),do_lang_tempcode('USERGROUPS'),('DOC_GROUPS')),
 			(get_forum_type()=='ocf')?NULL:array('security','usergroups',array('admin_permissions',array('type'=>'absorb'),get_module_zone('admin_security')),do_lang_tempcode('ABSORB_PERMISSIONS'),('DOC_ABSORB_PERMISSIONS')),
 

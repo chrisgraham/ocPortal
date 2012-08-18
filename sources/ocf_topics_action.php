@@ -76,7 +76,7 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 
 	if ((is_null($validated)) || (($check_perms) && ($validated==1)))
 	{
-		if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
+		if ((!is_null($forum_id)) && (!has_privilege(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
 	}
 
 	if (!addon_installed('unvalidated')) $validated=1;

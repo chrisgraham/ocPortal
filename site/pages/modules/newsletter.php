@@ -61,7 +61,7 @@ class Module_newsletter
 		delete_value('newsletter_whatsnew');
 		delete_value('newsletter_send_time');
 
-		delete_specific_permission('change_newsletter_subscriptions');
+		delete_privilege('change_newsletter_subscriptions');
 
 		delete_menu_item_simple('_SEARCH:newsletter:type=misc');
 	}
@@ -102,7 +102,7 @@ class Module_newsletter
 			add_config_option('PAGE_TEXT','newsletter_text','transtext','return \'\';','FEATURE','NEWSLETTER');
 			add_config_option('TITLE','newsletter_title','line','return get_option(\'site_name\').\' \'.ocp_mb_strtolower(do_lang(\'NEWSLETTER\'));','FEATURE','NEWSLETTER');
 
-			add_specific_permission('NEWSLETTER','change_newsletter_subscriptions',false);
+			add_privilege('NEWSLETTER','change_newsletter_subscriptions',false);
 
 			require_lang('newsletter');
 			//add_menu_item_simple('main_website',NULL,'NEWSLETTER','_SEARCH:newsletter:type=misc');
@@ -385,7 +385,7 @@ class Module_newsletter
 		// Change/make settings
 		$old_password=$GLOBALS['SITE_DB']->query_select_value('newsletter','the_password',array('email'=>$email));
 		$old_salt=$GLOBALS['SITE_DB']->query_select_value('newsletter','pass_salt',array('email'=>$email));
-		if ((!has_specific_permission(get_member(),'change_newsletter_subscriptions')) && ($old_password!='') && ($old_password!=md5($password.$old_salt))) // Access denied. People who can change any subscriptions can't get denied.
+		if ((!has_privilege(get_member(),'change_newsletter_subscriptions')) && ($old_password!='') && ($old_password!=md5($password.$old_salt))) // Access denied. People who can change any subscriptions can't get denied.
 		{
 			$_reset_url=build_url(array('page'=>'_SELF','type'=>'reset','email'=>$email),'_SELF');
 			$reset_url=$_reset_url->evaluate();

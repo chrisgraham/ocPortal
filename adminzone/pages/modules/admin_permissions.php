@@ -51,34 +51,34 @@ class Module_admin_permissions
 		$GLOBALS['SITE_DB']->drop_table_if_exists('group_page_access');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('match_key_messages');
 
-		delete_specific_permission('edit_own_lowrange_content');
-		delete_specific_permission('submit_highrange_content');
-		delete_specific_permission('submit_midrange_content');
-		delete_specific_permission('submit_lowrange_content');
-		delete_specific_permission('set_own_author_profile');
-		delete_specific_permission('rate');
-		delete_specific_permission('vote_in_polls');
-		delete_specific_permission('comment');
-		delete_specific_permission('have_personal_category');
-		delete_specific_permission('draw_to_server');
-		delete_specific_permission('see_unvalidated');
-		delete_specific_permission('jump_to_unvalidated');
-		delete_specific_permission('use_very_dangerous_comcode');
-		delete_specific_permission('open_virtual_roots');
-		delete_specific_permission('scheduled_publication_times');
-		delete_specific_permission('mass_delete_from_ip');
-		delete_specific_permission('exceed_filesize_limit');
-		delete_specific_permission('view_revision_history');
-		delete_specific_permission('sees_javascript_error_alerts');
-		delete_specific_permission('avoid_simplified_adminzone_look');
-		delete_specific_permission('see_software_docs');
-		delete_specific_permission('bypass_validation_lowrange_content');
-		delete_specific_permission('may_enable_staff_notifications');
+		delete_privilege('edit_own_lowrange_content');
+		delete_privilege('submit_highrange_content');
+		delete_privilege('submit_midrange_content');
+		delete_privilege('submit_lowrange_content');
+		delete_privilege('set_own_author_profile');
+		delete_privilege('rate');
+		delete_privilege('vote_in_polls');
+		delete_privilege('comment');
+		delete_privilege('have_personal_category');
+		delete_privilege('draw_to_server');
+		delete_privilege('see_unvalidated');
+		delete_privilege('jump_to_unvalidated');
+		delete_privilege('use_very_dangerous_comcode');
+		delete_privilege('open_virtual_roots');
+		delete_privilege('scheduled_publication_times');
+		delete_privilege('mass_delete_from_ip');
+		delete_privilege('exceed_filesize_limit');
+		delete_privilege('view_revision_history');
+		delete_privilege('sees_javascript_error_alerts');
+		delete_privilege('avoid_simplified_adminzone_look');
+		delete_privilege('see_software_docs');
+		delete_privilege('bypass_validation_lowrange_content');
+		delete_privilege('may_enable_staff_notifications');
 
 		$false_permissions=get_false_permissions();
 		foreach ($false_permissions as $permission)
 		{
-			delete_specific_permission($permission[1]);
+			delete_privilege($permission[1]);
 		}
 	}
 
@@ -101,63 +101,15 @@ class Module_admin_permissions
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
-			add_specific_permission('STAFF_ACTIONS','may_enable_staff_notifications',false);
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
-		{
-			$new_false_permissions=array('allow_html','remove_page_split','submit_cat_highrange_content','submit_cat_midrange_content','submit_cat_lowrange_content','edit_cat_highrange_content','edit_cat_midrange_content','edit_cat_lowrange_content','delete_cat_highrange_content','delete_cat_midrange_content','delete_cat_lowrange_content','edit_own_cat_highrange_content','edit_own_cat_midrange_content','edit_own_cat_lowrange_content','delete_own_cat_highrange_content','delete_own_cat_midrange_content','delete_own_cat_lowrange_content','mass_import');
-			$false_permissions=get_false_permissions();
-			foreach ($false_permissions as $permission)
-			{
-				if (in_array($permission[1],$new_false_permissions)) add_specific_permission($permission[0],$permission[1],false);
-			}
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
-		{
-			add_specific_permission('SUBMISSION','draw_to_server',false);
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
-			add_specific_permission('GENERAL_SETTINGS','see_unvalidated',false);
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<2))
-		{
-			add_specific_permission('GENERAL_SETTINGS','jump_to_unvalidated',true);
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('sp_list','p_section','ID_TEXT'); // Best to do this here, although permissions table not defined here
-
-			add_specific_permission('SUBMISSION','can_submit_to_others_categories',false);
-			add_specific_permission('_COMCODE','search_engine_links',false);
-			add_specific_permission('SUBMISSION','have_personal_category',true);
-			add_specific_permission('SUBMISSION','feature',false);
-			add_specific_permission('GENERAL_SETTINGS','see_unvalidated',false);
-
-			// Ergh - we need to update every kind of permission that existed before. If they have changed since this jump, they get remapped more than once. One clean step at a time.
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'_COMCODE\' WHERE the_name IN (\'comcode_nuisance\',\'comcode_dangerous\',\'reuse_others_attachments\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'BANNERS\' WHERE the_name IN (\'full_banner_setup\',\'view_anyones_banner_stats\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'IOTDS\' WHERE the_name IN (\'choose_iotd\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'NEWSLETTER\' WHERE the_name IN (\'change_newsletter_subscriptions\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'POINTS\' WHERE the_name IN (\'view_charge_log\',\'give_negative_points\',\'have_negative_gift_points\',\'give_points_self\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'POLLS\' WHERE the_name IN (\'choose_poll\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'SUPPORT_TICKETS\' WHERE the_name IN (\'view_others_tickets\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'SUBMISSION\' WHERE the_name IN (\'submit_highrange_content\',\'submit_midrange_content\',\'submit_lowrange_content\',\'set_own_author_profile\',\'bypass_validation_highrange_content\',\'bypass_validation_midrange_content\',\'bypass_validation_lowrange_content\',\'edit_highrange_content\',\'edit_midrange_content\',\'edit_lowrange_content\',\'edit_own_highrange_content\',\'edit_own_midrange_content\',\'edit_own_lowrange_content\',\'delete_highrange_content\',\'delete_midrange_content\',\'delete_lowrange_content\',\'delete_own_highrange_content\',\'delete_own_midrange_content\',\'delete_own_lowrange_content\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'_FEEDBACK\' WHERE the_name IN (\'rate\',\'comment\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'STAFF_ACTIONS\' WHERE the_name IN (\'access_closed_site\',\'bypass_bandwidth_restriction\',\'see_php_errors\',\'see_stack_dump\',\'view_profiling_modes\',\'access_overrun_site\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'GENERAL_SETTINGS\' WHERE the_name IN (\'jump_to_unvalidated\',\'see_unvalidated\',\'bypass_word_filter\',\'bypass_flood_control\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'SEEDY\' WHERE the_name IN (\'cedi_edit\',\'cedi_manage_tree\',\'cedi_edit_pages\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'FILE_DUMP\' WHERE the_name IN (\'delete_anything_filedump\',\'upload_filedump\',\'upload_anything_filedump\')');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'sp_list SET p_section=\'SECTION_FORUMS\' WHERE the_name IN (\'run_multi_moderations\',\'vote_in_polls\',\'use_pt\',\'may_report_post\',\'view_member_photos\',\'use_quick_reply\',\'rename_self\',\'view_any_profile_field\',\'disable_lost_passwords\',\'close_own_topics\',\'edit_own_polls\',\'double_post\',\'warn_members\',\'see_warnings\',\'see_ip\',\'may_choose_custom_title\',\'delete_account\',\'view_other_pt\',\'view_poll_results_before_voting\',\'may_unblind_own_poll\',\'moderate_personal_topic\')');
+			add_privilege('STAFF_ACTIONS','may_enable_staff_notifications',false);
 		}
 
 		if (is_null($upgrade_from))
 		{
+			add_privilege('SUBMISSION','draw_to_server',false);
+			add_privilege('GENERAL_SETTINGS','see_unvalidated',false);
+			add_privilege('GENERAL_SETTINGS','jump_to_unvalidated',true);
+
 			// What usergroups may enter this zone
 			$GLOBALS['SITE_DB']->create_table('group_zone_access',array(
 				'zone_name'=>'*ID_TEXT',
@@ -200,30 +152,30 @@ class Module_admin_permissions
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'admin_emaillog','zone_name'=>'adminzone','group_id'=>$id)); // We don't want people snooping on admin emails (e.g. password reset)
 			}
 
-			add_specific_permission('SUBMISSION','edit_own_lowrange_content',true);
-			add_specific_permission('SUBMISSION','submit_highrange_content',true);
-			add_specific_permission('SUBMISSION','submit_midrange_content',true);
-			add_specific_permission('SUBMISSION','submit_lowrange_content',true);
-			add_specific_permission('SUBMISSION','bypass_validation_lowrange_content',true);
-			add_specific_permission('SUBMISSION','set_own_author_profile',true);
-			add_specific_permission('_FEEDBACK','rate',true);
-			add_specific_permission('_FEEDBACK','comment',true);
-			add_specific_permission('SUBMISSION','have_personal_category',true);
-			add_specific_permission('POLLS','vote_in_polls',true);
-			add_specific_permission('_COMCODE','use_very_dangerous_comcode',false);
-			add_specific_permission('GENERAL_SETTINGS','open_virtual_roots',false);
-			add_specific_permission('SUBMISSION','scheduled_publication_times',false);
-			add_specific_permission('SUBMISSION','mass_delete_from_ip',false);
-			add_specific_permission('SUBMISSION','exceed_filesize_limit',false);
-			add_specific_permission('GENERAL_SETTINGS','view_revision_history',false);
-			add_specific_permission('GENERAL_SETTINGS','sees_javascript_error_alerts',false);
-			add_specific_permission('GENERAL_SETTINGS','avoid_simplified_adminzone_look',false,true);
-			add_specific_permission('GENERAL_SETTINGS','see_software_docs',false);
+			add_privilege('SUBMISSION','edit_own_lowrange_content',true);
+			add_privilege('SUBMISSION','submit_highrange_content',true);
+			add_privilege('SUBMISSION','submit_midrange_content',true);
+			add_privilege('SUBMISSION','submit_lowrange_content',true);
+			add_privilege('SUBMISSION','bypass_validation_lowrange_content',true);
+			add_privilege('SUBMISSION','set_own_author_profile',true);
+			add_privilege('_FEEDBACK','rate',true);
+			add_privilege('_FEEDBACK','comment',true);
+			add_privilege('SUBMISSION','have_personal_category',true);
+			add_privilege('POLLS','vote_in_polls',true);
+			add_privilege('_COMCODE','use_very_dangerous_comcode',false);
+			add_privilege('GENERAL_SETTINGS','open_virtual_roots',false);
+			add_privilege('SUBMISSION','scheduled_publication_times',false);
+			add_privilege('SUBMISSION','mass_delete_from_ip',false);
+			add_privilege('SUBMISSION','exceed_filesize_limit',false);
+			add_privilege('GENERAL_SETTINGS','view_revision_history',false);
+			add_privilege('GENERAL_SETTINGS','sees_javascript_error_alerts',false);
+			add_privilege('GENERAL_SETTINGS','avoid_simplified_adminzone_look',false,true);
+			add_privilege('GENERAL_SETTINGS','see_software_docs',false);
 
 			$false_permissions=get_false_permissions();
 			foreach ($false_permissions as $permission)
 			{
-				add_specific_permission($permission[0],$permission[1],false);
+				add_privilege($permission[0],$permission[1],false);
 			}
 		}
 	}
@@ -235,7 +187,7 @@ class Module_admin_permissions
 	 */
 	function get_entry_points()
 	{
-		$ret=array('page'=>'PAGE_ACCESS','specific'=>'PRIVILEGES');
+		$ret=array('page'=>'PAGE_ACCESS','privileges'=>'PRIVILEGES');
 		if (addon_installed('match_key_permissions')) $ret['keys']='MATCH_KEYS';
 		return $ret;
 	}
@@ -265,8 +217,8 @@ class Module_admin_permissions
 		}
 		if ($type=='page') return $this->interface_page_access();
 		if ($type=='_page') return $this->set_page_access();
-		if ($type=='_specific') return $this->set_specific_permissions();
-		if ($type=='specific') return $this->interface_specific_permissions();
+		if ($type=='_privileges') return $this->set_privileges();
+		if ($type=='privileges') return $this->interface_privileges();
 
 		return new ocp_tempcode();
 	}
@@ -295,7 +247,7 @@ class Module_admin_permissions
 		{
 			if (in_array($id,$admin_groups)) continue;
 
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('gsp','group_id',array('group_id'=>$id));
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('group_privileges','group_id',array('group_id'=>$id));
 			if (is_null($test)) $groups_without[$id]=$name;
 
 			$list1->attach(form_input_list_entry($id,is_null($test),$name));
@@ -739,7 +691,7 @@ class Module_admin_permissions
 	 */
 	function _get_ordered_sections()
 	{
-		$_sections=list_to_map('p_section',$GLOBALS['SITE_DB']->query_select('sp_list',array('DISTINCT p_section')));
+		$_sections=list_to_map('p_section',$GLOBALS['SITE_DB']->query_select('privilege_list',array('DISTINCT p_section')));
 		foreach ($_sections as $i=>$s)
 		{	
 			if ($s['p_section']=='SECTION_FORUMS')
@@ -775,7 +727,7 @@ class Module_admin_permissions
 	 *
 	 * @return tempcode		The UI
 	 */
-	function interface_specific_permissions()
+	function interface_privileges()
 	{
 		require_all_lang();
 		require_code('zones2');
@@ -828,7 +780,7 @@ class Module_admin_permissions
 
 		$title=get_screen_title('_PRIVILEGES',true,array(do_lang_tempcode($p_section)));
 
-		$url=build_url(array('page'=>'_SELF','type'=>'_specific','id'=>$p_section),'_SELF');
+		$url=build_url(array('page'=>'_SELF','type'=>'_privileges','id'=>$p_section),'_SELF');
 
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$moderator_groups=$GLOBALS['FORUM_DRIVER']->get_moderator_groups();
@@ -853,7 +805,7 @@ class Module_admin_permissions
 
 			foreach ($all_modules as $module=>$module_type)
 			{
-				$functions=extract_module_functions(zone_black_magic_filterer(get_file_base().'/'.$zone.(($zone=='')?'':'/').'pages/'.$module_type.'/'.$module.'.php'),array('get_sp_overrides'));
+				$functions=extract_module_functions(zone_black_magic_filterer(get_file_base().'/'.$zone.(($zone=='')?'':'/').'pages/'.$module_type.'/'.$module.'.php'),array('get_privilege_overrides'));
 				if (!is_null($functions[0]))
 				{
 					$overrides=is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
@@ -865,13 +817,13 @@ class Module_admin_permissions
 				}
 			}
 		}
-		$all_page_permission_overridding=$GLOBALS['SITE_DB']->query_select('gsp',array('the_page','specific_permission'),array('category_name'=>''));
+		$all_page_permission_overridding=$GLOBALS['SITE_DB']->query_select('group_privileges',array('the_page','privilege'),array('category_name'=>''));
 
 		// Rows (pages)
 		$rows=new ocp_tempcode();
 		$where=array('p_section'=>$p_section); // Added in because it was eating up too much memory
-		$_permissions=collapse_2d_complexity('the_name','p_section',$GLOBALS['SITE_DB']->query_select('sp_list',array('p_section','the_name'),$where,'ORDER BY p_section,the_name'));
-		$access_rows=$GLOBALS['SITE_DB']->query_select('gsp',array('specific_permission','group_id'),array('the_page'=>'','module_the_name'=>'','category_name'=>''));
+		$_permissions=collapse_2d_complexity('the_name','p_section',$GLOBALS['SITE_DB']->query_select('privilege_list',array('p_section','the_name'),$where,'ORDER BY p_section,the_name'));
+		$access_rows=$GLOBALS['SITE_DB']->query_select('group_privileges',array('privilege','group_id'),array('the_page'=>'','module_the_name'=>'','category_name'=>''));
 		$current_section='';
 		$sections=new ocp_tempcode();
 		$_false=do_template('PERMISSION_CELL',array('_GUID'=>'61aa7fa739e19caa1efb3695a5e2ab5d','CHECKED'=>false,'HUMAN'=>'__human__','NAME'=>'__name__'));
@@ -905,7 +857,7 @@ class Module_admin_permissions
 		// Display
 		foreach ($_permissions as $permission=>$section)
 		{
-			$permission_text=do_lang('PT_'.$permission,NULL,NULL,NULL,NULL,false);
+			$permission_text=do_lang('PRIVILEGE_'.$permission,NULL,NULL,NULL,NULL,false);
 			if (is_null($permission_text)) continue;
 
 			if (($section!=$current_section) && ($current_section!=''))
@@ -925,7 +877,7 @@ class Module_admin_permissions
 				$has_permission=false;
 				foreach ($access_rows as $access_row)
 				{
-					if (($access_row['specific_permission']==$permission) && ($access_row['group_id']==$id))
+					if (($access_row['privilege']==$permission) && ($access_row['group_id']==$id))
 					{
 						$has_permission=true;
 						break;
@@ -951,7 +903,7 @@ class Module_admin_permissions
 					$this_overrides=false;
 					foreach ($all_page_permission_overridding as $po_row)
 					{
-						if (($po_row['the_page']==$module) && ($po_row['specific_permission']==$permission))
+						if (($po_row['the_page']==$module) && ($po_row['privilege']==$permission))
 						{
 							$this_overrides=true;
 							break;
@@ -971,7 +923,7 @@ class Module_admin_permissions
 					if ($module=='topics') $m_list.=' ('.strtolower(do_lang('SECTION_FORUMS')).')';
 				}
 				if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($m_list);
-				$tpl_map['DESCRIPTION']=do_lang_tempcode($has_actual_overriding?'SP_USED_IN_SLASHED':'SP_USED_IN',$m_list);
+				$tpl_map['DESCRIPTION']=do_lang_tempcode($has_actual_overriding?'PRIVILEGE_USED_IN_SLASHED':'PRIVILEGE_USED_IN',$m_list);
 			}
 
 			// Render row
@@ -981,7 +933,7 @@ class Module_admin_permissions
 		}
 		$sections->attach(do_template('PERMISSION_S_CONFIG_SECTION',array('_GUID'=>'c75a07373f54c0fa31d18e360fcf26f6','COLS'=>$cols,'HEADER_CELLS'=>$header_cells,'SECTION'=>$rows,'CURRENT_SECTION'=>do_lang_tempcode($current_section))));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:specific',do_lang_tempcode('CHOOSE'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
 
 		return do_template('PERMISSION_S_PERMISSIONS_SCREEN',array('_GUID'=>'11974f0a137266a625991d3611b8e587','TITLE'=>$title,'URL'=>$url,'SECTIONS'=>$sections));
 	}
@@ -991,7 +943,7 @@ class Module_admin_permissions
 	 *
 	 * @return tempcode		The UI
 	 */
-	function set_specific_permissions()
+	function set_privileges()
 	{
 		require_all_lang();
 
@@ -1020,7 +972,7 @@ class Module_admin_permissions
 		}
 
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-		$permissions=collapse_1d_complexity('the_name',$GLOBALS['SITE_DB']->query_select('sp_list',array('the_name'),array('p_section'=>$p_section)));
+		$permissions=collapse_1d_complexity('the_name',$GLOBALS['SITE_DB']->query_select('privilege_list',array('the_name'),array('p_section'=>$p_section)));
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		foreach ($permissions as $permission)
 		{
@@ -1031,23 +983,23 @@ class Module_admin_permissions
 				$val=post_param_integer($permission.'__'.strval($id),0);
 
 				// Delete to cleanup
-				$GLOBALS['SITE_DB']->query_delete('gsp',array('specific_permission'=>$permission,'group_id'=>$id,'the_page'=>'','module_the_name'=>'','category_name'=>''),'',1);
+				$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$permission,'group_id'=>$id,'the_page'=>'','module_the_name'=>'','category_name'=>''),'',1);
 
 				if ($val==1)
 				{
-					$GLOBALS['SITE_DB']->query_insert('gsp',array('specific_permission'=>$permission,'group_id'=>$id,'the_page'=>'','module_the_name'=>'','category_name'=>'','the_value'=>1));
+					$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>$permission,'group_id'=>$id,'the_page'=>'','module_the_name'=>'','category_name'=>'','the_value'=>1));
 				}
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:specific',do_lang_tempcode('CHOOSE'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
 
 		decache('main_sitemap');
 		$GLOBALS['SITE_DB']->query_delete('cache');
 		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
 
 		// Show it worked / Refresh
-		$url=build_url(array('page'=>'_SELF','type'=>'specific','id'=>$next_section),'_SELF');
+		$url=build_url(array('page'=>'_SELF','type'=>'privileges','id'=>$next_section),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS_NOW_NEXT_SCREEN'));
 	}
 

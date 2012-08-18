@@ -168,7 +168,7 @@ class Hook_pointstore_banners
 	{
 		$after_deduction=available_points(get_member())-intval(get_option('banner_setup'));
 
-		if (($after_deduction<0) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($after_deduction<0) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			warn_exit(do_lang_tempcode('CANT_AFFORD'));
 		}
@@ -329,7 +329,7 @@ class Hook_pointstore_banners
 		$points_after=$pointsleft-$total_price;
 
 		//Check to see this isn't costing us more than we can afford
-		if (($points_after<0) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($points_after<0) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('CANT_AFFORD'));
 		}

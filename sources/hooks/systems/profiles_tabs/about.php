@@ -48,7 +48,7 @@ class Hook_Profiles_Tabs_about
 		$order=10;
 
 		$photo_url=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_url');
-		if (($photo_url!='') && (addon_installed('ocf_member_photos')) && (has_specific_permission($member_id_viewing,'view_member_photos')))
+		if (($photo_url!='') && (addon_installed('ocf_member_photos')) && (has_privilege($member_id_viewing,'view_member_photos')))
 		{
 			require_code('images');
 			$photo_thumb_url=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_thumb_url');
@@ -72,13 +72,13 @@ class Hook_Profiles_Tabs_about
 
 		// Things staff can do with this user
 		$modules=array();
-		if ((has_specific_permission($member_id_viewing,'warn_member')) && (has_actual_page_access($member_id_viewing,'warnings')) && (addon_installed('ocf_warnings')))
+		if ((has_privilege($member_id_viewing,'warn_member')) && (has_actual_page_access($member_id_viewing,'warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$redir_url=get_self_url(true);
 			$modules[]=array('usage',do_lang_tempcode('WARN_MEMBER'),build_url(array('page'=>'warnings','type'=>'ad','id'=>$member_id_of,'redirect'=>$redir_url),get_module_zone('warnings')));
 			$modules[]=array('usage',do_lang_tempcode('PUNITIVE_HISTORY'),build_url(array('page'=>'warnings','type'=>'history','id'=>$member_id_of),get_module_zone('warnings')));
 		}
-		if ((has_specific_permission($member_id_viewing,'view_content_history')) && (has_actual_page_access($member_id_viewing,'admin_ocf_history')))
+		if ((has_privilege($member_id_viewing,'view_content_history')) && (has_actual_page_access($member_id_viewing,'admin_ocf_history')))
 			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('usage',do_lang_tempcode('POST_HISTORY'),build_url(array('page'=>'admin_ocf_history','member_id'=>$member_id_of),'adminzone'));
 		if (has_actual_page_access($member_id_viewing,'admin_lookup'))
 		{
@@ -174,7 +174,7 @@ class Hook_Profiles_Tabs_about
 		}
 
 		// Custom fields
-		$_custom_fields=ocf_get_all_custom_fields_match_member($member_id_of,(($member_id_viewing!=$member_id_of) && (!has_specific_permission($member_id_viewing,'view_any_profile_field')))?1:NULL,(($member_id_viewing==$member_id_of) && (!has_specific_permission($member_id_viewing,'view_any_profile_field')))?1:NULL);
+		$_custom_fields=ocf_get_all_custom_fields_match_member($member_id_of,(($member_id_viewing!=$member_id_of) && (!has_privilege($member_id_viewing,'view_any_profile_field')))?1:NULL,(($member_id_viewing==$member_id_of) && (!has_privilege($member_id_viewing,'view_any_profile_field')))?1:NULL);
 		$custom_fields=array();
 		require_code('encryption');
 		$value=mixed();
@@ -280,7 +280,7 @@ class Hook_Profiles_Tabs_about
 		$b=($photo_thumb_url=='')?0:intval(get_option('thumb_width'));
 		$right_margin=(max($a,$b)==0)?'auto':(strval(max($a,$b)+6).'px');
 
-		if (has_specific_permission($member_id_viewing,'see_ip'))
+		if (has_privilege($member_id_viewing,'see_ip'))
 		{
 			$ip_address=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_ip_address');
 		} else $ip_address='';
@@ -309,7 +309,7 @@ class Hook_Profiles_Tabs_about
 
 		$user_agent=NULL;
 		$operating_system=NULL;
-		if ((has_specific_permission($member_id_viewing,'show_user_browsing')) && (addon_installed('stats')))
+		if ((has_privilege($member_id_viewing,'show_user_browsing')) && (addon_installed('stats')))
 		{
 			$last_stats=$GLOBALS['SITE_DB']->query_select('stats',array('browser','operating_system'),array('the_user'=>$member_id_of),'ORDER BY date_and_time DESC',1);
 			if (array_key_exists(0,$last_stats))
@@ -336,7 +336,7 @@ class Hook_Profiles_Tabs_about
 			'title'=>'',
 			'identifier'=>'_SEARCH:members:view:'.strval($member_id_of),
 			'description'=>'',
-			'image'=>(($avatar_url=='') && (has_specific_permission($member_id_viewing,'view_member_photos')))?$photo_url:$avatar_url,
+			'image'=>(($avatar_url=='') && (has_privilege($member_id_viewing,'view_member_photos')))?$photo_url:$avatar_url,
 		);
 
 		// Look up member's clubs
@@ -411,7 +411,7 @@ class Hook_Profiles_Tabs_about
 					'USERNAME'=>$username,
 					'MEMBER_ID'=>strval($member_id_of),
 					'SECONDARY_GROUPS'=>$secondary_groups,
-					'VIEW_PROFILES'=>$member_id_viewing==$member_id_of ||  has_specific_permission($member_id_viewing,'view_profiles'),
+					'VIEW_PROFILES'=>$member_id_viewing==$member_id_of ||  has_privilege($member_id_viewing,'view_profiles'),
 					'ON_PROBATION'=>$on_probation,
 					'EXTRA_INFO_DETAILS'=>$info_details,
 					'EXTRA_SECTIONS'=>$extra_sections,

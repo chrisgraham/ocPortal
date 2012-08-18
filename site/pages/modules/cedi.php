@@ -63,9 +63,9 @@ class Module_cedi
 		delete_attachments('seedy_page');
 		delete_attachments('cedi_page');
 
-		delete_specific_permission('seedy_manage_tree');
-		delete_specific_permission('seedy_edit_pages');
-		delete_specific_permission('seedy_edit');
+		delete_privilege('seedy_manage_tree');
+		delete_privilege('seedy_edit_pages');
+		delete_privilege('seedy_edit');
 
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'seedy_page'));
 
@@ -92,8 +92,8 @@ class Module_cedi
 
 		if (($upgrade_from<4) && (!is_null($upgrade_from)))
 		{
-			delete_specific_permission('seedy_edit');
-			delete_specific_permission('seedy_edit_pages');
+			delete_privilege('seedy_edit');
+			delete_privilege('seedy_edit_pages');
 			$GLOBALS['SITE_DB']->add_table_field('seedy_pages','seedy_views','INTEGER',0);
 			$GLOBALS['SITE_DB']->add_table_field('seedy_pages','hide_posts','BINARY',0);
 			$GLOBALS['SITE_DB']->add_table_field('seedy_posts','validated','BINARY',1);
@@ -183,7 +183,7 @@ class Module_cedi
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'seedy_page','category_name'=>strval(db_get_first_id()),'group_id'=>$group_id));
 			}
 
-			add_specific_permission('SEEDY','seedy_manage_tree',false);
+			add_privilege('SEEDY','seedy_manage_tree',false);
 
 			$GLOBALS['SITE_DB']->create_table('seedy_posts',array(
 				'id'=>'*AUTO',
@@ -448,7 +448,7 @@ class Module_cedi
 		$description_comcode=get_translated_text($page['description']);
 
 		// Build up navigation tree
-		$breadcrumbs=cedi_breadcrumbs($chain,$current_title,has_specific_permission(get_member(),'open_virtual_roots'),true,true);
+		$breadcrumbs=cedi_breadcrumbs($chain,$current_title,has_privilege(get_member(),'open_virtual_roots'),true,true);
 
 		// Children Links
 		$dbchildren=$GLOBALS['SITE_DB']->query('SELECT child_id FROM '.get_table_prefix().'seedy_children c LEFT JOIN '.get_table_prefix().'seedy_pages p ON c.child_id=p.id WHERE c.parent_id='.strval((integer)$id).' ORDER BY c.the_order');
@@ -485,11 +485,11 @@ class Module_cedi
 			$num_children++;
 		}
 
-		$staff_access=has_specific_permission(get_member(),'edit_lowrange_content','cms_cedi',array('seedy_page',$id));
+		$staff_access=has_privilege(get_member(),'edit_lowrange_content','cms_cedi',array('seedy_page',$id));
 
 		// Main text (posts)
 		$where_map=array('page_id'=>$id);
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $where_map['validated']=1;
+		if (!has_privilege(get_member(),'see_unvalidated')) $where_map['validated']=1;
 		$dbposts=$GLOBALS['SITE_DB']->query_select('seedy_posts',array('*'),$where_map,'ORDER BY date_and_time',300);
 		$num_posts=0;
 		$posts=new ocp_tempcode();
@@ -520,7 +520,7 @@ class Module_cedi
 			$include_expansion_here=(strpos($post_comcode,'[attachment')!==false);
 			if ($include_expansion_here) $include_expansion=true;
 			$post=get_translated_tempcode($myrow['the_message']);
-			if ((has_edit_permission('low',get_member(),$poster,'cms_cedi',array('seedy_page',$id))) && (($id!=db_get_first_id()) || (has_specific_permission(get_member(),'feature'))))
+			if ((has_edit_permission('low',get_member(),$poster,'cms_cedi',array('seedy_page',$id))) && (($id!=db_get_first_id()) || (has_privilege(get_member(),'feature'))))
 			{
 				$edit_url=build_url(array('page'=>'_SELF','type'=>'post','id'=>$chain,'post_id'=>$post_id),'_SELF');
 				$extra=do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'37404e2e5cf7e4cb806f796e9df90898','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'edit'));
@@ -579,7 +579,7 @@ class Module_cedi
 		} else $search_button=new ocp_tempcode();
 		$changes_url=build_url(array('page'=>'_SELF','type'=>'changes','id'=>$chain),'_SELF');
 		$changes_button=do_template('SCREEN_BUTTON',array('_GUID'=>'99ad7faac817326510583a69ac719d58','IMMEDIATE'=>false,'REL'=>'history','URL'=>$changes_url,'TITLE'=>do_lang_tempcode('CEDI_CHANGELOG'),'IMG'=>'changes'));
-		if ((has_specific_permission(get_member(),'seedy_manage_tree','cms_cedi',array('seedy_page',$id))) && (has_actual_page_access(get_member(),'cms_cedi')))
+		if ((has_privilege(get_member(),'seedy_manage_tree','cms_cedi',array('seedy_page',$id))) && (has_actual_page_access(get_member(),'cms_cedi')))
 		{
 			$tree_url=build_url(array('page'=>'cms_cedi','type'=>'edit_tree','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_cedi'));
 			$tree_button=do_template('SCREEN_BUTTON',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('TREE'),'IMG'=>'edit_tree'));
@@ -589,7 +589,7 @@ class Module_cedi
 			$edit_url=build_url(array('page'=>'cms_cedi','type'=>'edit_page','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_cedi'));
 			$edit_button=do_template('SCREEN_BUTTON',array('_GUID'=>'5d8783a0af3a35f21022b30397f1b03e','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'edit'));
 		} else $edit_button=new ocp_tempcode();
-		if (($may_post) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_cedi',array('seedy_page',$id))) && (($id!=db_get_first_id()) || (has_specific_permission(get_member(),'feature'))))
+		if (($may_post) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_cedi',array('seedy_page',$id))) && (($id!=db_get_first_id()) || (has_privilege(get_member(),'feature'))))
 		{
 			$post_url=build_url(array('page'=>'_SELF','type'=>'post','id'=>$chain),'_SELF');
 			$post_button=do_template('SCREEN_BUTTON',array('_GUID'=>'c26462f34a64c4bf80c1fb7c40102eb0','IMMEDIATE'=>false,'URL'=>$post_url,'TITLE'=>do_lang_tempcode('_POST'),'IMG'=>'new_post'));
@@ -812,7 +812,7 @@ class Module_cedi
 		$member=get_member();
 		if ($target==db_get_first_id())
 		{
-			check_specific_permission('feature');
+			check_privilege('feature');
 		}
 
 		if ($id==$target)
@@ -877,7 +877,7 @@ class Module_cedi
 
 			list($warning_details,$ping_url)=handle_conflict_resolution();
 
-			if (has_specific_permission(get_member(),'bypass_validation_lowrange_content','cms_cedi',array('seedy_page',$myrow['page_id'])))
+			if (has_privilege(get_member(),'bypass_validation_lowrange_content','cms_cedi',array('seedy_page',$myrow['page_id'])))
 				$specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 		} else
 		{
@@ -901,7 +901,7 @@ class Module_cedi
 
 			list($warning_details,$ping_url)=array(NULL,NULL);
 
-			if (has_specific_permission(get_member(),'bypass_validation_lowrange_content','cms_cedi'))
+			if (has_privilege(get_member(),'bypass_validation_lowrange_content','cms_cedi'))
 				$specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 		}
 
@@ -1010,14 +1010,14 @@ class Module_cedi
 
 		if ($id==db_get_first_id())
 		{
-			check_specific_permission('feature');
+			check_privilege('feature');
 		}
 
 		// Do it
 		if ($mode=='post')
 		{
 			inject_action_spamcheck();
-			if (!has_specific_permission(get_member(),'bypass_validation_lowrange_content','cms_cedi',array('seedy_page',$id)))
+			if (!has_privilege(get_member(),'bypass_validation_lowrange_content','cms_cedi',array('seedy_page',$id)))
 				$validated=0;
 			if (!has_category_access(get_member(),'seedy_page',strval($id))) access_denied('CATEGORY_ACCESS');
 
@@ -1041,7 +1041,7 @@ class Module_cedi
 
 			$original_poster=$myrow['the_user'];
 
-			if (!has_specific_permission(get_member(),'bypass_validation_lowrange_content','cms_cedi',array('seedy_page',$myrow['page_id'])))
+			if (!has_privilege(get_member(),'bypass_validation_lowrange_content','cms_cedi',array('seedy_page',$myrow['page_id'])))
 				$validated=0;
 
 			if ($delete==1)

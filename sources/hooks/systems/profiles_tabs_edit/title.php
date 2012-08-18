@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_Edit_title
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return has_specific_permission($member_id_viewing,'may_choose_custom_title') && (($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')) || (has_specific_permission($member_id_viewing,'member_maintenance')));
+		return has_privilege($member_id_viewing,'may_choose_custom_title') && (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')));
 	}
 
 	/**

@@ -101,7 +101,7 @@ function ocf_read_in_member_profile($member_id,$lite=true)
 		$out['groups']=ocf_get_members_groups($member_id);
 
 		// Custom fields
-		$out['custom_fields']=ocf_get_all_custom_fields_match_member($member_id,((get_member()!=$member_id) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,((get_member()!=$member_id) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL);
+		$out['custom_fields']=ocf_get_all_custom_fields_match_member($member_id,((get_member()!=$member_id) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,((get_member()!=$member_id) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL);
 
 		// Birthdate
 		if ($row['m_reveal_age']==1)
@@ -130,7 +130,7 @@ function ocf_read_in_member_profile($member_id,$lite=true)
 		}
 
 		// Any warnings?
-		if ((has_specific_permission(get_member(),'see_warnings')) && (addon_installed('ocf_warnings')))
+		if ((has_privilege(get_member(),'see_warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$out['warnings']=ocf_get_warnings($member_id);
 		}

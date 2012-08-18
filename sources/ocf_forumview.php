@@ -254,7 +254,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	if ($may_mass_moderate)
 	{
 		$moderator_actions.='<option value="move_topics">'.do_lang('MOVE_TOPICS').'</option>';
-		if (has_specific_permission(get_member(),'delete_midrange_content','topics',array('forums',$id)))
+		if (has_privilege(get_member(),'delete_midrange_content','topics',array('forums',$id)))
 		{
 			$moderator_actions.='<option value="delete_topics">'.do_lang('DELETE_TOPICS').'</option>';
 		}
@@ -680,7 +680,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		} else $child_or_list='';
 		if ($child_or_list!='') $child_or_list.=' AND ';
 		$query='SELECT DISTINCT t_forum_id,t.id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (t.id=l_topic_id AND l_member_id='.strval((integer)get_member()).') WHERE '.$child_or_list.'t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND (l_time<t_cache_last_time OR l_time IS NULL)';
-		if (!has_specific_permission(get_member(),'jump_to_unvalidated')) $query.=' AND t_validated=1';
+		if (!has_privilege(get_member(),'jump_to_unvalidated')) $query.=' AND t_validated=1';
 		$unread_forums=collapse_2d_complexity('t_forum_id','id',$GLOBALS['FORUM_DB']->query($query));
 	}
 
@@ -786,7 +786,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 
 	// Find topics
 	$extra='';
-	if ((!has_specific_permission(get_member(),'see_unvalidated')) && (!ocf_may_moderate_forum($forum_id,$member_id))) $extra='t_validated=1 AND ';
+	if ((!has_privilege(get_member(),'see_unvalidated')) && (!ocf_may_moderate_forum($forum_id,$member_id))) $extra='t_validated=1 AND ';
 	if (is_null($forum_info[0]['f_parent_forum']))
 	{
 		$where=$extra.' (t_forum_id='.strval((integer)$forum_id).')';
@@ -880,7 +880,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	{
 		$out['may_change_max']=1;
 		$out['may_move_topics']=1;
-		if (has_specific_permission(get_member(),'multi_delete_topics')) $out['may_delete_topics']=1; // Only super admins can casually delete topics - other staff are expected to trash them. At least deleted posts or trashed topics can be restored!
+		if (has_privilege(get_member(),'multi_delete_topics')) $out['may_delete_topics']=1; // Only super admins can casually delete topics - other staff are expected to trash them. At least deleted posts or trashed topics can be restored!
 	}
 	return $out;
 }

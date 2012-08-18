@@ -26,7 +26,7 @@ class Hook_pointstore_permission
 	 */
 	function init()
 	{
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'msp WHERE active_until<'.strval(time()));
+		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'member_privileges WHERE active_until<'.strval(time()));
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'member_category_access WHERE active_until<'.strval(time()));
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'member_page_access WHERE active_until<'.strval(time()));
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'member_zone_access WHERE active_until<'.strval(time()));
@@ -42,7 +42,7 @@ class Hook_pointstore_permission
 	 * @param  ?integer		The cost in points (NULL: not set)
 	 * @param  ?integer		Number of hours for it to last for (NULL: unlimited)
 	 * @param  ID_TEXT		Permission scope 'type'
-	 * @param  ID_TEXT		Permission scope 'specific_permission'
+	 * @param  ID_TEXT		Permission scope 'privilege'
 	 * @param  ID_TEXT		Permission scope 'zone'
 	 * @param  ID_TEXT		Permission scope 'page'
 	 * @param  ID_TEXT		Permission scope 'module'
@@ -51,7 +51,7 @@ class Hook_pointstore_permission
 	 * @param  LONG_TEXT		Confirmation mail body
 	 * @return tempcode		The fields
 	 */
-	function get_fields($name_suffix='',$title='',$description='',$enabled=1,$cost=NULL,$hours=NULL,$type='msp',$specific_permission='',$zone='',$page='',$module='',$category='',$mail_subject='',$mail_body='')
+	function get_fields($name_suffix='',$title='',$description='',$enabled=1,$cost=NULL,$hours=NULL,$type='member_privileges',$privilege='',$zone='',$page='',$module='',$category='',$mail_subject='',$mail_body='')
 	{
 		require_lang('points');
 		$fields=new ocp_tempcode();
@@ -60,26 +60,26 @@ class Hook_pointstore_permission
 		$fields->attach(form_input_integer(do_lang_tempcode('COST'),do_lang_tempcode('HOW_MUCH_THIS_COSTS'),'permission_cost'.$name_suffix,$cost,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('PERMISSION_HOURS'),do_lang_tempcode('DESCRIPTION_PERMISSION_HOURS'),'permission_hours'.$name_suffix,$hours,false));
 		$types=new ocp_tempcode();
-		$_types=array('msp','member_zone_access','member_page_access','member_category_access');
+		$_types=array('member_privileges','member_zone_access','member_page_access','member_category_access');
 		foreach ($_types as $_type)
 		{
 			$types->attach(form_input_list_entry($_type,$type==$_type,do_lang_tempcode('PERM_TYPE_'.$_type)));
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_type'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_type'),'permission_type'.$name_suffix,$types));
 		require_all_lang();
-		$specific_permissions=new ocp_tempcode();
+		$privileges=new ocp_tempcode();
 		$temp=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
-		$specific_permissions->attach($temp);
-		$_specific_permissions=$GLOBALS['SITE_DB']->query_select('sp_list',array('*'),NULL,'ORDER BY p_section,the_name');
-		foreach ($_specific_permissions as $sp)
+		$privileges->attach($temp);
+		$_privileges=$GLOBALS['SITE_DB']->query_select('privilege_list',array('*'),NULL,'ORDER BY p_section,the_name');
+		foreach ($_privileges as $__privilege)
 		{
-			$pt_name=do_lang_tempcode('PT_'.$sp['the_name']);
-			$_pt_name=do_lang('PT_'.$sp['the_name'],NULL,NULL,NULL,NULL,false);
+			$pt_name=do_lang_tempcode('PRIVILEGE_'.$__privilege['the_name']);
+			$_pt_name=do_lang('PRIVILEGE_'.$__privilege['the_name'],NULL,NULL,NULL,NULL,false);
 			if (is_null($_pt_name)) continue;
-			$temp=form_input_list_entry($sp['the_name'],$sp['the_name']==$specific_permission,$pt_name);
-			$specific_permissions->attach($temp);
+			$temp=form_input_list_entry($__privilege['the_name'],$__privilege['the_name']==$privilege,$pt_name);
+			$privileges->attach($temp);
 		}
-		$fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_specific_permission'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_specific_permission'),'permission_specific_permission'.$name_suffix,$specific_permissions,NULL,false,false));
+		$fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_privilege'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_privilege'),'permission_privilege'.$name_suffix,$privileges,NULL,false,false));
 		$zones=new ocp_tempcode();
 		//$zones->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
 		require_code('zones2');
@@ -139,7 +139,7 @@ class Hook_pointstore_permission
 			$hidden=new ocp_tempcode();
 			$hours=$row['p_hours'];
 			if ($hours==400000) $hours=NULL; // Around 100 years, but meaning unlimited
-			$fields->attach($this->get_fields('_'.strval($i),get_translated_text($row['p_title']),get_translated_text($row['p_description']),$row['p_enabled'],$row['p_cost'],$hours,$row['p_type'],$row['p_specific_permission'],$row['p_zone'],$row['p_page'],$row['p_module'],$row['p_category'],get_translated_text($row['p_mail_subject']),get_translated_text($row['p_mail_body'])));
+			$fields->attach($this->get_fields('_'.strval($i),get_translated_text($row['p_title']),get_translated_text($row['p_description']),$row['p_enabled'],$row['p_cost'],$hours,$row['p_type'],$row['p_privilege'],$row['p_zone'],$row['p_page'],$row['p_module'],$row['p_category'],get_translated_text($row['p_mail_subject']),get_translated_text($row['p_mail_body'])));
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete_permission_'.strval($i),false));
 			$hidden->attach(form_input_hidden('permission_'.strval($i),strval($row['id'])));
@@ -166,7 +166,7 @@ class Hook_pointstore_permission
 			$hours=post_param_integer('permission_hours_'.strval($i),400000);
 			$hours=max($hours,400000);
 			$type=post_param('permission_type_'.strval($i));
-			$specific_permission=post_param('permission_specific_permission_'.strval($i));
+			$privilege=post_param('permission_privilege_'.strval($i));
 			$zone=post_param('permission_zone_'.strval($i));
 			$page=post_param('permission_page_'.strval($i));
 			$module=post_param('permission_module_'.strval($i));
@@ -197,7 +197,7 @@ class Hook_pointstore_permission
 					'p_cost'=>$cost,
 					'p_hours'=>$hours,
 					'p_type'=>$type,
-					'p_specific_permission'=>$specific_permission,
+					'p_privilege'=>$privilege,
 					'p_zone'=>$zone,
 					'p_page'=>$page,
 					'p_module'=>$module,
@@ -217,7 +217,7 @@ class Hook_pointstore_permission
 			$hours=post_param_integer('permission_hours',400000);
 			$hours=max($hours,400000);
 			$type=post_param('permission_type');
-			$specific_permission=post_param('permission_specific_permission');
+			$privilege=post_param('permission_privilege');
 			$zone=post_param('permission_zone');
 			$page=post_param('permission_page');
 			$module=post_param('permission_module');
@@ -232,7 +232,7 @@ class Hook_pointstore_permission
 				'p_cost'=>$cost,
 				'p_hours'=>$hours,
 				'p_type'=>$type,
-				'p_specific_permission'=>$specific_permission,
+				'p_privilege'=>$privilege,
 				'p_zone'=>$zone,
 				'p_page'=>$page,
 				'p_module'=>$module,
@@ -285,7 +285,7 @@ class Hook_pointstore_permission
 		$points_left=available_points(get_member());
 
 		// Check points
-		if (($points_left<$cost) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($points_left<$cost) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('_CANT_AFFORD',integer_format($cost),integer_format($points_left)));
 		}
@@ -316,7 +316,7 @@ class Hook_pointstore_permission
 
 		// Check points
 		$points_left=available_points(get_member());
-		if (($points_left<$cost) && (!has_specific_permission(get_member(),'give_points_self')))
+		if (($points_left<$cost) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('_CANT_AFFORD',integer_format($cost),integer_format($points_left)));
 		}
@@ -363,8 +363,8 @@ class Hook_pointstore_permission
 		$map=array('member_id'=>get_member());
 		switch ($row['p_type'])
 		{
-			case 'msp':
-				$map['specific_permission']=$row['p_specific_permission'];
+			case 'member_privileges':
+				$map['privilege']=$row['p_privilege'];
 				$map['the_page']=$row['p_page'];
 				$map['module_the_name']=$row['p_module'];
 				$map['category_name']=$row['p_category'];

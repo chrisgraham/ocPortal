@@ -107,7 +107,7 @@ class Hook_search_ocf_own_pt
 			$where_clause.='s.t_cache_first_post_id=r.id';
 		}
 
-		if (!has_specific_permission(get_member(),'see_unvalidated'))
+		if (!has_privilege(get_member(),'see_unvalidated'))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='p_validated=1';

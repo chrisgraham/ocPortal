@@ -220,7 +220,7 @@ function iframe_script()
 
 	// Closed site
 	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));
@@ -372,7 +372,7 @@ function block_helper_script()
 	require_code('zones2');
 	require_code('zones3');
 
-	check_specific_permission('comcode_dangerous');
+	check_privilege('comcode_dangerous');
 
 	$title=get_screen_title('BLOCK_HELPER');
 
@@ -905,7 +905,7 @@ function emoticons_script()
 	require_lang('ocf');
 	require_javascript('javascript_editing');
 
-	$extra=has_specific_permission(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
+	$extra=has_privilege(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
 	$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_emoticons WHERE e_relevance_level<3'.$extra);
 	$content=new ocp_tempcode();
 	$cols=8;

@@ -175,7 +175,7 @@ class Hook_pointstore_ocdeadpeople
 		// Check points
 		$points_left=available_points(get_member());
 
-		if (!has_specific_permission(get_member(),'give_points_self'))
+		if (!has_privilege(get_member(),'give_points_self'))
 		{
 			if ($points_left<$amount)
 			{

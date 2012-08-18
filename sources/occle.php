@@ -43,7 +43,7 @@ function occle_script()
 	if (!$cli)
 	{
 		$site_closed=get_option('site_closed');
-		if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+		if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 		{
 			header('Content-Type: text/plain');
 			@exit(get_option('closed'));

@@ -141,7 +141,7 @@ class Module_vforums
 
 		// Find topics
 		$extra='';
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $extra='t_validated=1';
+		if (!has_privilege(get_member(),'see_unvalidated')) $extra='t_validated=1';
 		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
 		{
 			$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member(),false,true);

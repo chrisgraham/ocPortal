@@ -262,7 +262,7 @@ class Module_admin_zones
 
 				// WYSIWYG?
 				require_javascript('javascript_editing');
-				$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($comcode,'{$,page hint: no_wysiwyg}')===false));
+				$w=/* (has_privilege(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($comcode,'{$,page hint: no_wysiwyg}')===false));
 				global $JAVASCRIPT,$WYSIWYG_ATTACHED;
 				if (!$WYSIWYG_ATTACHED)
 					$JAVASCRIPT->attach(do_template('HTML_EDIT'));

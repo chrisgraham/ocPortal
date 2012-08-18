@@ -107,7 +107,7 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 		if (!ocf_may_edit_post_by($post_owner,$forum_id)) access_denied('I_ERROR');
 	if ((is_null($validated)) || ($validated==1))
 	{
-		if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
+		if ((!is_null($forum_id)) && (!has_privilege(get_member(),'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
 		if (($mark_as_unread)/* && (ocf_may_moderate_forum($forum_id))*/)
 		{
 			//			$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_cache_last_time'),array('id'=>$topic_id),'',1);

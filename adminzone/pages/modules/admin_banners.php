@@ -76,7 +76,7 @@ class Module_admin_banners
 	{
 		$title=get_screen_title('BANNER_STATISTICS');
 
-		check_specific_permission('view_anyones_banner_stats');
+		check_privilege('view_anyones_banner_stats');
 
 		require_code('templates_internalise_screen');
 		$test_tpl=internalise_own_screen($title);

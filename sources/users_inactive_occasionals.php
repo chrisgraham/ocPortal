@@ -214,7 +214,7 @@ function try_su_login($member)
 
 	require_code('permissions');
 	if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_layer_initialise')) $GLOBALS['FORUM_DRIVER']->forum_layer_initialise();
-	if (has_specific_permission($member,'assume_any_member'))
+	if (has_privilege($member,'assume_any_member'))
 	{
 		$su=$GLOBALS['FORUM_DRIVER']->get_member_from_username($ks);
 

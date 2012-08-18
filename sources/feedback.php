@@ -338,7 +338,7 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 		{
 			$error=do_lang_tempcode('RATE_DENIED_OWN');
 		}
-		elseif (!has_specific_permission(get_member(),'rate',get_page_name()))
+		elseif (!has_privilege(get_member(),'rate',get_page_name()))
 		{
 			$error=do_lang_tempcode('RATE_DENIED');
 		}
@@ -480,7 +480,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 
 	$rating_for_type=$content_type.(($type=='')?'':('_'.$type));
 
-	if (!has_specific_permission($member_id,'rate',$page_name)) return;
+	if (!has_privilege($member_id,'rate',$page_name)) return;
 	$already_rated=already_rated(array($rating_for_type),$content_id);
 	if (!is_null($rating))
 	{
@@ -639,7 +639,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 	{
 		if ((get_option('is_on_comments')=='0') || (!$allow_comments)) return false;
 
-		if (!has_specific_permission(get_member(),'comment',get_page_name())) return false;
+		if (!has_privilege(get_member(),'comment',get_page_name())) return false;
 	}
 
 	if (running_script('preview')) return false;

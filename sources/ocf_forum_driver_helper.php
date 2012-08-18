@@ -39,7 +39,7 @@ function _helper_apply_emoticons($this_ref,$member_id=NULL)
 		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
 	} else
 	{
-		$extra=has_specific_permission(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
+		$extra=has_privilege(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
 	}
 	$EMOTICON_CACHE=array();
 	$EMOTICON_LEVELS=array();
@@ -379,7 +379,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	if (!$load_spacer_posts_too)
 		$where.=not_like_spacer_posts('t.text_original');
 	$where.=$extra_where;
-	if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)get_member()).'))';
+	if (!has_privilege(get_member(),'see_unvalidated')) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)get_member()).'))';
 	$index=(strpos(get_db_type(),'mysql')!==false && !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))))?'USE INDEX (in_topic)':'';
 
 	$order=$reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';
@@ -468,7 +468,7 @@ function _helper_get_post_remaining_details($this_ref,$topic_id,$post_ids)
  */
 function _helper_get_emoticon_chooser($this_ref,$field_name)
 {
-	$extra=has_specific_permission(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
+	$extra=has_privilege(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
 	$emoticons=$this_ref->connection->query('SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_emoticons WHERE e_relevance_level=0'.$extra);
 	$em=new ocp_tempcode();
 	foreach ($emoticons as $emo)

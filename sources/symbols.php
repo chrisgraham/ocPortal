@@ -697,7 +697,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$page=get_page_name();
 				if (($site_closed=='1') && ($page!='login') && ($page!='join') && (get_param_integer('wide_high',0)==0))
 				{
-					$messages_bottom->attach(do_template('MESSAGE',array('_GUID'=>'03a41a91606b3ad05330e7d6f3e741c1','TYPE'=>'notice','MESSAGE'=>do_lang_tempcode(has_specific_permission(get_member(),'access_closed_site')?'SITE_SPECIAL_ACCESS':'SITE_SPECIAL_ACCESS_SU'))));
+					$messages_bottom->attach(do_template('MESSAGE',array('_GUID'=>'03a41a91606b3ad05330e7d6f3e741c1','TYPE'=>'notice','MESSAGE'=>do_lang_tempcode(has_privilege(get_member(),'access_closed_site')?'SITE_SPECIAL_ACCESS':'SITE_SPECIAL_ACCESS_SU'))));
 				}
 				if ($GLOBALS['IS_ACTUALLY_ADMIN'])
 				{
@@ -731,7 +731,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value='0';
 				if (!is_guest())
 				{
-					$value=(get_option('ocp_show_su',true)=='1') && (has_specific_permission(get_member(),'assume_any_member'))?'1':'0';
+					$value=(get_option('ocp_show_su',true)=='1') && (has_privilege(get_member(),'assume_any_member'))?'1':'0';
 				}
 				break;
 
@@ -739,7 +739,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (!is_guest())
 				{
 					// Different types of page type for staff (debug view, etc)
-					if ((get_option('ocp_show_staff_page_actions',true)=='1') && (has_specific_permission(get_member(),'view_profiling_modes')) && (count($_POST)==0)) // We count POST because we don't want to allow double submits
+					if ((get_option('ocp_show_staff_page_actions',true)=='1') && (has_privilege(get_member(),'view_profiling_modes')) && (count($_POST)==0)) // We count POST because we don't want to allow double submits
 					{
 						require_code('site2');
 						$value=get_staff_actions_list();
@@ -784,7 +784,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (addon_installed('banners'))
 				{
 					global $SITE_INFO;
-					$is_on_banners=(((!has_specific_permission(get_member(),'banner_free')) || (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_option('admin_banners')=='1')) || (!is_null($GLOBALS['CURRENT_SHARE_USER']))));
+					$is_on_banners=(((!has_privilege(get_member(),'banner_free')) || (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_option('admin_banners')=='1')) || (!is_null($GLOBALS['CURRENT_SHARE_USER']))));
 					if (array_key_exists('throttle_bandwidth_registered',$SITE_INFO))
 					{
 						$views_till_now=intval(get_value('page_views'));
@@ -1508,9 +1508,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'HAS_PRIVILEGE':
-				if ((isset($param[0])) && (function_exists('has_specific_permission')))
+				if ((isset($param[0])) && (function_exists('has_privilege')))
 				{
-					$value=has_specific_permission(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'1':'0';
+					$value=has_privilege(((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),$param[0])?'1':'0';
 				}
 				break;
 

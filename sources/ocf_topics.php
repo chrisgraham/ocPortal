@@ -29,9 +29,9 @@ function ocf_get_topic_where($topic_id)
 	$where='p_topic_id='.strval((integer)$topic_id);
 	if (is_guest())
 		$where.=' AND p_intended_solely_for IS NULL';
-	elseif (!has_specific_permission(get_member(),'view_other_pt'))
+	elseif (!has_privilege(get_member(),'view_other_pt'))
 		$where.=' AND (p_intended_solely_for='.strval((integer)get_member()).' OR p_poster='.strval((integer)get_member()).' OR p_intended_solely_for IS NULL)';
-	if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)get_member()).'))';
+	if (!has_privilege(get_member(),'see_unvalidated')) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)get_member()).'))';
 	return $where;
 }
 
@@ -45,7 +45,7 @@ function ocf_may_make_private_topic($member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (!has_specific_permission($member_id,'use_pt')) return false;
+	if (!has_privilege($member_id,'use_pt')) return false;
 
 	return $member_id!=$GLOBALS['OCF_DRIVER']->get_guest_id();
 }
@@ -61,7 +61,7 @@ function ocf_may_post_topic($forum_id,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (!has_specific_permission($member_id,'submit_midrange_content','topics',array('forums',$forum_id))) return false;
+	if (!has_privilege($member_id,'submit_midrange_content','topics',array('forums',$forum_id))) return false;
 	if (is_null($forum_id)) return true;
 
 	/*$test=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_warnings WHERE p_silence_from_forum='.strval($forum_id).' AND w_member_id='.strval($member_id));
@@ -80,7 +80,7 @@ function ocf_may_report_post($member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	return has_specific_permission($member_id,'may_report_post');
+	return has_privilege($member_id,'may_report_post');
 }
 
 /**
@@ -108,7 +108,7 @@ function ocf_may_edit_topics_by($forum_id,$member_id,$resource_owner)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (is_null($forum_id)) return has_specific_permission($member_id,'moderate_personal_topic');
+	if (is_null($forum_id)) return has_privilege($member_id,'moderate_personal_topic');
 
 	return has_edit_permission('mid',$member_id,$resource_owner,'topics',array('forums',$forum_id));
 }
@@ -125,7 +125,7 @@ function ocf_may_delete_topics_by($forum_id,$member_id,$resource_owner)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (is_null($forum_id)) return has_specific_permission($member_id,'moderate_personal_topic');
+	if (is_null($forum_id)) return has_privilege($member_id,'moderate_personal_topic');
 
 	return has_delete_permission('mid',$member_id,$resource_owner,'topics',array('forums',$forum_id));
 }

@@ -57,19 +57,19 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 		{
 			$pinned=0;
 			$sunk=0;
-			if (($info[0]['t_cache_first_member_id']!=get_member()) || (!has_specific_permission(get_member(),'close_own_topics')))
+			if (($info[0]['t_cache_first_member_id']!=get_member()) || (!has_privilege(get_member(),'close_own_topics')))
 				$open=1;
 			$cascading=0;
 		}
 
-		if (!(($info[0]['t_cache_first_member_id']==get_member()) && (has_specific_permission(get_member(),'close_own_topics'))))
+		if (!(($info[0]['t_cache_first_member_id']==get_member()) && (has_privilege(get_member(),'close_own_topics'))))
 		{
 			require_code('ocf_topics');
-			if ((!ocf_may_edit_topics_by($forum_id,get_member(),$info[0]['t_cache_first_member_id'])) || ((($info[0]['t_pt_from']!=get_member()) && ($info[0]['t_pt_to']!=get_member())) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt')) && (is_null($forum_id))))
+			if ((!ocf_may_edit_topics_by($forum_id,get_member(),$info[0]['t_cache_first_member_id'])) || ((($info[0]['t_pt_from']!=get_member()) && ($info[0]['t_pt_to']!=get_member())) && (!ocf_has_special_pt_access($topic_id)) && (!has_privilege(get_member(),'view_other_pt')) && (is_null($forum_id))))
 				access_denied('I_ERROR');
 		}
 
-		if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id)))) $validated=NULL;
+		if ((!is_null($forum_id)) && (!has_privilege(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id)))) $validated=NULL;
 	}
 
 	if (!is_null($description)) $update['t_description']=$description;
@@ -142,7 +142,7 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL)
 				((!is_null($info[0]['t_pt_to'])) && ($info[0]['t_pt_to']!=get_member()))
 			) &&
 			(!ocf_has_special_pt_access($topic_id)) &&
-			(!has_specific_permission(get_member(),'view_other_pt')) &&
+			(!has_privilege(get_member(),'view_other_pt')) &&
 			(is_null($forum_id))
 		)
 	)
@@ -305,7 +305,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 	{
 		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('t_forum_id','t_pt_from','t_pt_to','t_cache_first_title','t_cache_num_posts','t_validated'),array('id'=>$topics[0]));
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		if (($topic_info[0]['t_forum_id']!=$from) || ((($topic_info[0]['t_pt_from']!=get_member()) && ($topic_info[0]['t_pt_to']!=get_member())) && (!ocf_has_special_pt_access($topics[0])) && (!has_specific_permission(get_member(),'view_other_pt')) && (is_null($topic_info[0]['t_forum_id']))))
+		if (($topic_info[0]['t_forum_id']!=$from) || ((($topic_info[0]['t_pt_from']!=get_member()) && ($topic_info[0]['t_pt_to']!=get_member())) && (!ocf_has_special_pt_access($topics[0])) && (!has_privilege(get_member(),'view_other_pt')) && (is_null($topic_info[0]['t_forum_id']))))
 			access_denied('I_ERROR');
 		if ($topic_info[0]['t_validated']==1) $topic_count++;
 		$topic_title=$topic_info[0]['t_cache_first_title'];
@@ -335,7 +335,7 @@ function ocf_move_topics($from,$to,$topics=NULL) // NB: From is good to add a ad
 				{
 					if ($topic_info[0]['t_validated']==1) $topic_count++;
 
-					if (($topic_info[0]['t_forum_id']!=$from) || ((($topic_info[0]['t_pt_from']!=get_member()) && ($topic_info[0]['t_pt_to']!=get_member())) && (!ocf_has_special_pt_access($topic_id)) && (!has_specific_permission(get_member(),'view_other_pt'))))
+					if (($topic_info[0]['t_forum_id']!=$from) || ((($topic_info[0]['t_pt_from']!=get_member()) && ($topic_info[0]['t_pt_to']!=get_member())) && (!ocf_has_special_pt_access($topic_id)) && (!has_privilege(get_member(),'view_other_pt'))))
 						access_denied('I_ERROR');
 				}
 			} else
@@ -436,7 +436,7 @@ function ocf_invite_to_pt($member_id,$topic_id)
 	$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
 	if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	if (($topic_info[0]['t_pt_from']!=get_member()) && ($topic_info[0]['t_pt_to']!=get_member()) && (!has_specific_permission(get_member(),'view_other_pt')))
+	if (($topic_info[0]['t_pt_from']!=get_member()) && ($topic_info[0]['t_pt_to']!=get_member()) && (!has_privilege(get_member(),'view_other_pt')))
 		warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 	if (($topic_info[0]['t_pt_from']==$member_id) || ($topic_info[0]['t_pt_to']==$member_id))

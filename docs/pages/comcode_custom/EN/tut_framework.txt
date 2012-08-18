@@ -69,12 +69,12 @@ The new module, approximately 1,000 lines of code (PHP and XHTML) was completed 
 
 Some of the API functions used in the module include:
  - create_table
- - add_specific_permission
+ - add_privilege
  - add_config_option
  - query_select
  - do_template
  - do_lang
- - has_specific_permission
+ - has_privilege
  - build_url
  - assign_refresh
  - get_param_integer

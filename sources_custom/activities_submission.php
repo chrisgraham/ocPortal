@@ -66,7 +66,7 @@ function activities_addon_syndicate_described_activity($a_language_string_code='
 				if ($ob->is_available())
 				{
 					$ob->syndicate_user_activity($a_member_id,$row);
-					if (($sitewide_too) && (has_specific_permission(get_member(),'syndicate_site_activity')) && (post_param_integer('syndicate_this',0)==1))
+					if (($sitewide_too) && (has_privilege(get_member(),'syndicate_site_activity')) && (post_param_integer('syndicate_this',0)==1))
 						$ob->syndicate_site_activity($row);
 				}
 			}

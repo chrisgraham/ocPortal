@@ -47,7 +47,7 @@ class Block_main_comcode_page_children
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(has_specific_permission(get_member(),\'see_unvalidated\'),((array_key_exists(\'param\',$map)) && ($map[\'param\']!=\'\'))?$map[\'param\']:get_page_name(),array_key_exists(\'zone\',$map)?$map[\'zone\']:post_param(\'zone\',get_comcode_zone(((array_key_exists(\'param\',$map)) && ($map[\'param\']!=\'\'))?$map[\'param\']:get_page_name(),false)))';
+		$info['cache_on']='array(has_privilege(get_member(),\'see_unvalidated\'),((array_key_exists(\'param\',$map)) && ($map[\'param\']!=\'\'))?$map[\'param\']:get_page_name(),array_key_exists(\'zone\',$map)?$map[\'zone\']:post_param(\'zone\',get_comcode_zone(((array_key_exists(\'param\',$map)) && ($map[\'param\']!=\'\'))?$map[\'param\']:get_page_name(),false)))';
 		$info['ttl']=60*24*7;
 		return $info;
 	}
@@ -65,7 +65,7 @@ class Block_main_comcode_page_children
 		if ($zone=='_SEARCH') $zone=NULL;
 		$qmap=array('p_parent_page'=>$page);
 		if (!is_null($zone)) $qmap['the_zone']=$zone;
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $qmap['p_validated']=1;
+		if (!has_privilege(get_member(),'see_unvalidated')) $qmap['p_validated']=1;
 		$children=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','the_zone'),$qmap);
 		foreach ($children as $i=>$child)
 		{

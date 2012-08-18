@@ -159,9 +159,9 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 		$comcode_dangerous_html=true;
 	} else
 	{
-		$comcode_dangerous=($GLOBALS['MICRO_BOOTUP']==0) && (has_specific_permission($source_member,'comcode_dangerous'));
+		$comcode_dangerous=($GLOBALS['MICRO_BOOTUP']==0) && (has_privilege($source_member,'comcode_dangerous'));
 		$comcode_dangerous_html=false;
-		if ((has_specific_permission($source_member,'allow_html')) && (($is_all_semihtml) || (strpos($comcode,'[html')!==false) || (strpos($comcode,'[semihtml')!==false)))
+		if ((has_privilege($source_member,'allow_html')) && (($is_all_semihtml) || (strpos($comcode,'[html')!==false) || (strpos($comcode,'[semihtml')!==false)))
 		{
 			$comcode_dangerous_html=true;
 			/*foreach (array_keys($POTENTIALLY_EMPTY_TAGS) as $tag) // Find whether we really need to enable the computational-expensive filtering. Code disabled, not sure why this would have ever worked!
@@ -1009,7 +1009,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 								// Advertising
 								$b_all=true; // leave true - for test purposes only
-								if ((!$differented) && (!$semiparse_mode) && (!$in_code_tag) && (addon_installed('banners')) && (($b_all) || (!has_specific_permission($source_member,'banner_free'))))
+								if ((!$differented) && (!$semiparse_mode) && (!$in_code_tag) && (addon_installed('banners')) && (($b_all) || (!has_privilege($source_member,'banner_free'))))
 								{
 									// Pick up correctly, including permission filtering
 									if (is_null($ADVERTISING_BANNERS))
@@ -1862,7 +1862,7 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
  */
 function filter_html($as_admin,$source_member,$pos,&$len,&$comcode,$in_html,$in_semihtml)
 {
-	if ((!$as_admin) && (!has_specific_permission($source_member,'use_very_dangerous_comcode')))
+	if ((!$as_admin) && (!has_privilege($source_member,'use_very_dangerous_comcode')))
 	{
 		global $POTENTIAL_JS_NAUGHTY_ARRAY;
 

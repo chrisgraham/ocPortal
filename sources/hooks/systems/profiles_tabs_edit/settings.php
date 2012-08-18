@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_Edit_settings
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return (($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member')) || (has_specific_permission($member_id_viewing,'member_maintenance')));
+		return (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')));
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Hook_Profiles_Tabs_Edit_settings
 			$is_httpauth=ocf_is_httpauth_member($member_id_of);
 			$is_remote=($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_password_compat_scheme')=='remote');
 
-			if (($is_ldap) || ($is_httpauth) || ($is_remote) || (($member_id_of!=$member_id_viewing) && (!has_specific_permission($member_id_viewing,'assume_any_member'))))
+			if (($is_ldap) || ($is_httpauth) || ($is_remote) || (($member_id_of!=$member_id_viewing) && (!has_privilege($member_id_viewing,'assume_any_member'))))
 			{
 				$password=NULL;
 			} else
@@ -69,7 +69,7 @@ class Hook_Profiles_Tabs_Edit_settings
 
 			$custom_fields=ocf_get_all_custom_fields_match(
 				$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id_of), // groups
-				(($member_id_of!=$member_id_viewing) && (!has_specific_permission($member_id_viewing,'view_any_profile_field')))?1:NULL, // public view
+				(($member_id_of!=$member_id_viewing) && (!has_privilege($member_id_viewing,'view_any_profile_field')))?1:NULL, // public view
 				($member_id_of!=$member_id_viewing)?NULL:1, // owner view
 				($member_id_of!=$member_id_viewing)?NULL:1 // owner set
 			);
@@ -89,10 +89,10 @@ class Hook_Profiles_Tabs_Edit_settings
 			if ($pt_allow==$all_pt_allow) $pt_allow='*';
 			$pt_rules_text=post_param('pt_rules_text',NULL);
 
-			if (has_specific_permission($member_id_viewing,'member_maintenance'))
+			if (has_privilege($member_id_viewing,'member_maintenance'))
 			{
 				$validated=post_param_integer('validated',0);
-				$primary_group=(($is_ldap) || (!has_specific_permission($member_id_viewing,'assume_any_member')))?NULL:post_param_integer('primary_group',NULL);
+				$primary_group=(($is_ldap) || (!has_privilege($member_id_viewing,'assume_any_member')))?NULL:post_param_integer('primary_group',NULL);
 				$is_perm_banned=post_param_integer('is_perm_banned',0);
 				$old_is_perm_banned=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_is_perm_banned');
 				if ($old_is_perm_banned!=$is_perm_banned)
@@ -100,7 +100,7 @@ class Hook_Profiles_Tabs_Edit_settings
 					if ($is_perm_banned==1) ocf_ban_member($member_id_of); else ocf_unban_member($member_id_of);
 				}
 				$highlighted_name=post_param_integer('highlighted_name',0);
-				if (has_specific_permission($member_id_viewing,'probate_members'))
+				if (has_privilege($member_id_viewing,'probate_members'))
 				{
 	   			$on_probation_until=get_input_date('on_probation_until');
 
@@ -132,7 +132,7 @@ class Hook_Profiles_Tabs_Edit_settings
 				$highlighted_name=NULL;
 				$on_probation_until=NULL;
 			}
-			if ((has_actual_page_access($member_id_viewing,'admin_ocf_join')) || (has_specific_permission($member_id_of,'rename_self')))
+			if ((has_actual_page_access($member_id_viewing,'admin_ocf_join')) || (has_privilege($member_id_of,'rename_self')))
 			{
 				$username=($is_ldap||$is_remote)?NULL:post_param('edit_username');
 			} else $username=NULL;
@@ -173,9 +173,9 @@ class Hook_Profiles_Tabs_Edit_settings
 				{
 					$group=$groups[intval($group_id)];
 
-					if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_specific_permission($member_id_viewing,'see_hidden_groups'))) continue;
+					if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_privilege($member_id_viewing,'see_hidden_groups'))) continue;
 
-					if ((!in_array($group['id'],$members_groups)) && ((has_specific_permission($member_id_viewing,'assume_any_member')) || ($group['g_open_membership']==1)))
+					if ((!in_array($group['id'],$members_groups)) && ((has_privilege($member_id_viewing,'assume_any_member')) || ($group['g_open_membership']==1)))
 					{
 						ocf_add_member_to_group($member_id_of,$group['id']);
 					}

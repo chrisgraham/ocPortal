@@ -597,7 +597,7 @@ function handle_symbol_preprocessing($bit,&$children)
 					global $ZONE;
 					$wide_high=is_wide_high();
 					$wide=is_wide();
-					if ((($wide==0) || (($wide_high==0) && (($param[0]=='bottom') || ($param[0]=='top')))) && ((get_option('site_closed')=='0') || ($GLOBALS['IS_ACTUALLY_ADMIN']) || (has_specific_permission(get_member(),'access_closed_site'))))
+					if ((($wide==0) || (($wide_high==0) && (($param[0]=='bottom') || ($param[0]=='top')))) && ((get_option('site_closed')=='0') || ($GLOBALS['IS_ACTUALLY_ADMIN']) || (has_privilege(get_member(),'access_closed_site'))))
 					{
 						$tp_value=request_page('panel_'.$param[0],false,array_key_exists(1,$param)?$param[1]:NULL,NULL);
 

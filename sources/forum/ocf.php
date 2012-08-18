@@ -1160,7 +1160,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function _get_usergroup_list($hide_hidden=false,$only_permissive=false,$force_show_all=false,$force_find=NULL,$for_member=NULL,$skip_hidden=false)
 	{
-		if (($hide_hidden) && (has_specific_permission(get_member(),'see_hidden_groups'))) $hide_hidden=false;
+		if (($hide_hidden) && (has_privilege(get_member(),'see_hidden_groups'))) $hide_hidden=false;
 
 		$where=$only_permissive?' WHERE g_is_private_club=0':'';
 

@@ -91,139 +91,6 @@ class Module_admin_config
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if (($upgrade_from<3) || (is_null($upgrade_from))) // These are new in 3 of this module, and thus are for upgrades and fresh installs
-		{
-			add_config_option('MOD_REWRITE','mod_rewrite','tick','return \''.(in_array(ocp_srv('HTTP_HOST'),array('test.ocportal.com'))?'1':'0').'\'; /*function_exists(\'apache_get_modules\')?\'1\':\'0\';*/','SITE','ADVANCED');
-		}
-		if (($upgrade_from<4) || (is_null($upgrade_from))) // These are new in 4 of this module, and thus are for upgrades and fresh installs
-		{
-			add_config_option('SESSION_EXPIRY_TIME','session_expiry_time','integer','return \'1\';','SECURITY','GENERAL');
-		}
-		if (($upgrade_from<5) || (is_null($upgrade_from))) // These are new in 5 of this module, and thus are for upgrades and fresh installs
-		{
-			add_config_option('TRACKBACKS','is_on_trackbacks','tick','return \'0\';','FEATURE','USER_INTERACTION');
-
-			add_config_option('UNZIP_DIR','unzip_dir','line','return (DIRECTORY_SEPARATOR==\'/\')?\'/tmp/\':ocp_srv(\'TMP\');','SITE','ARCHIVES',1);
-			add_config_option('UNZIP_CMD','unzip_cmd','line','return \'/usr/bin/unzip -o @_SRC_@ -x -d @_DST_@\';','SITE','ARCHIVES',1);
-
-			add_config_option('ENABLED','smtp_sockets_use','tick','return \'0\';','SITE','SMTP',1);
-			add_config_option('HOST','smtp_sockets_host','line','return \'mail.yourispwhateveritis.net\';','SITE','SMTP',1);
-			add_config_option('PORT','smtp_sockets_port','line','return \'25\';','SITE','SMTP',1);
-			add_config_option('USERNAME','smtp_sockets_username','line','return \'\';','SITE','SMTP',1);
-			add_config_option('PASSWORD','smtp_sockets_password','line','return \'\';','SITE','SMTP',1);
-			add_config_option('EMAIL_ADDRESS','smtp_from_address','line','return \'\';','SITE','SMTP',1);
-
-			add_config_option('USE_SECURITY_IMAGES','use_security_images','tick','return \'1\';','SECURITY','GENERAL');
-			add_config_option('HTTPS_SUPPORT','enable_https','tick','return \'0\';','SECURITY','GENERAL',1);
-
-			add_config_option('SEND_ERROR_EMAILS_OCPRODUCTS','send_error_emails_ocproducts','tick','return '.strval(post_param_integer('allow_reports_default',0)).';','SITE','ADVANCED',1);
-
-			add_config_option('LOW_DISK_SPACE_SUBJECT','low_space_check','integer','return \'20\';','SITE','GENERAL'); // 20MB - very very low even for lame web hosts
-
-			add_config_option('DETECT_LANG_FORUM','detect_lang_forum','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('DETECT_LANG_BROWSER','detect_lang_browser','tick','return \'0\';','SITE','ADVANCED');
-		}
-		if (($upgrade_from<7) && (!is_null($upgrade_from))) // These are changed in 7 of this module, and thus are for upgrades and not fresh installs
-		{
-			$GLOBALS['SITE_DB']->query_update('config',array('eval'=>'return has_no_forum()?NULL:do_template(\'COMMENTS_DEFAULT_TEXT\');'),array('the_name'=>'comment_text'),'',1);
-			if ($GLOBALS['OPTIONS']['comment_text']['c_set']==0)
-			{
-				$tpl=do_template('COMMENTS_DEFAULT_TEXT');
-				set_option('comment_text',$tpl->evaluate());
-			}
-			delete_config_option('width_left');
-			delete_config_option('width_right');
-			set_option('welcome_message','[html]'.get_option('welcome_message').'[/html]');
-			set_option('closed','[html]'.get_option('closed').'[/html]');
-			delete_config_option('xhtml_validation');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<7))
-		{
-			add_config_option('ALLOW_AUDIO_VIDEOS','allow_audio_videos','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('VALIDATION','validation','tick','return \'0\';','SITE','VALIDATION',1); /*(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))))?'1':'0')*/ // return (!function_exists(\'memory_get_usage()\') || (ini_get(\'memory_limit\')!=\'8M\'))?\'1\':\'0\';
-			add_config_option('VALIDATION_XHTML','validation_xhtml','tick','return \'1\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_WCAG','validation_wcag','tick','return \'1\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_CSS','validation_css','tick','return \'0\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_JAVASCRIPT','validation_javascript','tick','return \'0\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_COMPAT','validation_compat','tick','return \'0\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_EXT_FILES','validation_ext_files','tick','return \'0\';','SITE','VALIDATION',1);
-			add_config_option('MAX_SIZE','max_download_size','integer','return \'20000\';','SITE','UPLOAD');
-		}
-		if ((is_null($upgrade_from)) || ($upgrade_from<8))
-		{
-			// TODO: Move these into sms addon_registry hook, once these hooks support installation
-			add_config_option('USERNAME','sms_username','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
-			add_config_option('PASSWORD','sms_password','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
-			add_config_option('API_ID','sms_api_id','integer','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
-			add_config_option('SMS_LOW_LIMIT','sms_low_limit','integer','return addon_installed(\'sms\')?\'10\':NULL;','FEATURE','SMS');
-			add_config_option('SMS_HIGH_LIMIT','sms_high_limit','integer','return addon_installed(\'sms\')?\'20\':NULL;','FEATURE','SMS');
-			add_config_option('SMS_LOW_TRIGGER_LIMIT','sms_low_trigger_limit','integer','return addon_installed(\'sms\')?\'50\':NULL;','FEATURE','SMS');
-			add_config_option('SMS_HIGH_TRIGGER_LIMIT','sms_high_trigger_limit','integer','return addon_installed(\'sms\')?\'100\':NULL;','FEATURE','SMS');
-
-			add_config_option('ALLOWED_POST_SUBMITTERS','allowed_post_submitters','text','return \'\';','SECURITY','ADVANCED',1);
-			add_config_option('STRONG_FORUM_TIE','is_on_strong_forum_tie','tick','return \'0\';','FEATURE','USER_INTERACTION',1);
-			add_config_option('VALIDATION_ON_PREVIEW','is_on_preview_validation','tick','return \'1\';','SITE','VALIDATION',1);
-			add_config_option('SHOW_INLINE_STATS','show_inline_stats','tick','return \'1\';','SITE','GENERAL');
-			add_config_option('SIMPLIFIED_DONEXT','simplified_donext','tick','return \'0\';','SITE','ADVANCED');
-			add_config_option('ANTI_LEECH','anti_leech','tick','return \'0\';','SECURITY','GENERAL');
-			add_config_option('SSW','ssw','tick','return \'0\';','SITE','GENERAL');
-			add_config_option('ADMIN_MENU','bottom_show_admin_menu','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
-			add_config_option('TOP_LINK','bottom_show_top_button','tick','return \'0\';','FEATURE','BOTTOM_LINKS');
-			add_config_option('FEEDBACK_LINK','bottom_show_feedback_link','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
-			add_config_option('PRIVACY_LINK','bottom_show_privacy_link','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
-			add_config_option('SITEMAP_LINK','bottom_show_sitemap_button','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
-			add_config_option('COUNT_POSTSCOUNT','forum_show_personal_stats_posts','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('COUNT_TOPICSCOUNT','forum_show_personal_stats_topics','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('ADMIN_ZONE_LINK','ocp_show_personal_adminzone_link','tick','return \'1\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('CONCEDED_MODE_LINK','ocp_show_conceded_mode_link','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('SU','ocp_show_su','tick','return has_no_forum()?NULL:\'1\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('PAGE_ACTIONS','ocp_show_staff_page_actions','tick','return \'1\';','THEME','GENERAL');
-			add_config_option('MY_PROFILE_LINK','ocf_show_profile_link','tick','return has_no_forum()?NULL:\'1\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('_USERGROUP','ocp_show_personal_usergroup','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('LAST_HERE','ocp_show_personal_last_visit','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('AVATAR','ocp_show_avatar','tick','return (has_no_forum() || ((get_forum_type()==\'ocf\') && (!addon_installed(\'ocf_member_avatars\'))))?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('ROOT_ZONE_LOGIN_THEME','root_zone_login_theme','tick','return \'0\';','THEME','GENERAL');
-			add_config_option('SHOW_DOCS','show_docs','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('CAPTCHA_NOISE','captcha_noise','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','SPAMMER_DETECTION');
-			add_config_option('CAPTCHA_ON_FEEDBACK','captcha_on_feedback','tick','return addon_installed(\'captcha\')?\'0\':NULL;','SECURITY','SPAMMER_DETECTION');
-			add_config_option('SHOW_POST_VALIDATION','show_post_validation','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('IP_FORWARDING','ip_forwarding','tick','return \'0\';','SITE','ENVIRONMENT');
-			add_config_option('FORCE_META_REFRESH','force_meta_refresh','tick','return \'0\';','SITE','ENVIRONMENT');
-			add_config_option('USE_CONTEXTUAL_DATES','use_contextual_dates','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('EAGER_WYSIWYG','eager_wysiwyg','tick','return \'0\';','SITE','ADVANCED');
-			add_config_option('WEBSITE_EMAIL','website_email','line','$staff_address=get_option(\'staff_address\'); $website_email=\'website@\'.get_domain(); if (substr($staff_address,-strlen(get_domain())-1)==\'@\'.get_domain()) $website_email=$staff_address; return $website_email;','SITE','EMAIL');
-			add_config_option('ENVELOPER_OVERRIDE','enveloper_override','tick','return \'0\';','SITE','EMAIL');
-			add_config_option('BCC','bcc','tick','return \'1\';','SITE','EMAIL');
-			add_config_option('ALLOW_EXT_IMAGES','allow_ext_images','tick','return \'0\';','SITE','EMAIL');
-			add_config_option('HTM_SHORT_URLS','htm_short_urls','tick','return \'0\';','SITE','ADVANCED');
-			add_config_option('IP_STRICT_FOR_SESSIONS','ip_strict_for_sessions','tick','return \'1\';','SECURITY','GENERAL');
-			add_config_option('ENABLE_PREVIEWS','enable_previews','tick','return \'1\';','SITE','PREVIEW');
-			add_config_option('ENABLE_KEYWORD_DENSITY_CHECK','enable_keyword_density_check','tick','return \'0\';','SITE','PREVIEW');
-			add_config_option('ENABLE_SPELL_CHECK','enable_spell_check','tick','return function_exists(\'pspell_check\')?\'0\':NULL;','SITE','PREVIEW');
-			add_config_option('ENABLE_MARKUP_VALIDATION','enable_markup_validation','tick','return \'0\';','SITE','PREVIEW');
-		}
-		if ((is_null($upgrade_from)) || ($upgrade_from<9))
-		{
-			add_config_option('AUTO_SUBMIT_SITEMAP','auto_submit_sitemap','tick','return \'0\';','SITE','GENERAL');
-			add_config_option('USER_POSTSIZE_ERRORS','user_postsize_errors','tick','return is_null($old=get_value(\'no_user_postsize_errors\'))?\'1\':invert_value($old);','SITE','UPLOAD');
-			add_config_option('AUTOMATIC_META_EXTRACTION','automatic_meta_extraction','tick','return is_null($old=get_value(\'no_auto_meta\'))?\'1\':invert_value($old);','SITE','GENERAL');
-			add_config_option('IS_ON_EMOTICON_CHOOSERS','is_on_emoticon_choosers','tick','return is_null($old=get_value(\'no_emoticon_choosers\'))?\'1\':invert_value($old);','THEME','GENERAL');
-			add_config_option('DEEPER_ADMIN_BREADCRUMBS','deeper_admin_breadcrumbs','tick','return is_null($old=get_value(\'no_admin_menu_assumption\'))?\'1\':invert_value($old);','SITE','ADVANCED');
-			add_config_option('HAS_LOW_MEMORY_LIMIT','has_low_memory_limit','tick','return is_null($old=get_value(\'has_low_memory_limit\'))?((ini_get(\'memory_limit\')==\'-1\' || ini_get(\'memory_limit\')==\'0\' || ini_get(\'memory_limit\')==\'\')?\'0\':NULL):$old;','SITE','ADVANCED');
-			add_config_option('IS_ON_COMCODE_PAGE_CHILDREN','is_on_comcode_page_children','tick','return is_null($old=get_value(\'disable_comcode_page_children\'))?\'1\':invert_value($old);','SITE','ADVANCED');
-			add_config_option('GLOBAL_DONEXT_ICONS','global_donext_icons','tick','return is_null($old=get_value(\'disable_donext_global\'))?\'1\':invert_value($old);','SITE','ADVANCED');
-			add_config_option('NO_STATS_WHEN_CLOSED','no_stats_when_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))))?'0':'1').'\';','SITE','CLOSED_SITE');
-			add_config_option('NO_BOT_STATS','no_bot_stats','tick','return \'0\';','SITE','GENERAL');
-			add_config_option('FILE_SYSTEM_CACHING','filesystem_caching','tick','return \'0\';','SITE','CACHES');
-
-			// Java/FTP upload
-			add_config_option('ENABLE_JAVA_UPLOAD','java_upload','tick','return \'0\';','SITE','JAVA_UPLOAD');
-			add_config_option('JAVA_FTP_HOST','java_ftp_host','line','return ocp_srv(\'HTTP_HOST\');','SITE','JAVA_UPLOAD');
-			add_config_option('JAVA_FTP_USERNAME','java_username','line','return \'anonymous\';','SITE','JAVA_UPLOAD');
-			add_config_option('JAVA_FTP_PASSWORD','java_password','line','return \'someone@example.com\';','SITE','JAVA_UPLOAD');
-			add_config_option('JAVA_FTP_PATH','java_ftp_path','line','return \'/public_html/uploads/incoming/\';','SITE','JAVA_UPLOAD');
-		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<10))
 		{
 			add_config_option('ADVANCED_ADMIN_CACHE','advanced_admin_cache','tick','return \'0\';','SITE','CACHES');
@@ -291,12 +158,6 @@ class Module_admin_config
 			add_config_option('RULES_LINK','bottom_show_rules_link','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
 		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
-		{
-			delete_config_option('logo_map');
-			$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'config SET the_type=\'forum\' WHERE the_name LIKE \''.db_encode_like('%_forum_name').'\'');
-		}
-
 		if ((!is_null($upgrade_from)) && ($upgrade_from<14))
 		{
 			delete_config_option('use_custom_zone_menu');
@@ -311,6 +172,106 @@ class Module_admin_config
 		{
 			set_value('version',float_to_raw_string(ocp_version_number()));
 			set_value('ocf_version',float_to_raw_string(ocp_version_number()));
+
+			add_config_option('UNZIP_DIR','unzip_dir','line','return (DIRECTORY_SEPARATOR==\'/\')?\'/tmp/\':ocp_srv(\'TMP\');','SITE','ARCHIVES',1);
+			add_config_option('UNZIP_CMD','unzip_cmd','line','return \'/usr/bin/unzip -o @_SRC_@ -x -d @_DST_@\';','SITE','ARCHIVES',1);
+
+			add_config_option('ENABLED','smtp_sockets_use','tick','return \'0\';','SITE','SMTP',1);
+			add_config_option('HOST','smtp_sockets_host','line','return \'mail.yourispwhateveritis.net\';','SITE','SMTP',1);
+			add_config_option('PORT','smtp_sockets_port','line','return \'25\';','SITE','SMTP',1);
+			add_config_option('USERNAME','smtp_sockets_username','line','return \'\';','SITE','SMTP',1);
+			add_config_option('PASSWORD','smtp_sockets_password','line','return \'\';','SITE','SMTP',1);
+			add_config_option('EMAIL_ADDRESS','smtp_from_address','line','return \'\';','SITE','SMTP',1);
+
+			add_config_option('USE_SECURITY_IMAGES','use_security_images','tick','return \'1\';','SECURITY','GENERAL');
+			add_config_option('HTTPS_SUPPORT','enable_https','tick','return \'0\';','SECURITY','GENERAL',1);
+
+			add_config_option('DETECT_LANG_FORUM','detect_lang_forum','tick','return \'1\';','SITE','ADVANCED');
+			add_config_option('DETECT_LANG_BROWSER','detect_lang_browser','tick','return \'0\';','SITE','ADVANCED');
+
+			add_config_option('VALIDATION','validation','tick','return \'0\';','SITE','VALIDATION',1); /*(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))))?'1':'0')*/ // return (!function_exists(\'memory_get_usage()\') || (ini_get(\'memory_limit\')!=\'8M\'))?\'1\':\'0\';
+			add_config_option('VALIDATION_XHTML','validation_xhtml','tick','return \'1\';','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_WCAG','validation_wcag','tick','return \'1\';','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_CSS','validation_css','tick','return \'0\';','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_JAVASCRIPT','validation_javascript','tick','return \'0\';','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_COMPAT','validation_compat','tick','return \'0\';','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_EXT_FILES','validation_ext_files','tick','return \'0\';','SITE','VALIDATION',1);
+
+			// TODO: Move these into sms addon_registry hook, once these hooks support installation
+			add_config_option('USERNAME','sms_username','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
+			add_config_option('PASSWORD','sms_password','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
+			add_config_option('API_ID','sms_api_id','integer','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
+			add_config_option('SMS_LOW_LIMIT','sms_low_limit','integer','return addon_installed(\'sms\')?\'10\':NULL;','FEATURE','SMS');
+			add_config_option('SMS_HIGH_LIMIT','sms_high_limit','integer','return addon_installed(\'sms\')?\'20\':NULL;','FEATURE','SMS');
+			add_config_option('SMS_LOW_TRIGGER_LIMIT','sms_low_trigger_limit','integer','return addon_installed(\'sms\')?\'50\':NULL;','FEATURE','SMS');
+			add_config_option('SMS_HIGH_TRIGGER_LIMIT','sms_high_trigger_limit','integer','return addon_installed(\'sms\')?\'100\':NULL;','FEATURE','SMS');
+
+			add_config_option('MAX_SIZE','max_download_size','integer','return \'20000\';','SITE','UPLOAD');
+			add_config_option('MOD_REWRITE','mod_rewrite','tick','return \''.(in_array(ocp_srv('HTTP_HOST'),array('test.ocportal.com'))?'1':'0').'\'; /*function_exists(\'apache_get_modules\')?\'1\':\'0\';*/','SITE','ADVANCED');
+			add_config_option('SESSION_EXPIRY_TIME','session_expiry_time','integer','return \'1\';','SECURITY','GENERAL');
+			add_config_option('TRACKBACKS','is_on_trackbacks','tick','return \'0\';','FEATURE','USER_INTERACTION');
+			add_config_option('SEND_ERROR_EMAILS_OCPRODUCTS','send_error_emails_ocproducts','tick','return '.strval(post_param_integer('allow_reports_default',0)).';','SITE','ADVANCED',1);
+			add_config_option('LOW_DISK_SPACE_SUBJECT','low_space_check','integer','return \'20\';','SITE','GENERAL'); // 20MB - very very low even for lame web hosts
+			add_config_option('ALLOW_AUDIO_VIDEOS','allow_audio_videos','tick','return \'1\';','SITE','ADVANCED');
+			add_config_option('ALLOWED_POST_SUBMITTERS','allowed_post_submitters','text','return \'\';','SECURITY','ADVANCED',1);
+			add_config_option('STRONG_FORUM_TIE','is_on_strong_forum_tie','tick','return \'0\';','FEATURE','USER_INTERACTION',1);
+			add_config_option('VALIDATION_ON_PREVIEW','is_on_preview_validation','tick','return \'1\';','SITE','VALIDATION',1);
+			add_config_option('SHOW_INLINE_STATS','show_inline_stats','tick','return \'1\';','SITE','GENERAL');
+			add_config_option('SIMPLIFIED_DONEXT','simplified_donext','tick','return \'0\';','SITE','ADVANCED');
+			add_config_option('ANTI_LEECH','anti_leech','tick','return \'0\';','SECURITY','GENERAL');
+			add_config_option('SSW','ssw','tick','return \'0\';','SITE','GENERAL');
+			add_config_option('ADMIN_MENU','bottom_show_admin_menu','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
+			add_config_option('TOP_LINK','bottom_show_top_button','tick','return \'0\';','FEATURE','BOTTOM_LINKS');
+			add_config_option('FEEDBACK_LINK','bottom_show_feedback_link','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
+			add_config_option('PRIVACY_LINK','bottom_show_privacy_link','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
+			add_config_option('SITEMAP_LINK','bottom_show_sitemap_button','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
+			add_config_option('COUNT_POSTSCOUNT','forum_show_personal_stats_posts','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('COUNT_TOPICSCOUNT','forum_show_personal_stats_topics','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('ADMIN_ZONE_LINK','ocp_show_personal_adminzone_link','tick','return \'1\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('CONCEDED_MODE_LINK','ocp_show_conceded_mode_link','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('SU','ocp_show_su','tick','return has_no_forum()?NULL:\'1\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('PAGE_ACTIONS','ocp_show_staff_page_actions','tick','return \'1\';','THEME','GENERAL');
+			add_config_option('MY_PROFILE_LINK','ocf_show_profile_link','tick','return has_no_forum()?NULL:\'1\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('_USERGROUP','ocp_show_personal_usergroup','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('LAST_HERE','ocp_show_personal_last_visit','tick','return has_no_forum()?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('AVATAR','ocp_show_avatar','tick','return (has_no_forum() || ((get_forum_type()==\'ocf\') && (!addon_installed(\'ocf_member_avatars\'))))?NULL:\'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('ROOT_ZONE_LOGIN_THEME','root_zone_login_theme','tick','return \'0\';','THEME','GENERAL');
+			add_config_option('SHOW_DOCS','show_docs','tick','return \'1\';','SITE','ADVANCED');
+			add_config_option('CAPTCHA_NOISE','captcha_noise','tick','return addon_installed(\'captcha\')?\'1\':NULL;','SECURITY','SPAMMER_DETECTION');
+			add_config_option('CAPTCHA_ON_FEEDBACK','captcha_on_feedback','tick','return addon_installed(\'captcha\')?\'0\':NULL;','SECURITY','SPAMMER_DETECTION');
+			add_config_option('SHOW_POST_VALIDATION','show_post_validation','tick','return \'1\';','SITE','ADVANCED');
+			add_config_option('IP_FORWARDING','ip_forwarding','tick','return \'0\';','SITE','ENVIRONMENT');
+			add_config_option('FORCE_META_REFRESH','force_meta_refresh','tick','return \'0\';','SITE','ENVIRONMENT');
+			add_config_option('USE_CONTEXTUAL_DATES','use_contextual_dates','tick','return \'1\';','SITE','ADVANCED');
+			add_config_option('EAGER_WYSIWYG','eager_wysiwyg','tick','return \'0\';','SITE','ADVANCED');
+			add_config_option('WEBSITE_EMAIL','website_email','line','$staff_address=get_option(\'staff_address\'); $website_email=\'website@\'.get_domain(); if (substr($staff_address,-strlen(get_domain())-1)==\'@\'.get_domain()) $website_email=$staff_address; return $website_email;','SITE','EMAIL');
+			add_config_option('ENVELOPER_OVERRIDE','enveloper_override','tick','return \'0\';','SITE','EMAIL');
+			add_config_option('BCC','bcc','tick','return \'1\';','SITE','EMAIL');
+			add_config_option('ALLOW_EXT_IMAGES','allow_ext_images','tick','return \'0\';','SITE','EMAIL');
+			add_config_option('HTM_SHORT_URLS','htm_short_urls','tick','return \'0\';','SITE','ADVANCED');
+			add_config_option('IP_STRICT_FOR_SESSIONS','ip_strict_for_sessions','tick','return \'1\';','SECURITY','GENERAL');
+			add_config_option('ENABLE_PREVIEWS','enable_previews','tick','return \'1\';','SITE','PREVIEW');
+			add_config_option('ENABLE_KEYWORD_DENSITY_CHECK','enable_keyword_density_check','tick','return \'0\';','SITE','PREVIEW');
+			add_config_option('ENABLE_SPELL_CHECK','enable_spell_check','tick','return function_exists(\'pspell_check\')?\'0\':NULL;','SITE','PREVIEW');
+			add_config_option('ENABLE_MARKUP_VALIDATION','enable_markup_validation','tick','return \'0\';','SITE','PREVIEW');
+			add_config_option('AUTO_SUBMIT_SITEMAP','auto_submit_sitemap','tick','return \'0\';','SITE','GENERAL');
+			add_config_option('USER_POSTSIZE_ERRORS','user_postsize_errors','tick','return is_null($old=get_value(\'no_user_postsize_errors\'))?\'1\':invert_value($old);','SITE','UPLOAD');
+			add_config_option('AUTOMATIC_META_EXTRACTION','automatic_meta_extraction','tick','return is_null($old=get_value(\'no_auto_meta\'))?\'1\':invert_value($old);','SITE','GENERAL');
+			add_config_option('IS_ON_EMOTICON_CHOOSERS','is_on_emoticon_choosers','tick','return is_null($old=get_value(\'no_emoticon_choosers\'))?\'1\':invert_value($old);','THEME','GENERAL');
+			add_config_option('DEEPER_ADMIN_BREADCRUMBS','deeper_admin_breadcrumbs','tick','return is_null($old=get_value(\'no_admin_menu_assumption\'))?\'1\':invert_value($old);','SITE','ADVANCED');
+			add_config_option('HAS_LOW_MEMORY_LIMIT','has_low_memory_limit','tick','return is_null($old=get_value(\'has_low_memory_limit\'))?((ini_get(\'memory_limit\')==\'-1\' || ini_get(\'memory_limit\')==\'0\' || ini_get(\'memory_limit\')==\'\')?\'0\':NULL):$old;','SITE','ADVANCED');
+			add_config_option('IS_ON_COMCODE_PAGE_CHILDREN','is_on_comcode_page_children','tick','return is_null($old=get_value(\'disable_comcode_page_children\'))?\'1\':invert_value($old);','SITE','ADVANCED');
+			add_config_option('GLOBAL_DONEXT_ICONS','global_donext_icons','tick','return is_null($old=get_value(\'disable_donext_global\'))?\'1\':invert_value($old);','SITE','ADVANCED');
+			add_config_option('NO_STATS_WHEN_CLOSED','no_stats_when_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))))?'0':'1').'\';','SITE','CLOSED_SITE');
+			add_config_option('NO_BOT_STATS','no_bot_stats','tick','return \'0\';','SITE','GENERAL');
+			add_config_option('FILE_SYSTEM_CACHING','filesystem_caching','tick','return \'0\';','SITE','CACHES');
+			add_config_option('USERS_ONLINE_TIME','users_online_time','integer','return \'5\';','SITE','LOGGING');
+
+			add_config_option('ENABLE_JAVA_UPLOAD','java_upload','tick','return \'0\';','SITE','JAVA_UPLOAD');
+			add_config_option('JAVA_FTP_HOST','java_ftp_host','line','return ocp_srv(\'HTTP_HOST\');','SITE','JAVA_UPLOAD');
+			add_config_option('JAVA_FTP_USERNAME','java_username','line','return \'anonymous\';','SITE','JAVA_UPLOAD');
+			add_config_option('JAVA_FTP_PASSWORD','java_password','line','return \'someone@example.com\';','SITE','JAVA_UPLOAD');
+			add_config_option('JAVA_FTP_PATH','java_ftp_path','line','return \'/public_html/uploads/incoming/\';','SITE','JAVA_UPLOAD');
 
 			// Site Configuration
 			//  General
@@ -353,8 +314,6 @@ class Module_admin_config
 			//  Images
 				add_config_option('THUMB_WIDTH','thumb_width','integer','return \'175\';','FEATURE','IMAGES');
 				add_config_option('IMAGES','max_image_size','integer','return \'700\';','SITE','UPLOAD');
-
-			add_config_option('USERS_ONLINE_TIME','users_online_time','integer','return \'5\';','SITE','LOGGING');
 		}
 	}
 

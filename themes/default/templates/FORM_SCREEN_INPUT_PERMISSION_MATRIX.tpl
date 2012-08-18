@@ -15,7 +15,7 @@
 				</th>
 
 				{+START,LOOP,OVERRIDES}
-					<th class="sp_header">
+					<th class="privilege_header">
 						<img src="{$BASE_URL*}/data/gd_text.php?color={COLOR*}&amp;text={$ESCAPE,{TITLE},UL_ESCAPED}{$KEEP*}" title="{TITLE*}" alt="{TITLE*}" />
 					</th>
 				{+END}

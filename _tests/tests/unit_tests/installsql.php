@@ -72,7 +72,7 @@ class installsql_test_set extends ocp_test_case
 			'',
 			'DROP TABLE IF EXISTS `ocp_db_meta`;',
 			'DROP TABLE IF EXISTS `ocp_f_polls`;',
-			'DROP TABLE IF EXISTS `ocp_msp`;',
+			'DROP TABLE IF EXISTS `ocp_member_privileges`;',
 		);
 
 		// Check we can find split points

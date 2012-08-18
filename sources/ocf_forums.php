@@ -151,9 +151,9 @@ function ocf_may_moderate_forum($forum_id,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (is_null($forum_id)) return has_specific_permission($member_id,'moderate_personal_topic');
+	if (is_null($forum_id)) return has_privilege($member_id,'moderate_personal_topic');
 
-	return has_specific_permission($member_id,'edit_midrange_content','topics',array('forums',$forum_id));
+	return has_privilege($member_id,'edit_midrange_content','topics',array('forums',$forum_id));
 }
 
 /**
@@ -199,7 +199,7 @@ function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NU
 		$this_name=escape_html($forum_details['f_name']);
 		$parent_forum=$forum_details['f_parent_forum'];
 	} else $this_name=escape_html($this_name);
-	if (((!$start) || (has_specific_permission(get_member(),'open_virtual_roots'))) && (is_integer($end_point_forum)))
+	if (((!$start) || (has_privilege(get_member(),'open_virtual_roots'))) && (is_integer($end_point_forum)))
 	{
 		$map=array('page'=>'forumview');
 		if ($end_point_forum!=db_get_first_id()) $map['id']=$end_point_forum;

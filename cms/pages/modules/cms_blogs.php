@@ -92,9 +92,9 @@ class Module_cms_blogs extends standard_crud_module
 		return do_next_manager(get_screen_title('MANAGE_BLOGS'),comcode_lang_string('DOC_BLOGS'),
 					array(
 						/*	 type							  page	 params													 zone	  */
-						has_specific_permission(get_member(),'submit_highrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS_BLOG')):NULL,
-						has_specific_permission(get_member(),'edit_own_highrange_content','cms_news')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWS_BLOG')):NULL,
-						has_specific_permission(get_member(),'mass_import','cms_news')?array('import',array('_SELF',array('type'=>'import_wordpress'),'_SELF'),do_lang('IMPORT_WORDPRESS')):NULL,
+						has_privilege(get_member(),'submit_highrange_content','cms_news')?array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWS_BLOG')):NULL,
+						has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWS_BLOG')):NULL,
+						has_privilege(get_member(),'mass_import','cms_news')?array('import',array('_SELF',array('type'=>'import_wordpress'),'_SELF'),do_lang('IMPORT_WORDPRESS')):NULL,
 					),
 					do_lang('MANAGE_BLOGS')
 		);
@@ -137,7 +137,7 @@ class Module_cms_blogs extends standard_crud_module
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
-		$only_owned=has_specific_permission(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
+		$only_owned=has_privilege(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,is_null($only_owned)?NULL:array('submitter'=>$only_owned),false,'JOIN '.get_table_prefix().'news_categories c ON c.id=r.news_category AND nc_owner IS NOT NULL');
 		if (count($rows)==0) return NULL;
 		foreach ($rows as $row)
@@ -168,7 +168,7 @@ class Module_cms_blogs extends standard_crud_module
 	 */
 	function nice_get_entries()
 	{
-		$only_owned=has_specific_permission(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
+		$only_owned=has_privilege(get_member(),'edit_highrange_content','cms_news')?NULL:get_member();
 		return nice_get_news(NULL,$only_owned,false,true);
 	}
 
@@ -233,7 +233,7 @@ class Module_cms_blogs extends standard_crud_module
 			$validated=get_param_integer('validated',0);
 			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
 		}
-		if (has_some_cat_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
+		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
 			if (addon_installed('unvalidated'))
 				$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 		if ($cats1->is_empty()) warn_exit(do_lang_tempcode('NO_CATEGORIES'));
@@ -254,7 +254,7 @@ class Module_cms_blogs extends standard_crud_module
 			$fields2->attach(form_input_multi_list(do_lang_tempcode('SECONDARY_CATEGORIES'),do_lang_tempcode('DESCRIPTION_SECONDARY_CATEGORIES'),'news_category',$cats2));
 		$fields2->attach(form_input_upload(do_lang_tempcode('IMAGE'),do_lang_tempcode('DESCRIPTION_NEWS_IMAGE_OVERRIDE'),'file',false,$image,NULL,true,str_replace(' ','',get_option('valid_images'))));
 		handle_max_file_size($hidden,'image');
-		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')))
+		if ((addon_installed('calendar')) && (has_privilege(get_member(),'scheduled_publication_times')))
 			$fields2->attach(form_input_date__scheduler(do_lang_tempcode('PUBLICATION_TIME'),do_lang_tempcode('DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true,$scheduled,intval(date('Y'))-1970+2,1970));
 
 		require_code('feedback2');
@@ -376,7 +376,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?time():$schedule;
-		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')) && (!is_null($schedule)) && ($schedule>time()))
+		if ((addon_installed('calendar')) && (has_privilege(get_member(),'scheduled_publication_times')) && (!is_null($schedule)) && ($schedule>time()))
 		{
 			$validated=0;
 		} else $schedule=NULL;
@@ -384,7 +384,7 @@ class Module_cms_blogs extends standard_crud_module
 		if (!is_null($main_news_category))
 		{
 			$owner=$GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>intval($main_news_category)));
-			if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
+			if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category));
 		}
 
 		$time=$add_time;
@@ -462,12 +462,12 @@ class Module_cms_blogs extends standard_crud_module
 		}
 
 		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
-		if ((!is_null($owner)) && ($owner!=get_member())) check_specific_permission('can_submit_to_others_categories',array('news',$main_news_category));
+		if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category));
 
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?mixed():$schedule;
 
-		if ((addon_installed('calendar')) && (has_specific_permission(get_member(),'scheduled_publication_times')))
+		if ((addon_installed('calendar')) && (has_privilege(get_member(),'scheduled_publication_times')))
 		{
 			require_code('calendar2');
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
@@ -543,14 +543,14 @@ class Module_cms_blogs extends standard_crud_module
 					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
 					/*	 page	 params				  zone	  */
 					array('_SELF',array('type'=>'ad','cat'=>$cat),'_SELF'),							// Add one
-					(is_null($id) || (!has_specific_permission(get_member(),'edit_own_highrange_content','cms_news',array('news',$cat))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
-					has_specific_permission(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
+					(is_null($id) || (!has_privilege(get_member(),'edit_own_highrange_content','cms_news',array('news',$cat))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'),							 // Edit this
+					has_privilege(get_member(),'edit_own_highrange_content','cms_news')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,											// Edit one
 					is_null($id)?NULL:array('news',array('type'=>'view','id'=>$id,'blog'=>1),get_module_zone('news')),							// View this
 					array('news',array('type'=>'misc','blog'=>1),get_module_zone('news')),									 // View archive
 					NULL,	  // Add to category
-					has_specific_permission(get_member(),'submit_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
-					has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
-					is_null($cat)?NULL:has_specific_permission(get_member(),'edit_own_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
+					has_privilege(get_member(),'submit_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'ac'),'_SELF'):NULL,					  // Add one category
+					has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'ec'),'_SELF'):NULL,					  // Edit one category
+					is_null($cat)?NULL:has_privilege(get_member(),'edit_own_cat_highrange_content','cms_news')?array('cms_news',array('type'=>'_ec','id'=>$cat),'_SELF'):NULL,			 // Edit this category
 					NULL																						 // View this category
 		);
 	}
@@ -562,7 +562,7 @@ class Module_cms_blogs extends standard_crud_module
 	 */
 	function import_wordpress()
 	{
-		check_specific_permission('mass_import');
+		check_privilege('mass_import');
 
 		$lang=post_param('lang',user_lang());
 		$title=get_screen_title('IMPORT_WP_DB');
@@ -634,7 +634,7 @@ class Module_cms_blogs extends standard_crud_module
 	 */
 	function _import_wordpress()
 	{
-		check_specific_permission('mass_import');
+		check_privilege('mass_import');
 
 		$title=get_screen_title('IMPORT_WP_DB');
 

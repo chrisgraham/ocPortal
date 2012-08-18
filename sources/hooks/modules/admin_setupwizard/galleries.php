@@ -44,13 +44,13 @@ class Hook_sw_galleries
 
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-		$GLOBALS['SITE_DB']->query_delete('gsp',array('specific_permission'=>'have_personal_category','the_page'=>'cms_galleries'));
+		$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>'have_personal_category','the_page'=>'cms_galleries'));
 		if (post_param_integer('keep_personal_galleries',0)==1)
 		{
 			foreach (array_keys($groups) as $group_id)
 			{
 				if (!in_array($group_id,$admin_groups))
-					$GLOBALS['SITE_DB']->query_insert('gsp',array('specific_permission'=>'have_personal_category','group_id'=>$group_id,'module_the_name'=>'','category_name'=>'','the_page'=>'cms_galleries','the_value'=>1));
+					$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>'have_personal_category','group_id'=>$group_id,'module_the_name'=>'','category_name'=>'','the_page'=>'cms_galleries','the_value'=>1));
 			}
 		}
 	}

@@ -252,7 +252,7 @@ function comcode_helper_script()
 				$custom=array_key_exists($tag,$custom_tag_list);
 				if (($in_wysiwyg) && (!$custom) && (!in_array($tag,$non_wysiwyg_tags))) continue;
 
-				if ((array_key_exists($tag,$DANGEROUS_TAGS)) && (!has_specific_permission(get_member(),'comcode_dangerous'))) continue;
+				if ((array_key_exists($tag,$DANGEROUS_TAGS)) && (!has_privilege(get_member(),'comcode_dangerous'))) continue;
 
 				if ($custom)
 				{

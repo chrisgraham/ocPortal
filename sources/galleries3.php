@@ -29,7 +29,7 @@ function download_gallery_script()
 
 	// Closed site
 	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));
@@ -42,7 +42,7 @@ function download_gallery_script()
 
 	if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
-	check_specific_permission('may_download_gallery',array('galleries',$cat));
+	check_privilege('may_download_gallery',array('galleries',$cat));
 	if ((strpos($cat,chr(10))!==false) || (strpos($cat,chr(13))!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 

@@ -42,7 +42,7 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 	$topic_id=$topic_info[0]['id'];
 	$poll_info=$GLOBALS['FORUM_DB']->query_select('f_polls',array('*'),array('id'=>$poll_id),'',1);
 
-	if ((!has_specific_permission(get_member(),'may_unblind_own_poll')) && ($is_private==0) && ($poll_info[0]['po_is_private']==1))
+	if ((!has_privilege(get_member(),'may_unblind_own_poll')) && ($is_private==0) && ($poll_info[0]['po_is_private']==1))
 		access_denied('PRIVILEGE','may_unblind_own_poll');
 
 	$GLOBALS['FORUM_DB']->query_update('f_polls',array(
@@ -131,7 +131,7 @@ function ocf_vote_in_poll($poll_id,$votes,$member_id=NULL,$topic_info=NULL)
 	if ($member_id==$GLOBALS['OCF_DRIVER']->get_guest_id()) warn_exit(do_lang_tempcode('GUESTS_CANT_VOTE_IN_POLLS'));
 
 	// Check they're allowed to vote
-	if (!has_specific_permission($member_id,'vote_in_polls')) warn_exit(do_lang_tempcode('VOTE_DENIED'));
+	if (!has_privilege($member_id,'vote_in_polls')) warn_exit(do_lang_tempcode('VOTE_DENIED'));
 	if (is_null($topic_info)) $topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('id','t_forum_id'),array('t_poll_id'=>$poll_id),'',1);
 	if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$topic_id=$topic_info[0]['id'];

@@ -40,7 +40,7 @@ class Hook_search_ocf_posts
 		$info['default']=false;
 		$info['special_on']=array();
 		$info['special_off']=array('open'=>do_lang_tempcode('POST_SEARCH_OPEN'),'closed'=>do_lang_tempcode('POST_SEARCH_CLOSED'),'pinned'=>do_lang_tempcode('POST_SEARCH_PINNED'),'starter'=>do_lang_tempcode('POST_SEARCH_STARTER'));
-		if (has_specific_permission(get_member(),'see_unvalidated')) $info['special_off']['unvalidated']=do_lang_tempcode('POST_SEARCH_UNVALIDATED');
+		if (has_privilege(get_member(),'see_unvalidated')) $info['special_off']['unvalidated']=do_lang_tempcode('POST_SEARCH_UNVALIDATED');
 		$info['category']='s.t_forum_id';
 		$info['integer_category']=true;
 
@@ -142,7 +142,7 @@ class Hook_search_ocf_posts
 			$where_clause.=' OR (p_intended_solely_for='.strval((integer)get_member()).' OR p_poster='.strval((integer)get_member()).')';
 		$where_clause.=')';
 
-		if (!has_specific_permission(get_member(),'see_unvalidated'))
+		if (!has_privilege(get_member(),'see_unvalidated'))
 		{
 			$where_clause.=' AND ';
 			$where_clause.='p_validated=1';

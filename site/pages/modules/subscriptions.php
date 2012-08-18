@@ -131,7 +131,7 @@ class Module_subscriptions
 		require_css('ecommerce');
 
 		// Kill switch
-		if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_specific_permission(get_member(),'access_ecommerce_in_test_mode'))) warn_exit(do_lang_tempcode('PURCHASE_DISABLED'));
+		if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_privilege(get_member(),'access_ecommerce_in_test_mode'))) warn_exit(do_lang_tempcode('PURCHASE_DISABLED'));
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
@@ -152,7 +152,7 @@ class Module_subscriptions
 		$title=get_screen_title('MY_SUBSCRIPTIONS');
 
 		$member_id=get_member();
-		if (has_specific_permission(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
+		if (has_privilege(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
 
 		$subscriptions=array();
 		$rows=$GLOBALS['SITE_DB']->query_select('subscriptions',array('*'),array('s_member_id'=>$member_id));

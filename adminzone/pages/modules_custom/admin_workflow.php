@@ -521,7 +521,7 @@ class Module_admin_workflow extends standard_crud_module
 
 		if (($this->user_facing) && (!is_null($this->permissions_require)))
 		{
-			if (!has_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
+			if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
 				$_POST['validated']='0';
 		}
 
@@ -709,7 +709,7 @@ class Module_admin_workflow extends standard_crud_module
 
 			if (($this->user_facing) && (!is_null($this->permissions_require)) && (array_key_exists('validated',$_POST)))
 			{
-				if (!has_specific_permission(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
+				if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
 					$_POST['validated']='0';
 			}
 

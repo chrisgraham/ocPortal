@@ -61,9 +61,9 @@ class Module_banners
 		delete_config_option('admin_banners');
 		delete_config_option('banner_autosize');
 
-		delete_specific_permission('full_banner_setup');
-		delete_specific_permission('view_anyones_banner_stats');
-		delete_specific_permission('banner_free');
+		delete_privilege('full_banner_setup');
+		delete_privilege('view_anyones_banner_stats');
+		delete_privilege('banner_free');
 
 		deldir_contents(get_custom_file_base().'/uploads/banners',true);
 
@@ -123,8 +123,8 @@ class Module_banners
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'banners','category_name'=>$banner_c,'group_id'=>$group_id));
 			}
 
-			add_specific_permission('BANNERS','full_banner_setup',false);
-			add_specific_permission('BANNERS','view_anyones_banner_stats',false);
+			add_privilege('BANNERS','full_banner_setup',false);
+			add_privilege('BANNERS','view_anyones_banner_stats',false);
 
 			add_config_option('ADD_BANNER','points_ADD_BANNER','integer','return addon_installed(\'points\')?\'0\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 
@@ -168,7 +168,7 @@ class Module_banners
 			));
 			$GLOBALS['SITE_DB']->create_index('banner_clicks','clicker_ip',array('c_ip_address'));
 
-			add_specific_permission('BANNERS','banner_free',false);
+			add_privilege('BANNERS','banner_free',false);
 
 			add_config_option('PERMISSIONS','use_banner_permissions','tick','return \'0\';','FEATURE','BANNERS');
 
@@ -196,8 +196,8 @@ class Module_banners
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))
 		{
-			add_specific_permission('_BANNERS','use_html_banner',false);
-			add_specific_permission('_BANNERS','use_php_banner',false,true);
+			add_privilege('_BANNERS','use_html_banner',false);
+			add_privilege('_BANNERS','use_php_banner',false,true);
 		}
 	}
 
@@ -297,7 +297,7 @@ class Module_banners
 		$url_map=array('page'=>'_SELF','type'=>'view');
 
 		require_code('form_templates');
-		$only_owned=has_specific_permission(get_member(),'edit_midrange_content','cms_banners')?NULL:get_member();
+		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_banners')?NULL:get_member();
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('banners','COUNT(*)',is_null($only_owned)?NULL:array('submitter'=>$only_owned));
 		if ($max_rows==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 		$max=get_param_integer('max',20);
@@ -362,7 +362,7 @@ class Module_banners
 		$myrow=$rows[0];
 
 		if ((is_guest($myrow['submitter'])) || ($myrow['submitter']!=get_member()))
-			check_specific_permission('view_anyones_banner_stats');
+			check_privilege('view_anyones_banner_stats');
 
 		switch ($myrow['the_type'])
 		{

@@ -59,8 +59,8 @@ function get_sales_permission_map($row,$member)
 	$map=array('member_id'=>$member);
 	switch ($row['p_type'])
 	{
-		case 'msp':
-			$map['specific_permission']=$row['p_specific_permission'];
+		case 'member_privileges':
+			$map['privilege']=$row['p_privilege'];
 			$map['the_page']=$row['p_page'];
 			$map['module_the_name']=$row['p_module'];
 			$map['category_name']=$row['p_category'];

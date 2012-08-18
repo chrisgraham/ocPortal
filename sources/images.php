@@ -252,7 +252,7 @@ function get_max_image_size()
 	$a=php_return_bytes(ini_get('upload_max_filesize'));
 	$b=php_return_bytes(ini_get('post_max_size'));
 	$c=intval(get_option('max_download_size'))*1024;
-	if (has_specific_permission(get_member(),'exceed_filesize_limit')) $c=0;
+	if (has_privilege(get_member(),'exceed_filesize_limit')) $c=0;
 
 	$possibilities=array();
 	if ($a!=0) $possibilities[]=$a;

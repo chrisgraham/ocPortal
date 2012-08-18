@@ -54,9 +54,9 @@ class Module_cms_authors
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
-	 * @return array	A map of privileges that are overridable; sp to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
-	function get_sp_overrides()
+	function get_privilege_overrides()
 	{
 		require_lang('authors');
 		return array('submit_midrange_content'=>array(0,'ADD_AUTHOR'),'edit_own_midrange_content'=>array(0,'EDIT_OWN_AUTHOR'),'edit_midrange_content'=>array(0,'EDIT_MERGE_AUTHORS'),'delete_own_midrange_content'=>array(0,'DELETE_OWN_AUTHOR'),'delete_midrange_content'=>array(0,'DELETE_AUTHOR'));
@@ -99,9 +99,9 @@ class Module_cms_authors
 		return do_next_manager(get_screen_title('AUTHOR_MANAGE'),comcode_lang_string('DOC_AUTHORS'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
-						has_specific_permission(get_member(),'set_own_author_profile')?array('set-own-profile',array('_SELF',array('type'=>'_ad'),'_SELF'),do_lang('EDIT_MY_AUTHOR_PROFILE')):NULL,
-						has_specific_permission(get_member(),'edit_midrange_content','cms_authors')?array('add_one',array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'),do_lang('ADD_AUTHOR')):NULL,
-						has_specific_permission(get_member(),'edit_midrange_content','cms_authors')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_MERGE_AUTHORS')):NULL,
+						has_privilege(get_member(),'set_own_author_profile')?array('set-own-profile',array('_SELF',array('type'=>'_ad'),'_SELF'),do_lang('EDIT_MY_AUTHOR_PROFILE')):NULL,
+						has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('add_one',array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'),do_lang('ADD_AUTHOR')):NULL,
+						has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_MERGE_AUTHORS')):NULL,
 					),manage_custom_fields_donext_link('author')),
 					do_lang('AUTHOR_MANAGE')
 		);
@@ -181,7 +181,7 @@ class Module_cms_authors
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('SKILLS'),do_lang_tempcode('DESCRIPTION_SKILLS'),'skills',$skills,false));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_MEMBER_DESCRIPTION'),'description',$description,false));
 
-		if (has_specific_permission(get_member(),'edit_midrange_content','cms_authors'))
+		if (has_privilege(get_member(),'edit_midrange_content','cms_authors'))
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>!is_null($handle),'TITLE'=>do_lang_tempcode('ADVANCED'))));
 			$fields->attach(form_input_username(do_lang_tempcode('MEMBER_ID'),do_lang_tempcode('DESCRIPTION_MEMBER_ID'),'forum_handle',is_null($handle)?'':$GLOBALS['FORUM_DRIVER']->get_username(intval($handle)),false));
@@ -306,9 +306,9 @@ class Module_cms_authors
 					NULL,
 					/*		TYPED-ORDERED LIST OF 'LINKS'		*/
 					/*	 page	 params				  zone	  */
-					has_specific_permission(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'):NULL,						 // Add one
+					has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'_ad','author'=>''),'_SELF'):NULL,						 // Add one
 					is_null($author)?NULL:array('_SELF',array('type'=>'_ad','author'=>$author),'_SELF'),				  // Edit this
-					has_specific_permission(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,				  // Edit one
+					has_privilege(get_member(),'edit_midrange_content','cms_authors')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL,				  // Edit one
 					is_null($author)?NULL:array('authors',array('type'=>'misc','id'=>$author),get_module_zone('authors')),					// View this
 					NULL,																						// View archive
 					NULL,																						// Add to category
@@ -319,7 +319,7 @@ class Module_cms_authors
 					/*	  SPECIALLY TYPED 'LINKS'				  */
 					array(
 						/*	 type							  page	 params													 zone	  */
-						has_specific_permission(get_member(),'delete_midrange_content','cms_authors')?array('merge',array('_SELF',array('type'=>'ed'),'_SELF')):NULL
+						has_privilege(get_member(),'delete_midrange_content','cms_authors')?array('merge',array('_SELF',array('type'=>'ed'),'_SELF')):NULL
 					)
 		);
 	}
@@ -342,7 +342,7 @@ class Module_cms_authors
 		$submit_name=do_lang_tempcode('PROCEED');
 		$define_form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'GET'=>true,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 
-		if (has_specific_permission(get_member(),'delete_midrange_content'))
+		if (has_privilege(get_member(),'delete_midrange_content'))
 		{
 			$fields=form_input_list(do_lang_tempcode('NAME'),'','mauthor',$authors);
 			$fields->attach(form_input_list(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'mauthor2',$authors));
@@ -363,7 +363,7 @@ class Module_cms_authors
 	 */
 	function _mg()
 	{
-		check_specific_permission('delete_midrange_content');
+		check_privilege('delete_midrange_content');
 
 		$title=get_screen_title('MERGE_AUTHORS');
 

@@ -310,10 +310,10 @@ function get_max_file_size($source_member=NULL,$connection=NULL)
 	$a=php_return_bytes(ini_get('upload_max_filesize'));
 	$b=php_return_bytes(ini_get('post_max_size'));
 	$c=intval(get_option('max_download_size'))*1024;
-	if (has_specific_permission(get_member(),'exceed_filesize_limit')) $c=0;
+	if (has_privilege(get_member(),'exceed_filesize_limit')) $c=0;
 
 	$d=0;
-	if ((!is_null($source_member)) && (!has_specific_permission(get_member(),'exceed_filesize_limit'))) // We'll be considering quota also
+	if ((!is_null($source_member)) && (!has_privilege(get_member(),'exceed_filesize_limit'))) // We'll be considering quota also
 	{
 		if (get_forum_type()=='ocf')
 		{
@@ -355,7 +355,7 @@ function check_extension($name,$skip_server_side_security_check=false,$file_to_d
 	ksort($types);
 	if (!$skip_server_side_security_check)
 	{
-		if (!has_specific_permission(get_member(),'use_very_dangerous_comcode'))
+		if (!has_privilege(get_member(),'use_very_dangerous_comcode'))
 		{
 			unset($types['js']);
 			unset($types['swf']);

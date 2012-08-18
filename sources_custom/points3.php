@@ -74,7 +74,7 @@ function points_profile($member_id_of,$member_id_viewing)
 
 	// If we're staff, we can show the charge log too
 	$chargelog_details=new ocp_tempcode();
-	if (has_specific_permission($member_id_viewing,'view_charge_log'))
+	if (has_privilege($member_id_viewing,'view_charge_log'))
 	{
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',10);
@@ -121,9 +121,9 @@ function points_profile($member_id_of,$member_id_viewing)
 		$give_template=do_lang_tempcode('POINTS_MUST_LOGIN');
 	} else
 	{
-		$have_negative_gift_points=has_specific_permission($member_id_viewing,'have_negative_gift_points');
+		$have_negative_gift_points=has_privilege($member_id_viewing,'have_negative_gift_points');
 		$enough_ok=(($viewer_gift_points_available>0) || ($have_negative_gift_points));
-		$give_ok=(($member_id_viewing!=$member_id_of) || (has_specific_permission($member_id_viewing,'give_points_self')));
+		$give_ok=(($member_id_viewing!=$member_id_of) || (has_privilege($member_id_viewing,'give_points_self')));
 		if (($enough_ok) && ($give_ok))
 		{
 			// Show how many points are available also

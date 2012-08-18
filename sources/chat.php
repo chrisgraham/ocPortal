@@ -46,7 +46,7 @@ function messages_script()
 
 	// Closed site
 	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));
@@ -302,7 +302,7 @@ function chat_logs_script()
 {
 	// Closed site
 	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));
@@ -529,7 +529,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		{
 			$moderator=is_chat_moderator($_message['member_id'],$room_id,$room_check[0]['room_owner']);
 			$edit_url=build_url(array('page'=>'cms_chat','type'=>'ed','id'=>$_message['id'],'room_id'=>$_message['room_id']),get_module_zone('cms_chat'));
-			if (has_specific_permission(get_member(),'ban_chatters_from_rooms'))
+			if (has_privilege(get_member(),'ban_chatters_from_rooms'))
 			{
 				if (check_chatroom_access($room_check[0],true,$_message['member_id']))
 				{
@@ -1456,7 +1456,7 @@ function _deal_with_chatcode_invite($pm_user,$pm_message,$username,$text,$zone)
 function _deal_with_chatcode_newroom($pm_user,$pm_message,$username,$text,$cutoff)
 {
 	$pm_message_deleted=false;
-	if (!has_specific_permission(get_member(),'create_private_room'))
+	if (!has_privilege(get_member(),'create_private_room'))
 		return array('pm_message_deleted'=>$pm_message_deleted,'text'=>$text);
 
 	// This deals with the [newroom="roomname"]allowlist[/newroom] tag

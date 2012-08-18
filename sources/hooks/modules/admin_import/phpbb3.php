@@ -193,9 +193,9 @@ class Hook_phpbb3
 
 			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_avatar_width'=>$INFO['avatar_max_width'],'g_max_avatar_height'=>$INFO['avatar_max_height'],'g_max_sig_length_comcode'=>$INFO['max_sig_chars']),array('id'=>$id),'',1);
 
-			set_specific_permission($id,'own_avatars',$INFO['allow_avatar_upload']=='1');
-			set_specific_permission($id,'rename_self',$INFO['allow_namechange']=='1');
-			set_specific_permission($id,'bypass_word_filter',$INFO['allow_namechange']=='1');
+			set_privilege($id,'own_avatars',$INFO['allow_avatar_upload']=='1');
+			set_privilege($id,'rename_self',$INFO['allow_namechange']=='1');
+			set_privilege($id,'bypass_word_filter',$INFO['allow_namechange']=='1');
 		}
 	}
 
@@ -325,7 +325,7 @@ class Hook_phpbb3
 				// Nothing can do
 			} else
 			{
-				$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>$translated_permission,'group_id'=>$group_id,'the_page'=>'topics','module_the_name'=>'','category_name'=>'','the_value'=>$the_value),false,true);
+				$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>$translated_permission,'group_id'=>$group_id,'the_page'=>'topics','module_the_name'=>'','category_name'=>'','the_value'=>$the_value),false,true);
 			}
 		}
 	}
@@ -722,7 +722,7 @@ class Hook_phpbb3
 					$GLOBALS['FORUM_DB']->query_insert('group_category_access',array('group_id'=>$group_id,'module_the_name'=>'forums','category_name'=>strval($forum_id)),false,true);
 			} else
 			{
-				$GLOBALS['FORUM_DB']->query_insert('gsp',array('specific_permission'=>$translated_permission,'group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>$the_value),false,true);
+				$GLOBALS['FORUM_DB']->query_insert('group_privileges',array('privilege'=>$translated_permission,'group_id'=>$group_id,'the_page'=>'','module_the_name'=>'forums','category_name'=>strval($forum_id),'the_value'=>$the_value),false,true);
 			}
 		}
 	}

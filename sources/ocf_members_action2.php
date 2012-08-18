@@ -359,7 +359,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	// Human name / Username
 	if (($special_type!='ldap') && ($special_type!='remote'))
 	{
-		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self')))
+		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_privilege($member_id,'rename_self')))
 		{
 			if (get_option('signup_fullname')=='1')
 			{
@@ -381,7 +381,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	// Password
 	if ($special_type=='')
 	{
-		if ((is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'assume_any_member')))
+		if ((is_null($member_id)) || ($member_id==get_member()) || (has_privilege(get_member(),'assume_any_member')))
 		{
 			$fields->attach(form_input_password(do_lang_tempcode('PASSWORD'),do_lang_tempcode('DESCRIPTION_PASSWORD'.(!is_null($member_id)?'_EDIT':'')),is_null($member_id)?'password':'edit_password',$mini_mode));
 			$fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',$mini_mode));
@@ -392,7 +392,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	if ($email_address=='') $email_address=trim(get_param('email_address',''));
 	if ($special_type!='remote')
 	{
-		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_specific_permission(get_member(),'member_maintenance')));
+		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_privilege(get_member(),'member_maintenance')));
 		if ((is_null($member_id)) && ($email_address=='') && (get_option('skip_email_confirm_join')=='0'))
 		{
 			$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',true));
@@ -523,12 +523,12 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		}
 
 		// Some admin options...
-		if (has_specific_permission(get_member(),'member_maintenance'))
+		if (has_privilege(get_member(),'member_maintenance'))
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MEMBER_ACCESS'))));
 
 			// Probation
-   		if (has_specific_permission(get_member(),'probate_members'))
+   		if (has_privilege(get_member(),'probate_members'))
    		{
    			$fields->attach(form_input_date(do_lang_tempcode('ON_PROBATION_UNTIL'),do_lang_tempcode('DESCRIPTION_ON_PROBATION_UNTIL'),'on_probation_until',true,is_null($on_probation_until) || $on_probation_until<=time(),true,$on_probation_until,2));
    		}
@@ -536,7 +536,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			// Primary usergroup
 			if ($special_type!='ldap')
 			{
-				if (has_specific_permission(get_member(),'assume_any_member'))
+				if (has_privilege(get_member(),'assume_any_member'))
 				{
 					if ((is_null($member_id)) || (!$GLOBALS['FORUM_DRIVER']->is_super_admin($member_id)) || (count($GLOBALS['FORUM_DRIVER']->member_group_query($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),2))>1))
 						$fields->attach(form_input_list(do_lang_tempcode('PRIMARY_GROUP'),do_lang_tempcode('DESCRIPTION_PRIMARY_GROUP'),'primary_group',$_groups));
@@ -551,9 +551,9 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			$members_groups=is_null($member_id)?array():$GLOBALS['OCF_DRIVER']->get_members_groups($member_id,false,false);
 			foreach ($rows as $group)
 			{
-				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_specific_permission(get_member(),'see_hidden_groups'))) continue;
+				if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_privilege(get_member(),'see_hidden_groups'))) continue;
 
-				if (($group['id']!=db_get_first_id()) && ($group['id']!=$current_primary_group) && ((in_array($group['id'],$members_groups)) || (has_specific_permission(get_member(),'assume_any_member')) || ($group['g_open_membership']==1)))
+				if (($group['id']!=db_get_first_id()) && ($group['id']!=$current_primary_group) && ((in_array($group['id'],$members_groups)) || (has_privilege(get_member(),'assume_any_member')) || ($group['g_open_membership']==1)))
 				{
 					$selected=in_array($group['id'],$members_groups);
 					$_groups2->attach(form_input_list_entry(strval($group['id']),$selected,get_translated_text($group['g_name'],$GLOBALS['FORUM_DB'])));
@@ -565,7 +565,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		}
 
 		// Special admin options
-		if (has_specific_permission(get_member(),'member_maintenance'))
+		if (has_privilege(get_member(),'member_maintenance'))
 		{
 			if ($validated==0)
 			{
@@ -602,7 +602,7 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 
 	$_custom_fields=ocf_get_all_custom_fields_match(
 		$groups,
-		($mini_mode || (is_null($member_id)) || ($member_id==get_member()) || (has_specific_permission(get_member(),'view_any_profile_field')))?NULL:1, // public view
+		($mini_mode || (is_null($member_id)) || ($member_id==get_member()) || (has_privilege(get_member(),'view_any_profile_field')))?NULL:1, // public view
 		($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner view
 		($mini_mode || (is_null($member_id)) || ($member_id!=get_member()))?NULL:1, // owner set
 		NULL,
@@ -723,7 +723,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	{
 		$old_email_address=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_email_address');
 
-		if ((!is_null($email_address)) && (($email_address!='') || (($old_email_address!='') && (!has_specific_permission(get_member(),'member_maintenance')))) && (!is_valid_email_address($email_address)))
+		if ((!is_null($email_address)) && (($email_address!='') || (($old_email_address!='') && (!has_privilege(get_member(),'member_maintenance')))) && (!is_valid_email_address($email_address)))
 			warn_exit(do_lang_tempcode('_INVALID_EMAIL_ADDRESS',escape_html($email_address)));
 	}
 
@@ -748,7 +748,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		{
 			if (!$skip_checks)
 			{
-				if (($field['cf_public_view']==0) && ($member_id!=get_member()) && (!has_specific_permission(get_member(),'view_any_profile_field'))) access_denied('I_ERROR');
+				if (($field['cf_public_view']==0) && ($member_id!=get_member()) && (!has_privilege(get_member(),'view_any_profile_field'))) access_denied('I_ERROR');
 				if (($field['cf_owner_view']==0) && ($member_id==get_member())) access_denied('I_ERROR');
 				if (($field['cf_owner_set']==0) && ($member_id==get_member())) access_denied('I_ERROR');
 			}
@@ -792,7 +792,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if (!is_null($zone_wide)) $update['m_zone_wide']=$zone_wide;
 	if (!is_null($pt_allow)) $update['m_pt_allow']=$pt_allow;
 	if (!is_null($pt_rules_text)) $update['m_pt_rules_text']=lang_remap_comcode($_pt_rules_text,$pt_rules_text,$GLOBALS['FORUM_DB']);
-	if (($skip_checks) || (has_specific_permission(get_member(),'probate_members')))
+	if (($skip_checks) || (has_privilege(get_member(),'probate_members')))
 		$update['m_on_probation_until']=$on_probation_until;
 	if (!is_null($join_time)) $update['m_join_time']=$join_time;
 	if (!is_null($avatar_url)) $update['m_avatar_url']=$avatar_url;
@@ -802,7 +802,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if (!is_null($photo_thumb_url)) $update['m_photo_thumb_url']=$photo_thumb_url;
 
 	$old_username=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username');
-	if ((!is_null($username)) && ($username!=$old_username) && (($skip_checks) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self'))))
+	if ((!is_null($username)) && ($username!=$old_username) && (($skip_checks) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_privilege($member_id,'rename_self'))))
 	{
 		$update['m_username']=$username;
 

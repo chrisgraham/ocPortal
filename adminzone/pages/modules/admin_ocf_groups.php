@@ -581,7 +581,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		if (post_param_integer('is_private_club',0)==1)
 		{
-			$GLOBALS['SITE_DB']->query_delete('gsp',array('group_id'=>$id));
+			$GLOBALS['SITE_DB']->query_delete('group_privileges',array('group_id'=>$id));
 			$GLOBALS['SITE_DB']->query_delete('group_zone_access',array('group_id'=>$id));
 			$GLOBALS['SITE_DB']->query_delete('group_category_access',array('group_id'=>$id));
 			$GLOBALS['SITE_DB']->query_delete('group_page_access',array('group_id'=>$id));
@@ -641,7 +641,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		if ((post_param_integer('is_private_club',0)==1) && (!$was_club))
 		{
-			$GLOBALS['SITE_DB']->query_delete('gsp',array('group_id'=>intval($id)));
+			$GLOBALS['SITE_DB']->query_delete('group_privileges',array('group_id'=>intval($id)));
 			$GLOBALS['SITE_DB']->query_delete('group_zone_access',array('group_id'=>intval($id)));
 			$GLOBALS['SITE_DB']->query_delete('group_category_access',array('group_id'=>intval($id)));
 			$GLOBALS['SITE_DB']->query_delete('group_page_access',array('group_id'=>intval($id)));

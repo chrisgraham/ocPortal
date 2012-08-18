@@ -29,7 +29,7 @@ function ocf_may_control_group($group_id,$member_id)
 {
 	$leader=ocf_get_group_property($group_id,'group_leader');
 	$is_super_admin=ocf_get_group_property($group_id,'is_super_admin');
-	return (($member_id===$leader) || ($GLOBALS['OCF_DRIVER']->is_super_admin($member_id)) || ((has_specific_permission($member_id,'control_usergroups')) && ($is_super_admin==0)));
+	return (($member_id===$leader) || ($GLOBALS['OCF_DRIVER']->is_super_admin($member_id)) || ((has_privilege($member_id,'control_usergroups')) && ($is_super_admin==0)));
 }
 
 /**
@@ -141,7 +141,7 @@ function ocf_delete_group($group_id,$target_group=NULL)
 	$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_group_id'=>$group_id));
 	$GLOBALS['FORUM_DB']->query_delete('f_groups',array('id'=>$group_id),'',1);
 	// No need to delete ocPortal permission stuff, as it could be on any MSN site, and ocPortal is coded with a tolerance due to the forum driver system. However, to be tidy...
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('group_id'=>$group_id));
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('group_id'=>$group_id));
 	$GLOBALS['SITE_DB']->query_delete('group_zone_access',array('group_id'=>$group_id));
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('group_id'=>$group_id));
 	$GLOBALS['SITE_DB']->query_delete('group_page_access',array('group_id'=>$group_id));
@@ -318,7 +318,7 @@ function ocf_group_absorb_privileges_of($to,$from)
 	_ocf_group_absorb_privileges_of($to,$from,'group_category_access');
 	_ocf_group_absorb_privileges_of($to,$from,'group_zone_access');
 	_ocf_group_absorb_privileges_of($to,$from,'group_page_access');
-	_ocf_group_absorb_privileges_of($to,$from,'gsp');
+	_ocf_group_absorb_privileges_of($to,$from,'group_privileges');
 }
 
 /**

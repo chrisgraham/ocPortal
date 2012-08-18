@@ -43,9 +43,9 @@ class Module_cms_quiz extends standard_crud_module
 	/**
 	 * Standard modular privilege-overide finder function.
 	 *
-	 * @return array	A map of privileges that are overridable; sp to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
-	function get_sp_overrides()
+	function get_privilege_overrides()
 	{
 		require_lang('quiz');
 		return array('submit_highrange_content'=>array(1,'ADD_QUIZ'),'bypass_validation_highrange_content'=>array(1,'BYPASS_VALIDATION_QUIZ'),'edit_own_highrange_content'=>array(1,'EDIT_OWN_QUIZ'),'edit_highrange_content'=>array(1,'EDIT_QUIZ'),'delete_own_highrange_content'=>array(1,'DELETE_OWN_QUIZ'),'delete_highrange_content'=>array(1,'DELETE_QUIZ'));

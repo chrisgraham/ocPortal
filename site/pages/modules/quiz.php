@@ -56,7 +56,7 @@ class Module_quiz
 		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_entry_answer');
 		delete_config_option('points_ADD_QUIZ');
 		delete_config_option('quiz_show_stats_count_total_open');
-		delete_specific_permission('bypass_quiz_repeat_time_restriction');
+		delete_privilege('bypass_quiz_repeat_time_restriction');
 		delete_menu_item_simple('_SEARCH:quiz:type=misc');
 	}
 
@@ -95,7 +95,7 @@ class Module_quiz
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
 			add_config_option('QUIZZES','quiz_show_stats_count_total_open','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_specific_permission('QUIZZES','bypass_quiz_repeat_time_restriction',false);
+			add_privilege('QUIZZES','bypass_quiz_repeat_time_restriction',false);
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
@@ -290,8 +290,8 @@ class Module_quiz
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.((!has_specific_permission(get_member(),'see_unvalidated'))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).') ORDER BY q_type ASC,id DESC',$max,$start);
-		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.((!has_specific_permission(get_member(),'see_unvalidated'))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).')');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.((!has_privilege(get_member(),'see_unvalidated'))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).') ORDER BY q_type ASC,id DESC',$max,$start);
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.((!has_privilege(get_member(),'see_unvalidated'))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).')');
 		if (count($rows)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 		$content_tests=new ocp_tempcode();
 		$content_competitions=new ocp_tempcode();
@@ -343,7 +343,7 @@ class Module_quiz
 			warn_exit(do_lang_tempcode('NOT_OPEN_THIS',do_lang_tempcode($quiz['q_type'])));
 
 		// Check they are allowed to do this (if repeating)
-		if ((!has_specific_permission(get_member(),'bypass_quiz_repeat_time_restriction')) && (!is_null($quiz['q_redo_time'])))
+		if ((!has_privilege(get_member(),'bypass_quiz_repeat_time_restriction')) && (!is_null($quiz['q_redo_time'])))
 		{
 			$last_entry=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_entries','q_time',array('q_member'=>get_member(),'q_quiz'=>$quiz['id']),'ORDER BY q_time DESC');
 			if ((!is_null($last_entry)) && ($last_entry+$quiz['q_redo_time']*60*60>time()) && ((is_null($quiz['q_timeout'])) || (time()-$last_entry>=$quiz['q_timeout']))) // If passed timeout and less than redo time, error
@@ -423,7 +423,7 @@ class Module_quiz
 		// Validation
 		if ($quiz['q_validated']==0)
 		{
-			if (!has_specific_permission(get_member(),'jump_to_unvalidated'))
+			if (!has_privilege(get_member(),'jump_to_unvalidated'))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 
 			$warning_details=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT')));

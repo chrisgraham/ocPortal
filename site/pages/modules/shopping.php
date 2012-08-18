@@ -208,7 +208,7 @@ class Module_shopping
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF'));
 
 		// Kill switch
-		if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_specific_permission(get_member(),'access_ecommerce_in_test_mode'))) warn_exit(do_lang_tempcode('PURCHASE_DISABLED'));
+		if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_privilege(get_member(),'access_ecommerce_in_test_mode'))) warn_exit(do_lang_tempcode('PURCHASE_DISABLED'));
 
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
@@ -612,7 +612,7 @@ class Module_shopping
 
 		$member_id=get_member();
 
-		if (has_specific_permission(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
+		if (has_privilege(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
 
 		$orders=array();
 

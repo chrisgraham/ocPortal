@@ -91,7 +91,7 @@ class Hook_choose_download
 						require_lang('galleries');
 						$cat='download_'.strval($eid);
 						$map=array('cat'=>$cat);
-						if (!has_specific_permission(get_member(),'see_unvalidated')) $map['validated']=1;
+						if (!has_privilege(get_member(),'see_unvalidated')) $map['validated']=1;
 						$rows=$GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'ORDER BY id',200/*Stop sillyness, could be a DOS attack*/);
 						$counter=0;
 						$div=2;

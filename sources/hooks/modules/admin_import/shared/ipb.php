@@ -146,21 +146,21 @@ class Hook_ipb_base
 				if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('group_page_access',array('group_id'=>$id_new,'zone_name'=>$zone,'page_name'=>$page));
 			}
 
-			// privileges
-			set_specific_permission($id_new,'comcode_dangerous',$row['g_dohtml']);
-			set_specific_permission($id_new,'view_member_photos',$row['g_mem_info']);
-			set_specific_permission($id_new,'edit_own_midrange_content',$row['g_edit_topic']);
-			set_specific_permission($id_new,'edit_own_lowrange_content',$row['g_edit_posts']);
-			set_specific_permission($id_new,'delete_own_midrange_content',$row['g_delete_own_topics']);
-			set_specific_permission($id_new,'bypass_validation_lowrange_content',$row['g_avoid_q']);
-			set_specific_permission($id_new,'submit_midrange_content',$row['g_post_new_topics']);
-			set_specific_permission($id_new,'submit_lowrange_content',$row['g_reply_other_topics']);
-			set_specific_permission($id_new,'delete_own_lowrange_content',$row['g_delete_own_posts']);
-			set_specific_permission($id_new,'close_own_topics',$row['g_open_close_posts']);
-			set_specific_permission($id_new,'vote_in_polls',$row['g_vote_polls']);
-			set_specific_permission($id_new,'use_pt',$row['g_use_pm']);
-			set_specific_permission($id_new,'delete_account',$row['g_can_remove']);
-			set_specific_permission($id_new,'access_closed_site',$row['g_access_offline']);
+			// Privileges
+			set_privilege($id_new,'comcode_dangerous',$row['g_dohtml']);
+			set_privilege($id_new,'view_member_photos',$row['g_mem_info']);
+			set_privilege($id_new,'edit_own_midrange_content',$row['g_edit_topic']);
+			set_privilege($id_new,'edit_own_lowrange_content',$row['g_edit_posts']);
+			set_privilege($id_new,'delete_own_midrange_content',$row['g_delete_own_topics']);
+			set_privilege($id_new,'bypass_validation_lowrange_content',$row['g_avoid_q']);
+			set_privilege($id_new,'submit_midrange_content',$row['g_post_new_topics']);
+			set_privilege($id_new,'submit_lowrange_content',$row['g_reply_other_topics']);
+			set_privilege($id_new,'delete_own_lowrange_content',$row['g_delete_own_posts']);
+			set_privilege($id_new,'close_own_topics',$row['g_open_close_posts']);
+			set_privilege($id_new,'vote_in_polls',$row['g_vote_polls']);
+			set_privilege($id_new,'use_pt',$row['g_use_pm']);
+			set_privilege($id_new,'delete_account',$row['g_can_remove']);
+			set_privilege($id_new,'access_closed_site',$row['g_access_offline']);
 
 			import_id_remap_put('group',strval($row['g_id']),$id_new);
 		}

@@ -296,7 +296,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 
 		// Or Was the given password wrong? (give them fail message)
 		$answer=$room['password_answer'];
-		if (!((strtolower($given_password)=='cheat') && ((has_specific_permission($member_id,'administer_ocworld')) || ($owner==$member_id)))) // Admins may enter 'cheat' to always-get-in
+		if (!((strtolower($given_password)=='cheat') && ((has_privilege($member_id,'administer_ocworld')) || ($owner==$member_id)))) // Admins may enter 'cheat' to always-get-in
 			if ((strtolower($answer)!=strtolower($given_password)))
 			{
 				$GLOBALS['SITE_DB']->query_insert('w_attempts',array(
@@ -324,7 +324,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 
 			// Transfer it to the troll
 			$troll_id=-$realm-1;
-			if (!has_specific_permission($member_id,'administer_ocworld'))
+			if (!has_privilege($member_id,'administer_ocworld'))
 			{
 				remove_item_person($member_id,$item_name);
 				add_item_person($troll_id,$item_name);
@@ -335,7 +335,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 			$item_name=$GLOBALS['SITE_DB']->query_select_value_if_there('w_inventory','item_name',array('item_owner'=>$member_id,'item_name'=>$required_item));
 			if (is_null($item_name))
 			{
-				if ((!has_specific_permission($member_id,'administer_ocworld')) && ($owner!=$member_id))
+				if ((!has_privilege($member_id,'administer_ocworld')) && ($owner!=$member_id))
 				{
 					$fail=$room['password_fail_message'];
 					if ($fail=='') $fail=do_lang_tempcode('W_MISSING_REQ_ITEM',escape_html($required_item));
@@ -628,7 +628,7 @@ function give($member_id,$dest_member_id,$item_name)
 	if (!item_held($member_id,$item_name)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	// Check members are in same $realm, $x and $y (admins can give to anyone, anywhere)
-	if ((!has_specific_permission($member_id,'administer_ocworld')) && (!has_specific_permission($dest_member_id,'administer_ocworld')))
+	if ((!has_privilege($member_id,'administer_ocworld')) && (!has_privilege($dest_member_id,'administer_ocworld')))
 	{
 		// Check members are in same room/realm
 		if (!check_coexist($member_id,$dest_member_id)) ocw_refresh_with_message(do_lang_tempcode('W_NOT_SAME_REALM'),'warn');
@@ -689,7 +689,7 @@ function buy($member_id,$item_name,$copy_owner)
 	if ($cost==0) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
 	// Charge them
-	if ((!has_specific_permission($member_id,'administer_ocworld')) || (!is_guest($copy_owner)))
+	if ((!has_privilege($member_id,'administer_ocworld')) || (!is_guest($copy_owner)))
 	{
 		require_code('points2');
 

@@ -76,7 +76,7 @@ class Hook_Notification_ocf_topic_invite extends Hook_Notification
 	function list_members_who_have_enabled($notification_code,$category=NULL,$to_member_ids=NULL,$start=0,$max=300)
 	{
 		$members=$this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-		$members=$this->_all_members_who_have_enabled_with_sp($members,'use_pt',$notification_code,$category,$to_member_ids,$start,$max);
+		$members=$this->_all_members_who_have_enabled_with_privilege($members,'use_pt',$notification_code,$category,$to_member_ids,$start,$max);
 		$members=$this->_all_members_who_have_enabled_with_zone_access($members,'forum',$notification_code,$category,$to_member_ids,$start,$max);
 
 		return $members;

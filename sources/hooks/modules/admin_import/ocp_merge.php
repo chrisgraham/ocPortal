@@ -1686,7 +1686,7 @@ class Hook_ocp_merge
 	 */
 	function import_permissions($db,$table_prefix,$file_base)
 	{
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'gsp');
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'group_privileges');
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
@@ -1694,7 +1694,7 @@ class Hook_ocp_merge
 			if (is_null($row['group_id'])) continue;
 			$row_temp=$row;
 			unset($row_temp['the_value']);
-			$GLOBALS['SITE_DB']->query_delete('gsp',$row_temp,'',1);
+			$GLOBALS['SITE_DB']->query_delete('group_privileges',$row_temp,'',1);
 			if (!array_key_exists('the_page',$row)) $row['the_page']='';
 			if (!array_key_exists('module_the_name',$row)) $row['module_the_name']='';
 			if (!array_key_exists('category_name',$row)) $row['category_name']='';
@@ -1748,7 +1748,7 @@ class Hook_ocp_merge
 				}
 			}
 			if (!array_key_exists('the_value',$row)) $row['the_value']='1';
-			$GLOBALS['SITE_DB']->query_insert('gsp',$row);
+			$GLOBALS['SITE_DB']->query_insert('group_privileges',$row);
 		}
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'group_page_access');
 		foreach ($rows as $row)

@@ -61,7 +61,7 @@ class Hook_checklist_polls
 		$num_queue=$this->get_num_poll_queue();
 		list($info,$seconds_due_in)=staff_checklist_time_ago_and_due($seconds_ago,$limit_hours);
 		$info->attach(do_lang_tempcode('NUM_QUEUE',integer_format($num_queue)));
-		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'5d709aa8a09bbf3e46aefa7fe7e02660','CONFIG_URL'=>$config_url,'URL'=>$url,'STATUS'=>$_status,'TASK'=>do_lang_tempcode('PT_choose_poll'),'INFO'=>$info));
+		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'5d709aa8a09bbf3e46aefa7fe7e02660','CONFIG_URL'=>$config_url,'URL'=>$url,'STATUS'=>$_status,'TASK'=>do_lang_tempcode('PRIVILEGE_choose_poll'),'INFO'=>$info));
 		return array(array($tpl,$seconds_due_in,NULL,'poll_update_time'));
 	}
 

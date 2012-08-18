@@ -39,7 +39,7 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 		$pagelinks=array();
 
 		$map=array();
-		if (!has_specific_permission(get_member(),'see_hidden_groups')) $map['g_hidden']=0;
+		if (!has_privilege(get_member(),'see_hidden_groups')) $map['g_hidden']=0;
 		$types=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),$map);
 		foreach ($types as $type)
 		{
@@ -104,7 +104,7 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 				$members_new=$members;
 				foreach ($members as $member_id=>$setting)
 				{
-					if (!has_specific_permission($member_id,'see_hidden_groups'))
+					if (!has_privilege($member_id,'see_hidden_groups'))
 						$members_new[$member_id]=$setting;
 				}
 				$members=$members_new;

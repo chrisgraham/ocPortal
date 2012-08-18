@@ -340,7 +340,7 @@ class Hook_addon_registry_core_permission_management
 		$k=0;
 		foreach (placeholder_array() as $permission)
 		{
-			//$permission_text=do_lang('PT_'.$permission);
+			//$permission_text=do_lang('PRIVILEGE_'.$permission);
 
 			$cells=new ocp_tempcode();
 

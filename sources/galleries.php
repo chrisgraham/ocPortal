@@ -513,7 +513,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 	$done_for_all=false;
 	if (($is_member_synched) && (!$purity) && ($levels!==0))
 	{
-		if ((has_specific_permission(get_member(),'can_submit_to_others_categories')) && (get_forum_type()=='ocf'))
+		if ((has_privilege(get_member(),'can_submit_to_others_categories')) && (get_forum_type()=='ocf'))
 		{
 			ocf_require_all_forum_stuff();
 
@@ -522,7 +522,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 			{
 				$done_for_all=true;
 				$group_membership=$GLOBALS['FORUM_DB']->query_select('f_group_members',array('gm_group_id','gm_member_id'),array('gm_validated'=>1));
-				$group_permissions=$GLOBALS['SITE_DB']->query('SELECT group_id,the_page,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gsp WHERE '.db_string_equal_to('specific_permission','have_personal_category').' AND ('.db_string_equal_to('the_page','').' OR '.db_string_equal_to('the_page','cms_galleries').')');
+				$group_permissions=$GLOBALS['SITE_DB']->query('SELECT group_id,the_page,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_privileges WHERE '.db_string_equal_to('privilege','have_personal_category').' AND ('.db_string_equal_to('the_page','').' OR '.db_string_equal_to('the_page','cms_galleries').')');
 				$is_super_admin=$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member());
 				foreach ($members as $_member)
 				{
@@ -579,7 +579,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 			}
 		}
 
-		if (((!$done_for_all) || (!$found_own_gallery)) && (!array_key_exists(get_member(),$found_member_galleries)) && (!is_guest()) && (!$purity) && (has_specific_permission(get_member(),'have_personal_category')))
+		if (((!$done_for_all) || (!$found_own_gallery)) && (!array_key_exists(get_member(),$found_member_galleries)) && (!is_guest()) && (!$purity) && (has_privilege(get_member(),'have_personal_category')))
 		{
 			$this_category_id='member_'.strval(get_member()).'_'.$category_id;
 			if ((is_null($filter)) || (call_user_func_array($filter,array($this_category_id,$member_id,0))))
@@ -618,7 +618,7 @@ function can_submit_to_gallery($name)
 	$parts=explode('_',$name);
 	if (intval($parts[1])==get_member()) return intval($parts[1]);
 
-	if (has_specific_permission(get_member(),'can_submit_to_others_categories')) return intval($parts[1]);
+	if (has_privilege(get_member(),'can_submit_to_others_categories')) return intval($parts[1]);
 
 	return false;
 }
@@ -880,7 +880,7 @@ function get_allowed_video_file_types()
 		$supported.=',mid,mp3,wav,wma';
 	}
 	$supported.=',pdf';
-	if (has_specific_permission(get_member(),'use_very_dangerous_comcode'))
+	if (has_privilege(get_member(),'use_very_dangerous_comcode'))
 	{
 		$supported.=',swf';
 	}

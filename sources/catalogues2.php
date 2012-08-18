@@ -48,7 +48,7 @@ function catalogue_file_script()
 {
 	// Closed site
 	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));
@@ -353,7 +353,7 @@ function actual_delete_catalogue($name)
 	delete_lang($myrow['c_title']);
 	delete_lang($myrow['c_description']);
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>$name));
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'catalogues_catalogue','category_name'=>$name));
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'catalogues_catalogue','category_name'=>$name));
 
 	log_it('DELETE_CATALOGUE',$name);
 }
@@ -695,7 +695,7 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 	$GLOBALS['SITE_DB']->query_delete('catalogue_categories',array('id'=>$id),'',1);
 
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($id)));
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'catalogues_category','category_name'=>strval($id)));
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'catalogues_category','category_name'=>strval($id)));
 
 	calculate_category_child_count_cache($old_parent_id);
 }

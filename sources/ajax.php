@@ -52,14 +52,14 @@ function find_permissions_script()
 	$serverid=get_param('serverid');
 	$x=get_param('x');
 	$matches=array();
-	preg_match('#^access_(\d+)_sp_(.+)$#',$x,$matches);
+	preg_match('#^access_(\d+)_privilege_(.+)$#',$x,$matches);
 	$group_id=intval($matches[1]);
-	$sp=$matches[2];
+	$privilege=$matches[2];
 	require_all_lang();
-	echo do_lang('PT_'.$sp).'=';
+	echo do_lang('PRIVILEGE_'.$privilege).'=';
 	if ($serverid=='_root')
 	{
-		echo has_specific_permission_group($group_id,$sp)?do_lang('YES'):do_lang('NO');
+		echo has_privilege_group($group_id,$privilege)?do_lang('YES'):do_lang('NO');
 	} else
 	{
 		preg_match('#^([^:]*):([^:]*)(:|$)#',$serverid,$matches);
@@ -71,7 +71,7 @@ function find_permissions_script()
 		$bits=(is_null($_pagelinks[0]))?array('!',''):(is_array($_pagelinks[0])?call_user_func_array($_pagelinks[0][0],$_pagelinks[0][1]):eval($_pagelinks[0])); // If $_pagelinks[0] is NULL then it's an error: extract_page_link_permissions is always there when there are cat permissions
 		$module=$bits[1];
 
-		echo has_specific_permission_group($group_id,$sp,$module)?do_lang('YES'):do_lang('NO');
+		echo has_privilege_group($group_id,$privilege,$module)?do_lang('YES'):do_lang('NO');
 	}
 }
 
@@ -444,7 +444,7 @@ function ajax_tree_script()
 {
 	// Closed site
 	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_specific_permission(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 	{
 		header('Content-Type: text/plain');
 		@exit(get_option('closed'));

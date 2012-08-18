@@ -126,7 +126,7 @@ class Module_lostpassword
 			$member=$GLOBALS['FORUM_DRIVER']->get_member_from_email_address($email_address);
 		}
 		if (is_null($member)) warn_exit(do_lang_tempcode('PASSWORD_RESET_ERROR_2'));
-		if (($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='') && (has_specific_permission($member,'disable_lost_passwords')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
+		if (($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='') && (has_privilege($member,'disable_lost_passwords')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 		{
 			warn_exit(do_lang_tempcode('NO_RESET_ACCESS'));
 		}

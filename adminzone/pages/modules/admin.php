@@ -67,7 +67,7 @@ class Module_admin
 
 		$type=get_param('type','misc');
 
-		if (((!has_specific_permission(get_member(),'avoid_simplified_adminzone_look')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) && (num_staff_icons()<MIN_STAFF_ICONS_BEFORE_COLLAPSE))
+		if (((!has_privilege(get_member(),'avoid_simplified_adminzone_look')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) && (num_staff_icons()<MIN_STAFF_ICONS_BEFORE_COLLAPSE))
 		{
 			if ($type=='misc') return do_next_manager_admin_simplified();
 		}
@@ -773,19 +773,19 @@ class Module_admin
 		{
 			// Privileges- sections/names/descriptions
 			$content[$current_results_type]=new ocp_tempcode();
-			$all_permissions=$GLOBALS['SITE_DB']->query_select('sp_list',array('the_name','p_section'));
+			$all_permissions=$GLOBALS['SITE_DB']->query_select('privilege_list',array('the_name','p_section'));
 			$pt_sections=array();
 			foreach ($all_permissions as $p)
 			{
-				$n=do_lang('PT_'.$p['the_name'],NULL,NULL,NULL,NULL,false);
+				$n=do_lang('PRIVILEGE_'.$p['the_name'],NULL,NULL,NULL,NULL,false);
 				if (is_null($n)) continue;
 				if (($this->_keyword_match($n)) || ($this->_keyword_match($p['the_name'])))
 				{
-					$_url=build_url(array('page'=>'admin_permissions','type'=>'specific','id'=>$p['p_section']),'adminzone');
+					$_url=build_url(array('page'=>'admin_permissions','type'=>'privileges','id'=>$p['p_section']),'adminzone');
 					$breadcrumbs=new ocp_tempcode();
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'security'),'adminzone'),do_lang_tempcode('SECURITY')));
 					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_permissions','type'=>'specific'),'adminzone'),do_lang_tempcode('PRIVILEGES')));
+					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_permissions','type'=>'privileges'),'adminzone'),do_lang_tempcode('PRIVILEGES')));
 					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 					$breadcrumbs->attach(hyperlink($_url,do_lang($p['p_section'])));
 					$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
@@ -801,11 +801,11 @@ class Module_admin
 				if (is_null($n)) continue;
 				if (($this->_keyword_match($n)) || ($this->_keyword_match($p)))
 				{
-					$_url=build_url(array('page'=>'admin_permissions','type'=>'specific','id'=>$p),'adminzone');
+					$_url=build_url(array('page'=>'admin_permissions','type'=>'privileges','id'=>$p),'adminzone');
 					$breadcrumbs=new ocp_tempcode();
 					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin','type'=>'security'),'adminzone'),do_lang_tempcode('SECURITY')));
 					$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_permissions','type'=>'specific'),'adminzone'),do_lang_tempcode('PRIVILEGES')));
+					$breadcrumbs->attach(hyperlink(build_url(array('page'=>'admin_permissions','type'=>'privileges'),'adminzone'),do_lang_tempcode('PRIVILEGES')));
 					$sup=do_lang_tempcode('LOCATED_IN',$breadcrumbs);
 					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'43bfb229943e0bb1d2c2e4512e0e5ec9','NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>'','SUP'=>$sup)));
 				}

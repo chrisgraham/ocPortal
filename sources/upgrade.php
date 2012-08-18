@@ -1446,55 +1446,6 @@ function version_specific()
 	if (is_null($_version_database)) $version_database=2.1; // Either 2.0 or 2.1, and they are equivalent in terms of what we need to do
 	if ($version_database<$version_files)
 	{
-		if ($version_database<2.5)
-		{
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'chat_messages');
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>'galleries'),array('module_the_name'=>'images'));
-			$GLOBALS['SITE_DB']->query_update('group_page_access',array('page_name'=>'galleries'),array('page_name'=>'images'));
-			$GLOBALS['SITE_DB']->alter_table_field('zones','zone_wide','?BINARY');
-			$GLOBALS['SITE_DB']->alter_table_field('theme_images','id','SHORT_TEXT');
-			$GLOBALS['SITE_DB']->refresh_field_definition('URLPATH');
-			$GLOBALS['SITE_DB']->query('ALTER TABLE '.get_table_prefix().'translate TYPE=MYISAM'); // Just in case it's not
-			$GLOBALS['SITE_DB']->create_index('translate','#search',array('text_original'));
-
-			$trans4=insert_lang(do_lang('A_SITE_ABOUT','???'),1);
-			$trans8=insert_lang(do_lang('GUIDES'),1);
-			$GLOBALS['SITE_DB']->query_insert('zones',array(/*'zone_title'=>insert_lang(do_lang('SITE'),1),*/'zone_name'=>'membersonly','zone_default_page'=>'start','zone_header_text'=>$trans4,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0));
-			$GLOBALS['SITE_DB']->query_insert('zones',array(/*'zone_title'=>insert_lang(do_lang('GUIDES'),1),*/'zone_default_page'=>'userguide','zone_header_text'=>$trans8,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0));
-		}
-		if ($version_database<3.0)
-		{
-			fu_rename_zone('membersonly','site');
-			fu_rename_zone('admincentre','adminzone');
-			if (file_exists(get_file_base().'/collaboration')) fu_rename_zone('supermembercentre','collaboration');
-			fu_rename_zone('membercentre','site',true); // Merged into 'site' (formerly membersonly)
-			actual_delete_zone_lite('seedy');
-			$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'cms','zone_title'=>insert_lang(do_lang('CMS'),1),'zone_default_page'=>'cms','zone_header_text'=>insert_lang(do_lang('CMS'),1),'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>1));
-
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>'admin_cleanup'),array('module_the_name'=>'admin_caches'));
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>'seedy_page'),array('module_the_name'=>'cedi'));
-			$GLOBALS['SITE_DB']->query_update('attachment_refs',array('r_referer_type'=>'cedi_page'),array('r_referer_type'=>'seedy_page'));
-			$GLOBALS['SITE_DB']->query_update('attachment_refs',array('r_referer_type'=>'cedi_post'),array('r_referer_type'=>'seedy_post'));
-			$modules_gone=array('seedy_move','seedy_changes','seedy_edit_page','seedy_manage_tree','seedy_move','seedy_post','seedy_show_tree','seedy_merge','admin_seedy','admin_pages','admin_ftp_downloads','admin_timezone','admin_modules','admin_ocf_moderator_logs','admin_submitban');
-			foreach ($modules_gone as $module)
-			{
-				$GLOBALS['SITE_DB']->query_delete('modules',array('module_the_name'=>$module),'',1);
-			}
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>'galleries'),array('module_the_name'=>'images'),'',1);
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>'admin_sitetree'),array('module_the_name'=>'admin_comcode_pages'),'',1);
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>'admin_addons'),array('module_the_name'=>'admin_mods'),'',1);
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>'admin_awards'),array('module_the_name'=>'admin_dotws'),'',1);
-		}
-		if ($version_database<4.0)
-		{
-			$GLOBALS['SITE_DB']->query('ALTER TABLE '.get_table_prefix().'translate CHANGE id id INT(10) UNSIGNED AUTO_INCREMENT');
-		}
-		if ($version_database<5.1)
-		{
-			// Installaton code got moved over
-			$sitetree_version=$GLOBALS['SITE_DB']->query_select_value('modules','module_version',array('module_the_name'=>'admin_sitetree'));
-			$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$sitetree_version),array('module_the_name'=>'cms_comcode_pages'),'',1);
-		}
 		if ($version_database<8.0)
 		{
 			actual_delete_zone_lite('personalzone');
@@ -1510,6 +1461,15 @@ function version_specific()
 						@rename(get_custom_file_base().'/imports/mods/'.$f,get_file_base().'/imports/addons/'.$f);
 				}
 			}
+		}
+		if ($version_database<10.0)
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('msp','specific_permission','ID_TEXT','privilege');
+			$GLOBALS['SITE_DB']->alter_table_field('gsp','specific_permission','ID_TEXT','privilege');
+			$GLOBALS['SITE_DB']->alter_table_field('pstore_permissions','p_specific_permission','ID_TEXT','p_privilege');
+			$GLOBALS['SITE_DB']->rename_table('msp','member_privileges');
+			$GLOBALS['SITE_DB']->rename_table('gsp','group_privileges');
+			$GLOBALS['SITE_DB']->rename_table('sp_list','privilege_list');
 		}
 		set_value('version',float_to_raw_string($version_files,10,true));
 

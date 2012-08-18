@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_warnings
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return (($member_id_of==$member_id_viewing) || (has_specific_permission($member_id_viewing,'assume_any_member'))) && ($GLOBALS['FORUM_DB']->query_select_value('f_warnings','COUNT(*)',array('w_member_id'=>$member_id_of,'w_is_warning'=>1))>0);
+		return (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member'))) && ($GLOBALS['FORUM_DB']->query_select_value('f_warnings','COUNT(*)',array('w_member_id'=>$member_id_of,'w_is_warning'=>1))>0);
 	}
 
 	/**
