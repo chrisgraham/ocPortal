@@ -94,7 +94,6 @@ class Hook_admin_setupwizard_installprofiles_blog
 				'main_newsletter_signup',
 				'side_tag_cloud',
 				'side_personal_stats',
-				'side_weather',
 				'side_calendar',
 				'main_search',
 				'main_poll',

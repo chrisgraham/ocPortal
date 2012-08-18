@@ -296,13 +296,11 @@ class Module_admin_setupwizard
 
 		$addon_list_advanced_off_by_default=array(
 			'installer',
-			'tester',
 			'textbased_persistent_cacheing',
 			'rootkit_detector',
 			'msn',
 			'backup',
 			'bookmarks',
-			'bulkupload',
 			'devguide',
 			'supermember_directory',
 		);

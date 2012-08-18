@@ -18,6 +18,10 @@
  * @package		core_validation
  */
 
+/*
+NB: This is for Web Standards validation, not Content validation.
+*/
+
 class Hook_addon_registry_core_validation
 {
 	/**
@@ -47,7 +51,7 @@ class Hook_addon_registry_core_validation
 	 */
 	function get_description()
 	{
-		return 'Web standards validation tools.';
+		return 'Web Standards validation tools.';
 	}
 
 	/**

@@ -126,7 +126,7 @@ if (get_param_integer('import_themes',1)==1)
 			{
 				require_code('tar');
 				$tar=tar_open($from,'rb');
-				$info_file=tar_get_file($tar,'mod.inf',true);
+				$info_file=tar_get_file($tar,'addon.inf',true);
 				$info=better_parse_ini_file(NULL,$info_file['data']);
 				tar_close($tar);
 

@@ -323,7 +323,6 @@ function make_installers($skip_file_grab=false)
 		unlink($prefix.'/themes/default/images/bigicons/multimods.png');
 		unlink($prefix.'/themes/default/images/bigicons/edit_css.png');
 		unlink($prefix.'/themes/default/images/bigicons/geolocate.png');
-		unlink($prefix.'/themes/default/images/bigicons/bulkupload.png');
 		unlink($prefix.'/themes/default/images/bigicons/ssl.png');
 		unlink($prefix.'/themes/default/images/bigicons/page_views.png');
 		unlink($prefix.'/themes/default/images/bigicons/newsletters.png');
@@ -515,7 +514,6 @@ function make_installers($skip_file_grab=false)
 		unlink($prefix.'/themes/default/images/pagepics/news.png');
 		unlink($prefix.'/themes/default/images/pagepics/newsletter.png');
 		unlink($prefix.'/themes/default/images/pagepics/comcode_page_edit.png');
-		unlink($prefix.'/themes/default/images/pagepics/bulkuploadassistant.png');
 		unlink($prefix.'/themes/default/images/pagepics/config.png');
 		unlink($prefix.'/themes/default/images/pagepics/deletepage.png');
 		unlink($prefix.'/themes/default/images/pagepics/trackbacks.png');

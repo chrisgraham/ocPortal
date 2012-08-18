@@ -261,6 +261,7 @@ PHP5 is required, and the PHP CuRL extension is required.
 Set up is a little tricky, you need to set up an application on Twitter, and authorise the site to it via the option on the Admin Zone drop-down menu. Setting up the application is explained by the configuration options.",,,Icon by leslienayibe. Class by Tijs Verkoyen.,
 under18s,Development,Chris Graham,Licensed on the same terms as ocPortal,"Example of an implicit usergroup hook, to automatically put all members under 18 into a special usergroup.",,,,
 utf8,Development,Chris Graham,Licensed on the same terms as ocPortal,Trivial change to make ocPortal run UTF-8 (changes one language string).,,,,
+weather,New Features,Chris Graham,Licensed on the same terms as ocPortal,"Adds a weather block to ocPortal, powered by Yahoo.",,,,
 workflows,New Features,Chris Warburton,Licensed on the same terms as ocPortal,"This addon extends the simple yes/no validation system of ocPortal to allows user-defined ""workflows"". A workflow contains an ordered list of ""approval levels"", such as 'design' or 'spelling', and each of these has a list of usergroups which have permission to approve it.
 
 New content enters the default workflow (unless another is specified) and notifications are sent to those users with permission to approve the next level. This continues until all of the levels are approved, at which point the content goes live.

@@ -96,7 +96,6 @@ class Hook_admin_setupwizard_installprofiles_infosite
 			'PANEL_RIGHT'=>array(
 				'main_search',
 				'side_calendar',
-				'side_weather',
 				'main_poll',
 			),
 		);

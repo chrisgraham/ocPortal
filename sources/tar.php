@@ -300,7 +300,7 @@ function tar_extract_to_folder(&$resource,$path,$use_afm=false,$files=NULL,$comc
 
 	foreach ($directory as $file)
 	{
-		if (($file['path']!='mod.inf') && ($file['path']!='mod.php') && ((is_null($files)) || (in_array($file['path'],$files))))
+		if (($file['path']!='addon.inf') && ($file['path']!='addon_install_code.php') && ((is_null($files)) || (in_array($file['path'],$files))))
 		{
 			// Special case for directories. ocPortal doesn't add directory records, but at least 7-zip does
 			if (substr($file['path'],-1)=='/')

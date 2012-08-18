@@ -237,7 +237,7 @@ function find_available_addons()
 		$full=get_custom_file_base().'/imports/addons/'.$file;
 		require_code('tar');
 		$tar=tar_open($full,'rb');
-		$info_file=tar_get_file($tar,'mod.inf',true);
+		$info_file=tar_get_file($tar,'addon.inf',true);
 		if (!is_null($info_file))
 		{
 			$info=better_parse_ini_file(NULL,$info_file['data']);
@@ -382,7 +382,7 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 
 	foreach ($files as $val)
 	{
-		if ($val=='mod.inf') continue;
+		if ($val=='addon.inf') continue;
 
 		$full=get_file_base().'/'.filter_naughty($val);
 
@@ -431,7 +431,7 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 			}
 		}
 
-		// If it's a theme, make a mod.php for the theme to restore images_custom mappings
+		// If it's a theme, make a addon_install_code.php for the theme to restore images_custom mappings
 		if ((substr($val,0,7)=='themes/') && (substr($val,-10)=='/theme.ini'))
 		{
 			$theme=substr($val,7,strpos($val,'/theme.ini')-7);
@@ -443,7 +443,7 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 				$data.='$GLOBALS[\'SITE_DB\']->query_insert(\'theme_images\',array(\'id\'=>\''.db_escape_string($image['id']).'\',\'theme\'=>\''.db_escape_string($image['theme']).'\',\'path\'=>\''.db_escape_string($image['path']).'\',\'lang\'=>\''.db_escape_string($image['lang']).'\'),false,true);'."\n";
 			}
 			$data.="?".">\n";
-			tar_add_file($tar,'mod.php',$data,0444,time());
+			tar_add_file($tar,'addon_install_code.php',$data,0444,time());
 		}
 	}
 
@@ -455,7 +455,7 @@ function create_addon($file,$files,$name,$incompatibilities,$dependencies,$autho
 	$incompatibilities=str_replace('"','\'',$incompatibilities);
 	$dependencies=str_replace('"','\'',$dependencies);
 	$description=str_replace(chr(13),'',str_replace(chr(10),'\n',str_replace('"','\'',$description)));
-	$mod_inf="name=".$name."
+	$addon_inf="name=".$name."
 author=".$author."
 organisation=".$organisation."
 version=".$version."
@@ -463,7 +463,7 @@ incompatibilities=".$incompatibilities."
 dependencies=".$dependencies."
 description=".$description."
 ";
-	tar_add_file($tar,'mod.inf',$mod_inf,0644,time());
+	tar_add_file($tar,'addon.inf',$addon_inf,0644,time());
 
 	tar_close($tar);
 
@@ -488,7 +488,7 @@ function install_addon($file,$files=NULL)
 
 	require_code('tar');
 	$tar=tar_open($full,'rb');
-	$info_file=tar_get_file($tar,'mod.inf');
+	$info_file=tar_get_file($tar,'addon.inf');
 	if (is_null($info_file)) warn_exit(do_lang_tempcode('NOT_ADDON'));
 	$info=better_parse_ini_file(NULL,$info_file['data']);
 	$directory=tar_get_directory($tar);
@@ -624,8 +624,8 @@ function install_addon($file,$files=NULL)
 	erase_cached_templates();
 	erase_cached_language();
 
-	// Load mod.php if it exists
-	$_modphp_file=tar_get_file($tar,'mod.php');
+	// Load addon_install_code.php if it exists
+	$_modphp_file=tar_get_file($tar,'addon_install_code.php');
 	if (!is_null($_modphp_file))
 	{
 		$modphp_file=trim($_modphp_file['data']);
@@ -707,7 +707,7 @@ function uninstall_addon($name)
 					uninstall_block($matches[2]);
 				if (preg_match('#^([^/]*)/index.php#',$filename,$matches)!=0)
 					actual_delete_zone_lite($matches[1]);
-				if (($filename!='mod.inf') && ($filename!='mod.php') && ($filename!='') && (substr($filename,-1)!='/'))
+				if (($filename!='addon.inf') && ($filename!='addon_install_code.php') && ($filename!='') && (substr($filename,-1)!='/'))
 				{
 					$last[]=$filename;
 				}
@@ -748,7 +748,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	if (!file_exists($full)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$tar=tar_open($full,'rb');
 	$directory=tar_get_directory($tar);
-	$info_file=tar_get_file($tar,'mod.inf');
+	$info_file=tar_get_file($tar,'addon.inf');
 	if (is_null($info_file)) warn_exit(do_lang_tempcode('NOT_ADDON'));
 	$info=better_parse_ini_file(NULL,$info_file['data']);
 	$addon=$info['name'];
@@ -764,8 +764,8 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 
 	foreach ($directory as $i=>$entry)
 	{
-		if ($entry['path']=='mod.inf') continue;
-		if ($entry['path']=='mod.php') continue;
+		if ($entry['path']=='addon.inf') continue;
+		if ($entry['path']=='addon_install_code.php') continue;
 		if (substr($entry['path'],-1)=='/') continue;
 
 		$data=(strtolower(substr($entry['path'],-4,4))=='.tpl')?tar_get_file($tar,$entry['path'],true):NULL;

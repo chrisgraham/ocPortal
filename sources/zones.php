@@ -622,7 +622,7 @@ function block_cache_default($codename)
 {
 	if ((cron_installed()) && (running_script('index')))
 	{
-		if ($codename=='side_weather' || $codename=='side_rss' || $codename=='main_rss') // Special cases to stop external dependencies causing slowdowns
+		if ($codename=='side_rss' || $codename=='main_rss') // Special cases to stop external dependencies causing slowdowns
 		{
 			return '2';
 		}

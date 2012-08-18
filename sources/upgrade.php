@@ -348,7 +348,7 @@ function upgrade_script()
 										{
 											if ($d['path']==$upgrade_file['path']) continue;
 											$file_data=tar_get_file($old_mod_file,$d['path']);
-											if ($d['path']=='mod.inf')
+											if ($d['path']=='addon.inf')
 											{
 												$file_data['data']=preg_replace('#^version=.*#m','version=(version-synched)',$file_data['data']);
 											}

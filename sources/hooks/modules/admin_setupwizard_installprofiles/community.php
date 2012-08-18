@@ -101,7 +101,6 @@ class Hook_admin_setupwizard_installprofiles_community
 				'side_users_online',
 				'side_stats',
 				'side_calendar',
-				'side_weather',
 				'side_shoutbox',
 			),
 		);

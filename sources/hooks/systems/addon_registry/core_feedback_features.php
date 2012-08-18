@@ -111,7 +111,6 @@ class Hook_addon_registry_core_feedback_features
 			'sources/feedback2.php',
 			'pages/comcode/EN/feedback.txt',
 			'sources/blocks/main_comments.php',
-			'sources/blocks/main_feedback.php',
 			'sources/blocks/main_trackback.php',
 			'sources/blocks/main_rating.php',
 			'COMMENT_AJAX_HANDLER.tpl',

@@ -24,7 +24,7 @@ class Hook_Notification_workflow_step extends Hook_Notification
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['workflow_step']=array(do_lang('VALIDATION'),do_lang('NOTIFICATION_TYPE_workflow_step'));
+		$list['workflow_step']=array(do_lang('CONTENT_VALIDATION'),do_lang('NOTIFICATION_TYPE_workflow_step'));
 		return $list;
 	}
 

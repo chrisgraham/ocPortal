@@ -21,6 +21,8 @@
  */
 
 /*
+NB: This is for Web Standards validation, not Content validation.
+
 The validation is designed for a special blend between uber-modern-standards and cross-browser stability - to only allow XHTML5 and CSS3 that runs (or gracefully degrades) on IE8.
 
 We favour the W3C standard over the WHATWG living document.

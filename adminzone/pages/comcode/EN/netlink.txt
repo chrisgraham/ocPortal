@@ -5,7 +5,7 @@ This page is used to configure the the list of partner links exported by this we
 The set of links will be used by any {$BRAND_NAME*} site that has been configured (via the "Network membership URL" option) to draw their links from:
 [font="Courier"]{$BASE_URL}/netlink.php[/font].
 
-To add new links, simply place them on a new line, with an equals symbol between the link caption and the link URL. Some default links are provided for illustrative purposes only - you may erase them.
+To add new links, simply place them on a new line, with an equals symbol between the link caption and the link URL. Some default links are provided for illustrative purposes only -- you may erase them.
 
 If you are not using the [tt]side_network[/tt] block and nobody is linking to your [tt]netlink.php[/tt] file, then just ignore these settings.
 

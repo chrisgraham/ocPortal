@@ -47,10 +47,10 @@ These methods include:
 
 [title="2"]An example of a new module[/title]
 
-[exp_thumb="ocPortal templates for the tester mod" float="right"]framework_file_templates[/exp_thumb]
+[exp_thumb="ocPortal templates for the tester addon" float="right"]framework_file_templates[/exp_thumb]
 As a part of testing ocPortal 2.5 (along time ago now), we wrote a new custom module that provided a quick way for all testers and developers to progress for the testing/bug-fixing process in a collaborative fashion. The module allowed the addition of tests, and assigning of those tests to members in a testing usergroup. It had a security system, so that non-testers could not access the system, and so that security could be defined to determine which testers had write access to edit tests. It also had forum integration, so that bug report topics could automatically be created and associated with a test.
 
-[exp_thumb="ocPortal language files for the tester mod" float="right"]framework_file_language[/exp_thumb]
+[exp_thumb="ocPortal language files for the tester addon" float="right"]framework_file_language[/exp_thumb]
 All this was done, without touching the core ocPortal code. The ocPortal API made all the integration (security, members, usergroups, forum topics, etc) very easy. It is not the intent of this tutorial to explain exactly how this module was written, but some screen-shots have been attached to illustrate where new files were created in order for it to work.
 
 The process of writing the module went along this basic route:
@@ -64,7 +64,7 @@ The process of writing the module went along this basic route:
 8) The screens for the main interface were written
 9) The module was tested, and then deployed
 
-[exp_thumb="ocPortal module for the tester mod" float="right"]framework_file_module[/exp_thumb]
+[exp_thumb="ocPortal module for the tester addon" float="right"]framework_file_module[/exp_thumb]
 The new module, approximately 1,000 lines of code (PHP and XHTML) was completed within one long day, and in active use soon after. It is a moderately advanced module, and was of great help to our organisation. Naturally, it would take a lot longer for an inexperienced ocPortal programmer to create this module, but the point is that it was made a lot faster due to our API and extension infrastructure: without these, a custom application from scratch might have taken a full week to develop. The alternative to a custom module would have been a third party application, but this would not have provided us with the level of integration we demand for our systems (not to mention compatibility with things as they are currently, and how they might change in the future). It is worth mentioning at this point that [page="site:support"]ocProducts staff[/page] are available for implementing systems built around on ocPortal.
 
 Some of the API functions used in the module include:

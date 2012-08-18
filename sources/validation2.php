@@ -20,6 +20,10 @@
 
 /*EXTRA FUNCTIONS: pspell\_.+*/
 
+/*
+NB: This is for Web Standards validation, not Content validation.
+*/
+
 /**
  * Standard code module initialisation function.
  */

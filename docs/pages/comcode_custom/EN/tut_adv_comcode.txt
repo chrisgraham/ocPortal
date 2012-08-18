@@ -44,11 +44,6 @@ The '-' means that a section is not expanded by default, whilst the '+' means th
 
 Menu entries are typed so that their indentation is equal to the indentation of the start of the section's title. i.e. one further depth of indentation from the section's '+' or '-'.
 
-[title="2"]Bulk media upload[/title]
-
-[exp_thumb="The Bulk-Upload assistant" float="right"]adv_comcode_bulk[/exp_thumb]
-{!bulkupload:DOC_BULK_UPLOAD}
-
 [title="2"]Custom Comcode[/title]
 
 [exp_thumb="Adding a custom Comcode tag" float="right"]adv_comcode_custom[/exp_thumb]
@@ -97,14 +92,14 @@ The following is an example of Comcode-XML:
 [code="XML"]
 <comcode>
    Please leave us some product feedback.<br /><br />
-   <block>main_feedback<blockParam key="param" value="product_feedback" /></block>
+   <block>main_contact_us<blockParam key="param" value="product_feedback" /></block>
 </comcode>
 [/code]
 in Comcode-Text, it would have looked as follows:
 [code="Comcode"]
 Please leave us some product feedback.
 
-[block="product_feedback"]main_feedback[/block]
+[block="product_feedback"]main_contact_us[/block]
 [/code]
 
 ocPortal contains a simple URL-based web service that can convert Comcode-Text into Comcode-XML, in preparation for integration.

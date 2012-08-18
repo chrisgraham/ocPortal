@@ -14,7 +14,7 @@ Comcode is written and laid out as plain-text. Within this plain text certain sy
 [list]
 [*] emoticon codes may be used (for OCF, these are listed in the 'The ocPortal emoticon system' tutorial)
 [*] Comcode tags may be used to change content, such as [tt][b]text[/b][/tt] to make some text bold
-[*] Comcode tags may be used to add content, such as  [tt][block]main_feedback[/block][/tt] to add a dynamic comments box
+[*] Comcode tags may be used to add content, such as  [tt][block]main_contact_us[/block][/tt] to add a dynamic comments box
 [*] horizontal lines may be added by placing a few '-'s on their own line
 [*] HTML style entities can be use to place special characters inside the text
 [*] member profile links can be placed by typing [tt]{{username-goes-here}}[/tt], or [tt]{{?username-goes-here}}[/tt] to show extra details when the mouse is hovered over ([concept]OCF[/concept] only)

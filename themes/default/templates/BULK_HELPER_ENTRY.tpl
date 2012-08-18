@@ -1,2 +1,0 @@
-[thumb]{FILEFULL@}[/thumb]
-
