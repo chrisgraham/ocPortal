@@ -211,7 +211,7 @@ function get_table_descriptions()
 		'notifications_enabled'=>'what notifications members receive',
 		'rating'=>'stores ratings for all kinds of content (rating_for_type determines what kind of content, rating_for_id determines what ID of content within that type)',
 		'review_supplement'=>'stores reviews for all kinds of content',
-		'security_images'=>'stores CAPTCHA image expectations, so ocPortal can check what they entered against what they were asked to enter',
+		'captchas'=>'stores CAPTCHA image expectations, so ocPortal can check what they entered against what they were asked to enter',
 		'seo_meta'=>'stores meta keywords and descriptions for all kinds of content',
 		'sessions'=>'stores user sessions, for guests and members (session ID\'s are treated with high security)',
 		'sms_log'=>'logs what SMS messages were sent out on behalf of what users and when',

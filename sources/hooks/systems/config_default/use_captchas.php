@@ -18,7 +18,7 @@
  * @package		core_configuration
  */
 
-class Hook_config_default_use_security_images
+class Hook_config_default_use_captchas
 {
 
 	/**
@@ -29,11 +29,11 @@ class Hook_config_default_use_security_images
 	function get_details()
 	{
 		return array(
-			'human_name'=>'USE_SECURITY_IMAGES',
+			'human_name'=>'USE_CAPTCHAS',
 			'the_type'=>'tick',
 			'the_page'=>'SECURITY',
-			'section'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_use_security_images',
+			'section'=>'CAPTCHA',
+			'explanation'=>'CONFIG_OPTION_use_captchas',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',
 

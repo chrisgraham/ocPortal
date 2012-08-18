@@ -145,7 +145,7 @@ class Hook_vb3
 			'maxthreads'=>'forum_topics_per_page',
 			//'reputationenable'=>'is_on_points',
 			'gzipoutput'=>'gzip_output',
-			'regimagecheck'=>'use_security_images',
+			'regimagecheck'=>'use_captchas',
 			'moderatenewmembers'=>'require_new_member_validation'
 		);
 

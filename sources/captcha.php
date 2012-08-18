@@ -31,11 +31,11 @@ function init__captcha()
  */
 function captcha_script()
 {
-	$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('security_images','si_code',array('si_session_id'=>get_session_id()));
+	$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
 	if (is_null($_code_needed))
 	{
 		generate_captcha();
-		$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('security_images','si_code',array('si_session_id'=>get_session_id()));
+		$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
 
 		/*$GLOBALS['HTTP_STATUS_CODE']='500';		This would actually be very slightly insecure, as it could be used to probe (binary) login state via rogue sites that check if CAPTCHAs had been generated
 		if (!headers_sent())
@@ -223,7 +223,7 @@ function form_input_captcha()
 
 	// Show template
 	$input=do_template('FORM_SCREEN_INPUT_CAPTCHA',array('_GUID'=>'f7452af9b83db36685ae8a86f9762d30','TABINDEX'=>strval($tabindex)));
-	return _form_input('captcha',do_lang_tempcode('CAPTCHA'),do_lang_tempcode('DESCRIPTION_CAPTCHA'),$input,true,false);
+	return _form_input('captcha',do_lang_tempcode('SECURITY_IMAGE'),do_lang_tempcode('DESCRIPTION_CAPTCHA'),$input,true,false);
 }
 
 /**
@@ -233,7 +233,7 @@ function form_input_captcha()
  */
 function use_captcha()
 {
-	$answer=((is_guest()) && (intval(get_option('is_on_gd'))==1) && (intval(get_option('use_security_images'))==1) && (function_exists('imagetypes')));
+	$answer=((is_guest()) && (intval(get_option('is_on_gd'))==1) && (intval(get_option('use_captchas'))==1) && (function_exists('imagetypes')));
 	return $answer;
 }
 
@@ -245,11 +245,11 @@ function generate_captcha()
 	$session=get_session_id();
 
 	// Clear out old codes
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'security_images WHERE si_time<'.strval((integer)time()-60*30).' OR si_session_id='.strval((integer)$session));
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'captchas WHERE si_time<'.strval((integer)time()-60*30).' OR si_session_id='.strval((integer)$session));
 	// HACKHACK Run a test to see if large numbers are supported
 	$insert_map=array('si_time'=>time(),'si_session_id'=>$session);
-	$GLOBALS['SITE_DB']->query_insert('security_images',$insert_map+array('si_code'=>333333333333),false,true);
-	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('security_images','si_code',$insert_map);
+	$GLOBALS['SITE_DB']->query_insert('captchas',$insert_map+array('si_code'=>333333333333),false,true);
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',$insert_map);
 
 	// Create code
 	$numbers_only=($test!==333333333333);
@@ -269,7 +269,7 @@ function generate_captcha()
 	}
 
 	// Clear out old codes
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'security_images WHERE si_time<'.strval((integer)time()-60*30).' OR si_session_id='.strval((integer)$session));
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'captchas WHERE si_time<'.strval((integer)time()-60*30).' OR si_session_id='.strval((integer)$session));
 
 	// Store code
 	$si_code=mixed();
@@ -280,7 +280,7 @@ function generate_captcha()
 	{
 		$si_code=floatval($code);
 	}
-	$GLOBALS['SITE_DB']->query_insert('security_images',$insert_map+array('si_code'=>$si_code),false,true);
+	$GLOBALS['SITE_DB']->query_insert('captchas',$insert_map+array('si_code'=>$si_code),false,true);
 
 	require_javascript('javascript_ajax');
 }
@@ -320,10 +320,10 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 {
 	if (use_captcha())
 	{
-		$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('security_images','si_code',array('si_session_id'=>get_session_id()));
+		$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
 		if (get_value('captcha_single_guess')==='1')
 		{
-			$GLOBALS['SITE_DB']->query_delete('security_images',array('si_session_id'=>get_session_id())); // Only allowed to check once
+			$GLOBALS['SITE_DB']->query_delete('captchas',array('si_session_id'=>get_session_id())); // Only allowed to check once
 		}
 		if (is_null($_code_needed))
 		{

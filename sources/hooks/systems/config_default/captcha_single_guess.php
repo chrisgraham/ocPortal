@@ -32,7 +32,7 @@ class Hook_config_default_captcha_single_guess
 			'human_name'=>'CAPTCHA_SINGLE_GUESS',
 			'the_type'=>'tick',
 			'the_page'=>'SECURITY',
-			'section'=>'SECURITY_IMAGE',
+			'section'=>'CAPTCHA',
 			'explanation'=>'CONFIG_OPTION_captcha_single_guess',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

@@ -174,7 +174,7 @@ class Hook_addon_registry_core_configuration
 			'sources/hooks/systems/config_default/unzip_cmd.php',
 			'sources/hooks/systems/config_default/unzip_dir.php',
 			'sources/hooks/systems/config_default/use_contextual_dates.php',
-			'sources/hooks/systems/config_default/use_security_images.php',
+			'sources/hooks/systems/config_default/use_captchas.php',
 			'sources/hooks/systems/config_default/user_postsize_errors.php',
 			'sources/hooks/systems/config_default/users_online_time.php',
 			'sources/hooks/systems/config_default/valid_images.php',

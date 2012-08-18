@@ -53,7 +53,7 @@ class Module_admin_config
 										'is_on_comments','comments_forum_name','comment_text','thumb_width','max_image_size','mod_rewrite','is_on_trackbacks',
 										'session_expiry_time','unzip_dir','unzip_cmd','detect_lang_forum','detect_lang_browser','enable_https',
 										'smtp_sockets_use','smtp_sockets_host','smtp_sockets_port','smtp_sockets_username','smtp_sockets_password',
-										'smtp_from_address','use_security_images','send_error_emails','send_error_emails_ocproducts','width_left','width_right',
+										'smtp_from_address','use_captchas','send_error_emails','send_error_emails_ocproducts','width_left','width_right',
 										'validation_xhtml','validation_wcag','validation_css','validation_javascript','validation_ext_files','validation_compat',
 										'is_on_strong_forum_tie','is_on_preview_validation','show_inline_stats',
 										'sms_username','sms_password','sms_api_id','sms_low_limit','sms_high_limit','sms_low_trigger_limit','sms_high_trigger_limit','max_download_size',
@@ -130,8 +130,8 @@ class Module_admin_config
 			add_config_option('JS_OVERLAYS','js_overlays','tick','return \'1\';','ACCESSIBILITY','GENERAL');
 			add_config_option('TREE_LISTS','tree_lists','tick','return \'1\';','ACCESSIBILITY','GENERAL');
 
-			add_config_option('CSS_CAPTCHA','css_captcha','tick','return \'1\';','SECURITY','SECURITY_IMAGE');
-			add_config_option('CAPTCHA_SINGLE_GUESS','captcha_single_guess','tick','return \'1\';','SECURITY','SECURITY_IMAGE');
+			add_config_option('CSS_CAPTCHA','css_captcha','tick','return \'1\';','SECURITY','CAPTCHA');
+			add_config_option('CAPTCHA_SINGLE_GUESS','captcha_single_guess','tick','return \'1\';','SECURITY','CAPTCHA');
 
 			add_config_option('ENABLE_AUTOBAN','autoban','tick','return \'1\';','SECURITY','GENERAL');
 
@@ -183,7 +183,7 @@ class Module_admin_config
 			add_config_option('PASSWORD','smtp_sockets_password','line','return \'\';','SITE','SMTP',1);
 			add_config_option('EMAIL_ADDRESS','smtp_from_address','line','return \'\';','SITE','SMTP',1);
 
-			add_config_option('USE_SECURITY_IMAGES','use_security_images','tick','return \'1\';','SECURITY','GENERAL');
+			add_config_option('USE_CAPTCHAS','use_captchas','tick','return \'1\';','SECURITY','GENERAL');
 			add_config_option('HTTPS_SUPPORT','enable_https','tick','return \'0\';','SECURITY','GENERAL',1);
 
 			add_config_option('DETECT_LANG_FORUM','detect_lang_forum','tick','return \'1\';','SITE','ADVANCED');

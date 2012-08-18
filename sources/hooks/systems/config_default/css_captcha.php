@@ -32,7 +32,7 @@ class Hook_config_default_css_captcha
 			'human_name'=>'CSS_CAPTCHA',
 			'the_type'=>'tick',
 			'the_page'=>'SECURITY',
-			'section'=>'SECURITY_IMAGE',
+			'section'=>'CAPTCHA',
 			'explanation'=>'CONFIG_OPTION_css_captcha',
 			'shared_hosting_restricted'=>'0',
 			'c_data'=>'',

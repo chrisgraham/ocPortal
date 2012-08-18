@@ -36,7 +36,7 @@ class Module_admin_version
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=16;
+		$info['version']=17;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -50,7 +50,7 @@ class Module_admin_version
 		$GLOBALS['SITE_DB']->drop_table_if_exists('url_id_monikers');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('cache');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('cache_on');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('security_images');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('captchas');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('rating');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('member_tracking');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('trackbacks');
@@ -297,6 +297,14 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->delete_table_field('cron_caching_requests','c_in_panel');
 		}
 
+		if ((!is_null($upgrade_from)) && ($upgrade_from<17))
+		{
+			$GLOBALS['SITE_DB']->rename_table('security_images','captchas');
+			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA','the_name'=>'USE_CAPTCHAS','the_name'=>'use_captchas'),array('the_name'=>'use_security_images'),'',1);
+			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'captcha_single_guess'),'',1);
+			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'css_captcha'),'',1);
+		}
+
 		if (is_null($upgrade_from)) // These are only for fresh installs
 		{
 			add_privilege('_COMCODE','reuse_others_attachments',true);
@@ -332,12 +340,12 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_for_id',array('trackback_for_id'));
 			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_time',array('trackback_time'));
 
-			$GLOBALS['SITE_DB']->create_table('security_images',array(
+			$GLOBALS['SITE_DB']->create_table('captchas',array(
 				'si_session_id'=>'*INTEGER',
 				'si_time'=>'TIME',
 				'si_code'=>'INTEGER'
 			));
-			$GLOBALS['SITE_DB']->create_index('security_images','si_time',array('si_time'));
+			$GLOBALS['SITE_DB']->create_index('captchas','si_time',array('si_time'));
 
 			$GLOBALS['SITE_DB']->create_table('member_tracking',array(
 				'mt_member_id'=>'*USER',

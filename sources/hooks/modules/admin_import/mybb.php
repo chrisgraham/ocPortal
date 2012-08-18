@@ -175,7 +175,7 @@ class Hook_mybb
 
 			if (isset($row['name'])&&$row['name']=='captchaimage')
 			{
-				$config_remapping['use_security_images']=$row['value'];
+				$config_remapping['use_captchas']=$row['value'];
 				continue;
 			}
 
