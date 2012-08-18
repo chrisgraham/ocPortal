@@ -56,7 +56,7 @@ class Hook_aef
 								'ocf_members',
 								'ocf_member_files',
 								'ip_bans',
-								'ocf_categories',
+								'ocf_forum_groupings',
 								'ocf_forums',
 								'ocf_topics',
 								'ocf_posts',
@@ -72,7 +72,7 @@ class Hook_aef
 		$info['dependencies']=array( // This dependency tree is overdefined, but I wanted to make it clear what depends on what, rather than having a simplified version
 								'ocf_members'=>array('ocf_groups'),
 								'ocf_member_files'=>array('ocf_members'),
-								'ocf_forums'=>array('ocf_categories','ocf_members','ocf_groups'),
+								'ocf_forums'=>array('ocf_forum_groupings','ocf_members','ocf_groups'),
 								'ocf_topics'=>array('ocf_forums','ocf_members'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('ocf_topics','ocf_members'),
@@ -489,7 +489,7 @@ class Hook_aef
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_categories($db,$table_prefix,$old_base_dir)
+	function import_ocf_forum_groupings($db,$table_prefix,$old_base_dir)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'categories');
 		foreach ($rows as $row)
@@ -499,7 +499,7 @@ class Hook_aef
 			$title=$row['name'];
 			$title=@html_entity_decode($title,ENT_QUOTES,get_charset());
 
-			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
 				import_id_remap_put('category',strval($row['cid']),$test);

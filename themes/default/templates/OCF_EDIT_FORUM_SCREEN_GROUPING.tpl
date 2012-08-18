@@ -1,4 +1,4 @@
-<div class="ocf_edit_forum_category">
+<div class="ocf_edit_forum_grouping">
 	<div class="float_surrounder">
 		<div class="ocf_edit_forum_type">
 			{!FORUM_GROUPING}

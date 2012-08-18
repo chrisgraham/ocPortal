@@ -16,7 +16,7 @@
 /**
  * ocPortal test case class (unit testing).
  */
-class forum_category_test_set extends ocp_test_case
+class forum_grouping_test_set extends ocp_test_case
 {
 	var $forum_cat_id;
 	var $access_mapping;
@@ -32,7 +32,7 @@ class forum_category_test_set extends ocp_test_case
 		$this->forum_cat_id=ocf_make_category('Test_cat','nothing',1);
 
 		// Test the forum was actually created
-		$this->assertTrue('Test_cat'==$GLOBALS['FORUM_DB']->query_select_value('f_categories','c_title',array('id'=>$this->forum_cat_id)));
+		$this->assertTrue('Test_cat'==$GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','c_title',array('id'=>$this->forum_cat_id)));
 	}
 
 	function testEditForum_category()
@@ -41,7 +41,7 @@ class forum_category_test_set extends ocp_test_case
 		ocf_edit_category($this->forum_cat_id,'New_title','somthing',1);
 
 		// Test the forum was actually created
-		$this->assertTrue('New_title'==$GLOBALS['FORUM_DB']->query_select_value('f_categories','c_title',array('id'=>$this->forum_cat_id)));
+		$this->assertTrue('New_title'==$GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','c_title',array('id'=>$this->forum_cat_id)));
 	}
 
 	function tearDown()

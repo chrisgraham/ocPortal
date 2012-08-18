@@ -770,10 +770,10 @@ class Module_admin_config
 						$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
 					}
 					break;
-				case 'category':
+				case 'forum_grouping':
 					if (get_forum_type()=='ocf')
 					{
-						$tmp_value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>get_option($myrow['the_name'])));
+						$tmp_value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','id',array('c_title'=>get_option($myrow['the_name'])));
 
 						require_code('ocf_forums2');
 						$_list=ocf_nice_get_categories(NULL,$tmp_value);
@@ -917,11 +917,11 @@ class Module_admin_config
 					$value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_name',array('id'=>post_param_integer($myrow['the_name'])));
 				if (is_null($value)) $value='';
 			}
-			elseif (($myrow['the_type']=='category') && (get_forum_type()=='ocf'))
+			elseif (($myrow['the_type']=='forum_grouping') && (get_forum_type()=='ocf'))
 			{
 				$value=post_param($myrow['the_name']);
 				if (is_numeric($value))
-					$value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','c_title',array('id'=>post_param_integer($myrow['the_name'])));
+					$value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','c_title',array('id'=>post_param_integer($myrow['the_name'])));
 				if (is_null($value)) $value='';
 			}
 			elseif (($myrow['the_type']=='usergroup') && (get_forum_type()=='ocf'))

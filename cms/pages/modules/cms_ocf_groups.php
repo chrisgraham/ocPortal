@@ -248,8 +248,8 @@ class Module_cms_ocf_groups extends standard_crud_module
 			$cat=intval($_cat);
 		} else
 		{
-			$cat=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$_cat));
-			if (is_null($cat)) $cat=$GLOBALS['FORUM_DB']->query_select_value('f_categories','MIN(id)');
+			$cat=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','id',array('c_title'=>$_cat));
+			if (is_null($cat)) $cat=$GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','MIN(id)');
 		}
 		$_forum=get_option('club_forum_parent_forum');
 		if (is_numeric($_forum))
@@ -334,7 +334,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 
 		ocf_edit_group($group_id,$name,NULL,NULL,NULL,NULL,NULL,NULL,NULL,$group_leader,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,post_param_integer('open_membership',0),1);
 
-		$forum_where=array('f_name'=>$old_name,'f_category_id'=>intval(get_option('club_forum_parent_category')),'f_parent_forum'=>intval(get_option('club_forum_parent_forum')));
+		$forum_where=array('f_name'=>$old_name,'f_forum_grouping_id'=>intval(get_option('club_forum_parent_category')),'f_parent_forum'=>intval(get_option('club_forum_parent_forum')));
 		$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',$forum_where);
 		if (!is_null($forum_id))
 		{

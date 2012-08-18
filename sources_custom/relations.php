@@ -281,7 +281,7 @@ function get_relation_map()
 		'sales.purcase_type'=>'prices.name',
 		'sessions.zone_name'=>'zones.zone_name',
 		'f_member_cpf_perms.field_id'=>'f_custom_fields.id',
-		'f_forums.f_category_id'=>'f_categories.id',
+		'f_forums.f_forum_grouping_id'=>'f_forum_groupings.id',
 		'f_forums.f_parent_forum'=>'f_forums.id',
 		'f_forums.f_cache_last_topic_id'=>'f_topics.id',
 		'f_forums.f_cache_last_forum_id'=>'f_forums.id',

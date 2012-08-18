@@ -652,7 +652,7 @@ class Hook_phpbb3
 				list($cat_id,$parent_id)=$this->_find_parent_forum_and_category($rows,$row['parent_id']);
 				$parent_forum=is_null($parent_id)?db_get_first_id():import_id_remap_get('forum',strval($parent_id));
 				$cat=is_null($cat_id)?db_get_first_id():import_id_remap_get('forum',strval($cat_id));
-				$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_category_id'=>$cat,'f_parent_forum'=>$parent_forum),array('id'=>$remapped),'',1);
+				$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_forum_grouping_id'=>$cat,'f_parent_forum'=>$parent_forum),array('id'=>$remapped),'',1);
 			}
 		}
 	}

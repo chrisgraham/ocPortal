@@ -15,9 +15,9 @@
 		{+END}
 	</div>
 </div>
-{+START,IF_NON_EMPTY,{CATEGORIES}}
+{+START,IF_NON_EMPTY,{FORUM_GROUPINGS}}
 	<div class="ocf_edit_forum_under">
-		{CATEGORIES}
+		{FORUM_GROUPINGS}
 	</div>
 {+END}
 

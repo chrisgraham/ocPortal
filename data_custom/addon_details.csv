@@ -250,6 +250,7 @@ So, you are probably thinking: what does [tt]_SEARCH:reportcontent:content_type=
 simplified_emails,Graphical,Chris Graham,Licensed on the same terms as ocPortal,"Simplifies mail templates, so no logo is shown. If you don't want to have to style your emails at all, use this addon.",,,,
 static_export,Development,Chris Graham,Licensed on the same terms as ocPortal,"This admin module exports a static copy of your website, as it would be seen by Guests. It is useful if you do not need any dynamic features and want to deploy on a server without a database. You'll find it linked from your tools menu.",,,,
 stress_test,Development,Chris Graham,Licensed on the same terms as ocPortal,"Non-maintained script to populate large amounts of data, for the purposes of stress-testing performance on large data-sets. Takes days to run properly.",,,,
+tester,Development,Chris Graham,Licensed on the same terms as ocPortal,Used for maintaining test sets and organising marking things tested.,,,,
 theme_debug,Development,Chris Graham,Licensed on the same terms as ocPortal,Can run a number of fixes to themes to get them up to spec.,,,,
 transcoder,Development,Chris Graham,Licensed on the same terms as ocPortal,Simple ocProducts transcoding server. Needs a programmer to install and configure it.,,,,
 twitter_support,Third Party Integration,Chris Graham,Licensed on the same terms as ocPortal,"This addon sits on top of the activity feed addon to syndicate out logged activities to the user's associated twitter account (if they have one).

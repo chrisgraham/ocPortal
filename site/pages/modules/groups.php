@@ -479,7 +479,7 @@ class Module_groups
 		$forum_id=NULL;
 		if ($club)
 		{
-			$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array('f_name'=>$group_name,'f_category_id'=>intval(get_option('club_forum_parent_category')),'f_parent_forum'=>intval(get_option('club_forum_parent_forum'))));
+			$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array('f_name'=>$group_name,'f_forum_grouping_id'=>intval(get_option('club_forum_parent_category')),'f_parent_forum'=>intval(get_option('club_forum_parent_forum'))));
 		}
 
 		return do_template('OCF_VIEW_GROUP_SCREEN',array('_GUID'=>'fc6cac5c73f92ab4410b492d58976dbe','GROUP_NAME'=>$group_name,'ID'=>strval($id),'FORUM'=>is_null($forum_id)?'':strval($forum_id),'CLUB'=>$club,'EDIT_URL'=>$edit_url,'TITLE'=>$title,'LEADER'=>$leader,'PROMOTION_INFO'=>$promotion_info,'ADD_URL'=>$add_url,'APPLY_URL'=>$apply_url,'APPLY_TEXT'=>$apply_text,'PRIMARY_MEMBERS'=>$primary_members,'SECONDARY_MEMBERS'=>$secondary_members,'PROSPECTIVE_MEMBERS'=>$prospective_members));

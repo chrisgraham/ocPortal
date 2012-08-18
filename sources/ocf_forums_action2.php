@@ -19,46 +19,46 @@
  */
 
 /**
- * Edit a forum category.
+ * Edit a forum grouping.
  *
- * @param  AUTO_LINK		The ID of the forum category we are editing.
- * @param  SHORT_TEXT	The title of the forum category.
- * @param  SHORT_TEXT	The description of the forum category.
- * @param  BINARY			Whether the forum category will be shown expanded by default (as opposed to contracted, where contained forums will not be shown until expansion).
+ * @param  AUTO_LINK		The ID of the forum grouping we are editing.
+ * @param  SHORT_TEXT	The title of the forum grouping.
+ * @param  SHORT_TEXT	The description of the forum grouping.
+ * @param  BINARY			Whether the forum grouping will be shown expanded by default (as opposed to contracted, where contained forums will not be shown until expansion).
  */
-function ocf_edit_category($category_id,$title,$description,$expanded_by_default)
+function ocf_edit_forum_grouping($forum_grouping_id,$title,$description,$expanded_by_default)
 {
-	$old_title=$GLOBALS['FORUM_DB']->query_select_value('f_categories','c_title',array('id'=>$category_id));
+	$old_title=$GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','c_title',array('id'=>$forum_grouping_id));
 
-	$GLOBALS['FORUM_DB']->query_update('f_categories',array(
+	$GLOBALS['FORUM_DB']->query_update('f_forum_groupings',array(
 		'c_title'=>$title,
 		'c_description'=>$description,
 		'c_expanded_by_default'=>$expanded_by_default
-	),array('id'=>$category_id),'',1);
+	),array('id'=>$forum_grouping_id),'',1);
 
 	if ($old_title!=$title)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','c_title',array('c_title'=>$old_title));
+		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','c_title',array('c_title'=>$old_title));
 		if (is_null($test)) // Ok, so we know there was only 1 forum named that and now it is gone
-			$GLOBALS['FORUM_DB']->query_update('config',array('config_value'=>$title),array('the_type'=>'category','config_value'=>$old_title));
+			$GLOBALS['FORUM_DB']->query_update('config',array('config_value'=>$title),array('the_type'=>'forum_grouping','config_value'=>$old_title));
 	}
 
-	log_it('EDIT_FORUM_CATEGORY',strval($category_id),$title);
+	log_it('EDIT_FORUM_GROUPING',strval($forum_grouping_id),$title);
 }
 
 /**
- * Delete a forum category.
+ * Delete a forum grouping.
  *
- * @param  AUTO_LINK  The ID of the forum category we are editing.
- * @param  AUTO_LINK  The ID of the category that we will move all the contained forum to.
+ * @param  AUTO_LINK  The ID of the forum grouping we are editing.
+ * @param  AUTO_LINK  The ID of the forum grouping that we will move all the contained forum to.
  */
-function ocf_delete_category($category_id,$target_category_id)
+function ocf_delete_forum_grouping($forum_grouping_id,$target_forum_grouping_id)
 {
-	$title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','c_title',array('id'=>$category_id));
+	$title=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','c_title',array('id'=>$forum_grouping_id));
 	if (is_null($title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_category_id'=>$target_category_id),array('f_category_id'=>$category_id));
-	$GLOBALS['FORUM_DB']->query_delete('f_categories',array('id'=>$category_id),'',1);
-	log_it('DELETE_FORUM_CATEGORY',strval($category_id),$title);
+	$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_forum_grouping_id'=>$target_forum_grouping_id),array('f_forum_grouping_id'=>$forum_grouping_id));
+	$GLOBALS['FORUM_DB']->query_delete('f_forum_groupings',array('id'=>$forum_grouping_id),'',1);
+	log_it('DELETE_FORUM_GROUPING',strval($forum_grouping_id),$title);
 }
 
 /**
@@ -67,7 +67,7 @@ function ocf_delete_category($category_id,$target_category_id)
  * @param  AUTO_LINK		The ID of the forum we are editing.
  * @param  SHORT_TEXT	The name of the forum.
  * @param  SHORT_TEXT	The description for the forum.
- * @param  AUTO_LINK		What forum category the forum will be filed with.
+ * @param  AUTO_LINK		What forum grouping the forum will be filed with.
  * @param  ?AUTO_LINK	The ID of the parent forum (NULL: this is the root forum).
  * @param  integer		The position of this forum relative to other forums viewable on the same screen (if parent forum hasn't specified automatic ordering).
  * @param  BINARY			Whether post counts will be incremented if members post in the forum.
@@ -79,15 +79,15 @@ function ocf_delete_category($category_id,$target_category_id)
  * @param  BINARY			Whether the forum is threaded.
  * @param  boolean		Whether to force forum rules to be re-agreed to, if they've just been changed.
  */
-function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection='',$order='last_post',$is_threaded=0,$reset_intro_acceptance=false)
+function ocf_edit_forum($forum_id,$name,$description,$forum_grouping_id,$new_parent,$position,$post_count_increment,$order_sub_alpha,$intro_question,$intro_answer,$redirection='',$order='last_post',$is_threaded=0,$reset_intro_acceptance=false)
 {
-	if ($category_id==-1) $category_id=NULL;
+	if ($forum_grouping_id==-1) $forum_grouping_id=NULL;
 	if ($new_parent==-1) $new_parent=NULL;
 
 	require_code('urls2');
 	suggest_new_idmoniker_for('forumview','misc',strval($forum_id),$name);
 
-	if ((!is_null($category_id)) && ($category_id!=INTEGER_MAGIC_NULL)) ocf_ensure_category_exists($category_id);
+	if ((!is_null($forum_grouping_id)) && ($forum_grouping_id!=INTEGER_MAGIC_NULL)) ocf_ensure_forum_grouping_exists($forum_grouping_id);
 	if ((!is_null($new_parent)) && ($new_parent!=INTEGER_MAGIC_NULL)) ocf_ensure_forum_exists($new_parent);
 
 	$forum_info=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),array('id'=>$forum_id),'',1);
@@ -95,11 +95,11 @@ function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$p
 	$old_parent=$forum_info[0]['f_parent_forum'];
 	$old_name=$forum_info[0]['f_name'];
 
-	$under_category_id=$new_parent;
-	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))
+	$under_forum_grouping_id=$new_parent;
+	while ((!is_null($under_forum_grouping_id)) && ($under_forum_grouping_id!=INTEGER_MAGIC_NULL))
 	{
-		if ($forum_id==$under_category_id) warn_exit(do_lang_tempcode('FORUM_CANNOT_BE_OWN_PARENT'));
-		$under_category_id=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_parent_forum',array('id'=>$under_category_id));
+		if ($forum_id==$under_forum_grouping_id) warn_exit(do_lang_tempcode('FORUM_CANNOT_BE_OWN_PARENT'));
+		$under_forum_grouping_id=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_parent_forum',array('id'=>$under_forum_grouping_id));
 	}
 
 	if (($reset_intro_acceptance) && (trim(get_translated_text($forum_info[0]['f_intro_question'],$GLOBALS['FORUM_DB']))!=trim($intro_question)) && ($intro_question!=STRING_MAGIC_NULL))
@@ -111,7 +111,7 @@ function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$p
 	$GLOBALS['FORUM_DB']->query_update('f_forums',array(
 		'f_name'=>$name,
 		'f_description'=>lang_remap($forum_info[0]['f_description'],$description,$GLOBALS['FORUM_DB']),
-		'f_category_id'=>$category_id,
+		'f_forum_grouping_id'=>$forum_grouping_id,
 		'f_parent_forum'=>$new_parent,
 		'f_position'=>$position,
 		'f_order_sub_alpha'=>$order_sub_alpha,
@@ -237,16 +237,16 @@ function ocf_ping_forum_unread_all($forum_id)
 }
 
 /**
- * Bomb out if the specified forum category doesn't exist.
+ * Bomb out if the specified forum grouping doesn't exist.
  *
- * @param  AUTO_LINK		The ID of the category.
+ * @param  AUTO_LINK		The ID of the forum grouping.
  */
-function ocf_ensure_category_exists($category_id)
+function ocf_ensure_forum_grouping_exists($forum_grouping_id)
 {
-	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('id'=>$category_id));
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','id',array('id'=>$forum_grouping_id));
 	if (is_null($test))
 	{
-		warn_exit(do_lang_tempcode('CAT_NOT_FOUND',strval($category_id)));
+		warn_exit(do_lang_tempcode('CAT_NOT_FOUND',strval($forum_grouping_id)));
 	}
 }
 

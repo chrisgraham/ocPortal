@@ -89,17 +89,17 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 
 	$may_mass_moderate=(array_key_exists('may_move_topics',$details)) || (array_key_exists('may_delete_topics',$details));
 
-	// Find categories
-	$categories=new ocp_tempcode();
+	// Find forum groupings
+	$forum_groupings=new ocp_tempcode();
 	if ($type!='pt')
 	{
-		foreach ($details['categories'] as $best=>$category)
+		foreach ($details['forum_groupings'] as $best=>$forum_grouping)
 		{
-			if (array_key_exists('subforums',$category)) // We only show if there is something in it
+			if (array_key_exists('subforums',$forum_grouping)) // We only show if there is something in it
 			{
 				// Subforums
 				$forums=new ocp_tempcode();
-				foreach ($category['subforums'] as $subforum)
+				foreach ($forum_grouping['subforums'] as $subforum)
 				{
 					if ((array_key_exists('last_topic_id',$subforum)) && (!is_null($subforum['last_topic_id'])))
 					{
@@ -223,7 +223,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 				}
 
 				// Category itself
-				if ((!array_key_exists('expanded_by_default',$category)) || ($category['expanded_by_default']==1))
+				if ((!array_key_exists('expanded_by_default',$forum_grouping)) || ($forum_grouping['expanded_by_default']==1))
 				{
 					$display='table';
 					$expand_type='contract';
@@ -232,8 +232,8 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 					$display='none';
 					$expand_type='expand';
 				}
-				$category_description=$category['description'];
-				$categories->attach(do_template('OCF_FORUM_GROUPING',array('_GUID'=>'fc9bae42c680ea0162287e2ed3917bbe','GROUPING_ID'=>strval($best),'EXPAND_TYPE'=>$expand_type,'DISPLAY'=>$display,'GROUPING_TITLE'=>$category['title'],'GROUPING_DESCRIPTION'=>$category_description,'FORUMS'=>$forums)));
+				$forum_grouping_description=$forum_grouping['description'];
+				$forum_groupings->attach(do_template('OCF_FORUM_GROUPING',array('_GUID'=>'fc9bae42c680ea0162287e2ed3917bbe','GROUPING_ID'=>strval($best),'EXPAND_TYPE'=>$expand_type,'DISPLAY'=>$display,'GROUPING_TITLE'=>$forum_grouping['title'],'GROUPING_DESCRIPTION'=>$forum_grouping_description,'FORUMS'=>$forums)));
 			}
 		}
 	}
@@ -386,7 +386,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 		}
 	}
 
-	$map=array('_GUID'=>'1c14afd9265b1bf69375169dd6faf83c','STARTER_TITLE'=>$starter_title,'ID'=>is_null($id)?NULL:strval($id),'DESCRIPTION'=>array_key_exists('description',$details)?$details['description']:'','FILTERS'=>$filters,'BUTTONS'=>$buttons,'TOPIC_WRAPPER'=>$topic_wrapper,'BREADCRUMBS'=>$breadcrumbs,'CATEGORIES'=>$categories);
+	$map=array('_GUID'=>'1c14afd9265b1bf69375169dd6faf83c','STARTER_TITLE'=>$starter_title,'ID'=>is_null($id)?NULL:strval($id),'DESCRIPTION'=>array_key_exists('description',$details)?$details['description']:'','FILTERS'=>$filters,'BUTTONS'=>$buttons,'TOPIC_WRAPPER'=>$topic_wrapper,'BREADCRUMBS'=>$breadcrumbs,'FORUM_GROUPINGS'=>$forum_groupings);
 	$content=do_template('OCF_FORUM',$map);
 
 	$ltitle=do_lang_tempcode('NAMED_FORUM',escape_html($details['name']));
@@ -697,26 +697,26 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 			continue;
 		}
 
-		$category_id=$subforum_row['f_category_id'];
-		if (!array_key_exists($category_id,$categories))
+		$forum_grouping_id=$subforum_row['f_forum_grouping_id'];
+		if (!array_key_exists($forum_grouping_id,$categories))
 		{
-			$categories[$category_id]=array('subforums'=>array());
+			$categories[$forum_grouping_id]=array('subforums'=>array());
 			if ($or_list!='') $or_list.=' OR ';
-			$or_list.='id='.strval((integer)$category_id);
+			$or_list.='id='.strval((integer)$forum_grouping_id);
 		}
 	}
 	if ($or_list!='')
 	{
-		$category_rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_categories WHERE '.$or_list);
-		foreach ($category_rows as $category_row)
+		$forum_grouping_rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forum_groupings WHERE '.$or_list);
+		foreach ($forum_grouping_rows as $forum_grouping_row)
 		{
-			$category_id=$category_row['id'];
-			$title=$category_row['c_title'];
-			$description=$category_row['c_description'];
-			$expanded_by_default=$category_row['c_expanded_by_default'];
-			$categories[$category_id]['title']=$title;
-			$categories[$category_id]['description']=$description;
-			$categories[$category_id]['expanded_by_default']=$expanded_by_default;
+			$forum_grouping_id=$forum_grouping_row['id'];
+			$title=$forum_grouping_row['c_title'];
+			$description=$forum_grouping_row['c_description'];
+			$expanded_by_default=$forum_grouping_row['c_expanded_by_default'];
+			$categories[$forum_grouping_id]['title']=$title;
+			$categories[$forum_grouping_id]['description']=$description;
+			$categories[$forum_grouping_id]['expanded_by_default']=$expanded_by_default;
 		}
 		$categories[NULL]['title']='';
 		$categories[NULL]['description']='';
@@ -725,7 +725,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		{
 			if ($subforum_row['f_parent_forum']!=$forum_id) continue;
 
-			$category_id=$subforum_row['f_category_id'];
+			$forum_grouping_id=$subforum_row['f_forum_grouping_id'];
 
 			$subforum=array();
 			$subforum['id']=$subforum_row['id'];
@@ -780,7 +780,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 				uasort($subforum['children'],'multi_sort');
 			}
 
-			$categories[$category_id]['subforums'][]=$subforum;
+			$categories[$forum_grouping_id]['subforums'][]=$subforum;
 		}
 	}
 

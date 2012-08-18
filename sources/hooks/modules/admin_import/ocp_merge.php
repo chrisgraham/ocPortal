@@ -47,7 +47,7 @@ class Hook_ocp_merge
 								'custom_comcode',
 								'awards',
 								'downloads_and_categories', // including rating, trackbacks, seo
-								'ocf_categories',
+								'ocf_forum_groupings',
 								'ocf_emoticons',
 								'ocf_forums', // including intros
 								'ocf_topics', // including readlogs
@@ -105,7 +105,7 @@ class Hook_ocp_merge
 								'ocf_custom_profile_fields'=>array('ocf_groups'),
 								'ocf_multi_moderations'=>array('ocf_forums'),
 								'ocf_members'=>array('ocf_groups','ocf_custom_profile_fields','attachments'),
-								'ocf_forums'=>array('ocf_categories','ocf_members','ocf_groups'),
+								'ocf_forums'=>array('ocf_forum_groupings','ocf_members','ocf_groups'),
 								'ocf_topics'=>array('ocf_forums','ocf_members'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('custom_comcode','ocf_topics','ocf_members','attachments'),
@@ -2006,27 +2006,27 @@ class Hook_ocp_merge
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_categories($db,$table_prefix,$file_base)
+	function import_ocf_forum_groupings($db,$table_prefix,$file_base)
 	{
 		if ($this->on_same_msn($file_base)) return;
 
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_categories');
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_forum_groupings');
 		foreach ($rows as $row)
 		{
-			if (import_check_if_imported('category',strval($row['id']))) continue;
+			if (import_check_if_imported('forum_groupings',strval($row['id']))) continue;
 
 			$title=$row['c_title'];
 
-			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_categories','id',array('c_title'=>$title));
+			$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','id',array('c_title'=>$title));
 			if (!is_null($test))
 			{
-				import_id_remap_put('category',strval($row['id']),$test);
+				import_id_remap_put('forum_groupings',strval($row['id']),$test);
 				continue;
 			}
 
-			$id_new=ocf_make_category($title,$row['c_description'],$row['c_expanded_by_default']);
+			$id_new=ocf_make_forum_groupings($title,$row['c_description'],$row['c_expanded_by_default']);
 
-			import_id_remap_put('category',strval($row['id']),$id_new);
+			import_id_remap_put('forum_groupings',strval($row['id']),$id_new);
 		}
 	}
 
@@ -2057,9 +2057,9 @@ class Hook_ocp_merge
 				continue;
 			}
 
-			$category_id=import_id_remap_get('category',strval($row['f_category_id']),true);
+			$forum_groupings_id=import_id_remap_get('forum_groupings',strval($row['f_forum_groupings_id']),true);
 
-			$id_new=ocf_make_forum($row['f_name'],$this->get_lang_string($db,$row['f_description']),$category_id,array(),db_get_first_id(),$row['f_position'],$row['f_post_count_increment'],$row['f_order_sub_alpha'],$this->get_lang_string($db,$row['f_intro_question']),$row['f_intro_answer'],$row['f_redirection'],array_key_exists('f_order',$row)?$row['f_order']:'last_post');
+			$id_new=ocf_make_forum($row['f_name'],$this->get_lang_string($db,$row['f_description']),$forum_groupings_id,array(),db_get_first_id(),$row['f_position'],$row['f_post_count_increment'],$row['f_order_sub_alpha'],$this->get_lang_string($db,$row['f_intro_question']),$row['f_intro_answer'],$row['f_redirection'],array_key_exists('f_order',$row)?$row['f_order']:'last_post');
 			import_id_remap_put('forum',strval($row['id']),$id_new);
 		}
 

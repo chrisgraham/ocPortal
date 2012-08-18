@@ -20,9 +20,9 @@
 	</div></div>
 {+END}
 
-{CATEGORIES}
+{FORUM_GROUPINGS}
 
-{+START,IF_EMPTY,{TOPIC_WRAPPER}{CATEGORIES}}
+{+START,IF_EMPTY,{TOPIC_WRAPPER}{FORUM_GROUPINGS}}
 	<p class="nothing_here">
 		{!NO_ENTRIES}
 	</p>

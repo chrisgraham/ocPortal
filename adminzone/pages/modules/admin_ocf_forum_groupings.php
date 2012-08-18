@@ -23,9 +23,9 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocf_categories extends standard_crud_module
+class Module_admin_ocf_forum_groupings extends standard_crud_module
 {
-	var $lang_type='FORUM_CATEGORY';
+	var $lang_type='FORUM_GROUPING';
 	var $select_name='TITLE';
 	var $archive_entry_point='_SEARCH:forumview';
 	var $archive_label='SECTION_FORUMS';
@@ -33,7 +33,7 @@ class Module_admin_ocf_categories extends standard_crud_module
 	var $extra_donext_whatever_title='';
 	var $do_next_editing_categories=true;
 	var $menu_label='SECTION_FORUMS';
-	var $javascript='if (document.getElementById(\'delete\')) { var form=document.getElementById(\'delete\').form; var crf=function() { form.elements[\'target_category\'].disabled=(!form.elements[\'delete\'].checked); }; crf(); form.elements[\'delete\'].onchange=crf; }';
+	var $javascript='if (document.getElementById(\'delete\')) { var form=document.getElementById(\'delete\').form; var crf=function() { form.elements[\'target_forum_grouping\'].disabled=(!form.elements[\'delete\'].checked); }; crf(); form.elements[\'delete\'].onchange=crf; }';
 	var $orderer='c_title';
 	var $title_is_multi_lang=false;
 
@@ -66,10 +66,10 @@ class Module_admin_ocf_categories extends standard_crud_module
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_forums:misc',do_lang_tempcode('SECTION_FORUMS'))));
 
-		$this->add_one_cat_label=do_lang_tempcode('ADD_FORUM_CATEGORY');
-		$this->edit_this_cat_label=do_lang_tempcode('EDIT_THIS_FORUM_CATEGORY');
-		$this->edit_one_cat_label=do_lang_tempcode('EDIT_FORUM_CATEGORY');
-		$this->categories_title=do_lang_tempcode('MODULE_TRANS_NAME_admin_ocf_categories');
+		$this->add_one_cat_label=do_lang_tempcode('ADD_FORUM_GROUPING');
+		$this->edit_this_cat_label=do_lang_tempcode('EDIT_THIS_FORUM_GROUPING');
+		$this->edit_one_cat_label=do_lang_tempcode('EDIT_FORUM_GROUPING');
+		$this->categories_title=do_lang_tempcode('MODULE_TRANS_NAME_admin_ocf_forum_groupings');
 
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_forums_action');
@@ -80,11 +80,11 @@ class Module_admin_ocf_categories extends standard_crud_module
 	}
 
 	/**
-	 * Get tempcode for a forum category template adding/editing form.
+	 * Get tempcode for a forum grouping template adding/editing form.
 	 *
-	 * @param  SHORT_TEXT	The title (name) of the forum category
-	 * @param  LONG_TEXT		The description for the category
-	 * @param  BINARY			Whether the category is expanded by default when shown in the forum view
+	 * @param  SHORT_TEXT	The title (name) of the forum grouping
+	 * @param  LONG_TEXT		The description for the forum grouping
+	 * @param  BINARY			Whether the forum grouping is expanded by default when shown in the forum view
 	 * @return tempcode		The input fields
 	 */
 	function get_form_fields($title='',$description='',$expanded_by_default=1)
@@ -149,7 +149,7 @@ class Module_admin_ocf_categories extends standard_crud_module
 	 */
 	function nice_get_entries($avoid=NULL)
 	{
-		return ocf_nice_get_categories(intval($avoid));
+		return ocf_nice_get_forum_groupings(intval($avoid));
 	}
 
 	/**
@@ -162,16 +162,16 @@ class Module_admin_ocf_categories extends standard_crud_module
 	{
 		$id=intval($_id);
 
-		$m=$GLOBALS['FORUM_DB']->query_select('f_categories',array('*'),array('id'=>$id),'',1);
+		$m=$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
 		$delete_fields=new ocp_tempcode();
 
 		$fields=$this->get_form_fields($r['c_title'],$r['c_description'],$r['c_expanded_by_default']);
-		$list=ocf_nice_get_categories($id);
+		$list=ocf_nice_get_forum_groupings($id);
 		if (!$list->is_empty())
-			$delete_fields->attach(form_input_list(do_lang_tempcode('TARGET'),do_lang_tempcode('DESCRIPTION_FORUM_MOVE_TARGET'),'target_category',$list));
+			$delete_fields->attach(form_input_list(do_lang_tempcode('TARGET'),do_lang_tempcode('DESCRIPTION_FORUM_MOVE_TARGET'),'target_forum_grouping',$list));
 
 		return array($fields,new ocp_tempcode(),$delete_fields);
 	}
@@ -186,7 +186,7 @@ class Module_admin_ocf_categories extends standard_crud_module
 	{
 		unset($id);
 
-		$count=$GLOBALS['FORUM_DB']->query_select_value('f_categories','COUNT(*)');
+		$count=$GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','COUNT(*)');
 		return $count>1;
 	}
 
@@ -197,10 +197,10 @@ class Module_admin_ocf_categories extends standard_crud_module
 	 */
 	function add_actualisation()
 	{
-		$tmp=strval(ocf_make_category(post_param('title'),post_param('description'),post_param_integer('expanded_by_default',0)));
+		$tmp=strval(ocf_make_forum_grouping(post_param('title'),post_param('description'),post_param_integer('expanded_by_default',0)));
 		$this->extra_donext_whatever=					array(
 						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('admin_ocf_forums',array('type'=>'ad','category_id'=>$tmp),get_module_zone('admin_ocf_forums'))),
+						array('add_one',array('admin_ocf_forums',array('type'=>'ad','forum_grouping_id'=>$tmp),get_module_zone('admin_ocf_forums'))),
 						array('edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
 					);
 		return $tmp;
@@ -213,10 +213,10 @@ class Module_admin_ocf_categories extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
-		ocf_edit_category(intval($id),post_param('title'),post_param('description',STRING_MAGIC_NULL),post_param_integer('expanded_by_default',fractional_edit()?INTEGER_MAGIC_NULL:0));
+		ocf_edit_forum_grouping(intval($id),post_param('title'),post_param('description',STRING_MAGIC_NULL),post_param_integer('expanded_by_default',fractional_edit()?INTEGER_MAGIC_NULL:0));
 		$this->extra_donext_whatever=					array(
 						/*	 type							  page	 params													 zone	  */
-						array('add_one',array('admin_ocf_forums',array('type'=>'ad','category_id'=>$id),get_module_zone('admin_ocf_forums'))),
+						array('add_one',array('admin_ocf_forums',array('type'=>'ad','forum_grouping_id'=>$id),get_module_zone('admin_ocf_forums'))),
 						array('edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
 					);
 	}
@@ -228,7 +228,7 @@ class Module_admin_ocf_categories extends standard_crud_module
 	 */
 	function delete_actualisation($id)
 	{
-		ocf_delete_category(intval($id),post_param_integer('target_category'));
+		ocf_delete_forum_grouping(intval($id),post_param_integer('target_forum_grouping'));
 	}
 }
 

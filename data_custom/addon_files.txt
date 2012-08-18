@@ -1771,7 +1771,7 @@ ocportal_tutorials
  - data_custom/images/docs/forum_tracking_Untrack-forum-link.png
  - data_custom/images/docs/forum_tracking_Untrack-topic-link.png
  - data_custom/images/docs/forums_add.png
- - data_custom/images/docs/forums_category_add.png
+ - data_custom/images/docs/forums_grouping_add.png
  - data_custom/images/docs/forums_edit.png
  - data_custom/images/docs/forums_structure.png
  - data_custom/images/docs/forums_view.png
@@ -4039,7 +4039,7 @@ testing_platform
  - _tests/tests/unit_tests/emoticon.php
  - _tests/tests/unit_tests/community_billboard.php
  - _tests/tests/unit_tests/forum.php
- - _tests/tests/unit_tests/forum_category.php
+ - _tests/tests/unit_tests/forum_grouping.php
  - _tests/tests/unit_tests/galleries.php
  - _tests/tests/unit_tests/galleries_1.php
  - _tests/tests/unit_tests/git_conflicts.php

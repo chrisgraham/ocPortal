@@ -178,7 +178,7 @@ class Hook_addon_registry_ocf_forum
 			'forum/pages/modules/vforums.php',
 			'forum/pages/modules_custom/.htaccess',
 			'forum/pages/modules_custom/index.html',
-			'adminzone/pages/modules/admin_ocf_categories.php',
+			'adminzone/pages/modules/admin_ocf_forum_groupings.php',
 			'adminzone/pages/modules/admin_ocf_forums.php',
 			'adminzone/pages/modules/admin_ocf_history.php',
 			'themes/default/images/ocf_general/index.html',

@@ -19,24 +19,24 @@
  */
 
 /**
- * Add a forum category.
+ * Add a forum grouping.
  *
- * @param  SHORT_TEXT The title of the forum category.
- * @param  SHORT_TEXT The description of the forum category.
- * @param  BINARY	Whether the forum category will be shown expanded by default (as opposed to contracted, where contained forums will not be shown until expansion).
- * @return AUTO_LINK  The ID of the forum category just added.
+ * @param  SHORT_TEXT The title of the forum grouping.
+ * @param  SHORT_TEXT The description of the forum grouping.
+ * @param  BINARY	Whether the forum grouping will be shown expanded by default (as opposed to contracted, where contained forums will not be shown until expansion).
+ * @return AUTO_LINK  The ID of the forum grouping just added.
  */
-function ocf_make_category($title,$description,$expanded_by_default=1)
+function ocf_make_forum_grouping($title,$description,$expanded_by_default=1)
 {
-	$category_id=$GLOBALS['FORUM_DB']->query_insert('f_categories',array(
+	$forum_grouping_id=$GLOBALS['FORUM_DB']->query_insert('f_forum_groupings',array(
 		'c_title'=>$title,
 		'c_description'=>$description,
 		'c_expanded_by_default'=>$expanded_by_default
 	),true);
 
-	log_it('ADD_FORUM_CATEGORY',strval($category_id),$title);
+	log_it('ADD_FORUM_GROUPING',strval($forum_grouping_id),$title);
 
-	return $category_id;
+	return $forum_grouping_id;
 }
 
 /**
@@ -44,7 +44,7 @@ function ocf_make_category($title,$description,$expanded_by_default=1)
  *
  * @param  SHORT_TEXT 	The name of the forum.
  * @param  SHORT_TEXT 	The description for the forum.
- * @param  ?AUTO_LINK	What forum category the forum will be filed with (NULL: this is the root forum).
+ * @param  ?AUTO_LINK	What forum grouping the forum will be filed with (NULL: this is the root forum).
  * @param  ?array			Permission map (NULL: do it the standard way, outside of this function). This parameter is for import/compatibility only and works upon an emulation of 'access levels' (ala ocPortal 2.5/2.6), and it is recommended to use the normal crud_module functionality for permissions setting.
  * @param  ?AUTO_LINK 	The ID of the parent forum (NULL: this is the root forum).
  * @param  integer		The position of this forum relative to other forums viewable on the same screen (if parent forum hasn't specified automatic ordering).
@@ -57,21 +57,21 @@ function ocf_make_category($title,$description,$expanded_by_default=1)
  * @param  BINARY			Whether the forum is threaded.
  * @return AUTO_LINK		The ID of the newly created forum.
  */
-function ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_forum,$position=1,$post_count_increment=1,$order_sub_alpha=0,$intro_question='',$intro_answer='',$redirection='',$order='last_post',$is_threaded=0)
+function ocf_make_forum($name,$description,$forum_grouping_id,$access_mapping,$parent_forum,$position=1,$post_count_increment=1,$order_sub_alpha=0,$intro_question='',$intro_answer='',$redirection='',$order='last_post',$is_threaded=0)
 {
-	if ($category_id==-1) $category_id=NULL;
+	if ($forum_grouping_id==-1) $forum_grouping_id=NULL;
 	if ($parent_forum==-1) $parent_forum=NULL;
 
 	if (get_page_name()!='admin_import')
 	{
-		if ((!is_null($category_id)) && (function_exists('ocf_ensure_category_exists'))) ocf_ensure_category_exists($category_id);
+		if ((!is_null($forum_grouping_id)) && (function_exists('ocf_ensure_forum_grouping_exists'))) ocf_ensure_forum_grouping_exists($forum_grouping_id);
 		if ((!is_null($parent_forum)) && (function_exists('ocf_ensure_forum_exists'))) ocf_ensure_forum_exists($parent_forum);
 	}
 
 	$forum_id=$GLOBALS['FORUM_DB']->query_insert('f_forums',array(
 		'f_name'=>$name,
 		'f_description'=>insert_lang($description,2,$GLOBALS['FORUM_DB']),
-		'f_category_id'=>$category_id,
+		'f_forum_grouping_id'=>$forum_grouping_id,
 		'f_parent_forum'=>$parent_forum,
 		'f_position'=>$position,
 		'f_order_sub_alpha'=>$order_sub_alpha,

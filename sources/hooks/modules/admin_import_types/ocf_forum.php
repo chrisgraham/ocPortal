@@ -32,7 +32,7 @@ class Hook_admin_import_types_ocf_forum
 			'ocf_post_history'=>'POST_HISTORY',
 			'ocf_post_templates'=>'POST_TEMPLATES',
 			'ocf_announcements'=>'ANNOUNCEMENTS',
-			'ocf_categories'=>'MODULE_TRANS_NAME_admin_ocf_categories',
+			'ocf_forum_groupings'=>'MODULE_TRANS_NAME_admin_ocf_forum_groupings',
 			'ocf_forums'=>'SECTION_FORUMS',
 			'ocf_topics'=>'FORUM_TOPICS',
 			'ocf_polls_and_votes'=>'TOPIC_POLLS',

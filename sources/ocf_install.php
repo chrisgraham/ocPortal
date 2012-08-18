@@ -53,7 +53,6 @@ function init__ocf_install()
 		'use_quick_reply',
 		'view_profiles',
 		'own_avatars',
-		//'decide_comment_type'
 	);
 	$OCF_FALSE_PERMISSIONS=array(
 		'rename_self',
@@ -82,12 +81,10 @@ function init__ocf_install()
 }
 
 /**
- * Uninstall OCF (1).
+ * Uninstall OCF
  */
-function uninstall_ocf_everytime()
+function uninstall_ocf()
 {
-	delete_specific_permission('enquire_on_new_ips'); // Used to exist
-	delete_specific_permission('allow_deletive_moderation'); // Used to exist
 	global $OCF_TRUE_PERMISSIONS,$OCF_FALSE_PERMISSIONS;
 
 	foreach ($OCF_TRUE_PERMISSIONS as $permission)
@@ -127,7 +124,7 @@ function uninstall_ocf_everytime()
 	delete_config_option('prohibit_username_whitespace');
 	delete_config_option('random_avatars');
 	delete_config_option('club_forum_parent_forum');
-	delete_config_option('club_forum_parent_category');
+	delete_config_option('club_forum_parent_forum_grouping');
 	delete_config_option('delete_trashed_pts');
 	delete_config_option('probation_usergroup');
 	delete_config_option('threaded_comments');
@@ -166,20 +163,14 @@ function uninstall_ocf_everytime()
 
 	delete_attachments('ocf_post');
 	delete_attachments('ocf_signature');
-}
 
-/**
- * Uninstall OCF (2).
- */
-function uninstall_ocf()
-{
 	require_code('database_action');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_emoticons');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_group_access');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_custom_fields');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_member_custom_fields');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_groups');
-	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_categories');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_groupings');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forums');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_intro_ip');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_intro_member');
@@ -203,6 +194,7 @@ function uninstall_ocf()
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_group_access');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_special_pt_access');
 	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_saved_warnings');
+	$GLOBALS['FORUM_DB']->drop_table_if_exists('f_member_cpf_perms');
 	$GLOBALS['FORUM_DB']->query_delete('gsp',array('module_the_name'=>'forums'));
 }
 
@@ -213,6 +205,8 @@ function uninstall_ocf()
  */
 function install_ocf($upgrade_from=NULL)
 {
+	if (strtoupper(ocp_srv('REQUEST_METHOD'))!='POST') exit(); // Needed as YSlow can load as GET's in background and cause horrible results
+
 	require_code('ocf_members');
 	require_code('ocf_topics');
 	require_code('ocf_groups');
@@ -230,65 +224,18 @@ function install_ocf($upgrade_from=NULL)
 
 	if (is_null($upgrade_from))
 	{
-		uninstall_ocf_everytime();
-
-//		if (post_param('clear_existing_forums_on_install','no')=='yes')  No longer necessary to have this option, as OCF is only ever installed to site-db, not forum-db (although site-db is aliased as forum-db for this code)
-		{
-			uninstall_ocf();
-		}
+		uninstall_ocf(); // Remove if already installed
 	}
 
-	$test=$GLOBALS['FORUM_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums',NULL,NULL,true);
-	$not_installed=is_null($test);
-	if ($not_installed) $upgrade_from=NULL;
-
-	if ((is_null($upgrade_from)) || ($upgrade_from<4.2))
+	// Combined upgrade/install code (<7 not supported)
+	if ((is_null($upgrade_from)) || ($upgrade_from<8.0))
 	{
-		add_config_option('ENCRYPTION_KEY','encryption_key','line','require_code(\'encryption\');return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED');
-		add_config_option('DECRYPTION_KEY','decryption_key','line','require_code(\'encryption\');return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED');
-		add_config_option('IS_ON_POST_TITLES','is_on_post_titles','tick','return is_null($old=get_value(\'no_post_titles\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('IS_ON_ANONYMOUS_POSTS','is_on_anonymous_posts','tick','return is_null($old=get_value(\'ocf_no_anonymous_post\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('IS_ON_TIMEZONE_DETECTION','is_on_timezone_detection','tick','return is_null($old=get_value(\'no_js_timezone_detect\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('IS_ON_TOPIC_DESCRIPTIONS','is_on_topic_descriptions','tick','return is_null($old=get_value(\'no_topic_descriptions\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('IS_ON_TOPIC_EMOTICONS','is_on_topic_emoticons','tick','return is_null($old=get_value(\'ocf_no_topic_emoticons\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('DEFAULT_PREVIEW_GUESTS','default_preview_guests','tick','return is_null($old=get_value(\'no_default_preview_guests\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('FORCED_PREVIEW_OPTION','forced_preview_option','tick','return is_null($old=get_value(\'no_forced_preview_option\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('OVERT_WHISPER_SUGGESTION','overt_whisper_suggestion','tick','return is_null($old=get_value(\'disable_overt_whispering\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('IS_ON_INVISIBILITY','is_on_invisibility','tick','return is_null($old=get_value(\'no_invisible_option\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('ALLOW_ALPHA_SEARCH','allow_alpha_search','tick','return is_null($old=get_value(\'allow_alpha_search\'))?\'0\':$old;','SECTION_FORUMS','GENERAL');
-		add_config_option('ALLOW_EMAIL_DISABLE','allow_email_disable','tick','return is_null($old=get_value(\'disable_allow_emails_field\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('MAX_MEMBER_TITLE_LENGTH','max_member_title_length','integer','return addon_installed(\'ocf_member_titles\')?\'20\':NULL;','SECTION_FORUMS','GENERAL');
-
-		$GLOBALS['FORUM_DB']->drop_table_if_exists('f_member_cpf_perms');
-		$GLOBALS['FORUM_DB']->create_table('f_member_cpf_perms',array(
-						'member_id'=>'*USER',
-						'field_id'=>'*AUTO_LINK',
-						'guest_view'=>'BINARY',
-						'member_view'=>'BINARY',
-						'friend_view'=>'BINARY',
-						'group_view'=>'SHORT_TEXT'
-		));
+		add_config_option('ALLOW_EMAIL_FROM_STAFF_DISABLE','allow_email_from_staff_disable','tick','return \'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('INTRO_FORUM_ID','intro_forum_id','?forum','return \'\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('SIGNUP_FULLNAME','signup_fullname','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
 	}
 
-	if ((is_null($upgrade_from)) || ($upgrade_from<2.5))
-	{
-		add_config_option('HTTPAUTH_IS_ENABLED','httpauth_is_enabled','tick','return \'0\';','SECTION_FORUMS','ADVANCED',1);
-		add_config_option('POST_HISTORY_DAYS','post_history_days','integer','return \'21\';','SECTION_FORUMS','GENERAL',1);
-	}
-
-	if (is_null($upgrade_from))
-	{
-		// Add config options
-		add_config_option('FORUM_POSTS_PER_PAGE','forum_posts_per_page','integer','return has_no_forum()?NULL:\'20\';','SECTION_FORUMS','GENERAL');
-		add_config_option('FORUM_TOPICS_PER_PAGE','forum_topics_per_page','integer','return has_no_forum()?NULL:\'30\';','SECTION_FORUMS','GENERAL');
-		add_config_option('PREVENT_SHOUTING','prevent_shouting','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL');
-		add_config_option('RESTRICTED_USERNAMES','restricted_usernames','line','return do_lang(\'GUEST\').\', \'.do_lang(\'STAFF\').\', \'.do_lang(\'ADMIN\').\', \'.do_lang(\'MODERATOR\').\', googlebot\';','SECTION_FORUMS','GENERAL');
-		add_config_option('REQUIRE_NEW_MEMBER_VALIDATION','require_new_member_validation','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('REPORTED_POSTS_FORUM','reported_posts_forum','forum','return (has_no_forum()||(!addon_installed(\'ocf_reported_posts\')))?NULL:do_lang(\'ocf:REPORTED_POSTS_FORUM\');','SECTION_FORUMS','GENERAL');
-		add_config_option('ONE_PER_EMAIL_ADDRESS','one_per_email_address','tick','return \'1\';','SECTION_FORUMS','GENERAL');
-		add_config_option('HOT_TOPIC_DEFINITION','hot_topic_definition','integer','return has_no_forum()?NULL:\'20\';','SECTION_FORUMS','GENERAL');
-	}
-
+	// Upgrade code for making changes (<7 not supported)
 	if ((!is_null($upgrade_from)) && ($upgrade_from<7.2))
 	{
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT m_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'db_meta WHERE ('.db_string_equal_to('m_type','?INTEGER').' OR '.db_string_equal_to('m_type','BINARY').') AND '.db_string_equal_to('m_table','f_member_custom_fields'));
@@ -321,69 +268,6 @@ function install_ocf($upgrade_from=NULL)
 		while (count($rows)!=0);
 
 		$GLOBALS['FORUM_DB']->alter_table_field('f_members','m_track_contributed_topics','BINARY','m_auto_monitor_contrib_content');
-	}
-
-	if ((!is_null($upgrade_from)) && ($upgrade_from<4.0))
-	{
-		$GLOBALS['FORUM_DB']->alter_table_field('f_members','m_password_compatibility_scheme','ID_TEXT','m_password_compat_scheme');
-		$GLOBALS['FORUM_DB']->delete_table_field('f_members','m_track_all_forums');
-	}
-
-	if ((!is_null($upgrade_from)) && ($upgrade_from<3.1))
-	{
-		$GLOBALS['FORUM_DB']->add_table_field('f_emoticons','e_is_special','BINARY',0);
-		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_highlighted_name','BINARY',0);
-	}
-
-	if ((!is_null($upgrade_from)) && ($upgrade_from<3.0))
-	{
-		$rows=$GLOBALS['FORUM_DB']->query_select('f_forum_group_access',array('*'));
-		foreach ($rows as $row)
-		{
-			if ($row['a_level']>1)
-				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'forums','category_name'=>strval($row['a_forum_id']),'group_id'=>$row['a_group_id']));
-		}
-		$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_group_access');
-		delete_specific_permission('allow_deletive_moderation');
-		$GLOBALS['FORUM_DB']->delete_table_field('f_post_templates','t_minimum_access_level');
-		$GLOBALS['FORUM_DB']->add_table_field('f_groups','g_is_presented_at_install','BINARY',0);
-		$GLOBALS['FORUM_DB']->alter_table_field('f_custom_fields','cf_name','SHORT_TRANS');
-		$GLOBALS['FORUM_DB']->alter_table_field('f_groups','g_rank_image','ID_TEXT');
-	}
-
-	if ((!is_null($upgrade_from)) && ($upgrade_from<2.6))
-	{
-		$GLOBALS['FORUM_DB']->add_table_field('f_groups','g_is_default','BINARY');
-	}
-
-	if ((is_null($upgrade_from)) || ($upgrade_from<4.0))
-	{
-		add_config_option('MINIMUM_PASSWORD_LENGTH','minimum_password_length','integer','return \'4\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('MAXIMUM_PASSWORD_LENGTH','maximum_password_length','integer','return \'20\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('MINIMUM_USERNAME_LENGTH','minimum_username_length','integer','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('MAXIMUM_USERNAME_LENGTH','maximum_username_length','integer','return \'20\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('PROHIBIT_PASSWORD_WHITESPACE','prohibit_password_whitespace','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('PROHIBIT_USERNAME_WHITESPACE','prohibit_username_whitespace','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('ASSIGN_RANDOM_AVATARS','random_avatars','tick','return addon_installed(\'ocf_member_avatars\')?\'1\':NULL;','SECTION_FORUMS','GENERAL');
-		add_config_option('CLUB_FORUM_PARENT_FORUM','club_forum_parent_forum','forum','return has_no_forum()?NULL:strval(db_get_first_id());','SECTION_FORUMS','GENERAL');
-		add_config_option('CLUB_FORUM_PARENT_CATEGORY','club_forum_parent_category','category','return has_no_forum()?NULL:strval(db_get_first_id());','SECTION_FORUMS','GENERAL');
-		add_config_option('DELETE_TRASHED_PTS','delete_trashed_pts','tick','return has_no_forum()?NULL:\'0\';','SECTION_FORUMS','GENERAL');
-		add_config_option('PROBATION_USERGROUP','probation_usergroup','usergroup','return do_lang(\'PROBATION\');','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('SHOW_FIRST_JOIN_PAGE','show_first_join_page','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('SKIP_EMAIL_CONFIRM_JOIN','skip_email_confirm_join','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('NO_DOB_ASK','no_dob_ask','list','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS',0,'0|1|2');
-		add_config_option('ALLOW_INTERNATIONAL','allow_international','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-	}
-	if ((is_null($upgrade_from)) || ($upgrade_from<8.0))
-	{
-		add_config_option('ALLOW_EMAIL_FROM_STAFF_DISABLE','allow_email_from_staff_disable','tick','return \'0\';','SECTION_FORUMS','GENERAL');
-		add_config_option('INTRO_FORUM_ID','intro_forum_id','?forum','return \'\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-		add_config_option('SIGNUP_FULLNAME','signup_fullname','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
-	}
-	if ((!is_null($upgrade_from)) && ($upgrade_from<8.1))
-	{
-		delete_config_option('no_dob_ask');
-		add_config_option('NO_DOB_ASK','no_dob_ask','list','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS',0,'0|1|2'); // Recreate option
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<8.0))
 	{
@@ -421,80 +305,75 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->drop_table_if_exists('f_forum_tracking');
 		$GLOBALS['FORUM_DB']->drop_table_if_exists('f_topic_tracking');
 	}
-	if ((!is_null($upgrade_from)) && ($upgrade_from<4.2))
+	if ((!is_null($upgrade_from)) && ($upgrade_from<8.1))
 	{
-		$GLOBALS['FORUM_DB']->add_table_field('f_topics','t_description_link','SHORT_TEXT');
-		$GLOBALS['FORUM_DB']->add_table_field('f_custom_fields','cf_encrypted','BINARY',0);
+		delete_config_option('no_dob_ask');
+		add_config_option('NO_DOB_ASK','no_dob_ask','list','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS',0,'0|1|2'); // Recreate option
 	}
-	if ((!is_null($upgrade_from)) && ($upgrade_from<4.0))
+	if ((!is_null($upgrade_from)) && ($upgrade_from<9.0))
 	{
-		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_on_probation_until','?TIME',time());
-		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_pt_rules_text','LONG_TRANS','');
-		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_pt_allow','SHORT_TEXT','*');
-		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_order','ID_TEXT','last_post'); // last_post,first_post,title
-		$GLOBALS['FORUM_DB']->add_table_field('f_groups','g_hidden','BINARY',0);
-		$GLOBALS['FORUM_DB']->add_table_field('f_groups','g_order','INTEGER');
-		$GLOBALS['FORUM_DB']->add_table_field('f_groups','g_rank_image_pri_only','BINARY',1);
-		$GLOBALS['FORUM_DB']->add_table_field('f_groups','g_open_membership','BINARY',0);
-		$GLOBALS['FORUM_DB']->add_table_field('f_groups','g_is_private_club','BINARY',0);
-		$GLOBALS['FORUM_DB']->add_table_field('f_posts','p_skip_sig','BINARY',0);
-		$GLOBALS['FORUM_DB']->add_table_field('f_topics','t_sunk','BINARY',0);
-		$GLOBALS['FORUM_DB']->add_table_field('f_multi_moderations','mm_sink_state','?BINARY',NULL);
-		$GLOBALS['FORUM_DB']->add_table_field('f_multi_moderations','mm_title_suffix','SHORT_TEXT');
-		$GLOBALS['FORUM_DB']->add_table_field('f_warnings','w_is_warning','BINARY',1);
-		$GLOBALS['FORUM_DB']->add_table_field('f_warnings','p_silence_from_topic','?AUTO_LINK');
-		$GLOBALS['FORUM_DB']->add_table_field('f_warnings','p_silence_from_forum','?AUTO_LINK');
-		$GLOBALS['FORUM_DB']->add_table_field('f_warnings','p_probation','INTEGER',0);
-		$GLOBALS['FORUM_DB']->add_table_field('f_warnings','p_banned_ip','IP');
-		$GLOBALS['FORUM_DB']->add_table_field('f_warnings','p_charged_points','INTEGER',0);
-		$GLOBALS['FORUM_DB']->add_table_field('f_warnings','p_banned_member','BINARY',0);
-		$GLOBALS['FORUM_DB']->add_table_field('f_warnings','p_changed_usergroup_from','?GROUP');
-	}
-	if ((is_null($upgrade_from)) || ($upgrade_from<3.0))
-	{
-		add_config_option('COPPA_ENABLED','is_on_coppa','tick','return \'0\';','PRIVACY','GENERAL');
-		add_config_option('FAX_NUMBER','privacy_fax','line','return \'\';','PRIVACY','GENERAL');
-		add_config_option('ADDRESS','privacy_postal_address','text','return \'\';','PRIVACY','GENERAL');
-	}
-	if ((is_null($upgrade_from)) || ($upgrade_from<2.6))
-	{
-		add_config_option('INVITES_ENABLED','is_on_invites','tick','return \'0\';','SECTION_FORUMS','GENERAL');
-		add_config_option('INVITES_PER_DAY','invites_per_day','float','return \'1\';','SECTION_FORUMS','GENERAL');
-	}
-	if ((!is_null($upgrade_from)) && ($upgrade_from<2.5))
-	{
-		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_redirection','SHORT_TEXT');
-		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_order_sub_alpha','BINARY');
-		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_intro_question','LONG_TRANS');
-		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_intro_answer','SHORT_TEXT');
-		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_max_email_attach_size_mb','INTEGER',3);
-		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_zone_wide','BINARY',1);
-		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_notes','LONG_TEXT'); // TODO: remove
-		$GLOBALS['FORUM_DB']->add_table_field('f_emoticons','e_use_topics','BINARY',1);
-		$GLOBALS['FORUM_DB']->add_table_field('f_topics','t_pt_from_category','SHORT_TEXT');
-		$GLOBALS['FORUM_DB']->add_table_field('f_topics','t_pt_to_category','SHORT_TEXT');
-		$GLOBALS['FORUM_DB']->add_table_field('f_custom_fields','cf_show_in_post_previews','BINARY',1);
-		$GLOBALS['FORUM_DB']->add_table_field('f_custom_fields','cf_order','INTEGER');
-		$GLOBALS['FORUM_DB']->add_table_field('f_custom_fields','cf_only_group','?GROUP');
-		$GLOBALS['FORUM_DB']->add_table_field('f_multi_moderations','mm_forum_multi_code','SHORT_TEXT');
-
-		$GLOBALS['FORUM_DB']->alter_table_field('f_topics','t_emoticon','SHORT_TEXT');
-		$GLOBALS['FORUM_DB']->alter_table_field('f_emoticons','e_theme_img_code','SHORT_TEXT');
-		$GLOBALS['FORUM_DB']->promote_text_field_to_comcode('f_forums','f_description');
-		$GLOBALS['FORUM_DB']->alter_table_field('f_members','m_pass_hash_salted','SHORT_TEXT');
-
-		$GLOBALS['FORUM_DB']->drop_table_if_exists('f_groups');
-		$GLOBALS['FORUM_DB']->query_delete('f_emoticons');
-	}
-	if ((!is_null($upgrade_from)) && ($upgrade_from<3.1))
-	{
-		$GLOBALS['FORUM_DB']->alter_table_field('f_custom_fields','cf_only_group','LONG_TEXT');
+		$GLOBALS['FORUM_DB']->rename_table('f_forum_categories','f_forum_groupings');
+		$GLOBALS['FORUM_DB']->alter_table_field('f_forums','f_category_id','AUTO_LINK','f_forum_grouping_id');
+		$GLOBALS['SITE_DB']->query_update('config',array('the_type'=>'forum_grouping','the_name'=>'club_forum_parent_forum_grouping'),array('the_name'=>'club_forum_parent_category'),'',1);
 	}
 
 	// If we have the forum installed to this db already, leave
-	if ((is_null($upgrade_from)) && ($not_installed))
+	if (is_null($upgrade_from))
 	{
-		uninstall_ocf();
+		// Add config options
+		add_config_option('ENCRYPTION_KEY','encryption_key','line','require_code(\'encryption\');return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED');
+		add_config_option('DECRYPTION_KEY','decryption_key','line','require_code(\'encryption\');return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED');
+		add_config_option('IS_ON_POST_TITLES','is_on_post_titles','tick','return is_null($old=get_value(\'no_post_titles\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_ANONYMOUS_POSTS','is_on_anonymous_posts','tick','return is_null($old=get_value(\'ocf_no_anonymous_post\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_TIMEZONE_DETECTION','is_on_timezone_detection','tick','return is_null($old=get_value(\'no_js_timezone_detect\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_TOPIC_DESCRIPTIONS','is_on_topic_descriptions','tick','return is_null($old=get_value(\'no_topic_descriptions\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_TOPIC_EMOTICONS','is_on_topic_emoticons','tick','return is_null($old=get_value(\'ocf_no_topic_emoticons\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('DEFAULT_PREVIEW_GUESTS','default_preview_guests','tick','return is_null($old=get_value(\'no_default_preview_guests\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('FORCED_PREVIEW_OPTION','forced_preview_option','tick','return is_null($old=get_value(\'no_forced_preview_option\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('OVERT_WHISPER_SUGGESTION','overt_whisper_suggestion','tick','return is_null($old=get_value(\'disable_overt_whispering\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_INVISIBILITY','is_on_invisibility','tick','return is_null($old=get_value(\'no_invisible_option\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('ALLOW_ALPHA_SEARCH','allow_alpha_search','tick','return is_null($old=get_value(\'allow_alpha_search\'))?\'0\':$old;','SECTION_FORUMS','GENERAL');
+		add_config_option('ALLOW_EMAIL_DISABLE','allow_email_disable','tick','return is_null($old=get_value(\'disable_allow_emails_field\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('MAX_MEMBER_TITLE_LENGTH','max_member_title_length','integer','return addon_installed(\'ocf_member_titles\')?\'20\':NULL;','SECTION_FORUMS','GENERAL');
+		add_config_option('HTTPAUTH_IS_ENABLED','httpauth_is_enabled','tick','return \'0\';','SECTION_FORUMS','ADVANCED',1);
+		add_config_option('POST_HISTORY_DAYS','post_history_days','integer','return \'21\';','SECTION_FORUMS','GENERAL',1);
+		add_config_option('FORUM_POSTS_PER_PAGE','forum_posts_per_page','integer','return has_no_forum()?NULL:\'20\';','SECTION_FORUMS','GENERAL');
+		add_config_option('FORUM_TOPICS_PER_PAGE','forum_topics_per_page','integer','return has_no_forum()?NULL:\'30\';','SECTION_FORUMS','GENERAL');
+		add_config_option('PREVENT_SHOUTING','prevent_shouting','tick','return has_no_forum()?NULL:\'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('RESTRICTED_USERNAMES','restricted_usernames','line','return do_lang(\'GUEST\').\', \'.do_lang(\'STAFF\').\', \'.do_lang(\'ADMIN\').\', \'.do_lang(\'MODERATOR\').\', googlebot\';','SECTION_FORUMS','GENERAL');
+		add_config_option('REQUIRE_NEW_MEMBER_VALIDATION','require_new_member_validation','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('REPORTED_POSTS_FORUM','reported_posts_forum','forum','return (has_no_forum()||(!addon_installed(\'ocf_reported_posts\')))?NULL:do_lang(\'ocf:REPORTED_POSTS_FORUM\');','SECTION_FORUMS','GENERAL');
+		add_config_option('ONE_PER_EMAIL_ADDRESS','one_per_email_address','tick','return \'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('HOT_TOPIC_DEFINITION','hot_topic_definition','integer','return has_no_forum()?NULL:\'20\';','SECTION_FORUMS','GENERAL');
+		add_config_option('MINIMUM_PASSWORD_LENGTH','minimum_password_length','integer','return \'4\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('MAXIMUM_PASSWORD_LENGTH','maximum_password_length','integer','return \'20\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('MINIMUM_USERNAME_LENGTH','minimum_username_length','integer','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('MAXIMUM_USERNAME_LENGTH','maximum_username_length','integer','return \'20\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('PROHIBIT_PASSWORD_WHITESPACE','prohibit_password_whitespace','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('PROHIBIT_USERNAME_WHITESPACE','prohibit_username_whitespace','tick','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('ASSIGN_RANDOM_AVATARS','random_avatars','tick','return addon_installed(\'ocf_member_avatars\')?\'1\':NULL;','SECTION_FORUMS','GENERAL');
+		add_config_option('CLUB_FORUM_PARENT_FORUM','club_forum_parent_forum','forum','return has_no_forum()?NULL:strval(db_get_first_id());','SECTION_FORUMS','GENERAL');
+		add_config_option('CLUB_FORUM_PARENT_CATEGORY','club_forum_parent_forum_grouping','forum_grouping','return has_no_forum()?NULL:strval(db_get_first_id());','SECTION_FORUMS','GENERAL');
+		add_config_option('DELETE_TRASHED_PTS','delete_trashed_pts','tick','return has_no_forum()?NULL:\'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('PROBATION_USERGROUP','probation_usergroup','usergroup','return do_lang(\'PROBATION\');','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('SHOW_FIRST_JOIN_PAGE','show_first_join_page','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('SKIP_EMAIL_CONFIRM_JOIN','skip_email_confirm_join','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('NO_DOB_ASK','no_dob_ask','list','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS',0,'0|1|2');
+		add_config_option('ALLOW_INTERNATIONAL','allow_international','tick','return \'1\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS');
+		add_config_option('COPPA_ENABLED','is_on_coppa','tick','return \'0\';','PRIVACY','GENERAL');
+		add_config_option('FAX_NUMBER','privacy_fax','line','return \'\';','PRIVACY','GENERAL');
+		add_config_option('ADDRESS','privacy_postal_address','text','return \'\';','PRIVACY','GENERAL');
+		add_config_option('INVITES_ENABLED','is_on_invites','tick','return \'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('INVITES_PER_DAY','invites_per_day','float','return \'1\';','SECTION_FORUMS','GENERAL');
+
+		$GLOBALS['FORUM_DB']->create_table('f_member_cpf_perms',array(
+			'member_id'=>'*USER',
+			'field_id'=>'*AUTO_LINK',
+			'guest_view'=>'BINARY',
+			'member_view'=>'BINARY',
+			'friend_view'=>'BINARY',
+			'group_view'=>'SHORT_TEXT'
+		));
 
 		$GLOBALS['FORUM_DB']->create_table('f_emoticons',array(
 			'e_code'=>'*ID_TEXT',
@@ -544,10 +423,7 @@ function install_ocf($upgrade_from=NULL)
 		ocf_make_boiler_custom_field('location');
 		ocf_make_boiler_custom_field('occupation');
 		ocf_make_boiler_custom_field('staff_notes');
-	}
 
-	if ((is_null($upgrade_from)) || ($upgrade_from<2.6))
-	{
 		$GLOBALS['FORUM_DB']->create_table('f_invites',array(
 			'id'=>'*AUTO',
 			'i_inviter'=>'USER',
@@ -555,10 +431,7 @@ function install_ocf($upgrade_from=NULL)
 			'i_time'=>'TIME',
 			'i_taken'=>'BINARY'
 		));
-	}
 
-	if ((is_null($upgrade_from)) && ($not_installed))
-	{
 		$GLOBALS['FORUM_DB']->create_table('f_group_members',array(
 			'gm_group_id'=>'*GROUP',
 			'gm_member_id'=>'*USER',
@@ -622,10 +495,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_members','ftjoin_msig',array('m_signature'));
 		$GLOBALS['FORUM_DB']->create_index('f_members','primary_group',array('m_primary_group'));
 		$GLOBALS['FORUM_DB']->create_index('f_members','avatar_url',array('m_avatar_url')); // Used for uniform avatar randomisation
-	}
 
-	if ((is_null($upgrade_from)) || ($upgrade_from<2.5))
-	{
 		$no_use_topics=array('party'=>1,'christmas'=>1,'offtopic'=>1,'rockon'=>1,'guitar'=>1,'sinner'=>1,'wink'=>1,'kiss'=>1,'nod'=>1,'smile'=>1,'mellow'=>1,'whistle'=>1,'shutup'=>1,'cyborg'=>1);
 		$core_emoticons=array(
 			':P'=>'cheeky',
@@ -746,24 +616,21 @@ function install_ocf($upgrade_from=NULL)
 		$member_group_0=ocf_make_group(do_lang('DEFAULT_RANK_0'),0,0,0,do_lang('DESCRIPTION_MEMBERS'),'ocf_rank_images/0',$member_group_1,100); // Not default because primary is always defaulted to this one
 		// Make probation
 		$probation_group=ocf_make_group(do_lang('PROBATION'),0,0,0,do_lang('DESCRIPTION_PROBATION'),'',NULL,NULL,NULL,0);
-	}
 
-	if ((is_null($upgrade_from)) && ($not_installed))
-	{
-		$GLOBALS['FORUM_DB']->create_table('f_categories',array(
+		$GLOBALS['FORUM_DB']->create_table('f_forum_groupings',array(
 			'id'=>'*AUTO',
 			'c_title'=>'SHORT_TEXT',
 			'c_description'=>'LONG_TEXT',
 			'c_expanded_by_default'=>'BINARY'
 		));
-		$category_id=ocf_make_category(do_lang('DEFAULT_GROUPING_TITLE'),'');
-		$category_id_staff=ocf_make_category(do_lang('STAFF'),'');
+		$forum_grouping_id=ocf_make_forum_grouping(do_lang('DEFAULT_GROUPING_TITLE'),'');
+		$forum_grouping_id_staff=ocf_make_forum_grouping(do_lang('STAFF'),'');
 
 		$GLOBALS['FORUM_DB']->create_table('f_forums',array(
 			'id'=>'*AUTO',
 			'f_name'=>'SHORT_TEXT',
 			'f_description'=>'LONG_TRANS',	// Comcode
-			'f_category_id'=>'?AUTO_LINK', // Categories can exist on multiple forum levels and positions - wherever a forum exists, the category it uses exists too (but not forums in category which aren't at level and position)
+			'f_forum_grouping_id'=>'?AUTO_LINK', // Categories can exist on multiple forum levels and positions - wherever a forum exists, the forum grouping it uses exists too (but not forums in the forum grouping which aren't at level and position)
 			'f_parent_forum'=>'?AUTO_LINK',
 			'f_position'=>'INTEGER', // might have been called 'f_order'=>'INTEGER' (consistent with other table's ordering fields) if we had not used f_order as a text field to determine the automatic ordering type
 			'f_order_sub_alpha'=>'BINARY',
@@ -790,16 +657,16 @@ function install_ocf($upgrade_from=NULL)
 		$staff_post_access=array($guest_group=>1,$administrator_group=>5,$super_moderator_group=>5,$probation_group=>1,$super_member_group=>2,$member_group_0=>1,$member_group_1=>1,$member_group_2=>1,$member_group_3=>1,$member_group_4=>1);
 		$staff_access=array($administrator_group=>5,$super_moderator_group=>5);
 		$root_forum=ocf_make_forum(do_lang('ROOT_FORUM'),'',NULL,$staff_post_access,NULL);
-		ocf_make_forum(do_lang('DEFAULT_FORUM_TITLE'),'',$category_id,$typical_access,$root_forum);
-		ocf_make_forum(do_lang('REPORTED_POSTS_FORUM'),'',$category_id_staff,$staff_access,$root_forum);
-		$trash_forum_id=ocf_make_forum(do_lang('TRASH'),'',$category_id_staff,$staff_access,$root_forum);
-		ocf_make_forum(do_lang('COMMENT_FORUM_NAME'),'',$category_id,$typical_access,$root_forum,1,1,0,'','','','last_post',1);
+		ocf_make_forum(do_lang('DEFAULT_FORUM_TITLE'),'',$forum_grouping_id,$typical_access,$root_forum);
+		ocf_make_forum(do_lang('REPORTED_POSTS_FORUM'),'',$forum_grouping_id_staff,$staff_access,$root_forum);
+		$trash_forum_id=ocf_make_forum(do_lang('TRASH'),'',$forum_grouping_id_staff,$staff_access,$root_forum);
+		ocf_make_forum(do_lang('COMMENT_FORUM_NAME'),'',$forum_grouping_id,$typical_access,$root_forum,1,1,0,'','','','last_post',1);
 		if (addon_installed('tickets'))
 		{
 			require_lang('tickets');
-			ocf_make_forum(do_lang('TICKET_FORUM_NAME'),'',$category_id_staff,$staff_access,$root_forum);
+			ocf_make_forum(do_lang('TICKET_FORUM_NAME'),'',$forum_grouping_id_staff,$staff_access,$root_forum);
 		}
-		$staff_forum_id=ocf_make_forum(do_lang('STAFF'),'',$category_id_staff,$staff_access,$root_forum);
+		$staff_forum_id=ocf_make_forum(do_lang('STAFF'),'',$forum_grouping_id_staff,$staff_access,$root_forum);
 
 		$GLOBALS['FORUM_DB']->create_table('f_topics',array(
 			'id'=>'*AUTO',
@@ -878,10 +745,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_posts','search_join',array('p_post'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','postsinforum',array('p_cache_forum_id'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','deletebyip',array('p_ip_address'));
-	}
 
-	if ((((is_null($upgrade_from)) && ($not_installed)) || (((!is_null($upgrade_from)) && ($upgrade_from<4.0)))))
-	{
 		$GLOBALS['FORUM_DB']->create_table('f_special_pt_access',array(
 			's_member_id'=>'*USER',
 			's_topic_id'=>'*AUTO_LINK',
@@ -892,10 +756,7 @@ function install_ocf($upgrade_from=NULL)
 			's_explanation'=>'LONG_TEXT',
 			's_message'=>'LONG_TEXT',
 		));
-	}
 
-	if ((((is_null($upgrade_from)) && ($not_installed)) || (($upgrade_from<2.5))))
-	{
 		$GLOBALS['FORUM_DB']->create_table('f_post_history',array(
 			'id'=>'*AUTO',
 			'h_create_date_and_time'=>'TIME',
@@ -931,10 +792,7 @@ function install_ocf($upgrade_from=NULL)
 		ocf_make_post_template(do_lang('DEFAULT_POST_TEMPLATE_fault_title'),do_lang('DEFAULT_POST_TEMPLATE_fault_text'),'',0);
 
 		$GLOBALS['FORUM_DB']->create_index('f_posts','#p_title',array('p_title'));
-	}
 
-	if ((is_null($upgrade_from)) && ($not_installed))
-	{
 		$GLOBALS['FORUM_DB']->create_table('f_polls',array(
 			'id'=>'*AUTO',
 			'po_question'=>'SHORT_TEXT',
@@ -1005,7 +863,6 @@ function install_ocf($upgrade_from=NULL)
 			'i_val_code'=>'SHORT_TEXT'
 		));
 
-		if (strtoupper(ocp_srv('REQUEST_METHOD'))!='POST') exit(); // Needed as YSlow can load as GET's in background and cause horrible results
 		// NB: post_param's will return default's if OCF is being installed but not used yet (e.g. IPB forum driver chosen at installation)
 		// Make guest
 		ocf_make_member(do_lang('GUEST'),'','',NULL,NULL,NULL,NULL,array(),NULL,$guest_group,1,time(),time(),'',NULL,'',0,1,1,'','','',1,0,'',1,1,'',NULL,'',false);
@@ -1022,11 +879,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_read_logs','erase_old_read_logs',array('l_time'));
 
 		ocf_make_post($topic_id,do_lang('DEFAULT_POST_TITLE'),do_lang('DEFAULT_POST_CONTENT'),0,true,1,0,do_lang('SYSTEM'),'127.0.0.1',time(),$GLOBALS['OCF_DRIVER']->get_guest_id(),NULL,NULL,NULL,false,true);
-	}
 
-	// Permissions have to be done after usergroups
-	if (is_null($upgrade_from))
-	{
 		// Add privileges
 		global $OCF_TRUE_PERMISSIONS,$OCF_FALSE_PERMISSIONS;
 		foreach ($OCF_TRUE_PERMISSIONS as $permission)
@@ -1037,47 +890,6 @@ function install_ocf($upgrade_from=NULL)
 		{
 			add_specific_permission('SECTION_FORUMS',$permission,false,($permission=='view_other_pt'));
 		}
-	}
-
-	if ((!is_null($upgrade_from)) && ($upgrade_from<3.1))
-	{
-		add_specific_permission('SECTION_FORUMS','use_special_emoticons',false);
-	}
-	if ((!is_null($upgrade_from)) && ($upgrade_from<4.0))
-	{
-		add_specific_permission('SECTION_FORUMS','member_maintenance',false);
-		add_specific_permission('SECTION_FORUMS','probate_members',false);
-		add_specific_permission('SECTION_FORUMS','own_avatars',true);
-		add_specific_permission('SECTION_FORUMS','control_usergroups',false,true);
-		add_specific_permission('SECTION_FORUMS','edit_personal_topic_posts',true);
-		add_specific_permission('SECTION_FORUMS','multi_delete_topics',false);
-		add_specific_permission('SECTION_FORUMS','show_user_browsing',false);
-		add_specific_permission('SECTION_FORUMS','see_hidden_groups',false);
-		add_specific_permission('SECTION_FORUMS','pt_anyone',false);
-	}
-	if ((!is_null($upgrade_from)) && ($upgrade_from<3.0))
-	{
-		add_specific_permission('SECTION_FORUMS','view_profiles',true);
-	}
-	if ((!is_null($upgrade_from)) && ($upgrade_from<2.5))
-	{
-		add_specific_permission('SECTION_FORUMS','moderate_personal_topic',false);
-		add_specific_permission('SECTION_FORUMS','disable_lost_passwords',false);
-		add_specific_permission('SECTION_FORUMS','view_any_profile_field',false);
-		add_specific_permission('SECTION_FORUMS','rename_self',true);
-		add_specific_permission('SECTION_FORUMS','double_post',false);
-		add_specific_permission('SECTION_FORUMS','close_own_topics',false);
-		add_specific_permission('SECTION_FORUMS','edit_own_polls',true);
-		add_specific_permission('SECTION_FORUMS','warn_members',false);
-		add_specific_permission('SECTION_FORUMS','see_warnings',false);
-		add_specific_permission('SECTION_FORUMS','see_ip',false);
-		add_specific_permission('SECTION_FORUMS','may_choose_custom_title',false);
-		add_specific_permission('SECTION_FORUMS','delete_account',false);
-		add_specific_permission('SECTION_FORUMS','view_other_pt',false);
-		add_specific_permission('SECTION_FORUMS','view_poll_results_before_voting',false);
-		add_specific_permission('SECTION_FORUMS','may_unblind_own_poll',true);
-
-		delete_specific_permission('enquire_on_new_ips');
 	}
 }
 

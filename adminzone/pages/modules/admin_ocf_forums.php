@@ -91,8 +91,8 @@ class Module_admin_ocf_forums extends standard_crud_module
 	{
 		$menu_links=array(
 						/*	 type							  page	 params													 zone	  */
-						array('add_one_category',array('admin_ocf_categories',array('type'=>'ad'),get_module_zone('admin_ocf_categories')),do_lang('ADD_FORUM_CATEGORY')),
-						array('edit_one_category',array('admin_ocf_categories',array('type'=>'ed'),get_module_zone('admin_ocf_categories')),do_lang('EDIT_FORUM_CATEGORY')),
+						array('add_one_category',array('admin_ocf_forum_groupings',array('type'=>'ad'),get_module_zone('admin_ocf_forum_groupings')),do_lang('ADD_FORUM_GROUPING')),
+						array('edit_one_category',array('admin_ocf_forum_groupings',array('type'=>'ed'),get_module_zone('admin_ocf_forum_groupings')),do_lang('EDIT_FORUM_GROUPING')),
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_FORUM')),
 						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_FORUM')),
 					);
@@ -116,7 +116,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 * @param  ?AUTO_LINK	The ID of the forum being edited (NULL: adding, not editing)
 	 * @param  SHORT_TEXT	The name of the forum
 	 * @param  LONG_TEXT		The description of the forum
-	 * @param  ?AUTO_LINK	The ID of the category for the forum (NULL: first)
+	 * @param  ?AUTO_LINK	The ID of the forum grouping for the forum (NULL: first)
 	 * @param  ?AUTO_LINK	The parent forum (NULL: root)
 	 * @param  ?integer		The position (NULL: next)
 	 * @param  BINARY			Whether post counts are incremented in this forum
@@ -128,14 +128,14 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 * @param  BINARY			Whether the forum is threaded.
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
-	function get_form_fields($id=NULL,$name='',$description='',$category_id=NULL,$parent_forum=NULL,$position=NULL,$post_count_increment=1,$order_sub_alpha=0,$intro_question='',$intro_answer='',$redirection='',$order='last_post',$is_threaded=0)
+	function get_form_fields($id=NULL,$name='',$description='',$forum_grouping_id=NULL,$parent_forum=NULL,$position=NULL,$post_count_increment=1,$order_sub_alpha=0,$intro_question='',$intro_answer='',$redirection='',$order='last_post',$is_threaded=0)
 	{
-		if (is_null($category_id))
+		if (is_null($forum_grouping_id))
 		{
-			$category_id=get_param_integer('category_id',db_get_first_id());
+			$forum_grouping_id=get_param_integer('forum_grouping_id',db_get_first_id());
 
 			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='category_id';
+			$NON_CANONICAL_PARAMS[]='forum_grouping_id';
 		}
 
 		if (is_null($parent_forum))
@@ -156,8 +156,8 @@ class Module_admin_ocf_forums extends standard_crud_module
 
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'name',$name,true));
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-		$list=ocf_nice_get_categories(NULL,$category_id);
-		$fields->attach(form_input_list(do_lang_tempcode('FORUM_GROUPING'),do_lang_tempcode('DESCRIPTION_FORUM_GROUPING'),'category_id',$list));
+		$list=ocf_nice_get_forum_groupings(NULL,$forum_grouping_id);
+		$fields->attach(form_input_list(do_lang_tempcode('FORUM_GROUPING'),do_lang_tempcode('DESCRIPTION_FORUM_GROUPING'),'forum_grouping_id',$list));
 		if ((is_null($id)) || ((!is_null($id)) && ($id!=db_get_first_id())))
 		{
 			$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT_FORUM'),'parent_forum',NULL,'choose_forum',array(),true,is_null($parent_forum)?'':strval($parent_forum)));
@@ -196,25 +196,25 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 * @param  SHORT_TEXT	The name of the forum $id
 	 * @param  array			A list of rows of all forums, or array() if the function is to get the list itself
 	 * @param  integer		The relative position of this forum wrt the others on the same level/branch in the UI
-	 * @param  integer		The number of forums in the parent category
+	 * @param  integer		The number of forums in the parent forum grouping
 	 * @param  ?BINARY		Whether to order own subcategories alphabetically (NULL: ask the DB)
 	 * @param  ?BINARY		Whether to order subcategories alphabetically (NULL: ask the DB)
 	 * @param  boolean		Whether we are dealing with a huge forum structure
 	 * @return tempcode		The UI
 	 */
-	function get_forum_tree($id,$forum,&$all_forums,$position=0,$sub_num_in_parent_category=1,$order_sub_alpha=NULL,$parent_order_sub_alpha=NULL,$huge=false)
+	function get_forum_tree($id,$forum,&$all_forums,$position=0,$sub_num_in_parent_forum_grouping=1,$order_sub_alpha=NULL,$parent_order_sub_alpha=NULL,$huge=false)
 	{
-		$categories=new ocp_tempcode();
+		$forum_groupings=new ocp_tempcode();
 
 		if ($huge)
 		{
-			$all_forums=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name','f_position','f_category_id','f_order_sub_alpha','f_parent_forum'),array('f_parent_forum'=>$id),'ORDER BY f_parent_forum,f_position',300);
+			$all_forums=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name','f_position','f_forum_grouping_id','f_order_sub_alpha','f_parent_forum'),array('f_parent_forum'=>$id),'ORDER BY f_parent_forum,f_position',300);
 			if (count($all_forums)==300) return paragraph(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 		} else
 		{
 			if (count($all_forums)==0)
 			{
-				$all_forums=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name','f_position','f_category_id','f_order_sub_alpha','f_parent_forum'),NULL,'ORDER BY f_parent_forum,f_position');
+				$all_forums=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name','f_position','f_forum_grouping_id','f_order_sub_alpha','f_parent_forum'),NULL,'ORDER BY f_parent_forum,f_position');
 			}
 		}
 
@@ -225,14 +225,14 @@ class Module_admin_ocf_forums extends standard_crud_module
 		}
 
 		global $C_TITLE;
-		if (is_null($C_TITLE)) $C_TITLE=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_categories',array('id','c_title')));
+		if (is_null($C_TITLE)) $C_TITLE=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('id','c_title')));
 
-		$_categories=array();
+		$_forum_groupings=array();
 		foreach ($all_forums as $_forum)
 		{
-			if ($_forum['f_parent_forum']==$id) $_categories[$_forum['f_category_id']]=1;
+			if ($_forum['f_parent_forum']==$id) $_forum_groupings[$_forum['f_forum_grouping_id']]=1;
 		}
-		$num_categories=count($_categories);
+		$num_forum_groupings=count($_forum_groupings);
 
 		$order=($order_sub_alpha==1)?'f_name':'f_position';
 		$subforums=array();
@@ -246,19 +246,19 @@ class Module_admin_ocf_forums extends standard_crud_module
 			$M_SORT_KEY='f_name';
 			uasort($subforums,'multi_sort');
 		}
-		$category_id=mixed();
+		$forum_grouping_id=mixed();
 		$position_in_cat=0;
-		$category_position=0;
+		$forum_grouping_position=0;
 		$forums=NULL;
 		$orderings='';
 		while (count($subforums)!=0)
 		{
 			$i=NULL;
-			if (!is_null($category_id))
+			if (!is_null($forum_grouping_id))
 			{
 				foreach ($subforums as $j=>$subforum)
 				{
-					if ($subforum['f_category_id']==$category_id)
+					if ($subforum['f_forum_grouping_id']==$forum_grouping_id)
 					{
 						$i=$j;
 						break;
@@ -270,8 +270,8 @@ class Module_admin_ocf_forums extends standard_crud_module
 			{
 				if (!is_null($forums))
 				{
-					$categories->attach(do_template('OCF_EDIT_FORUM_SCREEN_GROUPING',array('_GUID'=>'889173769e237b917b7e06eda0fb4350','ORDERINGS'=>$orderings,'GROUPING'=>$C_TITLE[$category_id],'SUBFORUMS'=>$forums)));
-					$category_position++;
+					$forum_groupings->attach(do_template('OCF_EDIT_FORUM_SCREEN_GROUPING',array('_GUID'=>'889173769e237b917b7e06eda0fb4350','ORDERINGS'=>$orderings,'GROUPING'=>$C_TITLE[$forum_grouping_id],'SUBFORUMS'=>$forums)));
+					$forum_grouping_position++;
 				}
 				$forums=new ocp_tempcode();
 				$i=0;
@@ -280,12 +280,12 @@ class Module_admin_ocf_forums extends standard_crud_module
 					$i=$j;
 					break;
 				}
-				$category_id=$subforums[$i]['f_category_id'];
+				$forum_grouping_id=$subforums[$i]['f_forum_grouping_id'];
 				$position_in_cat=0;
-				$sub_num_in_category=0;
+				$sub_num_in_forum_grouping=0;
 				foreach ($subforums as $subforum)
 				{
-					if ($subforum['f_category_id']==$category_id) $sub_num_in_category++;
+					if ($subforum['f_forum_grouping_id']==$forum_grouping_id) $sub_num_in_forum_grouping++;
 				}
 			}
 
@@ -294,20 +294,20 @@ class Module_admin_ocf_forums extends standard_crud_module
 			$orderings='';
 			if (($order_sub_alpha==0) && (!$huge))
 			{
-				for ($_i=0;$_i<$num_categories;$_i++)
+				for ($_i=0;$_i<$num_forum_groupings;$_i++)
 				{
-					$orderings.='<option '.(($_i==$category_position)?'selected="selected"':'').'>'.strval($_i+1).'</option>';
+					$orderings.='<option '.(($_i==$forum_grouping_position)?'selected="selected"':'').'>'.strval($_i+1).'</option>';
 				}
-				$orderings='<label for="category_order_'.strval($id).'_'.strval($category_id).'">'.do_lang('ORDER').'<span class="accessibility_hidden"> ('.(array_key_exists($category_id,$C_TITLE)?escape_html($C_TITLE[$category_id]):'').')</span> <select id="category_order_'.strval($id).'_'.strval($category_id).'" name="category_order_'.strval($id).'_'.strval($category_id).'">'.$orderings.'</select></label>'; // XHTMLXHTML
+				$orderings='<label for="forum_grouping_order_'.strval($id).'_'.strval($forum_grouping_id).'">'.do_lang('ORDER').'<span class="accessibility_hidden"> ('.(array_key_exists($forum_grouping_id,$C_TITLE)?escape_html($C_TITLE[$forum_grouping_id]):'').')</span> <select id="forum_grouping_order_'.strval($id).'_'.strval($forum_grouping_id).'" name="forum_grouping_order_'.strval($id).'_'.strval($forum_grouping_id).'">'.$orderings.'</select></label>'; // XHTMLXHTML
 			}
 
-			$forums->attach($this->get_forum_tree($subforum['id'],$subforum['f_name'],$all_forums,$position_in_cat,$sub_num_in_category,$subforum['f_order_sub_alpha'],$order_sub_alpha,$huge));
+			$forums->attach($this->get_forum_tree($subforum['id'],$subforum['f_name'],$all_forums,$position_in_cat,$sub_num_in_forum_grouping,$subforum['f_order_sub_alpha'],$order_sub_alpha,$huge));
 
 			$position_in_cat++;
 			unset($subforums[$i]);
 		}
-		if (!is_null($category_id))
-			$categories->attach(do_template('OCF_EDIT_FORUM_SCREEN_GROUPING',array('_GUID'=>'6cb30ec5189f75a9631b2bb430c89fd0','ORDERINGS'=>$orderings,'GROUPING'=>$C_TITLE[$category_id],'SUBFORUMS'=>$forums)));
+		if (!is_null($forum_grouping_id))
+			$forum_groupings->attach(do_template('OCF_EDIT_FORUM_SCREEN_GROUPING',array('_GUID'=>'6cb30ec5189f75a9631b2bb430c89fd0','ORDERINGS'=>$orderings,'GROUPING'=>$C_TITLE[$forum_grouping_id],'SUBFORUMS'=>$forums)));
 
 		$edit_url=build_url(array('page'=>'_SELF','type'=>'_ed','id'=>$id),'_SELF');
 		$view_map=array('page'=>'forumview');
@@ -319,7 +319,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 		$orderings='';
 		if ($parent_order_sub_alpha==0)
 		{
-			for ($i=0;$i<$sub_num_in_parent_category;$i++)
+			for ($i=0;$i<$sub_num_in_parent_forum_grouping;$i++)
 			{
 				$orderings.='<option '.(($i==$position)?'selected="selected"':'').'>'.strval($i+1).'</option>';
 			}
@@ -328,7 +328,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 
 		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($orderings);
 
-		return do_template('OCF_EDIT_FORUM_SCREEN_FORUM',array('_GUID'=>'35fdeb9848919b5c30b069eb5df603d5','ID'=>strval($id),'ORDERINGS'=>$orderings,'CATEGORIES'=>$categories,'CLASS'=>$class,'FORUM'=>$forum,'VIEW_URL'=>$view_url,'EDIT_URL'=>$edit_url));
+		return do_template('OCF_EDIT_FORUM_SCREEN_FORUM',array('_GUID'=>'35fdeb9848919b5c30b069eb5df603d5','ID'=>strval($id),'ORDERINGS'=>$orderings,'FORUM_GROUPINGS'=>$forum_groupings,'CLASS'=>$class,'FORUM'=>$forum,'VIEW_URL'=>$view_url,'EDIT_URL'=>$edit_url));
 	}
 
 	/**
@@ -365,11 +365,11 @@ class Module_admin_ocf_forums extends standard_crud_module
 	{
 		$title=get_screen_title('EDIT_FORUM');
 
-		$all=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_parent_forum','f_category_id'));
+		$all=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_parent_forum','f_forum_grouping_id'));
 		$ordering=array();
 		foreach ($all as $forum)
 		{
-			$cat_order=post_param_integer('category_order_'.strval($forum['f_parent_forum']).'_'.strval($forum['f_category_id']),-1);
+			$cat_order=post_param_integer('forum_grouping_order_'.strval($forum['f_parent_forum']).'_'.strval($forum['f_forum_grouping_id']),-1);
 			$order=post_param_integer('order_'.strval($forum['id']),-1);
 			if (($cat_order!=-1) && ($order!=-1)) // Should only be -1 if since deleted
 			{
@@ -445,7 +445,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$r=$m[0];
 
-		$fields=$this->get_form_fields($r['id'],$r['f_name'],get_translated_text($r['f_description'],$GLOBALS['FORUM_DB']),$r['f_category_id'],$r['f_parent_forum'],$r['f_position'],$r['f_post_count_increment'],$r['f_order_sub_alpha'],get_translated_text($r['f_intro_question'],$GLOBALS['FORUM_DB']),$r['f_intro_answer'],$r['f_redirection'],$r['f_order'],$r['f_is_threaded']);
+		$fields=$this->get_form_fields($r['id'],$r['f_name'],get_translated_text($r['f_description'],$GLOBALS['FORUM_DB']),$r['f_forum_grouping_id'],$r['f_parent_forum'],$r['f_position'],$r['f_post_count_increment'],$r['f_order_sub_alpha'],get_translated_text($r['f_intro_question'],$GLOBALS['FORUM_DB']),$r['f_intro_answer'],$r['f_redirection'],$r['f_order'],$r['f_is_threaded']);
 
 		$delete_fields=new ocp_tempcode();
 		if (intval($id)!=db_get_first_id())
@@ -471,7 +471,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 
 		$parent_forum=post_param_integer('parent_forum',-1);
 		$name=post_param('name');
-		$id=strval(ocf_make_forum($name,post_param('description'),post_param_integer('category_id'),NULL,$parent_forum,post_param_integer('position'),post_param_integer('post_count_increment',0),post_param_integer('order_sub_alpha',0),post_param('intro_question'),post_param('intro_answer'),post_param('redirection'),post_param('order'),post_param_integer('is_threaded',0)));
+		$id=strval(ocf_make_forum($name,post_param('description'),post_param_integer('forum_grouping_id'),NULL,$parent_forum,post_param_integer('position'),post_param_integer('post_count_increment',0),post_param_integer('order_sub_alpha',0),post_param('intro_question'),post_param('intro_answer'),post_param('redirection'),post_param('order'),post_param_integer('is_threaded',0)));
 
 		// Warning if there is full access to this forum, but not to the parent
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
@@ -529,7 +529,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
-		ocf_edit_forum(intval($id),post_param('name'),post_param('description',STRING_MAGIC_NULL),post_param_integer('category_id',INTEGER_MAGIC_NULL),post_param_integer('parent_forum',INTEGER_MAGIC_NULL),post_param_integer('position',INTEGER_MAGIC_NULL),post_param_integer('post_count_increment',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param_integer('order_sub_alpha',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param('intro_question',STRING_MAGIC_NULL),post_param('intro_answer',STRING_MAGIC_NULL),post_param('redirection',STRING_MAGIC_NULL),post_param('order',STRING_MAGIC_NULL),post_param_integer('is_threaded',0),post_param_integer('reset_intro_acceptance',0)==1);
+		ocf_edit_forum(intval($id),post_param('name'),post_param('description',STRING_MAGIC_NULL),post_param_integer('forum_grouping_id',INTEGER_MAGIC_NULL),post_param_integer('parent_forum',INTEGER_MAGIC_NULL),post_param_integer('position',INTEGER_MAGIC_NULL),post_param_integer('post_count_increment',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param_integer('order_sub_alpha',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param('intro_question',STRING_MAGIC_NULL),post_param('intro_answer',STRING_MAGIC_NULL),post_param('redirection',STRING_MAGIC_NULL),post_param('order',STRING_MAGIC_NULL),post_param_integer('is_threaded',0),post_param_integer('reset_intro_acceptance',0)==1);
 
 		if (!fractional_edit())
 		{

@@ -19,7 +19,7 @@ A forum exists to organise topics into some kind of common subject. For example,
 
 The sub-forum system exists so that forums may be organised such that subjects are logically sub-classified in such a way as to prevent an 'explosion' of forums displayed on the home forum (which would be cluttered and difficult to navigate). Whether a forum with sub-forums should itself be able to hold topics is up to you, but often allowing this is a useful technique for allowing placement of a topic that classifies under a forum, but not one of the sub-forums.
 
-[exp_thumb="Adding a forum grouping" float="left"]forums_category_add[/exp_thumb]
+[exp_thumb="Adding a forum grouping" float="left"]forums_grouping_add[/exp_thumb]
 [box="Important note" width="25em" float="right"]Whilst discussion forums are primarily meant for discussion, they may in-fact be used for the general purpose of conveying information. It is often typical for a topic that may-not-be-replied-to be made by staff to convey some form of alert: the discussion forums might be used rather than news, or some other ocPortal medium, due to the easiness of creating and organising topics, the flexibility of the medium, or to target an audience that views the discussion forums more regularly than the other mediums.[/box]
 {!ocf:DOC_FORUM_CATEGORIES}
 

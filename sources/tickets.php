@@ -50,7 +50,7 @@ function get_ticket_forum_id($member=NULL,$ticket_type=NULL,$create=false,$silen
 	require_code('ocf_forums_action');
 	require_code('ocf_forums_action2');
 
-	$category_id=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_category_id',array('id'=>$fid));
+	$category_id=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_forum_grouping_id',array('id'=>$fid));
 
 	if ((!is_null($member)) && (get_option('ticket_member_forums')=='1'))
 	{

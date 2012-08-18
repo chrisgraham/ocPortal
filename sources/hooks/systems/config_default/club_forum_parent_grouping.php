@@ -18,7 +18,7 @@
  * @package		core_ocf
  */
 
-class Hook_config_default_club_forum_parent_category
+class Hook_config_default_club_forum_parent_grouping
 {
 
 	/**

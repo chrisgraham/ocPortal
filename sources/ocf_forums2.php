@@ -19,15 +19,15 @@
  */
 
 /**
- * Get a nice list for selection from the forum categories.
+ * Get a nice list for selection from the forum groupings.
  *
  * @param  ?AUTO_LINK	Category to avoid putting in the list (NULL: don't avoid any).
  * @param  ?AUTO_LINK	Category selected by default (NULL: no specific default).
  * @return tempcode		The list.
  */
-function ocf_nice_get_categories($avoid=NULL,$it=NULL)
+function ocf_nice_get_forum_groupings($avoid=NULL,$it=NULL)
 {
-	$_m=$GLOBALS['FORUM_DB']->query_select('f_categories',array('*'));
+	$_m=$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('*'));
 	$entries=new ocp_tempcode();
 	foreach ($_m as $m)
 	{
@@ -90,8 +90,8 @@ function ocf_get_topic_tree($forum_id=NULL,$breadcrumbs=NULL,$title=NULL,$levels
 	$children[0]['title']=$title;
 	$children[0]['breadcrumbs']=$breadcrumbs;
 
-	// Children of this category
-	$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name'),array('f_parent_forum'=>$forum_id),'ORDER BY f_category_id,f_position',200);
+	// Children of this forum
+	$rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name'),array('f_parent_forum'=>$forum_id),'ORDER BY f_forum_grouping_id,f_position',200);
 	if (count($rows)==200) $rows=array(); // Too many, this method will suck
 	$tmap=array('t_forum_id'=>$forum_id);
 	if (!has_specific_permission(get_member(),'see_unvalidated')) $tmap['t_validated']=1;
@@ -159,12 +159,12 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 	}
 	if ($FORUM_TREE_SECURE_CACHE===true)
 	{
-		$forums=$GLOBALS['FORUM_DB']->query('SELECT id,f_order_sub_alpha,f_name,f_category_id,f_parent_forum,f_position FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id IS NOT NULL AND '.db_string_equal_to('f_redirection','').' AND '.(is_null($base_forum)?'f_parent_forum IS NULL':('f_parent_forum='.strval($base_forum))).' ORDER BY f_position',200/*reasonable limit*/);
+		$forums=$GLOBALS['FORUM_DB']->query('SELECT id,f_order_sub_alpha,f_name,f_forum_grouping_id,f_parent_forum,f_position FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id IS NOT NULL AND '.db_string_equal_to('f_redirection','').' AND '.(is_null($base_forum)?'f_parent_forum IS NULL':('f_parent_forum='.strval($base_forum))).' ORDER BY f_position',200/*reasonable limit*/);
 	} else
 	{
 		if ((is_null($FORUM_TREE_SECURE_CACHE)) || ($FORUM_TREE_SECURE_CACHE===false))
 		{
-			$FORUM_TREE_SECURE_CACHE=$GLOBALS['FORUM_DB']->query('SELECT id,f_order_sub_alpha,f_name,f_category_id,f_parent_forum,f_position FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id IS NOT NULL AND '.db_string_equal_to('f_redirection','').' ORDER BY f_position');
+			$FORUM_TREE_SECURE_CACHE=$GLOBALS['FORUM_DB']->query('SELECT id,f_order_sub_alpha,f_name,f_forum_grouping_id,f_parent_forum,f_position FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id IS NOT NULL AND '.db_string_equal_to('f_redirection','').' ORDER BY f_position');
 		}
 		foreach ($FORUM_TREE_SECURE_CACHE as $x)
 		{
@@ -178,19 +178,19 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 	foreach ($forums as $forum)
 	{
 		$access=has_category_access($member_id,'forums',strval($forum['id']));
-		$cat_sort_key='!'.(is_null($forum['f_category_id'])?'':strval($forum['f_category_id']));
+		$cat_sort_key='!'.(is_null($forum['f_forum_grouping_id'])?'':strval($forum['f_forum_grouping_id']));
 
 		if (($access) && ($skip!==$forum['id']) && ($levels!==0))
 		{
 			$cat_bit='';
-			if (!is_null($forum['f_category_id']))
+			if (!is_null($forum['f_forum_grouping_id']))
 			{
 				global $GROUPING_TITLES;
 				if (is_null($GROUPING_TITLES))
 				{
-					$GROUPING_TITLES=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_categories',array('id','c_title')));
+					$GROUPING_TITLES=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('id','c_title')));
 				}
-				$cat_bit=array_key_exists($forum['f_category_id'],$GROUPING_TITLES)?$GROUPING_TITLES[$forum['f_category_id']]:do_lang('NA');
+				$cat_bit=array_key_exists($forum['f_forum_grouping_id'],$GROUPING_TITLES)?$GROUPING_TITLES[$forum['f_forum_grouping_id']]:do_lang('NA');
 				//if (strlen($pre.$cat_bit)>26) $cat_bit='...';
 			}
 			if ($field_format)
@@ -229,7 +229,7 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 					list($below,$_compound_list)=$below;
 					$compound_list.=strval($forum['id']).','.$_compound_list;
 				}
-				$element=array('id'=>$forum['id'],'compound_list'=>(!$use_compound_list?strval($forum['id']):(strval($forum['id']).','.$_compound_list)),'second_cat'=>$cat_bit,'title'=>$forum['f_name'],'group'=>$forum['f_category_id'],'children'=>ocf_get_forum_tree_secure($member_id,$forum['id'],false,$selected_forum,$breadcrumbs,$skip,false,false,$levels,$do_stats));
+				$element=array('id'=>$forum['id'],'compound_list'=>(!$use_compound_list?strval($forum['id']):(strval($forum['id']).','.$_compound_list)),'second_cat'=>$cat_bit,'title'=>$forum['f_name'],'group'=>$forum['f_forum_grouping_id'],'children'=>ocf_get_forum_tree_secure($member_id,$forum['id'],false,$selected_forum,$breadcrumbs,$skip,false,false,$levels,$do_stats));
 				if ($do_stats)
 				{
 					$element['child_count']=$GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)',array('f_parent_forum'=>$forum['id']));
@@ -243,7 +243,7 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 		}
 	}
 
-	// Up to now we worked into an array, so we could benefit from how it would auto-sort into the category>forum-position ordering ocPortal uses. Now we need to unzip it
+	// Up to now we worked into an array, so we could benefit from how it would auto-sort into the grouping>forum-position ordering ocPortal uses. Now we need to unzip it
 	$real_out=mixed();
 	if ($field_format)
 	{
