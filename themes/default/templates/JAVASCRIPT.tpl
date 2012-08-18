@@ -2188,10 +2188,10 @@ function EntitiesToUnicode(din)
 	}
 	return din;
 }
-{$,load the HTML as XML}
+{$,load the HTML as XHTML}
 function Load(xmlString) {
 	var xml;
-	if (typeof DOMParser!="undefined") xml=(new DOMParser()).parseFromString(xmlString,"application/xml");
+	if (typeof DOMParser!="undefined") xml=(new DOMParser()).parseFromString(xmlString,"text/xml");
 	else {
 		var ieDOM=["MSXML2.DOMDocument","MSXML.DOMDocument","Microsoft.XMLDOM"];
 		for (var i=0;i<ieDOM.length && !xml;i++) {
@@ -2415,7 +2415,7 @@ function setInnerHTML(element,tHTML,append)
 	tHTML=EntitiesToUnicode(tHTML);
 
 	{$,load the XML and copies to DOM}
-	tHTML="<root>"+tHTML+"</root>";
+	tHTML="<root>"+tHTML.replace(/^\s*\<\!DOCTYPE[^<>]*\>/,'')+"</root>";
 	var xmlDoc=Load(tHTML);
 	if (element && xmlDoc) {
 		if (!append) while (element.lastChild) element.removeChild(element.lastChild);

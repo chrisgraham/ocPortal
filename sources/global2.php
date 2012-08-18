@@ -853,7 +853,7 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 			global $_REQUIRED_CODE;
 			if (!array_key_exists('failure',$_REQUIRED_CODE))
 			{
-				critical_error('EMERGENCY',$errstr.' ['.$errfile.' at '.strval($errline).']');
+				critical_error('EMERGENCY',$errstr.escape_html(' ['.$errfile.' at '.strval($errline).']'));
 			}
 		}
 		require_code('failure');
