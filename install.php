@@ -435,7 +435,7 @@ END;
 	foreach (preg_split('#\s+#',$needed_functions) as $function)
 	{
 		if (trim($function)=='') continue;
-		if (@preg_match('#(\s|,|^)'.str_replace('#','\#',preg_quote($function)).'(\s|$|,)#',strtolower(@ini_get('disable_functions').','.ini_get('suhosin.executor.func.blacklist').','.ini_get('suhosin.executor.include.blacklist').','.ini_get('suhosin.executor.eval.blacklist')))!=0)
+		if (@preg_match('#(\s|,|^)'.preg_quote($function,'#').'(\s|$|,)#',strtolower(@ini_get('disable_functions').','.ini_get('suhosin.executor.func.blacklist').','.ini_get('suhosin.executor.include.blacklist').','.ini_get('suhosin.executor.eval.blacklist')))!=0)
 			$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('DISABLED_FUNCTION',escape_html($function)))));
 	}
 	if (function_exists('mysqli_get_client_version'))

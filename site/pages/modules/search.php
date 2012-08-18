@@ -428,7 +428,7 @@ class Module_search
 				{
 					$simple_content_evaluated=$simple_content->evaluate();
 					$matches=array();
-					if (preg_match('#<option [^>]*value="'.str_replace('#','\#',preg_quote($under)).'('.((strpos($under,',')===false)?',':'').'[^"]*)?"[^>]*>([^>]* &gt; )?([^>]*)</option>#',$simple_content_evaluated,$matches)!=0)
+					if (preg_match('#<option [^>]*value="'.preg_quote($under,'#').'('.((strpos($under,',')===false)?',':'').'[^"]*)?"[^>]*>([^>]* &gt; )?([^>]*)</option>#',$simple_content_evaluated,$matches)!=0)
 					{
 						if (strpos($under,',')===false) $under=$under.$matches[1];
 						$nice_label=trim($matches[3]);

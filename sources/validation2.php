@@ -235,7 +235,7 @@ function init__validation2()
 	$enforce_list_style_image='(none|'.$enforce_functional_url.')';
 	$enforce_id='[a-zA-Z][\w\-\:\.]*';
 	$enforce_name='[\w\-\:\.]+(\[\])?';
-	$enforce_link=((get_forum_type()=='none')?'(mailto:.*)?':'').'('.str_replace('#','\#',preg_quote(mailto_obfuscated())).'.*)?[^\s\#]*(\#[^\s\#]*)?';
+	$enforce_link=((get_forum_type()=='none')?'(mailto:.*)?':'').'('.preg_quote(mailto_obfuscated()).'.*)?[^\s\#]*(\#[^\s\#]*)?';
 	$enforce_class='[ \w-]*';
 	$_counter_increment='((\w+( \d+)?)+)';
 	$enforce_counter_increment=$_counter_increment.'( '.$_counter_increment.')*';

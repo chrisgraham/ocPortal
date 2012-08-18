@@ -243,7 +243,7 @@ class Module_admin
 				foreach ($keyword_group as $keyword)
 				{
 					if ($regexp!='') $regexp.='|';
-					$regexp_for_keyword='((^|\.|\#|\s|\/|\-|>|\)|\(|\})'.str_replace('#','\#',preg_quote($keyword)).')';
+					$regexp_for_keyword='((^|\.|\#|\s|\/|\-|>|\)|\(|\})'.preg_quote($keyword,'#').')';
 					$regexp.=$regexp_for_keyword;
 				}
 				if ($this->and_query)
@@ -987,7 +987,7 @@ class Module_admin
 							{
 								if (!array_key_exists($file,$lang_file_contents))
 									$lang_file_contents[$file]=file_get_contents(get_file_base().'/'.$lang_dir.'/'.fallback_lang().'/'.$file);
-								if ((preg_match('#^'.str_replace('#','\#',preg_quote($n)).'=#m',$lang_file_contents[$file])!=0) || ((file_exists(get_custom_file_base().'/lang_custom/'.user_lang().'/'.$file)) && (preg_match('#^'.str_replace('#','\#',preg_quote($n)).'=#m',file_get_contents(get_custom_file_base().'/lang_custom/'.user_lang().'/'.$file))!=0)))
+								if ((preg_match('#^'.preg_quote($n,'#').'=#m',$lang_file_contents[$file])!=0) || ((file_exists(get_custom_file_base().'/lang_custom/'.user_lang().'/'.$file)) && (preg_match('#^'.preg_quote($n,'#').'=#m',file_get_contents(get_custom_file_base().'/lang_custom/'.user_lang().'/'.$file))!=0)))
 								{
 									$lang_file=basename($file,'.ini');
 									break;

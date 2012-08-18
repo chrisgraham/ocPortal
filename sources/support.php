@@ -1598,7 +1598,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 		{
 			require_code('files');
 			$details=better_parse_ini_file($ini_path);
-			if ((isset($details['mobile_pages'])) && ($details['mobile_pages']!='') && (preg_match('#(^|,)\s*'.str_replace('#','\#',preg_quote(get_page_name())).'\s*(,|$)#',$details['mobile_pages'])==0))
+			if ((isset($details['mobile_pages'])) && ($details['mobile_pages']!='') && (preg_match('#(^|,)\s*'.preg_quote(get_page_name(),'#').'\s*(,|$)#',$details['mobile_pages'])==0))
 			{
 				$IS_MOBILE=false;
 				return false;

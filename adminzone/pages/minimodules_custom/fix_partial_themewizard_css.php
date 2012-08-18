@@ -61,7 +61,7 @@ while (($sheet=readdir($dh))!==false)
 		foreach ($canonical_theme_landscape as $peak)
 		{
 			$matches=array();
-			$num_matches=preg_match_all('#\#[A-Fa-f0-9]{6}(.*)'.str_replace('#','\#',preg_quote($peak[2])).'#',$output,$matches);
+			$num_matches=preg_match_all('#\#[A-Fa-f0-9]{6}(.*)'.preg_quote($peak[2],'#').'#',$output,$matches);
 			for ($i=0;$i<$num_matches;$i++)
 			{
 				if (strtolower($matches[0][$i])==strtolower('#'.$peak[3].$matches[1][$i].$peak[2])) // i.e. unaltered in our theme

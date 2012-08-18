@@ -36,7 +36,7 @@ function block_params_to_block_signature($map)
 {
 	foreach ($map as $key=>$val)
 	{
-		$map[$key]=str_replace('#','\#',preg_quote($val));
+		$map[$key]=preg_quote($val,'#');
 	}
 	return $map;
 }

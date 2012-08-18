@@ -1152,14 +1152,14 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		if ($colon_pos!==false) $domain=substr($domain,0,$colon_pos);
 		$port=ocp_srv('SERVER_PORT');
 		if (($port=='') || ($port=='80') || ($port=='443')) $port=''; else $port=':'.$port;
-			$SITE_INFO['base_url']='http://'.$domain.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.str_replace('#','\#',preg_quote($GLOBALS['RELATIVE_PATH'])).'$#','',str_replace('\\','/',dirname(ocp_srv('PHP_SELF'))))));
+			$SITE_INFO['base_url']='http://'.$domain.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',str_replace('\\','/',dirname(ocp_srv('PHP_SELF'))))));
 	}
 
 	$base_url=$SITE_INFO['base_url'];
 	global $CURRENT_SHARE_USER;
 	if ($CURRENT_SHARE_USER!==NULL)
 	{
-		$base_url=preg_replace('#^http://([\w]+\.)?'.str_replace('#','\#',preg_quote($SITE_INFO['custom_share_domain'])).'#','http://'.ocp_srv('HTTP_HOST'),$base_url);
+		$base_url=preg_replace('#^http://([\w]+\.)?'.preg_quote($SITE_INFO['custom_share_domain'],'#').'#','http://'.ocp_srv('HTTP_HOST'),$base_url);
 	}
 	$found_mapping=false;
 	if ($VIRTUALISED_ZONES)

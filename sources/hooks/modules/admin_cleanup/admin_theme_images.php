@@ -54,7 +54,7 @@ class Hook_admin_theme_images
 			{
 				$GLOBALS['SITE_DB']->query_delete('theme_images',$path,'',1);
 			}
-			elseif (preg_match('#^themes/[^/]+/images_custom/+'.str_replace('#','\#',preg_quote($path['id'])).'\.#',$path['path'])!=0)
+			elseif (preg_match('#^themes/[^/]+/images_custom/+'.preg_quote($path['id'],'#').'\.#',$path['path'])!=0)
 			{
 				if ((!file_exists(get_custom_file_base().'/'.$path['path'])) && (!file_exists(get_file_base().'/'.$path['path'])))
 				{

@@ -461,7 +461,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	$array_html_preg_replace=array();
 	require_code('obfuscate');
 	$array_html_preg_replace[]=array('#^<a ([^>]*)href="mailto:(?-U) ?(?U)([^"]+)"([^>]*)>(.*)</a>$#siU','[email="${2}"]${4}[/email]');
-	$array_html_preg_replace[]=array('#^<a ([^>]*)href="'.str_replace('#','\#',str_replace('&','\\&',mailto_obfuscated())).'([^"]+)"([^>]*)>(.*)</a>$#siU','[email="${4}"]${2}[/email]');
+	$array_html_preg_replace[]=array('#^<a ([^>]*)href="'.preg_quote(mailto_obfuscated(),'#').'([^"]+)"([^>]*)>(.*)</a>$#siU','[email="${4}"]${2}[/email]');
 	$array_html_preg_replace[]=array('#^<a ([^>]*)href="([^"]+)"([^>]*) target="([^"]*)"([^>]*)>(.*)</a>$#siU','[url="${2}" target="${4}"]${6}[/url]');
 	$array_html_preg_replace[]=array('#^<a ([^>]*)href="([^"]+)"([^>]*)>(.*)</a>$#siU','[url="${2}"]${4}[/url]');
 	$semihtml=array_html_preg_replace('a',$array_html_preg_replace,$semihtml);
@@ -725,7 +725,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		}
 		$imgcode[1]=str_replace(get_base_url(),'',$imgcode[1]);
 
-		$semihtml2=preg_replace('#<img [^>]*src="[^"]*'.str_replace('#','\#',preg_quote(escape_html($imgcode[1]))).'"[^>]*>\s*#si',$code,$semihtml2);
+		$semihtml2=preg_replace('#<img [^>]*src="[^"]*'.preg_quote(escape_html($imgcode[1]),'#').'"[^>]*>\s*#si',$code,$semihtml2);
 	}
 
 	$semihtml2=preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*) />#siU','_img_tag_fixup',$semihtml2);

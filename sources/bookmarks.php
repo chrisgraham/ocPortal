@@ -73,10 +73,10 @@ function add_bookmark_form($post_url)
 	$page_link=convert_to_internal_encoding(url_to_pagelink($url,false,false),'UTF-8');
 	$default_title=get_param('title','',true);
 	$default_title=convert_to_internal_encoding($default_title,'UTF-8');
-	$default_title=preg_replace('#\s.\s'.str_replace('#','\#',preg_quote(get_site_name())).'$#s','',$default_title);
-	$default_title=preg_replace('#^'.str_replace('#','\#',preg_quote(get_site_name())).'\s.\s#s','',$default_title);
-	$default_title_2=@preg_replace('#\s.\s'.str_replace('#','\#',preg_quote(get_site_name())).'$#su','',$default_title);
-	$default_title_2=@preg_replace('#^'.str_replace('#','\#',preg_quote(get_site_name())).'\s.\s#su','',$default_title_2);
+	$default_title=preg_replace('#\s.\s'.preg_quote(get_site_name(),'#').'$#s','',$default_title);
+	$default_title=preg_replace('#^'.preg_quote(get_site_name(),'#').'\s.\s#s','',$default_title);
+	$default_title_2=@preg_replace('#\s.\s'.preg_quote(get_site_name(),'#').'$#su','',$default_title);
+	$default_title_2=@preg_replace('#^'.preg_quote(get_site_name(),'#').'\s.\s#su','',$default_title_2);
 	if ($default_title_2!==false) $default_title=$default_title_2;
 	if (!is_string($default_title)) $default_title='';
 

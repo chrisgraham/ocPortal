@@ -120,7 +120,7 @@ function get_exif_image_caption($path,$filename)
 		rewind($csv_file_handle);
 		while (($csv_line=fgetcsv($csv_file_handle,10240,$del))!==false)
 		{
-			if (preg_match('#(^|/|\\\\)'.str_replace('#','\#',preg_quote(trim($csv_line[0]))).'#',$filename)!=0)
+			if (preg_match('#(^|/|\\\\)'.preg_quote(trim($csv_line[0]),'#').'#',$filename)!=0)
 			{
 				$comments=trim($csv_line[1]);
 				break;

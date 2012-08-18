@@ -257,9 +257,9 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 	// Try and strip any variants of the base URL from our $url variable, to make it relative
 	$non_www_base_url=str_replace('http://www.','http://',get_base_url());
 	$www_base_url=str_replace('http://','http://www.',get_base_url());
-	$url=preg_replace('#^'.str_replace('#','\#',preg_quote(get_base_url().'/')).'#','',$url);
-	$url=preg_replace('#^'.str_replace('#','\#',preg_quote($non_www_base_url.'/')).'#','',$url);
-	$url=preg_replace('#^'.str_replace('#','\#',preg_quote($www_base_url.'/')).'#','',$url);
+	$url=preg_replace('#^'.preg_quote(get_base_url().'/','#').'#','',$url);
+	$url=preg_replace('#^'.preg_quote($non_www_base_url.'/','#').'#','',$url);
+	$url=preg_replace('#^'.preg_quote($www_base_url.'/','#').'#','',$url);
 	if (substr($url,0,7)=='http://') return '';
 	if (substr($url,0,8)=='https://') return '';
 	if (substr($url,0,1)!='/') $url='/'.$url;
@@ -437,7 +437,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
 	if (!$is_new)
 	{
 		// Deprecate old one if already exists
-		$old=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',array('m_resource_page'=>$page,'m_resource_type'=>$type,'m_resource_id'=>$id,'m_deprecated'=>0),'ORDER BY id DESC');
+		$old=$GLOBALS['SITE_DB']->query_selectvalue_if_there('url_id_monikers','m_moniker',array('m_resource_page'=>$page,'m_resource_type'=>$type,'m_resource_id'=>$id,'m_deprecated'=>0),'ORDER BY id DESC');
 		if (!is_null($old))
 		{
 			// See if it is same as current
@@ -532,7 +532,7 @@ function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL)
 			if ($moniker==preg_replace('#^.*/#','',$no_exists_check_for)) return $moniker; // This one is okay, we know it is safe
 		}
 
-		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_not_equal_to('m_resource_id',$id).' AND ('.db_string_equal_to('m_moniker',$moniker).' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\')');
+		$test=$GLOBALS['SITE_DB']->query_selectvalue_if_there_full('SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_not_equal_to('m_resource_id',$id).' AND ('.db_string_equal_to('m_moniker',$moniker).' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\')');
 		if (!is_null($test)) // Oh dear, will pass to next iteration, but trying a new moniker
 		{
 			$next_num++;

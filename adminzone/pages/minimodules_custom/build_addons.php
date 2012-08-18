@@ -149,7 +149,7 @@ if (get_param_integer('export_themes',0)==1)
 		foreach ($page_files as $file2)
 		{
 			$matches=array();
-			$regexp='#^((\w+)/)?pages/comcode_custom/[^/]*/'.str_replace('#','\#',preg_quote($theme)).'\_\_([\w\_]+)\.txt$#';
+			$regexp='#^((\w+)/)?pages/comcode_custom/[^/]*/'.preg_quote($theme,'#').'\_\_([\w\_]+)\.txt$#';
 			if ((preg_match($regexp,$file2,$matches)!=0) && ($matches[1]!='docs'.strval(ocp_version())))
 			{
 				$files2[]=dirname($file2).'/'.substr(basename($file2),strlen($theme)+2);

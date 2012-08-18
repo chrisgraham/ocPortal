@@ -320,7 +320,7 @@ function transcode_remaining_locations()
 				foreach ($unknown as $i=>$location)
 				{
 					$matches=array();
-					if (preg_match('#<location>'.str_replace('#','\#',preg_quote($location['l_string']))/*<<< xmlentities doesn't work around this for some reason*/.'</location>.*<geocodeQualityCode>(.*)</geocodeQualityCode>.*<lat>([\-\d\.]+)</lat>\s*<lng>([\-\d\.]+)</lng>#sU',$result,$matches)!=0)
+					if (preg_match('#<location>'.preg_quote($location['l_string'],'#')/*<<< xmlentities doesn't work around this for some reason*/.'</location>.*<geocodeQualityCode>(.*)</geocodeQualityCode>.*<lat>([\-\d\.]+)</lat>\s*<lng>([\-\d\.]+)</lng>#sU',$result,$matches)!=0)
 					{
 						if (($matches[1]=='A5XAX') || ($matches[1]=='A5XBX'))
 						{

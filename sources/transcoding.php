@@ -155,7 +155,7 @@ function transcode_video($url,$table,$url_field,$orig_filename_field,$width_fiel
 			if ((preg_match('#video\/#i',$input_mime_type)!=0) && ($ffmpeg_path!=''))
 			{
 				//it is video
-				$output_path=preg_replace('#\.'.str_replace('#','\#',preg_quote($file_ext)).'$#','',$file_path).'.mp4';
+				$output_path=preg_replace('#\.'.preg_quote($file_ext,'#').'$#','',$file_path).'.mp4';
 				$shell_command='"'.$ffmpeg_path.'ffmpeg" -i '.@escapeshellarg($file_path).' -y -f mp4 -vcodec libx264 -b '.@escapeshellarg($video_bitrate).'Kb -ab '.@escapeshellarg($audio_bitrate).'Kb -r ntsc-film -g 240 -qmin 2 -qmax 15 -vpre libx264-default -acodec aac -ar 22050 -ac 2 -aspect 16:9 -s '.@escapeshellarg($video_width_setting.':'.$video_height_setting).' '.@escapeshellarg($output_path);
 				$shell_commands=array($shell_command.' -map 0.1:0.0 -map 0.0:0.1',$shell_command.' -map 0.0:0.0 -map 0.1:0.1');
 				foreach ($shell_commands as $shell_command)
@@ -166,18 +166,18 @@ function transcode_video($url,$table,$url_field,$orig_filename_field,$width_fiel
 				if (@filesize($output_path))
 				{
 					shell_exec('"'.$ffmpeg_path.'MP4Box" -inter 500 '.' '.@escapeshellarg($output_path));
-					return preg_replace('#\.'.str_replace('#','\#',preg_quote($file_ext)).'$#','',$url).'.mp4';
+					return preg_replace('#\.'.preg_quote($file_ext,'#').'$#','',$url).'.mp4';
 				}
 			}
 			elseif ((preg_match('#audio\/#i',$input_mime_type)!=0) && ($ffmpeg_path!=''))
 			{
 				//it is audio
-				$output_path=preg_replace('#\.'.str_replace('#','\#',preg_quote($file_ext)).'$#','',$file_path).'.mp3';
+				$output_path=preg_replace('#\.'.preg_quote($file_ext,'#').'$#','',$file_path).'.mp3';
 				$shell_command='"'.$ffmpeg_path.'ffmpeg" -y -i '.@escapeshellarg($file_path).' -ab '.@escapeshellarg($audio_bitrate).'Kb '.@escapeshellarg($output_path);
 				shell_exec($shell_command);
 				if (@filesize($output_path))
 				{
-					return preg_replace('#\.'.str_replace('#','\#',preg_quote($file_ext)).'$#','',$url).'.mp3';
+					return preg_replace('#\.'.preg_quote($file_ext,'#').'$#','',$url).'.mp3';
 				}
 			}
 		}

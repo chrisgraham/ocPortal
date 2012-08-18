@@ -60,7 +60,7 @@ function find_lost_option($name)
 		foreach ($search as $s)
 		{
 			$code=file_get_contents($s);
-			if (preg_match('#add_config_option\(\'\w+\',\''.str_replace('#','\#',preg_quote($name)).'\',\'\w+\',\'.+\',\'\w+\',\'\w+\'(,1)?\);#',$code,$matches)>0)
+			if (preg_match('#add_config_option\(\'\w+\',\''.preg_quote($name,'#').'\',\'\w+\',\'.+\',\'\w+\',\'\w+\'(,1)?\);#',$code,$matches)>0)
 			{
 				require_code('database_action');
 				$upgrade_from=NULL; // In case referenced in add_config_option line

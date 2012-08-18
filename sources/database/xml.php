@@ -947,7 +947,7 @@ class Database_Static_xml
 			{
 				if ($key_fragments!='') $key_fragments.=',';
 				if ($key!='id')
-					$key_fragments.=str_replace('#','\#',preg_quote($key.'='));
+					$key_fragments.=preg_quote($key.'=','#');
 
 				if (!in_array($key,array_keys($where_expr_compressed)))
 				{
@@ -982,7 +982,7 @@ class Database_Static_xml
 								{
 									$new_val=float_to_raw_string($possible);
 								}
-								$key_fragments.=str_replace('#','\#',preg_quote($this->_escape_name($new_val)));
+								$key_fragments.=preg_quote($this->_escape_name($new_val),'#');
 							}
 							$key_fragments.=')';
 							continue;
@@ -1001,7 +1001,7 @@ class Database_Static_xml
 						$new_val=float_to_raw_string($val);
 					}
 
-					$key_fragments.=str_replace('#','\#',preg_quote($this->_escape_name($new_val)));
+					$key_fragments.=preg_quote($this->_escape_name($new_val),'#');
 				}
 			}
 			$key_buildup=$this->_guid($schema,$where_expr_compressed);
@@ -1126,7 +1126,7 @@ class Database_Static_xml
 			$key=$where_expr[1][1];
 			if ($table_as!='')
 			{
-				$key=preg_replace('#^'.str_replace('#','\#',preg_quote($table_as)).'\.#','',$key);
+				$key=preg_replace('#^'.preg_quote($table_as,'#').'\.#','',$key);
 				if (strpos($key,'.')!==false) return array(); // Not for our table
 			}
 
@@ -1145,7 +1145,7 @@ class Database_Static_xml
 			$key=$where_expr[1][1];
 			if ($table_as!='')
 			{
-				$key=preg_replace('#^'.str_replace('#','\#',preg_quote($table_as)).'\.#','',$key);
+				$key=preg_replace('#^'.preg_quote($table_as,'#').'\.#','',$key);
 				if (strpos($key,'.')!==false) return array(); // Not for our table
 			}
 			if ((!is_null($schema)) && (!array_key_exists($key,$schema)))

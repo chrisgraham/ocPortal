@@ -579,7 +579,7 @@ function get_webservice_result($error_message)
 		{
 			foreach ($_ as $key=>$val)
 			{
-				$regexp=preg_replace('#\\\{\d+\\\}#','.*',str_replace('#','\#',preg_quote($val)));
+				$regexp=preg_replace('#\\\{\d+\\\}#','.*',preg_quote($val,'#'));
 				if ($regexp!='.*')
 				{
 					if (preg_match('#'.$regexp.'#',$error_message)!=0)

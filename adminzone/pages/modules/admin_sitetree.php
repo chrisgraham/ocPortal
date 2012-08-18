@@ -241,9 +241,9 @@ class Module_admin_sitetree
 							$fallback=zone_black_magic_filterer(get_file_base().'/'.(($zone_under=='')?'':($zone_under.'/')).'pages/comcode/'.fallback_lang().'/'.$filename);
 							if (file_exists($fallback)) $contents.=file_get_contents($fallback);
 						}
-						if (preg_match('#\[block="'.str_replace('#','\#',preg_quote($row['i_menu'])).'"[^\]]* title="([^"]*)"[^\]]*\]side_stored_menu\[/block\]#',$contents,$matches)!=0)
+						if (preg_match('#\[block="'.preg_quote($row['i_menu'],'#').'"[^\]]* title="([^"]*)"[^\]]*\]side_stored_menu\[/block\]#',$contents,$matches)!=0)
 						{
-							$zone_title=preg_replace('# '.str_replace('#','\#',preg_quote(do_lang('ZONE'))).'$#','',$zones[$zone_under][1]);
+							$zone_title=preg_replace('# '.preg_quote(do_lang('ZONE'),'#').'$#','',$zones[$zone_under][1]);
 							$menu_name=do_lang_tempcode('MENU_FULL_DETAILS',$menu_name,make_string_tempcode(escape_html($matches[1])),make_string_tempcode(escape_html($zone_title)));
 							$found=true;
 							break 2;

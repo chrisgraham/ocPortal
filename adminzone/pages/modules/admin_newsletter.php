@@ -908,7 +908,7 @@ class Module_admin_newsletter extends standard_crud_module
 			foreach ($catarr as $find_id=>$line)
 			{
 				$matches=array();
-				if (preg_match('#\['.str_replace('#','\#',preg_quote($hook)).'/(.*)\]#',$line,$matches)!=0)
+				if (preg_match('#\['.preg_quote($hook,'#').'/(.*)\]#',$line,$matches)!=0)
 				{
 					$found_one_match=true;
 

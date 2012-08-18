@@ -1073,7 +1073,7 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
 
 		$simple_content_evaluated=$simple_content->evaluate();
 		$matches=array();
-		if (preg_match('#<option [^>]*value="'.str_replace('#','\#',preg_quote($default)).'"[^>]*>([^>]* &gt; )?([^>]*)</option>#',$simple_content_evaluated,$matches)!=0)
+		if (preg_match('#<option [^>]*value="'.preg_quote($default,'#').'"[^>]*>([^>]* &gt; )?([^>]*)</option>#',$simple_content_evaluated,$matches)!=0)
 		{
 			$nice_label=preg_replace('# \(.*\)#','',trim($matches[2]));
 		}

@@ -785,7 +785,7 @@ class Module_cms_news extends standard_crud_module
 		{
 			if (array_key_exists('full_url',$item))
 			{
-				$num_matches=preg_match_all('#<a\s*([^<>]*)href="'.str_replace('#','\#',preg_quote(escape_html($item['full_url']))).'"([^<>]*)>(.*)</a>#isU',$data,$matches);
+				$num_matches=preg_match_all('#<a\s*([^<>]*)href="'.preg_quote(escape_html($item['full_url']),'#').'"([^<>]*)>(.*)</a>#isU',$data,$matches);
 				for ($i=0;$i<$num_matches;$i++)
 				{
 					if (($matches[1][$i]=='') && ($matches[2][$i]=='') && (strpos($data,'[html]')===false))

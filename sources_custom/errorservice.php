@@ -61,7 +61,7 @@ function get_problem_match_worker($error_message)
 	$matches=array();
 	foreach ($_data as $d)
 	{
-		$regexp=str_replace('\.\.\.','.*',str_replace('xxx','.*',str_replace('#','\#',preg_quote($d['p_title']))));
+		$regexp=str_replace('\.\.\.','.*',str_replace('xxx','.*',preg_quote($d['p_title'],'#')));
 		if (preg_match('#'.$regexp.'#',$error_message)!=0)
 			$matches[$d['p_title']]=array($d['id'],$d['text_original'],$d['text_parsed'],$d['l_id']);
 	}

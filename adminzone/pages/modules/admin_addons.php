@@ -734,7 +734,7 @@ class Module_admin_addons
 				$i=0;
 				foreach (array_keys($files) as $file)
 				{
-					$field=form_input_tick(str_replace(array('/','_'),array('/ ','_ '),preg_replace('#^themes/'.str_replace('#','\#',preg_quote($theme)).'/#','',$file)),'','file_'.strval($i),true,NULL,$file);
+					$field=form_input_tick(str_replace(array('/','_'),array('/ ','_ '),preg_replace('#^themes/'.preg_quote($theme,'#').'/#','',$file)),'','file_'.strval($i),true,NULL,$file);
 					$fields.=$field->evaluate();
 					$i++;
 				}

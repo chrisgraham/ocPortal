@@ -44,7 +44,7 @@ if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 	$port=$_SERVER['SERVER_PORT'];
 	if (($port=='') || ($port=='80') || ($port=='443'))
 	{
-		$base_url='http://'.$domain.str_replace('%2F','/',rawurlencode(preg_replace('#/'.str_replace('#','\#',preg_quote($GLOBALS['RELATIVE_PATH'])).'$#','',dirname($_SERVER['PHP_SELF']))));
+		$base_url='http://'.$domain.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',dirname($_SERVER['PHP_SELF']))));
 	} else
 	{
 		@include($FILE_BASE.'/info.php');
@@ -53,7 +53,7 @@ if ((array_key_exists('js_cache',$_GET)) && ($_GET['js_cache']=='1'))
 			$base_url=$SITE_INFO['base_url'];
 		} else
 		{
-			$base_url='http://'.$domain.':'.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.str_replace('#','\#',preg_quote($GLOBALS['RELATIVE_PATH'])).'$#','',dirname($_SERVER['PHP_SELF']))));
+			$base_url='http://'.$domain.':'.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',dirname($_SERVER['PHP_SELF']))));
 		}
 	}
 

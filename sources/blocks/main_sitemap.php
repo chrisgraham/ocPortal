@@ -215,7 +215,7 @@ class Block_main_sitemap
 							}
 							//ksort($_entrypoints);
 							$title=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
-							if (is_null($title)) $title=titleify(preg_replace('#^ocf\_#','',preg_replace('#^'.str_replace('#','\#',preg_quote($zone)).'_#','',preg_replace('#^'.str_replace('#','\#',preg_quote(str_replace('zone','',$zone))).'_#','',$page))));
+							if (is_null($title)) $title=titleify(preg_replace('#^ocf\_#','',preg_replace('#^'.preg_quote($zone,'#').'_#','',preg_replace('#^'.preg_quote(str_replace('zone','',$zone),'#').'_#','',$page))));
 							if (count($_entrypoints)==1)
 							{
 								$temp_keys=array_keys($_entrypoints);

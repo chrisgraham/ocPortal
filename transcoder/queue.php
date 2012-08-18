@@ -126,18 +126,18 @@ function transcode($path)
 		if($is_video)
 		{
 			$file_type='m4v';
-			$path=preg_replace('#'.str_replace('#','\#',preg_quote($file_ext)).'$#', '', $path).$file_type;
+			$path=preg_replace('#'.preg_quote($file_ext,'#').'$#', '', $path).$file_type;
 			$path=str_replace('/queue/','/done/',$path);
 		}
 		elseif($is_audio)
 		{
-			$path=preg_replace('#'.str_replace('#','\#',preg_quote($file_ext)).'$#', '', $path).'mp3';
+			$path=preg_replace('#'.preg_quote($file_ext,'#').'$#', '', $path).'mp3';
 			$path=str_replace('/queue/','/done/',$path);
 		}
 
 		if ($is_video)
 		{
-			$output_path=preg_replace('#'.str_replace('#','\#',preg_quote($file_ext)).'$#', '', $file_path).$file_type;
+			$output_path=preg_replace('#'.preg_quote($file_ext,'#').'$#', '', $file_path).$file_type;
 			$output_path=str_replace('/queue/','/done/',$output_path);
 
 			/* mencoder too buggy
@@ -179,7 +179,7 @@ function transcode($path)
 		}
 		elseif ($is_audio)
 		{
-			$output_path=preg_replace('#'.str_replace('#','\#',preg_quote($file_ext)).'$#', '', $file_path).'mp3';
+			$output_path=preg_replace('#'.preg_quote($file_ext,'#').'$#', '', $file_path).'mp3';
 			$output_path=str_replace('/queue/','/done/',$output_path);
 
 			//it is audio

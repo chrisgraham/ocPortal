@@ -819,7 +819,7 @@ function ocf_group_ldapcn_to_ldapgid($cn)
 function ocf_long_cn_to_short_cn($long,$type)
 {
 	$matches=array();
-	if (preg_match('#^(dn|cn|'.str_replace('#','\#',preg_quote($type)).')=([^,]+)(,.*)?$#i',$long,$matches)!=0)
+	if (preg_match('#^(dn|cn|'.preg_quote($type,'#').')=([^,]+)(,.*)?$#i',$long,$matches)!=0)
 	{
 		return $matches[2];
 	}

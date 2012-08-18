@@ -377,7 +377,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 			case 'multilist':
 				$list_options=new ocp_tempcode();
 				foreach ($extra as $key=>$val)
-					$list_options->attach(form_input_list_entry($key,preg_match('#(^|,)'.str_replace('#','\#',preg_quote($key)).'(,|$)#',$default_value)!=0,$val));
+					$list_options->attach(form_input_list_entry($key,preg_match('#(^|,)'.preg_quote($key,'#').'(,|$)#',$default_value)!=0,$val));
 				$form_fields->attach(form_input_multi_list($field_label,'',$field_name,$list_options,NULL,5,false));
 				break;
 

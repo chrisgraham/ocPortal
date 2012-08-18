@@ -742,7 +742,7 @@ function filter_css($css,$context)
 						// ID selectors
 						foreach ($ids as $id)
 						{
-							if (preg_match('#\#'.str_replace('#','\#',preg_quote($id)).'([\[\.:\s]|$)#',$selector)!=0)
+							if (preg_match('#\#'.preg_quote($id,'#').'([\[\.:\s]|$)#',$selector)!=0)
 							{
 								$applies=true;
 								break;
@@ -752,7 +752,7 @@ function filter_css($css,$context)
 						// Class name selectors
 						foreach ($classes as $class)
 						{
-							if (preg_match('#\.'.str_replace('#','\#',preg_quote($class)).'([\[\#:\s]|$)#',$selector)!=0)
+							if (preg_match('#\.'.preg_quote($class,'#').'([\[\#:\s]|$)#',$selector)!=0)
 							{
 								$applies=true;
 								break;

@@ -38,7 +38,7 @@ function get_lang_files($lang=NULL)
 			{
 				if (substr($file,-3)=='.po')
 				{
-					$file=preg_replace('#\-'.str_replace('#','\#',preg_quote(strtolower($lang))).'$#','',substr($file,0,strlen($file)-3));
+					$file=preg_replace('#\-'.preg_quote(strtolower($lang),'#').'$#','',substr($file,0,strlen($file)-3));
 				} else
 				{
 					$file=substr($file,0,strlen($file)-4);
@@ -57,7 +57,7 @@ function get_lang_files($lang=NULL)
 			{
 				if (substr($file,-3)=='.po')
 				{
-					$file=preg_replace('#\-'.str_replace('#','\#',preg_quote(strtolower($lang))).'$#','',substr($file,0,strlen($file)-3));
+					$file=preg_replace('#\-'.preg_quote(strtolower($lang),'#').'$#','',substr($file,0,strlen($file)-3));
 				} else
 				{
 					$file=substr($file,0,strlen($file)-4);
@@ -78,7 +78,7 @@ function get_lang_files($lang=NULL)
 				{
 					if (substr($file,-3)=='.po')
 					{
-						$file=preg_replace('#\-'.str_replace('#','\#',preg_quote($lang)).'$#','',substr($file,0,strlen($file)-3));
+						$file=preg_replace('#\-'.preg_quote($lang,'#').'$#','',substr($file,0,strlen($file)-3));
 					} else
 					{
 						$file=substr($file,0,strlen($file)-4);
