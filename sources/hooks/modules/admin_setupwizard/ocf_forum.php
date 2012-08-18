@@ -124,7 +124,7 @@ class Hook_sw_ocf_forum
 	{
 		if (get_forum_type()=='ocf')
 		{
-			return array(array(),array('side_ocf_personal_topics'=>array('PANEL_NONE','PANEL_NONE')));
+			return array(array(),array('side_ocf_private_topics'=>array('PANEL_NONE','PANEL_NONE')));
 		}
 		return array(array(),array());
 	}

@@ -95,7 +95,7 @@ class Hook_admin_setupwizard_installprofiles_community
 			),
 			'PANEL_LEFT'=>array(
 				'side_personal_stats',
-				'side_ocf_personal_topics',
+				'side_ocf_private_topics',
 			),
 			'PANEL_RIGHT'=>array(
 				'side_users_online',

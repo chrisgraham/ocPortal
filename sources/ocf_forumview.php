@@ -21,12 +21,12 @@
 /**
  * Render the OCF forumview.
  *
- * @param  ?integer	Forum ID (NULL: personal topics).
+ * @param  ?integer	Forum ID (NULL: private topics).
  * @param  string		The filter category (blank if no filter)
  * @param  integer	Maximum results to show
  * @param  integer	Offset for result showing
  * @param  AUTO_LINK	Virtual root
- * @param  ?MEMBER	The member to show personal topics of (NULL: not showing personal topics)
+ * @param  ?MEMBER	The member to show private topics of (NULL: not showing private topics)
  * @return mixed		Either Tempcode (an interface that must be shown) or a Tuple: The main Tempcode, a title to use (also Tempcode), breadcrumbs (also Tempcode), the forum name (string). For a PT view, it is always a tuple, never raw Tempcode (as it can go inside a tabset).
  */
 function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_member_id)

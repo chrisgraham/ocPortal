@@ -516,7 +516,7 @@ class Module_topics
 
 		if (is_null($forum_id))
 		{
-			decache('side_ocf_personal_topics',array(get_member()));
+			decache('side_ocf_private_topics',array(get_member()));
 			decache('_new_pp',array(get_member()));
 		}
 
@@ -577,7 +577,7 @@ class Module_topics
 
 		if (is_null($forum_id))
 		{
-			decache('side_ocf_personal_topics',array(get_member()));
+			decache('side_ocf_private_topics',array(get_member()));
 			decache('_new_pp',array(get_member()));
 		}
 
@@ -2150,7 +2150,7 @@ END;
 		ocf_ping_topic_read($topic_id);
 		if ((is_null($forum_id)) || (get_param_integer('ajax',0)==1))
 		{
-			decache('side_ocf_personal_topics',array(get_member()));
+			decache('side_ocf_private_topics',array(get_member()));
 			decache('_new_pp',array(get_member()));
 		}
 
@@ -2174,7 +2174,7 @@ END;
 		$forum_id=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_forum_id',array('id'=>$topic_id));
 		if (is_null($forum_id))
 		{
-			decache('side_ocf_personal_topics',array(get_member()));
+			decache('side_ocf_private_topics',array(get_member()));
 			decache('_new_pp',array(get_member()));
 		}
 

@@ -59,7 +59,7 @@ class Hook_wowbb
 								'ocf_posts',
 								'ocf_polls_and_votes',
 								'notifications',
-								'ocf_personal_topics',
+								'ocf_private_topics',
 								'ocf_post_files',
 								'calendar',
 								'wordfilter',
@@ -72,9 +72,9 @@ class Hook_wowbb
 								'ocf_topics'=>array('ocf_forums','ocf_members'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('ocf_topics','ocf_members'),
-								'ocf_post_files'=>array('ocf_posts','ocf_personal_topics'),
+								'ocf_post_files'=>array('ocf_posts','ocf_private_topics'),
 								'notifications'=>array('ocf_topics','ocf_members'),
-								'ocf_personal_topics'=>array('ocf_members'),
+								'ocf_private_topics'=>array('ocf_members'),
 								'calendar'=>array('ocf_members'),
 							);
 		$_cleanup_url=build_url(array('page'=>'admin_cleanup'),get_module_zone('admin_cleanup'));
@@ -729,7 +729,7 @@ class Hook_wowbb
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_personal_topics($db,$table_prefix,$file_base)
+	function import_ocf_private_topics($db,$table_prefix,$file_base)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'pm p LEFT JOIN '.$table_prefix.'pm_texts t ON p.pm_id=t.pm_id ORDER BY pm_date_time');
 

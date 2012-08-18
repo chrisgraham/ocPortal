@@ -108,7 +108,7 @@ function ocf_may_edit_topics_by($forum_id,$member_id,$resource_owner)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (is_null($forum_id)) return has_privilege($member_id,'moderate_personal_topic');
+	if (is_null($forum_id)) return has_privilege($member_id,'moderate_private_topic');
 
 	return has_edit_permission('mid',$member_id,$resource_owner,'topics',array('forums',$forum_id));
 }
@@ -125,7 +125,7 @@ function ocf_may_delete_topics_by($forum_id,$member_id,$resource_owner)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (is_null($forum_id)) return has_privilege($member_id,'moderate_personal_topic');
+	if (is_null($forum_id)) return has_privilege($member_id,'moderate_private_topic');
 
 	return has_delete_permission('mid',$member_id,$resource_owner,'topics',array('forums',$forum_id));
 }

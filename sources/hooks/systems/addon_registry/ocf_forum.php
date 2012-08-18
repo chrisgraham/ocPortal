@@ -204,7 +204,7 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/images/ocf_topic_modifiers/poll.png',
 			'themes/default/images/ocf_topic_modifiers/unread.png',
 			'themes/default/images/ocf_topic_modifiers/unvalidated.png',
-			'sources/blocks/side_ocf_personal_topics.php',
+			'sources/blocks/side_ocf_private_topics.php',
 			'sources/hooks/modules/admin_cleanup/ocf_topics.php',
 			'sources/hooks/modules/admin_newsletter/ocf_forumview.php',
 			'sources/hooks/modules/admin_unvalidated/ocf_posts.php',
@@ -252,7 +252,7 @@ class Hook_addon_registry_ocf_forum
 			'sources/hooks/systems/ajax_tree/choose_forum_topic.php',
 			'sources/hooks/systems/ajax_tree/choose_forum.php',
 			'sources/hooks/systems/rss/ocf_unread_topics.php',
-			'sources/hooks/systems/rss/ocf_personal_topics.php',
+			'sources/hooks/systems/rss/ocf_private_topics.php',
 			'TOPIC_LIST.tpl',
 			'OCF_PT_FILTERS.tpl',
 			'OCF_MEMBER_PROFILE_POSTS.tpl'
@@ -279,7 +279,7 @@ class Hook_addon_registry_ocf_forum
 			'OCF_HISTORY_SCREEN.tpl'=>'administrative__ocf_history_screen',
 			'OCF_RANK_IMAGE.tpl'=>'ocf_rank_image',
 			'OCF_POST_BOX.tpl'=>'ocf_isolated_post',
-			'BLOCK_SIDE_OCF_PRIVATE_TOPICS.tpl'=>'block_side_ocf_personal_topics',
+			'BLOCK_SIDE_OCF_PRIVATE_TOPICS.tpl'=>'block_side_ocf_private_topics',
 			'BLOCK_MAIN_PT_NOTIFICATIONS.tpl'=>'block_pt_notifications',
 			'OCF_NOTIFICATION.tpl'=>'block_pt_notifications',
 			'OCF_FORUM_TOPIC_ROW_LAST_POST.tpl'=>'ocf_forum',
@@ -558,7 +558,7 @@ class Hook_addon_registry_ocf_forum
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_ocf_personal_topics()
+	function tpl_preview__block_side_ocf_private_topics()
 	{
 		require_css('ocf');
 

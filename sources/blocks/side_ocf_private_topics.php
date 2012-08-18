@@ -18,7 +18,7 @@
  * @package		ocf_forum
  */
 
-class Block_side_ocf_personal_topics
+class Block_side_ocf_private_topics
 {
 
 	/**

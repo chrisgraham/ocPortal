@@ -60,7 +60,7 @@ class Hook_phpbb2
 								'ocf_posts',
 								'ocf_polls_and_votes',
 								//'notifications',
-								'ocf_personal_topics',
+								'ocf_private_topics',
 								'ocf_post_files',
 								'wordfilter',
 								'config',
@@ -73,9 +73,9 @@ class Hook_phpbb2
 								'ocf_topics'=>array('ocf_forums','ocf_members'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('ocf_topics','ocf_members'),
-								'ocf_post_files'=>array('ocf_posts','ocf_personal_topics'),
+								'ocf_post_files'=>array('ocf_posts','ocf_private_topics'),
 								'notifications'=>array('ocf_topics','ocf_members'),
-								'ocf_personal_topics'=>array('ocf_members'),
+								'ocf_private_topics'=>array('ocf_members'),
 							);
 		$_cleanup_url=build_url(array('page'=>'admin_cleanup'),get_module_zone('admin_cleanup'));
 		$cleanup_url=$_cleanup_url->evaluate();
@@ -801,7 +801,7 @@ class Hook_phpbb2
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_personal_topics($db,$table_prefix,$old_base_dir)
+	function import_ocf_private_topics($db,$table_prefix,$old_base_dir)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'privmsgs p LEFT JOIN '.$table_prefix.'privmsgs_text t ON p.privmsgs_id=t.privmsgs_text_id WHERE privmsgs_type<>2 AND privmsgs_type<>4 ORDER BY privmsgs_date');
 

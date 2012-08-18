@@ -151,7 +151,7 @@ function ocf_may_moderate_forum($forum_id,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (is_null($forum_id)) return has_privilege($member_id,'moderate_personal_topic');
+	if (is_null($forum_id)) return has_privilege($member_id,'moderate_private_topic');
 
 	return has_privilege($member_id,'edit_midrange_content','topics',array('forums',$forum_id));
 }

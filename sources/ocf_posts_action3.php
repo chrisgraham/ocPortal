@@ -280,7 +280,7 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 		ocf_decache_ocp_blocks($forum_id);
 	} else
 	{
-		decache('side_ocf_personal_topics');
+		decache('side_ocf_private_topics');
 		decache('_new_pp');
 	}
 

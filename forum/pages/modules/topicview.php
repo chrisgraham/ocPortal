@@ -146,7 +146,7 @@ class Module_topicview
 			$replied=false;
 			if (is_null($topic_info['forum_id']))
 			{
-				decache('side_ocf_personal_topics',array(get_member()));
+				decache('side_ocf_private_topics',array(get_member()));
 				decache('_new_pp',array(get_member()));
 			}
 			$second_poster=$topic_info['first_poster'];
@@ -250,7 +250,7 @@ class Module_topicview
 
 				if (array_key_exists('intended_solely_for',$_postdetails))
 				{
-					decache('side_ocf_personal_topics',array(get_member()));
+					decache('side_ocf_private_topics',array(get_member()));
 					decache('_new_pp',array(get_member()));
 				}
 

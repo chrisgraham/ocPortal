@@ -246,7 +246,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			}
 		} else
 		{
-			// It must be a personal topic. Do we have access?
+			// It must be a private topic. Do we have access?
 			$from=$topic_info['t_pt_from'];
 			$to=$topic_info['t_pt_to'];
 
@@ -256,7 +256,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			}
 
 			decache('_new_pp',array(get_member()));
-			decache('side_ocf_personal_topics',array(get_member()));
+			decache('side_ocf_private_topics',array(get_member()));
 		}
 		// Check validated
 		if ($topic_info['t_validated']==0)

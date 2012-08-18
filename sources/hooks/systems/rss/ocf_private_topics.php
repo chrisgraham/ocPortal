@@ -18,7 +18,7 @@
  * @package		ocf_forum
  */
 
-class Hook_rss_ocf_personal_topics
+class Hook_rss_ocf_private_topics
 {
 
 	/**

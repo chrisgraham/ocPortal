@@ -70,7 +70,7 @@ class Hook_phpbb3
 								'ocf_posts',
 								'ocf_polls_and_votes',
 								//'notifications',  Actually this is read tracking, not for notifications
-								'ocf_personal_topics',
+								'ocf_private_topics',
 								'ocf_warnings',
 								'wordfilter',
 								'bookmarks',
@@ -90,7 +90,7 @@ class Hook_phpbb3
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('ocf_topics','ocf_members','attachments'),
 								'notifications'=>array('ocf_topics','ocf_members'),
-								'ocf_personal_topics'=>array('ocf_members','attachments'),
+								'ocf_private_topics'=>array('ocf_members','attachments'),
 								'friends'=>array('ocf_members'),
 								'bookmarks'=>array('ocf_members','ocf_topics'),
 								'reported_posts_forum'=>array('ocf_members','ocf_topics','ocf_posts'),
@@ -1047,7 +1047,7 @@ class Hook_phpbb3
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_personal_topics($db,$table_prefix,$old_base_dir)
+	function import_ocf_private_topics($db,$table_prefix,$old_base_dir)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'privmsgs ORDER BY message_time');
 

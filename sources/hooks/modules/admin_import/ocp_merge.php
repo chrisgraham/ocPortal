@@ -109,7 +109,7 @@ class Hook_ocp_merge
 								'ocf_topics'=>array('ocf_forums','ocf_members'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('custom_comcode','ocf_topics','ocf_members','attachments'),
-								'ocf_personal_topics'=>array('custom_comcode','ocf_members'),
+								'ocf_private_topics'=>array('custom_comcode','ocf_members'),
 								'ocf_post_templates'=>array('ocf_forums'),
 								'ocf_warnings'=>array('ocf_members','ocf_groups','ocf_topics','ocf_forums'),
 								'newsletter_subscriptions'=>array('attachments'),

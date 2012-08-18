@@ -67,7 +67,7 @@ function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL)
 
 	if (is_null($forum_id))
 	{
-		if (($resource_owner==$member_id) && (has_privilege($member_id,'edit_personal_topic_posts'))) return true;
+		if (($resource_owner==$member_id) && (has_privilege($member_id,'edit_private_topic_posts'))) return true;
 	}
 
 	if (!has_category_access($member_id,'forums',strval($forum_id))) return false;
@@ -89,7 +89,7 @@ function ocf_may_delete_post_by($resource_owner,$forum_id,$member_id=NULL)
 
 	if (is_null($forum_id))
 	{
-		if (($resource_owner!=$member_id) || (!has_privilege($member_id,'delete_personal_topic_posts'))) return false;
+		if (($resource_owner!=$member_id) || (!has_privilege($member_id,'delete_private_topic_posts'))) return false;
 	}
 
 	if (is_null($forum_id)) return false;

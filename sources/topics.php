@@ -822,7 +822,7 @@ class OCP_Topic
 
 			if (array_key_exists('intended_solely_for',$post))
 			{
-				decache('side_ocf_personal_topics',array(get_member()));
+				decache('side_ocf_private_topics',array(get_member()));
 				decache('_new_pp',array(get_member()));
 			}
 

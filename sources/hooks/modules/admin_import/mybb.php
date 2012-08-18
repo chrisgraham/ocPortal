@@ -61,7 +61,7 @@ class Hook_mybb
 								'ocf_forum_groupings',
 								'ocf_forums',
 								'ocf_topics',
-								'ocf_personal_topics',
+								'ocf_private_topics',
 								'ocf_posts',
 								'ocf_post_files',
 								'ocf_polls_and_votes',
@@ -78,10 +78,10 @@ class Hook_mybb
 								'ocf_topics'=>array('ocf_forums','ocf_members'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('ocf_topics','ocf_members'),
-								'ocf_post_files'=>array('ocf_posts','ocf_personal_topics'),
+								'ocf_post_files'=>array('ocf_posts','ocf_private_topics'),
 								'notifications'=>array('ocf_topics','ocf_members','ocf_polls_and_votes'),
-								'ocf_personal_topics'=>array('ocf_members'),
-								'ocf_multi_moderations'=>array('ocf_forums','ocf_members','ocf_topics','ocf_posts','ocf_personal_topics','ocf_forum_groupings'),
+								'ocf_private_topics'=>array('ocf_members'),
+								'ocf_multi_moderations'=>array('ocf_forums','ocf_members','ocf_topics','ocf_posts','ocf_private_topics','ocf_forum_groupings'),
 							);
 		$_cleanup_url=build_url(array('page'=>'admin_cleanup'),get_module_zone('admin_cleanup'));
 		$cleanup_url=$_cleanup_url->evaluate();
@@ -1028,7 +1028,7 @@ class Hook_mybb
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_personal_topics($db,$table_prefix,$old_base_dir)
+	function import_ocf_private_topics($db,$table_prefix,$old_base_dir)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'privatemessages p ORDER BY dateline');
 

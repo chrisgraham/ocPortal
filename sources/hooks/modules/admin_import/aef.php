@@ -60,7 +60,7 @@ class Hook_aef
 								'ocf_forums',
 								'ocf_topics',
 								'ocf_posts',
-								'ocf_personal_topics',
+								'ocf_private_topics',
 								'ocf_post_files',
 								'ocf_polls_and_votes',
 								'notifications',
@@ -76,8 +76,8 @@ class Hook_aef
 								'ocf_topics'=>array('ocf_forums','ocf_members'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
 								'ocf_posts'=>array('ocf_topics','ocf_members'),
-								'ocf_personal_topics'=>array('ocf_members'),
-								'ocf_post_files'=>array('ocf_posts','ocf_personal_topics'),
+								'ocf_private_topics'=>array('ocf_members'),
+								'ocf_post_files'=>array('ocf_posts','ocf_private_topics'),
 								'notifications'=>array('ocf_topics','ocf_members'),
 								'authors'=>array('ocf_topics','ocf_members'),
 								'news_and_categories'=>array('authors','ocf_topics','ocf_members'),
@@ -876,7 +876,7 @@ class Hook_aef
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_personal_topics($db,$table_prefix,$old_base_dir)
+	function import_ocf_private_topics($db,$table_prefix,$old_base_dir)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'pm p ORDER BY pm_time');
 

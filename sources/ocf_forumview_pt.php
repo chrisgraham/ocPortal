@@ -115,7 +115,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 
 	$out=array('topics'=>$topics,'max_rows'=>$max_rows);
 
-	if ((has_privilege($member_id,'moderate_personal_topic')) && (($member_id==get_member()) || (has_privilege($member_id,'multi_delete_topics'))))
+	if ((has_privilege($member_id,'moderate_private_topic')) && (($member_id==get_member()) || (has_privilege($member_id,'multi_delete_topics'))))
 	{
 		$out['may_move_topics']=1;
 		$out['may_delete_topics']=1;

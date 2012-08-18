@@ -285,7 +285,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 				$with=$info[0]['t_pt_from'];
 				if ($with==get_member()) $with=$info[0]['t_pt_to'];
 
-				decache('side_ocf_personal_topics',array($with));
+				decache('side_ocf_private_topics',array($with));
 				decache('_new_pp',array($with));
 			}
 
@@ -401,7 +401,7 @@ function ocf_decache_ocp_blocks($updated_forum_id,$forum_name=NULL,$member=NULL)
 	decache('bottom_news',array($forum_name));
 	if (!is_null($member))
 	{
-		decache('side_ocf_personal_topics',array($member));
+		decache('side_ocf_private_topics',array($member));
 		decache('_new_pp',array($member));
 	}
 }

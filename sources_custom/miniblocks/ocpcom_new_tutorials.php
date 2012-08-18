@@ -713,7 +713,7 @@ function get_tutorial_info($tut)
 		case 'correspondance':
 			$result=array(
 				"Correspondence between members",
-				"How members may send each other messages (OCF only), using personal topics and whispers.",
+				"How members may send each other messages (OCF only), using private topics and whispers.",
 				"Aug 2008",
 				"blue",
 				"Philip",

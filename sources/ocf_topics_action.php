@@ -54,7 +54,7 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 
 		if (!is_null($pt_to))
 		{
-			decache('side_ocf_personal_topics',array($pt_to));
+			decache('side_ocf_private_topics',array($pt_to));
 			decache('_new_pp',array($pt_to));
 		}
 

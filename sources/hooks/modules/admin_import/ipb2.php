@@ -48,7 +48,7 @@ class Hook_ipb2 extends Hook_ipb_base
 								'ocf_polls_and_votes',
 								'ocf_multi_moderations',
 								'notifications',
-								'ocf_personal_topics',
+								'ocf_private_topics',
 								'ocf_warnings',
 								'wordfilter',
 								'config',
@@ -64,7 +64,7 @@ class Hook_ipb2 extends Hook_ipb_base
 								'ocf_post_files'=>array('ocf_posts'),
 								'ocf_multi_moderations'=>array('ocf_forums'),
 								'notifications'=>array('ocf_topics','ocf_members'),
-								'ocf_personal_topics'=>array('custom_comcode','ocf_members'),
+								'ocf_private_topics'=>array('custom_comcode','ocf_members'),
 								'ocf_warnings'=>array('ocf_members'),
 								'calendar'=>array('ocf_members'),
 							);
@@ -296,7 +296,7 @@ class Hook_ipb2 extends Hook_ipb_base
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_personal_topics($db,$table_prefix,$old_base_dir)
+	function import_ocf_private_topics($db,$table_prefix,$old_base_dir)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'message_topics m LEFT JOIN '.$table_prefix.'message_text t ON m.mt_msg_id=t.msg_id WHERE mt_vid_folder<>\'sent\' ORDER BY mt_date');
 

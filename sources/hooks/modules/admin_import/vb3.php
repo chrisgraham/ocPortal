@@ -64,7 +64,7 @@ class Hook_vb3
 								'ocf_post_files',
 								'ocf_polls_and_votes',
 								'notifications',
-								'ocf_personal_topics',
+								'ocf_private_topics',
 								'wordfilter',
 								'config',
 								'calendar',
@@ -79,7 +79,7 @@ class Hook_vb3
 								'ocf_posts'=>array('custom_comcode','ocf_topics','ocf_members'),
 								'ocf_post_files'=>array('ocf_posts'),
 								'notifications'=>array('ocf_topics','ocf_members'),
-								'ocf_personal_topics'=>array('custom_comcode','ocf_members'),
+								'ocf_private_topics'=>array('custom_comcode','ocf_members'),
 								'points_gifts_and_charges'=>array('ocf_members'),
 								'logs'=>array('ocf_members','ocf_posts'),
 								'calendar'=>array('ocf_members'),
@@ -1032,7 +1032,7 @@ class Hook_vb3
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_ocf_personal_topics($db,$table_prefix,$old_base_dir)
+	function import_ocf_private_topics($db,$table_prefix,$old_base_dir)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'pm p LEFT JOIN '.$table_prefix.'pmtext t ON p.pmtextid=t.pmtextid WHERE folderid<>-1 AND title NOT LIKE \''.db_encode_like('Sent:  %').'\' ORDER BY dateline');
 

@@ -46,7 +46,7 @@ function init__ocf_install()
 	$OCF_TRUE_PERMISSIONS=array(
 		'run_multi_moderations',
 		'use_pt',
-		'edit_personal_topic_posts',
+		'edit_private_topic_posts',
 		'may_unblind_own_poll',
 		'may_report_post',
 		'view_member_photos',
@@ -68,7 +68,7 @@ function init__ocf_install()
 		'delete_account',
 		'view_other_pt',
 		'view_poll_results_before_voting',
-		'moderate_personal_topic',
+		'moderate_private_topic',
 		'member_maintenance',
 		'probate_members',
 		'warn_members',
@@ -77,6 +77,7 @@ function init__ocf_install()
 		'show_user_browsing',
 		'see_hidden_groups',
 		'pt_anyone',
+		'delete_private_topic_posts',
 	);
 }
 
@@ -310,11 +311,17 @@ function install_ocf($upgrade_from=NULL)
 		delete_config_option('no_dob_ask');
 		add_config_option('NO_DOB_ASK','no_dob_ask','list','return \'0\';','SECTION_FORUMS','USERNAMES_AND_PASSWORDS',0,'0|1|2'); // Recreate option
 	}
-	if ((!is_null($upgrade_from)) && ($upgrade_from<9.0))
+	if ((!is_null($upgrade_from)) && ($upgrade_from<10.0))
 	{
 		$GLOBALS['FORUM_DB']->rename_table('f_forum_categories','f_forum_groupings');
 		$GLOBALS['FORUM_DB']->alter_table_field('f_forums','f_category_id','AUTO_LINK','f_forum_grouping_id');
 		$GLOBALS['SITE_DB']->query_update('config',array('the_type'=>'forum_grouping','the_name'=>'club_forum_parent_forum_grouping'),array('the_name'=>'club_forum_parent_category'),'',1);
+		$privileges=array('moderate_private_topic'=>'moderate_private_topic','edit_private_topic_posts'=>'edit_private_topic_posts','delete_private_topic_posts'=>'delete_private_topic_posts');
+		foreach ($privileges as $old=>$new)
+		{
+			$GLOBALS['SITE_DB']->query_update('privilege_list',array('the_name'=>$new),array('the_name'=>$old),'',1);
+			$GLOBALS['SITE_DB']->query_update('group_privileges',array('privilege'=>$new),array('privilege'=>$old),'',1);
+		}
 	}
 
 	// If we have the forum installed to this db already, leave
