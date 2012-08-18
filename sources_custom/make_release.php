@@ -881,4 +881,13 @@ function make_files_manifest() // Builds files.dat, the ocPortal file manifest (
 	fix_permissions(get_file_base().'/data/files.dat');
 
 	$MAKE_INSTALLERS__FILE_ARRAY['data/files.dat']=$file_manifest;
+
+	// Write the file out
+	require_code('version2');
+	$version_branch=get_version_branch();
+	$builds_path=get_builds_path();
+	$tmp=fopen($builds_path.'/builds/build/'.$version_branch.'/data/files.dat','wb');
+	fwrite($tmp,$file_manifest);
+	fclose($tmp);
+	fix_permissions($builds_path.'/builds/build/'.$version_branch.'/data/files.dat');
 }
