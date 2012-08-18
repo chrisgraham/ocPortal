@@ -224,7 +224,7 @@ function get_table_descriptions()
 		'tutorial_links'=>'used by the ocPortal documentation, don\'t worry about this table',
 		'url_id_monikers'=>'stores search-engine-friendly URL codes for all kinds of content (we call these "monikers")',
 		'url_title_cache'=>'stores the HTML titles for URLs, used in particular by the Comcode parser when it auto-detects links',
-		'usersubmitban_ip'=>'list of banned IP addresses (ocPortal will use .htaccess also if it can, to improve performance)',
+		'banned_ip'=>'list of banned IP addresses (ocPortal will use .htaccess also if it can, to improve performance)',
 		'usersubmitban_member'=>'list of banned members',
 		'validated_once'=>'this is used by the inbuilt XHTML validator to know what markup it has already validated, so it doesn\'t waste a lot of time re-validating the same stuff; it uses a hash-signature-check so it doesn\'t need to store all data in the table',
 		'values'=>'arbitrary store of data values (mapping of keys to values)',

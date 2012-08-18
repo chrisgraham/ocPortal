@@ -1410,7 +1410,7 @@ class Hook_ocp_merge
 	{
 		require_code('failure');
 
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'usersubmitban_ip');
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'banned_ip');
 		foreach ($rows as $row)
 		{
 			add_ip_ban($row['ip'],array_key_exists('i_descrip',$row)?$row['i_descrip']:'',array_key_exists('i_ban_until',$row)?$row['i_ban_until']:NULL,array_key_exists('i_ban_positive',$row)?($row['i_ban_positive']==1):1);

@@ -1470,6 +1470,7 @@ function version_specific()
 			$GLOBALS['SITE_DB']->rename_table('msp','member_privileges');
 			$GLOBALS['SITE_DB']->rename_table('gsp','group_privileges');
 			$GLOBALS['SITE_DB']->rename_table('sp_list','privilege_list');
+			$GLOBALS['SITE_DB']->rename_table('usersubmitban_ip','banned_ip');
 		}
 		set_value('version',float_to_raw_string($version_files,10,true));
 

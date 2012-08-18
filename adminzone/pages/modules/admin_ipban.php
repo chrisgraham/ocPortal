@@ -47,7 +47,7 @@ class Module_admin_ipban
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_table_if_exists('usersubmitban_ip');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('banned_ip');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('usersubmitban_member');
 	}
 
@@ -61,7 +61,7 @@ class Module_admin_ipban
 	{
 		if (is_null($upgrade_from))
 		{
-			$GLOBALS['SITE_DB']->create_table('usersubmitban_ip',array(
+			$GLOBALS['SITE_DB']->create_table('banned_ip',array(
 				'ip'=>'*IP',
 				'i_descrip'=>'LONG_TEXT',
 				'i_ban_until'=>'?TIME',
@@ -78,12 +78,12 @@ class Module_admin_ipban
 		}
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{
-			$GLOBALS['SITE_DB']->add_table_field('usersubmitban_ip','i_descrip','LONG_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('banned_ip','i_descrip','LONG_TEXT');
 		}
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
-			$GLOBALS['SITE_DB']->add_table_field('usersubmitban_ip','i_ban_until','?TIME');
-			$GLOBALS['SITE_DB']->add_table_field('usersubmitban_ip','i_ban_positive','BINARY',1);
+			$GLOBALS['SITE_DB']->add_table_field('banned_ip','i_ban_until','?TIME');
+			$GLOBALS['SITE_DB']->add_table_field('banned_ip','i_ban_positive','BINARY',1);
 		}
 	}
 
@@ -132,7 +132,7 @@ class Module_admin_ipban
 
 		$bans='';
 		$locked_bans='';
-		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip,i_ban_until FROM '.get_table_prefix().'usersubmitban_ip WHERE i_ban_positive=1 AND (i_ban_until IS NULL'.' OR i_ban_until>'.strval(time()).')');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip,i_ban_until FROM '.get_table_prefix().'banned_ip WHERE i_ban_positive=1 AND (i_ban_until IS NULL'.' OR i_ban_until>'.strval(time()).')');
 		foreach ($rows as $row)
 		{
 			if (is_null($row['i_ban_until']))
@@ -162,7 +162,7 @@ class Module_admin_ipban
 	{
 		require_code('failure');
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip FROM '.get_table_prefix().'usersubmitban_ip WHERE i_ban_until IS NULL'/*.' OR i_ban_until>'.strval(time())*/);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip FROM '.get_table_prefix().'banned_ip WHERE i_ban_until IS NULL'/*.' OR i_ban_until>'.strval(time())*/);
 		$old_bans=collapse_1d_complexity('ip',$rows);
 		$bans=post_param('bans');
 		$_bans=explode(chr(10),$bans);

@@ -66,9 +66,9 @@ It should go without saying that you should only use this 'backdoor' for a short
 
 [title="2"]Unbanning an IP[/title]
 
-[exp_thumb="Select to browse the usersubmitban_ip table" float="left"]disaster_ban_1[/exp_thumb]
+[exp_thumb="Select to browse the banned_ip table" float="left"]disaster_ban_1[/exp_thumb]
 [exp_thumb="Delete the row corresponding to your IP address" float="right"]disaster_ban_2[/exp_thumb]
-If you are unfortunate enough to have somehow been banned from your own website, use phpMyAdmin to browse the 'usersubmitban_ip' table, and delete the row containing your IP address. If you don't know your IP address then you can find it out from http://www.myipaddress.com/.
+If you are unfortunate enough to have somehow been banned from your own website, use phpMyAdmin to browse the 'banned_ip' table, and delete the row containing your IP address. If you don't know your IP address then you can find it out from http://www.myipaddress.com/.
 
 [title="2"]Resetting page ownerships[/title]
 

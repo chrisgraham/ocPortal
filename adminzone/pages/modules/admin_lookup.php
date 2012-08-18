@@ -116,7 +116,7 @@ class Module_admin_lookup
 			if (is_null($id)) $id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			if (is_null($ip)) $ip='';
 
-			$all_banned=collapse_1d_complexity('ip',$GLOBALS['SITE_DB']->query('SELECT ip FROM '.get_table_prefix().'usersubmitban_ip WHERE i_ban_positive=1 AND (i_ban_until IS NULL OR i_ban_until>'.strval(time()).')'));
+			$all_banned=collapse_1d_complexity('ip',$GLOBALS['SITE_DB']->query('SELECT ip FROM '.get_table_prefix().'banned_ip WHERE i_ban_positive=1 AND (i_ban_until IS NULL OR i_ban_until>'.strval(time()).')'));
 
 			$ip_list=new ocp_tempcode();
 			$groups=array();
@@ -207,7 +207,7 @@ class Module_admin_lookup
 			$ip_banned=false;
 			if ($ip!='')
 			{
-				$ban_until=$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('i_ban_until'),array('i_ban_positive'=>1,'ip'=>$ip));
+				$ban_until=$GLOBALS['SITE_DB']->query_select('banned_ip',array('i_ban_until'),array('i_ban_positive'=>1,'ip'=>$ip));
 				if (array_key_exists(0,$ban_until))
 				{
 					$ip_banned=is_null($ban_until[0]['i_ban_until']) || $ban_until[0]['i_ban_until']>time();

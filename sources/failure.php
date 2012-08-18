@@ -489,8 +489,8 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 	require_code('support2');
 	if ((!is_null($ban_until)) && (ip_banned($ip,true))) return false; // Don't allow shortening ban period automatically, or having a negative ban negating a positive one!
 
-	$GLOBALS['SITE_DB']->query_delete('usersubmitban_ip',array('ip'=>$ip),'',1);
-	$GLOBALS['SITE_DB']->query_insert('usersubmitban_ip',array('ip'=>$ip,'i_descrip'=>$descrip,'i_ban_until'=>$ban_until,'i_ban_positive'=>$ban_positive?1:0),false,true); // To stop weird race-like conditions
+	$GLOBALS['SITE_DB']->query_delete('banned_ip',array('ip'=>$ip),'',1);
+	$GLOBALS['SITE_DB']->query_insert('banned_ip',array('ip'=>$ip,'i_descrip'=>$descrip,'i_ban_until'=>$ban_until,'i_ban_positive'=>$ban_positive?1:0),false,true); // To stop weird race-like conditions
 	persistent_cache_delete('IP_BANS');
 	if ((is_writable_wrap(get_file_base().'/.htaccess')) && (is_null($ban_until)))
 	{
@@ -532,7 +532,7 @@ function remove_ip_ban($ip)
 {
 	if (!addon_installed('securitylogging')) return;
 
-	$GLOBALS['SITE_DB']->query_delete('usersubmitban_ip',array('ip'=>$ip),'',1);
+	$GLOBALS['SITE_DB']->query_delete('banned_ip',array('ip'=>$ip),'',1);
 	persistent_cache_delete('IP_BANS');
 	if (is_writable_wrap(get_file_base().'/.htaccess'))
 	{
