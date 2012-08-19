@@ -105,6 +105,9 @@ class Module_pointstore
 				'details2'=>'SHORT_TEXT'
 			));
 
+			require_lang('pointstore');
+			add_menu_item_simple('main_community',NULL,'POINT_STORE','_SEARCH:pointstore:type=misc',0,0,true,'',0,'menu_items/community_navigation/pointstore');
+
 			// Pointstore Options
 			//  Banners
 				add_config_option('ENABLE_PURCHASE','is_on_banner_buy','tick','return (!addon_installed(\'banners\'))?false:\'1\';','POINTSTORE','BANNERS');
@@ -121,13 +124,6 @@ class Module_pointstore
 				add_config_option('FORW_MAINTAIN_URL','forw_url','line','return \'http://\'.get_domain().\':2082/frontend/x/mail/addfwd.html\';','POINTSTORE','FORWARDING',1);
 			//  Community billboard
 				add_config_option('ENABLE_PURCHASE','is_on_community_message_buy','tick','return (!addon_installed(\'community_billboard\'))?false:\'1\';','POINTSTORE','COMMUNITY_BILLBOARD_MESSAGE');
-
-			require_lang('pointstore');
-			add_menu_item_simple('main_community',NULL,'POINT_STORE','_SEARCH:pointstore:type=misc',0,0,true,'',0,'menu_items/community_navigation/pointstore');
-		}
-
-		if (($upgrade_from<3) || (is_null($upgrade_from)))
-		{
 			//  Highlighted names
 				add_config_option('ENABLE_PURCHASE','is_on_highlight_name_buy','tick','return (get_forum_type()!=\'ocf\')?false:\'1\';','POINTSTORE','NAME_HIGHLIGHTING');
 				add_config_option('COST_highlight_name','highlight_name','integer','return (get_forum_type()!=\'ocf\')?false:\'2000\';','POINTSTORE','NAME_HIGHLIGHTING');
@@ -176,11 +172,6 @@ class Module_pointstore
 					'p_module'=>'ID_TEXT', // category and ?privilege only
 					'p_category'=>'ID_TEXT', // category and ?privilege only
 				));
-		}
-
-		if (($upgrade_from<4) && (!is_null($upgrade_from)))
-		{
-			delete_config_option('is_on_shop');
 		}
 
 		if (($upgrade_from<5) && (!is_null($upgrade_from)))

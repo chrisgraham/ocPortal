@@ -114,7 +114,6 @@ class Module_news
 			$GLOBALS['SITE_DB']->create_index('news_categories','ncs',array('nc_owner'));
 
 			$default_categories=array('general','technology','difficulties','community','entertainment','business','art');
-
 			require_lang('news');
 			foreach ($default_categories as $category)
 			{
@@ -135,10 +134,10 @@ class Module_news
 			add_config_option('ADD_NEWS','points_ADD_NEWS','integer','return addon_installed(\'points\')?\'225\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('NEWS_REGULARITY','news_update_time','integer','return \'168\';','ADMIN','CHECK_LIST');
 			add_config_option('BLOG_REGULARITY','blog_update_time','integer','return \'168\';','ADMIN','CHECK_LIST');
-		}
+			add_config_option('PING_URL','ping_url','text','return \'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}\';','FEATURE','NEWS_AND_RSS');
+			add_config_option('TOTAL_NEWS_ENTRIES','news_show_stats_count_total_posts','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
+			add_config_option('BLOGS','news_show_stats_count_blogs','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 
-		if (($upgrade_from<3) || (is_null($upgrade_from)))
-		{
 			$GLOBALS['SITE_DB']->create_table('news_category_entries',array(
 				'news_entry'=>'*AUTO_LINK',
 				'news_entry_category'=>'*AUTO_LINK'
@@ -147,31 +146,12 @@ class Module_news
 
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			$categories=$GLOBALS['SITE_DB']->query_select('news_categories',array('id'));
-
 			foreach ($categories as $_id)
 			{
 				foreach (array_keys($groups) as $group_id)
 					$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($_id['id']),'group_id'=>$group_id));
 			}
-		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('news','allow_trackbacks','BINARY',1);
-
-			$GLOBALS['SITE_DB']->add_table_field('news_categories','nc_owner','?USER');
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('news','news_image','URLPATH','');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
-		{
-			add_config_option('PING_URL','ping_url','text','return \'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}\';','FEATURE','NEWS_AND_RSS');
-			add_config_option('TOTAL_NEWS_ENTRIES','news_show_stats_count_total_posts','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('BLOGS','news_show_stats_count_blogs','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_ititle',array('title'));
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_nnews',array('news'));
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_nnewsa',array('news_article'));

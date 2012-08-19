@@ -122,15 +122,8 @@ class Module_catalogues
 			));
 			$GLOBALS['SITE_DB']->create_index('catalogue_categories','catstoclean',array('cc_move_target'));
 			$GLOBALS['SITE_DB']->create_index('catalogue_categories','cataloguefind',array('c_name'));
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
 			$GLOBALS['SITE_DB']->create_index('catalogue_categories','cc_parent_id',array('cc_parent_id'));
-		}
 
-		if (is_null($upgrade_from))
-		{
 			$GLOBALS['SITE_DB']->create_table('catalogue_fields',array(
 				'id'=>'*AUTO',
 				'c_name'=>'ID_TEXT',
@@ -364,30 +357,7 @@ class Module_catalogues
 				actual_add_catalogue_field('contacts',lang_code_to_default_content($field[0],false,3),insert_lang('',2),$field[2],$i,$field[3],1,1,'',$field[4]);
 			actual_add_catalogue_category('contacts',lang_code_to_default_content('CONTACTS',false,2),'','',NULL,'');
 			add_menu_item_simple('main_content',NULL,'CONTACTS','_SEARCH:catalogues:type=index:id=contacts');
-		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
-			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_add_date',array('ce_add_date'),'id');
-			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_c_name',array('c_name'),'id');
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->delete_table_field('catalogues','c_own_template');
-			$GLOBALS['SITE_DB']->add_table_field('catalogues','c_cat_tab','BINARY',0);
-			$GLOBALS['SITE_DB']->add_table_field('catalogues','c_ecommerce','BINARY',0);
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_entries','ce_views_prior','INTEGER');
-			$GLOBALS['SITE_DB']->add_table_field('catalogues','c_send_view_reports','ID_TEXT','never');
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_categories','cc_move_target','?AUTO_LINK',NULL);
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_categories','cc_move_days_lower','INTEGER',30);
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_categories','cc_move_days_higher','INTEGER',60);
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_entries','ce_last_moved','INTEGER',0);
-			$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries SET ce_last_moved=ce_add_date');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
 			$cat_id=actual_add_catalogue('products',lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_DESCRIPTION',false,2),C_DT_GRID,1,'',0,1);
 
 			$fields=array(
@@ -430,37 +400,9 @@ class Module_catalogues
 			add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_PRODUCTS_TITLE','_SEARCH:catalogues:type=category:catalogue_name=products');
 
 			add_privilege('CATALOGUES','high_catalogue_entry_timeout',false);
-		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_long','#lcv_value',array('cv_value'),'id');
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short','#scv_value',array('cv_value'),'id');
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_entries','allow_trackbacks','BINARY',1);
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_entries','c_name','ID_TEXT');
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_categories','rep_image','URLPATH');
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_fields','cf_default','LONG_TEXT');
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_fields','cf_searchable','BINARY',1);
-			$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_categories c ON e.cc_id=c.id',array('e.id','c.c_name'));
-			foreach ($entries as $entry)
-			{
-				$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('c_name'=>$entry['c_name']),array('id'=>$entry['id']),'',1);
-			}
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->alter_table_field('catalogues','c_own_pages','SHORT_INTEGER','c_display_type');
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_fields','cf_put_in_category','BINARY',1);
-			$GLOBALS['SITE_DB']->add_table_field('catalogue_fields','cf_put_in_search','BINARY',1);
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<5))
-		{
 			//$GLOBALS['SITE_DB']->create_index('catalogue_efv_long','ilcv_value',array('cv_value'),'id');	Not allowed, LONG_TEXT can not be in key. People shouldn't order by this anyway
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short','iscv_value',array('cv_value'),'id');
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_long','lcf_id',array('cf_id'),'id');
@@ -476,6 +418,12 @@ class Module_catalogues
 			$GLOBALS['SITE_DB']->create_index('catalogue_categories','ftjoin_ccdescrip',array('cc_description'));
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_long_trans','ltcv_value',array('cv_value'));
 			$GLOBALS['SITE_DB']->create_index('catalogue_efv_short_trans','stcv_value',array('cv_value'));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_add_date',array('ce_add_date'),'id');
+			$GLOBALS['SITE_DB']->create_index('catalogue_entries','ce_c_name',array('c_name'),'id');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<6))

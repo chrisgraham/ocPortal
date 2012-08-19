@@ -65,13 +65,7 @@ class Block_main_rss
 		{
 			add_config_option('ENABLE_RSS','is_on_rss','tick','return \'1\';','FEATURE','NEWS_AND_RSS');
 			add_config_option('UPDATE_TIME','rss_update_time','integer','return \'60\';','FEATURE','NEWS_AND_RSS');
-		}
-
-		if (($upgrade_from<3) || (is_null($upgrade_from))) // These are new in 3 of this module, and thus are for upgrades and fresh installs
-		{
 			add_config_option('ENABLE_RSS_ADVERTISING','is_rss_advertised','tick','return \'0\';','FEATURE','NEWS_AND_RSS');
-			delete_config_option('rss_side_max_entries');
-			delete_config_option('rss_max_entries');
 		}
 	}
 

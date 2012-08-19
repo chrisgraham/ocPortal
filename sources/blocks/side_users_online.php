@@ -57,7 +57,7 @@ class Block_side_users_online
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
+		if (is_null($upgrade_from))
 		{
 			add_config_option('SHOW_NEWEST_MEMBER','usersonline_show_newest_member','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','USERS_ONLINE_BLOCK');
 			add_config_option('BIRTHDAYS','usersonline_show_birthdays','tick','return ((has_no_forum()) || (get_forum_type()!=\'ocf\'))?NULL:\'0\';','BLOCKS','USERS_ONLINE_BLOCK');

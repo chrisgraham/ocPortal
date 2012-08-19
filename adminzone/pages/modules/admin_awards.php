@@ -70,17 +70,6 @@ class Module_admin_awards extends standard_crud_module
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			delete_privilege('choose_dotw');
-			delete_config_option('dotw_update_time');
-			$GLOBALS['SITE_DB']->rename_table('dotw','award_archive');
-			$GLOBALS['SITE_DB']->add_table_field('award_archive','a_type_id','AUTO_LINK',db_get_first_id());
-			$GLOBALS['SITE_DB']->alter_table_field('award_archive','id','ID_TEXT','content_id');
-			$GLOBALS['SITE_DB']->add_table_field('award_archive','member_id','USER',$GLOBALS['FORUM_DRIVER']->get_guest_id());
-			$GLOBALS['SITE_DB']->change_primary_key('award_archive',array('a_type_id','date_and_time'));
-		}
-
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('award_archive',array(
@@ -89,12 +78,9 @@ class Module_admin_awards extends standard_crud_module
 				'content_id'=>'ID_TEXT',
 				'member_id'=>'USER'
 			));
-		}
 
-		$GLOBALS['SITE_DB']->create_index('award_archive','awardquicksearch',array('content_id'));
+			$GLOBALS['SITE_DB']->create_index('award_archive','awardquicksearch',array('content_id'));
 
-		if (((!is_null($upgrade_from)) && ($upgrade_from<3)) || (is_null($upgrade_from)))
-		{
 			$GLOBALS['SITE_DB']->create_table('award_types',array(
 				'id'=>'*AUTO',
 				'a_title'=>'SHORT_TRANS',

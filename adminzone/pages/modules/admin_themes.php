@@ -74,56 +74,6 @@ class Module_admin_themes
 
 		$themes=find_all_themes(); // Find all images for all themes
 
-		/*if ($upgrade_from==2)
-		{
-			foreach (array_keys($themes) as $theme)
-			{
-				if ($theme!='default')
-				{
-					// Make it so it'll now import from the default theme to get anything that is currently missing
-					$_dir=opendir(get_file_base().'/themes/default/css');
-					while (false!==($file=readdir($_dir)))
-					{
-						if (strtolower(substr($file,-4,4))=='.css')
-						{
-							$path=get_file_base().'/themes/'.$theme.'/css/'.$file;
-							$new_css_file=(($file=='no_cache.css')?'':"@import url(../../../default/css/$file);\n\n").file_get_contents($path);
-							$myfile=@fopen($path,'wt');
-							if ($myfile===false) intelligent_write_error($path);
-							fwrite($myfile,$new_css_file);
-							fclose($myfile);
-							fix_permissions($path);
-						}
-					}
-					closedir($_dir);
-
-					// Rename all their modified templates, because they've probably changed. They'll need to redo them :(
-					$path=get_file_base().'/themes/'.$theme.'/templates_custom/';
-					$_dir=opendir($path);
-					if ($_dir!==false)
-					{
-						while (false!==($file=readdir($_dir)))
-						{
-							if (substr($file,-4,4)=='.tpl')
-								rename($path.$file,$path.$file.'.from_'.strval($upgrade_from));
-						}
-						closedir($_dir);
-					}
-					$path=get_file_base().'/themes/'.$theme.'/templates/';
-					$_dir=opendir($path);
-					if ($_dir!==false)
-					{
-						while (false!==($file=readdir($_dir)))
-						{
-							if (substr($file,-4,4)=='.tpl')
-								rename($path.$file,$path.$file.'.from_'.strval($upgrade_from));
-						}
-						closedir($_dir);
-					}
-				}
-			}
-		}*/
-
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('theme_images',array(
@@ -136,30 +86,6 @@ class Module_admin_themes
 
 			add_config_option('STORE_REVISIONS','templates_store_revisions','tick','return \'1\';','ADMIN','EDIT_TEMPLATES');
 			add_config_option('SHOW_REVISIONS','templates_number_revisions_show','integer','return \'5\';','ADMIN','EDIT_TEMPLATES');
-
-			/*$langs=find_all_langs(true); // Find all images for all themes
-			foreach (array_keys($themes) as $theme)
-			{
-				require_code('themes3');
-				regen_theme_images($theme,$langs);
-			}
-
-			// Now add in any default theme images missing in other themes
-			$images=find_images_do_dir('default','',$langs);
-			foreach (array_keys($themes) as $theme)
-			{
-				foreach ($images as $id=>$path)
-				{
-					foreach (array_keys($langs) as $lang)
-					{
-						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',array('theme'=>$theme,'lang'=>$lang,'id'=>$id));
-						if (is_null($test))
-						{
-							$GLOBALS['SITE_DB']->query_insert('theme_images',array('id'=>$id,'theme'=>$theme,'lang'=>$lang,'path'=>$path));
-						}
-					}
-				}
-			}*/
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<4))

@@ -101,26 +101,13 @@ class Module_newsletter
 
 			add_config_option('PAGE_TEXT','newsletter_text','transtext','return \'\';','FEATURE','NEWSLETTER');
 			add_config_option('TITLE','newsletter_title','line','return get_option(\'site_name\').\' \'.ocp_mb_strtolower(do_lang(\'NEWSLETTER\'));','FEATURE','NEWSLETTER');
+			add_config_option('USE_INTEREST_LEVELS','interest_levels','tick','return \'0\';','FEATURE','NEWSLETTER');
 
 			add_privilege('NEWSLETTER','change_newsletter_subscriptions',false);
 
 			require_lang('newsletter');
 			//add_menu_item_simple('main_website',NULL,'NEWSLETTER','_SEARCH:newsletter:type=misc');
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('newsletter','pass_salt','ID_TEXT','');
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('newsletter','join_time','TIME');
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
-		{
-			set_option('newsletter_text','[html]'.get_option('newsletter_text').'[/html]');
-		}
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
+
 			require_lang('newsletter');
 
 			$GLOBALS['SITE_DB']->create_table('newsletters',array( // Would have been better named 'newsletter_subscribers' (but isn't for legacy reasons)
@@ -140,39 +127,7 @@ class Module_newsletter
 				'email'=>'*SHORT_TEXT',
 			));
 			$GLOBALS['SITE_DB']->create_index('newsletter_subscribe','peopletosendto',array('the_level'));
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<6)) // Ordering is important
-		{
-			$GLOBALS['SITE_DB']->alter_table_field('newsletter','email','SHORT_TEXT');
-			$subscribes=$GLOBALS['SITE_DB']->query_select('newsletter',array('the_level','email'));
-			foreach ($subscribes as $subscribe)
-			{
-				$subscribe['newsletter_id']=db_get_first_id();
-				$GLOBALS['SITE_DB']->query_insert('newsletter_subscribe',$subscribe);
-			}
-			$GLOBALS['SITE_DB']->delete_table_field('newsletter','the_level');
-		}
-		if ((is_null($upgrade_from)) || ($upgrade_from<7))
-		{
-			add_config_option('USE_INTEREST_LEVELS','interest_levels','tick','return \'0\';','FEATURE','NEWSLETTER');
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
-		{
-			// THIS STUFF DONE BECAUSE WE NEED A NUMERIC ID FOR IMPORT/EXPORT OF NEWSLETTER SUBSCRIBERS
-			/*$GLOBALS['SITE_DB']->add_table_field('newsletter','id','INTEGER'); // can't handle more than one row when it tries to become a key, as not sequential
-			$GLOBALS['SITE_DB']->change_primary_key('newsletter',array('id'));
-			$GLOBALS['SITE_DB']->alter_table_field('newsletter','id','AUTO');*/
-			// Works with mySQL only, but it's okay because before v4 of ocPortal (which this upgrades to), there's only mySQL support
-			$GLOBALS['SITE_DB']->query('ALTER TABLE '.get_table_prefix().'newsletter DROP PRIMARY KEY');
-			$GLOBALS['SITE_DB']->query('ALTER TABLE '.get_table_prefix().'newsletter ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY');
-			$GLOBALS['SITE_DB']->query_insert('db_meta',array('m_table'=>'newsletter','m_name'=>'id','m_type'=>'AUTO*'));
 
-			// Add some extra data...
-			$GLOBALS['SITE_DB']->add_table_field('newsletter','n_forename','SHORT_TEXT');
-			$GLOBALS['SITE_DB']->add_table_field('newsletter','n_surname','SHORT_TEXT');
-		}
-		if ((is_null($upgrade_from)) || ($upgrade_from<8))
-		{
 			$GLOBALS['SITE_DB']->create_table('newsletter_drip_send',array(
 				'id'=>'*AUTO',
 				'd_inject_time'=>'TIME',
@@ -188,6 +143,7 @@ class Module_newsletter
 			));
 			$GLOBALS['SITE_DB']->create_index('newsletter_drip_send','d_inject_time',array('d_inject_time'));
 		}
+
 		if ((is_null($upgrade_from)) || ($upgrade_from<9))
 		{
 			$GLOBALS['SITE_DB']->create_table('newsletter_periodic',array(
@@ -208,6 +164,7 @@ class Module_newsletter
 				'np_last_sent'=>'TIME',
 			));
 		}
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<9))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('newsletter_drip_send','d_template','ID_TEXT');

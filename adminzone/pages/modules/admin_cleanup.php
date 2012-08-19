@@ -66,9 +66,6 @@ class Module_admin_cleanup
 			add_config_option('BLOCK_CACHE','is_on_block_cache','tick','return $GLOBALS[\'SEMI_DEV_MODE\']?\'0\':\'1\';','SITE','CACHES',1);
 			add_config_option('TEMPLATE_CACHE','is_on_template_cache','tick','return \'1\';','SITE','CACHES',1);
 			add_config_option('COMCODE_PAGE_CACHE','is_on_comcode_page_cache','tick','return \'1\';','SITE','CACHES',1);
-		}
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
 			add_config_option('LANGUAGE_CACHE','is_on_lang_cache','tick','return \'1\';','SITE','CACHES',1);
 		}
 	}

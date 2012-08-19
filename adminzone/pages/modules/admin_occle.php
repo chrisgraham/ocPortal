@@ -77,10 +77,6 @@ class Module_admin_occle
 			));
 
 			add_config_option('OCCLE_CHAT_ANNOUNCE','occle_chat_announce','tick','return \'0\';','SITE','ADVANCED');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<2))
-		{
 			add_config_option('OCCLE_BUTTON','bottom_show_occle_button','tick','return (get_file_base()!=get_custom_file_base())?\'0\':\'1\';','FEATURE','BOTTOM_LINKS');
 		}
 	}

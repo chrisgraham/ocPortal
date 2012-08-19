@@ -102,14 +102,6 @@ class Module_iotds
 			add_config_option('IOTD_REGULARITY','iotd_update_time','integer','return \'24\';','ADMIN','CHECK_LIST');
 			$GLOBALS['SITE_DB']->create_index('iotd','ftjoin_icap',array('caption'));
 		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('iotd','allow_trackbacks','BINARY',1);
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('iotd','i_title','SHORT_TRANS','');
-		}
 	}
 
 	/**

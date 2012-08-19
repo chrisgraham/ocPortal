@@ -68,10 +68,7 @@ class Block_main_leader_board
 				'lb_points'=>'INTEGER',
 				'date_and_time'=>'*TIME'
 			));
-		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
 			add_config_option('LEADERBOARD_START_DATE','leaderboard_start_date','date','return strval(filemtime(get_file_base().\'/index.php\'));','POINTS','POINT_LEADERBOARD');
 		}
 	}

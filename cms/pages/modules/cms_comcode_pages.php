@@ -95,12 +95,10 @@ class Module_cms_comcode_pages
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ($GLOBALS['SITE_DB']->table_exists('comcode_pages')) return; // We moved this install code from another file. Now, upgrade.php should have dealt with this issue but if people didn't run it, detected
-
-		require_code('zones2');
-
-		if (($upgrade_from<4) || (is_null($upgrade_from)))
+		if (is_null($upgrade_from))
 		{
+			require_code('zones2');
+
 			$GLOBALS['SITE_DB']->create_table('comcode_pages',array(
 				'the_zone'=>'*ID_TEXT',
 				'the_page'=>'*ID_TEXT',
@@ -115,16 +113,7 @@ class Module_cms_comcode_pages
 			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_add_date',array('p_add_date'));
 			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_validated',array('p_validated'));
 			add_config_option('COMCODE_PAGE_ADD','points_COMCODE_PAGE_ADD','integer','return addon_installed(\'points\')?\'10\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-		}
 
-		if (($upgrade_from<3) && (!is_null($upgrade_from)))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('cached_comcode_pages','cc_page_title','?SHORT_TRANS');
-			return;
-		}
-
-		if (is_null($upgrade_from))
-		{
 			$GLOBALS['SITE_DB']->create_table('cached_comcode_pages',array(
 				'the_zone'=>'*ID_TEXT',
 				'the_page'=>'*ID_TEXT',

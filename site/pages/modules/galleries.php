@@ -136,6 +136,8 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->create_index('galleries','watermark_bottom_right',array('watermark_bottom_right'));
 			$GLOBALS['SITE_DB']->create_index('galleries','gadd_date',array('add_date'));
 			$GLOBALS['SITE_DB']->create_index('galleries','parent_id',array('parent_id'));
+			$GLOBALS['SITE_DB']->create_index('galleries','ftjoin_gfullname',array('fullname'));
+			$GLOBALS['SITE_DB']->create_index('galleries','ftjoin_gdescrip',array('description'));
 
 			$GLOBALS['SITE_DB']->create_table('images',array(
 				'id'=>'*AUTO',
@@ -154,42 +156,12 @@ class Module_galleries
 				'image_views'=>'INTEGER',
 				'title'=>'SHORT_TRANS',
 			));
-
 			$GLOBALS['SITE_DB']->create_index('images','image_views',array('image_views'));
 			$GLOBALS['SITE_DB']->create_index('images','category_list',array('cat'));
 			$GLOBALS['SITE_DB']->create_index('images','i_validated',array('validated'));
 			$GLOBALS['SITE_DB']->create_index('images','xis',array('submitter'));
 			$GLOBALS['SITE_DB']->create_index('images','iadd_date',array('add_date'));
-
-			add_config_option('ADD_IMAGE','points_ADD_IMAGE','integer','return addon_installed(\'points\')?\'100\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('ADD_VIDEO','points_ADD_VIDEO','integer','return addon_installed(\'points\')?\'100\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-
-			require_lang('galleries');
-			add_menu_item_simple('main_content',NULL,'GALLERIES','_SEARCH:galleries:type=misc',0,0,true,'',0,'',2);
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('galleries','teaser','SHORT_TRANS',2);
-			$GLOBALS['SITE_DB']->add_table_field('galleries','rep_image','URLPATH');
-			$GLOBALS['SITE_DB']->add_table_field('galleries','parent_id','ID_TEXT','root');
-			$GLOBALS['SITE_DB']->add_table_field('galleries','accept_images','BINARY',1);
-			$GLOBALS['SITE_DB']->add_table_field('galleries','accept_videos','BINARY',1);
-			$GLOBALS['SITE_DB']->add_table_field('galleries','watermark_top_left','URLPATH');
-			$GLOBALS['SITE_DB']->add_table_field('galleries','watermark_top_right','URLPATH');
-			$GLOBALS['SITE_DB']->add_table_field('galleries','watermark_bottom_left','URLPATH');
-			$GLOBALS['SITE_DB']->add_table_field('galleries','watermark_bottom_right','URLPATH');
-			$GLOBALS['SITE_DB']->add_table_field('galleries','is_member_synched','BINARY');
-			$GLOBALS['SITE_DB']->add_table_field('galleries','flow_mode_interface','BINARY');
-			$GLOBALS['SITE_DB']->add_table_field('galleries','allow_rating','BINARY',1);
-			$GLOBALS['SITE_DB']->add_table_field('galleries','allow_comments','SHORT_INTEGER',1);
-
-			$GLOBALS['SITE_DB']->add_table_field('images','allow_trackbacks','BINARY',1);
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
-			add_privilege('GALLERIES','may_download_gallery',false);
+			$GLOBALS['SITE_DB']->create_index('images','ftjoin_icomments',array('comments'));
 
 			$GLOBALS['SITE_DB']->create_table('videos',array(
 				'id'=>'*AUTO',
@@ -211,13 +183,22 @@ class Module_galleries
 				'video_length'=>'INTEGER',
 				'title'=>'SHORT_TRANS',
 			));
-
 			$GLOBALS['SITE_DB']->create_index('videos','video_views',array('video_views'));
 			$GLOBALS['SITE_DB']->create_index('videos','vs',array('submitter'));
 			$GLOBALS['SITE_DB']->create_index('videos','v_validated',array('validated'));
 			$GLOBALS['SITE_DB']->create_index('videos','category_list',array('cat'));
 			$GLOBALS['SITE_DB']->create_index('videos','vadd_date',array('add_date'));
+			$GLOBALS['SITE_DB']->create_index('videos','ftjoin_vcomments',array('comments'));
 
+			require_lang('galleries');
+			add_menu_item_simple('main_content',NULL,'GALLERIES','_SEARCH:galleries:type=misc',0,0,true,'',0,'',2);
+
+			add_privilege('GALLERIES','may_download_gallery',false);
+			add_privilege('GALLERIES','high_personal_gallery_limit',false);
+			add_privilege('GALLERIES','no_personal_gallery_limit',false);
+
+			add_config_option('ADD_IMAGE','points_ADD_IMAGE','integer','return addon_installed(\'points\')?\'100\':NULL;','POINTS','COUNT_POINTS_GIVEN');
+			add_config_option('ADD_VIDEO','points_ADD_VIDEO','integer','return addon_installed(\'points\')?\'100\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('DEFAULT_VIDEO_WIDTH','default_video_width','integer','return \'320\';','FEATURE','GALLERIES');
 			add_config_option('DEFAULT_VIDEO_HEIGHT','default_video_height','integer','return \'240\';','FEATURE','GALLERIES');
 			add_config_option('MAXIMUM_IMAGE_SIZE','maximum_image_size','integer','return \'1024\';','FEATURE','GALLERIES');
@@ -225,42 +206,24 @@ class Module_galleries
 			add_config_option('GALLERY_IMAGE_LIMIT_HIGH','max_personal_gallery_images_high','integer','return \'10\';','FEATURE','GALLERIES');
 			add_config_option('GALLERY_VIDEO_LIMIT_LOW','max_personal_gallery_videos_low','integer','return \'2\';','FEATURE','GALLERIES');
 			add_config_option('GALLERY_VIDEO_LIMIT_HIGH','max_personal_gallery_videos_high','integer','return \'5\';','FEATURE','GALLERIES');
-			add_privilege('GALLERIES','high_personal_gallery_limit',false);
-			add_privilege('GALLERIES','no_personal_gallery_limit',false);
+			add_config_option('GALLERIES','galleries_show_stats_count_galleries','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
+			add_config_option('IMAGES','galleries_show_stats_count_images','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
+			add_config_option('VIDEOS','galleries_show_stats_count_videos','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
+			add_config_option('SHOW_EMPTY_GALLERIES','show_empty_galleries','tick','return \'1\';','FEATURE','GALLERIES');
+			add_config_option('GALLERY_NAME_ORDER','gallery_name_order','tick','return \'0\';','FEATURE','GALLERIES');
+			add_config_option('GALLERY_SELECTORS','gallery_selectors','line','return is_null($old=get_value(\'gallery_selectors\'))?\'12,24,36,64,128\':$old;','FEATURE','GALLERIES');
+			add_config_option('REVERSE_THUMB_ORDER','reverse_thumb_order','tick','return is_null($old=get_value(\'reverse_thumb_order\'))?\'0\':$old;','FEATURE','GALLERIES');
+			add_config_option('SHOW_GALLERY_COUNTS','show_gallery_counts','tick','return is_null($old=get_value(\'show_gallery_counts\'))?((get_forum_type()==\'ocf\')?\'0\':NULL):$old;','FEATURE','GALLERIES');
+			add_config_option('VIDEO_BITRATE','video_bitrate','integer','return \'1000\';','FEATURE','TRANSCODING');
+			add_config_option('AUDIO_BITRATE','audio_bitrate','integer','return \'192\';','FEATURE','TRANSCODING');
+			add_config_option('VIDEO_WIDTH_SETTING','video_width_setting','integer','return \'720\';','FEATURE','TRANSCODING');
+			add_config_option('VIDEO_HEIGHT_SETTING','video_height_setting','integer','return \'480\';','FEATURE','TRANSCODING');
 
 			// Add root gallery
 			add_gallery('root',do_lang('GALLERIES_HOME'),'','','','',1,1,0,1);
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'galleries','category_name'=>'root','group_id'=>$group_id));
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
-		{
-			add_config_option('GALLERIES','galleries_show_stats_count_galleries','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('IMAGES','galleries_show_stats_count_images','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('VIDEOS','galleries_show_stats_count_videos','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('SHOW_EMPTY_GALLERIES','show_empty_galleries','tick','return \'1\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_NAME_ORDER','gallery_name_order','tick','return \'0\';','FEATURE','GALLERIES');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<5))
-		{
-			add_config_option('GALLERY_SELECTORS','gallery_selectors','line','return is_null($old=get_value(\'gallery_selectors\'))?\'12,24,36,64,128\':$old;','FEATURE','GALLERIES');
-			add_config_option('REVERSE_THUMB_ORDER','reverse_thumb_order','tick','return is_null($old=get_value(\'reverse_thumb_order\'))?\'0\':$old;','FEATURE','GALLERIES');
-			add_config_option('SHOW_GALLERY_COUNTS','show_gallery_counts','tick','return is_null($old=get_value(\'show_gallery_counts\'))?((get_forum_type()==\'ocf\')?\'0\':NULL):$old;','FEATURE','GALLERIES');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
-			add_config_option('VIDEO_BITRATE','video_bitrate','integer','return \'1000\';','FEATURE','TRANSCODING');
-			add_config_option('AUDIO_BITRATE','audio_bitrate','integer','return \'192\';','FEATURE','TRANSCODING');
-			add_config_option('VIDEO_WIDTH_SETTING','video_width_setting','integer','return \'720\';','FEATURE','TRANSCODING');
-			add_config_option('VIDEO_HEIGHT_SETTING','video_height_setting','integer','return \'480\';','FEATURE','TRANSCODING');
-			$GLOBALS['SITE_DB']->create_index('videos','ftjoin_vcomments',array('comments'));
-			$GLOBALS['SITE_DB']->create_index('images','ftjoin_icomments',array('comments'));
-			$GLOBALS['SITE_DB']->create_index('galleries','ftjoin_gfullname',array('fullname'));
-			$GLOBALS['SITE_DB']->create_index('galleries','ftjoin_gdescrip',array('description'));
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))

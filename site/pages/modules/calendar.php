@@ -126,7 +126,6 @@ class Module_calendar
 				'e_type'=>'AUTO_LINK',
 				'validated'=>'BINARY',
 			));
-
 			$GLOBALS['SITE_DB']->create_index('calendar_events','e_views',array('e_views'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','ces',array('e_submitter'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','publicevents',array('e_is_public'));
@@ -134,6 +133,8 @@ class Module_calendar
 			$GLOBALS['SITE_DB']->create_index('calendar_events','eventat',array('e_start_year','e_start_month','e_start_day','e_start_hour','e_start_minute'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','e_add_date',array('e_add_date'));
 			$GLOBALS['SITE_DB']->create_index('calendar_events','validated',array('validated'));
+			$GLOBALS['SITE_DB']->create_index('calendar_events','ftjoin_etitle',array('e_title'));
+			$GLOBALS['SITE_DB']->create_index('calendar_events','ftjoin_econtent',array('e_content'));
 
 			$GLOBALS['SITE_DB']->create_table('calendar_types',array(
 				'id'=>'*AUTO',
@@ -160,10 +161,7 @@ class Module_calendar
 			));
 
 			add_menu_item_simple('main_content',NULL,'CALENDAR','_SEARCH:calendar:type=misc',0,0,true,'',0,'',3);
-		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
 			$GLOBALS['SITE_DB']->create_table('calendar_jobs',array(
 				'id'=>'*AUTO',
 				'j_time'=>'TIME',
@@ -171,46 +169,12 @@ class Module_calendar
 				'j_member_id'=>'?USER',
 				'j_event_id'=>'AUTO_LINK'
 			));
-
 			$GLOBALS['SITE_DB']->create_index('calendar_jobs','applicablejobs',array('j_time'));
-		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->alter_table_field('calendar_events','e_edit_date','?TIME');
-			$GLOBALS['SITE_DB']->alter_table_field('calendar_events','e_end_minute','?INTEGER');
-			$GLOBALS['SITE_DB']->alter_table_field('calendar_events','e_end_hour','?INTEGER');
-			$GLOBALS['SITE_DB']->alter_table_field('calendar_events','e_end_day','?INTEGER');
-			$GLOBALS['SITE_DB']->alter_table_field('calendar_events','e_end_month','?INTEGER');
-			$GLOBALS['SITE_DB']->alter_table_field('calendar_events','e_end_year','?INTEGER');
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('calendar_events','allow_rating','BINARY',0);
-			$GLOBALS['SITE_DB']->add_table_field('calendar_events','allow_comments','SHORT_INTEGER',0);
-			$GLOBALS['SITE_DB']->add_table_field('calendar_events','allow_trackbacks','BINARY',0);
-			$GLOBALS['SITE_DB']->add_table_field('calendar_events','notes','LONG_TEXT');
-			$GLOBALS['SITE_DB']->add_table_field('calendar_events','validated','BINARY',1);
-			delete_privilege('edit_owned_events');
-			delete_privilege('edit_viewable_events');
-			add_config_option('ADD_CALENDAR_EVENT','points_ADD_CALENDAR_EVENT','integer','return addon_installed(\'points\')?\'2\':NULL;','POINTS','COUNT_POINTS_GIVEN');
-			$GLOBALS['SITE_DB']->rename_table('calendar_declarations_of_interest','calendar_interests');
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('calendar_events','e_seg_recurrences','BINARY',0);
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<5))
-		{
 			add_config_option('EVENTS','calendar_show_stats_count_events','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('_EVENTS_THIS_WEEK','calendar_show_stats_count_events_this_week','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('_EVENTS_THIS_MONTH','calendar_show_stats_count_events_this_month','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('_EVENTS_THIS_YEAR','calendar_show_stats_count_events_this_year','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			$GLOBALS['SITE_DB']->create_index('calendar_events','ftjoin_etitle',array('e_title'));
-			$GLOBALS['SITE_DB']->create_index('calendar_events','ftjoin_econtent',array('e_content'));
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<6))

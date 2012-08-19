@@ -69,17 +69,6 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('f_welcome_emails','w_newsletter','BINARY',0);
-			$GLOBALS['SITE_DB']->add_table_field('f_welcome_emails','w_name','SHORT_TEXT');
-			$welcome_mails=$GLOBALS['SITE_DB']->query_select('f_welcome_emails',array('id','w_subject'));
-			foreach ($welcome_mails as $row)
-			{
-				$GLOBALS['SITE_DB']->query_update('f_welcome_emails',array('w_name'=>$row['w_subject']),array('id'=>$row['id']),'',1);
-			}
-		}
-
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('f_welcome_emails',array(

@@ -128,16 +128,6 @@ class Module_banners
 
 			add_config_option('ADD_BANNER','points_ADD_BANNER','integer','return addon_installed(\'points\')?\'0\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 
-			//add_menu_item_simple('main_website',NULL,'DONATE','_SEARCH:donate');
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('banners','b_type','ID_TEXT');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
-		{
 			$GLOBALS['SITE_DB']->create_table('banner_types',array(
 				'id'=>'*ID_TEXT',
 				't_is_textual'=>'BINARY',
@@ -171,17 +161,6 @@ class Module_banners
 			add_privilege('BANNERS','banner_free',false);
 
 			add_config_option('PERMISSIONS','use_banner_permissions','tick','return \'0\';','FEATURE','BANNERS');
-
-			$GLOBALS['SITE_DB']->query_update('banners',array('b_type'=>'BANNERS'),array('b_type'=>'_BANNERS'));
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('banners','b_title_text','SHORT_TEXT');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<5))
-		{
 			add_config_option('BANNER_AUTOSIZE','banner_autosize','tick','return is_null($old=get_value(\'banner_autosize\'))?\'0\':$old;','FEATURE','BANNERS');
 			add_config_option('ADMIN_BANNERS','admin_banners','tick','return is_null($old=get_value(\'always_banners\'))?\'0\':$old;','FEATURE','BANNERS');
 		}

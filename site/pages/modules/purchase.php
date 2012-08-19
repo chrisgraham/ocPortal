@@ -80,17 +80,7 @@ class Module_purchase
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->alter_table_field('transactions','currency','ID_TEXT','t_currency');
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('transactions','t_via','ID_TEXT','paypal');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
+		if (is_null($upgrade_from))
 		{
 			add_config_option('PAYMENT_GATEWAY','payment_gateway','line','return \'paypal\';','ECOMMERCE','ECOMMERCE');
 			add_config_option('USE_LOCAL_PAYMENT','use_local_payment','tick','return \'0\';','ECOMMERCE','ECOMMERCE');
@@ -129,18 +119,12 @@ class Module_purchase
 			add_menu_item_simple('ecommerce_features',NULL,'PURCHASING','_SEARCH:purchase:type=misc');
 			add_menu_item_simple('ecommerce_features',NULL,'INVOICES','_SEARCH:invoices:type=misc');
 			add_menu_item_simple('ecommerce_features',NULL,'MODULE_TRANS_NAME_subscriptions','_SEARCH:subscriptions:type=misc');
-		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
 			add_config_option('CURRENCY','currency','line','return \'GBP\';','ECOMMERCE','ECOMMERCE');
 			add_config_option('ECOMMERCE_TEST_MODE','ecommerce_test_mode','tick','return \'0\';','ECOMMERCE','ECOMMERCE');
 			add_config_option('IPN_ADDRESS_TEST','ipn_test','line','return get_option(\'staff_address\');','ECOMMERCE','ECOMMERCE');
 			add_config_option('IPN_ADDRESS','ipn','line','return get_option(\'staff_address\');','ECOMMERCE','ECOMMERCE');
-		}
 
-		if (is_null($upgrade_from))
-		{
 			$GLOBALS['SITE_DB']->create_table('transactions',array(
 				'id'=>'*ID_TEXT',
 				'purchase_id'=>'ID_TEXT',

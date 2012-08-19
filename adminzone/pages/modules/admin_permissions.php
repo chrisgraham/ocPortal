@@ -90,25 +90,17 @@ class Module_admin_permissions
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
-			$GLOBALS['SITE_DB']->create_table('match_key_messages',array(
-				'id'=>'*AUTO',
-				'k_message'=>'LONG_TRANS',
-				'k_match_key'=>'SHORT_TEXT'
-			));
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<7))
-		{
-			add_privilege('STAFF_ACTIONS','may_enable_staff_notifications',false);
-		}
-
 		if (is_null($upgrade_from))
 		{
 			add_privilege('SUBMISSION','draw_to_server',false);
 			add_privilege('GENERAL_SETTINGS','see_unvalidated',false);
 			add_privilege('GENERAL_SETTINGS','jump_to_unvalidated',true);
+
+			$GLOBALS['SITE_DB']->create_table('match_key_messages',array(
+				'id'=>'*AUTO',
+				'k_message'=>'LONG_TRANS',
+				'k_match_key'=>'SHORT_TEXT'
+			));
 
 			// What usergroups may enter this zone
 			$GLOBALS['SITE_DB']->create_table('group_zone_access',array(

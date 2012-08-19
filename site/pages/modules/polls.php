@@ -123,25 +123,6 @@ class Module_polls
 			$GLOBALS['SITE_DB']->create_index('poll','ftjoin_po5',array('option5'));
 		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('poll','allow_trackbacks','BINARY',1);
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('poll','option6','SHORT_TRANS');
-			$GLOBALS['SITE_DB']->add_table_field('poll','option7','SHORT_TRANS');
-			$GLOBALS['SITE_DB']->add_table_field('poll','option8','SHORT_TRANS');
-			$GLOBALS['SITE_DB']->add_table_field('poll','option9','SHORT_TRANS');
-			$GLOBALS['SITE_DB']->add_table_field('poll','option10','SHORT_TRANS');
-			$GLOBALS['SITE_DB']->add_table_field('poll','votes6','INTEGER',0);
-			$GLOBALS['SITE_DB']->add_table_field('poll','votes7','INTEGER',0);
-			$GLOBALS['SITE_DB']->add_table_field('poll','votes8','INTEGER',0);
-			$GLOBALS['SITE_DB']->add_table_field('poll','votes9','INTEGER',0);
-			$GLOBALS['SITE_DB']->add_table_field('poll','votes10','INTEGER',0);
-		}
-
 		if ((is_null($upgrade_from)) || ($upgrade_from<5))
 		{
 			$GLOBALS['SITE_DB']->create_table('poll_votes',array(

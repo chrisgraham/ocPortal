@@ -89,6 +89,7 @@ class Module_chat
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
 		require_lang('chat');
+
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('chat_rooms',array(
@@ -174,10 +175,7 @@ class Module_chat
 			add_config_option('COUNT_CHATTERS','chat_show_stats_count_users','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('ROOMS','chat_show_stats_count_rooms','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('COUNT_CHATPOSTS','chat_show_stats_count_messages','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-		}
-		if ((is_null($upgrade_from)) || ($upgrade_from<10))
-		{
-			$GLOBALS['SITE_DB']->drop_table_if_exists('chat_active');
+
 			$GLOBALS['SITE_DB']->create_table('chat_active',array(
 				'id'=>'*AUTO', // serves no purpose really, but needed as room_id can be NULL but is in compound key
 				'member_id'=>'USER',
@@ -213,10 +211,12 @@ class Module_chat
 
 			add_config_option('SITEWIDE_IM','sitewide_im','tick','return \'0\';','FEATURE','SECTION_CHAT');
 		}
+
 		if ((is_null($upgrade_from)) || ($upgrade_from<11))
 		{
 			add_config_option('GROUP_PRIVATE_CHATROOMS','group_private_chatrooms','tick','return is_null($old=get_value(\'no_group_private_chatrooms\'))?\'1\':invert_value($old);','FEATURE','SECTION_CHAT');
 		}
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<12))
 		{
 			$GLOBALS['SITE_DB']->rename_table('chat_buddies','chat_friends');

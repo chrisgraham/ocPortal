@@ -68,45 +68,6 @@ class Module_quiz
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_points_for_passing','INTEGER',0);
-			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_tied_newsletter','?AUTO_LINK',NULL);
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<2))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_add_date','TIME',time());
-			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_validated','BINARY',1);
-			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_submitter','BINARY',$GLOBALS['FORUM_DRIVER']->get_guest_id());
-			$GLOBALS['SITE_DB']->promote_text_field_to_comcode('quizzes','q_name');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<2))
-		{
-			$GLOBALS['SITE_DB']->create_table('quiz_member_last_visit',array(
-				'id'=>'*AUTO',
-				'v_time'=>'TIME',
-				'v_member_id'=>'USER',
-				'v_quiz_id'=>'AUTO_LINK',
-			));
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
-			add_config_option('QUIZZES','quiz_show_stats_count_total_open','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_privilege('QUIZZES','bypass_quiz_repeat_time_restriction',false);
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_order','INTEGER');
-			$GLOBALS['SITE_DB']->add_table_field('quiz_question_answers','q_order','INTEGER');
-			$GLOBALS['SITE_DB']->add_table_field('quiz_member_last_visit','v_quiz_id','AUTO_LINK');
-			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_end_text_fail','LONG_TRANS','');
-			$GLOBALS['SITE_DB']->add_table_field('quiz_question_answers','q_explanation','LONG_TRANS','');
-		}
-
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_required','BINARY');
@@ -120,6 +81,16 @@ class Module_quiz
 
 		if (is_null($upgrade_from))
 		{
+			$GLOBALS['SITE_DB']->create_table('quiz_member_last_visit',array(
+				'id'=>'*AUTO',
+				'v_time'=>'TIME',
+				'v_member_id'=>'USER',
+				'v_quiz_id'=>'AUTO_LINK',
+			));
+
+			add_config_option('QUIZZES','quiz_show_stats_count_total_open','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
+			add_privilege('QUIZZES','bypass_quiz_repeat_time_restriction',false);
+
 			add_config_option('ADD_QUIZ','points_ADD_QUIZ','integer','return addon_installed(\'points\')?\'0\':NULL;','POINTS','COUNT_POINTS_GIVEN');
 
 			$GLOBALS['SITE_DB']->create_table('quizzes',array(

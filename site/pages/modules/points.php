@@ -84,13 +84,10 @@ class Module_points
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
-			add_privilege('POINTS','use_points',true);
-		}
-
 		if (is_null($upgrade_from))
 		{
+			add_privilege('POINTS','use_points',true);
+
 			$GLOBALS['SITE_DB']->create_table('chargelog',array(
 				'id'=>'*AUTO',
 				'user_id'=>'USER',
@@ -115,44 +112,25 @@ class Module_points
 			add_config_option('MAKE_POST','points_posting','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('RATING','points_rating','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('VOTING','points_voting','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
+			add_config_option('COUNT_POINTS_LEFT','points_show_personal_stats_points_left','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('COUNT_POINTS_USED','points_show_personal_stats_points_used','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('COUNT_GIFT_POINTS_LEFT','points_show_personal_stats_gift_points_left','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('COUNT_GIFT_POINTS_USED','points_show_personal_stats_gift_points_used','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('COUNT_POINTS_EVER','points_show_personal_stats_total_points','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
+			add_config_option('POINTS_PER_DAY','points_per_day','integer','return \'0\';','POINTS','COUNT_POINTS_GIVEN');
+			add_config_option('POINTS_PER_DAILY_VISIT','points_per_daily_visit','integer','return \'0\';','POINTS','COUNT_POINTS_GIVEN');
 
+			add_privilege('POINTS','trace_anonymous_gifts',false);
 			add_privilege('POINTS','give_points_self',false);
 			add_privilege('POINTS','have_negative_gift_points',false);
 			add_privilege('POINTS','give_negative_points',false);
 			add_privilege('POINTS','view_charge_log',false);
 		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
-		{
-			delete_config_option('is_on_points');
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
-		{
-			delete_config_option('points_show_personal_profile_link');
-		}
-
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
 			add_config_option('POINTS_IF_LIKED','points_if_liked','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('POINTS_PER_CURRENCY_UNIT','points_per_currency_unit','integer','return addon_installed(\'ecommerce\')?\'100.0\':NULL;','POINTS','ECOMMERCE');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<5))
-		{
-			add_config_option('COUNT_POINTS_LEFT','points_show_personal_stats_points_left','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('COUNT_POINTS_USED','points_show_personal_stats_points_used','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('COUNT_GIFT_POINTS_LEFT','points_show_personal_stats_gift_points_left','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('COUNT_GIFT_POINTS_USED','points_show_personal_stats_gift_points_used','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-			add_config_option('COUNT_POINTS_EVER','points_show_personal_stats_total_points','tick','return \'0\';','BLOCKS','PERSONAL_BLOCK');
-
-			add_privilege('POINTS','trace_anonymous_gifts',false);
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
-		{
-			add_config_option('POINTS_PER_DAY','points_per_day','integer','return \'0\';','POINTS','COUNT_POINTS_GIVEN');
-			add_config_option('POINTS_PER_DAILY_VISIT','points_per_daily_visit','integer','return \'0\';','POINTS','COUNT_POINTS_GIVEN');
 		}
 	}
 

@@ -72,14 +72,7 @@ class Module_admin_ipban
 				'the_member'=>'*USER',
 			));
 		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->drop_table_if_exists('usersubmit');
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('banned_ip','i_descrip','LONG_TEXT');
-		}
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('banned_ip','i_ban_until','?TIME');

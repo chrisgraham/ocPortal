@@ -88,10 +88,7 @@ class Module_filedump
 			{
 				add_menu_item_simple('collab_features',NULL,'FILE_DUMP','_SEARCH:filedump:type=misc');
 			}
-		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
 			add_config_option('FILEDUMP_COUNT_FILES','filedump_show_stats_count_total_files','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('FILEDUMP_DISK_USAGE','filedump_show_stats_count_total_space','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 		}

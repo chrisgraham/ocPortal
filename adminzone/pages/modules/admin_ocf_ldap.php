@@ -73,7 +73,7 @@ class Module_admin_ocf_ldap
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if (($upgrade_from<3) || (is_null($upgrade_from)))
+		if (is_null($upgrade_from))
 		{
 			add_config_option('LDAP_IS_ENABLED','ldap_is_enabled','tick','return \''.(in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))?'0':'0').'\';','SECTION_FORUMS','LDAP',1);
 			add_config_option('LDAP_IS_WINDOWS','ldap_is_windows','tick','return (DIRECTORY_SEPARATOR==\'/\')?\'0\':\'1\';','SECTION_FORUMS','LDAP',1);
@@ -82,13 +82,8 @@ class Module_admin_ocf_ldap
 			add_config_option('LDAP_BASE_DN','ldap_base_dn','line','return \''.'dc='.str_replace('.',',dc=',ocp_srv('HTTP_HOST')).'\';','SECTION_FORUMS','LDAP',1);
 			add_config_option('USERNAME','ldap_bind_rdn','line','return (DIRECTORY_SEPARATOR==\'/\')?\'NotManager\':\'NotAdministrator\';','SECTION_FORUMS','LDAP',1);
 			add_config_option('PASSWORD','ldap_bind_password','line','return \'\';','SECTION_FORUMS','LDAP',1);
-		}
-
-		if (($upgrade_from<4) || (is_null($upgrade_from)))
-		{
 			add_config_option('WINDOWS_AUTHENTICATION','windows_auth_is_enabled','tick','return \'0\';','SECTION_FORUMS','LDAP');
 			add_config_option('LDAP_LOGIN_QUALIFIER','ldap_login_qualifier','line','return is_null($old=get_value(\'ldap_login_qualifier\'))?\'\':$old;','SECTION_FORUMS','LDAP');
-
 			add_config_option('LDAP_GROUP_SEARCH_QUALIFIER','ldap_group_search_qualifier','line','return \'\';','SECTION_FORUMS','LDAP');
 			add_config_option('LDAP_MEMBER_SEARCH_QUALIFIER','ldap_member_search_qualifier','line','return \'\';','SECTION_FORUMS','LDAP');
 			add_config_option('LDAP_MEMBER_PROPERTY','ldap_member_property','line','return (get_option(\'ldap_is_windows\')==\'1\')?\'sAMAccountName\':\'cn\';','SECTION_FORUMS','LDAP');

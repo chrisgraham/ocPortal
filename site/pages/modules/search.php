@@ -83,10 +83,7 @@ class Module_search
 			$GLOBALS['SITE_DB']->create_index('searches_logged','past_search',array('s_primary'));
 
 			add_menu_item_simple('forum_features',NULL,'SEARCH','_SEARCH:search:type=misc:id=ocf_posts',0,0,true,do_lang('ZONE_BETWEEN'));
-		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
-		{
 			$GLOBALS['SITE_DB']->create_index('searches_logged','#past_search_ft',array('s_primary'));
 		}
 	}

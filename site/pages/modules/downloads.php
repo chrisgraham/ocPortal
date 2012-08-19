@@ -136,7 +136,6 @@ class Module_downloads
 				'download_licence'=>'?AUTO_LINK',
 				'download_data_mash'=>'LONG_TEXT'
 			));
-
 			$GLOBALS['SITE_DB']->create_index('download_downloads','download_views',array('download_views'));
 			$GLOBALS['SITE_DB']->create_index('download_downloads','category_list',array('category_id'));
 			$GLOBALS['SITE_DB']->create_index('download_downloads','recent_downloads',array('add_date'));
@@ -146,58 +145,40 @@ class Module_downloads
 			$GLOBALS['SITE_DB']->create_index('download_downloads','ddl',array('download_licence')); // For when deleting a download license
 			$GLOBALS['SITE_DB']->create_index('download_downloads','dvalidated',array('validated'));
 
+			$GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_dname',array('name'));
+			$GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_ddescrip',array('description'));
+			$GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_dcomments',array('comments'));
+			$GLOBALS['SITE_DB']->create_index('download_categories','ftjoin_dccat',array('category'));
+			$GLOBALS['SITE_DB']->create_index('download_categories','ftjoin_dcdescrip',array('description'));
+
+			$GLOBALS['SITE_DB']->create_index('download_downloads','#download_data_mash',array('download_data_mash'));
+			$GLOBALS['SITE_DB']->create_index('download_downloads','#original_filename',array('original_filename'));
+
 			$GLOBALS['SITE_DB']->create_table('download_logging',array(
 				'id'=>'*AUTO_LINK',
 				'the_user'=>'*USER',
 				'ip'=>'IP',
 				'date_and_time'=>'TIME'
 			));
-
 			$GLOBALS['SITE_DB']->create_index('download_logging','calculate_bandwidth',array('date_and_time'));
 
 			add_config_option('MAXIMUM_DOWNLOAD','maximum_download','integer','return \'15\';','SITE','CLOSED_SITE');
 			add_config_option('SHOW_DLOAD_TREES','show_dload_trees','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS',1);
 			add_config_option('ADD_DOWNLOAD','points_ADD_DOWNLOAD','integer','return addon_installed(\'points\')?\'150\':NULL;','POINTS','COUNT_POINTS_GIVEN');
+			add_config_option('_SECTION_DOWNLOADS','downloads_show_stats_count_total','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
+			add_config_option('TOTAL_DOWNLOADS_IN_ARCHIVE','downloads_show_stats_count_archive','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
+			add_config_option('_COUNT_DOWNLOADS','downloads_show_stats_count_downloads','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
+			add_config_option('_COUNT_BANDWIDTH','downloads_show_stats_count_bandwidth','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
+			add_config_option('IMMEDIATE_DOWNLOADS','immediate_downloads','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS');
 
 			require_lang('downloads');
 			add_menu_item_simple('main_content',NULL,'SECTION_DOWNLOADS','_SEARCH:downloads:type=misc',0,0,true,'',0,'',1);
-
-			$GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_dname',array('name'));
-			$GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_ddescrip',array('description'));
-			$GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_dcomments',array('comments'));
-			$GLOBALS['SITE_DB']->create_index('download_categories','ftjoin_dccat',array('category'));
-			$GLOBALS['SITE_DB']->create_index('download_categories','ftjoin_dcdescrip',array('description'));
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('download_downloads','allow_trackbacks','BINARY',1);
-			$GLOBALS['SITE_DB']->add_table_field('download_categories','rep_image','URLPATH');
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('download_downloads','download_licence','?AUTO_LINK',NULL);
-			$GLOBALS['SITE_DB']->add_table_field('download_downloads','download_data_mash','LONG_TEXT');
-			delete_config_option('is_on_downloads');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<5))
-		{
-			$GLOBALS['SITE_DB']->create_index('download_downloads','#download_data_mash',array('download_data_mash'));
-			$GLOBALS['SITE_DB']->create_index('download_downloads','#original_filename',array('original_filename'));
 
 			$GLOBALS['SITE_DB']->create_table('download_licences',array(
 				'id'=>'*AUTO',
 				'l_title'=>'SHORT_TEXT',
 				'l_text'=>'LONG_TEXT'
 			));
-
-			add_config_option('_SECTION_DOWNLOADS','downloads_show_stats_count_total','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('TOTAL_DOWNLOADS_IN_ARCHIVE','downloads_show_stats_count_archive','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('_COUNT_DOWNLOADS','downloads_show_stats_count_downloads','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('_COUNT_BANDWIDTH','downloads_show_stats_count_bandwidth','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
-			add_config_option('IMMEDIATE_DOWNLOADS','immediate_downloads','tick','return \'0\';','FEATURE','SECTION_DOWNLOADS');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))

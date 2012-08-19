@@ -99,10 +99,6 @@ class Module_admin_stats
 			$GLOBALS['SITE_DB']->create_index('usersonline_track','peak_track',array('peak'));
 
 			add_config_option('SUPER_LOGGING','super_logging','tick','return \'1\';','SITE','LOGGING',1);
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<5))
-		{
 			add_config_option('STORE_TIME','stats_store_time','integer','return \'124\';','SITE','LOGGING',1);
 
 			$GLOBALS['SITE_DB']->create_table('ip_country',array(
@@ -111,36 +107,6 @@ class Module_admin_stats
 				'end_num'=>'UINTEGER',
 				'country'=>'SHORT_TEXT'
 			));
-		}
-
-		if (!is_null($upgrade_from))
-		{
-			if ($upgrade_from<3) // These are new in 3 of this module, and thus are for upgrades
-			{
-				$GLOBALS['SITE_DB']->add_table_field('stats','milliseconds','INTEGER');
-			}
-
-			if ($upgrade_from<4)
-			{
-				$GLOBALS['SITE_DB']->create_index('stats','pages',array('the_page'));
-			}
-
-			if ($upgrade_from<5)
-			{
-				$GLOBALS['SITE_DB']->add_table_field('stats','browser','SHORT_TEXT');
-				$GLOBALS['SITE_DB']->add_table_field('stats','operating_system','SHORT_TEXT');
-				$GLOBALS['SITE_DB']->add_table_field('zones','access_denied_counter','INTEGER');
-			}
-
-			if ($upgrade_from<6)
-			{
-				$GLOBALS['SITE_DB']->alter_table_field('stats','the_page','SHORT_TEXT');
-			}
-
-			if ($upgrade_from<7)
-			{
-				$GLOBALS['SITE_DB']->delete_table_field('stats','regionality');
-			}
 		}
 	}
 

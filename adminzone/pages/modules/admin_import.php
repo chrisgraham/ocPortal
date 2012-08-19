@@ -60,12 +60,7 @@ class Module_admin_import
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
-		{
-			$GLOBALS['SITE_DB']->alter_table_field('import_id_remap','id_old','ID_TEXT');
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
+		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('import_parts_done',array(
 				'imp_id'=>'*SHORT_TEXT',
@@ -81,10 +76,7 @@ class Module_admin_import
 				'imp_refresh_time'=>'INTEGER',
 				'imp_session'=>'*INTEGER'
 			));
-		}
 
-		if (is_null($upgrade_from))
-		{
 			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($usergroups) as $id)
 			{

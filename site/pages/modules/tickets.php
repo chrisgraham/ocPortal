@@ -71,23 +71,17 @@ class Module_tickets
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
+		require_lang('tickets');
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
 		{
 			$GLOBALS['SITE_DB']->delete_table_field('ticket_types','send_sms_to');
 		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
+		if (is_null($upgrade_from))
 		{
-			$GLOBALS['SITE_DB']->add_table_field('ticket_types','guest_emails_mandatory','BINARY',0);
-			$GLOBALS['SITE_DB']->add_table_field('ticket_types','search_faq','BINARY',0);
-			$GLOBALS['SITE_DB']->add_table_field('ticket_types','cache_lead_time','?TIME');
-		}
-
-		if (($upgrade_from<3) || (is_null($upgrade_from)))
 			add_privilege('SUPPORT_TICKETS','support_operator',false);
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<4))
-		{
 			add_config_option('TICKET_MEMBER_FORUMS','ticket_member_forums','tick','return \'0\';','FEATURE','SUPPORT_TICKETS');
 			add_config_option('TICKET_TYPE_FORUMS','ticket_type_forums','tick','return \'0\';','FEATURE','SUPPORT_TICKETS');
 
@@ -97,24 +91,7 @@ class Module_tickets
 				'forum_id'=>'AUTO_LINK',
 				'ticket_type'=>'SHORT_TRANS'
 			));
-		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<2))
-		{
-			$GLOBALS['SITE_DB']->query_update('config',array('eval'=>'return do_lang(\'NEW_TICKET_WELCOME\');'),array('the_name'=>'ticket_text'),'',1);
-			if ($GLOBALS['OPTIONS']['ticket_text']['c_set']==1)
-			{
-				set_option('ticket_text','[html]'.get_option('ticket_text').'[/html]');
-			} else
-			{
-				set_option('ticket_text',do_lang('NEW_TICKET_WELCOME'));
-			}
-			return;
-		}
 
-		require_lang('tickets');
-
-		if (is_null($upgrade_from))
-		{
 			$GLOBALS['SITE_DB']->create_table('ticket_types',array(
 				'ticket_type'=>'*SHORT_TRANS',
 				'guest_emails_mandatory'=>'BINARY',

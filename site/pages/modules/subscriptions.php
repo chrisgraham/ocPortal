@@ -80,10 +80,7 @@ class Module_subscriptions
 				's_auto_fund_key'=>'SHORT_TEXT', // Ditto as above: we can serialize cc numbers etc into here
 				's_via'=>'ID_TEXT',
 			));
-		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
-		{
 			$GLOBALS['SITE_DB']->create_table('f_usergroup_subs',array(
 				'id'=>'*AUTO',
 				's_title'=>'SHORT_TRANS',
@@ -98,12 +95,6 @@ class Module_subscriptions
 				's_mail_uhoh'=>'LONG_TRANS',
 				's_uses_primary'=>'BINARY',
 			));
-		}
-
-		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('subscriptions','s_via','ID_TEXT','paypal');
-			$GLOBALS['SITE_DB']->add_table_field('f_usergroup_subs','s_uses_primary','BINARY');
 		}
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;

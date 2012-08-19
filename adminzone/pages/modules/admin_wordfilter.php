@@ -58,12 +58,6 @@ class Module_admin_wordfilter
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if (($upgrade_from<3) && (!is_null($upgrade_from)))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('wordfilter','w_replacement','SHORT_TEXT');
-			$GLOBALS['SITE_DB']->add_table_field('wordfilter','w_substr','BINARY',0);
-		}
-
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('wordfilter',array(

@@ -71,7 +71,7 @@ class Block_side_stats
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((is_null($upgrade_from)) || ($upgrade_from<3))
+		if (is_null($upgrade_from))
 		{
 			add_config_option('COUNT_MEMBERS','forum_show_stats_count_members','tick','return addon_installed(\'stats_block\')?\'1\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('COUNT_TOPICS','forum_show_stats_count_topics','tick','return addon_installed(\'stats_block\')?\'1\':NULL;','BLOCKS','STATISTICS');
