@@ -51,8 +51,6 @@
  */
 function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderator=0,$title='',$rank_image='',$promotion_target=NULL,$promotion_threshold=NULL,$group_leader=NULL,$flood_control_submit_secs=5,$flood_control_access_secs=0,$max_daily_upload_mb=70,$max_attachments_per_post=50,$max_avatar_width=100,$max_avatar_height=100,$max_post_length_comcode=30000,$max_sig_length_comcode=700,$gift_points_base=25,$gift_points_per_day=1,$enquire_on_new_ips=0,$is_presented_at_install=0,$hidden=0,$order=NULL,$rank_image_pri_only=1,$open_membership=0,$is_private_club=0)
 {
-	//	if (is_null($group_leader)) $group_leader=db_get_first_id()+1;
-
 	if (!running_script('stress_test_loader'))
 	{
 		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');

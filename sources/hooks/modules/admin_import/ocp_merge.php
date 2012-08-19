@@ -120,12 +120,9 @@ class Hook_ocp_merge
 			'quizzes'=>array('ocf_members'),
 		);
 
-		//if (!$this->on_same_msn($file_base))
-		{
-			$_cleanup_url=build_url(array('page'=>'admin_cleanup'),get_module_zone('admin_cleanup'));
-			$cleanup_url=$_cleanup_url->evaluate();
-			$info['message']=(get_param('type','misc')!='import' && get_param('type','misc')!='hook')?new ocp_tempcode():do_lang_tempcode('FORUM_CACHE_CLEAR',escape_html($cleanup_url));
-		}
+		$_cleanup_url=build_url(array('page'=>'admin_cleanup'),get_module_zone('admin_cleanup'));
+		$cleanup_url=$_cleanup_url->evaluate();
+		$info['message']=(get_param('type','misc')!='import' && get_param('type','misc')!='hook')?new ocp_tempcode():do_lang_tempcode('FORUM_CACHE_CLEAR',escape_html($cleanup_url));
 
 		return $info;
 	}
@@ -509,7 +506,6 @@ class Hook_ocp_merge
 			{
 				if (import_check_if_imported('attachment',strval($row['id']))) continue;
 
-	//			$row['a_member_id']=import_id_remap_get('member',strval($row['a_member_id']));
 				$row['a_member_id']=-$row['a_member_id']; // This is resolved when importing members
 				$row_copy=$row;
 				if (get_param_integer('keep_preserve_ids',0)==0) unset($row_copy['id']);

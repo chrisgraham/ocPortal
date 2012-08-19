@@ -1022,7 +1022,6 @@ function _access_denied($class,$param,$force_login)
 		exit();
 	}
 
-	//if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) fatal_exit($message);
 	warn_exit($message);
 }
 

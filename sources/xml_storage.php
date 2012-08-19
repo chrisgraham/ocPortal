@@ -607,7 +607,6 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 					$_type=($encrypted==1)?'LONG_TEXT':'SHORT_TEXT';
 			}
 			require_code('database_action');
-			// ($index?'#':'').
 			$GLOBALS['SITE_DB']->add_table_field('f_member_custom_fields','field_'.strval($id),$_type); // Default will be made explicit when we insert rows
 			if ($index)
 			{

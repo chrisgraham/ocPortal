@@ -105,13 +105,6 @@ class forum_driver_ipb_shared extends forum_driver_base
 		$val=preg_replace_callback('/&#x([0-9a-f]+);/i',array($this,'unentity_1'),$val);
 		$val=preg_replace_callback('/&#([0-9]+);/',array($this,'unentity_2'),$val);
 
-		/*$val=str_replace('&amp;','&',$val);
-		$val=str_replace('&gt;','>',$val);
-		$val=str_replace('&lt;','<',$val);
-		$val=str_replace('&quot;','"',$val);
-		$val=str_replace('&#33;','!',$val);
-		$val=str_replace('&#39;','\'',$val);*/
-
 		return $val;
 	}
 

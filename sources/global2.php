@@ -328,7 +328,7 @@ function init__global2()
 		}
 		if ((addon_installed('realtime_rain')) && (get_option('bottom_show_realtime_rain_button',true)==='1')) $JAVASCRIPTS['javascript_button_realtime_rain']=1;
 	}
-	/*ocp_memory_profile('startup');
+	/*ocp_memory_profile('startup');	If debugging with inbuilt profiler
 	$func=get_defined_functions();
 	print_r($func['user']);*/
 

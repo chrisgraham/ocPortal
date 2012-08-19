@@ -390,14 +390,6 @@ END;
 \$a[]=1;
 END;
 
-/*	$tests[38]=<<<END
-// <bad object call>
-
-\$a=new ocp_tempcode();
-\$b=\$a->evaluate_echo();
-unset(\$b);
-END;*/
-
 	// This one will fail to parse
 	$tests[39]=<<<END
 // <$$>

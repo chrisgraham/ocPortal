@@ -419,11 +419,8 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 
 	if ($only_group=='-1') $only_group='';
 
-	// Can only encrypt things if encryption support is available
-	require_code('encryption');
-	//if (!is_encryption_enabled()) $encrypted=0;
-
 	// Can't have publically-viewable encrypted fields
+	require_code('encryption');
 	if ($encrypted==1)
 	{
 		$public_view=0;
@@ -467,7 +464,6 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 	list($_type,$index)=get_cpf_storage_for($type);
 
 	require_code('database_action');
-	// ($index?'#':'').
 	$GLOBALS['FORUM_DB']->add_table_field('f_member_custom_fields','field_'.strval($id),$_type); // Default will be made explicit when we insert rows
 	if ($index)
 	{

@@ -146,7 +146,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 			{
 				if (tz_time(time(),$timezone)==tz_time(time(),$member[0]['m_timezone_offset'])) $timezone=$member[0]['m_timezone_offset']; // If equivalent, don't change
 			}
-			//if (($username!=$member[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member[0]['m_timezone_offset'])) || ($email_address!=$member[0]['m_email_address']))
+			//if (($username!=$member[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member[0]['m_timezone_offset'])) || ($email_address!=$member[0]['m_email_address']))		Actually there's lots of things that may have changed so let's just do this always
 			{
 				$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username'=>$username));
 				if (!is_null($test)) // Make sure there's no conflict

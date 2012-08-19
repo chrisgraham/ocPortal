@@ -176,7 +176,7 @@ if ($type=='auto_probe')
 					if (!is_null($caption))
 					{
 						echo ':<br /><br />';
-						/*require_code('geshi');
+						/*require_code('geshi');	If you want to see it highlighted
 						$geshi=new GeSHi($caption,'diff');
 						$geshi->set_header_type(GESHI_HEADER_DIV);
 						echo $geshi->parse_code();*/

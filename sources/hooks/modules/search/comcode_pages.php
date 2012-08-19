@@ -242,13 +242,6 @@ class Hook_search_comcode_pages
 
 		$url=build_url(array('page'=>$page),$zone);
 
-/*		if ($limit_to=='') // If we're not limited to searching comcode pages, then we must show it is a Comcode page
-			return put_in_standard_box(hyperlink($url,escape_html($page)),escape_html($page)'COMCODE_PAGE'));
-		else return paragraph(hyperlink($url,$page));*/
-
-//		$_summary=request_page($page,true,$zone,NULL,true);
-//		$summary=$_summary->evaluate();
-
 		$_summary=seo_meta_get_for('comcode_page',$zone.':'.$page);
 		$summary=$_summary[1];
 

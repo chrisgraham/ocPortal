@@ -199,7 +199,6 @@ function init__validation2()
 	$enforce_valign='(top|middle|bottom|baseline)';
 	$enforce_number='(-?[0-9]+)';
 	$enforce_inumber='[0-9]+';
-	//$enforce_plain_or_html='(plaintext|html)';
 	$enforce_character='.';
 	$enforce_color='(black|silver|gray|white|maroon|purple|fuchsia|green|lime|olive|yellow|navy|blue|teal|aqua|orange|red|(\#[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f])|(\#[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]))'; // orange and red aren't 'official' -- but kind of handy ;). In reality, the colour codes were never properly defined, and these two are obvious names for obviously needed ones-- they'll be supported
 	$enforce_length='((0)|('.$enforce_number.'(|in|cm|mm|ex|pt|pc|px|em|%))|(('.$enforce_number.')?\.'.$enforce_number.'(in|cm|mm|ex|em|%)))'; // |ex|pt|in|cm|mm|pc	We don't want these in our XHTML... preferably we only want em when it comes to font size!
@@ -1231,9 +1230,6 @@ function _check_blockyness($tag,$attributes,$self_close,$close)
  */
 function _check_attributes($tag,$attributes,$self_close,$close)
 {
-	//unset($self_close);
-	//unset($close);
-
 	global $PSPELL_LINK,$THE_LANGUAGE,$XML_CONSTRAIN,$TAGS_DEPRECATE_ALLOW,$THE_DOCTYPE,$HYPERLINK_URLS,$CRAWLED_URLS,$EMBED_URLS,$TAGS_INLINE,$TAGS_BLOCK,$TAGS_NORMAL,$TAGS_INLINE_DEPRECATED,$TAGS_BLOCK_DEPRECATED,$TAGS_NORMAL_DEPRECATED,$TAG_ATTRIBUTES,$IDS_SO_FAR,$ANCESTER_BLOCK,$ANCESTER_INLINE,$EXPECTING_TAG,$OUT,$POS,$LAST_A_TAG,$TAG_ATTRIBUTES_REQUIRED;
 
 	$errors=array();
@@ -1341,7 +1337,7 @@ function validate_spelling($value)
 
 	$lang=strtolower($THE_LANGUAGE);
 	$sub_lang='';
-	/*if ($lang=='en')
+	/*if ($lang=='en')	Not reliable
 	{
 		$sub_lang='british';
 	}*/
@@ -1455,8 +1451,6 @@ function _check_externals($tag,$attributes,$self_close,$close)
  */
 function _check_link_accessibility($tag,$attributes,$self_close,$close)
 {
-	//unset($self_close);
-
 	global $IDS_SO_FAR,$ANCESTER_BLOCK,$ANCESTER_INLINE,$EXPECTING_TAG,$OUT,$POS,$LAST_A_TAG,$TAG_RANGES,$VALIDATION_MANUAL;
 
 	$errors=array();

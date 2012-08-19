@@ -120,10 +120,8 @@ class Hook_orphaned_lang_strings
 					{
 						$_of=$GLOBALS['SITE_DB']->query_select($langidfield['m_table'],array('*'),$of,'',1,NULL,false,array());
 						$of=$_of[0];
-						//$GLOBALS['SITE_DB']->query_delete($langidfield['m_table'],$of,'',1);
 						$of_orig=$of;
 						$of[$langidfield['m_name']]=insert_lang($looked_up,2);
-						//$GLOBALS['SITE_DB']->query_insert($langidfield['m_table'],$of);
 						$GLOBALS['SITE_DB']->query_update($langidfield['m_table'],$of,$of_orig,'',1);
 					}
 					$fused_lang_strings[$id]=$looked_up;

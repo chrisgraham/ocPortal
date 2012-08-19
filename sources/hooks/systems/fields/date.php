@@ -140,7 +140,6 @@ class Hook_fields_date
 			$time_bits=explode(':',$bits[1],3);
 			if (!array_key_exists(1,$time_bits)) $time_bits[1]='00';
 			if (!array_key_exists(2,$time_bits)) $time_bits[2]='00';
-			//$time=mktime(intval($time_bits[0]),intval($time_bits[1]),intval($time_bits[2]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
 
 			$time=array(intval($time_bits[1]),intval($time_bits[0]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
 		}
@@ -179,11 +178,6 @@ class Hook_fields_date
 		$minute=post_param_integer($stub.'_minute',0);
 
 		return str_pad(strval($year),4,'0',STR_PAD_LEFT).'-'.str_pad(strval($month),2,'0',STR_PAD_LEFT).'-'.str_pad(strval($day),2,'0',STR_PAD_LEFT).' '.strval($hour).':'.strval($minute);
-
-		/*$temp=get_input_date($tmp_name);
-		if (is_null($temp)) return $editing?STRING_MAGIC_NULL:'';
-
-		return date('Y-m-d H:i:s',$temp);*/
 	}
 
 }

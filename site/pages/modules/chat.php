@@ -412,7 +412,6 @@ class Module_chat
 			{
 				$users=get_chatters_in_room($myrow['id']);
 				$usernames=get_chatters_in_room_tpl($users);
-				//$url=build_url(array('page'=>'_SELF','mode'=>$mode,'type'=>'room','id'=>$myrow['id']),'_SELF');
 				$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$myrow['id']),'_SELF');
 				$room_link=do_template('CHAT_ROOM_LINK',array('PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>$myrow['room_name'],'USERNAMES'=>$usernames,'URL'=>$url));
 				$fields->attach($room_link);
@@ -505,7 +504,6 @@ class Module_chat
 
 		$prefs=@$_COOKIE['ocp_chat_prefs'];
 		$prefs=@explode(';',$prefs);
-		//$mode=get_param('mode','');
 		$room_id=get_param_integer('id',1);
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=chat&filter='.strval($room_id);
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','allow_list','allow_list_groups','disallow_list','disallow_list_groups','room_owner'),array('id'=>$room_id),'',1);
@@ -703,11 +701,6 @@ class Module_chat
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADD_BLOCK'))));
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),do_lang_tempcode('BLOCK_MEMBER_MANUAL'),'username','',false));
-
-		/*if ($fields->is_empty())
-		{
-			inform_exit(do_lang_tempcode('NOBODY_BLOCKED_YET'));
-		}*/
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'blocking_set'),'_SELF');
 
@@ -1071,8 +1064,6 @@ class Module_chat
 		// We have the messages, now we have to create a nice little text file...
 		$keep=symbol_tempcode('KEEP');
 		$modlink=find_script('dllogs').'?room='.strval($room).'&start='.strval($start_date_and_time).'&finish='.strval($finish_date_and_time).'&zone='.get_zone_name().$keep->evaluate();
-		//$modlink=hyperlink($modlink,do_lang_tempcode('CHAT_DOWNLOAD_LOGS'));
-		//return do_template('CHAT_ROOM_SCREEN',array('_GUID'=>'18dd8ecf06301add0f44bdaf801fbdca','TITLE'=>$title,'INTRODUCTION'=>'','CONTENT'=>$modlink,'LINKS'=>array()));
 
 		require_code('site2');
 		assign_refresh($modlink,0.0);

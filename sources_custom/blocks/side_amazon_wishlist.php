@@ -65,7 +65,6 @@ class Block_side_amazon_wishlist
 		$secret_key=$map['secret_key'];//"xy9e5MHu4f9y7kjOjkysmjd58k2gjzN8YmC2/Ith";//"kzKVLbT9+GufjsGPwwprdxCeLfE6Zyl/o94msNKO";
 		$domain=$map['domain'];//'com';//coulb be also 'co.uk'
 
-		//$out=new ocp_tempcode();
 		$out='';
 
 		require_code('files');
@@ -97,8 +96,7 @@ class Block_side_amazon_wishlist
 				}
 			}
 		}
-		while($items->Lists->List->TotalPages>$i);
-
+		while ($items->Lists->List->TotalPages>$i);
 
 		return do_template('BLOCK_SIDE_AMAZON_WISHLIST',array('_GUID'=>'3c5da7ade6aca4c30a3842e00d686d90','TITLE'=>$title,'CONTENT'=>$out));
 	}

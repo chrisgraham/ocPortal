@@ -349,7 +349,7 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 			if ($attachment['type']=='new')
 			{
 				$marker=$attachment['marker'];
-//				echo $marker.'!'.$new_comcode;
+				//echo $marker.'!'.$new_comcode;
 				$a_id=$attachment['id'];
 
 				$old_length=strlen($new_comcode);
@@ -379,13 +379,13 @@ function do_comcode_attachments($original_comcode,$type,$id,$previewing_only=fal
 					}
 					$new_comcode.=strval($a_id).$end_keep;
 				}
-//				echo $new_comcode.'<br />!<br />';
+				//echo $new_comcode.'<br />!<br />';
 
 				// Update other attachment markers
 				$dif=strlen($new_comcode)-$old_length;
 				for ($j=$i+1;$j<count($COMCODE_ATTACHMENTS[$id]);$j++)
 				{
-//					echo $COMCODE_ATTACHMENTS[$id][$i]['marker'].'!';
+					//echo $COMCODE_ATTACHMENTS[$id][$i]['marker'].'!';
 					$COMCODE_ATTACHMENTS[$id][$j]['marker']+=$dif;
 				}
 

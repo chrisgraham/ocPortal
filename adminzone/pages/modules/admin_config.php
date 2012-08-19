@@ -47,7 +47,7 @@ class Module_admin_config
 	 */
 	function uninstall()
 	{
-		$config_options=array('simplified_donext','anti_leech','allow_audio_videos','low_space_check','site_name','site_scope','description','copyright','welcome_message','keywords','logo_map','validation',
+		$config_options=array('simplified_donext','anti_leech','allow_audio_videos','low_space_check','site_name','site_scope','description','copyright','welcome_message','keywords','validation',
 										'gzip_output','forum_in_portal','staff_address','is_on_gd','is_on_folder_create','site_closed','closed',
 										'maximum_users','cc_address','log_php_errors','display_php_errors','valid_types','valid_images','is_on_rating',
 										'is_on_comments','comments_forum_name','comment_text','thumb_width','max_image_size','mod_rewrite','is_on_trackbacks',
@@ -284,7 +284,6 @@ class Module_admin_config
 				add_config_option('KEYWORDS','keywords','line','return \'\';','SITE','GENERAL');
 
 			//  Advanced
-				//add_config_option('LOGO_MAP','logo_map','text','$tpl=do_template(\'IMAGE_MAP\'); return $tpl->evaluate();','SITE','ADVANCED');
 				add_config_option('GZIP_OUTPUT','gzip_output','tick','return \'0\';','SITE','ADVANCED',1);
 			//  Environment
 				add_config_option('FORUM_IN_PORTAL','forum_in_portal','tick','return has_no_forum()?NULL:\'0\';','SITE','ENVIRONMENT',1);
@@ -481,7 +480,7 @@ class Module_admin_config
 	{
 		require_javascript('javascript_validation');
 
-		/*$GLOBALS['HELPER_PANEL_PIC']='pagepics/config';
+		/*$GLOBALS['HELPER_PANEL_PIC']='pagepics/config';		Actually let's save the space
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_configuration';*/
 
 		$page=get_param('id');
@@ -658,10 +657,7 @@ class Module_admin_config
 						$out.=static_evaluate_tempcode(form_input_list($name_tempcode,$explanation,$myrow['the_name'],make_string_tempcode($list)));
 					} else
 					{
-					/*if (strpos($myrow['the_name'],'password')!==false)  password fields can't take defaults
-						$out.=static_evaluate_tempcode(form_input_password($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
-					else
-						*/$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
+						$out.=static_evaluate_tempcode(form_input_line($name_tempcode,$explanation,$myrow['the_name'],get_option($myrow['the_name']),false));
 					}
 					break;
 				case 'list':

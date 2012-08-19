@@ -363,10 +363,6 @@ class Module_admin_ecommerce extends standard_crud_module
 		$mc_currency=get_option('currency');
 		$txn_id='manual-'.substr(uniqid(''),0,10);
 		$parent_txn_id='';
-		/*if ($products[$item_name][0]==PRODUCT_SUBSCRIPTION)
-		{
-			$payment_status='SCancelled';
-		}*/
 
 		$_item_name=$products[$item_name][4];
 

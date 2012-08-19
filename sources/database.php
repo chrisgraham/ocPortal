@@ -659,8 +659,7 @@ class database_driver
 					if ($value===NULL) $where.=$key.' IS NULL';
 					else
 					{
-						if (($value==='') && ($this->static_ob->db_empty_is_null())) /*$where.=$key.' IS NULL';*/ $value=' ';
-						/*else */
+						if (($value==='') && ($this->static_ob->db_empty_is_null())) $value=' ';
 
 						if ($key=='text_original') $table=str_replace(' LEFT JOIN '.$this->get_table_prefix().'translate ',' JOIN '.$this->get_table_prefix().'translate ',$table);
 
@@ -877,9 +876,6 @@ class database_driver
 		{
 			if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!==$GLOBALS['FORUM_DB']->connection_write) && (!$GLOBALS['NO_DB_SCOPE_CHECK']))
 			{
-				/*file_put_contents(get_file_base().'/uploads/downloads/test.txt',var_export(debug_backtrace(),true));
-				@exit($query);
-				@debug_print_backtrace();*/
 				fatal_exit('Using OCF queries on the wrong driver');
 			}
 		}
@@ -1070,8 +1066,8 @@ class database_driver
 					if ($value===NULL) $where.=$key.' IS NULL';
 					else
 					{
-						if ((is_string($value)) && ($value=='') && ($this->static_ob->db_empty_is_null())) /*$where.=$key.' IS NULL';*/  $value=' ';
-						/*else */$where.=db_string_equal_to($key,$value);
+						if ((is_string($value)) && ($value=='') && ($this->static_ob->db_empty_is_null())) $value=' ';
+						$where.=db_string_equal_to($key,$value);
 					}
 				}
 			}

@@ -443,12 +443,7 @@ class forum_driver_base
 	 */
 	function get_num_new_forum_posts()
 	{
-		$value=NULL;//get_value_newer_than('num_new_forum_posts',time()-60*60*6);
-		if (is_null($value))
-		{
-			$value=strval($this->_get_num_new_forum_posts());
-			//set_value('num_new_forum_posts',$value);
-		}
+		$value=strval($this->_get_num_new_forum_posts());
 		return intval($value);
 	}
 

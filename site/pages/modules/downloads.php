@@ -746,7 +746,6 @@ class Module_downloads
 			{
 				$row=$rows[$counter];
 
-		//		$view_url=build_url(array('page'=>'galleries','type'=>'image','wide'=>1,'id'=>$row['id']),get_module_zone('galleries'));
 				$view_url=$row['url'];
 				if ($image_url=='') $image_url=$row['url'];
 				if (url_is_local($view_url)) $view_url=get_custom_base_url().'/'.$view_url;

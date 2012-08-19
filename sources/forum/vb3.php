@@ -217,7 +217,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	function _get_super_admin_groups()
 	{
 		return array(6);
-	//	$admin_group=$this->connection->query_select_value('usergroup','usergroupid',array('title'=>'Administrators'));
+	//	$admin_group=$this->connection->query_select_value('usergroup','usergroupid',array('title'=>'Administrators'));		Wrong
 	//	return array($admin_group);
 	}
 
@@ -230,7 +230,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	function _get_moderator_groups()
 	{
 		return array(5);
-	//	$moderator_group=$this->connection->query_select_value('usergroup','usergroupid',array('title'=>'Super Moderators'));
+	//	$moderator_group=$this->connection->query_select_value('usergroup','usergroupid',array('title'=>'Super Moderators'));	Wrong
 	//	return array($moderator_group);
 	}
 

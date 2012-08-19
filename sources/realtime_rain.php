@@ -68,11 +68,8 @@ function realtime_rain_script()
 				'TO_ID'=>NULL,
 				'GROUP_ID'=>'example_'.strval(mt_rand(0,4)),
 			);
-			//if ($i==0)
-			{
-				$event['SPECIAL_ICON']='email-icon';
-				$event['MULTIPLICITY']='10';
-			}
+			$event['SPECIAL_ICON']='email-icon';
+			$event['MULTIPLICITY']='10';
 			$events[]=$event;
 		}
 	} else

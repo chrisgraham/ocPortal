@@ -565,7 +565,7 @@ hr.ocf_sig_barrier {
 =========================
 */
 
-.ocf_information_bar { /* {$,either OCF_GUEST_BAR.tpl or OCF_MEMBER_BAR.tpl} */
+.ocf_information_bar { /* either OCF_GUEST_BAR.tpl or OCF_MEMBER_BAR.tpl */
 	font-size: 0.9em;
 	margin-bottom: 1em !important;
 }

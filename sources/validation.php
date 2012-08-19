@@ -482,7 +482,7 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 					++$stack_size;
 				} else
 				{
-					if ((is_null($XHTML_VALIDATOR_OFF)) && (!$WELL_FORMED_ONLY) && ((!$XML_CONSTRAIN) || (!isset($MUST_SELFCLOSE_TAGS[$basis_token]))) && /*(!in_array($basis_token,array('a'))) && */(is_null($XHTML_VALIDATOR_OFF))) // A tags must not self close even when only an anchor. Makes a weird underlined line effect in firefox
+					if ((is_null($XHTML_VALIDATOR_OFF)) && (!$WELL_FORMED_ONLY) && ((!$XML_CONSTRAIN) || (!isset($MUST_SELFCLOSE_TAGS[$basis_token]))) && (is_null($XHTML_VALIDATOR_OFF))) // A tags must not self close even when only an anchor. Makes a weird underlined line effect in firefox
 					{
 						if (!$bad_root)
 							$errors[]=_xhtml_error('XHTML_CEMPTY_TAG',$basis_token);
@@ -552,17 +552,12 @@ function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation
 						{
 							if ($XML_CONSTRAIN) $errors[]=_xhtml_error('XHTML_CDATA');
 						}
-						if (/*(!$c_section) && */(strpos($tag_contents,'</')!==false)) $errors[]=_xhtml_error('XML_JS_TAG_ESCAPE');
+						if (strpos($tag_contents,'</')!==false) $errors[]=_xhtml_error('XML_JS_TAG_ESCAPE');
 					}
 				}
 			}
 			while ($basis_token!=$previous);
 		}
-		/*else
-		{
-			$level_ranges[]=array($stack_size,$T_POS,$POS);
-			// it's monitonic, so ignore
-		}*/
 
 		$token=_get_next_tag();
 	}
@@ -1142,12 +1137,10 @@ function _get_next_tag()
 					if ($next=='<')
 					{
 						$errors[]=array('XML_TAG_OPEN_ANOMALY','7');
-	//					return array(NULL,$errors);
 					}
 					elseif ($next=='>')
 					{
 						$errors[]=array('XML_TAG_CLOSE_ANOMALY');
-	//					return array(NULL,$errors);
 					}
 
 					$current_attribute_value.=$next;
@@ -1240,7 +1233,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 		$XHTML_VALIDATOR_OFF=0;
 	}
 
-	if ((!$WELL_FORMED_ONLY) /*&& (is_null($XHTML_VALIDATOR_OFF))*/)
+	if (!$WELL_FORMED_ONLY)
 	{
 		$errors=__check_tag($tag,$attributes,$self_close,$close,$errors);
 	}

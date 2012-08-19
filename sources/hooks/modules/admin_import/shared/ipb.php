@@ -254,7 +254,6 @@ class Hook_ipb_base
 			}
 
 			ocf_over_msn();
-			//$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$event_title,$event_text,3,1-$private_event,$start_year,$start_month,$start_day,'day_of_month',0,0,$end_year,$end_month,$end_day,'day_of_month',NULL,1,0,0,$submitter); //old code
 
 			$id_new=add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$event_title,$event_text,3,1-$private_event,$start_year,$start_month,$start_day,'day_of_month',0,0,$end_year,$end_month,$end_day,'day_of_month',NULL,NULL,NULL,1,1,1,1,1,'',$submitter);
 
@@ -766,13 +765,6 @@ class Hook_ipb_base
 							$url='uploads/attachments/'.$row['attach_id'];
 							sync_file($url);
 							$thumb_url='';
-							if (is_image($target_path))
-							{
-								/*
-								require_code('images');
-								$thumb_url='uploads/attachments_thumbs/'.$row['attach_id'];
-								convert_image($url,$thumb_url,-1,-1,intval(get_option('thumb_width')),false,NULL,true);*/
-							}
 							$_a_id=$GLOBALS['SITE_DB']->query_insert('attachments',array('a_member_id'=>$member_id,'a_file_size'=>@filesize($target_path),'a_url'=>$url,'a_thumb_url'=>$thumb_url,'a_original_filename'=>$row['attach_file'],'a_num_downloads'=>$row['attach_hits'],'a_last_downloaded_time'=>NULL,'a_add_time'=>$row['post_date'],'a_description'=>''),true);
 							$has_attachment=true;
 						} else
@@ -799,13 +791,6 @@ class Hook_ipb_base
 							$url='uploads/attachments/'.$attachment['attach_location'];
 							sync_file($url);
 							$thumb_url='';
-							if (is_image($target_path))
-							{
-								/*
-								require_code('images');
-								$thumb_url='uploads/attachments_thumbs/'.$attachment['attach_location'];
-								convert_image($url,$thumb_url,-1,-1,intval(get_option('thumb_width')),false,NULL,true);*/
-							}
 							$a_id[$i]=$GLOBALS['SITE_DB']->query_insert('attachments',array('a_member_id'=>$member_id,'a_file_size'=>$attachment['attach_filesize'],'a_url'=>$url,'a_thumb_url'=>$thumb_url,'a_original_filename'=>$attachment['attach_file'],'a_num_downloads'=>$attachment['attach_hits'],'a_last_downloaded_time'=>NULL,'a_add_time'=>$post_date,'a_description'=>''),true);
 							$has_attachment=true;
 						} else

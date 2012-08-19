@@ -982,7 +982,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 			case CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT:
 				if ($next=='[') warn_exit(do_lang_tempcode('CCP_TAG_OPEN_ANOMALY'));
 				elseif ($next==']') warn_exit(do_lang_tempcode('CCP_TAG_CLOSE_ANOMALY'));
-				elseif ((($next=='"')/* && (!$in_semihtml)*/) || (($in_semihtml) && (substr($comcode,$pos-1,6)=='&quot;')))
+				elseif (($next=='"') || (($in_semihtml) && (substr($comcode,$pos-1,6)=='&quot;')))
 				{
 					if ($next!='"') $pos+=5;
 					$status=CCP_IN_TAG_ATTRIBUTE_VALUE;
@@ -1017,7 +1017,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 				}
 				break;
 			case CCP_IN_TAG_ATTRIBUTE_VALUE:
-				if ((($next=='"')/* && (!$in_semihtml)*/) || (($in_semihtml) && (substr($comcode,$pos-1,6)=='&quot;')))
+				if (($next=='"') || (($in_semihtml) && (substr($comcode,$pos-1,6)=='&quot;')))
 				{
 					if ($next!='"') $pos+=5;
 					$status=CCP_IN_TAG_BETWEEN_ATTRIBUTES;
@@ -1157,7 +1157,6 @@ function template_to_tempcode_static(/*&*/$text,$symbol_pos=0,$inside_directive=
 								$ret[3][]=$_out; // The inside of the directive becomes the final parameter
 								$directive_type=$name->evaluate();
 								$out->bits[]=array($ret[0],TC_DIRECTIVE,$directive_type,$ret[3]);
-		//						$out->children[]=array(':directive: '.$directive_type,$_out->children,true);
 							}
 						}
 					} elseif ($ret[2]=='END')
@@ -1277,9 +1276,6 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme=N
 							$param[$params-1].=$next;
 						} else
 						{
-							/*if ($quicker)
-								$param[$params-1]->bits[]=array(array(),TC_KNOWN,$next,NULL);
-							else*/
 							$param[$params-1]->attach($next);
 						}
 				}
@@ -1481,7 +1477,6 @@ class ocp_tempcode_static
 
 		if (is_object($attach)) // Consider it another piece of tempcode
 		{
-			//$done_one=false;
 			if (is_null($escape)) $escape=array();
 			$simple_escaped=array(ENTITY_ESCAPED);
 
@@ -1501,11 +1496,10 @@ class ocp_tempcode_static
 					if ($escape!=array()) $bit[0]=array_merge($escape,$bit[0]);
 
 					// Can we add into another string at our edge
-					if (/*($done_one) || */($last==-1) || ($bit[1]!=TC_KNOWN) || ($this->bits[$last][1]!=TC_KNOWN) || (($this->bits[$last][0]!=$bit[0]) && (((array_merge($bit[0],$this->bits[$last][0]))!=$simple_escaped) || (preg_match('#[&<>"\']#',$bit[2])!=0)))) // No
+					if (($last==-1) || ($bit[1]!=TC_KNOWN) || ($this->bits[$last][1]!=TC_KNOWN) || (($this->bits[$last][0]!=$bit[0]) && (((array_merge($bit[0],$this->bits[$last][0]))!=$simple_escaped) || (preg_match('#[&<>"\']#',$bit[2])!=0)))) // No
 					{
 						$this->bits[]=$bit;
 						$last++;
-						//$done_one=true;
 					} else // Yes
 					{
 						$this->bits[$last][2].=$bit[2];

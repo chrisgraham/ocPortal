@@ -193,7 +193,6 @@ class Module_admin_themewizard
 		$theme['LD']=$_theme['LD'];
 		$theme['DARK']=$_theme['dark'];
 		$theme['SEED']=$_theme['seed'];
-		//$theme=$theme['css']; // this will simplify things a bit, since we only use the 'css' sub-array.
 		$theme['TITLE']=$title;
 		$theme['CHANGE_URL']=build_url(array('page'=>'_SELF','type'=>'misc','source_theme'=>$source_theme,'algorithm'=>$algorithm,'seed'=>$seed,'dark'=>$dark,'inherit_css'=>$inherit_css,'themename'=>$themename),'_SELF');
 		$theme['STAGE3_URL']=build_url(array('page'=>'_SELF','type'=>'step3','source_theme'=>$source_theme,'algorithm'=>$algorithm,'seed'=>$seed,'dark'=>$dark,'inherit_css'=>$inherit_css,'themename'=>$themename),'_SELF');

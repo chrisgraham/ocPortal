@@ -180,7 +180,7 @@ class Hook_addon_registry_core_language_editing
 				'LANG_NICE_NAME'=>lorem_word(),
 				'LANG_NICE_ORIGINAL_NAME'=>lorem_word(),
 				'TOO_MANY'=>lorem_phrase(),
-				'INTERTRANS'=>lorem_phrase(),
+				'GOOGLE'=>lorem_phrase(),
 				'TOTAL'=>placeholder_number(),
 				'LANG'=>fallback_lang(),
 				'LANG_ORIGINAL_NAME'=>fallback_lang(),
@@ -219,7 +219,7 @@ class Hook_addon_registry_core_language_editing
 		return array(
 			lorem_globalise(do_lorem_template('TRANSLATE_SCREEN', array(
 				'PAGE'=>lorem_phrase(),
-				'INTERTRANS'=>lorem_phrase(),
+				'GOOGLE'=>lorem_phrase(),
 				'LANG'=>fallback_lang(),
 				'LINES'=>$lines,
 				'TITLE'=>lorem_title(),

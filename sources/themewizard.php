@@ -362,7 +362,6 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template'
 	}
 	foreach ($do as $i=>$doing)
 	{
-		//if ($i==1) continue;
 		if ((function_exists('imagettftext')) && (array_key_exists('FreeType Support',gd_info())) && (file_exists($doing[4])) && (@imagettfbbox(26.0,0.0,get_file_base().'/data/fonts/Vera.ttf','test')!==false))
 		{
 			imagettftext($img,(float)($doing[3]),0.0,$doing[1],$doing[2],$doing[5],$doing[4],foxy_utf8_to_nce($doing[0]));
@@ -500,7 +499,6 @@ function make_theme($themename,$source_theme,$algorithm,$seed,$use,$dark=false,$
 								fix_permissions($saveat);
 								sync_file($saveat);
 								actual_edit_theme_image($image_code,$themename,$lang,$image_code,$saveat_url,true);
-								//if ($lang==fallback_lang()) $IMG_CODES['site'][$image_code]=$saveat_url;
 							}
 						} else // Still need to do the edit, as currently it'll have been mapped to the default theme when this theme was added
 						{
@@ -786,7 +784,7 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 					}
 					elseif ($show=='zone_gradient')
 					{
-						$img=generate_recoloured_image($path,'#FFFFFF'/*3660A6*/,'#FFFFFF'/*$colours['navigation_peak']*/,'#82A3D8',$colours['navigation_top'],'#3865A9',$colours['navigation_bot']);
+						$img=generate_recoloured_image($path,'#FFFFFF','#FFFFFF','#82A3D8',$colours['navigation_top'],'#3865A9',$colours['navigation_bot']);
 					}
 					elseif (($show=='trimmed_logo_template') || ($show=='logo_template') || (substr($show,0,5)=='logo/'))
 					{
@@ -799,7 +797,7 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 						{
 							$pixel_x_start_array=array_merge($pixel_x_start_array,array(320,319,318,317,316,316,315,315,314,314,313,312,309));
 						}
-						$img=generate_recoloured_image($path,'#FFFFFF'/*3660A6*/,'#FFFFFF'/*$colours['navigation_peak']*/,'#82A3D8',$colours['navigation_top'],'#3865A9',$colours['navigation_bot'],'vertical',$pixel_x_start_array,60);
+						$img=generate_recoloured_image($path,'#FFFFFF','#FFFFFF','#82A3D8',$colours['navigation_top'],'#3865A9',$colours['navigation_bot'],'vertical',$pixel_x_start_array,60);
 						for ($y=0;$y<=88;$y++)
 						{
 							$pixel_x_start_array[$y]=(array_key_exists($y,$pixel_x_start_array)?$pixel_x_start_array[$y]:0);
@@ -923,7 +921,6 @@ function parse_css_colour_expression($textual)
 
 	// Perform inner conversion
 	$tokens=explode(' ',$textual);
-	//if (count($tokens)<5) return NULL;
 
 	$expression=_parse_css_colour_expression($tokens);
 	return $expression;
@@ -1301,7 +1298,7 @@ function theme_wizard_colours_to_sheet($sheet,$landscape,$source_theme,$algorith
 	} elseif (file_exists(get_file_base().'/themes/default/css_custom/'.filter_naughty($sheet)))
 	{
 		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/default/css_custom/'.filter_naughty($sheet)));
-	} else/*if (file_exists(get_file_base().'/themes/default/css/'.filter_naughty($sheet)))*/
+	} else
 	{
 		$contents=unixify_line_format(file_get_contents(get_file_base().'/themes/default/css/'.filter_naughty($sheet)));
 	}
@@ -1495,7 +1492,6 @@ function generate_gradient($top,$bottom)
 	{
 		$color=imagecolorallocate($gradient,$topred+intval(round($dr*floatval($i))),$topgrn+intval(round($dg*floatval($i))),$topblu+intval(round($db*floatval($i))));
 		imagesetpixel($gradient,0,$i,$color);
-		//ImageLine($gradient, 0,$i, 1,$i+1 ,$color);
 	}
 
 	return $gradient;

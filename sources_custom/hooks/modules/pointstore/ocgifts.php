@@ -33,8 +33,6 @@ class Hook_pointstore_ocgifts
 	{
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
 
-		//if (get_option('is_on_'.$class.'_buy')=='0') return array();
-
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action','id'=>$class),'_SELF');
 		return array(do_template('POINTSTORE_'.strtoupper($class),array('NEXT_URL'=>$next_url)));
 	}

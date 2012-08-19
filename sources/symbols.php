@@ -75,8 +75,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 {
 	global $TEMPCODE_SETGET,$CYCLES,$PREPROCESSABLE_SYMBOLS,$DISPLAYED_TITLE;
 
-	//echo '<!--'.$name.'-->'."\n";
-
 	if ($type==TC_SYMBOL)
 	{
 		$escaped_codes=$name.(($escaped==array())?'':serialize($escaped));
@@ -614,7 +612,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if ($DISPLAYED_TITLE!==NULL) $_displayed_title=$DISPLAYED_TITLE->evaluate();
 					if (($DISPLAYED_TITLE!==NULL) && (strip_tags($_displayed_title)!=''))
 					{
-						$value=html_entity_decode(strip_tags(str_replace(array('&ndash;','&mdash;','&middot;','&ldquo;','&rdquo;','&lsquo;','&rsquo;'),array('-','-','|','"','"',"'","'"),$_displayed_title)),ENT_QUOTES,get_charset());
+						$value=html_entity_decode(strip_tags(str_replace(array('&hellip;','&ndash;','&mdash;','&middot;','&ldquo;','&rdquo;','&lsquo;','&rsquo;'),array('...','-','-','|','"','"',"'","'"),$_displayed_title)),ENT_QUOTES,get_charset());
 					} else
 					{
 						$value=$ZONE['zone_header_text_trans'];
@@ -624,10 +622,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$comcodeless=strip_comcode($SEO_TITLE); // This is not HTML
 
 					// Strip 'Welcome to' off if it's there
-					/*$comcodeless=str_replace('&hellip;','...',$comcodeless);
-					$comcodeless=str_replace('&middot;','-',$comcodeless);
-					$comcodeless=str_replace('&ndash;','-',$comcodeless);
-					$comcodeless=str_replace('&mdash;','-',$comcodeless);*/
 					$value=preg_replace('#'.preg_quote(do_lang('WELCOME_TO_STRIPPABLE').' '.get_site_name(),'#').'([^-]+\s*-\s*)?#','',$comcodeless);
 					// Strip site name off it it's there (it'll be put on in the templates, so we don't want it twice)
 					$stub=get_site_name().' - ';
@@ -2230,7 +2224,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'VIEWS':
 				if (isset($param[2]))
 				{
-					$id_field=/*isset($param[4])?$param[4]:*/'id'; // Not allowed for security reasons
+					$id_field=/*isset($param[4])?$param[4]:*/'id'; // Not allowed on fields other than 'id', for security reasons
 					if (preg_match('#^\w*views\w*$#',$param[1])!=0)
 					{
 						$test=$GLOBALS['SITE_DB']->query_select_value_if_there($param[0],$param[1],array($id_field=>$param[2]));

@@ -803,23 +803,6 @@ class Module_admin_setupwizard
 			require_code('config2');
 			set_option('collapse_user_zones',strval($collapse_zones));
 
-			/*if (addon_installed('redirects_editor')) Old method
-			{
-				if ($collapse_zones)
-				{
-					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('redirects','r_from_page',array('r_from_page'=>'panel_left','r_from_zone'=>'site'));
-					if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'panel_left','r_from_zone'=>'site','r_to_page'=>'panel_left','r_to_zone'=>'','r_is_transparent'=>1));
-					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('redirects','r_from_page',array('r_from_page'=>'panel_right','r_from_zone'=>'site'));
-					if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'panel_right','r_from_zone'=>'site','r_to_page'=>'panel_right','r_to_zone'=>'','r_is_transparent'=>1));
-					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('redirects','r_from_page',array('r_from_page'=>'start','r_from_zone'=>'site'));
-					if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page'=>'start','r_from_zone'=>'site','r_to_page'=>'start','r_to_zone'=>'','r_is_transparent'=>1));
-				} else
-				{
-					$GLOBALS['SITE_DB']->query_delete('redirects',array('r_from_page'=>'panel_left','r_from_zone'=>'site','r_to_page'=>'panel_left','r_to_zone'=>''),'',1);
-					$GLOBALS['SITE_DB']->query_delete('redirects',array('r_from_page'=>'panel_right','r_from_zone'=>'site','r_to_page'=>'panel_right','r_to_zone'=>''),'',1);
-					$GLOBALS['SITE_DB']->query_delete('redirects',array('r_from_page'=>'start','r_from_zone'=>'site','r_to_page'=>'start','r_to_zone'=>''),'',1);
-				}
-			}*/
 			if (post_param_integer('guest_zone_access',0)==1)
 			{
 				$guest_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($GLOBALS['FORUM_DRIVER']->get_guest_id());

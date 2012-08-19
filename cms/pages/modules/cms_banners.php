@@ -211,7 +211,7 @@ class Module_cms_banners extends standard_crud_module
 			do_lang_tempcode('CODENAME'),
 			do_lang_tempcode('_BANNER_TYPE'),
 			do_lang_tempcode('DEPLOYMENT_AGREEMENT'),
-			//do_lang_tempcode('HITS_ALLOCATED'),
+			//do_lang_tempcode('HITS_ALLOCATED'),		Save space by not putting in
 			do_lang_tempcode('IMPORTANCE_MODULUS'),
 			do_lang_tempcode('EXPIRY_DATE'),
 			do_lang_tempcode('ADDED'),

@@ -645,7 +645,6 @@ class Module_admin_themes
 		require_code('form_templates');
 
 		$theme=get_param('theme',false,true);
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$css=new ocp_tempcode();
 		$files=array();
@@ -712,7 +711,6 @@ class Module_admin_themes
 
 		$theme=get_param('theme','');
 		if ($theme=='') return $this->choose_theme($title);
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$url=build_url(array('page'=>'_SELF','file'=>$file,'type'=>'_edit_css'),'_SELF');
 
@@ -828,7 +826,6 @@ class Module_admin_themes
 		$css=post_param('css');
 
 		$theme=post_param('theme');
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$i=0;
 		$color=post_param('c'.strval($i),'');
@@ -971,9 +968,7 @@ class Module_admin_themes
 				}
 				else
 				{
-					//$current=$subdir.'/'.$file;
 					if ((substr($file,0,strlen($find_for)+1)==$find_for.'.') && (substr($file,-9)!='.editfrom'))
-					//if (substr($current,0,strlen($find_for)+1)==$find_for.'.')
 					{
 						$temp=explode('.',$file,3);
 						if (is_numeric($temp[2])) $filesarray[$file]=intval($temp[2]);
@@ -1002,7 +997,6 @@ class Module_admin_themes
 
 		$theme=get_param('theme','');
 		if ($theme=='') return $this->choose_theme($title);
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$filesarray=$this->get_template_files_array($theme);
 		require_code('form_templates');
@@ -1065,7 +1059,6 @@ class Module_admin_themes
 	function _edit_templates()
 	{
 		$theme=get_param('theme');
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		$title=get_screen_title('EDIT_TEMPLATES');
 
@@ -1475,7 +1468,6 @@ class Module_admin_themes
 	{
 		// Erase cache
 		$theme=filter_naughty(post_param('theme'));
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 		erase_cached_templates();
 		require_code('view_modes');
 		erase_tempcode_cache();
@@ -1586,8 +1578,8 @@ class Module_admin_themes
 		$hidden->attach(form_input_hidden('theme',$theme));
 		$hidden->attach(form_input_hidden('lang',$lang));
 		$fields->attach(form_input_line(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_THEME_IMAGE_NAME'),'id',$id,true));
-	/*	
-		$list=combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images/',get_file_base().'/themes/'.filter_naughty($theme).'/images/');
+
+		/*$list=combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images/',get_file_base().'/themes/'.filter_naughty($theme).'/images/');		Actually we don't want to allow selection from existing -- too weird, creating these cross-links
 		$list->attach(combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images_custom/',get_file_base().'/themes/'.filter_naughty($theme).'/images_custom/'));
 		if ($theme!='default')
 		{
@@ -1602,7 +1594,7 @@ class Module_admin_themes
 		$field_set=alternate_fields_set__start($set_name);
 
 		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-	//	$fields->attach(form_input_radio(do_lang_tempcode('CHOOSE'),'',$list));
+		//	$fields->attach(form_input_radio(do_lang_tempcode('CHOOSE'),'',$list));
 
 		$field_set->attach(form_input_line(do_lang_tempcode('URL'),'','path',$path,false));
 
@@ -1621,7 +1613,6 @@ class Module_admin_themes
 		$title=get_screen_title('ADD_THEME_IMAGE');
 
 		$theme=get_param('theme');
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 		$lang=get_param('lang',user_lang());
 		if ($lang=='') $lang=user_lang();
 		list($fields,$hidden)=$this->get_image_form_fields($theme,$lang);
@@ -1658,7 +1649,6 @@ class Module_admin_themes
 		$title=get_screen_title('ADD_THEME_IMAGE');
 
 		$theme=post_param('theme');
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 		$lang=post_param('lang');
 		$id=post_param('id');
 		$use_all_themes=post_param_integer('use_all_themes',0);
@@ -1707,7 +1697,6 @@ class Module_admin_themes
 
 		$theme=get_param('theme','');
 		if ($theme=='') return $this->choose_theme($title,true);
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
 		require_code('themes3');
 		regen_theme_images($theme);
@@ -1715,16 +1704,6 @@ class Module_admin_themes
 
 		// Choose image to edit
 		require_code('form_templates');
-		/*$where_map=array('theme'=>$theme);
-		if ($lang!='') $where_map['lang']=$lang;
-		$images=$GLOBALS['SITE_DB']->query_select('theme_images',array('DISTINCT id'),$where_map);
-		$list='';
-		foreach ($images as $row)
-		{
-			$temp=form_input_list_entry($row['id'],false);
-			$list.=$temp->evaluate(); // XHTMLXHTML
-		}
-		$fields=form_input_huge_list(do_lang_tempcode('CODENAME'),'','id',make_string_tempcode($list),NULL,true,true,725);*/
 		require_code('themes2');
 		$ids=get_all_image_ids_type('',true,$GLOBALS['SITE_DB'],$theme);
 		$fields=form_input_theme_image(do_lang_tempcode('CODENAME'),'','id',$ids,NULL,NULL,NULL,false,NULL,$theme,$lang,true,true);
@@ -1768,7 +1747,6 @@ class Module_admin_themes
 			$id=get_param('id');
 			$theme=get_param('theme');
 		}
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 		$where_map=array('theme'=>$theme,'id'=>$id);
 		if ($lang!='') $where_map['lang']=$lang;
 		$path=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',$where_map);
@@ -1837,7 +1815,6 @@ class Module_admin_themes
 		if (is_object($lang)) return $lang;
 
 		$theme=post_param('theme');
-		//if ((get_file_base()!=get_custom_file_base()) && ($theme=='default')) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 		$id=post_param('id');
 		$old_id=post_param('old_id');
 

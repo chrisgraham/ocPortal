@@ -102,23 +102,8 @@ class Module_members
 
 		if ($type=='misc') return $this->directory();
 		if ($type=='view') return $this->profile();
-		//if ($type=='remote') return $this->remote();
 
 		return new ocp_tempcode();
-	}
-
-	/**
-	 * The UI to show info about remote logins.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function remote()
-	{
-		$title=get_screen_title('LEARN_ABOUT_REMOTE_LOGINS');
-
-		if (get_option('allow_member_integration')=='off') warn_exit(do_lang_tempcode('NO_REMOTE_ON'));
-
-		return do_template('FULL_MESSAGE_SCREEN',array('_GUID'=>'c0d5fa4f2b90e5d8e967763cca787636','TITLE'=>$title,'TEXT'=>do_lang_tempcode('DESCRIPTION_IS_REMOTE_MEMBER',ocp_srv('HTTP_HOST'))));
 	}
 
 	/**

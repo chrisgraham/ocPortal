@@ -111,7 +111,6 @@ function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 
 	// Stat
 	update_stat('num_wiki_posts',1);
-	//update_stat('num_wiki_files',count($_FILES));
 
 	if ($send_notification)
 	{
@@ -479,8 +478,6 @@ function wiki_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($orphan['text_original'])) $orphan['text_original']=get_translated_text($orphan['title']);
 
 			$title=$orphan['text_original'];
-			//$out->attach(form_input_list_entry(strval($orphan['id']),($select==$orphan['id']),do_template('WIKI_LIST_TREE_LINE',array('_GUID'=>'e3eb3decfac32382cdcb5b745ef0ad7e','BREADCRUMBS'=>'?','TITLE'=>$title,'ID'=>$orphan['id']))));
-//			$out.='<option value="'.$orphan['id'].'"> ? '.$title.'</option>';
 			$out->attach(form_input_list_entry($ins_format?(strval($orphan['id']).'!'.$title):strval($orphan['id']),false,do_lang('WIKI_ORPHANED').' > '.$title));
 		}
 	}

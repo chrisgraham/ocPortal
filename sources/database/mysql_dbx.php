@@ -184,7 +184,6 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 				else return (-1);
 			}
 
-			//return mysql_insert_id($db->handle);
 			if (strtoupper(substr($query,0,12))=='INSERT INTO ')
 			{
 				$table=substr($query,12,strpos($query,' ',12)-12);

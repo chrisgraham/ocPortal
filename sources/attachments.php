@@ -109,15 +109,12 @@ function attachments_script()
 	if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Content-Type: '.$mime_type.'; authoritative=true;');
-	//if ($mime_type=='application/octet-stream') Not sure about this at time of writing
+	if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
 	{
-		if (strstr(ocp_srv('HTTP_USER_AGENT'),'MSIE')!==false)
-		{
-			header('Content-Disposition: filename="'.$original_filename.'"');
-		} else
-		{
-			header('Content-Disposition: inline; filename="'.$original_filename.'"');
-		}
+		header('Content-Disposition: filename="'.$original_filename.'"');
+	} else
+	{
+		header('Content-Disposition: inline; filename="'.$original_filename.'"');
 	}
 	header('Accept-Ranges: bytes');
 

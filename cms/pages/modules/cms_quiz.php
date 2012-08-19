@@ -297,7 +297,7 @@ class Module_cms_quiz extends standard_crud_module
 		foreach ($question_rows as $q)
 		{
 			$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$q['id']),'ORDER BY q_order');
-			$text.=/*strval($i+1).') '.*/get_translated_text($q['q_question_text']).(($q['q_long_input_field']==1)?' [LONG]':'').(($q['q_required']==1)?' [REQUIRED]':'').((($q['q_num_choosable_answers']==count($answer_rows)) && ($q['q_num_choosable_answers']!=0))?' [*]':'').chr(10);
+			$text.=get_translated_text($q['q_question_text']).(($q['q_long_input_field']==1)?' [LONG]':'').(($q['q_required']==1)?' [REQUIRED]':'').((($q['q_num_choosable_answers']==count($answer_rows)) && ($q['q_num_choosable_answers']!=0))?' [*]':'').chr(10);
 			foreach ($answer_rows as $a)
 			{
 				$text.=get_translated_text($a['q_answer_text']).(($a['q_is_correct']==1)?' [*]':'').chr(10);

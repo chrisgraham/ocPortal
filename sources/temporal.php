@@ -300,7 +300,7 @@ function get_timezoned_date($timestamp,$include_time=true,$verbose=false,$utc_ti
 
 		if ($ret1==$today) // It is/was today
 		{
-			$ret=/*do_lang('TODAY').$joiner.*/$ret2;
+			$ret=/*Today is obvious do_lang('TODAY').$joiner.*/$ret2;
 			if ($ret=='') $ret=do_lang('TODAY'); // it'll be because avoid contextual dates is not on
 		} else
 		{

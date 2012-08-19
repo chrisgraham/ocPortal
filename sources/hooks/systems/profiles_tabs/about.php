@@ -319,11 +319,6 @@ class Hook_Profiles_Tabs_about
 			}
 		}
 
-		/*if ((get_option('allow_member_integration')!='off') && (get_option('allow_member_integration')!='hidden'))
-		{
-			$remote=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_password_compat_scheme')=='remote';
-		} else */$remote=NULL;
-
 		$_on_probation=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_on_probation_until');
 		if ((is_null($_on_probation)) || ($_on_probation<=time())) $on_probation=NULL; else $on_probation=strval($_on_probation);
 
@@ -374,7 +369,6 @@ class Hook_Profiles_Tabs_about
 		$content=do_template('OCF_MEMBER_PROFILE_ABOUT',
 			array('_GUID'=>'fodfjdsfjsdljfdls',
 					'CLUBS'=>$clubs,
-					'REMOTE'=>$remote,
 					'RIGHT_MARGIN'=>$right_margin,
 					'AVATAR_WIDTH'=>strval($a).'px',
 					'PHOTO_WIDTH'=>strval($b).'px',

@@ -457,7 +457,6 @@ class Module_admin_orders
 		$id=get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_dispatched'),array('id'=>$id),'',1);
-
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_dispatched'),array('order_id'=>$id)); // There may be more than one items to update status
 
 		require_code('shopping');
@@ -482,13 +481,9 @@ class Module_admin_orders
 		if (is_null($message)) return;
 
 		$res=$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$order_id),'',1);
-
 		$order_det=$res[0];
 
-		//$message=do_lang('ORDER_DISPATCHED_MAIL_MESSAGE',comcode_escape(get_site_name()),comcode_escape($member_name),array(strval($order_id)));
-
 		require_code('notifications');
-
 		dispatch_notification('order_dispatched',NULL,do_lang('ORDER_DISPATCHED_MAIL_SUBJECT',get_site_name(),strval($order_id),NULL,get_lang($order_det['c_member'])),$message,array($order_det['c_member']),A_FROM_SYSTEM_PRIVILEGED);
 	}
 
@@ -504,7 +499,6 @@ class Module_admin_orders
 		$id=get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_cancelled'),array('id'=>$id),'',1);
-
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_cancelled'),array('order_id'=>$id),'',1);
 
 		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'cancelled','id'=>$id),get_module_zone('admin_orders'));
@@ -524,7 +518,6 @@ class Module_admin_orders
 		$id=get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_returned'),array('id'=>$id),'',1);
-
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_returned'),array('order_id'=>$id),'',1);
 
 		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'returned','id'=>$id),get_module_zone('admin_orders'));
@@ -544,7 +537,6 @@ class Module_admin_orders
 		$id=get_param_integer('id');
 
 		$GLOBALS['SITE_DB']->query_update('shopping_order',array('order_status'=>'ORDER_STATUS_onhold'),array('id'=>$id),'',1);
-
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>'ORDER_STATUS_onhold'),array('order_id'=>$id),'',1);
 
 		$add_note_url=build_url(array('page'=>'_SELF','type'=>'order_act','action'=>'add_note','last_act'=>'onhold','id'=>$id),get_module_zone('admin_orders'));
@@ -590,7 +582,7 @@ class Module_admin_orders
 
 		$fields->attach(form_input_date(do_lang_tempcode('ST_END_PERIOD'),do_lang_tempcode('ST_END_PERIOD_DESCRIPTION'),'end_date',false,false,true,array($end_minute,$end_hour,$end_month,$end_day,$end_year)));
 
-		return	do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('EXPORT_ORDER_LIST'),'TEXT'=>paragraph(do_lang_tempcode('EXPORT_ORDER_LIST_TEXT')),'URL'=>build_url(array('page'=>'_SELF','type'=>'_order_export'),'_SELF'),'HIDDEN'=>'','FIELDS'=>$fields));
+		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('EXPORT_ORDER_LIST'),'TEXT'=>paragraph(do_lang_tempcode('EXPORT_ORDER_LIST_TEXT')),'URL'=>build_url(array('page'=>'_SELF','type'=>'_order_export'),'_SELF'),'HIDDEN'=>'','FIELDS'=>$fields));
 	}
 
 	/**

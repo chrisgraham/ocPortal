@@ -66,7 +66,6 @@ class Hook_Preview_quiz
 			}
 			$q=array_shift($as);
 			$matches=array();
-			//if (preg_match('#^(\d+)\)?(.*)#',$q,$matches)===false) continue;
 			if (preg_match('#^(.*)#',$q,$matches)===false) continue;
 			if (count($matches)==0) continue;
 
@@ -86,7 +85,6 @@ class Hook_Preview_quiz
 			}
 			$q=array_shift($as);
 			$matches=array();
-			//if (preg_match('#^(\d+)\)?(.*)#',$q,$matches)===false) continue;
 			if (preg_match('#^(.*)#',$q,$matches)===false) continue;
 			if (count($matches)==0) continue;
 			$question=trim($matches[count($matches)-1]);

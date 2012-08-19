@@ -65,16 +65,16 @@ class Block_side_similar_sites
 
 		$out='<ul>';
 		$links_count=0;
-		foreach($searchResultsArray as $result)
+		foreach ($searchResultsArray as $result)
 		{
 			//more details in output - page content and short url - if we need more details, i.e. for the main block we could use this
 			//$out .= '<li><strong><a href="'.$result["url"].'">'.$result["title"].'</a></strong> '.  $result["content"].' <em>'.$result["visibleUrl"].'</em></li>';
 			$links_count++;
-			if($links_count<=$max)
-				$out .= '<li><a href="'.$result["url"].'" target="_blank">'.$result["title"].'</a></li>';
+			if ($links_count<=$max)
+				$out.='<li><a href="'.$result["url"].'" target="_blank">'.$result["title"].'</a></li>';
 		}
 
-		$out .= '</ul>';
+		$out.='</ul>';
 
 		return do_template('BLOCK_SIDE_SIMILAR_SITES',array('TITLE'=>do_lang_tempcode('BLOCK_SIMILAR_SITES_TITLE'),'CONTENT'=>$out,'CRITERIA'=>$criteria));
 	}

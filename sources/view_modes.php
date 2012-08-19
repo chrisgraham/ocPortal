@@ -325,9 +325,8 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			ksort($_RECORDED_TEMPLATES_USED);
 			foreach ($_RECORDED_TEMPLATES_USED as $name=>$count)
 			{
-				//$restore_from=find_template_path($name);
 				$file=$name.'.tpl';
-				$edit_url=build_url(array('page'=>'admin_themes','type'=>'_edit_templates','theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),/*'restore_from'=>$restore_from,*/'f0file'=>$file),'adminzone',NULL,false,true);
+				$edit_url=build_url(array('page'=>'admin_themes','type'=>'_edit_templates','theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'f0file'=>$file),'adminzone',NULL,false,true);
 				$templates->attach(do_template('TEMPLATE_LIST_ENTRY',array('COUNT'=>integer_format($count),'NAME'=>$name,'EDIT_URL'=>$edit_url)));
 			}
 		} else
@@ -431,17 +430,16 @@ function find_template_tree_nice($codename,$children,$fresh,$cache_started=false
 		$source=make_string_tempcode($codename);
 	} else
 	{
-		//$restore_from=find_template_path($codename);
 		$file=$codename.'.tpl';
 		$guid=mixed();
 		foreach ($children as $child)
 		{
 			if ($child[0]==':guid') $guid=substr($child[1][0][0],1);
 		}
-		$edit_url=build_url(array('page'=>'admin_themes','type'=>'_edit_templates','preview_url'=>get_self_url(true,false,array('special_page_type'=>NULL)),'f0guid'=>$guid,'theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()/*,'restore_from'=>$restore_from*/,'f0file'=>$file),'adminzone');
+		$edit_url=build_url(array('page'=>'admin_themes','type'=>'_edit_templates','preview_url'=>get_self_url(true,false,array('special_page_type'=>NULL)),'f0guid'=>$guid,'theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'f0file'=>$file),'adminzone');
 		$source=do_template('TEMPLATE_TREE_ITEM',array('_GUID'=>'be8eb00699631677d459b0f7c5ba60c8','FILE'=>$file,'EDIT_URL'=>$edit_url,'CODENAME'=>$codename,'GUID'=>$guid,'ID'=>strval(mt_rand(0,100000))));
 	}
-	$out=$source->evaluate()/*.((!$fresh)?' (db-cached)':'')*/;
+	$out=$source->evaluate();
 
 	$middle='';
 	do
@@ -469,8 +467,6 @@ function find_template_tree_nice($codename,$children,$fresh,$cache_started=false
 			$_middle=do_template('TEMPLATE_TREE_ITEM_WRAP',array('_GUID'=>'59f003e298db3b621132649d2e315f9d','CONTENT'=>$middle2));
 			$middle.=$_middle->evaluate();
 		}
-		/*if ((!(strlen($codename)>0)) && (count($children)==1) && ($cache_started || ($fresh)))
-			return $middle2; // Collapse pointless nestings*/
 	}
 	if (($middle=='') && ((strlen($codename)==0) || ($codename[0]==':'))) return '';
 	if ($middle!='')

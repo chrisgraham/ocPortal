@@ -813,7 +813,6 @@ class ocp_tempcode
 
 		if (is_object($attach)) // Consider it another piece of tempcode
 		{
-			//$done_one=false;
 			if (is_null($escape)) $escape=array();
 
 			foreach ($attach->bits as $bit)
@@ -832,11 +831,10 @@ class ocp_tempcode
 					if ($escape!=array()) $bit[0]=array_merge($escape,$bit[0]);
 
 					// Can we add into another string at our edge
-					if (/*($done_one) || */($last==-1) || ($bit[1]!=TC_KNOWN) || ($this->bits[$last][1]!=TC_KNOWN) || (/*Commented out due to bug on Quercus($this->bits[$last][0]!=$bit[0]) && */((((array_merge($bit[0],$this->bits[$last][0]))!=$SIMPLE_ESCAPED) && ((array_merge($bit[0],$this->bits[$last][0]))!=array())) || (preg_match('#[&<>"\']#',$bit[2])!=0)))) // No
+					if (($last==-1) || ($bit[1]!=TC_KNOWN) || ($this->bits[$last][1]!=TC_KNOWN) || (/*Commented out due to bug on Quercus($this->bits[$last][0]!=$bit[0]) && */((((array_merge($bit[0],$this->bits[$last][0]))!=$SIMPLE_ESCAPED) && ((array_merge($bit[0],$this->bits[$last][0]))!=array())) || (preg_match('#[&<>"\']#',$bit[2])!=0)))) // No
 					{
 						$this->bits[]=$bit;
 						$last++;
-						//$done_one=true;
 					} else // Yes
 					{
 						$this->bits[$last][2].=$bit[2];
@@ -1083,7 +1081,6 @@ class ocp_tempcode
 							$parameters['_GUID']=array_key_exists(3,$trace)?($trace[3]['function'].'/'.$trace[2]['function']):(array_key_exists(2,$trace)?$trace[2]['function']:$trace[1]['function']);
 						} else
 						{
-							//$out->bits[]=array($bit[0],$bit_1,$bit_2,$bit[3]);
 							require_code('site');
 							if (!$under_loop) attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',$bit_2,$codename),'warn');
 							continue;

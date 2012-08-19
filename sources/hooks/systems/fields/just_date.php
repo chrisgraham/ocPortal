@@ -166,11 +166,6 @@ class Hook_fields_just_date
 		if (is_null($day)) return $editing?STRING_MAGIC_NULL:'';
 
 		return str_pad(strval($year),4,'0',STR_PAD_LEFT).'-'.str_pad(strval($month),2,'0',STR_PAD_LEFT).'-'.str_pad(strval($day),2,'0',STR_PAD_LEFT);
-
-		/*$temp=get_input_date($tmp_name);
-		if (is_null($temp)) return $editing?STRING_MAGIC_NULL:'';
-
-		return date('Y-m-d H:i:s',$temp);*/
 	}
 
 }

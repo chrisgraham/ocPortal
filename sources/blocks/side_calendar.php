@@ -75,8 +75,6 @@ class Block_side_calendar
 
 		$filter=$this->get_filter($filter_map);
 
-		//if(!is_null($filter_str)) $filter=explode(",",$filter_str):NULL;
-
 		$box_title=array_key_exists('title',$map)?$map['title']:do_lang_tempcode('COMING_SOON');
 
 		$calendar_url=build_url($filter+array('page'=>'calendar','type'=>'misc','view'=>'month','id'=>strval($year).'-'.strval($month)),$zone);

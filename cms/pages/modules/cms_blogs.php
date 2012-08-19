@@ -650,8 +650,8 @@ class Module_cms_blogs extends standard_crud_module
 		$is_validated=post_param_integer('wp_auto_validate',0);
 		$to_own_account=post_param_integer('wp_add_to_own',0);		
 
-		//Wordpress post xml file importing method
-		if((get_param('method')=='xml'))
+		// Wordpress post xml file importing method
+		if ((get_param('method')=='xml'))
 		{				
 			$rss_url=post_param('xml_url',NULL);
 
@@ -673,14 +673,13 @@ class Module_cms_blogs extends standard_crud_module
 			$cat_id=NULL;
 
 			$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-
 			$NEWS_CATS=list_to_map('id',$NEWS_CATS);
 
 			$extra_post_data=array();
 
 			foreach ($rss->gleamed_items as $item)
 			{
-				if(!array_key_exists('category',$item)) $item['category']=do_lang('NC_general');
+				if (!array_key_exists('category',$item)) $item['category']=do_lang('NC_general');
 
 				$extra_post_data[]=$item;
 
@@ -691,20 +690,19 @@ class Module_cms_blogs extends standard_crud_module
 						$cat_id=$_cat;
 					}				
 				}
-				//Check for existing owner categories, if not create blog category for creator
-				if($to_own_account==0)
+				// Check for existing owner categories, if not create blog category for creator
+				if ($to_own_account==0)
 				{
 					$creator=$item['author'];
 					$submitter_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($creator);
-				}
-				else
+				} else
+				{
 					$submitter_id=get_member();
-
-				//if(is_null($submitter_id))	continue;	//Skip importing posts of nonexisting users
+				}
 
 				$owner_category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','id',array('nc_owner'=>$submitter_id));
 
-				if(is_null($cat_id))
+				if (is_null($cat_id))
 				{
 					$cat_id=add_news_category($item['category'],'newscats/general','',NULL);
 					$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
@@ -715,10 +713,10 @@ class Module_cms_blogs extends standard_crud_module
 				add_news($item['title'],html_to_comcode($item['news']),NULL,$is_validated,1,1,1,'',array_key_exists('news_article',$item)?html_to_comcode($item['news_article']):'',$owner_category_id,array($cat_id),NULL,$submitter_id,0,time(),NULL,'');
 			}
 
-			if(url_is_local($rss_url)) // Means it is a temp file
+			if (url_is_local($rss_url)) // Means it is a temp file
 			@unlink($rss_url);
 		}
-		elseif(get_param('method')=='db')	//Importing directly from wordpress db
+		elseif (get_param('method')=='db')	//Importing directly from wordpress db
 		{	
 			import_wordpress_db();
 		}

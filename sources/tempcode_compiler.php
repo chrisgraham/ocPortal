@@ -699,10 +699,10 @@ function build_closure_function($myfunc,$parts)
 	{
 		if (strpos($code,'$bound')===false)
 		{
-			$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=create_function('\$parameters,\$cl,\$last_attach',\"echo ".php_addslashes($code).";\");\n";
+			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=create_function('\$parameters,\$cl,\$last_attach',\"echo ".php_addslashes($code).";\");\n";
 		} else
 		{
-			$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=create_function('\$parameters,\$cl,\$last_attach',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo ".php_addslashes($code).";\");\n";
+			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=create_function('\$parameters,\$cl,\$last_attach',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo ".php_addslashes($code).";\");\n";
 		}
 	} else
 	{
@@ -713,7 +713,7 @@ function build_closure_function($myfunc,$parts)
 			$reset_code="eval(\\\$RESET_VAR_CODE);";
 		else
 			$reset_code='';
-		$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"$reset_code echo ".php_addslashes($code).";\";\n";
+		$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"$reset_code echo ".php_addslashes($code).";\";\n";
 	}
 
 	return $funcdef;

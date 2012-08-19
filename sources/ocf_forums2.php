@@ -191,7 +191,6 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 					$GROUPING_TITLES=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('id','c_title')));
 				}
 				$cat_bit=array_key_exists($forum['f_forum_grouping_id'],$GROUPING_TITLES)?$GROUPING_TITLES[$forum['f_forum_grouping_id']]:do_lang('NA');
-				//if (strlen($pre.$cat_bit)>26) $cat_bit='...';
 			}
 			if ($field_format)
 			{
@@ -218,7 +217,6 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 				}
 
 				$out[$cat_sort_key].='<option value="'.(!$use_compound_list?strval($forum['id']):(strval($forum['id']).','.$_compound_list)).'"'.($selected?' selected="selected"':'').'>'.$line->evaluate().'</option>';
-				//$out.=$below;
 				if ($levels!==0)
 				$out[$cat_sort_key].=$below->evaluate();
 			} else

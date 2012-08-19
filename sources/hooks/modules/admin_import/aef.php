@@ -251,7 +251,6 @@ class Hook_aef
 					}
 				}
 
-				//$primary_group=$default_group;
 				$primary_group=import_id_remap_get('group',strval($row['u_member_group']),true);
 				if (is_null($primary_group)) $primary_group=$default_group;
 

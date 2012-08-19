@@ -588,7 +588,6 @@ class Module_admin_stats
 		$i=0;
 		$degrees=360.0/$total;
 		$done_total=0;
-		//$done=0;
 		$data=array();
 
 		$real_data=array();
@@ -607,12 +606,8 @@ class Module_admin_stats
 				'Tally'=>$views,
 			);
 
-			//if ($done<20)
-			//{
-				$data[$referrer]=$views*$degrees;
-				//$done++;
-				$done_total+=$data[$referrer];
-			//}
+			$data[$referrer]=$views*$degrees;
+			$done_total+=$data[$referrer];
 			$i++;
 		}
 		if ($csv) make_csv($real_data,'referrers.csv');
@@ -710,7 +705,6 @@ class Module_admin_stats
 		$fields=new ocp_tempcode();
 		$degrees=360/$total;
 		$done_total=0;
-		//$done=0;
 		$data=array();
 		$i=0;
 
@@ -730,12 +724,8 @@ class Module_admin_stats
 				'Tally'=>$views,
 			);
 
-			//if ($done<20)
-			//{
-				$data[$keyword]=$keywords[$keyword]*$degrees;
-				//$done++;
-				$done_total+=$data[$keyword];
-			//}
+			$data[$keyword]=$keywords[$keyword]*$degrees;
+			$done_total+=$data[$keyword];
 			$i++;
 		}
 		if ((360-$done_total)>0)
@@ -1038,7 +1028,6 @@ class Module_admin_stats
 				$fields_title=results_field_title(array(do_lang_tempcode('KEYWORD'),do_lang_tempcode('PEAK')),$sortables,'sort',$sortable.' '.$sort_order);
 				$fields=new ocp_tempcode();
 				$done_total=0;
-				//$done=0;
 				$data=array();
 				$i=0;
 
@@ -1052,12 +1041,8 @@ class Module_admin_stats
 					if ($key=='') $link=do_lang('_UNKNOWN'); else $link=escape_html($key);
 					$fields->attach(results_entry(array($link,escape_html(integer_format($value)))));
 
-					//if ($done<20)
-					//{
-						$data[$key]=$degrees*$value;
-						//$done++;
-						$done_total+=$data[$key];
-					//}
+					$data[$key]=$degrees*$value;
+					$done_total+=$data[$key];
 					$i++;
 				}
 				if ((360-$done_total)>0)
@@ -1117,7 +1102,6 @@ class Module_admin_stats
 				$fields_title=results_field_title(array(do_lang_tempcode('REGIONALITY'),do_lang_tempcode('COUNT_VIEWS')),$sortables,'sort',$sortable.' '.$sort_order);
 				$fields=new ocp_tempcode();
 				$done_total=0;
-				//$done=0;
 				$i=0;
 				foreach ($regions as $key=>$value)
 				{
@@ -1129,12 +1113,8 @@ class Module_admin_stats
 					if ($key=='') $link=do_lang('_UNKNOWN'); else $link=escape_html($key);
 					$fields->attach(results_entry(array($link,integer_format($value)),true));
 
-					//if ($done<20)
-					//{
-						$data[$key]=$degrees*$value;
-						//$done++;
-						$done_total+=$data[$key];
-					//}
+					$data[$key]=$degrees*$value;
+					$done_total+=$data[$key];
 					$i++;
 				}
 				if ((360-$done_total)>0)
@@ -1464,8 +1444,6 @@ class Module_admin_stats
 		$degrees=360/count($rows);
 		foreach ($rows as $value)
 		{
-			//if($value[$type]==0) $value[$type]=do_lang('_UNKNOWN');
-
 			if (!array_key_exists($value[$type],$data1)) $data1[$value[$type]]=$degrees;
 			else $data1[$value[$type]]=(($data1[$value[$type]]/$degrees)+1)*$degrees;
 		}
@@ -1475,7 +1453,6 @@ class Module_admin_stats
 		$fields=new ocp_tempcode();
 		$data=array();
 		$done_total=0;
-		//$done=0;
 		$i=0;
 
 		foreach ($data1 as $key=>$value)
@@ -1488,13 +1465,8 @@ class Module_admin_stats
 			if ($key=='') $link=do_lang('_UNKNOWN'); else $link=escape_html($key);
 			$fields->attach(results_entry(array($link,escape_html(float_format($value/$degrees)))));
 
-			//if ($done<20)
-			//{
-				$data[$key]=$value;
-				//$done++;
-				$done_total+=$value;
-			//}
-
+			$data[$key]=$value;
+			$done_total+=$value;
 			$i++;
 		}
 		if ((360.0-$done_total)>0.0)

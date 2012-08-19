@@ -420,7 +420,7 @@ class Module_admin_newsletter extends standard_crud_module
 		$all_subscribers=collapse_2d_complexity('email','id',$GLOBALS['SITE_DB']->query_select('newsletter',array('email','id')));
 
 		$headers=imap_search($mbox,'UNDELETED');
-		//$headers=imap_headers($mbox);
+		//$headers=imap_headers($mbox);	Does not work as expected
 		if ($headers===false)
 		{
 		   warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
@@ -745,11 +745,8 @@ class Module_admin_newsletter extends standard_crud_module
 			if (is_null($cutoff_time)) $cutoff_time=time()-60*60*24*365*3;
 			$fields->attach(form_input_date(do_lang_tempcode('CUTOFF_DATE'),do_lang_tempcode('DESCRIPTION_CUTOFF_DATE'),'cutoff',false,false,true,$cutoff_time,3,intval(date('Y'))-3,NULL,true));
 
-			//$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('CONTENT'))));
-
 			$fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'),do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'),'in_full',post_param_integer('in_full',0)==1));
 
-			//$_fields=array();
 			$chosen_categories='';
 			foreach (array_keys($_hooks) as $hook)
 			{
@@ -761,7 +758,6 @@ class Module_admin_newsletter extends standard_crud_module
 				if (method_exists($object,'choose_categories'))
 				{
 					list($cats,$_title)=$object->choose_categories();
-					//$field=form_input_multi_list($_title,'','whatsnew_'.$hook.'_filter',$cats);
 					if (is_object($cats)) $cats=$cats->evaluate($lang);
 					$matches=array();
 					$num_matches=preg_match_all('#<option [^>]*value="([^"]*)"[^>]*>([^<]*)</option>#',$cats,$matches);
@@ -789,18 +785,11 @@ class Module_admin_newsletter extends standard_crud_module
 						list($hook_content,$_title)=$new;
 						if (!$hook_content->is_empty())
 						{
-							//$field=form_input_tick($_title,'','whatsnew_'.$hook.'_include',false);
 							$chosen_categories.=$_title.' ['.$hook."]\n";
 						}
 					}
 				}
-				//$_fields[$_title]=$field;
 			}
-			/*ksort($_fields);
-			foreach ($_fields as $field)
-			{
-				$fields->attach($field);
-			}*/
 			$fields->attach(form_input_huge(do_lang_tempcode('CONTENT'),do_lang('NEWSLETTER_CONTENT_SELECT'),'chosen_categories',$chosen_categories,true));
 
 			$hidden=new ocp_tempcode();
@@ -900,7 +889,6 @@ class Module_admin_newsletter extends standard_crud_module
 			require_code('hooks/modules/admin_newsletter/'.filter_naughty_harsh($hook));
 			$object=object_factory('Hook_whats_news_'.filter_naughty_harsh($hook),true);
 			if (is_null($object)) continue;
-			//$filter=array_key_exists('whatsnew_'.$hook.'_filter',$_POST)?$_POST['whatsnew_'.$hook.'_filter']:NULL;
 			$found_one_match=false;
 			$last_find_id=mixed();
 			$last_cat_id=NULL;
@@ -935,11 +923,8 @@ class Module_admin_newsletter extends standard_crud_module
 					$last_find_id=$find_id;
 				}
 			}
-			//if (is_null($filter))
 			if (!$found_one_match)
 			{
-				//$test=post_param_integer('whatsnew_'.$hook.'_include',0);
-				//if ($test==0) continue;
 				$found=false;
 				foreach ($catarr as $find_id=>$line)
 				{
@@ -1229,7 +1214,6 @@ class Module_admin_newsletter extends standard_crud_module
 		{
 			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV'),'file',false,NULL,NULL,true,'csv,txt'));
 		}
-		//if ($fields->is_empty()) inform_exit(do_lang_tempcode('NOBODY_TO_SEND_TO'));
 
 		handle_max_file_size($hidden);
 
@@ -1596,8 +1580,8 @@ class Module_admin_newsletter extends standard_crud_module
 		$message=$rows[0]['newsletter'];
 		$language=$rows[0]['language'];
 		$level=$rows[0]['importance_level'];
-		/*require_code('lang2');
-		$language=lookup_language_full_name($rows[0]['language']);*/
+		require_code('lang2');
+		$language=lookup_language_full_name($rows[0]['language']);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWSLETTER')),array('_SELF:_SELF:archive',do_lang_tempcode('NEWSLETTER_ARCHIVE'))));
 		breadcrumb_set_self($subject);

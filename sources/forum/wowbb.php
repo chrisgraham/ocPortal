@@ -291,7 +291,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function pnamelast_visit($r)
 	{
-		//return $r['lastvisit'];
 		$rows=$this->connection->query_select('sessions',array('last_visit'),array('user_id'=>$r['user_id']),'',1);
 		return $rows[0]['last_visit'];
 	}
@@ -406,7 +405,6 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		unset($id);
 		return get_forum_base_url().'/pm.php?new_message=1';
-		//&to='.$this->get_username($id)
 	}
 
 	/**
@@ -510,8 +508,6 @@ class forum_driver_wowbb extends forum_driver_base
 	function get_forum_topic_posts($topic_id,&$count,$max=100,$start=0,$mark_read=true,$reverse=false)
 	{
 		if (is_null($topic_id)) return (-2);
-		//$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval((integer)$topic_id).' AND message NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY dateline');
-		//$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'posts_text d ON p.post_id=d.post_id WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_time');
 		$order=$reverse?'post_date_time DESC':'post_date_time';
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts d ON p.post_id=d.post_id WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
 		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts d ON p.post_id=d.post_id WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_date_time');
@@ -736,9 +732,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function probe_ip($ip)
 	{
-		//$test=$this->connection->query_select_value_if_there('users','user_id',array('regip'=>$ip));
-		//if (!is_null($test)) return $test;
-
 		// Not sure if this is valid! Is useip something else entirely maybe, like usesig?
 		return $this->connection->query_select('posts',array('DISTINCT user_id AS id'),array('post_ip'=>$ip));
 	}
@@ -1085,14 +1078,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function forum_create_cookie($id,$name,$password)
 	{
-		/*// User
-		ocp_setcookie(get_member_cookie(),$id);
-		$_COOKIE[get_member_cookie()]=$id;
-
-		// Password
-		$_password=md5($id.$password);
-		ocp_setcookie(get_pass_cookie(),$_password);
-		$_COOKIE[get_pass_cookie()]=$_password;*/
 		if (is_null($name)) $name=$this->get_username($id);
 
 		$data=$name.'||'.md5($password).'||0||||||||';
@@ -1159,7 +1144,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_member_ip($member)
 	{
-		//return $this->connection->query_select_value_if_there('users','regip',array('uid'=>$member));
 		return $this->connection->query_select_value_if_there('posts','post_ip',array('user_id'=>$member));
 	}
 
@@ -1227,8 +1211,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function _timestamp_to_date($timestamp)
 	{
-		//2004-12-28 08:52:05
-		//return strftime('%Y-%m-%d %H:%M:%S',$timestamp);
 		return date('Y-m-d H:i:s',$timestamp);
 	}
 

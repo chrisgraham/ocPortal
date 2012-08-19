@@ -134,7 +134,6 @@ class Block_side_forum_news
 					$topic_url=$GLOBALS['FORUM_DRIVER']->topic_url($topic['id'],$forum_name);
 					$title=$topic['title'];
 					$date=get_timezoned_date($topic[$date_key],false);
-	//				$username=$topic['lastusername'];
 
 					$out->attach(do_template('BLOCK_SIDE_FORUM_NEWS_SUMMARY',array('_GUID'=>'4b7f4ce27cf683710fc9958e9606291c','REPLIES'=>strval($topic['num']),'FIRSTTIME'=>strval($topic['firsttime']),'LASTTIME'=>strval($topic['lasttime']),'CLOSED'=>strval($topic['closed']),'FIRSTUSERNAME'=>$topic['firstusername'],'LASTUSERNAME'=>$topic['lastusername'],'FIRSTMEMBERID'=>strval($topic['firstmemberid']),'LASTMEMBERID'=>strval($topic['lastmemberid']),'_DATE'=>strval($topic[$date_key]),'DATE'=>$date,'FULL_URL'=>$topic_url,'NEWS_TITLE'=>escape_html($title))));
 				}

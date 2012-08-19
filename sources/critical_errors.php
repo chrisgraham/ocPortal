@@ -53,10 +53,6 @@ if (!function_exists('critical_error'))
 			case 'BANNED':
 				$error='The IP address you are accessing this website from ('.get_ip_address().') has been banished from this website. If you believe this is a mistake, contact the staff to have it resolved (typically, postmaster@'.get_domain().' will be able to reach them).</div>'.chr(10).'<div>If you are yourself staff, you should be able to unban yourself by editing the <kbd>banned_ip</kbd> table in a database administation tool, by removing rows that qualify against yourself. This error is raised to a critical error to reduce the chance of this IP address being able to further consume server resources.';
 				break;
-	/*		case 'PHP':
-				$error='<p>This is a PHP error.</div>'.chr(10).'<div style="padding-left: 50px">'.$relay;
-				break;
-	*/
 			case 'TEST':
 				$error='This is a test error.';
 				break;

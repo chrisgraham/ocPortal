@@ -1723,14 +1723,11 @@ function get_effect_settings($full_urls=false,$for_member=NULL,$all_members=fals
 				$member_setting=$EFFECT_SETTINGS_ROWS[$effect];
 			} else
 			{
-				if (true)/* elseif ($effect!='message_sent')*/
-				{
-					$member_setting='data_custom/sounds/'.$effect.'.mp3';
-					if (!file_exists(get_custom_file_base().'/'.$member_setting))
-						$member_setting='data/sounds/'.$effect.'.mp3';
-					if (!file_exists(get_file_base().'/'.$member_setting))
-						$member_setting='';
-				} else $member_setting='';
+				$member_setting='data_custom/sounds/'.$effect.'.mp3';
+				if (!file_exists(get_custom_file_base().'/'.$member_setting))
+					$member_setting='data/sounds/'.$effect.'.mp3';
+				if (!file_exists(get_file_base().'/'.$member_setting))
+					$member_setting='';
 			}
 		} else // Overridden settings
 		{

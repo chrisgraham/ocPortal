@@ -268,16 +268,13 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 
-		//if ((is_null($id)) || ($id>db_get_first_id()+8))
+		$copy_members_from_groups=new ocp_tempcode();
+		foreach ($rows as $row)
 		{
-			$copy_members_from_groups=new ocp_tempcode();
-			foreach ($rows as $row)
-			{
-				if (($row['id']!=db_get_first_id()) && ($row['id']!=$id))
-					$copy_members_from_groups->attach(form_input_list_entry(strval($row['id']),false,get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])));
-			}
-			$fields->attach(form_input_multi_list(do_lang_tempcode('COPY_MEMBERS_INTO'),do_lang_tempcode('DESCRIPTION_COPY_MEMBERS_INTO'),'copy_members_into',$copy_members_from_groups));
+			if (($row['id']!=db_get_first_id()) && ($row['id']!=$id))
+				$copy_members_from_groups->attach(form_input_list_entry(strval($row['id']),false,get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])));
 		}
+		$fields->attach(form_input_multi_list(do_lang_tempcode('COPY_MEMBERS_INTO'),do_lang_tempcode('DESCRIPTION_COPY_MEMBERS_INTO'),'copy_members_into',$copy_members_from_groups));
 
 		// Take permissions from
 		$permissions_from_groups=new ocp_tempcode();
@@ -336,7 +333,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 			do_lang_tempcode('NAME'),
 			do_lang_tempcode('IS_PRESENTED_AT_INSTALL'),
 			do_lang_tempcode('DEFAULT_GROUP'),
-			//do_lang_tempcode('IS_PRIVATE_CLUB'),
+			//do_lang_tempcode('IS_PRIVATE_CLUB'),	Save space
 			//do_lang_tempcode('GROUP_LEADER'),
 			do_lang_tempcode('OPEN_MEMBERSHIP'),
 			do_lang_tempcode('PROMOTION_TARGET'),

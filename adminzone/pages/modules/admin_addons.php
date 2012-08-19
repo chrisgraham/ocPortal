@@ -264,14 +264,7 @@ class Module_admin_addons
 				$_POST['url']='http://ocportal.com/site/dload.php?id='.$url;
 			}
 
-			//if ($url=='')
-			//{
-				$urls=get_url('url','file','imports/addons',0,0,false,'','',true);
-			//}
-			//else
-			//{
-			//	$urls=array($url);
-			//}
+			$urls=get_url('url','file','imports/addons',0,0,false,'','',true);
 
 			$full=get_custom_file_base().'/'.$urls[0];
 			if (strtolower(substr($full,-4))!='.tar')

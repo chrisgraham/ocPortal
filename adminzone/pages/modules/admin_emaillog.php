@@ -78,7 +78,7 @@ class Module_admin_emaillog
 	 */
 	function show()
 	{
-		//$GLOBALS['HELPER_PANEL_PIC']='pagepics/email';
+		//$GLOBALS['HELPER_PANEL_PIC']='pagepics/email';	Actually, we need the space
 
 		$title=get_screen_title('EMAIL_LOG');
 

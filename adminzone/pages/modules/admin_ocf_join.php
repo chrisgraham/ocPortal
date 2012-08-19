@@ -152,8 +152,6 @@ class Module_admin_ocf_join
 		// Read in data
 		$username=trim(post_param('username'));
 		$password=trim(post_param('password'));
-	/*	$password_confirm=trim(post_param('password_confirm'));
-		if ($password!=$password_confirm) warn_exit(make_string_tempcode(escape_html(do_lang('PASSWORD_MISMATCH'))));*/
 		$email_address=trim(post_param('email_address',''));
 		$dob_day=post_param_integer('dob_day',NULL);
 		$dob_month=post_param_integer('dob_month',NULL);
@@ -1056,7 +1054,7 @@ class Module_admin_ocf_join
 						$custom_fields[$cpf['id']]=substr(str_replace(chr(10),', ',str_replace(','.chr(10),chr(10),$custom_fields[$cpf['id']])),0,255);
 					} elseif (($cpf['cf_type']=='long_text') || ($cpf['cf_type']=='long_trans'))
 					{
-						//$custom_fields[$cpf['id']]=$custom_fields[$cpf['id']];
+						//$custom_fields[$cpf['id']]=$custom_fields[$cpf['id']];	Duh, no transform required
 					} elseif ($cpf['cf_type']=='float')
 					{
 						if (preg_match('#^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\n(\d\d\d\d)$#',$custom_fields[$cpf['id']])!=0) // Convert to float based date

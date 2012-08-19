@@ -571,7 +571,7 @@ function site_tree_script()
 			$serverid=$zone;
 			if ($start_links)
 			{
-				$serverid=$zone.':'/*.$_zone['zone_default_page']*/;
+				$serverid=$zone.':';
 			}
 			$pages=find_all_pages_wrap($zone,false,true,FIND_ALL_PAGES__NEWEST);
 			if ($permissions_needed)

@@ -384,10 +384,6 @@ function payment_form()
 
 		$fields=is_null($order_id)?new ocp_tempcode():get_transaction_form_fields(NULL,$order_id,$item_name,float_to_raw_string($price),NULL,'');
 
-		/*$via=get_option('payment_gateway');
-		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
-		$object=object_factory('Hook_'.$via);
-		$ipn_url=$object->get_ipn_url();*/
 		$finish_url=build_url(array('page'=>'purchase','type'=>'finish'),get_module_zone('purchase'));
 
 		$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('_GUID'=>'a70d6995baabb7e41e1af68409361f3c','FIELDS'=>$fields));

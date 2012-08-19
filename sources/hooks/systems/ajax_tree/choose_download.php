@@ -40,7 +40,7 @@ class Hook_choose_download
 				$id_float=floatval(substr($id,8));
 				do
 				{
-					$str='Version './*preg_replace('#\.0$#','',*/float_to_raw_string($id_float,1)/*)*/;
+					$str='Version '.float_to_raw_string($id_float,1);
 					$_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=c.category','c.id',array('parent_id'=>3,'text_original'=>$str));
 					if (is_null($_id)) $id_float-=0.1;
 				}
@@ -102,7 +102,6 @@ class Hook_choose_download
 						{
 							$row=$rows[$counter];
 
-					//		$view_url=build_url(array('page'=>'galleries','type'=>'image','wide'=>1,'id'=>$row['id']),get_module_zone('galleries'));
 							$view_url=$row['url'];
 							if (url_is_local($view_url)) $view_url=get_custom_base_url().'/'.$view_url;
 							$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);

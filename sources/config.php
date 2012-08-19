@@ -321,7 +321,7 @@ function get_option($name,$missing_ok=false)
 	if (!isset($option['c_set'])) $option['c_set']=($option['config_value']===NULL)?0:1; // for compatibility during upgrades
 	if (($option['c_set']==1) && ($type!='transline') && ($type!='transtext'))
 	{
-		//@print_r($OPTIONS);	exit($name.'='.gettype($option['config_value_translated']));
+		//@print_r($OPTIONS);	exit($name.'='.gettype($option['config_value_translated']));	Useful for debugging
 		$option['config_value_translated']=$option['config_value']; // Allows slightly better code path next time
 		if ($option['config_value_translated']===NULL) $option['config_value_translated']='<null>';
 		$OPTIONS[$name]=$option;

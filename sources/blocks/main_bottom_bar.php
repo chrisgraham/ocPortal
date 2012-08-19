@@ -62,7 +62,6 @@ class Block_main_bottom_bar
 		$groups_seen=array();
 		if (!is_null($members))
 		{
-			//$members=collapse_2d_complexity('the_user','cache_username',$members);
 			$guests=0;
 			foreach ($members as $bits)
 			{

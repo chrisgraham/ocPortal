@@ -436,7 +436,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('member_category_access','mcaname',array('module_the_name','category_name'));
 			$GLOBALS['SITE_DB']->create_index('member_category_access','mcamember_id',array('member_id'));
 
-			/*$GLOBALS['SITE_DB']->create_table('confirmed_mobiles',array(
+			/*$GLOBALS['SITE_DB']->create_table('confirmed_mobiles',array(		Not currently implemented
 				'm_phone_number'=>'*SHORT_TEXT',
 				'm_member_id'=>'USER',
 				'm_time'=>'TIME',

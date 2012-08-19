@@ -39,7 +39,7 @@ if ((strpos(ini_get('disallowed_functions'),'shell_exec')===false) && (strpos(ge
 	$msg=shell_exec($cmd);
 	if (($msg!='') || (filesize($target_file)==0))
 	{
-		/*echo 'Error';
+		/*echo 'Error';	For debugging
 		if ($msg!='') echo ' - '.$msg; */
 	} else
 	{

@@ -79,7 +79,7 @@ class Database_Static_mysqli extends Database_super_mysql
 
 			return array($CACHE_DB[$x],$db_name);
 		}
-		$db=/*$persistent?@mysqli_pconnect($db_host,$db_user,$db_password):*/@mysqli_connect($db_host,$db_user,$db_password);
+		$db=@mysqli_connect(($persistent?'p:':'').$db_host,$db_user,$db_password);
 
 		if ($db===false)
 		{
@@ -110,9 +110,6 @@ class Database_Static_mysqli extends Database_super_mysql
 			}
 		}
 		$LAST_SELECT_DB=array($db,$db_name);
-
-	/*	$mysql_version=mysqli_get_server_info($db);
-		if (($mysql_version[0]=='3') && (!file_exists(get_file_base().'/old_mysql'))) exit('The mySQL version used is too old (Version '.$mysql_version.' used, whilst at least Version 4.0 is required)');*/
 
 		$CACHE_DB[$x]=$db;
 

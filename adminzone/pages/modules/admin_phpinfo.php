@@ -83,7 +83,7 @@ class Module_admin_phpinfo
 			if ($end!==false)
 			{
 				$style=substr($out,$offset-strlen($matches[0]),$end-$offset+strlen('</style>')+strlen($matches[0]));
-				//$GLOBALS['EXTRA_HEAD']=make_string_tempcode($style);
+				//$GLOBALS['EXTRA_HEAD']=make_string_tempcode($style);		Actually this just makes an unnecessary mess
 
 				$out=substr($out,0,$offset).substr($out,$end);
 			}

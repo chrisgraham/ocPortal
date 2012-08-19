@@ -426,7 +426,7 @@ function add_portal_wrap($member_id,$name,$text,$end_location_realm,$end_locatio
 	if ((!has_privilege($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$realm))==1))
 		ocw_refresh_with_message(do_lang_tempcode('W_NO_EDIT_ACCESS_PRIVATE_REALM'),'warn');
 
-/*	if ((!has_privilege($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$end_location_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$end_location_realm))==1))
+/*	if ((!has_privilege($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$end_location_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$end_location_realm))==1))	Can make a portal to a realm you don't control
 		ocw_refresh_with_message(do_lang_tempcode('W_NO_EDIT_ACCESS_PRIVATE_REALM'),'warn');*/
 
 	// Charge them

@@ -29,7 +29,7 @@ function init__caches()
 	global $MEM_CACHE,$SITE_INFO;
 	$MEM_CACHE=NULL;
 	$use_memcache=((array_key_exists('use_mem_cache',$SITE_INFO)) && ($SITE_INFO['use_mem_cache']=='1'));// Default to off because badly configured caches can result in lots of very slow misses and lots of lost sessions || ((!array_key_exists('use_mem_cache',$SITE_INFO)) && ((function_exists('xcache_get')) || (function_exists('wincache_ucache_get')) || (function_exists('apc_fetch')) || (function_exists('eaccelerator_get')) || (function_exists('mmcache_get'))));
-	if ((($use_memcache)/* || ($GLOBALS['DEV_MODE'])*/) && ($GLOBALS['IN_MINIKERNEL_VERSION']!=1)) // There's some randomness so people in dev mode SOMETIMES use memcache. This'll stop it being allowed to rot.
+	if (($use_memcache) && ($GLOBALS['IN_MINIKERNEL_VERSION']!=1))
 	{
 		if (class_exists('Memcache'))
 		{

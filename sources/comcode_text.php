@@ -164,14 +164,6 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 		if ((has_privilege($source_member,'allow_html')) && (($is_all_semihtml) || (strpos($comcode,'[html')!==false) || (strpos($comcode,'[semihtml')!==false)))
 		{
 			$comcode_dangerous_html=true;
-			/*foreach (array_keys($POTENTIALLY_EMPTY_TAGS) as $tag) // Find whether we really need to enable the computational-expensive filtering. Code disabled, not sure why this would have ever worked!
-			{
-				if (($tag!='html') && ($tag!='semihtml') && (strpos($comcode,'['.$tag)!==false))
-				{
-					$comcode_dangerous_html=false;
-					break;
-				}
-			}*/
 		}
 	}
 	if (is_null($pass_id)) $pass_id=strval(mt_rand(0,32000)); // This is a unique ID that refers to this specific piece of comcode
@@ -291,7 +283,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							if ((isset($VALID_COMCODE_TAGS[$potential_tag])) && (strtolower(substr($ahead,0,2))!='i ')) // The "i" bit is just there to block a common annoyance: [i] doesn't take parameters and we don't want "[i think]" (for example) being parsed.
 							{
 								if (($comcode[$pos]!='/') || (count($tag_stack)==0))
-									$mindless_mode=($semiparse_mode) && /*(!isset($CODE_TAGS[$potential_tag])) && */((!isset($REVERSABLE_TAGS[$potential_tag])) || ((is_string($REVERSABLE_TAGS[$potential_tag])) && (preg_match($REVERSABLE_TAGS[$potential_tag],substr($comcode,$pos,100))!=0))) && (!isset($PUREHTML_TAGS[$potential_tag]));
+									$mindless_mode=($semiparse_mode) && ((!isset($REVERSABLE_TAGS[$potential_tag])) || ((is_string($REVERSABLE_TAGS[$potential_tag])) && (preg_match($REVERSABLE_TAGS[$potential_tag],substr($comcode,$pos,100))!=0))) && (!isset($PUREHTML_TAGS[$potential_tag]));
 								else $mindless_mode=$tag_stack[count($tag_stack)-1][7];
 
 								$close=false;
@@ -299,7 +291,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 								$tag_output->attach($continuation);
 								$continuation='';
-								if ((/*(($potential_tag=='html') || ($potential_tag=='semihtml')) && */($just_new_line)) || (isset($BLOCK_TAGS[$potential_tag])))
+								if ((($just_new_line)) || (isset($BLOCK_TAGS[$potential_tag])))
 								{
 									list($close_list,$list_indent)=_close_open_lists($list_indent,$list_type);
 									if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($close_list);
@@ -357,8 +349,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						}
 						if (!$seq_ok)
 						{
-							// $next='&lt;';  //OLD STYLE
-							if ($close!==false) $pos=$close+1; // NEW STYLE
+							if ($close!==false) $pos=$close+1;
 							continue;
 						}
 					}
@@ -1595,7 +1586,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 					$status=CCP_IN_TAG_BETWEEN_ATTRIBUTES;
 					$pos--;
 				}
-				elseif ((($next=='"')/* && (!$in_semihtml)*/) || (($in_semihtml) && (substr($comcode,$pos-1,6)=='&quot;')))
+				elseif (($next=='"') || (($in_semihtml) && (substr($comcode,$pos-1,6)=='&quot;')))
 				{
 					if ($next!='"')
 					{
@@ -1636,7 +1627,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 			case CCP_IN_TAG_ATTRIBUTE_VALUE:
 				if ($mindless_mode) $tag_raw.=($next);
 
-				if ((($next=='"')/* && (!$in_semihtml)*/) || (($in_semihtml) && (substr($comcode,$pos-1,6)=='&quot;')))
+				if (($next=='"') || (($in_semihtml) && (substr($comcode,$pos-1,6)=='&quot;')))
 				{
 					if ($next!='"')
 					{
@@ -1692,11 +1683,6 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 			while (count($tag_stack)>0)
 			{
 				$_last=array_pop($tag_stack);
-				/*if ($_last[0]=='title') Not sure about this
-				{
-					$_structure_sweep=false;
-					break;
-				}*/
 				$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,NULL,NULL,$in_semihtml,$is_all_semihtml);
 				$in_code_tag=false;
 				$white_space_area=$_last[3];
@@ -1711,9 +1697,6 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 			}
 		}
 	}
-
-//	$tag_output->left_attach('<div class="xhtml_validator_off">');
-//	$tag_output->attach('</div>');
 
 	return $tag_output;
 }

@@ -78,9 +78,7 @@ if (!function_exists('file_get_contents'))
 	}
 }
 
-/*if (file_exists($FILE_BASE.'/use_comp_name'))
-	require_once($FILE_BASE.'/'.(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']).'.php');
-else */require_once($FILE_BASE.'/_config.php');
+require_once($FILE_BASE.'/_config.php');
 
 if ((array_key_exists('given_password',$_POST)))
 {

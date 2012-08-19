@@ -121,12 +121,6 @@ class Hook_fields_reference
 	 */
 	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
 	{
-		/*$_list=new ocp_tempcode();
-		$list=nice_get_catalogue_entries_tree($field['c_name'],intval($actual_value),NULL,false);
-		if (($field['cf_required']==0) || ($actual_value==='') || (is_null($actual_value)) || ($list->is_empty()))
-			$_list->attach(form_input_list_entry('',(($actual_value==='') || (is_null($actual_value))),do_lang_tempcode('NA_EM')));
-		$_list->attach($list);
-		return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,false,$field['cf_required']==1);*/
 		$options=array();
 		if (($field['cf_type']!='reference') && (substr($field['cf_type'],0,3)=='ck_'))
 		{

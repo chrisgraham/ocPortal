@@ -492,166 +492,163 @@ class rss
 				break;
 
 			case 'ATOM':
-	//			if (array_peek($this->namespace_stack)=='ATOM')
+				if (array_key_exists('TYPE',$attributes)) $type=str_replace('text/','',$attributes['TYPE']); else $type='plain';
+				if (array_key_exists('MODE',$attributes)) $mode=$attributes['MODE']; else $mode='xml';
+				if ($mode=='BASE64') $data=base64_decode($data);
+				if (function_exists('xml_set_start_namespace_decl_handler'))
 				{
-					if (array_key_exists('TYPE',$attributes)) $type=str_replace('text/','',$attributes['TYPE']); else $type='plain';
-					if (array_key_exists('MODE',$attributes)) $mode=$attributes['MODE']; else $mode='xml';
-					if ($mode=='BASE64') $data=base64_decode($data);
-					if (function_exists('xml_set_start_namespace_decl_handler'))
-					{
-						$prefix='HTTP://PURL.ORG/ATOM/NS#:';
-					} else
-					{
-						$prefix='';
-					}
-					if (!is_null($prelast_tag)) $prelast_tag=str_replace('HTTP://WWW.W3.ORG/2005/ATOM:',$prefix,$prelast_tag);
-					$last_tag=str_replace('HTTP://WWW.W3.ORG/2005/ATOM:',$prefix,$last_tag);
-					switch ($prelast_tag)
-					{
-						case $prefix.'AUTHOR':
-							$preprelast_tag=array_peek($this->tag_stack,3);
-							switch ($preprelast_tag)
-							{
-								case $prefix.'FEED':
-									switch ($last_tag)
+					$prefix='HTTP://PURL.ORG/ATOM/NS#:';
+				} else
+				{
+					$prefix='';
+				}
+				if (!is_null($prelast_tag)) $prelast_tag=str_replace('HTTP://WWW.W3.ORG/2005/ATOM:',$prefix,$prelast_tag);
+				$last_tag=str_replace('HTTP://WWW.W3.ORG/2005/ATOM:',$prefix,$last_tag);
+				switch ($prelast_tag)
+				{
+					case $prefix.'AUTHOR':
+						$preprelast_tag=array_peek($this->tag_stack,3);
+						switch ($preprelast_tag)
+						{
+							case $prefix.'FEED':
+								switch ($last_tag)
+								{
+									case $prefix.'NAME':
+										$this->gleamed_feed['author']=$data;
+										break;
+									case $prefix.'URL':
+										$this->gleamed_feed['author_url']=$data;
+										break;
+									case $prefix.'EMAIL':
+										$this->gleamed_feed['author_email']=$data;
+										break;
+								}
+								break;
+							case $prefix.'ENTRY':
+								$current_item=&$this->gleamed_items[count($this->gleamed_items)-1];
+								switch ($last_tag)
+								{
+									case $prefix.'NAME':
+										$current_item['author']=$data;
+										break;
+									case $prefix.'URL':
+										$current_item['author_url']=$data;
+										break;
+									case $prefix.'EMAIL':
+										$current_item['author_email']=$data;
+										break;
+								}
+								break;
+						}
+					case $prefix.'FEED':
+						switch ($last_tag)
+						{
+							case $prefix.'TITLE':
+								$this->gleamed_feed['title']=$data;
+								break;
+							case $prefix.'LINK':
+								$rel=array_key_exists('REL',$attributes)?$attributes['REL']:'alternate';
+								if ($rel=='alternate')
+								{
+									$this->gleamed_feed['url']=array_key_exists('HREF',$attributes)?$attributes['HREF']:$data;
+								}
+								break;
+							case $prefix.'UPDATED':
+								$a=cleanup_date($data);
+								$current_item['edit_date']=$a[0];
+								if (array_key_exists(1,$a)) $current_item['clean_edit_date']=$a[1];
+								break;
+							case $prefix.'MODIFIED':
+								$a=cleanup_date($data);
+								$current_item['edit_date']=$a[0];
+								if (array_key_exists(1,$a)) $current_item['clean_edit_date']=$a[1];
+								break;
+							case $prefix.'RIGHTS':
+								$this->gleamed_feed['copyright']=$data;
+								break;
+							case $prefix.'COPYRIGHT':
+								$this->gleamed_feed['copyright']=$data;
+								break;
+							case $prefix.'SUBTITLE':
+								$this->gleamed_feed['description']=$data;
+								break;
+							case $prefix.'TAGLINE':
+								$this->gleamed_feed['description']=$data;
+								break;
+						}
+						break;
+					case $prefix.'ENTRY':
+						$current_item=&$this->gleamed_items[count($this->gleamed_items)-1];
+						switch ($last_tag)
+						{
+							case $prefix.'TITLE':
+								$current_item['title']=$data;
+								break;
+							case $prefix.'LINK':
+								if ((!array_key_exists('REL',$attributes)) || ($attributes['REL']=='alternate'))
+								{
+									$current_item['full_url']=array_key_exists('HREF',$attributes)?$attributes['HREF']:$data;
+								}
+								break;
+							case $prefix.'MODIFIED':
+							case $prefix.'UPDATED':
+								$a=cleanup_date($data);
+								$current_item['edit_date']=$a[0];
+								if (array_key_exists(1,$a)) $current_item['clean_edit_date']=$a[1];
+								break;
+							case $prefix.'PUBLISHED':
+							case $prefix.'ISSUED':
+								$a=cleanup_date($data);
+								$current_item['add_date']=$a[0];
+								if (array_key_exists(1,$a)) $current_item['clean_add_date']=$a[1];
+								break;
+							case $prefix.'ID':
+								$current_item['guid']=$data;
+								break;
+							case $prefix.'SUMMARY':
+								if ($type!='html') $data=str_replace("\n",'<br />',$data);
+								$current_item['news']=$data;
+								if (preg_match('#^http://ocportal.com/#',$this->feed_url)==0)
+								{
+									require_code('xhtml');
+									$current_item['news']=xhtmlise_html($current_item['news']);
+								}
+								break;
+							case $prefix.'CONTENT':
+								if ($type!='html') $data=str_replace("\n",'<br />',$data);
+								$current_item['news_article']=$data;
+								if (preg_match('#^http://ocportal.com/#',$this->feed_url)==0)
+								{
+									require_code('xhtml');
+									$current_item['news_article']=xhtmlise_html($current_item['news_article']);
+								}
+								break;
+							case $prefix.'CATEGORY':
+								if (($data=='') && (array_key_exists('TERM',$attributes))) $data=$attributes['TERM'];
+								if ($data!='')
+								{
+									if (array_key_exists('category',$current_item))
 									{
-										case $prefix.'NAME':
-											$this->gleamed_feed['author']=$data;
-											break;
-										case $prefix.'URL':
-											$this->gleamed_feed['author_url']=$data;
-											break;
-										case $prefix.'EMAIL':
-											$this->gleamed_feed['author_email']=$data;
-											break;
-									}
-									break;
-								case $prefix.'ENTRY':
-									$current_item=&$this->gleamed_items[count($this->gleamed_items)-1];
-									switch ($last_tag)
+										if (!array_key_exists('extra_categories',$current_item)) $current_item['extra_categories']=array();
+										$current_item['extra_categories'][]=$data;
+									} else
 									{
-										case $prefix.'NAME':
-											$current_item['author']=$data;
-											break;
-										case $prefix.'URL':
-											$current_item['author_url']=$data;
-											break;
-										case $prefix.'EMAIL':
-											$current_item['author_email']=$data;
-											break;
+										$current_item['category']=$data;
 									}
-									break;
-							}
-						case $prefix.'FEED':
-							switch ($last_tag)
-							{
-								case $prefix.'TITLE':
-									$this->gleamed_feed['title']=$data;
-									break;
-								case $prefix.'LINK':
-									$rel=array_key_exists('REL',$attributes)?$attributes['REL']:'alternate';
-									if ($rel=='alternate')
-									{
-										$this->gleamed_feed['url']=array_key_exists('HREF',$attributes)?$attributes['HREF']:$data;
-									}
-									break;
-								case $prefix.'UPDATED':
-									$a=cleanup_date($data);
-									$current_item['edit_date']=$a[0];
-									if (array_key_exists(1,$a)) $current_item['clean_edit_date']=$a[1];
-									break;
-								case $prefix.'MODIFIED':
-									$a=cleanup_date($data);
-									$current_item['edit_date']=$a[0];
-									if (array_key_exists(1,$a)) $current_item['clean_edit_date']=$a[1];
-									break;
-								case $prefix.'RIGHTS':
-									$this->gleamed_feed['copyright']=$data;
-									break;
-								case $prefix.'COPYRIGHT':
-									$this->gleamed_feed['copyright']=$data;
-									break;
-								case $prefix.'SUBTITLE':
-									$this->gleamed_feed['description']=$data;
-									break;
-								case $prefix.'TAGLINE':
-									$this->gleamed_feed['description']=$data;
-									break;
-							}
-							break;
-						case $prefix.'ENTRY':
-							$current_item=&$this->gleamed_items[count($this->gleamed_items)-1];
-							switch ($last_tag)
-							{
-								case $prefix.'TITLE':
-									$current_item['title']=$data;
-									break;
-								case $prefix.'LINK':
-									if ((!array_key_exists('REL',$attributes)) || ($attributes['REL']=='alternate'))
-									{
-										$current_item['full_url']=array_key_exists('HREF',$attributes)?$attributes['HREF']:$data;
-									}
-									break;
-								case $prefix.'MODIFIED':
-								case $prefix.'UPDATED':
-									$a=cleanup_date($data);
-									$current_item['edit_date']=$a[0];
-									if (array_key_exists(1,$a)) $current_item['clean_edit_date']=$a[1];
-									break;
-								case $prefix.'PUBLISHED':
-								case $prefix.'ISSUED':
-									$a=cleanup_date($data);
-									$current_item['add_date']=$a[0];
-									if (array_key_exists(1,$a)) $current_item['clean_add_date']=$a[1];
-									break;
-								case $prefix.'ID':
-									$current_item['guid']=$data;
-									break;
-								case $prefix.'SUMMARY':
-									if ($type!='html') $data=str_replace("\n",'<br />',$data);
-									$current_item['news']=$data;
-									if (preg_match('#^http://ocportal.com/#',$this->feed_url)==0)
-									{
-										require_code('xhtml');
-										$current_item['news']=xhtmlise_html($current_item['news']);
-									}
-									break;
-								case $prefix.'CONTENT':
-									if ($type!='html') $data=str_replace("\n",'<br />',$data);
-									$current_item['news_article']=$data;
-									if (preg_match('#^http://ocportal.com/#',$this->feed_url)==0)
-									{
-										require_code('xhtml');
-										$current_item['news_article']=xhtmlise_html($current_item['news_article']);
-									}
-									break;
-								case $prefix.'CATEGORY':
-									if (($data=='') && (array_key_exists('TERM',$attributes))) $data=$attributes['TERM'];
-									if ($data!='')
-									{
-										if (array_key_exists('category',$current_item))
-										{
-											if (!array_key_exists('extra_categories',$current_item)) $current_item['extra_categories']=array();
-											$current_item['extra_categories'][]=$data;
-										} else
-										{
-											$current_item['category']=$data;
-										}
-									}
-									if ((array_key_exists('TERM',$attributes)) && (strpos($attributes['TERM'],'post')===false) && (strpos($attributes['TERM'],'://')!==false))
-									{
-										$current_item['bogus']=true;
-									}
-									break;
-								case 'HTTP://SEARCH.YAHOO.COM/MRSS/:THUMBNAIL':
-									if (array_key_exists('URL',$attributes))
-									{
-										$current_item['rep_image']=$attributes['URL'];
-									}
-									break;
-							}
-							break;
-					}
+								}
+								if ((array_key_exists('TERM',$attributes)) && (strpos($attributes['TERM'],'post')===false) && (strpos($attributes['TERM'],'://')!==false))
+								{
+									$current_item['bogus']=true;
+								}
+								break;
+							case 'HTTP://SEARCH.YAHOO.COM/MRSS/:THUMBNAIL':
+								if (array_key_exists('URL',$attributes))
+								{
+									$current_item['rep_image']=$attributes['URL'];
+								}
+								break;
+						}
+						break;
 				}
 				break;
 		}

@@ -168,7 +168,6 @@ class Block_main_news
 		while (array_key_exists($i,$rows))
 		{
 			$myrow=$rows[$i];
-	//		$categories=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry_category'),array('news_entry'=>$myrow['p_id']));
 
 			if (has_category_access(get_member(),'news',strval($myrow['news_category'])))
 			{
@@ -228,7 +227,6 @@ class Block_main_news
 		while (array_key_exists($j,$rows2))
 		{
 			$myrow=$rows2[$j];
-	//		$categories=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry_category'),array('news_entry'=>$myrow['id']));
 
 			if (has_category_access(get_member(),'news',strval($myrow['news_category'])))
 			{

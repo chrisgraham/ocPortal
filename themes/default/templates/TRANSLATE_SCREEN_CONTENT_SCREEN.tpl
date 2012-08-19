@@ -2,7 +2,7 @@
 
 {!TRANSLATE_CONTENT_SCREEN,{LANG_NICE_NAME*}}
 
-{+START,IF_NON_EMPTY,{INTERTRANS}}
+{+START,IF_NON_EMPTY,{GOOGLE}}
 	<p>
 		{!POWERED_BY,<a rel="external" title="Google: {!LINK_NEW_WINDOW}" target="_blank" href="http://translate.google.com/">Google</a>}.
 	</p>
@@ -18,7 +18,7 @@
 				<th>
 					{LANG_NICE_NAME*}
 				</th>
-				{+START,IF_NON_EMPTY,{INTERTRANS}}
+				{+START,IF_NON_EMPTY,{GOOGLE}}
 					<th>
 						{!ACTIONS}
 					</th>
@@ -43,7 +43,7 @@
 <form title="" id="hack_form" action="http://translate.google.com/translate_t" method="post">
 	<div>
 		<input type="hidden" id="hack_input" name="text" value="" />
-		<input type="hidden" name="langpair" value="en|{INTERTRANS*}" />
+		<input type="hidden" name="langpair" value="en|{GOOGLE*}" />
 	</div>
 </form>
 

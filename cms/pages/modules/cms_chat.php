@@ -200,7 +200,7 @@ class Module_cms_chat
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_messages',array('*'),array('room_id'=>$room_id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$fields=new ocp_tempcode();
 		require_code('templates_results_table');
-		$array=array(do_lang_tempcode('MEMBER'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('MESSAGE')/*,do_lang_tempcode('CHAT_OPTIONS_COLOUR_NAME'),do_lang_tempcode('CHAT_OPTIONS_TEXT_NAME')*/);
+		$array=array(do_lang_tempcode('MEMBER'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('MESSAGE'));
 		if (has_js())
 			$array[]=do_lang_tempcode('DELETE');
 		$fields_title=results_field_title($array,$sortables,'sort',$sortable.' '.$sort_order);
@@ -215,7 +215,7 @@ class Module_cms_chat
 
 			$link_time=hyperlink($url,escape_html(get_timezoned_date($myrow['date_and_time'])));
 
-			$_row=array($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($GLOBALS['FORUM_DRIVER']->get_member_from_username($username),false,$username),escape_html($link_time),$message/*,escape_html($myrow['text_colour']),escape_html($myrow['font_name'])*/);
+			$_row=array($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($GLOBALS['FORUM_DRIVER']->get_member_from_username($username),false,$username),escape_html($link_time),$message);
 			if (has_js())
 			{
 				$deletion_tick=do_template('RESULTS_TABLE_TICK',array('ID'=>strval($myrow['id'])));
@@ -361,10 +361,6 @@ class Module_cms_chat
 		$has_mod_access=((has_privilege(get_member(),'edit_lowrange_content','cms_chat',array('chat',$room_id))) || ($row['room_owner']==get_member()) && (has_privilege(get_member(),'moderate_my_private_rooms')));
 		if (!$has_mod_access) access_denied('PRIVILEGE','edit_lowrange_content');
 
-		//$post_url=build_url(array('page'=>'_SELF','type'=>'delete','id'=>$myrow['id'],'room_id'=>get_param_integer('room_id',db_get_first_id())),'_SELF');
-
-		//$edit_form=do_template('FORM',array('_GUID'=>'da2ac49bc6af253b36e2855763ad8ae3','HIDDEN'=>'','TEXT'=>paragraph(do_lang_tempcode('DESCRIPTION_DELETE_MESSAGE')),'FIELDS'=>'','SUBMIT_NAME'=>do_lang_tempcode('DELETE_MESSAGE'),'URL'=>$post_url));
-
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_ed','id'=>$myrow['id'],'room_id'=>$room_id),'_SELF');
 
 		$message=get_translated_tempcode($myrow['the_message']);
@@ -376,15 +372,9 @@ class Module_cms_chat
 
 		$fields=form_input_text_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_MESSAGE'),'message',$message->evaluate(),true);
 		$fields->attach(form_input_line(do_lang_tempcode('CHAT_OPTIONS_COLOUR_NAME'),do_lang_tempcode('CHAT_OPTIONS_COLOUR_DESCRIPTION'),'textcolour',$text_colour,false));
-		//$fields->attach(do_template('EDIT_CSS_ENTRY',array('_GUID'=>'d65449d25908252cc7f34c19ee5e8747','COLOR'=>'#'.$myrow['text_colour'],'NAME'=>do_lan g_tempcode('TEXTCOLOUR'),'CONTEXT'=>do_l ang_tempcode('DESCRIPTION_TEXTCOLOUR'))));
 		$fields->attach(form_input_line(do_lang_tempcode('CHAT_OPTIONS_TEXT_NAME'),do_lang_tempcode('CHAT_OPTIONS_TEXT_DESCRIPTION'),'fontname',$font_name,false));
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_MESSAGE'),'delete',false));
-		//	$fields->attach(do_template('COLOUR_CHOOSER',array('_GUID'=>'817dbcdb419982774f86b8e5a0c5c1fe','NAME'=>$myrow['id'],'CONTEXT'=>do_l ang_tempcode('DESCRIPTION_TEXTCOLOUR'),'COLOR'=>$myrow['text_colour'])));
-
-		//$edit_form->attach(do_template('FORM',array('_GUID'=>'43651e089d7ec45e1468ae57e3bf315e','HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('EDIT_MESSAGE'),'URL'=>$post_url)));
-
-		//return do_template('CHAT_PANEL',array('_GUID'=>'6278e2571f20ad1b9becd12e007caac2','TITLE'=>$title,'INTRODUCTION'=>'','CONTENT'=>$edit_form));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($room_id),do_lang_tempcode('CHAT_MOD_PANEL'))));
 

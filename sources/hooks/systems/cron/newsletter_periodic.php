@@ -116,7 +116,6 @@ class Hook_cron_newsletter_periodic
 			require_code('hooks/modules/admin_newsletter/'.filter_naughty_harsh($hook));
 			$object=object_factory('Hook_whats_news_'.filter_naughty_harsh($hook),true);
 			if (is_null($object)) continue;
-			//$filter=array_key_exists('whatsnew_'.$hook.'_filter',$_POST)?$_POST['whatsnew_'.$hook.'_filter']:NULL;
 			$found_one_match=false;
 			$last_find_id=mixed();
 			$last_cat_id=mixed();
@@ -128,7 +127,7 @@ class Hook_cron_newsletter_periodic
 				{
 					$found_one_match=true;
 
-					if ((!is_null($last_find_id)) && (($find_id!=$last_find_id+1)/* || ($last_cat_id>intval($matches[1]))*/))
+					if ((!is_null($last_find_id)) && (($find_id!=$last_find_id+1)))
 					{
 						$last_cat_id=intval($matches[1]);
 
@@ -150,11 +149,8 @@ class Hook_cron_newsletter_periodic
 					$last_find_id=$find_id;
 				}
 			}
-			//if (is_null($filter))
 			if (!$found_one_match)
 			{
-				//$test=post_param_integer('whatsnew_'.$hook.'_include',0);
-				//if ($test==0) continue;
 				$found=false;
 				foreach ($contentarr as $find_id=>$line)
 				{

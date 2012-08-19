@@ -210,7 +210,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 			do_lang_tempcode('REQUIRED'),
 		);
 		$fh[]=do_lang_tempcode('SHOW_ON_JOIN_FORM');
-		//$fh[]=do_lang_tempcode('SHOW_IN_POSTS');
+		//$fh[]=do_lang_tempcode('SHOW_IN_POSTS');	Save space
 		//$fh[]=do_lang_tempcode('SHOW_IN_POST_PREVIEWS');
 		$fh[]=do_lang_tempcode('ORDER');
 		$fh[]=do_lang_tempcode('ACTIONS');

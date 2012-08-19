@@ -634,9 +634,6 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	$semihtml=str_replace('</CDATA__nl>',chr(10),$semihtml);
 	$semihtml=str_replace('</CDATA__lf>',chr(13),$semihtml);
 	$semihtml=str_replace('</CDATA__amp>','&',$semihtml);
-	/*// And use same method to protect our code tags
-	foreach (array_keys($GLOBALS['CODE_TAGS']) as $code_tag)
-		$semihtml=preg_replace_callback('#(\['.$code_tag.'[^\]]*\])(.*)(\[/'.$code_tag.'\])#siU','_codetag_unprotect',$semihtml);*/
 
 	// Tempcode escaping
 	/*$semihtml=str_replace('{+','\{+',$semihtml);	No - people should be able to type this if they want

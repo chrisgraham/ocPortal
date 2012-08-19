@@ -110,7 +110,6 @@ function adminzone_extend_breadcrumbs(&$stub)
 
 						$stub->attach(hyperlink($url,do_lang_tempcode(strtoupper($i[0])),false,false,do_lang_tempcode('GO_BACKWARDS_TO',@html_entity_decode(strip_tags(do_lang(strtoupper($i[0]))),ENT_QUOTES,get_charset()))));
 
-						//if ((!array_key_exists('type',$i[2][1])) || ($type==$i[2][1]['type'])) break;
 						return;
 					}
 				}

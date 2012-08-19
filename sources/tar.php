@@ -270,7 +270,6 @@ function tar_add_folder(&$resource,$logfile,$path,$max_size=NULL,$subpath='',$av
 				{
 					if ((($full!=$resource['full']) && ((is_null($max_size)) || (filesize($full)<$max_size*1024*1024))) && ((is_null($avoid_backing_up)) || (!array_key_exists($_subpath,$avoid_backing_up))))
 					{
-						//echo $_subpath.'<br />';
 						tar_add_file($resource,$_subpath,$full,fileperms($full),filemtime($full),true);
 						if (!is_null($logfile) && fwrite($logfile,'Backed up file '.$full.' ('.clean_file_size(filesize($full)).')'."\n")==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 					}

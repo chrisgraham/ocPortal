@@ -271,9 +271,6 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 	{
 		attach_message($text,'inform');
 		$text=mixed();
-	} else
-	{
-		//$GLOBALS['HELPER_PANEL_TEXT']=$text;
 	}
 
 	if (is_null($title)) return $sections;

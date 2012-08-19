@@ -120,7 +120,6 @@ class Mx_chat extends Module_chat
 
 		$prefs=@$_COOKIE['ocp_chat_prefs'];
 		$prefs=@explode(';',$prefs);
-		//$mode=get_param('mode','');
 		$room_id=get_param('id');
 
 		$posting_name=do_lang_tempcode('SEND_MESSAGE');

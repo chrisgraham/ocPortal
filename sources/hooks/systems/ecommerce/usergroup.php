@@ -68,7 +68,6 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 					$GLOBALS['FORUM_DB']->remove_member_from_group($member_id,$new_group);
 				} else
 				{
-	//				if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_primary_group')==$new_group)
 					if ($myrow['s_uses_primary']==1)
 					{
 						$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_update('f_members',array('m_primary_group'=>get_first_default_group()),array('id'=>$member_id),'',1);
@@ -78,7 +77,7 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 					}
 				}
 
-				dispatch_notification('paid_subscription_ended',NULL/*strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_ENDED',NULL,NULL,NULL,get_lang($member_id)),get_translated_text($myrow['s_mail_end'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
+				dispatch_notification('paid_subscription_ended',NULL/*Not currently per-sub settable strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_ENDED',NULL,NULL,NULL,get_lang($member_id)),get_translated_text($myrow['s_mail_end'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 			}
 		}
 	} else
@@ -101,7 +100,7 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 					ocf_add_member_to_group($member_id,$new_group);
 				}
 			}
-			dispatch_notification('paid_subscription_started',NULL/*strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_STARTED'),get_translated_text($myrow['s_mail_start'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
+			dispatch_notification('paid_subscription_started',NULL/*Not currently per-sub settable strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_STARTED'),get_translated_text($myrow['s_mail_start'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 		}
 	}
 }

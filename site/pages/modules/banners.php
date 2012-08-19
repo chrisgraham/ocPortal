@@ -304,7 +304,7 @@ class Module_banners
 				$row['name'],
 				($row['b_type']=='')?do_lang('GENERAL'):$row['b_type'],
 				$deployment_agreement,
-				//integer_format($row['campaign_remaining']),
+				//integer_format($row['campaign_remaining']),	Too much detail
 				strval($row['importance_modulus']),
 				is_null($row['expiry_date'])?protect_from_escaping(do_lang_tempcode('NA_EM')):make_string_tempcode(get_timezoned_date($row['expiry_date'])),
 				get_timezoned_date($row['add_date']),

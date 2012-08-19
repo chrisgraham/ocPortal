@@ -732,11 +732,8 @@ function filter_css($css,$context)
 						// We let all tag-name selectors through if the tag exists in the document, unless they contain a class/ID specifier -- in which case we toe to the presence of that class/ID
 						if ((strpos($selector,'.')===false) && (strpos($selector,'#')===false) && (preg_match('#(^|\s)(\w+)([\[\#\.:\s]|$)#',$selector,$matches)!=0))
 						{
-							//if (($matches[2]=='html') || ($matches[2]=='body') || ($matches[2]=='div') || ($matches[2]=='a') || (strpos($context,'<'.$matches[2])!==false))
-							{
-								$applies=true;
-								break;
-							}
+							$applies=true;
+							break;
 						}
 
 						// ID selectors

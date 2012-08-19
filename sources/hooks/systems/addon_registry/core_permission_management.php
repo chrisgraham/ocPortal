@@ -198,7 +198,6 @@ class Hook_addon_registry_core_permission_management
 
 			foreach (placeholder_array() as $gid=>$g_name)
 			{
-				//if (in_array($gid,$admin_groups)) continue;
 				$cells->attach(do_lorem_template('PERMISSION_CELL', array(
 					'CHECKED'=>true,
 					'HUMAN'=>lorem_phrase(),
@@ -340,8 +339,6 @@ class Hook_addon_registry_core_permission_management
 		$k=0;
 		foreach (placeholder_array() as $permission)
 		{
-			//$permission_text=do_lang('PRIVILEGE_'.$permission);
-
 			$cells=new ocp_tempcode();
 
 			foreach (placeholder_array() as $id=>$group)

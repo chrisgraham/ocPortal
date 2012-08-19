@@ -45,11 +45,7 @@ class upon_query_insults
 			$_insult=explode('[/b]',$insult);
 			$insult=(isset($_insult[0]) && strlen($_insult[0])>0)?$_insult[0]:'';
 
-			//old code that uses quotes
-			//$insult=explode('"',$first_post);
-			//$insult=(isset($insult[1]) && strlen($insult[1])>0)?$insult[1]:'';
-
-			if($insult!='')
+			if ($insult!='')
 			{
 				$get_reply='';
 				if (is_file(get_file_base().'/text_custom/'.user_lang().'/insults.txt'))
@@ -66,9 +62,7 @@ class upon_query_insults
 					$get_reply=isset($insults_array[$insult])?$insults_array[$insult]:'';
 				}
 
-
-
-				if($get_reply!='')
+				if ($get_reply!='')
 				{
 					//get PT
 					$pt=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE id= '.strval($topic_id).' ',1, NULL,true);
@@ -94,7 +88,6 @@ class upon_query_insults
 							{
 								system_gift_transfer(do_lang('SUCCESSFULLY_SUGGESTED_COMEBACK').' ('.$insult.')',intval($insult_points),$poster_id);
 
-
 								require_code('ocf_posts_action');
 								$congratulations_post=do_lang('CONGRATULATIONS_WON');//Congratulations that is the correct response
 
@@ -107,10 +100,4 @@ class upon_query_insults
 		}
 	}
 }
-
-
-
-
-
-
 

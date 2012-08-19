@@ -25,6 +25,6 @@ class dev_environment_test_set extends ocp_test_case
 
 	function testocpPHP()
 	{
-		//$this->assertTrue(function_exists('ocp_mark_as_escaped'),'Not running ocProducts PHP so XSS and type strictness errors won\'t be detected');
+		$this->assertTrue(function_exists('ocp_mark_as_escaped'),'Not running ocProducts PHP so XSS and type strictness errors won\'t be detected');
 	}
 }

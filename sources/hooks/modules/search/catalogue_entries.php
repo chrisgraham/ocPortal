@@ -246,37 +246,29 @@ class Hook_search_catalogue_entries
 							$trans_fields[]='f'.strval($i).'.cv_value';
 							$table.=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_long_trans f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 							$search_field='t'.strval(count($trans_fields)-1).'.text_original';
-							//$extra_select.=',t'.strval(count($trans_fields)-1).'.text_original AS f'.strval($i).'_actual_value';
 							break;
 						case 'short_trans':
 							$trans_fields[]='f'.strval($i).'.cv_value';
 							$table.=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short_trans f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 							$search_field='t'.strval(count($trans_fields)-1).'.text_original';
-							//$extra_select.=',t'.strval(count($trans_fields)-1).'.text_original AS f'.strval($i).'_actual_value';
 							break;
 						case 'long':
 							$nontrans_fields[]='f'.strval($i).'.cv_value';
 							$table.=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_long f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 							$search_field='f'.strval($i).'.cv_value';
-							//$extra_select.=',f'.strval($i).'.cv_value AS f'.strval($i).'_actual_value';
 							break;
 						case 'short':
 							$nontrans_fields[]='f'.strval($i).'.cv_value';
 							$table.=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 							$search_field='f'.strval($i).'.cv_value';
-							//$extra_select.=',f'.strval($i).'.cv_value AS f'.strval($i).'_actual_value';
 							break;
 						case 'float':
-							//$nontrans_fields[]='f'.strval($i).'.cv_value';
 							$table.=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_float f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 							$search_field='f'.strval($i).'.cv_value';
-							//$extra_select.=',f'.strval($i).'.cv_value AS f'.strval($i).'_actual_value';
 							break;
 						case 'integer':
-							//$nontrans_fields[]='f'.strval($i).'.cv_value';
 							$table.=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_integer f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
 							$search_field='f'.strval($i).'.cv_value';
-							//$extra_select.=',f'.strval($i).'.cv_value AS f'.strval($i).'_actual_value';
 							break;
 					}
 
@@ -395,7 +387,6 @@ class Hook_search_catalogue_entries
 					}
 				}
 
-				//$out[$i]['template']=do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$display,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');//put_in_table(hyperlink($url,do_lang('_HERE')),'internal','middle','WIDE',1,do_lang('CATALOGUE_ENTRY').' ('.do_lang('IN',get_translated_text($catalogue['c_title'])).')');
 				if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
 			}
 		} else

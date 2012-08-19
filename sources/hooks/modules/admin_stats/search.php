@@ -89,7 +89,6 @@ class Hook_admin_stats_search
 		$fields=new ocp_tempcode();
 		$degrees=360/$total;
 		$done_total=0;
-		//$done=0;
 		$data=array();
 		$i=0;
 
@@ -102,12 +101,8 @@ class Hook_admin_stats_search
 			if ($keyword=='') $link=do_lang_tempcode('SEARCH_STATS_ADVANCED'); else $link=protect_from_escaping(escape_html($keyword));
 			$fields->attach(results_entry(array($link,integer_format($views))));
 
-			//if ($done<20)
-			//{
-				$data[$keyword]=$keywords[$keyword]*$degrees;
-				//$done++;
-				$done_total+=$data[$keyword];
-			//}
+			$data[$keyword]=$keywords[$keyword]*$degrees;
+			$done_total+=$data[$keyword];
 			$i++;
 		}
 		if ((360-$done_total)>0)

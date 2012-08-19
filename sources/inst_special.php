@@ -31,10 +31,7 @@ function get_chmod_array()
 {
 	global $LANG;
 
-//	if ((function_exists('ocp_enterprise')) && (ocp_enterprise()))
-//	{
-		$extra_files=array('collaboration/pages/html_custom','collaboration/pages/html_custom/'.$LANG,'collaboration/pages/comcode_custom','collaboration/pages/comcode_custom/'.$LANG,);
-//	} else $extra_files=array();
+	$extra_files=array('collaboration/pages/html_custom','collaboration/pages/html_custom/'.$LANG,'collaboration/pages/comcode_custom','collaboration/pages/comcode_custom/'.$LANG,);
 
 	if (function_exists('find_all_hooks'))
 	{

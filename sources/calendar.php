@@ -216,7 +216,7 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 			$b=NULL;
 		} else
 		{
-			$_b=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,'day_of_month'/*$end_monthly_spec_type*/,$end_hour,$end_minute,$do_timezone_conv==1);
+			$_b=cal_get_end_utctime_for_event($timezone,$end_year,$end_month,$end_day,'day_of_month'/*Can't have loose end $end_monthly_spec_type*/,$end_hour,$end_minute,$do_timezone_conv==1);
 			$b=cal_utctime_to_usertime(
 				$_b,
 				$timezone,

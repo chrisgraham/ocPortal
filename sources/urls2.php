@@ -325,7 +325,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 		{
 			$_bit=explode('=',$bit,2);
 
-			if ((count($_bit)==2)/* && (substr($_bit[0],0,5)!='keep_')*/)
+			if (count($_bit)==2)
 			{
 				$attributes[$_bit[0]]=$_bit[1];
 				if (strpos($attributes[$_bit[0]],':')!==false)

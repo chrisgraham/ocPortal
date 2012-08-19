@@ -120,10 +120,6 @@ class Hook_search_ocf_members
 		}
 		$fields[]=array('NAME'=>'_user_group','DISPLAY'=>do_lang_tempcode('GROUP'),'TYPE'=>'_LIST','SPECIAL'=>$groups);
 		if (has_privilege(get_member(),'see_hidden_groups'))
-//      $fields[]=array('NAME'=>'_photo_thumb_url','DISPLAY'=>do_lang('PHOTO'),'TYPE'=>'','SPECIAL'=>'','CHECKED'=>false);
-		{
-			//$fields[]=array('NAME'=>'_emails_only','DISPLAY'=>do_lang_tempcode('EMAILS_ONLY'),'TYPE'=>'_TICK','SPECIAL'=>'');	CSV export better now
-		}
 
 		return $fields;
 	}
@@ -274,18 +270,6 @@ class Hook_search_ocf_members
 		$out=array();
 		foreach ($rows as $i=>$row)
 		{
-			/*if ($user_group!='')
-			{
-				$bits=explode(',',$user_group);
-				$ok=false;
-				$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($row['id']);
-				foreach ($bits as $bit)
-				{
-					if (in_array($user_group,$groups)) $ok=true;
-				}
-				if (!$ok) continue;
-			}*/
-
 			if (!is_guest($row['id']))
 			{
 				$out[$i]['data']=$row;
@@ -347,53 +331,51 @@ class Hook_search_ocf_members
 		{
 			return array();
 		}
-		//if (has_privilege(get_member(),'view_profiles'))
-		{
-			if ((get_option('show_gallery_counts')=='1') && (addon_installed('galleries')))
-			{
-				$num_galleries=$GLOBALS['SITE_DB']->query('SELECT COUNT(*) AS cnt FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name LIKE \''.db_encode_like('member_'.strval($member_id).'_%').'\'');
-			}
-			$_lines+=array(
-								do_lang('USERNAME')=>hyperlink($GLOBALS['OCF_DRIVER']->member_profile_url($member_id,false,true),$username,false,true),
-								do_lang('JOIN_DATE')=>escape_html(get_timezoned_date($GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_join_time'),false)),
-						);
-			if ((get_option('show_gallery_counts')=='1') && (addon_installed('galleries')))
-			{
-				if ($num_galleries[0]['cnt']>1)
-				{
-					require_lang('galleries');
-					$_lines[do_lang('GALLERIES')]=escape_html(integer_format($num_galleries[0]['cnt']));
-				}
-			}
-			$day=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_dob_day');
-			$month=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_dob_month');
-			$year=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_dob_year');
-			if (($GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_reveal_age')==1) && (!is_null($day)))
-			{
-				if (@strftime('%Y',@mktime(0,0,0,1,1,1963))!='1963') $dob=strval($year).'-'.str_pad(strval($month),2,'0',STR_PAD_LEFT).'-'.str_pad(strval($day),2,'0',STR_PAD_LEFT); else $dob=get_timezoned_date(mktime(12,0,0,$month,$day,$year),false,true);
-				$_lines[do_lang('DATE_OF_BIRTH')]=escape_html($dob);
-			}
-			$fields=ocf_get_all_custom_fields_match_member(
-				$member_id,
-				((get_member()!=$member_id) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // public view
-				((get_member()==$member_id) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // owner view
-				NULL, // owner set
-				0, // encrypted
-				NULL, // required
-				$preview?NULL:1, // show in posts
-				$preview?1:NULL // show in post previews
-			);
-			foreach ($fields as $key=>$val)
-			{
-				if ($val['RAW']!='') $_lines[$key]=$val['RENDERED'];
-			}
-			if ((!$preview) && (addon_installed('ocf_contactmember')) && (has_actual_page_access(get_member(),'contactmember')))
-			{
-				$redirect=get_self_url(true);
-				$email_member_url=build_url(array('page'=>'contactmember','redirect'=>$redirect,'id'=>$member_id),get_module_zone('contactmember'));
 
-				$_lines[do_lang('ACTIONS')]=hyperlink($email_member_url,do_lang_tempcode('_EMAIL_MEMBER'));
+		if ((get_option('show_gallery_counts')=='1') && (addon_installed('galleries')))
+		{
+			$num_galleries=$GLOBALS['SITE_DB']->query('SELECT COUNT(*) AS cnt FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name LIKE \''.db_encode_like('member_'.strval($member_id).'_%').'\'');
+		}
+		$_lines+=array(
+							do_lang('USERNAME')=>hyperlink($GLOBALS['OCF_DRIVER']->member_profile_url($member_id,false,true),$username,false,true),
+							do_lang('JOIN_DATE')=>escape_html(get_timezoned_date($GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_join_time'),false)),
+					);
+		if ((get_option('show_gallery_counts')=='1') && (addon_installed('galleries')))
+		{
+			if ($num_galleries[0]['cnt']>1)
+			{
+				require_lang('galleries');
+				$_lines[do_lang('GALLERIES')]=escape_html(integer_format($num_galleries[0]['cnt']));
 			}
+		}
+		$day=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_dob_day');
+		$month=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_dob_month');
+		$year=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_dob_year');
+		if (($GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_reveal_age')==1) && (!is_null($day)))
+		{
+			if (@strftime('%Y',@mktime(0,0,0,1,1,1963))!='1963') $dob=strval($year).'-'.str_pad(strval($month),2,'0',STR_PAD_LEFT).'-'.str_pad(strval($day),2,'0',STR_PAD_LEFT); else $dob=get_timezoned_date(mktime(12,0,0,$month,$day,$year),false,true);
+			$_lines[do_lang('DATE_OF_BIRTH')]=escape_html($dob);
+		}
+		$fields=ocf_get_all_custom_fields_match_member(
+			$member_id,
+			((get_member()!=$member_id) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // public view
+			((get_member()==$member_id) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // owner view
+			NULL, // owner set
+			0, // encrypted
+			NULL, // required
+			$preview?NULL:1, // show in posts
+			$preview?1:NULL // show in post previews
+		);
+		foreach ($fields as $key=>$val)
+		{
+			if ($val['RAW']!='') $_lines[$key]=$val['RENDERED'];
+		}
+		if ((!$preview) && (addon_installed('ocf_contactmember')) && (has_actual_page_access(get_member(),'contactmember')))
+		{
+			$redirect=get_self_url(true);
+			$email_member_url=build_url(array('page'=>'contactmember','redirect'=>$redirect,'id'=>$member_id),get_module_zone('contactmember'));
+
+			$_lines[do_lang('ACTIONS')]=hyperlink($email_member_url,do_lang_tempcode('_EMAIL_MEMBER'));
 		}
 
 		return $_lines;

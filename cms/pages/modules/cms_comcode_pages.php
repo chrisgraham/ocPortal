@@ -74,7 +74,7 @@ class Module_cms_comcode_pages
 		delete_config_option('number_revisions_show');
 		delete_config_option('points_COMCODE_PAGE_ADD');
 
-		/*$zones=find_all_zones(true);
+		/*$zones=find_all_zones(true);		We don't want to get rid of on-disk data when reinstalling
 		$langs=find_all_langs(true);
 		foreach ($zones as $zone)
 		{
@@ -503,7 +503,7 @@ class Module_cms_comcode_pages
 				protect_from_escaping(do_template('COMCODE_TELETYPE',array('CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['page']))))),
 				protect_from_escaping(hyperlink(build_url(array('page'=>''),$table_row['zone']),$table_row['zone_name'])),
 				protect_from_escaping(do_template('COMCODE_TELETYPE',array('CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['wrappable_pagelink']))))),
-				//$parent_page,
+				//$parent_page,	Save space
 				//$username,
 				//$add_date,
 				//$validated,

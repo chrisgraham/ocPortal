@@ -747,7 +747,6 @@ class forum_driver_mybb extends forum_driver_base
 		foreach ($groups as $group)
 		{
 			if ($_groups!='') $_groups.=' OR ';
-			//$_groups.='group_id='.strval((integer)$group);
 			$_groups.='u.usergroup='.strval((integer)$group);
 		}
 		if ($_groups=='') return array();
@@ -1161,8 +1160,6 @@ class forum_driver_mybb extends forum_driver_base
 	function _get_members_groups($member)
 	{
 		if ($member==$this->get_guest_id()) return array(-1);
-
-		//$groups=collapse_1d_complexity('usergroup',$this->connection->query_select('users',array('usergroup','additionalgroups'),array('uid'=>$member)));
 
 		$groups=array();
 		$additional_groups=explode(',',$this->get_member_row_field($member,'additionalgroups'));

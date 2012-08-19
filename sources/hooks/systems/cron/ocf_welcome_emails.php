@@ -26,13 +26,13 @@ class Hook_cron_ocf_welcome_emails
 	 */
 	function run()
 	{
-//if (!running_script('execute_temp')) return;
+		//if (!running_script('execute_temp')) return;
 		$time_now=time();
-//$time_now=1335726076;
+		//$time_now=1335726076;
 		$last_cron_time=intval(get_value('last_welcome_mail_time'));
 		if ($last_cron_time==0) $last_cron_time=$time_now-24*60*60*7;
 		set_value('last_welcome_mail_time',strval($time_now));
-//$last_cron_time=$time_now-60*60*1;
+		//$last_cron_time=$time_now-60*60*1;
 
 		require_code('mail');
 
@@ -67,7 +67,7 @@ class Hook_cron_ocf_welcome_emails
 				$query='SELECT m_email_address,m_username,id,m_join_time FROM '.get_table_prefix().'f_members'.$where;
 				$members=$GLOBALS['FORUM_DB']->query($query);
 			}
-//var_dump($members);exit();
+			//var_dump($members);exit();
 			foreach ($members as $member)
 			{
 				$subject=get_translated_text($mail['w_subject'],NULL,get_lang($member['id']));

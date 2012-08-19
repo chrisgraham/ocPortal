@@ -57,7 +57,6 @@ class Block_main_google_results
 
 		$out=new ocp_tempcode();
 
-		//return do_template('BLOCK_MAIN_GOOGLE_SEARCH_RESULTS',array('TITLE'=>do_lang_tempcode('BLOCK_GOOGLE_TITLE'),'CONTENT'=>$out));
 		return do_template('BLOCK_MAIN_GOOGLE_SEARCH_RESULTS',array('TITLE'=>'','CONTENT'=>$out));
 	}
 

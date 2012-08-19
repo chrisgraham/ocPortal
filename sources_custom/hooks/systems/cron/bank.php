@@ -26,7 +26,7 @@ class Hook_cron_bank
 		$to_be_restored=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'bank WHERE add_time<'.strval(time()-(30*24*60*60)),NULL,NULL,true);
 		if (is_null($to_be_restored)) return;
 
-		$bank_dividend=intval(get_option('bank_divident'));
+		$bank_dividend=intval(get_option('bank_dividend'));
 
 		foreach ($to_be_restored as $deposit)
 		{

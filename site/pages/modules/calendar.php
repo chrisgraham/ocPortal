@@ -642,7 +642,6 @@ class Module_calendar
 			if (!is_null($to))
 			{
 				$date=date_range($real_from,$real_to,!is_null($event['e_start_hour']));
-				//$date2=date('H:i',$to);
 				if ($to>=$period_end-60/*1 minute gap we use to stop stuff spanning to start of next day*/)
 				{
 					$to_h=24;
@@ -716,7 +715,7 @@ class Module_calendar
 				}
 
 				if ($down=='0') $down='1';
-				if /*((is_object($entry)) && (!$entry->is_empty()))*/($entry!='')
+				if ($entry!='')
 				{
 					$timestamp=$period_start+$i*60*60;
 					if ((has_actual_page_access(NULL,'cms_calendar',NULL,NULL)) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_calendar')))
@@ -1435,7 +1434,7 @@ class Module_calendar
 
 					if ($event['e_start_monthly_spec_type']!='day_of_month')
 					{
-						//$event['e_end_day']=find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
+						//$event['e_end_day']=find_concrete_day_of_month($event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type'],is_null($event['e_end_hour'])?find_timezone_end_hour_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_hour'],is_null($event['e_end_minute'])?find_timezone_end_minute_in_utc($event['e_timezone'],$event['e_end_year'],$event['e_end_month'],$event['e_end_day'],$event['e_end_monthly_spec_type']):$event['e_end_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);		Actually we can't do this, we need to work relative
 						$event['e_end_day']=$event['e_start_day']+get_days_between($orig_start_year,$orig_start_month,$orig_start_day,$event['e_end_year'],$event['e_end_month'],$event['e_end_day']);
 						$event['e_end_month']=$event['e_start_month'];
 						$event['e_end_year']=$event['e_start_year'];

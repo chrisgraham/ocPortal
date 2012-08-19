@@ -423,7 +423,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	/*#####################################################################################*/
 
 	// Try and locate the product
-	if (($item_name=='')/* && ($payment_status[0]=='S')*/) // Subscription
+	if ($item_name=='') // Subscription
 	{
 		$product=$GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_type_code',array('id'=>intval($purchase_id))); // Note that s_type_code is not numeric, it is a $product
 		if (is_null($product)) warn_exit(do_lang_tempcode('NO_SUCH_SUBSCRIPTION',strval($purchase_id)));

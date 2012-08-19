@@ -58,15 +58,6 @@ class Module_join
 	 */
 	function run()
 	{
-		/*if (get_option('allow_member_integration')=='strict')
-		{
-			$title=get_screen_title('_JOIN');
-			$url='http://ocproducts.com/index.php?page=join';
-			require_code('site2');
-			assign_refresh($url,1.0);
-			return do_template('REDIRECT_SCREEN',array('_GUID'=>'8398057d3427d54c105fb9c9ae9d2940','URL'=>$url,'TITLE'=>$title,'NO_COMPLETE'=>true,'TEXT'=>do_lang_tempcode('INT_STRICT',ocp_srv('HTTP_HOST'))));
-		}*/
-
 		require_code('ocf_join');
 
 		ocf_require_all_forum_stuff();
@@ -124,10 +115,7 @@ class Module_join
 
 		breadcrumb_set_self(do_lang_tempcode('_JOIN'));
 
-		$generate_host='';
-		//if ((get_option('allow_member_integration')!='off') && (get_option('allow_member_integration')!='hidden')) $generate_host=ocp_srv('HTTP_HOST');
-
-		return do_template('OCF_JOIN_STEP1_SCREEN',array('_GUID'=>'3776e89f3b18e4bd9dd532defe6b1e9e','TITLE'=>$title,'GENERATE_HOST'=>$generate_host,'RULES'=>$rules,'URL'=>$url,'GROUP_SELECT'=>$group_select));
+		return do_template('OCF_JOIN_STEP1_SCREEN',array('_GUID'=>'3776e89f3b18e4bd9dd532defe6b1e9e','TITLE'=>$title,'RULES'=>$rules,'URL'=>$url,'GROUP_SELECT'=>$group_select));
 	}
 
 	/**

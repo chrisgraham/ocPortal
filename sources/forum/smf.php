@@ -1198,11 +1198,9 @@ class forum_driver_smf extends forum_driver_base
 	{
 		$additional=$this->get_member_row_field($member,'additionalGroups');
 		if ($additional!='') $usergroups=explode(',',$additional); else $usergroups=array();
-		//if (!in_array(strval($group_id),$usergroups))
-		{
-			$usergroups[]=strval($group_id);
-			$this->connection->query_update('members',array('additionalGroups'=>implode(',',$usergroups)),array('ID_MEMBER'=>$member));
-		}
+
+		$usergroups[]=strval($group_id);
+		$this->connection->query_update('members',array('additionalGroups'=>implode(',',$usergroups)),array('ID_MEMBER'=>$member));
 	}
 
 	/**

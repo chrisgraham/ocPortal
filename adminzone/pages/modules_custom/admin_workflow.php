@@ -135,8 +135,8 @@ class Module_admin_workflow extends standard_crud_module
 	function run_start($type)
 	{
 		// TODO: Add pic & tutorial
-		//$GLOBALS['HELPER_PANEL_PIC']='pagepics/usergroups';
-		//$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_subcom';
+		//$GLOBALS['HELPER_PANEL_PIC']='pagepics/workflow';
+		//$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_workflow';
 
 		require_lang('workflows');
 		require_code('workflows');

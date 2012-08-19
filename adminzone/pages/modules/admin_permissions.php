@@ -581,7 +581,6 @@ class Module_admin_permissions
 
 		// Rows (pages)
 		$rows=new ocp_tempcode();
-	//	$zones=find_all_zones();
 		$zone=get_param('zone','!');
 		if ($zone=='!') return $this->choose_zone($title);
 		$zones=array($zone);
@@ -611,11 +610,11 @@ class Module_admin_permissions
 						}
 					}
 
-					$cells->attach(do_template('PERMISSION_CELL',array('CHECKED'=>(!$has_not_permission),'HUMAN'=>do_lang_tempcode('PERMISSION_CELL',/*$zone.'__'.*/escape_html($page),escape_html($g_name)),'NAME'=>'p_'.$zone.'__'.$page.'__'.strval($id))));
+					$cells->attach(do_template('PERMISSION_CELL',array('CHECKED'=>(!$has_not_permission),'HUMAN'=>do_lang_tempcode('PERMISSION_CELL',escape_html($page),escape_html($g_name)),'NAME'=>'p_'.$zone.'__'.$page.'__'.strval($id))));
 					$code.='form.elements[\''.'p_'.$zone.'__'.$page.'__'.strval($id).'\'].checked=this.value==\'+\';';
 				}
 
-				$rows->attach(do_template('PERMISSION_ROW',array('_GUID'=>'127bc51f9d5d2d53c84ad54d09fd4fe6','HAS'=>$has,'ABBR'=>/*$zone.'__'.*/$page,'PERMISSION'=>/*$zone.'__'.*/$page,'CELLS'=>$cells,'CODE'=>$code)));
+				$rows->attach(do_template('PERMISSION_ROW',array('_GUID'=>'127bc51f9d5d2d53c84ad54d09fd4fe6','HAS'=>$has,'ABBR'=>$page,'PERMISSION'=>$page,'CELLS'=>$cells,'CODE'=>$code)));
 			}
 		}
 
@@ -641,7 +640,6 @@ class Module_admin_permissions
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_page_access WHERE page_name NOT LIKE \''.db_encode_like('%:%').'\' AND '.db_string_equal_to('zone_name',$zone));
 
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-	//	$zones=find_all_zones();
 		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 		$zones=array($zone);
 		foreach ($zones as $zone)

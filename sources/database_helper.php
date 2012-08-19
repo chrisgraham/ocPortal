@@ -88,7 +88,7 @@ function _check_sizes($primary_key,$fields,$id_name,$skip_size_check=false,$skip
 		{
 			fatal_exit('You may not have a NULL string field');
 		}
-		if (($key) && (substr($id_name,0,1)!='#') && (!$size_restricted) && (($field=='LONG_TEXT') /*|| ($field=='SHORT_TRANS') || ($field=='LONG_TRANS')*/)) fatal_exit('You may not use a '.$field.' field for part of a key');
+		if (($key) && (substr($id_name,0,1)!='#') && (!$size_restricted) && (($field=='LONG_TEXT'))) fatal_exit('You may not use a '.$field.' field for part of a key');
 		if (($key) && ($primary_key) && ($null)) fatal_exit('No field that may be NULL may be a part of a primary key');
 		if (in_array(strtoupper($name),$keywords)) fatal_exit($name.' is a keyword');
 		if ((preg_match('#^[\w]+$#',$name)==0) || (strlen($name)>DB_MAX_FIELD_IDENTIFIER_SIZE)) fatal_exit('Inappropriate identifier: '.$name);

@@ -1525,7 +1525,7 @@ function pparse__parser_next($all=false)
 function parser_error($message)
 {
 	global $tokens,$i;
-	/*foreach ($tokens as $key=>$token)
+	/*foreach ($tokens as $key=>$token)	Debug output
 	{
 		if ($key==$i) echo '<strong>';
 		echo ' '.$token[0].' ';

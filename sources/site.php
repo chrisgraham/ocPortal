@@ -143,7 +143,7 @@ function init__site()
 		$redirect=persistent_cache_get(array('REDIRECT',$_zone));
 		if ($redirect===NULL)
 		{
-			$redirect=$GLOBALS['SITE_DB']->query_select('redirects',array('*')/*,array('r_from_zone'=>$_zone)*/);
+			$redirect=$GLOBALS['SITE_DB']->query_select('redirects',array('*')/*Actually for performance we will load all and cache them ,array('r_from_zone'=>$_zone)*/);
 			persistent_cache_set(array('REDIRECT',$_zone),$redirect);
 		}
 		foreach ($redirect as $r)
@@ -215,16 +215,13 @@ function init__site()
 		if (($real_zone=='data') || (has_zone_access(get_member(),$ZONE['zone_name'])))
 		{
 			global $NON_PAGE_SCRIPT;
-			if (($NON_PAGE_SCRIPT==0) && /*((get_page_name()!=$ZONE['zone_default_page']) || ($real_zone!='')) && */(!has_page_access(get_member(),get_page_name(),$ZONE['zone_name'],true)))
+			if (($NON_PAGE_SCRIPT==0) && /*Actually we will allow Guest denying to the front page even though that is a bit weird ((get_page_name()!=$ZONE['zone_default_page']) || ($real_zone!='')) && */(!has_page_access(get_member(),get_page_name(),$ZONE['zone_name'],true)))
 			{
 				access_denied('PAGE_ACCESS');
 			}
 		}
 		else
 		{
-	/*		if ($ZONE['zone_name']=='adminzone')	 GoogleAds will pick up on ANY URL any go and CRAWL IT. So don't use with googleads unless you want googlead-triggering-heart-attacks ;)
-				log_hack_attack_and_exit('ADMINZONE_ACCESS_DENIED');*/
-
 			if (get_page_name()!='login') access_denied('ZONE_ACCESS',$ZONE['zone_name'],true);
 		}
 	}
@@ -508,7 +505,7 @@ function do_site()
 	// More SEO redirection (monikers)
 	// Does this URL arrangement support monikers?
 	$url_id=get_param('id',NULL,true);
-	if (($url_id!==NULL) && ((url_monikers_enabled())/* && (!is_numeric(str_replace(',','',$url_id)))*/))
+	if (($url_id!==NULL) && ((url_monikers_enabled())))
 	{
 		$type=get_param('type','misc');
 		$looking_for='_SEARCH:'.get_page_name().':'.$type.':_WILD';
@@ -1313,7 +1310,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		{
 			$edit_url=build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','page_link'=>$zone.':'.$codename,/*'lang'=>user_lang(),*/'redirect'=>$redirect),get_module_zone('cms_comcode_pages'));
 		}
-		$add_child_url=(get_option('is_on_comcode_page_children')=='1')?build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','parent_page'=>$codename,'page_link'=>$zone.':'/*,'lang'=>user_lang()*//*,'redirect'=>$redirect*/),get_module_zone('cms_comcode_pages')):new ocp_tempcode();
+		$add_child_url=(get_option('is_on_comcode_page_children')=='1')?build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','parent_page'=>$codename,'page_link'=>$zone.':'/*Don't make too many assumptions about user flow ,'lang'=>user_lang()*//*,'redirect'=>$redirect*/),get_module_zone('cms_comcode_pages')):new ocp_tempcode();
 	} else
 	{
 		$edit_url=new ocp_tempcode();

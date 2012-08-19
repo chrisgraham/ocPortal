@@ -174,7 +174,7 @@ class Hook_secpay
 	 * @param  string		Transaction ID to cancel
 	 * @return ?boolean	True: yes. False: no. (NULL: cancels via a user-URL-directioning)
 	 */
-	/*function auto_cancel($trans_id)
+	/*function auto_cancel($trans_id)		Not currently implemented
 	{
 		require_lang('ecommerce');
 		$username=$this->_get_username();
@@ -282,7 +282,7 @@ class Hook_secpay
 	 */
 	function handle_transaction()
 	{
-		/*$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');
+		/*$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');		Useful for debugging
 		fwrite($myfile,serialize($_POST));
 		fclose($myfile);*/
 

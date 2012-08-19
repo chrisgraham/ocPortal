@@ -156,7 +156,6 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 	actualise_rating($allow_rating==1,$page_name,$content_id,$content_url,$content_title);
 	if ((!is_null(post_param('title',NULL))) || ($validated==1))
 		actualise_post_comment($allow_comments>=1,$page_name,$content_id,$content_url,$content_title,$forum);
-	//actualise_post_trackback($allow_trackbacks==1,$page_name,$content_id);
 	$rating_details=get_rating_box($content_url,$content_title,$page_name,$content_id,$allow_rating==1,$submitter);
 	$comment_details=get_comments($page_name,$allow_comments==1,$content_id,false,$forum,NULL,NULL,false,false,$submitter,$allow_comments==2);
 	$trackback_details=get_trackbacks($page_name,$content_id,$allow_trackbacks==1);

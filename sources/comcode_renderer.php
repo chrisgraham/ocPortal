@@ -168,11 +168,6 @@ function _custom_comcode_import($connection)
  */
 function _comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap_pos=60,$pass_id=NULL,$connection=NULL,$semiparse_mode=false,$preparse_mode=false,$is_all_semihtml=false,$structure_sweep=false,$check_only=false,$highlight_bits=NULL,$on_behalf_of_member=NULL)
 {
-	/*if (get_option('anti_leech',true)==='1')		No, better to see it, even if custom settings are lost
-	{
-		unset($REVERSABLE_TAGS['attachment_safe']);
-	}*/
-
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
 	if (is_null($source_member))
@@ -218,8 +213,6 @@ function _comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap
  */
 function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=false)
 {
-	//echo $comcode;
-
 	require_lang('comcode');
 	if (is_null($_message[0]))
 	{
@@ -239,7 +232,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	}
 	if (!$check_only)
 	{
-		if (((get_page_name()=='admin_import') || (count($_POST)==0) || /*(strpos($comcode,']new_')!==false) || */(!$posted)) && (!$preparse_mode))
+		if (((get_page_name()=='admin_import') || (count($_POST)==0) || (!$posted)) && (!$preparse_mode))
 		{
 			$line=substr_count(substr($comcode,0,$pos),chr(10))+1;
 			$out=do_template('COMCODE_CRITICAL_PARSE_ERROR',array('LINE'=>integer_format($line),'MESSAGE'=>$message,'SOURCE'=>$comcode)); // Won't parse, but we can't help it, so we will skip on
@@ -513,21 +506,17 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 	global $DANGEROUS_TAGS,$STRUCTURE_LIST,$COMCODE_PARSE_TITLE;
 	if ((isset($DANGEROUS_TAGS[$tag])) && (!$comcode_dangerous))
 	{
-		//if (($source_member==get_member()) && (strpos(serialize($_POST),'['.$tag)!==false))
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($source_member);
+		if ($semiparse_mode) // Can't load through error for this, so just show it as a tag
 		{
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($source_member);
-			if ($semiparse_mode) // Can't load through error for this, so just show it as a tag
+			$params='';
+			foreach ($attributes as $key=>$val)
 			{
-				$params='';
-				foreach ($attributes as $key=>$val)
-				{
-					$params.=' '.$key.'="'.comcode_escape($val).'"';
-				}
-				return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
+				$params.=' '.$key.'="'.comcode_escape($val).'"';
 			}
-			return do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('comcode:NO_ACCESS_FOR_TAG',escape_html($tag),escape_html($username))));
+			return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
 		}
-		//return new ocp_tempcode();
+		return do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('comcode:NO_ACCESS_FOR_TAG',escape_html($tag),escape_html($username))));
 	}
 
 	// These are just bbcode compatibility tags.. we will remap to our proper comcode
@@ -630,7 +619,6 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				{
 					require_code('comcode_from_html');
 					$back_to_comcode=semihtml_to_comcode($embed->evaluate()); // Undo what's happened already
-					//$back_to_comcode=html_entity_decode($back_to_comcode,ENT_QUOTES,get_charset()); // Remove the escaping entities that were inside the code tag
 					$embed=comcode_to_tempcode($back_to_comcode,$source_member,$as_admin,80,$pass_id,$connection,true); // Re-parse (with full security)
 				}
 
@@ -1195,7 +1183,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$attachment=$_attachment[0];
 
 				$already_referenced=array_key_exists($__id,$GLOBALS['ATTACHMENTS_ALREADY_REFERENCED']);
-				if (($already_referenced) || ($as_admin) || (/*(!is_guest($source_member)) && */($source_member===$owner)) || (((has_privilege($source_member,'reuse_others_attachments')) || ($owner==$source_member)) && (has_attachment_access($source_member,$__id))))
+				if (($already_referenced) || ($as_admin) || (/*Actually we just can't broker security between guest attachments so let's lower security on re-using them so long as they have access (!is_guest($source_member)) && */($source_member===$owner)) || (((has_privilege($source_member,'reuse_others_attachments')) || ($owner==$source_member)) && (has_attachment_access($source_member,$__id))))
 				{
 					if (!array_key_exists('type',$attributes)) $attributes['type']='auto';
 					$COMCODE_ATTACHMENTS[$pass_id][]=array('tag_type'=>$tag,'time'=>$attachment['a_add_time'],'type'=>'existing','id'=>$__id,'attachmenttype'=>$attributes['type'],'marker'=>$marker,'comcode'=>$comcode);
@@ -1798,15 +1786,9 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$given_url=$url;
 			if (($url!='') && ($url[0]!='#'))
 			{
-				/*if (substr($url,0,1)=='/')
-				{
-					$url_full=preg_replace('#/.*#','',get_base_url()).'/'.$url;
-				} else*/
-				{
-					if (substr($url,0,1)=='/') $url=substr($url,1);
-					$url_full=url_is_local($url)?(get_base_url().'/'.$url):$url;
-					if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($url_full);
-				}
+				if (substr($url,0,1)=='/') $url=substr($url,1);
+				$url_full=url_is_local($url)?(get_base_url().'/'.$url):$url;
+				if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($url_full);
 			} else $url_full=$url;
 			$striped_base_url=str_replace('www.','',str_replace('http://','',get_base_url()));
 			if (($striped_base_url!='') && (substr($url,0,1)!='%') && (strpos($url_full,$striped_base_url)===false)) // We don't want to hammer our own server when we have Comcode pages full of links to our own site (much less risk of hammering other people's servers, as we won't tend to have loads of links to them). Would also create bugs in emails sent out - e.g. auto-running validateip.php links hence voiding the intent of the feature.

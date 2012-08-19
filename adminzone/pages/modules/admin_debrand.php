@@ -240,7 +240,6 @@ class Module_admin_debrand
 		//  background-image
 		$theme=$GLOBALS['FORUM_DRIVER']->get_theme();
 		find_theme_image('background_image');
-		//$GLOBALS['SITE_DB']->query_update('theme_images',array('path'=>'themes/default/images/blank.gif'),array('id'=>'background-image','theme'=>$theme),'',1); No longer ocp-specific
 		//  logo/*
 		if (addon_installed('zone_logos'))
 		{

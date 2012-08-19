@@ -339,12 +339,6 @@ function db_create_table($table_name,$fields)
 {
 	$type_remap=db_get_type_remap();
 
-	/*if (multi_lang()==0)
-	{
-		$type_remap['LONG_TRANS']=$type_remap['LONG_TEXT'];
-		$type_remap['SHORT_TRANS']=$type_remap['SHORT_TEXT'];
-	}*/
-
 	$_fields='';
 	$keys='';
 	foreach ($fields as $name=>$type)

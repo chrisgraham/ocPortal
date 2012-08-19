@@ -257,7 +257,6 @@ class Module_search
 
 		$type=get_param('type','misc');
 		if (($type=='misc') || ($type=='results')) return $this->form();
-		//if ($type=='results') return $this->results();
 		if ($type=='my') return $this->my();
 		if ($type=='_delete') return $this->_delete();
 

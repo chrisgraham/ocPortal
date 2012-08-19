@@ -47,7 +47,6 @@ class Hook_rss_calendar
 			$_categories[$i]['text_original']=get_translated_text($_category['t_title']);
 		}
 		$categories=collapse_2d_complexity('id','text_original',$_categories);
-		//$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events WHERE e_add_date>'.strval((integer)$cutoff).' ORDER BY e_add_date DESC',$max);
 		$period_start=utctime_to_usertime($cutoff);
 		$period_end=utctime_to_usertime(time()*2-$cutoff);
 		if (is_float($period_end))	$period_end=intval($period_end);
@@ -66,7 +65,6 @@ class Hook_rss_calendar
 			$author='';
 
 			// The "add" date'll be actually used for the event time
-			//$_news_date=mktime($row['e_start_hour'],$row['e_start_minute'],0,$row['e_start_month'],$row['e_start_day'],$row['e_start_year']);
 			$_news_date=$_row[2];
 			$news_date=date($date_string,usertime_to_utctime($_news_date));
 

@@ -102,8 +102,6 @@ function currency_convert($amount,$from_currency,$to_currency=NULL,$string=false
 						$to_currency=ip_to_currency();
 						if (is_null($to_currency))
 						{
-//							// Euros to the rescue (it's a reasonable guess based on the largest population using a single currency)
-//							$to_currency='EUR';
 							$to_currency=get_option('currency');
 						}
 					}

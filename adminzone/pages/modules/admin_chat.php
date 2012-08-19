@@ -228,7 +228,6 @@ class Module_admin_chat extends standard_crud_module
 		require_code('form_templates');
 		$fields->attach(form_input_tick(do_lang_tempcode('PROCEED'),do_lang_tempcode('Q_SURE'),'continue_delete',false));
 		$posting_name=do_lang_tempcode('PROCEED');
-		//$posting_url=build_url(array('page'=>'_SELF','mode'=>$mode,'type'=>'private_add'),'_SELF');
 		$posting_url=build_url(array('page'=>'_SELF','type'=>'_delete_all'),'_SELF');
 		$text=paragraph(do_lang_tempcode('CONFIRM_DELETE_ALL_ROOMS'));
 		return do_template('FORM_SCREEN',array('_GUID'=>'fdf02f5b3a3b9ce6d1abaccf0970ed73','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'SUBMIT_NAME'=>$posting_name,'URL'=>$posting_url,'TEXT'=>$text));

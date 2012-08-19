@@ -321,7 +321,7 @@ function _get_lang_file_map($b,&$entries,$descriptions=NULL,$given_whole_file=fa
 
 			if (isset($parts[1]))
 			{
-				$entries[$parts[0]]=rtrim($parts[1],$nl);/*str_replace('\n',"\n",$parts[1]);*/
+				$entries[$parts[0]]=rtrim($parts[1],$nl);/*We do this at lookup-time now for performance reasons str_replace('\n',"\n",$parts[1]);*/
 			}
 		}
 	}

@@ -103,21 +103,6 @@ class Hook_fields_theme_image
 		if ($ev=='') return '';
 
 		$img_url=find_theme_image($ev);
-		/*if ((get_option('is_on_gd')=='0') || (!function_exists('imagetypes')))
-		{
-			$img_thumb_url=$img_url;
-		} else
-		{
-			$new_name=url_to_filename($ev);
-			require_code('images');
-			if (!is_saveable_image($new_name)) $new_name.='.png';
-			$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
-			if (!file_exists($file_thumb))
-			{
-				convert_image($img_url,$file_thumb,-1,-1,intval(get_option('thumb_width')),false);
-			}
-			$img_thumb_url=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
-		}*/
 		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
 		$tpl_set=$field['c_name'];
 

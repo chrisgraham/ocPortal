@@ -109,8 +109,6 @@ class Module_wiki
 				'title'=>'SHORT_TEXT'
 			));
 
-			//$GLOBALS['SITE_DB']->create_index('wiki_children','child_find',array('parent_id'));
-
 			$GLOBALS['SITE_DB']->create_table('wiki_pages',array(
 				'id'=>'*AUTO',
 				'title'=>'SHORT_TRANS',

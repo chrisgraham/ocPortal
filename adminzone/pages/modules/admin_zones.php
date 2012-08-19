@@ -56,7 +56,7 @@ class Module_admin_zones
 	 */
 	function uninstall()
 	{
-		/*		$zones=find_all_zones(true);
+		/*		$zones=find_all_zones(true);		We don't really want to throw away on-disk data on reinstalls
 		foreach ($zones as $zone)
 		{
 			//if (!in_array($zone,array('','docs','adminzone','collaboration','forum','cms','site'))) deldir_contents(get_file_base().'/'.$zone,true);
@@ -262,7 +262,7 @@ class Module_admin_zones
 
 				// WYSIWYG?
 				require_javascript('javascript_editing');
-				$w=/* (has_privilege(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($comcode,'{$,page hint: no_wysiwyg}')===false));
+				$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($comcode,'{$,page hint: no_wysiwyg}')===false));
 				global $JAVASCRIPT,$WYSIWYG_ATTACHED;
 				if (!$WYSIWYG_ATTACHED)
 					$JAVASCRIPT->attach(do_template('HTML_EDIT'));

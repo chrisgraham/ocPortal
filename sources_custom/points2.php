@@ -42,7 +42,6 @@ if (!function_exists('system_gift_transfer'))
 			$POINT_INFO_CACHE[$member_id]['points_gained_given']+=$amount;
 
 		//start add to mentor points if needed
-		//$mentor_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'u_mentor');
 		$mentor_id=$GLOBALS['SITE_DB']->query_select_value_if_there('members_mentors','mentor_id',array('member_id'=>$member_id),'',true);
 
 		if(isset($mentor_id) && !is_null($mentor_id) && (intval($mentor_id) != 0))

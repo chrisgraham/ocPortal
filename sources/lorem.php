@@ -719,7 +719,6 @@ function find_comcodes()
 	{
 		$z=$zone==''?'pages':$zone;
 		$files[$z]=find_all_pages($zone,'comcode/'.fallback_lang(),'txt');
-		//$files[$z] += find_all_pages($zone,'comcode_custom/'.fallback_lang(),'txt');
 	}
 	return $files;
 }
@@ -737,7 +736,6 @@ function find_html()
 	{
 		$z=$zone==''?'pages':$zone;
 		$files[$z]=find_all_pages($zone,'html/'.fallback_lang(),'htm');
-		//$files[$z] += find_all_pages($zone,'html_custom/'.fallback_lang(),'htm');
 	}
 	return $files;
 }

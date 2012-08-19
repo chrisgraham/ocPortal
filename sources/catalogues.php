@@ -1276,7 +1276,7 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 	$children=array();
 	$is_tree=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_is_tree',array('c_name'=>$catalogue_name));
 	if (is_null($is_tree)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','catalogue:'.escape_html($catalogue_name)));
-	if ((!is_null($category_id))/* || ($is_tree==1)*/)
+	if (!is_null($category_id))
 	{
 		$children[0]['id']=$category_id;
 		$children[0]['title']=$title;

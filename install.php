@@ -169,10 +169,7 @@ if (intval($_GET['step'])==4) // Define settings
 	$content=step_4();
 	$forum_type=get_param('forum_type','');
 	if ($forum_type=='none') $username='admin';
-	/*if (!is_null($username))
-		$password_prompt_2=do_lang_tempcode('CONFIRM_ADMIN_PASSWORD_2',escape_html($username));
-	else */$password_prompt_2=new ocp_tempcode();
-	$password_prompt=do_lang_tempcode('CONFIRM_ADMIN_PASSWORD',$password_prompt_2);
+	$password_prompt=do_lang_tempcode('CONFIRM_ADMIN_PASSWORD');
 }
 
 if (intval($_GET['step'])==5)
@@ -604,13 +601,6 @@ function step_3()
 		if (array_key_exists('forum_type',$SITE_INFO)) $DEFAULT_FORUM=$SITE_INFO['forum_type'];
 	}
 	$default_version=new ocp_tempcode();
-	/*foreach ($classes as $class=>$forums)
-	{
-		foreach ($forums as $forum)
-		{
-			if (strpos(get_file_base(),'/'.$forum.'/')!==false) $DEFAULT_FORUM=$forum;
-		}
-	}*/
 	$simple_forums=new ocp_tempcode(); // For is JS is off, this is a simple flat list of all versions (rather than a two level list - with first level being $tforums and the second level being filtered using CSS 'display' from $versions)
 
 	foreach ($classes as $class=>$forums)
@@ -886,7 +876,7 @@ function step_4()
 	}
 	foreach ($specifics as $specific)
 	{
-		if (($specific['name']=='clear_existing_forums_on_install') /*&& ($use_msn==0)*/)
+		if ($specific['name']=='clear_existing_forums_on_install')
 		{
 			$hidden->attach(form_input_hidden('clear_existing_forums_on_install','yes'));
 		}
@@ -1582,8 +1572,6 @@ function step_5_core()
 		));
 		$GLOBALS['SITE_DB']->create_index('translate','#search',array('text_original'));
 		$GLOBALS['SITE_DB']->create_index('translate','importance_level',array('importance_level'));
-		//$GLOBALS['SITE_DB']->create_index('translate','id',array('id'));
-		//$GLOBALS['SITE_DB']->create_index('translate','language',array('language'));
 		if (substr(get_db_type(),0,5)=='mysql')
 		{
 			$GLOBALS['SITE_DB']->create_index('translate','equiv_lang',array('text_original(4)'));
@@ -1691,7 +1679,6 @@ function step_5_core_2()
 	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>1,'zone_name'=>'adminzone','zone_title'=>insert_lang(do_lang('ADMIN_ZONE'),1),'zone_default_page'=>'start','zone_header_text'=>$trans2,'zone_theme'=>'default','zone_wide'=>0,'zone_require_session'=>1));
 	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>1,'zone_name'=>'site','zone_title'=>insert_lang(do_lang('SITE'),1),'zone_default_page'=>'start','zone_header_text'=>$trans4,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0));
 	if (file_exists(get_file_base().'/collaboration')) $GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>1,'zone_name'=>'collaboration','zone_title'=>insert_lang(do_lang('COLLABORATION'),1),'zone_default_page'=>'start','zone_header_text'=>$trans3,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0));
-	//$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>0,'zone_name'=>'docs','zone_title'=>insert_lang(do_lang('GUIDES'),1),'zone_default_page'=>'userguide','zone_header_text'=>$trans8,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0));
 	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>1,'zone_name'=>'cms','zone_title'=>insert_lang(do_lang('CMS'),1),'zone_default_page'=>'cms','zone_header_text'=>$trans6,'zone_theme'=>'default','zone_wide'=>0,'zone_require_session'=>1));
 
 	// Forums

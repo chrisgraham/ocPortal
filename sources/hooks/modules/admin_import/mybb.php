@@ -255,7 +255,6 @@ class Hook_mybb
 		}
 		foreach ($groups as $id=>$groupname)
 		{
-			//if ($GLOBALS['OCF_DRIVER']->is_super_admin($id)) continue;
 			if (preg_match('/Administrator/i',$groupname)!=0) continue;
 
 			foreach ($page_remap as $from=>$to)

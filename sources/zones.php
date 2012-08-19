@@ -406,9 +406,9 @@ function load_module_page($string,$codename)
 			require_code('database_action');
 			require_code('config2');
 			require_code('menus2');
-	/*		if (($installed_hacked_by!=$this_hacked_by) && (!is_null($installed_hacked_by)))
+			/*if (($installed_hacked_by!=$this_hacked_by) && (!is_null($installed_hacked_by)))
 			{
-				fatal_exit();
+				fatal_exit('Managed by different author');
 			} Probably better we leave the solution to this to modders rather than just block the potential for there even to be a solution	*/
 
 			$GLOBALS['SITE_DB']->query_update('modules',array('module_version'=>$this_version,'module_hack_version'=>$this_hack_version,'module_hacked_by'=>$this_hacked_by),array('module_the_name'=>$codename),'',1);
@@ -569,8 +569,7 @@ function find_all_hooks($type,$entry)
 			$basename=basename($file,'.php');
 			if (($file==$basename.'.php') && (preg_match('#^[\w\-]*$#',$basename)!=0))
 			{
-//				if ((filesize($dir.'/'.$file)>0) && (substr($file,0,4)!='ocf_'))
-					$out[$basename]='sources';
+				$out[$basename]='sources';
 			}
 		}
 		closedir($dh);
@@ -587,8 +586,7 @@ function find_all_hooks($type,$entry)
 				$basename=basename($file,'.php');
 				if (($file==$basename.'.php') && (preg_match('#^[\w\-]*$#',$basename)!=0))
 				{
-	//				if ((filesize($dir.'/'.$file)>0) && (substr($file,0,4)!='ocf_'))
-						$out[$basename]='sources_custom';
+					$out[$basename]='sources_custom';
 				}
 			}
 			closedir($dh);
@@ -1119,13 +1117,6 @@ function extract_module_functions($path,$functions,$params=NULL)
 			$end=min($end1,$end2)+2+$spaces;
 			$func=substr($file,$start,$end-$start);
 
-			/*if (strpos($func,'function '.$function.'()')===false)			Fails for default parameters (e.g. $a=NULL in function definition)
-			{
-				$new_func=preg_replace('#function '.preg_quote($function).'\(([^\n]*)\)#','list(${1})=array('.$_params.');',$func);
-			} else
-			{
-				$new_func=preg_replace('#function '.preg_quote($function).'\(\)#','',$func);
-			}*/
 			$new_func=str_replace('function '.$function.'(','function '.$function.$r.'(',$func).'return '.filter_naughty_harsh($function).$r.'('.$_params.'); ';
 			$out[]=$pre."\n\n".$new_func;
 

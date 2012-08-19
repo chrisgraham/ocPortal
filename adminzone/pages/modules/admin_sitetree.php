@@ -74,7 +74,6 @@ class Module_admin_sitetree
 		if ($type=='__delete') return $this->__delete();
 		if ($type=='move') return $this->move();
 		if ($type=='_move') return $this->_move();
-		//if ($type=='mass_validate') return $this->mass_validate();
 
 		return new ocp_tempcode();
 	}
@@ -317,85 +316,6 @@ class Module_admin_sitetree
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'3281970772c410cf071c422792d1571d','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>$hidden,'TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 	}
-
-	/**
-	 * The UI to do mass-XHTML validation.
-	 *
-	 * @return tempcode		The UI
-	 */
-	/*function mass_validate()
-	{
-		require_lang('validation');
-		require_code('obfuscate');
-		require_code('validation');
-
-		$title=g et_page_title('XHTML_CHECK');
-
-		$zone=post_param('zone','!');
-		if ($zone=='!') return $this->choose_zone($title);
-
-		// Find entry points
-		$found=array();
-		$pages=find_all_pages_wrap($zone);
-		foreach ($pages as $page=>$type)
-		{
-			if (strpos($page,'_tree_made')!==false) continue;
-
-			$entry_points=NULL;
-			$entry_point=$zone.':'.$page;
-			if (($type=='modules') || ($type=='modules_custom'))
-			{
-				require_once(zone_black_magic_filterer(get_file_base().'/'.filter_naughty_harsh($zone).'/pages/'.filter_naughty_harsh($type).'/'.filter_naughty_harsh($page).'.php'));
-
-				if (class_exists('Mx_'.filter_naughty_harsh($page)))
-				{
-					$object=object_factory('Mx_'.filter_naughty_harsh($page));
-				} else
-				{
-					$object=object_factory('Module_'.filter_naughty_harsh($page));
-				}
-				if (method_exists($object,'get_entry_points'))
-				{
-					$entry_points=$object->get_entry_points();
-					foreach (array_keys($entry_points) as $code)
-					{
-						if (($code=='logout') || ($code=='concede') || ($code=='admin_phpinfo')) continue;
-
-						$new_entry_point=($code=='!')?$entry_point:($entry_point.':type='.$code);
-						$map=array('page'=>$page,'keep_novalidate'=>1,'keep_session'=>get_session_id());
-						if ($code!='!') $map['type']=$code;
-						$url=build_url($map,$zone);
-						$found[$new_entry_point]=$url;
-					}
-				}
-			} elseif (substr($type,0,7)=='comcode')
-			{
-				$found[$entry_point]=build_url(array('page'=>$page,'keep_novalidate'=>1,'keep_session'=>get_session_id()),$zone);
-			}
-			if (is_null($entry_points))
-			{
-				$url=build_url(array('page'=>$page,'keep_novalidate'=>1,'keep_session'=>get_session_id()),$zone);
-				$found[$entry_point]=build_url(array('page'=>$page),$zone);
-			}
-		}
-
-		if (function_exists('set_time_limit')) @set_time_limit(0);
-
-		// Make tempcode
-		$contents=new ocp_tempcode();
-		foreach ($found as $code=>$url)
-		{
-			$error=check_xhtml(http_download_file($url->evaluate(),NULL,false,false));
-			if (count($error['errors'])!=0)
-				$contents->attach(do_template('VALIDATE_CHECK_ERROR',array('_GUID'=>'a82ea6421827305c8c9579d79597fc30','URL'=>$url,'POINT'=>$code)));
-
-			echo ((count($error['errors'])!=0)?'! ':' ').$code.'<br />';
-			if (count($error['errors'])!=0) print_r($error['errors']);
-		}
-		if ($contents->is_empty()) return inform_screen($title,do_lang_tempcode('NO_ENTRIES'));
-
-		return do_template('VALIDATE_CHECK',array('_GUID'=>'aca278de6738c2b5f840631234e44c7b','TITLE'=>$title,'CONTENTS'=>$contents));
-	}*/
 
 	/**
 	 * The UI to choose a zone.
@@ -714,7 +634,6 @@ class Module_admin_sitetree
 		$new_zone=post_param('destination_zone');
 		if (substr($new_zone,-1)==':') $new_zone=substr($new_zone,0,strlen($new_zone)-1);
 
-		//$pages=find_all_pages_wrap($zone);
 		$pages=array();
 		require_code('site');
 		foreach ($_POST as $key=>$val)

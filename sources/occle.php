@@ -545,7 +545,6 @@ class virtual_bash
 				case OUT_PARAMETER:
 					//Parameter parsing hasn't started yet; the next character should be a quote ('"'), or any other character apart from a space, really
 					$parameter_mode=IN_PARAMETER;
-					//$this->parse_runtime['parse_position']++;
 
 					break;
 				case IN_PARAMETER:
@@ -692,7 +691,6 @@ class virtual_bash
 					//Extra parsing hasn't started yet; the next character should be a stream identifier, or assignment operator
 					if (($next_char!='>') && ($next_char!='<') && ($next_char!='1') && ($next_char!='2') && ($next_char!='3') && ($next_char!='4') && ($next_char!='|')) break 2;
 					$extra_mode=IN_EXTRA_SYNTAX_STREAM;
-					//$this->parse_runtime['parse_position']++;
 
 					break;
 				case IN_EXTRA_SYNTAX_STREAM:

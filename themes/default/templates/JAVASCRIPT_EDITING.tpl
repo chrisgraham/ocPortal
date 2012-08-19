@@ -445,46 +445,44 @@ function find_tags_in_editor(editor,element)
 					{
 						tag_text=get_inner_html(this);
 					}
-					//if (tag_text.match(/^\[.*\]$/))
+
+					this.style.cursor='pointer';
+
+					var eventCopy={};
+					if (event)
 					{
-						this.style.cursor='pointer';
+						if (event.pageX) eventCopy.pageX=3000;
+						if (event.clientX) eventCopy.clientX=3000;
+						if (event.pageY) eventCopy.pageY=3000;
+						if (event.clientY) eventCopy.clientY=3000;
 
-						var eventCopy={};
-						if (event)
+						var self_ob=this;
+						if ((typeof this.rendered_tooltip=='undefined' && !self_ob.is_over) || (self_ob.tag_text!=tag_text))
 						{
-							if (event.pageX) eventCopy.pageX=3000;
-							if (event.clientX) eventCopy.clientX=3000;
-							if (event.pageY) eventCopy.pageY=3000;
-							if (event.clientY) eventCopy.clientY=3000;
+							self_ob.tag_text=tag_text;
+							self_ob.is_over=true;
 
-							var self_ob=this;
-							if ((typeof this.rendered_tooltip=='undefined' && !self_ob.is_over) || (self_ob.tag_text!=tag_text))
-							{
-								self_ob.tag_text=tag_text;
-								self_ob.is_over=true;
-
-								var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?css=1&javascript=1&box_title={!PREVIEW;&}'+keep_stub());
-								if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
-								var request=do_ajax_request(url,function(ajax_result_frame,ajax_result) {
-									if (ajax_result)
+							var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?css=1&javascript=1&box_title={!PREVIEW;&}'+keep_stub());
+							if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
+							var request=do_ajax_request(url,function(ajax_result_frame,ajax_result) {
+								if (ajax_result)
+								{
+									var tmp_rendered=get_inner_html(ajax_result);
+									if (tmp_rendered.indexOf('{!CCP_ERROR_STUB;}')==-1)
+										self_ob.rendered_tooltip=tmp_rendered;
+								}
+								if (typeof self_ob.rendered_tooltip!='undefined')
+								{
+									if (self_ob.is_over)
 									{
-										var tmp_rendered=get_inner_html(ajax_result);
-										if (tmp_rendered.indexOf('{!CCP_ERROR_STUB;}')==-1)
-											self_ob.rendered_tooltip=tmp_rendered;
+										activate_tooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'auto',null,null,false,true);
+										self_ob.title=self_ob.orig_title;
 									}
-									if (typeof self_ob.rendered_tooltip!='undefined')
-									{
-										if (self_ob.is_over)
-										{
-											activate_tooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'auto',null,null,false,true);
-											self_ob.title=self_ob.orig_title;
-										}
-									}
-								},'data='+window.encodeURIComponent('[semihtml]'+tag_text.replace(/<\/?span[^>]*>/gi,'')).substr(0,1000).replace(new RegExp(String.fromCharCode(8203),'g'),'')+'[/semihtml]');
-							} else if (typeof this.rendered_tooltip!='undefined')
-							{
-								activate_tooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'400px',null,null,false,true);
-							}
+								}
+							},'data='+window.encodeURIComponent('[semihtml]'+tag_text.replace(/<\/?span[^>]*>/gi,'')).substr(0,1000).replace(new RegExp(String.fromCharCode(8203),'g'),'')+'[/semihtml]');
+						} else if (typeof this.rendered_tooltip!='undefined')
+						{
+							activate_tooltip(self_ob,eventCopy,self_ob.rendered_tooltip,'400px',null,null,false,true);
 						}
 					}
 				}

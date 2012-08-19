@@ -337,9 +337,6 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function get_member_photo_url($member)
 	{
-		//unset($member);
-
-		//return '';
 		$pic=$this->get_member_row_field($member,'ppic');
 		if (is_null($pic)) $pic='';
 		elseif ((url_is_local($pic)) && ($pic!='')) $pic=((get_forum_base_url()!=get_base_url())?get_forum_base_url():get_custom_base_url()).'/uploads/personalpic/'.$pic;
@@ -763,7 +760,6 @@ class forum_driver_aef extends forum_driver_base
 		foreach ($groups as $group)
 		{
 			if ($_groups!='') $_groups.=' OR ';
-			//$_groups.='group_id='.strval((integer)$group);
 			$_groups.='u.u_member_group='.strval((integer)$group);
 		}
 		if ($_groups=='') return array();

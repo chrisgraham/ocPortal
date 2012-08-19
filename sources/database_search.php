@@ -1153,7 +1153,6 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 		$ultimate_field_map=array();
 		foreach ($types_results as $r)
 			$ultimate_field_map+=$r;
-		//ksort($ultimate_field_map);
 		$ultimate_field_map=array_keys($ultimate_field_map);
 		foreach ($types_results as $i=>$r)
 		{
@@ -1163,7 +1162,6 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 				if (!array_key_exists($key,$r)) $r[$key]='';
 				$r2d2[$key]=$r[$key];
 			}
-			//ksort($r);
 			$r=$r2d2;
 			$types_results[$i]=array('R'=>$r);
 		}

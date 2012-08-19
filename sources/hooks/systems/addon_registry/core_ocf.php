@@ -405,7 +405,6 @@ class Hook_addon_registry_core_ocf
 		return array(
 			lorem_globalise(do_lorem_template('OCF_JOIN_STEP1_SCREEN', array(
 				'TITLE'=>lorem_title(),
-				'GENERATE_HOST'=>'',
 				'RULES'=>lorem_chunk_html(),
 				'URL'=>placeholder_url(),
 				'GROUP_SELECT'=>$group_select
@@ -990,8 +989,6 @@ class Hook_addon_registry_core_ocf
 			$cells=do_lorem_template('RESULTS_TABLE_FIELD', array(
 				'VALUE'=>$temp
 			), NULL, false);
-			/*	$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>strval($i)),NULL,false));
-			$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>strval($i)),NULL,false));*/
 			$entries=do_lorem_template('RESULTS_TABLE_ENTRY', array(
 				'VALUES'=>$cells
 			), NULL, false);
@@ -1001,8 +998,6 @@ class Hook_addon_registry_core_ocf
 		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
 			'VALUE'=>lorem_word()
 		));
-		/*$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word_2())));
-		$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word_2())));*/
 
 		//results_table
 		$secondary_members=do_lorem_template('RESULTS_TABLE', array(
@@ -1026,7 +1021,6 @@ class Hook_addon_registry_core_ocf
 			$cells=do_lorem_template('RESULTS_TABLE_FIELD', array(
 				'VALUE'=>$temp
 			), NULL, false);
-			//$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE'=>strval($i)),NULL,false));
 			$entries=do_lorem_template('RESULTS_TABLE_ENTRY', array(
 				'VALUES'=>$cells
 			), NULL, false);
@@ -1036,7 +1030,6 @@ class Hook_addon_registry_core_ocf
 		$fields_title=do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
 			'VALUE'=>lorem_word()
 		));
-		//$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array('VALUE'=>lorem_word_2())));
 
 		//results_table
 		$prospective_members=do_lorem_template('RESULTS_TABLE', array(

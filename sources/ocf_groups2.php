@@ -39,7 +39,7 @@ function ocf_get_group_members_raw_count($group_id,$include_primaries=true,$non_
 		$map=array('m_primary_group'=>$group_id);
 		if (!$include_unvalidated_members)
 		{
-			//$map['m_validated_confirm_code']='';
+			//$map['m_validated_confirm_code']='';	Actually we don't want to consider this here
 			$map['m_validated']=1;
 		}
 		$b=$GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)',$map);
@@ -105,7 +105,7 @@ function ocf_get_group_members_raw($group_id,$include_primaries=true,$non_valida
 		$map=array('m_primary_group'=>$group_id);
 		if (!$include_unvalidated_members)
 		{
-			//$map['m_validated_confirm_code']='';
+			//$map['m_validated_confirm_code']='';	Actually we don't want to consider this here
 			$map['m_validated']=1;
 		}
 		$_members2=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username'),$map,'',$max,$start);

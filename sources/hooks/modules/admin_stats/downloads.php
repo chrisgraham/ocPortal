@@ -79,7 +79,6 @@ class Hook_admin_stats_downloads
 			$rows=$GLOBALS['SITE_DB']->query('SELECT id,num_downloads,name FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'download_downloads WHERE add_date>'.strval($time_start).' AND add_date<'.strval($time_end));
 		}
 
-		//$rows=array(array('id'=>1,'num_downloads'=>10,'name'=>3),array('id'=>2,'num_downloads'=>20,'name'=>4));
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
 
 		$downloads=array();

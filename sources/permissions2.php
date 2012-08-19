@@ -54,7 +54,7 @@ function _handle_permission_check_logging($member,$op,$params,$result)
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
 		if ($member!=get_member()) fwrite($PERMISSION_CHECK_LOGGER,' -- '.$username);
-	//	fwrite($PERMISSION_CHECK_LOGGER,' --> '.($result?do_lang('YES'):do_lang('NO')).chr(10));
+		//fwrite($PERMISSION_CHECK_LOGGER,' --> '.($result?do_lang('YES'):do_lang('NO')).chr(10));	Overly verbose
 		fwrite($PERMISSION_CHECK_LOGGER,chr(10));
 		sync_file(get_custom_file_base().'/data_custom/permissioncheckslog.php');
 	}

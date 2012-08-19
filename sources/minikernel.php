@@ -105,7 +105,7 @@ function get_html_trace()
 				{
 					if (!((is_array($param)) && (array_key_exists('GLOBALS',$param)))) // Some versions of PHP give the full environment as parameters. This will cause a recursive issue when outputting due to GLOBALS->ENV chaining.
 					{
-						if ((is_object($param) && (is_a($param,'ocp_tempcode')))/* || is_array($param)*/ || (is_null($param)))
+						if ((is_object($param) && (is_a($param,'ocp_tempcode'))) || (is_null($param)))
 						{
 							$__value=gettype($param);
 						} else

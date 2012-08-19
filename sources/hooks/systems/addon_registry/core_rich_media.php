@@ -1519,7 +1519,6 @@ class Hook_addon_registry_core_rich_media
 	{
 		$tag_output=new ocp_tempcode();
 
-		//$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE_START',array('WIDTH'=>'50%','FLOAT'=>'left','PADDING'=>'','PADDING_AMOUNT'=>'5')));
 		$tag_output->attach(do_lorem_template('COMCODE_CODE_SCROLL', array(
 			'TITLE'=>lorem_phrase(),
 			'CONTENT'=>lorem_phrase(),
@@ -1720,8 +1719,6 @@ class Hook_addon_registry_core_rich_media
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 
-
-		//$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
 
 		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START', array(
 			'SUMMARY'=>lorem_phrase(),

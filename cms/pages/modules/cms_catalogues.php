@@ -510,7 +510,6 @@ class Module_cms_catalogues extends standard_crud_module
 
 		$catalogue_name=$myrow['c_name'];
 		if (is_null($catalogue_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		//$this->edit_text=paragraph(do_lang_tempcode('FOR_CATALOGUE',escape_html($catalogue_name)));
 
 		return $this->get_form_fields($catalogue_name,$myrow['cc_id'],$myrow['ce_validated'],$myrow['notes'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$id);
 	}
@@ -1455,7 +1454,6 @@ class Module_cms_catalogues_cat extends standard_crud_module
 		$category_id=intval($_id);
 
 		$catalogue_name=get_param('catalogue_name',$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','c_name',array('id'=>$category_id)));
-		//$this->edit_text=paragraph(do_lang_tempcode('FOR_CATALOGUE',escape_html($catalogue_name)));
 
 		$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$category_id),'',1);
 		if (!array_key_exists(0,$rows))

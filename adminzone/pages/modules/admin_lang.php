@@ -261,7 +261,6 @@ class Module_admin_lang
 			if (!$file->is_empty())
 			{
 				$file_result=do_template('TRANSLATE_LANGUAGE_CRITICISE_FILE',array('_GUID'=>'925ae4a8dc34fed864c3072734a9abe5','COMPLAINTS'=>$file,'FILENAME'=>$file_base));
-				//$files->attach($file_result);
 				$files.=$file_result->evaluate();/*FUDGEFUDGE*/
 			}
 		}
@@ -274,7 +273,6 @@ class Module_admin_lang
 				$file->attach($crit);
 			}
 			$file_result=do_template('TRANSLATE_LANGUAGE_CRITICISE_FILE',array('_GUID'=>'4ffab9265ea8c5a5e99a7b9fb23d15e1','COMPLAINTS'=>$file,'FILENAME'=>do_lang_tempcode('NA_EM')));
-			//$files->attach($file_result);
 			$files.=$file_result->evaluate();/*FUDGEFUDGE*/
 		}
 
@@ -324,7 +322,7 @@ class Module_admin_lang
 		// Make our translation page
 		require_code('lang2');
 		$lines='';
-		$intertrans=$this->get_intertran_conv($lang);
+		$google=$this->get_google_code($lang);
 		$actions=make_string_tempcode('&nbsp;');
 		$last_level=NULL;
 		$too_many=(count($to_translate)==$max);
@@ -346,7 +344,7 @@ class Module_admin_lang
 			$name=$names[$id];
 			if (is_null($name)) continue; // Orphaned string
 
-			if ($intertrans!='') $actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'f625cf15c9db5e5af30fc772a7f0d5ff','LANG_FROM'=>$it['language'],'LANG_TO'=>$lang,'NAME'=>'trans_'.strval($id),'OLD'=>$old));
+			if ($google!='') $actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'f625cf15c9db5e5af30fc772a7f0d5ff','LANG_FROM'=>$it['language'],'LANG_TO'=>$lang,'NAME'=>'trans_'.strval($id),'OLD'=>$old));
 
 			$line=do_template('TRANSLATE_LINE_CONTENT',array('_GUID'=>'87a0f5298ce9532839f3206cd0e06051','NAME'=>$name,'ID'=>strval($id),'OLD'=>$old,'CURRENT'=>$current,'ACTIONS'=>$actions,'PRIORITY'=>$priority));
 
@@ -359,7 +357,7 @@ class Module_admin_lang
 
 		require_code('lang2');
 
-		return do_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array('_GUID'=>'af732c5e595816db1c6f025c4b8fa6a2','MAX'=>integer_format($max),'TOTAL'=>integer_format($total-$max),'LANG_ORIGINAL_NAME'=>get_site_default_lang(),'LANG_NICE_ORIGINAL_NAME'=>lookup_language_full_name(get_site_default_lang()),'LANG_NICE_NAME'=>lookup_language_full_name($lang),'TOO_MANY'=>$too_many,'INTERTRANS'=>$intertrans,'LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$title,'URL'=>$url));
+		return do_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array('_GUID'=>'af732c5e595816db1c6f025c4b8fa6a2','MAX'=>integer_format($max),'TOTAL'=>integer_format($total-$max),'LANG_ORIGINAL_NAME'=>get_site_default_lang(),'LANG_NICE_ORIGINAL_NAME'=>lookup_language_full_name(get_site_default_lang()),'LANG_NICE_NAME'=>lookup_language_full_name($lang),'TOO_MANY'=>$too_many,'GOOGLE'=>$google,'LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$title,'URL'=>$url));
 	}
 
 	/**
@@ -638,7 +636,7 @@ msgstr ""
 
 		// Make our translation page
 		$lines='';
-		$intertrans=$this->get_intertran_conv($lang);
+		$google=$this->get_google_code($lang);
 		$actions=new ocp_tempcode();
 		$next=0;
 		$trans_lot='';
@@ -659,9 +657,9 @@ msgstr ""
 		}
 
 		$translated_stuff=array();
-		if (($trans_lot!='') && ($intertrans!=''))
+		if (($trans_lot!='') && ($google!=''))
 		{
-			$result=http_download_file('http://translate.google.com/translate_t',NULL,false,false,'ocPortal',array('text'=>$trans_lot,'langpair'=>'en|'.$intertrans));
+			$result=http_download_file('http://translate.google.com/translate_t',NULL,false,false,'ocPortal',array('text'=>$trans_lot,'langpair'=>'en|'.$google));
 			if (!is_null($result))
 			{
 				require_code('character_sets');
@@ -701,7 +699,7 @@ msgstr ""
 			}
 			if ($_current=='') $_current=str_replace('\n',chr(10),$old);
 
-			if (($intertrans!='') && (get_value('google_translate_api_key')!==NULL))
+			if (($google!='') && (get_value('google_translate_api_key')!==NULL))
 			{
 				$actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'9e9a68cb2c1a1e23a901b84c9af2280b','LANG_FROM'=>get_site_default_lang(),'LANG_TO'=>$lang,'NAME'=>'trans_'.$name,'OLD'=>$_current));
 			}
@@ -712,48 +710,19 @@ msgstr ""
 
 		$url=build_url(array('page'=>'_SELF','type'=>'_code','lang_file'=>$lang_file,'lang'=>$lang),'_SELF');
 
-		return do_template('TRANSLATE_SCREEN',array('_GUID'=>'b3429f8bd0b4eb79c33709ca43e3207c','PAGE'=>$lang_file,'INTERTRANS'=>(get_value('google_translate_api_key')!==NULL)?$intertrans:'','LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$title,'URL'=>$url));
+		return do_template('TRANSLATE_SCREEN',array('_GUID'=>'b3429f8bd0b4eb79c33709ca43e3207c','PAGE'=>$lang_file,'GOOGLE'=>(get_value('google_translate_api_key')!==NULL)?$google:'','LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$title,'URL'=>$url));
 	}
 
 	/**
-	 * Convert a standard language code to an intertran code.
+	 * Convert a standard language code to a google code.
 	 *
 	 * @param  LANGUAGE_NAME	The code to convert
 	 * @return string				The converted code (or blank if none can be found)
 	 */
-	function get_intertran_conv($in)
+	function get_google_code($in)
 	{
 		if ($in==fallback_lang()) return '';
-		return strtolower($in); // Actually google now
-
-		/*$conv=array(
-					"BG"=>"bul",
-					"CS"=>"che",
-					"DA"=>"dan",
-					"NL"=>"dut",
-					"ES"=>"spa",
-					"FI"=>"fin",
-					"FR"=>"fre",
-					"DE"=>"ger",
-					"EL"=>"grk",
-					"HU"=>"hun",
-					"IS"=>"ice",
-					"IT"=>"ita",
-					"JA"=>"jpn",
-					"NO"=>"nor",
-					"TL"=>"tag",
-					"PL"=>"pol",
-					"PT"=>"poe",
-					"RO"=>"rom",
-					"RU"=>"rus",
-					"SH"=>"sel",
-					"SL"=>"slo",
-					"SV"=>"swe",
-					"CY"=>"wel",
-					"TR"=>"tur"
-		);
-		if (array_key_exists($in,$conv)) return $conv[$in];
-		return '';*/
+		return strtolower($in);
 	}
 
 	/**

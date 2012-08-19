@@ -1433,7 +1433,7 @@ function escape_html($string)
 //	if ($string==='') return $string; // Optimisation
 	if (is_object($string)) return $string;
 
-	/*if ($GLOBALS['XSS_DETECT'])
+	/*if ($GLOBALS['XSS_DETECT'])	Useful for debugging
 	{
 		if (ocp_is_escaped($string))
 		{
@@ -2028,7 +2028,7 @@ function get_zone_default_page($zone_name)
 				}
 			}
 			if ($_zone_default_page===NULL)
-				$_zone_default_page=$GLOBALS['SITE_DB']->query_select('zones',array('zone_name','zone_default_page'),NULL/*array('zone_name'=>$zone_name)*/,'ORDER BY zone_title',50/*reasonable limit; zone_title is sequential for default zones*/);
+				$_zone_default_page=$GLOBALS['SITE_DB']->query_select('zones',array('zone_name','zone_default_page'),NULL/*Load multiple so we can cache for performance array('zone_name'=>$zone_name)*/,'ORDER BY zone_title',50/*reasonable limit; zone_title is sequential for default zones*/);
 			$ZONE_DEFAULT_PAGES[$zone_name]='start';
 			$ZONE_DEFAULT_PAGES['collaboration']='start'; // Set this in case collaboration zone removed but still referenced. Performance tweak!
 			foreach ($_zone_default_page as $zone_row)

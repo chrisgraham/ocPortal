@@ -1252,11 +1252,6 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function forum_md5($password,$username)
 	{
-		/*if ((strpos($username,'.')!==false) && (strpos($username,'@')!==false))
-		{
-			return $password;
-		}*/
-
 		require_code('ocf_members');
 
 		$user_id=$this->get_member_from_username($username);

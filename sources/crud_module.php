@@ -881,7 +881,6 @@ class standard_crud_module
 
 		$post_url=build_url($map,'_SELF',NULL,false,true);
 
-		//$submit_name=(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang($doing);
 		$submit_name=do_lang_tempcode('PROCEED');
 
 		$keep=symbol_tempcode('KEEP');
@@ -921,12 +920,7 @@ class standard_crud_module
 		}
 
 		$title=get_screen_title($doing);
-		//$submit_name=(strpos($doing,' ')!==false)?protect_from_escaping($doing):do_lang($doing);
-		//if (!is_null($this->edit_submit_name)) $submit_name=$this->edit_submit_name;
 		$submit_name=do_lang_tempcode('SAVE');
-
-		//$test=$this->choose_catalogue($title);
-		//if (!is_null($test)) return $test;
 
 		$id=mixed(); // Define type as mixed
 		$id=$this->non_integer_id?get_param('id',false,true):strval(get_param_integer('id'));

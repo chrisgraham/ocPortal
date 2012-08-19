@@ -149,9 +149,6 @@ function i_force_refresh()
 			echo '<meta http-equiv="Refresh" content="0; URL='.escape_html($GLOBALS['I_REFRESH_URL']).'" />';
 			flush();
 		}
-		/*$f=fopen(get_file_base().'/test.txt','at');
-		fwrite($f,'R');
-		fclose($f);*/
 		exit();
 	}
 }

@@ -50,7 +50,7 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE_PLAIN
 					$catalogue=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$entry[0]['c_name']),'',1);
 					if (array_key_exists(0,$catalogue))
 					{
-						$map=get_catalogue_entry_map($entry[0],$catalogue[0],'PAGE','DEFAULT',NULL,NULL/*,array($field_id)*/);
+						$map=get_catalogue_entry_map($entry[0],$catalogue[0],'PAGE','DEFAULT',NULL,NULL/*Actually we'll load all so we can cache all,array($field_id)*/);
 					}
 				}
 

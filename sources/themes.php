@@ -117,7 +117,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		}
 	}
 
-	if (($pure_only) || (!isset($IMG_CODES[$site][$id])) || (!$truism)/* || (($IMG_CODES[$site][$id]=='') && (!$silent_fail))*/)
+	if (($pure_only) || (!isset($IMG_CODES[$site][$id])) || (!$truism))
 	{
 		$path=NULL;
 

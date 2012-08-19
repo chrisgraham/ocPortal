@@ -41,8 +41,6 @@ class Block_main_facebook_like
 	 */
 	function run($map)
 	{
-		//unset($map);
-
 		require_code('facebook_connect');
 
 		$appid=get_option('facebook_appid',true);

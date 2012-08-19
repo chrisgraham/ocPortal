@@ -802,9 +802,6 @@ class Database_Static_xml
 		{
 			$schema_type=preg_replace('#[^\w]#','',$schema[$key]);
 
-			/*if (in_array($schema_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','USER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
-				$val=@intval($val);*/
-
 			if (is_integer($val))
 			{
 				if (!in_array($schema_type,array('REAL','AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','USER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
@@ -1595,12 +1592,10 @@ class Database_Static_xml
 						if (in_array($data_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','USER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
 						{
 							return $this->_bad_query($query,false,'No DEFAULT given and NULL not allowed');
-							//$default=0;
 						}
 						elseif (in_array($data_type,array('REAL')))
 						{
 							return $this->_bad_query($query,false,'No DEFAULT given and NULL not allowed');
-							//$default=0.0;
 						} else
 						{
 							$default='';
@@ -2829,10 +2824,6 @@ class Database_Static_xml
 		if ((count($results)==0) && (is_null($group_by))) // If there are no records, but some functions, we need to add a row
 		{
 			$rep=$this->_function_set_scoping(array(),$select,array(),$query);
-			/*foreach (array_keys($schema) as $key)
-			{
-				$rep[$key]=NULL;
-			}*/
 			if (count($rep)!=0)
 			{
 				foreach ($select as $want)

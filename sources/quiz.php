@@ -72,7 +72,6 @@ function handle_quiz_answers($id,$text,$type)
 		}
 		$q=array_shift($as);
 		$matches=array();
-		//if (preg_match('#^(\d+)\)?(.*)#',$q,$matches)===false) continue;
 		if (preg_match('#^(.*)#',$q,$matches)===false) continue;
 		if (count($matches)==0) continue;
 
@@ -124,7 +123,6 @@ function handle_quiz_answers($id,$text,$type)
 		$q=array_shift($as);
 		$q=$q[0];
 		$matches=array();
-		//if (preg_match('#^(\d+)\)?(.*)#',$q,$matches)===false) continue;
 		if (preg_match('#^(.*)#',$q,$matches)===false) continue;
 		if (count($matches)==0) continue;
 
@@ -501,7 +499,6 @@ function render_quiz($questions)
 	{
 		$name='q_'.strval($question['id']);
 		$text=protect_from_escaping(is_string($question['q_question_text'])?comcode_to_tempcode($question['q_question_text']):get_translated_tempcode($question['q_question_text']));
-		//$pretty_name=do_lang_tempcode('Q_NUM',integer_format($i+1));
 
 		if ($question['q_num_choosable_answers']==0) // Text box ("free question"). May be an actual answer, or may not be: but regardless, the user cannot see it
 		{

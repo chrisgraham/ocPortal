@@ -661,7 +661,6 @@ class Module_tickets
 		{
 			$type_string=get_translated_text($ticket_type);
 			$ticket_type_details=get_ticket_type($ticket_type);
-			//$_title=$type_string.' ('.$_title.')';
 
 			if (!has_category_access(get_member(),'tickets',$type_string)) access_denied('I_ERROR');
 

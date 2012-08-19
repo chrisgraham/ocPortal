@@ -1897,7 +1897,7 @@ function check_variable($variable,$reference=false)
 	$next=$variable[2];
 	while ($next!=array()) // Complex: we must perform checks to make sure the base is of the correct type for the complexity to be valid. We must also note any deep variable references used in array index / string extract expressions
 	{
-		/*if ($next[0]=='CHAR_OF_STRING')
+		/*if ($next[0]=='CHAR_OF_STRING')		Deprecated syntax
 		{
 			check_expression($next[1]);
 			$passes=ensure_type(array('string'),check_variable(array('VARIABLE',$identifier,array())),$variable[3],'Variable \''.$identifier.'\' must be a string due to dereferencing');
@@ -2041,7 +2041,7 @@ function reinitialise_local_variables()
 // If the given expression is a direct variable expression, this function will infer the type as the given type. This therefore allows type infering on usage as well as on assignment
 function infer_expression_type_to_variable_type($type,$expression)
 {
-/*	if (($expression[0]=='VARIABLE') && (count($expression[1][2])==0))
+/*	if (($expression[0]=='VARIABLE') && (count($expression[1][2])==0))		Not reliable
 	{
 		$identifier=$expression[1][1];
 		set_ocportal_type($identifier,$type);

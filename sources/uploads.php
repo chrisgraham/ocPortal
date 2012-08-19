@@ -336,7 +336,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 		}
 	} else // Uh oh
 	{
-		if (/*($attach_name!='') && */(array_key_exists($attach_name,$_FILES)) && (array_key_exists('error',$_FILES[$attach_name])) && (($_FILES[$attach_name]['error']!=4) || ($should_get_something)) && ($_FILES[$attach_name]['error']!=0)) // If we uploaded
+		if ((array_key_exists($attach_name,$_FILES)) && (array_key_exists('error',$_FILES[$attach_name])) && (($_FILES[$attach_name]['error']!=4) || ($should_get_something)) && ($_FILES[$attach_name]['error']!=0)) // If we uploaded
 		{
 			if ($_FILES[$attach_name]['error']==1)
 			{

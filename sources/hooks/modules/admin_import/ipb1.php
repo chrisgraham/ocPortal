@@ -185,7 +185,7 @@ class Hook_ipb1 extends Hook_ipb_base
 		require($file_base.'/conf_global.php');
 		set_option('staff_address',$INFO['email_out']);
 		set_option('restricted_usernames',$INFO['ban_names']);
-		/*set_option('forum_posts_per_page',$INFO['display_max_posts']);
+		/*set_option('forum_posts_per_page',$INFO['display_max_posts']);	Not useful
 		set_option('forum_topics_per_page',$INFO['display_max_topics']);*/
 		set_option('site_name',$INFO['home_name']);
 		set_option('site_closed',$INFO['board_offline']);

@@ -73,7 +73,6 @@ class Hook_Profiles_Tabs_friends
 			}
 
 			$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends WHERE member_likes='.strval(intval($member_id_of)).' OR member_liked='.strval(intval($member_id_of)).' ORDER BY date_and_time',100);
-			//$rows=array(array('member_liked'=>2,'member_likes'=>3),array('member_liked'=>3,'member_likes'=>2));
 			$blocked=collapse_1d_complexity('member_blocked',$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>$member_id_of)));
 			$done_already=array();
 			$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true,false,false,NULL,$member_id_of);

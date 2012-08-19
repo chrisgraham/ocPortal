@@ -213,7 +213,6 @@ class Block_main_sitemap
 								}
 								$_entrypoints[$title]=do_template('BLOCK_MAIN_SITEMAP_NEST',array('_GUID'=>'ae2ed2549644a8e699e0938b3ab98ddb','URL'=>$url,'NAME'=>do_lang_tempcode($title),'CHILDREN'=>array()));
 							}
-							//ksort($_entrypoints);
 							$title=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
 							if (is_null($title)) $title=titleify(preg_replace('#^ocf\_#','',preg_replace('#^'.preg_quote($zone,'#').'_#','',preg_replace('#^'.preg_quote(str_replace('zone','',$zone),'#').'_#','',$page))));
 							if (count($_entrypoints)==1)

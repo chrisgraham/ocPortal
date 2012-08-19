@@ -104,7 +104,7 @@ class Module_admin_community_billboard extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		//$GLOBALS['HELPER_PANEL_PIC']='community_billboard';
+		$GLOBALS['HELPER_PANEL_PIC']='community_billboard';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_points';
 
 		require_lang('community_billboard');
@@ -136,17 +136,6 @@ class Module_admin_community_billboard extends standard_crud_module
 					do_lang('COMMUNITY_BILLBOARD_TEXT')
 		);
 	}
-
-	/* *
-	 * Standard crud_module preview generator.
-	 *
-	 * @return tempcode		The preview
-	 */
-	/*function get_preview()
-	{
-		$message=post_param('message');
-		return comcode_to_tempcode($message);
-	}*/
 
 	/**
 	 * Standard modular entry-point finder function.

@@ -76,7 +76,7 @@ function require_code($codename,$light_exit=false)
 {
 	$hphp=defined('HIPHOP_PHP');
 
-	if (($hphp)/* || ((array_key_exists('keep_old_parser',$_GET)) && ($_GET['keep_old_parser']=='1'))*/)
+	if ($hphp)
 	{
 		if ($codename=='tempcode')
 			$codename='tempcode__runtime';

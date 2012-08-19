@@ -169,8 +169,8 @@ function build_closure_tempcode($type,$name,$parameters,$escaping=NULL)
 		$_name=php_addslashes_twice($name);
 	else $_name=$name;
 
-	$myfunc='do_runtime_'.uniqid('',true)/*fast_uniqid()*/;
-	$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
+	$myfunc='do_runtime_'.uniqid('',true)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
+	$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo ecv(\\\$cl,".($_escaping).",".($_type).",\\\"".($_name)."\\\",\\\$parameters);\";\n";
 
 	$ret=new ocp_tempcode(array($funcdef,array(array($myfunc,($parameters===NULL)?array():$parameters,$type,$name,''))));
 	if ($type==TC_LANGUAGE_REFERENCE) $ret->pure_lang=true;
@@ -340,7 +340,7 @@ function closure_loop($param,$args,$main_function)
  */
 function make_string_tempcode($string)
 {
-	$myfunc='string_attach_'.uniqid('',true)/*fast_uniqid()*/;
+	$myfunc='string_attach_'.uniqid('',true)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
 	$code_to_preexecute="\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($string)."\\\";\";\n";
 	$seq_parts=array(array($myfunc,array(),TC_KNOWN,'',''));
 	return new ocp_tempcode(array($code_to_preexecute,$seq_parts));
@@ -498,7 +498,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		$loaded_this_once=true;
 	}
 	$_data=false;
-	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP) && ((!$POSSIBLY_IN_SAFE_MODE)/* || ($GLOBALS['SEMI_DEV_MODE'])*/ || (!in_safe_mode())))
+	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP) && ((!$POSSIBLY_IN_SAFE_MODE) || (!in_safe_mode())))
 	{
 		$tcp_path=$prefix.$theme.'/templates_cached/'.$lang.'/'.$codename.$suffix.'.tcp';
 		if ($loaded_this_once)
@@ -1135,8 +1135,8 @@ class ocp_tempcode
 				}
 			}
 
-			$myfunc='string_attach_'.uniqid('',true)/*fast_uniqid()*/;
-			$funcdef=/*if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($attach)."\\\";\";\n";
+			$myfunc='string_attach_'.uniqid('',true)/*We'll inline it actually rather than calling, for performance   fast_uniqid()*/;
+			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($attach)."\\\";\";\n";
 			$this->code_to_preexecute.=$funcdef;
 			$this->seq_parts[]=array($myfunc,array(),TC_KNOWN,'','');
 
@@ -1163,7 +1163,6 @@ class ocp_tempcode
 	 */
 	function is_empty()
 	{
-		//return $this->code_to_preexecute=='';
 		return $this->is_really_empty();
 	}
 
@@ -1556,9 +1555,9 @@ class ocp_tempcode
 
 			//@ob_end_flush();@ob_end_flush();@ob_end_flush();print('<!-- tempcode-eval-evaluate_echo: '.htmlentities($this->codename).' ('.clean_file_size(memory_get_usage()-$before).' used, now at '.number_format(memory_get_usage()).') -->'."\n");flush();
 
-//			if (isset($GLOBALS['FINISHING_OUTPUT'])) $seq_parts[$i]=NULL;
+			//if (isset($GLOBALS['FINISHING_OUTPUT'])) $seq_parts[$i]=NULL;
 		}
-	/*	if (isset($GLOBALS['FINISHING_OUTPUT']))		Optimisation to free memory up during wind down. Does not work well enough to risk the possible bugs doing this
+		/*if (isset($GLOBALS['FINISHING_OUTPUT']))		Optimisation to free memory up during wind down. Does not work well enough to risk the possible bugs doing this
 		{
 			$this->preprocessable_bits=NULL;
 			$this->seq_parts=NULL;

@@ -215,7 +215,7 @@ class Module_cms_galleries extends standard_crud_module
 	function _gimp()
 	{
 		$cat=get_param('name','root');
-		check_privilege('mass_import'/*,array('galleries',$cat)*/);
+		check_privilege('mass_import'/*Not currently scoped to categories,array('galleries',$cat)*/);
 
 		if (substr($cat,0,7)!='member_')
 		{
@@ -338,7 +338,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		require_code('images');
 
-		check_privilege('mass_import'/*,array('galleries',$cat)*/);
+		check_privilege('mass_import'/*Not currently scoped to categories,array('galleries',$cat)*/);
 
 		post_param('test'); // To pick up on max file size exceeded errors
 
@@ -510,7 +510,7 @@ class Module_cms_galleries extends standard_crud_module
 		require_code('images');
 		require_code('exif');
 
-		check_privilege('mass_import'/*,array('galleries',$cat)*/);
+		check_privilege('mass_import'/*Not currently scoped to categories,array('galleries',$cat)*/);
 
 		if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();
 
@@ -624,7 +624,7 @@ class Module_cms_galleries extends standard_crud_module
 	{
 		$cat=post_param('cat');
 
-		check_privilege('mass_import'/*,array('galleries',$cat)*/);
+		check_privilege('mass_import'/*Not currently scoped to categories,array('galleries',$cat)*/);
 
 		make_member_gallery_if_needed($cat);
 
@@ -755,7 +755,7 @@ class Module_cms_galleries extends standard_crud_module
 	{
 		$cat=post_param('cat');
 
-		check_privilege('mass_import'/*,array('galleries',$cat)*/);
+		check_privilege('mass_import'/*Not currently scoped to categories,array('galleries',$cat)*/);
 
 		foreach ($_POST as $x=>$file)
 		{

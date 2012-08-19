@@ -251,7 +251,6 @@ class Hook_smf
 		$groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list();
 		foreach ($groups as $id=>$groupname)
 		{
-			//if ($GLOBALS['OCF_DRIVER']->is_super_admin($id)) continue;
 			if (preg_match('/Administrator/i',$groupname)!=0) continue;
 
 			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_attachments_per_post'=>$additional_data['maxattachments'],'g_max_avatar_width'=>$additional_data['avatar_max_width'],'g_max_avatar_height'=>$additional_data['avatar_max_height']),array('id'=>$id),'',1);

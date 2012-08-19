@@ -107,7 +107,6 @@ class Block_bottom_forum_news
 					$topic_url=$GLOBALS['FORUM_DRIVER']->topic_url($topic['id'],$forum_name);
 					$title=$topic['title'];
 					$date=get_timezoned_date($topic[$date_key],false);
-	//				$username=$topic['lastusername'];
 
 					$_postdetailss[]=array('DATE'=>$date,'FULL_URL'=>$topic_url,'NEWS_TITLE'=>escape_html($title));
 				}

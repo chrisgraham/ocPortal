@@ -1338,17 +1338,6 @@ class Module_topics
 			$specialisation->attach(form_input_line(do_lang_tempcode('GUEST_NAME'),new ocp_tempcode(),'poster_name_if_guest',do_lang('GUEST'),true));
 		}
 
-		/*if (has_privilege(get_member(),'decide_comment_type'))	Threaded topics not implemented (yet?)
-		{
-			$topic_types=new ocp_tempcode();
-			$topic_types->attach(form_input_list_entry('0',get_option('threaded_topics_default')=='0',do_lang_tempcode('LINEAR_TOPIC')));
-			$topic_types->attach(form_input_list_entry('1',get_option('threaded_topics_default')=='1',do_lang_tempcode('THREADED_TOPIC')));
-			$specialisation->attach(form_input_list(do_lang_tempcode('TOPIC_TYPE'),do_lang_tempcode('DESCRIPTION_TOPIC_TYPE'),'topic_type',do_lang('GUEST'),$topic_types));
-		} else
-		{
-			$hidden_fields->attach(form_input_hidden('topic_type',get_option('threaded_topics_default')));
-		}*/
-
 		// Various kinds of tick options
 		if ((!$private_topic) && (ocf_may_moderate_forum($forum_id,get_member())))
 		{
@@ -1601,7 +1590,7 @@ class Module_topics
 						);
 			if (addon_installed('unvalidated'))
 				$moderation_options[]=array(do_lang_tempcode('VALIDATED'),'validated',true,do_lang_tempcode('DESCRIPTION_VALIDATED'));
-			//if ($intended_solely_for==-1) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));
+			//if ($intended_solely_for==-1) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));		Too much to offer this too
 		} else
 		{
 			$moderation_options=array();

@@ -45,9 +45,7 @@ if (get_magic_quotes_gpc())
 	}
 }
 
-/*if (file_exists($FILE_BASE.'/use_comp_name'))
-	require_once($FILE_BASE.'/'.(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']).'.php');
-else */require_once($FILE_BASE.'/_config.php');
+require_once($FILE_BASE.'/_config.php');
 
 if (!is_writable($FILE_BASE.'/_config.php'))
 {
@@ -388,24 +386,17 @@ function do_set()
 
 	// Delete old cookies, if our settings changed- to stop user getting confused by overrides
 	global $SITE_INFO;
-	if ((@$new['cookie_domain']!==@$SITE_INFO['cookie_domain']) || (@$new['cookie_path']!==@$SITE_INFO['cookie_path'])/* || (@$new['user_cookie']!==@$SITE_INFO['user_cookie']) || (@$new['pass_cookie']!==@$SITE_INFO['pass_cookie'])*/)
+	if ((@$new['cookie_domain']!==@$SITE_INFO['cookie_domain']) || (@$new['cookie_path']!==@$SITE_INFO['cookie_path']))
 	{
 		$cookie_path=array_key_exists('cookie_path',$SITE_INFO)?$SITE_INFO['cookie_path']:'/';
 		if ($cookie_path=='') $cookie_path=NULL;
 		$cookie_domain=array_key_exists('cookie_domain',$SITE_INFO)?$SITE_INFO['cookie_domain']:NULL;
 		if ($cookie_domain=='') $cookie_domain=NULL;
 
-		foreach (array_keys($_COOKIE) as $cookie)
+		foreach (array_keys($_COOKIE) as $cookie)	// Delete all cookies, to clean up the mess - don't try and be smart, it just creates more confusion that it's worth
 		{
 			@setcookie($cookie,'',time()-100000,$cookie_path,$cookie_domain);
 		}
-
-		/*$user_cookie=$SITE_INFO['user_cookie'];
-		if (strpos($user_cookie,':')!==false) $user_cookie=substr($user_cookie,$colon_pos+1);
-		@setcookie($user_cookie,'',time()-100000,$cookie_path,$cookie_domain);
-		$pass_cookie=$SITE_INFO['pass_cookie'];
-		if (strpos($pass_cookie,':')!==false) $pass_cookie=substr($pass_cookie,$colon_pos+1);
-		@setcookie($pass_cookie,'',time()-100000,$cookie_path,$cookie_domain);*/
 
 		echo '<p><strong>You have changed your cookie settings. Your old login cookies have been deleted, and the software will try and delete all cookie variations from your member\'s computers when they log out. However there is a chance you may need to let some members know that they need to delete their old cookies manually.</strong></p>';
 	}

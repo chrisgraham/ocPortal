@@ -218,31 +218,25 @@ class Module_points
 			$title=get_screen_title('USER_POINT_FIND');
 			return warn_screen($title,do_lang_tempcode('NO_RESULTS'));
 		}
-	//	if (count($rows)>1)
+
+		$title=get_screen_title('USER_POINT_FIND');
+
+		$results=new ocp_tempcode();
+		foreach ($rows as $myrow)
 		{
-			$title=get_screen_title('USER_POINT_FIND');
-
-			$results=new ocp_tempcode();
-			foreach ($rows as $myrow)
+			$id=$GLOBALS['FORUM_DRIVER']->pname_id($myrow);
+			if (!is_guest($id))
 			{
-				$id=$GLOBALS['FORUM_DRIVER']->pname_id($myrow);
-				if (!is_guest($id))
-				{
-					$url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$id),'_SELF');
-					$name=$GLOBALS['FORUM_DRIVER']->pname_name($myrow);
+				$url=build_url(array('page'=>'_SELF','type'=>'member','id'=>$id),'_SELF');
+				$name=$GLOBALS['FORUM_DRIVER']->pname_name($myrow);
 
-					$results->attach(do_template('POINTS_SEARCH_RESULT',array('_GUID'=>'df240255b2981dcaee38e126622be388','URL'=>$url,'ID'=>strval($id),'NAME'=>$name)));
-				}
+				$results->attach(do_template('POINTS_SEARCH_RESULT',array('_GUID'=>'df240255b2981dcaee38e126622be388','URL'=>$url,'ID'=>strval($id),'NAME'=>$name)));
 			}
-
-			$ret=do_template('POINTS_SEARCH_SCREEN',array('_GUID'=>'659af8a012d459db09dad0325a75ac70','TITLE'=>$title,'RESULTS'=>$results));
 		}
-
-	//	  $ret=$this->points_profile($GLOBALS['FORUM_DRIVER']->pname_id($rows[0]));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND'))));
 
-		return $ret;
+		return do_template('POINTS_SEARCH_SCREEN',array('_GUID'=>'659af8a012d459db09dad0325a75ac70','TITLE'=>$title,'RESULTS'=>$results));
 	}
 
 	/**

@@ -228,7 +228,6 @@ function check_rbl($rbl,$user_ip,$we_have_a_result_already=false,$page_level=fal
 				if (intval($rbl_response[1])>$spam_stale_threshold) return array(ANTISPAM_RESPONSE_STALE,NULL); // We know this IP is stale now so don't check other RBLs as no others support stale checks
 
 				$confidence_level=$_confidence_level*4.0; // Actually, this is a threat level, not a confidence level. We have a fudge factor to try and normalise it, seeing that Google was actually reported with a threat level.
-				//$confidence_level=1.0;
 				return array(ANTISPAM_RESPONSE_ACTIVE,$confidence_level);
 			}
 		}

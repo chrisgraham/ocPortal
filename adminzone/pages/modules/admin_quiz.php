@@ -133,9 +133,6 @@ class Module_admin_quiz
 		$fields=new ocp_tempcode();
 		$quiz_list=$this->nice_get_entries();
 
-		//Add all cal option
-		//$quiz_list->attach(form_input_list_entry('0',true,do_lang_tempcode('ALL_QUIZZES')));
-
 		$fields->attach(form_input_list(do_lang_tempcode('QUIZZES_EXPORT'),do_lang_tempcode('DESCRIPTION_QUIZZES_EXPORT'),'quiz_id',$quiz_list));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_export'),'_SELF');

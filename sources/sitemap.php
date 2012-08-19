@@ -253,7 +253,6 @@ function spawn_page_crawl($callback,$member_id,$extra_filters=NULL,$depth=1)
 								call_user_func_array($callback,array($pagelink,((count($_entrypoints)>1)&&($entrypoint!='!'))?($zone.':'.$page):$zone,NULL,NULL,(($entrypoint=='!') || ($entrypoint=='misc'))?0.8:0.7,$title));
 							}
 						}
-						//ksort($_entrypoints);
 						$title=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
 						if (is_null($title)) $title=titleify(preg_replace('#^ocf\_#','',preg_replace('#^'.preg_quote($zone,'#').'_#','',preg_replace('#^'.preg_quote(str_replace('zone','',$zone),'#').'_#','',$page))));
 						if ((count($_entrypoints)>1) && (!$done_top))

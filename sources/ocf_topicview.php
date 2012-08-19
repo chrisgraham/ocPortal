@@ -190,7 +190,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		if ((has_privilege(get_member(),'see_warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$num_warnings=$GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails['p_poster'],'m_cache_warnings');
-			/*if ($num_warnings!=0)*/ $post['poster_num_warnings']=$num_warnings;
+			$post['poster_num_warnings']=$num_warnings;
 		}
 
 		// Join date

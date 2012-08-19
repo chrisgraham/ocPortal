@@ -104,7 +104,7 @@ class Hook_Profiles_Tabs_Edit_signature
 
 		$tabindex=get_form_field_tabindex();
 
-		$post_comment=NULL;//do_lang_tempcode('SIGNATURE');
+		$post_comment=NULL;
 
 		list($attachments,$attach_size_field)=get_attachments('signature');
 
@@ -120,7 +120,7 @@ class Hook_Profiles_Tabs_Edit_signature
 		$comcode_editor=get_comcode_editor();
 		$comcode_editor_small=get_comcode_editor('signature',true);
 
-		$w=/* (has_privilege($member_id_viewing,'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($_signature_original,'{$,page hint: no_wysiwyg}')===false));
+		$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($_signature_original,'{$,page hint: no_wysiwyg}')===false));
 
 		$class='';
 		global $JAVASCRIPT,$WYSIWYG_ATTACHED;
@@ -135,7 +135,7 @@ class Hook_Profiles_Tabs_Edit_signature
 		$temp=$LAX_COMCODE;
 		$LAX_COMCODE=true;
 		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-		/*if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($_signature_original,NULL,false,60,NULL,NULL,true);
+		/*Make sure we reparse with semi-parse mode if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($_signature_original,NULL,false,60,NULL,NULL,true);
 		$LAX_COMCODE=$temp;
 
 		$fields=new ocp_tempcode();

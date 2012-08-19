@@ -112,20 +112,9 @@ class Block_main_forum_news
 			}
 		}
 
-//		if ((method_exists($GLOBALS['FORUM_DRIVER'],'supports_multi_show_forum_topics')) && ($GLOBALS['FORUM_DRIVER']->supports_multi_show_forum_topics()) && (count($forum_ids)!=0))
-//		{
-			$max_rows=0;
-			$rows=$GLOBALS['FORUM_DRIVER']->show_forum_topics($forum_ids,$num_topics,0,$max_rows,'',true,$date_key);
-			if (is_null($rows)) $rows=array();
-/*		} else
-		{
-			foreach ($forum_ids as $forum_id=>$forum_name)
-			{
-				$max_rows=0;
-				$t=$GLOBALS['FORUM_DRIVER']->show_forum_topics($forum_name,$num_topics,0,$max_rows,'',true);
-				if (!is_null($t)) $rows=array_merge($rows,$t);
-			}
-		}*/
+		$max_rows=0;
+		$rows=$GLOBALS['FORUM_DRIVER']->show_forum_topics($forum_ids,$num_topics,0,$max_rows,'',true,$date_key);
+		if (is_null($rows)) $rows=array();
 
 		global $M_SORT_KEY;
 		$M_SORT_KEY=$date_key;

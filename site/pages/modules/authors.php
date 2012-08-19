@@ -152,7 +152,6 @@ class Module_authors
 				$message=do_lang_tempcode('NO_SUCH_AUTHOR',escape_html($author));
 			}
 			$details=array('author'=>$author,'url'=>'','forum_handle'=>$GLOBALS['FORUM_DRIVER']->get_member_from_username($author),'description'=>NULL,'skills'=>NULL,);
-			//return inform_screen($title,$message);
 		} else
 		{
 			$details=$rows[0];

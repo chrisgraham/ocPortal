@@ -232,7 +232,6 @@ class Module_admin_menus
 
 		require_code('form_templates');
 		$fields_template=new ocp_tempcode();
-		//$fields_template->attach(form_input_line(do_lang_tempcode('CAPTION'),do_lang_tempcode('MENU_ENTRY_CAPTION'),'caption','',true)); This is editable in the tree structure instead
 		$fields_template->attach(form_input_line(do_lang_tempcode('LINK'),do_lang_tempcode('MENU_ENTRY_URL'),'url','',false));
 		$options=array(
 			array(do_lang_tempcode('MENU_ENTRY_NEW_WINDOW'),'new_window',false,new ocp_tempcode()),
@@ -346,26 +345,6 @@ class Module_admin_menus
 			}
 		}
 
-		/*// Order
-		$orderings=array();
-		$ids_copy=$ids;
-		while (count($ids_copy)!=0)
-		{
-			$best_value=0; // to initialise to integer type
-			$best_value=NULL;
-			$best_id=NULL;
-			foreach ($ids_copy as $id=>$parent)
-			{
-				$value=post_param_integer('order_'.strval($id));
-				if ((is_null($best_id)) || ($value<$best_value))
-				{
-					$best_id=$id;
-					$best_value=$value;
-				}
-			}
-			$orderings[]=$best_id;
-			unset($ids_copy[$best_id]);
-		}*/
 		$orderings=array_keys($ids);
 
 		// Get language codes currently used
@@ -434,21 +413,19 @@ class Module_admin_menus
 		$branch_type=post_param('branch_type_'.strval($id),'branch_plus'); // Default needed to workaround Opera problem
 		if ($branch_type=='branch_plus') $expanded=1; else $expanded=0;
 		$new_window=post_param_integer('new_window_'.strval($id),0);
-/*		if ($branch_type=='page')
-		{*/
-			$url=post_param('url_'.strval($id),'');
 
-			// See if we can tidy it back to a page-link
-			if (preg_match('#^\w+$#',$url)!=0) $url=':'.$url; // So users do not have to think about zones
-			$page_link=url_to_pagelink($url,true);
-			if ($page_link!='')
-			{
-				$url=$page_link;
-			} elseif (strpos($url,':')===false)
-			{
-				$url=fixup_protocolless_urls($url);
-			}
-//		} else $url='';
+		$url=post_param('url_'.strval($id),'');
+
+		// See if we can tidy it back to a page-link
+		if (preg_match('#^\w+$#',$url)!=0) $url=':'.$url; // So users do not have to think about zones
+		$page_link=url_to_pagelink($url,true);
+		if ($page_link!='')
+		{
+			$url=$page_link;
+		} elseif (strpos($url,':')===false)
+		{
+			$url=fixup_protocolless_urls($url);
+		}
 
 		$menu_save_map=array(
 			'i_menu'=>$menu,

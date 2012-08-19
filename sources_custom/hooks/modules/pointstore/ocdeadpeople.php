@@ -33,8 +33,6 @@ class Hook_pointstore_ocdeadpeople
 	{
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
 
-		//if (get_option('is_on_'.$class.'_buy')=='0') return array();
-
 		$next_url=build_url(array('page'=>'_SELF','type'=>'action','id'=>$class),'_SELF');
 		return array(do_template('POINTSTORE_'.strtoupper($class),array('NEXT_URL'=>$next_url)));
 	}
@@ -52,20 +50,17 @@ class Hook_pointstore_ocdeadpeople
 		$title=get_screen_title('DISEASES_CURES_IMMUNIZATIONS_TITLE');
 
 		require_code('form_templates');
-		//$fields=new ocp_tempcode();
 		$fields='<table style="width: 100%" cellspacing="0" cellpadding="0" border="1"><tr style="border: 1px solid #ccc; background-color: #E3EAF6;"><th colspan="2">Disease</th><th width="33%">Cure</th><th width="33%">Immunisation</th></tr>';
 
 		$member_id=get_member();
 		$rows=$GLOBALS['SITE_DB']->query_select('diseases',array('*'),NULL);
 		$counter=0;
-		foreach($rows as $disease)
+		foreach ($rows as $disease)
 		{
-			//$cure_url=get_base_url().'/site/index.php?page=pointstore&type=action_done&id=ocdeadpeople&disease='.$disease['id'].'&cure=1'; //hardcoded url
 			$cure_url='';
 			$cure_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'cure'=>1),'_SEARCH');
 			$cure_url=$cure_url->evaluate();
 
-			//$immunization_url=get_base_url().'/site/index.php?page=pointstore&type=action_done&id=ocdeadpeople&disease='.$disease['id'].'&immunization=1'; //hardcoded url
 			$immunization_url='';
 			$immunization_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'immunization'=>1),'_SEARCH');
 			$immunization_url=$immunization_url->evaluate();
@@ -75,30 +70,30 @@ class Hook_pointstore_ocdeadpeople
 			$get_cure=true;
 			$get_immunization=true;
 
-			if(isset($member_rows[0]['sick']) && $member_rows[0]['sick']==1 && $member_rows[0]['cure']==0)
+			if (isset($member_rows[0]['sick']) && $member_rows[0]['sick']==1 && $member_rows[0]['cure']==0)
 			{
 				$get_cure=true;
 				$get_immunization=false;
-			}elseif(isset($member_rows[0]['sick']) && $member_rows[0]['sick']==0 && $member_rows[0]['immunisation']==0)
+			}elseif (isset($member_rows[0]['sick']) && $member_rows[0]['sick']==0 && $member_rows[0]['immunisation']==0)
 			{
 				$get_cure=false;
 				$get_immunization=true;
-			} elseif(!isset($member_rows[0]))
+			} elseif (!isset($member_rows[0]))
 			{
 				$get_cure=false;
 				$get_immunization=true;
-			} elseif(isset($member_rows[0]['sick']) && ($member_rows[0]['cure']==1 || $member_rows[0]['immunisation']==1))
+			} elseif (isset($member_rows[0]['sick']) && ($member_rows[0]['cure']==1 || $member_rows[0]['immunisation']==1))
 			{
 				//skip this disease - because user has been immunizated or has been cured
 				$get_cure=false;
 				$get_immunization=false;
 			}
 
-			if($get_immunization || $get_cure)
+			if ($get_immunization || $get_cure)
 			{
-				if(is_file(get_file_base().'/'.$disease['image']))
+				if (is_file(get_file_base().'/'.$disease['image']))
 				{
-					if($get_cure)
+					if ($get_cure)
 					{
 						$fields.='<tr style="border: 1px solid #ccc; background-color: #D4E0F1;"><td width="45"><img width="45" src="'.get_base_url().'/'.$disease['image'].'" /></td><td>'.$disease['name'].'</td><td width="33%">'.$disease['cure'].' costs '.$disease['cure_price'].' points<br /><a href="'.$cure_url.'">'.do_lang('PROCEED').'</a></td><td width="33%">-</td></tr>';
 						$counter++;
@@ -109,7 +104,7 @@ class Hook_pointstore_ocdeadpeople
 					}
 				} else
 				{
-					if($get_cure)
+					if ($get_cure)
 					{
 						$fields.='<tr style="border: 1px solid #ccc; background-color: #D4E0F1;"><td colspan="2">'.$disease['name'].'</td><td width="33%">'.$disease['cure'].' costs '.$disease['cure_price'].' points<br /><a href="'.$cure_url.'">'.do_lang('PROCEED').'</a></td><td width="33%">-</td></tr>';
 						$counter++;
@@ -122,7 +117,7 @@ class Hook_pointstore_ocdeadpeople
 			}
 		}
 
-		if($counter==0)
+		if ($counter==0)
 			$fields.='<tr><td colspan="4">'.do_lang('NO_ENTRIES_TO_DISPLAY').'</td></tr>';
 		$fields.='</table>';
 
@@ -154,7 +149,7 @@ class Hook_pointstore_ocdeadpeople
 
 		$insert=true;
 
-		if(isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']!=0)
+		if (isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']!=0)
 		{
 			//there is already a db member disease record
 			$insert=false;
@@ -185,7 +180,7 @@ class Hook_pointstore_ocdeadpeople
 
 		// Actuate
 		require_code('points2');
-		if($get_immunization==1)
+		if ($get_immunization==1)
 		{
 			charge_member(get_member(),$amount,do_lang('IMMUNIZATION_PURCHASED'));
 		}
@@ -194,7 +189,7 @@ class Hook_pointstore_ocdeadpeople
 			charge_member(get_member(),$amount,do_lang('CURE_PURCHASED'));
 		}
 
-		if($insert)
+		if ($insert)
 		{
 			$GLOBALS['SITE_DB']->query_insert('members_diseases',array('user_id'=>$member_id,'disease_id'=>$disease_id,'sick'=>strval($sick),'cure'=>strval($cure),'immunisation'=>strval($immunization)));
 		}
@@ -203,7 +198,7 @@ class Hook_pointstore_ocdeadpeople
 			$GLOBALS['SITE_DB']->query_update('members_diseases',array('user_id'=>$member_id,'disease_id'=>$disease_id,'sick'=>strval($sick),'cure'=>strval($cure),'immunisation'=>strval($immunization)),array('user_id'=>$member_id,'disease_id'=>$disease_id),'',1);
 		}
 
-		if($get_immunization==1)
+		if ($get_immunization==1)
 		{
 			// Show message
 			$result=do_lang_tempcode('IMMUNIZATION_CONGRATULATIONS');
@@ -213,7 +208,6 @@ class Hook_pointstore_ocdeadpeople
 			// Show message
 			$result=do_lang_tempcode('CURE_CONGRATULATIONS');
 		}
-
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,$result);

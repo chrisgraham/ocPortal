@@ -162,7 +162,7 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 	$comcode_editor=get_comcode_editor();
 	$comcode_editor_small=get_comcode_editor('post',true);
 
-	$w=/* (has_privilege(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($post,'{$,page hint: no_wysiwyg}')===false));
+	$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($post,'{$,page hint: no_wysiwyg}')===false));
 
 	$class='';
 	global $JAVASCRIPT,$WYSIWYG_ATTACHED;
@@ -177,7 +177,7 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 	$temp=$LAX_COMCODE;
 	$LAX_COMCODE=true;
 	$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-	/*if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($post,NULL,false,60,NULL,NULL,true);
+	/*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($post,NULL,false,60,NULL,NULL,true);
 	$LAX_COMCODE=$temp;
 
 	return do_template('POSTING_FORM',array(
@@ -242,7 +242,6 @@ function get_comcode_editor($field_name='post',$cut_down=false)
 	if ((get_value('simplify_wysiwyg_by_permissions')!=='1') || (has_privilege(get_member(),'allow_html')))
 		$_buttons[]='box';
 	$_buttons[]='code';
-	//$_buttons[]='hide';
 	if (has_privilege(get_member(),'allow_html'))
 	{
 		if (!$cut_down) $_buttons[]='html';
@@ -733,13 +732,13 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
 		$WYSIWYG_ATTACHED=true;
 		@header('Content-type: text/html; charset='.get_charset());
 
-		$w=/* (has_privilege(get_member(),'comcode_dangerous')) && */(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
+		$w=(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
 		if ($w) $_required.=' wysiwyg';
 		global $LAX_COMCODE;
 		$temp=$LAX_COMCODE;
 		$LAX_COMCODE=true;
 		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-		/*if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
+		/*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
 		$LAX_COMCODE=$temp;
 	} else
 	{
@@ -787,13 +786,13 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 	$WYSIWYG_ATTACHED=true;
 	@header('Content-type: text/html; charset='.get_charset());
 
-	$w=/* (has_privilege(get_member(),'comcode_dangerous')) && */(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
+	$w=(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
 	if ($w) $_required.=' wysiwyg';
 	global $LAX_COMCODE;
 	$temp=$LAX_COMCODE;
 	$LAX_COMCODE=true;
 	$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-	/*if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
+	/*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
 	$LAX_COMCODE=$temp;
 
 	$_comcode=do_template('COMCODE_MESSAGE',array('_GUID'=>'fbcf2413f754ca5829b9f4c908746843','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false))));
@@ -1067,17 +1066,6 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
 	require_javascript('javascript_ajax');
 
 	$nice_label=$default;
-	/*if (!is_null($default)) Now we auto-expand to it
-	{
-		$simple_content=$object->simple($root_id,$options,$default);
-
-		$simple_content_evaluated=$simple_content->evaluate();
-		$matches=array();
-		if (preg_match('#<option [^>]*value="'.preg_quote($default,'#').'"[^>]*>([^>]* &gt; )?([^>]*)</option>#',$simple_content_evaluated,$matches)!=0)
-		{
-			$nice_label=preg_replace('# \(.*\)#','',trim($matches[2]));
-		}
-	}*/
 
 	$_required=($required)?'_required':'';
 	$input=do_template('FORM_SCREEN_INPUT_TREE_LIST',array('_GUID'=>'21e9644eeac24356f38459ebe37f693a','MULTI_SELECT'=>$multi_select,'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,'USE_SERVER_ID'=>$use_server_id,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'REQUIRED'=>$_required,'DEFAULT'=>is_null($default)?'':$default,'HOOK'=>$hook,'ROOT_ID'=>is_null($root_id)?'':$root_id,'OPTIONS'=>serialize($options)));

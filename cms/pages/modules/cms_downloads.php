@@ -154,7 +154,7 @@ class Module_cms_downloads extends standard_crud_module
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
-		check_privilege('mass_import'/*,array('downloads',$destination)*/);
+		check_privilege('mass_import'/*Not currently scoped to categories,array('downloads',$destination)*/);
 
 		$server_url=post_param('server_url');
 		$subfolders=post_param_integer('subfolders',0);
@@ -173,7 +173,6 @@ class Module_cms_downloads extends standard_crud_module
 		}
 
 		$parsed_url=parse_url($server_url);
-		//	$host=$parsed_url['scheme'].'://'.$parsed_url['host'].'/';
 		$directory=array_key_exists('path',$parsed_url)?$parsed_url['path']:'';
 
 		require_lang('installer');
@@ -313,7 +312,7 @@ class Module_cms_downloads extends standard_crud_module
 	{
 		$destination=post_param_integer('destination');
 
-		check_privilege('mass_import'/*,array('downloads',$destination)*/);
+		check_privilege('mass_import'/*Not currently scoped to categories,array('downloads',$destination)*/);
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 

@@ -121,7 +121,7 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 		if ((has_privilege(get_member(),'see_warnings')) && (addon_installed('ocf_warnings')))
 		{
 			$num_warnings=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details['poster'],'m_cache_warnings');
-			/*if ($num_warnings!=0)*/ $poster_details['poster_num_warnings']=$num_warnings;
+			$poster_details['poster_num_warnings']=$num_warnings;
 		}
 		if (has_privilege(get_member(),'see_ip')) $poster_details['ip_address']=$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details['poster'],'m_ip_address');
 	} else

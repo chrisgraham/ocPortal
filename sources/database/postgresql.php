@@ -145,12 +145,6 @@ class Database_Static_postgresql
 	{
 		$type_remap=$this->db_get_type_remap();
 
-		/*if (multi_lang()==0)
-		{
-			$type_remap['LONG_TRANS']=$type_remap['LONG_TEXT'];
-			$type_remap['SHORT_TRANS']=$type_remap['SHORT_TEXT'];
-		}*/
-
 		$_fields='';
 		$keys='';
 		foreach ($fields as $name=>$type)

@@ -773,17 +773,11 @@ class Module_galleries
 					$entry_edit_url=build_url(array('page'=>'cms_galleries','type'=>'_ev','id'=>$row['id']),get_module_zone('cms_galleries'));
 				}
 
-				/*$view_url=build_url(array('page'=>'_SELF','type'=>'video','root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$row['id']),'_SELF');
-				$thumb_url=$row['thumb_url'];
-				if (($thumb_url!='') && (url_is_local($thumb_url))) $thumb_url=get_custom_base_url().'/'.$thumb_url;
-				if ($thumb_url=='') $thumb_url=find_theme_image('na');
-				$thumb=do_image_thumb($thumb_url,'');*/
-
 				// Video HTML
 				$thumb_url=$row['thumb_url'];
 				$url=$row['url'];
 				$video_player=show_gallery_media($url,$thumb_url,$row['video_width'],$row['video_height'],$row['video_length']);
-				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'wide'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
+				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'root'=>($root=='root')?NULL:$root,'wide'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 
 				// Some extra variables relating to the currently selected entry
 				$entry_title=get_translated_text($row['title']);
@@ -817,17 +811,14 @@ class Module_galleries
 					$entry_edit_url=build_url(array('page'=>'cms_galleries','type'=>'_ed','id'=>$row['id']),get_module_zone('cms_galleries'));
 				}
 
-				/*$view_url=build_url(array('page'=>'_SELF','type'=>'image','root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$row['id']),'_SELF');
-				$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-				$thumb=do_image_thumb($thumb_url,'');*/
-				$thumb_url=$row['url'];//do_image_thumb($row['url'],'');
+				$thumb_url=$row['url'];
 				if (url_is_local($thumb_url))
 				{
 					$file_size=file_exists(get_custom_file_base().'/'.rawurldecode($thumb_url))?strval(filesize(get_custom_file_base().'/'.rawurldecode($thumb_url))):'';
 					$thumb_url=get_custom_base_url().'/'.$thumb_url;
 				} else $file_size='';
 				$full_url=$thumb_url;
-				$view_url=build_url(array('page'=>'_SELF','type'=>'image','id'=>$row['id'],'wide'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
+				$view_url=build_url(array('page'=>'_SELF','type'=>'image','id'=>$row['id'],'root'=>($root=='root')?NULL:$root,'wide'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 
 				// Some extra variables relatin to the currently selected entry
 				$entry_title=get_translated_text($row['title']);

@@ -237,7 +237,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 			$post_text=get_translated_text($lang_id,$GLOBALS['FORUM_DB'],get_site_default_lang());
 			$mail=do_lang('POST_REQUIRING_VALIDATION_MAIL',comcode_escape($url),comcode_escape($poster_name_if_guest),$post_text);
 			require_code('notifications');
-			dispatch_notification('needs_validation',NULL/*'ocf_forum:'.strval($forum_id)*/,$subject,$mail);
+			dispatch_notification('needs_validation',NULL,$subject,$mail);
 		}
 	} else
 	{
@@ -294,7 +294,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 
 		if (is_null($intended_solely_for))
 		{
-			if (($validated==1)/* || ($is_starter)*/)
+			if ($validated==1)
 			{
 				require_code('ocf_posts_action2');
 				ocf_force_update_topic_cacheing($topic_id,1,true,$is_starter,$post_id,$time,$title,$lang_id,$poster_name_if_guest,$poster);
@@ -303,7 +303,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 			{
 				if (!is_null($forum_id))
 				{
-					/*if ($sunk==1)		Don't like this
+					/*if ($sunk==1)		Don't hide posts to sunk topics actually, it's too weird
 					{
 						$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums SET f_cache_num_topics=(f_cache_num_topics+'.(($is_starter)?'1':'0').'),f_cache_num_posts=(f_cache_num_posts+1) WHERE id='.strval((integer)$topic_id));
 					} else*/

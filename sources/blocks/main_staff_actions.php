@@ -102,7 +102,7 @@ class Block_main_staff_actions
 
 		$start=get_param_integer('sa_start',0);
 		$max=get_param_integer('sa_max',10);
-		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'),/*'ip'=>do_lang_tempcode('IP_ADDRESS'),*/'the_type'=>do_lang_tempcode('ACTION'));
+		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'),/*Not enough space 'ip'=>do_lang_tempcode('IP_ADDRESS'),*/'the_type'=>do_lang_tempcode('ACTION'));
 		$test=explode(' ',get_param('sa_sort','date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
 		list($sortable,$sort_order)=$test;
@@ -138,7 +138,7 @@ class Block_main_staff_actions
 
 			$ip=tpl_crop_text_mouse_over($myrow['ip'],12);
 
-			$fields->attach(results_entry(array(escape_html($username)/*,$ip*/,escape_html($date),$type_str,$_a,$_b)));
+			$fields->attach(results_entry(array(escape_html($username)/*Not enough space ,$ip*/,escape_html($date),$type_str,$_a,$_b)));
 		}
 
 		return results_table(do_lang_tempcode('ACTIONS'),$start,'sa_start',$max,'sa_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sa_sort',new ocp_tempcode(),NULL,NULL,5);

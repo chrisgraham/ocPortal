@@ -129,7 +129,7 @@ class Hook_fields_posting_field
 		$comcode_editor=get_comcode_editor('field_'.strval($field['id']));
 		$comcode_editor_small=get_comcode_editor('field_'.strval($field['id']),true);
 
-		$w=/* (has_privilege(get_member(),'comcode_dangerous')) && */(has_js()) && (browser_matches('wysiwyg') && (strpos($actual_value,'{$,page hint: no_wysiwyg}')===false));
+		$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($actual_value,'{$,page hint: no_wysiwyg}')===false));
 
 		$class='';
 		global $JAVASCRIPT,$WYSIWYG_ATTACHED;
@@ -145,7 +145,7 @@ class Hook_fields_posting_field
 		$temp=$LAX_COMCODE;
 		$LAX_COMCODE=true;
 		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-		/*if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($actual_value,NULL,false,60,NULL,NULL,true);
+		/*We want to always reparse with semi-parse mode if (is_null($default_parsed)) */$default_parsed=comcode_to_tempcode($actual_value,NULL,false,60,NULL,NULL,true);
 		$LAX_COMCODE=$temp;
 
 		$attachments_done=true;
