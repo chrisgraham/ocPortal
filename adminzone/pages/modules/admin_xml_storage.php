@@ -106,6 +106,7 @@ class Module_admin_xml_storage
 		{
 			$nice_tables->attach(form_input_list_entry($table));
 		}
+		require_lang('comcode');
 		$export_fields->attach(form_input_multi_list(do_lang_tempcode('TABLES'),do_lang_tempcode('DESCRIPTION_TABLES'),'tables',$nice_tables,NULL,15));
 		$export_fields->attach(form_input_tick(do_lang_tempcode('EXPORT_WITH_COMCODE_XML'),do_lang_tempcode('DESCRIPTION_EXPORT_WITH_COMCODE_XML'),'comcode_xml',false));
 		$export_form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'URL'=>$export_url,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('XML_EXPORT_TEXT'),'FIELDS'=>$export_fields,'SUBMIT_NAME'=>do_lang_tempcode('EXPORT')));

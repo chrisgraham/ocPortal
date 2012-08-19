@@ -34,7 +34,7 @@
 				<td>{ORGANISATION*}</td>
 			</tr>
 			<tr>
-				<th>{!_VERSION}</th>
+				<th>{!VERSION}</th>
 				<td>{VERSION*}</td>
 			</tr>
 			<tr>

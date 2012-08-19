@@ -670,7 +670,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 		if (!is_null($owner))
 		{
 			$below=new ocp_tempcode();
-			foreach (array(array('_SEARCH:members:misc',do_lang_tempcode('MEMBERS')),array('_SEARCH:members:view:'.strval($owner).'#tab__galleries',do_lang_tempcode('MEMBER_PROFILE',escape_html($GLOBALS['FORUM_DRIVER']->get_username($owner))))) as $i=>$bits)
+			foreach (array(array('_SEARCH:members:misc',do_lang_tempcode('MEMBERS')),array('_SEARCH:members:view:'.strval($owner).'#tab__galleries',do_lang_tempcode('ocf:MEMBER_PROFILE',escape_html($GLOBALS['FORUM_DRIVER']->get_username($owner))))) as $i=>$bits)
 			{
 				list($page_link,$title)=$bits;
 				list($zone,$map,$hash)=page_link_decode($page_link);

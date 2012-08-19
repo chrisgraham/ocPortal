@@ -300,6 +300,7 @@ class Module_admin_sitetree
 				}
 			}
 		}
+		require_lang('menus');
 		$list->attach(form_input_list_group(do_lang('MENUS_EXISTING_USED'),$list_existing_used));
 		$list->attach(form_input_list_group(do_lang('MENUS_EXISTING_UNUSED'),$list_existing_unused));
 		$list->attach(form_input_list_group(do_lang('MENUS_NEW'),$list_new));

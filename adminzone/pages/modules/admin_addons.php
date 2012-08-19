@@ -705,7 +705,7 @@ class Module_admin_addons
 		$fields.=$field->evaluate();
 		$field=form_input_line(do_lang_tempcode('ORGANISATION'),do_lang_tempcode('DESCRIPTION_ORGANISATION'),'organisation',$organisation,false);
 		$fields.=$field->evaluate();
-		$field=form_input_line(do_lang_tempcode('_VERSION'),do_lang_tempcode('DESCRIPTION_VERSION'),'version','1.0',true);
+		$field=form_input_line(do_lang_tempcode('VERSION'),do_lang_tempcode('DESCRIPTION_VERSION'),'version','1.0',true);
 		$fields.=$field->evaluate();
 		$field=form_input_text(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,true);
 		$fields.=$field->evaluate();

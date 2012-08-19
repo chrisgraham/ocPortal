@@ -132,7 +132,10 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		$fields->attach(form_input_tick(do_lang_tempcode('OWNER_SET'),do_lang_tempcode('DESCRIPTION_OWNER_SET'),'owner_set',$owner_set==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('PUBLIC_VIEW'),do_lang_tempcode('DESCRIPTION_PUBLIC_VIEW'),'public_view',$public_view==1));
 		if ((is_encryption_enabled()) && ($name==''))
+		{
+			require_lang('encryption');
 			$fields->attach(form_input_tick(do_lang_tempcode('ENCRYPTED'),do_lang_tempcode('DESCRIPTION_ENCRYPTED'),'encrypted',$encrypted==1));
+		}
 
 		require_code('fields');
 		$type_list=nice_get_field_type($type,$name!='');

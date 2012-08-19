@@ -104,6 +104,7 @@ class Hook_addon_registry_core
 			'themes/default/images/no_image.png',
 			'install.css',
 			'lang/EN/installer.ini',
+			'lang/EN/encryption.ini',
 			'sources/group_member_timeouts.php',
 			'sources/hooks/systems/cron/group_member_timeouts.php',
 			'sources/inst_special.php',

@@ -51,6 +51,8 @@ function is_encryption_enabled()
  */
 function encrypt_data($data)
 {
+	require_lang('encryption');
+
 	if (!is_encryption_enabled()) return $data;
 	if ($data=='') return $data;
 	if (is_data_encrypted($data)) return $data;
@@ -119,6 +121,8 @@ function remove_magic_encryption_marker($data)
  */
 function decrypt_data($data,$passphrase)
 {
+	require_lang('encryption');
+
 	if ($data=='') return '';
 
 	if (!function_exists('openssl_pkey_get_private')) return '';

@@ -135,7 +135,7 @@ class Hook_pointstore_banners
 		$cost=intval(get_option('banner_setup'));
 		$points_after=available_points($member_id)-$cost; // the number of points this member has left
 
-		//So we don't have to call these big ugly names, again...
+		// So we don't have to call these big ugly names, again...
 		$name=post_param('name');
 		$urls=get_url('image_url','file','uploads/banners',0,OCP_UPLOAD_IMAGE);
 		$image_url=$urls[0];
@@ -298,43 +298,43 @@ class Hook_pointstore_banners
 		$curimp=$myrow['importance_modulus'];
 		$name=$myrow['name'];
 
-		//So we don't have to call these big ugly names, again...
+		// So we don't have to call these big ugly names, again...
 		$futhit=post_param_integer('hits');
 		$futimp=post_param_integer('importance');
 
-		//Checking to be sure we've ordered numbers that are positive
+		// Checking to be sure we've ordered numbers that are positive
 		if (!(($futimp>=0) && ($futhit>=0)))
 		{
 			return warn_screen($title,do_lang_tempcode('BAD_INPUT'));
 		}
 
-		//Checking to be sure we haven't ordered nothing...
+		// Checking to be sure we haven't ordered nothing...
 		if (($futimp==0) && ($futhit==0))
 		{
 			return warn_screen($title,do_lang_tempcode('SILLY_INPUT'));
 		}
 
-		//How many importance and hits will we have after this?
+		// How many importance and hits will we have after this?
 		$afthit=$curhit+$futhit;
 		$aftimp=$curimp+$futimp;
 
-		//Getting the prices of hits and importance...
+		// Getting the prices of hits and importance...
 		$impprice=intval(get_option('banner_imp'));
 		$hitprice=intval(get_option('banner_hit'));
 
-		//Figuring out the price of importance and hits, depedning on how many they bought.
+		// Figuring out the price of importance and hits, depedning on how many they bought.
 		$impcost=$futimp*$impprice;
 		$hitcost=$futhit*$hitprice;
 		$total_price=$hitcost+$impcost;
 		$points_after=$pointsleft-$total_price;
 
-		//Check to see this isn't costing us more than we can afford
+		// Check to see this isn't costing us more than we can afford
 		if (($points_after<0) && (!has_privilege(get_member(),'give_points_self')))
 		{
 			return warn_screen($title,do_lang_tempcode('CANT_AFFORD'));
 		}
 
-		//If this is *not* our first time through, do a confirmation screen. Else, make the purchase.
+		// If this is *not* our first time through, do a confirmation screen. Else, make the purchase.
 		$ord=post_param_integer('ord',0);
 		if ($ord==0)
 		{
@@ -351,7 +351,7 @@ class Hook_pointstore_banners
 		// Our Query
 		$GLOBALS['SITE_DB']->query_update('banners',array('campaign_remaining'=>$afthit,'importance_modulus'=>$aftimp),array('name'=>$name),'',1);
 
-		//Charge the user for their purchase
+		// Charge the user for their purchase
 		require_code('points2');
 		charge_member($member_id,$total_price,do_lang('BANNER_UPGRADE_LINE',integer_format($futhit),integer_format($futimp)));
 

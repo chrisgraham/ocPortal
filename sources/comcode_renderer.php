@@ -466,7 +466,7 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
 					$_embed=str_replace('&lt;?php<br />','',$_embed);
 					$_embed=str_replace('?&gt;','',$_embed);
 				}
-				$title=do_lang_tempcode('PHP_CODE');
+				$title=do_lang_tempcode('comcode:PHP_CODE');
 				break;
 		}
 	}

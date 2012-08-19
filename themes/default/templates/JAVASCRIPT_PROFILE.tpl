@@ -11,11 +11,11 @@ function decrypt_data(encrypted_data)
 	container.style.top=(get_window_height()/2-100).toString()+'px';
 
 	var title=document.createElement('h2');
-	title.appendChild(document.createTextNode('{!DECRYPT_TITLE;^}'));
+	title.appendChild(document.createTextNode('{!encryption:DECRYPT_TITLE;^}'));
 	container.appendChild(title);
 
 	var description=document.createElement('p');
-	description.appendChild(document.createTextNode('{!DECRYPT_DESCRIPTION;^}'));
+	description.appendChild(document.createTextNode('{!encryption:DECRYPT_DESCRIPTION;^}'));
 	container.appendChild(description);
 
 	var form=document.createElement('form');
@@ -25,7 +25,7 @@ function decrypt_data(encrypted_data)
 
 	var label=document.createElement('label');
 	label.setAttribute('for','decrypt');
-	label.appendChild(document.createTextNode('{!DECRYPT_LABEL;^}'));
+	label.appendChild(document.createTextNode('{!encryption:DECRYPT_LABEL;^}'));
 	form.appendChild(label);
 
 	var space=document.createTextNode(' ');
@@ -51,7 +51,7 @@ function decrypt_data(encrypted_data)
 	// Submit button
 	button=document.createElement('input');
 	button.type='submit';
-	button.value='{!DECRYPT;^}';
+	button.value='{!encryption:DECRYPT;^}';
 	// Hide the form upon submission
 	add_event_listener_abstract(button,'click',function () { container.style.display='none'; return true; });
 	proceed_div.appendChild(button);

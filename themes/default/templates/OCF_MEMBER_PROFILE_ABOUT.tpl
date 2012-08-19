@@ -132,7 +132,7 @@
 												{VALUE}
 											{+END}
 											{+START,IF_NON_EMPTY,{ENCRYPTED_VALUE}}
-												{+START,IF,{$JS_ON}}{!DATA_ENCRYPTED} <a href="javascript:decrypt_data('{ENCRYPTED_VALUE;}');" title="{!DECRYPT_DATA}: {!DESCRIPTION_DECRYPT_DATA=}">{!DECRYPT_DATA}</a>{+END}
+												{+START,IF,{$JS_ON}}{!encryption:DATA_ENCRYPTED} <a href="javascript:decrypt_data('{ENCRYPTED_VALUE;}');" title="{!encryption:DECRYPT_DATA}: {!encryption:DESCRIPTION_DECRYPT_DATA=}">{!encryption:DECRYPT_DATA}</a>{+END}
 												{+START,IF,{$NOT,{$JS_ON}}}{ENCRYPTED_VALUE*}{+END}
 											{+END}
 										</span>
