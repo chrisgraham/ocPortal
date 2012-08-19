@@ -75,14 +75,18 @@
 										if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('post').readOnly=true;
 
 										window.setInterval(function() {
-											if (isWYSIWYGField(document.getElementById('post')))
+											try
 											{
-												text_value=CKEDITOR.instances['post'].getData();
-												var matches = text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
-												var count = 0;
-												if(matches) count = matches.length/2;
-												setInnerHTML(document.getElementById('word_count'),'{!WORDS;}'.replace('\{1\}',count));
+												if (isWYSIWYGField(document.getElementById('post')))
+												{
+													text_value=CKEDITOR.instances['post'].getData();
+													var matches = text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
+													var count = 0;
+													if(matches) count = matches.length/2;
+													setInnerHTML(document.getElementById('word_count'),'{!WORDS;}'.replace('\{1\}',count));
+												}
 											}
+											catch (e) {};
 										}, 1000);
 									//]]></script>
 								{+END}
