@@ -2842,11 +2842,15 @@ function setup_word_counter(post,count_element)
 	window.setInterval(function() {
 		if (is_wysiwyg_field(post))
 		{
-			var text_value=CKEDITOR.instances['post'].getData();
-			var matches=text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
-			var count=0;
-			if(matches) count=matches.length/2;
-			set_inner_html(count_element,'{!WORDS;}'.replace('\{1\}',count));
+			try
+			{
+				var text_value=CKEDITOR.instances['post'].getData();
+				var matches=text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
+				var count=0;
+				if(matches) count=matches.length/2;
+				set_inner_html(count_element,'{!WORDS;}'.replace('\{1\}',count));
+			}
+			catch (e) {};
 		}
 	}, 1000);
 }

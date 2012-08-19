@@ -24,6 +24,9 @@
 			{+START,IF_PASSED_AND_TRUE,FRAME}
 				add_event_listener_abstract(window,'real_load',function () {
 					if (typeof window.trigger_resize!='undefined') trigger_resize();
+					window.setTimeout(function() { {$,Needed for IE10}
+						if (typeof window.trigger_resize!='undefined') trigger_resize();
+					},1000);
 				} );
 			{+END}
 
