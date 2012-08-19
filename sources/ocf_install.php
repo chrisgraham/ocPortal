@@ -871,11 +871,11 @@ function install_ocf($upgrade_from=NULL)
 
 		// NB: post_param's will return default's if OCF is being installed but not used yet (e.g. IPB forum driver chosen at installation)
 		// Make guest
-		ocf_make_member(do_lang('GUEST'),'','',NULL,NULL,NULL,NULL,array(),NULL,$guest_group,1,time(),time(),'',NULL,'',0,1,1,'','','',1,0,'',1,1,'',NULL,'',false);
+		ocf_make_member(do_lang('GUEST'),'','',NULL,NULL,NULL,NULL,array(),NULL,$guest_group,1,time(),time(),'',NULL,'',0,1,1,'','','',1,0,'',1,1,NULL,'',false);
 		// Make admin user
-		ocf_make_member(post_param('admin_username','admin'),post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$administrator_group,1,time(),time(),'','themes/default/images/ocf_default_avatars/default_set/cool_flare.png','',0,0,1,'','','',1,1,'',1,1,'',NULL,'',false);
+		ocf_make_member(post_param('admin_username','admin'),post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$administrator_group,1,time(),time(),'','themes/default/images/ocf_default_avatars/default_set/cool_flare.png','',0,0,1,'','','',1,1,'',1,1,NULL,'',false);
 		// Make test user
-		ocf_make_member('test',post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$member_group_0,1,time(),time(),'',NULL,'',0,0,1,'','','',1,0,'',1,1,'',NULL,'',false);
+		ocf_make_member('test',post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$member_group_0,1,time(),time(),'',NULL,'',0,0,1,'','','',1,0,'',1,1,NULL,'',false);
 
 		$GLOBALS['FORUM_DB']->create_table('f_read_logs',array(
 			'l_member_id'=>'*USER',

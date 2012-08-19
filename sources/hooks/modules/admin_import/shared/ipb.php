@@ -369,7 +369,7 @@ class Hook_ipb_base
 					$salt='';
 				}
 				if (is_null($password)) $password='';
-				$id_new=ocf_make_member($row['name'],$password,$row['email'],NULL,$row['bday_day'],$row['bday_month'],$row['bday_year'],$custom_fields,strval($row['time_offset']),$primary_group,$validated,$row['joined'],$row['last_visit'],'','',$signature,0,1,1,$row['title'],'','',$row['view_sigs'],$row['auto_track'],$language,$row['email_pm'],$row['email_pm'],$notes,$row['ip_address'],'',false,$type,$salt);
+				$id_new=ocf_make_member($row['name'],$password,$row['email'],NULL,$row['bday_day'],$row['bday_month'],$row['bday_year'],$custom_fields,strval($row['time_offset']),$primary_group,$validated,$row['joined'],$row['last_visit'],'','',$signature,0,1,1,$row['title'],'','',$row['view_sigs'],$row['auto_track'],$language,$row['email_pm'],$row['email_pm'],$row['ip_address'],'',false,$type,$salt);
 
 				if ($row['mgroup']==5) $GLOBALS['FORUM_DB']->query_update('f_members',array('m_is_perm_banned'=>1),array('id'=>$id_new),'',1);
 

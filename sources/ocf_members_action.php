@@ -48,7 +48,6 @@
  * @param  ?LANGUAGE_NAME	The member's language (NULL: auto detect).
  * @param  BINARY				Whether the member allows e-mails via the site.
  * @param  BINARY				Whether the member allows e-mails from staff via the site.
- * @param  LONG_TEXT			Personal notes of the member.
  * @param  ?IP					The member's IP address (NULL: IP address of current user).
  * @param  SHORT_TEXT		The code required before the account becomes active (blank: already entered).
  * @param  boolean			Whether to check details for correctness.
@@ -62,7 +61,7 @@
  * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
  * @return AUTO_LINK			The ID of the new member.
  */
-function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=0,$reveal_age=1,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$personal_notes='',$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=1,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='')
+function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone=NULL,$primary_group=NULL,$validated=1,$join_time=NULL,$last_visit_time=NULL,$theme='',$avatar_url=NULL,$signature='',$is_perm_banned=0,$preview_posts=0,$reveal_age=1,$title='',$photo_url='',$photo_thumb_url='',$views_signatures=1,$auto_monitor_contrib_content=NULL,$language=NULL,$allow_emails=1,$allow_emails_from_staff=1,$ip_address=NULL,$validated_email_confirm_code='',$check_correctness=true,$password_compatibility_scheme=NULL,$salt='',$zone_wide=1,$last_submit_time=NULL,$id=NULL,$highlighted_name=0,$pt_allow='*',$pt_rules_text='')
 {
 	if (is_null($auto_monitor_contrib_content))
 	{
@@ -85,7 +84,6 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 	if (is_null($timezone)) $timezone=get_site_timezone();
 	if (is_null($allow_emails)) $allow_emails=1;
 	if (is_null($allow_emails_from_staff)) $allow_emails_from_staff=1;
-	if (is_null($personal_notes)) $personal_notes='';
 	if (is_null($avatar_url))
 	{
 		if (($GLOBALS['IN_MINIKERNEL_VERSION']==1) || (!addon_installed('ocf_member_avatars')))
@@ -200,7 +198,6 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 		'm_signature'=>insert_lang_comcode($signature,4,$GLOBALS['FORUM_DB']),
 		'm_is_perm_banned'=>$is_perm_banned,
 		'm_preview_posts'=>$preview_posts,
-		'm_notes'=>$personal_notes,
 		'm_dob_day'=>$dob_day,
 		'm_dob_month'=>$dob_month,
 		'm_dob_year'=>$dob_year,

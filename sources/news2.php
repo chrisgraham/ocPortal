@@ -50,7 +50,7 @@ function import_wordpress_db()
 			{
 				if (post_param_integer('wp_import_wordpress_users',0)==1)
 				{
-					$member_id=ocf_make_member($values['user_login'],$values['user_pass'],'',NULL,NULL,NULL,NULL,array(),NULL,$def_grp_id,1,time(),time(),'',NULL,'',0,0,1,'','','',1,0,'',1,1,'',NULL,'',false,'wordpress');
+					$member_id=ocf_make_member($values['user_login'],$values['user_pass'],'',NULL,NULL,NULL,NULL,array(),NULL,$def_grp_id,1,time(),time(),'',NULL,'',0,0,1,'','','',1,0,1,1,NULL,'',false,'wordpress');
 				} else
 				{
 					$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username('admin');	// Set admin as owner

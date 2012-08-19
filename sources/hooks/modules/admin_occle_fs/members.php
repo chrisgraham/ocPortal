@@ -23,11 +23,11 @@ class Hook_members
 	/**
 	 * Standard modular listing function for OcCLE FS hooks.
 	 *
-	 * @param  array	The current meta-directory path
-	 * @param  string  The root node of the current meta-directory
-	 * @param  array	The current directory listing
-	 * @param  array	A reference to the OcCLE filesystem object
-	 * @return ~array  The final directory listing (false: failure)
+	 * @param  array		The current meta-directory path
+	 * @param  string		The root node of the current meta-directory
+	 * @param  array		The current directory listing
+	 * @param  array		A reference to the OcCLE filesystem object
+	 * @return ~array		The final directory listing (false: failure)
 	 */
 	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
 	{
@@ -36,7 +36,7 @@ class Hook_members
 		$listing=array();
 		if (count($meta_dir)<1)
 		{
-			//We're listing the users
+			// We're listing the users
 			$cnt=$GLOBALS['SITE_DB']->query_select_value('f_members','COUNT(*)');
 			if ($cnt>1000) return false; // Too much to process
 
@@ -45,7 +45,7 @@ class Hook_members
 		}
 		elseif (count($meta_dir)==1)
 		{
-			//We're listing the profile fields and custom profile fields of the specified member
+			// We're listing the profile fields and custom profile fields of the specified member
 			$username=$meta_dir[0];
 			$member_data=$GLOBALS['SITE_DB']->query_select('f_members',array('*'),array('m_username'=>$username),'',1);
 			if (!array_key_exists(0,$member_data)) return false;
@@ -77,7 +77,7 @@ class Hook_members
 			);
 			$listing['groups']=array();
 
-			//Custom profile fields
+			// Custom profile fields
 			$member_custom_fields=$GLOBALS['SITE_DB']->query_select('f_member_custom_fields',array('*'),array('mf_member_id'=>$member_data['id']));
 			if (!array_key_exists(0,$member_custom_fields)) return false;
 			$member_custom_fields=$member_custom_fields[0];
@@ -95,7 +95,7 @@ class Hook_members
 		{
 			if ($meta_dir[1]!='groups') return false;
 
-			//List the member's usergroups
+			// List the member's usergroups
 			$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups($GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]));
 			$group_names=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 			foreach ($groups as $group)
@@ -115,7 +115,7 @@ class Hook_members
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The new directory name
 	 * @param  array		A reference to the OcCLE filesystem object
-	 * @return boolean		Success?
+	 * @return boolean	Success?
 	 */
 	function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
 	{
@@ -123,12 +123,12 @@ class Hook_members
 
 		if (count($meta_dir)<1)
 		{
-			//We're at the top level, and adding a new member
+			// We're at the top level, and adding a new member
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
-			ocf_make_member($new_dir_name,'occle','',NULL,NULL,NULL,NULL,array(),NULL,NULL,1,NULL,NULL,'','','',0,1,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
+			ocf_make_member($new_dir_name,'occle','',NULL,NULL,NULL,NULL,array(),NULL,NULL,1,NULL,NULL,'','','',0,1,1,'','','',1,1,NULL,1,1,NULL,'',false);
 		}
-		else return false; //Directories aren't allowed to be added anywhere else
+		else return false; // Directories aren't allowed to be added anywhere else
 
 		return true;
 	}
@@ -136,10 +136,10 @@ class Hook_members
 	/**
 	 * Standard modular directory removal function for OcCLE FS hooks.
 	 *
-	 * @param  array	The current meta-directory path
-	 * @param  string	The root node of the current meta-directory
-	 * @param  string	The directory name
-	 * @param  array	A reference to the OcCLE filesystem object
+	 * @param  array		The current meta-directory path
+	 * @param  string		The root node of the current meta-directory
+	 * @param  string		The directory name
+	 * @param  array		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
@@ -148,12 +148,12 @@ class Hook_members
 
 		if (count($meta_dir)<1)
 		{
-			//We're at the top level, and removing a member
+			// We're at the top level, and removing a member
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
 			ocf_delete_member($GLOBALS['FORUM_DRIVER']->get_member_from_username($dir_name));
 		}
-		else return false; //Directories aren't allowed to be removed anywhere else
+		else return false; // Directories aren't allowed to be removed anywhere else
 
 		return true;
 	}
@@ -161,10 +161,10 @@ class Hook_members
 	/**
 	 * Standard modular file removal function for OcCLE FS hooks.
 	 *
-	 * @param  array	The current meta-directory path
-	 * @param  string	The root node of the current meta-directory
-	 * @param  string	The file name
-	 * @param  array	A reference to the OcCLE filesystem object
+	 * @param  array		The current meta-directory path
+	 * @param  string		The root node of the current meta-directory
+	 * @param  string		The file name
+	 * @param  array		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
@@ -173,7 +173,7 @@ class Hook_members
 
 		if (count($meta_dir)==1)
 		{
-			//We're in a member's directory, and deleting one of their profile fields
+			// We're in a member's directory, and deleting one of their profile fields
 			if (in_array($file_name,array(
 				'theme',
 				'avatar',
@@ -198,7 +198,7 @@ class Hook_members
 				'notes',
 				'wide',
 				'max_attach_size'
-			))) return false; //Can't delete a hard-coded (non-custom) profile field
+			))) return false; // Can't delete a hard-coded (non-custom) profile field
 
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
@@ -215,7 +215,7 @@ class Hook_members
 		{
 			if ($meta_dir[1]!='groups') return false;
 
-			//We're in a member's usergroup directory, and removing them from a usergroup
+			// We're in a member's usergroup directory, and removing them from a usergroup
 			require_code('ocf_groups_action');
 			require_code('ocf_groups_action2');
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
@@ -223,7 +223,7 @@ class Hook_members
 			if ($group_id!==false) ocf_member_leave_group($group_id,$GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]));
 			else return false;
 		}
-		else return false; //Files shouldn't even exist anywhere else!
+		else return false; // Files shouldn't even exist anywhere else!
 
 		return true;
 	}
@@ -235,7 +235,7 @@ class Hook_members
 	 * @param  string		The root node of the current meta-directory
 	 * @param  string		The file name
 	 * @param  array		A reference to the OcCLE filesystem object
-	 * @return ~string	 	The file contents (false: failure)
+	 * @return ~string		The file contents (false: failure)
 	 */
 	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
 	{
@@ -243,7 +243,7 @@ class Hook_members
 
 		if (count($meta_dir)==1)
 		{
-			//We're in a member's directory, and reading one of their profile fields
+			// We're in a member's directory, and reading one of their profile fields
 			$coded_fields=array(
 				'theme'=>'m_theme',
 				'avatar'=>'m_avatar_url',
@@ -266,7 +266,6 @@ class Hook_members
 				'language'=>'m_language',
 				'allow_e-mails'=>'m_allow_emails',
 				'allow_e-mails_from_staff'=>'m_allow_emails_from_staff',
-				'notes'=>'m_notes',
 				'wide'=>'m_zone_wide',
 				'max_attach_size'=>'m_max_email_attach_size_mb'
 			);
@@ -291,21 +290,21 @@ class Hook_members
 		{
 			if ($meta_dir[1]!='groups') return false;
 
-			//We're in a member's usergroup directory, and all files should contain '1' :)
+			// We're in a member's usergroup directory, and all files should contain '1' :)
 			return '1';
 		}
 
-		return false; //Files shouldn't even exist anywhere else!
+		return false; // Files shouldn't even exist anywhere else!
 	}
 
 	/**
 	 * Standard modular file writing function for OcCLE FS hooks.
 	 *
-	 * @param  array	The current meta-directory path
-	 * @param  string	The root node of the current meta-directory
-	 * @param  string	The file name
-	 * @param  string	The new file contents
-	 * @param  array	A reference to the OcCLE filesystem object
+	 * @param  array		The current meta-directory path
+	 * @param  string		The root node of the current meta-directory
+	 * @param  string		The file name
+	 * @param  string		The new file contents
+	 * @param  array		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
 	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
@@ -314,7 +313,7 @@ class Hook_members
 
 		if (count($meta_dir)==1)
 		{
-			//We're in a member's directory, and writing one of their profile fields
+			// We're in a member's directory, and writing one of their profile fields
 			$coded_fields=array(
 				'theme'=>'m_theme',
 				'avatar'=>'m_avatar_url',
@@ -337,7 +336,6 @@ class Hook_members
 				'language'=>'m_language',
 				'allow_e-mails'=>'m_allow_emails',
 				'allow_e-mails_from_staff'=>'m_allow_emails_from_staff',
-				'notes'=>'m_notes',
 				'wide'=>'m_zone_wide',
 				'max_attach_size'=>'m_max_email_attach_size_mb',
 				'highlighted_name'=>'m_highlighted_name',
@@ -363,7 +361,7 @@ class Hook_members
 		{
 			if ($meta_dir[1]!='groups') return false;
 
-			//We're in a member's usergroup directory, and writing one of their usergroup associations
+			// We're in a member's usergroup directory, and writing one of their usergroup associations
 			require_code('ocf_groups_action');
 			require_code('ocf_groups_action2');
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
@@ -371,7 +369,7 @@ class Hook_members
 			if ($group_id!==false) ocf_add_member_to_group($GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]),$group_id,1);
 			else return false;
 		}
-		else return false; //Group files can't be written, and other files shouldn't even exist anywhere else!
+		else return false; // Group files can't be written, and other files shouldn't even exist anywhere else!
 
 		return true;
 	}

@@ -295,7 +295,7 @@ class Hook_aef
 				$type='aef';
 				$salt=$row['salt'];
 
-				$id_new=ocf_make_member($row['username'],$password,$row['email'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['timezone']),$primary_group,$validated,$row['r_time'],$row['lastlogin_1'],'',$avatar_url,$signature,($row['temp_ban']!=0)?1:0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,1,1,'','','',false,$type,$salt,1);
+				$id_new=ocf_make_member($row['username'],$password,$row['email'],NULL,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['timezone']),$primary_group,$validated,$row['r_time'],$row['lastlogin_1'],'',$avatar_url,$signature,($row['temp_ban']!=0)?1:0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,1,1,'','',false,$type,$salt,1);
 
 				// Fix group leadership
 				$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>$id_new),array('g_group_leader'=>-$row['id']));

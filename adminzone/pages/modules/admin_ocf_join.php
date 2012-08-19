@@ -189,7 +189,7 @@ class Module_admin_ocf_join
 		breadcrumb_set_self(do_lang_tempcode('DETAILS'));
 
 		// Add member
-		$id=ocf_make_member($username,$password,$email_address,NULL,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,time(),NULL,'',NULL,'',0,$preview_posts,$reveal_age,'','','',$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,'','','',true,'','',post_param_integer('zone_wide',0),NULL,NULL,post_param_integer('highlighted_name',0),$pt_allow,$pt_rules_text);
+		$id=ocf_make_member($username,$password,$email_address,NULL,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$primary_group,$validated,time(),NULL,'',NULL,'',0,$preview_posts,$reveal_age,'','','',$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,'','',true,'','',post_param_integer('zone_wide',0),NULL,NULL,post_param_integer('highlighted_name',0),$pt_allow,$pt_rules_text);
 
 		// Secondary groups
 		if (array_key_exists('secondary_groups',$_POST))
@@ -585,7 +585,7 @@ class Module_admin_ocf_join
 
 		@ini_set('ocproducts.xss_detect','0');
 
-		$fields=array('id','m_username','m_email_address','m_last_visit_time','m_cache_num_posts','m_pass_hash_salted','m_pass_salt','m_password_compat_scheme','m_signature','m_validated','m_join_time','m_primary_group','m_is_perm_banned','m_dob_day','m_dob_month','m_dob_year','m_reveal_age','m_language','m_allow_emails','m_allow_emails_from_staff','m_notes');
+		$fields=array('id','m_username','m_email_address','m_last_visit_time','m_cache_num_posts','m_pass_hash_salted','m_pass_salt','m_password_compat_scheme','m_signature','m_validated','m_join_time','m_primary_group','m_is_perm_banned','m_dob_day','m_dob_month','m_dob_year','m_reveal_age','m_language','m_allow_emails','m_allow_emails_from_staff');
 		if (addon_installed('ocf_member_avatars')) $fields[]='m_avatar_url';
 		if (addon_installed('ocf_member_photos')) $fields[]='m_photo_url';
 		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,false,true);
@@ -1102,7 +1102,7 @@ class Module_admin_ocf_join
 					if (is_null($salt)) $salt='';
 					if (is_null($password_compatibility_scheme)) $password_compatibility_scheme='';
 
-					$linked_id=ocf_make_member($username,$password,is_null($email_address)?'':$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,NULL,$primary_group,$validated,$join_time,NULL,'',$avatar_url,$signature,$is_perm_banned,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,$allow_emails_from_staff,'',NULL,'',false,$password_compatibility_scheme,$salt,1,NULL,NULL,0,'*','');
+					$linked_id=ocf_make_member($username,$password,is_null($email_address)?'':$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,NULL,$primary_group,$validated,$join_time,NULL,'',$avatar_url,$signature,$is_perm_banned,(get_option('default_preview_guests')=='1')?1:0,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,$allow_emails_from_staff,NULL,'',false,$password_compatibility_scheme,$salt,1,NULL,NULL,0,'*','');
 					$num_added++;
 				} else
 				{
