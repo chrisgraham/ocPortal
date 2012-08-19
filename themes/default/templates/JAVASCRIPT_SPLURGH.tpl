@@ -31,7 +31,7 @@ function splurgh(save_to,key_name,url_stub,range_a,range_b,level,data,chain,not_
 	var contents="";
 	contents+="<li>\n";
 	contents+="<a id=\""+anchor_reference+"\" name=\""+anchor_reference+"\"></a>\n";
-	if (url_stub.indexOf('cedi')==-1)
+	if (url_stub.indexOf('wiki')==-1)
 	{
 		contents+="<a href=\""+escape_html(url_stub)+((url_stub.indexOf('?')==-1)?"?":"&amp;")+"chain="+chain+"&amp;"+key_name+"="+anchor_reference+"\">"+next_title+"</a>\n";
 	} else

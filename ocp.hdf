@@ -42,7 +42,7 @@ VirtualHost {
 
       b {
         pattern = ^/([^=]*)pg/s/([^\&\?]*)/index\.php$
-        to = $1index.php?page=cedi&id=$2
+        to = $1index.php?page=wiki&id=$2
         qsa = true
       }
 
@@ -90,7 +90,7 @@ VirtualHost {
 
       j {
         pattern = ^/([^=]*)pg/s/([^\&\?]*)$
-        to = $1index.php?page=cedi&id=$2
+        to = $1index.php?page=wiki&id=$2
         qsa = true
       }
 
@@ -138,7 +138,7 @@ VirtualHost {
 
       r {
         pattern = ^/([^=]*)pg/s/([^\&\?\.]*)&(.*)$
-        to = $1index.php?$3&page=cedi&id=$2
+        to = $1index.php?$3&page=wiki&id=$2
         qsa = true
       }
 
@@ -180,7 +180,7 @@ VirtualHost {
 
       y {
         pattern = ^/(site|forum|adminzone|cms|personalzone|collaboration)/s/([^\&\?]*)\.htm(\?.*)?$
-        to = $1/index.php?page=cedi&id=$2&$3
+        to = $1/index.php?page=wiki&id=$2&$3
         qsa = true
       }
 

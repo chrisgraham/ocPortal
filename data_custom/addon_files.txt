@@ -1473,7 +1473,7 @@ ocportal_tutorials
  - docs/pages/comcode_custom/EN/tut_browsers.txt
  - docs/pages/comcode_custom/EN/tut_calendar.txt
  - docs/pages/comcode_custom/EN/tut_catalogues.txt
- - docs/pages/comcode_custom/EN/tut_cedi.txt
+ - docs/pages/comcode_custom/EN/tut_wiki.txt
  - docs/pages/comcode_custom/EN/tut_censor.txt
  - docs/pages/comcode_custom/EN/tut_chat.txt
  - docs/pages/comcode_custom/EN/tut_chmod.txt
@@ -1657,9 +1657,9 @@ ocportal_tutorials
  - data_custom/images/docs/catalogues_own_pages.png
  - data_custom/images/docs/catalogues_view_entry.png
  - data_custom/images/docs/catalogues_view_index.png
- - data_custom/images/docs/cedi_page.png
- - data_custom/images/docs/cedi_post.png
- - data_custom/images/docs/cedi_tree_edit.png
+ - data_custom/images/docs/wiki_page.png
+ - data_custom/images/docs/wiki_post.png
+ - data_custom/images/docs/wiki_tree_edit.png
  - data_custom/images/docs/censor_make_warning.png
  - data_custom/images/docs/censor_member.png
  - data_custom/images/docs/censor_point_in_right_direction.png
@@ -4013,7 +4013,7 @@ testing_platform
  - _tests/tests/unit_tests/calendareventtype.php
  - _tests/tests/unit_tests/catalogues.php
  - _tests/tests/unit_tests/catalogues_category.php
- - _tests/tests/unit_tests/cedi.php
+ - _tests/tests/unit_tests/wiki.php
  - _tests/tests/unit_tests/chatroom.php
  - _tests/tests/unit_tests/comcode.php
  - _tests/tests/unit_tests/comcode_to_text.php

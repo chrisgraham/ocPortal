@@ -469,7 +469,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 									}
 								}
 							}
-							if (($textual_area) && (trim($next)!='') && (!$differented) && (addon_installed('cedi')))
+							if (($textual_area) && (trim($next)!='') && (!$differented) && (addon_installed('wiki')))
 							{
 								// Wiki+ pages
 								if (($pos<$len) && ($next=='['))

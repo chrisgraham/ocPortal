@@ -47,7 +47,7 @@ function points_profile($member_id_of,$member_id_viewing)
 	$points_gained_given=array_key_exists('points_gained_given',$_point_info)?$_point_info['points_gained_given']:0;
 	$points_gained_rating=array_key_exists('points_gained_rating',$_point_info)?$_point_info['points_gained_rating']:0;
 	$points_gained_voting=array_key_exists('points_gained_voting',$_point_info)?$_point_info['points_gained_voting']:0;
-	$cedi_post_count=array_key_exists('points_gained_seedy',$_point_info)?$_point_info['points_gained_seedy']:0;
+	$wiki_post_count=array_key_exists('points_gained_wiki',$_point_info)?$_point_info['points_gained_wiki']:0;
 	$chat_post_count=array_key_exists('points_gained_chat',$_point_info)?$_point_info['points_gained_chat']:0;
 	$points_used=points_used($member_id_of);
 	$remaining=available_points($member_id_of);
@@ -60,7 +60,7 @@ function points_profile($member_id_of,$member_id_viewing)
 	$points_rating=intval(get_option('points_rating'));
 	$points_voting=intval(get_option('points_voting'));
 	$points_joining=intval(get_option('points_joining'));
-	$points_cedi_posting=intval(get_option('points_cedi',true));
+	$points_wiki_posting=intval(get_option('points_wiki',true));
 	$points_chat_posting=intval(get_option('points_chat',true));
 	$points_per_day=intval(get_option('points_per_day',true));
 	$points_per_daily_visit=intval(get_option('points_per_daily_visit',true));
@@ -152,9 +152,9 @@ function points_profile($member_id_of,$member_id_viewing)
 		'MULT_POINTS_PER_DAY'=>integer_format($points_per_day*$days_joined),
 		'POINTS_GAINED_AUTO'=>integer_format($points_gained_auto), // This isn't needed now, it is same as MULT_POINTS_PER_DAY
 
-		'WIKI_POST_COUNT'=>integer_format($cedi_post_count),
-		'POINTS_WIKI_POSTING'=>integer_format($points_cedi_posting),
-		'MULT_POINTS_WIKI_POSTING'=>integer_format($cedi_post_count*$points_cedi_posting),
+		'WIKI_POST_COUNT'=>integer_format($wiki_post_count),
+		'POINTS_WIKI_POSTING'=>integer_format($points_wiki_posting),
+		'MULT_POINTS_WIKI_POSTING'=>integer_format($wiki_post_count*$points_wiki_posting),
 
 		'CHAT_POST_COUNT'=>integer_format($chat_post_count),
 		'POINTS_CHAT_POSTING'=>integer_format($points_chat_posting),

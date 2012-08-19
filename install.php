@@ -294,7 +294,7 @@ function step_1()
 					if ($file=='data_custom/errorlog.php') continue;
 					if ($file=='ocp_sitemap.xml') continue;
 					if ($file=='site/pages/html_custom/EN/download_tree_made.htm') continue;
-					if ($file=='site/pages/html_custom/EN/cedi_tree_made.htm') continue;
+					if ($file=='site/pages/html_custom/EN/wiki_tree_made.htm') continue;
 					if ($file=='data_custom/execute_temp.php') continue;
 					if ($file=='_config.php') continue;
 					if ($file=='themes/map.ini') continue;
@@ -2587,7 +2587,7 @@ RewriteRule ^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$ $1index.php\?p
 
 # These have a specially reduced form (no need to make it too explicit that these are Wiki+)
 #  We shouldn't shorten them too much, or the actual zone or base url might conflict
-RewriteRule ^([^=]*)pg/s/([^\&\?]*)/index\.php$ $1index.php\?page=cedi&id=$2 [L,QSA]
+RewriteRule ^([^=]*)pg/s/([^\&\?]*)/index\.php$ $1index.php\?page=wiki&id=$2 [L,QSA]
 
 # These have a specially reduce form (wide is implied)
 RewriteRule ^([^=]*)pg/galleries/image/([^\&\?]*)/index\.php(.*)$ $1index.php\?page=galleries&type=image&id=$2&wide=1$3 [L,QSA]
@@ -2602,7 +2602,7 @@ RewriteRule ^([^=]*)pg/([^/\&\?]*)/index\.php(.*)$ $1index.php\?page=$2$3 [L,QSA
 RewriteRule ^([^=]*)pg/index\.php(.*)$ $1index.php\?page=$3 [L,QSA]
 
 # Now the same, but without any additional parameters (and thus no index.php)
-RewriteRule ^([^=]*)pg/s/([^\&\?]*)$ $1index.php\?page=cedi&id=$2 [L,QSA]
+RewriteRule ^([^=]*)pg/s/([^\&\?]*)$ $1index.php\?page=wiki&id=$2 [L,QSA]
 RewriteRule ^([^=]*)pg/galleries/image/([^\&\?]*)$ $1index.php\?page=galleries&type=image&id=$2&wide=1$3 [L,QSA]
 RewriteRule ^([^=]*)pg/galleries/video/([^\&\?]*)$ $1index.php\?page=galleries&type=video&id=$2&wide=1$3 [L,QSA]
 RewriteRule ^([^=]*)pg/iotds/view/([^\&\?]*)$ $1index.php\?page=iotds&type=view&id=$2&wide=1 [L,QSA]
@@ -2612,7 +2612,7 @@ RewriteRule ^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)$ $1index.php\?page=$2&type=$3 [L,
 RewriteRule ^([^=]*)pg/([^/\&\?]*)$ $1index.php\?page=$2 [L,QSA]
 
 # And these for those nasty situations where index.php was missing and we couldn't do anything about it (usually due to keep_session creeping into a semi-cached URL)
-RewriteRule ^([^=]*)pg/s/([^\&\?\.]*)&(.*)$ $1index.php\?$3&page=cedi&id=$2 [L,QSA]
+RewriteRule ^([^=]*)pg/s/([^\&\?\.]*)&(.*)$ $1index.php\?$3&page=wiki&id=$2 [L,QSA]
 RewriteRule ^([^=]*)pg/galleries/image/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=galleries&type=image&id=$2&wide=1&$3 [L,QSA]
 RewriteRule ^([^=]*)pg/galleries/video/([^/\&\?\.]*)&(.*)$ $1index.php\?$5&page=galleries&type=video&id=$2&wide=1&$3 [L,QSA]
 RewriteRule ^([^=]*)pg/iotds/view/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=iotds&type=view&id=$2&wide=1 [L,QSA]
@@ -2622,8 +2622,8 @@ RewriteRule ^([^=]*)pg/([^/\&\?\.]*)&(.*)$ $1index.php\?$3&page=$2 [L,QSA]
 
 # These have a specially reduced form (no need to make it too explicit that these are Wiki+)
 #  We shouldn't shorten them too much, or the actual zone or base url might conflict
-RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/s/([^\&\?]*)\.htm$ $1/index.php\?page=cedi&id=$2 [L,QSA]
-RewriteRule ^s/([^\&\?]*)\.htm$ index\.php\?page=cedi&id=$1 [L,QSA]
+RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/s/([^\&\?]*)\.htm$ $1/index.php\?page=wiki&id=$2 [L,QSA]
+RewriteRule ^s/([^\&\?]*)\.htm$ index\.php\?page=wiki&id=$1 [L,QSA]
 
 # These have a specially reduce form (wide is implied)
 RewriteRule ^(site|forum|adminzone|cms|personalzone|collaboration)/galleries/image/([^\&\?]*)\.htm$ $1/index.php\?page=galleries&type=image&id=$2&wide=1 [L,QSA]

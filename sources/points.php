@@ -60,7 +60,7 @@ function total_points($member)
 	$points_gained_given=array_key_exists('points_gained_given',$_points_gained)?$_points_gained['points_gained_given']:0;
 	$points_gained_rating=array_key_exists('points_gained_rating',$_points_gained)?$_points_gained['points_gained_rating']:0;
 	$points_gained_voting=array_key_exists('points_gained_voting',$_points_gained)?$_points_gained['points_gained_voting']:0;
-	$points_gained_cedi=array_key_exists('points_gained_seedy',$_points_gained)?$_points_gained['points_gained_seedy']:0;
+	$points_gained_wiki=array_key_exists('points_gained_wiki',$_points_gained)?$_points_gained['points_gained_wiki']:0;
 	$points_gained_chat=array_key_exists('points_gained_chat',$_points_gained)?$_points_gained['points_gained_chat']:0;
 	$points_posting=intval(get_option('points_posting'));
 	$points_rating=intval(get_option('points_rating'));
@@ -68,9 +68,9 @@ function total_points($member)
 	$points_joining=intval(get_option('points_joining'));
 	$points_per_day=intval(get_option('points_per_day',true));
 	$points_chat=intval(get_option('points_chat',true));
-	$points_cedi=intval(get_option('points_cedi',true));
+	$points_wiki=intval(get_option('points_wiki',true));
 	$points_gained_auto=$points_per_day*intval(floor(floatval(time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member))/floatval(60*60*24)));
-	$points=$points_joining+$points_gained_chat*$points_chat+$points_gained_cedi*$points_cedi+$points_gained_posting*$points_posting+$points_gained_given+$points_gained_rating*$points_rating+$points_gained_voting*$points_voting+$points_gained_auto;
+	$points=$points_joining+$points_gained_chat*$points_chat+$points_gained_wiki*$points_wiki+$points_gained_posting*$points_posting+$points_gained_given+$points_gained_rating*$points_rating+$points_gained_voting*$points_voting+$points_gained_auto;
 
 	$TOTAL_POINTS_CACHE[$member]=$points;
 

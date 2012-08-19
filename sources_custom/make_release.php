@@ -286,7 +286,7 @@ function make_installers($skip_file_grab=false)
 		unlink($prefix.'/themes/default/templates/GALLERY_VIDEO_FLV.tpl');
 		unlink($prefix.'/themes/default/templates/JAVASCRIPT_JWPLAYER.tpl');
 		unlink($prefix.'/sources/jsmin.php');
-		unlink($prefix.'/themes/default/images/cedi_link.png');
+		unlink($prefix.'/themes/default/images/wiki_link.png');
 		unlink($prefix.'/themes/default/images/calendar/birthday.png');
 		unlink($prefix.'/themes/default/images/calendar/anniversary.png');
 		unlink($prefix.'/themes/default/images/calendar/appointment.png');
@@ -425,7 +425,7 @@ function make_installers($skip_file_grab=false)
 		unlink($prefix.'/themes/default/images/bigicons/realtime_rain.png');
 		unlink($prefix.'/themes/default/images/bigicons/edit_one_licence.png');
 		unlink($prefix.'/themes/default/images/bigicons/add_to_category.png');
-		unlink($prefix.'/themes/default/images/bigicons/cedi.png');
+		unlink($prefix.'/themes/default/images/bigicons/wiki.png');
 		unlink($prefix.'/themes/default/images/bigicons/menus.png');
 		unlink($prefix.'/themes/default/images/bigicons/customprofilefields.png');
 		unlink($prefix.'/themes/default/images/bigicons/quiz.png');
@@ -440,7 +440,7 @@ function make_installers($skip_file_grab=false)
 		unlink($prefix.'/themes/default/images/newscats/difficulties.jpg');
 		unlink($prefix.'/themes/default/images/newscats/community.jpg');
 		unlink($prefix.'/themes/default/images/newscats/technology.jpg');
-		unlink($prefix.'/themes/default/images/cedi_link_hover.png');
+		unlink($prefix.'/themes/default/images/wiki_link_hover.png');
 		unlink($prefix.'/themes/default/images/recommend/twitter.gif');
 		unlink($prefix.'/themes/default/images/recommend/stumbleupon.gif');
 		unlink($prefix.'/themes/default/images/recommend/print.gif');
@@ -540,7 +540,7 @@ function make_installers($skip_file_grab=false)
 		unlink($prefix.'/themes/default/images/pagepics/welcome_emails.png');
 		unlink($prefix.'/themes/default/images/pagepics/logowizard.png');
 		unlink($prefix.'/themes/default/images/pagepics/points.png');
-		unlink($prefix.'/themes/default/images/pagepics/cedi.png');
+		unlink($prefix.'/themes/default/images/pagepics/wiki.png');
 		unlink($prefix.'/themes/default/images/pagepics/menus.png');
 		unlink($prefix.'/themes/default/images/pagepics/customprofilefields.png');
 		unlink($prefix.'/themes/default/images/pagepics/quiz.png');
@@ -829,7 +829,7 @@ function populate_build_files_array($dir='',$pretend_dir='')
 			elseif (($pretend_dir.$file)=='themes/map.ini') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='default=default'.chr(10);
 			elseif ($pretend_dir.$file=='data_custom/functions.dat') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/download_tree_made.htm') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
-			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/cedi_tree_made.htm') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
+			elseif ($pretend_dir.$file=='site/pages/html_custom/EN/wiki_tree_made.htm') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='ocp_sitemap.xml') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]='';
 			elseif ($pretend_dir.$file=='data_custom/errorlog.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]="<?php return; ?".">\n"; // So that code can't be executed
 			elseif ($pretend_dir.$file=='data_custom/execute_temp.php') $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir.$file]=preg_replace('#function execute_temp\(\)\n\n\{\n.*\}\n\n#s',"function execute_temp()\n\n{\n}\n\n#",file_get_contents(get_file_base().'/'.$dir.$file));

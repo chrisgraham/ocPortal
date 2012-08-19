@@ -287,7 +287,7 @@ function _url_to_pagelink($url,$abs_only=false,$perfect_only=true)
 	foreach (array(false,true) as $method)
 	{
 		$mappings=get_remappings($method);
-		foreach ($mappings as $mapping) // e.g. array(array('page'=>'cedi','id'=>NULL),'pg/s/ID',true),
+		foreach ($mappings as $mapping) // e.g. array(array('page'=>'wiki','id'=>NULL),'pg/s/ID',true),
 		{
 			if (is_null($mapping)) continue;
 

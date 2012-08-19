@@ -1940,7 +1940,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 		OLD=/Library/WebServer/Documents/test/themes/default/templates ; NEW=/Library/WebServer/Documents/git/themes/default/templates ; diff -r $OLD $NEW | grep .tpl$ | grep "Only in "$OLD | sed "s#Only in "$OLD": ##"*/
 		$templates_rename=array(
 			'COMMENTS.tpl'=>'COMMENTS_POSTING_FORM.tpl',
-			'CEDI_RATING_INSIDE.tpl'=>'CEDI_RATING_FORM.tpl',
+			'WIKI_RATING_INSIDE.tpl'=>'WIKI_RATING_FORM.tpl',
 			'RATING_INSIDE.tpl'=>'RATING_FORM.tpl',
 			'RATING.tpl'=>'RATING_BOX.tpl',
 			'RATING_INLINE.tpl'=>'RATING_INLINE_STATIC.tpl',
@@ -1950,13 +1950,13 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
 		OLD=/Library/WebServer/Documents/test/themes/default/templates ; NEW=/Library/WebServer/Documents/git/themes/default/templates ; diff -u $OLD $NEW > ~/Desktop/diff.txt*/
 		$templates_borked=array(
 			'COMMENTS_POSTING_FORM.tpl',
-			'CEDI_RATING_FORM.tpl',
+			'WIKI_RATING_FORM.tpl',
 			'RATING_FORM.tpl',
 			'RATING_BOX.tpl',
 			'RATING_INLINE_STATIC.tpl',
 
 			'COMMENTS_WRAPPER.tpl',
-			'CEDI_RATING.tpl',
+			'WIKI_RATING.tpl',
 			'OCF_MEMBER_PROFILE_SCREEN.tpl',
 			'ATTACHMENT.tpl',
 			'POSTING_FORM.tpl',

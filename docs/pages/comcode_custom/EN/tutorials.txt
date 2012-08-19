@@ -2,7 +2,7 @@
 <div style="padding: 0 70px;">
 [title]Tutorials[/title]
 
-<div class="right" style="width: 200px">[block limit_to="comcode_pages,cedi_pages,cedi_posts" search_under="docs"]main_search[/block]</div>
+<div class="right" style="width: 200px">[block limit_to="comcode_pages,wiki_pages,wiki_posts" search_under="docs"]main_search[/block]</div>
 
 <p>These tutorials together form the ocPortal webmaster documentation.<br />If you think they can be improved in any way, please [page="site:free_tickets"]let us know[/page].</p>
 
@@ -92,7 +92,7 @@
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_10',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,expand}" /></a>Content features and usage[/title]
 	<div class="hide_tag" id="doctray_10"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="information,news,adv_news,newsletter,downloads,adv_downloads,galleries,adv_galleries,catalogues,cedi,calendar" view="full"]ocpcom_new_tutorials[/block]
+	[block="information,news,adv_news,newsletter,downloads,adv_downloads,galleries,adv_galleries,catalogues,wiki,calendar" view="full"]ocpcom_new_tutorials[/block]
 	</div>
 </div>
 

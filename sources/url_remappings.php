@@ -32,7 +32,7 @@ function get_remappings($old_style=false)
 	if ($old_style)
 	{
 		return array(
-			array(array('page'=>'cedi','type'=>'misc','id'=>NULL),'pg/s/ID',false),
+			array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'pg/s/ID',false),
 			array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>1),'pg/galleries/image/ID',false),
 			array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>1),'pg/galleries/video/ID',false),
 			array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>1),'pg/iotds/view/ID',false),
@@ -46,7 +46,7 @@ function get_remappings($old_style=false)
 	} else
 	{
 		return array(
-			array(array('page'=>'cedi','type'=>'misc','id'=>NULL),'s/ID.htm',false),
+			array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'s/ID.htm',false),
 			array(array('page'=>'galleries','type'=>'image','id'=>NULL,'wide'=>1),'galleries/image/ID.htm',false),
 			array(array('page'=>'galleries','type'=>'video','id'=>NULL,'wide'=>1),'galleries/video/ID.htm',false),
 			array(array('page'=>'iotds','type'=>'view','id'=>NULL,'wide'=>1),'iotds/view/ID.htm',false),

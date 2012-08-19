@@ -343,7 +343,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 			'map.ini'=>'themes',
 			'functions.dat'=>'data_custom',
 			'download_tree_made.htm'=>'pages/html_custom/EN',
-			'cedi_tree_made.htm'=>'site/pages/html_custom/EN',
+			'wiki_tree_made.htm'=>'site/pages/html_custom/EN',
 			'ocp_sitemap.xml'=>'',
 			'errorlog.php'=>'data_custom',
 			'execute_temp.php'=>'data_custom',
@@ -401,7 +401,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		} else
 		{
 			$ignore_filename_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
-				array('(?!cedi_tree_made\.htm$)(?!download_tree_made\.htm$)(?!index\.html$)(?!\.htaccess$).*','.*_custom(/.*)?'), // Stuff under custom folders; cedi_tree_made/download_tree_made is defined as an exception - it allows setting fewer permissions on the html_custom directory if wanted (ideally we would do this in a more modular way, but not worth the overhead)
+				array('(?!wiki_tree_made\.htm$)(?!download_tree_made\.htm$)(?!index\.html$)(?!\.htaccess$).*','.*_custom(/.*)?'), // Stuff under custom folders; wiki_tree_made/download_tree_made is defined as an exception - it allows setting fewer permissions on the html_custom directory if wanted (ideally we would do this in a more modular way, but not worth the overhead)
 			));
 			$ignore_filename_and_dir_name_patterns=array_merge($ignore_filename_and_dir_name_patterns,array(
 				//'.*\_custom'=>'.*', Let it find them, but work on the contents

@@ -37,7 +37,7 @@
 		{POST}
 	</div>
 </div>
-{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,seedy_post,{ID}}}
+{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,wiki_post,{ID}}}
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry},1}{+END}
 {+START,IF_NON_EMPTY,{BUTTONS}}
 	<div>

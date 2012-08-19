@@ -326,11 +326,11 @@ function do_work()
 
 	// Wiki+ pages (do a long descendant tree for some, and orphans for others)
 	// Wiki+ posts (remember to test Wiki+ changes screen)
-	require_code('cedi');
-	for ($i=$GLOBALS['SITE_DB']->query_select_value('seedy_pages','COUNT(*)');$i<$num_wanted;$i++)
+	require_code('wiki');
+	for ($i=$GLOBALS['SITE_DB']->query_select_value('wiki_pages','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		$page_id=cedi_add_page(random_line(),random_text(),'',1);
-		cedi_add_post($page_id,random_text(),1,NULL,false);
+		$page_id=wiki_add_page(random_line(),random_text(),'',1);
+		wiki_add_post($page_id,random_text(),1,NULL,false);
 	}
 	echo 'done Wiki+ stuff'.chr(10);
 

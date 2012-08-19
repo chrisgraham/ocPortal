@@ -59,7 +59,7 @@ $featuretree=array(
 			array(
 				array('Reporting bugs','Big or tiny &ndash; we will be happy if you even report typos we make as bugs.'),
 				array('Reporting usability issues','We will be happy if you have any concrete suggestions for making reasonably common tasks even a little bit easier.'),
-				array('Write community tutorials','Post them on [page="site:cedi"]CEDI[/page] and the staff may highlight them.'),
+				array('Write community tutorials','Post them on [page="site:wiki"]Wiki+[/page] and the staff may highlight them.'),
 				array('Developing unit tests','If you know some PHP you can help us test ocPortal en-masse. [url="http://ocportal.com/docs/ocportal_testing_framework.zip"]Write unit tests[/url] (the latest version of this framework is in our public git repository).'),
 			),NULL,true,
 		),
@@ -250,8 +250,8 @@ $featuretree=array(
 			),
 			'Think &ldquo;databases on my website&rdquo;',
 		),
-		'cedi'=>array(
-			'CEDI <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of CEDI" href="http://shareddemo.myocp.com/site/index.php?page=cedi&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>',
+		'wiki'=>array(
+			'Wiki+ <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Wiki+" href="http://shareddemo.myocp.com/site/index.php?page=wiki&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>',
 			array(
 				array('Create an encyclopaedic database for your website'),
 				array('Create a tree-structure, or use traditional cross-linking'),
@@ -260,7 +260,7 @@ $featuretree=array(
 				NULL, // divider
 				array('Allow users to jump in at random pages'),
 				array('Make your pages either wiki-style or topic-style'),
-				array('Display a tree structure of your whole CEDI (normal wiki\'s can\'t do that!)'),
+				array('Display a tree structure of your whole Wiki+ (normal wiki\'s can\'t do that!)'),
 			),
 			'Think &ldquo;structured wikis&rdquo;',
 		),

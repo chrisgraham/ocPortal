@@ -53,9 +53,9 @@
 					<td class="answer">= {MULT_POINTS_POSTING*} {!POINTS_UNIT}</td>
 				</tr>
 			{+END}{+END}
-			{+START,IF,{$NEQ,{POINTS_WIKI_POSTING},0}}{+START,IF,{$ADDON_INSTALLED,cedi}}
+			{+START,IF,{$NEQ,{POINTS_WIKI_POSTING},0}}{+START,IF,{$ADDON_INSTALLED,wiki}}
 				<tr>
-					<td>&bull; {!cedi:CEDI_POSTS}:</td>
+					<td>&bull; {!wiki:WIKI_POSTS}:</td>
 					<td class="equation">{WIKI_POST_COUNT*} &times; {POINTS_WIKI_POSTING*} {!POINTS_UNIT}</td>
 					<td class="answer">= {MULT_POINTS_WIKI_POSTING*} {!POINTS_UNIT}</td>
 				</tr>

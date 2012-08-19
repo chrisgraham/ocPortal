@@ -36,8 +36,8 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 	// TODO: remove legacy later
 	if ($type_has=='award_hook')
 	{
-		if ($type_id=='seedy_page') $type_id='cedi_page';
-		if ($type_id=='seedy_post') $type_id='cedi_post';
+		if ($type_id=='wiki_page') $type_id='wiki_page';
+		if ($type_id=='wiki_post') $type_id='wiki_post';
 		$type_has='cma_hook';
 	}
 
@@ -63,8 +63,8 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 	if ($real_type_wanted=='award_hook')
 	{
 		// TODO: remove legacy later
-		if ($found_type_id=='cedi_page') $found_type_id='seedy_page';
-		if ($found_type_id=='cedi_post') $found_type_id='seedy_post';
+		if ($found_type_id=='wiki_page') $found_type_id='wiki_page';
+		if ($found_type_id=='wiki_post') $found_type_id='wiki_post';
 		if ($found_type_id=='iotd') $found_type_id=''; // TODO: No award hook right now
 	}
 

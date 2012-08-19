@@ -1,6 +1,6 @@
 {TITLE}
 
-{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,seedy_page,{ID}}}
+{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,wiki_page,{ID}}}
 
 {$REQUIRE_CSS,ocf}
 
@@ -58,10 +58,10 @@
 		</div></div>
 
 		{+START,IF,{$AND,{$JS_ON},{STAFF_ACCESS}}}
-			<form title="{!MERGE_CEDI_POSTS}" action="{$PAGE_LINK*,_SEARCH:cedi:type=mg:id={ID},1}" method="post">
+			<form title="{!MERGE_WIKI_POSTS}" action="{$PAGE_LINK*,_SEARCH:wiki:type=mg:id={ID},1}" method="post">
 				<div class="float_surrounder">
 					<div class="wiki_merge_posts_button">
-						<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_page" type="submit" value="{!MERGE_CEDI_POSTS}" />
+						<input onclick="if (add_form_marked_posts(this.form,'mark_')) { disable_button_just_clicked(this); return true; } window.fauxmodal_alert('{!NOTHING_SELECTED=;}'); return false;" class="button_page" type="submit" value="{!MERGE_WIKI_POSTS}" />
 					</div>
 				</div>
 			</form>
@@ -75,7 +75,7 @@
 
 	<div class="buttons_group">
 		{+START,INCLUDE,NOTIFICATION_BUTTONS}
-			NOTIFICATIONS_TYPE=cedi
+			NOTIFICATIONS_TYPE=wiki
 			NOTIFICATIONS_ID={ID}
 		{+END}
 

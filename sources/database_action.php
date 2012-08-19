@@ -343,6 +343,19 @@ function set_privilege($group_id,$permission,$value,$page=NULL,$category_type=NU
 }
 
 /**
+ * Rename a privilege.
+ *
+ * @param  ID_TEXT		The old name
+ * @param  ID_TEXT		The new name
+ */
+function rename_privilege($old,$new)
+{
+	$GLOBALS['SITE_DB']->query_update('privilege_list',array('the_name'=>$new),array('the_name'=>$old),'',1);
+	$GLOBALS['SITE_DB']->query_update('group_privileges',array('privilege'=>$new),array('privilege'=>$old),'',1);
+	$GLOBALS['SITE_DB']->query_update('member_privileges',array('privilege'=>$new),array('privilege'=>$old),'',1);
+}
+
+/**
  * Delete a privilege, and every usergroup is then relaxed from the restrictions of this permission.
  *
  * @param  ID_TEXT		The codename of the permission

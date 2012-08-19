@@ -80,7 +80,7 @@ Here is a glossary of some of the terms that are used to describe ocPortal conce
  - Points, Members of a site can earn 'points' by participating in site activities. The site administrator can adjust the value of different activities. Members can then gift these points to each other or redeem them at the point-store.
  - Point-store, The place where members can spend hard-earned points on gifts such as e-mail addresses or community billboard messages
  - Standard box, The type of box that wraps most ocPortal content, like side-blocks (e.g. 'Site statistics', 'Users online', 'Shoutbox', etc.). There are different styles of standard box.
- - Splurgh, A system for compressing tree structures of links, so that large tree structures may be transmitted efficiently to visitor's web browsers. These compressed structures can be decompressed by JavaScript (Javascript functions in the [tt]JAVASCRIPT_SPLURGH[/tt] template interpret the compressed format, expanding it into a full uncompressed page). Splurgh functionality is rarely used -- usually only to provide a single tree overview screen for a new module's category structure. Out-of-the-box ocPortal uses it to provide such screens for the download system, the galleries system, and the CEDI system.
+ - Splurgh, A system for compressing tree structures of links, so that large tree structures may be transmitted efficiently to visitor's web browsers. These compressed structures can be decompressed by JavaScript (Javascript functions in the [tt]JAVASCRIPT_SPLURGH[/tt] template interpret the compressed format, expanding it into a full uncompressed page). Splurgh functionality is rarely used -- usually only to provide a single tree overview screen for a new module's category structure. Out-of-the-box ocPortal uses it to provide such screens for the download system, the galleries system, and the Wiki+ system.
  - System, A large aspect of ocPortal that has an influence spanning multiple files (e.g. IOTD system, Addon system, Award system). This is an informal term -- addon is used more formerly and refers to a defined set of files.
  - [page="docs:tut_tempcode"]Tempcode[/page], An intermediary format between Comcode and XHTML, used for transmission and storage of screens in ocPortal. Also, the written programming language used in templates. The two things are different representations of the same thing.
  - Theme, A set of templates, images and CSS style-sheets that can be used on a website to completely change the layout, look and feel of the website. Different themes can be used concurrently by many members, with no impact on the system
@@ -97,7 +97,7 @@ The following ocPortal concepts are used to describe content:
 
 At the time of writing, 'resource' is often used loosely, and 'category' and 'entry' are used differently depending on the context. This is not a design flaw, but merely indicative of the diversity of context in ocPortal and the difficulty of being consistent across different contexts (e.g. a topic is a category for posts, but really we would usually consider the categories of the forum system to be the actual forums).
 
-There are many other terms in ocPortal that belong to certain addons (such as 'Download' or 'CEDI'), but these won't be explained here.
+There are many other terms in ocPortal that belong to certain addons (such as 'Download' or 'Wiki+'), but these won't be explained here.
 
 [title="3"]Feature architecting standards, and implementation notes[/title]
 
@@ -162,5 +162,5 @@ The documentation and tools on the ocPortal website may be out of date between o
  - [url="Developer documentation source files"]https://www.dropbox.com/sh/qouvnrbmbwr09ad/tMZjhcyn7i[/url]
  - Patches for future https://www.dropbox.com/sh/2lg5c6qb035jw2c/ZEaKNhbE4z
  - Graphics https://www.dropbox.com/sh/3lt8yaj60wxeb24/PxztQ4hGJR
- - [url="Community documentation"]http://ocportal.com/site/cedi.htm[/url]
+ - [url="Community documentation"]http://ocportal.com/site/wiki.htm[/url]
 [/surround]

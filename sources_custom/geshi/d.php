@@ -94,7 +94,7 @@ $language_data = array (
             "lang|rang|loz|spades|clubs|hearts|diams);#",*/
         // optimized:
         6 => "#\\\\&(?:A(?:Elig|acute|circ|grave|lpha|ring|tilde|uml)|Beta|".
-            "C(?:cedil|hi)|D(?:agger|elta)|E(?:TH|acute|circ|grave|psilon|ta|uml)|".
+            "C(?:wikil|hi)|D(?:agger|elta)|E(?:TH|acute|circ|grave|psilon|ta|uml)|".
             "Gamma|I(?:acute|circ|grave|ota|uml)|Kappa|Lambda|Mu|N(?:tilde|u)|".
             "O(?:Elig|acute|circ|grave|m(?:ega|icron)|slash|tilde|uml)|".
             "P(?:hi|i|rime|si)|Rho|S(?:caron|igma)|T(?:HORN|au|heta)|".

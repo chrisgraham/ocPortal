@@ -82,7 +82,7 @@ function get_chmod_array()
 						'themes/default/css_custom','themes/default/images_custom','themes/default/templates_custom','themes/default/templates_cached','themes/default/templates_cached/'.$LANG,'themes/default/theme.ini',
 						'uploads/incoming','uploads/website_specific','uploads/personal_sound_effects','uploads/banners','uploads/downloads','uploads/galleries','uploads/watermarks','uploads/grepimages','uploads/galleries_thumbs','uploads/iotds','uploads/iotds_thumbs','uploads/catalogues','uploads/attachments','uploads/attachments_thumbs','uploads/auto_thumbs','uploads/ocf_avatars','uploads/ocf_cpf_upload','uploads/ocf_photos','uploads/ocf_photos_thumbs','uploads/filedump',
 						'_config.php','exports/backups','exports/file_backups','exports/addons','imports/addons',
-						'site/pages/html_custom/'.$LANG.'/download_tree_made.htm','site/pages/html_custom/'.$LANG.'/cedi_tree_made.htm'
+						'site/pages/html_custom/'.$LANG.'/download_tree_made.htm','site/pages/html_custom/'.$LANG.'/wiki_tree_made.htm'
 					));
 }
 

@@ -64,7 +64,7 @@ class Hook_ocp_merge
 								'polls', // including rating, trackbacks, seo
 								'pointstore',
 								'redirects',
-								'cedi', // including rating, trackbacks, seo
+								'wiki', // including rating, trackbacks, seo
 								'stats',
 								'community_billboard',
 								'themes',
@@ -82,7 +82,7 @@ class Hook_ocp_merge
 								'quizzes',
 							);
 		$info['dependencies']=array( // This dependency tree is overdefined, but I wanted to make it clear what depends on what, rather than having a simplified version
-								'attachment_references'=>array('attachments','ocf_members','ocf_posts','news_and_categories','cedi'),
+								'attachment_references'=>array('attachments','ocf_members','ocf_posts','news_and_categories','wiki'),
 								'permissions'=>array_diff($info['import'],array('themes','feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
 								'feedback'=>array_diff($info['import'],array('themes','ocf_warnings','feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
 								'authors'=>array('ocf_members'),
@@ -96,7 +96,7 @@ class Hook_ocp_merge
 								'news_and_categories'=>array('ocf_members','attachments'),
 								'polls'=>array('ocf_members'),
 								'pointstore'=>array('ocf_members'),
-								'cedi'=>array('ocf_members','attachments'),
+								'wiki'=>array('ocf_members','attachments'),
 								'community_billboard'=>array('ocf_members'),
 								'useronline_tracking'=>array('ocf_members'),
 								'ip_bans'=>array('ocf_members'),
@@ -113,7 +113,7 @@ class Hook_ocp_merge
 								'ocf_post_templates'=>array('ocf_forums'),
 								'ocf_warnings'=>array('ocf_members','ocf_groups','ocf_topics','ocf_forums'),
 								'newsletter_subscriptions'=>array('attachments'),
-								'awards'=>array('calendar','cedi','news_and_categories','images_and_galleries','catalogues','authors','ocf_topics','ocf_posts','ocf_forums','ocf_groups','ocf_members','downloads_and_categories'),
+								'awards'=>array('calendar','wiki','news_and_categories','images_and_galleries','catalogues','authors','ocf_topics','ocf_posts','ocf_forums','ocf_groups','ocf_members','downloads_and_categories'),
 								'ecommerce'=>array('ocf_groups','ocf_members'),
 								'ocf_welcome_emails'=>array('ocf_members'),
 								'bookmarks'=>array('ocf_members'),
@@ -1114,60 +1114,60 @@ class Hook_ocp_merge
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
-	function import_cedi($db,$table_prefix,$file_base)
+	function import_wiki($db,$table_prefix,$file_base)
 	{
-		if (!import_check_if_imported('cedi_page',strval(db_get_first_id())))
-			import_id_remap_put('cedi_page',strval(db_get_first_id()),db_get_first_id());
+		if (!import_check_if_imported('wiki_page',strval(db_get_first_id())))
+			import_id_remap_put('wiki_page',strval(db_get_first_id()),db_get_first_id());
 
-		$rows_pages=$db->query('SELECT * FROM '.$table_prefix.'seedy_pages',NULL,NULL,true);
+		$rows_pages=$db->query('SELECT * FROM '.$table_prefix.'wiki_pages',NULL,NULL,true);
 		if (is_null($rows_pages)) return;
 		$titlemap=array();
 		foreach ($rows_pages as $row)
 		{
 			$title=$this->get_lang_string($db,$row['title']);
 
-			if (import_check_if_imported('cedi_page',strval($row['id'])))
+			if (import_check_if_imported('wiki_page',strval($row['id'])))
 			{
-				$id=import_id_remap_get('cedi_page',strval($row['id']));
+				$id=import_id_remap_get('wiki_page',strval($row['id']));
 				$titlemap[$id]=$title;
 				continue;
 			}
 
 			$titlemap[$id]=$title;
-			$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',array('submitter'=>array_key_exists('submitter',$row)?$row['submitter']:get_member(),'hide_posts'=>array_key_exists('hide_posts',$row)?$row['hide_posts']:0,'seedy_views'=>array_key_exists('seedy_views',$row)?$row['seedy_views']:0,'notes'=>$row['notes'],'description'=>insert_lang_comcode($this->get_lang_string($db,$row['description']),2),'add_date'=>$row['add_date'],'title'=>insert_lang($title,2)),true);
+			$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>array_key_exists('submitter',$row)?$row['submitter']:get_member(),'hide_posts'=>array_key_exists('hide_posts',$row)?$row['hide_posts']:0,'wiki_views'=>array_key_exists('wiki_views',$row)?$row['wiki_views']:0,'notes'=>$row['notes'],'description'=>insert_lang_comcode($this->get_lang_string($db,$row['description']),2),'add_date'=>$row['add_date'],'title'=>insert_lang($title,2)),true);
 
-			import_id_remap_put('cedi_page',strval($row['id']),$id);
+			import_id_remap_put('wiki_page',strval($row['id']),$id);
 		}
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'seedy_posts');
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'wiki_posts');
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			if (import_check_if_imported('cedi_post',strval($row['id']))) continue;
+			if (import_check_if_imported('wiki_post',strval($row['id']))) continue;
 
-			$page_id=import_id_remap_get('cedi_page',$row['page_id'],true);
+			$page_id=import_id_remap_get('wiki_page',$row['page_id'],true);
 			if (is_null($page_id)) $page_id=db_get_first_id();
 
 			$user=$on_same_msn?$row['the_user']:import_id_remap_get('member',$row['the_user'],true);
 			if (is_null($user)) $user=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			$id_new=$GLOBALS['SITE_DB']->query_insert('seedy_posts',array('seedy_views'=>array_key_exists('seedy_views',$row)?$row['seedy_views']:0,'validated'=>array_key_exists('validated',$row)?$row['validated']:1,'the_message'=>insert_lang_comcode($this->get_lang_string($db,$row['the_message']),2),'the_user'=>$user,'date_and_time'=>$row['date_and_time'],'page_id'=>$page_id,'edit_date'=>$row['edit_date']),true);
+			$id_new=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('wiki_views'=>array_key_exists('wiki_views',$row)?$row['wiki_views']:0,'validated'=>array_key_exists('validated',$row)?$row['validated']:1,'the_message'=>insert_lang_comcode($this->get_lang_string($db,$row['the_message']),2),'the_user'=>$user,'date_and_time'=>$row['date_and_time'],'page_id'=>$page_id,'edit_date'=>$row['edit_date']),true);
 
-			import_id_remap_put('cedi_post',strval($row['id']),$id_new);
+			import_id_remap_put('wiki_post',strval($row['id']),$id_new);
 		}
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'seedy_changes');
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'wiki_changes');
 		foreach ($rows as $row)
 		{
-			$page_id=import_id_remap_get('cedi_page',$row['the_page'],true);
+			$page_id=import_id_remap_get('wiki_page',$row['the_page'],true);
 			if (is_null($page_id)) continue;
 
 			$user=$on_same_msn?$row['the_user']:import_id_remap_get('member',$row['the_user'],true);
 			if (is_null($user)) $user=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>$row['the_action'],'the_page'=>$page_id,'ip'=>$row['ip'],'the_user'=>$user,'date_and_time'=>$row['date_and_time']),false,true);
+			$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>$row['the_action'],'the_page'=>$page_id,'ip'=>$row['ip'],'the_user'=>$user,'date_and_time'=>$row['date_and_time']),false,true);
 		}
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'seedy_children');
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'wiki_children');
 		foreach ($rows as $row)
 		{
-			$child_id=import_id_remap_get('cedi_page',$row['child_id'],true);
-			$parent_id=import_id_remap_get('cedi_page',$row['parent_id'],true);
+			$child_id=import_id_remap_get('wiki_page',$row['child_id'],true);
+			$parent_id=import_id_remap_get('wiki_page',$row['parent_id'],true);
 
 			if (is_null($child_id)) continue;
 			if (is_null($parent_id)) continue;
@@ -1180,7 +1180,7 @@ class Hook_ocp_merge
 				$title=$this->get_lang_string($db,$rows_pages[$child_id]['title']);
 			} else continue;
 
-			$GLOBALS['SITE_DB']->query_insert('seedy_children',array('parent_id'=>$parent_id,'child_id'=>$child_id,'the_order'=>$row['the_order'],'title'=>$titlemap[$child_id]),false,true);
+			$GLOBALS['SITE_DB']->query_insert('wiki_children',array('parent_id'=>$parent_id,'child_id'=>$child_id,'the_order'=>$row['the_order'],'title'=>$titlemap[$child_id]),false,true);
 		}
 	}
 
@@ -1438,7 +1438,7 @@ class Hook_ocp_merge
 		foreach ($rows as $row)
 		{
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_name',array('zone_name'=>$row['zone_name']));
-			if ((is_null($test)) && ($test!='seedy') && ($test!='supermembercentre') && ($test!='admincentre') && ($test!='membersonly') && ($test!='personalcentre') && ($test!='membercentre'))
+			if ((is_null($test)) && ($test!='wiki') && ($test!='supermembercentre') && ($test!='admincentre') && ($test!='membersonly') && ($test!='personalcentre') && ($test!='membercentre'))
 			{
 				if (!array_key_exists('zone_displayed_in_menu',$row)) $row['zone_displayed_in_menu']=1;
 				$old_title=$this->get_lang_string($db,$row['zone_title']);
@@ -1727,8 +1727,8 @@ class Hook_ocp_merge
 					case 'topics':
 						$import_type='topic';
 						break;
-					case 'seedy_page':
-						$import_type='cedi_page';
+					case 'wiki_page':
+						$import_type='wiki_page';
 						break;
 					case 'award':
 						$import_type='award_type';
@@ -1806,8 +1806,8 @@ class Hook_ocp_merge
 					case 'topics':
 						$import_type='topic';
 						break;
-					case 'seedy_page':
-						$import_type='cedi_page';
+					case 'wiki_page':
+						$import_type='wiki_page';
 						break;
 					case 'award':
 						$import_type='award_type';

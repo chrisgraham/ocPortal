@@ -7,7 +7,7 @@
 
 <h2>{!HELP}</h2>
 
-{!CEDI_MANAGE_TREE_TEXT}
+{!WIKI_MANAGE_TREE_TEXT}
 
 <h2>{!SETTINGS}</h2>
 
@@ -28,7 +28,7 @@
 				{$REQUIRE_JAVASCRIPT,javascript_ajax}
 				{$REQUIRE_JAVASCRIPT,javascript_tree_list}
 				{$REQUIRE_JAVASCRIPT,javascript_more}
-				new tree_list('mtp_tree','data/ajax_tree.php?hook=choose_cedi_page{$KEEP;}','','');
+				new tree_list('mtp_tree','data/ajax_tree.php?hook=choose_wiki_page{$KEEP;}','','');
 			//]]></script>
 		{+END}
 

@@ -164,7 +164,6 @@ class Module_admin
 			array('bbcode','wikicode','comcode'),
 			array('html','xhtml'),
 			array('addon','add-on','mod','hack','extension','plugin'),
-			array('cedi','wiki','seedy'),
 			array('name','title'),
 			array('analytics','statistics','hits'),
 			array('newsletter','mass-mail','mass-mailing','bulletin','mail-merge'),

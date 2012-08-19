@@ -1044,7 +1044,7 @@ These priorities are intended to be reflected in the content translation interfa
 
 There is a design issue that comes to us when we design template structure... do we re-use templates so that editing is easier, load is decreased, and consistency is raised; or do we allow maximum customisation of different aspects of the system by not re-using templates?
 
-We stick to a middle ground between these extremes, and re-use templates when the usage pattern is almost identical. For example, almost all of ocPortal uses the same form field templates, but CEDI posts use different templates to forum posts. However, there are still places where we re-use templates in situations that sites may wish to develop in separate directions.
+We stick to a middle ground between these extremes, and re-use templates when the usage pattern is almost identical. For example, almost all of ocPortal uses the same form field templates, but Wiki+ posts use different templates to forum posts. However, there are still places where we re-use templates in situations that sites may wish to develop in separate directions.
 
 Each '[tt]do_template[/tt]' call in ocPortal, which loads up a template, passes in a parameter, '[tt]_GUID[/tt]'. The GUIDs may then be used by themers with tempcode directives to control what the template outputs.
 

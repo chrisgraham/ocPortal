@@ -319,8 +319,7 @@ function install_ocf($upgrade_from=NULL)
 		$privileges=array('moderate_private_topic'=>'moderate_private_topic','edit_private_topic_posts'=>'edit_private_topic_posts','delete_private_topic_posts'=>'delete_private_topic_posts');
 		foreach ($privileges as $old=>$new)
 		{
-			$GLOBALS['SITE_DB']->query_update('privilege_list',array('the_name'=>$new),array('the_name'=>$old),'',1);
-			$GLOBALS['SITE_DB']->query_update('group_privileges',array('privilege'=>$new),array('privilege'=>$old),'',1);
+			rename_privilege($old,$new);
 		}
 	}
 

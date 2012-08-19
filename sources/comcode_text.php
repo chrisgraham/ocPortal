@@ -756,7 +756,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							if ((trim($next)!='') && (!$in_code_tag) && (!$differented))
 							{
 								// Wiki pages
-								if (($pos<$len) && ($next=='[') && ($pos+1<$len) && ($comcode[$pos]=='[') && (!$semiparse_mode) && (addon_installed('cedi')))
+								if (($pos<$len) && ($next=='[') && ($pos+1<$len) && ($comcode[$pos]=='[') && (!$semiparse_mode) && (addon_installed('wiki')))
 								{
 									$matches=array();
 									if (preg_match('#^\[([^\[\]]*)\]\]#',substr($comcode,$pos,200),$matches)!=0)
@@ -771,7 +771,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											$jump_to=substr($wiki_page_name,$hash_pos+1);
 											$wiki_page_name=substr($wiki_page_name,0,$hash_pos);
 										} else $jump_to='';
-										$wiki_page_url=build_url(array('page'=>'cedi','type'=>'misc','find'=>$wiki_page_name),get_module_zone('cedi'));
+										$wiki_page_url=build_url(array('page'=>'wiki','type'=>'misc','find'=>$wiki_page_name),get_module_zone('wiki'));
 										if ($jump_to!='')
 										{
 											$wiki_page_url->attach('#'.$jump_to);

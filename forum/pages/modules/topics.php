@@ -1437,7 +1437,7 @@ class Module_topics
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
-			$specialisation->attach(get_award_fields('seedy_page'));
+			$specialisation->attach(get_award_fields('wiki_page'));
 		}
 
 		// Render form

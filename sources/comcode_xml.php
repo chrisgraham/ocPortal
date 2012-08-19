@@ -471,7 +471,7 @@ class comcode_xml_to_tempcode
 						{
 							$jump_to=$attributes['anchor'];
 						} else $jump_to='';
-						$wiki_page_url=build_url(array('page'=>'cedi','type'=>'misc','find'=>$wiki_page_name),get_module_zone('cedi'));
+						$wiki_page_url=build_url(array('page'=>'wiki','type'=>'misc','find'=>$wiki_page_name),get_module_zone('wiki'));
 						if ($jump_to!='')
 						{
 							$wiki_page_url->attach('#'.$jump_to);

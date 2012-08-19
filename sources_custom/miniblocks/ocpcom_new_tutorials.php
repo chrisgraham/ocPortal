@@ -579,10 +579,10 @@ function get_tutorial_info($tut)
 				"blue",
 			); break;
 
-		case 'cedi':
+		case 'wiki':
 			$result=array(
-				"Custom structured content - CEDI",
-				"The CEDI system is ocPortal's equivalent to a wiki, but extended with additional features.",
+				"Custom structured content - Wiki+",
+				"The Wiki+ system is ocPortal's equivalent to a wiki, but extended with additional features.",
 				"Aug 2008",
 				"blue",
 			); break;
