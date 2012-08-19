@@ -203,8 +203,7 @@ class Database_super_mysql
 			PRIMARY KEY ('.$keys.')
 		)';
 
-		if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';
-		$query.=' CHARACTER SET='.preg_replace('#\_.*$#','',$SITE_INFO['database_charset']);
+		$query.=' CHARACTER SET=utf8');
 
 		$query.=' '.$type_key.'='.$table_type.';';
 		$this->db_query($query,$db,NULL,NULL);

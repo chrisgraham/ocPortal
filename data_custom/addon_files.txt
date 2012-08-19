@@ -2211,10 +2211,6 @@ reported_content
  - site/pages/modules_custom/reportcontent.php
  - themes/default/templates_custom/REPORTED_CONTENT_FCOMCODE.tpl
 
-utf8
-----
- - lang_custom/EN/global.ini
-
 workflows
 ---------
  - sources_custom/hooks/systems/notifications/workflow_step.php

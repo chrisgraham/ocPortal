@@ -70,7 +70,7 @@ Language string codes that are in lower-case are special strings, that should no
    </tr>
    <tr>
       <td>charset</td>
-      <td>The character set needed for the language (standard code for an ASCII character set). Many people change this to 'utf-8' (Unicode, works with any characters), although regional character sets are supported also.</td>
+      <td>The character set needed for the language (standard code for an ASCII character set). Most people leave this as 'utf-8' (Unicode, works with any characters), although regional character sets are supported also.</td>
    </tr>
    <tr>
       <td>locale</td>
@@ -169,16 +169,7 @@ This generally does not matter a lot (because anything that you ask to store wil
 1) It does make a small difference in searches. For example, in languages there are usually 'equivalent' characters (e.g. lower case and upper case), and the MySQL collation tells MySQL about those.
 2) If the charset ocPortal is using is not matching up with what MySQL is using in terms of unicode vs non-unicode (e.g. MySQL uses UTF-8 but ocPortal uses ISO-8859-1) then conversion errors can happen as there are character code sequences that non-Unicode text might use which are totally invalid in Unicode and hence won't be stored at all. Users of English (who have limited alphabet that is all in lower ASCII and thus interchangeably compatible with both latin1 and UTF-8) would likely not notice this problem, but it becomes a problem for anyone doing internationalisation who have such a unicode vs non-unicode conflict.
 
-Set your collation appropriately if you don't think that your MySQL server's default collation will be correct for your language due to one of the above two problems. You can set this when you create your MySQL database, or if your database already exists, you need to set it for each of the tables.
-
-You may need to add something like:
-[code]
-$SITE_INFO['database_charset']='utf8';
-[/code]
-to your [tt]_config.php[/tt] file if you set a MySQL character set different to the server default (substitute 'utf8' for the actual character set you're using).
-After doing this you may need to clear the cache from inside the [tt]upgrader.php[/tt] script, as ocPortal's cache data will no longer be read out in the same way it had been written in.
-
-The normal Western European collation (used by English) is 'latin1_swedish_ci'. If anybody wonders why 'Swedish' is used for 'English', it is because English does not use accented characters and hence was considered a subset of Swedish, which does.
+ocPortal 10+ uses utf-8 tables by default and utf-8 internally, so none of this is an issue. It should work automatically, but you should still have a basic understanding of how collations work.
 
 [title="3"]GD fonts[/title]
 
@@ -204,7 +195,6 @@ The process is as follows:
 3) Log in
 4) Set your languages
 5) Start translating (the strings are split across about 60 files, often it works well to work with other people, each doing different files)
-6) It is advisable to translate something inside the 'global' language file before doing any downloading, as ocPortal needs a partially or fully translated global language file Launchpad [tt].po[/tt] file to automatically flip the site into utf-8, which is what Launchpad encodes language in.
 
 Note that some of the "English" will be written as "English: (English value). Explanation: (Explanation)". This is because Launchpad has no specific way to explain what strings are used for, so when importing we have put the explanation and original English together like this. These particular strings are just documentation strings, they should not be translated.
 
