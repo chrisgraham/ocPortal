@@ -104,7 +104,6 @@ function init__global2()
 	$XSS_DETECT=function_exists('ocp_mark_as_escaped');
 	$GLOBALS['DEV_MODE']=(((!array_key_exists('dev_mode',$SITE_INFO) || ($SITE_INFO['dev_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))) && ((!array_key_exists('keep_no_dev_mode',$_GET) || ($_GET['keep_no_dev_mode']=='0'))));
 	$GLOBALS['SEMI_DEV_MODE']=(((!array_key_exists('dev_mode',$SITE_INFO) || ($SITE_INFO['dev_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))));
-	$GLOBALS['SEMI_DEBUG_MODE']=$GLOBALS['SEMI_DEV_MODE']; // TODO: Remove (legacy)
 	if (function_exists('set_time_limit')) @set_time_limit(60);
 	if ($GLOBALS['DEV_MODE'])
 	{
@@ -1673,7 +1672,7 @@ function javascript_tempcode($position=NULL)
 
 		if ($position!==NULL)
 		{
-			$bottom=(isset($bottom_ones[$j])); // TODO: progmattic way of saying this at point of calls
+			$bottom=(isset($bottom_ones[$j]));
 			if (($position=='header') && ($bottom)) continue;
 			if (($position=='footer') && (!$bottom)) continue;
 		}

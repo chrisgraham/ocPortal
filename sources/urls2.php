@@ -23,7 +23,8 @@
  */
 function init__urls2()
 {
-	define('MAX_MONIKER_LENGTH',24); // TODO: Make proper option
+	$max_moniker_length=get_value('max_moniker_length');
+	define('MAX_MONIKER_LENGTH',is_null($max_moniker_length)?24:intval($max_moniker_length));
 }
 
 /**

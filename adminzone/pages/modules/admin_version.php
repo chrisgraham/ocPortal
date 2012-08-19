@@ -124,7 +124,7 @@ class Module_admin_version
 			));
 			$GLOBALS['SITE_DB']->create_index('review_supplement','rating_for_id',array('r_rating_for_id'));
 
-			// TODO: Move these into sms addon_registry hook, once these hooks support installation
+			// TODO: Move these into sms addon_registry hook, once these hooks support installation (#354 on tracker)
 			$GLOBALS['SITE_DB']->create_table('sms_log',array(
 				'id'=>'*AUTO',
 				's_member_id'=>'USER',

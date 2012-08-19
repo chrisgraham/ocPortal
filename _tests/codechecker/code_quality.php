@@ -1881,7 +1881,7 @@ function check_variable($variable,$reference=false)
 	if (is_array($identifier)) return;
 
 	global $LOCAL_VARIABLES;
-	if ((!isset($LOCAL_VARIABLES[$identifier])) && ($identifier!='this') && !((is_array($identifier) && (in_array($identifier[0],array('CALL_METHOD'/*TODO: Add more here*/))))))
+	if ((!isset($LOCAL_VARIABLES[$identifier])) && ($identifier!='this') && !((is_array($identifier) && (in_array($identifier[0],array('CALL_METHOD'))))))
 	{
 		// We skip this check if the "variable" is coming from a function/method
 		// (in which case we have a function/method call rather than a variable)

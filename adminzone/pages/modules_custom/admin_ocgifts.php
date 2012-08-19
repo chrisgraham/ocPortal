@@ -41,7 +41,7 @@ class Module_admin_ocgifts extends standard_crud_module
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=3;
+		$info['version']=4;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -100,7 +100,6 @@ class Module_admin_ocgifts extends standard_crud_module
 				'gift_id'=>'AUTO_LINK',
 				'add_time'=>'TIME',
 				'is_anonymous'=>'BINARY',
-				'topic_id'=>'?AUTO_LINK', // TODO: Remove
 				'gift_message'=>'LONG_TEXT',
 			));
 		}
@@ -111,6 +110,11 @@ class Module_admin_ocgifts extends standard_crud_module
 
 			$GLOBALS['SITE_DB']->alter_table_field('members_gifts','annonymous','BINARY','is_anonymous');
 			$GLOBALS['SITE_DB']->alter_table_field('members_gifts','topic_id','?AUTO_LINK');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
+		{
+			$GLOBALS['SITE_DB']->delete_table_field('members_gifts','topic_id');
 		}
 	}
 

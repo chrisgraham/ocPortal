@@ -141,6 +141,9 @@ The values you might want to manually change are:
  - [tt]primary_paypal_email[/tt] -- set this to your primary PayPal email address, if you have set up PayPal to work against a secondary PayPal address instead. Without it ocPortal will fail to validate payments, causing all eCommerce to fail.
  - [tt]simplify_wysiwyg_by_permissions[/tt] -- set this to '1' if you want to show a simpler WYSIWYG editor to members with limited Comcode permissions.
  - [tt]chat_interval_time[/tt] -- the number of milliseconds between chat message retrieval requests; don't set it too low or server-performance will be hurt.
+ - [tt]max_moniker_length[/tt] -- the length of characters to include in URL moniker segments
+ - [tt]gift_reward_chance[/tt] -- the percentage chance that members giving point gifts will be given a reward for doing so
+ - [tt]gift_reward_amount[/tt] -- the number of points automatically given to a member who was lucky enough to get a reward for their own point giving (given by the system)
 
 We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:
  - [tt]stupidity_mode[/tt] -- set to 'leet' or 'bork', for a fun April Fools-style Comcode joke (clear the Comcode cache after you're done though)

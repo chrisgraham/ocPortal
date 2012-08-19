@@ -262,7 +262,7 @@ function update_stock($order_id)
 		$object=object_factory('Hook_'.$hook,true);
 		if (is_null($object)) continue;
 
-		if (method_exists($object,'update_stock')) // TODO: This is silly, we should recurse to the proper handler in the eCommerce hook, for whatever delivery is needed
+		if (method_exists($object,'update_stock'))
 			$object->update_stock($ordered_items['p_id'],$ordered_items['p_quantity']);	
 	}
 }

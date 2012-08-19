@@ -102,26 +102,26 @@ function get_innodb_table_sql($tables,$all_tables)
 function get_innodb_data_types()
 {
 	$type_remap=array(
-						'AUTO'=>'integer auto_increment', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
-						'AUTO_LINK'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
-						'INTEGER'=>'integer',
-						'UINTEGER'=>'integer unsigned',
-						'SHORT_INTEGER'=>'tinyint',
-						'REAL'=>'real',
-						'BINARY'=>'tinyint(1)',
-						'USER'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
-						'GROUP'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
-						'TIME'=>'integer unsigned',
-						'LONG_TRANS'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
-						'SHORT_TRANS'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
-						'SHORT_TEXT'=>'varchar(255)',
-						'LONG_TEXT'=>'longtext',
-						'ID_TEXT'=>'varchar(80)',
-						'MINIID_TEXT'=>'varchar(40)',
-						'IP'=>'varchar(40)', // 15 for ip4, but we now support ip6
-						'LANGUAGE_NAME'=>'varchar(5)',
-						'URLPATH'=>'varchar(255)',
-						'MD5'=>'varchar(33)'
+		'AUTO'=>'integer auto_increment', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
+		'AUTO_LINK'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
+		'INTEGER'=>'integer',
+		'UINTEGER'=>'integer unsigned',
+		'SHORT_INTEGER'=>'tinyint',
+		'REAL'=>'real',
+		'BINARY'=>'tinyint(1)',
+		'USER'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
+		'GROUP'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
+		'TIME'=>'integer unsigned',
+		'LONG_TRANS'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
+		'SHORT_TRANS'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
+		'SHORT_TEXT'=>'varchar(255)',
+		'LONG_TEXT'=>'longtext',
+		'ID_TEXT'=>'varchar(80)',
+		'MINIID_TEXT'=>'varchar(40)',
+		'IP'=>'varchar(40)', // 15 for ip4, but we now support ip6
+		'LANGUAGE_NAME'=>'varchar(5)',
+		'URLPATH'=>'varchar(255)',
+		'MD5'=>'varchar(33)'
 	);
 
 	return $type_remap;

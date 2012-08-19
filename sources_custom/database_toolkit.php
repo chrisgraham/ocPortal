@@ -304,26 +304,26 @@ function get_sql_dump($include_drops=false,$output_statuses=false,$from=NULL,$sk
 function db_get_type_remap()
 {
 	$type_remap=array(
-						'AUTO'=>'integer unsigned auto_increment',
-						'AUTO_LINK'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
-						'INTEGER'=>'integer',
-						'UINTEGER'=>'integer unsigned',
-						'SHORT_INTEGER'=>'tinyint',
-						'REAL'=>'real',
-						'BINARY'=>'tinyint(1)',
-						'USER'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
-						'GROUP'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
-						'TIME'=>'integer unsigned',
-						'LONG_TRANS'=>'integer unsigned',
-						'SHORT_TRANS'=>'integer unsigned',
-						'SHORT_TEXT'=>'varchar(255)',
-						'LONG_TEXT'=>'longtext',
-						'ID_TEXT'=>'varchar(80)',
-						'MINIID_TEXT'=>'varchar(40)',
-						'IP'=>'varchar(40)', // 15 for ip4, but we now support ip6
-						'LANGUAGE_NAME'=>'varchar(5)',
-						'URLPATH'=>'varchar(255)',
-						'MD5'=>'varchar(33)'
+		'AUTO'=>'integer unsigned auto_increment',
+		'AUTO_LINK'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
+		'INTEGER'=>'integer',
+		'UINTEGER'=>'integer unsigned',
+		'SHORT_INTEGER'=>'tinyint',
+		'REAL'=>'real',
+		'BINARY'=>'tinyint(1)',
+		'USER'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
+		'GROUP'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
+		'TIME'=>'integer unsigned',
+		'LONG_TRANS'=>'integer unsigned',
+		'SHORT_TRANS'=>'integer unsigned',
+		'SHORT_TEXT'=>'varchar(255)',
+		'LONG_TEXT'=>'longtext',
+		'ID_TEXT'=>'varchar(80)',
+		'MINIID_TEXT'=>'varchar(40)',
+		'IP'=>'varchar(40)', // 15 for ip4, but we now support ip6
+		'LANGUAGE_NAME'=>'varchar(5)',
+		'URLPATH'=>'varchar(255)',
+		'MD5'=>'varchar(33)'
 	);
 	return $type_remap;
 }

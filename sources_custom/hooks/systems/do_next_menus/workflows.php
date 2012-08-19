@@ -24,8 +24,8 @@ class Hook_do_next_menus_workflows
 	 */
 	function run()
 	{
-		// TODO: Make workflows register itself in the addon registry
-		//if (!addon_installed('workflows')) return array();
+		if (!addon_installed('workflows',true)) return array();
+
 		require_lang('workflows');
 
 		return array(

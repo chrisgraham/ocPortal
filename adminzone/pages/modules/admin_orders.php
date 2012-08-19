@@ -417,7 +417,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Actualizer to add not to an order
+	 * Actualiser to add not to an order
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -446,7 +446,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Function to dispatch an order
+	 * Method to dispatch an order
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -469,7 +469,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Function to dispatch an order
+	 * Method to dispatch an order
 	 *
 	 * @param	AUTO_LINK	Order Id
 	 */
@@ -493,7 +493,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Function to delete order
+	 * Method to delete order
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -513,7 +513,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Function to return order items
+	 * Method to return order items
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -533,7 +533,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Function to hold an order
+	 * Method to hold an order
 	 *
 	 * @return tempcode	The interface.
 	 */
@@ -553,7 +553,7 @@ class Module_admin_orders
 	}
 
 	/**
-	 * Function to display export order list filters
+	 * Method to display export order list filters
 	 *
 	 * @return tempcode	The interface.
 	 */

@@ -33,7 +33,7 @@ function actionlog_linkage($type,$a,$b,$_a,$_b)
 	$type_str=do_lang($type,$a,$b,NULL,NULL,false);
 	if (is_null($type_str)) $type_str=$type;
 
-	// TODO: This will be replaced later with a more thorough system
+	// TODO: This will be replaced later with a more thorough system	#115 on tracker
 	if (($type=='EDIT_TEMPLATES') && (strpos($a,',')===false))
 	{
 		if ($b=='') $b='default';

@@ -53,11 +53,11 @@ function sms_wrap($message,$to_sms)
 	$site_name=xmlentities(substr(get_site_name(),0,11));
 	if ((strtolower(get_charset())!='utf-8') && (strtolower(get_charset())!='utf8')) $site_name=utf8_encode($site_name);
 	//$callback=xmlentities(find_script('sms')); --- set on clickatell's site
-	$callback='0'; /* return nothing (for the moment); TODO: change to 3 (return all message statuses) */
+	$callback='0'; /* return nothing (for the moment); TODO: change to 3 (return all message statuses)   #376 on tracker */
 
 	$threshold=mktime(0,0,0,intval(date('m')),0,intval(date('Y')));
 
-	// TODO: $confirmed_numbers=collapse_2d_complexity('m_phone_number','m_member_id',$GLOBALS['SITE_DB']->query_select('confirmed_mobiles',array('m_phone_number','m_member_id'),array('m_confirm_code'=>'')));
+	// TODO: $confirmed_numbers=collapse_2d_complexity('m_phone_number','m_member_id',$GLOBALS['SITE_DB']->query_select('confirmed_mobiles',array('m_phone_number','m_member_id'),array('m_confirm_code'=>''))); #376 on tracker
 
 	// Check current user has not trigered too many
 	$triggered_already=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'sms_log WHERE s_time>'.strval(time()-60*60*24*31).' AND '.db_string_equal_to('s_trigger_ip',get_ip_address(2)));
@@ -88,7 +88,7 @@ function sms_wrap($message,$to_sms)
 		if (!array_key_exists('mobile_phone_number',$cpf_values)) continue; // :S  -- should be there
 		$to=cleanup_mobile_number($cpf_values['mobile_phone_number']);
 		if ($to=='') continue;
-		// TODO: if (!array_key_exists($to,$confirmed_numbers)) continue;
+		// TODO: if (!array_key_exists($to,$confirmed_numbers)) continue;			#376 on tracker
 		$to=xmlentities($to);
 
 		$xml=<<<END

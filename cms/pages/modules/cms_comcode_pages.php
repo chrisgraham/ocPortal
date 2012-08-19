@@ -791,7 +791,7 @@ class Module_cms_comcode_pages
 		if (!$simple_add)
 		{
 			$fields2->attach(form_input_tick(do_lang_tempcode('SHOW_AS_EDITED'),do_lang_tempcode('DESCRIPTION_SHOW_AS_EDITED'),'show_as_edit',$show_as_edit));
-			if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // TODO: Make a proper permission
+			if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // TODO: Make a proper permission (see #206 on tracker)
 			{
 				$fields2->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'owner',$GLOBALS['FORUM_DRIVER']->get_username($owner),true));
 			}
@@ -903,7 +903,7 @@ class Module_cms_comcode_pages
 
 		$resource_owner=$GLOBALS['SITE_DB']->query_select_value_if_there('comcode_pages','p_submitter',array('the_zone'=>$zone,'the_page'=>$file));
 		check_edit_permission('high',$resource_owner);
-		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // TODO: Make a proper permission
+		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // TODO: Make a proper permission (see #206 on tracker)
 		{
 			$_owner=post_param('owner',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
 			$owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_owner);

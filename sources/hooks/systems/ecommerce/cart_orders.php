@@ -35,7 +35,7 @@ function handle_product_orders($purchase_id,$details,$product)
 
 	$old_status=$GLOBALS['SITE_DB']->query_select_value('shopping_order_details','dispatch_status',array('order_id'=>$purchase_id));
 
-	if ($old_status != $details['ORDER_STATUS'])
+	if ($old_status!=$details['ORDER_STATUS'])
 	{
 		$GLOBALS['SITE_DB']->query_update('shopping_order_details',array('dispatch_status'=>$details['ORDER_STATUS']),array('order_id'=>$purchase_id));
 
@@ -44,12 +44,6 @@ function handle_product_orders($purchase_id,$details,$product)
 		if ($details['ORDER_STATUS']=='ORDER_STATUS_payment_received')
 		{	
 			purchase_done_staff_mail($purchase_id);
-		}
-
-		// TODO: Suspect this is never called ?!? admin_orders.php runs it's own update_stock, and dispatching is not a part of the core eCommerce framework
-		if ($details['ORDER_STATUS']=='ORDER_STATUS_dispatched')
-		{	
-			update_stock($purchase_id);	//Update stock after dispatch
 		}
 	}
 }

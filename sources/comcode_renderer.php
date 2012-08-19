@@ -1444,10 +1444,9 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 		case 'box':
 			$width=array_key_exists('width',$attributes)?comcode_to_tempcode($attributes['width'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member):make_string_tempcode('auto');
 			$type=array_key_exists('type',$attributes)?$attributes['type']:'';
-			if ($type=='light' || $type=='med' || $type=='classic' || $type=='curved') $type='default'; // TODO: Remove, legacy
 			$options=array_key_exists('options',$attributes)?$attributes['options']:'';
-			$meta=($comcode_dangerous&&array_key_exists('meta',$attributes))?$attributes['meta']:''; //Insecure, unneeded here
-			$links=($comcode_dangerous&&array_key_exists('links',$attributes))?$attributes['links']:''; //Insecure, unneeded here
+			$meta=($comcode_dangerous&&array_key_exists('meta',$attributes))?$attributes['meta']:''; // Insecure, unneeded here
+			$links=($comcode_dangerous&&array_key_exists('links',$attributes))?$attributes['links']:''; // Insecure, unneeded here
 			$converted_title=is_object($attributes['param'])?$attributes['param']:comcode_to_tempcode($attributes['param'],$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
 
 			$temp_tpl=directive_tempcode('BOX',$embed,array($converted_title,make_string_tempcode($type),$width,make_string_tempcode($options),make_string_tempcode($meta),make_string_tempcode($links)));

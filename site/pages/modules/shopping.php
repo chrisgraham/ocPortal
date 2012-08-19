@@ -506,11 +506,11 @@ class Module_shopping
 
 		breadcrumb_set_parents(array(array('_SELF:catalogues:misc:ecommerce=1',do_lang_tempcode('CATALOGUES')),array('_SELF:_SELF:misc',do_lang_tempcode('SHOPPING'))));
 
-		$message=get_param('message',NULL,true); // TODO: Assumption, needs to really go through the payment gateway API
+		$message=get_param('message',NULL,true); // TODO: Assumption, needs to really go through the payment gateway API			#145 on tracker
 
 		if (get_param_integer('cancel',0)==0)
 		{
-			//Empty cart.
+			// Empty the cart.
 			$where=array();
 			if (is_guest())
 			{
@@ -528,35 +528,24 @@ class Module_shopping
 				$trans_id=post_param('trans_id');
 
 				$transaction_rows=$GLOBALS['SITE_DB']->query_select('trans_expecting',array('*'),array('id'=>$trans_id),'',1);
-
 				if (!array_key_exists(0,$transaction_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 				$transaction_row=$transaction_rows[0];
 
 				$amount=$transaction_row['e_amount'];
-
 				$length=$transaction_row['e_length'];
-
 				$length_units=$transaction_row['e_length_units'];
 
 				$via=get_option('payment_gateway');
-
 				require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
-
 				$object=object_factory('Hook_'.$via);
 
 				$name=post_param('name');
-
 				$card_number=post_param('card_number');
-
 				$expiry_date=str_replace('/','',post_param('expiry_date'));
-
 				$issue_number=post_param_integer('issue_number',NULL);
-
 				$start_date=str_replace('/','',post_param('start_date'));
-
 				$card_type=post_param('card_type');
-
 				$cv2=post_param('cv2');
 
 				list($success,,$message,$message_raw)=$object->do_transaction($trans_id,$name,$card_number,$amount,$expiry_date,$issue_number,$start_date,$card_type,$cv2,$length,$length_units);

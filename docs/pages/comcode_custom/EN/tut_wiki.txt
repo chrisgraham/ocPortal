@@ -53,7 +53,7 @@ On a Wiki+ page with a lot of thumb-nailed images, you may wish to click the exp
 Please note that when you do this you view with guest access -- so some pages may be missing from the view.
 
 [concepts
- 1_key="Wiki+"   1_value="A collaborative and informal hierarchical database system in ocPortal"
+ 1_key="Wiki+"   1_value="A collaborative hierarchical database system in ocPortal"
 ]Concepts[/concepts]
 
 [title="2"]See also[/title]

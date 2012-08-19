@@ -1554,5 +1554,6 @@ function handle_comment($comment)
 		if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found',$GLOBALS['i']);
 		if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found',$GLOBALS['i']);
 		if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found',$GLOBALS['i']);
+		if (strpos($comment[1],'LEGACY')!==false) log_warning('LEGACY comment found',$GLOBALS['i']);
 	}
 }

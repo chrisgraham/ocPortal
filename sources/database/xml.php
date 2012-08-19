@@ -173,26 +173,26 @@ class Database_Static_xml
 	function db_get_type_remap()
 	{
 		$type_remap=array(
-							'AUTO'=>'AUTO',
-							'AUTO_LINK'=>'AUTO_LINK',
-							'INTEGER'=>'INTEGER',
-							'UINTEGER'=>'UINTEGER',
-							'SHORT_INTEGER'=>'SHORT_INTEGER',
-							'REAL'=>'REAL',
-							'BINARY'=>'BINARY',
-							'USER'=>'USER',
-							'GROUP'=>'GROUP',
-							'TIME'=>'TIME',
-							'LONG_TRANS'=>'LONG_TRANS',
-							'SHORT_TRANS'=>'SHORT_TRANS',
-							'SHORT_TEXT'=>'SHORT_TEXT',
-							'LONG_TEXT'=>'LONG_TEXT',
-							'ID_TEXT'=>'ID_TEXT',
-							'MINIID_TEXT'=>'MINIID_TEXT',
-							'IP'=>'IP',
-							'LANGUAGE_NAME'=>'LANGUAGE_NAME',
-							'URLPATH'=>'URLPATH',
-							'MD5'=>'MD5'
+			'AUTO'=>'AUTO',
+			'AUTO_LINK'=>'AUTO_LINK',
+			'INTEGER'=>'INTEGER',
+			'UINTEGER'=>'UINTEGER',
+			'SHORT_INTEGER'=>'SHORT_INTEGER',
+			'REAL'=>'REAL',
+			'BINARY'=>'BINARY',
+			'USER'=>'USER',
+			'GROUP'=>'GROUP',
+			'TIME'=>'TIME',
+			'LONG_TRANS'=>'LONG_TRANS',
+			'SHORT_TRANS'=>'SHORT_TRANS',
+			'SHORT_TEXT'=>'SHORT_TEXT',
+			'LONG_TEXT'=>'LONG_TEXT',
+			'ID_TEXT'=>'ID_TEXT',
+			'MINIID_TEXT'=>'MINIID_TEXT',
+			'IP'=>'IP',
+			'LANGUAGE_NAME'=>'LANGUAGE_NAME',
+			'URLPATH'=>'URLPATH',
+			'MD5'=>'MD5'
 		);
 		return $type_remap;
 	}

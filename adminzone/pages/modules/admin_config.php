@@ -197,7 +197,7 @@ class Module_admin_config
 			add_config_option('VALIDATION_COMPAT','validation_compat','tick','return \'0\';','SITE','VALIDATION',1);
 			add_config_option('VALIDATION_EXT_FILES','validation_ext_files','tick','return \'0\';','SITE','VALIDATION',1);
 
-			// TODO: Move these into sms addon_registry hook, once these hooks support installation
+			// TODO: Move these into sms addon_registry hook, once these hooks support installation (#354 on tracker)
 			add_config_option('USERNAME','sms_username','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
 			add_config_option('PASSWORD','sms_password','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
 			add_config_option('API_ID','sms_api_id','integer','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');

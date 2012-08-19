@@ -132,26 +132,26 @@ class Database_Static_oracle
 	function db_get_type_remap()
 	{
 		$type_remap=array(
-							'AUTO'=>'integer',
-							'AUTO_LINK'=>'integer',
-							'INTEGER'=>'integer',
-							'UINTEGER'=>'bigint',
-							'SHORT_INTEGER'=>'smallint',
-							'REAL'=>'real',
-							'BINARY'=>'smallint',
-							'USER'=>'integer',
-							'GROUP'=>'integer',
-							'TIME'=>'integer',
-							'LONG_TRANS'=>'integer',
-							'SHORT_TRANS'=>'integer',
-							'SHORT_TEXT'=>'text',
-							'LONG_TEXT'=>'CLOB',
-							'ID_TEXT'=>'varchar(80)',
-							'MINIID_TEXT'=>'varchar(40)',
-							'IP'=>'varchar(40)',
-							'LANGUAGE_NAME'=>'varchar(5)',
-							'URLPATH'=>'varchar(255)',
-							'MD5'=>'varchar(33)'
+			'AUTO'=>'integer',
+			'AUTO_LINK'=>'integer',
+			'INTEGER'=>'integer',
+			'UINTEGER'=>'bigint',
+			'SHORT_INTEGER'=>'smallint',
+			'REAL'=>'real',
+			'BINARY'=>'smallint',
+			'USER'=>'integer',
+			'GROUP'=>'integer',
+			'TIME'=>'integer',
+			'LONG_TRANS'=>'integer',
+			'SHORT_TRANS'=>'integer',
+			'SHORT_TEXT'=>'text',
+			'LONG_TEXT'=>'CLOB',
+			'ID_TEXT'=>'varchar(80)',
+			'MINIID_TEXT'=>'varchar(40)',
+			'IP'=>'varchar(40)',
+			'LANGUAGE_NAME'=>'varchar(5)',
+			'URLPATH'=>'varchar(255)',
+			'MD5'=>'varchar(33)'
 		);
 		return $type_remap;
 	}

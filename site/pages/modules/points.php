@@ -330,12 +330,17 @@ class Module_points
 					give_points($amount,$member_id_of,$member_id_viewing,$reason,$anonymous==1);
 
 					// Randomised gifts
-					if (mt_rand(0,4)==1) // TODO: 4 should be a config option
+					$_gift_reward_chance=get_value('gift_reward_chance');
+					$gift_reward_chance=is_null($_gift_reward_chance)?25:intval($_gift_reward_chance);
+					if (mt_rand(0,100)<$gift_reward_chance)
 					{
+						$_gift_reward_amount=get_value('gift_reward_amount');
+						$gift_reward_amount=is_null($_gift_reward_amount)?25:intval($_gift_reward_amount);
+
 						$message=do_lang_tempcode('PR_LUCKY');
 						$_current_gift=point_info($member_id_viewing);
 						$current_gift=array_key_exists('points_gained_given',$_current_gift)?$_current_gift['points_gained_given']:0;
-						$GLOBALS['FORUM_DRIVER']->set_custom_field($member_id_viewing,'points_gained_given',$current_gift+25); // TODO: 25 should be a config option
+						$GLOBALS['FORUM_DRIVER']->set_custom_field($member_id_viewing,'points_gained_given',$current_gift+$gift_reward_amount);
 					} else $message=do_lang_tempcode('PR_NORMAL');
 
 					$worked=true;

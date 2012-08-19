@@ -33,92 +33,92 @@ class Hook_ocp_merge
 		$info['product']=do_lang('OCPORTAL_SITE_MERGER');
 		$info['prefix']='ocp4_';
 		$info['import']=array(
-								'attachments',
-								'ocf_groups',
-								'ocf_custom_profile_fields',
-								'ocf_members',
-								'authors',
-								'banners',
-								'calendar',
-								'catalogues', // including rating, trackbacks, seo
-								'points_gifts_and_charges', // including leader board
-								'chat_rooms',
-								'config',
-								'custom_comcode',
-								'awards',
-								'downloads_and_categories', // including rating, trackbacks, seo
-								'ocf_forum_groupings',
-								'ocf_emoticons',
-								'ocf_forums', // including intros
-								'ocf_topics', // including readlogs
-								'ocf_multi_moderations',
-								'ocf_polls_and_votes',
-								'ocf_post_templates',
-								'ocf_posts', // including title remapping for comment topics
-								'ocf_warnings',
-								'filedump',
-								'images_and_galleries', // including rating, trackbacks, seo
-								'iotds', // including rating, trackbacks, seo
-								'news_and_categories', // including rating, trackbacks, seo
-								'newsletter_subscriptions',
-								'polls', // including rating, trackbacks, seo
-								'pointstore',
-								'redirects',
-								'wiki', // including rating, trackbacks, seo
-								'stats',
-								'community_billboard',
-								'themes',
-								'support_tickets',
-								'useronline_tracking',
-								'ip_bans',
-								'wordfilter',
-								'zones',
-								'permissions', // including HTTPS
-								'attachment_references',
-								'feedback',
-								'ecommerce',
-								'ocf_welcome_emails',
-								'bookmarks',
-								'quizzes',
-							);
+			'attachments',
+			'ocf_groups',
+			'ocf_custom_profile_fields',
+			'ocf_members',
+			'authors',
+			'banners',
+			'calendar',
+			'catalogues', // including rating, trackbacks, seo
+			'points_gifts_and_charges', // including leader board
+			'chat_rooms',
+			'config',
+			'custom_comcode',
+			'awards',
+			'downloads_and_categories', // including rating, trackbacks, seo
+			'ocf_forum_groupings',
+			'ocf_emoticons',
+			'ocf_forums', // including intros
+			'ocf_topics', // including readlogs
+			'ocf_multi_moderations',
+			'ocf_polls_and_votes',
+			'ocf_post_templates',
+			'ocf_posts', // including title remapping for comment topics
+			'ocf_warnings',
+			'filedump',
+			'images_and_galleries', // including rating, trackbacks, seo
+			'iotds', // including rating, trackbacks, seo
+			'news_and_categories', // including rating, trackbacks, seo
+			'newsletter_subscriptions',
+			'polls', // including rating, trackbacks, seo
+			'pointstore',
+			'redirects',
+			'wiki', // including rating, trackbacks, seo
+			'stats',
+			'community_billboard',
+			'themes',
+			'support_tickets',
+			'useronline_tracking',
+			'ip_bans',
+			'wordfilter',
+			'zones',
+			'permissions', // including HTTPS
+			'attachment_references',
+			'feedback',
+			'ecommerce',
+			'ocf_welcome_emails',
+			'bookmarks',
+			'quizzes',
+		);
 		$info['dependencies']=array( // This dependency tree is overdefined, but I wanted to make it clear what depends on what, rather than having a simplified version
-								'attachment_references'=>array('attachments','ocf_members','ocf_posts','news_and_categories','wiki'),
-								'permissions'=>array_diff($info['import'],array('themes','feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
-								'feedback'=>array_diff($info['import'],array('themes','ocf_warnings','feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
-								'authors'=>array('ocf_members'),
-								'banners'=>array('ocf_members'),
-								'catalogues'=>array('ocf_members'),
-								'chat_rooms'=>array('ocf_members','ocf_groups'),
-								'downloads_and_categories'=>array('ocf_members'),
-								'filedump'=>array('ocf_members'),
-								'images_and_galleries'=>array('ocf_members'),
-								'iotds'=>array('ocf_members'),
-								'news_and_categories'=>array('ocf_members','attachments'),
-								'polls'=>array('ocf_members'),
-								'pointstore'=>array('ocf_members'),
-								'wiki'=>array('ocf_members','attachments'),
-								'community_billboard'=>array('ocf_members'),
-								'useronline_tracking'=>array('ocf_members'),
-								'ip_bans'=>array('ocf_members'),
-								'points_gifts_and_charges'=>array('ocf_members'),
-								'calendar'=>array('ocf_members'),
-								'ocf_custom_profile_fields'=>array('ocf_groups'),
-								'ocf_multi_moderations'=>array('ocf_forums'),
-								'ocf_members'=>array('ocf_groups','ocf_custom_profile_fields','attachments'),
-								'ocf_forums'=>array('ocf_forum_groupings','ocf_members','ocf_groups'),
-								'ocf_topics'=>array('ocf_forums','ocf_members'),
-								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
-								'ocf_posts'=>array('custom_comcode','ocf_topics','ocf_members','attachments'),
-								'ocf_private_topics'=>array('custom_comcode','ocf_members'),
-								'ocf_post_templates'=>array('ocf_forums'),
-								'ocf_warnings'=>array('ocf_members','ocf_groups','ocf_topics','ocf_forums'),
-								'newsletter_subscriptions'=>array('attachments'),
-								'awards'=>array('calendar','wiki','news_and_categories','images_and_galleries','catalogues','authors','ocf_topics','ocf_posts','ocf_forums','ocf_groups','ocf_members','downloads_and_categories'),
-								'ecommerce'=>array('ocf_groups','ocf_members'),
-								'ocf_welcome_emails'=>array('ocf_members'),
-								'bookmarks'=>array('ocf_members'),
-								'quizzes'=>array('ocf_members'),
-							);
+			'attachment_references'=>array('attachments','ocf_members','ocf_posts','news_and_categories','wiki'),
+			'permissions'=>array_diff($info['import'],array('themes','feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
+			'feedback'=>array_diff($info['import'],array('themes','ocf_warnings','feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
+			'authors'=>array('ocf_members'),
+			'banners'=>array('ocf_members'),
+			'catalogues'=>array('ocf_members'),
+			'chat_rooms'=>array('ocf_members','ocf_groups'),
+			'downloads_and_categories'=>array('ocf_members'),
+			'filedump'=>array('ocf_members'),
+			'images_and_galleries'=>array('ocf_members'),
+			'iotds'=>array('ocf_members'),
+			'news_and_categories'=>array('ocf_members','attachments'),
+			'polls'=>array('ocf_members'),
+			'pointstore'=>array('ocf_members'),
+			'wiki'=>array('ocf_members','attachments'),
+			'community_billboard'=>array('ocf_members'),
+			'useronline_tracking'=>array('ocf_members'),
+			'ip_bans'=>array('ocf_members'),
+			'points_gifts_and_charges'=>array('ocf_members'),
+			'calendar'=>array('ocf_members'),
+			'ocf_custom_profile_fields'=>array('ocf_groups'),
+			'ocf_multi_moderations'=>array('ocf_forums'),
+			'ocf_members'=>array('ocf_groups','ocf_custom_profile_fields','attachments'),
+			'ocf_forums'=>array('ocf_forum_groupings','ocf_members','ocf_groups'),
+			'ocf_topics'=>array('ocf_forums','ocf_members'),
+			'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
+			'ocf_posts'=>array('custom_comcode','ocf_topics','ocf_members','attachments'),
+			'ocf_private_topics'=>array('custom_comcode','ocf_members'),
+			'ocf_post_templates'=>array('ocf_forums'),
+			'ocf_warnings'=>array('ocf_members','ocf_groups','ocf_topics','ocf_forums'),
+			'newsletter_subscriptions'=>array('attachments'),
+			'awards'=>array('calendar','wiki','news_and_categories','images_and_galleries','catalogues','authors','ocf_topics','ocf_posts','ocf_forums','ocf_groups','ocf_members','downloads_and_categories'),
+			'ecommerce'=>array('ocf_groups','ocf_members'),
+			'ocf_welcome_emails'=>array('ocf_members'),
+			'bookmarks'=>array('ocf_members'),
+			'quizzes'=>array('ocf_members'),
+		);
 
 		//if (!$this->on_same_msn($file_base))
 		{

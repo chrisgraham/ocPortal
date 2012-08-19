@@ -321,6 +321,7 @@ function install_ocf($upgrade_from=NULL)
 		{
 			rename_privilege($old,$new);
 		}
+		$GLOBALS['FORUM_DB']->delete_table_field('f_members','m_notes');
 	}
 
 	// If we have the forum installed to this db already, leave
@@ -480,7 +481,6 @@ function install_ocf($upgrade_from=NULL)
 			'm_ip_address'=>'IP',
 			'm_allow_emails'=>'BINARY',
 			'm_allow_emails_from_staff'=>'BINARY',
-			'm_notes'=>'LONG_TEXT', // TODO: Remove
 			'm_zone_wide'=>'BINARY',
 			'm_highlighted_name'=>'BINARY',
 			'm_pt_allow'=>'SHORT_TEXT',

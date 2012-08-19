@@ -332,7 +332,7 @@ function referrer_report_script($ret=false)
 		$deleted=false;
 		if (is_null($ref['referee']))
 		{
-			$deleted=($ref['qualified']==1);//!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','id',array('the_type'=>'DELETE_MEMBER','param_b'=>TODO Unfortunately we can't tell)));
+			$deleted=($ref['qualified']==1);//!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','id',array('the_type'=>'DELETE_MEMBER','param_b'=>NOTE Unfortunately we can't tell who the old member was)));
 		}
 		if ($csv)
 		{

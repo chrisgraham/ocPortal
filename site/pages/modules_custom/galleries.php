@@ -76,7 +76,7 @@ function init__site__pages__modules_custom__galleries($code)
 		require_code(\'workflows\');
 		require_lang(\'workflows\');
 		// We need to find our ID first
-		// FIXME: Hack to see whether we are an image or video
+		// Hack to see whether we are an image or video
 		if (array_key_exists(\'image_views\',$myrow)) $content_type=\'image\';
 		if (array_key_exists(\'video_views\',$myrow)) $content_type=\'video\';
 		$workflow_content_id=get_workflow_content_id($content_type,strval($myrow[\'id\']));
