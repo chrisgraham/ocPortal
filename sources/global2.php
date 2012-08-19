@@ -69,10 +69,7 @@ function init__global2()
 	}
 
 	// Initialise some globals
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BAD_WORD_CHARS,$FIXED_WORD_CHARS,$FIXED_WORD_CHARS_HTML,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING;
-	$BAD_WORD_CHARS=array(chr(128),chr(130),chr(131),chr(132),chr(133),chr(134),chr(135),chr(136),chr(137),chr(138),chr(139),chr(140),chr(142),chr(145),chr(146),chr(147),chr(148),chr(149),chr(150),chr(151),chr(152),chr(153),chr(154),chr(155),chr(156),chr(158),chr(159));
-	$FIXED_WORD_CHARS=array('(EUR-)',',','{f.}','"','...','-|-','=|=','^','{%o}','{~S}','<','CE','{~Z}',"'","'",'"','"','-','-','--','~','(TM)','{~s}','>','ce','{~z}','{.Y.}'); // some of these are Comcode shortcuts. We can't use entities as we can't assume we're converting into Comcode.
-	$FIXED_WORD_CHARS_HTML=array('&#8364;','&#8218;','&#402;','&#8222;','&hellip;','&#8224;','&#8225;','&#710;','&#8240;','&#352;','&#8249;','&#338;','&#381;',"&lsquo;","&rsquo;",'&ldquo;','&rdquo;','&bull;','&ndash;','&mdash;','&#732;','&trade;','&#353;','&#8250;','&#339;','&#382;','&#376;');
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING;
 	$RUNNING_SCRIPT_CACHE=array();
 	$BROWSER_DECACHEING=NULL;
 	$CHARSET=NULL;
@@ -611,7 +608,7 @@ function get_charset()
 		if ($XSS_DETECT) ocp_mark_as_escaped($TEMP_CHARSET);
 		return $TEMP_CHARSET;
 	}
-	$TEMP_CHARSET='iso-8859-1';
+	$TEMP_CHARSET='utf-8';
 	return $TEMP_CHARSET;
 }
 
@@ -1516,13 +1513,6 @@ function unixify_line_format($in,$desired_charset=NULL,$html=false,$from_disk=fa
 	if ($desired_charset===NULL) $desired_charset=get_charset();
 
 	$in=str_replace(array(chr(13).chr(10),'&#8298;',chr(13)),array(chr(10),'',chr(10)),$in); // &#8298; is very odd- seems to come from open office copy & paste
-	if (!$from_disk)
-	{
-		if ($desired_charset=='ISO-8859-1') // Fix up Windows ANSI characters
-		{
-			$in=str_replace($GLOBALS['BAD_WORD_CHARS'],$html?$GLOBALS['FIXED_WORD_CHARS_HTML']:$GLOBALS['FIXED_WORD_CHARS'],$in);
-		}
-	}
 	return $in;
 }
 

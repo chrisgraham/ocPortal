@@ -324,7 +324,7 @@ function get_charset()
 	{
 		return strtolower($matches[1]);
 	}
-	return strtolower('ISO-8859-1');
+	return strtolower('utf-8');
 }
 
 /**

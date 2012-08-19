@@ -666,7 +666,7 @@ class ocp_simple_xml_reader
 		// Our internal charset
 		$parser_charset=get_charset();
 		if (!in_array(strtoupper($parser_charset),array('ISO-8859-1','US-ASCII','UTF-8')))
-			$parser_charset='ISO-8859-1';
+			$parser_charset='UTF-8';
 
 		// Create and setup our parser
 		$xml_parser=function_exists('xml_parser_create_ns')?@xml_parser_create_ns($parser_charset):@xml_parser_create($parser_charset);
