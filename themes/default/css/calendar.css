@@ -243,6 +243,19 @@ abbr.dtstart, abbr.dtend {
 =========================
 */
 
+.side_calendar .calendar_priority_na,
+.side_calendar .calendar_priority_1,
+.side_calendar .calendar_priority_2,
+.side_calendar .calendar_priority_3,
+.side_calendar .calendar_priority_4,
+.side_calendar .calendar_priority_5,
+.side_calendar .calendar_priority_free_time,
+.side_calendar .calendar_free_time,
+.side_calendar .calendar_active {
+	font-size: 0.85em;
+	padding: 0.5em 0.2em;
+}
+
 .calendar_priority_na,
 .calendar_priority_1,
 .calendar_priority_2,
@@ -252,7 +265,6 @@ abbr.dtstart, abbr.dtend {
 .calendar_priority_free_time,
 .calendar_free_time,
 .calendar_active {
-	font-size: 0.85em;
 	padding: 0.5em;
 }
 

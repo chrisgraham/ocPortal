@@ -480,7 +480,11 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 .fields_set_contents {
-	margin-bottom: 0.5em;
+	margin-bottom: 1.3em;
+}
+
+.fields_set_contents .associated_details {
+	margin-top: 0.2em;
 }
 
 /* Spruce up defaults for form fields */

@@ -7,6 +7,9 @@
 
 */
 
+restrictify();
+@ini_set('ocproducts.xss_detect','0');
+
 $_title=get_screen_title('ocPortal addon building tool',false);
 $_title->evaluate_echo();
 
@@ -34,7 +37,7 @@ if (function_exists('set_time_limit')) @set_time_limit(0);
 
 $only=get_param('only',NULL);
 
-if (get_param_integer('export_bundled_addons',0)==1)
+if (get_param_integer('export_bundled_addons',0)==1) // We are not normally concerned about these, but maybe it is useful sometimes
 {
 	$addons=find_all_hooks('systems','addon_registry');
 	foreach (array_keys($addons) as $name)
@@ -76,6 +79,8 @@ if (get_param_integer('export_addons',1)==1)
 		$addon_limit=explode(',',$_addon_limit);
 	}
 
+	$version=ocp_version_number();
+
 	foreach ($file_list as $addon_codename=>$files)
 	{
 		if ((!is_null($addon_limit)) && (!in_array($addon_codename,$addon_limit))) continue;
@@ -105,7 +110,7 @@ if (get_param_integer('export_addons',1)==1)
 			}
 		}
 
-		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd',float_to_raw_string($version),$description,'exports/addons');
+		create_addon($file,$files,$name,$incompatibilities,$dependencies,$author,'ocProducts Ltd',float_to_raw_string($version,2,true),$description,'exports/addons');
 
 		echo nl2br(escape_html(show_updated_comments_code($file,$name)));
 	}

@@ -1399,11 +1399,15 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 					} else
 					{
 						$alien.=$file_html;
+						if (strlen($alien)<=100000) // Reasonable limit
+							$alien.='<kbd>'.escape_html($rela.$file).'</kbd></li>';
 					}
 				}
 			}
 		}
 	}
+
+	if (strlen($alien)>100000) $alien=''; // Reasonable limit
 
 	return array($alien,$addon);
 }

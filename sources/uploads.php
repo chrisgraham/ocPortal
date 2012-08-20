@@ -497,7 +497,7 @@ function _get_specify_url($specify_name,$upload_folder,$enforce_type=0,$accept_e
 		$missing_ok=false;
 
 		// Its not in the upload folder, so maybe we aren't allowed to download it
-		if ((substr($url[0],0,strlen($upload_folder)+1)!=$upload_folder.'/') || (strpos($url[0],'..')!==false))
+		if (((substr($url[0],0,strlen($upload_folder)+1)!=$upload_folder.'/') && (substr($url[0],0,strlen('data/images/')+1)!='data/images/')) || (strpos($url[0],'..')!==false))
 		{
 			$myfile=@fopen(get_custom_file_base().'/'.rawurldecode($url[0]),'rb');
 			if ($myfile!==false)

@@ -32,7 +32,7 @@ At the time of writing, the following types of alert are defined:
  - [b]SCRIPT_TAG_HACK[/b], The user tried to introduce a script tag. This would be likely to be a hack attempt if it wasn't for the fact that by default, ordinary members cannot submit any HTML at all; it is therefore likely that a privileged user has out-stepped the norm, or a privileged member is not to be trusted
  - [b]SCRIPT_URL_HACK[/b], This is highly likely to be a hack attempt, as a user explicitly specified a URL which was code and not a real URL
  - [b]LAME_SPAM_HACK[/b], This is a blocked spam attempt, where a Guest user posted with the terms [tt][link[/tt] and [tt]<a [/tt] within a single post, almost certainly a common kind of "try everything" attempt to get spam links posted (ocPortal does not even support a 'link' bbcode tag)
- - [b]TRY_TO_DOWNLOAD_SCRIPT[/b], The user tried to add a download with a manual URL that links to private files that are not meant to be downloadable. This may be an honest mistake -- but if it is _config.php, then it is very likely to be a hack attempt
+ - [b]TRY_TO_DOWNLOAD_SCRIPT[/b], The user tried to add a download with a manual URL that links to private files that are not meant to be downloadable. This may be an honest mistake -- but if it is [tt]_config.php[/tt], then it is very likely to be a hack attempt. A more detailed explanation follows further in this tutorial
  - [b]TICKET_OTHERS_HACK[/b], The user tried to access support tickets from another user. This is either a bug (we know of no way it would happen normally), or a hack attempt
  - [b]TICKET_SYSTEM_WEIRD[/b], The user tried to access a support ticket with an non-standard name. This is either a bug, or a hack attempt; if it is a hack attempt, it is probably not one that would get anywhere even if it was not blocked
  - [b]ORDERBY_HACK[/b], Tried to change the SQL ordering attribute, perhaps for SQL injection
@@ -204,6 +204,19 @@ There is a special script ([tt]rootkit_detection.php[/tt]) that will help detect
 [title="2"]HTTP authentication[/title]
 
 There is nothing stopping you using HTTP authentication served by your web server on top of the website if you want some extra security. However, you should let requests from the web server itself through that without needing to authenticate so that it can read it's own URLs (otherwise you could have some problems, such as security errors when editing theme images).
+
+[title="2"]The "TRY_TO_DOWNLOAD_SCRIPT" error in detail[/title]
+
+The full error is:
+[quote]
+Tried to add a downloaded file that points to a script: so they could get the script contents (e.g. passwords)
+[/quote]
+
+The error is saying that the server tried to check the URL was valid but that it found the downloaded file was different to what there was on disk. That suggests to ocPortal that there's a security issue, that some kind of script is behind the URL, and therefore to not allow a 'trusted' relative URL to it because direct access could bypass security layers. If you really do want to link to a script you can via an absolute URL – ocPortal never trusts absolute URLs.
+
+This error could also be caused by some server configuration issue too. For example:
+1) If the server cannot download files from itself properly to check, and whatever it does manage to access is returning HTTP '200' (file found) messages. This seems unlikely but it can be surprising what weird situations happen "in the wild".
+2) If something on the server is interfering with downloads. Something like the new Apache [tt]mod_spdy[/tt] module could cause something like this. That might alter images during transfer and ocPortal would not receive the file it expected to be checking.
 
 [concepts
  1_key="SSL"          1_value="Secure Socket Layer -- encryption over Internet connections so as to avoid interception of information"

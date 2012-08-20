@@ -47,7 +47,7 @@ class Block_side_shoutbox
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='((get_value(\'no_frames\')===\'1\') && (count($_POST)!=0))?NULL:array(array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'param\',$map)?intval($map[\'param\']):NULL)';
+		$info['cache_on']='((get_value(\'no_frames\')===\'1\') && (count($_POST)!=0))?NULL:array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()),array_key_exists(\'max\',$map)?intval($map[\'max\']):5,array_key_exists(\'param\',$map)?intval($map[\'param\']):NULL)';
 		$info['ttl']=60*24;
 		return $info;
 	}

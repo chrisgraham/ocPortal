@@ -345,8 +345,8 @@ function check_field(the_element,the_form,for_preview)
 	// Fix up bad characters
 	if ((browser_matches('ie')) && (the_element.value) && (the_element.nodeName.toLowerCase()!='select'))
 	{
-		bad_word_chars=[8216,8217,8220,8221];
-		fixed_word_chars=["'","'",'"','"'];
+		var bad_word_chars=[8216,8217,8220,8221];
+		var fixed_word_chars=["'","'",'"','"'];
 		for (i=0;i<bad_word_chars.length;i++)
 		{
 			regexp=new RegExp(String.fromCharCode(bad_word_chars[i]),'gm');

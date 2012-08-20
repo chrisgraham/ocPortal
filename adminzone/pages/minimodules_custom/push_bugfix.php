@@ -7,6 +7,9 @@
 
 */
 
+restrictify();
+@ini_set('ocproducts.xss_detect','0');
+
 define('SOLUTION_FORUM',283); // The forum ID on ocPortal.com for problem solution posts
 
 $_title=get_screen_title('ocPortal bugfix tool',false);
@@ -406,7 +409,7 @@ function create_hotfix_tar($tracker_id,$files)
 		fix_permissions($builds_path.'/builds/hotfixes',0777);
 	}
 	chdir($builds_path.'/builds/hotfixes');
-	$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'tar');
+	$tar=((DIRECTORY_SEPARATOR=='\\')?('"'.dirname(__FILE__).'\\tar"'):'COPYFILE_DISABLE=1 tar');
 	$tar_path=$builds_path.'/builds/hotfixes/hotfix-'.strval($tracker_id).', '.date('Y-m-d ga').'.tar';
 	$cmd=$tar.' cvf '.escapeshellarg(basename($tar_path)).' -C '.escapeshellarg(get_file_base()); // Windows doesn't allow absolute path for 'f' option so we need to use 'f' & 'C' to do it
 	foreach ($files as $file)
@@ -451,7 +454,7 @@ function make_call($call,$params,$file=NULL)
 		$header="Content-type: application/x-www-form-urlencoded\r\nContent-Length: $data_len\r\n";
 	} else
 	{
-		list($header,$data_url)=make_post_request_with_attached_file($file,basename($file),$data);
+		list($header,$data_url)=make_post_request_with_attached_file(basename($file),$file,$data);
 	}
 
 	$opts=array('http'=>
@@ -482,7 +485,7 @@ function make_post_request_with_attached_file($filename,$file_path,$more_post_da
 	$file_contents=file_get_contents($file_path);
 	
 	$content="--".$multipart_boundary."\r\n".
-				"Content-Disposition: form-data; name=\"upload\"; filename=\"".addslashes(basename($filename))."\"\r\n".
+				"Content-Disposition: form-data; name=\"upload\"; filename=\"".addslashes($filename)."\"\r\n".
 				"Content-Type: application/octet-stream\r\n\r\n".
 				$file_contents."\r\n";
 
@@ -493,12 +496,16 @@ function make_post_request_with_attached_file($filename,$file_path,$more_post_da
 		{
 			foreach ($val as $val2)
 			{
+				if (!is_string($val2)) $val2=strval($val2);
+
 				$content.=	"--".$multipart_boundary."\r\n".
 								"Content-Disposition: form-data; name=\"".addslashes($key)."[]\"\r\n\r\n".
 								$val2."\r\n";
 			}
 		} else
 		{
+			if (!is_string($val)) $val=strval($val);
+
 			$content.=	"--".$multipart_boundary."\r\n".
 							"Content-Disposition: form-data; name=\"".addslashes($key)."\"\r\n\r\n".
 							$val."\r\n";

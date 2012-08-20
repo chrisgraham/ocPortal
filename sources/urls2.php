@@ -535,7 +535,7 @@ function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL)
 			if ($moniker==preg_replace('#^.*/#','',$no_exists_check_for)) return $moniker; // This one is okay, we know it is safe
 		}
 
-		$test=$GLOBALS['SITE_DB']->query_selectvalue_if_there_full('SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_not_equal_to('m_resource_id',$id).' AND ('.db_string_equal_to('m_moniker',$moniker).' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\')');
+		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT m_resource_id FROM '.get_table_prefix().'url_id_monikers WHERE '.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_not_equal_to('m_resource_id',$id).' AND ('.db_string_equal_to('m_moniker',$moniker).' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\')');
 		if (!is_null($test)) // Oh dear, will pass to next iteration, but trying a new moniker
 		{
 			$next_num++;

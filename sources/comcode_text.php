@@ -590,7 +590,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							$differented=false; // If somehow via lookahead we've changed this to HTML and thus won't use it in raw form
 
 							// Variable lookahead
-							if ((!$in_code_tag) && (($next=='{') && (($comcode[$pos]=='$') || ($comcode[$pos]=='+') || ($comcode[$pos]=='!'))))
+							if ((!$in_code_tag) && (($next=='{') && (isset($comcode[$pos])) && (($comcode[$pos]=='$') || ($comcode[$pos]=='+') || ($comcode[$pos]=='!'))))
 							{
 								if ($comcode_dangerous)
 								{

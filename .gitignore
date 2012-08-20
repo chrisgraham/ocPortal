@@ -3,6 +3,7 @@ docs/api
 /www.pid
 *test.png
 /info.php
+/_config.php
 /.htaccess
 .DS_Store
 *.lcd

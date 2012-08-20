@@ -21,6 +21,9 @@ If running on Windows, you need to install the following commands in your path..
  - gunzip.exe, gzip.exe, and tar.exe
 */
 
+restrictify();
+@ini_set('ocproducts.xss_detect','0');
+
 disable_php_memory_limit();
 
 $type=get_param('type','0');
@@ -247,7 +250,7 @@ function phase_2()
 		$ms_sha1=sha1_file($webpi);
 
 		echo '
-			<li><strong>Installatron</strong>: Go into <a target="_blank" href="http://installatron.com/editor">Installatron</a>, login with the privileged management account, and setup a new release with the new version number (Main tab), update the URL (Version Info tab), and publish.</li>
+			<li><strong>Installatron</strong>: Go into <a target="_blank" href="http://installatron.com/editor">Installatron</a>, login with the privileged management account, and setup a new release with the new version number (Main tab), update the URL (Version Info tab) and scroll down and click "Save all changes", and Publish (Publisher tab).</li>
 			<li><strong>Microsoft Web Platform</strong>: <a target="_blank" href="http://www.microsoft.com/web/gallery/appsubmit.aspx?id=460">Submit the new MS Web App Gallery file to Microsoft</a> using the privileged management account. Change the \'Version\' the \'Package Location URL\' and set the shasum to <kbd>'.escape_html($ms_sha1).'</kbd></li>
 			<li><strong>Other integrations</strong>: E-mail <a href="mailto:?bcc=punit@softaculous.com,brijesh@softaculous.com,support@simplescripts.com&amp;subject=New ocPortal release&amp;body=Hi, this is an automated notification that a new release of ocPortal has been released - regards, the ocPortal team.">integration partners</a></li>
 			<!--Disabled for now as not ready <li><strong>Debian</strong>: Take "debian-'.escape_html($version_dotted).'.tar" to a debian box with correct signing key installed and do "tar xvf debian-'.escape_html($version_dotted).'.tar; cd ocportal-'.escape_html($version_dotted).' ; dpkg-buildpackage" and send \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_all.deb\' over</li>-->

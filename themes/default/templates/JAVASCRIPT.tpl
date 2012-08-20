@@ -2260,7 +2260,7 @@ function entities_to_unicode(din)
 	}
 	return din;
 }
-/* load the HTML as XML */
+/* load the HTML as XHTML */
 function inner_html_load(xml_string) {
 	var xml;
 	if (typeof DOMParser!="undefined") xml=(new DOMParser()).parseFromString(xml_string,"application/xml");
@@ -2489,7 +2489,7 @@ function set_inner_html(element,tHTML,append)
 	tHTML=entities_to_unicode(tHTML);
 
 	/* load the XML and copies to DOM */
-	tHTML="<root>"+tHTML+"</root>";
+	tHTML="<root>"+tHTML.replace(/^\s*\<\!DOCTYPE[^<>]*\>/,'')+"</root>";
 	var xml_doc=inner_html_load(tHTML);
 	if (element && xml_doc) {
 		if (!append) while (element.lastChild) element.removeChild(element.lastChild);
@@ -2842,11 +2842,15 @@ function setup_word_counter(post,count_element)
 	window.setInterval(function() {
 		if (is_wysiwyg_field(post))
 		{
-			var text_value=CKEDITOR.instances['post'].getData();
-			var matches=text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
-			var count=0;
-			if(matches) count=matches.length/2;
-			set_inner_html(count_element,'{!WORDS;}'.replace('\{1\}',count));
+			try
+			{
+				var text_value=CKEDITOR.instances['post'].getData();
+				var matches=text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
+				var count=0;
+				if(matches) count=matches.length/2;
+				set_inner_html(count_element,'{!WORDS;}'.replace('\{1\}',count));
+			}
+			catch (e) {};
 		}
 	}, 1000);
 }

@@ -22,10 +22,11 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 =========================
 */
 
-/* Used to initate equations (although running the Theme Wizard replaces these with what the user chooses - which is how it works) */
+/* Used to initiate equations (although running the Theme Wizard replaces these with what the user chooses - which is how it works) */
 {$THEME_WIZARD_COLOR,#94979d,seed,100% 94979D}
 {$THEME_WIZARD_COLOR,#ffffff,WB,100% FFFFFF}
 {$THEME_WIZARD_COLOR,#000000,BW,100% 000000}
+/*Theme seed is: {$GET,seed}*/
 
 /* The fundamental website */
 {$THEME_WIZARD_COLOR,#e3eaf6,fixed_width_background,11% (seed sat_to 100) + 89% WB}
@@ -124,7 +125,7 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 /* Special colour for box titles */
 {$THEME_WIZARD_COLOR,#ffffff,box_title_text,100% WB}
 {$THEME_WIZARD_COLOR,#426aa9,box_title_background,100% seed}
-
+{$GET,box_title_background}TODO{$GET,seed}
 /* Special colour for code/quote boxes */
 {$THEME_WIZARD_COLOR,#8ea6cb,code_title_background,60% seed + 40% WB}
 {$THEME_WIZARD_COLOR,#3f3f3f,code_text,25% code_background + 85% BW}
@@ -765,7 +766,8 @@ footer .global_footer_left .horizontal_buttons>li {
 }
 
 footer .su_form input {
-	padding: 0;
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 footer .special_page_type_form select, footer .special_page_type_form select option.label {
@@ -1087,6 +1089,7 @@ div.red_alert, p.red_alert {
 	display: inline-block;
 	white-space: nowrap;
 	border: 1px dotted {$GET,dark_border};
+	background: {$GET,main_background} !important;
 	text-align: center;
 	width: 1.1em;
 	font-size: 0.9em;

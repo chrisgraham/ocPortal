@@ -1689,7 +1689,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$tooltip=$caption;
 			}
 			$rollover=array_key_exists('rollover',$attributes)?$attributes['rollover']:NULL;
-			if (url_is_local($rollover))
+			if ((!is_null($rollover)) && (url_is_local($rollover)))
 			{
 				if ((file_exists(get_file_base().'/'.$rollover)) && (!file_exists(get_custom_file_base().'/'.$rollover)))
 				{
