@@ -280,3 +280,8 @@ xmppchat,Development,Chris Graham,LGPL,"This addon replaces the standard ocPorta
 9) In ocPortal you should deny access to Guests to the chat module, they are not supported at this time.
 10) Instructions for XMPP usage by users have been placed on the chat lobby screen. Note that as an administrator you now need to manage chat rooms via a normal XMPP client: the admin/CMS chat modules will no longer be functional.
 11) You may need to set up Proxy server (we're not sure why, but on some PHP configurations our proxying script does not work). Something similar to the following needs to be in the Apache configuration to workaround the problem: LoadModule proxy_module /usr/lib/apache2/modules/mod_proxy.so LoadModule proxy_http_module /usr/lib/apache2/modules/mod_proxy_http.so ProxyRequests Off ProxyPass /data_custom/xmpp_proxy.php http://<yourdomainname>:5280/http-bind/ Credits: We used xmpp4js to integrate with our chat frontend, and the ocP/jabber authentication was based on lissyx's work.","Dedicated server running ejabberd, chat",,Harlan Iverson,
+cleanup_repository,Development,Chris Graham,Licensed on the same terms as ocPortal,Used to delete non-bundled addons from a github checkout.,,,,
+ocportal_release_build,Development,Chris Graham,Licensed on the same terms as ocPortal,The ocPortal release build platform.,,,,
+ocportalcom,Development,Chris Graham,Licensed on the same terms as ocPortal,The ocPortal deployment platform.,,,,
+ocportalcom_support_credits,Development,Chris Graham,Licensed on the same terms as ocPortal,The ocPortal.com support credits system.,,,,
+testing_platform,Development,Chris Graham,Licensed on the same terms as ocPortal,The ocPortal testing platform.,,,,
