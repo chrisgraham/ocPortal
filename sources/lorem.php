@@ -518,8 +518,6 @@ function do_lorem_template($codename,$parameters=NULL,$lang=NULL,$light_error=fa
  */
 function lorem_globalise($middle,$message=NULL,$type='',$include_header_and_footer=false)
 {
-	if (!$include_header_and_footer) $_GET['wide_high']='1'; // HACKHACK
-
 	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 
 	global $LOREM_AVOID_GLOBALISE;

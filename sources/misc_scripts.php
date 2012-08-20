@@ -782,11 +782,6 @@ function block_helper_script()
 						$list->attach(form_input_list_entry('',true));
 					foreach (array_keys($hooks) as $hook)
 					{
-						if ($block=='side_tag_cloud') // HACKHACK: When we unify our names, fix this
-						{
-							if (substr($hook,-1)=='y') $hook.=','.substr($hook,0,strlen($hook)-1).'ies';
-							elseif ((substr($hook,-1)!='s') && ($hook!='quiz')) $hook.=','.$hook.'s';
-						}
 						$list->attach(form_input_list_entry($hook,$hook==$default));
 					}
 					if ((($block=='main_search') && ($parameter=='limit_to')) || ($block=='side_tag_cloud'))

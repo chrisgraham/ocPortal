@@ -601,7 +601,12 @@ function ocf_require_all_forum_stuff()
  */
 function globalise($middle,$message=NULL,$type='',$include_header_and_footer=false)
 {
-	if (!$include_header_and_footer) $_GET['wide_high']='1'; // HACKHACK
+	if (!$include_header_and_footer) // FUDGE
+	{
+		$old=mixed();
+		if (isset($_GET['wide_high'])) $old=$_GET['wide_high'];
+		$_GET['wide_high']='1';
+	}
 
 	require_code('site');
 	if ($message!==NULL) attach_message($message,$type);
@@ -632,6 +637,11 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 	if (get_value('xhtml_strict')==='1')
 	{
 		$global=make_xhtml_strict($global);
+	}
+
+	if ((!$include_header_and_footer) && (!is_null($old)))
+	{
+		$_GET['wide_high']=$old;
 	}
 
 	return $global;

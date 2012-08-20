@@ -926,11 +926,8 @@ function has_feature($dependency)
 {
 	$dependency=str_replace(' ','',strtolower(preg_replace('# (enabled|needed|required)$#','',$dependency)));
 
-	if ($dependency=='yes') return true; // Buggy addon definition
-
-	$remapping=array( // HACKHACK: Remove these for next major version
-		'chatrooms'=>'chat',
-		'side_stats'=>'stats_block',
+	$remapping=array(
+		// Useful for carrying legacy remappings, currently there are none
 	);
 	if (array_key_exists($dependency,$remapping)) $dependency=$remapping[$dependency];
 

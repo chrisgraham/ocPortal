@@ -62,6 +62,7 @@ class Block_side_tag_cloud
 	{
 		require_lang('search');
 		require_css('search');
+		require_code('content');
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('search');
 		$max_tags=array_key_exists('max',$map)?intval($map['max']):30;
@@ -73,7 +74,7 @@ class Block_side_tag_cloud
 		$search_limiter=array('all_defaults'=>'1');
 
 		// Find all keywords, hence all tags
-		$limit_to=array_key_exists('param',$map)?$map['param']:''; // HACKHACK: No correlation between meta keywords and search hook names, so we have to specify both in here
+		$limit_to=array_key_exists('param',$map)?$map['param']:'';
 		if ($limit_to!='')
 		{
 			$where='';
@@ -82,7 +83,8 @@ class Block_side_tag_cloud
 				if ($where!='') $where.=' OR ';
 				$where.=db_string_equal_to('meta_for_type',$l);
 
-				$search_limiter['search_'.$l]=1;
+				$l2=convert_ocportal_type_codes('seo_type_code',$l,'search_hook');
+				$search_limiter['search_'.$l2]=1;
 			}
 			$search_limiter['all_defaults']='0';
 		} else

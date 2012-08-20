@@ -65,7 +65,7 @@ function server__post_in_bugs_catalogue($version_pretty,$ce_title,$ce_descriptio
 	$bug_category_id=get_bug_category_id($version_pretty);
 
 	$map=array(
-		// HACKHACK: Hard-coded IDs
+		// FUDGE: Hard-coded IDs
 		35=>$ce_title,
 		36=>$ce_description,
 		32=>$ce_affects,

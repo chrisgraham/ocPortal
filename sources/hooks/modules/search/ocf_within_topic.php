@@ -53,7 +53,7 @@ class Hook_search_ocf_within_topic
 	 */
 	function ajax_tree()
 	{
-		return array('choose_forum_topic',array('compound_list'=>false));
+		return array('choose_topic',array('compound_list'=>false));
 	}
 
 	/**

@@ -245,7 +245,7 @@ class Block_main_content
 			{
 				$bits=explode(':',$content_id);
 
-				// HACKHACK
+				// FUDGE
 				if ($type_id=='comcode_page')
 				{
 					// Try and force a parse of the page, so it's in the system

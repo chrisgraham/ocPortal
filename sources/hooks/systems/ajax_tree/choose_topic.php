@@ -18,7 +18,7 @@
  * @package		ocf_forum
  */
 
-class Hook_choose_forum_topic
+class Hook_choose_topic
 {
 
 	/**

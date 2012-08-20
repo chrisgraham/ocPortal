@@ -76,7 +76,7 @@ class Hook_pointstore_topic_pin
 			$set_title=do_lang_tempcode('FORUM_TOPIC');
 			$field_set=alternate_fields_set__start($set_name);
 
-			$field_set->attach(form_input_tree_list(do_lang_tempcode('CHOOSE'),'','select_topic_id',NULL,'choose_forum_topic',array(),false));
+			$field_set->attach(form_input_tree_list(do_lang_tempcode('CHOOSE'),'','select_topic_id',NULL,'choose_topic',array(),false));
 
 			$field_set->attach(form_input_integer(do_lang_tempcode('IDENTIFIER'),do_lang_tempcode('DESCRIPTION_FORUM_TOPIC_ID'),'manual_topic_id',NULL,false));
 

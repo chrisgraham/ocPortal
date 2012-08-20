@@ -249,7 +249,7 @@ class Hook_addon_registry_ocf_forum
 			'themes/default/images/pagepics/forums.png',
 			'sources/hooks/modules/topicview/.htaccess',
 			'sources/hooks/modules/topicview/index.html',
-			'sources/hooks/systems/ajax_tree/choose_forum_topic.php',
+			'sources/hooks/systems/ajax_tree/choose_topic.php',
 			'sources/hooks/systems/ajax_tree/choose_forum.php',
 			'sources/hooks/systems/rss/ocf_unread_topics.php',
 			'sources/hooks/systems/rss/ocf_private_topics.php',

@@ -92,7 +92,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		ob_end_clean();
 	}
 
-	// HACKHACK: Yuck. We have to after-the-fact make it wide, and empty lots of internal caching to reset the state.
+	// FUDGE: Yuck. We have to after-the-fact make it wide, and empty lots of internal caching to reset the state.
 	$_GET['wide_high']='1';
 	$_GET['wide']='1';
 	$GLOBALS['LOADED_PANELS']=array();

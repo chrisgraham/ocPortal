@@ -22,7 +22,7 @@
  * Find a different content type code from the one had. In future we intend to change everything to be cma_hook internally.
  *
  * @param  ID_TEXT		Content type type we know
- * @set addon cma_hook award_hook search_hook table seo_type_code feedback_type_code permissions_type_code module table
+ * @set addon cma_hook meta_hook award_hook search_hook table seo_type_code feedback_type_code permissions_type_code module table
  * @param  ID_TEXT		Content type ID we know
  * @param  ID_TEXT		Desired content type
  * @set addon cma_hook search_hook table seo_type_code feedback_type_code permissions_type_code module table

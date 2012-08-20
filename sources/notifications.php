@@ -460,7 +460,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 			$wrapped_message=do_lang('NOTIFICATION_PT_MESSAGE_WRAP',$message_to_send);
 
 			// NB: These are posted by Guest (system) although the display name is set to the member triggering. This is intentional to stop said member getting unexpected replies.
-			$topic_id=ocf_make_topic(NULL,$wrapped_subject,'ocf_topic_modifiers/announcement'/*HACKHACK: replace with proper topic emoticon*/,1,1,0,0,0,db_get_first_id(),$to_member_id,false,0,NULL,'');
+			$topic_id=ocf_make_topic(NULL,$wrapped_subject,'ocf_topic_modifiers/announcement'/*TODO: replace with proper topic emoticon, #186 on tracker*/,1,1,0,0,0,db_get_first_id(),$to_member_id,false,0,NULL,'');
 			ocf_make_post($topic_id,$wrapped_subject,$wrapped_message,0,true,1,0,($from_member_id<0)?do_lang('SYSTEM'):$from_name,NULL,NULL,db_get_first_id(),NULL,NULL,NULL,false,true,NULL,true,$wrapped_subject,0,NULL,true,true,true,($from_member_id==A_FROM_SYSTEM_PRIVILEGED));
 		}
 	}

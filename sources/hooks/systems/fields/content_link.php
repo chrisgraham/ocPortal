@@ -102,9 +102,6 @@ class Hook_fields_content_link
 
 		$type=preg_replace('#^choose\_#','',substr($field['cf_type'],3));
 
-		// HACKHACK: imperfect content type naming schemes
-		if ($type=='forum_topic') $type='topic';
-
 		require_code('content');
 		list($title,,$info)=content_get_details($type,$ev);
 

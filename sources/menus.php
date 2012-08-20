@@ -260,12 +260,12 @@ function build_stored_menu($type,$menu,$silent_failure=false)
 			{
 				$new_kids_on_the_block=build_stored_menu_branch($item,$items);
 
-				// HACKHACK: Cleaner way preferable, but needs new DB field!
+				// HACKHACK: Cleaner way preferable, but needs new DB field! (#16 on tracker)
 				if ((array_key_exists('i_caption_long',$item)) && (substr($item['i_caption_long'],0,3)=='!!!'))
 				{
 					$new_kids_on_the_block['caption_long']='';
 				}
-				// HACKHACK: Cleaner way preferable, but needs new DB field!
+				// HACKHACK: Cleaner way preferable, but needs new DB field! (#16 on tracker)
 				if ((array_key_exists('i_caption_long',$item)) && (substr($item['i_caption_long'],0,2)=='@@'))
 				{
 					$new_kids_on_the_block['caption_long']='';
@@ -308,7 +308,7 @@ function build_stored_menu_branch($thisitem,$items)
 		'img'=>array_key_exists('i_theme_img_code',$thisitem)?$thisitem['i_theme_img_code']:'',
 	);
 
-	// HACKHACK: Cleaner way preferable, but needs new DB field!
+	// HACKHACK: Cleaner way preferable, but needs new DB field! (#16 on tracker)
 	if ((array_key_exists('i_caption_long',$thisitem)) && (substr($thisitem['i_caption_long'],0,3)=='!!!'))
 	{
 		require_code('menus_sitemap');
@@ -323,7 +323,7 @@ function build_stored_menu_branch($thisitem,$items)
 			$items[]=$e;
 		}
 	}
-	// HACKHACK: Cleaner way preferable, but needs new DB field!
+	// HACKHACK: Cleaner way preferable, but needs new DB field! (#16 on tracker)
 	if ((array_key_exists('i_caption_long',$thisitem)) && (substr($thisitem['i_caption_long'],0,2)=='@@'))
 	{
 		$bits=explode('@@',$thisitem['i_caption_long']);
