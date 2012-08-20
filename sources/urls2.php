@@ -23,7 +23,9 @@
  */
 function init__urls2()
 {
-	$max_moniker_length=get_value('max_moniker_length');
+	$max_moniker_length=mixed();
+	if (function_exists('get_value'))
+		$max_moniker_length=get_value('max_moniker_length');
 	define('MAX_MONIKER_LENGTH',is_null($max_moniker_length)?24:intval($max_moniker_length));
 }
 

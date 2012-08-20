@@ -83,7 +83,7 @@ function find_lost_option($name)
  * @param  ID_TEXT		The name of the value
  * @param  LONG_TEXT		The value
  * @param  ?ID_TEXT		The type of the option. This is normally ommited, but to save a DB lookup, may be passed through (NULL: work out the type)
- * @set    float integer tick line text transline transtext list date forum category usergroup
+ * @set    float integer tick line text transline transtext list date forum forum_grouping usergroup
  * @param  ?LONG_TEXT	The current value of the config option (NULL: unknown). This is just for efficiency for remapping language config options.
  */
 function set_option($name,$value,$type=NULL,$current_value=NULL)

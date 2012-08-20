@@ -1114,7 +1114,7 @@ class forum_driver_smf extends forum_driver_base
 		// Main authentication
 		$bits=explode('::',$password_hashed);
 		if (!array_key_exists(1,$bits)) $bits[1]=$bits[0];
-		$test1=(!$GLOBALS['SMF_NEW'])) && ((($from_cookie) && ($this->forum_md5($row['passwd'],'ys',true)==$bits[0])) || ((!$from_cookie) && ($row['passwd']==$bits[0])));
+		$test1=(!$GLOBALS['SMF_NEW']) && ((($from_cookie) && ($this->forum_md5($row['passwd'],'ys',true)==$bits[0])) || ((!$from_cookie) && ($row['passwd']==$bits[0])));
 		$test2=($GLOBALS['SMF_NEW']) && ((($from_cookie) && (sha1($row['passwd'].$row['passwordSalt'])==$bits[1])) || ((!$from_cookie) && ($row['passwd']==$bits[1])));
 		if ((!$test1) && (!$test2))
 		{

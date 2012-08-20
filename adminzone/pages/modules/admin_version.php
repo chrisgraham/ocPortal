@@ -408,7 +408,7 @@ class Module_admin_version
 				'the_value'=>'BINARY'
 			));
 			$GLOBALS['SITE_DB']->create_index('member_privileges','member_privileges_name',array('privilege','the_page','module_the_name','category_name'));
-			$GLOBALS['SITE_DB']->create_index('member_privileges','member_privileges_member_id',array('member_id'));
+			$GLOBALS['SITE_DB']->create_index('member_privileges','member_privileges_member',array('member_id'));
 
 			$GLOBALS['SITE_DB']->create_table('member_zone_access',array(
 				'active_until'=>'*TIME',

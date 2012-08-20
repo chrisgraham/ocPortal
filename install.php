@@ -1440,18 +1440,18 @@ function step_5_write_config()
 	if (substr($base_url,-1)=='/') $base_url=substr($base_url,0,strlen($base_url)-1);
 
 	// _config.php
-	$info_file=((file_exists('use_comp_name'))?(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']):'info').'.php';
-	$info=fopen(get_file_base().'/'.$info_file,'wt');
-	fwrite($info,"<"."?php\nglobal \$SITE_INFO;\n");
-	fwrite($info,"\$SITE_INFO['use_mem_cache']='0';\n");
-	fwrite($info,"\$SITE_INFO['fast_spider_cache']='0';\n");
-	fwrite($info,"\$SITE_INFO['on_msn']='0';\n");
-	fwrite($info,"\$SITE_INFO['disable_smart_decaching']='0';\n");
-	fwrite($info,"\$SITE_INFO['no_disk_sanity_checks']='0';\n");
-	fwrite($info,"\$SITE_INFO['hardcode_common_module_zones']='0';\n");
-	fwrite($info,"\$SITE_INFO['prefer_direct_code_call']='0';\n");
-	if ($info===false)
-		warn_exit(do_lang_tempcode('INSTALL_WRITE_ERROR',escape_html($info_file)));
+	$config_file='_config.php';
+	$config_file_handle=fopen(get_file_base().'/'.$config_file,'wt');
+	fwrite($config_file_handle,"<"."?php\nglobal \$SITE_INFO;\n");
+	fwrite($config_file_handle,"\$SITE_INFO['use_mem_cache']='0';\n");
+	fwrite($config_file_handle,"\$SITE_INFO['fast_spider_cache']='0';\n");
+	fwrite($config_file_handle,"\$SITE_INFO['on_msn']='0';\n");
+	fwrite($config_file_handle,"\$SITE_INFO['disable_smart_decaching']='0';\n");
+	fwrite($config_file_handle,"\$SITE_INFO['no_disk_sanity_checks']='0';\n");
+	fwrite($config_file_handle,"\$SITE_INFO['hardcode_common_module_zones']='0';\n");
+	fwrite($config_file_handle,"\$SITE_INFO['prefer_direct_code_call']='0';\n");
+	if ($config_file_handle===false)
+		warn_exit(do_lang_tempcode('INSTALL_WRITE_ERROR',escape_html($config_file)));
 
 	foreach ($_POST as $key=>$val)
 	{
@@ -1461,10 +1461,10 @@ function step_5_write_config()
 		if ($key=='admin_password') $val='!'.md5($val.'ocp');
 		if ($key=='base_url') $val=$base_url;
 		$_val=addslashes(trim($val));
-		fwrite($info,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");
+		fwrite($config_file_handle,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");
 	}
-	fclose($info);
-	require_once(get_file_base().'/'.$info_file);
+	fclose($config_file_handle);
+	require_once(get_file_base().'/'.$config_file);
 
 	global $FILE_ARRAY,$DIR_ARRAY;
 	if ((@is_array($FILE_ARRAY)) && (!is_suexec_like()))
@@ -1770,8 +1770,8 @@ function step_6()
 
 	$log=new ocp_tempcode();
 
-	$info_file=((file_exists('use_comp_name'))?(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']):'info').'.php';
-	require_once(get_file_base().'/'.$info_file);
+	$config_file='_config.php';
+	require_once(get_file_base().'/'.$config_file);
 	require_code('database');
 	require_code('database_action');
    require_code('menus2');
@@ -1794,8 +1794,8 @@ function big_installation_common()
 
 	if (count($_POST)==0) exit(do_lang('INST_POST_ERROR'));
 
-	$info_file=((file_exists('use_comp_name'))?(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']):'info').'.php';
-	require_once(get_file_base().'/'.$info_file);
+	$config_file='_config.php';
+	require_once(get_file_base().'/'.$config_file);
 
 	require_code('database');
 	$forum_type=get_forum_type();

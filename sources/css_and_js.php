@@ -282,8 +282,8 @@ function _css_compile($active_theme,$theme,$c,$fullpath,$minify=true)
 		$cdn_parts=explode(',',$cdn);
 		foreach ($cdn_parts as $cdn_part)
 		{
-			$out=preg_replace('#'.preg_quote(preg_replace('#://'.preg_quote(get_domain(),'#')).'([/:])#','://'.$cdn_part.'${1}',get_base_url(true)),'#').'#','../../../..',$out); // make URLs relative. For SSL and myocp
-			$out=preg_replace('#'.preg_quote(preg_replace('#://'.preg_quote(get_domain(),'#')).'([/:])#','://'.$cdn_part.'${1}',get_base_url(false)),'#').'#','../../../..',$out); // make URLs relative. For SSL and myocp
+			$out=preg_replace('#'.preg_quote(preg_replace('#://'.preg_quote(get_domain(),'#').'([/:])#','://'.$cdn_part.'${1}',get_base_url(true)),'#').'#','../../../..',$out); // make URLs relative. For SSL and myocp
+			$out=preg_replace('#'.preg_quote(preg_replace('#://'.preg_quote(get_domain(),'#').'([/:])#','://'.$cdn_part.'${1}',get_base_url(false)),'#').'#','../../../..',$out); // make URLs relative. For SSL and myocp
 		}
 	}
 	if ($minify)

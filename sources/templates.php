@@ -144,7 +144,7 @@ function hyperlink($url,$caption,$external=false,$escape=false,$title='',$access
 	{
 		$tpl='HYPERLINK';
 	}
-	return do_template($tpl,array('OVERLAY'=>$overlay,'REL'=>$rel,'POST_DATA'=>$post_data,'ACCESSKEY'=>$accesskey,'NEW_WINDOW'=>$external,'TITLE'=>$title,'URL'=>$url,'CAPTION'=>($escape?escape_html($caption):$caption));
+	return do_template($tpl,array('OVERLAY'=>$overlay,'REL'=>$rel,'POST_DATA'=>$post_data,'ACCESSKEY'=>$accesskey,'NEW_WINDOW'=>$external,'TITLE'=>$title,'URL'=>$url,'CAPTION'=>$escape?escape_html($caption):$caption));
 }
 
 /**

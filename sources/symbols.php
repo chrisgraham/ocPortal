@@ -1096,7 +1096,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'FLAGRANT': // LEGACY: Remove
 			case 'COMMUNITY_BILLBOARD':
-				$_value=get_community_billboard();
+				$_value=get_community_billboard_message();
 				$value=$_value->evaluate();
 				break;
 

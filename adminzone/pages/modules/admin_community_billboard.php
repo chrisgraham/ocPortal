@@ -30,7 +30,7 @@ class Module_admin_community_billboard extends standard_crud_module
 	var $redirect_type='ed';
 	var $menu_label='COMMUNITY_BILLBOARD_TEXT';
 	var $select_name='MESSAGE';
-	var $table='community_billboard_messages';
+	var $table='community_billboard';
 	var $orderer='the_message';
 	var $title_is_multi_lang=true;
 
@@ -57,7 +57,7 @@ class Module_admin_community_billboard extends standard_crud_module
 	 */
 	function uninstall()
 	{
-		$GLOBALS['SITE_DB']->drop_table_if_exists('community_billboard_messages');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('community_billboard');
 
 		delete_config_option('system_community_billboard');
 	}
@@ -72,7 +72,7 @@ class Module_admin_community_billboard extends standard_crud_module
 	{
 		if (is_null($upgrade_from))
 		{
-			$GLOBALS['SITE_DB']->create_table('community_billboard_messages',array(
+			$GLOBALS['SITE_DB']->create_table('community_billboard',array(
 				'id'=>'*AUTO',
 				'user_id'=>'USER',
 				'the_message'=>'SHORT_TRANS',	// Comcode
@@ -85,14 +85,14 @@ class Module_admin_community_billboard extends standard_crud_module
 
 			$GLOBALS['SITE_DB']->create_index('community_billboard','find_active_billboard_msg',array('active_now'));
 
-			add_config_option('SYSTEM_COMMUNITY_BILLBOARD','community_billboard','transline','return \'\';','SITE','GENERAL');
+			add_config_option('SYSTEM_COMMUNITY_BILLBOARD','system_community_billboard','transline','return \'\';','SITE','GENERAL');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{
-			rename_config_option('system_flagrant','community_billboard');
+			rename_config_option('system_flagrant','system_community_billboard');
 
-			$GLOBALS['SITE_DB']->rename_table('text','community_billboard_messages');
+			$GLOBALS['SITE_DB']->rename_table('text','community_billboard');
 		}
 	}
 
@@ -228,7 +228,7 @@ class Module_admin_community_billboard extends standard_crud_module
 	 */
 	function fill_in_edit_form($id)
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('community_billboard_messages',array('*'),array('id'=>intval($id)));
+		$rows=$GLOBALS['SITE_DB']->query_select('community_billboard',array('*'),array('id'=>intval($id)));
 		if (!array_key_exists(0,$rows))
 		{
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));

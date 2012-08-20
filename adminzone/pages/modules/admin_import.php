@@ -716,9 +716,9 @@ class Module_admin_import
 
 		// _config.php
 		global $FILE_BASE;
-		$info_file=((file_exists('use_comp_name'))?(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']):'info').'.php';
-		$info=@fopen($FILE_BASE.'/'.$info_file,'wt') OR intelligent_write_error($FILE_BASE.'/'.$info_file);
-		fwrite($info,"<"."?php\n");
+		$config_file='_config.php';
+		$config_file_handle=@fopen($FILE_BASE.'/'.$config_file,'wt') OR intelligent_write_error($FILE_BASE.'/'.$config_file);
+		fwrite($config_file_handle,"<"."?php\n");
 		global $SITE_INFO;
 		$SITE_INFO['forum_type']='ocf';
 		$SITE_INFO['ocf_table_prefix']=$SITE_INFO['table_prefix'];
@@ -730,12 +730,12 @@ class Module_admin_import
 		foreach ($SITE_INFO as $key=>$val)
 		{
 			$_val=str_replace('\\','\\\\',$val);
-			fwrite($info,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");
+			fwrite($config_file_handle,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");
 		}
-		fwrite($info,"?".">\n");
-		fclose($info);
-		fix_permissions($FILE_BASE.'/'.$info_file);
-		sync_file($FILE_BASE.'/'.$info_file);
+		fwrite($config_file_handle,"?".">\n");
+		fclose($config_file_handle);
+		fix_permissions($FILE_BASE.'/'.$config_file);
+		sync_file($FILE_BASE.'/'.$config_file);
 		$out->attach(paragraph(do_lang_tempcode('OCF_CONVERTED_INFO')));
 
 		$LANG=get_site_default_lang();

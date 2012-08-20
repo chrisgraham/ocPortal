@@ -203,7 +203,7 @@ class Database_super_mysql
 			PRIMARY KEY ('.$keys.')
 		)';
 
-		$query.=' CHARACTER SET=utf8');
+		$query.=' CHARACTER SET=utf8';
 
 		$query.=' '.$type_key.'='.$table_type.';';
 		$this->db_query($query,$db,NULL,NULL);

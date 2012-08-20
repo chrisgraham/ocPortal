@@ -403,13 +403,13 @@ function do_set()
 
 	// _config.php
 	global $FILE_BASE;
-	$info_file=((file_exists('use_comp_name'))?(array_key_exists('COMPUTERNAME',$_ENV)?$_ENV['COMPUTERNAME']:$_SERVER['SERVER_NAME']):'info').'.php';
-	$path=$FILE_BASE.'/exports/file_backups/'.$info_file.'.'.strval(time());
-	$copied_ok=@copy($FILE_BASE.'/'.$info_file,$path);
+	$config_file='_config.php';
+	$path=$FILE_BASE.'/exports/file_backups/'.$config_file.'.'.strval(time());
+	$copied_ok=@copy($FILE_BASE.'/'.$config_file,$path);
 	if ($copied_ok!==false) co_sync_file($path);
-	$info=fopen($FILE_BASE.'/'.$info_file,'wt');
-	if ($info===false) exit();
-	fwrite($info,"<"."?php\n");
+	$config_file_handle=fopen($FILE_BASE.'/'.$config_file,'wt');
+	if ($config_file_handle===false) exit();
+	fwrite($config_file_handle,"<"."?php\n");
 	foreach ($new as $key=>$val)
 	{
 		if (is_array($val))
@@ -417,7 +417,7 @@ function do_set()
 			foreach ($val as $val2)
 			{
 				$_val=str_replace('\\','\\\\',$val2);
-				if (fwrite($info,'$SITE_INFO[\''.$key.'\'][]=\''.$_val."';\n")===false)
+				if (fwrite($config_file_handle,'$SITE_INFO[\''.$key.'\'][]=\''.$_val."';\n")===false)
 				{
 					echo '<strong>Could not save to file. Out of disk space?<strong>';
 				}
@@ -425,14 +425,14 @@ function do_set()
 		} else
 		{
 			$_val=str_replace('\\','\\\\',$val);
-			if (fwrite($info,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n")===false)
+			if (fwrite($config_file_handle,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n")===false)
 			{
 				echo '<strong>Could not save to file. Out of disk space?<strong>';
 			}
 		}
 	}
-	fclose($info);
-	co_sync_file($info_file);
+	fclose($config_file_handle);
+	co_sync_file($config_file);
 
 	echo '<hr /><p>Edited configuration. If you wish to continue editing you must <a href="config_editor.php">login again.</a></p>';
 	echo '<hr /><p>The _config.php file was backed up at '.htmlentities($path).'</p>';

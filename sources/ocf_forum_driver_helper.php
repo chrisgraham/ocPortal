@@ -244,7 +244,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 	} else $topic_filter_sup='';
 	if (($filter_topic_title=='') && ($filter_topic_description==''))
 	{
-		if (($filter_topic_title=='') && ($filter_topic_description=='')
+		if (($filter_topic_title=='') && ($filter_topic_description==''))
 		{
 			$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics WHERE ('.$id_list.')'.$topic_filter_sup;
 		} else

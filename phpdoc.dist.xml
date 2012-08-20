@@ -9,7 +9,8 @@
 			<item>IDEA</item>
 			<item>LEGACY</item>
 			<item>FUDGE</item>
-			<item>XHTMLXHTML</item>
+			<item>HACKHACK</item>
+			<!--<item>XHTMLXHTML</item>	Don't want to report these-->
 		</markers>
 		<extensions>
 			<extension>php</extension>
