@@ -68,7 +68,7 @@ function setAttachment(field_name,number,filename)
 
 			is_archive=(ext=='.tar') || (ext=='.zip');
 			is_image=(ext=='.png') || (ext=='.jpg') || (ext=='jpeg') || (ext=='.gif');
-		}
+		} else return; // Upload error
 
 		var wysiwyg=isWYSIWYGField(document.getElementById(field_name));
 
