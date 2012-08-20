@@ -684,8 +684,8 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		$unread_forums=collapse_2d_complexity('t_forum_id','id',$GLOBALS['FORUM_DB']->query($query));
 	}
 
-	// Find all the categories that are used
-	$categories=array();
+	// Find all the forum groupings that are used
+	$forum_groupings=array();
 	$or_list='';
 	foreach ($subforum_rows as $tmp_key=>$subforum_row)
 	{
@@ -698,9 +698,9 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		}
 
 		$forum_grouping_id=$subforum_row['f_forum_grouping_id'];
-		if (!array_key_exists($forum_grouping_id,$categories))
+		if (!array_key_exists($forum_grouping_id,$forum_groupings))
 		{
-			$categories[$forum_grouping_id]=array('subforums'=>array());
+			$forum_groupings[$forum_grouping_id]=array('subforums'=>array());
 			if ($or_list!='') $or_list.=' OR ';
 			$or_list.='id='.strval((integer)$forum_grouping_id);
 		}
@@ -714,13 +714,13 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 			$title=$forum_grouping_row['c_title'];
 			$description=$forum_grouping_row['c_description'];
 			$expanded_by_default=$forum_grouping_row['c_expanded_by_default'];
-			$categories[$forum_grouping_id]['title']=$title;
-			$categories[$forum_grouping_id]['description']=$description;
-			$categories[$forum_grouping_id]['expanded_by_default']=$expanded_by_default;
+			$forum_groupings[$forum_grouping_id]['title']=$title;
+			$forum_groupings[$forum_grouping_id]['description']=$description;
+			$forum_groupings[$forum_grouping_id]['expanded_by_default']=$expanded_by_default;
 		}
-		$categories[NULL]['title']='';
-		$categories[NULL]['description']='';
-		$categories[NULL]['expanded_by_default']=true;
+		$forum_groupings[NULL]['title']='';
+		$forum_groupings[NULL]['description']='';
+		$forum_groupings[NULL]['expanded_by_default']=true;
 		foreach ($subforum_rows as $subforum_row)
 		{
 			if ($subforum_row['f_parent_forum']!=$forum_id) continue;
@@ -780,7 +780,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 				uasort($subforum['children'],'multi_sort');
 			}
 
-			$categories[$forum_grouping_id]['subforums'][]=$subforum;
+			$forum_groupings[$forum_grouping_id]['subforums'][]=$subforum;
 		}
 	}
 
@@ -839,7 +839,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	$out=array(
 		'name'=>$forum_info[0]['f_name'],
 		'description'=>$description,
-		'categories'=>$categories,
+		'forum_groupings'=>$forum_groupings,
 		'topics'=>$topics,
 		'max_rows'=>$max_rows,
 		'order'=>$order,

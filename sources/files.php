@@ -273,11 +273,22 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		// MyOCP
 		'sites'=>'',
 
+		// API docs
+		'api'=>'docs',
+		'ocportal-api-template'=>'docs',
+
 		// PHP compiler temporary files
 		'subs.inc'=>'',
 		'hphp-static-cache'=>'',
 		'hphp.files.list'=>'',
 		'hphp'=>'',
+
+		// LEGACY: Old files
+		'info.php'=>'', // Pre-v10 equivalent to _config.php
+		'persistant_cache'=>'',
+		'docs4'=>'',
+		'mods'=>'imports',
+		'mods'=>'exports',
 	);
 
 	$ignore_extensions=array( // Case insensitive, define in lower case
@@ -339,7 +350,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		$ignore_filenames_and_dir_names+=array(
 			// Bundled stuff that is not necessarily in a *_custom dir yet is volatile
 			'_config.php'=>'',
-			'info.php'=>'', // Pre-v10 equivalent to _config.php
 			'map.ini'=>'themes',
 			'functions.dat'=>'data_custom',
 			'download_tree_made.htm'=>'pages/html_custom/EN',

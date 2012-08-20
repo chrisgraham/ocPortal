@@ -595,7 +595,7 @@ class Hook_phpbb3
 
 			if ($row['forum_type']==0)
 			{
-				$id_new=ocf_make_category($row['forum_name'],'',1);
+				$id_new=ocf_make_forum_grouping($row['forum_name'],'',1);
 				import_id_remap_put('forum',strval($row['forum_id']),$id_new);
 				continue;
 			}

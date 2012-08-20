@@ -731,7 +731,7 @@ class Module_admin_config
 						$tmp_value=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','id',array('c_title'=>get_option($myrow['the_name'])));
 
 						require_code('ocf_forums2');
-						$_list=ocf_nice_get_categories(NULL,$tmp_value);
+						$_list=ocf_nice_get_forum_groupings(NULL,$tmp_value);
 						$out.=static_evaluate_tempcode(form_input_list($name_tempcode,$explanation,$myrow['the_name'],$_list));
 					} else
 					{

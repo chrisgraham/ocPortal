@@ -2020,7 +2020,7 @@ class Hook_ocp_merge
 				continue;
 			}
 
-			$id_new=ocf_make_forum_groupings($title,$row['c_description'],$row['c_expanded_by_default']);
+			$id_new=ocf_make_forum_grouping($title,$row['c_description'],$row['c_expanded_by_default']);
 
 			import_id_remap_put('forum_groupings',strval($row['id']),$id_new);
 		}

@@ -27,16 +27,6 @@ The code quality checker automatically parses and uses this file, to build up th
 */
 
 /**
- * Generate a stack trace.
- *
- * @return array	Stack trace.
- */
-function debug_backtrace()
-{
-	return array();
-}
-
-/**
  * Absolute value.
  *
  * @param  mixed	The number to get the absolute value of.
@@ -2577,16 +2567,6 @@ function ob_end_flush()
  * @return ~string	The buffer contents (false: no buffer).
  */
 function ob_get_contents()
-{
-	return '';
-}
-
-/**
- * Return the contents of the output buffer and empty it. Not available on all PHP versions, do a version check before calling it.
- *
- * @return ~string	The buffer contents (false: no buffer).
- */
-function ob_get_clean()
 {
 	return '';
 }
@@ -6063,7 +6043,7 @@ function array_udiff_uassoc($a,$b)
  *
  * @param  array 	 		The input array
  * @param  mixed 	 		Callback
- * @param  mixed 	 		If the optional userdata parameter is supplied, it will be passed as the third parameter to the callback funcname
+ * @param  ?mixed 	 	If the optional userdata parameter is supplied, it will be passed as the third parameter to the callback funcname (NULL: no user data)
  * @return boolean		Result
  */
 function array_walk_recursive($input,$funcname,$userdata=NULL)
@@ -6166,7 +6146,7 @@ function file_put_contents($filename,$data,$flags=0)
  * @param  BINARY			Whether to parse into a map
  * @return array			Result
  */
-function get_headers($url)
+function get_headers($url,$parse=0)
 {
 	return array();
 }
@@ -6209,10 +6189,10 @@ function image_type_to_extension($imagetype,$include_dot=true)
  *
  * @param  resource 	 	Image
  * @param  integer 	 	A constant indicating the filter type
- * @param  mixed	 	 	Parameter
- * @param  mixed	 	 	Parameter
- * @param  mixed	 	 	Parameter
- * @param  mixed	 	 	Parameter
+ * @param  ?mixed	 	 	Parameter (NULL: don't read)
+ * @param  ?mixed	 	 	Parameter (NULL: don't read)
+ * @param  ?mixed	 	 	Parameter (NULL: don't read)
+ * @param  ?mixed	 	 	Parameter (NULL: don't read)
  * @return boolean		Success status
  */
 function imagefilter($image,$filtertype,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL)

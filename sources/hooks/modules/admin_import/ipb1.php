@@ -102,7 +102,7 @@ class Hook_ipb1 extends Hook_ipb_base
 			$description=strip_tags(@html_entity_decode($row['description'],ENT_QUOTES,get_charset()));
 			$expanded_by_default=1;
 
-			$id_new=ocf_make_category($title,$description,$expanded_by_default);
+			$id_new=ocf_make_forum_grouping($title,$description,$expanded_by_default);
 
 			import_id_remap_put('category',strval($row['id']),$id_new);
 		}

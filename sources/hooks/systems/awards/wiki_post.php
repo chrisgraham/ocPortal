@@ -24,7 +24,7 @@ class Hook_awards_wiki_post
 	/**
 	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
 	function info($zone=NULL)

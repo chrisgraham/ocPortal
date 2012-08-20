@@ -440,7 +440,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$moniker_src,$is_new=false)
 	if (!$is_new)
 	{
 		// Deprecate old one if already exists
-		$old=$GLOBALS['SITE_DB']->query_selectvalue_if_there('url_id_monikers','m_moniker',array('m_resource_page'=>$page,'m_resource_type'=>$type,'m_resource_id'=>$id,'m_deprecated'=>0),'ORDER BY id DESC');
+		$old=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',array('m_resource_page'=>$page,'m_resource_type'=>$type,'m_resource_id'=>$id,'m_deprecated'=>0),'ORDER BY id DESC');
 		if (!is_null($old))
 		{
 			// See if it is same as current

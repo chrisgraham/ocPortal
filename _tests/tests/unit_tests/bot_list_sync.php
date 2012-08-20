@@ -29,6 +29,8 @@ class bot_list_sync_test_set extends ocp_test_case
 		$file_bots=better_parse_ini_file(get_file_base().'/text/bots.txt');
 		ksort($file_bots);
 
+		$_SERVER['HTTP_USER_AGENT']='';	// Force away optimisation
+		get_bot_type();
 		global $BOT_MAP;
 		ksort($BOT_MAP);
 

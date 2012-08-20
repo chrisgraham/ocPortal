@@ -75,9 +75,9 @@ class Hook_addon_registry_phpinfo
 		return array(
 
 			'phpinfo.css',
-			'sources/hooks/systems/do_next_menus/php_config.php',
-			'sources/hooks/systems/addon_registry/php_config.php',
-			'adminzone/pages/modules/admin_php_config.php',
+			'sources/hooks/systems/do_next_menus/phpinfo.php',
+			'sources/hooks/systems/addon_registry/phpinfo.php',
+			'adminzone/pages/modules/admin_phpinfo.php',
 			'themes/default/images/pagepics/phpinfo.png',
 			'themes/default/images/bigicons/phpinfo.png',
 		);

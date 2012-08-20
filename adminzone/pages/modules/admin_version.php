@@ -300,7 +300,7 @@ class Module_admin_version
 		if ((!is_null($upgrade_from)) && ($upgrade_from<17))
 		{
 			$GLOBALS['SITE_DB']->rename_table('security_images','captchas');
-			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA','the_name'=>'USE_CAPTCHAS','the_name'=>'use_captchas'),array('the_name'=>'use_security_images'),'',1);
+			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA','human_name'=>'USE_CAPTCHAS','the_name'=>'use_captchas'),array('the_name'=>'use_security_images'),'',1);
 			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'captcha_single_guess'),'',1);
 			$GLOBALS['SITE_DB']->query_update('config',array('section'=>'CAPTCHA'),array('the_name'=>'css_captcha'),'',1);
 		}

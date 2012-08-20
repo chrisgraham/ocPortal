@@ -80,7 +80,7 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/snippets/exists_emoticon.php',
 			'themes/default/images/pagepics/usergroups_temp.png',
 			'themes/default/images/bigicons/usergroups_temp.png',
-			'sources/hooks/systems/config_default/club_forum_parent_category.php',
+			'sources/hooks/systems/config_default/club_forum_parent_grouping.php',
 			'sources/hooks/systems/config_default/club_forum_parent_forum.php',
 			'sources/hooks/systems/config_default/allow_alpha_search.php',
 			'sources/hooks/systems/config_default/allow_email_disable.php',

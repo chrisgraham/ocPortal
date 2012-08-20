@@ -13,6 +13,10 @@
  * @package		code_quality
  */
 
+/*/
+This file is currently broken. It would need to be rewritten to load as part of ocPortal, but currently is not required.
+*/
+
 if (!function_exists('error_capture'))
 {
 	function error_capture($errno,$errmsg)

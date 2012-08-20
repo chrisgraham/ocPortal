@@ -635,7 +635,7 @@ class Hook_mybb
 				continue;
 			}
 
-			$id_new=ocf_make_category($title,'',1);
+			$id_new=ocf_make_forum_grouping($title,'',1);
 
 			import_id_remap_put('category',strval($row['fid']),$id_new);
 		}

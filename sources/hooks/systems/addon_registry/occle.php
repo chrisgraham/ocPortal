@@ -123,7 +123,7 @@ class Hook_addon_registry_occle
 			'sources/hooks/modules/admin_occle_commands/ban_ip.php',
 			'sources/hooks/modules/admin_occle_commands/ban_member.php',
 			'sources/hooks/modules/admin_occle_commands/bsod.php',
-			'sources/hooks/modules/admin_occle_commands/php_config.php',
+			'sources/hooks/modules/admin_occle_commands/phpinfo.php',
 			'sources/hooks/modules/admin_occle_commands/call.php',
 			'sources/hooks/modules/admin_occle_commands/cat.php',
 			'sources/hooks/modules/admin_occle_commands/cd.php',

@@ -46,6 +46,7 @@ class Block_main_gallery_tease
 	 */
 	function cacheing_environment()
 	{
+		$info=array();
 		$info['cache_on']='array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'root\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',(array_key_exists(\'reverse_thumb_order\',$map))?$map[\'reverse_thumb_order\']:\'0\')';
 		$info['ttl']=60*2;
 		return $info;

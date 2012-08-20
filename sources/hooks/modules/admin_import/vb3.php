@@ -524,7 +524,7 @@ class Hook_vb3
 				continue;
 			}
 
-			$id_new=ocf_make_category($title,$row['description'],1);
+			$id_new=ocf_make_forum_grouping($title,$row['description'],1);
 
 			import_id_remap_put('category',strval($row['forumid']),$id_new);
 		}
