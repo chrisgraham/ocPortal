@@ -69,9 +69,9 @@ class Block_bottom_rss
 			return do_template('WARNING_BOX',array('WARNING'=>$rss->error));
 		}
 
-		global $NEWS_CATS;
-		$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-		$NEWS_CATS=list_to_map('id',$NEWS_CATS);
+		global $NEWS_CATS_CACHE;
+		$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
+		$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
 
 		$_postdetailss=array();
 

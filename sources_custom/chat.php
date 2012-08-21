@@ -11,8 +11,8 @@ if (!function_exists('init__chat'))
 {
 	function init__chat()
 	{
-		global $MEMBERS_BEFRIENDED;
-		$MEMBERS_BEFRIENDED=NULL;
+		global $MEMBERS_BEFRIENDED_CACHE;
+		$MEMBERS_BEFRIENDED_CACHE=NULL;
 
 		global $EFFECT_SETTINGS_ROWS;
 		$EFFECT_SETTINGS_ROWS=NULL;

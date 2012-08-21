@@ -132,13 +132,7 @@ class Hook_fields_posting_field
 		$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($actual_value,'{$,page hint: no_wysiwyg}')===false));
 
 		$class='';
-		global $JAVASCRIPT,$WYSIWYG_ATTACHED;
-		if (!$WYSIWYG_ATTACHED)
-			$JAVASCRIPT->attach(do_template('HTML_EDIT'));
-		$WYSIWYG_ATTACHED=true;
-
-		@header('Content-type: text/html; charset='.get_charset());
-
+		attach_wysiwyg();
 		if ($w) $class.=' wysiwyg';
 
 		global $LAX_COMCODE;

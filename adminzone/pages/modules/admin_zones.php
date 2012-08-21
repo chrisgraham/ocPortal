@@ -263,15 +263,8 @@ class Module_admin_zones
 				// WYSIWYG?
 				require_javascript('javascript_editing');
 				$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($comcode,'{$,page hint: no_wysiwyg}')===false));
-				global $JAVASCRIPT,$WYSIWYG_ATTACHED;
-				if (!$WYSIWYG_ATTACHED)
-					$JAVASCRIPT->attach(do_template('HTML_EDIT'));
-				$WYSIWYG_ATTACHED=true;
-				if ($w)
-				{
-					@header('Content-type: text/html; charset='.get_charset());
-					$class.=' wysiwyg';
-				}
+				attach_wysiwyg();
+				if ($w) $class.=' wysiwyg';
 			} else // Can't edit a non-Comcode page in the zone editor
 			{
 				$comcode=NULL;

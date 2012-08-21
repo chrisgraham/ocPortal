@@ -25,7 +25,7 @@
  */
 function find_lost_option($name)
 {
-	global $OPTIONS;
+	global $CONFIG_OPTIONS_CACHE;
 
 	// In the dark dark past, we'd bomb out...
 	if ((function_exists('find_all_zones')) && (!defined('HIPHOP_PHP')))
@@ -74,7 +74,7 @@ function find_lost_option($name)
 			}
 		}
 	}
-	if (!array_key_exists($name,$OPTIONS)) fatal_exit(do_lang_tempcode('_MISSING_OPTION',escape_html($name)));
+	if (!array_key_exists($name,$CONFIG_OPTIONS_CACHE)) fatal_exit(do_lang_tempcode('_MISSING_OPTION',escape_html($name)));
 }
 
 /**
@@ -88,7 +88,7 @@ function find_lost_option($name)
  */
 function set_option($name,$value,$type=NULL,$current_value=NULL)
 {
-	global $OPTIONS;
+	global $CONFIG_OPTIONS_CACHE;
 
 	if (is_null($type))
 	{
@@ -96,32 +96,32 @@ function set_option($name,$value,$type=NULL,$current_value=NULL)
 		if ($GET_OPTION_LOOP!=1)
 			get_option($name); // Ensure it's installed
 
-		$type=$OPTIONS[$name]['the_type']; //$type=$GLOBALS['SITE_DB']->query_select_value('config','the_type',array('the_name'=>$name));
+		$type=$CONFIG_OPTIONS_CACHE[$name]['the_type']; //$type=$GLOBALS['SITE_DB']->query_select_value('config','the_type',array('the_name'=>$name));
 	}
 
 	if (($type=='transline') || ($type=='transtext'))
 	{
 //		$current_value=$GLOBALS['SITE_DB']->query_select_value('config','config_value',array('the_name'=>$name));
 
-		if ((array_key_exists('c_set',$OPTIONS[$name])) && ($OPTIONS[$name]['c_set']==0))
+		if ((array_key_exists('c_set',$CONFIG_OPTIONS_CACHE[$name])) && ($CONFIG_OPTIONS_CACHE[$name]['c_set']==0))
 		{
 			$GLOBALS['SITE_DB']->query_update('config',array('config_value'=>strval(insert_lang($value,1)),'c_set'=>1),array('the_name'=>$name),'',1);
 		} else
 		{
-			$current_value=$OPTIONS[$name]['config_value'];
+			$current_value=$CONFIG_OPTIONS_CACHE[$name]['config_value'];
 			if (!is_null($current_value)) // Should never happen, but might during upgrading
 				lang_remap(intval($current_value),$value);
 		}
 	} else
 	{
 		$map=array('config_value'=>$value);
-		if (array_key_exists('c_set',$OPTIONS[$name])) $map['c_set']=1;
+		if (array_key_exists('c_set',$CONFIG_OPTIONS_CACHE[$name])) $map['c_set']=1;
 		$GLOBALS['SITE_DB']->query_update('config',$map,array('the_name'=>$name),'',1);
 
-		$OPTIONS[$name]['config_value']=$value;
+		$CONFIG_OPTIONS_CACHE[$name]['config_value']=$value;
 	}
 
-	$OPTIONS[$name]['config_value_translated']=$value;
+	$CONFIG_OPTIONS_CACHE[$name]['config_value_translated']=$value;
 
 	if (function_exists('log_it'))
 	{

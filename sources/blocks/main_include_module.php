@@ -35,7 +35,7 @@ class Block_main_include_module
 		$info['hack_version']=NULL;
 		$info['version']=1;
 		$info['locked']=false;
-		$info['parameters']=array('param','striptitle','onlyifpermissions','leave_page_and_zone','merge_parameters');
+		$info['parameters']=array('param','strip_title','only_if_permissions','leave_page_and_zone','merge_parameters');
 		return $info;
 	}
 
@@ -47,80 +47,58 @@ class Block_main_include_module
 	 */
 	function run($map)
 	{
-		$param=array_key_exists('param',$map)?$map['param']:'';
-		if ($param=='') return new ocp_tempcode();
-		$striptitle=array_key_exists('striptitle',$map)?intval($map['striptitle']):1;
-		$onlyifpermissions=array_key_exists('onlyifpermissions',$map)?intval($map['onlyifpermissions']):1;
+		// Settings
+		$strip_title=array_key_exists('strip_title',$map)?intval($map['strip_title']):1;
+		$only_if_permissions=array_key_exists('only_if_permissions',$map)?intval($map['only_if_permissions']):1;
 		$leave_page_and_zone=array_key_exists('leave_page_and_zone',$map)?($map['leave_page_and_zone']=='1'):false;
 		$merge_parameters=array_key_exists('merge_parameters',$map)?($map['merge_parameters']=='1'):false;
+
+		// Find out what we're virtualising
+		$param=array_key_exists('param',$map)?$map['param']:'';
+		if ($param=='') return new ocp_tempcode();
 		list($zone,$attributes,)=page_link_decode($param);
 		if (!array_key_exists('page',$attributes)) return new ocp_tempcode();
 		if ($zone=='_SEARCH') $zone=get_page_zone($attributes['page'],false);
 		elseif ($zone=='_SELF') $zone=get_zone_name();
 		if (is_null($zone)) return new ocp_tempcode();
-		if (($onlyifpermissions==1) && (!has_actual_page_access(get_member(),$attributes['page'],$zone)))
+		if ($merge_parameters) $attributes+=$_GET; // Remember that PHP does not overwrite using the '+' operator (as unintuitive as this is!)
+
+		// Check permissions
+		if (($only_if_permissions==1) && (!has_actual_page_access(get_member(),$attributes['page'],$zone)))
 			return new ocp_tempcode();
 
+		// Setup virtual environment
 		global $SKIP_TITLING;
-		if ($striptitle==1)
+		if ($strip_title==1)
 		{
-			$temp=$SKIP_TITLING;
+			$prior_skip_titling=$SKIP_TITLING;
 			$SKIP_TITLING=true;
 		}
-		$temp_get=$_GET;
-		if (!$merge_parameters) $_GET=array();
-		if ($striptitle==1)
-		{
-			$_GET['no_frames']='1';
-		}
-		foreach ($attributes as $key=>$val)
-		{
-			$_GET[$key]=get_magic_quotes_gpc()?addslashes($val):$val;
-		}
-		foreach ($temp_get as $key=>$val)
-		{
-			if (substr($key,0,5)=='keep_')
-				$_GET[$key]=get_magic_quotes_gpc()?addslashes($val):$val;
-		}
-		$_GET['in_main_include_module']='1';
-		$current_page=$GLOBALS['PAGE_NAME_CACHE'];
-		$current_zone=$GLOBALS['ZONE'];
-		if (!$leave_page_and_zone)
-		{
-			$GLOBALS['PAGE_NAME_CACHE']=$attributes['page'];
-			if ($zone!=get_zone_name())
-			{
-				$_zone=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>$zone),'',1);
-				if (array_key_exists(0,$_zone))
-				{
-					$_zone[0]['zone_header_text_trans']=get_translated_text($_zone[0]['zone_header_text']);
-					$GLOBALS['ZONE']=$_zone[0];
-				}
-			}
-		}
-		$temp_displayed_title=$GLOBALS['DISPLAYED_TITLE'];
-		$temp_seo_title=$GLOBALS['SHORT_TITLE'];
-		$temp_current_breadcrumb_extra_segments=$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS'];
-		$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']=new ocp_tempcode(); // Force a new object, so we don't just reassign the tainted reference
-		$temp_current_breadcrumbs=$GLOBALS['BREADCRUMBS'];
-		$GLOBALS['BREADCRUMBS']=NULL;
-		$temp_current_breadcrumb_set_parents=$GLOBALS['BREADCRUMB_SET_PARENTS'];
-		$temp_current_breadcrumb_set_self=$GLOBALS['BREADCRUMB_SET_SELF'];
+		$new_zone=$leave_page_and_zone?get_zone_name():$zone;
+		list($old_get,$old_zone,$old_current_script)=set_execution_context(
+			($leave_page_and_zone?array('page'=>$attributes['page']):array())+$attributes,
+			$new_zone
+		);
+		global $IS_VIRTUALISED_REQUEST;
+		$IS_VIRTUALISED_REQUEST=true;
+		push_output_state();
+
+		// Do it!
 		$out=request_page($attributes['page'],false,$zone,NULL,true);
 		$ret=make_string_tempcode($out->evaluate());
-		$GLOBALS['DISPLAYED_TITLE']=$temp_displayed_title;
-		$GLOBALS['SHORT_TITLE']=$temp_seo_title;
-		$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']=$temp_current_breadcrumb_extra_segments;
-		$GLOBALS['BREADCRUMBS']=$temp_current_breadcrumbs;
-		$GLOBALS['BREADCRUMB_SET_PARENTS']=$temp_current_breadcrumb_set_parents;
-		$GLOBALS['BREADCRUMB_SET_SELF']=$temp_current_breadcrumb_set_self;
-		$GLOBALS['PAGE_NAME_CACHE']=$current_page;
-		$GLOBALS['ZONE']=$current_zone;
-		$_GET=$temp_get;
-		if (is_null($out)) $out=new ocp_tempcode();
-		if ($striptitle==1)
+
+		// Get things back to prior state
+		set_execution_context(
+			$old_get,
+			$old_zone,
+			$old_current_script,
+			false
+		);
+		restore_output_state();
+		$IS_VIRTUALISED_REQUEST=false;
+		if ($strip_title==1)
 		{
-			$SKIP_TITLING=$temp;
+			$SKIP_TITLING=$prior_skip_titling;
 		}
 
 		return $ret;

@@ -36,7 +36,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 
 	$base_dir=((($theme=='default') && (($suffix!='.css') || (strpos($path,'/css_custom')===false)))?get_file_base():get_custom_file_base()).'/themes/';
 
-	global $CACHE_TEMPLATES,$FILE_ARRAY,$TEMPLATE_PREVIEW_OP,$MEM_CACHE;
+	global $CACHE_TEMPLATES,$FILE_ARRAY,$IS_TEMPLATE_PREVIEW_OP_CACHE,$MEM_CACHE;
 
 	if (isset($FILE_ARRAY))
 	{
@@ -60,7 +60,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 		$html=substr($html,0,strlen($html)-1);
 	}
 
-	if ($TEMPLATE_PREVIEW_OP)
+	if ($IS_TEMPLATE_PREVIEW_OP_CACHE)
 	{
 		$test=post_param($codename,NULL);
 		if (!is_null($test)) $html=post_param($test.'_new');

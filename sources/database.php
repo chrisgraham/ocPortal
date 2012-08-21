@@ -51,8 +51,8 @@ function init__database()
 	$GLOBALS['DB_STATIC_OBJECT']=object_factory('Database_Static_'.get_db_type());
 
 	// Create our main database objects
-	global $TABLE_LANG_FIELDS;
-	$TABLE_LANG_FIELDS=array();
+	global $TABLE_LANG_FIELDS_CACHE;
+	$TABLE_LANG_FIELDS_CACHE=array();
 	if ((array_key_exists('db_site',$SITE_INFO)) || (array_key_exists('db_site_user',$SITE_INFO)))
 	{
 		global $SITE_DB;
@@ -72,8 +72,8 @@ function init__database()
 	define('DB_MAX_KEY_SIZE_UNICODE',1000);
 	define('DB_MAX_ROW_SIZE_UNICODE',24000);
 
-	global $UPON_QUERY_HOOKS;
-	$UPON_QUERY_HOOKS=NULL;
+	global $UPON_QUERY_HOOKS_CACHE;
+	$UPON_QUERY_HOOKS_CACHE=NULL;
 }
 
 /**
@@ -81,28 +81,28 @@ function init__database()
  */
 function _general_db_init()
 {
-	global $TABLE_LANG_FIELDS;
-	if (count($TABLE_LANG_FIELDS)>0) return;
+	global $TABLE_LANG_FIELDS_CACHE;
+	if (count($TABLE_LANG_FIELDS_CACHE)>0) return;
 
-	$TABLE_LANG_FIELDS=function_exists('persistent_cache_get')?persistent_cache_get('TABLE_LANG_FIELDS'):NULL;
-	if ($TABLE_LANG_FIELDS===NULL)
+	$TABLE_LANG_FIELDS_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('TABLE_LANG_FIELDS_CACHE'):NULL;
+	if ($TABLE_LANG_FIELDS_CACHE===NULL)
 	{
-		$TABLE_LANG_FIELDS=array();
+		$TABLE_LANG_FIELDS_CACHE=array();
 
 		$_table_lang_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM '.get_table_prefix().'db_meta WHERE '.db_string_equal_to('m_type','SHORT_TRANS').' OR '.db_string_equal_to('m_type','LONG_TRANS').' OR '.db_string_equal_to('m_type','*SHORT_TRANS').' OR '.db_string_equal_to('m_type','*LONG_TRANS').' OR '.db_string_equal_to('m_type','?SHORT_TRANS').' OR '.db_string_equal_to('m_type','?LONG_TRANS'),NULL,NULL,true);
 		if ($_table_lang_fields!==NULL)
 		{
 			foreach ($_table_lang_fields as $lang_field)
 			{
-				if (!isset($TABLE_LANG_FIELDS[$lang_field['m_table']]))
-					$TABLE_LANG_FIELDS[$lang_field['m_table']]=array();
+				if (!isset($TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]))
+					$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]=array();
 
-				$TABLE_LANG_FIELDS[$lang_field['m_table']][]=$lang_field['m_name'];
+				$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']][]=$lang_field['m_name'];
 			}
 		}
 
 		if (function_exists('persistent_cache_set'))
-			persistent_cache_set('TABLE_LANG_FIELDS',$TABLE_LANG_FIELDS);
+			persistent_cache_set('TABLE_LANG_FIELDS_CACHE',$TABLE_LANG_FIELDS_CACHE);
 	}
 }
 
@@ -780,8 +780,8 @@ class database_driver
 		{
 			if (($table!='translate') && (strpos($table,' ')===false) && (isset($GLOBALS['SITE_DB'])) && ($this->table_prefix==$GLOBALS['SITE_DB']->table_prefix))
 			{
-				global $TABLE_LANG_FIELDS;
-				$lang_fields_provisional=isset($TABLE_LANG_FIELDS[$table])?$TABLE_LANG_FIELDS[$table]:array();
+				global $TABLE_LANG_FIELDS_CACHE;
+				$lang_fields_provisional=isset($TABLE_LANG_FIELDS_CACHE[$table])?$TABLE_LANG_FIELDS_CACHE[$table]:array();
 				$lang_fields=array();
 
 				if ($lang_fields_provisional!=array())
@@ -875,7 +875,7 @@ class database_driver
 	 */
 	function _query($query,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false,$lang_fields=NULL,$field_prefix='',$save_as_volatile=false)
 	{
-		global $QUERY_COUNT,$NO_QUERY_LIMIT,$QUERY_LOG,$QUERY_LIST,$DEV_MODE,$IN_MINIKERNEL_VERSION,$QUERY_FILE_LOG,$UPON_QUERY_HOOKS;
+		global $QUERY_COUNT,$NO_QUERY_LIMIT,$QUERY_LOG,$QUERY_LIST,$DEV_MODE,$IN_MINIKERNEL_VERSION,$QUERY_FILE_LOG,$UPON_QUERY_HOOKS_CACHE;
 
 		if ($QUERY_FILE_LOG!==NULL)
 		{
@@ -997,22 +997,22 @@ class database_driver
 		}
 
 		// Run hooks, if any exist
-		if ($UPON_QUERY_HOOKS===NULL)
+		if ($UPON_QUERY_HOOKS_CACHE===NULL)
 		{
 			if (!function_exists('find_all_hooks')) return $ret;
 
-			$UPON_QUERY_HOOKS=array();
+			$UPON_QUERY_HOOKS_CACHE=array();
 			if (!running_script('restore'))
 			{
 				$hooks=find_all_hooks('systems','upon_query');
 				foreach (array_keys($hooks) as $hook)
 				{
 					require_code('hooks/systems/upon_query/'.filter_naughty($hook));
-					$UPON_QUERY_HOOKS[$hook]=object_factory('upon_query_'.filter_naughty($hook),true);
+					$UPON_QUERY_HOOKS_CACHE[$hook]=object_factory('upon_query_'.filter_naughty($hook),true);
 				}
 			}
 		}
-		foreach ($UPON_QUERY_HOOKS as $ob)
+		foreach ($UPON_QUERY_HOOKS_CACHE as $ob)
 		{
 			if ($ob!==NULL)
 				$ob->run($this,$query,$max,$start,$fail_ok,$get_insert_id,$ret);

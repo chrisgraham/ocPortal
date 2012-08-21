@@ -477,7 +477,7 @@ function render_menu($menu,$source_member,$type,$as_admin=false)
  */
 function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_admin,$all_branches,$the_level=1)
 {
-	global $REDIRECTED_TO;
+	global $REDIRECTED_TO_CACHE;
 
 	$caption=mixed(); // Initialise type to mixed
 	if ((is_string($branch['caption'])) && (strpos($branch['caption'],'[')!==false))
@@ -591,8 +591,8 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 					if ($_parts[1]==$users_current_zone) $somewhere_definite=true;
 				}
 			}
-			$current_zone=(($zone_name==$users_current_zone) || ((!is_null($REDIRECTED_TO)) && ($zone_name==$REDIRECTED_TO['r_to_zone']) && (!$somewhere_definite))); // This code is a bit smart, as zone menus usually have a small number of zones on them - redirects will be counted into the zone redirected to, so long as there is no more suitable zone and so long as it is not a transparent redirect
-			if (($zone_name==$users_current_zone) || ((!is_null($REDIRECTED_TO)) && ($zone_name==$REDIRECTED_TO['r_to_zone']) && (array_key_exists('page',$map)) && ($map['page']==$REDIRECTED_TO['r_to_page'])))
+			$current_zone=(($zone_name==$users_current_zone) || ((!is_null($REDIRECTED_TO_CACHE)) && ($zone_name==$REDIRECTED_TO_CACHE['r_to_zone']) && (!$somewhere_definite))); // This code is a bit smart, as zone menus usually have a small number of zones on them - redirects will be counted into the zone redirected to, so long as there is no more suitable zone and so long as it is not a transparent redirect
+			if (($zone_name==$users_current_zone) || ((!is_null($REDIRECTED_TO_CACHE)) && ($zone_name==$REDIRECTED_TO_CACHE['r_to_zone']) && (array_key_exists('page',$map)) && ($map['page']==$REDIRECTED_TO_CACHE['r_to_page'])))
 			{
 				$current_page=true;
 				foreach ($map as $k=>$v)
@@ -609,7 +609,7 @@ function render_menu_branch($branch,$codename,$source_member,$level,$type,$as_ad
 						}
 					}
 					$pv=get_param($k,($k=='page')?$dp:NULL,true);
-					if (($pv!==$v) && (($k!='page') || (is_null($REDIRECTED_TO)) || ((!is_null($REDIRECTED_TO)) && (($v!==$REDIRECTED_TO['r_to_page']) || ($zone_name!=$REDIRECTED_TO['r_to_zone'])))) && (($k!='type') || ($v!='misc') || ($pv!==NULL)) && (($v!=$dp) || ($k!='page') || (get_param('page','')!='')) && (substr($k,0,5)!='keep_'))
+					if (($pv!==$v) && (($k!='page') || (is_null($REDIRECTED_TO_CACHE)) || ((!is_null($REDIRECTED_TO_CACHE)) && (($v!==$REDIRECTED_TO_CACHE['r_to_page']) || ($zone_name!=$REDIRECTED_TO_CACHE['r_to_zone'])))) && (($k!='type') || ($v!='misc') || ($pv!==NULL)) && (($v!=$dp) || ($k!='page') || (get_param('page','')!='')) && (substr($k,0,5)!='keep_'))
 					{
 						$current_page=false;
 						break;

@@ -431,13 +431,12 @@ function filter_naughty_harsh($in,$preg=false)
 	return ''; // trick to make Zend happy
 }
 
+// Useful for basic profiling
 global $PAGE_START_TIME;
 $PAGE_START_TIME=microtime(false);
 
-global $IN_MINIKERNEL_VERSION;
-$IN_MINIKERNEL_VERSION=0;
-
-if (ini_get('register_globals')=='1') // Unregister globals
+// Unregister globals (sanitisation)
+if (ini_get('register_globals')=='1')
 {
 	foreach ($_GET as $key=>$_)
 		if ((array_key_exists($key,$GLOBALS)) && ($GLOBALS[$key]==$_GET[$key])) $GLOBALS[$key]=NULL;
@@ -456,7 +455,7 @@ if (ini_get('register_globals')=='1') // Unregister globals
 	}
 }
 
-// Sanetise the PHP environment some more
+// Sanitise the PHP environment some more
 @ini_set('track_errors','1'); // so $php_errormsg is available
 @ini_set('allow_url_fopen','0');
 @ini_set('allow_url_fopen','0');
@@ -473,22 +472,26 @@ if (function_exists('set_magic_quotes_runtime')) @set_magic_quotes_runtime(0); /
 @ini_set('docref_root','http://www.php.net/manual/en/');
 @ini_set('docref_ext','.php');
 
-global $REQUIRED_CODE;
+// Get ready for some global variables
+global $REQUIRED_CODE,$CURRENT_SHARE_USER,$PURE_POST,$NO_QUERY_LIMIT,$NO_QUERY_LIMIT,$IN_MINIKERNEL_VERSION;
+/** Details of what code files have been loaded up.
+ * @global array $REQUIRED_CODE
+ */
 $REQUIRED_CODE=array();
-
-global $FUNCTION_SIGNATURES,$CHECKING_PARAMETERS;
-$FUNCTION_SIGNATURES=NULL;
-$CHECKING_PARAMETERS=false;
-
-/** If running on a shared-install, this is the identifying name of the site that is being called up
+/** If running on a shared-install, this is the identifying name of the site that is being called up.
  * @global ?ID_TEXT $CURRENT_SHARE_USER
  */
-global $CURRENT_SHARE_USER;
 if ((!isset($CURRENT_SHARE_USER)) || (isset($_SERVER['REQUEST_METHOD'])))
 	$CURRENT_SHARE_USER=NULL;
+/** A copy of the POST parameters, as passed initially to PHP (needed for hash checks with some IPN systems).
+ * @global array $PURE_POST
+ */
+$PURE_POST=$_POST;
+$NO_QUERY_LIMIT=false;
+$IN_MINIKERNEL_VERSION=0;
 
+// Critical error reporting system
 global $FILE_BASE;
-
 if (is_file($FILE_BASE.'/sources_custom/critical_errors.php'))
 {
 	require($FILE_BASE.'/sources_custom/critical_errors.php');
@@ -502,6 +505,7 @@ if (is_file($FILE_BASE.'/sources_custom/critical_errors.php'))
 	}
 }
 
+// Load up config file
 global $SITE_INFO;
 /** Site base configuration settings.
  * @global array $SITE_INFO
@@ -515,11 +519,11 @@ if (count($SITE_INFO)==0)
 	critical_error('INFO.PHP_CORRUPTED');
 }
 
+// Are we in a compiled version of PHP?
 if ((strpos(PHP_VERSION,'hiphop')!==false) || (array_key_exists('ZERO_HOME',$_ENV)) || (function_exists('quercus_version')) || (defined('PHALANGER')) || (defined('ROADSEND_PHPC')) || ((array_key_exists('force_no_eval',$SITE_INFO)) && ($SITE_INFO['force_no_eval']=='1')))
 	define('HIPHOP_PHP','1');
 
 get_custom_file_base(); // Make sure $CURRENT_SHARE_USER is set if it is a shared site, so we can use CURRENT_SHARE_USER as an indicator of it being one.
 
-$GLOBALS['PURE_POST']=$_POST;
+// Pass on to next bootstrap level
 require_code('global2');
-$GLOBALS['NO_QUERY_LIMIT']=true;

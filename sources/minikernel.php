@@ -700,6 +700,8 @@ function unixify_line_format($in)
 /**
  * Make sure that the given CSS file is loaded up.
  *
+ * @sets_output_state
+ *
  * @param  ID_TEXT		The CSS file required
  */
 function require_css($css)

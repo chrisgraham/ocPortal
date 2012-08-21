@@ -127,6 +127,8 @@ function get_page_warning_details($zone,$codename,$edit_url)
 /**
  * Assign a page refresh to the specified URL.
  *
+ * @sets_output_state
+ *
  * @param  mixed			Refresh to this URL (URLPATH or Tempcode URL)
  * @param  float			Take this many times longer than a 'standard ocPortal refresh'
  */
@@ -147,7 +149,7 @@ function assign_refresh($url,$multiplier)
 			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 
 		global $FORCE_META_REFRESH;
-		if (($special_page_type=='view') && ($GLOBALS['NON_PAGE_SCRIPT']==0) && (!headers_sent()) && (!$FORCE_META_REFRESH))
+		if (($special_page_type=='view') && (running_script('index')) && (!headers_sent()) && (!$FORCE_META_REFRESH))
 		{
 			header('Location: '.$url);
 			if (strpos($url,'#')===false)

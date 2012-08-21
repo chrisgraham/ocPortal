@@ -156,9 +156,9 @@ function actual_rename_zone_lite($zone,$new_zone,$dont_bother_with_main_row=fals
 		}
 	}
 
-	global $ALL_ZONES,$ALL_ZONES_TITLED;
-	$ALL_ZONES=NULL;
-	$ALL_ZONES_TITLED=NULL;
+	global $ALL_ZONES_CACHE,$ALL_ZONES_TITLED_CACHE;
+	$ALL_ZONES_CACHE=NULL;
+	$ALL_ZONES_TITLED_CACHE=NULL;
 }
 
 /**
@@ -223,9 +223,9 @@ function actual_delete_zone_lite($zone)
 	persistent_cache_delete(array('ZONE',$zone));
 	persistent_cache_delete('ALL_ZONES');
 
-	global $ALL_ZONES,$ALL_ZONES_TITLED;
-	$ALL_ZONES=NULL;
-	$ALL_ZONES_TITLED=NULL;
+	global $ALL_ZONES_CACHE,$ALL_ZONES_TITLED_CACHE;
+	$ALL_ZONES_CACHE=NULL;
+	$ALL_ZONES_TITLED_CACHE=NULL;
 }
 
 /**

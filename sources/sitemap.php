@@ -297,7 +297,7 @@ function spawn_page_crawl($callback,$member_id,$extra_filters=NULL,$depth=1)
  */
 function sitemaps_xml_initialise($file_path)
 {
-	global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH,$LOADED_MONIKERS;
+	global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH,$LOADED_MONIKERS_CACHE;
 	$SITEMAPS_OUT_TEMPPATH=ocp_tempnam('ocpsmap'); // We write to temporary path first to minimise the time our target file is invalid (during generation)
 	$SITEMAPS_OUT_FILE=fopen($SITEMAPS_OUT_TEMPPATH,'wb');
 	$SITEMAPS_OUT_PATH=$file_path;
@@ -307,7 +307,7 @@ function sitemaps_xml_initialise($file_path)
 	$results=$GLOBALS['SITE_DB']->query($query);
 	foreach ($results as $result)
 	{
-		$LOADED_MONIKERS[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']]=$result['m_moniker'];
+		$LOADED_MONIKERS_CACHE[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']]=$result['m_moniker'];
 	}
 
 	// Load ALL guest permissions (for efficiency)

@@ -89,7 +89,7 @@ function check_naughty_javascript_url($source_member,$url,$as_admin)
 function _custom_comcode_import($connection)
 {
 	global $IN_MINIKERNEL_VERSION;
-	global $DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$TEXTUAL_TAGS,$IMPORTED_CUSTOM_COMCODE,$REPLACE_TARGETS;
+	global $DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$TEXTUAL_TAGS,$IMPORTED_CUSTOM_COMCODE,$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE;
 
 	if ($IN_MINIKERNEL_VERSION==0)
 	{
@@ -104,7 +104,7 @@ function _custom_comcode_import($connection)
 				if ($code['textual_tag']==1) $TEXTUAL_TAGS[$code['tag']]=1;
 				if ($code['dangerous_tag']==1) $DANGEROUS_TAGS[$code['tag']]=1;
 				//if (is_object($code['replace'])) $code['replace']=$code['replace']->evaluate();  Never tempcode
-				$REPLACE_TARGETS[$code['tag']]=array('replace'=>$code['replace'],'parameters'=>$code['parameters']);
+				$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE[$code['tag']]=array('replace'=>$code['replace'],'parameters'=>$code['parameters']);
 			}
 		}
 
@@ -125,7 +125,7 @@ function _custom_comcode_import($connection)
 			if ($tag['tag_textual_tag']==1) $TEXTUAL_TAGS[$tag['tag_tag']]=1;
 			if ($tag['tag_dangerous_tag']==1) $DANGEROUS_TAGS[$tag['tag_tag']]=1;
 			//if (is_object($tag['tag_replace'])) $tag['tag_replace']=$tag['tag_replace']->evaluate();  Never tempcode
-			$REPLACE_TARGETS[$tag['tag_tag']]=array('replace'=>$tag['tag_replace'],'parameters'=>$tag['tag_parameters']);
+			$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE[$tag['tag_tag']]=array('replace'=>$tag['tag_replace'],'parameters'=>$tag['tag_parameters']);
 		}
 
 		// From Comcode hooks
@@ -141,7 +141,7 @@ function _custom_comcode_import($connection)
 			if ($tag['tag_block_tag']==1) $BLOCK_TAGS[$tag['tag_tag']]=1;
 			if ($tag['tag_textual_tag']==1) $TEXTUAL_TAGS[$tag['tag_tag']]=1;
 			if ($tag['tag_dangerous_tag']==1) $DANGEROUS_TAGS[$tag['tag_tag']]=1;
-			$REPLACE_TARGETS[$tag['tag_tag']]=array('replace'=>$tag['tag_replace'],'parameters'=>$tag['tag_parameters']);
+			$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE[$tag['tag_tag']]=array('replace'=>$tag['tag_replace'],'parameters'=>$tag['tag_parameters']);
 		}
 	}
 
@@ -1737,11 +1737,11 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if ((strpos($attributes['param'],'[')!==false) || (strpos($attributes['param'],'{')!==false)) // Extra Comcode parsing wanted?
 				{
 					$param_temp=comcode_to_tempcode(escape_html($attributes['param']),$source_member,$as_admin,60,NULL,$connection,false,false,true,false,false,$highlight_bits,$on_behalf_of_member);
-					global $ADVERTISING_BANNERS;
-					$temp_ab=$ADVERTISING_BANNERS;
-					$ADVERTISING_BANNERS=array();
+					global $ADVERTISING_BANNERS_CACHE;
+					$temp_ab=$ADVERTISING_BANNERS_CACHE;
+					$ADVERTISING_BANNERS_CACHE=array();
 					$caption=$param_temp;
-					$ADVERTISING_BANNERS=$temp_ab;
+					$ADVERTISING_BANNERS_CACHE=$temp_ab;
 				} else
 				{
 					$caption=make_string_tempcode(escape_html($attributes['param'])); // Consistency of escaping
@@ -2088,11 +2088,11 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 	// Last ditch effort: custom tags
 	if ($temp_tpl->is_definitely_empty())
 	{
-		global $REPLACE_TARGETS;
-		if (array_key_exists($tag,$REPLACE_TARGETS))
+		global $CUSTOM_COMCODE_REPLACE_TARGETS_CACHE;
+		if (array_key_exists($tag,$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE))
 		{
-			$replace=$REPLACE_TARGETS[$tag]['replace'];
-			$parameters=explode(',',$REPLACE_TARGETS[$tag]['parameters']);
+			$replace=$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE[$tag]['replace'];
+			$parameters=explode(',',$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE[$tag]['parameters']);
 			$binding=array('CONTENT'=>$embed);
 			foreach ($parameters as $parameter)
 			{

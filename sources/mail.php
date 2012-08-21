@@ -794,7 +794,6 @@ function form_to_email_entry_script()
 	if (!is_null($redirect))
 	{
 		require_code('site2');
-		$GLOBALS['NON_PAGE_SCRIPT']=0;
 		$tpl=redirect_screen($title,$redirect,$text);
 	} else
 	{

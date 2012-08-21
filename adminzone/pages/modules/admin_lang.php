@@ -173,13 +173,13 @@ class Module_admin_lang
 		}
 
 		// Search code strings
-		global $LANGUAGE;
+		global $LANGUAGE_STRINGS_CACHE;
 
-		if (!array_key_exists(user_lang(),$LANGUAGE)) return '';
-		$finds=array_keys($LANGUAGE[user_lang()],$old);
+		if (!array_key_exists(user_lang(),$LANGUAGE_STRINGS_CACHE)) return '';
+		$finds=array_keys($LANGUAGE_STRINGS_CACHE[user_lang()],$old);
 		foreach ($finds as $find)
 		{
-			if ((array_key_exists($lang,$LANGUAGE)) && (array_key_exists($find,$LANGUAGE[$lang]))) return $LANGUAGE[$lang][$find];
+			if ((array_key_exists($lang,$LANGUAGE_STRINGS_CACHE)) && (array_key_exists($find,$LANGUAGE_STRINGS_CACHE[$lang]))) return $LANGUAGE_STRINGS_CACHE[$lang][$find];
 		}
 
 		return '';
@@ -565,8 +565,8 @@ msgstr ""
 
 			require_code('form_templates');
 			$fields=new ocp_tempcode();
-			global $LANGUAGE;
-			foreach ($LANGUAGE[user_lang()] as $key=>$value)
+			global $LANGUAGE_STRINGS_CACHE;
+			foreach ($LANGUAGE_STRINGS_CACHE[user_lang()] as $key=>$value)
 			{
 				if (strpos(strtolower($value),strtolower($search))!==false)
 				{

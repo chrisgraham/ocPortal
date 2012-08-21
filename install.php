@@ -40,9 +40,6 @@ error_reporting(E_ALL);
 @ini_set('display_errors','1');
 @ini_set('assert.active','0');
 
-global $MOBILE;
-$MOBILE=0;
-
 global $DEFAULT_FORUM;
 $DEFAULT_FORUM='ocf';
 
@@ -113,11 +110,11 @@ global $CACHE_TEMPLATES;
 if (is_writable(get_file_base().'/themes/default/templates_cached/'.user_lang())) $CACHE_TEMPLATES=true;
 
 // Set up some globals
-global $LANG,$VERSION,$CHMOD_ARRAY,$USER_LANG_CACHED;
-$LANG=fallback_lang();
-if (array_key_exists('default_lang',$_GET)) $LANG=$_GET['default_lang'];
-if (array_key_exists('default_lang',$_POST)) $LANG=$_POST['default_lang'];
-$USER_LANG_CACHED=$LANG;
+global $INSTALL_LANG,$VERSION_BEING_INSTALLED,$CHMOD_ARRAY,$USER_LANG_CACHED;
+$INSTALL_LANG=fallback_lang();
+if (array_key_exists('default_lang',$_GET)) $INSTALL_LANG=$_GET['default_lang'];
+if (array_key_exists('default_lang',$_POST)) $INSTALL_LANG=$_POST['default_lang'];
+$USER_LANG_CACHED=$INSTALL_LANG;
 
 // Languages we can use
 require_lang('global');
@@ -135,9 +132,9 @@ if (ini_get('file_uploads')=='0') exit(do_lang('NO_UPLOAD'));
 
 // Set up some globals
 $minor=ocp_version_minor();
-$VERSION=strval(ocp_version());
-if ($minor!='') $VERSION.=(is_numeric($minor[0])?'.':'-').$minor;
-$CHMOD_ARRAY=get_chmod_array();
+$VERSION_BEING_INSTALLED=strval(ocp_version());
+if ($minor!='') $VERSION_BEING_INSTALLED.=(is_numeric($minor[0])?'.':'-').$minor;
+$CHMOD_ARRAY=get_chmod_array($INSTALL_LANG);
 
 $password_prompt=new ocp_tempcode();
 
@@ -205,13 +202,13 @@ $logo_url='install.php?type=logo';
 if (is_null($DEFAULT_FORUM)) $DEFAULT_FORUM='ocf'; // Shouldn't happen, but who knows
 require_code('tempcode_compiler');
 $css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-$out_final=do_template('INSTALLER_HTML_WRAP',array('_GUID'=>'29aa056c05fa360b72dbb01c46608c4b','CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>$DEFAULT_FORUM,'PASSWORD_PROMPT'=>$password_prompt,'CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$content,'VERSION'=>$VERSION));
+$out_final=do_template('INSTALLER_HTML_WRAP',array('_GUID'=>'29aa056c05fa360b72dbb01c46608c4b','CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>$DEFAULT_FORUM,'PASSWORD_PROMPT'=>$password_prompt,'CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$content,'VERSION'=>$VERSION_BEING_INSTALLED));
 unset($css_nocache);
 unset($content);
 $out_final->evaluate_echo();
 
-global $MYFILE;
-if (@is_resource($MYFILE))
+global $DATADOTOCP_FILE;
+if (@is_resource($DATADOTOCP_FILE))
 {
 	if ((intval($_GET['step'])==10) && (!is_suexec_like()))
 	{
@@ -267,8 +264,8 @@ if (@is_resource($MYFILE))
 function step_1()
 {
 	$warnings=new ocp_tempcode();
-	global $MYFILE;
-	if (!@is_resource($MYFILE)) // Do an integrity check - missing corrupt files
+	global $DATADOTOCP_FILE;
+	if (!@is_resource($DATADOTOCP_FILE)) // Do an integrity check - missing corrupt files
 	{
 		if ((array_key_exists('skip_disk_checks',$_GET)) || (file_exists(get_file_base().'/.git')))
 		{
@@ -555,7 +552,7 @@ function step_3()
 {
 	if (count($_POST)==0) exit(do_lang('INST_POST_ERROR'));
 
-	global $LANG;
+	global $INSTALL_LANG;
 
 	// Call home, if they asked to
 	$advertise_on=array_key_exists('advertise_on',$_POST)?intval($_POST['advertise_on']):0;
@@ -563,7 +560,7 @@ function step_3()
 	if ($email==do_lang('EMAIL_ADDRESS')) $email='';
 	if (($email!='') || ($advertise_on==1))
 	{
-		$call='/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$LANG;
+		$call='/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('REQUEST_URI')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$INSTALL_LANG;
 		$errno=0;
 		$errstr='';
 		$mysock=@fsockopen('ocportal.com',80,$errno,$errstr,6.0);
@@ -672,7 +669,7 @@ function step_3()
  */
 function step_4()
 {
-	global $LANG;
+	global $INSTALL_LANG;
 
 	if (count($_POST)==0) exit(do_lang('INST_POST_ERROR'));
 
@@ -937,7 +934,7 @@ function step_4()
 	$url='install.php?step=5';
 	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
-	return do_template('INSTALLER_STEP_4',array('_GUID'=>'73c3ac0a7108709b74b2e89cae30be12','URL'=>$url,'JS'=>$js,'MESSAGE'=>$message,'LANG'=>$LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>$forum_type,'BOARD_PATH'=>$board_path,'SECTIONS'=>$sections,'MAX'=>strval(post_param_integer('max',1000))));
+	return do_template('INSTALLER_STEP_4',array('_GUID'=>'73c3ac0a7108709b74b2e89cae30be12','URL'=>$url,'JS'=>$js,'MESSAGE'=>$message,'LANG'=>$INSTALL_LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>$forum_type,'BOARD_PATH'=>$board_path,'SECTIONS'=>$sections,'MAX'=>strval(post_param_integer('max',1000))));
 }
 
 /**
@@ -1017,14 +1014,14 @@ function step_5()
 		unset($tmp);
 		if (!is_null($test))
 		{
-			global $LANG;
+			global $INSTALL_LANG;
 			$sections=build_keep_post_fields(array('forum_type','db_type','board_path','default_lang'));
 			$sections->attach(form_input_hidden('confirm','1'));
 
 			$url='install.php?step=5';
 			if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
-			return do_template('INSTALLER_STEP_4',array('_GUID'=>'aaf0386966dd4b75c8027a6b1f7454c6','URL'=>$url,'MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE'),'LANG'=>$LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>post_param('forum_type'),'BOARD_PATH'=>post_param('board_path'),'SECTIONS'=>$sections));
+			return do_template('INSTALLER_STEP_4',array('_GUID'=>'aaf0386966dd4b75c8027a6b1f7454c6','URL'=>$url,'MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE'),'LANG'=>$INSTALL_LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>post_param('forum_type'),'BOARD_PATH'=>post_param('board_path'),'SECTIONS'=>$sections));
 		}
 	}
 
@@ -1655,7 +1652,7 @@ function step_5_core()
  */
 function step_5_core_2()
 {
-	global $LANG;
+	global $INSTALL_LANG;
 
 	$GLOBALS['SITE_DB']->drop_table_if_exists('zones');
 	$GLOBALS['SITE_DB']->create_table('zones',array(
@@ -1670,12 +1667,12 @@ function step_5_core_2()
 	));
 
 	require_lang('zones');
-	$trans1=insert_lang(do_lang('A_SITE_ABOUT','???'),1,NULL,false,NULL,$LANG);
-	$trans2=insert_lang(do_lang('HEADER_TEXT_ADMINZONE'),1,NULL,false,NULL,$LANG);
-	if (file_exists(get_file_base().'/collaboration')) $trans3=insert_lang(do_lang('HEADER_TEXT_collaboration'),1,NULL,false,NULL,$LANG);
-	$trans4=insert_lang(do_lang('A_SITE_ABOUT','???'),1,NULL,false,NULL,$LANG);
-	$trans6=insert_lang(do_lang('CMS'),1,NULL,false,NULL,$LANG);
-	$trans8=insert_lang(do_lang('GUIDES'),1,NULL,false,NULL,$LANG);
+	$trans1=insert_lang(do_lang('A_SITE_ABOUT','???'),1,NULL,false,NULL,$INSTALL_LANG);
+	$trans2=insert_lang(do_lang('HEADER_TEXT_ADMINZONE'),1,NULL,false,NULL,$INSTALL_LANG);
+	if (file_exists(get_file_base().'/collaboration')) $trans3=insert_lang(do_lang('HEADER_TEXT_collaboration'),1,NULL,false,NULL,$INSTALL_LANG);
+	$trans4=insert_lang(do_lang('A_SITE_ABOUT','???'),1,NULL,false,NULL,$INSTALL_LANG);
+	$trans6=insert_lang(do_lang('CMS'),1,NULL,false,NULL,$INSTALL_LANG);
+	$trans8=insert_lang(do_lang('GUIDES'),1,NULL,false,NULL,$INSTALL_LANG);
 	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>0,'zone_name'=>'','zone_title'=>insert_lang(do_lang('_WELCOME'),1),'zone_default_page'=>'start','zone_header_text'=>$trans1,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0));
 	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>1,'zone_name'=>'adminzone','zone_title'=>insert_lang(do_lang('ADMIN_ZONE'),1),'zone_default_page'=>'start','zone_header_text'=>$trans2,'zone_theme'=>'default','zone_wide'=>0,'zone_require_session'=>1));
 	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>1,'zone_name'=>'site','zone_title'=>insert_lang(do_lang('SITE'),1),'zone_default_page'=>'start','zone_header_text'=>$trans4,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0));
@@ -1686,7 +1683,7 @@ function step_5_core_2()
 	$forum_type=post_param('forum_type');
 	if ($forum_type=='ocf')
 	{
-		$trans5=insert_lang(do_lang('FORUM'),1,NULL,false,NULL,$LANG);
+		$trans5=insert_lang(do_lang('FORUM'),1,NULL,false,NULL,$INSTALL_LANG);
 		$GLOBALS['SITE_DB']->query_insert('zones',array('zone_displayed_in_menu'=>1,'zone_name'=>'forum','zone_title'=>insert_lang(do_lang('SECTION_FORUMS'),1),'zone_default_page'=>'forumview','zone_header_text'=>$trans5,'zone_theme'=>'-1','zone_wide'=>NULL,'zone_require_session'=>0));
 	}
 

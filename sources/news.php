@@ -31,17 +31,17 @@ function render_news_box($row,$zone='_SEARCH')
 	$title=get_translated_tempcode($row['title']);
 	$title_plain=get_translated_text($row['title']);
 
-	global $NEWS_CATS;
-	if (!isset($NEWS_CATS)) $NEWS_CATS=array();
-	if (!array_key_exists($row['news_category'],$NEWS_CATS))
+	global $NEWS_CATS_CACHE;
+	if (!isset($NEWS_CATS_CACHE)) $NEWS_CATS_CACHE=array();
+	if (!array_key_exists($row['news_category'],$NEWS_CATS_CACHE))
 	{
 		$_news_cats=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>$row['news_category']),'',1);
 		if (array_key_exists(0,$_news_cats))
-			$NEWS_CATS[$row['news_category']]=$_news_cats[0];
+			$NEWS_CATS_CACHE[$row['news_category']]=$_news_cats[0];
 	}
-	if ((!array_key_exists($row['news_category'],$NEWS_CATS)) || (!array_key_exists('nc_title',$NEWS_CATS[$row['news_category']])))
+	if ((!array_key_exists($row['news_category'],$NEWS_CATS_CACHE)) || (!array_key_exists('nc_title',$NEWS_CATS_CACHE[$row['news_category']])))
 		$row['news_category']=db_get_first_id();
-	$news_cat_row=$NEWS_CATS[$row['news_category']];
+	$news_cat_row=$NEWS_CATS_CACHE[$row['news_category']];
 	$img=find_theme_image($news_cat_row['nc_img']);
 	if (is_null($img)) $img='';
 	if ($row['news_image']!='')

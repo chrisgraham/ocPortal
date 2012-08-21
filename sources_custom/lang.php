@@ -29,7 +29,7 @@ if (!function_exists('_do_lang'))
 			$codename=substr($codename,$pos+1);
 		}
 
-		global $LANGUAGE,$USER_LANG_CACHED,$RECORD_LANG_STRINGS,$XSS_DETECT,$PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED;
+		global $LANGUAGE_STRINGS_CACHE,$USER_LANG_CACHED,$RECORD_LANG_STRINGS,$XSS_DETECT,$PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED;
 
 		if ($RECORD_LANG_STRINGS)
 		{
@@ -42,7 +42,7 @@ if (!function_exists('_do_lang'))
 			$lang=($USER_LANG_CACHED===NULL)?user_lang():$USER_LANG_CACHED;
 		}// else // This else assumes we initially load all language files in the users language. Reasonable. EDIT: Actually, no it is not - the user_lang() initially is not accurate until ocPortal gets past a certain startup position
 		{
-			if ((!isset($LANGUAGE[$lang][$codename])) && ((!array_key_exists($lang,$LANGUAGE)) || (!array_key_exists($codename,$LANGUAGE[$lang]))))
+			if ((!isset($LANGUAGE_STRINGS_CACHE[$lang][$codename])) && ((!array_key_exists($lang,$LANGUAGE_STRINGS_CACHE)) || (!array_key_exists($codename,$LANGUAGE_STRINGS_CACHE[$lang]))))
 			{
 				global $PAGE_CACHE_LAZY_LOAD,$PAGE_CACHE_LANGS_REQUESTED,$LANG_REQUESTED_LANG;
 
@@ -78,7 +78,7 @@ if (!function_exists('_do_lang'))
 
 		if ($lang=='xxx') return 'xxx'; // Helpful for testing language compliancy. We don't expect to see non x's if we're running this language
 
-		if ((!isset($LANGUAGE[$lang][$codename])) && ((!array_key_exists($lang,$LANGUAGE)) || (!array_key_exists($codename,$LANGUAGE[$lang]))))
+		if ((!isset($LANGUAGE_STRINGS_CACHE[$lang][$codename])) && ((!array_key_exists($lang,$LANGUAGE_STRINGS_CACHE)) || (!array_key_exists($codename,$LANGUAGE_STRINGS_CACHE[$lang]))))
 		{
 			if ($lang!=fallback_lang())
 			{
@@ -164,7 +164,7 @@ if (!function_exists('_do_lang'))
 		{
 			if (!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename]))
 			{
-				$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$LANGUAGE[$lang][$codename];
+				$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$LANGUAGE_STRINGS_CACHE[$lang][$codename];
 				if ($GLOBALS['MEM_CACHE']!==NULL)
 				{
 					persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
@@ -179,7 +179,7 @@ if (!function_exists('_do_lang'))
 
 		// Put in parameters
 		static $non_plural_non_vowel=array('1','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z');
-		$looked_up=$LANGUAGE[$lang][$codename];
+		$looked_up=$LANGUAGE_STRINGS_CACHE[$lang][$codename];
 		if ($looked_up===NULL) return NULL; // Learning cache pool has told us this string definitely does not exist
 		$out=str_replace('\n',"\n",$looked_up);
 		$plural_or_vowel_check=strpos($out,'|')!==false;

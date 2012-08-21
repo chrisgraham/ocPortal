@@ -67,12 +67,12 @@ function display_time_period($seconds)
  */
 function make_locale_filter()
 {
-	global $LOCALE_FILTER;
-	$LOCALE_FILTER=explode(',',do_lang('LOCALE_SUBST'));
-	foreach ($LOCALE_FILTER as $i=>$filter)
+	global $LOCALE_FILTER_CACHE;
+	$LOCALE_FILTER_CACHE=explode(',',do_lang('LOCALE_SUBST'));
+	foreach ($LOCALE_FILTER_CACHE as $i=>$filter)
 	{
-		if ($filter=='') unset($LOCALE_FILTER[$i]);
-		else $LOCALE_FILTER[$i]=explode('=',$filter);
+		if ($filter=='') unset($LOCALE_FILTER_CACHE[$i]);
+		else $LOCALE_FILTER_CACHE[$i]=explode('=',$filter);
 	}
 }
 
@@ -83,10 +83,10 @@ function make_locale_filter()
  */
 function get_server_timezone()
 {
-	global $SERVER_TIMEZONE;
-	if (is_string($SERVER_TIMEZONE))
+	global $SERVER_TIMEZONE_CACHE;
+	if (is_string($SERVER_TIMEZONE_CACHE))
 	{
-		if ($SERVER_TIMEZONE!='') return $SERVER_TIMEZONE;
+		if ($SERVER_TIMEZONE_CACHE!='') return $SERVER_TIMEZONE_CACHE;
 	}
 
 	return 'UTC';
@@ -337,9 +337,9 @@ function get_timezoned_date($timestamp,$include_time=true,$verbose=false,$utc_ti
  */
 function locale_filter($ret)
 {
-	global $LOCALE_FILTER;
-	if ($LOCALE_FILTER===NULL) make_locale_filter();
-	foreach ($LOCALE_FILTER as $filter)
+	global $LOCALE_FILTER_CACHE;
+	if ($LOCALE_FILTER_CACHE===NULL) make_locale_filter();
+	foreach ($LOCALE_FILTER_CACHE as $filter)
 		if (count($filter)==2) $ret=str_replace($filter[0],$filter[1],$ret);
 	return $ret;
 }

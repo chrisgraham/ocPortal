@@ -25,19 +25,14 @@
  */
 function init__symbols()
 {
-	global $LOADED_NONREG_LOGO,$LOADED_BLOCKS,$LOADED_PAGES,$LOADED_PANELS,$NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS;
-	$LOADED_NONREG_LOGO=false;
-	$LOADED_BLOCKS=array();
-	$LOADED_PAGES=array();
-	$LOADED_PANELS=array();
+	global $BLOCKS_CACHE,$PAGES_CACHE,$PANELS_CACHE,$NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$SYMBOL_CACHE;
+	$BLOCKS_CACHE=array();
+	$PAGES_CACHE=array();
+	$PANELS_CACHE=array();
 	$NON_CACHEABLE_SYMBOLS=array('SET_RAND'=>1,'RAND'=>1,'CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1,'SHOW_HEADER'=>1,'SHOW_FOOTER'=>1,'WIDE_HIGH'=>1,'WIDE'=>1); // these symbols can't be cached regardless of if they have params or not; other symbols can only be cached if they have no params or escaping
 	$PREPROCESSABLE_SYMBOLS=array('PAGE_LINK'=>1,'SET'=>1,'BLOCK'=>1,'FACILITATE_AJAX_BLOCK_CALL'=>1,'REQUIRE_JAVASCRIPT'=>1,'REQUIRE_CSS'=>1,'LOAD_PANEL'=>1,'JS_TEMPCODE'=>1,'CSS_TEMPCODE'=>1,'LOAD_PAGE'=>1,'FRACTIONAL_EDITABLE'=>1,);
 	$EXTRA_SYMBOLS=NULL;
-
-	global $SYMBOL_CACHE,$CYCLES,$TEMPCODE_SETGET;
 	$SYMBOL_CACHE=array();
-	$CYCLES=array();
-	$TEMPCODE_SETGET=array();
 }
 
 /**
@@ -449,7 +444,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'CONFIG_OPTION':
 				if (isset($param[0]))
 				{
-					if (!isset($GLOBALS['OPTIONS'])) // Installer, likely executing JAVASCRIPT.tpl
+					if (!isset($GLOBALS['CONFIG_OPTIONS_CACHE'])) // Installer, likely executing JAVASCRIPT.tpl
 					{
 						$value='0';
 					} else
@@ -548,12 +543,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 				foreach ($param as $i=>$p)
 					if (is_object($p)) $param[$i]=$p->evaluate();
 
-				global $LOADED_PANELS;
+				global $PANELS_CACHE;
 				if (strpos($param[0],':')!==false)
 					$param=array_reverse(explode(':',$param[0],2));
 				if (substr($param[0],0,6)=='panel_') $param[0]=substr($param[0],6);
 				$sr=serialize($param);
-				$value=array_key_exists($sr,$LOADED_PANELS)?$LOADED_PANELS[$sr]:'';
+				$value=array_key_exists($sr,$PANELS_CACHE)?$PANELS_CACHE[$sr]:'';
 				break;
 
 			case 'JS_ON':
@@ -677,7 +672,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'MESSAGES_TOP':
-				$value=static_evaluate_tempcode($GLOBALS['ATTACHED_MESSAGES']);
+				if ($GLOBALS['ATTACHED_MESSAGES']!==NULL)
+				{
+					$value=static_evaluate_tempcode($GLOBALS['ATTACHED_MESSAGES']);
+				}
 				break;
 
 			case 'MESSAGES_BOTTOM':
@@ -710,7 +708,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'LATE_MESSAGES':
-				$value=static_evaluate_tempcode($GLOBALS['LATE_ATTACHED_MESSAGES']);
+				if ($GLOBALS['LATE_ATTACHED_MESSAGES']!==NULL)
+				{
+					$value=static_evaluate_tempcode($GLOBALS['LATE_ATTACHED_MESSAGES']);
+				}
 				break;
 
 			case 'BREADCRUMBS':
@@ -1059,13 +1060,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
-			case 'DOCUMENT_HELP':
-				global $DOCUMENT_HELP,$HELPER_PANEL_TUTORIAL;
-				$value=$DOCUMENT_HELP;
-				if (($value=='') && ($HELPER_PANEL_TUTORIAL!=''))
-				{
-					$value=brand_base_url().'/docs'.strval(ocp_version()).'/pg/'.$HELPER_PANEL_TUTORIAL;
-				}
+			case 'DOCUMENT_HELP': // LEGACY: Remove
 				break;
 
 			case 'HTTP_STATUS_CODE':
@@ -1161,10 +1156,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 				foreach ($param as $i=>$p)
 					if (is_object($p)) $param[$i]=$p->evaluate();
 
-				global $LOADED_PAGES;
+				global $PAGES_CACHE;
 				if (strpos($param[0],':')!==false)
 					$param=array_reverse(explode(':',$param[0],2));
-				$_value=$LOADED_PAGES[serialize($param)];
+				$_value=$PAGES_CACHE[serialize($param)];
 				$value=$_value->evaluate();
 				break;
 
@@ -1203,9 +1198,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$param=preg_split('#((?<'.'![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
 					}
 
-					global $LOADED_BLOCKS;
-					if (isset($LOADED_BLOCKS[serialize($param)])) // Will always be set
-						$value=$LOADED_BLOCKS[serialize($param)]->evaluate();
+					global $BLOCKS_CACHE;
+					if (isset($BLOCKS_CACHE[serialize($param)])) // Will always be set
+						$value=$BLOCKS_CACHE[serialize($param)]->evaluate();
 				}
 				break;
 
@@ -1402,7 +1397,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'EXTRA_HEAD':
-				if (isset($GLOBALS['EXTRA_HEAD']))
+				if ($GLOBALS['EXTRA_HEAD']!==NULL)
 				{
 					$_value=$GLOBALS['EXTRA_HEAD'];
 					$value=$_value->evaluate();
@@ -1410,7 +1405,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'EXTRA_FOOT':
-				if (isset($GLOBALS['EXTRA_FOOT']))
+				if ($GLOBALS['EXTRA_FOOT']!==NULL)
 				{
 					$_value=$GLOBALS['EXTRA_FOOT'];
 
@@ -1422,6 +1417,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$value=$_value->evaluate();
 					}
 				}
+				break;
+
+			case 'IS_VIRTUALISED_REQUEST':
+				$value=$GLOBALS['IS_VIRTUALISED_REQUEST']?'1':'0';
 				break;
 
 			case 'RAND':

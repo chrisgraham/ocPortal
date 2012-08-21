@@ -140,12 +140,12 @@ class template_previews_test_set extends ocp_test_case
 
 	function testRepeatConsistency()
 	{
-		global $NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$DOCUMENT_HELP,$PREPROCESSABLE_SYMBOLS,$CYCLES,$TEMPCODE_SETGET,$LOADED_TPL_CACHE,$META_DATA;
+		global $NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$LOADED_TPL_CACHE;
 		$NON_CACHEABLE_SYMBOLS=array('CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1);
 
-		global $HAS_KEEP_IN_URL;
+		global $HAS_KEEP_IN_URL_CACHE;
 		$_GET['wide']='1';
-		$HAS_KEEP_IN_URL=NULL;
+		$HAS_KEEP_IN_URL_CACHE=NULL;
 
 		$lists=find_all_previews__by_screen();
 		foreach ($lists as $function=>$tpls)
@@ -158,16 +158,12 @@ class template_previews_test_set extends ocp_test_case
 			if (function_exists('set_time_limit')) @set_time_limit(0);
 
 			init__lorem();
-			$META_DATA=array();
-			$CYCLES=array();
-			$TEMPCODE_SETGET=array();
+			restore_output_state();
 			$LOADED_TPL_CACHE=array();
 			$out1=render_screen_preview($template,$hook,$function);
 			$_out1=$out1->evaluate();
 			init__lorem();
-			$META_DATA=array();
-			$CYCLES=array();
-			$TEMPCODE_SETGET=array();
+			restore_output_state();
 			$LOADED_TPL_CACHE=array();
 			$out2=render_screen_preview($template,$hook,$function);
 			$_out2=$out2->evaluate();
@@ -222,6 +218,7 @@ class template_previews_test_set extends ocp_test_case
 			$ATTACHED_MESSAGES_RAW=array();
 			$out1=render_screen_preview($template,$hook,$function);
 
+			if ($ATTACHED_MESSAGES===NULL) $ATTACHED_MESSAGES=new ocp_tempcode();
 			$put_out=(!$ATTACHED_MESSAGES->is_empty()) || (count($ATTACHED_MESSAGES_RAW)>0);
 			$this->assertFalse($put_out,'Messages put out by '.$function.'  ('.strip_tags($ATTACHED_MESSAGES->evaluate()).')');
 

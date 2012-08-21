@@ -45,6 +45,21 @@ function init__form_templates()
 }
 
 /**
+ * Attach the WYSIWYG editor.
+ */
+function attach_wysiwyg()
+{
+	global $WYSIWYG_ATTACHED;
+	if (!$WYSIWYG_ATTACHED)
+	{
+		require_code('site');
+		attach_to_javascript(do_template('HTML_EDIT'));
+	}
+	$WYSIWYG_ATTACHED=true;
+	@header('Content-type: text/html; charset='.get_charset());
+}
+
+/**
  * Insert hidden data for the maximum file size of form fields.
  *
  * @param  tempcode			Hidden fields
@@ -165,12 +180,7 @@ function get_posting_form($submit_name,$post,$post_url,$hidden_fields,$specialis
 	$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($post,'{$,page hint: no_wysiwyg}')===false));
 
 	$class='';
-	global $JAVASCRIPT,$WYSIWYG_ATTACHED;
-	if (!$WYSIWYG_ATTACHED)
-		$JAVASCRIPT->attach(do_template('HTML_EDIT'));
-	$WYSIWYG_ATTACHED=true;
-	@header('Content-type: text/html; charset='.get_charset());
-
+	attach_wysiwyg();
 	if ($w) $class.=' wysiwyg';
 
 	global $LAX_COMCODE;
@@ -726,11 +736,7 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
 
 	if (!$force_non_wysiwyg)
 	{
-		global $JAVASCRIPT,$WYSIWYG_ATTACHED;
-		if (!$WYSIWYG_ATTACHED)
-			$JAVASCRIPT->attach(do_template('HTML_EDIT'));
-		$WYSIWYG_ATTACHED=true;
-		@header('Content-type: text/html; charset='.get_charset());
+		attach_wysiwyg();
 
 		$w=(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
 		if ($w) $_required.=' wysiwyg';
@@ -780,11 +786,7 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 	$_required=($required)?'_required':'';
 	$default_parsed=new ocp_tempcode();
 
-	global $JAVASCRIPT,$WYSIWYG_ATTACHED;
-	if (!$WYSIWYG_ATTACHED)
-		$JAVASCRIPT->attach(do_template('HTML_EDIT'));
-	$WYSIWYG_ATTACHED=true;
-	@header('Content-type: text/html; charset='.get_charset());
+	attach_wysiwyg();
 
 	$w=(has_js() && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
 	if ($w) $_required.=' wysiwyg';

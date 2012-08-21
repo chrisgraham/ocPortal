@@ -32,17 +32,14 @@ error_reporting(E_ALL);
 assert_options(ASSERT_ACTIVE,0);
 @ini_set('assert.active','0');
 
-global $MOBILE;
-$MOBILE=0;
-
 global $REQUIRED_BEFORE;
 $REQUIRED_BEFORE=array();
 
 global $SITE_INFO;
 $SITE_INFO=array();
 
-global $OPTIONS;
-$OPTIONS=array();
+global $CONFIG_OPTIONS_CACHE;
+$CONFIG_OPTIONS_CACHE=array();
 
 global $CURRENT_SHARE_USER;
 $CURRENT_SHARE_USER=NULL;
@@ -91,8 +88,8 @@ require_code('database_action');
 handle_self_referencing_embedment();
 
 // Set up some globals
-global $LANG,$VERSION,$CHMOD_ARRAY;
-$LANG=(isset($_GET['default_lang']))?$_GET['default_lang']:'en';
+global $INSTALL_LANG,$VERSION,$CHMOD_ARRAY;
+$INSTALL_LANG=(isset($_GET['default_lang']))?$_GET['default_lang']:'en';
 
 // Languages we can use
 require_lang('global');

@@ -27,8 +27,6 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 $RELATIVE_PATH='';
 @chdir($FILE_BASE);
 
-global $NON_PAGE_SCRIPT;
-$NON_PAGE_SCRIPT=1;
 global $FORCE_INVISIBLE_GUEST;
 $FORCE_INVISIBLE_GUEST=0;
 

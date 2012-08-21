@@ -40,7 +40,7 @@ if (!function_exists('require_lang_compile'))
 	 */
 	function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=false)
 	{
-		global $LANGUAGE,$REQUIRE_LANG_LOOP,$LANG_LOADED_LANG;
+		global $LANGUAGE_STRINGS_CACHE,$REQUIRE_LANG_LOOP,$LANG_LOADED_LANG;
 
 		$desire_cache=(function_exists('get_option')) && ((get_option('is_on_lang_cache',true)=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
 		if ($desire_cache)
@@ -68,7 +68,7 @@ if (!function_exists('require_lang_compile'))
 			$load_target=array();
 		} else
 		{
-			$load_target=&$LANGUAGE[$lang];
+			$load_target=&$LANGUAGE_STRINGS_CACHE[$lang];
 		}
 
 		global $FILE_ARRAY;
@@ -181,7 +181,7 @@ if (!function_exists('require_lang_compile'))
 
 				if (!array_key_exists($lang,$LANG_LOADED_LANG)) $LANG_LOADED_LANG[$lang]=array();
 				$LANG_LOADED_LANG[$lang][$codename]=1;
-				if (!$bad) $LANGUAGE[$lang]+=$fallback_map;
+				if (!$bad) $LANGUAGE_STRINGS_CACHE[$lang]+=$fallback_map;
 
 				return $bad;
 			}
@@ -227,7 +227,7 @@ if (!function_exists('require_lang_compile'))
 			persistent_cache_set(array('LANG',$lang,$codename),$load_target,!$dirty);
 		}
 
-		if ($desire_cache) $LANGUAGE[$lang]+=$load_target;
+		if ($desire_cache) $LANGUAGE_STRINGS_CACHE[$lang]+=$load_target;
 
 		return $bad;
 	}

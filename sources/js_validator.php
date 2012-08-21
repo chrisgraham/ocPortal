@@ -378,7 +378,7 @@ function js_check_variable_list($JS_LOCAL_VARIABLES)
  */
 function js_check_command($command,$depth)
 {
-	global $JS_LOCAL_VARIABLES,$CURRENT_CLASS,$FUNCTION_SIGNATURES;
+	global $JS_LOCAL_VARIABLES,$CURRENT_CLASS;
 	foreach ($command as $i=>$c)
 	{
 		if ($c==array()) continue;

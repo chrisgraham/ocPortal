@@ -35,7 +35,7 @@ function _redirect_screen($title,$url,$text,$intermediatory_hop=false,$msg_type=
 
 	global $FORCE_META_REFRESH,$ATTACHED_MESSAGES_RAW;
 	$special_page_type=get_param('special_page_type','view');
-	if (($special_page_type=='view') && ($GLOBALS['NON_PAGE_SCRIPT']==0) && (!headers_sent()) && (!$FORCE_META_REFRESH))
+	if (($special_page_type=='view') && (!running_script('index')) && (!headers_sent()) && (!$FORCE_META_REFRESH))
 	{
 		foreach ($ATTACHED_MESSAGES_RAW as $message)
 		{

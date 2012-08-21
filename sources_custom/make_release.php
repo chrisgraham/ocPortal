@@ -130,18 +130,18 @@ function make_installers($skip_file_grab=false)
 		$installer_start="<?php
 			/* QUICK INSTALLER CODE starts */
 
-			global \$FILE_ARRAY,\$SIZE_ARRAY,\$OFFSET_ARRAY,\$DIR_ARRAY,\$myfile;
+			global \$FILE_ARRAY,\$SIZE_ARRAY,\$OFFSET_ARRAY,\$DIR_ARRAY,\$DATADOTOCP_FILE;
 			\$OFFSET_ARRAY=array({$offset_list});
 			\$SIZE_ARRAY=array({$size_list});
 			\$FILE_ARRAY=array({$file_list});
-			\$myfile=fopen('data.ocp','rb');
-			if (\$myfile===false) warn_exit('data.ocp missing / inaccessible');
+			\$DATADOTOCP_FILE=fopen('data.ocp','rb');
+			if (\$DATADOTOCP_FILE===false) warn_exit('data.ocp missing / inaccessible');
 			if (filesize('data.ocp')!={$archive_size}) warn_exit('data.ocp not fully uploaded, or wrong version for this installer');
 			if (md5(file_array_get('{$md5_test_path}'))!='{$md5}') warn_exit('data.ocp corrupt. Must not be uploaded in text mode');
 
 			function file_array_get(\$path)
 			{
-				global \$OFFSET_ARRAY,\$SIZE_ARRAY,\$myfile,\$FILE_BASE;
+				global \$OFFSET_ARRAY,\$SIZE_ARRAY,\$DATADOTOCP_FILE,\$FILE_BASE;
 
 				if (substr(\$path,0,strlen(\$FILE_BASE.'/'))==\$FILE_BASE.'/')
 					\$path=substr(\$path,strlen(\$FILE_BASE.'/'));
@@ -150,12 +150,12 @@ function make_installers($skip_file_grab=false)
 				\$offset=\$OFFSET_ARRAY[\$path];
 				\$size=\$SIZE_ARRAY[\$path];
 				if (\$size==0) return '';
-				fseek(\$myfile,\$offset,SEEK_SET);
+				fseek(\$DATADOTOCP_FILE,\$offset,SEEK_SET);
 				if (\$size>1024*1024)
 				{
-					return array(\$size,\$myfile,\$offset);
+					return array(\$size,\$DATADOTOCP_FILE,\$offset);
 				}
-				\$data=fread(\$myfile,\$size);
+				\$data=fread(\$DATADOTOCP_FILE,\$size);
 				return \$data;
 			}
 

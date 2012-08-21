@@ -67,7 +67,7 @@ class Hook_cron_calendar
 								if ($to_echo===false) fatal_exit(@strval($php_errormsg));
 							} else
 							{
-								$GLOBALS['event_timestamp']=array_key_exists(0,$recurrences)?usertime_to_utctime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$start_day_of_month,$job['e_start_year']);
+								$GLOBALS['_EVENT_TIMESTAMP']=array_key_exists(0,$recurrences)?usertime_to_utctime($recurrences[0][0]):mktime($job['e_start_hour'],$job['e_start_minute'],0,$job['e_start_month'],$start_day_of_month,$job['e_start_year']);
 
 								// OcCLE code
 								require_code('occle');

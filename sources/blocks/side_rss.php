@@ -99,9 +99,9 @@ class Block_side_rss
 		sort_maps_by($items,'clean_add_date');
 		$items=array_reverse($items);
 
-		global $NEWS_CATS;
-		$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-		$NEWS_CATS=list_to_map('id',$NEWS_CATS);
+		global $NEWS_CATS_CACHE;
+		$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
+		$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
 
 		if (!array_key_exists('title',$rss->gleamed_feed)) $rss->gleamed_feed['title']=do_lang_tempcode('RSS_STREAM');
 		if (array_key_exists('title',$map)) $rss->gleamed_feed['title']=$map['title'];

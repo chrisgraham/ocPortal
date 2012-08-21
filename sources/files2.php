@@ -24,17 +24,38 @@
 function init__files2()
 {
 	global $HTTP_DOWNLOAD_MIME_TYPE,$HTTP_DOWNLOAD_SIZE,$HTTP_DOWNLOAD_URL,$HTTP_MESSAGE,$HTTP_MESSAGE_B,$HTTP_NEW_COOKIES,$HTTP_FILENAME,$HTTP_CHARSET,$HTTP_DOWNLOAD_MTIME;
+	/** The mime type returned from the last file lookup.
+	 * @global ?ID_TEXT $HTTP_DOWNLOAD_MIME_TYPE
+	 */
 	$HTTP_DOWNLOAD_MIME_TYPE=NULL;
+	/** The download size returned from the last file lookup.
+	 * @global ?ID_TEXT $HTTP_DOWNLOAD_SIZE
+	 */
 	$HTTP_DOWNLOAD_SIZE=NULL;
+	/** The redirected URL for the last file lookup.
+	 * @global ?ID_TEXT $HTTP_DOWNLOAD_URL
+	 */
 	$HTTP_DOWNLOAD_URL=NULL;
+	/** The file modification time returned from the last file lookup.
+	 * @global ?ID_TEXT $HTTP_DOWNLOAD_MTIME
+	 */
 	$HTTP_DOWNLOAD_MTIME=NULL;
-	/** The status code returned from the last file lookup (e.g. "200" or "404")
+	/** The status code returned from the last file lookup (e.g. "200" or "404").
 	 * @global string $HTTP_MESSAGE
 	 */
 	$HTTP_MESSAGE=NULL;
 	$HTTP_MESSAGE_B=NULL;
+	/** The cookies returned from the last file lookup.
+	 * @global ?ID_TEXT $HTTP_NEW_COOKIES
+	 */
 	$HTTP_NEW_COOKIES=NULL;
+	/** The filename returned from the last file lookup.
+	 * @global ?ID_TEXT $HTTP_FILENAME
+	 */
 	$HTTP_FILENAME=NULL;
+	/** The character set returned from the last file lookup.
+	 * @global ?ID_TEXT $HTTP_CHARSET
+	 */
 	$HTTP_CHARSET=NULL;
 }
 

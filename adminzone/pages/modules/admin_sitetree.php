@@ -591,8 +591,8 @@ class Module_admin_sitetree
 			if (($zone=='adminzone') && (substr($page,0,6)=='admin_') && (substr($type,0,6)=='module')) continue;
 
 			// We can't move modules we've hard-optimised to be in a certain place
-			global $MODULES_ZONES_DEFAULT;
-			if (array_key_exists($page,$MODULES_ZONES_DEFAULT)) continue;
+			global $MODULES_ZONES_CACHE_DEFAULT;
+			if (array_key_exists($page,$MODULES_ZONES_CACHE_DEFAULT)) continue;
 
 			$fields->attach(form_input_tick($page,do_lang_tempcode('_TYPE',escape_html($type)),'page__'.$page,false));
 		}

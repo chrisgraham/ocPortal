@@ -69,27 +69,47 @@ function init__global2()
 	}
 
 	// Initialise some globals
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING,$DEV_MODE,$SEMI_DEV_MODE;
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY;
 	$RUNNING_SCRIPT_CACHE=array();
-	$BROWSER_DECACHEING=NULL;
-	$CHARSET=NULL;
-	$TEMP_CHARSET=NULL;
-	$CURRENTLY_HTTPS=NULL;
-	$CACHE_FIND_SCRIPT=array();
-	$WHAT_IS_RUNNING=current_script();
-	$WORDS_TO_FILTER=NULL;
+	$BROWSER_DECACHEING_CACHE=NULL;
+	$CHARSET_CACHE=NULL;
+	$TEMP_CHARSET_CACHE=NULL;
+	$CURRENTLY_HTTPS_CACHE=NULL;
+	$FIND_SCRIPT_CACHE=array();
+	$WHAT_IS_RUNNING_CACHE=current_script();
+	$WORDS_TO_FILTER_CACHE=NULL;
 	$FIELD_RESTRICTIONS=NULL;
 	$VALID_ENCODING=false;
 	$CONVERTED_ENCODING=false;
+	/** Whether we are loading up in micro-bootup mode (reduced amount of loading for quicker simple responses).
+	 * @global BINARY $MICRO_BOOTUP
+	 */
 	if (!isset($MICRO_BOOTUP)) $MICRO_BOOTUP=0;
+	/** Whether we are loading up in micro-ajax-bootup mode (reduced amount of loading for quicker simple AJAX responses).
+	 * @global BINARY $MICRO_AJAX_BOOTUP
+	 */
 	if (!isset($MICRO_AJAX_BOOTUP)) $MICRO_AJAX_BOOTUP=0;
+	/** Whether we know input text is in UTF8 because it came from an AJAX call (which is always UTF).
+	 * @global boolean $KNOWN_UTF8
+	 */
+	if (!isset($KNOWN_UTF8)) $KNOWN_UTF8=false;
+	$CACHE_TEMPLATES=true;
+	$IS_VIRTUALISED_REQUEST=false;
+	/** On the quick installer, this presents manifest information about files that exist in the virtual filesystem.
+	 * @global ?array $FILE_ARRAY
+	 */
+	$FILE_ARRAY=NULL;
+	/** On the quick installer, this presents manifest information about directories that exist in the virtual filesystem.
+	 * @global ?array $DIR_ARRAY
+	 */
+	$DIR_ARRAY=NULL;
 
 	// Keep check of our bootstrapping
 	$BOOTSTRAPPING=1;
 	$CHECKING_SAFEMODE=false;
 
 	// Initialise timezones
-	$SERVER_TIMEZONE=@date_default_timezone_get();
+	$SERVER_TIMEZONE_CACHE=@date_default_timezone_get();
 	date_default_timezone_set('UTC');
 
 	// Initialise some error handling
@@ -122,12 +142,6 @@ function init__global2()
 		require_code('developer_tools');
 	}
 
-	// Register basic CSS and Javascript requirements
-	$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
-	if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) $JAVASCRIPTS['javascript_ajax']=1; // AJAX needed by shared installs
-	$CSSS=array('no_cache'=>1,'global'=>1);
-	$CACHE_TEMPLATES=true;
-
 	// Load most basic config
 	/** Whether ocPortal is currently running from the 'minikernel' used during installation
 	 * @global BINARY $IN_MINIKERNEL_VERSION
@@ -141,8 +155,8 @@ function init__global2()
 	}
 
 	// The URL to our install (no trailing /)
-	$BASE_URL_HTTP=NULL;
-	$BASE_URL_HTTPS=NULL;
+	$BASE_URL_HTTP_CACHE=NULL;
+	$BASE_URL_HTTPS_CACHE=NULL;
 
 	require_code_no_override('version');
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0))
@@ -243,10 +257,6 @@ function init__global2()
 	}
 
 	// More things to initialise
-	if ($MICRO_AJAX_BOOTUP==0)
-	{
-		$JAVASCRIPT=new ocp_tempcode();
-	}
 	if ($MICRO_BOOTUP==0)
 	{
 		if (($IN_MINIKERNEL_VERSION!=1) && ($MICRO_AJAX_BOOTUP==0))
@@ -562,15 +572,15 @@ function disable_php_memory_limit()
  */
 function get_charset()
 {
-	global $CHARSET,$XSS_DETECT;
-	if (isset($CHARSET)) return $CHARSET;
+	global $CHARSET_CACHE,$XSS_DETECT;
+	if (isset($CHARSET_CACHE)) return $CHARSET_CACHE;
 
 	global $SITE_INFO;
 	if (isset($SITE_INFO['charset'])) // An optimisation, if you want to put it in here
 	{
-		$CHARSET=$SITE_INFO['charset'];
-		if ($XSS_DETECT) ocp_mark_as_escaped($CHARSET);
-		return $CHARSET;
+		$CHARSET_CACHE=$SITE_INFO['charset'];
+		if ($XSS_DETECT) ocp_mark_as_escaped($CHARSET_CACHE);
+		return $CHARSET_CACHE;
 	}
 
 	global $LANG_LOADED_LANG;
@@ -579,13 +589,13 @@ function get_charset()
 		$attempt=do_lang('charset',NULL,NULL,NULL,NULL,false);
 		if ($attempt!==NULL)
 		{
-			$CHARSET=$attempt;
+			$CHARSET_CACHE=$attempt;
 			return $attempt;
 		}
 	}
 
-	global $TEMP_CHARSET;
-	if (isset($TEMP_CHARSET)) return $TEMP_CHARSET;
+	global $TEMP_CHARSET_CACHE;
+	if (isset($TEMP_CHARSET_CACHE)) return $TEMP_CHARSET_CACHE;
 
 	global $SITE_INFO;
 	$lang=array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN';
@@ -596,8 +606,8 @@ function get_charset()
 		$path=get_file_base().'/lang_custom/'.$lang.'/global.po';
 		if (is_file($path))
 		{
-			$TEMP_CHARSET='utf-8';
-			return $TEMP_CHARSET;
+			$TEMP_CHARSET_CACHE='utf-8';
+			return $TEMP_CHARSET_CACHE;
 		}
 	}
 	if (!is_file($path))
@@ -605,8 +615,8 @@ function get_charset()
 		$path=get_file_base().'/lang_custom/'.$lang.'/global-'.strtolower($lang).'.po';
 		if (is_file($path))
 		{
-			$TEMP_CHARSET='utf-8';
-			return $TEMP_CHARSET;
+			$TEMP_CHARSET_CACHE='utf-8';
+			return $TEMP_CHARSET_CACHE;
 		}
 	}
 	if (!is_file($path)) $path=get_file_base().'/lang/EN/global.ini';
@@ -616,12 +626,12 @@ function get_charset()
 	$matches=array();
 	if (preg_match('#\[strings\].*charset=([\w\-]+)\n#s',$contents,$matches)!=0)
 	{
-		$TEMP_CHARSET=$matches[1];
-		if ($XSS_DETECT) ocp_mark_as_escaped($TEMP_CHARSET);
-		return $TEMP_CHARSET;
+		$TEMP_CHARSET_CACHE=$matches[1];
+		if ($XSS_DETECT) ocp_mark_as_escaped($TEMP_CHARSET_CACHE);
+		return $TEMP_CHARSET_CACHE;
 	}
-	$TEMP_CHARSET='utf-8';
-	return $TEMP_CHARSET;
+	$TEMP_CHARSET_CACHE='utf-8';
+	return $TEMP_CHARSET_CACHE;
 }
 
 /**
@@ -776,8 +786,8 @@ function ocp_memory_profile_2($id,&$struct)
  */
 function is_browser_decacheing()
 {
-	global $BROWSER_DECACHEING;
-	if ($BROWSER_DECACHEING!==NULL) return $BROWSER_DECACHEING;
+	global $BROWSER_DECACHEING_CACHE;
+	if ($BROWSER_DECACHEING_CACHE!==NULL) return $BROWSER_DECACHEING_CACHE;
 
 	if (is_null(get_value('ran_once')))
 	{
@@ -785,8 +795,8 @@ function is_browser_decacheing()
 		return true;
 	}
 	$header_method=(array_key_exists('HTTP_CACHE_CONTROL',$_SERVER)) && ($_SERVER['HTTP_CACHE_CONTROL']=='no-cache') && (ocp_srv('REQUEST_METHOD')!='POST') && ((!function_exists('browser_matches')) || (!browser_matches('opera')));
-	$BROWSER_DECACHEING=(($header_method) && ((array_key_exists('FORUM_DRIVER',$GLOBALS)) && (has_actual_page_access(get_member(),'admin_cleanup')) || ($GLOBALS['IS_ACTUALLY_ADMIN'])));
-	return $BROWSER_DECACHEING;
+	$BROWSER_DECACHEING_CACHE=(($header_method) && ((array_key_exists('FORUM_DRIVER',$GLOBALS)) && (has_actual_page_access(get_member(),'admin_cleanup')) || ($GLOBALS['IS_ACTUALLY_ADMIN'])));
+	return $BROWSER_DECACHEING_CACHE;
 }
 
 /**
@@ -797,13 +807,13 @@ function is_browser_decacheing()
 function current_script()
 {
 	// Strip down current URL so we can do a simple compare
-	global $WHAT_IS_RUNNING;
-	if ($WHAT_IS_RUNNING===NULL)
+	global $WHAT_IS_RUNNING_CACHE;
+	if ($WHAT_IS_RUNNING_CACHE===NULL)
 	{
 		$stripped_current_url=preg_replace('#^.*/#','',function_exists('ocp_srv')?ocp_srv('PHP_SELF'):$_SERVER['PHP_SELF']);
-		$WHAT_IS_RUNNING=substr($stripped_current_url,0,strpos($stripped_current_url,'.'));
+		$WHAT_IS_RUNNING_CACHE=substr($stripped_current_url,0,strpos($stripped_current_url,'.'));
 	}
-	return $WHAT_IS_RUNNING;
+	return $WHAT_IS_RUNNING_CACHE;
 }
 
 /**
@@ -1089,13 +1099,13 @@ function find_script($name,$append_keep=false,$base_url_code=0)
 		$append.=$keep->evaluate();
 	}
 
-	global $CACHE_FIND_SCRIPT;
-	if ($CACHE_FIND_SCRIPT===array())
+	global $FIND_SCRIPT_CACHE;
+	if ($FIND_SCRIPT_CACHE===array())
 	{
-		if (function_exists('persistent_cache_get')) $CACHE_FIND_SCRIPT=persistent_cache_get('SCRIPT_PLACES');
-		if ($CACHE_FIND_SCRIPT===NULL) $CACHE_FIND_SCRIPT=array();
+		if (function_exists('persistent_cache_get')) $FIND_SCRIPT_CACHE=persistent_cache_get('SCRIPT_PLACES');
+		if ($FIND_SCRIPT_CACHE===NULL) $FIND_SCRIPT_CACHE=array();
 	}
-	if (isset($CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code])) return $CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code].$append;
+	if (isset($FIND_SCRIPT_CACHE[$name][$append_keep][$base_url_code])) return $FIND_SCRIPT_CACHE[$name][$append_keep][$base_url_code].$append;
 
 	$zones=array(get_zone_name());
 	if (!in_safe_mode())
@@ -1111,15 +1121,15 @@ function find_script($name,$append_keep=false,$base_url_code=0)
 			if (is_file(get_file_base().'/'.$zone.'/'.$name.'.php'))
 			{
 				$ret=get_base_url().'/'.$zone.(($zone!='')?'/':'').$name.'.php';
-				$CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code]=$ret;
-				if (function_exists('persistent_cache_set')) persistent_cache_set('SCRIPT_PLACES',$CACHE_FIND_SCRIPT,true);
+				$FIND_SCRIPT_CACHE[$name][$append_keep][$base_url_code]=$ret;
+				if (function_exists('persistent_cache_set')) persistent_cache_set('SCRIPT_PLACES',$FIND_SCRIPT_CACHE,true);
 				return $ret.$append;
 			}
 		}
 	}
 	$ret=get_base_url(($base_url_code==0)?NULL:($base_url_code==2)).'/site/'.$name.'.php';
-	$CACHE_FIND_SCRIPT[$name][$append_keep][$base_url_code]=$ret;
-	if (function_exists('persistent_cache_set')) persistent_cache_set('SCRIPT_PLACES',$CACHE_FIND_SCRIPT,true);
+	$FIND_SCRIPT_CACHE[$name][$append_keep][$base_url_code]=$ret;
+	if (function_exists('persistent_cache_set')) persistent_cache_set('SCRIPT_PLACES',$FIND_SCRIPT_CACHE,true);
 	return $ret.$append;
 }
 
@@ -1134,8 +1144,8 @@ function get_base_url($https=NULL,$zone_for=NULL)
 {
 	if ($https===NULL) // If we don't know, we go by what the current page is
 	{
-		global $CURRENTLY_HTTPS;
-		$https=$CURRENTLY_HTTPS;
+		global $CURRENTLY_HTTPS_CACHE;
+		$https=$CURRENTLY_HTTPS_CACHE;
 		if ($https===NULL)
 		{
 			if ((get_option('enable_https',true)=='0') || (!running_script('index')))
@@ -1145,20 +1155,20 @@ function get_base_url($https=NULL,$zone_for=NULL)
 			{
 				$https=function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name()));
 			}
-			$CURRENTLY_HTTPS=$https;
+			$CURRENTLY_HTTPS_CACHE=$https;
 		}
 	}
 
-	global $BASE_URL_HTTP,$BASE_URL_HTTPS,$VIRTUALISED_ZONES;
+	global $BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$VIRTUALISED_ZONES_CACHE;
 
-	if ($VIRTUALISED_ZONES===NULL)
+	if ($VIRTUALISED_ZONES_CACHE===NULL)
 	{
 		require_code('zones');
 		get_zone_name();
 	}
 
-	if (($BASE_URL_HTTP!==NULL) && (!$https) && ((!$VIRTUALISED_ZONES) || ($zone_for===NULL))) return $BASE_URL_HTTP.(($zone_for=='')?'':('/'.$zone_for));
-	if (($BASE_URL_HTTPS!==NULL) && ($https) && ((!$VIRTUALISED_ZONES) || ($zone_for===NULL))) return $BASE_URL_HTTPS.(($zone_for=='')?'':('/'.$zone_for));
+	if (($BASE_URL_HTTP_CACHE!==NULL) && (!$https) && ((!$VIRTUALISED_ZONES_CACHE) || ($zone_for===NULL))) return $BASE_URL_HTTP_CACHE.(($zone_for=='')?'':('/'.$zone_for));
+	if (($BASE_URL_HTTPS_CACHE!==NULL) && ($https) && ((!$VIRTUALISED_ZONES_CACHE) || ($zone_for===NULL))) return $BASE_URL_HTTPS_CACHE.(($zone_for=='')?'':('/'.$zone_for));
 
 	global $SITE_INFO;
 	if ((!isset($SITE_INFO)) || (!array_key_exists('base_url',$SITE_INFO)) || ($SITE_INFO['base_url']=='')) // Try and autodetect the base URL if it's not configured
@@ -1178,7 +1188,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		$base_url=preg_replace('#^http://([\w]+\.)?'.preg_quote($SITE_INFO['custom_share_domain'],'#').'#','http://'.ocp_srv('HTTP_HOST'),$base_url);
 	}
 	$found_mapping=false;
-	if ($VIRTUALISED_ZONES)
+	if ($VIRTUALISED_ZONES_CACHE)
 	{
 		$zone_doing=($zone_for===NULL)?'':str_replace('/','',$zone_for);
 
@@ -1195,8 +1205,8 @@ function get_base_url($https=NULL,$zone_for=NULL)
 	if ($https)
 	{
 		$base_url='https://'.preg_replace('#^\w*://#','',$base_url);
-		if ((!$VIRTUALISED_ZONES) || ($zone_for===NULL)) $BASE_URL_HTTPS=$base_url;
-	} elseif ((!$VIRTUALISED_ZONES) || ($zone_for===NULL)) $BASE_URL_HTTP=$base_url;
+		if ((!$VIRTUALISED_ZONES_CACHE) || ($zone_for===NULL)) $BASE_URL_HTTPS_CACHE=$base_url;
+	} elseif ((!$VIRTUALISED_ZONES_CACHE) || ($zone_for===NULL)) $BASE_URL_HTTP_CACHE=$base_url;
 
 	if (!$found_mapping)
 	{
@@ -1704,6 +1714,8 @@ function javascript_tempcode($position=NULL)
 /**
  * Make sure that the given javascript file is loaded up.
  *
+ * @sets_output_state
+ *
  * @param  ID_TEXT		The javascript file required
  */
 function require_javascript($javascript)
@@ -1859,6 +1871,8 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 
 /**
  * Make sure that the given CSS file is loaded up.
+ *
+ * @sets_output_state
  *
  * @param  ID_TEXT		The CSS file required
  */

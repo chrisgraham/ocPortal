@@ -505,11 +505,11 @@ class Module_news
 		$truncate=true;
 		$member_based=($blog===1);
 
-		global $NEWS_CATS;
-		if (!isset($NEWS_CATS))
+		global $NEWS_CATS_CACHE;
+		if (!isset($NEWS_CATS_CACHE))
 		{
-			$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-			$NEWS_CATS=list_to_map('id',$NEWS_CATS);
+			$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
+			$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
 		}
 
 		foreach ($rows as $myrow)
@@ -527,16 +527,16 @@ class Module_news
 				$_title_plain=get_translated_text($myrow['title']);
 				$author_url=((addon_installed('authors')) && (!$member_based))?build_url(array('page'=>'authors','type'=>'misc','id'=>$myrow['author'])+propagate_ocselect(),get_module_zone('authors')):new ocp_tempcode();
 				$author=$myrow['author'];
-				if (!array_key_exists($myrow['news_category'],$NEWS_CATS))
+				if (!array_key_exists($myrow['news_category'],$NEWS_CATS_CACHE))
 				{
 					$_news_cats=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>$myrow['news_category']),'',1);
 					if (array_key_exists(0,$_news_cats))
-						$NEWS_CATS[$myrow['news_category']]=$_news_cats[0];
+						$NEWS_CATS_CACHE[$myrow['news_category']]=$_news_cats[0];
 				}
-				if (array_key_exists($myrow['news_category'],$NEWS_CATS))
+				if (array_key_exists($myrow['news_category'],$NEWS_CATS_CACHE))
 				{
-					$category=get_translated_text($NEWS_CATS[$myrow['news_category']]['nc_title']);
-					$img=find_theme_image($NEWS_CATS[$myrow['news_category']]['nc_img']);
+					$category=get_translated_text($NEWS_CATS_CACHE[$myrow['news_category']]['nc_title']);
+					$img=find_theme_image($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']);
 				} else
 				{
 					$category='';
@@ -732,14 +732,14 @@ class Module_news
 
 		$categories=array(strval($myrow['news_category'])=>$category);
 		$all_categories_for_this=$GLOBALS['SITE_DB']->query_select('news_category_entries',array('*'),array('news_entry'=>$id));
-		$NEWS_CATS=array();
+		$NEWS_CATS_CACHE=array();
 		foreach ($all_categories_for_this as $category_for_this)
 		{
 			if (!array_key_exists($category_for_this['news_entry_category'],$news_cats))
 			{
 				$_news_cats=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>$category_for_this['news_entry_category']),'',1);
 				if (array_key_exists(0,$_news_cats))
-					$NEWS_CATS[$category_for_this['news_entry_category']]=$_news_cats[0];
+					$NEWS_CATS_CACHE[$category_for_this['news_entry_category']]=$_news_cats[0];
 			}
 
 			if (array_key_exists($category_for_this['news_entry_category'],$news_cats))

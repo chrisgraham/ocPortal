@@ -577,7 +577,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 			$base_dir=get_file_base().'/themes/';
 	}
 
-	global $CACHE_TEMPLATES,$FILE_ARRAY,$TEMPLATE_PREVIEW_OP,$MEM_CACHE;
+	global $CACHE_TEMPLATES,$FILE_ARRAY,$IS_TEMPLATE_PREVIEW_OP_CACHE,$MEM_CACHE;
 
 	if (isset($FILE_ARRAY))
 	{
@@ -595,14 +595,14 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 		$html=substr($html,0,strlen($html)-1);
 	}
 
-	if ($TEMPLATE_PREVIEW_OP)
+	if ($IS_TEMPLATE_PREVIEW_OP_CACHE)
 	{
 		$test=post_param($codename,NULL);
 		if (!is_null($test)) $html=post_param($test.'_new');
 	}
 
 	$result=template_to_tempcode($html,0,false,($suffix!='.tpl')?'':$codename,$theme_orig,$lang);
-	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP) && (($suffix=='.tpl') || ($codename=='no_cache')))
+	if (($CACHE_TEMPLATES) && (!$IS_TEMPLATE_PREVIEW_OP_CACHE) && (($suffix=='.tpl') || ($codename=='no_cache')))
 	{
 		$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang).'/';
 		$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcp','wb');

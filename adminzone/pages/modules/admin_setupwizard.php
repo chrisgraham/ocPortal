@@ -680,7 +680,7 @@ class Module_admin_setupwizard
 			require_code('themewizard');
 
 			// Make theme
-			global $IMG_CODES;
+			global $THEME_IMAGES_CACHE;
 			$old_img_codes_site=$GLOBALS['SITE_DB']->query_select('theme_images',array('id','path'),array('theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'lang'=>user_lang()));
 			if (!file_exists(get_custom_file_base().'/themes/'.$theme))
 			{
@@ -707,7 +707,7 @@ class Module_admin_setupwizard
 			if (fwrite($myfile,'author=ocPortal'.chr(10))==0) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 			fclose($myfile);
 			sync_file(get_custom_file_base().'/themes/'.filter_naughty($theme).'/theme.ini');
-			$IMG_CODES['site']=$old_img_codes_site; // Just so it renders with the old theme
+			$THEME_IMAGES_CACHE['site']=$old_img_codes_site; // Just so it renders with the old theme
 		}
 
 		// Set options

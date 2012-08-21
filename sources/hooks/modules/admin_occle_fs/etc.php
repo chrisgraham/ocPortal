@@ -31,12 +31,12 @@ class Hook_etc
 	 */
 	function listing($meta_dir,$meta_root_node,$current_dir,&$occle_fs)
 	{
-		global $OPTIONS;
+		global $CONFIG_OPTIONS_CACHE;
 
 		if (count($meta_dir)>0) return false; // Directory doesn't exist
 		load_options();
 
-		$ret=array_keys($OPTIONS);
+		$ret=array_keys($CONFIG_OPTIONS_CACHE);
 
 		return $ret;
 	}
@@ -115,8 +115,8 @@ class Hook_etc
 		require_code('config2');
 
 		if (count($meta_dir)>0) return false; // Directory doesn't exist
-		global $OPTIONS;
-		if (!array_key_exists($file_name,$OPTIONS)) return false;
+		global $CONFIG_OPTIONS_CACHE;
+		if (!array_key_exists($file_name,$CONFIG_OPTIONS_CACHE)) return false;
 		set_option($file_name,$contents);
 		return true;
 	}

@@ -23,10 +23,10 @@
  */
 function init__galleries()
 {
-	global $GALLERY_ENTRIES_CATS_USED;
-	$GALLERY_ENTRIES_CATS_USED=NULL;
-	global $GALLERY_PAIRS;
-	$GALLERY_PAIRS=NULL;
+	global $GALLERY_ENTRIES_CATS_USED_CACHE;
+	$GALLERY_ENTRIES_CATS_USED_CACHE=NULL;
+	global $GALLERY_PAIRS_CACHE;
+	$GALLERY_PAIRS_CACHE=NULL;
 	global $PT_PAIR_CACHE_G;
 	$PT_PAIR_CACHE_G=array();
 }
@@ -120,41 +120,41 @@ function gallery_has_content($name)
 {
 	$num_galleries=NULL;
 
-	global $GALLERY_ENTRIES_CATS_USED;
-	if (is_null($GALLERY_ENTRIES_CATS_USED))
+	global $GALLERY_ENTRIES_CATS_USED_CACHE;
+	if (is_null($GALLERY_ENTRIES_CATS_USED_CACHE))
 	{
 		$num_galleries=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 
-		$GALLERY_ENTRIES_CATS_USED=array();
+		$GALLERY_ENTRIES_CATS_USED_CACHE=array();
 		$images_cats=$GLOBALS['SITE_DB']->query_select('images',array('DISTINCT cat'),($num_galleries<300)?array('validated'=>1):array('validated'=>1,'cat'=>$name));
 		foreach ($images_cats as $images_cat)
-			$GALLERY_ENTRIES_CATS_USED[$images_cat['cat']]=1;
+			$GALLERY_ENTRIES_CATS_USED_CACHE[$images_cat['cat']]=1;
 		$videos_cats=$GLOBALS['SITE_DB']->query_select('videos',array('DISTINCT cat'),($num_galleries<300)?array('validated'=>1):array('validated'=>1,'cat'=>$name));
 		foreach ($videos_cats as $videos_cat)
-			$GALLERY_ENTRIES_CATS_USED[$videos_cat['cat']]=1;
+			$GALLERY_ENTRIES_CATS_USED_CACHE[$videos_cat['cat']]=1;
 	}
-	if (array_key_exists($name,$GALLERY_ENTRIES_CATS_USED))
+	if (array_key_exists($name,$GALLERY_ENTRIES_CATS_USED_CACHE))
 	{
-		if ($num_galleries>=300) $GALLERY_ENTRIES_CATS_USED=NULL; // It's not right so reset it
+		if ($num_galleries>=300) $GALLERY_ENTRIES_CATS_USED_CACHE=NULL; // It's not right so reset it
 		return true;
 	}
-	if ($num_galleries>=300) $GALLERY_ENTRIES_CATS_USED=NULL; // It's not right so reset it
+	if ($num_galleries>=300) $GALLERY_ENTRIES_CATS_USED_CACHE=NULL; // It's not right so reset it
 
-	global $GALLERY_PAIRS;
-	if (is_null($GALLERY_PAIRS))
+	global $GALLERY_PAIRS_CACHE;
+	if (is_null($GALLERY_PAIRS_CACHE))
 	{
 		if (is_null($num_galleries))
 			$num_galleries=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 
 		if ($num_galleries<300)
 		{
-			$GALLERY_PAIRS=collapse_2d_complexity('name','parent_id',$GLOBALS['SITE_DB']->query_select('galleries',array('name','parent_id')));
+			$GALLERY_PAIRS_CACHE=collapse_2d_complexity('name','parent_id',$GLOBALS['SITE_DB']->query_select('galleries',array('name','parent_id')));
 		} else
 		{
 			return !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('parent_id'=>$name)));
 		}
 	}
-	foreach ($GALLERY_PAIRS as $_parent_id)
+	foreach ($GALLERY_PAIRS_CACHE as $_parent_id)
 	{
 		if ($_parent_id==$name) return true;
 	}

@@ -51,10 +51,12 @@ class Hook_block
 		// Cleanup
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'temp_block_permissions WHERE p_time<'.strval(60*60*intval(get_option('session_expiry_time'))));
 
-		// Return block snippet
+		// We need to minimise the dependency stuff that comes out, we don't need any default values
 		global $CSSS,$JAVASCRIPTS;
 		$CSSS=array();
 		$JAVASCRIPTS=array();
+
+		// And, go
 		$out=new ocp_tempcode();
 		$out->attach(symbol_tempcode('CSS_TEMPCODE'));
 		$out->attach(symbol_tempcode('JS_TEMPCODE'));

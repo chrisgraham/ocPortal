@@ -64,11 +64,11 @@ function init__database__xml()
 	$SCHEMA_CACHE=array();
 	$DIR_CONTENTS_CACHE=array();
 
-	global $DELIMITERS_FLIPPED,$DELIMITERS,$SYMBOL_DELIMINITER,$DELIMITERS_ALPHA;
+	global $DELIMITERS_FLIPPED,$DELIMITERS,$SYMBOL_DELIMITER,$DELIMITERS_ALPHA;
 	$DELIMITERS=array_merge(array("\t",' ',"\n"),_get_sql_keywords());
 	sort($DELIMITERS);
 	$DELIMITERS_FLIPPED=array_flip($DELIMITERS);
-	$SYMBOL_DELIMINITER=array_flip(array("\t",' ',"\n",'+','-','*','/','>','<','=',"'",'"',"\\'",'(',')',','));
+	$SYMBOL_DELIMITER=array_flip(array("\t",' ',"\n",'+','-','*','/','>','<','=',"'",'"',"\\'",'(',')',','));
 	foreach ($DELIMITERS as $d)
 	{
 		if (!isset($DELIMITERS_ALPHA[$d[0]])) $DELIMITERS_ALPHA[$d[0]]=array();
@@ -459,7 +459,7 @@ class Database_Static_xml
 	 */
 	function db_query($query,$db,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false,$no_syndicate=false,$save_as_volatile=false)
 	{
-		global $DELIMITERS_FLIPPED,$DELIMITERS,$SYMBOL_DELIMINITER;
+		global $DELIMITERS_FLIPPED,$DELIMITERS,$SYMBOL_DELIMITER;
 
 		// LEXING STAGE
 		// ------------
@@ -518,7 +518,7 @@ class Database_Static_xml
 				$doing_symbol_delimiter=true;
 			} else
 			{
-				$symbol_delimiter_coming=((isset($SYMBOL_DELIMINITER[$next])) && ((isset($DELIMITERS_FLIPPED[$next])) || (($i+1<$len) && (isset($DELIMITERS_FLIPPED[$next.$query[$i+1]]))))); //  (NB: symbol delimiters are a maximum of two in length)
+				$symbol_delimiter_coming=((isset($SYMBOL_DELIMITER[$next])) && ((isset($DELIMITERS_FLIPPED[$next])) || (($i+1<$len) && (isset($DELIMITERS_FLIPPED[$next.$query[$i+1]]))))); //  (NB: symbol delimiters are a maximum of two in length)
 				if ( /*When token ends, which is..*/
 					($symbol_delimiter_coming || $doing_symbol_delimiter) /*Case of toggling from symbol to text or vice-versa and we find a delimitor is coming. When symbol delimiter arrives or we are doing a symbol deliminator */
 					&&
@@ -536,11 +536,11 @@ class Database_Static_xml
 						}
 					}
 					$current_token=$next;
-					$doing_symbol_delimiter=(isset($SYMBOL_DELIMINITER[$next]));
+					$doing_symbol_delimiter=(isset($SYMBOL_DELIMITER[$next]));
 				} else
 				{
 					$current_token.=$next;
-					if ($doing_symbol_delimiter) $doing_symbol_delimiter=isset($SYMBOL_DELIMINITER[$next]);
+					if ($doing_symbol_delimiter) $doing_symbol_delimiter=isset($SYMBOL_DELIMITER[$next]);
 				}
 			}
 

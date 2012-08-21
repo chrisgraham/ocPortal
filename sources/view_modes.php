@@ -62,8 +62,8 @@ function initialise_special_page_types($special_page_type)
 	}
 	elseif ($special_page_type=='theme_images')
 	{
-		global $RECORD_IMG_CODES;
-		$RECORD_IMG_CODES=true;
+		global $RECORD_THEME_IMAGES_CACHE;
+		$RECORD_THEME_IMAGES_CACHE=true;
 	}
 	elseif ($special_page_type=='ide_linkage')
 	{
@@ -98,9 +98,9 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 	// FUDGE: Yuck. We have to after-the-fact make it wide, and empty lots of internal caching to reset the state.
 	$_GET['wide_high']='1';
 	$_GET['wide']='1';
-	$GLOBALS['LOADED_PANELS']=array();
-	$GLOBALS['IS_WIDE_HIGH']=1;
-	$GLOBALS['IS_WIDE']=1;
+	$GLOBALS['PANELS_CACHE']=array();
+	$GLOBALS['IS_WIDE_HIGH_CACHE']=1;
+	$GLOBALS['IS_WIDE_CACHE']=1;
 	$GLOBALS['TEMPCODE_SETGET']=array();
 	$GLOBALS['LOADED_TPL_CACHE']=array();
 	$GLOBALS['HELPER_PANEL_PIC']=NULL;
@@ -197,8 +197,8 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 
 		$theme_images=new ocp_tempcode();
 
-		global $RECORDED_IMG_CODES;
-		foreach (array_keys($RECORDED_IMG_CODES) as $theme_image_details)
+		global $RECORDED_THEME_IMAGES;
+		foreach (array_keys($RECORDED_THEME_IMAGES) as $theme_image_details)
 		{
 			list($id,$theme,$lang)=unserialize($theme_image_details);
 

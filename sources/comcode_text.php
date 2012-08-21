@@ -118,8 +118,8 @@ function init__comcode_text()
 	//$ALLOWED_ENTITIES=array('raquo'=>1,'frac14'=>1,'frac12'=>1,'frac34'=>1,'ndash'=>1,'mdash'=>1,'ldquo'=>1,'rdquo'=>1);
 	$ALLOWED_ENTITIES=array('OElig'=>1,'oelig'=>1,'Scaron'=>1,'scaron'=>1,'Yuml'=>1,'circ'=>1,'tilde'=>1,'ensp'=>1,'emsp'=>1,'thinsp'=>1,'zwnj'=>1,'zwj'=>1,'lrm'=>1,'rlm'=>1,'ndash'=>1,'mdash'=>1,'lsquo'=>1,'rsquo'=>1,'sbquo'=>1,'ldquo'=>1,'rdquo'=>1,'bdquo'=>1,'dagger'=>1,'Dagger'=>1,'hellip'=>1,'permil'=>1,'lsaquo'=>1,'rsaquo'=>1,'euro'=>1,'Agrave'=>1,'Aacute'=>1,'Acirc'=>1,'Atilde'=>1,'Auml'=>1,'Aring'=>1,'AElig'=>1,'Ccedil'=>1,'Egrave'=>1,'Eacute'=>1,'Ecirc'=>1,'Euml'=>1,'Igrave'=>1,'Iacute'=>1,'Icirc'=>1,'Iuml'=>1,'ETH'=>1,'Ntilde'=>1,'Ograve'=>1,'Oacute'=>1,'Ocirc'=>1,'Otilde'=>1,'Ouml'=>1,'Oslash'=>1,'Ugrave'=>1,'Uacute'=>1,'Ucirc'=>1,'Uuml'=>1,'Yacute'=>1,'THORN'=>1,'szlig'=>1,'agrave'=>1,'aacute'=>1,'acirc'=>1,'atilde'=>1,'auml'=>1,'aring'=>1,'aelig'=>1,'ccedil'=>1,'egrave'=>1,'eacute'=>1,'ecirc'=>1,'euml'=>1,'igrave'=>1,'iacute'=>1,'icirc'=>1,'iuml'=>1,'eth'=>1,'ntilde'=>1,'ograve'=>1,'oacute'=>1,'ocirc'=>1,'otilde'=>1,'ouml'=>1,'oslash'=>1,'ugrave'=>1,'uacute'=>1,'ucirc'=>1,'uuml'=>1,'yacute'=>1,'thorn'=>1,'yuml'=>1,'nbsp'=>1,'iexcl'=>1,'curren'=>1,'cent'=>1,'pound'=>1,'yen'=>1,'brvbar'=>1,'sect'=>1,'uml'=>1,'copy'=>1,'ordf'=>1,'laquo'=>1,'not'=>1,'shy'=>1,'reg'=>1,'trade'=>1,'macr'=>1,'deg'=>1,'plusmn'=>1,'sup2'=>1,'sup3'=>1,'acute'=>1,'micro'=>1,'para'=>1,'middot'=>1,'cedil'=>1,'sup1'=>1,'ordm'=>1,'raquo'=>1,'frac14'=>1,'frac12'=>1,'frac34'=>1,'iquest'=>1,'times'=>1,'divide'=>1,'amp'=>1,'lt'=>1,'gt'=>1,'quot'=>1);
 
-	global $ADVERTISING_BANNERS;
-	$ADVERTISING_BANNERS=NULL;
+	global $ADVERTISING_BANNERS_CACHE;
+	$ADVERTISING_BANNERS_CACHE=NULL;
 
 	global $NO_LINK_TITLES;
 	$NO_LINK_TITLES=false;
@@ -145,7 +145,7 @@ function init__comcode_text()
  */
 function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits=NULL,$on_behalf_of_member=NULL)
 {
-	global $ADVERTISING_BANNERS,$ALLOWED_ENTITIES,$POTENTIALLY_EMPTY_TAGS,$CODE_TAGS,$REVERSABLE_TAGS,$PUREHTML_TAGS,$DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$POTENTIAL_JS_NAUGHTY_ARRAY,$TEXTUAL_TAGS,$LEET_FILTER,$IMPORTED_CUSTOM_COMCODE,$REPLACE_TARGETS;
+	global $ADVERTISING_BANNERS_CACHE,$ALLOWED_ENTITIES,$POTENTIALLY_EMPTY_TAGS,$CODE_TAGS,$REVERSABLE_TAGS,$PUREHTML_TAGS,$DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$POTENTIAL_JS_NAUGHTY_ARRAY,$TEXTUAL_TAGS,$LEET_FILTER,$IMPORTED_CUSTOM_COMCODE;
 
 	$wml=false; // removed feature from ocPortal now
 	$print_mode=get_param_integer('wide_print',0)==1;
@@ -199,8 +199,8 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 	$none_wrap_length=0;
 	$just_new_line=true; // So we can detect lists starting right away
 	$just_title=false;
-	global $NUM_LINES;
-	$NUM_LINES=0;
+	global $NUM_COMCODE_LINES_PARSED;
+	$NUM_COMCODE_LINES_PARSED=0;
 	$queued_tempcode=new ocp_tempcode();
 	$mindless_mode=false; // If we're doing a semi parse mode and going over a tag we don't actually process
 	$tag_raw='';
@@ -338,7 +338,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 				if ((($in_html) || ((($in_semihtml) && (!$in_code_tag)) && (($next=='<') || ($next=='>') || ($next=='"')))))
 				{
-					if ($next==chr(10)) ++$NUM_LINES;
+					if ($next==chr(10)) ++$NUM_COMCODE_LINES_PARSED;
 
 					if ((!$comcode_dangerous_html) && ($next=='<')) // Special filtering required
 					{
@@ -451,7 +451,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 									{
 										if ($scan_next==chr(10))
 										{
-											++$NUM_LINES;
+											++$NUM_COMCODE_LINES_PARSED;
 											break;
 										} else $found_rule=false;
 									}
@@ -535,7 +535,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 					}
 					if (($next==chr(10)) && ($white_space_area) && (!$in_semihtml) && ((!$just_ended) || ($semiparse_mode) || (substr($comcode,$pos,3)==' - '))) // Hard-new-lines
 					{
-						++$NUM_LINES;
+						++$NUM_COMCODE_LINES_PARSED;
 						$line_starting=true;
 						if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
 						$tag_output->attach($continuation);
@@ -1005,7 +1005,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 								if ((!$differented) && (!$semiparse_mode) && (!$in_code_tag) && (addon_installed('banners')) && (($b_all) || (!has_privilege($source_member,'banner_free'))))
 								{
 									// Pick up correctly, including permission filtering
-									if (is_null($ADVERTISING_BANNERS))
+									if (is_null($ADVERTISING_BANNERS_CACHE))
 									{
 										$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'banners b LEFT JOIN '.get_table_prefix().'banner_types t ON b.b_type=t.id WHERE t_comcode_inline=1 AND '.db_string_not_equal_to('b_title_text',''),NULL,NULL,true);
 										if (!is_null($rows))
@@ -1027,20 +1027,20 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 												}
 											}
 
-											$ADVERTISING_BANNERS=array();
+											$ADVERTISING_BANNERS_CACHE=array();
 											foreach ($rows as $row)
 											{
 												$trigger_text=$row['b_title_text'];
 												foreach (explode(',',$trigger_text) as $t)
-													if (trim($t)!='') $ADVERTISING_BANNERS[trim($t)]=$row;
+													if (trim($t)!='') $ADVERTISING_BANNERS_CACHE[trim($t)]=$row;
 											}
 										}
 									}
 
 									// Apply
-									if (!is_null($ADVERTISING_BANNERS))
+									if (!is_null($ADVERTISING_BANNERS_CACHE))
 									{
-										foreach ($ADVERTISING_BANNERS as $ad_trigger=>$ad_bits)
+										foreach ($ADVERTISING_BANNERS_CACHE as $ad_trigger=>$ad_bits)
 										{
 											if (strtolower($next)==strtolower($ad_trigger[0])) // optimisation
 											{
@@ -1393,7 +1393,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						{
 							if ((strlen($comcode)>$pos+1) && ($comcode[$pos]==chr(10)) && ($comcode[$pos+1]==chr(10))) // Linux newline
 							{
-								$NUM_LINES+=2;
+								$NUM_COMCODE_LINES_PARSED+=2;
 								$pos+=2;
 								$just_new_line=true;
 							}
@@ -1782,8 +1782,8 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
 	if (($block_tag) && ($pos<$len) && ($comcode[$pos]==chr(10)))
 	{
 		++$pos;
-		global $NUM_LINES;
-		++$NUM_LINES;
+		global $NUM_COMCODE_LINES_PARSED;
+		++$NUM_COMCODE_LINES_PARSED;
 	}
 
 	$tag_output=new ocp_tempcode();

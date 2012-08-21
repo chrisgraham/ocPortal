@@ -369,40 +369,40 @@ class forum_driver_base
 			return $this->get_theme();
 		}
 
-		global $CACHED_THEME;
-		if ($CACHED_THEME!==NULL) return $CACHED_THEME;
+		global $USER_THEME_CACHE;
+		if ($USER_THEME_CACHE!==NULL) return $USER_THEME_CACHE;
 
 		global $IN_MINIKERNEL_VERSION;
 		if (($IN_MINIKERNEL_VERSION==1) || (in_safe_mode())) return 'default';
 
 		// Try hardcoded in URL
-		$CACHED_THEME=filter_naughty(get_param('keep_theme',get_param('utheme','-1')));
-		if ($CACHED_THEME!='-1')
+		$USER_THEME_CACHE=filter_naughty(get_param('keep_theme',get_param('utheme','-1')));
+		if ($USER_THEME_CACHE!='-1')
 		{
-			if ((!is_dir(get_file_base().'/themes/'.$CACHED_THEME)) && (!is_dir(get_custom_file_base().'/themes/'.$CACHED_THEME)))
+			if ((!is_dir(get_file_base().'/themes/'.$USER_THEME_CACHE)) && (!is_dir(get_custom_file_base().'/themes/'.$USER_THEME_CACHE)))
 			{
-				$theme=$CACHED_THEME;
-				$CACHED_THEME='default';
+				$theme=$USER_THEME_CACHE;
+				$USER_THEME_CACHE='default';
 				require_code('site');
 				attach_message(do_lang_tempcode('NO_SUCH_THEME',escape_html($theme)),'warn');
-				$CACHED_THEME=NULL;
+				$USER_THEME_CACHE=NULL;
 			} else
 			{
 				global $ZONE;
 				$zone_theme=($ZONE===NULL)?$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_theme',array('zone_name'=>get_zone_name())):$ZONE['zone_theme'];
 
-				if (($CACHED_THEME=='default') || ($CACHED_THEME==$zone_theme) || (has_category_access(get_member(),'theme',$CACHED_THEME)))
+				if (($USER_THEME_CACHE=='default') || ($USER_THEME_CACHE==$zone_theme) || (has_category_access(get_member(),'theme',$USER_THEME_CACHE)))
 				{
-					return $CACHED_THEME;
+					return $USER_THEME_CACHE;
 				} else
 				{
-					$theme=$CACHED_THEME;
-					$CACHED_THEME='default';
+					$theme=$USER_THEME_CACHE;
+					$USER_THEME_CACHE='default';
 					attach_message(do_lang_tempcode('NO_THEME_PERMISSION',escape_html($theme)),'warn');
-					$CACHED_THEME=NULL;
+					$USER_THEME_CACHE=NULL;
 				}
 			}
-		} else $CACHED_THEME=NULL;
+		} else $USER_THEME_CACHE=NULL;
 
 		// Try hardcoded in ocPortal
 		global $ZONE;
@@ -417,25 +417,25 @@ class forum_driver_base
 		}
 		if ($default_theme!='-1')
 		{
-			$CACHED_THEME=$default_theme;
-			if ($CACHED_THEME=='') $CACHED_THEME='default';
-			return $CACHED_THEME;
+			$USER_THEME_CACHE=$default_theme;
+			if ($USER_THEME_CACHE=='') $USER_THEME_CACHE='default';
+			return $USER_THEME_CACHE;
 		}
 		if ($default_theme=='-1') $default_theme='default';
 
 		// Get from forums
-		$CACHED_THEME=filter_naughty($this->_get_theme());
-		if (($CACHED_THEME=='') || (($CACHED_THEME!='default') && (!is_dir(get_custom_file_base().'/themes/'.$CACHED_THEME)))) $CACHED_THEME='default';
-		if ($CACHED_THEME=='-1') $CACHED_THEME='default';
+		$USER_THEME_CACHE=filter_naughty($this->_get_theme());
+		if (($USER_THEME_CACHE=='') || (($USER_THEME_CACHE!='default') && (!is_dir(get_custom_file_base().'/themes/'.$USER_THEME_CACHE)))) $USER_THEME_CACHE='default';
+		if ($USER_THEME_CACHE=='-1') $USER_THEME_CACHE='default';
 		require_code('permissions');
-		if (($CACHED_THEME!='default') && (!has_category_access(get_member(),'theme',$CACHED_THEME)))
+		if (($USER_THEME_CACHE!='default') && (!has_category_access(get_member(),'theme',$USER_THEME_CACHE)))
 		{
-			$CACHED_THEME='default';
+			$USER_THEME_CACHE='default';
 		}
 
-		if ($CACHED_THEME=='') $CACHED_THEME='default';
+		if ($USER_THEME_CACHE=='') $USER_THEME_CACHE='default';
 
-		return $CACHED_THEME;
+		return $USER_THEME_CACHE;
 	}
 
 	/**

@@ -80,9 +80,6 @@
 <link rel="apple-touch-icon" href="{$IMG*,appleicon}" />
 <link rel="shortcut icon" href="{$IMG*,favicon}" type="image/x-icon" />
 
-{$,Inclusion of help semantic data, so smart browsers can provide native links to it}
-{+START,IF,{$HAS_PRIVILEGE,see_software_docs}}{+START,IF_NON_EMPTY,{$DOCUMENT_HELP}}<link rel="help" href="{$DOCUMENT_HELP*}" />{+END}{+END}
-
 {$,Inclusion of search semantic data, so smart browsers can automatically allow native-browser searching of the site}
 {+START,SET,Commented out by default to save bandwidth}{+START,IF,{$ADDON_INSTALLED,search}}
 	{+START,IF,{$EQ,{$ZONE},docs}}

@@ -40,7 +40,7 @@ function init__lang_compile()
  */
 function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=false)
 {
-	global $LANGUAGE,$REQUIRE_LANG_LOOP,$LANG_LOADED_LANG;
+	global $LANGUAGE_STRINGS_CACHE,$REQUIRE_LANG_LOOP,$LANG_LOADED_LANG;
 
 	$desire_cache=(function_exists('get_option')) && ((get_option('is_on_lang_cache',true)=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0);
 	if ($desire_cache)
@@ -68,7 +68,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 		$load_target=array();
 	} else
 	{
-		$load_target=&$LANGUAGE[$lang];
+		$load_target=&$LANGUAGE_STRINGS_CACHE[$lang];
 	}
 
 	global $FILE_ARRAY;
@@ -172,7 +172,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors=f
 		persistent_cache_set(array('LANG',$lang,$codename),$load_target,!$dirty);
 	}
 
-	if ($desire_cache) $LANGUAGE[$lang]+=$load_target;
+	if ($desire_cache) $LANGUAGE_STRINGS_CACHE[$lang]+=$load_target;
 
 	return $bad;
 }

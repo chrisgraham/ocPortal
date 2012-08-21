@@ -23,8 +23,8 @@ To learn more about how ocPortal composes pages from it's various elements, and 
 ocPortal initialisation can be controlled by a few global variables in the entry-point script. They all default to [tt]0[/tt].
  - [tt]$MICRO_BOOTUP[/tt] ([tt]1[/tt] will tell ocPortal to not use a user login, skip the ability for sophisticated interfaces, and skip permissions)
  - [tt]$MICRO_AJAX_BOOTUP[/tt] ([tt]1[/tt] will skip a lot of stuff loading, intended for AJAX scripts that run a lot; this is intended to reduce server load)
- - [tt]$NON_PAGE_SCRIPT[/tt] ([tt]1[/tt] will hint to ocPortal to not do redirects or prompt for logins)
- - [tt]$FORCE_INVISIBLE_GUEST[/tt] ([tt]1[/tt] will tell ocPortal to not use a user login)
+ - [tt]$KNOWN_UTF8[/tt] ([tt]true[/tt] will tell ocPortal the request character set is definitely in Unicode, as the request came from Javascript)
+ - [tt]$FORCE_INVISIBLE_GUEST[/tt] ([tt]1[/tt] will tell ocPortal to not use a member login)
 
 [title="3"]Addons[/title]
 

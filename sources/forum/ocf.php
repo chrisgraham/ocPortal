@@ -34,10 +34,10 @@ function init__forum__ocf()
 	global $LAST_POST_ID,$LAST_TOPIC_ID;
 	$LAST_POST_ID=NULL;
 	$LAST_TOPIC_ID=NULL;
-	global $TOPIC_IDENTIFIERS_TO_IDS,$FORUM_NAMES_TO_IDS,$TOPIC_IS_THREADED;
-	$TOPIC_IDENTIFIERS_TO_IDS=array();
-	$FORUM_NAMES_TO_IDS=array();
-	$TOPIC_IS_THREADED=array();
+	global $TOPIC_IDENTIFIERS_TO_IDS_CACHE,$FORUM_NAMES_TO_IDS_CACHE,$TOPIC_IS_THREADED_CACHE;
+	$TOPIC_IDENTIFIERS_TO_IDS_CACHE=array();
+	$FORUM_NAMES_TO_IDS_CACHE=array();
+	$TOPIC_IS_THREADED_CACHE=array();
 }
 
 /**
@@ -291,11 +291,11 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function topic_is_threaded($topic_id)
 	{
-		global $TOPIC_IS_THREADED;
-		if (array_key_exists($topic_id,$TOPIC_IS_THREADED)) return $TOPIC_IS_THREADED[$topic_id]==1;
+		global $TOPIC_IS_THREADED_CACHE;
+		if (array_key_exists($topic_id,$TOPIC_IS_THREADED_CACHE)) return $TOPIC_IS_THREADED_CACHE[$topic_id]==1;
 
-		$TOPIC_IS_THREADED[$topic_id]=$this->connection->query_select_value_if_there('f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id','f_is_threaded',array('t.id'=>$topic_id));
-		return $TOPIC_IS_THREADED[$topic_id]==1;
+		$TOPIC_IS_THREADED_CACHE[$topic_id]=$this->connection->query_select_value_if_there('f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id','f_is_threaded',array('t.id'=>$topic_id));
+		return $TOPIC_IS_THREADED_CACHE[$topic_id]==1;
 	}
 
 	/**
@@ -627,8 +627,8 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function forum_id_from_name($forum_name)
 	{
-		global $FORUM_NAMES_TO_IDS;
-		if (array_key_exists($forum_name,$FORUM_NAMES_TO_IDS)) return $FORUM_NAMES_TO_IDS[$forum_name];
+		global $FORUM_NAMES_TO_IDS_CACHE;
+		if (array_key_exists($forum_name,$FORUM_NAMES_TO_IDS_CACHE)) return $FORUM_NAMES_TO_IDS_CACHE[$forum_name];
 
 		if (is_numeric($forum_name))
 		{
@@ -643,7 +643,7 @@ class forum_driver_ocf extends forum_driver_base
 			}
 		}
 
-		$FORUM_NAMES_TO_IDS[$forum_name]=$result;
+		$FORUM_NAMES_TO_IDS_CACHE[$forum_name]=$result;
 		return $result;
 	}
 
@@ -658,8 +658,8 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		$key=serialize(array($forum,$topic_identifier));
 
-		global $TOPIC_IDENTIFIERS_TO_IDS;
-		if (array_key_exists($key,$TOPIC_IDENTIFIERS_TO_IDS)) return $TOPIC_IDENTIFIERS_TO_IDS[$key];
+		global $TOPIC_IDENTIFIERS_TO_IDS_CACHE;
+		if (array_key_exists($key,$TOPIC_IDENTIFIERS_TO_IDS_CACHE)) return $TOPIC_IDENTIFIERS_TO_IDS_CACHE[$key];
 		$result=is_numeric($forum)?intval($forum):$this->connection->query_select_value_if_there('f_forums','id',array('f_name'=>$forum));
 
 		if (is_integer($forum)) $forum_id=$forum;
@@ -669,14 +669,14 @@ class forum_driver_ocf extends forum_driver_base
 		$_result=$this->connection->query($query,1);
 		if (array_key_exists(0,$_result))
 		{
-			$TOPIC_IDENTIFIERS_TO_IDS[$key]=$_result[0]['id'];
-			global $TOPIC_IS_THREADED;
-			$TOPIC_IS_THREADED[$_result[0]['id']]=$_result[0]['f_is_threaded'];
+			$TOPIC_IDENTIFIERS_TO_IDS_CACHE[$key]=$_result[0]['id'];
+			global $TOPIC_IS_THREADED_CACHE;
+			$TOPIC_IS_THREADED_CACHE[$_result[0]['id']]=$_result[0]['f_is_threaded'];
 		} else
 		{
-			$TOPIC_IDENTIFIERS_TO_IDS[$key]=NULL;
+			$TOPIC_IDENTIFIERS_TO_IDS_CACHE[$key]=NULL;
 		}
-		return $TOPIC_IDENTIFIERS_TO_IDS[$key];
+		return $TOPIC_IDENTIFIERS_TO_IDS_CACHE[$key];
 	}
 
 	/**
@@ -1518,9 +1518,6 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function ocf_flood_control($id)
 	{
-		global $NON_PAGE_SCRIPT;
-		if ($NON_PAGE_SCRIPT==1) return;
-
 		global $FLOOD_CONTROL_ONCE;
 		if ($FLOOD_CONTROL_ONCE) return;
 		$FLOOD_CONTROL_ONCE=true;

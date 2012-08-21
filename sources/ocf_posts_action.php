@@ -23,8 +23,8 @@
  */
 function init__ocf_posts_action()
 {
-	global $ALL_FORUM_POST_COUNT_INFO;
-	$ALL_FORUM_POST_COUNT_INFO=NULL;
+	global $ALL_FORUM_POST_COUNT_INFO_CACHE;
+	$ALL_FORUM_POST_COUNT_INFO_CACHE=NULL;
 }
 
 /**
@@ -363,13 +363,13 @@ function ocf_force_update_member_post_count($member_id,$member_post_count_dif=NU
 	if (is_null($member_post_count_dif))
 	{
 		// This is gonna take a while!!
-		global $ALL_FORUM_POST_COUNT_INFO;
-		if (is_null($ALL_FORUM_POST_COUNT_INFO))
+		global $ALL_FORUM_POST_COUNT_INFO_CACHE;
+		if (is_null($ALL_FORUM_POST_COUNT_INFO_CACHE))
 		{
-			$ALL_FORUM_POST_COUNT_INFO=collapse_2d_complexity('id','f_post_count_increment',$GLOBALS['FORUM_DB']->query('SELECT id,f_post_count_increment FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE f_cache_num_posts>0'));
+			$ALL_FORUM_POST_COUNT_INFO_CACHE=collapse_2d_complexity('id','f_post_count_increment',$GLOBALS['FORUM_DB']->query('SELECT id,f_post_count_increment FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE f_cache_num_posts>0'));
 		}
 		$member_post_count=0;
-		foreach ($ALL_FORUM_POST_COUNT_INFO as $forum_id=>$post_count_increment)
+		foreach ($ALL_FORUM_POST_COUNT_INFO_CACHE as $forum_id=>$post_count_increment)
 		{
 			if ($post_count_increment==1)
 			{

@@ -83,6 +83,9 @@ function ldap_unescape($str)
 function ocf_ldap_connect()
 {
 	global $LDAP_CONNECTION;
+	/** Our connection to the LDAP server.
+	 * @global ?array $LDAP_CONNECTION
+	 */
 	$LDAP_CONNECTION=ldap_connect(get_option('ldap_hostname'));
 
 	if ((get_option('ldap_is_windows')=='1') && (function_exists('ldap_set_option')))
@@ -732,7 +735,7 @@ function ocf_get_members_groups_ldap($member_id)
  */
 function ocf_ldap_get_member_primary_group($member_id)
 {
-	global $PRIMARY_GROUP_MEMBERS;
+	global $PRIMARY_GROUP_MEMBERS_CACHE;
 
 	global $LDAP_CONNECTION;
 
@@ -763,7 +766,7 @@ function ocf_ldap_get_member_primary_group($member_id)
 		ldap_free_result($results);
 	}
 
-	$PRIMARY_GROUP_MEMBERS[$member_id]=$gid;
+	$PRIMARY_GROUP_MEMBERS_CACHE[$member_id]=$gid;
 
 	return $gid;
 }

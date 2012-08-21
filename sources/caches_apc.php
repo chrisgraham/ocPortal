@@ -54,11 +54,11 @@ class apccache
 		unset($flags);
 
 		// Update list of e-objects
-		global $ECACHE_OBJECTS;
-		if (!isset($ECACHE_OBJECTS[$key]))
+		global $PERSISTENT_CACHE_OBJECTS_CACHE;
+		if (!isset($PERSISTENT_CACHE_OBJECTS_CACHE[$key]))
 		{
-			$ECACHE_OBJECTS[$key]=1;
-			@apc_store(get_file_base().'ECACHE_OBJECTS',$ECACHE_OBJECTS,0);
+			$PERSISTENT_CACHE_OBJECTS_CACHE[$key]=1;
+			@apc_store(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
 		}
 
 		@apc_store($key,array(time(),$data),$expire_secs);
@@ -72,10 +72,10 @@ class apccache
 	function delete($key)
 	{
 		// Update list of e-objects
-		global $ECACHE_OBJECTS;
-		unset($ECACHE_OBJECTS[$key]);
+		global $PERSISTENT_CACHE_OBJECTS_CACHE;
+		unset($PERSISTENT_CACHE_OBJECTS_CACHE[$key]);
 
-		@apc_store(get_file_base().'ECACHE_OBJECTS',$ECACHE_OBJECTS,0);
+		@apc_store(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
 
 		apc_delete($key);
 	}

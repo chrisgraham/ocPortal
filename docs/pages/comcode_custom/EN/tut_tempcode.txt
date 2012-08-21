@@ -411,6 +411,10 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 		<td>Extract the requested script GET parameter</td>
 	</tr>
 	<tr style="background: #DDFFDD">
+		<td>{$IS_VIRTUALISED_REQUEST}</td>
+		<td>Find if this is a virtualised page load, via something like the <kbd>main_include_module</kbd> block</td>
+	</tr>
+	<tr style="background: #DDFFDD">
 		<td>{$QUERY_STRING}</td>
 		<td>Extract all requested script parameters (the 'query string', i.e. part of the URL after "?")</td>
 	</tr>
@@ -888,10 +892,6 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 	<tr style="background: #DDFFDD">
 		<td>{$COMMENT_COUNT,downloads,3}</td>
 		<td>Find the number of comments made for a resource (first parameter is the resource type code, second parameter is the resource ID)</td>
-	</tr>
-	<tr style="background: #DDFFDD">
-		<td>{$DOCUMENT_HELP}</td>
-		<td>Get the URL to the help for the current screen (will be blank if there is none)</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$IMAGE_WIDTH,http://example.com/pic.png}</td>

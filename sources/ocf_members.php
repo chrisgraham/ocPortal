@@ -27,8 +27,8 @@ function init__ocf_members()
 	$CUSTOM_FIELD_CACHE=array();
 	global $MEMBER_CACHE_FIELD_MAPPINGS;
 	$MEMBER_CACHE_FIELD_MAPPINGS=array();
-	global $PRIMARY_GROUP_MEMBERS;
-	$PRIMARY_GROUP_MEMBERS=array();
+	global $PRIMARY_GROUP_MEMBERS_CACHE;
+	$PRIMARY_GROUP_MEMBERS_CACHE=array();
 	global $MAY_WHISPER_CACHE;
 	$MAY_WHISPER_CACHE=array();
 }
@@ -141,8 +141,8 @@ function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=N
 		if ($special_start==1) $where.=' AND tx.text_original LIKE \''.db_encode_like('ocp_%').'\'';
 		if (!is_null($show_on_join_form)) $where.=' AND cf_show_on_join_form='.strval((integer)$show_on_join_form);
 
-		global $TABLE_LANG_FIELDS;
-		$_result=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate tx ON (tx.id=f.cf_name AND '.db_string_equal_to('tx.language',get_site_default_lang()).') '.$where.' ORDER BY cf_order',NULL,NULL,false,false,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS)?$TABLE_LANG_FIELDS['f_custom_fields']:array());
+		global $TABLE_LANG_FIELDS_CACHE;
+		$_result=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate tx ON (tx.id=f.cf_name AND '.db_string_equal_to('tx.language',get_site_default_lang()).') '.$where.' ORDER BY cf_order',NULL,NULL,false,false,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_custom_fields']:array());
 		$result=array();
 		foreach ($_result as $row)
 		{
@@ -363,16 +363,16 @@ function ocf_get_custom_fields_member($member_id)
  */
 function ocf_get_member_primary_group($member_id)
 {
-	global $PRIMARY_GROUP_MEMBERS;
-	if (array_key_exists($member_id,$PRIMARY_GROUP_MEMBERS)) return $PRIMARY_GROUP_MEMBERS[$member_id];
+	global $PRIMARY_GROUP_MEMBERS_CACHE;
+	if (array_key_exists($member_id,$PRIMARY_GROUP_MEMBERS_CACHE)) return $PRIMARY_GROUP_MEMBERS_CACHE[$member_id];
 
 	if (ocf_is_ldap_member($member_id))
 	{
 		ocf_ldap_get_member_primary_group($member_id);
 	} else
 	{
-		$PRIMARY_GROUP_MEMBERS[$member_id]=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_primary_group');
+		$PRIMARY_GROUP_MEMBERS_CACHE[$member_id]=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_primary_group');
 	}
 
-	return $PRIMARY_GROUP_MEMBERS[$member_id];
+	return $PRIMARY_GROUP_MEMBERS_CACHE[$member_id];
 }

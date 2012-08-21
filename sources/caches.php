@@ -23,8 +23,8 @@
  */
 function init__caches()
 {
-	global $CACHE_ON;
-	$CACHE_ON=NULL;
+	global $BLOCK_CACHE_ON_CACHE;
+	$BLOCK_CACHE_ON_CACHE=NULL;
 
 	global $MEM_CACHE,$SITE_INFO;
 	/** The persistent cache access object (NULL if there is no persistent cache).
@@ -44,39 +44,39 @@ function init__caches()
 			require_code('caches_apc');
 
 			$MEM_CACHE=new apccache();
-			global $ECACHE_OBJECTS;
-			$ECACHE_OBJECTS=apc_fetch(get_file_base().'ECACHE_OBJECTS');
-			if ($ECACHE_OBJECTS===false) $ECACHE_OBJECTS=array();
+			global $PERSISTENT_CACHE_OBJECTS_CACHE;
+			$PERSISTENT_CACHE_OBJECTS_CACHE=apc_fetch(get_file_base().'PERSISTENT_CACHE_OBJECTS');
+			if ($PERSISTENT_CACHE_OBJECTS_CACHE===false) $PERSISTENT_CACHE_OBJECTS_CACHE=array();
 		}
 		elseif ((function_exists('eaccelerator_put')) || (function_exists('mmcache_put')))
 		{
 			require_code('caches_eaccelerator');
 
 			$MEM_CACHE=new eacceleratorcache();
-			global $ECACHE_OBJECTS;
+			global $PERSISTENT_CACHE_OBJECTS_CACHE;
 			if (function_exists('eaccelerator_get'))
-				$ECACHE_OBJECTS=eaccelerator_get(get_file_base().'ECACHE_OBJECTS');
+				$PERSISTENT_CACHE_OBJECTS_CACHE=eaccelerator_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
 			if (function_exists('mmcache_get'))
-				$ECACHE_OBJECTS=mmcache_get(get_file_base().'ECACHE_OBJECTS');
-			if ($ECACHE_OBJECTS===NULL) $ECACHE_OBJECTS=array();
+				$PERSISTENT_CACHE_OBJECTS_CACHE=mmcache_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
+			if ($PERSISTENT_CACHE_OBJECTS_CACHE===NULL) $PERSISTENT_CACHE_OBJECTS_CACHE=array();
 		}
 		elseif (function_exists('xcache_get'))
 		{
 			require_code('caches_xcache');
 
 			$MEM_CACHE=new xcache();
-			global $ECACHE_OBJECTS;
-			$ECACHE_OBJECTS=xcache_get(get_file_base().'ECACHE_OBJECTS');
-			if ($ECACHE_OBJECTS===false) $ECACHE_OBJECTS=array();
+			global $PERSISTENT_CACHE_OBJECTS_CACHE;
+			$PERSISTENT_CACHE_OBJECTS_CACHE=xcache_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
+			if ($PERSISTENT_CACHE_OBJECTS_CACHE===false) $PERSISTENT_CACHE_OBJECTS_CACHE=array();
 		}
 		elseif (function_exists('wincache_ucache_get'))
 		{
 			require_code('caches_wincache');
 
 			$MEM_CACHE=new wincache();
-			global $ECACHE_OBJECTS;
-			$ECACHE_OBJECTS=wincache_ucache_get(get_file_base().'ECACHE_OBJECTS');
-			if ($ECACHE_OBJECTS===false) $ECACHE_OBJECTS=array();
+			global $PERSISTENT_CACHE_OBJECTS_CACHE;
+			$PERSISTENT_CACHE_OBJECTS_CACHE=wincache_ucache_get(get_file_base().'PERSISTENT_CACHE_OBJECTS');
+			if ($PERSISTENT_CACHE_OBJECTS_CACHE===false) $PERSISTENT_CACHE_OBJECTS_CACHE=array();
 		}
 		elseif (file_exists(get_custom_file_base().'/persistent_cache/'))
 		{
@@ -183,17 +183,17 @@ function find_cache_on($codename)
 	if (defined('HIPHOP_PHP')) return NULL;
 
 	// See if we have it cached
-	global $CACHE_ON;
-	if ($CACHE_ON===NULL)
+	global $BLOCK_CACHE_ON_CACHE;
+	if ($BLOCK_CACHE_ON_CACHE===NULL)
 	{
-		$CACHE_ON=persistent_cache_get('CACHE_ON');
-		if ($CACHE_ON===NULL)
+		$BLOCK_CACHE_ON_CACHE=persistent_cache_get('BLOCK_CACHE_ON_CACHE');
+		if ($BLOCK_CACHE_ON_CACHE===NULL)
 		{
-			$CACHE_ON=$GLOBALS['SITE_DB']->query_select('cache_on',array('*'));
-			persistent_cache_set('CACHE_ON',$CACHE_ON);
+			$BLOCK_CACHE_ON_CACHE=$GLOBALS['SITE_DB']->query_select('cache_on',array('*'));
+			persistent_cache_set('BLOCK_CACHE_ON_CACHE',$BLOCK_CACHE_ON_CACHE);
 		}
 	}
-	foreach ($CACHE_ON as $row)
+	foreach ($BLOCK_CACHE_ON_CACHE as $row)
 	{
 		if ($row['cached_for']==$codename)
 		{

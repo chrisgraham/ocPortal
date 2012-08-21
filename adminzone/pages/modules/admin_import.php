@@ -204,7 +204,7 @@ class Module_admin_import
 		if(array_key_exists('hook_type',$info))
 		{
 			$redirect_url=build_url(array('page'=>$info['import_module'],'type'=>$info['import_method_name']),get_module_zone($info['import_module']));
-			return redirect_screen($title,$redirect_url,do_lang_tempcode('REDIRECTED_TO_MODULES'));
+			return redirect_screen($title,$redirect_url,do_lang_tempcode('REDIRECTED_TO_CACHE_MODULES'));
 		}
 		/* END */
 
@@ -738,8 +738,8 @@ class Module_admin_import
 		sync_file($FILE_BASE.'/'.$config_file);
 		$out->attach(paragraph(do_lang_tempcode('OCF_CONVERTED_INFO')));
 
-		$LANG=get_site_default_lang();
-		$trans5=insert_lang(do_lang('FORUM'),1,NULL,false,NULL,$LANG);
+		// Add menu link
+		$trans5=insert_lang(do_lang('FORUM'),1,NULL,false,NULL,get_site_default_lang());
 		$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'forum','zone_title'=>insert_lang(do_lang('SECTION_FORUMS'),1),'zone_default_page'=>'forumview','zone_header_text'=>$trans5,'zone_theme'=>'-1','zone_wide'=>NULL,'zone_require_session'=>0,'zone_displayed_in_menu'=>1));
 		require_code('menus2');
 		add_menu_item_simple('zone_menu',NULL,'SECTION_FORUMS','forum'.':forumview',0,1);

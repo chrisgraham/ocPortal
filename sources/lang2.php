@@ -226,16 +226,16 @@ function nice_get_lang_files($lang=NULL)
  */
 function lookup_language_full_name($code)
 {
-	global $LANGS_MAP;
+	global $LANGS_MAP_CACHE;
 
-	if ($LANGS_MAP===NULL)
+	if ($LANGS_MAP_CACHE===NULL)
 	{
 		$map_file_a=get_file_base().'/lang/langs.ini';
 		$map_file_b=get_custom_file_base().'/lang_custom/langs.ini';
 		if (!is_file($map_file_b)) $map_file_b=$map_file_a;
-		$LANGS_MAP=better_parse_ini_file($map_file_b);
+		$LANGS_MAP_CACHE=better_parse_ini_file($map_file_b);
 	}
-	return isset($LANGS_MAP[$code])?$LANGS_MAP[$code]:$code;
+	return isset($LANGS_MAP_CACHE[$code])?$LANGS_MAP_CACHE[$code]:$code;
 }
 
 /**

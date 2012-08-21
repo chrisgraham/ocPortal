@@ -680,12 +680,7 @@ function check_perms()
 
 	$super_out='';
 
-	global $LANG;
-	$LANG='EN'; // Make it simple
-	if (array_key_exists('lang',$_GET)) $LANG=$_GET['lang'];
-	if (preg_match('#\w+#A',$LANG)==0) return '';
-
-	$array=array_merge(get_chmod_array(),get_chmod_array_2());
+	$array=array_merge(get_chmod_array(fallback_lang()),get_chmod_array_2());
 	require_code('themes2');
 	$themes=find_all_themes();
 
@@ -755,9 +750,6 @@ function fix_perms()
 	require_code('inst_special');
 
 	$super_out='';
-
-	global $LANG;
-	$LANG=get_param('lang','EN');
 
 	$array=array_merge(get_chmod_array(),get_chmod_array_2());
 	require_code('themes2');
@@ -2350,7 +2342,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run=true)
  */
 function upgrade_sharedinstall_sites($from=0)
 {
-	global $CURRENT_SHARE_USER,$SITE_INFO,$TABLE_LANG_FIELDS;
+	global $CURRENT_SHARE_USER,$SITE_INFO,$TABLE_LANG_FIELDS_CACHE;
 
 	// Find sites
 	$sites=array();
@@ -2375,7 +2367,7 @@ function upgrade_sharedinstall_sites($from=0)
 
 		// Change active site
 		$CURRENT_SHARE_USER=$site;
-		$TABLE_LANG_FIELDS=array();
+		$TABLE_LANG_FIELDS_CACHE=array();
 		_general_db_init();
 
 		// Reset DB

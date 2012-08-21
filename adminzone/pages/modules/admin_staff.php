@@ -63,7 +63,7 @@ class Module_admin_staff
 		if ($upgrade_from==2)
 		{
 			$GLOBALS['SITE_DB']->query_update('config',array('eval'=>'return do_lang(\'POST_STAFF\');'),array('the_name'=>'staff_text'),'',1);
-			if ($GLOBALS['OPTIONS']['staff_text']['c_set']==1)
+			if ($GLOBALS['CONFIG_OPTIONS_CACHE']['staff_text']['c_set']==1)
 			{
 				set_option('staff_text','[html]'.get_option('staff_text').'[/html]');
 			} else

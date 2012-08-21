@@ -46,15 +46,15 @@ function init__tempcode()
 	define('TC_PARAMETER',3); // A late parameter for a compiled template
 	define('TC_DIRECTIVE',4);
 
-	global $XHTML_SPIT_OUT,$NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$CACHED_FOUND,$REQUEST_BLOCK_NEST_LEVEL,$LOADED_TPL_CACHE;
+	global $XHTML_SPIT_OUT,$NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$TEMPLATE_DISK_ORIGIN_CACHE,$REQUEST_BLOCK_NEST_LEVEL,$LOADED_TPL_CACHE;
 	$XHTML_SPIT_OUT=NULL;
 	$NO_EVAL_CACHE=false;
 	$MEMORY_OVER_SPEED=false;
-	$CACHED_FOUND=array();
+	$TEMPLATE_DISK_ORIGIN_CACHE=array();
 	$REQUEST_BLOCK_NEST_LEVEL=0;
 	$LOADED_TPL_CACHE=array();
 
-	global $RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED,$RECORD_TEMPLATES_TREE,$POSSIBLY_IN_SAFE_MODE,$SCREEN_TEMPLATE_CALLED,$TITLE_CALLED;
+	global $RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED,$RECORD_TEMPLATES_TREE,$POSSIBLY_IN_SAFE_MODE_CACHE,$SCREEN_TEMPLATE_CALLED,$TITLE_CALLED;
 	$RECORD_TEMPLATES_USED=false;
 	$RECORDED_TEMPLATES_USED=array();
 	$RECORD_TEMPLATES_TREE=false;
@@ -62,8 +62,11 @@ function init__tempcode()
 	 * @global ?ID_TEXT $SCREEN_TEMPLATE_CALLED
 	 */
 	$SCREEN_TEMPLATE_CALLED=NULL;
+	/** Whether a title has been called.
+	 * @global boolean $TITLE_CALLED
+	 */
 	$TITLE_CALLED=false;
-	$POSSIBLY_IN_SAFE_MODE=(get_param_integer('keep_safe_mode',0)==1);
+	$POSSIBLY_IN_SAFE_MODE_CACHE=(get_param_integer('keep_safe_mode',0)==1);
 
 	global $SIMPLE_ESCAPED,$XSS_DETECT;
 	$SIMPLE_ESCAPED=array(ENTITY_ESCAPED);
@@ -75,11 +78,8 @@ function init__tempcode()
 	$FULL_RESET_VAR_CODE='foreach(array_keys(get_defined_vars()) as $x) { if ($x[0]==\'b\' && substr($x,0,6)==\'bound_\') unset($$x); } extract($parameters,EXTR_PREFIX_ALL,\'bound\');';
 	$RESET_VAR_CODE='extract($parameters,EXTR_PREFIX_ALL,\'bound\');';
 
-	global $TEMPLATE_PREVIEW_OP;
-	$TEMPLATE_PREVIEW_OP=array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op']=='1') && ((get_page_name()!='admin_themes') || (get_param('type','')=='view'));
-
-	global $OB_GET_CLEAN;
-	$OB_GET_CLEAN=function_exists('ob_get_clean');
+	global $IS_TEMPLATE_PREVIEW_OP_CACHE;
+	$IS_TEMPLATE_PREVIEW_OP_CACHE=array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op']=='1') && ((get_page_name()!='admin_themes') || (get_param('type','')=='view'));
 }
 
 /**
@@ -475,7 +475,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		}
 	}
 
-	global $TEMPLATE_PREVIEW_OP,$RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED,$FILE_ARRAY,$MEM_CACHE,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$CACHE_TEMPLATES,$FORUM_DRIVER,$POSSIBLY_IN_SAFE_MODE,$CACHED_THEME,$CACHED_FOUND,$LOADED_TPL_CACHE;
+	global $IS_TEMPLATE_PREVIEW_OP_CACHE,$RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED,$FILE_ARRAY,$MEM_CACHE,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$CACHE_TEMPLATES,$FORUM_DRIVER,$POSSIBLY_IN_SAFE_MODE_CACHE,$USER_THEME_CACHE,$TEMPLATE_DISK_ORIGIN_CACHE,$LOADED_TPL_CACHE;
 	$special_treatment=((($KEEP_MARKERS) || ($SHOW_EDIT_LINKS)) && (is_null($XHTML_SPIT_OUT)));
 
 	if ($RECORD_TEMPLATES_USED)
@@ -485,12 +485,12 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 
 	// Variables we'll need
 	if (!isset($theme))
-		$theme=isset($CACHED_THEME)?$CACHED_THEME:(((isset($FORUM_DRIVER)) && (is_object($FORUM_DRIVER)) && (method_exists($FORUM_DRIVER,'get_theme')))?filter_naughty($FORUM_DRIVER->get_theme()):'default');
+		$theme=isset($USER_THEME_CACHE)?$USER_THEME_CACHE:(((isset($FORUM_DRIVER)) && (is_object($FORUM_DRIVER)) && (method_exists($FORUM_DRIVER,'get_theme')))?filter_naughty($FORUM_DRIVER->get_theme()):'default');
 	$prefix_default=get_file_base().'/themes/';
 	$prefix=($theme=='default')?$prefix_default:(get_custom_file_base().'/themes/');
 
 	// Is it structurally cached on disk yet?
-	if (!isset($CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]))
+	if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type]))
 	{
 		$loaded_this_once=false;
 	} else
@@ -498,7 +498,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		$loaded_this_once=true;
 	}
 	$_data=false;
-	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP) && ((!$POSSIBLY_IN_SAFE_MODE) || (!in_safe_mode())))
+	if (($CACHE_TEMPLATES) && (!$IS_TEMPLATE_PREVIEW_OP_CACHE) && ((!$POSSIBLY_IN_SAFE_MODE_CACHE) || (!in_safe_mode())))
 	{
 		$tcp_path=$prefix.$theme.'/templates_cached/'.$lang.'/'.$codename.$suffix.'.tcp';
 		if ($loaded_this_once)
@@ -518,13 +518,13 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
 			if ($support_smart_decaching)
 			{
-				if (!isset($CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]))
+				if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type]))
 				{
 					$found=find_template_place($codename,$lang,$theme,$suffix,$type);
-					$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]=$found;
+					$TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type]=$found;
 				} else
 				{
-					$found=$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type];
+					$found=$TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type];
 				}
 
 				if (!is_null($found))
@@ -557,16 +557,16 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 	}
 	if ($_data===false) // No, it's not
 	{
-		if (!isset($CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]))
+		if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type]))
 		{
 			$found=find_template_place($codename,$lang,$theme,$suffix,$type);
-			$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]=$found;
+			$TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type]=$found;
 		} else
 		{
-			$found=$CACHED_FOUND[$codename][$lang][$theme][$suffix][$type];
+			$found=$TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type];
 		}
 
-		unset($CACHED_FOUND[$codename][$lang][$theme][$suffix][$type]);
+		unset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type]);
 		if (is_null($found))
 		{
 			if (is_null($fallback))
@@ -677,17 +677,17 @@ function handle_symbol_preprocessing($bit,&$children)
 				if ($url_parts['id']===NULL) $url_parts['id']=/*get_param('id',*/strval(db_get_first_id())/*)*/;
 
 				// Does this URL arrangement support monikers?
-				global $LOADED_MONIKERS;
-				if (!isset($LOADED_MONIKERS[$url_parts['page']][$url_parts['type']][$url_parts['id']]))
+				global $LOADED_MONIKERS_CACHE;
+				if (!isset($LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']]))
 				{
-					global $CONTENT_OBS,$LOADED_MONIKERS;
+					global $CONTENT_OBS,$LOADED_MONIKERS_CACHE;
 					load_moniker_hooks();
 					$found=false;
 					$looking_for='_SEARCH:'.$url_parts['page'].':'.$url_parts['type'].':_WILD';
 
 					$ob_info=isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:NULL;
 					if ($ob_info!==NULL)
-						$LOADED_MONIKERS[$url_parts['page']][$url_parts['type']][$url_parts['id']]=true; // Indicator to preload this
+						$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']]=true; // Indicator to preload this
 				}
 			}
 			return;
@@ -732,8 +732,8 @@ function handle_symbol_preprocessing($bit,&$children)
 
 			//if (strpos(serialize($param),'side_stored_menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
 
-			global $LOADED_BLOCKS;
-			if (isset($LOADED_BLOCKS[serialize($param)]))
+			global $BLOCKS_CACHE;
+			if (isset($BLOCKS_CACHE[serialize($param)]))
 			{
 				$REQUEST_BLOCK_NEST_LEVEL--;
 				return;
@@ -745,7 +745,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				$block_parts=explode('=',$_param,2);
 				if (!isset($block_parts[1]))
 				{
-					$LOADED_BLOCKS[serialize($param)]=do_lang_tempcode('INTERNAL_ERROR');
+					$BLOCKS_CACHE[serialize($param)]=do_lang_tempcode('INTERNAL_ERROR');
 					return;
 				}
 				list($key,$val)=$block_parts;
@@ -772,7 +772,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			}
 			$b_value->handle_symbol_preprocessing();
 
-			$LOADED_BLOCKS[serialize($param)]=$b_value;
+			$BLOCKS_CACHE[serialize($param)]=$b_value;
 
 			$REQUEST_BLOCK_NEST_LEVEL--;
 
@@ -818,8 +818,8 @@ function handle_symbol_preprocessing($bit,&$children)
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
-			global $LOADED_PANELS;
-			if (isset($LOADED_PANELS[serialize($param)])) return;
+			global $PANELS_CACHE;
+			if (isset($PANELS_CACHE[serialize($param)])) return;
 
 			if (array_key_exists(0,$param))
 			{
@@ -859,7 +859,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				} else $value='';
 			} else $value='';
 
-			$LOADED_PANELS[serialize($param)]=$value;
+			$PANELS_CACHE[serialize($param)]=$value;
 
 			return;
 
@@ -892,8 +892,8 @@ function handle_symbol_preprocessing($bit,&$children)
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
-			global $LOADED_PAGES;
-			if (array_key_exists(serialize($param),$LOADED_PAGES)) return;
+			global $PAGES_CACHE;
+			if (array_key_exists(serialize($param),$PAGES_CACHE)) return;
 
 			if (array_key_exists(0,$param))
 			{
@@ -921,7 +921,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				}
 			} else $tp_value=new ocp_tempcode();
 
-			$LOADED_PAGES[serialize($param)]=$tp_value;
+			$PAGES_CACHE[serialize($param)]=$tp_value;
 
 			return;
 
@@ -1187,7 +1187,7 @@ class ocp_tempcode
 
 		ob_start();
 
-		global $NO_EVAL_CACHE,$XSS_DETECT,$USER_LANG_CACHED,$OB_GET_CLEAN;
+		global $NO_EVAL_CACHE,$XSS_DETECT,$USER_LANG_CACHED;
 
 		if ($XSS_DETECT)
 		{
@@ -1218,7 +1218,7 @@ class ocp_tempcode
 			$bit_0=$bit[0];
 			if (!isset($TPL_FUNCS[$bit_0]))
 			{
-				//$MY_LOG_FILE=fopen(get_custom_file_base().'/../test.log','wt'); fwrite($MY_LOG_FILE,$this->code_to_preexecute); fclose($MY_LOG_FILE);
+				//$PROFILING_LOG_FILE=fopen(get_custom_file_base().'/../test.log','wt'); fwrite($PROFILING_LOG_FILE,$this->code_to_preexecute); fclose($PROFILING_LOG_FILE);
 
 				if (eval($this->code_to_preexecute)===false) fatal_exit(@strval($php_errormsg));
 				if (!isset($TPL_FUNCS[$bit_0])) $TPL_FUNCS[$bit_0]=' '; // Fudge to stop error. Actually caused by a race condition and output will be incomplete
@@ -1257,14 +1257,7 @@ class ocp_tempcode
 
 		if (($MEMORY_OVER_SPEED) || ($NO_EVAL_CACHE))
 		{
-			if ($OB_GET_CLEAN)
-			{
-				$tmp=ob_get_clean();
-			} else
-			{
-				$tmp=ob_get_contents();
-				@ob_end_clean();
-			}
+			$tmp=ob_get_clean();
 			if ($XSS_DETECT)
 				@ini_set('ocproducts.xss_detect',$before);
 			if (!$no_eval_cache_before)
@@ -1274,14 +1267,7 @@ class ocp_tempcode
 			return $ret;
 		}
 
-		if ($OB_GET_CLEAN)
-		{
-			$this->cached_output=ob_get_clean(); // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
-		} else
-		{
-			$this->cached_output=ob_get_contents(); // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
-			@ob_end_clean();
-		}
+		$this->cached_output=ob_get_clean(); // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
 		if (!$no_eval_cache_before)
 			$NO_EVAL_CACHE=$no_eval_cache_before;
 		if ($XSS_DETECT)
@@ -1599,7 +1585,7 @@ class ocp_tempcode
 			return '';
 		}
 
-		global $NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$USER_LANG_CACHED,$XSS_DETECT,$OB_GET_CLEAN;
+		global $NO_EVAL_CACHE,$MEMORY_OVER_SPEED,$USER_LANG_CACHED,$XSS_DETECT;
 
 		ob_start();
 
@@ -1634,14 +1620,7 @@ class ocp_tempcode
 		{
 			if (($doing_up_to) && (ob_get_length()>$up_to))
 			{
-				if ($OB_GET_CLEAN)
-				{
-					$ret=ob_get_clean();
-				} else
-				{
-					$ret=ob_get_contents();
-					@ob_end_clean();
-				}
+				$ret=ob_get_clean();
 
 				if ($XSS_DETECT)
 					@ini_set('ocproducts.xss_detect',$before);
@@ -1696,25 +1675,11 @@ class ocp_tempcode
 		{
 			if (!$no_eval_cache_before)
 				$NO_EVAL_CACHE=$no_eval_cache_before;
-			if ($OB_GET_CLEAN)
-			{
-				$ret=ob_get_clean();
-			} else
-			{
-				$ret=ob_get_contents();
-				@ob_end_clean();
-			}
+			$ret=ob_get_clean();
 			return $ret;
 		}
 
-		if ($OB_GET_CLEAN)
-		{
-			$this->cached_output=ob_get_clean(); // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
-		} else
-		{
-			$this->cached_output=ob_get_contents(); // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
-			@ob_end_clean();
-		}
+		$this->cached_output=ob_get_clean(); // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
 
 		return $this->cached_output;
 	}
@@ -1723,12 +1688,12 @@ class ocp_tempcode
 
 /*f unction tempcode_profile_log($bit)
 {
-	global $MY_LOG_FILE,$SUMMARY;
-	if (!isset($MY_LOG_FILE))
+	global $PROFILING_LOG_FILE,$SUMMARY;
+	if (!isset($PROFILING_LOG_FILE))
 	{
-		$MY_LOG_FILE=fopen(get_custom_file_base().'/../test.log','wt');
+		$PROFILING_LOG_FILE=fopen(get_custom_file_base().'/../test.log','wt');
 		$SUMMARY=array();
-		fwrite($MY_LOG_FILE,ocp_srv('SCRIPT_NAME').'?'.ocp_srv('QUERY_STRING')."...\n\n");
+		fwrite($PROFILING_LOG_FILE,ocp_srv('SCRIPT_NAME').'?'.ocp_srv('QUERY_STRING')."...\n\n");
 
 		if (function_exists('set_time_limit')) @set_time_limit(2);
 
@@ -1747,36 +1712,36 @@ class ocp_tempcode
 	$SUMMARY[$signature]++;
 
 	$bit=array(); // Comment out this line to show full data in the dump
-	fwrite($MY_LOG_FILE,$function.': '.$signature.' [recursive level='.integer_format($level).', parts='.integer_format(count($bit)).', complexity='.integer_format($complexity).' bytes]      '.str_replace("\n",'\n',serialize($bit))."\n");
+	fwrite($PROFILING_LOG_FILE,$function.': '.$signature.' [recursive level='.integer_format($level).', parts='.integer_format(count($bit)).', complexity='.integer_format($complexity).' bytes]      '.str_replace("\n",'\n',serialize($bit))."\n");
 }
 
 f unction tempcode_profile_log_diff($from,$to,$bit)
 {
-	global $MY_LOG_FILE,$SUMMARY;
+	global $PROFILING_LOG_FILE,$SUMMARY;
 
-	if (isset($MY_LOG_FILE))
+	if (isset($PROFILING_LOG_FILE))
 	{
 		$sz=serialize($bit);
 		$signature=md5($sz);
 
-		fwrite($MY_LOG_FILE,'Time taken for '.$signature.': '.float_format(microtime_diff($from,$to)).' seconds'."\n");
+		fwrite($PROFILING_LOG_FILE,'Time taken for '.$signature.': '.float_format(microtime_diff($from,$to)).' seconds'."\n");
 	}
 }
 
 f unction finish_logging()
 {
-	global $MY_LOG_FILE,$SUMMARY;
+	global $PROFILING_LOG_FILE,$SUMMARY;
 
-	if (isset($MY_LOG_FILE))
+	if (isset($PROFILING_LOG_FILE))
 	{
-		fwrite($MY_LOG_FILE,"\n\nSUMMARY...\n\n");
+		fwrite($PROFILING_LOG_FILE,"\n\nSUMMARY...\n\n");
 		foreach ($SUMMARY as $sig=>$count)
 		{
-			fwrite($MY_LOG_FILE,$sig.' [x '.integer_format($count).']'."\n");
+			fwrite($PROFILING_LOG_FILE,$sig.' [x '.integer_format($count).']'."\n");
 		}
 
-		fclose($MY_LOG_FILE);
-		$MY_LOG_FILE=NULL;
+		fclose($PROFILING_LOG_FILE);
+		$PROFILING_LOG_FILE=NULL;
 	}
 }
 

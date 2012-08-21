@@ -1192,6 +1192,8 @@ function gzwrite($handle,$string,$length=NULL)
 /**
  * Send a raw HTTP header.
  *
+ * @sets_output_state
+ *
  * @param  string		The header to send.
  * @param  boolean	Whether to replace a previous call to set the same header (if you choose to not replace, it will send two different values for the same header).
  */
@@ -3021,6 +3023,8 @@ function set_error_handler($error_handler)
 
 /**
  * Send a cookie.
+ *
+ * @sets_output_state
  *
  * @param  string		The name.
  * @param  ?string	The value (NULL: unset existing cookie).

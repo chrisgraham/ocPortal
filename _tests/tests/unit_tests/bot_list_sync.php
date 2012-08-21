@@ -31,9 +31,9 @@ class bot_list_sync_test_set extends ocp_test_case
 
 		$_SERVER['HTTP_USER_AGENT']='';	// Force away optimisation
 		get_bot_type();
-		global $BOT_MAP;
-		ksort($BOT_MAP);
+		global $BOT_MAP_CACHE;
+		ksort($BOT_MAP_CACHE);
 
-		$this->assertTrue($BOT_MAP==$file_bots);
+		$this->assertTrue($BOT_MAP_CACHE==$file_bots);
 	}
 }

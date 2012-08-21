@@ -74,11 +74,11 @@ class Block_main_news
 		$blogs=array_key_exists('blogs',$map)?intval($map['blogs']):-1;
 		$member_based=(array_key_exists('member_based',$map)) && ($map['member_based']=='1');
 
-		global $NEWS_CATS;
-		if (!isset($NEWS_CATS))
+		global $NEWS_CATS_CACHE;
+		if (!isset($NEWS_CATS_CACHE))
 		{
-			$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-			$NEWS_CATS=list_to_map('id',$NEWS_CATS);
+			$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
+			$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
 		}
 
 		$days=intval($days);
@@ -198,22 +198,22 @@ class Block_main_news
 				if (($filter_and!='*') && ($filter_and!='')) $tmp['filter_and']=$filter_and;
 				if ($blogs!=-1) $tmp['blog']=$blogs;
 				$full_url=build_url($tmp,$zone);
-				if (!array_key_exists($myrow['news_category'],$NEWS_CATS))
+				if (!array_key_exists($myrow['news_category'],$NEWS_CATS_CACHE))
 				{
 					$_news_cats=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>$myrow['news_category']),'',1);
 					if (array_key_exists(0,$_news_cats))
-						$NEWS_CATS[$myrow['news_category']]=$_news_cats[0];
+						$NEWS_CATS_CACHE[$myrow['news_category']]=$_news_cats[0];
 				}
-				if ((!array_key_exists($myrow['news_category'],$NEWS_CATS)) || (!array_key_exists('nc_title',$NEWS_CATS[$myrow['news_category']])))
+				if ((!array_key_exists($myrow['news_category'],$NEWS_CATS_CACHE)) || (!array_key_exists('nc_title',$NEWS_CATS_CACHE[$myrow['news_category']])))
 					$myrow['news_category']=db_get_first_id();
-				$img=find_theme_image($NEWS_CATS[$myrow['news_category']]['nc_img']);
+				$img=find_theme_image($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']);
 				if (is_null($img)) $img='';
 				if ($myrow['news_image']!='')
 				{
 					$img=$myrow['news_image'];
 					if (url_is_local($img)) $img=get_base_url().'/'.$img;
 				}
-				$category=get_translated_text($NEWS_CATS[$myrow['news_category']]['nc_title']);
+				$category=get_translated_text($NEWS_CATS_CACHE[$myrow['news_category']]['nc_title']);
 				$seo_bits=seo_meta_get_for('news',strval($id));
 				$map2=array('TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'ID'=>strval($id),'TRUNCATE'=>$truncate,'BLOG'=>$blogs===1,'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$category,'IMG'=>$img,'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'NEWS_TITLE'=>$news_title,'AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS'=>$news,'FULL_URL'=>$full_url);
 				if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map2['COMMENT_COUNT']='1';

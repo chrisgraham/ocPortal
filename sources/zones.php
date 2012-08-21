@@ -23,8 +23,8 @@
  */
 function init__zones()
 {
-	global $CACHE_ON,$CLASS_CACHE;
-	$CACHE_ON=NULL;
+	global $BLOCK_CACHE_ON_CACHE,$CLASS_CACHE;
+	$BLOCK_CACHE_ON_CACHE=NULL;
 	$CLASS_CACHE=array();
 
 	global $ARB_COUNTER;
@@ -33,15 +33,15 @@ function init__zones()
 	global $DO_NOT_CACHE_THIS;
 	$DO_NOT_CACHE_THIS=false;
 
-	global $MODULES_ZONES,$MODULES_ZONES_DEFAULT;
-	$MODULES_ZONES=function_exists('persistent_cache_get')?persistent_cache_get('MODULES_ZONES'):NULL;
+	global $MODULES_ZONES_CACHE,$MODULES_ZONES_CACHE_DEFAULT;
+	$MODULES_ZONES_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('MODULES_ZONES'):NULL;
 	global $SITE_INFO;
 	$hardcoded=(isset($SITE_INFO['hardcode_common_module_zones'])) && ($SITE_INFO['hardcode_common_module_zones']=='1');
 	if (get_forum_type()=='ocf')
 	{
 		if ($hardcoded)
 		{
-			$MODULES_ZONES_DEFAULT=array( // Breaks redirects etc, but handy optimisation if you have a vanilla layout
+			$MODULES_ZONES_CACHE_DEFAULT=array( // Breaks redirects etc, but handy optimisation if you have a vanilla layout
 				'forumview'=>'forum',
 				'topicview'=>'forum',
 				'topics'=>'forum',
@@ -55,35 +55,35 @@ function init__zones()
 			);
 		} else
 		{
-			$MODULES_ZONES_DEFAULT=array(
+			$MODULES_ZONES_CACHE_DEFAULT=array(
 				'join'=>'',
 				'login'=>'',
 			);
 		}
 	} else
 	{
-		$MODULES_ZONES_DEFAULT=array(
+		$MODULES_ZONES_CACHE_DEFAULT=array(
 			'join'=>'',
 		);
 	}
 
-	global $VIRTUALISED_ZONES;
-	$VIRTUALISED_ZONES=NULL;
-	if (is_null($MODULES_ZONES))
+	global $VIRTUALISED_ZONES_CACHE;
+	$VIRTUALISED_ZONES_CACHE=NULL;
+	if (is_null($MODULES_ZONES_CACHE))
 	{
-		foreach ($MODULES_ZONES_DEFAULT as $key=>$val)
+		foreach ($MODULES_ZONES_CACHE_DEFAULT as $key=>$val)
 		{
 			if ((!$hardcoded) && (!is_file(get_file_base().'/'.$val.'/pages/modules/'.$key.'.php')))
 			{
-				unset($MODULES_ZONES_DEFAULT[$key]);
+				unset($MODULES_ZONES_CACHE_DEFAULT[$key]);
 			}
 		}
-		$MODULES_ZONES=$MODULES_ZONES_DEFAULT;
+		$MODULES_ZONES_CACHE=$MODULES_ZONES_CACHE_DEFAULT;
 	}
 
-	global $ALL_ZONES,$ALL_ZONES_TITLED;
-	$ALL_ZONES=NULL;
-	$ALL_ZONES_TITLED=NULL;
+	global $ALL_ZONES_CACHE,$ALL_ZONES_TITLED_CACHE;
+	$ALL_ZONES_CACHE=NULL;
+	$ALL_ZONES_TITLED_CACHE=NULL;
 
 	global $MODULE_INSTALLED_CACHE;
 	$MODULE_INSTALLED_CACHE=array();
@@ -165,17 +165,17 @@ function zone_black_magic_filterer($path,$relative=false)
  */
 function get_zone_name()
 {
-	global $ZONE,$RELATIVE_PATH,$SITE_INFO,$VIRTUALISED_ZONES;
+	global $ZONE,$RELATIVE_PATH,$SITE_INFO,$VIRTUALISED_ZONES_CACHE;
 	if ($ZONE!==NULL) return $ZONE['zone_name'];
-	if ($VIRTUALISED_ZONES!==false)
+	if ($VIRTUALISED_ZONES_CACHE!==false)
 	{
-		$VIRTUALISED_ZONES=false;
+		$VIRTUALISED_ZONES_CACHE=false;
 		$url_path=dirname(ocp_srv('REQUEST_URI'));
 		foreach ($SITE_INFO as $key=>$val)
 		{
 			if (($key[0]=='Z') && (substr($key,0,13))=='ZONE_MAPPING_')
 			{
-				$VIRTUALISED_ZONES=true;
+				$VIRTUALISED_ZONES_CACHE=true;
 				if ((preg_replace('#:\d+$#','',ocp_srv('HTTP_HOST'))==$val[0]) && (preg_match('#^'.(($val[1]=='')?'':('/'.preg_quote($val[1]))).'(/|$)#',$url_path)!=0))
 					return substr($key,13);
 			}
@@ -198,10 +198,10 @@ function get_zone_name()
  */
 function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$error=true)
 {
-	global $MODULES_ZONES;
-	if ((isset($MODULES_ZONES[$module_name])) || ((!$error) && (array_key_exists($module_name,$MODULES_ZONES)) && ($type=='modules')/*don't want to look at cached failure for different page type*/))
+	global $MODULES_ZONES_CACHE;
+	if ((isset($MODULES_ZONES_CACHE[$module_name])) || ((!$error) && (array_key_exists($module_name,$MODULES_ZONES_CACHE)) && ($type=='modules')/*don't want to look at cached failure for different page type*/))
 	{
-		return $MODULES_ZONES[$module_name];
+		return $MODULES_ZONES_CACHE[$module_name];
 	}
 
 	$error=false; // hack for now
@@ -209,7 +209,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 	$zone=get_zone_name();
 	if (($module_name==get_page_name()) && (running_script('index')) && ($module_name!='login'))
 	{
-		$MODULES_ZONES[$module_name]=$zone;
+		$MODULES_ZONES_CACHE[$module_name]=$zone;
 		return $zone;
 	}
 
@@ -218,13 +218,13 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		if (($type=='modules') && (substr($module_name,0,6)=='admin_'))
 		{
 			$zone='adminzone';
-			$MODULES_ZONES[$module_name]=$zone;
+			$MODULES_ZONES_CACHE[$module_name]=$zone;
 			return $zone;
 		}
 		if (($type=='modules') && (substr($module_name,0,4)=='cms_'))
 		{
 			$zone='cms';
-			$MODULES_ZONES[$module_name]=$zone;
+			$MODULES_ZONES_CACHE[$module_name]=$zone;
 			return $zone;
 		}
 	}
@@ -237,8 +237,8 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 	{
 		if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1)) // Only needs to actually look for redirections in first zones until end due to the way precedences work (we know the current zone will be in the first zones)
 		{
-			$MODULES_ZONES[$module_name]=$zone;
-			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES);
+			$MODULES_ZONES_CACHE[$module_name]=$zone;
+			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
 			return $zone;
 		}
 
@@ -246,8 +246,8 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 			|| (is_file(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$type.'_custom/'.(($dir2===NULL)?'':($dir2.'/')).$module_name.'.'.$ftype))))
 		{
 			if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==0) && ($REDIRECT_CACHE[$zone][$module_name]['r_to_page']==$module_name)) $zone=$REDIRECT_CACHE[$zone][$module_name]['r_to_zone'];
-			$MODULES_ZONES[$module_name]=$zone;
-			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES);
+			$MODULES_ZONES_CACHE[$module_name]=$zone;
+			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
 			return $zone;
 		}
 	}
@@ -260,8 +260,8 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 				|| (is_file(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$type.'_custom/'.(($dir2===NULL)?'':($dir2.'/')).$module_name.'.'.$ftype))))
 			{
 				if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==0) && ($REDIRECT_CACHE[$zone][$module_name]['r_to_page']==$module_name)) $zone=$REDIRECT_CACHE[$zone][$module_name]['r_to_zone'];
-				$MODULES_ZONES[$module_name]=$zone;
-				if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES);
+				$MODULES_ZONES_CACHE[$module_name]=$zone;
+				if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
 				return $zone;
 			}
 		}
@@ -271,15 +271,15 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 	{
 		if ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1))
 		{
-			$MODULES_ZONES[$module_name]=$zone;
-			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES);
+			$MODULES_ZONES_CACHE[$module_name]=$zone;
+			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
 			return $zone;
 		}
 	}
 
 	if (!$error)
 	{
-		$MODULES_ZONES[$module_name]=NULL;
+		$MODULES_ZONES_CACHE[$module_name]=NULL;
 		return NULL;
 	}
 	warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',$module_name));
@@ -458,16 +458,16 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 		return $out;
 	}
 
-	global $ALL_ZONES,$ALL_ZONES_TITLED,$SITE_INFO;
+	global $ALL_ZONES_CACHE,$ALL_ZONES_TITLED_CACHE,$SITE_INFO;
 
 	if ($get_titles)
 	{
-		if ($ALL_ZONES_TITLED===NULL) $ALL_ZONES_TITLED=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES_TITLED'):NULL;
-		if ($ALL_ZONES_TITLED!==NULL) return $ALL_ZONES_TITLED;
+		if ($ALL_ZONES_TITLED_CACHE===NULL) $ALL_ZONES_TITLED_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES_TITLED'):NULL;
+		if ($ALL_ZONES_TITLED_CACHE!==NULL) return $ALL_ZONES_TITLED_CACHE;
 	} else
 	{
-		if ($ALL_ZONES===NULL) $ALL_ZONES=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES'):NULL;
-		if ($ALL_ZONES!==NULL) return $ALL_ZONES;
+		if ($ALL_ZONES_CACHE===NULL) $ALL_ZONES_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('ALL_ZONES'):NULL;
+		if ($ALL_ZONES_CACHE!==NULL) return $ALL_ZONES_CACHE;
 	}
 
 	$rows=$GLOBALS['SITE_DB']->query_select('zones',array('*','zone_title AS _zone_title'),NULL,'ORDER BY zone_name',$force_all?NULL:$max,$start);
@@ -491,10 +491,10 @@ function find_all_zones($search=false,$get_titles=false,$force_all=false,$start=
 		}
 	}
 
-	$ALL_ZONES_TITLED=$zones_titled;
-	if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES_TITLED',$ALL_ZONES_TITLED);
-	$ALL_ZONES=$zones;
-	if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES',$ALL_ZONES);
+	$ALL_ZONES_TITLED_CACHE=$zones_titled;
+	if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES_TITLED',$ALL_ZONES_TITLED_CACHE);
+	$ALL_ZONES_CACHE=$zones;
+	if (function_exists('persistent_cache_set')) persistent_cache_set('ALL_ZONES',$ALL_ZONES_CACHE);
 
 	return $get_titles?$zones_titled:$zones;
 }
@@ -695,7 +695,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 						{
 							// Removed outdated cache-on information
 							$GLOBALS['SITE_DB']->query_delete('cache_on',array('cached_for'=>$codename),'',1);
-							persistent_cache_delete('CACHE_ON');
+							persistent_cache_delete('BLOCK_CACHE_ON_CACHE');
 						}
 
 						$out=new ocp_tempcode();

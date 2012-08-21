@@ -23,8 +23,8 @@
  */
 function init__chat()
 {
-	global $MEMBERS_BEFRIENDED;
-	$MEMBERS_BEFRIENDED=NULL;
+	global $MEMBERS_BEFRIENDED_CACHE;
+	$MEMBERS_BEFRIENDED_CACHE=NULL;
 
 	global $EFFECT_SETTINGS_ROWS;
 	$EFFECT_SETTINGS_ROWS=NULL;
@@ -200,16 +200,16 @@ function member_befriended($member_id)
 	if ($member_id==get_member()) return false;
 	if (is_guest()) return false;
 
-	global $MEMBERS_BEFRIENDED;
-	if (is_null($MEMBERS_BEFRIENDED))
+	global $MEMBERS_BEFRIENDED_CACHE;
+	if (is_null($MEMBERS_BEFRIENDED_CACHE))
 	{
-		$MEMBERS_BEFRIENDED=collapse_1d_complexity('member_liked',$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),array('member_likes'=>get_member()),'',100));
+		$MEMBERS_BEFRIENDED_CACHE=collapse_1d_complexity('member_liked',$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),array('member_likes'=>get_member()),'',100));
 	}
-	if (count($MEMBERS_BEFRIENDED)==100) // Ah, too much to preload
+	if (count($MEMBERS_BEFRIENDED_CACHE)==100) // Ah, too much to preload
 	{
 		return !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_liked',array('member_liked'=>$member_id,'member_likes'=>get_member())));
 	}
-	return (in_array($member_id,$MEMBERS_BEFRIENDED));
+	return (in_array($member_id,$MEMBERS_BEFRIENDED_CACHE));
 }
 
 /**
@@ -1244,8 +1244,8 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 			$where.='system_message=0';
 		}
 		$query.=(($where=='')?'':' WHERE '.$where).' ORDER BY date_and_time DESC,id DESC';
-		global $TABLE_LANG_FIELDS;
-		$rows=$GLOBALS['SITE_DB']->query($query,$cutoff,NULL,false,false,array_key_exists('chat_messages',$TABLE_LANG_FIELDS)?$TABLE_LANG_FIELDS['chat_messages']:array());
+		global $TABLE_LANG_FIELDS_CACHE;
+		$rows=$GLOBALS['SITE_DB']->query($query,$cutoff,NULL,false,false,array_key_exists('chat_messages',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['chat_messages']:array());
 	} else
 	{
 		$where_array=array('room_id'=>$room_id);

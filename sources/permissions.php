@@ -35,9 +35,9 @@ function init__permissions()
 	global $PAGE_ACCESS_CACHE;
 	$PAGE_ACCESS_CACHE=array();
 
-	global $CATEGORY_ACCESS_CACHE,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR;
+	global $CATEGORY_ACCESS_CACHE,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR_CACHE;
 	$CATEGORY_ACCESS_CACHE=array();
-	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR=array();
+	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR_CACHE=array();
 
 	global $SUBMIT_PERMISSION_CACHE;
 	$SUBMIT_PERMISSION_CACHE=array();
@@ -326,9 +326,9 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 	$groups=_get_where_clause_groups($member);
 	if ($groups===NULL) return;
 
-	global $CATEGORY_ACCESS_CACHE,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR;
+	global $CATEGORY_ACCESS_CACHE,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR_CACHE;
 
-	if ((array_key_exists($module,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR)) && ($LOADED_ALL_CATEGORY_PERMISSIONS_FOR[$module]))
+	if ((array_key_exists($module,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR_CACHE)) && ($LOADED_ALL_CATEGORY_PERMISSIONS_FOR_CACHE[$module]))
 		return;
 
 	if (!is_null($module))
@@ -344,7 +344,7 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 	if ($db->query_value_if_there('SELECT COUNT(*) FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.')')>1000) return; // Performance issue
 	$perhaps=$db->query('SELECT '.$select.' FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.') UNION ALL SELECT '.$select.' FROM '.$db->get_table_prefix().'member_category_access WHERE '.$catclause.'(member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',NULL,NULL,false,true);
 
-	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR[$module]=true;
+	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR_CACHE[$module]=true;
 
 	$CATEGORY_ACCESS_CACHE[$member]=array();
 	foreach ($perhaps as $row)
@@ -372,13 +372,13 @@ function has_category_access($member,$module,$category)
 {
 	if (running_script('upgrader')) return true;
 
-	global $CATEGORY_ACCESS_CACHE,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR;
+	global $CATEGORY_ACCESS_CACHE,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR_CACHE;
 	if ((isset($CATEGORY_ACCESS_CACHE[$member])) && (isset($CATEGORY_ACCESS_CACHE[$member][$module.'/'.$category])))
 	{
 		handle_permission_check_logging($member,'has_category_access',array($module,$category),$CATEGORY_ACCESS_CACHE[$member][$module.'/'.$category]);
 		return $CATEGORY_ACCESS_CACHE[$member][$module.'/'.$category];
 	}
-	if (array_key_exists($module,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR))
+	if (array_key_exists($module,$LOADED_ALL_CATEGORY_PERMISSIONS_FOR_CACHE))
 	{
 		handle_permission_check_logging($member,'has_category_access',array($module,$category),false);
 		return false;

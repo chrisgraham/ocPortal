@@ -40,8 +40,6 @@ if (!file_exists($FILE_BASE.'/sources/global.php'))
 }
 @chdir($FILE_BASE);
 
-global $NON_PAGE_SCRIPT;
-$NON_PAGE_SCRIPT=1;
 global $FORCE_INVISIBLE_GUEST;
 $FORCE_INVISIBLE_GUEST=0;
 global $KNOWN_UTF8;

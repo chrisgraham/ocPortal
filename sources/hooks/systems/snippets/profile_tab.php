@@ -45,9 +45,12 @@ class Hook_profile_tab
 		$ob=object_factory('Hook_Profiles_Tabs_'.$hook);
 		if ($ob->is_active($member_id_of,$member_id_viewing))
 		{
+			// We need to minimise the dependency stuff that comes out, we don't need any default values
 			global $CSSS,$JAVASCRIPTS;
 			$CSSS=array();
 			$JAVASCRIPTS=array();
+
+			// And, go
 			$ret=$ob->render_tab($member_id_of,$member_id_viewing);
 			$out=new ocp_tempcode();
 			$out->attach(symbol_tempcode('CSS_TEMPCODE'));

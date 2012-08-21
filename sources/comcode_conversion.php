@@ -51,7 +51,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 
 	$xml='';
 
-	global $ALLOWED_ENTITIES,$CODE_TAGS,$DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$POTENTIAL_JS_NAUGHTY_ARRAY,$TEXTUAL_TAGS,$LEET_FILTER,$IMPORTED_CUSTOM_COMCODE,$REPLACE_TARGETS;
+	global $ALLOWED_ENTITIES,$CODE_TAGS,$DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$POTENTIAL_JS_NAUGHTY_ARRAY,$TEXTUAL_TAGS,$LEET_FILTER,$IMPORTED_CUSTOM_COMCODE;
 
 	$len=strlen($comcode);
 
@@ -88,8 +88,8 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 	$none_wrap_length=0;
 	$just_new_line=true; // So we can detect lists starting right away
 	$just_title=false;
-	global $NUM_LINES;
-	$NUM_LINES=0;
+	global $NUM_COMCODE_LINES_PARSED;
+	$NUM_COMCODE_LINES_PARSED=0;
 	$wrap_pos=60;
 	$preparse_mode=false;
 	$is_all_semihtml=false;
@@ -155,7 +155,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 					$ahead=substr($comcode,$pos-1,20);
 					$ahead_lower=strtolower($ahead);
 
-					if ($next==chr(10)) ++$NUM_LINES;
+					if ($next==chr(10)) ++$NUM_COMCODE_LINES_PARSED;
 
 					$continuation.=$next;
 				}
@@ -236,7 +236,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 									{
 										if ($scan_next==chr(10))
 										{
-											++$NUM_LINES;
+											++$NUM_COMCODE_LINES_PARSED;
 											break;
 										} else $found_rule=false;
 									}
@@ -300,7 +300,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 
 					if (($next==chr(10)) && ($white_space_area) && (!$just_ended)) // Hard-new-lines
 					{
-						++$NUM_LINES;
+						++$NUM_COMCODE_LINES_PARSED;
 						$line_starting=true;
 						$xml.=$continuation;
 						$continuation='';
@@ -908,7 +908,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 						{
 							if ((strlen($comcode)>$pos+1) && ($comcode[$pos]==chr(10)) && ($comcode[$pos+1]==chr(10))) // Linux newline
 							{
-								$NUM_LINES+=2;
+								$NUM_COMCODE_LINES_PARSED+=2;
 								$pos+=2;
 								$just_new_line=true;
 								list($close_list,$list_indent)=_convert_close_open_lists($list_indent);

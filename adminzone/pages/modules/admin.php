@@ -955,10 +955,10 @@ class Module_admin
 			if (user_lang()!=fallback_lang())
 				$content[$current_results_type]->attach(paragraph(do_lang_tempcode('SEARCH_LAUNCHPAD',escape_html(urlencode($raw_search_string)),escape_html(urlencode(user_lang())))));
 
-			global $LANGUAGE;
+			global $LANGUAGE_STRINGS_CACHE;
 			$lang_file_contents=array();
 			$lang_found=array();
-			foreach ($LANGUAGE[user_lang()] as $n=>$n_value) // Search all lang strings (we loaded all earlier with require_all_lang)
+			foreach ($LANGUAGE_STRINGS_CACHE[user_lang()] as $n=>$n_value) // Search all lang strings (we loaded all earlier with require_all_lang)
 			{
 				if (($this->_keyword_match($n)) || ($this->_keyword_match($n_value)))
 				{

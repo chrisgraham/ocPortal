@@ -28,8 +28,6 @@ function init__lang()
 	global $COMCODE_LANG_STRING_CACHE;
 	$COMCODE_LANG_STRING_CACHE=array();
 
-	global $LANG;
-	$LANG=array();
 	global $LANG_LOADED,$LANG_LOADED_LANG,$LANG_REQUESTED_LANG,$LANGS_REQUESTED;
 	// Tracks what has already been require'd, although loading may have been deferred.
 	$LANG_REQUESTED_LANG=array(); // By lang pack and lang file
@@ -38,11 +36,11 @@ function init__lang()
 	$LANG_LOADED_LANG=array(); // By lang pack and lang file
 	$LANG_LOADED=array(); // Just by lang file
 
-	global $LANGUAGE;
-	$LANGUAGE=array();
+	global $LANGUAGE_STRINGS_CACHE;
+	$LANGUAGE_STRINGS_CACHE=array();
 
-	global $LANGS_MAP;
-	$LANGS_MAP=NULL;
+	global $LANGS_MAP_CACHE;
+	$LANGS_MAP_CACHE=NULL;
 
 	global $USER_LANG_CACHED,$USER_LANG_EARLY_CACHED,$USER_LANG_LOOP,$REQUIRE_LANG_LOOP;
 	global $RECORD_LANG_STRINGS,$RECORDED_LANG_STRINGS,$RECORD_LANG_STRINGS_CONTENT,$RECORDED_LANG_STRINGS_CONTENT;
@@ -79,7 +77,7 @@ function init__lang()
 			if (is_array($PAGE_CACHE_LANG_LOADED))
 			{
 				$PAGE_CACHE_LAZY_LOAD=true;
-				$LANGUAGE=$PAGE_CACHE_LANG_LOADED;
+				$LANGUAGE_STRINGS_CACHE=$PAGE_CACHE_LANG_LOADED;
 			}
 			$PAGE_CACHE_FILE=$cache_path;
 		} else
@@ -91,7 +89,7 @@ function init__lang()
 				if (is_array($PAGE_CACHE_LANG_LOADED))
 				{
 					$PAGE_CACHE_LAZY_LOAD=true;
-					$LANGUAGE=$PAGE_CACHE_LANG_LOADED;
+					$LANGUAGE_STRINGS_CACHE=$PAGE_CACHE_LANG_LOADED;
 				}
 			}
 			$PAGE_CACHE_FILE=$cache_path;
@@ -111,14 +109,14 @@ function init__lang()
 		$HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
 	}
 
-	global $OPTIONS;
-	if (isset($OPTIONS))
+	global $CONFIG_OPTIONS_CACHE;
+	if (isset($CONFIG_OPTIONS_CACHE))
 	{
 		if (user_lang()!=get_site_default_lang())
 		{
-			foreach ($OPTIONS as $name=>$option)
+			foreach ($CONFIG_OPTIONS_CACHE as $name=>$option)
 			{
-				unset($OPTIONS[$name]['config_value_translated']);
+				unset($CONFIG_OPTIONS_CACHE[$name]['config_value_translated']);
 			}
 		}
 	}
@@ -410,7 +408,7 @@ function get_lang($member=NULL)
 function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $type is for efficiency only - to avoid needing to doubly-search when requiring all
 {
 	// So we can keep track of what code loads what langs
-	global $LANGS_REQUESTED,$LANG_REQUESTED_LANG,$REQUIRE_LANG_LOOP,$PAGE_CACHE_LAZY_LOAD,$PAGE_CACHE_LANGS_REQUESTED,$LANG_LOADED_LANG,$LANGUAGE;
+	global $LANGS_REQUESTED,$LANG_REQUESTED_LANG,$REQUIRE_LANG_LOOP,$PAGE_CACHE_LAZY_LOAD,$PAGE_CACHE_LANGS_REQUESTED,$LANG_LOADED_LANG,$LANGUAGE_STRINGS_CACHE;
 	$LANGS_REQUESTED[$codename]=1;
 
 	if ($lang===NULL) $lang=user_lang();
@@ -467,7 +465,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 		{
 			global $PAGE_CACHE_FILE;
 			open_page_cache_file();
-			$LANGUAGE=array();
+			$LANGUAGE_STRINGS_CACHE=array();
 			@rewind($PAGE_CACHE_FILE);
 			@ftruncate($PAGE_CACHE_FILE,0);
 			$PAGE_CACHE_LAZY_LOAD=false;
@@ -497,7 +495,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 	$bad=false;
 	$done=false;
 
-	if (!isset($LANGUAGE[$lang])) $LANGUAGE[$lang]=array();
+	if (!isset($LANGUAGE_STRINGS_CACHE[$lang])) $LANGUAGE_STRINGS_CACHE[$lang]=array();
 
 	$cache_path=$cfb.'/lang_cached/'.$lang.'/'.$codename.'.lcd';
 
@@ -522,7 +520,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 		}
 		if (is_array($pcache))
 		{
-			$LANGUAGE[$lang]+=$pcache;
+			$LANGUAGE_STRINGS_CACHE[$lang]+=$pcache;
 			$done=true;
 		}
 	} else
@@ -559,7 +557,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 					$unserialized=@unserialize($tmp);
 					if ($unserialized!==false)
 					{
-						$LANGUAGE[$lang]+=$unserialized;
+						$LANGUAGE_STRINGS_CACHE[$lang]+=$unserialized;
 						$done=true;
 					}
 				}
@@ -698,7 +696,7 @@ function protect_from_escaping($in)
  */
 function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$require_result=true)
 {
-	global $LANGUAGE,$USER_LANG_CACHED,$RECORD_LANG_STRINGS,$XSS_DETECT,$PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED;
+	global $LANGUAGE_STRINGS_CACHE,$USER_LANG_CACHED,$RECORD_LANG_STRINGS,$XSS_DETECT,$PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED;
 
 	if ($lang===NULL)
 	{
@@ -732,7 +730,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				fwrite($myfile,"\n".$codename.'='.$value);
 				fclose($myfile);
 				// Fake-load the string
-				$LANGUAGE[$lang][$codename]=$value;
+				$LANGUAGE_STRINGS_CACHE[$lang][$codename]=$value;
 				// Go through all required files, doing a string replace if needed
 				$included_files=get_included_files();
 				foreach ($included_files as $inc)
@@ -749,7 +747,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			}
 		}
 
-		$there=isset($LANGUAGE[$lang][$codename]);
+		$there=isset($LANGUAGE_STRINGS_CACHE[$lang][$codename]);
 
 		if (!$there)
 		{
@@ -760,7 +758,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				$codename=substr($codename,$pos+1);
 			}
 
-			$there=isset($LANGUAGE[$lang][$codename]);
+			$there=isset($LANGUAGE_STRINGS_CACHE[$lang][$codename]);
 		}
 
 		if ($RECORD_LANG_STRINGS)
@@ -769,7 +767,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			$RECORDED_LANG_STRINGS[$codename]=1;
 		}
 
-		if ((!$there) && ((!isset($LANGUAGE[$lang])) || (!array_key_exists($codename,$LANGUAGE[$lang]))))
+		if ((!$there) && ((!isset($LANGUAGE_STRINGS_CACHE[$lang])) || (!array_key_exists($codename,$LANGUAGE_STRINGS_CACHE[$lang]))))
 		{
 			global $PAGE_CACHE_LAZY_LOAD,$PAGE_CACHE_LANGS_REQUESTED,$LANG_REQUESTED_LANG;
 
@@ -806,7 +804,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 
 	if ($lang=='xxx') return 'xxx'; // Helpful for testing language compliancy. We don't expect to see non x's if we're running this language
 
-	if ((!isset($LANGUAGE[$lang][$codename])) && (($require_result) || (!isset($LANGUAGE[$lang])) || (!array_key_exists($codename,$LANGUAGE[$lang]))))
+	if ((!isset($LANGUAGE_STRINGS_CACHE[$lang][$codename])) && (($require_result) || (!isset($LANGUAGE_STRINGS_CACHE[$lang])) || (!array_key_exists($codename,$LANGUAGE_STRINGS_CACHE[$lang]))))
 	{
 		if ($lang!=fallback_lang())
 		{
@@ -853,7 +851,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 	{
 		if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename,$PAGE_CACHE_LANG_LOADED[$lang]))))
 		{
-			$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$LANGUAGE[$lang][$codename];
+			$PAGE_CACHE_LANG_LOADED[$lang][$codename]=$LANGUAGE_STRINGS_CACHE[$lang][$codename];
 			if ($GLOBALS['MEM_CACHE']!==NULL)
 			{
 				persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
@@ -869,7 +867,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 
 	// Put in parameters
 	static $non_plural_non_vowel=array('1','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z');
-	$looked_up=$LANGUAGE[$lang][$codename];
+	$looked_up=$LANGUAGE_STRINGS_CACHE[$lang][$codename];
 	if ($looked_up===NULL)
 	{
 		return NULL; // Learning cache pool has told us this string definitely does not exist
@@ -1274,17 +1272,17 @@ function choose_language($title,$tip=false,$allow_all_selection=false)
 		$text=do_lang_tempcode('CHOOSE_LANG_DESCRIP');
 	} else
 	{
-		global $LANGS_MAP;
-		if ($LANGS_MAP===NULL)
+		global $LANGS_MAP_CACHE;
+		if ($LANGS_MAP_CACHE===NULL)
 		{
 			$map_a=get_file_base().'/lang/langs.ini';
 			$map_b=get_custom_file_base().'/lang_custom/langs.ini';
 			if (!is_file($map_b)) $map_b=$map_a;
-			$LANGS_MAP=better_parse_ini_file($map_b);
+			$LANGS_MAP_CACHE=better_parse_ini_file($map_b);
 		}
 
 		$lang_name=get_site_default_lang();
-		if (array_key_exists($lang_name,$LANGS_MAP)) $lang_name=$LANGS_MAP[$lang_name];
+		if (array_key_exists($lang_name,$LANGS_MAP_CACHE)) $lang_name=$LANGS_MAP_CACHE[$lang_name];
 
 		$text=do_lang_tempcode('CHOOSE_LANG_DESCRIP_ADD_TO_MAIN_LANG_FIRST',escape_html($lang_name));
 	}

@@ -690,7 +690,7 @@ class Module_search
 		$out=build_search_results_interface($results,$start,$max,$direction,$id=='');
 		if ($out->is_empty())
 		{
-			if (($days!=-1) && ($GLOBALS['TOTAL_RESULTS']==0))
+			if (($days!=-1) && ($GLOBALS['TOTAL_SEARCH_RESULTS']==0))
 			{
 				$ret_maybe=$this->results($id,$author,$author_id,-1,$sort,$direction,$only_titles,$search_under);
 				if (!$ret_maybe[0]->is_empty())
@@ -704,7 +704,7 @@ class Module_search
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('RESULTS'),NULL,$start,'start',$max,'max',$GLOBALS['TOTAL_RESULTS'],NULL,'results',true,true);
+		$pagination=pagination(do_lang_tempcode('RESULTS'),NULL,$start,'start',$max,'max',$GLOBALS['TOTAL_SEARCH_RESULTS'],NULL,'results',true,true);
 
 		if ($start==0)
 		{
@@ -717,7 +717,7 @@ class Module_search
 			));
 		}
 
-		return array($out,$pagination,$GLOBALS['TOTAL_RESULTS']);
+		return array($out,$pagination,$GLOBALS['TOTAL_SEARCH_RESULTS']);
 	}
 
 }

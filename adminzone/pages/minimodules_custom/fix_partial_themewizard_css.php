@@ -101,7 +101,7 @@ echo '<p>Making missing theme images</p><ul>';
 
 load_themewizard_params_from_theme('default');
 
-global $THEME_WIZARD_IMAGES,$THEME_WIZARD_IMAGES_NO_WILD,$IMG_CODES;
+global $THEME_WIZARD_IMAGES,$THEME_WIZARD_IMAGES_NO_WILD,$THEME_IMAGES_CACHE;
 if (function_exists('imagecolorallocatealpha'))
 {
 	require_code('themes2');

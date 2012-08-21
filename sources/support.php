@@ -31,30 +31,35 @@ function init__support()
 	$PAGE_NAME_CACHE=NULL;
 	$GETTING_PAGE_NAME=false;
 
-	global $IS_MOBILE,$IS_MOBILE_TRUTH;
-	$IS_MOBILE=NULL;
-	$IS_MOBILE_TRUTH=NULL;
+	global $IS_MOBILE_CACHE,$IS_MOBILE_TRUTH_CACHE;
+	$IS_MOBILE_CACHE=NULL;
+	$IS_MOBILE_TRUTH_CACHE=NULL;
 
-	// Heavily optimised! Ended up with preg_replace after trying lots of things
+	// Heavily optimised string escaping data
 	global $HTML_ESCAPE_1,$HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
-	$HTML_ESCAPE_1=array('/&/'/*,'/'.chr(195).'/','/'.chr(195).'/'*/,'/"/','/\'/','/</','/>/'/*,'/'.chr(194).'/'*/);
-	$HTML_ESCAPE_1_STRREP=array('&'/*,chr(195),chr(195)*/,'"','\'','<','>'/*,chr(194)*/);
-	$HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
+	$HTML_ESCAPE_1=array('/&/','/"/','/\'/','/</','/>/');
+	$HTML_ESCAPE_1_STRREP=array('&','"','\'','<','>');
+	$HTML_ESCAPE_2=array('&amp;','&quot;','&#039;','&lt;','&gt;');
+	global $PHP_REP_FROM,$PHP_REP_TO,$PHP_REP_TO_TWICE;
+	$PHP_REP_FROM=array('\\',"\n",'$','"');
+	$PHP_REP_TO=array('\\\\','\n','\$','\\"');
+	$PHP_REP_TO_TWICE=array('\\\\\\\\','\\n','\\\\$','\\\\\"');
 
-	global $BOT_MAP,$CACHE_BOT_TYPE;
-	$BOT_MAP=NULL;
-	$CACHE_BOT_TYPE=false;
+	global $BOT_MAP_CACHE,$BOT_TYPE_CACHE;
+	$BOT_MAP_CACHE=NULL;
+	$BOT_TYPE_CACHE=false;
 
-	global $LOCALE_FILTER;
-	$LOCALE_FILTER=NULL;
+	global $LOCALE_FILTER_CACHE;
+	$LOCALE_FILTER_CACHE=NULL;
 
-	global $HAS_COOKIES;
-	$HAS_COOKIES=NULL;
+	global $HAS_COOKIES_CACHE;
+	$HAS_COOKIES_CACHE=NULL;
 
 	global $BROWSER_MATCHES_CACHE;
 	$BROWSER_MATCHES_CACHE=array();
 
-	$GLOBALS['MSN_DB']=NULL;
+	global $MSN_DB;
+	$MSN_DB=NULL;
 
 	// This is like NULL, but is a higher-precedence NULL that can also survive string layers (such as HTML forms). It should only be used when:
 	//  - 'NULL' or '' or '-1' aren't appropriate (although '-1' is only appropriate when dealing with numbers held in strings, really).
@@ -63,33 +68,200 @@ function init__support()
 	// This is similar, but for integers. As before, it should only be used when NULL and -1 aren't appropiate OR as the "ignore this field" indicator.
 	if (!defined('INTEGER_MAGIC_NULL')) define('INTEGER_MAGIC_NULL',1634817353); // VERY unlikely to occur, but is both a 32bit unsigned and a 32 bit signed number
 
-	global $ZONE_DEFAULT_PAGES;
-	$ZONE_DEFAULT_PAGES=array();
+	global $ZONE_DEFAULT_PAGES_CACHE;
+	$ZONE_DEFAULT_PAGES_CACHE=array();
 
-	global $PHP_REP_FROM,$PHP_REP_TO,$PHP_REP_TO_TWICE;
-	$PHP_REP_FROM=array('\\',"\n",'$','"');
-	$PHP_REP_TO=array('\\\\','\n','\$','\\"');
-	$PHP_REP_TO_TWICE=array('\\\\\\\\','\\n','\\\\$','\\\\\"');
-
-	global $IS_WIDE,$IS_WIDE_HIGH;
-	$IS_WIDE=NULL;
-	$IS_WIDE_HIGH=NULL;
+	global $IS_WIDE_CACHE,$IS_WIDE_HIGH_CACHE;
+	$IS_WIDE_CACHE=NULL;
+	$IS_WIDE_HIGH_CACHE=NULL;
 
 	global $ADDON_INSTALLED_CACHE;
 	$ADDON_INSTALLED_CACHE=array();
 
-	global $HTTP_STATUS_CODE;
-	$HTTP_STATUS_CODE='200';
+	// Registry of output state globals
+	$OUTPUT_STATE_VARS=array(
+		'HTTP_STATUS_CODE',
+		'META_DATA',
+		'ATTACHED_MESSAGES',
+		'ATTACHED_MESSAGES_RAW',
+		'LATE_ATTACHED_MESSAGES',
+		'LATE_ATTACHED_MESSAGES_RAW',
+		'SEO_KEYWORDS',
+		'SEO_DESCRIPTION',
+		'SHORT_TITLE',
+		'BREADCRUMBS',
+		'BREADCRUMB_SET_PARENTS',
+		'BREADCRUMB_EXTRA_SEGMENTS',
+		'DISPLAYED_TITLE',
+		'BREADCRUMB_SET_SELF',
+		'FEED_URL',
+		'FEED_URL_2',
+		'OUTPUT_STATE_STACK',
+		'REFRESH_URL',
+		'FORCE_META_REFRESH',
+		'QUICK_REDIRECT',
+		'EXTRA_HEAD',
+		'EXTRA_FOOT',
+		'HELPER_PANEL_TEXT',
+		'HELPER_PANEL_HTML',
+		'HELPER_PANEL_PIC',
+		'HELPER_PANEL_TUTORIAL',
+		'JAVASCRIPT',
+		'JAVASCRIPTS',
+		'CSSS',
+		'CYCLES',
+		'TEMPCODE_SETGET',
+	);
+	_load_blank_output_state();
+}
 
-	global $DOCUMENT_HELP;
-	$DOCUMENT_HELP='';
+/**
+ * Load a fresh output state.
+ *
+ * @sets_output_state
+ *
+ * @param  boolean				Whether to only restore the Tempcode execution part of the state.
+ */
+function _load_blank_output_state($just_tempcode=false)
+{
+	/*
+		Now lots of stuff all relating to output state (unless commented, these GLOBALs should not be written to directly, we have API calls for it)
+	*/
 
-	global $META_DATA;
-	$META_DATA=array();
+	if (!$just_tempcode)
+	{
+		global $HTTP_STATUS_CODE;
+		$HTTP_STATUS_CODE='200';
+
+		global $META_DATA;
+		$META_DATA=array();
+
+		global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES,$LATE_ATTACHED_MESSAGES_RAW;
+		$ATTACHED_MESSAGES=NULL;
+		/** Raw data of attached messages.
+		 * @sets_output_state
+		 *
+		 * @global ?array $ATTACHED_MESSAGES_RAW
+		 */
+		$ATTACHED_MESSAGES_RAW=array();
+		$LATE_ATTACHED_MESSAGES=NULL;
+		$LATE_ATTACHED_MESSAGES_RAW=array();
+
+		global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SHORT_TITLE;
+		$SEO_KEYWORDS=NULL;
+		$SEO_DESCRIPTION=NULL;
+		$SHORT_TITLE=NULL;
+
+		global $BREADCRUMBS,$BREADCRUMB_SET_PARENTS,$BREADCRUMB_EXTRA_SEGMENTS,$DISPLAYED_TITLE,$BREADCRUMB_SET_SELF;
+		$BREADCRUMBS=NULL;
+		$BREADCRUMB_SET_PARENTS=array();
+		$BREADCRUMB_EXTRA_SEGMENTS=NULL;
+		$DISPLAYED_TITLE=NULL;
+		$BREADCRUMB_SET_SELF=NULL;
+
+		global $FEED_URL,$FEED_URL_2;
+		$FEED_URL=NULL;
+		$FEED_URL_2=NULL;
+
+		global $OUTPUT_STATE_STACK;
+		$OUTPUT_STATE_STACK=array();
+
+		global $REFRESH_URL,$FORCE_META_REFRESH,$QUICK_REDIRECT;
+		$REFRESH_URL[0]='';
+		$REFRESH_URL[1]=0;
+		$FORCE_META_REFRESH=false;
+		$QUICK_REDIRECT=false;
+
+		global $EXTRA_HEAD,$EXTRA_FOOT;
+		$EXTRA_HEAD=NULL;
+		$EXTRA_FOOT=NULL;
+
+		global $HELPER_PANEL_TEXT,$HELPER_PANEL_HTML,$HELPER_PANEL_PIC,$HELPER_PANEL_TUTORIAL;
+		$HELPER_PANEL_TEXT='';
+		$HELPER_PANEL_HTML='';
+		$HELPER_PANEL_PIC='';
+		$HELPER_PANEL_TUTORIAL='';
+
+		// Register basic CSS and Javascript requirements
+		global $JAVASCRIPT,$JAVASCRIPTS,$CSSS;
+		$JAVASCRIPT=NULL;
+		/** List of required Javascript files.
+		 * @sets_output_state
+		 *
+		 * @global ?array $JAVASCRIPTS
+		 */
+		$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
+		if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) $JAVASCRIPTS['javascript_ajax']=1; // AJAX needed by shared installs
+		/** List of required CSS files.
+		 * @sets_output_state
+		 *
+		 * @global ?array $CSSS
+		 */
+		$CSSS=array('no_cache'=>1,'global'=>1);
+	}
+
+	global $CYCLES,$TEMPCODE_SETGET;
+	/** Stores Tempcode CYCLE values during execution.
+	 * @sets_output_state
+	 *
+	 * @global array $CYCLE
+	 */
+	$CYCLES=array();
+	/** Stores Tempcode variable values during execution.
+	 * @sets_output_state
+	 *
+	 * @global array $TEMPCODE_SETGET
+	 */
+	$TEMPCODE_SETGET=array();
+}
+
+/**
+ * Push the output state on the stack and create a fresh one.
+ *
+ * @sets_output_state
+ */
+function push_output_state()
+{
+	global $OUTPUT_STATE_STACK,$OUTPUT_STATE_VARS;
+	$current_state=array();
+	foreach ($OUTPUT_STATE_VARS as $var)
+	{
+		$current_state[$var]=$GLOBALS[$var];
+	}
+	array_push($OUTPUT_STATE_STACK,$current_state);
+	_load_blank_output_state();
+}
+
+/**
+ * Restore the last output state on the stack, or a fresh one if none was pushed.
+ *
+ * @sets_output_state
+ *
+ * @param  boolean				Whether to only restore the Tempcode execution part of the state.
+ */
+function restore_output_state($just_tempcode=false)
+{
+	global $OUTPUT_STATE_STACK;
+	$old_state=array_pop($OUTPUT_STATE_STACK);
+	if (is_null($old_state))
+	{
+		_load_blank_output_state($just_tempcode);
+	} else
+	{
+		foreach ($old_state as $var=>$val)
+		{
+			if ((!$just_tempcode) || ($key=='CYCLES') || ($key=='TEMPCODE_SETGET'))
+			{
+				$GLOBALS[$var]=$val;
+			}
+		}
+	}
 }
 
 /**
  * Add some meta-data for the request.
+ *
+ * @sets_output_state
  *
  * @param  array				Extra meta-data
  */
@@ -101,6 +273,8 @@ function set_extra_request_metadata($meta_data)
 
 /**
  * Set the HTTP status code for the request.
+ *
+ * @sets_output_state
  *
  * @param  string				The HTTP status code (should be numeric)
  */
@@ -210,11 +384,11 @@ function find_template_place($codename,$lang,$theme,$suffix,$type)
  */
 function is_wide_high()
 {
-	global $IS_WIDE_HIGH;
-	if ($IS_WIDE_HIGH!==NULL) return $IS_WIDE_HIGH;
+	global $IS_WIDE_HIGH_CACHE;
+	if ($IS_WIDE_HIGH_CACHE!==NULL) return $IS_WIDE_HIGH_CACHE;
 
-	$IS_WIDE_HIGH=get_param_integer('wide_high',get_param_integer('keep_wide_high',get_param_integer('wide_print',0)));
-	return $IS_WIDE_HIGH;
+	$IS_WIDE_HIGH_CACHE=get_param_integer('wide_high',get_param_integer('keep_wide_high',get_param_integer('wide_print',0)));
+	return $IS_WIDE_HIGH_CACHE;
 }
 
 /**
@@ -224,12 +398,12 @@ function is_wide_high()
  */
 function is_wide()
 {
-	global $IS_WIDE;
-	if ($IS_WIDE!==NULL) return $IS_WIDE;
+	global $IS_WIDE_CACHE;
+	if ($IS_WIDE_CACHE!==NULL) return $IS_WIDE_CACHE;
 
 	global $ZONE;
-	$IS_WIDE=get_param_integer('wide',get_param_integer('keep_wide',(is_wide_high()==1)?1:$ZONE['zone_wide']));
-	if ($IS_WIDE==0) return 0;
+	$IS_WIDE_CACHE=get_param_integer('wide',get_param_integer('keep_wide',(is_wide_high()==1)?1:$ZONE['zone_wide']));
+	if ($IS_WIDE_CACHE==0) return 0;
 
 	// Need to check it is allowed
 	$theme=$GLOBALS['FORUM_DRIVER']->get_theme();
@@ -240,12 +414,12 @@ function is_wide()
 		$details=better_parse_ini_file($ini_path);
 		if ((isset($details['supports_wide'])) && ($details['supports_wide']=='0'))
 		{
-			$IS_WIDE=0;
-			return $IS_WIDE;
+			$IS_WIDE_CACHE=0;
+			return $IS_WIDE_CACHE;
 		}
 	}
 
-	return $IS_WIDE;
+	return $IS_WIDE_CACHE;
 }
 
 /**
@@ -672,7 +846,7 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 	require_code('site');
 	if ($message!==NULL) attach_message($message,$type);
 
-	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
+	restore_output_state(true); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 
 	if (!running_script('index'))
 	{
@@ -1439,21 +1613,21 @@ function is_invisible()
  */
 function get_num_users_site()
 {
-	global $NUM_USERS_SITE,$PEAK_USERS_EVER;
+	global $NUM_USERS_SITE_CACHE,$PEAK_USERS_EVER_CACHE;
 	$users_online_time_seconds=60*intval(get_option('users_online_time'));
-	$NUM_USERS_SITE=get_value_newer_than('users_online',time()-$users_online_time_seconds/2);
-	if ($NUM_USERS_SITE===NULL)
+	$NUM_USERS_SITE_CACHE=get_value_newer_than('users_online',time()-$users_online_time_seconds/2);
+	if ($NUM_USERS_SITE_CACHE===NULL)
 	{
-		$NUM_USERS_SITE=get_value('users_online');
+		$NUM_USERS_SITE_CACHE=get_value('users_online');
 		$count=0;
 		get_online_members(false,NULL,$count);
-		if (strval($count)!=$NUM_USERS_SITE)
+		if (strval($count)!=$NUM_USERS_SITE_CACHE)
 		{
-			$NUM_USERS_SITE=strval($count);
-			set_value('users_online',$NUM_USERS_SITE);
+			$NUM_USERS_SITE_CACHE=strval($count);
+			set_value('users_online',$NUM_USERS_SITE_CACHE);
 		}
 	}
-	if ((intval($NUM_USERS_SITE)>intval(get_option('maximum_users'))) && (intval(get_option('maximum_users'))>1) && (get_page_name()!='login') && (!has_privilege(get_member(),'access_overrun_site')) && (!running_script('cron_bridge')))
+	if ((intval($NUM_USERS_SITE_CACHE)>intval(get_option('maximum_users'))) && (intval(get_option('maximum_users'))>1) && (get_page_name()!='login') && (!has_privilege(get_member(),'access_overrun_site')) && (!running_script('cron_bridge')))
 	{
 		set_http_status_code('503');
 
@@ -1461,24 +1635,24 @@ function get_num_users_site()
 	}
 	if (addon_installed('stats'))
 	{
-		$PEAK_USERS_EVER=get_value_newer_than('user_peak',time()-$users_online_time_seconds*10);
-		if (($PEAK_USERS_EVER===NULL) || ($PEAK_USERS_EVER==''))
+		$PEAK_USERS_EVER_CACHE=get_value_newer_than('user_peak',time()-$users_online_time_seconds*10);
+		if (($PEAK_USERS_EVER_CACHE===NULL) || ($PEAK_USERS_EVER_CACHE==''))
 		{
 			$_peak_users_user=$GLOBALS['SITE_DB']->query_select_value_if_there('usersonline_track','MAX(peak)',NULL,'',true);
-			$PEAK_USERS_EVER=($_peak_users_user===NULL)?$NUM_USERS_SITE:strval($_peak_users_user);
-			set_value('user_peak',$PEAK_USERS_EVER);
+			$PEAK_USERS_EVER_CACHE=($_peak_users_user===NULL)?$NUM_USERS_SITE_CACHE:strval($_peak_users_user);
+			set_value('user_peak',$PEAK_USERS_EVER_CACHE);
 		}
-		if ($NUM_USERS_SITE>$PEAK_USERS_EVER)
+		if ($NUM_USERS_SITE_CACHE>$PEAK_USERS_EVER_CACHE)
 		{
 			// In case the record is beaten more than once within the same second
 			$time=time();
 			$GLOBALS['SITE_DB']->query_delete('usersonline_track',array('date_and_time'=>$time),'',1,NULL,true);
 
 			// New record
-			$GLOBALS['SITE_DB']->query_insert('usersonline_track',array('date_and_time'=>$time,'peak'=>intval($NUM_USERS_SITE)),false,true);
+			$GLOBALS['SITE_DB']->query_insert('usersonline_track',array('date_and_time'=>$time,'peak'=>intval($NUM_USERS_SITE_CACHE)),false,true);
 		}
 	}
-	return intval($NUM_USERS_SITE);
+	return intval($NUM_USERS_SITE_CACHE);
 }
 
 /**
@@ -1488,8 +1662,8 @@ function get_num_users_site()
  */
 function get_num_users_peak()
 {
-	global $PEAK_USERS_EVER;
-	return intval($PEAK_USERS_EVER);
+	global $PEAK_USERS_EVER_CACHE;
+	return intval($PEAK_USERS_EVER_CACHE);
 }
 
 /**
@@ -1646,17 +1820,17 @@ function is_mobile($user_agent=NULL,$truth=false)
 	$user_agent_given=($user_agent!==NULL);
 	if ($user_agent===NULL) $user_agent=ocp_srv('HTTP_USER_AGENT');
 
-	global $IS_MOBILE,$IS_MOBILE_TRUTH;
+	global $IS_MOBILE_CACHE,$IS_MOBILE_TRUTH_CACHE;
 
 	if (!$user_agent_given)
 	{
-		if (($truth?$IS_MOBILE_TRUTH:$IS_MOBILE)!==NULL) return $truth?$IS_MOBILE_TRUTH:$IS_MOBILE;
+		if (($truth?$IS_MOBILE_TRUTH_CACHE:$IS_MOBILE_CACHE)!==NULL) return $truth?$IS_MOBILE_TRUTH_CACHE:$IS_MOBILE_CACHE;
 	}
 
 	if ((!function_exists('get_option')) || (get_option('mobile_support')=='0'))
 	{
-		$IS_MOBILE=false;
-		$IS_MOBILE_TRUTH=false;
+		$IS_MOBILE_CACHE=false;
+		$IS_MOBILE_TRUTH_CACHE=false;
 		return false;
 	}
 
@@ -1670,7 +1844,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 			$details=better_parse_ini_file($ini_path);
 			if ((isset($details['mobile_pages'])) && ($details['mobile_pages']!='') && (preg_match('#(^|,)\s*'.preg_quote(get_page_name(),'#').'\s*(,|$)#',$details['mobile_pages'])==0))
 			{
-				$IS_MOBILE=false;
+				$IS_MOBILE_CACHE=false;
 				return false;
 			}
 		}
@@ -1682,70 +1856,70 @@ function is_mobile($user_agent=NULL,$truth=false)
 		if ($val!==NULL)
 		{
 			if (isset($GLOBALS['FORUM_DRIVER']))
-				$IS_MOBILE=($val==1);
-			$IS_MOBILE_TRUTH=$IS_MOBILE;
-			return $IS_MOBILE;
+				$IS_MOBILE_CACHE=($val==1);
+			$IS_MOBILE_TRUTH_CACHE=$IS_MOBILE_CACHE;
+			return $IS_MOBILE_CACHE;
 		}
 	}
 
 	// The set of browsers
 	$browsers=array(
-						// Implication by technology claims
-						'WML',
-						'WAP',
-						'Wap',
-						'MIDP', // Mobile Information Device Profile
+		// Implication by technology claims
+		'WML',
+		'WAP',
+		'Wap',
+		'MIDP', // Mobile Information Device Profile
 
-						// Generics
-						'Mobile',
-						'Smartphone',
-						'WebTV',
+		// Generics
+		'Mobile',
+		'Smartphone',
+		'WebTV',
 
-						// Well known/important browsers/brands
-						'Minimo', // By Mozilla
-						'Fennec', // By Mozilla (being outmoded by minimo)
-						'Mobile Safari', // Usually Android
-						'lynx',
-						'Links',
-						'iPhone',
-						'iPod',
-						'Opera Mobi',
-						'Opera Mini',
-						'BlackBerry',
-						'Windows Phone',
-						'Windows CE',
-						'Symbian',
-						'nook browser', // Barnes and Noble
-						'Blazer', // Palm
-						'PalmOS',
-						'webOS', // Palm
-						'SonyEricsson',
+		// Well known/important browsers/brands
+		'Minimo', // By Mozilla
+		'Fennec', // By Mozilla (being outmoded by minimo)
+		'Mobile Safari', // Usually Android
+		'lynx',
+		'Links',
+		'iPhone',
+		'iPod',
+		'Opera Mobi',
+		'Opera Mini',
+		'BlackBerry',
+		'Windows Phone',
+		'Windows CE',
+		'Symbian',
+		'nook browser', // Barnes and Noble
+		'Blazer', // Palm
+		'PalmOS',
+		'webOS', // Palm
+		'SonyEricsson',
 
-						// Games consoles
-						'Nintendo',
-						'PlayStation Portable',
+		// Games consoles
+		'Nintendo',
+		'PlayStation Portable',
 
-						// Less well known but common browsers
-						'UP.Browser', // OpenWave
-						'UP.Link', // OpenWave again?
-						'NetFront',
-						'Teleca',
-						'UCWEB',
+		// Less well known but common browsers
+		'UP.Browser', // OpenWave
+		'UP.Link', // OpenWave again?
+		'NetFront',
+		'Teleca',
+		'UCWEB',
 
-						// Specific lamely-identified devices/brands
-						'DDIPOCKET',
-						'SEMC-Browser',
-						'DoCoMo',
-						'Xda',
-						'ReqwirelessWeb', // Siemens/Samsung
+		// Specific lamely-identified devices/brands
+		'DDIPOCKET',
+		'SEMC-Browser',
+		'DoCoMo',
+		'Xda',
+		'ReqwirelessWeb', // Siemens/Samsung
 
-						// Specific services
-						'AvantGo',
-						);
+		// Specific services
+		'AvantGo',
+	);
 
 	$exceptions=array(
-						'iPad',
-						);
+		'iPad',
+	);
 
 	if (((!isset($SITE_INFO['no_extra_mobiles'])) || ($SITE_INFO['no_extra_mobiles']=='0')) && (is_file(get_file_base().'/text_custom/pdas.txt')))
 	{
@@ -1769,8 +1943,8 @@ function is_mobile($user_agent=NULL,$truth=false)
 	{
 		if (isset($GLOBALS['FORUM_DRIVER']))
 		{
-			$IS_MOBILE=$result;
-			$IS_MOBILE_TRUTH=$IS_MOBILE;
+			$IS_MOBILE_CACHE=$result;
+			$IS_MOBILE_CACHE_TRUTH_CACHE=$IS_MOBILE_CACHE;
 		}
 	}
 	return $result;
@@ -1783,23 +1957,23 @@ function is_mobile($user_agent=NULL,$truth=false)
  */
 function get_bot_type()
 {
-	global $CACHE_BOT_TYPE;
-	if ($CACHE_BOT_TYPE!==false) return $CACHE_BOT_TYPE;
+	global $BOT_TYPE_CACHE;
+	if ($BOT_TYPE_CACHE!==false) return $BOT_TYPE_CACHE;
 
 	$agent=ocp_srv('HTTP_USER_AGENT');
 	if (strpos($agent,'WebKit')!==false || strpos($agent,'MSIE')!==false || strpos($agent,'Firefox')!==false || strpos($agent,'Opera')!==false) return NULL; // Quick exit path
 	$agent=strtolower($agent);
 
-	global $BOT_MAP,$SITE_INFO;
-	if ($BOT_MAP===NULL)
+	global $BOT_MAP_CACHE,$SITE_INFO;
+	if ($BOT_MAP_CACHE===NULL)
 	{
 		if (((!isset($SITE_INFO['no_extra_bots'])) || ($SITE_INFO['no_extra_bots']=='0')) && (is_file(get_file_base().'/text_custom/bots.txt')))
 		{
 			require_code('files');
-			$BOT_MAP=better_parse_ini_file(get_file_base().'/text_custom/bots.txt');
+			$BOT_MAP_CACHE=better_parse_ini_file(get_file_base().'/text_custom/bots.txt');
 		} else
 		{
-			$BOT_MAP=array(
+			$BOT_MAP_CACHE=array(
 				'zyborg'=>'Looksmart',
 				'googlebot'=>'Google',
 				'teoma'=>'Teoma',
@@ -1822,12 +1996,12 @@ function get_bot_type()
 			);
 		}
 	}
-	foreach ($BOT_MAP as $id=>$name)
+	foreach ($BOT_MAP_CACHE as $id=>$name)
 	{
 		if ($name=='') continue;
 		if (strpos($agent,$id)!==false)
 		{
-			$CACHE_BOT_TYPE=$name;
+			$BOT_TYPE_CACHE=$name;
 			return $name;
 		}
 	}
@@ -1837,10 +2011,10 @@ function get_bot_type()
 		if ($to_a===false) $to_a=strlen($agent);
 		$to_b=strpos($agent,'/');
 		if ($to_b===false) $to_b=strlen($agent);
-		$CACHE_BOT_TYPE=substr($agent,0,min($to_a,$to_b));
+		$BOT_TYPE_CACHE=substr($agent,0,min($to_a,$to_b));
 		return $agent;
 	}
-	$CACHE_BOT_TYPE=NULL;
+	$BOT_TYPE_CACHE=NULL;
 	return NULL;
 }
 
@@ -1915,8 +2089,8 @@ function xmlentities($string,$quote_style=ENT_COMPAT)
  */
 function has_cookies() // Will fail on users first visit, but then will catch on
 {
-	global $HAS_COOKIES;
-	if ($HAS_COOKIES!==NULL) return $HAS_COOKIES;
+	global $HAS_COOKIES_CACHE;
+	if ($HAS_COOKIES_CACHE!==NULL) return $HAS_COOKIES_CACHE;
 
 	/*if (($GLOBALS['DEV_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0) && (!running_script('occle')))	We know this works by now, was tested for years. Causes annoyance when developing
 	{
@@ -1926,12 +2100,12 @@ function has_cookies() // Will fail on users first visit, but then will catch on
 
 	if (isset($_COOKIE['has_cookies']))
 	{
-		$HAS_COOKIES=true;
+		$HAS_COOKIES_CACHE=true;
 		return true;
 	}
 	require_code('users_active_actions');
 	ocp_setcookie('has_cookies','1');
-	$HAS_COOKIES=false;
+	$HAS_COOKIES_CACHE=false;
 	return false;
 }
 
@@ -1997,6 +2171,8 @@ function seo_meta_get_for($type,$id)
 /**
  * Load the specified resource's meta information into the system for use on this page.
  * Also, if the title is specified then this is used for the page title.
+ *
+ * @sets_output_state
  *
  * @param  ID_TEXT		The type of resource (e.g. download)
  * @param  ID_TEXT		The ID of the resource
@@ -2079,8 +2255,8 @@ function get_zone_default_page($zone_name)
 		return $ZONE['zone_default_page'];
 	} else
 	{
-		global $ZONE_DEFAULT_PAGES;
-		if (!isset($ZONE_DEFAULT_PAGES[$zone_name]))
+		global $ZONE_DEFAULT_PAGES_CACHE;
+		if (!isset($ZONE_DEFAULT_PAGES_CACHE[$zone_name]))
 		{
 			$_zone_default_page=NULL;
 			if (function_exists('persistent_cache_set'))
@@ -2098,13 +2274,13 @@ function get_zone_default_page($zone_name)
 			}
 			if ($_zone_default_page===NULL)
 				$_zone_default_page=$GLOBALS['SITE_DB']->query_select('zones',array('zone_name','zone_default_page'),NULL/*Load multiple so we can cache for performance array('zone_name'=>$zone_name)*/,'ORDER BY zone_title',50/*reasonable limit; zone_title is sequential for default zones*/);
-			$ZONE_DEFAULT_PAGES[$zone_name]='start';
-			$ZONE_DEFAULT_PAGES['collaboration']='start'; // Set this in case collaboration zone removed but still referenced. Performance tweak!
+			$ZONE_DEFAULT_PAGES_CACHE[$zone_name]='start';
+			$ZONE_DEFAULT_PAGES_CACHE['collaboration']='start'; // Set this in case collaboration zone removed but still referenced. Performance tweak!
 			foreach ($_zone_default_page as $zone_row)
-				$ZONE_DEFAULT_PAGES[$zone_row['zone_name']]=$zone_row['zone_default_page'];
+				$ZONE_DEFAULT_PAGES_CACHE[$zone_row['zone_name']]=$zone_row['zone_default_page'];
 		}
 
-		return $ZONE_DEFAULT_PAGES[$zone_name];
+		return $ZONE_DEFAULT_PAGES_CACHE[$zone_name];
 	}
 }
 
@@ -2350,7 +2526,7 @@ function member_personal_links_and_details($member_id)
 	}
 
 	// Conceded mode link
-	if (($GLOBALS['SESSION_CONFIRMED']==1) && (get_option('ocp_show_conceded_mode_link')=='1'))
+	if (($GLOBALS['SESSION_CONFIRMED_CACHE']==1) && (get_option('ocp_show_conceded_mode_link')=='1'))
 	{
 		$url=build_url(array('page'=>'login','type'=>'concede','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
 		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('_GUID'=>'81fa81cfd3130e42996bf72b0e03d8aa','POST'=>true,'NAME'=>do_lang_tempcode('CONCEDED_MODE'),'DESCRIPTION'=>do_lang_tempcode('DESCRIPTION_CONCEDED_MODE'),'URL'=>$url)));

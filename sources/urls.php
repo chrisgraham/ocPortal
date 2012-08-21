@@ -23,24 +23,24 @@
  */
 function init__urls()
 {
-	global $HTTPS_PAGES;
-	$HTTPS_PAGES=NULL;
+	global $HTTPS_PAGES_CACHE;
+	$HTTPS_PAGES_CACHE=NULL;
 
 	global $CHR_0;
 	$CHR_0=chr(10);
 
-	global $USE_REWRITE_PARAMS;
-	$USE_REWRITE_PARAMS=NULL;
+	global $USE_REWRITE_PARAMS_CACHE;
+	$USE_REWRITE_PARAMS_CACHE=NULL;
 
-	global $HAS_KEEP_IN_URL;
-	$HAS_KEEP_IN_URL=NULL;
+	global $HAS_KEEP_IN_URL_CACHE;
+	$HAS_KEEP_IN_URL_CACHE=NULL;
 
 	global $URL_REMAPPINGS;
 	$URL_REMAPPINGS=NULL;
 
-	global $CONTENT_OBS,$LOADED_MONIKERS;
+	global $CONTENT_OBS,$LOADED_MONIKERS_CACHE;
 	$CONTENT_OBS=NULL;
-	$LOADED_MONIKERS=array();
+	$LOADED_MONIKERS_CACHE=array();
 
 	global $SELF_URL_CACHED;
 	$SELF_URL_CACHED=NULL;
@@ -217,9 +217,9 @@ function remove_url_mistakes($url)
  */
 function skippable_keep($key,$val)
 {
-	global $CACHE_BOT_TYPE;
-	if ($CACHE_BOT_TYPE===false) get_bot_type();
-	if ($CACHE_BOT_TYPE!==false)
+	global $BOT_TYPE_CACHE;
+	if ($BOT_TYPE_CACHE===false) get_bot_type();
+	if ($BOT_TYPE_CACHE!==false)
 	{
 		return true;
 	}
@@ -255,21 +255,21 @@ function is_page_https($zone,$page)
 		if (tacit_https()) return true;
 	}
 
-	global $HTTPS_PAGES;
-	if ($HTTPS_PAGES===NULL)
-		$HTTPS_PAGES=persistent_cache_get('HTTPS_PAGES');
-	if ($HTTPS_PAGES===NULL)
+	global $HTTPS_PAGES_CACHE;
+	if ($HTTPS_PAGES_CACHE===NULL)
+		$HTTPS_PAGES_CACHE=persistent_cache_get('HTTPS_PAGES_CACHE');
+	if ($HTTPS_PAGES_CACHE===NULL)
 	{
 		$results=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'https_pages',NULL,NULL,true);
 		if (($results===false) || ($results===NULL)) // No HTTPS support (probably not upgraded yet)
 		{
-			$HTTPS_PAGES=array();
+			$HTTPS_PAGES_CACHE=array();
 			return false;
 		}
-		$HTTPS_PAGES=collapse_1d_complexity('https_page_name',$results);
-		persistent_cache_set('HTTPS_PAGES',$HTTPS_PAGES);
+		$HTTPS_PAGES_CACHE=collapse_1d_complexity('https_page_name',$results);
+		persistent_cache_set('HTTPS_PAGES_CACHE',$HTTPS_PAGES_CACHE);
 	}
-	return in_array($zone.':'.$page,$HTTPS_PAGES);
+	return in_array($zone.':'.$page,$HTTPS_PAGES_CACHE);
 }
 
 /**
@@ -401,13 +401,13 @@ function url_monikers_enabled()
  */
 function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=false,$skip_keep=false,$hash='')
 {
-	global $HAS_KEEP_IN_URL,$USE_REWRITE_PARAMS,$CACHE_BOT_TYPE,$WHAT_IS_RUNNING;
+	global $HAS_KEEP_IN_URL_CACHE,$USE_REWRITE_PARAMS_CACHE,$BOT_TYPE_CACHE,$WHAT_IS_RUNNING_CACHE;
 
 	// Build up our URL base
 	$stub=get_base_url(is_page_https($zone_name,isset($vars['page'])?$vars['page']:''),$zone_name);
 	$stub.='/';
 
-	if (($CACHE_BOT_TYPE!==NULL) && (get_bot_type()!==NULL))
+	if (($BOT_TYPE_CACHE!==NULL) && (get_bot_type()!==NULL))
 	{
 		foreach ($vars as $key=>$val)
 		{
@@ -418,12 +418,12 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 
 	// Things we need to keep in the url
 	$keep_actual=array();
-	if (($HAS_KEEP_IN_URL===NULL) || ($HAS_KEEP_IN_URL) || ($keep_all))
+	if (($HAS_KEEP_IN_URL_CACHE===NULL) || ($HAS_KEEP_IN_URL_CACHE) || ($keep_all))
 	{
 		$mc=get_magic_quotes_gpc();
 
 		$keep_cant_use=array();
-		$HAS_KEEP_IN_URL=false;
+		$HAS_KEEP_IN_URL_CACHE=false;
 		foreach ($_GET as $key=>$val)
 		{
 			if (!is_string($val)) continue;
@@ -434,7 +434,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 			{
 				if ((!$skip_keep) && (!skippable_keep($key,$val)))
 					$is_keep=true;
-				$HAS_KEEP_IN_URL=true;
+				$HAS_KEEP_IN_URL_CACHE=true;
 			}
 			if (((($keep_all) && (!$appears_keep)) || ($is_keep)) && (!array_key_exists($key,$vars)) && (!isset($skip[$key])))
 			{
@@ -451,32 +451,32 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		$vars+=$keep_actual;
 	}
 
-	global $URL_MONIKERS_ENABLED;
-	if ($URL_MONIKERS_ENABLED===NULL) $URL_MONIKERS_ENABLED=url_monikers_enabled();
-	if ($URL_MONIKERS_ENABLED)
+	global $URL_MONIKERS_ENABLED_CACHE;
+	if ($URL_MONIKERS_ENABLED_CACHE===NULL) $URL_MONIKERS_ENABLED_CACHE=url_monikers_enabled();
+	if ($URL_MONIKERS_ENABLED_CACHE)
 	{
 		$test=find_id_moniker($vars);
 		if ($test!==NULL) $vars['id']=$test;
 	}
 
 	// We either use mod_rewrite, or return a standard parameterisation
-	if (($USE_REWRITE_PARAMS===NULL) || ($avoid_remap))
+	if (($USE_REWRITE_PARAMS_CACHE===NULL) || ($avoid_remap))
 	{
 		$use_rewrite_params=can_try_mod_rewrite($avoid_remap);
-		if (!$avoid_remap) $USE_REWRITE_PARAMS=$use_rewrite_params;
-	} else $use_rewrite_params=$USE_REWRITE_PARAMS;
+		if (!$avoid_remap) $USE_REWRITE_PARAMS_CACHE=$use_rewrite_params;
+	} else $use_rewrite_params=$USE_REWRITE_PARAMS_CACHE;
 	$test_rewrite=NULL;
 	$self_page=((!isset($vars['page'])) || ($vars['page']=='_SELF') || ($vars['page']==get_page_name())) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='_top');
 	if ($use_rewrite_params)
 	{
-		if ((!$self_page) || ($WHAT_IS_RUNNING==='index'))
+		if ((!$self_page) || ($WHAT_IS_RUNNING_CACHE==='index'))
 		{
 			$test_rewrite=_url_rewrite_params($zone_name,$vars,count($keep_actual)>0);
 		}
 	}
 	if ($test_rewrite===NULL)
 	{
-		$url=(($self_page) && ($WHAT_IS_RUNNING!=='index'))?find_script($WHAT_IS_RUNNING):($stub.'index.php');
+		$url=(($self_page) && ($WHAT_IS_RUNNING_CACHE!=='index'))?find_script($WHAT_IS_RUNNING_CACHE):($stub.'index.php');
 
 		// Fix sort order
 		if (isset($vars['id']))
@@ -924,13 +924,13 @@ function find_id_moniker($url_parts)
 	if ($ob_info['support_url_monikers'])
 	{
 	   // Has to find existing if already there
-		global $LOADED_MONIKERS;
-		if (isset($LOADED_MONIKERS[$url_parts['page']][$url_parts['type']][$url_parts['id']]))
+		global $LOADED_MONIKERS_CACHE;
+		if (isset($LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']]))
 		{
-			if (is_bool($LOADED_MONIKERS[$url_parts['page']][$url_parts['type']][$url_parts['id']])) // Ok, none pre-loaded yet, so we preload all and replace the boolean values with actual results
+			if (is_bool($LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']])) // Ok, none pre-loaded yet, so we preload all and replace the boolean values with actual results
 			{
 				$or_list='';
-				foreach ($LOADED_MONIKERS as $page=>$types)
+				foreach ($LOADED_MONIKERS_CACHE as $page=>$types)
 				{
 					foreach ($types as $type=>$ids)
 					{
@@ -952,17 +952,17 @@ function find_id_moniker($url_parts)
 				$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
 				foreach ($results as $result)
 				{
-					$LOADED_MONIKERS[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']]=$result['m_moniker'];
+					$LOADED_MONIKERS_CACHE[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']]=$result['m_moniker'];
 				}
 			}
-			$test=$LOADED_MONIKERS[$url_parts['page']][$url_parts['type']][$url_parts['id']];
+			$test=$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']];
 		} else
 		{
 			$bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',array('m_deprecated'=>0,'m_resource_page'=>$url_parts['page'],'m_resource_type'=>$url_parts['type'],'m_resource_id'=>is_integer($url_parts['id'])?strval($url_parts['id']):$url_parts['id']));
 			$GLOBALS['NO_DB_SCOPE_CHECK']=$bak;
-			$LOADED_MONIKERS[$url_parts['page']][$url_parts['type']][$url_parts['id']]=$test;
+			$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']]=$test;
 		}
 		if (is_string($test)) return $test;
 
@@ -976,6 +976,8 @@ function find_id_moniker($url_parts)
 
 /**
  * Change whatever global context that is required in order to run from a different context.
+ *
+ * @sets_input_state
  *
  * @param  array			The URL component map (must contain 'page').
  * @param  ID_TEXT		The zone.
@@ -1005,9 +1007,9 @@ function set_execution_context($new_get,$new_zone='_SEARCH',$new_current_script=
 
 	global $PAGE_NAME_CACHE;
 	$PAGE_NAME_CACHE=NULL;
-	global $RUNNING_SCRIPT_CACHE,$WHAT_IS_RUNNING;
+	global $RUNNING_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE;
 	$RUNNING_SCRIPT_CACHE=array();
-	$WHAT_IS_RUNNING=$new_current_script;
+	$WHAT_IS_RUNNING_CACHE=$new_current_script;
 
 	return array($old_get,$old_zone,$old_current_script,true);
 }

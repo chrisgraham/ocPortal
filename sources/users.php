@@ -25,12 +25,12 @@
  */
 function init__users()
 {
-	global $MEMBERS_BLOCKED,$MEMBERS_BLOCKING_US;
-	$MEMBERS_BLOCKED=NULL;
-	$MEMBERS_BLOCKING_US=NULL;
+	global $MEMBERS_BLOCKED_CACHE,$MEMBERS_BLOCKING_US_CACHE;
+	$MEMBERS_BLOCKED_CACHE=NULL;
+	$MEMBERS_BLOCKING_US_CACHE=NULL;
 	global $SESSION_CACHE,$MEMBER_CACHED,$ADMIN_GROUP_CACHE,$MODERATOR_GROUP_CACHE,$USERGROUP_LIST_CACHE;
 	global $USER_NAME_CACHE,$MEMBER_EMAIL_CACHE,$USERS_GROUPS_CACHE;
-	global $SESSION_CONFIRMED,$GETTING_MEMBER,$CACHED_THEME,$EMOTICON_LEVELS,$EMOTICON_SET_DIR;
+	global $SESSION_CONFIRMED_CACHE,$GETTING_MEMBER,$USER_THEME_CACHE,$EMOTICON_LEVELS,$EMOTICON_SET_DIR;
 	$EMOTICON_LEVELS=NULL;
 	$USER_NAME_CACHE=array();
 	$MEMBER_EMAIL_CACHE=array();
@@ -39,9 +39,9 @@ function init__users()
 	$ADMIN_GROUP_CACHE=NULL;
 	$MODERATOR_GROUP_CACHE=NULL;
 	$MEMBER_CACHED=NULL;
-	$SESSION_CONFIRMED=0;
+	$SESSION_CONFIRMED_CACHE=0;
 	$GETTING_MEMBER=false;
-	$CACHED_THEME=NULL;
+	$USER_THEME_CACHE=NULL;
 	$EMOTICON_SET_DIR=NULL;
 	global $IS_ACTUALLY_ADMIN;
 	/** Find whether ocPortal is running in SU mode, and therefore the real user is an admin
@@ -220,8 +220,8 @@ function get_member($quick_only=false)
 					persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
 				}
 			}
-			global $SESSION_CONFIRMED;
-			$SESSION_CONFIRMED=$member_row['session_confirmed'];
+			global $SESSION_CONFIRMED_CACHE;
+			$SESSION_CONFIRMED_CACHE=$member_row['session_confirmed'];
 
 			if (get_forum_type()=='ocf') $GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
 
@@ -609,30 +609,30 @@ function member_blocked($member_id,$member_blocker=NULL)
 
 	if ($member_id==get_member())
 	{
-		global $MEMBERS_BLOCKING_US;
-		if (is_null($MEMBERS_BLOCKING_US))
+		global $MEMBERS_BLOCKING_US_CACHE;
+		if (is_null($MEMBERS_BLOCKING_US_CACHE))
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocker'),array('member_blocked'=>get_member()),'',NULL,NULL,true);
 			if (is_null($rows))
 			{
-				$MEMBERS_BLOCKING_US=array();
+				$MEMBERS_BLOCKING_US_CACHE=array();
 				return false;
 			}
-			$MEMBERS_BLOCKING_US=collapse_1d_complexity('member_blocker',$rows);
+			$MEMBERS_BLOCKING_US_CACHE=collapse_1d_complexity('member_blocker',$rows);
 		}
-		return (in_array($member_blocker,$MEMBERS_BLOCKING_US));
+		return (in_array($member_blocker,$MEMBERS_BLOCKING_US_CACHE));
 	}
 
-	global $MEMBERS_BLOCKED;
-	if (is_null($MEMBERS_BLOCKED))
+	global $MEMBERS_BLOCKED_CACHE;
+	if (is_null($MEMBERS_BLOCKED_CACHE))
 	{
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>get_member()),'',NULL,NULL,true);
 		if (is_null($rows))
 		{
-			$MEMBERS_BLOCKED=array();
+			$MEMBERS_BLOCKED_CACHE=array();
 			return false;
 		}
-		$MEMBERS_BLOCKED=collapse_1d_complexity('member_blocked',$rows);
+		$MEMBERS_BLOCKED_CACHE=collapse_1d_complexity('member_blocked',$rows);
 	}
-	return (in_array($member_id,$MEMBERS_BLOCKED));
+	return (in_array($member_id,$MEMBERS_BLOCKED_CACHE));
 }

@@ -123,12 +123,7 @@ class Hook_Profiles_Tabs_Edit_signature
 		$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($_signature_original,'{$,page hint: no_wysiwyg}')===false));
 
 		$class='';
-		global $JAVASCRIPT,$WYSIWYG_ATTACHED;
-		if (!$WYSIWYG_ATTACHED)
-			$JAVASCRIPT->attach(do_template('HTML_EDIT'));
-		$WYSIWYG_ATTACHED=true;
-		@header('Content-type: text/html; charset='.get_charset());
-
+		attach_wysiwyg();
 		if ($w) $class.=' wysiwyg';
 
 		global $LAX_COMCODE;

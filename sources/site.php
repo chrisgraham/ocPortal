@@ -23,34 +23,24 @@
  */
 function init__site()
 {
-	if (defined('BREADCRUMB_CROP_LENGTH')) return;
-
-	global $HELPER_PANEL_TEXT,$HELPER_PANEL_HTML,$HELPER_PANEL_PIC,$HELPER_PANEL_TUTORIAL;
-	$HELPER_PANEL_TEXT='';
-	$HELPER_PANEL_HTML='';
-	$HELPER_PANEL_PIC='';
-	$HELPER_PANEL_TUTORIAL='';
-
 	global $REQUEST_PAGE_NEST_LEVEL;
 	$REQUEST_PAGE_NEST_LEVEL=0;
 
 	global $REDIRECT_CACHE;
 	$REDIRECT_CACHE=array();
 
-	global $REDIRECTED_TO;
-	$REDIRECTED_TO=NULL;
+	global $REDIRECTED_TO_CACHE;
+	$REDIRECTED_TO_CACHE=NULL;
 
-	global $REFRESH_URL,$FORCE_META_REFRESH,$EXTRA_HEAD,$EXTRA_FOOT,$QUICK_REDIRECT;
-	$REFRESH_URL[0]='';
-	$REFRESH_URL[1]=0;
-	$FORCE_META_REFRESH=false;
-	$EXTRA_HEAD=new ocp_tempcode();
-	$EXTRA_FOOT=new ocp_tempcode();
-	$QUICK_REDIRECT=false;
-
-	global $FEED_URL,$FEED_URL_2;
-	$FEED_URL=NULL;
-	$FEED_URL_2=NULL;
+	// Get ready for breadcrumbs
+	if (function_exists('get_value'))
+	{
+		$bcl=get_value('breadcrumb_crop_length');
+	} else
+	{
+		$bcl=mixed();
+	}
+	define('BREADCRUMB_CROP_LENGTH',is_null($bcl)?26:intval($bcl));
 
 	global $NON_CANONICAL_PARAMS;
 	// We only bother listing ones the software itself may inject - otherwise admin responsible for their own curation of canonical settings
@@ -64,36 +54,9 @@ function init__site()
 		}
 	}
 
-	global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$LATE_ATTACHED_MESSAGES,$LATE_ATTACHED_MESSAGES_RAW;
-	$ATTACHED_MESSAGES=new ocp_tempcode();
-	$ATTACHED_MESSAGES_RAW=array();
-	$LATE_ATTACHED_MESSAGES=new ocp_tempcode();
-	$LATE_ATTACHED_MESSAGES_RAW=array();
-
-	// We may fill these in from the code, or we may not
-	global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SHORT_TITLE;
-	$SEO_KEYWORDS=NULL;
-	$SEO_DESCRIPTION=NULL;
-	$SHORT_TITLE=NULL;
-
 	global $PAGE_STRING,$LAST_COMCODE_PARSED_TITLE;
 	$PAGE_STRING=NULL;
 	$LAST_COMCODE_PARSED_TITLE='';
-
-	global $BREADCRUMBS,$BREADCRUMB_SET_PARENTS,$BREADCRUMB_EXTRA_SEGMENTS,$DISPLAYED_TITLE,$BREADCRUMB_SET_SELF;
-	$BREADCRUMBS=NULL;
-	$BREADCRUMB_SET_PARENTS=array();
-	$BREADCRUMB_EXTRA_SEGMENTS=new ocp_tempcode();
-	$DISPLAYED_TITLE=NULL;
-	$BREADCRUMB_SET_SELF=NULL;
-	if (function_exists('get_value'))
-	{
-		$bcl=get_value('breadcrumb_crop_length');
-	} else
-	{
-		$bcl=mixed();
-	}
-	define('BREADCRUMB_CROP_LENGTH',is_null($bcl)?26:intval($bcl));
 
 	global $PT_PAIR_CACHE_CP;
 	$PT_PAIR_CACHE_CP=array();
@@ -165,7 +128,7 @@ function init__site()
 
 		$old_style=get_option('htm_short_urls')!='1';
 
-		if ((!headers_sent()) && (running_script('index')) && ($GLOBALS['NON_PAGE_SCRIPT']==0) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
+		if ((!headers_sent()) && (running_script('index')) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
 		{
 			set_http_status_code('301');
 			header('HTTP/1.0 301 Moved Permanently'); // Direct ascending for short URLs - not possible, so should give 404's to avoid indexing
@@ -204,20 +167,18 @@ function init__site()
 	}
 
 	// The most important security check
-	global $SESSION_CONFIRMED;
+	global $SESSION_CONFIRMED_CACHE;
 	get_member(); // Make sure we've loaded our backdoor if installed
 	require_code('permissions');
 	if ($ZONE['zone_require_session']==1) header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
-	if (($ZONE['zone_name']!='') && (!is_httpauth_login()) && ((get_session_id()==-1) || ($SESSION_CONFIRMED==0)) && ($ZONE['zone_require_session']==1) && (get_page_name()!='login'))
+	if (($ZONE['zone_name']!='') && (!is_httpauth_login()) && ((get_session_id()==-1) || ($SESSION_CONFIRMED_CACHE==0)) && ($ZONE['zone_require_session']==1) && (get_page_name()!='login'))
 	{
 		access_denied((($real_zone=='data') || (has_zone_access(get_member(),$ZONE['zone_name'])))?'ZONE_ACCESS_SESSION':'ZONE_ACCESS',$ZONE['zone_name'],true);
-	}
-	else
+	} else
 	{
 		if (($real_zone=='data') || (has_zone_access(get_member(),$ZONE['zone_name'])))
 		{
-			global $NON_PAGE_SCRIPT;
-			if (($NON_PAGE_SCRIPT==0) && /*Actually we will allow Guest denying to the front page even though that is a bit weird ((get_page_name()!=$ZONE['zone_default_page']) || ($real_zone!='')) && */(!has_page_access(get_member(),get_page_name(),$ZONE['zone_name'],true)))
+			if ((running_script('index')) && /*Actually we will allow Guest denying to the front page even though that is a bit weird ((get_page_name()!=$ZONE['zone_default_page']) || ($real_zone!='')) && */(!has_page_access(get_member(),get_page_name(),$ZONE['zone_name'],true)))
 			{
 				access_denied('PAGE_ACCESS');
 			}
@@ -230,29 +191,51 @@ function init__site()
 }
 
 /**
+ * Attach some extra Javascript to <head>. Don't use this too commonly, it's not a 'tidy' way of doing things.
+ *
+ * @sets_output_state
+ *
+ * @param  mixed			Javascript to attach (Tempcode or string)
+ */
+function attach_to_javascript($data)
+{
+	global $JAVASCRIPT;
+	if ($JAVASCRIPT===NULL) $JAVASCRIPT=new ocp_tempcode();
+	$JAVASCRIPT->attach($data);
+}
+
+/**
  * Attach some XHTML to the screen header.
+ *
+ * @sets_output_state
  *
  * @param  mixed			XHTML to attach (Tempcode or string)
  */
 function attach_to_screen_header($data)
 {
 	global $EXTRA_HEAD;
+	if ($EXTRA_HEAD===NULL) $EXTRA_HEAD=new ocp_tempcode();
 	$EXTRA_HEAD->attach($data);
 }
 
 /**
  * Attach some XHTML to the screen footer.
  *
+ * @sets_output_state
+ *
  * @param  mixed			XHTML to attach (Tempcode or string)
  */
 function attach_to_screen_footer($data)
 {
 	global $EXTRA_FOOT;
+	if ($EXTRA_FOOT===NULL) $EXTRA_FOOT=new ocp_tempcode();
 	$EXTRA_FOOT->attach($data);
 }
 
 /**
  * Mark another parameter non-canonical, so that Google won't consider it when indexing URLs.
+ *
+ * @sets_output_state
  *
  * @param  ID_TEXT		Parameter name
  */
@@ -264,6 +247,8 @@ function inform_non_canonical_parameter($param)
 
 /**
  * Attach a message to the page output.
+ *
+ * @sets_output_state
  *
  * @param  mixed			The type of special message
  * @param  ID_TEXT		The template to use
@@ -317,10 +302,12 @@ function attach_message($message,$type='inform')
 	if (headers_sent())
 	{
 		$LATE_ATTACHED_MESSAGES_RAW[]=array($message,$type);
+		if ($LATE_ATTACHED_MESSAGES===NULL) $LATE_ATTACHED_MESSAGES=new ocp_tempcode();
 		$LATE_ATTACHED_MESSAGES->attach($message_tpl);
 	} else
 	{
 		$ATTACHED_MESSAGES_RAW[]=array($message,$type);
+		if ($ATTACHED_MESSAGES===NULL) $ATTACHED_MESSAGES=new ocp_tempcode();
 		$ATTACHED_MESSAGES->attach($message_tpl);
 	}
 
@@ -361,11 +348,11 @@ function breadcrumbs()
 
 	if ($BREADCRUMBS===NULL)
 	{
-		$BREADCRUMBS=breadcrumbs_get_default_stub($BREADCRUMB_EXTRA_SEGMENTS->is_empty());
+		$BREADCRUMBS=breadcrumbs_get_default_stub($BREADCRUMB_EXTRA_SEGMENTS===NULL || $BREADCRUMB_EXTRA_SEGMENTS->is_empty());
 	}
 	$out=new ocp_tempcode();
 	$out->attach($BREADCRUMBS);
-	if (!$BREADCRUMB_EXTRA_SEGMENTS->is_empty())
+	if (($BREADCRUMB_EXTRA_SEGMENTS!==NULL) && (!$BREADCRUMB_EXTRA_SEGMENTS->is_empty()))
 	{
 		if (!$out->is_empty()) $out->attach(do_template('BREADCRUMB_SEPARATOR'));
 		$out->attach($BREADCRUMB_EXTRA_SEGMENTS);
@@ -464,6 +451,8 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint=true)
 /**
  * Add a segment to the breadcrumbs (if this isn't used, a default will be used for the stub).
  *
+ * @sets_output_state
+ *
  * @param  tempcode		The segment
  * @param  ?mixed			The title of the follower of the segment OR an array as for breadcrumb_set_parents (NULL: implicit in $segment)
  */
@@ -471,6 +460,7 @@ function breadcrumb_add_segment($segment,$final_title=NULL)
 {
 	global $BREADCRUMB_EXTRA_SEGMENTS;
 
+	if ($BREADCRUMB_EXTRA_SEGMENTS===NULL) $BREADCRUMB_EXTRA_SEGMENTS=new ocp_tempcode();
 	$BREADCRUMB_EXTRA_SEGMENTS->attach($segment);
 	if ($final_title!==NULL)
 	{
@@ -512,6 +502,8 @@ function breadcrumb_add_segment($segment,$final_title=NULL)
 /**
  * Put a list of parents in for the breadcrumbs.
  *
+ * @sets_output_state
+ *
  * @param  array			The list of parent entry points (pairs: entry point, title)
  */
 function breadcrumb_set_parents($parents)
@@ -522,6 +514,8 @@ function breadcrumb_set_parents($parents)
 
 /**
  * Set the current title.
+ *
+ * @sets_output_state
  *
  * @param  tempcode		The title
  */
@@ -534,6 +528,8 @@ function breadcrumb_set_self($title)
 /**
  * Set the feed (RSS/Atom) URL.
  *
+ * @sets_output_state
+ *
  * @param  URLPATH		The URL
  */
 function set_feed_url($url)
@@ -544,6 +540,8 @@ function set_feed_url($url)
 
 /**
  * Set the helper panel text.
+ *
+ * @sets_output_state
  *
  * @param  tempcode		The text
  */
@@ -556,6 +554,8 @@ function set_helper_panel_text($text)
 /**
  * Set the helper panel tutorial.
  *
+ * @sets_output_state
+ *
  * @param  ID_TEXT		The page name of the tutorial (must be an existing one on the brand site, i.e. ocPortal.com)
  */
 function set_helper_panel_tutorial($tutorial)
@@ -567,6 +567,8 @@ function set_helper_panel_tutorial($tutorial)
 /**
  * Set the helper panel picture.
  *
+ * @sets_output_state
+ *
  * @param  ID_TEXT		Theme image code
  */
 function set_helper_panel_pic($pic)
@@ -577,6 +579,8 @@ function set_helper_panel_pic($pic)
 
 /**
  * Sets the short title, used for screen header text if set.
+ *
+ * @sets_output_state
  *
  * @param  string			The short title
  */
@@ -678,8 +682,18 @@ function do_site()
 	$keep_markers=get_param_integer('keep_markers',0);
 	$show_edit_links=get_param_integer('show_edit_links',0);
 	global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
+	/** Whether we will be embedding template markers in the output.
+	 * @sets_output_state
+	 *
+	 * @global ?array $KEEP_MARKERS
+	 */
 	$KEEP_MARKERS=($keep_markers==1) || ($special_page_type=='show_markers');
 	if (($KEEP_MARKERS) && (!headers_sent())) header('Content-type: text/html; charset='.get_charset());
+	/** Whether we will be embedding edit links in the output.
+	 * @sets_output_state
+	 *
+	 * @global ?array $SHOW_EDIT_LINKS
+	 */
 	$SHOW_EDIT_LINKS=($show_edit_links==1) || ($special_page_type=='show_edit_links');
 	if (($special_page_type!='view') && ($special_page_type!='show_markers'))
 	{
@@ -708,13 +722,9 @@ function do_site()
 		closed_site();
 	}
 
-	// Work out which page we're viewing
-	global $PAGE;
-	$PAGE=get_page_name();
-
 	// Load up our frames into strings. Note that the header and the footer are fixed already.
-	$middle=request_page($PAGE,true);
-	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
+	$middle=request_page(get_page_name(),true);
+	restore_output_state(true); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 	if (($middle===NULL) || ($middle->is_definitely_empty()))
 	{
 		set_http_status_code('404');
@@ -974,8 +984,8 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 			$redirect=$details[1];
 			if ($required)
 			{
-				global $REDIRECTED_TO;
-				$REDIRECTED_TO=$redirect;
+				global $REDIRECTED_TO_CACHE;
+				$REDIRECTED_TO_CACHE=$redirect;
 			}
 			if (strpos($redirect['r_to_page'],':')!==false)
 			{

@@ -79,6 +79,8 @@ function _enforce_sessioned_url($url)
 /**
  * Set up a new session / Restore an existing one that was lost.
  *
+ * @sets_output_state
+ *
  * @param  MEMBER			Logged in member
  * @param  BINARY			Whether the session should be considered confirmed
  * @param  boolean		Whether the session should be invisible
@@ -146,13 +148,15 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 		}
 	}
 
-	$GLOBALS['SESSION_CONFIRMED']=$session_confirmed;
+	$GLOBALS['SESSION_CONFIRMED_CACHE']=$session_confirmed;
 
 	return $new_session;
 }
 
 /**
  * Set the session ID of the user.
+ *
+ * @sets_output_state
  *
  * @param  integer		The session ID
  * @param  boolean		Whether this is a guest session (guest sessions will use persistent cookies)
@@ -230,8 +234,8 @@ function try_su_login($member)
 
 			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) // All hands to the guns
 			{
-				global $CACHED_THEME;
-				$CACHED_THEME='default';
+				global $USER_THEME_CACHE;
+				$USER_THEME_CACHE='default';
 				critical_error('MEMBER_BANNED');
 			}
 		}

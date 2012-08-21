@@ -126,8 +126,8 @@ function fractional_edit_script()
 
 	$_POST['fractional_edit']='1';
 
-	global $SESSION_CONFIRMED;
-	if ($SESSION_CONFIRMED==0)
+	global $SESSION_CONFIRMED_CACHE;
+	if ($SESSION_CONFIRMED_CACHE==0)
 	{
 		return;
 	}
@@ -480,8 +480,8 @@ function confirm_session_script()
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
 	header('Content-Type: text/plain');
-	global $SESSION_CONFIRMED;
-	if ($SESSION_CONFIRMED==0) echo $GLOBALS['FORUM_DRIVER']->get_username(get_member());
+	global $SESSION_CONFIRMED_CACHE;
+	if ($SESSION_CONFIRMED_CACHE==0) echo $GLOBALS['FORUM_DRIVER']->get_username(get_member());
 	echo '';
 }
 

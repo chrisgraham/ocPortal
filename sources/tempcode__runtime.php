@@ -54,8 +54,8 @@ function init__tempcode__runtime()
 	global $PREPROCESSED_BLOCKS;
 	$PREPROCESSED_BLOCKS=array('BLOCK'=>1,'LOAD_PANEL'=>1,'LOAD_PAGE'=>1);
 
-	global $TEMPLATE_PREVIEW_OP;
-	$TEMPLATE_PREVIEW_OP=array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op']==1);
+	global $IS_TEMPLATE_PREVIEW_OP_CACHE;
+	$IS_TEMPLATE_PREVIEW_OP_CACHE=array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op']==1);
 
 	global $TEMPLATE_CACHE,$XHTML_SPIT_OUT,$MEMORY_OVER_SPEED,$REQUEST_BLOCK_NEST_LEVEL;
 	$TEMPLATE_CACHE=array();
@@ -292,7 +292,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 
 	if (is_null($parameters)) $parameters=array();
 
-	global $RECORD_TEMPLATES_USED,$FILE_ARRAY,$MEM_CACHE,$CACHE_TEMPLATES,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$TEMPLATE_CACHE,$MOBILE,$FORUM_DRIVER;
+	global $RECORD_TEMPLATES_USED,$FILE_ARRAY,$MEM_CACHE,$CACHE_TEMPLATES,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$TEMPLATE_CACHE,$IS_MOBILE_CACHE,$FORUM_DRIVER;
 	$special_treatment=((($KEEP_MARKERS) || ($SHOW_EDIT_LINKS)) && (is_null($XHTML_SPIT_OUT)));
 
 	// Is it already loaded?
@@ -305,7 +305,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 	// Variables we'll need
 	if (!isset($theme))
 		$theme=((isset($FORUM_DRIVER)) && (is_object($FORUM_DRIVER)) && (method_exists($FORUM_DRIVER,'get_theme')))?filter_naughty($FORUM_DRIVER->get_theme()):'default';
-	$_codename=($MOBILE)?$codename.'_mobile':$codename;
+	$_codename=($IS_MOBILE_CACHE)?$codename.'_mobile':$codename;
 
 	if (isset($TEMPLATE_CACHE[$theme][$codename][$lang]))
 	{
@@ -472,7 +472,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				}
 
 				// Does this URL arrangement support monikers?
-				global $CONTENT_OBS,$LOADED_MONIKERS;
+				global $CONTENT_OBS,$LOADED_MONIKERS_CACHE;
 				load_moniker_hooks();
 				$found=false;
 				$looking_for='_SEARCH:'.$url_parts['page'].':'.$url_parts['type'].':_WILD';
@@ -480,8 +480,8 @@ function handle_symbol_preprocessing($bit,&$children)
 				$ob_info=isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:NULL;
 				if (!is_null($ob_info))
 				{
-					if (!isset($LOADED_MONIKERS[$url_parts['page']][$url_parts['type']][$url_parts['id']]))
-						$LOADED_MONIKERS[$url_parts['page']][$url_parts['type']][$url_parts['id']]=true; // Indicator to preload this
+					if (!isset($LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']]))
+						$LOADED_MONIKERS_CACHE[$url_parts['page']][$url_parts['type']][$url_parts['id']]=true; // Indicator to preload this
 				}
 			}
 			return;
@@ -524,8 +524,8 @@ function handle_symbol_preprocessing($bit,&$children)
 
 			//if (strpos(serialize($param),'side_stored_menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
 
-			global $LOADED_BLOCKS;
-			if (array_key_exists(serialize($param),$LOADED_BLOCKS))
+			global $BLOCKS_CACHE;
+			if (array_key_exists(serialize($param),$BLOCKS_CACHE))
 			{
 				$REQUEST_BLOCK_NEST_LEVEL--;
 				return;
@@ -537,7 +537,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				$block_parts=explode('=',$_param,2);
 				if (count($block_parts)!=2)
 				{
-					$LOADED_BLOCKS[serialize($param)]=new ocp_tempcode();
+					$BLOCKS_CACHE[serialize($param)]=new ocp_tempcode();
 					continue 2;
 				}
 				list($key,$val)=$block_parts;
@@ -551,7 +551,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			}
 			$b_value->handle_symbol_preprocessing();
 
-			$LOADED_BLOCKS[serialize($param)]=$b_value;
+			$BLOCKS_CACHE[serialize($param)]=$b_value;
 
 			$REQUEST_BLOCK_NEST_LEVEL--;
 
@@ -583,8 +583,8 @@ function handle_symbol_preprocessing($bit,&$children)
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
-			global $LOADED_PANELS;
-			if (array_key_exists(serialize($param),$LOADED_PANELS)) return;
+			global $PANELS_CACHE;
+			if (array_key_exists(serialize($param),$PANELS_CACHE)) return;
 
 			if (array_key_exists(0,$param))
 			{
@@ -613,7 +613,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				} else $value='';
 			} else $value='';
 
-			$LOADED_PANELS[serialize($param)]=$value;
+			$PANELS_CACHE[serialize($param)]=$value;
 
 			return;
 
@@ -648,8 +648,8 @@ function handle_symbol_preprocessing($bit,&$children)
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
-			global $LOADED_PAGES;
-			if (array_key_exists(serialize($param),$LOADED_PAGES)) return;
+			global $PAGES_CACHE;
+			if (array_key_exists(serialize($param),$PAGES_CACHE)) return;
 
 			if (array_key_exists(0,$param))
 			{
@@ -664,7 +664,7 @@ function handle_symbol_preprocessing($bit,&$children)
 				}
 			} else $tp_value=new ocp_tempcode();
 
-			$LOADED_PAGES[serialize($param)]=$tp_value;
+			$PAGES_CACHE[serialize($param)]=$tp_value;
 
 			return;
 

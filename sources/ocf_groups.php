@@ -29,11 +29,11 @@ function init__ocf_groups()
 	global $GROUP_MEMBERS_CACHE;
 	$GROUP_MEMBERS_CACHE=array();
 
-	global $PROBATION_GROUP;
-	$PROBATION_GROUP=NULL;
+	global $PROBATION_GROUP_CACHE;
+	$PROBATION_GROUP_CACHE=NULL;
 
-	global $ALL_DEFAULT_GROUPS;
-	$ALL_DEFAULT_GROUPS=array();
+	global $ALL_DEFAULT_GROUPS_CACHE;
+	$ALL_DEFAULT_GROUPS_CACHE=array();
 }
 
 /**
@@ -74,8 +74,8 @@ function get_first_default_group()
  */
 function ocf_get_all_default_groups($include_primary=false)
 {
-	global $ALL_DEFAULT_GROUPS;
-	if (array_key_exists($include_primary?1:0,$ALL_DEFAULT_GROUPS)) return $ALL_DEFAULT_GROUPS[$include_primary?1:0];
+	global $ALL_DEFAULT_GROUPS_CACHE;
+	if (array_key_exists($include_primary?1:0,$ALL_DEFAULT_GROUPS_CACHE)) return $ALL_DEFAULT_GROUPS_CACHE[$include_primary?1:0];
 
 	$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array('g_is_default'=>1,'g_is_presented_at_install'=>0),'ORDER BY g_order');
 	$groups=collapse_1d_complexity('id',$rows);
@@ -85,7 +85,7 @@ function ocf_get_all_default_groups($include_primary=false)
 		if (!is_null($test))
 			$groups[]=db_get_first_id()+8;
 	}
-	$ALL_DEFAULT_GROUPS[$include_primary?1:0]=$groups;
+	$ALL_DEFAULT_GROUPS_CACHE[$include_primary?1:0]=$groups;
 	return $groups;
 }
 
@@ -263,14 +263,14 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 		$opt=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_on_probation_until');
 		if ((!is_null($opt)) && ($opt>time()))
 		{
-			global $PROBATION_GROUP;
-			if (is_null($PROBATION_GROUP))
+			global $PROBATION_GROUP_CACHE;
+			if (is_null($PROBATION_GROUP_CACHE))
 			{
 				$probation_group=get_option('probation_usergroup');
-				$PROBATION_GROUP=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$probation_group));
-				if (is_null($PROBATION_GROUP)) $PROBATION_GROUP=false;
+				$PROBATION_GROUP_CACHE=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$probation_group));
+				if (is_null($PROBATION_GROUP_CACHE)) $PROBATION_GROUP_CACHE=false;
 			}
-			if ($PROBATION_GROUP!==false) return array($PROBATION_GROUP=>1);
+			if ($PROBATION_GROUP_CACHE!==false) return array($PROBATION_GROUP_CACHE=>1);
 		}
 	}
 

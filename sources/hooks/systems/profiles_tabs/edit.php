@@ -94,8 +94,8 @@ class Hook_Profiles_Tabs_edit
 		// Session ID check, if saving
 		if ((count($_POST)!=0) && (count($tabs)!=0))
 		{
-			global $SESSION_CONFIRMED;
-			if ($SESSION_CONFIRMED==0)
+			global $SESSION_CONFIRMED_CACHE;
+			if ($SESSION_CONFIRMED_CACHE==0)
 			{
 				access_denied('SESSION','',true);
 			}

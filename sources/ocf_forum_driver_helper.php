@@ -171,8 +171,8 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 	if ($is_new)
 	{
 		// Broken cache now for the rest of this page view - fix by flushing
-		global $TOPIC_IDENTIFIERS_TO_IDS;
-		$TOPIC_IDENTIFIERS_TO_IDS=array();
+		global $TOPIC_IDENTIFIERS_TO_IDS_CACHE;
+		$TOPIC_IDENTIFIERS_TO_IDS_CACHE=array();
 	}
 
 	// Send out notifications

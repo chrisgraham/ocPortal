@@ -23,11 +23,11 @@
  */
 function init__themes()
 {
-	global $IMG_CODES,$CDN_CONSISTENCY_CHECK,$RECORD_IMG_CODES,$RECORDED_IMG_CODES;
-	$IMG_CODES=array();
+	global $THEME_IMAGES_CACHE,$CDN_CONSISTENCY_CHECK,$RECORD_THEME_IMAGES_CACHE,$RECORDED_THEME_IMAGES;
+	$THEME_IMAGES_CACHE=array();
 	$CDN_CONSISTENCY_CHECK=array();
-	$RECORD_IMG_CODES=false;
-	$RECORDED_IMG_CODES=array();
+	$RECORD_THEME_IMAGES_CACHE=false;
+	$RECORDED_THEME_IMAGES=array();
 }
 
 /**
@@ -58,12 +58,12 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 	if ($db===NULL) $db=$GLOBALS['SITE_DB'];
 
-	global $RECORD_IMG_CODES;
-	if ($RECORD_IMG_CODES)
+	global $RECORD_THEME_IMAGES_CACHE;
+	if ($RECORD_THEME_IMAGES_CACHE)
 	{
-		global $RECORDED_IMG_CODES;
+		global $RECORDED_THEME_IMAGES;
 		if ((isset($GLOBALS['FORUM_DB'])) && ($db->connection_write!==$GLOBALS['FORUM_DB']->connection_write))
-			$RECORDED_IMG_CODES[serialize(array($id,$theme,$lang))]=1;
+			$RECORDED_THEME_IMAGES[serialize(array($id,$theme,$lang))]=1;
 	}
 
 	$true_theme=$GLOBALS['FORUM_DRIVER']->get_theme();
@@ -77,8 +77,8 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 	$site=($GLOBALS['SITE_DB']==$db)?'site':'forums';
 
-	global $IMG_CODES;
-	if (!isset($IMG_CODES[$site]))
+	global $THEME_IMAGES_CACHE;
+	if (!isset($THEME_IMAGES_CACHE[$site]))
 	{
 		$cache=NULL;
 		if ($site=='site')
@@ -88,22 +88,22 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 		if (!isset($cache[$true_theme][$true_lang]))
 		{
-			$IMG_CODES[$site]=$db->query_select('theme_images',array('id','path'),array('theme'=>$true_theme,'lang'=>$true_lang));
-			$IMG_CODES[$site]=collapse_2d_complexity('id','path',$IMG_CODES[$site]);
+			$THEME_IMAGES_CACHE[$site]=$db->query_select('theme_images',array('id','path'),array('theme'=>$true_theme,'lang'=>$true_lang));
+			$THEME_IMAGES_CACHE[$site]=collapse_2d_complexity('id','path',$THEME_IMAGES_CACHE[$site]);
 
 			if ($site=='site')
 			{
 				if ($cache===NULL) $cache=array();
-				$cache[$theme][$lang]=$IMG_CODES[$site];
+				$cache[$theme][$lang]=$THEME_IMAGES_CACHE[$site];
 				persistent_cache_set('THEME_IMAGES',$cache);
 			}
 		} else
 		{
-			$IMG_CODES[$site]=$cache[$true_theme][$true_lang];
+			$THEME_IMAGES_CACHE[$site]=$cache[$true_theme][$true_lang];
 		}
 	}
 
-	if ((!$truism) && (!$pure_only)) // Separate lookup, cannot go through $IMG_CODES
+	if ((!$truism) && (!$pure_only)) // Separate lookup, cannot go through $THEME_IMAGES_CACHE
 	{
 		$path=$db->query_select_value_if_there('theme_images','path',array('theme'=>$theme,'lang'=>$lang,'id'=>$id));
 		if ($path!==NULL)
@@ -117,7 +117,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		}
 	}
 
-	if (($pure_only) || (!isset($IMG_CODES[$site][$id])) || (!$truism))
+	if (($pure_only) || (!isset($THEME_IMAGES_CACHE[$site][$id])) || (!$truism))
 	{
 		$path=NULL;
 
@@ -210,16 +210,16 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 			}
 			return '';
 		}
-		if ($truism) $IMG_CODES[$site][$id]=$path; // only cache if we are looking up for our own theme/lang
+		if ($truism) $THEME_IMAGES_CACHE[$site][$id]=$path; // only cache if we are looking up for our own theme/lang
 	} else
 	{
-		$path=$IMG_CODES[$site][$id];
+		$path=$THEME_IMAGES_CACHE[$site][$id];
 
 		global $SITE_INFO;
 
 		if (($path!='') && ((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0')) && (url_is_local($path)) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Missing image, so erase to re-search for it
 		{
-			unset($IMG_CODES[$site][$id]);
+			unset($THEME_IMAGES_CACHE[$site][$id]);
 			return find_theme_image($id,$silent_fail,$leave_local,$theme,$lang,$db,$pure_only);
 		}
 	}

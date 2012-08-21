@@ -70,11 +70,11 @@ class Block_side_news
 		$historic=array_key_exists('historic',$map)?$map['historic']:'';
 		$filter_and=array_key_exists('filter_and',$map)?$map['filter_and']:'';
 
-		global $NEWS_CATS;
-		if (!isset($NEWS_CATS))
+		global $NEWS_CATS_CACHE;
+		if (!isset($NEWS_CATS_CACHE))
 		{
-			$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-			$NEWS_CATS=list_to_map('id',$NEWS_CATS);
+			$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
+			$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
 		}
 
 		$content=new ocp_tempcode();
@@ -170,15 +170,15 @@ class Block_side_news
 					$summary=get_translated_tempcode($myrow['news_article']);
 				}
 
-				if (!array_key_exists($myrow['news_category'],$NEWS_CATS))
+				if (!array_key_exists($myrow['news_category'],$NEWS_CATS_CACHE))
 				{
 					$_news_cats=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id'=>$myrow['news_category']),'',1);
 					if (array_key_exists(0,$_news_cats))
-						$NEWS_CATS[$myrow['news_category']]=$_news_cats[0];
+						$NEWS_CATS_CACHE[$myrow['news_category']]=$_news_cats[0];
 				}
-				$category=get_translated_text($NEWS_CATS[$myrow['news_category']]['nc_title']);
+				$category=get_translated_text($NEWS_CATS_CACHE[$myrow['news_category']]['nc_title']);
 
-				$content->attach(do_template('BLOCK_SIDE_NEWS_SUMMARY',array('_GUID'=>'f7bc5288680e68641ca94ca4a3111d4a','IMG_URL'=>find_theme_image($NEWS_CATS[$myrow['news_category']]['nc_img']),'AUTHOR'=>$myrow['author'],'ID'=>strval($myrow['id']),'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$category,'BLOG'=>$blogs===1,'FULL_URL'=>$full_url,'NEWS'=>$summary,'NEWS_TITLE'=>$news_title,'_DATE'=>strval($myrow['date_and_time']),'DATE'=>$date)));
+				$content->attach(do_template('BLOCK_SIDE_NEWS_SUMMARY',array('_GUID'=>'f7bc5288680e68641ca94ca4a3111d4a','IMG_URL'=>find_theme_image($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']),'AUTHOR'=>$myrow['author'],'ID'=>strval($myrow['id']),'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$category,'BLOG'=>$blogs===1,'FULL_URL'=>$full_url,'NEWS'=>$summary,'NEWS_TITLE'=>$news_title,'_DATE'=>strval($myrow['date_and_time']),'DATE'=>$date)));
 			}
 		}
 

@@ -23,7 +23,7 @@
  */
 function init__database_search()
 {
-	$GLOBALS['TOTAL_RESULTS']=0;
+	$GLOBALS['TOTAL_SEARCH_RESULTS']=0;
 }
 
 /**
@@ -785,7 +785,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 	$final_result_rows=$t_rows;
 	if (!$had_limit_imposed) // More accurate, as filtered for dupes
 		$t_count=count($t_rows);
-	$GLOBALS['TOTAL_RESULTS']+=$t_count;
+	$GLOBALS['TOTAL_SEARCH_RESULTS']+=$t_count;
 	array_splice($final_result_rows,$max*2+$start); // We return more than max in case our search hook does some extra in-code filtering (Catalogues, Comcode pages). It shouldn't really but sometimes it has to, and it certainly shouldn't filter more than 50%. Also so our overall ordering can be better.
 
 	return $final_result_rows;

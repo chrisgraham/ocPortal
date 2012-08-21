@@ -51,17 +51,17 @@ function check_word_filter($a,$name=NULL,$no_die=false,$try_patterns=false,$perm
 	}
 
 	// Load filter
-	global $WORDS_TO_FILTER;
-	if (is_null($WORDS_TO_FILTER))
+	global $WORDS_TO_FILTER_CACHE;
+	if (is_null($WORDS_TO_FILTER_CACHE))
 	{
-		$WORDS_TO_FILTER=array();
+		$WORDS_TO_FILTER_CACHE=array();
 		$rows=$GLOBALS['SITE_DB']->query_select('wordfilter',array('*'),NULL,'',NULL,NULL,true);
 		if (!is_null($rows))
 		{
 			foreach ($rows as $i=>$r)
 			{
 				if (($i==0) && (!array_key_exists('w_replacement',$r))) return $a; // Safe upgrading
-				$WORDS_TO_FILTER[strtolower($r['word'])]=$r;
+				$WORDS_TO_FILTER_CACHE[strtolower($r['word'])]=$r;
 			}
 		}
 	}
@@ -74,9 +74,9 @@ function check_word_filter($a,$name=NULL,$no_die=false,$try_patterns=false,$perm
 	$changes=array();
 	foreach ($words as $pos=>$word)
 	{
-		if ((array_key_exists(strtolower($word),$WORDS_TO_FILTER)) && ($WORDS_TO_FILTER[strtolower($word)]['w_substr']==0))
+		if ((array_key_exists(strtolower($word),$WORDS_TO_FILTER_CACHE)) && ($WORDS_TO_FILTER_CACHE[strtolower($word)]['w_substr']==0))
 		{
-			$w=$WORDS_TO_FILTER[strtolower($word)];
+			$w=$WORDS_TO_FILTER_CACHE[strtolower($word)];
 			if (($w['w_replacement']=='') && (!$no_die))
 			{
 				warn_exit_wordfilter($name,do_lang_tempcode('WORD_FILTER_YOU',escape_html($word))); // In soviet Russia, words filter you
@@ -89,7 +89,7 @@ function check_word_filter($a,$name=NULL,$no_die=false,$try_patterns=false,$perm
 		if ($try_patterns)
 		{
 			// Now try patterns
-			foreach ($WORDS_TO_FILTER as $word2=>$w)
+			foreach ($WORDS_TO_FILTER_CACHE as $word2=>$w)
 			{
 				if (($w['w_substr']==0) && (simulated_wildcard_match($word,$word2,true)))
 				{
@@ -115,7 +115,7 @@ function check_word_filter($a,$name=NULL,$no_die=false,$try_patterns=false,$perm
 	}
 
 	// Apply filter for disallowed substrings
-	foreach ($WORDS_TO_FILTER as $word=>$w)
+	foreach ($WORDS_TO_FILTER_CACHE as $word=>$w)
 	{
 		if (($w['w_substr']==1) && (strpos($a,$word)!==false))
 		{

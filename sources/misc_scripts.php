@@ -212,7 +212,7 @@ function iframe_script()
 	if (!array_key_exists(0,$zones)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	if ($zones[0]['zone_require_session']==1) header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
-	if (($zones[0]['zone_name']!='') && (get_option('windows_auth_is_enabled',true)!='1') && ((get_session_id()==-1) || ($GLOBALS['SESSION_CONFIRMED']==0)) && (!is_guest()) && ($zones[0]['zone_require_session']==1))
+	if (($zones[0]['zone_name']!='') && (get_option('windows_auth_is_enabled',true)!='1') && ((get_session_id()==-1) || ($GLOBALS['SESSION_CONFIRMED_CACHE']==0)) && (!is_guest()) && ($zones[0]['zone_require_session']==1))
 		access_denied('ZONE_ACCESS_SESSION');
 
 	if (!has_actual_page_access(get_member(),$page,$zone))
@@ -226,13 +226,11 @@ function iframe_script()
 		@exit(get_option('closed'));
 	}
 
-	global $EXTRA_HEAD;
-	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
-	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+	require_code('site');
+	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$output=request_page($page,true);
 
-	global $ATTACHED_MESSAGES;
 	$output->handle_symbol_preprocessing();
 	$tpl=do_template('STANDALONE_HTML_WRAP',array('OPENS_BELOW'=>get_param_integer('opens_below',0)==1,'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
 	$tpl->handle_symbol_preprocessing();
@@ -270,9 +268,8 @@ function page_link_chooser_script()
 	require_javascript('javascript_tree_list');
 	require_javascript('javascript_more');
 
-	global $EXTRA_HEAD;
-	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
-	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+	require_code('site');
+	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	// Display
 	$content=do_template('PAGE_LINK_CHOOSER',array('_GUID'=>'235d969528d7b81aeb17e042a17f5537','NAME'=>'tree_list'));
@@ -351,9 +348,8 @@ function staff_tips_script($ret=false)
 
 	if ($ret) return $content;
 
-	global $EXTRA_HEAD;
-	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
-	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+	require_code('site');
+	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	// Display
 	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'3b5596a12c46295081f09ebe5349a479','FRAME'=>true,'TITLE'=>do_lang_tempcode('TIPS'),'CONTENT'=>$content));
@@ -879,9 +875,8 @@ function block_helper_script()
 		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'575d6c8120d6001c8156560be518f296','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$block,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
 	}
 
-	global $EXTRA_HEAD;
-	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
-	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+	require_code('site');
+	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('BLOCK_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
@@ -921,9 +916,8 @@ function emoticons_script()
 
 	$content=do_template('OCF_EMOTICON_TABLE',array('_GUID'=>'d3dd9bbfacede738e2aff4712b86944b','ROWS'=>$content));
 
-	global $EXTRA_HEAD;
-	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
-	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+	require_code('site');
+	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'8acac778b145bfe7b063317fbcae7fde','TITLE'=>do_lang_tempcode('EMOTICONS_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();

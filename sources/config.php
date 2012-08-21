@@ -23,25 +23,25 @@
  */
 function init__config()
 {
-	global $VALUES,$IN_MINIKERNEL_VERSION;
+	global $VALUE_OPTIONS_CACHE,$IN_MINIKERNEL_VERSION;
 	if ($IN_MINIKERNEL_VERSION==0)
 	{
 		load_options();
 
-		$VALUES=persistent_cache_get('VALUES');
-		if ($VALUES===NULL)
+		$VALUE_OPTIONS_CACHE=persistent_cache_get('VALUES');
+		if ($VALUE_OPTIONS_CACHE===NULL)
 		{
-			$VALUES=$GLOBALS['SITE_DB']->query_select('values',array('*'));
-			$VALUES=list_to_map('the_name',$VALUES);
-			persistent_cache_set('VALUES',$VALUES);
+			$VALUE_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('values',array('*'));
+			$VALUE_OPTIONS_CACHE=list_to_map('the_name',$VALUE_OPTIONS_CACHE);
+			persistent_cache_set('VALUES',$VALUE_OPTIONS_CACHE);
 		}
-	} else $VALUES=array();
+	} else $VALUE_OPTIONS_CACHE=array();
 
 	global $GET_OPTION_LOOP;
 	$GET_OPTION_LOOP=0;
 
-	global $MULTI_LANG;
-	$MULTI_LANG=NULL;
+	global $MULTI_LANG_CACHE;
+	$MULTI_LANG_CACHE=NULL;
 
 	// Enforce XML db synching
 	if ((get_db_type()=='xml') && (!running_script('xml_db_import')) && (is_file(get_file_base().'/data_custom/xml_db_import.php')) && (is_dir(get_file_base().'/.svn')))
@@ -65,9 +65,9 @@ function init__config()
  */
 function multi_lang()
 {
-	global $MULTI_LANG;
-	if ($MULTI_LANG!==NULL) return $MULTI_LANG;
-	$MULTI_LANG=false;
+	global $MULTI_LANG_CACHE;
+	if ($MULTI_LANG_CACHE!==NULL) return $MULTI_LANG_CACHE;
+	$MULTI_LANG_CACHE=false;
 	if (get_option('allow_international',true)!=='1') return false;
 
 	$_dir=opendir(get_file_base().'/lang/');
@@ -112,7 +112,7 @@ function multi_lang()
 	{
 		if (/*optimisation*/is_file((($dir=='lang_custom')?get_custom_file_base():get_file_base()).'/'.$dir.'/'.$lang.'/global.ini'))
 		{
-			$MULTI_LANG=true;
+			$MULTI_LANG_CACHE=true;
 			break;
 		}
 
@@ -123,14 +123,14 @@ function multi_lang()
 			{
 				if ((substr($file2,-4)=='.ini') || (substr($file2,-3)=='.po'))
 				{
-					$MULTI_LANG=true;
+					$MULTI_LANG_CACHE=true;
 					break;
 				}
 			}
 		}
 	}
 
-	return $MULTI_LANG;
+	return $MULTI_LANG_CACHE;
 }
 
 /**
@@ -138,21 +138,21 @@ function multi_lang()
  */
 function load_options()
 {
-	global $OPTIONS;
-	$OPTIONS=function_exists('persistent_cache_get')?persistent_cache_get('OPTIONS'):NULL;
-	if (is_array($OPTIONS)) return;
+	global $CONFIG_OPTIONS_CACHE;
+	$CONFIG_OPTIONS_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('OPTIONS'):NULL;
+	if (is_array($CONFIG_OPTIONS_CACHE)) return;
 	if (strpos(get_db_type(),'mysql')!==false)
 	{
 		global $SITE_INFO;
-		$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'',NULL,NULL,true);
+		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'',NULL,NULL,true);
 	} else
 	{
-		$OPTIONS=$GLOBALS['SITE_DB']->query_select('config',array('the_name','config_value','the_type','c_set'),NULL,'',NULL,NULL,true);
+		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config',array('the_name','config_value','the_type','c_set'),NULL,'',NULL,NULL,true);
 	}
 
-	if ($OPTIONS===NULL) critical_error('DATABASE_FAIL');
-	$OPTIONS=list_to_map('the_name',$OPTIONS);
-	if (function_exists('persistent_cache_set')) persistent_cache_set('OPTIONS',$OPTIONS);
+	if ($CONFIG_OPTIONS_CACHE===NULL) critical_error('DATABASE_FAIL');
+	$CONFIG_OPTIONS_CACHE=list_to_map('the_name',$CONFIG_OPTIONS_CACHE);
+	if (function_exists('persistent_cache_set')) persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
 }
 
 /**
@@ -226,10 +226,10 @@ function set_long_value($name,$value)
  */
 function get_value($name,$default=NULL,$env_also=false)
 {
-	global $IN_MINIKERNEL_VERSION,$VALUES;
+	global $IN_MINIKERNEL_VERSION,$VALUE_OPTIONS_CACHE;
 	if ($IN_MINIKERNEL_VERSION==1) return $default;
 
-	if (isset($VALUES[$name])) return $VALUES[$name]['the_value'];
+	if (isset($VALUE_OPTIONS_CACHE[$name])) return $VALUE_OPTIONS_CACHE[$name]['the_value'];
 
 	if ($env_also)
 	{
@@ -251,8 +251,8 @@ function get_value_newer_than($name,$cutoff)
 {
 	$cutoff-=mt_rand(0,200); // Bit of scattering to stop locking issues if lots of requests hit this at once in the middle of a hit burst (whole table is read each page requests, and mysql will lock the table on set_value - causes horrible out-of-control buildups)
 
-	global $VALUES;
-	if ((array_key_exists($name,$VALUES)) && ($VALUES[$name]['date_and_time']>$cutoff)) return $VALUES[$name]['the_value'];
+	global $VALUE_OPTIONS_CACHE;
+	if ((array_key_exists($name,$VALUE_OPTIONS_CACHE)) && ($VALUE_OPTIONS_CACHE[$name]['date_and_time']>$cutoff)) return $VALUE_OPTIONS_CACHE[$name]['the_value'];
 	return NULL;
 }
 
@@ -264,10 +264,10 @@ function get_value_newer_than($name,$cutoff)
  */
 function set_value($name,$value)
 {
-	global $VALUES;
-	$existed_before=array_key_exists($name,$VALUES);
-	$VALUES[$name]['the_value']=$value;
-	$VALUES[$name]['date_and_time']=time();
+	global $VALUE_OPTIONS_CACHE;
+	$existed_before=array_key_exists($name,$VALUE_OPTIONS_CACHE);
+	$VALUE_OPTIONS_CACHE[$name]['the_value']=$value;
+	$VALUE_OPTIONS_CACHE[$name]['date_and_time']=time();
 	if ($existed_before)
 	{
 		$GLOBALS['SITE_DB']->query_update('values',array('date_and_time'=>time(),'the_value'=>$value),array('the_name'=>$name),'',1,NULL,false,true);
@@ -275,7 +275,7 @@ function set_value($name,$value)
 	{
 		$GLOBALS['SITE_DB']->query_insert('values',array('date_and_time'=>time(),'the_value'=>$value,'the_name'=>$name),false,true); // Allow failure, if there is a race condition
 	}
-	if (function_exists('persistent_cache_set')) persistent_cache_set('VALUES',$VALUES);
+	if (function_exists('persistent_cache_set')) persistent_cache_set('VALUES',$VALUE_OPTIONS_CACHE);
 }
 
 /**
@@ -298,16 +298,16 @@ function delete_value($name)
  */
 function get_option($name,$missing_ok=false)
 {
-	global $OPTIONS;
+	global $CONFIG_OPTIONS_CACHE;
 
-	if (!isset($OPTIONS[$name]))
+	if (!isset($CONFIG_OPTIONS_CACHE[$name]))
 	{
 		if ($missing_ok) return NULL;
 		require_code('config2');
 		find_lost_option($name);
 	}
 
-	$option=&$OPTIONS[$name];
+	$option=&$CONFIG_OPTIONS_CACHE[$name];
 
 	// The master of redundant quick exit points. Has to be after the above IF due to weird PHP isset/NULL bug on some 5.1.4 (and possibly others)
 	if (isset($option['config_value_translated']))
@@ -321,11 +321,11 @@ function get_option($name,$missing_ok=false)
 	if (!isset($option['c_set'])) $option['c_set']=($option['config_value']===NULL)?0:1; // for compatibility during upgrades
 	if (($option['c_set']==1) && ($type!='transline') && ($type!='transtext'))
 	{
-		//@print_r($OPTIONS);	exit($name.'='.gettype($option['config_value_translated']));	Useful for debugging
+		//@print_r($CONFIG_OPTIONS_CACHE);	exit($name.'='.gettype($option['config_value_translated']));	Useful for debugging
 		$option['config_value_translated']=$option['config_value']; // Allows slightly better code path next time
 		if ($option['config_value_translated']===NULL) $option['config_value_translated']='<null>';
-		$OPTIONS[$name]=$option;
-		if (function_exists('persistent_cache_set')) persistent_cache_set('OPTIONS',$OPTIONS);
+		$CONFIG_OPTIONS_CACHE[$name]=$option;
+		if (function_exists('persistent_cache_set')) persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
 		if ($option['config_value']=='<null>') return NULL;
 		return $option['config_value'];
 	}
@@ -348,9 +348,9 @@ function get_option($name,$missing_ok=false)
 				if (!isset($option['eval']))
 				{
 					global $SITE_INFO;
-					$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'');
-					$OPTIONS=list_to_map('the_name',$OPTIONS);
-					$option=&$OPTIONS[$name];
+					$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'');
+					$CONFIG_OPTIONS_CACHE=list_to_map('the_name',$CONFIG_OPTIONS_CACHE);
+					$option=&$CONFIG_OPTIONS_CACHE[$name];
 				}
 				$option['config_value_translated']=eval($option['eval'].';');
 				if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
@@ -375,9 +375,9 @@ function get_option($name,$missing_ok=false)
 			if (!isset($option['eval']))
 			{
 				global $SITE_INFO;
-				$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'');
-				$OPTIONS=list_to_map('the_name',$OPTIONS);
-				$option=&$OPTIONS[$name];
+				$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'');
+				$CONFIG_OPTIONS_CACHE=list_to_map('the_name',$CONFIG_OPTIONS_CACHE);
+				$option=&$CONFIG_OPTIONS_CACHE[$name];
 			}
 			if ((function_exists('do_lang')) || (strpos($option['eval'],'lang')===false)) // Something in set_option may need do_lang
 			{
@@ -402,8 +402,8 @@ function get_option($name,$missing_ok=false)
 		if (!isset($option['config_value_translated']))
 		{
 			$option['config_value_translated']=get_translated_text(intval($option['config_value']));
-			$OPTIONS[$name]=$option;
-			persistent_cache_set('OPTIONS',$OPTIONS);
+			$CONFIG_OPTIONS_CACHE[$name]=$option;
+			persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
 		}
 		// Answer
 		$GET_OPTION_LOOP=0;

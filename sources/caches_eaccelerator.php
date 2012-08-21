@@ -58,16 +58,16 @@ class eacceleratorcache
 		unset($flags);
 
 		// Update list of e-objects
-		global $ECACHE_OBJECTS;
-		if (!array_key_exists($key,$ECACHE_OBJECTS))
+		global $PERSISTENT_CACHE_OBJECTS_CACHE;
+		if (!array_key_exists($key,$PERSISTENT_CACHE_OBJECTS_CACHE))
 		{
-			$ECACHE_OBJECTS[$key]=1;
+			$PERSISTENT_CACHE_OBJECTS_CACHE[$key]=1;
 			if (function_exists('eaccelerator_put'))
 			{
-				eaccelerator_put(get_file_base().'ECACHE_OBJECTS',$ECACHE_OBJECTS,0);
+				eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
 			} elseif (function_exists('mmcache_put'))
 			{
-				mmcache_put(get_file_base().'ECACHE_OBJECTS',$ECACHE_OBJECTS,0);
+				mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
 			}
 		}
 
@@ -88,15 +88,15 @@ class eacceleratorcache
 	function delete($key)
 	{
 		// Update list of e-objects
-		global $ECACHE_OBJECTS;
-		unset($ECACHE_OBJECTS[$key]);
+		global $PERSISTENT_CACHE_OBJECTS_CACHE;
+		unset($PERSISTENT_CACHE_OBJECTS_CACHE[$key]);
 
 		if (function_exists('eaccelerator_put'))
 		{
-			eaccelerator_put(get_file_base().'ECACHE_OBJECTS',$ECACHE_OBJECTS,0);
+			eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
 		} elseif (function_exists('mmcache_put'))
 		{
-			mmcache_put(get_file_base().'ECACHE_OBJECTS',$ECACHE_OBJECTS,0);
+			mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
 		}
 
 		if (function_exists('eaccelerator_rm'))
@@ -113,27 +113,27 @@ class eacceleratorcache
 	 */
 	function flush()
 	{
-		global $ECACHE_OBJECTS;
-		$ECACHE_OBJECTS=array();
+		global $PERSISTENT_CACHE_OBJECTS_CACHE;
+		$PERSISTENT_CACHE_OBJECTS_CACHE=array();
 		if (function_exists('eaccelerator_rm'))
 		{
-			foreach (array_keys($ECACHE_OBJECTS) as $obkey)
+			foreach (array_keys($PERSISTENT_CACHE_OBJECTS_CACHE) as $obkey)
 			{
 				eaccelerator_rm($obkey);
 			}
 		} elseif (function_exists('mmcache_rm'))
 		{
-			foreach (array_keys($ECACHE_OBJECTS) as $obkey)
+			foreach (array_keys($PERSISTENT_CACHE_OBJECTS_CACHE) as $obkey)
 			{
 				mmcache_rm($obkey);
 			}
 		}
 		if (function_exists('eaccelerator_put'))
 		{
-			eaccelerator_put(get_file_base().'ECACHE_OBJECTS',$ECACHE_OBJECTS,0);
+			eaccelerator_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
 		} elseif (function_exists('mmcache_put'))
 		{
-			mmcache_put(get_file_base().'ECACHE_OBJECTS',$ECACHE_OBJECTS,0);
+			mmcache_put(get_file_base().'PERSISTENT_CACHE_OBJECTS',$PERSISTENT_CACHE_OBJECTS_CACHE,0);
 		}
 	}
 }

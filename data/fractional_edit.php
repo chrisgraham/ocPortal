@@ -28,8 +28,6 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 @chdir($FILE_BASE);
 $RELATIVE_PATH=array_key_exists('zone',$_GET)?$_GET['zone']:'';
 
-global $NON_PAGE_SCRIPT;
-$NON_PAGE_SCRIPT=1;
 global $FORCE_INVISIBLE_GUEST;
 $FORCE_INVISIBLE_GUEST=0;
 global $KNOWN_UTF8;

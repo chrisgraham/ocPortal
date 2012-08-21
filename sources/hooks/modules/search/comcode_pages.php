@@ -200,7 +200,7 @@ class Hook_search_comcode_pages
 
 							$i++;
 
-							$GLOBALS['TOTAL_RESULTS']++;
+							$GLOBALS['TOTAL_SEARCH_RESULTS']++;
 
 							// Let it cache for next time
 							if (get_option('is_on_comcode_page_cache')=='1')
@@ -278,8 +278,8 @@ class Hook_search_comcode_pages
 				$GLOBALS['OVERRIDE_SELF_ZONE']=NULL;
 				$LAX_COMCODE=false;
 				$_temp_summary=$temp_summary->evaluate();
-				global $LOADED_PAGES;
-				$LOADED_PAGES=array(); // Decache this, or we'll eat up a tonne of RAM
+				global $PAGES_CACHE;
+				$PAGES_CACHE=array(); // Decache this, or we'll eat up a tonne of RAM
 
 				$summary=generate_text_summary($_temp_summary,is_null($SEARCH__CONTENT_BITS)?array():$SEARCH__CONTENT_BITS);
 			}

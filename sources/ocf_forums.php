@@ -26,14 +26,14 @@ function init__ocf_forums()
 	global $USER_ACCESS_CACHE;
 	$USER_ACCESS_CACHE=array();
 
-	global $GROUPING_TITLES;
-	$GROUPING_TITLES=NULL;
+	global $FORUM_GROUPINGS_TITLES_CACHE;
+	$FORUM_GROUPINGS_TITLES_CACHE=NULL;
 
 	global $FORUM_TREE_SECURE_CACHE;
 	$FORUM_TREE_SECURE_CACHE=mixed();
 
-	global $ALL_FORUMS_STRUCT;
-	$ALL_FORUMS_STRUCT=NULL;
+	global $ALL_FORUMS_STRUCT_CACHE;
+	$ALL_FORUMS_STRUCT_CACHE=NULL;
 }
 
 /**
@@ -77,8 +77,8 @@ function ocf_get_all_subordinate_forums($forum_id,$create_or_list=NULL,$tree=NUL
 
 	if (is_null($tree))
 	{
-		global $ALL_FORUMS_STRUCT;
-		if (is_null($ALL_FORUMS_STRUCT))
+		global $ALL_FORUMS_STRUCT_CACHE;
+		if (is_null($ALL_FORUMS_STRUCT_CACHE))
 		{
 			$_max_forum_detail=get_value('max_forum_detail');
 			$max_forum_detail=is_null($_max_forum_detail)?100:intval($_max_forum_detail);
@@ -96,13 +96,13 @@ function ocf_get_all_subordinate_forums($forum_id,$create_or_list=NULL,$tree=NUL
 				$tree=ocf_organise_into_tree($all_descendant,$forum_id);
 			} else
 			{
-				$ALL_FORUMS_STRUCT=$GLOBALS['FORUM_DB']->query_select('f_forums');
-				$all_forum_struct_copy=$ALL_FORUMS_STRUCT;
+				$ALL_FORUMS_STRUCT_CACHE=$GLOBALS['FORUM_DB']->query_select('f_forums');
+				$all_forum_struct_copy=$ALL_FORUMS_STRUCT_CACHE;
 				$tree=ocf_organise_into_tree($all_forum_struct_copy,$forum_id);
 			}
 		} else
 		{
-			$all_forum_struct_copy=$ALL_FORUMS_STRUCT;
+			$all_forum_struct_copy=$ALL_FORUMS_STRUCT_CACHE;
 			$tree=ocf_organise_into_tree($all_forum_struct_copy,$forum_id);
 		}
 	}

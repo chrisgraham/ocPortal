@@ -30,6 +30,7 @@ class Database_Static_mysql extends Database_super_mysql
 {
 	var $cache_db=array();
 	var $last_select_db=NULL;
+	var $reconnected_once=false;
 
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
@@ -220,12 +221,12 @@ class Database_Static_mysql extends Database_super_mysql
 		{
 			$err=mysql_error($db);
 
-			if ((function_exists('mysql_ping')) && ($err=='MySQL server has gone away') && (!isset($GLOBALS['REDONE_ONCE'])))
+			if ((function_exists('mysql_ping')) && ($err=='MySQL server has gone away') && (!$this->reconnected_once))
 			{
-				$GLOBALS['REDONE_ONCE']=true;
+				$this->reconnected_once=true;
 				mysql_ping($db);
 				$ret=$this->db_query($query,$db_parts,NULL,NULL,$fail_ok,$get_insert_id);
-				unset($GLOBALS['REDONE_ONCE']);
+				$this->reconnected_once=false;
 				return $ret;
 			}
 

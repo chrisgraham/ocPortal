@@ -136,8 +136,8 @@ function actual_rename_theme($theme,$to)
 		warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($to)));
 	}
 
-	global $CACHED_THEME;
-	if ((!is_null($CACHED_THEME)) && ($CACHED_THEME==$theme)) $CACHED_THEME=$to;
+	global $USER_THEME_CACHE;
+	if ((!is_null($USER_THEME_CACHE)) && ($USER_THEME_CACHE==$theme)) $USER_THEME_CACHE=$to;
 
 	require_code('abstract_file_manager');
 	force_have_afm_details();
@@ -203,8 +203,8 @@ function actual_delete_theme($theme)
 {
 	if ($theme=='default') fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-	global $CACHED_THEME;
-	if ((!is_null($CACHED_THEME)) && ($CACHED_THEME==$theme)) $CACHED_THEME='default';
+	global $USER_THEME_CACHE;
+	if ((!is_null($USER_THEME_CACHE)) && ($USER_THEME_CACHE==$theme)) $USER_THEME_CACHE='default';
 
 	require_code('abstract_file_manager');
 	force_have_afm_details();

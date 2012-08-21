@@ -145,12 +145,12 @@ function filter_form_field_default($name,$val)
 						case 'disallowedword':
 							if (addon_installed('wordfilter'))
 							{
-								global $WORDS_TO_FILTER;
-								$temp_remember=$WORDS_TO_FILTER;
-								$WORDS_TO_FILTER=array($attributes['embed']=>array('word'=>$attributes['embed'],'w_replacement'=>'','w_substr'=>0));
+								global $WORDS_TO_FILTER_CACHE;
+								$temp_remember=$WORDS_TO_FILTER_CACHE;
+								$WORDS_TO_FILTER_CACHE=array($attributes['embed']=>array('word'=>$attributes['embed'],'w_replacement'=>'','w_substr'=>0));
 								require_code('word_filter');
 								check_word_filter($val,$name,false,true,false);
-								$WORDS_TO_FILTER=$temp_remember;
+								$WORDS_TO_FILTER_CACHE=$temp_remember;
 							} else
 							{
 								if (strpos($val,$attributes['embed'])!==false)

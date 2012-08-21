@@ -29,8 +29,6 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 
 $_COOKIE=array(); // Needed because Flash can have out-dated cookies, presumably due to them being picked up when the .swf first loads, and then going stale. We pass a session in via keep_session which must take precedence.
 
-global $NON_PAGE_SCRIPT;
-$NON_PAGE_SCRIPT=1;
 global $FORCE_INVISIBLE_GUEST;
 $FORCE_INVISIBLE_GUEST=0;
 global $MICRO_AJAX_BOOTUP;

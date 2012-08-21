@@ -144,11 +144,11 @@ class Hook_search_news
 	 */
 	function render($myrow)
 	{
-		global $NEWS_CATS;
-		if (!isset($NEWS_CATS))
+		global $NEWS_CATS_CACHE;
+		if (!isset($NEWS_CATS_CACHE))
 		{
-			$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-			$NEWS_CATS=list_to_map('id',$NEWS_CATS);
+			$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
+			$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
 		}
 
 		require_code('news');

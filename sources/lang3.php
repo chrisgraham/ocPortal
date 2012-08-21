@@ -106,17 +106,17 @@ function _find_all_langs($even_empty_langs=false)
  */
 function get_language_title($lang)
 {
-	global $LANGS_MAP;
+	global $LANGS_MAP_CACHE;
 
-	if ($LANGS_MAP===NULL)
+	if ($LANGS_MAP_CACHE===NULL)
 	{
 		$map_a=get_file_base().'/lang/langs.ini';
 		$map_b=get_custom_file_base().'/lang_custom/langs.ini';
 		if (!is_file($map_b)) $map_b=$map_a;
-		$LANGS_MAP=better_parse_ini_file($map_b);
+		$LANGS_MAP_CACHE=better_parse_ini_file($map_b);
 	}
 
-	return array_key_exists($lang,$LANGS_MAP)?$LANGS_MAP[$lang]:$lang;
+	return array_key_exists($lang,$LANGS_MAP_CACHE)?$LANGS_MAP_CACHE[$lang]:$lang;
 }
 
 /**
@@ -140,9 +140,9 @@ function _nice_get_langs($select_lang=NULL,$show_unset=false)
 
 	if ($show_unset)
 	{
-		global $LANGS_MAP;
-		asort($LANGS_MAP);
-		foreach ($LANGS_MAP as $lang=>$full)
+		global $LANGS_MAP_CACHE;
+		asort($LANGS_MAP_CACHE);
+		foreach ($LANGS_MAP_CACHE as $lang=>$full)
 		{
 			if (!array_key_exists($lang,$_langs))
 			{

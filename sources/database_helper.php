@@ -144,7 +144,7 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 	$this_ref->table_exists_cache[$table_name]=true;
 
 	if (function_exists('persistent_cache_set'))
-		persistent_cache_delete('TABLE_LANG_FIELDS');
+		persistent_cache_delete('TABLE_LANG_FIELDS_CACHE');
 }
 
 /**
@@ -253,7 +253,7 @@ function _helper_drop_table_if_exists($this_ref,$table)
 	$this_ref->static_ob->db_drop_table_if_exists($this_ref->table_prefix.$table,$this_ref->connection_write);
 
 	if (function_exists('persistent_cache_set'))
-		persistent_cache_delete('TABLE_LANG_FIELDS');
+		persistent_cache_delete('TABLE_LANG_FIELDS_CACHE');
 }
 
 /**
@@ -278,7 +278,7 @@ function _helper_rename_table($this_ref,$old,$new)
 	$this_ref->query_update('db_meta_indices',array('i_table'=>$new),array('i_table'=>$old));
 
 	if (function_exists('persistent_cache_set'))
-		persistent_cache_delete('TABLE_LANG_FIELDS');
+		persistent_cache_delete('TABLE_LANG_FIELDS_CACHE');
 }
 
 /**
@@ -386,7 +386,7 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 	$this_ref->query_insert('db_meta',array('m_table'=>$table_name,'m_name'=>$name,'m_type'=>$_type));
 
 	if (function_exists('persistent_cache_set'))
-		persistent_cache_delete('TABLE_LANG_FIELDS');
+		persistent_cache_delete('TABLE_LANG_FIELDS_CACHE');
 }
 
 /**
@@ -429,7 +429,7 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 	$this_ref->query_update('db_meta',$update_map,array('m_table'=>$table_name,'m_name'=>$name));
 
 	if (function_exists('persistent_cache_set'))
-		persistent_cache_delete('TABLE_LANG_FIELDS');
+		persistent_cache_delete('TABLE_LANG_FIELDS_CACHE');
 }
 
 /**
@@ -478,7 +478,7 @@ function _helper_promote_text_field_to_comcode($this_ref,$table_name,$name,$key=
 	}
 
 	if (function_exists('persistent_cache_set'))
-		persistent_cache_delete('TABLE_LANG_FIELDS');
+		persistent_cache_delete('TABLE_LANG_FIELDS_CACHE');
 }
 
 /**
@@ -503,7 +503,7 @@ function _helper_delete_table_field($this_ref,$table_name,$name)
 	}
 
 	if (function_exists('persistent_cache_set'))
-		persistent_cache_delete('TABLE_LANG_FIELDS');
+		persistent_cache_delete('TABLE_LANG_FIELDS_CACHE');
 }
 
 /**

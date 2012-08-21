@@ -25,8 +25,8 @@
  */
 function init__developer_tools()
 {
-	global $MEMORY_POINTS;
-	$MEMORY_POINTS=array();
+	global $MEMORY_PROFILING_POINTS;
+	$MEMORY_PROFILING_POINTS=array();
 }
 
 /**
@@ -182,9 +182,9 @@ function _inspect($args,$force_plain=false)
  */
 function memory_trace_point($name=NULL)
 {
-	global $MEMORY_POINTS;
-	if (is_null($name)) $name='#'.integer_format(count($MEMORY_POINTS)+1);
-	$MEMORY_POINTS[]=array(memory_get_usage(),$name);
+	global $MEMORY_PROFILING_POINTS;
+	if (is_null($name)) $name='#'.integer_format(count($MEMORY_PROFILING_POINTS)+1);
+	$MEMORY_PROFILING_POINTS[]=array(memory_get_usage(),$name);
 }
 
 /**
@@ -198,9 +198,9 @@ function show_memory_points()
 
 	$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 
-	global $MEMORY_POINTS;
+	global $MEMORY_PROFILING_POINTS;
 	$before=mixed();
-	foreach ($MEMORY_POINTS as $point)
+	foreach ($MEMORY_PROFILING_POINTS as $point)
 	{
 		list($memory,$name)=$point;
 		echo 'Memory at '.$name.' is'."\t".integer_format($memory).' (growth of '.(is_null($before)?'N/A':integer_format($memory-$before)).')'."\n";

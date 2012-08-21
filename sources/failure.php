@@ -553,8 +553,8 @@ function get_webservice_result($error_message)
 	// Get message IN ENGLISH
 	if (user_lang()!=fallback_lang())
 	{
-		global $LANGUAGE;
-		foreach ($LANGUAGE as $_)
+		global $LANGUAGE_STRINGS_CACHE;
+		foreach ($LANGUAGE_STRINGS_CACHE as $_)
 		{
 			foreach ($_ as $key=>$val)
 			{
@@ -974,7 +974,7 @@ function _access_denied($class,$param,$force_login)
 	require_code('site');
 	log_stats('/access_denied',0);
 
-	if (((is_guest()) && ($GLOBALS['NON_PAGE_SCRIPT']==0)) || ($force_login))
+	if (((is_guest()) && (running_script('index'))) || ($force_login)) // Show login screen if appropriate
 	{
 		@ob_end_clean();
 
@@ -993,7 +993,7 @@ function _access_denied($class,$param,$force_login)
 		exit();
 	}
 
-	warn_exit($message);
+	warn_exit($message); // Or if no login screen, just show normal error screen
 }
 
 /**

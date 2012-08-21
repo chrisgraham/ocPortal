@@ -183,12 +183,12 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 			$cat_bit='';
 			if (!is_null($forum['f_forum_grouping_id']))
 			{
-				global $GROUPING_TITLES;
-				if (is_null($GROUPING_TITLES))
+				global $FORUM_GROUPINGS_TITLES_CACHE;
+				if (is_null($FORUM_GROUPINGS_TITLES_CACHE))
 				{
-					$GROUPING_TITLES=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('id','c_title')));
+					$FORUM_GROUPINGS_TITLES_CACHE=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('id','c_title')));
 				}
-				$cat_bit=array_key_exists($forum['f_forum_grouping_id'],$GROUPING_TITLES)?$GROUPING_TITLES[$forum['f_forum_grouping_id']]:do_lang('NA');
+				$cat_bit=array_key_exists($forum['f_forum_grouping_id'],$FORUM_GROUPINGS_TITLES_CACHE)?$FORUM_GROUPINGS_TITLES_CACHE[$forum['f_forum_grouping_id']]:do_lang('NA');
 			}
 			if ($field_format)
 			{

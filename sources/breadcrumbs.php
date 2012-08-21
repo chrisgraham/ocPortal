@@ -35,15 +35,15 @@ function init__breadcrumbs()
  */
 function load_breadcrumb_substitutions($current_breadcrumb,$data)
 {
-	global $BREADCRUMB_SUBSTITIONS;
-	if ($BREADCRUMB_SUBSTITIONS===NULL)
+	global $BREADCRUMB_SUBSTITUTIONS_CACHE;
+	if ($BREADCRUMB_SUBSTITUTIONS_CACHE===NULL)
 	{
 		$temp=new breadcrumb_substitution_loader();
 		$temp->go($current_breadcrumb,$data);
-		$BREADCRUMB_SUBSTITIONS=$temp->substitutions;
+		$BREADCRUMB_SUBSTITUTIONS_CACHE=$temp->substitutions;
 	}
 
-	return $BREADCRUMB_SUBSTITIONS;
+	return $BREADCRUMB_SUBSTITUTIONS_CACHE;
 }
 
 /**

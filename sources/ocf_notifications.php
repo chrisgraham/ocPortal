@@ -23,8 +23,8 @@
  */
 function init__ocf_notifications()
 {
-	global $PP_ROWS;
-	$PP_ROWS=NULL;
+	global $PRIVATE_POST_ROWS_CACHE;
+	$PRIVATE_POST_ROWS_CACHE=NULL;
 }
 
 /**
@@ -35,8 +35,8 @@ function init__ocf_notifications()
  */
 function ocf_get_pp_rows($limit=5)
 {
-	global $PP_ROWS;
-	if (!is_null($PP_ROWS)) return $PP_ROWS;
+	global $PRIVATE_POST_ROWS_CACHE;
+	if (!is_null($PRIVATE_POST_ROWS_CACHE)) return $PRIVATE_POST_ROWS_CACHE;
 
 	$member_id=get_member();
 
@@ -92,11 +92,11 @@ function ocf_get_pp_rows($limit=5)
 
 	$query.=' ORDER BY t_cache_last_time DESC';
 
-	$PP_ROWS=$GLOBALS['FORUM_DB']->query($query,$limit,NULL,false,true);
+	$PRIVATE_POST_ROWS_CACHE=$GLOBALS['FORUM_DB']->query($query,$limit,NULL,false,true);
 
-	$PP_ROWS=remove_duplicate_rows($PP_ROWS,'t_id');
+	$PRIVATE_POST_ROWS_CACHE=remove_duplicate_rows($PRIVATE_POST_ROWS_CACHE,'t_id');
 
-	return $PP_ROWS;
+	return $PRIVATE_POST_ROWS_CACHE;
 }
 
 /**

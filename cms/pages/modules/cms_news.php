@@ -364,7 +364,7 @@ class Module_cms_news extends standard_crud_module
 
 		if (addon_installed('calendar'))
 		{
-			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
+			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'_EVENT_TIMESTAMP\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
 			$past_event=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id',array('e_start_day','e_start_month','e_start_year','e_start_hour','e_start_minute'),array('text_original'=>$schedule_code),'',1);
 			$scheduled=array_key_exists(0,$past_event)?array($past_event[0]['e_start_minute'],$past_event[0]['e_start_hour'],$past_event[0]['e_start_month'],$past_event[0]['e_start_day'],$past_event[0]['e_start_year']):NULL;
 			if ((!is_null($scheduled)) && ($scheduled<time())) $scheduled=NULL;
@@ -444,7 +444,7 @@ class Module_cms_news extends standard_crud_module
 		if (!is_null($schedule))
 		{
 			require_code('calendar');
-			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
+			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'_EVENT_TIMESTAMP\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
 			$start_year=post_param_integer('schedule_year');
 			$start_month=post_param_integer('schedule_month');
 			$start_day=post_param_integer('schedule_day');
@@ -510,7 +510,7 @@ class Module_cms_news extends standard_crud_module
 		if ((addon_installed('calendar')) && (has_privilege(get_member(),'scheduled_publication_times')))
 		{
 			require_code('calendar2');
-			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
+			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'_EVENT_TIMESTAMP\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
 			$past_event=$GLOBALS['SITE_DB']->query_select_value_if_there('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id','e.id',array('text_original'=>$schedule_code));
 			require_code('calendar');
 			if (!is_null($past_event))
@@ -657,9 +657,9 @@ class Module_cms_news extends standard_crud_module
 
 		$submitter=get_member();
 
-		$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
+		$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 
-		$NEWS_CATS=list_to_map('id',$NEWS_CATS);
+		$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
 
 		$extra_post_data=array();
 
@@ -677,7 +677,7 @@ class Module_cms_news extends standard_crud_module
 			foreach ($cats_to_process as $j=>$cat)
 			{
 				$_cat_id=mixed();
-				foreach ($NEWS_CATS as $_cat=>$news_cat)
+				foreach ($NEWS_CATS_CACHE as $_cat=>$news_cat)
 				{				
 					if (get_translated_text($news_cat['nc_title'])==$cat)
 					{
@@ -688,8 +688,8 @@ class Module_cms_news extends standard_crud_module
 				{
 					$_cat_id=add_news_category($cat,'newscats/general','',NULL);
 					// Need to reload now
-					$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-					$NEWS_CATS=list_to_map('id',$NEWS_CATS);
+					$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
+					$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
 				}
 
 				if ($j==0)

@@ -36,9 +36,9 @@ function import_wordpress_db()
 	$def_grp_id=get_first_default_group();
 	$cat_id=array();	
 
-	$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
+	$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
 
-	$NEWS_CATS=list_to_map('id',$NEWS_CATS);
+	$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
 
 	foreach ($data as $values)
 	{
@@ -76,7 +76,7 @@ function import_wordpress_db()
 					{	
 						$cat_code=NULL;
 						if ($category=='Uncategorized')	continue;	// Skip blank category creation
-						foreach ($NEWS_CATS as $id=>$existing_cat)
+						foreach ($NEWS_CATS_CACHE as $id=>$existing_cat)
 						{
 							if (get_translated_text($existing_cat['nc_title'])==$category)
 							{
@@ -86,8 +86,8 @@ function import_wordpress_db()
 						if (is_null($cat_code))	// Cound not find existing category, create new
 						{
 							$cat_code=add_news_category($category,'newscats/community',$category);
-							$NEWS_CATS=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'));	
-							$NEWS_CATS=list_to_map('id',$NEWS_CATS);
+							$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'));	
+							$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
 						}
 						$cat_id=array_merge($cat_id,array($cat_code));
 					}

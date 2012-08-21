@@ -249,16 +249,16 @@ function add_config_option($human_name,$name,$type,$eval,$category,$group,$share
 		$GLOBALS['SITE_DB']->query_insert('config',$map); // From installer we want to know if there are errors in our install cycle
 	}
 	if (function_exists('persistent_cache_delete')) persistent_cache_delete('OPTIONS');
-	global $OPTIONS;
-	if ($OPTIONS==array()) // Installer might not have loaded any yet
+	global $CONFIG_OPTIONS_CACHE;
+	if ($CONFIG_OPTIONS_CACHE==array()) // Installer might not have loaded any yet
 	{
 		load_options();
 	} else
 	{
-		$OPTIONS[$name]=$map;
+		$CONFIG_OPTIONS_CACHE[$name]=$map;
 		if (multi_lang())
 		{
-			unset($OPTIONS[$name]['config_value_translated']);
+			unset($CONFIG_OPTIONS_CACHE[$name]['config_value_translated']);
 		}
 	}
 }
@@ -279,8 +279,8 @@ function delete_config_option($name)
 			delete_lang($myrow['config_value']);
 		}
 		$GLOBALS['SITE_DB']->query_delete('config',array('the_name'=>$name),'',1);
-		/*global $OPTIONS;  Don't do this, it will cause problems in some parts of the code
-		unset($OPTIONS[$name]);*/
+		/*global $CONFIG_OPTIONS_CACHE;  Don't do this, it will cause problems in some parts of the code
+		unset($CONFIG_OPTIONS_CACHE[$name]);*/
 	}
 	if (function_exists('persistent_cache_delete')) persistent_cache_delete('OPTIONS');
 }

@@ -24,6 +24,9 @@
 function init__templates()
 {
 	global $SKIP_TITLING;
+	/** Whether we actually don't want to show screen titles in our output -- put them out as empty.
+	 * @global boolean $SKIP_TITLING
+	 */
 	$SKIP_TITLING=false;
 }
 
@@ -71,6 +74,8 @@ function put_in_standard_box($content,$title='',$type='default',$width='',$optio
 /**
  * Get the tempcode for a page title. (Ones below the page header, not in the browser title bar.)
  *
+ * @sets_output_state
+ *
  * @param  mixed			The title to use (usually, a language string code, see below)
  * @param  boolean		Whether the given title is actually a language string code, and hence gets dereferenced
  * @param  ?array			Parameters sent to the language string (NULL: none)
@@ -106,12 +111,6 @@ function get_screen_title($title,$dereference_lang=true,$params=NULL,$user_onlin
 
 	global $DISPLAYED_TITLE;
 	$DISPLAYED_TITLE=$_title;
-
-	if ($our_help_url!='')
-	{
-		global $HELP_URL;
-		$HELP_URL=$our_help_url.'#'.$our_help_term;
-	}
 
 	if ($awards===NULL) $awards=array();
 
