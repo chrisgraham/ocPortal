@@ -77,6 +77,62 @@ function init__support()
 
 	global $ADDON_INSTALLED_CACHE;
 	$ADDON_INSTALLED_CACHE=array();
+
+	global $HTTP_STATUS_CODE;
+	$HTTP_STATUS_CODE='200';
+
+	global $DOCUMENT_HELP;
+	$DOCUMENT_HELP='';
+
+	global $META_DATA;
+	$META_DATA=array();
+}
+
+/**
+ * Add some meta-data for the request.
+ *
+ * @param  array				Extra meta-data
+ */
+function set_extra_request_metadata($meta_data)
+{
+	global $META_DATA;
+	$META_DATA+=$meta_data;
+}
+
+/**
+ * Set the HTTP status code for the request.
+ *
+ * @param  string				The HTTP status code (should be numeric)
+ */
+function set_http_status_code($code)
+{
+	global $HTTP_STATUS_CODE;
+	$HTTP_STATUS_CODE=$code; // So we can keep track
+
+	if ((!headers_sent()) && (function_exists('browser_matches')) && (!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) 
+	{
+		switch ($code)
+		{
+			case '301':
+				header('HTTP/1.0 301 Moved Permanently');
+				break;
+			case '400':
+				header('HTTP/1.0 400 Bad Request');
+				break;
+			case '401':
+				header('HTTP/1.0 401 Unauthorized');
+				break;
+			case '403':
+				header('HTTP/1.0 403 Forbidden');
+				break;
+			case '404':
+				header('HTTP/1.0 404 Not Found');
+				break;
+			case '500':
+				header('HTTP/1.0 500 Internal server error');
+				break;
+		}
+	}
 }
 
 /**
@@ -1399,8 +1455,7 @@ function get_num_users_site()
 	}
 	if ((intval($NUM_USERS_SITE)>intval(get_option('maximum_users'))) && (intval(get_option('maximum_users'))>1) && (get_page_name()!='login') && (!has_privilege(get_member(),'access_overrun_site')) && (!running_script('cron_bridge')))
 	{
-		$GLOBALS['HTTP_STATUS_CODE']='503';
-		header('HTTP/1.0 503 Service Unavailable');
+		set_http_status_code('503');
 
 		critical_error('BUSY',do_lang('TOO_MANY_USERS'));
 	}
@@ -1950,11 +2005,10 @@ function seo_meta_get_for($type,$id)
 function seo_meta_load_for($type,$id,$title=NULL)
 {
 	$result=seo_meta_get_for($type,$id);
-	global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SEO_TITLE;
-	if ($SEO_TITLE=='DO_NOT_REPLACE') return; // main_include_module block set this
+	global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SHORT_TITLE;
 	if ($result[0]!='') $SEO_KEYWORDS=array_map('trim',explode(',',$result[0]));
 	if ($result[1]!='') $SEO_DESCRIPTION=$result[1];
-	if ($title!==NULL) $SEO_TITLE=str_replace('&ndash;','-',str_replace('&copy;','(c)',str_replace('&#039;','\'',$title)));
+	if ($title!==NULL) set_short_title(str_replace('&ndash;','-',str_replace('&copy;','(c)',str_replace('&#039;','\'',$title))));
 }
 
 /**

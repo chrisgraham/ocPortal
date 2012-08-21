@@ -64,15 +64,15 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	 */
 	function install_specifics()
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		$a=array();
 		$a['name']='vb_table_prefix';
-		$a['default']=array_key_exists('prefix',$INFO)?$INFO['prefix']:'';
+		$a['default']=array_key_exists('prefix',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['prefix']:'';
 		$a['description']=do_lang('MOST_DEFAULT');
 		$a['title']='VB '.do_lang('TABLE_PREFIX');
 		$b=array();
 		$b['name']='vb_unique_id';
-		$b['default']=array_key_exists('vb_unique_id',$INFO)?$INFO['vb_unique_id']:'X######x';
+		$b['default']=array_key_exists('vb_unique_id',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['vb_unique_id']:'X######x';
 		$b['description']=do_lang('VB_UNIQUE_ID_DESCRIP');
 		$b['title']='VB '.do_lang('VB_UNIQUE_ID');
 		return array($a,$b);
@@ -86,7 +86,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 	 */
 	function install_test_load_from($path)
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		if (@file_exists($path.'/includes/config.php'))
 		{
 			$dbname=NULL;
@@ -95,31 +95,31 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 			$tableprefix='';
 			$config=array();
 			@include($path.'/includes/config.php');
-			$INFO=array();
+			$PROBED_FORUM_CONFIG=array();
 			if (!is_null($dbname))
 			{
-				$INFO['sql_database']=$dbname;
-				$INFO['sql_user']=$dbusername;
-				$INFO['sql_pass']=$dbpassword;
-				$INFO['prefix']=$tableprefix;
-				$INFO['cookie_member_id']='bbuserid';
-				$INFO['cookie_member_hash']='bbpassword';
+				$PROBED_FORUM_CONFIG['sql_database']=$dbname;
+				$PROBED_FORUM_CONFIG['sql_user']=$dbusername;
+				$PROBED_FORUM_CONFIG['sql_pass']=$dbpassword;
+				$PROBED_FORUM_CONFIG['prefix']=$tableprefix;
+				$PROBED_FORUM_CONFIG['cookie_member_id']='bbuserid';
+				$PROBED_FORUM_CONFIG['cookie_member_hash']='bbpassword';
 			} elseif (array_key_exists('Database',$config))
 			{
-				$INFO['sql_database']=$config['Database']['dbname'];
-				$INFO['sql_user']=$config['MasterServer']['username'];
-				$INFO['sql_pass']=$config['MasterServer']['password'];
-				$INFO['prefix']=$config['Database']['tableprefix'];
-				$INFO['cookie_member_id']=$config['Misc']['cookieprefix'].'userid';
-				$INFO['cookie_member_hash']=$config['Misc']['cookieprefix'].'password';
+				$PROBED_FORUM_CONFIG['sql_database']=$config['Database']['dbname'];
+				$PROBED_FORUM_CONFIG['sql_user']=$config['MasterServer']['username'];
+				$PROBED_FORUM_CONFIG['sql_pass']=$config['MasterServer']['password'];
+				$PROBED_FORUM_CONFIG['prefix']=$config['Database']['tableprefix'];
+				$PROBED_FORUM_CONFIG['cookie_member_id']=$config['Misc']['cookieprefix'].'userid';
+				$PROBED_FORUM_CONFIG['cookie_member_hash']=$config['Misc']['cookieprefix'].'password';
 			}
 
-			$INFO['board_url']='';
+			$PROBED_FORUM_CONFIG['board_url']='';
 			$file_contents=file_get_contents($path.'/includes/config.php');
 			$matches=array();
 			if (preg_match('#Licence Number (.*)#',$file_contents,$matches)!=0)
 			{
-				$INFO['vb_unique_id']=$matches[1];
+				$PROBED_FORUM_CONFIG['vb_unique_id']=$matches[1];
 			}
 			return true;
 		}

@@ -94,8 +94,8 @@ class Module_admin_wordfilter
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/wordfilter';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_censor';
+		set_helper_panel_pic('pagepics/wordfilter');
+		set_helper_panel_tutorial('tut_censor');
 
 		require_lang('wordfilter');
 

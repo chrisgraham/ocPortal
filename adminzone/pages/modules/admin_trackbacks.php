@@ -58,8 +58,8 @@ class Module_admin_trackbacks
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/trackbacks';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_TRACKBACKS');
+		set_helper_panel_pic('pagepics/trackbacks');
+		set_helper_panel_text(comcode_lang_string('DOC_TRACKBACKS'));
 
 		require_lang('trackbacks');
 

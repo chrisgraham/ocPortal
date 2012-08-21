@@ -683,20 +683,19 @@ class forum_driver_vb_shared extends forum_driver_base
 	 */
 	function find_emoticons()
 	{
-		global $EMOTICON_CACHE;
-		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
-		$EMOTICON_CACHE=array();
+		if (!is_null($this->EMOTICON_CACHE)) return $this->EMOTICON_CACHE;
+		$this->EMOTICON_CACHE=array();
 		$rows=$this->connection->query_select('smilie',array('*'));
-		$EMOTICON_CACHE=array();
+		$this->EMOTICON_CACHE=array();
 		foreach ($rows as $myrow)
 		{
 			$src=$myrow['smiliepath'];
 			if (url_is_local($src)) $src=$this->get_emo_dir().$src;
-			$EMOTICON_CACHE[$myrow['smilietext']]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['smilietext']);
+			$this->EMOTICON_CACHE[$myrow['smilietext']]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['smilietext']);
 		}
-		uksort($EMOTICON_CACHE,'strlen_sort');
-		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
-		return $EMOTICON_CACHE;
+		uksort($this->EMOTICON_CACHE,'strlen_sort');
+		$this->EMOTICON_CACHE=array_reverse($this->EMOTICON_CACHE);
+		return $this->EMOTICON_CACHE;
 	}
 
 	/**

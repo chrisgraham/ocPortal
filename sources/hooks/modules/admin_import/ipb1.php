@@ -181,21 +181,21 @@ class Hook_ipb1 extends Hook_ipb_base
 	 */
 	function import_config($db,$table_prefix,$file_base)
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		require($file_base.'/conf_global.php');
-		set_option('staff_address',$INFO['email_out']);
-		set_option('restricted_usernames',$INFO['ban_names']);
-		/*set_option('forum_posts_per_page',$INFO['display_max_posts']);	Not useful
-		set_option('forum_topics_per_page',$INFO['display_max_topics']);*/
-		set_option('site_name',$INFO['home_name']);
-		set_option('site_closed',$INFO['board_offline']);
-		set_option('closed',$INFO['offline_msg']);
-		set_option('session_expiry_time',strval(intval(round($INFO['session_expiration']/3600))));
-		set_option('prevent_shouting',strval($INFO['etfilter_shout']));
+		set_option('staff_address',$PROBED_FORUM_CONFIG['email_out']);
+		set_option('restricted_usernames',$PROBED_FORUM_CONFIG['ban_names']);
+		/*set_option('forum_posts_per_page',$PROBED_FORUM_CONFIG['display_max_posts']);	Not useful
+		set_option('forum_topics_per_page',$PROBED_FORUM_CONFIG['display_max_topics']);*/
+		set_option('site_name',$PROBED_FORUM_CONFIG['home_name']);
+		set_option('site_closed',$PROBED_FORUM_CONFIG['board_offline']);
+		set_option('closed',$PROBED_FORUM_CONFIG['offline_msg']);
+		set_option('session_expiry_time',strval(intval(round($PROBED_FORUM_CONFIG['session_expiration']/3600))));
+		set_option('prevent_shouting',strval($PROBED_FORUM_CONFIG['etfilter_shout']));
 
 		// Now some usergroup options
-		list($width,$height)=explode('x',$INFO['avatar_dims']);
-		$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_avatar_width'=>$width,'g_max_avatar_height'=>$height,'g_max_sig_length_comcode'=>$INFO['max_sig_length'],'g_max_post_length_comcode'=>$INFO['max_post_length']));
+		list($width,$height)=explode('x',$PROBED_FORUM_CONFIG['avatar_dims']);
+		$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_avatar_width'=>$width,'g_max_avatar_height'=>$height,'g_max_sig_length_comcode'=>$PROBED_FORUM_CONFIG['max_sig_length'],'g_max_post_length_comcode'=>$PROBED_FORUM_CONFIG['max_post_length']));
 	}
 
 	/**

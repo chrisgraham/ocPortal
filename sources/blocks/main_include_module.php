@@ -99,18 +99,17 @@ class Block_main_include_module
 			}
 		}
 		$temp_displayed_title=$GLOBALS['DISPLAYED_TITLE'];
-		$temp_seo_title=$GLOBALS['SEO_TITLE'];
+		$temp_seo_title=$GLOBALS['SHORT_TITLE'];
 		$temp_current_breadcrumb_extra_segments=$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS'];
 		$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']=new ocp_tempcode(); // Force a new object, so we don't just reassign the tainted reference
 		$temp_current_breadcrumbs=$GLOBALS['BREADCRUMBS'];
 		$GLOBALS['BREADCRUMBS']=NULL;
 		$temp_current_breadcrumb_set_parents=$GLOBALS['BREADCRUMB_SET_PARENTS'];
 		$temp_current_breadcrumb_set_self=$GLOBALS['BREADCRUMB_SET_SELF'];
-		$GLOBALS['SEO_TITLE']='DO_NOT_REPLACE';
 		$out=request_page($attributes['page'],false,$zone,NULL,true);
 		$ret=make_string_tempcode($out->evaluate());
 		$GLOBALS['DISPLAYED_TITLE']=$temp_displayed_title;
-		$GLOBALS['SEO_TITLE']=$temp_seo_title;
+		$GLOBALS['SHORT_TITLE']=$temp_seo_title;
 		$GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']=$temp_current_breadcrumb_extra_segments;
 		$GLOBALS['BREADCRUMBS']=$temp_current_breadcrumbs;
 		$GLOBALS['BREADCRUMB_SET_PARENTS']=$temp_current_breadcrumb_set_parents;

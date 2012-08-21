@@ -61,8 +61,8 @@ class Module_admin_debrand
 		require_lang('debrand');
 		require_lang('config');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/debrand';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_SUPERDEBRAND');
+		set_helper_panel_pic('pagepics/debrand');
+		set_helper_panel_text(comcode_lang_string('DOC_SUPERDEBRAND'));
 
 		$type=get_param('type','misc');
 		if ($type=='misc') return $this->misc();

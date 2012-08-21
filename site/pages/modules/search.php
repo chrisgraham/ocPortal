@@ -282,8 +282,7 @@ class Module_search
 		list($sortable,$sort_order)=explode(' ',get_param('sort','s_time DESC'),2);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 		$fields_title=results_field_title(array(do_lang_tempcode('TITLE'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('DELETE'),do_lang_tempcode('RUN_SEARCH')),$sortables,'sort',$sortable.' '.$sort_order);
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('searches_saved','COUNT(*)',array('s_member_id'=>get_member()));
 		$rows=$GLOBALS['SITE_DB']->query_select('searches_saved',array('*'),array('s_member_id'=>get_member()),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
@@ -339,8 +338,6 @@ class Module_search
 	 */
 	function form()
 	{
-		global $NON_CANONICAL_PARAMS;
-
 		$id=get_param('id','');
 
 		$title=get_screen_title('SEARCH_TITLE');
@@ -482,7 +479,7 @@ class Module_search
 				$info=$object->info();
 				if (is_null($info)) continue;
 
-				$NON_CANONICAL_PARAMS[]='search_'.$hook;
+				inform_non_canonical_parameter('search_'.$hook);
 
 				$is_default_or_advanced=(($info['default']) && ($id=='')) || ($hook==$id);
 
@@ -507,22 +504,22 @@ class Module_search
 		$sort=get_param('sort','relevance');
 		$direction=get_param('direction','DESC');
 		if (!in_array(strtoupper($direction),array('ASC','DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');
-		$NON_CANONICAL_PARAMS[]='sort';
-		$NON_CANONICAL_PARAMS[]='direction';
+		inform_non_canonical_parameter('sort');
+		inform_non_canonical_parameter('direction');
 		$only_titles=get_param_integer('only_titles',0)==1;
 		$search_under=get_param('search_under','!',true);
 		if ($search_under=='') $search_under='!';
 		$boolean_operator=get_param('conjunctive_operator','OR');
 
-		$NON_CANONICAL_PARAMS[]='search_under';
-		$NON_CANONICAL_PARAMS[]='all_defaults';
-		$NON_CANONICAL_PARAMS[]='days';
-		$NON_CANONICAL_PARAMS[]='only_titles';
-		$NON_CANONICAL_PARAMS[]='conjunctive_operator';
-		$NON_CANONICAL_PARAMS[]='boolean_search';
-		$NON_CANONICAL_PARAMS[]='only_search_meta';
-		$NON_CANONICAL_PARAMS[]='content';
-		$NON_CANONICAL_PARAMS[]='author';
+		inform_non_canonical_parameter('search_under');
+		inform_non_canonical_parameter('all_defaults');
+		inform_non_canonical_parameter('days');
+		inform_non_canonical_parameter('only_titles');
+		inform_non_canonical_parameter('conjunctive_operator');
+		inform_non_canonical_parameter('boolean_search');
+		inform_non_canonical_parameter('only_search_meta');
+		inform_non_canonical_parameter('content');
+		inform_non_canonical_parameter('author');
 
 		$has_fulltext_search=db_has_full_text($GLOBALS['SITE_DB']->connection_read);
 
@@ -687,8 +684,7 @@ class Module_search
 
 		if (function_exists('set_time_limit')) @set_time_limit(15);
 
-		global $EXTRA_HEAD;
-		$EXTRA_HEAD->attach('<meta name="robots" content="noindex,nofollow" />'); // XHTMLXHTML
+		attach_to_screen_header('<meta name="robots" content="noindex,nofollow" />'); // XHTMLXHTML
 
 		// Now glue our templates together
 		$out=build_search_results_interface($results,$start,$max,$direction,$id=='');

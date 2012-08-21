@@ -134,11 +134,11 @@ class forum_driver_none extends forum_driver_base
 	function install_test_load_from($path)
 	{
 		unset($path);
-		global $INFO;
-		$INFO=array();
-		$INFO['sql_database']='ocp';
-		$INFO['sql_user']=$GLOBALS['DB_STATIC_OBJECT']->db_default_user();
-		$INFO['sql_pass']=$GLOBALS['DB_STATIC_OBJECT']->db_default_password();
+		global $PROBED_FORUM_CONFIG;
+		$PROBED_FORUM_CONFIG=array();
+		$PROBED_FORUM_CONFIG['sql_database']='ocp';
+		$PROBED_FORUM_CONFIG['sql_user']=$GLOBALS['DB_STATIC_OBJECT']->db_default_user();
+		$PROBED_FORUM_CONFIG['sql_pass']=$GLOBALS['DB_STATIC_OBJECT']->db_default_password();
 		return true;
 	}
 
@@ -193,18 +193,18 @@ class forum_driver_none extends forum_driver_base
 		global $IN_MINIKERNEL_VERSION;
 		if ($IN_MINIKERNEL_VERSION==1) return array();
 
-		global $EMOTICON_CACHE,$EMOTICON_LEVELS;
-		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
-		$EMOTICON_CACHE=array();
+		global $EMOTICON_LEVELS;
+		if (!is_null($this->EMOTICON_CACHE)) return $this->EMOTICON_CACHE;
+		$this->EMOTICON_CACHE=array();
 		$EMOTICON_LEVELS=array();
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_emoticons WHERE e_relevance_level<4');
 		foreach ($rows as $myrow)
 		{
-			$EMOTICON_CACHE[$myrow['e_code']]=array('EMOTICON_IMG_CODE_THEMED',$myrow['e_theme_img_code'],$myrow['e_code']);
+			$this->EMOTICON_CACHE[$myrow['e_code']]=array('EMOTICON_IMG_CODE_THEMED',$myrow['e_theme_img_code'],$myrow['e_code']);
 			$EMOTICON_LEVELS[$myrow['e_code']]=$myrow['e_relevance_level'];
 		}
-		uksort($EMOTICON_CACHE,'strlen_sort');
-		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
+		uksort($this->EMOTICON_CACHE,'strlen_sort');
+		$this->EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
 		return $EMOTICON_CACHE;
 	}
 

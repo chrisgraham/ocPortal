@@ -207,11 +207,7 @@ function closed_site()
  */
 function page_not_found($codename,$zone)
 {
-	$GLOBALS['HTTP_STATUS_CODE']='404';
-	if (!headers_sent())
-	{
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
-	}
+	set_http_status_code('404');
 
 	// Maybe problem with SEO URLs
 	if ((get_zone_name()=='') && (get_option('htm_short_urls')=='1') && (has_zone_access(get_member(),'adminzone')))

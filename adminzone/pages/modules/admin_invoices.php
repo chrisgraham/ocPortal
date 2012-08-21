@@ -63,8 +63,8 @@ class Module_admin_invoices
 
 		$type=get_param('type','ad');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/invoices';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_ecommerce';
+		set_helper_panel_pic('pagepics/invoices');
+		set_helper_panel_tutorial('tut_ecommerce');
 
 		if ($type=='misc') return $this->misc();
 		if ($type=='ad') return $this->ad();

@@ -163,7 +163,7 @@ class Module_iotds
 	 */
 	function run()
 	{
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=iotds&filter=';
+		set_feed_url(find_script('backend').'?mode=iotds&filter=');
 
 		require_lang('iotds');
 		require_code('feedback');
@@ -248,7 +248,7 @@ class Module_iotds
 		$url=$myrow['url'];
 		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$myrow['add_date']),
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
 			'publisher'=>'', // blank means same as creator
@@ -258,7 +258,7 @@ class Module_iotds
 			'identifier'=>'_SEARCH:iotds:view:'.strval($id),
 			'description'=>'',
 			'image'=>$url,
-		);
+		));
 
 		return do_template('IOTD_ENTRY_SCREEN',array('_GUID'=>'f508d483459b88fab44cd8b9f4db780b','TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'I_TITLE'=>get_translated_tempcode($myrow['i_title']),'CAPTION'=>get_translated_tempcode($myrow['caption']),'DATE_RAW'=>$date_raw,'ADD_DATE_RAW'=>$add_date_raw,'EDIT_DATE_RAW'=>$edit_date_raw,'DATE'=>$date,'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'VIEWS'=>integer_format($myrow['iotd_views']),'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'URL'=>$url));
 	}

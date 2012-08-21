@@ -52,9 +52,6 @@ $REQUIRED_BEFORE=array();
 global $SITE_INFO;
 $SITE_INFO=array();
 
-global $CACHE_DB;
-$CACHE_DB=array();
-
 global $CURRENT_SHARE_USER;
 $CURRENT_SHARE_USER=NULL;
 
@@ -700,14 +697,18 @@ function step_4()
 	$GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED=array();
 
 	// Try and grab ourselves forum details
-	global $INFO;
-	$INFO['sql_database']='';
-	$INFO['sql_user']='';
-	$INFO['sql_pass']='';
+	global $PROBED_FORUM_CONFIG;
+	/** When forum drivers are asked to probe configuration from a potentially existing forum, it gets stored in here.
+	 * @global array $PROBED_FORUM_CONFIG
+	 */
+	$PROBED_FORUM_CONFIG=array();
+	$PROBED_FORUM_CONFIG['sql_database']='';
+	$PROBED_FORUM_CONFIG['sql_user']='';
+	$PROBED_FORUM_CONFIG['sql_pass']='';
 	$board_path=post_param('board_path');
 	find_forum_path($board_path);
 
-	if ((!array_key_exists('board_url',$INFO)) || (!(strlen($INFO['board_url'])>0)))
+	if ((!array_key_exists('board_url',$PROBED_FORUM_CONFIG)) || (!(strlen($PROBED_FORUM_CONFIG['board_url'])>0)))
 	{
 		$file_base=get_file_base();
 		for ($i=0;$i<strlen($board_path);$i++)
@@ -717,11 +718,11 @@ function step_4()
 		}
 
 		$append=str_replace('\\','/',substr($board_path,$i));
-		$INFO['board_url']=(strlen($append)<15)?(substr($base_url,0,strlen($base_url)-($i-strlen($board_path))).((((strlen($append)>0) && ($append[0]=='/')))?'':'/').$append):($base_url.'/forums');
+		$PROBED_FORUM_CONFIG['board_url']=(strlen($append)<15)?(substr($base_url,0,strlen($base_url)-($i-strlen($board_path))).((((strlen($append)>0) && ($append[0]=='/')))?'':'/').$append):($base_url.'/forums');
 	}
 
-	if (!array_key_exists('cookie_member_id',$INFO)) $INFO['cookie_member_id']='ocp_member_id';
-	if (!array_key_exists('cookie_member_hash',$INFO)) $INFO['cookie_member_hash']='ocp_member_hash';
+	if (!array_key_exists('cookie_member_id',$PROBED_FORUM_CONFIG)) $PROBED_FORUM_CONFIG['cookie_member_id']='ocp_member_id';
+	if (!array_key_exists('cookie_member_hash',$PROBED_FORUM_CONFIG)) $PROBED_FORUM_CONFIG['cookie_member_hash']='ocp_member_hash';
 
 	$cookie_domain='';//(($domain=='localhost') || (strpos($domain,'.')===false))?'':('.'.$domain);
 	$cookie_path='/';
@@ -736,16 +737,16 @@ function step_4()
 	{
 		$db_site_host='localhost';
 	}
-	$db_site_user=$INFO['sql_user'];
-	$db_site_password=$INFO['sql_pass'];
-	$db_site=$INFO['sql_database'];
+	$db_site_user=$PROBED_FORUM_CONFIG['sql_user'];
+	$db_site_password=$PROBED_FORUM_CONFIG['sql_pass'];
+	$db_site=$PROBED_FORUM_CONFIG['sql_database'];
 	$db_forums_host=$db_site_host;
 	$db_forums_user=$db_site_user;
 	$db_forums_password=$db_site_password;
 	$db_forums=$db_site;
-	$board_prefix=$INFO['board_url'];
-	$member_cookie=$INFO['cookie_member_id'];
-	$pass_cookie=$INFO['cookie_member_hash'];
+	$board_prefix=$PROBED_FORUM_CONFIG['board_url'];
+	$member_cookie=$PROBED_FORUM_CONFIG['cookie_member_id'];
+	$pass_cookie=$PROBED_FORUM_CONFIG['cookie_member_hash'];
 
 	if ((function_exists('posix_getpwuid')) && (strpos(@ini_get('disable_functions'),'posix_getpwuid')===false))
 	{
@@ -778,7 +779,7 @@ function step_4()
 	if ((file_exists(get_file_base().'/_config.php')) && (filesize(get_file_base().'/_config.php')!=0))
 	{
 		require_once(get_file_base().'/_config.php');
-		if ($INFO['sql_database']!='')
+		if ($PROBED_FORUM_CONFIG['sql_database']!='')
 		{
 			if ((!array_key_exists('forum_type',$SITE_INFO)) || ($SITE_INFO['forum_type']!=$forum_type)) // Don't want to throw detected versions of these away
 			{
@@ -832,7 +833,6 @@ function step_4()
 	$admin_password='';
 	$options->attach(make_option(do_lang_tempcode('MASTER_PASSWORD'),example('','CHOOSE_ADMIN_PASSWORD'),'admin_password',$admin_password,true));
 	$options->attach(make_tick(do_lang_tempcode('USE_PERSISTENT'),example('','USE_PERSISTENT_TEXT'),'use_persistent',$use_persistent?1:0));
-//	$options->attach(make_tick(do_lang_tempcode('MULTI_LANG'),example('','MULTI_LANG_TEXT'),'multi_lang',true));
 	require_lang('config');
 	$options->attach(make_tick(do_lang_tempcode('SEND_ERROR_EMAILS_OCPRODUCTS'),example('','CONFIG_OPTION_send_error_emails_ocproducts'),'allow_reports_default',1));
 	$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'f051465e86a7a53ec078e0d9de773993','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options)));
@@ -1563,24 +1563,21 @@ function step_5_core()
 	));
 
 	$GLOBALS['SITE_DB']->drop_table_if_exists('translate');
-//	if (array_key_exists('multi_lang',$_POST))
+	$GLOBALS['SITE_DB']->create_table('translate',array(
+		'id'=>'*AUTO',
+		'language'=>'*LANGUAGE_NAME',
+		'importance_level'=>'SHORT_INTEGER',
+		'text_original'=>'LONG_TEXT',
+		'text_parsed'=>'LONG_TEXT',
+		'broken'=>'BINARY',
+		'source_user'=>'USER'
+	));
+	$GLOBALS['SITE_DB']->create_index('translate','#search',array('text_original'));
+	$GLOBALS['SITE_DB']->create_index('translate','importance_level',array('importance_level'));
+	if (substr(get_db_type(),0,5)=='mysql')
 	{
-		$GLOBALS['SITE_DB']->create_table('translate',array(
-			'id'=>'*AUTO',
-			'language'=>'*LANGUAGE_NAME',
-			'importance_level'=>'SHORT_INTEGER',
-			'text_original'=>'LONG_TEXT',
-			'text_parsed'=>'LONG_TEXT',
-			'broken'=>'BINARY',
-			'source_user'=>'USER'
-		));
-		$GLOBALS['SITE_DB']->create_index('translate','#search',array('text_original'));
-		$GLOBALS['SITE_DB']->create_index('translate','importance_level',array('importance_level'));
-		if (substr(get_db_type(),0,5)=='mysql')
-		{
-			$GLOBALS['SITE_DB']->create_index('translate','equiv_lang',array('text_original(4)'));
-			$GLOBALS['SITE_DB']->create_index('translate','decache',array('text_parsed(2)'));
-		}
+		$GLOBALS['SITE_DB']->create_index('translate','equiv_lang',array('text_original(4)'));
+		$GLOBALS['SITE_DB']->create_index('translate','decache',array('text_parsed(2)'));
 	}
 
 	$GLOBALS['SITE_DB']->drop_table_if_exists('values');

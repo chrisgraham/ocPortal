@@ -147,8 +147,8 @@ class Module_cms_calendar extends standard_crud_module
 				};
 		";
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/calendar';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_calendar';
+		set_helper_panel_pic('pagepics/calendar');
+		set_helper_panel_tutorial('tut_calendar');
 
 		$this->posting_form_title=do_lang_tempcode('EVENT_TEXT');
 
@@ -220,8 +220,7 @@ class Module_cms_calendar extends standard_crud_module
 		{
 			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 				log_hack_attack_and_exit('ORDERBY_HACK');
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='sort';
+			inform_non_canonical_parameter('sort');
 		}
 
 		$header_row=results_field_title(array(
@@ -322,10 +321,9 @@ class Module_cms_calendar extends standard_crud_module
 
 		if (is_null($type)) // Adding one
 		{
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='date';
-			$NON_CANONICAL_PARAMS[]='e_type';
-			$NON_CANONICAL_PARAMS[]='validated';
+			inform_non_canonical_parameter('date');
+			inform_non_canonical_parameter('e_type');
+			inform_non_canonical_parameter('validated');
 
 			$date=get_param('date','');
 			$start_hour=NULL;
@@ -1131,8 +1129,7 @@ class Module_cms_calendar_cat extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),

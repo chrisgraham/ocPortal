@@ -101,10 +101,10 @@ function _helper_install_test_load_from($path)
 {
 	unset($path);
 
-	global $INFO;
-	$INFO['sql_database']='ocf';
-	$INFO['sql_user']=$GLOBALS['DB_STATIC_OBJECT']->db_default_user();
-	$INFO['sql_pass']=$GLOBALS['DB_STATIC_OBJECT']->db_default_password();
+	global $PROBED_FORUM_CONFIG;
+	$PROBED_FORUM_CONFIG['sql_database']='ocf';
+	$PROBED_FORUM_CONFIG['sql_user']=$GLOBALS['DB_STATIC_OBJECT']->db_default_user();
+	$PROBED_FORUM_CONFIG['sql_pass']=$GLOBALS['DB_STATIC_OBJECT']->db_default_password();
 
 	$domain=ocp_srv('HTTP_HOST');
 	if (substr($domain,0,4)=='www.') $domain=substr($domain,4);
@@ -116,7 +116,7 @@ function _helper_install_test_load_from($path)
 	if (($port=='') || ($port=='80') || ($port=='443')) $port=''; else $port=':'.$port;
 	$base_url=post_param('base_url','http://'.$domain.$port.substr(ocp_srv('PHP_SELF'),0,$pos));
 
-	$INFO['board_url']=$base_url.'/forum';
+	$PROBED_FORUM_CONFIG['board_url']=$base_url.'/forum';
 	return true;
 }
 

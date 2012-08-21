@@ -25,7 +25,7 @@
  */
 function init__symbols()
 {
-	global $LOADED_NONREG_LOGO,$LOADED_BLOCKS,$LOADED_PAGES,$LOADED_PANELS,$NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$DOCUMENT_HELP,$HTTP_STATUS_CODE,$PREPROCESSABLE_SYMBOLS;
+	global $LOADED_NONREG_LOGO,$LOADED_BLOCKS,$LOADED_PAGES,$LOADED_PANELS,$NON_CACHEABLE_SYMBOLS,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS;
 	$LOADED_NONREG_LOGO=false;
 	$LOADED_BLOCKS=array();
 	$LOADED_PAGES=array();
@@ -33,10 +33,6 @@ function init__symbols()
 	$NON_CACHEABLE_SYMBOLS=array('SET_RAND'=>1,'RAND'=>1,'CSS_TEMPCODE'=>1,'JS_TEMPCODE'=>1,'SHOW_HEADER'=>1,'SHOW_FOOTER'=>1,'WIDE_HIGH'=>1,'WIDE'=>1); // these symbols can't be cached regardless of if they have params or not; other symbols can only be cached if they have no params or escaping
 	$PREPROCESSABLE_SYMBOLS=array('PAGE_LINK'=>1,'SET'=>1,'BLOCK'=>1,'FACILITATE_AJAX_BLOCK_CALL'=>1,'REQUIRE_JAVASCRIPT'=>1,'REQUIRE_CSS'=>1,'LOAD_PANEL'=>1,'JS_TEMPCODE'=>1,'CSS_TEMPCODE'=>1,'LOAD_PAGE'=>1,'FRACTIONAL_EDITABLE'=>1,);
 	$EXTRA_SYMBOLS=NULL;
-	$DOCUMENT_HELP='';
-	$HTTP_STATUS_CODE='200';
-	global $META_DATA;
-	$META_DATA=array();
 
 	global $SYMBOL_CACHE,$CYCLES,$TEMPCODE_SETGET;
 	$SYMBOL_CACHE=array();
@@ -602,12 +598,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'HEADER_TEXT':
-				global $ZONE,$SEO_TITLE,$DISPLAYED_TITLE;
+				global $ZONE,$SHORT_TITLE,$DISPLAYED_TITLE;
 				if ($ZONE===NULL)
 				{
 					warn_exit(do_lang_tempcode('ZONE_NOT_INSTALLED'));
 				}
-				if (($SEO_TITLE===NULL) || ($SEO_TITLE=='')) // Take from either zone header or page title
+				if ($SHORT_TITLE===NULL) // Take from either zone header or screen title
 				{
 					if ($DISPLAYED_TITLE!==NULL) $_displayed_title=$DISPLAYED_TITLE->evaluate();
 					if (($DISPLAYED_TITLE!==NULL) && (strip_tags($_displayed_title)!=''))
@@ -617,9 +613,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						$value=$ZONE['zone_header_text_trans'];
 					}
-				} else // Take from SEO title
+				} else // Take from short title
 				{
-					$comcodeless=strip_comcode($SEO_TITLE); // This is not HTML
+					$comcodeless=strip_comcode($SHORT_TITLE); // This is not HTML
 
 					// Strip 'Welcome to' off if it's there
 					$value=preg_replace('#'.preg_quote(do_lang('WELCOME_TO_STRIPPABLE').' '.get_site_name(),'#').'([^-]+\s*-\s*)?#','',$comcodeless);
@@ -659,13 +655,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'HELPER_PANEL_TUTORIAL':
-				if ($GLOBALS['HELPER_PANEL_TUTORIAL']===NULL) $GLOBALS['HELPER_PANEL_TUTORIAL']='';
-				if (get_option('show_docs')=='0') $GLOBALS['HELPER_PANEL_TUTORIAL']='';
+				if ($GLOBALS['HELPER_PANEL_TUTORIAL']===NULL) set_helper_panel_tutorial('');
+				if (get_option('show_docs')=='0') set_helper_panel_tutorial('');
 				$value=$GLOBALS['HELPER_PANEL_TUTORIAL'];
 				break;
 
 			case 'HELPER_PANEL_PIC':
-				if ($GLOBALS['HELPER_PANEL_PIC']===NULL) $GLOBALS['HELPER_PANEL_PIC']='';
+				if ($GLOBALS['HELPER_PANEL_PIC']===NULL) set_helper_panel_pic('');
 				$value=$GLOBALS['HELPER_PANEL_PIC'];
 				if (($value!='') && (find_theme_image($value,true)=='')) $value='';
 				break;

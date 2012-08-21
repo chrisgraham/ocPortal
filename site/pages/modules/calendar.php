@@ -384,8 +384,7 @@ class Module_calendar
 			$t=$type['id'];
 			$filter['int_'.strval($t)]=get_param_integer('int_'.strval($t),0);
 
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='int_'.strval($t);
+			inform_non_canonical_parameter('int_'.strval($t));
 
 			if (post_param_integer('id',NULL)===$type['id']) $filter['int_'.strval($t)]=1;
 			if ($filter['int_'.strval($t)]==1) $some_pos=true;
@@ -422,7 +421,7 @@ class Module_calendar
 		$view=get_param('view','day');
 		$member_id=get_param_integer('member_id',get_member());
 		$filter=$this->get_filter();
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=calendar&filter='.implode(',',$this->get_and_filter());
+		set_feed_url(find_script('backend').'?mode=calendar&filter='.implode(',',$this->get_and_filter()));
 		if ($member_id!=get_member()) enforce_personal_access($member_id);
 		$back_url=NULL;
 
@@ -1269,12 +1268,11 @@ class Module_calendar
 	{
 		check_privilege('view_calendar');
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='back';
+		inform_non_canonical_parameter('back');
 
 		$id=get_param_integer('id');
 		$filter=$this->get_filter();
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=calendar&filter='.implode(',',$this->get_and_filter());
+		set_feed_url(find_script('backend').'?mode=calendar&filter='.implode(',',$this->get_and_filter()));
 
 		$rows=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON t.id=e.e_type',array('*'),array('e.id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
@@ -1382,8 +1380,8 @@ class Module_calendar
 
 		if ($event['e_seg_recurrences']==0)
 		{
-			$NON_CANONICAL_PARAMS[]='day';
-			$NON_CANONICAL_PARAMS[]='date';
+			inform_non_canonical_parameter('day');
+			inform_non_canonical_parameter('date');
 		}
 
 		$day=get_param('day','');
@@ -1509,7 +1507,7 @@ class Module_calendar
 
 		breadcrumb_set_parents(array(array($back_url,do_lang_tempcode('CALENDAR'))));
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$event['e_add_date']),
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter']),
 			'publisher'=>'', // blank means same as creator
@@ -1519,7 +1517,7 @@ class Module_calendar
 			'identifier'=>'_SEARCH:calendar:view:'.strval($id),
 			'description'=>get_translated_text($event['e_content']),
 			'image'=>find_theme_image('bigicons/calendar'),
-		);
+		));
 
 		$map=array(
 			'TITLE'=>$title,

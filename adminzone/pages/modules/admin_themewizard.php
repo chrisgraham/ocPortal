@@ -63,9 +63,9 @@ class Module_admin_themewizard
 		require_code('themewizard');
 		require_css('themes_editor');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/themewizard';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_themes';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_THEMEWIZARD');
+		set_helper_panel_pic('pagepics/themewizard');
+		set_helper_panel_tutorial('tut_themes');
+		set_helper_panel_text(comcode_lang_string('DOC_THEMEWIZARD'));
 
 		$type=get_param('type','misc');
 
@@ -310,7 +310,7 @@ class Module_admin_themewizard
 		if (!function_exists('imagepng')) warn_exit(do_lang_tempcode('GD_NEEDED'));
 
 		$title=get_screen_title('_LOGOWIZARD',true,array(integer_format(1),integer_format(3)));
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/logowizard';
+		set_helper_panel_pic('pagepics/logowizard');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_make_logo'),'_SELF');
 		$theme_image_url=build_url(array('page'=>'admin_themes','type'=>'edit_image','id'=>'logo/-logo','lang'=>user_lang(),'theme'=>$GLOBALS['FORUM_DRIVER']->get_theme('')),get_module_zone('admin_themes'));
@@ -349,7 +349,7 @@ class Module_admin_themewizard
 	function _make_logo()
 	{
 		$title=get_screen_title('_LOGOWIZARD',true,array(integer_format(2),integer_format(3)));
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/logowizard';
+		set_helper_panel_pic('pagepics/logowizard');
 
 		$preview=do_template('LOGOWIZARD_2',array('NAME'=>post_param('name'),'TITLE'=>post_param('title'),'THEME'=>post_param('theme')));
 
@@ -367,7 +367,7 @@ class Module_admin_themewizard
 	function __make_logo()
 	{
 		$title=get_screen_title('_LOGOWIZARD',true,array(integer_format(3),integer_format(3)));
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/logowizard';
+		set_helper_panel_pic('pagepics/logowizard');
 
 		$theme=post_param('theme');
 

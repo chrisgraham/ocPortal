@@ -58,8 +58,8 @@ class Module_admin_errorlog
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/errorlog';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_disaster';
+		set_helper_panel_pic('pagepics/errorlog');
+		set_helper_panel_tutorial('tut_disaster');
 
 		require_lang('errorlog');
 		require_css('errorlog');
@@ -108,8 +108,7 @@ class Module_admin_errorlog
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 		if ($sort_order=='DESC') $stuff=array_reverse($stuff);
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('DATE_TIME'),do_lang_tempcode('TYPE'),do_lang_tempcode('MESSAGE')),$sortables,'sort',$sortable.' '.$sort_order);

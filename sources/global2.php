@@ -69,7 +69,7 @@ function init__global2()
 	}
 
 	// Initialise some globals
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING;
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING,$DEV_MODE,$SEMI_DEV_MODE;
 	$RUNNING_SCRIPT_CACHE=array();
 	$BROWSER_DECACHEING=NULL;
 	$CHARSET=NULL;
@@ -98,17 +98,26 @@ function init__global2()
 	$DYING_BADLY=false; // If ocPortal is bailing out uncontrollably, setting this will make sure the error hander does not try and suppress
 
 	// Dev mode stuff
+	/** Whether the ocProducts version of PHP is running, and hence whether XSS-detection is enabled, and hence whether we may need to carry through additional meta-data to make sure it operates correctly. Stored in a global for quick check (good performance).
+	 * @global boolean $XSS_DETECT
+	 */
 	$XSS_DETECT=function_exists('ocp_mark_as_escaped');
-	$GLOBALS['DEV_MODE']=(((!array_key_exists('dev_mode',$SITE_INFO) || ($SITE_INFO['dev_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))) && ((!array_key_exists('keep_no_dev_mode',$_GET) || ($_GET['keep_no_dev_mode']=='0'))));
-	$GLOBALS['SEMI_DEV_MODE']=(((!array_key_exists('dev_mode',$SITE_INFO) || ($SITE_INFO['dev_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))));
+	/** Whether ocPortal is running in development mode
+	 * @global boolean $DEV_MODE
+	 */
+	$DEV_MODE=(((!array_key_exists('dev_mode',$SITE_INFO) || ($SITE_INFO['dev_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))) && ((!array_key_exists('keep_no_dev_mode',$_GET) || ($_GET['keep_no_dev_mode']=='0'))));
+	/** Whether ocPortal is running in a more limited development mode, which may make things a bit slower and more verbose, but won't run such severe standard enforcement tricks
+	 * @global boolean $SEMI_DEV_MODE
+	 */
+	$SEMI_DEV_MODE=(((!array_key_exists('dev_mode',$SITE_INFO) || ($SITE_INFO['dev_mode']=='1')) && ((is_dir(get_file_base().'/.svn')) || (is_dir(get_file_base().'/.git')) || (function_exists('ocp_mark_as_escaped')))));
 	if (function_exists('set_time_limit')) @set_time_limit(60);
-	if ($GLOBALS['DEV_MODE'])
+	if ($DEV_MODE)
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(10);
 		@ini_set('ocproducts.type_strictness','1');
 		@ini_set('ocproducts.xss_detect','1');
 	}
-	if ($GLOBALS['DEV_MODE'])
+	if ($DEV_MODE)
 	{
 		require_code('developer_tools');
 	}
@@ -120,6 +129,9 @@ function init__global2()
 	$CACHE_TEMPLATES=true;
 
 	// Load most basic config
+	/** Whether ocPortal is currently running from the 'minikernel' used during installation
+	 * @global BINARY $IN_MINIKERNEL_VERSION
+	 */
 	$IN_MINIKERNEL_VERSION=0;
 	$EXITING=0;
 	if ((array_key_exists('use_ocf',$_GET)) && (running_script('upgrader')))
@@ -287,7 +299,7 @@ function init__global2()
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0) && ((get_option('display_php_errors')=='1') || (running_script('upgrader')) || (has_privilege(get_member(),'see_php_errors'))))
 	{
 		@ini_set('display_errors','1');
-	} elseif (!$GLOBALS['DEV_MODE']) @ini_set('display_errors','0');
+	} elseif (!$DEV_MODE) @ini_set('display_errors','0');
 
 	// G-zip?
 	@ini_set('zlib.output_compression',(get_option('gzip_output')=='1')?'On':'Off');
@@ -335,11 +347,11 @@ function init__global2()
 	// Okay, we've loaded everything critical. Don't need to tell ocPortal to be paranoid now.
 	$BOOTSTRAPPING=0;
 
-	if (($GLOBALS['SEMI_DEV_MODE']) && ($MICRO_AJAX_BOOTUP==0)) // Lots of code that only runs if you're a programmer. It tries to make sure coding standards are met.
+	if (($SEMI_DEV_MODE) && ($MICRO_AJAX_BOOTUP==0)) // Lots of code that only runs if you're a programmer. It tries to make sure coding standards are met.
 	{
-		if ($GLOBALS['SEMI_DEV_MODE'])
+		if ($SEMI_DEV_MODE)
 		{
-			/*if ((mt_rand(0,2)==1) && ($GLOBALS['DEV_MODE']) && (running_script('index')))	We know this works now, so let's stop messing up our development speed
+			/*if ((mt_rand(0,2)==1) && ($DEV_MODE) && (running_script('index')))	We know this works now, so let's stop messing up our development speed
 			{
 				require_code('view_modes');
 				erase_cached_templates(true); // Stop anything trying to read a template cache item (E.g. CSS, JS) that might not exist!
@@ -381,7 +393,7 @@ function init__global2()
 			register_shutdown_function('dev_mode_aftertests');
 		}
 
-		if ((ocp_srv('SCRIPT_FILENAME')!='') && ($GLOBALS['DEV_MODE']) && (strpos(ocp_srv('SCRIPT_FILENAME'),'data_custom')===false))
+		if ((ocp_srv('SCRIPT_FILENAME')!='') && ($DEV_MODE) && (strpos(ocp_srv('SCRIPT_FILENAME'),'data_custom')===false))
 		{
 			if (@strlen(file_get_contents(ocp_srv('SCRIPT_FILENAME')))>4500)
 			{
@@ -619,22 +631,30 @@ function load_user_stuff()
 {
 	if ((!array_key_exists('FORUM_DRIVER',$GLOBALS)) || ($GLOBALS['FORUM_DRIVER']===NULL)) // Second clause is for Quercus, as it pre-NULLs referenced variables
 	{
-		global $SITE_INFO;
+		global $SITE_INFO,$FORUM_DRIVER,$SITE_DB,$FORUM_DB;
+
 		require_code('forum_stub');
 
 		if (!array_key_exists('forum_type',$SITE_INFO)) $SITE_INFO['forum_type']='ocf';
 		require_code('forum/'.$SITE_INFO['forum_type']);	 // So we can at least get user details
-		$GLOBALS['FORUM_DRIVER']=object_factory('forum_driver_'.filter_naughty_harsh($SITE_INFO['forum_type']));
-		if (($SITE_INFO['forum_type']=='ocf') && (get_db_forums()==get_db_site()) && ($GLOBALS['FORUM_DRIVER']->get_drivered_table_prefix()==get_table_prefix()) && (!$GLOBALS['DEV_MODE'])) // NB: In debug mode needs separating so we can properly test our boundaries
+		/** The active forum driver, through which member and forum interfacing should be done (apart from code that is explicitly only written as part of OCF)
+		 * @global object $FORUM_DRIVER
+		 */
+		$FORUM_DRIVER=object_factory('forum_driver_'.filter_naughty_harsh($SITE_INFO['forum_type']));
+		if (($SITE_INFO['forum_type']=='ocf') && (get_db_forums()==get_db_site()) && ($FORUM_DRIVER->get_drivered_table_prefix()==get_table_prefix()) && (!$GLOBALS['DEV_MODE'])) // NB: In debug mode needs separating so we can properly test our boundaries
 		{
-			$GLOBALS['FORUM_DRIVER']->connection=$GLOBALS['SITE_DB'];
+			$FORUM_DRIVER->connection=&$SITE_DB;
 		}
 		elseif ($SITE_INFO['forum_type']!='none')
 		{
-			$GLOBALS['FORUM_DRIVER']->connection=new database_driver(get_db_forums(),get_db_forums_host(),get_db_forums_user(),get_db_forums_password(),$GLOBALS['FORUM_DRIVER']->get_drivered_table_prefix());
+			$FORUM_DRIVER->connection=new database_driver(get_db_forums(),get_db_forums_host(),get_db_forums_user(),get_db_forums_password(),$FORUM_DRIVER->get_drivered_table_prefix());
 		}
-		$GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED=array();
-		$GLOBALS['FORUM_DB']=&$GLOBALS['FORUM_DRIVER']->connection;
+		$FORUM_DRIVER->MEMBER_ROWS_CACHED=array();
+		/** The connection to the active forum database.
+		 * @global object $FORUM_DB
+		 */
+		$FORUM_DB=mixed();
+		$GLOBALS['FORUM_DB']=&$FORUM_DRIVER->connection; // Done like this to workaround that PHP can't put a reference in a global'd variable
 	}
 }
 
@@ -724,8 +744,8 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 		$GLOBALS['DYING_BADLY']=false; // So error suppress works again
 		if (strpos($errstr,'Allowed memory')!==false)
 		{
-			global $_REQUIRED_CODE;
-			if (!array_key_exists('failure',$_REQUIRED_CODE))
+			global $REQUIRED_CODE;
+			if (!array_key_exists('failure',$REQUIRED_CODE))
 			{
 				critical_error('EMERGENCY',$errstr.escape_html(' ['.$errfile.' at '.strval($errline).']'));
 			}
@@ -1305,11 +1325,7 @@ function get_param($name,$default=false,$no_security=false)
 	if (($a=='') && (isset($_GET['require__'.$name])) && ($default!==$a) && ($_GET['require__'.$name]!='0'))
 	{
 		// We didn't give some required input
-		$GLOBALS['HTTP_STATUS_CODE']='400';
-		if (!headers_sent())
-		{
-			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
-		}
+		set_http_status_code('400');
 		warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
 	}
 	if ($a===$default) return $a;

@@ -140,8 +140,8 @@ class Module_admin_addons
 	 */
 	function gui()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/addons';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_configuration';
+		set_helper_panel_pic('pagepics/addons');
+		set_helper_panel_tutorial('tut_adv_configuration');
 
 		$title=get_screen_title('ADDONS');
 
@@ -716,7 +716,7 @@ class Module_admin_addons
 
 		if (get_param('exp','custom')=='theme')
 		{
-			$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_releasing_themes';
+			set_helper_panel_tutorial('tut_releasing_themes');
 
 			if (!is_null($theme))
 			{

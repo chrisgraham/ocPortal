@@ -52,8 +52,8 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	{
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/customprofilefields';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_members';
+		set_helper_panel_pic('pagepics/customprofilefields');
+		set_helper_panel_tutorial('tut_adv_members');
 
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_members_action');
@@ -202,8 +202,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$fh=array(
 			do_lang_tempcode('NAME'),

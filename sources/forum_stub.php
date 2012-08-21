@@ -38,6 +38,8 @@ class forum_driver_base
 
 	var $MEMBER_ROWS_CACHED=array();
 
+	var $EMOTICON_CACHE=NULL;
+
 	/**
 	 * Find the usergroup id of the forum guest member.
 	 *

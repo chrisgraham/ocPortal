@@ -174,7 +174,7 @@ class Module_points
 	 */
 	function points_search_form()
 	{
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=points&filter=';
+		set_feed_url(find_script('backend').'?mode=points&filter=');
 
 		$title=get_screen_title('USER_POINT_FIND');
 
@@ -203,7 +203,7 @@ class Module_points
 	 */
 	function points_search_results()
 	{
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=points&filter=';
+		set_feed_url(find_script('backend').'?mode=points&filter=');
 
 		$username=str_replace('*','%',get_param('username'));
 		if ((substr($username,0,1)=='%') && ($GLOBALS['FORUM_DRIVER']->get_members()>3000))
@@ -260,7 +260,7 @@ class Module_points
 			return redirect_screen($title,$url.'#tab__points','');
 		}
 
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=points&filter='.strval($member_id_of);
+		set_feed_url(find_script('backend').'?mode=points&filter='.strval($member_id_of));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND'))));
 

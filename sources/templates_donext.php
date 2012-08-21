@@ -35,7 +35,7 @@ function do_next_manager_admin_simplified()
 	$sections->attach(do_next_manager_hooked('SETUP',NULL,'setup'));
 	$sections->attach(do_next_manager_hooked('TOOLS',NULL,'tools'));
 	$sections->attach(do_next_manager_hooked('SECURITY',NULL,'security'));
-	$GLOBALS['HELPER_PANEL_TEXT']=do_lang_tempcode('SIMPLIFIED_STAFF_ADMIN');
+	set_helper_panel_text(do_lang_tempcode('SIMPLIFIED_STAFF_ADMIN'));
 	return do_template('DO_NEXT_SCREEN',array('INTRO'=>'','QUESTION'=>do_lang_tempcode('WHAT_NEXT'),'TITLE'=>get_screen_title(has_zone_access(get_member(),'adminzone')?'ADMIN_ZONE':'CMS'),'SECTIONS'=>$sections));
 }
 

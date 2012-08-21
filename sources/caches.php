@@ -27,6 +27,9 @@ function init__caches()
 	$CACHE_ON=NULL;
 
 	global $MEM_CACHE,$SITE_INFO;
+	/** The persistent cache access object (NULL if there is no persistent cache).
+	 * @global ?object $MEM_CACHE
+	 */
 	$MEM_CACHE=NULL;
 	$use_memcache=((array_key_exists('use_mem_cache',$SITE_INFO)) && ($SITE_INFO['use_mem_cache']=='1'));// Default to off because badly configured caches can result in lots of very slow misses and lots of lost sessions || ((!array_key_exists('use_mem_cache',$SITE_INFO)) && ((function_exists('xcache_get')) || (function_exists('wincache_ucache_get')) || (function_exists('apc_fetch')) || (function_exists('eaccelerator_get')) || (function_exists('mmcache_get'))));
 	if (($use_memcache) && ($GLOBALS['IN_MINIKERNEL_VERSION']!=1))

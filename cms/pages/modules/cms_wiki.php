@@ -72,8 +72,8 @@ class Module_cms_wiki
 	{
 		$type=get_param('type','misc');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/wiki';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_wiki';
+		set_helper_panel_pic('pagepics/wiki');
+		set_helper_panel_tutorial('tut_wiki');
 
 		require_code('wiki');
 		require_lang('wiki');
@@ -239,7 +239,7 @@ class Module_cms_wiki
 
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_WIKI');
+		set_helper_panel_text(comcode_lang_string('DOC_WIKI'));
 
 		$search_url=build_url(array('page'=>'search','id'=>'wiki_pages'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'wiki'),get_module_zone('wiki'));

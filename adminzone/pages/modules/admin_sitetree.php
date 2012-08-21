@@ -85,8 +85,8 @@ class Module_admin_sitetree
 	 */
 	function misc()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/sitetreeeditor';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
+		set_helper_panel_pic('pagepics/sitetreeeditor');
+		set_helper_panel_tutorial('tut_structure');
 
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('PAGES'),comcode_lang_string('DOC_PAGES'),
@@ -160,8 +160,8 @@ class Module_admin_sitetree
 	{
 		$zone=get_param('zone','site');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/addpagewizard';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_comcode_pages';
+		set_helper_panel_pic('pagepics/addpagewizard');
+		set_helper_panel_tutorial('tut_comcode_pages');
 
 		$title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(1),integer_format(3)));
 
@@ -187,8 +187,8 @@ class Module_admin_sitetree
 	 */
 	function _page_wizard()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/addpagewizard';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_comcode_pages';
+		set_helper_panel_pic('pagepics/addpagewizard');
+		set_helper_panel_tutorial('tut_comcode_pages');
 
 		$title=get_screen_title('PAGE_WIZARD_STEP',true,array(integer_format(2),integer_format(3)));
 
@@ -351,7 +351,7 @@ class Module_admin_sitetree
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/deletepage';
+		set_helper_panel_pic('pagepics/deletepage');
 
 		$title=get_screen_title('DELETE_PAGES');
 
@@ -390,7 +390,7 @@ class Module_admin_sitetree
 	 */
 	function _delete()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/deletepage';
+		set_helper_panel_pic('pagepics/deletepage');
 
 		$hidden=new ocp_tempcode();
 
@@ -444,7 +444,7 @@ class Module_admin_sitetree
 	 */
 	function __delete()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/deletepage';
+		set_helper_panel_pic('pagepics/deletepage');
 
 		$zone=post_param('zone',NULL);
 
@@ -570,8 +570,8 @@ class Module_admin_sitetree
 	{
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/move';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
+		set_helper_panel_pic('pagepics/move');
+		set_helper_panel_tutorial('tut_structure');
 
 		$title=get_screen_title('MOVE_PAGES');
 
@@ -619,8 +619,8 @@ class Module_admin_sitetree
 
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/move';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
+		set_helper_panel_pic('pagepics/move');
+		set_helper_panel_tutorial('tut_structure');
 
 		$zone=post_param('zone',NULL);
 

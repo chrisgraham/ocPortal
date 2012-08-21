@@ -58,8 +58,8 @@ class Module_admin_ssl
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/ssl';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_security';
+		set_helper_panel_pic('pagepics/ssl');
+		set_helper_panel_tutorial('tut_security');
 
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 

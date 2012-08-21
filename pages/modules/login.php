@@ -105,8 +105,7 @@ class Module_login
 	{
 		$title=get_screen_title('_LOGIN');
 
-		global $EXTRA_HEAD;
-		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 		global $ZONE;
 

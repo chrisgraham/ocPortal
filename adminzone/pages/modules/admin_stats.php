@@ -182,8 +182,8 @@ class Module_admin_stats
 	 */
 	function misc()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/statistics';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_statistics';
+		set_helper_panel_pic('pagepics/statistics');
+		set_helper_panel_tutorial('tut_statistics');
 
 		require_code('templates_donext');
 		$test=$GLOBALS['SITE_DB']->query_select_value('ip_country','COUNT(*)');
@@ -293,8 +293,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('usersonline_track',array('date_and_time','peak'),NULL,'ORDER BY '.$sortable.' '.$sort_order);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
@@ -367,8 +366,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('adminlogs',array('date_and_time','COUNT(*) AS cnt'),NULL,'GROUP BY date_and_time ORDER BY '.$sortable.' '.$sort_order,3000/*reasonable limit*/);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
@@ -471,8 +469,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		sort_maps_by($data,0);
 		if ($sort_order=='DESC')
@@ -574,8 +571,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		if ($sort_order=='ASC') asort($referrers);
 		else arsort($referrers);
@@ -670,8 +666,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT referer FROM '.get_table_prefix().'stats WHERE referer LIKE \''.db_encode_like('http://www.google.%q=%').'\' AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end).' ORDER BY '.$sortable.' '.$sort_order);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
@@ -822,8 +817,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		sort_maps_by($views,0);
 		if ($sort_order=='DESC')
@@ -894,8 +888,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=explode(' ',get_param('sort_views','date_and_time DESC'));
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort_views';
+		inform_non_canonical_parameter('sort_views');
 
 		// NB: not used in default templates
 		$where=db_string_equal_to('the_page',$page);
@@ -975,8 +968,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort_keywords';
+		inform_non_canonical_parameter('sort_keywords');
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1067,8 +1059,7 @@ class Module_admin_stats
 			list($sortable,$sort_order)=explode(' ',get_param('sort_regionalities','ip DESC'));
 			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 				log_hack_attack_and_exit('ORDERBY_HACK');
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='sort_regionalities';
+			inform_non_canonical_parameter('sort_regionalities');
 
 			$where=db_string_equal_to('the_page',$page);
 			if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1144,8 +1135,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort_views';
+		inform_non_canonical_parameter('sort_views');
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1218,7 +1208,7 @@ class Module_admin_stats
 	 */
 	function _clear()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/statistics_clear';
+		set_helper_panel_pic('pagepics/statistics_clear');
 
 		// Let's clear out the saved graphs
 		$handle=opendir(get_custom_file_base().'/data_custom/modules/admin_stats/');
@@ -1264,7 +1254,7 @@ class Module_admin_stats
 
 		$last=104295-1; // Index of the last line in the IP_Country.txt file
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/installgeolocationdata';
+		set_helper_panel_pic('pagepics/installgeolocationdata');
 
 		$test=$GLOBALS['SITE_DB']->query_select_value('ip_country','COUNT(*)');
 		if ($test>=$last)
@@ -1350,8 +1340,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
@@ -1422,8 +1411,7 @@ class Module_admin_stats
 		list($sortable,$sort_order)=explode(' ',get_param('sort','date_and_time ASC'),2);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$where=db_string_equal_to('the_page',$page);
 		if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility

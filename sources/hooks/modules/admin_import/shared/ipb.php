@@ -69,12 +69,12 @@ class Hook_ipb_base
 	 */
 	function probe_db_access($file_base)
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		if (!file_exists($file_base.'/conf_global.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('conf_global.php')));
 		require_once($file_base.'/conf_global.php');
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
 	}
 
 	/**
@@ -88,23 +88,23 @@ class Hook_ipb_base
 	{
 		if (either_param('importer')=='ipb1')
 		{
-			global $INFO;
+			global $PROBED_FORUM_CONFIG;
 			require_once($file_base.'/conf_global.php');
 		} else
 		{
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'conf_settings');
-			$INFO=array();
+			$PROBED_FORUM_CONFIG=array();
 			foreach ($rows as $row)
 			{
 				$key=$row['conf_key'];
 				$val=$row['conf_value'];
 				if ($val=='') $val=$row['conf_default'];
-				$INFO[$key]=$val;
+				$PROBED_FORUM_CONFIG[$key]=$val;
 			}
 		}
-		$max_post_length_comcode=$INFO['max_post_length'];
-		$max_sig_length_comcode=$INFO['max_sig_length'];
-		list($max_avatar_width,$max_avatar_height)=explode('x',$INFO['avatar_dims']);
+		$max_post_length_comcode=$PROBED_FORUM_CONFIG['max_post_length'];
+		$max_sig_length_comcode=$PROBED_FORUM_CONFIG['max_sig_length'];
+		list($max_avatar_width,$max_avatar_height)=explode('x',$PROBED_FORUM_CONFIG['avatar_dims']);
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'groups');
 		foreach ($rows as $row)

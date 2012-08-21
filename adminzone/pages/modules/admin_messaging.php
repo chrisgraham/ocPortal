@@ -93,8 +93,8 @@ class Module_admin_messaging
 	{
 		if (has_no_forum()) warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/messaging';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_support_desk';
+		set_helper_panel_pic('pagepics/messaging');
+		set_helper_panel_tutorial('tut_support_desk');
 
 		require_lang('messaging');
 

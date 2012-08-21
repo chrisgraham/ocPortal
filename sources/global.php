@@ -84,15 +84,15 @@ function require_code($codename,$light_exit=false)
 			$codename='tempcode_compiler__runtime';
 	}
 
-	global $_REQUIRED_CODE,$FILE_BASE,$SITE_INFO;
-	if (isset($_REQUIRED_CODE[$codename])) return;
-	$_REQUIRED_CODE[$codename]=1;
+	global $REQUIRED_CODE,$FILE_BASE,$SITE_INFO;
+	if (isset($REQUIRED_CODE[$codename])) return;
+	$REQUIRED_CODE[$codename]=1;
 
 	$shorthand=(strpos($codename,'.php')===false);
 	if (!$shorthand)
 	{
 		$non_custom_codename=str_replace('_custom/','/',$codename);
-		$_REQUIRED_CODE[$non_custom_codename]=1;
+		$REQUIRED_CODE[$non_custom_codename]=1;
 	}
 
 	$codename=filter_naughty($codename);
@@ -336,9 +336,9 @@ function require_code($codename,$light_exit=false)
  */
 function require_code_no_override($codename)
 {
-	global $_REQUIRED_CODE;
-	if (array_key_exists($codename,$_REQUIRED_CODE)) return;
-	$_REQUIRED_CODE[$codename]=1;
+	global $REQUIRED_CODE;
+	if (array_key_exists($codename,$REQUIRED_CODE)) return;
+	$REQUIRED_CODE[$codename]=1;
 	require_once(get_file_base().'/sources/'.filter_naughty($codename).'.php');
 	if (function_exists('init__'.str_replace('/','__',$codename))) call_user_func('init__'.str_replace('/','__',$codename));
 }
@@ -473,13 +473,16 @@ if (function_exists('set_magic_quotes_runtime')) @set_magic_quotes_runtime(0); /
 @ini_set('docref_root','http://www.php.net/manual/en/');
 @ini_set('docref_ext','.php');
 
-global $_REQUIRED_CODE;
-$_REQUIRED_CODE=array();
+global $REQUIRED_CODE;
+$REQUIRED_CODE=array();
 
 global $FUNCTION_SIGNATURES,$CHECKING_PARAMETERS;
 $FUNCTION_SIGNATURES=NULL;
 $CHECKING_PARAMETERS=false;
 
+/** If running on a shared-install, this is the identifying name of the site that is being called up
+ * @global ?ID_TEXT $CURRENT_SHARE_USER
+ */
 global $CURRENT_SHARE_USER;
 if ((!isset($CURRENT_SHARE_USER)) || (isset($_SERVER['REQUEST_METHOD'])))
 	$CURRENT_SHARE_USER=NULL;
@@ -499,10 +502,13 @@ if (is_file($FILE_BASE.'/sources_custom/critical_errors.php'))
 	}
 }
 
-@include($FILE_BASE.'/_config.php');
-
 global $SITE_INFO;
-if (!isset($SITE_INFO))
+/** Site base configuration settings.
+ * @global array $SITE_INFO
+ */
+$SITE_INFO=array();
+@include($FILE_BASE.'/_config.php');
+if (count($SITE_INFO)==0)
 {
 	if ((!is_file($FILE_BASE.'/_config.php')) || (filesize($FILE_BASE.'/_config.php')==0))
 		critical_error('INFO.PHP');

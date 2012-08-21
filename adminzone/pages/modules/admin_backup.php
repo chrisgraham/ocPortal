@@ -104,9 +104,9 @@ class Module_admin_backup
 	{
 		require_lang('backups');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/backups';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_backup';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_BACKUPS_2');
+		set_helper_panel_pic('pagepics/backups');
+		set_helper_panel_tutorial('tut_backup');
+		set_helper_panel_text(comcode_lang_string('DOC_BACKUPS_2'));
 
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 

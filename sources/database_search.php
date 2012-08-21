@@ -1180,11 +1180,11 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 		}
 	}
 
-	$GLOBALS['META_DATA']+=array(
+	set_extra_request_metadata(array(
 		'opensearch_totalresults'=>strval($i),
 		'opensearch_startindex'=>strval($start),
 		'opensearch_itemsperpage'=>strval($max),
-	);
+	));
 
 	$SEARCH__CONTENT_BITS=NULL;
 

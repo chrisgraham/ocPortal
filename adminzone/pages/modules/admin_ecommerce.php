@@ -93,8 +93,8 @@ class Module_admin_ecommerce extends standard_crud_module
 			if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		}
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/ecommerce';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_ecommerce';
+		set_helper_panel_pic('pagepics/ecommerce');
+		set_helper_panel_tutorial('tut_ecommerce');
 
 		$type=get_param('type','misc');
 
@@ -171,8 +171,8 @@ class Module_admin_ecommerce extends standard_crud_module
 	 */
 	function logs()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='';
+		set_helper_panel_pic('');
+		set_helper_panel_tutorial('');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
 
@@ -186,8 +186,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$where=NULL;
 		$product=get_param('product',NULL);
@@ -539,7 +538,7 @@ class Module_admin_ecommerce extends standard_crud_module
 	{
 		$title=get_screen_title('CASH_FLOW');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/cash_flow';
+		set_helper_panel_pic('pagepics/cash_flow');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
 
@@ -565,7 +564,7 @@ class Module_admin_ecommerce extends standard_crud_module
 	{
 		$title=get_screen_title('PROFIT_LOSS');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/profit_loss';
+		set_helper_panel_pic('pagepics/profit_loss');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
 
@@ -684,8 +683,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),

@@ -718,7 +718,7 @@ class Module_catalogues
 		{
 			$id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>get_param('catalogue_name'),'cc_parent_id'=>NULL));
 		}
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=catalogues&filter='.strval($id);
+		set_feed_url(find_script('backend').'?mode=catalogues&filter='.strval($id));
 
 		$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$categories))
@@ -887,7 +887,7 @@ class Module_catalogues
 		breadcrumb_add_segment($breadcrumbs);
 		if (is_null($root)) breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.($is_ecommerce?':ecommerce=1':''),do_lang('CATALOGUES'))));
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$category['cc_add_date']),
 			'creator'=>'',
 			'publisher'=>'', // blank means same as creator
@@ -896,14 +896,14 @@ class Module_catalogues
 			'title'=>$_title,
 			'identifier'=>'_SEARCH:catalogues:category:'.strval($id),
 			'description'=>get_translated_text($category['cc_description']),
-		);
+		));
 
 		$rep_image_str=$category['rep_image'];
 		if ($rep_image_str!='')
 		{
-			$GLOBALS['META_DATA']+=array(
+			set_extra_request_metadata(array(
 				'image'=>(url_is_local($rep_image_str)?(get_custom_base_url().'/'):'').$rep_image_str,
-			);
+			));
 		}
 
 		$cart_link=new ocp_tempcode();
@@ -951,7 +951,7 @@ class Module_catalogues
 		{
 			$id=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>get_param('catalogue_name'),'cc_parent_id'=>NULL));
 		}
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=catalogues&filter='.strval($id);
+		set_feed_url(find_script('backend').'?mode=catalogues&filter='.strval($id));
 
 		$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$categories))
@@ -1063,7 +1063,7 @@ class Module_catalogues
 	function view_catalogue_index()
 	{
 		$catalogue_name=get_param('id');
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=catalogues&filter='.$catalogue_name;
+		set_feed_url(find_script('backend').'?mode=catalogues&filter='.$catalogue_name);
 		$catalogue_rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 		if (!array_key_exists(0,$catalogue_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$catalogue=$catalogue_rows[0];
@@ -1119,7 +1119,7 @@ class Module_catalogues
 			$add_cat_url=build_url(array('page'=>'cms_catalogues','type'=>'add_category','catalogue_name'=>$catalogue_name),get_module_zone('cms_catalogues'));
 		} else $add_cat_url=new ocp_tempcode();
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$catalogue['c_add_date']),
 			'creator'=>'',
 			'publisher'=>'', // blank means same as creator
@@ -1128,7 +1128,7 @@ class Module_catalogues
 			'title'=>get_translated_text($catalogue['c_title']),
 			'identifier'=>'_SEARCH:catalogues:index:'.$catalogue_name,
 			'description'=>$description_2,
-		);
+		));
 
 		$catalogue_description=get_translated_tempcode($catalogue['c_description']);
 
@@ -1144,7 +1144,7 @@ class Module_catalogues
 	{
 		$title=get_screen_title('CATALOGUES');
 
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=catalogues&filter=';
+		set_feed_url(find_script('backend').'?mode=catalogues&filter=');
 
 		$ecommerce=get_param_integer('ecommerce',NULL);
 
@@ -1207,7 +1207,7 @@ class Module_catalogues
 		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000)
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=catalogues&filter=';
+		set_feed_url(find_script('backend').'?mode=catalogues&filter=');
 
 		$url_stub=build_url(array('page'=>'_SELF','type'=>'category'),'_SELF',NULL,false,false,true);
 		$last_change_time=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MAX(cc_add_date)');

@@ -103,8 +103,8 @@ class Module_admin_staff
 	{
 		require_lang('staff');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/staff';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_staff';
+		set_helper_panel_pic('pagepics/staff');
+		set_helper_panel_tutorial('tut_staff');
 
 		$type=get_param('type','misc');
 

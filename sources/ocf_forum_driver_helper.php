@@ -35,13 +35,13 @@ function _helper_apply_emoticons($this_ref,$member_id=NULL)
 	$extra='';
 	if (is_null($member_id))
 	{
-		global $EMOTICON_CACHE,$EMOTICON_LEVELS;
-		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
+		global $EMOTICON_LEVELS;
+		if (!is_null($this_ref->EMOTICON_CACHE)) return $this_ref->EMOTICON_CACHE;
 	} else
 	{
 		$extra=has_privilege(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
 	}
-	$EMOTICON_CACHE=array();
+	$this_ref->EMOTICON_CACHE=array();
 	$EMOTICON_LEVELS=array();
 
 	$query='SELECT e_code,e_theme_img_code,e_relevance_level FROM '.$this_ref->connection->get_table_prefix().'f_emoticons WHERE e_relevance_level<4'.$extra;
@@ -50,15 +50,15 @@ function _helper_apply_emoticons($this_ref,$member_id=NULL)
 	foreach ($rows as $myrow)
 	{
 		$tpl='EMOTICON_IMG_CODE_THEMED';
-		$EMOTICON_CACHE[$myrow['e_code']]=array($tpl,$myrow['e_theme_img_code'],$myrow['e_code']);
+		$this_ref->EMOTICON_CACHE[$myrow['e_code']]=array($tpl,$myrow['e_theme_img_code'],$myrow['e_code']);
 		$EMOTICON_LEVELS[$myrow['e_code']]=$myrow['e_relevance_level'];
 	}
 	if (strpos(get_db_type(),'mysql')===false)
 	{
-		uksort($EMOTICON_CACHE,'strlen_sort');
-		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
+		uksort($this_ref->EMOTICON_CACHE,'strlen_sort');
+		$this_ref->EMOTICON_CACHE=array_reverse($this_ref->EMOTICON_CACHE);
 	}
-	return $EMOTICON_CACHE;
+	return $this_ref->EMOTICON_CACHE;
 }
 
 /**

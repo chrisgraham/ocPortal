@@ -58,8 +58,8 @@ class Module_admin_pointstore
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/pointstore';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_points';
+		set_helper_panel_pic('pagepics/pointstore');
+		set_helper_panel_tutorial('tut_points');
 
 		require_lang('pointstore');
 		require_lang('menus');

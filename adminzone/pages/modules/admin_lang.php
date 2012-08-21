@@ -105,8 +105,8 @@ class Module_admin_lang
 	 */
 	function choose_lang($title,$choose_lang_file=false,$add_lang=false,$text='',$provide_na=true,$param_name='lang')
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/language';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_intl';
+		set_helper_panel_pic('pagepics/language');
+		set_helper_panel_tutorial('tut_intl');
 
 		require_code('form_templates');
 		$langs=new ocp_tempcode();
@@ -192,8 +192,8 @@ class Module_admin_lang
 	 */
 	function criticise()
 	{
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_intl';
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/criticise_language';
+		set_helper_panel_tutorial('tut_intl');
+		set_helper_panel_pic('pagepics/criticise_language');
 
 		$title=get_screen_title('CRITICISE_LANGUAGE_PACK');
 
@@ -546,7 +546,7 @@ msgstr ""
 		if ($lang=='')
 		{
 			$title=get_screen_title('TRANSLATE_CODE');
-			$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_FIND_LANG_STRING_TIP');
+			set_helper_panel_text(comcode_lang_string('DOC_FIND_LANG_STRING_TIP'));
 			return $this->choose_lang($title,true,true,do_lang_tempcode('CHOOSE_EDIT_LIST_LANG_FILE'));
 		}
 

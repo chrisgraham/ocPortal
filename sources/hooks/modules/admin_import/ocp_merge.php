@@ -2159,7 +2159,7 @@ class Hook_ocp_merge
 	{
 		if ($this->on_same_msn($file_base)) return;
 
-		global $STRICT_FILE,$TOPIC_FORUM_CACHE;
+		global $TOPIC_FORUM_CACHE;
 		$TOPIC_FORUM_CACHE=array();
 
 		$row_start=0;

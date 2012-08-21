@@ -58,8 +58,8 @@ class Module_admin_points
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='points';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_points';
+		set_helper_panel_pic('points');
+		set_helper_panel_tutorial('tut_points');
 
 		require_code('points');
 		require_css('points');
@@ -91,8 +91,7 @@ class Module_admin_points
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('gifts','COUNT(*)');
 		$rows=$GLOBALS['SITE_DB']->query_select('gifts',array('*'),NULL,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);

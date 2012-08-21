@@ -971,9 +971,8 @@ function question_ui_script()
 	$image_set=($_image_set=='')?array():explode(',',$_image_set);
 	$message=do_template('QUESTION_UI_BUTTONS',array('_GUID'=>'0c5a1efcf065e4281670426c8fbb2769','TITLE'=>$title,'IMAGES'=>$image_set,'BUTTONS'=>$button_set,'MESSAGE'=>$_message));
 
-	global $EXTRA_HEAD;
-	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
-	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+	require_code('site');
+	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>escape_html($title),'POPUP'=>true,'CONTENT'=>$message));
 	$echo->handle_symbol_preprocessing();

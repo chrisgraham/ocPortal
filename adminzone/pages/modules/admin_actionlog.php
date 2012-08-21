@@ -88,8 +88,8 @@ class Module_admin_actionlog
 	{
 		$title=get_screen_title('VIEW_ACTION_LOGS');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/actionlog';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_trace';
+		set_helper_panel_pic('pagepics/actionlog');
+		set_helper_panel_tutorial('tut_trace');
 
 		require_code('form_templates');
 
@@ -195,8 +195,7 @@ class Module_admin_actionlog
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		require_code('templates_results_table');
 		$field_titles=array(do_lang_tempcode('USERNAME'),do_lang_tempcode('DATE_TIME'),do_lang_tempcode('ACTION'),do_lang_tempcode('PARAMETER_A'),do_lang_tempcode('PARAMETER_B'));

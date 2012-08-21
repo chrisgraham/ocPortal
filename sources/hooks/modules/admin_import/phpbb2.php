@@ -99,13 +99,13 @@ class Hook_phpbb2
 		if (!file_exists($file_base.'/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('config.php')));
 		require($file_base.'/config.php');
-		$INFO=array();
-		$INFO['sql_database']=$dbname;
-		$INFO['sql_user']=$dbuser;
-		$INFO['sql_pass']=$dbpasswd;
-		$INFO['sql_tbl_prefix']=$table_prefix;
+		$PROBED_FORUM_CONFIG=array();
+		$PROBED_FORUM_CONFIG['sql_database']=$dbname;
+		$PROBED_FORUM_CONFIG['sql_user']=$dbuser;
+		$PROBED_FORUM_CONFIG['sql_pass']=$dbpasswd;
+		$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$table_prefix;
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
 	}
 
 	/**
@@ -133,7 +133,7 @@ class Hook_phpbb2
 		);
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'config');
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 		foreach ($rows as $row)
 		{
 			if ($row['config_name']=='require_activation')
@@ -152,10 +152,10 @@ class Hook_phpbb2
 				}
 				set_option($remapping,$value);
 			}
-			$INFO[$row['config_name']]=$row['config_value'];
+			$PROBED_FORUM_CONFIG[$row['config_name']]=$row['config_value'];
 		}
 
-		set_value('timezone',$INFO['board_timezone']);
+		set_value('timezone',$PROBED_FORUM_CONFIG['board_timezone']);
 
 		// Now some usergroup options
 		$groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list();
@@ -164,8 +164,8 @@ class Hook_phpbb2
 		{
 			if (in_array($id,$super_admin_groups)) continue;
 
-			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_avatar_width'=>$INFO['avatar_max_width'],'g_max_avatar_height'=>$INFO['avatar_max_height'],'g_max_sig_length_comcode'=>$INFO['max_sig_chars']),array('id'=>$id),'',1);
-			set_privilege($id,'comcode_dangerous',$INFO['allow_html']);
+			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_avatar_width'=>$PROBED_FORUM_CONFIG['avatar_max_width'],'g_max_avatar_height'=>$PROBED_FORUM_CONFIG['avatar_max_height'],'g_max_sig_length_comcode'=>$PROBED_FORUM_CONFIG['max_sig_chars']),array('id'=>$id),'',1);
+			set_privilege($id,'comcode_dangerous',$PROBED_FORUM_CONFIG['allow_html']);
 		}
 	}
 
@@ -179,12 +179,12 @@ class Hook_phpbb2
 	function import_ocf_groups($db,$table_prefix,$file_base)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'config');
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 		foreach ($rows as $row)
 		{
 			$key=$row['config_name'];
 			$val=$row['config_value'];
-			$INFO[$key]=$val;
+			$PROBED_FORUM_CONFIG[$key]=$val;
 		}
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'groups WHERE group_single_user=0 ORDER BY group_id');
@@ -201,11 +201,11 @@ class Hook_phpbb2
 			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['group_name']),'g.id');
 			if (is_null($id_new))
 			{
-				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,5,0,5,5,$INFO['avatar_max_width'],$INFO['avatar_max_height'],30000,$INFO['max_sig_chars']);
+				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,5,0,5,5,$PROBED_FORUM_CONFIG['avatar_max_width'],$PROBED_FORUM_CONFIG['avatar_max_height'],30000,$PROBED_FORUM_CONFIG['max_sig_chars']);
 			}
 
 			// privileges
-			set_privilege($id_new,'comcode_dangerous',$INFO['allow_html']);
+			set_privilege($id_new,'comcode_dangerous',$PROBED_FORUM_CONFIG['allow_html']);
 
 			import_id_remap_put('group',strval($row['group_id']),$id_new);
 		}

@@ -27,6 +27,9 @@ function init__hooks__modules__admin_import__aef()
 	$TOPIC_FORUM_CACHE=array();
 
 	global $STRICT_FILE;
+	/** Whether we will strictly ensure every file referenced by imported content can be found on disk. We probably do not want this enabled - missing files may be uploaded later just fine.
+	 * @global boolean $STRICT_FILE
+	 */
 	$STRICT_FILE=false; // Disable this for a quicker import that is quite liable to go wrong if you don't have the files in the right place
 
 	global $OLD_BASE_URL;
@@ -101,13 +104,13 @@ class Hook_aef
 		if (!file_exists($file_base.'/universal.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH','universal.php'));
 		require($file_base.'/universal.php');
-		$INFO=array();
-		$INFO['sql_database']=$globals['database'];
-		$INFO['sql_user']=$globals['user'];
-		$INFO['sql_pass']=$globals['password'];
-		$INFO['sql_tbl_prefix']=$globals['dbprefix'];
+		$PROBED_FORUM_CONFIG=array();
+		$PROBED_FORUM_CONFIG['sql_database']=$globals['database'];
+		$PROBED_FORUM_CONFIG['sql_user']=$globals['user'];
+		$PROBED_FORUM_CONFIG['sql_pass']=$globals['password'];
+		$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$globals['dbprefix'];
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
 	}
 
 	/**
@@ -152,17 +155,17 @@ class Hook_aef
 		$config_remapping['staff_address']=$globals['board_email'];
 		$config_remapping['gzip_output']=$globals['gzip'];
 
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 
 		foreach ($config_remapping as $key=>$value)
 		{
 			set_option($key,$value);
 
-			$INFO[$key]=$row;
+			$PROBED_FORUM_CONFIG[$key]=$row;
 		}
 
-		$INFO['board_prefix']=$globals['url'];
-		$INFO['user_cookie']=$globals['cookie_name'];
+		$PROBED_FORUM_CONFIG['board_prefix']=$globals['url'];
+		$PROBED_FORUM_CONFIG['user_cookie']=$globals['cookie_name'];
 	}
 
 	/**
@@ -179,12 +182,12 @@ class Hook_aef
 
 		//avatar dementions are set in av_width and av_height values from aef_registry db table
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'registry WHERE '.db_string_equal_to('name','av_width').' OR '.db_string_equal_to('name','av_height').' OR '.db_string_equal_to('name','usersiglen'));
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 		foreach ($rows as $row)
 		{
 			$key=$row['name'];
 			$val=$row['regval'];
-			$INFO[$key]=$val;
+			$PROBED_FORUM_CONFIG[$key]=$val;
 		}
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'user_groups WHERE post_count=-1 ORDER BY member_group');
@@ -199,7 +202,7 @@ class Hook_aef
 			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['mem_gr_name']),'g.id');
 			if (is_null($id_new))
 			{
-				$id_new=ocf_make_group($row['mem_gr_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$INFO['av_width'],$INFO['av_height'],30000,$INFO['usersiglen']);
+				$id_new=ocf_make_group($row['mem_gr_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$PROBED_FORUM_CONFIG['av_width'],$PROBED_FORUM_CONFIG['av_height'],30000,$PROBED_FORUM_CONFIG['usersiglen']);
 			}
 
 			// privileges

@@ -177,9 +177,9 @@ class OCP_Topic
 					$reviews_rating_criteria[]=array('REVIEW_TITLE'=>$review_title,'REVIEW_RATING'=>make_string_tempcode(is_null($rating)?'':float_format($rating)));
 					if (!is_null($rating))
 					{
-						$GLOBALS['META_DATA']+=array(
+						set_extra_request_metadata(array(
 							'rating'=>float_to_raw_string($rating),
-						);
+						));
 					}
 				}
 			}
@@ -866,7 +866,8 @@ class OCP_Topic
 	 */
 	function inject_rss_url($forum,$type,$id)
 	{
-		$GLOBALS['FEED_URL_2']=find_script('backend').'?mode=comments&forum='.urlencode($forum).'&filter='.urlencode($type.'_'.$id);
+		require_code('site');
+		set_feed_url(find_script('backend').'?mode=comments&forum='.urlencode($forum).'&filter='.urlencode($type.'_'.$id));
 	}
 
 	/**
@@ -874,9 +875,9 @@ class OCP_Topic
 	 */
 	function inject_meta_data()
 	{
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'numcomments'=>strval(count($this->all_posts_ordered)),
-		);
+		));
 	}
 
 	/**

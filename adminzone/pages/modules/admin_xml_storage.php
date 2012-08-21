@@ -64,8 +64,8 @@ class Module_admin_xml_storage
 		require_lang('xml_storage');
 		require_lang('import');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/xml';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_XML_DATA_MANAGEMENT');
+		set_helper_panel_pic('pagepics/xml');
+		set_helper_panel_text(comcode_lang_string('DOC_XML_DATA_MANAGEMENT'));
 
 		switch ($type)
 		{

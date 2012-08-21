@@ -105,11 +105,7 @@ function _param_invalid($name,$ret,$posted)
 		if (is_numeric($test)) return $test;
 	}
 
-	$GLOBALS['HTTP_STATUS_CODE']='400';
-	if (!headers_sent())
-	{
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
-	}
+	set_http_status_code('400');
 
 	require_lang('javascript');
 	warn_exit(do_lang_tempcode('NOT_INTEGER'));
@@ -127,11 +123,7 @@ function improperly_filled_in($name,$posted,$array)
 {
 	require_code('tempcode');
 
-	$GLOBALS['HTTP_STATUS_CODE']='400';
-	if (!headers_sent())
-	{
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
-	}
+	set_http_status_code('400');
 
 	if ($posted!==false)
 	{
@@ -145,8 +137,7 @@ function improperly_filled_in($name,$posted,$array)
 
 	if ((!isset($array[$name])) && (($name=='id') || ($name=='type')) && (!headers_sent()))
 	{
-		$GLOBALS['HTTP_STATUS_CODE']='404';
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found'); // Direct ascending for short URLs - not possible, so should give 404's to avoid indexing
+		set_http_status_code('404');
 	}
 	warn_exit(do_lang_tempcode('NO_PARAMETER_SENT',escape_html($name)));
 }
@@ -158,11 +149,7 @@ function improperly_filled_in($name,$posted,$array)
  */
 function improperly_filled_in_post($name)
 {
-	$GLOBALS['HTTP_STATUS_CODE']='400';
-	if (!headers_sent())
-	{
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
-	}
+	set_http_status_code('400');
 
 	if ((count($_POST)==0) && (get_option('user_postsize_errors')=='1'))
 	{
@@ -252,16 +239,14 @@ function _generic_exit($text,$template)
 		{
 			if (!headers_sent())
 			{
-				$GLOBALS['HTTP_STATUS_CODE']='400';
-				if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
+				set_http_status_code('400');
 			}
 		}
 		elseif (($text_eval==do_lang('MISSING_RESOURCE')) || ($text_eval==do_lang('USER_NO_EXIST')))
 		{
 			if (!headers_sent())
 			{
-				$GLOBALS['HTTP_STATUS_CODE']='404';
-				if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
+				set_http_status_code('404');
 			}
 			if (ocp_srv('HTTP_REFERER')!='')
 			{
@@ -272,8 +257,7 @@ function _generic_exit($text,$template)
 		{
 			if (!headers_sent())
 			{
-				$GLOBALS['HTTP_STATUS_CODE']='500';
-				if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 500 Internal server error');
+				set_http_status_code('500');
 			}
 		}
 	}
@@ -325,15 +309,10 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 {
 	if (function_exists('set_time_limit')) @set_time_limit(4);
 
-	global $EXTRA_HEAD;
-	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
-	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+	require_code('site');
+	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$GLOBALS['HTTP_STATUS_CODE']='403';
-	if (!headers_sent())
-	{
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 403 Forbidden'); // Stop spiders ever storing the URL that caused this
-	}
+	set_http_status_code('403'); // Stop spiders ever storing the URL that caused this
 
 	if (!addon_installed('securitylogging'))
 		warn_exit(do_lang_tempcode('HACK_ATTACK_USER'));
@@ -647,11 +626,9 @@ function _fatal_exit($text,$return=false)
 		exit($output);
 	}
 
-	$GLOBALS['HTTP_STATUS_CODE']='500';
+	set_http_status_code('500');
 	if (!headers_sent())
 	{
-		if (function_exists('browser_matches'))
-			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 500 Internal server error');
 		header('Content-type: text/html; charset='.get_charset());
 		header('Content-Disposition: inline');
 	}
@@ -956,11 +933,7 @@ function get_html_trace()
  */
 function _access_denied($class,$param,$force_login)
 {
-	$GLOBALS['HTTP_STATUS_CODE']='401';
-	if (!headers_sent())
-	{
-		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 401 Unauthorized'); // Stop spiders ever storing the URL that caused this
-	}
+	set_http_status_code('401'); // Stop spiders ever storing the URL that caused this
 
 	require_lang('permissions');
 	require_lang('ocf_config');

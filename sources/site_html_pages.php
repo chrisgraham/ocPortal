@@ -93,8 +93,6 @@ function load_html_page($string,$file_base=NULL)
 		// Extract script, style, and link elements from head
 		if (preg_match('#<\s*head[^<>]*>(.*)<\s*/\s*head\s*>#mis',$html,$matches)!=0)
 		{
-			global $EXTRA_HEAD;
-
 			$head=$matches[1];
 
 			$head_patterns=array('#<\s*script.*<\s*/\s*script\s*>#misU','#<\s*link[^<>]*>#misU','#<\s*style.*<\s*/\s*style\s*>#misU');
@@ -103,19 +101,19 @@ function load_html_page($string,$file_base=NULL)
 				$num_matches=preg_match_all($pattern,$head,$matches);
 				for ($i=0;$i<$num_matches;$i++)
 				{
-					$EXTRA_HEAD->attach($matches[0][$i]);
+					attach_to_screen_header($matches[0][$i]);
 				}
 			}
 		}
 
 		// Extra meta keywords and description, and title
-		global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SEO_TITLE;
+		global $SEO_KEYWORDS,$SEO_DESCRIPTION;
 		if (preg_match('#<\s*meta\s+name\s*=\s*"keywords"\s+content="([^"]*)"#mi',$html,$matches)!=0)
 			$SEO_KEYWORDS=explode(',',@html_entity_decode(trim($matches[1]),ENT_QUOTES,get_charset()));
 		if (preg_match('#<\s*meta\s+name\s*=\s*"description"\s+content="([^"]*)"#mi',$html,$matches)!=0)
 			$SEO_DESCRIPTION=@html_entity_decode(trim($matches[1]),ENT_QUOTES,get_charset());
 		if (preg_match('#<\s*title\s*>([^<>]*)<\s*/\s*title\s*>#mis',$html,$matches)!=0)
-			$SEO_TITLE=@html_entity_decode(trim($matches[1]),ENT_QUOTES,get_charset());
+			set_short_title(@html_entity_decode(trim($matches[1]),ENT_QUOTES,get_charset()));
 
 		// Extract body
 		if (preg_match('#<\s*body[^>]*>(.*)<\s*/\s*body\s*>#mis',$html,$matches)!=0)

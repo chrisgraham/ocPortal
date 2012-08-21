@@ -134,8 +134,8 @@ class Module_admin_themes
 
 		$type=get_param('type','misc');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/themes';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_themes';
+		set_helper_panel_pic('pagepics/themes');
+		set_helper_panel_tutorial('tut_themes');
 
 		if ($type=='misc') return $this->manage_themes();
 		if ($type=='choose_css') return $this->choose_css();
@@ -168,7 +168,7 @@ class Module_admin_themes
 	{
 		$title=get_screen_title('MANAGE_THEMES');
 
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_THEMES');
+		set_helper_panel_text(comcode_lang_string('DOC_THEMES'));
 
 		$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),NULL,'ORDER BY zone_title',50/*reasonable limit; zone_title is sequential for default zones*/);
 
@@ -690,7 +690,7 @@ class Module_admin_themes
 
 		if (get_option('editarea')=='1')
 		{
-			$GLOBALS['EXTRA_HEAD']->attach(make_string_tempcode('
+			attach_to_screen_header(make_string_tempcode('
 				<script language="javascript" type="text/javascript" src="'.get_base_url().'/data/editarea/edit_area_full.js"></script>
 				<script type="text/javascript">// <![CDATA[
 				editAreaLoader.init({
@@ -701,11 +701,11 @@ class Module_admin_themes
 					,allow_resize: true
 					,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
 				});
-				//]]></script>'));
+				//]]></script>')); // XHTMLXHTML
 		}
 
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_CSS');
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_markup';
+		set_helper_panel_text(comcode_lang_string('DOC_CSS'));
+		set_helper_panel_tutorial('tut_markup');
 
 		require_javascript('javascript_ajax');
 
@@ -725,7 +725,7 @@ class Module_admin_themes
 		$old_contents=@file_get_contents(get_file_base().'/themes/default/css/'.$file);
 		if ($old_contents===false) $old_contents='';
 
-		$GLOBALS['SEO_TITLE']=$file;
+		set_short_title($file);
 
 		$entries=new ocp_tempcode();
 
@@ -990,8 +990,8 @@ class Module_admin_themes
 	{
 		$title=get_screen_title('EDIT_TEMPLATES');
 
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_markup';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_TEMPLATES');
+		set_helper_panel_tutorial('tut_markup');
+		set_helper_panel_text(comcode_lang_string('DOC_TEMPLATES'));
 
 		require_javascript('javascript_ajax');
 
@@ -1062,8 +1062,8 @@ class Module_admin_themes
 
 		$title=get_screen_title('EDIT_TEMPLATES');
 
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_MARKUP');
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_themes';
+		set_helper_panel_text(comcode_lang_string('DOC_MARKUP'));
+		set_helper_panel_tutorial('tut_themes');
 
 		// Searching for something, which will provide links that loop back to the proper version of this page
 		$search=get_param('search','',true);
@@ -1108,9 +1108,9 @@ class Module_admin_themes
 
 		if (get_option('editarea')=='1')
 		{
-			$GLOBALS['EXTRA_HEAD']->attach(make_string_tempcode('
+			attach_to_screen_header(make_string_tempcode('
 				<script language="javascript" type="text/javascript" src="'.get_base_url().'/data/editarea/edit_area_full.js"></script>
-			'));
+			')); // XHTMLXHTML
 		}
 
 		$count=0;
@@ -1155,7 +1155,7 @@ class Module_admin_themes
 
 			if (get_option('editarea')=='1')
 			{
-				$GLOBALS['EXTRA_HEAD']->attach('
+				attach_to_screen_header('
 					<script type="text/javascript">// <![CDATA[
 					editAreaLoader.init({
 						id : "f'.$i.'_new"
@@ -1166,7 +1166,7 @@ class Module_admin_themes
 						,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
 					});
 					//]]></script>
-				');
+				'); // XHTMLXHTML
 			}
 
 			// Support searching
@@ -1429,7 +1429,7 @@ class Module_admin_themes
 
 		if ($count==1)
 		{
-			$GLOBALS['SEO_TITLE']=$files_seen[0];
+			set_short_title($files_seen[0]);
 		}
 
 		if ($template_editors->is_empty()) warn_exit(do_lang_tempcode('NO_TEMPLATES_SELECTED'));
@@ -1753,7 +1753,7 @@ class Module_admin_themes
 		if (is_null($path)) $path=$GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',array('theme'=>$theme,'lang'=>get_site_default_lang(),'id'=>$id));
 		if (is_null($path)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-		$GLOBALS['SEO_TITLE']=$id;
+		set_short_title($id);
 
 		$unmodified=(strpos($path,'themes/default/images/')!==false);
 
@@ -1851,8 +1851,8 @@ class Module_admin_themes
 	{
 		$title=get_screen_title('SCREEN_PREVIEWS');
 
-		$GLOBALS['HELPER_PANEL_PIC']='';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='';
+		set_helper_panel_pic('');
+		set_helper_panel_tutorial('');
 
 		if (function_exists('set_time_limit')) @set_time_limit(120);
 		require_code('lorem');
@@ -1960,8 +1960,8 @@ class Module_admin_themes
 	 */
 	function view_screen_preview()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='';
+		set_helper_panel_pic('');
+		set_helper_panel_tutorial('');
 		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
 
 		require_code('lorem');

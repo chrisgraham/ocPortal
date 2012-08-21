@@ -58,8 +58,8 @@ class Module_admin_ocf_merge_members
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/mergemembers';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_members';
+		set_helper_panel_pic('pagepics/mergemembers');
+		set_helper_panel_tutorial('tut_adv_members');
 
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 

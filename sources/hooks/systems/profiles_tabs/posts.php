@@ -58,9 +58,8 @@ class Hook_Profiles_Tabs_posts
 		{
 			require_code('ocf_forumview');
 
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='post_start';
-			$NON_CANONICAL_PARAMS[]='post_max';
+			inform_non_canonical_parameter('post_start');
+			inform_non_canonical_parameter('post_max');
 
 			// Last 15 topics that member contributed to
 			$n=get_param_integer('post_max',10);

@@ -161,10 +161,10 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function install_specifics()
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		$a=array();
 		$a['name']='ipb_table_prefix';
-		$a['default']=array_key_exists('sql_tbl_prefix',$INFO)?$INFO['sql_tbl_prefix']:'ibf_';
+		$a['default']=array_key_exists('sql_tbl_prefix',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['sql_tbl_prefix']:'ibf_';
 		$a['description']=do_lang('MOST_DEFAULT');
 		$a['title']='IPB '.do_lang('TABLE_PREFIX');
 		return array($a);

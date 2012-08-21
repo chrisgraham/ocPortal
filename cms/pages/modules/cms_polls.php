@@ -46,8 +46,8 @@ class Module_cms_polls extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/polls';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_feedback';
+		set_helper_panel_pic('pagepics/polls');
+		set_helper_panel_tutorial('tut_feedback');
 
 		require_code('polls');
 		require_lang('polls');
@@ -136,8 +136,7 @@ class Module_cms_polls extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('QUESTION'),

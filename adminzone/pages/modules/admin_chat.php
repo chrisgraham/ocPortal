@@ -54,8 +54,8 @@ class Module_admin_chat extends standard_crud_module
 	{
 		$this->extra_donext_entries=array(array('delete',array('_SELF',array('type'=>'delete_all'),'_SELF'),do_lang('DELETE_ALL_ROOMS')));
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/chatrooms';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_chat';
+		set_helper_panel_pic('pagepics/chatrooms');
+		set_helper_panel_tutorial('tut_chat');
 
 		require_lang('chat');
 		require_code('chat');

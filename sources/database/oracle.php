@@ -21,19 +21,8 @@
 /*EXTRA FUNCTIONS: oci.+*/
 
 /*
-
 For: php_oci8.dll
-
 */
-
-/**
- * Standard code module initialisation function.
- */
-function init__database__oracle()
-{
-	global $CACHE_DB;
-	$CACHE_DB=array();
-}
 
 /**
  * Database Driver.
@@ -41,6 +30,7 @@ function init__database__oracle()
  */
 class Database_Static_oracle
 {
+	var $cache_db=array();
 
 	/**
 	 * Get the default user for making db connections (used by the installer as a default).
@@ -293,8 +283,7 @@ class Database_Static_oracle
 	 */
 	function db_close_connections()
 	{
-		global $CACHE_DB;
-		foreach ($CACHE_DB as $db)
+		foreach ($this->cache_db as $db)
 		{
 			foreach ($db as $_db)
 			{
@@ -319,10 +308,9 @@ class Database_Static_oracle
 		if ($db_host!='localhost') fatal_exit(do_lang_tempcode('ONLY_LOCAL_HOST_FOR_TYPE'));
 
 		// Potential cacheing
-		global $CACHE_DB;
-		if (isset($CACHE_DB[$db_name][$db_host]))
+		if (isset($this->cache_db[$db_name][$db_host]))
 		{
-			return $CACHE_DB[$db_name][$db_host];
+			return $this->cache_db[$db_name][$db_host];
 		}
 
 		if (!function_exists('ocilogon'))
@@ -349,7 +337,7 @@ class Database_Static_oracle
 		}
 
 		if (!$db) fatal_exit(do_lang('CONNECT_DB_ERROR'));
-		$CACHE_DB[$db_name][$db_host]=$db;
+		$this->cache_db[$db_name][$db_host]=$db;
 		return $db;
 	}
 

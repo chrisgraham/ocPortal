@@ -62,10 +62,9 @@ class Module_topicview
 		require_code('ocf_topicview');
 		require_css('ocf');
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='max';
-		$NON_CANONICAL_PARAMS[]='start';
-		$NON_CANONICAL_PARAMS[]='threaded';
+		inform_non_canonical_parameter('max');
+		inform_non_canonical_parameter('start');
+		inform_non_canonical_parameter('threaded');
 
 		$start=get_param_integer('start',0);
 		$default_max=intval(get_option('forum_posts_per_page'));
@@ -74,9 +73,8 @@ class Module_topicview
 		if ($max==0) $max=1;
 		$first_unread_id=-1;
 
-		global $NON_CANONICAL_PARAMS;
 		foreach (array_keys($_GET) as $key)
-			if (substr($key,0,3)=='kfs') $NON_CANONICAL_PARAMS[]=$key;
+			if (substr($key,0,3)=='kfs') inform_non_canonical_parameter($key);
 
 		$type=get_param('type','misc');
 
@@ -102,7 +100,7 @@ class Module_topicview
 		}
 
 		if (!is_null($id))
-			$GLOBALS['FEED_URL']=find_script('backend').'?mode=ocf_topicview&filter='.strval($id);
+			set_feed_url(find_script('backend').'?mode=ocf_topicview&filter='.strval($id));
 
 		$view_poll_results=get_param_integer('view_poll_results',0);
 
@@ -119,7 +117,7 @@ class Module_topicview
 
 		// Load up topic info
 		$topic_info=ocf_read_in_topic($id,$start,$max,$view_poll_results==1);
-		$GLOBALS['META_DATA']+=$topic_info['meta_data'];
+		set_extra_request_metadata($topic_info['meta_data']);
 		global $SEO_TITLE;
 		$SEO_TITLE=do_lang('_VIEW_TOPIC',$topic_info['title']);
 

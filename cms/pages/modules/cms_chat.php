@@ -69,8 +69,8 @@ class Module_cms_chat
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/forums';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_chat';
+		set_helper_panel_pic('pagepics/forums');
+		set_helper_panel_tutorial('tut_chat');
 
 		require_lang('chat');
 		require_code('chat');
@@ -118,8 +118,7 @@ class Module_cms_chat
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('ROOM_NAME'),do_lang_tempcode('ROOM_OWNER'),do_lang_tempcode('ROOM_LANG'),do_lang_tempcode('MESSAGES')),$sortables,'sort',$sortable.' '.$sort_order);
 
@@ -194,8 +193,7 @@ class Module_cms_chat
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id'=>$room_id));
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_messages',array('*'),array('room_id'=>$room_id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$fields=new ocp_tempcode();

@@ -108,9 +108,9 @@ class Module_admin_occle
 		require_javascript('javascript_occle');
 		require_css('occle');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/occle';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_occle';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_OCCLE');
+		set_helper_panel_pic('pagepics/occle');
+		set_helper_panel_tutorial('tut_occle');
+		set_helper_panel_text(comcode_lang_string('DOC_OCCLE'));
 
 		return $this->main_gui();
 	}

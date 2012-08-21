@@ -132,9 +132,8 @@ function reprocess_url($url,$operation_base_url)
 	$matches=array();
 	if (preg_match('#<\s*title[^>]*>(.*)<\s*/\s*title\s*>#is',$document,$matches)!=0)
 	{
-		global $SEO_TITLE;
 		$title=str_replace('&bull;','-',str_replace('&ndash;','-',str_replace('&mdash;','-',@html_entity_decode($matches[1],ENT_QUOTES,get_charset()))));
-		$SEO_TITLE=$title;
+		set_short_title(trim($title));
 		get_screen_title(trim($title),false);
 	}
 
@@ -213,7 +212,6 @@ function reprocess_url($url,$operation_base_url)
 		}
 
 		// Stuff to copy
-		global $EXTRA_HEAD;
 		$head_patterns=array('#<\s*script.*<\s*/\s*script\s*>#isU','#<\s*link[^<>]*>#isU','#<\s*style.*<\s*/\s*style\s*>#isU');
 		foreach ($head_patterns as $pattern)
 		{
@@ -230,7 +228,7 @@ function reprocess_url($url,$operation_base_url)
 						$x=str_replace($match_x[0],str_replace($match_x[2],$url_new,$match_x[0]),$x);
 					}
 				}
-				$EXTRA_HEAD->attach($x);
+				attach_to_screen_header($x);
 			}
 		}
 	}

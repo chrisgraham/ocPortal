@@ -53,8 +53,8 @@ class Module_admin_newsletter extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/newsletter';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_newsletter';
+		set_helper_panel_pic('pagepics/newsletter');
+		set_helper_panel_tutorial('tut_newsletter');
 
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
@@ -717,7 +717,7 @@ class Module_admin_newsletter extends standard_crud_module
 	 */
 	function automatic_whats_new()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/newsletter_from_changes';
+		set_helper_panel_pic('pagepics/newsletter_from_changes');
 
 		$title=get_screen_title('NEW_CONTENT');
 
@@ -1627,8 +1627,7 @@ class Module_admin_newsletter extends standard_crud_module
 		}
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),

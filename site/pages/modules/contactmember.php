@@ -88,8 +88,7 @@ class Module_contactmember
 
 		$title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($username)));
 
-		global $EXTRA_HEAD;
-		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 		$text=do_lang_tempcode('EMAIL_MEMBER_TEXT');
 

@@ -139,10 +139,10 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 */
 	function install_specifics()
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		$a=array();
 		$a['name']='bb_forum_number';
-		$a['default']=array_key_exists('sql_tbl_prefix',$INFO)?$INFO['sql_tbl_prefix']:'1';
+		$a['default']=array_key_exists('sql_tbl_prefix',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['sql_tbl_prefix']:'1';
 		$a['description']=do_lang('MOST_DEFAULT');
 		$a['title']=do_lang('BOARD_INSTALL_NUMBER');
 		return array($a);
@@ -156,7 +156,7 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 */
 	function install_test_load_from($path)
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		if (@file_exists($path.'/acp/lib/config.inc.php'))
 		{
 			$sqldb='';
@@ -164,13 +164,13 @@ class forum_driver_wbb_shared extends forum_driver_base
 			$sqlpassword='';
 			$n='';
 			@include($path.'/acp/lib/config.inc.php');
-			$INFO['sql_database']=$sqldb;
-			$INFO['sql_user']=$sqluser;
-			$INFO['sql_pass']=$sqlpassword;
-			$INFO['cookie_member_id']='wbb_userid';
-			$INFO['cookie_member_hash']='wbb_userpassword';
-			$INFO['board_url']='';
-			$INFO['sql_tbl_prefix']=$n;
+			$PROBED_FORUM_CONFIG['sql_database']=$sqldb;
+			$PROBED_FORUM_CONFIG['sql_user']=$sqluser;
+			$PROBED_FORUM_CONFIG['sql_pass']=$sqlpassword;
+			$PROBED_FORUM_CONFIG['cookie_member_id']='wbb_userid';
+			$PROBED_FORUM_CONFIG['cookie_member_hash']='wbb_userpassword';
+			$PROBED_FORUM_CONFIG['board_url']='';
+			$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$n;
 			return true;
 		}
 		return false;
@@ -735,19 +735,18 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 */
 	function find_emoticons()
 	{
-		global $EMOTICON_CACHE;
-		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
+		if (!is_null($this->EMOTICON_CACHE)) return $this->EMOTICON_CACHE;
 		$rows=$this->connection->query_select('smilies',array('*'));
-		$EMOTICON_CACHE=array();
+		$this->EMOTICON_CACHE=array();
 		foreach ($rows as $myrow)
 		{
 			$src=str_replace('{imagefolder}'.'/','images/',$myrow['smiliepath']);
 			if (url_is_local($src)) $src=$this->get_emo_dir().$src;
-			$EMOTICON_CACHE[$myrow['smiliecode']]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['smiliecode']);
+			$this->EMOTICON_CACHE[$myrow['smiliecode']]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['smiliecode']);
 		}
-		uksort($EMOTICON_CACHE,'strlen_sort');
-		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
-		return $EMOTICON_CACHE;
+		uksort($this->EMOTICON_CACHE,'strlen_sort');
+		$this->EMOTICON_CACHE=array_reverse($this->EMOTICON_CACHE);
+		return $this->EMOTICON_CACHE;
 	}
 
 	/**

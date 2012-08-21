@@ -142,8 +142,7 @@ class Module_members
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='md_sort';
+		inform_non_canonical_parameter('md_sort');
 
 		$group_filter=get_param('group_filter','');
 

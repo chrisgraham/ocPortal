@@ -21,23 +21,12 @@
 /*EXTRA FUNCTIONS: odbc\_.+*/
 
 /*
-
 This driver works by ODBC. You create a mdb database in access, then create a mapping in the
 ODBC part of control panel. You need to add a 'System DSN' (the DSN is the database name mapping
 to the mdb file). In the properties there is option to choose username and password.
 Alternatively just give the filename!
 Make sure you have write permissions on the file as 'Everyone'.
-
 */
-
-/**
- * Standard code module initialisation function.
- */
-function init__database__access()
-{
-	global $CACHE_DB;
-	$CACHE_DB=array();
-}
 
 /**
  * Database Driver.
@@ -45,6 +34,7 @@ function init__database__access()
  */
 class Database_Static_access
 {
+	var $cache_db=array();
 
 	/**
 	 * Get the default user for making db connections (used by the installer as a default).
@@ -140,8 +130,7 @@ class Database_Static_access
 	 */
 	function db_close_connections()
 	{
-		global $CACHE_DB;
-		$CACHE_DB=array();
+		$this->cache_db=array();
 	}
 
 	/**
@@ -266,10 +255,9 @@ class Database_Static_access
 		if ($db_host!='localhost') fatal_exit(do_lang_tempcode('ONLY_LOCAL_HOST_FOR_TYPE'));
 
 		// Potential cacheing
-		global $CACHE_DB;
-		if (isset($CACHE_DB[$db_name][$db_host]))
+		if (isset($this->cache_db[$db_name][$db_host]))
 		{
-			return $CACHE_DB[$db_name][$db_host];
+			return $this->cache_db[$db_name][$db_host];
 		}
 
 		$db_name_short=$db_name;
@@ -312,7 +300,7 @@ class Database_Static_access
 		}
 
 		if (!$db) fatal_exit(do_lang('CONNECT_DB_ERROR'));
-		$CACHE_DB[$db_name_short][$db_host]=$db;
+		$this->cache_db[$db_name_short][$db_host]=$db;
 		return $db;
 	}
 

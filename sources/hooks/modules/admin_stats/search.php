@@ -68,8 +68,7 @@ class Hook_admin_stats_search
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT s_primary,COUNT(*) AS cnt FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'searches_logged WHERE s_time>'.strval((integer)$time_start).' AND s_time<'.strval((integer)$time_end).' GROUP BY s_primary ORDER BY '.$sortable.' '.$sort_order);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));

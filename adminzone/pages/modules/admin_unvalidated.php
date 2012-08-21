@@ -60,8 +60,8 @@ class Module_admin_unvalidated
 	{
 		require_lang('unvalidated');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/unvalidated';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_censor';
+		set_helper_panel_pic('pagepics/unvalidated');
+		set_helper_panel_tutorial('tut_censor');
 
 		$_title=get_screen_title('UNVALIDATED_RESOURCES');
 

@@ -124,10 +124,10 @@ class forum_driver_mybb extends forum_driver_base
 	 */
 	function install_specifics()
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		$a=array();
 		$a['name']='mybb_table_prefix';
-		$a['default']=array_key_exists('sql_tbl_prefix',$INFO)?$INFO['sql_tbl_prefix']:'mybb_';
+		$a['default']=array_key_exists('sql_tbl_prefix',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['sql_tbl_prefix']:'mybb_';
 		$a['description']=do_lang('MOST_DEFAULT');
 		$a['title']='MyBB '.do_lang('TABLE_PREFIX');
 		return array($a);
@@ -141,7 +141,7 @@ class forum_driver_mybb extends forum_driver_base
 	 */
 	function install_test_load_from($path)
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 
 		if (@file_exists($path.'/inc/config.php'))
 		{
@@ -150,11 +150,11 @@ class forum_driver_mybb extends forum_driver_base
 			@include($path.'/inc/config.php');
 			if (array_key_exists('database',$config))
 			{
-				$INFO['sql_database']=!empty($config['database']['database'])?$config['database']['database']:'';
-				$INFO['sql_user']=!empty($config['database']['username'])?$config['database']['username']:'';
-				$INFO['sql_pass']=!empty($config['database']['password'])?$config['database']['password']:'';
-				$INFO['cookie_member_id']='mybbuser';
-				$INFO['sql_tbl_prefix']=!empty($config['database']['table_prefix'])?$config['database']['table_prefix']:'';
+				$PROBED_FORUM_CONFIG['sql_database']=!empty($config['database']['database'])?$config['database']['database']:'';
+				$PROBED_FORUM_CONFIG['sql_user']=!empty($config['database']['username'])?$config['database']['username']:'';
+				$PROBED_FORUM_CONFIG['sql_pass']=!empty($config['database']['password'])?$config['database']['password']:'';
+				$PROBED_FORUM_CONFIG['cookie_member_id']='mybbuser';
+				$PROBED_FORUM_CONFIG['sql_tbl_prefix']=!empty($config['database']['table_prefix'])?$config['database']['table_prefix']:'';
 			}
 			return true;
 		}
@@ -924,18 +924,17 @@ class forum_driver_mybb extends forum_driver_base
 	 */
 	function find_emoticons()
 	{
-		global $EMOTICON_CACHE;
-		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
+		if (!is_null($this->EMOTICON_CACHE)) return $this->EMOTICON_CACHE;
 		$rows=$this->connection->query_select('smilies',array('*'));
-		$EMOTICON_CACHE=array();
+		$this->EMOTICON_CACHE=array();
 		foreach ($rows as $myrow)
 		{
 			$src=$this->get_emo_dir().$myrow['image'];
-			$EMOTICON_CACHE[$myrow['find']]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['find']);
+			$this->EMOTICON_CACHE[$myrow['find']]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['find']);
 		}
-		uksort($EMOTICON_CACHE,'strlen_sort');
-		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
-		return $EMOTICON_CACHE;
+		uksort($this->EMOTICON_CACHE,'strlen_sort');
+		$this->EMOTICON_CACHE=array_reverse($this->EMOTICON_CACHE);
+		return $this->EMOTICON_CACHE;
 	}
 
 	/**

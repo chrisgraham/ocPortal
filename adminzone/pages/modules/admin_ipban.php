@@ -97,8 +97,8 @@ class Module_admin_ipban
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/ipban';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_censor';
+		set_helper_panel_pic('pagepics/ipban');
+		set_helper_panel_tutorial('tut_censor');
 
 		require_lang('submitban');
 		require_code('submit');
@@ -121,7 +121,7 @@ class Module_admin_ipban
 		$title=get_screen_title('IP_BANS');
 
 		$lookup_url=build_url(array('page'=>'admin_lookup'),get_module_zone('admin_lookup'));
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_to_tempcode(do_lang('IP_BANNING_WILDCARDS',$lookup_url->evaluate()));
+		set_helper_panel_text(comcode_to_tempcode(do_lang('IP_BANNING_WILDCARDS',$lookup_url->evaluate())));
 
 		$bans='';
 		$locked_bans='';

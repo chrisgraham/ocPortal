@@ -107,22 +107,22 @@ class Hook_vb3
 		if (!file_exists($file_base.'/includes/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('includes/config.php')));
 		require($file_base.'/includes/config.php');
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 		if (!is_null($dbname))
 		{
-			$INFO['sql_database']=$dbname;
-			$INFO['sql_user']=$dbusername;
-			$INFO['sql_pass']=$dbpassword;
-			$INFO['sql_tbl_prefix']=$tableprefix;
+			$PROBED_FORUM_CONFIG['sql_database']=$dbname;
+			$PROBED_FORUM_CONFIG['sql_user']=$dbusername;
+			$PROBED_FORUM_CONFIG['sql_pass']=$dbpassword;
+			$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$tableprefix;
 		} else
 		{
-			$INFO['sql_database']=$config['Database']['dbname'];
-			$INFO['sql_user']=$config['MasterServer']['username'];
-			$INFO['sql_pass']=$config['MasterServer']['password'];
-			$INFO['sql_tbl_prefix']=$config['Database']['tableprefix'];
+			$PROBED_FORUM_CONFIG['sql_database']=$config['Database']['dbname'];
+			$PROBED_FORUM_CONFIG['sql_user']=$config['MasterServer']['username'];
+			$PROBED_FORUM_CONFIG['sql_pass']=$config['MasterServer']['password'];
+			$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$config['Database']['tableprefix'];
 		}
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
 	}
 
 	/**
@@ -150,7 +150,7 @@ class Hook_vb3
 		);
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'setting');
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 		foreach ($rows as $row)
 		{
 			if ($row['value']=='') $row['value']=$row['defaultvalue'];
@@ -165,10 +165,10 @@ class Hook_vb3
 				}
 				set_option($remapping,$value);
 			}
-			$INFO[$row['varname']]=$row['value'];
+			$PROBED_FORUM_CONFIG[$row['varname']]=$row['value'];
 		}
 
-		set_value('timezone',$INFO['timeoffset']);
+		set_value('timezone',$PROBED_FORUM_CONFIG['timeoffset']);
 
 		// Now some usergroup options
 		$groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list();
@@ -187,18 +187,18 @@ class Hook_vb3
 
 			foreach ($page_remap as $from=>$to)
 			{
-				if ($INFO[$from]=='1')
+				if ($PROBED_FORUM_CONFIG[$from]=='1')
 					$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>$to,'zone_name'=>get_module_zone($to),'group_id'=>$id));
 			}
 
 			$map=array();
-			$map['g_max_attachments_per_post']=$INFO['attachlimit'];
-			$map['g_max_post_length_comcode']=$INFO['postmaxchars'];
-			if (array_key_exists('sigmax',$map)) $map['g_max_sig_length_comcode']=$INFO['sigmax'];
+			$map['g_max_attachments_per_post']=$PROBED_FORUM_CONFIG['attachlimit'];
+			$map['g_max_post_length_comcode']=$PROBED_FORUM_CONFIG['postmaxchars'];
+			if (array_key_exists('sigmax',$map)) $map['g_max_sig_length_comcode']=$PROBED_FORUM_CONFIG['sigmax'];
 			$GLOBALS['FORUM_DB']->query_update('f_groups',$map,array('id'=>$id),'',1);
 
-			set_privilege($id,'use_quick_reply',$INFO['quickreply']);
-			set_privilege($id,'comcode_dangerous',$INFO['allowhtml']);
+			set_privilege($id,'use_quick_reply',$PROBED_FORUM_CONFIG['quickreply']);
+			set_privilege($id,'comcode_dangerous',$PROBED_FORUM_CONFIG['allowhtml']);
 		}
 	}
 
@@ -212,13 +212,13 @@ class Hook_vb3
 	function import_ocf_groups($db,$table_prefix,$file_base)
 	{
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'setting');
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 		foreach ($rows as $row)
 		{
 			$key=$row['varname'];
 			$val=$row['value'];
 			if ($val=='') $val=$row['defaultvalue'];
-			$INFO[$key]=$val;
+			$PROBED_FORUM_CONFIG[$key]=$val;
 		}
 
 		$rows=$db->query('SELECT *,g.usergroupid AS usergroupid FROM '.$table_prefix.'usergroup g LEFT JOIN '.$table_prefix.'usergroupleader l ON g.usergroupid=l.usergroupid LEFT JOIN '.$table_prefix.'userpromotion p ON g.usergroupid=p.usergroupid');
@@ -239,7 +239,7 @@ class Hook_vb3
 			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['title']),'g.id');
 			if (is_null($id_new))
 			{
-				$id_new=ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,$row['usertitle'],'',$row_promotion_target,$row['reputation'],$row_group_leader,5,0,5,$row['attachlimit'],$row['avatarmaxwidth'],$row['avatarmaxheight'],$INFO['postmaxchars'],array_key_exists('sigmax',$INFO)?$INFO['sigmax']:700);
+				$id_new=ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,$row['usertitle'],'',$row_promotion_target,$row['reputation'],$row_group_leader,5,0,5,$row['attachlimit'],$row['avatarmaxwidth'],$row['avatarmaxheight'],$PROBED_FORUM_CONFIG['postmaxchars'],array_key_exists('sigmax',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['sigmax']:700);
 			}
 
 			// Zone permissions
@@ -261,9 +261,9 @@ class Hook_vb3
 			}
 
 			// privileges
-			set_privilege($id_new,'comcode_dangerous',$INFO['allowhtml']==1);
-			set_privilege($id_new,'bypass_word_filter',$INFO['censorwords']==0);
-			set_privilege($id_new,'use_quick_reply',$INFO['quickreply']==1);
+			set_privilege($id_new,'comcode_dangerous',$PROBED_FORUM_CONFIG['allowhtml']==1);
+			set_privilege($id_new,'bypass_word_filter',$PROBED_FORUM_CONFIG['censorwords']==0);
+			set_privilege($id_new,'use_quick_reply',$PROBED_FORUM_CONFIG['quickreply']==1);
 			set_privilege($id_new,'vote_in_polls',($row['forumpermissions']&32768)!=0);
 			set_privilege($id_new,'view_member_photos',($row['genericpermissions']&4096)!=0);
 			set_privilege($id_new,'view_any_profile_field',($row['genericpermissions']&262144)!=0);

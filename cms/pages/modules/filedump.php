@@ -142,7 +142,7 @@ class Module_filedump
 		$place=filter_naughty(get_param('place','/'));
 		if (substr($place,-1,1)!='/') $place.='/';
 
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=filedump&filter='.$place;
+		set_feed_url(find_script('backend').'?mode=filedump&filter='.$place);
 
 		// Show tree
 		$dirs=explode('/',substr($place,0,strlen($place)-1));

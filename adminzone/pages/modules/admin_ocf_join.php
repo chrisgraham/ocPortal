@@ -58,8 +58,8 @@ class Module_admin_ocf_join
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/addmember';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_members';
+		set_helper_panel_pic('pagepics/addmember');
+		set_helper_panel_tutorial('tut_adv_members');
 
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_members_action');
@@ -89,8 +89,8 @@ class Module_admin_ocf_join
 	 */
 	function menu()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/editmember';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_members';
+		set_helper_panel_pic('pagepics/editmember');
+		set_helper_panel_tutorial('tut_members');
 
 		require_lang('submitban');
 		require_lang('security');
@@ -252,7 +252,7 @@ class Module_admin_ocf_join
 
 		if (!cron_installed()) attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_configuration')),'warn');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/usergroups_temp';
+		set_helper_panel_pic('pagepics/usergroups_temp');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
@@ -347,7 +347,7 @@ class Module_admin_ocf_join
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/deletelurkers';
+		set_helper_panel_pic('pagepics/deletelurkers');
 
 		require_code('form_templates');
 
@@ -472,7 +472,7 @@ class Module_admin_ocf_join
 
 		require_lang('ocf_lurkers');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/deletelurkers';
+		set_helper_panel_pic('pagepics/deletelurkers');
 
 		$max_posts=post_param_integer('max_posts');
 		$max_points=post_param_integer('max_points');
@@ -512,7 +512,7 @@ class Module_admin_ocf_join
 	{
 		$title=get_screen_title('DELETE_LURKERS');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/deletelurkers';
+		set_helper_panel_pic('pagepics/deletelurkers');
 
 		require_lang('ocf_lurkers');
 
@@ -770,7 +770,7 @@ class Module_admin_ocf_join
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/import_csv';
+		set_helper_panel_pic('pagepics/import_csv');
 
 		require_code('form_templates');
 
@@ -799,7 +799,7 @@ class Module_admin_ocf_join
 	{
 		$title=get_screen_title('IMPORT_MEMBER_CSV');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/import_csv';
+		set_helper_panel_pic('pagepics/import_csv');
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 

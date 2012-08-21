@@ -111,8 +111,8 @@ class Module_admin_ocf_ldap
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/ldap';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_ldap';
+		set_helper_panel_pic('pagepics/ldap');
+		set_helper_panel_tutorial('tut_ldap');
 
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_groups_action');

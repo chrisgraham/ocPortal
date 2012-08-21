@@ -253,7 +253,7 @@ class Hook_ipb2 extends Hook_ipb_base
 		);
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'conf_settings');
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 		foreach ($rows as $row)
 		{
 			if ($row['conf_value']=='') $row['conf_value']=$row['conf_default'];
@@ -261,18 +261,18 @@ class Hook_ipb2 extends Hook_ipb_base
 			{
 				set_option($config_remapping[$row['conf_key']],$row['conf_value']);
 			}
-			$INFO[$row['conf_key']]=$row['conf_value'];
+			$PROBED_FORUM_CONFIG[$row['conf_key']]=$row['conf_value'];
 		}
 
-		set_option('session_expiry_time',strval(60*intval($INFO['session_expiration'])));
-		set_option('gzip_output',strval(1-intval($INFO['disable_gzip'])));
-		set_option('smtp_sockets_use',($INFO['mail_method']=='smtp')?'1':'0');
-		set_option('session_expiry_time',strval(60*intval($INFO['session_expiration'])));
-		set_value('timezone',$INFO['time_offset']);
+		set_option('session_expiry_time',strval(60*intval($PROBED_FORUM_CONFIG['session_expiration'])));
+		set_option('gzip_output',strval(1-intval($PROBED_FORUM_CONFIG['disable_gzip'])));
+		set_option('smtp_sockets_use',($PROBED_FORUM_CONFIG['mail_method']=='smtp')?'1':'0');
+		set_option('session_expiry_time',strval(60*intval($PROBED_FORUM_CONFIG['session_expiration'])));
+		set_value('timezone',$PROBED_FORUM_CONFIG['time_offset']);
 
 		// Now some usergroup options
 		$groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list();
-		list($width,$height)=explode('x',$INFO['avatar_dims']);
+		list($width,$height)=explode('x',$PROBED_FORUM_CONFIG['avatar_dims']);
 		$GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name'=>'search','zone_name'=>get_module_zone('search')));
 		$GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name'=>'join','zone_name'=>get_module_zone('join')));
 		$super_admin_groups=$GLOBALS['OCF_DRIVER']->_get_super_admin_groups();
@@ -280,12 +280,12 @@ class Hook_ipb2 extends Hook_ipb_base
 		{
 			if (in_array($id, $super_admin_groups)) continue;
 
-			if ($INFO['allow_search']=='0')
+			if ($PROBED_FORUM_CONFIG['allow_search']=='0')
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'search','zone_name'=>get_module_zone('search'),'group_id'=>$id));
-			if ($INFO['no_reg']=='1')
+			if ($PROBED_FORUM_CONFIG['no_reg']=='1')
 				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'join','zone_name'=>get_module_zone('join'),'group_id'=>$id));
 
-			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_flood_control_submit_secs'=>intval($INFO['flood_control']),'g_max_avatar_width'=>$width,'g_max_avatar_height'=>$height,'g_max_sig_length_comcode'=>$INFO['max_sig_length'],'g_max_post_length_comcode'=>$INFO['max_post_length']),array('id'=>$id),'',1);
+			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_flood_control_submit_secs'=>intval($PROBED_FORUM_CONFIG['flood_control']),'g_max_avatar_width'=>$width,'g_max_avatar_height'=>$height,'g_max_sig_length_comcode'=>$PROBED_FORUM_CONFIG['max_sig_length'],'g_max_post_length_comcode'=>$PROBED_FORUM_CONFIG['max_post_length']),array('id'=>$id),'',1);
 		}
 	}
 

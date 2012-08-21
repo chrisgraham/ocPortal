@@ -74,8 +74,8 @@ class Module_cms_downloads extends standard_crud_module
 
 		$GLOBALS['MODULE_CMS_DOWNLOADS']=$this;
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/downloads';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_downloads';
+		set_helper_panel_pic('pagepics/downloads');
+		set_helper_panel_tutorial('tut_downloads');
 
 		require_lang('downloads');
 		require_code('downloads');
@@ -467,17 +467,16 @@ class Module_cms_downloads extends standard_crud_module
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='validated';
+		inform_non_canonical_parameter('validated');
 
 		if ((is_null($id)) && (is_null($category_id)))
 		{
-			$NON_CANONICAL_PARAMS[]='cat';
-			$NON_CANONICAL_PARAMS[]='name';
-			$NON_CANONICAL_PARAMS[]='author';
-			$NON_CANONICAL_PARAMS[]='description';
-			$NON_CANONICAL_PARAMS[]='comments';
-			$NON_CANONICAL_PARAMS[]='notes';
+			inform_non_canonical_parameter('cat');
+			inform_non_canonical_parameter('name');
+			inform_non_canonical_parameter('author');
+			inform_non_canonical_parameter('description');
+			inform_non_canonical_parameter('comments');
+			inform_non_canonical_parameter('notes');
 
 			$category_id=get_param_integer('cat',-1);
 			if ($category_id==-1) $category_id=NULL;
@@ -942,8 +941,7 @@ class Module_cms_downloads_cat extends standard_crud_module
 	{
 		if ((is_null($parent_id)) && ($category_id==-1))
 		{
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='parent_id';
+			inform_non_canonical_parameter('parent_id');
 
 			$parent_id=get_param_integer('parent_id',-1);
 			if ($parent_id==-1) $parent_id=db_get_first_id();

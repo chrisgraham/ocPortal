@@ -109,8 +109,8 @@ class Module_admin_import
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/importdata';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_importer';
+		set_helper_panel_pic('pagepics/importdata');
+		set_helper_panel_tutorial('tut_importer');
 
 		if (defined('HIPHOP_PHP')) warn_exit(do_lang_tempcode('NO_HIPHOP'));
 

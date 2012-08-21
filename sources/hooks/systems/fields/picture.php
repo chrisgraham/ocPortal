@@ -101,9 +101,9 @@ class Hook_fields_picture
 		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
 		$tpl_set=$field['c_name'];
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'image'=>$img_url,
-		);
+		));
 
 		return do_template('CATALOGUE_'.$tpl_set.'_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$img_url,'THUMB_URL'=>$img_thumb_url),NULL,false,'CATALOGUE_DEFAULT_FIELD_PICTURE');
 	}

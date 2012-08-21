@@ -72,8 +72,8 @@ class Module_cms_news extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/news';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_news';
+		set_helper_panel_pic('pagepics/news');
+		set_helper_panel_tutorial('tut_news');
 
 		$this->cat_crud_module=new Module_cms_news_cat();
 		$this->posting_form_title=do_lang_tempcode('NEWS_ARTICLE');
@@ -136,8 +136,7 @@ class Module_cms_news extends standard_crud_module
 			$sortables['validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$fh=array(do_lang_tempcode('TITLE'),do_lang_tempcode('MAIN_CATEGORY'));
 		$fh[]=do_lang_tempcode('ADDED');
@@ -225,12 +224,11 @@ class Module_cms_news extends standard_crud_module
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='cat';
-		$NON_CANONICAL_PARAMS[]='title';
-		$NON_CANONICAL_PARAMS[]='author';
-		$NON_CANONICAL_PARAMS[]='notes';
-		$NON_CANONICAL_PARAMS[]='validated';
+		inform_non_canonical_parameter('cat');
+		inform_non_canonical_parameter('title');
+		inform_non_canonical_parameter('author');
+		inform_non_canonical_parameter('notes');
+		inform_non_canonical_parameter('validated');
 
 		if ($title=='')
 		{
@@ -241,13 +239,12 @@ class Module_cms_news extends standard_crud_module
 		}
 
 		require_lang('menus');
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_WRITING');
-		$GLOBALS['HELPER_PANEL_PIC']='';
+		set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
+		set_helper_panel_pic('');
 
 		if (is_null($main_news_category))
 		{
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='cat';
+			inform_non_canonical_parameter('cat');
 
 			$param_cat=get_param('cat','');
 			if ($param_cat=='')
@@ -863,8 +860,7 @@ class Module_cms_news_cat extends standard_crud_module
 		}
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),

@@ -124,7 +124,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_subcom';
+		set_helper_panel_tutorial('tut_subcom');
 
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_groups_action');

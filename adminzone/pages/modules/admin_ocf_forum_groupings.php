@@ -61,8 +61,8 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 						array('edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),
 					);
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/forums';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_forums';
+		set_helper_panel_pic('pagepics/forums');
+		set_helper_panel_tutorial('tut_forums');
 
 		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_forums:misc',do_lang_tempcode('SECTION_FORUMS'))));
 
@@ -115,8 +115,7 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),

@@ -61,8 +61,8 @@ class Module_cms_banners extends standard_crud_module
 		require_code('banners2');
 		require_lang('banners');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/banners';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_banners';
+		set_helper_panel_pic('pagepics/banners');
+		set_helper_panel_tutorial('tut_banners');
 
 		if ($type=='misc') return $this->misc();
 
@@ -204,8 +204,7 @@ class Module_cms_banners extends standard_crud_module
 		if (addon_installed('unvalidated')) $sortables['validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$hr=array(
 			do_lang_tempcode('CODENAME'),
@@ -296,8 +295,7 @@ class Module_cms_banners extends standard_crud_module
 	 */
 	function get_form_fields($name='',$image_url='',$site_url='',$caption='',$direct_code='',$notes='',$importancemodulus=3,$campaignremaining=50,$the_type=0,$expiry_date=NULL,$submitter=NULL,$validated=1,$b_type='',$title_text='')
 	{
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='b_type';
+		inform_non_canonical_parameter('b_type');
 
 		if ($b_type=='') $b_type=get_param('b_type','');
 
@@ -493,8 +491,7 @@ class Module_cms_banners_cat extends standard_crud_module
 		}
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('CODENAME'),

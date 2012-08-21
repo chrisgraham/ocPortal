@@ -104,8 +104,8 @@ class Module_admin_community_billboard extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='community_billboard';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_points';
+		set_helper_panel_pic('community_billboard');
+		set_helper_panel_tutorial('tut_points');
 
 		require_lang('community_billboard');
 		require_code('community_billboard');
@@ -168,8 +168,7 @@ class Module_admin_community_billboard extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('MESSAGE'),

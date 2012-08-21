@@ -324,7 +324,9 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 
 				$all_rating_criteria[$i]=array('NUM_RATINGS'=>integer_format($num_ratings),'RATING'=>make_string_tempcode(strval($calculated_rating)))+$all_rating_criteria[$i];
 
-				$GLOBALS['META_DATA']['rating'.(($rating_criteria['TYPE']=='')?'':('_'.$rating_criteria['TYPE']))]=strval($calculated_rating);
+				$extra_meta_data=array();
+				$extra_meta_data['rating'.(($rating_criteria['TYPE']=='')?'':('_'.$rating_criteria['TYPE']))]=strval($calculated_rating);
+				set_extra_request_metadata($extra_meta_data);
 
 				$has_ratings=true;
 			}

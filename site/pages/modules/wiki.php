@@ -329,7 +329,7 @@ class Module_wiki
 	 */
 	function run()
 	{
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=wiki&filter=';
+		set_feed_url(find_script('backend').'?mode=wiki&filter=');
 
 		$type=get_param('type','misc');
 
@@ -539,7 +539,7 @@ class Module_wiki
 
 		$menu=$this->do_menu($chain,$id,$include_expansion,count($dbposts)<300);
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$page['add_date']),
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($page['submitter']),
 			'publisher'=>'', // blank means same as creator
@@ -550,7 +550,7 @@ class Module_wiki
 			'description'=>get_translated_text($page['description']),
 			'numposts'=>strval($num_posts),
 			'image'=>find_theme_image('bigicons/wiki'),
-		);
+		));
 
 		breadcrumb_add_segment($breadcrumbs);
 		return do_template('WIKI_PAGE_SCREEN',array('_GUID'=>'1840d6934be3344c4f93a159fc737a45','TAGS'=>get_loaded_tags('wiki_pages'),'HIDE_POSTS'=>$page['hide_posts']==1,'ID'=>strval($id),'VIEWS'=>integer_format($page['wiki_views']),'STAFF_ACCESS'=>$staff_access,'DESCRIPTION'=>$description,'TITLE'=>$title,'CHILDREN'=>$children,'POSTS'=>$posts,'NUM_POSTS'=>integer_format($num_posts),'MENU'=>$menu));
@@ -625,8 +625,7 @@ class Module_wiki
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('wiki_changes','COUNT(*)',array('the_action'=>'WIKI_MAKE_POST'));
 		$_id=get_param('id',NULL);

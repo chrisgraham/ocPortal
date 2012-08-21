@@ -824,11 +824,11 @@ function do_block_hunt_file($codename,$map=NULL)
 
 	$file_base=get_file_base();
 
-	global $_REQUIRED_CODE;
+	global $REQUIRED_CODE;
 	if (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/blocks/'.$codename.'.php'))))
 	{
-		if (!isset($_REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources_custom/blocks/'.$codename.'.php');
-		$_REQUIRED_CODE['blocks/'.$codename]=1;
+		if (!isset($REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources_custom/blocks/'.$codename.'.php');
+		$REQUIRED_CODE['blocks/'.$codename]=1;
 
 		if (!isset($BLOCKS_AT_CACHE[$codename]))
 		{
@@ -838,8 +838,8 @@ function do_block_hunt_file($codename,$map=NULL)
 	}
 	elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/blocks/'.$codename.'.php'))))
 	{
-		if (!isset($_REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources/blocks/'.$codename.'.php');
-		$_REQUIRED_CODE['blocks/'.$codename]=1;
+		if (!isset($REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources/blocks/'.$codename.'.php');
+		$REQUIRED_CODE['blocks/'.$codename]=1;
 
 		if (!isset($BLOCKS_AT_CACHE[$codename]))
 		{

@@ -226,8 +226,8 @@ class Module_admin_permissions
 
 		$title=get_screen_title('ABSORB_PERMISSIONS');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/privileges';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
+		set_helper_panel_pic('pagepics/privileges');
+		set_helper_panel_tutorial('tut_permissions');
 
 		$groups_without=array();
 		$all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
@@ -276,8 +276,8 @@ class Module_admin_permissions
 
 		$title=get_screen_title('ABSORB_PERMISSIONS');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/privileges';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
+		set_helper_panel_pic('pagepics/privileges');
+		set_helper_panel_tutorial('tut_permissions');
 
 		// Although the code is from OCF, it is safe to use for other forum drivers
 		require_code('ocf_groups_action');
@@ -418,8 +418,8 @@ class Module_admin_permissions
 	 */
 	function interface_keys_access()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/matchkeysecurity';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
+		set_helper_panel_pic('pagepics/matchkeysecurity');
+		set_helper_panel_tutorial('tut_permissions');
 
 		$title=get_screen_title('PAGE_MATCH_KEY_ACCESS');
 
@@ -489,8 +489,8 @@ class Module_admin_permissions
 	 */
 	function set_keys_access()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/matchkeysecurity';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
+		set_helper_panel_pic('pagepics/matchkeysecurity');
+		set_helper_panel_tutorial('tut_permissions');
 
 		$title=get_screen_title('PAGE_MATCH_KEY_ACCESS');
 
@@ -560,8 +560,8 @@ class Module_admin_permissions
 	 */
 	function interface_page_access()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/permissionstree';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
+		set_helper_panel_pic('pagepics/permissionstree');
+		set_helper_panel_tutorial('tut_permissions');
 
 		$title=get_screen_title('PAGE_ACCESS');
 
@@ -630,8 +630,8 @@ class Module_admin_permissions
 	 */
 	function set_page_access()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/permissionstree';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
+		set_helper_panel_pic('pagepics/permissionstree');
+		set_helper_panel_tutorial('tut_permissions');
 
 		$title=get_screen_title('PAGE_ACCESS');
 
@@ -725,10 +725,10 @@ class Module_admin_permissions
 		$p_section=get_param('id',NULL);
 		if ((is_null($p_section)) || ($p_section==''))
 		{
-			$GLOBALS['HELPER_PANEL_PIC']='pagepics/privileges';
-			$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
+			set_helper_panel_pic('pagepics/privileges');
+			set_helper_panel_tutorial('tut_permissions');
 
-			$GLOBALS['HELPER_PANEL_PIC']='pagepics/privileges';
+			set_helper_panel_pic('pagepics/privileges');
 
 			$fields=new ocp_tempcode();
 			require_code('form_templates');
@@ -935,8 +935,8 @@ class Module_admin_permissions
 	{
 		require_all_lang();
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/privileges';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_permissions';
+		set_helper_panel_pic('pagepics/privileges');
+		set_helper_panel_tutorial('tut_permissions');
 
 		if ((count($_POST)==0) && (strtolower(ocp_srv('REQUEST_METHOD'))!='post')) warn_exit(do_lang_tempcode('PERMISSION_TRAGEDY_PREVENTED'));
 

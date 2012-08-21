@@ -87,8 +87,8 @@ class Module_admin_cleanup
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/cleanup';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_cleanup';
+		set_helper_panel_pic('pagepics/cleanup');
+		set_helper_panel_tutorial('tut_cleanup');
 
 		require_lang('cleanup');
 		require_code('view_modes');

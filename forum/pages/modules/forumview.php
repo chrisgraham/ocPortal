@@ -214,10 +214,9 @@ class Module_forumview
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_forumview');
 
-		global $NON_CANONICAL_PARAMS;
 		foreach (array_keys($_GET) as $key)
-			if (substr($key,0,3)=='kfs') $NON_CANONICAL_PARAMS[]=$key;
-		$NON_CANONICAL_PARAMS[]='order';
+			if (substr($key,0,3)=='kfs') inform_non_canonical_parameter($key);
+		inform_non_canonical_parameter('order');
 
 		$type=get_param('type','misc');
 
@@ -253,8 +252,7 @@ class Module_forumview
 
 		if ($type!='pt')
 		{
-			global $SEO_TITLE;
-			$SEO_TITLE=$forum_name;
+			set_short_title($forum_name);
 
 			breadcrumb_add_segment($breadcrumbs);
 		}

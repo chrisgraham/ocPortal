@@ -69,8 +69,8 @@ class Module_cms_quiz extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/quiz';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_quizzes';
+		set_helper_panel_pic('pagepics/quiz');
+		set_helper_panel_tutorial('tut_quizzes');
 
 		require_code('quiz');
 
@@ -129,8 +129,7 @@ class Module_cms_quiz extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),
@@ -215,8 +214,7 @@ class Module_cms_quiz extends standard_crud_module
 		$fields->attach(form_input_huge(do_lang_tempcode('QUESTIONS'),do_lang_tempcode('IMPORT_QUESTIONS_TEXT'),'text',$text,true));
 		if ($validated==0)
 		{
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='validated';
+			inform_non_canonical_parameter('validated');
 
 			$validated=get_param_integer('validated',0);
 			if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));

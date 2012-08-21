@@ -44,9 +44,8 @@ function init__facebook_connect()
 	if (($appsecret!='') && ($appid!=''))
 		$FACEBOOK_CONNECT=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
 
-	global $EXTRA_FOOT;
-	if (!isset($EXTRA_FOOT)) $EXTRA_FOOT=new ocp_tempcode();
-	$EXTRA_FOOT->attach(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
+	require_code('site');
+	attach_to_screen_footer(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
 }
 
 // This is only called if we know we have a user logged into Facebook, who has authorised to our app

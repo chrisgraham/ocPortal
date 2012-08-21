@@ -47,7 +47,7 @@ class Hook_phpinfo
 				if ($end!==false)
 				{
 					$style=substr($out,$offset-strlen($matches[0]),$end-$offset+strlen('</style>')+strlen($matches[0]));
-					//$GLOBALS['EXTRA_HEAD']=make_string_tempcode($style);		Not relevant due to running in OcCLE
+					//attach_to_screen_header($style);		Not relevant due to running in OcCLE
 
 					$out=substr($out,0,$offset).substr($out,$end);
 				}

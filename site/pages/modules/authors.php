@@ -100,7 +100,7 @@ class Module_authors
 	 */
 	function run()
 	{
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=authors&filter=';
+		set_feed_url(find_script('backend').'?mode=authors&filter=');
 
 		require_code('authors');
 		require_lang('authors');
@@ -136,11 +136,7 @@ class Module_authors
 		{
 			if ((has_actual_page_access(get_member(),'cms_authors')) && (has_edit_author_permission(get_member(),$author)))
 			{
-				$GLOBALS['HTTP_STATUS_CODE']='404';
-				if (!headers_sent())
-				{
-					if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
-				}
+				set_http_status_code('404');
 
 				$_author_add_url=build_url(array('page'=>'cms_authors','type'=>'_ad','author'=>$author),get_module_zone('cms_authors'));
 				$author_add_url=$_author_add_url->evaluate();

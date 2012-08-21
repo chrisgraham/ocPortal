@@ -57,8 +57,8 @@ class Module_admin_ocf_groups extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/usergroups';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_subcom';
+		set_helper_panel_pic('pagepics/usergroups');
+		set_helper_panel_tutorial('tut_subcom');
 
 		if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		require_code('ocf_groups_action');
@@ -325,8 +325,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 			list($sortable,$sort_order)=explode(' ',$current_ordering,2);
 			if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 				log_hack_attack_and_exit('ORDERBY_HACK');
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='sort';
+			inform_non_canonical_parameter('sort');
 		}
 
 		$header_row=results_field_title(array(

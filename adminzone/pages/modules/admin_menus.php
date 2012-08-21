@@ -161,8 +161,8 @@ class Module_admin_menus
 	 */
 	function get_menu_name()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/menus';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_menus';
+		set_helper_panel_pic('pagepics/menus');
+		set_helper_panel_tutorial('tut_menus');
 
 		$title=get_screen_title('MENU_MANAGEMENT');
 

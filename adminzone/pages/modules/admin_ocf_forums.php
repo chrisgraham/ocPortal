@@ -57,8 +57,8 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/forums';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_forums';
+		set_helper_panel_pic('pagepics/forums');
+		set_helper_panel_tutorial('tut_forums');
 
 		$this->add_one_label=do_lang_tempcode('ADD_FORUM');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_FORUM');
@@ -134,14 +134,12 @@ class Module_admin_ocf_forums extends standard_crud_module
 		{
 			$forum_grouping_id=get_param_integer('forum_grouping_id',db_get_first_id());
 
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='forum_grouping_id';
+			inform_non_canonical_parameter('forum_grouping_id');
 		}
 
 		if (is_null($parent_forum))
 		{
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='parent_forum';
+			inform_non_canonical_parameter('parent_forum');
 
 			$parent_forum=get_param_integer('parent_forum',NULL);
 		}

@@ -50,7 +50,8 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 		$details['name']=do_lang_tempcode('PRIVATE_TOPICS_OF',escape_html($pt_username));
 	} else
 	{
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=ocf_forumview&filter='.strval($id);
+		require_code('site');
+		set_feed_url(find_script('backend').'?mode=ocf_forumview&filter='.strval($id));
 		$details=ocf_get_forum_view($start,$max,$id);
 		$breadcrumbs=ocf_forum_breadcrumbs($id,$details['name'],$details['parent_forum']);
 
@@ -844,7 +845,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		'parent_forum'=>$forum_info[0]['f_parent_forum']
 	);
 
-	$GLOBALS['META_DATA']+=array(
+	set_extra_request_metadata(array(
 		'created'=>'',
 		'creator'=>'',
 		'publisher'=>'', // blank means same as creator
@@ -854,7 +855,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		'identifier'=>'_SEARCH:forumview:misc:'.strval($forum_id),
 		'description'=>$description_text,
 		'image'=>find_theme_image('bigicons/forums'),
-	);
+	));
 
 	// Is there a question/answer situation?
 	$question=get_translated_tempcode($forum_info[0]['f_intro_question'],$GLOBALS['FORUM_DB']);

@@ -58,8 +58,8 @@ class Module_admin_lookup
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/investigateuser';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_trace';
+		set_helper_panel_pic('pagepics/investigateuser');
+		set_helper_panel_tutorial('tut_trace');
 
 		require_lang('submitban');
 		require_lang('security');
@@ -68,7 +68,7 @@ class Module_admin_lookup
 		if (addon_installed('securitylogging'))
 		{
 			$ip_ban_url=build_url(array('page'=>'admin_ipban'),get_module_zone('admin_ipban'));
-			$GLOBALS['HELPER_PANEL_TEXT']=comcode_to_tempcode(do_lang('DOC_ACTIONLOG_BAN_HELP',$ip_ban_url->evaluate()));
+			set_helper_panel_text(comcode_to_tempcode(do_lang('DOC_ACTIONLOG_BAN_HELP',$ip_ban_url->evaluate())));
 		}
 
 		$param=get_param('param',get_param('id',''));

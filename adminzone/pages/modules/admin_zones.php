@@ -108,8 +108,8 @@ class Module_admin_zones
 	 */
 	function misc()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/zones';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
+		set_helper_panel_pic('pagepics/zones');
+		set_helper_panel_tutorial('tut_structure');
 
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('ZONES'),comcode_lang_string('DOC_ZONES'),
@@ -144,7 +144,7 @@ class Module_admin_zones
 		$id=get_param('id',''); // '' needed for short URLs
 		if ($id=='/') $id='';
 
-		$GLOBALS['EXTRA_HEAD']->attach(make_string_tempcode('<base target="_blank" />'));
+		attach_to_screen_header(make_string_tempcode('<base target="_blank" />'));
 
 		$nice_zone_name=($id=='')?do_lang('_WELCOME'):$id;
 
@@ -325,9 +325,9 @@ class Module_admin_zones
 
 		list($warning_details,$ping_url)=handle_conflict_resolution($id);
 
-		$GLOBALS['HELPER_PANEL_PIC']='';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='';
-		$GLOBALS['HELPER_PANEL_TEXT']='';
+		set_helper_panel_pic('');
+		set_helper_panel_tutorial('');
+		set_helper_panel_text(new ocp_tempcode());
 
 		return do_template('ZONE_EDITOR_SCREEN',array('_GUID'=>'3cb1aab6b16444484e82d22f2c8f1e9a','ID'=>$id,'LANG'=>$lang,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$title,'URL'=>$post_url,'LEFT_EDITOR'=>$editor['panel_left'],'RIGHT_EDITOR'=>$editor['panel_right'],'MIDDLE_EDITOR'=>$editor[$default_page]));
 	}
@@ -535,8 +535,8 @@ class Module_admin_zones
 	 */
 	function add_zone()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/zones';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
+		set_helper_panel_pic('pagepics/zones');
+		set_helper_panel_tutorial('tut_structure');
 
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
@@ -624,8 +624,8 @@ class Module_admin_zones
 	 */
 	function edit_zone($type='_edit',$title=NULL)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/zones';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
+		set_helper_panel_pic('pagepics/zones');
+		set_helper_panel_tutorial('tut_structure');
 
 		if (is_null($title)) $title=get_screen_title('EDIT_ZONE');
 
@@ -697,8 +697,8 @@ class Module_admin_zones
 
 		require_lang('themes');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/zones';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
+		set_helper_panel_pic('pagepics/zones');
+		set_helper_panel_tutorial('tut_structure');
 
 		$zone=get_param('id',''); // '' needed for short URLs
 		if ($zone=='/') $zone='';

@@ -48,8 +48,8 @@ class Module_cms_iotds extends standard_crud_module
 		require_code('iotds');
 		require_css('iotds');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/iotds';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_featured';
+		set_helper_panel_pic('pagepics/iotds');
+		set_helper_panel_tutorial('tut_featured');
 
 		$this->add_one_label=do_lang_tempcode('ADD_IOTD');
 		$this->edit_one_label=do_lang_tempcode('EDIT_OR_CHOOSE_IOTD');

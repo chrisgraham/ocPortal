@@ -61,8 +61,8 @@ class Module_cms_blogs extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/news';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_news';
+		set_helper_panel_pic('pagepics/news');
+		set_helper_panel_tutorial('tut_news');
 
 		$this->posting_form_title=do_lang_tempcode('BLOG_NEWS_ARTICLE');
 
@@ -122,8 +122,7 @@ class Module_cms_blogs extends standard_crud_module
 			$sortables['validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$fh=array();
 		$fh[]=do_lang_tempcode('TITLE');
@@ -194,12 +193,11 @@ class Module_cms_blogs extends standard_crud_module
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='validated';
+		inform_non_canonical_parameter('validated');
 
 		if (is_null($main_news_category))
 		{
-			$NON_CANONICAL_PARAMS[]='cat';
+			inform_non_canonical_parameter('cat');
 
 			$param_cat=get_param('cat','');
 			if ($param_cat=='')
@@ -303,8 +301,8 @@ class Module_cms_blogs extends standard_crud_module
 
 		require_lang('menus');
 		require_lang('zones');
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_WRITING');
-		$GLOBALS['HELPER_PANEL_PIC']='';
+		set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
+		set_helper_panel_pic('');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('id'=>intval($id)),'',1);
 		if (!array_key_exists(0,$rows))

@@ -75,8 +75,8 @@ class Module_cms_galleries extends standard_crud_module
 		require_css('galleries');
 		require_lang('dearchive');
 
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_galleries';
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/images';
+		set_helper_panel_tutorial('tut_galleries');
+		set_helper_panel_pic('pagepics/images');
 
 		$this->cat_crud_module=new Module_cms_galleries_cat();
 		$this->alt_crud_module=new Module_cms_galleries_alt();
@@ -84,8 +84,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		$this->alt_crud_module->add_text=new ocp_tempcode();
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='cat';
+		inform_non_canonical_parameter('cat');
 
 		$cat=get_param('cat','');
 		if ($cat!='')
@@ -869,9 +868,8 @@ class Module_cms_galleries extends standard_crud_module
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='cat';
-		$NON_CANONICAL_PARAMS[]='validated';
+		inform_non_canonical_parameter('cat');
+		inform_non_canonical_parameter('validated');
 
 		if ($adding)
 		{
@@ -1287,9 +1285,8 @@ class Module_cms_galleries_alt extends standard_crud_module
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='cat';
-		$NON_CANONICAL_PARAMS[]='validated';
+		inform_non_canonical_parameter('cat');
+		inform_non_canonical_parameter('validated');
 
 		$no_thumb_needed=(get_option('ffmpeg_path')!='') || (class_exists('ffmpeg_movie'));
 
@@ -1634,9 +1631,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 	{
 		list($allow_rating,$allow_comments,)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,1);
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='cat';
-		$NON_CANONICAL_PARAMS[]='validated';
+		inform_non_canonical_parameter('cat');
+		inform_non_canonical_parameter('validated');
 
 		if (is_null($flow_mode_interface))
 		{

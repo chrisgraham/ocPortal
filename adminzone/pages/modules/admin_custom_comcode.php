@@ -111,8 +111,8 @@ class Module_admin_custom_comcode extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/customcomcode';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_comcode';
+		set_helper_panel_pic('pagepics/customcomcode');
+		set_helper_panel_tutorial('tut_adv_comcode');
 
 		$this->add_one_label=do_lang_tempcode('ADD_CUSTOM_COMCODE_TAG');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_CUSTOM_COMCODE_TAG');
@@ -196,8 +196,7 @@ class Module_admin_custom_comcode extends standard_crud_module
 		),$sortables,'sort',$sortable.' '.$sort_order);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$fields=new ocp_tempcode();
 

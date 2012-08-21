@@ -66,12 +66,14 @@ function init__comcode_text()
 	// In theory, almost any tag is reversable. However these tags can be converted ROBUSTLY and hence the WYSIWYG editor can manipulate them as HTML rather than having to display as Comcode
 	// If the tag is mapped to a string that provides a regexp to say when it is NOT reversible. Usually this is done for certain parameters.
 	global $REVERSABLE_TAGS;
-	$REVERSABLE_TAGS=array('surround'=>1,'attachment_safe'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'highlight'=>1,'indent'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
-										'title'=>1,'size'=>1,'color'=>1,'font'=>1,'tt'=>1,'img'=>'#\s(rollover|refresh\_time)=#','url'=>1,'email'=>1,'upload'=>1,
-										'semihtml'=>1,'html'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
+	$REVERSABLE_TAGS=array(
+		'surround'=>1,'attachment_safe'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'highlight'=>1,'indent'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
+		'title'=>1,'size'=>1,'color'=>1,'font'=>1,'tt'=>1,'img'=>'#\s(rollover|refresh\_time)=#','url'=>1,'email'=>1,'upload'=>1,
+		'semihtml'=>1,'html'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
 
-										/*Handled in special way*/
-										'block'=>1,'contents'=>1,'concepts'=>1,'attachment'=>1,'flash'=>1,'menu'=>1,'reference'=>1,'page'=>1,'exp_thumb'=>1,'exp_ref'=>1,'thumb'=>1,'snapback'=>1,'post'=>1,'thread'=>1,'topic'=>1,'include'=>1,'random'=>1,'jumping'=>1,'shocker'=>1,);
+		/*Handled in special way*/
+		'block'=>1,'contents'=>1,'concepts'=>1,'attachment'=>1,'flash'=>1,'menu'=>1,'reference'=>1,'page'=>1,'exp_thumb'=>1,'exp_ref'=>1,'thumb'=>1,'snapback'=>1,'post'=>1,'thread'=>1,'topic'=>1,'include'=>1,'random'=>1,'jumping'=>1,'shocker'=>1,
+	);
 	// These are not reversable, but we want them WYSIWYGABLE
 	global $PUREHTML_TAGS;
 	$PUREHTML_TAGS=array(/*'attachment_safe'=>'1*/); // Actually: there is some dynamicness even in this ($KEEP and $SESSION in particular -- and we couldn't even have them preserved inside a WYSIWYG-edit)
@@ -113,7 +115,7 @@ function init__comcode_text()
 	$LEET_FILTER=NULL;
 
 	global $ALLOWED_ENTITIES;
-//	$ALLOWED_ENTITIES=array('raquo'=>1,'frac14'=>1,'frac12'=>1,'frac34'=>1,'ndash'=>1,'mdash'=>1,'ldquo'=>1,'rdquo'=>1);
+	//$ALLOWED_ENTITIES=array('raquo'=>1,'frac14'=>1,'frac12'=>1,'frac34'=>1,'ndash'=>1,'mdash'=>1,'ldquo'=>1,'rdquo'=>1);
 	$ALLOWED_ENTITIES=array('OElig'=>1,'oelig'=>1,'Scaron'=>1,'scaron'=>1,'Yuml'=>1,'circ'=>1,'tilde'=>1,'ensp'=>1,'emsp'=>1,'thinsp'=>1,'zwnj'=>1,'zwj'=>1,'lrm'=>1,'rlm'=>1,'ndash'=>1,'mdash'=>1,'lsquo'=>1,'rsquo'=>1,'sbquo'=>1,'ldquo'=>1,'rdquo'=>1,'bdquo'=>1,'dagger'=>1,'Dagger'=>1,'hellip'=>1,'permil'=>1,'lsaquo'=>1,'rsaquo'=>1,'euro'=>1,'Agrave'=>1,'Aacute'=>1,'Acirc'=>1,'Atilde'=>1,'Auml'=>1,'Aring'=>1,'AElig'=>1,'Ccedil'=>1,'Egrave'=>1,'Eacute'=>1,'Ecirc'=>1,'Euml'=>1,'Igrave'=>1,'Iacute'=>1,'Icirc'=>1,'Iuml'=>1,'ETH'=>1,'Ntilde'=>1,'Ograve'=>1,'Oacute'=>1,'Ocirc'=>1,'Otilde'=>1,'Ouml'=>1,'Oslash'=>1,'Ugrave'=>1,'Uacute'=>1,'Ucirc'=>1,'Uuml'=>1,'Yacute'=>1,'THORN'=>1,'szlig'=>1,'agrave'=>1,'aacute'=>1,'acirc'=>1,'atilde'=>1,'auml'=>1,'aring'=>1,'aelig'=>1,'ccedil'=>1,'egrave'=>1,'eacute'=>1,'ecirc'=>1,'euml'=>1,'igrave'=>1,'iacute'=>1,'icirc'=>1,'iuml'=>1,'eth'=>1,'ntilde'=>1,'ograve'=>1,'oacute'=>1,'ocirc'=>1,'otilde'=>1,'ouml'=>1,'oslash'=>1,'ugrave'=>1,'uacute'=>1,'ucirc'=>1,'uuml'=>1,'yacute'=>1,'thorn'=>1,'yuml'=>1,'nbsp'=>1,'iexcl'=>1,'curren'=>1,'cent'=>1,'pound'=>1,'yen'=>1,'brvbar'=>1,'sect'=>1,'uml'=>1,'copy'=>1,'ordf'=>1,'laquo'=>1,'not'=>1,'shy'=>1,'reg'=>1,'trade'=>1,'macr'=>1,'deg'=>1,'plusmn'=>1,'sup2'=>1,'sup3'=>1,'acute'=>1,'micro'=>1,'para'=>1,'middot'=>1,'cedil'=>1,'sup1'=>1,'ordm'=>1,'raquo'=>1,'frac14'=>1,'frac12'=>1,'frac34'=>1,'iquest'=>1,'times'=>1,'divide'=>1,'amp'=>1,'lt'=>1,'gt'=>1,'quot'=>1);
 
 	global $ADVERTISING_BANNERS;

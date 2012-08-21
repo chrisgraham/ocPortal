@@ -243,14 +243,14 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	 */
 	function install_test_load_from($path)
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		if (@file_exists($path.'/conf_global.php'))
 		{
 			if (!@file_exists($path.'/conf_shared.php')) // We can't work with ipb->site bound forums
 			{
 				@include($path.'/conf_global.php');
-				$INFO['cookie_member_id']='member_id';
-				$INFO['cookie_member_hash']='pass_hash';
+				$PROBED_FORUM_CONFIG['cookie_member_id']='member_id';
+				$PROBED_FORUM_CONFIG['cookie_member_hash']='pass_hash';
 				return true;
 			}
 		}
@@ -605,23 +605,22 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	 */
 	function find_emoticons()
 	{
-		global $EMOTICON_CACHE;
-		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
+		if (!is_null($this->EMOTICON_CACHE)) return $this->EMOTICON_CACHE;
 		$rows=$this->connection->query_select('emoticons',array('*'));
 		if (!is_array($rows)) return array(); // weird importer trouble
-		$EMOTICON_CACHE=array();
+		$this->EMOTICON_CACHE=array();
 		foreach ($rows as $myrow)
 		{
 			if (strlen($myrow['image'])>0)
 			{
 				$src=$myrow['image'];
 				if (url_is_local($src)) $src=$this->get_emo_dir().$src;
-				$EMOTICON_CACHE[$this->ipb_unescape($myrow['typed'])]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['typed']);
+				$this->EMOTICON_CACHE[$this->ipb_unescape($myrow['typed'])]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['typed']);
 			}
 		}
-		uksort($EMOTICON_CACHE,'strlen_sort');
-		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
-		return $EMOTICON_CACHE;
+		uksort($this->EMOTICON_CACHE,'strlen_sort');
+		$this->EMOTICON_CACHE=array_reverse($this->EMOTICON_CACHE);
+		return $this->EMOTICON_CACHE;
 	}
 
 	/**

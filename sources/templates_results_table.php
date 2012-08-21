@@ -49,8 +49,7 @@ function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fie
 
 	if (!is_null($sort_name))
 	{
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]=$sort_name;
+		inform_non_canonical_parameter($sort_name);
 	}
 
 	if (is_null($widths)) $widths=array();

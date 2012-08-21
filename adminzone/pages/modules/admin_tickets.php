@@ -58,8 +58,8 @@ class Module_admin_tickets
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/tickets';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_support_desk';
+		set_helper_panel_pic('pagepics/tickets');
+		set_helper_panel_tutorial('tut_support_desk');
 
 		require_lang('tickets');
 		require_css('tickets');

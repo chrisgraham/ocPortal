@@ -21,21 +21,10 @@
  */
 
 /*
-
 SQLite is a great little (but very inefficient) DB.
 You just copy a DLL into the path, and choose a filename as a database name.
 No need for presetting up, or usernames or passwords.
-
 */
-
-/**
- * Standard code module initialisation function.
- */
-function init__database__sqlite()
-{
-	global $CACHE_DB;
-	$CACHE_DB=array();
-}
 
 /**
  * Database Driver.
@@ -244,8 +233,7 @@ class Database_Static_sqlite
 	 */
 	function db_close_connections()
 	{
-		global $CACHE_DB;
-		foreach ($CACHE_DB as $db)
+		foreach ($this->cache_db as $db)
 		{
 			foreach ($db as $_db)
 			{
@@ -269,10 +257,9 @@ class Database_Static_sqlite
 	function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok=false)
 	{
 		// Potential cacheing
-		global $CACHE_DB;
-		if (isset($CACHE_DB[$db_name][$db_host]))
+		if (isset($this->cache_db[$db_name][$db_host]))
 		{
-			return $CACHE_DB[$db_name][$db_host];
+			return $this->cache_db[$db_name][$db_host];
 		}
 
 		if (!function_exists('sqlite_popen'))
@@ -301,7 +288,7 @@ class Database_Static_sqlite
 		sqlite_query($db,'BEGIN TRANSACTION');
 
 		if (!$db) fatal_exit(do_lang('CONNECT_DB_ERROR'));
-		$CACHE_DB[$db_name][$db_host]=$db;
+		$this->cache_db[$db_name][$db_host]=$db;
 		return $db;
 	}
 

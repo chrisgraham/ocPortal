@@ -66,7 +66,7 @@ class Module_admin_phpinfo
 		$GLOBALS['TITLE_CALLED']=true;
 
 		require_lang('menus');
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_PHP_INFO');
+		set_helper_panel_text(comcode_lang_string('DOC_PHP_INFO'));
 
 		ob_start();
 		phpinfo();
@@ -83,7 +83,7 @@ class Module_admin_phpinfo
 			if ($end!==false)
 			{
 				$style=substr($out,$offset-strlen($matches[0]),$end-$offset+strlen('</style>')+strlen($matches[0]));
-				//$GLOBALS['EXTRA_HEAD']=make_string_tempcode($style);		Actually this just makes an unnecessary mess
+				//attach_to_screen_header(make_string_tempcode($style));		Actually this just makes an unnecessary mess
 
 				$out=substr($out,0,$offset).substr($out,$end);
 			}

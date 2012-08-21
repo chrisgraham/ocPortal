@@ -125,16 +125,14 @@ class Module_recommend
 	{
 		require_code('form_templates');
 
-		global $EXTRA_HEAD;
-		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='page_title';
-		$NON_CANONICAL_PARAMS[]='subject';
-		$NON_CANONICAL_PARAMS[]='s_message';
-		$NON_CANONICAL_PARAMS[]='from';
-		$NON_CANONICAL_PARAMS[]='title';
-		$NON_CANONICAL_PARAMS[]='ocp';
+		inform_non_canonical_parameter('page_title');
+		inform_non_canonical_parameter('subject');
+		inform_non_canonical_parameter('s_message');
+		inform_non_canonical_parameter('from');
+		inform_non_canonical_parameter('title');
+		inform_non_canonical_parameter('ocp');
 
 		$page_title=get_param('page_title',NULL,true);
 

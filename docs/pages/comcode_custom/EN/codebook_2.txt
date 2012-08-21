@@ -149,11 +149,9 @@ In ocPortal, Javascript libraries are automatically minified to save on bandwidt
 
 [title="3"]Integrating third-party Javascript libraries[/title]
 
-If you're working on a standalone website you can just edit [tt]HEADER.tpl[/tt] to include whatever Javascript calls you like. If you're working on an addon, however, you will want to code it into your addon to insert the necessary code into [tt]<head>[/tt] dynamically. You can do this by setting [tt]$GLOBALS['EXTRA_HEAD'][/tt] to contain whatever Tempcode is required. Typical code will look like:
+If you're working on a standalone website you can just edit [tt]GLOBAL_HTML_WRAP.tpl[/tt] to include whatever Javascript calls you like. If you're working on an addon, however, you will want to code it into your addon to insert the necessary code into [tt]<head>[/tt] dynamically. You can do this by calling [tt]attach_to_screen_header[/tt] with whatever Tempcode is required. Typical code will look like:
 [code="PHP"]
-global $EXTRA_HEAD;
-if (is_null($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
-$EXTRA_HEAD->attach(make_string_tempcode('Extra code goes here'));
+attach_to_screen_header(make_string_tempcode('Extra code goes here'));
 [/code]
 
 [title="3"]Javascript event handlers[/title]

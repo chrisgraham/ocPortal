@@ -303,12 +303,11 @@ class Module_news
 		require_code('feedback');
 		require_css('news');
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='filter';
-		$NON_CANONICAL_PARAMS[]='filter_and';
-		$NON_CANONICAL_PARAMS[]='blog';
-		$NON_CANONICAL_PARAMS[]='max';
-		$NON_CANONICAL_PARAMS[]='start';
+		inform_non_canonical_parameter('filter');
+		inform_non_canonical_parameter('filter_and');
+		inform_non_canonical_parameter('blog');
+		inform_non_canonical_parameter('max');
+		inform_non_canonical_parameter('start');
 
 		$type=get_param('type','misc');
 
@@ -759,7 +758,7 @@ class Module_news
 
 		breadcrumb_set_self(get_translated_tempcode($myrow['title']));
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$myrow['date_and_time']),
 			'creator'=>$myrow['author'],
 			'publisher'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
@@ -769,7 +768,7 @@ class Module_news
 			'identifier'=>'_SEARCH:news:view:'.strval($id),
 			'image'=>$img,
 			'description'=>strip_comcode(get_translated_text($myrow['news'])),
-		);
+		));
 
 		return do_template('NEWS_ENTRY_SCREEN',array('_GUID'=>'7686b23934e22c493d4ac10ba6c475c4','ID'=>strval($id),'CATEGORY_ID'=>strval($myrow['news_category']),'BLOG'=>$blog===1,'_TITLE'=>$_title,'TAGS'=>get_loaded_tags('news'),'CATEGORIES'=>$categories,'NEWSLETTER_URL'=>$newsletter_url,'ADD_DATE_RAW'=>strval($myrow['date_and_time']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$category,'IMG'=>$img,'TITLE'=>$title,'VIEWS'=>integer_format($myrow['news_views']),'COMMENT_DETAILS'=>$comment_details,'RATING_DETAILS'=>$rating_details,'TRACKBACK_DETAILS'=>$trackback_details,'DATE'=>$date,'AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS_FULL'=>$news_full,'NEWS_FULL_PLAIN'=>$news_full_plain,'EDIT_URL'=>$edit_url,'ARCHIVE_URL'=>$archive_url,'SUBMIT_URL'=>$submit_url,'WARNING_DETAILS'=>$warning_details));
 	}

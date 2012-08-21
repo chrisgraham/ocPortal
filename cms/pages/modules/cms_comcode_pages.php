@@ -331,8 +331,7 @@ class Module_cms_comcode_pages
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),
@@ -542,10 +541,10 @@ class Module_cms_comcode_pages
 	 */
 	function _ed()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/comcode_page_edit';
+		set_helper_panel_pic('pagepics/comcode_page_edit');
 		require_lang('menus');
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_WRITING');
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_comcode_pages';
+		set_helper_panel_text(comcode_lang_string('DOC_WRITING'));
+		set_helper_panel_tutorial('tut_comcode_pages');
 
 		$simple_add=(get_param_integer('simple_add',0)==1);
 
@@ -745,8 +744,7 @@ class Module_cms_comcode_pages
 			$owner=$rows[0]['p_submitter'];
 		} else
 		{
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='parent_page';
+			inform_non_canonical_parameter('parent_page');
 
 			$validated=true;
 			$parent_page=get_param('parent_page','');
@@ -845,7 +843,7 @@ class Module_cms_comcode_pages
 
 		$title=get_screen_title($simple_add?'COMCODE_PAGE_ADD':'COMCODE_PAGE_EDIT');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/comcode_page_edit';
+		set_helper_panel_pic('pagepics/comcode_page_edit');
 
 		$file=filter_naughty(post_param('file'));
 		$lang=filter_naughty(post_param('lang'));

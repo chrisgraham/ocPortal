@@ -31,16 +31,16 @@ function adminzone_special_cases($codename)
 	if (($codename=='start') && (get_page_name()=='start') && (get_option('show_docs')!=='0'))
 	{
 		require_lang('menus');
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/ocpmainpage';
+		set_helper_panel_pic('pagepics/ocpmainpage');
 		$GLOBALS['HELPER_PANEL_HTML']=do_block('main_staff_tips');
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_ADMIN_ZONE');
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adminzone';
+		set_helper_panel_text(comcode_lang_string('DOC_ADMIN_ZONE'));
+		set_helper_panel_tutorial('tut_adminzone');
 	}
 	elseif (($codename=='netlink') && (get_page_name()=='netlink'))
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/multisitenetworking';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_NETLINK');
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_msn';
+		set_helper_panel_pic('pagepics/multisitenetworking');
+		set_helper_panel_text(comcode_lang_string('DOC_NETLINK'));
+		set_helper_panel_tutorial('tut_msn');
 	}
 */
 }

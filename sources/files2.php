@@ -28,6 +28,9 @@ function init__files2()
 	$HTTP_DOWNLOAD_SIZE=NULL;
 	$HTTP_DOWNLOAD_URL=NULL;
 	$HTTP_DOWNLOAD_MTIME=NULL;
+	/** The status code returned from the last file lookup (e.g. "200" or "404")
+	 * @global string $HTTP_MESSAGE
+	 */
 	$HTTP_MESSAGE=NULL;
 	$HTTP_MESSAGE_B=NULL;
 	$HTTP_NEW_COOKIES=NULL;

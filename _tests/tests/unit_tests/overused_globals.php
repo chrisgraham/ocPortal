@@ -22,17 +22,22 @@ class overused_globals_test_set extends ocp_test_case
 	{
 		$matches=array();
 		$found_globals=array();
+		$documented_globals=array();
+		$sanctified_globals=array();
 
 		require_code('files2');
-		$files=get_directory_contents(get_file_base());
+		$files=get_directory_contents(get_file_base(),'',true);
 		foreach ($files as $file)
 		{
-			if ((substr($file,-4)=='.php') && (!should_ignore_file($file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS)))
+			if ((substr($file,-4)=='.php') && (($file=='install.php') || (!should_ignore_file($file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS))))
 			{
 				$done_for_file=array();
 
 				$contents=file_get_contents(get_file_base().'/'.$file);
+				if ($file!='install.php')
+					if (strpos($contents,'@chdir($FILE_BASE);')!==false) continue; // Front end controller script, will have lots of globals
 
+				// global $FOO
 				$num_matches=preg_match_all('#^\s*global ([^;]*);#m',$contents,$matches);
 				for ($i=0;$i<$num_matches;$i++)
 				{
@@ -50,6 +55,7 @@ class overused_globals_test_set extends ocp_test_case
 					}
 				}
 
+				// $GLOBALS['FOO']
 				$num_matches=preg_match_all('#\$GLOBALS\[\'(\w+)\'\]#',$contents,$matches);
 				for ($i=0;$i<$num_matches;$i++)
 				{
@@ -62,14 +68,23 @@ class overused_globals_test_set extends ocp_test_case
 
 					$done_for_file[$global]=true;
 				}
+
+				// Global documentation, which makes a global 'sanctified' for use in many files
+				$num_matches=preg_match_all('#@global\s+[^\s]+\s+\$(\w+)#',$contents,$matches);
+				for ($i=0;$i<$num_matches;$i++)
+				{
+					$global=$matches[1][$i];
+					$sanctified_globals[$global]=true;
+				}
 			}
 		}
 
+		ksort($found_globals);
+
 		foreach ($found_globals as $global=>$count)
 		{
-			if (in_array($global,array('SITE_DB','FORUM_DB','FORUM_DRIVER','SITE_INFO'))) continue;
-
-			$this->assertTrue($count<5,'It is sloppy to make global variables that are commonly accessed ('.$global.', '.integer_format($count).' uses).');
+			if ((!isset($sanctified_globals[$global])) && (substr($global,-6)!='_CACHE'))
+				$this->assertTrue($count<=8,'Don\'t over-use global variables ('.$global.', '.integer_format($count).' files using).');
 		}
 	}
 }

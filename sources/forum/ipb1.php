@@ -162,14 +162,14 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	 */
 	function install_test_load_from($path)
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		if (file_exists($path.'/conf_global.php'))
 		{
 			@include($path.'/conf_global.php');
-			if (array_key_exists('cookie_id',$INFO))
+			if (array_key_exists('cookie_id',$PROBED_FORUM_CONFIG))
 			{
-				$INFO['cookie_member_id']=$INFO['cookie_id'].'member_id';
-				$INFO['cookie_member_hash']=$INFO['cookie_id'].'pass_hash';
+				$PROBED_FORUM_CONFIG['cookie_member_id']=$PROBED_FORUM_CONFIG['cookie_id'].'member_id';
+				$PROBED_FORUM_CONFIG['cookie_member_hash']=$PROBED_FORUM_CONFIG['cookie_id'].'pass_hash';
 			}
 			return true;
 		}
@@ -394,19 +394,18 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	 */
 	function find_emoticons()
 	{
-		global $EMOTICON_CACHE;
-		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
+		if (!is_null($this->EMOTICON_CACHE)) return $this->EMOTICON_CACHE;
 		$rows=$this->connection->query_select('emoticons',array('*'));
-		$EMOTICON_CACHE=array();
+		$this->EMOTICON_CACHE=array();
 		foreach ($rows as $myrow)
 		{
 			$src=$myrow['image'];
 			if (url_is_local($src)) $src=$this->get_emo_dir().$src;
-			$EMOTICON_CACHE[$this->ipb_unescape($myrow['typed'])]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['typed']);
+			$this->EMOTICON_CACHE[$this->ipb_unescape($myrow['typed'])]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['typed']);
 		}
-		uksort($EMOTICON_CACHE,'strlen_sort');
-		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
-		return $EMOTICON_CACHE;
+		uksort($this->EMOTICON_CACHE,'strlen_sort');
+		$this->EMOTICON_CACHE=array_reverse($this->EMOTICON_CACHE);
+		return $this->EMOTICON_CACHE;
 	}
 
 	/**

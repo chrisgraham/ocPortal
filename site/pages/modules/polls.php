@@ -218,7 +218,7 @@ class Module_polls
 	 */
 	function run()
 	{
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=polls&filter=';
+		set_feed_url(find_script('backend').'?mode=polls&filter=');
 
 		require_code('feedback');
 		require_code('polls');
@@ -327,7 +327,7 @@ class Module_polls
 
 		$poll_details=do_block('main_poll');
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$myrow['add_time']),
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
 			'publisher'=>'', // blank means same as creator
@@ -337,7 +337,7 @@ class Module_polls
 			'identifier'=>'_SEARCH:polls:view:'.strval($id),
 			'description'=>'',
 			'image'=>find_theme_image('bigicons/polls'),
-		);
+		));
 
 		return do_template('POLL_SCREEN',array('_GUID'=>'1463a42354c3ad154e2c6bb0c96be3b9','TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'ID'=>strval($id),'DATE_RAW'=>$date_raw,'ADD_DATE_RAW'=>$add_date_raw,'EDIT_DATE_RAW'=>$edit_date_raw,'DATE'=>$date,'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'VIEWS'=>integer_format($myrow['poll_views']),'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'POLL_DETAILS'=>$poll_details));
 	}

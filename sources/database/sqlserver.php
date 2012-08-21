@@ -21,10 +21,8 @@
  */
 
 /*
-
 Use the Enterprise Manager to get things set up.
 You need to go into your server properties and turn the security to "SQL Server and Windows"
-
 */
 
 /**
@@ -32,9 +30,6 @@ You need to go into your server properties and turn the security to "SQL Server 
  */
 function init__database__sqlserver()
 {
-	global $CACHE_DB;
-	$CACHE_DB=array();
-
 	@ini_set('mssql.textlimit','300000');
 	@ini_set('mssql.textsize','300000');
 }
@@ -45,6 +40,7 @@ function init__database__sqlserver()
  */
 class Database_Static_sqlserver
 {
+	var $cache_db=array();
 
 	/**
 	 * Get the default user for making db connections (used by the installer as a default).
@@ -167,8 +163,7 @@ class Database_Static_sqlserver
 	 */
 	function db_close_connections()
 	{
-		global $CACHE_DB;
-		$CACHE_DB=array();
+		$this->cache_db=array();
 	}
 
 	/**
@@ -291,10 +286,9 @@ class Database_Static_sqlserver
 	function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok=false)
 	{
 		// Potential cacheing
-		global $CACHE_DB;
-		if (isset($CACHE_DB[$db_name][$db_host]))
+		if (isset($this->cache_db[$db_name][$db_host]))
 		{
-			return $CACHE_DB[$db_name][$db_host];
+			return $this->cache_db[$db_name][$db_host];
 		}
 
 		if ((!function_exists('sqlsrv_connect')) && (!function_exists('mssql_pconnect')))
@@ -340,7 +334,7 @@ class Database_Static_sqlserver
 			}
 		}
 
-		$CACHE_DB[$db_name][$db_host]=$db;
+		$this->cache_db[$db_name][$db_host]=$db;
 		return $db;
 	}
 

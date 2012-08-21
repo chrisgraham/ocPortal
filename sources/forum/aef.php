@@ -124,10 +124,10 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function install_specifics()
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		$a=array();
 		$a['name']='aef_table_prefix';
-		$a['default']=array_key_exists('sql_tbl_prefix',$INFO)?$INFO['sql_tbl_prefix']:'aef_';
+		$a['default']=array_key_exists('sql_tbl_prefix',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['sql_tbl_prefix']:'aef_';
 		$a['description']=do_lang('MOST_DEFAULT');
 		$a['title']='AEF '.do_lang('TABLE_PREFIX');
 		return array($a);
@@ -141,20 +141,20 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function install_test_load_from($path)
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		if (@file_exists($path.'/universal.php'))
 		{
 			$globals=array();
 			@include($path.'/universal.php');
 			if (array_key_exists('database',$globals))
 			{
-				$INFO['sql_database']=$globals['database'];
-				$INFO['sql_user']=$globals['user'];
-				$INFO['sql_pass']=$globals['password'];
-				$INFO['board_url']=$globals['url'];
-				$INFO['sql_tbl_prefix']=$globals['dbprefix'];
-				$INFO['cookie_member_id']=$globals['cookie_name'].'[loguid]';
-				$INFO['cookie_member_hash']=$globals['cookie_name'].'[logpass]';
+				$PROBED_FORUM_CONFIG['sql_database']=$globals['database'];
+				$PROBED_FORUM_CONFIG['sql_user']=$globals['user'];
+				$PROBED_FORUM_CONFIG['sql_pass']=$globals['password'];
+				$PROBED_FORUM_CONFIG['board_url']=$globals['url'];
+				$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$globals['dbprefix'];
+				$PROBED_FORUM_CONFIG['cookie_member_id']=$globals['cookie_name'].'[loguid]';
+				$PROBED_FORUM_CONFIG['cookie_member_hash']=$globals['cookie_name'].'[logpass]';
 			}
 			return true;
 		}
@@ -929,20 +929,19 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function find_emoticons()
 	{
-		global $EMOTICON_CACHE;
-		if (!is_null($EMOTICON_CACHE)) return $EMOTICON_CACHE;
+		if (!is_null($this->EMOTICON_CACHE)) return $this->EMOTICON_CACHE;
 		$rows=$this->connection->query_select('smileys',array('*'));
-		$EMOTICON_CACHE=array();
+		$this->EMOTICON_CACHE=array();
 		foreach ($rows as $myrow)
 		{
 			$src=$myrow['smfile'];
 			$smfolder=$myrow['smfolder'];
 			if (url_is_local($src)) $src=$this->get_emo_dir().$smfolder.'/'.$src;
-			$EMOTICON_CACHE[$myrow['smcode']]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['smcode']);
+			$this->EMOTICON_CACHE[$myrow['smcode']]=array('EMOTICON_IMG_CODE_DIR',$src,$myrow['smcode']);
 		}
-		uksort($EMOTICON_CACHE,'strlen_sort');
-		$EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
-		return $EMOTICON_CACHE;
+		uksort($this->EMOTICON_CACHE,'strlen_sort');
+		$this->EMOTICON_CACHE=array_reverse($this->EMOTICON_CACHE);
+		return $this->EMOTICON_CACHE;
 	}
 
 	/**

@@ -98,13 +98,13 @@ class Hook_smf
 		if (!file_exists($file_base.'/Settings.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('Settings.php')));
 		require($file_base.'/Settings.php');
-		$INFO=array();
-		$INFO['sql_database']=$db_name;
-		$INFO['sql_user']=$db_user;
-		$INFO['sql_pass']=$db_passwd;
-		$INFO['sql_tbl_prefix']=$db_prefix;
+		$PROBED_FORUM_CONFIG=array();
+		$PROBED_FORUM_CONFIG['sql_database']=$db_name;
+		$PROBED_FORUM_CONFIG['sql_user']=$db_user;
+		$PROBED_FORUM_CONFIG['sql_pass']=$db_passwd;
+		$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$db_prefix;
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
 	}
 
 	/**
@@ -233,7 +233,7 @@ class Hook_smf
 
 		}
 
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 
 		foreach ($config_remapping as $key=>$value)
 		{
@@ -245,7 +245,7 @@ class Hook_smf
 				set_value('timezone',str_replace('Etc/GMT+','',$value));
 			}
 
-			$INFO[$key]=$row;
+			$PROBED_FORUM_CONFIG[$key]=$row;
 		}
 
 		$groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list();
@@ -256,8 +256,8 @@ class Hook_smf
 			$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_attachments_per_post'=>$additional_data['maxattachments'],'g_max_avatar_width'=>$additional_data['avatar_max_width'],'g_max_avatar_height'=>$additional_data['avatar_max_height']),array('id'=>$id),'',1);
 		}
 
-		$INFO['board_prefix']=$boardurl;
-		$INFO['user_cookie']=$cookiename;
+		$PROBED_FORUM_CONFIG['board_prefix']=$boardurl;
+		$PROBED_FORUM_CONFIG['user_cookie']=$cookiename;
 	}
 
 	/**
@@ -272,16 +272,16 @@ class Hook_smf
 		require($file_base.'/Settings.php');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'settings WHERE '.db_string_equal_to('variable','avatar_max_width_upload').' OR '.db_string_equal_to('variable','avatar_max_height_upload'));
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 		foreach ($rows as $row)
 		{
 			$key=$row['variable'];
 			$val=$row['value'];
-			$INFO[$key]=$val;
+			$PROBED_FORUM_CONFIG[$key]=$val;
 		}
 
-		$avatar_max_width=$INFO['avatar_max_width_upload'];
-		$avatar_max_height=$INFO['avatar_max_height_upload'];
+		$avatar_max_width=$PROBED_FORUM_CONFIG['avatar_max_width_upload'];
+		$avatar_max_height=$PROBED_FORUM_CONFIG['avatar_max_height_upload'];
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'membergroups ORDER BY ID_GROUP');
 		foreach ($rows as $row)

@@ -30,7 +30,13 @@ function init__database()
 	global $QUERY_LIST,$QUERY_COUNT,$NO_QUERY_LIMIT,$NO_DB_SCOPE_CHECK,$QUERY_FILE_LOG,$SITE_INFO;
 	$QUERY_LIST=array();
 	$QUERY_COUNT=0;
+	/** Disable the query limit that operates during development mode
+	 * @global boolean $NO_QUERY_LIMIT
+	 */
 	$NO_QUERY_LIMIT=false;
+	/** Disable the database driver scope check that operates during development mode
+	 * @global boolean $NO_DB_SCOPE_CHECK
+	 */
 	$NO_DB_SCOPE_CHECK=false;
 	if (((!isset($SITE_INFO['no_extra_logs'])) || ($SITE_INFO['no_extra_logs']=='0')) && (is_file(get_custom_file_base().'/data_custom/queries.log')))
 	{
@@ -49,7 +55,11 @@ function init__database()
 	$TABLE_LANG_FIELDS=array();
 	if ((array_key_exists('db_site',$SITE_INFO)) || (array_key_exists('db_site_user',$SITE_INFO)))
 	{
-		$GLOBALS['SITE_DB']=new database_driver(get_db_site(),get_db_site_host(),get_db_site_user(),get_db_site_password(),get_table_prefix());
+		global $SITE_DB;
+		/** The connection to the active site database.
+		 * @global object $SITE_DB
+		 */
+		$SITE_DB=new database_driver(get_db_site(),get_db_site_host(),get_db_site_user(),get_db_site_password(),get_table_prefix());
 	}
 
 	// Limits (we also limit field names to not conflict with keywords - those defined in database_action.php)
@@ -892,6 +902,7 @@ class database_driver
 		{
 			fb('Query: '.$query);
 		}
+
 		if (($QUERY_COUNT==68) && (get_param_integer('keep_no_query_limit',0)==0) && (count($_POST)==0) && (get_page_name()!='admin_importer') && ($IN_MINIKERNEL_VERSION==0) && (get_param('special_page_type','')!='query'))
 		{
 			$NO_QUERY_LIMIT=true;

@@ -44,8 +44,8 @@ function init__site()
 	$REFRESH_URL[0]='';
 	$REFRESH_URL[1]=0;
 	$FORCE_META_REFRESH=false;
-	if (!isset($EXTRA_HEAD)) $EXTRA_HEAD=new ocp_tempcode();
-	if (!isset($EXTRA_FOOT)) $EXTRA_FOOT=new ocp_tempcode();
+	$EXTRA_HEAD=new ocp_tempcode();
+	$EXTRA_FOOT=new ocp_tempcode();
 	$QUICK_REDIRECT=false;
 
 	global $FEED_URL,$FEED_URL_2;
@@ -71,10 +71,10 @@ function init__site()
 	$LATE_ATTACHED_MESSAGES_RAW=array();
 
 	// We may fill these in from the code, or we may not
-	global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SEO_TITLE;
+	global $SEO_KEYWORDS,$SEO_DESCRIPTION,$SHORT_TITLE;
 	$SEO_KEYWORDS=NULL;
 	$SEO_DESCRIPTION=NULL;
-	$SEO_TITLE=NULL;
+	$SHORT_TITLE=NULL;
 
 	global $PAGE_STRING,$LAST_COMCODE_PARSED_TITLE;
 	$PAGE_STRING=NULL;
@@ -104,6 +104,9 @@ function init__site()
 	global $ZONE,$RELATIVE_PATH;
 	$zone=get_zone_name();
 	$real_zone=(($RELATIVE_PATH=='_tests') || ($RELATIVE_PATH=='data') || ($RELATIVE_PATH=='data_custom'))?get_param('zone',''):$zone;
+	/** A map of the current zone that is running.
+	 * @global array $ZONE
+	 */
 	$ZONE=persistent_cache_get(array('ZONE',$real_zone));
 
 	if ($ZONE===NULL)
@@ -164,8 +167,8 @@ function init__site()
 
 		if ((!headers_sent()) && (running_script('index')) && ($GLOBALS['NON_PAGE_SCRIPT']==0) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
 		{
-			$GLOBALS['HTTP_STATUS_CODE']='301';
-			header('HTTP/1.0 301 Moved Permanently');
+			set_http_status_code('301');
+			header('HTTP/1.0 301 Moved Permanently'); // Direct ascending for short URLs - not possible, so should give 404's to avoid indexing
 			header('Location: '.get_self_url(true));
 			exit();
 		}
@@ -174,8 +177,7 @@ function init__site()
 	// Search engine having session in URL, we don't like this
 	if ((get_bot_type()!==NULL) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
 	{
-		$GLOBALS['HTTP_STATUS_CODE']='301';
-		header('HTTP/1.0 301 Moved Permanently');
+		set_http_status_code('301');
 		header('Location: '.get_self_url(true,false,array('keep_session'=>NULL,'keep_print'=>NULL)));
 		exit();
 	}
@@ -225,6 +227,39 @@ function init__site()
 			if (get_page_name()!='login') access_denied('ZONE_ACCESS',$ZONE['zone_name'],true);
 		}
 	}
+}
+
+/**
+ * Attach some XHTML to the screen header.
+ *
+ * @param  mixed			XHTML to attach (Tempcode or string)
+ */
+function attach_to_screen_header($data)
+{
+	global $EXTRA_HEAD;
+	$EXTRA_HEAD->attach($data);
+}
+
+/**
+ * Attach some XHTML to the screen footer.
+ *
+ * @param  mixed			XHTML to attach (Tempcode or string)
+ */
+function attach_to_screen_footer($data)
+{
+	global $EXTRA_FOOT;
+	$EXTRA_FOOT->attach($data);
+}
+
+/**
+ * Mark another parameter non-canonical, so that Google won't consider it when indexing URLs.
+ *
+ * @param  ID_TEXT		Parameter name
+ */
+function inform_non_canonical_parameter($param)
+{
+	global $NON_CANONICAL_PARAMS;
+	$NON_CANONICAL_PARAMS[]=$param;
 }
 
 /**
@@ -497,6 +532,61 @@ function breadcrumb_set_self($title)
 }
 
 /**
+ * Set the feed (RSS/Atom) URL.
+ *
+ * @param  URLPATH		The URL
+ */
+function set_feed_url($url)
+{
+	global $FEED_URL;
+	$FEED_URL=$url;
+}
+
+/**
+ * Set the helper panel text.
+ *
+ * @param  tempcode		The text
+ */
+function set_helper_panel_text($text)
+{
+	global $HELPER_PANEL_TEXT;
+	$HELPER_PANEL_TEXT=$text;
+}
+
+/**
+ * Set the helper panel tutorial.
+ *
+ * @param  ID_TEXT		The page name of the tutorial (must be an existing one on the brand site, i.e. ocPortal.com)
+ */
+function set_helper_panel_tutorial($tutorial)
+{
+	global $HELPER_PANEL_TUTORIAL;
+	$HELPER_PANEL_TUTORIAL=$tutorial;
+}
+
+/**
+ * Set the helper panel picture.
+ *
+ * @param  ID_TEXT		Theme image code
+ */
+function set_helper_panel_pic($pic)
+{
+	global $HELPER_PANEL_PIC;
+	$HELPER_PANEL_PIC=$pic;
+}
+
+/**
+ * Sets the short title, used for screen header text if set.
+ *
+ * @param  string			The short title
+ */
+function set_short_title($title)
+{
+	global $SHORT_TITLE;
+	$SHORT_TITLE=($title=='')?NULL:$title;
+}
+
+/**
  * This is it - the start of rendering of a website page.
  * Take in all inputs, sends them to the correct functions to process, gathers up all the outputs, sticks them together and echoes them.
  */
@@ -627,11 +717,7 @@ function do_site()
 	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 	if (($middle===NULL) || ($middle->is_definitely_empty()))
 	{
-		$GLOBALS['HTTP_STATUS_CODE']='404';
-		if (!headers_sent())
-		{
-			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
-		}
+		set_http_status_code('404');
 
 		$title=get_screen_title('ERROR_OCCURRED');
 		$text=do_lang_tempcode('NO_PAGE_OUTPUT');
@@ -1155,20 +1241,14 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 	if ($zone=='' && $codename=='404')
 	{
-		global $EXTRA_HEAD;
-		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-		$GLOBALS['HTTP_STATUS_CODE']='404';
-		if (!headers_sent())
-		{
-			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
-		}
+		set_http_status_code('404');
 	}
 
 	if ((($is_panel) || ($codename[0]=='_')) && (get_page_name()==$codename))
 	{
-		global $EXTRA_HEAD;
-		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 	}
 
 	if ($zone=='adminzone')
@@ -1179,7 +1259,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 	if ($codename=='sitemap')
 	{
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=comcode_pages&filter='.$zone;
+		set_feed_url(find_script('backend').'?mode=comcode_pages&filter='.$zone);
 	}
 
 	global $PAGE_STRING,$COMCODE_PARSE_TITLE,$LAST_COMCODE_PARSED_TITLE;
@@ -1332,7 +1412,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		$comcode_breadcrumbs=comcode_breadcrumbs($codename,$zone,get_param('root',''),($comcode_page_row['p_parent_page']=='') || !has_privilege(get_member(),'open_virtual_roots'));
 		breadcrumb_add_segment($comcode_breadcrumbs);
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$comcode_page_row['p_add_date']),
 			'creator'=>(is_guest($comcode_page_row['p_submitter']))?'':$GLOBALS['FORUM_DRIVER']->get_username($comcode_page_row['p_submitter']),
 			'publisher'=>'', // blank means same as creator
@@ -1341,7 +1421,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 			'title'=>$title_to_use,
 			'identifier'=>$zone.':'.$codename,
 			'description'=>'',
-		);
+		));
 	}
 
 	if (($html->is_definitely_empty()) && ($is_panel)) return $html;

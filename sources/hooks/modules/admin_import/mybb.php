@@ -102,13 +102,13 @@ class Hook_mybb
 		if (!file_exists($file_base.'/inc/config.php'))
 			warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('inc/config.php')));
 		require($file_base.'/inc/config.php');
-		$INFO=array();
-		$INFO['sql_database']=$config['database']['database'];
-		$INFO['sql_user']=$config['database']['username'];
-		$INFO['sql_pass']=$config['database']['password'];
-		$INFO['sql_tbl_prefix']=$config['database']['table_prefix'];
+		$PROBED_FORUM_CONFIG=array();
+		$PROBED_FORUM_CONFIG['sql_database']=$config['database']['database'];
+		$PROBED_FORUM_CONFIG['sql_user']=$config['database']['username'];
+		$PROBED_FORUM_CONFIG['sql_pass']=$config['database']['password'];
+		$PROBED_FORUM_CONFIG['sql_tbl_prefix']=$config['database']['table_prefix'];
 
-		return array($INFO['sql_database'],$INFO['sql_user'],$INFO['sql_pass'],$INFO['sql_tbl_prefix']);
+		return array($PROBED_FORUM_CONFIG['sql_database'],$PROBED_FORUM_CONFIG['sql_user'],$PROBED_FORUM_CONFIG['sql_pass'],$PROBED_FORUM_CONFIG['sql_tbl_prefix']);
 	}
 
 	/**
@@ -233,7 +233,7 @@ class Hook_mybb
 			}
 		}
 
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 
 		foreach ($config_remapping as $key=>$value)
 		{
@@ -246,7 +246,7 @@ class Hook_mybb
 				set_value('timezone',$value);
 			}
 
-			$INFO[$key]=$value;
+			$PROBED_FORUM_CONFIG[$key]=$value;
 		}
 
 		foreach ($page_remap as $to)
@@ -268,8 +268,8 @@ class Hook_mybb
 			set_privilege($id,'use_quick_reply',$additional_data['quickreply']);
 		}
 
-		$INFO['board_prefix']=$board_url;
-		$INFO['user_cookie']='mybbuser';
+		$PROBED_FORUM_CONFIG['board_prefix']=$board_url;
+		$PROBED_FORUM_CONFIG['user_cookie']='mybbuser';
 	}
 
 	/**
@@ -284,15 +284,15 @@ class Hook_mybb
 		require($file_base.'/inc/config.php');
 
 		$rows=$db->query_select('settings');
-		$INFO=array();
+		$PROBED_FORUM_CONFIG=array();
 		foreach ($rows as $row)
 		{
 			$key=$row['name'];
 			$val=$row['value'];
-			$INFO[$key]=$val;
+			$PROBED_FORUM_CONFIG[$key]=$val;
 		}
 
-		$avatar_dimensions=explode('x',$INFO['postmaxavatarsize']);
+		$avatar_dimensions=explode('x',$PROBED_FORUM_CONFIG['postmaxavatarsize']);
 		if (isset($avatar_dimensions[0])&&isset($avatar_dimensions[1])&&(!is_null($avatar_dimensions[0]))&&(!is_null($avatar_dimensions[1])))
 		{
 			$avatar_max_width=intval($avatar_dimensions[0]);

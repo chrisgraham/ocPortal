@@ -146,8 +146,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	// Find order field from environment (assuming $_order_by not passed in), and decode to $order_by/$direction which are semantically quite different
 	if ($do_sorting)
 	{
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='order';
+		inform_non_canonical_parameter('order');
 
 		if (is_null($_order_by))
 			$_order_by=get_param('order','');
@@ -1423,9 +1422,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 	}
 
 	require_code('images');	
-
 	require_css('catalogues');	
-
 	require_lang('catalogues');
 
 	$entries=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id'=>$id),'',1);
@@ -1438,7 +1435,8 @@ function render_catalogue_entry_screen($id,$no_title=false)
 	$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$entry['cc_id']),'',1);
 	if (!array_key_exists(0,$categories)) warn_exit(do_lang_tempcode('CAT_NOT_FOUND',strval($entry['cc_id'])));
 	$category=$categories[0];
-	$GLOBALS['FEED_URL']=find_script('backend').'?mode=catalogues&filter='.strval($entry['cc_id']);
+	require_code('site');
+	set_feed_url(find_script('backend').'?mode=catalogues&filter='.strval($entry['cc_id']));
 
 	$catalogue_name=$category['c_name'];
 	$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
@@ -1542,7 +1540,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 	breadcrumb_add_segment($map['BREADCRUMBS'],protect_from_escaping('<span>'.$title_to_use->evaluate().'</span>'));
 	if (is_null($root)) breadcrumb_set_parents(array(array('_SELF:_SELF:misc'.($ecommerce?':ecommerce=1':''),do_lang('CATALOGUES'))));
 
-	$GLOBALS['META_DATA']+=array(
+	set_extra_request_metadata(array(
 		'created'=>date('Y-m-d',$entry['ce_add_date']),
 		'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($entry['ce_submitter']),
 		'publisher'=>'', // blank means same as creator
@@ -1551,7 +1549,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 		'title'=>$title_to_use_2,
 		'identifier'=>'_SEARCH:catalogues:entry:'.strval($id),
 		'description'=>'',
-	);
+	));
 
 	return do_template('CATALOGUE_'.$tpl_set.'_ENTRY_SCREEN',$map,NULL,false,'CATALOGUE_DEFAULT_ENTRY_SCREEN');
 }

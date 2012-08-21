@@ -121,8 +121,8 @@ class Module_admin_awards extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/awards';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_featured';
+		set_helper_panel_pic('pagepics/awards');
+		set_helper_panel_tutorial('tut_featured');
 
 		require_code('awards');
 
@@ -183,8 +183,7 @@ class Module_admin_awards extends standard_crud_module
 			$sortables['a_points']=do_lang_tempcode('POINTS');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title($hr,$sortables,'sort',$sortable.' '.$sort_order);
 

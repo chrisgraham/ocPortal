@@ -142,8 +142,7 @@ class Block_main_activities
 
 		$content=array();
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='act_start';
+		inform_non_canonical_parameter('act_start');
 
 		$start=get_param_integer('act_start',0);
 		$max=get_param_integer('act_max',intval($map['max']));

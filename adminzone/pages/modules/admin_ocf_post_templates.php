@@ -53,8 +53,8 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/posttemplates';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_forum_helpdesk';
+		set_helper_panel_pic('pagepics/posttemplates');
+		set_helper_panel_tutorial('tut_forum_helpdesk');
 
 		$this->add_one_label=do_lang_tempcode('ADD_POST_TEMPLATE');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_POST_TEMPLATE');
@@ -104,8 +104,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('TITLE'),

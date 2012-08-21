@@ -60,8 +60,8 @@ class Module_admin_setupwizard
 	{
 		$type=get_param('type','misc');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/configwizard';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_configuration';
+		set_helper_panel_pic('pagepics/configwizard');
+		set_helper_panel_tutorial('tut_configuration');
 
 		require_lang('config');
 

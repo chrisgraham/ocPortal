@@ -53,8 +53,8 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 	 */
 	function run_start($type)
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/emoticons';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_emoticons';
+		set_helper_panel_pic('pagepics/emoticons');
+		set_helper_panel_tutorial('tut_emoticons');
 
 		$this->add_one_label=do_lang_tempcode('ADD_EMOTICON');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_EMOTICON');

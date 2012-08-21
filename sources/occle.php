@@ -1277,7 +1277,7 @@ class virtual_bash
 			}
 
 			ocp_setcookie('occle_state',serialize($occle_state_diff));
-			ocp_setcookie('occle_state_code',serialize(array_keys($GLOBALS['_REQUIRED_CODE'])));
+			ocp_setcookie('occle_state_code',serialize(array_keys($GLOBALS['REQUIRED_CODE'])));
 			ocp_setcookie('occle_state_lang',serialize(array_keys($GLOBALS['LANGS_REQUESTED'])));
 		}
 		else

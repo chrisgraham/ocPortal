@@ -394,7 +394,7 @@ class Module_chat
 
 		// Generic stuff: Title, feed URL
 		$title=get_screen_title('CHAT_LOBBY');
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=chat&filter=';
+		set_feed_url(find_script('backend').'?mode=chat&filter=');
 
 		// Rooms
 		$rows=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('is_im'=>0),'ORDER BY room_name DESC',200);
@@ -505,7 +505,7 @@ class Module_chat
 		$prefs=@$_COOKIE['ocp_chat_prefs'];
 		$prefs=@explode(';',$prefs);
 		$room_id=get_param_integer('id',1);
-		$GLOBALS['FEED_URL']=find_script('backend').'?mode=chat&filter='.strval($room_id);
+		set_feed_url(find_script('backend').'?mode=chat&filter='.strval($room_id));
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','allow_list','allow_list_groups','disallow_list','disallow_list_groups','room_owner'),array('id'=>$room_id),'',1);
 		if (!array_key_exists(0,$room_check))
 		{

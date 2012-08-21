@@ -48,8 +48,7 @@ function init__templates_pagination()
  */
 function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_rows,$root=NULL,$type=NULL,$keep_all=false,$keep_post=false,$max_page_links=7,$_selectors=NULL,$hash='')
 {
-	global $NON_CANONICAL_PARAMS;
-	$NON_CANONICAL_PARAMS[]=$max_name;
+	inform_non_canonical_parameter($max_name);
 
 	$post_array=array();
 	if ($keep_post)

@@ -48,10 +48,10 @@ class forum_driver_vb22 extends forum_driver_vb_shared
 	 */
 	function install_specifics()
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		$a=array();
 		$a['name']='vb_table_prefix';
-		$a['default']=array_key_exists('prefix',$INFO)?$INFO['prefix']:'';
+		$a['default']=array_key_exists('prefix',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['prefix']:'';
 		$a['description']=do_lang('MOST_DEFAULT');
 		$a['title']='VB '.do_lang('TABLE_PREFIX');
 		return array($a);
@@ -65,19 +65,19 @@ class forum_driver_vb22 extends forum_driver_vb_shared
 	 */
 	function install_test_load_from($path)
 	{
-		global $INFO;
+		global $PROBED_FORUM_CONFIG;
 		if (@file_exists($path.'/admin/config.php'))
 		{
 			$dbname='';
 			$dbusername='';
 			$dbpassword='';
 			@include($path.'/admin/config.php');
-			$INFO['sql_database']=$dbname;
-			$INFO['sql_user']=$dbusername;
-			$INFO['sql_pass']=$dbpassword;
-			$INFO['cookie_member_id']='bbuserid';
-			$INFO['cookie_member_hash']='bbpassword';
-			$INFO['board_url']='';
+			$PROBED_FORUM_CONFIG['sql_database']=$dbname;
+			$PROBED_FORUM_CONFIG['sql_user']=$dbusername;
+			$PROBED_FORUM_CONFIG['sql_pass']=$dbpassword;
+			$PROBED_FORUM_CONFIG['cookie_member_id']='bbuserid';
+			$PROBED_FORUM_CONFIG['cookie_member_hash']='bbpassword';
+			$PROBED_FORUM_CONFIG['board_url']='';
 			return true;
 		}
 		return false;

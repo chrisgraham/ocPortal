@@ -108,9 +108,9 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 
 		require_lang('ocf_welcome_emails');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/welcome_emails';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_members';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_WELCOME_EMAIL_PREVIEW');
+		set_helper_panel_pic('pagepics/welcome_emails');
+		set_helper_panel_tutorial('tut_members');
+		set_helper_panel_text(comcode_lang_string('DOC_WELCOME_EMAIL_PREVIEW'));
 
 		require_code('ocf_general_action');
 		require_code('ocf_general_action2');
@@ -211,8 +211,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$header_row=results_field_title(array(
 			do_lang_tempcode('NAME'),

@@ -302,11 +302,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 
 	if (!running_script('comcode_convert')) // Don't want it running in background
 	{
-		$GLOBALS['HTTP_STATUS_CODE']='400';
-		if (!headers_sent())
-		{
-			if (/*(!browser_matches('ie')) && */(strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 400 Bad Request');
-		}
+		set_http_status_code('400');
 	}
 
 	// Output our error / correction form

@@ -55,10 +55,12 @@ function init__tempcode()
 	$LOADED_TPL_CACHE=array();
 
 	global $RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED,$RECORD_TEMPLATES_TREE,$POSSIBLY_IN_SAFE_MODE,$SCREEN_TEMPLATE_CALLED,$TITLE_CALLED;
-	$SCREEN_TEMPLATE_CALLED=false;
 	$RECORD_TEMPLATES_USED=false;
 	$RECORDED_TEMPLATES_USED=array();
 	$RECORD_TEMPLATES_TREE=false;
+	/** The name of a template that was called to render the current screen (NULL: not rendering a screen), auto-populated within the template system. This is tracked during dev mode to confirm that each screen really does wrap itself in a proper screen template.
+	 * @global ?ID_TEXT $SCREEN_TEMPLATE_CALLED
+	 */
 	$SCREEN_TEMPLATE_CALLED=NULL;
 	$TITLE_CALLED=false;
 	$POSSIBLY_IN_SAFE_MODE=(get_param_integer('keep_safe_mode',0)==1);

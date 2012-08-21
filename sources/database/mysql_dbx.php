@@ -23,22 +23,13 @@
 require_code('database/shared/mysql');
 
 /**
- * Standard code module initialisation function.
- */
-function init__database__mysql_dbx()
-{
-	global $CACHE_DB;
-	$CACHE_DB=array();
-	global $LAST_SELECT_DB;
-	$LAST_SELECT_DB=NULL;
-}
-
-/**
  * Database Driver.
  * @package		core_database_drivers
  */
 class Database_Static_mysql_dbx extends Database_super_mysql
 {
+	var $cache_db=array();
+	var $last_select_db=NULL;
 
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
@@ -65,9 +56,8 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 		}
 
 		// Potential cacheing
-		global $CACHE_DB;
 		$x=serialize(array($db_name,$db_host));
-		if (array_key_exists($x,$CACHE_DB))
+		if (array_key_exists($x,$this->cache_db))
 		{
 			return array($x,$db_name);
 		}
@@ -83,8 +73,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 			}
 			critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR')); // purposely not ===false
 		}
-		global $LAST_SELECT_DB;
-		$LAST_SELECT_DB=$db;
+		$this->last_select_db=$db;
 
 		global $SITE_INFO;
 		if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';
@@ -103,9 +92,8 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 	 */
 	function db_escape_string($string)
 	{
-		global $LAST_SELECT_DB;
-		if (is_null($LAST_SELECT_DB)) return addslashes($string);
-		return dbx_escape_string($LAST_SELECT_DB,$string);
+		if (is_null($this->last_select_db)) return addslashes($string);
+		return dbx_escape_string($this->last_select_db,$string);
 	}
 
 	/**

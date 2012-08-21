@@ -447,8 +447,8 @@ class Module_admin_config
 	 */
 	function config_choose()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/config';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_configuration';
+		set_helper_panel_pic('pagepics/config');
+		set_helper_panel_tutorial('tut_adv_configuration');
 
 		$title=get_screen_title('CONFIGURATION');
 
@@ -480,8 +480,8 @@ class Module_admin_config
 	{
 		require_javascript('javascript_validation');
 
-		/*$GLOBALS['HELPER_PANEL_PIC']='pagepics/config';		Actually let's save the space
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_configuration';*/
+		/*set_helper_panel_pic('pagepics/config');		Actually let's save the space
+		set_helper_panel_tutorial('tut_adv_configuration');*/
 
 		$page=get_param('id');
 		$title=get_screen_title(do_lang_tempcode('CONFIG_CATEGORY_'.$page),false);
@@ -944,8 +944,8 @@ class Module_admin_config
 	 */
 	function xml_fields()
 	{
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_fields_filter';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_FIELD_FILTERS');
+		set_helper_panel_tutorial('tut_fields_filter');
+		set_helper_panel_text(comcode_lang_string('DOC_FIELD_FILTERS'));
 
 		$title=get_screen_title('FIELD_FILTERS');
 
@@ -981,8 +981,8 @@ class Module_admin_config
 	 */
 	function xml_breadcrumbs()
 	{
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_structure';
-		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_BREADCRUMB_OVERRIDES');
+		set_helper_panel_tutorial('tut_structure');
+		set_helper_panel_text(comcode_lang_string('DOC_BREADCRUMB_OVERRIDES'));
 
 		$title=get_screen_title('BREADCRUMB_OVERRIDES');
 

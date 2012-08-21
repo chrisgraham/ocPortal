@@ -50,6 +50,9 @@ function initialise_special_page_types($special_page_type)
 	elseif (substr($special_page_type,0,12)=='lang_content')
 	{
 		global $RECORD_LANG_STRINGS_CONTENT;
+		/** A marker indicating whether all referenced content language strings need to be collected, so that the contextual editor knows what was used to generate the screen.
+		 * @global boolean $RECORD_LANG_STRINGS_CONTENT
+		 */
 		$RECORD_LANG_STRINGS_CONTENT=true;
 	}
 	elseif (substr($special_page_type,0,4)=='lang')
@@ -128,7 +131,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 
 		$file_links=new ocp_tempcode();
 
-		global $JAVASCRIPTS,$CSSS,$_REQUIRED_CODE,$LANGS_REQUESTED;
+		global $JAVASCRIPTS,$CSSS,$REQUIRED_CODE,$LANGS_REQUESTED;
 		/*foreach (array_keys($JAVASCRIPTS) as $name)	Already in list of templates
 		{
 			$txtmte_url='txmt://open?url=file://'.$name;
@@ -144,7 +147,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 				$file_links->attach(do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'c3d6bdf723918aae23541d91ebf09f0b','DISPLAY_STRING'=>'(CSS)','URL'=>$txtmte_url,'NAME'=>$name.'.css')));
 			}
 		}
-		foreach (array_keys($_REQUIRED_CODE) as $name)
+		foreach (array_keys($REQUIRED_CODE) as $name)
 		{
 			$path_a=get_file_base().'/'.((strpos($name,'.php')===false)?('/sources_custom/'.$name.'.php'):$name);
 			$path_b=get_file_base().'/'.((strpos($name,'.php')===false)?('/sources/'.$name.'.php'):str_replace('_custom','',$name));

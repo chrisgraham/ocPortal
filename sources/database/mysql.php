@@ -23,23 +23,13 @@
 require_code('database/shared/mysql');
 
 /**
- * Standard code module initialisation function.
- * @package		core_database_drivers
- */
-function init__database__mysql()
-{
-	global $LAST_SELECT_DB;
-	$LAST_SELECT_DB=NULL;
-	global $CACHE_DB;
-	$CACHE_DB=array();
-}
-
-/**
  * Database Driver.
  * @package		core_database_drivers
  */
 class Database_Static_mysql extends Database_super_mysql
 {
+	var $cache_db=array();
+	var $last_select_db=NULL;
 
 	/**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
@@ -55,14 +45,13 @@ class Database_Static_mysql extends Database_super_mysql
 	function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok=false)
 	{
 		// Potential cacheing
-		global $CACHE_DB,$LAST_SELECT_DB;
 		$x=serialize(array($db_name,$db_host));
-		if (array_key_exists($x,$CACHE_DB))
+		if (array_key_exists($x,$this->cache_db))
 		{
-			if ($LAST_SELECT_DB!=$db_name)
+			if ($this->last_select_db!=$db_name)
 			{
 				mysql_select_db($db_name,$x);
-				$LAST_SELECT_DB=$db_name;
+				$this->last_select_db=$db_name;
 			}
 
 			return array($x,$db_name);
@@ -109,7 +98,7 @@ class Database_Static_mysql extends Database_super_mysql
 				critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_ERROR'));
 			}
 		}
-		$LAST_SELECT_DB=$db_name;
+		$this->last_select_db=$db_name;
 
 		global $SITE_INFO;
 		if (!array_key_exists('database_charset',$SITE_INFO)) $SITE_INFO['database_charset']=(strtolower(get_charset())=='utf-8')?'utf8':'latin1';
@@ -216,11 +205,10 @@ class Database_Static_mysql extends Database_super_mysql
 			}
 		}
 
-		global $LAST_SELECT_DB;
-		if ($LAST_SELECT_DB!=$db_name)
+		if ($this->last_select_db!=$db_name)
 		{
 			mysql_select_db($db_name,$db);
-			$LAST_SELECT_DB=$db_name;
+			$this->last_select_db=$db_name;
 		}
 
 		if (($max!==NULL) && ($start!==NULL)) $query.=' LIMIT '.strval((integer)$start).','.strval((integer)$max);

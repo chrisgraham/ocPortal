@@ -460,8 +460,7 @@ class Module_warnings extends standard_crud_module
 			$sortables['p_charged_points']=do_lang_tempcode('POINTS');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$fh=array(
 			do_lang_tempcode('USERNAME'),

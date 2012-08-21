@@ -255,8 +255,7 @@ class Module_banners
 		if (addon_installed('unvalidated')) $sortables['validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$hr=array(
 			do_lang_tempcode('CODENAME'),
@@ -389,7 +388,7 @@ class Module_banners
 			$edit_url=build_url(array('page'=>'cms_banners','type'=>'_ed','id'=>$source),get_module_zone('cms_banners'));
 		}
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$myrow['add_date']),
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
 			'publisher'=>'', // blank means same as creator
@@ -399,7 +398,7 @@ class Module_banners
 			'identifier'=>'_SEARCH:banners:view:'.$source,
 			'description'=>'',
 			'image'=>$myrow['img_url'],
-		);
+		));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
 

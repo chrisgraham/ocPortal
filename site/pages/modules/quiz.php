@@ -416,7 +416,7 @@ class Module_quiz
 				break;
 		}
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$quiz['q_add_date']),
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($quiz['q_submitter']),
 			'publisher'=>'', // blank means same as creator
@@ -426,7 +426,7 @@ class Module_quiz
 			'identifier'=>'_SEARCH:quiz:do:'.strval($id),
 			'description'=>get_translated_text($quiz['q_start_text']),
 			'image'=>find_theme_image('bigicons/quiz'),
-		);
+		));
 
 		$edit_url=new ocp_tempcode();
 		if ((has_actual_page_access(NULL,'cms_quiz',NULL,NULL)) && (has_edit_permission('mid',get_member(),$quiz['q_submitter'],'cms_quiz',array('quiz',$id))))

@@ -292,9 +292,8 @@ class Database_super_mysql
 	 */
 	function db_close_connections()
 	{
-		global $CACHE_DB,$LAST_SELECT_DB;
-		$CACHE_DB=array();
-		$LAST_SELECT_DB=NULL;
+		$this->cache_db=array();
+		$this->last_select_db=NULL;
 	}
 
 }

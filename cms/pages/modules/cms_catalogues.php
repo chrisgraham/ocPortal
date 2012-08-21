@@ -87,8 +87,8 @@ class Module_cms_catalogues extends standard_crud_module
 			$this->cat_crud_module->permissions_cat_name=NULL;
 		}
 
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_catalogues';
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/catalogues';
+		set_helper_panel_tutorial('tut_catalogues');
+		set_helper_panel_pic('pagepics/catalogues');
 
 		require_lang('catalogues');
 		require_lang('fields');
@@ -198,8 +198,7 @@ class Module_cms_catalogues extends standard_crud_module
 			$sortables['ce_validated']=do_lang_tempcode('VALIDATED');
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$fh=array();
 		$fh[]=do_lang_tempcode('TITLE');
@@ -319,15 +318,14 @@ class Module_cms_catalogues extends standard_crud_module
 
 		$hidden=form_input_hidden('catalogue_name',$catalogue_name);
 
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='validated';
+		inform_non_canonical_parameter('validated');
 
 		if ((is_null($id)) && (is_null($category_id)))
 		{
 			$category_id=get_param_integer('category_id',NULL);
 
-			$NON_CANONICAL_PARAMS[]='category_id';
-			$NON_CANONICAL_PARAMS[]='category_id_suggest';
+			inform_non_canonical_parameter('category_id');
+			inform_non_canonical_parameter('category_id_suggest');
 		}
 
 		$this->add_text=do_lang('CATALOGUE_'.$catalogue_name.'_ADD_TEXT',escape_html(get_base_url()),NULL,NULL,NULL,false);
@@ -370,7 +368,7 @@ class Module_cms_catalogues extends standard_crud_module
 		require_code('fields');
 		foreach ($special_fields as $field_num=>$field)
 		{
-			$NON_CANONICAL_PARAMS[]='field_'.strval($field['id']);
+			inform_non_canonical_parameter('field_'.strval($field['id']));
 
 			$ob=get_fields_hook($field['cf_type']);
 			$default=get_param('field_'.strval($field['id']),$field['cf_default']);
@@ -1312,8 +1310,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 
 		$fh=array(do_lang_tempcode('TITLE'),do_lang_tempcode('ADDED'));
 		$fh[]=do_lang_tempcode('ACTIONS');
@@ -1384,10 +1381,9 @@ class Module_cms_catalogues_cat extends standard_crud_module
 
 		if ($parent_id==-1)
 		{
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='parent_id';
-			$NON_CANONICAL_PARAMS[]='title';
-			$NON_CANONICAL_PARAMS[]='notes';
+			inform_non_canonical_parameter('parent_id');
+			inform_non_canonical_parameter('title');
+			inform_non_canonical_parameter('notes');
 
 			$parent_id=get_param_integer('parent_id',-1);
 

@@ -39,9 +39,6 @@ $REQUIRED_BEFORE=array();
 global $SITE_INFO;
 $SITE_INFO=array();
 
-global $CACHE_DB;
-$CACHE_DB=array();
-
 global $OPTIONS;
 $OPTIONS=array();
 

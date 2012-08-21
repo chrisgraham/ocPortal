@@ -461,7 +461,7 @@ class Module_groups
 
 		$group_name=get_translated_text($group['g_name'],$GLOBALS['FORUM_DB']);
 
-		$GLOBALS['META_DATA']+=array(
+		set_extra_request_metadata(array(
 			'created'=>'',
 			'creator'=>is_null($group['g_group_leader'])?'':$GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader']),
 			'publisher'=>'', // blank means same as creator
@@ -471,7 +471,7 @@ class Module_groups
 			'identifier'=>'_SEARCH:groups:view:'.strval($id),
 			'description'=>'',
 			'image'=>find_theme_image('bigicons/usergroups'),
-		);
+		));
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_ajax_people_lists');

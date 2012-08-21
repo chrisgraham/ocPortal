@@ -21,21 +21,10 @@
  */
 
 /*
-
 This driver works by ODBC. You create a mdb database in access, then create a mapping in the
 ODBC part of control panel. You need to add a 'System DSN' (the DSN is the database name mapping
 to the mdb file). In the properties there is option to choose username and password.
-
 */
-
-/**
- * Standard code module initialisation function.
- */
-function init__database__ibm()
-{
-	global $CACHE_DB;
-	$CACHE_DB=array();
-}
 
 /**
  * Database Driver.
@@ -43,6 +32,7 @@ function init__database__ibm()
  */
 class Database_Static_ibm
 {
+	var $cache_db=array();
 
 	/**
 	 * Get the default user for making db connections (used by the installer as a default).
@@ -244,8 +234,7 @@ class Database_Static_ibm
 	 */
 	function db_close_connections()
 	{
-		global $CACHE_DB;
-		foreach ($CACHE_DB as $db)
+		foreach ($this->cache_db as $db)
 		{
 			foreach ($db as $_db)
 			{
@@ -270,10 +259,9 @@ class Database_Static_ibm
 		if ($db_host!='localhost') fatal_exit(do_lang_tempcode('ONLY_LOCAL_HOST_FOR_TYPE'));
 
 		// Potential cacheing
-		global $CACHE_DB;
-		if (isset($CACHE_DB[$db_name][$db_host]))
+		if (isset($this->cache_db[$db_name][$db_host]))
 		{
-			return $CACHE_DB[$db_name][$db_host];
+			return $this->cache_db[$db_name][$db_host];
 		}
 
 		if (!function_exists('odbc_connect'))
@@ -300,7 +288,7 @@ class Database_Static_ibm
 		}
 
 		if (!$db) fatal_exit(do_lang('CONNECT_DB_ERROR'));
-		$CACHE_DB[$db_name][$db_host]=$db;
+		$this->cache_db[$db_name][$db_host]=$db;
 		return $db;
 	}
 

@@ -200,11 +200,7 @@ function warn_screen($title,$text,$provide_back=true)
 
 	if ($text_eval==do_lang('MISSING_RESOURCE'))
 	{
-		$GLOBALS['HTTP_STATUS_CODE']='404';
-		if (!headers_sent())
-		{
-			if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 404 Not Found');
-		}
+		set_http_status_code('404');
 		if (ocp_srv('HTTP_REFERER')!='')
 		{
 			relay_error_notification($text_eval.' '.do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false,'error_occurred_missing_resource');

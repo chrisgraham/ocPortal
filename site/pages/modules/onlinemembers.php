@@ -62,8 +62,7 @@ class Module_onlinemembers
 
 		$title=get_screen_title('USERS_ONLINE');
 
-		global $EXTRA_HEAD;
-		$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
+		attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 		$count=0;
 		$members=get_online_members(has_privilege(get_member(),'show_user_browsing'),NULL,$count);

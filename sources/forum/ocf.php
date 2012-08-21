@@ -51,7 +51,12 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function forum_layer_initialise()
 	{
-		$GLOBALS['OCF_DRIVER']=&$this;
+		/** A copy of the forum driver pointing to OCF. This is used during importing as a permanent pointer to OCF, even when FORUM_DRIVER may be pointing temporarily to an instance of the forum being imported.
+		 * @global object $OCF_DRIVER
+		 */
+		global $OCF_DRIVER;
+		$OCF_DRIVER=mixed();
+		$GLOBALS['OCF_DRIVER']=&$this; // Done like this to workaround that PHP can't put a reference in a global'd variable
 
 		if ((function_exists('ldap_connect')) && (get_option('ldap_is_enabled',true)=='1'))
 		{

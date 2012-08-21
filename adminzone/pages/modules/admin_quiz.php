@@ -48,8 +48,8 @@ class Module_admin_quiz
 	 */
 	function run()
 	{
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/quiz';
-		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_quizzes';
+		set_helper_panel_pic('pagepics/quiz');
+		set_helper_panel_tutorial('tut_quizzes');
 
 		require_lang('quiz');
 		require_code('quiz');
@@ -292,7 +292,7 @@ class Module_admin_quiz
 	{
 		$title=get_screen_title('SURVEY_RESULTS');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/survey_results';
+		set_helper_panel_pic('pagepics/survey_results');
 
 		require_code('form_templates');
 
@@ -326,7 +326,7 @@ class Module_admin_quiz
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES'))));
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/survey_results';
+		set_helper_panel_pic('pagepics/survey_results');
 
 		$id=get_param_integer('id'); // quiz ID
 
@@ -373,8 +373,7 @@ class Module_admin_quiz
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('quiz_entries','COUNT(*)');
 		$rows=$GLOBALS['SITE_DB']->query_select('quiz_entries',array('id','q_time','q_member'),array('q_quiz'=>$id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		if (count($rows)==0)
@@ -405,7 +404,7 @@ class Module_admin_quiz
 	{
 		$title=get_screen_title('SURVEY_RESULTS');
 
-		$GLOBALS['HELPER_PANEL_PIC']='pagepics/survey_results';
+		set_helper_panel_pic('pagepics/survey_results');
 
 		require_code('templates_map_table');
 

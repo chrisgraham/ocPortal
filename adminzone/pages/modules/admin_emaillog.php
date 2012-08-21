@@ -78,7 +78,7 @@ class Module_admin_emaillog
 	 */
 	function show()
 	{
-		//$GLOBALS['HELPER_PANEL_PIC']='pagepics/email';	Actually, we need the space
+		//set_helper_panel_pic('pagepics/email');	Actually, we need the space
 
 		$title=get_screen_title('EMAIL_LOG');
 
@@ -91,8 +91,7 @@ class Module_admin_emaillog
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		global $NON_CANONICAL_PARAMS;
-		$NON_CANONICAL_PARAMS[]='sort';
+		inform_non_canonical_parameter('sort');
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('DATE_TIME'),do_lang_tempcode('FROM'),do_lang_tempcode('TO'),do_lang_tempcode('SUBJECT')),$sortables,'sort',$sortable.' '.$sort_order);
 		$fields=new ocp_tempcode();

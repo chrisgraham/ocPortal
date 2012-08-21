@@ -37,12 +37,7 @@ function captcha_script()
 		generate_captcha();
 		$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
 
-		/*$GLOBALS['HTTP_STATUS_CODE']='500';		This would actually be very slightly insecure, as it could be used to probe (binary) login state via rogue sites that check if CAPTCHAs had been generated
-		if (!headers_sent())
-		{
-			if (function_exists('browser_matches'))
-				if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 500 Internal server error');
-		}
+		/*set_http_status_code('500');		This would actually be very slightly insecure, as it could be used to probe (binary) login state via rogue sites that check if CAPTCHAs had been generated
 
 		warn_exit(do_lang_tempcode('CAPTCHA_NO_SESSION'));*/
 	}
@@ -297,12 +292,7 @@ function enforce_captcha($regenerate_on_error=true)
 		$code_entered=post_param('captcha');
 		if (!check_captcha($code_entered,$regenerate_on_error))
 		{
-			$GLOBALS['HTTP_STATUS_CODE']='500';
-			if (!headers_sent())
-			{
-				if (function_exists('browser_matches'))
-					if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 500 Internal server error');
-			}
+			set_http_status_code('500');
 
 			warn_exit(do_lang_tempcode('INVALID_SECURITY_CODE_ENTERED'));
 		}
@@ -331,12 +321,7 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 			{
 				generate_captcha();
 			}
-			$GLOBALS['HTTP_STATUS_CODE']='500';
-			if (!headers_sent())
-			{
-				if (function_exists('browser_matches'))
-					if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 500 Internal server error');
-			}
+			set_http_status_code('500');
 
 			warn_exit(do_lang_tempcode('NO_SESSION_SECURITY_CODE'));
 		}
