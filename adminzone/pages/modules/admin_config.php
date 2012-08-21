@@ -494,9 +494,7 @@ class Module_admin_config
 		// Addin special ones
 		if ($page=='SITE') $rows[]=array('the_name'=>'timezone','human_name'=>'TIME_ZONE','config_value'=>'','the_type'=>'special','eval'=>'','the_page'=>'SITE','section'=>'GENERAL','explanation'=>'','shared_hosting_restricted'=>0);
 
-		/*global $M_SORT_KEY;	This is a lame sort - it doesn't preserve internal order
-		$M_SORT_KEY='section';
-		usort($rows,'multi_sort');*/
+		//sort_maps_by($rows,'section');  This is a lame sort - it doesn't preserve internal order
 		// Better sort
 		$all_known_groups=array();
 		foreach ($rows as $myrow)

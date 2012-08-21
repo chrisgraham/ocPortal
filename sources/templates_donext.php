@@ -75,9 +75,7 @@ function do_next_manager_hooked($title,$text,$type,$main_title=NULL)
 		}
 	}
 
-	global $M_SORT_KEY;
-	$M_SORT_KEY=2;
-	@usort($links,'multi_sort');
+	sort_maps_by($links,2);
 
 	if (!is_null($text))
 	{

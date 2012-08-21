@@ -1181,9 +1181,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 		{
 			$rows[$i]['_cc_title']=get_translated_text($child['cc_title']);
 		}
-		global $M_SORT_KEY;
-		$M_SORT_KEY='_cc_title';
-		usort($rows,'multi_sort');
+		sort_maps_by($rows,'_cc_title');
 		foreach ($rows as $child)
 		{
 			$child_id=$child['id'];
@@ -1299,9 +1297,7 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 	{
 		if (count($rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
 	}
-	global $M_SORT_KEY;
-	$M_SORT_KEY='text_original';
-	usort($rows,'multi_sort');
+	sort_maps_by($rows,'text_original');
 	$no_root=!array_key_exists(0,$children);
 	if (!$no_root) $children[0]['child_count']=count($rows);
 	if ($levels!==0)

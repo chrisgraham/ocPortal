@@ -2749,9 +2749,7 @@ class Database_Static_xml
 		// Sort
 		if (!is_null($orders))
 		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY=$orders;
-			usort($pre_filtered_records,'multi_sort');
+			sort_maps_by($pre_filtered_records,$orders);
 		}
 
 		// Cut

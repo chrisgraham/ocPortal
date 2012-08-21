@@ -791,9 +791,7 @@ class forum_driver_wowbb extends forum_driver_base
 	function get_matching_members($pattern,$limit=NULL)
 	{
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE user_name LIKE \''.db_encode_like($pattern).'\' AND user_id<>'.strval($this->get_guest_id()).' ORDER BY user_posts DESC',$limit);
-		global $M_SORT_KEY;
-		$M_SORT_KEY='user_name';
-		uasort($rows,'multi_sort');
+		sort_maps_by($rows,'user_name');
 		return $rows;
 	}
 

@@ -50,9 +50,7 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 		}
 	}
 
-	global $M_SORT_KEY;
-	$M_SORT_KEY=2;
-	uasort($tabs,'multi_sort');
+	sort_maps_by($tabs,2);
 
 	require_javascript('javascript_profile');
 	require_javascript('javascript_ajax');

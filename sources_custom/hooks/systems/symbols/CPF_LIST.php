@@ -27,9 +27,7 @@ class Hook_symbol_CPF_LIST
 				{
 					$_m[$i]['text']=get_translated_text($m['g_name'],$GLOBALS['FORUM_DB']);
 				}
-				global $M_SORT_KEY;
-				$M_SORT_KEY='text';
-				usort($_m,'multi_sort');
+				sort_maps_by($_m,'text');
 				foreach ($_m as $m)
 				{
 					if ($m['id']==db_get_first_id()) continue;

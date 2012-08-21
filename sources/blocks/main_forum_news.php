@@ -116,9 +116,7 @@ class Block_main_forum_news
 		$rows=$GLOBALS['FORUM_DRIVER']->show_forum_topics($forum_ids,$num_topics,0,$max_rows,'',true,$date_key);
 		if (is_null($rows)) $rows=array();
 
-		global $M_SORT_KEY;
-		$M_SORT_KEY=$date_key;
-		usort($rows,'multi_sort');
+		sort_maps_by($rows,$date_key);
 		$rows=array_reverse($rows,false);
 
 		$_title=do_lang_tempcode('NEWS');

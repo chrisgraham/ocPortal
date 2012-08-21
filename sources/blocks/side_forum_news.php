@@ -124,9 +124,7 @@ class Block_side_forum_news
 			$out=new ocp_tempcode();
 			if (!is_null($topics))
 			{
-				global $M_SORT_KEY;
-				$M_SORT_KEY=$date_key;
-				usort($topics,'multi_sort');
+				sort_maps_by($topics,$date_key);
 				$topics=array_reverse($topics,false);
 
 				foreach ($topics as $topic)

@@ -74,9 +74,7 @@ class Hook_themewizard_find_color
 				}
 			}
 
-			global $M_SORT_KEY;
-			$M_SORT_KEY=1;
-			usort($results,'multi_sort');
+			sort_maps_by($results,1);
 			$results=array_reverse($results);
 
 			$results_printed='';

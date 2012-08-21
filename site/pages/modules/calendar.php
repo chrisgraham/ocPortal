@@ -618,9 +618,7 @@ class Module_calendar
 		$period_end=mktime(0,0,0,$start_month,$start_day+1,$start_year);
 		$happenings=calendar_matches($member_id,true,$period_start,$period_end,$filter);
 
-		global $M_SORT_KEY;
-		$M_SORT_KEY=0;
-		usort($happenings,'multi_sort');
+		sort_maps_by($happenings,0);
 
 		$hours=new ocp_tempcode();
 		$streams=array(array());
@@ -753,9 +751,7 @@ class Module_calendar
 		$period_end=$period_start+60*60*24*7;
 		$happenings=calendar_matches($member_id,true,$period_start,$period_end,$filter);
 
-		global $M_SORT_KEY;
-		$M_SORT_KEY=0;
-		usort($happenings,'multi_sort');
+		sort_maps_by($happenings,0);
 
 		if (get_option('ssw')=='0')
 		{
@@ -974,9 +970,7 @@ class Module_calendar
 
 		$happenings=calendar_matches($member_id,true,$period_start,$period_end,$filter);
 
-		global $M_SORT_KEY;
-		$M_SORT_KEY=0;
-		usort($happenings,'multi_sort');
+		sort_maps_by($happenings,0);
 
 		if (get_option('ssw')=='0')
 		{
@@ -1101,9 +1095,7 @@ class Module_calendar
 
 		$happenings=calendar_matches($member_id,true,$period_start,$period_end,$filter);
 
-		global $M_SORT_KEY;
-		$M_SORT_KEY=0;
-		usort($happenings,'multi_sort');
+		sort_maps_by($happenings,0);
 
 		$months='';
 		$month_rows=new ocp_tempcode();

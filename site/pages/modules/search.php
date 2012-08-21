@@ -492,9 +492,7 @@ class Module_search
 
 				$_search_domains[]=array('_GUID'=>'3d3099872184923aec0f49388f52c750','ADVANCED_ONLY'=>(array_key_exists('advanced_only',$info)) && ($info['advanced_only']),'CHECKED'=>$checked,'OPTIONS_URL'=>$options_url,'LANG'=>$info['lang'],'NAME'=>$hook);
 			}
-			global $M_SORT_KEY;
-			$M_SORT_KEY='LANG';
-			usort($_search_domains,'multi_sort');
+			sort_maps_by($_search_domains,'LANG');
 			foreach ($_search_domains as $sd)
 			{
 				$search_domains->attach(do_template('SEARCH_FOR_SEARCH_DOMAIN',$sd));

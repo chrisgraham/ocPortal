@@ -179,9 +179,7 @@ class Block_main_gallery_embed
 			shuffle($combined);
 		} else
 		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY=2;
-			usort($combined,'multi_sort');
+			sort_maps_by($combined,2);
 			if ($_dir=='DESC')
 				$combined=array_reverse($combined);
 		}

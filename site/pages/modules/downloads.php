@@ -365,9 +365,7 @@ class Module_downloads
 		$rows=$GLOBALS['SITE_DB']->query_select('download_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.category=t.id',array('rep_image','c.id','category','text_original','description'),array('parent_id'=>$category_id),(($order=='t.text_original ASC')?'':('ORDER BY '.$order)),400/*reasonable limit*/);
 		if ($order=='t.text_original ASC')
 		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY='text_original';
-			usort($rows,'multi_sort');
+			sort_maps_by($rows,'text_original');
 		}
 		if (count($rows)==400) $rows=array(); // Too much, performance issue
 		$out=new ocp_tempcode();

@@ -775,9 +775,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 						$subforum['children'][$subforum_row2['f_name'].'__'.strval($subforum_row2['id'])]=array('id'=>$subforum_row2['id'],'name'=>$subforum_row2['f_name'],'redirection'=>$subforum_row2['f_redirection']);
 					}
 				}
-				global $M_SORT_KEY;
-				$M_SORT_KEY='name';
-				uasort($subforum['children'],'multi_sort');
+				sort_maps_by($subforum['children'],'name');
 			}
 
 			$forum_groupings[$forum_grouping_id]['subforums'][]=$subforum;

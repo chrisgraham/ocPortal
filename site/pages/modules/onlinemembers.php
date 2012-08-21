@@ -75,9 +75,7 @@ class Module_onlinemembers
 
 		$rows=new ocp_tempcode();
 		$members=array_reverse($members);
-		global $M_SORT_KEY;
-		$M_SORT_KEY='last_activity';
-		usort($members,'multi_sort');
+		sort_maps_by($members,'last_activity');
 		$members=array_reverse($members);
 		foreach ($members as $row)
 		{

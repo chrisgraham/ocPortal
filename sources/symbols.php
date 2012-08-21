@@ -2665,9 +2665,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 							$rev=((array_key_exists(5+1,$param)) && ($param[5]->evaluate()=='DESC'));
 							if ($sort_key!='')
 							{
-								global $M_SORT_KEY;
-								$M_SORT_KEY=$sort_key;
-								uasort($array,'multi_sort');
+								sort_maps_by($array,$sort_key);
 							}
 							if ($rev) $array=array_reverse($array);
 						}

@@ -384,26 +384,6 @@ function fractional_edit()
 }
 
 /**
- * Helper function for usort to sort a list by string length.
- *
- * @param  string			The first string to compare
- * @param  string			The second string to compare
- * @return integer		The comparison result (0 for equal, -1 for less, 1 for more)
- */
-function strlen_sort($a,$b)
-{
-	if (!isset($a)) $a='';
-	if (!isset($b)) $b='';
-	if ($a==$b) return 0;
-	if (!is_string($a))
-	{
-		global $M_SORT_KEY;
-		return (strlen($a[$M_SORT_KEY])<strlen($b[$M_SORT_KEY]))?-1:1;
-	}
-	return (strlen($a)<strlen($b))?-1:1;
-}
-
-/**
  * Find whether we have no forum on this website.
  *
  * @return boolean		Whether we have no forum on this website
@@ -497,13 +477,59 @@ function integer_format($val)
 }
 
 /**
+ * Sort a list of maps by the string length of a particular key ID in the maps.
+ *
+ * @param  array			List of maps to sort
+ * @param  mixed			Either an integer sort key (to sort by integer key ID of contained arrays) or a String sort key (to sort by string key ID of contained arrays).
+ */
+function sort_maps_by__strlen($rows,$sort_key)
+{
+	global $M_SORT_KEY;
+	$M_SORT_KEY=$sort_key;
+	@uasort($rows,'_strlen_sort'); // @ is to stop PHP bug warning about altered array contents when Tempcode copies are evaluated internally
+}
+
+/**
+ * Helper function for usort to sort a list by string length.
+ *
+ * @param  string			The first string to compare
+ * @param  string			The second string to compare
+ * @return integer		The comparison result (0 for equal, -1 for less, 1 for more)
+ */
+function strlen_sort($a,$b)
+{
+	if (!isset($a)) $a='';
+	if (!isset($b)) $b='';
+	if ($a==$b) return 0;
+	if (!is_string($a))
+	{
+		global $M_SORT_KEY;
+		return (strlen($a[$M_SORT_KEY])<strlen($b[$M_SORT_KEY]))?-1:1;
+	}
+	return (strlen($a)<strlen($b))?-1:1;
+}
+
+/**
+ * Sort a list of maps by a particular key ID in the maps.
+ *
+ * @param  array			List of maps to sort
+ * @param  mixed			Either an integer sort key (to sort by integer key ID of contained arrays) or a Comma-separated list of sort keys (to sort by string key ID of contained arrays; prefix '!' a key to reverse the sort order for it).
+ */
+function sort_maps_by($rows,$sort_keys)
+{
+	global $M_SORT_KEY;
+	$M_SORT_KEY=$sort_keys;
+	@uasort($rows,'_multi_sort'); // @ is to stop PHP bug warning about altered array contents when Tempcode copies are evaluated internally
+}
+
+/**
  * Helper function to sort a list of maps by the value at $key in each of those maps.
  *
  * @param  array			The first to compare
  * @param  array			The second to compare
  * @return integer		The comparison result (0 for equal, -1 for less, 1 for more)
  */
-function multi_sort($a,$b)
+function _multi_sort($a,$b)
 {
 	global $M_SORT_KEY;
 	$keys=explode(',',is_string($M_SORT_KEY)?$M_SORT_KEY:strval($M_SORT_KEY));
@@ -551,27 +577,6 @@ function multi_sort($a,$b)
 	while ((count($keys)!=0) && ($ret==0));
 	return $ret;
 }
-
-/*!*
- * Finds if a function is being run underneath another function, and exit if there is a death message to output. This function should only be used when coding.
- *
- * @param  string			The function to check running underneath
- * @param  ?string		The message to exit with (NULL: return, do not exit)
- * @return boolean		Whether we are
- */
-/*function debug_running_underneath($function,$death_message=NULL)
-{
-	$stack=debug_backtrace();
-	foreach ($stack as $level)
-	{
-		if (in_array($function,$level))
-		{
-			if (!is_null($death_message)) fatal_exit($death_message);
-			return true;
-		}
-	}
-	return false;
-}*/
 
 /**
  * Require all code relating to the OCF forum
@@ -2274,9 +2279,7 @@ function member_personal_links_and_details($member_id)
 		}
 		if (!$in_one)
 		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY='s_cost';
-			usort($usergroup_subs,'multi_sort');
+			sort_maps_by($usergroup_subs,'s_cost');
 			foreach ($usergroup_subs as $sub)
 			{
 				$url=build_url(array('page'=>'purchase','type'=>'message','product'=>'USERGROUP'.strval($sub['id'])),get_module_zone('purchase'));

@@ -131,12 +131,10 @@ function notifications_ui($member_id_of)
 	if (count($notification_sections)==0) return new ocp_tempcode();
 
 	// Sort labels
-	global $M_SORT_KEY;
-	$M_SORT_KEY='NOTIFICATION_LABEL';
 	ksort($notification_sections);
 	foreach (array_keys($notification_sections) as $i)
 	{
-		usort($notification_sections[$i]['NOTIFICATION_CODES'],'multi_sort');
+		sort_maps_by($notification_sections[$i]['NOTIFICATION_CODES'],'NOTIFICATION_LABEL');
 	}
 
 	// Save

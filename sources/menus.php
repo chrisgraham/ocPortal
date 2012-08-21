@@ -165,15 +165,13 @@ function build_management_menu()
 
 	$i=1;
 	require_all_lang();
-	global $M_SORT_KEY;
-	$M_SORT_KEY='cap';
 	foreach ($sections as $type=>$section)
 	{
 		if ((count($sections)>4) || ($type=='admin'))
 		{
 			$virtual_type=($type=='admin')?'':$type;
 			$items2=build_stored_menu_hooked($collect,$virtual_type,-$i);
-			usort($items2,'multi_sort');
+			sort_maps_by($items2,'cap');
 		} else
 		{
 			$items2=array();

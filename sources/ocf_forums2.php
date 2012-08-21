@@ -171,9 +171,7 @@ function ocf_get_forum_tree_secure($member_id=NULL,$base_forum=NULL,$field_forma
 			if ($x['f_parent_forum']===$base_forum) $forums[]=$x;
 		}
 	}
-	global $M_SORT_KEY;
-	$M_SORT_KEY=$order;
-	uasort($forums,'multi_sort');
+	sort_maps_by($forums,$order);
 	$compound_list='';
 	foreach ($forums as $forum)
 	{

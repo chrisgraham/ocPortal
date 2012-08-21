@@ -692,9 +692,7 @@ class Module_admin_permissions
 				$_sections[$i]['trans']=do_lang($s['p_section']);
 			}
 		}
-		global $M_SORT_KEY;
-		$M_SORT_KEY='trans';
-		@uasort($_sections,'multi_sort'); /* @ is to stop PHP bug warning about altered array contents when Tempcode copies are evaluated internally */
+		sort_maps_by($_sections,'trans');
 		$orderings=array('SUBMISSION','GENERAL_SETTINGS','SECTION_FORUMS','STAFF_ACTIONS','_COMCODE','_FEEDBACK','POINTS');
 		$_sections_prior=array();
 		foreach ($orderings as $ordering)

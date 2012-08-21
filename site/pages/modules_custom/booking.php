@@ -205,8 +205,6 @@ class Module_booking
 	 */
 	function choose_bookables_and_dates()
 	{
-		global $M_SORT_KEY;
-
 		$title=get_screen_title('CREATE_BOOKING');
 
 		$query='SELECT * FROM '.get_table_prefix().'bookable WHERE enabled=1';
@@ -324,8 +322,7 @@ class Module_booking
 				'BOOKABLE_DATE_TO_YEAR'=>date('Y',$date_to),
 			);
 
-			/*$M_SORT_KEY='BOOKABLE_TITLE';	Wrong - we're sorting by sort_order
-			usort($categories[$category]['BOOKABLES'],'multi_sort');*/
+			//Wrong - we're sorting by sort_order	sort_maps_by($categories[$category]['BOOKABLES'],'BOOKABLE_TITLE');
 		}
 
 		ksort($categories);

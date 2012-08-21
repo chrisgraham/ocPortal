@@ -209,11 +209,8 @@ class Block_main_staff_checklist
 			}
 		}
 
-		global $M_SORT_KEY;
-		$M_SORT_KEY='!2';
-		usort($rets_todo_counts,'multi_sort');
-		$M_SORT_KEY='1';
-		usort($rets_dates,'multi_sort');
+		sort_maps_by($rets_todo_counts,'!2');
+		sort_maps_by($rets_dates,'1');
 
 		$out_no_times=new ocp_tempcode();
 		foreach ($rets_no_times as $item)

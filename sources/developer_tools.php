@@ -208,3 +208,25 @@ function show_memory_points()
 	}
 	exit();
 }
+
+/*!*
+ * Finds if a function is being run underneath another function, and exit if there is a death message to output. This function should only be used when coding.
+ *
+ * @param  string			The function to check running underneath
+ * @param  ?string		The message to exit with (NULL: return, do not exit)
+ * @return boolean		Whether we are
+ */
+/*function debug_running_underneath($function,$death_message=NULL)
+{
+	$stack=debug_backtrace();
+	foreach ($stack as $level)
+	{
+		if (in_array($function,$level))
+		{
+			if (!is_null($death_message)) fatal_exit($death_message);
+			return true;
+		}
+	}
+	return false;
+}*/
+

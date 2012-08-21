@@ -104,9 +104,7 @@ function reconstitute_booking_requests(&$request)
 	$changes=false;
 
 	// Sort, so that we know we only merge when things are consecutive
-	global $M_SORT_KEY;
-	$M_SORT_KEY='bookable_id,start_year,start_month,start_day';
-	usort($request,'multi_sort');
+	sort_maps_by($request,'bookable_id,start_year,start_month,start_day');
 
 	$all_supplements=collapse_2d_complexity('id','price_is_per_period',$GLOBALS['SITE_DB']->query_select('bookable_supplement',array('id','price_is_per_period')));
 

@@ -591,9 +591,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 		}
 	}
 
-	global $M_SORT_KEY;
-	$M_SORT_KEY=2;
-	usort($matches,'multi_sort');
+	sort_maps_by($matches,2);
 
 	return $matches;
 }

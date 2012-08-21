@@ -96,9 +96,7 @@ class Block_side_rss
 			if (!array_key_exists('clean_add_date',$item)) $item['clean_add_date']=time();
 			$items[]=$item;
 		}
-		global $M_SORT_KEY;
-		$M_SORT_KEY='clean_add_date';
-		usort($items,'multi_sort');
+		sort_maps_by($items,'clean_add_date');
 		$items=array_reverse($items);
 
 		global $NEWS_CATS;

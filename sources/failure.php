@@ -966,9 +966,7 @@ function _access_denied($class,$param,$force_login)
 	require_lang('ocf_config');
 
 	$match_keys=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message','k_match_key'));
-	global $M_SORT_KEY;
-	$M_SORT_KEY='k_match_key';
-	usort($match_keys,'strlen_sort');
+	sort_maps_by__strlen($match_keys,'k_match_key');
 	$match_keys=array_reverse($match_keys);
 	$message=NULL;
 	foreach ($match_keys as $match_key)

@@ -78,9 +78,7 @@ class Hook_Profiles_Tabs_blog
 			foreach ($news2 as $row) $news[$row['id']]=$row;
 			unset($news1);
 			unset($news2);
-			global $M_SORT_KEY;
-			$M_SORT_KEY='date_and_time';
-			usort($news,'multi_sort');
+			sort_maps_by($news,'date_and_time');
 			$news=array_reverse($news);
 
 			// Output

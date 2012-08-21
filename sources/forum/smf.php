@@ -744,9 +744,7 @@ class forum_driver_smf extends forum_driver_base
 	function get_matching_members($pattern,$limit=NULL)
 	{
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'members WHERE realName LIKE \''.db_encode_like($pattern).'\''.' ORDER BY lastLogin DESC',$limit);
-		global $M_SORT_KEY;
-		$M_SORT_KEY='realName';
-		uasort($rows,'multi_sort');
+		sort_maps_by($rows,'realName');
 		return $rows;
 	}
 

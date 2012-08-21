@@ -197,9 +197,7 @@ function build_preview($multi_return=false)
 							$keywords[]=array('sort'=>$ideal_density,'KEYWORD'=>$meta_keyword,'IDEAL_DENSITY'=>strval(intval(round($ideal_density*100))),'DENSITY'=>strval(intval(round($density*100))));
 						}
 					}
-					global $M_SORT_KEY;
-					$M_SORT_KEY='sort';
-					usort($keywords,'multi_sort');
+					sort_maps_by($keywords,'sort');
 					foreach ($keywords as $ti=>$meta_keyword)
 					{
 						unset($keywords[$ti]['sort']);

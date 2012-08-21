@@ -110,9 +110,7 @@ class Module_staff
 			$rows[$i]['name']=$name;
 		}
 
-		global $M_SORT_KEY;
-		$M_SORT_KEY='name';
-		usort($rows,'multi_sort');
+		sort_maps_by($rows,'name');
 
 		$content=new ocp_tempcode();
 		foreach ($rows as $row_staff)

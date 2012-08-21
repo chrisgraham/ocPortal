@@ -756,9 +756,7 @@ class standard_crud_module
 		}
 		if (($this->title_is_multi_lang) && (preg_replace('# (ASC|DESC)$#','',$orderer)==$select_field))
 		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY='_readable';
-			usort($_entries,'multi_sort');
+			sort_maps_by($_entries,'_readable');
 			if (substr($orderer,-5)==' DESC') $_entries=array_reverse($_entries);
 		}
 

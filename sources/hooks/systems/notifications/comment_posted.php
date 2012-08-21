@@ -53,10 +53,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
 				}
 			}
 		}
-
-		global $M_SORT_KEY;
-		$M_SORT_KEY='title';
-		usort($categories,'multi_sort');
+		sort_maps_by($pagelinks,'title');
 
 		return $categories;
 	}

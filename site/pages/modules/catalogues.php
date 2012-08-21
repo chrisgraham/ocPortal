@@ -1092,9 +1092,7 @@ class Module_catalogues
 		{
 			$rows_subcategories[$i]['cc_title']=get_translated_text($subcategory['cc_title']);
 		}
-		global $M_SORT_KEY;
-		$M_SORT_KEY='cc_title';
-		usort($rows_subcategories,'multi_sort');
+		sort_maps_by($rows_subcategories,'cc_title');
 		$out=new ocp_tempcode();
 		foreach ($rows_subcategories as $myrow)
 		{

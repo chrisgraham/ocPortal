@@ -439,9 +439,7 @@ class Module_cms_galleries extends standard_crud_module
 						}
 						if (!is_null($all_are))
 						{
-							global $M_SORT_KEY;
-							$M_SORT_KEY='path';
-							usort($directory,'multi_sort');
+							sort_maps_by($directory,'path');
 						}
 
 						foreach ($directory as $entry)

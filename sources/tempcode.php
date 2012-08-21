@@ -291,9 +291,7 @@ function closure_loop($param,$args,$main_function)
 				$rev=((isset($param[5+1])) && ($param[5]=='DESC'));
 				if ($sort_key!='')
 				{
-					global $M_SORT_KEY;
-					$M_SORT_KEY=$sort_key;
-					uasort($array,'multi_sort');
+					sort_maps_by($array,$sort_key);
 				}
 				if ($rev) $array=array_reverse($array);
 			}

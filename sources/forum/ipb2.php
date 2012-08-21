@@ -74,9 +74,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	{
 		$query='SELECT * FROM '.$this->connection->get_table_prefix().'members WHERE members_display_name LIKE \''.db_encode_like($pattern).'\' AND id<>'.strval($this->get_guest_id()).' ORDER BY last_post DESC';
 		$rows=$this->connection->query($query,$limit);
-		global $M_SORT_KEY;
-		$M_SORT_KEY='members_display_name';
-		uasort($rows,'multi_sort');
+		sort_maps_by($rows,'members_display_name');
 		return $rows;
 	}
 

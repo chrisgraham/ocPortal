@@ -226,9 +226,7 @@ function find_available_addons()
 		closedir($dh);
 	}
 
-	global $M_SORT_KEY;
-	$M_SORT_KEY='1';
-	usort($files,'multi_sort');
+	sort_maps_by($files,'1');
 
 	foreach ($files as $_file)
 	{
@@ -758,9 +756,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 	$files=new ocp_tempcode();
 	$files_warnings=new ocp_tempcode();
 
-	global $M_SORT_KEY;
-	$M_SORT_KEY='path';
-	usort($directory,'multi_sort');
+	sort_maps_by($directory,'path');
 
 	foreach ($directory as $i=>$entry)
 	{

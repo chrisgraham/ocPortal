@@ -480,9 +480,7 @@ class Module_cms_comcode_pages
 		}
 
 		// Manual sorting
-		global $M_SORT_KEY;
-		$M_SORT_KEY=$sortable;
-		usort($_table_rows,'multi_sort');
+		sort_maps_by($_table_rows,$sortable);
 		if ($sort_order=='DESC') $_table_rows=array_reverse($_table_rows);
 
 		$table_rows=new ocp_tempcode();

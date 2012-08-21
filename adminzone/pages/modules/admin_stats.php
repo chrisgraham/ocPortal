@@ -474,9 +474,7 @@ class Module_admin_stats
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
 
-		global $M_SORT_KEY;
-		$M_SORT_KEY=0;
-		uasort($data,'multi_sort');
+		sort_maps_by($data,0);
 		if ($sort_order=='DESC')
 		{
 			$data=array_reverse($data,true);
@@ -827,9 +825,7 @@ class Module_admin_stats
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
 
-		global $M_SORT_KEY;
-		$M_SORT_KEY=0;
-		uasort($views,'multi_sort');
+		sort_maps_by($views,0);
 		if ($sort_order=='DESC')
 		{
 			$views=array_reverse($views,true);

@@ -355,9 +355,7 @@ class Module_news
 		}
 		if ($max_rows==count($categories)) // We'll implement better title-based sorting only if we can show all rows on one screen, otherwise too slow
 		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY='text_original';
-			usort($categories,'multi_sort');
+			sort_maps_by($categories,'text_original');
 		}
 		$content=new ocp_tempcode();
 		$join=' LEFT JOIN '.get_table_prefix().'news_category_entries d ON d.news_entry=p.id';

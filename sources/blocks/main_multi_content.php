@@ -416,18 +416,14 @@ class Block_main_multi_content
 					case 'recent':
 						if (array_key_exists('date_field',$info))
 						{
-							global $M_SORT_KEY;
-							$M_SORT_KEY=$info['date_field'];
-							usort($pinned_order,'multi_sort');
+							sort_maps_by($pinned_order,$info['date_field']);
 							$rows=array_reverse($pinned_order);
 						}
 						break;
 					case 'views':
 						if (array_key_exists('views_field',$info))
 						{
-							global $M_SORT_KEY;
-							$M_SORT_KEY=$info['views_field'];
-							usort($pinned_order,'multi_sort');
+							sort_maps_by($pinned_order,$info['views_field']);
 							$rows=array_reverse($pinned_order);
 						}
 						break;

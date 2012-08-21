@@ -58,9 +58,7 @@ class Hook_Notification_pointstore_request_custom extends Hook_Notification__Sta
 				'title'=>get_translated_text($type['c_title']),
 			);
 		}
-		global $M_SORT_KEY;
-		$M_SORT_KEY='title';
-		usort($pagelinks,'multi_sort');
+		sort_maps_by($pagelinks,'title');
 
 		return $pagelinks;
 	}

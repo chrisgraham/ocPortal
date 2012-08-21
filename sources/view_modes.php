@@ -359,9 +359,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 		global $QUERY_LIST;
 		$queries=new ocp_tempcode();
 		$total_time=0.0;
-		global $M_SORT_KEY;
-		$M_SORT_KEY='time';
-		usort($QUERY_LIST,'multi_sort');
+		sort_maps_by($QUERY_LIST,'time');
 		$QUERY_LIST=array_reverse($QUERY_LIST);
 		foreach ($QUERY_LIST as $query)
 		{

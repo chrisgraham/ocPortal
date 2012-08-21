@@ -85,9 +85,7 @@ class Hook_Profiles_Tabs_edit
 
 		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
-		global $M_SORT_KEY;
-		$M_SORT_KEY=4;
-		usort($tabs,'multi_sort');
+		sort_maps_by($tabs,4);
 
 		$javascript='';
 

@@ -56,9 +56,7 @@ class Hook_Notification_activity extends Hook_Notification
 				);
 			}
 		}
-		global $M_SORT_KEY;
-		$M_SORT_KEY='title';
-		usort($pagelinks,'multi_sort');
+		sort_maps_by($pagelinks,'title');
 
 		return array_values($pagelinks);
 	}

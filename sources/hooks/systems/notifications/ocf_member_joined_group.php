@@ -48,9 +48,7 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 				'title'=>get_translated_text($type['g_name'],$GLOBALS['FORUM_DB']),
 			);
 		}
-		global $M_SORT_KEY;
-		$M_SORT_KEY='title';
-		usort($pagelinks,'multi_sort');
+		sort_maps_by($pagelinks,'title');
 
 		return $pagelinks;
 	}

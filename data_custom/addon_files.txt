@@ -3997,6 +3997,7 @@ testing_platform
  - _tests/tests/testatom.cms
  - _tests/tests/testrss.cms
  - _tests/tests/unit_tests/.htaccess
+ - _tests/tests/unit_tests/overused_globals.php
  - _tests/tests/unit_tests/api_classes_documented.php
  - _tests/tests/unit_tests/lang_ini_size.php
  - _tests/tests/unit_tests/tracker_categories.php

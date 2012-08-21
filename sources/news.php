@@ -518,9 +518,7 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 	{
 		$_cats[$i]['nice_title']=get_translated_text($cat['nc_title']);
 	}
-	global $M_SORT_KEY;
-	$M_SORT_KEY='nice_title';
-	usort($_cats,'multi_sort');
+	sort_maps_by($_cats,'nice_title');
 
 	// Sort so blogs go after news
 	$title_ordered_cats=$_cats;

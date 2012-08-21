@@ -216,9 +216,7 @@ class Module_admin_backup
 			}
 		}
 		closedir($handle);
-		global $M_SORT_KEY;
-		$M_SORT_KEY='mtime';
-		uasort($entries,'multi_sort');
+		sort_maps_by($entries,'mtime');
 
 		if (count($entries)!=0)
 		{

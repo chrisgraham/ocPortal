@@ -257,9 +257,7 @@ class Module_cms_catalogues extends standard_crud_module
 		}
 		if ($current_ordering=='title ASC' || $current_ordering=='title DESC')
 		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY='title';
-			usort($_fields,'multi_sort');
+			sort_maps_by($_fields,'title');
 			if ($current_ordering=='title DESC') $_fields=array_reverse($_fields);
 		}
 		foreach ($_fields as $_fr)

@@ -58,9 +58,7 @@ class Hook_Notification_ticket_new_staff extends Hook_Notification__Staff
 				'title'=>get_translated_text($type['ticket_type']),
 			);
 		}
-		global $M_SORT_KEY;
-		$M_SORT_KEY='title';
-		usort($pagelinks,'multi_sort');
+		sort_maps_by($pagelinks,'title');
 
 		return $pagelinks;
 	}

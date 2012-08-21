@@ -242,9 +242,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 		}
 		if ($order=='f_name')
 		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY='f_name';
-			uasort($subforums,'multi_sort');
+			sort_maps_by($subforums,'f_name');
 		}
 		$forum_grouping_id=mixed();
 		$position_in_cat=0;

@@ -150,9 +150,7 @@ class Block_main_rss
 				$items[]=$item;
 			}
 		}
-		global $M_SORT_KEY;
-		$M_SORT_KEY='clean_add_date';
-		usort($items,'multi_sort');
+		sort_maps_by($items,'clean_add_date');
 		$items=array_reverse($items);
 		foreach ($items as $i=>$item)
 		{

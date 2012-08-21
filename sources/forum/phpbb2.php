@@ -845,9 +845,7 @@ class forum_driver_phpbb2 extends forum_driver_base
 	function get_matching_members($pattern,$limit=NULL)
 	{
 		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE username LIKE \''.db_encode_like($pattern).'\' AND user_id<>'.strval($this->get_guest_id()).' ORDER BY user_lastvisit DESC',$limit);
-		global $M_SORT_KEY;
-		$M_SORT_KEY='username';
-		uasort($rows,'multi_sort');
+		sort_maps_by($rows,'username');
 		return $rows;
 	}
 

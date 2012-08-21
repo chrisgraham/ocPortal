@@ -214,12 +214,10 @@ class Module_admin_notifications
 		}
 
 		// Sort labels
-		global $M_SORT_KEY;
-		$M_SORT_KEY='NOTIFICATION_LABEL';
 		ksort($notification_sections);
 		foreach (array_keys($notification_sections) as $i)
 		{
-			usort($notification_sections[$i]['NOTIFICATION_CODES'],'multi_sort');
+			sort_maps_by($notification_sections[$i]['NOTIFICATION_CODES'],'NOTIFICATION_LABEL');
 		}
 
 		$css_path=get_custom_file_base().'/themes/'.$GLOBALS['FORUM_DRIVER']->get_theme().'/templates_cached/'.user_lang().'/global.css';

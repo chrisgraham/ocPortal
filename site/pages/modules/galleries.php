@@ -861,10 +861,7 @@ class Module_galleries
 		}
 		if (!is_null($all_are))
 		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY=mixed();
-			$M_SORT_KEY='url';
-			usort($query_rows_images,'multi_sort');
+			sort_maps_by($query_rows_images,'url');
 		}
 
 		$query_rows=array_merge($query_rows_images,$query_rows_videos);
@@ -1376,9 +1373,7 @@ class Module_galleries
 			$combined=array();
 			foreach ($rows_images as $row_image) $combined[]=array($row_image,'image',$row_image[$_sort]);
 			foreach ($rows_videos as $row_video) $combined[]=array($row_video,'video',$row_video[$_sort]);
-			global $M_SORT_KEY;
-			$M_SORT_KEY=2;
-			usort($combined,'multi_sort');
+			sort_maps_by($combined,2);
 			if ($_dir=='DESC')
 				$combined=array_reverse($combined);
 
