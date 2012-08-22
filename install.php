@@ -90,7 +90,7 @@ require_code('permissions');
 require_code('minikernel');
 require_code('inst_special');
 require_code('forum_stub');
-require_code('support');
+require_code('global3');
 require_code('temporal');
 $GLOBALS['MEM_CACHE']=NULL;
 require_code('files');

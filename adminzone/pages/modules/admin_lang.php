@@ -488,7 +488,7 @@ msgstr ""
 						$entries2[$key]=array($val,$seen_before,$english);
 						$en_seen_before[$val]=1;
 					}
-					require_code('support2');
+					require_code('global4');
 					foreach ($entries2 as $key=>$_val)
 					{
 						list($val,$seen_before,$english)=$_val;

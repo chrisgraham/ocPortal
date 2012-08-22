@@ -738,7 +738,7 @@ class Hook_addon_registry_core
 			'sources/site_tree.php',
 			'sources/splurgh.php',
 			'sources/submit.php',
-			'sources/support.php',
+			'sources/global3.php',
 			'sources/support2.php',
 			'sources/mime_types.php',
 			'sources/obfuscate.php',

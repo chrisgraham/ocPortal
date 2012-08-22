@@ -19,13 +19,13 @@
  */
 
 /*
-support.php contains further support functions, which are shared between the installer and the main installation (i.e. global.php and global2.php are not used by the installer, and the installer emulates these functions functionality via minikernel.php).
+global3.php contains further support functions, which are shared between the installer and the main installation (i.e. global.php and global2.php are not used by the installer, and the installer emulates these functions functionality via minikernel.php).
 */
 
 /**
  * Standard code module initialisation function.
  */
-function init__support()
+function init__global3()
 {
 	global $PAGE_NAME_CACHE,$GETTING_PAGE_NAME;
 	$PAGE_NAME_CACHE=NULL;

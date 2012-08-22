@@ -465,7 +465,7 @@ function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 {
 	if (!addon_installed('securitylogging')) return false;
 
-	require_code('support2');
+	require_code('global4');
 	if ((!is_null($ban_until)) && (ip_banned($ip,true))) return false; // Don't allow shortening ban period automatically, or having a negative ban negating a positive one!
 
 	$GLOBALS['SITE_DB']->query_delete('banned_ip',array('ip'=>$ip),'',1);

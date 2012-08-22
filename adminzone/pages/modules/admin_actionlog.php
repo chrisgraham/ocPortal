@@ -60,7 +60,7 @@ class Module_admin_actionlog
 	{
 		require_all_lang();
 
-		require_code('support2');
+		require_code('global4');
 
 		$type=get_param('type','misc');
 

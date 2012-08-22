@@ -57,7 +57,7 @@ The following are the core ocPortal APIs (green is used to indicate the most imp
 | [color="green"]GLOBAL[/color]
 | [url="http://ocportal.com/docs/api/core/_sources---global.php.html"][tt]sources/global.php[/tt][/url]
 [url="http://ocportal.com/docs/api/core/_sources---global2.php.html"][tt]sources/global2.php[/tt][/url]
-[url="http://ocportal.com/docs/api/core/_sources---support.php.html"][tt]sources/support.php[/tt][/url]
+[url="http://ocportal.com/docs/api/core/_sources---global3.php.html"][tt]sources/global3.php[/tt][/url]
 | Pre-loaded and available in global scope
 |-
 | [color="green"]Web page display[/color]
@@ -198,7 +198,7 @@ The following are the core ocPortal APIs (green is used to indicate the most imp
 |-
 | XHTML manipulation
 | [tt]sources/xhtml.php[/tt]
-API described in [url="http://ocportal.com/docs/api/core/_sources---support.php.html"][tt]support.php[/tt][/url] (has since been split)
+API described in [url="http://ocportal.com/docs/api/core/_sources---global3.php.html"][tt]global3.php[/tt][/url] (has since been split)
 | Needs [tt]require_code[/tt].
 |-
 | [color="green"]URL generation[/color]

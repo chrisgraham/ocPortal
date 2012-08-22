@@ -42,7 +42,7 @@ function check_rbls($page_level=false,$user_ip=NULL)
 	if (is_null($user_ip)) $user_ip=get_ip_address();
 
 	// Check ocPortal bans / caching
-	require_code('support2');
+	require_code('global4');
 	$is_already_ip_banned=ip_banned($user_ip,true,true);
 	if ($is_already_ip_banned===true) critical_error('BANNED');
 	if ($is_already_ip_banned===false) return; // Cached that we're not banned

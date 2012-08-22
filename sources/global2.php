@@ -173,7 +173,7 @@ function init__global2()
 	}
 
 	// Most critical things
-	require_code('support'); // A lot of support code is present in this
+	require_code('global3'); // A lot of support code is present in this
 	srand(make_seed());
 	mt_srand(make_seed());
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0)) // Fast cacheing for bots
@@ -187,7 +187,7 @@ function init__global2()
 			}
 		}
 	}
-	require_code('caches'); // Recently taken out of 'support' so makes sense to load it here
+	require_code('caches');
 	require_code('database'); // There's nothing without the database
 	require_code('config'); // Config is needed for much active stuff
 	require_code('support2');
