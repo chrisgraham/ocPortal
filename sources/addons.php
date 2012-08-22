@@ -1,3 +1,4 @@
+
 <?php /*
 
  ocPortal
@@ -28,6 +29,8 @@
 function find_updated_addons()
 {
 	$addons=find_installed_addons(true);
+	if (count($addons)==0) return array();
+
 	$url='http://ocportal.com/uploads/website_specific/ocportal.com/scripts/addon_manifest.php?version='.urlencode(float_to_raw_string(ocp_version_number()));
 	foreach (array_keys($addons) as $i=>$addon)
 	{
@@ -39,6 +42,10 @@ function find_updated_addons()
 	if ($addon_data=='') warn_exit(do_lang('INTERNAL_ERROR'));
 
 	$available_addons=find_available_addons();
+	global $M_SORT_KEY;
+	$M_SORT_KEY='mtime'; // TODO: In v10 this syntax will change
+	usort($available_addons,'multi_sort');
+	$available_addons=array_reverse($available_addons);
 
 	$updated_addons=array();
 	foreach (unserialize($addon_data) as $i=>$addon)
@@ -54,6 +61,7 @@ function find_updated_addons()
 				{
 					$updated_addons[$addon[3]]=array($addon[1]); // Is known to server though
 				}
+				break;
 			}
 		}
 		if (!$found) // Don't have our original .tar, so lets say we need to reinstall
