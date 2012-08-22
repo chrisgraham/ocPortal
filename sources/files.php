@@ -263,6 +263,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 		$ignore_filenames+=array(
 			// Bundled stuff that is not necessarily in a *_custom dir yet is volatile
 			'map.ini'=>'themes',
+			'_config.php'=>'',
 			'info.php'=>'',
 			'ocp_sitemap.xml'=>'',
 			'errorlog.php'=>'data_custom',
