@@ -637,17 +637,36 @@ body.popup_spacer h2 {
 
 #panel_left {
 	float: {!en_left};
-	margin-{!en_left}: 1em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin-{!en_left}: 1em;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		padding-{!en_left}: 1em;
+		padding-{!en_right}: 0.5em;
+		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+	{+END}
 }
 
 #panel_right {
 	float: {!en_right};
-	margin-{!en_right}: 1em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		margin-{!en_right}: 1em;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		padding-{!en_right}: 1em;
+		padding-{!en_left}: 0.5em;
+		{$BETA_CSS_PROPERTY,box-sizing: border-box;}
+	{+END}
 }
 
 .global_side_panel {
 	{$BETA_CSS_PROPERTY,word-wrap: break-word;}
-	width: 13em;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 13em;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		width: 50%;
+	{+END}
 	color: {$GET,slightly_seeded_gray_text};
 }
 .global_middle_faux>.global_side_panel {
@@ -841,7 +860,7 @@ footer .global_minilinks .horizontal_links {
 }
 
 footer .global_minilinks a {
-	white-space: nowrap;
+	white-space: nowrap !important; /* So works on mobiles */
 	{+START,IF,{$MOBILE}}
 		padding: 4px;
 	{+END}
@@ -1361,7 +1380,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	{+END}
 	{+START,IF,{$MOBILE}}
 		margin: 1em 0;
-		width: 100%;
+		max-width: 100%;
 	{+END}
 	{$BETA_CSS_PROPERTY,box-sizing: border-box;}
 }
