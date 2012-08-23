@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core
+ * @package		securitylogging
  */
 
 /**
@@ -62,7 +62,7 @@ class Module_admin_lookup
 		set_helper_panel_tutorial('tut_trace');
 
 		require_lang('submitban');
-		require_lang('security');
+		require_lang('lookup');
 		require_code('lookup');
 
 		if (addon_installed('securitylogging'))

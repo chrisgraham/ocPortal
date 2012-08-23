@@ -275,11 +275,13 @@
 							<td>{!DAYS_AGO,{SUBMIT_DAYS_AGO}}</td>
 						</tr>
 
-						{+START,IF_NON_EMPTY,{IP_ADDRESS}}
-							<tr>
-								<th class="de_th">{!IP_ADDRESS}:</th>
-								<td><a href="{$PAGE_LINK*,_SEARCH:admin_lookup:param={IP_ADDRESS&}}">{$TRUNCATE_SPREAD,{IP_ADDRESS*},20,1,1}</a></td>
-							</tr>
+						{+START,IF,{$ADDON_INSTALLED,securitylogging}}
+							{+START,IF_NON_EMPTY,{IP_ADDRESS}}
+								<tr>
+									<th class="de_th">{!IP_ADDRESS}:</th>
+									<td><a href="{$PAGE_LINK*,_SEARCH:admin_lookup:param={IP_ADDRESS&}}">{$TRUNCATE_SPREAD,{IP_ADDRESS*},20,1,1}</a></td>
+								</tr>
+							{+END}
 						{+END}
 
 						{+START,IF_PASSED,USER_AGENT}

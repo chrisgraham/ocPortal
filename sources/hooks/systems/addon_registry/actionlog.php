@@ -82,6 +82,7 @@ class Hook_addon_registry_actionlog
 			'themes/default/images/bigicons/actionlog.png',
 			'themes/default/images/pagepics/actionlog.png',
 			'sources/hooks/systems/rss/admin_recent_actions.php',
+			'lang/EN/actionlog.ini',
 		);
 	}
 

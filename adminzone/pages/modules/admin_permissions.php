@@ -222,8 +222,6 @@ class Module_admin_permissions
 	 */
 	function absorb()
 	{
-		require_lang('security');
-
 		$title=get_screen_title('ABSORB_PERMISSIONS');
 
 		set_helper_panel_pic('pagepics/privileges');
@@ -268,8 +266,6 @@ class Module_admin_permissions
 	 */
 	function _absorb()
 	{
-		require_lang('security');
-
 		$to=post_param_integer('to');
 		$from=post_param_integer('from');
 		if ($to==$from) warn_exit(do_lang_tempcode('MERGE_SAME'));

@@ -61,7 +61,7 @@ class Hook_do_next_menus_core
 			array('setup','config',array('admin_config',array('type'=>'misc'),get_module_zone('admin_config')),do_lang_tempcode('CONFIGURATION'),('DOC_CONFIGURATION')),
 			addon_installed('awards')?array('setup','awards',array('admin_awards',array('type'=>'misc'),get_module_zone('admin_awards')),do_lang_tempcode('AWARDS'),('DOC_AWARDS')):NULL,
 			(get_forum_type()=='ocf' || !addon_installed('welcome_emails'))?/*Is on members menu*/NULL:array('setup','welcome_emails',array('admin_ocf_welcome_emails',array('type'=>'misc'),get_module_zone('admin_ocf_welcome_emails')),do_lang_tempcode('WELCOME_EMAILS'),('DOC_WELCOME_EMAILS')),
-			(get_forum_type()=='ocf')?/*Is on members menu*/NULL:array('tools','investigateuser',array('admin_lookup',array(),get_module_zone('admin_lookup')),do_lang_tempcode('INVESTIGATE_USER'),('DOC_INVESTIGATE_USER')),
+			((get_forum_type()=='ocf')?/*Is on members menu*/ || (addon_installed('securitylogging')))?NULL:array('tools','investigateuser',array('admin_lookup',array(),get_module_zone('admin_lookup')),do_lang_tempcode('INVESTIGATE_USER'),('DOC_INVESTIGATE_USER')),
 			addon_installed('xml_fields')?array('setup','xml',array('admin_config',array('type'=>'xml_fields'),get_module_zone('admin_config')),do_lang_tempcode('FIELD_FILTERS'),('DOC_FIELD_FILTERS')):NULL,
 
 			(get_forum_type()!='ocf')?NULL:array('tools','editmember',array('admin_ocf_join',array('type'=>'menu'),get_module_zone('admin_ocf_join')),do_lang_tempcode('MEMBERS'),('DOC_MEMBERS')),

@@ -2180,7 +2180,7 @@ END;
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$this->handle_topic_breadcrumbs($topic_info[0]['t_forum_id'],$topic_id,$topic_info[0]['t_cache_first_title'],do_lang_tempcode('DELETE_POST'));
 
-		if (has_privilege(get_member(),'mass_delete_from_ip'))
+		if ((addon_installed('securitylogging')) && (has_privilege(get_member(),'mass_delete_from_ip')))
 		{
 			$title=get_screen_title('DELETE_POST');
 			$post_rows=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_ip_address','p_time'),array('id'=>$post_id));

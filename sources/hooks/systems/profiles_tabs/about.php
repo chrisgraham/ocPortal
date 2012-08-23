@@ -80,7 +80,7 @@ class Hook_Profiles_Tabs_about
 		}
 		if ((has_privilege($member_id_viewing,'view_content_history')) && (has_actual_page_access($member_id_viewing,'admin_ocf_history')))
 			$modules[]=(!addon_installed('ocf_forum'))?NULL:array('usage',do_lang_tempcode('POST_HISTORY'),build_url(array('page'=>'admin_ocf_history','member_id'=>$member_id_of),'adminzone'));
-		if (has_actual_page_access($member_id_viewing,'admin_lookup'))
+		if ((addon_installed('securitylogging')) && (has_actual_page_access($member_id_viewing,'admin_lookup')))
 		{
 			require_lang('submitban');
 			$modules[]=array('usage',do_lang_tempcode('INVESTIGATE_USER'),build_url(array('page'=>'admin_lookup','param'=>$member_id_of),'adminzone'));

@@ -227,7 +227,7 @@ class Module_topicview
 					$poster=do_template('OCF_POSTER_MEMBER',array('_GUID'=>'dbbed1850b6c01a6c9601d85c6aee43f','ONLINE'=>member_is_online($_postdetails['poster']),'ID'=>strval($_postdetails['poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($_postdetails['poster'],false,true),'POSTER_USERNAME'=>$_postdetails['poster_username'],'HIGHLIGHT_NAME'=>array_key_exists('poster_highlighted_name',$_postdetails)?strval($_postdetails['poster_highlighted_name']):NULL));
 				} else
 				{
-					$ip_link=((array_key_exists('ip_address',$_postdetails)) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$_postdetails['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();
+					$ip_link=((addon_installed('securitylogging')) && (array_key_exists('ip_address',$_postdetails)) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$_postdetails['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();
 					$poster=do_template('OCF_POSTER_GUEST',array('_GUID'=>'36a8e550222cdac5165ef8f722be3def','LOOKUP_IP_URL'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$_postdetails['poster_username']));
 				}
 

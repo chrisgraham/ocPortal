@@ -788,7 +788,7 @@ class OCP_Topic
 					$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>member_is_online($post['poster']),'ID'=>strval($post['poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['poster'],false,true),'POSTER_USERNAME'=>$post['poster_username']));
 				} else
 				{
-					$ip_link=((array_key_exists('ip_address',$post)) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$post['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();
+					$ip_link=((array_key_exists('ip_address',$post)) && (addon_installed('securitylogging')) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$post['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();
 					$poster=do_template('OCF_POSTER_GUEST',array('_GUID'=>'93107543c6a0138f379e7124b72b24ff','LOOKUP_IP_URL'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$post['poster_username']));
 				}
 			}

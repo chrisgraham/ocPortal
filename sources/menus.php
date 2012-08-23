@@ -107,7 +107,6 @@ function build_management_menu()
 	if (is_guest()) return array();
 
 	require_lang('menus');
-	require_lang('security');
 
 	$sections=array(
 		'start'=>array('TOOLTIP'=>do_lang('MM_TOOLTIP_START'),'CURRENT'=>false,'URL'=>'adminzone:','CAPTION'=>do_lang('ADMIN_HOME'),'IMG'=>'menu_items/management_navigation/start'),

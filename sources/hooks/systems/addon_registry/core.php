@@ -338,7 +338,6 @@ class Hook_addon_registry_core
 			'IPBAN_SCREEN.tpl',
 			'LOOKUP_IP_LIST_GROUP.tpl',
 			'BLOCK_MAIN_COMCODE_PAGE_CHILDREN.tpl',
-			'adminzone/pages/modules/admin_lookup.php',
 			'adminzone/pages/modules/admin_version.php',
 			'adminzone/pages/modules/index.html',
 			'adminzone/pages/modules_custom/.htaccess',
@@ -604,8 +603,6 @@ class Hook_addon_registry_core
 			'lang/EN/lang.ini',
 			'lang/EN/mail.ini',
 			'lang/EN/profiling.ini',
-			'lang/EN/security.ini',
-			'lang/EN/submitban.ini',
 			'lang/EN/version.ini',
 			'lang/EN/zones.ini',
 			'pages/comcode/.htaccess',
@@ -722,7 +719,6 @@ class Hook_addon_registry_core
 			'sources/lang_compile.php',
 			'sources/lang2.php',
 			'sources/lang3.php',
-			'sources/lookup.php',
 			'sources/mail.php',
 			'sources/miniblocks/.htaccess',
 			'sources/miniblocks/index.html',
@@ -862,9 +858,6 @@ class Hook_addon_registry_core
 		return array(
 			'ACTION_LOGS_SCREEN.tpl'=>'administrative__action_logs_screen',
 			'ACTION_LOGS_TOGGLE_LINK.tpl'=>'administrative__action_logs_toggle_link',
-			'LOOKUP_IP_LIST_ENTRY.tpl'=>'administrative__lookup_screen',
-			'LOOKUP_IP_LIST_GROUP.tpl'=>'administrative__lookup_screen',
-			'LOOKUP_SCREEN.tpl'=>'administrative__lookup_screen',
 			'LOGIN_SCREEN.tpl'=>'login_screen',
 			'LOGIN_REDIRECT_SCREEN.tpl'=>'login_redirect_screen',
 			'FORUMS_EMBED.tpl'=>'forums_embed',
@@ -991,54 +984,6 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('ACTION_LOGS_SCREEN', array(
 				'TABLE'=>placeholder_table(),
 				'TITLE'=>lorem_title()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__administrative__lookup_screen()
-	{
-		$inner_ip_list=new ocp_tempcode();
-		foreach (placeholder_array() as $value)
-			$inner_ip_list->attach(do_lorem_template('LOOKUP_IP_LIST_ENTRY', array(
-				'LOOKUP_URL'=>placeholder_url(),
-				'DATE'=>placeholder_time(),
-				'_DATE'=>placeholder_time(),
-				'IP'=>placeholder_ip(),
-				'BANNED'=>do_lang_tempcode('YES'),
-				'UNIQID'=>placeholder_random()
-			)));
-
-		$group=do_lorem_template('LOOKUP_IP_LIST_GROUP', array(
-			'BANNED'=>do_lang_tempcode('YES'),
-			'MASK'=>placeholder_ip(),
-			'GROUP'=>$inner_ip_list,
-			'OPEN_DEFAULT'=>true,
-			'UNIQID'=>placeholder_random()
-		));
-		return array(
-			lorem_globalise(do_lorem_template('LOOKUP_SCREEN', array(
-				'TITLE'=>lorem_title(),
-				'ALERTS'=>lorem_phrase(),
-				'STATS'=>lorem_phrase(),
-				'IP_LIST'=>$group,
-				'IP_BANNED'=>lorem_phrase(),
-				'SUBMITTER_BANNED'=>lorem_phrase(),
-				'MEMBER_BANNED'=>lorem_phrase(),
-				'ID'=>placeholder_id(),
-				'IP'=>placeholder_ip(),
-				'NAME'=>lorem_word(),
-				'SEARCH_URL'=>placeholder_url(),
-				'AUTHOR_URL'=>placeholder_url(),
-				'POINTS_URL'=>placeholder_url(),
-				'PROFILE_URL'=>placeholder_url(),
-				'ACTION_LOG_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}

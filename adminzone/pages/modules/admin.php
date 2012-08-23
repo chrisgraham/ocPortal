@@ -494,7 +494,6 @@ class Module_admin
 													}
 
 													require_lang('menus');
-													require_lang('security');
 
 													$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 													$breadcrumbs->attach(hyperlink($_url,do_lang_tempcode(strtoupper($i[0]))));

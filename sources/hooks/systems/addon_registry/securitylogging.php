@@ -84,7 +84,12 @@ class Hook_addon_registry_securitylogging
 			'themes/default/images/bigicons/securitylog.png',
 			'themes/default/images/pagepics/securitylog.png',
 			'HACK_ATTEMPT_MAIL.tpl',
-			'adminzone/pages/modules/admin_ipban.php'
+			'adminzone/pages/modules/admin_ipban.php',
+			'lang/EN/lookup.ini',
+			'lang/EN/security.ini',
+			'lang/EN/submitban.ini',
+			'adminzone/pages/modules/admin_lookup.php',
+			'sources/lookup.php',
 		);
 	}
 
@@ -100,7 +105,10 @@ class Hook_addon_registry_securitylogging
 			'SECURITY_SCREEN.tpl'=>'administrative__security_screen',
 			'SECURITY_ALERT_SCREEN.tpl'=>'administrative__security_alert_screen',
 			'HACK_ATTEMPT_MAIL.tpl'=>'administrative__hack_attempt_mail',
-			'IPBAN_SCREEN.tpl'=>'ipban_screen'
+			'IPBAN_SCREEN.tpl'=>'ipban_screen',
+			'LOOKUP_IP_LIST_ENTRY.tpl'=>'administrative__lookup_screen',
+			'LOOKUP_IP_LIST_GROUP.tpl'=>'administrative__lookup_screen',
+			'LOOKUP_SCREEN.tpl'=>'administrative__lookup_screen',
 		);
 	}
 
@@ -198,4 +206,53 @@ class Hook_addon_registry_securitylogging
 			)), NULL, '', true)
 		);
 	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__administrative__lookup_screen()
+	{
+		$inner_ip_list=new ocp_tempcode();
+		foreach (placeholder_array() as $value)
+			$inner_ip_list->attach(do_lorem_template('LOOKUP_IP_LIST_ENTRY', array(
+				'LOOKUP_URL'=>placeholder_url(),
+				'DATE'=>placeholder_time(),
+				'_DATE'=>placeholder_time(),
+				'IP'=>placeholder_ip(),
+				'BANNED'=>do_lang_tempcode('YES'),
+				'UNIQID'=>placeholder_random()
+			)));
+
+		$group=do_lorem_template('LOOKUP_IP_LIST_GROUP', array(
+			'BANNED'=>do_lang_tempcode('YES'),
+			'MASK'=>placeholder_ip(),
+			'GROUP'=>$inner_ip_list,
+			'OPEN_DEFAULT'=>true,
+			'UNIQID'=>placeholder_random()
+		));
+		return array(
+			lorem_globalise(do_lorem_template('LOOKUP_SCREEN', array(
+				'TITLE'=>lorem_title(),
+				'ALERTS'=>lorem_phrase(),
+				'STATS'=>lorem_phrase(),
+				'IP_LIST'=>$group,
+				'IP_BANNED'=>lorem_phrase(),
+				'SUBMITTER_BANNED'=>lorem_phrase(),
+				'MEMBER_BANNED'=>lorem_phrase(),
+				'ID'=>placeholder_id(),
+				'IP'=>placeholder_ip(),
+				'NAME'=>lorem_word(),
+				'SEARCH_URL'=>placeholder_url(),
+				'AUTHOR_URL'=>placeholder_url(),
+				'POINTS_URL'=>placeholder_url(),
+				'PROFILE_URL'=>placeholder_url(),
+				'ACTION_LOG_URL'=>placeholder_url()
+			)), NULL, '', true)
+		);
+	}
+
 }

@@ -63,7 +63,7 @@ class Module_admin_ssl
 
 		if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 
-		require_lang('security');
+		require_lang('ssl');
 
 		if (get_option('enable_https')=='0')
 		{

@@ -78,7 +78,8 @@ class Hook_addon_registry_ssl
 			'adminzone/pages/modules/admin_ssl.php',
 			'sources/hooks/systems/do_next_menus/ssl.php',
 			'themes/default/images/pagepics/ssl.png',
-			'themes/default/images/bigicons/ssl.png'
+			'themes/default/images/bigicons/ssl.png',
+			'lang/EN/ssl.ini',
 		);
 	}
 
@@ -105,7 +106,7 @@ class Hook_addon_registry_ssl
 	 */
 	function tpl_preview__administrative__ssl_configuration_screen()
 	{
-		require_lang('security');
+		require_lang('ssl');
 		$content=new ocp_tempcode();
 		$k=0;
 		foreach (placeholder_array() as $_k=>$v)

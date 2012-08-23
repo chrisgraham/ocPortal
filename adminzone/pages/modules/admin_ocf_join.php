@@ -92,8 +92,7 @@ class Module_admin_ocf_join
 		set_helper_panel_pic('pagepics/editmember');
 		set_helper_panel_tutorial('tut_members');
 
-		require_lang('submitban');
-		require_lang('security');
+		require_lang('lookup');
 		if (addon_installed('welcome_emails')) require_lang('ocf_welcome_emails');
 		if (addon_installed('ecommerce')) require_lang('ecommerce');
 		if (addon_installed('staff')) require_lang('staff');
@@ -110,7 +109,7 @@ class Module_admin_ocf_join
 						array('import_csv',array('admin_ocf_join',array('type'=>'import_csv'),get_module_zone('admin_ocf_join')),do_lang_tempcode('IMPORT_MEMBER_CSV'),('DOC_IMPORT_MEMBER_CSV')),
 						addon_installed('ocf_cpfs')?array('customprofilefields',array('admin_ocf_customprofilefields',array('type'=>'misc'),get_module_zone('admin_ocf_customprofilefields')),do_lang_tempcode('CUSTOM_PROFILE_FIELDS'),('DOC_CUSTOM_PROFILE_FIELDS')):NULL,
 						addon_installed('welcome_emails')?array('welcome_emails',array('admin_ocf_welcome_emails',array('type'=>'misc'),get_module_zone('admin_ocf_welcome_emails')),do_lang_tempcode('WELCOME_EMAILS'),('DOC_WELCOME_EMAILS')):NULL,
-						array('investigateuser',array('admin_lookup',array(),get_module_zone('admin_lookup')),do_lang_tempcode('INVESTIGATE_USER'),('DOC_INVESTIGATE_USER')),
+						addon_installed('securitylogging')?array('investigateuser',array('admin_lookup',array(),get_module_zone('admin_lookup')),do_lang_tempcode('INVESTIGATE_USER'),('DOC_INVESTIGATE_USER')):NULL,
 						array('usergroups_temp',array('admin_ocf_join',array('type'=>'group_member_timeouts'),get_module_zone('admin_ocf_join')),do_lang_tempcode('GROUP_MEMBER_TIMEOUTS'),('DOC_GROUP_MEMBER_TIMEOUTS')),
 						addon_installed('ecommerce')?array('ecommerce',array('admin_ecommerce',array('type'=>'misc'),get_module_zone('admin_ecommerce')),do_lang_tempcode('CUSTOM_PRODUCT_USERGROUP'),('DOC_ECOMMERCE')):NULL,
 						array('usergroups',array('admin_ocf_groups',array('type'=>'misc'),get_module_zone('admin_ocf_groups'),do_lang_tempcode('SWITCH_SECTION_WARNING')),do_lang_tempcode('USERGROUPS'),('DOC_GROUPS')),
