@@ -84,7 +84,7 @@ Our recommend tool should work with all major software and web applications that
 1) Log into your Live.com email account;
 2) Click on "Contact list" from the left menu;
 3) From the middle-top menu select "Manage" and then "Export";
-4) Enter the security image characters inti the text box and click "Export";
+4) Enter the security image characters into the text box and click "Export";
 5) Save the file.
 
 [title="3"]LinkedIn[/title]
