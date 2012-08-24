@@ -190,7 +190,7 @@ function init__global2()
 	require_code('caches');
 	require_code('database'); // There's nothing without the database
 	require_code('config'); // Config is needed for much active stuff
-	require_code('support2');
+	require_code('global4');
 	if (ip_banned(get_ip_address())) critical_error('BANNED');
 	if ((running_script('messages')) && (get_param('action','new')=='new') && (get_param_integer('routine_refresh',0)==0)) // Architecturally unsound chat message precheck (for extra efficiency)
 	{

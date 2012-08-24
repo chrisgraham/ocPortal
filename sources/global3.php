@@ -1412,7 +1412,7 @@ function get_community_billboard_message()
  */
 function log_it($type,$a=NULL,$b=NULL)
 {
-	require_code('support2');
+	require_code('global4');
 	_log_it($type,$a,$b);
 }
 

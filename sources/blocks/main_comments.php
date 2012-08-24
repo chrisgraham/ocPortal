@@ -35,7 +35,7 @@ class Block_main_comments
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','page','extra_param_from','reverse','forum','invisible_if_no_comments','reviews');
+		$info['parameters']=array('param','page','extra_param_from','reverse','forum','invisible_if_no_comments','reviews','max');
 		return $info;
 	}
 
@@ -100,11 +100,9 @@ class Block_main_comments
 		}
 		$hidden=$submitted?actualise_post_comment(true,'block_main_comments',$map['page'].'_'.$map['param'].$extra,$self_url,$self_title,array_key_exists('forum',$map)?$map['forum']:NULL,false,NULL,get_page_name()=='guestbook'):false;
 
-		$out=new ocp_tempcode();
-
 		if ((array_key_exists('title',$_POST)) && ($hidden) && ($submitted))
 		{
-			$out->attach(paragraph(do_lang_tempcode('MESSAGE_POSTED'),'dsgdgdfl;gkd09'));
+			attach_message(do_lang_tempcode('MESSAGE_POSTED'),'inform');
 
 			if (get_forum_type()=='ocf')
 			{
@@ -122,9 +120,9 @@ class Block_main_comments
 		$invisible_if_no_comments=((array_key_exists('invisible_if_no_comments',$map)) && ($map['invisible_if_no_comments']=='1'));
 		$reverse=((array_key_exists('reverse',$map)) && ($map['reverse']=='1'));
 		$allow_reviews=((!array_key_exists('reviews',$map)) || ($map['reviews']=='1'));
+		$num_to_show_limit=((array_key_exists('max',$map)) && ($map['max']!='-1'))?intval($map['max']):NULL;
 
-		$out->attach(get_comments('block_main_comments',true,$map['page'].'_'.$map['param'].$extra,$invisible_if_no_comments,array_key_exists('forum',$map)?$map['forum']:NULL,NULL,NULL,get_page_name()=='guestbook',$reverse,NULL,$allow_reviews));
-		return $out;
+		return get_comments('block_main_comments',true,$map['page'].'_'.$map['param'].$extra,$invisible_if_no_comments,array_key_exists('forum',$map)?$map['forum']:NULL,NULL,NULL,get_page_name()=='guestbook',$reverse,NULL,$allow_reviews,$num_to_show_limit);
 	}
 
 }

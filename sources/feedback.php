@@ -585,9 +585,10 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
  * @param  boolean		Whether to reverse the posts
  * @param  ?MEMBER		User to highlight the posts of (NULL: none)
  * @param  boolean		Whether to allow ratings along with the comment (like reviews)
+ * @param  ?integer		Maximum to load (NULL: default)
  * @return tempcode		The tempcode for the comment topic
  */
-function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no_comments=false,$forum=NULL,$post_warning=NULL,$_comments=NULL,$explicit_allow=false,$reverse=false,$highlight_by_user=NULL,$allow_reviews=false)
+function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no_comments=false,$forum=NULL,$post_warning=NULL,$_comments=NULL,$explicit_allow=false,$reverse=false,$highlight_by_user=NULL,$allow_reviews=false,$num_to_show_limit=NULL)
 {
 	if (((get_option('is_on_comments')=='1') && (get_forum_type()!='none') && ((get_forum_type()!='ocf') || (addon_installed('ocf_forum'))) && (($allow_reviews) || ($allow_comments))) || ($explicit_allow))
 	{
@@ -596,7 +597,7 @@ function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no
 		require_code('topics');
 		$renderer=new OCP_Topic();
 
-		return $renderer->render_as_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum,$post_warning,$_comments,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews);
+		return $renderer->render_as_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum,$post_warning,$_comments,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews,$num_to_show_limit);
 	}
 
 	return new ocp_tempcode(); // No franchise to render comments

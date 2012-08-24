@@ -83,9 +83,10 @@ class OCP_Topic
 	 * @param  boolean		Whether to reverse the posts
 	 * @param  ?MEMBER		User to highlight the posts of (NULL: none)
 	 * @param  boolean		Whether to allow ratings along with the comment (like reviews)
+	 * @param  ?integer		Maximum to load (NULL: default)
 	 * @return tempcode		The tempcode for the comment topic
 	 */
-	function render_as_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum_name,$post_warning,$preloaded_comments,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews)
+	function render_as_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum_name,$post_warning,$preloaded_comments,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews,$num_to_show_limit)
 	{
 		if ((get_forum_type()=='ocf') && (!addon_installed('ocf_forum'))) return new ocp_tempcode();
 
@@ -93,7 +94,7 @@ class OCP_Topic
 
 		// Settings we need
 		$max_thread_depth=get_param_integer('max_thread_depth',intval(get_option('max_thread_depth')));
-		$num_to_show_limit=get_param_integer('max_comments',intval(get_option('comments_to_show_in_thread')));
+		if (is_null($num_to_show_limit)) $num_to_show_limit=get_param_integer('max_comments',intval(get_option('comments_to_show_in_thread')));
 		$start=get_param_integer('start_comments',0);
 
 		// Load up posts from DB
@@ -111,7 +112,7 @@ class OCP_Topic
 			if ((count($this->all_posts_ordered)==0) && ($invisible_if_no_comments))
 				return new ocp_tempcode();
 
-			$may_reply=has_privilege(get_member(),'comment',get_page_name());
+			$may_reply=has_specific_permission(get_member(),'comment',get_page_name());
 
 			// Prepare review titles
 			global $REVIEWS_STRUCTURE;
@@ -171,15 +172,15 @@ class OCP_Topic
 			{
 				foreach ($this->reviews_rating_criteria as $review_title)
 				{
-					$_rating=$GLOBALS['SITE_DB']->query_select_value('review_supplement','AVG(r_rating)',array('r_rating_type'=>$review_title,'r_topic_id'=>$topic_id));
+					$_rating=$GLOBALS['SITE_DB']->query_value('review_supplement','AVG(r_rating)',array('r_rating_type'=>$review_title,'r_topic_id'=>$topic_id));
 					$rating=mixed();
 					$rating=is_null($_rating)?NULL:$_rating;
 					$reviews_rating_criteria[]=array('REVIEW_TITLE'=>$review_title,'REVIEW_RATING'=>make_string_tempcode(is_null($rating)?'':float_format($rating)));
 					if (!is_null($rating))
 					{
-						set_extra_request_metadata(array(
+						$GLOBALS['META_DATA']+=array(
 							'rating'=>float_to_raw_string($rating),
-						));
+						);
 					}
 				}
 			}
@@ -217,7 +218,7 @@ class OCP_Topic
 	 * Render posts from a topic (usually tied into AJAX, to get iterative results).
 	 *
 	 * @param  AUTO_LINK		The topic ID
-	 * @param  integer		Maximum to load if non-threaded
+	 * @param  integer		Maximum to load
 	 * @param  boolean		Whether this resource allows comments (if not, this function does nothing - but it's nice to move out this common logic into the shared function)
 	 * @param  boolean		Whether the comment box will be invisible if there are not yet any comments (and you're not staff)
 	 * @param  ?string		The name of the forum to use (NULL: default comment forum)
@@ -273,7 +274,7 @@ class OCP_Topic
 	 * Load from a given topic ID.
 	 *
 	 * @param  AUTO_LINK		Topic ID
-	 * @param  integer		Maximum to load if non-threaded
+	 * @param  integer		Maximum to load
 	 * @param  integer		Pagination start if non-threaded
 	 * @param  boolean		Whether to show in reverse date order
 	 * @param  ?array			List of post IDs to load (NULL: no filter)
@@ -404,7 +405,9 @@ class OCP_Topic
 			$tree=$this->_arrange_posts_in_tree($parent_post_id,$posts/*passed by reference*/,$queue,$max_thread_depth);
 			if (count($posts)!=0) // E.g. if parent was deleted at some time
 			{
-				sort_maps_by($posts,'date');
+				global $M_SORT_KEY;
+				$M_SORT_KEY='date';
+				usort($posts,'multi_sort');
 				while (count($posts)!=0)
 				{
 					$orphaned_post=array_shift($posts);
@@ -645,7 +648,7 @@ class OCP_Topic
 	/**
 	 * Render posts.
 	 *
-	 * @param  integer		Maximum to load if non-threaded
+	 * @param  integer		Maximum to load
 	 * @param  array			Tree structure of posts
 	 * @param  boolean		Whether the current user may reply to the topic (influences what buttons show)
 	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
@@ -820,7 +823,7 @@ class OCP_Topic
 
 			if (array_key_exists('intended_solely_for',$post))
 			{
-				decache('side_ocf_private_topics',array(get_member()));
+				decache('side_ocf_personal_topics',array(get_member()));
 				decache('_new_pp',array(get_member()));
 			}
 
@@ -866,8 +869,7 @@ class OCP_Topic
 	 */
 	function inject_rss_url($forum,$type,$id)
 	{
-		require_code('site');
-		set_feed_url(find_script('backend').'?mode=comments&forum='.urlencode($forum).'&filter='.urlencode($type.'_'.$id));
+		$GLOBALS['FEED_URL_2']=find_script('backend').'?mode=comments&forum='.urlencode($forum).'&filter='.urlencode($type.'_'.$id);
 	}
 
 	/**
@@ -875,9 +877,9 @@ class OCP_Topic
 	 */
 	function inject_meta_data()
 	{
-		set_extra_request_metadata(array(
+		$GLOBALS['META_DATA']+=array(
 			'numcomments'=>strval(count($this->all_posts_ordered)),
-		));
+		);
 	}
 
 	/**
