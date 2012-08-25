@@ -330,17 +330,17 @@ function install_ocf($upgrade_from=NULL)
 		// Add config options
 		add_config_option('ENCRYPTION_KEY','encryption_key','line','require_code(\'encryption\');return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED');
 		add_config_option('DECRYPTION_KEY','decryption_key','line','require_code(\'encryption\');return is_encryption_available()?\'\':NULL;','PRIVACY','ADVANCED');
-		add_config_option('IS_ON_POST_TITLES','is_on_post_titles','tick','return is_null($old=get_value(\'no_post_titles\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('IS_ON_ANONYMOUS_POSTS','is_on_anonymous_posts','tick','return is_null($old=get_value(\'ocf_no_anonymous_post\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('IS_ON_TIMEZONE_DETECTION','is_on_timezone_detection','tick','return is_null($old=get_value(\'no_js_timezone_detect\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('IS_ON_TOPIC_DESCRIPTIONS','is_on_topic_descriptions','tick','return is_null($old=get_value(\'no_topic_descriptions\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('IS_ON_TOPIC_EMOTICONS','is_on_topic_emoticons','tick','return is_null($old=get_value(\'ocf_no_topic_emoticons\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('DEFAULT_PREVIEW_GUESTS','default_preview_guests','tick','return is_null($old=get_value(\'no_default_preview_guests\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('FORCED_PREVIEW_OPTION','forced_preview_option','tick','return is_null($old=get_value(\'no_forced_preview_option\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('OVERT_WHISPER_SUGGESTION','overt_whisper_suggestion','tick','return is_null($old=get_value(\'disable_overt_whispering\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('IS_ON_INVISIBILITY','is_on_invisibility','tick','return is_null($old=get_value(\'no_invisible_option\'))?\'0\':invert_value($old);','SECTION_FORUMS','GENERAL');
-		add_config_option('ALLOW_ALPHA_SEARCH','allow_alpha_search','tick','return is_null($old=get_value(\'allow_alpha_search\'))?\'0\':$old;','SECTION_FORUMS','GENERAL');
-		add_config_option('ALLOW_EMAIL_DISABLE','allow_email_disable','tick','return is_null($old=get_value(\'disable_allow_emails_field\'))?\'1\':invert_value($old);','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_POST_TITLES','is_on_post_titles','tick','return \'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_ANONYMOUS_POSTS','is_on_anonymous_posts','tick','return \'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_TIMEZONE_DETECTION','is_on_timezone_detection','tick','return \'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_TOPIC_DESCRIPTIONS','is_on_topic_descriptions','tick','return \'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_TOPIC_EMOTICONS','is_on_topic_emoticons','tick','return \'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('DEFAULT_PREVIEW_GUESTS','default_preview_guests','tick','return \'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('FORCED_PREVIEW_OPTION','forced_preview_option','tick','return \'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('OVERT_WHISPER_SUGGESTION','overt_whisper_suggestion','tick','return \'1\';','SECTION_FORUMS','GENERAL');
+		add_config_option('IS_ON_INVISIBILITY','is_on_invisibility','tick','return \'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('ALLOW_ALPHA_SEARCH','allow_alpha_search','tick','return \'0\';','SECTION_FORUMS','GENERAL');
+		add_config_option('ALLOW_EMAIL_DISABLE','allow_email_disable','tick','return \'1\';','SECTION_FORUMS','GENERAL');
 		add_config_option('MAX_MEMBER_TITLE_LENGTH','max_member_title_length','integer','return addon_installed(\'ocf_member_titles\')?\'20\':NULL;','SECTION_FORUMS','GENERAL');
 		add_config_option('HTTPAUTH_IS_ENABLED','httpauth_is_enabled','tick','return \'0\';','SECTION_FORUMS','ADVANCED',1);
 		add_config_option('POST_HISTORY_DAYS','post_history_days','integer','return \'21\';','SECTION_FORUMS','GENERAL',1);

@@ -48,8 +48,7 @@ class Hook_config_default_show_gallery_counts
 	 */
 	function get_default()
 	{
-		$old=get_value('show_gallery_counts');
-		return is_null($old)?((get_forum_type()=='ocf')?'0':NULL):$old;
+		return ((get_forum_type()=='ocf')?'0':NULL);
 	}
 
 }

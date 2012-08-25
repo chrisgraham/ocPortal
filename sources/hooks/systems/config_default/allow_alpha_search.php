@@ -48,8 +48,7 @@ class Hook_config_default_allow_alpha_search
 	 */
 	function get_default()
 	{
-		$old=get_value('allow_alpha_search');
-		return is_null($old)?'0':$old;
+		return '0';
 	}
 
 }

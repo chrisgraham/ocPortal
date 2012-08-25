@@ -70,7 +70,8 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 				}
 			}
 
-			$data=http_download_file($url,NULL,false,false,'ocPortal',NULL,array('ocp_session'=>12345));
+			$session_cookie_id=get_session_cookie();
+			$data=http_download_file($url,NULL,false,false,'ocPortal',NULL,array($session_cookie_id=>12345));
 			if (is_null($data)) continue;
 
 			if (get_param_integer('save__deps',1)==1)

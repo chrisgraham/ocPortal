@@ -48,8 +48,7 @@ class Hook_config_default_global_donext_icons
 	 */
 	function get_default()
 	{
-		$old=get_value('disable_donext_global');
-		return is_null($old)?'1':invert_value($old);
+		return '1';
 	}
 
 }

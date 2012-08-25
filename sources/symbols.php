@@ -1452,10 +1452,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 				$value=str_replace('$CURRENT_YEAR',date('Y'),get_option('copyright'));
 				break;
 
-			case 'KEYWORDS_SPACED':
-				$value=str_replace(',',' ',get_option('keywords'));
-				break;
-
 			case 'STAFF_ADDRESS_PURE':
 				$value=get_option('staff_address');
 				break;
@@ -1661,14 +1657,6 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'SESSION':
 				$value=strval(get_session_id());
-				break;
-
-			case 'IN_ARRAY':
-				if (isset($param[1])) // Hard coding array
-				{
-					$array=array_slice($param,1);
-					$value=in_array($param[0],$array)?'1':'0';
-				}
 				break;
 
 			case 'MULT':
@@ -1940,6 +1928,10 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'COOKIE_DOMAIN':
 				$s_value=function_exists('get_cookie_domain')?get_cookie_domain():'';
 				$value=is_null($s_value)?'':$s_value;
+				break;
+
+			case 'SESSION_COOKIE_NAME':
+				$value=function_exists('get_session_cookie')?get_session_cookie():'';
 				break;
 
 			case 'IS_A_COOKIE_LOGIN':

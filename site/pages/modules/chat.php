@@ -214,7 +214,7 @@ class Module_chat
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<11))
 		{
-			add_config_option('GROUP_PRIVATE_CHATROOMS','group_private_chatrooms','tick','return is_null($old=get_value(\'no_group_private_chatrooms\'))?\'1\':invert_value($old);','FEATURE','SECTION_CHAT');
+			add_config_option('GROUP_PRIVATE_CHATROOMS','group_private_chatrooms','tick','return \'1\';','FEATURE','SECTION_CHAT');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<12))

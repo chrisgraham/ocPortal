@@ -48,8 +48,7 @@ class Hook_config_default_reverse_thumb_order
 	 */
 	function get_default()
 	{
-		$old=get_value('reverse_thumb_order');
-		return is_null($old)?'0':$old;
+		return '0';
 	}
 
 }

@@ -48,8 +48,7 @@ class Hook_config_default_allow_email_disable
 	 */
 	function get_default()
 	{
-		$old=get_value('disable_allow_emails_field');
-		return is_null($old)?'1':invert_value($old);
+		return '1';
 	}
 
 }

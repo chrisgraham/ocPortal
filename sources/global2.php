@@ -413,7 +413,7 @@ function init__global2()
 	}
 
 	// FirePHP console support, only for administrators
-	if (((get_param_integer('keep_firephp',0)==1) || (get_param_integer('keep_queries',0)==1)) && (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($GLOBALS['IS_ACTUALLY_ADMIN'])))
+	if ((get_param_integer('keep_firephp',0)==1) && (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($GLOBALS['IS_ACTUALLY_ADMIN'])))
 	{
 		require_code('firephp');
 	}

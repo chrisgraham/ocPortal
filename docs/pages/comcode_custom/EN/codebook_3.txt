@@ -185,6 +185,20 @@ The values you might want to manually change are:
  - [tt]max_moniker_length[/tt] -- the length of characters to include in URL moniker segments
  - [tt]gift_reward_chance[/tt] -- the percentage chance that members giving point gifts will be given a reward for doing so
  - [tt]gift_reward_amount[/tt] -- the number of points automatically given to a member who was lucky enough to get a reward for their own point giving (given by the system)
+ - [tt]brand_base_url[/tt] -- the base URL to the brand site (by default this is ocPortal.com but may be changed)
+ - [tt]captcha_single_guess[/tt] -- whether the CAPTCHA may only be guessed once before being reset (increases security, increases user annoyance)
+ - [tt]disable_feedback[/tt] -- set this to '1' to disable the feedback features (comments, ratings, etc)
+ - [tt]disable_post_emphasis[/tt] -- set this to '1' to disable the OCF post emphasis feature
+ - [tt]disable_secondary_news[/tt] -- set this to '1' to disable secondary news categories
+ - [tt]force_html_only[/tt] -- set this to '1' if newsletters should be sent in HTML, without a Comcode-based text version
+ - [tt]no_auto_meta[/tt] -- set this to '1' if you don't want SEO keywords/description to be auto-generated from content
+ - [tt]no_auto_notifications[/tt] -- set this to '1' if new members should not be given a default to be notified for their posted content (all this option does is change whether the automatic notifications default is on or off: the member may still control the automatic notifications setting, or of course manage notifications individually)
+ - [tt]no_dload_search_index[/tt] -- set this to '1' if download contents should not be indexed for the search module
+ - [tt]no_finish_profile[/tt] -- set this to '1' if members signing in via httpauth/OpenID/Facebook will not be required to immediately complete configured required custom profile fields
+ - [tt]personal_under_members[/tt] -- set this to '1' if personal galleries should be shown underneath members
+ - [tt]session_prudence[/tt] -- set this to '1' if new guests from the same IP address as an existing session should be reinitiated with that session, and that sessions should not be saved to the persistent cache. This is useful to improve performance slightly if the site is under very high load from non-cookie-supporting bots yet doesn't have eCommerce features that rely on tight session reliability
+ - [tt]username_profile_links[/tt] -- set this to '1' if member profile links should have the username in the URL rather than the member ID number
+ - [tt]welcome_nw_choice[/tt] -- set this to a newsletter ID# if welcome emails should go out to new newsletter subscribers rather than new members
 
 We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:
  - [tt]stupidity_mode[/tt] -- set to 'leet' or 'bork', for a fun April Fools-style Comcode joke (clear the Comcode cache after you're done though)
@@ -211,32 +225,32 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]no_base_check[/tt] -- set this to '1' if you do not want ocPortal to empty caches if the base URL gets changed (this is if the base URL is not defined, and someone accesses from something different). If you set this to '1', you also will want to disable frames (set no_frames to '1').
  - [tt]allow_php_in_templates[/tt] -- set this to '1' to enable the undocumented Tempcode 'PHP' directive, and it's short-hand syntax (written like normal PHP long-tags). This allows you to write PHP code inside templates, but please aware there are strong risks associated with this. It means that themes you install may contain PHP code, or people submitting Comcode content may put in PHP code which you could accidentally unwittingly activate when validating content (as it would be validated against your own security credentials).
  - [tt]base64_emails[/tt] -- set this to '1' if you want base64 emails to be used. These are more robust (PHP's wordwrapping, which we use to make non-base-64 emails compliant, can be buggy) but some servers do not like them or consider them very slightly more spammy.
- - [tt]disable_sunk[/tt] -- set this to '1' if you want to disable the sunk-topics feature. This improves performance a little on MySQL.
+ - [tt]disable_sunk[/tt] -- set this to '1' if you want to disable the sunk-topics feature. This improves performance a little on MySQL
  - [tt]implicit_usergroup_sync[/tt] -- set this to '1' to enable synching of implicit usergroups (see the advanced members tutorial for more information)
- - [tt]disable_password_change_mails_for_staff[/tt] -- set this to '1' if you want staff password edits to not result in emails to users.
- - [tt]google_translate_api_key[/tt] -- set this to a google translate API key for the content translation feature to work much better.
- - [tt]real_memory_available_mb[/tt] -- set this to the number of MB GD should consider available for image generation, if PHP is lying about it's memory limit.
- - [tt]md_default_sort_order[/tt] -- set this to a sort parameter to change the member directory's default sort order.
- - [tt]disable_highlight_name[/tt] -- set this to '1' to disable the member name highlighting option.
+ - [tt]disable_password_change_mails_for_staff[/tt] -- set this to '1' if you want staff password edits to not result in emails to users
+ - [tt]google_translate_api_key[/tt] -- set this to a google translate API key for the content translation feature to work much better
+ - [tt]real_memory_available_mb[/tt] -- set this to the number of MB GD should consider available for image generation, if PHP is lying about it's memory limit
+ - [tt]md_default_sort_order[/tt] -- set this to a sort parameter to change the member directory's default sort order
+ - [tt]disable_highlight_name[/tt] -- set this to '1' to disable the member name highlighting option
  - [tt]poll_no_member_ip_restrict[/tt] -- set this to '1' if members should not be limited by IP address when voting in poll (i.e. more than one member can vote per household, but we can't stop people registering multiple profiles).
- - [tt]commercial_spellchecker[/tt] -- set this to '1' if you want to enable the WYSIWYG editor's spellcheck.net spellchecker.
- - [tt]disable_theme_img_buttons[/tt] -- set this to '1' if you don't like the theme image edit buttons that appear to staff when hovering the images.
- - [tt]disable_cat_cat_perms[/tt] -- set this to '1' if you want to disable catalogue category permissions.
- - [tt]no_confirm_url_spec_cats[/tt] -- set this to '1' if you don't want to have to confirm the category for a new catalogue entry when the category was specified in a URL parameter already.
+ - [tt]commercial_spellchecker[/tt] -- set this to '1' if you want to enable the WYSIWYG editor's spellcheck.net spellchecker
+ - [tt]disable_theme_img_buttons[/tt] -- set this to '1' if you don't like the theme image edit buttons that appear to staff when hovering the images
+ - [tt]disable_cat_cat_perms[/tt] -- set this to '1' if you want to disable catalogue category permissions
+ - [tt]no_confirm_url_spec_cats[/tt] -- set this to '1' if you don't want to have to confirm the category for a new catalogue entry when the category was specified in a URL parameter already
  - [tt]use_true_from[/tt] -- set this to '1' if you want ocPortal to send emails 'from' the user that triggered the message, rather than the website. Usually it is set to 'from' the server to avoid problems with spam filters and uses the true sender address as the 'reply from' address. It is not recommended you turn this on, although it does aid usability if you know the recipient is not using SPF in their spam filter.
- - [tt]flow_mode_max[/tt] -- set this to the maximum number of images/videos to show in flow-mode.
- - [tt]no_individual_gallery_view[/tt] -- set this to '1' if all images/videos in a flow-mode gallery must be viewed from the flow-mode view (never individually).
- - [tt]notification_safety_testing[/tt] -- set this to '1' to enable extra checks to ensure notifications or welcome emails don't get mistargeted/over-sent.
- - [tt]no_threaded_buttons[/tt] -- set this to '1' if you don't want the buttons to switch between linear and threaded mode on the forum.
- - [tt]allow_admin_in_other_zones[/tt] -- set this to '1' if you want to allow admin and CMS modules to run in other zones (small performance cost).
+ - [tt]flow_mode_max[/tt] -- set this to the maximum number of images/videos to show in flow-mode
+ - [tt]no_individual_gallery_view[/tt] -- set this to '1' if all images/videos in a flow-mode gallery must be viewed from the flow-mode view (never individually)
+ - [tt]notification_safety_testing[/tt] -- set this to '1' to enable extra checks to ensure notifications or welcome emails don't get mistargeted/over-sent
+ - [tt]no_threaded_buttons[/tt] -- set this to '1' if you don't want the buttons to switch between linear and threaded mode on the forum
+ - [tt]allow_admin_in_other_zones[/tt] -- set this to '1' if you want to allow admin and CMS modules to run in other zones (small performance cost)
  - [tt]memory_tracking[/tt] -- set this to '1' if you want error mails to go out if a non-admin uses more than 50MB of memory. The check happens during Tempcode output phase.
  - [tt]max_rows_to_preload[/tt] -- set this to the number of rows the search system may load up, to get optimum sorting and result summarisation. Default is 500. Each record usually takes around 3kb.
- - [tt]ocselect_protected_fields[/tt] -- a comma-separated list of fields ocSelect cannot work on (above the ones hard-coded as forbidden).
+ - [tt]ocselect_protected_fields[/tt] -- a comma-separated list of fields ocSelect cannot work on (above the ones hard-coded as forbidden)
  - [tt]memory_limit[/tt] -- set this to a memory limit to override ocPortal's built in one (e.g. "128M"). This will make memory bugs on your server more dangerous, so use at your own risk (a memory usage problem can take down a whole server) -- although memory bugs are unlikely given that ocPortal users report if they ever see this error.
- - [tt]no_call_home[/tt] -- disable the private sharing of your website URL to the ocPortal developers when the Admin Zone front page loads.
+ - [tt]no_call_home[/tt] -- disable the private sharing of your website URL to the ocPortal developers when the Admin Zone front page loads
  - [tt]alternate_search_join_type[/tt] -- set this to '1' if your database server does 'JOIN' translate table searches intractably slowly, and 'LEFT JOIN' ones fast. This is the exact opposite of the behaviour of most MySQL versions, but we think we have seen a case of this so on some MySQL servers to make catalogue searches tractable you might need to enable this.
  - [tt]catalogue_limit_cat_field_load__<cataloguename>[/tt] -- set this to '1' if you want that catalogue to not have all fields loaded on category views, an optimisation that reduces templating flexibility
- - [tt]canonical_keep_params[/tt] -- set this to a comma-separated list of keep_ parameters that should be allowed to propagate within search engines.
+ - [tt]canonical_keep_params[/tt] -- set this to a comma-separated list of keep_ parameters that should be allowed to propagate within search engines
 
 [title="3"]Hidden 'keep' parameters[/title]
 
@@ -251,7 +265,6 @@ The 'keep' parameters available are:
  - [tt]keep_simplified_donext[/tt] -- set to '1' to temporarily act as if the simplified do-next option is turned on
  - [tt]keep_mobile[/tt] -- set to '1' to pretend you're using a PDA
  - [tt]keep_has_js[/tt] -- set to '1' to force ocPortal to think you have Javascript (useful if the has-JS cookie isn't saving yet you need to use a JS-based interface)
- - [tt]keep_forum_root[/tt] -- see root below; this one works for the forum and is a 'keep' parameter due to how the forum has links going all-over
  - [tt]keep_ldap_debug[/tt] -- set to '1' to forcefully show LDAP errors, when supressing them might normally be wise due to over-sensitivity
  - [tt]keep_hide_mail_failure[/tt] -- set to '1' if you want to avoid showing e-mailing errors
  - [tt]keep_huge[/tt] -- set to '1' if you want to override the precautionary filesize check used by the JS validator
@@ -271,17 +284,25 @@ The 'keep' parameters available are:
  - [tt]keep_firephp[/tt] -- set this to '1' to dump permissions checks that occurred to [url="FirePHP"]http://www.firephp.org/[/url]. It only works for authenticated administrators, but if the administrator is using '[tt]keep_su[/tt]' to masquerade as another user it will work (which is particularly useful for debugging permissions problems).
  - [tt]keep_firephp_queries[/tt] -- set this to '1' to dump queries that occurred to [url="FirePHP"]http://www.firephp.org/[/url]. It only works for authenticated administrators, but if the administrator is using '[tt]keep_su[/tt]' to masquerade as another user it will work.
  - [tt]keep_show_parse_errors[/tt] -- set this to '1' if you think you have a corrupt PHP file but you can't tell which as your PHP display errors option isn't on (and hence just get blank screens). This will allow ocPortal to generate stack traces for most corrupt files it tries to include. Note another cause of blank screens can be the PHP memory limit being exceeded.
- - [tt]keep_send_immediately[/tt] -- set this to '1' if you want to debug newsletter code, and not have newsletters sent in the background.
- - [tt]keep_su_online[/tt] -- set this to '1' if you want the user '[tt]keep_su[/tt]' is used with to also show as online, and for their last online/submit statuses to be updated.
- - [tt]keep_no_frames[/tt] -- set this to '1' if you do not want frames to be used.
- - [tt]keep_no_minify[/tt] -- set this to '1' if you want to use a Javascript debugger and hence do not want the JS to be minified (unreadable).
+ - [tt]keep_send_immediately[/tt] -- set this to '1' if you want to debug newsletter code, and not have newsletters sent in the background
+ - [tt]keep_su_online[/tt] -- set this to '1' if you want the user '[tt]keep_su[/tt]' is used with to also show as online, and for their last online/submit statuses to be updated
+ - [tt]keep_no_frames[/tt] -- set this to '1' if you do not want frames to be used
+ - [tt]keep_no_minify[/tt] -- set this to '1' if you want to use a Javascript debugger and hence do not want the JS to be minified (unreadable)
  - [tt]keep_show_loading[/tt] -- set this to '1' if you want comments inside the HTML source showing memory usage taken up as server-side scripts load
  - [tt]keep_no_swfupload[/tt] -- set this to '1' if you don't want the flash uploader to be used
  - [tt]keep_avoid_memory_limit[/tt] -- do not put on a memory limit in development mode
  - [tt]keep_no_query_limit[/tt] -- do not place a query limit during development mode
  - [tt]keep_on_same_msn[/tt] -- set this to '0' if you are doing an ocPortal site merge import and want to force OCF content to import even if the importer thinks that you are on the same MSN as the other site
  - [tt]keep_theme_test[/tt] -- set this to '1' if you are testing lots of themes. It will cause installed theme addons to have their Comcode pages extracted with a special prefix, it will remove that prefix on addon packaging, and page detection will give preference to the prefix for the particular theme you are currently using (so use in conjunction with keep_theme).
- - [tt]keep_debug_notifications[/tt] -- set this to '1' if you are debugging the notifications system and therefore need them to be sent before the page output finishes.
+ - [tt]keep_debug_notifications[/tt] -- set this to '1' if you are debugging the notifications system and therefore need them to be sent before the page output finishes
+ - [tt]keep_devtest[/tt] -- Used during development mode to test URL building is working correctly, of no use manually
+ - [tt]keep_debug_has_cookies[/tt] -- Useful for developers to tell ocPortal cookies are supported when Javascript may be off
+ - [tt]keep_memory_limit_test[/tt] -- Set to a number of megabytes under 32 to reduce the memory limit to this value; useful for performance debugging
+ - [tt]keep_no_chain[/tt] -- Useful when working with the XML forum driver, tells it to not do reads from the configured chain database
+ - [tt]keep_realtime_test[/tt] -- Used for testing the realtime feature's display (it injects random data)
+ - [tt]keep_simpleurls[/tt] -- Disable short URLs
+ - [tt]keep_wide[/tt] -- Remove panels
+ - [tt]keep_wide_high[/tt] -- Remove panels, as well as the header and footer
 
 The following 'keep' parameters have interface triggers, but are also handy for manual activation:
  - [tt]keep_markers[/tt] -- set this to '1' if you want template start/end markers to be output in the page HTML source when viewed in ocPortal
@@ -295,6 +316,8 @@ The following 'keep' parameters have interface triggers, but are also handy for 
  - [tt]keep_lang[/tt] -- set to a two-letter ISO language code to tell ocPortal which language to use
  - [tt]keep_session[/tt] -- this isn't useful for manual editing, but it is used to note session-IDs when [session-]cookies are not working
  - [tt]keep_timezone[/tt] -- this is the timezone code (tz style) to view in
+ - [tt]keep_wiki_root[/tt] -- Used to propagate Wiki+ virtual roots
+ - [tt]keep_forum_root[/tt] -- see root below; this one works for the forum and is a 'keep' parameter due to how the forum has links going all-over
 
 The following aren't 'keep' parameters, but are still useful and otherwise behave in the same way:
  - [tt]auth[/tt] -- set to '1' to make ocPortal request HTTP authentication. This is useful for RSS URLs, if you want the feeds to be generated as authenticated.

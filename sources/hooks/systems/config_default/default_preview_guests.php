@@ -48,8 +48,7 @@ class Hook_config_default_default_preview_guests
 	 */
 	function get_default()
 	{
-		$old=get_value('no_default_preview_guests');
-		return is_null($old)?'0':invert_value($old);
+		return '0';
 	}
 
 }

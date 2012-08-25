@@ -48,8 +48,7 @@ class Hook_config_default_ldap_login_qualifier
 	 */
 	function get_default()
 	{
-		$old=get_value('ldap_login_qualifier');
-		return is_null($old)?'':$old;
+		return '';
 	}
 
 }

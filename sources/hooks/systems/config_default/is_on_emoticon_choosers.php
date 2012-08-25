@@ -48,8 +48,7 @@ class Hook_config_default_is_on_emoticon_choosers
 	 */
 	function get_default()
 	{
-		$old=get_value('no_emoticon_choosers');
-		return is_null($old)?'1':invert_value($old);
+		return '1';
 	}
 
 }

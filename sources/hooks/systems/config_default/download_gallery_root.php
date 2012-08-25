@@ -48,8 +48,7 @@ class Hook_config_default_download_gallery_root
 	 */
 	function get_default()
 	{
-		$old=get_value('download_gallery_root');
-		return is_null($old)?(addon_installed('galleries')?'root':NULL):$old;
+		return addon_installed('galleries')?'root':NULL;
 	}
 
 }

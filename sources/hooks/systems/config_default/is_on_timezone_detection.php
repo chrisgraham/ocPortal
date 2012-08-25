@@ -48,8 +48,7 @@ class Hook_config_default_is_on_timezone_detection
 	 */
 	function get_default()
 	{
-		$old=get_value('no_js_timezone_detect');
-		return is_null($old)?'1':invert_value($old);
+		return '1';
 	}
 
 }

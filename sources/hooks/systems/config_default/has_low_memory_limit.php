@@ -48,8 +48,7 @@ class Hook_config_default_has_low_memory_limit
 	 */
 	function get_default()
 	{
-		$old=get_value('has_low_memory_limit');
-		return is_null($old)?((ini_get('memory_limit')=='-1' || ini_get('memory_limit')=='0' || ini_get('memory_limit')=='')?'0':NULL):$old;
+		return ((ini_get('memory_limit')=='-1' || ini_get('memory_limit')=='0' || ini_get('memory_limit')=='')?'0':NULL;
 	}
 
 }

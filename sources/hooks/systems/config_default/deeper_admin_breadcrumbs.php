@@ -48,8 +48,7 @@ class Hook_config_default_deeper_admin_breadcrumbs
 	 */
 	function get_default()
 	{
-		$old=get_value('no_admin_menu_assumption');
-		return is_null($old)?'1':invert_value($old);
+		return '1';
 	}
 
 }

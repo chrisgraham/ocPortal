@@ -48,8 +48,7 @@ class Hook_config_default_forced_preview_option
 	 */
 	function get_default()
 	{
-		$old=get_value('no_forced_preview_option');
-		return is_null($old)?'0':invert_value($old);
+		return '0';
 	}
 
 }

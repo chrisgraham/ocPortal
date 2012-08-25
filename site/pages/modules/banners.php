@@ -161,8 +161,8 @@ class Module_banners
 			add_privilege('BANNERS','banner_free',false);
 
 			add_config_option('PERMISSIONS','use_banner_permissions','tick','return \'0\';','FEATURE','BANNERS');
-			add_config_option('BANNER_AUTOSIZE','banner_autosize','tick','return is_null($old=get_value(\'banner_autosize\'))?\'0\':$old;','FEATURE','BANNERS');
-			add_config_option('ADMIN_BANNERS','admin_banners','tick','return is_null($old=get_value(\'always_banners\'))?\'0\':$old;','FEATURE','BANNERS');
+			add_config_option('BANNER_AUTOSIZE','banner_autosize','tick','return \'0\';','FEATURE','BANNERS');
+			add_config_option('ADMIN_BANNERS','admin_banners','tick','return \'0\';','FEATURE','BANNERS');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<6))

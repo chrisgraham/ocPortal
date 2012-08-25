@@ -297,14 +297,7 @@ class Module_cms_galleries extends standard_crud_module
 				$fields_2=new ocp_tempcode();
 				$hidden_2=new ocp_tempcode();
 
-				if (get_param_integer('keep_de_orphan',0)==1)
-				{
-					$cats=nice_get_gallery_tree($cat,NULL,false,false,false,false,NULL,true);
-					$fields_2->attach(form_input_list(do_lang_tempcode('GALLERY'),'','cat',$cats));
-				} else
-				{
-					$hidden_2->attach(form_input_hidden('cat',$cat));
-				}
+				$hidden_2->attach(form_input_hidden('cat',$cat));
 				$fields_2->attach(form_input_multi_list(do_lang_tempcode('ENTRIES'),'','files',$orphaned_content));
 				if ($this->has_at_least_one_watermark($cat))
 					$fields_2->attach(form_input_various_ticks(array(array(do_lang_tempcode('WATERMARK'),'watermark',true,''),array(do_lang_tempcode('ALLOW_RATING'),'allow_rating',true,''),array(do_lang_tempcode('ALLOW_COMMENTS'),'allow_comments',true,''),array(do_lang_tempcode('ALLOW_REVIEWS'),'allow_reviews',false,''),array(do_lang_tempcode('ALLOW_TRACKBACKS'),'allow_trackbacks',true,''),),'',NULL,do_lang_tempcode('OPTIONS')));
@@ -346,22 +339,6 @@ class Module_cms_galleries extends standard_crud_module
 		require_code('uploads');
 		if ((!is_swf_upload(true)) && ((!array_key_exists('file_1',$_FILES)) || (!is_uploaded_file($_FILES['file_1']['tmp_name']))))
 			warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','file'));
-
-		if (get_value('use_gallery_subdirs')=='1')
-		{
-			if (!file_exists(get_custom_file_base().'/uploads/galleries/'.$cat))
-			{
-				mkdir(get_custom_file_base().'/uploads/galleries/'.$cat,0777);
-				fix_permissions(get_custom_file_base().'/uploads/galleries/'.$cat,0777);
-				sync_file('uploads/galleries/'.$cat);
-			}
-			if (!file_exists(get_custom_file_base().'/uploads/galleries_thumbs/'.$cat))
-			{
-				@mkdir(get_custom_file_base().'/uploads/galleries_thumbs/'.$cat,0777) OR warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',get_custom_file_base().'/uploads/galleries_thumbs'));
-				fix_permissions(get_custom_file_base().'/uploads/galleries_thumbs/'.$cat,0777);
-				sync_file('uploads/galleries_thumbs/'.$cat);
-			}
-		}
 
 		foreach ($_FILES as $attach_name=>$__file)
 		{
@@ -581,22 +558,22 @@ class Module_cms_galleries extends standard_crud_module
 	{
 		// Find where to store on server
 		//  Hunt with sensible names until we don't get a conflict
-		$place=get_custom_file_base().'/uploads/galleries'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):'').'/'.filter_naughty($file);
+		$place=get_custom_file_base().'/uploads/galleries/'.filter_naughty($file);
 		$i=2;
 		$_file=filter_naughty($file);
 		while (file_exists($place))
 		{
 			$_file=strval($i).$file;
-			$place=get_custom_file_base().'/uploads/galleries'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):'').'/'.$_file;
+			$place=get_custom_file_base().'/uploads/galleries/'.$_file;
 			$i++;
 		}
-		$place_thumb=get_custom_file_base().'/uploads/galleries_thumbs'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):'').'/'.filter_naughty($file);
+		$place_thumb=get_custom_file_base().'/uploads/galleries_thumbs/'.filter_naughty($file);
 		$i=2;
 		$_file_thumb=filter_naughty($file);
 		while (file_exists($place_thumb))
 		{
 			$_file_thumb=strval($i).$file;
-			$place_thumb=get_custom_file_base().'/uploads/galleries_thumbs'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):'').'/'.$_file_thumb;
+			$place_thumb=get_custom_file_base().'/uploads/galleries_thumbs/'.$_file_thumb;
 			$i++;
 		}
 
@@ -605,8 +582,8 @@ class Module_cms_galleries extends standard_crud_module
 		fix_permissions($place);
 		sync_file($place);
 
-		$aurl='uploads/galleries'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):'').'/'.rawurlencode($_file);
-		$thumb_url='uploads/galleries_thumbs'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):'').'/'.rawurlencode($_file_thumb);
+		$aurl='uploads/galleries/'.rawurlencode($_file);
+		$thumb_url='uploads/galleries_thumbs/'.rawurlencode($_file_thumb);
 
 		// Add to database
 		$this->simple_add($aurl,$thumb_url,$_file,$cat);
@@ -1018,7 +995,7 @@ class Module_cms_galleries extends standard_crud_module
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		$this->handle_resizing_and_watermarking();
 
-		$urls=get_url('url','file','uploads/galleries'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):''),0,OCP_UPLOAD_IMAGE,true,'thumb_url','file2');
+		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true,'thumb_url','file2');
 
 		if (($urls[0]=='') || ($urls[1]==''))
 		{
@@ -1063,7 +1040,7 @@ class Module_cms_galleries extends standard_crud_module
 		$this->check_images_allowed($cat);
 		$this->handle_resizing_and_watermarking();
 		$validated=post_param_integer('validated',0);
-		$urls=get_url('url','file','uploads/galleries'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):''),0,OCP_UPLOAD_IMAGE,true,'thumb_url','file2');
+		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true,'thumb_url','file2');
 		if ($urls[0]=='')
 		{
 			$rows=$GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url'),array('id'=>$id),'',1);
@@ -1443,7 +1420,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		$title=post_param('title');
 
 		list($video_width,$video_height,$video_length)=$this->get_special_video_info();
-		$urls=get_url('url','file','uploads/galleries'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):''),0,OCP_UPLOAD_VIDEO,true,'thumb_url','file2');
+		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_VIDEO,true,'thumb_url','file2');
 
 		if (($urls[1]=='') && ($urls[0]!=''))
 		{
@@ -1489,7 +1466,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		$this->check_videos_allowed($cat);
 		$validated=post_param_integer('validated',0);
 		$title=post_param('title');
-		$urls=get_url('url','file','uploads/galleries'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):''),0,OCP_UPLOAD_VIDEO,true,'thumb_url','file2');
+		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_VIDEO,true,'thumb_url','file2');
 		if ($urls[0]=='')
 		{
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));

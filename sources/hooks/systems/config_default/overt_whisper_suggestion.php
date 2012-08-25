@@ -48,8 +48,7 @@ class Hook_config_default_overt_whisper_suggestion
 	 */
 	function get_default()
 	{
-		$old=get_value('disable_overt_whispering');
-		return is_null($old)?'1':invert_value($old);
+		return '1';
 	}
 
 }

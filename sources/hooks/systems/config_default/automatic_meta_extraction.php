@@ -48,8 +48,7 @@ class Hook_config_default_automatic_meta_extraction
 	 */
 	function get_default()
 	{
-		$old=get_value('no_auto_meta');
-		return is_null($old)?'1':invert_value($old);
+		return '1';
 	}
 
 }

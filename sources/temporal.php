@@ -103,12 +103,6 @@ function get_site_timezone()
 	if (is_null($_timezone_site))
 	{
 		$timezone_site=get_server_timezone();
-	}
-	elseif (is_numeric($_timezone_site))
-	{
-		$timezone_site=convert_timezone_offset_to_formal_timezone(floatval($_timezone_site));
-		set_value('timezone',$timezone_site);
-		set_value('timezone_old_offset',$_timezone_site);
 	} else
 	{
 		$timezone_site=$_timezone_site;
@@ -144,12 +138,6 @@ function get_users_timezone($member=NULL)
 		{
 			// Database upgrade needed
 			$GLOBALS['FORUM_DB']->alter_table_field('f_members','m_timezone_offset','SHORT_TEXT');
-		}
-		if ((is_integer($_timezone_member)) || (is_numeric($_timezone_member))) // Old date, must upgrade
-		{
-			$_timezone_old_offset=get_value('timezone_old_offset');
-			if (is_null($_timezone_old_offset)) $_timezone_old_offset='0';
-			$timezone_member=convert_timezone_offset_to_formal_timezone(floatval($_timezone_member)+floatval($_timezone_old_offset));
 		} else // Ah, simple: what member has set
 		{
 			$timezone_member=$_timezone_member;

@@ -43,7 +43,7 @@ class Hook_Preview_image
 
 		$cat=post_param('cat');
 
-		$urls=get_url('url','file','uploads/galleries'.((get_value('use_gallery_subdirs')=='1')?('/'.$cat):''),0,OCP_UPLOAD_IMAGE,true,'','file2');
+		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true,'','file2');
 		if ($urls[0]=='')
 		{
 			if (!is_null(post_param_integer('id',NULL)))

@@ -174,9 +174,9 @@ function set_session_id($id,$guest_session=false)  // NB: Guests sessions can pe
 		$test=false;
 	} else*/
 	{
-		$test=@setcookie('ocp_session',strval($id),$timeout,get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
+		$test=@setcookie(get_session_cookie(),strval($id),$timeout,get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
 	}
-	$_COOKIE['ocp_session']=strval($id); // So we remember for this page view
+	$_COOKIE[get_session_cookie()]=strval($id); // So we remember for this page view
 
 	// If we really have to, store in URL
 	if (((!has_cookies()) || (!$test)) && (is_null(get_bot_type())))

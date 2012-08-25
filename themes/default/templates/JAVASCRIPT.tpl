@@ -2112,7 +2112,7 @@ function keep_stub(starting_query_string) // starting_query_string means "Put a 
 	}
 	if (!done_session)
 	{
-		var session=read_cookie('ocp_session');
+		var session=read_cookie('{$SESSION_COOKIE_NAME;}');
 		gap_symbol=(((to_add=='') && (starting_query_string))?'?':'&');
 		if (session) to_add=to_add+gap_symbol+'keep_session='+window.encodeURIComponent(session);
 	}

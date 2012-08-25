@@ -48,8 +48,7 @@ class Hook_config_default_is_on_anonymous_posts
 	 */
 	function get_default()
 	{
-		$old=get_value('ocf_no_anonymous_post');
-		return is_null($old)?'0':invert_value($old);
+		return '0';
 	}
 
 }

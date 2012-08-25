@@ -48,8 +48,7 @@ class Hook_config_default_is_on_comcode_page_children
 	 */
 	function get_default()
 	{
-		$old=get_value('disable_comcode_page_children');
-		return is_null($old)?'1':invert_value($old);
+		return '1';
 	}
 
 }

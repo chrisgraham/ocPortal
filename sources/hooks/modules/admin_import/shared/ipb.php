@@ -641,8 +641,6 @@ class Hook_ipb_base
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'posts ORDER BY pid',200,$row_start);
 			foreach ($rows as $row)
 			{
-				if ((get_param_integer('keep_import_test',0)==1) && ($row['new_topic']==0)) continue;
-
 				if (import_check_if_imported('post',strval($row['pid']))) continue;
 
 				$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);

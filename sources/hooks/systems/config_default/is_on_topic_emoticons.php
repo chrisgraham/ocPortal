@@ -48,8 +48,7 @@ class Hook_config_default_is_on_topic_emoticons
 	 */
 	function get_default()
 	{
-		$old=get_value('ocf_no_topic_emoticons');
-		return is_null($old)?'1':invert_value($old);
+		return '1';
 	}
 
 }

@@ -102,24 +102,24 @@ echo '
  */
 function ce_do_footer()
 {
-	echo <<<END
+	echo '
 		</form>
-END;
-global $SITE_INFO;
-if (array_key_exists('base_url',$SITE_INFO))
-{
-$_base_url=htmlentities($SITE_INFO['base_url']);
-echo <<<END
-		<hr />
-		<ul class="actions_list" role="navigation">
-			<li><a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a></li>
-		</ul>
-END;
-}
-echo <<<END
-	</div></body>
-</html>
-END;
+	';
+
+	global $SITE_INFO;
+	if (array_key_exists('base_url',$SITE_INFO))
+	{
+		echo '
+			<hr />
+			<ul class="actions_list" role="navigation">
+				<li><a href="'.htmlentities($SITE_INFO['base_url']).'/adminzone/index.php">Go to Admin Zone</a></li>
+			</ul>
+		';
+	}
+	echo '
+		</div></body>
+	</html>
+	';
 }
 
 /**
@@ -128,10 +128,12 @@ END;
 function ce_do_login()
 {
 	if (@$_POST['given_password']) echo '<p><strong>Invalid password</strong></p>';
-	echo <<<END
+
+	echo '
 		<label for="given_password">Master Password: <input type="password" name="given_password" id="given_password" /></label>
+
 		<p><input type="submit" value="Login" /></p>
-END;
+	';
 }
 
 /**
@@ -141,14 +143,75 @@ END;
  */
 function do_access($given_password)
 {
+	$settings=array(
+		'admin_username'=>'The username used for the administrator when ocPortal is installed to not use a forum. On the vast majority of sites this setting does nothing.',
+		'admin_password'=>'If you wish the password to be changed, enter a new password here. Otherwise leave blank.',
+
+		'base_url'=>'A critical option, that defines the URL of the site (no trailing slash). If the URL changes, the base URL must be changed to reflect it. If you change this option you will need to empty your template and image caches (in the Cleanup Tools or Upgrader), else you may get strange error messages, broken images, and an ocPortal warning about an inconsistency.',
+		'domain'=>'The domain that e-mail addresses are registered on. This applies only to the Point Store and may be ignored by most.',
+		'default_lang'=>'The default language used on the site (language code form, of subdirectory under lang/).',
+		'block_mod_rewrite'=>'Whether to block the short-URL (mod_rewrite) option. Set this to 1 if you turned on short-URLs and find your site no longer works.',
+		'on_msn'=>'Whether this is a site on an OCF multi-site-network (enable for to trigger URLs to avatars and photos to be absolute).',
+
+		'forum_type'=>'<em>Forum:</em> The forum driver to use. Note that it is unwise to change this unless expert, as member-IDs and usergroup-IDs form a binding between portal and forum, and would need remapping. To convert to OCF, the forum importers can handle all of this automatically.',
+		'board_prefix'=>'<em>Forum:</em> This is the base-URL for the forums. If it is not correct, various links, such as links to topics, will not function correctly.',
+
+		'db_type'=>'<em>Database:</em> The database driver to use (code of PHP file in sources[_custom]/database/). Only mySQL supported officially.',
+		'table_prefix'=>'<em>Database:</em> The table prefix for ocPortals database tables.',
+		'db_site'=>'<em>Database:</em> The database name of the ocPortal database.',
+		'db_site_host'=>'<em>Database:</em> The database hosting computer name (usually localhost) for the ocPortal database.',
+		'db_site_user'=>'<em>Database:</em> The database username for ocPortal to connect to the ocPortal database with.',
+		'db_site_password'=>'<em>Database:</em> The password for the ocPortal database username.',
+		'db_forums'=>'<em>Database:</em> The database name for the forum driver to tie in to.',
+		'db_forums_host'=>'<em>Database:</em> The database hosting computer name (usually localhost) for the forum driver to tie in to.',
+		'db_forums_user'=>'<em>Database:</em> The database username for the forum driver to connect to the forum database with.',
+		'db_forums_password'=>'<em>Database:</em> The password for the forum database username.',
+		'use_persistent'=>'<em>Database:</em> Whether to use persistent database connections (most shared webhosts do not like these to be used).',
+		'database_charset'=>'<em>Database:</em> The MySQL character set for the connection. Usually you can just leave this blank, but if MySQL\'s character set for your database has been overridden away from the server-default then you will need to set this to be equal to that same character set.',
+
+		'user_cookie'=>'<em>Cookies:</em> The name of the cookie used to hold usernames/ids for each user. Dependant on the forum system involved, and may use a special serialisation notation involving a colon (there is no special notation for OCF).',
+		'pass_cookie'=>'<em>Cookies:</em> The name of the cookie used to hold passwords for each user.',
+		'session_cookie'=>'<em>Cookies:</em> The name of the cookie used to hold session IDs.',
+		'cookie_domain'=>'<em>Cookies:</em> The domain name the cookies are tied to. Only URLs with this domain, or a subdomain there-of, may access the cookies. You probably want to leave it blank. Use blank if running ocPortal off the DNS system (e.g. localhost), or if you want the active-domain to be used (i.e. autodetection). <strong>It\'s best not to change this setting once your community is active, as it can cause logging-out problems.</strong>',
+		'cookie_path'=>'<em>Cookies:</em> The URL path the cookeis are tied to. Only URLs branching from this may access the cookies. Either set it to the path portion of the base-URL, or a shortened path if cookies need to work with something elsewhere on the domain, or leave blank for auto-detection. <strong>It\'s best not to change this setting once your community is active, as it can cause logging-out problems.</strong>',
+		'cookie_days'=>'<em>Cookies:</em> The number of days to store login cookies for.',
+
+		'use_mem_cache'=>'<em>Performance:</em> Whether persistent memory cacheing is to be used (caches data in memory between requests using whatever appropriate PHP extensions are available).',
+		'fast_spider_cache'=>'<em>Performance:</em> The number of hours that the spider/bot cache lasts for (this sets both HTTP cacheing, and server retention of cached screens).',
+		'any_guest_cached_too'=>'<em>Performance:</em> Whether Guests are cached with the spider cache time too.',
+
+		'disable_smart_decaching'=>'<em>Tuning/Disk performance:</em> Don\'t check file times to check caches aren\'t stale.',
+		'no_disk_sanity_checks'=>'<em>Tuning/Disk performance:</em> Assume that there are no missing language directories, or other configured directories; things may crash horribly if they are missing and this is enabled.',
+		'hardcode_common_module_zones'=>'<em>Tuning/Disk performance:</em> Don\'t search for common modules, assume they are in default positions.',
+		'charset'=>'<em>Tuning/Disk performance:</em> The character set (if set, it skips an extra disk check inside the language files).',
+		'known_suexec'=>'<em>Tuning/Disk performance:</em> Whether we know suExec is on the server so will skip checking for it (which involves a disk access).',
+		'assume_full_mobile_support'=>'<em>Tuning/Disk performance:</em> Whether to assume that the current theme fully supports mobile view-mode, on all pages. This skips a disk access.',
+		'no_extra_bots'=>'<em>Tuning/Disk performance:</em> Whether to only use the hard-coded bot detection list. This saves a disk access.',
+		'no_extra_closed_file'=>'<em>Tuning/Disk performance:</em> Whether to not recognise a closed.html file. This saves a disk access.',
+		'no_extra_logs'=>'<em>Tuning/Disk performance:</em> Whether to not populate extra logs even if writable files have been put in place for this. This saves disk accesses to look for these files.',
+		'no_extra_mobiles'=>'<em>Tuning/Disk performance:</em> Whether to only use the hard-coded mobile-device detection list. This saves a disk access.',
+		'no_installer_checks'=>'<em>Tuning/Disk performance:</em> Whether to skip complaining if the install.php file has been left around. This is intended only for developers working on development machines.',
+
+		'prefer_direct_code_call'=>'<em>Tuning:</em> Assume a good opcode cache is present, so load up full code files via this rather than trying to save RAM by loading up small parts of files on occasion.',
+
+		'backdoor_ip'=>'<em>Development:</em> Always allow users accessing from this IP address in, automatically logged in as the oldest admin of the site.',
+		'dev_mode'=>'<em>Development:</em> Whether development mode is enabled (<strong>intended only for core ocPortal programmers</strong>).',
+		'force_no_eval'=>'<em>Development:</em> Whether to force extra strictness that is required for ocPortal to run on non-native PHP environments.',
+		'no_keep_params'=>'<em>Development:</em> Whether to disable support for \'keep_\' params in ocPortal. You probably don\'t want to disable them!',
+		'safe_mode'=>'<em>Development:</em> Whether ocPortal is to be forced into Safe Mode, meaning no custom files will load and most caching will be disabled.',
+	);
+
 	global $SITE_INFO;
-echo <<<END
-	<table class="results_table">
-END;
-	if (!array_key_exists('block_mod_rewrite',$SITE_INFO)) $SITE_INFO['block_mod_rewrite']='0';
-	if (!array_key_exists('use_mem_cache',$SITE_INFO)) $SITE_INFO['use_mem_cache']='1';
-	foreach ($SITE_INFO as $key=>$val)
+
+	echo '
+		<table class="results_table">
+	';
+
+	// Display UI to set all settings
+	foreach ($settings as $key=>$notes)
 	{
+		$val=array_key_exists($key,$SITE_INFO)?$SITE_INFO[$key]:'';
+
 		if (is_array($val))
 		{
 			foreach ($val as $val2)
@@ -158,169 +221,78 @@ END;
 			continue;
 		}
 
-		$notes='';
-		switch ($key)
+		$type='text';
+		if (strpos($key,'password')!==false)
 		{
-/*block_mod_rewrite
-custom_base_url_stub
-custom_share_domain
-custom_share_path
-custom_user_XXX
-custom_domain_XXX
-throttle_bandwidth_registered
-throttle_bandwidth_complementary
-throttle_space_registered
-throttle_space_complementary
-vb_unique_id
-stronghold_cookies
-vb_version*/
-			case 'use_mem_cache':
-				$notes='Set this to \'1\' if persistent memory cacheing is to be used (caches data in memory between requests using whatever appropriate PHP extensions are available).';
-				break;
-			case 'fast_spider_cache':
-				$notes='The number of hours that the spider/bot cache lasts for (this sets both HTTP cacheing, and server retention of cached screens).';
-				break;
-			case 'any_guest_cached_too':
-				$notes='Set to \'1\' if Guests are cached with the spider cache time too.';
-				break;
-			case 'default_lang':
-				$notes='The default language used on the site (language code form, of subdirectory under lang/).';
-				break;
-			case 'db_type':
-				$notes='The database driver to use (code of PHP file in sources[_custom]/database/). Only mySQL supported officially.';
-				break;
-			case 'forum_type':
-				$notes='The forum driver to use. Note that it is unwise to change this unless expert, as member-IDs and usergroup-IDs form a binding between portal and forum, and would need remapping. To convert to OCF, the forum importers can handle all of this automatically.';
-				break;
-			case 'board_prefix':
-				$notes='This is the base-URL for the forums. If it is not correct, various links, such as links to topics, will not function correctly.';
-				break;
-			case 'domain':
-				$notes='The domain that e-mail addresses are registered on. This applies only to the Point Store and may be ignored by most.';
-				break;
-			case 'base_url':
-				$notes='A critical option, that defines the URL of the site (no trailing slash). If the URL changes, the base URL must be changed to reflect it. If you change this option you will need to empty your template and image caches (in the Cleanup Tools or Upgrader), else you may get strange error messages, broken images, and an ocPortal warning about an inconsistency.';
-				break;
-			case 'db_forums':
-				$notes='The database name for the forum driver to tie in to.';
-				break;
-			case 'db_forums_host':
-				$notes='The database hosting computer name (usually localhost) for the forum driver to tie in to.';
-				break;
-			case 'db_forums_user':
-				$notes='The database username for the forum driver to connect to the forum database with.';
-				break;
-			case 'db_forums_password':
-				$notes='The password for the forum database username.';
-				break;
-			case 'table_prefix':
-				$notes='The table prefix for ocPortals database tables.';
-				break;
-			case 'db_site':
-				$notes='The database name of the ocPortal database.';
-				break;
-			case 'db_site_host':
-				$notes='The database hosting computer name (usually localhost) for the ocPortal database.';
-				break;
-			case 'db_site_user':
-				$notes='The database username for ocPortal to connect to the ocPortal database with.';
-				break;
-			case 'db_site_password':
-				$notes='The password for the ocPortal database username.';
-				break;
-			case 'use_persistent':
-				$notes='Whether to use persistent database connections (most shared webhosts do not like these to be used).';
-				break;
-			case 'user_cookie':
-				$notes='The name of the cookie used to hold usernames/ids for each user. Dependant on the forum system involved, and may use a special serialisation notation involving a colon (there is no special notation for OCF).';
-				break;
-			case 'pass_cookie':
-				$notes='The name of the cookie used to hold passwords for each user.';
-				break;
-			case 'cookie_domain':
-				$notes='The domain name the cookies are tied to. Only URLs with this domain, or a subdomain there-of, may access the cookies. You probably want to leave it blank. Use blank if running ocPortal off the DNS system (e.g. localhost), or if you want the active-domain to be used (i.e. autodetection). <strong>It\'s best not to change this setting once your community is active, as it can cause logging-out problems.</strong>';
-				break;
-			case 'cookie_path':
-				$notes='The URL path the cookeis are tied to. Only URLs branching from this may access the cookies. Either set it to the path portion of the base-URL, or a shortened path if cookies need to work with something elsewhere on the domain, or leave blank for auto-detection. <strong>It\'s best not to change this setting once your community is active, as it can cause logging-out problems.</strong>';
-				break;
-			case 'block_mod_rewrite':
-				$notes='Whether to block the short-URL (mod_rewrite) option. Set this to 1 if you turned on short-URLs and find your site no longer works.';
-				break;
-			case 'admin_username':
-				$val='';
-				$notes='The username used for the administrator when ocPortal is installed to not use a forum.';
-				break;
-			case 'admin_password':
-				$val='';
-				$notes='If you wish the password to be changed, enter a new password here. Otherwise leave blank.';
-				break;
-			case 'database_charset':
-				$notes='The MySQL character set for the connection. Usually you can just leave this blank, but if MySQL\'s character set for your database has been overridden away from the server-default then you will need to set this to be equal to that same character set.';
-				break;
-			case 'on_msn':
-				$notes='Whether this is a site on an OCF multi-site-network (set to 1 to trigger URLs to avatars and photos to be absolute).';
-				break;
-			case 'disable_smart_decaching':
-				$notes='Don\'t check file times to check caches aren\'t stale.';
-				break;
-			case 'no_disk_sanity_checks':
-				$notes='Assume that there are no missing language directories, or other configured directories; things may crash horribly if they are missing and this is enabled.';
-				break;
-			case 'hardcode_common_module_zones':
-				$notes='Don\'t search for common modules, assume they are in default positions.';
-				break;
-			case 'prefer_direct_code_call':
-				$notes='Assume a good opcode cache is present, so load up full code files via this rather than trying to save RAM by loading up small parts of files on occasion.';
-				break;
-			case 'backdoor_ip':
-				$notes='Always allow users accessing from this IP address in, automatically logged in as the oldest admin of the site.';
-				break;
+			$type='password';
 		}
-		if (strpos($key,'_table_prefix')!==false)
+		elseif (strpos($key,'Whether')!==false)
 		{
-			$notes='';
+			$type='checkbox';
+			$checked=($val==1);
+			$val='1';
 		}
-		$type='TEXT';
-		if (strpos($key,'password')!==false) $type='password';
+
 		$_key=htmlentities($key);
 		$_val=htmlentities($val);
-		echo <<<END
-		<tr>
-			<th>
-				{$_key}
-			</th>
-			<td>
-				<input type="{$type}" name="{$_key}" value="{$_val}" size="50" />
-			</td>
-			<td>
-				{$notes}
-			</td>
-		</tr>
-END;
+
+		echo '
+			<tr>
+				<th style="text-align: right">
+					'.$_key.'
+				</th>
+				<td>
+					<input type="'.$type.'" name="'.$_key.'" value="'.$_val.'" '.(($type=='checkbox')?($checked?'checked="checked"':''):'size="20"').' />
+				</td>
+				<td>
+					'.$notes.'
+				</td>
+			</tr>
+		';
 		if ($key=='admin_password')
 		{
-		echo <<<END
-		<tr>
-			<th>
-				&raquo; Confirm password
-			</th>
-			<td>
-				<input type="{$type}" name="confirm_admin_password" value="{$_val}" size="50" />
-			</td>
-			<td>
-			</td>
-		</tr>
-END;
+			echo '
+				<tr>
+					<th style="text-align: right">
+						&raquo; Confirm password
+					</th>
+					<td>
+						<input type="'.$type.'" name="confirm_admin_password" value="'.$_val.'" size="20" />
+					</td>
+					<td>
+					</td>
+				</tr>
+			';
+		}
+
+		// Any other settings that we don't actually implicitly recognise need to be relayed
+		foreach ($SITE_INFO as $key=>$val)
+		{
+			if (!array_key_exists($key,$settings))
+			{
+				if (is_array($val))
+				{
+					foreach ($val as $val2)
+					{
+						echo '<input type="hidden" name="'.htmlentities($key).'[]" value="'.htmlentities($val2).'" />';
+					}
+				} else
+				{
+					echo '<input type="hidden" name="'.htmlentities($key).'" value="'.htmlentities($val).'" />';
+				}
+			}
 		}
 	}
-	$_given_password=htmlentities($given_password);
-	echo <<<END
-	</table>
-	<p class="proceed_button">
-		<input type="submit" value="Edit" />
-	</p>
-	<input type="hidden" name="given_password" value="{$_given_password}" />
-END;
+
+	echo '
+		</table>
+
+		<p class="proceed_button" style="text-align: center">
+			<input type="submit" value="Edit" />
+		</p>
+
+		<input type="hidden" name="given_password" value="'.htmlentities($given_password).'" />
+	';
 }
 
 /**

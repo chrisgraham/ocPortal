@@ -953,7 +953,7 @@ function step_5()
 
 	$use_msn=post_param_integer('use_msn',0);
 	if ($use_msn==0) $use_msn=post_param_integer('use_multi_db',0);
-	if ($use_msn==0)
+	if ($use_msn==0) // If not on a multi-site-network, forum access is the same as site access.
 	{
 		$_POST['db_forums']=$_POST['db_site'];
 		$_POST['db_forums_host']=$_POST['db_site_host'];
@@ -995,8 +995,7 @@ function step_5()
 	$table_prefix=post_param('table_prefix');
 	if ($table_prefix=='') warn_exit(do_lang_tempcode('NO_BLANK_TABLE_PREFIX'));
 
-
-	// Give warning if database contains data
+	// Read in a temporary SITE_INFO, but only so this step has something to run with (the _config.php write doesn't use this data)
 	global $SITE_INFO;
 	foreach ($_POST as $key=>$val)
 	{
@@ -1006,6 +1005,8 @@ function step_5()
 		if ($key=='admin_password') $val='!'.md5($val.'ocp');
 		$SITE_INFO[$key]=trim($val);
 	}
+
+	// Give warning if database contains data
 	require_code('database');
 	if (post_param_integer('confirm',0)==0)
 	{
@@ -1025,16 +1026,16 @@ function step_5()
 		}
 	}
 
+	// Give warning if setting up a multi-site-network to a bad database
 	if (($_POST['db_forums']!=$_POST['db_site']) && (get_forum_type()=='ocf'))
 	{
 		$tmp=new database_driver(trim(post_param('db_forums')),trim(post_param('db_forums_host')),trim(post_param('db_forums_user')),trim(post_param('db_forums_password')),$table_prefix);
 		if (is_null($tmp->query_select_value_if_there('db_meta','COUNT(*)',NULL,'',true))) warn_exit(do_lang_tempcode('MSN_FORUM_DB_NOT_OCF_ALREADY'));
 	}
 
+	// FTP uploads if we're in the quick installer
 	global $FILE_ARRAY;
-
 	$still_ftp=false;
-
 	$log=new ocp_tempcode();
 	if (@is_array($FILE_ARRAY))
 	{
@@ -1047,6 +1048,8 @@ function step_5()
 			$still_ftp=true;
 		}
 	}
+
+	// If done with FTP, do the main stuff for this step
 	if (!$still_ftp)
 	{
 		require_code('zones');
@@ -1444,13 +1447,6 @@ function step_5_write_config()
 	$config_file='_config.php';
 	$config_file_handle=fopen(get_file_base().'/'.$config_file,'wt');
 	fwrite($config_file_handle,"<"."?php\nglobal \$SITE_INFO;\n");
-	fwrite($config_file_handle,"\$SITE_INFO['use_mem_cache']='0';\n");
-	fwrite($config_file_handle,"\$SITE_INFO['fast_spider_cache']='0';\n");
-	fwrite($config_file_handle,"\$SITE_INFO['on_msn']='0';\n");
-	fwrite($config_file_handle,"\$SITE_INFO['disable_smart_decaching']='0';\n");
-	fwrite($config_file_handle,"\$SITE_INFO['no_disk_sanity_checks']='0';\n");
-	fwrite($config_file_handle,"\$SITE_INFO['hardcode_common_module_zones']='0';\n");
-	fwrite($config_file_handle,"\$SITE_INFO['prefer_direct_code_call']='0';\n");
 	if ($config_file_handle===false)
 		warn_exit(do_lang_tempcode('INSTALL_WRITE_ERROR',escape_html($config_file)));
 
@@ -1464,6 +1460,7 @@ function step_5_write_config()
 		$_val=addslashes(trim($val));
 		fwrite($config_file_handle,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");
 	}
+	fwrite($config_file_handle,'$SITE_INFO[\'session_cookie\']=\'ocp_session__'.uniqid('')."';\n");
 	fclose($config_file_handle);
 	require_once(get_file_base().'/'.$config_file);
 

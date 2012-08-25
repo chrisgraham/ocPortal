@@ -48,8 +48,7 @@ class Hook_config_default_admin_banners
 	 */
 	function get_default()
 	{
-		$old=get_value('always_banners');
-		return is_null($old)?'0':$old;
+		return '0';
 	}
 
 }

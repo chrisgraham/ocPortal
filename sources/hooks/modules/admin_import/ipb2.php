@@ -343,7 +343,6 @@ class Hook_ipb2 extends Hook_ipb_base
 				} else
 				{
 					$title='';
-					if (get_param_integer('keep_import_test',0)==1) continue;
 				}
 
 				$post=str_replace('$','[html]$[/html]',$this->clean_ipb_post($_postdetails['msg_post']));

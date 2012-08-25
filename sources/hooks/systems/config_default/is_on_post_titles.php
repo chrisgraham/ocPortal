@@ -48,8 +48,7 @@ class Hook_config_default_is_on_post_titles
 	 */
 	function get_default()
 	{
-		$old=get_value('no_post_titles');
-		return is_null($old)?'0':invert_value($old);
+		return '0';
 	}
 
 }

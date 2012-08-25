@@ -48,8 +48,7 @@ class Hook_config_default_group_private_chatrooms
 	 */
 	function get_default()
 	{
-		$old=get_value('no_group_private_chatrooms');
-		return is_null($old)?'1':invert_value($old);
+		return '1';
 	}
 
 }

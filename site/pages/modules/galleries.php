@@ -211,9 +211,9 @@ class Module_galleries
 			add_config_option('VIDEOS','galleries_show_stats_count_videos','tick','return addon_installed(\'stats_block\')?\'0\':NULL;','BLOCKS','STATISTICS');
 			add_config_option('SHOW_EMPTY_GALLERIES','show_empty_galleries','tick','return \'1\';','FEATURE','GALLERIES');
 			add_config_option('GALLERY_NAME_ORDER','gallery_name_order','tick','return \'0\';','FEATURE','GALLERIES');
-			add_config_option('GALLERY_SELECTORS','gallery_selectors','line','return is_null($old=get_value(\'gallery_selectors\'))?\'12,24,36,64,128\':$old;','FEATURE','GALLERIES');
-			add_config_option('REVERSE_THUMB_ORDER','reverse_thumb_order','tick','return is_null($old=get_value(\'reverse_thumb_order\'))?\'0\':$old;','FEATURE','GALLERIES');
-			add_config_option('SHOW_GALLERY_COUNTS','show_gallery_counts','tick','return is_null($old=get_value(\'show_gallery_counts\'))?((get_forum_type()==\'ocf\')?\'0\':NULL):$old;','FEATURE','GALLERIES');
+			add_config_option('GALLERY_SELECTORS','gallery_selectors','line','return \'12,24,36,64,128\';','FEATURE','GALLERIES');
+			add_config_option('REVERSE_THUMB_ORDER','reverse_thumb_order','tick','return \'0\';','FEATURE','GALLERIES');
+			add_config_option('SHOW_GALLERY_COUNTS','show_gallery_counts','tick','return ((get_forum_type()==\'ocf\')?\'0\':NULL);','FEATURE','GALLERIES');
 			add_config_option('VIDEO_BITRATE','video_bitrate','integer','return \'1000\';','FEATURE','TRANSCODING');
 			add_config_option('AUDIO_BITRATE','audio_bitrate','integer','return \'192\';','FEATURE','TRANSCODING');
 			add_config_option('VIDEO_WIDTH_SETTING','video_width_setting','integer','return \'720\';','FEATURE','TRANSCODING');

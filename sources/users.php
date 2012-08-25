@@ -343,12 +343,12 @@ function apply_forum_driver_md5_variant($data,$key)
  */
 function get_session_id()
 {
-	if ((!isset($_COOKIE['ocp_session'])) || (/*To work around OcCLE's development mode trick*/$GLOBALS['DEV_MODE'] && running_script('occle')))
+	if ((!isset($_COOKIE[get_session_cookie()])) || (/*To work around OcCLE's development mode trick*/$GLOBALS['DEV_MODE'] && running_script('occle')))
 	{
 		if (array_key_exists('keep_session',$_GET)) return get_param_integer('keep_session');
 		return (-1);
 	}
-	return intval($_COOKIE['ocp_session']); // No need to stripslashes as it's numeric
+	return intval($_COOKIE[get_session_cookie()]); // No need to stripslashes as it's numeric
 }
 
 /**
@@ -434,13 +434,25 @@ function delete_expired_sessions_or_recover($member=NULL)
 /**
  * Get the member cookie's name.
  *
- * @return string			The member username/id (depending on forum driver) cookie's name
+ * @return string			The member username/ID (depending on forum driver) cookie's name
  */
 function get_member_cookie()
 {
 	global $SITE_INFO;
 	if (!array_key_exists('user_cookie',$SITE_INFO)) $SITE_INFO['user_cookie']='ocp_member_id';
 	return $SITE_INFO['user_cookie'];
+}
+
+/**
+ * Get the session cookie's name.
+ *
+ * @return string			The session ID cookie's name
+ */
+function get_session_cookie()
+{
+	global $SITE_INFO;
+	if (!array_key_exists('session_cookie',$SITE_INFO)) $SITE_INFO['session_cookie']='ocp_session';
+	return $SITE_INFO['session_cookie'];
 }
 
 /**

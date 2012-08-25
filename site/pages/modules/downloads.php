@@ -183,7 +183,7 @@ class Module_downloads
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))
 		{
-			add_config_option('DOWNLOAD_GALLERY_ROOT','download_gallery_root','line','return is_null($old=get_value(\'download_gallery_root\'))?(addon_installed(\'galleries\')?\'root\':NULL):$old;','FEATURE','SECTION_DOWNLOADS');
+			add_config_option('DOWNLOAD_GALLERY_ROOT','download_gallery_root','line','return (addon_installed(\'galleries\')?\'root\':NULL);','FEATURE','SECTION_DOWNLOADS');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))

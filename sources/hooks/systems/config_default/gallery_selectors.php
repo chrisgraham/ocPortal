@@ -48,8 +48,7 @@ class Hook_config_default_gallery_selectors
 	 */
 	function get_default()
 	{
-		$old=get_value('gallery_selectors');
-		return is_null($old)?'6,9,18,36':$old;
+		return '6,9,18,36';
 	}
 
 }
