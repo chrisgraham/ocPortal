@@ -147,7 +147,7 @@ class Block_main_leader_board
 	 */
 	function calculate_leaderboard($limit,$staff)
 	{
-		$all_members=$GLOBALS['FORUM_DRIVER']->get_top_posters(100);
+		$all_members=$GLOBALS['FORUM_DRIVER']->get_top_posters(max(100,$limit));
 		$points=array();
 		foreach ($all_members as $member)
 		{
