@@ -43,9 +43,7 @@ class Hook_realtime_rain_news
 				$timestamp=$row['timestamp'];
 				$member_id=$row['member_id'];
 
-				$image=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-				$image=$row['nc_img'];
-				if (url_is_local($image)) $image=get_custom_base_url().'/'.$image;
+				$image=find_theme_image($row['nc_img']);
 
 				$ticker_text=strip_comcode(get_translated_text($row['title']));
 

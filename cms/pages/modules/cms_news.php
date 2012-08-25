@@ -869,7 +869,7 @@ class Module_cms_news_cat extends standard_aed_module
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
-		list($rows,$max_rows)=$this->get_entry_rows($current_ordering);
+		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering);
 		foreach ($rows as $row)
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
