@@ -55,28 +55,28 @@ The following are the core ocPortal APIs (green is used to indicate the most imp
 ! Typical usage
 |-
 | [color="green"]GLOBAL[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---global.php.html"][tt]sources/global.php[/tt][/url]
-[url="http://ocportal.com/docs/api/core/_sources---global2.php.html"][tt]sources/global2.php[/tt][/url]
-[url="http://ocportal.com/docs/api/core/_sources---support.php.html"][tt]sources/support.php[/tt][/url]
+| [tt]sources/global.php[/tt]
+[tt]sources/global2.php[/tt]
+[tt]sources/support.php[/tt]
 | Pre-loaded and available in global scope
 |-
 | [color="green"]Web page display[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---site.php.html"][tt]sources/site.php[/tt][/url]
+| [tt]sources/site.php[/tt]
 | Pre-loaded and available in global scope
 |-
 | [color="green"]Forum, members, and usergroups (forum driver layer)[/color]
 | [tt]sources/forum/*.php[/tt]
-[url="http://ocportal.com/docs/api/core/_sources---forum_stub.php.html"][tt]sources/forum_stub.php[/tt][/url]
-[url="http://ocportal.com/docs/api/core/_sources---users.php.html"][tt]sources/users.php[/tt][/url]
+[tt]sources/forum_stub.php[/tt]
+[tt]sources/users.php[/tt]
 | Use via the [tt]$GLOBALS['FORUM_DRIVER'][/tt] object.
 |-
 | Forum, members, and usergroups (OCF)
-| [url="http://ocportal.com/docs/api/li_core_ocf.html"][tt]sources/ocf_*.php[/tt][/url]
+| [tt]sources/ocf_*.php[/tt]
 | Needs [tt]require_code[/tt]. Only use these functions if you can assume OCF is running.
 |-
 | [color="green"]Database[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---database.php.html"][tt]sources/database.php[/tt][/url]
-[url="http://ocportal.com/docs/api/li_core_database_drivers.html"][tt]sources/database/*.php[/tt][/url]
+| [tt]sources/database.php[/tt]
+[tt]sources/database/*.php[/tt]
 | Use via the [tt]$GLOBALS['SITE_DB'][/tt] or [tt]$GLOBALS['FORUM_DB'][/tt] objects / global functions.
 |-
 | Caches
@@ -84,16 +84,16 @@ The following are the core ocPortal APIs (green is used to indicate the most imp
 | Use the functions, which tie into pre-instantiated cache objects (you don't need to instantiate anything).
 |-
 | CAPTCHA
-| [url="http://ocportal.com/docs/api/core/_sources---caches.php.html"][tt]sources/captcha.php[/tt][/url]
+| [tt]sources/captcha.php[/tt]
 | Needs [tt]require_code[/tt].
 |-
 | [color="green"]Comcode[/color]
-| [url="http://ocportal.com/docs/api/core_rich_media/_sources---comcode.php.html"][tt]sources/comcode.php[/tt][/url]
-[url="http://ocportal.com/docs/api/core_rich_media/_sources---comcode_text.php.html"][tt]sources/comcode_text.php[/tt][/url]
+| [tt]sources/comcode.php[/tt]
+[tt]sources/comcode_text.php[/tt]
 | Needs [tt]require_code[/tt] if you need anything in [tt]comcode_text.php[/tt].
 |-
 | [color="green"]Configuration[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---config.php.html"][tt]sources/config.php[/tt][/url]
+| [tt]sources/config.php[/tt]
 | Pre-loaded and available in global scope
 |-
 | Encryption
@@ -101,59 +101,59 @@ The following are the core ocPortal APIs (green is used to indicate the most imp
 | Needs [tt]require_code[/tt].
 |-
 | Feedback (ratings, comments, etc)
-| [url="http://ocportal.com/docs/api/core_feedback_features/_sources---feedback.php.html"][tt]sources/feedback.php[/tt][/url]
+| [tt]sources/feedback.php[/tt]
 | Needs [tt]require_code[/tt].
 |-
 | [color="green"]Files[/color]
 | [tt]sources/files.php[/tt]
 [tt]sources/files2.php[/tt]
-[url="http://ocportal.com/docs/api/core/_sources---themes.php.html"][tt]API docs[/tt][/url] (was created before the API was split into the above files)
+[tt]API docs[/tt] (was created before the API was split into the above files)
 | Needs [tt]require_code[/tt] if you need anything in [tt]files2.php[/tt].
 |-
 | [color="green"]Forms (for full tabular form interfaces, not for any time you need a standalone input field)[/color]
-| [url="http://ocportal.com/docs/api/core_form_interfaces/_sources---form_templates.php.html"][tt]sources/form_templates.php[/tt][/url]
+| [tt]sources/form_templates.php[/tt]
 | Needs [tt]require_code[/tt].
 |-
 | E-mail and SMS
-| [url="http://ocportal.com/docs/api/core/_sources---mail.php.html"][tt]sources/mail.php[/tt][/url]
+| [tt]sources/mail.php[/tt]
 | Needs [tt]require_code[/tt].
 |-
 | Image manipulation
-| [url="http://ocportal.com/docs/api/core/_sources---images.php.html"][tt]sources/images.php[/tt][/url]
+| [tt]sources/images.php[/tt]
 | Needs [tt]require_code[/tt].
 |-
 | [color="green"]Language and internationalisation[/color]
 | [tt]sources/lang.php[/tt]
 [tt]sources/lang2.php[/tt]
-[url="http://ocportal.com/docs/api/core/_sources---themes.php.html"][tt]API docs[/tt][/url] (was created before the API was split into the above files)
+[tt]API docs[/tt] (was created before the API was split into the above files)
 | Needs [tt]require_code[/tt] if you need anything in [tt]lang2.php[/tt].
 |-
 | Filtering syntax (ocFilter)
-| [url="http://ocportal.com/docs/api/core/_sources---ocfiltering.php.html"][tt]sources/ocfiltering.php[/tt][/url]
+| [tt]sources/ocfiltering.php[/tt]
 | Needs [tt]require_code[/tt].
 |-
 | [color="green"]Permissions[/color]
 | [tt]sources/permissions.php[/tt]
 [tt]sources/permissions2.php[/tt]
-[url="http://ocportal.com/docs/api/core/_sources---themes.php.html"][tt]API docs[/tt][/url] (was created before the API was split into the above files)
+[tt]API docs[/tt] (was created before the API was split into the above files)
 | Needs [tt]require_code[/tt] if you need anything in [tt]permissions2.php[/tt].
 |-
 | Content submission security
-| [url="http://ocportal.com/docs/api/core/_sources---submit.php.html"][tt]sources/submit.php[/tt][/url]
+| [tt]sources/submit.php[/tt]
 | Needs [tt]require_code[/tt].
 |-
 | Archiving and compression
-| [url="http://ocportal.com/docs/api/core/_sources---tar.php.html"][tt]sources/tar.php[/tt][/url]
-[url="http://ocportal.com/docs/api/core/_sources---zip.php.html"][tt]sources/zip.php[/tt][/url]
+| [tt]sources/tar.php[/tt]
+[tt]sources/zip.php[/tt]
 [tt]sources/m_zip.php[/tt] (use the PHP API, this implements that if the PHP zip extension is not available)
 | Needs [tt]require_code[/tt].
 |-
 | [color]Templating (Tempcode engine)[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---tempcode.php.html"][tt]sources/tempcode.php[/tt][/url]
+| [tt]sources/tempcode.php[/tt]
 | Pre-loaded and available in global scope
 |-
 | [color="green"]Templating (template wrapper functions)[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---templates.php.html"][tt]sources/templates.php[/tt][/url]
+| [tt]sources/templates.php[/tt]
 | Pre-loaded and available in global scope
 |-
 | [color="green"]Templating (sophisticated interfaces)[/color]
@@ -167,11 +167,11 @@ The following are the core ocPortal APIs (green is used to indicate the most imp
 [tt]sources/templates_results_table.php[/tt]
 [tt]sources/templates_table_table.php[/tt]
 [tt]sources/templates_view_space.php[/tt]
-[url="http://ocportal.com/docs/api/core/_sources---themes.php.html"][tt]API docs[/tt][/url] (was created before the API was split into the above files)
+[tt]API docs[/tt] (was created before the API was split into the above files)
 | Needs [tt]require_code[/tt].
 |-
 | [color="green"]Date and time[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---temporal.php.html"][tt]sources/temporal.php[/tt][/url]
+| [tt]sources/temporal.php[/tt]
 | Pre-loaded and available in global scope
 |-
 | Overridable text files
@@ -181,15 +181,15 @@ The following are the core ocPortal APIs (green is used to indicate the most imp
 | Themes (esp theme image management)
 | [tt]sources/themes.php[/tt]
 [tt]sources/themes2.php[/tt]
-[url="http://ocportal.com/docs/api/core/_sources---themes.php.html"][tt]API docs[/tt][/url] (was created before the API was split into the above files)
+[tt]API docs[/tt] (was created before the API was split into the above files)
 | Needs [tt]require_code[/tt] if you need anything in [tt]themes2.php[/tt].
 |-
 | Data validation
-| [url="http://ocportal.com/docs/api/core/_sources---type_validation.php.html"][tt]sources/type_validation.php[/tt][/url]
+| [tt]sources/type_validation.php[/tt]
 | Needs [tt]require_code[/tt].
 |-
 | [color="green"]File uploads[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---uploads.php.html"][tt]sources/uploads.php[/tt][/url]
+| [tt]sources/uploads.php[/tt]
 | Needs [tt]require_code[/tt].
 |-
 | Web services
@@ -198,21 +198,21 @@ The following are the core ocPortal APIs (green is used to indicate the most imp
 |-
 | XHTML manipulation
 | [tt]sources/xhtml.php[/tt]
-API described in [url="http://ocportal.com/docs/api/core/_sources---support.php.html"][tt]support.php[/tt][/url] (has since been split)
+API described in [tt]support.php[/tt] (has since been split)
 | Needs [tt]require_code[/tt].
 |-
 | [color="green"]URL generation[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---urls.php.html"][tt]sources/urls.php[/tt][/url]
+| [tt]sources/urls.php[/tt]
 | Pre-loaded and available in global scope
 |-
 | Block, page, and zone querying and maintenance
-| [url="http://ocportal.com/docs/api/core/_sources---zones.php.html"][tt]sources/zones.php[/tt][/url]
-[url="http://ocportal.com/docs/api/core/_sources---zones2.php.html"][tt]sources/zones2.php[/tt][/url]
+| [tt]sources/zones.php[/tt]
+[tt]sources/zones2.php[/tt]
 [tt]sources/zones3.php[/tt] (see [tt]zones.php[/tt] API doc -- has since been split)
 | Needs [tt]require_code[/tt] if you need anything in [tt]zones2.php[/tt] or [tt]zones3.php[/tt].
 |-
 | [color="green"]Add/edit/delete forms[/color]
-| [url="http://ocportal.com/docs/api/core/_sources---aed_module.php.html"][tt]sources/aed_module.php[/tt][/url]
+| [tt]sources/aed_module.php[/tt]
 | Needs [tt]require_code[/tt].
 |}
 
