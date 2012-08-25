@@ -875,7 +875,7 @@ class Module_cms_news_cat extends standard_aed_module
 		$fields=new ocp_tempcode();
 
 		require_code('form_templates');
-		list($rows,$max_rows)=$this->get_entry_rows($current_ordering);
+		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering);
 		foreach ($rows as $row)
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
@@ -923,7 +923,7 @@ class Module_cms_news_cat extends standard_aed_module
 		if (get_base_url()==get_forum_base_url())
 		{
 			$set_name='rep_image';
-			$required=false;
+			$required=true;
 			$set_title=do_lang_tempcode('IMAGE');
 			$field_set=alternate_fields_set__start($set_name);
 

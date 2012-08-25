@@ -42,7 +42,7 @@ function render_news_box($row,$zone='_SEARCH')
 	if ((!array_key_exists($row['news_category'],$NEWS_CATS)) || (!array_key_exists('nc_title',$NEWS_CATS[$row['news_category']])))
 		$row['news_category']=db_get_first_id();
 	$news_cat_row=$NEWS_CATS[$row['news_category']];
-	$img=find_theme_image($news_cat_row['nc_img']);
+	$img=($news_cat_row['nc_img']=='')?'':find_theme_image($news_cat_row['nc_img']);
 	if (is_null($img)) $img='';
 	if ($row['news_image']!='')
 	{

@@ -207,7 +207,7 @@ class Block_main_news
 				}
 				if ((!array_key_exists($myrow['news_category'],$NEWS_CATS)) || (!array_key_exists('nc_title',$NEWS_CATS[$myrow['news_category']])))
 					$myrow['news_category']=db_get_first_id();
-				$img=find_theme_image($NEWS_CATS[$myrow['news_category']]['nc_img']);
+				$img=($NEWS_CATS[$myrow['news_category']]['nc_img']=='')?'':find_theme_image($NEWS_CATS[$myrow['news_category']]['nc_img']);
 				if (is_null($img)) $img='';
 				if ($myrow['news_image']!='')
 				{

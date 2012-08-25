@@ -102,7 +102,7 @@ class Hook_Profiles_Tabs_blog
 					$truncate=true;
 				} else $truncate=false;
 				$news_full_url=build_url(array('page'=>'news','type'=>'view','id'=>$news_id,'filter'=>$news_cat[0]['id']),get_module_zone('news'));
-				$news_img=find_theme_image($news_cat[0]['nc_img']);
+				$news_img=($news_cat[0]['nc_img']=='')?'':find_theme_image($news_cat[0]['nc_img']);
 				if (is_null($news_img)) $news_img='';
 				if ($myrow['news_image']!='')
 				{
