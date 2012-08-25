@@ -9,7 +9,9 @@
 		{+START,IF,{$NOT,{HIDE_POSTS}}}
 			<div class="pe_wiki_page_description" itemprop="description">
 				<div class="box box___wiki_page_screen"><div class="box_inner">
-					{DESCRIPTION}
+					<div>{$,To disassociated headers}
+						{DESCRIPTION}
+					</div>
 				</div></div>
 
 				{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
