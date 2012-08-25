@@ -1835,7 +1835,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 	}
 
 	global $SITE_INFO;
-	if (((!isset($SITE_INFO['assume_full_mobile_support'])) || ($SITE_INFO['assume_full_mobile_support']=='0')) && (isset($GLOBALS['FORUM_DRIVER'])) && (!$truth) && (($theme=$GLOBALS['FORUM_DRIVER']->get_theme())!='default'))
+	if (((!isset($SITE_INFO['assume_full_mobile_support'])) || ($SITE_INFO['assume_full_mobile_support']!='1')) && (isset($GLOBALS['FORUM_DRIVER'])) && (!$truth) && (($theme=$GLOBALS['FORUM_DRIVER']->get_theme())!='default'))
 	{
 		$ini_path=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.$theme.'/theme.ini';
 		if (is_file($ini_path))
@@ -1921,7 +1921,7 @@ function is_mobile($user_agent=NULL,$truth=false)
 		'iPad',
 	);
 
-	if (((!isset($SITE_INFO['no_extra_mobiles'])) || ($SITE_INFO['no_extra_mobiles']=='0')) && (is_file(get_file_base().'/text_custom/pdas.txt')))
+	if (((!isset($SITE_INFO['no_extra_mobiles'])) || ($SITE_INFO['no_extra_mobiles']!='1')) && (is_file(get_file_base().'/text_custom/pdas.txt')))
 	{
 		require_code('files');
 		$pdas=better_parse_ini_file((get_file_base().'/text_custom/pdas.txt'));
@@ -1967,7 +1967,7 @@ function get_bot_type()
 	global $BOT_MAP_CACHE,$SITE_INFO;
 	if ($BOT_MAP_CACHE===NULL)
 	{
-		if (((!isset($SITE_INFO['no_extra_bots'])) || ($SITE_INFO['no_extra_bots']=='0')) && (is_file(get_file_base().'/text_custom/bots.txt')))
+		if (((!isset($SITE_INFO['no_extra_bots'])) || ($SITE_INFO['no_extra_bots']!='1')) && (is_file(get_file_base().'/text_custom/bots.txt')))
 		{
 			require_code('files');
 			$BOT_MAP_CACHE=better_parse_ini_file(get_file_base().'/text_custom/bots.txt');

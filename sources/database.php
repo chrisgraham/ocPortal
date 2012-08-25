@@ -38,7 +38,7 @@ function init__database()
 	 * @global boolean $NO_DB_SCOPE_CHECK
 	 */
 	$NO_DB_SCOPE_CHECK=false;
-	if (((!isset($SITE_INFO['no_extra_logs'])) || ($SITE_INFO['no_extra_logs']=='0')) && (is_file(get_custom_file_base().'/data_custom/queries.log')))
+	if (((!isset($SITE_INFO['no_extra_logs'])) || ($SITE_INFO['no_extra_logs']!='1')) && (is_file(get_custom_file_base().'/data_custom/queries.log')))
 	{
 		$QUERY_FILE_LOG=fopen(get_custom_file_base().'/data_custom/queries.log','at');
 	} else

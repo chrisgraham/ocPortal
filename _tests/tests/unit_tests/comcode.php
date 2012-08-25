@@ -42,6 +42,22 @@ class comcode_test_set extends ocp_test_case
 		}
 	}
 
+	function testComcodeXML()
+	{
+		$comcode_xml=trim('
+			<comcode>Please leave us some product feedback.<br /><br /><block>main_contact_us<blockParam key="param" value="product_feedback" /></block></comcode>
+		');
+		$comcode_text=trim('
+Please leave us some product feedback.
+
+[block="product_feedback"]main_contact_us[/block]
+		');
+		$_comcode_xml=static_evaluate_tempcode(comcode_to_tempcode($comcode_xml,NULL,false,60,NULL,NULL,false,false,false,false,false,NULL,NULL));
+		$_comcode_text=static_evaluate_tempcode(comcode_to_tempcode($comcode_text,NULL,false,60,NULL,NULL,false,false,false,false,false,NULL,NULL));
+
+		$this->assertTrue($_comcode_xml==$_comcode_text);
+	}
+
 	function tearDown()
 	{
 		parent::tearDown();

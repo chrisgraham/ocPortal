@@ -1290,7 +1290,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 	if (((get_option('is_on_comcode_page_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && (get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0) && (get_param_integer('keep_print',0)==0))
 	{
 		global $SITE_INFO;
-		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
 
 		if (is_browser_decacheing())
 		{

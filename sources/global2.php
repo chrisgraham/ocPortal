@@ -58,7 +58,7 @@ function init__global2()
 	@header('Pragma: no-cache'); // for proxies, and also IE
 
 	// Closed site message
-	if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']=='0')))
+	if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']!='1')))
 	{
 		if ((is_file('closed.html')) || (@is_file('../closed.html')))
 		{
@@ -181,7 +181,7 @@ function init__global2()
 		if ((running_script('index')) && (count($_POST)==0))
 		{
 			$bot_type=get_bot_type();
-			if (($bot_type!==NULL) && (isset($SITE_INFO['fast_spider_cache'])) && ($SITE_INFO['fast_spider_cache']!='0'))
+			if (($bot_type!==NULL) && (isset($SITE_INFO['fast_spider_cache'])) && ($SITE_INFO['fast_spider_cache']!='') && ($SITE_INFO['fast_spider_cache']!='0'))
 			{
 				fast_spider_cache(true);
 			}
@@ -315,7 +315,7 @@ function init__global2()
 	@ini_set('zlib.output_compression',(get_option('gzip_output')=='1')?'On':'Off');
 
 	// Check installer not left behind
-	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0) && ((!isset($SITE_INFO['no_installer_checks'])) || ($SITE_INFO['no_installer_checks']=='0')))
+	if (($MICRO_AJAX_BOOTUP==0) && ($MICRO_BOOTUP==0) && ((!isset($SITE_INFO['no_installer_checks'])) || ($SITE_INFO['no_installer_checks']!='1')))
 	{
 		if ((is_file(get_file_base().'/install.php')) && (!is_file(get_file_base().'/install_ok')) && (running_script('index')))
 			warn_exit(do_lang_tempcode('MUST_DELETE_INSTALLER'));
@@ -576,7 +576,7 @@ function get_charset()
 	if (isset($CHARSET_CACHE)) return $CHARSET_CACHE;
 
 	global $SITE_INFO;
-	if (isset($SITE_INFO['charset'])) // An optimisation, if you want to put it in here
+	if ((isset($SITE_INFO['charset'])) && ($SITE_INFO['charset']!='')) // An optimisation, if you want to put it in here
 	{
 		$CHARSET_CACHE=$SITE_INFO['charset'];
 		if ($XSS_DETECT) ocp_mark_as_escaped($CHARSET_CACHE);
@@ -1563,7 +1563,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 	if ($theme===NULL)
 		$theme=filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme());
 	$dir=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.filter_naughty(user_lang());
-	if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))
+	if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']!='1'))
 	{
 		if (!is_dir($dir))
 		{
@@ -1583,7 +1583,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 	$js_cache_path.='.js';
 
 	global $CACHE_TEMPLATES;
-	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
 	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@(filesize($js_cache_path)!=0)) && (!is_browser_decacheing()) && (!in_safe_mode());
 
 	if (($support_smart_decaching) || (!$is_cached))
@@ -1701,7 +1701,7 @@ function javascript_tempcode($position=NULL)
 			if ($mobile) $j.='_mobile';
 
 			global $SITE_INFO;
-			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
 			$sup=($support_smart_decaching)?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
 
 			$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'b5886d9dfc4d528b7e1b0cd6f0eb1670','CODE'=>$j,'SUP'=>$sup)));
@@ -1752,7 +1752,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 		$theme=@method_exists($GLOBALS['FORUM_DRIVER'],'get_theme')?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
 	$active_theme=$theme;
 	$dir=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.filter_naughty(user_lang());
-	if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0'))
+	if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']!='1'))
 	{
 		if (!is_dir($dir))
 		{
@@ -1772,7 +1772,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 	$css_cache_path.='.css';
 
 	global $CACHE_TEMPLATES;
-	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
 	$is_cached=($CACHE_TEMPLATES || !running_script('index')/*must cache for non-index to stop getting blanked out in depended sub-script output generation and hence causing concurrency issues*/) && (@(filesize($css_cache_path)!=0)) && (!is_browser_decacheing()) && (!in_safe_mode());
 
 	if (($support_smart_decaching) || (!$is_cached) || ($text_only))
@@ -1858,7 +1858,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 			if ($temp!='')
 			{
 				global $SITE_INFO;
-				$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+				$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
 				$sup=($support_smart_decaching)?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
 
 				$css->attach(do_template('CSS_NEED',array('_GUID'=>'ed35fac857214000f69a1551cd483096','CODE'=>$c,'SUP'=>$sup),user_lang(),false,NULL,'.tpl','templates',$theme));

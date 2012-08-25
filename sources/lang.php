@@ -424,7 +424,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 	if ($PAGE_CACHE_LAZY_LOAD)
 	{
 		global $SITE_INFO;
-		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
 		if ($support_smart_decaching)
 		{
 			$cache_path=$cfb.'/lang_cached/'.$lang.'/'.$codename.'.lcd';
@@ -504,7 +504,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
 	{
 		$desire_cache=true;
 		global $SITE_INFO;
-		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+		$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
 		if ($support_smart_decaching)
 		{
 			$lang_file=$fb.'/lang/'.$lang.'/'.$codename.'.ini';

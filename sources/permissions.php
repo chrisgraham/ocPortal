@@ -67,7 +67,7 @@ function handle_permission_check_logging($member,$op,$params,$result)
 	if ($PERMISSION_CHECK_LOGGER===NULL)
 	{
 		$file_path=get_custom_file_base().'/data_custom/permissioncheckslog.php';
-		if (((!isset($SITE_INFO['no_extra_logs'])) || ($SITE_INFO['no_extra_logs']=='0')) && (is_file($file_path)) && (is_writable_wrap($file_path)))
+		if (((!isset($SITE_INFO['no_extra_logs'])) || ($SITE_INFO['no_extra_logs']!='1')) && (is_file($file_path)) && (is_writable_wrap($file_path)))
 		{
 			$PERMISSION_CHECK_LOGGER=fopen($file_path,'at');
 			if (!function_exists('get_self_url')) require_code('urls');

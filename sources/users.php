@@ -165,7 +165,7 @@ function get_member($quick_only=false)
 	// Try via backdoor that someone with full server access can place
 	$backdoor_ip_address=mixed(); // Enable to a real IP address to force login from FTP access (if lost admin password)
 	if (array_key_exists('backdoor_ip',$SITE_INFO)) $backdoor_ip_address=$SITE_INFO['backdoor_ip'];
-	if ((is_string($backdoor_ip_address)) && (get_ip_address()==$backdoor_ip_address))
+	if ((is_string($backdoor_ip_address)) && ($backdoor_ip_address!='') && (get_ip_address()==$backdoor_ip_address))
 	{
 		require_code('users_active_actions');
 		$MEMBER_CACHED=restricted_manually_enabled_backdoor();

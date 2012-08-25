@@ -515,7 +515,7 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		} else
 		{
 			global $SITE_INFO;
-			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
 			if ($support_smart_decaching)
 			{
 				if (!isset($TEMPLATE_DISK_ORIGIN_CACHE[$codename][$lang][$theme][$suffix][$type]))
