@@ -250,7 +250,7 @@ function restore_output_state($just_tempcode=false)
 	{
 		foreach ($old_state as $var=>$val)
 		{
-			if ((!$just_tempcode) || ($key=='CYCLES') || ($key=='TEMPCODE_SETGET'))
+			if ((!$just_tempcode) || ($var=='CYCLES') || ($var=='TEMPCODE_SETGET'))
 			{
 				$GLOBALS[$var]=$val;
 			}

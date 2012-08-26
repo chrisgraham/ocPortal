@@ -179,7 +179,7 @@ function get_php_file_api($filename,$include_code=true)
 
 						$in_return=true;
 					}
-					elseif (substr($ltrim,0,4)=='@set')
+					elseif ((substr($ltrim,0,4)=='@set') && (substr($ltrim,0,5)!='@sets'))
 					{
 						$set=ltrim(substr($ltrim,5));
 						if ($in_return)
@@ -228,6 +228,7 @@ function get_php_file_api($filename,$include_code=true)
 					if ($default==='boolean-true') $default=true;
 					if ($default==='boolean-false') $default=false;
 				} else $default=NULL;
+
 				check_function_type($parameter['type'],$function_name,$parameter['name'],$default,array_key_exists('range',$parameter)?$parameter['range']:NULL,array_key_exists('set',$parameter)?$parameter['set']:NULL);
 
 				// Check that null is fully specified

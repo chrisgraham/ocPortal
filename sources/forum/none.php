@@ -204,8 +204,8 @@ class forum_driver_none extends forum_driver_base
 			$EMOTICON_LEVELS[$myrow['e_code']]=$myrow['e_relevance_level'];
 		}
 		uksort($this->EMOTICON_CACHE,'strlen_sort');
-		$this->EMOTICON_CACHE=array_reverse($EMOTICON_CACHE);
-		return $EMOTICON_CACHE;
+		$this->EMOTICON_CACHE=array_reverse($this->EMOTICON_CACHE);
+		return $this->EMOTICON_CACHE;
 	}
 
 	/**

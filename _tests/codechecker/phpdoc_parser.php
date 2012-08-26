@@ -110,7 +110,7 @@ if (file_exists($OCPORTAL_PATH.'/data_custom'))
 fwrite($myfile,serialize($classes));
 fclose($myfile);
 
-echo 'Done';
+echo 'DONE Compiled signatures';
 
 function require_code($codename)
 {

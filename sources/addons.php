@@ -1,4 +1,3 @@
-
 <?php /*
 
  ocPortal
@@ -29,6 +28,7 @@
 function find_updated_addons()
 {
 	static $updated_addons=NULL; // Cache
+	if ($updated_addons===NULL) $updated_addons=mixed();
 	if ($updated_addons!==NULL) return $updated_addons;
 
 	$addons=find_installed_addons(true);

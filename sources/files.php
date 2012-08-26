@@ -287,8 +287,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'info.php'=>'', // Pre-v10 equivalent to _config.php
 		'persistant_cache'=>'',
 		'docs4'=>'',
-		'mods'=>'imports',
-		'mods'=>'exports',
+		'mods'=>'imports|exports',
 	);
 
 	$ignore_extensions=array( // Case insensitive, define in lower case

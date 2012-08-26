@@ -264,22 +264,22 @@ function do_access($given_password)
 				</tr>
 			';
 		}
+	}
 
-		// Any other settings that we don't actually implicitly recognise need to be relayed
-		foreach ($SITE_INFO as $key=>$val)
+	// Any other settings that we don't actually implicitly recognise need to be relayed
+	foreach ($SITE_INFO as $key=>$val)
+	{
+		if (!array_key_exists($key,$settings))
 		{
-			if (!array_key_exists($key,$settings))
+			if (is_array($val))
 			{
-				if (is_array($val))
+				foreach ($val as $val2)
 				{
-					foreach ($val as $val2)
-					{
-						echo '<input type="hidden" name="'.htmlentities($key).'[]" value="'.htmlentities($val2).'" />';
-					}
-				} else
-				{
-					echo '<input type="hidden" name="'.htmlentities($key).'" value="'.htmlentities($val).'" />';
+					echo '<input type="hidden" name="'.htmlentities($key).'[]" value="'.htmlentities($val2).'" />';
 				}
+			} else
+			{
+				echo '<input type="hidden" name="'.htmlentities($key).'" value="'.htmlentities($val).'" />';
 			}
 		}
 	}

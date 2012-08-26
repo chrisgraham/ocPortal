@@ -751,7 +751,7 @@ function fix_perms()
 
 	$super_out='';
 
-	$array=array_merge(get_chmod_array(),get_chmod_array_2());
+	$array=array_merge(get_chmod_array(fallback_lang()),get_chmod_array_2());
 	require_code('themes2');
 	$themes=find_all_themes();
 

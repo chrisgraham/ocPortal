@@ -112,7 +112,7 @@ class OCP_Topic
 			if ((count($this->all_posts_ordered)==0) && ($invisible_if_no_comments))
 				return new ocp_tempcode();
 
-			$may_reply=has_specific_permission(get_member(),'comment',get_page_name());
+			$may_reply=has_privilege(get_member(),'comment',get_page_name());
 
 			// Prepare review titles
 			global $REVIEWS_STRUCTURE;
