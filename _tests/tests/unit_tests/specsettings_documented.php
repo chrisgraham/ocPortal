@@ -97,7 +97,7 @@ class specsettings_documented_test_set extends ocp_test_case
 				for ($i=0;$i<$num_matches;$i++)
 				{
 					$var=$matches[1][$i];
-					if ((!file_exists(get_file_base().'/sources/hooks/systems/disposable_values/'.$var.'.php')) && (substr($var,0,5)!='last_') && (substr($var,0,4)!='ftp_') && ($var!='uses_ftp') && ($var!='occle_watched_chatroom') && (substr($var,0,8)!='delurk__') && (substr($var,0,7)!='backup_') && ($var!='version') && ($var!='ocf_version') && ($var!='newsletter_whatsnew') && ($var!='newsletter_send_time') && ($var!='site_salt') && ($var!='sitemap_building_in_progress') && ($var!='setup_wizard_completed') && ($var!='site_bestmember') && ($var!='oracle_index_cleanup_last_time') && ($var!='timezone') && ($var!='users_online') && ($var!='ran_once')) // Quite a few are set in code
+					if ((!file_exists(get_file_base().'/sources/hooks/systems/disposable_values/'.$var.'.php')) && ($var!='user_peak') && ($var!='user_peak_week') && (substr($var,0,5)!='last_') && (substr($var,0,4)!='ftp_') && ($var!='uses_ftp') && ($var!='occle_watched_chatroom') && (substr($var,0,8)!='delurk__') && (substr($var,0,7)!='backup_') && ($var!='version') && ($var!='ocf_version') && ($var!='newsletter_whatsnew') && ($var!='newsletter_send_time') && ($var!='site_salt') && ($var!='sitemap_building_in_progress') && ($var!='setup_wizard_completed') && ($var!='site_bestmember') && ($var!='oracle_index_cleanup_last_time') && ($var!='timezone') && ($var!='users_online') && ($var!='ran_once')) // Quite a few are set in code
 						$found[$var]=1;
 				}
 			}

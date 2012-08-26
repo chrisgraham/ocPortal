@@ -1613,9 +1613,9 @@ function is_invisible()
  */
 function get_num_users_site()
 {
-	global $NUM_USERS_SITE_CACHE,$PEAK_USERS_EVER_CACHE;
+	global $NUM_USERS_SITE_CACHE,$PEAK_USERS_EVER_CACHE,$PEAK_USERS_WEEK_CACHE;
 	$users_online_time_seconds=60*intval(get_option('users_online_time'));
-	$NUM_USERS_SITE_CACHE=get_value_newer_than('users_online',time()-$users_online_time_seconds/2);
+	$NUM_USERS_SITE_CACHE=get_value_newer_than('users_online',time()-$users_online_time_seconds/2); /* Refreshes half way through the user online time, to approximate accuracy */
 	if ($NUM_USERS_SITE_CACHE===NULL)
 	{
 		$NUM_USERS_SITE_CACHE=get_value('users_online');
@@ -1635,21 +1635,37 @@ function get_num_users_site()
 	}
 	if (addon_installed('stats'))
 	{
-		$PEAK_USERS_EVER_CACHE=get_value_newer_than('user_peak',time()-$users_online_time_seconds*10);
+		// Store a peak record if there is one
+		$PEAK_USERS_EVER_CACHE=get_value('user_peak');
 		if (($PEAK_USERS_EVER_CACHE===NULL) || ($PEAK_USERS_EVER_CACHE==''))
 		{
 			$_peak_users_user=$GLOBALS['SITE_DB']->query_select_value_if_there('usersonline_track','MAX(peak)',NULL,'',true);
 			$PEAK_USERS_EVER_CACHE=($_peak_users_user===NULL)?$NUM_USERS_SITE_CACHE:strval($_peak_users_user);
 			set_value('user_peak',$PEAK_USERS_EVER_CACHE);
 		}
-		if ($NUM_USERS_SITE_CACHE>$PEAK_USERS_EVER_CACHE)
+		if (intval($NUM_USERS_SITE_CACHE)>intval($PEAK_USERS_EVER_CACHE))
 		{
-			// In case the record is beaten more than once within the same second
-			$time=time();
-			$GLOBALS['SITE_DB']->query_delete('usersonline_track',array('date_and_time'=>$time),'',1,NULL,true);
-
 			// New record
-			$GLOBALS['SITE_DB']->query_insert('usersonline_track',array('date_and_time'=>$time,'peak'=>intval($NUM_USERS_SITE_CACHE)),false,true);
+			$GLOBALS['SITE_DB']->query_insert('usersonline_track',array('date_and_time'=>time(),'peak'=>intval($NUM_USERS_SITE_CACHE)),false,true);
+		}
+
+		// Store a 7-day-cycle peak record if we've made one
+		$PEAK_USERS_WEEK_CACHE=get_value_newer_than('user_peak_week',time()-$users_online_time_seconds/2);
+		$store_anyway=false;
+		if (($PEAK_USERS_WEEK_CACHE===NULL) || ($PEAK_USERS_WEEK_CACHE==''))
+		{
+			$store_anyway=true;
+		}
+		if ((intval($NUM_USERS_SITE_CACHE)>intval($PEAK_USERS_WEEK_CACHE)) || ($store_anyway))
+		{
+			$PEAK_USERS_WEEK_CACHE=$NUM_USERS_SITE_CACHE;
+
+			// But also delete anything else in the last 7 days that was less than the new weekly peak record, to keep the stats clean (we only want 7 day peaks to be stored)
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'usersonline_track WHERE date_and_time>'.strval(time()-60*60*24*7).' AND peak<='.strval($PEAK_USERS_WEEK_CACHE));
+
+			// Set record for week
+			set_value('user_peak_week',$PEAK_USERS_WEEK_CACHE);
+			$GLOBALS['SITE_DB']->query_insert('usersonline_track',array('date_and_time'=>time(),'peak'=>intval($PEAK_USERS_WEEK_CACHE)),false,true);
 		}
 	}
 	return intval($NUM_USERS_SITE_CACHE);
