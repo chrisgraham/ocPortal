@@ -29,7 +29,8 @@ function get_future_version_information()
 
 	$url='http://ocportal.com/version.php?version='.rawurlencode(get_version_dotted()).'&lang='.rawurlencode(user_lang());
 
-	$data=http_download_file($url,NULL,false);
+	static $data=NULL; // Cache
+	if (is_null($data)) $data=http_download_file($url,NULL,false);
 	if (!is_null($data))
 	{
 		$data=str_replace('"../upgrader.php"','"'.get_base_url().'/upgrader.php"',$data);

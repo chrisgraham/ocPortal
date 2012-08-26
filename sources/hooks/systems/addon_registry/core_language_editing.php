@@ -74,6 +74,7 @@ class Hook_addon_registry_core_language_editing
 		return array(
 			'translations_editor.css',
 			'sources/hooks/systems/addon_registry/core_language_editing.php',
+			'sources/hooks/blocks/main_staff_checklist/translations.php',
 			'JAVASCRIPT_TRANSLATE.tpl',
 			'TRANSLATE_ACTION.tpl',
 			'TRANSLATE_LINE.tpl',

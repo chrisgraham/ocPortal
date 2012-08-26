@@ -147,6 +147,7 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/modules/members/index.html',
 			'sources/hooks/modules/search/ocf_members.php',
 			'sources/hooks/systems/addon_registry/core_ocf.php',
+			'sources/hooks/blocks/main_staff_checklist/usergroup_membership.php',
 			'adminzone/pages/modules/admin_ocf_emoticons.php',
 			'adminzone/pages/modules/admin_ocf_groups.php',
 			'adminzone/pages/modules/admin_ocf_merge_members.php',

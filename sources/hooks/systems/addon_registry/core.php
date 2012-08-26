@@ -99,6 +99,7 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/disposable_values/page_views.php',
 			'sources/password_strength.php',
 			'sources/hooks/systems/snippets/password_strength.php',
+			'sources/hooks/blocks/main_staff_checklist/version.php',
 			'web.config',
 			'data/html5.js',
 			'themes/default/images/footer/ocpchat.png',

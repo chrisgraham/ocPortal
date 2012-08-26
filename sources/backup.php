@@ -285,15 +285,27 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 			$copy_path=get_option('backup_server_path');
 			if ($copy_path=='') $copy_path=$_file;
 			elseif ((substr($copy_path,-1)=='/') || ($copy_path=='')) $copy_path.=$_file;
+
+			$error=false;
 			$ftp_connection=@ftp_connect($copy_server,intval($copy_port));
 			if ($ftp_connection!==false)
 			{
 				if (@ftp_login($ftp_connection,$copy_user,$copy_password))
 				{
 					@ftp_delete($ftp_connection,$path_stub.$_file);
-					@ftp_put($ftp_connection,$copy_path,$path_stub,FTP_BINARY);
-				}
+					if (@ftp_put($ftp_connection,$copy_path,$path_stub,FTP_BINARY)===false) $error=true;
+				} else $error=true;
 				@ftp_close($ftp_connection);
+			} else $error=true;
+
+			// If an error occurred, send a notification about it
+			if ($error)
+			{
+				require_lang('backups');
+				require_code('notifications');
+				$subject=do_lang('FAILED_TO_UPLOAD_BACKUP_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
+				$message=do_lang('FAILED_TO_UPLOAD_BACKUP_BODY',$copy_server,NULL,NULL,get_site_default_lang());
+				dispatch_notification('error_occurred',NULL,$subject,$message,NULL,A_FROM_SYSTEM_PRIVILEGED);
 			}
 		}
 	}

@@ -27,6 +27,9 @@
  */
 function find_updated_addons()
 {
+	static $updated_addons=NULL; // Cache
+	if ($updated_addons!==NULL) return $updated_addons;
+
 	$addons=find_installed_addons(true);
 	$url='http://ocportal.com/uploads/website_specific/ocportal.com/scripts/addon_manifest.php?version='.urlencode(float_to_raw_string(ocp_version_number()));
 	foreach (array_keys($addons) as $i=>$addon)

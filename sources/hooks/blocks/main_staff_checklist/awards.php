@@ -65,7 +65,7 @@ class Hook_checklist_awards
 				if (is_object($url)) $url=$url->evaluate();
 				$url=str_replace('=!','_ignore=1',$url);
 
-				$task=escape_html(get_translated_text($award['a_title']));
+				$task=do_lang_tempcode('_GIVE_AWARD',escape_html(get_translated_text($award['a_title'])));
 
 				if ((!is_null($date)) && (!is_null($details['date_field'])))
 				{

@@ -275,9 +275,7 @@ class Hook_addon_registry_core_adminzone_frontpage
 			'NUM_QUEUE'=>placeholder_id()
 		));
 
-		$status=do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0', array(
-			'ORDER_STATUS'=>'not_completed'
-		));
+		$status=do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0', array());
 
 		$url=build_url(array(
 			'page'=>'admin_orders',
