@@ -924,7 +924,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 					{
 						array_push($tag_stack,array($current_tag,$attribute_map,$xml,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area));
 
-						list(,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag(false,false,get_member(),$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+						list(,,,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag(false,false,get_member(),$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 						$xml='';
 					}
 				}
@@ -948,7 +948,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 				{
 					array_push($tag_stack,array($current_tag,$attribute_map,$xml,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area));
 
-					list(,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag(false,false,get_member(),$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list(,,,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag(false,false,get_member(),$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					$xml='';
 				}
 				elseif ($next=='[')
@@ -971,7 +971,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 
 					array_push($tag_stack,array($current_tag,$attribute_map,$xml,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area));
 
-					list(,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag(false,false,get_member(),$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list(,,,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag(false,false,get_member(),$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					$xml='';
 				}
 				elseif ($next=='=') $status=CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
@@ -1011,7 +1011,7 @@ function comcode_text__to__comcode_xml($comcode,$skip_wrapper=false)
 
 					array_push($tag_stack,array($current_tag,$attribute_map,$xml,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area));
 
-					list(,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag(false,false,get_member(),$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+					list(,,,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag(false,false,get_member(),$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
 					$xml='';
 				}
 				else
