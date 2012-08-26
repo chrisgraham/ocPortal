@@ -162,17 +162,6 @@ class Block_main_staff_checklist
 			)));
 		}
 
-		// Handle notes
-		$file='admin_notes';
-		$new=post_param('new',NULL);
-		if (!is_null($new))
-		{
-			set_long_value('note_text_'.$file,$new);
-			log_it('NOTES',$file);
-		}
-		$notes=get_long_value('note_text_'.$file);
-		if (is_null($notes)) $notes='';
-
 		require_lang('staff_checklist');
 		require_css('adminzone_frontpage');
 

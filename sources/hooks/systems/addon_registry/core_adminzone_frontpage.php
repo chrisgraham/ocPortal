@@ -86,6 +86,8 @@ class Hook_addon_registry_core_adminzone_frontpage
 			'BLOCK_MAIN_NOTES.tpl',
 			'adminzone/staff_tips.php',
 			'lang/EN/staff_checklist.ini',
+			'sources/hooks/systems/cron/staff_checklist_notify.php',
+			'sources/hooks/systems/notifications/staff_checklist.php',
 			'themes/default/images/checklist/checklist-.png',
 			'themes/default/images/checklist/checklist0.png',
 			'themes/default/images/checklist/checklist1.png',

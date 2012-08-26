@@ -1551,12 +1551,12 @@ function handle_comment($comment)
 	}
 	if (isset($GLOBALS['TODO']))
 	{
-		if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found',$GLOBALS['i']);
-		if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found',$GLOBALS['i']);
-		if (strpos($comment[1],'IDEA')!==false) log_warning('IDEA comment found',$GLOBALS['i']);
-		if (strpos($comment[1],'LEGACY')!==false) log_warning('LEGACY comment found',$GLOBALS['i']);
-		if (strpos($comment[1],'FUDGE')!==false) log_warning('FUDGE comment found',$GLOBALS['i']);
-		if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found',$GLOBALS['i']);
+		if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found ('.$comment[1].')',$GLOBALS['i']);
+		if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found ('.$comment[1].')',$GLOBALS['i']);
+		if (strpos($comment[1],'IDEA')!==false) log_warning('IDEA comment found ('.$comment[1].')',$GLOBALS['i']);
+		if (strpos($comment[1],'LEGACY')!==false) log_warning('LEGACY comment found ('.$comment[1].')',$GLOBALS['i']);
+		if (strpos($comment[1],'FUDGE')!==false) log_warning('FUDGE comment found ('.$comment[1].')',$GLOBALS['i']);
+		if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found ('.$comment[1].')',$GLOBALS['i']);
 		//if (strpos($comment[1],'XHTMLXHTML')!==false) log_warning('XHTMLXHTML comment found',$GLOBALS['i']);	Don't want to report these
 	}
 }

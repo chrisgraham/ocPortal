@@ -53,14 +53,48 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('notifications');
-	foreach ($GLOBALS['SITE_DB']->query_select('tracking_info',array('*')) as $t)
+	require_code('blocks/main_staff_checklist');
+
+	// Find if anything needs doing
+	$outstanding=0;
+	$rows=$GLOBALS['SITE_DB']->query_select('customtasks',array('*'));
+	foreach($rows as $r)
 	{
-		$GLOBALS['SITE_DB']->query_insert('notifications_enabled',array(
-			'l_member_id'=>$t['t_member_id'],
-			'l_notification_code'=>$t['t_type'],
-			'l_code_category'=>$t['t_category_id'],
-			'l_setting'=>($t['t_use_email']==0)?A_NA:A_INSTANT_EMAIL,
-		));
+		$task_done=((!is_null($r['taskisdone'])) && (($r['recurinterval']==0) || (($r['recurevery']!='mins') || (time()<$r['taskisdone']+60*$r['recurinterval'])) && (($r['recurevery']!='hours') || (time()<$r['taskisdone']+60*60*$r['recurinterval'])) && (($r['recurevery']!='days') || (time()<$r['taskisdone']+24*60*60*$r['recurinterval'])) && (($r['recurevery']!='months') || (time()<$r['taskisdone']+31*24*60*60*$r['recurinterval']))));
+		if (!$task_done) $outstanding++;
+	}
+	$_hooks=find_all_hooks('blocks','main_staff_checklist');
+	foreach (array_keys($_hooks) as $hook)
+	{
+		require_code('hooks/blocks/main_staff_checklist/'.filter_naughty_harsh($hook));
+		$object=object_factory('Hook_checklist_'.filter_naughty_harsh($hook),true);
+		if (is_null($object)) continue;
+		$ret=$object->run();
+		if ((!is_null($ret)) && (count($ret)!=0))
+		{
+			foreach ($ret as $r)
+			{
+				if (!is_null($r[2]))
+				{
+					if ($r[2]>0)
+						$outstanding++; // A tally of undone stuff
+				} elseif (!is_null($r[1]))
+				{
+					if ($r[1]<0) // Needed doing in the past
+						$outstanding++;
+				}
+			}
+		}
+	}
+
+	if ($outstanding>0)
+	{
+		require_lang('staff_checklist');
+
+		require_code('notifications');
+		$subject=do_lang('STAFF_CHECKLIST_MAIL_SUBJECT',integer_format($outstanding),get_site_name(),NULL,get_site_default_lang());
+		$adminzone_url=build_url(array('page'=>''),'adminzone',NULL,false,false,true);
+		$message=do_lang('STAFF_CHECKLIST_MAIL_BODY',integer_format($outstanding),get_site_name(),static_evaluate_tempcode($adminzone_url),get_site_default_lang());
+exit($message);
 	}
 }
