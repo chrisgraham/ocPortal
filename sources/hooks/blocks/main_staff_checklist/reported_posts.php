@@ -39,16 +39,13 @@ class Hook_checklist_reported_posts
 		$query='SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where;
 		$outstanding=$GLOBALS['FORUM_DB']->query_value_null_ok_full($query);
 
-		if($outstanding>0)
+		if ($outstanding>0)
 		{
-			$img	=	'not_completed';			
-		}
-		else
+			$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'e578142633c6f3d37776e82a869deb91'));
+		} else
 		{	
-			$img	=	'completed';
+			$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1',array('_GUID'=>'f578142633c6f3d37776e82a869deb91'));
 		}
-
-		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('ORDER_STATUS'=>$img));
 
 		$url=$GLOBALS['FORUM_DRIVER']->forum_url($forum_id);
 

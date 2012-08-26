@@ -47,14 +47,11 @@ class Hook_checklist_tickets
 
 		if($outstanding>0)
 		{
-			$img	=	'not_completed';			
-		}
-		else
+			$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'g578142633c6f3d37776e82a869deb91'));
+		} else
 		{	
-			$img	=	'completed';
+			$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1',array('_GUID'=>'h578142633c6f3d37776e82a869deb91'));
 		}
-
-		$status		=	do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('ORDER_STATUS'=>$img));
 
 		$url=build_url(array('page'=>'tickets','type'=>'misc'),get_module_zone('tickets'));
 
