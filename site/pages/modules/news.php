@@ -386,7 +386,7 @@ class Module_news
 					$url=build_url($url_map+propagate_ocselect(),'_SELF');
 					$name=$category['text_original'];
 					$description=do_lang_tempcode('CATEGORY_SUBORDINATE_2',integer_format($count));
-					$img=find_theme_image($category['nc_img']);
+					$img=($category['nc_img']=='')?'':find_theme_image($category['nc_img']);
 					if ($blogs===1)
 					{
 						$_img=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($category['nc_owner']);
@@ -536,7 +536,7 @@ class Module_news
 				if (array_key_exists($myrow['news_category'],$NEWS_CATS_CACHE))
 				{
 					$category=get_translated_text($NEWS_CATS_CACHE[$myrow['news_category']]['nc_title']);
-					$img=find_theme_image($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']);
+					$img=($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']=='')?'':find_theme_image($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']);
 				} else
 				{
 					$category='';
@@ -721,7 +721,7 @@ class Module_news
 
 		$news_cats=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'news_categories WHERE nc_owner IS NULL OR id='.strval($myrow['news_category']));
 		$news_cats=list_to_map('id',$news_cats);
-		$img=find_theme_image($news_cats[$myrow['news_category']]['nc_img']);
+		$img=($news_cats[$myrow['news_category']]['nc_img']=='')?'':find_theme_image($news_cats[$myrow['news_category']]['nc_img']);
 		if (is_null($img)) $img='';
 		if ($myrow['news_image']!='')
 		{

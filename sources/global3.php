@@ -1661,7 +1661,7 @@ function get_num_users_site()
 			$PEAK_USERS_WEEK_CACHE=$NUM_USERS_SITE_CACHE;
 
 			// But also delete anything else in the last 7 days that was less than the new weekly peak record, to keep the stats clean (we only want 7 day peaks to be stored)
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'usersonline_track WHERE date_and_time>'.strval(time()-60*60*24*7).' AND peak<='.strval($PEAK_USERS_WEEK_CACHE));
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'usersonline_track WHERE date_and_time>'.strval(time()-60*60*24*7).' AND peak<='.$PEAK_USERS_WEEK_CACHE);
 
 			// Set record for week
 			set_value('user_peak_week',$PEAK_USERS_WEEK_CACHE);

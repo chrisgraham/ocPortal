@@ -245,6 +245,8 @@ class virtual_bash
 		$html_bak=$this->output[STREAM_STDHTML];
 		$this->output[STREAM_STDHTML]=strtr($this->output[STREAM_STDHTML],$table);
 
+		@ob_end_clean(); // Cleanup any output that may have somehow leaked to this point
+
 		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <response>
 	<result>

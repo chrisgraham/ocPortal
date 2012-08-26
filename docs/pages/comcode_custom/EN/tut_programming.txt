@@ -540,7 +540,7 @@ N/A is used to mark characters that have a special meaning.
  - [page="_SEARCH:tut_webapp"]Web-applications, ocPortal, and PHP[/page]
  - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and Javascript[/page]
  - [page="_SEARCH:tut_sql"]Manually editing your database with phpMyAdmin[/page]
- - [url="ocPortal Code Book"]http://ocportal.com/docs/codebook.pdf[/url]
+ - [page="_SEARCH:codebook"]ocPortal Code Book[/page]
  - [url="PHP website"]http://www.php.net[/url] (I recommend you get the CHM reference guide -- very useful, I have it open all day!)
 
 

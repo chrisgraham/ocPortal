@@ -39,7 +39,7 @@ if (isset($_SERVER['argv']))
 	if (array_key_exists('path',$_SERVER['argv'])) $GLOBALS['OCPORTAL_PATH']=$_SERVER['argv']['path'];
 }
 
-require(dirname(__FILE__).'/php.php');
+require_code('php');
 
 $files=do_dir($OCPORTAL_PATH,true,true);
 

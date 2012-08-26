@@ -1496,4 +1496,4 @@ If you enter the template editor from the 'Template tree' screen then you will b
  - [page="_SEARCH:tut_releasing_themes"]Releasing a theme[/page]
  - [page="_SEARCH:tut_themes"]Themeing your site[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
- - [url="ocPortal Code Book"]http://ocportal.com/docs/codebook.pdf[/url]
+ - [page="_SEARCH:codebook"]ocPortal Code Book[/page]

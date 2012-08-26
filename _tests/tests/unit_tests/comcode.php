@@ -52,8 +52,8 @@ Please leave us some product feedback.
 
 [block="product_feedback"]main_contact_us[/block]
 		');
-		$_comcode_xml=static_evaluate_tempcode(comcode_to_tempcode($comcode_xml,NULL,false,60,NULL,NULL,false,false,false,false,false,NULL,NULL));
-		$_comcode_text=static_evaluate_tempcode(comcode_to_tempcode($comcode_text,NULL,false,60,NULL,NULL,false,false,false,false,false,NULL,NULL));
+		$_comcode_xml=static_evaluate_tempcode(comcode_to_tempcode($comcode_xml,NULL,true,60,NULL,NULL,false,false,false,false,false,NULL,NULL));
+		$_comcode_text=static_evaluate_tempcode(comcode_to_tempcode($comcode_text,NULL,true,60,NULL,NULL,false,false,false,false,false,NULL,NULL));
 		$this->assertTrue($_comcode_xml==$_comcode_text);
 
 		require_code('comcode_conversion');

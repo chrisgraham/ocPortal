@@ -178,7 +178,7 @@ class Block_side_news
 				}
 				$category=get_translated_text($NEWS_CATS_CACHE[$myrow['news_category']]['nc_title']);
 
-				$content->attach(do_template('BLOCK_SIDE_NEWS_SUMMARY',array('_GUID'=>'f7bc5288680e68641ca94ca4a3111d4a','IMG_URL'=>find_theme_image($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']),'AUTHOR'=>$myrow['author'],'ID'=>strval($myrow['id']),'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$category,'BLOG'=>$blogs===1,'FULL_URL'=>$full_url,'NEWS'=>$summary,'NEWS_TITLE'=>$news_title,'_DATE'=>strval($myrow['date_and_time']),'DATE'=>$date)));
+				$content->attach(do_template('BLOCK_SIDE_NEWS_SUMMARY',array('_GUID'=>'f7bc5288680e68641ca94ca4a3111d4a','IMG_URL'=>($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']=='')?'':find_theme_image($NEWS_CATS_CACHE[$myrow['news_category']]['nc_img']),'AUTHOR'=>$myrow['author'],'ID'=>strval($myrow['id']),'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$category,'BLOG'=>$blogs===1,'FULL_URL'=>$full_url,'NEWS'=>$summary,'NEWS_TITLE'=>$news_title,'_DATE'=>strval($myrow['date_and_time']),'DATE'=>$date)));
 			}
 		}
 

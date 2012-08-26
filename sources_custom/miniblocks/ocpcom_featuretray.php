@@ -385,7 +385,7 @@ $featuretree=array(
 				array('Versatile','You can strip down to a core system, or build up with 3rd-party addons <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Addons" href="http://shareddemo.myocp.com/adminzone/index.php?page=admin_addons&amp;type=misc"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				array('Full <acronym title="Application Programming Interface">API</acronym> documentation <a target="_blank" class="link_exempt no_print" title="(Opens in new window) API documentation" href="http://ocportal.com/docs/api/"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				array('High coding standards','No PHP notices. Type-strict codebase. We use <acronym title="Model View Controller">MVC</acronym>'),
-				array('Free online developers guide book <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Developers Documentation" href="http://ocportal.com/docs/codebook.pdf"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
+				array('Free online developers guide book <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Developers Documentation" href="http://ocportal.com/docs/codebook.htm"><img class="inline_image_3" alt="" src="{$IMG*,help}" /></a>'),
 				NULL, // divider
 				array('Custom field filters','For example, restrict news posts to a minimum length'),
 				array('Stack dumps for easy debugging'),

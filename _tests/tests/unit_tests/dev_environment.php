@@ -20,7 +20,7 @@ class dev_environment_test_set extends ocp_test_case
 {
 	function testDevMode()
 	{
-		$this->assertTrue($GLOBALS['DEV_MODE'],'Not running out of SVN or debug mode disabled, therefore not all run-time checks enabled');
+		$this->assertTrue($GLOBALS['DEV_MODE'],'Not running out of git or development mode disabled, therefore not all run-time checks enabled');
 	}
 
 	function testocpPHP()

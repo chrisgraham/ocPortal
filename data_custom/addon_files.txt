@@ -3800,9 +3800,6 @@ testing_platform
  - _tests/codechecker/codechecker.app/index.html
  - _tests/codechecker/codechecker.bat
  - _tests/codechecker/index.html
- - _tests/codechecker/js_lex.php
- - _tests/codechecker/js_parse.php
- - _tests/codechecker/js_validator.php
  - _tests/codechecker/lang/.htaccess
  - _tests/codechecker/lang/index.html
  - _tests/codechecker/lang/php.ini
@@ -3889,12 +3886,9 @@ testing_platform
  - _tests/codechecker/netbeans/test/index.html
  - _tests/codechecker/non_errors.txt
  - _tests/codechecker/parse.php
- - _tests/codechecker/php.php
  - _tests/codechecker/phpdoc_parser.php
  - _tests/codechecker/readme.txt
  - _tests/codechecker/tests.php
- - _tests/codechecker/type_validation.php
- - _tests/codechecker/validation.php
  - _tests/codechecker/xhtml.php
  - _tests/html_dump/.htaccess
  - _tests/html_dump/forum_test_set/.htaccess
@@ -3997,6 +3991,7 @@ testing_platform
  - _tests/tests/testatom.cms
  - _tests/tests/testrss.cms
  - _tests/tests/unit_tests/.htaccess
+ - _tests/tests/unit_tests/specsettings_documented.php
  - _tests/tests/unit_tests/overused_globals.php
  - _tests/tests/unit_tests/api_classes_documented.php
  - _tests/tests/unit_tests/lang_ini_size.php

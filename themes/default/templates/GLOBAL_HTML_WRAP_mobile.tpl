@@ -6,9 +6,9 @@
 
 <div class="float_surrounder">
 	{+START,IF,{$NOT,{$IS_GUEST}}}
-		{+START,IF_NON_EMPTY,{$GET,panel_top}}
+		{+START,IF_NON_EMPTY,{$LOAD_PANEL,panel_top}}
 			<div id="panel_top" role="complementary">
-				{$GET,panel_top}
+				{$LOAD_PANEL,panel_top}
 			</div>
 		{+END}
 	{+END}
@@ -25,23 +25,29 @@
 		{MIDDLE}
 	</article>
 
+	{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,left}{$LOAD_PANEL,right}}}
+		<div class="global_middle">
+			<h2>{!NAVIGATION}</h2>
+		</div>
+	{+END}
+
 	<div class="float_surrounder">
 		{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,left}}}
 			<div id="panel_left" class="global_side_panel" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
-				{$GET,panel_left}
+				{$LOAD_PANEL,panel_left}
 			</div>
 		{+END}
 
 		{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}
 			<div id="panel_right" class="global_side_panel" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
-				{$GET,panel_right}
+				{$LOAD_PANEL,panel_right}
 			</div>
 		{+END}
 	</div>
 
-	{+START,IF_NON_EMPTY,{$GET,panel_bottom}}
+	{+START,IF_NON_EMPTY,{$LOAD_PANEL,panel_bottom}}
 		<div id="panel_bottom" role="complementary">
-			{$GET,panel_bottom}
+			{$LOAD_PANEL,panel_bottom}
 		</div>
 	{+END}
 

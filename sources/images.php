@@ -151,7 +151,7 @@ function _symbol_thumbnail($param)
 						// We only need to crop/pad if the aspect ratio
 						// differs from what we want
 						$source_aspect=floatval($source_x) / floatval($source_y);
-						if ($exp_dimensions[1]==0) $exp_dimensions[1]=1;
+						if ($exp_dimensions[1]=='0') $exp_dimensions[1]='1';
 						$destination_aspect=floatval($exp_dimensions[0]) / floatval($exp_dimensions[1]);
 
 						// We test the scaled sizes, rather than the ratios

@@ -2170,8 +2170,11 @@ function html5_upload(event,field_name,files)
 	if (typeof files=='undefined') return;
 	var count = files.length;
 
-	cancel_bubbling(event);
-	if (typeof event.preventDefault!='undefined') event.preventDefault();
+	if (count>0)
+	{
+		cancel_bubbling(event);
+		if (typeof event.preventDefault!='undefined') event.preventDefault();
+	}
 
 	if (typeof window.extraAttachmentBase=='undefined') window.extraAttachmentBase=1000;
 

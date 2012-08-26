@@ -89,7 +89,8 @@ function ocf_may_delete_post_by($resource_owner,$forum_id,$member_id=NULL)
 
 	if (is_null($forum_id))
 	{
-		if (($resource_owner!=$member_id) || (!has_privilege($member_id,'delete_private_topic_posts'))) return false;
+		if (has_privilege($member_id,'moderate_personal_topic')) return true;
+		if (($resource_owner!=$member_id) || (!has_privilege($member_id,'delete_personal_topic_posts'))) return false;
 	}
 
 	if (is_null($forum_id)) return false;
