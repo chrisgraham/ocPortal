@@ -1009,7 +1009,7 @@ function get_forum_base_url($forum_base=false)
 {
 	global $SITE_INFO;
 
-	if (!array_key_exists('board_prefix',$SITE_INFO)) $SITE_INFO['board_prefix']=get_base_url();
+	if ((!array_key_exists('board_prefix',$SITE_INFO)) || ($SITE_INFO['board_prefix']=='')) $SITE_INFO['board_prefix']=get_base_url();
 	$forum_type=get_forum_type();
 	if ($forum_type=='none') return '';
 	$needs_forum_strip=(substr($SITE_INFO['board_prefix'],-6)=='/forum') && (substr(get_base_url(),-6)!='/forum');

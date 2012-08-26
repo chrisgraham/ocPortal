@@ -745,7 +745,7 @@ function strlen_sort($a,$b)
  * @param  array			List of maps to sort
  * @param  mixed			Either an integer sort key (to sort by integer key ID of contained arrays) or a Comma-separated list of sort keys (to sort by string key ID of contained arrays; prefix '!' a key to reverse the sort order for it).
  */
-function sort_maps_by($rows,$sort_keys)
+function sort_maps_by(&$rows,$sort_keys)
 {
 	global $M_SORT_KEY;
 	$M_SORT_KEY=$sort_keys;
