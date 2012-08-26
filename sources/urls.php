@@ -476,7 +476,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	}
 	if ($test_rewrite===NULL)
 	{
-		$url=(($self_page) && ($WHAT_IS_RUNNING!=='index'))?find_script($WHAT_IS_RUNNING):($stub.'index.php');
+		$url=(($self_page) && (($zone_name=='_SEARCH') || ($zone_name=='_SELF')) && ($WHAT_IS_RUNNING_CACHE!=='index'))?find_script($WHAT_IS_RUNNING_CACHE):($stub.'index.php');
 
 		// Fix sort order
 		if (isset($vars['id']))
