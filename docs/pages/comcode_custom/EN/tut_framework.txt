@@ -211,7 +211,7 @@ If you still are not convinced that ocPortal is the right choice for you, consid
  - [url="mySQL documentation"]http://dev.mysql.com/doc/mysql/en/[/url]
  - [page="_SEARCH:tut_programming"]Introduction to programming[/page]
  - [url="API guide"]http://ocportal.com/docs/api/[/url]
- - [url="ocPortal Code Book"]http://ocportal.com/docs/codebook.pdf[/url]
+ - [page="_SEARCH:codebook"]ocPortal Code Book[/page]
  - [url="PHP website"]http://www.php.net[/url] (I recommend you get the CHM reference guide -- very useful, I have it open all day!)
 
 
