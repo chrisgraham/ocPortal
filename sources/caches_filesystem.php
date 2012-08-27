@@ -85,9 +85,6 @@ class filecache
 	 */
 	function set($key,$data,$flags,$expire_secs)
 	{
-		unset($flags);
-		unset($expire_secs);
-
 		$path=get_custom_file_base().'/persistent_cache/'.md5($key).'.gcd';
 		$myfile=@fopen($path,'ab');
 		if ($myfile===false) return; // Failure

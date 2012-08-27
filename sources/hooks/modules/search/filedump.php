@@ -69,9 +69,6 @@ class Hook_search_filedump
 	 */
 	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
 	{
-		unset($author_id);
-		unset($where_clause);
-
 		require_lang('zones');
 
 		// Calculate our where clause (search)

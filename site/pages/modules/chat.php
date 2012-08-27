@@ -244,8 +244,6 @@ class Module_chat
 	 */
 	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
 	{
-		unset($start_at);
-
 		$count=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','COUNT(*)',array('is_im'=>0));
 		$permission_page='cms_chat';
 		$tree=array();

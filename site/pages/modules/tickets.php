@@ -142,10 +142,6 @@ class Module_tickets
 	 */
 	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
 	{
-		unset($require_permission_support);
-		unset($max_depth);
-		unset($start_at);
-
 		$permission_page='tickets';
 		$tree=array();
 		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('ticket_types c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.ticket_type=t.id',array('ticket_type','text_original'));

@@ -101,8 +101,6 @@ class Hook_choose_gallery
 	 */
 	function simple($id,$options,$it=NULL)
 	{
-		unset($id);
-
 		$must_accept_images=array_key_exists('must_accept_images',$options)?$options['must_accept_images']:false;
 		$must_accept_videos=array_key_exists('must_accept_videos',$options)?$options['must_accept_videos']:false;
 		$filter=array_key_exists('filter',$options)?$options['filter']:NULL;

@@ -93,8 +93,6 @@ class Hook_choose_download_category
 	 */
 	function simple($id,$options,$it=NULL)
 	{
-		unset($id);
-
 		require_code('downloads');
 
 		$compound_list=array_key_exists('compound_list',$options)?$options['compound_list']:false;

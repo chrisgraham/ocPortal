@@ -92,8 +92,6 @@ class Block_main_staff_actions
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		require_all_lang();
 
 		require_css('adminzone_frontpage');

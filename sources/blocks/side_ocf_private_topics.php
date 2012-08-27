@@ -62,8 +62,6 @@ class Block_side_ocf_private_topics
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		if (get_forum_type()!='ocf') return new ocp_tempcode();
 
 		if (is_guest()) return new ocp_tempcode();

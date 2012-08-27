@@ -1014,8 +1014,6 @@ function js_add_variable_reference($identifier,$first_mention,$instantiation=tru
  */
 function js_infer_expression_type_to_variable_type($type,$expr)
 {
-	unset($type);
-	unset($expr);
 /*	if (($expression[0]=='VARIABLE') && (count($expression[1][2])==0))		Not reliable enough, JS is very dynamic
 	{
 		$identifier=$expression[1][1];

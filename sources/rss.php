@@ -218,8 +218,6 @@ class rss
 	 */
 	function startNameSpace($parser,$prefix,$uri=NULL)
 	{
-		unset($parser);
-		unset($prefix);
 		if ((($uri=='http://purl.org/atom/ns#') || ($uri=='http://www.w3.org/2005/Atom')) && ($this->type!='RSS'))
 		{
 			array_push($this->namespace_stack,'ATOM');
@@ -235,8 +233,6 @@ class rss
 	 */
 	function endNameSpace($parser)
 	{
-		unset($parser);
-
 		array_pop($this->namespace_stack);
 	}
 
@@ -249,8 +245,6 @@ class rss
 	 */
 	function startElement($parser,$name,$attributes)
 	{
-		unset($parser);
-
 		if ((strpos($name,'HTTP://PURL.ORG/RSS/1.0/:')!==false))
 		{
 			$this->type='RSS';
@@ -316,8 +310,6 @@ class rss
 	 */
 	function startText($parser,$data)
 	{
-		unset($parser);
-
 		$this->text_so_far.=$data;
 	}
 
@@ -329,8 +321,6 @@ class rss
 	 */
 	function trueStartText($parser,$data)
 	{
-		unset($parser);
-
 		$prelast_tag=array_peek($this->tag_stack,2);
 		$last_tag=array_peek($this->tag_stack);
 		$attributes=array_peek($this->attribute_stack);

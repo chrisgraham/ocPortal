@@ -62,9 +62,6 @@ class Hook_choose_ocportalcom_addon
 	 */
 	function run($id,$options,$default=NULL)
 	{
-		unset($options);
-		unset($default);
-
 		return $this->get_file($id);
 	}
 

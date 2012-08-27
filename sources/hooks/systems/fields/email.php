@@ -62,7 +62,6 @@ class Hook_fields_email
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($field);
 		if (!is_null($required))
 		{
 			if (($required) && ($default=='')) $default=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());

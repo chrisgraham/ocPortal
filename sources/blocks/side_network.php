@@ -79,8 +79,6 @@ class Block_side_network
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		$netlinks=get_option('network_links');
 		if (strlen($netlinks)>0)
 		{

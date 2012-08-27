@@ -163,9 +163,6 @@ class comcode_xml_to_tempcode
 	 */
 	function startNameSpace($parser,$prefix,$uri=NULL)
 	{
-		unset($parser);
-		unset($prefix);
-
 		array_push($this->namespace_stack,strtolower($uri));
 	}
 
@@ -176,8 +173,6 @@ class comcode_xml_to_tempcode
 	 */
 	function endNameSpace($parser)
 	{
-		unset($parser);
-
 		array_pop($this->namespace_stack);
 	}
 
@@ -190,8 +185,6 @@ class comcode_xml_to_tempcode
 	 */
 	function startElement($parser,$name,$attributes)
 	{
-		unset($parser);
-
 		array_push($this->tag_stack,$name);
 		array_push($this->attribute_stack,$attributes);
 		array_push($this->tempcode_stack,new ocp_tempcode());
@@ -239,8 +232,6 @@ class comcode_xml_to_tempcode
 	 */
 	function startText($parser,$data)
 	{
-		unset($parser);
-
 		$parent_tempcode=array_pop($this->tempcode_stack);
 		$parent_tempcode->attach($data);
 		array_push($this->tempcode_stack,$parent_tempcode);

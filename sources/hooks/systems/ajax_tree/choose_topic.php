@@ -79,9 +79,6 @@ class Hook_choose_topic
 	 */
 	function simple($id,$options,$it=NULL)
 	{
-		unset($id);
-		unset($options);
-
 		require_code('ocf_forums2');
 
 		return ocf_nice_get_topic_tree(is_null($it)?NULL:intval($it));

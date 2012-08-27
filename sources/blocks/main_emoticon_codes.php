@@ -60,8 +60,6 @@ class Block_main_emoticon_codes
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		require_code('comcode_text');
 
 		$smilies=$GLOBALS['FORUM_DRIVER']->find_emoticons(get_member());

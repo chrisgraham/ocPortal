@@ -34,8 +34,6 @@ class Hook_rss_iotds
 	 */
 	function run($_filters,$cutoff,$prefix,$date_string,$max)
 	{
-		unset($_filters); // Not used
-
 		if (!addon_installed('iotds')) return NULL;
 
 		if (!has_actual_page_access(get_member(),'iotds')) return NULL;

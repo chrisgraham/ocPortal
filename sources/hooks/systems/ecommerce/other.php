@@ -29,8 +29,6 @@ class Hook_other
 	 */
 	function get_identifier_manual_field_inputter($type_code)
 	{
-		unset($type_code);
-
 		return NULL;
 	}
 

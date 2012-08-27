@@ -300,8 +300,6 @@ class field_restriction_loader
 	 */
 	function startElement($parser,$tag,$_attributes)
 	{
-		unset($parser);
-
 		array_push($this->tag_stack,$tag);
 		$attributes=array();
 		foreach ($_attributes as $key=>$val)
@@ -431,8 +429,6 @@ class field_restriction_loader
 	 */
 	function startText($parser,$data)
 	{
-		unset($parser);
-
 		$this->text_so_far.=$data;
 	}
 

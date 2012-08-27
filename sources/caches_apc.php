@@ -51,8 +51,6 @@ class apccache
 	 */
 	function set($key,$data,$flags,$expire_secs)
 	{
-		unset($flags);
-
 		// Update list of e-objects
 		global $PERSISTENT_CACHE_OBJECTS_CACHE;
 		if (!isset($PERSISTENT_CACHE_OBJECTS_CACHE[$key]))

@@ -107,7 +107,6 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function install_create_custom_field($name,$length)
 	{
-		unset($length);
 		$this->connection->query('ALTER TABLE '.$this->connection->get_table_prefix().'users ADD ocp_'.$name.' TEXT',NULL,NULL,true);
 		return true;
 	}
@@ -325,7 +324,6 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function member_home_url($id)
 	{
-		unset($id);
 		return get_forum_base_url().'/index.php?act=usercp';
 	}
 
@@ -568,7 +566,6 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function topic_url($id,$forum)
 	{
-		unset($forum);
 		return get_forum_base_url().'/index.php?tid='.strval($id);
 	}
 
@@ -581,7 +578,6 @@ class forum_driver_aef extends forum_driver_base
 	 */
 	function post_url($id,$forum)
 	{
-		unset($forum);
 		$topic_id=$this->connection->query_select_value_if_there('posts','post_tid',array('pid'=>$id));
 		if (is_null($topic_id)) return '?';
 		$url=get_forum_base_url().'/index.php?tid='.strval($topic_id).'&tpg=1#p'.strval($id);

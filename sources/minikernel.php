@@ -469,7 +469,6 @@ function get_site_name()
  */
 function get_base_url($https=NULL,$zone_for='')
 {
-	unset($https);
 	global $SITE_INFO;
 	if (!array_key_exists('base_url',$SITE_INFO))
 	{
@@ -508,9 +507,6 @@ function get_custom_base_url($https=NULL)
  */
 function log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='')
 {
-	unset($reason);
-	unset($reason_param_a);
-	unset($reason_param_b);
 	exit('You should not see this message. If you do, contact ocProducts and tell them a \'lhaae\' showed during installation.');
 }
 
@@ -527,11 +523,6 @@ function log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='')
  */
 function check_word_filter($a,$name=NULL,$no_die=false,$try_patterns=false,$perm_check=true)
 {
-	unset($name);
-	unset($no_die);
-	unset($try_patterns);
-	unset($perm_check);
-
 	return $a;
 }
 
@@ -586,8 +577,6 @@ function get_param($name,$default=NULL)
  */
 function __param($array,$name,$default,$must_integer=false,$is_post=false)
 {
-	unset($is_post);
-	unset($must_integer);
 	if (!array_key_exists($name,$array)) return $default;
 	$val=trim($array[$name]);
 	if (get_magic_quotes_gpc()) $val=stripslashes($val);

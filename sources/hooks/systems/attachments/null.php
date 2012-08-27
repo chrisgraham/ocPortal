@@ -30,9 +30,6 @@ class Hook_attachments_null
 	 */
 	function run($id,$connection)
 	{
-		unset($id);
-		unset($connection);
-
 		return true;
 	}
 

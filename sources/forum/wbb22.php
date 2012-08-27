@@ -76,7 +76,6 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
 	 */
 	function is_banned($member)
 	{
-		unset($member);
 		return false;
 	}
 

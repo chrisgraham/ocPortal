@@ -179,8 +179,6 @@ class Module_polls
 	 */
 	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
 	{
-		unset($require_permission_support);
-
 		$permission_page='cms_polls';
 
 		return array(array(),$permission_page);

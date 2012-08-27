@@ -38,8 +38,6 @@
  */
 function _helper_install_create_custom_field($this_ref,$name,$length,$locked=1,$viewable=0,$settable=0,$required=0,$description='',$type='long_text',$encrypted=0,$default=NULL)
 {
-	unset($length);
-
 	ocf_require_all_forum_stuff();
 	require_code('ocf_members_action');
 
@@ -99,8 +97,6 @@ function _helper_install_specifics()
  */
 function _helper_install_test_load_from($path)
 {
-	unset($path);
-
 	global $PROBED_FORUM_CONFIG;
 	$PROBED_FORUM_CONFIG['sql_database']='ocf';
 	$PROBED_FORUM_CONFIG['sql_user']=$GLOBALS['DB_STATIC_OBJECT']->db_default_user();

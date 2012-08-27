@@ -107,8 +107,6 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function install_create_custom_field($name,$length)
 	{
-		unset($length);
-
 		$this->connection->query('ALTER TABLE '.$this->connection->get_table_prefix().'members ADD ocp_'.$name.' TEXT',NULL,NULL,true);
 		return true;
 	}
@@ -322,8 +320,6 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function get_member_photo_url($member)
 	{
-		unset($member);
-
 		return '';
 	}
 
@@ -541,7 +537,6 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function topic_url($id,$forum)
 	{
-		unset($forum);
 		return get_forum_base_url().'/index.php?topic='.strval($id).'.0';
 	}
 
@@ -554,7 +549,6 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function post_url($id,$forum)
 	{
-		unset($forum);
 		$topic_id=$this->connection->query_select_value_if_there('messages','id_topic',array('id_msg'=>$id));
 		if (is_null($topic_id)) return '?';
 		$url=get_forum_base_url().'/index.php?topic='.strval($topic_id).'.msg'.strval($id).'#msg'.strval($id);
@@ -1048,9 +1042,6 @@ class forum_driver_smf2 extends forum_driver_base
 	 */
 	function forum_create_cookie($id,$name,$password)
 	{
-		unset($name);
-		unset($password);
-
 		list($stub,)=explode(':',get_member_cookie());
 
 		if (!$GLOBALS['SMF_NEW']) // SMF 1.0 style

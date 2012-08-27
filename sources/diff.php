@@ -1543,8 +1543,6 @@ class Text_Diff_Renderer {
 
 	function _lines($lines, $prefix=' ', $encode=true)
 	{
-		unset($encode); // For phalanger
-
 		$ret=$prefix;
 		$ret.=implode("\n".$prefix,$lines);
 		$ret.="\n";
@@ -1563,7 +1561,6 @@ class Text_Diff_Renderer {
 
 	function _deleted($lines, $words=false)
 	{
-		unset($words); // For phalanger
 		return $this->_lines($lines, '<');
 	}
 
@@ -1767,7 +1764,6 @@ class Text_Diff_Renderer_unified extends Text_Diff_Renderer {
 
 	function _deleted($lines, $words=false)
 	{
-		unset($words); // For phalanger
 		return $this->_lines($lines, '-');
 	}
 

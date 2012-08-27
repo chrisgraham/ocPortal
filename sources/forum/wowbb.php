@@ -107,7 +107,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function install_create_custom_field($name,$length)
 	{
-		unset($length);
 		$this->connection->query('ALTER TABLE '.$this->connection->get_table_prefix().'users ADD ocp_'.$name.' TEXT',NULL,NULL,true);
 		return true;
 	}
@@ -325,7 +324,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function member_home_url($id)
 	{
-		unset($id);
 		return get_forum_base_url().'/my_account.php';
 	}
 
@@ -337,8 +335,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_member_photo_url($member)
 	{
-		unset($member);
-
 		return '';
 	}
 
@@ -403,7 +399,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function _member_pm_url($id)
 	{
-		unset($id);
 		return get_forum_base_url().'/pm.php?new_message=1';
 	}
 
@@ -540,8 +535,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function topic_url($id,$forum)
 	{
-		unset($forum);
-
 		return get_forum_base_url().'/view_topic.php?id='.strval($id);
 	}
 
@@ -554,7 +547,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function post_url($id,$forum)
 	{
-		unset($forum);
 		$topic_id=$this->connection->query_select_value_if_there('posts','topic_id',array('post_id'=>$id));
 		if (is_null($topic_id)) return '?';
 		$url=get_forum_base_url().'/view_topic.php?id='.strval($topic_id).'#p'.strval($id);
@@ -1096,7 +1088,6 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function forum_authorise_login($username,$userid,$password_hashed,$password_raw,$cookie_login=false)
 	{
-		unset($cookie_login);
 		$out=array();
 		$out['id']=NULL;
 

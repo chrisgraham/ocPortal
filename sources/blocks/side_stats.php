@@ -113,8 +113,6 @@ class Block_side_stats
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		$full_tpl=new ocp_tempcode();
 
 		// Inbuilt

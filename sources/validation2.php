@@ -1187,8 +1187,6 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
  */
 function _check_blockyness($tag,$attributes,$self_close,$close)
 {
-	unset($attributes);
-
 	global $THE_DOCTYPE,$BLOCK_CONSTRAIN,$XML_CONSTRAIN,$TAGS_DEPRECATE_ALLOW,$PARENT_TAG,$TAGS_INLINE,$TAGS_BLOCK,$TAGS_NORMAL,$TAGS_INLINE_DEPRECATED,$TAGS_BLOCK_DEPRECATED,$TAGS_NORMAL_DEPRECATED,$IDS_SO_FAR,$ANCESTER_BLOCK,$ANCESTER_INLINE,$EXPECTING_TAG,$OUT,$POS,$LAST_A_TAG,$UNDER_XMLNS;
 
 	$errors=array();
@@ -1511,8 +1509,6 @@ function _check_link_accessibility($tag,$attributes,$self_close,$close)
  */
 function _check_labelling($tag,$attributes,$self_close,$close)
 {
-	unset($self_close);
-
 	global $TAG_STACK,$IDS_SO_FAR,$ANCESTER_BLOCK,$ANCESTER_INLINE,$EXPECTING_TAG,$OUT,$POS,$LAST_A_TAG;
 
 	$errors=array();

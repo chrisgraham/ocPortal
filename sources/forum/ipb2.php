@@ -639,9 +639,6 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
 	 */
 	function forum_create_cookie($id,$name,$password)
 	{
-		unset($name);
-		unset($password);
-
 		// User
 		ocp_setcookie(get_member_cookie(),strval($id));
 		$_COOKIE[get_member_cookie()]=strval($id);

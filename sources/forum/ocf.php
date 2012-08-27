@@ -1231,9 +1231,6 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function forum_create_cookie($id,$name,$password)
 	{
-		unset($name);
-		unset($password);
-
 		// User
 		ocp_setcookie(get_member_cookie(),strval($id));
 		$_COOKIE[get_member_cookie()]=strval($id);

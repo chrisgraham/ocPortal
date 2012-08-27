@@ -47,8 +47,6 @@ class Block_main_block_help
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		require_all_lang();
 
 		$blocks=new ocp_tempcode();

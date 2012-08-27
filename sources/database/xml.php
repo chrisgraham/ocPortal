@@ -381,12 +381,6 @@ class Database_Static_xml
 	 */
 	function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok=false)
 	{
-		unset($persistent); // Un-used
-		unset($db_host); // Un-used
-		unset($db_user); // Un-used
-		unset($db_password); // Un-used
-		unset($fail_ok); // Un-used
-
 		if ((strpos($db_name,'\\')===false) && (strpos($db_name,'/')===false))
 			$db_name=get_custom_file_base().'/uploads/website_specific/'.$db_name;
 		if (!file_exists($db_name)) // Will create on first usage

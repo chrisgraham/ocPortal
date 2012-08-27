@@ -62,8 +62,6 @@ class Module_groups
 	 */
 	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
 	{
-		unset($start_at);
-
 		if (get_forum_type()!='ocf') return NULL;
 
 		$permission_page=NULL;

@@ -2433,7 +2433,6 @@ function method_exists($object,$method_name)
  */
 function microtime($as_float)
 {
-	unset($as_float);
 	return '';
 }
 

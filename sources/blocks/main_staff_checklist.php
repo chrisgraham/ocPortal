@@ -119,8 +119,6 @@ class Block_main_staff_checklist
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		require_javascript('javascript_ajax');
 
 		// Handle custom tasks

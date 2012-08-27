@@ -283,7 +283,6 @@ function _m_zip_RelPath($base_path,$path)
  */
 function zip_entry_open($zip,$zip_entry,$mode='rb')
 {
-	unset($mode);
 	global $M_ZIP_FILE_HANDLES;
 
 	$m_zip_file_handle=fopen($zip_entry[2].$zip_entry[0],'rb');

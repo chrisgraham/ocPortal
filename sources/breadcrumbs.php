@@ -106,8 +106,6 @@ class breadcrumb_substitution_loader
 	 */
 	function startElement($parser,$tag,$_attributes)
 	{
-		unset($parser);
-
 		array_push($this->tag_stack,$tag);
 		$tag_attributes=array();
 		foreach ($_attributes as $key=>$val)
@@ -241,8 +239,6 @@ class breadcrumb_substitution_loader
 	 */
 	function startText($parser,$data)
 	{
-		unset($parser);
-
 		$this->text_so_far.=$data;
 	}
 

@@ -69,8 +69,6 @@ class Hook_search_ocf_own_pt
 	 */
 	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
 	{
-		unset($limit_to);
-
 		if (get_forum_type()!='ocf') return array();
 		if (get_member()==$GLOBALS['OCF_DRIVER']->get_guest_id()) return array();
 		require_code('ocf_forums');

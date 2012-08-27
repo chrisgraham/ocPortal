@@ -698,8 +698,6 @@ class ocp_simple_xml_reader
 	 */
 	function startElement($parser,$name,$attributes)
 	{
-		unset($parser);
-
 		array_push($this->tag_stack,strtolower($name));
 		if ($attributes!=array())
 		{
@@ -722,8 +720,6 @@ class ocp_simple_xml_reader
 	 */
 	function endElement($parser)
 	{
-		unset($parser);
-
 		$this_tag=array_pop($this->tag_stack);
 		$this_attributes=array_pop($this->attribute_stack);
 		$this_children=array_pop($this->children_stack);
@@ -748,8 +744,6 @@ class ocp_simple_xml_reader
 	 */
 	function startText($parser,$data)
 	{
-		unset($parser);
-
 		$next_top_tags_text=array_pop($this->text_stack);
 		$next_top_tags_text.=$data;
 		array_push($this->text_stack,$next_top_tags_text);

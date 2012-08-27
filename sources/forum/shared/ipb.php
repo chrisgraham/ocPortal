@@ -252,7 +252,6 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function member_home_url($id)
 	{
-		unset($id);
 		return get_forum_base_url().'/index.php?act=UserCP&CODE=00';
 	}
 
@@ -346,7 +345,6 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function topic_url($id,$forum)
 	{
-		unset($forum);
 		return get_forum_base_url().'/index.php?showtopic='.strval($id).'&view=getnewpost';
 	}
 
@@ -359,7 +357,6 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function post_url($id,$forum)
 	{
-		unset($forum);
 		$topic_id=$this->connection->query_select_value_if_there('posts','topic_id',array('pid'=>$id));
 		if (is_null($topic_id)) return '?';
 		$url=get_forum_base_url().'/index.php?act=findpost&pid='.strval($id);

@@ -47,8 +47,6 @@ class Block_main_custom_comcode_tags
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		require_lang('custom_comcode');
 
 		$tags=array();

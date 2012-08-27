@@ -31,8 +31,6 @@ class Hook_choose_wiki_page
 	 */
 	function run($id,$options,$default=NULL)
 	{
-		unset($options);
-
 		require_code('wiki');
 		require_lang('wiki');
 
@@ -114,9 +112,6 @@ class Hook_choose_wiki_page
 	 */
 	function simple($id,$options,$it=NULL)
 	{
-		unset($id);
-		unset($options);
-
 		require_lang('wiki');
 		require_code('wiki');
 

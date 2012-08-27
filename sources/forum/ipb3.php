@@ -703,7 +703,6 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	 */
 	function member_home_url($id)
 	{
-		unset($id);
 		return get_forum_base_url().'/index.php?app=core&module=usercp';
 	}
 
@@ -828,9 +827,6 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 	 */
 	function forum_create_cookie($id,$name,$password)
 	{
-		unset($name);
-		unset($password);
-
 		// User
 		ocp_setcookie(get_member_cookie(),strval($id));
 		$_COOKIE[get_member_cookie()]=strval($id);

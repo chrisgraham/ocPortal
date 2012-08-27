@@ -54,7 +54,6 @@ class forum_driver_vb_shared extends forum_driver_base
 	 */
 	function forum_get_lang($member)
 	{
-		unset($member);
 		return NULL;
 	}
 
@@ -226,7 +225,6 @@ class forum_driver_vb_shared extends forum_driver_base
 	 */
 	function member_home_url($id)
 	{
-		unset($id);
 		return get_forum_base_url().'/usercp.php';
 	}
 
@@ -428,7 +426,6 @@ class forum_driver_vb_shared extends forum_driver_base
 	 */
 	function topic_url($id,$forum)
 	{
-		unset($forum);
 		return get_forum_base_url().'/showthread.php?threadid='.strval($id);
 	}
 
@@ -441,7 +438,6 @@ class forum_driver_vb_shared extends forum_driver_base
 	 */
 	function post_url($id,$forum)
 	{
-		unset($forum);
 		return get_forum_base_url().'/showpost.php?p='.strval($id);
 	}
 

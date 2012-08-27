@@ -85,8 +85,6 @@ class Block_side_users_online
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		$count=0;
 		$members=get_online_members(false,NULL,$count);
 		if (is_null($members)) return new ocp_tempcode(); // Too many to show

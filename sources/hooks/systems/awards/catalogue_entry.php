@@ -64,8 +64,6 @@ class Hook_awards_catalogue_entry
 	 */
 	function run($row,$zone)
 	{
-		unset($zone);
-
 		require_code('catalogues');
 		$catalogue_name=$row['c_name'];
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);

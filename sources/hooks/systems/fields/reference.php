@@ -81,7 +81,6 @@ class Hook_fields_reference
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($field);
 		return array('short_unescaped',$default,'short');
 	}
 

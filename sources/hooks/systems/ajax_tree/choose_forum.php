@@ -95,8 +95,6 @@ class Hook_choose_forum
 	 */
 	function simple($id,$options,$it=NULL)
 	{
-		unset($id);
-
 		require_code('ocf_forums2');
 
 		$compound_list=array_key_exists('compound_list',$options)?$options['compound_list']:false;

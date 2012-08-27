@@ -59,8 +59,6 @@ class Block_main_greeting
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		$forum=get_forum_type();
 
 		$out=new ocp_tempcode();

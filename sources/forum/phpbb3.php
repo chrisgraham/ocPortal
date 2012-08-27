@@ -217,7 +217,6 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function install_create_custom_field($name,$length)
 	{
-		unset($length);
 		$this->connection->query('ALTER TABLE '.$this->connection->get_table_prefix().'users ADD ocp_'.$name.' TEXT',NULL,NULL,true);
 		return true;
 	}
@@ -457,7 +456,6 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function member_home_url($id)
 	{
-		unset($id);
 		return get_forum_base_url().'/memberlist.php?mode=editprofile';
 	}
 
@@ -469,8 +467,6 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function get_member_photo_url($member)
 	{
-		unset($member);
-
 		return '';
 	}
 
@@ -696,7 +692,6 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function topic_url($id,$forum)
 	{
-		unset($forum);
 		return get_forum_base_url().'/viewtopic.php?t='.strval($id);
 	}
 
@@ -709,7 +704,6 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function post_url($id,$forum)
 	{
-		unset($forum);
 		$topic_id=$this->connection->query_select_value_if_there('posts','tid',array('pid'=>$id));
 		if (is_null($topic_id)) return '?';
 		$url=get_forum_base_url().'/viewtopic.php?t='.strval($topic_id).'#'.strval($id);
@@ -1292,9 +1286,6 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function forum_create_cookie($id,$name,$password)
 	{
-		unset($name);
-		unset($password);
-
 		$member_cookie_name=get_member_cookie();
 		$colon_pos=strpos($member_cookie_name,':');
 		if ($colon_pos!==false)

@@ -116,9 +116,6 @@ class Hook_html_site
 	 */
 	function import_pages($db,$table_prefix,$file_base)
 	{
-		unset($db);
-		unset($table_prefix);
-
 		require_code('files2');
 		$files=@get_directory_contents($file_base);
 

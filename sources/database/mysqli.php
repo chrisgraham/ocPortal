@@ -45,8 +45,6 @@ class Database_Static_mysqli extends Database_super_mysql
 	 */
 	function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok=false)
 	{
-		unset($persistent);
-
 		if (!function_exists('mysqli_connect'))
 		{
 			$error='mySQLi not on server (anymore?). Try using the \'mysql\' database driver. To use it, edit the _config.php config file.';

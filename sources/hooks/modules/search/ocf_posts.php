@@ -82,8 +82,6 @@ class Hook_search_ocf_posts
 	 */
 	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
 	{
-		unset($limit_to);
-
 		if (get_forum_type()!='ocf') return array();
 		require_code('ocf_forums');
 		require_code('ocf_posts');

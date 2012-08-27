@@ -99,8 +99,6 @@ class Hook_choose_catalogue_category
 	 */
 	function simple($id,$options,$it=NULL)
 	{
-		unset($id);
-
 		require_code('catalogues');
 
 		$catalogue_name=array_key_exists('catalogue_name',$options)?$options['catalogue_name']:NULL;

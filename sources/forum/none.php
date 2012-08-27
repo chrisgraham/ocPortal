@@ -45,7 +45,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_top_posters($limit)
 	{
-		unset($limit);
 		return array(array(1));
 	}
 
@@ -57,7 +56,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function forum_get_lang($member)
 	{
-		unset($member);
 		return NULL;
 	}
 
@@ -100,8 +98,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function install_create_custom_field($name,$length)
 	{
-		unset($name);
-		unset($length);
 		return false;
 	}
 
@@ -133,7 +129,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function install_test_load_from($path)
 	{
-		unset($path);
 		global $PROBED_FORUM_CONFIG;
 		$PROBED_FORUM_CONFIG=array();
 		$PROBED_FORUM_CONFIG['sql_database']='ocp';
@@ -217,9 +212,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function set_custom_field($member,$field,$amount)
 	{
-		unset($member);
-		unset($field);
-		unset($amount);
 	}
 
 	/**
@@ -230,7 +222,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_custom_fields($member)
 	{
-		unset($member);
 		return array();
 	}
 
@@ -254,7 +245,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_member_row($id)
 	{
-		unset($id);
 		return array(0);
 	}
 
@@ -267,7 +257,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_member_row_field($id,$field)
 	{
-		unset($id);
 		return NULL;
 	}
 
@@ -302,7 +291,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function pnamelast_visit($r)
 	{
-		unset($r);
 		return time();
 	}
 
@@ -336,7 +324,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function member_home_url($id)
 	{
-		unset($id);
 		return get_base_url();
 	}
 
@@ -348,8 +335,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_member_photo_url($member)
 	{
-		unset($member);
-
 		return '';
 	}
 
@@ -361,8 +346,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_member_avatar_url($member)
 	{
-		unset($member);
-
 		return '';
 	}
 
@@ -432,7 +415,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function _member_pm_url($id)
 	{
-		unset($id);
 		return 'mailto:'.get_option('staff_address');
 	}
 
@@ -444,7 +426,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function _forum_url($id)
 	{
-		unset($id);
 		return '';
 	}
 
@@ -456,7 +437,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function forum_id_from_name($forum_name)
 	{
-		unset($forum_name);
 		return 0;
 	}
 
@@ -507,7 +487,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_forum_topic_posts($topic_id)
 	{
-		unset($topic_id);
 		return (-1);
 	}
 
@@ -520,7 +499,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function topic_url($id,$forum)
 	{
-		unset($forum);
 		$url=build_url(array('page'=>'news','id'=>$id),get_module_zone('news'),NULL,false,false,true);
 		return $url->evaluate();
 	}
@@ -534,7 +512,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function post_url($id,$forum)
 	{
-		unset($forum);
 		$url=build_url(array('page'=>'news','id'=>$id),get_module_zone('news'),NULL,false,false,true);
 		return $url->evaluate();
 	}
@@ -563,13 +540,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
 	{
-		unset($name);
-		unset($limit);
-		unset($filter_topic_title);
-		unset($show_first_posts);
-		unset($date_key);
-		unset($hot);
-		unset($filter_topic_description);
 		return NULL;
 	}
 
@@ -596,7 +566,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_previous_member($member)
 	{
-		unset($member);
 		return NULL; // Guest doesn't count
 	}
 
@@ -620,7 +589,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function probe_ip($ip)
 	{
-		unset($ip);
 		return array();
 	}
 
@@ -658,7 +626,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_member_email_allowed($member)
 	{
-		unset($member);
 		return true;
 	}
 
@@ -670,7 +637,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_member_join_timestamp($member)
 	{
-		unset($member);
 		return filectime(get_file_base().'/_config.php');
 	}
 
@@ -683,8 +649,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_matching_members($pattern,$limit=NULL)
 	{
-		unset($pattern);
-		unset($limit);
 		return array();
 	}
 
@@ -696,7 +660,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_post_count($member)
 	{
-		unset($member);
 		return 0;
 	}
 
@@ -708,7 +671,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_topic_count($member)
 	{
-		unset($member);
 		return 0;
 	}
 
@@ -720,7 +682,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function is_banned($member)
 	{
-		unset($member);
 		return false;
 	}
 
@@ -877,8 +838,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function forum_authorise_login($username,$userid,$password_hashed,$password_raw,$cookie_login=false)
 	{
-		unset($cookie_login);
-
 		$out=array();
 		$out['id']=NULL;
 
@@ -906,7 +865,6 @@ class forum_driver_none extends forum_driver_base
 	 */
 	function get_member_ip($id)
 	{
-		unset($id);
 		return '';
 	}
 

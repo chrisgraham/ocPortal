@@ -167,8 +167,6 @@ class Hook_search_catalogue_entries
 	 */
 	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
 	{
-		unset($limit_to);
-
 		if (!module_installed('catalogues')) return array();
 
 		$remapped_orderer='';

@@ -60,8 +60,6 @@ class Block_main_staff_new_version
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		require_lang('version');
 		require_code('version2');
 		require_css('adminzone_frontpage');

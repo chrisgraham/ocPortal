@@ -69,8 +69,6 @@ class Block_main_staff_tips
 	 */
 	function run($map)
 	{
-		unset($map);
-
 		require_css('adminzone_frontpage');
 		require_lang('tips');
 

@@ -62,7 +62,6 @@ class Hook_fields_codename
 	 */
 	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
 	{
-		unset($field);
 		if (!is_null($required))
 		{
 			if (($required) && ($default=='')) $default='default';

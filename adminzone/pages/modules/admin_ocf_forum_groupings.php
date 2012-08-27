@@ -183,8 +183,6 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 	 */
 	function may_delete_this($id)
 	{
-		unset($id);
-
 		$count=$GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','COUNT(*)');
 		return $count>1;
 	}

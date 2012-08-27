@@ -30,8 +30,6 @@
  */
 function get_video_details($file_path,$filename,$delay_errors=false)
 {
-	unset($delay_errors);
-
 	$info=NULL;
 
 	$extension=get_file_extension($filename);

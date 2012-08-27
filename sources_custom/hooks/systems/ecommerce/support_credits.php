@@ -22,8 +22,6 @@
  */
 function handle_support_credits($_key,$details,$product)
 {
-	unset($product);
-
 	$row=$GLOBALS['SITE_DB']->query_select('credit_purchases',array('member_id','num_credits'),array('purchase_validated'=>0,'purchase_id'=>intval($_key)),'',1);
 	if (count ($row) != 1) return;
 	$member_id=$row[0]['member_id'];

@@ -62,8 +62,6 @@ class Module_forumview
 	 */
 	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
 	{
-		unset($require_permission_support);
-
 		$permission_page='topics';
 
 		require_code('ocf_forums');

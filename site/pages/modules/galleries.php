@@ -284,8 +284,6 @@ class Module_galleries
 	 */
 	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
 	{
-		unset($require_permission_support);
-
 		$permission_page='cms_galleries';
 
 		$category_data_count=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');

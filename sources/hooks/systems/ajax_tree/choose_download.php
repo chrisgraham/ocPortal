@@ -159,8 +159,6 @@ class Hook_choose_download
 	 */
 	function simple($id,$options,$it=NULL)
 	{
-		unset($id);
-
 		require_code('downloads');
 
 		$only_owned=array_key_exists('only_owned',$options)?(is_null($options['only_owned'])?NULL:intval($options['only_owned'])):NULL;

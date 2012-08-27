@@ -543,8 +543,6 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	 */
 	function forum_authorise_login($username,$userid,$password_hashed,$password_raw,$cookie_login=false)
 	{
-		unset($cookie_login);
-
 		$out=array();
 		$out['id']=NULL;
 

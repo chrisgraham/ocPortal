@@ -54,7 +54,6 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 */
 	function forum_get_lang($member)
 	{
-		unset($member);
 		return NULL;
 	}
 
@@ -301,7 +300,6 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 */
 	function member_home_url($id)
 	{
-		unset($id);
 		return get_forum_base_url().'/usercp.php';
 	}
 
@@ -313,8 +311,6 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 */
 	function get_member_photo_url($member)
 	{
-		unset($member);
-
 		return '';
 	}
 
@@ -502,7 +498,6 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 */
 	function topic_url($id,$forum)
 	{
-		unset($forum);
 		return get_forum_base_url().'/thread.php?threadid='.strval($id);
 	}
 
@@ -515,7 +510,6 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 */
 	function post_url($id,$forum)
 	{
-		unset($forum);
 		return get_forum_base_url().'/thread.php?postid='.strval($id).'#post'.strval($id);
 	}
 
@@ -859,8 +853,6 @@ class forum_driver_wbb_shared extends forum_driver_base
 	 */
 	function forum_authorise_login($username,$memberid,$password_hashed,$password_raw,$cookie_login=false)
 	{
-		unset($cookie_login);
-
 		$out=array();
 		$out['id']=NULL;
 

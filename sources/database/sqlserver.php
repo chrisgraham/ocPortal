@@ -110,8 +110,6 @@ class Database_Static_sqlserver
 	 */
 	function db_full_text_assemble($content,$boolean)
 	{
-		unset($boolean);
-
 		$content=str_replace('"','',$content);
 		return 'CONTAINS ((?),\''.$this->db_escape_string($content).'\')';
 	}

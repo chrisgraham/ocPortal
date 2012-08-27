@@ -179,8 +179,6 @@ class Module_news
 	 */
 	function get_page_links($max_depth=NULL,$require_permission_support=false,$start_at=NULL,$dont_care_about_categories=false)
 	{
-		unset($require_permission_support);
-
 		$permission_page='cms_news';
 		$tree=array();
 		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('news_categories c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.nc_title=t.id',array('c.nc_title','c.id','text_original'),array('nc_owner'=>NULL),'ORDER BY text_original ASC');
