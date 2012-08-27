@@ -1699,7 +1699,7 @@ class Module_topics
 		$posts=$GLOBALS['FORUM_DB']->query('SELECT *,p.id AS id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.p_post WHERE p_topic_id='.strval($topic_id).' AND (p_intended_solely_for IS NULL OR p_intended_solely_for='.strval(get_member()).' OR p_poster='.strval(get_member()).') AND p_validated=1 ORDER BY p_time DESC,p.id DESC',30);
 		foreach ($posts as $row)
 		{
-			$topic_posts->attach(do_template('OCF_POSTING_SCREEN_POST',array('TITLE'=>$row['p_title'],'ID'=>strval($row['id']),'POSTER'=>strval($row['p_poster']),'POST'=>render_post_box($row,true))));
+			$topic_posts->attach(do_template('OCF_POSTING_SCREEN_POST',array('TITLE'=>$row['p_title'],'ID'=>strval($row['id']),'POSTER'=>strval($row['p_poster']),'POST'=>render_post_box($row,true,false))));
 		}
 		if (!$topic_posts->is_empty()) $topic_posts=do_template('OCF_POSTING_SCREEN_POSTS',array('_GUID'=>'3d3b14cf3a48b2a16eed5b1bd92b1187','POSTS'=>$topic_posts));
 

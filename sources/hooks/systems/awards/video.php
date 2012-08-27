@@ -66,6 +66,7 @@ class Hook_awards_video
 	function run($row,$zone)
 	{
 		require_code('galleries');
+
 		return render_video_box($row,$zone);
 	}
 

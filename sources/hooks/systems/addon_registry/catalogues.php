@@ -331,7 +331,8 @@ class Hook_addon_registry_catalogues
 			'ID'=>placeholder_id(),
 			'FIELDS'=>$fields,
 			'VIEW_URL'=>placeholder_url(),
-			'FIELD_0'=>lorem_word()
+			'FIELD_0'=>lorem_word(),
+			'GIVE_CONTEXT'=>false,
 		));
 		foreach (placeholder_array(2) as $v)
 		{
@@ -634,7 +635,8 @@ class Hook_addon_registry_catalogues
 			'FIELDS'=>$fields,
 			'VIEW_URL'=>placeholder_url(),
 			'FIELD_0'=>lorem_word(),
-			'ENTRY_SCREEN'=>true
+			'ENTRY_SCREEN'=>true,
+			'GIVE_CONTEXT'=>false,
 		));
 
 		return array(
@@ -793,7 +795,8 @@ class Hook_addon_registry_catalogues
 			'ID'=>placeholder_id(),
 			'FIELDS'=>placeholder_fields(),
 			'VIEW_URL'=>placeholder_url(),
-			'FIELD_0'=>lorem_word()
+			'FIELD_0'=>lorem_word(),
+			'GIVE_CONTEXT'=>false,
 		)));
 
 		return array(

@@ -37,6 +37,22 @@ function init__ocf_forums()
 }
 
 /**
+ * Render a forum box.
+ *
+ * @param  array				Forum row
+ * @param  ID_TEXT			Zone to link through to
+ * @return tempcode			The forum box
+ */
+function render_forum_box($row,$zone='_SEARCH')
+{
+	$view_map=array('page'=>'forumview');
+	if ($row['id']!=db_get_first_id()) $view_map['id']=$row['id'];
+	$url=build_url($view_map,get_module_zone('forumview'));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['f_name'],'SUMMARY'=>get_translated_tempcode($row['f_description']),'URL'=>$url));
+}
+
+/**
  * Organise a list of forum rows into a tree structure.
  *
  * @param  array			The list of all forum rows (be aware that this will get modified for performance reasons).

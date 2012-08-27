@@ -23,19 +23,58 @@
  *
  * @param  array			The IOTD row
  * @param  ID_TEXT		The zone the iotds module is in
+ * @param  boolean		Whether to include extra management links (e.g. editing, choosing, archive, etc)
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @return tempcode		The rendered box
  */
-function render_iotd_box($myrow,$zone='_SEARCH')
+function render_iotd_box($myrow,$zone='_SEARCH',$include_manage_links=false,$give_context=true)
 {
-	$date=get_timezoned_date($myrow['date_and_time']);
-	$url=build_url(array('page'=>'iotds','type'=>'view','wide'=>1,'id'=>$myrow['id']),$zone);
-	$thumb_url=$myrow['thumb_url'];
-	$caption=get_translated_tempcode($myrow['i_title']);
-
 	require_code('images');
-	$thumb_url=ensure_thumbnail($myrow['url'],$thumb_url,'iotds','iotd',$myrow['id']);
+
+	if ($include_manage_links)
+	{
+		$choose_url=build_url(array('page'=>'cms_iotds','type'=>'_choose'),get_module_zone('cms_iotds'));
+		$delete_url=build_url(array('page'=>'cms_iotds','type'=>'_delete'),get_module_zone('cms_iotds'));
+		$edit_url=build_url(array('page'=>'cms_iotds','type'=>'_ed','id'=>$myrow['id']),get_module_zone('cms_iotds'));
+	} else
+	{
+		$choose_url=mixed();
+		$delete_url=mixed();
+		$edit_url=mixed();
+	}
+
+	$i_title=get_translated_tempcode($myrow['i_title']);
+	$caption=get_translated_tempcode($myrow['caption']);
+	$date=get_timezoned_date($myrow['date_and_time']);
+
+	$submitter=$myrow['submitter'];
+	$username=$GLOBALS['FORUM_DRIVER']->get_username($submitter);
+
+	$thumb_url=ensure_thumbnail($myrow['url'],$myrow['thumb_url'],'iotds','iotd',$myrow['id']);
+	$image_url=url_is_local($myrow['url'])?(get_custom_base_url().'/'.$myrow['url']):$myrow['url'];
 	$thumb=do_image_thumb($thumb_url,'');
-	return do_template('IOTD_ARCHIVE_SCREEN_IOTD',array('SUBMITTER'=>strval($myrow['submitter']),'ID'=>strval($myrow['id']),'VIEWS'=>integer_format($myrow['iotd_views']),'THUMB'=>$thumb,'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'URL'=>$url,'CAPTION'=>$caption));
+
+	$view_url=build_url(array('page'=>'iotds','type'=>'view','wide'=>1,'id'=>$myrow['id']),$zone);
+
+	return do_template('IOTD_BOX',array(
+		'_GUID'=>'a6479902d2cd7b4119be7159147e0a0b',
+		'VIEWS'=>integer_format($myrow['iotd_views']),
+		'THUMB'=>$thumb,
+		'DATE'=>$date,
+		'DATE_RAW'=>strval($myrow['date_and_time']),
+		'IS_CURRENT'=>($current==1),
+		'THUMB_URL'=>$thumb_url,
+		'VIEW_URL'=>$view_url,
+		'ID'=>strval($myrow['id']),
+		'EDIT_URL'=>$edit_url,
+		'DELETE_URL'=>$delete_url,
+		'CHOOSE_URL'=>$choose_url,
+		'I_TITLE'=>$i_title,
+		'CAPTION'=>$caption,
+		'SUBMITTER'=>strval($submitter),
+		'USERNAME'=>$username,
+		'GIVE_CONTEXT'=>$give_context,
+	));
 }
 
 /**

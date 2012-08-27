@@ -615,7 +615,8 @@ class Hook_addon_registry_shopping
 			'CART_LINK'=>$cart_link,
 			'ADD_TO_CART'=>placeholder_url(),
 			'FIELDS'=>$fields,
-			'ENTRY_SCREEN'=>true
+			'ENTRY_SCREEN'=>true,
+			'GIVE_CONTEXT'=>false,
 		);
 		$entry=do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP', $map);
 

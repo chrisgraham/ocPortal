@@ -210,8 +210,10 @@ function show_video_details($myrow)
  * @param  boolean		Whether only to show 'preview' details
  * @return tempcode		The preview
  */
-function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false)
+function render_gallery_box($child,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false)
 {
+	require_css('galleries');
+
 	$member_id=get_member_id_from_gallery_name($child['name'],$child,true);
 	$url_map=array('page'=>'galleries','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$child['name']);
 	if (get_page_name()=='galleries') $url_map+=propagate_ocselect();
@@ -283,9 +285,8 @@ function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=
 			$lang=do_lang_tempcode('SUBGALLERY_BITS',integer_format($num_children),integer_format($num_images),array(integer_format($num_videos),integer_format($num_images+$num_videos)));
 		}
 	}
-	$tpl=do_template('GALLERY_BOX',array('_GUID'=>'0dbec2f11de63b0402471fe5c8b32865','NUM_VIDEOS'=>strval($num_videos),'NUM_IMAGES'=>strval($num_images),'NUM_CHILDREN'=>strval($num_children),'ID'=>$child['name'],'LANG'=>$lang,'ADD_DATE'=>$add_date,'ADD_DATE_RAW'=>strval($child['add_date']),'MEMBER_INFO'=>$member_info,'URL'=>$url,'THUMB'=>$thumb,'PIC'=>$pic,'TITLE'=>$_title,'COMMENTS'=>$comments));
 
-	return $tpl;
+	return do_template('GALLERY_BOX',array('_GUID'=>'0dbec2f11de63b0402471fe5c8b32865','NUM_VIDEOS'=>strval($num_videos),'NUM_IMAGES'=>strval($num_images),'NUM_CHILDREN'=>strval($num_children),'ID'=>$child['name'],'LANG'=>$lang,'ADD_DATE'=>$add_date,'ADD_DATE_RAW'=>strval($child['add_date']),'MEMBER_INFO'=>$member_info,'URL'=>$url,'THUMB'=>$thumb,'PIC'=>$pic,'TITLE'=>$_title,'COMMENTS'=>$comments));
 }
 
 /**

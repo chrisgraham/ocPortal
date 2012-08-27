@@ -59,13 +59,9 @@ class Hook_awards_group
 	 */
 	function run($row,$zone)
 	{
-		unset($zone);
-
 		require_code('ocf_groups');
 
-		$url=build_url(array('page'=>'groups','type'=>'view','id'=>$row['id']),get_module_zone('groups'));
-
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>ocf_get_group_name($row['id']),'SUMMARY'=>get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']),'URL'=>$url));
+		return render_group_box($row,$zone);
 	}
 
 }

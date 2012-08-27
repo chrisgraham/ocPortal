@@ -27,6 +27,22 @@ function init__calendar()
 }
 
 /**
+ * Render an event box.
+ *
+ * @param  array				Event row
+ * @param  ID_TEXT			Zone to link through to
+ * @return tempcode			The event box
+ */
+function render_event_box($row,$zone='_SEARCH')
+{
+	require_css('calendar');
+
+	$url=build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),$zone);
+
+	return do_template('CALENDAR_EVENT_BOX',array('TITLE'=>get_translated_text($row['e_title']),'SUMMARY'=>get_translated_tempcode($row['e_content']),'URL'=>$url));
+}
+
+/**
  * Get the week number for a time.
  *
  * @param  TIME				The week number

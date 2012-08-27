@@ -94,16 +94,17 @@ class Block_main_iotd
 		if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
 
 		$view_url=build_url(array('page'=>'iotds','wide'=>1,'type'=>'view','id'=>$myrow['id']),$zone);
+
+		$i_title=get_translated_tempcode($myrow['i_title']);
+		$caption=get_translated_tempcode($myrow['caption']);
+
 		require_code('images');
 		$thumb_url=ensure_thumbnail($myrow['url'],$myrow['thumb_url'],'iotds','iotd',$myrow['id']);
-		$caption=get_translated_tempcode($myrow['i_title']);
 		$image=do_image_thumb($thumb_url,do_lang('IOTD'));
-
-		$tpl=do_template('IOTD',array('_GUID'=>'ca9c4b4941c12c15f7bdfe4cb57cd266','ID'=>strval($myrow['id']),'IMAGE_URL'=>$image_url,'SUBMITTER'=>strval($myrow['submitter']),'VIEW_URL'=>$view_url,'CAPTION'=>$caption,'IMAGE'=>$image));
 
 		$archive_url=build_url(array('page'=>'iotds','type'=>'misc'),$zone);
 
-		$map2=array('_GUID'=>'d710da3675a1775867168ae37db02ad4','CURRENT'=>($mode=='current'),'FULL_URL'=>$view_url,'ID'=>strval($myrow['id']),'CONTENT'=>$tpl,'ARCHIVE_URL'=>$archive_url,'SUBMIT_URL'=>$submit_url);
+		$map2=array('_GUID'=>'d710da3675a1775867168ae37db02ad4','CURRENT'=>($mode=='current'),'VIEW_URL'=>$view_url,'IMAGE_URL'=>$image_url,'THUMB_URL'=>$thumb_url,'SUBMITTER'=>strval($myrow['submitter']),'ID'=>strval($myrow['id']),'I_TITLE'=>$i_title,'CAPTION'=>$caption,'IMAGE'=>$image,'ARCHIVE_URL'=>$archive_url,'SUBMIT_URL'=>$submit_url);
 		if ((get_option('is_on_comments')=='1') && (get_forum_type()!='none') && ($myrow['allow_comments']>=1)) $map2['COMMENT_COUNT']='1';
 		return do_template('BLOCK_MAIN_IOTD',$map2);
 	}

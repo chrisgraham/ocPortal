@@ -66,6 +66,7 @@ class Hook_awards_post
 	function run($row,$zone)
 	{
 		unset($zone);
+
 		require_code('ocf_posts2');
 		require_code('ocf_forums');
 

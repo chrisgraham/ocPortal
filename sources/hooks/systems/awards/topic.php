@@ -66,11 +66,9 @@ class Hook_awards_topic
 	 */
 	function run($row,$zone)
 	{
-		unset($zone);
+		require_code('ocf_topics');
 
-		$url=build_url(array('page'=>'topicview','id'=>$row['id']),get_module_zone('topicview'));
-
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['t_cache_first_title'],'SUMMARY'=>$row['t_description'],'URL'=>$url));
+		return render_topic_box($row,$zone);
 	}
 
 }

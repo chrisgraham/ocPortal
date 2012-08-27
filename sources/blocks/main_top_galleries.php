@@ -132,7 +132,7 @@ class Block_main_top_galleries
 
 				if (!is_null($row))
 				{
-					$out->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>show_gallery_box($row,'root',true,$zone,false,true))));
+					$out->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>render_gallery_box($row,'root',true,$zone,false,true))));
 					if ($i==$number) break;
 					$i++;
 				}

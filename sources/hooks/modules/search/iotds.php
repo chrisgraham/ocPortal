@@ -120,10 +120,8 @@ class Hook_search_iotds
 	 */
 	function render($row)
 	{
-		require_code('images');
-		$url=build_url(array('page'=>'iotds','type'=>'view','id'=>$row['id']),get_module_zone('iotds'));
-		$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'iotds','iotd',$row['id']);
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>do_lang_tempcode('IOTD'),'SUMMARY'=>hyperlink($url,do_image_thumb($thumb_url,get_translated_tempcode($row['i_title']),true))));
+		require_code('iotds');
+		return render_iotd_box($row);
 	}
 
 }

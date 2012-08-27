@@ -63,6 +63,7 @@ class Hook_awards_quiz
 	function run($row,$zone)
 	{
 		require_code('quiz');
+
 		return render_quiz_box($row,$zone);
 	}
 

@@ -142,7 +142,7 @@ class Hook_search_ocf_within_topic
 	function render($row)
 	{
 		require_code('ocf_posts2');
-		return render_post_box($row);
+		return render_post_box($row,false,false);
 	}
 
 }

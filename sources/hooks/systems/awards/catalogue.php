@@ -56,15 +56,9 @@ class Hook_awards_catalogue
 	 */
 	function run($row,$zone)
 	{
-		if ($row['c_is_tree'])
-		{
-			$url=build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$row['c_name']),$zone);
-		} else
-		{
-			$url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$row['c_name']),$zone);
-		}
+		require_code('catalogues');
 
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>get_translated_text($row['c_title']),'SUMMARY'=>get_translated_text($row['c_description']),'URL'=>$url));
+		return render_catalogue_box($row,$zone);
 	}
 
 }

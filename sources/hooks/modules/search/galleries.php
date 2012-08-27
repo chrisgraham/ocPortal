@@ -125,10 +125,7 @@ class Hook_search_galleries
 	function render($row)
 	{
 		require_code('galleries');
-		$tpl=show_gallery_box($row,'root',true,get_module_zone('galleries'),false,false);
-		$breadcrumbs=gallery_breadcrumbs($row['name']);
-		if (!$breadcrumbs->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$breadcrumbs)));
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>do_lang_tempcode('GALLERY'),'SUMMARY'=>$tpl));
+		return render_gallery_box($row,'root',true,get_module_zone('galleries'),false,false);
 	}
 
 }

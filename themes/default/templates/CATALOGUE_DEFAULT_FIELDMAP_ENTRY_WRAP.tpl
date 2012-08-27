@@ -1,5 +1,9 @@
 {$,Read the catalogue tutorial for information on custom catalogue layouts}
 
+{+START,IF,{GIVE_CONTEXT}}
+	<h3>{!CATALOGUE_GENERIC,{CATALOGUE_TITLE*}}</h3>
+{+END}
+
 <div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table spaced_table">
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<colgroup>

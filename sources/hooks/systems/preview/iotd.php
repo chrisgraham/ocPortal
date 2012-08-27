@@ -41,6 +41,7 @@ class Hook_Preview_iotd
 	function run()
 	{
 		require_code('uploads');
+		require_code('images');
 
 		$urls=get_url('','file','uploads/iotds',0,OCP_UPLOAD_IMAGE,true,'','file2');
 		if ($urls[0]=='')
@@ -62,16 +63,24 @@ class Hook_Preview_iotd
 			$thumb_url=$urls[1];
 		}
 
-		$caption=comcode_to_tempcode(post_param('caption',''));
+		$thumb_url=url_is_local($thumb_url)?(get_custom_base_url().'/'.$thumb_url):$thumb_url;
+		$image_url=url_is_local($image_url)?(get_custom_base_url().'/'.$url):$image_url;
+		$thumb=do_image_thumb($thumb_url,'');
+
+		$choose_url=mixed();
+		$delete_url=mixed();
+		$edit_url=mixed();
 
 		$title=comcode_to_tempcode(post_param('title',''));
+		$caption=comcode_to_tempcode(post_param('caption',''));
+		$date=get_timezoned_date(time());
 
-		require_code('images');
-		$thumb=do_image_thumb(url_is_local($thumb_url)?(get_custom_base_url().'/'.$thumb_url):$thumb_url,$caption,true);
+		$submitter=get_member();
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($submitter);
 
-		$url=url_is_local($url)?(get_custom_base_url().'/'.$url):$url;
+		$view_url=mixed();
 
-		$preview=do_template('IOTD',array('ID'=>'','IMAGE_URL'=>$url,'SUBMITTER'=>strval(get_member()),'VIEW_URL'=>$url,'IMAGE'=>$thumb,'CAPTION'=>$title));
+		$preview=do_template('IOTD_BOX',array('_GUID'=>'a6479902d2cd7b4119be7159147e0a0b','VIEWS'=>'','THUMB'=>$thumb,'DATE'=>$date,'DATE_RAW'=>strval(time()),'IS_CURRENT'=>0,'THUMB_URL'=>$thumb_url,'VIEW_URL'=>$view_url,'ID'=>'','EDIT_URL'=>$edit_url,'DELETE_URL'=>$delete_url,'CHOOSE_URL'=>$choose_url,'TITLE'=>$title,'CAPTION'=>$caption,'SUBMITTER'=>strval($submitter),'USERNAME'=>$username));
 
 		return array($preview,NULL);
 	}

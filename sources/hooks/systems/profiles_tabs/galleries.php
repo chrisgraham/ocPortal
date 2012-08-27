@@ -57,7 +57,7 @@ class Hook_Profiles_Tabs_galleries
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'galleries WHERE name LIKE \''.db_encode_like('member\_'.strval($member_id_of).'\_%').'\'');
 		foreach ($rows as $i=>$row)
 		{
-			$galleries->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>show_gallery_box($row,'root',false,get_module_zone('galleries')))));
+			$galleries->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>render_gallery_box($row,'root',false,get_module_zone('galleries')))));
 			$this->attach_gallery_subgalleries($row['name'],$galleries);
 		}
 
@@ -111,7 +111,7 @@ class Hook_Profiles_Tabs_galleries
 		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id'=>$gallery_name),'ORDER BY add_date DESC');
 		foreach ($rows as $i=>$row)
 		{
-			$galleries->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>show_gallery_box($row,'root',false,get_module_zone('galleries')))));
+			$galleries->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>render_gallery_box($row,'root',false,get_module_zone('galleries')))));
 			$this->attach_gallery_subgalleries($row['name'],$galleries);
 		}
 	}

@@ -1121,13 +1121,7 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 				$rendered_result=$result['template'];
 			} else
 			{
-				if ((!$general_search) && (get_param_integer('force_non_tabular',0)==0) && (method_exists($result['object'],'render_tabular')))
-				{
-					$rendered_result=$result['object']->render_tabular($result['data']);
-				} else
-				{
-					$rendered_result=$result['object']->render($result['data']);
-				}
+				$rendered_result=$result['object']->render($result['data']);
 			}
 			if (!is_null($rendered_result))
 			{

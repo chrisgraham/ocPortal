@@ -37,6 +37,22 @@ function init__ocf_groups()
 }
 
 /**
+ * Render a usergroup box.
+ *
+ * @param  array				Usergroup row
+ * @param  ID_TEXT			Zone to link through to
+ * @return tempcode			The usergroup box
+ */
+function render_group_box($row,$zone='_SEARCH')
+{
+	require_code('ocf_groups');
+
+	$url=build_url(array('page'=>'groups','type'=>'view','id'=>$row['id']),get_module_zone('groups'));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>ocf_get_group_name($row['id']),'SUMMARY'=>get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']),'URL'=>$url));
+}
+
+/**
  * Get a nice list for selection from the usergroups. Suitable for admin use only (does not check hidden status).
  *
  * @param  ?AUTO_LINK	Usergroup selected by default (NULL: no specific default).

@@ -84,7 +84,7 @@ class Block_main_recent_galleries
 
 				$row=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$gallery),'',1);
 
-				$out->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>show_gallery_box($row[0],'root',true,$zone,false,true))));
+				$out->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>render_gallery_box($row[0],'root',true,$zone,false,true))));
 			}
 		}
 

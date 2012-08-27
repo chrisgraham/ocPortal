@@ -422,7 +422,7 @@ class Hook_search_catalogue_entries
 			$tpl_set=$catalogue_name;
 			$display=get_catalogue_entry_map($row,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name],'SEARCH',$tpl_set,-1);
 
-			$tpl=do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$display,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');
+			$tpl=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$display+array('GIVE_CONTEXT'=>true),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
 
 			$breadcrumbs=catalogue_category_breadcrumbs($row['cc_id'],NULL,false);
 			if (!$breadcrumbs->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$breadcrumbs)));

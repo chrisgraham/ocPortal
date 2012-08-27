@@ -321,8 +321,8 @@ The default catalogue templates are very formulaic in their arrangement of conte
 
 To do this copy the following templates and edit the copies (for this example I am assuming your catalogue has the codename 'project_staff'):
  - CATALOGUE_DEFAULT_CATEGORY_EMBED --> CATALOGUE_project_staff_CATEGORY_EMBED
- - CATALOGUE_DEFAULT_ENTRY_EMBED --> CATALOGUE_project_staff_ENTRY_EMBED
- - CATALOGUE_DEFAULT_ENTRY_FIELD --> CATALOGUE_project_staff_ENTRY_FIELD
+ - CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP --> CATALOGUE_project_staff_FIELDMAP_ENTRY_WRAP
+ - CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD --> CATALOGUE_project_staff_FIELDMAP_ENTRY_FIELD
 (by overriding catalogue templates to a particular catalogue name we can make changes without interfering with how other catalogues look)
 
 Each individual field is passed into the main template (for the case of the [tt]main_cc_embed[/tt] block, it is [tt]CATALOGUE_project_staff_CATEGORY_EMBED[/tt]), with names like [tt]{FIELD_0}[/tt] etc (this is the first field). [tt]{FIELDS}[/tt] is the formulaic arrangement and you'll probably want to remove it.

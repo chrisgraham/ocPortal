@@ -19,6 +19,20 @@
  */
 
 /**
+ * Render an author box.
+ *
+ * @param  array				Author row
+ * @param  ID_TEXT			Zone to link through to
+ * @return tempcode			The author box
+ */
+function render_author_box($row,$zone='_SEARCH')
+{
+	$url=build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),$zone);
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['author'],'SUMMARY'=>get_translated_text($row['description']),'URL'=>$url));
+}
+
+/**
  * Shows an HTML page of all authors clickably.
  */
 function authors_script()

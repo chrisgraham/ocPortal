@@ -65,6 +65,7 @@ class Hook_awards_news
 	function run($row,$zone)
 	{
 		require_code('news');
+
 		return render_news_box($row,$zone);
 	}
 

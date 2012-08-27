@@ -61,7 +61,7 @@ function poll_script($ret=false,$param=NULL)
 		$show_poll_results=get_param_integer('show_poll_results_'.strval($myrow['id']),0);
 		if ($show_poll_results==0)
 		{
-			$content=render_poll_box(false,$myrow,$zone);
+			$content=render_poll_box(false,$myrow,$zone,true);
 		} else
 		{
 			// Voting
@@ -103,7 +103,7 @@ function poll_script($ret=false,$param=NULL)
 			}
 
 			// Show poll, with results
-			$content=render_poll_box(true,$myrow,$zone);
+			$content=render_poll_box(true,$myrow,$zone,true);
 		}
 	}
 
@@ -146,9 +146,10 @@ function may_vote_in_poll($myrow)
  * @param  boolean			Whether to show results (if we've already voted, this'll be overrided)
  * @param  array				The poll row
  * @param  ID_TEXT			The zone our poll module is in
+ * @param  boolean			Whether to include extra management links (e.g. editing, choosing, archive, etc)
  * @return tempcode			The box
  */
-function render_poll_box($results,$myrow,$zone='_SEARCH')
+function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=false)
 {
 	$ip=get_ip_address();
 	if (!may_vote_in_poll($myrow)) $results=true;
@@ -209,15 +210,23 @@ function render_poll_box($results,$myrow,$zone='_SEARCH')
 		}
 	}
 
-	if ((has_actual_page_access(NULL,'cms_polls',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_polls')))
+	if ($include_manage_links)
 	{
-		$submit_url=build_url(array('page'=>'cms_polls','type'=>'ad','redirect'=>running_script('index')?get_self_url(true,true,array()):NULL),get_module_zone('cms_polls'));
-	} else $submit_url=new ocp_tempcode();
+		if ((has_actual_page_access(NULL,'cms_polls',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_polls')))
+		{
+			$submit_url=build_url(array('page'=>'cms_polls','type'=>'ad','redirect'=>running_script('index')?get_self_url(true,true,array()):NULL),get_module_zone('cms_polls'));
+		} else $submit_url=new ocp_tempcode();
+
+		$archive_url=build_url(array('page'=>'polls','type'=>'misc'),$zone);
+	} else
+	{
+		$submit_url=new ocp_tempcode();
+		$archive_url=new ocp_tempcode();
+	}
 
 	// Do our final template
 	$question=get_translated_tempcode($myrow['question']);
 	$question_plain=get_translated_text($myrow['question']);
-	$archive_url=build_url(array('page'=>'polls','type'=>'misc'),$zone);
 	$full_url=new ocp_tempcode();
 	if ((get_page_name()!='polls') || (get_param('type','')!='view'))
 		$full_url=build_url(array('page'=>'polls','type'=>'view','id'=>$myrow['id']),$zone);

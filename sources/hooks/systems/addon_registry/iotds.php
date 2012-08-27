@@ -81,8 +81,7 @@ class Hook_addon_registry_iotds
 			'sources/hooks/systems/addon_registry/iotds.php',
 			'sources/hooks/modules/admin_setupwizard/iotds.php',
 			'sources/hooks/modules/admin_import_types/iotds.php',
-			'IOTD.tpl',
-			'IOTD_ARCHIVE_SCREEN_IOTD.tpl',
+			'IOTD_BOX.tpl',
 			'IOTD_ENTRY_SCREEN.tpl',
 			'BLOCK_MAIN_IOTD.tpl',
 			'uploads/iotds/index.html',
@@ -102,7 +101,6 @@ class Hook_addon_registry_iotds
 			'sources/iotds.php',
 			'sources/hooks/systems/preview/iotd.php',
 			'IOTD_ADMIN_CHOOSE_SCREEN.tpl',
-			'IOTD_ADMIN_CHOOSE_SCREEN_IOTD.tpl',
 			'uploads/iotds/.htaccess',
 			'uploads/iotds_thumbs/.htaccess'
 		);
@@ -119,9 +117,8 @@ class Hook_addon_registry_iotds
 		return array(
 			'IOTD_ADMIN_CHOOSE_SCREEN.tpl'=>'administrative__iotd_admin_choose_screen',
 			'IOTD_ADMIN_CHOOSE_SCREEN_IOTD.tpl'=>'administrative__iotd_admin_choose_screen',
-			'IOTD.tpl'=>'block_main_iotd',
 			'BLOCK_MAIN_IOTD.tpl'=>'block_main_iotd',
-			'IOTD_ARCHIVE_SCREEN_IOTD.tpl'=>'iotd_view_screen_iotd',
+			'IOTD_BOX.tpl'=>'iotd_view_screen_iotd',
 			'IOTD_ENTRY_SCREEN.tpl'=>'iotd_view_screen'
 		);
 	}
@@ -135,18 +132,24 @@ class Hook_addon_registry_iotds
 	 */
 	function tpl_preview__administrative__iotd_admin_choose_screen()
 	{
-		$current_iotd=do_lorem_template('IOTD_ADMIN_CHOOSE_SCREEN_IOTD', array(
+		$current_iotd=do_lorem_template('IOTD', array(
 			'IS_CURRENT'=>placeholder_number(),
-			'SUBMITTER_URL'=>placeholder_url(),
 			'THUMB_URL'=>placeholder_image_url(),
-			'FULL_URL'=>placeholder_url(),
+			'IMAGE_URL'=>placeholder_image_url(),
+			'VIEWS'=>placeholder_number(),
+			'THUMB'=>placeholder_image(),
+			'DATE'=>placeholder_time(),
+			'DATE_RAW'=>placeholder_date_raw(),
+			'VIEW_URL'=>placeholder_url(),
 			'ID'=>placeholder_id(),
 			'EDIT_URL'=>placeholder_url(),
 			'DELETE_URL'=>placeholder_url(),
 			'CHOOSE_URL'=>placeholder_url(),
-			'CAPTION'=>lorem_phrase(),
-			'USER'=>lorem_word(),
-			'USERNAME_LINK'=>lorem_word()
+			'I_TITLE'=>lorem_phrase(),
+			'CAPTION'=>lorem_paragraph(),
+			'SUBMITTER'=>placeholder_id(),
+			'USERNAME'=>lorem_word(),
+			'GIVE_CONTEXT'=>true,
 		));
 		$unused_iotd=$current_iotd;
 		$used_iotd=$current_iotd;
@@ -172,19 +175,15 @@ class Hook_addon_registry_iotds
 	 */
 	function tpl_preview__block_main_iotd()
 	{
-		$content=do_lorem_template('IOTD', array(
-			'ID'=>placeholder_id(),
-			'SUBMITTER'=>placeholder_number(),
-			'IMAGE_URL'=>placeholder_image_url(),
-			'VIEW_URL'=>placeholder_url(),
-			'CAPTION'=>lorem_word(),
-			'IMAGE'=>placeholder_image()
-		));
-
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_IOTD', array(
-				'CONTENT'=>$content,
-				'FULL_URL'=>placeholder_url(),
+				'SUBMITTER'=>placeholder_number(),
+				'THUMB_URL'=>placeholder_image_url(),
+				'FULL_URL'=>placeholder_image_url(),
+				'I_TITLE'=>lorem_phrase(),
+				'CAPTION'=>lorem_paragraph(),
+				'IMAGE'=>placeholder_image(),
+				'VIEW_URL'=>placeholder_url(),
 				'SUBMIT_URL'=>placeholder_url(),
 				'ARCHIVE_URL'=>placeholder_url(),
 				'ID'=>placeholder_id()
@@ -201,10 +200,8 @@ class Hook_addon_registry_iotds
 	 */
 	function tpl_preview__iotd_view_screen_iotd()
 	{
-		//Wrap 'IOTD_ARCHIVE_SCREEN_IOTD' with 'PAGINATION_SCREEN'
-
 		$content=new ocp_tempcode();
-		$content->attach(do_lorem_template('IOTD_ARCHIVE_SCREEN_IOTD', array(
+		$content->attach(do_lorem_template('IOTD', array(
 			'SUBMITTER'=>placeholder_id(),
 			'ID'=>placeholder_id(),
 			'VIEWS'=>placeholder_number(),

@@ -189,10 +189,10 @@ class Module_cms_iotds extends standard_crud_module
 
 		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_iotds')?NULL:get_member();
 
-		$current_iotd=$this->nice_get_iotds_link(1,1);
-		$unused_iotd=$this->nice_get_iotds_link(0,0,$only_owned);
+		$current_iotd=$this->_get_iotd_boxes(1,1);
+		$unused_iotd=$this->_get_iotd_boxes(0,0,$only_owned);
 		$used_iotd=new ocp_tempcode();
-		if ($used==1) $used_iotd=$this->nice_get_iotds_link(1);
+		if ($used==1) $used_iotd=$this->_get_iotd_boxes(1);
 		$used_url=build_url(array('page'=>'_SELF','type'=>'ed','used'=>1),'_SELF');
 
 		$search_url=build_url(array('page'=>'search','id'=>'iotds'),get_module_zone('search'));
@@ -210,10 +210,8 @@ class Module_cms_iotds extends standard_crud_module
 	 * @param  ?MEMBER		The member to only show iotds submitted-by (NULL: do not filter)
 	 * @return tempcode		The UI
 	 */
-	function nice_get_iotds_link($used=0,$current=0,$submitter=NULL)
+	function _get_iotd_boxes($used=0,$current=0,$submitter=NULL)
 	{
-		require_code('images');
-
 		$where=array('used'=>$used,'is_current'=>$current);
 		if (!is_null($submitter)) $where['submitter']=$submitter;
 		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('i_title','submitter','is_current','used','id','thumb_url','url'),$where,'ORDER BY id DESC',100);
@@ -224,19 +222,8 @@ class Module_cms_iotds extends standard_crud_module
 		$previews=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{
-			$caption=get_translated_tempcode($myrow['i_title']);
-			$choose_url=build_url(array('page'=>'_SELF','type'=>'_choose'),'_SELF');
-			$delete_url=build_url(array('page'=>'_SELF','type'=>'_delete'),'_SELF');
-			$edit_url=build_url(array('page'=>'_SELF','type'=>'_ed','id'=>$myrow['id']),'_SELF');
-
-			$submitter=$myrow['submitter'];
-			$username_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($submitter);
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($submitter);
-
-			$thumb_url=ensure_thumbnail($myrow['url'],$myrow['thumb_url'],'iotds','iotd',$myrow['id']);
-			$full_url=build_url(array('page'=>'iotds','type'=>'view','wide'=>1,'id'=>$myrow['id']),get_module_zone('iotds'));
-
-			$previews->attach(do_template('IOTD_ADMIN_CHOOSE_SCREEN_IOTD',array('_GUID'=>'a6479902d2cd7b4119be7159147e0a0b','IS_CURRENT'=>$current==1,'USERNAME_LINK'=>$username_link,'THUMB_URL'=>$thumb_url,'FULL_URL'=>$full_url,'ID'=>strval($myrow['id']),'EDIT_URL'=>$edit_url,'DELETE_URL'=>$delete_url,'CHOOSE_URL'=>$choose_url,'CAPTION'=>$caption,'USER'=>strval($submitter),'USERNAME'=>$username)));
+			require_code('iotds');
+			$previews->attach(render_iotd_box($myrow,'_SEARCH',true,false));
 		}
 		if (($previews->is_empty()) && ($current==1)) return new ocp_tempcode();
 

@@ -307,4 +307,21 @@ Example:
 Tip: If you develop on Firefox and have the Firebug addon installed, leave Firebug open when testing AJAX, as all the requests will come up in the Firebug console, and you can review them there to debug any server-side issues.
 
 [b]Advanced tip[/b]: You can either pass a function to the [tt]do_ajax_request[/tt] function as your method, or you can pass an object that has a [tt]response[/tt] function in it. The latter is useful if you want to make your response a neat part of an OOP approach.
+
+[title="3"]Box templates[/title]
+
+Any content type will probably have two main templates used to display it:
+ - A box template ([tt]<content_type>_BOX.tpl[/tt])
+ - A screen template ([tt]<content_type>_SCREEN.tpl[/tt])
+
+Box templates are used on category listings, previews, search results, and when picking out content to display with an award. Box templates generally hold the following criteria:
+ - Must be surrounding with standard box markup, or mainly consist of a table
+ - If it is a box, must have a level 3 header within the box (boxes must not be presented as list elements -- they are headed sections in boxes, and CSS may change the appearance of them if required due to the consistency of the box markup)
+ - Will typically involve a title/thumbnail/caption, but it really depends what the content is
+ - Must support display in both category and standalone contexts
+  - Category contexts will not mention the content type or show breadcrumbs
+  - Standalone contexts will make it clear enough what the content actually is, rather than merely showing a title/thumbnail/caption; for hierarchically stored content breadcrumbs should be included
+ - Must primarily support a fairly minimal raw context, but possibly with the [b]option[/b] to have additional attached bits such as edit links
+ - Box templates should look neat, not too generic
+ - Box templates should be flexible enough to show in a carousel, in a grid, or as standalone/sequential boxes
 [/surround]

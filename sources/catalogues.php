@@ -40,6 +40,26 @@ function init__catalogues()
 }
 
 /**
+ * Render a catalogue box.
+ *
+ * @param  array				Catalogue row
+ * @param  ID_TEXT			Zone to link through to
+ * @return tempcode			The catalogue box
+ */
+function render_catalogue_box($row,$zone='_SEARCH')
+{
+	if ($row['c_is_tree'])
+	{
+		$url=build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$row['c_name']),$zone);
+	} else
+	{
+		$url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$row['c_name']),$zone);
+	}
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>get_translated_text($row['c_title']),'SUMMARY'=>get_translated_text($row['c_description']),'URL'=>$url));
+}
+
+/**
  * Get tempcode for a catalogue category 'feature box' for the given row
  *
  * @param  array			The database field row of it
@@ -277,7 +297,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 				$entry=$entries[$i];
 
 				if ((is_null($max)) || ((is_null($start)) || ($in_db_sorting) || ($i>=$start) && ($i<$start+$max)) && ((!is_array($select)) || ((is_array($select)) && (in_array($entry['id'],$select)))))
-					$entry_buildup->attach(do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array()),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP'));
+					$entry_buildup->attach(do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$entry['map']+array('GIVE_CONTEXT'=>false)+(array_key_exists($i,$extra_map)?$extra_map[$i]:array()),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP'));
 			}
 			break;
 
@@ -756,6 +776,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	$map['EDIT_DATE']=get_timezoned_date($entry['ce_edit_date']);
 	$map['ID']=strval($id);
 	$map['CATALOGUE']=$catalogue_name;
+	$map['CATALOGUE_TITLE']=get_translated_text($catalogue['c_title']);
 	$map['CAT']=strval($entry['cc_id']);
 	if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($entry['allow_comments']>=1)) $map['COMMENT_COUNT']='1';
 
@@ -1490,7 +1511,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 
 	// Main rendering...
 
-	$map['ENTRY']=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$map+array('ENTRY_SCREEN'=>true),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
+	$map['ENTRY']=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$map+array('ENTRY_SCREEN'=>true,'GIVE_CONTEXT'=>false),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
 	$map['ADD_DATE']=get_timezoned_date($entry['ce_add_date']);
 	$map['ADD_DATE_RAW']=strval($entry['ce_add_date']);
 	$map['EDIT_DATE']=is_null($entry['ce_edit_date'])?'':get_timezoned_date($entry['ce_edit_date']);

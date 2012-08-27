@@ -65,7 +65,8 @@ class Hook_awards_iotd
 	function run($row,$zone)
 	{
 		require_code('iotds');
-		return render_iotd_box($row,$zone);
+
+		return render_iotd_box($row,$zone,false,false);
 	}
 
 }

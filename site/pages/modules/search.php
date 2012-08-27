@@ -389,8 +389,6 @@ class Module_search
 			$url_map=array('page'=>'_SELF','type'=>'results','id'=>$id,'specific'=>1);
 			$catalogue_name=get_param('catalogue_name','');
 			if ($catalogue_name!='') $url_map['catalogue_name']=$catalogue_name;
-			$force_non_tabular=get_param_integer('force_non_tabular',0);
-			if ($force_non_tabular==1) $url_map['force_non_tabular']=1;
 			$url=build_url($url_map,'_SELF',NULL,false,true);
 
 			require_code('hooks/modules/search/'.filter_naughty_harsh($id),true);

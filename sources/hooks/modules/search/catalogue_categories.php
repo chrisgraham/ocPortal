@@ -136,6 +136,7 @@ class Hook_search_catalogue_categories
 	 */
 	function render($row)
 	{
+		require_code('catalogues');
 		return render_catalogue_category_box($row);
 	}
 

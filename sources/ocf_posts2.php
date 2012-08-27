@@ -23,9 +23,10 @@
  *
  * @param  array		The post row.
  * @param  boolean	Whether to use the post title, as opposed to the post's topic's title.
+ * @param  boolean	Whether to embed a link to the topic.
  * @return tempcode  The isolated post.
  */
-function render_post_box($row,$use_post_title=false)
+function render_post_box($row,$use_post_title=false,$encapsulate_with_link=true)
 {
 	require_code('ocf_groups');
 	require_css('ocf');
@@ -143,7 +144,7 @@ function render_post_box($row,$use_post_title=false)
 	$rating=display_rating(get_self_url(),$row['p_title'],'post',strval($row['id']),'RATING_INLINE_DYNAMIC',$row['p_poster']);
 
 	// Render
-	return do_template('OCF_POST_BOX',array(
+	$tpl=do_template('OCF_POST_BOX',array(
 				'_GUID'=>'9456f4fe4b8fb1bf34f606fcb2bcc9d7',
 				'URL'=>$post_url,
 				'ID'=>strval($row['id']),
@@ -178,4 +179,20 @@ function render_post_box($row,$use_post_title=false)
 					'RATING'=>$rating,
 			))
 	));
+
+	if ($encapsulate_with_link)
+	{
+		$poster=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['p_poster']);
+		$date=get_timezoned_date($row['p_time']);
+		if ($row['t_cache_first_title']=='')
+		{
+			$row['t_cache_first_title']=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('p_topic_id'=>$row['p_topic_id']),'ORDER BY p_time ASC',1);
+		}
+		$link=hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($row['p_topic_id']),$row['t_cache_first_title']);
+		$title=do_lang_tempcode('FORUM_POST_ISOLATED_RESULT',escape_html($row['id']),$poster,array(escape_html($date),$link));
+
+		return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'84ac17a5855ceed1c47c5d3ef6cf4f3d','TITLE'=>$title,'SUMMARY'=>$tpl));
+	}
+
+	return $tpl;
 }

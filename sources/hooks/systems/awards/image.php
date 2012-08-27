@@ -66,6 +66,7 @@ class Hook_awards_image
 	function run($row,$zone)
 	{
 		require_code('galleries');
+
 		return render_image_box($row,$zone);
 	}
 

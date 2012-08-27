@@ -61,13 +61,9 @@ class Hook_awards_forum
 	 */
 	function run($row,$zone)
 	{
-		unset($zone);
+		require_code('ocf_forums');
 
-		$view_map=array('page'=>'forumview');
-		if ($row['id']!=db_get_first_id()) $view_map['id']=$row['id'];
-		$url=build_url($view_map,get_module_zone('forumview'));
-
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['f_name'],'SUMMARY'=>get_translated_tempcode($row['f_description']),'URL'=>$url));
+		return render_forum_box($row,$zone);
 	}
 
 }
