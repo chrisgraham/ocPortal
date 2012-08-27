@@ -70,7 +70,7 @@ class Hook_awards_catalogue_entry
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 		$tpl_set=$catalogue_name;
 		$display=get_catalogue_entry_map($row,$catalogues[0],'SEARCH',$tpl_set,-1,NULL,NULL,false,true);
-		return do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$display,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');
+		return do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_FIELD',$display,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD');
 	}
 
 }

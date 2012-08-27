@@ -395,7 +395,6 @@ class Hook_search_catalogue_entries
 					}
 				}
 
-				//$out[$i]['template']=do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$display,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');//put_in_table(hyperlink($url,do_lang('_HERE')),'internal','middle','WIDE',1,do_lang('CATALOGUE_ENTRY').' ('.do_lang('IN',get_translated_text($catalogue['c_title'])).')');
 				if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
 			}
 		} else
@@ -431,7 +430,7 @@ class Hook_search_catalogue_entries
 			$tpl_set=$catalogue_name;
 			$display=get_catalogue_entry_map($row,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name],'SEARCH',$tpl_set,-1);
 
-			$tpl=do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$display,NULL,false,'CATALOGUE_DEFAULT_ENTRY_EMBED');
+			$tpl=do_template('CATALOGUE_'.$tpl_set.'_ENTRY_EMBED',$display,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD');
 
 			$breadcrumbs=catalogue_category_breadcrumbs($row['cc_id'],NULL,false);
 			if (!$breadcrumbs->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$breadcrumbs)));
