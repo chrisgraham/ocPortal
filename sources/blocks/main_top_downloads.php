@@ -79,7 +79,7 @@ class Block_main_top_downloads
 		foreach ($rows as $i=>$row)
 		{
 			if ($i!=0) $out->attach(do_template('BLOCK_SEPARATOR'));
-			$out->attach(get_download_html($row,$zone));
+			$out->attach(get_download_html($row,true,true,$zone));
 		}
 		if ($out->is_empty())
 		{

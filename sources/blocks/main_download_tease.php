@@ -80,7 +80,7 @@ class Block_main_download_tease
 		{
 			if ($i!=0) $content->attach(do_template('BLOCK_SEPARATOR'));
 
-			$content->attach(get_download_html($row,$zone));
+			$content->attach(get_download_html($row,true,true,$zone));
 		}
 
 		$page_num=intval(floor(floatval($start)/floatval($max)))+1;
