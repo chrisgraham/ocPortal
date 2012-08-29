@@ -170,7 +170,7 @@ class Notification_dispatcher
 		$this->subject=$subject;
 		$this->message=$message;
 		$this->to_member_ids=$to_member_ids;
-		$this->from_member_id=$from_member_id;
+		$this->from_member_id=is_null($from_member_id)?get_member():$from_member_id;
 		$this->priority=$priority;
 		$this->store_in_staff_messaging_system=$store_in_staff_messaging_system;
 		$this->no_cc=$no_cc;

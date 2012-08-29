@@ -78,7 +78,7 @@ class Block_main_download_tease
 		$content=new ocp_tempcode();
 		foreach ($rows as $row)
 		{
-			$content->attach(render_download_box($row,$zone));
+			$content->attach(render_download_box($row,true,true,$zone));
 		}
 
 		$page_num=intval(floor(floatval($start)/floatval($max)))+1;

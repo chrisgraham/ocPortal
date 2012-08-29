@@ -636,19 +636,20 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 			$additional='';
 			if (get_option('enveloper_override')=='1') $additional='-f '.$website_email;
-			if ($to_name==='')
+			if (($to_name==='') || (strtoupper(substr(PHP_OS,0,3))=='WIN'))
 			{
 				$to_line=$to;
 			} else
 			{
 				$to_line='"'.(is_array($to_name)?$to_name[$i]:$to_name).'" <'.$to.'>';
 			}
+			//if (function_exists('mb_language')) mb_language('en');	Stop overridden mbstring mail function from messing and base64'ing stuff. Actually we don't need this as we make sure to pass through as headers with blank message, bypassing any filtering.
 			if (ini_get('safe_mode')=='1')
 			{
-				$worked=mail($to_line,$tightened_subject,$sending_message,$headers);
+				$worked=mail($to_line,$tightened_subject,'',$headers.$line_term.$sending_message);
 			} else
 			{
-				$worked=mail($to_line,$tightened_subject,$sending_message,$headers,$additional);
+				$worked=mail($to_line,$tightened_subject,'',$headers.$line_term.$sending_message,$additional);
 			}
 			$GLOBALS['SUPRESS_ERROR_DEATH']=false;
 		}
