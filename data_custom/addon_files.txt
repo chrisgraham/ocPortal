@@ -4076,3 +4076,10 @@ testing_platform
  - _tests/tests/unit_tests/welcome_emails.php
  - _tests/tests/unit_tests/bot_list_sync.php
  - _tests/tests/unit_tests/installsql.php
+
+youtube_channel_integration_block
+---------------------------------
+ - lang_custom/EN/youtube_channel.ini
+ - sources_custom/blocks/youtube_channel.php
+ - themes/default/templates_custom/BLOCK_YOUTUBE_CHANNEL.tpl
+ - themes/default/templates_custom/BLOCK_YOUTUBE_CHANNEL_STYLE.tpl
