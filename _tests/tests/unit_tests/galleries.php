@@ -238,9 +238,9 @@ class galleries_test_set extends ocp_test_case
 			'require__file2'=>1,
 			'hidFileID_file2'=>-1,
 			'file2'=>'',
-			'comcode__comments'=>1,
-			'comments'=>'test description',		
-			'comments_parsed'=>'',
+			'comcode__description'=>1,
+			'description'=>'test description',		
+			'description_parsed'=>'',
 			'validated'=>1,
 			'tick_on_form__validated'=>0,
 			'require__validated'=>0,
@@ -261,7 +261,7 @@ class galleries_test_set extends ocp_test_case
 			'require__meta_keywords'=>0,
 			'meta_description'=>'',
 			'require__meta_description'=>0,
-			'comments__is_wysiwyg'=>1,
+			'description__is_wysiwyg'=>1,
 		);
 
 		return $this->cms_gal->_ad();
@@ -286,9 +286,9 @@ class galleries_test_set extends ocp_test_case
 			'require__file2'=>1,
 			'hidFileID_file2'=>-1,
 			'file2'=>'',
-			'comcode__comments'=>1,
-			'comments'=>'test description',		
-			'comments_parsed'=>'',
+			'comcode__description'=>1,
+			'description'=>'test description',		
+			'description_parsed'=>'',
 			'validated'=>1,
 			'tick_on_form__validated'=>0,
 			'require__validated'=>0,
@@ -309,7 +309,7 @@ class galleries_test_set extends ocp_test_case
 			'require__meta_keywords'=>0,
 			'meta_description'=>'',
 			'require__meta_description'=>0,
-			'comments__is_wysiwyg'=>1,
+			'description__is_wysiwyg'=>1,
 		);
 
 		//return $this->cms_gal_alt->_ad();

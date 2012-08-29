@@ -31,8 +31,10 @@ function init__zones2()
  * Render a Comcode page box.
  *
  * @param  tempcode		Rendered box
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
  */
-function render_comcode_page_box($row)
+function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=true)
 {
 	$url=build_url(array('page'=>$row['the_page']),$row['the_zone']);
 
@@ -59,7 +61,22 @@ function render_comcode_page_box($row)
 		$cc_page_title='';
 	}
 
-	return do_template('COMCODE_PAGE_BOX',array('_GUID'=>'ac70e0b5a003f8dac1ff42f46af28e1d','TITLE'=>$cc_page_title,'PAGE'=>$row['the_page'],'ZONE'=>$row['the_zone'],'URL'=>$url,'SUMMARY'=>$summary));
+	$breadcrumbs=mixed();
+	if ($include_breadcrumbs)
+	{
+		$breadcrumbs=comcode_breadcrumbs($row['the_page'],$row['the_zone']);
+	}
+
+	return do_template('COMCODE_PAGE_BOX',array(
+		'_GUID'=>'ac70e0b5a003f8dac1ff42f46af28e1d',
+		'TITLE'=>$cc_page_title,
+		'PAGE'=>$row['the_page'],
+		'ZONE'=>$row['the_zone'],
+		'URL'=>$url,
+		'SUMMARY'=>$summary,
+		'BREADCRUMBS'=>$breadcrumbs,
+		'GIVE_CONTEXT'=>$give_context,
+	));
 }
 
 /**

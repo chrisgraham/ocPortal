@@ -182,7 +182,8 @@ class Hook_addon_registry_quizzes
 				'TIMEOUT'=>placeholder_number(),
 				'REDO_TIME'=>placeholder_number(),
 				'_TYPE'=>lorem_word(),
-				'POINTS'=>placeholder_id()
+				'POINTS'=>placeholder_id(),
+				'GIVE_CONTEXT'=>true,
 			));
 		}
 		$content_surveys->attach($link);

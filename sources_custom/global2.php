@@ -12,6 +12,6 @@ function require_javascript($javascript)
 		$javascript='javascript_plupload';
 	}
 
-	non_overrided__require_javascript($javascript);
+	non_overridden__require_javascript($javascript);
 }
 

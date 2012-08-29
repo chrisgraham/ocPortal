@@ -113,7 +113,7 @@ class Hook_search_images
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows('image','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'images r',array('','r.comments','r.title'),$where_clause,$content_where,$remapped_orderer,'r.*',array(),'galleries','cat',true);
+		$rows=get_search_rows('image','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'images r',array('','r.description','r.title'),$where_clause,$content_where,$remapped_orderer,'r.*',array(),'galleries','cat',true);
 
 		$out=array();
 		foreach ($rows as $i=>$row)

@@ -197,7 +197,7 @@ class Hook_addon_registry_forum_blocks
 	function tpl_preview__block_main_forum_news()
 	{
 		require_lang('news');
-		//Create the 'NEWS_BOX' template value
+
 		$out=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
@@ -221,11 +221,11 @@ class Hook_addon_registry_forum_blocks
 				'IMG'=>'',
 				'AUTHOR'=>lorem_word(),
 				'AUTHOR_URL'=>placeholder_url(),
-				'NEWS'=>lorem_paragraph()
+				'NEWS'=>lorem_paragraph(),
+				'GIVE_CONTEXT'=>false,
 			)));
 		}
 
-		//Create the 'BLOCK_MAIN_FORUM_NEWS' with 'NEWS_BOX' as sub-template.
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_FORUM_NEWS', array(
 				'TITLE'=>lorem_word(),
@@ -235,7 +235,7 @@ class Hook_addon_registry_forum_blocks
 				'ARCHIVE_URL'=>placeholder_url(),
 				'SUBMIT_URL'=>placeholder_url(),
 				'RSS_URL'=>placeholder_url(),
-				'ATOM_URL'=>placeholder_url()
+				'ATOM_URL'=>placeholder_url(),
 			)), NULL, '', true)
 		);
 	}

@@ -1497,11 +1497,12 @@ class Hook_addon_registry_ocf_forum
 				'POSTS'=>placeholder_number(),
 				'POINTS'=>placeholder_number(),
 				'JOIN_DATE_RAW'=>placeholder_date_raw(),
-				'POSTER'=>lorem_phrase(),
+				'MEMBER_ID'=>placeholder_id(),
 				'JOIN_DATE'=>placeholder_time(),
 				'PRIMARY_GROUP_NAME'=>lorem_phrase(),
 				'CUSTOM_FIELDS'=>lorem_phrase(),
-				'CUSTOM_FIELDS_FULL'=>lorem_phrase()
+				'CUSTOM_FIELDS_FULL'=>lorem_phrase(),
+				'GIVE_CONTEXT'=>false,
 			));
 			$poster=do_lorem_template('OCF_POSTER_MEMBER', array(
 				'ID'=>placeholder_random(),

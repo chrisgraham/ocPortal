@@ -800,7 +800,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 											{
 												require_lang('ocf');
 												require_code('ocf_members2');
-												$details=render_member_box($this_member_id);
+												$details=render_member_box($this_member_id,false,NULL,NULL,true,NULL,false);
 												$tag_output->attach(do_template('HYPERLINK_TOOLTIP',array('_GUID'=>'d8f4f4ac70bd52b3ef9ee74ae9c5e085','TOOLTIP'=>$details,'CAPTION'=>$username,'URL'=>$poster_url,'NEW_WINDOW'=>false)));
 											} else
 											{

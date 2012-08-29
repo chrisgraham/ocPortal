@@ -1,5 +1,12 @@
-<div class="float_surrounder news_piece_summary">
-	<h3><a title="{$STRIP_TAGS,{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}}: #{ID*}" href="{FULL_URL*}">{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}</a></h3>
+<div class="box box___news_box"><div class="box_inner">
+	<h3>
+		{+START,IF,{GIVE_CONTEXT}}
+			{!CONTENT_IS_OF_TYPE,{!NEWS},{NEWS_TITLE}}
+		{+END}
+		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+			<a title="{$STRIP_TAGS,{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}}: #{ID*}" href="{FULL_URL*}">{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}</a>
+		{+END}
+	</h3>
 
 	{+START,IF,{$AND,{$NOT,{BLOG}},{$IS_NON_EMPTY,{AUTHOR_URL}}}}
 		<div class="newscat_img newscat_img_author">

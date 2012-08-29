@@ -36,7 +36,7 @@ class Hook_unvalidated_images
 		$info['db_table']='images';
 		$info['db_identifier']='id';
 		$info['db_validated']='validated';
-		$info['db_title']='comments';
+		$info['db_title']='title';
 		$info['db_title_dereference']=true;
 		$info['db_add_date']='add_date';
 		$info['db_edit_date']='edit_date';

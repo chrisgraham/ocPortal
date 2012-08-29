@@ -128,7 +128,7 @@ class Hook_Preview_ocf_post
 		if (!is_guest($post_owner))
 		{
 			require_code('ocf_members2');
-			$poster_details=render_member_box($post_owner,false,NULL,NULL,false);
+			$poster_details=render_member_box($post_owner,false,NULL,NULL,false,NULL,false);
 			$poster_username=$GLOBALS['FORUM_DRIVER']->get_username($post_owner);
 			if (is_null($poster_username)) $poster_username=do_lang('UNKNOWN');
 			$poster=do_template('OCF_POSTER_MEMBER',array('_GUID'=>'976a6ceb631bbdcdd950b723cb5d2487','ONLINE'=>true,'ID'=>strval($post_owner),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post_owner,false,true),'POSTER_USERNAME'=>$poster_username));

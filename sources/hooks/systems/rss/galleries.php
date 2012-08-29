@@ -67,7 +67,7 @@ class Hook_rss_galleries
 			$edit_date=is_null($row['edit_date'])?'':date($date_string,$row['edit_date']);
 
 			$news_title=xmlentities(do_lang('THIS_WITH_SIMPLE',(array_key_exists('video_views',$row)?do_lang('VIDEO'):do_lang('IMAGE')),strval($row['id'])));
-			$_summary=get_translated_tempcode($row['comments']);
+			$_summary=get_translated_tempcode($row['description']);
 			$summary=xmlentities($_summary->evaluate());
 			$news='';
 

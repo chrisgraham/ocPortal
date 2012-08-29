@@ -1,5 +1,13 @@
 <div class="box box___calendar_event_box"><div class="box_inner">
-	<h3>{TITLE*}</h3>
+	<h3>
+		{+START,IF,{GIVE_CONTEXT}}
+			{!CONTENT_IS_OF_TYPE,{!EVENT},{TITLE*}}
+		{+END}
+
+		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+			{TITLE*}
+		{+END}
+	</h3>
 
 	{+START,IF_NON_EMPTY,{SUMMARY}}
 		<div class="float_surrounder">

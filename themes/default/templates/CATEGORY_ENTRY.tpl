@@ -8,5 +8,5 @@
 		<p class="associated_details">{$TRUNCATE_LEFT,{DESCRIPTION},100,0,1}</p>
 	{+END}{+END}
 
-	<p class="associated_details">{CHILDREN}</p>
+	<p class="associated_details">({CHILDREN*})</p>
 </li>

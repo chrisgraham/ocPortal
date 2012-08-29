@@ -150,9 +150,9 @@ class Hook_addon_registry_authors
 			$tpl=do_lorem_template('NEWS_BRIEF', array(
 				'DATE'=>placeholder_time(),
 				'URL'=>placeholder_url(),
-				'TITLE_PLAIN'=>lorem_word(),
+				'NEWS_TITLE_PLAIN'=>lorem_word(),
 				'ID'=>placeholder_id(),
-				'TITLE'=>lorem_word()
+				'NEWS_TITLE'=>lorem_word()
 			));
 			$news_released->attach($tpl);
 		}

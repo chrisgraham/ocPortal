@@ -36,18 +36,27 @@ function init__galleries()
  *
  * @param  array			The image row
  * @param  ID_TEXT		The zone the galleries module is in
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @return tempcode		The rendered box
  */
-function render_image_box($row,$zone='_SEARCH')
+function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
 {
 	require_css('galleries');
-
 	require_code('images');
+
 	$url=build_url(array('page'=>'galleries','type'=>'image','id'=>$row['id']),$zone);
+
+	$description=get_translated_tempcode($row['description']);
+
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-	$description=get_translated_tempcode($row['comments']);
 	$thumb=do_image_thumb($thumb_url,$description,true);
-	$breadcrumbs=gallery_breadcrumbs($row['cat'],'root',false,$zone);
+
+	$breadcrumbs=new ocp_tempcode();
+	if ($include_breadcrumbs)
+	{
+		$breadcrumbs=gallery_breadcrumbs($row['cat'],'root',false,$zone);
+	}
 
 	$image_url=$row['url'];
 	if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
@@ -61,7 +70,22 @@ function render_image_box($row,$zone='_SEARCH')
 		$gallery_title=get_translated_text($title);
 	}
 
-	return do_template('GALLERY_IMAGE_BOX',array('ADD_DATE_RAW'=>strval($row['add_date']),'ID'=>strval($row['id']),'TITLE'=>get_translated_text($row['title']),'NOTES'=>$row['notes'],'GALLERY_TITLE'=>$gallery_title,'CAT'=>$row['cat'],'VIEWS'=>strval($row['image_views']),'BREADCRUMBS'=>$breadcrumbs,'URL'=>$url,'IMAGE_URL'=>$image_url,'DESCRIPTION'=>$description,'THUMB'=>$thumb,'THUMB_URL'=>$thumb_url));
+	return do_template('GALLERY_IMAGE_BOX',array(
+		'GIVE_CONTEXT'=>$give_context,
+		'ADD_DATE_RAW'=>strval($row['add_date']),
+		'ID'=>strval($row['id']),
+		'TITLE'=>get_translated_text($row['title']),
+		'NOTES'=>$row['notes'],
+		'GALLERY_TITLE'=>$gallery_title,
+		'CAT'=>$row['cat'],
+		'VIEWS'=>strval($row['image_views']),
+		'BREADCRUMBS'=>$breadcrumbs,
+		'URL'=>$url,
+		'IMAGE_URL'=>$image_url,
+		'DESCRIPTION'=>$description,
+		'THUMB'=>$thumb,
+		'THUMB_URL'=>$thumb_url,
+	));
 }
 
 /**
@@ -69,18 +93,27 @@ function render_image_box($row,$zone='_SEARCH')
  *
  * @param  array			The video row
  * @param  ID_TEXT		The zone the galleries module is in
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @return tempcode		The rendered box
  */
-function render_video_box($row,$zone='_SEARCH')
+function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
 {
 	require_css('galleries');
-
 	require_code('images');
+
 	$url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row['id']),$zone);
+
+	$description=get_translated_tempcode($row['description']);
+
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','videos',$row['id']);
-	$description=get_translated_tempcode($row['comments']);
 	$thumb=do_image_thumb($thumb_url,$description,true);
-	$breadcrumbs=gallery_breadcrumbs($row['cat'],'root',false,$zone);
+
+	$breadcrumbs=new ocp_tempcode();
+	if ($include_breadcrumbs)
+	{
+		$breadcrumbs=gallery_breadcrumbs($row['cat'],'root',false,$zone);
+	}
 
 	$video_url=$row['url'];
 	if (url_is_local($video_url)) $video_url=get_custom_base_url().'/'.$video_url;
@@ -94,7 +127,146 @@ function render_video_box($row,$zone='_SEARCH')
 		$gallery_title=get_translated_text($title);
 	}
 
-	return do_template('GALLERY_VIDEO_BOX',array('ADD_DATE_RAW'=>strval($row['add_date']),'ID'=>strval($row['id']),'TITLE'=>get_translated_text($row['title']),'NOTES'=>$row['notes'],'GALLERY_TITLE'=>$gallery_title,'CAT'=>$row['cat'],'VIEWS'=>strval($row['video_views']),'BREADCRUMBS'=>$breadcrumbs,'URL'=>$url,'VIDEO_URL'=>$video_url,'DESCRIPTION'=>$description,'THUMB'=>$thumb,'THUMB_URL'=>$thumb_url,'VIDEO_WIDTH'=>strval($row['video_width']),'VIDEO_HEIGHT'=>strval($row['video_height']),'VIDEO_LENGTH'=>strval($row['video_length'])));
+	return do_template('GALLERY_VIDEO_BOX',array(
+		'GIVE_CONTEXT'=>$give_context,
+		'ADD_DATE_RAW'=>strval($row['add_date']),
+		'ID'=>strval($row['id']),
+		'TITLE'=>get_translated_text($row['title']),
+		'NOTES'=>$row['notes'],
+		'GALLERY_TITLE'=>$gallery_title,
+		'CAT'=>$row['cat'],
+		'VIEWS'=>strval($row['video_views']),
+		'BREADCRUMBS'=>$breadcrumbs,
+		'URL'=>$url,
+		'VIDEO_URL'=>$video_url,
+		'DESCRIPTION'=>$description,
+		'THUMB'=>$thumb,
+		'THUMB_URL'=>$thumb_url,
+		'VIDEO_WIDTH'=>strval($row['video_width']),
+		'VIDEO_HEIGHT'=>strval($row['video_height']),
+		'VIDEO_LENGTH'=>strval($row['video_length']),
+	));
+}
+
+/**
+ * Get preview detailing for a gallery.
+ *
+ * @param  array			The database row of the gallery
+ * @param  ID_TEXT		The virtual root of the gallery
+ * @param  boolean		Whether to show member stats if it is a member owned gallery
+ * @param  ID_TEXT		The zone that the gallery module we are linking to is in
+ * @param  boolean		Whether to not show anything if the gallery is empty
+ * @param  boolean		Whether only to show 'preview' details
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @return tempcode		The preview
+ */
+function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false,$give_context=true,$include_breadcrumbs=true)
+{
+	require_css('galleries');
+
+	$member_id=get_member_id_from_gallery_name($myrow['name'],$myrow,true);
+	$is_member=!is_null($member_id);
+
+	$url_map=array('page'=>'galleries','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$myrow['name']);
+	if (get_page_name()=='galleries') $url_map+=propagate_ocselect();
+	$url=build_url($url_map,$zone);
+
+	$_title=get_translated_text($myrow['fullname']);
+	$add_date=get_timezoned_date($myrow['add_date'],false);
+	$description=get_translated_tempcode($myrow['description']);
+
+	if ($show_member_stats_if_appropriate)
+	{
+		if (($is_member) && (get_forum_type()=='ocf'))
+		{
+			require_code('ocf_members');
+			require_code('ocf_members2');
+			$member_info=render_member_box($member_id,true,NULL,NULL,true,NULL,false);
+		} else $member_info=new ocp_tempcode();
+	} else $member_info=new ocp_tempcode();
+
+	if (($quit_if_empty) && ($num_images==0) && ($num_videos==0) && ($num_children==0)) return new ocp_tempcode();
+
+	$pic=$myrow['rep_image'];
+	if (($pic=='') && ($is_member)) $pic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+	$thumb_order='ORDER BY id ASC';
+	if (get_option('reverse_thumb_order')=='1') $thumb_order='ORDER BY id DESC';
+	if ($pic=='')
+	{
+		$pic=$GLOBALS['SITE_DB']->query_select_value_if_there('images','thumb_url',array('cat'=>$myrow['name'],'validated'=>1),$thumb_order);
+		if ($pic==='')
+		{
+			require_code('images');
+			$temp=$GLOBALS['SITE_DB']->query_select('images',array('id','url'),array('cat'=>$myrow['name'],'validated'=>1),$thumb_order,1);
+			$thumb_url=ensure_thumbnail($temp[0]['url'],'','galleries','images',$temp[0]['id']);
+		}
+	}
+	if (is_null($pic))
+	{
+		$pic=$GLOBALS['SITE_DB']->query_select_value_if_there('videos','thumb_url',array('cat'=>$myrow['name'],'validated'=>1),$thumb_order);
+	}
+	if (is_null($pic)) $pic='';
+	if (($pic!='') && (url_is_local($pic))) $pic=get_custom_base_url().'/'.$pic;
+	if ($pic!='')
+	{
+		require_code('images');
+		$thumb=do_image_thumb($pic,'');
+	} else $thumb=new ocp_tempcode();
+
+	list($num_children,$num_images,$num_videos)=get_recursive_gallery_details($myrow['name']);
+	if ($num_children==0)
+	{
+		if ($myrow['accept_videos']==0)
+		{
+			$lang=do_lang_tempcode('_SUBGALLERY_BITS_IMAGES',integer_format($num_images),integer_format($num_videos),integer_format($num_images+$num_videos));
+		}
+		elseif ($myrow['accept_images']==0)
+		{
+			$lang=do_lang_tempcode('_SUBGALLERY_BITS_VIDEOS',integer_format($num_images),integer_format($num_videos),integer_format($num_images+$num_videos));
+		} else
+		{
+			$lang=do_lang_tempcode('_SUBGALLERY_BITS',integer_format($num_images),integer_format($num_videos),integer_format($num_images+$num_videos));
+		}
+	} else
+	{
+		if ($myrow['accept_videos']==0)
+		{
+			$lang=do_lang_tempcode('SUBGALLERY_BITS_IMAGES',integer_format($num_children),integer_format($num_images),array(integer_format($num_videos),integer_format($num_images+$num_videos)));
+		}
+		elseif ($myrow['accept_images']==0)
+		{
+			$lang=do_lang_tempcode('SUBGALLERY_BITS_VIDEOS',integer_format($num_children),integer_format($num_images),array(integer_format($num_videos),integer_format($num_images+$num_videos)));
+		} else
+		{
+			$lang=do_lang_tempcode('SUBGALLERY_BITS',integer_format($num_children),integer_format($num_images),array(integer_format($num_videos),integer_format($num_images+$num_videos)));
+		}
+	}
+
+	$breadcrumbs=mixed();
+	if ($include_breadcrumbs)
+	{
+		$breadcrumbs=gallery_breadcrumbs($myrow['name']);
+	}
+
+	return do_template('GALLERY_BOX',array(
+		'_GUID'=>'0dbec2f11de63b0402471fe5c8b32865',
+		'GIVE_CONTEXT'=>$give_context,
+		'NUM_VIDEOS'=>strval($num_videos),
+		'NUM_IMAGES'=>strval($num_images),
+		'NUM_CHILDREN'=>strval($num_children),
+		'ID'=>$myrow['name'],
+		'LANG'=>$lang,
+		'ADD_DATE'=>$add_date,
+		'ADD_DATE_RAW'=>strval($myrow['add_date']),
+		'MEMBER_INFO'=>$member_info,
+		'URL'=>$url,
+		'THUMB'=>$thumb,
+		'PIC'=>$pic,
+		'TITLE'=>$_title,
+		'DESCRIPTION'=>$description,
+		'BREADCRUMBS'=>$breadcrumbs,
+	));
 }
 
 /**
@@ -196,97 +368,11 @@ function get_member_id_from_gallery_name($gallery_name,$row=NULL,$only_if_person
  */
 function show_video_details($myrow)
 {
-	return do_template('GALLERY_VIDEO_INFO',array('HEIGHT'=>integer_format($myrow['video_height']),'WIDTH'=>integer_format($myrow['video_width']),'LENGTH'=>strval($myrow['video_length'])));
-}
-
-/**
- * Get preview detailing for a gallery.
- *
- * @param  array			The database row of the gallery
- * @param  ID_TEXT		The virtual root of the gallery
- * @param  boolean		Whether to show member stats if it is a member owned gallery
- * @param  ID_TEXT		The zone that the gallery module we are linking to is in
- * @param  boolean		Whether to not show anything if the gallery is empty
- * @param  boolean		Whether only to show 'preview' details
- * @return tempcode		The preview
- */
-function render_gallery_box($child,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false)
-{
-	require_css('galleries');
-
-	$member_id=get_member_id_from_gallery_name($child['name'],$child,true);
-	$url_map=array('page'=>'galleries','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$child['name']);
-	if (get_page_name()=='galleries') $url_map+=propagate_ocselect();
-	$url=build_url($url_map,$zone);
-	$_title=get_translated_text($child['fullname']);
-	$pic=$child['rep_image'];
-	$is_member=!is_null($member_id);
-	if (($pic=='') && ($is_member)) $pic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-	$add_date=get_timezoned_date($child['add_date'],false);
-	$comments=get_translated_tempcode($child['description']);
-	if ($show_member_stats_if_appropriate)
-	{
-		if (($is_member) && (get_forum_type()=='ocf'))
-		{
-			require_code('ocf_members');
-			require_code('ocf_members2');
-			$member_info=render_member_box($member_id,true);
-		} else $member_info=new ocp_tempcode();
-	} else $member_info=new ocp_tempcode();
-	list($num_children,$num_images,$num_videos)=get_recursive_gallery_details($child['name']);
-	if (($quit_if_empty) && ($num_images==0) && ($num_videos==0) && ($num_children==0)) return new ocp_tempcode();
-	$thumb_order='ORDER BY id ASC';
-	if (get_option('reverse_thumb_order')=='1') $thumb_order='ORDER BY id DESC';
-	if ($pic=='')
-	{
-		$pic=$GLOBALS['SITE_DB']->query_select_value_if_there('images','thumb_url',array('cat'=>$child['name'],'validated'=>1),$thumb_order);
-		if ($pic==='')
-		{
-			require_code('images');
-			$temp=$GLOBALS['SITE_DB']->query_select('images',array('id','url'),array('cat'=>$child['name'],'validated'=>1),$thumb_order,1);
-			$thumb_url=ensure_thumbnail($temp[0]['url'],'','galleries','images',$temp[0]['id']);
-		}
-	}
-	if (is_null($pic))
-	{
-		$pic=$GLOBALS['SITE_DB']->query_select_value_if_there('videos','thumb_url',array('cat'=>$child['name'],'validated'=>1),$thumb_order);
-	}
-	if (is_null($pic)) $pic='';
-	if (($pic!='') && (url_is_local($pic))) $pic=get_custom_base_url().'/'.$pic;
-	if ($pic!='')
-	{
-		require_code('images');
-		$thumb=do_image_thumb($pic,'');
-	} else $thumb=new ocp_tempcode();
-	if ($num_children==0)
-	{
-		if ($child['accept_videos']==0)
-		{
-			$lang=do_lang_tempcode('_SUBGALLERY_BITS_IMAGES',integer_format($num_images),integer_format($num_videos),integer_format($num_images+$num_videos));
-		}
-		elseif ($child['accept_images']==0)
-		{
-			$lang=do_lang_tempcode('_SUBGALLERY_BITS_VIDEOS',integer_format($num_images),integer_format($num_videos),integer_format($num_images+$num_videos));
-		} else
-		{
-			$lang=do_lang_tempcode('_SUBGALLERY_BITS',integer_format($num_images),integer_format($num_videos),integer_format($num_images+$num_videos));
-		}
-	} else
-	{
-		if ($child['accept_videos']==0)
-		{
-			$lang=do_lang_tempcode('SUBGALLERY_BITS_IMAGES',integer_format($num_children),integer_format($num_images),array(integer_format($num_videos),integer_format($num_images+$num_videos)));
-		}
-		elseif ($child['accept_images']==0)
-		{
-			$lang=do_lang_tempcode('SUBGALLERY_BITS_VIDEOS',integer_format($num_children),integer_format($num_images),array(integer_format($num_videos),integer_format($num_images+$num_videos)));
-		} else
-		{
-			$lang=do_lang_tempcode('SUBGALLERY_BITS',integer_format($num_children),integer_format($num_images),array(integer_format($num_videos),integer_format($num_images+$num_videos)));
-		}
-	}
-
-	return do_template('GALLERY_BOX',array('_GUID'=>'0dbec2f11de63b0402471fe5c8b32865','NUM_VIDEOS'=>strval($num_videos),'NUM_IMAGES'=>strval($num_images),'NUM_CHILDREN'=>strval($num_children),'ID'=>$child['name'],'LANG'=>$lang,'ADD_DATE'=>$add_date,'ADD_DATE_RAW'=>strval($child['add_date']),'MEMBER_INFO'=>$member_info,'URL'=>$url,'THUMB'=>$thumb,'PIC'=>$pic,'TITLE'=>$_title,'COMMENTS'=>$comments));
+	return do_template('GALLERY_VIDEO_INFO',array(
+		'HEIGHT'=>integer_format($myrow['video_height']),
+		'WIDTH'=>integer_format($myrow['video_width']),
+		'LENGTH'=>strval($myrow['video_length']),
+	));
 }
 
 /**
@@ -493,7 +579,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 		if (($can_submit!==false) && (($levels!==0) || ($use_compound_list)))
 		{
 			$child_id=$child['name'];
-//			$child_title=$child['text_original'];
+			//$child_title=$child['text_original'];
 			$child_breadcrumbs=$breadcrumbs;
 
 			$child_children=get_gallery_tree($child_id,$child_breadcrumbs,$child,$do_stats,$filter,$must_accept_images,$must_accept_videos,$purity,$use_compound_list,is_null($levels)?NULL:($levels-1),$member_id,$addable_filter);
@@ -865,7 +951,14 @@ function show_gallery_media($url,$thumb_url,$width,$height,$length,$orig_filenam
 				$tpl='GALLERY_VIDEO_GENERAL';
 		}
 	}
-	return do_template($tpl,array('THUMB_URL'=>$thumb_url,'URL'=>$full_url,'LENGTH'=>strval($length),'WIDTH'=>strval($width),'HEIGHT'=>strval($height),'MIME_TYPE'=>$mime_type));
+	return do_template($tpl,array(
+		'THUMB_URL'=>$thumb_url,
+		'URL'=>$full_url,
+		'LENGTH'=>strval($length),
+		'WIDTH'=>strval($width),
+		'HEIGHT'=>strval($height),
+		'MIME_TYPE'=>$mime_type,
+	));
 }
 
 /**

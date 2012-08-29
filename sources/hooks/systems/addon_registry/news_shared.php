@@ -130,7 +130,8 @@ class Hook_addon_registry_news_shared
 				'LASTUSERNAME'=>lorem_word(),
 				'FIRSTMEMBERID'=>lorem_word(),
 				'LASTMEMBERID'=>lorem_word(),
-				'DATE_RAW'=>lorem_word()
+				'DATE_RAW'=>lorem_word(),
+				'GIVE_CONTEXT'=>true,
 			)), NULL, '', true)
 		);
 	}

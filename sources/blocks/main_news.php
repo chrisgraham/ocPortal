@@ -215,7 +215,7 @@ class Block_main_news
 				}
 				$category=get_translated_text($NEWS_CATS_CACHE[$myrow['news_category']]['nc_title']);
 				$seo_bits=seo_meta_get_for('news',strval($id));
-				$map2=array('TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'ID'=>strval($id),'TRUNCATE'=>$truncate,'BLOG'=>$blogs===1,'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$category,'IMG'=>$img,'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'NEWS_TITLE'=>$news_title,'AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS'=>$news,'FULL_URL'=>$full_url);
+				$map2=array('GIVE_CONTEXT'=>false,'TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'ID'=>strval($id),'TRUNCATE'=>$truncate,'BLOG'=>$blogs===1,'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$category,'IMG'=>$img,'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'NEWS_TITLE'=>$news_title,'AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS'=>$news,'FULL_URL'=>$full_url);
 				if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map2['COMMENT_COUNT']='1';
 				$news_text->attach(do_template('NEWS_BOX',$map2));
 			}
@@ -240,7 +240,7 @@ class Block_main_news
 				$title_plain=get_translated_text($myrow['title']);
 
 				$seo_bits=seo_meta_get_for('news',strval($myrow['p_id']));
-				$map2=array('_GUID'=>'d81bda3a0912a1e708af6bb1f503b296','TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'BLOG'=>$blogs===1,'ID'=>strval($myrow['p_id']),'SUBMITTER'=>strval($myrow['submitter']),'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'URL'=>$url,'TITLE_PLAIN'=>$title_plain,'TITLE'=>$title);
+				$map2=array('_GUID'=>'d81bda3a0912a1e708af6bb1f503b296','TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'BLOG'=>$blogs===1,'ID'=>strval($myrow['p_id']),'SUBMITTER'=>strval($myrow['submitter']),'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'URL'=>$url,'NEWS_TITLE_PLAIN'=>$title_plain,'NEWS_TITLE'=>$title);
 
 				if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map2['COMMENT_COUNT']='1';
 

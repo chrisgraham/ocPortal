@@ -76,9 +76,10 @@ function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filte
  * @param  ?array			An array of hook objects that allow us to collect additional mouse-over member information. (NULL: lookup)
  * @param  boolean		Whether to show the avatar
  * @param  ?array			Map of extra fields to show (NULL: none)
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @return tempcode		The member box
  */
-function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_objects=NULL,$show_avatar=true,$extra_fields=NULL)
+function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_objects=NULL,$show_avatar=true,$extra_fields=NULL,$give_context=true)
 {
 	require_lang('ocf');
 	require_css('ocf');
@@ -217,7 +218,8 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 
 	return do_template('OCF_MEMBER_BOX',array(
 		'_GUID'=>'dfskfdsf9',
-		'POSTER'=>strval($member_id),
+		'GIVE_CONTEXT'=>$give_context,
+		'MEMBER_ID'=>strval($member_id),
 		'POSTS'=>integer_format($poster_details['poster_posts']),
 		'POINTS'=>$points,
 		'JOIN_DATE_RAW'=>strval($poster_details['poster_join_date']),

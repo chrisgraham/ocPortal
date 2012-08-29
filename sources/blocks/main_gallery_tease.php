@@ -102,7 +102,7 @@ class Block_main_gallery_tease
 			{
 				require_code('ocf_members');
 				require_code('ocf_members2');
-				$member_info=render_member_box($member_id,true);
+				$member_info=render_member_box($member_id,true,NULL,NULL,true,NULL,false);
 			} else $member_info=new ocp_tempcode();
 			list($num_children,$num_images,$num_videos)=get_recursive_gallery_details($child['name']);
 			if (($num_images==0) && ($num_videos==0)) continue;

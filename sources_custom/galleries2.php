@@ -305,8 +305,8 @@ function init__galleries2($code)
 
 	// Now we add removal code for the delete functions.
 	// We do this for images...
-	$code=str_replace('log_it(\'DELETE_IMAGE\',strval($id),get_translated_text($comments));',
-		'log_it(\'DELETE_IMAGE\',strval($id),get_translated_text($comments));
+	$code=str_replace('log_it(\'DELETE_IMAGE\',strval($id),get_translated_text($description));',
+		'log_it(\'DELETE_IMAGE\',strval($id),get_translated_text($description));
 		require_code("workflows");
 		require_lang("workflows");
 		if (!is_null(get_workflow_of_content("image",strval($id))))
@@ -315,8 +315,8 @@ function init__galleries2($code)
 	);
 
 	// ...videos...
-	$code=str_replace('log_it(\'DELETE_VIDEO\',strval($id),get_translated_text($comments));',
-		'log_it(\'DELETE_VIDEO\',strval($id),get_translated_text($comments));
+	$code=str_replace('log_it(\'DELETE_VIDEO\',strval($id),get_translated_text($description));',
+		'log_it(\'DELETE_VIDEO\',strval($id),get_translated_text($description));
 		require_code("workflows");
 		require_lang("workflows");
 		if (!is_null(get_workflow_of_content("video",strval($id))))

@@ -21,7 +21,7 @@ function ocjester_filtering_wrap($in)
 	$in='<div>'.$in.'</div>';
 	$matches=array();
 	$num_matches=preg_match_all('#(>)([^<>]+)(<)#Us',$in,$matches,PREG_SET_ORDER);
-	sort_maps_by__strlen($match_keys,2);
+	sort_maps_by__strlen($matches,2);
 	$matches=array_reverse($matches);
 	for ($i=0;$i<$num_matches;$i++)
 	{

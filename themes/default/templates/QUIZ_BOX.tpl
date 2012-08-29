@@ -1,5 +1,13 @@
 <section class="box box___quiz_box"><div class="box_inner">
-	<h3>{NAME*}</h3>
+	<h3>
+		{+START,IF,{GIVE_CONTEXT}}
+			{!CONTENT_IS_OF_TYPE,{TYPE*},{NAME*}}
+		{+END}
+
+		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+			{NAME*}
+		{+END}
+	</h3>
 
 	<div class="meta_details" role="contentinfo">
 		<dl class="meta_details_list">

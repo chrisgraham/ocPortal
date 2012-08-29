@@ -1487,7 +1487,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				{
 					require_code('ocf_members');
 					require_code('ocf_members2');
-					$_value=render_member_box(isset($param[0])?intval($param[0]):get_member());
+					$_value=render_member_box(isset($param[0])?intval($param[0]):get_member(),false,NULL,NULL,true,NULL,false);
 					$value=$_value->evaluate();
 				}
 				break;

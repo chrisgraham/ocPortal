@@ -80,7 +80,25 @@ class Hook_Preview_iotd
 
 		$view_url=mixed();
 
-		$preview=do_template('IOTD_BOX',array('_GUID'=>'a6479902d2cd7b4119be7159147e0a0b','VIEWS'=>'','THUMB'=>$thumb,'DATE'=>$date,'DATE_RAW'=>strval(time()),'IS_CURRENT'=>0,'THUMB_URL'=>$thumb_url,'VIEW_URL'=>$view_url,'ID'=>'','EDIT_URL'=>$edit_url,'DELETE_URL'=>$delete_url,'CHOOSE_URL'=>$choose_url,'TITLE'=>$title,'CAPTION'=>$caption,'SUBMITTER'=>strval($submitter),'USERNAME'=>$username));
+		$preview=do_template('IOTD_BOX',array(
+			'_GUID'=>'a6479902d2cd7b4119be7159147e0a0b',
+			'VIEWS'=>'',
+			'THUMB'=>$thumb,
+			'DATE'=>$date,
+			'DATE_RAW'=>strval(time()),
+			'IS_CURRENT'=>0,
+			'THUMB_URL'=>$thumb_url,
+			'VIEW_URL'=>$view_url,
+			'ID'=>'',
+			'EDIT_URL'=>$edit_url,
+			'DELETE_URL'=>$delete_url,
+			'CHOOSE_URL'=>$choose_url,
+			'TITLE'=>$title,
+			'CAPTION'=>$caption,
+			'SUBMITTER'=>strval($submitter),
+			'USERNAME'=>$username,
+			'GIVE_CONTEXT'=>true,
+		));
 
 		return array($preview,NULL);
 	}

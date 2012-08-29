@@ -11,32 +11,14 @@
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,catalogue_category,{ID}}}
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
-{SUBCATEGORIES}
-
-{+START,IF_NON_EMPTY,{ENTRIES}}
-	<div class="float_surrounder display_type_{DISPLAY_TYPE*}">
-		{ENTRIES}
+{+START,IF_NON_EMPTY,{SUBCATEGORIES}}
+	<div>
+		<p class="lonely_label">{!CATEGORIES}:</p>
+		{SUBCATEGORIES}
 	</div>
 {+END}
 
-{+START,IF_EMPTY,{ENTRIES}{SUBCATEGORIES}}
-	<p class="nothing_here">
-		{!NO_ENTRIES}
-	</p>
-{+END}
-
-{+START,IF_NON_EMPTY,{SORTING}}
-	<div class="box category_sorter inline_block"><div class="box_inner">
-		{$SET,show_sort_button,1}
-		{SORTING}
-	</div></div>
-{+END}
-
-{+START,IF_NON_EMPTY,{PAGINATION}}
-	<div class="float_surrounder">
-		{PAGINATION}
-	</div>
-{+END}
+{ENTRIES}
 
 {+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}
 

@@ -38,6 +38,26 @@ function init__chat()
 }
 
 /**
+ * Get tempcode for a chat room 'feature box' for the given row
+ *
+ * @param  array			The database field row of it
+ * @param  ID_TEXT		The zone to use
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @return tempcode		A box for it, linking to the full page
+ */
+function render_chat_box($row,$zone='_SEARCH',$give_context=true)
+{
+	$url=build_url(array('page'=>'chat','type'=>'room','id'=>$row['id']),$zone);
+
+	require_lang('chat');
+
+	$_title=$row['room_name'];
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('ROOM'),$_title):$_title;
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>'','URL'=>$url));
+}
+
+/**
  * High-level messages script handling
  */
 function messages_script()

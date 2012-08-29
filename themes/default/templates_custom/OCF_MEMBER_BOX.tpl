@@ -1,4 +1,8 @@
 <div class="ocf_member_box">
+	{+START,IF,{GIVE_CONTEXT}}
+		<h3>{!CONTENT_IS_OF_TYPE,{!MEMBER},{$USERNAME*,{MEMBER_ID}}}</h3>
+	{+END}
+
 	{$SET,fancy_screen,{$AND,{$NOT,{$MATCH_KEY_MATCH,site:members:view}},{$OR,{$RUNNING_SCRIPT,iframe},{$MATCH_KEY_MATCH,site:members},{$MATCH_KEY_MATCH,site:search}}}}
 
 	{+START,IF,{$GET,fancy_screen}}
@@ -21,22 +25,22 @@
 		{+END}
 
 		{+START,SET,CONTENTS}
-			{$SET,AVATAR_URL,{$?,{$GET,fancy_screen},{$THUMBNAIL,{$?,{$IS_EMPTY,{$PHOTO,{POSTER}}},{$IMG,no_image},{$PHOTO,{POSTER}}},80x80,uploads/website_specific,,,pad,both,#faf5ef},{AVATAR_URL}}}
+			{$SET,AVATAR_URL,{$?,{$GET,fancy_screen},{$THUMBNAIL,{$?,{$IS_EMPTY,{$PHOTO,{MEMBER_ID}}},{$IMG,no_image},{$PHOTO,{MEMBER_ID}}},80x80,uploads/website_specific,,,pad,both,#faf5ef},{AVATAR_URL}}}
 
 			{$SET,main,0}
-			<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'&lt;table class=&quot;tooltip_fields autosized_table&quot; summary=&quot;{!MAP_TABLE}&quot;&gt;&lt;tbody&gt;{CUSTOM_FIELDS_FULL*;^}{$GET*;^,ADDITIONAL_DETAILS}&lt;/tbody&gt;&lt;/table&gt;','auto');" href="{$MEMBER_PROFILE_URL*,{POSTER}}"><img class="ocf_member_box_avatar" src="{$GET*,AVATAR_URL}" alt="" /></a>
+			<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'&lt;table class=&quot;tooltip_fields autosized_table&quot; summary=&quot;{!MAP_TABLE}&quot;&gt;&lt;tbody&gt;{CUSTOM_FIELDS_FULL*;^}{$GET*;^,ADDITIONAL_DETAILS}&lt;/tbody&gt;&lt;/table&gt;','auto');" href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}"><img class="ocf_member_box_avatar" src="{$GET*,AVATAR_URL}" alt="" /></a>
 
 			<div{+START,IF_NON_EMPTY,{$GET,AVATAR_URL}} class="ocf_member_box_avatar"{+END} style="float: left; width: 95px; word-wrap: break-word; margin-right: 0">
-				<a href="{$MEMBER_PROFILE_URL*,{POSTER}}">{$TRUNCATE_LEFT,{$USERNAME,{POSTER}},18,1}</a>
+				<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{$TRUNCATE_LEFT,{$USERNAME,{MEMBER_ID}},18,1}</a>
 				{$SET,main,1}
 				{CUSTOM_FIELDS}
 
 				{+START,IF,{$ADDON_INSTALLED,ocGiftGiver,1}}
 					<p class="associated_link">
-						{+START,IF,{$NEQ,{$USER},{POSTER}}}
-							<a href="{$PAGE_LINK*,site:pointstore:action:ocgifts:username={$USERNAME,{POSTER}}}">{!ocgifts:GIVE_A_GIFT}</a>
+						{+START,IF,{$NEQ,{$USER},{MEMBER_ID}}}
+							<a href="{$PAGE_LINK*,site:pointstore:action:ocgifts:username={$USERNAME,{MEMBER_ID}}}">{!ocgifts:GIVE_A_GIFT}</a>
 						{+END}
-						{+START,IF,{$EQ,{$USER},{POSTER}}}
+						{+START,IF,{$EQ,{$USER},{MEMBER_ID}}}
 							<em>{!ocgifts:THIS_IS_YOU}</em>
 						{+END}
 					</p>
@@ -45,7 +49,7 @@
 		{+END}
 
 		<div class="ocf_member_directory_box box">
-			<input class="right" type="hidden" name="result__member_{POSTER*}" value="1" />
+			<input class="right" type="hidden" name="result__member_{MEMBER_ID*}" value="1" />
 
 			{$GET,CONTENTS}
 		</div>
@@ -59,7 +63,7 @@
 		<div{+START,IF_NON_EMPTY,{AVATAR_URL}} class="ocf_member_box_avatar"{+END}>
 			<table class="tooltip_fields autosized_table" summary="{!MAP_TABLE}">
 				<tbody>
-					<tr><th class="de_th">{!USERNAME}:</th><td><a href="{$MEMBER_PROFILE_URL*,{POSTER}}">{$USERNAME*,{POSTER}}</a></td></tr>
+					<tr><th class="de_th">{!USERNAME}:</th><td><a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{$USERNAME*,{MEMBER_ID}}</a></td></tr>
 					<tr><th class="de_th">{!ocf:SPECIFIC_FORUM_POSTS}:</th><td>{POSTS*}</td></tr>
 					{+START,IF_NON_EMPTY,{POINTS}}
 						<tr><th class="de_th">{!POINTS}:</th><td>{POINTS*}</td></tr>

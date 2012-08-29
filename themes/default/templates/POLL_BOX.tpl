@@ -1,7 +1,11 @@
 <section class="box box___poll_box"><div class="box_inner">
-	<h3>{!POLL}</h3>
+	{+START,IF,{GIVE_CONTEXT}}
+		<h3>{!CONTENT_IS_OF_TYPE,{!POLL},{QUESTION}}</h3>
+	{+END}
 
-	<p class="poll_question">{+START,FRACTIONAL_EDITABLE,{QUESTION_PLAIN},question,_SEARCH:cms_polls:type=_edit_poll:id={PID},1}{QUESTION}{+END}</p>
+	{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+		<h3>{+START,FRACTIONAL_EDITABLE,{QUESTION_PLAIN},question,_SEARCH:cms_polls:type=_edit_poll:id={PID},1}{QUESTION}{+END}</h3>
+	{+END}
 
 	<a id="poll_jump" rel="dovote"></a>
 	<form title="{!VOTE}" target="_self" action="{VOTE_URL*}" method="post" class="poll_form">

@@ -634,7 +634,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
  * @param  URLPATH			The URL to the download
  * @param  LONG_TEXT			The description of the download
  * @param  ID_TEXT			The author of the download (not necessarily same as the submitter)
- * @param  LONG_TEXT			The comments for the download
+ * @param  LONG_TEXT			The supplementary description for the download
  * @param  ?AUTO_LINK		The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (NULL: none)
  * @param  BINARY				Whether the download has been validated
  * @param  BINARY				Whether the download may be rated
@@ -654,7 +654,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
  * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
  * @return AUTO_LINK			The ID of the newly added download
  */
-function add_download($category_id,$name,$url,$description,$author,$comments,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence=NULL,$add_date=NULL,$num_downloads=0,$views=0,$submitter=NULL,$edit_date=NULL,$id=NULL)
+function add_download($category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence=NULL,$add_date=NULL,$num_downloads=0,$views=0,$submitter=NULL,$edit_date=NULL,$id=NULL)
 {
 	if (is_null($add_date)) $add_date=time();
 	if (is_null($submitter)) $submitter=get_member();
@@ -672,12 +672,12 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 	$data_mash=($url=='')?'':create_data_mash($url,NULL,get_file_extension($original_filename));
 	if (function_exists('set_time_limit')) @set_time_limit($met);
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('download_data_mash'=>$data_mash,'download_licence'=>$licence,'rep_image'=>'','edit_date'=>$edit_date,'download_submitter_gets_points'=>$submitter_gets_points,'download_cost'=>$cost,'original_filename'=>$original_filename,'download_views'=>$views,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'default_pic'=>1,'num_downloads'=>$num_downloads,'out_mode_id'=>$out_mode_id,'category_id'=>$category_id,'name'=>insert_lang($name,2),'url'=>$url,'description'=>insert_lang_comcode($description,3),'author'=>$author,'comments'=>insert_lang_comcode($comments,3),'validated'=>$validated,'add_date'=>$add_date,'file_size'=>$file_size);
+	$map=array('download_data_mash'=>$data_mash,'download_licence'=>$licence,'rep_image'=>'','edit_date'=>$edit_date,'download_submitter_gets_points'=>$submitter_gets_points,'download_cost'=>$cost,'original_filename'=>$original_filename,'download_views'=>$views,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'default_pic'=>1,'num_downloads'=>$num_downloads,'out_mode_id'=>$out_mode_id,'category_id'=>$category_id,'name'=>insert_lang($name,2),'url'=>$url,'description'=>insert_lang_comcode($description,3),'author'=>$author,'additional_details'=>insert_lang_comcode($additional_details,3),'validated'=>$validated,'add_date'=>$add_date,'file_size'=>$file_size);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('download_downloads',$map,true);
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('downloads_download',strval($id),array($name,$description,$comments),$description);
+	seo_meta_set_for_implicit('downloads_download',strval($id),array($name,$description,$additional_details),$description);
 
 	// Make its gallery
 	if ((addon_installed('galleries')) && (!running_script('stress_test_loader')))
@@ -724,7 +724,7 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
  * @param  URLPATH			The URL to the download
  * @param  LONG_TEXT			The description of the download
  * @param  ID_TEXT			The author of the download (not necessarily same as the submitter)
- * @param  LONG_TEXT			The comments for the download
+ * @param  LONG_TEXT			The supplementary description for the download
  * @param  ?AUTO_LINK		The out-mode-id (the ID of a download that this download is an old version of). Often people wonder why this is specified with the old version, and not the opposite with the new version - it is because statistically, we perceive more chance of downloads merging than splitting (NULL: none)
  * @param  integer			The ordered number of the gallery image to use as the download representative image
  * @param  BINARY				Whether the download has been validated
@@ -740,7 +740,7 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
  * @param  SHORT_TEXT		Meta keywords
  * @param  LONG_TEXT			Meta description
  */
-function edit_download($id,$category_id,$name,$url,$description,$author,$comments,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description)
+function edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description)
 {
 	require_code('urls2');
 	suggest_new_idmoniker_for('downloads','view',strval($id),$name);
@@ -756,7 +756,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 		}
 	}
 
-	$myrows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','comments'),array('id'=>$id),'',1);
+	$myrows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','additional_details'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
@@ -779,7 +779,7 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 		send_content_validated_notification('download',strval($id));
 	}
 
-	$map=array('download_data_mash'=>$data_mash,'download_licence'=>$licence,'original_filename'=>$original_filename,'download_submitter_gets_points'=>$submitter_gets_points,'download_cost'=>$cost,'edit_date'=>time(),'file_size'=>$file_size,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'name'=>lang_remap($myrow['name'],$name),'description'=>lang_remap_comcode($myrow['description'],$description),'comments'=>lang_remap_comcode($myrow['comments'],$comments),'validated'=>$validated,'category_id'=>$category_id,'url'=>$url,'author'=>$author,'default_pic'=>$default_pic,'out_mode_id'=>$out_mode_id);
+	$map=array('download_data_mash'=>$data_mash,'download_licence'=>$licence,'original_filename'=>$original_filename,'download_submitter_gets_points'=>$submitter_gets_points,'download_cost'=>$cost,'edit_date'=>time(),'file_size'=>$file_size,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'name'=>lang_remap($myrow['name'],$name),'description'=>lang_remap_comcode($myrow['description'],$description),'additional_details'=>lang_remap_comcode($myrow['additional_details'],$additional_details),'validated'=>$validated,'category_id'=>$category_id,'url'=>$url,'author'=>$author,'default_pic'=>$default_pic,'out_mode_id'=>$out_mode_id);
 	$GLOBALS['SITE_DB']->query_update('download_downloads',$map,array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'),NULL,false,false,true);
@@ -822,14 +822,14 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
  */
 function delete_download($id,$leave=false)
 {
-	$myrows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','comments'),array('id'=>$id),'',1);
+	$myrows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','additional_details'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
 	log_it('DELETE_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
 	delete_lang($myrow['name']);
 	delete_lang($myrow['description']);
-	delete_lang($myrow['comments']);
+	delete_lang($myrow['additional_details']);
 
 	require_code('seo2');
 	seo_meta_erase_storage('downloads_download',strval($id));

@@ -35,7 +35,7 @@ class Block_main_awards
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','zone');
+		$info['parameters']=array('param','zone','give_context','include_breadcrumbs');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_awards
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='(count($_POST)!=0 || get_param_integer(\'keep_non_rated\',0)==1)?NULL:array(array_key_exists(\'param\',$map)?$map[\'param\']:strval(db_get_first_id()),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\')';
+		$info['cache_on']='(count($_POST)!=0 || get_param_integer(\'keep_non_rated\',0)==1)?NULL:array((array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'param\',$map)?$map[\'param\']:strval(db_get_first_id()),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\')';
 		$info['ttl']=60*24; // Intentionally, do randomisation acts as 'of the day'
 		return $info;
 	}
@@ -65,6 +65,9 @@ class Block_main_awards
 
 		$award=(array_key_exists('param',$map)?intval($map['param']):db_get_first_id());
 		$zone=array_key_exists('zone',$map)?$map['zone']:'_SEARCH';
+
+		$give_context=(array_key_exists('give_context',$map)?$map['give_context']:'0')=='1';
+		$include_breadcrumbs=(array_key_exists('include_breadcrumbs',$map)?$map['include_breadcrumbs']:'0')=='1';
 
 		$_award_type_row=$GLOBALS['SITE_DB']->query_select('award_types',array('*'),array('id'=>$award),'',1);
 		if (!array_key_exists(0,$_award_type_row)) return do_lang_tempcode('MISSING_RESOURCE');
@@ -111,7 +114,7 @@ class Block_main_awards
 
 		$archive_url=build_url(array('page'=>'awards','type'=>'award','id'=>$award),get_module_zone('awards'));
 
-		$rendered_content=$object->run($award_content_row,$zone);
+		$rendered_content=$object->run($award_content_row,$zone,$give_context,$include_breadcrumbs);
 
 		if (($award_type_row['a_hide_awardee']==1) || (is_guest($myrow['member_id'])))
 		{

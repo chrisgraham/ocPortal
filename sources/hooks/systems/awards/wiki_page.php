@@ -57,13 +57,15 @@ class Hook_awards_wiki_page
 	 *
 	 * @param  array		The database row for the content
 	 * @param  ID_TEXT	The zone to display in
+	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
+	 * @param  boolean	Whether to include breadcrumbs (if there are any)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone)
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true)
 	{
 		require_code('wiki');
 
-		return render_wiki_page_box($row,$zone);
+		return render_wiki_page_box($row,$zone,$give_context,$include_breadcrumbs);
 	}
 
 }

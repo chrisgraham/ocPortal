@@ -772,7 +772,7 @@ class OCP_Topic
 					if (!is_guest($post['poster']))
 					{
 						require_code('ocf_members2');
-						$poster_details=render_member_box($post,false,$hooks,$hook_objects,false);
+						$poster_details=render_member_box($post,false,$hooks,$hook_objects,false,NULL,false);
 					} else
 					{
 						$custom_fields=new ocp_tempcode();

@@ -35,7 +35,7 @@ class Block_main_content
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','efficient','id','filter','filter_b','title','zone','no_links');
+		$info['parameters']=array('param','efficient','id','filter','filter_b','title','zone','no_links','give_context','include_breadcrumbs');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_content
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'id\',$map)?$map[\'id\']:\'\',array_key_exists(\'efficient\',$map)?$map[\'efficient\']:\'_SEARCH\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\')';
+		$info['cache_on']='array((array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'id\',$map)?$map[\'id\']:\'\',array_key_exists(\'efficient\',$map)?$map[\'efficient\']:\'_SEARCH\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\')';
 		$info['ttl']=60*24; // Intentionally, do randomisation acts as 'of the day'
 		return $info;
 	}
@@ -85,6 +85,8 @@ class Block_main_content
 		$filter_b=array_key_exists('filter_b',$map)?$map['filter_b']:'';
 		$title=array_key_exists('title',$map)?$map['title']:NULL;
 		if ($title===NULL) $title=do_lang('RANDOM_CONTENT');
+		$give_context=(array_key_exists('give_context',$map)?$map['give_context']:'0')=='1';
+		$include_breadcrumbs=(array_key_exists('include_breadcrumbs',$map)?$map['include_breadcrumbs']:'0')=='1';
 
 		if ((!file_exists(get_file_base().'/sources/hooks/systems/awards/'.filter_naughty_harsh($type_id,true).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.filter_naughty_harsh($type_id,true).'.php')))
 			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$type_id));
@@ -276,7 +278,7 @@ class Block_main_content
 		$submit_url=str_replace('%21',$content_id,$submit_url);
 
 		$archive_url=$info['archive_url'];
-		$rendered_content=$object->run($award_content_row,$zone);
+		$rendered_content=$object->run($award_content_row,$zone,$give_context,$include_breadcrumbs);
 
 		if ((array_key_exists('no_links',$map)) && ($map['no_links']=='1'))
 		{

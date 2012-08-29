@@ -78,7 +78,7 @@ class Block_main_top_downloads
 		$out=new ocp_tempcode();
 		foreach ($rows as $row)
 		{
-			$out->attach(render_download_box($row,$zone));
+			$out->attach(render_download_box($row,true,true/*breadcrumbs?*/,$zone,NULL,false/*context?*/));
 		}
 		if ($out->is_empty())
 		{

@@ -1028,7 +1028,7 @@ class Hook_ocp_merge
 			$category_id=import_id_remap_get('download_category',strval($row['category_id']),true);
 			if (is_null($category_id)) $category_id=db_get_first_id();
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-			$id_new=add_download($category_id,$this->get_lang_string($db,$row['name']),$row['url'],$this->get_lang_string($db,$row['description']),$row['author'],$this->get_lang_string($db,$row['comments']),NULL,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$row['original_filename'],$row['file_size'],$row['download_cost'],$row['download_submitter_gets_points'],array_key_exists('download_licence',$row)?$row['download_licence']:NULL,$row['add_date'],$row['num_downloads'],$row['download_views'],$submitter,$row['edit_date'],$id);
+			$id_new=add_download($category_id,$this->get_lang_string($db,$row['name']),$row['url'],$this->get_lang_string($db,$row['description']),$row['author'],$this->get_lang_string($db,array_key_exists('additional_details',$row)?$row['additional_details']:$row['comments']),NULL,$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$row['original_filename'],$row['file_size'],$row['download_cost'],$row['download_submitter_gets_points'],array_key_exists('download_licence',$row)?$row['download_licence']:NULL,$row['add_date'],$row['num_downloads'],$row['download_views'],$submitter,$row['edit_date'],$id);
 
 			import_id_remap_put('download',strval($row['id']),$id_new);
 		}
@@ -1085,7 +1085,7 @@ class Hook_ocp_merge
 			$submitter=$on_same_msn?$row['submitter']:import_id_remap_get('member',$row['submitter'],true);
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-			$id_new=add_image(array_key_exists('title',$row)?$row['title']:'',$row['cat'],$this->get_lang_string($db,$row['comments']),$row['url'],$row['thumb_url'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$row['add_date'],$row['edit_date'],$row['image_views'],$id);
+			$id_new=add_image(array_key_exists('title',$row)?$row['title']:'',$row['cat'],$this->get_lang_string($db,array_key_exists('description',$row)?$row['description']:$row['comments']),$row['url'],$row['thumb_url'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$submitter,$row['add_date'],$row['edit_date'],$row['image_views'],$id);
 
 			import_id_remap_put('image',strval($row['id']),$id_new);
 		}
@@ -1097,7 +1097,7 @@ class Hook_ocp_merge
 			$submitter=$on_same_msn?$row['submitter']:import_id_remap_get('member',$row['submitter'],true);
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$id=(get_param_integer('keep_preserve_ids',0)==0)?NULL:$row['id'];
-			$id_new=add_video(array_key_exists('title',$row)?$row['title']:'',$row['cat'],$this->get_lang_string($db,$row['comments']),$row['url'],$row['thumb_url'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$row['video_length'],$row['video_width'],$row['video_height'],$submitter,$row['add_date'],$row['edit_date'],$row['video_views'],$id);
+			$id_new=add_video(array_key_exists('title',$row)?$row['title']:'',$row['cat'],$this->get_lang_string($db,array_key_exists('description',$row)?$row['description']:$row['comments']),$row['url'],$row['thumb_url'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$row['video_length'],$row['video_width'],$row['video_height'],$submitter,$row['add_date'],$row['edit_date'],$row['video_views'],$id);
 
 			import_id_remap_put('video',strval($row['id']),$id_new);
 		}

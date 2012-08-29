@@ -25,7 +25,7 @@
  */
 function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL')
 {
-	if (get_option('smtp_sockets_use')=='0') return non_overrided__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue);
+	if (get_option('smtp_sockets_use')=='0') return non_overridden__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue);
 
 	if (running_script('stress_test_loader')) return NULL;
 

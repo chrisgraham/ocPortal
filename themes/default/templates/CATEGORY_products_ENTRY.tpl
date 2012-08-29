@@ -9,7 +9,7 @@
 			<div class="right float_separation"><a href="{URL*}">{REP_IMAGE}</a></div>
 		{+END}
 
-		<p>&bull; <a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME_PLAIN},{NAME_FIELD},{AJAX_EDIT_URL},1}{NAME*}{+END}</a> &ndash; {CHILDREN}</p>
+		<p>&bull; <a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME_PLAIN},{NAME_FIELD},{AJAX_EDIT_URL},1}{NAME*}{+END}</a> ({CHILDREN*})</p>
 
 		{+START,IF_PASSED,DESCRIPTION}{+START,IF_NON_EMPTY,{DESCRIPTION}}
 			<p>{DESCRIPTION}</p>

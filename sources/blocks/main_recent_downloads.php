@@ -79,7 +79,7 @@ class Block_main_recent_downloads
 		$out=new ocp_tempcode();
 		foreach ($rows as $row)
 		{
-			$out->attach(render_download_box($row,true,true,$zone));
+			$out->attach(render_download_box($row,true,true/*breadcrumbs?*/,$zone,NULL,false/*context?*/));
 		}
 		if ($out->is_empty())
 		{

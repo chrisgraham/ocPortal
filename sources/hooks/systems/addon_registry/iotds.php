@@ -132,7 +132,7 @@ class Hook_addon_registry_iotds
 	 */
 	function tpl_preview__administrative__iotd_admin_choose_screen()
 	{
-		$current_iotd=do_lorem_template('IOTD', array(
+		$current_iotd=do_lorem_template('IOTD_BOX', array(
 			'IS_CURRENT'=>placeholder_number(),
 			'THUMB_URL'=>placeholder_image_url(),
 			'IMAGE_URL'=>placeholder_image_url(),

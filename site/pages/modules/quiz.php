@@ -267,7 +267,7 @@ class Module_quiz
 		$content_surveys=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{
-			$link=render_quiz_box($myrow);
+			$link=render_quiz_box($myrow,'_SEARCH',false);
 
 			switch ($myrow['q_type'])
 			{

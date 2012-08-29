@@ -31,15 +31,48 @@ function init__calendar()
  *
  * @param  array				Event row
  * @param  ID_TEXT			Zone to link through to
+ * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @return tempcode			The event box
  */
-function render_event_box($row,$zone='_SEARCH')
+function render_event_box($row,$zone='_SEARCH',$give_context=true)
 {
 	require_css('calendar');
 
+	require_lang('calendar');
+
 	$url=build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),$zone);
 
-	return do_template('CALENDAR_EVENT_BOX',array('TITLE'=>get_translated_text($row['e_title']),'SUMMARY'=>get_translated_tempcode($row['e_content']),'URL'=>$url));
+	return do_template('CALENDAR_EVENT_BOX',array(
+		'TITLE'=>get_translated_text($row['e_title']),
+		'SUMMARY'=>get_translated_tempcode($row['e_content']),
+		'URL'=>$url,
+		'GIVE_CONTEXT'=>$give_context,
+	));
+}
+
+/**
+ * Get tempcode for a calendar type 'feature box' for the given row
+ *
+ * @param  array			The database field row of it
+ * @param  ID_TEXT		The zone to use
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @return tempcode		A box for it, linking to the full page
+ */
+function render_calendar_type_box($row,$zone='_SEARCH',$give_context=true)
+{
+	$map=array('page'=>'calendar','type'=>'misc');
+	$map['int_'.strval($row['id'])]=1;
+	$url=build_url($map,$zone);
+
+	require_lang('calendar');
+
+	$_title=get_translated_text($row['t_title']);
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('EVENT_TYPE'),$_title):$_title;
+
+	$num_entries=$GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)',array('e_type'=>$row['id'],'validated'=>1));
+	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

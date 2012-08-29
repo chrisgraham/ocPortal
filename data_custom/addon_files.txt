@@ -1325,10 +1325,6 @@ oc_prose
 --------
  - sources_custom/miniblocks/main_best_posters.php
 
-oc_groupies
------------
- - sources_custom/miniblocks/main_user_boxes.php
-
 oc_world
 --------
  - data_custom/modules/ocworld/index.html

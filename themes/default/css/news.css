@@ -7,10 +7,6 @@
 	white-space: normal;
 }
 
-.news_piece_summary h3 {
-	font-size: 1.2em;
-}
-
 .newscat_img {
 	margin-{!en_left}: 1.5em;
 	margin-bottom: 1.5em;
@@ -58,7 +54,11 @@
 	text-align: left;
 }
 
-.news_piece_summary + .news_piece_summary {
+.box___block_main_news .box___news_box, .box___block_main_rss .box___news_box {
+	border: 0;
+}
+
+.box___block_main_news .box___news_box + .box___news_box, .box___block_main_rss .box___news_box + .box___news_box {
 	border-top: 1px dotted {$GET,pale_border};
 	padding-top: 0.5em;
 }

@@ -73,6 +73,8 @@ class Hook_addon_registry_chat
 	{
 		return array(
 			'themes/default/images/menu_items/community_navigation/chat.png',
+			'sources/hooks/systems/awards/calendar_type.php',
+			'sources/hooks/systems/awards/chat.php',
 			'sources/hooks/systems/notifications/im_invited.php',
 			'sources/hooks/systems/notifications/new_friend.php',
 			'sources/hooks/systems/notifications/member_entered_chatroom.php',

@@ -39,17 +39,34 @@ function init__ocf_forums()
 /**
  * Render a forum box.
  *
- * @param  array				Forum row
- * @param  ID_TEXT			Zone to link through to
- * @return tempcode			The forum box
+ * @param  array			Forum row
+ * @param  ID_TEXT		Zone to link through to
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @return tempcode		The forum box
  */
-function render_forum_box($row,$zone='_SEARCH')
+function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
 {
 	$view_map=array('page'=>'forumview');
 	if ($row['id']!=db_get_first_id()) $view_map['id']=$row['id'];
 	$url=build_url($view_map,get_module_zone('forumview'));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['f_name'],'SUMMARY'=>get_translated_tempcode($row['f_description']),'URL'=>$url));
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('FORUM'),$row['f_name']):$row['f_name'];
+
+	$breadcrumbs=mixed();
+	if ($include_breadcrumbs)
+	{
+		$breadcrumbs=ocf_forum_breadcrumbs($row['id']);
+	}
+
+	$summary=get_translated_tempcode($row['f_description']);
+
+	$num_topics=$row['f_cache_num_topics'];
+	$num_posts=$row['f_cache_num_posts'];
+
+	$entry_details=do_lang('FORUM_NUM_TOPICS',integer_format($num_topics)).do_lang('LIST_SEP').do_lang('FORUM_NUM_POSTS',integer_format($num_posts));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url,'ENTRY_DETAILS'=>$entry_details,'BREADCRUMBS'=>$breadcrumbs));
 }
 
 /**

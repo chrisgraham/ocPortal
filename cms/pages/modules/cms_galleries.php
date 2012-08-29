@@ -828,7 +828,7 @@ class Module_cms_galleries extends standard_crud_module
 	/**
 	 * Get tempcode for an image adding/editing form.
 	 *
-	 * @param  SHORT_TEXT			The title
+	 * @param  SHORT_TEXT		The title
 	 * @param  ID_TEXT			The gallery
 	 * @param  LONG_TEXT			The image description
 	 * @param  URLPATH			URL to the image
@@ -841,7 +841,7 @@ class Module_cms_galleries extends standard_crud_module
 	 * @param  boolean			Whether this form will be used for adding a new image
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($title='',$cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$adding=true)
+	function get_form_fields($title='',$cat='',$description='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$adding=true)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -891,7 +891,7 @@ class Module_cms_galleries extends standard_crud_module
 
 			$fields->attach(alternate_fields_set__end($set_name,$set_title,do_lang_tempcode('DESCRIPTION_THUMBNAIL',escape_html($thumb_width)),$field_set,$required));
 		}
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION_ACCESSIBILITY'),'comments',$comments,false));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION_ACCESSIBILITY'),'description',$description,false));
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
@@ -958,7 +958,7 @@ class Module_cms_galleries extends standard_crud_module
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-		$comments=get_translated_text($myrow['comments']);
+		$description=get_translated_text($myrow['description']);
 		$cat=$myrow['cat'];
 		$validated=$myrow['validated'];
 
@@ -970,7 +970,7 @@ class Module_cms_galleries extends standard_crud_module
 			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
 		} else $delete_fields=new ocp_tempcode();
 
-		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$comments,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false);
+		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$myrow['url'],$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],false);
 
 		return array($fields,$hidden,$delete_fields,'',true);
 	}
@@ -1005,11 +1005,11 @@ class Module_cms_galleries extends standard_crud_module
 		if ((substr($urls[0],0,8)!='uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 
-		$comments=post_param('comments');
+		$description=post_param('description');
 
 		$this->donext_type=$cat;
 
-		$id=add_image($title,$cat,$comments,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+		$id=add_image($title,$cat,$description,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 
 		if ($validated==1)
 		{
@@ -1057,7 +1057,7 @@ class Module_cms_galleries extends standard_crud_module
 		if ((substr($urls[0],0,8)!='uploads/') && ($urls[0]!='') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 
-		$comments=post_param('comments');
+		$description=post_param('description');
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
 		$notes=post_param('notes','');
@@ -1074,7 +1074,7 @@ class Module_cms_galleries extends standard_crud_module
 				syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_IMAGE':'galleries:ACTIVITY_ADD_IMAGE',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:image:'.strval($id),'','','galleries',1,$submitter);
 		}
 
-		edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,post_param('meta_keywords',''),post_param('meta_description',''));
+		edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,post_param('meta_keywords',''),post_param('meta_description',''));
 
 		if ((has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))) && (post_param_integer('rep_image',0)==1))
 		{
@@ -1258,7 +1258,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 	 * @param  ?integer			The height of the video (NULL: not yet added, so not yet known)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($title='',$cat='',$comments='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$video_length=NULL,$video_width=NULL,$video_height=NULL)
+	function get_form_fields($title='',$cat='',$description='',$url='',$thumb_url='',$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$video_length=NULL,$video_width=NULL,$video_height=NULL)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -1303,7 +1303,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
 			if (addon_installed('unvalidated'))
 				$validated_field=form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1);
-		$description_field=form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION_ACCESSIBILITY'),'comments',$comments,false);
+		$description_field=form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION_ACCESSIBILITY'),'description',$description,false);
 		if ($no_thumb_needed)
 		{
 			$fields->attach($description_field);
@@ -1383,7 +1383,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-		$comments=get_translated_text($myrow['comments']);
+		$description=get_translated_text($myrow['description']);
 		$url=$myrow['url'];
 		$cat=$myrow['cat'];
 		$validated=$myrow['validated'];
@@ -1396,7 +1396,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
 		} else $delete_fields=new ocp_tempcode();
 
-		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$comments,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height']);
+		list($fields,$hidden)=$this->get_form_fields(get_translated_text($myrow['title']),$cat,$description,$url,$myrow['thumb_url'],$validated,$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['video_length'],$myrow['video_width'],$myrow['video_height']);
 
 		return array($fields,$hidden,$delete_fields,'',true);
 	}
@@ -1436,11 +1436,11 @@ class Module_cms_galleries_alt extends standard_crud_module
 		if ((substr($urls[0],0,8)!='uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 
-		$comments=post_param('comments');
+		$description=post_param('description');
 
 		$this->donext_type=$cat;
 
-		$id=add_video($title,$cat,$comments,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height);
+		$id=add_video($title,$cat,$description,$urls[0],$urls[1],$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height);
 
 		if ($validated==1)
 		{
@@ -1497,7 +1497,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
 		}
 
-		$comments=post_param('comments');
+		$description=post_param('description');
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
 		$notes=post_param('notes','');
@@ -1514,7 +1514,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 				syndicate_described_activity(($submitter!=get_member())?'galleries:ACTIVITY_VALIDATE_VIDEO':'galleries:ACTIVITY_ADD_VIDEO',($title=='')?basename($urls[0]):$title,'','','_SEARCH:galleries:video:'.strval($id),'','','galleries',1,$submitter);
 		}
 
-		edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,post_param('meta_keywords',''),post_param('meta_description',''));
+		edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,post_param('meta_keywords',''),post_param('meta_description',''));
 	}
 
 	/**
@@ -1792,11 +1792,10 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$g_owner_name=post_param('g_owner',NULL);
-		if(is_null($g_owner_name))
+		if (is_null($g_owner_name))
 			$g_owner=$GLOBALS['SITE_DB']->query_select_value('galleries','g_owner',array('name'=>$name));
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
-
 
 		edit_gallery($id,$name,post_param('fullname'),post_param('description',STRING_MAGIC_NULL),post_param('teaser',STRING_MAGIC_NULL),post_param('notes',STRING_MAGIC_NULL),$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$allow_rating,$allow_comments,$g_owner);
 

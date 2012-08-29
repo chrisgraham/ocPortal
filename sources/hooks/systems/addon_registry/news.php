@@ -70,6 +70,7 @@ class Hook_addon_registry_news
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/awards/news_category.php',
 			'sources/hooks/systems/notifications/news_entry.php',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/blog.php',
 			'sources/hooks/systems/realtime_rain/news.php',
@@ -278,6 +279,7 @@ class Hook_addon_registry_news
 				'FIRSTMEMBERID'=>lorem_word(),
 				'LASTMEMBERID'=>lorem_word(),
 				'DATE_RAW'=>lorem_word(),
+				'GIVE_CONTEXT'=>false,
 				'TAGS'=>''
 			)));
 		}
@@ -328,9 +330,9 @@ class Hook_addon_registry_news
 		$content=do_lorem_template('NEWS_BRIEF', array(
 			'DATE'=>placeholder_time(),
 			'URL'=>placeholder_url(),
-			'TITLE_PLAIN'=>lorem_word(),
+			'NEWS_TITLE_PLAIN'=>lorem_word(),
 			'ID'=>placeholder_id(),
-			'TITLE'=>lorem_word()
+			'NEWS_TITLE'=>lorem_word()
 		));
 
 		return array(

@@ -61,16 +61,15 @@ class Hook_awards_post
 	 *
 	 * @param  array		The database row for the content
 	 * @param  ID_TEXT	The zone to display in
+	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
+	 * @param  boolean	Whether to include breadcrumbs (if there are any)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone)
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true)
 	{
-		unset($zone);
-
 		require_code('ocf_posts2');
-		require_code('ocf_forums');
 
-		return render_post_box($row);
+		return render_post_box($row,false,$give_context,$include_breadcrumbs);
 	}
 
 }

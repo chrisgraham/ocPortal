@@ -1093,8 +1093,6 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 
 	$out=new ocp_tempcode();
 	$i=0;
-	global $CATALOGUE_ENTRIES_BUILDUP;
-	$CATALOGUE_ENTRIES_BUILDUP=array();
 	$tabular_results=array();
 	foreach ($results as $result)
 	{
@@ -1162,16 +1160,6 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 
 		// Output
 		$out->attach(do_template('SEARCH_RESULT_TABLE',array('_GUID'=>'816ec14dc0df432ca6e1e1014ef1f3d1','HEADERS'=>$ultimate_field_map,'ROWS'=>$types_results)));
-	}
-	if (count($CATALOGUE_ENTRIES_BUILDUP)!=0)
-	{
-		global $SEARCH_CATALOGUE_ENTRIES_CATALOGUES;
-		foreach ($CATALOGUE_ENTRIES_BUILDUP as $catalogue_name=>$catalogue_entries)
-		{
-			$tpl_set=$catalogue_name;
-			$buildup=get_catalogue_category_entry_buildup(NULL,$catalogue_name,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name],'SEARCH',$tpl_set,NULL,NULL,NULL,NULL,NULL,false,$catalogue_entries);
-			$out->attach(do_template('SEARCH_RESULT_CATALOGUE_ENTRIES',array('_GUID'=>'dd0045ac291275b2d822d40b28182a28','BUILDUP'=>$buildup[0],'NAME'=>$catalogue_name,'TITLE'=>get_translated_text($SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name]['c_title']))));
-		}
 	}
 
 	set_extra_request_metadata(array(

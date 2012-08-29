@@ -41,15 +41,24 @@ function init__ocf_groups()
  *
  * @param  array				Usergroup row
  * @param  ID_TEXT			Zone to link through to
+ * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @return tempcode			The usergroup box
  */
-function render_group_box($row,$zone='_SEARCH')
+function render_group_box($row,$zone='_SEARCH',$give_context=true)
 {
 	require_code('ocf_groups');
 
 	$url=build_url(array('page'=>'groups','type'=>'view','id'=>$row['id']),get_module_zone('groups'));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>ocf_get_group_name($row['id']),'SUMMARY'=>get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']),'URL'=>$url));
+	$_title=ocf_get_group_name($row['id']);
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('_USERGROUP'),$_title):$_title;
+
+	$summary=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+
+	$num_members=ocf_get_group_members_raw_count($row['id']);
+	$entry_details=do_lang_tempcode('GROUP_NUM_MEMBERS',escape_html(integer_format($num_members)));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

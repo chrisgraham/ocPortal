@@ -27,19 +27,24 @@ The concept of a chain is crucial to proper understanding of the Wiki+ system. P
  *
  * @param  array			The database field row of it
  * @param  ID_TEXT		The zone to use
- * @param  boolean		Whether to put it in a box
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_wiki_post_box($row,$zone='_SEARCH',$put_in_box=true)
+function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
 {
 	$url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($row['page_id']==db_get_first_id())?NULL:$row['page_id']),$zone);
 	$url->attach('#post_'.strval($row['id']));
 
 	$breadcrumbs=mixed();
-	$title=mixed();
-	if ($put_in_box)
+	if ($include_breadcrumbs)
 	{
 		$breadcrumbs=wiki_breadcrumbs(strval($row['page_id']),NULL,true);
+	}
+
+	$title=mixed();
+	if ($give_context)
+	{
 		$title=do_lang_tempcode('WIKI_POST');
 	}
 
@@ -51,20 +56,22 @@ function render_wiki_post_box($row,$zone='_SEARCH',$put_in_box=true)
  *
  * @param  array			The database field row of it
  * @param  ID_TEXT		The zone to use
- * @param  boolean		Whether to put it in a box with a title
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_wiki_page_box($row,$zone='_SEARCH',$put_in_box=true)
+function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
 {
-	$content=paragraph(get_translated_tempcode($row['description']),'tyrtfjhggfdf');
+	$content=get_translated_tempcode($row['description']);
+
 	$url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']),$zone);
 
-	$breadcrumbs=mixed();
-	$title=mixed();
-	if ($put_in_box)
-	{
-		$title=do_lang_tempcode('WIKI_PAGE',escape_html(get_translated_text($row['title'])));
+	$_title=escape_html(get_translated_text($row['title']));
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('WIKI_PAGE'),$_title):$_title;
 
+	$breadcrumbs=mixed();
+	if ($include_breadcrumbs)
+	{
 		$chain=wiki_derive_chain($row['id']);
 		$chain=preg_replace('#/[^/]+#','',$chain);
 		if ($chain!='')

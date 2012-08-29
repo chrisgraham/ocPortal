@@ -94,8 +94,6 @@ class Hook_addon_registry_catalogues
 			'sources/hooks/systems/content_meta_aware/catalogue_category.php',
 			'sources/hooks/systems/content_meta_aware/catalogue_entry.php',
 			'sources/hooks/systems/addon_registry/catalogues.php',
-			'CATALOGUE_DEFAULT_SUBCATEGORY.tpl',
-			'CATALOGUE_DEFAULT_SUBCATEGORY_WRAP.tpl',
 			'CATALOGUE_ADDING_SCREEN.tpl',
 			'CATALOGUE_EDITING_SCREEN.tpl',
 			'CATALOGUE_CATEGORIES_LIST_LINE.tpl',
@@ -172,8 +170,6 @@ class Hook_addon_registry_catalogues
 
 			'CATALOGUE_CATEGORY_HEADING.tpl'=>'fieldmap_category_screen',
 			'CATALOGUE_DEFAULT_CATEGORY_SCREEN.tpl'=>'fieldmap_category_screen',
-			'CATALOGUE_DEFAULT_SUBCATEGORY.tpl'=>'fieldmap_category_screen',
-			'CATALOGUE_DEFAULT_SUBCATEGORY_WRAP.tpl'=>'fieldmap_category_screen',
 
 			'CATALOGUE_DEFAULT_TABULAR_WRAP.tpl'=>'tabular_category_screen',
 			'CATALOGUE_DEFAULT_TABULAR_HEADCELL.tpl'=>'tabular_category_screen',
@@ -207,24 +203,12 @@ class Hook_addon_registry_catalogues
 	 */
 	function tpl_preview__grid_category_screen()
 	{
-		$subcategory=new ocp_tempcode();
-		foreach (placeholder_array(3) as $k=>$v)
-		{
-			$subcategory->attach(do_lorem_template('CATALOGUE_DEFAULT_SUBCATEGORY', array(
-				'ID'=>placeholder_id(),
-				'CATALOGUE'=>lorem_word_2(),
-				'URL'=>placeholder_url(),
-				'NUM_CHILDREN'=>'3',
-				'NUM_ENTRIES'=>'2',
-				'NUM_CHILDREN_RECURSIVE'=>'3',
-				'NUM_ENTRIES_DIRECT'=>'2',
-				'NAME'=>lorem_word()
-			)));
-		}
-		$subcategories=do_lorem_template('CATALOGUE_DEFAULT_SUBCATEGORY_WRAP', array(
-			'CATALOGUE'=>lorem_word(),
-			'CONTENT'=>$subcategory
-		));
+		$subcategories=new ocp_tempcode();
+		$subcategories->attach(do_lorem_template('SIMPLE_PREVIEW_BOX', array(
+			'TITLE'=>lorem_phrase(),
+			'SUMMARY'=>lorem_paragraph_html(),
+			'URL'=>placeholder_url(),
+		)));
 		$tags=do_lorem_template('TAGS', array(
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
@@ -261,8 +245,6 @@ class Hook_addon_registry_catalogues
 				'_TITLE'=>lorem_phrase(),
 				'TAGS'=>$tags,
 				'CATALOGUE'=>lorem_word_2(),
-				'PAGINATION'=>'',
-				'SORTING'=>'',
 				'ADD_ENTRY_URL'=>placeholder_url(),
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),
@@ -286,24 +268,7 @@ class Hook_addon_registry_catalogues
 	 */
 	function tpl_preview__fieldmap_category_screen()
 	{
-		$subcategory=new ocp_tempcode();
-		foreach (placeholder_array(3) as $k=>$v)
-		{
-			$subcategory->attach(do_lorem_template('CATALOGUE_DEFAULT_SUBCATEGORY', array(
-				'ID'=>placeholder_id(),
-				'CATALOGUE'=>lorem_word_2(),
-				'URL'=>placeholder_url(),
-				'NUM_CHILDREN'=>'3',
-				'NUM_ENTRIES'=>'2',
-				'NUM_CHILDREN_RECURSIVE'=>'3',
-				'NUM_ENTRIES_DIRECT'=>'2',
-				'NAME'=>lorem_word()
-			)));
-		}
-		$subcategories=do_lorem_template('CATALOGUE_DEFAULT_SUBCATEGORY_WRAP', array(
-			'CATALOGUE'=>lorem_word(),
-			'CONTENT'=>$subcategory
-		));
+		$subcategories=new ocp_tempcode();
 		$tags=do_lorem_template('TAGS', array(
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
@@ -349,8 +314,6 @@ class Hook_addon_registry_catalogues
 				'_TITLE'=>lorem_phrase(),
 				'TAGS'=>$tags,
 				'CATALOGUE'=>lorem_word_2(),
-				'PAGINATION'=>'',
-				'SORTING'=>'',
 				'ADD_ENTRY_URL'=>placeholder_url(),
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),
@@ -404,8 +367,6 @@ class Hook_addon_registry_catalogues
 				'_TITLE'=>lorem_phrase(),
 				'TAGS'=>$tags,
 				'CATALOGUE'=>lorem_word_2(),
-				'PAGINATION'=>'',
-				'SORTING'=>'',
 				'ADD_ENTRY_URL'=>placeholder_url(),
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),
@@ -429,31 +390,13 @@ class Hook_addon_registry_catalogues
 	 */
 	function tpl_preview__tabular_category_screen__links()
 	{
-		$subcategory=new ocp_tempcode();
-		foreach (placeholder_array(3) as $k=>$v)
-		{
-			$subcategory->attach(do_lorem_template('CATALOGUE_DEFAULT_SUBCATEGORY', array(
-				'ID'=>placeholder_id(),
-				'CATALOGUE'=>lorem_word_2(),
-				'URL'=>placeholder_url(),
-				'NUM_CHILDREN'=>'3',
-				'NUM_ENTRIES'=>'2',
-				'NUM_CHILDREN_RECURSIVE'=>'3',
-				'NUM_ENTRIES_DIRECT'=>'2',
-				'NAME'=>lorem_word()
-			)));
-		}
-		$subcategories=do_lorem_template('CATALOGUE_DEFAULT_SUBCATEGORY_WRAP', array(
-			'CATALOGUE'=>lorem_word(),
-			'CONTENT'=>$subcategory
-		));
+		$subcategories=new ocp_tempcode();
 		$tags=do_lorem_template('TAGS', array(
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
 			'TAG'=>lorem_word()
 		));
-
 
 		$row=new ocp_tempcode();
 		$entry_fields=new ocp_tempcode();
@@ -497,8 +440,6 @@ class Hook_addon_registry_catalogues
 				'_TITLE'=>lorem_phrase(),
 				'TAGS'=>$tags,
 				'CATALOGUE'=>lorem_word_2(),
-				'PAGINATION'=>'',
-				'SORTING'=>'',
 				'ADD_ENTRY_URL'=>placeholder_url(),
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),
@@ -522,24 +463,7 @@ class Hook_addon_registry_catalogues
 	 */
 	function tpl_preview__tabular_category_screen()
 	{
-		$subcategory=new ocp_tempcode();
-		foreach (placeholder_array(3) as $k=>$v)
-		{
-			$subcategory->attach(do_lorem_template('CATALOGUE_DEFAULT_SUBCATEGORY', array(
-				'ID'=>placeholder_id(),
-				'CATALOGUE'=>lorem_word_2(),
-				'URL'=>placeholder_url(),
-				'NUM_CHILDREN'=>'3',
-				'NUM_ENTRIES'=>'2',
-				'NUM_CHILDREN_RECURSIVE'=>'3',
-				'NUM_ENTRIES_DIRECT'=>'2',
-				'NAME'=>lorem_word()
-			)));
-		}
-		$subcategories=do_lorem_template('CATALOGUE_DEFAULT_SUBCATEGORY_WRAP', array(
-			'CATALOGUE'=>lorem_word(),
-			'CONTENT'=>$subcategory
-		));
+		$subcategories=new ocp_tempcode();
 		$tags=do_lorem_template('TAGS', array(
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
@@ -584,8 +508,6 @@ class Hook_addon_registry_catalogues
 				'_TITLE'=>lorem_phrase(),
 				'TAGS'=>$tags,
 				'CATALOGUE'=>lorem_word_2(),
-				'PAGINATION'=>'',
-				'SORTING'=>'',
 				'ADD_ENTRY_URL'=>placeholder_url(),
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),

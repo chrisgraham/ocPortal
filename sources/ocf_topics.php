@@ -21,15 +21,32 @@
 /**
  * Render a topic box.
  *
- * @param  array				Topic row
- * @param  ID_TEXT			Zone to link through to
- * @return tempcode			The topic box
+ * @param  array			Topic row
+ * @param  ID_TEXT		Zone to link through to
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @return tempcode		The topic box
  */
-function render_topic_box($row,$zone='_SEARCH')
+function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
 {
 	$url=build_url(array('page'=>'topicview','id'=>$row['id']),get_module_zone('topicview'));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['t_cache_first_title'],'SUMMARY'=>$row['t_description'],'URL'=>$url));
+	require_lang('ocf');
+
+	$_title=$row['t_cache_first_title'];
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('FORUM_TOPIC'),$_title):$_title;
+
+	$breadcrumbs=mixed();
+	if ($include_breadcrumbs)
+	{
+		require_code('ocf_forums');
+		$breadcrumbs=ocf_forum_breadcrumbs($row['t_forum_id'],NULL,NULL,false);
+	}
+
+	$num_posts=$row['t_cache_num_posts'];
+	$entry_details=do_lang_tempcode('FORUM_NUM_POSTS',escape_html(integer_format($num_posts)));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>$row['t_description'],'URL'=>$url,'ENTRY_DETAILS'=>$entry_details,'BREADCRUMBS'=>$breadcrumbs));
 }
 
 /**

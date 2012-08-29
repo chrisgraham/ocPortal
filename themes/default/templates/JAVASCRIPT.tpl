@@ -2892,5 +2892,5 @@ function set_up_change_monitor(id)
 
 {+START,INCLUDE,JAVASCRIPT_MODALWINDOW}{+END}
 
-/* Put your extra custom code in an overrided version of the template below + it will take function precedence also */
+/* Put your extra custom code in an overridden version of the template below + it will take function precedence also */
 {+START,INCLUDE,JAVASCRIPT_CUSTOM_GLOBALS}{+END}

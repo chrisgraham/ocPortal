@@ -544,7 +544,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 				$award_content_row=content_get_row($content_id,$award_ob->info());
 				if (!is_null($award_content_row))
 				{
-					$rendered_award=preg_replace('#&amp;keep_\w+=[^&]*#','',static_evaluate_tempcode($award_ob->run($award_content_row,'_SEARCH')));
+					$rendered_award=preg_replace('#&amp;keep_\w+=[^&]*#','',static_evaluate_tempcode($award_ob->run($award_content_row,'_SEARCH',true,true)));
 				}
 			}
 			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(comcode_escape(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),$rendered_award,comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));

@@ -1,12 +1,33 @@
-{+START,SET,PREVIEW_CONTENTS}
+<section class="box box___simple_preview_box"><div class="box_inner">
+	{+START,IF_PASSED,TITLE}
+		<h3>{TITLE*}</h3>
+	{+END}
+
+	{+START,IF_PASSED,REP_IMAGE}
+		<div class="right float_separation"><a href="{URL*}">{REP_IMAGE}</a></div>
+	{+END}
+
 	{+START,IF_NON_EMPTY,{SUMMARY}}
 		<div class="float_surrounder">
-			{SUMMARY`}
+			{$PARAGRAPH,{SUMMARY}}
 		</div>
 	{+END}
 	{+START,IF_EMPTY,{SUMMARY}}
 		<p>
 			{!NO_SUMMARY}
+		</p>
+	{+END}
+
+	{+START,IF_PASSED,ENTRY_DETAILS}
+		<p class="associated_details">
+			{$,Displays summary of gallery contents}
+			({ENTRY_DETAILS})
+		</p>
+	{+END}
+	{+START,IF_PASSED,ENTRY_DETAILS_PREBRACKETED}
+		<p class="associated_details">
+			{$,Displays summary of gallery contents}
+			{ENTRY_DETAILS}
 		</p>
 	{+END}
 
@@ -21,12 +42,4 @@
 			<a href="{URL*}"><img class="button_pageitem" alt="{!VIEW}" title="{!VIEW}" src="{$IMG*,pageitem/goto}" /></a>
 		</p>
 	{+END}
-{+END}
-
-<section class="box box___simple_preview_box"><div class="box_inner">
-	{+START,IF_PASSED,TITLE}
-		<h3>{TITLE*}</h3>
-	{+END}
-
-	{$GET,PREVIEW_CONTENTS}
 </div></section>

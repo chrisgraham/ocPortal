@@ -448,7 +448,7 @@ class Module_cms_downloads extends standard_crud_module
 	 * @param  URLPATH			The URL for the downloadable file
 	 * @param  SHORT_TEXT		The name of the author
 	 * @param  LONG_TEXT			Description for the download
-	 * @param  LONG_TEXT			Additional comments for the download
+	 * @param  LONG_TEXT			Supplementary description for the download
 	 * @param  ?AUTO_LINK		The ID of the download this download is out-moding (NULL: none)
 	 * @param  BINARY				Whether the download is validated
 	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
@@ -463,7 +463,7 @@ class Module_cms_downloads extends standard_crud_module
 	 * @param  integer			Which image to use for the downloads representative image (counts from 1)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($id=NULL,$name='',$category_id=NULL,$url='',$author='',$description='',$comments='',$out_mode_id=NULL,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$file_size=NULL,$cost=0,$submitter_gets_points=1,$original_filename=NULL,$licence=NULL,$default_pic=1)
+	function get_form_fields($id=NULL,$name='',$category_id=NULL,$url='',$author='',$description='',$additional_details='',$out_mode_id=NULL,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$file_size=NULL,$cost=0,$submitter_gets_points=1,$original_filename=NULL,$licence=NULL,$default_pic=1)
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
@@ -475,7 +475,7 @@ class Module_cms_downloads extends standard_crud_module
 			inform_non_canonical_parameter('name');
 			inform_non_canonical_parameter('author');
 			inform_non_canonical_parameter('description');
-			inform_non_canonical_parameter('comments');
+			inform_non_canonical_parameter('additional_details');
 			inform_non_canonical_parameter('notes');
 
 			$category_id=get_param_integer('cat',-1);
@@ -484,7 +484,7 @@ class Module_cms_downloads extends standard_crud_module
 			$name=get_param('name',$name);
 			$author=get_param('author',$author);
 			$description=get_param('description',$description);
-			$comments=get_param('comments',$comments);
+			$additional_details=get_param('additional_details',$additional_details);
 			$notes=get_param('notes',$notes);
 		}
 
@@ -536,8 +536,8 @@ class Module_cms_downloads extends standard_crud_module
 			if (addon_installed('unvalidated'))
 				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$comments=='' && is_null($out_mode_id) && ($cost==0) && is_null($licence),'TITLE'=>do_lang_tempcode('ADVANCED'))));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('ADDITIONAL_INFO'),do_lang_tempcode('DESCRIPTION_ADDITIONAL_INFO'),'comments',$comments,false));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$additional_details=='' && is_null($out_mode_id) && ($cost==0) && is_null($licence),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('ADDITIONAL_INFO'),do_lang_tempcode('DESCRIPTION_ADDITIONAL_INFO'),'additional_details',$additional_details,false));
 		if (!is_null($id))
 			$fields->attach(form_input_integer(do_lang_tempcode('DEFAULT_PICTURE'),do_lang_tempcode('DESCRIPTION_DEFAULT_PICTURE'),'default_pic',$default_pic,false));
 		if (!is_null($id)) $fields->attach(form_input_tree_list(do_lang_tempcode('OUTMODE'),do_lang_tempcode('DESCRIPTION_OUTMODE'),'out_mode_id',NULL,'choose_download',array('shun'=>$id),false,is_null($out_mode_id)?'':strval($out_mode_id)));
@@ -608,7 +608,7 @@ class Module_cms_downloads extends standard_crud_module
 
 		$cat=$myrow['category_id'];
 
-		list($fields,$hidden)=$this->get_form_fields($id,get_translated_text($myrow['name']),$cat,$myrow['url'],$myrow['author'],get_translated_text($myrow['description']),get_translated_text($myrow['comments']),$myrow['out_mode_id'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['file_size'],$myrow['download_cost'],$myrow['download_submitter_gets_points'],$myrow['original_filename'],$myrow['download_licence'],$myrow['default_pic']);
+		list($fields,$hidden)=$this->get_form_fields($id,get_translated_text($myrow['name']),$cat,$myrow['url'],$myrow['author'],get_translated_text($myrow['description']),get_translated_text($myrow['additional_details']),$myrow['out_mode_id'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['file_size'],$myrow['download_cost'],$myrow['download_submitter_gets_points'],$myrow['original_filename'],$myrow['download_licence'],$myrow['default_pic']);
 
 		if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_downloads',array('downloads',$cat)))
 		{
@@ -639,7 +639,7 @@ class Module_cms_downloads extends standard_crud_module
 		$licence=($_licence=='')?-1:intval($_licence);
 		if ($licence==-1) $licence=NULL;
 		$validated=post_param_integer('validated',0);
-		$comments=post_param('comments');
+		$additional_details=post_param('additional_details');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
@@ -660,7 +660,7 @@ class Module_cms_downloads extends standard_crud_module
 		if ((substr($urls[0],0,8)!='uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 
-		$id=add_download($category_id,$name,fixup_protocolless_urls($urls[0]),$description,$author,$comments,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence);
+		$id=add_download($category_id,$name,fixup_protocolless_urls($urls[0]),$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence);
 		if (addon_installed('galleries'))
 		{
 			require_code('permissions2');
@@ -722,7 +722,7 @@ class Module_cms_downloads extends standard_crud_module
 
 		$description=post_param('description',STRING_MAGIC_NULL);
 		$author=post_param('author',STRING_MAGIC_NULL);
-		$comments=post_param('comments',STRING_MAGIC_NULL);
+		$additional_details=post_param('additional_details',STRING_MAGIC_NULL);
 		$default_pic=post_param_integer('default_pic',INTEGER_MAGIC_NULL);
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
@@ -747,7 +747,7 @@ class Module_cms_downloads extends standard_crud_module
 				syndicate_described_activity(($submitter!=get_member())?'downloads:ACTIVITY_VALIDATE_DOWNLOAD':'downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads',1,$submitter);
 		}
 
-		edit_download($id,$category_id,$name,$url,$description,$author,$comments,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
+		edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
 
 		if (addon_installed('galleries'))
 		{

@@ -184,6 +184,7 @@ class Hook_addon_registry_core_comcode_pages
 	{
 		return array(
 			lorem_globalise(do_lorem_template('COMCODE_PAGE_BOX', array(
+				'GIVE_CONTEXT'=>true,
 				'PAGE'=>lorem_phrase(),
 				'ZONE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),

@@ -186,7 +186,7 @@ class Module_iotds
 	{
 		$title=get_screen_title('IOTD_ARCHIVE');
 
-		$content=do_block('main_multi_content',array('param'=>'iotd','efficient'=>'1','zone'=>'_SEARCH','mode'=>'recent','max'=>'10','no_links'=>'1','pagination'=>'1'));
+		$content=do_block('main_multi_content',array('param'=>'iotd','efficient'=>'0','zone'=>'_SELF','mode'=>'recent','max'=>'10','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0'));
 
 		return do_template('PAGINATION_SCREEN',array('_GUID'=>'d8a493c2b007d98074f104ea433c8091','TITLE'=>$title,'CONTENT'=>$content));
 	}

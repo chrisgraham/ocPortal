@@ -5,9 +5,9 @@
 		<a rel="lightbox" href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
 	</div>
 
-	{+START,IF_NON_EMPTY,{COMMENT}}
+	{+START,IF_NON_EMPTY,{DESCRIPTION}}
 		<figcaption class="associated_details">
-			{COMMENT}
+			{DESCRIPTION}
 		</figcaption>
 	{+END}
 

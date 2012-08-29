@@ -19,7 +19,7 @@ foreach ($all_rows as $d_row)
 		if (array_key_exists(0,$i_rows))
 		{
 			$thumb_url=ensure_thumbnail($i_rows[0]['url'],$i_rows[0]['thumb_url'],'galleries','images',$i_rows[0]['id']);
-			$subdownloads->attach(hyperlink($d_url,do_image_thumb($thumb_url,render_download_box($d_row,false))));
+			$subdownloads->attach(hyperlink($d_url,do_image_thumb($thumb_url,render_download_box($d_row,false,false/*breadcrumbs?*/,$zone,NULL,false/*context?*/))));
 		}
 	}
 }

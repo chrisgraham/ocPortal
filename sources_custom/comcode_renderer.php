@@ -25,7 +25,7 @@ if (!function_exists('init__comcode_renderer'))
 				\$urls_gal=get_url('','file'.\$_id,'uploads/galleries',0,OCP_UPLOAD_ANYTHING,true,'','',true,true,true);
 				require_code('galleries2');
 
-				\$comments=post_param('caption'.\$_id,array_key_exists('description',\$attributes)?\$attributes['description']:'');
+				\$description=post_param('caption'.\$_id,array_key_exists('description',\$attributes)?\$attributes['description']:'');
 
 				if (is_video(\$urls_gal[0]))
 				{
@@ -46,12 +46,12 @@ if (!function_exists('init__comcode_renderer'))
 					if (is_null(\$video_width)) \$video_width=300;
 					if (is_null(\$video_height)) \$video_height=200;
 
-					add_video('',\$gallery,\$comments,\$urls_gal[0],\$urls_gal[1],1,1,1,1,'',\$video_length,\$video_width,\$video_height);
+					add_video('',\$gallery,\$description,\$urls_gal[0],\$urls_gal[1],1,1,1,1,'',\$video_length,\$video_width,\$video_height);
 				}
 
 				if (is_image(\$urls_gal[0]))
 				{
-					add_image('',\$gallery,\$comments,\$urls_gal[0],\$urls_gal[1],1,1,1,1,'');
+					add_image('',\$gallery,\$description,\$urls_gal[0],\$urls_gal[1],1,1,1,1,'');
 				}
 			}
 		";

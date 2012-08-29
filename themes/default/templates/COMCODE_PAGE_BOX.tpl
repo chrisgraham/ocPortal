@@ -23,7 +23,15 @@
 
 {+START,IF_PASSED,TITLE}
 	<section class="box box___comcode_page_box"><div class="box_inner">
-		<h3>{TITLE*}</h3>
+		<h3>
+			{+START,IF,{GIVE_CONTEXT}}
+				{!CONTENT_IS_OF_TYPE,{!PAGE},{TITLE*}}
+			{+END}
+
+			{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+				{TITLE*}
+			{+END}
+		</h3>
 
 		{$GET,PREVIEW_CONTENTS}
 	</div></section>

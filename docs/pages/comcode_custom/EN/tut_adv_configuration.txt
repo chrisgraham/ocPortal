@@ -55,7 +55,7 @@ ocPortal has two main types of permission:
 1) privileges
 2) access permissions (for defining what may be viewed)
 
-ocPortal uses a "best of" permission system, meaning that a member has the best possible access that the combination of all usergroups that they are in could give them. The one exception to this is when permissions are overridden for a page/catalogue/category the user will be limited by the override even if only a subset of their usergroup set is overrided at that level.
+ocPortal uses a "best of" permission system, meaning that a member has the best possible access that the combination of all usergroups that they are in could give them. The one exception to this is when permissions are overridden for a page/catalogue/category the user will be limited by the override even if only a subset of their usergroup set is overridden at that level.
 
 [title="3"]Privileges[/title]
 

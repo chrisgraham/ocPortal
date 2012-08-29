@@ -365,7 +365,7 @@ function _get_mov_details_do_atom_list($file,$atom_size=NULL)
  *
  * @param  SHORT_TEXT	Image title
  * @param  ID_TEXT		The gallery name
- * @param  LONG_TEXT		The image comments
+ * @param  LONG_TEXT		The image description
  * @param  URLPATH		The URL to the actual image
  * @param  URLPATH		The URL to the thumbnail of the actual image
  * @param  BINARY			Whether the image has been validated for display on the site
@@ -380,20 +380,20 @@ function _get_mov_details_do_atom_list($file,$atom_size=NULL)
  * @param  ?AUTO_LINK	Force an ID (NULL: don't force an ID)
  * @return AUTO_LINK		The ID of the new entry
  */
-function add_image($title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL)
+function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL)
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('title'=>insert_lang_comcode($title,2),'edit_date'=>$edit_date,'image_views'=>$views,'add_date'=>$add_date,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'url'=>$url,'thumb_url'=>$thumb_url,'comments'=>insert_lang_comcode($comments,3),'cat'=>$cat,'validated'=>$validated);
+	$map=array('title'=>insert_lang_comcode($title,2),'edit_date'=>$edit_date,'image_views'=>$views,'add_date'=>$add_date,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'url'=>$url,'thumb_url'=>$thumb_url,'description'=>insert_lang_comcode($description,3),'cat'=>$cat,'validated'=>$validated);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('images',$map,true);
 
 	log_it('ADD_IMAGE',strval($id),$title);
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('image',strval($id),array($comments),$comments);
+	seo_meta_set_for_implicit('image',strval($id),array($description),$description);
 
 	if ($validated==1)
 	{
@@ -419,7 +419,7 @@ function add_image($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
  * @param  AUTO_LINK		The ID of the image to edit
  * @param  SHORT_TEXT	Image title
  * @param  ID_TEXT		The gallery name
- * @param  LONG_TEXT		The image comments
+ * @param  LONG_TEXT		The image description
  * @param  URLPATH		The URL to the actual image
  * @param  URLPATH		The URL to the thumbnail of the actual image
  * @param  BINARY			Whether the image has been validated for display on the site
@@ -430,12 +430,12 @@ function add_image($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
  * @param  SHORT_TEXT	Meta keywords
  * @param  LONG_TEXT		Meta description
  */
-function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description)
+function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description)
 {
 	require_code('urls2');
-	suggest_new_idmoniker_for('galleries','image',strval($id),($title=='')?$comments:$title);
+	suggest_new_idmoniker_for('galleries','image',strval($id),($title=='')?$description:$title);
 
-	$_comments=$GLOBALS['SITE_DB']->query_select_value('images','comments',array('id'=>$id));
+	$_description=$GLOBALS['SITE_DB']->query_select_value('images','description',array('id'=>$id));
 	$_title=$GLOBALS['SITE_DB']->query_select_value('images','title',array('id'=>$id));
 
 	decache('main_gallery_embed');
@@ -453,7 +453,7 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 		send_content_validated_notification('image',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('images',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'comments'=>lang_remap_comcode($_comments,$comments),'url'=>$url,'thumb_url'=>$thumb_url),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('images',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'description'=>lang_remap_comcode($_description,$description),'url'=>$url,'thumb_url'=>$thumb_url),array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'galleries','type'=>'image','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
 
@@ -486,13 +486,13 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
  */
 function delete_image($id,$delete_full)
 {
-	$rows=$GLOBALS['SITE_DB']->query_select('images',array('title','comments','cat'),array('id'=>$id));
+	$rows=$GLOBALS['SITE_DB']->query_select('images',array('title','description','cat'),array('id'=>$id));
 	$title=$rows[0]['title'];
-	$comments=$rows[0]['comments'];
+	$description=$rows[0]['description'];
 	$cat=$rows[0]['cat'];
 
 	log_it('DELETE_IMAGE',strval($id),get_translated_text($title));
-	delete_lang($comments);
+	delete_lang($description);
 	delete_lang($title);
 
 	// Delete file
@@ -633,7 +633,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
  *
  * @param  SHORT_TEXT	Video title
  * @param  ID_TEXT		The gallery name
- * @param  LONG_TEXT		The video comments
+ * @param  LONG_TEXT		The video description
  * @param  URLPATH		The URL to the actual video
  * @param  URLPATH		The URL to the thumbnail of the actual video
  * @param  BINARY			Whether the video has been validated for display on the site
@@ -651,7 +651,7 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
  * @param  ?AUTO_LINK	Force an ID (NULL: don't force an ID)
  * @return AUTO_LINK		The ID of the new entry
  */
-function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL)
+function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL)
 {
 	if (is_null($submitter)) $submitter=get_member();
 	if (is_null($add_date)) $add_date=time();
@@ -660,7 +660,7 @@ function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 	$url=transcode_video($url,'videos','url',NULL,'video_width','video_height');
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('title'=>insert_lang_comcode($title,2),'edit_date'=>$edit_date,'video_views'=>$views,'add_date'=>$add_date,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'url'=>$url,'thumb_url'=>$thumb_url,'comments'=>insert_lang_comcode($comments,3),'cat'=>$cat,'validated'=>$validated,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height);
+	$map=array('title'=>insert_lang_comcode($title,2),'edit_date'=>$edit_date,'video_views'=>$views,'add_date'=>$add_date,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'url'=>$url,'thumb_url'=>$thumb_url,'description'=>insert_lang_comcode($description,3),'cat'=>$cat,'validated'=>$validated,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('videos',$map,true);
 
@@ -677,7 +677,7 @@ function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 	}
 
 	require_code('seo2');
-	seo_meta_set_for_implicit('video',strval($id),array($comments),$comments);
+	seo_meta_set_for_implicit('video',strval($id),array($description),$description);
 
 	decache('side_root_galleries');
 	decache('main_gallery_embed');
@@ -691,7 +691,7 @@ function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
  * @param  AUTO_LINK		The ID of the entry to edit
  * @param  SHORT_TEXT	Video title
  * @param  ID_TEXT		The gallery name
- * @param  LONG_TEXT		The video comments
+ * @param  LONG_TEXT		The video description
  * @param  URLPATH		The URL to the actual video
  * @param  URLPATH		The URL to the thumbnail of the actual video
  * @param  BINARY			Whether the video has been validated for display on the site
@@ -705,13 +705,13 @@ function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
  * @param  SHORT_TEXT	Meta keywords
  * @param  LONG_TEXT		Meta description
  */
-function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description)
+function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description)
 {
 	require_code('urls2');
-	suggest_new_idmoniker_for('galleries','video',strval($id),($title=='')?$comments:$title);
+	suggest_new_idmoniker_for('galleries','video',strval($id),($title=='')?$description:$title);
 
 	$_title=$GLOBALS['SITE_DB']->query_select_value('videos','title',array('id'=>$id));
-	$_comments=$GLOBALS['SITE_DB']->query_select_value('videos','comments',array('id'=>$id));
+	$_description=$GLOBALS['SITE_DB']->query_select_value('videos','description',array('id'=>$id));
 
 	require_code('files2');
 	delete_upload('uploads/galleries','videos','url','id',$id,$url);
@@ -729,7 +729,7 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 		send_content_validated_notification('video',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('videos',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'comments'=>lang_remap_comcode($_comments,$comments),'url'=>$url,'thumb_url'=>$thumb_url,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('videos',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'description'=>lang_remap_comcode($_description,$description),'url'=>$url,'thumb_url'=>$thumb_url,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height),array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
 
@@ -762,14 +762,14 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
  */
 function delete_video($id,$delete_full)
 {
-	$rows=$GLOBALS['SITE_DB']->query_select('videos',array('title','comments','cat'),array('id'=>$id));
+	$rows=$GLOBALS['SITE_DB']->query_select('videos',array('title','description','cat'),array('id'=>$id));
 	$title=$rows[0]['title'];
-	$comments=$rows[0]['comments'];
+	$description=$rows[0]['description'];
 	$cat=$rows[0]['cat'];
 
 	log_it('DELETE_VIDEO',strval($id),get_translated_text($title));
 	delete_lang($title);
-	delete_lang($comments);
+	delete_lang($description);
 
 	if ($delete_full)
 	{
@@ -1017,10 +1017,21 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
-	$map=array('name'=>$name,'notes'=>$notes,'fullname'=>lang_remap($myrow['fullname'],$fullname),
-					'description'=>lang_remap_comcode($myrow['description'],$description),'teaser'=>lang_remap_comcode($myrow['teaser'],$teaser),'parent_id'=>$parent_id,'accept_images'=>$accept_images,
-					'accept_videos'=>$accept_videos,'is_member_synched'=>$is_member_synched,'flow_mode_interface'=>$flow_mode_interface,
-					'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'g_owner'=>$g_owner);
+	$map=array(
+		'name'=>$name,
+		'notes'=>$notes,
+		'fullname'=>lang_remap($myrow['fullname'],$fullname),
+		'description'=>lang_remap_comcode($myrow['description'],$description),
+		'teaser'=>lang_remap_comcode($myrow['teaser'],$teaser),
+		'parent_id'=>$parent_id,
+		'accept_images'=>$accept_images,
+		'accept_videos'=>$accept_videos,
+		'is_member_synched'=>$is_member_synched,
+		'flow_mode_interface'=>$flow_mode_interface,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'g_owner'=>$g_owner,
+	);
 
 	require_code('files2');
 

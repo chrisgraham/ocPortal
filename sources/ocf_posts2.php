@@ -21,14 +21,17 @@
 /**
  * Show a post, isolated of the other posts in it's topic.
  *
- * @param  array		The post row.
- * @param  boolean	Whether to use the post title, as opposed to the post's topic's title.
- * @param  boolean	Whether to embed a link to the topic.
- * @return tempcode  The isolated post.
+ * @param  array			The post row.
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content). Also uses the post title, as opposed to the post's topic's title.
+ * @param  boolean		Whether to embed a link to the topic.
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @return tempcode  	The isolated post.
  */
-function render_post_box($row,$use_post_title=false,$encapsulate_with_link=true)
+function render_post_box($row,$use_post_title=false,$give_context=true,$include_breadcrumbs=true)
 {
 	require_code('ocf_groups');
+	require_code('ocf_forums');
+
 	require_css('ocf');
 
 	// Poster title
@@ -80,13 +83,12 @@ function render_post_box($row,$use_post_title=false,$encapsulate_with_link=true)
 	if ((!is_guest($row['p_poster'])) && (!is_null($primary_group)))
 	{
 		require_code('ocf_members2');
-		$poster_details=render_member_box($row['p_poster'],false,NULL,NULL,false);
+		$poster_details=render_member_box($row['p_poster'],false,NULL,NULL,false,NULL,false);
 	} else
 	{
 		$custom_fields=new ocp_tempcode();
 		$poster_details=new ocp_tempcode();
 	}
-
 	if ((!is_guest($row['p_poster'])) && (!is_null($primary_group)))
 	{
 		$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>member_is_online($row['p_poster']),'ID'=>strval($row['p_poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($row['p_poster'],false,true),'POSTER_USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['p_poster']),'HIGHLIGHT_NAME'=>NULL));
@@ -102,9 +104,15 @@ function render_post_box($row,$use_post_title=false,$encapsulate_with_link=true)
 	} else $last_edited=new ocp_tempcode();
 	$last_edited_raw=is_null($row['p_last_edit_time'])?'':strval($row['p_last_edit_time']);
 
+	// Breadcrumbs
+	$breadcrumbs=mixed();
+	if ($include_breadcrumbs)
+	{
+		$breadcrumbs=ocf_forum_breadcrumbs($row['p_cache_forum_id']);
+	}
+
 	// Misc stuff
 	$poster_id=$row['p_poster'];
-	$breadcrumbs=ocf_forum_breadcrumbs($row['p_cache_forum_id']);
 	$post_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$row['id']),get_module_zone('topicview'));
 	$post_url->attach('#post_'.strval($row['id']));
 	if ((get_page_name()!='search') && (array_key_exists('text_parsed',$row)) && (!is_null($row['text_parsed'])) && ($row['text_parsed']!='') && ($row['p_post']!=0))
@@ -127,6 +135,7 @@ function render_post_box($row,$use_post_title=false,$encapsulate_with_link=true)
 		if ($row['p_title']!=$post_title) $post_title.=': '.$row['p_title'];
 	}
 
+	// Emphasis? PP to?
 	$emphasis=new ocp_tempcode();
 	if ($row['p_is_emphasised']==1)
 	{
@@ -139,48 +148,49 @@ function render_post_box($row,$use_post_title=false,$encapsulate_with_link=true)
 		$emphasis=do_lang('PP_TO',$pp_to_username);
 	}
 
+	// Feedback
 	require_code('feedback');
 	actualise_rating(true,'post',strval($row['id']),get_self_url(),$row['p_title']);
 	$rating=display_rating(get_self_url(),$row['p_title'],'post',strval($row['id']),'RATING_INLINE_DYNAMIC',$row['p_poster']);
 
 	// Render
 	$tpl=do_template('OCF_POST_BOX',array(
-				'_GUID'=>'9456f4fe4b8fb1bf34f606fcb2bcc9d7',
-				'URL'=>$post_url,
-				'ID'=>strval($row['id']),
-				'BREADCRUMBS'=>$breadcrumbs,
-				'POST'=>do_template('OCF_TOPIC_POST',array(
-					'ID'=>strval($row['id']),
-					'TOPIC_FIRST_POST_ID'=>'',
-					'TOPIC_FIRST_POSTER'=>'',
-					'POST_ID'=>strval($row['id']),
-					'URL'=>$post_url,
-					'CLASS'=>($row['p_is_emphasised']==1)?'ocf_post_emphasis':((!is_null($row['p_intended_solely_for']))?'ocf_post_personal':''),
-					'EMPHASIS'=>$emphasis,
-					'FIRST_UNREAD'=>'',
-					'POSTER_TITLE'=>$poster_title,
-					'POST_TITLE'=>$post_title,
-					'POST_DATE_RAW'=>strval($post_date_raw),
-					'POST_DATE'=>$post_date,
-					'POST'=>$post,
-					'TOPIC_ID'=>is_null($row['p_topic_id'])?'':strval($row['p_topic_id']),
-					'LAST_EDITED_RAW'=>$last_edited_raw,
-					'LAST_EDITED'=>$last_edited,
-					'POSTER_ID'=>strval($poster_id),
-					'POSTER'=>$poster,
-					'POSTER_DETAILS'=>$poster_details,
-					'POST_AVATAR'=>$post_avatar,
-					'RANK_IMAGES'=>$rank_images,
-					'BUTTONS'=>'',
-					'SIGNATURE'=>'',
-					'UNVALIDATED'=>'',
-					'DESCRIPTION'=>'',
-					'PREVIEWING'=>true,
-					'RATING'=>$rating,
-			))
+		'_GUID'=>'9456f4fe4b8fb1bf34f606fcb2bcc9d7',
+		'URL'=>$post_url,
+		'ID'=>strval($row['id']),
+		'BREADCRUMBS'=>$breadcrumbs,
+		'POST'=>do_template('OCF_TOPIC_POST',array(
+			'ID'=>strval($row['id']),
+			'TOPIC_FIRST_POST_ID'=>'',
+			'TOPIC_FIRST_POSTER'=>'',
+			'POST_ID'=>strval($row['id']),
+			'URL'=>$post_url,
+			'CLASS'=>($row['p_is_emphasised']==1)?'ocf_post_emphasis':((!is_null($row['p_intended_solely_for']))?'ocf_post_personal':''),
+			'EMPHASIS'=>$emphasis,
+			'FIRST_UNREAD'=>'',
+			'POSTER_TITLE'=>$poster_title,
+			'POST_TITLE'=>$post_title,
+			'POST_DATE_RAW'=>strval($post_date_raw),
+			'POST_DATE'=>$post_date,
+			'POST'=>$post,
+			'TOPIC_ID'=>is_null($row['p_topic_id'])?'':strval($row['p_topic_id']),
+			'LAST_EDITED_RAW'=>$last_edited_raw,
+			'LAST_EDITED'=>$last_edited,
+			'POSTER_ID'=>strval($poster_id),
+			'POSTER'=>$poster,
+			'POSTER_DETAILS'=>$poster_details,
+			'POST_AVATAR'=>$post_avatar,
+			'RANK_IMAGES'=>$rank_images,
+			'BUTTONS'=>'',
+			'SIGNATURE'=>'',
+			'UNVALIDATED'=>'',
+			'DESCRIPTION'=>'',
+			'PREVIEWING'=>true,
+			'RATING'=>$rating,
+		))
 	));
 
-	if ($encapsulate_with_link)
+	if ($give_context)
 	{
 		$poster=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['p_poster']);
 		$date=get_timezoned_date($row['p_time']);

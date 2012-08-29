@@ -30,5 +30,5 @@ function incoming_uploads_script()
 		exit();
 	}
 
-	non_overrided__incoming_uploads_script();
+	non_overridden__incoming_uploads_script();
 }

@@ -73,6 +73,8 @@ class Hook_addon_registry_banners
 	{
 		return array(
 			'banners.css',
+			'sources/hooks/systems/awards/banner_type.php',
+			'sources/hooks/systems/awards/banner.php',
 			'sources/hooks/systems/snippets/exists_banner.php',
 			'sources/hooks/systems/snippets/exists_banner_type.php',
 			'sources/hooks/systems/config_default/admin_banners.php',

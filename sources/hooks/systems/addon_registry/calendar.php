@@ -388,7 +388,8 @@ class Hook_addon_registry_calendar
 			lorem_globalise(do_lorem_template('CALENDAR_EVENT_BOX', array(
 				'URL'=>placeholder_url(),
 				'SUMMARY'=>lorem_paragraph_html(),
-				'TITLE'=>lorem_phrase()
+				'TITLE'=>lorem_phrase(),
+				'GIVE_CONTEXT'=>true,
 			)), NULL, '', true)
 		);
 	}

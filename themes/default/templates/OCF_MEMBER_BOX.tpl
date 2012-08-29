@@ -1,4 +1,8 @@
 <div class="ocf_member_box">
+	{+START,IF,{GIVE_CONTEXT}}
+		<h3>{!CONTENT_IS_OF_TYPE,{!MEMBER},{$USERNAME*,{MEMBER_ID}}}</h3>
+	{+END}
+
 	{+START,IF,{$NOT,{$MOBILE}}}
 		{+START,IF_NON_EMPTY,{AVATAR_URL}}
 			<img class="ocf_member_box_avatar" src="{AVATAR_URL*}" alt="{!AVATAR}" title="{!AVATAR}" />
@@ -8,7 +12,7 @@
 	<div{+START,IF_NON_EMPTY,{AVATAR_URL}} class="ocf_member_box_avatar"{+END}>
 		<table class="tooltip_fields autosized_table" summary="{!MAP_TABLE}">
 			<tbody>
-				<tr><th class="de_th">{!USERNAME}:</th><td><a href="{$MEMBER_PROFILE_URL*,{POSTER}}">{$USERNAME*,{POSTER}}</a></td></tr>
+				<tr><th class="de_th">{!USERNAME}:</th><td><a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}">{$USERNAME*,{MEMBER_ID}}</a></td></tr>
 				<tr><th class="de_th">{!ocf:SPECIFIC_FORUM_POSTS}:</th><td>{POSTS*}</td></tr>
 				{+START,IF_NON_EMPTY,{POINTS}}
 					<tr><th class="de_th">{!POINTS}:</th><td>{POINTS*}</td></tr>

@@ -31,8 +31,8 @@ class Hook_search_catalogue_entries
 		if (!module_installed('catalogues')) return NULL;
 		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)')==0) return NULL;
 
-		global $SEARCH_CATALOGUE_ENTRIES_CATALOGUES;
-		$SEARCH_CATALOGUE_ENTRIES_CATALOGUES=array();
+		global $SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE;
+		$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE=array();
 
 		require_lang('catalogues');
 		require_code('catalogues');
@@ -356,14 +356,14 @@ class Hook_search_catalogue_entries
 		$out=array();
 		if (count($rows)==0) return array();
 
-		global $SEARCH_CATALOGUE_ENTRIES_CATALOGUES;
+		global $SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE;
 		$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
 		if (can_arbitrary_groupby())
 			$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name GROUP BY c.c_name';
 		$_catalogues=$GLOBALS['SITE_DB']->query($query);
 		foreach ($_catalogues as $catalogue)
 		{
-			$SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue['c_name']]=$catalogue;
+			$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE[$catalogue['c_name']]=$catalogue;
 		}
 		if (count($ranges)!=0) // Unfortunately we have to actually load these up to tell if we can use
 		{
@@ -371,7 +371,7 @@ class Hook_search_catalogue_entries
 			{
 				$catalogue_name=$row['c_name'];
 				$tpl_set=$catalogue_name;
-				$display=get_catalogue_entry_map($row,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name],'PAGE',$tpl_set,-1);
+				$display=get_catalogue_entry_map($row,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE[$catalogue_name],'PAGE',$tpl_set,-1);
 				foreach ($ranges as $range_id=>$range_key)
 				{
 					$bits=explode('-',$display['_FIELD_'.strval($range_id)]);
@@ -408,32 +408,8 @@ class Hook_search_catalogue_entries
 	 */
 	function render($row)
 	{
-		global $SEARCH_CATALOGUE_ENTRIES_CATALOGUES;
-
-		require_css('catalogues');
-
-		$catalogue_name=$row['c_name'];
-		if (!array_key_exists($catalogue_name,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES)) return new ocp_tempcode();
-		$display_type=$SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name]['c_display_type'];
-		if (($display_type==C_DT_FIELDMAPS) || ($display_type==C_DT_GRID) || (get_param_integer('specific',0)==0)) // Singular results
-		{
-			$tpl_set=$catalogue_name;
-			$display=get_catalogue_entry_map($row,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES[$catalogue_name],'SEARCH',$tpl_set,-1);
-
-			$tpl=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$display+array('GIVE_CONTEXT'=>true),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
-
-			$breadcrumbs=catalogue_category_breadcrumbs($row['cc_id'],NULL,false);
-			if (!$breadcrumbs->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$breadcrumbs)));
-
-			return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>do_lang_tempcode('CATALOGUE_ENTRY'),'SUMMARY'=>$tpl));
-		} else // Compound results
-		{
-			global $CATALOGUE_ENTRIES_BUILDUP;
-			if (!array_key_exists($catalogue_name,$CATALOGUE_ENTRIES_BUILDUP))
-				$CATALOGUE_ENTRIES_BUILDUP[$catalogue_name]=array();
-			$CATALOGUE_ENTRIES_BUILDUP[$catalogue_name][]=$row;
-		}
-		return NULL;
+		require_code('catalogues');
+		return render_catalogue_entry_box($row,'_SEARCH');
 	}
 
 }

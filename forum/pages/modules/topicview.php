@@ -204,7 +204,7 @@ class Module_topicview
 					if (!is_guest($_postdetails['poster']))
 					{
 						require_code('ocf_members2');
-						$poster_details=render_member_box($_postdetails,false,$hooks,$hook_objects,false);
+						$poster_details=render_member_box($_postdetails,false,$hooks,$hook_objects,false,NULL,false);
 					} else
 					{
 						$custom_fields=new ocp_tempcode();

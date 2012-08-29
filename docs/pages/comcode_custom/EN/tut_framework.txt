@@ -103,19 +103,19 @@ This form of overriding works via class inheritance. All you need to do is to ma
 
 If you override a file to the [tt]sources_custom[/tt] directory then that file will essentially be overlaid on top of its equivalent in the [tt]sources[/tt] directory. (You can use this technique in other [tt]*_custom[/tt] directories too, such as [tt]modules_custom[/tt] directories -- although in this case it is less useful, as there is less granularity due to a module only containing a single class)
 
-You can redefine any existing function or class, and you can define new functions or classes. ocPortal does some magic so that you can reference the old versions of the functions or classes by prepending [tt]non_overrided__[/tt] to their names (e.g. [tt]example_function[/tt] would become [tt]non_overrided__example_function[/tt]). This is very useful if you can write your overridden function without having to completely replace the original function. For example, if we just want to add some logging to [tt]example_function[/tt]...
+You can redefine any existing function or class, and you can define new functions or classes. ocPortal does some magic so that you can reference the old versions of the functions or classes by prepending [tt]non_overridden__[/tt] to their names (e.g. [tt]example_function[/tt] would become [tt]non_overridden__example_function[/tt]). This is very useful if you can write your overridden function without having to completely replace the original function. For example, if we just want to add some logging to [tt]example_function[/tt]...
 [code="PHP"]
 function example_function($a,$b)
 {
 	some_logging_function('call to example_function with '.$a.' and '.$b);
-	$ret=non_overrided__example_function($a,$b);
+	$ret=non_overridden__example_function($a,$b);
 	some_logging_function('leaving example_function returning '.$ret);
 	return $ret;
 }
 [/code]
 It is also very useful for classes because it allows you to create a subclass of the original, without changing its name (which would break ocPortal, as ocPortal expects a certain fixed name for its classes). For example:
 [code="PHP"]
-class example extends non_overrided__example
+class example extends non_overridden__example
 {
 	function mymethod($a,$b)
 	{

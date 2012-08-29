@@ -123,7 +123,7 @@ function ocf_display_spacer_post($linked_type,$linked_id)
 			$award_info=$award_ob->info();
 			$linked_rows=$GLOBALS['SITE_DB']->query_select($award_info['table'],array('*'),array($award_info['id_field']=>$award_info['id_is_string']?$linked_id:intval($linked_id)),'',1);
 			if (array_key_exists(0,$linked_rows))
-				$new_post=$award_ob->run($linked_rows[0],'_SEARCH');
+				$new_post=$award_ob->run($linked_rows[0],'_SEARCH',true,true);
 			$new_description=do_lang('THIS_IS_COMMENT_TOPIC',get_site_name());
 		}
 	}

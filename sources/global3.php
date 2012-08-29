@@ -2400,11 +2400,12 @@ function titleify($boring)
 /**
  * Propagate ocSelect through links.
  *
+ * @param  ID_TEXT			Prefix for main filter environment variable
  * @return array				Extra URL mappings
  */
-function propagate_ocselect()
+function propagate_ocselect($prefix='')
 {
-	$active_filter=either_param('active_filter','');
+	$active_filter=either_param(($prefix=='')?'active_filter':($prefix.'_active_filter'),'');
 	$map=array();
 	if ($active_filter!='')
 	{

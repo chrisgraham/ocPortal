@@ -35,7 +35,7 @@ class Block_main_multi_content
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('ocselect','param','efficient','filter','filter_b','title','zone','mode','max','days','lifetime','pinned','no_links','pagination');
+		$info['parameters']=array('ocselect','param','efficient','filter','filter_b','title','zone','mode','max','days','lifetime','pinned','no_links','pagination','give_context','include_breadcrumbs');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_multi_content
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'0\')?array(array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\',array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'mode\',$map)?$map[\'mode\']:\'recent\'):NULL';
+		$info['cache_on']='((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'0\')?array((array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\',array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'mode\',$map)?$map[\'mode\']:\'recent\'):NULL';
 		$info['ttl']=30;
 		return $info;
 	}
@@ -117,6 +117,8 @@ class Block_main_multi_content
 		$days=((array_key_exists('days',$map)) && ($map['days']!=''))?intval($map['days']):NULL;
 		$lifetime=((array_key_exists('lifetime',$map)) && ($map['lifetime']!=''))?intval($map['lifetime']):NULL;
 		$pinned=((array_key_exists('pinned',$map)) && ($map['pinned']!=''))?explode(',',$map['pinned']):array();
+		$give_context=(array_key_exists('give_context',$map)?$map['give_context']:'0')=='1';
+		$include_breadcrumbs=(array_key_exists('include_breadcrumbs',$map)?$map['include_breadcrumbs']:'0')=='1';
 
 		if ((!file_exists(get_file_base().'/sources/hooks/systems/awards/'.filter_naughty_harsh($type_id).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.filter_naughty_harsh($type_id).'.php')))
 			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$type_id));
@@ -501,7 +503,7 @@ class Block_main_multi_content
 			}
 
 			// Render
-			$rendered_content[]=$object->run($row,$zone);
+			$rendered_content[]=$object->run($row,$zone,$give_context,$include_breadcrumbs);
 
 			// Try and get a better submit url
 			$submit_url=str_replace('%21',$content_id,$submit_url);

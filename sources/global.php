@@ -163,11 +163,11 @@ function require_code($codename,$light_exit=false)
 
 				$pure=true; // We will set this to false if it does not have all functions the main one has. If it does have all functions we know we should not run the original init, as it will almost certainly just have been the same code copy&pasted through.
 				$overlaps=false;
-				foreach ($functions_diff as $function) // Go through override's functions and make sure original doesn't have them: rename original's to non_overrided__ equivs.
+				foreach ($functions_diff as $function) // Go through override's functions and make sure original doesn't have them: rename original's to non_overridden__ equivs.
 				{
 					if (strpos($orig,'function '.$function.'(')!==false)
 					{
-						$orig=str_replace('function '.$function.'(','function non_overrided__'.$function.'(',$orig);
+						$orig=str_replace('function '.$function.'(','function non_overridden__'.$function.'(',$orig);
 						$overlaps=true;
 					} else
 					{
@@ -181,7 +181,7 @@ function require_code($codename,$light_exit=false)
 
 					if (strpos($orig,'class '.$class)!==false)
 					{
-						$orig=str_replace('class '.$class,'class non_overrided__'.$class,$orig);
+						$orig=str_replace('class '.$class,'class non_overridden__'.$class,$orig);
 						$overlaps=true;
 					} else
 					{
@@ -206,9 +206,9 @@ function require_code($codename,$light_exit=false)
 					eval($orig); // Load up modified original
 				}
 
-				if ((!$pure) && ($doing_code_modifier_init) && (function_exists('non_overrided__init__'.str_replace('/','__',str_replace('.php','',$codename)))))
+				if ((!$pure) && ($doing_code_modifier_init) && (function_exists('non_overridden__init__'.str_replace('/','__',str_replace('.php','',$codename)))))
 				{
-					call_user_func('non_overrided__init__'.str_replace('/','__',str_replace('.php','',$codename)));
+					call_user_func('non_overridden__init__'.str_replace('/','__',str_replace('.php','',$codename)));
 				}
 			} else
 			{

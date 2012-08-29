@@ -53,9 +53,10 @@ function download_licence_script()
  * @param  boolean		Whether to show breadcrumbs
  * @param  ?ID_TEXT		The zone the download module we're using is in (NULL: find it)
  * @param  ?string		Text summary for result (e.g. highlighted portion of actual file from search result) (NULL: none)
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @return tempcode		A box for this download, linking to the full download page
  */
-function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL,$text_summary=NULL)
+function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL,$text_summary=NULL,$give_context=true)
 {
 	require_css('downloads');
 
@@ -116,7 +117,32 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 
 	// Final template
 	if (($full_img_url!='') && (url_is_local($full_img_url))) $full_img_url=get_custom_base_url().'/'.$full_img_url;
-	return do_template('DOWNLOAD_BOX',array('_GUID'=>'7a4737e21bdb4bd15ac5fe8570915d08','TEXT_SUMMARY'=>$text_summary,'AUTHOR'=>$row['author'],'ID'=>strval($row['id']),'RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>get_translated_text($row['name']),'BREADCRUMBS'=>$breadcrumbs,'IMG_URL'=>$thumb_url,'FULL_IMG_URL'=>$full_img_url,'IMGCODE'=>$imgcode,'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink));
+	return do_template('DOWNLOAD_BOX',array(
+		'_GUID'=>'7a4737e21bdb4bd15ac5fe8570915d08',
+		'GIVE_CONTEXT'=>$give_context,
+		'TEXT_SUMMARY'=>$text_summary,
+		'AUTHOR'=>$row['author'],
+		'ID'=>strval($row['id']),
+		'RATING'=>$rating,
+		'VIEWS'=>integer_format($row['download_views']),
+		'SUBMITTER'=>strval($row['submitter']),
+		'DESCRIPTION'=>$description,
+		'FILE_SIZE'=>$filesize,
+		'DOWNLOADS'=>integer_format($row['num_downloads']),
+		'DATE_RAW'=>strval($date_raw),
+		'DATE'=>$date,
+		'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),
+		'SIZE'=>$filesize,
+		'URL'=>$download_url,
+		'NAME'=>get_translated_text($row['name']),
+		'BREADCRUMBS'=>$breadcrumbs,
+		'IMG_URL'=>$thumb_url,
+		'FULL_IMG_URL'=>$full_img_url,
+		'IMGCODE'=>$imgcode,
+		'LICENCE'=>is_null($licence)?NULL:strval($licence),
+		'LICENCE_TITLE'=>$licence_title,
+		'LICENCE_HYPERLINK'=>$licence_hyperlink,
+	));
 }
 
 /**
@@ -124,25 +150,33 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
  *
  * @param  array			The database field row of it
  * @param  ID_TEXT		The zone to use
- * @param  boolean		Whether to put it in a box
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_download_category_box($row,$zone='_SEARCH',$put_in_box=true)
+function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
 {
 	$url=build_url(array('page'=>'downloads','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']),$zone);
 
+	require_lang('downloads');
+
+	$_title=get_translated_text($row['category']);
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('DOWNLOAD_CATEGORY'),$_title):$_title;
+
 	$breadcrumbs=mixed();
-	$title=mixed();
-	if ($put_in_box)
+	if ($include_breadcrumbs)
 	{
-		if (!is_null($row['parent_id']))
-		{
-			$breadcrumbs=download_breadcrumbs($row['parent_id'],NULL,false,$zone);
-		}
-		$title=get_translated_text($row['category']);
+		$breadcrumbs=download_breadcrumbs($row['parent_id'],NULL,false,$zone);
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'SUMMARY'=>get_translated_tempcode($row['description']),'URL'=>$url));
+	$summary=get_translated_tempcode($row['description']);
+
+	$child_counts=count_download_category_children($row['id']);
+	$num_children=$child_counts['num_children_children'];
+	$num_entries=$child_counts['num_downloads_children'];
+	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**
@@ -426,14 +460,24 @@ function count_download_category_children($category_id)
 	$out['num_children']=$GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)',array('parent_id'=>$category_id));
 	$out['num_downloads']=$GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)',array('category_id'=>$category_id,'validated'=>1));
 
-	$out['num_downloads_children']=$out['num_downloads'];
-	if ($total_categories<200) // Make sure not too much, performance issue
+	if ($category_id==db_get_first_id())
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id'),array('parent_id'=>$category_id));
-		foreach ($rows as $child)
+		$out['num_downloads_children']=$GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)',array('validated'=>1));
+	}
+	else
+	{
+		$out['num_children_children']=$out['num_children'];
+		$out['num_downloads_children']=$out['num_downloads'];
+
+		if ($total_categories<200) // Make sure not too much, performance issue
 		{
-			$temp=count_download_category_children($child['id']);
-			$out['num_downloads_children']+=$temp['num_downloads_children'];
+			$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id'),array('parent_id'=>$category_id));
+			foreach ($rows as $child)
+			{
+				$temp=count_download_category_children($child['id']);
+				$out['num_downloads_children']+=$temp['num_downloads_children'];
+				$out['num_children_children']+=$temp['num_children_children'];
+			}
 		}
 	}
 

@@ -109,7 +109,7 @@ class Hook_Profiles_Tabs_blog
 				}
 				$news_category=get_translated_text($news_cat[0]['nc_title']);
 				$seo_bits=seo_meta_get_for('news',strval($news_id));
-				$map2=array('TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'TRUNCATE'=>$truncate,'BLOG'=>false,'ID'=>strval($news_id),'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$news_category,'IMG'=>$news_img,'DATE'=>$news_date,'DATE_RAW'=>strval($myrow['date_and_time']),'NEWS_TITLE'=>$news_title,'AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS'=>$news_summary,'FULL_URL'=>$news_full_url);
+				$map2=array('GIVE_CONTEXT'=>false,'TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'TRUNCATE'=>$truncate,'BLOG'=>false,'ID'=>strval($news_id),'SUBMITTER'=>strval($myrow['submitter']),'CATEGORY'=>$news_category,'IMG'=>$news_img,'DATE'=>$news_date,'DATE_RAW'=>strval($myrow['date_and_time']),'NEWS_TITLE'=>$news_title,'AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS'=>$news_summary,'FULL_URL'=>$news_full_url);
 				if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map2['COMMENT_COUNT']='1';
 				$recent_blog_posts->attach(do_template('NEWS_BOX',$map2));
 

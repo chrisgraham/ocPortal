@@ -38,7 +38,7 @@ function init__uploads($old)
  */
 function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false)
 {
-	$urls=non_overrided__get_url($specify_name,$attach_name,$upload_folder,$obfuscate,$enforce_type,$make_thumbnail,$thumb_specify_name,$thumb_attach_name,$copy_to_server,$accept_errors,$should_get_something);
+	$urls=non_overridden__get_url($specify_name,$attach_name,$upload_folder,$obfuscate,$enforce_type,$make_thumbnail,$thumb_specify_name,$thumb_attach_name,$copy_to_server,$accept_errors,$should_get_something);
 
 	if (!$GLOBALS['SITE_DB']->table_exists('image_url_sub_for')) return $urls;
 

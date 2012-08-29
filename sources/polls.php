@@ -61,7 +61,7 @@ function poll_script($ret=false,$param=NULL)
 		$show_poll_results=get_param_integer('show_poll_results_'.strval($myrow['id']),0);
 		if ($show_poll_results==0)
 		{
-			$content=render_poll_box(false,$myrow,$zone,true);
+			$content=render_poll_box(false,$myrow,$zone,true,false);
 		} else
 		{
 			// Voting
@@ -103,7 +103,7 @@ function poll_script($ret=false,$param=NULL)
 			}
 
 			// Show poll, with results
-			$content=render_poll_box(true,$myrow,$zone,true);
+			$content=render_poll_box(true,$myrow,$zone,true,false);
 		}
 	}
 
@@ -143,13 +143,13 @@ function may_vote_in_poll($myrow)
 /**
  * Show an actual poll box.
  *
- * @param  boolean			Whether to show results (if we've already voted, this'll be overrided)
+ * @param  boolean			Whether to show results (if we've already voted, this'll be overridden)
  * @param  array				The poll row
  * @param  ID_TEXT			The zone our poll module is in
  * @param  boolean			Whether to include extra management links (e.g. editing, choosing, archive, etc)
  * @return tempcode			The box
  */
-function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=false)
+function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=false,$give_context=true)
 {
 	$ip=get_ip_address();
 	if (!may_vote_in_poll($myrow)) $results=true;

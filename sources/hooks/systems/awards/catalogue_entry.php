@@ -60,16 +60,15 @@ class Hook_awards_catalogue_entry
 	 *
 	 * @param  array		The database row for the content
 	 * @param  ID_TEXT	The zone to display in
+	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
+	 * @param  boolean	Whether to include breadcrumbs (if there are any)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone)
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true)
 	{
 		require_code('catalogues');
-		$catalogue_name=$row['c_name'];
-		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
-		$tpl_set=$catalogue_name;
-		$display=get_catalogue_entry_map($row,$catalogues[0],'SEARCH',$tpl_set,-1,NULL,NULL,false,true);
-		return do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$display+array('GIVE_CONTEXT'=>false),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
+
+		return render_catalogue_entry_box($row,$zone,$give_context,$include_breadcrumbs);
 	}
 
 }

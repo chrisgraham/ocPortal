@@ -317,11 +317,12 @@ Any content type will probably have two main templates used to display it:
 Box templates are used on category listings, previews, search results, and when picking out content to display with an award. Box templates generally hold the following criteria:
  - Must be surrounding with standard box markup, or mainly consist of a table
  - If it is a box, must have a level 3 header within the box (boxes must not be presented as list elements -- they are headed sections in boxes, and CSS may change the appearance of them if required due to the consistency of the box markup)
- - Will typically involve a title/thumbnail/caption, but it really depends what the content is
+ - Will typically involve a title/thumbnail/caption, but it really depends what the content is; the [tt]SIMPLE_PREVIEW_BOX[/tt] template may be used for a foundation for very simple box layouts where no dedicated template is needed
  - Must support display in both category and standalone contexts
   - Category contexts will not mention the content type or show breadcrumbs
   - Standalone contexts will make it clear enough what the content actually is, rather than merely showing a title/thumbnail/caption; for hierarchically stored content breadcrumbs should be included
  - Must primarily support a fairly minimal raw context, but possibly with the [b]option[/b] to have additional attached bits such as edit links
  - Box templates should look neat, not too generic
  - Box templates should be flexible enough to show in a carousel, in a grid, or as standalone/sequential boxes
+ - Box templates for categories should say how many child entries are inside the category
 [/surround]

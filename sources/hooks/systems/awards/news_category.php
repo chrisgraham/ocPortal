@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		iotds
+ * @package		news
  */
 
-class Hook_awards_iotd
+class Hook_awards_news_category
 {
 
 	/**
@@ -31,26 +31,19 @@ class Hook_awards_iotd
 	{
 		$info=array();
 		$info['connection']=$GLOBALS['SITE_DB'];
-		$info['table']='iotd';
-		$info['date_field']='date_and_time'; // add_date is the technical add date, but date_and_time is when it went live
+		$info['table']='news_categories';
+		$info['date_field']=NULL;
 		$info['id_field']='id';
-		$info['add_url']=(has_submit_permission('mid',get_member(),get_ip_address(),'cms_iotds'))?build_url(array('page'=>'cms_iotds','type'=>'ad'),get_module_zone('cms_iotds')):new ocp_tempcode();
+		$info['add_url']=(has_submit_permission('mid',get_member(),get_ip_address(),'cms_news'))?build_url(array('page'=>'cms_news','type'=>'ad'),get_module_zone('cms_news')):new ocp_tempcode();
 		$info['category_field']=NULL;
-		$info['category_type']=NULL;
-		$info['parent_spec__table_name']=NULL;
-		$info['parent_spec__parent_name']=NULL;
-		$info['parent_spec__field_name']=NULL;
-		$info['parent_field_name']=NULL;
-		$info['submitter_field']='submitter';
+		$info['submitter_field']=NULL;
 		$info['id_is_string']=false;
-		require_lang('iotds');
-		$info['title']=do_lang_tempcode('IOTDS');
-		$info['validated_field']='used';
-		$info['category_is_string']=true;
-		$info['archive_url']=build_url(array('page'=>'iotds'),(!is_null($zone))?$zone:get_module_zone('iotds'));
-		$info['cms_page']='cms_iotds';
-		$info['views_field']='iotd_views';
-		$info['supports_custom_fields']=true;
+		require_lang('news');
+		$info['title']=do_lang_tempcode('NEWS');
+		$info['category_is_string']=false;
+		$info['archive_url']=build_url(array('page'=>'news'),(!is_null($zone))?$zone:get_module_zone('news'));
+		$info['cms_page']='cms_news';
+		$info['supports_custom_fields']=false;
 
 		return $info;
 	}
@@ -66,9 +59,9 @@ class Hook_awards_iotd
 	 */
 	function run($row,$zone,$give_context=true,$include_breadcrumbs=true)
 	{
-		require_code('iotds');
+		require_code('news');
 
-		return render_iotd_box($row,$zone,false,$give_context);
+		return render_news_category_box($row,$zone,$give_context);
 	}
 
 }

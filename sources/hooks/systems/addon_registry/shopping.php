@@ -711,8 +711,6 @@ class Hook_addon_registry_shopping
 				'_TITLE'=>lorem_phrase(),
 				'TAGS'=>'',
 				'CATALOGUE'=>lorem_word_2(),
-				'PAGINATION'=>'',
-				'SORTING'=>'',
 				'ADD_ENTRY_URL'=>placeholder_url(),
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),

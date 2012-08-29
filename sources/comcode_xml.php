@@ -448,7 +448,7 @@ class comcode_xml_to_tempcode
 							{
 								require_lang('ocf');
 								require_code('ocf_members2');
-								$details=render_member_box($this_member_id);
+								$details=render_member_box($this_member_id,false,NULL,NULL,true,NULL,false);
 								$tempcode=do_template('HYPERLINK_TOOLTIP',array('_GUID'=>'f7b65418616787b0f732c32486b63f4e','TOOLTIP'=>$details,'CAPTION'=>$username,'URL'=>$poster_url,'NEW_WINDOW'=>false));
 							} else
 							{

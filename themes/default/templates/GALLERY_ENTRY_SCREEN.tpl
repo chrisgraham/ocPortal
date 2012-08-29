@@ -103,9 +103,9 @@
 		{+END}
 		{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
-		{+START,IF_NON_EMPTY,{COMMENTS}}
+		{+START,IF_NON_EMPTY,{DESCRIPTION}}
 			<div itemprop="caption">
-				{COMMENTS}
+				{DESCRIPTION}
 			</div>
 		{+END}
 

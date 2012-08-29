@@ -1,5 +1,13 @@
 <div class="box box___download_box"><div class="box_inner">
-	<h3><a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:type=__ed:id={ID}}{NAME*}{+END}</a></h3>
+	<h3>
+		{+START,IF,{GIVE_CONTEXT}}
+			{!CONTENT_IS_OF_TYPE,{!DOWNLOAD},{NAME*}}
+		{+END}
+
+		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+			<a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:type=__ed:id={ID}}{NAME*}{+END}</a>
+		{+END}
+	</h3>
 
 	<div class="meta_details" role="contentinfo">
 		<dl class="meta_details_list">

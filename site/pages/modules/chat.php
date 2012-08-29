@@ -980,7 +980,7 @@ class Module_chat
 				$friend_usergroup_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($f_id,'m_primary_group');
 				$friend_usergroup=array_key_exists($friend_usergroup_id,$all_usergroups)?$all_usergroups[$friend_usergroup_id]:do_lang_tempcode('UNKNOWN');
 				$mutual_label=do_lang('MUTUAL_FRIEND');
-				$box=render_member_box($f_id,false,NULL,NULL,true,($f_id==get_member() || $member_id==get_member())?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL);
+				$box=render_member_box($f_id,false,NULL,NULL,true,($f_id==get_member() || $member_id==get_member())?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL,false);
 				if ($box->is_empty()) continue;
 				$friend_map=array('USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
 				$friends[]=$friend_map;

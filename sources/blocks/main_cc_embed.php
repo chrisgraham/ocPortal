@@ -35,7 +35,7 @@ class Block_main_cc_embed
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('ocselect','root','sort','max','param','select','template_set','display_type');
+		$info['parameters']=array('ocselect','root','sort','max','param','select','template_set','display_type','pagination','sorting');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_cc_embed
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'root\',NULL),array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),get_param_integer(\'max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer(\'start\',0))';
+		$info['cache_on']='array(((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'sorting\',$map)?$map[\'sorting\']:\'0\')==\'1\'),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'root\',NULL),array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),get_param_integer(\'max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer(\'start\',0))';
 		$info['ttl']=60*2;
 		return $info;
 	}
@@ -62,20 +62,23 @@ class Block_main_cc_embed
 	{
 		inform_non_canonical_parameter('max');
 
+		$block_id=md5(serialize($map));
+
 		$category_id=array_key_exists('param',$map)?intval($map['param']):db_get_first_id();
-		$max=get_param_integer('max',array_key_exists('max',$map)?intval($map['max']):30);
-		$start=get_param_integer('start',0);
+		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):30);
+		$start=get_param_integer($block_id.'_start',0);
 		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('root',NULL);
-
 		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
-
 		$sort=array_key_exists('sort',$map)?$map['sort']:'';
+		$pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
+		$sorting=((array_key_exists('sorting',$map)?$map['sorting']:'0')=='1');
 
 		require_lang('catalogues');
 		require_code('catalogues');
 		require_code('feedback');
 		require_css('catalogues');
 
+		// ocFilter
 		$select=NULL;
 		if ((!is_null($map)) && (array_key_exists('select',$map)))
 		{
@@ -83,6 +86,7 @@ class Block_main_cc_embed
 			$select=ocfilter_to_sqlfragment($map['select'],'e.id','catalogue_categories','cc_parent_id','cc_id','id');
 		}
 
+		// Pick up details about category
 		$categories=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),array('id'=>$category_id),'',1);
 		if (!array_key_exists(0,$categories))
 		{
@@ -90,10 +94,12 @@ class Block_main_cc_embed
 		}
 		$category=$categories[0];
 
+		// Pick up details about catalogue
 		$catalogue_name=$category['c_name'];
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 		$catalogue=$catalogues[0];
 
+		// Display type?
 		$tpl_set=array_key_exists('template_set',$map)?$map['template_set']:$catalogue_name;
 		$_display_type=((array_key_exists('display_type',$map)) && ($map['display_type']!=''))?$map['display_type']:NULL;
 		$display_type=mixed();
@@ -122,9 +128,29 @@ class Block_main_cc_embed
 			}
 		}
 
-		list($entry_buildup,,,)=get_catalogue_category_entry_buildup(is_null($select)?$category_id:NULL,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,$select,$root,$display_type,true,NULL,$ocselect,$sort);
+		// Get entries
+		list($entry_buildup,$sorting,,$max_rows)=get_catalogue_category_entry_buildup(is_null($select)?$category_id:NULL,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,$select,$root,$display_type,true,NULL,$ocselect,$sort,$block_id.'_order');
 
-		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_EMBED',array('ROOT'=>strval($root),'CATALOGUE'=>$catalogue_name,'ENTRIES'=>$entry_buildup),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_EMBED');
+		// Sorting and pagination
+		if (!$sorting)
+		{
+			$sorting='',
+		}
+		$pagination='';
+		if ($pagination)
+		{
+			require_code('templates_pagination');
+			$pagination=pagination(do_lang_tempcode('ENTRIES'),$id,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows,$root,NULL,true);
+		}
+
+		// Render
+		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_EMBED',array(
+			'ROOT'=>strval($root),
+			'CATALOGUE'=>$catalogue_name,
+			'ENTRIES'=>$entry_buildup,
+			'SORTING'=>$sorting,
+			'PAGINATION'=>$pagination,
+		),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_EMBED');
 	}
 
 }

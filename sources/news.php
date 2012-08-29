@@ -23,11 +23,14 @@
  *
  * @param  array				The news row
  * @param  ID_TEXT			The zone our news module is in
+ * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean			Whether to use the brief styling
  * @return tempcode			The box
  */
-function render_news_box($row,$zone='_SEARCH')
+function render_news_box($row,$zone='_SEARCH',$give_context=true,$brief=false)
 {
 	$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),$zone);
+
 	$title=get_translated_tempcode($row['title']);
 	$title_plain=get_translated_text($row['title']);
 
@@ -57,16 +60,60 @@ function render_news_box($row,$zone='_SEARCH')
 		$news=get_translated_tempcode($row['news_article']);
 		$truncate=true;
 	} else $truncate=false;
+
 	$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),get_module_zone('authors')):new ocp_tempcode();
 	$author=$row['author'];
+
 	require_css('news');
+
 	$seo_bits=seo_meta_get_for('news',strval($row['id']));
-	$map=array('_GUID'=>'jd89f893jlkj9832gr3uyg2u','TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'TRUNCATE'=>$truncate,'AUTHOR'=>$author,'BLOG'=>false,'AUTHOR_URL'=>$author_url,'CATEGORY'=>$category,'IMG'=>$img,'NEWS'=>$news,'ID'=>strval($row['id']),'SUBMITTER'=>strval($row['submitter']),'DATE'=>get_timezoned_date($row['date_and_time']),'DATE_RAW'=>strval($row['date_and_time']),'FULL_URL'=>$url,'NEWS_TITLE'=>$title,'NEWS_TITLE_PLAIN'=>$title_plain);
+
+	$map=array(
+		'_GUID'=>'jd89f893jlkj9832gr3uyg2u',
+		'GIVE_CONTEXT'=>$give_context,
+		'TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),
+		'TRUNCATE'=>$truncate,
+		'AUTHOR'=>$author,
+		'BLOG'=>false,
+		'AUTHOR_URL'=>$author_url,
+		'CATEGORY'=>$category,
+		'IMG'=>$img,
+		'NEWS'=>$news,
+		'ID'=>strval($row['id']),
+		'SUBMITTER'=>strval($row['submitter']),
+		'DATE'=>get_timezoned_date($row['date_and_time']),
+		'DATE_RAW'=>strval($row['date_and_time']),
+		'FULL_URL'=>$url,
+		'NEWS_TITLE'=>$title,
+		'NEWS_TITLE_PLAIN'=>$title_plain,
+	);
+
 	if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($row['allow_comments']>=1)) $map['COMMENT_COUNT']='1';
 
-	$box=do_template('NEWS_BOX',$map);
+	return do_template($brief?'NEWS_BRIEF':'NEWS_BOX',$map);
+}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'47eeed9d10cb6ad1f1631056d3744ea2','SUMMARY'=>$box));
+/**
+ * Get tempcode for a news category 'feature box' for the given row
+ *
+ * @param  array			The database field row of it
+ * @param  ID_TEXT		The zone to use
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @return tempcode		A box for it, linking to the full page
+ */
+function render_news_category_box($row,$zone='_SEARCH',$give_context=true)
+{
+	$url=build_url(array('page'=>'news','type'=>'misc','id'=>$row['id']),$zone);
+
+	require_lang('news');
+
+	$_title=get_translated_text($row['nc_title']);
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('NEWS_CATEGORY'),$_title):$_title;
+
+	$num_entries=$GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)',array('validated'=>1));
+	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

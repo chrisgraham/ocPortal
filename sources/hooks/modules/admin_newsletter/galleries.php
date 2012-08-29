@@ -76,7 +76,7 @@ class Hook_whats_news_galleries
 				$galleries[$row['cat']]=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$row['cat'])));
 			}
 			$name=$galleries[$row['cat']];
-			$description=get_translated_text($row['comments'],NULL,$lang);
+			$description=get_translated_text($row['description'],NULL,$lang);
 			$member_id=(is_guest($row['submitter']))?NULL:strval($row['submitter']);
 			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'dfe5850aa67c0cd00ff7d465248b87a5','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description)));
 		}

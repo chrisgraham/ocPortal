@@ -294,7 +294,16 @@ class Hook_search_comcode_pages
 
 		$breadcrumbs=comcode_breadcrumbs($page,$zone);
 
-		return do_template('COMCODE_PAGE_BOX',array('_GUID'=>'79cd9e7d0b63ee916c4cd74b26c2f652','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'PAGE'=>$page,'ZONE'=>$zone,'URL'=>$url,'SUMMARY'=>$summary));
+		return do_template('COMCODE_PAGE_BOX',array(
+			'_GUID'=>'79cd9e7d0b63ee916c4cd74b26c2f652',
+			'TITLE'=>$title,
+			'BREADCRUMBS'=>$breadcrumbs,
+			'PAGE'=>$page,
+			'ZONE'=>$zone,
+			'URL'=>$url,
+			'SUMMARY'=>$summary,
+			'GIVE_CONTEXT'=>true,
+		));
 	}
 
 }

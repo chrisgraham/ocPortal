@@ -44,9 +44,92 @@ function init__catalogues()
  *
  * @param  array				Catalogue row
  * @param  ID_TEXT			Zone to link through to
+ * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean			Whether to include breadcrumbs (if there are any)
  * @return tempcode			The catalogue box
  */
-function render_catalogue_box($row,$zone='_SEARCH')
+function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+{
+	require_css('catalogues');
+
+	$catalogue_name=$row['c_name'];
+	if (array_key_exists($catalogue_name,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE))
+	{
+		$catalogue=$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE[$catalogue_name];
+	} else
+	{
+		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
+		$catalogue=$catalogues[0];
+	}
+
+	$display=get_catalogue_entry_map($row,$catalogue,'SEARCH',$tpl_set,-1,NULL,NULL,false,true);
+
+	$breadcrumbs=mixed();
+	if ($include_breadcrumbs)
+	{
+		$breadcrumbs=catalogue_category_breadcrumbs($row['cc_id'],NULL,false);
+	}
+
+	$tpl_set=$catalogue_name;
+	return do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$display+array('GIVE_CONTEXT'=>$give_context,'BREADCRUMBS'=>$breadcrumbs),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
+}
+
+/**
+ * Get tempcode for a catalogue category 'feature box' for the given row
+ *
+ * @param  array			The database field row of it
+ * @param  ID_TEXT		The zone to use
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @return tempcode		A box for it, linking to the full page
+ */
+function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+{
+	$content=get_translated_tempcode($row['cc_description']);
+
+	// TODO!!
+	$map=array('page'=>'catalogues','type'=>'category','id'=>$row['id']);
+	$root=get_param_integer('root',NULL);
+	if (!is_null($root)) $map['root']=$root;
+	if (get_page_name()=='catalogues') $map+=propagate_ocselect($prefix);
+	$url=build_url($map,$zone);
+
+	$_title=get_translated_text($row['cc_title']);
+
+	$title=$_title;
+	if ($give_context)
+	{
+		$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>$row['c_name'])));
+		$title=do_lang('CONTENT_IS_OF_TYPE',do_lang('CATALOGUE_GENERIC_CATEGORY',$catalogue_title),$_title);
+	}
+
+	$breadcrumbs=mixed();
+	if ($include_breadcrumbs)
+	{
+		$breadcrumbs=catalogue_category_breadcrumbs($row['id']);
+	}
+
+	$rep_image=mixed();
+	if ($row['rep_image']!='')
+		$rep_image=do_image_thumb($sc['rep_image'],$sc['cc_title'],$sc['cc_title'],false);
+
+	$child_counts=count_catalogue_category_children($row['id']);
+	$num_children=$child_counts['num_children_children'];
+	$num_entries=$child_counts['num_entries_children'];
+	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'REP_IMAGE'=>$rep_image,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+}
+
+/**
+ * Render a catalogue box.
+ *
+ * @param  array				Catalogue row
+ * @param  ID_TEXT			Zone to link through to
+ * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @return tempcode			The catalogue box
+ */
+function render_catalogue_box($row,$zone='_SEARCH',$give_context=true)
 {
 	if ($row['c_is_tree'])
 	{
@@ -56,25 +139,16 @@ function render_catalogue_box($row,$zone='_SEARCH')
 		$url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$row['c_name']),$zone);
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>get_translated_text($row['c_title']),'SUMMARY'=>get_translated_text($row['c_description']),'URL'=>$url));
-}
+	$_title=get_translated_text($row['c_title']);
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('CATALOGUE'),$_title):$_title;
 
-/**
- * Get tempcode for a catalogue category 'feature box' for the given row
- *
- * @param  array			The database field row of it
- * @param  ID_TEXT		The zone to use
- * @param  boolean		Whether to put it in a box with a title
- * @return tempcode		A box for it, linking to the full page
- */
-function render_catalogue_category_box($row,$zone='_SEARCH',$give_title=true)
-{
-	$content=paragraph(get_translated_tempcode($row['cc_description']),'yghjgfjftgerr');
-	$url=build_url(array('page'=>'catalogues','type'=>'category','id'=>$row['id']),$zone);
+	$summary=get_translated_text($row['c_description']);
 
-	$breadcrumbs=catalogue_category_breadcrumbs($row['id']);
+	$num_children=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$row['c_name']));
+	$num_entries=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']));
+	$entry_details=do_lang_tempcode(($myrow['c_is_tree']==1)?'CATEGORY_SUBORDINATE':'CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$give_title?get_translated_text($row['cc_title']):NULL,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**
@@ -134,9 +208,10 @@ function count_catalogue_category_children($category_id)
  * @param  ?array				A list of entry rows (NULL: select them normally)
  * @param  string				ocSelect to apply (blank: none).
  * @param  ?ID_TEXT			Orderer (NULL: read from environment)
+ * @param  ID_TEXT			Environment param used for ordering
  * @return array				An array containing our built up entries (renderable tempcode), our sorting interface, and our entries (entry records from database, with an additional 'map' field), and the max rows
  */
-function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$select,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$_filters='',$_order_by=NULL)
+function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$catalogue,$view_type,$tpl_set,$max,$start,$select,$root,$display_type=NULL,$do_sorting=true,$entries=NULL,$_filters='',$_order_by=NULL,$ordering_param='order')
 {
 	if ($_filters!='')
 	{
@@ -166,10 +241,10 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 	// Find order field from environment (assuming $_order_by not passed in), and decode to $order_by/$direction which are semantically quite different
 	if ($do_sorting)
 	{
-		inform_non_canonical_parameter('order');
+		inform_non_canonical_parameter($ordering_param);
 
 		if (is_null($_order_by))
-			$_order_by=get_param('order','');
+			$_order_by=get_param($ordering_param,'');
 		if (($_order_by=='') || (strpos($_order_by,' ')===false/*probably some bot probing URLs -- sorting always has a space between sorter and direction*/))
 		{	
 			$order_by='0';
@@ -261,8 +336,8 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 				$selectors->attach(do_template('PAGINATION_SORTER',array('_GUID'=>'xfdsfdsusd0fsd0dsf','SELECTED'=>$sort_sel,'NAME'=>protect_from_escaping($_potential_sorter_name),'VALUE'=>$extra_sort_code.' '.$dir_code)));
 			}
 		}
-		$sort_url=get_self_url(false,false,array('order'=>NULL),false,true);
-		$sorting=do_template('PAGINATION_SORT',array('_GUID'=>'9fgjfdklgjdfgkjlfdjgd90','SORT'=>'order','URL'=>$sort_url,'SELECTORS'=>$selectors));
+		$sort_url=get_self_url(false,false,array($ordering_param=>NULL),false,true);
+		$sorting=do_template('PAGINATION_SORT',array('_GUID'=>'9fgjfdklgjdfgkjlfdjgd90','SORT'=>$ordering_param,'URL'=>$sort_url,'SELECTORS'=>$selectors));
 
 		// Sort entries manually
 		if (!$in_db_sorting) catalogue_entries_manual_sort($fields,$entries,$order_by,$direction);
@@ -347,8 +422,8 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 					{
 						if ($field['cf_searchable']==1)
 						{
-							$sort_url_asc=get_self_url(false,false,array('order'=>strval($field['id']).' ASC'),true);
-							$sort_url_desc=get_self_url(false,false,array('order'=>strval($field['id']).' DESC'),true);
+							$sort_url_asc=get_self_url(false,false,array($ordering_param=>strval($field['id']).' ASC'),true);
+							$sort_url_desc=get_self_url(false,false,array($ordering_param=>strval($field['id']).' DESC'),true);
 							$sort_asc_selected=(($order_by==strval($field['id'])) && ($direction=='ASC'));
 							$sort_desc_selected=(($order_by==strval($field['id'])) && ($direction=='DESC'));
 						} else

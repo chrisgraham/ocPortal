@@ -1,6 +1,14 @@
 <section class="box box___gallery_video_box"><div class="box_inner">
 	{+START,IF_NON_EMPTY,{TITLE}}
-		<h3>{!VIDEO}: {TITLE*}</h3>
+		<h3>
+			{+START,IF,{GIVE_CONTEXT}}
+				{!CONTENT_IS_OF_TYPE,{!VIDEO},{TITLE*}}
+			{+END}
+
+			{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+				{TITLE*}
+			{+END}
+		</h3>
 	{+END}
 
 	<div>

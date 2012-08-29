@@ -54,18 +54,18 @@ class Hook_awards_member
 	 *
 	 * @param  array		The database row for the content
 	 * @param  ID_TEXT	The zone to display in
+	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
+	 * @param  boolean	Whether to include breadcrumbs (if there are any)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone)
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true)
 	{
-		unset($zone);
-
 		require_code('ocf_members');
 		require_code('ocf_members2');
 
 		$GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']]=$row;
 
-		return render_member_box($row['id']);
+		return render_member_box($row['id'],false,NULL,NULL,true,NULL,$give_context);
 	}
 
 }

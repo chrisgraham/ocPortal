@@ -23,13 +23,16 @@
  *
  * @param  array				Author row
  * @param  ID_TEXT			Zone to link through to
+ * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @return tempcode			The author box
  */
-function render_author_box($row,$zone='_SEARCH')
+function render_author_box($row,$zone='_SEARCH',$give_context=true)
 {
 	$url=build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),$zone);
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['author'],'SUMMARY'=>get_translated_text($row['description']),'URL'=>$url));
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('AUTHOR'),$row['author']):$row['author'];
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>get_translated_text($row['description']),'URL'=>$url));
 }
 
 /**

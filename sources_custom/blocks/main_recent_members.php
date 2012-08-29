@@ -77,7 +77,7 @@ class Block_main_recent_members
 		{
 			foreach ($rows as $row)
 			{
-				$out->attach(render_member_box($row['id'],true));
+				$out->attach(render_member_box($row['id'],true,NULL,NULL,true,NULL,false));
 			}
 		}
 

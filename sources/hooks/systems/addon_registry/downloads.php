@@ -212,7 +212,8 @@ class Hook_addon_registry_downloads
 				'URL'=>placeholder_url(),
 				'NAME'=>lorem_phrase(),
 				'BREADCRUMBS'=>placeholder_breadcrumbs(),
-				'IMGCODE'=>''
+				'IMGCODE'=>'',
+				'GIVE_CONTEXT'=>false,
 			);
 			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
@@ -300,7 +301,8 @@ class Hook_addon_registry_downloads
 				'URL'=>placeholder_url(),
 				'NAME'=>lorem_phrase(),
 				'BREADCRUMBS'=>placeholder_breadcrumbs(),
-				'IMGCODE'=>''
+				'IMGCODE'=>'',
+				'GIVE_CONTEXT'=>false,
 			);
 			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
@@ -372,7 +374,8 @@ class Hook_addon_registry_downloads
 				'URL'=>placeholder_url(),
 				'NAME'=>lorem_phrase(),
 				'BREADCRUMBS'=>placeholder_breadcrumbs(),
-				'IMGCODE'=>''
+				'IMGCODE'=>'',
+				'GIVE_CONTEXT'=>false,
 			);
 			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
@@ -470,6 +473,7 @@ class Hook_addon_registry_downloads
 		foreach ($download_items as $download)
 		{
 			$map=array(
+				'AUTHOR'=>lorem_phrase(),
 				'ID'=>placeholder_id(),
 				'VIEWS'=>placeholder_number(),
 				'SUBMITTER'=>placeholder_id(),
@@ -484,7 +488,7 @@ class Hook_addon_registry_downloads
 				'NAME'=>lorem_phrase(),
 				'BREADCRUMBS'=>placeholder_breadcrumbs(),
 				'IMGCODE'=>'',
-				'AUTHOR'=>lorem_word()
+				'GIVE_CONTEXT'=>false,
 			);
 			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
@@ -553,7 +557,8 @@ class Hook_addon_registry_downloads
 					'URL'=>placeholder_url(),
 					'NAME'=>lorem_phrase(),
 					'BREADCRUMBS'=>placeholder_breadcrumbs(),
-					'IMGCODE'=>''
+					'IMGCODE'=>'',
+					'GIVE_CONTEXT'=>false,
 				);
 				$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
 
@@ -595,7 +600,7 @@ class Hook_addon_registry_downloads
 				'VIEW_URL'=>placeholder_url(),
 				'EDIT_URL'=>placeholder_url(),
 				'THUMB'=>placeholder_image(),
-				'COMMENT'=>lorem_phrase()
+				'DESCRIPTION'=>lorem_phrase()
 			));
 
 			$cell=do_lorem_template('DOWNLOAD_GALLERY_IMAGE_CELL', array(

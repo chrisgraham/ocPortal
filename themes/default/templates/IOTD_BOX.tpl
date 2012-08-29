@@ -1,4 +1,4 @@
-<div class="box box___iotd_admin_choose_screen_iotd"><div class="box_inner">
+<div class="box box___iotd_box"><div class="box_inner">
 	{+START,IF,{GIVE_CONTEXT}}
 		<h3>{!IOTD}</h3>
 	{+END}

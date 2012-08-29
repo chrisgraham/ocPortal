@@ -29,6 +29,50 @@ function init__banners()
 }
 
 /**
+ * Get tempcode for a banner 'feature box' for the given row
+ *
+ * @param  array			The database field row of it
+ * @param  ID_TEXT		The zone to use
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @return tempcode		A box for it, linking to the full page
+ */
+function render_banner_box($row,$zone='_SEARCH',$give_context=true)
+{
+	$url=new ocp_tempcode();
+
+	$_title=$row['name'];
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('BANNER'),$_title):$_title;
+
+	$summary=show_banner($row['name'],$row['b_title_text'],get_translated_text($row['caption']),$row['b_direct_code'],$row['img_url'],'',$row['url'],$row['the_type'],$row['submitter']);
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url));
+}
+
+/**
+ * Get tempcode for a banner type 'feature box' for the given row
+ *
+ * @param  array			The database field row of it
+ * @param  ID_TEXT		The zone to use
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @return tempcode		A box for it, linking to the full page
+ */
+function render_banner_type_box($row,$zone='_SEARCH',$give_context=true)
+{
+	$url=new ocp_tempcode();
+
+	require_lang('banners');
+
+	$_title=$row['id'];
+	if ($_title=='') $_title=do_lang('GENERAL');
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('_BANNER_TYPE'),$_title):$_title;
+
+	$num_entries=$GLOBALS['SITE_DB']->query_select_value('banners','COUNT(*)',array('validated'=>1));
+	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+}
+
+/**
  * Show a banner according to GET parameter specification.
  *
  * @param  boolean		Whether to return a result rather than outputting
@@ -259,7 +303,7 @@ function nice_get_banner_types($it=NULL)
  * @param  tempcode		The caption of the banner
  * @param  LONG_TEXT		The full HTML/PHP for the banner
  * @param  URLPATH		The URL to the banner image
- * @param  ID_TEXT		The name of the banner for the site that will get the return-hit
+ * @param  ID_TEXT		The name of the banner for the site that will get the return-hit (blank: none)
  * @param  URLPATH		The URL to the banner's target
  * @param  ID_TEXT		The banner type
  * @param  MEMBER			The submitting user
