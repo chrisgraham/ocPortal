@@ -426,8 +426,8 @@ class Module_galleries
 		require_code('feedback');
 		require_css('galleries');
 
-		inform_non_canonical_parameter('max');
-		inform_non_canonical_parameter('start');
+		inform_non_canonical_parameter('gallery_entries_max');
+		inform_non_canonical_parameter('gallery_entries_start');
 		inform_non_canonical_parameter('days');
 
 		// What are we doing?
@@ -492,7 +492,7 @@ class Module_galleries
 
 		$cat=get_param('id','root');
 		set_feed_url(find_script('backend').'?mode=galleries&filter='.$cat);
-		$root=get_param('root','root');
+		$root=get_param('keep_gallery_root','root');
 
 		if (!has_category_access(get_member(),'galleries',$cat)) access_denied('CATEGORY_ACCESS');
 
@@ -524,7 +524,10 @@ class Module_galleries
 		if ($fullname=='') $fullname=$cat;
 
 		$description=get_translated_tempcode($myrow['description']);
+		$rep_image=$myrow['rep_image'];
+		$may_download_gallery=has_privilege(get_member(),'may_download_gallery','galleries',array('galleries',$cat));
 
+		// Management links
 		if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))))
 		{
 			$submit_cat=($myrow['is_member_synched']==1)?('member_'.strval(get_member()).'_'.$cat):$cat;
@@ -535,36 +538,33 @@ class Module_galleries
 			$submit_image_url=new ocp_tempcode();
 			$submit_video_url=new ocp_tempcode();
 		}
-
 		if ((!$implied_existence) && (has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))))
 		{
 			$edit_url=build_url(array('page'=>'cms_galleries','type'=>'_ec','id'=>$cat),get_module_zone('cms_galleries'));
 		} else $edit_url=new ocp_tempcode();
-
 		if ((!$implied_existence) && (has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_submit_permission('cat_mid',get_member(),get_ip_address(),'cms_galleries')))
 		{
 			$add_gallery_url=build_url(array('page'=>'cms_galleries','type'=>'ac','cat'=>$cat),get_module_zone('cms_galleries'));
 		} else $add_gallery_url=new ocp_tempcode();
 
-		$may_download_gallery=has_privilege(get_member(),'may_download_gallery','galleries',array('galleries',$cat));
-
+		// Breadcrumbs
 		$breadcrumbs=gallery_breadcrumbs($cat,$root,true,get_module_zone('galleries'));
 		if (!$breadcrumbs->is_empty())
 			$breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 		if (has_privilege(get_member(),'open_virtual_roots'))
 		{
-			$url=get_self_url(false,false,array('root'=>$cat));
+			$url=get_self_url(false,false,array('keep_gallery_root'=>$cat));
 			$breadcrumbs->attach(hyperlink($url,escape_html($fullname),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
 		} else $breadcrumbs->attach('<span>'.escape_html($fullname).'</span>');
-
-		$myrow['flow_mode_interface']=get_param_integer('flow_mode_interface',$myrow['flow_mode_interface']); // Allow override via URL
+		breadcrumb_add_segment($breadcrumbs);
 
 		// Flow mode puts emphasis on subgalleries, rather than entries; it is subgalleries that there are a lot of, rather than entries
+		$myrow['flow_mode_interface']=get_param_integer('flow_mode_interface',$myrow['flow_mode_interface']); // Allow override via URL
 		if ($myrow['flow_mode_interface']==1)
 		{
-			$max=get_param_integer('max',get_default_gallery_max());
+			$max=get_param_integer('gallery_entries_max',get_default_gallery_max());
 			if ($max<1) $max=1;
-			$start=get_param_integer('start',0);
+			$start=get_param_integer('gallery_entries_start',0);
 		} else
 		{
 			$max=NULL;
@@ -577,7 +577,6 @@ class Module_galleries
 		{
 			$order='name ASC';
 		}
-
 		$rows_children=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id'=>$cat),'ORDER BY '.$order,200/*reasonable limit*/);
 		$children=new ocp_tempcode();
 		$num_galleries=0;
@@ -598,6 +597,7 @@ class Module_galleries
 				$num_galleries++;
 			}
 		}
+
 		// Views
 		if (get_db_type()!='xml')
 		{
@@ -615,12 +615,7 @@ class Module_galleries
 		$title_to_use_2=do_lang('_GALLERY',$fullname);
 		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 
-		seo_meta_load_for('gallery',$cat,$title_to_use_2);
-
-		$rep_image=$myrow['rep_image'];
-
-		if (post_param_integer('rating_'.$cat,-1)!=-1) decache('main_top_galleries');
-
+		// Feedback
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
 			get_page_name(),
 			$cat,
@@ -634,8 +629,8 @@ class Module_galleries
 			get_value('comment_forum__galleries')
 		);
 
-		breadcrumb_add_segment($breadcrumbs);
-
+		// Meta-data
+		seo_meta_load_for('gallery',$cat,$title_to_use_2);
 		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$myrow['add_date']),
 			'creator'=>is_null($myrow['g_owner'])?'':$GLOBALS['FORUM_DRIVER']->get_username($myrow['g_owner']),
@@ -704,7 +699,7 @@ class Module_galleries
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('SUBCATEGORIES_HERE'),NULL,$start,'start',$max,'max',$num_galleries,NULL,get_param('type','misc'),true);
+		$pagination=pagination(do_lang_tempcode('SUBCATEGORIES_HERE'),NULL,$start,'gallery_entries_start',$max,'gallery_entries_max',$num_galleries);
 
 		// View current entry
 		$row=NULL;
@@ -780,7 +775,7 @@ class Module_galleries
 				$thumb_url=$row['thumb_url'];
 				$url=$row['url'];
 				$video_player=show_gallery_media($url,$thumb_url,$row['video_width'],$row['video_height'],$row['video_length']);
-				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'root'=>($root=='root')?NULL:$root,'wide'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
+				$view_url=build_url(array('page'=>'_SELF','type'=>'video','id'=>$row['id'],'wide'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 
 				// Some extra variables relating to the currently selected entry
 				$entry_title=get_translated_text($row['title']);
@@ -821,7 +816,7 @@ class Module_galleries
 					$thumb_url=get_custom_base_url().'/'.$thumb_url;
 				} else $file_size='';
 				$full_url=$thumb_url;
-				$view_url=build_url(array('page'=>'_SELF','type'=>'image','id'=>$row['id'],'root'=>($root=='root')?NULL:$root,'wide'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
+				$view_url=build_url(array('page'=>'_SELF','type'=>'image','id'=>$row['id'],'wide'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 
 				// Some extra variables relatin to the currently selected entry
 				$entry_title=get_translated_text($row['title']);
@@ -876,8 +871,8 @@ class Module_galleries
 
 			$entry_description=get_translated_tempcode($row['description']);
 
-			$probe_url=build_url(array('page'=>'_SELF','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$cat,'flow_mode_interface'=>get_param_integer('flow_mode_interface',NULL),'probe_type'=>$type,'probe_id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
-			$view_url_2=build_url(array('page'=>'_SELF','wide'=>1,'type'=>$type,'root'=>($root=='root')?NULL:$root,'id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
+			$probe_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'flow_mode_interface'=>get_param_integer('flow_mode_interface',NULL),'probe_type'=>$type,'probe_id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
+			$view_url_2=build_url(array('page'=>'_SELF','wide'=>1,'type'=>$type,'id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 			if (array_key_exists('url',$row))
 			{
 				$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
@@ -933,8 +928,8 @@ class Module_galleries
 	 */
 	function do_gallery_regular_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$fullname,$sorting)
 	{
-		$max=get_param_integer('max',get_default_gallery_max());
-		$start=get_param_integer('start',0);
+		$max=get_param_integer('gallery_entries_max',get_default_gallery_max());
+		$start=get_param_integer('gallery_entries_start',0);
 
 		// WHERE clause
 		if (get_option('galleries_subcat_narrowin')=='1')
@@ -996,7 +991,7 @@ class Module_galleries
 		// Display videos
 		foreach ($rows as $row_video)
 		{
-			$view_url=build_url(array('page'=>'_SELF','type'=>'video','root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$row_video['id'],'start'=>($start==0)?NULL:$start,'max'=>($start==get_default_gallery_max())?NULL:$max,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF');
+			$view_url=build_url(array('page'=>'_SELF','type'=>'video','wide'=>1,'id'=>$row_video['id'],'gallery_entries_start'=>($start==0)?NULL:$start,'gallery_entries_max'=>($start==get_default_gallery_max())?NULL:$max,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF');
 			$thumb_url=ensure_thumbnail($row_video['url'],$row_video['thumb_url'],'galleries','videos',$row_video['id']);
 			if ($thumb_url=='') $thumb_url=find_theme_image('na');
 			$thumb=do_image_thumb($thumb_url,'',true);
@@ -1013,7 +1008,7 @@ class Module_galleries
 		// Display images
 		foreach ($rows2 as $row_image)
 		{
-			$view_url=build_url(array('page'=>'_SELF','type'=>'image','root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$row_image['id'],'start'=>($start==0)?NULL:$start,'max'=>($max==get_default_gallery_max())?NULL:$max,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF');
+			$view_url=build_url(array('page'=>'_SELF','type'=>'image','wide'=>1,'id'=>$row_image['id'],'gallery_entries_start'=>($start==0)?NULL:$start,'gallery_entries_max'=>($max==get_default_gallery_max())?NULL:$max,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF');
 			$thumb_url=ensure_thumbnail($row_image['url'],$row_image['thumb_url'],'galleries','images',$row_image['id']);
 			$thumb=do_image_thumb($thumb_url,'',true);
 			$this_full_url=$row_image['url'];
@@ -1042,7 +1037,7 @@ class Module_galleries
 		// Pagination
 		require_code('templates_pagination');
 		$_selectors=array_map('intval',explode(',',get_option('gallery_selectors')));
-		$pagination=pagination(do_lang('ENTRY'),$cat,$start,'start',$max,'max',$total_rows,$root,'misc',true,false,10,$_selectors);
+		$pagination=pagination(do_lang('ENTRY'),$cat,$start,'gallery_entries_start',$max,'gallery_entries_max',$total_rows,false,10,$_selectors);
 
 		return do_template('GALLERY_REGULAR_MODE_SCREEN',array('_GUID'=>'cec405597f47f5079b7c7f581fa6b5c2','SORTING'=>$sorting,'_TITLE'=>$fullname,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'PAGINATION'=>$pagination,'TAGS'=>get_loaded_tags('galleries'),'CAT'=>$cat,'MEMBER_DETAILS'=>$member_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'ADD_GALLERY_URL'=>$add_gallery_url,'EDIT_URL'=>$edit_url,'CHILDREN'=>$children,'TITLE'=>$title,'DESCRIPTION'=>$description,'IMAGE_URL'=>$submit_image_url,'VIDEO_URL'=>$submit_video_url,'MAY_DOWNLOAD'=>$may_download,'ENTRIES'=>$entries));
 	}
@@ -1100,7 +1095,7 @@ class Module_galleries
 			$title=get_screen_title((get_translated_text($myrow['title'])=='')?'VIEW_IMAGE':'_VIEW_IMAGE',true,array(get_translated_tempcode($myrow['title'])),NULL,$awards);
 		}
 
-		$root=get_param('root','root');
+		$root=get_param('keep_gallery_root','root');
 
 		seo_meta_load_for('image',strval($id));
 
@@ -1144,7 +1139,7 @@ class Module_galleries
 		$add_date=get_timezoned_date($myrow['add_date']);
 		$edit_date=is_null($myrow['edit_date'])?'':get_timezoned_date($myrow['edit_date']);
 
-		list($n,$x,$nav)=$this->build_set_navigation(db_string_equal_to('cat',$cat),'',$category_name,$id,$root,'image',get_param_integer('slideshow',0),get_param_integer('wide_high',0),get_param_integer('start',0),get_param_integer('max',get_default_gallery_max()),$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,get_param('select','*'),get_param('video_select','*'));
+		list($n,$x,$nav)=$this->build_set_navigation(db_string_equal_to('cat',$cat),'',$category_name,$id,$root,'image',get_param_integer('slideshow',0),get_param_integer('wide_high',0),get_param_integer('gallery_entries_start',0),get_param_integer('gallery_entries_max',get_default_gallery_max()),$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,get_param('select','*'),get_param('video_select','*'));
 
 		$member_id=get_member_id_from_gallery_name($cat,NULL,true);
 		if (get_forum_type()=='ocf')
@@ -1223,7 +1218,7 @@ class Module_galleries
 			$title=get_screen_title((get_translated_text($myrow['title'])=='')?'VIEW_VIDEO':'_VIEW_VIDEO',true,array(get_translated_tempcode($myrow['title'])),NULL,$awards);
 		}
 
-		$root=get_param('root','root');
+		$root=get_param('keep_gallery_root','root');
 
 		seo_meta_load_for('video',strval($id));
 
@@ -1279,7 +1274,7 @@ class Module_galleries
 		require_code('mime_types');
 		$mime_type=get_mime_type($extension);
 
-		list($n,$x,$nav)=$this->build_set_navigation(db_string_equal_to('cat',$cat),'',$category_name,$id,$root,'video',get_param_integer('slideshow',0),get_param_integer('wide_high',0),get_param_integer('start',0),get_param_integer('max',get_default_gallery_max()),$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,get_param('select','*'),get_param('video_select','*'));
+		list($n,$x,$nav)=$this->build_set_navigation(db_string_equal_to('cat',$cat),'',$category_name,$id,$root,'video',get_param_integer('slideshow',0),get_param_integer('wide_high',0),get_param_integer('gallery_entries_start',0),get_param_integer('gallery_entries_max',get_default_gallery_max()),$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,get_param('select','*'),get_param('video_select','*'));
 
 		$member_id=get_member_id_from_gallery_name($cat,NULL,true);
 		if (get_forum_type()=='ocf')
@@ -1452,8 +1447,8 @@ class Module_galleries
 	{
 		if (!is_null($back_id))
 		{
-			$slideshow_previous_url=build_url(array('page'=>'_SELF','type'=>$back_type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$back_id,'slideshow'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true); // Continues, but as slideshow
-			$back_url=build_url(array('page'=>'_SELF','type'=>$back_type,'root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$back_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
+			$slideshow_previous_url=build_url(array('page'=>'_SELF','type'=>$back_type,'wide_high'=>1,'id'=>$back_id,'slideshow'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true); // Continues, but as slideshow
+			$back_url=build_url(array('page'=>'_SELF','type'=>$back_type,'wide'=>1,'id'=>$back_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
 		} else
 		{
 			$slideshow_previous_url=new ocp_tempcode();
@@ -1461,8 +1456,8 @@ class Module_galleries
 		}
 		if (!is_null($next_id))
 		{
-			$slideshow_next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$next_id,'slideshow'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true); // Continues, but as slideshow
-			$next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'root'=>($root=='root')?NULL:$root,'wide'=>1,'id'=>$next_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
+			$slideshow_next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'wide_high'=>1,'id'=>$next_id,'slideshow'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true); // Continues, but as slideshow
+			$next_url=build_url(array('page'=>'_SELF','type'=>$next_type,'wide'=>1,'id'=>$next_id,'slideshow'=>($slideshow==0)?NULL:$slideshow,'wide_high'=>($wide_high==0)?NULL:$wide_high,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
 		} else
 		{
 			$slideshow_next_url=new ocp_tempcode();
@@ -1470,8 +1465,8 @@ class Module_galleries
 		}
 
 		// Link to show more. Preserve info about where we were
-		$slideshow_url=build_url(array('page'=>'_SELF','type'=>$first_type,'root'=>($root=='root')?NULL:$root,'wide_high'=>1,'id'=>$first_id,'slideshow'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
-		$more_url=is_null($cat)?NULL:build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'root'=>($root=='root')?NULL:$root,'start'=>($start==0)?NULL:$start,'max'=>($max==get_default_gallery_max())?NULL:$max,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF');
+		$slideshow_url=build_url(array('page'=>'_SELF','type'=>$first_type,'wide_high'=>1,'id'=>$first_id,'slideshow'=>1,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF',NULL,true);
+		$more_url=is_null($cat)?NULL:build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'gallery_entries_start'=>($start==0)?NULL:$start,'gallery_entries_max'=>($max==get_default_gallery_max())?NULL:$max,'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select)+propagate_ocselect(),'_SELF');
 
 		// Only one entry?
 		if ($n==1)

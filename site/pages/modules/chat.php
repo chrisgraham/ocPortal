@@ -951,8 +951,8 @@ class Module_chat
 		$text_id=do_lang_tempcode('FRIENDS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id)));
 
 		$mode=get_param('mode','both'); // single, both
-		$max=get_param_integer('max',100);
-		$start=get_param_integer('start',0);
+		$max=get_param_integer('friends_max',100);
+		$start=get_param_integer('friends_start',0);
 
 		if ($mode=='both')
 		{
@@ -990,7 +990,7 @@ class Module_chat
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
 		require_code('templates_pagination');
-		$pagination=pagination($text_id,NULL,$start,'start',$max,'max',$max_rows,NULL,'friends_list',true);
+		$pagination=pagination($text_id,NULL,$start,'friends_start',$max,'friends_max',$max_rows);
 
 		return do_template('CHAT_FRIENDS_LIST_SCREEN',array('_GUID'=>'70b11d3c01ff551be42a0472d27dd207','TITLE'=>$title,'FRIENDS'=>$friends,'PAGINATION'=>$pagination));
 	}

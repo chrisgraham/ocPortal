@@ -44,7 +44,7 @@ function init__site()
 
 	global $NON_CANONICAL_PARAMS;
 	// We only bother listing ones the software itself may inject - otherwise admin responsible for their own curation of canonical settings
-	$NON_CANONICAL_PARAMS=array('wide_high','wide','wide_print','root','filtered','utheme','active_filter','redirected','redirect_url','redirect','redirect_passon');
+	$NON_CANONICAL_PARAMS=array('wide_high','wide','wide_print','filtered','utheme','active_filter','redirected','redirect_url','redirect','redirect_passon');
 	if (function_exists('get_value'))
 	{
 		$canonical_keep_params=explode(',',is_null(get_value('canonical_keep_params'))?'':get_value('canonical_keep_params'));
@@ -1419,7 +1419,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		global $PT_PAIR_CACHE_CP;
 		$PT_PAIR_CACHE_CP[$codename]['cc_page_title']=($title_to_use===NULL)?do_lang_tempcode('NA_EM'):make_string_tempcode($title_to_use);
 		$PT_PAIR_CACHE_CP[$codename]['p_parent_page']=$comcode_page_row['p_parent_page'];
-		$comcode_breadcrumbs=comcode_breadcrumbs($codename,$zone,get_param('root',''),($comcode_page_row['p_parent_page']=='') || !has_privilege(get_member(),'open_virtual_roots'));
+		$comcode_breadcrumbs=comcode_breadcrumbs($codename,$zone,get_param('keep_page_root',''),($comcode_page_row['p_parent_page']=='') || !has_privilege(get_member(),'open_virtual_roots'));
 		breadcrumb_add_segment($comcode_breadcrumbs);
 
 		set_extra_request_metadata(array(
@@ -1461,8 +1461,8 @@ function comcode_breadcrumbs($the_page,$the_zone,$root='',$no_link_for_me_sir=tr
 	if ($jumps==10) return new ocp_tempcode();
 
 	$map=array('page'=>$the_page);
-	if ($jumps==0) $map['root']=$the_page;
-	elseif ($root!='') $map['root']=$root;
+	if ($jumps==0) $map['keep_page_root']=$the_page;
+	elseif ($root!='') $map['keep_page_root']=$root;
 	$url=build_url($map,$the_zone);
 
 	if ($the_page=='') return new ocp_tempcode();

@@ -304,8 +304,6 @@ class Module_news
 		inform_non_canonical_parameter('filter');
 		inform_non_canonical_parameter('filter_and');
 		inform_non_canonical_parameter('blog');
-		inform_non_canonical_parameter('max');
-		inform_non_canonical_parameter('start');
 
 		$type=get_param('type','misc');
 
@@ -328,8 +326,11 @@ class Module_news
 	{
 		$title=get_screen_title(($blogs===1)?'BLOGS':(($blogs===0)?'JUST_NEWS_CATEGORIES':'NEWS_CATEGORIES'));
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',30);
+		inform_non_canonical_parameter('news_categories_max');
+		inform_non_canonical_parameter('news_categories_start');
+
+		$start=get_param_integer('news_categories_start',0);
+		$max=get_param_integer('news_categories_max',30);
 
 		require_code('ocfiltering');
 		$filter=get_param('filter','*');
@@ -408,7 +409,7 @@ class Module_news
 		} else $submit_url=new ocp_tempcode();
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('NEWS_CATEGORIES'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'));
+		$pagination=pagination(do_lang_tempcode('NEWS_CATEGORIES'),NULL,$start,'news_categories_start',$max,'news_categories_max',$max_rows);
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'c61c945e0453c2145a819ca60e8faf09','TITLE'=>$title,'SUBMIT_URL'=>$submit_url,'CONTENT'=>$content,'PRE'=>'','POST'=>'','PAGINATION'=>$pagination));
 	}
@@ -420,8 +421,11 @@ class Module_news
 	 */
 	function news_archive()
 	{
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',20);
+		inform_non_canonical_parameter('news_max');
+		inform_non_canonical_parameter('news_start');
+
+		$start=get_param_integer('news_start',0);
+		$max=get_param_integer('news_max',20);
 		$blog=get_param_integer('blog',NULL);
 
 		require_code('ocfiltering');
@@ -560,7 +564,7 @@ class Module_news
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('NEWS'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
+		$pagination=pagination(do_lang_tempcode('NEWS'),NULL,$start,'news_start',$max,'news_max',$max_rows);
 
 		if ($blog===1)
 		{

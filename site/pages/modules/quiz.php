@@ -256,8 +256,8 @@ class Module_quiz
 
 		require_code('quiz');
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',20);
+		$start=get_param_integer('quizzes_start',0);
+		$max=get_param_integer('quizzes_max',20);
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.((!has_privilege(get_member(),'see_unvalidated'))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).') ORDER BY q_type ASC,id DESC',$max,$start);
 		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.((!has_privilege(get_member(),'see_unvalidated'))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).')');
@@ -284,7 +284,7 @@ class Module_quiz
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('QUIZZES'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
+		$pagination=pagination(do_lang_tempcode('QUIZZES'),NULL,$start,'quizzes_start',$max,'quizzes_max',$max_rows);
 
 		return do_template('QUIZ_ARCHIVE_SCREEN',array('_GUID'=>'3073f74b500deba96b7a3031a2e9c8d8','TITLE'=>$title,'CONTENT_SURVEYS'=>$content_surveys,'CONTENT_COMPETITIONS'=>$content_competitions,'CONTENT_TESTS'=>$content_tests,'PAGINATION'=>$pagination));
 	}

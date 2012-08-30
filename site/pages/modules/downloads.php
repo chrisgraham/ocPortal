@@ -348,7 +348,7 @@ class Module_downloads
 	function category_screen()
 	{
 		$category_id=get_param_integer('id',db_get_first_id());
-		$root=get_param_integer('root',db_get_first_id());
+		$root=get_param_integer('keep_download_root',db_get_first_id());
 		$cat_order=get_param('cat_order','t.text_original ASC');
 		$order=get_param('order','t.text_original ASC');
 
@@ -386,7 +386,7 @@ class Module_downloads
 			$num_downloads=$info['num_downloads_children'];
 			$display_string=do_lang_tempcode('CATEGORY_SUBORDINATE',integer_format($num_downloads),integer_format($num_children));
 
-			$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>($child_id==db_get_first_id())?NULL:$child_id,'root'=>($root==db_get_first_id())?NULL:$root,'order'=>get_param('order',NULL))+propagate_ocselect(),'_SELF');
+			$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>($child_id==db_get_first_id())?NULL:$child_id,'order'=>get_param('order',NULL))+propagate_ocselect(),'_SELF');
 
 			if ($myrow['rep_image']!='')
 			{
@@ -402,8 +402,8 @@ class Module_downloads
 		}
 		$subcategories=do_template('CATEGORY_LIST',array('_GUID'=>'2de3e2cdd0180a584b4f4ec72652716f','CONTENT'=>$out));
 
-		$max=get_param_integer('max',30);
-		$start=get_param_integer('start',0);
+		$max=get_param_integer('downloads_max',30);
+		$start=get_param_integer('downloads_start',0);
 
 		// WHERE clause
 		if (get_option('downloads_subcat_narrowin')=='1')
@@ -466,7 +466,7 @@ class Module_downloads
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('SECTION_DOWNLOADS'),$category_id,$start,'start',$max,'max',$max_rows,$root,'misc',true);
+		$pagination=pagination(do_lang_tempcode('SECTION_DOWNLOADS'),$category_id,$start,'downloads_start',$max,'downloads_max',$max_rows);
 
 		$title_to_use=get_translated_text($category['category']);
 
@@ -484,7 +484,7 @@ class Module_downloads
 		}
 		if (has_privilege(get_member(),'open_virtual_roots'))
 		{
-			$url=get_self_url(false,false,array('root'=>$category_id));
+			$url=get_self_url(false,false,array('keep_download_root'=>$category_id));
 			$breadcrumbs->attach(hyperlink($url,escape_html($title_to_use),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
 		} else $breadcrumbs->attach($title_to_use);
 
@@ -626,7 +626,7 @@ class Module_downloads
 	{
 		$id=get_param_integer('id');
 
-		$root=get_param_integer('root',db_get_first_id(),true);
+		$root=get_param_integer('keep_download_root',db_get_first_id(),true);
 
 		// Basic Init
 		$rows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id'=>$id),'',1);
@@ -712,7 +712,7 @@ class Module_downloads
 		// Outmoding
 		if (!is_null($myrow['out_mode_id']))
 		{
-			$outmode_url=build_url(array('page'=>'_SELF','type'=>'entry','id'=>$myrow['out_mode_id'],'root'=>($root==db_get_first_id())?NULL:$root),'_SELF');
+			$outmode_url=build_url(array('page'=>'_SELF','type'=>'entry','id'=>$myrow['out_mode_id']),'_SELF');
 		} else $outmode_url=new ocp_tempcode();
 
 		// Stats

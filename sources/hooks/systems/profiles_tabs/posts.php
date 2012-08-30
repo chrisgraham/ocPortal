@@ -100,7 +100,7 @@ class Hook_Profiles_Tabs_posts
 					$marker='';
 					$breadcrumbs=new ocp_tempcode();
 					require_code('templates_pagination');
-					$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'post_start',$n,'post_max',$max_rows,NULL,'view',true,false,7,NULL,'tab__posts');
+					$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'post_start',$n,'post_max',$max_rows,false,7,NULL,'tab__posts');
 					$topics=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'8723270b128b4eea47ab3c756b342e14','ORDER'=>'','MAX'=>'15','MAY_CHANGE_MAX'=>false,'BREADCRUMBS'=>$breadcrumbs,'ACTION_URL'=>get_self_url(),'BUTTONS'=>'','STARTER_TITLE'=>'','MARKER'=>$marker,'FORUM_NAME'=>$forum_name,'TOPICS'=>$topics,'PAGINATION'=>$pagination,'MODERATOR_ACTIONS'=>''));
 				}
 			}

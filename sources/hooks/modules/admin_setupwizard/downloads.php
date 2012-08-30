@@ -30,7 +30,7 @@ class Hook_sw_downloads
 	{
 		if (!addon_installed('downloads')) return array();
 
-		return array(array('main_awards'=>array('YES_CELL','NO'),'main_recent_downloads'=>array('YES','NO'),'main_top_downloads'=>array('YES','NO')),array());
+		return array(array('main_awards'=>array('YES_CELL','NO')),array());
 	}
 
 }

@@ -276,8 +276,8 @@ class Module_search
 
 		$title=get_screen_title('SAVED_SEARCHES');
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',50);
+		$start=get_param_integer('my_start',0);
+		$max=get_param_integer('my_max',50);
 		$sortables=array('s_time'=>do_lang_tempcode('DATE_TIME'),'s_title'=>do_lang_tempcode('TITLE'));
 		list($sortable,$sort_order)=explode(' ',get_param('sort','s_time DESC'),2);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
@@ -307,7 +307,7 @@ class Module_search
 
 			$fields->attach(results_entry(array($row['s_title'],get_timezoned_date($row['s_time']),$deletion_button,$run_button),true));
 		}
-		$searches=results_table(do_lang_tempcode('SAVED_SEARCHES'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort',new ocp_tempcode());
+		$searches=results_table(do_lang_tempcode('SAVED_SEARCHES'),$start,'my_start',$max,'my_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort',new ocp_tempcode());
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'my'),'_SELF');
 
@@ -603,13 +603,13 @@ class Module_search
 			}
 		}
 
-		$start=get_param_integer('start',0);
+		$start=get_param_integer('search_start',0);
 		$default_max=10;
 		if ((ini_get('memory_limit')!='-1') && (ini_get('memory_limit')!='0'))
 		{
 			if (intval(preg_replace('#M$#','',ini_get('memory_limit')))<20) $default_max=5;
 		}
-		$max=get_param_integer('max',$default_max);  // Also see get_search_rows
+		$max=get_param_integer('search_max',$default_max);  // Also see get_search_rows
 
 		$save_title=post_param('save_title','');
 		if ((!is_guest()) && ($save_title!='') && ($start==0))
@@ -702,7 +702,7 @@ class Module_search
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('RESULTS'),NULL,$start,'start',$max,'max',$GLOBALS['TOTAL_SEARCH_RESULTS'],NULL,'results',true,true);
+		$pagination=pagination(do_lang_tempcode('RESULTS'),NULL,$start,'search_start',$max,'search_max',$GLOBALS['TOTAL_SEARCH_RESULTS'],true);
 
 		if ($start==0)
 		{

@@ -15,7 +15,7 @@
 
 	<div class="carousel_temp" id="carousel_ns_{$GET*,carousel_id}">
 	{+END}
-		{IMAGES}
+		{ENTRIES}
 
 	{+START,IF,{$NEQ,{$COMMA_LIST_GET,{BLOCK_PARAMS},raw},1}}
 	</div>

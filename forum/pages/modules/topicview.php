@@ -62,13 +62,13 @@ class Module_topicview
 		require_code('ocf_topicview');
 		require_css('ocf');
 
-		inform_non_canonical_parameter('max');
-		inform_non_canonical_parameter('start');
+		inform_non_canonical_parameter('topic_max');
+		inform_non_canonical_parameter('topic_start');
 		inform_non_canonical_parameter('threaded');
 
-		$start=get_param_integer('start',0);
+		$start=get_param_integer('topic_start',0);
 		$default_max=intval(get_option('forum_posts_per_page'));
-		$max=get_param_integer('max',$default_max);
+		$max=get_param_integer('topic_max',$default_max);
 		if ($max==0) $max=$default_max;
 		if ($max==0) $max=1;
 		$first_unread_id=-1;
@@ -462,7 +462,7 @@ class Module_topicview
 						} else
 						{
 							require_lang('polls');
-							$map=array('page'=>'topicview','id'=>$id,'view_poll_results'=>1,'start'=>($start==0)?NULL:$start,'max'=>($max==$default_max)?NULL:$max);
+							$map=array('page'=>'topicview','id'=>$id,'view_poll_results'=>1,'topic_start'=>($start==0)?NULL:$start,'topic_max'=>($max==$default_max)?NULL:$max);
 							$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 							if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
 							$test=get_param_integer('threaded',-1);
@@ -490,7 +490,7 @@ class Module_topicview
 				}
 				$answers->attach($answer_tpl);
 			}
-			$map=array('page'=>'topics','type'=>'vote_poll','id'=>$id,'start'=>($start==0)?NULL:$start,'max'=>($max==$default_max)?NULL:$max);
+			$map=array('page'=>'topics','type'=>'vote_poll','id'=>$id,'topic_start'=>($start==0)?NULL:$start,'topic_max'=>($max==$default_max)?NULL:$max);
 			$test=get_param_integer('kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id'])),-1);
 			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
 			$test=get_param_integer('threaded',-1);
@@ -653,7 +653,7 @@ class Module_topicview
 		if (($max_rows>$max) && (!$threaded))
 		{
 			require_code('templates_pagination');
-			$pagination=pagination(do_lang_tempcode('FORUM_POSTS'),$id,$start,'start',$max,'max',$max_rows,NULL,'misc',true,false);
+			$pagination=pagination(do_lang_tempcode('FORUM_POSTS'),$id,$start,'topic_start',$max,'topic_max',$max_rows,false);
 		} else
 		{
 			$pagination=new ocp_tempcode();

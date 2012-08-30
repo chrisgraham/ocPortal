@@ -64,13 +64,14 @@ class Hook_awards_topic
 	 * @param  ID_TEXT	The zone to display in
 	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
 	 * @param  boolean	Whether to include breadcrumbs (if there are any)
+	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true)
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL)
 	{
 		require_code('ocf_topics');
 
-		return render_topic_box($row,$zone,$give_context,$include_breadcrumbs);
+		return render_topic_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?NULL:intval($root));
 	}
 
 }

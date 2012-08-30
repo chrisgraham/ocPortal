@@ -90,11 +90,11 @@
 
 			{+START,IF,{MAY_CHANGE_MAX}}
 				<form title="{!PER_PAGE}" class="inline" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}{+START,IF,{$EQ,{TYPE},pt}}#tab__pts{+END}" method="get">
-					{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},max}
+					{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},forum_max}
 
 					<div class="inline">
-						<label for="max">{!PER_PAGE}:
-						<select{+START,IF,{$JS_ON}} onchange="this.form.submit();"{+END} name="max" id="max">
+						<label for="forum_max">{!PER_PAGE}:
+						<select{+START,IF,{$JS_ON}} onchange="this.form.submit();"{+END} name="forum_max" id="forum_max">
 							<option value="10"{$?,{$EQ,{MAX},10}, selected="selected",}>10</option>
 							<option value="20"{$?,{$EQ,{MAX},20}, selected="selected",}>20</option>
 							<option value="30"{$?,{$EQ,{MAX},30}, selected="selected",}>30</option>

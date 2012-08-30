@@ -83,7 +83,6 @@ class Hook_admin_setupwizard_installprofiles_shopping
 		return array(
 			'YES'=>array(
 				'main_greeting',
-				'main_recent_cc_entries',
 				'main_news',
 				'main_quotes',
 			),
@@ -107,9 +106,6 @@ class Hook_admin_setupwizard_installprofiles_shopping
 	function block_options()
 	{
 		return array(
-			'main_recent_cc_entries'=>array(
-				'catalogue'=>'products',
-			),
 		);
 	}
 

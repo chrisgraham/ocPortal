@@ -316,14 +316,17 @@ The following 'keep' parameters have interface triggers, but are also handy for 
  - [tt]keep_lang[/tt] -- set to a two-letter ISO language code to tell ocPortal which language to use
  - [tt]keep_session[/tt] -- this isn't useful for manual editing, but it is used to note session-IDs when [session-]cookies are not working
  - [tt]keep_timezone[/tt] -- this is the timezone code (tz style) to view in
- - [tt]keep_wiki_root[/tt] -- Used to propagate Wiki+ virtual roots
- - [tt]keep_forum_root[/tt] -- see root below; this one works for the forum and is a 'keep' parameter due to how the forum has links going all-over
+ - [tt]keep_catalogue_<catalogue-name>_root[/tt] -- set to a category ID for the current viewed content type to trick the breadcrumbs into showing a 'virtual root'; this can also be activated by browsing to the category you'd like to be virtual root (as staff) and then clicking on the final link in the breacrumb chain (the link representing the current category)
+ - [tt]keep_wiki_root[/tt] -- As above, but used to propagate Wiki+ virtual roots
+ - [tt]keep_gallery_root[/tt] -- As above, but used to propagate gallery virtual roots
+ - [tt]keep_download_root[/tt] -- As above, but used to propagate download virtual roots
+ - [tt]keep_forum_root[/tt] -- As above, but used to propagate forum virtual roots
+ - [tt]keep_page_root[/tt] -- As above, but used to propagate Comcode page virtual roots
 
 The following aren't 'keep' parameters, but are still useful and otherwise behave in the same way:
  - [tt]auth[/tt] -- set to '1' to make ocPortal request HTTP authentication. This is useful for RSS URLs, if you want the feeds to be generated as authenticated.
  - [tt]wide[/tt] -- set to '1' if you don't want to show side panels
  - [tt]wide_high[/tt] -- set to '1' if you don't show to show panels or the TOP/BOTTOM
- - [tt]root[/tt] -- set to a category ID for the current viewed content type to trick the breadcrumbs into showing a 'virtual root'; this can also be activated by browsing to the category you'd like to be virtual root (as staff) and then clicking on the final link in the breacrumb chain (the link representing the current category)
  - [tt]start[/tt] -- set to the start number in the result browsing
  - [tt]max[/tt] -- set to the maximum number of results to show per-page
  - [tt]page/type/id[/tt] -- I hope you know what these ones do ;)

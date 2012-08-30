@@ -38,7 +38,7 @@ class Hook_symbol_CATALOGUE_ENTRY_ALL_FIELD_VALUES
 				require_code('catalogues');
 				$catalogue_name=$rows[0]['c_name'];
 				$tpl_set=$catalogue_name;
-				$display=get_catalogue_entry_map($rows[0],array('c_name'=>$catalogue_name,'c_display_type'=>C_DT_FIELDMAPS),'PAGE',$tpl_set,-1);
+				$display=get_catalogue_entry_map($rows[0],array('c_name'=>$catalogue_name,'c_display_type'=>C_DT_FIELDMAPS),'PAGE',$tpl_set,NULL);
 				if ((array_key_exists(1,$param)) && ($param[1]=='1'))
 				{
 					$value=$display['FIELDS']->evaluate();

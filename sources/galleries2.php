@@ -944,8 +944,6 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
 
 	if (function_exists('decache'))
 	{
-		decache('main_top_galleries');
-		decache('main_recent_galleries');
 		decache('main_root_galleries');
 		decache('side_root_galleries');
 	}
@@ -1067,8 +1065,6 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 
 	$GLOBALS['SITE_DB']->query_update('group_category_access',array('category_name'=>$name),array('module_the_name'=>'galleries','category_name'=>$old_name));
 
-	decache('main_top_galleries');
-	decache('main_recent_galleries');
 	decache('main_root_galleries');
 	decache('side_root_galleries');
 
@@ -1135,8 +1131,6 @@ function delete_gallery($name)
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'galleries','category_name'=>$name));
 	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'galleries','category_name'=>$name));
 
-	decache('main_top_galleries');
-	decache('main_recent_galleries');
 	decache('main_root_galleries');
 	decache('side_root_galleries');
 }

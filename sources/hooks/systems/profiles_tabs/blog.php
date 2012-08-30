@@ -125,7 +125,7 @@ class Hook_Profiles_Tabs_blog
 
 		// Pagination
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('BLOGS_POSTS'),NULL,$start,'blogs_start',$max,'blogs_max',$max_rows,NULL,'view',true,false,7,NULL,'tab__blog');
+		$pagination=pagination(do_lang_tempcode('BLOGS_POSTS'),NULL,$start,'blogs_start',$max,'blogs_max',$max_rows,false,7,NULL,'tab__blog');
 
 		// Wrap it all up
 		$content=do_template('OCF_MEMBER_PROFILE_BLOG',array('_GUID'=>'f76244bc259c3e7da8c98b28fff85953','PAGINATION'=>$pagination,'RSS_URL'=>$rss_url,'ADD_BLOG_POST_URL'=>$add_blog_post_url,'MEMBER_ID'=>strval($member_id_of),'RECENT_BLOG_POSTS'=>$recent_blog_posts));

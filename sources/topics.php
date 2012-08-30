@@ -148,7 +148,7 @@ class OCP_Topic
 				if ($this->total_posts>$num_to_show_limit)
 				{
 					require_code('templates_pagination');
-					$pagination=pagination(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',$this->total_posts,NULL,NULL,true);
+					$pagination=pagination(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',$this->total_posts);
 				}
 			}
 

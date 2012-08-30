@@ -461,7 +461,7 @@ class Module_tickets
 					if (count($_comments_all)>$num_to_show_limit)
 					{
 						require_code('templates_pagination');
-						$pagination=pagination(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',count($_comments_all),NULL,NULL,true);
+						$pagination=pagination(do_lang_tempcode('COMMENTS'),NULL,$start,'start_comments',$num_to_show_limit,'max_comments',count($_comments_all));
 					}
 				}
 

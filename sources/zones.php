@@ -629,6 +629,18 @@ function block_cache_default($codename)
 }
 
 /**
+ * Get a unique ID representing a block call.
+ *
+ * @param  array			The block parameter map
+ * @return ID_TEXT		The block ID
+ */
+function get_block_id($map)
+{
+	ksort($map);
+	return md5(serialize($map));
+}
+
+/**
  * Get the processed tempcode for the specified block. Please note that you pass multiple parameters in as an array, but single parameters go in as a string or other flat variable.
  *
  * @param  ID_TEXT		The block name
@@ -920,6 +932,10 @@ function do_block_get_cache_identifier($cache_on,$map)
 	{
 		if (($cache_on!='') && (!defined('HIPHOP_PHP')))
 		{
+			$block_id=mixed();
+			if (strpos($cache_on,'block_id')!==false)
+				$block_id=get_block_id($map);
+
 			$_cache_on=eval('return '.$cache_on.';'); // NB: This uses $map, as $map is referenced inside $cache_on
 			if ($_cache_on===NULL) return NULL;
 			foreach ($_cache_on as $on)

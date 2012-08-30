@@ -716,8 +716,8 @@ class Module_catalogues
 
 		$ecommerce=get_param_integer('ecommerce',NULL);
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',30);
+		$start=get_param_integer('catalogues_start',0);
+		$max=get_param_integer('catalogues_max',30);
 
 		// Not done via main_multi_content block due to need for custom filtering
 		$query='FROM '.get_table_prefix().'catalogues c';
@@ -740,7 +740,7 @@ class Module_catalogues
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('CATALOGUES'),NULL,$start,'start',$max,'max',$max_rows,NULL,'misc');
+		$pagination=pagination(do_lang_tempcode('CATALOGUES'),NULL,$start,'catalogues_start',$max,'catalogues_max',$max_rows);
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'5af7dcb5bd26550ca6f26c2f9108f478','PRE'=>'','POST'=>'','PAGINATION'=>$pagination,'TITLE'=>$title,'CONTENT'=>$out));
 	}
@@ -847,7 +847,7 @@ class Module_catalogues
 
 		$catalogue_name=$category['c_name'];
 
-		$root=get_param_integer('root',NULL);
+		$root=get_param_integer('keep_catalogue_'.$catalogue_name.'_root',NULL);
 
 		$category=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','cc_title',array('id'=>$id));
 
@@ -957,7 +957,7 @@ class Module_catalogues
 
 		// Pick up some data
 		$catalogue_name=$category['c_name'];
-		$root=get_param_integer('root',NULL);
+		$root=get_param_integer('keep_catalogue_'.$catalogue_name.'_root',NULL);
 		$tpl_set=$catalogue_name;
 		$_title=get_translated_text($category['cc_title']);
 
@@ -1030,7 +1030,7 @@ class Module_catalogues
 			if (!$breadcrumbs->is_empty()) $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
 			if (has_privilege(get_member(),'open_virtual_roots'))
 			{
-				$url=get_self_url(false,false,(is_null(get_param('root',NULL)))?array('root'=>$id):array('root'=>($id==-1)?NULL:$id));
+				$url=get_self_url();
 				$breadcrumbs->attach(hyperlink($url,escape_html($_title),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
 			} else $breadcrumbs->attach('<span>'.escape_html($_title).'</span>');
 		} else

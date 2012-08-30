@@ -246,7 +246,7 @@ class Module_members
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('MEMBERS'),NULL,$start,'md_start',$max,'md_max',$max_rows,NULL,NULL,true,true);
+		$pagination=pagination(do_lang_tempcode('MEMBERS'),NULL,$start,'md_start',$max,'md_max',$max_rows,true);
 
 		$symbols=NULL;
 		if (get_option('allow_alpha_search')=='1')

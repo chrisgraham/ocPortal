@@ -47,8 +47,6 @@ class Block_main_screen_actions
 	 */
 	function run($map)
 	{
-		//if (count($_POST)!=0) return new ocp_tempcode();		Can't do that, breaks previewing it
-
 		require_css('screen_actions');
 
 		require_lang('recommend');
@@ -58,7 +56,7 @@ class Block_main_screen_actions
 		$recommend_url=build_url($_map,'_SEARCH');
 
 		return do_template('BLOCK_MAIN_SCREEN_ACTIONS',array(
-			'PRINT_URL'=>get_self_url(true,false,array('wide_print'=>1,'max'=>1000)),
+			'PRINT_URL'=>get_self_url(true,false,array('wide_print'=>1)),
 			'RECOMMEND_URL'=>$recommend_url,
 			'EASY_SELF_URL'=>str_replace("'",'',urlencode(get_self_url(true))),
 			'TITLE'=>array_key_exists('title',$map)?$map['title']:'',

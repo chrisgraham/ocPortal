@@ -371,7 +371,7 @@ class Hook_search_catalogue_entries
 			{
 				$catalogue_name=$row['c_name'];
 				$tpl_set=$catalogue_name;
-				$display=get_catalogue_entry_map($row,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE[$catalogue_name],'PAGE',$tpl_set,-1);
+				$display=get_catalogue_entry_map($row,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE[$catalogue_name],'PAGE',$tpl_set,NULL);
 				foreach ($ranges as $range_id=>$range_key)
 				{
 					$bits=explode('-',$display['_FIELD_'.strval($range_id)]);

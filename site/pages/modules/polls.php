@@ -241,8 +241,8 @@ class Module_polls
 	{
 		$title=get_screen_title('POLL_ARCHIVE');
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',20);
+		$start=get_param_integer('polls_start',0);
+		$max=get_param_integer('polls_max',20);
 
 		$total_polls=$GLOBALS['SITE_DB']->query_select_value('poll','COUNT(*)');
 		if ($total_polls<500)
@@ -263,7 +263,7 @@ class Module_polls
 		if ($content->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('POLLS'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
+		$pagination=pagination(do_lang_tempcode('POLLS'),NULL,$start,'polls_start',$max,'polls_max',$max_rows);
 
 		return do_template('PAGINATION_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$title,'CONTENT'=>$content,'PAGINATION'=>$pagination));
 	}

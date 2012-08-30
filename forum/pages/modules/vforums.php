@@ -134,8 +134,8 @@ class Module_vforums
 	 */
 	function _vforum($title,$condition,$order,$no_pin=false)
 	{
-		$max=get_param_integer('max',intval(get_option('forum_topics_per_page')));
-		$start=get_param_integer('start',0);
+		$max=get_param_integer('forum_max',intval(get_option('forum_topics_per_page')));
+		$start=get_param_integer('forum_start',0);
 		$type=get_param('type','misc');
 		$forum_name=do_lang_tempcode('VIRTUAL_FORUM');
 
@@ -210,7 +210,7 @@ class Module_vforums
 		$breadcrumbs=ocf_forum_breadcrumbs(db_get_first_id(),$title,get_param_integer('keep_forum_root',db_get_first_id()));
 		if (!$topics->is_empty())
 		{
-			$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'start',$max,'max',$max_rows,NULL,$type,true);
+			$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'forum_start',$max,'forum_max',$max_rows);
 
 			$moderator_actions='';
 			$moderator_actions.='<option value="mark_topics_read">'.do_lang('MARK_READ').'</option>';

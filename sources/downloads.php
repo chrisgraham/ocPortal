@@ -54,9 +54,10 @@ function download_licence_script()
  * @param  ?ID_TEXT		The zone the download module we're using is in (NULL: find it)
  * @param  ?string		Text summary for result (e.g. highlighted portion of actual file from search result) (NULL: none)
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ?AUTO_LINK	The virtual root (NULL: read from environment)
  * @return tempcode		A box for this download, linking to the full download page
  */
-function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL,$text_summary=NULL,$give_context=true)
+function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL,$text_summary=NULL,$give_context=true,$root=NULL)
 {
 	require_css('downloads');
 
@@ -66,15 +67,16 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	$filesize=$row['file_size'];
 	$filesize=($filesize>0)?clean_file_size($filesize):do_lang('UNKNOWN');
 	$description=get_translated_tempcode($row['description']);
-	$root=get_param_integer('root',db_get_first_id(),true);
-	$map=array('page'=>'downloads','type'=>'entry','id'=>$row['id'],'root'=>($root==db_get_first_id())?NULL:$root);
+	$map=array('page'=>'downloads','type'=>'entry','id'=>$row['id']);
+	if (!is_null($root)) $map['keep_download_root']=($root==db_get_first_id())?NULL:$root;
 	if (get_page_name()=='downloads') $map+=propagate_ocselect();
 	$download_url=build_url($map,$zone);
 	$date=get_timezoned_date($row['add_date'],false);
 	$date_raw=$row['add_date'];
 
-	$breadcrumbs=((get_option('show_dload_trees')=='1') && ($include_breadcrumbs))?download_breadcrumbs($row['category_id'],NULL,false,$zone):new ocp_tempcode();
+	$breadcrumbs=((get_option('show_dload_trees')=='1') && ($include_breadcrumbs))?download_breadcrumbs($row['category_id'],is_null($root)?get_param_integer('keep_downloads_root',NULL):$root,false,$zone):new ocp_tempcode();
 
+	// Download has image?
 	$pic_suffix='';
 	$thumb_url='';
 	$full_img_url='';
@@ -92,11 +94,13 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 		} else $imgcode=new ocp_tempcode();
 	} else $imgcode=new ocp_tempcode();
 
+	// Rating
 	require_code('feedback');
 	$rating=($row['allow_rating']==1)?display_rating($download_url,get_translated_text($row['name']),'downloads',strval($row['id']),'RATING_INLINE_STATIC',$row['submitter']):NULL;
 	if (!is_null($rating))
 		if (trim($rating->evaluate())=='') $rating=NULL;
 
+	// Licensing
 	$licence_title=NULL;
 	$licence_url=NULL;
 	$licence_hyperlink=NULL;
@@ -152,11 +156,14 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
-	$url=build_url(array('page'=>'downloads','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']),$zone);
+	$map=array('page'=>'downloads','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']);
+	if (!is_null($root)) $map['keep_download_root']=$root;
+	$url=build_url($map,$zone);
 
 	require_lang('downloads');
 
@@ -166,7 +173,7 @@ function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$i
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=download_breadcrumbs($row['parent_id'],NULL,false,$zone);
+		$breadcrumbs=download_breadcrumbs($row['parent_id'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone);
 	}
 
 	$summary=get_translated_tempcode($row['description']);
@@ -414,7 +421,7 @@ function download_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$
 	if (is_null($root)) $root=db_get_first_id();
 	if (is_null($zone)) $zone=get_module_zone('downloads');
 
-	$url=build_url(array('page'=>'downloads','type'=>'misc','id'=>($category_id==db_get_first_id())?NULL:$category_id,'root'=>($root==db_get_first_id())?NULL:$root)+propagate_ocselect(),$zone);
+	$url=build_url(array('page'=>'downloads','type'=>'misc','id'=>($category_id==db_get_first_id())?NULL:$category_id,'keep_download_root'=>($root==db_get_first_id())?NULL:$root)+propagate_ocselect(),$zone);
 
 	if (($category_id==$root) || ($category_id==db_get_first_id()))
 	{

@@ -25,11 +25,14 @@
  * @param  ID_TEXT		Zone to link through to
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @return tempcode		The topic box
  */
-function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
-	$url=build_url(array('page'=>'topicview','id'=>$row['id']),get_module_zone('topicview'));
+	$map=array('page'=>'topicview','id'=>$row['id']);
+	if (!is_null($root)) $map['keep_forum_root']=$root;
+	$url=build_url($map,get_module_zone('topicview'));
 
 	require_lang('ocf');
 
@@ -40,7 +43,7 @@ function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	if ($include_breadcrumbs)
 	{
 		require_code('ocf_forums');
-		$breadcrumbs=ocf_forum_breadcrumbs($row['t_forum_id'],NULL,NULL,false);
+		$breadcrumbs=ocf_forum_breadcrumbs($row['t_forum_id'],NULL,NULL,false,is_null($root)?get_param_integer('keep_forum_root',NULL):$root);
 	}
 
 	$num_posts=$row['t_cache_num_posts'];

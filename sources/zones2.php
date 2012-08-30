@@ -33,10 +33,13 @@ function init__zones2()
  * @param  tempcode		Rendered box
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?ID_TEXT		Virtual root to use (NULL: none)
  */
-function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=true)
+function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
-	$url=build_url(array('page'=>$row['the_page']),$row['the_zone']);
+	$map=array('page'=>$row['the_page']);
+	if (!is_null($root)) $map['keep_page_root']=$root;
+	$url=build_url($map,$row['the_zone']);
 
 	$_summary=seo_meta_get_for('comcode_page',$row['the_zone'].':'.$row['the_page']);
 	$summary=$_summary[1];
@@ -64,7 +67,7 @@ function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=tr
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=comcode_breadcrumbs($row['the_page'],$row['the_zone']);
+		$breadcrumbs=comcode_breadcrumbs($row['the_page'],$row['the_zone'],is_null($root)?get_param('keep_page_root',NULL):$root);
 	}
 
 	return do_template('COMCODE_PAGE_BOX',array(

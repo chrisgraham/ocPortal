@@ -105,8 +105,6 @@ class Hook_addon_registry_downloads
 			'DOWNLOAD_LIST_LINE_2.tpl',
 			'DOWNLOAD_SCREEN.tpl',
 			'BLOCK_MAIN_DOWNLOAD_TEASE.tpl',
-			'BLOCK_MAIN_RECENT_DOWNLOADS.tpl',
-			'BLOCK_MAIN_TOP_DOWNLOADS.tpl',
 			'DOWNLOAD_ALL_SCREEN.tpl',
 			'DOWNLOAD_AND_IMAGES_SIMPLE_BOX.tpl',
 			'uploads/downloads/.htaccess',
@@ -117,8 +115,6 @@ class Hook_addon_registry_downloads
 			'cms/pages/modules/cms_downloads.php',
 			'lang/EN/downloads.ini',
 			'site/pages/modules/downloads.php',
-			'sources/blocks/main_recent_downloads.php',
-			'sources/blocks/main_top_downloads.php',
 			'sources/downloads.php',
 			'sources/downloads2.php',
 			'sources/downloads_stats.php',
@@ -154,8 +150,6 @@ class Hook_addon_registry_downloads
 	{
 		return array(
 			'BLOCK_MAIN_DOWNLOAD_TEASE.tpl'=>'block_main_download_tease',
-			'BLOCK_MAIN_RECENT_DOWNLOADS.tpl'=>'block_main_recent_downloads',
-			'BLOCK_MAIN_TOP_DOWNLOADS.tpl'=>'block_main_top_downloads',
 			'DOWNLOAD_LIST_LINE.tpl'=>'download_list_line',
 			'DOWNLOAD_LIST_LINE_2.tpl'=>'download_list_line_2',
 			'DOWNLOAD_BOX.tpl'=>'download_category_screen',
@@ -241,152 +235,6 @@ class Hook_addon_registry_downloads
 			lorem_globalise(do_lorem_template('DOWNLOAD_AND_IMAGES_SIMPLE_BOX', array(
 				'DESCRIPTION'=>lorem_paragraph_html(),
 				'IMAGES'=>lorem_phrase(),
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__block_main_recent_downloads()
-	{
-		$downlaods=array(
-			array(
-				'id'=>1,
-				'file_size'=>placeholder_number(),
-				'description'=>lorem_phrase(),
-				'add_date'=>placeholder_time(),
-				'category_id'=>placeholder_id(),
-				'default_pic'=>'',
-				'download_views'=>placeholder_number(),
-				'submitter'=>placeholder_id(),
-				'num_downloads'=>placeholder_number(),
-				'edit_date'=>placeholder_time(),
-				'name'=>1
-			),
-			array(
-				'id'=>2,
-				'file_size'=>placeholder_number(),
-				'description'=>lorem_phrase(),
-				'add_date'=>placeholder_time(),
-				'category_id'=>placeholder_id(),
-				'default_pic'=>'',
-				'download_views'=>placeholder_number(),
-				'submitter'=>placeholder_id(),
-				'num_downloads'=>placeholder_number(),
-				'edit_date'=>placeholder_time(),
-				'name'=>lorem_phrase()
-			)
-		);
-
-		$content=new ocp_tempcode();
-		foreach ($downlaods as $download)
-		{
-			$map=array(
-				'AUTHOR'=>lorem_phrase(),
-				'ID'=>placeholder_id(),
-				'VIEWS'=>placeholder_number(),
-				'SUBMITTER'=>placeholder_id(),
-				'DESCRIPTION'=>lorem_sentence(),
-				'FILE_SIZE'=>placeholder_number(),
-				'DOWNLOADS'=>placeholder_number(),
-				'DATE_RAW'=>placeholder_date_raw(),
-				'DATE'=>placeholder_date(),
-				'EDIT_DATE_RAW'=>'',
-				'SIZE'=>placeholder_number(),
-				'URL'=>placeholder_url(),
-				'NAME'=>lorem_phrase(),
-				'BREADCRUMBS'=>placeholder_breadcrumbs(),
-				'IMGCODE'=>'',
-				'GIVE_CONTEXT'=>false,
-			);
-			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
-
-			$content->attach($tpl);
-		}
-
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_RECENT_DOWNLOADS', array(
-				'TITLE'=>lorem_word(),
-				'CONTENT'=>$content,
-				'NUMBER'=>placeholder_number()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__block_main_top_downloads()
-	{
-		$downlaods=array(
-			array(
-				'id'=>placeholder_id(),
-				'file_size'=>placeholder_number(),
-				'description'=>lorem_phrase(),
-				'add_date'=>placeholder_time(),
-				'category_id'=>placeholder_id(),
-				'default_pic'=>'',
-				'download_views'=>placeholder_number(),
-				'submitter'=>placeholder_id(),
-				'num_downloads'=>placeholder_number(),
-				'edit_date'=>placeholder_time(),
-				'name'=>1
-			),
-			array(
-				'id'=>placeholder_id(),
-				'file_size'=>placeholder_number(),
-				'description'=>lorem_phrase(),
-				'add_date'=>placeholder_time(),
-				'category_id'=>placeholder_id(),
-				'default_pic'=>'',
-				'download_views'=>placeholder_number(),
-				'submitter'=>placeholder_id(),
-				'num_downloads'=>placeholder_number(),
-				'edit_date'=>placeholder_time(),
-				'name'=>lorem_phrase()
-			)
-		);
-
-		$content=new ocp_tempcode();
-		foreach ($downlaods as $download)
-		{
-			$map=array(
-				'AUTHOR'=>lorem_phrase(),
-				'ID'=>placeholder_id(),
-				'VIEWS'=>placeholder_number(),
-				'SUBMITTER'=>placeholder_id(),
-				'DESCRIPTION'=>lorem_sentence(),
-				'FILE_SIZE'=>placeholder_number(),
-				'DOWNLOADS'=>placeholder_number(),
-				'DATE_RAW'=>placeholder_date_raw(),
-				'DATE'=>placeholder_date(),
-				'EDIT_DATE_RAW'=>'',
-				'SIZE'=>placeholder_number(),
-				'URL'=>placeholder_url(),
-				'NAME'=>lorem_phrase(),
-				'BREADCRUMBS'=>placeholder_breadcrumbs(),
-				'IMGCODE'=>'',
-				'GIVE_CONTEXT'=>false,
-			);
-			$tpl=do_lorem_template('DOWNLOAD_BOX', $map);
-
-			$content->attach($tpl);
-		}
-
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_TOP_DOWNLOADS', array(
-				'TITLE'=>lorem_word(),
-				'CONTENT'=>$content,
-				'NUMBER'=>placeholder_number()
 			)), NULL, '', true)
 		);
 	}

@@ -117,7 +117,6 @@ class Hook_addon_registry_catalogues
 			'CATALOGUE_links_TABULAR_HEADCELL.tpl',
 			'CATALOGUE_links_TABULAR_WRAP.tpl',
 			'CATALOGUE_CATEGORY_HEADING.tpl',
-			'BLOCK_MAIN_RECENT_CC_ENTRIES.tpl',
 			'uploads/catalogues/index.html',
 			'uploads/catalogues/.htaccess',
 			'themes/default/images/bigicons/catalogues.png',
@@ -140,7 +139,6 @@ class Hook_addon_registry_catalogues
 			'sources/hooks/modules/admin_unvalidated/catalogue_entry.php',
 			'sources/hooks/systems/attachments/catalogue_entry.php',
 			'sources/blocks/main_cc_embed.php',
-			'sources/blocks/main_recent_cc_entries.php',
 			'catalogues.css',
 			'site/catalogue_file.php',
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_BACKREFS.php',
@@ -162,7 +160,6 @@ class Hook_addon_registry_catalogues
 		return array(
 			'CATALOGUE_ADDING_SCREEN.tpl'=>'administrative__catalogue_adding_screen',
 			'CATALOGUE_EDITING_SCREEN.tpl'=>'administrative__catalogue_editing_screen',
-			'BLOCK_MAIN_RECENT_CC_ENTRIES.tpl'=>'block_main_recent_cc_entries',
 			'CATALOGUE_ENTRIES_LIST_LINE.tpl'=>'catalogue_entries_list_line',
 			'CATALOGUE_CATEGORIES_LIST_LINE.tpl'=>'catalogue_categories_list_line',
 			'SEARCH_RESULT_CATALOGUE_ENTRIES.tpl'=>'search_result_catalogue_entries',
@@ -627,25 +624,6 @@ class Hook_addon_registry_catalogues
 				'FIELDS_EXISTING'=>placeholder_form(),
 				'FIELDS_NEW'=>placeholder_form(),
 				'SUBMIT_NAME'=>lorem_word()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__block_main_recent_cc_entries()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_RECENT_CC_ENTRIES', array(
-				'CATALOGUE_TITLE'=>lorem_word(),
-				'CONTENT'=>lorem_phrase(),
-				'NUMBER'=>placeholder_number(),
-				'CATALOGUE'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}

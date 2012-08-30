@@ -43,20 +43,22 @@ function init__ocf_forums()
  * @param  ID_TEXT		Zone to link through to
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @return tempcode		The forum box
  */
-function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
-	$view_map=array('page'=>'forumview');
-	if ($row['id']!=db_get_first_id()) $view_map['id']=$row['id'];
-	$url=build_url($view_map,get_module_zone('forumview'));
+	$map=array('page'=>'forumview');
+	if ($row['id']!=db_get_first_id()) $map['id']=$row['id'];
+	if (!is_null($root)) $map['keep_forum_root']=$root;
+	$url=build_url($map,get_module_zone('forumview'));
 
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('FORUM'),$row['f_name']):$row['f_name'];
 
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=ocf_forum_breadcrumbs($row['id']);
+		$breadcrumbs=ocf_forum_breadcrumbs($row['id'],NULL,NULL,true,is_null($root)?get_param_integer('keep_forum_root',NULL):$root);
 	}
 
 	$summary=get_translated_tempcode($row['f_description']);
@@ -215,10 +217,13 @@ function ocf_get_forum_parent_or_list($forum_id,$parent_id=-1)
  * @param  ?string		The name of the given forum (NULL: find it from the DB).
  * @param  ?AUTO_LINK	The parent forum of the given forum (NULL: find it from the DB).
  * @param  boolean		Whether this is being called as the recursion start of deriving the breadcrumbs (top level call).
+ * @param  ?AUTO_LINK	Virtual root (NULL: none).
  * @return tempcode		The breadcrumbs.
  */
-function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NULL,$start=true)
+function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NULL,$start=true,$root=NULL)
 {
+	if (is_null($root)) $root=get_param_integer('keep_forum_root',db_get_first_id());
+
 	if (is_null($end_point_forum))
 	{
 		return new ocp_tempcode();
@@ -244,9 +249,9 @@ function ocf_forum_breadcrumbs($end_point_forum,$this_name=NULL,$parent_forum=NU
 	{
 		$_this_name=make_string_tempcode('<span>'.$this_name.'</span>');
 	}
-	if ($end_point_forum!==get_param_integer('keep_forum_root',db_get_first_id()))
+	if ($end_point_forum!==$root)
 	{
-		$out=ocf_forum_breadcrumbs($parent_forum,NULL,NULL,false);
+		$out=ocf_forum_breadcrumbs($parent_forum,NULL,NULL,false,$root);
 		if (!$out->is_empty()) $out->attach(do_template('BREADCRUMB_SEPARATOR'));
 	} else $out=new ocp_tempcode();
 	$out->attach($_this_name);

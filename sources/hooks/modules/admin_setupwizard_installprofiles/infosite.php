@@ -83,8 +83,6 @@ class Hook_admin_setupwizard_installprofiles_infosite
 			'YES'=>array(
 				'main_news',
 				'main_rss',
-				'main_recent_cc_entries',
-				'main_top_downloads',
 				'main_quotes',
 			),
 			'YES_CELL'=>array(

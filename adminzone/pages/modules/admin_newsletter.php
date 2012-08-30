@@ -659,7 +659,7 @@ class Module_admin_newsletter extends standard_crud_module
 			} else
 			{
 				require_code('templates_pagination');
-				$pagination=pagination(do_lang_tempcode('VIEW_NEWSLETTER_SUBSCRIBERS'),NULL,$start,'start_'.(is_null($level)?'':strval($level)),$max,'max_'.(is_null($level)?'':strval($level)),$max_rows,NULL,'subscribers',true);
+				$pagination=pagination(do_lang_tempcode('VIEW_NEWSLETTER_SUBSCRIBERS'),NULL,$start,'start_'.(is_null($level)?'':strval($level)),$max,'max_'.(is_null($level)?'':strval($level)),$max_rows);
 
 				$outs[]=array('PAGINATION'=>$pagination,'SUB'=>$out,'TEXT'=>$text);
 			}

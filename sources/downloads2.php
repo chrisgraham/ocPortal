@@ -708,8 +708,6 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 
 	log_it('ADD_DOWNLOAD',strval($id),$name);
 
-	decache('main_recent_downloads');
-	decache('main_top_downloads');
 	decache('main_download_tease');
 
 	return $id;
@@ -806,8 +804,6 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 			edit_gallery('download_'.strval($id),'download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','','',$download_gallery_root);
 	}
 
-	decache('main_recent_downloads');
-	decache('main_top_downloads');
 	decache('main_download_tease');
 
 	require_code('feedback');
@@ -858,8 +854,6 @@ function delete_download($id,$leave=false)
 			delete_gallery($name);
 	}
 
-	decache('main_recent_downloads');
-	decache('main_top_downloads');
 	decache('main_download_tease');
 }
 

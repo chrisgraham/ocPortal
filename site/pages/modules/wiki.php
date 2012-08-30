@@ -617,8 +617,8 @@ class Module_wiki
 		$test_tpl=internalise_own_screen($title);
 		if (is_object($test_tpl)) return $test_tpl;
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',25);
+		$start=get_param_integer('changes_start',0);
+		$max=get_param_integer('changes_max',25);
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'));
 		$test=explode(' ',get_param('sort','date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
@@ -661,7 +661,7 @@ class Module_wiki
 		if ($fields->is_empty()) return inform_screen($title,do_lang_tempcode('NO_ENTRIES'));
 
 		$fields_title=results_field_title(array(do_lang_tempcode('PAGE'),do_lang_tempcode('USERNAME'),do_lang_tempcode('DATE'),do_lang_tempcode('ACTION')),$sortables,'sort',$sortable.' '.$sort_order);
-		$out=results_table(do_lang_tempcode('WIKI_CHANGELOG'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
+		$out=results_table(do_lang_tempcode('WIKI_CHANGELOG'),$start,'changes_start',$max,'changes_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
 		return do_template('WIKI_CHANGES_SCREEN',array('_GUID'=>'0dea1ed9d31a818cba60f56fc1c8f68f','TITLE'=>$title,'RESULTS'=>$out));
 	}

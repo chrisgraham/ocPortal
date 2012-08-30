@@ -129,8 +129,8 @@ class Module_classifieds
 
 		enforce_personal_access($member_id);
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',30);
+		$start=get_param_integer('classifieds_start',0);
+		$max=get_param_integer('classifieds_max',30);
 
 		require_code('templates_pagination');
 
@@ -142,9 +142,7 @@ class Module_classifieds
 		$ads=array();
 		foreach ($rows as $row)
 		{
-			$root=get_param_integer('root',NULL);
-
-			$data_map=get_catalogue_entry_map($row,NULL,'CATEGORY','DEFAULT',$root,NULL,array(0));
+			$data_map=get_catalogue_entry_map($row,NULL,'CATEGORY','DEFAULT',get_param_integer('keep_catalogue_'.$row['c_name'].'_root',NULL),NULL,array(0));
 			$ad_title=$data_map['FIELD_0'];
 
 			$purchase_url=build_url(array('page'=>'purchase','type'=>'misc','filter'=>'CLASSIFIEDS_ADVERT','id'=>$row['id']),get_module_zone('purchase'));
@@ -176,7 +174,7 @@ class Module_classifieds
 					'T_VIA'=>$t['t_via']
 				);
 			}
-			$url_map=array('page'=>'catalogues','type'=>'entry','id'=>$row['id'],'root'=>$root);
+			$url_map=array('page'=>'catalogues','type'=>'entry','id'=>$row['id']);
 			$url=build_url($url_map,'_SELF');
 
 			// No known expiry status: put on free, or let expire
@@ -201,7 +199,7 @@ class Module_classifieds
 			);
 		}
 
-		$pagination=pagination(do_lang('_CLASSIFIED_ADVERTS'),NULL,$start,'start',$max,'max',$max_rows,NULL,NULL,true);
+		$pagination=pagination(do_lang('_CLASSIFIED_ADVERTS'),NULL,$start,'classifieds_start',$max,'classifieds_max',$max_rows);
 
 		return do_template('CLASSIFIED_ADVERTS_SCREEN',array('_GUID'=>'b25659c245a738b4f161dc87869d9edc','TITLE'=>$title,'RESULTS_BROWSER'=>$results_browser,'ADS'=>$ads));
 	}

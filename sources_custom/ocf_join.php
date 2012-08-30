@@ -294,8 +294,8 @@ function referrer_report_script($ret=false)
 		$where.=' AND referrer.id='.strval($member_id);
 	}
 
-	$max=get_param_integer('max',$csv?10000:30);
-	$start=get_param_integer('start',0);
+	$max=get_param_integer('referrals_max',$csv?10000:30);
+	$start=get_param_integer('referrals_start',0);
 
 	$data=array();
 	$table='f_invites i LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members referrer ON referrer.id=i_inviter LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members referee ON referee.m_email_address=i_email_address';
@@ -379,7 +379,7 @@ function referrer_report_script($ret=false)
 			$fields->attach(results_entry($data_row));
 		}
 
-		$table=results_table(do_lang('REFERRALS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields);
+		$table=results_table(do_lang('REFERRALS'),$start,'referrals_start',$max,'referrals_max',$max_rows,$fields_title,$fields);
 
 		if ($ret) return $table;
 

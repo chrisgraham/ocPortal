@@ -82,8 +82,6 @@ class Hook_admin_setupwizard_installprofiles_portfolio
 	{
 		return array(
 			'YES'=>array(
-				'main_recent_galleries',
-				'main_top_galleries',
 				'main_quotes',
 			),
 			'YES_CELL'=>array(

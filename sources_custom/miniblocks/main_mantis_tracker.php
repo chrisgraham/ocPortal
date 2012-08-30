@@ -38,8 +38,8 @@ if (!running_script('tracker'))
 
 require_code('xhtml');
 
-$max=get_param_integer('max',10);
-$start=get_param_integer('start',0);
+$max=get_param_integer('mantis_max',10);
+$start=get_param_integer('mantis_start',0);
 
 $db=new database_driver(get_db_site(),get_db_site_host(),get_db_site_user(),get_db_site_password(),'');
 
@@ -148,7 +148,7 @@ if (count($issues)==0)
 }
 
 require_code('templates_results_browser');
-$results_browser=results_browser('Issues',NULL,$start,'start',$max,'max',$max_rows,NULL,NULL,true);
+$results_browser=results_browser('Issues',NULL,$start,'mantis_start',$max,'mantis_max',$max_rows,NULL,NULL,true);
 echo '<div class="float_surrounder">';
 echo str_replace(get_base_url().((get_zone_name()=='')?'':'/').get_zone_name().'/index.php',find_script('tracker'),$results_browser->evaluate());
 echo '</div>';

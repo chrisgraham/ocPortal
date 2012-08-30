@@ -155,7 +155,7 @@ function activities_ajax_update_list_handler()
 {
 	$map=array();
 
-	$map['max']=$GLOBALS['SITE_DB']->query_select_value_if_there('values', 'the_value', array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
+	$map['max']=$GLOBALS['SITE_DB']->query_select_value_if_there('values','the_value',array('the_name'=>get_zone_name()."_".get_page_name()."_update_max"));
 
 	if (is_null($map['max']))
 	{

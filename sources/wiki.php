@@ -29,17 +29,20 @@ The concept of a chain is crucial to proper understanding of the Wiki+ system. P
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
-	$url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($row['page_id']==db_get_first_id())?NULL:$row['page_id']),$zone);
+	$map=array('page'=>'wiki','type'=>'misc','id'=>($row['page_id']==db_get_first_id())?NULL:$row['page_id']);
+	if (!is_null($root)) $map['keep_forum_root']=$root;
+	$url=build_url($map,$zone);
 	$url->attach('#post_'.strval($row['id']));
 
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=wiki_breadcrumbs(strval($row['page_id']),NULL,true);
+		$breadcrumbs=wiki_breadcrumbs(wiki_derive_chain($row['page_id'],$root),NULL,true);
 	}
 
 	$title=mixed();
@@ -58,13 +61,16 @@ function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_b
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
 	$content=get_translated_tempcode($row['description']);
 
-	$url=build_url(array('page'=>'wiki','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']),$zone);
+	$map=array('page'=>'wiki','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']);
+	if (!is_null($root)) $map['keep_forum_root']=$root;
+	$url=build_url($map,$zone);
 
 	$_title=escape_html(get_translated_text($row['title']));
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('WIKI_PAGE'),$_title):$_title;
@@ -72,7 +78,7 @@ function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_b
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$chain=wiki_derive_chain($row['id']);
+		$chain=wiki_derive_chain($row['id'],$root);
 		$chain=preg_replace('#/[^/]+#','',$chain);
 		if ($chain!='')
 			$breadcrumbs=wiki_breadcrumbs($chain,NULL,true);
@@ -410,16 +416,19 @@ function wiki_breadcrumbs($chain,$current_title=NULL,$final_link=false,$links=tr
  * Create a Wiki+ chain from the specified page ID
  *
  * @param  AUTO_LINK		The ID of the page to derive a chain for
+ * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @return string			The Wiki+ chain derived
  */
-function wiki_derive_chain($id)
+function wiki_derive_chain($id,$root=NULL)
 {
 	static $parents=array();
+
+	if (is_null($root))
+		$root=get_param_integer('keep_wiki_root',db_get_first_id());
 
 	$temp_id=$id;
 	$chain=strval($id);
 	$seen_before=array();
-	$root=get_param_integer('keep_wiki_root',db_get_first_id());
 	while ($temp_id>$root)
 	{
 		$temp_id=array_key_exists($temp_id,$parents)?$parents[$temp_id]:$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_children','parent_id',array('child_id'=>$temp_id));

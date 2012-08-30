@@ -35,19 +35,19 @@ class Block_main_cc_embed
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('ocselect','root','sort','max','param','select','template_set','display_type','pagination','sorting');
+		$info['parameters']=array('ocselect','param','select','template_set','display_type','sorting','sort','max','start','pagination','root');
 		return $info;
 	}
 
 	/**
 	 * Standard modular cache function.
 	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).
+	 * @return ?array		Map of cache details (cache_on and ttl) (NULL: module is disabled).
 	 */
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'sorting\',$map)?$map[\'sorting\']:\'0\')==\'1\'),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'root\',NULL),array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),get_param_integer(\'max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer(\'start\',0))';
+		$info['cache_on']='array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):NULL,((array_key_exists(\'sorting\',$map)?$map[\'sorting\']:\'0\')==\'1\'),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'\',array_key_exists(\'display_type\',$map)?$map[\'display_type\']:NULL,array_key_exists(\'template_set\',$map)?$map[\'template_set\']:\'\',array_key_exists(\'select\',$map)?$map[\'select\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id())';
 		$info['ttl']=60*2;
 		return $info;
 	}
@@ -60,17 +60,9 @@ class Block_main_cc_embed
 	 */
 	function run($map)
 	{
-		inform_non_canonical_parameter('max');
-
-		$block_id=md5(serialize($map));
-
 		$category_id=array_key_exists('param',$map)?intval($map['param']):db_get_first_id();
-		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):30);
-		$start=get_param_integer($block_id.'_start',0);
-		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('root',NULL);
 		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
 		$sort=array_key_exists('sort',$map)?$map['sort']:'';
-		$pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
 		$sorting=((array_key_exists('sorting',$map)?$map['sorting']:'0')=='1');
 
 		require_lang('catalogues');
@@ -98,6 +90,13 @@ class Block_main_cc_embed
 		$catalogue_name=$category['c_name'];
 		$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 		$catalogue=$catalogues[0];
+
+		$block_id=get_block_id($map);
+
+		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):30);
+		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
+		$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
+		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('keep_catalogue_'.$catalogue_name.'_root',NULL);
 
 		// Display type?
 		$tpl_set=array_key_exists('template_set',$map)?$map['template_set']:$catalogue_name;
@@ -134,13 +133,13 @@ class Block_main_cc_embed
 		// Sorting and pagination
 		if (!$sorting)
 		{
-			$sorting='',
+			$sorting=new ocp_tempcode(),
 		}
-		$pagination='';
-		if ($pagination)
+		$pagination=new ocp_tempcode();
+		if ($do_pagination)
 		{
 			require_code('templates_pagination');
-			$pagination=pagination(do_lang_tempcode('ENTRIES'),$id,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows,$root,NULL,true);
+			$pagination=pagination(do_lang_tempcode('ENTRIES'),$id,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
 		}
 
 		// Render

@@ -1,7 +1,7 @@
 {$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
 <div id="{$GET*,wrapper_id}">
 	<div class="gallery_grid_cell_wrap">
-		{IMAGES}
+		{ENTRIES}
 	</div>
 
 	{+START,IF_NON_EMPTY,{PAGINATION}}

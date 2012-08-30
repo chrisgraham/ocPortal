@@ -66,8 +66,8 @@ class Module_leader_board
 
 		$start_date=intval(get_option('leaderboard_start_date'));
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',52);
+		$start=get_param_integer('lb_start',0);
+		$max=get_param_integer('lb_max',52);
 
 		$weeks=$GLOBALS['SITE_DB']->query('SELECT DISTINCT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date).' ORDER BY date_and_time DESC',$max,$start);
 		if (count($weeks)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
@@ -94,7 +94,7 @@ class Module_leader_board
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('POINT_LEADERBOARD'),NULL,$start,'start',$max,'max',$num_weeks,NULL,get_param('type','misc'),true);
+		$pagination=pagination(do_lang_tempcode('POINT_LEADERBOARD'),NULL,$start,'lb_start',$max,'lb_max',$num_weeks);
 
 		return do_template('POINTS_LEADERBOARD_SCREEN',array('_GUID'=>'bab5f7b661435b83800532d3eebd0d54','TITLE'=>$title,'WEEKS'=>$out,'PAGINATION'=>$pagination));
 	}

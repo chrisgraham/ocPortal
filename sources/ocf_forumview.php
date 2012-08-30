@@ -349,7 +349,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($moderator_actions);
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),($type=='pt')?$of_member_id:$id,$start,'start',$max,'max',$details['max_rows'],NULL,($type=='pt')?'view':$type,true,false,7,NULL,($type=='pt')?'tab__pts':'');
+		$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),($type=='pt')?$of_member_id:$id,$start,'forum_start',$max,'forum_max',$details['max_rows'],false,7,NULL,($type=='pt')?'tab__pts':'');
 
 		$order=array_key_exists('order',$details)?$details['order']:'last_post';
 		$topic_wrapper=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'e452b81001e5c6b7adb4d82e627bf983','TYPE'=>$type,'ID'=>is_null($id)?NULL:strval($id),'MAX'=>strval($max),'ORDER'=>$order,'MAY_CHANGE_MAX'=>array_key_exists('may_change_max',$details),'ACTION_URL'=>$action_url,'BUTTONS'=>$buttons,'STARTER_TITLE'=>$starter_title,'BREADCRUMBS'=>$breadcrumbs,'PAGINATION'=>$pagination,'MODERATOR_ACTIONS'=>$moderator_actions,'TOPICS'=>$topics,'FORUM_NAME'=>$forum_name));
@@ -532,7 +532,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 		$last_post=do_template('OCF_FORUM_TOPIC_ROW_LAST_POST',array('_GUID'=>'6aa8d0f4024ae12bf94b68b74faae7cf','ID'=>strval($topic['id']),'DATE_RAW'=>strval($topic['last_time']),'DATE'=>$topic['last_time_string'],'POSTER'=>$poster,'LAST_URL'=>$last_post_url));
 	} else $last_post=do_lang_tempcode('NA_EM');
 	$map=array('page'=>'topicview','id'=>$topic['id']);
-	if ((array_key_exists('forum_id',$topic)) && (is_null(get_bot_type())) && (get_param_integer('start',0)!=0)) $map['kfs'.strval($topic['forum_id'])]=get_param_integer('start',0);
+	if ((array_key_exists('forum_id',$topic)) && (is_null(get_bot_type())) && (get_param_integer('forum_start',0)!=0)) $map['kfs'.strval($topic['forum_id'])]=get_param_integer('forum_start',0);
 	$url=build_url($map,get_module_zone('topicview'));
 
 	// Modifiers

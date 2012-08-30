@@ -130,7 +130,7 @@ class Hook_sw_catalogues
 	{
 		if (!addon_installed('catalogues')) return array();
 
-		return array(array('main_recent_cc_entries'=>array('NO','NO')),array());
+		return array(),array());
 	}
 }
 

@@ -85,8 +85,6 @@ class Hook_admin_setupwizard_installprofiles_community
 				'main_forum_news',
 				'main_leader_board',
 				'main_forum_topics',
-				'main_recent_downloads',
-				'main_top_downloads',
 				'main_quotes',
 			),
 			'YES_CELL'=>array(

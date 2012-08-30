@@ -186,8 +186,8 @@ class Module_awards
 		$info=$object->info();
 		if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',20);
+		$start=get_param_integer('award_start',0);
+		$max=get_param_integer('award_max',20);
 		$title=get_screen_title('_AWARD',true,array(escape_html(get_translated_text($award_type_row['a_title']))));
 		$description=paragraph(get_translated_tempcode($award_type_row['a_description']),'grdgdfghdfgodfs');
 
@@ -227,7 +227,7 @@ class Module_awards
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('AWARD_HISTORY'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
+		$pagination=pagination(do_lang_tempcode('AWARD_HISTORY'),NULL,$start,'award_start',$max,'award_max',$max_rows);
 
 		$sub_title=do_lang_tempcode('AWARD_HISTORY');
 

@@ -35,19 +35,19 @@ class Block_main_multi_content
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('ocselect','param','efficient','filter','filter_b','title','zone','mode','max','days','lifetime','pinned','no_links','pagination','give_context','include_breadcrumbs');
+		$info['parameters']=array('ocselect','param','efficient','filter','filter_b','title','zone','mode','days','lifetime','pinned','no_links','give_context','include_breadcrumbs','max','start','pagination','root');
 		return $info;
 	}
 
 	/**
 	 * Standard modular cache function.
 	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).
+	 * @return ?array		Map of cache details (cache_on and ttl) (NULL: module is disabled).
 	 */
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'0\')?array((array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\',array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'mode\',$map)?$map[\'mode\']:\'recent\'):NULL';
+		$info['cache_on']='array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'keep_\'.(array_key_exists(\'param\',$map)?$map[\'param\']:\'download\').\'_root\',NULL),(array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'mode\',$map)?$map[\'mode\']:\'recent\')';
 		$info['ttl']=30;
 		return $info;
 	}
@@ -88,8 +88,6 @@ class Block_main_multi_content
 		require_lang('awards');
 		require_code('awards');
 
-		$block_id=md5(serialize($map));
-
 		if (array_key_exists('param',$map))
 		{
 			$type_id=$map['param'];
@@ -104,6 +102,14 @@ class Block_main_multi_content
 				$type_id=key($hooks);
 			}
 		}
+
+		$block_id=get_block_id($map);
+
+		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):30);
+		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
+		$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
+		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('keep_'.$type_id.'_root',NULL);
+
 		$mode=array_key_exists('mode',$map)?$map['mode']:'recent'; // recent|top|random|all
 		$filter=array_key_exists('filter',$map)?$map['filter']:'';
 		$filter_b=array_key_exists('filter_b',$map)?$map['filter_b']:'';
@@ -111,9 +117,6 @@ class Block_main_multi_content
 		$zone=array_key_exists('zone',$map)?$map['zone']:'_SEARCH';
 		$efficient=(array_key_exists('efficient',$map)?$map['efficient']:'1')=='1';
 		$title=array_key_exists('title',$map)?$map['title']:'';
-		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):10);
-		$start=get_param_integer($block_id.'_start',0);
-		$do_pagination=(array_key_exists('pagination',$map)?$map['pagination']:'0')=='1';
 		$days=((array_key_exists('days',$map)) && ($map['days']!=''))?intval($map['days']):NULL;
 		$lifetime=((array_key_exists('lifetime',$map)) && ($map['lifetime']!=''))?intval($map['lifetime']):NULL;
 		$pinned=((array_key_exists('pinned',$map)) && ($map['pinned']!=''))?explode(',',$map['pinned']):array();
@@ -503,7 +506,7 @@ class Block_main_multi_content
 			}
 
 			// Render
-			$rendered_content[]=$object->run($row,$zone,$give_context,$include_breadcrumbs);
+			$rendered_content[]=$object->run($row,$zone,$give_context,$include_breadcrumbs,$root);
 
 			// Try and get a better submit url
 			$submit_url=str_replace('%21',$content_id,$submit_url);
@@ -537,7 +540,7 @@ class Block_main_multi_content
 		if ($do_pagination)
 		{
 			require_code('templates_pagination');
-			$pagination=pagination($info['title'],NULL,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows,NULL,NULL,true);
+			$pagination=pagination($info['title'],NULL,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
 		}
 
 		return do_template('BLOCK_MAIN_MULTI_CONTENT',array('TYPE'=>$info['title'],'TITLE'=>$title,'CONTENT'=>$rendered_content,'CONTENT_DATA'=>$content_data,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'PAGINATION'=>$pagination));

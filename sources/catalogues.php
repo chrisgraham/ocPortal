@@ -46,9 +46,10 @@ function init__catalogues()
  * @param  ID_TEXT			Zone to link through to
  * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean			Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @return tempcode			The catalogue box
  */
-function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
 	require_css('catalogues');
 
@@ -62,12 +63,12 @@ function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$inc
 		$catalogue=$catalogues[0];
 	}
 
-	$display=get_catalogue_entry_map($row,$catalogue,'SEARCH',$tpl_set,-1,NULL,NULL,false,true);
+	$display=get_catalogue_entry_map($row,$catalogue,'SEARCH',$tpl_set,$root,NULL,NULL,false,true);
 
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=catalogue_category_breadcrumbs($row['cc_id'],NULL,false);
+		$breadcrumbs=catalogue_category_breadcrumbs($row['cc_id'],is_null($root)?get_param_integer('keep_catalogue_'.$catalogue['c_name'].'_root',NULL):$root,false);
 	}
 
 	$tpl_set=$catalogue_name;
@@ -81,16 +82,15 @@ function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$inc
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
 	$content=get_translated_tempcode($row['cc_description']);
 
-	// TODO!!
 	$map=array('page'=>'catalogues','type'=>'category','id'=>$row['id']);
-	$root=get_param_integer('root',NULL);
-	if (!is_null($root)) $map['root']=$root;
+	if (!is_null($root)) $map['keep_catalogue_'.$row['c_name'].'_root']=$root;
 	if (get_page_name()=='catalogues') $map+=propagate_ocselect($prefix);
 	$url=build_url($map,$zone);
 
@@ -106,7 +106,7 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=catalogue_category_breadcrumbs($row['id']);
+		$breadcrumbs=catalogue_category_breadcrumbs($row['id'],is_null($root)?get_param_integer('keep_catalogue_'.$catalogue['c_name'].'_root',NULL):$root);
 	}
 
 	$rep_image=mixed();
@@ -399,7 +399,8 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 					$tab_entry_map=$entry['map']+(array_key_exists($i,$extra_map)?$extra_map[$i]:array());
 					if ((get_option('is_on_comments')=='1') && ($entry['allow_comments']>=1) || (get_option('is_on_rating')=='1') && ($entry['allow_rating']==1) || (get_option('is_on_trackbacks')=='1') && ($entry['allow_trackbacks']==1))
 					{
-						$url_map=array('page'=>'catalogues','type'=>'entry','id'=>$entry['id'],'root'=>($root==-1)?NULL:$root);
+						$url_map=array('page'=>'catalogues','type'=>'entry','id'=>$entry['id']);
+						if ($root!==NULL) $url_map['keep_catalogue_'.$catalogue_name.'_root']=$root;
 						if (get_page_name()=='catalogues') $url_map+=propagate_ocselect();
 						$tab_entry_map['VIEW_URL']=build_url($url_map,get_module_zone('catalogues'));
 					} else
@@ -885,7 +886,8 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	// Link to view entry
 	if ((get_option('is_on_comments')=='1') && ($entry['allow_comments']>=1) || (get_option('is_on_rating')=='1') && ($entry['allow_rating']==1) || (get_option('is_on_trackbacks')=='1') && ($entry['allow_trackbacks']==1) || (!$all_visible))
 	{
-		$url_map=array('page'=>'catalogues','type'=>'entry','id'=>$id,'root'=>($root==-1)?NULL:$root);
+		$url_map=array('page'=>'catalogues','type'=>'entry','id'=>$id);
+		if ($root!==NULL) $url_map['keep_catalogue_'.$catalogue_name.'_root']=$root;
 		if (get_page_name()=='catalogues') $url_map+=propagate_ocselect();
 		$map['VIEW_URL']=build_url($url_map,get_module_zone('catalogues'));
 	} else
@@ -1432,7 +1434,6 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true)
 {
 	$map=array('page'=>'catalogues','type'=>'category','id'=>$category_id);
-	if (!is_null($root)) $map['root']=$root;
 
 	if (get_page_name()=='catalogues') $map+=propagate_ocselect();
    $url=build_url($map,get_module_zone('catalogues'));
@@ -1556,7 +1557,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 	else
 		$tpl_set=$catalogue_name;
 
-	$root=get_param_integer('root',NULL);
+	$root=get_param_integer('keep_catalogue_'.$catalogue_name.'_root',NULL);
 	$map=get_catalogue_entry_map($entry,$catalogue,'PAGE',$tpl_set,$root,NULL,NULL,true,true);
 
 	if (get_db_type()!='xml')

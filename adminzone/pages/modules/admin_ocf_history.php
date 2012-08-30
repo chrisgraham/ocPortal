@@ -187,7 +187,7 @@ class Module_admin_ocf_history
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('POST_HISTORY'),NULL,$start,'start',$max,'max',$max_rows,NULL,'misc',true);
+		$pagination=pagination(do_lang_tempcode('POST_HISTORY'),NULL,$start,'start',$max,'max',$max_rows);
 
 		return do_template('OCF_HISTORY_SCREEN',array('_GUID'=>'7dd45ce985fc7222771368336c3f19e4','PAGINATION'=>$pagination,'TITLE'=>$title,'CONTENT'=>$content));
 	}

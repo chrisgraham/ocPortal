@@ -25,9 +25,10 @@
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content). Also uses the post title, as opposed to the post's topic's title.
  * @param  boolean		Whether to embed a link to the topic.
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @return tempcode  	The isolated post.
  */
-function render_post_box($row,$use_post_title=false,$give_context=true,$include_breadcrumbs=true)
+function render_post_box($row,$use_post_title=false,$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
 	require_code('ocf_groups');
 	require_code('ocf_forums');
@@ -108,12 +109,14 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=ocf_forum_breadcrumbs($row['p_cache_forum_id']);
+		$breadcrumbs=ocf_forum_breadcrumbs($row['p_cache_forum_id'],NULL,NULL,false,is_null($root)?get_param_integer('keep_forum_root',NULL):$root);
 	}
 
 	// Misc stuff
 	$poster_id=$row['p_poster'];
-	$post_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$row['id']),get_module_zone('topicview'));
+	$map=array('page'=>'topicview','type'=>'findpost','id'=>$row['id']);
+	if (!is_null($root)) $map['keep_forum_root']=$root;
+	$post_url=build_url($map,get_module_zone('topicview'));
 	$post_url->attach('#post_'.strval($row['id']));
 	if ((get_page_name()!='search') && (array_key_exists('text_parsed',$row)) && (!is_null($row['text_parsed'])) && ($row['text_parsed']!='') && ($row['p_post']!=0))
 	{

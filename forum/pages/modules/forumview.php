@@ -220,19 +220,19 @@ class Module_forumview
 
 		$current_filter_cat=get_param('category','');
 
-		$max=get_param_integer('max',intval(get_option('forum_topics_per_page')));
+		$max=get_param_integer('forum_max',intval(get_option('forum_topics_per_page')));
 
 		$root=get_param_integer('keep_forum_root',db_get_first_id());
 
 		if ($type=='pt') // Not used anymore by default, but code still here
 		{
 			$id=NULL;
-			$start=get_param_integer('start',get_param_integer('kfs',0));
+			$start=get_param_integer('forum_start',get_param_integer('kfs',0));
 			$of_member_id=get_param_integer('id',get_member());
 		} else
 		{
 			$id=get_param_integer('id',db_get_first_id());
-			$start=get_param_integer('start',get_param_integer('kfs'.strval($id),0));
+			$start=get_param_integer('forum_start',get_param_integer('kfs'.strval($id),0));
 			$of_member_id=NULL;
 		}
 

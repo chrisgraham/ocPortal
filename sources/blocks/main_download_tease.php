@@ -35,19 +35,19 @@ class Block_main_download_tease
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('zone');
+		$info['parameters']=array('zone','max','start','pagination','root');
 		return $info;
 	}
 
 	/**
 	 * Standard modular cache function.
 	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).
+	 * @return ?array		Map of cache details (cache_on and ttl) (NULL: module is disabled).
 	 */
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(get_param_integer(\'max\',10),get_param_integer(\'start\',0),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'downloads\'))';
+		$info['cache_on']='array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'keep_download_root\',NULL),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'downloads\'))';
 		$info['ttl']=60*24;
 		return $info;
 	}
@@ -66,8 +66,12 @@ class Block_main_download_tease
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('downloads');
 
-		$max=get_param_integer('max',10);
-		$start=get_param_integer('start',0);
+		$block_id=get_block_id($map);
+
+		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):30);
+		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
+		$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
+		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('keep_download_root',NULL);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('validated'=>1),'ORDER BY num_downloads DESC',$max,$start);
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)',array('validated'=>1));
@@ -75,11 +79,15 @@ class Block_main_download_tease
 		$content=new ocp_tempcode();
 		foreach ($rows as $row)
 		{
-			$content->attach(render_download_box($row,true,true/*breadcrumbs?*/,$zone,NULL,false/*context?*/));
+			$content->attach(render_download_box($row,true,true/*breadcrumbs?*/,$zone,NULL,false/*context?*/,$root));
 		}
 
-		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('DOWNLOADS'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
+		$pagination=new ocp_tempcode();
+		if ($do_pagination)
+		{
+			require_code('templates_pagination');
+			$pagination=pagination(do_lang_tempcode('DOWNLOADS'),NULL,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
+		}
 
 		return do_template('BLOCK_MAIN_DOWNLOAD_TEASE',array('_GUID'=>'a164e33c0b4ace4bae945c39f2f00ca9','CONTENT'=>$content,'PAGINATION'=>$pagination));
 	}

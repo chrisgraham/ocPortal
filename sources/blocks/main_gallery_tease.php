@@ -35,19 +35,19 @@ class Block_main_gallery_tease
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('param','zone','reverse_thumb_order');
+		$info['parameters']=array('param','zone','reverse_thumb_order','max','start','pagination','root');
 		return $info;
 	}
 
 	/**
 	 * Standard modular cache function.
 	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).
+	 * @return ?array		Map of cache details (cache_on and ttl) (NULL: module is disabled).
 	 */
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?$map[\'param\']:\'root\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',(array_key_exists(\'reverse_thumb_order\',$map))?$map[\'reverse_thumb_order\']:\'0\')';
+		$info['cache_on']='array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'keep_gallery_root\',NULL),array_key_exists(\'param\',$map)?$map[\'param\']:\'root\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',(array_key_exists(\'reverse_thumb_order\',$map))?$map[\'reverse_thumb_order\']:\'0\')';
 		$info['ttl']=60*2;
 		return $info;
 	}
@@ -64,6 +64,13 @@ class Block_main_gallery_tease
 		require_code('galleries');
 		require_css('galleries');
 
+		$block_id=get_block_id($map);
+
+		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):30);
+		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
+		$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
+		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('keep_gallery_root',NULL);
+
 		$content=new ocp_tempcode();
 
 		$parent_id=array_key_exists('param',$map)?$map['param']:'root';
@@ -71,9 +78,6 @@ class Block_main_gallery_tease
 		$parent_ids=ocfilter_to_idlist_using_db($parent_id,'name','galleries','galleries','parent_id','parent_id','name',false,false);
 
 		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
-
-		$max=get_param_integer('max',5);
-		$start=get_param_integer('start',0);
 
 		// For all galleries off the given gallery
 		$where='';
@@ -90,7 +94,7 @@ class Block_main_gallery_tease
 		}
 		foreach ($galleries as $child)
 		{
-			$url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$child['name']),$zone);
+			$url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$child['name'],'root'=>$root),$zone);
 
 			$member_id=get_member_id_from_gallery_name($child['name'],$child,true);
 			$is_member=!is_null($member_id);
@@ -120,8 +124,12 @@ class Block_main_gallery_tease
 
 		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) '.$query);
 
-		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('MEDIA_ENTRIES'),NULL,$start,'start',$max,'max',$max_rows,NULL,get_param('type','misc'),true);
+		$pagination=new ocp_tempcode();
+		if ($do_pagination)
+		{
+			require_code('templates_pagination');
+			$pagination=pagination(do_lang_tempcode('MEDIA_ENTRIES'),NULL,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
+		}
 
 		return do_template('BLOCK_MAIN_GALLERY_TEASE',array('_GUID'=>'0e7f84042ab0c873155998eae41b8a16','CONTENT'=>$content,'PAGINATION'=>$pagination));
 	}

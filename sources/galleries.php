@@ -38,14 +38,17 @@ function init__galleries()
  * @param  ID_TEXT		The zone the galleries module is in
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?ID_TEXT		Virtual root to use (NULL: none)
  * @return tempcode		The rendered box
  */
-function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
 	require_css('galleries');
 	require_code('images');
 
-	$url=build_url(array('page'=>'galleries','type'=>'image','id'=>$row['id']),$zone);
+	$map=array('page'=>'galleries','type'=>'image','id'=>$row['id']);
+	if (!is_null($root)) $map['keep_gallery_root']=$root;
+	$url=build_url($map,$zone);
 
 	$description=get_translated_tempcode($row['description']);
 
@@ -55,7 +58,7 @@ function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	$breadcrumbs=new ocp_tempcode();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=gallery_breadcrumbs($row['cat'],'root',false,$zone);
+		$breadcrumbs=gallery_breadcrumbs($row['cat'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone);
 	}
 
 	$image_url=$row['url'];
@@ -95,14 +98,17 @@ function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_bread
  * @param  ID_TEXT		The zone the galleries module is in
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?ID_TEXT		Virtual root to use (NULL: none)
  * @return tempcode		The rendered box
  */
-function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true)
+function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
 	require_css('galleries');
 	require_code('images');
 
-	$url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row['id']),$zone);
+	$map=array('page'=>'galleries','type'=>'video','id'=>$row['id']);
+	if (!is_null($root)) $map['keep_gallery_root']=$root;
+	$url=build_url($map,$zone);
 
 	$description=get_translated_tempcode($row['description']);
 
@@ -112,7 +118,7 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	$breadcrumbs=new ocp_tempcode();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=gallery_breadcrumbs($row['cat'],'root',false,$zone);
+		$breadcrumbs=gallery_breadcrumbs($row['cat'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone);
 	}
 
 	$video_url=$row['url'];
@@ -159,18 +165,20 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
  * @param  boolean		Whether only to show 'preview' details
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
+ * @param  ?ID_TEXT		Virtual root to use (NULL: none)
  * @return tempcode		The preview
  */
-function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false,$give_context=true,$include_breadcrumbs=true)
+function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false,$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
 	require_css('galleries');
 
 	$member_id=get_member_id_from_gallery_name($myrow['name'],$myrow,true);
 	$is_member=!is_null($member_id);
 
-	$url_map=array('page'=>'galleries','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$myrow['name']);
-	if (get_page_name()=='galleries') $url_map+=propagate_ocselect();
-	$url=build_url($url_map,$zone);
+	$map=array('page'=>'galleries','type'=>'misc','keep_gallery_root'=>($root=='root')?NULL:$root,'id'=>$myrow['name']);
+	if (!is_null($root)) $map['keep_gallery_root']=$root;
+	if (get_page_name()=='galleries') $map+=propagate_ocselect();
+	$url=build_url($map,$zone);
 
 	$_title=get_translated_text($myrow['fullname']);
 	$add_date=get_timezoned_date($myrow['add_date'],false);
@@ -246,7 +254,7 @@ function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriat
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=gallery_breadcrumbs($myrow['name']);
+		$breadcrumbs=gallery_breadcrumbs($myrow['name'],is_null($root)?get_param_integer('keep_download_root',NULL):$root);
 	}
 
 	return do_template('GALLERY_BOX',array(
@@ -714,16 +722,18 @@ function can_submit_to_gallery($name)
  * Get a UI element of a route from a known gallery back to the declared root of the tree.
  *
  * @param  ID_TEXT		The gallery name
- * @param  ID_TEXT		The virtual root
+ * @param  ?ID_TEXT		The virtual root (NULL: none)
  * @param  boolean		Whether not to put a link at this point in the breadcrumbs (usually, because the viewer is already at it)
  * @param  ID_TEXT		The zone that the linked to gallery module is in
  * @return tempcode		The navigation element
  */
 function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,$zone='')
 {
+	if (is_null($root)) $root='root';
+
 	if ($category_id=='') $category_id='root'; // To fix corrupt data
 
-	$url_map=array('page'=>'galleries','type'=>'misc','id'=>$category_id,'root'=>($root=='root')?NULL:$root);
+	$url_map=array('page'=>'galleries','type'=>'misc','id'=>$category_id,'keep_gallery_root'=>($root=='root')?NULL:$root);
 	if (get_page_name()=='galleries') $url_map+=propagate_ocselect();
 	$url=build_url($url_map,$zone);
 

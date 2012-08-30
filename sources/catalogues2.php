@@ -300,7 +300,6 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 	}
 
 	decache('main_cc_embed');
-	decache('main_recent_cc_entries');
 
 	log_it('EDIT_CATALOGUE',$name);
 }
@@ -806,7 +805,6 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	}
 
 	decache('main_cc_embed');
-	decache('main_recent_cc_entries');
 
 	return $id;
 }
@@ -910,7 +908,6 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	}
 
 	decache('main_cc_embed');
-	decache('main_recent_cc_entries');
 
 	if ($catalogue_name[0]!='_')
 	{
@@ -998,7 +995,6 @@ function actual_delete_catalogue_entry($id)
 
 	calculate_category_child_count_cache($old_category_id);
 
-	decache('main_recent_cc_entries');
 	decache('main_cc_embed');
 
 	if ($catalogue_name[0]!='_')

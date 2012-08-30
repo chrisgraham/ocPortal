@@ -56,15 +56,16 @@ class Hook_awards_comcode_page
 	 * @param  ID_TEXT	The zone to display in
 	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
 	 * @param  boolean	Whether to include breadcrumbs (if there are any)
+	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true)
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL)
 	{
 		unset($zone); // Meaningless here
 
 		require_code('zones2');
 
-		return render_comcode_page_box($row,$give_context,$include_breadcrumbs);
+		return render_comcode_page_box($row,$give_context,$include_breadcrumbs,$root);
 	}
 
 }

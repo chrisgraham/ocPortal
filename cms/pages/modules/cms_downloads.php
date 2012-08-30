@@ -205,7 +205,6 @@ class Module_cms_downloads extends standard_crud_module
 
 		ftp_close($conn_id);
 
-		decache('main_recent_downloads');
 		decache('main_download_tease');
 
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
@@ -335,7 +334,6 @@ class Module_cms_downloads extends standard_crud_module
 		// Actually start the scanning
 		$num_added=$this->filesystem_recursive_downloads_scan($base_path,$base_url,$destination,$subfolders);
 
-		decache('main_recent_downloads');
 		decache('main_download_tease');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS')),array('_SELF:_SELF:import',do_lang_tempcode('FILESYSTEM_DOWNLOADS'))));

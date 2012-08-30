@@ -37,18 +37,16 @@ function init__templates_pagination()
  * @param  integer		The maximum number of rows to show per browser page
  * @param  ID_TEXT		The parameter name used to store the total number of results to show per-page (usually, 'max')
  * @param  integer		The maximum number of rows in the entire dataset
- * @param  ?mixed			The virtual root category this browser uses (NULL: no such concept for our results browser)
- * @param  ?ID_TEXT		The page type this browser is browsing through (e.g. 'category') (NULL: none)
- * @param  boolean		Whether to keep get data when browsing through
  * @param  boolean		Whether to keep post data when browsing through
  * @param  integer		The maximum number of quick-jump page links to show
  * @param  ?array			List of per-page selectors to show (NULL: show hard-coded ones)
  * @param  ID_TEXT		Hash component to URL
  * @return tempcode		The results browser
  */
-function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_rows,$root=NULL,$type=NULL,$keep_all=false,$keep_post=false,$max_page_links=7,$_selectors=NULL,$hash='')
+function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_rows,$keep_post=false,$max_page_links=7,$_selectors=NULL,$hash='')
 {
 	inform_non_canonical_parameter($max_name);
+	inform_non_canonical_parameter($start_name);
 
 	$post_array=array();
 	if ($keep_post)
@@ -90,7 +88,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 		if ($start>0)
 		{
 			$url_array=array('page'=>'_SELF',$start_name=>NULL);
-			$cat_url=_build_pagination_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
+			$cat_url=_build_pagination_cat_url($url_array,$post_array,$hash);
 			$first=do_template('PAGINATION_CONTINUE_FIRST',array('_GUID'=>'f5e510da318af9b37c3a4b23face5ae3','TITLE'=>$title,'P'=>strval(1),'FIRST_URL'=>$cat_url));
 		} else $first=new ocp_tempcode();
 
@@ -98,7 +96,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 		if ($start>0)
 		{
 			$url_array=array('page'=>'_SELF',$start_name=>strval(max($start-$max,0)));
-			$cat_url=_build_pagination_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
+			$cat_url=_build_pagination_cat_url($url_array,$post_array,$hash);
 			$previous=do_template('PAGINATION_PREVIOUS_LINK',array('_GUID'=>'ec4d4da9677b5b9c8cea08676337c6eb','TITLE'=>$title,'P'=>integer_format(intval($start/$max)),'URL'=>$cat_url));
 		} else $previous=do_template('PAGINATION_PREVIOUS');
 
@@ -134,7 +132,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 		for ($x=$from;$x<$to;$x++)
 		{
 			$url_array=array('page'=>'_SELF',$start_name=>($x==0)?NULL:strval($x*$max));
-			$cat_url=_build_pagination_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
+			$cat_url=_build_pagination_cat_url($url_array,$post_array,$hash);
 			if ($x*$max==$start)
 			{
 				$parts->attach(do_template('PAGINATION_PAGE_NUMBER',array('_GUID'=>'13cdaf548d5486fb8d8ae0d23b6a08ec','P'=>strval($x+1))));
@@ -159,7 +157,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 		if (($start+$max)<$max_rows)
 		{
 			$url_array=array('page'=>'_SELF',$start_name=>strval($start+$max));
-			$cat_url=_build_pagination_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
+			$cat_url=_build_pagination_cat_url($url_array,$post_array,$hash);
 			$p=($max==0)?1.0:($start/$max+2);
 			$rel=NULL;
 			if (($start+$max*2)>$max_rows) $rel='last';
@@ -170,7 +168,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 		if ($start+$max<$max_rows)
 		{
 			$url_array=array('page'=>'_SELF',($num_pages-1==0)?NULL:$start_name=>strval(($num_pages-1)*$max));
-			$cat_url=_build_pagination_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash);
+			$cat_url=_build_pagination_cat_url($url_array,$post_array,$hash);
 			$last=do_template('PAGINATION_CONTINUE_LAST',array('_GUID'=>'2934936df4ba90989e949a8ebe905522','TITLE'=>$title,'P'=>strval($num_pages),'LAST_URL'=>$cat_url));
 		} else $last=new ocp_tempcode();
 
@@ -198,20 +196,10 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 			{
 				$list->attach(form_input_list_entry('',false,'...',false,true));
 			}
-			if ($keep_all)
-			{
-				$dont_auto_keep=array($start_name,'type');
-				if (!is_null($category_id)) $dont_auto_keep[]='id';
-				$hidden=build_keep_form_fields('_SELF',true,$dont_auto_keep);
-				if (!is_null($category_id)) $hidden->attach(form_input_hidden('id',is_integer($category_id)?strval($category_id):$category_id));
-				if (!is_null($type)) $hidden->attach(form_input_hidden('type',$type));
-			} else
-			{
-				$hidden=new ocp_tempcode();
-				$hidden->attach(form_input_hidden($max_name,strval($max)));
-				$hidden->attach(form_input_hidden('page',get_page_name()));
-				$hidden->attach(form_input_hidden('type',$type));
-			}
+			$dont_auto_keep=array();
+			if (!is_null($category_id)) $dont_auto_keep[]='id';
+			$hidden=build_keep_form_fields('_SELF',true,$dont_auto_keep);
+			if (!is_null($category_id)) $hidden->attach(form_input_hidden('id',is_integer($category_id)?strval($category_id):$category_id));
 			$pages_list=do_template('PAGINATION_LIST_PAGES',array('_GUID'=>'9e1b394763619433f23b8ed95f5ac134','URL'=>$get_url,'HIDDEN'=>$hidden,'START_NAME'=>$start_name,'LIST'=>$list));
 		} else
 		{
@@ -242,27 +230,21 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
  *
  * @param  array			Map of GET array segments to use (others will be added by this function)
  * @param  array			Map of POST array segments (relayed as GET) to use
- * @param  ?ID_TEXT		The page type this browser is browsing through (e.g. 'category') (NULL: none)
- * @param  ?mixed			The virtual root category this browser uses (NULL: no such concept for our results browser)
- * @param  ?mixed			The category ID we are browsing in (NULL: not applicable)
- * @param  boolean		Whether to keep get data when browsing through
  * @param  ID_TEXT		Hash component to URL
  * @return mixed			The URL
  */
-function _build_pagination_cat_url($url_array,$post_array,$type,$root,$category_id,$keep_all,$hash)
+function _build_pagination_cat_url($url_array,$post_array,$hash)
 {
 	if (!is_null($category_id))
 		if (!is_string($category_id)) $category_id=strval($category_id);
 
 	$url_array=array_merge($url_array,$post_array);
-	if (!is_null($type)) $url_array['type']=$type;
-	if (!is_null($root)) $url_array['root']=$root;
 	if (!is_null($category_id))
 	{
 		$url_array['id']=$category_id;
 		$url_array['kfs'.$category_id]=NULL; // For OCF. We don't need this anymore because we're using 'start' explicitly here
 	}
-	$cat_url=build_url($url_array,'_SELF',NULL,$keep_all,false,false,$hash);
+	$cat_url=build_url($url_array,'_SELF',NULL,true,false,false,$hash);
 
 	return $cat_url;
 }

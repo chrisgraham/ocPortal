@@ -264,7 +264,7 @@ ocPortal is basically a programming language within a programming language. The 
 1) ocPortal's templating language/syntax
 2) The name for instances of compiled ocPortal templates. These instances are instances of the 'ocp_tempcode' object.
 
-Tempcode (the language) is very rich and dynamic. It is designed so that templates can be infinitely complex but so that they can be cached so that the data that goes into them does not need to be recalculated each time. This cacheing usually only applies to blocks- modules generally do not employ Tempcode cacheing. For example, the 'main_recent_downloads' block might have been templated to look different for people in a certain usergroup, yet we also don't want to have to regenerate this block each time it is viewed. Tempcode is powerful enough to be able to represent arbitrary differences like this in a way that survives cacheing.
+Tempcode (the language) is very rich and dynamic. It is designed so that templates can be infinitely complex but so that they can be cached so that the data that goes into them does not need to be recalculated each time. This cacheing usually only applies to blocks- modules generally do not employ Tempcode cacheing. For example, the 'main_multi_content' block might have been templated to look different for people in a certain usergroup, yet we also don't want to have to regenerate this block each time it is viewed. Tempcode is powerful enough to be able to represent arbitrary differences like this in a way that survives cacheing.
 
 Due to this requirement, ocPortal must not deal in string output, it has to deal in Tempcode output. All through the system Tempcode is composed together, rather than strings.
 

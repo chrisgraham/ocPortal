@@ -411,7 +411,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	{
 		foreach ($vars as $key=>$val)
 		{
-			if (($key=='redirect') || ($key=='root')) unset($vars[$key]);
+			if ($key=='redirect') unset($vars[$key]);
 			if ((substr($key,0,5)=='keep_') && (skippable_keep($key,$val))) unset($vars[$key]);
 		}
 	}

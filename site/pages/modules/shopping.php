@@ -240,11 +240,8 @@ class Module_shopping
 		$pro_ids_val=NULL;
 
 		require_code('templates_results_table');
-
 		require_code('form_templates');
-
 		require_css('shopping');
-
 		require_javascript('javascript_shopping');
 
 		$title=get_screen_title('SHOPPING');
@@ -268,7 +265,6 @@ class Module_shopping
 		if ($max_rows>0)
 		{
 			$shopping_cart=new ocp_tempcode();
-
 			$checkout_details=new ocp_tempcode();
 
 			$fields_title=results_field_title(
@@ -302,36 +298,29 @@ class Module_shopping
 				$object=object_factory('Hook_'.filter_naughty_harsh($_hook));
 
 				if (method_exists($object,'show_cart_entry'))
-				{
 					$object->show_cart_entry($shopping_cart,$value);
-				}
 
+				$tax=0;
 				if (method_exists($object,'calculate_tax'))
 					$tax=$object->calculate_tax($value['price'],$value['price_pre_tax']);
-				else
-					$tax=0;
 
-
-
-				//Shipping
+				// Shipping
 				if (method_exists($object,'calculate_shipping_cost'))
 					$shipping_cost=$object->calculate_shipping_cost($value['product_weight']);
 				else
 					$shipping_cost=0;	
 
-				$sub_tot	+=round($value['price']+$tax+$shipping_cost,2)*$value['quantity'];
+				$sub_tot+=round($value['price']+$tax+$shipping_cost,2)*$value['quantity'];
 
 				$i++;
 			}
 
 			$width=NULL;//array('50','100%','85','85','85','85','85','85','85');
 
-			$results_table=results_table(do_lang_tempcode('MEMBERS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$shopping_cart,NULL,NULL,NULL,'sort',NULL,$width,'cart');
+			$results_table=results_table(do_lang_tempcode('MEMBERS'),0,'cart_start',$max_rows,'cart_max',$max_rows,$fields_title,$shopping_cart,NULL,NULL,NULL,'sort',NULL,$width,'cart');
 
 			$update_cart=build_url(array('page'=>'_SELF','type'=>'update_cart'),'_SELF');
-
 			$empty_cart=build_url(array('page'=>'_SELF','type'=>'empty_cart'),'_SELF');
-
 			$checkout=build_url(array('page'=>'_SELF','type'=>'pay'),'_SELF');
 
 			$payment_form=payment_form();			
@@ -341,14 +330,11 @@ class Module_shopping
 		}
 		else
 		{	
-			$update_cart= 	new ocp_tempcode();
-
+			$update_cart=new ocp_tempcode();
 			$empty_cart=new ocp_tempcode();
-
 			$checkout=new ocp_tempcode();
 
 			$results_table=do_lang_tempcode('CART_EMPTY');
-
 			$proceed_box=new ocp_tempcode();
 		}
 
@@ -356,7 +342,7 @@ class Module_shopping
 
 		$cont_shopping=is_null($ecom_catalogue)?new ocp_tempcode():build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$ecom_catalogue),get_module_zone('catalogues'));
 
-		//Product id string for hidden field in Shopping cart
+		// Product id string for hidden field in Shopping cart
 		$pro_ids_val=is_array($pro_ids)?implode(',',$pro_ids):'';
 
 		$allow_opt_out_tax=get_option('allow_opting_out_of_tax');
