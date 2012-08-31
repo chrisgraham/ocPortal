@@ -1893,29 +1893,26 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	padding: 0 0 0 20px;
 	overflow: auto;
 }
-.category_list>li {
+.category_list .box {
 	border-top: 2px solid {$GET,standard_border} !important;
-	padding: 0.5em 0;
+	padding: 0 !important;
 	margin: 0.5em 0;
 	clear: both;
 	overflow: hidden;
 }
-.category_list>li:first-child {
+.category_list .box:first-child {
 	border-top: 0 !important;
 }
-.category_list>li.box { /* For a variety of combined box and category_list */
-	padding: 0 !important;
-}
-.category_list>li a img {
+.category_list .box a img {
 	max-width: 150px;
 }
-.category_list>li+.category_list>li {
+.category_list .box+.category_list .box {
 	border-top: 1px solid {$GET,standard_border};
 }
-.category_list>li a {
+.category_list .box a {
 	font-size: 1.1em;
 }
-.category_list>li .associated_details {
+.category_list .box .associated_details {
 	margin-bottom: 0;
 }
 

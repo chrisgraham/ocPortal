@@ -673,7 +673,7 @@ function block_helper_script()
 					$list=ocf_get_forum_tree_secure(NULL,NULL,true,explode(',',$default));
 					$fields->attach(form_input_multi_list(titleify($parameter),escape_html($description),$parameter,$list));
 				}
-				elseif (($parameter=='param') && (in_array($block,array('side_root_galleries','main_gallery_tease','main_gallery_embed','main_image_fader')))) // gallery list
+				elseif (($parameter=='param') && (in_array($block,array('side_galleries','main_gallery_embed','main_image_fader')))) // gallery list
 				{
 					require_code('galleries');
 					$list=nice_get_gallery_tree($default);

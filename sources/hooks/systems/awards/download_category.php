@@ -60,13 +60,14 @@ class Hook_awards_download_category
 	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
 	 * @param  boolean	Whether to include breadcrumbs (if there are any)
 	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
+	 * @param  boolean	Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL)
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false)
 	{
 		require_code('downloads');
 
-		return render_download_category_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?NULL:intval($root));
+		return render_download_category_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?NULL:intval($root),$attach_to_url_filter);
 	}
 
 }

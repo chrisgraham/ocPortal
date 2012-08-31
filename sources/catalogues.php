@@ -42,12 +42,12 @@ function init__catalogues()
 /**
  * Render a catalogue box.
  *
- * @param  array				Catalogue row
- * @param  ID_TEXT			Zone to link through to
- * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean			Whether to include breadcrumbs (if there are any)
+ * @param  array			Catalogue row
+ * @param  ID_TEXT		Zone to link through to
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
- * @return tempcode			The catalogue box
+ * @return tempcode		The catalogue box
  */
 function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
 {
@@ -83,19 +83,19 @@ function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$inc
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
+ * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode		A box for it, linking to the full page
  */
-function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false)
 {
-	$content=get_translated_tempcode($row['cc_description']);
-
+	// URL
 	$map=array('page'=>'catalogues','type'=>'category','id'=>$row['id']);
 	if (!is_null($root)) $map['keep_catalogue_'.$row['c_name'].'_root']=$root;
-	if (get_page_name()=='catalogues') $map+=propagate_ocselect($prefix);
+	if ($attach_to_url_filter) $map+=propagate_ocselect($prefix);
 	$url=build_url($map,$zone);
 
+	// Title
 	$_title=get_translated_text($row['cc_title']);
-
 	$title=$_title;
 	if ($give_context)
 	{
@@ -103,22 +103,34 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 		$title=do_lang('CONTENT_IS_OF_TYPE',do_lang('CATALOGUE_GENERIC_CATEGORY',$catalogue_title),$_title);
 	}
 
+	// Description
+	$content=get_translated_tempcode($row['cc_description']);
+
+	// Breadcrumbs
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=catalogue_category_breadcrumbs($row['id'],is_null($root)?get_param_integer('keep_catalogue_'.$catalogue['c_name'].'_root',NULL):$root);
+		$breadcrumbs=catalogue_category_breadcrumbs($row['id'],is_null($root)?get_param_integer('keep_catalogue_'.$catalogue['c_name'].'_root',NULL):$root,$attach_to_url_filter);
 	}
 
+	// Image
 	$rep_image=mixed();
+	$_rep_image=mixed();
 	if ($row['rep_image']!='')
-		$rep_image=do_image_thumb($sc['rep_image'],$sc['cc_title'],$sc['cc_title'],false);
+	{
+		$_rep_image=$row['rep_image'];
+		if (url_is_local($_rep_image)) $_rep_image=get_custom_base_url().'/'.$_rep_image;
+		$rep_image=do_image_thumb($row['rep_image'],$_title,$_title,false);
+	}
 
+	// Meta data
 	$child_counts=count_catalogue_category_children($row['id']);
 	$num_children=$child_counts['num_children_children'];
 	$num_entries=$child_counts['num_entries_children'];
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'REP_IMAGE'=>$rep_image,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	// Render
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'_REP_IMAGE'=>$_rep_image,'REP_IMAGE'=>$rep_image,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**
@@ -401,7 +413,6 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 					{
 						$url_map=array('page'=>'catalogues','type'=>'entry','id'=>$entry['id']);
 						if ($root!==NULL) $url_map['keep_catalogue_'.$catalogue_name.'_root']=$root;
-						if (get_page_name()=='catalogues') $url_map+=propagate_ocselect();
 						$tab_entry_map['VIEW_URL']=build_url($url_map,get_module_zone('catalogues'));
 					} else
 					{
@@ -861,7 +872,6 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	$c_value=array_key_exists('FIELD_0_PLAIN_PURE',$map)?$map['FIELD_0_PLAIN_PURE']:$map['FIELD_0_PLAIN'];
 	if (is_object($c_value)) $c_value=$c_value->evaluate();
 	$url_map=array('page'=>'catalogues','type'=>'entry','id'=>$id);
-	if (get_page_name()=='catalogues') $url_map+=propagate_ocselect();
 	$self_url=build_url($url_map,get_module_zone('catalogues'),NULL,false,false,true);
 	if (($feedback_details) || ($only_fields!==array(0)))
 	{
@@ -888,7 +898,6 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	{
 		$url_map=array('page'=>'catalogues','type'=>'entry','id'=>$id);
 		if ($root!==NULL) $url_map['keep_catalogue_'.$catalogue_name.'_root']=$root;
-		if (get_page_name()=='catalogues') $url_map+=propagate_ocselect();
 		$map['VIEW_URL']=build_url($url_map,get_module_zone('catalogues'));
 	} else
 	{
@@ -1429,9 +1438,10 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
  * @param  AUTO_LINK		The category we are finding for
  * @param  ?AUTO_LINK	The root of the tree (NULL: the true root)
  * @param  boolean		Whether to include category links at this level (the recursed levels will always contain links - the top level is optional, hence this parameter)
+ * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode		The breadcrumbs
  */
-function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true)
+function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$attach_to_url_filter=false)
 {
 	$map=array('page'=>'catalogues','type'=>'category','id'=>$category_id);
 
@@ -1458,7 +1468,7 @@ function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_
 		$below=new ocp_tempcode();
 	} else
 	{
-		$below=catalogue_category_breadcrumbs($PT_PAIR_CACHE[$category_id]['cc_parent_id'],$root,false);
+		$below=catalogue_category_breadcrumbs($PT_PAIR_CACHE[$category_id]['cc_parent_id'],$root,false,$attach_to_url_filter);
 	}
 
 	if (!$no_link_for_me_sir)
@@ -1507,9 +1517,10 @@ function is_ecommerce_catalogue_entry($entry_id)
  *
  * @param  AUTO_LINK		Entry ID
  * @param  boolean		Whether to skip rendering a title
+ * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode		Tempcode interface to display an entry
  */
-function render_catalogue_entry_screen($id,$no_title=false)
+function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter=true)
 {	
 	require_code('feedback');
 
@@ -1625,7 +1636,7 @@ function render_catalogue_entry_screen($id,$no_title=false)
 		$map['BREADCRUMBS']->attach(hyperlink($url,escape_html(get_translated_text($catalogue['c_title'])),false,false,do_lang('INDEX')));
 		$map['BREADCRUMBS']->attach(do_template('BREADCRUMB_SEPARATOR'));
 		$url_map=array('page'=>'_SELF','type'=>'category','id'=>$category['id']);
-		if (get_page_name()=='catalogues') $url_map+=propagate_ocselect();
+		if ($attach_to_url_filter) $url_map+=propagate_ocselect();
 		$url=build_url($url_map,'_SELF');
 		$map['BREADCRUMBS']->attach(hyperlink($url,escape_html(get_translated_text($category['cc_title'])),false,false,do_lang('GO_BACKWARDS_TO',get_translated_text($category['cc_title'])),NULL,NULL,'up'));
 	}

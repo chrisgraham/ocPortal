@@ -1266,14 +1266,11 @@ class Module_calendar
 	 */
 	function view_event()
 	{
-		check_privilege('view_calendar');
-
-		inform_non_canonical_parameter('back');
-
 		$id=get_param_integer('id');
 		$filter=$this->get_filter();
 		set_feed_url(find_script('backend').'?mode=calendar&filter='.implode(',',$this->get_and_filter()));
 
+		// Load up
 		$rows=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON t.id=e.e_type',array('*'),array('e.id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
 		{
@@ -1282,6 +1279,8 @@ class Module_calendar
 		$event=$rows[0];
 		if ($event['e_is_public']==0) enforce_personal_access($event['e_submitter'],'view_personal_events');
 
+		// Security
+		check_privilege('view_calendar');
 		if (!has_category_access(get_member(),'calendar',strval($event['e_type']))) access_denied('CATEGORY_ACCESS');
 
 		// Validation
@@ -1294,19 +1293,18 @@ class Module_calendar
 			$warning_details->attach(do_template('WARNING_BOX',array('_GUID'=>'332faacba974e648a67e5e91ffd3d8e5','WARNING'=>do_lang_tempcode((get_param_integer('redirected',0)==1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
 		}
 
+		// Titling
 		if (addon_installed('awards'))
 		{
 			require_code('awards');
 			$awards=find_awards_for('event',strval($id));
 		} else $awards=array();
-
 		$_title=get_translated_text($event['e_title']);
 		$title_to_use=do_lang_tempcode('CALENDAR_EVENT_VCAL',escape_html($_title));
 		$title_to_use_2=do_lang('CALENDAR_EVENT',$_title);
 		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 
-		seo_meta_load_for('event',strval($id),$title_to_use_2);
-
+		// All subscriptions (reminders)
 		$content=($event['e_type']==db_get_first_id())?make_string_tempcode(get_translated_text($event['e_content'])):get_translated_tempcode($event['e_content']);
 		$type=get_translated_text($event['t_title']);
 		$subscribed=new ocp_tempcode();
@@ -1327,6 +1325,7 @@ class Module_calendar
 			}
 		}
 
+		// Initial date working out
 		$start_day_of_month=find_concrete_day_of_month($event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type'],is_null($event['e_start_hour'])?find_timezone_start_hour_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_hour'],is_null($event['e_start_minute'])?find_timezone_start_minute_in_utc($event['e_timezone'],$event['e_start_year'],$event['e_start_month'],$event['e_start_day'],$event['e_start_monthly_spec_type']):$event['e_start_minute'],$event['e_timezone'],$event['e_do_timezone_conv']==1);
 		$__first_date=mktime($event['e_start_hour'],$event['e_start_minute'],0,$event['e_start_month'],$start_day_of_month,$event['e_start_year']);
 		$_first_date=cal_utctime_to_usertime(
@@ -1341,6 +1340,7 @@ class Module_calendar
 		if (get_param_integer('member_id',get_member())!=get_member()) $map['member_id']=get_param_integer('member_id');
 		$back_url=build_url($map,'_SELF');
 
+		// Feedback
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
 			'events',
 			strval($id).(($event['e_seg_recurrences']==1)?('_'.$date):''),
@@ -1354,6 +1354,7 @@ class Module_calendar
 			get_value('comment_forum__calendar')
 		);
 
+		// Personal subscriptions (reminders)
 		$_subscriptions=new ocp_tempcode();
 		if ((is_guest()) || (!cron_installed()))
 		{
@@ -1370,6 +1371,7 @@ class Module_calendar
 			$subscribe_url=build_url(array('page'=>'_SELF','type'=>'subscribe_event','id'=>$id),'_SELF');
 		}
 
+		// Management links
 		if ((has_actual_page_access(NULL,'cms_calendar',NULL,NULL)) && (has_edit_permission(($event['e_is_public']==0)?'low':'mid',get_member(),$event['e_submitter'],'cms_calendar',array('calendar',$event['e_type']))))
 		{
 			$edit_url=build_url(array('page'=>'cms_calendar','type'=>'_ed','id'=>$id),get_module_zone('cms_calendar'));
@@ -1378,12 +1380,16 @@ class Module_calendar
 			$edit_url=new ocp_tempcode();
 		}
 
+		// SEO
 		if ($event['e_seg_recurrences']==0)
 		{
 			inform_non_canonical_parameter('day');
 			inform_non_canonical_parameter('date');
 		}
+		inform_non_canonical_parameter('back');
+		seo_meta_load_for('event',strval($id),$title_to_use_2);
 
+		// Work out dates
 		$day=get_param('day','');
 		if ($day!='')
 		{
@@ -1481,9 +1487,7 @@ class Module_calendar
 			$to_day_formatted=NULL;
 		}
 
-		$priority=$event['e_priority'];
-		$is_public=($event['e_is_public']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
-
+		// Recurrences
 		$recurrence=do_lang_tempcode('NA_EM');
 		if (($event['e_recurrence']!='none') && ($event['e_recurrence']!=''))
 		{
@@ -1496,6 +1500,9 @@ class Module_calendar
 			}
 		} elseif ($day=='') $day=$first_date;
 
+		// Other settings
+		$priority=$event['e_priority'];
+		$is_public=($event['e_is_public']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 		$priority_lang=do_lang_tempcode('PRIORITY_'.strval($priority));
 
 		// Views
@@ -1505,8 +1512,10 @@ class Module_calendar
 			$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_views'=>$event['e_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
+		// Breadcrumbs
 		breadcrumb_set_parents(array(array($back_url,do_lang_tempcode('CALENDAR'))));
 
+		// Meta data
 		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$event['e_add_date']),
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($event['e_submitter']),
@@ -1519,6 +1528,7 @@ class Module_calendar
 			'image'=>find_theme_image('bigicons/calendar'),
 		));
 
+		// Render
 		$map=array(
 			'TITLE'=>$title,
 			'_TITLE'=>get_translated_text($event['e_title']),
@@ -1553,13 +1563,11 @@ class Module_calendar
 			'COMMENT_DETAILS'=>$comment_details,
 			'_GUID'=>'602e6f86f586ef0a24efed950eafd426',
 		);
-
 		if ($event['e_do_timezone_conv']==0)
 		{
 			$timezone_map=get_timezone_list();
 			$map['TIMEZONE']=$timezone_map[$event['e_timezone']];
 		}
-
 		return do_template('CALENDAR_EVENT_SCREEN',$map);
 	}
 

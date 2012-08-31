@@ -1,10 +1,8 @@
-{+START,IF_NON_EMPTY,{$TRIM,{GALLERIES}}}
-	<ul class="category_list">
-		{GALLERIES}
-	</ul>
+{+START,IF_NON_EMPTY,{GALLERIES}}
+	{GALLERIES}
 {+END}
 
-{+START,IF_EMPTY,{$TRIM,{GALLERIES}}}
+{+START,IF_EMPTY,{GALLERIES}}
 	<p class="nothing_here">{!NO_ENTRIES}</p>
 {+END}
 

@@ -78,8 +78,6 @@ class Hook_addon_registry_core_abstract_components
 			'IMG_THUMB.tpl',
 			'POST.tpl',
 			'POST_CHILD_LOAD_LINK.tpl',
-			'CATEGORY_ENTRY.tpl',
-			'CATEGORY_LIST.tpl',
 			'SCREEN_BUTTON.tpl',
 			'SCREEN_ITEM_BUTTON.tpl',
 			'STANDARDBOX_default.tpl',
@@ -114,8 +112,6 @@ class Hook_addon_registry_core_abstract_components
 			'SCREEN_ITEM_BUTTON.tpl'=>'screen_item_button',
 			'FRACTIONAL_EDIT.tpl'=>'administrative__fractional_edit',
 			'CROP_TEXT_MOUSE_OVER_INLINE.tpl'=>'crop_text_mouse_over_inline',
-			'CATEGORY_ENTRY.tpl'=>'category_list',
-			'CATEGORY_LIST.tpl'=>'category_list',
 			'IMG_THUMB.tpl'=>'img_thumb',
 			'CROP_TEXT_MOUSE_OVER.tpl'=>'crop_text_mouse_over',
 			'SCREEN_BUTTON.tpl'=>'screen_button',
@@ -241,42 +237,6 @@ class Hook_addon_registry_core_abstract_components
 			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER_INLINE', array(
 				'TEXT_SMALL'=>lorem_sentence_html(),
 				'TEXT_LARGE'=>lorem_sentence_html()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__category_list()
-	{
-		$cat_entry=new ocp_tempcode();
-
-		foreach (placeholder_array() as $key=>$values)
-		{
-			$cat_entry->attach(do_lorem_template('CATEGORY_ENTRY', array(
-				'ID'=>placeholder_id(),
-				'NAME_FIELD'=>$values,
-				'AJAX_EDIT_URL'=>placeholder_url(),
-				'URL'=>placeholder_url(),
-				'REP_IMAGE'=>placeholder_image(),
-				'CHILDREN'=>lorem_phrase(),
-				'NAME'=>lorem_word(),
-				'NAME_PLAIN'=>lorem_word_html(),
-				'NUM_CHILDREN'=>'3',
-				'NUM_ENTRIES'=>'2',
-				'NUM_CHILDREN_RECURSIVE'=>'3',
-				'NUM_ENTRIES_DIRECT'=>'2'
-			)));
-		}
-
-		return array(
-			lorem_globalise(do_lorem_template('CATEGORY_LIST', array(
-				'CONTENT'=>$cat_entry
 			)), NULL, '', true)
 		);
 	}

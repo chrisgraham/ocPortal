@@ -12,10 +12,11 @@
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
 {+START,IF_NON_EMPTY,{SUBCATEGORIES}}
-	<div>
-		<p class="lonely_label">{!CATEGORIES}:</p>
+	<div class="box box___catalogue_category_screen"><div class="box_inner category_list">
+		<h2>{!SUBCATEGORIES_HERE}</h2>
+
 		{SUBCATEGORIES}
-	</div>
+	</div></div>
 {+END}
 
 {ENTRIES}

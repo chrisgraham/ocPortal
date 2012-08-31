@@ -238,7 +238,7 @@ class Module_wiki
 	{
 		$permission_page='cms_wiki';
 
-//		if ($require_permission_support) return array(array(),$permission_page,'_SELF:_SELF:type=misc:id=!');
+		//if ($require_permission_support) return array(array(),$permission_page,'_SELF:_SELF:type=misc:id=!');
 
 		require_code('wiki');
 		$category_id=NULL;

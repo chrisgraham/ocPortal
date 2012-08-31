@@ -37,11 +37,6 @@ When you add or edit a gallery you may choose watermarks to be automatically add
 
 Watermarks are actually 'inherited' in the tree structure: in other words, when adding an image, watermarks will be chosen from the first gallery back down towards the root gallery that actually defines watermarks.
 
-[title="2"]Teasers[/title]
-[surround]
-[exp_thumb="Viewing a gallery image" float="right"]gallery_view_image[/exp_thumb]
-For various kinds of website, such as expert photography communities, galleries provide a place to position premium or important content. ocPortal forms a 'teaser' system, whereby you can encourage users to join a certain usergroup (perhaps, via some form of subscription) that has access to view certain galleries, by 'teasing' them about them. You can define 'teaser' text for each gallery, and use the [tt]:tease[/tt] page to display it, other details, and the rep-image, to those without access.
-[/surround]
 [title="2"]Videos[/title]
 
 Galleries have powerful video support. ocPortal will analyse the file types of uploaded videos and use carefully crafted templates that use browser plug-ins that are most appropriate to that file type. For example, QuickTime files will be displayed with HTML to use the QuickTime plugin.
@@ -100,10 +95,9 @@ Unfortunately FFMPEG does have some major problems with audio/video synchronisat
 [concepts
  1_key="Gallery"     1_value="A category for images and videos"
  2_key="Rep-image"   2_value="An image chosen to represent a category, when a box for it is displayed"
- 3_key="Teaser page" 3_value="A page that only shows gallery rep-images and details, intended for sites where the gallery requires subscription (stock art sites, auction sites, etc.)"
- 4_key="Watermark"   4_value="A standard mark shown on an image to mark its identity, often done for a number of different reasons"
- 5_key="Flow mode"   5_value="The gallery view mode intended for attractive display of small galleries"
- 6_key="Subgallery"  6_value="A gallery placed beneath another gallery"
+ 3_key="Watermark"   3_value="A standard mark shown on an image to mark its identity, often done for a number of different reasons"
+ 4_key="Flow mode"   4_value="The gallery view mode intended for attractive display of small galleries"
+ 5_key="Subgallery"  5_value="A gallery placed beneath another gallery"
 ]Concepts[/concepts]
 
 [title="2"]See also[/title]

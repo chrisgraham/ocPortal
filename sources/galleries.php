@@ -46,24 +46,25 @@ function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	require_css('galleries');
 	require_code('images');
 
+	// URL
 	$map=array('page'=>'galleries','type'=>'image','id'=>$row['id']);
 	if (!is_null($root)) $map['keep_gallery_root']=$root;
 	$url=build_url($map,$zone);
 
-	$description=get_translated_tempcode($row['description']);
-
+	// Images
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
 	$thumb=do_image_thumb($thumb_url,$description,true);
+	$image_url=$row['url'];
+	if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
 
+	// Breadcrumbs
 	$breadcrumbs=new ocp_tempcode();
 	if ($include_breadcrumbs)
 	{
 		$breadcrumbs=gallery_breadcrumbs($row['cat'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone);
 	}
 
-	$image_url=$row['url'];
-	if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
-
+	// Title
 	$title=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name'=>$row['cat']));
 	if (is_null($title))
 	{
@@ -73,6 +74,10 @@ function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 		$gallery_title=get_translated_text($title);
 	}
 
+	// Description
+	$description=get_translated_tempcode($row['description']);
+
+	// Render
 	return do_template('GALLERY_IMAGE_BOX',array(
 		'GIVE_CONTEXT'=>$give_context,
 		'ADD_DATE_RAW'=>strval($row['add_date']),
@@ -106,24 +111,25 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	require_css('galleries');
 	require_code('images');
 
+	// URL
 	$map=array('page'=>'galleries','type'=>'video','id'=>$row['id']);
 	if (!is_null($root)) $map['keep_gallery_root']=$root;
 	$url=build_url($map,$zone);
 
-	$description=get_translated_tempcode($row['description']);
-
+	// Images
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','videos',$row['id']);
 	$thumb=do_image_thumb($thumb_url,$description,true);
+	$video_url=$row['url'];
+	if (url_is_local($video_url)) $video_url=get_custom_base_url().'/'.$video_url;
 
+	// Breadcrumbs
 	$breadcrumbs=new ocp_tempcode();
 	if ($include_breadcrumbs)
 	{
 		$breadcrumbs=gallery_breadcrumbs($row['cat'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone);
 	}
 
-	$video_url=$row['url'];
-	if (url_is_local($video_url)) $video_url=get_custom_base_url().'/'.$video_url;
-
+	// Title
 	$title=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name'=>$row['cat']));
 	if (is_null($title))
 	{
@@ -133,6 +139,10 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 		$gallery_title=get_translated_text($title);
 	}
 
+	// Description
+	$description=get_translated_tempcode($row['description']);
+
+	// Render
 	return do_template('GALLERY_VIDEO_BOX',array(
 		'GIVE_CONTEXT'=>$give_context,
 		'ADD_DATE_RAW'=>strval($row['add_date']),
@@ -166,24 +176,28 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?ID_TEXT		Virtual root to use (NULL: none)
+ * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode		The preview
  */
-function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false,$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false)
 {
 	require_css('galleries');
 
 	$member_id=get_member_id_from_gallery_name($myrow['name'],$myrow,true);
 	$is_member=!is_null($member_id);
 
+	// URL
 	$map=array('page'=>'galleries','type'=>'misc','keep_gallery_root'=>($root=='root')?NULL:$root,'id'=>$myrow['name']);
 	if (!is_null($root)) $map['keep_gallery_root']=$root;
-	if (get_page_name()=='galleries') $map+=propagate_ocselect();
+	if ($attach_to_url_filter) $map+=propagate_ocselect();
 	$url=build_url($map,$zone);
 
+	// Basic details
 	$_title=get_translated_text($myrow['fullname']);
 	$add_date=get_timezoned_date($myrow['add_date'],false);
 	$description=get_translated_tempcode($myrow['description']);
 
+	// Member details
 	if ($show_member_stats_if_appropriate)
 	{
 		if (($is_member) && (get_forum_type()=='ocf'))
@@ -194,8 +208,10 @@ function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriat
 		} else $member_info=new ocp_tempcode();
 	} else $member_info=new ocp_tempcode();
 
+	// If empty gallery (special case for galleries - as galleries may often be empty, due to Personal Gallery system)
 	if (($quit_if_empty) && ($num_images==0) && ($num_videos==0) && ($num_children==0)) return new ocp_tempcode();
 
+	// Image
 	$pic=$myrow['rep_image'];
 	if (($pic=='') && ($is_member)) $pic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 	$thumb_order='ORDER BY id ASC';
@@ -222,6 +238,7 @@ function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriat
 		$thumb=do_image_thumb($pic,'');
 	} else $thumb=new ocp_tempcode();
 
+	// Meta data
 	list($num_children,$num_images,$num_videos)=get_recursive_gallery_details($myrow['name']);
 	if ($num_children==0)
 	{
@@ -251,12 +268,14 @@ function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriat
 		}
 	}
 
+	// Breadcrumbs
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=gallery_breadcrumbs($myrow['name'],is_null($root)?get_param_integer('keep_download_root',NULL):$root);
+		$breadcrumbs=gallery_breadcrumbs($myrow['name'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,$attach_to_url_filter);
 	}
 
+	// Render
 	return do_template('GALLERY_BOX',array(
 		'_GUID'=>'0dbec2f11de63b0402471fe5c8b32865',
 		'GIVE_CONTEXT'=>$give_context,
@@ -725,9 +744,10 @@ function can_submit_to_gallery($name)
  * @param  ?ID_TEXT		The virtual root (NULL: none)
  * @param  boolean		Whether not to put a link at this point in the breadcrumbs (usually, because the viewer is already at it)
  * @param  ID_TEXT		The zone that the linked to gallery module is in
+ * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode		The navigation element
  */
-function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,$zone='')
+function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,$zone='',$attach_to_url_filter=false)
 {
 	if (is_null($root)) $root='root';
 
@@ -781,7 +801,7 @@ function gallery_breadcrumbs($category_id,$root='root',$no_link_for_me_sir=true,
 		}
 	}
 
-	$below=gallery_breadcrumbs($PT_PAIR_CACHE_G[$category_id]['parent_id'],$root,false,$zone);
+	$below=gallery_breadcrumbs($PT_PAIR_CACHE_G[$category_id]['parent_id'],$root,false,$zone,$attach_to_url_filter);
 
 	$below->attach($tpl_url);
 	return $below;

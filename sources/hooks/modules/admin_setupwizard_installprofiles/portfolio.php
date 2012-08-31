@@ -87,7 +87,7 @@ class Hook_admin_setupwizard_installprofiles_portfolio
 			'YES_CELL'=>array(
 			),
 			'PANEL_LEFT'=>array(
-				'side_root_galleries',
+				'side_galleries',
 				'main_image_fader',
 				'side_news',
 			),

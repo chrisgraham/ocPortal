@@ -11,35 +11,20 @@
 	{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
 	{+START,IF_NON_EMPTY,{CHILDREN}}
-		<div class="box box___gallery_regular_mode_screen"><div class="box_inner">
+		<div class="box box___gallery_regular_mode_screen"><div class="box_inner category_list">
 			<h2>{!SUBCATEGORIES_HERE}</h2>
 
-			<ul class="category_list" itemprop="significantLinks">
-				{CHILDREN}
-			</ul>
+			{CHILDREN}
 		</div></div>
 	{+END}
 
 	{+START,IF_NON_EMPTY,{ENTRIES}}
-		<div class="gallery_grid_cell_wrap" itemprop="significantLinks">
-			{ENTRIES}
-		</div>
+		{ENTRIES}
 
-		<p>
+		<div class="box category_sorter inline_block"><div class="box_inner">
+			{$SET,show_sort_button,1}
 			{SORTING}
-		</p>
-	{+END}
-
-	{+START,IF_EMPTY,{CHILDREN}{ENTRIES}}
-		<p class="nothing_here">
-			{!NO_ENTRIES}
-		</p>
-	{+END}
-
-	{+START,IF_NON_EMPTY,{PAGINATION}}
-		<div class="float_surrounder pagination_spacing">
-			{PAGINATION}
-		</div>
+		</div></div>
 	{+END}
 
 	{+START,IF,{$CONFIG_OPTION,show_content_tagging}}{TAGS}{+END}

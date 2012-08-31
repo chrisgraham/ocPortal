@@ -136,7 +136,7 @@
 	font-size: 1.2em;
 }
 
-/* side_root_galleries block */
+/* side_galleries block */
 
 .side_galleries_block p {
 	margin-top: 0.5em;
@@ -158,7 +158,22 @@
 	padding: 0;
 }
 
-/* Tease block / Image fader block */
+/* Image fader block */
+
+.image_fader_box {
+	position: relative;
+	border: 1px solid {$GET,standard_border};
+	display: inline-block;
+}
+
+.image_fader_box img {
+	display: block;
+}
+
+/* If nested in a box already */
+.box_inner>.image_fader_box {
+	border: 0;
+}
 
 .gallery_tease_pic_wrap {
 	margin-bottom: 1.5em;
@@ -187,23 +202,6 @@
 
 #tease_scrolling_text {
 	width: 23em;
-}
-
-/* Image fader block */
-
-.image_fader_box {
-	position: relative;
-	border: 1px solid {$GET,standard_border};
-	display: inline-block;
-}
-
-.image_fader_box img {
-	display: block;
-}
-
-/* If nested in a box already */
-.box_inner>.image_fader_box {
-	border: 0;
 }
 
 /* Miscellaneous media handling */

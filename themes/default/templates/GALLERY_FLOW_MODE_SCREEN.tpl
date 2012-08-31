@@ -12,15 +12,7 @@
 	{$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,gallery,{CAT}}}
 	{+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
-	{+START,IF_NON_EMPTY,{CHILDREN}}
-		<div class="box box___gallery_flow_mode_screen__subcats"><div class="box_inner">
-			<h2>{!SUBCATEGORIES_HERE}</h2>
-
-			<ul class="category_list">
-				{CHILDREN}
-			</ul>
-		</div></div>
-	{+END}
+	{CHILDREN}
 
 	{CURRENT_ENTRY}
 
@@ -60,12 +52,6 @@
 
 			{SORTING}
 		</div></div>
-	{+END}
-
-	{+START,IF_NON_EMPTY,{PAGINATION}}
-		<div class="pagination_spacing float_surrounder">
-			{PAGINATION}
-		</div>
 	{+END}
 
 	{+START,IF_EMPTY,{ENTRIES}{CURRENT_ENTRY}}

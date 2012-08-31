@@ -1316,11 +1316,6 @@ oc_thanks
  - sources_custom/miniblocks/side_recent_points.php
  - themes/default/templates_custom/POINTS_GIVE.tpl
 
-oc_noobs
---------
- - sources_custom/blocks/main_recent_members.php
- - lang_custom/EN/recent_members.ini
-
 oc_prose
 --------
  - sources_custom/miniblocks/main_best_posters.php

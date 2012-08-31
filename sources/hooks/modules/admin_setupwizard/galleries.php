@@ -64,7 +64,7 @@ class Hook_sw_galleries
 	{
 		if (!addon_installed('galleries')) return array();
 
-		return array(array('main_image_fader'=>array('NO','NO')),array('side_root_galleries'=>array('PANEL_NONE','PANEL_NONE')));
+		return array(array('main_image_fader'=>array('NO','NO')),array('side_galleries'=>array('PANEL_NONE','PANEL_NONE')));
 	}
 
 }

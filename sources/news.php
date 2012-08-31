@@ -99,21 +99,49 @@ function render_news_box($row,$zone='_SEARCH',$give_context=true,$brief=false)
  * @param  array			The database field row of it
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode		A box for it, linking to the full page
  */
-function render_news_category_box($row,$zone='_SEARCH',$give_context=true)
+function render_news_category_box($row,$zone='_SEARCH',$give_context=true,$attach_to_url_filter=false)
 {
-	$url=build_url(array('page'=>'news','type'=>'misc','id'=>$row['id']),$zone);
-
 	require_lang('news');
 
+	// URL
+	$map=array('page'=>'news','type'=>'misc','id'=>$row['id']);
+	if ($attach_to_url_filter)
+	{
+		if (get_param('type','misc')=='cat_select') $map['blog']='0';
+		elseif (get_param('type','misc')=='blog_select') $map['blog']='1';
+
+		$map+=propagate_ocselect();
+	}
+	$url=build_url($map,$zone);
+
+	// Title
 	$_title=get_translated_text($row['nc_title']);
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('NEWS_CATEGORY'),$_title):$_title;
 
+	// Meta-data
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)',array('validated'=>1));
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	// Image
+	$img=($row['nc_img']=='')?'':find_theme_image($row['nc_img']);
+	if ($blogs===1)
+	{
+		$_img=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($row['nc_owner']);
+		if ($_img!='') $img=$_img;
+	}
+	$rep_image=mixed();
+	$_rep_image=mixed();
+	if ($img!='')
+	{
+		$_rep_image=$img;
+		$rep_image=do_image_thumb($img,$_title,$_title,false);
+	}
+
+	// Render
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'_REP_IMAGE'=>$_rep_image,'REP_IMAGE'=>$rep_image,'OWNER'=>is_null($row['nc_owner'])?'':strval($row['nc_owner']),'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

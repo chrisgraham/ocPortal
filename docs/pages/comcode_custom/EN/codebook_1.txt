@@ -307,7 +307,7 @@ function category_screen()
 
 	// Wrap up our subcategory composition in a template
 	// that represents the whole screen
-	return do_template('CATEGORY_PAGE',array('SUBCATEGORIES'=>$subcategories));
+	return do_template('CATEGORY_SCREEN',array('SUBCATEGORIES'=>$subcategories));
 }
 [/code]
 

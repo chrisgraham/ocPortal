@@ -341,7 +341,6 @@ class Hook_addon_registry_news
 				'CONTENT'=>$content,
 				'SUBMIT_URL'=>placeholder_url(),
 				'BLOG'=>false,
-				'PAGINATION'=>placeholder_pagination(),
 			)), NULL, '', true)
 		);
 	}

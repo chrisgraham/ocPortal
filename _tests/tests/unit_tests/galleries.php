@@ -106,7 +106,6 @@ class galleries_test_set extends ocp_test_case
 			'allow_comments'=>0,
 			'require__allow_comments'=>1,
 			'notes'=>'Test note',
-			'teaser'=>'',
 			'pre_f_notes'=>1,
 			'require__notes'=>0,
 			'access_1_presets'=>-1,

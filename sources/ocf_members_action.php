@@ -405,7 +405,7 @@ function get_cpf_storage_for($type)
  * @set    short_text long_text short_trans long_trans integer upload picture url list tick float
  * @param  BINARY			Whether it is required that every member have this field filled in.
  * @param  BINARY			Whether this field is shown in posts and places where member details are highlighted (such as an image in a member gallery).
- * @param  BINARY			Whether this field is shown in preview places, such as in the teaser for a member gallery.
+ * @param  BINARY			Whether this field is shown in preview places, such as in the forum member tooltip.
  * @param  ?integer		The order of this field relative to other fields (NULL: next).
  * @param  LONG_TEXT 	The usergroups that this field is confined to (comma-separated list).
  * @param  boolean		Whether to check that no field has this name already.

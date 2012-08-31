@@ -200,17 +200,28 @@ class Module_iotds
 	{
 		$title=get_screen_title('IOTD');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IOTD_ARCHIVE'))));
-
 		$id=get_param_integer('id');
 
+		// Breadcrumbs
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IOTD_ARCHIVE'))));
+
+		// Fetch details
 		$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
 		{
 			return warn_screen($title,do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
+		$date_raw=strval($myrow['date_and_time']);
+		$add_date_raw=strval($myrow['add_date']);
+		$edit_date_raw=is_null($myrow['edit_date'])?'':strval($myrow['edit_date']);
+		$date=get_timezoned_date($myrow['date_and_time']);
+		$add_date=get_timezoned_date($myrow['add_date']);
+		$edit_date=get_timezoned_date($myrow['edit_date']);
+		$url=$myrow['url'];
+		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
 
+		// Feedback
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
 			get_page_name(),
 			strval($id),
@@ -224,13 +235,6 @@ class Module_iotds
 			get_value('comment_forum__iotds')
 		);
 
-		$date_raw=strval($myrow['date_and_time']);
-		$add_date_raw=strval($myrow['add_date']);
-		$edit_date_raw=is_null($myrow['edit_date'])?'':strval($myrow['edit_date']);
-		$date=get_timezoned_date($myrow['date_and_time']);
-		$add_date=get_timezoned_date($myrow['add_date']);
-		$edit_date=get_timezoned_date($myrow['edit_date']);
-
 		// Views
 		if (get_db_type()!='xml')
 		{
@@ -238,14 +242,13 @@ class Module_iotds
 			$GLOBALS['SITE_DB']->query_update('iotd',array('iotd_views'=>$myrow['iotd_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
+		// Management links
 		if ((has_actual_page_access(NULL,'cms_iotds',NULL,NULL)) && (has_edit_permission('high',get_member(),$myrow['submitter'],'cms_iotds')))
 		{
 			$edit_url=build_url(array('page'=>'cms_iotds','type'=>'_ed','id'=>$id),get_module_zone('cms_iotds'));
 		} else $edit_url=new ocp_tempcode();
 
-		$url=$myrow['url'];
-		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
-
+		// Meta data
 		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$myrow['add_date']),
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),

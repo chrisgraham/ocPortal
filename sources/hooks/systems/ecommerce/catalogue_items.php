@@ -631,7 +631,7 @@ class Hook_catalogue_items
 	 */
 	function product_info($id)
 	{
-		return render_catalogue_entry_screen($id,true);
+		return render_catalogue_entry_screen($id,true,false);
 	}
 
 	/**

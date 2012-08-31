@@ -241,31 +241,9 @@ class Module_polls
 	{
 		$title=get_screen_title('POLL_ARCHIVE');
 
-		$start=get_param_integer('polls_start',0);
-		$max=get_param_integer('polls_max',20);
+		$content=do_block('main_multi_content',array('param'=>'poll','efficient'=>'0','zone'=>'_SELF','mode'=>'date_and_time DESC','max'=>'20','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0'));
 
-		$total_polls=$GLOBALS['SITE_DB']->query_select_value('poll','COUNT(*)');
-		if ($total_polls<500)
-		{
-			$rows=$GLOBALS['SITE_DB']->query('SELECT id,date_and_time FROM '.get_table_prefix().'poll WHERE votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10<>0 ORDER BY date_and_time DESC',$max,$start);
-			$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'poll WHERE votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10<>0');
-		} else
-		{
-			$rows=$GLOBALS['SITE_DB']->query('SELECT id,date_and_time FROM '.get_table_prefix().'poll WHERE date_and_time IS NOT NULL ORDER BY date_and_time DESC',$max,$start);
-			$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'poll WHERE date_and_time IS NOT NULL');
-		}
-		$content=new ocp_tempcode();
-		foreach ($rows as $myrow)
-		{
-			$poll=do_block('main_poll',array('param'=>strval($myrow['id'])));
-			$content->attach($poll);
-		}
-		if ($content->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
-
-		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('POLLS'),NULL,$start,'polls_start',$max,'polls_max',$max_rows);
-
-		return do_template('PAGINATION_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$title,'CONTENT'=>$content,'PAGINATION'=>$pagination));
+		return do_template('PAGINATION_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$title,'CONTENT'=>$content));
 	}
 
 	/**
@@ -277,17 +255,26 @@ class Module_polls
 	{
 		$title=get_screen_title('POLL');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POLL_ARCHIVE'))));
-
 		$id=get_param_integer('id');
 		$_GET['poll_id']=strval($id);
 
+		// Breadcrumbs
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POLL_ARCHIVE'))));
+
+		// Load data
 		$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$id),'',1);
 		if (!array_key_exists(0,$rows))
 		{
 			return warn_screen($title,do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
+		$date_raw=is_null($myrow['date_and_time'])?'':strval($myrow['date_and_time']);
+		$add_date_raw=strval($myrow['add_time']);
+		$edit_date_raw=is_null($myrow['edit_date'])?'':strval($myrow['edit_date']);
+		$date=get_timezoned_date($myrow['date_and_time']);
+		$add_date=get_timezoned_date($myrow['add_time']);
+		$edit_date=get_timezoned_date($myrow['edit_date']);
+		$_title=get_translated_text($myrow['question']);
 
 		// Views
 		if (get_db_type()!='xml')
@@ -296,15 +283,7 @@ class Module_polls
 			$GLOBALS['SITE_DB']->query_update('poll',array('poll_views'=>$myrow['poll_views']),array('id'=>$id),'',1,NULL,false,true);
 		}
 
-		$date_raw=is_null($myrow['date_and_time'])?'':strval($myrow['date_and_time']);
-		$add_date_raw=strval($myrow['add_time']);
-		$edit_date_raw=is_null($myrow['edit_date'])?'':strval($myrow['edit_date']);
-		$date=get_timezoned_date($myrow['date_and_time']);
-		$add_date=get_timezoned_date($myrow['add_time']);
-		$edit_date=get_timezoned_date($myrow['edit_date']);
-
-		$_title=get_translated_text($myrow['question']);
-
+		// Feedback
 		list($rating_details,$comment_details,$trackback_details)=embed_feedback_systems(
 			get_page_name(),
 			strval($id),
@@ -318,13 +297,16 @@ class Module_polls
 			get_value('comment_forum__polls')
 		);
 
+		// Management links
 		if ((has_actual_page_access(NULL,'cms_polls',NULL,NULL)) && (has_edit_permission('high',get_member(),$myrow['submitter'],'cms_polls')))
 		{
 			$edit_url=build_url(array('page'=>'cms_polls','type'=>'_ed','id'=>$id),get_module_zone('cms_polls'));
 		} else $edit_url=new ocp_tempcode();
 
+		// Load poll
 		$poll_details=do_block('main_poll');
 
+		// Meta data
 		set_extra_request_metadata(array(
 			'created'=>date('Y-m-d',$myrow['add_time']),
 			'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
@@ -337,7 +319,25 @@ class Module_polls
 			'image'=>find_theme_image('bigicons/polls'),
 		));
 
-		return do_template('POLL_SCREEN',array('_GUID'=>'1463a42354c3ad154e2c6bb0c96be3b9','TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'ID'=>strval($id),'DATE_RAW'=>$date_raw,'ADD_DATE_RAW'=>$add_date_raw,'EDIT_DATE_RAW'=>$edit_date_raw,'DATE'=>$date,'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'VIEWS'=>integer_format($myrow['poll_views']),'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'POLL_DETAILS'=>$poll_details));
+		// Render
+		return do_template('POLL_SCREEN',array(
+			'_GUID'=>'1463a42354c3ad154e2c6bb0c96be3b9',
+			'TITLE'=>$title,
+			'SUBMITTER'=>strval($myrow['submitter']),
+			'ID'=>strval($id),
+			'DATE_RAW'=>$date_raw,
+			'ADD_DATE_RAW'=>$add_date_raw,
+			'EDIT_DATE_RAW'=>$edit_date_raw,
+			'DATE'=>$date,
+			'ADD_DATE'=>$add_date,
+			'EDIT_DATE'=>$edit_date,
+			'VIEWS'=>integer_format($myrow['poll_views']),
+			'TRACKBACK_DETAILS'=>$trackback_details,
+			'RATING_DETAILS'=>$rating_details,
+			'COMMENT_DETAILS'=>$comment_details,
+			'EDIT_URL'=>$edit_url,
+			'POLL_DETAILS'=>$poll_details,
+		));
 	}
 
 }

@@ -121,7 +121,6 @@ class Hook_addon_registry_galleries
 			'GALLERY_ENTRY_WRAP.tpl',
 			'BLOCK_MAIN_GALLERY_EMBED.tpl',
 			'GALLERY_BOX.tpl',
-			'GALLERY_SUBGALLERY_WRAP.tpl',
 			'GALLERY_VIDEO_YOUTUBE.tpl',
 			'GALLERY_VIDEO_FACEBOOK.tpl',
 			'GALLERY_VIDEO_GENERAL.tpl',
@@ -142,12 +141,10 @@ class Hook_addon_registry_galleries
 			'GALLERY_VIDEO.tpl',
 			'GALLERY_VIDEO_INFO.tpl',
 			'GALLERY_REGULAR_MODE_SCREEN.tpl',
-			'GALLERY_TEASE_PIC.tpl',
-			'BLOCK_MAIN_GALLERY_TEASE.tpl',
-			'BLOCK_SIDE_ROOT_GALLERIES.tpl',
-			'BLOCK_SIDE_ROOT_GALLERIES_LINE.tpl',
-			'BLOCK_SIDE_ROOT_GALLERIES_LINE_CONTAINER.tpl',
-			'BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH.tpl',
+			'BLOCK_SIDE_GALLERIES.tpl',
+			'BLOCK_SIDE_GALLERIES_LINE.tpl',
+			'BLOCK_SIDE_GALLERIES_LINE_CONTAINER.tpl',
+			'BLOCK_SIDE_GALLERIES_LINE_DEPTH.tpl',
 			'BLOCK_MAIN_IMAGE_FADER.tpl',
 			'GALLERY_IMPORT_SCREEN.tpl',
 			'uploads/galleries/index.html',
@@ -159,7 +156,7 @@ class Hook_addon_registry_galleries
 			'cms/pages/modules/cms_galleries.php',
 			'lang/EN/galleries.ini',
 			'site/pages/modules/galleries.php',
-			'sources/blocks/side_root_galleries.php',
+			'sources/blocks/side_galleries.php',
 			'uploads/galleries/pre_transcoding/index.html',
 			'sources/transcoding.php',
 			'sources/galleries.php',
@@ -196,7 +193,6 @@ class Hook_addon_registry_galleries
 			'site/download_gallery.php',
 			'sources/hooks/systems/preview/image.php',
 			'sources/blocks/main_gallery_embed.php',
-			'sources/blocks/main_gallery_tease.php',
 			'sources/blocks/main_image_fader.php',
 			'uploads/galleries/.htaccess',
 			'uploads/galleries_thumbs/.htaccess',
@@ -219,16 +215,14 @@ class Hook_addon_registry_galleries
 		return array(
 				'BLOCK_MAIN_IMAGE_FADER.tpl'=>'block_main_image_fader',
 				'GALLERY_IMPORT_SCREEN.tpl'=>'administrative__gallery_import_screen',
-				'GALLERY_TEASE_PIC.tpl'=>'block_main_gallery_tease',
-				'BLOCK_MAIN_GALLERY_TEASE.tpl'=>'block_main_gallery_tease',
 				'GALLERY_IMAGE.tpl'=>'gallery_image',
 				'GALLERY_ENTRY_WRAP.tpl'=>'gallery_regular_mode_screen',
 				'GALLERY_VIDEO.tpl'=>'gallery_regular_mode_screen',
 				'BLOCK_MAIN_GALLERY_EMBED.tpl'=>'block_main_gallery_embed',
-				'BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH.tpl'=>'block_side_root_galleries',
-				'BLOCK_SIDE_ROOT_GALLERIES_LINE.tpl'=>'block_side_root_galleries',
-				'BLOCK_SIDE_ROOT_GALLERIES_LINE_CONTAINER.tpl'=>'block_side_root_galleries',
-				'BLOCK_SIDE_ROOT_GALLERIES.tpl'=>'block_side_root_galleries',
+				'BLOCK_SIDE_GALLERIES_LINE_DEPTH.tpl'=>'block_side_galleries',
+				'BLOCK_SIDE_GALLERIES_LINE.tpl'=>'block_side_galleries',
+				'BLOCK_SIDE_GALLERIES_LINE_CONTAINER.tpl'=>'block_side_galleries',
+				'BLOCK_SIDE_GALLERIES.tpl'=>'block_side_galleries',
 				'GALLERY_VIDEO_INFO.tpl'=>'gallery_video_info',
 				'GALLERY_BOX.tpl'=>'gallery_regular_mode_screen',
 				'GALLERY_ENTRY_LIST_LINE.tpl'=>'gallery_entry_list_line',
@@ -541,32 +535,6 @@ class Hook_addon_registry_galleries
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_main_gallery_tease()
-	{
-		$content=new ocp_tempcode();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$sub=do_lorem_template('GALLERY_TEASE_PIC',array('GALLERY' =>placeholder_id(),'TEASER'=>lorem_phrase(),'ADD_DATE'=>placeholder_date(),'NUM_CHILDREN'=>placeholder_number(),'NUM_IMAGES'=>placeholder_number(),'NUM_VIDEOS'=>placeholder_number(),'MEMBER_INFO'=>lorem_paragraph(),'URL'=>placeholder_url(),'PIC'=>placeholder_url(),'TITLE'=>lorem_phrase()));
-			$content->attach($sub);
-		}
-
-		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_MAIN_GALLERY_TEASE',array(
-					'CONTENT'=>$content,
-					'PAGINATION'=>placeholder_pagination(),
-				)
-			),NULL,'',true),
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
 	function tpl_preview__gallery_image()
 	{
 		return array(
@@ -629,7 +597,7 @@ class Hook_addon_registry_galleries
 	*
 	* @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with andplaceholder_date_raw() without blank data).
 	*/
-	function tpl_preview__block_side_root_galleries()
+	function tpl_preview__block_side_galleries()
 	{
 		$content=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
@@ -637,16 +605,16 @@ class Hook_addon_registry_galleries
 			$out=new ocp_tempcode();
 			foreach (placeholder_array() as $_k=>$_v)
 			{
-				$out->attach(do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH',array('TITLE'=>lorem_word(),'URL'=>placeholder_url())));
+				$out->attach(do_lorem_template('BLOCK_SIDE_GALLERIES_LINE_DEPTH',array('TITLE'=>lorem_word(),'URL'=>placeholder_url())));
 			}
-			$out->attach(do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES_LINE',array('TITLE'=>lorem_word(),'URL'=>placeholder_url())));
+			$out->attach(do_lorem_template('BLOCK_SIDE_GALLERIES_LINE',array('TITLE'=>lorem_word(),'URL'=>placeholder_url())));
 
-			$content->attach(do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES_LINE_CONTAINER',array('ID'=>placeholder_random(),'CAPTION'=>lorem_phrase(),'CONTENTS'=>$out)));
+			$content->attach(do_lorem_template('BLOCK_SIDE_GALLERIES_LINE_CONTAINER',array('ID'=>placeholder_random(),'CAPTION'=>lorem_phrase(),'CONTENTS'=>$out)));
 		}
 
 		return array(
 			lorem_globalise(
-				do_lorem_template('BLOCK_SIDE_ROOT_GALLERIES',array(
+				do_lorem_template('BLOCK_SIDE_GALLERIES',array(
 					'DEPTH'=>true,
 					'CONTENT'=>$content,
 				)
@@ -826,12 +794,11 @@ class Hook_addon_registry_galleries
 					'TAGS'=>$tags,
 					'RATING_DETAILS'=>lorem_sentence_html(),
 					'COMMENT_DETAILS'=>$comment_details,
-					'PAGINATION'=>placeholder_pagination(),
 					'REP_IMAGE_URL'=>placeholder_image_url(),
 					'TITLE'=>lorem_title(),
 					'MEMBER_DETAILS'=>lorem_paragraph_html(),
 					'DESCRIPTION'=>lorem_paragraph_html(),
-					'CHILDREN'=>placeholder_list_item(),
+					'CHILDREN'=>lorem_paragraph_html(),
 					'CURRENT_ENTRY'=>$image,
 					'ENTRIES'=>$entries,
 					'EDIT_URL'=>placeholder_url(),
@@ -859,8 +826,6 @@ class Hook_addon_registry_galleries
 	{
 		$tags=do_lorem_template('TAGS',array('LINK_FULLSCOPE'=>lorem_word(),'TAG'=>lorem_word(),'TAGS'=>placeholder_array(),'TYPE'=>NULL));
 
-		$pagination=placeholder_pagination();
-
 		$entry=new ocp_tempcode();
 		$map=array('TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph(),'TYPE'=>'image','ID'=>placeholder_id(),'FILE_SIZE'=>lorem_word(),'SUBMITTER'=>lorem_word(),'FULL_URL'=>placeholder_url(),'THUMB_URL'=>placeholder_url(),'CAT'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'EDIT_DATE_RAW'=>placeholder_time(),'ADD_DATE_RAW'=>placeholder_time(),'VIEWS'=>placeholder_number());
 		$entry=do_lorem_template('GALLERY_IMAGE',$map);
@@ -872,7 +837,7 @@ class Hook_addon_registry_galleries
 		$entry=do_lorem_template('GALLERY_VIDEO',$map);
 		$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 
-		$children=do_lorem_template('GALLERY_SUBGALLERY_WRAP',array('CONTENT'=>do_lorem_template('GALLERY_BOX',array('GIVE_CONTEXT'=>false,'THUMB'=>'','NUM_VIDEOS'=>lorem_word(),'NUM_IMAGES'=>lorem_word(),'NUM_CHILDREN'=>lorem_word(),'ID'=>lorem_word(),'LANG'=>lorem_word(),'ADD_DATE_RAW'=>placeholder_date_raw(),'ADD_DATE'=>lorem_word(),'MEMBER_INFO'=>lorem_paragraph(),'URL'=>placeholder_url(),'PIC'=>placeholder_image_url(),'TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph()))));
+		$children=do_lorem_template('GALLERY_BOX',array('GIVE_CONTEXT'=>false,'THUMB'=>'','NUM_VIDEOS'=>lorem_word(),'NUM_IMAGES'=>lorem_word(),'NUM_CHILDREN'=>lorem_word(),'ID'=>lorem_word(),'LANG'=>lorem_word(),'ADD_DATE_RAW'=>placeholder_date_raw(),'ADD_DATE'=>lorem_word(),'MEMBER_INFO'=>lorem_paragraph(),'URL'=>placeholder_url(),'PIC'=>placeholder_image_url(),'TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph())));
 
 		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
 
@@ -880,7 +845,6 @@ class Hook_addon_registry_galleries
 			lorem_globalise(
 				do_lorem_template('GALLERY_REGULAR_MODE_SCREEN',array(
 					'_TITLE'=>lorem_phrase(),
-					'PAGINATION'=>$pagination,
 					'TAGS'=>$tags,
 					'CAT'=>lorem_word(),
 					'MEMBER_DETAILS'=>lorem_sentence_html(),

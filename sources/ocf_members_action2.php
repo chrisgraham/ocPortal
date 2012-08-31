@@ -1015,7 +1015,7 @@ function ocf_unban_member($member_id)
  * @param  BINARY			Whether the field should be encrypted.
  * @param  BINARY			Whether the field is to be shown on the join form
  * @param  BINARY			Whether this field is shown in posts and places where member details are highlighted (such as an image in a member gallery).
- * @param  BINARY			Whether this field is shown in preview places, such as in the teaser for a member gallery.
+ * @param  BINARY			Whether this field is shown in preview places, such as in the forum member tooltip.
  * @param  integer		The order of this field relative to other fields.
  * @param  LONG_TEXT		The usergroups that this field is confined to (comma-separated list).
  * @param  ID_TEXT		The type of the field.

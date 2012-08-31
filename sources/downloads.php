@@ -69,7 +69,6 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	$description=get_translated_tempcode($row['description']);
 	$map=array('page'=>'downloads','type'=>'entry','id'=>$row['id']);
 	if (!is_null($root)) $map['keep_download_root']=($root==db_get_first_id())?NULL:$root;
-	if (get_page_name()=='downloads') $map+=propagate_ocselect();
 	$download_url=build_url($map,$zone);
 	$date=get_timezoned_date($row['add_date'],false);
 	$date_raw=$row['add_date'];
@@ -157,12 +156,14 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
+ * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode		A box for it, linking to the full page
  */
-function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false)
 {
 	$map=array('page'=>'downloads','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']);
 	if (!is_null($root)) $map['keep_download_root']=$root;
+	if ($attach_to_url_filter) $map+=propagate_ocselect();
 	$url=build_url($map,$zone);
 
 	require_lang('downloads');
@@ -173,7 +174,7 @@ function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$i
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=download_breadcrumbs($row['parent_id'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone);
+		$breadcrumbs=download_breadcrumbs($row['parent_id'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone,$attach_to_url_filter);
 	}
 
 	$summary=get_translated_tempcode($row['description']);
@@ -414,14 +415,17 @@ function get_download_category_tree($category_id=NULL,$breadcrumbs=NULL,$title=N
  * @param  ?AUTO_LINK	The root of the tree (NULL: the true root)
  * @param  boolean		Whether to include category links at this level (the recursed levels will always contain links - the top level is optional, hence this parameter)
  * @param  ?ID_TEXT		The zone the download module we're using is in (NULL: find it)
+ * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
  * @return tempcode		The breadcrumbs
  */
-function download_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$zone=NULL)
+function download_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$zone=NULL,$attach_to_url_filter=false)
 {
 	if (is_null($root)) $root=db_get_first_id();
 	if (is_null($zone)) $zone=get_module_zone('downloads');
 
-	$url=build_url(array('page'=>'downloads','type'=>'misc','id'=>($category_id==db_get_first_id())?NULL:$category_id,'keep_download_root'=>($root==db_get_first_id())?NULL:$root)+propagate_ocselect(),$zone);
+	$map=array('page'=>'downloads','type'=>'misc','id'=>($category_id==db_get_first_id())?NULL:$category_id,'keep_download_root'=>($root==db_get_first_id())?NULL:$root);
+	if (get_page_name()=='catalogues') $map+=propagate_ocselect();
+	$url=build_url($map,$zone);
 
 	if (($category_id==$root) || ($category_id==db_get_first_id()))
 	{
@@ -446,7 +450,7 @@ function download_breadcrumbs($category_id,$root=NULL,$no_link_for_me_sir=true,$
 	} else $tpl_url=new ocp_tempcode();
 
 	if ($PT_PAIR_CACHE_D[$category_id]['parent_id']==$category_id) fatal_exit(do_lang_tempcode('RECURSIVE_TREE_CHAIN',strval($category_id)));
-	$below=download_breadcrumbs($PT_PAIR_CACHE_D[$category_id]['parent_id'],$root,false,$zone);
+	$below=download_breadcrumbs($PT_PAIR_CACHE_D[$category_id]['parent_id'],$root,false,$zone,$attach_to_url_filter);
 
 	$below->attach($tpl_url);
 	return $below;

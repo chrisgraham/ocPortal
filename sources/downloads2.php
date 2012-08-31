@@ -688,7 +688,7 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 			require_code('galleries2');
 			$download_gallery_root=get_option('download_gallery_root');
 			if (is_null($download_gallery_root)) $download_gallery_root='root';
-			add_gallery('download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','','',$download_gallery_root);
+			add_gallery('download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','',$download_gallery_root);
 		}
 	}
 
@@ -707,8 +707,6 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 	}
 
 	log_it('ADD_DOWNLOAD',strval($id),$name);
-
-	decache('main_download_tease');
 
 	return $id;
 }
@@ -801,10 +799,8 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 		if (is_null($download_gallery_root)) $download_gallery_root='root';
 		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>'download_'.strval($id)));
 		if (!is_null($test))
-			edit_gallery('download_'.strval($id),'download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','','',$download_gallery_root);
+			edit_gallery('download_'.strval($id),'download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','',$download_gallery_root);
 	}
-
-	decache('main_download_tease');
 
 	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'downloads',strval($id),$self_url,$name,get_value('comment_forum__downloads'));
@@ -853,8 +849,6 @@ function delete_download($id,$leave=false)
 		if (!is_null($test))
 			delete_gallery($name);
 	}
-
-	decache('main_download_tease');
 }
 
 /**

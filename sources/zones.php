@@ -637,6 +637,8 @@ function block_cache_default($codename)
 function get_block_id($map)
 {
 	ksort($map);
+	unset($map['start']);
+	unset($map['max']);
 	return md5(serialize($map));
 }
 

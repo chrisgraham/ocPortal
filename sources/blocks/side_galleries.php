@@ -18,7 +18,7 @@
  * @package		galleries
  */
 
-class Block_side_root_galleries
+class Block_side_galleries
 {
 
 	/**
@@ -77,7 +77,7 @@ class Block_side_root_galleries
 		$galleries=$GLOBALS['SITE_DB']->query($query,300 /*reasonable limit*/);
 		if ($depth==0)
 		{
-			$content=$this->inside($zone,$galleries,'BLOCK_SIDE_ROOT_GALLERIES_LINE',$show_empty);
+			$content=$this->inside($zone,$galleries,'BLOCK_SIDE_GALLERIES_LINE',$show_empty);
 		} else
 		{
 			$content=new ocp_tempcode();
@@ -87,9 +87,9 @@ class Block_side_root_galleries
 				if (($show_empty) || (gallery_has_content($gallery['name'])))
 				{
 					$subgalleries=$GLOBALS['SITE_DB']->query_select('galleries',array('name','fullname'),array('parent_id'=>$gallery['name']),'ORDER BY add_date',300 /*reasonable limit*/);
-					$nest=$this->inside($zone,$subgalleries,'BLOCK_SIDE_ROOT_GALLERIES_LINE_DEPTH',$show_empty);
+					$nest=$this->inside($zone,$subgalleries,'BLOCK_SIDE_GALLERIES_LINE_DEPTH',$show_empty);
 					$caption=get_translated_text($gallery['fullname']);
-					$content->attach(do_template('BLOCK_SIDE_ROOT_GALLERIES_LINE_CONTAINER',array('_GUID'=>'e50b84369b5e2146c4fab4fddc84bf0a','ID'=>$gallery['name'],'CAPTION'=>$caption,'CONTENTS'=>$nest)));
+					$content->attach(do_template('BLOCK_SIDE_GALLERIES_LINE_CONTAINER',array('_GUID'=>'e50b84369b5e2146c4fab4fddc84bf0a','ID'=>$gallery['name'],'CAPTION'=>$caption,'CONTENTS'=>$nest)));
 				}
 			}
 		}
@@ -103,7 +103,7 @@ class Block_side_root_galleries
 			$title='';
 		}
 
-		return do_template('BLOCK_SIDE_ROOT_GALLERIES',array('_GUID'=>'ed420ce9d1b1dde95eb3fd8473090228','TITLE'=>$title,'ID'=>$parent_id,'DEPTH'=>$depth!=0,'CONTENT'=>$content));
+		return do_template('BLOCK_SIDE_GALLERIES',array('_GUID'=>'ed420ce9d1b1dde95eb3fd8473090228','TITLE'=>$title,'ID'=>$parent_id,'DEPTH'=>$depth!=0,'CONTENT'=>$content));
 	}
 
 	/**

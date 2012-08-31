@@ -1588,7 +1588,6 @@ class Module_cms_galleries_cat extends standard_crud_module
 	 * @param  ID_TEXT			The gallery codename
 	 * @param  SHORT_TEXT		The full human-readeable name of the gallery
 	 * @param  LONG_TEXT			The description of the gallery
-	 * @param  SHORT_TEXT		Teaser text for the gallery
 	 * @param  LONG_TEXT			Hidden notes associated with the gallery
 	 * @param  ID_TEXT			The parent gallery (blank: no parent)
 	 * @param  BINARY				Whether images may be put in this gallery
@@ -1604,7 +1603,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($name='',$fullname='',$description='',$teaser='',$notes='',$parent_id='',$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=NULL,$rep_image=NULL,$watermark_top_left=NULL,$watermark_top_right=NULL,$watermark_bottom_left=NULL,$watermark_bottom_right=NULL,$allow_rating=NULL,$allow_comments=NULL)
+	function get_form_fields($name='',$fullname='',$description='',$notes='',$parent_id='',$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=NULL,$rep_image=NULL,$watermark_top_left=NULL,$watermark_top_right=NULL,$watermark_bottom_left=NULL,$watermark_bottom_right=NULL,$allow_rating=NULL,$allow_comments=NULL)
 	{
 		list($allow_rating,$allow_comments,)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,1);
 
@@ -1634,36 +1633,8 @@ class Module_cms_galleries_cat extends standard_crud_module
 			$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_gallery',array('filter'=>'only_conventional_galleries','purity'=>true),true,$parent_id));
 		$fields->attach(form_input_various_ticks(array(array(do_lang_tempcode('ACCEPT_IMAGES'),'accept_images',$accept_images==1,do_lang_tempcode('DESCRIPTION_ACCEPT_IMAGES')),array(do_lang_tempcode('ACCEPT_VIDEOS'),'accept_videos',$accept_videos==1,do_lang_tempcode('DESCRIPTION_ACCEPT_VIDEOS'))),new ocp_tempcode(),NULL,do_lang_tempcode('ACCEPTED_MEDIA_TYPES')));
 		$fields->attach(form_input_tick(do_lang_tempcode('FLOW_MODE_INTERFACE'),do_lang_tempcode('DESCRIPTION_FLOW_MODE_INTERFACE'),'flow_mode_interface',$flow_mode_interface==1));
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>($rep_image=='') && ($teaser=='') && ($is_member_synched==0),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>($rep_image=='') && ($is_member_synched==0),'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE_GALLERY'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
-
-		// Only show tease option if tease block being used
-		$teaser_shows=false;
-		$zones=find_all_zones(false,true);
-		$pages=array();
-		foreach ($zones as $_zone)
-		{
-			$pages[$_zone[0]]=find_all_pages_wrap($_zone[0],true);
-		}
-		foreach ($pages as $zone=>$under)
-		{
-			foreach ($under as $filename=>$type)
-			{
-				if (substr(strtolower($filename),-4)=='.txt')
-				{
-					$matches=array();
-					$contents=file_get_contents(zone_black_magic_filterer(((substr($type,0,15)=='comcode_custom/')?get_custom_file_base():get_file_base()).'/'.(($zone=='')?'':($zone.'/')).'pages/'.$type.'/'.$filename));
-					$fallback=get_file_base().'/'.(($zone=='')?'':($zone.'/')).'pages/comcode/'.fallback_lang().'/'.$filename;
-					if (file_exists($fallback)) $contents.=file_get_contents($fallback);
-					if (preg_match('#\[block[^\]]*\]main_gallery_tease\[/block\]#',$contents,$matches)!=0)
-					{
-						$teaser_shows=true;
-					}
-				}
-			}
-		}
-		if ($teaser_shows)
-			$fields->attach(form_input_line_comcode(do_lang_tempcode('TEASER'),do_lang_tempcode('DESCRIPTION_TEASER'),'teaser',$teaser,false));
 
 		$fields->attach(form_input_tick(do_lang_tempcode('IS_MEMBER_SYNCHED'),do_lang_tempcode('DESCRIPTION_IS_MEMBER_SYNCHED_GALLERY'),'is_member_synched',$is_member_synched==1));
 
@@ -1712,7 +1683,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		}
 		$myrow=$rows[0];
 
-		return $this->get_form_fields($id,get_translated_text($myrow['fullname']),get_translated_text($myrow['description']),get_translated_text($myrow['teaser']),$myrow['notes'],$myrow['parent_id'],$myrow['accept_images'],$myrow['accept_videos'],$myrow['is_member_synched'],$myrow['flow_mode_interface'],$myrow['rep_image'],$myrow['watermark_top_left'],$myrow['watermark_top_right'],$myrow['watermark_bottom_left'],$myrow['watermark_bottom_right'],$myrow['allow_rating'],$myrow['allow_comments']);
+		return $this->get_form_fields($id,get_translated_text($myrow['fullname']),get_translated_text($myrow['description']),$myrow['notes'],$myrow['parent_id'],$myrow['accept_images'],$myrow['accept_videos'],$myrow['is_member_synched'],$myrow['flow_mode_interface'],$myrow['rep_image'],$myrow['watermark_top_left'],$myrow['watermark_top_right'],$myrow['watermark_bottom_left'],$myrow['watermark_bottom_right'],$myrow['allow_rating'],$myrow['allow_comments']);
 	}
 
 	/**
@@ -1725,7 +1696,6 @@ class Module_cms_galleries_cat extends standard_crud_module
 		$name=post_param('name');
 		$fullname=post_param('fullname');
 		$description=post_param('description');
-		$teaser=post_param('teaser','');
 		$notes=post_param('notes','');
 		$parent_id=post_param('parent_id');
 		$accept_images=post_param_integer('accept_images',0);
@@ -1747,7 +1717,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
 
-		add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],$allow_rating,$allow_comments,false,time(),$g_owner);
+		add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],$allow_rating,$allow_comments,false,time(),$g_owner);
 		$this->set_permissions($name);
 
 		return $name;
@@ -1797,7 +1767,7 @@ class Module_cms_galleries_cat extends standard_crud_module
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
 
-		edit_gallery($id,$name,post_param('fullname'),post_param('description',STRING_MAGIC_NULL),post_param('teaser',STRING_MAGIC_NULL),post_param('notes',STRING_MAGIC_NULL),$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$allow_rating,$allow_comments,$g_owner);
+		edit_gallery($id,$name,post_param('fullname'),post_param('description',STRING_MAGIC_NULL),post_param('notes',STRING_MAGIC_NULL),$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$allow_rating,$allow_comments,$g_owner);
 
 		$this->new_id=$name;
 

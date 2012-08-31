@@ -13,6 +13,14 @@
 		</div>
 	{+END}
 
+	{+START,IF_PASSED,PAGINATION}
+		{+START,IF_NON_EMPTY,{PAGINATION}}
+			<div class="float_surrounder">
+				{PAGINATION}
+			</div>
+		{+END}
+	{+END}
+
 	{+START,IF_NON_EMPTY,{ARCHIVE_URL}{SUBMIT_URL}{RSS_URL}{ATOM_URL}}
 		<ul class="horizontal_links associated_links_block_group force_margin">
 			{+START,IF_NON_EMPTY,{ARCHIVE_URL}}

@@ -98,7 +98,6 @@ class Hook_addon_registry_shopping
 			'CATALOGUE_products_GRID_ENTRY_FIELD.tpl',
 			'CATALOGUE_products_FIELDMAP_ENTRY_FIELD.tpl',
 			'CATALOGUE_products_GRID_ENTRY_WRAP.tpl',
-			'CATEGORY_products_ENTRY.tpl',
 			'RESULTS_products_TABLE.tpl',
 			'JAVASCRIPT_SHOPPING.tpl',
 			'ECOM_SHOPPING_CART_PROCEED.tpl',
@@ -167,7 +166,6 @@ class Hook_addon_registry_shopping
 			'CATALOGUE_products_CATEGORY_SCREEN.tpl'=>'grid_category_screen__products',
 			'CATALOGUE_products_GRID_ENTRY_FIELD.tpl'=>'grid_category_screen__products',
 			'CATALOGUE_products_GRID_ENTRY_WRAP.tpl'=>'grid_category_screen__products',
-			'CATEGORY_products_ENTRY.tpl'=>'category_products_entry',
 			'RESULTS_products_TABLE.tpl'=>'results_products_table',
 			'ECOM_SHOPPING_CART_STAGE_PAY.tpl'=>'shopping_cart_stage_pay'
 		);
@@ -803,42 +801,6 @@ class Hook_addon_registry_shopping
 				'WIDTHS'=>array(
 					placeholder_number()
 				)
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__category_products_entry()
-	{
-		$cat_entry=new ocp_tempcode();
-
-		foreach (placeholder_array() as $key=>$values)
-		{
-			$cat_entry->attach(do_lorem_template('CATEGORY_products_ENTRY', array(
-				'ID'=>placeholder_id(),
-				'NAME_FIELD'=>$values,
-				'AJAX_EDIT_URL'=>placeholder_url(),
-				'URL'=>placeholder_url(),
-				'REP_IMAGE'=>placeholder_image(),
-				'CHILDREN'=>lorem_phrase(),
-				'NAME'=>lorem_word(),
-				'NAME_PLAIN'=>lorem_word_html(),
-				'NUM_CHILDREN'=>'3',
-				'NUM_ENTRIES'=>'2',
-				'NUM_CHILDREN_RECURSIVE'=>'3',
-				'NUM_ENTRIES_DIRECT'=>'2'
-			)));
-		}
-
-		return array(
-			lorem_globalise(do_lorem_template('CATEGORY_LIST', array(
-				'CONTENT'=>$cat_entry
 			)), NULL, '', true)
 		);
 	}

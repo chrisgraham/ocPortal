@@ -405,7 +405,7 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 		dispatch_notification('gallery_entry',$cat,$subject,$mail);
 	}
 
-	decache('side_root_galleries');
+	decache('side_galleries');
 	decache('main_gallery_embed');
 
 	decache('main_image_fader');
@@ -511,7 +511,7 @@ function delete_image($id,$delete_full)
 	require_code('seo2');
 	seo_meta_erase_storage('image',strval($id));
 
-	decache('side_root_galleries');
+	decache('side_galleries');
 	decache('main_gallery_embed');
 	decache('main_image_fader');
 }
@@ -679,7 +679,7 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	require_code('seo2');
 	seo_meta_set_for_implicit('video',strval($id),array($description),$description);
 
-	decache('side_root_galleries');
+	decache('side_galleries');
 	decache('main_gallery_embed');
 
 	return $id;
@@ -786,7 +786,7 @@ function delete_video($id,$delete_full)
 	require_code('seo2');
 	seo_meta_erase_storage('video',strval($id));
 
-	decache('side_root_galleries');
+	decache('side_galleries');
 	decache('main_gallery_embed');
 }
 
@@ -889,7 +889,6 @@ function constrain_gallery_image_to_max_size($file_path,$filename,$box_width)
  * @param  ID_TEXT		The gallery codename
  * @param  SHORT_TEXT	The full human-readeable name of the gallery
  * @param  LONG_TEXT		The description of the gallery
- * @param  SHORT_TEXT	Teaser text for the gallery
  * @param  LONG_TEXT		Hidden notes associated with the gallery
  * @param  ID_TEXT		The parent gallery (blank: no parent)
  * @param  BINARY			Whether images may be put in this gallery
@@ -907,7 +906,7 @@ function constrain_gallery_image_to_max_size($file_path,$filename,$box_width)
  * @param  ?TIME			The add time (NULL: now)
  * @param  ?MEMBER		The gallery owner (NULL: nobody)
  */
-function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$allow_rating=1,$allow_comments=1,$skip_exists_check=false,$add_date=NULL,$g_owner=NULL)
+function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$allow_rating=1,$allow_comments=1,$skip_exists_check=false,$add_date=NULL,$g_owner=NULL)
 {
 	if (is_null($add_date)) $add_date=time();
 
@@ -921,7 +920,7 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
 	}
 
 	$GLOBALS['SITE_DB']->query_insert('galleries',
-		array('name'=>$name,'add_date'=>$add_date,'description'=>insert_lang_comcode($description,2),'teaser'=>insert_lang_comcode($teaser,2),'notes'=>$notes,
+		array('name'=>$name,'add_date'=>$add_date,'description'=>insert_lang_comcode($description,2),'notes'=>$notes,
 				'fullname'=>insert_lang($fullname,1),
 				'watermark_top_left'=>$watermark_top_left,'watermark_top_right'=>$watermark_top_right,
 				'watermark_bottom_left'=>$watermark_bottom_left,'watermark_bottom_right'=>$watermark_bottom_right,
@@ -944,8 +943,7 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
 
 	if (function_exists('decache'))
 	{
-		decache('main_root_galleries');
-		decache('side_root_galleries');
+		decache('side_galleries');
 	}
 }
 
@@ -956,7 +954,6 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
  * @param  ID_TEXT		The gallery codename (maybe the same as the old one)
  * @param  SHORT_TEXT	The full human-readeable name of the gallery
  * @param  LONG_TEXT		The description of the gallery
- * @param  SHORT_TEXT	Teaser text for the gallery
  * @param  LONG_TEXT		Hidden notes associated with the gallery
  * @param  ?ID_TEXT		The parent gallery (NULL: no parent)
  * @param  BINARY			Whether images may be put in this gallery
@@ -974,7 +971,7 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
  * @param  BINARY			Whether comments are allowed
  * @param  ?MEMBER		The gallery owner (NULL: nobody)
  */
-function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$parent_id=NULL,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$meta_keywords=NULL,$meta_description=NULL,$allow_rating=1,$allow_comments=1,$g_owner=NULL)
+function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=NULL,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$meta_keywords=NULL,$meta_description=NULL,$allow_rating=1,$allow_comments=1,$g_owner=NULL)
 {
 	require_code('urls2');
 	suggest_new_idmoniker_for('galleries','misc',$name,$fullname);
@@ -1011,7 +1008,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 
 	if (!is_null($meta_keywords)) seo_meta_set_for_explicit('gallery',$name,$meta_keywords,$meta_description);
 
-	$myrows=$GLOBALS['SITE_DB']->query_select('galleries',array('fullname','description','teaser'),array('name'=>$old_name),'',1);
+	$myrows=$GLOBALS['SITE_DB']->query_select('galleries',array('fullname','description'),array('name'=>$old_name),'',1);
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
@@ -1020,7 +1017,6 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 		'notes'=>$notes,
 		'fullname'=>lang_remap($myrow['fullname'],$fullname),
 		'description'=>lang_remap_comcode($myrow['description'],$description),
-		'teaser'=>lang_remap_comcode($myrow['teaser'],$teaser),
 		'parent_id'=>$parent_id,
 		'accept_images'=>$accept_images,
 		'accept_videos'=>$accept_videos,
@@ -1065,8 +1061,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 
 	$GLOBALS['SITE_DB']->query_update('group_category_access',array('category_name'=>$name),array('module_the_name'=>'galleries','category_name'=>$old_name));
 
-	decache('main_root_galleries');
-	decache('side_root_galleries');
+	decache('side_galleries');
 
 	require_code('feedback');
 	update_spacer_post($allow_comments!=0,'galleries',$name,build_url(array('page'=>'galleries','type'=>'misc','id'=>$name),get_module_zone('galleries'),NULL,false,false,true),$fullname,get_value('comment_forum__galleries'));
@@ -1095,7 +1090,6 @@ function delete_gallery($name)
 
 	delete_lang($rows[0]['fullname']);
 	delete_lang($rows[0]['description']);
-	delete_lang($rows[0]['teaser']);
 
 	// Images and videos are deleted, because we are deleting the _gallery_, not just a category (nobody is going to be deleting galleries with the expectation of moving the image to a different one in bulk - unlike download categories, for example).
 	if (function_exists('set_time_limit')) @set_time_limit(0);
@@ -1131,8 +1125,7 @@ function delete_gallery($name)
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'galleries','category_name'=>$name));
 	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'galleries','category_name'=>$name));
 
-	decache('main_root_galleries');
-	decache('side_root_galleries');
+	decache('side_galleries');
 }
 
 /**
@@ -1163,7 +1156,8 @@ function make_member_gallery_if_needed($cat)
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 		if (is_null($username)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
-		add_gallery($cat,do_lang('PERSONAL_GALLERY_OF',$username,get_translated_text($parent_info['fullname'])),'','','',$parent_id,$parent_info['accept_images'],$parent_info['accept_videos'],0,$parent_info['flow_mode_interface']);
+		$member_gallery_title=do_lang('PERSONAL_GALLERY_OF',$username,get_translated_text($parent_info['fullname']));
+		add_gallery($cat,$member_gallery_title,'','',$parent_id,$parent_info['accept_images'],$parent_info['accept_videos'],0,$parent_info['flow_mode_interface']);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('group_category_access',array('group_id'),array('module_the_name'=>'galleries','category_name'=>$parent_id));
 		foreach ($rows as $row)
