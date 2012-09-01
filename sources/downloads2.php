@@ -152,7 +152,9 @@ function dload_script()
 	header("Pragma: private");
 	header("Cache-Control: private");
 	header('Expires: '.gmdate('D, d M Y H:i:s',time()+60*60*24*365).' GMT');
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s',is_null($myrow['edit_date'])?$myrow['add_date']:$myrow['edit_date']).' GMT');
+	$time=is_null($myrow['edit_date'])?$myrow['add_date']:$myrow['edit_date'];
+	$time=max($time,filemtime($_full));
+	header('Last-Modified: '.gmdate('D, d M Y H:i:s',$time).' GMT');
 
 	// Default to no resume
 	$from=0;
