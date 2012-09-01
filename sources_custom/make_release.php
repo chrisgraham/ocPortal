@@ -119,8 +119,8 @@ function make_installers($skip_file_grab=false)
 		foreach (array_keys($MAKE_INSTALLERS__FILE_ARRAY) as $path) // $MAKE_INSTALLERS__FILE_ARRAY is Current path->contents. We need number->path, so we can count through them without having to have the array with us. We end up with this in string form, as it goes in our file
 		{
 			$out.=do_build_file_output($path);
-			$size_list.='\''.$path.'\'=>'.$sizes[$path].','."\n";
-			$offset_list.='\''.$path.'\'=>'.$offsets[$path].','."\n";
+			$size_list.='\''.$path.'\'=>'.strval($sizes[$path]).','."\n";
+			$offset_list.='\''.$path.'\'=>'.strval($offsets[$path]).','."\n";
 			$file_list.='\''.$path.'\',';
 		}
 
@@ -235,10 +235,13 @@ function make_installers($skip_file_grab=false)
 		// Do the main work
 		chdir($builds_path.'/builds/build/'.$version_branch);
 		$cmd='tar -cvf '.escapeshellarg($bundled).' * --mode=a+X';
-		$output2=shell_exec($cmd);
+		$output2='';
+		$cmd_result=shell_exec($cmd);
+		if ($cmd_result!==NULL) $output2.=$cmd_result;
 		chdir(get_file_base().'/data_custom/builds');
 		$cmd='tar -rvf '.escapeshellarg($bundled).' readme.txt --mode=a+X';
-		$output2.=shell_exec($cmd);
+		$cmd_result=shell_exec($cmd);
+		if ($cmd_result!==NULL) $output2.=$cmd_result;
 		//$out.=do_build_zip_output($v,$output2);	Don't mention, as will get auto-deleted after gzipping anyway
 		chdir($builds_path.'/builds/build/'.$version_branch);
 		$cmd='gzip -n '.escapeshellarg($bundled);

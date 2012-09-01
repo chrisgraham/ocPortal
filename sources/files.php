@@ -228,9 +228,15 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		// Specially-recognised naming conventions
 		'_old'=>'.*',
 
+		// From NEXT version (v10), ignored in this one
+		'_config.php'=>'',
+
 		// Syntax's used during ocPortal testing
 		'gibb'=>'.*',
 		'gibberish'=>'.*',
+
+		// Compiled documentation
+		'api'=>'docs',
 
 		// Files you are sometimes expected to leave around, but outside ocPortal's direct remit
 		'bingsiteauth.xml'=>'',
@@ -338,7 +344,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 	{
 		$ignore_filenames_and_dir_names+=array(
 			// Bundled stuff that is not necessarily in a *_custom dir yet is volatile
-			'_config.php'=>'',
 			'info.php'=>'',
 			'map.ini'=>'themes',
 			'functions.dat'=>'data_custom',
