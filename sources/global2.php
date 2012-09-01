@@ -645,7 +645,9 @@ function fast_spider_cache($bot=true)
 				header('Content-Encoding: gzip');
 			}
 
-			exit(file_get_contents($fast_cache_path));
+			$contents=file_get_contents($fast_cache_path);
+			if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($contents);
+			exit($contents);
 		} else
 		{
 			@unlink($fast_cache_path);
