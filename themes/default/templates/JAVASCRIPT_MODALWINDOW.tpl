@@ -61,24 +61,31 @@ function open_link_as_overlay(ob,width,height,target)
 				var real_height=img.height;
 				var height=real_height;
 
-				// Might need to rescale using some maths, if natural size is too big
-				var max_width=modal.topWindow.get_window_width()-20;
-				var max_height=modal.topWindow.get_window_height()-180;
-				if (width>max_width)
+				var dims_func=function()
 				{
-					width=max_width;
-					height=window.parseInt(max_width*real_height/real_width-1);
-				}
-				if (height>max_height)
-				{
-					width=window.parseInt(max_height*real_width/real_height-1);
-					height=max_height;
-				}
-				modal.resetDimensions(width,height);
+					// Might need to rescale using some maths, if natural size is too big
+					var max_width=modal.topWindow.get_window_width()-20;
+					var max_height=modal.topWindow.get_window_height()-180;
+					if (width>max_width)
+					{
+						width=max_width;
+						height=window.parseInt(max_width*real_height/real_width-1);
+					}
+					if (height>max_height)
+					{
+						width=window.parseInt(max_height*real_width/real_height-1);
+						height=max_height;
+					}
+					modal.resetDimensions(width,height);
+
+					img.width=width;
+					img.height=height;
+				};
+
+				dims_func();
+				modal.addEvent( window, "resize", function() { dims_func(); } );
 
 				var sup=modal.topWindow.document.getElementById('lightbox_image').parentNode;
-				img.width=width;
-				img.height=height;
 				sup.removeChild(sup.childNodes[0]);
 				sup.appendChild(img);
 				sup.className='';
@@ -366,6 +373,13 @@ function ModalWindow()
 			this.box.childNodes[0].style.top=boxPosTop;
 			this.box.childNodes[0].style.left=boxPosLeft;
 
+			var iframe=this.box.getElementsByTagName('iframe');
+			if (typeof iframe[0]!='undefined')
+			{
+				iframe[0].style.width=this.width?(this.width+'px'):'100%';
+				iframe[0].style.height=this.width?(this.height+'px'):'50%';
+			}
+
 			if (((boxHeight=='auto') && ('{$MOBILE}'==1)) || (height>dim.windowHeight))
 			{
 				this.box.childNodes[0].style.position='absolute';
@@ -403,7 +417,11 @@ function ModalWindow()
 				}
 			}));
 
+			var _this=this;
+			var width=this.width;
+			var height=this.height;
 			this.resetDimensions(this.width,this.height);
+			this.addEvent( window, "resize", function() { _this.resetDimensions(width,height); } );
 
 			this.inject(this.box);
 

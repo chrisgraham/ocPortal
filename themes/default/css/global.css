@@ -468,8 +468,8 @@ header h1 {
 		margin-top: 60px;
 		padding: 5px 5px 0 0;
 		background: url('{$IMG;,zone_gradient}') repeat-x;
+		min-height: 24px;
 	{+END}
-	min-height: 24px;
 	font-weight: bold;
 	color: {$GET,navigation_text};
 	background-color: {$GET,navigation_background};
@@ -672,6 +672,13 @@ body.popup_spacer h2 {
 .global_middle_faux>.global_side_panel {
 	width: auto;
 }
+{+START,IF,{$MOBILE}}
+	.panel_solo {
+		width: 100% !important;
+		padding-left: 1em !important;
+		padding-right: 1em !important;
+	}
+{+END}
 
 /* Spacing around middle column if it adjoins panels */
 #panel_left ~ .global_middle {
@@ -3222,7 +3229,7 @@ ul.nl, .nl ul {
 	margin-{!en_right}: -1px;
 	margin-bottom: 0;
 	{+START,IF,{$MOBILE}}
-		font-size: 0.8em;
+		font-size: 0.9em;
 	{+END}
 	{$BETA_CSS_PROPERTY,transition: color\,background-color 0.5s linear;}
 }
@@ -3316,6 +3323,7 @@ ul.nl, .nl ul {
 
 .menu_type__zone a {
 	border-bottom: 1px solid transparent;
+	white-space: nowrap !important;
 	{$BETA_CSS_PROPERTY,transition: border-bottom-color 0.5s linear;}
 }
 
@@ -3596,24 +3604,24 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 .shocker_right {
 }
 
-{+START,IF,{$NOT,{$MOBILE}}}
-	.attachment {
-		margin: 1em 0;
+.attachment {
+	margin: 1em 0;
+	{+START,IF,{$NOT,{$MOBILE}}}
 		border: 1px solid {$GET,standard_border};
 		padding: 0.5em;
-		font-size: 0.9em;
-		white-space: nowrap;
-		display: inline-block;
-	}
+	{+END}
+	font-size: 0.9em;
+	white-space: nowrap;
+	display: inline-block;
+}
 
-	.attachment figcaption {
-		border: 1px solid {$GET,standard_border};
-		padding: 0.15em 0.3em;
-		font-style: italic;
-		margin-bottom: 0.5em;
-		display: inline-block;
-	}
-{+END}
+.attachment figcaption {
+	border: 1px solid {$GET,standard_border};
+	padding: 0.15em 0.3em;
+	font-style: italic;
+	margin-bottom: 0.5em;
+	display: inline-block;
+}
 
 .attachment_details {
 	margin-top: 0.2em;
