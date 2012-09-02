@@ -156,7 +156,7 @@ function fauxmodal_prompt(question,defaultValue,callback,title,input_type)
 			text: escape_html(question),
 			yes_button: "{!INPUTSYSTEM_OK#}",
 			cancel_button: "{!INPUTSYSTEM_CANCEL#}",
-			defaultValue: defaultValue,
+			defaultValue: (this.defaultValue===null)?'':this.defaultValue,
 			title: title,
 			yes: function(value) {
 				callback(value);
@@ -646,7 +646,7 @@ function ModalWindow()
 						'type': this.input_type,
 						'size': "40",
 						'class': "wide_field",
-						'value': this.defaultValue
+						'value': (this.defaultValue===null)?'':this.defaultValue
 					});
 					var input_wrap=this.element("div", {
 						'class': "constrain_field"
