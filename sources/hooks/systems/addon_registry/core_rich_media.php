@@ -228,6 +228,8 @@ class Hook_addon_registry_core_rich_media
 			'themes/default/images/big_tabs_controller_button_top_active.png',
 			'themes/default/images/big_tabs_controller_button_top.png',
 			'themes/default/images/big_tabs_controller_button.png',
+			'themes/default/images/EN/page/fullsize.png',
+			'themes/default/images/EN/page/thumbnail.png',
 			'COMCODE_BIG_TABS_CONTROLLER.tpl',
 			'COMCODE_BIG_TABS_TAB.tpl',
 			'big_tabs.css',
