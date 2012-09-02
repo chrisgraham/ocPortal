@@ -210,17 +210,19 @@ foreach ($lines as $line)
 }
 $files=(@$_GET['full_scan']=='1')?do_dir(get_file_base(),$git_found):array_keys($git_found);
 
+$git_status='placeholder="optional"';
+$git_status_2=' <span style="font-size: 0.8em">(if not entered a new one will be made)</span>';
+$git_status_3='Git commit ID';
+$choose_files_label='Choose files';
+
 if (count($files)==0)
 {
-	echo '<p><em>Found no changed files so you will need to enter a git commit ID!</em> Pass <kbd>full_scan=1</kbd> if you want to do a filesystem scan (rather than relying on git).</p>';
-	$git_status='required="required"';
-	$git_status_2='';
+	echo '<p><em>Found no changed files so done a full filesystem scan (rather than relying on git). You can enter a git ID or select files.</p>';
+	$files=do_dir(get_file_base(),$git_found);
+	/*$git_status='required="required"';
+	$git_status_2='';*/
 	$git_status_3='<strong>Git commit ID</strong>';
-} else
-{
-	$git_status='placeholder="optional"';
-	$git_status_2=' <span style="font-size: 0.8em">(if not entered a new one will be made)</span>';
-	$git_status_3='Git commit ID';
+	$choose_files_label='<strong>Choose files</strong>';
 }
 
 $post_url=escape_html(static_evaluate_tempcode(get_self_url()));
@@ -300,7 +302,7 @@ echo <<<END
 	<fieldset>
 		<legend>Fix</legend>
 
-		<label for="fixed_files">Choose files</label>
+		<label for="fixed_files">{$choose_files_label}</label>
 		<select size="15" required="required" multiple="multiple" name="fixed_files[]" id="fixed_files">
 END;
 		foreach ($files as $file)
