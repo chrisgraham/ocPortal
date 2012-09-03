@@ -451,6 +451,7 @@ class Module_galleries
 
 		set_feed_url(find_script('backend').'?mode=galleries&filter=');
 
+		// Not done via main_multi_content block due to need to filter out special galleries
 		$count=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
 		if ($count>500) warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'));
@@ -558,6 +559,7 @@ class Module_galleries
 		}
 
 		// Subgalleries
+		// Not done via main_multi_content block due to need to filter out special galleries
 		$order='add_date DESC';
 		if (get_option('gallery_name_order')=='1')
 		{
@@ -1025,11 +1027,6 @@ class Module_galleries
 			require_code('ocf_members2');
 		}
 		$member_details=((is_null($member_id)) || (get_forum_type()!='ocf'))?new ocp_tempcode():render_member_box($member_id,true,NULL,NULL,true,NULL,false);
-
-		// Pagination
-		require_code('templates_pagination');
-		$_selectors=array_map('intval',explode(',',get_option('gallery_selectors')));
-		$pagination=pagination(do_lang('ENTRY'),$cat,$start,'gallery_entries_start',$max,'gallery_entries_max',$total_rows,false,10,$_selectors);
 
 		// Render
 		return do_template('GALLERY_REGULAR_MODE_SCREEN',array(

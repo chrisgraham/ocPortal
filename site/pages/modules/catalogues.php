@@ -792,6 +792,7 @@ class Module_catalogues
 		sort_maps_by($rows_subcategories,'cc_title');
 
 		// Render categories
+		// Not done via main_multi_content block due to need for custom query
 		$content=new ocp_tempcode();
 		foreach ($rows_subcategories as $myrow)
 		{
@@ -889,6 +890,7 @@ class Module_catalogues
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 		$cats=array();
 
+		// Not done via main_cc_entries block due to complex organisation
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'catalogue_entries p WHERE ce_validated=1 AND ('.$sql_filter.')');
 		foreach ($rows as $row)
 		{

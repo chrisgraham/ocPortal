@@ -718,7 +718,6 @@ class Hook_addon_registry_galleries
 					'TAGS'=>$tags,
 					'RATING_DETAILS'=>lorem_sentence_html(),
 					'COMMENT_DETAILS'=>$comment_details,
-					'PAGINATION'=>placeholder_pagination(),
 					'REP_IMAGE_URL'=>placeholder_image_url(),
 					'TITLE'=>lorem_title(),
 					'MEMBER_DETAILS'=>lorem_phrase(),

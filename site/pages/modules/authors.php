@@ -199,6 +199,7 @@ class Module_authors
 		else $search_details=new ocp_tempcode();
 
 		// Downloads
+		// Not done via main_multi_content block due to need for custom query
 		$downloads_released=new ocp_tempcode();
 		if (addon_installed('downloads'))
 		{
@@ -222,6 +223,7 @@ class Module_authors
 		}
 
 		// News
+		// Not done via main_multi_content block due to need for custom query
 		$news_released=new ocp_tempcode();
 		if (addon_installed('news'))
 		{

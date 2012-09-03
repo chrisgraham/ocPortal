@@ -307,7 +307,7 @@ class Hook_addon_registry_search
 			'FIELDS'=>$entries,
 			'MESSAGE'=>new ocp_tempcode(),
 			'SORT'=>'',
-			'PAGINATION'=>placeholder_pagination()
+			'PAGINATION'=>new ocp_tempcode()
 		));
 
 		$saved_search_screen=do_lorem_template('SEARCH_SAVED_SCREEN', array(

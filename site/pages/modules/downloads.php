@@ -522,6 +522,7 @@ class Module_downloads
 		unset($rows);
 
 		// Show all letters
+		// Not done via main_multi_content block due to complex organisation
 		$subcats=array();
 		foreach ($cats as $letter=>$rows)
 		{

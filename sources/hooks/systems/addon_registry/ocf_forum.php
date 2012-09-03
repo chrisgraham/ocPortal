@@ -74,6 +74,7 @@ class Hook_addon_registry_ocf_forum
 	function get_file_list()
 	{
 		return array(
+			'sources/blocks/main_ocf_involved_topics.php',
 			'sources/hooks/systems/notifications/ocf_topic_invite.php',
 			'sources/hooks/systems/notifications/ocf_new_pt.php',
 			'sources/hooks/systems/notifications/ocf_topic.php',

@@ -107,6 +107,7 @@ class Hook_Profiles_Tabs_galleries
 	 */
 	function attach_gallery_subgalleries($gallery_name,&$galleries)
 	{
+		// Not done via main_multi_content block due to need to custom query
 		$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id'=>$gallery_name),'ORDER BY add_date DESC');
 		foreach ($rows as $i=>$row)
 		{

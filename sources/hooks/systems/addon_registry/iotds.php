@@ -216,7 +216,6 @@ class Hook_addon_registry_iotds
 			lorem_globalise(do_lorem_template('PAGINATION_SCREEN', array(
 				'TITLE'=>lorem_title(),
 				'CONTENT'=>$content,
-				'PAGINATION'=>placeholder_pagination()
 			)), NULL, '', true)
 		);
 	}

@@ -72,7 +72,6 @@ class Block_side_ocf_private_topics
 
 		// Only show what's new in week. Some forums may want to tweak this, but forums themselves only mark unread topics for a week.
 		$rows=ocf_get_pp_rows();
-//		if (count($rows)==0) return new ocp_tempcode();
 		require_lang('ocf');
 		$out=new ocp_tempcode();
 		foreach ($rows as $topic)
