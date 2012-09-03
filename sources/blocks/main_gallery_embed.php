@@ -301,7 +301,7 @@ class Block_main_gallery_embed
 		{
 			require_code('templates_pagination');
 			$_selectors=array_map('intval',explode(',',get_option('gallery_selectors')));
-			$pagination=pagination(do_lang('MEDIA'),$cat,$start,$block_id.'_start',$max,$block_id.'_max',$total_videos+$total_images,false,10,$_selectors);
+			$pagination=pagination(do_lang('MEDIA'),$start,$block_id.'_start',$max,$block_id.'_max',$total_videos+$total_images,false,10,$_selectors);
 		}
 
 		// Render

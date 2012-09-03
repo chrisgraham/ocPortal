@@ -373,13 +373,7 @@ class Module_downloads
 			$order=get_param('order',NULL);
 			if (is_null($order))
 			{
-				if ($max_rows<1000)
-				{
-					$order='t.text_original ASC';
-				} else
-				{
-					$order='num_downloads DESC';
-				}
+				$order='t.text_original ASC';
 			}
 		}
 		if ((strtoupper($order)!=strtoupper('t.text_original ASC')) && (strtoupper($order)!=strtoupper('t.text_original DESC')) && (strtoupper($order)!=strtoupper('file_size ASC')) && (strtoupper($order)!=strtoupper('file_size DESC'))
@@ -405,13 +399,13 @@ class Module_downloads
 		inform_non_canonical_parameter('order');
 
 		// Get category contents
-		$subcategories=do_block('main_multi_content',array('param'=>'download_category','filter'=>strval($id),'efficient'=>'0','zone'=>'_SELF','mode'=>'all','max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','render_if_empty'=>'0'));
+		$subcategories=do_block('main_multi_content',array('param'=>'download_category','filter'=>strval($category_id),'efficient'=>'0','zone'=>'_SELF','mode'=>'all','max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','render_if_empty'=>'0'));
 		if (get_option('downloads_subcat_narrowin')=='1')
 		{
-			$filter=strval($id).'*';
+			$filter=strval($category_id).'*';
 		} else
 		{
-			$filter=strval($id);
+			$filter=strval($category_id);
 		}
 		$ocselect=either_param('active_filter','');
 		$entries=do_block('main_multi_content',array('param'=>'download','filter'=>$filter,'efficient'=>'0','zone'=>'_SELF','mode'=>$order,'max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','ocselect'=>$ocselect));

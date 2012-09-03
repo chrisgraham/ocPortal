@@ -208,7 +208,7 @@ foreach ($lines as $line)
 			$git_found[get_file_base().'/'.$matches[2]]=true;
 	}
 }
-$files=(@$_GET['full_scan']=='1')?do_dir(get_file_base(),$git_found):array_keys($git_found);
+$files=(@$_GET['full_scan']=='1')?push_bugfix_do_dir(get_file_base(),$git_found):array_keys($git_found);
 
 if (count($files)==0)
 {
@@ -517,7 +517,7 @@ function make_post_request_with_attached_file($filename,$file_path,$more_post_da
 	return array($header,$content);
 }
 
-function do_dir($dir,$git_found)
+function push_bugfix_do_dir($dir,$git_found)
 {
 	$out=array();
 	$_dir=($dir=='')?'.':$dir;
@@ -535,7 +535,7 @@ function do_dir($dir,$git_found)
 					$out[]=$path;
 				} elseif (is_dir($_dir.'/'.$file))
 				{
-					$out=array_merge($out,do_dir($path,$git_found));
+					$out=array_merge($out,push_bugfix_do_dir($path,$git_found));
 				}
 			}
 		}

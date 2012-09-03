@@ -378,7 +378,7 @@ class Module_news
 				$count=$GLOBALS['SITE_DB']->query_value_if_there($query);
 				if ($count>0)
 				{
-					$content[]=render_news_category_box($category,'_SELF',false,true);
+					$_content[]=render_news_category_box($category,'_SELF',false,true,$blogs);
 				}
 			}
 		}
@@ -396,7 +396,7 @@ class Module_news
 		} else $submit_url=new ocp_tempcode();
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('NEWS_CATEGORIES'),NULL,$start,'news_categories_start',$max,'news_categories_max',$max_rows);
+		$pagination=pagination(do_lang_tempcode('NEWS_CATEGORIES'),$start,'news_categories_start',$max,'news_categories_max',$max_rows);
 
 		return do_template('PAGINATION_SCREEN',array('_GUID'=>'c61c945e0453c2145a819ca60e8faf09','TITLE'=>$title,'SUBMIT_URL'=>$submit_url,'CONTENT'=>$content,'PAGINATION'=>$pagination));
 	}

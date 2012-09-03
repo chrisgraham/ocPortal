@@ -66,9 +66,12 @@ function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	$num_topics=$row['f_cache_num_topics'];
 	$num_posts=$row['f_cache_num_posts'];
 
-	$entry_details=do_lang('FORUM_NUM_TOPICS',integer_format($num_topics)).do_lang('LIST_SEP').do_lang('FORUM_NUM_POSTS',integer_format($num_posts));
+	$entry_details=new ocp_tempcode();
+	$entry_details->attach(do_lang_tempcode('FORUM_NUM_TOPICS',escape_html(integer_format($num_topics))));
+	$entry_details->attach(do_lang_tempcode('LIST_SEP'));
+	$entry_details->attach(do_lang_tempcode('FORUM_NUM_POSTS',escape_html(integer_format($num_posts))));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url,'ENTRY_DETAILS'=>$entry_details,'BREADCRUMBS'=>$breadcrumbs));
+	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url,'ENTRY_DETAILS'=>protect_from_escaping($entry_details),'BREADCRUMBS'=>$breadcrumbs));
 }
 
 /**

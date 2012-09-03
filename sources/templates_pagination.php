@@ -31,7 +31,6 @@ function init__templates_pagination()
  * Get the tempcode for a results browser.
  *
  * @param  tempcode		The title/name of the resource we are browsing through
- * @param  ?mixed			The category ID we are browsing in (NULL: not applicable)
  * @param  integer		The current position in the browser
  * @param  ID_TEXT		The parameter name used to store our position in the results (usually, 'start')
  * @param  integer		The maximum number of rows to show per browser page
@@ -43,7 +42,7 @@ function init__templates_pagination()
  * @param  ID_TEXT		Hash component to URL
  * @return tempcode		The results browser
  */
-function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_rows,$keep_post=false,$max_page_links=7,$_selectors=NULL,$hash='')
+function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_post=false,$max_page_links=7,$_selectors=NULL,$hash='')
 {
 	inform_non_canonical_parameter($max_name);
 	inform_non_canonical_parameter($start_name);
@@ -197,9 +196,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 				$list->attach(form_input_list_entry('',false,'...',false,true));
 			}
 			$dont_auto_keep=array();
-			if (!is_null($category_id)) $dont_auto_keep[]='id';
 			$hidden=build_keep_form_fields('_SELF',true,$dont_auto_keep);
-			if (!is_null($category_id)) $hidden->attach(form_input_hidden('id',is_integer($category_id)?strval($category_id):$category_id));
 			$pages_list=do_template('PAGINATION_LIST_PAGES',array('_GUID'=>'9e1b394763619433f23b8ed95f5ac134','URL'=>$get_url,'HIDDEN'=>$hidden,'START_NAME'=>$start_name,'LIST'=>$list));
 		} else
 		{
@@ -235,15 +232,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
  */
 function _build_pagination_cat_url($url_array,$post_array,$hash)
 {
-	if (!is_null($category_id))
-		if (!is_string($category_id)) $category_id=strval($category_id);
-
 	$url_array=array_merge($url_array,$post_array);
-	if (!is_null($category_id))
-	{
-		$url_array['id']=$category_id;
-		$url_array['kfs'.$category_id]=NULL; // For OCF. We don't need this anymore because we're using 'start' explicitly here
-	}
 	$cat_url=build_url($url_array,'_SELF',NULL,true,false,false,$hash);
 
 	return $cat_url;

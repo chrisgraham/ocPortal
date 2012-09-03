@@ -669,10 +669,11 @@ function fgets($handle,$length)
 /**
  * Reads entire file into an array.
  *
- * @param  PATH	The file name.
- * @return ~array	The array (each line being an entry in the array, and newlines still attached). (false: error)
+ * @param  PATH		The file name.
+ * @param  integer	Flags.
+ * @return ~array		The array (each line being an entry in the array, and newlines still attached). (false: error)
  */
-function file($filename)
+function file($filename,$flags=0)
 {
 	return array();
 }
@@ -2429,7 +2430,7 @@ function method_exists($object,$method_name)
  * Return current UNIX timestamp with microseconds.
  *
  * @param  boolean	Whether to return a float result. ALWAYS PASS THIS IN AS *FALSE* - FOR COMPATIBILITY WITH OLD VERSIONS OF PHP THAT DO NOT HAVE IT, WHILST PHP 6 DEFAULTS IT TO TRUE.
- * @return string		Micro-time.
+ * @return mixed		Micro-time.
  */
 function microtime($as_float)
 {
@@ -5083,12 +5084,25 @@ function fscanf($handle,$format)
 /**
  * Gets information about a file using an open file pointer.
  *
- * @param  resource  File handle.
+ * @param  resource	File handle.
  * @return array		Map of status information.
  */
 function fstat($handle)
 {
 	return array();
+}
+
+/**
+ * Set permissions on a file via FTP.
+ *
+ * @param  resource	File handle.
+ * @param  integer	Requested file permissions.
+ * @param  PATH		Filepath.
+ * @return ~integer	New file permissions.
+ */
+function ftp_chmod($ftp_stream,$mode,$filename)
+{
+	return 0;
 }
 
 /**

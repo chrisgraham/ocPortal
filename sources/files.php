@@ -419,6 +419,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 				array('(?!index\.html$)(?!\.htaccess$).*','data/areaedit/plugins/SpellChecker/aspell'), // We don't supply aspell outside git, too much space taken
 				array('(?!index\.html$)(?!\.htaccess$).*','data_custom/modules/admin_stats'), // Various temporary XML files get created under here, for SVG graphs
 				array('(?!pre_transcoding$)(?!index.html$)(?!\.htaccess$).*','uploads/.*'), // Uploads
+				array('.*','exports/builds/.*'),
 			));
 		}
 	}

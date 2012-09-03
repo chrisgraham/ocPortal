@@ -22,7 +22,9 @@ class Hook_symbol_CPF_LIST
 			{
 				$map=has_privilege(get_member(),'see_hidden_groups')?array():array('g_hidden'=>0);
 				$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
-				$_m=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),($group_count>200)?(array('g_is_private_club'=>0)+$map):$map,'ORDER BY g_order');
+				$map_extended=$map;
+				if ($group_count>200) $map_extended+=array('g_is_private_club'=>0);
+				$_m=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),$map_extended,'ORDER BY g_order');
 				foreach ($_m as $i=>$m)
 				{
 					$_m[$i]['text']=get_translated_text($m['g_name'],$GLOBALS['FORUM_DB']);

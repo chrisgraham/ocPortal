@@ -55,14 +55,14 @@ class Block_side_amazon_wishlist
 	{
 		require_lang('amazon');
 
-		global $secret_key;
+		global $SECRET_KEY;
 		$title=(isset($map['title']) && strlen($map['title'])>0)?$map['title']:do_lang_tempcode('BLOCK_AMAZON_WISHLIST_TITLE');
 		if (!array_key_exists('wishlist_id',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','wishlist_id');
 		if (!array_key_exists('access_key',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','access_key');
 		if (!array_key_exists('secret_key',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','secret_key');
 		$wishlist_id=$map['wishlist_id'];//"2VAUC2FYIEUZ5";//"3U62ZPEQ2G0GO";
 		$access_key=$map['access_key'];//"AKIAJXSQP4CES2F37GWQ";//"AKIAIZCU6XMIQYEDWU6A";
-		$secret_key=$map['secret_key'];//"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";//"kzKVLbT9+GufjsGPwwprdxCeLfE6Zyl/o94msNKO";
+		$SECRET_KEY=$map['secret_key'];//"xy9e5MHu4f9y7kjOjkysmjd58k2gjzN8YmC2/Ith";//"kzKVLbT9+GufjsGPwwprdxCeLfE6Zyl/o94msNKO";
 		$domain=$map['domain'];//'com';//coulb be also 'co.uk'
 
 		$out='';
@@ -75,7 +75,7 @@ class Block_side_amazon_wishlist
 		{
 			$i++;
 
-			$url=$this->createSignature("http://webservices.amazon.".$domain."/onca/xml?AWSAccessKeyId=".$access_key."&ListId=".strval($wishlist_id)."&ListType=WishList&Operation=ListLookup&ProductPage=".$i."&ResponseGroup=Request,ListFull&Service=AWSECommerceService&Timestamp=".gmdate("Y-m-d\TH:i:s\Z")."&Version=2008-09-17");//2");
+			$url=$this->createSignature("http://webservices.amazon.".$domain."/onca/xml?AWSAccessKeyId=".$access_key."&ListId=".$wishlist_id."&ListType=WishList&Operation=ListLookup&ProductPage=".$i."&ResponseGroup=Request,ListFull&Service=AWSECommerceService&Timestamp=".gmdate("Y-m-d\TH:i:s\Z")."&Version=2008-09-17");//2");
 
 			$xml_url=http_download_file($url);
 			$items=simplexml_load_string($xml_url);
@@ -89,9 +89,9 @@ class Block_side_amazon_wishlist
 						$url=$this->createSignature("http://webservices.amazon.".$domain."/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=".$access_key."&Operation=ItemLookup&IdType=ASIN&ItemId=".$item->Item->ASIN."&MerchantId=All&ResponseGroup=Medium&Timestamp=".gmdate("Y-m-d\TH:i:s\Z")."&Version=2007-07-16");//2");
 
 						$xml_url=http_download_file($url);
-						$itemDetails=simplexml_load_string($xml_url);
+						$item_details=simplexml_load_string($xml_url);
 
-						$out.='<div class="amazon_wishlist"><img src="' . $itemDetails->Items->Item->SmallImage->URL . '" width="22"  /> <a href="' . $itemDetails->Items->Item->DetailPageURL . '" title="' . htmlspecialchars($item->Item->ItemAttributes->Title) . '">' . $item->Item->ItemAttributes->Title . '</a></div><br />';
+						$out.='<div class="amazon_wishlist"><img src="' . $item_details->Items->Item->SmallImage->URL . '" width="22"  /> <a href="' . $item_details->Items->Item->DetailPageURL . '" title="' . htmlspecialchars($item->Item->ItemAttributes->Title) . '">' . $item->Item->ItemAttributes->Title . '</a></div><br />';
 					}
 				}
 			}
@@ -110,7 +110,7 @@ class Block_side_amazon_wishlist
 	 */
 	function createSignature($url,$params='')
 	{
-		global $secret_key;
+		global $SECRET_KEY;
 		$url_parts=parse_url($url);
 		$query=array();
 		parse_str($url_parts['query'],$query);
@@ -119,7 +119,7 @@ class Block_side_amazon_wishlist
 		{
 			$params .= $key."=".str_replace(array(":",","),array("%3A","%2C"),$value)."&";
 		}
-		$signature=base64_encode(hash_hmac('sha256',"GET\n".$url_parts['host']."\n".$url_parts['path']."\n".substr($params,0,-1),$secret_key,true));
+		$signature=base64_encode(hash_hmac('sha256',"GET\n".$url_parts['host']."\n".$url_parts['path']."\n".substr($params,0,-1),$SECRET_KEY,true));
 		$return="http://".$url_parts['host'].$url_parts['path']."?".$params."Signature=".str_replace(array("+","="),array("%2B","%3D"),$signature);
 
 		return $return;

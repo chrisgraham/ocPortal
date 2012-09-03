@@ -259,7 +259,7 @@ class Module_admin_config
 			add_config_option('AUTOMATIC_META_EXTRACTION','automatic_meta_extraction','tick','return \'1\';','SITE','GENERAL');
 			add_config_option('IS_ON_EMOTICON_CHOOSERS','is_on_emoticon_choosers','tick','return \'1\';','THEME','GENERAL');
 			add_config_option('DEEPER_ADMIN_BREADCRUMBS','deeper_admin_breadcrumbs','tick','return \'1\';','SITE','ADVANCED');
-			add_config_option('HAS_LOW_MEMORY_LIMIT','has_low_memory_limit','tick','return ((ini_get(\'memory_limit\')==\'-1\' || ini_get(\'memory_limit\')==\'0\' || ini_get(\'memory_limit\')==\'\')?\'0\':NULL):$old;','SITE','ADVANCED');
+			add_config_option('HAS_LOW_MEMORY_LIMIT','has_low_memory_limit','tick','return ((ini_get(\'memory_limit\')==\'-1\' || ini_get(\'memory_limit\')==\'0\' || ini_get(\'memory_limit\')==\'\')?\'0\':NULL);','SITE','ADVANCED');
 			add_config_option('IS_ON_COMCODE_PAGE_CHILDREN','is_on_comcode_page_children','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('GLOBAL_DONEXT_ICONS','global_donext_icons','tick','return \'1\';','SITE','ADVANCED');
 			add_config_option('NO_STATS_WHEN_CLOSED','no_stats_when_closed','tick','return \''.(((substr(ocp_srv('HTTP_HOST'),0,8)=='192.168.') || (substr(ocp_srv('HTTP_HOST'),0,7)=='10.0.0.') || (in_array(ocp_srv('HTTP_HOST'),array('localhost','test.ocportal.com'))))?'0':'1').'\';','SITE','CLOSED_SITE');

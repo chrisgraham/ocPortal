@@ -51,17 +51,11 @@ function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	if (!is_null($root)) $map['keep_gallery_root']=$root;
 	$url=build_url($map,$zone);
 
-	// Images
-	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-	$thumb=do_image_thumb($thumb_url,$description,true);
-	$image_url=$row['url'];
-	if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
-
 	// Breadcrumbs
 	$breadcrumbs=new ocp_tempcode();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=gallery_breadcrumbs($row['cat'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone);
+		$breadcrumbs=gallery_breadcrumbs($row['cat'],is_null($root)?get_param('keep_gallery_root','root'):$root,false,$zone);
 	}
 
 	// Title
@@ -76,6 +70,12 @@ function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 
 	// Description
 	$description=get_translated_tempcode($row['description']);
+
+	// Images
+	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
+	$thumb=do_image_thumb($thumb_url,$description,true);
+	$image_url=$row['url'];
+	if (url_is_local($image_url)) $image_url=get_custom_base_url().'/'.$image_url;
 
 	// Render
 	return do_template('GALLERY_IMAGE_BOX',array(
@@ -116,17 +116,11 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	if (!is_null($root)) $map['keep_gallery_root']=$root;
 	$url=build_url($map,$zone);
 
-	// Images
-	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','videos',$row['id']);
-	$thumb=do_image_thumb($thumb_url,$description,true);
-	$video_url=$row['url'];
-	if (url_is_local($video_url)) $video_url=get_custom_base_url().'/'.$video_url;
-
 	// Breadcrumbs
 	$breadcrumbs=new ocp_tempcode();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=gallery_breadcrumbs($row['cat'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone);
+		$breadcrumbs=gallery_breadcrumbs($row['cat'],is_null($root)?get_param('keep_gallery_root','root'):$root,false,$zone);
 	}
 
 	// Title
@@ -141,6 +135,12 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 
 	// Description
 	$description=get_translated_tempcode($row['description']);
+
+	// Images
+	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','videos',$row['id']);
+	$thumb=do_image_thumb($thumb_url,$description,true);
+	$video_url=$row['url'];
+	if (url_is_local($video_url)) $video_url=get_custom_base_url().'/'.$video_url;
 
 	// Render
 	return do_template('GALLERY_VIDEO_BOX',array(
@@ -208,36 +208,6 @@ function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriat
 		} else $member_info=new ocp_tempcode();
 	} else $member_info=new ocp_tempcode();
 
-	// If empty gallery (special case for galleries - as galleries may often be empty, due to Personal Gallery system)
-	if (($quit_if_empty) && ($num_images==0) && ($num_videos==0) && ($num_children==0)) return new ocp_tempcode();
-
-	// Image
-	$pic=$myrow['rep_image'];
-	if (($pic=='') && ($is_member)) $pic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-	$thumb_order='ORDER BY id ASC';
-	if (get_option('reverse_thumb_order')=='1') $thumb_order='ORDER BY id DESC';
-	if ($pic=='')
-	{
-		$pic=$GLOBALS['SITE_DB']->query_select_value_if_there('images','thumb_url',array('cat'=>$myrow['name'],'validated'=>1),$thumb_order);
-		if ($pic==='')
-		{
-			require_code('images');
-			$temp=$GLOBALS['SITE_DB']->query_select('images',array('id','url'),array('cat'=>$myrow['name'],'validated'=>1),$thumb_order,1);
-			$thumb_url=ensure_thumbnail($temp[0]['url'],'','galleries','images',$temp[0]['id']);
-		}
-	}
-	if (is_null($pic))
-	{
-		$pic=$GLOBALS['SITE_DB']->query_select_value_if_there('videos','thumb_url',array('cat'=>$myrow['name'],'validated'=>1),$thumb_order);
-	}
-	if (is_null($pic)) $pic='';
-	if (($pic!='') && (url_is_local($pic))) $pic=get_custom_base_url().'/'.$pic;
-	if ($pic!='')
-	{
-		require_code('images');
-		$thumb=do_image_thumb($pic,'');
-	} else $thumb=new ocp_tempcode();
-
 	// Meta data
 	list($num_children,$num_images,$num_videos)=get_recursive_gallery_details($myrow['name']);
 	if ($num_children==0)
@@ -268,11 +238,41 @@ function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriat
 		}
 	}
 
+	// If empty gallery (special case for galleries - as galleries may often be empty, due to Personal Gallery system)
+	if (($quit_if_empty) && ($num_images==0) && ($num_videos==0) && ($num_children==0)) return new ocp_tempcode();
+
+	// Image
+	$pic=$myrow['rep_image'];
+	if (($pic=='') && ($is_member)) $pic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+	$thumb_order='ORDER BY id ASC';
+	if (get_option('reverse_thumb_order')=='1') $thumb_order='ORDER BY id DESC';
+	if ($pic=='')
+	{
+		$pic=$GLOBALS['SITE_DB']->query_select_value_if_there('images','thumb_url',array('cat'=>$myrow['name'],'validated'=>1),$thumb_order);
+		if ($pic==='')
+		{
+			require_code('images');
+			$temp=$GLOBALS['SITE_DB']->query_select('images',array('id','url'),array('cat'=>$myrow['name'],'validated'=>1),$thumb_order,1);
+			$thumb_url=ensure_thumbnail($temp[0]['url'],'','galleries','images',$temp[0]['id']);
+		}
+	}
+	if (is_null($pic))
+	{
+		$pic=$GLOBALS['SITE_DB']->query_select_value_if_there('videos','thumb_url',array('cat'=>$myrow['name'],'validated'=>1),$thumb_order);
+	}
+	if (is_null($pic)) $pic='';
+	if (($pic!='') && (url_is_local($pic))) $pic=get_custom_base_url().'/'.$pic;
+	if ($pic!='')
+	{
+		require_code('images');
+		$thumb=do_image_thumb($pic,'');
+	} else $thumb=new ocp_tempcode();
+
 	// Breadcrumbs
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=gallery_breadcrumbs($myrow['name'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,$attach_to_url_filter);
+		$breadcrumbs=gallery_breadcrumbs($myrow['name'],is_null($root)?get_param('keep_gallery_root','root'):$root,$attach_to_url_filter);
 	}
 
 	// Render

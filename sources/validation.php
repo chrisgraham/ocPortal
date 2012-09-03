@@ -302,7 +302,8 @@ function init__validation()
 function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation_javascript=true,$validation_css=true,$validation_wcag=true,$validation_compat=true,$validation_ext_files=true,$validation_manual=false)
 {
 	global $XHTML_VALIDATOR_OFF,$WELL_FORMED_ONLY,$VALIDATION_JAVASCRIPT,$VALIDATION_CSS,$VALIDATION_WCAG,$VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL,$UNDER_XMLNS;
-	$XHTML_VALIDATOR_OFF=mixed();
+	if (function_exists('mixed')) $XHTML_VALIDATOR_OFF=mixed();
+	$XHTML_VALIDATOR_OFF=NULL;
 	$WELL_FORMED_ONLY=$well_formed_only;
 	if (!$WELL_FORMED_ONLY)
 	{
@@ -661,7 +662,13 @@ function _xhtml_error($error,$param_a='',$param_b='',$param_c='',$raw=false,$rel
 		$out['pos']=$POS+$rel_pos-strrpos(substr($OUT,0,$POS+$rel_pos),chr(10));
 	}
 	$out['global_pos']=$POS+$rel_pos;
-	$out['error']=$raw?$error:do_lang($error,htmlentities($param_a),htmlentities($param_b),htmlentities($param_c));
+	if (function_exists('do_lang'))
+	{
+		$out['error']=$raw?$error:do_lang($error,htmlentities($param_a),htmlentities($param_b),htmlentities($param_c));
+	} else
+	{
+		$out['error']=$raw?$error:($error.': '.htmlentities($param_a).', '.htmlentities($param_b).', '.htmlentities($param_c));
+	}
 
 	return $out;
 }

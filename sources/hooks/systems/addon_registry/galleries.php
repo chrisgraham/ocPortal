@@ -836,7 +836,7 @@ class Hook_addon_registry_galleries
 		$entry=do_lorem_template('GALLERY_VIDEO',$map);
 		$entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP',array('ENTRY'=>$entry)+$map));
 
-		$children=do_lorem_template('GALLERY_BOX',array('GIVE_CONTEXT'=>false,'THUMB'=>'','NUM_VIDEOS'=>lorem_word(),'NUM_IMAGES'=>lorem_word(),'NUM_CHILDREN'=>lorem_word(),'ID'=>lorem_word(),'LANG'=>lorem_word(),'ADD_DATE_RAW'=>placeholder_date_raw(),'ADD_DATE'=>lorem_word(),'MEMBER_INFO'=>lorem_paragraph(),'URL'=>placeholder_url(),'PIC'=>placeholder_image_url(),'TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph())));
+		$children=do_lorem_template('GALLERY_BOX',array('GIVE_CONTEXT'=>false,'THUMB'=>'','NUM_VIDEOS'=>lorem_word(),'NUM_IMAGES'=>lorem_word(),'NUM_CHILDREN'=>lorem_word(),'ID'=>lorem_word(),'LANG'=>lorem_word(),'ADD_DATE_RAW'=>placeholder_date_raw(),'ADD_DATE'=>lorem_word(),'MEMBER_INFO'=>lorem_paragraph(),'URL'=>placeholder_url(),'PIC'=>placeholder_image_url(),'TITLE'=>lorem_phrase(),'DESCRIPTION'=>lorem_paragraph()));
 
 		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
 

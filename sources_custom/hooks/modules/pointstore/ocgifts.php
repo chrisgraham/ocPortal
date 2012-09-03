@@ -63,7 +63,7 @@ class Hook_pointstore_ocgifts
 		$max=get_param_integer('gifts_max',20);
 		$start=get_param_integer('gifts_start',0);
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('OCGIFTS_TITLE'),get_param('id'),$start,'gifts_start',$max,'gifts_max',$max_rows,true);
+		$pagination=pagination(do_lang_tempcode('OCGIFTS_TITLE'),$start,'gifts_start',$max,'gifts_max',$max_rows,true);
 
 		$rows=$GLOBALS['SITE_DB']->query_select('ocgifts g',array('*','(SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'members_gifts m WHERE m.gift_id=g.id) AS popularity'),$map,'ORDER BY popularity DESC',$max,$start);
 		$username=get_param('username','');

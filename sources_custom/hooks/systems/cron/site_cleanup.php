@@ -27,7 +27,7 @@ class Hook_cron_site_cleanup
 
 		// Reset demo
 		$last=get_value('last_demo_set_time');
-		if ((is_null($last)) || ($last<time()-60*60*12))
+		if ((is_null($last)) || (intval($last)<time()-60*60*12))
 		{
 			set_value('last_demo_set_time',strval(time()));
 			

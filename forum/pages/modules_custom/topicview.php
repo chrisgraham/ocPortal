@@ -133,8 +133,8 @@ function moveLetter(&$word) {
 	if (!containsVowel($word)) return $word;
 
 	if (!isVowel(substr($word,0,1))) {
-		$chLetter=strtolower(substr($word,0,1));
-		$word=substr($word,1) . $chLetter;
+		$ch_letter=strtolower(substr($word,0,1));
+		$word=substr($word,1) . $ch_letter;
 		return moveLetter($word);
 	}
 	else { return $word; }

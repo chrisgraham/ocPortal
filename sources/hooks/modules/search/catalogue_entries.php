@@ -31,9 +31,6 @@ class Hook_search_catalogue_entries
 		if (!module_installed('catalogues')) return NULL;
 		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)')==0) return NULL;
 
-		global $SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE;
-		$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE=array();
-
 		require_lang('catalogues');
 		require_code('catalogues');
 

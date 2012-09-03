@@ -1,14 +1,17 @@
-<div class="wide_table_wrap"><table class="results_table wide_table">
-	<tr>
-		<th>Avatar</th>
-		<th>Username</th>
-		<th>Average post length</th>
-		<th>Number of posts</th>
-	</tr>
+<div summary="<?php echo do_lang('COLUMNED_TABLE'); ?>" class="wide_table_wrap"><table class="results_table wide_table">
+	<thead>
+		<tr>
+			<th>Avatar</th>
+			<th>Username</th>
+			<th>Average post length</th>
+			<th>Number of posts</th>
+		</tr>
+	</thead>
 	<?php
 		$max=array_key_exists('max',$map)?intval($map['max']):10;
 
-		$members=$GLOBALS['FORUM_DB']->query('SELECT m.id,AVG(LENGTH(text_original)) AS avg,COUNT(*) AS cnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.p_poster=m.id LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=p.p_post WHERE m.id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' GROUP BY m.id ORDER BY avg DESC',$max);
+		$query='SELECT m.id,AVG(LENGTH(text_original)) AS avg,COUNT(*) AS cnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.p_poster=m.id LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=p.p_post WHERE m.id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' GROUP BY m.id ORDER BY avg DESC';
+		$members=$GLOBALS['FORUM_DB']->query($query,$max);
 
 		foreach ($members as $_member)
 		{

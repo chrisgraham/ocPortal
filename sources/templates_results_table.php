@@ -102,7 +102,7 @@ function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fie
 	} else $sort=new ocp_tempcode();
 
 	// Pagination
-	$pagination=pagination(is_object($text_id)?$text_id:make_string_tempcode($text_id),NULL,$start,$start_name,$max,$max_name,$max_rows,true,$max_page_links,NULL,is_null($hash)?'':$hash);
+	$pagination=pagination(is_object($text_id)?$text_id:make_string_tempcode($text_id),$start,$start_name,$max,$max_name,$max_rows,true,$max_page_links,NULL,is_null($hash)?'':$hash);
 
 	return do_template(is_null($tplset)?'RESULTS_TABLE':('RESULTS_'.$tplset.'_TABLE'),array('_GUID'=>$guid,'TEXT_ID'=>$text_id,'FIELDS_TITLE'=>$fields_title,'FIELDS'=>$fields,'MESSAGE'=>$message,'SORT'=>$skip_sortables_form?new ocp_tempcode():$sort,'PAGINATION'=>$pagination,'WIDTHS'=>$widths),NULL,false,'RESULTS_TABLE');
 }

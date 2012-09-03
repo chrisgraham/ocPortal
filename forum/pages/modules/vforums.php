@@ -210,7 +210,7 @@ class Module_vforums
 		$breadcrumbs=ocf_forum_breadcrumbs(db_get_first_id(),$title,get_param_integer('keep_forum_root',db_get_first_id()));
 		if (!$topics->is_empty())
 		{
-			$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),NULL,$start,'forum_start',$max,'forum_max',$max_rows);
+			$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),$start,'forum_start',$max,'forum_max',$max_rows);
 
 			$moderator_actions='';
 			$moderator_actions.='<option value="mark_topics_read">'.do_lang('MARK_READ').'</option>';

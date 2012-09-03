@@ -740,7 +740,7 @@ class Module_catalogues
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('CATALOGUES'),NULL,$start,'catalogues_start',$max,'catalogues_max',$max_rows);
+		$pagination=pagination(do_lang_tempcode('CATALOGUES'),$start,'catalogues_start',$max,'catalogues_max',$max_rows);
 
 		return do_template('PAGINATION_SCREEN',array('_GUID'=>'5af7dcb5bd26550ca6f26c2f9108f478','TITLE'=>$title,'CONTENT'=>$out,'PAGINATION'=>$pagination));
 	}

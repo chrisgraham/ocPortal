@@ -72,6 +72,7 @@ class Hook_addon_registry_calendar
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/awards/calendar_type.php',
 			'sources/hooks/systems/snippets/calendar_recurrence_suggest.php',
 			'sources/hooks/systems/notifications/calendar_reminder.php',
 			'sources/hooks/systems/notifications/calendar_event.php',

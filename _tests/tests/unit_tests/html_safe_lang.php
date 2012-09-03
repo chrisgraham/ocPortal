@@ -114,7 +114,7 @@ class html_safe_lang_test_set extends ocp_test_case
 			$a=str_replace(get_file_base().'/','',$_a);
 			$_b=$LANGUAGE_HTML[$r][0];
 			$b=str_replace(get_file_base().'/','',$_b);
-			$this->assertTrue(false,$a.' vs '.$b);
+			$this->assertTrue(false,$r.': mismatch of HTML/plain usage with '.$a.' vs '.$b);
 			//echo '<p>'.htmlentities($r).' (<a href="txmt://open?url=file://'.htmlentities($_a).'">'.htmlentities($a).'</a> and <a href="txmt://open?url=file://'.htmlentities($_b).'">'.htmlentities($b).')</a></p>';
 
 			$cnt++;

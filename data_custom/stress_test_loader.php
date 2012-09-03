@@ -256,10 +256,10 @@ function do_work()
 	// galleries under a subcategory
 	require_code('galleries2');
 	$xsubcat_id=uniqid('');
-	add_gallery($xsubcat_id,random_line(),random_text(),'','','root');
+	add_gallery($xsubcat_id,random_line(),random_text(),'','root');
 	for ($i=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');$i<$num_wanted;$i++)
 	{
-		add_gallery(uniqid(''),random_line(),random_text(),'','',$xsubcat_id);
+		add_gallery(uniqid(''),random_line(),random_text(),'',$xsubcat_id);
 	}
 	// images
 	require_code('galleries2');
@@ -388,7 +388,7 @@ function do_work()
 	require_code('tickets2');
 	for ($i=intval(floatval($GLOBALS['FORUM_DB']->query_select_value('f_topics','COUNT(*)'))/2.0);$i<$num_wanted;$i++)
 	{
-		ticket_add_post(mt_rand(db_get_first_id(),$num_wanted-1),uniqid(''),db_get_first_id(),random_line(),random_text(),'','');
+		ticket_add_post(mt_rand(db_get_first_id(),$num_wanted-1),uniqid(''),db_get_first_id(),random_line(),random_text(),'');
 	}
 	echo 'done tickets stuff'.chr(10);
 

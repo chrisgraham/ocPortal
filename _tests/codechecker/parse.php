@@ -21,7 +21,6 @@ function parse($_tokens=NULL)
 	$OK_EXTRA_FUNCTIONS=NULL;
 	if (!is_null($_tokens)) $tokens=$_tokens;
 	$i=0;
-
 	$structure=_parse_php($tokens,$i);
 	$structure['ok_extra_functions']=$OK_EXTRA_FUNCTIONS;
 	global $FILENAME;
@@ -189,6 +188,7 @@ function _parse_command()
 function _test_command_end()
 {
 	$next=pparse__parser_peek();
+
 	if (($next!='BOOLEAN_OR_2') && ($next!='COMMAND_TERMINATE')) parser_error('Bad command termination');
 }
 
@@ -1551,12 +1551,12 @@ function handle_comment($comment)
 	}
 	if (isset($GLOBALS['TODO']))
 	{
-		if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found ('.trim($comment[1]).')',$GLOBALS['i']);
-		if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found ('.trim($comment[1]).')',$GLOBALS['i']);
-		if (strpos($comment[1],'IDEA')!==false) log_warning('IDEA comment found ('.trim($comment[1]).')',$GLOBALS['i']);
-		if (strpos($comment[1],'LEGACY')!==false) log_warning('LEGACY comment found ('.trim($comment[1]).')',$GLOBALS['i']);
-		if (strpos($comment[1],'FUDGE')!==false) log_warning('FUDGE comment found ('.trim($comment[1]).')',$GLOBALS['i']);
-		if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found ('.trim($comment[1]).')',$GLOBALS['i']);
+		if (strpos($comment[1],'TODO')!==false) log_warning('TODO comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
+		if (strpos($comment[1],'FIXME')!==false) log_warning('FIXME comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
+		if (strpos($comment[1],'IDEA')!==false) log_warning('IDEA comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
+		if (strpos($comment[1],'LEGACY')!==false) log_warning('LEGACY comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
+		if (strpos($comment[1],'FUDGE')!==false) log_warning('FUDGE comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
+		if (strpos($comment[1],'HACKHACK')!==false) log_warning('HACKHACK comment found ('.str_replace(chr(10),' ',trim($comment[1])).')',$GLOBALS['i']);
 		//if (strpos($comment[1],'XHTMLXHTML')!==false) log_warning('XHTMLXHTML comment found',$GLOBALS['i']);	Don't want to report these
 	}
 }

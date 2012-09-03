@@ -150,12 +150,11 @@ class Module_admin_ocpusers
 			$seen_before[$r['website_url']]=1;
 
 			$rt=array();
-			$rt['VERSION']=strval($r['l_version']);
-			$rt['WEBSITE_URL']=strval($r['website_url']);
-			$rt['WEBSITE_NAME']=strval($r['website_name']);
-			$rt['LAST_ACP_ACCESS']=strval(round((time()-$r['hittime'])/60/60));
-			$rt['LAST_ACP_ACCESS_2']=strval(round((time()-$r['hittime'])/60/60/24));
-			$rt['KEY_EXPIRE']=strval(round((time()-$r['expire'])/60/60/24));
+			$rt['VERSION']=$r['l_version'];
+			$rt['WEBSITE_URL']=$r['website_url'];
+			$rt['WEBSITE_NAME']=$r['website_name'];
+			$rt['LAST_ACP_ACCESS']=integer_format(intval(round((time()-$r['hittime'])/60/60)));
+			$rt['LAST_ACP_ACCESS_2']=integer_format(intval(round((time()-$r['hittime'])/60/60/24)));
 			if ($i<100)
 			{
 				$active=get_long_value_newer_than('testing__'.$r['website_url'].'/_config.php',time()-60*60*10);

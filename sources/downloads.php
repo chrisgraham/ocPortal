@@ -73,7 +73,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	$date=get_timezoned_date($row['add_date'],false);
 	$date_raw=$row['add_date'];
 
-	$breadcrumbs=((get_option('show_dload_trees')=='1') && ($include_breadcrumbs))?download_breadcrumbs($row['category_id'],is_null($root)?get_param_integer('keep_downloads_root',NULL):$root,false,$zone):new ocp_tempcode();
+	$breadcrumbs=((get_option('show_dload_trees')=='1') && ($include_breadcrumbs))?download_breadcrumbs($row['category_id'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone):new ocp_tempcode();
 
 	// Download has image?
 	$pic_suffix='';

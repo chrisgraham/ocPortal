@@ -552,7 +552,7 @@ class Block_main_multi_content
 		if ($do_pagination)
 		{
 			require_code('templates_pagination');
-			$pagination=pagination($info['title'],NULL,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
+			$pagination=pagination($info['title'],$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
 		}
 
 		return do_template('BLOCK_MAIN_MULTI_CONTENT',array('TYPE'=>$info['title'],'TITLE'=>$title,'CONTENT'=>$rendered_content,'CONTENT_DATA'=>$content_data,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'PAGINATION'=>$pagination));

@@ -990,7 +990,7 @@ class Module_chat
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
 		require_code('templates_pagination');
-		$pagination=pagination($text_id,NULL,$start,'friends_start',$max,'friends_max',$max_rows);
+		$pagination=pagination($text_id,$start,'friends_start',$max,'friends_max',$max_rows);
 
 		return do_template('CHAT_FRIENDS_LIST_SCREEN',array('_GUID'=>'70b11d3c01ff551be42a0472d27dd207','TITLE'=>$title,'FRIENDS'=>$friends,'PAGINATION'=>$pagination));
 	}

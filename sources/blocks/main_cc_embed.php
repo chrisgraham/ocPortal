@@ -63,7 +63,7 @@ class Block_main_cc_embed
 		$category_id=array_key_exists('param',$map)?intval($map['param']):db_get_first_id();
 		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
 		$sort=array_key_exists('sort',$map)?$map['sort']:'';
-		$sorting=((array_key_exists('sorting',$map)?$map['sorting']:'0')=='1');
+		$do_sorting=((array_key_exists('sorting',$map)?$map['sorting']:'0')=='1');
 
 		require_lang('catalogues');
 		require_code('catalogues');
@@ -131,15 +131,15 @@ class Block_main_cc_embed
 		list($entry_buildup,$sorting,,$max_rows)=get_catalogue_category_entry_buildup(is_null($select)?$category_id:NULL,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,$select,$root,$display_type,true,NULL,$ocselect,$sort,$block_id.'_order');
 
 		// Sorting and pagination
-		if (!$sorting)
+		if (!$do_sorting)
 		{
-			$sorting=new ocp_tempcode(),
+			$sorting=new ocp_tempcode();
 		}
 		$pagination=new ocp_tempcode();
 		if ($do_pagination)
 		{
 			require_code('templates_pagination');
-			$pagination=pagination(do_lang_tempcode('ENTRIES'),$id,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
+			$pagination=pagination(do_lang_tempcode('ENTRIES'),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
 		}
 
 		// Render

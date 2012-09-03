@@ -72,7 +72,7 @@ class Hook_awards_poll
 	{
 		require_code('polls');
 
-		return render_poll_box(true,$row,false,$give_context);
+		return render_poll_box(true,$row,$zone,false,$give_context);
 	}
 
 }

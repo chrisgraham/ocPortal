@@ -19,7 +19,7 @@ if (!running_script('tracker'))
 	foreach ($map as $key=>$val)
 	{
 		$params.=($params=='')?'?':'&';
-		$params.=$key.='='.urlencode($val);
+		$params.=$key.'='.urlencode($val);
 	}
 	$frame_name='frame_'.uniqid('');
 	echo '
@@ -87,7 +87,7 @@ if (count($issues)==0)
 		$title=$issue['category'].': '.$issue['summary'];
 		$description=$issue['description'];
 		$votes=intval($issue['num_votes']);
-		$cost=($issue['hours']==0 || is_null($issue['hours']))?NULL:($issue['hours']*5.5*6);
+		$cost=($issue['hours']==0 || is_null($issue['hours']))?mixed():($issue['hours']*5.5*6);
 		$money_raised=$issue['money_raised'];
 		$suggested_by=$issue['reporter_id'];
 		$add_date=$issue['date_submitted'];
@@ -106,7 +106,7 @@ if (count($issues)==0)
 		$out='';
 		$out.='
 			<div style="float: left; width: 140px; text-align: center; border: 1px solid #AAA" class="medborder">
-				<p style="font-size: 1.5em"><strong>'.escape_html(number_format($votes)).'</strong> '.(($votes=='1')?'vote':'votes').'</p>
+				<p style="font-size: 1.5em"><strong>'.escape_html(number_format($votes)).'</strong> '.(($votes==1)?'vote':'votes').'</p>
 		';
 
 		if (!$voted)
@@ -141,14 +141,14 @@ if (count($issues)==0)
 			</div>
 		';
 
-		echo static_evaluate_tempcode(put_in_standard_box($out,$title,NULL,'curved_turquoise'));
+		echo static_evaluate_tempcode(put_in_standard_box(make_string_tempcode($out),$title,'curved_turquoise'));
 	}
 	
 	echo '</div>';
 }
 
-require_code('templates_results_browser');
-$results_browser=results_browser('Issues',NULL,$start,'mantis_start',$max,'mantis_max',$max_rows,NULL,NULL,true);
+require_code('templates_pagination');
+$results_browser=pagination(make_string_tempcode('Issues'),$start,'mantis_start',$max,'mantis_max',$max_rows);
 echo '<div class="float_surrounder">';
 echo str_replace(get_base_url().((get_zone_name()=='')?'':'/').get_zone_name().'/index.php',find_script('tracker'),$results_browser->evaluate());
 echo '</div>';

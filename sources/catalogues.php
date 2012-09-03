@@ -23,6 +23,9 @@
  */
 function init__catalogues()
 {
+	global $SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE;
+	$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE=array();
+
 	global $PT_PAIR_CACHE;
 	$PT_PAIR_CACHE=array();
 
@@ -53,6 +56,8 @@ function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$inc
 {
 	require_css('catalogues');
 
+	global $SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE;
+
 	$catalogue_name=$row['c_name'];
 	if (array_key_exists($catalogue_name,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE))
 	{
@@ -63,6 +68,7 @@ function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$inc
 		$catalogue=$catalogues[0];
 	}
 
+	$tpl_set=$catalogue_name;
 	$display=get_catalogue_entry_map($row,$catalogue,'SEARCH',$tpl_set,$root,NULL,NULL,false,true);
 
 	$breadcrumbs=mixed();
@@ -91,7 +97,7 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 	// URL
 	$map=array('page'=>'catalogues','type'=>'category','id'=>$row['id']);
 	if (!is_null($root)) $map['keep_catalogue_'.$row['c_name'].'_root']=$root;
-	if ($attach_to_url_filter) $map+=propagate_ocselect($prefix);
+	if ($attach_to_url_filter) $map+=propagate_ocselect();
 	$url=build_url($map,$zone);
 
 	// Title
@@ -110,7 +116,7 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
 	{
-		$breadcrumbs=catalogue_category_breadcrumbs($row['id'],is_null($root)?get_param_integer('keep_catalogue_'.$catalogue['c_name'].'_root',NULL):$root,$attach_to_url_filter);
+		$breadcrumbs=catalogue_category_breadcrumbs($row['id'],is_null($root)?get_param_integer('keep_catalogue_'.$row['c_name'].'_root',NULL):$root,$attach_to_url_filter);
 	}
 
 	// Image
@@ -120,7 +126,7 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 	{
 		$_rep_image=$row['rep_image'];
 		if (url_is_local($_rep_image)) $_rep_image=get_custom_base_url().'/'.$_rep_image;
-		$rep_image=do_image_thumb($row['rep_image'],$_title,$_title,false);
+		$rep_image=do_image_thumb($row['rep_image'],$_title,false);
 	}
 
 	// Meta data
@@ -158,7 +164,7 @@ function render_catalogue_box($row,$zone='_SEARCH',$give_context=true)
 
 	$num_children=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$row['c_name']));
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']));
-	$entry_details=do_lang_tempcode(($myrow['c_is_tree']==1)?'CATEGORY_SUBORDINATE':'CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
+	$entry_details=do_lang_tempcode(($row['c_is_tree']==1)?'CATEGORY_SUBORDINATE':'CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
 	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }

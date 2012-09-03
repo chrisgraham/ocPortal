@@ -22,7 +22,7 @@ foreach ($files as $i=>$file)
 	if (substr($file,-4)!='.php') continue;
 	if (strpos($file,'plug_guid')!==false) continue;
 
-	$FILENAME=substr($file,strlen($ocPortal_path)+1);
+	$FILENAME=substr($file,strlen(get_file_base())+1);
 
 	echo 'Doing '.escape_html($file).'<br />';
 

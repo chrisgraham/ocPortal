@@ -25,20 +25,15 @@
  * @param  SHORT_TEXT	The name of the multi moderation.
  * @param  LONG_TEXT		The default post text to add when applying (may be blank).
  * @param  ?AUTO_LINK	The forum to move the topic when applying (NULL: do not move).
- * @param  BINARY			The pin state after applying.
- * @param  BINARY			The sink state after applying.
- * @param  BINARY			The open state after applying.
+ * @param  BINARY			The pin state after applying (NULL: unchanged).
+ * @param  BINARY			The sink state after applying (NULL: unchanged).
+ * @param  BINARY			The open state after applying (NULL: unchanged).
  * @param  SHORT_TEXT 	The forum multi code for where this multi moderation may be applied.
  * @param  SHORT_TEXT 	The title suffix.
  */
 function ocf_edit_multi_moderation($id,$name,$post_text,$move_to,$pin_state,$sink_state,$open_state,$forum_multi_code,$title_suffix)
 {
 	$_name=$GLOBALS['FORUM_DB']->query_select_value('f_multi_moderations','mm_name',array('id'=>$id));
-
-	if ($move_to==-1) $move_to=NULL;
-	if ($pin_state==-1) $pin_state=NULL;
-	if ($open_state==-1) $open_state=NULL;
-	if ($sink_state==-1) $sink_state=NULL;
 
 	$GLOBALS['FORUM_DB']->query_update('f_multi_moderations',array(
 		'mm_name'=>lang_remap($_name,$name,$GLOBALS['FORUM_DB']),

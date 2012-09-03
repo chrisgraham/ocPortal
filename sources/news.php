@@ -100,9 +100,10 @@ function render_news_box($row,$zone='_SEARCH',$give_context=true,$brief=false)
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+ * @param  ?integer		What to show (NULL: news and blogs, 0: news, 1: blogs)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_news_category_box($row,$zone='_SEARCH',$give_context=true,$attach_to_url_filter=false)
+function render_news_category_box($row,$zone='_SEARCH',$give_context=true,$attach_to_url_filter=false,$blogs=NULL)
 {
 	require_lang('news');
 
@@ -137,7 +138,7 @@ function render_news_category_box($row,$zone='_SEARCH',$give_context=true,$attac
 	if ($img!='')
 	{
 		$_rep_image=$img;
-		$rep_image=do_image_thumb($img,$_title,$_title,false);
+		$rep_image=do_image_thumb($img,$_title,false);
 	}
 
 	// Render

@@ -575,11 +575,7 @@ class Module_galleries
 
 			if ((get_option('show_empty_galleries')=='1') || (gallery_has_content($child['name'])))
 			{
-				if ((is_null($max)) || (($num_galleries>=$start) && ($num_galleries<$start+$max)))
-				{
-					$children->attach(render_gallery_box($child,$root,true,get_zone_name(),get_option('show_empty_galleries')!='1',false,false,false,NULL,true));
-				}
-				$num_galleries++;
+				$children->attach(render_gallery_box($child,$root,true,get_zone_name(),get_option('show_empty_galleries')!='1',false,false,false,NULL,true));
 			}
 		}
 
@@ -1004,10 +1000,10 @@ class Module_galleries
 		// Entries
 		if (get_option('galleries_subcat_narrowin')=='1')
 		{
-			$filter=strval($id).'*';
+			$filter=$cat.'*';
 		} else
 		{
-			$filter=strval($id);
+			$filter=$cat;
 		}
 		$days=get_param('days','');
 		$image_select=get_param('select','*');

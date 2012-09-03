@@ -130,7 +130,7 @@ class Hook_sw_catalogues
 	{
 		if (!addon_installed('catalogues')) return array();
 
-		return array(),array());
+		return array(array(),array());
 	}
 }
 

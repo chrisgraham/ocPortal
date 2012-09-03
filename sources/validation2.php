@@ -186,8 +186,14 @@ function init__validation2()
 		'basefont'=>1,
 	);
 
-	$browser=strtolower(ocp_srv('HTTP_USER_AGENT'));
-	$is_ie=(strpos($browser,'msie')!==false) && (strpos($browser,'opera')===false);
+	if (function_exists('ocp_srv'))
+	{
+		$browser=strtolower(ocp_srv('HTTP_USER_AGENT'));
+		$is_ie=(strpos($browser,'msie')!==false) && (strpos($browser,'opera')===false);
+	} else
+	{
+		$is_ie=false;
+	}
 
 	$enforce_javascript='([^\n]+)';
 	$enforce_lang='[a-zA-Z][a-zA-Z](-[a-zA-Z]+)?';
@@ -234,8 +240,14 @@ function init__validation2()
 	$enforce_list_style_image='(none|'.$enforce_functional_url.')';
 	$enforce_id='[a-zA-Z][\w\-\:\.]*';
 	$enforce_name='[\w\-\:\.]+(\[\])?';
-	require_code('obfuscate');
-	$enforce_link=((get_forum_type()=='none')?'(mailto:.*)?':'').'(mailto:.*|'.preg_quote(mailto_obfuscated(),'#').'.*)?[^\s\#]*(\#[^\s\#]*)?';
+	if (function_exists('require_code'))
+	{
+		require_code('obfuscate');
+		$enforce_link=((get_forum_type()=='none')?'(mailto:.*)?':'').'(mailto:.*|'.preg_quote(mailto_obfuscated(),'#').'.*)?[^\s\#]*(\#[^\s\#]*)?';
+	} else
+	{
+		$enforce_link='.*';
+	}
 	$enforce_class='[ \w-]*';
 	$_counter_increment='((\w+( \d+)?)+)';
 	$enforce_counter_increment=$_counter_increment.'( '.$_counter_increment.')*';

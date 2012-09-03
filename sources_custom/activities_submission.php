@@ -308,9 +308,9 @@ function log_newest_activity($id,$timeout=1000,$force=false)
 
 			// If lock is not obtained sleep for 0 <-> $timeout/10 milliseconds,
 			// to avoid collision and CPU load
-			if(!$can_write) usleep(intval(mt_rand(0, intval($sleep_multiplier))*1000));		// *1000 as usleep uses microseconds
+			if (!$can_write) usleep(intval(mt_rand(0, intval($sleep_multiplier))*1000));		// *1000 as usleep uses microseconds
 		}
-		while ((!$can_write) && ((microtime(true)-$start_time) < $timeout));
+		while ((!$can_write) && ((microtime(true)-$start_time)<$timeout));
 
 		// File was locked so now we can store information
 		if ($can_write)

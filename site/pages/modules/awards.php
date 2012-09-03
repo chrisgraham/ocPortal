@@ -227,7 +227,7 @@ class Module_awards
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('AWARD_HISTORY'),NULL,$start,'award_start',$max,'award_max',$max_rows);
+		$pagination=pagination(do_lang_tempcode('AWARD_HISTORY'),$start,'award_start',$max,'award_max',$max_rows);
 
 		$sub_title=do_lang_tempcode('AWARD_HISTORY');
 

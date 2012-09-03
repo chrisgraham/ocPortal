@@ -143,11 +143,12 @@ function may_vote_in_poll($myrow)
 /**
  * Show an actual poll box.
  *
- * @param  boolean			Whether to show results (if we've already voted, this'll be overridden)
- * @param  array				The poll row
- * @param  ID_TEXT			The zone our poll module is in
- * @param  boolean			Whether to include extra management links (e.g. editing, choosing, archive, etc)
- * @return tempcode			The box
+ * @param  boolean		Whether to show results (if we've already voted, this'll be overridden)
+ * @param  array			The poll row
+ * @param  ID_TEXT		The zone our poll module is in
+ * @param  boolean		Whether to include extra management links (e.g. editing, choosing, archive, etc)
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @return tempcode		The box
  */
 function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=false,$give_context=true)
 {

@@ -37,11 +37,12 @@ function find_existing()
 {
 	$out=array();
 	$d=opendir(get_file_base().'/themes/default/css');
-	while ($e=readdir($d))
+	while (($e=readdir($d))!==false)
 	{
 		if (substr($e,-4)=='.css')
 		{
 			$contents=file_get_contents(get_file_base().'/themes/default/css/'.$e);
+			$matches=array();
 			$found=preg_match_all('#\.([a-z][a-z_\d]*)[ ,:]#',$contents,$matches);
 			for ($i=0;$i<$found;$i++)
 			{
@@ -58,11 +59,12 @@ function find_used()
 {
 	$out=array();
 	$d=opendir(get_file_base().'/themes/default/templates');
-	while ($e=readdir($d))
+	while (($e=readdir($d))!==false)
 	{
 		if (substr($e,-4)=='.tpl')
 		{
 			$contents=file_get_contents(get_file_base().'/themes/default/templates/'.$e);
+			$matches=array();
 			$found=preg_match_all('#class="([\w ]+)"#',$contents,$matches);
 			for ($i=0;$i<$found;$i++)
 			{

@@ -104,12 +104,12 @@ class Block_main_news
 		if ($blogs===0)
 		{
 			if ($q_filter!='') $q_filter.=' AND ';
-			$q_filter.='nc_owner IS NULL';
+			$q_filter.=' AND nc_owner IS NULL';
 		}
 		elseif ($blogs===1)
 		{
 			if ($q_filter!='') $q_filter.=' AND ';
-			$q_filter.='(nc_owner IS NOT NULL)';
+			$q_filter.=' AND (nc_owner IS NOT NULL)';
 		}
 		if ($blogs!=-1)
 		{
@@ -131,7 +131,7 @@ class Block_main_news
 			list($ocselect_extra_select,$ocselect_extra_join,$ocselect_extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($ocselect),$content_type,'');
 			$extra_select_sql=implode('',$ocselect_extra_select);
 			$join.=implode('',$ocselect_extra_join);
-			$q_filter.=$ocselect_extra_where;
+			$q_filter.=' AND '.$ocselect_extra_where;
 		} else
 		{
 			$extra_select_sql='';
@@ -141,20 +141,20 @@ class Block_main_news
 		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT r.id) FROM '.get_table_prefix().'news r'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':''));
 		if ($historic=='')
 		{
-			$rows=($days_full==0.0)?array():$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=p.id'.$join.' WHERE '.$q_filter.' AND '.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',300/*reasonable limit*/);
+			$rows=($days_full==0.0)?array():$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=p.id'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',300/*reasonable limit*/);
 			if (!array_key_exists(0,$rows)) // Nothing recent, so we work to get at least something
 			{
-				$rows=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.' AND '.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',$fallback_full,$start);
-				$rows2=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.' AND '.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',$fallback_archive,$fallback_full+$start);
+				$rows=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',$fallback_full,$start);
+				$rows2=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',$fallback_archive,$fallback_full+$start);
 			}
-			else $rows2=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.' AND '.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full+$days_outline)).' AND date_and_time<'.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',300/*reasonable limit*/);
+			else $rows2=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full+$days_outline)).' AND date_and_time<'.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',300/*reasonable limit*/);
 		} else
 		{
 			if (function_exists('set_time_limit')) @set_time_limit(0);
 			$start=0;
 			do
 			{
-				$_rows=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.' AND '.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',200,$start);
+				$_rows=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',200,$start);
 				$rows=array();
 				$rows2=array();
 				foreach ($_rows as $row)
@@ -378,7 +378,7 @@ class Block_main_news
 		if ($do_pagination)
 		{
 			require_code('templates_pagination');
-			$pagination=pagination(do_lang_tempcode('NEWS'),NULL,$start,$block_id.'_start',$fallback_full+$fallback_archive,$block_id.'_max',$max_rows);
+			$pagination=pagination(do_lang_tempcode('NEWS'),$start,$block_id.'_start',$fallback_full+$fallback_archive,$block_id.'_max',$max_rows);
 		}
 
 		return do_template('BLOCK_MAIN_NEWS',array('_GUID'=>'01f5fbd2b0c7c8f249023ecb4254366e','BLOG'=>$blogs===1,'TITLE'=>$_title,'CONTENT'=>$news_text,'BRIEF'=>$news_text2,'FILTER'=>$filter,'ARCHIVE_URL'=>$archive_url,'SUBMIT_URL'=>$submit_url,'RSS_URL'=>$rss_url,'ATOM_URL'=>$atom_url,'PAGINATION'=>$pagination));

@@ -92,6 +92,7 @@ function get_bug_category_id($version_pretty)
 		);
 		foreach ($fields as $i=>$field)
 			actual_add_catalogue_field('projects',$field[0],'',$field[1],$i,$field[2],1,1,'',$field[3],$field[4]);
+		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 		foreach (array_keys($groups) as $group_id)
 			$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'bugs','group_id'=>$group_id));
 	}
@@ -506,8 +507,8 @@ function find_server_load($server)
 function choose_available_server()
 {
 	$servers=find_all_servers();
-	$lowest_load=NULL;
-	$lowest_for=NULL;
+	$lowest_load=mixed();
+	$lowest_for=mixed();
 	foreach ($servers as $server)
 	{
 		$server_load=find_server_load($server);

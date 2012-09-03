@@ -65,7 +65,7 @@ class Hook_awards_group
 	{
 		require_code('ocf_groups');
 
-		return render_group_box($row,$zone,$give_context,$include_breadcrumbs);
+		return render_group_box($row,$zone,$give_context);
 	}
 
 }

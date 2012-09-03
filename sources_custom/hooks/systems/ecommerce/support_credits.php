@@ -29,7 +29,7 @@ function handle_support_credits($_key,$details,$product)
 	if (is_null($member_id)) return;
 
 	require_code('ocf_members');
-	$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,true);
+	$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
 	$cpf_id=NULL;
 	foreach ($cpfs as $cpf)
 	{

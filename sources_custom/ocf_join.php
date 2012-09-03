@@ -379,15 +379,15 @@ function referrer_report_script($ret=false)
 			$fields->attach(results_entry($data_row));
 		}
 
-		$table=results_table(do_lang('REFERRALS'),$start,'referrals_start',$max,'referrals_max',$max_rows,$fields_title,$fields);
+		$results_table=results_table(do_lang('REFERRALS'),$start,'referrals_start',$max,'referrals_max',$max_rows,$fields_title,$fields);
 
-		if ($ret) return $table;
+		if ($ret) return $results_table;
 
 		$title=get_screen_title('REFERRALS');
 
 		$out=new ocp_tempcode();
 		$out->attach($title);
-		$out->attach($table);
+		$out->attach($results_table);
 
 		$out=globalise($out,NULL,'',true);
 		$out->evaluate_echo();

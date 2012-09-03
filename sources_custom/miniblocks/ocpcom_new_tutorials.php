@@ -880,7 +880,7 @@ foreach ($tutorials as $i=>$tut)
 	if (file_exists(get_custom_file_base().'/docs/pages/comcode_custom/EN/tut_'.$tut.'.txt'))
 	{
 		$linktitle='Read';
-		$link=build_url(array('page'=>'tut_'.$tut),'docs');
+		$link=static_evaluate_tempcode(build_url(array('page'=>'tut_'.$tut),'docs'));
 		$javascript='';
 	} elseif (file_exists(get_custom_file_base().'/uploads/website_specific/ocportal.com/video_tutorials/'.$tut.'.flv'))
 	{
@@ -923,7 +923,7 @@ $_author=escape_html($author);
 if ($full_mode)
 {
 	$side=($i%2==0)?'l':'r';
-echo @<<<END
+echo <<<END
 	<div class="{$side} {$colour}">
 		<div class="b">
 			<img src="{$_img}" alt="" />
@@ -941,7 +941,7 @@ echo @<<<END
 END;
 } else
 {
-echo @<<<END
+echo <<<END
 	</div></div>
 	<div class="{$a}"><div class="{$b}">
 		<div class="tutorial"><div class="float_surrounder">

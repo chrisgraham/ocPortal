@@ -731,7 +731,6 @@ elseif ((!isset($_GET['to_use'])) && (!isset($_SERVER['argv'][1]))) // Run for a
 
 	foreach ($to_use_multi as $to_use)
 	{
-//		$to_use=str_replace('\\','/',$to_use);
 		$full_path=(($OCPORTAL_PATH=='')?'':($OCPORTAL_PATH.((substr($OCPORTAL_PATH,-1)==DIRECTORY_SEPARATOR)?'':DIRECTORY_SEPARATOR))).$to_use;
 
 		if (strpos(file_get_contents($full_path),'/*CQC: No check*/')!==false)
@@ -948,7 +947,7 @@ function check_variable_list($LOCAL_VARIABLES,$offset=-1)
 		}
 
 		// Check for non-used variables
-		if (($GLOBALS['FILENAME']!='sources\phpstub.php') && ($v['references']==0) && ($name!='__return') && ($name!='_') && (!$v['is_global']) && (!in_array($name,array('db','file_base','table_prefix','old_base_dir','upgrade_from_hack','upgrade_from','this','GLOBALS','php_errormsg',/*'_GET','_POST','_REQUEST','_COOKIE','_SERVER','_ENV', These are intentionally removed as they should only be used at one point in the code*/'_SESSION','_FILES'))))
+		if (($GLOBALS['FILENAME']!='sources\phpstub.php') && ($v['references']==0) && ($name!='__return') && ($name!='_') && (!$v['is_global']) && (!in_array($name,array('db','file_base','table_prefix','old_base_dir','upgrade_from_hack','upgrade_from','this','GLOBALS','php_errormsg','http_response_header',/*'_GET','_POST','_REQUEST','_COOKIE','_SERVER','_ENV', These are intentionally removed as they should only be used at one point in the code*/'_SESSION','_FILES'))))
 		{
 			if (!$v['unused_value'])
 				log_warning('Non-used '.($v['unused_value']?'value':'variable').' (\''.$name.'\')',$v['first_mention']);
@@ -1363,7 +1362,6 @@ function check_call($c,$c_pos,$class=NULL,$function_guard='')
 
 	if (($function=='tempnam') && (@$c[2][0][0]=='LITERAL') && (substr(@$c[2][0][1][1],0,4)=='/tmp')) log_warning('Don\'t assume you can write to the shared temp directory -- safe mode won\'t tolerate it',$c_pos);
 	if (($function=='strpos') && (@$c[2][0][0]=='LITERAL') && (@$c[2][1][0]!='LITERAL')) log_warning('Looks like strpos parameters are the wrong way around; you fell for a common API anomaly: unlike most functions like in_array, strpos is haystack followed by needle',$c_pos);
-	if (($function=='strrpos') && (@$c[2][1][0]=='LITERAL') && (strlen(@$c[2][1][1][1])>1)) log_warning('strrpos only accepts single character search strings prior to PHP5',$c_pos);
 	if ((($function=='sprintf') || ($function=='printf')) && (@$c[2][0][0]=='LITERAL'))
 	{
 		$matches=array();
@@ -2026,6 +2024,7 @@ function reinitialise_local_variables()
 {
 	return array(
 		'php_errormsg'=>array('is_global'=>true,'conditioner'=>array(),'conditioned_zero'=>false,'conditioned_false'=>false,'conditioned_null'=>false,'types'=>array('string'),'references'=>0,'object_type'=>'','unused_value'=>false,'first_mention'=>0,'mixed_tag'=>false),
+		'http_response_header'=>array('is_global'=>true,'conditioner'=>array(),'conditioned_zero'=>false,'conditioned_false'=>false,'conditioned_null'=>false,'types'=>array('array'),'references'=>0,'object_type'=>'','unused_value'=>false,'first_mention'=>0,'mixed_tag'=>false),
 		'_GET'=>array('is_global'=>true,'conditioner'=>array(),'conditioned_zero'=>false,'conditioned_false'=>false,'conditioned_null'=>false,'types'=>array('array'),'references'=>0,'object_type'=>'','unused_value'=>false,'first_mention'=>0,'mixed_tag'=>false),
 		'_POST'=>array('is_global'=>true,'conditioner'=>array(),'conditioned_zero'=>false,'conditioned_false'=>false,'conditioned_null'=>false,'types'=>array('array'),'references'=>0,'object_type'=>'','unused_value'=>false,'first_mention'=>0,'mixed_tag'=>false),
 		'_REQUEST'=>array('is_global'=>true,'conditioner'=>array(),'conditioned_zero'=>false,'conditioned_false'=>false,'conditioned_null'=>false,'types'=>array('array'),'references'=>0,'object_type'=>'','unused_value'=>false,'first_mention'=>0,'mixed_tag'=>false),

@@ -170,7 +170,7 @@ class Hook_search_ocf_posts
 	{
 		require_code('ocf_posts2');
 
-		$tpl=render_post_box($row,false);
+		return render_post_box($row,false);
 	}
 
 }

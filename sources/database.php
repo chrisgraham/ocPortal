@@ -903,7 +903,7 @@ class database_driver
 			fb('Query: '.$query);
 		}
 
-		if (($QUERY_COUNT==68) && (get_param_integer('keep_no_query_limit',0)==0) && (count($_POST)==0) && (get_page_name()!='admin_importer') && ($IN_MINIKERNEL_VERSION==0) && (get_param('special_page_type','')!='query'))
+		if (($QUERY_COUNT==250) && (get_param_integer('keep_no_query_limit',0)==0) && (count($_POST)==0) && (get_page_name()!='admin_importer') && ($IN_MINIKERNEL_VERSION==0) && (get_param('special_page_type','')!='query'))
 		{
 			$NO_QUERY_LIMIT=true;
 			$log_path=get_custom_file_base().'/data_custom/big_query_screens.log';
@@ -915,6 +915,7 @@ class database_driver
 			}
 			if ($DEV_MODE)
 			{
+
 				$QUERY_COUNT=0;
 				fatal_exit(do_lang_tempcode('TOO_MANY_QUERIES'));
 			}

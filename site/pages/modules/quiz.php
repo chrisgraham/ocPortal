@@ -284,7 +284,7 @@ class Module_quiz
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('QUIZZES'),NULL,$start,'quizzes_start',$max,'quizzes_max',$max_rows);
+		$pagination=pagination(do_lang_tempcode('QUIZZES'),$start,'quizzes_start',$max,'quizzes_max',$max_rows);
 
 		return do_template('QUIZ_ARCHIVE_SCREEN',array('_GUID'=>'3073f74b500deba96b7a3031a2e9c8d8','TITLE'=>$title,'CONTENT_SURVEYS'=>$content_surveys,'CONTENT_COMPETITIONS'=>$content_competitions,'CONTENT_TESTS'=>$content_tests,'PAGINATION'=>$pagination));
 	}

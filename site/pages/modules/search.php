@@ -702,7 +702,7 @@ class Module_search
 		}
 
 		require_code('templates_pagination');
-		$pagination=pagination(do_lang_tempcode('RESULTS'),NULL,$start,'search_start',$max,'search_max',$GLOBALS['TOTAL_SEARCH_RESULTS'],true);
+		$pagination=pagination(do_lang_tempcode('RESULTS'),$start,'search_start',$max,'search_max',$GLOBALS['TOTAL_SEARCH_RESULTS'],true);
 
 		if ($start==0)
 		{

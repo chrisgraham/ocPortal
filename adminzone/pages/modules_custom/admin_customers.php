@@ -149,7 +149,7 @@ class Module_admin_customers
 		if (!is_null($member_id))
 		{
 			require_code('ocf_members');
-			$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,true);
+			$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
 			$cpf_id=NULL;
 			foreach ($cpfs as $cpf)
 			{
@@ -187,7 +187,7 @@ class Module_admin_customers
 		$amount=post_param_integer('amount');
 
 		require_code('ocf_members');
-		$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,true);
+		$cpfs=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
 		$cpf_id=NULL;
 		foreach ($cpfs as $cpf)
 		{

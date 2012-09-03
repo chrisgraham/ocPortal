@@ -653,7 +653,7 @@ class Module_topicview
 		if (($max_rows>$max) && (!$threaded))
 		{
 			require_code('templates_pagination');
-			$pagination=pagination(do_lang_tempcode('FORUM_POSTS'),$id,$start,'topic_start',$max,'topic_max',$max_rows,false);
+			$pagination=pagination(do_lang_tempcode('FORUM_POSTS'),$start,'topic_start',$max,'topic_max',$max_rows,false);
 		} else
 		{
 			$pagination=new ocp_tempcode();

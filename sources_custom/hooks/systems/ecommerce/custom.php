@@ -40,12 +40,13 @@ function handle_custom_purchase($purchase_id,$details,$product)
 
 	// Email member
 	require_code('mail');
+	$row=$rows[0];
 	$subject_line=get_translated_text($row['c_mail_subject']);
 	if ($subject_line!='')
 	{
 		$message_raw=get_translated_text($row['cp_mail_body']);
-		$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member);
-		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member);
+		$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($purchase_id);
+		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($purchase_id);
 		mail_wrap($subject_line,$message_raw,array($email),$to_name,'','',3,NULL,false,NULL,true);
 	}
 }

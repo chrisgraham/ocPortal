@@ -125,7 +125,7 @@ class specsettings_documented_test_set extends ocp_test_case
 			{
 				$c=file_get_contents($f);
 				$matches=array();
-				$num_matches=preg_match_all('#get\_param(\_integer)?\(\'(keep_[^\']+)\'#',$c,$matches);
+				$num_matches=preg_match_all('#get\_param(\_integer)?\(\'(keep_[^\']+)\'[,\)]#',$c,$matches);
 				for ($i=0;$i<$num_matches;$i++)
 				{
 					$var=$matches[2][$i];

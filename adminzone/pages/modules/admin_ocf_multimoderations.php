@@ -249,7 +249,19 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 	 */
 	function add_actualisation()
 	{
-		return strval(ocf_make_multi_moderation(post_param('name'),post_param('post_text'),post_param_integer('move_to',NULL),post_param_integer('pin_state',0),post_param_integer('sink_state',0),post_param_integer('open_state',0),read_multi_code('forum_multi_code'),post_param('title_suffix')));
+		$pin_state=mixed();
+		$pin_state=post_param_integer('pin_state',0);
+		if ($pin_state==-1) $pin_state=NULL;
+
+		$sink_state=mixed();
+		$sink_state=post_param_integer('sink_state',0);
+		if ($sink_state==-1) $sink_state=NULL;
+
+		$open_state=mixed();
+		$open_state=post_param_integer('open_state',0);
+		if ($open_state==-1) $open_state=NULL;
+
+		return strval(ocf_make_multi_moderation(post_param('name'),post_param('post_text'),post_param_integer('move_to',NULL),$pin_state,$sink_state,$open_state,read_multi_code('forum_multi_code'),post_param('title_suffix')));
 	}
 
 	/**
@@ -259,7 +271,19 @@ class Module_admin_ocf_multimoderations extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
-		ocf_edit_multi_moderation(intval($id),post_param('name'),post_param('post_text'),post_param_integer('move_to',NULL),post_param_integer('pin_state',0),post_param_integer('sink_state',0),post_param_integer('open_state',0),read_multi_code('forum_multi_code'),post_param('title_suffix'));
+		$pin_state=mixed();
+		$pin_state=post_param_integer('pin_state',0);
+		if ($pin_state==-1) $pin_state=NULL;
+
+		$sink_state=mixed();
+		$sink_state=post_param_integer('sink_state',0);
+		if ($sink_state==-1) $sink_state=NULL;
+
+		$open_state=mixed();
+		$open_state=post_param_integer('open_state',0);
+		if ($open_state==-1) $open_state=NULL;
+
+		ocf_edit_multi_moderation(intval($id),post_param('name'),post_param('post_text'),post_param_integer('move_to',NULL),$pin_state,$sink_state,$open_state,read_multi_code('forum_multi_code'),post_param('title_suffix'));
 	}
 
 	/**

@@ -252,16 +252,20 @@ function _log_it($type,$a=NULL,$b=NULL)
 	$ip=get_ip_address();
 	$GLOBALS['SITE_DB']->query_insert('adminlogs',array('the_type'=>$type,'param_a'=>is_null($a)?'':substr($a,0,80),'param_b'=>is_null($b)?'':substr($b,0,80),'date_and_time'=>time(),'the_user'=>get_member(),'ip'=>$ip));
 
-	decache('side_tag_cloud');
-	decache('main_staff_actions');
-	decache('main_staff_checklist');
-	decache('main_awards');
-	decache('main_multi_content');
+	static $logged=0;
+	$logged++;
+
+	if ($logged==0)
+	{
+		decache('side_tag_cloud');
+		decache('main_staff_actions');
+		decache('main_staff_checklist');
+		decache('main_awards');
+		decache('main_multi_content');
+	}
 
 	if ((get_page_name()!='admin_themewizard') && (get_page_name()!='admin_import'))
 	{
-		static $logged=0;
-		$logged++;
 		if ($logged<10) // Be extra sure it's not some kind of import, causing spam
 		{
 			if (is_null($a)) $a=do_lang('NA');

@@ -62,7 +62,7 @@ class Hook_awards_catalogue
 	{
 		require_code('catalogues');
 
-		return render_catalogue_box($row,$zone,$give_context,$include_breadcrumbs);
+		return render_catalogue_box($row,$zone,$give_context);
 	}
 
 }
