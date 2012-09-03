@@ -245,6 +245,7 @@ class Module_admin_notifications
 		$interface=do_template('NOTIFICATIONS_MANAGE',array('SHOW_PRIVILEGES'=>true,'COLOR'=>$color,'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,'NOTIFICATION_SECTIONS'=>$notification_sections));
 
 		return do_template('NOTIFICATIONS_MANAGE_SCREEN',array(
+			'_GUID'=>'4f6af291a40c519377879555e24c2c81',
 			'TITLE'=>$title,
 			'INTERFACE'=>$interface,
 			'ACTION_URL'=>get_self_url(),

@@ -350,6 +350,7 @@ function output_room_screen($member_id)
 	$is_staff=(has_privilege($member_id,'administer_ocworld'));
 
 	return do_template('W_MAIN_SCREEN',array(
+		'_GUID'=>'c1578b8a755553ae71fdfbb17d94a46e',
 		'TITLE'=>$title,
 		'REALM_NAME'=>$realm_name,
 		'ROOM_NAME'=>$room_name,

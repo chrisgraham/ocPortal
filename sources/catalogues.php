@@ -136,7 +136,7 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
 	// Render
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'_REP_IMAGE'=>$_rep_image,'REP_IMAGE'=>$rep_image,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'e3fbbe807f75c0aa24626e06082ae731','TITLE'=>$title,'_REP_IMAGE'=>$_rep_image,'REP_IMAGE'=>$rep_image,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**
@@ -166,7 +166,7 @@ function render_catalogue_box($row,$zone='_SEARCH',$give_context=true)
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']));
 	$entry_details=do_lang_tempcode(($row['c_is_tree']==1)?'CATEGORY_SUBORDINATE':'CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'8d7eaf6bb3170a92fd6a4876462e6f2e','TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

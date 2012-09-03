@@ -49,7 +49,7 @@ function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	$num_posts=$row['t_cache_num_posts'];
 	$entry_details=do_lang_tempcode('FORUM_NUM_POSTS',escape_html(integer_format($num_posts)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>$row['t_description'],'URL'=>$url,'ENTRY_DETAILS'=>$entry_details,'BREADCRUMBS'=>$breadcrumbs));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'85727b71bebcab45977363c8cb0a3ee6','TITLE'=>$title,'SUMMARY'=>$row['t_description'],'URL'=>$url,'ENTRY_DETAILS'=>$entry_details,'BREADCRUMBS'=>$breadcrumbs));
 }
 
 /**

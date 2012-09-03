@@ -216,7 +216,7 @@ class Block_main_content
 			$cnt=$rows[0]['cnt'];
 			if ($cnt==0)
 			{
-				return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'13f060922a5ab6c370f218b2ecc6fe9c','HIGH'=>true,'TITLE'=>$title,'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD'),'SUBMIT_URL'=>str_replace('=%21','__ignore=1',$submit_url)));
+				return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>($guid!='')?$guid:'13f060922a5ab6c370f218b2ecc6fe9c','HIGH'=>true,'TITLE'=>$title,'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD'),'SUBMIT_URL'=>str_replace('=%21','__ignore=1',$submit_url)));
 			}
 
 			$rows=$info['connection']->query('SELECT * '.$query,1,mt_rand(0,$cnt-1));
@@ -266,7 +266,7 @@ class Block_main_content
 			$rows=$info['connection']->query_select($info['table'].' g',array('g.*'),$wherea,'',1);
 			if (!array_key_exists(0,$rows))
 			{
-				return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'12d8cdc62cd78480b83c8daaaa68b686','HIGH'=>true,'TITLE'=>$title,'MESSAGE'=>do_lang_tempcode('MISSING_RESOURCE'),'ADD_NAME'=>do_lang_tempcode('ADD'),'SUBMIT_URL'=>str_replace('=%21','__ignore=1',$submit_url)));
+				return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>($guid!='')?$guid:'12d8cdc62cd78480b83c8daaaa68b686','HIGH'=>true,'TITLE'=>$title,'MESSAGE'=>do_lang_tempcode('MISSING_RESOURCE'),'ADD_NAME'=>do_lang_tempcode('ADD'),'SUBMIT_URL'=>str_replace('=%21','__ignore=1',$submit_url)));
 			}
 			$award_content_row=$rows[0];
 		}
@@ -288,7 +288,7 @@ class Block_main_content
 		}
 
 		$raw_date=($info['date_field']=='')?mixed():$award_content_row[$info['date_field']];
-		return do_template('BLOCK_MAIN_CONTENT',array('_GUID'=>'fce1eace6008d650afc0283a7be9ec30','TYPE'=>$info['title'],'TITLE'=>$title,'RAW_AWARD_DATE'=>is_null($raw_date)?'':strval($raw_date),'AWARD_DATE'=>is_null($raw_date)?'':get_timezoned_date($raw_date),'CONTENT'=>$rendered_content,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url));
+		return do_template('BLOCK_MAIN_CONTENT',array('_GUID'=>($guid!='')?$guid:'fce1eace6008d650afc0283a7be9ec30','TYPE'=>$info['title'],'TITLE'=>$title,'RAW_AWARD_DATE'=>is_null($raw_date)?'':strval($raw_date),'AWARD_DATE'=>is_null($raw_date)?'':get_timezoned_date($raw_date),'CONTENT'=>$rendered_content,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url));
 	}
 
 	/**

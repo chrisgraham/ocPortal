@@ -1,4 +1,4 @@
-<section class="box box___gallery_image_box"><div class="box_inner">
+<section class="box box___main_awards cguid_{_GUID*}"><div class="box_inner">
 	{+START,IF_NON_EMPTY,{TITLE}}
 		<h2>{TITLE*}</h2>
 	{+END}

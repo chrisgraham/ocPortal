@@ -127,14 +127,15 @@ function points_profile($member_id_of,$member_id_viewing)
 		{
 			// Show how many points are available also
 			$give_url=build_url(array('page'=>'points','type'=>'give','id'=>$member_id_of),get_module_zone('points'));
-			$give_template=do_template('POINTS_GIVE',array('_GUID'=>'fa1749d5a803d86b1efbcfde2ad81702','GIVE_URL'=>$give_url,'USER'=>strval($member_id_of),'VIEWER_GIFT_POINTS_AVAILABLE'=>$have_negative_gift_points?'':integer_format($viewer_gift_points_available)));
+			$give_template=do_template('POINTS_GIVE',array('_GUID'=>'a7663fab037412fd4e6a6404a4291939','GIVE_URL'=>$give_url,'USER'=>strval($member_id_of),'VIEWER_GIFT_POINTS_AVAILABLE'=>$have_negative_gift_points?'':integer_format($viewer_gift_points_available)));
 		}
 		else $give_template=do_lang_tempcode('PE_LACKING_GIFT_POINTS');
 		if (!$give_ok) $give_template=new ocp_tempcode();
 	}
 
 	return do_template('POINTS_PROFILE',array(
-		'_GUID'=>'f91208ef0f9a1e1a8633ce307a778a8d',
+		'_GUID'=>'900deaa0bba64762271ca63bf1606d87',
+
 		'TITLE'=>$title,
 		'MEMBER'=>strval($member_id_of),
 		'PROFILE_URL'=>$profile_link,

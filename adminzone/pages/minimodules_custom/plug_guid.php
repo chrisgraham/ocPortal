@@ -28,11 +28,11 @@ foreach ($files as $i=>$file)
 
 	$IN=file_get_contents($file);
 
-	$out=preg_replace_callback("#do_template\('([^']*)',array\('([^']+)'=>('[^\']+')#",'callback',$IN);
-	$out=preg_replace_callback("#do_template\('([^']*)',array\('([^']+)'=>(\\$[\w\d]+,)#",'callback',$out);
-	$out=preg_replace_callback("#do_template\('([^']*)',array\('([^']+)'=>(\\$[\w\d]+\[\d+\],)#",'callback',$out);
-	$out=preg_replace_callback("#do_template\('([^']*)',array\('([^']+)'=>(\\$[\w\d]+\))#",'callback',$out);
-	$out=preg_replace_callback("#do_template\('([^']*)',array\('([^']+)'=>(\\$[\w\d]+\[\d+\]\))#",'callback',$out);
+	$out=preg_replace_callback("#do_template\('([^']*)',array\(\s*'([^']+)'=>('[^\']+')#",'callback',$IN);
+	$out=preg_replace_callback("#do_template\('([^']*)',array\(\s*'([^']+)'=>(\\$[\w\d]+,)#",'callback',$out);
+	$out=preg_replace_callback("#do_template\('([^']*)',array\(\s*'([^']+)'=>(\\$[\w\d]+\[\d+\],)#",'callback',$out);
+	$out=preg_replace_callback("#do_template\('([^']*)',array\(\s*'([^']+)'=>(\\$[\w\d]+\))#",'callback',$out);
+	$out=preg_replace_callback("#do_template\('([^']*)',array\(\s*'([^']+)'=>(\\$[\w\d]+\[\d+\]\))#",'callback',$out);
 
 	if ($IN!=$out)
 	{

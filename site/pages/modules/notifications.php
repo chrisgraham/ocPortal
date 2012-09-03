@@ -83,6 +83,7 @@ class Module_notifications
 		$interface=notifications_ui(get_member());
 
 		return do_template('NOTIFICATIONS_MANAGE_SCREEN',array(
+			'_GUID'=>'3c81043e6fd004baf9a36c68cb47ffe5',
 			'TITLE'=>$title,
 			'INTERFACE'=>$interface,
 			'ACTION_URL'=>get_self_url(),

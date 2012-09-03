@@ -365,6 +365,7 @@ class Module_booking
 		}
 
 		return do_template('BOOKING_START_SCREEN',array(
+			'_GUID'=>'12787a01e3408b56f61f4b41cefa1325',
 			'TITLE'=>$title,
 			'CATEGORIES'=>$categories,
 			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'flesh_out','usergroup'=>get_param_integer('usergroup',NULL)),'_SELF'),
@@ -468,8 +469,7 @@ class Module_booking
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_validation');
 
-		return do_template('BOOKING_FLESH_OUT_SCREEN',array(
-			'TITLE'=>$title,
+		return do_template('BOOKING_FLESH_OUT_SCREEN',array('_GUID'=>'255280fa4f9bb37e3dae76f5bca46ace','TITLE'=>$title,
 			'BOOKABLES'=>$bookables,
 			'PRICE'=>float_format(find_booking_price($request)),
 			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'account','usergroup'=>get_param_integer('usergroup',NULL)),'_SELF'),

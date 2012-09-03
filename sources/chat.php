@@ -54,7 +54,7 @@ function render_chat_box($row,$zone='_SEARCH',$give_context=true)
 	$_title=$row['room_name'];
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('ROOM'),$_title):$_title;
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>'','URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'dacd41bad78b545f179582f83209c070','TITLE'=>$title,'SUMMARY'=>'','URL'=>$url));
 }
 
 /**

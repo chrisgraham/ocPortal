@@ -72,7 +72,7 @@ function render_calendar_type_box($row,$zone='_SEARCH',$give_context=true)
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)',array('e_type'=>$row['id'],'validated'=>1));
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'0eaa10d9fab32599ff095e1121d41c49','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

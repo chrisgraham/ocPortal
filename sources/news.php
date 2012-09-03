@@ -142,7 +142,7 @@ function render_news_category_box($row,$zone='_SEARCH',$give_context=true,$attac
 	}
 
 	// Render
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'_REP_IMAGE'=>$_rep_image,'REP_IMAGE'=>$rep_image,'OWNER'=>is_null($row['nc_owner'])?'':strval($row['nc_owner']),'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'49e9c7022f9171fdff02d84ee968bb52','TITLE'=>$title,'_REP_IMAGE'=>$_rep_image,'REP_IMAGE'=>$rep_image,'OWNER'=>is_null($row['nc_owner'])?'':strval($row['nc_owner']),'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

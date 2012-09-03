@@ -79,6 +79,7 @@ function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 
 	// Render
 	return do_template('GALLERY_IMAGE_BOX',array(
+		'_GUID'=>'733c22f14649705418ac0b155d11a661',
 		'GIVE_CONTEXT'=>$give_context,
 		'ADD_DATE_RAW'=>strval($row['add_date']),
 		'ID'=>strval($row['id']),
@@ -144,6 +145,7 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 
 	// Render
 	return do_template('GALLERY_VIDEO_BOX',array(
+		'_GUID'=>'22ef89b03900cbb264bd945b5bade75d',
 		'GIVE_CONTEXT'=>$give_context,
 		'ADD_DATE_RAW'=>strval($row['add_date']),
 		'ID'=>strval($row['id']),

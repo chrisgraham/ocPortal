@@ -58,7 +58,7 @@ function render_group_box($row,$zone='_SEARCH',$give_context=true)
 	$num_members=ocf_get_group_members_raw_count($row['id']);
 	$entry_details=do_lang_tempcode('GROUP_NUM_MEMBERS',escape_html(integer_format($num_members)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'efeac1c8465974edd27bb0d805c4fbe0','TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

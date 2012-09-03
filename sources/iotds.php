@@ -57,7 +57,7 @@ function render_iotd_box($myrow,$zone='_SEARCH',$include_manage_links=false,$giv
 	$view_url=build_url(array('page'=>'iotds','type'=>'view','wide'=>1,'id'=>$myrow['id']),$zone);
 
 	return do_template('IOTD_BOX',array(
-		'_GUID'=>'a6479902d2cd7b4119be7159147e0a0b',
+		'_GUID'=>'01162a9cc9bb6c4d0e79715f30aa141e',
 		'VIEWS'=>integer_format($myrow['iotd_views']),
 		'THUMB'=>$thumb,
 		'DATE'=>$date,

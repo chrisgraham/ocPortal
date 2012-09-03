@@ -340,7 +340,6 @@ class Module_chat
 		if ($type=='blocking_remove') return $this->blocking_remove();
 		if ($type=='friend_add') return $this->friend_add();
 		if ($type=='friend_remove') return $this->friend_remove();
-		if ($type=='friends_list') return $this->friends_list();
 		if ($type=='set_effects') return $this->set_effects();
 		if ($type=='_set_effects') return $this->_set_effects();
 
@@ -935,64 +934,6 @@ class Module_chat
 			return inform_screen($title,do_lang_tempcode('SUCCESS'));
 		}
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
-	}
-
-	/**
-	 * List all the friends of a member.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function friends_list()
-	{
-		$member_id=get_param_integer('id');
-
-		$title=get_screen_title('FRIENDS',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id))));
-
-		$text_id=do_lang_tempcode('FRIENDS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id)));
-
-		$mode=get_param('mode','both'); // single, both
-		$max=get_param_integer('friends_max',100);
-		$start=get_param_integer('friends_start',0);
-
-		if ($mode=='both')
-		{
-			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends a LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends b ON a.member_liked=b.member_likes AND a.member_liked='.strval($member_id).' WHERE (a.member_likes='.strval(intval($member_id)).' OR a.member_liked='.strval(intval($member_id)).') AND b.member_liked IS NULL';
-			$rows=$GLOBALS['SITE_DB']->query('SELECT a.* FROM '.$query.' ORDER BY date_and_time',$max,$start);
-		} else
-		{
-			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends WHERE member_likes='.strval(intval($member_id));
-			$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$query.' ORDER BY date_and_time',$max,$start);
-		}
-		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$query);
-
-		$friends=array();
-		$blocked=collapse_1d_complexity('member_blocked',$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>$member_id)));
-		$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
-		foreach ($rows as $i=>$row)
-		{
-			$f_id=($row['member_liked']==$member_id)?$row['member_likes']:$row['member_liked'];
-
-			if (($f_id==$row['member_likes']) || (!in_array($f_id,$blocked)))
-			{
-				$appears_twice=(/*if was member_liked we already know it is not twice as our query filters those dupes away*/$row['member_likes']==$member_id) && !is_null($GLOBALS['SITE_DB']->query_select_value('chat_friends','member_likes',array('member_liked'=>$member_id)));
-				require_code('ocf_members2');
-				$friend_username=$GLOBALS['FORUM_DRIVER']->get_username($f_id);
-				$friend_usergroup_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($f_id,'m_primary_group');
-				$friend_usergroup=array_key_exists($friend_usergroup_id,$all_usergroups)?$all_usergroups[$friend_usergroup_id]:do_lang_tempcode('UNKNOWN');
-				$mutual_label=do_lang('MUTUAL_FRIEND');
-				$box=render_member_box($f_id,false,NULL,NULL,true,($f_id==get_member() || $member_id==get_member())?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL,false);
-				if ($box->is_empty()) continue;
-				$friend_map=array('USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
-				$friends[]=$friend_map;
-			}
-		}
-
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
-
-		require_code('templates_pagination');
-		$pagination=pagination($text_id,$start,'friends_start',$max,'friends_max',$max_rows);
-
-		return do_template('CHAT_FRIENDS_LIST_SCREEN',array('_GUID'=>'70b11d3c01ff551be42a0472d27dd207','TITLE'=>$title,'FRIENDS'=>$friends,'PAGINATION'=>$pagination));
 	}
 
 	/**

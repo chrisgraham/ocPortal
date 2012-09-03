@@ -91,6 +91,7 @@ class Hook_Preview_comments
 		$poster_url=$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member());
 		$title=post_param('title','');
 		$tpl=do_template('POST',array(
+			'_GUID'=>'fe6913829896c0f0a615ecdb11fc5271',
 			'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,
 			'HIGHLIGHT'=>$highlight,
 			'TITLE'=>$title,

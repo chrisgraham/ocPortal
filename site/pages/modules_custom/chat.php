@@ -54,7 +54,6 @@ class Mx_chat extends Module_chat
 		if ($type=='blocking_remove') return $this->blocking_remove();
 		if ($type=='friend_add') return $this->friend_add();
 		if ($type=='friend_remove') return $this->friend_remove();
-		if ($type=='friends_list') return $this->friends_list();
 		if ($type=='set_effects') return $this->set_effects();
 		if ($type=='_set_effects') return $this->_set_effects();
 

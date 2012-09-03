@@ -30,7 +30,7 @@ class Hook_Profiles_Tabs_friends
 	 */
 	function is_active($member_id_of,$member_id_viewing)
 	{
-		return true;
+		return addon_installed('chat');
 	}
 
 	/**
@@ -52,71 +52,23 @@ class Hook_Profiles_Tabs_friends
 
 		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
-		// Friends
-		$friends_a=array();
-		$friends_b=array();
 		$add_friend_url=new ocp_tempcode();
 		$remove_friend_url=new ocp_tempcode();
-		$all_friends_link=new ocp_tempcode();
-		if (addon_installed('chat'))
+		require_code('chat');
+		if (($member_id_of!=$member_id_viewing) && (!is_guest()))
 		{
-			require_code('chat');
-			if (($member_id_of!=$member_id_viewing) && (!is_guest()))
+			if (!member_befriended($member_id_of))
 			{
-				if (!member_befriended($member_id_of))
-				{
-					$add_friend_url=build_url(array('page'=>'chat','type'=>'friend_add','member_id'=>$member_id_of,'redirect'=>get_self_url(true)),get_module_zone('chat'));
-				} else
-				{
-					$remove_friend_url=build_url(array('page'=>'chat','type'=>'friend_remove','member_id'=>$member_id_of,'redirect'=>get_self_url(true)),get_module_zone('chat'));
-				}
-			}
-
-			$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends WHERE member_likes='.strval(intval($member_id_of)).' OR member_liked='.strval(intval($member_id_of)).' ORDER BY date_and_time',100);
-			$blocked=collapse_1d_complexity('member_blocked',$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>$member_id_of)));
-			$done_already=array();
-			$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true,false,false,NULL,$member_id_of);
-			foreach ($rows as $i=>$row)
+				$add_friend_url=build_url(array('page'=>'chat','type'=>'friend_add','member_id'=>$member_id_of,'redirect'=>get_self_url(true)),get_module_zone('chat'));
+			} else
 			{
-				$f_id=($row['member_liked']==$member_id_of)?$row['member_likes']:$row['member_liked'];
-
-				if (array_key_exists($f_id,$done_already)) continue;
-
-				if (($f_id==$row['member_likes']) || (!in_array($f_id,$blocked)))
-				{
-					$appears_twice=false;
-					foreach ($rows as $j=>$row2)
-					{
-						$f_id_2=($row2['member_liked']==$member_id_of)?$row2['member_likes']:$row2['member_liked'];
-						if (($f_id_2==$f_id) && ($i!=$j))
-						{
-							$appears_twice=true;
-							break;
-						}
-					}
-					require_code('ocf_members2');
-					$friend_username=$GLOBALS['FORUM_DRIVER']->get_username($f_id);
-					$friend_usergroup_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($f_id,'m_primary_group');
-					$friend_usergroup=array_key_exists($friend_usergroup_id,$all_usergroups)?$all_usergroups[$friend_usergroup_id]:do_lang_tempcode('UNKNOWN');
-					$mutual_label=do_lang('MUTUAL_FRIEND');
-					$box=render_member_box($f_id,false,NULL,NULL,true,($f_id==$member_id_viewing || $member_id_of==$member_id_viewing)?array($mutual_label=>do_lang($appears_twice?'YES':'NO')):NULL,false);
-					if ($box->is_empty()) continue;
-					$friend_map=array('USERGROUP'=>$friend_usergroup,'USERNAME'=>$friend_username,'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($f_id,false,true),'F_ID'=>strval($f_id),'BOX'=>$box);
-					if ($appears_twice) // Mutual friendship
-					{
-						$friends_a[]=$friend_map;
-					} else // One-way friendship
-					{
-						$friends_b[]=$friend_map;
-					}
-				}
-
-				$done_already[$f_id]=1;
+				$remove_friend_url=build_url(array('page'=>'chat','type'=>'friend_remove','member_id'=>$member_id_of,'redirect'=>get_self_url(true)),get_module_zone('chat'));
 			}
-			if (count($rows)==100) $all_friends_link=build_url(array('page'=>'chat','type'=>'friends_list','id'=>$member_id_of),get_module_zone('chat'));
 		}
 
-		$content=do_template('OCF_MEMBER_PROFILE_FRIENDS',array('MEMBER_ID'=>strval($member_id_of),'FRIENDS_A'=>$friends_a,'FRIENDS_B'=>$friends_b,'ALL_FRIENDS_URL'=>$all_friends_link,'ADD_FRIEND_URL'=>$add_friend_url,'REMOVE_FRIEND_URL'=>$remove_friend_url));
+		$friends=do_block('main_friends_list',array('member_id'=>strval($member_id_of)));
+
+		$content=do_template('OCF_MEMBER_PROFILE_FRIENDS',array('_GUID'=>'b24a8607c6e2d3d6ddc29c8e22b972e8','FRIENDS'=>$friends,'MEMBER_ID'=>strval($member_id_of),'ADD_FRIEND_URL'=>$add_friend_url,'REMOVE_FRIEND_URL'=>$remove_friend_url));
 
 		return array($title,$content,$order);
 	}

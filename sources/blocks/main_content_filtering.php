@@ -82,6 +82,7 @@ class Block_main_content_filtering
 		}
 
 		return do_template('BLOCK_MAIN_CONTENT_FILTERING',array(
+			'_GUID'=>'6cdeed216dfac854672a16db39a6807f',
 			'FIELDS'=>$fields,
 			'ACTIVE_FILTER'=>$filter,
 			'LINKS'=>$links,

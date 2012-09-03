@@ -1,4 +1,4 @@
-{TITLE}
+<p>{!DESCRIPTION_FRIENDS,{$USERNAME*,{MEMBER_ID}}}</p>
 
 {+START,IF_NON_EMPTY,{FRIENDS}}
 	<ul class="ocf_profile_friends actions_list">

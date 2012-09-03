@@ -165,6 +165,7 @@ class Block_main_activities
 				}
 
 				return do_template('BLOCK_MAIN_ACTIVITIES',array(
+					'_GUID'=>'62010121868c2761ae9f074a0c9c4d7c',
 					'TITLE'=>$title,
 					'MODE'=>strval($mode),
 					'MEMBER_IDS'=>implode(',',$member_ids),
@@ -181,6 +182,7 @@ class Block_main_activities
 
 		// No entries
 		return do_template('BLOCK_MAIN_ACTIVITIES',array(
+			'_GUID'=>'b4de219116e1b8107553ee588717e2c9',
 			'TITLE'=>$title,
 			'MODE'=>$mode,
 			'CONTENT'=>$content,

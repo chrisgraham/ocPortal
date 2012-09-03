@@ -284,6 +284,7 @@ function attach_message($message,$type='inform')
 			elseif (is_object($message)) $message=escape_html($message->evaluate());
 			else $message=escape_html($message);
 			$message=do_template('CROP_TEXT_MOUSE_OVER',array(
+				'_GUID'=>'36ccd2ff13867ed000a46f15df0a4a22',
 				'TEXT_LARGE'=>$webservice_result,
 				'TEXT_SMALL'=>protect_from_escaping($message),
 			));
@@ -1438,7 +1439,20 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 
 	global $SCREEN_TEMPLATE_CALLED;
 	$st=$SCREEN_TEMPLATE_CALLED;
-	$ret=do_template('COMCODE_PAGE_SCREEN',array('_GUID'=>'0fc4fe4f27e54aaaa2b7e4848c02bacb','IS_PANEL'=>$is_panel,'BEING_INCLUDED'=>$being_included,'SUBMITTER'=>strval($comcode_page_row['p_submitter']),'TAGS'=>get_loaded_tags('comcode_pages'),'WARNING_DETAILS'=>$warning_details,'EDIT_DATE_RAW'=>($comcode_page_row['p_edit_date']===NULL)?'':strval($comcode_page_row['p_edit_date']),'SHOW_AS_EDIT'=>$comcode_page_row['p_show_as_edit']==1,'CONTENT'=>$html,'EDIT_URL'=>$edit_url,'ADD_CHILD_URL'=>$add_child_url,'NAME'=>$codename));
+	$ret=do_template('COMCODE_PAGE_SCREEN',array(
+		'_GUID'=>'0fc4fe4f27e54aaaa2b7e4848c02bacb',
+		'IS_PANEL'=>$is_panel,
+		'BEING_INCLUDED'=>$being_included,
+		'SUBMITTER'=>strval($comcode_page_row['p_submitter']),
+		'TAGS'=>get_loaded_tags('comcode_pages'),
+		'WARNING_DETAILS'=>$warning_details,
+		'EDIT_DATE_RAW'=>($comcode_page_row['p_edit_date']===NULL)?'':strval($comcode_page_row['p_edit_date']),
+		'SHOW_AS_EDIT'=>$comcode_page_row['p_show_as_edit']==1,
+		'CONTENT'=>$html,
+		'EDIT_URL'=>$edit_url,
+		'ADD_CHILD_URL'=>$add_child_url,
+		'NAME'=>$codename,
+	));
 	if (($is_panel) || ($being_included))
 	{
 		$SCREEN_TEMPLATE_CALLED=$st;

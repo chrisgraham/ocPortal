@@ -128,7 +128,8 @@ class Hook_addon_registry_chat
 			'CHAT_PRIVATE.tpl',
 			'CHAT_STAFF_ACTIONS.tpl',
 			'JAVASCRIPT_CHAT.tpl',
-			'CHAT_FRIENDS_LIST_SCREEN.tpl',
+			'BLOCK_MAIN_FRIENDS_LIST.tpl',
+			'sources/blocks/main_friends_list.php',
 			'CHAT_LOBBY_SCREEN.tpl',
 			'CHAT_LOBBY_IM_AREA.tpl',
 			'CHAT_LOBBY_IM_PARTICIPANT.tpl',
@@ -197,7 +198,7 @@ class Hook_addon_registry_chat
 			'CHAT_ROOM_SCREEN.tpl'=>'chat_room_screen',
 			'CHAT_SET_EFFECTS_SETTING_BLOCK.tpl'=>'chat_set_effects_screen',
 			'CHAT_SET_EFFECTS_SCREEN.tpl'=>'chat_set_effects_screen',
-			'CHAT_FRIENDS_LIST_SCREEN.tpl'=>'chat_friends_list_screen',
+			'BLOCK_MAIN_FRIENDS_LIST.tpl'=>'ocf_member_profile_friends',
 			'OCF_MEMBER_PROFILE_FRIENDS.tpl'=>'ocf_member_profile_friends'
 		);
 	}
@@ -213,36 +214,6 @@ class Hook_addon_registry_chat
 	{
 		require_lang('chat');
 		require_lang('ocf');
-
-		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_FRIENDS', array(
-			'MEMBER_ID'=>placeholder_id(),
-			'FRIENDS_A'=>array(),
-			'FRIENDS_B'=>array(
-				array(
-					'USERNAME'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-					'USERGROUP'=>lorem_phrase()
-				)
-			),
-			'ADD_FRIEND_URL'=>placeholder_url(),
-			'REMOVE_FRIEND_URL'=>placeholder_url(),
-			'ALL_FRIENDS_URL'=>placeholder_url(),
-			'BOX'=>lorem_paragraph()
-		));
-		return array(
-			lorem_globalise($tab_content, NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__chat_friends_list_screen()
-	{
 		require_css('ocf');
 
 		$friend_map=array(
@@ -252,15 +223,23 @@ class Hook_addon_registry_chat
 			'F_ID'=>placeholder_id(),
 			'BOX'=>placeholder_table()
 		);
-		$friends=array();
-		$friends[]=$friend_map;
+		$friends_arr=array();
+		$friends_arr[]=$friend_map;
 
+		$friends=do_lorem_template('BLOCK_MAIN_FRIENDS_LIST', array(
+			'FRIENDS'=>$friends_arr,
+			'PAGINATION'=>placeholder_pagination()
+		));
+
+		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_FRIENDS', array(
+			'MEMBER_ID'=>placeholder_id(),
+			'FRIENDS'=>new ocp_tempcode(),
+			'ADD_FRIEND_URL'=>placeholder_url(),
+			'REMOVE_FRIEND_URL'=>placeholder_url(),
+			'BOX'=>lorem_paragraph()
+		));
 		return array(
-			lorem_globalise(do_lorem_template('CHAT_FRIENDS_LIST_SCREEN', array(
-				'TITLE'=>lorem_title(),
-				'FRIENDS'=>$friends,
-				'PAGINATION'=>placeholder_pagination()
-			)), NULL, '', true)
+			lorem_globalise($tab_content, NULL, '', true)
 		);
 	}
 

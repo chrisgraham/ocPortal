@@ -74,7 +74,7 @@ class Hook_cron_ocdeadpeople
 					}
 				}
 
-				$friends_list=implode(",",$friends_a);
+				$friends_list=implode(',',$friends_a);
 				$friends_healthy=array();
 				foreach ($friends_a as $friend)
 				{

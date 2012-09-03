@@ -102,7 +102,7 @@ class Block_main_awards
 			$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'award_archive WHERE a_type_id='.strval($award).' '.$sup.' ORDER BY date_and_time DESC',1);
 			if (!array_key_exists(0,$rows))
 			{
-				return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'f32b50770fd6581c4a2c839a1ed25801','HIGH'=>false,'TITLE'=>$award_title,'MESSAGE'=>do_lang_tempcode('NO_AWARD'),'ADD_NAME'=>do_lang_tempcode('ADD'),'SUBMIT_URL'=>str_replace('=!','__ignore=1',$submit_url)));
+				return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>($guid!='')?$guid:'f32b50770fd6581c4a2c839a1ed25801','HIGH'=>false,'TITLE'=>$award_title,'MESSAGE'=>do_lang_tempcode('NO_AWARD'),'ADD_NAME'=>do_lang_tempcode('ADD'),'SUBMIT_URL'=>str_replace('=!','__ignore=1',$submit_url)));
 			}
 			$myrow=$rows[0];
 
@@ -130,7 +130,7 @@ class Block_main_awards
 			$awardee_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($myrow['member_id'],true,true);
 		}
 
-		return do_template('BLOCK_MAIN_AWARDS',array('_GUID'=>'99f092e35db0c17f407f40ed55c42cfd','TITLE'=>$award_title,'TYPE'=>$award_type_row['a_content_type'],'DESCRIPTION'=>$award_description,'AWARDEE_PROFILE_URL'=>$awardee_profile_url,'AWARDEE'=>$awardee,'AWARDEE_USERNAME'=>$awardee_username,'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time']),'CONTENT'=>$rendered_content,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url));
+		return do_template('BLOCK_MAIN_AWARDS',array('_GUID'=>($guid!='')?$guid:'99f092e35db0c17f407f40ed55c42cfd','TITLE'=>$award_title,'TYPE'=>$award_type_row['a_content_type'],'DESCRIPTION'=>$award_description,'AWARDEE_PROFILE_URL'=>$awardee_profile_url,'AWARDEE'=>$awardee,'AWARDEE_USERNAME'=>$awardee_username,'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time']),'CONTENT'=>$rendered_content,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url));
 	}
 
 }

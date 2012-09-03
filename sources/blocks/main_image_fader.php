@@ -136,7 +136,14 @@ class Block_main_image_fader
 			{
 				$submit_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_galleries'));
 			}
-			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'aa84d65b8dd134ba6cd7b1b7bde99de2','HIGH'=>false,'TITLE'=>do_lang_tempcode('GALLERY'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),'SUBMIT_URL'=>$submit_url));
+			return do_template('BLOCK_NO_ENTRIES',array(
+				'_GUID'=>'aa84d65b8dd134ba6cd7b1b7bde99de2',
+				'HIGH'=>false,
+				'TITLE'=>do_lang_tempcode('GALLERY'),
+				'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),
+				'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),
+				'SUBMIT_URL'=>$submit_url,
+			));
 		}
 
 		$nice_cat=str_replace('*','',$cat);
@@ -144,6 +151,7 @@ class Block_main_image_fader
 		$gallery_url=build_url(array('page'=>'galleries','type'=>'misc','id'=>$nice_cat),$zone);
 
 		return do_template('BLOCK_MAIN_IMAGE_FADER',array(
+			'_GUID'=>'92337749fa084393a97f97eedbcf81f6',
 			'GALLERY_URL'=>$gallery_url,
 			'PREVIOUS_URL'=>$images[count($images)-1],
 			'PREVIOUS_URL_FULL'=>$images[count($images_full)-1],

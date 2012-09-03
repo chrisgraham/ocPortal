@@ -167,6 +167,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 
 	// AJAX support
 	$comment_details->attach(do_template('COMMENT_AJAX_HANDLER',array(
+		'_GUID'=>'da533e0f637e4c90ca7ef5a9a23f3203',
 		'OPTIONS'=>$serialized_options,
 		'HASH'=>$hash,
 	)));

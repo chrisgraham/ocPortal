@@ -299,6 +299,7 @@ function notifications_ui_advanced($notification_code,$enable_message=NULL,$disa
 	}
 
 	return do_template('NOTIFICATIONS_MANAGE_ADVANCED_SCREEN',array(
+		'_GUID'=>'21337e54cc87d82269bec89e70690543',
 		'TITLE'=>$title,
 		'COLOR'=>$color,
 		'ACTION_URL'=>get_self_url(false,false,array('id'=>NULL)),
@@ -400,6 +401,7 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 	}
 
 	$tree=do_template('NOTIFICATIONS_TREE',array(
+		'_GUID'=>'a370837b5ffb3d80989a34ad2a71b6c1',
 		'NOTIFICATION_CODE'=>$notification_code,
 		'NOTIFICATION_CATEGORIES'=>$notification_categories,
 	));

@@ -38,6 +38,7 @@ function render_quiz_box($row,$zone='_SEARCH',$give_context=true)
 	$redo_time=((is_null($row['q_redo_time'])) || ($row['q_redo_time']==0))?'':display_time_period($row['q_redo_time']*60*60);
 
 	return do_template('QUIZ_BOX',array(
+		'_GUID'=>'3ba4e19d93eb41f6cf2d472af982116e',
 		'GIVE_CONTEXT'=>$give_context,
 		'_TYPE'=>$row['q_type'],
 		'POINTS'=>strval($row['q_points_for_passing']),
