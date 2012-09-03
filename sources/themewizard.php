@@ -287,6 +287,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template'
 	{
 		if (url_is_local($logo_url)) $logo_url=((strpos($logo_url,'themes/default/')!==false)?get_base_url():get_custom_base_url()).'/'.$logo_url;
 	}
+
 	$file_path_stub=convert_url_to_path($logo_url);
 	if (!is_null($file_path_stub))
 	{
@@ -324,7 +325,7 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template'
 	{
 		$css_file=file_get_contents(get_file_base().'/themes/default/css/global.css');
 	}
-	if (preg_match('/#\{\$THEME\_WIZARD\_COLOR,\#(\w\w)(\w\w)(\w\w),standard_border,.*\}/',$css_file,$matches)!=0)
+	if (preg_match('/\{\$THEME\_WIZARD\_COLOR,\#(\w\w)(\w\w)(\w\w),standard_border,.*\}/',$css_file,$matches)!=0)
 	{
 		$blue=imagecolorallocate($img,hexdec($matches[1]),hexdec($matches[2]),hexdec($matches[3]));
 	} else
@@ -368,7 +369,8 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template'
 			imagettftext($img,(float)($doing[3]),0.0,$doing[1],$doing[2],$doing[5],$doing[4],foxy_utf8_to_nce($doing[0]));
 		} else
 		{
-			imagestring($img,($doing[3]==intval($logo_wizard_details['site_name_font_size_small']))?intval($logo_wizard_details['site_name_font_size_nonttf']):$font,$doing[1],$doing[2]-11,$doing[0],$doing[5]);
+			// @ needed for bizarre reasons due to type juggling in PHP (brought up by ocProducts PHP only)
+			@imagestring($img,($doing[3]==intval($logo_wizard_details['site_name_font_size_small']))?intval($logo_wizard_details['site_name_font_size_nonttf']):$font,$doing[1],$doing[2]-11,$doing[0],$doing[5]);
 		}
 	}
 
