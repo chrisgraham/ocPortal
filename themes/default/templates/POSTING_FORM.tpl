@@ -22,7 +22,6 @@
 				{+START,INCLUDE,POSTING_FIELD}
 					NAME=post
 					DESCRIPTION=
-					REQUIRED=1
 					WORD_COUNTER=1
 				{+END}
 
