@@ -182,7 +182,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'])=='POST')
 
 	if (($is_addon) && (count($addons_involved)!=0))
 	{
-		echo '<p><strong>This was for an addon.</strong> Remember to run <kbd>data_custom/build_addons.php?addon_limit='.escape_html(urlencode(implode(',',$addons_involved))).'</kbd> out of the repository URL, and then upload the appropriate addon TARs and post the has-updated comments.</p>';
+		echo '<p><strong>This was for an addon.</strong> Remember to run <a href="'.escape_html(get_base_url()).'/adminzone/index.php?page=build_addons&amp;addon_limit='.escape_html(urlencode(implode(',',$addons_involved))).'">the addon update script</a>, and then upload the appropriate addon TARs and post the has-updated comments.</p>';
 	}
 
 	return;
