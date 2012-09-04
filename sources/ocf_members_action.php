@@ -124,7 +124,7 @@ function ocf_make_member($username,$password,$email_address,$groups,$dob_day,$do
 
 	if ($check_correctness)
 	{
-		if (!in_array($password_compatibility_scheme,array('ldap','httpauth'))) ocf_check_name_valid($username,NULL,$password);
+		if (!in_array($password_compatibility_scheme,array('ldap','httpauth'))) ocf_check_name_valid($username,NULL,($password_compatibility_scheme=='')?$password:NULL);
 		if ((!function_exists('has_actual_page_access')) || (!has_actual_page_access(get_member(),'admin_ocf_join')))
 		{
 			require_code('type_validation');
