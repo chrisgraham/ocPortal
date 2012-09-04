@@ -143,10 +143,10 @@ class Block_main_buttons
 		{
 			$bd=show_banner($banner['name'],$banner['b_title_text'],get_translated_tempcode($banner['caption']),$banner['b_direct_code'],$banner['img_url'],'',$banner['site_url'],$banner['b_type'],$banner['submitter']);
 			$more_coming=($i<count($banners)-1);
-			$assemble->attach(do_template('BLOCK_MAIN_BANNER_WAVE_BWRAP_CUSTOM',array('EXTRA'=>$map['extra'],'TYPE'=>$map['param'],'BANNER'=>$bd,'MORE_COMING'=>$more_coming)));
+			$assemble->attach(do_template('BLOCK_MAIN_BANNER_WAVE_BWRAP_CUSTOM',array('_GUID'=>'b7d22f954147f0d012cb6eaeaf721e8f','EXTRA'=>$map['extra'],'TYPE'=>$map['param'],'BANNER'=>$bd,'MORE_COMING'=>$more_coming)));
 		}
 
-		return do_template('BLOCK_MAIN_BUTTONS',array('EXTRA'=>$map['extra'],'TYPE'=>$map['param'],'ASSEMBLE'=>$assemble,'TITLE'=>$map['title'],'SET_HEIGHT'=>$set_height));
+		return do_template('BLOCK_MAIN_BUTTONS',array('_GUID'=>'b78228b68ce7f275c6cbb6055e37081e','EXTRA'=>$map['extra'],'TYPE'=>$map['param'],'ASSEMBLE'=>$assemble,'TITLE'=>$map['title'],'SET_HEIGHT'=>$set_height));
 	}
 }
 

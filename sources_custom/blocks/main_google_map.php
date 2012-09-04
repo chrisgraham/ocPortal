@@ -204,6 +204,6 @@ class Block_main_google_map
 		$uniqid=uniqid('');
 		$div_id='div_'.$catalogue_name.'_'.$uniqid;
 
-		return do_template('BLOCK_MAIN_GOOGLE_MAP',array('TITLE'=>$map['title'],'ICON'=>$icon,'MIN_LATITUDE'=>$min_latitude,'MAX_LATITUDE'=>$max_latitude,'MIN_LONGITUDE'=>$min_longitude,'MAX_LONGITUDE'=>$max_longitude,'DATA'=>$data,'SHOW_LINKS'=>$set_show_links,'DIV_ID'=>$div_id,'CLUSTER'=>$cluster,'REGION'=>$map['region'],'WIDTH'=>$mapwidth, 'HEIGHT'=>$mapheight, 'LATITUDE'=>$map['latitude'],'LONGITUDE'=>$map['longitude'],'ZOOM'=>$set_zoom,'CENTER'=>$set_center));
+		return do_template('BLOCK_MAIN_GOOGLE_MAP',array('_GUID'=>'939dd8fe2397bba0609fba129a8a3bfd','TITLE'=>$map['title'],'ICON'=>$icon,'MIN_LATITUDE'=>$min_latitude,'MAX_LATITUDE'=>$max_latitude,'MIN_LONGITUDE'=>$min_longitude,'MAX_LONGITUDE'=>$max_longitude,'DATA'=>$data,'SHOW_LINKS'=>$set_show_links,'DIV_ID'=>$div_id,'CLUSTER'=>$cluster,'REGION'=>$map['region'],'WIDTH'=>$mapwidth, 'HEIGHT'=>$mapheight, 'LATITUDE'=>$map['latitude'],'LONGITUDE'=>$map['longitude'],'ZOOM'=>$set_zoom,'CENTER'=>$set_center));
 	}
 }

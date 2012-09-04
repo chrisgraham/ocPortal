@@ -215,7 +215,7 @@ class Module_admin_ecommerce extends standard_crud_module
 			if ($myrow['status']!='Completed')
 			{
 				$trigger_url=build_url(array('page'=>'_SELF','type'=>'trigger','product'=>$myrow['item'],'id'=>$myrow['purchase_id']),'_SELF');
-				$status=do_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER',array('STATUS'=>$myrow['status'],'TRIGGER_URL'=>$trigger_url));
+				$status=do_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER',array('_GUID'=>'5e770b9b30db88032bcc56efe8e3dc23','STATUS'=>$myrow['status'],'TRIGGER_URL'=>$trigger_url));
 			} else $status=protect_from_escaping(escape_html($myrow['status']));
 
 			// Find member link, if possible

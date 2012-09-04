@@ -934,7 +934,7 @@ class Module_topics
 
 		$to=post_param_integer('to');
 		$from=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_forum_id',array('id'=>$topics[0]));
-//		if (is_null($from)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		//if (is_null($from)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));  May be from private topics, so can't do this check
 		require_code('ocf_topics_action');
 		require_code('ocf_topics_action2');
 		ocf_move_topics($from,$to,$topics);
@@ -1700,6 +1700,7 @@ class Module_topics
 		foreach ($posts as $row)
 		{
 			$rendered_post=do_template('OCF_POSTING_SCREEN_POST',array(
+				'_GUID'=>'ff92a51b7c747fab41fd9c62651625a3',
 				'TITLE'=>$row['p_title'],
 				'ID'=>strval($row['id']),
 				'POSTER'=>strval($row['p_poster']),

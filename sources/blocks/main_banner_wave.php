@@ -81,10 +81,10 @@ class Block_main_banner_wave
 		foreach ($banners as $i=>$banner)
 		{
 			$bd=show_banner($banner['name'],$banner['b_title_text'],get_translated_tempcode($banner['caption']),$banner['b_direct_code'],$banner['img_url'],'',$banner['site_url'],$banner['b_type'],$banner['submitter']);
-			$assemble->attach(do_template('BLOCK_MAIN_BANNER_WAVE_BWRAP',array('TYPE'=>$map['param'],'BANNER'=>$bd)));
+			$assemble->attach(do_template('BLOCK_MAIN_BANNER_WAVE_BWRAP',array('_GUID'=>'bbb0851f015305da014f0a55006770f5','TYPE'=>$map['param'],'BANNER'=>$bd)));
 		}
 
-		return do_template('BLOCK_MAIN_BANNER_WAVE',array('TYPE'=>$map['param'],'ASSEMBLE'=>$assemble));
+		return do_template('BLOCK_MAIN_BANNER_WAVE',array('_GUID'=>'8bced3f44675de9ef0bd5f4d286aea76','TYPE'=>$map['param'],'ASSEMBLE'=>$assemble));
 	}
 
 }

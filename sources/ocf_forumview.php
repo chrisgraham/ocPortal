@@ -80,7 +80,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 			{ // Ask the question
 				$title=get_screen_title(($details['answer']=='')?'INTRO_NOTICE':'INTRO_QUESTION');
 				$url=get_self_url();
-				return do_template('OCF_FORUM_INTRO_QUESTION_SCREEN',array('ANSWER'=>$details['answer'],'TITLE'=>$title,'URL'=>$url,'QUESTION'=>$details['question']));
+				return do_template('OCF_FORUM_INTRO_QUESTION_SCREEN',array('_GUID'=>'ee9caba0735aea9c39c4194337036e81','ANSWER'=>$details['answer'],'TITLE'=>$title,'URL'=>$url,'QUESTION'=>$details['question']));
 			}
 		}
 	}
@@ -548,6 +548,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 			if ($topic['last_member_id']!=$GLOBALS['OCF_DRIVER']->get_guest_id())
 			{
 				$poster=do_template('OCF_USER_MEMBER',array(
+					'_GUID'=>'8cf92d50e26ed25fcb2a551419ce6c82',
 					'USERNAME'=>$topic['last_username'],
 					'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($topic['last_member_id'],false,true)
 				));

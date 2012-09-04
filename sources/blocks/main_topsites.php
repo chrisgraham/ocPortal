@@ -97,7 +97,7 @@ class Block_main_topsites
 			$submit_url=build_url(array('page'=>'cms_banners','type'=>'ad','redirect'=>SELF_REDIRECT),get_module_zone('cms_banners'));
 		} else $submit_url=new ocp_tempcode();
 
-		return do_template('BLOCK_MAIN_TOPSITES',array('TYPE'=>$map['param'],'BANNERS'=>$banners,'SUBMIT_URL'=>$submit_url));
+		return do_template('BLOCK_MAIN_TOPSITES',array('_GUID'=>'776cecc3769b4f4e082be327da5b7248','TYPE'=>$map['param'],'BANNERS'=>$banners,'SUBMIT_URL'=>$submit_url));
 	}
 
 }

@@ -555,7 +555,7 @@ class Block_main_multi_content
 			$pagination=pagination($info['title'],$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
 		}
 
-		return do_template('BLOCK_MAIN_MULTI_CONTENT',array('TYPE'=>$info['title'],'TITLE'=>$title,'CONTENT'=>$rendered_content,'CONTENT_DATA'=>$content_data,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'PAGINATION'=>$pagination));
+		return do_template('BLOCK_MAIN_MULTI_CONTENT',array('_GUID'=>($guid!='')?$guid:'9035934bc9b25f57eb8d23bf100b5796','TYPE'=>$info['title'],'TITLE'=>$title,'CONTENT'=>$rendered_content,'CONTENT_DATA'=>$content_data,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'PAGINATION'=>$pagination));
 	}
 
 	/**

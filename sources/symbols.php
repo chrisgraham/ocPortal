@@ -252,9 +252,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if (get_option('is_on_rss',true)==='1')
 					{
 						if ($GLOBALS['FEED_URL']!==NULL)
-							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>$GLOBALS['FEED_URL'])));
+							$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'3a289a821e87e954494753edf7cb2ebd','FEED_URL'=>$GLOBALS['FEED_URL'])));
 						if ($GLOBALS['FEED_URL_2']!==NULL)
-							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>$GLOBALS['FEED_URL_2'],'TITLE'=>do_lang('COMMENTS'))));
+							$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'fa8c7aaa3601c24d1986fa2598416558','FEED_URL'=>$GLOBALS['FEED_URL_2'],'TITLE'=>do_lang('COMMENTS'))));
 						if (addon_installed('news'))
 							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
 					}
@@ -2292,7 +2292,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 		switch ($name)
 		{
 			case 'PARAM_INFO':
-				$_value=do_template('PARAM_INFO',array('MAP'=>$param['vars']));
+				$_value=do_template('PARAM_INFO',array('_GUID'=>'960e11880fbc512a3170756ca43384fd','MAP'=>$param['vars']));
 				$value=$_value->evaluate();
 				break;
 

@@ -355,7 +355,7 @@ class Module_admin_orders
 		if (array_key_exists(0,$row))
 		{
 			$address=$row[0];
-			$shipping_address=do_template('ECOM_SHIPPING_ADDRESS',array('ADDRESS_NAME'=>$address['address_name'],'ADDRESS_STREET'=>$address['address_street'],'ADDRESS_CITY'=>$address['address_city'],'ADDRESS_ZIP'=>$address['address_zip'],'ADDRESS_COUNTRY'=>$address['address_country'],'RECEIVER_EMAIL'=>$address['receiver_email']));	
+			$shipping_address=do_template('ECOM_SHIPPING_ADDRESS',array('_GUID'=>'332bc2e28a75cff64e6856bbeda6102e','ADDRESS_NAME'=>$address['address_name'],'ADDRESS_STREET'=>$address['address_street'],'ADDRESS_CITY'=>$address['address_city'],'ADDRESS_ZIP'=>$address['address_zip'],'ADDRESS_COUNTRY'=>$address['address_country'],'RECEIVER_EMAIL'=>$address['receiver_email']));	
 		} else
 		{
 			$shipping_address=new ocp_tempcode();
