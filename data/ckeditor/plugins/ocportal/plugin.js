@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
 	CKEDITOR.plugins.add('ocportal', {
 		init: function(editor) {
 			var possibles=['block','comcode','page','quote','box','code'];
