@@ -829,10 +829,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
-			case 'MEMBER':
-				$value=strval(get_member());
-				break;
-
+			case 'MEMBER': // LEGACY
 			case 'USER':
 				if (!isset($param[0]))
 				{

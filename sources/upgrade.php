@@ -1398,9 +1398,8 @@ function check_alien($addon_files,$old_files,$files,$dir,$rela='',$raw=false)
 						$addon.=$file_html;
 					} else
 					{
-						$alien.=$file_html;
 						if (strlen($alien)<=100000) // Reasonable limit
-							$alien.='<kbd>'.escape_html($rela.$file).'</kbd></li>';
+							$alien.=$file_html;
 					}
 				}
 			}
