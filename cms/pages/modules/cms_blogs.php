@@ -239,7 +239,7 @@ class Module_cms_blogs extends standard_crud_module
 		{
 			$hidden->attach(form_input_hidden('author',$author));
 		}
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>(is_null($news_category) || (count($news_category)==0)) && $image=='' && (is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'cff27a28d4d01f8e0255ee645ea210b3','SECTION_HIDDEN'=>(is_null($news_category) || (count($news_category)==0)) && $image=='' && (is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields2->attach(form_input_text_comcode(do_lang_tempcode('BLOG_NEWS_SUMMARY'),do_lang_tempcode('DESCRIPTION_NEWS_SUMMARY'),'news',$news,false));
 		if (get_value('disable_secondary_news')!=='1')
 		{
@@ -587,7 +587,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		$xml_post_url=build_url(array('page'=>'_SELF','type'=>'_import_wordpress','method'=>'xml'),'_SELF');
 
-		$xml_upload_form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields_xml,'SUBMIT_NAME'=>$submit_name,'URL'=>$xml_post_url));
+		$xml_upload_form=do_template('FORM',array('_GUID'=>'bdcc111acf379bab6f163f2e86d20e03','TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields_xml,'SUBMIT_NAME'=>$submit_name,'URL'=>$xml_post_url));
 
 		//--------------------------------------------
 		$fields=new ocp_tempcode();	
@@ -602,7 +602,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		$fields->attach(form_input_password(do_lang_tempcode('WORDPRESS_DB_PASSWORD'),do_lang_tempcode('DESCRIPTION_WORDPRESS_DB_PASSWORD'),'wp_db_password',false));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ADVANCED_OPTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'27350b4f39d4634a405131716a1f152c','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ADVANCED_OPTIONS'))));
 
 		$fields->attach(form_input_tick(do_lang_tempcode('IMPORT_WORDPRESS_USERS'),do_lang_tempcode('DESCRIPTION_IMPORT_WORDPRESS_USER'),'wp_import_wordpress_users',true));
 
@@ -620,9 +620,9 @@ class Module_cms_blogs extends standard_crud_module
 
 		$db_post_url=build_url(array('page'=>'_SELF','type'=>'_import_wordpress','method'=>'db'),'_SELF');
 
-		$db_import_form=	do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$db_post_url,'JAVASCRIPT'=>$javascript));
+		$db_import_form=	do_template('FORM',array('_GUID'=>'df2b4285f538bf94055c75fb8b61be6e','TABINDEX'=>strval(get_form_field_tabindex()),'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$db_post_url,'JAVASCRIPT'=>$javascript));
 
-		return do_template('NEWS_WORDPRESS_IMPORT_SCREEN',array('TITLE'=>get_screen_title('DB_IMPORT_FORM'),'XML_UPLOAD_FORM'=>$xml_upload_form,'DB_IMPORT_FORM'=>$db_import_form));
+		return do_template('NEWS_WORDPRESS_IMPORT_SCREEN',array('_GUID'=>'b9dcdd8211c65f3d2acd16e759d451a5','TITLE'=>get_screen_title('DB_IMPORT_FORM'),'XML_UPLOAD_FORM'=>$xml_upload_form,'DB_IMPORT_FORM'=>$db_import_form));
 	}
 
 	/**

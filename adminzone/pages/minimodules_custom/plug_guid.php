@@ -7,6 +7,11 @@
 
 */
 
+/*
+	NB: Multi line do_template calls may be uglified. You can find those in your IDE using
+	do_template[^\n]*_GUID[^\n]*\n\t+'
+*/
+
 global $FOUND_GUID;
 $FOUND_GUID=array();
 global $GUID_LANDSCAPE;
@@ -29,9 +34,7 @@ foreach ($files as $i=>$file)
 	$IN=file_get_contents($file);
 
 	$out=preg_replace_callback("#do_template\('([^']*)',array\(\s*'([^']+)'=>('[^\']+')#",'callback',$IN);
-	$out=preg_replace_callback("#do_template\('([^']*)',array\(\s*'([^']+)'=>(\\$[\w\d]+[,\)])#",'callback',$out);
-	$out=preg_replace_callback("#do_template\('([^']*)',array\(\s*'([^']+)'=>(\\$[\w\d]+\[\d+\][,\)])#",'callback',$out);
-	$out=preg_replace_callback("#do_template\('([^']*)',array\(\s*'([^']+)'=>(\\$[\w\d]+\[\'[^\']*'\][,\)])#",'callback',$out);
+	$out=preg_replace_callback("#do_template\('([^']*)',array\(\s*'([^']+)'=>#",'callback',$IN);
 
 	if ($IN!=$out)
 	{
@@ -63,17 +66,20 @@ function callback($match)
 	{
 		echo 'Insert needed for '.escape_html($match[1]).'<br />';
 		$GUID_LANDSCAPE[$match[1]][]=array($FILENAME,$line,$new_guid);
-		return "do_template('".$match[1]."',array('_GUID'=>'".$new_guid."','".$match[2].'\'=>'.$match[3];
+		return "do_template('".$match[1]."',array('_GUID'=>'".$new_guid."','".$match[2].'\'=>'.(isset($match[3])?$match[3]:'');
 	}
-	global $FOUND_GUID;
-	$guid_value=str_replace('\'','',$match[3]);
-	if (array_key_exists($guid_value,$FOUND_GUID))
+	if (isset($match[3]))
 	{
-		echo 'Repair needed for '.escape_html($match[1]).'<br />';
-		$GUID_LANDSCAPE[$match[1]][]=array($FILENAME,$line,$new_guid);
-		return "do_template('".$match[1]."',array('_GUID'=>'".$new_guid."'";
+		global $FOUND_GUID;
+		$guid_value=str_replace('\'','',$match[3]);
+		if (array_key_exists($guid_value,$FOUND_GUID))
+		{
+			echo 'Repair needed for '.escape_html($match[1]).'<br />';
+			$GUID_LANDSCAPE[$match[1]][]=array($FILENAME,$line,$new_guid);
+			return "do_template('".$match[1]."',array('_GUID'=>'".$new_guid."'";
+		}
+		$FOUND_GUID[$guid_value]=1;
+		$GUID_LANDSCAPE[$match[1]][]=array($FILENAME,$line,$guid_value);
 	}
-	$FOUND_GUID[$guid_value]=1;
-	$GUID_LANDSCAPE[$match[1]][]=array($FILENAME,$line,$guid_value);
 	return $match[0];
 }

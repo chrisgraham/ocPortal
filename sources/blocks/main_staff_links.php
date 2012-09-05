@@ -202,7 +202,7 @@ class Block_main_staff_links
 
 		$map_comcode='';
 		foreach ($map as $key=>$val) $map_comcode.=' '.$key.'="'.addslashes($val).'"';
-		return do_template('BLOCK_MAIN_STAFF_LINKS',array('URL'=>get_self_url(),'BLOCK_NAME'=>'main_staff_links','MAP'=>$map_comcode,'FORMATTED_LINKS'=>$formatted_staff_links,'UNFORMATTED_LINKS'=>$unformatted_staff_links));
+		return do_template('BLOCK_MAIN_STAFF_LINKS',array('_GUID'=>'555150e7f1626ae0689158b1ecc1d85b','URL'=>get_self_url(),'BLOCK_NAME'=>'main_staff_links','MAP'=>$map_comcode,'FORMATTED_LINKS'=>$formatted_staff_links,'UNFORMATTED_LINKS'=>$unformatted_staff_links));
 	}
 
 }

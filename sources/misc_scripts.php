@@ -142,7 +142,7 @@ function preview_script()
 
 	$output=do_template('PREVIEW_SCRIPT',array('_GUID'=>'97bd8909e8b9983a0bbf7ab68fab92f3','OUTPUT'=>$output->evaluate(),'VALIDATION'=>$validation,'KEYWORD_DENSITY'=>$keyword_density,'SPELLING'=>$spelling,'HIDDEN'=>build_keep_post_fields()));
 
-	$tpl=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
+	$tpl=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'0a96e3b9be154e8b29bee5b1c1c7cc69','TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
 	$tpl->handle_symbol_preprocessing();
 	$tpl->evaluate_echo();
 }
@@ -232,7 +232,7 @@ function iframe_script()
 	$output=request_page($page,true);
 
 	$output->handle_symbol_preprocessing();
-	$tpl=do_template('STANDALONE_HTML_WRAP',array('OPENS_BELOW'=>get_param_integer('opens_below',0)==1,'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
+	$tpl=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'04cf4ef7aac4201bb985327ec0e04c87','OPENS_BELOW'=>get_param_integer('opens_below',0)==1,'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
 	$tpl->handle_symbol_preprocessing();
 	$tpl->evaluate_echo();
 }
@@ -273,7 +273,7 @@ function page_link_chooser_script()
 
 	// Display
 	$content=do_template('PAGE_LINK_CHOOSER',array('_GUID'=>'235d969528d7b81aeb17e042a17f5537','NAME'=>'tree_list'));
-	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('CHOOSE'),'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'58768379196d6ad27d6298134e33fabd','TITLE'=>do_lang_tempcode('CHOOSE'),'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }
@@ -553,7 +553,7 @@ function block_helper_script()
 			{
 				if ($param_class=='normal')
 				{
-					$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PARAMETERS'),'HELP'=>protect_from_escaping(paragraph(do_lang_tempcode('BLOCK_HELPER_NO_PARAMETERS'),'','nothing_here')))));
+					$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'e50ed41cc58bc234ccd314127583a1f2','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PARAMETERS'),'HELP'=>protect_from_escaping(paragraph(do_lang_tempcode('BLOCK_HELPER_NO_PARAMETERS'),'','nothing_here')))));
 				}
 
 				continue;
@@ -561,7 +561,7 @@ function block_helper_script()
 
 			if ($param_class=='advanced')
 			{
-				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3d9642b17f6be2067f4fd6e102c344bf','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 			}
 
 			foreach ($parameters as $parameter)
@@ -804,7 +804,7 @@ function block_helper_script()
 			$submit_name=do_lang_tempcode('SAVE');
 
 			// Allow remove option
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ACTIONS'),'HELP'=>'')));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'9fafd87384a20a8ccca561b087cbe1fc','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ACTIONS'),'HELP'=>'')));
 			$fields->attach(form_input_tick(do_lang_tempcode('REMOVE'),'','_delete',false));
 		} else
 		{
@@ -872,7 +872,7 @@ function block_helper_script()
 	require_code('site');
 	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('BLOCK_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'ccb57d45d593eb8aabc2a5e99ea7711f','TITLE'=>do_lang_tempcode('BLOCK_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }
@@ -962,7 +962,7 @@ function question_ui_script()
 	require_code('site');
 	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>escape_html($title),'POPUP'=>true,'CONTENT'=>$message));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'8d72daa4c9f922656b190b643a6fe61d','TITLE'=>escape_html($title),'POPUP'=>true,'CONTENT'=>$message));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }

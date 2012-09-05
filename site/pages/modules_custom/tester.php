@@ -231,7 +231,7 @@ class Module_tester
 					$section_notes=$GLOBALS['SITE_DB']->query_select_value('test_sections','s_notes',array('id'=>$test['t_inherit_section']));
 					if ($section_notes!='') $a_test->attach(paragraph(escape_html($section_notes)));
 
-					$a_test->attach(do_template('TESTER_TEST_SET',array('TESTS'=>map_keys_to_upper($_tests_2))));
+					$a_test->attach(do_template('TESTER_TEST_SET',array('_GUID'=>'9f1b9f814c1e5c8dfbc051feffced72a','TESTS'=>map_keys_to_upper($_tests_2))));
 				}
 			}
 
@@ -605,7 +605,7 @@ class Module_tester
 			access_denied('ACCESS_DENIED');
 
 		$fields=$this->get_test_section_form_fields($section['s_section'],$section['s_notes'],$section['s_assigned_to'],$section['s_inheritable']);
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'2ded201b1b60b2bfc21f159ce4e4f3c1','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 
 		$add_template=do_template('TESTER_TEST_GROUP_NEW',array('_GUID'=>'3d0e12fdff0aef8f8aa5818e441238ee','ID'=>'add_-REPLACEME-','FIELDS'=>$this->get_test_form_fields('add_-REPLACEME-')));
@@ -615,7 +615,7 @@ class Module_tester
 		foreach ($_tests as $test)
 		{
 			$_fields=$this->get_test_form_fields('edit_'.strval($test['id']),$test['t_test'],$test['t_assigned_to'],$test['t_enabled'],$test['t_inherit_section']);
-			$_fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$_fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'21f8a24eb794f271137d72360fb78136','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$_fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'edit_'.strval($test['id']).'_delete',false));
 			$_test=do_template('TESTER_TEST_GROUP',array('_GUID'=>'620b45c5ff5bf26417442865e6bcb045','ID'=>'edit_'.strval($test['id']),'FIELDS'=>$_fields));
 			$tests->attach($_test);

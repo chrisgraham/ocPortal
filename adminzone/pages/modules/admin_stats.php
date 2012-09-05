@@ -266,7 +266,7 @@ class Module_admin_stats
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'GET'=>true,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$message,'HIDDEN'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'3e76584f20ecfb947b00638211e63321','SKIP_VALIDATION'=>true,'GET'=>true,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$message,'HIDDEN'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
 	}
 
 	/**
@@ -506,7 +506,7 @@ class Module_admin_stats
 		$output=create_bar_chart($data,do_lang('PAGE'),do_lang('LOAD_TIME'),'',do_lang('_SECONDS'));
 		$this->save_graph('Global-Load-times',$output);
 
-		$graph=do_template('STATS_GRAPH',array('GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Load-times.xml','TITLE'=>do_lang_tempcode('LOAD_TIMES'),'TEXT'=>do_lang_tempcode('DESCRIPTION_LOAD_TIMES')));
+		$graph=do_template('STATS_GRAPH',array('_GUID'=>'3f1ef4ebbed1e064c0ec89481dc39afc','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Load-times.xml','TITLE'=>do_lang_tempcode('LOAD_TIMES'),'TEXT'=>do_lang_tempcode('DESCRIPTION_LOAD_TIMES')));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
@@ -1043,7 +1043,7 @@ class Module_admin_stats
 				$output=create_pie_chart($data);
 				$this->save_graph(strval($rows[0]['id']).'-Keywords',$output);
 
-				$graph_keywords=do_template('STATS_GRAPH',array('GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-Keywords.xml','TITLE'=>do_lang_tempcode('KEYWORDS_SHARE'),'TEXT'=>do_lang_tempcode('DESCRIPTION_KEYWORDS_SHARE')));
+				$graph_keywords=do_template('STATS_GRAPH',array('_GUID'=>'6e3a48274f2e3babf546292b8eec2f9b','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-Keywords.xml','TITLE'=>do_lang_tempcode('KEYWORDS_SHARE'),'TEXT'=>do_lang_tempcode('DESCRIPTION_KEYWORDS_SHARE')));
 			}
 		}
 
@@ -1114,7 +1114,7 @@ class Module_admin_stats
 				$output=create_pie_chart($data);
 				$this->save_graph('Regionality',$output);
 
-				$graph_regionality=do_template('STATS_GRAPH',array('GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['ip']).'-Regionality.xml','TITLE'=>do_lang_tempcode('REGIONALITY_SHARE'),'TEXT'=>do_lang_tempcode('DESCRIPTION_REGIONALITY_SHARE')));
+				$graph_regionality=do_template('STATS_GRAPH',array('_GUID'=>'1087a34b5aa2ec808dcdce234dfe492e','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['ip']).'-Regionality.xml','TITLE'=>do_lang_tempcode('REGIONALITY_SHARE'),'TEXT'=>do_lang_tempcode('DESCRIPTION_REGIONALITY_SHARE')));
 			}
 		}
 		else
@@ -1387,7 +1387,7 @@ class Module_admin_stats
 		$output=create_bar_chart($data,do_lang('DATE_TIME'),do_lang('COUNT_VIEWS'),'','');
 		$this->save_graph(strval($rows[0]['id']).'-Views-'.strval((integer)$hours).'_'.strval((integer)$start_date_and_time),$output);
 
-		$graph=do_template('STATS_GRAPH',array('GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-Views-'.strval((integer)$hours).'_'.strval((integer)$start_date_and_time).'.xml','TITLE'=>do_lang_tempcode($graph_title),'TEXT'=>do_lang_tempcode($graph_description)));
+		$graph=do_template('STATS_GRAPH',array('_GUID'=>'b4cf5df74c012c2df5e3988a0ca0e622','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-Views-'.strval((integer)$hours).'_'.strval((integer)$start_date_and_time).'.xml','TITLE'=>do_lang_tempcode($graph_title),'TEXT'=>do_lang_tempcode($graph_description)));
 
 		return array($graph,$list);
 	}
@@ -1463,7 +1463,7 @@ class Module_admin_stats
 		$output=create_pie_chart($data);
 		$this->save_graph(strval($rows[0]['id']).'-'.$type,$output);
 
-		$graph=do_template('STATS_GRAPH',array('GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-'.$type.'.xml','TITLE'=>do_lang_tempcode($graph_title),'TEXT'=>do_lang_tempcode($graph_description)));
+		$graph=do_template('STATS_GRAPH',array('_GUID'=>'5a88fdf891e9af4eb1cca3470f263c7d','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-'.$type.'.xml','TITLE'=>do_lang_tempcode($graph_title),'TEXT'=>do_lang_tempcode($graph_description)));
 
 		return array($graph,$list);
 	}

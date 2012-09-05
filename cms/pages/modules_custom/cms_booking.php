@@ -932,7 +932,7 @@ class Module_cms_booking_bookings extends standard_crud_module
 				$notes=$details['supplements'][$supplement_row['id']]['notes'];
 			}
 
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SUPPLEMENT',get_translated_tempcode($supplement_row['title'])))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'384b1451a2e83190ec50555e30ceeedc','TITLE'=>do_lang_tempcode('SUPPLEMENT',get_translated_tempcode($supplement_row['title'])))));
 
 			if ($supplement_row['supports_quantities']==1)
 			{

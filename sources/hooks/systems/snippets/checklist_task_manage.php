@@ -57,6 +57,7 @@ class Hook_checklist_task_manage
 				dispatch_notification('checklist_task',NULL,$subject,$mail);
 
 				return do_template('BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK',array(
+					'_GUID'=>'e95228a3740dc7eda2d1b0ccc7d3d9d3',
 					'TASK_TITLE'=>comcode_to_tempcode(get_param('tasktitle',false,true)),
 					'ADD_DATE'=>display_time_period(time()),
 					'RECUR_INTERVAL'=>($recurinterval==0)?'':integer_format($recurinterval),

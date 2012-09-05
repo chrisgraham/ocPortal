@@ -241,7 +241,7 @@ function output_room_screen($member_id)
 		$picture_url=$myrow2['picture_url'];
 		if ((url_is_local($picture_url)) && ($picture_url!='')) $picture_url=get_custom_base_url().'/'.str_replace(' ','%20',$picture_url);
 
-		$items->attach(do_template('W_MAIN_ITEM',array('ACTION'=>do_lang_tempcode('W_TAKE'),'EDIT_ACCESS'=>$edit_item_copy_access,'USER'=>strval($myrow['copy_owner']),'DESCRIPTION'=>$myrow2['description'],'PICTURE_URL'=>$picture_url,'AUX'=>$aux,'NAME'=>$myrow['name'],'COUNT'=>$count)));
+		$items->attach(do_template('W_MAIN_ITEM',array('_GUID'=>'c144fda9edfe61750aba4afbce7b9b02','ACTION'=>do_lang_tempcode('W_TAKE'),'EDIT_ACCESS'=>$edit_item_copy_access,'USER'=>strval($myrow['copy_owner']),'DESCRIPTION'=>$myrow2['description'],'PICTURE_URL'=>$picture_url,'AUX'=>$aux,'NAME'=>$myrow['name'],'COUNT'=>$count)));
 	}
 
 	$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_items WHERE location_x='.strval((integer)$x).' AND location_y='.strval((integer)$y).' AND location_realm='.strval((integer)$realm).' AND cost>0');

@@ -164,7 +164,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 				$fields->attach(form_input_list(do_lang_tempcode('WHO_CAN_SEE_YOUR',escape_html($cpf_title)),'','privacy_'.strval($cpf_id),$privacy_options));
 			} else // Complex style
 			{
-				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('WHO_CAN_SEE_YOUR',escape_html($cpf_title)))));
+				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'00c9fa8c21c17b30dc06bd2e86518d6f','TITLE'=>do_lang_tempcode('WHO_CAN_SEE_YOUR',escape_html($cpf_title)))));
 
 				$fields->attach(form_input_tick(do_lang_tempcode('GUESTS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_GUESTS'),'guests_'.strval($cpf_id),$view_by_guests));
 				$fields->attach(form_input_tick(do_lang_tempcode('MEMBERS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_MEMBERS'),'members_'.strval($cpf_id),$view_by_members));

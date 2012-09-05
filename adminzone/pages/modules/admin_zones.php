@@ -466,7 +466,7 @@ class Module_admin_zones
 		$entries=nice_get_themes($theme,false,true);
 		$fields.=static_evaluate_tempcode(form_input_list(do_lang_tempcode('THEME'),do_lang_tempcode((get_forum_type()=='ocf')?'_DESCRIPTION_THEME_OCF':'_DESCRIPTION_THEME',substr(preg_replace('#[^A-Za-z\d]#','_',get_site_name()),0,80)),'theme',$entries));
 
-		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b997e901934b59fa72c944e0ce6fc1b0','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('REQUIRE_SESSION'),do_lang_tempcode('DESCRIPTION_REQUIRE_SESSION'),'require_session',($require_session==1)));
 
 		if ((!$in_zone_editor) && (!is_null($zone)) && (addon_installed('zone_logos')))
@@ -477,7 +477,7 @@ class Module_admin_zones
 			$themes=find_all_themes();
 			foreach ($themes as $theme=>$theme_name)
 			{
-				$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('THEME_LOGO',escape_html($theme_name)))));
+				$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'8c4c1267060970f8b89d1068d03280a7','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('THEME_LOGO',escape_html($theme_name)))));
 
 				$set_name='logo_choose_'.$theme;
 				$required=true;
@@ -504,7 +504,7 @@ class Module_admin_zones
 
 		if ($zone!=='')
 		{
-			$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PERMISSIONS'))));
+			$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'579ab823f5f8ec7b48e3b59af8a64ba2','TITLE'=>do_lang_tempcode('PERMISSIONS'))));
 
 			// Permissions
 			$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
@@ -711,7 +711,7 @@ class Module_admin_zones
 			$hidden->attach(form_input_hidden('new_zone',$zone));
 		} else
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b6915d8e00ae36d2f47e44bbbb14ae69','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$rename_label='DESCRIPTION_ZONE_RENAME';
 			if (in_array($zone,array('site','cms','collaboration')))
 				$rename_label='DESCRIPTION_ZONE_RENAME_DEFAULT_ZONE';
@@ -719,7 +719,7 @@ class Module_admin_zones
 		}
 		if ((!in_array($zone,$no_delete_zones)) && (get_file_base()==get_custom_file_base()))
 		{
-			if ($no_rename) $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			if ($no_rename) $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'2fec0bddfe975b573da9bbd68ec16689','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 		}
 

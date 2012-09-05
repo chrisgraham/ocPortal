@@ -100,7 +100,7 @@ class Module_admin_tickets
 			$submit_name=do_lang_tempcode('CHOOSE');
 			$fields=form_input_list(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'ticket_type',$list);
 
-			$tpl=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'GET'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$edit_url,'SUBMIT_NAME'=>$submit_name));
+			$tpl=do_template('FORM',array('_GUID'=>'2d2e76f5cfc397a78688db72170918d4','TABINDEX'=>strval(get_form_field_tabindex()),'GET'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$edit_url,'SUBMIT_NAME'=>$submit_name));
 		} else $tpl=new ocp_tempcode();
 
 		// Do a form so people can add
@@ -163,12 +163,12 @@ class Module_admin_tickets
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit','ticket_type'=>$ticket_type),'_SELF');
 		$submit_name=do_lang_tempcode('SAVE');
 		$fields=new ocp_tempcode();
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SETTINGS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'0746afdfa7033291cc1897bf67c1f22a','TITLE'=>do_lang_tempcode('SETTINGS'))));
 		$fields->attach(form_input_line(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'new_type',$type_text,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_GUEST_EMAILS_MANDATORY'),do_lang_tempcode('DESCRIPTION_TICKET_GUEST_EMAILS_MANDATORY'),'guest_emails_mandatory',$details['guest_emails_mandatory']));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_SEARCH_FAQ'),do_lang_tempcode('DESCRIPTION_TICKET_SEARCH_FAQ'),'search_faq',$details['search_faq']));
 		$fields->attach(get_category_permissions_for_environment('tickets',$type_text));
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'09e6f1d2276ee679f280b33a79bff089','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'0a505a779c1639fd2d3ee10c24a7905a','SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));

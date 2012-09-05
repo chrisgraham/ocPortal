@@ -106,7 +106,7 @@ class Hook_pointstore_pop3
 			$hidden->attach(form_input_hidden('dpop3_'.strval($i),$domain));
 			$fields->attach(form_input_line(do_lang_tempcode('MAIL_DOMAIN'),do_lang_tempcode('DESCRIPTION_MAIL_DOMAIN'),'ndpop3_'.strval($i),substr($row['name'],5),true));
 			$fields->attach(form_input_integer(do_lang_tempcode('MAIL_COST'),do_lang_tempcode('DESCRIPTION_MAIL_COST',escape_html('pop3'),escape_html($domain)),'pop3_'.strval($i),$row['price'],true));
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'9e37f41f134eecae630bfbf32da7b9ec','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete_pop3_'.strval($i),false));
 			$out[]=array($fields,$hidden,do_lang_tempcode('EDIT_POP3_DOMAIN'));
 		}

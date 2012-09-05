@@ -58,7 +58,7 @@ class Hook_profile_tab
 			$out->attach($ret[1]);
 			return $out;
 		}
-		return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>do_lang_tempcode('INTERNAL_ERROR')));
+		return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'aae58043638dac785405a42e9578202b','MESSAGE'=>do_lang_tempcode('INTERNAL_ERROR')));
 	}
 
 }

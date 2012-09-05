@@ -42,7 +42,7 @@ class Hook_Notification_occlechat
 			}
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'occlechat WHERE c_timestamp>='.strval((integer)$timestamp));
 
-			return array(do_lang('OCCLE'),do_lang('_NEW_OCCLECHAT_MESSAGES'),do_template('OCCLE_OCCLECHAT_NOTIFICATION',array('MESSAGE_COUNT'=>integer_format(count($messages)),'MESSAGES'=>$_messages)));
+			return array(do_lang('OCCLE'),do_lang('_NEW_OCCLECHAT_MESSAGES'),do_template('OCCLE_OCCLECHAT_NOTIFICATION',array('_GUID'=>'f6a3a17ace63675690319f6a7540c86a','MESSAGE_COUNT'=>integer_format(count($messages)),'MESSAGES'=>$_messages)));
 		}
 		else return false;
 	}

@@ -264,7 +264,7 @@ class Module_admin_workflow extends standard_crud_module
 
 		// Actions
 		$fields2=new ocp_tempcode();
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'2ba5778e5fae64904d0c013db3d0a216','TITLE'=>do_lang_tempcode('ACTIONS'))));
 
 		// Add an option to redefine the approval permissions
 		$fields2->attach(form_input_tick(do_lang('REDEFINE_WORKFLOW_POINTS'), do_lang('REDEFINE_WORKFLOW_POINTS_DESC'), 'redefine_points', false));
@@ -949,6 +949,7 @@ class Module_admin_workflow extends standard_crud_module
 		if (count($clarify_points) > 0)
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+				'_GUID'=>'ceee046b64028beeccd973c7221d5a5b',
 				'TITLE'=>do_lang('DEFINE_WORKFLOW_POINTS'),
 				'HELP'=>do_lang_tempcode('DEFINE_WORKFLOW_POINTS_HELP',implode(', ',$clarify_points)),
 			)));
@@ -978,6 +979,7 @@ class Module_admin_workflow extends standard_crud_module
 		if (count($redefine_points) > 0)
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+				'_GUID'=>'db8e021f2a59b1c30a3bf64ac97a5de2',
 				'TITLE'=>do_lang('REDEFINE_WORKFLOW_POINTS'),
 				'HELP'=>do_lang('REDEFINE_WORKFLOW_POINTS_HELP'),
 			)));
@@ -1012,10 +1014,8 @@ class Module_admin_workflow extends standard_crud_module
 		$self_url=get_self_url();
 
 		return do_template('FORM_SCREEN',array(
-			'TITLE'=>do_template('SCREEN_TITLE',array(
-				'TITLE'=>do_lang('DEFINE_WORKFLOW_POINTS'),
-				'HELP_URL'=>'',
-			)),
+			'_GUID'=>'33e5a72664f26e420b1fdf9a681b57f7',
+			'TITLE'=>get_screen_title('DEFINE_WORKFLOW_POINTS'),
 			'FIELDS'=>$fields,
 			'TEXT'=>'',
 			'HIDDEN'=>$hidden,

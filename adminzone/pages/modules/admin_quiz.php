@@ -181,7 +181,7 @@ class Module_admin_quiz
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 		breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES'))));
 
-		return do_template('FORM_SCREEN',array('HIDDEN'=>'','SKIP_VALIDATION'=>true,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'830097b15c232b10a8204cfed86082de','HIDDEN'=>'','SKIP_VALIDATION'=>true,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -312,7 +312,7 @@ class Module_admin_quiz
 
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
-		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'03f611727000c1cb1c40780773bb8ebd','SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**

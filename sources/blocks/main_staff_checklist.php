@@ -150,6 +150,7 @@ class Block_main_staff_checklist
 					break;
 			}
 			$custasks->attach(do_template('BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK',array(
+				'_GUID'=>'fa747347ad7b9eb1a7f3f54867154db4',
 				'TASK_TITLE'=>comcode_to_tempcode($r['tasktitle']),
 				'ADD_DATE'=>display_time_period($r['datetimeadded']),
 				'RECUR_INTERVAL'=>($r['recurinterval']==0)?'':integer_format($r['recurinterval']),

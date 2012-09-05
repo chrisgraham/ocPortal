@@ -36,10 +36,10 @@ class Hook_stats_filedump
 		require_code('files2');
 
 		$bits=new ocp_tempcode();
-		if (get_option('filedump_show_stats_count_total_files',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('COUNT_FILES'),'VALUE'=>integer_format(count(get_directory_contents(get_custom_file_base().'/uploads/filedump'))))));
-		if (get_option('filedump_show_stats_count_total_space',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('DISK_USAGE'),'VALUE'=>clean_file_size(get_directory_size(get_custom_file_base().'/uploads/filedump')))));
+		if (get_option('filedump_show_stats_count_total_files',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'d420666251bd9e70804f97ff737c775a','KEY'=>do_lang_tempcode('COUNT_FILES'),'VALUE'=>integer_format(count(get_directory_contents(get_custom_file_base().'/uploads/filedump'))))));
+		if (get_option('filedump_show_stats_count_total_space',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'995ec487ce5f445f2a74aa483a75910a','KEY'=>do_lang_tempcode('DISK_USAGE'),'VALUE'=>clean_file_size(get_directory_size(get_custom_file_base().'/uploads/filedump')))));
 		if ($bits->is_empty()) return new ocp_tempcode();
-		$section=do_template('BLOCK_SIDE_STATS_SECTION',array('SECTION'=>do_lang_tempcode('FILE_DUMP'),'CONTENT'=>$bits));
+		$section=do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'cd479a1301ea539c82d99ad7367d7d54','SECTION'=>do_lang_tempcode('FILE_DUMP'),'CONTENT'=>$bits));
 
 		return $section;
 	}

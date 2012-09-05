@@ -76,7 +76,7 @@ class Block_side_shoutbox
 		$last_message_id=$GLOBALS['SITE_DB']->query_select_value('chat_messages','MAX(id)',array('room_id'=>$room_id));
 		if (is_null($last_message_id)) $last_message_id=-1;
 
-		return do_template('BLOCK_SIDE_SHOUTBOX_IFRAME',array('LAST_MESSAGE_ID'=>strval($last_message_id),'CONTENT'=>$content,'ROOM_ID'=>strval($room_id),'NUM_MESSAGES'=>strval($num_messages)));
+		return do_template('BLOCK_SIDE_SHOUTBOX_IFRAME',array('_GUID'=>'023aef81ed14e33f1b9337c5aa3b7bc9','LAST_MESSAGE_ID'=>strval($last_message_id),'CONTENT'=>$content,'ROOM_ID'=>strval($room_id),'NUM_MESSAGES'=>strval($num_messages)));
 	}
 
 }

@@ -497,9 +497,9 @@ class Module_cms_comcode_pages
 
 			$table_rows->attach(results_entry(array(
 				protect_from_escaping(hyperlink(build_url(array('page'=>$table_row['page']),$table_row['zone']),$table_row['page_title'])),
-				protect_from_escaping(do_template('COMCODE_TELETYPE',array('CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['page']))))),
+				protect_from_escaping(do_template('COMCODE_TELETYPE',array('_GUID'=>'56e1af60e09524c20fc62dd55cda1eb9','CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['page']))))),
 				protect_from_escaping(hyperlink(build_url(array('page'=>''),$table_row['zone']),$table_row['zone_name'])),
-				protect_from_escaping(do_template('COMCODE_TELETYPE',array('CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['wrappable_pagelink']))))),
+				protect_from_escaping(do_template('COMCODE_TELETYPE',array('_GUID'=>'bf4dbed562e189c84aa33c17d06c2791','CONTENT'=>preg_replace('#([\w\d\_]{22})#','${1}<br />',escape_html($table_row['wrappable_pagelink']))))),
 				//$parent_page,	Save space
 				//$username,
 				//$add_date,
@@ -792,7 +792,7 @@ class Module_cms_comcode_pages
 				$fields2->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'owner',$GLOBALS['FORUM_DRIVER']->get_username($owner),true));
 			}
 
-			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SEO'),'SECTION_HIDDEN'=>true,'HELP'=>(get_option('show_docs')=='0')?NULL:protect_from_escaping(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_seo','tut_seo','1'))))));
+			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'a42341a9a2de532cecdcfbecaff00a0f','TITLE'=>do_lang_tempcode('SEO'),'SECTION_HIDDEN'=>true,'HELP'=>(get_option('show_docs')=='0')?NULL:protect_from_escaping(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_seo','tut_seo','1'))))));
 			$fields2->attach(form_input_line_multi(do_lang_tempcode('KEYWORDS'),do_lang_tempcode('DESCRIPTION_META_KEYWORDS'),'meta_keywords[]',array_map('trim',explode(',',preg_replace('#,+#',',',$meta_keywords))),0));
 			$fields2->attach(form_input_line(do_lang_tempcode('META_DESCRIPTION'),do_lang_tempcode('DESCRIPTION_META_DESCRIPTION'),'meta_description',$meta_description,false));
 		}

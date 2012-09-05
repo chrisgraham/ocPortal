@@ -270,7 +270,7 @@ function comcode_helper_script()
 				$comcode_types.=static_evaluate_tempcode(do_template('BLOCK_HELPER_BLOCK_CHOICE',array('_GUID'=>'bf0d7ae2e7de61e1f079ebd80423b60d','USAGE'=>$usage,'DESCRIPTION'=>$description,'URL'=>$url,'LINK_CAPTION'=>$link_caption)));
 			}
 			if ($comcode_types!='')
-				$comcode_groups.=static_evaluate_tempcode(do_template('BLOCK_HELPER_BLOCK_GROUP',array('IMG'=>NULL,'TITLE'=>do_lang_tempcode('COMCODE_GROUP_'.$groupname),'LINKS'=>$comcode_types)));
+				$comcode_groups.=static_evaluate_tempcode(do_template('BLOCK_HELPER_BLOCK_GROUP',array('_GUID'=>'e14a9199c8a104005978567feab7413f','IMG'=>NULL,'TITLE'=>do_lang_tempcode('COMCODE_GROUP_'.$groupname),'LINKS'=>$comcode_types)));
 		}
 		$content=do_template('BLOCK_HELPER_START',array('_GUID'=>'d2d6837cdd8b19d80ea95ab9f5d09c9a','GET'=>true,'TITLE'=>$title,'LINKS'=>$comcode_groups));
 	}
@@ -580,7 +580,7 @@ function comcode_helper_script()
 
 		if (!$fields_advanced->is_empty())
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'2796d7acdd3e237aa2884371712d05d7','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 			$fields->attach($fields_advanced);
 		}
 
@@ -594,7 +594,7 @@ function comcode_helper_script()
 			$submit_name=do_lang_tempcode('SAVE');
 
 			// Allow remove option
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ACTIONS'),'HELP'=>'')));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'42dccc98beb16c7c6336eb60243fd9db','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('ACTIONS'),'HELP'=>'')));
 			$fields->attach(form_input_tick(do_lang_tempcode('REMOVE'),'','_delete',false));
 		} else
 		{
@@ -631,7 +631,7 @@ function comcode_helper_script()
 	}
 
 	$content->handle_symbol_preprocessing();
-	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('COMCODE_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'c1f229be68a1137c5b418b0d5d8a7ccf','TITLE'=>do_lang_tempcode('COMCODE_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
 	exit($echo->evaluate());
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();

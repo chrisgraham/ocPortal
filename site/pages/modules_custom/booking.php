@@ -469,7 +469,9 @@ class Module_booking
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_validation');
 
-		return do_template('BOOKING_FLESH_OUT_SCREEN',array('_GUID'=>'255280fa4f9bb37e3dae76f5bca46ace','TITLE'=>$title,
+		return do_template('BOOKING_FLESH_OUT_SCREEN',array(
+			'_GUID'=>'255280fa4f9bb37e3dae76f5bca46ace',
+			'TITLE'=>$title,
 			'BOOKABLES'=>$bookables,
 			'PRICE'=>float_format(find_booking_price($request)),
 			'POST_URL'=>build_url(array('page'=>'_SELF','type'=>'account','usergroup'=>get_param_integer('usergroup',NULL)),'_SELF'),

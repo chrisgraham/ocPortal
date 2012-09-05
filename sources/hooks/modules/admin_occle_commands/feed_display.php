@@ -78,7 +78,7 @@ class Hook_feed_display
 				$content->attach(do_template('OCCLE_RSS_ITEM',array('_GUID'=>'d6b811d17956ebd82c9911fbda19eeec','FULL_URL'=>$full_url,'NEWS_TITLE'=>$_title,'DATE'=>$date,'SUMMARY'=>xhtmlise_html($item['news']))));
 			}
 
-			return array('',do_template('OCCLE_RSS',array('TITLE'=>$rss->gleamed_feed['title'],'CONTENT'=>$content)),'','');
+			return array('',do_template('OCCLE_RSS',array('_GUID'=>'c01334f868079f9e0c2dba751550aa40','TITLE'=>$rss->gleamed_feed['title'],'CONTENT'=>$content)),'','');
 		}
 	}
 

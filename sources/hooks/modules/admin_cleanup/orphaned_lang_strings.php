@@ -138,7 +138,7 @@ class Hook_orphaned_lang_strings
 			}
 		}
 
-		return do_template('BROKEN_LANG_STRINGS',array('MISSING_LANG_STRINGS'=>array_keys($missing_lang_strings),'FUSED_LANG_STRINGS'=>$fused_lang_strings,'ORPHANED_LANG_STRINGS'=>$orphaned_lang_strings));
+		return do_template('BROKEN_LANG_STRINGS',array('_GUID'=>'318fcbe81e1e4324350114c3def020dd','MISSING_LANG_STRINGS'=>array_keys($missing_lang_strings),'FUSED_LANG_STRINGS'=>$fused_lang_strings,'ORPHANED_LANG_STRINGS'=>$orphaned_lang_strings));
 	}
 
 }

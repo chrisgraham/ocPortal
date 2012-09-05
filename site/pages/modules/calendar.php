@@ -591,7 +591,7 @@ class Module_calendar
 		{
 			$fields->attach(form_input_line(do_lang_tempcode('FEED',integer_format($i+1)),'','feed_'.strval($i),ocp_admirecookie('feed_'.strval($i)),false));
 		}
-		$rss_form=do_template('FORM',array('HIDDEN'=>'','TEXT'=>do_lang_tempcode('DESCRIPTION_FEEDS_TO_OVERLAY'),'URL'=>get_self_url(),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
+		$rss_form=do_template('FORM',array('_GUID'=>'1756a3c6a5a105ef8b2b9d2ebc9e4e86','HIDDEN'=>'','TEXT'=>do_lang_tempcode('DESCRIPTION_FEEDS_TO_OVERLAY'),'URL'=>get_self_url(),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
 
 		return do_template('CALENDAR_MAIN_SCREEN',array('_GUID'=>'147a58dbe05366ac37698a8cdd501d12','RSS_FORM'=>$rss_form,'PREVIOUS_NO_FOLLOW'=>$previous_no_follow,'NEXT_NO_FOLLOW'=>$next_no_follow,'DAY_URL'=>$day_url,'WEEK_URL'=>$week_url,'MONTH_URL'=>$month_url,'YEAR_URL'=>$year_url,'PREVIOUS_URL'=>$previous_url,'NEXT_URL'=>$next_url,'ADD_URL'=>$add_url,'TITLE'=>$title,'BACK_URL'=>$back_url,'MAIN'=>$main,'FILTER_URL'=>$filter_url,'EVENT_TYPES_1'=>$event_types_1,'INTERESTS_URL'=>$interests_url,'EVENT_TYPES_2'=>$event_types_2));
 	}

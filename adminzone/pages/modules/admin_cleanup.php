@@ -139,9 +139,9 @@ class Module_admin_cleanup
 		}
 
 		$fields=new ocp_tempcode();
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('CACHES_PAGE_EXP_OPTIMISERS'),'HELP'=>'')));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'4a9d6e722f246887160c444a062a9d00','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('CACHES_PAGE_EXP_OPTIMISERS'),'HELP'=>'')));
 		$fields->attach($fields_optimise);
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('CACHES_PAGE_EXP_CACHES'),'HELP'=>do_lang_tempcode('CACHES_PAGE_CACHES'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3ddb387dba8c42ac4ef7b85621052e11','TITLE'=>do_lang_tempcode('CACHES_PAGE_EXP_CACHES'),'HELP'=>do_lang_tempcode('CACHES_PAGE_CACHES'))));
 		$fields->attach($fields_cache);
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'85bfdf171484604594a157aa8983f920','SKIP_VALIDATION'=>true,'TEXT'=>do_lang_tempcode('CACHES_PAGE'),'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$url));

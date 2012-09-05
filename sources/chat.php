@@ -378,7 +378,7 @@ function chat_logs_script()
 	else
 		header('Content-Disposition: attachment; filename="'.$filename.'"');
 
-	$message_contents=do_template('BASIC_HTML_WRAP',array('TITLE'=>do_lang('CHAT_LOGS',escape_html(get_site_name()),escape_html($room_name),array(escape_html($start_date),escape_html($finish_date))),'CONTENT'=>$message_contents));
+	$message_contents=do_template('BASIC_HTML_WRAP',array('_GUID'=>'ff052ede2357f894a219c27a3ec75642','TITLE'=>do_lang('CHAT_LOGS',escape_html(get_site_name()),escape_html($room_name),array(escape_html($start_date),escape_html($finish_date))),'CONTENT'=>$message_contents));
 
 	echo $message_contents->evaluate();
 }
@@ -795,7 +795,7 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 		require_lang('chat');
 		$the_message=do_lang('BANNED_FROM_CHAT');
 		$_message=array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'member_id'=>get_member(),'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font'));
-		$template=do_template('CHAT_MESSAGE',array('SYSTEM_MESSAGE'=>strval($_message['system_message']),'STAFF'=>false,'OLD_MESSAGES'=>false,'AVATAR_URL'=>'','STAFF_ACTIONS'=>'','USER'=>strval($_message['member_id']),'MESSAGE'=>$the_message,'TIME'=>get_timezoned_date($_message['date_and_time']),'RAW_TIME'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name']));
+		$template=do_template('CHAT_MESSAGE',array('_GUID'=>'f0eb6b037a7cb4b70a114e7e96bde36d','SYSTEM_MESSAGE'=>strval($_message['system_message']),'STAFF'=>false,'OLD_MESSAGES'=>false,'AVATAR_URL'=>'','STAFF_ACTIONS'=>'','USER'=>strval($_message['member_id']),'MESSAGE'=>$the_message,'TIME'=>get_timezoned_date($_message['date_and_time']),'RAW_TIME'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name']));
 		$messages_output='<div sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="123456789" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
 
 		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
@@ -1015,7 +1015,7 @@ function get_chatters_in_room_tpl($users)
 					require_code('ocf_members');
 
 					$colour=get_group_colour(ocf_get_member_primary_group($member_id));
-					$usernames->attach(do_template('OCF_USER_MEMBER',array('PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),'USERNAME'=>$username,'COLOUR'=>$colour)));
+					$usernames->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'ef5f13f50d242a49474337b8e979c419','PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true,true),'USERNAME'=>$username,'COLOUR'=>$colour)));
 				} else
 				{
 					$usernames->attach($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,true,$username));
@@ -1776,5 +1776,5 @@ function get_effect_settings($full_urls=false,$for_member=NULL,$all_members=fals
 */
 function get_chat_sound_tpl()
 {
-	return do_template('CHAT_SOUND',array('SOUND_EFFECTS'=>get_effect_settings(true,NULL,true)));
+	return do_template('CHAT_SOUND',array('_GUID'=>'102c9574a2563143683970595df74011','SOUND_EFFECTS'=>get_effect_settings(true,NULL,true)));
 }

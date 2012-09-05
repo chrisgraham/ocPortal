@@ -86,7 +86,7 @@ class Block_side_rss
 			{
 				if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();
 			}
-			return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>htmlentities($rss->error)));
+			return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'b1da4a43b092dc991c27952a7ef530d1','MESSAGE'=>htmlentities($rss->error)));
 		}
 
 		// Sorting

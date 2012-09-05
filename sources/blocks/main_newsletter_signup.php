@@ -64,8 +64,8 @@ class Block_main_newsletter_signup
 			require_code('type_validation');
 			if (!is_valid_email_address($address))
 			{
-				$msg=do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>do_lang_tempcode('INVALID_EMAIL_ADDRESS')));
-				return do_template('BLOCK_MAIN_NEWSLETTER_SIGNUP',array('URL'=>get_self_url(),'MSG'=>$msg));
+				$msg=do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'9ce849d0d2dc879acba609b907317c74','MESSAGE'=>do_lang_tempcode('INVALID_EMAIL_ADDRESS')));
+				return do_template('BLOCK_MAIN_NEWSLETTER_SIGNUP',array('_GUID'=>'3759e07077d74e6537cab04c897e76d2','URL'=>get_self_url(),'MSG'=>$msg));
 			}
 
 			if (!array_key_exists('path',$map)) $map['path']='uploads/website_specific/signup.txt';
@@ -74,12 +74,12 @@ class Block_main_newsletter_signup
 			$password=basic_newsletter_join($address,4,NULL,!file_exists(get_custom_file_base().'/'.$map['path']),$newsletter_id,post_param('firstname'.strval($newsletter_id),''),post_param('lastname'.strval($newsletter_id),''));
 			if ($password=='')
 			{
-				return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>do_lang_tempcode('NEWSLETTER_THIS_ALSO')));
+				return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'bbbf2b31e71cbdbc2bcf2bdb7605142c','MESSAGE'=>do_lang_tempcode('NEWSLETTER_THIS_ALSO')));
 			}
 			if ($password==do_lang('NA'))
 			{
 				$manage_url=build_url(array('page'=>'newsletter','email'=>$address),get_module_zone('newsletter'));
-				return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>do_lang_tempcode('ALREADY_EMAIL_ADDRESS',escape_html($manage_url->evaluate()))));
+				return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'0ece8967a12afe4248cf5976e1dc903e','MESSAGE'=>do_lang_tempcode('ALREADY_EMAIL_ADDRESS',escape_html($manage_url->evaluate()))));
 			}
 
 			require_code('mail');

@@ -119,7 +119,7 @@ class Module_admin_debrand
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
 		$submit_name=do_lang_tempcode('SUPER_DEBRAND');
 
-		return do_template('FORM_SCREEN',array('HIDDEN'=>'','TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('WARNING_SUPER_DEBRAND_MAJOR_CHANGES'),'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'fd47f191ac51f7754eb17e3233f53bcc','HIDDEN'=>'','TITLE'=>$title,'URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('WARNING_SUPER_DEBRAND_MAJOR_CHANGES'),'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**

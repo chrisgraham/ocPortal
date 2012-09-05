@@ -325,7 +325,7 @@ class Module_shopping
 
 			$payment_form=payment_form();			
 
-			$proceed_box=do_template('ECOM_SHOPPING_CART_PROCEED',array('SUB_TOTAL'=>float_format($sub_tot),'SHIPPING_COST'=>float_format($shipping_cost),'GRAND_TOTAL'=>float_format($sub_tot),'CHECKOUT_URL'=>$checkout,'PROCEED'=>do_lang_tempcode('PROCEED'),'CURRENCY'=>ecommerce_get_currency_symbol(),'PAYMENT_FORM'=>$payment_form));
+			$proceed_box=do_template('ECOM_SHOPPING_CART_PROCEED',array('_GUID'=>'02c90b68ca06620d39a42727766ce8b0','SUB_TOTAL'=>float_format($sub_tot),'SHIPPING_COST'=>float_format($shipping_cost),'GRAND_TOTAL'=>float_format($sub_tot),'CHECKOUT_URL'=>$checkout,'PROCEED'=>do_lang_tempcode('PROCEED'),'CURRENCY'=>ecommerce_get_currency_symbol(),'PAYMENT_FORM'=>$payment_form));
 
 		}
 		else

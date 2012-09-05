@@ -396,7 +396,7 @@ class Module_cms_calendar extends standard_crud_module
 
 		$fields2=new ocp_tempcode();
 
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'fd78d3298730d0cb157b20f1b3dd6ae1','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 
 		// More date stuff
 		$list='';
@@ -422,7 +422,7 @@ class Module_cms_calendar extends standard_crud_module
 		$fields2->attach(form_input_list(do_lang_tempcode('PRIORITY'),'','priority',$priority_list));
 
 		// Recurrence
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('RECURRENCE'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'313be8d71088bf12c9c5e5f67f28174a','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('RECURRENCE'))));
 		if (strpos($recurrence,' ')===false)
 		{
 			$recurrence_main=$recurrence;
@@ -449,7 +449,7 @@ class Module_cms_calendar extends standard_crud_module
 
 		if (($adding) && (cron_installed()) && (has_privilege(get_member(),'set_reminders'))) // Some more stuff only when adding
 		{
-			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('REMINDERS'))));
+			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'d2117ffcebeb2125e77a31e4d5cfd9bb','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('REMINDERS'))));
 
 			$fields2->attach(form_input_tick(do_lang_tempcode('SIGN_UP_REMINDER'),do_lang_tempcode('DESCRIPTION_SIGN_UP_REMINDER'),'sign_up_reminder',true));
 			if (has_privilege(get_member(),'add_public_events'))

@@ -412,7 +412,7 @@ class Module_admin_import
 		{
 			if (array_key_exists($import,$parts_done))
 			{
-				$import_list->attach(do_template('IMPORT_ACTION_LINE',array('CHECKED'=>false,'DISABLED'=>true,'NAME'=>'import_'.$import,'TEXT'=>$text,'ADVANCED_URL'=>$info['supports_advanced_import']?build_url(array('page'=>'_SELF','type'=>'advanced_hook','session'=>$session,'content_type'=>$import,'importer'=>$importer),'_SELF'):new ocp_tempcode())));
+				$import_list->attach(do_template('IMPORT_ACTION_LINE',array('_GUID'=>'887770aad4269b74fdf11d09f4ab4fa3','CHECKED'=>false,'DISABLED'=>true,'NAME'=>'import_'.$import,'TEXT'=>$text,'ADVANCED_URL'=>$info['supports_advanced_import']?build_url(array('page'=>'_SELF','type'=>'advanced_hook','session'=>$session,'content_type'=>$import,'importer'=>$importer),'_SELF'):new ocp_tempcode())));
 			} else
 			{
 				$checked=(is_null($just)) && ($first);

@@ -76,7 +76,7 @@ class Block_side_similar_sites
 
 		$out.='</ul>';
 
-		return do_template('BLOCK_SIDE_SIMILAR_SITES',array('TITLE'=>do_lang_tempcode('BLOCK_SIMILAR_SITES_TITLE'),'CONTENT'=>$out,'CRITERIA'=>$criteria));
+		return do_template('BLOCK_SIDE_SIMILAR_SITES',array('_GUID'=>'0eeeec88a1496aa8b0db3580dcaa4ed8','TITLE'=>do_lang_tempcode('BLOCK_SIMILAR_SITES_TITLE'),'CONTENT'=>$out,'CRITERIA'=>$criteria));
 	}
 
 	function retrieveGoogleSearch($searchTerms="ocportal",$searchURL="related:ocportal.com")

@@ -34,7 +34,7 @@ class Hook_checklist_open_site
 		$status=(get_option('site_closed')=='1')?0:1;
 
 		$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
-		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('URL'=>'','STATUS'=>$_status,'TASK'=>$task));
+		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'83cfd2a7553a4820f2930484bfa85e47','URL'=>'','STATUS'=>$_status,'TASK'=>$task));
 		return array(array($tpl,($status==0)?-1:0,1,NULL));
 	}
 

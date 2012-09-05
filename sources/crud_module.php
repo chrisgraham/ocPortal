@@ -519,7 +519,7 @@ class standard_crud_module
 		if ($this->has_tied_catalogue())
 		{
 			require_code('fields');
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MORE'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'d55b3a9fc65c8586498489f55ca2f1b8','TITLE'=>do_lang_tempcode('MORE'))));
 			append_form_custom_fields($this->award_type,NULL,$fields,$hidden);
 		}
 
@@ -981,7 +981,7 @@ class standard_crud_module
 		if ($this->has_tied_catalogue())
 		{
 			require_code('fields');
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MORE'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3431365db07e3ecd6f9f4d8cf51ff396','TITLE'=>do_lang_tempcode('MORE'))));
 			append_form_custom_fields($this->award_type,$id,$fields,$hidden);
 		}
 
@@ -1031,7 +1031,7 @@ class standard_crud_module
 
 		if ((!$this->appended_actions_already) && (!$action_fields->is_empty()))
 		{
-			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'65fe1edf02edab5cae619a70cfa690d0','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		}
 		$fields2->attach($action_fields);
 
@@ -1077,7 +1077,7 @@ class standard_crud_module
 				list($_fields_existing,$_fields_hidden)=$this->get_field_fields((($i==0) && (substr($c_name,0,1)!='_')),count($rows)+10,$prefix,$field_count,$name,$description,$myrow['cf_type'],$myrow['cf_defines_order'],$myrow['cf_visible'],$myrow['cf_searchable'],$myrow['cf_default'],$myrow['cf_required'],$myrow['cf_put_in_category'],$myrow['cf_put_in_search']);
 				if ((!is_ecommerce_catalogue($c_name)) || ($i>9))
 				{
-					$_fields_existing->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+					$_fields_existing->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'c1959d74d4226cad31629b6f24a8e4b0','TITLE'=>do_lang_tempcode('ACTIONS'))));
 					$_fields_existing->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),$prefix.'delete',false));
 				}
 				$temp=do_template('FORM_FIELD_SET_GROUPER',array('_GUID'=>'1492d973db45cbecff892ad4ac1af28f'.get_class($this),'NAME'=>$name,'ID'=>'FIELD_'.strval($i+1),'FIELDS'=>$_fields_existing->evaluate()/*FUDGEFUDGE*/));

@@ -61,7 +61,7 @@ class Block_side_google_search
 
 		$out=new ocp_tempcode();
 
-		return do_template('BLOCK_SIDE_GOOGLE_SEARCH',array('TITLE'=>do_lang_tempcode('BLOCK_GOOGLE_TITLE'),'CONTENT'=>$out,'USER_SEARCH_ID'=>$user_search_id,'PAGE_ID'=>$page_id));
+		return do_template('BLOCK_SIDE_GOOGLE_SEARCH',array('_GUID'=>'e42a949234538f8c2f9a8e96bc43056d','TITLE'=>do_lang_tempcode('BLOCK_GOOGLE_TITLE'),'CONTENT'=>$out,'USER_SEARCH_ID'=>$user_search_id,'PAGE_ID'=>$page_id));
 	}
 
 }

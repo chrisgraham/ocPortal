@@ -172,12 +172,12 @@ function get_category_permissions_for_environment($module,$category,$page=NULL,$
 	$out=new ocp_tempcode;
 	if (is_null($_overridables[0]))
 	{
-		$temp=do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PERMISSIONS'),'HELP'=>$help,'SECTION_HIDDEN'=>true));
+		$temp=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'6789cb454688a1bc811af1b4011ede35','TITLE'=>do_lang_tempcode('PERMISSIONS'),'HELP'=>$help,'SECTION_HIDDEN'=>true));
 		$overridables=array();
 	} else
 	{
 		require_lang('permissions');
-		$temp=do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PERMISSIONS'),'HELP'=>do_lang_tempcode('PINTERACE_HELP'),'SECTION_HIDDEN'=>true));
+		$temp=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'d4659e64eaeb8e9f4c09255a8d3c9f33','TITLE'=>do_lang_tempcode('PERMISSIONS'),'HELP'=>do_lang_tempcode('PINTERACE_HELP'),'SECTION_HIDDEN'=>true));
 		$overridables=is_array($_overridables[0])?call_user_func_array($_overridables[0][0],$_overridables[0][1]):eval($_overridables[0]);
 	}
 	$out->attach($temp);
@@ -408,7 +408,7 @@ function get_page_permissions_for_environment($zone,$page,$help=NULL)
 
 	// Interface
 	$fields=new ocp_tempcode();
-	$temp=do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PERMISSIONS'),'HELP'=>$help,'SECTION_HIDDEN'=>true));
+	$temp=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3bf8415fd44bf48c6ab49dede3dbfea5','TITLE'=>do_lang_tempcode('PERMISSIONS'),'HELP'=>$help,'SECTION_HIDDEN'=>true));
 	$fields->attach($temp);
 	foreach ($groups as $id=>$group_name)
 	{

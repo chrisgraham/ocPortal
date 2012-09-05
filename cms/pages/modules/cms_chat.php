@@ -216,7 +216,7 @@ class Module_cms_chat
 			$_row=array($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($GLOBALS['FORUM_DRIVER']->get_member_from_username($username),false,$username),escape_html($link_time),$message);
 			if (has_js())
 			{
-				$deletion_tick=do_template('RESULTS_TABLE_TICK',array('ID'=>strval($myrow['id'])));
+				$deletion_tick=do_template('RESULTS_TABLE_TICK',array('_GUID'=>'40c6bd03e455c98589542b704259351d','ID'=>strval($myrow['id'])));
 				$_row[]=$deletion_tick;
 			}
 
@@ -371,7 +371,7 @@ class Module_cms_chat
 		$fields=form_input_text_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_MESSAGE'),'message',$message->evaluate(),true);
 		$fields->attach(form_input_line(do_lang_tempcode('CHAT_OPTIONS_COLOUR_NAME'),do_lang_tempcode('CHAT_OPTIONS_COLOUR_DESCRIPTION'),'textcolour',$text_colour,false));
 		$fields->attach(form_input_line(do_lang_tempcode('CHAT_OPTIONS_TEXT_NAME'),do_lang_tempcode('CHAT_OPTIONS_TEXT_DESCRIPTION'),'fontname',$font_name,false));
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'43ca9d141f23445a018634bdc70f1c7c','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_MESSAGE'),'delete',false));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:room:id='.strval($room_id),do_lang_tempcode('CHAT_MOD_PANEL'))));

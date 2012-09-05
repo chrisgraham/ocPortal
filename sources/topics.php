@@ -435,7 +435,7 @@ class OCP_Topic
 				$other_ids[]=strval($u['id']);
 			}
 		}
-		$ret->attach(do_template('POST_CHILD_LOAD_LINK',array('NUM_TO_SHOW_LIMIT'=>strval($num_to_show_limit),'OTHER_IDS'=>$other_ids,'ID'=>'','CHILDREN'=>(count($other_ids)==0)?'':'1')));
+		$ret->attach(do_template('POST_CHILD_LOAD_LINK',array('_GUID'=>'79e1f3feec7a6d48cd554b41e831b287','NUM_TO_SHOW_LIMIT'=>strval($num_to_show_limit),'OTHER_IDS'=>$other_ids,'ID'=>'','CHILDREN'=>(count($other_ids)==0)?'':'1')));
 
 		if (!is_null($this->topic_id))
 		{
@@ -620,7 +620,7 @@ class OCP_Topic
 						if (strpos($c['message_comcode'],'[quote')===false)
 						{
 							$c['message_comcode']='[quote="'.comcode_escape($p['username']).'"]'.$p['message_comcode'].'[/quote]'."\n\n".$c['message_comcode'];
-							$new=do_template('COMCODE_QUOTE_BY',array('SAIDLESS'=>false,'BY'=>$p['username'],'CONTENT'=>$p['message']));
+							$new=do_template('COMCODE_QUOTE_BY',array('_GUID'=>'e5c1b08d7ca2368954e9c2f032044218','SAIDLESS'=>false,'BY'=>$p['username'],'CONTENT'=>$p['message']));
 							$new->attach($c['message']);
 							$c['message']=$new;
 						}
@@ -735,7 +735,7 @@ class OCP_Topic
 				$unvalidated=($post['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode();
 				if (array_key_exists('last_edit_time',$post))
 				{
-					$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array('LAST_EDIT_DATE_RAW'=>is_null($post['last_edit_time'])?'':strval($post['last_edit_time']),'LAST_EDIT_DATE'=>$post['last_edit_time_string'],'LAST_EDIT_PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['last_edit_by'],false,true),'LAST_EDIT_USERNAME'=>$post['last_edit_by_username']));
+					$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array('_GUID'=>'6301ad8d8f80948ad8270828f1bdaf33','LAST_EDIT_DATE_RAW'=>is_null($post['last_edit_time'])?'':strval($post['last_edit_time']),'LAST_EDIT_DATE'=>$post['last_edit_time_string'],'LAST_EDIT_PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['last_edit_by'],false,true),'LAST_EDIT_USERNAME'=>$post['last_edit_by_username']));
 					$last_edited_raw=(is_null($post['last_edit_time'])?'':strval($post['last_edit_time']));
 				}
 
@@ -778,7 +778,7 @@ class OCP_Topic
 						$custom_fields=new ocp_tempcode();
 						if (array_key_exists('ip_address',$post))
 						{
-							$custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>($post['ip_address']))));
+							$custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'f7e62822e879682cf1588d9f49484bfa','NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>($post['ip_address']))));
 							$poster_details=do_template('OCF_GUEST_DETAILS',array('_GUID'=>'df42e7d5003834a60fdb3bf476b393c5','CUSTOM_FIELDS'=>$custom_fields));
 						} else
 						{
@@ -788,7 +788,7 @@ class OCP_Topic
 				}
 				if (!is_guest($post['poster']))
 				{
-					$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>member_is_online($post['poster']),'ID'=>strval($post['poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['poster'],false,true),'POSTER_USERNAME'=>$post['poster_username']));
+					$poster=do_template('OCF_POSTER_MEMBER',array('_GUID'=>'da673c38b3cfbe9bf53d4334ca0eacfd','ONLINE'=>member_is_online($post['poster']),'ID'=>strval($post['poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['poster'],false,true),'POSTER_USERNAME'=>$post['poster_username']));
 				} else
 				{
 					$ip_link=((array_key_exists('ip_address',$post)) && (addon_installed('securitylogging')) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$post['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();

@@ -161,7 +161,7 @@ class Module_admin_addons
 		// Show installed addons
 		foreach ($addons_installed as $row)
 		{
-			$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('GET'=>true,'NAME'=>$row['addon_name'],'URL'=>build_url(array('page'=>'_SELF','type'=>'addon_uninstall','name'=>$row['addon_name']),'_SELF')));
+			$actions=do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY',array('_GUID'=>'5a65c9aa87291ecfe46f75e9b2949246','GET'=>true,'NAME'=>$row['addon_name'],'URL'=>build_url(array('page'=>'_SELF','type'=>'addon_uninstall','name'=>$row['addon_name']),'_SELF')));
 			$updated=array_key_exists($row['addon_name'],$updated_addons_arr);
 			$status=do_lang_tempcode($updated?'STATUS_OUTOFDATE':'STATUS_INSTALLED');
 			$colour=$updated?'red':'green';
@@ -721,7 +721,7 @@ class Module_admin_addons
 			if (!is_null($theme))
 			{
 				// Option for selecting exactly what files are used
-				$field=do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('COUNT_FILES')));
+				$field=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'40cf0d0d5b6fee74fbd476e720a59675','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('COUNT_FILES')));
 				$fields.=$field->evaluate();
 				$files=$this->do_dir('themes/'.$theme);
 				$i=0;
@@ -734,7 +734,7 @@ class Module_admin_addons
 
 				// Option for selecting Comcode pages
 				require_lang('themes');
-				$field=do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PAGES'),'HELP'=>do_lang_tempcode('THEME_ALSO_INCLUDE_PAGES')));
+				$field=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'e3f8c43ac243a7666a318319e8b6dd60','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PAGES'),'HELP'=>do_lang_tempcode('THEME_ALSO_INCLUDE_PAGES')));
 				$fields.=$field->evaluate();
 				$files=$this->do_dir('');
 				ksort($files);

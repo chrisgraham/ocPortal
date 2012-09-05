@@ -136,7 +136,7 @@ class Module_cms_wiki
 		$radios->attach(form_input_radio_entry('send_notification','1',$notify,do_lang_tempcode('YES')));
 		$fields2->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),'send_notification',$radios));
 
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'5ae885a9f92415498340c41edfb47501','SECTION_HIDDEN'=>$notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 		if (get_value('disable_staff_notes')!=='1')
 			$fields2->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
 
@@ -297,7 +297,7 @@ class Module_cms_wiki
 
 		if (has_delete_permission('cat_low',get_member(),NULL,NULL,array('wiki_page',$id)) && ($id!=db_get_first_id()))
 		{
-			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'189cb80853d73ea1f63d5b0463ef7a37','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields2->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 		}
 

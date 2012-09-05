@@ -114,7 +114,7 @@ class Module_bookmarks
 		require_lang('zones');
 
 		$fields=new ocp_tempcode();
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MOVE'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'2efc21de71434c715f920c7dbd14e687','TITLE'=>do_lang_tempcode('MOVE'))));
 		$rows=$GLOBALS['SITE_DB']->query_select('bookmarks',array('DISTINCT b_folder'),array('b_owner'=>get_member()),'ORDER BY b_folder');
 		$list=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
 		$list->attach(form_input_list_entry('!',false,do_lang_tempcode('ROOT_EM')));
@@ -134,10 +134,10 @@ class Module_bookmarks
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'ec1bb050b1a6b31a8c2774c6994f3fb2','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_manage'),'_SELF');
-		$form=do_template('FORM',array('HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('MOVE_OR_DELETE_BOOKMARKS')));
+		$form=do_template('FORM',array('_GUID'=>'5d9a17c5be18674991c3b17a4a4e7bfe','HIDDEN'=>'','FIELDS'=>$fields,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('MOVE_OR_DELETE_BOOKMARKS')));
 
 		$bookmarks=array();
 		$_bookmarks=$GLOBALS['SITE_DB']->query_select('bookmarks',array('*'),array('b_owner'=>get_member()),'ORDER BY b_folder');

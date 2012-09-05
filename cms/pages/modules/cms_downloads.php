@@ -530,7 +530,7 @@ class Module_cms_downloads extends standard_crud_module
 			if (addon_installed('unvalidated'))
 				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$additional_details=='' && is_null($out_mode_id) && ($cost==0) && is_null($licence),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3014367d92010c4ff78684f7c792efa0','SECTION_HIDDEN'=>$additional_details=='' && is_null($out_mode_id) && ($cost==0) && is_null($licence),'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('ADDITIONAL_INFO'),do_lang_tempcode('DESCRIPTION_ADDITIONAL_INFO'),'additional_details',$additional_details,false));
 		if (!is_null($id))
 			$fields->attach(form_input_integer(do_lang_tempcode('DEFAULT_PICTURE'),do_lang_tempcode('DESCRIPTION_DEFAULT_PICTURE'),'default_pic',$default_pic,false));

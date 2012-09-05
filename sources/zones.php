@@ -906,7 +906,7 @@ function do_block_hunt_file($codename,$map=NULL)
 			}
 		} elseif ((is_null($map)) || (!array_key_exists('failsafe',$map)) || ($map['failsafe']!='1'))
 		{
-			$temp=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($codename))));
+			$temp=do_template('WARNING_BOX',array('_GUID'=>'09f1bd6e117693a85fb69bfb52ea1799','WARNING'=>do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($codename))));
 			return $temp->evaluate();
 		} else $object='';
 		return $object;

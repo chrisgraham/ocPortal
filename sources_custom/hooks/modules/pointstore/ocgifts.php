@@ -117,7 +117,7 @@ class Hook_pointstore_ocgifts
 
 		$post_url=build_url(array('page'=>'pointstore','type'=>'action_done2','id'=>'ocgifts','gift'=>get_param('gift',0)),'_SEARCH');
 
-		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>'','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'0d2878fbba63b22f7225a05ec2672537','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>'','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**

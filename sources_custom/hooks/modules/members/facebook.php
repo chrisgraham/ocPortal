@@ -23,6 +23,6 @@ class Hook_members_facebook
 	 */
 	function get_sections($member_id)
 	{
-		return array(do_template('MEMBER_FACEBOOK',array('MEMBER_ID'=>strval($member_id))));
+		return array(do_template('MEMBER_FACEBOOK',array('_GUID'=>'233c4cf6852e67fd2687dadb2ddff4c1','MEMBER_ID'=>strval($member_id))));
 	}
 }

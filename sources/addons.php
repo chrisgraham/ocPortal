@@ -860,7 +860,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 		if (!$_incompatibilities->is_empty()) $_incompatibilities->attach(do_lang_tempcode('LIST_SEP'));
 		$_incompatibilities->attach(escape_html($in));
 	}
-	if (count($incompatibilities)!=0) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_INCOMPATIBILITIES',$_incompatibilities,escape_html($file)))));
+	if (count($incompatibilities)!=0) $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'7ee5935df99b7b863477ec96989df0eb','WARNING'=>do_lang_tempcode('ADDON_WARNING_INCOMPATIBILITIES',$_incompatibilities,escape_html($file)))));
 
 	// Check dependencies
 	$_dependencies=explode(',',array_key_exists('dependencies',$info)?$info['dependencies']:'');
@@ -908,7 +908,7 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 			warn_exit(do_lang_tempcode('_ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str->evaluate(),escape_html($addon),array(escape_html($url),$post_fields)));
 		} else
 		{
-			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str,escape_html($file)))));
+			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'ba2146fb91a940e0b2793d985563fb9e','WARNING'=>do_lang_tempcode('ADDON_WARNING_MISSING_DEPENDENCIES',$_dependencies_str,escape_html($file)))));
 		}
 	}
 
@@ -993,7 +993,7 @@ function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=N
 	}
 	foreach ($loopable as $i=>$filename)
 	{
-		$files->attach(do_template('ADDON_INSTALL_FILES',array('I'=>strval($i),'DISABLED'=>true,'PATH'=>$filename)));
+		$files->attach(do_template('ADDON_INSTALL_FILES',array('_GUID'=>'235d09a3cc041cea03f5421f639e8edf','I'=>strval($i),'DISABLED'=>true,'PATH'=>$filename)));
 	}
 
 	// Check dependencies
@@ -1027,7 +1027,7 @@ function inform_about_addon_uninstall($name,$also_uninstalling=NULL,$addon_row=N
 			warn_exit(do_lang_tempcode('_ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies_str->evaluate(),escape_html($name),array(escape_html($url),$post_fields)));
 		} else
 		{
-			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('WARNING'=>do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies_str,escape_html($name)))));
+			$warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'95b9f58ac4f19afe974082a4185642a4','WARNING'=>do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES',$_dependencies_str,escape_html($name)))));
 		}
 	}
 

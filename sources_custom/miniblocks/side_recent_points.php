@@ -39,7 +39,7 @@ foreach ($gifts as $gift)
 	if ($amount<=0) continue;
 
 	$from_link=hyperlink($from_url,$from_name,false,true);
-	$to_link=do_template('MEMBER_TOOLTIP',array('SUBMITTER'=>strval($gift['gift_to'])));//hyperlink($to_url,$to_name,false,true);
+	$to_link=do_template('MEMBER_TOOLTIP',array('_GUID'=>'0cdd0adf612cf0f50a732daa79718d09','SUBMITTER'=>strval($gift['gift_to'])));//hyperlink($to_url,$to_name,false,true);
 
 	echo '<tr>';
 //	echo '<td>'.$from_link->evaluate().'</td>';

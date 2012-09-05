@@ -110,7 +110,7 @@ function poll_script($ret=false,$param=NULL)
 	if ($ret) return $content;
 
 	// Display
-	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('POLL'),'FRAME'=>true,'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'7ffcf15ffb0632909444b9489b74bf18','TITLE'=>do_lang_tempcode('POLL'),'FRAME'=>true,'CONTENT'=>$content));
 	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 	return NULL;

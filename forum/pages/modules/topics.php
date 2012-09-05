@@ -862,7 +862,7 @@ class Module_topics
 		$action_list->attach(do_lang_tempcode('MULTI_MODERATION_WILL_POST'));
 		$text=do_lang_tempcode('MULTI_MODERATION_WILL',make_string_tempcode($mm_title),$action_list);
 
-		return do_template('FORM_SCREEN',array('STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_forum_helpdesk','PREVIEW'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'69908b7e2711414c13395535d6547096','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_forum_helpdesk','PREVIEW'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
@@ -1119,7 +1119,7 @@ class Module_topics
 			$path=$row['e_theme_img_code'];
 
 			$url=find_theme_image($path);
-			$content->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('PRETTY'=>'','CHECKED'=>$path==$selected_path,'NAME'=>'emoticon','CODE'=>$path,'URL'=>$url)));
+			$content->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID'=>'22050272aebe90adf8cd4c89e4a7b06a','PRETTY'=>'','CHECKED'=>$path==$selected_path,'NAME'=>'emoticon','CODE'=>$path,'URL'=>$url)));
 		}
 
 		$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('_GUID'=>'80fe581b26d04876180605cdbb111f6a','NAME'=>'emoticon','REQUIRED'=>false,'CODE'=>$selected_path,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
@@ -1670,7 +1670,7 @@ class Module_topics
 		{
 			require_code('ocf_forums2');
 
-			$specialisation2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('TOPIC_MODERATION'))));
+			$specialisation2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'061fdbebcc17e08e8d6ff2c329f3d483','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('TOPIC_MODERATION'))));
 			$specialisation2->attach(form_input_line(do_lang_tempcode('TITLE'),'','new_title',$topic_title,false));
 			$specialisation2->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_FORUM'),do_lang_tempcode('DESCRIPTION_DESTINATION_FORUM'),'to',NULL,'choose_forum',array(),false,is_null($forum_id)?'':strval($forum_id)));
 			$options=array(
@@ -2208,7 +2208,7 @@ END;
 
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE_POSTS_FROM_IP'),do_lang_tempcode('DELETE_POSTS_FROM_IP_DESCRIPTION'),'post_all',false));
 
-			return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+			return do_template('FORM_SCREEN',array('_GUID'=>'c10e882fa621b5230f455b41f40514c0','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 		}
 
 		return $this->relay_with_reason('DELETE_POST');
@@ -2264,7 +2264,7 @@ END;
 					}
 				}
 
-				return do_template('CONFIRM_SCREEN',array('TITLE'=>get_screen_title('DELETE_POSTS'),'TEXT'=>do_lang_tempcode('CONFIRM_DELETE',$stuff),'URL'=>$post_url,'HIDDEN'=>$hidden));
+				return do_template('CONFIRM_SCREEN',array('_GUID'=>'ec5fd36fd869e42c59a0e7e3efa8a123','TITLE'=>get_screen_title('DELETE_POSTS'),'TEXT'=>do_lang_tempcode('CONFIRM_DELETE',$stuff),'URL'=>$post_url,'HIDDEN'=>$hidden));
 			}
 
 			foreach ($posts as $post)
@@ -2426,7 +2426,7 @@ END;
 		}
 		if (count($polls)!=0)
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ALT_COPY_EXISTING_POLL'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'1fb2af282b014c3a6ae09d986e4f72eb','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ALT_COPY_EXISTING_POLL'))));
 
 			$list=new ocp_tempcode();
 			$list->attach(form_input_list_entry('',true,''));
@@ -2610,7 +2610,7 @@ END;
 		}
 
 		if (count($moderation_options)!=0) $specialisation2->attach(form_input_various_ticks($moderation_options,'',NULL,do_lang_tempcode('MODERATION_OPTIONS')));
-		$specialisation2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+		$specialisation2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'bdab02bfa4ea2f50feedf8a15762c5f1','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$options=array();
 		$options[]=array(do_lang_tempcode('MARK_UNREAD'),'mark_as_unread',false,do_lang_tempcode('DESCRIPTION_MARK_UNREAD'));
 		$options[]=array(do_lang_tempcode('SHOW_AS_EDITED'),'show_as_edited',((time()-$post_details[0]['p_time'])>60*3),do_lang_tempcode('DESCRIPTION_POST_SHOW_AS_EDITED'));
@@ -2979,7 +2979,7 @@ END;
 		$submit_name=do_lang_tempcode('INVITE_MEMBER_TO_PT');
 		$text=paragraph(do_lang_tempcode('INVITE_MEMBER_TO_PT_TEXT'));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_invite_member','topic_id'=>$topic_id),'_SELF');
-		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'9f28869bd74262ae20ba79ace14b87ca','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -3148,7 +3148,7 @@ END;
 		$fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_FORUM'),do_lang_tempcode('DESCRIPTION_DESTINATION_FORUM'),'to',NULL,'choose_forum',array(),true,strval($forum_id)));
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),do_lang_tempcode('DESCRIPTION_REASON'),'description','',false));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'20a9918ec1abc48c55dd7ba9ce5545a8','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('REDIRECT_TO_TOPIC'),do_lang_tempcode('DESCRIPTION_REDIRECT_TO_TOPIC'),'redir_topic',false));
 
 		$topic_title=$topic_info[0]['t_cache_first_title'];
@@ -3426,7 +3426,7 @@ END;
 		$fields->attach(form_input_username(do_lang_tempcode('FROM'),'','a',$a,true));
 		$fields->attach(form_input_username(do_lang_tempcode('TO'),'','b',$b,true));
 
-		return do_template('FORM_SCREEN',array('STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'9416df197ee157510e9d6be7458d510f','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**

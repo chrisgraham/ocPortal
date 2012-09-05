@@ -410,7 +410,7 @@ class Module_chat
 				$users=get_chatters_in_room($myrow['id']);
 				$usernames=get_chatters_in_room_tpl($users);
 				$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$myrow['id']),'_SELF');
-				$room_link=do_template('CHAT_ROOM_LINK',array('PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>$myrow['room_name'],'USERNAMES'=>$usernames,'URL'=>$url));
+				$room_link=do_template('CHAT_ROOM_LINK',array('_GUID'=>'7a7c65df7fbb6b27c1ef8ce30eb55654','PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>$myrow['room_name'],'USERNAMES'=>$usernames,'URL'=>$url));
 				$fields->attach($room_link);
 			}
 		}
@@ -688,7 +688,7 @@ class Module_chat
 		$fields=new ocp_tempcode();
 
 		$blocked=$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>get_member()));
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('EXISTING_BLOCKS'),'HELP'=>(count($blocked)!=0)?new ocp_tempcode():do_lang_tempcode('NONE_EM'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'85cbdbced505a6621ccbedc2de50c5f9','TITLE'=>do_lang_tempcode('EXISTING_BLOCKS'),'HELP'=>(count($blocked)!=0)?new ocp_tempcode():do_lang_tempcode('NONE_EM'))));
 		foreach ($blocked as $row)
 		{
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($row['member_blocked']);
@@ -696,7 +696,7 @@ class Module_chat
 				$fields->attach(form_input_tick(do_lang_tempcode('BLOCK_THEM',escape_html($username)),do_lang_tempcode('_BLOCK_MEMBER',$username),'block_'.strval($row['member_blocked']),true));
 		}
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ADD_BLOCK'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'a7e0f8368fd7f9ab09dddff27e649554','TITLE'=>do_lang_tempcode('ADD_BLOCK'))));
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),do_lang_tempcode('BLOCK_MEMBER_MANUAL'),'username','',false));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'blocking_set'),'_SELF');

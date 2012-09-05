@@ -36,7 +36,7 @@ function do_next_manager_admin_simplified()
 	$sections->attach(do_next_manager_hooked('TOOLS',NULL,'tools'));
 	$sections->attach(do_next_manager_hooked('SECURITY',NULL,'security'));
 	set_helper_panel_text(do_lang_tempcode('SIMPLIFIED_STAFF_ADMIN'));
-	return do_template('DO_NEXT_SCREEN',array('INTRO'=>'','QUESTION'=>do_lang_tempcode('WHAT_NEXT'),'TITLE'=>get_screen_title(has_zone_access(get_member(),'adminzone')?'ADMIN_ZONE':'CMS'),'SECTIONS'=>$sections));
+	return do_template('DO_NEXT_SCREEN',array('_GUID'=>'3c5fa0d04c28c81cac64a481e1c96800','INTRO'=>'','QUESTION'=>do_lang_tempcode('WHAT_NEXT'),'TITLE'=>get_screen_title(has_zone_access(get_member(),'adminzone')?'ADMIN_ZONE':'CMS'),'SECTIONS'=>$sections));
 }
 
 /**

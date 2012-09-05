@@ -36,6 +36,6 @@ $GLOBALS['SITE_INFO']['block_mod_rewrite']='1';
 $content=do_block('main_mantis_tracker',$_GET);
 
 // Display
-$echo=do_template('STYLED_HTML_WRAP',array('FRAME'=>true,'TARGET'=>'_blank','TITLE'=>'Tracker','CONTENT'=>$content));
+$echo=do_template('STYLED_HTML_WRAP',array('_GUID'=>'9f623034340bd8efcb9352b27908bc92','FRAME'=>true,'TARGET'=>'_blank','TITLE'=>'Tracker','CONTENT'=>$content));
 $echo->handle_symbol_preprocessing();
 $echo->evaluate_echo();

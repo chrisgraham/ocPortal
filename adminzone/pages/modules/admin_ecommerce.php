@@ -325,7 +325,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		}
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang('TRANSACTION_NOTES'),'memo','',false));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'f4e52dff9353fb767afbe0be9808591c','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_float(do_lang_tempcode('AMOUNT'),do_lang_tempcode('MONEY_AMOUNT_DESCRIPTION',ecommerce_get_currency_symbol()),'amount',NULL,false));
 
 		$hidden=new ocp_tempcode();

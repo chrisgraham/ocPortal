@@ -115,7 +115,7 @@ class Hook_pointstore_permission
 		$fields->attach(form_input_line(do_lang_tempcode('PERMISSION_SCOPE_category'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_category'),'permission_category'.$name_suffix,$category,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('ENABLED'),'','permission_enabled'.$name_suffix,$enabled==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PURCHASE_MAIL'),'HELP'=>do_lang_tempcode('DESCRIPTION_PURCHASE_MAIL'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b89804ab98762d661f4337b1dfb62d46','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PURCHASE_MAIL'),'HELP'=>do_lang_tempcode('DESCRIPTION_PURCHASE_MAIL'))));
 		$fields->attach(form_input_line(do_lang_tempcode('PURCHASE_MAIL_SUBJECT'),'','permission_mail_subject'.$name_suffix,$mail_subject,false));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('PURCHASE_MAIL_BODY'),'','permission_mail_body'.$name_suffix,$mail_body,false));
 
@@ -140,7 +140,7 @@ class Hook_pointstore_permission
 			$hours=$row['p_hours'];
 			if ($hours==400000) $hours=NULL; // Around 100 years, but meaning unlimited
 			$fields->attach($this->get_fields('_'.strval($i),get_translated_text($row['p_title']),get_translated_text($row['p_description']),$row['p_enabled'],$row['p_cost'],$hours,$row['p_type'],$row['p_privilege'],$row['p_zone'],$row['p_page'],$row['p_module'],$row['p_category'],get_translated_text($row['p_mail_subject']),get_translated_text($row['p_mail_body'])));
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'4055cbfc1c94723f4ad72a80ede0b554','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete_permission_'.strval($i),false));
 			$hidden->attach(form_input_hidden('permission_'.strval($i),strval($row['id'])));
 			$out[]=array($fields,$hidden,do_lang_tempcode('EDIT_PERMISSION_PRODUCT'));

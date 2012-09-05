@@ -321,7 +321,7 @@ class Block_main_staff_website_monitoring
 
 		$map_comcode='';
 		foreach ($map as $key=>$val) $map_comcode.=' '.$key.'="'.addslashes($val).'"';
-		return do_template('BLOCK_MAIN_STAFF_WEBSITE_MONITORING',array('URL'=>get_self_url(),'BLOCK_NAME'=>'main_staff_website_monitoring','MAP'=>$map_comcode,'SITEURLS'=>$sitesbeingwatched,'GRIDDATA'=>$sitegriddata));
+		return do_template('BLOCK_MAIN_STAFF_WEBSITE_MONITORING',array('_GUID'=>'0abf65878c508bf133836589a8cc45da','URL'=>get_self_url(),'BLOCK_NAME'=>'main_staff_website_monitoring','MAP'=>$map_comcode,'SITEURLS'=>$sitesbeingwatched,'GRIDDATA'=>$sitegriddata));
 	}
 }
 

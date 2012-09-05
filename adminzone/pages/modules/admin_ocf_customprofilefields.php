@@ -277,7 +277,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 			{
 				$orderlist->attach(form_input_list_entry(strval($order),true,integer_format($order+1)));
 			}
-			$orderer=do_template('COLUMNED_TABLE_ROW_CELL_SELECT',array('LABEL'=>do_lang_tempcode('ORDER'),'NAME'=>'order_'.strval($row['id']),'LIST'=>$orderlist));
+			$orderer=do_template('COLUMNED_TABLE_ROW_CELL_SELECT',array('_GUID'=>'0c35279246e34d94fd4a41c432cdffed','LABEL'=>do_lang_tempcode('ORDER'),'NAME'=>'order_'.strval($row['id']),'LIST'=>$orderlist));
 
 			$fr=array();
 			$fr[]=$trans;
@@ -453,7 +453,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 			if (!is_null($row[$f_name]))
 			{
 				$val=$row[$f_name];
-				$lines->attach(do_template('OCF_CPF_STATS_LINE',array('CNT'=>integer_format($row['cnt']),'VAL'=>is_integer($val)?integer_format($val):$val)));
+				$lines->attach(do_template('OCF_CPF_STATS_LINE',array('_GUID'=>'874c9b780f625ff4566e7b909f554288','CNT'=>integer_format($row['cnt']),'VAL'=>is_integer($val)?integer_format($val):$val)));
 			}
 		}
 		if ($lines->is_empty()) warn_exit(do_lang_tempcode('NO_DATA'));

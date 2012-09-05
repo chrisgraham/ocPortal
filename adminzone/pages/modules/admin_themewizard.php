@@ -110,7 +110,7 @@ class Module_admin_themewizard
 
 		$fields->attach(form_input_codename(do_lang_tempcode('NEW_THEME'),do_lang_tempcode('DESCRIPTION_NAME'),'themename',get_param('themename',''),true));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PARAMETERS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'0373ce292326fa209a6a44d829f547d4','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PARAMETERS'))));
 
 		$fields->attach(form_input_colour(do_lang_tempcode('SEED_COLOUR'),do_lang_tempcode('DESCRIPTION_SEED_COLOUR'),'seed','#'.preg_replace('/^\#/','',get_param('seed',find_theme_seed('default'))),true));
 
@@ -126,7 +126,7 @@ class Module_admin_themewizard
 
 		$fields->attach(form_input_tick(do_lang_tempcode('DARK_THEME'),do_lang_tempcode('DESCRIPTION_DARK_THEME'),'dark',get_param_integer('dark',0)==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'e809c785aff72bbfeec3829a0b2f464d','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('INHERIT_CSS'),do_lang_tempcode('DESCRIPTION_INHERIT_CSS'),'inherit_css',get_param_integer('inherit_css',0)==1));
 
 		breadcrumb_set_self(do_lang_tempcode('THEMEWIZARD'));
@@ -351,7 +351,7 @@ class Module_admin_themewizard
 		$title=get_screen_title('_LOGOWIZARD',true,array(integer_format(2),integer_format(3)));
 		set_helper_panel_pic('pagepics/logowizard');
 
-		$preview=do_template('LOGOWIZARD_2',array('NAME'=>post_param('name'),'TITLE'=>post_param('title'),'THEME'=>post_param('theme')));
+		$preview=do_template('LOGOWIZARD_2',array('_GUID'=>'6e5a442860e5b7644b50c2345c3c8dee','NAME'=>post_param('name'),'TITLE'=>post_param('title'),'THEME'=>post_param('theme')));
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:make_logo',do_lang_tempcode('LOGOWIZARD'))));
 

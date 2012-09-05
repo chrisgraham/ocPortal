@@ -331,7 +331,7 @@ class Module_admin_setupwizard
 			}
 		}
 
-		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'00948cc876d0ecb8b511800eabd8cae2','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields.=$fields_hidden;
 
 		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
@@ -367,7 +367,7 @@ class Module_admin_setupwizard
 			$field_defaults=is_array($_hook_bits[0])?call_user_func_array($_hook_bits[0][0],$_hook_bits[0][1]):@eval($_hook_bits[0]);
 		} else $field_defaults=array();
 
-		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('FEATURES'))));
+		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'9f81456d95f2ff66a46e2a5b9901aaf3','TITLE'=>do_lang_tempcode('FEATURES'))));
 
 		$hooks=find_all_hooks('modules','admin_setupwizard');
 		foreach (array_keys($hooks) as $hook)
@@ -395,7 +395,7 @@ class Module_admin_setupwizard
 		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('SHOW_CONTENT_TAGGING_INLINE'),do_lang_tempcode('CONFIG_OPTION_show_content_tagging_inline'),'show_content_tagging_inline',array_key_exists('show_content_tagging_inline',$field_defaults)?($field_defaults['show_content_tagging_inline']=='1'):(get_option('show_content_tagging_inline')=='1')));
 		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('SHOW_SCREEN_ACTIONS'),do_lang_tempcode('CONFIG_OPTION_show_screen_actions'),'show_screen_actions',array_key_exists('show_screen_actions',$field_defaults)?($field_defaults['show_screen_actions']=='1'):(get_option('show_screen_actions')=='1')));
 
-		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('STRUCTURE'),'HELP'=>do_lang_tempcode('SETUP_WIZARD_5x_DESCRIBE'))));
+		$fields.=static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'63300e2146d6104e147db94d2c19a65d','TITLE'=>do_lang_tempcode('STRUCTURE'),'HELP'=>do_lang_tempcode('SETUP_WIZARD_5x_DESCRIBE'))));
 
 		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('COLLAPSE_USER_ZONES'),do_lang_tempcode('CONFIG_OPTION_collapse_user_zones'),'collapse_user_zones',array_key_exists('collapse_user_zones',$field_defaults)?($field_defaults['collapse_user_zones']=='1'):(get_option('collapse_user_zones')=='1')));
 		$fields.=static_evaluate_tempcode(form_input_tick(do_lang_tempcode('GUEST_ZONE_ACCESS'),do_lang_tempcode('DESCRIPTION_GUEST_ZONE_ACCESS'),'guest_zone_access',array_key_exists('guest_zone_access',$field_defaults)?($field_defaults['guest_zone_access']=='1'):true));
@@ -462,7 +462,7 @@ class Module_admin_setupwizard
 		require_lang('zones');
 		require_code('zones2');
 
-		$tmp=do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('FRONT_PAGE')));
+		$tmp=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'dfc20251e4f6b37ec1e046d0903250aa','TITLE'=>do_lang_tempcode('FRONT_PAGE')));
 		$fields.=$tmp->evaluate(); /*XHTMLXHTML*/
 		foreach ($main_blocks as $block=>$position_bits)
 		{
@@ -492,7 +492,7 @@ class Module_admin_setupwizard
 			$fields.=$tmp->evaluate(); /*XHTMLXHTML*/
 		}
 
-		$tmp=do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PANELS')));
+		$tmp=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'13e0d3002669654d9b45b4739ecbf28c','TITLE'=>do_lang_tempcode('PANELS')));
 		$fields.=$tmp->evaluate(); /*XHTMLXHTML*/
 		foreach ($side_blocks as $block=>$position_bits)
 		{

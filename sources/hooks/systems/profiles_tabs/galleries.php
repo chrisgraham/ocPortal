@@ -89,6 +89,7 @@ class Hook_Profiles_Tabs_galleries
 		}
 
 		$content=do_template('OCF_MEMBER_PROFILE_GALLERIES',array(
+			'_GUID'=>'ede1039bfd9bacfabb1d38e9e6821465',
 			'MEMBER_ID'=>strval($member_id_of),
 			'GALLERIES'=>$galleries,
 			'ADD_GALLERY_URL'=>$add_gallery_url,

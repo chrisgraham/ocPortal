@@ -864,7 +864,7 @@ class Module_wiki
 
 			if (has_delete_permission('low',get_member(),$original_poster,'cms_wiki',array('wiki_page',$myrow['page_id'])))
 			{
-				$specialisation->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+				$specialisation->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'569be0b840914473a0928606a045f838','TITLE'=>do_lang_tempcode('ACTIONS'))));
 				$specialisation->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 			}
 

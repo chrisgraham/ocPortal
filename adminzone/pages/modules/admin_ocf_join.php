@@ -298,7 +298,7 @@ class Module_admin_ocf_join
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_group_member_timeouts'),'_SELF');
 		$submit_name=do_lang_tempcode('ADD');
 
-		$form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		$form=do_template('FORM',array('_GUID'=>'2afadffabe2becb6eac071db085edc57','TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 
 		return do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'e9ce4084126653162ad84839fb7f47e3','TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'FORM'=>$form));
 	}

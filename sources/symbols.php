@@ -256,7 +256,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						if ($GLOBALS['FEED_URL_2']!==NULL)
 							$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'fa8c7aaa3601c24d1986fa2598416558','FEED_URL'=>$GLOBALS['FEED_URL_2'],'TITLE'=>do_lang('COMMENTS'))));
 						if (addon_installed('news'))
-							$feeds->attach(do_template('RSS_HEADER',array('FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
+							$feeds->attach(do_template('RSS_HEADER',array('_GUID'=>'53e135b04502d6df64f1570b61310f30','FEED_URL'=>find_script('backend').'?mode=news','TITLE'=>do_lang('NEWS'))));
 					}
 				}
 				$value=$feeds->evaluate();
@@ -987,7 +987,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						$rank_image_pri_only=ocf_get_group_property($group,'rank_image_pri_only');
 						if (($rank_image!='') && (($rank_image_pri_only==0) || ($group==$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_primary_group'))))
 						{
-							$rank_images->attach(do_template('OCF_RANK_IMAGE',array('USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id),'GROUP_NAME'=>$group_name,'IMG'=>$rank_image,'IS_LEADER'=>$group_leader==$member_id)));
+							$rank_images->attach(do_template('OCF_RANK_IMAGE',array('_GUID'=>'513032ef4693abc353f9934e8799943b','USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id),'GROUP_NAME'=>$group_name,'IMG'=>$rank_image,'IS_LEADER'=>$group_leader==$member_id)));
 						}
 					}
 					$value=$rank_images->evaluate();
@@ -2784,7 +2784,7 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 			case 'expand':
 				$temp=(($is_html || $grammar_completeness_tolerance!=0.0)?xhtml_substr($html,0,$amount-3,$literal_pos,false,$grammar_completeness_tolerance):escape_html(ocp_mb_substr($not_html,0,$amount-3)));
 				if ($temp!=$html && in_array(substr($temp,-1),array('.','?','!'))) $temp.='<br />'; // so the "..." does not go right after the sentence terminator
-				$_truncated=do_template('COMCODE_HIDE',array('TEXT'=>protect_from_escaping($temp),'CONTENT'=>protect_from_escaping($html)));
+				$_truncated=do_template('COMCODE_HIDE',array('_GUID'=>'3ead7fdb5b510930f54310e3c32147c2','TEXT'=>protect_from_escaping($temp),'CONTENT'=>protect_from_escaping($html)));
 				$truncated=$_truncated->evaluate();
 				break;
 			case 'right':

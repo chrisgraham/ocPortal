@@ -83,7 +83,7 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 		$forum_id=get_option('intro_forum_id');
 		if ($forum_id!='')
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('INTRODUCE_YOURSELF'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b8197832e4467b08e953535202235501','TITLE'=>do_lang_tempcode('INTRODUCE_YOURSELF'))));
 			$fields->attach(form_input_line(do_lang_tempcode('TITLE'),'','intro_title',do_lang('INTRO_POST_DEFAULT','___'),false));
 			$fields->attach(form_input_text_comcode(do_lang_tempcode('POST_COMMENT'),do_lang_tempcode('DESCRIPTION_INTRO_POST'),'intro_post','',false));
 		}
@@ -192,7 +192,7 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 			};
 	";
 
-	$form=do_template('FORM',array('TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$url));
+	$form=do_template('FORM',array('_GUID'=>'f6dba5638ae50a04562df50b1f217311','TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$url));
 
 	return array($javascript,$form);
 }

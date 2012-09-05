@@ -53,7 +53,7 @@ class Hook_pointstore_custom
 		$fields->attach(form_input_tick(do_lang_tempcode('ONE_PER_MEMBER'),do_lang_tempcode('DESCRIPTION_ONE_PER_MEMBER'),'custom_one_per_member'.$name_suffix,$one_per_member==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('ENABLED'),'','custom_enabled'.$name_suffix,$enabled==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PURCHASE_MAIL'),'HELP'=>do_lang_tempcode('DESCRIPTION_PURCHASE_MAIL'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'6e4f9d4f6fc7ba05336681c5311bc42f','SECTION_HIDDEN'=>false,'TITLE'=>do_lang_tempcode('PURCHASE_MAIL'),'HELP'=>do_lang_tempcode('DESCRIPTION_PURCHASE_MAIL'))));
 		$fields->attach(form_input_line(do_lang_tempcode('PURCHASE_MAIL_SUBJECT'),'','custom_mail_subject'.$name_suffix,$mail_subject,false));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('PURCHASE_MAIL_BODY'),'','custom_mail_body'.$name_suffix,$mail_body,false));
 
@@ -74,7 +74,7 @@ class Hook_pointstore_custom
 			$fields=new ocp_tempcode();
 			$hidden=new ocp_tempcode();
 			$fields->attach($this->get_fields('_'.strval($i),get_translated_text($row['c_title']),get_translated_text($row['c_description']),$row['c_enabled'],$row['c_cost'],$row['c_one_per_member'],get_translated_text($row['c_mail_subject']),get_translated_text($row['c_mail_body'])));
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'01362c21b40d7905b76ee6134198a128','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete_custom_'.strval($i),false));
 			$hidden->attach(form_input_hidden('custom_'.strval($i),strval($row['id'])));
 			$out[]=array($fields,$hidden,do_lang_tempcode('EDIT_CUSTOM_PRODUCT'));

@@ -398,7 +398,7 @@ class Module_admin_config
 		$title=get_screen_title('CONFIGURATION');
 		require_code('site2');
 		assign_refresh(get_base_url().'/config_editor.php',0.0);
-		return do_template('REDIRECT_SCREEN',array('URL'=>get_base_url().'/config_editor.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		return do_template('REDIRECT_SCREEN',array('_GUID'=>'66b1e7b5d84a48677c12cb83b240d1c5','URL'=>get_base_url().'/config_editor.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
 	}
 
 	/**
@@ -411,7 +411,7 @@ class Module_admin_config
 		$title=get_screen_title('FU_UPGRADER_TITLE');
 		require_code('site2');
 		assign_refresh(get_base_url().'/upgrader.php',0.0);
-		return do_template('REDIRECT_SCREEN',array('URL'=>get_base_url().'/upgrader.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		return do_template('REDIRECT_SCREEN',array('_GUID'=>'493b2a11c53ddb3af6eb5d73ec8a6244','URL'=>get_base_url().'/upgrader.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
 	}
 
 	/**
@@ -424,7 +424,7 @@ class Module_admin_config
 		$title=get_screen_title('FEEDS');
 		require_code('site2');
 		assign_refresh(get_base_url().'/backend.php',0.0);
-		return do_template('REDIRECT_SCREEN',array('URL'=>get_base_url().'/backend.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		return do_template('REDIRECT_SCREEN',array('_GUID'=>'32b8840660b0ff990276ac4008da0f3a','URL'=>get_base_url().'/backend.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
 	}
 
 	/**
@@ -437,7 +437,7 @@ class Module_admin_config
 		$title=get_screen_title('CODE_EDITOR');
 		require_code('site2');
 		assign_refresh(get_base_url().'/code_editor.php',0.0);
-		return do_template('REDIRECT_SCREEN',array('URL'=>get_base_url().'/code_editor.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
+		return do_template('REDIRECT_SCREEN',array('_GUID'=>'d9a0d9eefa1092e8b2604dce2378344f','URL'=>get_base_url().'/code_editor.php','TITLE'=>$title,'TEXT'=>do_lang_tempcode('REDIRECTING')));
 	}
 
 	/**
@@ -466,7 +466,7 @@ class Module_admin_config
 
 			$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'6ba2b09432d06e7502c71e7aac2d3527','COUNT'=>$count,'TITLE'=>protect_from_escaping(do_lang('CONFIGURATION').': '.$_name),'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>do_lang_tempcode('CONFIG_CATEGORY_DESCRIPTION__'.$myrow['the_page']))));
 		}
-		$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('COUNT'=>NULL,'TITLE'=>protect_from_escaping(do_lang('CONFIGURATION').': '.do_lang('BASE_CONFIGURATION')),'URL'=>get_base_url().'/config_editor.php','NAME'=>do_lang_tempcode('BASE_CONFIGURATION'),'DESCRIPTION'=>do_lang_tempcode('DOC_BASE_CONFIGURATION'))));
+		$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'6fde99ae81367fb7405e94b6731a7d9a','COUNT'=>NULL,'TITLE'=>protect_from_escaping(do_lang('CONFIGURATION').': '.do_lang('BASE_CONFIGURATION')),'URL'=>get_base_url().'/config_editor.php','NAME'=>do_lang_tempcode('BASE_CONFIGURATION'),'DESCRIPTION'=>do_lang_tempcode('DOC_BASE_CONFIGURATION'))));
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'c8fdb2b481625d58b0b228c897fda72f','PRE'=>paragraph(do_lang_tempcode('CHOOSE_A_CONFIG_CATEGORY')),'POST'=>'','TITLE'=>$title,'CONTENT'=>$content));
 	}

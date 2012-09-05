@@ -909,7 +909,7 @@ class Module_catalogues
 		{
 			list($entry_buildup)=get_catalogue_category_entry_buildup(NULL,$catalogue_name,$catalogue,'CATEGORY',$tpl_set,$max,$start,NULL,$root,NULL,true,$entries);
 
-			$category_buildup->attach(do_template('CATALOGUE_CATEGORY_HEADING',array('LETTER'=>is_integer($letter)?strval($letter):$letter,'ENTRIES'=>escape_html($entry_buildup)),NULL,false,'CATALOGUE_CATEGORY_HEADING'));				
+			$category_buildup->attach(do_template('CATALOGUE_CATEGORY_HEADING',array('_GUID'=>'633d73ad882c9f28524ad27120b77b78','LETTER'=>is_integer($letter)?strval($letter):$letter,'ENTRIES'=>escape_html($entry_buildup)),NULL,false,'CATALOGUE_CATEGORY_HEADING'));				
 		}
 
 		$_title=get_translated_text($category);

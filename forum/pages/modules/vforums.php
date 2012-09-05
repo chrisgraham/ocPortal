@@ -224,7 +224,7 @@ class Module_vforums
 
 		$_buttons=new ocp_tempcode();
 		$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id());
-		$_buttons->attach(do_template('SCREEN_BUTTON',array('TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'all','IMMEDIATE'=>false,'URL'=>$archive_url)));
+		$_buttons->attach(do_template('SCREEN_BUTTON',array('_GUID'=>'8c928f1f703e9ba232a7033adee19a31','TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'all','IMMEDIATE'=>false,'URL'=>$archive_url)));
 
 		breadcrumb_add_segment($breadcrumbs);
 		return do_template('OCF_FORUM',array('_GUID'=>'d3fa84575727af935eadb2ce2b7c7b3e','FILTERS'=>'','FORUM_NAME'=>$forum_name,'STARTER_TITLE'=>'','BUTTONS'=>$_buttons,'TOPIC_WRAPPER'=>$topic_wrapper,'CATEGORIES'=>''));

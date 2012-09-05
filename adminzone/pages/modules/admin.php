@@ -604,7 +604,7 @@ class Module_admin
 
 							if ($conf_found_count>100)
 							{
-								$content[$current_results_type]=do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'URL'=>'','TITLE'=>'','DESCRIPTION'=>'','SUP'=>''));
+								$content[$current_results_type]=do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'360a5362435a57f9c1d6a7b18624f53b','NAME'=>do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'URL'=>'','TITLE'=>'','DESCRIPTION'=>'','SUP'=>''));
 								break;
 							}
 
@@ -939,7 +939,7 @@ class Module_admin
 					if ($this->_keyword_match($n))
 					{
 						$url=get_base_url().'/config_editor.php';
-						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>stripslashes($matches[1][$i]),'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>$n)));
+						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'a7f235eb8348c285a40f30538b9d1d40','NAME'=>stripslashes($matches[1][$i]),'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>$n)));
 					}
 				}
 			}
@@ -964,7 +964,7 @@ class Module_admin
 					$lang_found[$n]=$n_value;
 					if (count($lang_found)>100)
 					{
-						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'URL'=>'','TITLE'=>'','DESCRIPTION'=>'','SUP'=>'')));
+						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'ec40bcba34ccbd6d3e31cbfd3a650241','NAME'=>do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'URL'=>'','TITLE'=>'','DESCRIPTION'=>'','SUP'=>'')));
 						$lang_found=array();
 						break;
 					}
@@ -1129,7 +1129,7 @@ class Module_admin
 			return $this->search();
 		}
 
-		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('TITLE'=>get_screen_title('ADMIN_ZONE_SEARCH_RESULTS'),'EMPTY'=>$found_some?NULL:true,'ARRAY'=>true,'CONTENT'=>$content,'PRE'=>$pre,'POST'=>$post));
+		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'b34d4765744c359a25a0b71449eafed1','TITLE'=>get_screen_title('ADMIN_ZONE_SEARCH_RESULTS'),'EMPTY'=>$found_some?NULL:true,'ARRAY'=>true,'CONTENT'=>$content,'PRE'=>$pre,'POST'=>$post));
 	}
 
 }

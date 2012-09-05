@@ -59,7 +59,7 @@ class Block_side_justgiving_donate
 
 		$eggid=$map['eggid'];
 
-		return do_template('BLOCK_SIDE_JUSTGIVING_DONATE',array('TITLE'=>do_lang_tempcode('BLOCK_JUSTGIVING_DONATE_TITLE'),'EGGID'=>$eggid));
+		return do_template('BLOCK_SIDE_JUSTGIVING_DONATE',array('_GUID'=>'f2fcc049804d8305eb0d8fe2cee81626','TITLE'=>do_lang_tempcode('BLOCK_JUSTGIVING_DONATE_TITLE'),'EGGID'=>$eggid));
 	}
 
 }

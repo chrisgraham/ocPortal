@@ -100,7 +100,7 @@ class Block_main_contact_simple
 			}
 		} else $use_captcha=false;
 
-		$comment_details=do_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'EMAIL_OPTIONAL'=>$email_optional,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>!$private,'GET_TITLE'=>!$private,'EM'=>$em,'DISPLAY'=>'block','TITLE'=>$box_title,'COMMENT_URL'=>$comment_url));
+		$comment_details=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'d35227903b5f786331f6532bce1765e4','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'EMAIL_OPTIONAL'=>$email_optional,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>!$private,'GET_TITLE'=>!$private,'EM'=>$em,'DISPLAY'=>'block','TITLE'=>$box_title,'COMMENT_URL'=>$comment_url));
 
 		$out=do_template('BLOCK_MAIN_CONTACT_SIMPLE',array('_GUID'=>'298a357f442f440c6b42e58d6717e57c','EMAIL_OPTIONAL'=>true,'COMMENT_DETAILS'=>$comment_details,'MESSAGE'=>$message));
 

@@ -167,7 +167,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 		if ((addon_installed('ocf_clubs')) && (!is_null($id)))
 			$fields->attach(form_input_tick(do_lang_tempcode('IS_PRIVATE_CLUB'),do_lang_tempcode('IS_PRIVATE_CLUB_DESCRIPTION'),'is_private_club',$is_private_club==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$title=='' && $group_leader=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'9a3e18560632564111aecb8f27341fb2','SECTION_HIDDEN'=>$title=='' && $group_leader=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_GROUP_TITLE'),'title',$title,false));
 		$fields->attach(form_input_username(do_lang_tempcode('GROUP_LEADER'),do_lang_tempcode('DESCRIPTION_GROUP_LEADER'),'group_leader',$group_leader,false));
@@ -183,14 +183,14 @@ class Module_admin_ocf_groups extends standard_crud_module
 		}
 		$fields->attach(form_input_list(do_lang_tempcode('ORDER'),do_lang_tempcode('USERGROUP_DISPLAY_ORDER_DESCRIPTION'),'order',$orderlist));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('JOINING'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'4d72d054883ede5250a3c3e03d27d18c','TITLE'=>do_lang_tempcode('JOINING'))));
 		if ((is_null($id)) || ($id!=db_get_first_id()))
 		{
 			$fields->attach(form_input_tick(do_lang_tempcode('IS_PRESENTED_AT_INSTALL'),do_lang_tempcode('DESCRIPTION_IS_PRESENTED_AT_INSTALL'),'is_presented_at_install',$is_presented_at_install==1));
 			$fields->attach(form_input_tick(do_lang_tempcode('DEFAULT_GROUP'),do_lang_tempcode('DESCRIPTION_IS_DEFAULT_GROUP'),'is_default',$is_default==1));
 		}
 		$fields->attach(form_input_tick(do_lang_tempcode('OPEN_MEMBERSHIP'),do_lang_tempcode('OPEN_MEMBERSHIP_DESCRIPTION'),'open_membership',$open_membership==1));
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('RANK'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'4ec20b3b67c70e1d4136432ae4fd56b6','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('RANK'))));
 		if (addon_installed('points'))
 		{
 			$promotion_target_groups=form_input_list_entry('-1',false,do_lang_tempcode('NA_EM'));
@@ -229,7 +229,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		$fields->attach(form_input_tick(do_lang_tempcode('RANK_IMAGE_PRI_ONLY'),do_lang_tempcode('RANK_IMAGE_PRI_ONLY_DESCRIPTION'),'rank_image_pri_only',$rank_image_pri_only==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('BENEFITS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'46bcc92ed469cdee0c16e66dda6986e7','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('BENEFITS'))));
 		$sa_descrip=do_lang_tempcode('DESCRIPTION_IS_SUPER_ADMIN');
 		if ($is_super_admin==1)
 		{
@@ -243,11 +243,11 @@ class Module_admin_ocf_groups extends standard_crud_module
 			$fields->attach(form_input_integer(do_lang_tempcode('GIFT_POINTS_PER_DAY'),do_lang_tempcode('DESCRIPTION_GIFT_POINTS_PER_DAY'),'gift_points_per_day',$gift_points_per_day,true));
 		}
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('SECURITY'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'242da621a54eb63efd528e678dbceeaa','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('SECURITY'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('HIDDEN_USERGROUP'),do_lang_tempcode('DESCRIPTION_GROUP_HIDDEN'),'hidden',$group_is_hidden==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('ENQUIRE_ON_NEW_IPS'),do_lang_tempcode('DESCRIPTION_ENQUIRE_ON_NEW_IPS'),'enquire_on_new_ips',$enquire_on_new_ips==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('RESTRICTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'e894918a6e1b56fdd5f1574cd68a3a91','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('RESTRICTIONS'))));
 		$fields->attach(form_input_integer(do_lang_tempcode('MAX_ATTACHMENTS_PER_POST'),do_lang_tempcode('DESCRIPTION_MAX_ATTACHMENTS_PER_POST'),'max_attachments_per_post',$max_attachments_per_post,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('MAX_DAILY_UPLOAD_MB'),do_lang_tempcode('DESCRIPTION_MAX_DAILY_UPLOAD_MB'),'max_daily_upload_mb',$max_daily_upload_mb,true));
 		if (addon_installed('ocf_member_avatars'))
@@ -261,11 +261,11 @@ class Module_admin_ocf_groups extends standard_crud_module
 			$fields->attach(form_input_integer(do_lang_tempcode('MAX_SIG_LENGTH_COMCODE'),do_lang_tempcode('DESCRIPTION_MAX_SIG_LENGTH_COMCODE'),'max_sig_length_comcode',$max_sig_length_comcode,true));
 		}
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('FLOOD_CONTROL'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'251cbc5b4e8a3dd600535ed29b3cd9d1','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('FLOOD_CONTROL'))));
 		$fields->attach(form_input_integer(do_lang_tempcode('FLOOD_CONTROL_ACCESS_SECS'),do_lang_tempcode('DESCRIPTION_FLOOD_CONTROL_ACCESS_SECS'),'flood_control_access_secs',$flood_control_access_secs,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('FLOOD_CONTROL_SUBMIT_SECS'),do_lang_tempcode('DESCRIPTION_FLOOD_CONTROL_SUBMIT_SECS'),'flood_control_submit_secs',$flood_control_submit_secs,true));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'0fd215401ffaace7f2f9f6aa73db4ce1','TITLE'=>do_lang_tempcode('ACTIONS'))));
 
 		$copy_members_from_groups=new ocp_tempcode();
 		foreach ($rows as $row)
@@ -391,7 +391,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 			{
 				$orderlist->attach(form_input_list_entry(strval($order),true,integer_format($order+1)));
 			}
-			$ordererx=protect_from_escaping(do_template('COLUMNED_TABLE_ROW_CELL_SELECT',array('LABEL'=>do_lang_tempcode('ORDER'),'NAME'=>'order_'.strval($row['id']),'LIST'=>$orderlist)));
+			$ordererx=protect_from_escaping(do_template('COLUMNED_TABLE_ROW_CELL_SELECT',array('_GUID'=>'034e9c56038caa68874dece1174700e3','LABEL'=>do_lang_tempcode('ORDER'),'NAME'=>'order_'.strval($row['id']),'LIST'=>$orderlist)));
 
 			$fr[]=$ordererx;
 

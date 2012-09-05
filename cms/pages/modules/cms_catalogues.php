@@ -438,7 +438,7 @@ class Module_cms_catalogues extends standard_crud_module
 			if (addon_installed('unvalidated'))
 			{
 				if (count($field_groups)!=1)
-					$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SETTINGS'))));
+					$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'17e83c2d6412bddc12ac1873f9ec6092','TITLE'=>do_lang_tempcode('SETTINGS'))));
 				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 			}
 		}
@@ -1410,7 +1410,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 			$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_catalogue_category',array('catalogue_name'=>$catalogue_name),true,((is_null($parent_id)) || ($parent_id==-1))?'':strval($parent_id)));
 		}
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>is_null($move_target),'TITLE'=>do_lang_tempcode('CLASSIFIED_ADS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'745236e628a4d3da5355f07874433600','SECTION_HIDDEN'=>is_null($move_target),'TITLE'=>do_lang_tempcode('CLASSIFIED_ADS'))));
 		$list=new ocp_tempcode();
 		$fields->attach(form_input_tree_list(do_lang_tempcode('EXPIRY_MOVE_TARGET'),do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_TARGET'),'move_target',NULL,'choose_catalogue_category',array('catalogue_name'=>$catalogue_name),false,is_null($move_target)?NULL:strval($move_target)));
 		if (cron_installed())
@@ -1718,7 +1718,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			$fields->attach(form_input_tick(do_lang_tempcode('IS_TREE'),do_lang_tempcode('DESCRIPTION_IS_TREE'),'is_tree',$is_tree==1));
 			if ($name=='') $fields->attach(form_input_line(do_lang_tempcode('AUTO_FILL'),do_lang_tempcode('DESCRIPTION_AUTO_FILL'),'auto_fill','',false,NULL,10000));
 
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$notes=='' && $submit_points==0 && $send_view_reports=='never','TITLE'=>do_lang_tempcode('ADVANCED'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'d7f7e0da078bdfaab0b3387d200d57a4','SECTION_HIDDEN'=>$notes=='' && $submit_points==0 && $send_view_reports=='never','TITLE'=>do_lang_tempcode('ADVANCED'))));
 
 			if (get_value('disable_staff_notes')!=='1')
 				$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));

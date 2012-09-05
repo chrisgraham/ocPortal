@@ -158,7 +158,7 @@ function warn_exit_wordfilter($name,$message)
 		$fields=form_input_text(do_lang_tempcode('CHANGE'),'',$name,$value,true);
 	}
 	$post_url=get_self_url();
-	$output=do_template('FORM_SCREEN',array('TITLE'=>get_screen_title('ERROR_OCCURRED'),'TEXT'=>$message,'URL'=>$post_url,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
+	$output=do_template('FORM_SCREEN',array('_GUID'=>'e644c444027b244ebc382eae66ae23fc','TITLE'=>get_screen_title('ERROR_OCCURRED'),'TEXT'=>$message,'URL'=>$post_url,'HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
 	$echo=new ocp_tempcode();
 	if (!running_script('preview'))
 	{
@@ -166,7 +166,7 @@ function warn_exit_wordfilter($name,$message)
 		$echo->handle_symbol_preprocessing();
 	} else
 	{
-		$echo->attach(do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'TARGET'=>'_top','CONTENT'=>$output)));
+		$echo->attach(do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'3ab07c8ac266d3dfb4dfc99e8f4fc2b9','TITLE'=>do_lang_tempcode('PREVIEW'),'TARGET'=>'_top','CONTENT'=>$output)));
 	}
 	$echo->evaluate_echo();
 	exit();

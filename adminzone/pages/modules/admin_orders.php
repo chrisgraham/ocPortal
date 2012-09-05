@@ -581,7 +581,7 @@ class Module_admin_orders
 
 		$fields->attach(form_input_date(do_lang_tempcode('ST_END_PERIOD'),do_lang_tempcode('ST_END_PERIOD_DESCRIPTION'),'end_date',false,false,true,array($end_minute,$end_hour,$end_month,$end_day,$end_year)));
 
-		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('EXPORT_ORDER_LIST'),'TEXT'=>paragraph(do_lang_tempcode('EXPORT_ORDER_LIST_TEXT')),'URL'=>build_url(array('page'=>'_SELF','type'=>'_order_export'),'_SELF'),'HIDDEN'=>'','FIELDS'=>$fields));
+		return do_template('FORM_SCREEN',array('_GUID'=>'e2e5097798c963f4977ba22b50ddf2f3','SKIP_VALIDATION'=>true,'TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('EXPORT_ORDER_LIST'),'TEXT'=>paragraph(do_lang_tempcode('EXPORT_ORDER_LIST_TEXT')),'URL'=>build_url(array('page'=>'_SELF','type'=>'_order_export'),'_SELF'),'HIDDEN'=>'','FIELDS'=>$fields));
 	}
 
 	/**

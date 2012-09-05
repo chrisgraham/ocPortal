@@ -222,18 +222,18 @@ class Module_cms_quiz extends standard_crud_module
 		if (addon_installed('unvalidated'))
 			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED_SIMPLE'),'validated',$validated==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('TEST'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'43499b3d39e5743f27852e84cd6d3296','TITLE'=>do_lang_tempcode('TEST'))));
 		$fields->attach(form_input_integer(do_lang_tempcode('COMPLETION_PERCENTAGE'),do_lang_tempcode('DESCRIPTION_COMPLETION_PERCENTAGE'),'percentage',$percentage,true));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('TEXT'),'SECTION_HIDDEN'=>true)));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'9df4bf6d913b68f9c80312df875367d7','TITLE'=>do_lang_tempcode('TEXT'),'SECTION_HIDDEN'=>true)));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_START_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_START_TEXT'),'start_text',$start_text,false));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT'),'end_text',$end_text,false));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('COMPETITION'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'40f0d67ae21fd3768cc7688d90c99d6e','TITLE'=>do_lang_tempcode('COMPETITION'))));
 		$fields->attach(form_input_integer(do_lang_tempcode('NUM_WINNERS'),do_lang_tempcode('DESCRIPTION_NUM_WINNERS'),'num_winners',$num_winners,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT_FAIL'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT_FAIL'),'end_text_fail',$end_text_fail,false));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>is_null($redo_time) && is_null($timeout) && ((is_null($open_time)) || ($open_time<=time())) && is_null($close_time) && $points_for_passing==0 && is_null($tied_newsletter) && $notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'00b9a6a21eab07864d41d5465d9569cd','SECTION_HIDDEN'=>is_null($redo_time) && is_null($timeout) && ((is_null($open_time)) || ($open_time<=time())) && is_null($close_time) && $points_for_passing==0 && is_null($tied_newsletter) && $notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_integer(do_lang_tempcode('REDO_TIME'),do_lang_tempcode('DESCRIPTION_REDO_TIME'),'redo_time',$redo_time,false));
 		$fields->attach(form_input_integer(do_lang_tempcode('TIMEOUT'),do_lang_tempcode('DESCRIPTION_QUIZ_TIMEOUT'),'timeout',$timeout,false));
 		$fields->attach(form_input_date(do_lang_tempcode('OPEN_TIME'),do_lang_tempcode('DESCRIPTION_OPEN_TIME'),'open_time',false,false,true,$open_time,2));

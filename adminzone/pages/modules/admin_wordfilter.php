@@ -132,7 +132,7 @@ class Module_admin_wordfilter
 			$submit_name=do_lang_tempcode('DELETE_WORDFILTER');
 			$fields=form_input_list(do_lang_tempcode('WORD'),'','word',$list);
 
-			$tpl=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$delete_url,'SUBMIT_NAME'=>$submit_name));
+			$tpl=do_template('FORM',array('_GUID'=>'a752cea5acab633e1cc0781f0e77e0be','TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$delete_url,'SUBMIT_NAME'=>$submit_name));
 		} else $tpl=new ocp_tempcode();
 
 		// Do a form so people can add

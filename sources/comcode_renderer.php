@@ -235,7 +235,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 		if (((get_page_name()=='admin_import') || (count($_POST)==0) || (!$posted)) && (!$preparse_mode))
 		{
 			$line=substr_count(substr($comcode,0,$pos),chr(10))+1;
-			$out=do_template('COMCODE_CRITICAL_PARSE_ERROR',array('LINE'=>integer_format($line),'MESSAGE'=>$message,'SOURCE'=>$comcode)); // Won't parse, but we can't help it, so we will skip on
+			$out=do_template('COMCODE_CRITICAL_PARSE_ERROR',array('_GUID'=>'29da9dc5c6b9a527cb055b7da35bb6b8','LINE'=>integer_format($line),'MESSAGE'=>$message,'SOURCE'=>$comcode)); // Won't parse, but we can't help it, so we will skip on
 			return $out;
 		}
 	}
@@ -320,7 +320,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 		$echo->handle_symbol_preprocessing();
 	} else
 	{
-		$echo->attach(do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>running_script('preview'),'TARGET'=>'_top','CONTENT'=>$output)));
+		$echo->attach(do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'e8f40ff1e4fb29e9bf3aea955c1483a0','TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>running_script('preview'),'TARGET'=>'_top','CONTENT'=>$output)));
 	}
 	$echo->evaluate_echo();
 	exit();
@@ -364,7 +364,7 @@ function test_url($url_full,$tag_type,$given_url,$source_member)
 		$test=($GLOBALS['COMCODE_PARSE_URLS_CHECKED']>=MAX_URLS_TO_READ)?'':http_download_file($url_full,0,false);
 		if ((is_null($test)) && (in_array($GLOBALS['HTTP_MESSAGE'],array('404','could not connect to host'))))
 		{
-			$temp_tpl=do_template('WARNING_BOX',array('FOR_GUESTS'=>false,'WARNING'=>do_lang_tempcode('MISSING_URL_COMCODE',$tag_type,escape_html($url_full))));
+			$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'7bcea67226f89840394614d88020e3ac','FOR_GUESTS'=>false,'WARNING'=>do_lang_tempcode('MISSING_URL_COMCODE',$tag_type,escape_html($url_full))));
 			if (array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS))
 			{
 				$GLOBALS['COMCODE_BROKEN_URLS'][]=array($url_full,NULL);
@@ -512,7 +512,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			}
 			return make_string_tempcode('<input class="ocp_keep_ui_controlled" size="45" title="['.$tag.''.(escape_html($params)).']'.((($in_semihtml) || ($is_all_semihtml))?$embed->evaluate():(escape_html($embed->evaluate()))).'[/'.$tag.']" type="text" value="'.($tag=='block'?do_lang('COMCODE_EDITABLE_BLOCK',escape_html($embed->evaluate())):do_lang('COMCODE_EDITABLE_TAG',escape_html($tag))).'" />');
 		}
-		return do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('comcode:NO_ACCESS_FOR_TAG',escape_html($tag),escape_html($username))));
+		return do_template('WARNING_BOX',array('_GUID'=>'faea04a9d6f1e409d99b8485d28b2225','WARNING'=>do_lang_tempcode('comcode:NO_ACCESS_FOR_TAG',escape_html($tag),escape_html($username))));
 	}
 
 	// These are just bbcode compatibility tags.. we will remap to our proper comcode
@@ -677,7 +677,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$post_id=intval($embed->evaluate());
 			$s_title=($attributes['param']=='')?do_lang_tempcode('FORUM_POST_NUMBERED',integer_format($post_id)):make_string_tempcode($attributes['param']);
 			$forum=array_key_exists('forum',$attributes)?$attributes['forum']:'';
-			$temp_tpl=do_template('COMCODE_SNAPBACK',array('URL'=>$GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum),'TITLE'=>$s_title));
+			$temp_tpl=do_template('COMCODE_SNAPBACK',array('_GUID'=>'af7b6920e58027256d536a8cdb8a164a','URL'=>$GLOBALS['FORUM_DRIVER']->post_url($post_id,$forum),'TITLE'=>$s_title));
 			break;
 		case 'post':
 			require_lang('ocf');
@@ -713,18 +713,18 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 		case 'big_tab_controller':
 			$tabs=explode(',',$embed->evaluate());
 			if (!array_key_exists('switch_time',$attributes)) $attributes['switch_time']='6000';
-			$temp_tpl=do_template('COMCODE_BIG_TABS_CONTROLLER',array('SWITCH_TIME'=>($attributes['switch_time']=='')?NULL:strval(intval($attributes['switch_time'])),'TABS'=>$tabs,'PASS_ID'=>'x'.$pass_id));
+			$temp_tpl=do_template('COMCODE_BIG_TABS_CONTROLLER',array('_GUID'=>'b6cc1835b688f086e34837e3c345ba0a','SWITCH_TIME'=>($attributes['switch_time']=='')?NULL:strval(intval($attributes['switch_time'])),'TABS'=>$tabs,'PASS_ID'=>'x'.$pass_id));
 			break;
 		case 'tab':
 			$default=(array_key_exists('default',$attributes))?$attributes['default']:'0';
-			$temp_tpl=do_template('COMCODE_TAB_BODY',array('DEFAULT'=>$default=='1','TITLE'=>trim($attributes['param']),'CONTENT'=>$embed));
+			$temp_tpl=do_template('COMCODE_TAB_BODY',array('_GUID'=>'2d63ed21f8d8b939b8db21b20c147b41','DEFAULT'=>$default=='1','TITLE'=>trim($attributes['param']),'CONTENT'=>$embed));
 			break;
 		case 'tabs':
 			$heads=new ocp_tempcode();
 			$tabs=explode(',',$attributes['param']);
 			foreach ($tabs as $i=>$tab)
 			{
-				$heads->attach(do_template('COMCODE_TAB_HEAD',array('TITLE'=>trim($tab),'FIRST'=>$i==0,'LAST'=>!array_key_exists($i+1,$tabs))));
+				$heads->attach(do_template('COMCODE_TAB_HEAD',array('_GUID'=>'735f70b1c8dcc78a0876136cfb4822a0','TITLE'=>trim($tab),'FIRST'=>$i==0,'LAST'=>!array_key_exists($i+1,$tabs))));
 			}
 
 			$temp_tpl=do_template('COMCODE_TAB_CONTROLLER',array('_GUID'=>'0e56cf180973c57f3633aae54dd9cddc','HEADS'=>$heads,'CONTENT'=>$embed));
@@ -965,7 +965,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 						$attach_size+=floatval($_file['size'])/1024.0/1024.0;
 					if (($size_uploaded_today+$attach_size)>floatval($daily_quota))
 					{
-						$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('OVER_DAILY_QUOTA',integer_format($daily_quota),float_format($size_uploaded_today))));
+						$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'89b7982164ccf8d98f3d0596ad425f78','WARNING'=>do_lang_tempcode('OVER_DAILY_QUOTA',integer_format($daily_quota),float_format($size_uploaded_today))));
 						break;
 					}
 				}
@@ -979,7 +979,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$file=base64_decode(str_replace(chr(10),'',$id));
 				if ($file===false)
 				{
-					$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('comcode:CORRUPT_ATTACHMENT')));
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'422658aee3c0eea77ad85d8621af742b','WARNING'=>do_lang_tempcode('comcode:CORRUPT_ATTACHMENT')));
 					break;
 				}
 				$md5=md5(substr($file,0,30));
@@ -997,7 +997,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$myfile=@fopen($path,'wb');
 				if ($myfile===false)
 				{
-					$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>intelligent_write_error_inline($path)));
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'428a36aa6cea693d01429f3d21caac36','WARNING'=>intelligent_write_error_inline($path)));
 					break;
 				}
 				if (fwrite($myfile,$file)<strlen($file)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
@@ -1067,7 +1067,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$_id=substr($id,4);
 					if (!is_numeric($_id))
 					{
-						$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('comcode:INVALID_ATTACHMENT')));
+						$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'dd7035da4ad83b55fbd185267ab31fe6','WARNING'=>do_lang_tempcode('comcode:INVALID_ATTACHMENT')));
 						break;
 					}
 
@@ -1102,7 +1102,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 				else
 				{
-					$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('comcode:INVALID_ATTACHMENT')));
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'f7c0ead08bf7e19f3b78a536c755d6a5','WARNING'=>do_lang_tempcode('comcode:INVALID_ATTACHMENT')));
 					break;
 				}
 
@@ -1110,7 +1110,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				{
 					require_code('images');
 					require_code('files2');
-					$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('ATTACHMENT_WOULD_NOT_UPLOAD',float_format(get_max_file_size()/1024/1024),float_format(get_max_image_size()/1024/1024))));
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'81dce25ce8c1e0a9a2407315df0cf99c','WARNING'=>do_lang_tempcode('ATTACHMENT_WOULD_NOT_UPLOAD',float_format(get_max_file_size()/1024/1024),float_format(get_max_image_size()/1024/1024))));
 					break;
 				}
 				$url=$urls[0];
@@ -1166,7 +1166,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$owner=$connection->query_select_value_if_there('attachments','a_member_id',array('id'=>$__id));
 				if (is_null($owner)) // Missing attachment!
 				{
-					$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','attachment',escape_html(strval($__id)))));
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'be1c9c26a8802a00955fbd7a55b08bd3','WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','attachment',escape_html(strval($__id)))));
 					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 					{
 						require_code('failure');
@@ -1186,7 +1186,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				} else
 				{
 					require_lang('permissions');
-					$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('permissions:ACCESS_DENIED__REUSE_ATTACHMENT',$GLOBALS['FORUM_DRIVER']->get_username($source_member))));
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'af61f96b5cc6819979ce681d6f49b384','WARNING'=>do_lang_tempcode('permissions:ACCESS_DENIED__REUSE_ATTACHMENT',$GLOBALS['FORUM_DRIVER']->get_username($source_member))));
 					break;
 					//access_denied('REUSE_ATTACHMENT');
 				}
@@ -1218,7 +1218,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$COMCODE_PARSE_TITLE=$temp_comcode_parse_title;
 			if ($temp->is_empty())
 			{
-				$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','include',hyperlink(build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','page_link'=>$zone.':'.$codename),get_module_zone('cms_comcode_pages')),$zone.':'.$codename,false,true))));
+				$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'1d617fd24b632640dddeeadd8432d7a9','WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','include',hyperlink(build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','page_link'=>$zone.':'.$codename),get_module_zone('cms_comcode_pages')),$zone.':'.$codename,false,true))));
 				if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 				{
 					require_code('failure');
@@ -1283,7 +1283,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if (substr($max_color,0,1)=='#') $max_color=substr($max_color,1);
 
 			$embed=$embed->evaluate();
-			$temp_tpl=do_template('COMCODE_SHOCKER',array('UNIQID'=>uniqid(''),'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'FULL'=>implode(', ',$attributes),'TIME'=>strval((integer)$embed),'PARTS'=>$_parts));
+			$temp_tpl=do_template('COMCODE_SHOCKER',array('_GUID'=>'d648de0a5e3b5f84d82d781f4964e04a','UNIQID'=>uniqid(''),'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'FULL'=>implode(', ',$attributes),'TIME'=>strval((integer)$embed),'PARTS'=>$_parts));
 			break;
 		case 'ticker':
 			$width=$attributes['param'];
@@ -1517,7 +1517,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				elseif (file_exists($stub.$_embed.'.jpeg')) $url=$stub2.$_embed.'.jpeg';
 				else
 				{
-					$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','exp_ref',escape_html($_embed))));
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'74014f3e7209684c3e41fb8635a8792e','WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','exp_ref',escape_html($_embed))));
 					if (array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS))
 					{
 						$GLOBALS['COMCODE_BROKEN_URLS'][]=array($_embed,NULL);
@@ -1557,7 +1557,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				elseif (file_exists($stub.$_embed.'.jpeg')) $url_full=$stub2.$_embed.'.jpeg';
 				else
 				{
-					$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','exp_thumb',escape_html($_embed))));
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'a477b2be7eba88867f0a574fcdd2e842','WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','exp_thumb',escape_html($_embed))));
 					if (array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS))
 					{
 						$GLOBALS['COMCODE_BROKEN_URLS'][]=$_embed;
@@ -1633,7 +1633,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					if (!is_saveable_image($new_name)) $new_name.='.png';
 					if (is_null($new_name))
 					{
-						$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('URL_THUMB_TOO_LONG')));
+						$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'cd326d51c536bd0ae235eb002afab192','WARNING'=>do_lang_tempcode('URL_THUMB_TOO_LONG')));
 						break;
 					}
 					$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
@@ -1959,7 +1959,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$attributes['block']=trim($embed->evaluate());
 			if (preg_match('#^[\w\-]*$#',$attributes['block'])==0)
 			{
-				$temp_tpl=do_template('WARNING_BOX',array('WARNING'=>do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($attributes['block']))));
+				$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'b5638d953c400b7f194b62bc34f89181','WARNING'=>do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($attributes['block']))));
 				break; // Avoids a suspected hack attempt by just filtering early
 			}
 			$_attributes=array();

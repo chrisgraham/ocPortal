@@ -185,7 +185,7 @@ function find_security_alerts($where)
 		$_row=array(hyperlink($member_url,$username),hyperlink($full_url,$time),hyperlink($lookup_url,$row['ip']),$reason);
 		if (has_js())
 		{
-			$deletion_tick=do_template('RESULTS_TABLE_TICK',array('ID'=>strval($row['id'])));
+			$deletion_tick=do_template('RESULTS_TABLE_TICK',array('_GUID'=>'9d310a90afa8bd1817452e476385bc57','ID'=>strval($row['id'])));
 			$_row[]=$deletion_tick;
 		}
 

@@ -65,7 +65,7 @@ class Hook_Profiles_Tabs_warnings
 			$warnings->attach(paragraph(do_lang_tempcode('MEMBER_WARNING',$explanation,$warning_by,array(make_string_tempcode(escape_html($date)))),'treyerhy34y'));
 		}
 
-		$content=do_template('OCF_MEMBER_PROFILE_WARNINGS',array('MEMBER_ID'=>strval($member_id_of),'WARNINGS'=>$warnings));
+		$content=do_template('OCF_MEMBER_PROFILE_WARNINGS',array('_GUID'=>'fea98858f6bf89f1d9dc3ec995785a39','MEMBER_ID'=>strval($member_id_of),'WARNINGS'=>$warnings));
 
 		return array($title,$content,$order);
 	}

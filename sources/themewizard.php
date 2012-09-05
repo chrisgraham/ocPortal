@@ -597,7 +597,7 @@ function themewizard_script()
 	if ($type=='preview')
 	{
 		$_tpl=do_template('THEMEWIZARD_2_PREVIEW');
-		$tpl=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'CONTENT'=>$_tpl));
+		$tpl=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'652b7df378b36714cb9dfa146490cbb8','TITLE'=>do_lang_tempcode('PREVIEW'),'CONTENT'=>$_tpl));
 		$tpl->evaluate_echo();
 	}
 	if ($type=='css')

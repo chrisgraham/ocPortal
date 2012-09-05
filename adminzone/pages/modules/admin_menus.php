@@ -220,7 +220,7 @@ class Module_admin_menus
 		$menu_items=$GLOBALS['SITE_DB']->query_select('menu_items',array('*'),array('i_menu'=>$id),'ORDER BY i_parent,i_order');
 		$child_branches=$this->menu_branch($id,NULL,$order,$clickable_sections,$menu_items);
 
-		$root_branch=do_template('MENU_EDITOR_BRANCH',array('CLICKABLE_SECTIONS'=>$clickable_sections?'true':'false','CHILD_BRANCH_TEMPLATE'=>$child_branch_template,'CHILD_BRANCHES'=>$child_branches,'I'=>''));
+		$root_branch=do_template('MENU_EDITOR_BRANCH',array('_GUID'=>'28009b66089c05744d2727ff4689e43e','CLICKABLE_SECTIONS'=>$clickable_sections?'true':'false','CHILD_BRANCH_TEMPLATE'=>$child_branch_template,'CHILD_BRANCHES'=>$child_branches,'I'=>''));
 
 		$map=array('page'=>'_SELF','type'=>'_edit','id'=>$id);
 		if (get_param('redirect','!')!='!') $map['redirect']=get_param('redirect');
@@ -247,7 +247,7 @@ class Module_admin_menus
 		$list->attach(form_input_list_entry('branch_plus',false,do_lang_tempcode('EXPANDED_BRANCH')));
 		$fields_template->attach(form_input_list(do_lang_tempcode('BRANCH_TYPE'),do_lang_tempcode('MENU_ENTRY_BRANCH'),'branch_type',$list));
 
-		$fields_template->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields_template->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'9d8636a88bfca7069d1fc0ff5a30c237','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields_template->attach(form_input_line(do_lang_tempcode('CAPTION_LONG'),do_lang_tempcode('MENU_ENTRY_CAPTION_LONG'),'caption_long','',false));
 		$list=new ocp_tempcode();
 		$list->attach(form_input_list_entry('',false,do_lang_tempcode('NONE_EM')));

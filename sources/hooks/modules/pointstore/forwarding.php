@@ -106,7 +106,7 @@ class Hook_pointstore_forwarding
 			$hidden->attach(form_input_hidden('dforw_'.strval($i),$domain));
 			$fields->attach(form_input_line(do_lang_tempcode('MAIL_DOMAIN'),do_lang_tempcode('DESCRIPTION_MAIL_DOMAIN'),'ndforw_'.strval($i),substr($row['name'],5),true));
 			$fields->attach(form_input_integer(do_lang_tempcode('MAIL_COST'),do_lang_tempcode('DESCRIPTION_MAIL_COST',escape_html('forw'),escape_html($domain)),'forw_'.strval($i),$row['price'],true));
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'34f5212a96f58fa1b0575a99ca0509e7','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete_forw_'.strval($i),false));
 			$out[]=array($fields,$hidden,do_lang_tempcode('EDIT_FORWARDING_DOMAIN'));
 		}

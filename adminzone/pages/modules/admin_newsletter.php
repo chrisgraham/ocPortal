@@ -180,7 +180,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$hidden->attach(form_input_hidden('lang',$_lang));
 			handle_max_file_size($hidden);
 
-			return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+			return do_template('FORM_SCREEN',array('_GUID'=>'7e0387bcc4a1b7e2846ba357d36dbc15','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 		}
 
 		// Read data
@@ -341,7 +341,7 @@ class Module_admin_newsletter extends standard_crud_module
 		$post_url=get_self_url();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_b'),'_SELF');
-		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>do_lang_tempcode('ENTER_IMAP_DETAILS'),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'87f79d177931bab13f614b9cb24fb877','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>do_lang_tempcode('ENTER_IMAP_DETAILS'),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -390,7 +390,7 @@ class Module_admin_newsletter extends standard_crud_module
 		$post_url=get_self_url();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_c'),'_SELF');
-		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'69437ad3611c0ee55d09907985df8205','SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -458,7 +458,7 @@ class Module_admin_newsletter extends standard_crud_module
 		$post_url=get_self_url();
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_d'),'_SELF');
-		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$title,'TEXT'=>do_lang_tempcode('BOUNCE_WHICH'),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array('_GUID'=>'a517b87e2080204262d0bcf7fcebdf99','SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$title,'TEXT'=>do_lang_tempcode('BOUNCE_WHICH'),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
 
 	/**
@@ -542,7 +542,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$post_url=get_self_url();
 
 			$prune_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_a'),'_SELF');
-			return do_template('FORM_SCREEN',array('GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>do_lang_tempcode('NEWSLETTER_SUBSCRIBERS_FORM',escape_html($prune_url->evaluate())),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+			return do_template('FORM_SCREEN',array('_GUID'=>'0100ae6565474bca0669de1654b6efcf','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>do_lang_tempcode('NEWSLETTER_SUBSCRIBERS_FORM',escape_html($prune_url->evaluate())),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 		}
 
 		// Send to CSV file?
@@ -822,6 +822,7 @@ class Module_admin_newsletter extends standard_crud_module
 					}
 				}
 				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+					'_GUID'=>'9360e476c6fd8ed95176d05b866ee553',
 					'TITLE'=>do_lang('PERIODIC_NEWSLETTER_SETTINGS'),
 					'HELP'=>do_lang('PERIODIC_NEWSLETTER_HELP',$extra_help),
 				)));
@@ -829,7 +830,7 @@ class Module_admin_newsletter extends standard_crud_module
 				$fields->attach(form_input_list($periodic_choice_name,$periodic_choice_help,'periodic_choice',$periodic_options,NULL,false,false));
 			}
 
-			return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('SELECT_CATEGORIES_WANTED'),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('NEXT'),'URL'=>get_self_url()));
+			return do_template('FORM_SCREEN',array('_GUID'=>'ce1af424e01219c8dee2a7867c1647ef','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('SELECT_CATEGORIES_WANTED'),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('NEXT'),'URL'=>get_self_url()));
 		} else
 		{
 			$cutoff_time=get_input_date('cutoff');
@@ -845,6 +846,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$hidden->attach(form_input_hidden('chosen_content','1'));
 			$hidden->attach(form_input_hidden('periodic_choice','periodic_remove_confirmed_'.$matches[1]));
 			return do_template('PERIODIC_NEWSLETTER_REMOVE',array(
+				'_GUID'=>'4fe61ba93e2a05ae9f987e462687d6d5',
 				'TITLE'=>get_screen_title('REMOVE_PERIODIC_NEWSLETTER'),
 				'URL'=>get_self_url(),
 				'HIDDEN'=>$hidden,
@@ -1161,7 +1163,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$num_csv_data=count($_csv_data)-1;
 			$send_to_help=do_lang_tempcode('SOME_NEWSLETTER_TARGETS_KNOWN',escape_html(integer_format($num_csv_data)));
 		}
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('CHOOSE_SEND_TO'),'HELP'=>$send_to_help)));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'7e1c75fef01054164abfa72f55e5ba86','TITLE'=>do_lang_tempcode('CHOOSE_SEND_TO'),'HELP'=>$send_to_help)));
 		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
 		foreach ($newsletters as $newsletter)
 		{
@@ -1239,7 +1241,7 @@ class Module_admin_newsletter extends standard_crud_module
 		{
 			$hidden->attach(form_input_hidden('make_periodic','1'));
 			$hidden->attach(form_input_hidden('periodic_choice',post_param('periodic_choice')));
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang('PERIODIC_WHEN'),'HELP'=>do_lang('PERIODIC_WHEN_HELP'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'1e6e0f900f85aa4ed54318801a1810bb','TITLE'=>do_lang('PERIODIC_WHEN'),'HELP'=>do_lang('PERIODIC_WHEN_HELP'))));
 
 			// The choices are given as radio buttons: weekly or bi-weekly or monthly?
 			// In the labels for these radio buttons, we put a dropdown for day of
@@ -1268,12 +1270,12 @@ class Module_admin_newsletter extends standard_crud_module
 
 			$weekly_desc=new ocp_tempcode();
 			$weekly_desc->attach(do_lang('PERIODIC_WEEKLY_ON'));
-			$weekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_weekday_weekly','CONTENT'=>$week_days_weekly,'INLINE_LIST'=>'0')));
+			$weekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID'=>'b0c43b5f6883be80af5911a587fc85bf','TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_weekday_weekly','CONTENT'=>$week_days_weekly,'INLINE_LIST'=>'0')));
 			$radios->attach(form_input_radio_entry('periodic_when','weekly',$frequency=='weekly',$weekly_desc,NULL,''));
 
 			$weekly_desc=new ocp_tempcode();
 			$weekly_desc->attach(do_lang('PERIODIC_BIWEEKLY_ON'));
-			$weekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_weekday_biweekly','CONTENT'=>$week_days_biweekly,'INLINE_LIST'=>'0')));
+			$weekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID'=>'533afb6cdf1da813dd55ae694b962151','TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_weekday_biweekly','CONTENT'=>$week_days_biweekly,'INLINE_LIST'=>'0')));
 			$radios->attach(form_input_radio_entry('periodic_when','biweekly',$frequency=='biweekly',$weekly_desc,NULL,''));
 
 			$month_days=new ocp_tempcode();
@@ -1284,7 +1286,7 @@ class Module_admin_newsletter extends standard_crud_module
 			}
 			$monthly_desc=new ocp_tempcode();
 			$monthly_desc->attach(do_lang('PERIODIC_MONTHLY_ON'));
-			$monthly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_monthly','CONTENT'=>$month_days,'INLINE_LIST'=>'0')));
+			$monthly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID'=>'352012c3153342f5a954fcfa16c5503b','TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_monthly','CONTENT'=>$month_days,'INLINE_LIST'=>'0')));
 			$radios->attach(form_input_radio_entry('periodic_when','monthly',$frequency=='monthly',$monthly_desc,NULL,''));
 			$fields->attach(form_input_radio(do_lang('PERIODIC_WHEN_CHOICE'),'','periodic_when',$radios,true));
 

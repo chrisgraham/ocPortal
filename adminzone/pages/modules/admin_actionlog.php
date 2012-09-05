@@ -352,10 +352,10 @@ class Module_admin_actionlog
 				$fields['IP_BANNED']=(!$banned_test_1)?do_lang_tempcode('NO'):do_lang_tempcode('YES');
 				if ($row['ip']!=get_ip_address())
 				{
-					$fields['IP_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_ip_ban','id'=>$row['ip'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
+					$fields['IP_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'eff2890f2193ece32df8ec8ee48b252d','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_ip_ban','id'=>$row['ip'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
 					if (get_option('stopforumspam_api_key').get_option('tornevall_api_username')!='')
 					{
-						$fields['SYNDICATE_TO_STOPFORUMSPAM']=do_template('ACTION_LOGS_TOGGLE_LINK',array('LABEL'=>do_lang_tempcode('PROCEED'),'URL'=>build_url(array('page'=>'admin_ipban','type'=>'syndicate_ip_ban','ip'=>$row['ip'],'member_id'=>$row['the_user'],'reason'=>do_lang('BANNED_ADDRESSES'),'redirect'=>get_self_url(true)),get_module_zone('admin_ipban'))));
+						$fields['SYNDICATE_TO_STOPFORUMSPAM']=do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'7d10045c6b3b48f256e2f8eb5535809c','LABEL'=>do_lang_tempcode('PROCEED'),'URL'=>build_url(array('page'=>'admin_ipban','type'=>'syndicate_ip_ban','ip'=>$row['ip'],'member_id'=>$row['the_user'],'reason'=>do_lang('BANNED_ADDRESSES'),'redirect'=>get_self_url(true)),get_module_zone('admin_ipban'))));
 					}
 				}
 			}
@@ -363,13 +363,13 @@ class Module_admin_actionlog
 			$fields['SUBMITTER_BANNED']=is_null($banned_test_2)?do_lang_tempcode('NO'):do_lang_tempcode('YES');
 			if ((!is_guest($row['the_user'])) && ($row['the_user']!=get_member()))
 			{
-				$fields['SUBMITTER_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_submitter_ban','id'=>$row['the_user'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
+				$fields['SUBMITTER_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'f79fb00ef35d89381371a67bc9c4d69b','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_submitter_ban','id'=>$row['the_user'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
 			}
 			$banned_test_3=$GLOBALS['FORUM_DRIVER']->is_banned($row['the_user']);
 			$fields['MEMBER_BANNED']=$banned_test_3?do_lang_tempcode('YES'):do_lang_tempcode('NO');
 			if (((get_forum_type()=='ocf') && (!is_guest($row['the_user']))) && ($row['the_user']!=get_member()))
 			{
-				$fields['MEMBER_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_member_ban','id'=>$row['the_user'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
+				$fields['MEMBER_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'6b192ecfad1afc67bb8c2f1e744cc3b1','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_member_ban','id'=>$row['the_user'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
 			}
 		}
 		$fields['INVESTIGATE_USER']=hyperlink(build_url(array('page'=>'admin_lookup','id'=>(array_key_exists('ip',$row))?$row['ip']:$row['the_user']),'_SELF'),do_lang_tempcode('PROCEED'));

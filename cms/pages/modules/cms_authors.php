@@ -182,7 +182,7 @@ class Module_cms_authors
 
 		if (has_privilege(get_member(),'edit_midrange_content','cms_authors'))
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>!is_null($handle),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b18ab131f72a024039eaa92814f0f4a9','SECTION_HIDDEN'=>!is_null($handle),'TITLE'=>do_lang_tempcode('ADVANCED'))));
 			$fields->attach(form_input_username(do_lang_tempcode('MEMBER_ID'),do_lang_tempcode('DESCRIPTION_MEMBER_ID'),'forum_handle',is_null($handle)?'':$GLOBALS['FORUM_DRIVER']->get_username(intval($handle)),false));
 		} else
 		{
@@ -207,7 +207,7 @@ class Module_cms_authors
 
 		if ($may_delete)
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'8a83b3253a6452c90e92699d629b9d03','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 		}
 
@@ -339,7 +339,7 @@ class Module_cms_authors
 		$fields=form_input_list(do_lang_tempcode('NAME'),'','author',$authors,NULL,true);
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_ad'),'_SELF');
 		$submit_name=do_lang_tempcode('PROCEED');
-		$define_form=do_template('FORM',array('TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'GET'=>true,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		$define_form=do_template('FORM',array('_GUID'=>'1109c0cfdd598bf87134de1838709c39','TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'GET'=>true,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 
 		if (has_privilege(get_member(),'delete_midrange_content'))
 		{

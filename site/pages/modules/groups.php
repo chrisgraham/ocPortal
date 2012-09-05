@@ -683,7 +683,7 @@ class Module_groups
 			$hidden=form_input_hidden('id',strval($id));
 			$fields->attach(form_input_line(do_lang_tempcode('REASON'),'','reason','',false));
 
-			return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+			return do_template('FORM_SCREEN',array('_GUID'=>'ebec84204dee305a8db1a57e5a95c774','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 		}
 
 		if (!ocf_may_control_group($id,get_member()))

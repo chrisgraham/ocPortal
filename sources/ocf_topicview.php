@@ -427,7 +427,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 				}
 				$temp=$_postdetails['message'];
 				$_postdetails['message']=new ocp_tempcode();
-				$_postdetails['message']=do_template('COMCODE_QUOTE_BY',array('SAIDLESS'=>false,'BY'=>$p['p_poster_name_if_guest'],'CONTENT'=>$p['message']));
+				$_postdetails['message']=do_template('COMCODE_QUOTE_BY',array('_GUID'=>'4521bfe295b1834460f498df488ee7cb','SAIDLESS'=>false,'BY'=>$p['p_poster_name_if_guest'],'CONTENT'=>$p['message']));
 				$_postdetails['message']->attach($temp);
 			}
 

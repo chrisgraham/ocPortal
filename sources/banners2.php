@@ -76,7 +76,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 	}
 
-	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SOURCE_MEDIA'))));
+	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'b110d585eea7d6e29dab4870c5a15c4a','TITLE'=>do_lang_tempcode('SOURCE_MEDIA'))));
 
 	$set_name='media';
 	$required=false;
@@ -96,7 +96,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 
 	$fields->attach(form_input_line_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_BANNER_DESCRIPTION'),'caption',$caption,false));
 
-	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('DEPLOYMENT_DETERMINATION'))));
+	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'1184532268cd8a58adea01c3637dc4c5','TITLE'=>do_lang_tempcode('DEPLOYMENT_DETERMINATION'))));
 	if (has_privilege(get_member(),'full_banner_setup'))
 	{
 		$radios=new ocp_tempcode();

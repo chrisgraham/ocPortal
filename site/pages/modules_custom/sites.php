@@ -166,7 +166,7 @@ class Module_sites
 		$fields->attach(form_input_line(do_lang_tempcode('SEARCH_UNDERNEATH'),do_lang_tempcode('DESCRIPTION_FTP_SEARCH_UNDER'),'search_under','/',false));
 		$post_url=build_url(array('page'=>'_SELF','type'=>'hostingcopy_step2'),'_SELF');
 		$submit_name=do_lang('PROCEED');
-		$hostingcopy_form=do_template('FORM',array('HIDDEN'=>'','URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('OC_COPYWAIT'),'SUBMIT_NAME'=>$submit_name));
+		$hostingcopy_form=do_template('FORM',array('_GUID'=>'e9f51de85f7cf800aa3097366a03ca5e','HIDDEN'=>'','URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('OC_COPYWAIT'),'SUBMIT_NAME'=>$submit_name));
 
 		// Put together details about releases
 		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.comments','name',array('text_original'=>'This is the latest version.'));

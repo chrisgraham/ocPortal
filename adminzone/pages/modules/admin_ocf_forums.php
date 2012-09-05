@@ -168,7 +168,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 			$hidden->attach(form_input_hidden('position',strval($position)));
 		}
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$post_count_increment==1 && $order_sub_alpha==0 && ($intro_question=='') && ($intro_answer=='') && ($redirection=='') && ($order=='last_post'),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'cb47ed06695dc2cd99211772fe4c5643','SECTION_HIDDEN'=>$post_count_increment==1 && $order_sub_alpha==0 && ($intro_question=='') && ($intro_answer=='') && ($redirection=='') && ($order=='last_post'),'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('POST_COUNT_INCREMENT'),do_lang_tempcode('DESCRIPTION_POST_COUNT_INCREMENT'),'post_count_increment',$post_count_increment==1));
 		$fields->attach(form_input_tick(do_lang_tempcode('ORDER_SUB_ALPHA'),do_lang_tempcode('DESCRIPTION_ORDER_SUB_ALPHA'),'order_sub_alpha',$order_sub_alpha==1));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('INTRO_QUESTION'),do_lang_tempcode('DESCRIPTION_INTRO_QUESTION'),'intro_question',$intro_question,false));

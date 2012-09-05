@@ -247,7 +247,7 @@ class Module_newsletter
 		$l->attach(form_input_list_entry('2',$level==2,do_lang_tempcode('NEWSLETTER_2')));
 		$l->attach(form_input_list_entry('3',$level==3,do_lang_tempcode('NEWSLETTER_3')));
 		$l->attach(form_input_list_entry('4',$level==4,do_lang_tempcode('NEWSLETTER_4')));
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('NEWSLETTER_SUBSCRIPTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'a87e4be6cbc070e66e25ad4ece429cc4','TITLE'=>do_lang_tempcode('NEWSLETTER_SUBSCRIPTIONS'))));
 		foreach ($newsletters as $newsletter)
 		{
 			$newsletter_title=get_translated_text($newsletter['title']);

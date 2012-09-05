@@ -128,7 +128,7 @@ class Module_admin_emaillog
 				$date_time,
 				hyperlink('mailto:'.$from_email,$from_name,false,true),
 				hyperlink('mailto:'.$to_email[0],$to_name[0],false,true),
-				do_template('CROP_TEXT_MOUSE_OVER',array('TEXT_LARGE'=>escape_html($row['m_message']),'TEXT_SMALL'=>escape_html($row['m_subject']))),
+				do_template('CROP_TEXT_MOUSE_OVER',array('_GUID'=>'c2fd45ce32e1c03a536674108b937098','TEXT_LARGE'=>escape_html($row['m_message']),'TEXT_SMALL'=>escape_html($row['m_subject']))),
 			)));
 		}
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('logged_mail_messages','COUNT(*)');
@@ -188,7 +188,7 @@ class Module_admin_emaillog
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit','id'=>$id),'_SELF');
 
-		return do_template('FORM_SCREEN',array('SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array('_GUID'=>'84c9b97944b6cf799ac1abb5044d426a','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**

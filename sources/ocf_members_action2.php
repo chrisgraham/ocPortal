@@ -40,7 +40,7 @@ function nice_get_timezone_list($timezone=NULL)
 	$timezone_list=new ocp_tempcode();
 	foreach (get_timezone_list() as $_timezone=>$timezone_nice)
 	{
-		$timezone_list->attach(do_template('OCF_AUTO_TIME_ZONE_ENTRY',array('HOUR'=>date('H',tz_time(time(),$_timezone)),'DW'=>date('w',tz_time(time(),$_timezone)),'NAME'=>$_timezone,'SELECTED'=>($timezone==$_timezone),'CLASS'=>'','TEXT'=>$timezone_nice)));
+		$timezone_list->attach(do_template('OCF_AUTO_TIME_ZONE_ENTRY',array('_GUID'=>'2aed8a9fcccb52e5d52b5a307a906b3a','HOUR'=>date('H',tz_time(time(),$_timezone)),'DW'=>date('w',tz_time(time(),$_timezone)),'NAME'=>$_timezone,'SELECTED'=>($timezone==$_timezone),'CLASS'=>'','TEXT'=>$timezone_nice)));
 	}
 	return $timezone_list;
 }
@@ -283,7 +283,7 @@ function ocf_get_member_fields($mini_mode=true,$member_id=NULL,$groups=NULL,$ema
 	list($_fields,$_hidden)=ocf_get_member_fields_settings($mini_mode,$member_id,$groups,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$primary_group,$username,$is_perm_banned,$special_type,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 	$fields->attach($_fields);
 	$hidden->attach($_hidden);
-	if (!$mini_mode) $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PROFILE'))));
+	if (!$mini_mode) $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'14205f6bf83c469a1404d24967d7b6f6','TITLE'=>do_lang_tempcode('PROFILE'))));
 	list($_fields,$_hidden)=ocf_get_member_fields_profile($mini_mode,$member_id,$groups,$custom_fields);
 	$fields->attach($_fields);
 	$hidden->attach($_hidden);
@@ -423,7 +423,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$doing_local_forum_options=(addon_installed('ocf_forum')) && ($special_type!='remote') && (!$mini_mode);
 
 	if (($doing_international) || ($doing_langs) || ($doing_email_option) || ($doing_wide_option) || ($doing_theme_option) || ($doing_local_forum_options))
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('FORCE_OPEN'=>is_null($member_id)?true:NULL,'TITLE'=>do_lang_tempcode('SETTINGS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3cd79bbea084ec1fe148edddad7d52b4','FORCE_OPEN'=>is_null($member_id)?true:NULL,'TITLE'=>do_lang_tempcode('SETTINGS'))));
 
 	require_lang('config');
 
@@ -525,7 +525,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		// Some admin options...
 		if (has_privilege(get_member(),'member_maintenance'))
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MEMBER_ACCESS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'04422238c372edd0b11c11a05feb6267','TITLE'=>do_lang_tempcode('MEMBER_ACCESS'))));
 
 			// Probation
    		if (has_privilege(get_member(),'probate_members'))

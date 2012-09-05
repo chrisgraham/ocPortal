@@ -188,7 +188,7 @@ function get_afm_form_fields()
 		}
 	}
 
-	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SETTINGS'))));
+	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'671ec3d1ffd376766450b36d718f1c60','TITLE'=>do_lang_tempcode('SETTINGS'))));
 	if (ini_get('safe_mode')!='1')
 	{
 		$fields->attach(form_input_tick(do_lang_tempcode('NEED_FTP'),do_lang_tempcode('DESCRIPTION_NEED_FTP'),'uses_ftp',$uses_ftp));
@@ -197,7 +197,7 @@ function get_afm_form_fields()
 	$fields->attach(form_input_line(do_lang_tempcode('FTP_DIRECTORY'),do_lang_tempcode('FTP_FOLDER'),'ftp_directory',$ftp_directory,false));
 	$fields->attach(form_input_line(do_lang_tempcode('FTP_USERNAME'),'','ftp_username',$ftp_username,false));
 	$fields->attach(form_input_password(do_lang_tempcode('FTP_PASSWORD'),'','ftp_password',false));
-	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+	$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'7b2ed7bd1b2869a02e3b3bf40b3f99cd','TITLE'=>do_lang_tempcode('ACTIONS'))));
 	$fields->attach(form_input_tick(do_lang_tempcode('REMEMBER_PASSWORD'),do_lang_tempcode('DESCRIPTION_REMEMBER_PASSWORD'),'remember_password',false));
 
 	return $fields;

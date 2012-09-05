@@ -136,7 +136,7 @@ class Block_main_forum_news
 			$news=is_object($myrow['firstpost'])?$myrow['firstpost']:make_string_tempcode(xhtmlise_html($myrow['firstpost']));
 			if (is_null($news)) $news='';
 			$full_url=$GLOBALS['FORUM_DRIVER']->topic_url($id,'');
-			$news_text->attach(do_template('NEWS_BOX',array('GIVE_CONTEXT'=>false,'_GUID'=>'2edf18daf5510495fd588cad062aec4e','TRUNCATE'=>false,'BLOG'=>false,'FIRSTTIME'=>strval($myrow['firsttime']),'LASTTIME'=>strval($myrow['lasttime']),'CLOSED'=>strval($myrow['closed']),'FIRSTUSERNAME'=>$myrow['firstusername'],'LASTUSERNAME'=>$myrow['lastusername'],'FIRSTMEMBERID'=>strval($myrow['firstmemberid']),'LASTMEMBERID'=>strval($myrow['lastmemberid']),'ID'=>strval($id),'FULL_URL'=>$full_url,'SUBMITTER'=>strval($myrow['firstmemberid']),'DATE'=>$date,'DATE_RAW'=>strval($myrow[$date_key]),'NEWS_TITLE'=>$news_title,'CATEGORY'=>'','IMG'=>'','AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS'=>$news)));
+			$news_text->attach(do_template('NEWS_BOX',array('_GUID'=>'12fa98717a768ccbe28884bdbae0313b','GIVE_CONTEXT'=>false,'_GUID'=>'2edf18daf5510495fd588cad062aec4e','TRUNCATE'=>false,'BLOG'=>false,'FIRSTTIME'=>strval($myrow['firsttime']),'LASTTIME'=>strval($myrow['lasttime']),'CLOSED'=>strval($myrow['closed']),'FIRSTUSERNAME'=>$myrow['firstusername'],'LASTUSERNAME'=>$myrow['lastusername'],'FIRSTMEMBERID'=>strval($myrow['firstmemberid']),'LASTMEMBERID'=>strval($myrow['lastmemberid']),'ID'=>strval($id),'FULL_URL'=>$full_url,'SUBMITTER'=>strval($myrow['firstmemberid']),'DATE'=>$date,'DATE_RAW'=>strval($myrow[$date_key]),'NEWS_TITLE'=>$news_title,'CATEGORY'=>'','IMG'=>'','AUTHOR'=>$author,'AUTHOR_URL'=>$author_url,'NEWS'=>$news)));
 
 			$i++;
 

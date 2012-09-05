@@ -64,7 +64,7 @@ class Hook_Preview_ocf_post
 
 				$temp=$post_html;
 				$post_html=new ocp_tempcode();
-				$post_html=do_template('COMCODE_QUOTE_BY',array('SAIDLESS'=>false,'BY'=>$p['p_poster_name_if_guest'],'CONTENT'=>$p['message']));
+				$post_html=do_template('COMCODE_QUOTE_BY',array('_GUID'=>'ba33b8277a991e48c7174c0469771a44','SAIDLESS'=>false,'BY'=>$p['p_poster_name_if_guest'],'CONTENT'=>$p['message']));
 				$post_html->attach($temp);
 			}
 		}
@@ -135,7 +135,7 @@ class Hook_Preview_ocf_post
 		} else
 		{
 			$poster_details=new ocp_tempcode();
-			$custom_fields=do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>(get_ip_address())));
+			$custom_fields=do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID'=>'9cbbc5913d8164970f19c38a210fda95','NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>(get_ip_address())));
 			$poster_details=do_template('OCF_GUEST_DETAILS',array('_GUID'=>'2db48e17db9f060c04386843f2d0f105','CUSTOM_FIELDS'=>$custom_fields));
 			$poster_username=post_param('poster_name_if_guest',do_lang('GUEST'));
 			$ip_link=((has_actual_page_access(get_member(),'admin_lookup')) && (addon_installed('securitylogging')))?build_url(array('page'=>'admin_lookup','param'=>get_ip_address()),get_module_zone('admin_lookup')):new ocp_tempcode();
@@ -155,7 +155,7 @@ class Hook_Preview_ocf_post
 
 		if (get_param('type')=='edit_post')
 		{
-			$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array('LAST_EDIT_DATE_RAW'=>strval(time()),'LAST_EDIT_DATE'=>get_timezoned_date(time(),true),'LAST_EDIT_PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),false,true),'LAST_EDIT_USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
+			$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array('_GUID'=>'3c476cf570fc4ba9780cc6b9c358b7f4','LAST_EDIT_DATE_RAW'=>strval(time()),'LAST_EDIT_DATE'=>get_timezoned_date(time(),true),'LAST_EDIT_PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),false,true),'LAST_EDIT_USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())));
 		} else $last_edited=new ocp_tempcode();
 
 		$post=do_template('OCF_TOPIC_POST',array('_GUID'=>'354473f96b4f7324d2a9c476ff78f0d7','POST_ID'=>'','TOPIC_FIRST_POST_ID'=>'','TOPIC_FIRST_POSTER'=>strval(get_member()),'POST_TITLE'=>$post_title,'CLASS'=>$class,'EMPHASIS'=>$emphasis,'FIRST_UNREAD'=>'','TOPIC_ID'=>'','ID'=>'','POST_DATE_RAW'=>strval($_post_date),'POST_DATE'=>$post_date,'UNVALIDATED'=>$unvalidated,'URL'=>'','POSTER'=>$poster,'POST_AVATAR'=>$post_avatar,'POSTER_TITLE'=>$poster_title,'RANK_IMAGES'=>$rank_images,'POST'=>$post_html,'LAST_EDITED'=>$last_edited,'SIGNATURE'=>$signature,'BUTTONS'=>'','POSTER_ID'=>strval($post_owner)));

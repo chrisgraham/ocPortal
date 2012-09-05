@@ -158,7 +158,7 @@ class Hook_pointstore_banners
 		$keep->attach(form_input_hidden('notes',$notes));
 		$keep->attach(form_input_hidden('name',$name));
 
-		return do_template('POINTSTORE_CONFIRM_SCREEN',array('ACTION'=>'','COST'=>integer_format($cost),'POINTS_AFTER'=>integer_format($points_after),'TITLE'=>$title,'MESSAGE'=>$banner,'PROCEED_URL'=>$proceed_url,'CANCEL_URL'=>$cancel_url,'KEEP'=>$keep));
+		return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'6d5ac2177bd76e31b915d4358c0bbbf4','ACTION'=>'','COST'=>integer_format($cost),'POINTS_AFTER'=>integer_format($points_after),'TITLE'=>$title,'MESSAGE'=>$banner,'PROCEED_URL'=>$proceed_url,'CANCEL_URL'=>$cancel_url,'KEEP'=>$keep));
 	}
 
 	/**

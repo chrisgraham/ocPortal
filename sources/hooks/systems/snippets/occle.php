@@ -37,7 +37,7 @@ class Hook_occle
 
 			$title=get_screen_title('OCCLE');
 
-			return do_template('OCCLE_MAIN',array('COMMANDS'=>'','SUBMIT_URL'=>build_url(array('page'=>'admin_occle'),'adminzone'),'PROMPT'=>do_lang_tempcode('COMMAND_PROMPT',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())))));
+			return do_template('OCCLE_MAIN',array('_GUID'=>'2f29170f4f8320a26fad66e0d0f52b7a','COMMANDS'=>'','SUBMIT_URL'=>build_url(array('page'=>'admin_occle'),'adminzone'),'PROMPT'=>do_lang_tempcode('COMMAND_PROMPT',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())))));
 		}
 
 		return new ocp_tempcode();

@@ -157,11 +157,11 @@ class Module_authors
 		$handle=get_author_id_from_name($author);
 		if (!is_null($handle))
 		{
-			$forum_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('ACTION'=>hyperlink($GLOBALS['FORUM_DRIVER']->member_profile_url($handle,false,true),do_lang_tempcode('AUTHOR_PROFILE'),false,false,'',NULL,NULL,'me')));
+			$forum_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('_GUID'=>'b90b606f263eeabeba38e06eef40a21e','ACTION'=>hyperlink($GLOBALS['FORUM_DRIVER']->member_profile_url($handle,false,true),do_lang_tempcode('AUTHOR_PROFILE'),false,false,'',NULL,NULL,'me')));
 			if (addon_installed('points'))
 			{
 				$give_points_url=build_url(array('page'=>'points','id'=>$handle),get_module_zone('points'));
-				$point_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('ACTION'=>hyperlink($give_points_url,do_lang_tempcode('AUTHOR_POINTS'))));
+				$point_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('_GUID'=>'2bfb9bf9b5fdf1dad34102abd4bc4648','ACTION'=>hyperlink($give_points_url,do_lang_tempcode('AUTHOR_POINTS'))));
 			}
 			else $point_details=new ocp_tempcode();
 		} else
@@ -173,7 +173,7 @@ class Module_authors
 		// Homepage
 		$url=$details['url'];
 		if (strlen($url)>0)
-			$url_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('ACTION'=>hyperlink($url,do_lang_tempcode('AUTHOR_HOMEPAGE'),false,false,'',NULL,NULL,'me')));
+			$url_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('_GUID'=>'4276bac5acb0ce5839a90614438c1049','ACTION'=>hyperlink($url,do_lang_tempcode('AUTHOR_HOMEPAGE'),false,false,'',NULL,NULL,'me')));
 		else $url_details=new ocp_tempcode();
 
 		// (Self?) description
@@ -186,7 +186,7 @@ class Module_authors
 		if (has_edit_author_permission(get_member(),$author))
 		{
 			$edit_author_url=build_url(array('page'=>'cms_authors','type'=>'_ad','author'=>$author),get_module_zone('cms_authors'));
-			$staff_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('ACTION'=>hyperlink($edit_author_url,do_lang_tempcode('DEFINE_AUTHOR'),false)));
+			$staff_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('_GUID'=>'604b1a986cee4924998cee722b72936e','ACTION'=>hyperlink($edit_author_url,do_lang_tempcode('DEFINE_AUTHOR'),false)));
 		}
 		else $staff_details=new ocp_tempcode();
 
@@ -194,7 +194,7 @@ class Module_authors
 		if (addon_installed('search'))
 		{
 			$search_url=build_url(array('page'=>'search','author'=>$author),get_module_zone('search'));
-			$search_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('ACTION'=>hyperlink($search_url,do_lang_tempcode('SEARCH'),false)));
+			$search_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('_GUID'=>'6fccd38451bc1198024e2452f8539411','ACTION'=>hyperlink($search_url,do_lang_tempcode('SEARCH'),false)));
 		}
 		else $search_details=new ocp_tempcode();
 

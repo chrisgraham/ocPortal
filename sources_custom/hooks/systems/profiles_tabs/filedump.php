@@ -48,7 +48,7 @@ class Hook_Profiles_Tabs_filedump
 
 		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
-		$content=do_template('OCF_MEMBER_PROFILE_FILEDUMP',array('MEMBER_ID'=>strval($member_id_of)));
+		$content=do_template('OCF_MEMBER_PROFILE_FILEDUMP',array('_GUID'=>'87c683590a6e2d435d877cec1c97baba','MEMBER_ID'=>strval($member_id_of)));
 
 		return array($title,$content,$order);
 	}

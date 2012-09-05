@@ -853,10 +853,11 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 		global $ATTACHED_MESSAGES;
 		$middle->handle_symbol_preprocessing();
 		$tpl=do_template('STANDALONE_HTML_WRAP',array(
+			'_GUID'=>'fe818a6fb0870f0b211e8e52adb23f26',
 			'TITLE'=>is_null($GLOBALS['DISPLAYED_TITLE'])?do_lang_tempcode('NA'):$GLOBALS['DISPLAYED_TITLE'],
 			'FRAME'=>running_script('iframe'),
 			'TARGET'=>'_self',
-			'CONTENT'=>$middle
+			'CONTENT'=>$middle,
 		));
 		$tpl->handle_symbol_preprocessing();
 		return $tpl;
@@ -2458,7 +2459,7 @@ function member_personal_links_and_details($member_id)
 		// Topic count
 		if ((!has_no_forum()) && (get_option('forum_show_personal_stats_topics')=='1'))
 		{
-			$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('KEY'=>do_lang_tempcode('COUNT_TOPICSCOUNT'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_topic_count($member_id)))));
+			$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'2dd2a2d30c4ea7144c74ab058239fb23','KEY'=>do_lang_tempcode('COUNT_TOPICSCOUNT'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_topic_count($member_id)))));
 		}
 
 		// Member profile view link
@@ -2530,7 +2531,7 @@ function member_personal_links_and_details($member_id)
 			foreach ($usergroup_subs as $sub)
 			{
 				$url=build_url(array('page'=>'purchase','type'=>'message','product'=>'USERGROUP'.strval($sub['id'])),get_module_zone('purchase'));
-				$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('NAME'=>do_lang_tempcode('UPGRADE_TO',escape_html(get_translated_text($sub['s_title']))),'URL'=>$url)));
+				$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'5c4a1f300b37722e587fe2f608f1ee3a','NAME'=>do_lang_tempcode('UPGRADE_TO',escape_html(get_translated_text($sub['s_title']))),'URL'=>$url)));
 			}
 		}
 	}
@@ -2556,7 +2557,7 @@ function member_personal_links_and_details($member_id)
 		{
 			$visible=(array_key_exists(get_session_id(),$GLOBALS['SESSION_CACHE'])) && ($GLOBALS['SESSION_CACHE'][get_session_id()]['session_invisible']==0);
 			$url=build_url(array('page'=>'login','type'=>'invisible','redirect'=>(get_page_name()=='login')?NULL:SELF_REDIRECT),get_module_zone('login'));
-			$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('NAME'=>do_lang_tempcode($visible?'INVISIBLE':'BE_VISIBLE'),'DESCRIPTION'=>'','URL'=>$url)));
+			$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array('_GUID'=>'2af618fe39444861c21cf0caec216227','NAME'=>do_lang_tempcode($visible?'INVISIBLE':'BE_VISIBLE'),'DESCRIPTION'=>'','URL'=>$url)));
 		}
 	}
 

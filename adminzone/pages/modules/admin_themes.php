@@ -271,7 +271,7 @@ class Module_admin_themes
 		$fields->attach(form_input_tick(do_lang_tempcode('SUPPORTS_WIDE'),do_lang_tempcode('DESCRIPTION_SUPPORTS_WIDE'),'supports_wide',$supports_wide==1));
 		$fields->attach(form_input_line(do_lang_tempcode('MOBILE_PAGES'),do_lang_tempcode('DESCRIPTION_MOBILE_PAGES'),'mobile_pages',$mobile_pages,false));
 		if ($name!='default') $fields->attach(get_category_permissions_for_environment('theme',$name,NULL,NULL,($name=='')));
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'805d278a21d59eaa4568c2a77fbb5073','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('USE_ON_ZONES'),do_lang_tempcode('DESCRIPTION_USE_ON_ZONES'),'use_on_all',$use_on_all_zones));
 
 		// Mapping
@@ -445,7 +445,7 @@ class Module_admin_themes
 		$fields=$this->get_theme_fields($theme,$details['title'],$details['description'],$details['author'],$details['mobile_pages'],intval($details['supports_wide']),false);
 		if ($theme!='default')
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'66a48b082356b9e9bfdb1a8107f5e567','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('COPY_THEME'),do_lang_tempcode('DESCRIPTION_COPY_THEME',escape_html($theme)),'copy',false));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 		}
@@ -1779,7 +1779,7 @@ class Module_admin_themes
 		$hidden->attach(form_input_hidden('old_id',$id));
 		if (strpos($path,'images_custom')!==false)
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'9468297854009243da7b47c9bb3992bb','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_THEME_IMAGE'),'delete',false));
 		}
 
@@ -1905,7 +1905,7 @@ class Module_admin_themes
 				}
 			} elseif ((substr($t,0,11)!='JAVASCRIPT_') && ($t!='JAVASCRIPT.tpl')) // Oh dear
 			{
-				$tpl_x=do_template('TEMPLATE_LIST',array('URL'=>'','COLOR'=>'red','TEMPLATE'=>$t,'LIST'=>''));
+				$tpl_x=do_template('TEMPLATE_LIST',array('_GUID'=>'96115a3b168769744b4b69fd2e1e7f6c','URL'=>'','COLOR'=>'red','TEMPLATE'=>$t,'LIST'=>''));
 				$lis->attach($tpl_x);
 			}
 		}

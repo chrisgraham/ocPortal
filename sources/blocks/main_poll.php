@@ -60,7 +60,7 @@ class Block_main_poll
 			return poll_script(true,$param);
 		}
 
-		return do_template('BLOCK_MAIN_POLL_IFRAME',array('PARAM'=>strval($param),'ZONE'=>$zone));
+		return do_template('BLOCK_MAIN_POLL_IFRAME',array('_GUID'=>'06a5b384015504a6a57fc4ddedbe91a7','PARAM'=>strval($param),'ZONE'=>$zone));
 	}
 
 }

@@ -305,7 +305,7 @@ class Module_cms_banners extends standard_crud_module
 		// Permissions
 		if (get_option('use_banner_permissions')=='1') $fields->attach($this->get_permission_fields($name,NULL,($name=='')));
 
-		$edit_text=($name=='')?new ocp_tempcode():do_template('BANNER_PREVIEW',array('PREVIEW'=>show_banner($name,$title_text,comcode_to_tempcode($caption,$submitter),$direct_code,$image_url,'',$site_url,$b_type,is_null($submitter)?get_member():$submitter)));
+		$edit_text=($name=='')?new ocp_tempcode():do_template('BANNER_PREVIEW',array('_GUID'=>'b7c58bc13ff317870b6823716fd36f0c','PREVIEW'=>show_banner($name,$title_text,comcode_to_tempcode($caption,$submitter),$direct_code,$image_url,'',$site_url,$b_type,is_null($submitter)?get_member():$submitter)));
 
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden,'image');

@@ -71,7 +71,7 @@ class Activity_activities
 		{
 			require_lang('activities');
 
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SYNDICATION'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'ded75eeb85f5bb8a6c1b6da597555750','TITLE'=>do_lang_tempcode('SYNDICATION'))));
 			$fields->attach(form_input_tick(do_lang_tempcode('SYNDICATE_THIS'),do_lang_tempcode('DESCRIPTION_SYNDICATE_THIS'),'syndicate_this',true));
 		}
 		return $fields;

@@ -125,7 +125,7 @@ class Hook_fields_combo
 
 		$_required=($required)?'_required':'';
 
-		$input=do_template('FORM_SCREEN_INPUT_COMBO',array('DEFAULT'=>($actual_value==$field['cf_default'])?'':$actual_value,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'CONTENT'=>$_list));
+		$input=do_template('FORM_SCREEN_INPUT_COMBO',array('_GUID'=>'0736ea661a743a09354346e9534aa597','DEFAULT'=>($actual_value==$field['cf_default'])?'':$actual_value,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'CONTENT'=>$_list));
 
 		return _form_input($name,$_cf_name,$_cf_description,$input,$required,false,$tabindex);
 	}

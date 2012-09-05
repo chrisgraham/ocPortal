@@ -1831,7 +1831,7 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 		if ($seed!='')
 		{
 			$keep=symbol_tempcode('KEEP');
-			$css->attach(do_template('CSS_NEED_FULL',array('URL'=>find_script('themewizard').'?type=css&show='.urlencode($c).'.css'.$keep->evaluate()),user_lang(),false,NULL,'.tpl','templates',$theme));
+			$css->attach(do_template('CSS_NEED_FULL',array('_GUID'=>'f2d7f0303a08b9aa9e92f8b0208ee9a7','URL'=>find_script('themewizard').'?type=css&show='.urlencode($c).'.css'.$keep->evaluate()),user_lang(),false,NULL,'.tpl','templates',$theme));
 		}
 		elseif (($c=='no_cache') || ($inline))
 		{

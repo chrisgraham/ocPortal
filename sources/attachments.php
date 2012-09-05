@@ -272,7 +272,7 @@ function attachment_popup_script()
 	require_code('site');
 	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('ATTACHMENT_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
+	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'954617cc747b5cece4cc406d8c110150','TITLE'=>do_lang_tempcode('ATTACHMENT_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
 
 	$echo->evaluate_echo();
 }
@@ -376,7 +376,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 			$file_contents=http_download_file($url,1024*1024*20/*reasonable limit*/);
 			list($_embed,$title)=do_code_box($extension,make_string_tempcode($file_contents));
 			if ($attachment['a_original_filename']!='') $title=escape_html($attachment['a_original_filename']);
-			$temp_tpl=do_template('COMCODE_CODE',array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true,'STYLE'=>'','TYPE'=>$extension,'CONTENT'=>$_embed,'TITLE'=>$title));
+			$temp_tpl=do_template('COMCODE_CODE',array('_GUID'=>'b76f3383d31ad823f50124d59db6a8c3','WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true,'STYLE'=>'','TYPE'=>$extension,'CONTENT'=>$_embed,'TITLE'=>$title));
 			break;
 
 		case 'hyperlink':

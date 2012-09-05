@@ -142,7 +142,7 @@ class Block_side_weather
 			{
 				if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();
 			}
-			return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>htmlentities($rss->error)));
+			return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'046c437a5c3799838155b5c5fbe3be26','MESSAGE'=>htmlentities($rss->error)));
 		}
 
 		foreach ($rss->gleamed_items as $item)

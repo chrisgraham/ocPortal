@@ -66,7 +66,7 @@ class Block_bottom_rss
 		$rss=new rss($url);
 		if (!is_null($rss->error))
 		{
-			return do_template('WARNING_BOX',array('WARNING'=>$rss->error));
+			return do_template('WARNING_BOX',array('_GUID'=>'7ae6a91db7c7ac7d607b9e29ddafc344','WARNING'=>$rss->error));
 		}
 
 		global $NEWS_CATS_CACHE;

@@ -321,13 +321,13 @@ class Module_warnings extends standard_crud_module
 			$this->add_text=do_lang_tempcode('HAS_ALREADY_X_WARNINGS',escape_html($username),integer_format($num_warnings),array(escape_html(get_site_name()),escape_html($rules_url),escape_html($history_url),escape_html($profile_url)));
 		}
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('MODULE_TRANS_NAME_warnings'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'cb4511a58a4c78eb75346a468e6e6fdf','TITLE'=>do_lang_tempcode('MODULE_TRANS_NAME_warnings'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('WHETHER_MAKE_WARNING'),do_lang_tempcode('DESCRIPTION_WHETHER_MAKE_WARNING'),'is_warning',$is_warning==1));
 
 		// Punitive actions
 		if ($new)
 		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('PUNITIVE_ACTIONS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'322a026b7a56a3e4e9ac58e4979add35','TITLE'=>do_lang_tempcode('PUNITIVE_ACTIONS'))));
 
 			if (!is_null($post_id))
 			{
@@ -407,7 +407,7 @@ class Module_warnings extends standard_crud_module
 		// Explanatory text
 		$keep=symbol_tempcode('KEEP');
 		$load_url=find_script('warnings').'?type=load'.$keep->evaluate();
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('EXPLANATORY_TEXT'),'HELP'=>do_lang_tempcode('LOAD_SAVED_WARNING',escape_html($load_url)))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'c7eb70b13be74d8f3bd1f1c5e739d9aa','TITLE'=>do_lang_tempcode('EXPLANATORY_TEXT'),'HELP'=>do_lang_tempcode('LOAD_SAVED_WARNING',escape_html($load_url)))));
 		$fields->attach(form_input_line_comcode(do_lang_tempcode('EXPLANATION'),do_lang_tempcode('DESCRIPTION_EXPLANATION'),'explanation',$explanation,true));
 		if ($new)
 		{
@@ -422,7 +422,7 @@ class Module_warnings extends standard_crud_module
 			}
 			$fields->attach(form_input_text_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_PP_MESSAGE'),'message',$message,false));
 
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'c745535395edf114d20a8a8eafe73b92','TITLE'=>do_lang_tempcode('ACTIONS'))));
 			$fields->attach(form_input_line(do_lang_tempcode('SAVE_WARNING_DETAILS'),do_lang_tempcode('DESCRIPTION_SAVE_WARNING_DETAILS'),'save','',false));
 		}
 

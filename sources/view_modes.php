@@ -255,7 +255,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 				} else
 				{
 					require_javascript('javascript_translate');
-					$actions=do_template('TRANSLATE_ACTION',array('LANG_FROM'=>get_site_default_lang(),'LANG_TO'=>user_lang(),'NAME'=>'trans_'.strval($key),'OLD'=>$value_found));
+					$actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'441cd96588b2a4f74e94003643262833','LANG_FROM'=>get_site_default_lang(),'LANG_TO'=>user_lang(),'NAME'=>'trans_'.strval($key),'OLD'=>$value_found));
 				}
 				$description->attach($actions);
 				$fields->attach(form_input_text(is_null($names[$key])?('#'.strval($key)):$names[$key],$description,'trans_'.strval($key),$value_found,false));
@@ -298,7 +298,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 				} else
 				{
 					require_javascript('javascript_translate');
-					$actions=do_template('TRANSLATE_ACTION',array('LANG_FROM'=>get_site_default_lang(),'LANG_TO'=>user_lang(),'NAME'=>'l_'.$key,'OLD'=>str_replace('\n',chr(10),$value_found)));
+					$actions=do_template('TRANSLATE_ACTION',array('_GUID'=>'031eb918cb3bcaf4339130b46f8b1b8a','LANG_FROM'=>get_site_default_lang(),'LANG_TO'=>user_lang(),'NAME'=>'l_'.$key,'OLD'=>str_replace('\n',chr(10),$value_found)));
 				}
 				$description->attach($actions);
 				$fields->attach(form_input_text($key,$description,'l_'.$key,str_replace('\n',chr(10),$value_found),false));
@@ -330,7 +330,7 @@ function special_page_types($special_page_type,&$out,/*&*/$out_evaluated)
 			{
 				$file=$name.'.tpl';
 				$edit_url=build_url(array('page'=>'admin_themes','type'=>'_edit_templates','theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'f0file'=>$file),'adminzone',NULL,false,true);
-				$templates->attach(do_template('TEMPLATE_LIST_ENTRY',array('COUNT'=>integer_format($count),'NAME'=>$name,'EDIT_URL'=>$edit_url)));
+				$templates->attach(do_template('TEMPLATE_LIST_ENTRY',array('_GUID'=>'67fb5ac96a4ab2103ae82f9be7c43e24','COUNT'=>integer_format($count),'NAME'=>$name,'EDIT_URL'=>$edit_url)));
 			}
 		} else
 		{

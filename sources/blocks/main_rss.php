@@ -124,7 +124,7 @@ class Block_main_rss
 			{
 				if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) return new ocp_tempcode();
 			}
-			return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>htmlentities($error)));
+			return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'c2a067db18cd5f14392fa922b06967e4','MESSAGE'=>htmlentities($error)));
 		}
 
 		global $NEWS_CATS_CACHE;

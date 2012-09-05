@@ -37,7 +37,7 @@ class Hook_Preview_ocf_welcome_email
 			require_code('mail');
 
 			$subject_line=post_param('subject');
-			$message_raw=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('CONTENT'=>post_param('text'),'LANG'=>get_site_default_lang()));
+			$message_raw=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'e065391099b1c7273ca1de940a1acb66','CONTENT'=>post_param('text'),'LANG'=>get_site_default_lang()));
 
 			$to=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 			if ($to=='' ) $to=get_option('staff_address');

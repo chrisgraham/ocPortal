@@ -233,7 +233,7 @@ function build_stored_menu($type,$menu,$silent_failure=false)
 		$redirect=get_self_url(true,true);
 		$_add_url=build_url(array('page'=>'admin_menus','type'=>'edit','id'=>$menu,'redirect'=>$redirect,'wide'=>1),'adminzone');
 		$add_url=$_add_url->evaluate();
-		return do_template('INLINE_WIP_MESSAGE',array('MESSAGE'=>do_lang_tempcode('MISSING_MENU',escape_html($menu),escape_html($add_url))));
+		return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'276e6600571b8b4717ca742b6e9da17a','MESSAGE'=>do_lang_tempcode('MISSING_MENU',escape_html($menu),escape_html($add_url))));
 	}
 
 	$i=0;

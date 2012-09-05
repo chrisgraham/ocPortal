@@ -116,7 +116,7 @@ class Block_main_contact_us
 					}
 				} else $use_captcha=false;
 
-				$comment_details=do_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'EMAIL_OPTIONAL'=>$email_optional,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>$box_title));
+				$comment_details=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'31fe96c5ec3b609fbf19595a1de3886f','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'EMAIL_OPTIONAL'=>$email_optional,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>$comment_url,'TITLE'=>$box_title));
 
 				$notifications_enabled=NULL;
 				$notification_change_url=NULL;

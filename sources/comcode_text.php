@@ -945,7 +945,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 												if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
 												{
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_START',array('SUMMARY'=>preg_replace('#(^|\s)wide($|\s)#','',$caption))));
+													$tag_output->attach(do_template('COMCODE_REAL_TABLE_START',array('_GUID'=>'9fca9672b9d069a0c8a40ebc6e88602b','SUMMARY'=>preg_replace('#(^|\s)wide($|\s)#','',$caption))));
 												} else
 												{
 													$tag_output->attach(do_template('COMCODE_REAL_TABLE_START_SUMMARY',array('_GUID'=>'0c5674fba61ba14b4b9fa39ea31ff54f','CAPTION'=>$caption)));
@@ -967,7 +967,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 														}
 														$spec=!$spec;
 													}
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START',array('START_HEAD'=>!$finished_thead,'START_BODY'=>(!$finished_thead_prior) && ($finished_thead))));
+													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START',array('_GUID'=>'98f20d57692f0bded555a0acb7d55024','START_HEAD'=>!$finished_thead,'START_BODY'=>(!$finished_thead_prior) && ($finished_thead))));
 													$spec=true;
 													foreach ($cells as $i=>$cell)
 													{
@@ -988,7 +988,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 														$spec=!$spec;
 													}
 
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END',array('END_HEAD'=>!$finished_thead)));
+													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END',array('_GUID'=>'c3abce83ec5bdbc10d0e80f646c91c23','END_HEAD'=>!$finished_thead)));
 												}
 
 												$tag_output->attach(do_template('COMCODE_REAL_TABLE_END',array('_GUID'=>'6a843e072e92b60cc950f69576231fe1','END_BODY'=>$finished_thead)));
