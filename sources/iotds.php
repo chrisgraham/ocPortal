@@ -25,9 +25,10 @@
  * @param  ID_TEXT		The zone the iotds module is in
  * @param  boolean		Whether to include extra management links (e.g. editing, choosing, archive, etc)
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		The rendered box
  */
-function render_iotd_box($myrow,$zone='_SEARCH',$include_manage_links=false,$give_context=true)
+function render_iotd_box($myrow,$zone='_SEARCH',$include_manage_links=false,$give_context=true,$guid='')
 {
 	require_code('images');
 
@@ -57,7 +58,7 @@ function render_iotd_box($myrow,$zone='_SEARCH',$include_manage_links=false,$giv
 	$view_url=build_url(array('page'=>'iotds','type'=>'view','wide'=>1,'id'=>$myrow['id']),$zone);
 
 	return do_template('IOTD_BOX',array(
-		'_GUID'=>'01162a9cc9bb6c4d0e79715f30aa141e',
+		'_GUID'=>($guid!='')?$guid:'01162a9cc9bb6c4d0e79715f30aa141e',
 		'VIEWS'=>integer_format($myrow['iotd_views']),
 		'THUMB'=>$thumb,
 		'DATE'=>$date,

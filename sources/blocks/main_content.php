@@ -279,7 +279,8 @@ class Block_main_content
 		$submit_url=str_replace('%21',$content_id,$submit_url);
 
 		$archive_url=$info['archive_url'];
-		$rendered_content=$object->run($award_content_row,$zone,$give_context,$include_breadcrumbs);
+
+		$rendered_content=$object->run($award_content_row,$zone,$give_context,$include_breadcrumbs,NULL,false,$guid);
 
 		if ((array_key_exists('no_links',$map)) && ($map['no_links']=='1'))
 		{

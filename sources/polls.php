@@ -148,9 +148,10 @@ function may_vote_in_poll($myrow)
  * @param  ID_TEXT		The zone our poll module is in
  * @param  boolean		Whether to include extra management links (e.g. editing, choosing, archive, etc)
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		The box
  */
-function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=false,$give_context=true)
+function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=false,$give_context=true,$guid='')
 {
 	$ip=get_ip_address();
 	if (!may_vote_in_poll($myrow)) $results=true;
@@ -201,13 +202,13 @@ function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=f
 		$answer_plain=get_translated_text($myrow['option'.strval($i)]);
 		if (!$results)
 		{
-			$tpl->attach(do_template('POLL_ANSWER',array('_GUID'=>'bc9c2e818f2e7031075d8d7b01d79cd5','PID'=>strval($myrow['id']),'I'=>strval($i),'CAST'=>strval($i),'VOTE_URL'=>$vote_url,'ANSWER'=>$answer,'ANSWER_PLAIN'=>$answer_plain)));
+			$tpl->attach(do_template('POLL_ANSWER',array('_GUID'=>($guid!='')?$guid:'bc9c2e818f2e7031075d8d7b01d79cd5','PID'=>strval($myrow['id']),'I'=>strval($i),'CAST'=>strval($i),'VOTE_URL'=>$vote_url,'ANSWER'=>$answer,'ANSWER_PLAIN'=>$answer_plain)));
 		} else
 		{
 			$votes=$myrow['votes'.strval($i)];
 			if (!is_numeric($votes)) $votes=0;
 			if ($totalvotes!=0) $width=intval(round(70.0*floatval($votes)/floatval($totalvotes))); else $width=0;
-			$tpl->attach(do_template('POLL_ANSWER_RESULT',array('_GUID'=>'887ea0ed090c48305eb84500865e5178','PID'=>strval($myrow['id']),'I'=>strval($i),'VOTE_URL'=>$vote_url,'ANSWER'=>$answer,'ANSWER_PLAIN'=>$answer_plain,'WIDTH'=>strval($width),'VOTES'=>integer_format($votes))));
+			$tpl->attach(do_template('POLL_ANSWER_RESULT',array('_GUID'=>($guid!='')?$guid:'887ea0ed090c48305eb84500865e5178','PID'=>strval($myrow['id']),'I'=>strval($i),'VOTE_URL'=>$vote_url,'ANSWER'=>$answer,'ANSWER_PLAIN'=>$answer_plain,'WIDTH'=>strval($width),'VOTES'=>integer_format($votes))));
 		}
 	}
 
@@ -231,7 +232,7 @@ function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=f
 	$full_url=new ocp_tempcode();
 	if ((get_page_name()!='polls') || (get_param('type','')!='view'))
 		$full_url=build_url(array('page'=>'polls','type'=>'view','id'=>$myrow['id']),$zone);
-	$map2=array('_GUID'=>'4c6b026f7ed96f0b5b8408eb5e5affb5','VOTE_URL'=>$vote_url,'SUBMITTER'=>strval($myrow['submitter']),'PID'=>strval($myrow['id']),'FULL_URL'=>$full_url,'CONTENT'=>$tpl,'QUESTION'=>$question,'QUESTION_PLAIN'=>$question_plain,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'RESULT_URL'=>$result_url,'ZONE'=>$zone);
+	$map2=array('_GUID'=>($guid!='')?$guid:'4c6b026f7ed96f0b5b8408eb5e5affb5','VOTE_URL'=>$vote_url,'SUBMITTER'=>strval($myrow['submitter']),'PID'=>strval($myrow['id']),'FULL_URL'=>$full_url,'CONTENT'=>$tpl,'QUESTION'=>$question,'QUESTION_PLAIN'=>$question_plain,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'RESULT_URL'=>$result_url,'ZONE'=>$zone);
 	if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map2['COMMENT_COUNT']='1';
 	return do_template('POLL_BOX',$map2);
 }

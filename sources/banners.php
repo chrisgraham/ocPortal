@@ -34,9 +34,10 @@ function init__banners()
  * @param  array			The database field row of it
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_banner_box($row,$zone='_SEARCH',$give_context=true)
+function render_banner_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	$url=new ocp_tempcode();
 
@@ -45,7 +46,7 @@ function render_banner_box($row,$zone='_SEARCH',$give_context=true)
 
 	$summary=show_banner($row['name'],$row['b_title_text'],get_translated_tempcode($row['caption']),$row['b_direct_code'],$row['img_url'],'',$row['url'],$row['the_type'],$row['submitter']);
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url));
 }
 
 /**
@@ -54,9 +55,10 @@ function render_banner_box($row,$zone='_SEARCH',$give_context=true)
  * @param  array			The database field row of it
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_banner_type_box($row,$zone='_SEARCH',$give_context=true)
+function render_banner_type_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	$url=new ocp_tempcode();
 
@@ -69,7 +71,7 @@ function render_banner_type_box($row,$zone='_SEARCH',$give_context=true)
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('banners','COUNT(*)',array('validated'=>1));
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'ba1f8d9da6b65415483d0d235f29c3d4','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'ba1f8d9da6b65415483d0d235f29c3d4','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

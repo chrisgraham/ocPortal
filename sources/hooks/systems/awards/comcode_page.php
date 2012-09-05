@@ -58,15 +58,16 @@ class Hook_awards_comcode_page
 	 * @param  boolean	Whether to include breadcrumbs (if there are any)
 	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
 	 * @param  boolean	Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false)
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
 	{
 		unset($zone); // Meaningless here
 
 		require_code('zones2');
 
-		return render_comcode_page_box($row,$give_context,$include_breadcrumbs,$root);
+		return render_comcode_page_box($row,$give_context,$include_breadcrumbs,$root,$guid);
 	}
 
 }

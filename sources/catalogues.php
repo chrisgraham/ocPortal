@@ -50,9 +50,10 @@ function init__catalogues()
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		The catalogue box
  */
-function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
 	require_css('catalogues');
 
@@ -78,7 +79,7 @@ function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$inc
 	}
 
 	$tpl_set=$catalogue_name;
-	return do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$display+array('GIVE_CONTEXT'=>$give_context,'BREADCRUMBS'=>$breadcrumbs),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
+	return do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$display+array('_GUID'=>($guid!='')?$guid:'dfg3rergt5g433f','GIVE_CONTEXT'=>$give_context,'BREADCRUMBS'=>$breadcrumbs),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
 }
 
 /**
@@ -90,9 +91,10 @@ function render_catalogue_entry_box($row,$zone='_SEARCH',$give_context=true,$inc
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false)
+function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
 {
 	// URL
 	$map=array('page'=>'catalogues','type'=>'category','id'=>$row['id']);
@@ -136,18 +138,19 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
 	// Render
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'e3fbbe807f75c0aa24626e06082ae731','TITLE'=>$title,'_REP_IMAGE'=>$_rep_image,'REP_IMAGE'=>$rep_image,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'e3fbbe807f75c0aa24626e06082ae731','TITLE'=>$title,'_REP_IMAGE'=>$_rep_image,'REP_IMAGE'=>$rep_image,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**
  * Render a catalogue box.
  *
- * @param  array				Catalogue row
- * @param  ID_TEXT			Zone to link through to
- * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @return tempcode			The catalogue box
+ * @param  array			Catalogue row
+ * @param  ID_TEXT		Zone to link through to
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
+ * @return tempcode		The catalogue box
  */
-function render_catalogue_box($row,$zone='_SEARCH',$give_context=true)
+function render_catalogue_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	if ($row['c_is_tree'])
 	{
@@ -166,7 +169,7 @@ function render_catalogue_box($row,$zone='_SEARCH',$give_context=true)
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']));
 	$entry_details=do_lang_tempcode(($row['c_is_tree']==1)?'CATEGORY_SUBORDINATE':'CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'8d7eaf6bb3170a92fd6a4876462e6f2e','TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'8d7eaf6bb3170a92fd6a4876462e6f2e','TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

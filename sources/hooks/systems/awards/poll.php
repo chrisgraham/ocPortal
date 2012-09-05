@@ -66,13 +66,14 @@ class Hook_awards_poll
 	 * @param  boolean	Whether to include breadcrumbs (if there are any)
 	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
 	 * @param  boolean	Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false)
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
 	{
 		require_code('polls');
 
-		return render_poll_box(true,$row,$zone,false,$give_context);
+		return render_poll_box(true,$row,$zone,false,$give_context,$guid);
 	}
 
 }

@@ -43,9 +43,10 @@ function init__chat()
  * @param  array			The database field row of it
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_chat_box($row,$zone='_SEARCH',$give_context=true)
+function render_chat_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	$url=build_url(array('page'=>'chat','type'=>'room','id'=>$row['id']),$zone);
 
@@ -54,7 +55,7 @@ function render_chat_box($row,$zone='_SEARCH',$give_context=true)
 	$_title=$row['room_name'];
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('ROOM'),$_title):$_title;
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'dacd41bad78b545f179582f83209c070','TITLE'=>$title,'SUMMARY'=>'','URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'dacd41bad78b545f179582f83209c070','TITLE'=>$title,'SUMMARY'=>'','URL'=>$url));
 }
 
 /**

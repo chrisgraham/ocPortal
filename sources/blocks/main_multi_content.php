@@ -509,7 +509,7 @@ class Block_main_multi_content
 			}
 
 			// Render
-			$rendered_content[]=$object->run($row,$zone,$give_context,$include_breadcrumbs,$root,$attach_to_url_filter);
+			$rendered_content[]=$object->run($row,$zone,$give_context,$include_breadcrumbs,$root,$attach_to_url_filter,$guid);
 
 			// Try and get a better submit url
 			$submit_url=str_replace('%21',$content_id,$submit_url);

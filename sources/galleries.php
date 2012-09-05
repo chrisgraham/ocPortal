@@ -39,9 +39,10 @@ function init__galleries()
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?ID_TEXT		Virtual root to use (NULL: none)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		The rendered box
  */
-function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
 	require_css('galleries');
 	require_code('images');
@@ -79,7 +80,7 @@ function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 
 	// Render
 	return do_template('GALLERY_IMAGE_BOX',array(
-		'_GUID'=>'733c22f14649705418ac0b155d11a661',
+		'_GUID'=>($guid!='')?$guid:'733c22f14649705418ac0b155d11a661',
 		'GIVE_CONTEXT'=>$give_context,
 		'ADD_DATE_RAW'=>strval($row['add_date']),
 		'ID'=>strval($row['id']),
@@ -105,9 +106,10 @@ function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_bread
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?ID_TEXT		Virtual root to use (NULL: none)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		The rendered box
  */
-function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
 	require_css('galleries');
 	require_code('images');
@@ -145,7 +147,7 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 
 	// Render
 	return do_template('GALLERY_VIDEO_BOX',array(
-		'_GUID'=>'22ef89b03900cbb264bd945b5bade75d',
+		'_GUID'=>($guid!='')?$guid:'22ef89b03900cbb264bd945b5bade75d',
 		'GIVE_CONTEXT'=>$give_context,
 		'ADD_DATE_RAW'=>strval($row['add_date']),
 		'ID'=>strval($row['id']),
@@ -179,9 +181,10 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?ID_TEXT		Virtual root to use (NULL: none)
  * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		The preview
  */
-function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false)
+function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
 {
 	require_css('galleries');
 
@@ -279,7 +282,7 @@ function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriat
 
 	// Render
 	return do_template('GALLERY_BOX',array(
-		'_GUID'=>'0dbec2f11de63b0402471fe5c8b32865',
+		'_GUID'=>($guid!='')?$guid:'0dbec2f11de63b0402471fe5c8b32865',
 		'GIVE_CONTEXT'=>$give_context,
 		'NUM_VIDEOS'=>strval($num_videos),
 		'NUM_IMAGES'=>strval($num_images),

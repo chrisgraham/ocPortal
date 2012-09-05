@@ -39,12 +39,13 @@ function init__ocf_groups()
 /**
  * Render a usergroup box.
  *
- * @param  array				Usergroup row
- * @param  ID_TEXT			Zone to link through to
- * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @return tempcode			The usergroup box
+ * @param  array			Usergroup row
+ * @param  ID_TEXT		Zone to link through to
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
+ * @return tempcode		The usergroup box
  */
-function render_group_box($row,$zone='_SEARCH',$give_context=true)
+function render_group_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	require_code('ocf_groups');
 
@@ -58,7 +59,7 @@ function render_group_box($row,$zone='_SEARCH',$give_context=true)
 	$num_members=ocf_get_group_members_raw_count($row['id']);
 	$entry_details=do_lang_tempcode('GROUP_NUM_MEMBERS',escape_html(integer_format($num_members)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'efeac1c8465974edd27bb0d805c4fbe0','TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'efeac1c8465974edd27bb0d805c4fbe0','TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

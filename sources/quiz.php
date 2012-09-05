@@ -24,9 +24,10 @@
  * @param  array			The database row
  * @param  string			The zone to show in
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		The rendered quiz link
  */
-function render_quiz_box($row,$zone='_SEARCH',$give_context=true)
+function render_quiz_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	$date=get_timezoned_date($row['q_add_date']);
 	$url=build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),$zone);
@@ -38,7 +39,7 @@ function render_quiz_box($row,$zone='_SEARCH',$give_context=true)
 	$redo_time=((is_null($row['q_redo_time'])) || ($row['q_redo_time']==0))?'':display_time_period($row['q_redo_time']*60*60);
 
 	return do_template('QUIZ_BOX',array(
-		'_GUID'=>'3ba4e19d93eb41f6cf2d472af982116e',
+		'_GUID'=>($guid!='')?$guid:'3ba4e19d93eb41f6cf2d472af982116e',
 		'GIVE_CONTEXT'=>$give_context,
 		'_TYPE'=>$row['q_type'],
 		'POINTS'=>strval($row['q_points_for_passing']),

@@ -26,9 +26,10 @@
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		The topic box
  */
-function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
 	$map=array('page'=>'topicview','id'=>$row['id']);
 	if (!is_null($root)) $map['keep_forum_root']=$root;
@@ -49,7 +50,7 @@ function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	$num_posts=$row['t_cache_num_posts'];
 	$entry_details=do_lang_tempcode('FORUM_NUM_POSTS',escape_html(integer_format($num_posts)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'85727b71bebcab45977363c8cb0a3ee6','TITLE'=>$title,'SUMMARY'=>$row['t_description'],'URL'=>$url,'ENTRY_DETAILS'=>$entry_details,'BREADCRUMBS'=>$breadcrumbs));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'85727b71bebcab45977363c8cb0a3ee6','TITLE'=>$title,'SUMMARY'=>$row['t_description'],'URL'=>$url,'ENTRY_DETAILS'=>$entry_details,'BREADCRUMBS'=>$breadcrumbs));
 }
 
 /**

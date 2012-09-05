@@ -21,18 +21,19 @@
 /**
  * Render an author box.
  *
- * @param  array				Author row
- * @param  ID_TEXT			Zone to link through to
- * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @return tempcode			The author box
+ * @param  array			Author row
+ * @param  ID_TEXT		Zone to link through to
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
+ * @return tempcode		The author box
  */
-function render_author_box($row,$zone='_SEARCH',$give_context=true)
+function render_author_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	$url=build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),$zone);
 
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('AUTHOR'),$row['author']):$row['author'];
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'e597aef1818f5610402d6e5f478735a1','TITLE'=>$title,'SUMMARY'=>get_translated_text($row['description']),'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'e597aef1818f5610402d6e5f478735a1','TITLE'=>$title,'SUMMARY'=>get_translated_text($row['description']),'URL'=>$url));
 }
 
 /**

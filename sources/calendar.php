@@ -29,12 +29,13 @@ function init__calendar()
 /**
  * Render an event box.
  *
- * @param  array				Event row
- * @param  ID_TEXT			Zone to link through to
- * @param  boolean			Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @return tempcode			The event box
+ * @param  array			Event row
+ * @param  ID_TEXT		Zone to link through to
+ * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
+ * @return tempcode		The event box
  */
-function render_event_box($row,$zone='_SEARCH',$give_context=true)
+function render_event_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	require_css('calendar');
 
@@ -43,6 +44,7 @@ function render_event_box($row,$zone='_SEARCH',$give_context=true)
 	$url=build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),$zone);
 
 	return do_template('CALENDAR_EVENT_BOX',array(
+		'_GUID'=>($guid!='')?$guid:'0eaa10d9fab32599ff095e1121d41c43',
 		'TITLE'=>get_translated_text($row['e_title']),
 		'SUMMARY'=>get_translated_tempcode($row['e_content']),
 		'URL'=>$url,
@@ -56,9 +58,10 @@ function render_event_box($row,$zone='_SEARCH',$give_context=true)
  * @param  array			The database field row of it
  * @param  ID_TEXT		The zone to use
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_calendar_type_box($row,$zone='_SEARCH',$give_context=true)
+function render_calendar_type_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	$map=array('page'=>'calendar','type'=>'misc');
 	$map['int_'.strval($row['id'])]=1;
@@ -72,7 +75,7 @@ function render_calendar_type_box($row,$zone='_SEARCH',$give_context=true)
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)',array('e_type'=>$row['id'],'validated'=>1));
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'0eaa10d9fab32599ff095e1121d41c49','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'0eaa10d9fab32599ff095e1121d41c49','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

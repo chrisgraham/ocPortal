@@ -34,9 +34,10 @@ function init__zones2()
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?ID_TEXT		Virtual root to use (NULL: none)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		Rendered box
  */
-function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
 	$map=array('page'=>$row['the_page']);
 	if (!is_null($root)) $map['keep_page_root']=$root;
@@ -72,7 +73,7 @@ function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=tr
 	}
 
 	return do_template('COMCODE_PAGE_BOX',array(
-		'_GUID'=>'ac70e0b5a003f8dac1ff42f46af28e1d',
+		'_GUID'=>($guid!='')?$guid:'ac70e0b5a003f8dac1ff42f46af28e1d',
 		'TITLE'=>$cc_page_title,
 		'PAGE'=>$row['the_page'],
 		'ZONE'=>$row['the_zone'],

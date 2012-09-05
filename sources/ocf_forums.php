@@ -44,9 +44,10 @@ function init__ocf_forums()
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		The forum box
  */
-function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
 	$map=array('page'=>'forumview');
 	if ($row['id']!=db_get_first_id()) $map['id']=$row['id'];
@@ -71,7 +72,7 @@ function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	$entry_details->attach(do_lang_tempcode('LIST_SEP'));
 	$entry_details->attach(do_lang_tempcode('FORUM_NUM_POSTS',escape_html(integer_format($num_posts))));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f61cd0ea4c2ac496da958a36f118495d','TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url,'ENTRY_DETAILS'=>protect_from_escaping($entry_details),'BREADCRUMBS'=>$breadcrumbs));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'f61cd0ea4c2ac496da958a36f118495d','TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url,'ENTRY_DETAILS'=>protect_from_escaping($entry_details),'BREADCRUMBS'=>$breadcrumbs));
 }
 
 /**

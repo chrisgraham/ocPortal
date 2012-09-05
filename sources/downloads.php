@@ -55,9 +55,10 @@ function download_licence_script()
  * @param  ?string		Text summary for result (e.g. highlighted portion of actual file from search result) (NULL: none)
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  ?AUTO_LINK	The virtual root (NULL: read from environment)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		A box for this download, linking to the full download page
  */
-function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL,$text_summary=NULL,$give_context=true,$root=NULL)
+function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL,$text_summary=NULL,$give_context=true,$root=NULL,$guid='')
 {
 	require_css('downloads');
 
@@ -111,7 +112,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 		{
 			$keep=symbol_tempcode('KEEP');
 			$licence_url=find_script('download_licence').'?id='.strval($licence).$keep->evaluate();
-			$licence_hyperlink=do_template('HYPERLINK_POPUP_WINDOW',array('_GUID'=>'58a9e5c99bd236290009b6eab44dbac3','TITLE'=>'','CAPTION'=>$licence_title,'URL'=>$licence_url,'WIDTH'=>'600','HEIGHT'=>'500','REL'=>'license'));
+			$licence_hyperlink=do_template('HYPERLINK_POPUP_WINDOW',array('_GUID'=>($guid!='')?$guid:'58a9e5c99bd236290009b6eab44dbac3','TITLE'=>'','CAPTION'=>$licence_title,'URL'=>$licence_url,'WIDTH'=>'600','HEIGHT'=>'500','REL'=>'license'));
 		} else
 		{
 			$licence=NULL; // Orphaned
@@ -121,7 +122,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	// Final template
 	if (($full_img_url!='') && (url_is_local($full_img_url))) $full_img_url=get_custom_base_url().'/'.$full_img_url;
 	return do_template('DOWNLOAD_BOX',array(
-		'_GUID'=>'7a4737e21bdb4bd15ac5fe8570915d08',
+		'_GUID'=>($guid!='')?$guid:'7a4737e21bdb4bd15ac5fe8570915d08',
 		'GIVE_CONTEXT'=>$give_context,
 		'TEXT_SUMMARY'=>$text_summary,
 		'AUTHOR'=>$row['author'],
@@ -157,9 +158,10 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
  * @param  boolean		Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false)
+function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
 {
 	$map=array('page'=>'downloads','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']);
 	if (!is_null($root)) $map['keep_download_root']=$root;
@@ -184,7 +186,7 @@ function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$i
 	$num_entries=$child_counts['num_downloads_children'];
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'4074a20248289c28cde8201272627129','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'4074a20248289c28cde8201272627129','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
 }
 
 /**

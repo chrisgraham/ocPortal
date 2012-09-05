@@ -115,7 +115,7 @@ class Block_main_awards
 
 		$archive_url=build_url(array('page'=>'awards','type'=>'award','id'=>$award),get_module_zone('awards'));
 
-		$rendered_content=$object->run($award_content_row,$zone,$give_context,$include_breadcrumbs);
+		$rendered_content=$object->run($award_content_row,$zone,$give_context,$include_breadcrumbs,NULL,false,$guid);
 
 		if (($award_type_row['a_hide_awardee']==1) || (is_guest($myrow['member_id'])))
 		{

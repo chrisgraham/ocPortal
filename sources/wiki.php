@@ -30,9 +30,10 @@ The concept of a chain is crucial to proper understanding of the Wiki+ system. P
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
 	$map=array('page'=>'wiki','type'=>'misc','id'=>($row['page_id']==db_get_first_id())?NULL:$row['page_id']);
 	if (!is_null($root)) $map['keep_forum_root']=$root;
@@ -51,7 +52,7 @@ function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_b
 		$title=do_lang_tempcode('WIKI_POST');
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode($row['the_message']),'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode($row['the_message']),'URL'=>$url));
 }
 
 /**
@@ -62,9 +63,10 @@ function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_b
  * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
  * @param  boolean		Whether to include breadcrumbs (if there are any)
  * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
+ * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		A box for it, linking to the full page
  */
-function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL)
+function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
 	$content=get_translated_tempcode($row['description']);
 
@@ -84,7 +86,7 @@ function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_b
 			$breadcrumbs=wiki_breadcrumbs($chain,NULL,true);
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'d2c37a1f68e684dc4ac85e3d4e4bf959','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'d2c37a1f68e684dc4ac85e3d4e4bf959','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>$content,'URL'=>$url));
 }
 
 /**
