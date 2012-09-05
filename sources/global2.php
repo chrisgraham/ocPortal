@@ -23,7 +23,7 @@
  */
 function init__global2()
 {
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY;
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS;
 
 	if (ini_get('output_buffering')=='1') @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
@@ -71,6 +71,8 @@ function init__global2()
 	}
 
 	// Initialise some globals
+	$JAVASCRIPTS_DEFAULT=array('javascript'=>1,'javascript_transitions'=>1);
+	if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) $JAVASCRIPTS_DEFAULT['javascript_ajax']=1; // AJAX needed by shared installs
 	$RUNNING_SCRIPT_CACHE=array();
 	$BROWSER_DECACHEING_CACHE=NULL;
 	$CHARSET_CACHE=NULL;
@@ -345,11 +347,12 @@ function init__global2()
 		// Load requirements for admins
 		if (has_zone_access(get_member(),'adminzone'))
 		{
-			$JAVASCRIPTS['javascript_staff']=1;
-			$JAVASCRIPTS['javascript_ajax']=1;
-			if (addon_installed('occle')) $JAVASCRIPTS['javascript_button_occle']=1;
+			$JAVASCRIPTS_DEFAULT['javascript_staff']=1;
+			$JAVASCRIPTS_DEFAULT['javascript_ajax']=1;
+			if (addon_installed('occle')) $JAVASCRIPTS_DEFAULT['javascript_button_occle']=1;
 		}
-		if ((addon_installed('realtime_rain')) && (get_option('bottom_show_realtime_rain_button',true)==='1')) $JAVASCRIPTS['javascript_button_realtime_rain']=1;
+		if ((addon_installed('realtime_rain')) && (get_option('bottom_show_realtime_rain_button',true)==='1')) $JAVASCRIPTS_DEFAULT['javascript_button_realtime_rain']=1;
+		$JAVASCRIPTS+=$JAVASCRIPTS_DEFAULT;
 	}
 	/*ocp_memory_profile('startup');	If debugging with inbuilt profiler
 	$func=get_defined_functions();

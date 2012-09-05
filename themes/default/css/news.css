@@ -27,6 +27,10 @@
 	margin-top: 0.5em;
 }
 
+.news_by {
+	text-align: center;
+}
+
 .newscat_img_author .news_by {
 	margin-top: 0.5em;
 	padding-bottom: 0.5em;
@@ -41,30 +45,6 @@
 
 .news_summary_p {
 	margin-top: 0.5em;
-}
-
-.news_goto {
-	font-size: 0.9em;
-	padding-bottom: 0.5em;
-	margin-bottom: 1.5em;
-	text-align: center;
-}
-
-.boxless_space .news_goto {
-	text-align: left;
-}
-
-.box___block_main_news .box___news_box, .box___block_main_rss .box___news_box {
-	border: 0;
-}
-
-.box___block_main_news .box___news_box + .box___news_box, .box___block_main_rss .box___news_box + .box___news_box {
-	border-top: 1px dotted {$GET,pale_border};
-	padding-top: 0.5em;
-}
-
-.news_by {
-	text-align: center;
 }
 
 .chicklet {

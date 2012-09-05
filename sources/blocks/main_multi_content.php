@@ -132,6 +132,10 @@ class Block_main_multi_content
 		$object=object_factory('Hook_awards_'.$type_id);
 		$info=$object->info($zone,($filter_b=='')?NULL:$filter_b);
 		if (is_null($info)) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
+		require_code('content');
+		$cma_hook=convert_ocportal_type_codes('award_hook',$type_id,'cma_hook');
+		$cma_object=object_factory('Hook_content_meta_aware_'.$cma_hook);
+		$info+=$cma_object->info();
 
 		$submit_url=$info['add_url'];
 		if (is_object($submit_url)) $submit_url=$submit_url->evaluate();
@@ -262,9 +266,6 @@ class Block_main_multi_content
 		// ocSelect support
 		if ($ocselect!='')
 		{
-			require_code('content');
-			$cma_hook=convert_ocportal_type_codes('award_hook',$type_id,'cma_hook');
-
 			// Convert the filters to SQL
 			require_code('ocselect');
 			list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($info['connection'],parse_ocselect($ocselect),$cma_hook,'');
@@ -273,7 +274,8 @@ class Block_main_multi_content
 			$where.=$extra_where;
 		}
 
-		if ($mode=='all')
+		// Need to pull in title?
+		if (($mode=='all') || (strpos($mode,'t.text_original')!==false))
 		{
 			if ((array_key_exists('title_field',$info)) && (strpos($info['title_field'],':')===false))
 			{
@@ -281,6 +283,7 @@ class Block_main_multi_content
 			}
 		}
 
+		// Put query together
 		if ($where.$x1.$x2!='')
 		{
 			if ($where=='') $where='1=1';
@@ -291,6 +294,7 @@ class Block_main_multi_content
 
 		if (($mode=='top') && (array_key_exists('feedback_type',$info)) && (is_null($info['feedback_type']))) $mode='all';
 
+		// Find what kind of query to run and run it
 		switch ($mode)
 		{
 			case 'random':
@@ -356,7 +360,6 @@ class Block_main_multi_content
 				$pinned_order[$i]=$award_content_row;
 			}
 		}
-
 
 		if (count($pinned_order)>0) // Re-sort with pinned awards if appropriate
 		{
@@ -445,7 +448,7 @@ class Block_main_multi_content
 			$lifetime_monitor=list_to_map('content_id',$GLOBALS['SITE_DB']->query_select('feature_lifetime_monitor',array('content_id','run_period','last_update'),array('block_cache_id'=>$block_cache_id,'running_now'=>1)));
 		}
 
-		// Render
+		// Move towards render...
 
 		$archive_url=$info['archive_url'];
 		$view_url=array_key_exists('view_url',$info)?$info['view_url']:new ocp_tempcode();
@@ -539,7 +542,7 @@ class Block_main_multi_content
 		}
 
 		// Empty? Bomb out somehow
-		if ($rendered_content->is_empty())
+		if (count($rendered_content)==0)
 		{
 			if ((isset($map['render_if_empty'])) && ($map['render_if_empty']=='0'))
 			{

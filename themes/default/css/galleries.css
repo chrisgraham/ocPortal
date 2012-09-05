@@ -22,7 +22,7 @@
 {$,Our standard ocPortal-wide thumbnail image size is defined by the thumb_width option}
 {$SET,gallery_thumb_size,{$CONFIG_OPTION,thumb_width}px}
 {$,However actually lets make them smaller custom sizes for the gallery and let CSS scale-down the larger thumbnail images}
-{$SET,gallery_thumb_size,175px}
+{$SET,gallery_thumb_size,170px}
 {$,That is not the most efficient approach - which would be to use the Tempcode THUMBNAIL symbol in the GALLERY_IMAGE/GALLERY_VIDEO templates to generate idealised thumbnails and tie them into the HTML - but that is fiddly and messy, requires more thought and planning by the web designer}
 {$,Or, of course we could use the standard thumbnail size, or change the standard thumbnail size, but that would affect other systems which may want the larger thumbnails}
 
@@ -32,12 +32,11 @@
 	/* Fiddle it so our grid cells will be flush with the left */
 	margin-left: -0.5em;
 	width: 100%;
-	padding-right: 0.5em;
 }
 
 .gallery_grid_cell {
 	float: {!en_left};
-	padding: 0.5em;
+	padding: 0.4em;
 }
 
 .gallery_regular_thumb {

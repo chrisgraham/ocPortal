@@ -14,6 +14,7 @@ An ocFilter is a comma-separated list of match-specifier tokens, where a match-s
  - a non-bounded acceptable-range (e.g. '3+')
  - an acceptable subtree (e.g. '3*')
  - an avoiding subtree (e.g. '3~')
+ - an acceptable set of direct descendents (e.g. '3>')
  - all-acceptable '*'
 
 [title="2"]Examples[/title]
@@ -52,6 +53,11 @@ foo*,!foo
 Match anything  except anything under '3':
 [code]
 *,3~
+[/code]
+
+Match anything  directly under '3':
+[code]
+3>
 [/code]
 
 [title="2"]Numeric or not?[/title]

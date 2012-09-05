@@ -437,7 +437,7 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 
 	calculate_category_child_count_cache($parent_id);
 
-	log_it('ADD_CATALOGUE_CATEGORY',strval($id),$title);
+	log_it('ADD_CATALOGUE_CATEGORY',strval($id),get_translated_text($title));
 
 	require_code('seo2');
 	if (!is_numeric($title)) seo_meta_set_for_implicit('catalogue_category',strval($id),array($title,$description),$title);

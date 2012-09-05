@@ -132,7 +132,6 @@ class Module_chat
 
 			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_chat',20,1,0,0,0,'','integer');
 
-			require_lang('chat');
 			add_menu_item_simple('main_community',NULL,'CHAT_LOBBY','_SEARCH:chat:type=misc',0,0,true,'',0,'menu_items/community_navigation/chat');
 
 			add_config_option('CHAT_OPTIONS_COLOUR_NAME','chat_default_post_colour','colour','return \'inherit\';','FEATURE','SECTION_CHAT'); // NB: compressed up due to 256 character limit

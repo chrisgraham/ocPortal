@@ -127,18 +127,24 @@ function js_compile($j,$js_cache_path,$minify=true)
 			require_code('hooks/systems/content_meta_aware/'.$hook);
 			$hook_ob=object_factory('Hook_content_meta_aware_'.$hook);
 			$info=$hook_ob->info();
-			list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
-			$url=build_url($attributes,$zone,NULL,false,false,true);
-			$url_patterns[$url->evaluate()]=array(
-				'PATTERN'=>$url->evaluate(),
-				'HOOK'=>$hook,
-			);
-			list($zone,$attributes,)=page_link_decode($info['edit_pagelink_pattern']);
-			$url=build_url($attributes,$zone,NULL,false,false,true);
-			$url_patterns[$url->evaluate()]=array(
-				'PATTERN'=>$url->evaluate(),
-				'HOOK'=>$hook,
-			);
+			if (!is_null($info['view_pagelink_pattern']))
+			{
+				list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
+				$url=build_url($attributes,$zone,NULL,false,false,true);
+				$url_patterns[$url->evaluate()]=array(
+					'PATTERN'=>$url->evaluate(),
+					'HOOK'=>$hook,
+				);
+			}
+			if (!is_null($info['edit_pagelink_pattern']))
+			{
+				list($zone,$attributes,)=page_link_decode($info['edit_pagelink_pattern']);
+				$url=build_url($attributes,$zone,NULL,false,false,true);
+				$url_patterns[$url->evaluate()]=array(
+					'PATTERN'=>$url->evaluate(),
+					'HOOK'=>$hook,
+				);
+			}
 		}
 		$tpl_params['URL_PATTERNS']=array_values($url_patterns);
 	}

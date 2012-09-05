@@ -38,20 +38,34 @@
 						<td>{VIEWS*}</td>
 					</tr>
 				{+END}
+
+				{$SET,rating,{$RATING,images,{ID},1}}
+				{+START,IF_NON_EMPTY,{$TRIM,{$GET,rating}}}
+					<tr>
+						<th class="de_th meta_data_title">{!RATING}</th>
+						<td>{$GET,rating}</td>
+					</tr>
+				{+END}
 			</tbody>
 		</table>
 	</div>
 {+END}
 
-<div class="gallery_regular_thumb" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','auto',null,null,false,true);">
-	<div class="img_thumb_wrap">
-		<a href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
-	</div>
+{+START,IF,{$GET,gallery_carousel}}
+	<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','auto',null,null,false,true);" href="{VIEW_URL*}"><img alt="{TITLE}" height="140" src="{$THUMBNAIL*,{THUMB_URL},140x140,website_specific,,,height}" /></a>
+{+END}
 
-	{+START,IF_PASSED,RATING_DETAILS}{+START,IF_NON_EMPTY,{RATING_DETAILS}}
-		<div class="grating">{RATING_DETAILS}</div>
-	{+END}{+END}
-	<p class="gallery_regular_thumb_comments_count">
-		<a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a>
-	</p>
-</div>
+{+START,IF,{$NOT,{$GET,gallery_carousel}}}
+	<div class="gallery_regular_thumb" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET*;^,TOOLTIP}','auto',null,null,false,true);">
+		<div class="img_thumb_wrap">
+			<a href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
+		</div>
+
+		{+START,IF_PASSED,RATING_DETAILS}{+START,IF_NON_EMPTY,{RATING_DETAILS}}
+			<div class="grating">{RATING_DETAILS}</div>
+		{+END}{+END}
+		<p class="gallery_regular_thumb_comments_count">
+			<a href="{VIEW_URL*}">{$COMMENT_COUNT,images,{ID}}</a>
+		</p>
+	</div>
+{+END}

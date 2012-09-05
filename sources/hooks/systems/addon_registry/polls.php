@@ -273,6 +273,7 @@ class Hook_addon_registry_polls
 
 		$wrap_content=do_lorem_template('POLL_BOX', array(
 			'VOTE_URL'=>placeholder_url(),
+			'GIVE_CONTEXT'=>true,
 			'SUBMITTER'=>placeholder_id(),
 			'RESULT_URL'=>placeholder_url(),
 			'POLL_RESULTS'=>lorem_phrase(),

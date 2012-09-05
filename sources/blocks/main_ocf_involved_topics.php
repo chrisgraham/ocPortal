@@ -101,7 +101,7 @@ class Block_main_ocf_involved_topics
 				$marker='';
 				$breadcrumbs=new ocp_tempcode();
 				require_code('templates_pagination');
-				$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows,false,7,NULL);
+				$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows,false,5,NULL);
 				$topics=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'8723270b128b4eea47ab3c756b342e14','ORDER'=>'','MAX'=>'15','MAY_CHANGE_MAX'=>false,'BREADCRUMBS'=>$breadcrumbs,'ACTION_URL'=>get_self_url(),'BUTTONS'=>'','STARTER_TITLE'=>'','MARKER'=>$marker,'FORUM_NAME'=>$forum_name,'TOPICS'=>$topics,'PAGINATION'=>$pagination,'MODERATOR_ACTIONS'=>''));
 			}
 		}

@@ -98,27 +98,27 @@ class Block_main_news
 		// News query
 		require_code('ocfiltering');
 		$filter=array_key_exists('filter',$map)?$map['filter']:get_param('news_filter','*');
-		$filters_1=ocfilter_to_sqlfragment($filter,'p.news_category','news_categories',NULL,'p.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
+		$filters_1=ocfilter_to_sqlfragment($filter,'r.news_category','news_categories',NULL,'r.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 		$filters_2=ocfilter_to_sqlfragment($filter,'d.news_entry_category','news_categories',NULL,'d.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 		$q_filter='('.$filters_1.' OR '.$filters_2.')';
 		if ($blogs===0)
 		{
 			if ($q_filter!='') $q_filter.=' AND ';
-			$q_filter.=' AND nc_owner IS NULL';
+			$q_filter.='nc_owner IS NULL';
 		}
 		elseif ($blogs===1)
 		{
 			if ($q_filter!='') $q_filter.=' AND ';
-			$q_filter.=' AND (nc_owner IS NOT NULL)';
+			$q_filter.='(nc_owner IS NOT NULL)';
 		}
 		if ($blogs!=-1)
 		{
-			$join=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_categories c ON c.id=p.news_category';
+			$join=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_categories c ON c.id=r.news_category';
 		} else $join='';
 
 		if ($filter_and!='')
 		{
-			$filters_and_1=ocfilter_to_sqlfragment($filter_and,'p.news_category','news_categories',NULL,'p.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
+			$filters_and_1=ocfilter_to_sqlfragment($filter_and,'r.news_category','news_categories',NULL,'r.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 			$filters_and_2=ocfilter_to_sqlfragment($filter_and,'d.news_entry_category','news_categories',NULL,'d.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 			$q_filter.=' AND ('.$filters_and_1.' OR '.$filters_and_2.')';
 		}
@@ -138,23 +138,23 @@ class Block_main_news
 		}
 
 		// Read in rows
-		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT r.id) FROM '.get_table_prefix().'news r'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':''));
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT r.id) FROM '.get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=r.id'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':''));
 		if ($historic=='')
 		{
-			$rows=($days_full==0.0)?array():$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=p.id'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',300/*reasonable limit*/);
+			$rows=($days_full==0.0)?array():$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=r.id'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',max($fallback_full+$fallback_archive,100)/*reasonable limit*/);
 			if (!array_key_exists(0,$rows)) // Nothing recent, so we work to get at least something
 			{
-				$rows=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',$fallback_full,$start);
-				$rows2=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',$fallback_archive,$fallback_full+$start);
+				$rows=$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON r.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',$fallback_full,$start);
+				$rows2=$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON r.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',$fallback_archive,$fallback_full+$start);
 			}
-			else $rows2=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full+$days_outline)).' AND date_and_time<'.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',300/*reasonable limit*/);
+			else $rows2=$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON r.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full+$days_outline)).' AND date_and_time<'.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',max($fallback_full+$fallback_archive,100)/*reasonable limit*/);
 		} else
 		{
 			if (function_exists('set_time_limit')) @set_time_limit(0);
 			$start=0;
 			do
 			{
-				$_rows=$GLOBALS['SITE_DB']->query('SELECT *,p.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON p.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY p.id':'').' ORDER BY p.date_and_time DESC',200,$start);
+				$_rows=$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON r.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',200,$start);
 				$rows=array();
 				$rows2=array();
 				foreach ($_rows as $row)
@@ -343,16 +343,6 @@ class Block_main_news
 		$_title=do_lang_tempcode(($blogs==1)?'BLOGS_POSTS':'NEWS');
 		if ((array_key_exists('title',$map)) && ($map['title']!='')) $_title=make_string_tempcode(escape_html($map['title']));
 
-		if (($i==0) && ($j==0))
-		{
-			if ((isset($map['render_if_empty'])) && ($map['render_if_empty']=='0'))
-			{
-				return new ocp_tempcode();
-			}
-
-			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'9d7065af4dd4026ffb34243fd931f99d','HIGH'=>false,'TITLE'=>$_title,'MESSAGE'=>do_lang_tempcode(($blogs==1)?'BLOG_NO_NEWS':'NO_NEWS'),'ADD_NAME'=>do_lang_tempcode(($blogs==1)?'ADD_NEWS_BLOG':'ADD_NEWS'),'SUBMIT_URL'=>$submit_url));
-		}
-
 		// Feed URLs
 		$atom_url=new ocp_tempcode();
 		$rss_url=new ocp_tempcode();
@@ -371,6 +361,16 @@ class Block_main_news
 			$archive_url=new ocp_tempcode();
 			$atom_url=new ocp_tempcode();
 			$rss_url=new ocp_tempcode();
+		}
+
+		if (($i==0) && ($j==0))
+		{
+			if ((isset($map['render_if_empty'])) && ($map['render_if_empty']=='0'))
+			{
+				return new ocp_tempcode();
+			}
+
+			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'9d7065af4dd4026ffb34243fd931f99d','HIGH'=>false,'TITLE'=>$_title,'MESSAGE'=>do_lang_tempcode(($blogs==1)?'BLOG_NO_NEWS':'NO_NEWS'),'ADD_NAME'=>do_lang_tempcode(($blogs==1)?'ADD_NEWS_BLOG':'ADD_NEWS'),'SUBMIT_URL'=>$submit_url));
 		}
 
 		// Pagination

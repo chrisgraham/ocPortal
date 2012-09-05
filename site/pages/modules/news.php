@@ -334,7 +334,7 @@ class Module_news
 
 		require_code('ocfiltering');
 		$filter=get_param('filter','*');
-		$q_filter=ocfilter_to_sqlfragment($filter,'p.news_category','news_categories',NULL,'p.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
+		$q_filter=ocfilter_to_sqlfragment($filter,'r.news_category','news_categories',NULL,'r.news_category','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
 		if (is_null($blogs))
 		{
@@ -356,25 +356,25 @@ class Module_news
 			sort_maps_by($categories,'text_original');
 		}
 		$content=new ocp_tempcode();
-		$join=' LEFT JOIN '.get_table_prefix().'news_category_entries d ON d.news_entry=p.id';
+		$join=' LEFT JOIN '.get_table_prefix().'news_category_entries d ON d.news_entry=r.id';
 		if ($blogs===1)
 		{
 			$q_filter.=' AND c.nc_owner IS NOT NULL';
 
-			$join.=' LEFT JOIN '.get_table_prefix().'news_categories c ON c.id=p.news_category';
+			$join.=' LEFT JOIN '.get_table_prefix().'news_categories c ON c.id=r.news_category';
 		}
 		elseif ($blogs===0)
 		{
 			$q_filter.=' AND c.nc_owner IS NULL AND c.id IS NOT NULL';
 
-			$join.=' LEFT JOIN '.get_table_prefix().'news_categories c ON c.id=p.news_category';
+			$join.=' LEFT JOIN '.get_table_prefix().'news_categories c ON c.id=r.news_category';
 		}
 		$_content=array();
 		foreach ($categories as $category)
 		{
 			if (has_category_access(get_member(),'news',strval($category['id'])))
 			{
-				$query='SELECT COUNT(*) FROM '.get_table_prefix().'news p'.$join.' WHERE '.((!has_privilege(get_member(),'see_unvalidated'))?'validated=1 AND ':'').' (news_entry_category='.strval($category['id']).' OR news_category='.strval($category['id']).') AND '.$q_filter.' ORDER BY date_and_time DESC';
+				$query='SELECT COUNT(*) FROM '.get_table_prefix().'news r'.$join.' WHERE '.((!has_privilege(get_member(),'see_unvalidated'))?'validated=1 AND ':'').' (news_entry_category='.strval($category['id']).' OR news_category='.strval($category['id']).') AND '.$q_filter.' ORDER BY date_and_time DESC';
 				$count=$GLOBALS['SITE_DB']->query_value_if_there($query);
 				if ($count>0)
 				{
@@ -412,6 +412,7 @@ class Module_news
 
 		$filter=get_param('id',get_param('filter','*'));
 		$filter_and=get_param('filter_and','*');
+		$ocselect=either_param('active_filter','');
 
 		// Title
 		if ($blog===1)
@@ -452,7 +453,7 @@ class Module_news
 
 		// Get category contents
 		$inline=get_param_integer('inline',0)==1;
-		$content=do_block('main_news',array('filter'=>$filter,'filter_and'=>$filter_and,'blogs'=>($blog===1)?'1':'0','member_based'=>($blog===1)?'1':'0','zone'=>'_SELF','days'=>'0','fallback_full'=>$inline?'0':'30','fallback_archive'=>$inline?'30':'0','no_links'=>'1','pagination'=>'1','attach_to_url_filter'=>'1','ocselect'=>$ocselect));
+		$content=do_block('main_news',array('filter'=>$filter,'filter_and'=>$filter_and,'blogs'=>is_null($blog)?'-1':strval($blog),'member_based'=>($blog===1)?'1':'0','zone'=>'_SELF','days'=>'0','fallback_full'=>$inline?'0':'30','fallback_archive'=>$inline?'30':'0','no_links'=>'1','pagination'=>'1','attach_to_url_filter'=>'1','ocselect'=>$ocselect));
 
 		// Management links
 		if ((($blog!==1) || (has_privilege(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))

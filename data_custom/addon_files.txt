@@ -2220,13 +2220,6 @@ workflows
  - adminzone/pages/modules_custom/admin_unvalidated.php
  - themes/default/templates_custom/WORKFLOW_BOX.tpl
 
-gallery_carousel
-----------------
- - themes/default/templates_custom/GALLERY_IMAGE.tpl
- - themes/default/templates_custom/GALLERY_VIDEO.tpl
- - themes/default/templates_custom/GALLERY_ENTRY_WRAP.tpl
- - themes/default/templates_custom/BLOCK_MAIN_GALLERY_EMBED.tpl
-
 referrals
 ---------
  - sources_custom/hooks/systems/referrals/.htaccess

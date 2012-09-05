@@ -1692,7 +1692,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	// Add in move/leave events if needed
 	if (!ac.onmouseout) ac.onmouseout=function(event) { win.deactivate_tooltip(ac,event); };
 	if (!ac.onmousemove) ac.onmousemove=function(event) { win.reposition_tooltip(ac,event,false,false,null,false,win); };
- 
+
 	if (typeof tooltip=='function') tooltip=tooltip();
 	if (tooltip=='') return;
 
@@ -2310,7 +2310,10 @@ function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
 						case "for": this_node.htmlFor=a_value; break;
 						default: this_node.setAttribute(a_name,a_value);
 					}
-				} else this_node[a_name]=eval('var x=function(event) { '+a_value+' }; x;');
+				} else
+				{
+					this_node[a_name]=eval('var x=function(event) { '+a_value+' }; x;');
+				}
 			}
 
 			// append node

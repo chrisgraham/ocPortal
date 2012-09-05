@@ -4,7 +4,7 @@
 			{!CONTENT_IS_OF_TYPE,{!NEWS},{NEWS_TITLE}}
 		{+END}
 		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
-			<a title="{$STRIP_TAGS,{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}}: #{ID*}" href="{FULL_URL*}">{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}</a>
+			{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}
 		{+END}
 	</h3>
 
@@ -63,9 +63,8 @@
 		{+START,IF,{$CONFIG_OPTION,show_content_tagging_inline}}{TAGS}{+END}
 	{+END}
 
-	<p class="news_goto">
-		{$,<img class="button_pageitem" src="{$IMG*,pageitem/goto}" title="{!VIEW} / {!COMMENTS}" alt="{!VIEW} / {!COMMENTS}" />}
-		<a title="{!READ_MORE}: #{ID*}" href="{FULL_URL*}">{!READ_MORE}</a>{+START,IF,{$NOT,{$MATCH_KEY_MATCH,forum:topicview,forum:forumview}}} {+START,IF_PASSED_AND_TRUE,COMMENT_COUNT} <span class="comment_count">{$COMMENT_COUNT,news,{ID}}</span>{+END}{+END}
-	</p>
-</div>
+	<ul class="horizontal_links associated_links_block_group">
+		<li><a title="{!READ_MORE}: #{ID*}" href="{FULL_URL*}">{!READ_MORE}</a>{+START,IF,{$NOT,{$MATCH_KEY_MATCH,forum:topicview,forum:forumview}}} {+START,IF_PASSED_AND_TRUE,COMMENT_COUNT} <span class="comment_count">{$COMMENT_COUNT,news,{ID}}</span>{+END}{+END}</li>
+	</ul>
+</div></div>
 

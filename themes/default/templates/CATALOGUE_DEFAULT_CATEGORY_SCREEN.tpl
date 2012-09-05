@@ -15,7 +15,9 @@
 	<div class="box box___catalogue_category_screen"><div class="box_inner category_list">
 		<h2>{!SUBCATEGORIES_HERE}</h2>
 
-		{SUBCATEGORIES}
+		<div>
+			{SUBCATEGORIES}
+		</div>
 	</div></div>
 {+END}
 

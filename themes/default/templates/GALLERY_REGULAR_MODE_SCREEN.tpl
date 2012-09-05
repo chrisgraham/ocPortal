@@ -14,7 +14,9 @@
 		<div class="box box___gallery_regular_mode_screen"><div class="box_inner category_list">
 			<h2>{!SUBCATEGORIES_HERE}</h2>
 
-			{CHILDREN}
+			<div>
+				{CHILDREN}
+			</div>
 		</div></div>
 	{+END}
 

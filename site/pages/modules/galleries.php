@@ -678,6 +678,9 @@ class Module_galleries
 	{
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 
+		$image_select=get_param('select','*');
+		$video_select=get_param('video_select','*');
+
 		// View current entry
 		$row=NULL;
 		$current_entry=new ocp_tempcode();
@@ -1009,6 +1012,7 @@ class Module_galleries
 		$image_select=get_param('select','*');
 		$video_select=get_param('video_select','*');
 		$sort=get_param('sort','add_date DESC');
+		$ocselect=either_param('active_filter','');
 		$entries=do_block('main_gallery_embed',array('param'=>$filter,'zone'=>'_SELF','sort'=>$sort,'days'=>$days,'max'=>'30','pagination'=>'1','select'=>$image_select,'video_select'=>$video_select,'ocselect'=>$ocselect));
 		inform_non_canonical_parameter('sort');
 		inform_non_canonical_parameter('select');

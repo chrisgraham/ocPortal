@@ -1,4 +1,4 @@
-<section class="box box___block_main_rss"><div class="box_inner">
+<section class="box box___block_main_rss"><div class="box_inner category_list">
 	<h3>{$?,{$IS_NON_EMPTY,{TITLE}},{!NEWS_FROM}: {TITLE}}</h3>
 
 	<div class="xhtml_validator_off">

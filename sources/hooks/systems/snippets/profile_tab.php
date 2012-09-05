@@ -46,9 +46,7 @@ class Hook_profile_tab
 		if ($ob->is_active($member_id_of,$member_id_viewing))
 		{
 			// We need to minimise the dependency stuff that comes out, we don't need any default values
-			global $CSSS,$JAVASCRIPTS;
-			$CSSS=array();
-			$JAVASCRIPTS=array();
+			push_output_state(false,true);
 
 			// And, go
 			$ret=$ob->render_tab($member_id_of,$member_id_viewing);

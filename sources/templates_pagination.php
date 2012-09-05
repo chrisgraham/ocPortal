@@ -42,7 +42,7 @@ function init__templates_pagination()
  * @param  ID_TEXT		Hash component to URL
  * @return tempcode		The results browser
  */
-function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_post=false,$max_page_links=7,$_selectors=NULL,$hash='')
+function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_post=false,$max_page_links=5,$_selectors=NULL,$hash='')
 {
 	inform_non_canonical_parameter($max_name);
 	inform_non_canonical_parameter($start_name);

@@ -58,8 +58,7 @@ Example Comcode to use it:
 
 [title=""2""]License[/title]
 
-Licensed on the same terms as ocPortal",,,Icon by leslienayibe. Class by Facebook Inc.,
-gallery_carousel,Graphical,Chris Graham,Licensed on the same terms as ocPortal,Replaces templates to that the main_gallery_embed block uses a carousel to display content.,,,,
+Licensed on the same terms as ocPortal",,,Icon by leslienayibe. Class by Facebook Plc.,
 geshi,Information Display,Chris Graham,GPL,"GeSHi applies syntax highlighting to a block of coding which is pasted inside the Comcode 'code' tag as follows:
 [code=""Comcode""][codebox=""<language>""]<the code goes here>[/codebox][/code]",,,The Authors of GeSHi,
 getid3,Admin Utilities,Chris Graham,GPL,"This addon will automatically detect the Height, Width and Length of video files when they are uploaded to the gallery.",galleries,,"James Heinrich, Allan Hansen",

@@ -1096,7 +1096,7 @@ ul.ocf_profile_friends {
 	overflow: hidden;
 	list-style-type: none;
 	display: block;
-	margin: 0;
+	margin: 1em;
 	padding: 0;
 }
 
@@ -1110,7 +1110,7 @@ ul.ocf_profile_friends li {
 		float: left;
 		margin: 1em 1em 0 0;
 		padding: 0.5em;
-		width: 12.5em;
+		width: 10.5em;
 	{+END}
 	list-style-type: none;
 	border: 1px solid {$GET,standard_border};

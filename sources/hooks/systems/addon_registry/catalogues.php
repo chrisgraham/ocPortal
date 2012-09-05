@@ -702,6 +702,7 @@ class Hook_addon_registry_catalogues
 		return array(
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED', array(
 				'ENTRIES'=>$entries,
+				'DISPLAY_TYPE'=>'',
 				'ROOT'=>placeholder_id()
 			)), NULL, '', true)
 		);

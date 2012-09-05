@@ -28,7 +28,7 @@
 	{+END}
 </div>
 
-<div class="news_goto">
-	{FULL_URL}
-</div>
+<ul class="horizontal_links associated_links_block_group">
+	<li>{FULL_URL}</li>
+</ul>
 

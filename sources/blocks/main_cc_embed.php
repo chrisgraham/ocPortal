@@ -125,6 +125,9 @@ class Block_main_cc_embed
 						break;
 				}
 			}
+		} else
+		{
+			$display_type=$catalogue['c_display_type'];
 		}
 
 		// Get entries
@@ -144,7 +147,8 @@ class Block_main_cc_embed
 
 		// Render
 		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_EMBED',array(
-			'ROOT'=>strval($root),
+			'DISPLAY_TYPE'=>strval($display_type),
+			'ROOT'=>is_null($root)?'':strval($root),
 			'CATALOGUE'=>$catalogue_name,
 			'ENTRIES'=>$entry_buildup,
 			'SORTING'=>$sorting,

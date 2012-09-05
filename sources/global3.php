@@ -78,7 +78,11 @@ function init__global3()
 	global $ADDON_INSTALLED_CACHE;
 	$ADDON_INSTALLED_CACHE=array();
 
+	global $OUTPUT_STATE_STACK;
+	$OUTPUT_STATE_STACK=array();
+
 	// Registry of output state globals
+	global $OUTPUT_STATE_VARS;
 	$OUTPUT_STATE_VARS=array(
 		'HTTP_STATUS_CODE',
 		'META_DATA',
@@ -121,8 +125,9 @@ function init__global3()
  * @sets_output_state
  *
  * @param  boolean				Whether to only restore the Tempcode execution part of the state.
+ * @param  boolean				Whether to go for a completely blank state (no defaults!), not just a default fresh state.
  */
-function _load_blank_output_state($just_tempcode=false)
+function _load_blank_output_state($just_tempcode=false,$true_blank=false)
 {
 	/*
 		Now lots of stuff all relating to output state (unless commented, these GLOBALs should not be written to directly, we have API calls for it)
@@ -163,9 +168,6 @@ function _load_blank_output_state($just_tempcode=false)
 		$FEED_URL=NULL;
 		$FEED_URL_2=NULL;
 
-		global $OUTPUT_STATE_STACK;
-		$OUTPUT_STATE_STACK=array();
-
 		global $REFRESH_URL,$FORCE_META_REFRESH,$QUICK_REDIRECT;
 		$REFRESH_URL[0]='';
 		$REFRESH_URL[1]=0;
@@ -183,21 +185,20 @@ function _load_blank_output_state($just_tempcode=false)
 		$HELPER_PANEL_TUTORIAL='';
 
 		// Register basic CSS and Javascript requirements
-		global $JAVASCRIPT,$JAVASCRIPTS,$CSSS;
+		global $JAVASCRIPT,$JAVASCRIPTS,$CSSS,$JAVASCRIPTS_DEFAULT;
 		$JAVASCRIPT=NULL;
 		/** List of required Javascript files.
 		 * @sets_output_state
 		 *
 		 * @global ?array $JAVASCRIPTS
 		 */
-		$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
-		if ($GLOBALS['CURRENT_SHARE_USER']!==NULL) $JAVASCRIPTS['javascript_ajax']=1; // AJAX needed by shared installs
+		$JAVASCRIPTS=$true_blank?array():$JAVASCRIPTS_DEFAULT;
 		/** List of required CSS files.
 		 * @sets_output_state
 		 *
 		 * @global ?array $CSSS
 		 */
-		$CSSS=array('no_cache'=>1,'global'=>1);
+		$CSSS=$true_blank?array():array('no_cache'=>1,'global'=>1);
 	}
 
 	global $CYCLES,$TEMPCODE_SETGET;
@@ -219,8 +220,11 @@ function _load_blank_output_state($just_tempcode=false)
  * Push the output state on the stack and create a fresh one.
  *
  * @sets_output_state
+ *
+ * @param  boolean				Whether to only restore the Tempcode execution part of the state.
+ * @param  boolean				Whether to go for a completely blank state (no defaults!), not just a default fresh state.
  */
-function push_output_state()
+function push_output_state($just_tempcode=false,$true_blank=false)
 {
 	global $OUTPUT_STATE_STACK,$OUTPUT_STATE_VARS;
 	$current_state=array();
@@ -229,7 +233,7 @@ function push_output_state()
 		$current_state[$var]=$GLOBALS[$var];
 	}
 	array_push($OUTPUT_STATE_STACK,$current_state);
-	_load_blank_output_state();
+	_load_blank_output_state($just_tempcode,$true_blank);
 }
 
 /**
@@ -238,10 +242,12 @@ function push_output_state()
  * @sets_output_state
  *
  * @param  boolean				Whether to only restore the Tempcode execution part of the state.
+ * @param  boolean				Whether to merge the current output state in.
  */
-function restore_output_state($just_tempcode=false)
+function restore_output_state($just_tempcode=false,$merge_current=false)
 {
 	global $OUTPUT_STATE_STACK;
+
 	$old_state=array_pop($OUTPUT_STATE_STACK);
 	if (is_null($old_state))
 	{
@@ -252,7 +258,14 @@ function restore_output_state($just_tempcode=false)
 		{
 			if ((!$just_tempcode) || ($var=='CYCLES') || ($var=='TEMPCODE_SETGET'))
 			{
-				$GLOBALS[$var]=$val;
+				if (($merge_current) && (is_array($val)))
+				{
+					if (is_null($GLOBALS[$var])) $GLOBALS[$var]=array();
+					$GLOBALS[$var]+=$val;
+				} else
+				{
+					$GLOBALS[$var]=$val;
+				}
 			}
 		}
 	}

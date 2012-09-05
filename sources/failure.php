@@ -807,8 +807,10 @@ function die_html_trace($message)
 	//$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);	Disabled as causes weird crashes
 	$_trace=debug_backtrace();
 	$trace='<div class="box guid_{_GUID}"><div class="box_inner"><h2>Stack trace&hellip;</h2>';
-	foreach ($_trace as $stage)
+	foreach ($_trace as $i=>$stage)
 	{
+		if ($i>20) break;
+
 		$traces='';
 		foreach ($stage as $key=>$value)
 		{

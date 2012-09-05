@@ -639,7 +639,7 @@ function get_block_id($map)
 	ksort($map);
 	unset($map['start']);
 	unset($map['max']);
-	return md5(serialize($map));
+	return substr(md5(serialize($map)),0,6);
 }
 
 /**
@@ -660,6 +660,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 
 	if (!array_key_exists('cache',$map))
 		$map['cache']=block_cache_default($codename);
+
+	push_output_state(false,true);
 
 	$object=NULL;
 	if (((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1) || (get_param_integer('cache_blocks',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache_blocks',NULL)!==0) && (get_param_integer('cache',NULL)!==0)) && (strpos(get_param('special_page_type',''),'t')===false))
@@ -714,14 +716,11 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 
 						$out=new ocp_tempcode();
 						$out->attach($object);
+						restore_output_state(false,true);
 						return $out;
 					}
 					$backup_langs_requested=$LANGS_REQUESTED;
-					$backup_javascripts=$JAVASCRIPTS;
-					$backup_csss=$CSSS;
 					$LANGS_REQUESTED=array();
-					$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
-					$CSSS=array('no_cache'=>1,'global'=>1);
 					if ((isset($map['quick_cache'])) && ($map['quick_cache']=='1')) // because we know we will not do this often we can allow this to work as a vector for doing highly complex activity
 					{
 						global $MEMORY_OVER_SPEED;
@@ -739,16 +738,14 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 					} elseif (($ttl!=-1) && ($cache->is_empty())) // Try again with no TTL, if we currently failed but did impose a TTL
 					{
 						$LANGS_REQUESTED+=$backup_langs_requested;
-						$JAVASCRIPTS+=$backup_javascripts;
-						$CSSS+=$backup_csss;
+						restore_output_state(false,true);
 						return do_block($codename,$map,-1);
 					}
 					$LANGS_REQUESTED+=$backup_langs_requested;
-					$JAVASCRIPTS+=$backup_javascripts;
-					$CSSS+=$backup_csss;
 
 					$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 				}
+				restore_output_state(false,true);
 				return $cache;
 			}
 		}
@@ -763,17 +760,14 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 		$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 		$backup_langs_requested=$LANGS_REQUESTED;
-		$backup_javascripts=$JAVASCRIPTS;
-		$backup_csss=$CSSS;
 		$LANGS_REQUESTED=array();
-		$JAVASCRIPTS=array('javascript'=>1,'javascript_transitions'=>1);
-		$CSSS=array('no_cache'=>1,'global'=>1);
 		$cache=$object->run($map);
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 	} else
 	{
 		$out=new ocp_tempcode();
 		$out->attach($object);
+		restore_output_state(false,true);
 		return $out;
 	}
 
@@ -796,9 +790,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 		}
 	}
 	$LANGS_REQUESTED+=$backup_langs_requested;
-	$JAVASCRIPTS+=$backup_javascripts;
-	$CSSS+=$backup_csss;
 
+	restore_output_state(false,true);
 	return $cache;
 }
 

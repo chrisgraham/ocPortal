@@ -35,7 +35,7 @@ class Block_main_gallery_embed
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('ocselect','param','select','video_select','zone','title','sort','days','render_if_empty','max','start','pagination','root');
+		$info['parameters']=array('ocselect','param','select','video_select','zone','title','sort','days','render_if_empty','max','start','pagination','root','guid');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_gallery_embed
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):NULL),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?$map[\'root\']:get_param(\'keep_gallery_root\',NULL),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',array_key_exists(\'days\',$map)?$map[\'days\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'add_date DESC\',get_param_integer(\'mge_start\',0),array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',((is_null($map)) || (!array_key_exists(\'select\',$map)))?\'*\':$map[\'select\'],((is_null($map)) || (!array_key_exists(\'video_select\',$map)))?\'*\':$map[\'video_select\'],array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
+		$info['cache_on']='array(array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):NULL),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?$map[\'root\']:get_param(\'keep_gallery_root\',NULL),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',array_key_exists(\'days\',$map)?$map[\'days\']:\'\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'add_date DESC\',get_param_integer(\'mge_start\',0),array_key_exists(\'param\',$map)?$map[\'param\']:db_get_first_id(),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'\',((is_null($map)) || (!array_key_exists(\'select\',$map)))?\'*\':$map[\'select\'],((is_null($map)) || (!array_key_exists(\'video_select\',$map)))?\'*\':$map[\'video_select\'],array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
 		$info['ttl']=60*2;
 		return $info;
 	}
@@ -73,6 +73,7 @@ class Block_main_gallery_embed
 		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
 		$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
 		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?$map['root']:get_param('keep_gallery_root',NULL);
+		$guid=array_key_exists('guid',$map)?$map['guid']:'';
 
 		require_code('ocfiltering');
 		$cat=array_key_exists('param',$map)?$map['param']:'root';
@@ -216,7 +217,7 @@ class Block_main_gallery_embed
 						$entry_rating_details=($row_image['allow_rating']==1)?display_rating($view_url,get_translated_text($row_image['title']),'images',strval($row_image['id']),'RATING_INLINE_STATIC',$row_image['submitter']):NULL;
 
 						$entry_map=array(
-							'_GUID'=>'043ac7d15ce02715ac02309f6e8340ff',
+							'_GUID'=>($guid!='')?$guid:'043ac7d15ce02715ac02309f6e8340ff',
 							'RATING_DETAILS'=>$entry_rating_details,
 							'TITLE'=>get_translated_text($row_image['title']),
 							'DESCRIPTION'=>get_translated_tempcode($row_image['description']),
@@ -233,7 +234,7 @@ class Block_main_gallery_embed
 							'EDIT_DATE_RAW'=>is_null($row_image['edit_date'])?'':strval($row_image['edit_date']),
 						);
 						$entry=do_template('GALLERY_IMAGE',$entry_map);
-						$entries->attach(do_template('GALLERY_ENTRY_WRAP',array('_GUID'=>'13134830e1ebea158ab44885eeec0953','ENTRY'=>$entry)+$entry_map));
+						$entries->attach(do_template('GALLERY_ENTRY_WRAP',array('_GUID'=>($guid!='')?$guid:'13134830e1ebea158ab44885eeec0953','ENTRY'=>$entry)+$entry_map));
 
 						break;
 
@@ -253,7 +254,7 @@ class Block_main_gallery_embed
 						$entry_rating_details=($row_video['allow_rating']==1)?display_rating($view_url,get_translated_text($row_video['title']),'videos',strval($row_video['id']),'RATING_INLINE_STATIC',$row_video['submitter']):NULL;
 
 						$entry_map=array(
-							'_GUID'=>'66b7fb4d3b61ef79d6803c170d102cbf',
+							'_GUID'=>($guid!='')?$guid:'66b7fb4d3b61ef79d6803c170d102cbf',
 							'RATING_DETAILS'=>$entry_rating_details,
 							'TITLE'=>get_translated_text($row_video['title']),
 							'DESCRIPTION'=>get_translated_tempcode($row_video['description']),
@@ -270,7 +271,7 @@ class Block_main_gallery_embed
 							'EDIT_DATE_RAW'=>is_null($row_video['edit_date'])?'':strval($row_video['edit_date']),
 						);
 						$entry=do_template('GALLERY_VIDEO',$entry_map);
-						$entries->attach(do_template('GALLERY_ENTRY_WRAP',array('_GUID'=>'a0ff010ae7fd1f7b3341993072ed23cf','ENTRY'=>$entry)+$entry_map));
+						$entries->attach(do_template('GALLERY_ENTRY_WRAP',array('_GUID'=>($guid!='')?$guid:'a0ff010ae7fd1f7b3341993072ed23cf','ENTRY'=>$entry)+$entry_map));
 
 						break;
 				}
@@ -292,7 +293,7 @@ class Block_main_gallery_embed
 			{
 				$submit_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_galleries'));
 			} else $submit_url=new ocp_tempcode();
-			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'bf84d65b8dd134ba6cd7b1b7bde99de2','HIGH'=>false,'TITLE'=>do_lang_tempcode('GALLERY'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),'SUBMIT_URL'=>$submit_url));
+			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>($guid!='')?$guid:'bf84d65b8dd134ba6cd7b1b7bde99de2','HIGH'=>false,'TITLE'=>do_lang_tempcode('GALLERY'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),'SUBMIT_URL'=>$submit_url));
 		}
 
 		// Pagination
@@ -301,12 +302,12 @@ class Block_main_gallery_embed
 		{
 			require_code('templates_pagination');
 			$_selectors=array_map('intval',explode(',',get_option('gallery_selectors')));
-			$pagination=pagination(do_lang('MEDIA'),$start,$block_id.'_start',$max,$block_id.'_max',$total_videos+$total_images,false,10,$_selectors);
+			$pagination=pagination(do_lang('MEDIA'),$start,$block_id.'_start',$max,$block_id.'_max',$total_videos+$total_images,false,5,$_selectors);
 		}
 
 		// Render
 		return do_template('BLOCK_MAIN_GALLERY_EMBED',array(
-			'_GUID'=>'b7b969c8fe8c398dd6e3af7ee06717ea',
+			'_GUID'=>($guid!='')?$guid:'b7b969c8fe8c398dd6e3af7ee06717ea',
 			'IMAGE_SELECT'=>$map['select'],
 			'VIDEO_SELECT'=>$map['video_select'],
 			'DAYS'=>$_days,

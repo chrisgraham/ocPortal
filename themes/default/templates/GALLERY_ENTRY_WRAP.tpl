@@ -1,4 +1,10 @@
-<div class="gallery_grid_cell">
+{+START,IF,{$GET,gallery_carousel}}
 	{ENTRY}
-</div>
+{+END}
+
+{+START,IF,{$NOT,{$GET,gallery_carousel}}}
+	<div class="gallery_grid_cell">
+		{ENTRY}
+	</div>
+{+END}
 

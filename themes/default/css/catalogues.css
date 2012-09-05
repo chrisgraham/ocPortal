@@ -48,14 +48,12 @@
 
 .cart_info {
 	text-align: right;
-	height: 60px;
-	overflow: visible;
+	overflow: hidden;
+	margin: 1.5em 0;
 }
 
 .cart_logo {
-	display: inline;
 	float: right;
-	margin-right: 18px;
 }
 
 /* eCommerce add to cart template */

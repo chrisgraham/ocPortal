@@ -52,7 +52,7 @@ class Block_main_friends_list
 		$block_id=get_block_id($map);
 
 		$member_id=array_key_exists('member_id',$map)?intval($map['member_id']):get_member();
-		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):10);
+		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):12);
 		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
 		$mutual=((array_key_exists('mutual',$map)?$map['mutual']:'0')=='1');
 
@@ -82,7 +82,7 @@ class Block_main_friends_list
 				$appears_twice=false;
 				foreach ($rows as $j=>$row2)
 				{
-					$f_id_2=($row2['member_liked']==$member_id_of)?$row2['member_likes']:$row2['member_liked'];
+					$f_id_2=($row2['member_liked']==$member_id)?$row2['member_likes']:$row2['member_liked'];
 					if (($f_id_2==$f_id) && ($i!=$j))
 					{
 						$appears_twice=true;

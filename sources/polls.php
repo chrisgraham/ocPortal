@@ -232,7 +232,21 @@ function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=f
 	$full_url=new ocp_tempcode();
 	if ((get_page_name()!='polls') || (get_param('type','')!='view'))
 		$full_url=build_url(array('page'=>'polls','type'=>'view','id'=>$myrow['id']),$zone);
-	$map2=array('_GUID'=>($guid!='')?$guid:'4c6b026f7ed96f0b5b8408eb5e5affb5','VOTE_URL'=>$vote_url,'SUBMITTER'=>strval($myrow['submitter']),'PID'=>strval($myrow['id']),'FULL_URL'=>$full_url,'CONTENT'=>$tpl,'QUESTION'=>$question,'QUESTION_PLAIN'=>$question_plain,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'RESULT_URL'=>$result_url,'ZONE'=>$zone);
+	$map2=array(
+		'_GUID'=>($guid!='')?$guid:'4c6b026f7ed96f0b5b8408eb5e5affb5',
+		'VOTE_URL'=>$vote_url,
+		'SUBMITTER'=>strval($myrow['submitter']),
+		'PID'=>strval($myrow['id']),
+		'FULL_URL'=>$full_url,
+		'CONTENT'=>$tpl,
+		'QUESTION'=>$question,
+		'QUESTION_PLAIN'=>$question_plain,
+		'SUBMIT_URL'=>$submit_url,
+		'ARCHIVE_URL'=>$archive_url,
+		'RESULT_URL'=>$result_url,
+		'ZONE'=>$zone,
+		'GIVE_CONTEXT'=>$give_context,
+	);
 	if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map2['COMMENT_COUNT']='1';
 	return do_template('POLL_BOX',$map2);
 }

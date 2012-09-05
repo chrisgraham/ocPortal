@@ -3,24 +3,39 @@
 		<h3>{!IOTD}</h3>
 	{+END}
 
+	{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+		{+START,IF_NON_EMPTY,{I_TITLE}}
+			<h3>{I_TITLE}</h3>
+		{+END}
+	{+END}
+
 	{+START,IF_NON_EMPTY,{THUMB_URL}}
-		<div class="iotd_admin_preview_picture">
-			 {+START,IF_NON_EMPTY,{VIEW_URL}}<a target="_blank" title="{TITLE*}" href="{VIEW_URL*}">{+END}<img alt="{!THUMBNAIL}" src="{THUMB_URL*}" />{+START,IF_NON_EMPTY,{VIEW_URL}}</a>{+END}
+		<div class="right">
+			 {+START,IF_NON_EMPTY,{VIEW_URL}}<a title="{I_TITLE*}" href="{VIEW_URL*}">{+END}<img alt="{!THUMBNAIL}" src="{THUMB_URL*}" />{+START,IF_NON_EMPTY,{VIEW_URL}}</a>{+END}
 		</div>
 	{+END}
 
-	{+START,IF_NON_EMPTY,{USERNAME}}
+	{+START,IF_PASSED,USERNAME}{+START,IF_NON_EMPTY,{USERNAME}}
 		<div class="meta_details" role="contentinfo">
 			<ul class="meta_details_list">
-				<li>{!SUBMITTED_BY,<a href="{$MEMBER_PROFILE_URL,{SUBMITTER}}">{USERNAME*}</a>}</li>
+				<li>{!SUBMITTED_BY,<a href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}">{USERNAME*}</a>}</li>
 			</ul>
 		</div>
-	{+END}
+	{+END}{+END}
 
-	{+START,IF_NON_EMPTY,{I_TITLE}}
-		<div class="associated_details">
-			{$PARAGRAPH,{I_TITLE}}
-		</div>
+	{+START,IF,{GIVE_CONTEXT}}
+		{+START,IF_NON_EMPTY,{I_TITLE}}
+			<div class="associated_details">
+				{$PARAGRAPH,{I_TITLE}}
+			</div>
+		{+END}
+	{+END}
+	{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+		{+START,IF_NON_EMPTY,{CAPTION}}
+			<div class="associated_details">
+				{$PARAGRAPH,{CAPTION}}
+			</div>
+		{+END}
 	{+END}
 
 	{+START,IF_PASSED,CHOOSE_URL}{+START,IF_PASSED,EDIT_URL}{+START,IF_PASSED,IS_CURRENT}

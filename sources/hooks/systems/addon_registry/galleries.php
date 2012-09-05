@@ -194,6 +194,8 @@ class Hook_addon_registry_galleries
 			'sources/hooks/systems/preview/image.php',
 			'sources/blocks/main_gallery_embed.php',
 			'sources/blocks/main_image_fader.php',
+			'sources/blocks/main_friends_list.php',
+			'BLOCK_MAIN_PERSONAL_GALLERIES_LIST.tpl',
 			'uploads/galleries/.htaccess',
 			'uploads/galleries_thumbs/.htaccess',
 			'uploads/grepimages/.htaccess',
@@ -241,6 +243,7 @@ class Hook_addon_registry_galleries
 				'GALLERY_SWF.tpl'=>'gallery_swf',
 				'GALLERY_PDF.tpl'=>'gallery_pdf',
 				'OCF_MEMBER_PROFILE_GALLERIES.tpl'=>'ocf_member_profile_galleries',
+				'BLOCK_MAIN_PERSONAL_GALLERIES_LIST.tpl'=>'ocf_member_profile_galleries',
 				'GALLERY_VIDEO_BOX.tpl'=>'gallery_video_box',
 				'GALLERY_IMAGE_BOX.tpl'=>'gallery_image_box',
 				);
@@ -318,9 +321,14 @@ class Hook_addon_registry_galleries
 	 */
 	function tpl_preview__ocf_member_profile_galleries()
 	{
+		$galleries=do_lorem_template('BLOCK_MAIN_PERSONAL_GALLERIES_LIST', array(
+			'GALLERIES'=>lorem_paragraph_html(),
+			'PAGINATION'=>placeholder_pagination()
+		));
+
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_GALLERIES',array(
 			'MEMBER_ID'=>placeholder_id(),
-			'GALLERIES'=>placeholder_list_item(),
+			'GALLERIES'=>$galleries,
 			'ADD_GALLERY_URL'=>placeholder_url(),
 			'ADD_IMAGE_URL'=>placeholder_url(),
 			'ADD_VIDEO_URL'=>placeholder_url(),

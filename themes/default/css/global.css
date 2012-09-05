@@ -125,7 +125,7 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 /* Special colour for box titles */
 {$THEME_WIZARD_COLOR,#ffffff,box_title_text,100% WB}
 {$THEME_WIZARD_COLOR,#426aa9,box_title_background,100% seed}
-{$GET,box_title_background}TODO{$GET,seed}
+
 /* Special colour for code/quote boxes */
 {$THEME_WIZARD_COLOR,#8ea6cb,code_title_background,60% seed + 40% WB}
 {$THEME_WIZARD_COLOR,#3f3f3f,code_text,25% code_background + 85% BW}
@@ -1246,7 +1246,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	text-decoration: none !important;
 }
 .box_inner>h1 a:hover, .box_inner>h2 a:hover, .box_inner>h3 a:hover, .box_inner>h4 a:hover, .box_inner>h5 a:hover, .box_inner>h6 a:hover, .toggleable_tray_title a:hover {
-	color: {$GET,area_2_link_hover};
+	color: inherit;
 }
 
 /* If we want a box to standout less, give it 'pale_box' */
@@ -1888,20 +1888,25 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	padding: 0 3px;
 }
 
-.category_list {
-	margin: 0;
-	padding: 0 0 0 20px;
-	overflow: auto;
+.category_list.box_inner {
+	margin-left: 0 !important;
+	margin-right: 0 !important;
 }
 .category_list .box {
-	border-top: 2px solid {$GET,standard_border} !important;
+	border-top: 1px dotted {$GET,standard_border} !important;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 0;
+	border-radius: 0;
 	padding: 0 !important;
-	margin: 0.5em 0;
-	clear: both;
-	overflow: hidden;
+	margin: 0.7em 0;
+	padding: 0.7em 0;
+	background: none;
 }
 .category_list .box:first-child {
 	border-top: 0 !important;
+	margin-top: 0 !important;
+	padding-top: 0 !important;
 }
 .category_list .box a img {
 	max-width: 150px;
@@ -2576,7 +2581,7 @@ ul.associated_links_block_group.horizontal_links>li:before,
 	padding-left: 0 !important;
 }
 .horizontal_links_comma li:before {
-	content: ", ";
+	content: ", \A";
 }
 .horizontal_meta_details li:first-child:before,
 .horizontal_links li:first-child:before,

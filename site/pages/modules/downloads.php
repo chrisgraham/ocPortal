@@ -349,7 +349,7 @@ class Module_downloads
 	{
 		$category_id=get_param_integer('id',db_get_first_id());
 		$root=get_param_integer('keep_download_root',db_get_first_id());
-		$cat_order=get_param('cat_order','t.text_original ASC');
+		$cat_order=get_param('cat_order','t1.text_original ASC');
 		$order=get_param('order','t.text_original ASC');
 
 		// RSS
@@ -399,7 +399,7 @@ class Module_downloads
 		inform_non_canonical_parameter('order');
 
 		// Get category contents
-		$subcategories=do_block('main_multi_content',array('param'=>'download_category','filter'=>strval($category_id),'efficient'=>'0','zone'=>'_SELF','mode'=>'all','max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','render_if_empty'=>'0'));
+		$subcategories=do_block('main_multi_content',array('param'=>'download_category','filter'=>strval($category_id).'>','efficient'=>'0','zone'=>'_SELF','mode'=>'all','max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','render_if_empty'=>'0'));
 		if (get_option('downloads_subcat_narrowin')=='1')
 		{
 			$filter=strval($category_id).'*';
@@ -477,9 +477,8 @@ class Module_downloads
 			'EDIT_CAT_URL'=>$edit_cat_url,
 			'DESCRIPTION'=>$description,
 			'SUBCATEGORIES'=>$subcategories,
-			'DOWNLOADS'=>$downloads,
+			'DOWNLOADS'=>$entries,
 			'SORTING'=>$sorting,
-			'PAGINATION'=>$pagination,
 		));
 	}
 
