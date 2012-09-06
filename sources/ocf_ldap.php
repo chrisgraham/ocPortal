@@ -364,7 +364,7 @@ function ldap_get_login_string($cn)
 	{
 		if (member_property()=='sAMAccountName')
 		{
-			$login=$cn.'@'.preg_replace('#^dc=#','',str_replace(',dc=','.',get_option('ldap_base_dn')));
+			$login=$cn.'@'.preg_replace('#^dc=#','',str_replace(',dc=','.',strtolower(get_option('ldap_base_dn'))));
 		} else
 		{
 			if (strpos($cn,'=')===false)

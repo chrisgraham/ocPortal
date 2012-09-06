@@ -955,7 +955,7 @@ class Hook_ipb_base
 			if (is_null($member_id)) continue;
 			$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
 			if (is_null($forum_id)) continue;
-			enable_notifications('ocf_forum',strval($forum_id),$member_id);
+			enable_notifications('ocf_topic','forum:'.strval($forum_id),$member_id);
 
 			import_id_remap_put('forum_notification',strval($row['frid']),1);
 		}
