@@ -1903,7 +1903,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	padding: 0.7em 0;
 	background: none;
 }
-.compacted_subbox_stream .box:first-child {
+.compacted_subbox_stream .box:first-child, .compacted_subbox_stream h3 + .box {
 	border-top: 0 !important;
 	margin-top: 0 !important;
 	padding-top: 0 !important;

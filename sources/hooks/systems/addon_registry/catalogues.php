@@ -703,7 +703,8 @@ class Hook_addon_registry_catalogues
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED', array(
 				'ENTRIES'=>$entries,
 				'DISPLAY_TYPE'=>'',
-				'ROOT'=>placeholder_id()
+				'ROOT'=>placeholder_id(),
+				'BLOCK_PARAMS'=>'',
 			)), NULL, '', true)
 		);
 	}

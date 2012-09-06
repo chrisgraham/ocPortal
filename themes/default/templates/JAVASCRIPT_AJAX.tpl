@@ -44,6 +44,11 @@ function _call_block(raw_ajax_result,ajax_url,target_div,append,callback)
 	var new_html=raw_ajax_result.responseText;
 	block_data_cache[ajax_url]=new_html;
 	show_block_html(new_html,target_div,append);
+	try
+	{
+		window.scrollTo(0,find_pos_y(target_div));
+	}
+	catch (e) {};
 	if (callback) callback();
 }
 
@@ -72,11 +77,11 @@ function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_para
 			var url_stub='';
 			for (var j=0;j<look_for.length;j++)
 			{
-				var matches=this.href.match(new RegExp('[&\?]'+look_for[j]+'=([^&]*)'));
+				var matches=this.href.match(new RegExp('[&\?]('+look_for[j]+')=([^&]*)'));
 				if (matches)
 				{
 					url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
-					url_stub+=look_for[j]+='='+matches[1];
+					url_stub+=matches[1]+'='+matches[2];
 				}
 			}
 			for (var j in extra_params)

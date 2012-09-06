@@ -91,6 +91,7 @@ class Hook_addon_registry_ocf_forum
 			'OCF_POSTING_SCREEN_POST.tpl',
 			'OCF_PT_BETWEEN.tpl',
 			'JAVASCRIPT_OCF_FORUM.tpl',
+			'BLOCK_MAIN_OCF_INVOLVED_TOPICS.tpl',
 			'forum/rules.php',
 			'themes/default/images/ocf_general/redirect.png',
 			'sources/hooks/modules/search/ocf_within_topic.php',
@@ -274,6 +275,7 @@ class Hook_addon_registry_ocf_forum
 			'OCF_HISTORY_SCREEN.tpl'=>'administrative__ocf_history_screen',
 			'OCF_RANK_IMAGE.tpl'=>'ocf_rank_image',
 			'OCF_POST_BOX.tpl'=>'ocf_isolated_post',
+			'BLOCK_MAIN_OCF_INVOLVED_TOPICS.tpl'=>'block_main_ocf_involved_topics',
 			'BLOCK_SIDE_OCF_PRIVATE_TOPICS.tpl'=>'block_side_ocf_private_topics',
 			'BLOCK_MAIN_PT_NOTIFICATIONS.tpl'=>'block_pt_notifications',
 			'OCF_NOTIFICATION.tpl'=>'block_pt_notifications',
@@ -544,6 +546,27 @@ class Hook_addon_registry_ocf_forum
 				'POST'=>$post,
 				'URL'=>placeholder_url(),
 				'BREADCRUMBS'=>lorem_phrase()
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_main_ocf_involved_topics()
+	{
+		require_css('ocf');
+
+		require_lang('ocf');
+
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_OCF_INVOLVED_TOPICS', array(
+				'TOPICS'=>lorem_paragraph_html(),
+				'BLOCK_PARAMS'=>'',
 			)), NULL, '', true)
 		);
 	}

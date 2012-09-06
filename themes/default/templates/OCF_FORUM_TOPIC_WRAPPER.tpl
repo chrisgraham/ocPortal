@@ -65,7 +65,7 @@
 </table></div>
 
 {+START,IF_NON_EMPTY,{PAGINATION}}
-	<div class="float_surrounder pagination_spacing">
+	<div class="float_surrounder pagination_spacing ajax_block_wrapper_links">
 		{PAGINATION}
 	</div>
 {+END}

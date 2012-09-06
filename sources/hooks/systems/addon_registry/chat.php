@@ -228,7 +228,8 @@ class Hook_addon_registry_chat
 
 		$friends=do_lorem_template('BLOCK_MAIN_FRIENDS_LIST', array(
 			'FRIENDS'=>$friends_arr,
-			'PAGINATION'=>placeholder_pagination()
+			'PAGINATION'=>placeholder_pagination(),
+			'BLOCK_PARAMS'=>'',
 		));
 
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_FRIENDS', array(

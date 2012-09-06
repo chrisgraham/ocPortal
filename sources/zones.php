@@ -658,6 +658,8 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 
 	if (is_null($map)) $map=array();
 
+	$map['block']=$codename;
+
 	if (!array_key_exists('cache',$map))
 		$map['cache']=block_cache_default($codename);
 

@@ -80,6 +80,7 @@ class Block_main_news
 		// Pagination
 		$block_id=get_block_id($map);
 		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
+		if ($start!=0) $days=0;
 		$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
 
 		// Read in news categories ahead, for performance
@@ -141,7 +142,7 @@ class Block_main_news
 		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT r.id) FROM '.get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=r.id'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':''));
 		if ($historic=='')
 		{
-			$rows=($days_full==0.0)?array():$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=r.id'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',max($fallback_full+$fallback_archive,100)/*reasonable limit*/);
+			$rows=($days_full==0.0)?array():$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON d.news_entry=r.id'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').' AND date_and_time>='.strval(time()-60*60*24*intval($days_full)).(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',min($fallback_full+$fallback_archive,100)/*reasonable limit*/);
 			if (!array_key_exists(0,$rows)) // Nothing recent, so we work to get at least something
 			{
 				$rows=$GLOBALS['SITE_DB']->query('SELECT *,r.id AS p_id'.$extra_select_sql.' FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'news r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'news_category_entries d ON r.id=d.news_entry'.$join.' WHERE '.$q_filter.((!has_privilege(get_member(),'see_unvalidated'))?' AND validated=1':'').(can_arbitrary_groupby()?' GROUP BY r.id':'').' ORDER BY r.date_and_time DESC',$fallback_full,$start);
@@ -206,10 +207,10 @@ class Block_main_news
 				$author_url=new ocp_tempcode();
 				if ((addon_installed('authors')) && (!$member_based))
 				{
-					$map=array('page'=>'authors','type'=>'misc','id'=>$myrow['author']);
+					$url_map=array('page'=>'authors','type'=>'misc','id'=>$myrow['author']);
 					if ($attach_to_url_filter)
-						$map+=propagate_ocselect();
-					$author_url=build_url($map,get_module_zone('authors'));
+						$url_map+=propagate_ocselect();
+					$author_url=build_url($url_map,get_module_zone('authors'));
 				}
 				$author=$myrow['author'];
 
@@ -381,7 +382,20 @@ class Block_main_news
 			$pagination=pagination(do_lang_tempcode('NEWS'),$start,$block_id.'_start',$fallback_full+$fallback_archive,$block_id.'_max',$max_rows);
 		}
 
-		return do_template('BLOCK_MAIN_NEWS',array('_GUID'=>'01f5fbd2b0c7c8f249023ecb4254366e','BLOG'=>$blogs===1,'TITLE'=>$_title,'CONTENT'=>$news_text,'BRIEF'=>$news_text2,'FILTER'=>$filter,'ARCHIVE_URL'=>$archive_url,'SUBMIT_URL'=>$submit_url,'RSS_URL'=>$rss_url,'ATOM_URL'=>$atom_url,'PAGINATION'=>$pagination));
+		return do_template('BLOCK_MAIN_NEWS',array(
+			'_GUID'=>'01f5fbd2b0c7c8f249023ecb4254366e',
+			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
+			'BLOG'=>$blogs===1,
+			'TITLE'=>$_title,
+			'CONTENT'=>$news_text,
+			'BRIEF'=>$news_text2,
+			'FILTER'=>$filter,
+			'ARCHIVE_URL'=>$archive_url,
+			'SUBMIT_URL'=>$submit_url,
+			'RSS_URL'=>$rss_url,
+			'ATOM_URL'=>$atom_url,
+			'PAGINATION'=>$pagination,
+		));
 	}
 
 }

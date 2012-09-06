@@ -453,7 +453,7 @@ class Module_news
 
 		// Get category contents
 		$inline=get_param_integer('inline',0)==1;
-		$content=do_block('main_news',array('filter'=>$filter,'filter_and'=>$filter_and,'blogs'=>is_null($blog)?'-1':strval($blog),'member_based'=>($blog===1)?'1':'0','zone'=>'_SELF','days'=>'0','fallback_full'=>$inline?'0':'30','fallback_archive'=>$inline?'30':'0','no_links'=>'1','pagination'=>'1','attach_to_url_filter'=>'1','ocselect'=>$ocselect));
+		$content=do_block('main_news',array('filter'=>$filter,'filter_and'=>$filter_and,'blogs'=>is_null($blog)?'-1':strval($blog),'member_based'=>($blog===1)?'1':'0','zone'=>'_SELF','days'=>'0','fallback_full'=>$inline?'0':'10','fallback_archive'=>$inline?'30':'0','no_links'=>'1','pagination'=>'1','attach_to_url_filter'=>'1','ocselect'=>$ocselect));
 
 		// Management links
 		if ((($blog!==1) || (has_privilege(get_member(),'have_personal_category','cms_news'))) && (has_actual_page_access(NULL,($blog===1)?'cms_blogs':'cms_news',NULL,NULL)) && (has_submit_permission('high',get_member(),get_ip_address(),'cms_news')))

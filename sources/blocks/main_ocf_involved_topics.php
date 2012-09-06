@@ -106,7 +106,7 @@ class Block_main_ocf_involved_topics
 			}
 		}
 
-		return $topics;
+		return do_template('BLOCK_MAIN_OCF_INVOLVED_TOPICS',array('BLOCK_PARAMS'=>block_params_arr_to_str($map),'TOPICS'=>$topics));
 	}
 
 }

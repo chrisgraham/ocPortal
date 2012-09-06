@@ -323,7 +323,8 @@ class Hook_addon_registry_galleries
 	{
 		$galleries=do_lorem_template('BLOCK_MAIN_PERSONAL_GALLERIES_LIST', array(
 			'GALLERIES'=>lorem_paragraph_html(),
-			'PAGINATION'=>placeholder_pagination()
+			'PAGINATION'=>placeholder_pagination(),
+			'BLOCK_PARAMS'=>'',
 		));
 
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_GALLERIES',array(

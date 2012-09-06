@@ -155,7 +155,8 @@ class Hook_addon_registry_awards
 					lorem_phrase_html()
 				),
 				'SUBMIT_URL'=>placeholder_url(),
-				'ARCHIVE_URL'=>placeholder_url()
+				'ARCHIVE_URL'=>placeholder_url(),
+				'BLOCK_PARAMS'=>'',
 			)), NULL, '', true)
 		);
 	}

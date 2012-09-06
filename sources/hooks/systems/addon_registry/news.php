@@ -292,7 +292,8 @@ class Hook_addon_registry_news
 				'ATOM_URL'=>placeholder_url(),
 				'SUBMIT_URL'=>placeholder_url(),
 				'ARCHIVE_URL'=>placeholder_url(),
-				'BRIEF'=>lorem_phrase()
+				'BRIEF'=>lorem_phrase(),
+				'BLOCK_PARAMS'=>'',
 			)), NULL, '', true)
 		);
 	}

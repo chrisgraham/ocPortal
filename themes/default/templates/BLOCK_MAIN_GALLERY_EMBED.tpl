@@ -6,7 +6,7 @@
 		</div>
 
 		{+START,IF_NON_EMPTY,{PAGINATION}}
-			<div class="float_surrounder">
+			<div class="float_surrounder ajax_block_wrapper_links">
 				{PAGINATION}
 			</div>
 		{+END}
@@ -14,7 +14,7 @@
 		<script type="text/javascript">// <![CDATA[
 			add_event_listener_abstract(window,'load',function () {
 				{$REQUIRE_JAVASCRIPT,javascript_ajax}
-				internalise_ajax_block_wrapper_links('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}',document.getElementById('{$GET;,wrapper_id}'),['mge_start'], { } );
+				internalise_ajax_block_wrapper_links('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}',document.getElementById('{$GET;,wrapper_id}'),['[^_]*_start'], { } );
 			} );
 		//]]></script>
 	</div>
