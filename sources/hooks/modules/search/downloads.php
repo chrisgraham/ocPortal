@@ -145,7 +145,15 @@ class Hook_search_downloads
 	{
 		global $SEARCH__CONTENT_BITS;
 		$highlight_bits=is_null($SEARCH__CONTENT_BITS)?array():$SEARCH__CONTENT_BITS;
-		$_text_summary=trim(preg_replace('#\s+#',' ',substr($row['download_data_mash'],strpos($row['download_data_mash'],array_key_exists(0,$highlight_bits)?($highlight_bits[0]-1000):0),10000)));
+		if (array_key_exists(0,$highlight_bits))
+		{
+			$pos=strpos($row['download_data_mash'],$highlight_bits[0])-1000;
+		} else
+		{
+			$pos=0;
+		}
+		$mash_portion=substr($row['download_data_mash'],$pos,10000);
+		$_text_summary=trim(preg_replace('#\s+#',' ',$mash_portion));
 		if ($_text_summary===false) $_text_summary='';
 		global $LAX_COMCODE;
 		$LAX_COMCODE=true;
