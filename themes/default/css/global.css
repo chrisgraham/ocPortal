@@ -125,7 +125,7 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 /* Special colour for box titles */
 {$THEME_WIZARD_COLOR,#ffffff,box_title_text,100% WB}
 {$THEME_WIZARD_COLOR,#426aa9,box_title_background,100% seed}
-{$GET,box_title_background}TODO{$GET,seed}
+
 /* Special colour for code/quote boxes */
 {$THEME_WIZARD_COLOR,#8ea6cb,code_title_background,60% seed + 40% WB}
 {$THEME_WIZARD_COLOR,#3f3f3f,code_text,25% code_background + 85% BW}
@@ -560,13 +560,13 @@ header h1 {
 	font-weight: bold;
 }
 
-.breadcrumbs>.sep:after {
+.breadcrumbs .sep:after {
 	content: " \00A0\00BB " !important;
 	display: inline-block;
 	font-size: 0.9em;
 	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 }
-.breadcrumbs>.sep:last-child:after {
+.breadcrumbs .sep:last-child:after {
 	content: "" !important;
 }
 
@@ -1016,7 +1016,7 @@ input.button_hyperlink {
 .non_link,
 .non_link:visited,
 .non_link:hover {
-	color: {$GET,slightly_seeded_text} !important;
+	color: inherit !important;
 	text-decoration: none;
 	cursor: default;
 }
@@ -2586,7 +2586,7 @@ ul.associated_links_block_group.horizontal_links>li:before,
 	padding-left: 0 !important;
 }
 .horizontal_links_comma li:before {
-	content: ", ";
+	content: ", \A";
 }
 .horizontal_meta_details li:first-child:before,
 .horizontal_links li:first-child:before,
