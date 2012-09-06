@@ -37,6 +37,8 @@ set_time_limit(0);
 disable_php_memory_limit();
 if (function_exists('gc_enable')) gc_enable();
 
+$GLOBALS['NO_QUERY_LIMIT']=true;
+
 do_work();
 
 function do_work()
@@ -61,7 +63,7 @@ function do_work()
 		$member_id=ocf_make_member(uniqid(''),uniqid(''),uniqid('').'@example.com',array(),intval(date('d')),intval(date('m')),intval(date('Y')),array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',false);
 		add_author(random_line(),'',$member_id,random_text(),random_text());
 
-		enable_notifications('ocf_forum',strval(db_get_first_id()),$member_id);
+		enable_notifications('ocf_topic','forum:'.strval(db_get_first_id()),$member_id);
 
 		enable_notifications('ocf_topic',strval(db_get_first_id()),$member_id);
 

@@ -1184,7 +1184,7 @@ class Hook_vb3
 			if (is_null($member_id)) continue;
 			$forum_id=import_id_remap_get('forum',strval($row['forumid']),true);
 			if (is_null($forum_id)) continue;
-			enable_notifications('ocf_forum',strval($forum_id),$member_id);
+			enable_notifications('ocf_topic','forum:'.strval($forum_id),$member_id);
 
 			import_id_remap_put('forum_notification',strval($row['subscribeforumid']),1);
 		}

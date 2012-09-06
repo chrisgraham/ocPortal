@@ -389,7 +389,7 @@ function step_1()
 		preg_match preg_grep preg_match_all
 		preg_replace preg_replace_callback preg_split print_r putenv rawurldecode
 		rawurlencode readdir realpath register_shutdown_function rename require require_once reset rmdir
-		round rsort rtrim serialize set_error_handler set_magic_quotes_runtime set_time_limit
+		round rsort rtrim serialize set_error_handler set_magic_quotes_runtime
 		setcookie setlocale sha1 sin sort sprintf srand str_pad str_repeat str_replace
 		strcmp strftime strip_tags stripslashes strlen strpos strrpos strstr strtok strtolower
 		strtotime strtoupper strtr strval substr substr_count tempnam time trim trigger_error

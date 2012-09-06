@@ -852,7 +852,7 @@ class Hook_wowbb
 				{
 					$forum_id=import_id_remap_get('forum',strval($forum),true);
 					if (is_null($forum_id)) continue;
-					enable_notifications('ocf_forum',strval($forum_id),$member_id);
+					enable_notifications('ocf_topic','forum:'.strval($forum_id),$member_id);
 				}
 
 				import_id_remap_put('forum_notification',strval($row['user_id']),1);

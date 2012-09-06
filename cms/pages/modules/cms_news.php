@@ -537,7 +537,7 @@ class Module_cms_news extends standard_aed_module
 
 		$title=post_param('title',STRING_MAGIC_NULL);
 
-		if (($validated==1) && ($main_news_category!=STRING_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($main_news_category!=INTEGER_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
 		{
 			$is_blog=!is_null($GLOBALS['SITE_DB']->query_value('news_categories','nc_owner',array('id'=>$main_news_category)));
 
