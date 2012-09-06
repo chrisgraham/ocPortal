@@ -1,7 +1,7 @@
 <section class="box box___simple_preview_box"><div class="box_inner">
-	{+START,IF_PASSED,TITLE}
+	{+START,IF_PASSED,TITLE}{+START,IF_NON_EMPTY,{TITLE}}
 		<h3>{TITLE*}</h3>
-	{+END}
+	{+END}{+END}
 
 	{+START,IF_PASSED,REP_IMAGE}
 		<div class="right float_separation"><a href="{URL*}">{REP_IMAGE}</a></div>

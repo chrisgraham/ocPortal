@@ -1,4 +1,9 @@
+{+START,IF,{GIVE_CONTEXT}}
+<div class="box"><div class="box_inner">
+{+END}
+{+START,IF,{$NOT,{GIVE_CONTEXT}}}
 <div class="ocf_member_box">
+{+END}
 	{+START,IF,{GIVE_CONTEXT}}
 		<h3>{!CONTENT_IS_OF_TYPE,{!MEMBER},{$USERNAME*,{MEMBER_ID}}}</h3>
 	{+END}
@@ -41,4 +46,9 @@
 			</tbody>
 		</table>
 	</div>
+{+START,IF,{$NOT,{GIVE_CONTEXT}}}
 </div>
+{+END}
+{+START,IF,{GIVE_CONTEXT}}
+</div></div>
+{+END}

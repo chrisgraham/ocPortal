@@ -39,6 +39,8 @@ function init__banners()
  */
 function render_banner_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
+	require_lang('banners');
+
 	$url=new ocp_tempcode();
 
 	$_title=$row['name'];
@@ -60,6 +62,8 @@ function render_banner_box($row,$zone='_SEARCH',$give_context=true,$guid='')
  */
 function render_banner_type_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
+	require_lang('banners');
+
 	$url=new ocp_tempcode();
 
 	require_lang('banners');

@@ -510,6 +510,7 @@ class Hook_addon_registry_ocf_forum
 
 		$post=do_lorem_template('OCF_TOPIC_POST', array(
 			'ID'=>placeholder_id(),
+			'GIVE_CONTEXT'=>false,
 			'TOPIC_FIRST_POST_ID'=>placeholder_id(),
 			'TOPIC_FIRST_POSTER'=>lorem_phrase(),
 			'POST_ID'=>placeholder_id(),
@@ -538,6 +539,7 @@ class Hook_addon_registry_ocf_forum
 
 		return array(
 			lorem_globalise(do_lorem_template('OCF_POST_BOX', array(
+				'GIVE_CONTEXT'=>true,
 				'ID'=>placeholder_id(),
 				'POST'=>$post,
 				'URL'=>placeholder_url(),
@@ -1546,6 +1548,7 @@ class Hook_addon_registry_ocf_forum
 
 			$posts->attach(do_lorem_template('OCF_TOPIC_POST', array(
 				'ID'=>placeholder_random(),
+				'GIVE_CONTEXT'=>false,
 				'TOPIC_FIRST_POST_ID'=>placeholder_random(),
 				'TOPIC_FIRST_POSTER'=>lorem_phrase(),
 				'POST_ID'=>placeholder_random(),

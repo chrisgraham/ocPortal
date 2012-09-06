@@ -153,6 +153,8 @@ function may_vote_in_poll($myrow)
  */
 function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=false,$give_context=true,$guid='')
 {
+	require_lang('polls');
+
 	$ip=get_ip_address();
 	if (!may_vote_in_poll($myrow)) $results=true;
 

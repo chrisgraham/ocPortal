@@ -215,14 +215,15 @@
 	{+END}
 	background-color: {$GET,area_background};
 	padding: 0.3em;
+	vertical-align: middle;
+}
+
+.ocf_post_box .ocf_topic>div>div>div {
+	border: 0;
 }
 
 .ocf_topic {
 	table-layout: fixed !important; /* Needed to be able to lock in overflow scrolling to individual cells */
-}
-
-.ocf_topic>div>div>div:first-child {
-	vertical-align: middle;
 }
 
 .ocf_topic .ocf_forum_box_left, .ocf_post_details {

@@ -120,7 +120,7 @@ class Hook_search_downloads
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows('downloads_download','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'download_downloads r',array('r.name','r.description','r.comments'),$where_clause,$content_where,$remapped_orderer,'r.*',array('r.original_filename','r.download_data_mash'),'downloads','category_id');
+		$rows=get_search_rows('downloads_download','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'download_downloads r',array('r.name','r.description','r.additional_details'),$where_clause,$content_where,$remapped_orderer,'r.*',array('r.original_filename','r.download_data_mash'),'downloads','category_id');
 
 		$out=array();
 		foreach ($rows as $i=>$row)
@@ -143,13 +143,23 @@ class Hook_search_downloads
 	{
 		global $SEARCH__CONTENT_BITS;
 		$highlight_bits=is_null($SEARCH__CONTENT_BITS)?array():$SEARCH__CONTENT_BITS;
-		$_text_summary=trim(preg_replace('#\s+#',' ',substr($row['download_data_mash'],strpos($row['download_data_mash'],array_key_exists(0,$highlight_bits)?($highlight_bits[0]-1000):0),10000)));
+
+		if (array_key_exists(0,$highlight_bits))
+		{
+			$pos=strpos($row['download_data_mash'],$highlight_bits[0])-1000;
+		} else
+		{
+			$pos=0;
+		}
+		$mash_portion=substr($row['download_data_mash'],$pos,10000);
+		$_text_summary=trim(preg_replace('#\s+#',' ',$mash_portion));
 		if ($_text_summary===false) $_text_summary='';
 		global $LAX_COMCODE;
 		$LAX_COMCODE=true;
 		$text_summary_h=comcode_to_tempcode($_text_summary,NULL,false,60,NULL,NULL,false,false,false,false,false,$highlight_bits);
 		$LAX_COMCODE=false;
 		$text_summary=generate_text_summary($text_summary_h->evaluate(),$highlight_bits);
+
 		return render_download_box($row,true,true,NULL,$text_summary);
 	}
 

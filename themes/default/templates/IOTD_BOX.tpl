@@ -1,16 +1,13 @@
 <div class="box box___iotd_box"><div class="box_inner">
 	{+START,IF,{GIVE_CONTEXT}}
-		<h3>{!IOTD}</h3>
-	{+END}
-
-	{+START,IF,{$NOT,{GIVE_CONTEXT}}}
-		{+START,IF_NON_EMPTY,{I_TITLE}}
-			<h3>{I_TITLE}</h3>
-		{+END}
+		<h3>
+			{+START,IF_NON_EMPTY,{I_TITLE}}{!CONTENT_IS_OF_TYPE,{!IOTD},{I_TITLE}}{+END}
+			{+START,IF_EMPTY,{I_TITLE}}{!IOTD}{+END}
+		</h3>
 	{+END}
 
 	{+START,IF_NON_EMPTY,{THUMB_URL}}
-		<div class="right">
+		<div class="right float_separation">
 			 {+START,IF_NON_EMPTY,{VIEW_URL}}<a title="{I_TITLE*}" href="{VIEW_URL*}">{+END}<img alt="{!THUMBNAIL}" src="{THUMB_URL*}" />{+START,IF_NON_EMPTY,{VIEW_URL}}</a>{+END}
 		</div>
 	{+END}
@@ -23,19 +20,10 @@
 		</div>
 	{+END}{+END}
 
-	{+START,IF,{GIVE_CONTEXT}}
-		{+START,IF_NON_EMPTY,{I_TITLE}}
-			<div class="associated_details">
-				{$PARAGRAPH,{I_TITLE}}
-			</div>
-		{+END}
-	{+END}
-	{+START,IF,{$NOT,{GIVE_CONTEXT}}}
-		{+START,IF_NON_EMPTY,{CAPTION}}
-			<div class="associated_details">
-				{$PARAGRAPH,{CAPTION}}
-			</div>
-		{+END}
+	{+START,IF_NON_EMPTY,{CAPTION}}
+		<div class="associated_details">
+			{$PARAGRAPH,{CAPTION}}
+		</div>
 	{+END}
 
 	{+START,IF_PASSED,CHOOSE_URL}{+START,IF_PASSED,EDIT_URL}{+START,IF_PASSED,IS_CURRENT}

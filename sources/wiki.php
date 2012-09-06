@@ -35,6 +35,8 @@ The concept of a chain is crucial to proper understanding of the Wiki+ system. P
  */
 function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
+	require_lang('wiki');
+
 	$map=array('page'=>'wiki','type'=>'misc','id'=>($row['page_id']==db_get_first_id())?NULL:$row['page_id']);
 	if (!is_null($root)) $map['keep_forum_root']=$root;
 	$url=build_url($map,$zone);
@@ -68,6 +70,8 @@ function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_b
  */
 function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
+	require_lang('wiki');
+
 	$content=get_translated_tempcode($row['description']);
 
 	$map=array('page'=>'wiki','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']);
@@ -75,7 +79,7 @@ function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_b
 	$url=build_url($map,$zone);
 
 	$_title=escape_html(get_translated_text($row['title']));
-	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('WIKI_PAGE'),$_title):$_title;
+	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('_WIKI_PAGE'),$_title):$_title;
 
 	$breadcrumbs=mixed();
 	if ($include_breadcrumbs)
@@ -101,6 +105,8 @@ function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_b
  */
 function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notification=true)
 {
+	require_lang('wiki');
+
 	if (is_null($member)) $member=get_member();
 
 	require_code('comcode_check');

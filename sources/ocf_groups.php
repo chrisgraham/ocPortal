@@ -47,7 +47,7 @@ function init__ocf_groups()
  */
 function render_group_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
-	require_code('ocf_groups');
+	require_lang('ocf');
 
 	$url=build_url(array('page'=>'groups','type'=>'view','id'=>$row['id']),get_module_zone('groups'));
 

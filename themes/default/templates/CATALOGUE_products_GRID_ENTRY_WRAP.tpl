@@ -15,7 +15,7 @@
 		<span class="price">{$CURRENCY_SYMBOL}{$FLOAT_FORMAT,{FIELD_2}}</span>
 	</div>
 
-	<div>
+	<div class="buttons_group">
 		<a href="{ADD_TO_CART*}"><img class="button_pageitem" src="{$IMG*,pageitem/cart_add}" title="{!ADD_TO_CART}" alt="{!ADD_TO_CART}"/></a>
 		<a href="{VIEW_URL*}"><img class="button_pageitem" src="{$IMG*,pageitem/goto}" title="{!GO_FOR_IT}" alt="{!GO_FOR_IT}"/></a>			
 	</div>

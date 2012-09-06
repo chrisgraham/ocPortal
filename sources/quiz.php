@@ -29,6 +29,8 @@
  */
 function render_quiz_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
+	require_lang('quiz');
+
 	$date=get_timezoned_date($row['q_add_date']);
 	$url=build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),$zone);
 
@@ -505,6 +507,8 @@ function get_quiz_data_for_csv($quiz_id)
  */
 function render_quiz($questions)
 {
+	require_lang('quiz');
+
 	require_code('form_templates');
 
 	// Sort out qa input

@@ -1,4 +1,4 @@
-<section class="box box___block_main_news"><div class="box_inner category_list">
+<section class="box box___block_main_news"><div class="box_inner compacted_subbox_stream">
 	{+START,IF,{$NOT,{BLOG}}}{+START,IF_NON_EMPTY,{TITLE}}
 		<h3>{TITLE}</h3>
 	{+END}{+END}

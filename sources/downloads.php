@@ -60,6 +60,7 @@ function download_licence_script()
  */
 function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL,$text_summary=NULL,$give_context=true,$root=NULL,$guid='')
 {
+	require_lang('downloads');
 	require_css('downloads');
 
 	if (is_null($zone)) $zone=get_module_zone('downloads');
@@ -163,12 +164,12 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
  */
 function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
 {
+	require_lang('downloads');
+
 	$map=array('page'=>'downloads','type'=>'misc','id'=>($row['id']==db_get_first_id())?NULL:$row['id']);
 	if (!is_null($root)) $map['keep_download_root']=$root;
 	if ($attach_to_url_filter) $map+=propagate_ocselect();
 	$url=build_url($map,$zone);
-
-	require_lang('downloads');
 
 	$_title=get_translated_text($row['category']);
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('DOWNLOAD_CATEGORY'),$_title):$_title;

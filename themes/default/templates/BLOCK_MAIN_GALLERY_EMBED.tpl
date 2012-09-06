@@ -21,8 +21,6 @@
 {+END}
 
 {+START,IF,{$EQ,{_GUID},carousel}}
-	{$SET,gallery_carousel,1}
-
 	{+START,IF,{$NEQ,{$COMMA_LIST_GET,{BLOCK_PARAMS},raw},1}}
 		{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
 
@@ -67,6 +65,4 @@
 			}
 		//]]></script>
 	{+END}
-
-	{$SET,gallery_carousel,0}
 {+END}

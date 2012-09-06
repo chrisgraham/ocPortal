@@ -38,7 +38,6 @@ function init__calendar()
 function render_event_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	require_css('calendar');
-
 	require_lang('calendar');
 
 	$url=build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),$zone);
@@ -63,6 +62,8 @@ function render_event_box($row,$zone='_SEARCH',$give_context=true,$guid='')
  */
 function render_calendar_type_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
+	require_lang('calendar');
+
 	$map=array('page'=>'calendar','type'=>'misc');
 	$map['int_'.strval($row['id'])]=1;
 	$url=build_url($map,$zone);

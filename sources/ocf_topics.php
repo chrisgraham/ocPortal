@@ -31,6 +31,8 @@
  */
 function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
+	require_lang('ocf');
+
 	$map=array('page'=>'topicview','id'=>$row['id']);
 	if (!is_null($root)) $map['keep_forum_root']=$root;
 	$url=build_url($map,get_module_zone('topicview'));

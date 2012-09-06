@@ -49,6 +49,8 @@ function init__ocf_forums()
  */
 function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
+	require_lang('ocf');
+
 	$map=array('page'=>'forumview');
 	if ($row['id']!=db_get_first_id()) $map['id']=$row['id'];
 	if (!is_null($root)) $map['keep_forum_root']=$root;

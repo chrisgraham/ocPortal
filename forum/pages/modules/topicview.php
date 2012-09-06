@@ -266,6 +266,7 @@ class Module_topicview
 
 				$rendered_post=do_template('OCF_TOPIC_POST',array(
 							'_GUID'=>'sacd09wekfofpw2f',
+							'GIVE_CONTEXT'=>false,
 							'ID'=>$is_spacer_post?'':strval($_postdetails['id']),
 							'TOPIC_FIRST_POST_ID'=>is_null($topic_info['first_post_id'])?'':strval($topic_info['first_post_id']),
 							'TOPIC_FIRST_POSTER'=>is_null($topic_info['first_poster'])?'':strval($topic_info['first_poster']),

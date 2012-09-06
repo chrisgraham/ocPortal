@@ -112,15 +112,16 @@
 	<div class="ocf_left_post_buttons {CLASS*}">
 		{EMPHASIS*}
 
-		{+START,IF_EMPTY,{EMPHASIS}}{+START,IF_NON_EMPTY,{ID}}
-			<div class="ocf_post_back_to_top">
-				<a href="#"><img title="{!BACK_TO_TOP}" alt="{!BACK_TO_TOP}" src="{$IMG*,top}" /></a>
-			</div>
-		{+END}{+END}
+		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+			{+START,IF_EMPTY,{EMPHASIS}}{+START,IF_NON_EMPTY,{ID}}
+				<div class="ocf_post_back_to_top">
+					<a href="#"><img title="{!BACK_TO_TOP}" alt="{!BACK_TO_TOP}" src="{$IMG*,top}" /></a>
+				</div>
+			{+END}{+END}
+		{+END}
 	</div>
 
 	<div class="buttons_group post_buttons ocf_post_main_column">
 		{BUTTONS}
 	</div>
 </div>
-

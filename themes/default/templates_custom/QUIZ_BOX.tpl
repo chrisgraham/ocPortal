@@ -19,9 +19,11 @@
 		</p>
 	{+END}
 
-	<form  title="{!START} {!QUIZ}: {NAME*}" method="post" action="{URL*}">
-		<input class="button_pageitem" type="image" src="{$IMG*,pageitem/goto}" alt="{!VIEW}" />
-	</form>
+	<div class="shunted_button">
+		<form title="{!START} {!QUIZ}: {NAME*}" method="post" action="{URL*}">
+			<input class="button_pageitem" type="image" src="{$IMG*,pageitem/goto}" alt="{!START} {!QUIZ}: {NAME*}" />
+		</form>
+	</div>
 
 	{+START,IF,{$EQ,{_TYPE},TEST}}{+START,IF,{$NEQ,{POINTS},0}}{+START,IF,{$ADDON_INSTALLED,points}}
 		<p>You will win <strong>{$NUMBER_FORMAT*,{POINTS}}</strong> points if you pass this test. You will spend <strong>{$NUMBER_FORMAT*,{$DIV,{POINTS},2}}</strong> points to enter this test.<br />Put your points on the line and your knowledge to the test!</p>

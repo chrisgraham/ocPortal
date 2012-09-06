@@ -1,4 +1,9 @@
+{+START,IF,{GIVE_CONTEXT}}
+<div class="box"><div class="box_inner">
+{+END}
+{+START,IF,{$NOT,{GIVE_CONTEXT}}}
 <div class="ocf_member_box">
+{+END}
 	{+START,IF,{GIVE_CONTEXT}}
 		<h3>{!CONTENT_IS_OF_TYPE,{!MEMBER},{$USERNAME*,{MEMBER_ID}}}</h3>
 	{+END}
@@ -48,11 +53,15 @@
 			</div>
 		{+END}
 
+		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
 		<div class="ocf_member_directory_box box">
+		{+END}
 			<input class="right" type="hidden" name="result__member_{MEMBER_ID*}" value="1" />
 
 			{$GET,CONTENTS}
+		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
 		</div>
+		{+END}
 	{+END}
 
 	{+START,IF,{$NOT,{$GET,fancy_screen}}}
@@ -93,4 +102,9 @@
 			</table>
 		</div>
 	{+END}
+{+START,IF,{$NOT,{GIVE_CONTEXT}}}
 </div>
+{+END}
+{+START,IF,{GIVE_CONTEXT}}
+</div></div>
+{+END}

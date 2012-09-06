@@ -1,8 +1,8 @@
-{+START,IF,{$GET,gallery_carousel}}
+{+START,IF,{$EQ,{_GUID},carousel}}
 	{ENTRY}
 {+END}
 
-{+START,IF,{$NOT,{$GET,gallery_carousel}}}
+{+START,IF,{$NEQ,{_GUID},carousel}}
 	<div class="gallery_grid_cell">
 		{ENTRY}
 	</div>

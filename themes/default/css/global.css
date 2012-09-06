@@ -560,13 +560,13 @@ header h1 {
 	font-weight: bold;
 }
 
-.breadcrumbs>.sep:after {
+.breadcrumbs .sep:after {
 	content: " \00A0\00BB " !important;
 	display: inline-block;
 	font-size: 0.9em;
 	{$BETA_CSS_PROPERTY,opacity: 0.5;}
 }
-.breadcrumbs>.sep:last-child:after {
+.breadcrumbs .sep:last-child:after {
 	content: "" !important;
 }
 
@@ -1009,7 +1009,7 @@ input.button_hyperlink {
 .non_link,
 .non_link:visited,
 .non_link:hover {
-	color: {$GET,slightly_seeded_text} !important;
+	color: inherit !important;
 	text-decoration: none;
 	cursor: default;
 }
@@ -1414,9 +1414,9 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	margin-bottom: 1em;
 }
 
-h3+.meta_details, .newscat_img+.meta_details {
+.compacted_subbox_stream h3+.meta_details, .compacted_subbox_stream .newscat_img+.meta_details {
 	border-bottom: 0;
-	margin-top: -1em;
+	margin-top: -0.8em;
 	margin-bottom: 0.5em;
 }
 .box_inner>h3+.meta_details {
@@ -1888,11 +1888,11 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	padding: 0 3px;
 }
 
-.category_list.box_inner {
+.compacted_subbox_stream.box_inner {
 	margin-left: 0 !important;
 	margin-right: 0 !important;
 }
-.category_list .box {
+.compacted_subbox_stream .box {
 	border-top: 1px dotted {$GET,standard_border} !important;
 	border-left: 0;
 	border-right: 0;
@@ -1903,21 +1903,21 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	padding: 0.7em 0;
 	background: none;
 }
-.category_list .box:first-child {
+.compacted_subbox_stream .box:first-child {
 	border-top: 0 !important;
 	margin-top: 0 !important;
 	padding-top: 0 !important;
 }
-.category_list .box a img {
+.compacted_subbox_stream .box a img {
 	max-width: 150px;
 }
-.category_list .box+.category_list .box {
+.compacted_subbox_stream .box+.compacted_subbox_stream .box {
 	border-top: 1px solid {$GET,standard_border};
 }
-.category_list .box a {
+.compacted_subbox_stream .box a {
 	font-size: 1.1em;
 }
-.category_list .box .associated_details {
+.compacted_subbox_stream .box .associated_details {
 	margin-bottom: 0;
 }
 
@@ -2904,6 +2904,13 @@ Form buttons are wrapped in either:
 
 .carousel .main {
 	overflow: hidden;
+}
+
+.carousel .box {
+	display: inline-block;
+	max-width: 25em;
+	white-space: normal;
+	vertical-align: top;
 }
 
 /*

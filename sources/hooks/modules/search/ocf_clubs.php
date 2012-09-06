@@ -109,13 +109,20 @@ class Hook_search_ocf_clubs
 	function render($row)
 	{
 		$leader=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['g_group_leader']);
+
 		require_code('ocf_groups');
 		$group_name=ocf_get_group_name($row['id']);
+
 		require_code('ocf_groups2');
 		$num_members=ocf_get_group_members_raw_count($row['id'],false,false,true,false);
+
+		$title=do_lang('CONTENT_IS_OF_TYPE',do_lang('CLUB'),$group_name);
+
 		$summary=do_lang_tempcode(($row['g_open_membership']==1)?'CLUB_WITH_MEMBERS_OPEN':'CLUB_WITH_MEMBERS_APPROVAL',escape_html($group_name),escape_html(integer_format($num_members)),$leader);
+
 		$url=build_url(array('page'=>'groups','type'=>'view','id'=>$row['id']),get_module_zone('groups'));
-		return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'2f7814a2e1f868d2ac73fba69f3aeee1','SUMMARY'=>$summary,'URL'=>$url));
+
+		return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'2f7814a2e1f868d2ac73fba69f3aeee1','TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url));
 	}
 
 }

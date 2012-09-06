@@ -1,5 +1,5 @@
 {+START,IF_NON_EMPTY,{GALLERIES}}
-	<div class="box box___download_category_screen"><div class="box_inner category_list">
+	<div class="box box___download_category_screen"><div class="box_inner compacted_subbox_stream">
 		<div>
 			{GALLERIES}
 		</div>

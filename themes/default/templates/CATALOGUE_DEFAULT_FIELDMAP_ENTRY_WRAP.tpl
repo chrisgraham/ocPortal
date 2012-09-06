@@ -1,6 +1,11 @@
 {$,Read the catalogue tutorial for information on custom catalogue layouts}
 
+{+START,IF,{GIVE_CONTEXT}}
+<div class="box"><div class="box_inner">
+{+END}
+{+START,IF,{$NOT,{GIVE_CONTEXT}}}
 <div class="catalogue_fieldmap_entry_wrap">
+{+END}
 	{+START,IF,{GIVE_CONTEXT}}
 		<h3>{!CATALOGUE_GENERIC,{CATALOGUE_TITLE*}}</h3>
 	{+END}
@@ -26,15 +31,22 @@
 
 	{+START,IF_NON_PASSED_OR_FALSE,ENTRY_SCREEN}
 		<div class="float_surrounder">
-			<p class="left">
-				<a target="_self" href="#"><img class="top_vertical_alignment" title="{!BACK_TO_TOP}" alt="{!BACK_TO_TOP}" src="{$IMG*,top}" /></a>
-			</p>
+			{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+				<p class="left">
+					<a target="_self" href="#"><img class="top_vertical_alignment" title="{!BACK_TO_TOP}" alt="{!BACK_TO_TOP}" src="{$IMG*,top}" /></a>
+				</p>
+			{+END}
 
 			{+START,IF_NON_EMPTY,{VIEW_URL}}
-				<p class="right">
+				<p class="{$?,{GIVE_CONTEXT},shunted_button,right}">
 					<a href="{VIEW_URL*}" title="{!VIEW}: {$STRIP_TAGS*,{FIELD_0}}"><img title="{!VIEW}{+START,IF_PASSED_AND_TRUE,COMMENT_COUNT} ({$STRIP_TAGS,{$COMMENT_COUNT,catalogues,{ID}}}){+END}" alt="{!COMMENTS} / {!VIEW}" class="button_pageitem" src="{$IMG*,pageitem/goto}" /></a>
 				</p>
 			{+END}
 		</div>
 	{+END}
+{+START,IF,{$NOT,{GIVE_CONTEXT}}}
 </div>
+{+END}
+{+START,IF,{GIVE_CONTEXT}}
+</div></div>
+{+END}

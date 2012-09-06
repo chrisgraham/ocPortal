@@ -36,7 +36,7 @@ class Hook_search_ocf_posts
 		require_lang('ocf');
 
 		$info=array();
-		$info['lang']=do_lang_tempcode('SECTION_FORUMS');
+		$info['lang']=do_lang_tempcode('FORUM_POSTS');
 		$info['default']=false;
 		$info['special_on']=array();
 		$info['special_off']=array('open'=>do_lang_tempcode('POST_SEARCH_OPEN'),'closed'=>do_lang_tempcode('POST_SEARCH_CLOSED'),'pinned'=>do_lang_tempcode('POST_SEARCH_PINNED'),'starter'=>do_lang_tempcode('POST_SEARCH_STARTER'));

@@ -48,9 +48,9 @@ function init__chat()
  */
 function render_chat_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
-	$url=build_url(array('page'=>'chat','type'=>'room','id'=>$row['id']),$zone);
-
 	require_lang('chat');
+
+	$url=build_url(array('page'=>'chat','type'=>'room','id'=>$row['id']),$zone);
 
 	$_title=$row['room_name'];
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('ROOM'),$_title):$_title;

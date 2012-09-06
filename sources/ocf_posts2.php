@@ -31,10 +31,11 @@
  */
 function render_post_box($row,$use_post_title=false,$give_context=true,$include_breadcrumbs=true,$root=NULL,$guid='')
 {
+	require_lang('ocf');
+	require_css('ocf');
+
 	require_code('ocf_groups');
 	require_code('ocf_forums');
-
-	require_css('ocf');
 
 	// Poster title
 	$primary_group=$GLOBALS['FORUM_DRIVER']->get_member_row_field($row['p_poster'],'m_primary_group');
@@ -160,12 +161,14 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 	// Render
 	$tpl=do_template('OCF_POST_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'9456f4fe4b8fb1bf34f606fcb2bcc9d7',
+		'GIVE_CONTEXT'=>$give_context,
 		'URL'=>$post_url,
 		'ID'=>strval($row['id']),
 		'BREADCRUMBS'=>$breadcrumbs,
 		'POST'=>do_template('OCF_TOPIC_POST',array(
 			'_GUID'=>($guid!='')?$guid:'9456f4fe4b8fb1bf34f606fcb2bcc9d3',
 			'ID'=>strval($row['id']),
+			'GIVE_CONTEXT'=>$give_context,
 			'TOPIC_FIRST_POST_ID'=>'',
 			'TOPIC_FIRST_POSTER'=>'',
 			'POST_ID'=>strval($row['id']),
@@ -204,7 +207,7 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 			$row['t_cache_first_title']=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('p_topic_id'=>$row['p_topic_id']),'ORDER BY p_time ASC',1);
 		}
 		$link=hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($row['p_topic_id']),$row['t_cache_first_title']);
-		$title=do_lang_tempcode('FORUM_POST_ISOLATED_RESULT',escape_html($row['id']),$poster,array(escape_html($date),$link));
+		$title=do_lang_tempcode('FORUM_POST_ISOLATED_RESULT',escape_html(strval($row['id'])),$poster,array(escape_html($date),$link));
 
 		return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'84ac17a5855ceed1c47c5d3ef6cf4f3d','TITLE'=>$title,'SUMMARY'=>$tpl));
 	}

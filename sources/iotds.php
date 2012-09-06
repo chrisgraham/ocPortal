@@ -30,6 +30,7 @@
  */
 function render_iotd_box($myrow,$zone='_SEARCH',$include_manage_links=false,$give_context=true,$guid='')
 {
+	require_lang('iotds');
 	require_code('images');
 
 	if ($include_manage_links)

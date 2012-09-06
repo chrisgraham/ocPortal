@@ -5,16 +5,15 @@
 		</div>
 	</div></div>
 
-	{+START,IF_PASSED,URL}
-		<p class="right">
-			<a href="{URL*}"><img class="button_pageitem" src="{$IMG*,pageitem/goto}" alt="{!FORUM_POST} #{ID*}" /></a>
-		</p>
-	{+END}
-
 	{+START,IF_PASSED,BREADCRUMBS}
 		<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p>
-			<img class="breadcrumbs_img" src="{$IMG*,breadcrumbs}" alt="&gt; " title="{!YOU_ARE_HERE}" />
-			{BREADCRUMBS}
+			{!LOCATED_IN,{BREADCRUMBS}}
 		</p></nav>
+	{+END}
+
+	{+START,IF_PASSED,URL}
+		<p class="shunted_button">
+			<a href="{URL*}"><img class="button_pageitem" src="{$IMG*,pageitem/goto}" alt="{!FORUM_POST} #{ID*}" /></a>
+		</p>
 	{+END}
 </div>

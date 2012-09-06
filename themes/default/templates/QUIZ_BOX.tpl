@@ -27,7 +27,9 @@
 		</p>
 	{+END}
 
-	<form title="{!START} {!QUIZ}: {NAME*}" method="post" action="{URL*}">
-		<input class="button_pageitem" type="image" src="{$IMG*,pageitem/goto}" alt="{!START} {!QUIZ}: {NAME*}" />
-	</form>
+	<div class="shunted_button">
+		<form title="{!START} {!QUIZ}: {NAME*}" method="post" action="{URL*}">
+			<input class="button_pageitem" type="image" src="{$IMG*,pageitem/goto}" alt="{!START} {!QUIZ}: {NAME*}" />
+		</form>
+	</div>
 </div></section>
