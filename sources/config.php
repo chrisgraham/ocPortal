@@ -186,7 +186,7 @@ function set_tutorial_link($name,$value)
  */
 function get_long_value($name)
 {
-	return $GLOBALS['SITE_DB']->query_value_null_ok('long_values','the_value',array('the_name'=>$name));
+	return $GLOBALS['SITE_DB']->query_value_null_ok('long_values','the_value',array('the_name'=>$name),'',running_script('install'));
 }
 
 /**

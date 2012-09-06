@@ -53,6 +53,15 @@ function _members_ocselect($db,$info,$context,&$extra_join,&$extra_select,$filte
 	{
 		$new_filter_key='field_'.$new_filter_key;
 	}
+	elseif ($filter_key=='gm_group_id')
+	{
+		$join_sql=' LEFT JOIN '.$db->get_table_prefix().'f_group_members gm ON gm.gm_member_id=r.id';
+
+		if (!in_array($join_sql,$extra_join))
+			$extra_join[$filter_key]=$join_sql;
+
+		return array($new_filter_key,'',$field_val);
+	}
 	elseif (preg_match('#^field\_\d+$#',$filter_key)==0) // If it's not already correct
 	{
 		require_code('ocf_members');
