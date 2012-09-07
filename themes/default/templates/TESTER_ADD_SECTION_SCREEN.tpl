@@ -10,7 +10,7 @@
 
 		<h2>{!TESTS}</h2>
 		<script type="text/javascript">// <![CDATA[
-			var add_template='{ADD_TEMPLATE/;~}';
+			var add_template='{ADD_TEMPLATE;~/}';
 			var next_id=1;
 
 			function add_test()

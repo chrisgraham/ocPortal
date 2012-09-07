@@ -18,14 +18,14 @@
 		{
 			var my_id=parseInt(Math.random()*10000);
 			tick_pos[my_id]=400;
-			set_inner_html(ticktickticker,'<div onmouseover="this.mouseisover=true;" onmouseout="this.mouseisover=false;" class="ticker" style="text-indent: 400px; width: 400px;" id="'+my_id+'"><span>{$GET/;~,news_ticker_text}<\/span><\/div>');
+			set_inner_html(ticktickticker,'<div onmouseover="this.mouseisover=true;" onmouseout="this.mouseisover=false;" class="ticker" style="text-indent: 400px; width: 400px;" id="'+my_id+'"><span>{$GET;~/,news_ticker_text}<\/span><\/div>');
 			window.focused=true;
 			add_event_listener_abstract(window,"focus",function() { window.focused=true; });
 			add_event_listener_abstract(window,"blur",function() { window.focused=false; });
 			timer=window.setInterval(function() { ticker_tick(my_id,400); }, 50);
 		} else
 		{
-			set_inner_html(ticktickticker,'<marquee style="display: block" class="ticker" onmouseover="this.setAttribute(\'scrolldelay\',\'10000\');" onmouseout="this.setAttribute(\'scrolldelay\',50);" scrollamount="2" scrolldelay="'+(50)+'" width="400">{$GET/;~,news_ticker_text}<\/marquee>');
+			set_inner_html(ticktickticker,'<marquee style="display: block" class="ticker" onmouseover="this.setAttribute(\'scrolldelay\',\'10000\');" onmouseout="this.setAttribute(\'scrolldelay\',50);" scrollamount="2" scrolldelay="'+(50)+'" width="400">{$GET;~/,news_ticker_text}<\/marquee>');
 		}
 	}) ();
 //]]></script>

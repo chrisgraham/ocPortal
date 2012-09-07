@@ -11,14 +11,14 @@
 		{
 			var my_id=parseInt(Math.random()*10000);
 			tick_pos[my_id]={WIDTH%};
-			set_inner_html(ticktickticker,'<div onmouseover="this.mouseisover=true;" onmouseout="this.mouseisover=false;" class="ticker" style="text-indent: {WIDTH|}px; width: {WIDTH|}px;" id="'+my_id+'"><span>{TEXT/;~}<\/span><\/div>');
+			set_inner_html(ticktickticker,'<div onmouseover="this.mouseisover=true;" onmouseout="this.mouseisover=false;" class="ticker" style="text-indent: {WIDTH|}px; width: {WIDTH|}px;" id="'+my_id+'"><span>{TEXT;~/}<\/span><\/div>');
 			window.focused=true;
 			add_event_listener_abstract(window,"focus",function() { window.focused=true; });
 			add_event_listener_abstract(window,"blur",function() { window.focused=false; });
 			timer=window.setInterval(function() { ticker_tick(my_id,{WIDTH%}); },100/{SPEED%});
 		} else
 		{
-			set_inner_html(ticktickticker,'<marquee style="display: block" class="ticker" onmouseover="this.setAttribute(\'scrolldelay\',\'10000\');" onmouseout="this.setAttribute(\'scrolldelay\',(100/{SPEED%}));" scrollamount="2" scrolldelay="'+(100/{SPEED%})+'" width="{WIDTH|}">{TEXT/;~}<\/marquee>');
+			set_inner_html(ticktickticker,'<marquee style="display: block" class="ticker" onmouseover="this.setAttribute(\'scrolldelay\',\'10000\');" onmouseout="this.setAttribute(\'scrolldelay\',(100/{SPEED%}));" scrollamount="2" scrolldelay="'+(100/{SPEED%})+'" width="{WIDTH|}">{TEXT;~/}<\/marquee>');
 		}
 	} );
 //]]></script>
