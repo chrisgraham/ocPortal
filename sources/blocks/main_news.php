@@ -47,7 +47,7 @@ class Block_main_news
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'show_in_full\',$map)?$map[\'show_in_full\']:\'0\',array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',((array_key_exists(\'attach_to_url_filter\',$map)?$map[\'attach_to_url_filter\']:\'0\')==\'1\'),array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'member_based\',$map)?$map[\'member_based\']:\'0\',array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'historic\',$map)?$map[\'historic\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?intval($map[\'param\']):14,array_key_exists(\'multiplier\',$map)?floatval($map[\'multiplier\']):0.5,array_key_exists(\'fallback_full\',$map)?intval($map[\'fallback_full\']):3,array_key_exists(\'fallback_archive\',$map)?intval($map[\'fallback_archive\']):6,array_key_exists(\'filter\',$map)?$map[\'filter\']:get_param(\'news_filter\',\'\'),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'filter_and\',$map)?$map[\'filter_and\']:\'\')';
+		$info['cache_on']='array(((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),array_key_exists(\'title\',$map)?make_string_tempcode(escape_html($map[\'title\'])):do_lang_tempcode(($blogs==1)?\'BLOGS_POSTS\':\'NEWS\'),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'show_in_full\',$map)?$map[\'show_in_full\']:\'0\',array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',((array_key_exists(\'attach_to_url_filter\',$map)?$map[\'attach_to_url_filter\']:\'0\')==\'1\'),array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'member_based\',$map)?$map[\'member_based\']:\'0\',array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'historic\',$map)?$map[\'historic\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?intval($map[\'param\']):14,array_key_exists(\'multiplier\',$map)?floatval($map[\'multiplier\']):0.5,array_key_exists(\'fallback_full\',$map)?intval($map[\'fallback_full\']):3,array_key_exists(\'fallback_archive\',$map)?intval($map[\'fallback_archive\']):6,array_key_exists(\'filter\',$map)?$map[\'filter\']:get_param(\'news_filter\',\'\'),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'filter_and\',$map)?$map[\'filter_and\']:\'\')';
 		$info['ttl']=60;
 		return $info;
 	}
@@ -341,8 +341,7 @@ class Block_main_news
 		}
 
 		// Block title
-		$_title=do_lang_tempcode(($blogs==1)?'BLOGS_POSTS':'NEWS');
-		if ((array_key_exists('title',$map)) && ($map['title']!='')) $_title=make_string_tempcode(escape_html($map['title']));
+		$_title=array_key_exists('title',$map)?make_string_tempcode(escape_html($map['title'])):do_lang_tempcode(($blogs==1)?'BLOGS_POSTS':'NEWS');
 
 		// Feed URLs
 		$atom_url=new ocp_tempcode();
@@ -395,6 +394,11 @@ class Block_main_news
 			'RSS_URL'=>$rss_url,
 			'ATOM_URL'=>$atom_url,
 			'PAGINATION'=>$pagination,
+
+			'START'=>strval($start),
+			'MAX'=>strval($fallback_full+$fallback_archive),
+			'START_PARAM'=>$block_id.'_start',
+			'MAX_PARAM'=>$block_id.'_max',
 		));
 	}
 

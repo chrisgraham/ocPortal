@@ -155,6 +155,11 @@ class Block_main_cc_embed
 			'ENTRIES'=>$entry_buildup,
 			'SORTING'=>$sorting,
 			'PAGINATION'=>$pagination,
+
+			'START'=>strval($start),
+			'MAX'=>strval($max),
+			'START_PARAM'=>$block_id.'_start',
+			'MAX_PARAM'=>$block_id.'_max',
 		),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_EMBED');
 	}
 

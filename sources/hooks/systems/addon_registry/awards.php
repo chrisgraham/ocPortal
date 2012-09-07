@@ -157,6 +157,11 @@ class Hook_addon_registry_awards
 				'SUBMIT_URL'=>placeholder_url(),
 				'ARCHIVE_URL'=>placeholder_url(),
 				'BLOCK_PARAMS'=>'',
+
+				'START'=>'0',
+				'MAX'=>'10',
+				'START_PARAM'=>'x_start',
+				'MAX_PARAM'=>'x_max',
 			)), NULL, '', true)
 		);
 	}

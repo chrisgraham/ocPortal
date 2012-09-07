@@ -705,6 +705,11 @@ class Hook_addon_registry_catalogues
 				'DISPLAY_TYPE'=>'',
 				'ROOT'=>placeholder_id(),
 				'BLOCK_PARAMS'=>'',
+
+				'START'=>'0',
+				'MAX'=>'10',
+				'START_PARAM'=>'x_start',
+				'MAX_PARAM'=>'x_max',
 			)), NULL, '', true)
 		);
 	}

@@ -54,6 +54,8 @@ class Hook_block
 		// We need to minimise the dependency stuff that comes out, we don't need any default values
 		push_output_state(false,true);
 
+		if (get_param_integer('raw',0)==1) $map['raw']='1';
+
 		// And, go
 		$out=new ocp_tempcode();
 		$out->attach(symbol_tempcode('CSS_TEMPCODE'));

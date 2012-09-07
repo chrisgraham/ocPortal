@@ -6,8 +6,9 @@ var AJAX_TIMEOUTS=[];
 
 var block_data_cache={};
 
-function call_block(url,new_params,target_div,append,callback)
+function call_block(url,new_params,target_div,append,callback,scroll_to_top_of_wrapper)
 {
+	if (typeof scroll_to_top_of_wrapper=='undefined') var scroll_to_top_of_wrapper=false;
 	if (typeof block_data_cache[url]=='undefined') block_data_cache[url]=get_inner_html(target_div); // Cache start position. For this to be useful we must be smart enough to pass blank new_params if returning to fresh state
 
 	var ajax_url=url+'&block_map_sup='+window.encodeURIComponent(new_params);
@@ -18,47 +19,137 @@ function call_block(url,new_params,target_div,append,callback)
 		return null;
 	}
 
-	// Show loading image
-
+	// Show loading animation
+	var loading_wrapper=target_div;
+	var raw_grow_spot=get_elements_by_class_name(target_div,'raw_grow_spot');
+	if (typeof raw_grow_spot[0]!='undefined') loading_wrapper=raw_grow_spot[0]; // If we actually are embedding new results a bit deeper
+	var loading_wrapper_inner=document.createElement('div');
+	loading_wrapper_inner.style.position='relative';
+	var loading_image=document.createElement('img');
+	loading_image.className='ajax_loading';
+	loading_image.src='{$IMG;,loading}';
+	loading_image.style.position='absolute';
+	loading_image.style.left=(find_width(target_div)/2-10)+'px';
 	if (!append)
 	{
-		target_div.orig_position=target_div.style.position;
-		target_div.style.position='relative';
-		var loading_image=document.createElement('img');
-		loading_image.src='{$IMG;,loading}';
-		loading_image.style.position='absolute';
-		loading_image.style.left=(find_width(target_div)/2-10)+'px';
-		loading_image.style.top=(find_height(target_div)/2-20)+'px';
-		target_div.appendChild(loading_image);
+		loading_image.style.top=(-find_height(target_div)/2-20)+'px';
+	} else
+	{
+		loading_image.style.top=0;
+		loading_wrapper_inner.style.height='30px';
 	}
+	loading_wrapper_inner.appendChild(loading_image);
+	loading_wrapper.appendChild(loading_wrapper_inner);
 
 	// Make AJAX call
-	do_ajax_request(ajax_url,function(raw_ajax_result) { _call_block(raw_ajax_result,ajax_url,target_div,append,callback); });
+	do_ajax_request(ajax_url,function(raw_ajax_result) { _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,scroll_to_top_of_wrapper); });
 
 	return false;
 }
 
-function _call_block(raw_ajax_result,ajax_url,target_div,append,callback)
+function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,scroll_to_top_of_wrapper)
 {
-	target_div.style.position=target_div.orig_position;
 	var new_html=raw_ajax_result.responseText;
 	block_data_cache[ajax_url]=new_html;
-	show_block_html(new_html,target_div,append);
-	try
+
+	// Remove loading animation if there is one
+	var ajax_loading=get_elements_by_class_name(target_div,'ajax_loading');
+	if (typeof ajax_loading[0]!='undefined')
 	{
-		window.scrollTo(0,find_pos_y(target_div));
+		ajax_loading[0].parentNode.removeChild(ajax_loading[0]);
 	}
-	catch (e) {};
+
+	// Put in HTML
+	show_block_html(new_html,target_div,append);
+
+	// Scroll up if required
+	if (scroll_to_top_of_wrapper)
+	{
+		try
+		{
+			window.scrollTo(0,find_pos_y(target_div));
+		}
+		catch (e) {};
+	}
+
+	// Defined callback
 	if (callback) callback();
 }
 
 function show_block_html(new_html,target_div,append)
 {
+	var raw_grow_spot=get_elements_by_class_name(target_div,'raw_grow_spot');
+	if (typeof raw_grow_spot[0]!='undefined') target_div=raw_grow_spot[0]; // If we actually are embedding new results a bit deeper
+
 	set_inner_html(target_div,new_html,append);
 }
 
-function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_params)
+var infinite_scroll_blocked=false;
+function infinite_scrolling_block(event)
 {
+	if (event.keyCode==35) // 'End' key pressed, so stop the expand happening for a few seconds while the browser scrolls down
+	{
+		infinite_scroll_blocked=true;
+		window.setTimeout(function() {
+			infinite_scroll_blocked=false;
+		}, 3000);
+	}
+}
+function infinite_scrolling_block_hold()
+{
+	infinite_scroll_blocked=true;
+}
+function infinite_scrolling_block_unhold(infinite_scrolling)
+{
+	infinite_scroll_blocked=false;
+	infinite_scrolling();
+}
+function internalise_infinite_scrolling(url_stem,wrapper)
+{
+	if (infinite_scroll_blocked) return;
+
+	var _pagination=get_elements_by_class_name(wrapper,'pagination');
+	if (typeof _pagination[0]=='undefined') return;
+	var pagination=_pagination[0];
+	pagination.style.display='none';
+
+	var wrapper_pos_y=find_pos_y(wrapper);
+	var wrapper_height=find_height(wrapper);
+	var wrapper_bottom=wrapper_pos_y+wrapper_height;
+	var window_height=get_window_height();
+	var page_height=get_window_scroll_height();
+	var scroll_y=get_window_scroll_y();
+
+	if ((scroll_y+window_height>wrapper_bottom-window_height/2) && (scroll_y+window_height<page_height-30)) // If within window_height/2 pixels of load area and not within 30 pixels of window bottom (so you can press End key)
+	{
+		var more_links=pagination.getElementsByTagName('a');
+
+		pagination.parentNode.removeChild(pagination);
+
+		for (var i=0;i<more_links.length;i++)
+		{
+			if (more_links[i].getAttribute('rel')=='next')
+			{
+				var next_link=more_links[i];
+
+				var url_stub='';
+				var matches=next_link.href.match(new RegExp('[&\?]([^_]*_start)=([^&]*)'));
+				if (matches)
+				{
+					url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
+					url_stub+=matches[1]+'='+matches[2];
+					url_stub+='&raw=1';
+					return call_block(url_stem+url_stub,'',wrapper,true);
+				}
+			}
+		}
+	}
+}
+
+function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_params,append)
+{
+	if (typeof append=='undefined') var append=false;
+
 	var _links=get_elements_by_class_name(block,'ajax_block_wrapper_links');
 	var links=[];
 	for (var i=0;i<_links.length;i++)
@@ -89,7 +180,7 @@ function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_para
 				url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
 				url_stub+=j+'='+window.encodeURIComponent(extra_params[j]);
 			}
-			return call_block(url_stem+url_stub,'',block,false);
+			return call_block(url_stem+url_stub,'',block,append,true);
 		}
 	}
 }

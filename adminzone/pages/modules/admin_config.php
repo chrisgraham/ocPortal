@@ -36,7 +36,7 @@ class Module_admin_config
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=14;
+		$info['version']=15;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -75,7 +75,7 @@ class Module_admin_config
 										'spam_check_level','stopforumspam_api_key','tornevall_api_username','tornevall_api_password','spam_block_lists','spam_cache_time','spam_check_exclusions',
 										'spam_stale_threshold','spam_ban_threshold','spam_block_threshold','spam_approval_threshold',
 										'spam_check_usernames','implied_spammer_confidence','spam_blackhole_detection','honeypot_url','honeypot_phrase',
-										'filetype_icons',
+										'filetype_icons','infinite_scrolling',
 										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
 										);
 
@@ -166,6 +166,11 @@ class Module_admin_config
 			delete_config_option('tray_support');
 			delete_config_option('enable_image_fading');
 			add_config_option('FILETYPE_ICONS','filetype_icons','tick','return \'1\';','THEME','GENERAL');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<15))
+		{
+			add_config_option('INFINITE_SCROLLING','infinite_scrolling','tick','return \'1\';','SITE','GENERAL');
 		}
 
 		if (is_null($upgrade_from))

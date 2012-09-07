@@ -888,6 +888,7 @@ function get_text_templates()
 		'HTML_EDIT',
 		'JAVASCRIPT_NEED',
 		'JAVASCRIPT_NEED_INLINE',
+		'AJAX_PAGINATION',
 		'JAVA_DETECT',
 		'JS_REFRESH',
 		'META_REFRESH_LINE',

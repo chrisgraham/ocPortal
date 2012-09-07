@@ -325,6 +325,11 @@ class Hook_addon_registry_galleries
 			'GALLERIES'=>lorem_paragraph_html(),
 			'PAGINATION'=>placeholder_pagination(),
 			'BLOCK_PARAMS'=>'',
+
+			'START'=>'0',
+			'MAX'=>'10',
+			'START_PARAM'=>'x_start',
+			'MAX_PARAM'=>'x_max',
 		));
 
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_GALLERIES',array(
@@ -594,6 +599,11 @@ class Hook_addon_registry_galleries
 					'TOTAL'=>lorem_phrase(),
 					'PAGINATION'=>placeholder_pagination(),
 					'BLOCK_PARAMS'=>'',
+
+					'START'=>'0',
+					'MAX'=>'10',
+					'START_PARAM'=>'x_start',
+					'MAX_PARAM'=>'x_max',
 				)
 			),NULL,'',true),
 		);

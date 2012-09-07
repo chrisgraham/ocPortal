@@ -75,6 +75,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			'sources/hooks/systems/addon_registry/core_abstract_interfaces.php',
 			'QUESTION_UI_BUTTONS.tpl',
 			'PAGINATION_SCREEN.tpl',
+			'AJAX_PAGINATION.tpl',
 			'CONFIRM_SCREEN.tpl',
 			'WARN_SCREEN.tpl',
 			'JAVASCRIPT_SPLURGH.tpl',

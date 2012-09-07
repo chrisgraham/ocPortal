@@ -230,6 +230,11 @@ class Hook_addon_registry_chat
 			'FRIENDS'=>$friends_arr,
 			'PAGINATION'=>placeholder_pagination(),
 			'BLOCK_PARAMS'=>'',
+
+			'START'=>'0',
+			'MAX'=>'10',
+			'START_PARAM'=>'x_start',
+			'MAX_PARAM'=>'x_max',
 		));
 
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_FRIENDS', array(

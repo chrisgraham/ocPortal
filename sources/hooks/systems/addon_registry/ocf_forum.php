@@ -567,6 +567,11 @@ class Hook_addon_registry_ocf_forum
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_OCF_INVOLVED_TOPICS', array(
 				'TOPICS'=>lorem_paragraph_html(),
 				'BLOCK_PARAMS'=>'',
+
+				'START'=>'0',
+				'MAX'=>'10',
+				'START_PARAM'=>'x_start',
+				'MAX_PARAM'=>'x_max',
 			)), NULL, '', true)
 		);
 	}

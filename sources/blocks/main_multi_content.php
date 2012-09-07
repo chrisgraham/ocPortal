@@ -568,6 +568,11 @@ class Block_main_multi_content
 			'SUBMIT_URL'=>$submit_url,
 			'ARCHIVE_URL'=>$archive_url,
 			'PAGINATION'=>$pagination,
+
+			'START'=>strval($start),
+			'MAX'=>strval($max),
+			'START_PARAM'=>$block_id.'_start',
+			'MAX_PARAM'=>$block_id.'_max',
 		));
 	}
 

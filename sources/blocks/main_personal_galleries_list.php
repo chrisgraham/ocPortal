@@ -115,6 +115,11 @@ class Block_main_personal_galleries_list
 			'ADD_GALLERY_URL'=>$add_gallery_url,
 			'ADD_IMAGE_URL'=>$add_image_url,
 			'ADD_VIDEO_URL'=>$add_video_url,
+
+			'START'=>strval($start),
+			'MAX'=>strval($max),
+			'START_PARAM'=>$block_id.'_start',
+			'MAX_PARAM'=>$block_id.'_max',
 		));
 	}
 

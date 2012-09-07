@@ -119,6 +119,11 @@ class Block_main_friends_list
 			'FRIENDS'=>$friends,
 			'PAGINATION'=>$pagination,
 			'MEMBER_ID'=>strval($member_id),
+
+			'START'=>strval($start),
+			'MAX'=>strval($max),
+			'START_PARAM'=>$block_id.'_start',
+			'MAX_PARAM'=>$block_id.'_max',
 		));
 	}
 

@@ -72,6 +72,7 @@ class Hook_addon_registry_core_configuration
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/config_default/infinite_scrolling.php',
 			'sources/hooks/systems/config_default/check_broken_urls.php',
 			'sources/hooks/systems/config_default/google_analytics.php',
 			'sources/hooks/systems/config_default/ocp_show_personal_sub_links.php',
