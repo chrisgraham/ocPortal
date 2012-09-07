@@ -95,14 +95,20 @@ function infinite_scrolling_block(event)
 		}, 3000);
 	}
 }
+var infinite_scroll_mouse_held=false;
 function infinite_scrolling_block_hold()
 {
 	infinite_scroll_blocked=true;
+	infinite_scroll_mouse_held=true;
 }
 function infinite_scrolling_block_unhold(infinite_scrolling)
 {
-	infinite_scroll_blocked=false;
-	infinite_scrolling();
+	if (infinite_scroll_mouse_held)
+	{
+		infinite_scroll_blocked=false;
+		infinite_scroll_mouse_held=false;
+		infinite_scrolling();
+	}
 }
 function internalise_infinite_scrolling(url_stem,wrapper)
 {
