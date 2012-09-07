@@ -2544,6 +2544,7 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 
 			bit.onclick=function(i) {
 				return function()	{
+					// Find where the
 					var template='';
 					var replace_spot=bit;
 					while (replace_spot)
@@ -2565,10 +2566,21 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 							break;
 						}
 					}
+					var _replace_spot=(template=='')?bit.parentNode.parentNode.parentNode.parentNode:replace_spot;
+
+					// Show loading animation
+					set_inner_html(_replace_spot,'');
+					var loading_image=document.createElement('img');
+					loading_image.className='ajax_loading';
+					loading_image.src='{$IMG;,loading}';
+					loading_image.style.height='12px';
+					_replace_spot.appendChild(loading_image);
+
+					// AJAX call
 					var snippet_request='rating&type='+window.encodeURIComponent(type)+'&id='+window.encodeURIComponent(id)+'&content_type='+window.encodeURIComponent(content_type)+'&template='+window.encodeURIComponent(template)+'&content_url='+window.encodeURIComponent(content_url)+'&content_title='+window.encodeURIComponent(content_title);
 					var message=load_snippet(snippet_request,'rating='+window.encodeURIComponent(i),function(ajax_result) {
 						var message=ajax_result.responseText;
-						set_inner_html((template=='')?bit.parentNode.parentNode.parentNode.parentNode:replace_spot,(template=='')?('<strong>'+message+'</strong>'):message.replace(/^\s*<[^<>]+>/,'').replace(/<\/[^<>]+>\s*$/,''));
+						set_inner_html(_replace_spot,(template=='')?('<strong>'+message+'</strong>'):message.replace(/^\s*<[^<>]+>/,'').replace(/<\/[^<>]+>\s*$/,''));
 					});
 				}
 			}(i);
