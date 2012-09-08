@@ -125,7 +125,7 @@ ocPortal contains many "cross-cutting" features that are often present in differ
  - AJAX fractional-edit support where appropriate (see how CMS CRUD module's use INTEGER_MAGIC_NULL and STRING_MAGIC_NULL, and how their view templates use the FRACTIONAL_EDITABLE directive)
  - Rep-images (implementation varies, but basically these are icons for a module's categories)
  - RSS (just implement a hook, and call [tt]set_feed_url[/tt] in the code when viewing what the RSS feed subscribes to)
- - awards (just implement a hook)
+ - awards (just implement a content-meta-aware hook)
  - Possible others I've forgotten to list
 
 [title="2"]Back-end[/title]

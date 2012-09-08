@@ -76,11 +76,11 @@ class Block_main_awards
 		$award_title=get_translated_text($award_type_row['a_title']);
 		$award_description=get_translated_text($award_type_row['a_description']);
 
-		if ((!file_exists(get_file_base().'/sources/hooks/systems/awards/'.filter_naughty_harsh($award_type_row['a_content_type']).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.filter_naughty_harsh($award_type_row['a_content_type']).'.php')))
+		if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($award_type_row['a_content_type']).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($award_type_row['a_content_type']).'.php')))
 			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$award_type_row['a_content_type']));
 
-		require_code('hooks/systems/awards/'.filter_naughty_harsh($award_type_row['a_content_type']));
-		$object=object_factory('Hook_awards_'.$award_type_row['a_content_type']);
+		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($award_type_row['a_content_type']));
+		$object=object_factory('Hook_content_meta_aware_'.$award_type_row['a_content_type']);
 		$info=$object->info();
 		if (is_null($info)) return do_lang_tempcode('IMPOSSIBLE_TYPE_USED');
 

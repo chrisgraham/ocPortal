@@ -120,20 +120,18 @@ function js_compile($j,$js_cache_path,$minify=true)
 	{
 		$url_patterns=array();
 		$cma_hooks=find_all_hooks('systems','content_meta_aware');
-		$award_hooks=find_all_hooks('systems','awards');
-		$common=array_intersect(array_keys($cma_hooks),array_keys($award_hooks));
-		foreach ($common as $hook)
+		foreach ($cma_hooks as $content_type)
 		{
-			require_code('hooks/systems/content_meta_aware/'.$hook);
-			$hook_ob=object_factory('Hook_content_meta_aware_'.$hook);
-			$info=$hook_ob->info();
+			require_code('hooks/systems/content_meta_aware/'.$content_type);
+			$content_type_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+			$info=$content_type_ob->info();
 			if (!is_null($info['view_pagelink_pattern']))
 			{
 				list($zone,$attributes,)=page_link_decode($info['view_pagelink_pattern']);
 				$url=build_url($attributes,$zone,NULL,false,false,true);
 				$url_patterns[$url->evaluate()]=array(
 					'PATTERN'=>$url->evaluate(),
-					'HOOK'=>$hook,
+					'HOOK'=>$content_type,
 				);
 			}
 			if (!is_null($info['edit_pagelink_pattern']))
@@ -142,7 +140,7 @@ function js_compile($j,$js_cache_path,$minify=true)
 				$url=build_url($attributes,$zone,NULL,false,false,true);
 				$url_patterns[$url->evaluate()]=array(
 					'PATTERN'=>$url->evaluate(),
-					'HOOK'=>$hook,
+					'HOOK'=>$content_type,
 				);
 			}
 		}

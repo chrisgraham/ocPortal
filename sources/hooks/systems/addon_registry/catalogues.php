@@ -82,9 +82,6 @@ class Hook_addon_registry_catalogues
 			'sources/hooks/modules/search/catalogue_entries.php',
 			'sources/hooks/systems/ajax_tree/choose_catalogue_category.php',
 			'sources/hooks/systems/ajax_tree/choose_catalogue_entry.php',
-			'sources/hooks/systems/awards/catalogue.php',
-			'sources/hooks/systems/awards/catalogue_category.php',
-			'sources/hooks/systems/awards/catalogue_entry.php',
 			'sources/hooks/systems/cron/catalogue_entry_timeouts.php',
 			'sources/hooks/systems/cron/catalogue_view_reports.php',
 			'sources/hooks/systems/meta/catalogue_category.php',
@@ -145,7 +142,8 @@ class Hook_addon_registry_catalogues
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_FIELD_VALUE.php',
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_FIELD_VALUE_PLAIN.php',
 			'sources/blocks/main_contact_catalogues.php',
-			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_ALL_FIELD_VALUES.php'
+			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_ALL_FIELD_VALUES.php',
+			'sources/hooks/systems/content_meta_aware/catalogue.php',
 		);
 	}
 

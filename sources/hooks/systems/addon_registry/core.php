@@ -72,6 +72,10 @@ class Hook_addon_registry_core
 	function get_file_list()
 	{
 		return array(
+			'BLOCK_MAIN_CONTENT.tpl',
+			'BLOCK_MAIN_MULTI_CONTENT.tpl',
+			'sources/blocks/main_content.php',
+			'sources/blocks/main_multi_content.php',
 			'themes/default/images/action.png',
 			'themes/default/images/action_small.png',
 			'sources/hooks/systems/symbols/BETA_CSS_PROPERTY.php',
@@ -900,6 +904,60 @@ class Hook_addon_registry_core
 			'EMAILLOG_SCREEN.tpl'=>'email_log_screen',
 			'QUICK_JS_LOADER.tpl'=>'quick_js_loader',
 			'BLOCK_MAIN_CONTENT_FILTERING.tpl'=>'block_main_content_filtering',
+			'BLOCK_MAIN_CONTENT.tpl'=>'block_main_content',
+			'BLOCK_MAIN_MULTI_CONTENT.tpl'=>'block_main_multi_content',
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_main_content()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTENT', array(
+				'TYPE'=>lorem_phrase(),
+				'TITLE'=>lorem_word(),
+				'RAW_AWARD_DATE'=>placeholder_time(),
+				'AWARD_DATE'=>placeholder_time(),
+				'CONTENT'=>lorem_phrase_html(),
+				'SUBMIT_URL'=>placeholder_url(),
+				'ARCHIVE_URL'=>placeholder_url()
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_main_multi_content()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_MULTI_CONTENT', array(
+				'TYPE'=>lorem_phrase(),
+				'TITLE'=>lorem_word(),
+				'RAW_AWARD_DATE'=>placeholder_time(),
+				'AWARD_DATE'=>placeholder_time(),
+				'CONTENT'=>array(
+					lorem_phrase_html()
+				),
+				'SUBMIT_URL'=>placeholder_url(),
+				'ARCHIVE_URL'=>placeholder_url(),
+				'BLOCK_PARAMS'=>'',
+
+				'START'=>'0',
+				'MAX'=>'10',
+				'START_PARAM'=>'x_start',
+				'MAX_PARAM'=>'x_max',
+			)), NULL, '', true)
 		);
 	}
 

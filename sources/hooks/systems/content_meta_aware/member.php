@@ -22,45 +22,94 @@ class Hook_content_meta_aware_member
 {
 
 	/**
-	 * Standard modular info function for content_meta_aware hooks. Allows progmattic identification of ocPortal entity model (along with db_meta table contents).
+	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
+		if (get_forum_type()!='ocf') return NULL;
+
 		return array(
+			'supports_custom_fields'=>false,
+
 			'content_type_label'=>'MEMBER',
 
+			'connection'=>$GLOBALS['FORUM_DB'],
 			'table'=>'f_members',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,
 			'parent_category_field'=>NULL,
 			'parent_category_meta_aware_type'=>NULL,
+			'is_category'=>false,
+			'is_entry'=>true,
+			'category_type'=>NULL, // For category permissions
+			'category_field'=>'m_primary_group', // For category permissions
+			'category_is_string'=>false,
+
 			'title_field'=>'m_username',
 			'title_field_dereference'=>false,
 
-			'is_category'=>false,
-			'is_entry'=>true,
-			'seo_type_code'=>NULL,
-			'feedback_type_code'=>NULL,
-			'permissions_type_code'=>NULL, // NULL if has no permissions
 			'view_pagelink_pattern'=>'_SEARCH:members:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:members:view:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
+			'add_url'=>new ocp_tempcode(),
+			'archive_url'=>build_url(array('page'=>'members'),(!is_null($zone))?$zone:get_module_zone('members')),
+
 			'support_url_monikers'=>(get_value('username_profile_links')!=='1'),
-			'search_hook'=>'ocf_members',
+
+			'views_field'=>NULL,
 			'submitter_field'=>'id',
 			'add_time_field'=>'m_join_time',
 			'edit_time_field'=>NULL,
+			'date_field'=>'m_join_time',
 			'validated_field'=>'m_validated',
+
+			'seo_type_code'=>NULL,
+
+			'feedback_type_code'=>NULL,
+
+			'permissions_type_code'=>NULL, // NULL if has no permissions
+
+			'search_hook'=>'ocf_members',
 
 			'addon_name'=>'core_ocf',
 
+			'cms_page'=>'admin_ocf_join',
 			'module'=>'members',
+
+			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+
+			'rss_hook'=>'ocf_members',
+
+			'actionlog_regexp'=>'\w+_MEMBER',
 
 			'ocselect'=>'ocf_members2::_members_ocselect',
 			'ocselect_protected_fields'=>array('m_pass_hash_salted','m_pass_salt','m_password_change_code'), // These are ones even some staff should never know
 		);
+	}
+
+	/**
+	 * Standard modular run function for award hooks. Renders a content box for an award/randomisation.
+	 *
+	 * @param  array		The database row for the content
+	 * @param  ID_TEXT	The zone to display in
+	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
+	 * @param  boolean	Whether to include breadcrumbs (if there are any)
+	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
+	 * @param  boolean	Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
+	 * @return tempcode	Results
+	 */
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
+	{
+		require_code('ocf_members');
+		require_code('ocf_members2');
+
+		$GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']]=$row;
+
+		return render_member_box($row['id'],false,NULL,NULL,true,NULL,$give_context,$guid);
 	}
 
 }

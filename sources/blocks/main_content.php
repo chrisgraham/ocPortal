@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		awards
+ * @package		core
  */
 
 class Block_main_content
@@ -60,9 +60,6 @@ class Block_main_content
 	 */
 	function run($map)
 	{
-		require_lang('awards');
-		require_code('awards');
-
 		$guid=array_key_exists('guid',$map)?$map['guid']:'';
 		if (array_key_exists('param',$map))
 		{
@@ -74,7 +71,7 @@ class Block_main_content
 				$type_id='download';
 			} else
 			{
-				$hooks=find_all_hooks('systems','awards');
+				$hooks=find_all_hooks('systems','content_meta_aware');
 				$type_id=key($hooks);
 			}
 		}
@@ -89,14 +86,14 @@ class Block_main_content
 		$give_context=(array_key_exists('give_context',$map)?$map['give_context']:'0')=='1';
 		$include_breadcrumbs=(array_key_exists('include_breadcrumbs',$map)?$map['include_breadcrumbs']:'0')=='1';
 
-		if ((!file_exists(get_file_base().'/sources/hooks/systems/awards/'.filter_naughty_harsh($type_id,true).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.filter_naughty_harsh($type_id,true).'.php')))
+		if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true).'.php')))
 			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$type_id));
 
-		require_code('hooks/systems/awards/'.filter_naughty_harsh($type_id,true),true);
-		$object=object_factory('Hook_awards_'.$type_id);
+		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true),true);
+		$object=object_factory('Hook_content_meta_aware_'.$type_id);
 		$info=$object->info();
 		if (is_null($info)) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
-		if (((!array_key_exists('id_is_string',$info)) || (!$info['id_is_string'])) && (!is_null($content_id)) && (!is_numeric($content_id)))
+		if (((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric'])) && (!is_null($content_id)) && (!is_numeric($content_id)))
 		{
 			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($type_id,true),true);
 			$object_cm=object_factory('Hook_content_meta_aware_'.$type_id);
@@ -259,9 +256,9 @@ class Block_main_content
 				$wherea=array();
 				foreach ($bits as $i=>$bit)
 				{
-					$wherea[$info['id_field'][$i]]=$info['id_is_string']?$bit:intval($bit);
+					$wherea[$info['id_field'][$i]]=$info['id_field_numeric']?intval($bit):$bit;
 				}
-			} else $wherea[$info['id_field']]=$info['id_is_string']?$content_id:intval($content_id);
+			} else $wherea[$info['id_field']]=$info['id_field_numeric']?intval($content_id):$content_id;
 
 			$rows=$info['connection']->query_select($info['table'].' g',array('g.*'),$wherea,'',1);
 			if (!array_key_exists(0,$rows))
@@ -289,7 +286,7 @@ class Block_main_content
 		}
 
 		$raw_date=($info['date_field']=='')?mixed():$award_content_row[$info['date_field']];
-		return do_template('BLOCK_MAIN_CONTENT',array('_GUID'=>($guid!='')?$guid:'fce1eace6008d650afc0283a7be9ec30','TYPE'=>$info['title'],'TITLE'=>$title,'RAW_AWARD_DATE'=>is_null($raw_date)?'':strval($raw_date),'AWARD_DATE'=>is_null($raw_date)?'':get_timezoned_date($raw_date),'CONTENT'=>$rendered_content,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url));
+		return do_template('BLOCK_MAIN_CONTENT',array('_GUID'=>($guid!='')?$guid:'fce1eace6008d650afc0283a7be9ec30','TYPE'=>do_lang_tempcode($info['title']),'TITLE'=>$title,'RAW_AWARD_DATE'=>is_null($raw_date)?'':strval($raw_date),'AWARD_DATE'=>is_null($raw_date)?'':get_timezoned_date($raw_date),'CONTENT'=>$rendered_content,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url));
 	}
 
 	/**
@@ -304,7 +301,7 @@ class Block_main_content
 	function build_filter($filter,$info,$category_field_filter,$category_is_string)
 	{
 		$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:$info['table'];
-		$parent_field_name=array_key_exists('parent_field_name',$info)?$info['parent_field_name']:NULL;
+		$parent_field_name=array_key_exists('parent_category_field',$info)?$info['parent_category_field']:NULL;
 		$parent_spec__parent_name=array_key_exists('parent_spec__parent_name',$info)?$info['parent_spec__parent_name']:NULL;
 		$parent_spec__field_name=array_key_exists('parent_spec__field_name',$info)?$info['parent_spec__field_name']:NULL;
 		require_code('ocfiltering');

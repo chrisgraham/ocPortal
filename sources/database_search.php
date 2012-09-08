@@ -1098,12 +1098,12 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 	{
 		if (array_key_exists('restricted',$result)) continue; // This has been blanked out due to insufficient access permissions or some other reason
 
-		$type=convert_ocportal_type_codes('search_hook',$result['type'],'cma_hook');
+		$content_type=convert_ocportal_type_codes('search_hook',$result['type'],'content_type');
 		$id=mixed();
-		if ($type!='')
+		if ($content_type!='')
 		{
-			require_code('hooks/systems/content_meta_aware/'.$type);
-			$cma_ob=object_factory('Hook_content_meta_aware_'.$type);
+			require_code('hooks/systems/content_meta_aware/'.$content_type);
+			$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
 			$cma_info=$cma_ob->info();
 			$id_field=$cma_info['id_field'];
 			if (!is_array($id_field))
@@ -1130,12 +1130,12 @@ function build_search_results_interface($results,$start,$max,$direction,$general
 					$tabular_results[$class][]=$rendered_result;
 				} else
 				{
-					$out->attach(do_template('SEARCH_RESULT',array('_GUID'=>'47da093f9ace87819e246f0cec1402a9','TYPE'=>$type,'ID'=>$id,'CONTENT'=>$rendered_result)));
+					$out->attach(do_template('SEARCH_RESULT',array('_GUID'=>'47da093f9ace87819e246f0cec1402a9','TYPE'=>$content_type,'ID'=>$id,'CONTENT'=>$rendered_result)));
 				}
 			}
 		} else
 		{
-			$out->attach(static_evaluate_tempcode(do_template('SEARCH_RESULT',array('_GUID'=>'d8422a971f55a8a94d090861d519ca7a','TYPE'=>$type,'ID'=>$id))));
+			$out->attach(static_evaluate_tempcode(do_template('SEARCH_RESULT',array('_GUID'=>'d8422a971f55a8a94d090861d519ca7a','TYPE'=>$content_type,'ID'=>$id))));
 		}
 		$i++;
 	}

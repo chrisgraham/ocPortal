@@ -372,7 +372,7 @@ Permissions are usually the tool to use to customise things for different users,
 
 [b]How do I show random content in a box in the front page?[/b]
 Place the [tt]main_content[/tt] block on the page with the right parameters. Here is an example to pick a random download: [tt][block="download"]main_content[/block][/tt].
-To get a full list of valid content-types, look to see what filenames exist in the [tt]sources/hooks/systems/awards[/tt] directory.
+To get a full list of valid content-types, look to see what filenames exist in the [tt]sources/hooks/systems/content_meta_aware[/tt] directory.
 The [tt]main_content[/tt] block is actually very flexible, and can also show specific content items of your choice, or randomise from sets.
 
 [b]Various blocks require ID codes for what content to include. Where do I find these?[/b]

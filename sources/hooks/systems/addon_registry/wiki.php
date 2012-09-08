@@ -115,8 +115,6 @@ class Hook_addon_registry_wiki
 			'sources/hooks/systems/preview/wiki_page.php',
 			'sources/hooks/systems/preview/wiki_post.php',
 			'sources/hooks/systems/rss/wiki.php',
-			'sources/hooks/systems/awards/wiki_page.php',
-			'sources/hooks/systems/awards/wiki_post.php',
 			'sources/hooks/systems/module_permissions/wiki_page.php',
 			'sources/hooks/systems/content_meta_aware/wiki_post.php',
 			'themes/default/images/EN/page/edit_tree.png',

@@ -129,8 +129,6 @@ class Hook_addon_registry_downloads
 			'sources/hooks/systems/trackback/downloads.php',
 			'sources/hooks/systems/ajax_tree/choose_download.php',
 			'sources/hooks/systems/ajax_tree/choose_download_category.php',
-			'sources/hooks/systems/awards/download.php',
-			'sources/hooks/systems/awards/download_category.php',
 			'themes/default/images/bigicons/add_one_licence.png',
 			'themes/default/images/bigicons/edit_one_licence.png',
 			'site/dload.php',

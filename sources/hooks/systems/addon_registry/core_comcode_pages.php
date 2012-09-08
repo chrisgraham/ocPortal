@@ -80,7 +80,6 @@ class Hook_addon_registry_core_comcode_pages
 			'COMCODE_PAGE_EDIT_ACTIONS.tpl',
 			'COMCODE_PAGE_BOX.tpl',
 			'sources/hooks/modules/search/comcode_pages.php',
-			'sources/hooks/systems/awards/comcode_page.php',
 			'sources/hooks/systems/content_meta_aware/comcode_page.php',
 			'themes/default/images/bigicons/comcode_page_edit.png',
 			'COMCODE_PAGE_SCREEN.tpl',

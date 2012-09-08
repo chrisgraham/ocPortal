@@ -41,7 +41,11 @@ class Hook_rss_wiki
 		$filters=ocfilter_to_sqlfragment($_filters,'id','wiki_children','parent_id','parent_id','child_id');
 
 		$content=new ocp_tempcode();
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'wiki_pages WHERE '.$filters.' AND add_date>'.strval((integer)$cutoff).' ORDER BY add_date DESC',$max);
+		$query='SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'wiki_pages p WHERE '.$filters.' AND ((add_date>'.strval((integer)$cutoff).' OR edit_date>'.strval((integer)$cutoff);
+		$query.=' OR EXISTS(SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'wiki_posts o WHERE o.page_id=p.id WHERE date_and_time>'.strval((integer)$cutoff).')';
+		$query.=')';
+		$query.=' ORDER BY add_date DESC';
+		$rows=$GLOBALS['SITE_DB']->query($query,$max);
 		foreach ($rows as $row)
 		{
 			$id=strval($row['id']);

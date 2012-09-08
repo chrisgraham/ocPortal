@@ -25,7 +25,7 @@ The obvious disadvantage of non-randomised featured content is the effort that i
 
 [title="2"]Awards[/title]
 
-The award system allows you to select out content for featuring. It may be used in three ways:
+The award/content systems allows you to select out content for featuring. It may be used in three ways:
  - display of content assigned as the current holder of an award (via the [tt]main_awards[/tt] block, or by browsing the [tt]awards[/tt] page). An award must exist (create new awards in the 'Setup' section of the Admin Zone) before it can be assigned.
  - random display of content in any arbitrary categories (via the [tt]main_content[/tt] block) with full [concept]ocFilter support[/concept]. No award needs to exist for this, as assignment is done via block parameters.
  - display of any arbitrary item of content (via the [tt]main_content[/tt] block). No award needs to exist for this, as assignment is done via block parameters.
@@ -122,7 +122,7 @@ If block cacheing is on, quotes will be rotated on a daily basis.
 [concepts
  1_key="IOTD"   1_value="[Image of the day]. An image and associated caption, generally shown on your front page, intended for regular changing"
  2_key="DOTW"   2_value="[Download of the week]"
- 3_key="Award system"   3_value="A system for picking out content for prominent display. You do not necessarily have to create an award to use the award system"
+ 3_key="Award system"   3_value="A system for picking out content for prominent display"
  4_key="Award"  4_value="Awards are created for a specific content type with specific details and then content of that content type may be given the award; past holders of the award are displayed in an archive"
 ]Concepts[/concepts]
 

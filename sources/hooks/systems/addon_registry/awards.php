@@ -78,8 +78,6 @@ class Hook_addon_registry_awards
 			'sources/hooks/systems/addon_registry/awards.php',
 			'AWARDED_CONTENT.tpl',
 			'BLOCK_MAIN_AWARDS.tpl',
-			'BLOCK_MAIN_CONTENT.tpl',
-			'BLOCK_MAIN_MULTI_CONTENT.tpl',
 			'adminzone/pages/modules/admin_awards.php',
 			'sources/blocks/main_awards.php',
 			'sources/awards.php',
@@ -88,10 +86,6 @@ class Hook_addon_registry_awards
 			'themes/default/images/pagepics/awards.png',
 			'themes/default/images/bigicons/awards.png',
 			'sources/hooks/blocks/main_staff_checklist/awards.php',
-			'sources/hooks/systems/awards/.htaccess',
-			'sources/hooks/systems/awards/index.html',
-			'sources/blocks/main_content.php',
-			'sources/blocks/main_multi_content.php',
 			'awards.css',
 			'themes/default/images/awarded.png',
 			'sources/hooks/modules/admin_import_types/awards.php'
@@ -107,62 +101,8 @@ class Hook_addon_registry_awards
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_MAIN_CONTENT.tpl'=>'block_main_content',
-			'BLOCK_MAIN_MULTI_CONTENT.tpl'=>'block_main_multi_content',
 			'BLOCK_MAIN_AWARDS.tpl'=>'block_main_awards',
 			'AWARDED_CONTENT.tpl'=>'awarded_content'
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__block_main_content()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTENT', array(
-				'TYPE'=>lorem_phrase(),
-				'TITLE'=>lorem_word(),
-				'RAW_AWARD_DATE'=>placeholder_time(),
-				'AWARD_DATE'=>placeholder_time(),
-				'CONTENT'=>lorem_phrase_html(),
-				'SUBMIT_URL'=>placeholder_url(),
-				'ARCHIVE_URL'=>placeholder_url()
-			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__block_main_multi_content()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_MULTI_CONTENT', array(
-				'TYPE'=>lorem_phrase(),
-				'TITLE'=>lorem_word(),
-				'RAW_AWARD_DATE'=>placeholder_time(),
-				'AWARD_DATE'=>placeholder_time(),
-				'CONTENT'=>array(
-					lorem_phrase_html()
-				),
-				'SUBMIT_URL'=>placeholder_url(),
-				'ARCHIVE_URL'=>placeholder_url(),
-				'BLOCK_PARAMS'=>'',
-
-				'START'=>'0',
-				'MAX'=>'10',
-				'START_PARAM'=>'x_start',
-				'MAX_PARAM'=>'x_max',
-			)), NULL, '', true)
 		);
 	}
 

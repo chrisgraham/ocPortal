@@ -70,7 +70,6 @@ class Hook_addon_registry_news
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/awards/news_category.php',
 			'sources/hooks/systems/notifications/news_entry.php',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/blog.php',
 			'sources/hooks/systems/realtime_rain/news.php',
@@ -122,7 +121,6 @@ class Hook_addon_registry_news
 			'sources/hooks/modules/members/news.php',
 			'sources/hooks/modules/search/news.php',
 			'sources/hooks/systems/attachments/news.php',
-			'sources/hooks/systems/awards/news.php',
 			'sources/hooks/systems/do_next_menus/news.php',
 			'sources/hooks/systems/module_permissions/news.php',
 			'sources/hooks/systems/preview/news.php',

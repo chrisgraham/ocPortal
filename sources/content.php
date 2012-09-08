@@ -19,34 +19,30 @@
  */
 
 /**
- * Find a different content type code from the one had. In future we intend to change everything to be cma_hook internally.
+ * Find a different content type code from the one had. In future we intend to change everything to be content_type internally.
  *
  * @param  ID_TEXT		Content type type we know
- * @set addon cma_hook meta_hook award_hook search_hook table seo_type_code feedback_type_code permissions_type_code module table
+ * @set addon content_type meta_hook search_hook seo_type_code feedback_type_code permissions_type_code module table
  * @param  ID_TEXT		Content type ID we know
  * @param  ID_TEXT		Desired content type
- * @set addon cma_hook search_hook table seo_type_code feedback_type_code permissions_type_code module table
+ * @set addon content_type meta_hook search_hook seo_type_code feedback_type_code permissions_type_code module table
  * @return ID_TEXT		Corrected content type type (blank: could not find)
  */
 function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 {
 	$real_type_wanted=$type_wanted;
-	if ($type_wanted=='award_hook') $type_wanted='cma_hook';
-
-	if ($type_has=='award_hook') // Equivalent
-		$type_has='cma_hook';
 
 	// Search content-meta-aware hooks
 	$found_type_id='';
 	$cma_hooks=find_all_hooks('systems','content_meta_aware');
-	foreach (array_keys($cma_hooks) as $cma_hook)
+	foreach (array_keys($cma_hooks) as $content_type)
 	{
-		if ((($type_has=='cma_hook') && ($cma_hook==$type_id)) || ($type_has!='cma_hook'))
+		if ((($type_has=='content_type') && ($content_type==$type_id)) || ($type_has!='content_type'))
 		{
-			require_code('hooks/systems/content_meta_aware/'.$cma_hook);
-			$cms_ob=object_factory('Hook_content_meta_aware_'.$cma_hook);
+			require_code('hooks/systems/content_meta_aware/'.$content_type);
+			$cms_ob=object_factory('Hook_content_meta_aware_'.$content_type);
 			$cma_info=$cms_ob->info();
-			$cma_info['cma_hook']=$cma_hook;
+			$cma_info['content_type']=$content_type;
 			if ((isset($cma_info[$type_has])) && (isset($cma_info[$type_wanted])) && ($cma_info[$type_has]==$type_id))
 			{
 				$found_type_id=$cma_info[$type_wanted];

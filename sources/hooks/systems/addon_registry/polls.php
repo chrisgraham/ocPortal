@@ -77,7 +77,6 @@ class Hook_addon_registry_polls
 			'sources/hooks/systems/config_default/points_CHOOSE_POLL.php',
 			'sources/hooks/systems/config_default/poll_update_time.php',
 			'sources/hooks/systems/realtime_rain/polls.php',
-			'sources/hooks/systems/awards/poll.php',
 			'BLOCK_MAIN_POLL_IFRAME.tpl',
 			'poll.php',
 			'sources/hooks/systems/content_meta_aware/poll.php',

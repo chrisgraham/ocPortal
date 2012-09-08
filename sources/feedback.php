@@ -51,13 +51,13 @@ function get_details_behind_feedback_code($content_type,$content_id)
 {
 	require_code('content');
 
-	$cma_hook=convert_ocportal_type_codes('feedback_type_code',$content_type,'cma_hook');
-	if ($cma_hook!='')
+	$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+	if ($content_type!='')
 	{
-		require_code('hooks/systems/content_meta_aware/'.$cma_hook);
-		$cma_ob=object_factory('Hook_content_meta_aware_'.$cma_hook);
+		require_code('hooks/systems/content_meta_aware/'.$content_type);
+		$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
 		$info=$cma_ob->info();
-		list($content_title,$submitter_id,$cma_info,,$content_url,$content_url_email_safe)=content_get_details($cma_hook,$content_id);
+		list($content_title,$submitter_id,$cma_info,,$content_url,$content_url_email_safe)=content_get_details($content_type,$content_id);
 		return array($content_title,$submitter_id,$content_url,$content_url_email_safe,$cma_info);
 	}
 
@@ -82,16 +82,15 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 	if ($module=='') $module=$content_id;
 
 	$category_id=mixed();
-	$award_hook=convert_ocportal_type_codes('feedback_type_code',$content_type,'award_hook');
-	if ($award_hook!='')
+	$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+	if ($content_type!='')
 	{
-		require_code('hooks/systems/awards/'.$award_hook);
-		$award_hook_ob=object_factory('Hook_awards_'.$award_hook);
-		$info=$award_hook_ob->info();
+		require_code('hooks/systems/content_meta_aware/'.$content_type);
+		$content_type_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+		$info=$cma_hook_ob->info();
 		if (isset($info['category_field']))
 		{
-			$cma_hook=convert_ocportal_type_codes('award_hook',$award_hook,'cma_hook');
-			list(,,,$content)=content_get_details($cma_hook,$content_id);
+			list(,,,$content)=content_get_details($content_type,$content_id);
 			if (!is_null($content))
 			{
 				$category_field=$info['category_field'];
@@ -536,19 +535,19 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 			// Notification
 			require_code('notifications');
 			$subject=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title);
-			$rendered_award='';
-			$award_hook=convert_ocportal_type_codes('feedback_type_code',$content_type,'award_hook');
-			if ($award_hook!='')
+			$rendered='';
+			$content_type=convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+			if ($content_type!='')
 			{
-				require_code('hooks/systems/awards/'.$award_hook);
-				$award_ob=object_factory('Hook_awards_'.$award_hook);
-				$award_content_row=content_get_row($content_id,$award_ob->info());
-				if (!is_null($award_content_row))
+				require_code('hooks/systems/content_meta_aware/'.$content_type);
+				$cma_ob=object_factory('Hook_content_meta_aware_'.$content_type);
+				$cma_content_row=content_get_row($content_id,$cma_ob->info());
+				if (!is_null($cma_content_row))
 				{
-					$rendered_award=preg_replace('#&amp;keep_\w+=[^&]*#','',static_evaluate_tempcode($award_ob->run($award_content_row,'_SEARCH',true,true)));
+					$rendered=preg_replace('#&amp;keep_\w+=[^&]*#','',static_evaluate_tempcode($cma_ob->run($cma_content_row,'_SEARCH',true,true)));
 				}
 			}
-			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(comcode_escape(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),$rendered_award,comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
+			$mail=do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title=='')?ocp_mb_strtolower($content_type_title):$content_title),array(comcode_escape(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),$rendered,comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
 			dispatch_notification('like',NULL,$subject,$mail,array($submitter));
 		}
 

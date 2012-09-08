@@ -90,64 +90,62 @@ function script_load_stuff_staff()
 			}
 		}
 	}
-	{+START,IF,{$ADDON_INSTALLED,awards}}
-		for (var i=0;i<links.length;i++)
+	for (var i=0;i<links.length;i++)
+	{
+		for (var j=0;j<url_patterns.length;j++)
 		{
-			for (var j=0;j<url_patterns.length;j++)
+			var url_pattern=url_patterns[j].pattern,hook=url_patterns[j].hook;
+
+			if ((links[i].href) && (!links[i].onmouseover))
 			{
-				var url_pattern=url_patterns[j].pattern,hook=url_patterns[j].hook;
-
-				if ((links[i].href) && (!links[i].onmouseover))
+				var id=links[i].href.match(url_pattern);
+				if (id)
 				{
-					var id=links[i].href.match(url_pattern);
-					if (id)
+					var myfunc=function(hook,id,link)
 					{
-						var myfunc=function(hook,id,link)
-						{
-							add_event_listener_abstract(link,'mouseout',function(event) {
-								if (typeof event=='undefined') var event=window.event;
-								if (typeof window.deactivate_tooltip!='undefined') deactivate_tooltip(link,event);
-							} );
-							add_event_listener_abstract(link,'mousemove',function(event) {
-								if (typeof event=='undefined') var event=window.event;
-								if (typeof window.activate_tooltip!='undefined') reposition_tooltip(link,event,false,false,null,true);
-							} );
-							add_event_listener_abstract(link,'mouseover',function(event) {
-								if (typeof event=='undefined') var event=window.event;
+						add_event_listener_abstract(link,'mouseout',function(event) {
+							if (typeof event=='undefined') var event=window.event;
+							if (typeof window.deactivate_tooltip!='undefined') deactivate_tooltip(link,event);
+						} );
+						add_event_listener_abstract(link,'mousemove',function(event) {
+							if (typeof event=='undefined') var event=window.event;
+							if (typeof window.activate_tooltip!='undefined') reposition_tooltip(link,event,false,false,null,true);
+						} );
+						add_event_listener_abstract(link,'mouseover',function(event) {
+							if (typeof event=='undefined') var event=window.event;
 
-								if (typeof window.activate_tooltip!='undefined')
+							if (typeof window.activate_tooltip!='undefined')
+							{
+								var id_chopped=id[1];
+								if (typeof id[2]!='undefined') id_chopped+=':'+id[2];
+								var comcode='[block="'+hook+'" id="'+window.decodeURIComponent(id_chopped)+'" no_links="1"]main_content[/block]';
+								if (typeof link.rendered_tooltip=='undefined')
 								{
-									var id_chopped=id[1];
-									if (typeof id[2]!='undefined') id_chopped+=':'+id[2];
-									var comcode='[block="'+hook+'" id="'+window.decodeURIComponent(id_chopped)+'" no_links="1"]main_content[/block]';
-									if (typeof link.rendered_tooltip=='undefined')
-									{
-										link.is_over=true;
+									link.is_over=true;
 
-										var request=do_ajax_request(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?css=1&javascript=1&box_title={!PREVIEW;&}'+keep_stub(false)),function(ajax_result_frame,ajax_result) {
-											if (ajax_result)
-											{
-												link.rendered_tooltip=get_inner_html(ajax_result);
-											}
-											if (typeof link.rendered_tooltip!='undefined')
-											{
-												if (link.is_over)
-													activate_tooltip(link,event,link.rendered_tooltip,'400px',null,null,false,false,false,true);
-											}
-										},'data='+window.encodeURIComponent(comcode));
-									} else
-									{
-										activate_tooltip(link,event,link.rendered_tooltip,'400px',null,null,false,false,false,true);
-									}
+									var request=do_ajax_request(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?css=1&javascript=1&box_title={!PREVIEW;&}'+keep_stub(false)),function(ajax_result_frame,ajax_result) {
+										if (ajax_result)
+										{
+											link.rendered_tooltip=get_inner_html(ajax_result);
+										}
+										if (typeof link.rendered_tooltip!='undefined')
+										{
+											if (link.is_over)
+												activate_tooltip(link,event,link.rendered_tooltip,'400px',null,null,false,false,false,true);
+										}
+									},'data='+window.encodeURIComponent(comcode));
+								} else
+								{
+									activate_tooltip(link,event,link.rendered_tooltip,'400px',null,null,false,false,false,true);
 								}
-							} );
-						};
-						myfunc(hook,id,links[i]);
-					}
+							}
+						} );
+					};
+					myfunc(hook,id,links[i]);
 				}
 			}
 		}
-	{+END}
+	}
 }
 
 function local_page_caching(html)

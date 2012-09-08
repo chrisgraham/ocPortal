@@ -15,7 +15,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		awards
+ * @package		core
  */
 
 class Block_main_multi_content
@@ -85,21 +85,18 @@ class Block_main_multi_content
 	 */
 	function run($map)
 	{
-		require_lang('awards');
-		require_code('awards');
-
 		if (array_key_exists('param',$map))
 		{
-			$type_id=$map['param'];
+			$content_type=$map['param'];
 		} else
 		{
 			if (addon_installed('downloads'))
 			{
-				$type_id='download';
+				$content_type='download';
 			} else
 			{
-				$hooks=find_all_hooks('systems','awards');
-				$type_id=key($hooks);
+				$hooks=find_all_hooks('systems','content_meta_aware');
+				$content_type=key($hooks);
 			}
 		}
 
@@ -109,7 +106,7 @@ class Block_main_multi_content
 		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
 		$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
 		$attach_to_url_filter=((array_key_exists('attach_to_url_filter',$map)?$map['attach_to_url_filter']:'0')=='1');
-		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('keep_'.$type_id.'_root',NULL);
+		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('keep_'.$content_type.'_root',NULL);
 
 		$guid=array_key_exists('guid',$map)?$map['guid']:'';
 		$mode=array_key_exists('mode',$map)?$map['mode']:'recent'; // recent|top|views|random|all or some manually typed sort order
@@ -125,17 +122,13 @@ class Block_main_multi_content
 		$give_context=(array_key_exists('give_context',$map)?$map['give_context']:'0')=='1';
 		$include_breadcrumbs=(array_key_exists('include_breadcrumbs',$map)?$map['include_breadcrumbs']:'0')=='1';
 
-		if ((!file_exists(get_file_base().'/sources/hooks/systems/awards/'.filter_naughty_harsh($type_id).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.filter_naughty_harsh($type_id).'.php')))
-			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$type_id));
+		if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')))
+			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$content_type));
 
-		require_code('hooks/systems/awards/'.filter_naughty_harsh($type_id),true);
-		$object=object_factory('Hook_awards_'.$type_id);
+		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type),true);
+		$object=object_factory('Hook_content_meta_aware_'.$content_type);
 		$info=$object->info($zone,($filter_b=='')?NULL:$filter_b);
 		if (is_null($info)) warn_exit(do_lang_tempcode('IMPOSSIBLE_TYPE_USED'));
-		require_code('content');
-		$cma_hook=convert_ocportal_type_codes('award_hook',$type_id,'cma_hook');
-		$cma_object=object_factory('Hook_content_meta_aware_'.$cma_hook);
-		$info+=$cma_object->info();
 
 		$submit_url=$info['add_url'];
 		if (is_object($submit_url)) $submit_url=$submit_url->evaluate();
@@ -268,7 +261,7 @@ class Block_main_multi_content
 		{
 			// Convert the filters to SQL
 			require_code('ocselect');
-			list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($info['connection'],parse_ocselect($ocselect),$cma_hook,'');
+			list($extra_select,$extra_join,$extra_where)=ocselect_to_sql($info['connection'],parse_ocselect($ocselect),$content_type,'');
 			$extra_select_sql.=implode('',$extra_select);
 			$query.=implode('',$extra_join);
 			$where.=$extra_where;
@@ -347,17 +340,20 @@ class Block_main_multi_content
 		require_code('content');
 
 		// Add in requested pinned awards
-		foreach ($pinned as $i=>$p)
+		if (addon_installed('awards'))
 		{
-			$awarded_rows=$GLOBALS['SITE_DB']->query_select('award_archive',array('*'),array('a_type_id'=>intval($p)),'ORDER BY date_and_time DESC',1);
-			if (!array_key_exists(0,$awarded_rows)) continue;
-			$awarded_row=$awarded_rows[0];
-
-			$award_content_row=content_get_row($awarded_row['content_id'],$info);
-
-			if ((!is_null($award_content_row)) && ((!isset($info['validated_field'])) || ($award_content_row[$info['validated_field']]!=0)))
+			foreach ($pinned as $i=>$p)
 			{
-				$pinned_order[$i]=$award_content_row;
+				$awarded_rows=$GLOBALS['SITE_DB']->query_select('award_archive',array('*'),array('a_type_id'=>intval($p)),'ORDER BY date_and_time DESC',1);
+				if (!array_key_exists(0,$awarded_rows)) continue;
+				$awarded_row=$awarded_rows[0];
+
+				$award_content_row=content_get_row($awarded_row['content_id'],$info);
+
+				if ((!is_null($award_content_row)) && ((!isset($info['validated_field'])) || ($award_content_row[$info['validated_field']]!=0)))
+				{
+					$pinned_order[$i]=$award_content_row;
+				}
 			}
 		}
 
@@ -555,13 +551,13 @@ class Block_main_multi_content
 		if ($do_pagination)
 		{
 			require_code('templates_pagination');
-			$pagination=pagination($info['title'],$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
+			$pagination=pagination(do_lang_tempcode($info['title']),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
 		}
 
 		return do_template('BLOCK_MAIN_MULTI_CONTENT',array(
 			'_GUID'=>($guid!='')?$guid:'9035934bc9b25f57eb8d23bf100b5796',
 			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
-			'TYPE'=>$info['title'],
+			'TYPE'=>do_lang_tempcode($info['title']),
 			'TITLE'=>$title,
 			'CONTENT'=>$rendered_content,
 			'CONTENT_DATA'=>$content_data,
@@ -587,14 +583,14 @@ class Block_main_multi_content
 	function build_filter($filter,$info,$category_field_filter)
 	{
 		$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:$info['table'];
-		$parent_field_name=array_key_exists('parent_field_name',$info)?$info['parent_field_name']:NULL;
+		$parent_field_name=array_key_exists('parent_category_field',$info)?$info['parent_category_field']:NULL;
 		if (is_null($parent_field_name)) $parent_spec__table_name=NULL;
 		$parent_spec__parent_name=array_key_exists('parent_spec__parent_name',$info)?$info['parent_spec__parent_name']:NULL;
 		$parent_spec__field_name=array_key_exists('parent_spec__field_name',$info)?$info['parent_spec__field_name']:NULL;
-		$id_is_string=((array_key_exists('id_is_string',$info)) && ($info['id_is_string']));
+		$id_field_numeric=((!array_key_exists('id_field_numeric',$info)) || ($info['id_field_numeric']));
 		$category_is_string=((array_key_exists('category_is_string',$info)) && ($info['category_is_string']));
 		require_code('ocfiltering');
-		return ocfilter_to_sqlfragment($filter,$category_field_filter,$parent_spec__table_name,$parent_spec__parent_name,$parent_field_name,$parent_spec__field_name,!$id_is_string,!$category_is_string);
+		return ocfilter_to_sqlfragment($filter,$category_field_filter,$parent_spec__table_name,$parent_spec__parent_name,$parent_field_name,$parent_spec__field_name,$id_field_numeric,!$category_is_string);
 	}
 }
 

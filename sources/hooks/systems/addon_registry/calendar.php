@@ -72,7 +72,6 @@ class Hook_addon_registry_calendar
 	function get_file_list()
 	{
 		return array(
-			'sources/hooks/systems/awards/calendar_type.php',
 			'sources/hooks/systems/snippets/calendar_recurrence_suggest.php',
 			'sources/hooks/systems/notifications/calendar_reminder.php',
 			'sources/hooks/systems/notifications/calendar_event.php',
@@ -122,7 +121,6 @@ class Hook_addon_registry_calendar
 			'BLOCK_SIDE_CALENDAR_LISTING.tpl',
 			'CALENDAR_EVENT_BOX.tpl',
 			'themes/default/images/EN/page/add_event.png',
-			'sources/hooks/systems/awards/event.php',
 			'sources/hooks/systems/trackback/events.php',
 			'cms/pages/modules/cms_calendar.php',
 			'lang/EN/calendar.ini',

@@ -240,13 +240,13 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL)
 
 	if ($description!='')
 	{
-		$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$member,'hide_posts'=>$hide_posts,'wiki_views'=>0,'notes'=>$notes,'description'=>0,'title'=>insert_lang($title,2),'add_date'=>time()),true);
+		$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$member,'hide_posts'=>$hide_posts,'edit_date'=>NULL,'wiki_views'=>0,'notes'=>$notes,'description'=>0,'title'=>insert_lang($title,2),'add_date'=>time()),true);
 
 		require_code('attachments2');
 		$GLOBALS['SITE_DB']->query_update('wiki_pages',array('description'=>insert_lang_comcode_attachments(2,$description,'wiki_page',strval($id),NULL,false,$member)),array('id'=>$id),'',1);
 	} else
 	{
-		$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$member,'hide_posts'=>$hide_posts,'wiki_views'=>0,'notes'=>$notes,'description'=>insert_lang($description,2),'title'=>insert_lang($title,2),'add_date'=>time()),true);
+		$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$member,'hide_posts'=>$hide_posts,'edit_date'=>NULL,'wiki_views'=>0,'notes'=>$notes,'description'=>insert_lang($description,2),'title'=>insert_lang($title,2),'add_date'=>time()),true);
 	}
 
 	update_stat('num_wiki_pages',1);
@@ -288,7 +288,7 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 
 	require_code('attachments2');
 	require_code('attachments3');
-	$GLOBALS['SITE_DB']->query_update('wiki_pages',array('hide_posts'=>$hide_posts,'description'=>update_lang_comcode_attachments($_description,$description,'wiki_page',strval($id),NULL,true),'notes'=>$notes,'title'=>lang_remap($_title,$title)),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('wiki_pages',array('hide_posts'=>$hide_posts,'description'=>update_lang_comcode_attachments($_description,$description,'wiki_page',strval($id),NULL,true),'notes'=>$notes,'title'=>lang_remap($_title,$title),'edit_date'=>time()),array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>$member));
 
 	require_code('seo2');

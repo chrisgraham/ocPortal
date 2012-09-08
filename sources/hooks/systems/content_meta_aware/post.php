@@ -22,43 +22,91 @@ class Hook_content_meta_aware_post
 {
 
 	/**
-	 * Standard modular info function for content_meta_aware hooks. Allows progmattic identification of ocPortal entity model (along with db_meta table contents).
+	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
+		if (get_forum_type()!='ocf') return NULL;
+
 		return array(
+			'supports_custom_fields'=>true,
+
 			'content_type_label'=>'ocf:FORUM_POST',
 
+			'connection'=>$GLOBALS['FORUM_DB'],
 			'table'=>'f_posts',
 			'id_field'=>'id',
 			'id_field_numeric'=>true,
 			'parent_category_field'=>'p_topic_id',
 			'parent_category_meta_aware_type'=>'topic',
+			'is_category'=>false,
+			'is_entry'=>true,
+			'category_field'=>'p_cache_forum_id', // For category permissions
+			'category_type'=>'forums', // For category permissions
+			'parent_spec__table_name'=>'f_forums',
+			'parent_spec__parent_name'=>'f_parent_forum',
+			'parent_spec__field_name'=>'id',
+			'category_is_string'=>false,
+
 			'title_field'=>'p_title',
 			'title_field_dereference'=>false,
 
-			'is_category'=>false,
-			'is_entry'=>true,
-			'seo_type_code'=>NULL,
-			'feedback_type_code'=>'post',
-			'permissions_type_code'=>'forums',
 			'view_pagelink_pattern'=>'_SEARCH:topicview:findpost:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:topics:edit_post:_WILD',
 			'view_category_pagelink_pattern'=>'_SEARCH:topicview:misc:_WILD',
+			'add_url'=>new ocp_tempcode(),
+			'archive_url'=>build_url(array('page'=>'forumview'),(!is_null($zone))?$zone:get_module_zone('forumview')),
+
 			'support_url_monikers'=>false,
-			'search_hook'=>'ocf_posts',
+
 			'views_field'=>NULL,
 			'submitter_field'=>'p_poster',
 			'add_time_field'=>'p_time',
 			'edit_time_field'=>'p_last_edit_time',
+			'date_field'=>'p_time',
 			'validated_field'=>'p_validated',
+
+			'seo_type_code'=>NULL,
+
+			'feedback_type_code'=>'post',
+
+			'permissions_type_code'=>'forums',
+
+			'search_hook'=>'ocf_posts',
 
 			'addon_name'=>'ocf_forum',
 
+			'cms_page'=>'topics',
 			'module'=>'forumview',
+
+			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+
+			'rss_hook'=>NULL,
+
+			'actionlog_regexp'=>'\w+_POST',
 		);
+	}
+
+	/**
+	 * Standard modular run function for award hooks. Renders a content box for an award/randomisation.
+	 *
+	 * @param  array		The database row for the content
+	 * @param  ID_TEXT	The zone to display in
+	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
+	 * @param  boolean	Whether to include breadcrumbs (if there are any)
+	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
+	 * @param  boolean	Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
+	 * @return tempcode	Results
+	 */
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
+	{
+		require_code('ocf_posts2');
+
+		return render_post_box($row,false,$give_context,$include_breadcrumbs,is_null($root)?NULL:intval($root),$guid);
 	}
 
 }

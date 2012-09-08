@@ -121,25 +121,21 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 
 		// Custom fields
 		require_code('content');
-		$award_hook=convert_ocportal_type_codes('cma_hook',$content_type,'award_hook');
-		if (!is_null($award_hook))
+		require_code('hooks/systems/content_meta_aware/'.$content_type);
+		$ob2=object_factory('Hook_content_meta_aware_'.$content_type);
+		$info2=$ob2->info();
+		if ((isset($info2['supports_custom_fields'])) && ($info2['supports_custom_fields']))
 		{
-			require_code('hooks/systems/awards/'.$award_hook);
-			$ob2=object_factory('Hook_awards_'.$award_hook);
-			$info2=$ob2->info();
-			if ((isset($info2['supports_custom_fields'])) && ($info2['supports_custom_fields']))
+			require_code('fields');
+			$catalogue_fields=list_to_map('id',get_catalogue_fields(($content_type=='catalogue_entry')?$catalogue_name:'_'.$content_type));
+			foreach ($catalogue_fields as $catalogue_field)
 			{
-				require_code('fields');
-				$catalogue_fields=list_to_map('id',get_catalogue_fields(($award_hook=='catalogue_entry')?$catalogue_name:'_'.$award_hook));
-				foreach ($catalogue_fields as $catalogue_field)
+				if ($catalogue_field['cf_put_in_search']==1)
 				{
-					if ($catalogue_field['cf_put_in_search']==1)
-					{
-						$remapped_name='field_'.strval($catalogue_field['id']);
-						$db_fields[$remapped_name]='SHORT_TEXT';
-						$types[$remapped_name]=$catalogue_field['cf_type'];
-						$labels[$remapped_name]=get_translated_text($catalogue_field['cf_name']);
-					}
+					$remapped_name='field_'.strval($catalogue_field['id']);
+					$db_fields[$remapped_name]='SHORT_TEXT';
+					$types[$remapped_name]=$catalogue_field['cf_type'];
+					$labels[$remapped_name]=get_translated_text($catalogue_field['cf_name']);
 				}
 			}
 		}
@@ -530,9 +526,9 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
 
 	// Fields API
 	$matches=array();
-	if ((preg_match('#^field\_(\d+)#',$filter_key,$matches)!=0) && (isset($info['cma_hook'])))
+	if ((preg_match('#^field\_(\d+)#',$filter_key,$matches)!=0) && (isset($info['content_type'])))
 	{
-		return _fields_api_ocselect($db,$info,'_'.$info['cma_hook'],$extra_join,$extra_select,$filter_key,$filter_val,$db_fields);
+		return _fields_api_ocselect($db,$info,'_'.$info['content_type'],$extra_join,$extra_select,$filter_key,$filter_val,$db_fields);
 	}
 
 	$filter_key=filter_naughty_harsh($filter_key);
@@ -586,15 +582,15 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
 	} else
 	{
 		// Fields API (named)
-		if (isset($info['cma_hook']))
+		if (isset($info['content_type']))
 		{
 			require_code('fields');
-			$fields=list_to_map('id',get_catalogue_fields('_'.$info['cma_hook']));
+			$fields=list_to_map('id',get_catalogue_fields('_'.$info['content_type']));
 			foreach ($fields as $field)
 			{
 				if (get_translated_text($field['cf_name'])==$filter_key)
 				{
-					return _fields_api_ocselect($db,$info,'_'.$info['cma_hook'],$extra_join,$extra_select,'field_'.strval($field['id']),$filter_val,$db_fields);
+					return _fields_api_ocselect($db,$info,'_'.$info['content_type'],$extra_join,$extra_select,'field_'.strval($field['id']),$filter_val,$db_fields);
 				}
 			}
 		}
@@ -629,7 +625,7 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='')
 		require_code('hooks/systems/content_meta_aware/'.$content_type);
 		$ob=object_factory('Hook_content_meta_aware_'.$content_type);
 		$info=$ob->info();
-		$info['cma_hook']=$content_type;
+		$info['content_type']=$content_type; // We'll need this later, so add it in
 
 		if (isset($info['ocselect']))
 		{

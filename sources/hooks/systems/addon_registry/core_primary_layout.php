@@ -247,18 +247,23 @@ class Hook_addon_registry_core_primary_layout
 	 */
 	function tpl_preview__screen_title()
 	{
-		require_lang('awards');
+		$awards=mixed();
+		if (addon_installed('awards'))
+		{
+			require_lang('awards');
+			$awards=array(
+				array(
+					'AWARD_TYPE'=>lorem_title(),
+					'AWARD_TIMESTAMP'=>placeholder_time()
+				)
+			);
+		}
 		return array(
 			lorem_globalise(do_lorem_template('SCREEN_TITLE', array(
 				'TITLE'=>lorem_phrase(),
 				'HELP_URL'=>placeholder_url(),
 				'HELP_TERM'=>lorem_word(),
-				'AWARDS'=>array(
-					array(
-						'AWARD_TYPE'=>lorem_title(),
-						'AWARD_TIMESTAMP'=>placeholder_time()
-					)
-				)
+				'AWARDS'=>$awards
 			)), NULL, '', true)
 		);
 	}

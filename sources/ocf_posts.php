@@ -112,20 +112,17 @@ function ocf_display_spacer_post($linked_type,$linked_id)
 	$new_description=mixed();
 	$new_post=mixed();
 
-	if (addon_installed('awards'))
+	require_code('content');
+	$linked_type=convert_ocportal_type_codes('feedback_type_code',$linked_type,'award_hook');
+	if ($linked_type!='')
 	{
-		require_code('content');
-		$linked_type=convert_ocportal_type_codes('feedback_type_code',$linked_type,'award_hook');
-		if ($linked_type!='')
-		{
-			require_code('hooks/systems/awards/'.$linked_type);
-			$award_ob=object_factory('Hook_awards_'.$linked_type);
-			$award_info=$award_ob->info();
-			$linked_rows=$GLOBALS['SITE_DB']->query_select($award_info['table'],array('*'),array($award_info['id_field']=>$award_info['id_is_string']?$linked_id:intval($linked_id)),'',1);
-			if (array_key_exists(0,$linked_rows))
-				$new_post=$award_ob->run($linked_rows[0],'_SEARCH',true,true);
-			$new_description=do_lang('THIS_IS_COMMENT_TOPIC',get_site_name());
-		}
+		require_code('hooks/systems/content_meta_aware/'.$linked_type);
+		$award_ob=object_factory('Hook_content_meta_aware_'.$linked_type);
+		$award_info=$award_ob->info();
+		$linked_rows=$GLOBALS['SITE_DB']->query_select($award_info['table'],array('*'),array($award_info['id_field']=>$award_info['id_field_numeric']?intval($linked_id):$linked_id),'',1);
+		if (array_key_exists(0,$linked_rows))
+			$new_post=$award_ob->run($linked_rows[0],'_SEARCH',true,true);
+		$new_description=do_lang('THIS_IS_COMMENT_TOPIC',get_site_name());
 	}
 
 	return array($new_description,$new_post);

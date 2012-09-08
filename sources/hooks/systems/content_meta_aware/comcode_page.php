@@ -22,40 +22,88 @@ class Hook_content_meta_aware_comcode_page
 {
 
 	/**
-	 * Standard modular info function for content_meta_aware hooks. Allows progmattic identification of ocPortal entity model (along with db_meta table contents).
+	 * Standard modular info function for award hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
-	 * @return ?array	Map of award content-type info (NULL: disabled).
+	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
+	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info()
+	function info($zone=NULL)
 	{
 		return array(
+			'supports_custom_fields'=>false,
+
 			'content_type_label'=>'zones:COMCODE_PAGE',
 
+			'connection'=>$GLOBALS['SITE_DB'],
 			'table'=>'comcode_pages',
 			'id_field'=>'the_page',
 			'id_field_numeric'=>false,
 			'parent_category_field'=>'the_zone',
 			'parent_category_meta_aware_type'=>NULL,
+			'is_category'=>false,
+			'is_entry'=>true,
+			'category_field'=>array('the_zone','the_page'), // For category permissions
+			'category_type'=>'!', // For category permissions
+			'category_is_string'=>true,
+
 			'title_field'=>NULL,
 			'title_field_dereference'=>true,
 
-			'is_category'=>false,
-			'is_entry'=>true,
-			'seo_type_code'=>'comcode_page',
-			'feedback_type_code'=>NULL,
-			'permissions_type_code'=>NULL, // NULL if has no permissions
 			'view_pagelink_pattern'=>'_WILD:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_comcode_pages:_ed:_WILD',
 			'view_category_pagelink_pattern'=>'_WILD:',
+			'add_url'=>(has_submit_permission('high',get_member(),get_ip_address(),'cms_comcode_pages'))?build_url(array('page'=>'cms_comcode_pages','type'=>'ed'),get_module_zone('cms_comcode_pages')):new ocp_tempcode(),
+			'archive_url'=>build_url(array('page'=>'sitemap'),(!is_null($zone))?$zone:get_page_zone('sitemap')),
+
 			'support_url_monikers'=>false,
-			'search_hook'=>'comcode_pages',
+
+			'views_field'=>NULL,
 			'submitter_field'=>'p_submitter',
 			'add_time_field'=>'p_add_date',
 			'edit_time_field'=>'p_edit_date',
+			'date_field'=>'p_add_date',
 			'validated_field'=>'p_validated',
 
+			'seo_type_code'=>'comcode_page',
+
+			'feedback_type_code'=>NULL,
+
+			'permissions_type_code'=>NULL, // NULL if has no permissions
+
+			'search_hook'=>'comcode_pages',
+
 			'addon_name'=>'core_comcode_pages',
+
+			'module'=>NULL,
+			'cms_page'=>'cms_comcode_pages',
+
+			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+
+			'rss_hook'=>'comcode_pages',
+
+			'actionlog_regexp'=>'\w+_COMCODE_PAGE',
 		);
+	}
+
+	/**
+	 * Standard modular run function for award hooks. Renders a content box for an award/randomisation.
+	 *
+	 * @param  array		The database row for the content
+	 * @param  ID_TEXT	The zone to display in
+	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
+	 * @param  boolean	Whether to include breadcrumbs (if there are any)
+	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
+	 * @param  boolean	Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
+	 * @return tempcode	Results
+	 */
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
+	{
+		unset($zone); // Meaningless here
+
+		require_code('zones2');
+
+		return render_comcode_page_box($row,$give_context,$include_breadcrumbs,$root,$guid);
 	}
 
 }

@@ -18,7 +18,7 @@
  * @package		catalogues
  */
 
-class Hook_awards_catalogue
+class Hook_content_meta_aware_catalogue
 {
 
 	/**
@@ -29,22 +29,60 @@ class Hook_awards_catalogue
 	 */
 	function info($zone=NULL)
 	{
-		$info=array();
-		$info['connection']=$GLOBALS['SITE_DB'];
-		$info['table']='catalogues';
-		$info['date_field']='c_add_date';
-		$info['id_field']='c_name';
-		$info['add_url']=(has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues'))?build_url(array('page'=>'cms_catalogues','type'=>'add_entry','catalogue_name'=>'!'),get_module_zone('cms_catalogues')):new ocp_tempcode();
-		$info['category_field']='c_name';
-		$info['category_type']='catalogues_catalogue';
-		$info['id_is_string']=true;
-		require_lang('catalogues');
-		$info['title']=do_lang_tempcode('CATALOGUES');
-		$info['category_is_string']=true;
-		$info['archive_url']=build_url(array('page'=>'catalogues'),(!is_null($zone))?$zone:get_module_zone('catalogues'));
-		$info['cms_page']='cms_catalogues';
+		return array(
+			'supports_custom_fields'=>false,
 
-		return $info;
+			'content_type_label'=>'CATALOGUES',
+
+			'connection'=>$GLOBALS['SITE_DB'],
+			'table'=>'banners',
+			'id_field'=>'c_name',
+			'id_field_numeric'=>false,
+			'parent_category_field'=>NULL,
+			'parent_category_meta_aware_type'=>NULL,
+			'is_category'=>true,
+			'is_entry'=>false,
+			'category_field'=>'c_name', // For category permissions
+			'category_type'=>'catalogues_catalogue', // For category permissions
+			'category_is_string'=>true,
+
+			'title_field'=>'c_title',
+			'title_field_dereference'=>true,
+
+			'view_pagelink_pattern'=>'_SEARCH:catalogues:index:_WILD',
+			'edit_pagelink_pattern'=>'_SEARCH:cms_catalogues:_edit_catalogue:_WILD',
+			'view_category_pagelink_pattern'=>NULL,
+			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues'))?build_url(array('page'=>'cms_catalogues','type'=>'add_entry','catalogue_name'=>'!'),get_module_zone('cms_catalogues')):new ocp_tempcode(),
+			'archive_url'=>build_url(array('page'=>'catalogues'),(!is_null($zone))?$zone:get_module_zone('catalogues')),
+
+			'support_url_monikers'=>false,
+
+			'views_field'=>NULL,
+			'submitter_field'=>NULL,
+			'add_time_field'=>'c_add_date',
+			'edit_time_field'=>NULL,
+			'date_field'=>'c_add_date',
+			'validated_field'=>NULL,
+
+			'seo_type_code'=>NULL,
+
+			'feedback_type_code'=>NULL,
+
+			'permissions_type_code'=>NULL, // NULL if has no permissions
+
+			'search_hook'=>NULL,
+
+			'addon_name'=>'catalogues',
+
+			'cms_page'=>'cms_catalogues',
+			'module'=>'catalogues',
+
+			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+
+			'rss_hook'=>NULL,
+
+			'actionlog_regexp'=>'\w+_CATALOGUE',
+		);
 	}
 
 	/**
@@ -67,5 +105,3 @@ class Hook_awards_catalogue
 	}
 
 }
-
-

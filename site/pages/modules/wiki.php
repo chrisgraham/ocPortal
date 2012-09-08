@@ -115,6 +115,7 @@ class Module_wiki
 				'notes'=>'LONG_TEXT',
 				'description'=>'LONG_TRANS',	// Comcode
 				'add_date'=>'TIME',
+				'edit_date'=>'?TIME',
 				'wiki_views'=>'INTEGER',
 				'hide_posts'=>'BINARY',
 				'submitter'=>'USER'
@@ -125,7 +126,7 @@ class Module_wiki
 			$GLOBALS['SITE_DB']->create_index('wiki_pages','sadd_date',array('add_date'));
 
 			$lang_key=lang_code_to_default_content('WIKI_HOME',false,1);
-			$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'hide_posts'=>0,'wiki_views'=>0,'add_date'=>time(),'description'=>insert_lang_comcode('',2),'notes'=>'','title'=>$lang_key));
+			$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'edit_date'=>NULL,'hide_posts'=>0,'wiki_views'=>0,'add_date'=>time(),'description'=>insert_lang_comcode('',2),'notes'=>'','title'=>$lang_key));
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)
 			{
@@ -173,6 +174,8 @@ class Module_wiki
 			$GLOBALS['SITE_DB']->rename_table('seedy_posts','wiki_posts');
 			
 			$GLOBALS['SITE_DB']->alter_table_field('wiki_posts','seedy_views','INTEGER','wiki_views');
+
+			$GLOBALS['SITE_DB']->add_table_field('wiki_pages','edit_date','?TIME');
 
 			rename_config_option('is_on_wiki','is_on_seedy');
 			rename_config_option('points_wiki','points_cedi');

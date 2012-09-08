@@ -576,7 +576,6 @@ class Module_admin_workflow extends standard_crud_module
 		}
 
 		clear_ocp_autosave();
-		decache('main_awards');
 
 //		if ($this->redirect_type=='!')
 		{
@@ -760,7 +759,6 @@ class Module_admin_workflow extends standard_crud_module
 		}
 
 		clear_ocp_autosave();
-		decache('main_awards');
 
 		return $this->do_next_manager($title,$description,$id);
 	}

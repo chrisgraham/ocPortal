@@ -35,11 +35,11 @@ class Hook_checklist_awards
 		foreach ($award_types as $award)
 		{
 			// Find out how many submissions we've had since the last award was given
-			if ((!file_exists(get_file_base().'/sources/hooks/systems/awards/'.filter_naughty_harsh($award['a_content_type']).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.filter_naughty_harsh($award['a_content_type']).'.php')))
+			if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($award['a_content_type']).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($award['a_content_type']).'.php')))
 				continue;
 
-			require_code('hooks/systems/awards/'.$award['a_content_type']);
-			$hook_object=object_factory('Hook_awards_'.$award['a_content_type'],true);
+			require_code('hooks/systems/content_meta_aware/'.$award['a_content_type']);
+			$hook_object=object_factory('Hook_content_meta_aware_'.$award['a_content_type'],true);
 			if (is_null($hook_object)) continue;
 			$details=$hook_object->info();
 			if (!is_null($details))

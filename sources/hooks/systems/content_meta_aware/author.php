@@ -18,7 +18,7 @@
  * @package		authors
  */
 
-class Hook_awards_author
+class Hook_content_meta_aware_author
 {
 
 	/**
@@ -29,23 +29,60 @@ class Hook_awards_author
 	 */
 	function info($zone=NULL)
 	{
-		$info=array();
-		$info['connection']=$GLOBALS['SITE_DB'];
-		$info['table']='authors';
-		$info['date_field']=NULL;
-		$info['id_field']='author';
-		$info['add_url']=(has_submit_permission('mid',get_member(),get_ip_address(),'cms_authors'))?build_url(array('page'=>'cms_authors','type'=>'_ad'),get_module_zone('cms_authors')):new ocp_tempcode();
-		$info['category_field']=NULL;
-		$info['submitter_field']='forum_handle';
-		$info['id_is_string']=true;
-		require_lang('authors');
-		$info['title']=do_lang_tempcode('AUTHORS');
-		$info['category_is_string']=true;
-		$info['archive_url']=build_url(array('page'=>'authors'),(!is_null($zone))?$zone:get_module_zone('authors'));
-		$info['cms_page']='cms_authors';
-		$info['supports_custom_fields']=true;
+		return array(
+			'supports_custom_fields'=>true,
 
-		return $info;
+			'content_type_label'=>'AUTHORS',
+
+			'connection'=>$GLOBALS['SITE_DB'],
+			'table'=>'authors',
+			'id_field'=>'author',
+			'id_field_numeric'=>false,
+			'parent_category_field'=>NULL,
+			'parent_category_meta_aware_type'=>NULL,
+			'is_category'=>false,
+			'is_entry'=>true,
+			'category_type'=>NULL, // For category permissions
+			'category_field'=>NULL, // For category permissions
+			'category_is_string'=>true,
+
+			'title_field'=>'author',
+			'title_field_dereference'=>false,
+
+			'view_pagelink_pattern'=>'_SEARCH:authors:misc:_WILD',
+			'edit_pagelink_pattern'=>'_SEARCH:cms_authors:_ad:_WILD',
+			'view_category_pagelink_pattern'=>NULL,
+			'add_url'=>(has_submit_permission('mid',get_member(),get_ip_address(),'cms_authors'))?build_url(array('page'=>'cms_authors','type'=>'_ad'),get_module_zone('cms_authors')):new ocp_tempcode(),
+			'archive_url'=>build_url(array('page'=>'authors'),(!is_null($zone))?$zone:get_module_zone('authors')),
+
+			'support_url_monikers'=>false,
+
+			'views_field'=>NULL,
+			'submitter_field'=>NULL,
+			'add_time_field'=>NULL,
+			'edit_time_field'=>NULL,
+			'date_field'=>NULL,
+			'validated_field'=>NULL,
+
+			'seo_type_code'=>NULL,
+
+			'feedback_type_code'=>NULL,
+
+			'permissions_type_code'=>NULL, // NULL if has no permissions
+
+			'search_hook'=>NULL,
+
+			'addon_name'=>'authors',
+
+			'cms_page'=>'cms_authors',
+			'module'=>'authors',
+
+			'occle_filesystem_hook'=>NULL, // TODO, #218 on tracker
+
+			'rss_hook'=>'authors',
+
+			'actionlog_regexp'=>'\w+_AUTHOR',
+		);
 	}
 
 	/**
@@ -68,5 +105,3 @@ class Hook_awards_author
 	}
 
 }
-
-

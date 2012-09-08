@@ -89,8 +89,8 @@ function manage_custom_fields_donext_link($content_type)
 	{
 		require_lang('fields');
 
-		require_code('hooks/systems/awards/'.$content_type);
-		$ob=object_factory('Hook_awards_'.$content_type);
+		require_code('hooks/systems/content_meta_aware/'.$content_type);
+		$ob=object_factory('Hook_content_meta_aware_'.$content_type);
 		$info=$ob->info();
 
 		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']))
@@ -98,7 +98,7 @@ function manage_custom_fields_donext_link($content_type)
 			$exists=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'_'.$content_type)));
 
 			return array(
-				array('edit_one_catalogue',array('cms_catalogues',array('type'=>$exists?'_edit_catalogue':'add_catalogue','id'=>'_'.$content_type,'redirect'=>get_self_url(true)),get_module_zone('cms_catalogues')),do_lang('EDIT_CUSTOM_FIELDS',$info['title'])),
+				array('edit_one_catalogue',array('cms_catalogues',array('type'=>$exists?'_edit_catalogue':'add_catalogue','id'=>'_'.$content_type,'redirect'=>get_self_url(true)),get_module_zone('cms_catalogues')),do_lang('EDIT_CUSTOM_FIELDS',do_lang($info['title']))),
 			);
 		}
 	}
@@ -116,8 +116,8 @@ function has_tied_catalogue($content_type)
 {
 	if (addon_installed('catalogues'))
 	{
-		require_code('hooks/systems/awards/'.$content_type);
-		$ob=object_factory('Hook_awards_'.$content_type);
+		require_code('hooks/systems/content_meta_aware/'.$content_type);
+		$ob=object_factory('Hook_content_meta_aware_'.$content_type);
 		$info=$ob->info();
 		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']))
 		{
@@ -129,7 +129,7 @@ function has_tied_catalogue($content_type)
 				{
 					require_code('catalogues2');
 					require_lang('catalogues');
-					actual_add_catalogue_category('_'.$content_type,do_lang('CUSTOM_FIELDS_FOR',$info['title']->evaluate()),'','',NULL);
+					actual_add_catalogue_category('_'.$content_type,do_lang('CUSTOM_FIELDS_FOR',do_lang($info['title'])),'','',NULL);
 				}
 
 				return true;

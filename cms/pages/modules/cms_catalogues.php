@@ -1635,7 +1635,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 	var $award_type='catalogue';
 	var $is_tree_catalogue=false; // Set for usage by do-next-manager
 	var $menu_label='CATALOGUES';
-	var $table='catalogue_entries';
+	var $table='catalogues';
 	var $javascript="var fn=document.getElementById('title'); if (fn) { var form=fn.form; fn.onchange=function() { if ((form.elements['name']) && (form.elements['name'].value=='')) form.elements['name'].value=fn.value.toLowerCase().replace(/[^\w\d\.\-]/g,'_').replace(/\_+\$/,''); }; }";
 
 	/**
@@ -1670,7 +1670,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 		require_code('form_templates');
 
 		if ($name=='') $name=get_param('id','');
-		$tied_to_content_type=(substr($name,0,1)=='_') && ((file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.substr($name,1).'.php')) || (file_exists(get_file_base().'/sources/hooks/systems/awards/'.substr($name,1).'.php')));
+		$tied_to_content_type=(substr($name,0,1)=='_') && ((file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.substr($name,1).'.php')) || (file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.substr($name,1).'.php')));
 		if ($tied_to_content_type)
 		{
 			$content_type=substr($name,1);
@@ -1679,7 +1679,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			$ob=object_factory('Hook_awards_'.$content_type);
 			$info=$ob->info();
 
-			$title=do_lang('CUSTOM_FIELDS_FOR',$info['title']->evaluate());
+			$title=do_lang('CUSTOM_FIELDS_FOR',do_lang($info['title']));
 
 			$hidden->attach(form_input_hidden('title',$title));
 			$hidden->attach(form_input_hidden('name',$name));
@@ -1690,7 +1690,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			$hidden->attach(form_input_hidden('submit_points','0'));
 			$hidden->attach(form_input_hidden('send_view_reports','never'));
 
-			attach_message(do_lang_tempcode('EDITING_CUSTOM_FIELDS_HELP',$info['title']));
+			attach_message(do_lang_tempcode('EDITING_CUSTOM_FIELDS_HELP',do_lang_tempcode($info['title'])));
 
 			$actions=new ocp_tempcode();
 		} else

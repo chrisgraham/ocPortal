@@ -76,7 +76,6 @@ class Hook_addon_registry_iotds
 			'sources/hooks/systems/config_default/iotd_update_time.php',
 			'sources/hooks/systems/config_default/points_ADD_IOTD.php',
 			'sources/hooks/systems/config_default/points_CHOOSE_IOTD.php',
-			'sources/hooks/systems/awards/iotd.php',
 			'sources/hooks/systems/content_meta_aware/iotd.php',
 			'sources/hooks/systems/addon_registry/iotds.php',
 			'sources/hooks/modules/admin_setupwizard/iotds.php',

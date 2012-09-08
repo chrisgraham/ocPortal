@@ -272,8 +272,6 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/profiles_tabs/.htaccess',
 			'sources/hooks/systems/profiles_tabs_edit/.htaccess',
 			'sources/hooks/modules/admin_occle_fs/members.php',
-			'sources/hooks/systems/awards/member.php',
-			'sources/hooks/systems/awards/group.php',
 			'sources/hooks/modules/admin_stats/ocf_demographics.php',
 			'themes/default/images/bigicons/statistics_demographics.png',
 			'themes/default/images/bigicons/customprofilefields.png',

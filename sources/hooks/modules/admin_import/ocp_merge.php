@@ -1130,7 +1130,7 @@ class Hook_ocp_merge
 			}
 
 			$titlemap[$id]=$title;
-			$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>array_key_exists('submitter',$row)?$row['submitter']:get_member(),'hide_posts'=>array_key_exists('hide_posts',$row)?$row['hide_posts']:0,'wiki_views'=>array_key_exists('wiki_views',$row)?$row['wiki_views']:0,'notes'=>$row['notes'],'description'=>insert_lang_comcode($this->get_lang_string($db,$row['description']),2),'add_date'=>$row['add_date'],'title'=>insert_lang($title,2)),true);
+			$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('edit_date'=>array_key_exists('edit_date',$row)?$row['edit_date']:NULL,'submitter'=>array_key_exists('submitter',$row)?$row['submitter']:get_member(),'hide_posts'=>array_key_exists('hide_posts',$row)?$row['hide_posts']:0,'wiki_views'=>array_key_exists('wiki_views',$row)?$row['wiki_views']:0,'notes'=>$row['notes'],'description'=>insert_lang_comcode($this->get_lang_string($db,$row['description']),2),'add_date'=>$row['add_date'],'title'=>insert_lang($title,2)),true);
 
 			import_id_remap_put('wiki_page',strval($row['id']),$id);
 		}

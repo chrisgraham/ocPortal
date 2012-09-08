@@ -199,18 +199,18 @@ class Module_admin_awards extends standard_crud_module
 			$fr[]=protect_from_escaping(hyperlink(build_url(array('page'=>'awards','type'=>'award','id'=>$row['id']),get_module_zone('awards')),get_translated_text($row['a_title'])));
 			if (addon_installed('points'))
 				$fr[]=integer_format($row['a_points']);
-			$hooks=find_all_hooks('systems','awards');
+			$hooks=find_all_hooks('systems','content_meta_aware');
 			$hook_title=do_lang('UNKNOWN');
 			foreach (array_keys($hooks) as $hook)
 			{
 				if ($hook==$row['a_content_type'])
 				{
-					require_code('hooks/systems/awards/'.$hook);
-					$hook_object=object_factory('Hook_awards_'.$hook,true);
+					require_code('hooks/systems/content_meta_aware/'.$hook);
+					$hook_object=object_factory('Hook_content_meta_aware_'.$hook,true);
 					if (is_null($hook_object)) continue;
 					$hook_info=$hook_object->info();
 					if (!is_null($hook_info))
-						$hook_title=$hook_info['title']->evaluate();
+						$hook_title=do_lang($hook_info['title']);
 				}
 			}
 			$fr[]=$hook_title;
@@ -246,15 +246,15 @@ class Module_admin_awards extends standard_crud_module
 		}
 		$list=new ocp_tempcode();
 		$_hooks=array();
-		$hooks=find_all_hooks('systems','awards');
+		$hooks=find_all_hooks('systems','content_meta_aware');
 		foreach (array_keys($hooks) as $hook)
 		{
-			require_code('hooks/systems/awards/'.$hook);
-			$hook_object=object_factory('Hook_awards_'.$hook,true);
+			require_code('hooks/systems/content_meta_aware/'.$hook);
+			$hook_object=object_factory('Hook_content_meta_aware_'.$hook,true);
 			if (is_null($hook_object)) continue;
 			$hook_info=$hook_object->info();
 			if (!is_null($hook_info))
-				$_hooks[$hook]=$hook_info['title']->evaluate();
+				$_hooks[$hook]=do_lang($hook_info['title']);
 		}
 		asort($_hooks);
 		foreach ($_hooks as $hook=>$hook_title)

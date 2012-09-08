@@ -38,7 +38,7 @@ class Hook_rss_comments
 
 		// Check permissions (this is HARD, we have to tunnel through content_meta_aware hooks)
 		$parts=explode('_',$full_title,2);
-		$hook=convert_ocportal_type_codes('feedback_type_code',$parts[0],'cma_hook');
+		$hook=convert_ocportal_type_codes('feedback_type_code',$parts[0],'content_type');
 		if ($hook!='')
 		{
 			require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($hook),true);

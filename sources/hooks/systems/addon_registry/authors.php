@@ -90,9 +90,9 @@ class Hook_addon_registry_authors
 			'site/pages/modules/authors.php',
 			'sources/authors.php',
 			'sources/hooks/systems/do_next_menus/authors.php',
-			'sources/hooks/systems/awards/author.php',
 			'sources/hooks/systems/rss/authors.php',
-			'themes/default/images/bigicons/set-own-profile.png'
+			'themes/default/images/bigicons/set-own-profile.png',
+			'sources/hooks/systems/content_meta_aware/author.php',
 		);
 	}
 
