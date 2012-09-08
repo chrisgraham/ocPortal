@@ -224,8 +224,14 @@ END;
  */
 function upgrader2_check_master_password($password_given_hashed)
 {
+	if (isset($GLOBALS['SITE_INFO']['admin_password'])) // LEGACY
+	{
+		$GLOBALS['SITE_INFO']['master_password']=$GLOBALS['SITE_INFO']['admin_password'];
+		unset($GLOBALS['SITE_INFO']['admin_password']);
+	}
+
 	global $SITE_INFO;
-	$actual_password_hashed=$SITE_INFO['admin_password'];
+	$actual_password_hashed=$SITE_INFO['master_password'];
 
 	return ($password_given_hashed==$actual_password_hashed);
 }

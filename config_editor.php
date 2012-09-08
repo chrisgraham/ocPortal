@@ -46,6 +46,11 @@ if (get_magic_quotes_gpc())
 }
 
 require_once($FILE_BASE.'/_config.php');
+if (isset($GLOBALS['SITE_INFO']['admin_password'])) // LEGACY
+{
+	$GLOBALS['SITE_INFO']['master_password']=$GLOBALS['SITE_INFO']['admin_password'];
+	unset($GLOBALS['SITE_INFO']['admin_password']);
+}
 
 if (!is_writable($FILE_BASE.'/_config.php'))
 {
@@ -145,7 +150,7 @@ function do_access($given_password)
 {
 	$settings=array(
 		'admin_username'=>'The username used for the administrator when ocPortal is installed to not use a forum. On the vast majority of sites this setting does nothing.',
-		'admin_password'=>'If you wish the password to be changed, enter a new password here. Otherwise leave blank.',
+		'master_password'=>'If you wish the password to be changed, enter a new password here. Otherwise leave blank.',
 
 		'base_url'=>'A critical option, that defines the URL of the site (no trailing slash). If the URL changes, the base URL must be changed to reflect it. If you change this option you will need to empty your template and image caches (in the Cleanup Tools or Upgrader), else you may get strange error messages, broken images, and an ocPortal warning about an inconsistency.',
 		'domain'=>'The domain that e-mail addresses are registered on. This applies only to the Point Store and may be ignored by most.',
@@ -251,7 +256,7 @@ function do_access($given_password)
 				</td>
 			</tr>
 		';
-		if ($key=='admin_password')
+		if ($key=='master_password')
 		{
 			echo '
 				<tr>
@@ -259,7 +264,7 @@ function do_access($given_password)
 						&raquo; Confirm password
 					</th>
 					<td>
-						<input type="'.$type.'" name="confirm_admin_password" value="'.$_val.'" size="20" />
+						<input type="'.$type.'" name="confirm_master_password" value="'.$_val.'" size="20" />
 					</td>
 					<td>
 					</td>
@@ -309,7 +314,7 @@ function do_set()
 	{
 		if ($key!='given_password')
 		{
-			if (($key=='admin_password') || ($key=='confirm_admin_password'))
+			if (($key=='master_password') || ($key=='confirm_master_password'))
 			{
 				if ($val=='')
 				{
@@ -318,12 +323,12 @@ function do_set()
 			} else $new[$key]=$val;
 		}
 	}
-	if ($new['confirm_admin_password']!=$new['admin_password'])
+	if ($new['confirm_master_password']!=$new['master_password'])
 	{
 		echo '<hr /><p><strong>Your passwords do not match up.</strong></p>';
 		return;
 	}
-	unset($new['confirm_admin_password']);
+	unset($new['confirm_master_password']);
 
 	// Test cookie settings. BASED ON CODE FROM INSTALL.PHP
 	$base_url=$new['base_url'];
@@ -464,8 +469,8 @@ function co_sync_file_move($old,$new)
 function co_check_master_password($password_given)
 {
 	global $SITE_INFO;
-	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
-	$actual_password_hashed=$SITE_INFO['admin_password'];
+	if (!array_key_exists('master_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
+	$actual_password_hashed=$SITE_INFO['master_password'];
 	$salt='';
 	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))
 	{

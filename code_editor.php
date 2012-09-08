@@ -691,9 +691,15 @@ function ce_sync_file_move($old,$new)
  */
 function ce_check_master_password($password_given)
 {
+	if (isset($GLOBALS['SITE_INFO']['admin_password'])) // LEGACY
+	{
+		$GLOBALS['SITE_INFO']['master_password']=$GLOBALS['SITE_INFO']['admin_password'];
+		unset($GLOBALS['SITE_INFO']['admin_password']);
+	}
+
 	global $SITE_INFO;
-	if (!array_key_exists('admin_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
-	$actual_password_hashed=$SITE_INFO['admin_password'];
+	if (!array_key_exists('master_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
+	$actual_password_hashed=$SITE_INFO['master_password'];
 	$salt='';
 	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))
 	{

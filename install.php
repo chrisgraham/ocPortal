@@ -163,7 +163,7 @@ if (intval($_GET['step'])==4) // Define settings
 	$content=step_4();
 	$forum_type=get_param('forum_type','');
 	if ($forum_type=='none') $username='admin';
-	$password_prompt=do_lang_tempcode('CONFIRM_ADMIN_PASSWORD');
+	$password_prompt=do_lang_tempcode('CONFIRM_MASTER_PASSWORD');
 }
 
 if (intval($_GET['step'])==5)
@@ -827,8 +827,8 @@ function step_4()
 		$options->attach(make_option(do_lang_tempcode('TABLE_PREFIX'),example('TABLE_PREFIX_EXAMPLE','TABLE_PREFIX_TEXT'),'table_prefix',$table_prefix));
 	else
 		$hidden->attach(form_input_hidden('table_prefix',$table_prefix));
-	$admin_password='';
-	$options->attach(make_option(do_lang_tempcode('MASTER_PASSWORD'),example('','CHOOSE_ADMIN_PASSWORD'),'admin_password',$admin_password,true));
+	$master_password='';
+	$options->attach(make_option(do_lang_tempcode('MASTER_PASSWORD'),example('','CHOOSE_MASTER_PASSWORD'),'master_password',$master_password,true));
 	$options->attach(make_tick(do_lang_tempcode('USE_PERSISTENT'),example('','USE_PERSISTENT_TEXT'),'use_persistent',$use_persistent?1:0));
 	require_lang('config');
 	$options->attach(make_tick(do_lang_tempcode('SEND_ERROR_EMAILS_OCPRODUCTS'),example('','CONFIG_OPTION_send_error_emails_ocproducts'),'allow_reports_default',1));
@@ -999,10 +999,10 @@ function step_5()
 	global $SITE_INFO;
 	foreach ($_POST as $key=>$val)
 	{
-		if (($key=='ftp_password') || ($key=='ftp_password_confirm') || ($key=='admin_password_confirm') || ($key=='ocf_admin_password') || ($key=='ocf_admin_password_confirm')) continue;
+		if (($key=='ftp_password') || ($key=='ftp_password_confirm') || ($key=='master_password_confirm') || ($key=='ocf_admin_password') || ($key=='ocf_admin_password_confirm')) continue;
 
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);
-		if ($key=='admin_password') $val='!'.md5($val.'ocp');
+		if ($key=='master_password') $val='!'.md5($val.'ocp');
 		$SITE_INFO[$key]=trim($val);
 	}
 
@@ -1452,10 +1452,10 @@ function step_5_write_config()
 
 	foreach ($_POST as $key=>$val)
 	{
-		if ((($key=='admin_username') && (post_param('forum_type')!='none')) || ($key=='clear_existing_forums_on_install') || ($key=='allow_reports_default') || ($key=='board_path') || ($key=='confirm') || ($key=='ftp_password') || ($key=='ftp_password_confirm') || ($key=='admin_password_confirm') || ($key=='ocf_admin_password') || ($key=='ocf_admin_password_confirm')) continue;
+		if ((($key=='admin_username') && (post_param('forum_type')!='none')) || ($key=='clear_existing_forums_on_install') || ($key=='allow_reports_default') || ($key=='board_path') || ($key=='confirm') || ($key=='ftp_password') || ($key=='ftp_password_confirm') || ($key=='master_password_confirm') || ($key=='ocf_admin_password') || ($key=='ocf_admin_password_confirm')) continue;
 
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);
-		if ($key=='admin_password') $val='!'.md5($val.'ocp');
+		if ($key=='master_password') $val='!'.md5($val.'ocp');
 		if ($key=='base_url') $val=$base_url;
 		$_val=addslashes(trim($val));
 		fwrite($config_file_handle,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");

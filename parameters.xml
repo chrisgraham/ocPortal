@@ -249,13 +249,13 @@
 
   <parameter
     name="Automatic Master password"
-    defaultValue="$SITE_INFO['admin_password']='{Master password}';"
+    defaultValue="$SITE_INFO['master_password']='{Master password}';"
     tags="Hidden"
     >
     <parameterEntry
       type="TextFile"
       scope="_config.php"
-      match="\$SITE_INFO\s*\['admin_password'\]='([^']*)';" />
+      match="\$SITE_INFO\s*\['master_password'\]='([^']*)';" />
   </parameter>
 
   <parameter

@@ -181,7 +181,7 @@ It may seem an obvious solution, to not use an executable file to store configur
 
 For added security you can remove the:
 [code]
-$SITE_INFO['admin_password']='...';
+$SITE_INFO['master_password']='...';
 [/code]
 line from [tt]_config.php[/tt].
 

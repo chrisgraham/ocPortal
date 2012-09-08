@@ -135,9 +135,9 @@
 						return false;
 					}
 				}
-				if (typeof form.elements['admin_password_confirm']!='undefined')
+				if (typeof form.elements['master_password_confirm']!='undefined')
 				{
-					if (form.elements['admin_password_confirm'].value!=form.elements['admin_password'].value)
+					if (form.elements['master_password_confirm'].value!=form.elements['master_password'].value)
 					{
 						window.alert('{!PASSWORDS_DO_NOT_MATCH;}');
 						return false;
@@ -146,9 +146,9 @@
 
 				window.alert('{PASSWORD_PROMPT;}','');
 
-				if (form.elements['admin_password'].value.length<5)
+				if (form.elements['master_password'].value.length<5)
 				{
-					return window.confirm('{!ADMIN_PASSWORD_INSECURE;}');
+					return window.confirm('{!MASTER_PASSWORD_INSECURE;}');
 				}
 				return true;
 			}
