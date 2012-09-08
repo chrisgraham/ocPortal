@@ -2,7 +2,7 @@
 	{+START,IF,{$NEQ,{_GUID},carousel}}
 		{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
 		<div id="{$GET*,wrapper_id}">
-			<div class="gallery_grid_cell_wrap raw_grow_spot">
+			<div class="gallery_grid_cell_wrap raw_ajax_grow_spot">
 				{ENTRIES}
 			</div>
 
@@ -12,7 +12,7 @@
 				</div>
 			{+END}
 
-			{+START,INCLUDE,AJAX_PAGINATION}{+END}
+			{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
 		</div>
 	{+END}
 
@@ -25,7 +25,7 @@
 			<div class="move_left" onkeypress="this.onmousedown(event);" onmousedown="carousel_move({$GET*,carousel_id},-47); return false;"></div>
 			<div class="move_right" onkeypress="this.onmousedown(event); this.onclick(event);" onclick="carousel_prepare_load_more_{$GET*,carousel_id}({$GET*,carousel_id});" onmousedown="carousel_move({$GET*,carousel_id},+47); return false;"></div>
 
-			<div class="main raw_grow_spot" id="carousel_{$GET*,carousel_id}_container">
+			<div class="main raw_ajax_grow_spot" id="carousel_{$GET*,carousel_id}_container">
 			</div>
 		</div>
 

@@ -11,7 +11,7 @@
 				<div class="move_left" onkeypress="this.onmousedown(event);" onmousedown="carousel_move({$GET*,carousel_id},-30); return false;"></div>
 				<div class="move_right" onkeypress="this.onmousedown(event);" onmousedown="carousel_move({$GET*,carousel_id},+30); return false;"></div>
 
-				<div class="main raw_grow_spot">
+				<div class="main raw_ajax_grow_spot">
 				</div>
 			</div>
 
@@ -55,7 +55,7 @@
 					<h2>{TITLE*}</h2>
 				{+END}
 
-				<div class="float_surrounder cguid_{_GUID*} raw_grow_spot">
+				<div class="float_surrounder cguid_{_GUID*} raw_ajax_grow_spot">
 					{+START,LOOP,CONTENT}
 						{_loop_var}
 					{+END}
@@ -69,7 +69,7 @@
 					{+END}
 				{+END}
 
-				{+START,INCLUDE,AJAX_PAGINATION}{+END}
+				{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
 			</div>
 		{+END}
 	{+END}

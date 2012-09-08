@@ -6,6 +6,137 @@ var AJAX_TIMEOUTS=[];
 
 var block_data_cache={};
 
+var infinite_scroll_blocked=false;
+function infinite_scrolling_block(event)
+{
+	if (event.keyCode==35) // 'End' key pressed, so stop the expand happening for a few seconds while the browser scrolls down
+	{
+		infinite_scroll_blocked=true;
+		window.setTimeout(function() {
+			infinite_scroll_blocked=false;
+		}, 3000);
+	}
+}
+var infinite_scroll_mouse_held=false;
+function infinite_scrolling_block_hold()
+{
+	if (!infinite_scroll_blocked)
+	{
+		infinite_scroll_blocked=true;
+		infinite_scroll_mouse_held=true;
+	}
+}
+function infinite_scrolling_block_unhold(infinite_scrolling)
+{
+	if (infinite_scroll_mouse_held)
+	{
+		infinite_scroll_blocked=false;
+		infinite_scroll_mouse_held=false;
+		infinite_scrolling();
+	}
+}
+function internalise_infinite_scrolling(url_stem,wrapper)
+{
+	var _pagination=get_elements_by_class_name(wrapper,'pagination');
+	if (typeof _pagination[0]=='undefined') return false;
+	var pagination=_pagination[0];
+
+	if (pagination.style.display!='none')
+	{
+		pagination.style.display='none';
+
+		var load_more_link=document.createElement('div');
+		load_more_link.className='pagination_load_more';
+		var load_more_link_a=document.createElement('a');
+		set_inner_html(load_more_link_a,'{!LOAD_MORE;}');
+		load_more_link_a.href='#';
+		load_more_link_a.onclick=function() { internalise_infinite_scrolling_go(url_stem,wrapper,pagination); return false; };
+		load_more_link.appendChild(load_more_link_a);
+		pagination.parentNode.insertBefore(load_more_link,pagination.nextSibling);
+	}
+
+	if (infinite_scroll_blocked) return false;
+
+	var wrapper_pos_y=find_pos_y(wrapper);
+	var wrapper_height=find_height(wrapper);
+	var wrapper_bottom=wrapper_pos_y+wrapper_height;
+	var window_height=get_window_height();
+	var page_height=get_window_scroll_height();
+	var scroll_y=get_window_scroll_y();
+
+	if ((scroll_y+window_height>wrapper_bottom-window_height/2) && (scroll_y+window_height<page_height-30)) // If within window_height/2 pixels of load area and not within 30 pixels of window bottom (so you can press End key)
+	{
+		return internalise_infinite_scrolling_go(url_stem,wrapper,pagination);
+	}
+
+	return false;
+}
+function internalise_infinite_scrolling_go(url_stem,wrapper,pagination)
+{
+	var more_links=pagination.getElementsByTagName('a');
+
+	pagination.parentNode.removeChild(pagination.nextSibling);
+	pagination.parentNode.removeChild(pagination);
+
+	for (var i=0;i<more_links.length;i++)
+	{
+		if (more_links[i].getAttribute('rel')=='next')
+		{
+			var next_link=more_links[i];
+
+			var url_stub='';
+			var matches=next_link.href.match(new RegExp('[&\?]([^_]*_start)=([^&]*)'));
+			if (matches)
+			{
+				url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
+				url_stub+=matches[1]+'='+matches[2];
+				url_stub+='&raw=1';
+				return call_block(url_stem+url_stub,'',wrapper,true);
+			}
+		}
+	}
+	return false;
+}
+
+function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_params,append)
+{
+	if (typeof append=='undefined') var append=false;
+
+	var _links=get_elements_by_class_name(block,'ajax_block_wrapper_links');
+	var links=[];
+	for (var i=0;i<_links.length;i++)
+	{
+		var more_links=_links[i].getElementsByTagName('a');
+		for (var j=0;j<more_links.length;j++)
+		{
+			links.push(more_links[j]);
+		}
+	}
+	for (var i=0;i<links.length;i++)
+	{
+		links[i].href;
+		links[i].onclick=function()
+		{
+			var url_stub='';
+			for (var j=0;j<look_for.length;j++)
+			{
+				var matches=this.href.match(new RegExp('[&\?]('+look_for[j]+')=([^&]*)'));
+				if (matches)
+				{
+					url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
+					url_stub+=matches[1]+'='+matches[2];
+				}
+			}
+			for (var j in extra_params)
+			{
+				url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
+				url_stub+=j+'='+window.encodeURIComponent(extra_params[j]);
+			}
+			return call_block(url_stem+url_stub,'',block,append,true);
+		}
+	}
+}
+
 function call_block(url,new_params,target_div,append,callback,scroll_to_top_of_wrapper)
 {
 	if (typeof scroll_to_top_of_wrapper=='undefined') var scroll_to_top_of_wrapper=false;
@@ -21,8 +152,8 @@ function call_block(url,new_params,target_div,append,callback,scroll_to_top_of_w
 
 	// Show loading animation
 	var loading_wrapper=target_div;
-	var raw_grow_spot=get_elements_by_class_name(target_div,'raw_grow_spot');
-	if (typeof raw_grow_spot[0]!='undefined') loading_wrapper=raw_grow_spot[0]; // If we actually are embedding new results a bit deeper
+	var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
+	if (typeof raw_ajax_grow_spot[0]!='undefined') loading_wrapper=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
 	var loading_wrapper_inner=document.createElement('div');
 	loading_wrapper_inner.style.position='relative';
 	var loading_image=document.createElement('img');
@@ -78,117 +209,10 @@ function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,
 
 function show_block_html(new_html,target_div,append)
 {
-	var raw_grow_spot=get_elements_by_class_name(target_div,'raw_grow_spot');
-	if (typeof raw_grow_spot[0]!='undefined') target_div=raw_grow_spot[0]; // If we actually are embedding new results a bit deeper
+	var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
+	if (typeof raw_ajax_grow_spot[0]!='undefined') target_div=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
 
 	set_inner_html(target_div,new_html,append);
-}
-
-var infinite_scroll_blocked=false;
-function infinite_scrolling_block(event)
-{
-	if (event.keyCode==35) // 'End' key pressed, so stop the expand happening for a few seconds while the browser scrolls down
-	{
-		infinite_scroll_blocked=true;
-		window.setTimeout(function() {
-			infinite_scroll_blocked=false;
-		}, 3000);
-	}
-}
-var infinite_scroll_mouse_held=false;
-function infinite_scrolling_block_hold()
-{
-	infinite_scroll_blocked=true;
-	infinite_scroll_mouse_held=true;
-}
-function infinite_scrolling_block_unhold(infinite_scrolling)
-{
-	if (infinite_scroll_mouse_held)
-	{
-		infinite_scroll_blocked=false;
-		infinite_scroll_mouse_held=false;
-		infinite_scrolling();
-	}
-}
-function internalise_infinite_scrolling(url_stem,wrapper)
-{
-	if (infinite_scroll_blocked) return;
-
-	var _pagination=get_elements_by_class_name(wrapper,'pagination');
-	if (typeof _pagination[0]=='undefined') return;
-	var pagination=_pagination[0];
-	pagination.style.display='none';
-
-	var wrapper_pos_y=find_pos_y(wrapper);
-	var wrapper_height=find_height(wrapper);
-	var wrapper_bottom=wrapper_pos_y+wrapper_height;
-	var window_height=get_window_height();
-	var page_height=get_window_scroll_height();
-	var scroll_y=get_window_scroll_y();
-
-	if ((scroll_y+window_height>wrapper_bottom-window_height/2) && (scroll_y+window_height<page_height-30)) // If within window_height/2 pixels of load area and not within 30 pixels of window bottom (so you can press End key)
-	{
-		var more_links=pagination.getElementsByTagName('a');
-
-		pagination.parentNode.removeChild(pagination);
-
-		for (var i=0;i<more_links.length;i++)
-		{
-			if (more_links[i].getAttribute('rel')=='next')
-			{
-				var next_link=more_links[i];
-
-				var url_stub='';
-				var matches=next_link.href.match(new RegExp('[&\?]([^_]*_start)=([^&]*)'));
-				if (matches)
-				{
-					url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
-					url_stub+=matches[1]+'='+matches[2];
-					url_stub+='&raw=1';
-					return call_block(url_stem+url_stub,'',wrapper,true);
-				}
-			}
-		}
-	}
-}
-
-function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_params,append)
-{
-	if (typeof append=='undefined') var append=false;
-
-	var _links=get_elements_by_class_name(block,'ajax_block_wrapper_links');
-	var links=[];
-	for (var i=0;i<_links.length;i++)
-	{
-		var more_links=_links[i].getElementsByTagName('a');
-		for (var j=0;j<more_links.length;j++)
-		{
-			links.push(more_links[j]);
-		}
-	}
-	for (var i=0;i<links.length;i++)
-	{
-		links[i].href;
-		links[i].onclick=function()
-		{
-			var url_stub='';
-			for (var j=0;j<look_for.length;j++)
-			{
-				var matches=this.href.match(new RegExp('[&\?]('+look_for[j]+')=([^&]*)'));
-				if (matches)
-				{
-					url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
-					url_stub+=matches[1]+'='+matches[2];
-				}
-			}
-			for (var j in extra_params)
-			{
-				url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
-				url_stub+=j+'='+window.encodeURIComponent(extra_params[j]);
-			}
-			return call_block(url_stem+url_stub,'',block,append,true);
-		}
-	}
 }
 
 /* Calls up a URL to check something, giving any 'feedback' as an error (or if just 'false' then returning false with no message) */

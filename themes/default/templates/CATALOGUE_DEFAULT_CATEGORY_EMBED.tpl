@@ -15,7 +15,7 @@
 		{+END}
 
 		{+START,IF_NON_EMPTY,{ENTRIES}}
-			<div class="float_surrounder display_type_{DISPLAY_TYPE*} raw_grow_spot">
+			<div class="float_surrounder display_type_{DISPLAY_TYPE*} raw_ajax_grow_spot">
 				{ENTRIES}
 			</div>
 		{+END}
@@ -36,7 +36,9 @@
 			</div>
 		{+END}
 
-		{+START,INCLUDE,AJAX_PAGINATION}{+END}
+		{+START,INCLUDE,AJAX_PAGINATION}
+			ALLOW_INFINITE_SCROLL={$EQ,{DISPLAY_TYPE},FIELDMAPS,GRID}
+		{+END}
 	</div>
 {+END}
 

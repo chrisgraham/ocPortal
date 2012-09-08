@@ -4,7 +4,7 @@
 		<p>{!DESCRIPTION_FRIENDS,{$USERNAME*,{MEMBER_ID}}}</p>
 
 		{+START,IF_NON_EMPTY,{FRIENDS}}
-			<ul class="ocf_profile_friends actions_list raw_grow_spot">
+			<ul class="ocf_profile_friends actions_list raw_ajax_grow_spot">
 				{+START,LOOP,FRIENDS}
 					<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');"><a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span></li>
 				{+END}
@@ -20,7 +20,7 @@
 			</div>
 		{+END}
 
-		{+START,INCLUDE,AJAX_PAGINATION}{+END}
+		{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
 	</div>
 {+END}
 

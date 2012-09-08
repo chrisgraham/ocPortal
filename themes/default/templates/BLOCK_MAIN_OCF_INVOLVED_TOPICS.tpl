@@ -3,7 +3,7 @@
 	<div id="{$GET*,wrapper_id}">
 		{TOPICS}
 
-		{+START,INCLUDE,AJAX_PAGINATION}{+END}
+		{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
 	</div>
 {+END}
 

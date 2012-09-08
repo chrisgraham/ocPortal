@@ -31,7 +31,7 @@ class Block_main_activities
 		$info['version']=1;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
-		$info['parameters']=array('max','param','member','mode','grow');
+		$info['parameters']=array('max','start','param','member','mode','grow');
 		return $info;
 	}
 
@@ -105,11 +105,6 @@ class Block_main_activities
 		require_javascript('javascript_jquery');
 		require_javascript('javascript_base64');
 
-		if (!array_key_exists('max',$map))
-		{
-			$map['max']='10';
-		}
-
 		if (array_key_exists('param',$map))
 			$title=$map['param'];
 		else
@@ -142,10 +137,10 @@ class Block_main_activities
 
 		$content=array();
 
-		inform_non_canonical_parameter('act_start');
+		$block_id=get_block_id($map);
 
-		$start=get_param_integer('act_start',0);
-		$max=get_param_integer('act_max',intval($map['max']));
+		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):10);
+		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
 
 		if ($proceed_selection===true)
 		{
@@ -166,13 +161,18 @@ class Block_main_activities
 
 				return do_template('BLOCK_MAIN_ACTIVITIES',array(
 					'_GUID'=>'62010121868c2761ae9f074a0c9c4d7c',
+					'BLOCK_PARAMS'=>block_params_arr_to_str($map),
 					'TITLE'=>$title,
 					'MODE'=>strval($mode),
 					'MEMBER_IDS'=>implode(',',$member_ids),
 					'CONTENT'=>$content,
 					'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
 					'PAGINATION'=>$pagination,
-					'MAX'=>($start==0)?strval($max):NULL,
+
+					'START'=>strval($start),
+					'MAX'=>strval($max),
+					'START_PARAM'=>$block_id.'_start',
+					'MAX_PARAM'=>$block_id.'_max',
 				));
 			}
 		} else
@@ -183,13 +183,18 @@ class Block_main_activities
 		// No entries
 		return do_template('BLOCK_MAIN_ACTIVITIES',array(
 			'_GUID'=>'b4de219116e1b8107553ee588717e2c9',
+			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
 			'TITLE'=>$title,
 			'MODE'=>$mode,
 			'CONTENT'=>$content,
 			'MEMBER_IDS'=>'',
 			'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
 			'PAGINATION'=>$pagination,
-			'MAX'=>($start==0)?strval($max):NULL,
+
+			'START'=>strval($start),
+			'MAX'=>strval($max),
+			'START_PARAM'=>$block_id.'_start',
+			'MAX_PARAM'=>$block_id.'_max',
 		));
 	}
 

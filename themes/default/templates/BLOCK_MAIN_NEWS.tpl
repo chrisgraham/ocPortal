@@ -6,7 +6,7 @@
 				<h3>{TITLE}</h3>
 			{+END}{+END}
 
-			<div class="raw_grow_spot">
+			<div class="raw_ajax_grow_spot">
 				{CONTENT}
 
 				{+START,IF_NON_EMPTY,{BRIEF}}
@@ -42,7 +42,7 @@
 			{+END}
 		</div></section>
 
-		{+START,INCLUDE,AJAX_PAGINATION}{+END}
+		{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
 	</div>
 {+END}
 

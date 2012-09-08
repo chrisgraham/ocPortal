@@ -3,7 +3,7 @@
 	<div id="{$GET*,wrapper_id}">
 		{+START,IF_NON_EMPTY,{GALLERIES}}
 			<div class="box box___download_category_screen"><div class="box_inner compacted_subbox_stream">
-				<div class="raw_grow_spot">
+				<div class="raw_ajax_grow_spot">
 					{GALLERIES}
 				</div>
 			</div></div>
@@ -31,7 +31,7 @@
 			3_REDIRECT_HASH=galleries
 		{+END}
 
-		{+START,INCLUDE,AJAX_PAGINATION}{+END}
+		{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
 	</div>
 {+END}
 

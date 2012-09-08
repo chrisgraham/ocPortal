@@ -1816,6 +1816,14 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	}
 {+END}
 
+.pagination_load_more {
+	border-top: 1px solid {$GET,standard_border};
+	text-align: center;
+	font-size: 1.6em;
+	padding: 0.2em;
+	clear: both;
+}
+
 .alphabetical_jumper {
 	float: none !important;
 	margin-left: 2px !important;
