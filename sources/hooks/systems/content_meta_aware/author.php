@@ -42,8 +42,8 @@ class Hook_content_meta_aware_author
 			'parent_category_meta_aware_type'=>NULL,
 			'is_category'=>false,
 			'is_entry'=>true,
-			'category_type'=>NULL, // For category permissions
 			'category_field'=>NULL, // For category permissions
+			'category_type'=>NULL, // For category permissions
 			'category_is_string'=>true,
 
 			'title_field'=>'author',

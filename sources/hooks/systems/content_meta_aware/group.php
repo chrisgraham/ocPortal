@@ -54,7 +54,7 @@ class Hook_content_meta_aware_group
 			'view_pagelink_pattern'=>'_SEARCH:groups:view:_WILD',
 			'edit_pagelink_pattern'=>'adminzone:admin_ocf_groups:_ed:_WILD',
 			'view_category_pagelink_pattern'=>NULL,
-			'add_url'=>new ocp_tempcode();
+			'add_url'=>new ocp_tempcode(),
 			'archive_url'=>build_url(array('page'=>'groups'),(!is_null($zone))?$zone:get_module_zone('groups')),
 
 			'support_url_monikers'=>true,

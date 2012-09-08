@@ -885,6 +885,7 @@ function load_moniker_hooks()
 			if ($info_function[0]!==NULL)
 			{
 				$ob_info=is_array($info_function[0])?call_user_func_array($info_function[0][0],$info_function[0][1]):eval($info_function[0]);
+
 				if ($ob_info===NULL) continue;
 				$ob_info['_hook']=$hook;
 				$CONTENT_OBS[$ob_info['view_pagelink_pattern']]=$ob_info;
