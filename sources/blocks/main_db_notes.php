@@ -67,7 +67,15 @@ class Block_main_db_notes
 
 		$map_comcode='';
 		foreach ($map as $key=>$val) $map_comcode.=' '.$key.'="'.addslashes($val).'"';
-		return do_template('BLOCK_MAIN_NOTES',array('_GUID'=>'2a9e1c512b66600583735552b56e0911','TITLE'=>$title,'BLOCK_NAME'=>'main_db_notes','MAP'=>$map_comcode,'SCROLLS'=>array_key_exists('scrolls',$map) && ($map['scrolls']=='1'),'CONTENTS'=>$contents,'URL'=>$post_url));
+		return do_template('BLOCK_MAIN_NOTES',array(
+			'_GUID'=>'2a9e1c512b66600583735552b56e0911',
+			'TITLE'=>$title,
+			'BLOCK_NAME'=>'main_db_notes',
+			'MAP'=>$map_comcode,
+			'SCROLLS'=>array_key_exists('scrolls',$map) && ($map['scrolls']=='1'),
+			'CONTENTS'=>$contents,
+			'URL'=>$post_url,
+		));
 	}
 
 }

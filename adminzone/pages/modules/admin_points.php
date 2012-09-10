@@ -132,7 +132,10 @@ class Module_admin_points
 
 		$results_table=results_table(do_lang_tempcode('GIFT_TRANSACTIONS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort',paragraph(do_lang_tempcode('GIFT_POINTS_LOG')));
 
-		return do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'12ce8cf5c2f669948b14e68bd6c00fe9','TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'12ce8cf5c2f669948b14e68bd6c00fe9','TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

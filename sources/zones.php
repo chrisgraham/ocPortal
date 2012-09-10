@@ -618,7 +618,7 @@ function find_all_hooks($type,$entry)
  */
 function block_cache_default($codename)
 {
-	if ((cron_installed()) && (running_script('index')))
+	if ((cron_installed()) && ((running_script('index')) || (running_script('iframe'))))
 	{
 		if ($codename=='side_rss' || $codename=='main_rss') // Special cases to stop external dependencies causing slowdowns
 		{
@@ -834,7 +834,7 @@ function do_block_hunt_file($codename,$map=NULL)
 	$file_base=get_file_base();
 
 	global $REQUIRED_CODE;
-	if (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/blocks/'.$codename.'.php'))))
+	if ((!in_safe_mode()) && (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/blocks/'.$codename.'.php')))))
 	{
 		if (!isset($REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources_custom/blocks/'.$codename.'.php');
 		$REQUIRED_CODE['blocks/'.$codename]=1;
@@ -858,7 +858,7 @@ function do_block_hunt_file($codename,$map=NULL)
 	}
 	else
 	{
-		if (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/miniblocks/'.$codename.'.php'))))
+		if ((!in_safe_mode()) && (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/miniblocks/'.$codename.'.php')))))
 		{
 			require_code('developer_tools');
 			destrictify();

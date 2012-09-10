@@ -146,7 +146,16 @@ class Hook_pointstore_forwarding
 
 		// Return template
 		$newfor_url=build_url(array('page'=>'_SELF','type'=>'_newforwarding','id'=>'forwarding'),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'1fcc6083db18c996fabb51d0ac10bc88','HIDDEN'=>'','TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWFORWARDING'),'TEXT'=>paragraph(do_lang_tempcode('ADDRESSES_ABOUT')),'URL'=>$newfor_url,'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),'FIELDS'=>$fields));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'1fcc6083db18c996fabb51d0ac10bc88',
+			'HIDDEN'=>'',
+			'TITLE'=>$title,
+			'ACTION'=>do_lang_tempcode('TITLE_NEWFORWARDING'),
+			'TEXT'=>paragraph(do_lang_tempcode('ADDRESSES_ABOUT')),
+			'URL'=>$newfor_url,
+			'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),
+			'FIELDS'=>$fields,
+		));
 	}
 
 	/**
@@ -205,7 +214,17 @@ class Hook_pointstore_forwarding
 		$keep->attach(form_input_hidden('prefix',$prefix));
 		$keep->attach(form_input_hidden('suffix',$_suffix));
 		$keep->attach(form_input_hidden('email',$email));
-		return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'2209e63206edac410bf553b96eee4782','MESSAGE'=>paragraph($prefix.'@'.$_suffix),'TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWFORWARDING'),'KEEP'=>$keep,'COST'=>integer_format($suffix_price),'POINTS_AFTER'=>integer_format($points_after),'PROCEED_URL'=>$proceed_url,'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF')));
+		return do_template('POINTSTORE_CONFIRM_SCREEN',array(
+			'_GUID'=>'2209e63206edac410bf553b96eee4782',
+			'MESSAGE'=>paragraph($prefix.'@'.$_suffix),
+			'TITLE'=>$title,
+			'ACTION'=>do_lang_tempcode('TITLE_NEWFORWARDING'),
+			'KEEP'=>$keep,
+			'COST'=>integer_format($suffix_price),
+			'POINTS_AFTER'=>integer_format($points_after),
+			'PROCEED_URL'=>$proceed_url,
+			'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF'),
+		));
 	}
 
 	/**

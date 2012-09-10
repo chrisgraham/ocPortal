@@ -39,7 +39,7 @@
 		{+START,IF,{$JS_ON}}
 			<hr class="spaced_rule" />
 
-			<form target="_self" action="{$FIND_SCRIPT*,preview}?page={$_GET&*,page}&amp;type={$_GET&*,type}&amp;utheme={$THEME&*}{$KEEP*}&amp;keep_mobile={$?,{$MOBILE},1,0}" method="post">
+			<form target="_self" action="{$SELF_URL*,0,0,keep_mobile={$MOBILE}}" method="post">
 				{HIDDEN}
 
 				{+START,IF,{$CONFIG_OPTION,mobile_support}}

@@ -20,15 +20,25 @@
 		{$JS_TEMPCODE,footer}
 
 		<script type="text/javascript">// <![CDATA[
-
-			{+START,IF_PASSED_AND_TRUE,FRAME}
+			if (window.parent)
+			{
 				add_event_listener_abstract(window,'real_load',function () {
-					if (typeof window.trigger_resize!='undefined') trigger_resize();
-					window.setTimeout(function() { {$,Needed for IE10}
+					document.body.className+=' frame';
+
+					try
+					{
 						if (typeof window.trigger_resize!='undefined') trigger_resize();
+					}
+					catch (e) {};
+					window.setTimeout(function() { {$,Needed for IE10}
+						try
+						{
+							if (typeof window.trigger_resize!='undefined') trigger_resize();
+						}
+						catch (e) {};
 					},1000);
 				} );
-			{+END}
+			}
 
 			script_load_stuff();
 

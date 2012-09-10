@@ -106,10 +106,6 @@ class Module_admin_ocf_history
 			$title=get_screen_title('POST_HISTORY');
 		}
 
-		require_code('templates_internalise_screen');
-		$test_tpl=internalise_own_screen($title);
-		if (is_object($test_tpl)) return $test_tpl;
-
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',40);
 
@@ -163,7 +159,20 @@ class Module_admin_ocf_history
 				$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'3f41d4d399676972c01ebb14f6ee56db','IMMEDIATE'=>true,'URL'=>$url,'IMG'=>'choose','TITLE'=>do_lang_tempcode('REVERT_HISTORY_POST'))));
 			}
 
-			$content->attach(do_template('OCF_HISTORY_POST',array('_GUID'=>'f3512689a8b3fcf4215f63f9f340cdac','LABEL'=>do_lang_tempcode('BEFORE_ACTION'),'LINK'=>$link,'BUTTONS'=>$buttons,'ACTION'=>$action,'ACTION_DATE_AND_TIME'=>$action_date_and_time,'ACTION_DATE_AND_TIME_RAW'=>strval($post['h_action_date_and_time']),'CREATE_DATE_AND_TIME_RAW'=>strval($post['h_create_date_and_time']),'CREATE_DATE_AND_TIME'=>$create_date_and_time,'OWNER_MEMBER'=>$owner_member,'ALTERER_MEMBER'=>$alterer_member,'BEFORE'=>$post['h_before'])));
+			$content->attach(do_template('OCF_HISTORY_POST',array(
+				'_GUID'=>'f3512689a8b3fcf4215f63f9f340cdac',
+				'LABEL'=>do_lang_tempcode('BEFORE_ACTION'),
+				'LINK'=>$link,
+				'BUTTONS'=>$buttons,
+				'ACTION'=>$action,
+				'ACTION_DATE_AND_TIME'=>$action_date_and_time,
+				'ACTION_DATE_AND_TIME_RAW'=>strval($post['h_action_date_and_time']),
+				'CREATE_DATE_AND_TIME_RAW'=>strval($post['h_create_date_and_time']),
+				'CREATE_DATE_AND_TIME'=>$create_date_and_time,
+				'OWNER_MEMBER'=>$owner_member,
+				'ALTERER_MEMBER'=>$alterer_member,
+				'BEFORE'=>$post['h_before'],
+			)));
 		}
 		if ((count($posts)!=0) && ($post_id!=-1))
 		{
@@ -180,7 +189,20 @@ class Module_admin_ocf_history
 				$before=get_translated_text($original_post[0]['p_post'],$GLOBALS['FORUM_DB']);
 				$create_date_and_time=get_timezoned_date($original_post[0]['p_time']);
 				$create_date_and_time_raw=strval($original_post[0]['p_time']);
-				$content2=do_template('OCF_HISTORY_POST',array('_GUID'=>'a3512689a8b3fcf4215f63f9f340cdac','LABEL'=>do_lang_tempcode('CURRENT_STATUS'),'LINK'=>$link,'BUTTONS'=>$buttons,'ACTION'=>$action,'ACTION_DATE_AND_TIME'=>$action_date_and_time,'ACTION_DATE_AND_TIME_RAW'=>$action_date_and_time_raw,'CREATE_DATE_AND_TIME_RAW'=>$create_date_and_time_raw,'CREATE_DATE_AND_TIME'=>$create_date_and_time,'OWNER_MEMBER'=>$owner_member,'ALTERER_MEMBER'=>$alterer_member,'BEFORE'=>$before));
+				$content2=do_template('OCF_HISTORY_POST',array(
+					'_GUID'=>'a3512689a8b3fcf4215f63f9f340cdac',
+					'LABEL'=>do_lang_tempcode('CURRENT_STATUS'),
+					'LINK'=>$link,
+					'BUTTONS'=>$buttons,
+					'ACTION'=>$action,
+					'ACTION_DATE_AND_TIME'=>$action_date_and_time,
+					'ACTION_DATE_AND_TIME_RAW'=>$action_date_and_time_raw,
+					'CREATE_DATE_AND_TIME_RAW'=>$create_date_and_time_raw,
+					'CREATE_DATE_AND_TIME'=>$create_date_and_time,
+					'OWNER_MEMBER'=>$owner_member,
+					'ALTERER_MEMBER'=>$alterer_member,
+					'BEFORE'=>$before,
+				));
 				$content2->attach($content);
 				$content=$content2;
 			}
@@ -189,7 +211,9 @@ class Module_admin_ocf_history
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('POST_HISTORY'),$start,'start',$max,'max',$max_rows);
 
-		return do_template('OCF_HISTORY_SCREEN',array('_GUID'=>'7dd45ce985fc7222771368336c3f19e4','PAGINATION'=>$pagination,'TITLE'=>$title,'CONTENT'=>$content));
+		$tpl=do_template('OCF_HISTORY_SCREEN',array('_GUID'=>'7dd45ce985fc7222771368336c3f19e4','PAGINATION'=>$pagination,'TITLE'=>$title,'CONTENT'=>$content));
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

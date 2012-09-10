@@ -61,6 +61,8 @@ class Block_side_shoutbox
 	function run($map)
 	{
 		require_lang('chat');
+		require_css('chat');
+		require_code('chat');
 
 		$room_id=array_key_exists('param',$map)?intval($map['param']):NULL;
 		$num_messages=array_key_exists('max',$map)?intval($map['max']):5;
@@ -82,10 +84,65 @@ class Block_side_shoutbox
 			return new ocp_tempcode();
 		}
 
-		$content=NULL;
-		if (get_value('no_frames')==='1') $content=shoutbox_script(true,$room_id,$num_messages);
+		$last_message_id=$GLOBALS['SITE_DB']->query_select_value('chat_messages','MAX(id)',array('room_id'=>$room_id));
+		if (is_null($last_message_id)) $last_message_id=-1;
 
-		return do_template('BLOCK_SIDE_SHOUTBOX_IFRAME',array('_GUID'=>'dd737145479155961a1252162a43d4ef','CONTENT'=>$content,'ROOM_ID'=>strval($room_id),'NUM_MESSAGES'=>strval($num_messages)));
+		$zone=get_module_zone('chat');
+
+		if (is_null($room_id))
+		{
+			$room_id=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','MIN(id)',array('is_im'=>0,'room_language'=>user_lang()));
+			if (is_null($room_id)) $room_id=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','MIN(id)',array('is_im'=>0));
+			if (is_null($room_id)) return paragraph(do_lang_tempcode('NONE_EM'),'','nothing_here');
+		}
+
+		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$room_id),'',1);
+		if (!array_key_exists(0,$room_check)) return paragraph(do_lang_tempcode('MISSING_RESOURCE'),'','red_alert');
+
+		// Did a message get sent last time?
+		$shoutbox_message=post_param('shoutbox_message','');
+		if ($shoutbox_message!='')
+		{
+			if (!chat_post_message($room_id,$shoutbox_message,get_option('chat_default_post_font'),get_option('chat_default_post_colour'),15))
+			{
+				// Error. But actually we'll get it from below
+			}
+		}
+
+		$messages=chat_get_room_content($room_id,$room_check,$num_messages*3,false,false,NULL,NULL,-1,$zone,NULL,true,$shoutbox_message!='');
+		$_tpl=array();
+		foreach ($messages as $_message)
+		{
+			$evaluated=$_message['the_message']->evaluate();
+
+			// We are only interested in private-message system messages and flood-control system messages, no other kinds of system message
+			if (($_message['system_message']==1) && (strpos($evaluated,'[private')===false) && (preg_match('#'.str_replace('\{1\}','\d+',preg_quote(do_lang('FLOOD_CONTROL_BLOCKED'))).'#',$evaluated)==0)) continue;
+
+			if ((strpos($evaluated,'[private')===false) || (($shoutbox_message!='') && (strpos($evaluated,'[private="'.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).'"]')!==false)))
+			{
+				$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_message['username']);
+				$member=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,true,$_message['username']);
+				$_tpl[]=do_template('BLOCK_SIDE_SHOUTBOX_MESSAGE',array('_GUID'=>'a6f86aa48af7de7ec78423864c82c626','USER'=>$member,'MESSAGE'=>$_message['the_message'],'TIME_RAW'=>strval($_message['date_and_time']),'TIME'=>$_message['date_and_time_nice']));
+			}
+		}
+
+		$tpl=new ocp_tempcode();
+		while (count($_tpl)>$num_messages) array_shift($_tpl);
+		foreach ($_tpl as $t)
+		{
+			$tpl->attach($t);
+		}
+
+		$url=get_self_url(false,false,array('room_id'=>$room_id));
+
+		return do_template('BLOCK_SIDE_SHOUTBOX',array(
+			'_GUID'=>'dd737145479155961a1252162a43d4ef',
+			'MESSAGES'=>$tpl,
+			'URL'=>$url,
+			'ROOM_ID'=>strval($room_id),
+			'NUM_MESSAGES'=>strval($num_messages),
+			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
+		));
 	}
 
 }

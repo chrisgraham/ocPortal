@@ -98,7 +98,7 @@ function manage_custom_fields_donext_link($content_type)
 			$exists=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'_'.$content_type)));
 
 			return array(
-				array('edit_one_catalogue',array('cms_catalogues',array('type'=>$exists?'_edit_catalogue':'add_catalogue','id'=>'_'.$content_type,'redirect'=>get_self_url(true)),get_module_zone('cms_catalogues')),do_lang('EDIT_CUSTOM_FIELDS',do_lang($info['title']))),
+				array('edit_one_catalogue',array('cms_catalogues',array('type'=>$exists?'_edit_catalogue':'add_catalogue','id'=>'_'.$content_type,'redirect'=>get_self_url(true)),get_module_zone('cms_catalogues')),do_lang('EDIT_CUSTOM_FIELDS',do_lang($info['content_type_label']))),
 			);
 		}
 	}
@@ -129,7 +129,7 @@ function has_tied_catalogue($content_type)
 				{
 					require_code('catalogues2');
 					require_lang('catalogues');
-					actual_add_catalogue_category('_'.$content_type,do_lang('CUSTOM_FIELDS_FOR',do_lang($info['title'])),'','',NULL);
+					actual_add_catalogue_category('_'.$content_type,do_lang('CUSTOM_FIELDS_FOR',do_lang($info['content_type_label'])),'','',NULL);
 				}
 
 				return true;

@@ -525,7 +525,20 @@ class Module_ocworld
 			$name=post_param('name','');
 			if ($name=='')
 			{
-				$tpl=do_template('W_ITEM_SCREEN',array('_GUID'=>'0246f7037a360996bdfb4f1dcf96bcfc','PRICE'=>integer_format(get_price('mud_item')),'TEXT'=>paragraph(do_lang_tempcode('W_ADD_ITEM_TEXT')),'TITLE'=>get_screen_title('W_ADD_ITEM_TITLE'),'PAGE_TYPE'=>'additem','ITEM'=>'','DESCRIPTION'=>'','BRIBABLE'=>'0','HEALTHY'=>'0','PICTURE_URL'=>'','MAX_PER_PLAYER'=>'10','REPLICATEABLE'=>'1'));
+				$tpl=do_template('W_ITEM_SCREEN',array(
+					'_GUID'=>'0246f7037a360996bdfb4f1dcf96bcfc',
+					'PRICE'=>integer_format(get_price('mud_item')),
+					'TEXT'=>paragraph(do_lang_tempcode('W_ADD_ITEM_TEXT')),
+					'TITLE'=>get_screen_title('W_ADD_ITEM_TITLE'),
+					'PAGE_TYPE'=>'additem',
+					'ITEM'=>'',
+					'DESCRIPTION'=>'',
+					'BRIBABLE'=>'0',
+					'HEALTHY'=>'0',
+					'PICTURE_URL'=>'',
+					'MAX_PER_PLAYER'=>'10',
+					'REPLICATEABLE'=>'1',
+				));
 				return $tpl;
 			}
 
@@ -549,7 +562,16 @@ class Module_ocworld
 
 				if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($items);
 
-				$tpl=do_template('W_ITEMCOPY_SCREEN',array('_GUID'=>'15799930bca51eafdee3c0a8e197866a','PRICE'=>integer_format(get_price('mud_item_copy')),'TEXT'=>paragraph(do_lang_tempcode('W_ADD_ITEM_COPY_TEXT')),'TITLE'=>get_screen_title('W_ADD_ITEM_COPY_TITLE'),'PAGE_TYPE'=>'additemcopy','NOT_INFINITE'=>'1','ITEMS'=>$items,'COST'=>''));
+				$tpl=do_template('W_ITEMCOPY_SCREEN',array(
+					'_GUID'=>'15799930bca51eafdee3c0a8e197866a',
+					'PRICE'=>integer_format(get_price('mud_item_copy')),
+					'TEXT'=>paragraph(do_lang_tempcode('W_ADD_ITEM_COPY_TEXT')),
+					'TITLE'=>get_screen_title('W_ADD_ITEM_COPY_TITLE'),
+					'PAGE_TYPE'=>'additemcopy',
+					'NOT_INFINITE'=>'1',
+					'ITEMS'=>$items,
+					'COST'=>'',
+				));
 				return $tpl;
 			}
 			add_item_wrap_copy($member_id,$name,post_param_integer('cost'),post_param_integer('not_infinite',0));
@@ -563,7 +585,25 @@ class Module_ocworld
 			if ($name=='')
 			{
 				list($realm,$x,$y)=get_loc_details($member_id);
-				$tpl=do_template('W_ROOM_SCREEN',array('_GUID'=>'5357a6cf8648c952cf29c2b7234cfa6c','PRICE'=>integer_format(get_price('mud_room')),'TEXT'=>paragraph(do_lang_tempcode('W_ADD_ROOM_TEXT')),'ROOM_TEXT'=>'','TITLE'=>get_screen_title('W_ADD_ROOM_TITLE'),'PAGE_TYPE'=>'addroom','NAME'=>'','PASSWORD_QUESTION'=>'','PASSWORD_ANSWER'=>'','PASSWORD_FAIL_MESSAGE'=>'','REQUIRED_ITEM'=>'','LOCKED_UP'=>'0','LOCKED_DOWN'=>'0','LOCKED_LEFT'=>'0','LOCKED_RIGHT'=>'0','ALLOW_PORTAL'=>'1','PICTURE_URL'=>''));
+				$tpl=do_template('W_ROOM_SCREEN',array(
+					'_GUID'=>'5357a6cf8648c952cf29c2b7234cfa6c',
+					'PRICE'=>integer_format(get_price('mud_room')),
+					'TEXT'=>paragraph(do_lang_tempcode('W_ADD_ROOM_TEXT')),
+					'ROOM_TEXT'=>'',
+					'TITLE'=>get_screen_title('W_ADD_ROOM_TITLE'),
+					'PAGE_TYPE'=>'addroom',
+					'NAME'=>'',
+					'PASSWORD_QUESTION'=>'',
+					'PASSWORD_ANSWER'=>'',
+					'PASSWORD_FAIL_MESSAGE'=>'',
+					'REQUIRED_ITEM'=>'',
+					'LOCKED_UP'=>'0',
+					'LOCKED_DOWN'=>'0',
+					'LOCKED_LEFT'=>'0',
+					'LOCKED_RIGHT'=>'0',
+					'ALLOW_PORTAL'=>'1',
+					'PICTURE_URL'=>'',
+				));
 				return $tpl;
 			}
 			$urls=get_url('url','pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
@@ -587,7 +627,18 @@ class Module_ocworld
 					$_qa->attach(do_template('W_REALM_SCREEN_QUESTION',array('_GUID'=>'5fa7725f11b0df7e58ff83f2f1751515','I'=>strval($i),'Q'=>'','A'=>'')));
 				}
 
-				$tpl=do_template('W_REALM_SCREEN',array('_GUID'=>'7ae26fe1766aed02233e1be84772759b','PRICE'=>integer_format(get_price('mud_realm')),'TEXT'=>paragraph(do_lang_tempcode('W_ADD_REALM_TEXT',integer_format($left))),'TITLE'=>get_screen_title('W_ADD_REALM_TITLE'),'PAGE_TYPE'=>'addrealm','QA'=>$_qa,'NAME'=>'','TROLL_NAME'=>'','PRIVATE'=>'0'));
+				$tpl=do_template('W_REALM_SCREEN',array(
+					'_GUID'=>'7ae26fe1766aed02233e1be84772759b',
+					'PRICE'=>integer_format(get_price('mud_realm')),
+					'TEXT'=>paragraph(do_lang_tempcode('W_ADD_REALM_TEXT',
+					integer_format($left))),
+					'TITLE'=>get_screen_title('W_ADD_REALM_TITLE'),
+					'PAGE_TYPE'=>'addrealm',
+					'QA'=>$_qa,
+					'NAME'=>'',
+					'TROLL_NAME'=>'',
+					'PRIVATE'=>'0',
+				));
 				return $tpl;
 			}
 
@@ -613,7 +664,18 @@ class Module_ocworld
 
 			if ($name=='')
 			{
-				$tpl=do_template('W_PORTAL_SCREEN',array('_GUID'=>'69e74a964f69721d0381a920c4a25ce5','PRICE'=>integer_format(get_price('mud_portal')),'TEXT'=>paragraph(do_lang_tempcode('W_ADD_PORTAL_TEXT')),'TITLE'=>get_screen_title('W_ADD_PORTAL_TITLE'),'PORTAL_TEXT'=>'','PAGE_TYPE'=>'addportal','NAME'=>'','END_LOCATION_REALM'=>'','END_LOCATION_X'=>'','END_LOCATION_Y'=>''));
+				$tpl=do_template('W_PORTAL_SCREEN',array(
+					'_GUID'=>'69e74a964f69721d0381a920c4a25ce5',
+					'PRICE'=>integer_format(get_price('mud_portal')),
+					'TEXT'=>paragraph(do_lang_tempcode('W_ADD_PORTAL_TEXT')),
+					'TITLE'=>get_screen_title('W_ADD_PORTAL_TITLE'),
+					'PORTAL_TEXT'=>'',
+					'PAGE_TYPE'=>'addportal',
+					'NAME'=>'',
+					'END_LOCATION_REALM'=>'',
+					'END_LOCATION_X'=>'',
+					'END_LOCATION_Y'=>'',
+				));
 				return $tpl;
 			}
 
@@ -676,7 +738,19 @@ class Module_ocworld
 				if (!array_key_exists(0,$rows)) ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'),'warn');
 				$row=$rows[0];
 
-				$tpl=do_template('W_ITEM_SCREEN',array('_GUID'=>'1f581864bd2f0cbe05742e03ab6c2a53','TITLE'=>get_screen_title('W_EDIT_ITEM_TITLE'),'PAGE_TYPE'=>'edititem','ITEM'=>either_param('item'),'DESCRIPTION'=>$row['description'],'BRIBABLE'=>strval($row['bribable']),'HEALTHY'=>strval($row['healthy']),'PICTURE_URL'=>$row['picture_url'],'OWNER'=>is_null($row['owner'])?'':strval($row['owner']),'MAX_PER_PLAYER'=>strval($row['max_per_player']),'REPLICATEABLE'=>strval($row['replicateable'])));
+				$tpl=do_template('W_ITEM_SCREEN',array(
+					'_GUID'=>'1f581864bd2f0cbe05742e03ab6c2a53',
+					'TITLE'=>get_screen_title('W_EDIT_ITEM_TITLE'),
+					'PAGE_TYPE'=>'edititem',
+					'ITEM'=>either_param('item'),
+					'DESCRIPTION'=>$row['description'],
+					'BRIBABLE'=>strval($row['bribable']),
+					'HEALTHY'=>strval($row['healthy']),
+					'PICTURE_URL'=>$row['picture_url'],
+					'OWNER'=>is_null($row['owner'])?'':strval($row['owner']),
+					'MAX_PER_PLAYER'=>strval($row['max_per_player']),
+					'REPLICATEABLE'=>strval($row['replicateable']),
+				));
 				return $tpl;
 			}
 
@@ -697,7 +771,18 @@ class Module_ocworld
 				$cost=$GLOBALS['SITE_DB']->query_select_value('w_items','cost',array('copy_owner'=>$user,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'name'=>get_param('item')));
 				$not_infinite=$GLOBALS['SITE_DB']->query_select_value('w_items','not_infinite',array('copy_owner'=>$user,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'name'=>get_param('item')));
 
-				$tpl=do_template('W_ITEMCOPY_SCREEN',array('_GUID'=>'a8d28f6516408dba96a8b57ddcd7cee6','TITLE'=>get_screen_title('W_EDIT_ITEM_COPY_TITLE'),'PAGE_TYPE'=>'edititemcopy','NOT_INFINITE'=>strval($not_infinite),'X'=>strval($x),'Y'=>strval($y),'REALM'=>strval($realm),'ITEM'=>get_param('item'),'OWNER'=>strval($user),'COST'=>strval($cost)));
+				$tpl=do_template('W_ITEMCOPY_SCREEN',array(
+					'_GUID'=>'a8d28f6516408dba96a8b57ddcd7cee6',
+					'TITLE'=>get_screen_title('W_EDIT_ITEM_COPY_TITLE'),
+					'PAGE_TYPE'=>'edititemcopy',
+					'NOT_INFINITE'=>strval($not_infinite),
+					'X'=>strval($x),
+					'Y'=>strval($y),
+					'REALM'=>strval($realm),
+					'ITEM'=>get_param('item'),
+					'OWNER'=>strval($user),
+					'COST'=>strval($cost),
+				));
 				return $tpl;
 			}
 
@@ -717,7 +802,27 @@ class Module_ocworld
 				if (!array_key_exists(0,$rows)) ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'),'warn');
 				$row=$rows[0];
 
-				$tpl=do_template('W_ROOM_SCREEN',array('_GUID'=>'a4c5f8ae962cdbaa304135cf07c583a0','TITLE'=>get_screen_title('W_EDIT_ROOM_TITLE'),'PAGE_TYPE'=>'editroom','X'=>strval($x),'Y'=>strval($y),'REALM'=>strval($location_realm),'NAME'=>$row['name'],'ROOM_TEXT'=>$row['r_text'],'PASSWORD_QUESTION'=>$row['password_question'],'PASSWORD_ANSWER'=>$row['password_answer'],'PASSWORD_FAIL_MESSAGE'=>$row['password_fail_message'],'REQUIRED_ITEM'=>$row['required_item'],'LOCKED_UP'=>strval($row['locked_up']),'LOCKED_DOWN'=>strval($row['locked_down']),'LOCKED_LEFT'=>strval($row['locked_left']),'LOCKED_RIGHT'=>strval($row['locked_right']),'ALLOW_PORTAL'=>strval($row['allow_portal']),'PICTURE_URL'=>$row['picture_url'],'OWNER'=>is_null($row['owner'])?'':strval($row['owner'])));
+				$tpl=do_template('W_ROOM_SCREEN',array(
+					'_GUID'=>'a4c5f8ae962cdbaa304135cf07c583a0',
+					'TITLE'=>get_screen_title('W_EDIT_ROOM_TITLE'),
+					'PAGE_TYPE'=>'editroom',
+					'X'=>strval($x),
+					'Y'=>strval($y),
+					'REALM'=>strval($location_realm),
+					'NAME'=>$row['name'],
+					'ROOM_TEXT'=>$row['r_text'],
+					'PASSWORD_QUESTION'=>$row['password_question'],
+					'PASSWORD_ANSWER'=>$row['password_answer'],
+					'PASSWORD_FAIL_MESSAGE'=>$row['password_fail_message'],
+					'REQUIRED_ITEM'=>$row['required_item'],
+					'LOCKED_UP'=>strval($row['locked_up']),
+					'LOCKED_DOWN'=>strval($row['locked_down']),
+					'LOCKED_LEFT'=>strval($row['locked_left']),
+					'LOCKED_RIGHT'=>strval($row['locked_right']),
+					'ALLOW_PORTAL'=>strval($row['allow_portal']),
+					'PICTURE_URL'=>$row['picture_url'],
+					'OWNER'=>is_null($row['owner'])?'':strval($row['owner']),
+				));
 				return $tpl;
 			}
 
@@ -744,7 +849,16 @@ class Module_ocworld
 					$qatc->attach(do_template('W_REALM_SCREEN_QUESTION',array('_GUID'=>'0510427a3895969dede2bd13db7d46a6','I'=>strval($i),'Q'=>$row['q'.strval($i)],'A'=>$row['a'.strval($i)])));
 				}
 
-				$tpl=do_template('W_REALM_SCREEN',array('_GUID'=>'f2503e0be6e45a296baa8625cafb4d72','TITLE'=>get_screen_title('W_EDIT_REALM_TITLE'),'PAGE_TYPE'=>'editrealm','OWNER'=>is_null($row['owner'])?'':strval($row['owner']),'QA'=>$qatc,'NAME'=>$row['name'],'TROLL_NAME'=>$row['troll_name'],'PRIVATE'=>strval($row['r_private'])));
+				$tpl=do_template('W_REALM_SCREEN',array(
+					'_GUID'=>'f2503e0be6e45a296baa8625cafb4d72',
+					'TITLE'=>get_screen_title('W_EDIT_REALM_TITLE'),
+					'PAGE_TYPE'=>'editrealm',
+					'OWNER'=>is_null($row['owner'])?'':strval($row['owner']),
+					'QA'=>$qatc,
+					'NAME'=>$row['name'],
+					'TROLL_NAME'=>$row['troll_name'],
+					'PRIVATE'=>strval($row['r_private']),
+				));
 				return $tpl;
 			}
 
@@ -770,7 +884,21 @@ class Module_ocworld
 				if (!array_key_exists(0,$rows)) ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'),'warn');
 				$row=$rows[0];
 
-				$tpl=do_template('W_PORTAL_SCREEN',array('_GUID'=>'cad0e01c1c4c410e67b775c3ff6eeb3a','TITLE'=>get_screen_title('W_EDIT_PORTAL_TITLE'),'PAGE_TYPE'=>'editportal','X'=>strval($x),'Y'=>strval($y),'REALM'=>strval($realm),'PARAM'=>$param,'NAME'=>$row['name'],'PORTAL_TEXT'=>$row['p_text'],'END_LOCATION_REALM'=>strval($end_realm),'END_LOCATION_X'=>strval($row['end_location_x']),'END_LOCATION_Y'=>strval($row['end_location_y']),'OWNER'=>is_null($row['owner'])?'':strval($row['owner'])));
+				$tpl=do_template('W_PORTAL_SCREEN',array(
+					'_GUID'=>'cad0e01c1c4c410e67b775c3ff6eeb3a',
+					'TITLE'=>get_screen_title('W_EDIT_PORTAL_TITLE'),
+					'PAGE_TYPE'=>'editportal',
+					'X'=>strval($x),
+					'Y'=>strval($y),
+					'REALM'=>strval($realm),
+					'PARAM'=>$param,
+					'NAME'=>$row['name'],
+					'PORTAL_TEXT'=>$row['p_text'],
+					'END_LOCATION_REALM'=>strval($end_realm),
+					'END_LOCATION_X'=>strval($row['end_location_x']),
+					'END_LOCATION_Y'=>strval($row['end_location_y']),
+					'OWNER'=>is_null($row['owner'])?'':strval($row['owner']),
+				));
 				return $tpl;
 			}
 

@@ -316,7 +316,10 @@ class Module_banners
 
 		$text=do_lang_tempcode('CHOOSE_VIEW_LIST');
 
-		return do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'be5248da379faeead5a18d9f2b62bd6b','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
+		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'be5248da379faeead5a18d9f2b62bd6b','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

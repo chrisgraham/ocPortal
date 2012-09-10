@@ -126,7 +126,16 @@ class Module_contactmember
 		}
 		$post_url=build_url(array('page'=>'_SELF','type'=>'actual','id'=>$member_id,'redirect'=>$redirect),'_SELF');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'e06557e6eceacf1f46ee930c99ac5bb5','TITLE'=>$title,'HIDDEN'=>$hidden,'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'','FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'e06557e6eceacf1f46ee930c99ac5bb5',
+			'TITLE'=>$title,
+			'HIDDEN'=>$hidden,
+			'JAVASCRIPT'=>function_exists('captcha_ajax_check')?captcha_ajax_check():'',
+			'FIELDS'=>$fields,
+			'TEXT'=>$text,
+			'SUBMIT_NAME'=>$submit_name,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**

@@ -123,7 +123,7 @@ class Block_main_multi_content
 		$include_breadcrumbs=(array_key_exists('include_breadcrumbs',$map)?$map['include_breadcrumbs']:'0')=='1';
 
 		if ((!file_exists(get_file_base().'/sources/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type).'.php')))
-			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$content_type));
+			return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$content_type),'','red_alert');
 
 		require_code('hooks/systems/content_meta_aware/'.filter_naughty_harsh($content_type),true);
 		$object=object_factory('Hook_content_meta_aware_'.$content_type);
@@ -551,13 +551,13 @@ class Block_main_multi_content
 		if ($do_pagination)
 		{
 			require_code('templates_pagination');
-			$pagination=pagination(do_lang_tempcode($info['title']),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
+			$pagination=pagination(do_lang_tempcode($info['content_type_label']),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
 		}
 
 		return do_template('BLOCK_MAIN_MULTI_CONTENT',array(
 			'_GUID'=>($guid!='')?$guid:'9035934bc9b25f57eb8d23bf100b5796',
 			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
-			'TYPE'=>do_lang_tempcode($info['title']),
+			'TYPE'=>do_lang_tempcode($info['content_type_label']),
 			'TITLE'=>$title,
 			'CONTENT'=>$rendered_content,
 			'CONTENT_DATA'=>$content_data,

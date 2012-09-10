@@ -17,7 +17,7 @@
 		</div>
 	{+END}{+END}
 
-	{+START,IF,{$NOR,{IS_PANEL},{$EQ,{NAME},rules,start},{$_GET,wide_high},{IS_PANEL},{BEING_INCLUDED}}}
+	{+START,IF,{$NOR,{IS_PANEL},{$EQ,{NAME},rules,start},{$WIDE_HIGH},{IS_PANEL},{BEING_INCLUDED}}}
 		{+START,IF,{$CONFIG_OPTION,show_screen_actions}}
 			{$BLOCK,failsafe=1,block=main_screen_actions}
 		{+END}

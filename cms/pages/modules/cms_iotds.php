@@ -46,6 +46,7 @@ class Module_cms_iotds extends standard_crud_module
 	{
 		require_lang('iotds');
 		require_code('iotds');
+		require_code('iotds2');
 		require_css('iotds');
 
 		set_helper_panel_pic('pagepics/iotds');

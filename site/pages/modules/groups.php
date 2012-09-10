@@ -297,7 +297,10 @@ class Module_groups
 		}
 		$others=results_table(do_lang_tempcode('OTHER_USERGROUPS'),$start,'others_start',$max,'others_max',$max_rows,$fields_title,$others,$sortables,$sortable,$sort_order,'others_sort',NULL,array('200'));
 
-		return do_template('OCF_GROUP_DIRECTORY_SCREEN',array('_GUID'=>'39aebd8fcb618c2ae45e867d0c96a4cf','TITLE'=>$title,'STAFF'=>$staff,'OTHERS'=>$others,'RANKS'=>$ranks));
+		$tpl=do_template('OCF_GROUP_DIRECTORY_SCREEN',array('_GUID'=>'39aebd8fcb618c2ae45e867d0c96a4cf','TITLE'=>$title,'STAFF'=>$staff,'OTHERS'=>$others,'RANKS'=>$ranks));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -480,7 +483,26 @@ class Module_groups
 			$forum_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array('f_name'=>$group_name,'f_forum_grouping_id'=>intval(get_option('club_forum_parent_category')),'f_parent_forum'=>intval(get_option('club_forum_parent_forum'))));
 		}
 
-		return do_template('OCF_VIEW_GROUP_SCREEN',array('_GUID'=>'fc6cac5c73f92ab4410b492d58976dbe','GROUP_NAME'=>$group_name,'ID'=>strval($id),'FORUM'=>is_null($forum_id)?'':strval($forum_id),'CLUB'=>$club,'EDIT_URL'=>$edit_url,'TITLE'=>$title,'LEADER'=>$leader,'PROMOTION_INFO'=>$promotion_info,'ADD_URL'=>$add_url,'APPLY_URL'=>$apply_url,'APPLY_TEXT'=>$apply_text,'PRIMARY_MEMBERS'=>$primary_members,'SECONDARY_MEMBERS'=>$secondary_members,'PROSPECTIVE_MEMBERS'=>$prospective_members));
+		$tpl=do_template('OCF_VIEW_GROUP_SCREEN',array(
+			'_GUID'=>'fc6cac5c73f92ab4410b492d58976dbe',
+			'GROUP_NAME'=>$group_name,
+			'ID'=>strval($id),
+			'FORUM'=>is_null($forum_id)?'':strval($forum_id),
+			'CLUB'=>$club,
+			'EDIT_URL'=>$edit_url,
+			'TITLE'=>$title,
+			'LEADER'=>$leader,
+			'PROMOTION_INFO'=>$promotion_info,
+			'ADD_URL'=>$add_url,
+			'APPLY_URL'=>$apply_url,
+			'APPLY_TEXT'=>$apply_text,
+			'PRIMARY_MEMBERS'=>$primary_members,
+			'SECONDARY_MEMBERS'=>$secondary_members,
+			'PROSPECTIVE_MEMBERS'=>$prospective_members,
+		));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

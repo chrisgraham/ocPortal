@@ -79,7 +79,7 @@ add_iotds('data_custom/lolcats/funny-pictures-cat-special-delivery.jpg','data_cu
 function add_iotds($url='',$thumb_url='',$title='',$caption='',$notes='',$allow_rating=0,$allow_comments=0,$allow_trackbacks=0,$current=0)
 {
 	require_lang('iotds');
-	require_code('iotds');
+	require_code('iotds2');
 	require_css('iotds');
 	require_code('uploads');
 	require_code('images');

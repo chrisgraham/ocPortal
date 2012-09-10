@@ -68,7 +68,16 @@ class Block_main_facebook_friends
 
 		$out=new ocp_tempcode();
 
-		return do_template('BLOCK_MAIN_FACEBOOK_FRIENDS',array('_GUID'=>'5f4dc97379346496d8b8152a56a9ec84','TITLE'=>do_lang_tempcode('BLOCK_FACEBOOK_FRIENDS_TITLE'),'CONTENT'=>$out,'FANPAGE_NAME'=>$fanpage_name,'SHOW_FANPAGE_LINK'=>$show_fanpage_link,'LOGOBAR'=>$logobar,'FANS'=>$fans,'STREAM'=>$stream));
+		return do_template('BLOCK_MAIN_FACEBOOK_FRIENDS',array(
+			'_GUID'=>'5f4dc97379346496d8b8152a56a9ec84',
+			'TITLE'=>do_lang_tempcode('BLOCK_FACEBOOK_FRIENDS_TITLE'),
+			'CONTENT'=>$out,
+			'FANPAGE_NAME'=>$fanpage_name,
+			'SHOW_FANPAGE_LINK'=>$show_fanpage_link,
+			'LOGOBAR'=>$logobar,
+			'FANS'=>$fans,
+			'STREAM'=>$stream,
+		));
 	}
 
 }

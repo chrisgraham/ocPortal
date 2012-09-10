@@ -131,6 +131,7 @@ class Hook_addon_registry_ecommerce
 			'sources/hooks/systems/notifications/service_cancelled_staff.php',
 			'sources/hooks/systems/notifications/service_paid_for_staff.php',
 			'sources/ecommerce.php',
+			'sources/ecommerce2.php',
 			'sources/hooks/modules/members/ecommerce.php',
 			'sources/hooks/systems/do_next_menus/ecommerce.php',
 			'sources/hooks/systems/ecommerce/.htaccess',

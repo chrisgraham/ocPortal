@@ -85,7 +85,16 @@ class Module_admin_trackbacks
 		$trackbacks='';
 		foreach ($trackback_rows as $value)
 		{
-			$trackbacks.=static_evaluate_tempcode(do_template('TRACKBACK',array('_GUID'=>'eb005ff4cf387e4c18cbc862c38555e3','ID'=>strval($value['id']),'TIME_RAW'=>strval($value['trackback_time']),'TIME'=>get_timezoned_date($value['trackback_time']),'URL'=>$value['trackback_url'],'TITLE'=>$value['trackback_title'],'EXCERPT'=>$value['trackback_excerpt'],'NAME'=>$value['trackback_name'])));
+			$trackbacks.=static_evaluate_tempcode(do_template('TRACKBACK',array(
+				'_GUID'=>'eb005ff4cf387e4c18cbc862c38555e3',
+				'ID'=>strval($value['id']),
+				'TIME_RAW'=>strval($value['trackback_time']),
+				'TIME'=>get_timezoned_date($value['trackback_time']),
+				'URL'=>$value['trackback_url'],
+				'TITLE'=>$value['trackback_title'],
+				'EXCERPT'=>$value['trackback_excerpt'],
+				'NAME'=>$value['trackback_name'],
+			)));
 		}
 
 		return do_template('TRACKBACK_DELETE_SCREEN',array('_GUID'=>'51f7e4c1976bcaf120758d2c86771289','TITLE'=>$title,'TRACKBACKS'=>$trackbacks,'LOTS'=>count($trackback_rows)==1000));

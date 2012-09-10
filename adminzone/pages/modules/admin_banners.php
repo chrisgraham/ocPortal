@@ -78,15 +78,8 @@ class Module_admin_banners
 
 		check_privilege('view_anyones_banner_stats');
 
-		require_code('templates_internalise_screen');
-		$test_tpl=internalise_own_screen($title);
-		if (is_object($test_tpl))
-		{
-			$also_url=build_url(array('page'=>'cms_banners'),get_module_zone('cms_banners'));
-			attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform');
-
-			return $test_tpl;
-		}
+		$also_url=build_url(array('page'=>'cms_banners'),get_module_zone('cms_banners'));
+		attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform');
 
 		$id=get_param_integer('id',-1);
 		$start=get_param_integer('start',0);
@@ -164,7 +157,10 @@ class Module_admin_banners
 
 		$table=results_table(do_lang_tempcode('BANNERS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		return do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'c9270fd515e76918a37edf3f573c6da2','RESULTS_TABLE'=>$table,'TITLE'=>$title));
+		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'c9270fd515e76918a37edf3f573c6da2','RESULTS_TABLE'=>$table,'TITLE'=>$title));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 }

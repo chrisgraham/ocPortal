@@ -120,24 +120,77 @@ class Block_side_stats
 		$on_forum=$GLOBALS['FORUM_DRIVER']->get_num_users_forums();
 		if (!is_null($on_forum))
 		{
-			if (get_option('activity_show_stats_count_users_online',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'5ac97313d4c83e8afdeec09a48cea030','KEY'=>do_lang_tempcode('COUNT_ONSITE'),'VALUE'=>integer_format(get_num_users_site()))));
-			if (get_option('activity_show_stats_count_users_online_record',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'dc6d0893cf98703a951da168c6a9d0ac','KEY'=>do_lang_tempcode('COUNT_ONSITE_RECORD'),'VALUE'=>integer_format(get_num_users_peak()))));
-			if (get_option('activity_show_stats_count_users_online_forum',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'14f2fdbf59e86c34d93cbf16bed3f0eb','KEY'=>do_lang_tempcode('COUNT_ONFORUMS'),'VALUE'=>integer_format($on_forum))));
+			if (get_option('activity_show_stats_count_users_online',true)=='1')
+			{
+				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
+					'_GUID'=>'5ac97313d4c83e8afdeec09a48cea030',
+					'KEY'=>do_lang_tempcode('COUNT_ONSITE'),
+					'VALUE'=>integer_format(get_num_users_site()),
+				)));
+			}
+			if (get_option('activity_show_stats_count_users_online_record',true)=='1')
+			{
+				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
+					'_GUID'=>'dc6d0893cf98703a951da168c6a9d0ac',
+					'KEY'=>do_lang_tempcode('COUNT_ONSITE_RECORD'),
+					'VALUE'=>integer_format(get_num_users_peak()),
+				)));
+			}
+			if (get_option('activity_show_stats_count_users_online_forum',true)=='1')
+			{
+				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
+					'_GUID'=>'14f2fdbf59e86c34d93cbf16bed3f0eb',
+					'KEY'=>do_lang_tempcode('COUNT_ONFORUMS'),
+					'VALUE'=>integer_format($on_forum),
+				)));
+			}
 			$title=do_lang_tempcode('SECTION_USERS');
 		} else
 		{
-			if (get_option('activity_show_stats_count_users_online',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'9c9760b2ed9e985e96b53c91c511e84e','KEY'=>do_lang_tempcode('USERS_ONLINE'),'VALUE'=>integer_format(get_num_users_site()))));
-			if (get_option('activity_show_stats_count_users_online_record',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'d18068d747fe1fe364042133e4b3ba84','KEY'=>do_lang_tempcode('USERS_ONLINE_RECORD'),'VALUE'=>integer_format(get_num_users_peak()))));
+			if (get_option('activity_show_stats_count_users_online',true)=='1')
+			{
+				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
+					'_GUID'=>'9c9760b2ed9e985e96b53c91c511e84e',
+					'KEY'=>do_lang_tempcode('USERS_ONLINE'),
+					'VALUE'=>integer_format(get_num_users_site()),
+				)));
+			}
+			if (get_option('activity_show_stats_count_users_online_record',true)=='1')
+			{
+				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
+					'_GUID'=>'d18068d747fe1fe364042133e4b3ba84',
+					'KEY'=>do_lang_tempcode('USERS_ONLINE_RECORD'),
+					'VALUE'=>integer_format(get_num_users_peak()),
+				)));
+			}
 			$title=do_lang_tempcode('ACTIVITY');
 		}
 		if (addon_installed('stats'))
 		{
 			if (get_option('activity_show_stats_count_page_views_today',true)=='1')
-				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'fc9760b2ed9e985e96b53c91c511e84e','KEY'=>do_lang_tempcode('PAGE_VIEWS_TODAY'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval(time()-60*60*24))))));
+			{
+				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
+					'_GUID'=>'fc9760b2ed9e985e96b53c91c511e84e',
+					'KEY'=>do_lang_tempcode('PAGE_VIEWS_TODAY'),
+					'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval(time()-60*60*24))),
+				)));
+			}
 			if (get_option('activity_show_stats_count_page_views_this_week',true)=='1')
-				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'gc9760b2ed9e985e96b53c91c511e84e','KEY'=>do_lang_tempcode('PAGE_VIEWS_THIS_WEEK'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval(time()-60*60*24*7))))));
+			{
+				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
+					'_GUID'=>'gc9760b2ed9e985e96b53c91c511e84e',
+					'KEY'=>do_lang_tempcode('PAGE_VIEWS_THIS_WEEK'),
+					'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval(time()-60*60*24*7))),
+				)));
+			}
 			if (get_option('activity_show_stats_count_page_views_this_month',true)=='1')
-				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'hc9760b2ed9e985e96b53c91c511e84e','KEY'=>do_lang_tempcode('PAGE_VIEWS_THIS_MONTH'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval(time()-60*60*24*31))))));
+			{
+				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array(
+					'_GUID'=>'hc9760b2ed9e985e96b53c91c511e84e',
+					'KEY'=>do_lang_tempcode('PAGE_VIEWS_THIS_MONTH'),
+					'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval(time()-60*60*24*31))),
+				)));
+			}
 		}
 		if (!$bits->is_empty())
 			$full_tpl->attach(do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'e2408c71a7c74f1d14089412d4538b6d','SECTION'=>$title,'CONTENT'=>$bits)));

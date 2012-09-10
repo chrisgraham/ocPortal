@@ -72,13 +72,14 @@ class Hook_addon_registry_polls
 	function get_file_list()
 	{
 		return array(
+			'sources/polls2.php',
+			'sources/hooks/systems/block_ui_renderers/polls.php',
 			'sources/hooks/systems/notifications/poll_chosen.php',
 			'sources/hooks/systems/config_default/points_ADD_POLL.php',
 			'sources/hooks/systems/config_default/points_CHOOSE_POLL.php',
 			'sources/hooks/systems/config_default/poll_update_time.php',
 			'sources/hooks/systems/realtime_rain/polls.php',
-			'BLOCK_MAIN_POLL_IFRAME.tpl',
-			'poll.php',
+			'BLOCK_MAIN_POLL.tpl',
 			'sources/hooks/systems/content_meta_aware/poll.php',
 			'sources/hooks/systems/addon_registry/polls.php',
 			'sources/hooks/systems/preview/poll.php',
@@ -115,7 +116,7 @@ class Hook_addon_registry_polls
 	function tpl_previews()
 	{
 		return array(
-			'BLOCK_MAIN_POLL_IFRAME.tpl'=>'block_main_poll_iframe',
+			'BLOCK_MAIN_POLL.tpl'=>'block_main_poll',
 			'POLL_RSS_SUMMARY.tpl'=>'poll_rss_summary',
 			'POLL_ANSWER.tpl'=>'poll_answer',
 			'POLL_ANSWER_RESULT.tpl'=>'poll_answer_result',
@@ -132,12 +133,12 @@ class Hook_addon_registry_polls
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_main_poll_iframe()
+	function tpl_preview__block_main_poll()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_POLL_IFRAME', array(
-				'PARAM'=>"-1",
-				'ZONE'=>lorem_word()
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_POLL', array(
+				'CONTENT'=>$this->poll('poll'),
+				'BLOCK_PARAMS'=>'',
 			)), NULL, '', true)
 		);
 	}
@@ -271,24 +272,18 @@ class Hook_addon_registry_polls
 		}
 
 		$wrap_content=do_lorem_template('POLL_BOX', array(
+			'_GUID'=>($guid!='')?$guid:'4c6b026f7ed96f0b5b8408eb5e5affb5',
 			'VOTE_URL'=>placeholder_url(),
 			'GIVE_CONTEXT'=>true,
 			'SUBMITTER'=>placeholder_id(),
 			'RESULT_URL'=>placeholder_url(),
-			'POLL_RESULTS'=>lorem_phrase(),
 			'SUBMIT_URL'=>placeholder_url(),
 			'ARCHIVE_URL'=>placeholder_url(),
-			'POLLS'=>lorem_phrase(),
-			'VIEW_ARCHIVE'=>placeholder_url(),
-			'POLL'=>lorem_phrase(),
 			'PID'=>placeholder_id(),
-			'VIEW'=>lorem_phrase(),
 			'COMMENT_COUNT'=>placeholder_number(),
 			'QUESTION_PLAIN'=>lorem_phrase(),
 			'QUESTION'=>lorem_phrase(),
 			'CONTENT'=>$tpl,
-			'VOTE'=>placeholder_number(),
-			'ZONE'=>lorem_word(),
 			'FULL_URL'=>placeholder_url()
 		));
 
@@ -355,10 +350,7 @@ class Hook_addon_registry_polls
 			'COMMENTS'=>$comments
 		));
 
-		$poll_details=do_lorem_template('BLOCK_MAIN_POLL_IFRAME', array(
-			'PARAM'=>'-1',
-			'ZONE'=>lorem_word()
-		));
+		$poll_details=$this->poll('poll');
 
 		return array(
 			lorem_globalise(do_lorem_template('POLL_SCREEN', array(

@@ -339,7 +339,16 @@ class Module_cms_wiki
 		breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang('WIKI_EDIT_PAGE').'</span>'));
 		breadcrumb_set_parents(array(array('_SELF:_SELF:edit_page',do_lang_tempcode('CHOOSE'))));
 
-		return do_template('POSTING_SCREEN',array('_GUID'=>'de53b8902ab1431e0d2d676f7d5471d3','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'REVISION_HISTORY'=>$revision_history,'POSTING_FORM'=>$posting_form,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>paragraph(do_lang_tempcode('WIKI_EDIT_PAGE_TEXT'))));
+		return do_template('POSTING_SCREEN',array(
+			'_GUID'=>'de53b8902ab1431e0d2d676f7d5471d3',
+			'PING_URL'=>$ping_url,
+			'WARNING_DETAILS'=>$warning_details,
+			'REVISION_HISTORY'=>$revision_history,
+			'POSTING_FORM'=>$posting_form,
+			'HIDDEN'=>$hidden,
+			'TITLE'=>$title,
+			'TEXT'=>paragraph(do_lang_tempcode('WIKI_EDIT_PAGE_TEXT')),
+		));
 	}
 
 	/**

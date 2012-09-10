@@ -392,7 +392,10 @@ class Module_admin_quiz
 		if ($fields->is_empty()) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 		$results=results_table(do_lang_tempcode('SURVEY_RESULTS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		return do_template('SURVEY_RESULTS_SCREEN',array('_GUID'=>'3f38ac1b94fb4de8219b8f7108c7b0a3','TITLE'=>$title,'SUMMARY'=>$summary,'RESULTS'=>$results));
+		$tpl=do_template('SURVEY_RESULTS_SCREEN',array('_GUID'=>'3f38ac1b94fb4de8219b8f7108c7b0a3','TITLE'=>$title,'SUMMARY'=>$summary,'RESULTS'=>$results));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

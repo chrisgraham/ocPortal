@@ -139,7 +139,10 @@ class Hook_admin_stats_downloads
 
 		$graph=do_template('STATS_GRAPH',array('_GUID'=>'d2cd5da7cf2139f750d4373acf6149e8','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Downloads.xml','TITLE'=>do_lang_tempcode('SECTION_DOWNLOADS'),'TEXT'=>do_lang_tempcode('DESCRIPTION_DOWNLOADS_STATISTICS')));
 
-		return do_template('STATS_SCREEN',array('_GUID'=>'4b8e0478231473d690e947ffc4580840','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'4b8e0478231473d690e947ffc4580840','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 }

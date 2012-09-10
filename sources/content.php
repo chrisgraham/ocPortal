@@ -18,6 +18,21 @@
  * @package		core
  */
 
+/*
+
+Notes about hook info...
+ - id_field may be array
+ - category_field may be array
+ - category_field may be NULL
+ - category_type may be array
+ - category_type may be '!'
+ - category_type may be NULL
+ - category_type may be missing
+ - add_url may contain '!'
+ - submitter_field may be a field:regexp
+
+*/
+
 /**
  * Find a different content type code from the one had. In future we intend to change everything to be content_type internally.
  *

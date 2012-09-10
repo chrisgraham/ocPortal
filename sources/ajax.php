@@ -23,14 +23,14 @@
  */
 function username_check_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-Type: text/plain');
 
 	require_code('ocf_members_action');
 	require_code('ocf_members_action2');
 	require_lang('ocf');
+
 	$username=trim(get_param('username',false,true));
 	$error=ocf_check_name_valid($username,NULL,trim(post_param('password',NULL)),true);
 	if (!is_null($error)) $error->evaluate_echo();
@@ -41,8 +41,7 @@ function username_check_script()
  */
 function find_permissions_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-Type: text/plain');
 
@@ -80,8 +79,7 @@ function find_permissions_script()
  */
 function store_autosave()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	$member_id=get_member();
 	$key=post_param('key');
@@ -101,8 +99,7 @@ function store_autosave()
  */
 function retrieve_autosave()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-Type: text/plain');
 
@@ -119,12 +116,11 @@ function retrieve_autosave()
  */
 function fractional_edit_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-type: text/plain; charset='.get_charset());
 
-	$_POST['fractional_edit']='1';
+	$_POST['fractional_edit']='1'; // FUDGE
 
 	global $SESSION_CONFIRMED_CACHE;
 	if ($SESSION_CONFIRMED_CACHE==0)
@@ -141,7 +137,6 @@ function fractional_edit_script()
 	request_page($page,true);
 
 	$supports_comcode=get_param_integer('supports_comcode',0)==1;
-	convert_data_encodings(true);
 	$edited=post_param(get_param('edit_param_name'));
 	if ($supports_comcode)
 	{
@@ -157,8 +152,7 @@ function fractional_edit_script()
  */
 function change_detection_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-type: text/plain; charset='.get_charset());
 
@@ -177,8 +171,7 @@ function change_detection_script()
  */
 function edit_ping_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-type: text/plain; charset='.get_charset());
 
@@ -207,15 +200,13 @@ function edit_ping_script()
  */
 function comcode_convert_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	require_code('site');
 	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	require_lang('comcode');
 
-	convert_data_encodings(true);
 	$data=post_param('data',NULL,false,false);
 	if (is_null($data))
 	{
@@ -318,11 +309,10 @@ function comcode_convert_script()
  */
 function username_exists_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-type: text/plain; charset='.get_charset());
-	convert_data_encodings(true);
+
 	$username=trim(get_param('username',false,true));
 	$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
 	if (is_null($member_id)) echo 'false';
@@ -333,10 +323,8 @@ function username_exists_script()
  */
 function namelike_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
-	convert_data_encodings(true);
 	$id=str_replace('*','%',get_param('id',false,true));
 	$special=get_param('special','');
 
@@ -449,14 +437,12 @@ function ajax_tree_script()
 		@exit(get_option('closed'));
 	}
 
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-Type: text/xml');
 	$hook=filter_naughty_harsh(get_param('hook'));
 	require_code('hooks/systems/ajax_tree/'.$hook);
 	$object=object_factory('Hook_'.$hook);
-	convert_data_encodings(true);
 	$id=get_param('id','',true);
 	if ($id=='') $id=NULL;
 	@ini_set('ocproducts.xss_detect','0');
@@ -476,8 +462,7 @@ function ajax_tree_script()
  */
 function confirm_session_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-Type: text/plain');
 	global $SESSION_CONFIRMED_CACHE;
@@ -490,8 +475,7 @@ function confirm_session_script()
  */
 function load_template_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	if (!has_actual_page_access(get_member(),'admin_themes','adminzone')) exit();
 
@@ -512,8 +496,7 @@ function load_template_script()
  */
 function sheet_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-Type: text/css');
 	$sheet=get_param('sheet');
@@ -525,8 +508,7 @@ function sheet_script()
  */
 function snippet_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	header('Content-Type: text/plain; charset='.get_charset());
 	$hook=filter_naughty_harsh(get_param('snippet'));

@@ -63,6 +63,8 @@ function render_chat_box($row,$zone='_SEARCH',$give_context=true,$guid='')
  */
 function messages_script()
 {
+	prepare_for_known_ajax_response();
+
 	get_screen_title('',false); // Force session time to be updated
 
 	// Closed site
@@ -87,7 +89,6 @@ function messages_script()
 	elseif ($action=='post')
 	{
 		// Posting a message
-		convert_data_encodings(true);
 		$message=either_param('message');
 		_chat_post_message_ajax(either_param_integer('room_id'),$message,post_param('font',''),post_param('colour',''),post_param_integer('first_message',0));
 	}
@@ -234,89 +235,6 @@ function member_befriended($member_id)
 }
 
 /**
- * Outputs the shoutbox iframe.
- *
- * @param  boolean			Whether to get the output instead of outputting it directly
- * @param  ?AUTO_LINK		Chat room ID (NULL: read from environment)
- * @param  ?integer			The maximum number of messages to show (NULL: read from environment)
- * @return ?object			Output (NULL: outputted it already)
- */
-function shoutbox_script($ret=false,$room_id=NULL,$num_messages=NULL)
-{
-	if (is_null($room_id)) $room_id=get_param_integer('room_id');
-	if (is_null($num_messages)) $num_messages=get_param_integer('num_messages',5);
-	$zone=get_param('zone',get_module_zone('chat'));
-
-	require_lang('chat');
-	require_code('chat');
-	require_css('chat');
-
-	if (is_null($room_id))
-	{
-		$room_id=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','MIN(id)',array('is_im'=>0,'room_language'=>user_lang()));
-		if (is_null($room_id)) $room_id=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','MIN(id)',array('is_im'=>0));
-		if (is_null($room_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	}
-
-	$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$room_id),'',1);
-	if (!array_key_exists(0,$room_check)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	if (!check_chatroom_access($room_check[0])) warn_exit(do_lang_tempcode('ACCESS_DENIED__CHATROOM_UNAUTHORISED',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
-
-	// Did a message get sent last time?
-	$shoutbox_message=post_param('shoutbox_message','');
-	if ($shoutbox_message!='')
-	{
-		if (!chat_post_message($room_id,$shoutbox_message,get_option('chat_default_post_font'),get_option('chat_default_post_colour'),15))
-		{
-			// Error. But actually we'll get it from below
-		}
-	}
-
-	$messages=chat_get_room_content($room_id,$room_check,$num_messages*3,false,false,NULL,NULL,-1,$zone,NULL,true,$shoutbox_message!='');
-	$_tpl=array();
-	foreach ($messages as $_message)
-	{
-		$evaluated=$_message['the_message']->evaluate();
-
-		// We are only interested in private-message system messages and flood-control system messages, no other kinds of system message
-		if (($_message['system_message']==1) && (strpos($evaluated,'[private')===false) && (preg_match('#'.str_replace('\{1\}','\d+',preg_quote(do_lang('FLOOD_CONTROL_BLOCKED'))).'#',$evaluated)==0)) continue;
-
-		if ((strpos($evaluated,'[private')===false) || (($shoutbox_message!='') && (strpos($evaluated,'[private="'.$GLOBALS['FORUM_DRIVER']->get_username(get_member()).'"]')!==false)))
-		{
-			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_message['username']);
-			$member=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,true,$_message['username']);
-			$_tpl[]=do_template('BLOCK_SIDE_SHOUTBOX_MESSAGE',array('_GUID'=>'a6f86aa48af7de7ec78423864c82c626','USER'=>$member,'MESSAGE'=>$_message['the_message'],'TIME_RAW'=>strval($_message['date_and_time']),'TIME'=>$_message['date_and_time_nice']));
-		}
-	}
-
-	$tpl=new ocp_tempcode();
-	while (count($_tpl)>$num_messages) array_shift($_tpl);
-	foreach ($_tpl as $t)
-	{
-		$tpl->attach($t);
-	}
-
-	if (running_script('shoutbox'))
-	{
-		$keep=symbol_tempcode('KEEP');
-		$_url=find_script('shoutbox').'?room_id='.strval($room_id).'&num_messages='.strval($num_messages).$keep->evaluate();
-		if (get_param('utheme','')!='') $_url.='&utheme='.get_param('utheme');
-		$url=make_string_tempcode($_url);
-	} else
-	{
-		$url=get_self_url(false,(array_keys($_POST)!=array('shoutbox_message')),array('room_id'=>$room_id));
-	}
-	$tpl=do_template('BLOCK_SIDE_SHOUTBOX',array('_GUID'=>'080880eb9ebdb7fcdca1ebdae6b1b9aa','MESSAGES'=>$tpl,'URL'=>$url));
-
-	if ($ret) return $tpl;
-
-	$keep=symbol_tempcode('KEEP');
-	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'aacac778b145bfe7b063317fbcae7fde','FRAME'=>true,'TARGET'=>'_top','TITLE'=>do_lang_tempcode('SHOUTBOX'),'CONTENT'=>$tpl));
-	$echo->evaluate_echo();
-	return NULL;
-}
-
-/**
  * Pass out chat log files.
  */
 function chat_logs_script()
@@ -364,7 +282,20 @@ function chat_logs_script()
 	$message_contents=new ocp_tempcode();
 	foreach ($messages as $_message)
 	{
-		$message_contents->attach(do_template('CHAT_MESSAGE',array('_GUID'=>'ff22f181850feaba2a062b7edf71e332','STAFF'=>false,'OLD_MESSAGES'=>true,'SYSTEM_MESSAGE'=>strval($_message['system_message']),'AVATAR_URL'=>'','STAFF_ACTIONS'=>'','USER'=>escape_html($_message['username']),'MESSAGE'=>$_message['the_message'],'TIME'=>$_message['date_and_time_nice'],'TIME_RAW'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name'])));
+		$message_contents->attach(do_template('CHAT_MESSAGE',array(
+			'_GUID'=>'ff22f181850feaba2a062b7edf71e332',
+			'STAFF'=>false,
+			'OLD_MESSAGES'=>true,
+			'SYSTEM_MESSAGE'=>strval($_message['system_message']),
+			'AVATAR_URL'=>'',
+			'STAFF_ACTIONS'=>'',
+			'USER'=>escape_html($_message['username']),
+			'MESSAGE'=>$_message['the_message'],
+			'TIME'=>$_message['date_and_time_nice'],
+			'TIME_RAW'=>strval($_message['date_and_time']),
+			'FONT_COLOUR'=>$_message['text_colour'],
+			'FONT_FACE'=>$_message['font_name'],
+		)));
 	}
 
 	// Send header
@@ -600,7 +531,20 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			}
 		}
 
-		$template=do_template('CHAT_MESSAGE',array('_GUID'=>'6bcac8d9fdd166cde266f8d23b790b69','SYSTEM_MESSAGE'=>strval($_message['system_message']),'STAFF'=>$moderator,'OLD_MESSAGES'=>$backlog,'AVATAR_URL'=>$avatar_url,'STAFF_ACTIONS'=>$staff_actions,'USER'=>$user,'MESSAGE'=>$_message['the_message'],'TIME'=>$_message['date_and_time_nice'],'RAW_TIME'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name']));
+		$template=do_template('CHAT_MESSAGE',array(
+			'_GUID'=>'6bcac8d9fdd166cde266f8d23b790b69',
+			'SYSTEM_MESSAGE'=>strval($_message['system_message']),
+			'STAFF'=>$moderator,
+			'OLD_MESSAGES'=>$backlog,
+			'AVATAR_URL'=>$avatar_url,
+			'STAFF_ACTIONS'=>$staff_actions,
+			'USER'=>$user,
+			'MESSAGE'=>$_message['the_message'],
+			'TIME'=>$_message['date_and_time_nice'],
+			'RAW_TIME'=>strval($_message['date_and_time']),
+			'FONT_COLOUR'=>$_message['text_colour'],
+			'FONT_FACE'=>$_message['font_name'],
+		));
 		$messages_output.='<div sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="'.strval($_message['id']).'" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
 	}
 
@@ -701,8 +645,6 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 	{
 		$messages_output='<chat_null>'.strval($room_id).'</chat_null>';
 	}
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 	header('Content-Type: application/xml');
 	$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <!DOCTYPE xc:content [
@@ -795,11 +737,24 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 		require_lang('chat');
 		$the_message=do_lang('BANNED_FROM_CHAT');
 		$_message=array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'member_id'=>get_member(),'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font'));
-		$template=do_template('CHAT_MESSAGE',array('_GUID'=>'f0eb6b037a7cb4b70a114e7e96bde36d','SYSTEM_MESSAGE'=>strval($_message['system_message']),'STAFF'=>false,'OLD_MESSAGES'=>false,'AVATAR_URL'=>'','STAFF_ACTIONS'=>'','USER'=>strval($_message['member_id']),'MESSAGE'=>$the_message,'TIME'=>get_timezoned_date($_message['date_and_time']),'RAW_TIME'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name']));
+		$template=do_template('CHAT_MESSAGE',array(
+			'_GUID'=>'f0eb6b037a7cb4b70a114e7e96bde36d',
+			'SYSTEM_MESSAGE'=>strval($_message['system_message']),
+			'STAFF'=>false,
+			'OLD_MESSAGES'=>false,
+			'AVATAR_URL'=>'',
+			'STAFF_ACTIONS'=>'',
+			'USER'=>strval($_message['member_id']),
+			'MESSAGE'=>$the_message,
+			'TIME'=>get_timezoned_date($_message['date_and_time']),
+			'RAW_TIME'=>strval($_message['date_and_time']),
+			'FONT_COLOUR'=>$_message['text_colour'],
+			'FONT_FACE'=>$_message['font_name'],
+		));
 		$messages_output='<div sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="123456789" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
 
-		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+		prepare_for_known_ajax_response();
+
 		header('Content-Type: application/xml');
 		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <!DOCTYPE xc:content [
@@ -900,10 +855,10 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 
 	/*if ($return=='0') Flood control creates error, but we'd rather see it shown inline
 	{
-			header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-			header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-			header('Content-Type: application/xml');
-			$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
+		prepare_for_known_ajax_response();
+
+		header('Content-Type: application/xml');
+		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <!DOCTYPE xc:content [
 <!ENTITY euro "&#8364;">
 <!ENTITY ldquo "&#8220;">

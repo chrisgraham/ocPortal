@@ -134,7 +134,15 @@ class Block_main_countdown
 				break;
 		}
 
-		return do_template('BLOCK_MAIN_COUNTDOWN',array('_GUID'=>'7bfbaf09b256edcdfc0aeb04d282c3b8','TAILING'=>strval($tailing),'LANG'=>$lang,'POSITIVE'=>$positive,'PRECISION'=>strval($precision),'MILLISECONDS_FOR_PRECISION'=>strval($milliseconds_for_precision),'DISTANCE_FOR_PRECISION'=>strval($distance_for_precision)));
+		return do_template('BLOCK_MAIN_COUNTDOWN',array(
+			'_GUID'=>'7bfbaf09b256edcdfc0aeb04d282c3b8',
+			'TAILING'=>strval($tailing),
+			'LANG'=>$lang,
+			'POSITIVE'=>$positive,
+			'PRECISION'=>strval($precision),
+			'MILLISECONDS_FOR_PRECISION'=>strval($milliseconds_for_precision),
+			'DISTANCE_FOR_PRECISION'=>strval($distance_for_precision),
+		));
 	}
 
 }

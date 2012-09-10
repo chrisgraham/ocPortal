@@ -233,7 +233,16 @@ class Module_admin_import
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT'))));
 		breadcrumb_set_self(do_lang_tempcode('IMPORT_SESSION'));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'f474980f7263f2def2ff75e7ee40be33','SKIP_VALIDATION'=>true,'HIDDEN'=>form_input_hidden('importer',get_param('importer')),'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>''));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'f474980f7263f2def2ff75e7ee40be33',
+			'SKIP_VALIDATION'=>true,
+			'HIDDEN'=>form_input_hidden('importer',get_param('importer')),
+			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'URL'=>$post_url,
+			'TEXT'=>'',
+		));
 	}
 
 	/**
@@ -412,11 +421,24 @@ class Module_admin_import
 		{
 			if (array_key_exists($import,$parts_done))
 			{
-				$import_list->attach(do_template('IMPORT_ACTION_LINE',array('_GUID'=>'887770aad4269b74fdf11d09f4ab4fa3','CHECKED'=>false,'DISABLED'=>true,'NAME'=>'import_'.$import,'TEXT'=>$text,'ADVANCED_URL'=>$info['supports_advanced_import']?build_url(array('page'=>'_SELF','type'=>'advanced_hook','session'=>$session,'content_type'=>$import,'importer'=>$importer),'_SELF'):new ocp_tempcode())));
+				$import_list->attach(do_template('IMPORT_ACTION_LINE',array(
+					'_GUID'=>'887770aad4269b74fdf11d09f4ab4fa3',
+					'CHECKED'=>false,
+					'DISABLED'=>true,
+					'NAME'=>'import_'.$import,
+					'TEXT'=>$text,
+					'ADVANCED_URL'=>$info['supports_advanced_import']?build_url(array('page'=>'_SELF','type'=>'advanced_hook','session'=>$session,'content_type'=>$import,'importer'=>$importer),'_SELF'):new ocp_tempcode(),
+				)));
 			} else
 			{
 				$checked=(is_null($just)) && ($first);
-				$import_list->attach(do_template('IMPORT_ACTION_LINE',array('_GUID'=>'f2215115f920200a0a1ba6bc776ad945','CHECKED'=>$checked,'NAME'=>'import_'.$import,'TEXT'=>$text,'ADVANCED_URL'=>$info['supports_advanced_import']?build_url(array('page'=>'_SELF','type'=>'advanced_hook','session'=>$session,'content_type'=>$import,'importer'=>$importer),'_SELF'):new ocp_tempcode())));
+				$import_list->attach(do_template('IMPORT_ACTION_LINE',array(
+					'_GUID'=>'f2215115f920200a0a1ba6bc776ad945',
+					'CHECKED'=>$checked,
+					'NAME'=>'import_'.$import,
+					'TEXT'=>$text,
+					'ADVANCED_URL'=>$info['supports_advanced_import']?build_url(array('page'=>'_SELF','type'=>'advanced_hook','session'=>$session,'content_type'=>$import,'importer'=>$importer),'_SELF'):new ocp_tempcode()
+				)));
 			}
 			if ($just==$import)
 			{

@@ -183,9 +183,6 @@ function generate_text_summary($_temp_summary,$words_searched)
  */
 function opensearch_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-
 	if (!has_actual_page_access(get_member(),'search')) return; // No access
 
 	$type=get_param('type','misc');

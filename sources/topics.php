@@ -735,7 +735,13 @@ class OCP_Topic
 				$unvalidated=($post['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode();
 				if (array_key_exists('last_edit_time',$post))
 				{
-					$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array('_GUID'=>'6301ad8d8f80948ad8270828f1bdaf33','LAST_EDIT_DATE_RAW'=>is_null($post['last_edit_time'])?'':strval($post['last_edit_time']),'LAST_EDIT_DATE'=>$post['last_edit_time_string'],'LAST_EDIT_PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['last_edit_by'],false,true),'LAST_EDIT_USERNAME'=>$post['last_edit_by_username']));
+					$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array(
+						'_GUID'=>'6301ad8d8f80948ad8270828f1bdaf33',
+						'LAST_EDIT_DATE_RAW'=>is_null($post['last_edit_time'])?'':strval($post['last_edit_time']),
+						'LAST_EDIT_DATE'=>$post['last_edit_time_string'],
+						'LAST_EDIT_PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['last_edit_by'],false,true),
+						'LAST_EDIT_USERNAME'=>$post['last_edit_by_username'],
+					));
 					$last_edited_raw=(is_null($post['last_edit_time'])?'':strval($post['last_edit_time']));
 				}
 
@@ -788,7 +794,14 @@ class OCP_Topic
 				}
 				if (!is_guest($post['poster']))
 				{
-					$poster=do_template('OCF_POSTER_MEMBER',array('_GUID'=>'da673c38b3cfbe9bf53d4334ca0eacfd','ONLINE'=>member_is_online($post['poster']),'ID'=>strval($post['poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['poster'],false,true),'POSTER_USERNAME'=>$post['poster_username']));
+					$poster=do_template('OCF_POSTER_MEMBER',array(
+						'_GUID'=>'da673c38b3cfbe9bf53d4334ca0eacfd',
+						'ONLINE'=>member_is_online($post['poster']),
+						'ID'=>strval($post['poster']),
+						'POSTER_DETAILS'=>$poster_details,
+						'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['poster'],false,true),
+						'POSTER_USERNAME'=>$post['poster_username'],
+					));
 				} else
 				{
 					$ip_link=((array_key_exists('ip_address',$post)) && (addon_installed('securitylogging')) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$post['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();

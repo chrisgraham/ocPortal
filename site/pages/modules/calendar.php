@@ -593,7 +593,26 @@ class Module_calendar
 		}
 		$rss_form=do_template('FORM',array('_GUID'=>'1756a3c6a5a105ef8b2b9d2ebc9e4e86','HIDDEN'=>'','TEXT'=>do_lang_tempcode('DESCRIPTION_FEEDS_TO_OVERLAY'),'URL'=>get_self_url(),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
 
-		return do_template('CALENDAR_MAIN_SCREEN',array('_GUID'=>'147a58dbe05366ac37698a8cdd501d12','RSS_FORM'=>$rss_form,'PREVIOUS_NO_FOLLOW'=>$previous_no_follow,'NEXT_NO_FOLLOW'=>$next_no_follow,'DAY_URL'=>$day_url,'WEEK_URL'=>$week_url,'MONTH_URL'=>$month_url,'YEAR_URL'=>$year_url,'PREVIOUS_URL'=>$previous_url,'NEXT_URL'=>$next_url,'ADD_URL'=>$add_url,'TITLE'=>$title,'BACK_URL'=>$back_url,'MAIN'=>$main,'FILTER_URL'=>$filter_url,'EVENT_TYPES_1'=>$event_types_1,'INTERESTS_URL'=>$interests_url,'EVENT_TYPES_2'=>$event_types_2));
+		return do_template('CALENDAR_MAIN_SCREEN',array(
+			'_GUID'=>'147a58dbe05366ac37698a8cdd501d12',
+			'RSS_FORM'=>$rss_form,
+			'PREVIOUS_NO_FOLLOW'=>$previous_no_follow,
+			'NEXT_NO_FOLLOW'=>$next_no_follow,
+			'DAY_URL'=>$day_url,
+			'WEEK_URL'=>$week_url,
+			'MONTH_URL'=>$month_url,
+			'YEAR_URL'=>$year_url,
+			'PREVIOUS_URL'=>$previous_url,
+			'NEXT_URL'=>$next_url,
+			'ADD_URL'=>$add_url,
+			'TITLE'=>$title,
+			'BACK_URL'=>$back_url,
+			'MAIN'=>$main,
+			'FILTER_URL'=>$filter_url,
+			'EVENT_TYPES_1'=>$event_types_1,
+			'INTERESTS_URL'=>$interests_url,
+			'EVENT_TYPES_2'=>$event_types_2,
+		));
 	}
 
 	/**
@@ -816,7 +835,17 @@ class Module_calendar
 							}
 						}
 						$title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
-						$entries->attach(do_template('CALENDAR_WEEK_ENTRY',array('_GUID'=>'a5577fb634ecc5480789d1cd21f686fb','ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$title,'URL'=>$url,'RECURRING'=>$event['e_recurrence']!='none')));
+						$entries->attach(do_template('CALENDAR_WEEK_ENTRY',array(
+							'_GUID'=>'a5577fb634ecc5480789d1cd21f686fb',
+							'ID'=>strval($event['e_id']),
+							'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS',
+							'PRIORITY'=>strval($event['e_priority']),
+							'ICON'=>$icon,
+							'TIME'=>$date,
+							'TITLE'=>$title,
+							'URL'=>$url,
+							'RECURRING'=>$event['e_recurrence']!='none',
+						)));
 
 						if ($event['e_priority']<$worst_priority)
 						{
@@ -947,7 +976,26 @@ class Module_calendar
 			$offset++;
 		}
 
-		return do_template('CALENDAR_WEEK',array('_GUID'=>'8dd9ad4e874d2f320a48551e0c9bde57','MONDAY_DATE'=>$monday_date,'TUESDAY_DATE'=>$tuesday_date,'WEDNESDAY_DATE'=>$wednesday_date,'THURSDAY_DATE'=>$thursday_date,'FRIDAY_DATE'=>$friday_date,'SATURDAY_DATE'=>$saturday_date,'SUNDAY_DATE'=>$sunday_date,'MONDAY_URL'=>$monday_url,'TUESDAY_URL'=>$tuesday_url,'WEDNESDAY_URL'=>$wednesday_url,'THURSDAY_URL'=>$thursday_url,'FRIDAY_URL'=>$friday_url,'SATURDAY_URL'=>$saturday_url,'SUNDAY_URL'=>$sunday_url,'HOURS'=>$hours,'PERIOD_START'=>strval($period_start),'PERIOD_END'=>strval($period_end)));
+		return do_template('CALENDAR_WEEK',array(
+			'_GUID'=>'8dd9ad4e874d2f320a48551e0c9bde57',
+			'MONDAY_DATE'=>$monday_date,
+			'TUESDAY_DATE'=>$tuesday_date,
+			'WEDNESDAY_DATE'=>$wednesday_date,
+			'THURSDAY_DATE'=>$thursday_date,
+			'FRIDAY_DATE'=>$friday_date,
+			'SATURDAY_DATE'=>$saturday_date,
+			'SUNDAY_DATE'=>$sunday_date,
+			'MONDAY_URL'=>$monday_url,
+			'TUESDAY_URL'=>$tuesday_url,
+			'WEDNESDAY_URL'=>$wednesday_url,
+			'THURSDAY_URL'=>$thursday_url,
+			'FRIDAY_URL'=>$friday_url,
+			'SATURDAY_URL'=>$saturday_url,
+			'SUNDAY_URL'=>$sunday_url,
+			'HOURS'=>$hours,
+			'PERIOD_START'=>strval($period_start),
+			'PERIOD_END'=>strval($period_end),
+		));
 	}
 
 	/**
@@ -1034,7 +1082,17 @@ class Module_calendar
 						$date=date_range($real_from,$real_to,!is_null($event['e_start_hour']));
 					}
 					$title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
-					$entries->attach(do_template('CALENDAR_MONTH_ENTRY',array('_GUID'=>'58353fc64595f981d41da303cfe40855','ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$title,'URL'=>$url,'RECURRING'=>$event['e_recurrence']!='none')));
+					$entries->attach(do_template('CALENDAR_MONTH_ENTRY',array(
+						'_GUID'=>'58353fc64595f981d41da303cfe40855',
+						'ID'=>strval($event['e_id']),
+						'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS',
+						'PRIORITY'=>strval($event['e_priority']),
+						'ICON'=>$icon,
+						'TIME'=>$date,
+						'TITLE'=>$title,
+						'URL'=>$url,
+						'RECURRING'=>$event['e_recurrence']!='none',
+					)));
 
 					if ($event['e_priority']<$worst_priority)
 					{
@@ -1222,7 +1280,21 @@ class Module_calendar
 					$class='multiple';
 					$e_count=integer_format($entries[$j]);
 					$events_and_priority_lang=do_lang_tempcode('TOTAL_EVENTS_AND_HIGHEST_PRIORITY',make_string_tempcode($e_count),do_lang_tempcode('PRIORITY_'.strval($priorities[$j])));
-					$__entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array('_GUID'=>'9f016773fce6402eca1a7a0afa6bb89f','CURRENT'=>date('Y-m-d')==$date,'DAY_URL'=>$day_url,'DATE'=>$date_formatted,'TITLE'=>'','TIME'=>'','URL'=>'','ID'=>'','PRIORITY'=>strval($priorities[$j]),'DAY'=>strval($j),'ICON'=>'','COUNT'=>$e_count,'EVENTS_AND_PRIORITY_LANG'=>$events_and_priority_lang)));
+					$__entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array(
+						'_GUID'=>'9f016773fce6402eca1a7a0afa6bb89f',
+						'CURRENT'=>date('Y-m-d')==$date,
+						'DAY_URL'=>$day_url,
+						'DATE'=>$date_formatted,
+						'TITLE'=>'',
+						'TIME'=>'',
+						'URL'=>'',
+						'ID'=>'',
+						'PRIORITY'=>strval($priorities[$j]),
+						'DAY'=>strval($j),
+						'ICON'=>'',
+						'COUNT'=>$e_count,
+						'EVENTS_AND_PRIORITY_LANG'=>$events_and_priority_lang,
+					)));
 				}
 
 				if ($dotw==6)

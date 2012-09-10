@@ -169,11 +169,26 @@ class Module_tester
 			$num_tests_incomplete=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=0 AND (t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))');
 			$num_tests=$num_tests_successful+$num_tests_failed+$num_tests_incomplete;
 
-			$t=do_template('TESTER_STATISTICS_MEMBER',array('_GUID'=>'80778fd574859f966686212566ba67bc','TESTER'=>$t_username,'NUM_TESTS'=>integer_format($num_tests),'NUM_TESTS_SUCCESSFUL'=>integer_format($num_tests_successful),'NUM_TESTS_FAILED'=>integer_format($num_tests_failed),'NUM_TESTS_INCOMPLETE'=>integer_format($num_tests_incomplete)));
+			$t=do_template('TESTER_STATISTICS_MEMBER',array(
+				'_GUID'=>'80778fd574859f966686212566ba67bc',
+				'TESTER'=>$t_username,
+				'NUM_TESTS'=>integer_format($num_tests),
+				'NUM_TESTS_SUCCESSFUL'=>integer_format($num_tests_successful),
+				'NUM_TESTS_FAILED'=>integer_format($num_tests_failed),
+				'NUM_TESTS_INCOMPLETE'=>integer_format($num_tests_incomplete),
+			));
 			$testers->attach($t);
 		}
 
-		return do_template('TESTER_STATISTICS_SCREEN',array('_GUID'=>'3f4bcbccbdc2e60ad7324cb28ed942b5','TITLE'=>$title,'TESTERS'=>$testers,'NUM_TESTS'=>integer_format($num_tests),'NUM_TESTS_SUCCESSFUL'=>integer_format($num_tests_successful),'NUM_TESTS_FAILED'=>integer_format($num_tests_failed),'NUM_TESTS_INCOMPLETE'=>integer_format($num_tests_incomplete)));
+		return do_template('TESTER_STATISTICS_SCREEN',array(
+			'_GUID'=>'3f4bcbccbdc2e60ad7324cb28ed942b5',
+			'TITLE'=>$title,
+			'TESTERS'=>$testers,
+			'NUM_TESTS'=>integer_format($num_tests),
+			'NUM_TESTS_SUCCESSFUL'=>integer_format($num_tests_successful),
+			'NUM_TESTS_FAILED'=>integer_format($num_tests_failed),
+			'NUM_TESTS_INCOMPLETE'=>integer_format($num_tests_incomplete),
+		));
 	}
 
 	/**
@@ -260,7 +275,15 @@ class Module_tester
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_go'),'_SELF');
 
-		return do_template('TESTER_GO_SCREEN',array('_GUID'=>'22b3b626cb510e64a795d95acc0ad8a2','ADD_TEST_SECTION_URL'=>$add_test_section_url,'SHOW_SUCCESSFUL'=>strval($show_successful),'SHOW_FOR_ALL'=>strval($show_for_all),'TITLE'=>$title,'SECTIONS'=>$sections,'URL'=>$post_url));
+		return do_template('TESTER_GO_SCREEN',array(
+			'_GUID'=>'22b3b626cb510e64a795d95acc0ad8a2',
+			'ADD_TEST_SECTION_URL'=>$add_test_section_url,
+			'SHOW_SUCCESSFUL'=>strval($show_successful),
+			'SHOW_FOR_ALL'=>strval($show_for_all),
+			'TITLE'=>$title,
+			'SECTIONS'=>$sections,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**

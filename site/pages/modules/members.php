@@ -118,17 +118,7 @@ class Module_members
 
 		$title=get_screen_title('MEMBERS');
 
-		require_code('templates_internalise_screen');
-		$test_tpl=internalise_own_screen($title);
-		if (is_object($test_tpl)) return $test_tpl;
-
-		if (running_script('iframe'))
-		{
-			$get_url=find_script('iframe');
-		} else
-		{
-			$get_url=find_script('index');
-		}
+		$get_url=get_self_url(true);
 		$hidden=build_keep_form_fields('_SELF',true,array('filter'));
 
 		$start=get_param_integer('md_start',0);
@@ -267,7 +257,23 @@ class Module_members
 			}
 		}
 
-		return do_template('OCF_MEMBER_DIRECTORY_SCREEN',array('_GUID'=>'096767e9aaabce9cb3e6591b7bcf95b8','MAX'=>strval($max),'PAGINATION'=>$pagination,'MEMBER_BOXES'=>$member_boxes,'OTHER_IDS'=>$other_ids,'USERGROUPS'=>$usergroups,'HIDDEN'=>$hidden,'SYMBOLS'=>$symbols,'SEARCH'=>$search,'GET_URL'=>$get_url,'TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+		$tpl=do_template('OCF_MEMBER_DIRECTORY_SCREEN',array(
+			'_GUID'=>'096767e9aaabce9cb3e6591b7bcf95b8',
+			'MAX'=>strval($max),
+			'PAGINATION'=>$pagination,
+			'MEMBER_BOXES'=>$member_boxes,
+			'OTHER_IDS'=>$other_ids,
+			'USERGROUPS'=>$usergroups,
+			'HIDDEN'=>$hidden,
+			'SYMBOLS'=>$symbols,
+			'SEARCH'=>$search,
+			'GET_URL'=>$get_url,
+			'TITLE'=>$title,
+			'RESULTS_TABLE'=>$results_table,
+		));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

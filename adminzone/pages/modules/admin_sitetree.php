@@ -380,7 +380,16 @@ class Module_admin_sitetree
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'a7310327788808856f1da4351f116b92','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'TITLE'=>$title,'SUBMIT_NAME'=>$submit_name,'TEXT'=>paragraph(do_lang_tempcode('SELECT_PAGES_DELETE')),'URL'=>$post_url,'HIDDEN'=>$hidden));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'a7310327788808856f1da4351f116b92',
+			'SKIP_VALIDATION'=>true,
+			'FIELDS'=>$fields,
+			'TITLE'=>$title,
+			'SUBMIT_NAME'=>$submit_name,
+			'TEXT'=>paragraph(do_lang_tempcode('SELECT_PAGES_DELETE')),
+			'URL'=>$post_url,
+			'HIDDEN'=>$hidden,
+		));
 	}
 
 	/**

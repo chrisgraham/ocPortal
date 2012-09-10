@@ -68,7 +68,17 @@ class Hook_paypal
 			$user_details['country']=get_ocp_cpf('country');
 		}
 
-		return do_template('ECOM_BUTTON_VIA_PAYPAL',array('_GUID'=>'b0d48992ed17325f5e2330bf90c85762','PRODUCT'=>$product,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url,'MEMBER_ADDRESS'=>$user_details));
+		return do_template('ECOM_BUTTON_VIA_PAYPAL',array(
+			'_GUID'=>'b0d48992ed17325f5e2330bf90c85762',
+			'PRODUCT'=>$product,
+			'ITEM_NAME'=>$item_name,
+			'PURCHASE_ID'=>$purchase_id,
+			'AMOUNT'=>float_to_raw_string($amount),
+			'CURRENCY'=>$currency,
+			'PAYMENT_ADDRESS'=>$payment_address,
+			'IPN_URL'=>$ipn_url,
+			'MEMBER_ADDRESS'=>$user_details,
+		));
 	}
 
 	/**
@@ -88,7 +98,8 @@ class Hook_paypal
 	{
 		$payment_address=$this->_get_payment_address();
 		$ipn_url=$this->get_ipn_url();
-		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL',array('_GUID'=>'7c8b9ce1f60323e118da1bef416adff3','PRODUCT'=>$product,'ITEM_NAME'=>$item_name,'LENGTH'=>strval($length),'LENGTH_UNITS'=>$length_units,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url));
+		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL',array(
+			'_GUID'=>'7c8b9ce1f60323e118da1bef416adff3','PRODUCT'=>$product,'ITEM_NAME'=>$item_name,'LENGTH'=>strval($length),'LENGTH_UNITS'=>$length_units,'PURCHASE_ID'=>$purchase_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url));
 	}
 
 	/**
@@ -252,7 +263,16 @@ class Hook_paypal
 			$user_details['country']=get_ocp_cpf('country');
 		}
 
-		return do_template('ECOM_CART_BUTTON_VIA_PAYPAL',array('_GUID'=>'89b7edf976ef0143dd8dfbabd3378c95','ITEMS'=>$items,'CURRENCY'=>$currency,'PAYMENT_ADDRESS'=>$payment_address,'IPN_URL'=>$ipn_url,'ORDER_ID'=>strval($order_id),'NOTIFICATION_TEXT'=>$notification_text,'MEMBER_ADDRESS'=>$user_details));
+		return do_template('ECOM_CART_BUTTON_VIA_PAYPAL',array(
+			'_GUID'=>'89b7edf976ef0143dd8dfbabd3378c95',
+			'ITEMS'=>$items,
+			'CURRENCY'=>$currency,
+			'PAYMENT_ADDRESS'=>$payment_address,
+			'IPN_URL'=>$ipn_url,
+			'ORDER_ID'=>strval($order_id),
+			'NOTIFICATION_TEXT'=>$notification_text,
+			'MEMBER_ADDRESS'=>$user_details,
+		));
 	}
 
 	/**

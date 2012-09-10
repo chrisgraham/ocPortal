@@ -43,7 +43,17 @@ class Hook_symbol_CHAT_IM
 			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url(-100,false,true);
 			if (is_object($profile_url)) $profile_url=$profile_url->evaluate();
 			$profile_url=str_replace('-100','__id__',$profile_url);
-			$im_participant_template=do_template('CHAT_LOBBY_IM_PARTICIPANT',array('_GUID'=>'0c5e080d0afb29814a6e3059f0204ad1','PROFILE_URL'=>$profile_url,'ID'=>'__id__','ROOM_ID'=>'__room_id__','USERNAME'=>'__username__','ONLINE'=>'__online__','AVATAR_URL'=>'__avatar_url__','MAKE_FRIEND_URL'=>$make_friend_url,'BLOCK_MEMBER_URL'=>$block_member_url));
+			$im_participant_template=do_template('CHAT_LOBBY_IM_PARTICIPANT',array(
+				'_GUID'=>'0c5e080d0afb29814a6e3059f0204ad1',
+				'PROFILE_URL'=>$profile_url,
+				'ID'=>'__id__',
+				'ROOM_ID'=>'__room_id__',
+				'USERNAME'=>'__username__',
+				'ONLINE'=>'__online__',
+				'AVATAR_URL'=>'__avatar_url__',
+				'MAKE_FRIEND_URL'=>$make_friend_url,
+				'BLOCK_MEMBER_URL'=>$block_member_url,
+			));
 			$_value=do_template('CHAT_SITEWIDE_IM',array('_GUID'=>'5ab0404b3dac4578e8b4be699bd43c95','IM_AREA_TEMPLATE'=>$im_area_template,'IM_PARTICIPANT_TEMPLATE'=>$im_participant_template,'CHAT_SOUND'=>get_chat_sound_tpl()));
 			$value=$_value->evaluate();
 		}

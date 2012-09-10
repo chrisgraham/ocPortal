@@ -85,10 +85,9 @@ function activities_addon_syndicate_described_activity($a_language_string_code='
 
 function activities_ajax_submit_handler()
 {
+	prepare_for_known_ajax_response();
+
 	header('Content-Type: text/xml');
-//	header('HTTP/1.0 200 Ok');
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
 	$response ='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
 	$response.='<response><content>';
@@ -121,14 +120,14 @@ function activities_ajax_submit_handler()
 				else
 				{
 					$stored_id=activities_addon_syndicate_described_activity('RAW_DUMP',
-													$map['STATUS'],
-													'',
-													'',
-													'',
-													'',
-													'',
-													'',
-													($map['PRIVACY']=='public')?1:0
+						$map['STATUS'],
+						'',
+						'',
+						'',
+						'',
+						'',
+						'',
+						($map['PRIVACY']=='public')?1:0
 					);
 
 					if ($stored_id>0)
@@ -181,9 +180,9 @@ function activities_ajax_update_list_handler()
 
 	list($proceed_selection,$whereville)=find_activities($viewer_id,$mode,$member_ids);
 
-	header("Content-Type: text/xml");
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
+
+	header('Content-Type: text/xml');
 
 	$response ='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
 
@@ -200,7 +199,18 @@ function activities_ajax_update_list_handler()
 			{
 				list($message,$memberpic,$datetime,$member_url)=render_activity($row);
 
-				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array('_GUID'=>'02dfa8b02040f56d76b783ddb8fb382f','LANG_STRING'=>'RAW_DUMP', 'ADDON_ICON'=>find_addon_icon($row['a_addon']), 'BITS'=>$message, 'MEMPIC'=>$memberpic, 'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']), 'DATETIME'=>strval($datetime), 'MEMBER_URL'=>$member_url, 'LIID'=>strval($row['id']), 'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)));
+				$list_item=do_template('BLOCK_MAIN_ACTIVITIES_XML',array(
+					'_GUID'=>'02dfa8b02040f56d76b783ddb8fb382f',
+					'LANG_STRING'=>'RAW_DUMP',
+					'ADDON_ICON'=>find_addon_icon($row['a_addon']),
+					'BITS'=>$message,
+					'MEMPIC'=>$memberpic,
+					'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']),
+					'DATETIME'=>strval($datetime),
+					'MEMBER_URL'=>$member_url,
+					'LIID'=>strval($row['id']),
+					'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others,
+				)));
 				// We dump our response in CDATA, since that lets us work around the
 				// fact that our list elements aren't actually in a list, etc.
 				// However, we allow comcode but some tags make use of CDATA. Since
@@ -236,9 +246,9 @@ function activities_ajax_removal_handler()
 
 	$can_remove_others=(has_zone_access($viewer_id,'adminzone'))?true:false;
 
+	prepare_for_known_ajax_response();
+
 	header('Content-Type: text/xml');
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
 	$response ='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>';
 	$response.='<response>';

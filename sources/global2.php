@@ -23,7 +23,7 @@
  */
 function init__global2()
 {
-	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS;
+	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BROWSER_DECACHEING_CACHE,$CHARSET_CACHE,$TEMP_CHARSET_CACHE,$RELATIVE_PATH,$CURRENTLY_HTTPS_CACHE,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE_CACHE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$CACHE_TEMPLATES,$BASE_URL_HTTP_CACHE,$BASE_URL_HTTPS_CACHE,$WORDS_TO_FILTER_CACHE,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$FIND_SCRIPT_CACHE,$WHAT_IS_RUNNING_CACHE,$DEV_MODE,$SEMI_DEV_MODE,$IS_VIRTUALISED_REQUEST,$FILE_ARRAY,$DIR_ARRAY,$JAVASCRIPTS_DEFAULT,$JAVASCRIPTS,$KNOWN_AJAX;
 
 	if (ini_get('output_buffering')=='1') @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
@@ -84,6 +84,7 @@ function init__global2()
 	$FIELD_RESTRICTIONS=NULL;
 	$VALID_ENCODING=false;
 	$CONVERTED_ENCODING=false;
+	$KNOWN_AJAX=false;
 	/** Whether we are loading up in micro-bootup mode (reduced amount of loading for quicker simple responses).
 	 * @global BINARY $MICRO_BOOTUP
 	 */
@@ -476,6 +477,20 @@ function init__global2()
 			ocf_upgrade();
 		}
 	}
+}
+
+/**
+ * Get ready for outputting an AJAX response.
+ */
+function prepare_for_known_ajax_response()
+{
+	header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
+	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+
+	convert_data_encodings(true);
+
+	global $KNOWN_AJAX;
+	$KNOWN_AJAX=true;
 }
 
 /**
@@ -1154,10 +1169,10 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		{
 			if ((get_option('enable_https',true)=='0') || (!running_script('index')))
 			{
-				$https=false;
+				$https=tacit_https();
 			} else
 			{
-				$https=function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name()));
+				$https=((tacit_https()) || (function_exists('is_page_https')) && (function_exists('get_zone_name')) && (is_page_https(get_zone_name(),get_page_name())));
 			}
 			$CURRENTLY_HTTPS_CACHE=$https;
 		}
@@ -1185,6 +1200,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 			$SITE_INFO['base_url']='http://'.$domain.$port.str_replace('%2F','/',rawurlencode(preg_replace('#/'.preg_quote($GLOBALS['RELATIVE_PATH'],'#').'$#','',str_replace('\\','/',dirname(ocp_srv('PHP_SELF'))))));
 	}
 
+	// Lookup
 	$base_url=$SITE_INFO['base_url'];
 	global $CURRENT_SHARE_USER;
 	if ($CURRENT_SHARE_USER!==NULL)
@@ -1192,7 +1208,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		$base_url=preg_replace('#^http://([\w]+\.)?'.preg_quote($SITE_INFO['custom_share_domain'],'#').'#','http://'.ocp_srv('HTTP_HOST'),$base_url);
 	}
 	$found_mapping=false;
-	if ($VIRTUALISED_ZONES_CACHE)
+	if ($VIRTUALISED_ZONES_CACHE) // Special searching if we are doing a complex zone scheme
 	{
 		$zone_doing=($zone_for===NULL)?'':str_replace('/','',$zone_for);
 
@@ -1206,17 +1222,19 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		}
 	}
 
+	// Work out correct variant
 	if ($https)
 	{
 		$base_url='https://'.preg_replace('#^\w*://#','',$base_url);
 		if ((!$VIRTUALISED_ZONES_CACHE) || ($zone_for===NULL)) $BASE_URL_HTTPS_CACHE=$base_url;
 	} elseif ((!$VIRTUALISED_ZONES_CACHE) || ($zone_for===NULL)) $BASE_URL_HTTP_CACHE=$base_url;
 
-	if (!$found_mapping)
+	if (!$found_mapping) // Scope inside the correct zone
 	{
 		$base_url.=(($zone_for=='')?'':('/'.$zone_for));
 	}
 
+	// Done
 	return $base_url;
 }
 
@@ -1630,7 +1648,7 @@ function javascript_tempcode($position=NULL)
 
 	// Special merge operation for staff. In truth it's to get a better score on Google Page Speed ;)
 	$to_merge=array('javascript_staff','javascript_button_occle','javascript_fractional_edit');
-	$good_to_merge=true;
+	$good_to_merge=$minify;
 	foreach ($to_merge as $j)
 		if (!array_key_exists($j,$JAVASCRIPTS)) $good_to_merge=false;
 	if ($good_to_merge)
@@ -1645,7 +1663,7 @@ function javascript_tempcode($position=NULL)
 		$write_path=$dir.'/'.filter_naughty_harsh($j);
 		$write_path.='.js';
 
-		/*$rebuild=false;	Performance hit
+		/*$rebuild=false;	Performance hit			Just turn off minification for better debugging
 		foreach ($to_merge as $j2)
 		{
 			$merge_from=javascript_enforce($j2);

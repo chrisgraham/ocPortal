@@ -76,7 +76,6 @@ class Hook_addon_registry_core_adminzone_frontpage
 			'sources/hooks/systems/addon_registry/core_adminzone_frontpage.php',
 			'BLOCK_MAIN_STAFF_NEW_VERSION.tpl',
 			'BLOCK_MAIN_STAFF_TIPS.tpl',
-			'BLOCK_MAIN_STAFF_TIPS_IFRAME.tpl',
 			'BLOCK_MAIN_STAFF_CHECKLIST.tpl',
 			'BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK.tpl',
 			'BLOCK_MAIN_STAFF_CHECKLIST_ITEM.tpl',
@@ -84,7 +83,6 @@ class Hook_addon_registry_core_adminzone_frontpage
 			'BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0.tpl',
 			'BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1.tpl',
 			'BLOCK_MAIN_NOTES.tpl',
-			'adminzone/staff_tips.php',
 			'lang/EN/staff_checklist.ini',
 			'sources/hooks/systems/cron/staff_checklist_notify.php',
 			'sources/hooks/systems/notifications/staff_checklist.php',
@@ -113,7 +111,8 @@ class Hook_addon_registry_core_adminzone_frontpage
 			'BLOCK_MAIN_STAFF_WEBSITE_MONITORING.tpl',
 			'themes/default/images/checklist/cross.png',
 			'themes/default/images/checklist/cross2.png',
-			'sources/hooks/systems/notifications/checklist_task.php'
+			'sources/hooks/systems/notifications/checklist_task.php',
+			'BLOCK_MAIN_STAFF_ACTIONS.tpl',
 		);
 	}
 
@@ -127,7 +126,6 @@ class Hook_addon_registry_core_adminzone_frontpage
 	{
 		return array(
 			'BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK.tpl'=>'administrative__block_main_staff_checklist',
-			'BLOCK_MAIN_STAFF_TIPS_IFRAME.tpl'=>'administrative__block_main_staff_tips_iframe',
 			'BLOCK_MAIN_NOTES.tpl'=>'block_main_notes',
 			'BLOCK_MAIN_STAFF_CHECKLIST.tpl'=>'administrative__block_main_staff_checklist',
 			'BLOCK_MAIN_STAFF_NEW_VERSION.tpl'=>'administrative__block_main_staff_new_version',
@@ -137,7 +135,8 @@ class Hook_addon_registry_core_adminzone_frontpage
 			'BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_NA.tpl'=>'administrative__block_main_staff_checklist',
 			'BLOCK_MAIN_STAFF_TIPS.tpl'=>'administrative__block_main_staff_tips',
 			'BLOCK_MAIN_STAFF_LINKS.tpl'=>'administrative__block_main_staff_links',
-			'BLOCK_MAIN_STAFF_WEBSITE_MONITORING.tpl'=>'administrative__block_main_staff_website_monitoring'
+			'BLOCK_MAIN_STAFF_WEBSITE_MONITORING.tpl'=>'administrative__block_main_staff_website_monitoring',
+			'BLOCK_MAIN_STAFF_ACTIONS.tpl'=>'administrative__block_main_staff_actions',
 		);
 	}
 
@@ -177,7 +176,8 @@ class Hook_addon_registry_core_adminzone_frontpage
 				'URL'=>placeholder_url(),
 				'SITEURLS'=>$urls,
 				'BLOCK_NAME'=>'',
-				'MAP'=>''
+				'MAP'=>'',
+				'BLOCK_PARAMS'=>'',
 			)), NULL, '', true)
 		);
 	}
@@ -217,20 +217,6 @@ class Hook_addon_registry_core_adminzone_frontpage
 				'BLOCK_NAME'=>'',
 				'MAP'=>''
 			)), NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__administrative__block_main_staff_tips_iframe()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_TIPS_IFRAME', array()), NULL, '', true)
 		);
 	}
 
@@ -366,6 +352,7 @@ class Hook_addon_registry_core_adminzone_frontpage
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_TIPS', array(
+				'BLOCK_PARAMS'=>'',
 				'TIP'=>lorem_phrase(),
 				'TIP_CODE'=>lorem_phrase(),
 				'LEVEL'=>lorem_phrase(),
@@ -373,4 +360,22 @@ class Hook_addon_registry_core_adminzone_frontpage
 			)), NULL, '', true)
 		);
 	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__administrative__block_main_staff_actions()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_ACTIONS', array(
+				'BLOCK_PARAMS'=>'',
+				'CONTENT'=>lorem_placeholder_html(),
+			)), NULL, '', true)
+		);
+	}
+
 }

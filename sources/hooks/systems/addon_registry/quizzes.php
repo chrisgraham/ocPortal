@@ -100,6 +100,7 @@ class Hook_addon_registry_quizzes
 			'sources/hooks/modules/search/quiz.php',
 			'sources/hooks/systems/do_next_menus/quiz.php',
 			'sources/quiz.php',
+			'sources/quiz2.php',
 			'themes/default/images/bigicons/survey_results.png',
 			'themes/default/images/pagepics/survey_results.png',
 			'sources/hooks/systems/preview/quiz.php',

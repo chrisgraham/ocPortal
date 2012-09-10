@@ -96,7 +96,10 @@ class Module_leader_board
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('POINT_LEADERBOARD'),$start,'lb_start',$max,'lb_max',$num_weeks);
 
-		return do_template('POINTS_LEADERBOARD_SCREEN',array('_GUID'=>'bab5f7b661435b83800532d3eebd0d54','TITLE'=>$title,'WEEKS'=>$out,'PAGINATION'=>$pagination));
+		$tpl=do_template('POINTS_LEADERBOARD_SCREEN',array('_GUID'=>'bab5f7b661435b83800532d3eebd0d54','TITLE'=>$title,'WEEKS'=>$out,'PAGINATION'=>$pagination));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 }

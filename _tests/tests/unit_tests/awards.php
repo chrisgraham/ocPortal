@@ -24,7 +24,7 @@ class awards_test_set extends ocp_test_case
 	{
 		parent::setUp();
 
-		require_code('awards');
+		require_code('awards2');
 
 		$this->award_id=add_award_type('test','test',1,'download',0,250);
 

@@ -740,7 +740,18 @@ function render_php_function($function,$class,$show_filename=false)
 	$filename=$show_filename?$function['filename']:'';
 	if (!isset($class['name'])) $class['name']='';
 
-	$a=do_template('PHP_FUNCTION',array('_GUID'=>'f01224ffadc5cde023a1777b9267da61','FILENAME'=>$filename,'CODE'=>$code,'RETURN_TYPE'=>$return_type,'FUNCTION'=>$function['name'],'CLASS'=>$class['name'],'PARAMETERS'=>$parameters,'DESCRIPTION'=>$description,'FULL_PARAMETERS'=>$full_parameters,'RETURN'=>$return));
+	$a=do_template('PHP_FUNCTION',array(
+		'_GUID'=>'f01224ffadc5cde023a1777b9267da61',
+		'FILENAME'=>$filename,
+		'CODE'=>$code,
+		'RETURN_TYPE'=>$return_type,
+		'FUNCTION'=>$function['name'],
+		'CLASS'=>$class['name'],
+		'PARAMETERS'=>$parameters,
+		'DESCRIPTION'=>$description,
+		'FULL_PARAMETERS'=>$full_parameters,
+		'RETURN'=>$return,
+	));
 	$b=do_template('PHP_FUNCTION_SUMMARY',array('_GUID'=>'ac91501d0fcef2f17c7f068f0d506d42','FILENAME'=>$filename,'RETURN_TYPE'=>$return_type,'CLASS'=>$class['name'],'FUNCTION'=>$function['name'],'PARAMETERS'=>$parameters));
 
 	return array($a,$b);

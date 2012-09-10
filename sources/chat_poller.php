@@ -40,8 +40,8 @@ function chat_poller()
 		require_code('chat');
 		chat_room_prune($room_id);
 
-		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+		prepare_for_known_ajax_response();
+
 		header('Content-Type: application/xml');
 
 		$output='<?xml version="1.0" encoding="'.get_charset().'" ?'.'>

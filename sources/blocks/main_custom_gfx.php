@@ -54,7 +54,7 @@ class Block_main_custom_gfx
 		$type_id=$map['param'];
 
 		if ((!file_exists(get_file_base().'/sources/hooks/blocks/main_custom_gfx/'.filter_naughty_harsh($type_id).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/blocks/main_custom_gfx/'.filter_naughty_harsh($type_id).'.php')))
-			return paragraph(do_lang_tempcode('NO_SUCH_RENDERER',$type_id));
+			return paragraph(do_lang_tempcode('NO_SUCH_RENDERER',$type_id),'','red_alert');
 
 		require_code('hooks/blocks/main_custom_gfx/'.filter_naughty_harsh($type_id),true);
 		$object=object_factory('Hook_main_custom_gfx_'.$type_id);
@@ -93,7 +93,7 @@ class Block_main_custom_gfx
 			$img=@imagecreatefromstring($file_contents);
 			if ($img===false)
 			{
-				return paragraph(do_lang_tempcode('CORRUPT_FILE',escape_html($img_path)));
+				return paragraph(do_lang_tempcode('CORRUPT_FILE',escape_html($img_path)),'','red_alert');
 			}
 
 			imagealphablending($img,true);

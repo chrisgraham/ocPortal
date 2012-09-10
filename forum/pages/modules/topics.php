@@ -188,7 +188,17 @@ class Module_topics
 		$hidden->attach(build_keep_form_fields());
 		$fields->attach(form_input_line(do_lang_tempcode('REASON'),'','reason','',false));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'85e30370bb9e45b2b9a7cd6463d69557','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'85e30370bb9e45b2b9a7cd6463d69557',
+			'SKIP_VALIDATION'=>true,
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'HIDDEN'=>$hidden,
+			'TITLE'=>$title,
+			'TEXT'=>$text,
+			'URL'=>$post_url,
+			'FIELDS'=>$fields,
+			'SUBMIT_NAME'=>$submit_name,
+		));
 	}
 
 	/**
@@ -411,7 +421,16 @@ class Module_topics
 		$submit_name=do_lang_tempcode('MOVE_POSTS');
 		$text=do_lang_tempcode('MOVE_POSTS_A_TEXT');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'d62d2c81583398f26f900ee3df1894b1','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'d62d2c81583398f26f900ee3df1894b1',
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'HIDDEN'=>$hidden,
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>$text,
+			'SUBMIT_NAME'=>$submit_name,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**
@@ -447,7 +466,16 @@ class Module_topics
 		$submit_name=do_lang_tempcode('MOVE_POSTS');
 		$text=do_lang_tempcode('MOVE_POSTS_B_TEXT');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'a476da1fecfbd932db4853cdbd7cfedd','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'a476da1fecfbd932db4853cdbd7cfedd',
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'HIDDEN'=>$hidden,
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>$text,
+			'SUBMIT_NAME'=>$submit_name,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**
@@ -862,7 +890,17 @@ class Module_topics
 		$action_list->attach(do_lang_tempcode('MULTI_MODERATION_WILL_POST'));
 		$text=do_lang_tempcode('MULTI_MODERATION_WILL',make_string_tempcode($mm_title),$action_list);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'69908b7e2711414c13395535d6547096','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_forum_helpdesk','PREVIEW'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'69908b7e2711414c13395535d6547096',
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_forum_helpdesk',
+			'PREVIEW'=>true,
+			'HIDDEN'=>$hidden,
+			'TITLE'=>$title,
+			'TEXT'=>$text,
+			'URL'=>$post_url,
+			'FIELDS'=>$fields,
+			'SUBMIT_NAME'=>$submit_name,
+		));
 	}
 
 	/**
@@ -919,7 +957,17 @@ class Module_topics
 
 		$title=get_screen_title('MOVE_TOPICS');
 		$submit_name=do_lang_tempcode('MOVE_TOPICS');
-		return do_template('FORM_SCREEN',array('_GUID'=>'7532b5e7239e0f9ceb64d09c28fd7261','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'7532b5e7239e0f9ceb64d09c28fd7261',
+			'SKIP_VALIDATION'=>true,
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'HIDDEN'=>$hidden,
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>'',
+			'SUBMIT_NAME'=>$submit_name,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**
@@ -2208,7 +2256,17 @@ END;
 
 			$fields->attach(form_input_tick(do_lang_tempcode('DELETE_POSTS_FROM_IP'),do_lang_tempcode('DELETE_POSTS_FROM_IP_DESCRIPTION'),'post_all',false));
 
-			return do_template('FORM_SCREEN',array('_GUID'=>'c10e882fa621b5230f455b41f40514c0','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+			return do_template('FORM_SCREEN',array(
+				'_GUID'=>'c10e882fa621b5230f455b41f40514c0',
+				'SKIP_VALIDATION'=>true,
+				'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+				'HIDDEN'=>$hidden,
+				'TITLE'=>$title,
+				'TEXT'=>$text,
+				'URL'=>$post_url,
+				'FIELDS'=>$fields,
+				'SUBMIT_NAME'=>$submit_name,
+			));
 		}
 
 		return $this->relay_with_reason('DELETE_POST');
@@ -2636,7 +2694,14 @@ END;
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
 		$title=get_screen_title('EDIT_POST');
-		return do_template('POSTING_SCREEN',array('_GUID'=>'347e469de58882bf77722bba6ed4aba4','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','TITLE'=>$title,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'POSTING_FORM'=>$posting_form));
+		return do_template('POSTING_SCREEN',array(
+			'_GUID'=>'347e469de58882bf77722bba6ed4aba4',
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'TITLE'=>$title,
+			'PING_URL'=>$ping_url,
+			'WARNING_DETAILS'=>$warning_details,
+			'POSTING_FORM'=>$posting_form,
+		));
 	}
 
 	/**
@@ -2858,7 +2923,16 @@ END;
 
 		$title=get_screen_title('EDIT_TOPIC');
 		$submit_name=do_lang_tempcode('SAVE');
-		return do_template('FORM_SCREEN',array('_GUID'=>'071b6747a1df1cf8e72f8f542422aa5b','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden_fields,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'071b6747a1df1cf8e72f8f542422aa5b',
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'HIDDEN'=>$hidden_fields,
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>'',
+			'SUBMIT_NAME'=>$submit_name,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**
@@ -2935,7 +3009,17 @@ END;
 		$title=get_screen_title('_DELETE_TOPIC',true,array(escape_html($topic_title)));
 		$submit_name=do_lang_tempcode('DELETE');
 		$text=paragraph(do_lang_tempcode('DELETE_TOPIC_TEXT'));
-		return do_template('FORM_SCREEN',array('_GUID'=>'00b84f337de3683bfcdb60ea3086afa0','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>$hidden,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'00b84f337de3683bfcdb60ea3086afa0',
+			'SKIP_VALIDATION'=>true,
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'HIDDEN'=>$hidden,
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>$text,
+			'SUBMIT_NAME'=>$submit_name,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**
@@ -2976,10 +3060,24 @@ END;
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),do_lang_tempcode('MEMBER_TO_INVITE'),'username','',false));
 
 		$title=get_screen_title('INVITE_MEMBER_TO_PT');
+
 		$submit_name=do_lang_tempcode('INVITE_MEMBER_TO_PT');
+
 		$text=paragraph(do_lang_tempcode('INVITE_MEMBER_TO_PT_TEXT'));
+
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_invite_member','topic_id'=>$topic_id),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'9f28869bd74262ae20ba79ace14b87ca','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'9f28869bd74262ae20ba79ace14b87ca',
+			'SKIP_VALIDATION'=>true,
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance',
+			'HIDDEN'=>'',
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>$text,
+			'SUBMIT_NAME'=>$submit_name,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**
@@ -3041,7 +3139,19 @@ END;
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'992a1bfd025e3fabea9d13307cfd2a91','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','PREVIEW'=>true,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'992a1bfd025e3fabea9d13307cfd2a91',
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'PREVIEW'=>true,
+			'PING_URL'=>$ping_url,
+			'WARNING_DETAILS'=>$warning_details,
+			'HIDDEN'=>'',
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>'',
+			'SUBMIT_NAME'=>$submit_name,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**
@@ -3154,7 +3264,18 @@ END;
 		$topic_title=$topic_info[0]['t_cache_first_title'];
 		$title=get_screen_title('_MOVE_TOPIC',true,array(escape_html($topic_title)));
 		$submit_name=do_lang_tempcode('MOVE_TOPIC');
-		return do_template('FORM_SCREEN',array('_GUID'=>'313fd175ccd376caa32794fedad21ac6','SKIP_VALIDATION'=>true,'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod','HIDDEN'=>'','TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'313fd175ccd376caa32794fedad21ac6',
+			'SKIP_VALIDATION'=>true,
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_mod',
+			'HIDDEN'=>'',
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>'',
+			'SUBMIT_NAME'=>$submit_name,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**
@@ -3349,7 +3470,17 @@ END;
 		$action_list->attach(do_lang_tempcode('MULTI_MODERATION_WILL_POST'));
 		$text=do_lang_tempcode('MULTI_MODERATION_WILL',make_string_tempcode($mm_title),$action_list);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'2eef0c445d207bb10ff3fd28ea32ef8c','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_forum_helpdesk','PREVIEW'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'2eef0c445d207bb10ff3fd28ea32ef8c',
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_forum_helpdesk',
+			'PREVIEW'=>true,
+			'HIDDEN'=>$hidden,
+			'TITLE'=>$title,
+			'TEXT'=>$text,
+			'URL'=>$post_url,
+			'FIELDS'=>$fields,
+			'SUBMIT_NAME'=>$submit_name,
+		));
 	}
 
 	/**
@@ -3426,7 +3557,16 @@ END;
 		$fields->attach(form_input_username(do_lang_tempcode('FROM'),'','a',$a,true));
 		$fields->attach(form_input_username(do_lang_tempcode('TO'),'','b',$b,true));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'9416df197ee157510e9d6be7458d510f','STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'9416df197ee157510e9d6be7458d510f',
+			'STAFF_HELP_URL'=>brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance',
+			'HIDDEN'=>$hidden,
+			'TITLE'=>$title,
+			'TEXT'=>$text,
+			'URL'=>$post_url,
+			'FIELDS'=>$fields,
+			'SUBMIT_NAME'=>$submit_name,
+		));
 	}
 
 	/**

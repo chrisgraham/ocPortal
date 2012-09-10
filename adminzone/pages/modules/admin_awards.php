@@ -125,6 +125,7 @@ class Module_admin_awards extends standard_crud_module
 		set_helper_panel_tutorial('tut_featured');
 
 		require_code('awards');
+		require_code('awards2');
 
 		$this->add_text=do_lang_tempcode('AWARD_ALLOCATEHELP');
 
@@ -210,7 +211,7 @@ class Module_admin_awards extends standard_crud_module
 					if (is_null($hook_object)) continue;
 					$hook_info=$hook_object->info();
 					if (!is_null($hook_info))
-						$hook_title=do_lang($hook_info['title']);
+						$hook_title=do_lang($hook_info['content_type_label']);
 				}
 			}
 			$fr[]=$hook_title;
@@ -254,7 +255,7 @@ class Module_admin_awards extends standard_crud_module
 			if (is_null($hook_object)) continue;
 			$hook_info=$hook_object->info();
 			if (!is_null($hook_info))
-				$_hooks[$hook]=do_lang($hook_info['title']);
+				$_hooks[$hook]=do_lang($hook_info['content_type_label']);
 		}
 		asort($_hooks);
 		foreach ($_hooks as $hook=>$hook_title)

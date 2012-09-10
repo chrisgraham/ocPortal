@@ -676,7 +676,15 @@ class Hook_catalogue_items
 
 		$purchase_mod_url=build_url(array('page'=>'purchase','type'=>($licence=='')?(is_null($fields)?'pay':'details'):'licence','product'=>strval($id),'id'=>$id),'_SELF');
 
-		$map['CART_BUTTONS']=do_template('CATALOGUE_ENTRY_ADD_TO_CART',array('_GUID'=>'d4491c6e221b1f06375a6427da062bac','OUT_OF_STOCK'=>$out_of_stock,'ACTION_URL'=>$cart_url,'PRODUCT_ID'=>strval($id),'ALLOW_OPTOUT_TAX'=>get_option('allow_opting_out_of_tax'),'PURCHASE_ACTION_URL'=>$purchase_mod_url,'CART_URL'=>$shopping_cart_url));
+		$map['CART_BUTTONS']=do_template('CATALOGUE_ENTRY_ADD_TO_CART',array(
+			'_GUID'=>'d4491c6e221b1f06375a6427da062bac',
+			'OUT_OF_STOCK'=>$out_of_stock,
+			'ACTION_URL'=>$cart_url,
+			'PRODUCT_ID'=>strval($id),
+			'ALLOW_OPTOUT_TAX'=>get_option('allow_opting_out_of_tax'),
+			'PURCHASE_ACTION_URL'=>$purchase_mod_url,
+			'CART_URL'=>$shopping_cart_url,
+		));
 
 		$map['CART_LINK']=show_cart_image();
 	}

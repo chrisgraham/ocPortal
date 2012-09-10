@@ -401,7 +401,7 @@ function url_monikers_enabled()
  */
 function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=false,$skip_keep=false,$hash='')
 {
-	global $HAS_KEEP_IN_URL_CACHE,$USE_REWRITE_PARAMS_CACHE,$BOT_TYPE_CACHE,$WHAT_IS_RUNNING_CACHE;
+	global $HAS_KEEP_IN_URL_CACHE,$USE_REWRITE_PARAMS_CACHE,$BOT_TYPE_CACHE,$WHAT_IS_RUNNING_CACHE,$KNOWN_AJAX;
 
 	// Build up our URL base
 	$stub=get_base_url(is_page_https($zone_name,isset($vars['page'])?$vars['page']:''),$zone_name);
@@ -466,7 +466,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		if (!$avoid_remap) $USE_REWRITE_PARAMS_CACHE=$use_rewrite_params;
 	} else $use_rewrite_params=$USE_REWRITE_PARAMS_CACHE;
 	$test_rewrite=NULL;
-	$self_page=((!isset($vars['page'])) || ($vars['page']=='_SELF') || ($vars['page']==get_page_name())) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='_top');
+	$self_page=((!isset($vars['page'])) || ($vars['page']=='_SELF') || ($vars['page']==get_page_name())) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='_top') && (!$KNOWN_AJAX);
 	if ($use_rewrite_params)
 	{
 		if ((!$self_page) || ($WHAT_IS_RUNNING_CACHE==='index'))

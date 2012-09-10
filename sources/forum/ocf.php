@@ -1491,7 +1491,7 @@ class forum_driver_ocf extends forum_driver_base
 					$mail=do_lang('IP_VERIFY_MAIL',comcode_escape($url),comcode_escape(get_ip_address()),array($url_simple,$code),get_lang($row['id']));
 					$email_address=$row['m_email_address'];
 					if ($email_address=='') $email_address=get_option('staff_address');
-					if (running_script('index'))
+					if ((running_script('index')) || (running_script('iframe')))
 						mail_wrap(do_lang('IP_VERIFY_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($row['id'])),$mail,array($email_address),$row['m_username'],'','',1);
 
 					$SENT_OUT_VALIDATE_NOTICE=true;
@@ -1519,8 +1519,9 @@ class forum_driver_ocf extends forum_driver_base
 		if ($FLOOD_CONTROL_ONCE) return;
 		$FLOOD_CONTROL_ONCE=true;
 
-		if (get_page_name()=='join') return;
-		if ((!running_script('index')) && (!running_script('iframe'))) return;
+		// Don't do flood control in every situation
+		if (get_page_name()=='join') return; // Not when joining (too early to be annoying!)
+		if ((!running_script('index')) && (!running_script('iframe'))) return; // Not when probably running some AJAX script
 
 		require_code('ocf_groups');
 

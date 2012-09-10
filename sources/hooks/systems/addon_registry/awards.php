@@ -81,6 +81,7 @@ class Hook_addon_registry_awards
 			'adminzone/pages/modules/admin_awards.php',
 			'sources/blocks/main_awards.php',
 			'sources/awards.php',
+			'sources/awards2.php',
 			'site/pages/modules/awards.php',
 			'lang/EN/awards.ini',
 			'themes/default/images/pagepics/awards.png',
@@ -88,7 +89,8 @@ class Hook_addon_registry_awards
 			'sources/hooks/blocks/main_staff_checklist/awards.php',
 			'awards.css',
 			'themes/default/images/awarded.png',
-			'sources/hooks/modules/admin_import_types/awards.php'
+			'sources/hooks/modules/admin_import_types/awards.php',
+			'sources/hooks/systems/block_ui_renderers/awards.php',
 		);
 	}
 

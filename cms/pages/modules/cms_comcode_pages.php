@@ -510,7 +510,10 @@ class Module_cms_comcode_pages
 
 		$table=results_table(do_lang('COMCODE_PAGES'),$start,'start',$max,'max',$max_rows,$header_row,$table_rows,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'fdgfdfdfdggfd',true);
 
-		return do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'0b7285c14eb632ab50d0a497a240cf7a','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'FIELDS'=>$fields,'POST_URL'=>$post_url,'GET'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name));
+		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'0b7285c14eb632ab50d0a497a240cf7a','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'FIELDS'=>$fields,'POST_URL'=>$post_url,'GET'=>true,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>$submit_name));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -636,7 +639,8 @@ class Module_cms_comcode_pages
 			$new=false;
 		}
 
-		$map=array('page'=>'_SELF','type'=>'__ed','wide'=>1);
+		// Actualiser URL
+		$map=array('page'=>'_SELF','type'=>'__ed');
 		if ($simple_add) $map['simple_add']='1';
 		$post_url=build_url($map,'_SELF');
 
@@ -792,7 +796,12 @@ class Module_cms_comcode_pages
 				$fields2->attach(form_input_username(do_lang_tempcode('OWNER'),do_lang_tempcode('DESCRIPTION_OWNER'),'owner',$GLOBALS['FORUM_DRIVER']->get_username($owner),true));
 			}
 
-			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'a42341a9a2de532cecdcfbecaff00a0f','TITLE'=>do_lang_tempcode('SEO'),'SECTION_HIDDEN'=>true,'HELP'=>(get_option('show_docs')=='0')?NULL:protect_from_escaping(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_seo','tut_seo','1'))))));
+			$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+				'_GUID'=>'a42341a9a2de532cecdcfbecaff00a0f',
+				'TITLE'=>do_lang_tempcode('SEO'),
+				'SECTION_HIDDEN'=>true,
+				'HELP'=>(get_option('show_docs')=='0')?NULL:protect_from_escaping(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_seo','tut_seo','1')))
+			)));
 			$fields2->attach(form_input_line_multi(do_lang_tempcode('KEYWORDS'),do_lang_tempcode('DESCRIPTION_META_KEYWORDS'),'meta_keywords[]',array_map('trim',explode(',',preg_replace('#,+#',',',$meta_keywords))),0));
 			$fields2->attach(form_input_line(do_lang_tempcode('META_DESCRIPTION'),do_lang_tempcode('DESCRIPTION_META_DESCRIPTION'),'meta_description',$meta_description,false));
 		}
@@ -829,7 +838,20 @@ class Module_cms_comcode_pages
 		if (!$simple_add)
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc:lang='.$lang,do_lang_tempcode('CHOOSE'))));
 
-		return do_template('COMCODE_EDIT_SCREEN',array('_GUID'=>'ec1d773684757f5bf6f39cf931555bf2','NEW'=>$new,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TEXT'=>$text,'TITLE'=>$title,'DELETE_URL'=>$delete_url,'ZONE'=>$zone,'FILE'=>$file,'EXPORT_URL'=>$export_url,'POSTING_FORM'=>$posting_form,'REVISION_HISTORY'=>$revision_history));
+		return do_template('COMCODE_EDIT_SCREEN',array(
+			'_GUID'=>'ec1d773684757f5bf6f39cf931555bf2',
+			'NEW'=>$new,
+			'PING_URL'=>$ping_url,
+			'WARNING_DETAILS'=>$warning_details,
+			'TEXT'=>$text,
+			'TITLE'=>$title,
+			'DELETE_URL'=>$delete_url,
+			'ZONE'=>$zone,
+			'FILE'=>$file,
+			'EXPORT_URL'=>$export_url,
+			'POSTING_FORM'=>$posting_form,
+			'REVISION_HISTORY'=>$revision_history,
+		));
 	}
 
 	/**

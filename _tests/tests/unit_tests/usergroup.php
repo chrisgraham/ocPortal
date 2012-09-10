@@ -23,7 +23,7 @@ class usergroup_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		require_code('ecommerce');
+		require_code('ecommerce2');
 
 		$this->usr_grp_id=add_usergroup_subscription('test','test','123',12,'2',1,1,1,' ',' ',' ');
 

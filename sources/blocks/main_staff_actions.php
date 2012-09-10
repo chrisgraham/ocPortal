@@ -138,7 +138,14 @@ class Block_main_staff_actions
 			$fields->attach(results_entry(array(escape_html($username)/*Not enough space ,$ip*/,escape_html($date),$type_str,$_a,$_b)));
 		}
 
-		return results_table(do_lang_tempcode('ACTIONS'),$start,'sa_start',$max,'sa_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sa_sort',new ocp_tempcode(),NULL,NULL,5);
+		$content=results_table(do_lang_tempcode('ACTIONS'),$start,'sa_start',$max,'sa_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sa_sort',new ocp_tempcode(),NULL,NULL,5);
+
+		// Render block wrapper template around actions table
+		return do_template('BLOCK_MAIN_STAFF_ACTIONS',array(
+			'_GUID'=>'16a5b384015504a6a57fc4ddedbe91a7',
+			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
+			'CONTENT'=>$content,
+		));
 	}
 
 }

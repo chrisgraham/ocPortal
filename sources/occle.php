@@ -42,6 +42,8 @@ function occle_script()
 	// Closed site
 	if (!$cli)
 	{
+		prepare_for_known_ajax_response();
+
 		$site_closed=get_option('site_closed');
 		if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
 		{
@@ -55,7 +57,6 @@ function occle_script()
 	}
 
 	// Check the action
-	convert_data_encodings(true);
 	$action=get_param('action','occle');
 
 	if ($action=='message')
@@ -293,7 +294,15 @@ class virtual_bash
 
 		$notifications=get_queued_messages(false);
 
-		$output=do_template('OCCLE_COMMAND',array('_GUID'=>'a05ee6b75302f8ccd5ec9f3a24207521','NOTIFICATIONS'=>$notifications,'METHOD'=>$this->current_input,'STDOUT'=>$this->output[STREAM_STDOUT],'STDHTML'=>$this->output[STREAM_STDHTML],'STDCOMMAND'=>$this->output[STREAM_STDCOMMAND],'STDERR'=>$this->output[STREAM_STDERR]));
+		$output=do_template('OCCLE_COMMAND',array(
+			'_GUID'=>'a05ee6b75302f8ccd5ec9f3a24207521',
+			'NOTIFICATIONS'=>$notifications,
+			'METHOD'=>$this->current_input,
+			'STDOUT'=>$this->output[STREAM_STDOUT],
+			'STDHTML'=>$this->output[STREAM_STDHTML],
+			'STDCOMMAND'=>$this->output[STREAM_STDCOMMAND],
+			'STDERR'=>$this->output[STREAM_STDERR],
+		));
 
 		set_value('last_occle_command',strval(time()));
 		return $output;

@@ -133,11 +133,33 @@ class Block_side_forum_news
 					$title=$topic['title'];
 					$date=get_timezoned_date($topic[$date_key],false);
 
-					$out->attach(do_template('BLOCK_SIDE_FORUM_NEWS_SUMMARY',array('_GUID'=>'4b7f4ce27cf683710fc9958e9606291c','REPLIES'=>strval($topic['num']),'FIRSTTIME'=>strval($topic['firsttime']),'LASTTIME'=>strval($topic['lasttime']),'CLOSED'=>strval($topic['closed']),'FIRSTUSERNAME'=>$topic['firstusername'],'LASTUSERNAME'=>$topic['lastusername'],'FIRSTMEMBERID'=>strval($topic['firstmemberid']),'LASTMEMBERID'=>strval($topic['lastmemberid']),'_DATE'=>strval($topic[$date_key]),'DATE'=>$date,'FULL_URL'=>$topic_url,'NEWS_TITLE'=>escape_html($title))));
+					$out->attach(do_template('BLOCK_SIDE_FORUM_NEWS_SUMMARY',array(
+						'_GUID'=>'4b7f4ce27cf683710fc9958e9606291c',
+						'REPLIES'=>strval($topic['num']),
+						'FIRSTTIME'=>strval($topic['firsttime']),
+						'LASTTIME'=>strval($topic['lasttime']),
+						'CLOSED'=>strval($topic['closed']),
+						'FIRSTUSERNAME'=>$topic['firstusername'],
+						'LASTUSERNAME'=>$topic['lastusername'],
+						'FIRSTMEMBERID'=>strval($topic['firstmemberid']),
+						'LASTMEMBERID'=>strval($topic['lastmemberid']),
+						'_DATE'=>strval($topic[$date_key]),
+						'DATE'=>$date,
+						'FULL_URL'=>$topic_url,
+						'NEWS_TITLE'=>escape_html($title),
+					)));
 				}
 			}
 
-			return do_template('BLOCK_SIDE_FORUM_NEWS',array('_GUID'=>'174fa5ce0d35d9b49dca6347c66494a5','FORUM_NAME'=>array_key_exists('forum',$map)?$map['forum']:do_lang('NEWS'),'TITLE'=>$_title,'CONTENT'=>$out,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>is_null($archive_url)?'':$archive_url));
+			return do_template('BLOCK_SIDE_FORUM_NEWS',array(
+				'_GUID'=>'174fa5ce0d35d9b49dca6347c66494a5',
+				'FORUM_NAME'=>array_key_exists('forum',
+				$map)?$map['forum']:do_lang('NEWS'),
+				'TITLE'=>$_title,
+				'CONTENT'=>$out,
+				'SUBMIT_URL'=>$submit_url,
+				'ARCHIVE_URL'=>is_null($archive_url)?'':$archive_url,
+			));
 		} else
 		{
 			return new ocp_tempcode();

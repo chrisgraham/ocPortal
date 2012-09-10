@@ -188,7 +188,16 @@ class Hook_pointstore_pop3
 
 		// Return template
 		$newpop_url=build_url(array('page'=>'_SELF','type'=>'_newpop3','id'=>'pop3'),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'addf1563770845ba5fe4aaf2e60ca6fc','JAVASCRIPT'=>$javascript,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>paragraph(do_lang_tempcode('ADDRESSES_ABOUT')),'URL'=>$newpop_url,'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),'FIELDS'=>$fields));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'addf1563770845ba5fe4aaf2e60ca6fc',
+			'JAVASCRIPT'=>$javascript,
+			'HIDDEN'=>'',
+			'TITLE'=>$title,
+			'TEXT'=>paragraph(do_lang_tempcode('ADDRESSES_ABOUT')),
+			'URL'=>$newpop_url,
+			'SUBMIT_NAME'=>do_lang_tempcode('PURCHASE'),
+			'FIELDS'=>$fields,
+		));
 	}
 
 	/**
@@ -246,7 +255,17 @@ class Hook_pointstore_pop3
 		$keep->attach(form_input_hidden('prefix',$prefix));
 		$keep->attach(form_input_hidden('suffix',$_suffix));
 		$keep->attach(form_input_hidden('password',$pass1));
-		return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'099ab9d87fb6e68d74de27e7d41d50c0','MESSAGE'=>paragraph($prefix.'@'.$_suffix),'TITLE'=>$title,'ACTION'=>do_lang_tempcode('TITLE_NEWPOP3'),'KEEP'=>$keep,'COST'=>integer_format($_suffix_price),'POINTS_AFTER'=>integer_format($points_after),'PROCEED_URL'=>$proceed_url,'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF')));
+		return do_template('POINTSTORE_CONFIRM_SCREEN',array(
+			'_GUID'=>'099ab9d87fb6e68d74de27e7d41d50c0',
+			'MESSAGE'=>paragraph($prefix.'@'.$_suffix),
+			'TITLE'=>$title,
+			'ACTION'=>do_lang_tempcode('TITLE_NEWPOP3'),
+			'KEEP'=>$keep,
+			'COST'=>integer_format($_suffix_price),
+			'POINTS_AFTER'=>integer_format($points_after),
+			'PROCEED_URL'=>$proceed_url,
+			'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF'),
+		));
 	}
 
 	/**
@@ -293,7 +312,19 @@ class Hook_pointstore_pop3
 
 		// Mail off the order form
 		$encoded_reason=do_lang('TITLE_NEWPOP3');
-		$message_raw=do_template('POINTSTORE_POP3_MAIL',array('_GUID'=>'19022c49d0bdde39735245850d04fca7','EMAIL'=>$email,'ENCODED_REASON'=>$encoded_reason,'LOGIN'=>$login,'QUOTA'=>integer_format($initial_quota),'MAIL_SERVER'=>$mail_server,'PASSWORD'=>$password,'PREFIX'=>$prefix,'SUFFIX'=>$_suffix,'POP3_URL'=>$pop3_url,'SUFFIX_PRICE'=>integer_format($suffix_price)));
+		$message_raw=do_template('POINTSTORE_POP3_MAIL',array(
+			'_GUID'=>'19022c49d0bdde39735245850d04fca7',
+			'EMAIL'=>$email,
+			'ENCODED_REASON'=>$encoded_reason,
+			'LOGIN'=>$login,
+			'QUOTA'=>integer_format($initial_quota),
+			'MAIL_SERVER'=>$mail_server,
+			'PASSWORD'=>$password,
+			'PREFIX'=>$prefix,
+			'SUFFIX'=>$_suffix,
+			'POP3_URL'=>$pop3_url,
+			'SUFFIX_PRICE'=>integer_format($suffix_price),
+		));
 		require_code('notifications');
 		dispatch_notification('pointstore_request_pop3','pop3_'.strval($sale_id),do_lang('MAIL_REQUEST_POP3',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
 

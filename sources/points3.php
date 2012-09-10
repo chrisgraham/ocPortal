@@ -78,9 +78,6 @@ function points_profile($member_id_of,$member_id_viewing)
 	$chargelog_details=new ocp_tempcode();
 	if (has_privilege($member_id_viewing,'view_charge_log'))
 	{
-		inform_non_canonical_parameter('charge_start');
-		inform_non_canonical_parameter('charge_sort');
-
 		$start=get_param_integer('charge_start',0);
 		$max=get_param_integer('charge_max',10);
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'),'amount'=>do_lang_tempcode('AMOUNT'));
@@ -153,7 +150,6 @@ function points_profile($member_id_of,$member_id_viewing)
 		'POINTS_PER_DAY'=>integer_format($points_per_day),
 		'DAYS_JOINED'=>integer_format($days_joined),
 		'MULT_POINTS_PER_DAY'=>integer_format($points_per_day*$days_joined),
-		'POINTS_GAINED_AUTO'=>integer_format($points_gained_auto), // This isn't needed now, it is same as MULT_POINTS_PER_DAY
 
 		'WIKI_POST_COUNT'=>integer_format($wiki_post_count),
 		'POINTS_WIKI_POSTING'=>integer_format($points_wiki_posting),
@@ -205,8 +201,6 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 	list($sortable,$sort_order)=$test;
 	if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 		log_hack_attack_and_exit('ORDERBY_HACK');
-	inform_non_canonical_parameter('gift_sort_'.$type);
-	inform_non_canonical_parameter('gift_start_'.$type);
 	$max_rows=$GLOBALS['SITE_DB']->query_select_value('gifts','COUNT(*)',$where);
 	$rows=$GLOBALS['SITE_DB']->query_select('gifts g LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=g.reason',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 	$out=new ocp_tempcode();

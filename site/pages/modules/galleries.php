@@ -384,7 +384,7 @@ class Module_galleries
 			{
 				if ($row['category_id']==$parent_attributes['id'])
 				{
-					$pagelink=$pagelink_stub.'image:'.strval($row['id']);
+					$pagelink=$pagelink_stub.'image:'.strval($row['id']).':wide=1';
 					if (is_null($row['title'])) $row['ntitle']=get_translated_text($row['title']);
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['ntitle'])); // Callback
 				}
@@ -393,7 +393,7 @@ class Module_galleries
 			{
 				if ($row['category_id']==$parent_attributes['id'])
 				{
-					$pagelink=$pagelink_stub.'video:'.strval($row['id']);
+					$pagelink=$pagelink_stub.'video:'.strval($row['id']).':wide=1';
 					if (is_null($row['title'])) $row['ntitle']=get_translated_text($row['title']);
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['ntitle'])); // Callback
 				}
@@ -426,8 +426,6 @@ class Module_galleries
 		require_code('feedback');
 		require_css('galleries');
 
-		inform_non_canonical_parameter('gallery_entries_max');
-		inform_non_canonical_parameter('gallery_entries_start');
 		inform_non_canonical_parameter('days');
 
 		// What are we doing?

@@ -179,7 +179,10 @@ class Hook_admin_stats_ocf_posting_rates
 
 		$graph=do_template('STATS_GRAPH',array('_GUID'=>'8c6f81c928789e267c81b1d50544ca25','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Posting_rates.xml','TITLE'=>do_lang_tempcode('POSTING_RATES'),'TEXT'=>do_lang_tempcode('DESCRIPTION_POSTING_RATES')));
 
-		return do_template('STATS_SCREEN',array('_GUID'=>'2af485cee293bf89607066db9f667423','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'2af485cee293bf89607066db9f667423','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 }

@@ -72,6 +72,7 @@ class Hook_addon_registry_core
 	function get_file_list()
 	{
 		return array(
+			'sources/block_add.php',
 			'BLOCK_MAIN_CONTENT.tpl',
 			'BLOCK_MAIN_MULTI_CONTENT.tpl',
 			'sources/blocks/main_content.php',

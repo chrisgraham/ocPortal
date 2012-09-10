@@ -300,7 +300,10 @@ class Module_admin_ocf_join
 
 		$form=do_template('FORM',array('_GUID'=>'2afadffabe2becb6eac071db085edc57','TABINDEX'=>strval(get_form_field_tabindex()),'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
 
-		return do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'e9ce4084126653162ad84839fb7f47e3','TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'FORM'=>$form));
+		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'e9ce4084126653162ad84839fb7f47e3','TITLE'=>$title,'RESULTS_TABLE'=>$results_table,'FORM'=>$form));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

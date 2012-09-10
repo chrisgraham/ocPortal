@@ -152,7 +152,18 @@ class Module_admin_lang
 
 		$post_url=get_self_url(false,false,NULL,false,true);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'ee6bdea3661cb4736173cac818a769e5','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'JAVASCRIPT'=>$javascript));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'ee6bdea3661cb4736173cac818a769e5',
+			'GET'=>true,
+			'SKIP_VALIDATION'=>true,
+			'HIDDEN'=>'',
+			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'URL'=>$post_url,
+			'TEXT'=>$text,
+			'JAVASCRIPT'=>$javascript,
+		));
 	}
 
 	/**
@@ -357,7 +368,20 @@ class Module_admin_lang
 
 		require_code('lang2');
 
-		return do_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array('_GUID'=>'af732c5e595816db1c6f025c4b8fa6a2','MAX'=>integer_format($max),'TOTAL'=>integer_format($total-$max),'LANG_ORIGINAL_NAME'=>get_site_default_lang(),'LANG_NICE_ORIGINAL_NAME'=>lookup_language_full_name(get_site_default_lang()),'LANG_NICE_NAME'=>lookup_language_full_name($lang),'TOO_MANY'=>$too_many,'GOOGLE'=>$google,'LANG'=>$lang,'LINES'=>$lines,'TITLE'=>$title,'URL'=>$url));
+		return do_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array(
+			'_GUID'=>'af732c5e595816db1c6f025c4b8fa6a2',
+			'MAX'=>integer_format($max),
+			'TOTAL'=>integer_format($total-$max),
+			'LANG_ORIGINAL_NAME'=>get_site_default_lang(),
+			'LANG_NICE_ORIGINAL_NAME'=>lookup_language_full_name(get_site_default_lang()),
+			'LANG_NICE_NAME'=>lookup_language_full_name($lang),
+			'TOO_MANY'=>$too_many,
+			'GOOGLE'=>$google,
+			'LANG'=>$lang,
+			'LINES'=>$lines,
+			'TITLE'=>$title,
+			'URL'=>$url,
+		));
 	}
 
 	/**

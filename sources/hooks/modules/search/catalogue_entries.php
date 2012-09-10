@@ -82,13 +82,7 @@ class Hook_search_catalogue_entries
 
 			require_code('form_templates');
 			$fields=form_input_list(do_lang_tempcode('NAME'),'','catalogue_name',$tree,NULL,true);
-			if (running_script('iframe'))
-			{
-				$post_url=get_self_url_easy();
-			} else
-			{
-				$post_url=get_self_url(false,false,NULL,false,true);
-			}
+			$post_url=get_self_url(false,false,NULL,false,true);
 			$submit_name=do_lang_tempcode('PROCEED');
 			$hidden=build_keep_post_fields();
 

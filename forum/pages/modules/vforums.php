@@ -134,6 +134,9 @@ class Module_vforums
 	 */
 	function _vforum($title,$condition,$order,$no_pin=false)
 	{
+		$breadcrumbs=ocf_forum_breadcrumbs(db_get_first_id(),$title,get_param_integer('keep_forum_root',db_get_first_id()));
+		breadcrumb_add_segment($breadcrumbs);
+
 		$max=get_param_integer('forum_max',intval(get_option('forum_topics_per_page')));
 		$start=get_param_integer('forum_start',0);
 		$type=get_param('type','misc');
@@ -207,7 +210,6 @@ class Module_vforums
 			$_forum_name=array_key_exists($forum_id,$forum_name_map)?$forum_name_map[$forum_id]:do_lang_tempcode('PRIVATE_TOPICS');
 			$topics->attach(ocf_render_topic($topic,true,false,$_forum_name));
 		}
-		$breadcrumbs=ocf_forum_breadcrumbs(db_get_first_id(),$title,get_param_integer('keep_forum_root',db_get_first_id()));
 		if (!$topics->is_empty())
 		{
 			$pagination=pagination(do_lang_tempcode('FORUM_TOPICS'),$start,'forum_start',$max,'forum_max',$max_rows);
@@ -219,15 +221,30 @@ class Module_vforums
 			if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($moderator_actions);
 
 			$action_url=build_url(array('page'=>'topics','redirect'=>get_self_url(true)),get_module_zone('topics'));
-			$topic_wrapper=do_template('OCF_FORUM_TOPIC_WRAPPER',array('_GUID'=>'67356b4daacbed3e3d960d89a57d0a4a','MAX'=>strval($max),'ORDER'=>'','MAY_CHANGE_MAX'=>false,'BREADCRUMBS'=>$breadcrumbs,'BUTTONS'=>'','STARTER_TITLE'=>'','PAGINATION'=>$pagination,'MODERATOR_ACTIONS'=>$moderator_actions,'ACTION_URL'=>$action_url,'TOPICS'=>$topics,'FORUM_NAME'=>$forum_name));
+			$topic_wrapper=do_template('OCF_FORUM_TOPIC_WRAPPER',array(
+				'_GUID'=>'67356b4daacbed3e3d960d89a57d0a4a',
+				'MAX'=>strval($max),
+				'ORDER'=>'',
+				'MAY_CHANGE_MAX'=>false,
+				'BREADCRUMBS'=>$breadcrumbs,
+				'BUTTONS'=>'',
+				'STARTER_TITLE'=>'',
+				'PAGINATION'=>$pagination,
+				'MODERATOR_ACTIONS'=>$moderator_actions,
+				'ACTION_URL'=>$action_url,
+				'TOPICS'=>$topics,
+				'FORUM_NAME'=>$forum_name,
+			));
 		}
 
 		$_buttons=new ocp_tempcode();
 		$archive_url=$GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id());
 		$_buttons->attach(do_template('SCREEN_BUTTON',array('_GUID'=>'8c928f1f703e9ba232a7033adee19a31','TITLE'=>do_lang_tempcode('ROOT_FORUM'),'IMG'=>'all','IMMEDIATE'=>false,'URL'=>$archive_url)));
 
-		breadcrumb_add_segment($breadcrumbs);
-		return do_template('OCF_FORUM',array('_GUID'=>'d3fa84575727af935eadb2ce2b7c7b3e','FILTERS'=>'','FORUM_NAME'=>$forum_name,'STARTER_TITLE'=>'','BUTTONS'=>$_buttons,'TOPIC_WRAPPER'=>$topic_wrapper,'CATEGORIES'=>''));
+		$tpl=do_template('OCF_FORUM',array('_GUID'=>'d3fa84575727af935eadb2ce2b7c7b3e','FILTERS'=>'','FORUM_NAME'=>$forum_name,'STARTER_TITLE'=>'','BUTTONS'=>$_buttons,'TOPIC_WRAPPER'=>$topic_wrapper,'CATEGORIES'=>''));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 }

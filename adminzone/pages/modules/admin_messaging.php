@@ -145,7 +145,10 @@ class Module_admin_messaging
 		$fields_title=results_field_title(array(do_lang_tempcode('TITLE'),do_lang_tempcode('DATE'),do_lang_tempcode('TYPE')));
 		$results_table=results_table('messages',$start,'start',$max,'max',$max_rows,$fields_title,$fields,NULL,NULL,NULL,NULL,paragraph(do_lang_tempcode('SELECT_A_MESSAGE')));
 
-		return do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'6ced89e25a12a45deb6cf10bd42869ee','TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'6ced89e25a12a45deb6cf10bd42869ee','TITLE'=>$title,'RESULTS_TABLE'=>$results_table));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -215,7 +218,17 @@ class Module_admin_messaging
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHOOSE'))));
 		breadcrumb_set_self(do_lang_tempcode('VIEW'));
 
-		return do_template('MESSAGING_MESSAGE_SCREEN',array('_GUID'=>'61561f1a333b88370ceb66dbbcc0ea4c','TITLE'=>$title,'MESSAGE_TITLE'=>$message_title,'MESSAGE'=>$message,'BY'=>$by,'WHOS_READ'=>$whos_read,'COMMENT_DETAILS'=>$comment_details,'TAKE_RESPONSIBILITY_URL'=>$take_responsibility_url,'RESPONSIBLE'=>$responsible));
+		return do_template('MESSAGING_MESSAGE_SCREEN',array(
+			'_GUID'=>'61561f1a333b88370ceb66dbbcc0ea4c',
+			'TITLE'=>$title,
+			'MESSAGE_TITLE'=>$message_title,
+			'MESSAGE'=>$message,
+			'BY'=>$by,
+			'WHOS_READ'=>$whos_read,
+			'COMMENT_DETAILS'=>$comment_details,
+			'TAKE_RESPONSIBILITY_URL'=>$take_responsibility_url,
+			'RESPONSIBLE'=>$responsible,
+		));
 	}
 
 	/**

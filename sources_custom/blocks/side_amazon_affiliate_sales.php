@@ -70,7 +70,14 @@ class Block_side_amazon_affiliate_sales
 		for($i=0; $i<$n; $i++)
 			$out.='<iframe src="http://rcm.amazon.com/e/cm?lt1=_blank&t='.escape_html($associates_id).'&o=1&p=8&l=st1&mode='.escape_html($product_line).'&search='.$subject_keywords.'&t1=_blank&lc1=00FFFF&bg1=FFFFFF&f=ifr" marginwidth="0" marginheight="0" width="120px" height="240" border="0" frameborder="0" style="width: 120px; border:none;" scrolling="no"></iframe><br /><br />';
 
-		return do_template('BLOCK_SIDE_AMAZON_AFFILIATES',array('_GUID'=>'5edc2fd386f1688fca8e0e6eefa5f455','TITLE'=>do_lang_tempcode('BLOCK_AMAZON_AFFILIATE_SALES_TITLE'),'CONTENT'=>$out,'ASSOCIATES_ID'=>$associates_id,'PRODUCT_LINE'=>$product_line,'SUBJECT_KEYWORDS'=>$subject_keywords));
+		return do_template('BLOCK_SIDE_AMAZON_AFFILIATES',array(
+			'_GUID'=>'5edc2fd386f1688fca8e0e6eefa5f455',
+			'TITLE'=>do_lang_tempcode('BLOCK_AMAZON_AFFILIATE_SALES_TITLE'),
+			'CONTENT'=>$out,
+			'ASSOCIATES_ID'=>$associates_id,
+			'PRODUCT_LINE'=>$product_line,
+			'SUBJECT_KEYWORDS'=>$subject_keywords,
+		));
 
 	}
 }

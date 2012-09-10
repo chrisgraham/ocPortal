@@ -96,7 +96,7 @@ function get_afm_form()
 
 	$title=get_screen_title('ABSTRACT_FILE_MANAGEMENT');
 
-	$post_url=running_script('index')?get_self_url(true):get_self_url_easy();
+	$post_url=get_self_url(true);
 	$submit_name=do_lang_tempcode('PROCEED');
 	$hidden=build_keep_post_fields();
 	$hidden->attach(form_input_hidden('got_ftp_details','1'));

@@ -592,10 +592,9 @@ function set_short_title($title)
 }
 
 /**
- * This is it - the start of rendering of a website page.
- * Take in all inputs, sends them to the correct functions to process, gathers up all the outputs, sticks them together and echoes them.
+ * Process URL monikers, changing 'id' GET param to be correct.
  */
-function do_site()
+function process_url_monikers()
 {
 	// More SEO redirection (monikers)
 	// Does this URL arrangement support monikers?
@@ -655,10 +654,19 @@ function do_site()
 						$_GET['id']=$monikers[0]['m_resource_id']; // We need to know the ID number rather than the moniker
 					}
 				}
-				break;
+				return;
 			}
 		}
 	}
+}
+
+/**
+ * This is it - the start of rendering of a website page.
+ * Take in all inputs, sends them to the correct functions to process, gathers up all the outputs, sticks them together and echoes them.
+ */
+function do_site()
+{
+	process_url_monikers();
 
 	// Any messages to output?
 	if (get_param_integer('redirected',0)==1)
@@ -861,8 +869,6 @@ function do_site()
 			dispatch_notification('low_disk_space',NULL,$subject,$message,NULL,A_FROM_SYSTEM_PRIVILEGED);
 		}
 	}
-
-	//exit();
 }
 
 /**

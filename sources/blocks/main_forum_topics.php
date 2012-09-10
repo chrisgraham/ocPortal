@@ -116,7 +116,7 @@ class Block_main_forum_topics
 		if ((is_numeric($forum_name)) && (get_forum_type()=='ocf'))
 		{
 			$forum_name=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_name',array('id'=>intval($forum_name)));
-			if (is_null($forum_name)) return paragraph(do_lang_tempcode('MISSING_RESOURCE'));
+			if (is_null($forum_name)) return paragraph(do_lang_tempcode('MISSING_RESOURCE'),'','red_alert');
 		}
 		$_title=do_lang_tempcode('ACTIVE_TOPICS_IN',escape_html($forum_name));
 		if ((array_key_exists('title',$map)) && ($map['title']!='')) $_title=make_string_tempcode(escape_html($map['title']));
@@ -178,7 +178,20 @@ class Block_main_forum_topics
 					if ((!is_null($forum_names_map)) && (!array_key_exists($topic['forum_id'],$forum_names_map))) continue; // Maybe Private Topic, slipped in via reference to a missing forum
 					$forum_name=is_null($forum_names_map)?NULL:$forum_names_map[$topic['forum_id']];
 
-					$out->attach(do_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC',array('_GUID'=>'ae4e351b3fa5422bf8ecdfb7e49076d1','POST'=>$topic['firstpost'],'FORUM_ID'=>is_null($forum_names_map)?NULL:strval($topic['forum_id']),'FORUM_NAME'=>$forum_name,'TOPIC_URL'=>$topic_url,'TOPIC_URL_UNREAD'=>$topic_url_unread,'TITLE'=>$title,'DATE'=>$date,'DATE_RAW'=>strval($topic[$date_key]),'USERNAME'=>$username,'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),'NUM_POSTS'=>integer_format($topic['num']))));
+					$out->attach(do_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC',array(
+						'_GUID'=>'ae4e351b3fa5422bf8ecdfb7e49076d1',
+						'POST'=>$topic['firstpost'],
+						'FORUM_ID'=>is_null($forum_names_map)?NULL:strval($topic['forum_id']),
+						'FORUM_NAME'=>$forum_name,
+						'TOPIC_URL'=>$topic_url,
+						'TOPIC_URL_UNREAD'=>$topic_url_unread,
+						'TITLE'=>$title,
+						'DATE'=>$date,
+						'DATE_RAW'=>strval($topic[$date_key]),
+						'USERNAME'=>$username,
+						'MEMBER_ID'=>is_null($member_id)?'':strval($member_id),
+						'NUM_POSTS'=>integer_format($topic['num']),
+					)));
 
 					$done++;
 
@@ -187,10 +200,24 @@ class Block_main_forum_topics
 			}
 			if ($out->is_empty())
 			{
-				return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'c76ab018a0746c2875c6cf69c92a01fb','HIGH'=>false,'FORUM_NAME'=>array_key_exists('param',$map)?$map['param']:'General chat','TITLE'=>$_title,'MESSAGE'=>do_lang_tempcode(($hot==1)?'NO_TOPICS_HOT':'NO_TOPICS'),'ADD_NAME'=>$add_name,'SUBMIT_URL'=>$submit_url));
+				return do_template('BLOCK_NO_ENTRIES',array(
+					'_GUID'=>'c76ab018a0746c2875c6cf69c92a01fb',
+					'HIGH'=>false,
+					'FORUM_NAME'=>array_key_exists('param',$map)?$map['param']:'General chat',
+					'TITLE'=>$_title,
+					'MESSAGE'=>do_lang_tempcode(($hot==1)?'NO_TOPICS_HOT':'NO_TOPICS'),
+					'ADD_NAME'=>$add_name,
+					'SUBMIT_URL'=>$submit_url,
+				));
 			}
 
-			return do_template('BLOCK_MAIN_FORUM_TOPICS',array('_GUID'=>'368b80c49a335ad035b00510681d5008','TITLE'=>$_title,'CONTENT'=>$out,'FORUM_NAME'=>array_key_exists('param',$map)?$map['param']:'General chat','SUBMIT_URL'=>$submit_url));
+			return do_template('BLOCK_MAIN_FORUM_TOPICS',array(
+				'_GUID'=>'368b80c49a335ad035b00510681d5008',
+				'TITLE'=>$_title,
+				'CONTENT'=>$out,
+				'FORUM_NAME'=>array_key_exists('param',$map)?$map['param']:'General chat',
+				'SUBMIT_URL'=>$submit_url,
+			));
 		} else
 		{
 			return new ocp_tempcode();

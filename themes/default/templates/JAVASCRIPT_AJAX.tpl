@@ -4,6 +4,10 @@ var AJAX_REQUESTS=[];
 var AJAX_METHODS=[];
 var AJAX_TIMEOUTS=[];
 
+/*
+	Faux frames and faux scrolling
+*/
+
 var block_data_cache={};
 
 var infinite_scroll_blocked=false;
@@ -98,56 +102,104 @@ function internalise_infinite_scrolling_go(url_stem,wrapper,pagination)
 	return false;
 }
 
-function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_params,append)
+function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_params,append,forms_too)
 {
+	if (typeof look_for=='undefined') var look_for=[];
+	if (typeof extra_params=='undefined') var extra_params=[];
 	if (typeof append=='undefined') var append=false;
+	if (typeof forms_too=='undefined') var forms_too=false;
 
-	var _links=get_elements_by_class_name(block,'ajax_block_wrapper_links');
+	var _link_wrappers=get_elements_by_class_name(block,'ajax_block_wrapper_links');
+	if (_link_wrappers.length==0) _link_wrappers=[block];
 	var links=[];
-	for (var i=0;i<_links.length;i++)
+	for (var i=0;i<_link_wrappers.length;i++)
 	{
-		var more_links=_links[i].getElementsByTagName('a');
-		for (var j=0;j<more_links.length;j++)
+		var _links=_link_wrappers[i].getElementsByTagName('a');
+		for (var j=0;j<_links.length;j++)
+			links.push(_links[j]);
+		if (forms_too)
 		{
-			links.push(more_links[j]);
+			_links=_link_wrappers[i].getElementsByTagName('form');
+			for (var j=0;j<_links.length;j++)
+				links.push(_links[j]);
 		}
 	}
 	for (var i=0;i<links.length;i++)
 	{
-		links[i].href;
-		links[i].onclick=function()
+		if ((links[i].target) && (links[i].target=='_self'))
 		{
-			var url_stub='';
-			for (var j=0;j<look_for.length;j++)
+			var submit_func=function()
 			{
-				var matches=this.href.match(new RegExp('[&\?]('+look_for[j]+')=([^&]*)'));
-				if (matches)
+				var url_stub='';
+
+				var href=(this.nodeName.toLowerCase()=='a')?this.href:this.action;
+
+				// Any parameters matching a pattern must be sent in the URL to the AJAX block call
+				for (var j=0;j<look_for.length;j++)
+				{
+					var matches=href.match(new RegExp('[&\?]('+look_for[j]+')=([^&]*)'));
+					if (matches)
+					{
+						url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
+						url_stub+=matches[1]+'='+matches[2];
+					}
+				}
+				for (var j in extra_params)
 				{
 					url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
-					url_stub+=matches[1]+'='+matches[2];
+					url_stub+=j+'='+window.encodeURIComponent(extra_params[j]);
 				}
+
+				// Any POST parameters?
+				var post_params=null;
+				if (this.nodeName.toLowerCase()=='form')
+				{
+					post_params='';
+					for (var j=0;j<this.elements.length;j++)
+					{
+						if (this.elements[j].name)
+						{
+							if (post_params!='') post_params+='&';
+							post_params+=this.elements[j].name+'='+window.encodeURIComponent(clever_find_value(this,this.elements[j]));
+						}
+					}
+				}
+
+				// Make AJAX block call
+				return call_block(url_stem+url_stub,'',block,append,null,false,post_params);
 			}
-			for (var j in extra_params)
+			if (links[i].nodeName.toLowerCase()=='a')
 			{
-				url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
-				url_stub+=j+'='+window.encodeURIComponent(extra_params[j]);
+				links[i].onclick=submit_func;
+			} else
+			{
+				links[i].onsubmit=submit_func;
 			}
-			return call_block(url_stem+url_stub,'',block,append,true);
 		}
 	}
 }
 
-function call_block(url,new_params,target_div,append,callback,scroll_to_top_of_wrapper)
+function guarded_form_submit(form)
+{
+	if ((!form.onsubmit) || (form.onsubmit())) form.submit();
+}
+
+// This function will load a block, with options for parameter changes, and render the results in specified way - with optional callback support
+function call_block(url,new_block_params,target_div,append,callback,scroll_to_top_of_wrapper,post_params)
 {
 	if (typeof scroll_to_top_of_wrapper=='undefined') var scroll_to_top_of_wrapper=false;
-	if (typeof block_data_cache[url]=='undefined') block_data_cache[url]=get_inner_html(target_div); // Cache start position. For this to be useful we must be smart enough to pass blank new_params if returning to fresh state
+	if (typeof post_params=='undefined') var post_params=null;
+	if ((typeof block_data_cache[url]=='undefined') && (new_block_params!=''))
+		block_data_cache[url]=get_inner_html(target_div); // Cache start position. For this to be useful we must be smart enough to pass blank new_block_params if returning to fresh state
 
-	var ajax_url=url+'&block_map_sup='+window.encodeURIComponent(new_params);
+	var ajax_url=url;
+	if (new_block_params!='') '&block_map_sup='+window.encodeURIComponent(new_block_params);
 	if (typeof block_data_cache[ajax_url]!='undefined')
 	{
+		// Show results from cache
 		show_block_html(block_data_cache[ajax_url],target_div,append);
 		if (callback) callback();
-		return null;
+		return false;
 	}
 
 	// Show loading animation
@@ -157,7 +209,7 @@ function call_block(url,new_params,target_div,append,callback,scroll_to_top_of_w
 	var loading_wrapper_inner=document.createElement('div');
 	loading_wrapper_inner.style.position='relative';
 	var loading_image=document.createElement('img');
-	loading_image.className='ajax_loading';
+	loading_image.className='ajax_loading ajax_loading_block';
 	loading_image.src='{$IMG;,loading}';
 	loading_image.style.position='absolute';
 	loading_image.style.left=(find_width(target_div)/2-10)+'px';
@@ -173,7 +225,13 @@ function call_block(url,new_params,target_div,append,callback,scroll_to_top_of_w
 	loading_wrapper.appendChild(loading_wrapper_inner);
 
 	// Make AJAX call
-	do_ajax_request(ajax_url,function(raw_ajax_result) { _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,scroll_to_top_of_wrapper); });
+	do_ajax_request(
+		ajax_url,
+		function(raw_ajax_result) { // Show results when available
+			_call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,scroll_to_top_of_wrapper);
+		},
+		post_params
+	);
 
 	return false;
 }
@@ -215,34 +273,7 @@ function show_block_html(new_html,target_div,append)
 	set_inner_html(target_div,new_html,append);
 }
 
-/* Calls up a URL to check something, giving any 'feedback' as an error (or if just 'false' then returning false with no message) */
-function do_ajax_field_test(url,post)
-{
-	if (typeof window.keep_stub!='undefined') url=url+keep_stub();
-	var xmlhttp=do_ajax_request(url,null,post);
-	if ((xmlhttp.responseText!='') && (xmlhttp.responseText.replace(/[ \t\n\r]/g,'')!='0'/*some cache layers may change blank to zero*/))
-	{
-		if (xmlhttp.responseText!='false')
-		{
-			if (xmlhttp.responseText.length>1000)
-			{
-				var error_window=window.open();
-				if (error_window)
-				{
-					error_window.document.write(xmlhttp.responseText);
-					error_window.document.close();
-				}
-			} else
-			{
-				window.fauxmodal_alert(xmlhttp.responseText);
-			}
-		}
-		return false;
-	}
-	return true;
-}
-
-function ajax_form_submit(event,form,block_name,map)
+function ajax_form_submit__admin__headless(event,form,block_name,map)
 {
 	if (typeof window.clever_find_value=='undefined') return true;
 
@@ -284,6 +315,41 @@ function ajax_form_submit(event,form,block_name,map)
 
 	return true;
 }
+
+/*
+	Validation
+*/
+
+/* Calls up a URL to check something, giving any 'feedback' as an error (or if just 'false' then returning false with no message) */
+function do_ajax_field_test(url,post)
+{
+	if (typeof window.keep_stub!='undefined') url=url+keep_stub();
+	var xmlhttp=do_ajax_request(url,null,post);
+	if ((xmlhttp.responseText!='') && (xmlhttp.responseText.replace(/[ \t\n\r]/g,'')!='0'/*some cache layers may change blank to zero*/))
+	{
+		if (xmlhttp.responseText!='false')
+		{
+			if (xmlhttp.responseText.length>1000)
+			{
+				var error_window=window.open();
+				if (error_window)
+				{
+					error_window.document.write(xmlhttp.responseText);
+					error_window.document.close();
+				}
+			} else
+			{
+				window.fauxmodal_alert(xmlhttp.responseText);
+			}
+		}
+		return false;
+	}
+	return true;
+}
+
+/*
+	Request backend
+*/
 
 function do_ajax_request(url,callback__method,post) // Note: 'post' is not an array, it's a string (a=b)
 {
@@ -445,21 +511,6 @@ function process_request_change(ajax_result_frame,i)
 	}// else window.fauxmodal_alert("Method required: as it is non-blocking");
 
 	return null;
-}
-
-function create_xml_doc()
-{
-	var xml_doc;
-
-	if (typeof window.ActiveXObject!='undefined')
-	{
-		xml_doc=new ActiveXObject("Microsoft.XMLDOM");
-	}
-	else if (document.implementation && document.implementation.createDocument)
-	{
-	  xml_doc=document.implementation.createDocument("","",null);
-	}
-	return xml_doc;
 }
 
 function merge_text_nodes(childNodes)

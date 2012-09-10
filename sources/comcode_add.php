@@ -603,7 +603,20 @@ function comcode_helper_script()
 
 		$text=$tag_description->is_empty()?new ocp_tempcode():do_lang_tempcode('COMCODE_HELPER_2',escape_html($tag),$tag_description);
 		$hidden->attach(form_input_hidden('tag',$tag));
-		$content=do_template('FORM_SCREEN',array('_GUID'=>'270058349d048a8be6570bba97c81fa2','TITLE'=>$title,'JAVASCRIPT'=>$javascript,'TARGET'=>'_self','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>$preview,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
+		$content=do_template('FORM_SCREEN',array(
+			'_GUID'=>'270058349d048a8be6570bba97c81fa2',
+			'TITLE'=>$title,
+			'JAVASCRIPT'=>$javascript,
+			'TARGET'=>'_self',
+			'SKIP_VALIDATION'=>true,
+			'FIELDS'=>$fields,
+			'URL'=>$post_url,
+			'TEXT'=>$text,
+			'SUBMIT_NAME'=>$submit_name,
+			'HIDDEN'=>$hidden,
+			'PREVIEW'=>$preview,
+			'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme(),
+		));
 	}
 	elseif ($type=='step3')
 	{
@@ -630,7 +643,6 @@ function comcode_helper_script()
 		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'d5d5888d89b764f81769823ac71d0827','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$tag,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
 	}
 
-	$content->handle_symbol_preprocessing();
 	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'c1f229be68a1137c5b418b0d5d8a7ccf','TITLE'=>do_lang_tempcode('COMCODE_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
 	exit($echo->evaluate());
 	$echo->handle_symbol_preprocessing();

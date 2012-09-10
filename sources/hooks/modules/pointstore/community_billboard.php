@@ -130,7 +130,17 @@ class Hook_pointstore_community_billboard
 		$keep->attach(form_input_hidden('days',strval($days)));
 		$proceed_url=build_url(array('page'=>'_SELF','type'=>'___community_billboard','id'=>'community_billboard'),'_SELF');
 
-		return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'e2b139122d95af6a1930e84b41609145','TITLE'=>$title,'KEEP'=>$keep,'ACTION'=>$action,'COST'=>integer_format($total),'POINTS_AFTER'=>integer_format($pointsleft-$total),'PROCEED_URL'=>$proceed_url,'MESSAGE'=>comcode_to_tempcode($message),'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF')));
+		return do_template('POINTSTORE_CONFIRM_SCREEN',array(
+			'_GUID'=>'e2b139122d95af6a1930e84b41609145',
+			'TITLE'=>$title,
+			'KEEP'=>$keep,
+			'ACTION'=>$action,
+			'COST'=>integer_format($total),
+			'POINTS_AFTER'=>integer_format($pointsleft-$total),
+			'PROCEED_URL'=>$proceed_url,
+			'MESSAGE'=>comcode_to_tempcode($message),
+			'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF'),
+		));
 	}
 
 	/**

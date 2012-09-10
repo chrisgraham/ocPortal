@@ -1679,7 +1679,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			$ob=object_factory('Hook_awards_'.$content_type);
 			$info=$ob->info();
 
-			$title=do_lang('CUSTOM_FIELDS_FOR',do_lang($info['title']));
+			$title=do_lang('CUSTOM_FIELDS_FOR',do_lang($info['content_type_label']));
 
 			$hidden->attach(form_input_hidden('title',$title));
 			$hidden->attach(form_input_hidden('name',$name));
@@ -1690,7 +1690,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 			$hidden->attach(form_input_hidden('submit_points','0'));
 			$hidden->attach(form_input_hidden('send_view_reports','never'));
 
-			attach_message(do_lang_tempcode('EDITING_CUSTOM_FIELDS_HELP',do_lang_tempcode($info['title'])));
+			attach_message(do_lang_tempcode('EDITING_CUSTOM_FIELDS_HELP',do_lang_tempcode($info['content_type_label'])));
 
 			$actions=new ocp_tempcode();
 		} else

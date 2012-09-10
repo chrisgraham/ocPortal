@@ -215,6 +215,7 @@ if ($is_substantial)
 }
 
 require_code('news');
+require_code('news2');
 
 $summary="{$version_pretty} released. Read the full article for a list of changes, and upgrade information.";
 

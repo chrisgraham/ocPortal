@@ -530,7 +530,21 @@ class Module_wiki
 			} else $extra=new ocp_tempcode();
 			$poster_url=is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_url($poster,false,true);
 			$rate_url=get_self_url(true);
-			$posts->attach(do_template('WIKI_POST',array('_GUID'=>'a29b107abfaf7689c8392676c63093f5','INCLUDE_EXPANSION'=>$include_expansion_here,'UNVALIDATED'=>($myrow['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),'STAFF_ACCESS'=>$staff_access,'RATE_URL'=>$rate_url.'#post_'.strval($post_id),'RATING'=>$rating,'ID'=>strval($myrow['id']),'POSTER_URL'=>$poster_url,'POSTER'=>$username,'POST_DATE_RAW'=>strval($post_date_raw),'POST_DATE'=>$post_date,'POST'=>$post,'BUTTONS'=>$extra)));
+			$posts->attach(do_template('WIKI_POST',array(
+				'_GUID'=>'a29b107abfaf7689c8392676c63093f5',
+				'INCLUDE_EXPANSION'=>$include_expansion_here,
+				'UNVALIDATED'=>($myrow['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),
+				'STAFF_ACCESS'=>$staff_access,
+				'RATE_URL'=>$rate_url.'#post_'.strval($post_id),
+				'RATING'=>$rating,
+				'ID'=>strval($myrow['id']),
+				'POSTER_URL'=>$poster_url,
+				'POSTER'=>$username,
+				'POST_DATE_RAW'=>strval($post_date_raw),
+				'POST_DATE'=>$post_date,
+				'POST'=>$post,
+				'BUTTONS'=>$extra,
+			)));
 
 			$num_posts++;
 		}
@@ -556,7 +570,20 @@ class Module_wiki
 		));
 
 		breadcrumb_add_segment($breadcrumbs);
-		return do_template('WIKI_PAGE_SCREEN',array('_GUID'=>'1840d6934be3344c4f93a159fc737a45','TAGS'=>get_loaded_tags('wiki_pages'),'HIDE_POSTS'=>$page['hide_posts']==1,'ID'=>strval($id),'VIEWS'=>integer_format($page['wiki_views']),'STAFF_ACCESS'=>$staff_access,'DESCRIPTION'=>$description,'TITLE'=>$title,'CHILDREN'=>$children,'POSTS'=>$posts,'NUM_POSTS'=>integer_format($num_posts),'MENU'=>$menu));
+		return do_template('WIKI_PAGE_SCREEN',array(
+			'_GUID'=>'1840d6934be3344c4f93a159fc737a45',
+			'TAGS'=>get_loaded_tags('wiki_pages'),
+			'HIDE_POSTS'=>$page['hide_posts']==1,
+			'ID'=>strval($id),
+			'VIEWS'=>integer_format($page['wiki_views']),
+			'STAFF_ACCESS'=>$staff_access,
+			'DESCRIPTION'=>$description,
+			'TITLE'=>$title,
+			'CHILDREN'=>$children,
+			'POSTS'=>$posts,
+			'NUM_POSTS'=>integer_format($num_posts),
+			'MENU'=>$menu,
+		));
 	}
 
 	/**
@@ -616,10 +643,6 @@ class Module_wiki
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('WIKI'))));
 
-		require_code('templates_internalise_screen');
-		$test_tpl=internalise_own_screen($title);
-		if (is_object($test_tpl)) return $test_tpl;
-
 		$start=get_param_integer('changes_start',0);
 		$max=get_param_integer('changes_max',25);
 		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'));
@@ -666,7 +689,10 @@ class Module_wiki
 		$fields_title=results_field_title(array(do_lang_tempcode('PAGE'),do_lang_tempcode('USERNAME'),do_lang_tempcode('DATE'),do_lang_tempcode('ACTION')),$sortables,'sort',$sortable.' '.$sort_order);
 		$out=results_table(do_lang_tempcode('WIKI_CHANGELOG'),$start,'changes_start',$max,'changes_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		return do_template('WIKI_CHANGES_SCREEN',array('_GUID'=>'0dea1ed9d31a818cba60f56fc1c8f68f','TITLE'=>$title,'RESULTS'=>$out));
+		$tpl=do_template('WIKI_CHANGES_SCREEN',array('_GUID'=>'0dea1ed9d31a818cba60f56fc1c8f68f','TITLE'=>$title,'RESULTS'=>$out));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -785,7 +811,16 @@ class Module_wiki
 
 		$hidden=form_input_hidden('source',strval($post_id));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'f231626424aa83d75df571a818665152','SKIP_VALIDATION'=>true,'TITLE'=>$title,'URL'=>$move_url,'TEXT'=>do_lang_tempcode('SELECT_TARGET_POST_DESTINATION'),'FIELDS'=>$fields,'HIDDEN'=>$hidden,'SUBMIT_NAME'=>do_lang_tempcode('MOVE')));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'f231626424aa83d75df571a818665152',
+			'SKIP_VALIDATION'=>true,
+			'TITLE'=>$title,
+			'URL'=>$move_url,
+			'TEXT'=>do_lang_tempcode('SELECT_TARGET_POST_DESTINATION'),
+			'FIELDS'=>$fields,
+			'HIDDEN'=>$hidden,
+			'SUBMIT_NAME'=>do_lang_tempcode('MOVE'),
+		));
 	}
 
 	/**

@@ -434,7 +434,25 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		$_stack_trace=get_html_trace();
 		$stack_trace=str_replace('html','&#104;tml',$_stack_trace->evaluate());
 		$time=get_timezoned_date(time(),true,true,true);
-		$message=do_template('HACK_ATTEMPT_MAIL',array('_GUID'=>'6253b3c42c5e6c70d20afa9d1f5b40bd','STACK_TRACE'=>$stack_trace,'USER_AGENT'=>get_browser_string(),'REFERER'=>ocp_srv('HTTP_REFERER'),'USER_OS'=>get_os_string(),'REASON'=>$reason_full,'IP'=>$ip,'ID'=>strval($id),'USERNAME'=>$username,'TIME_RAW'=>strval(time()),'TIME'=>$time,'URL'=>$url,'POST'=>$post),get_site_default_lang());
+		$message=do_template(
+			'HACK_ATTEMPT_MAIL',
+			array(
+				'_GUID'=>'6253b3c42c5e6c70d20afa9d1f5b40bd',
+				'STACK_TRACE'=>$stack_trace,
+				'USER_AGENT'=>get_browser_string(),
+				'REFERER'=>ocp_srv('HTTP_REFERER'),
+				'USER_OS'=>get_os_string(),
+				'REASON'=>$reason_full,
+				'IP'=>$ip,
+				'ID'=>strval($id),
+				'USERNAME'=>$username,
+				'TIME_RAW'=>strval(time()),
+				'TIME'=>$time,
+				'URL'=>$url,
+				'POST'=>$post,
+			),
+			get_site_default_lang()
+		);
 
 		require_code('notifications');
 
@@ -725,7 +743,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 	require_code('urls');
 	require_code('tempcode');
 
-	$error_url=running_script('index')?static_evaluate_tempcode(build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,true)):get_self_url_easy();
+	$error_url=static_evaluate_tempcode(build_url(array('page'=>'_SELF'),'_SELF',NULL,true,false,true));
 
 	require_code('notifications');
 	require_code('comcode');

@@ -41,17 +41,15 @@ class poll_test_set extends ocp_test_case
 		$this->assertTrue('Who are you ?'==$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question ',array('id'=>$this->poll_id)));
 	}
 
-	/*function testPollVote()		Wrong poll type
+	function testPollVote()
 	{
-		$_POST['cast_'.strval($this->poll_id)]='2';
-		$_GET['show_poll_results_'.strval($this->poll_id)]='1';
-		poll_script(true,$this->poll_id);
+		vote_in_poll($this->poll_id,2);
 
 		$poll_details=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$this->poll_id),'',1);
 		$this->assertTrue(array_key_exists(0,$poll_details));
 
 		$this->assertTrue($poll_details[0]['votes2']==1);
-	}*/
+	}
 
 	function testEditPoll()
 	{

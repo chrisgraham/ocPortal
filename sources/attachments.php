@@ -254,9 +254,7 @@ function attachment_popup_script()
 	}
 
 	$field_name=get_param('field_name','post');
-	$keep=symbol_tempcode('KEEP',array(0,1));
-	$post_url=find_script('attachment_popup').'?field_name='.$field_name.$keep->evaluate();
-	if (get_param('utheme','')!='') $post_url.='&utheme='.get_param('utheme');
+	$post_url=get_self_url();
 
 	$rows=$connection->query_select('attachments',array('*'),array('a_member_id'=>$member_now));
 	$content=new ocp_tempcode();
@@ -273,7 +271,7 @@ function attachment_popup_script()
 	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'954617cc747b5cece4cc406d8c110150','TITLE'=>do_lang_tempcode('ATTACHMENT_POPUP'),'POPUP'=>true,'CONTENT'=>$content));
-
+	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 }
 

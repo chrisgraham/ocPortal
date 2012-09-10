@@ -56,7 +56,12 @@ function seo_get_fields($type,$id=NULL)
 	$fields=new ocp_tempcode();
 	if ((get_value('disable_seo')!=='1') && ((get_value('disable_seo')!=='2'/*2 means have it only on edit*/) || (!is_null($id))))
 	{
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'545aefd48d73cf01bdec7226dc6d93fb','SECTION_HIDDEN'=>$keywords=='' && $description=='','TITLE'=>do_lang_tempcode('SEO'),'HELP'=>(get_option('show_docs')==='0')?NULL:protect_from_escaping(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_seo','tut_seo','1'))))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+			'_GUID'=>'545aefd48d73cf01bdec7226dc6d93fb',
+			'SECTION_HIDDEN'=>$keywords=='' && $description=='',
+			'TITLE'=>do_lang_tempcode('SEO'),
+			'HELP'=>(get_option('show_docs')==='0')?NULL:protect_from_escaping(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_seo','tut_seo','1'))),
+		)));
 		$fields->attach(form_input_line_multi(do_lang_tempcode('KEYWORDS'),do_lang_tempcode('DESCRIPTION_META_KEYWORDS'),'meta_keywords[]',array_map('trim',explode(',',preg_replace('#,+#',',',$keywords))),0));
 		$fields->attach(form_input_line(do_lang_tempcode('META_DESCRIPTION'),do_lang_tempcode('DESCRIPTION_META_DESCRIPTION'),'meta_description',$description,false));
 	}

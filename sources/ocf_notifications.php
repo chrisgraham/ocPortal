@@ -168,7 +168,24 @@ function generate_notifications($member_id)
 			$ignore_url=build_url(array('page'=>'topics','type'=>'mark_read_topic','id'=>$unread_pp['p_topic_id'],'redirect'=>$redirect),get_module_zone('topics'));
 			$ignore_url_2=build_url(array('page'=>'topics','type'=>'mark_read_topic','id'=>$unread_pp['p_topic_id'],'redirect'=>$redirect,'ajax'=>1),get_module_zone('topics'));
 			require_javascript('javascript_ajax');
-			$notifications->attach(do_template('OCF_NOTIFICATION',array('_GUID'=>'3b224ea3f4da2f8f869a505b9756970a','ADDITIONAL_POSTS'=>integer_format($additional_posts),'_ADDITIONAL_POSTS'=>strval($additional_posts),'ID'=>strval($unread_pp['id']),'U_TITLE'=>$u_title,'IGNORE_URL'=>$ignore_url,'IGNORE_URL_2'=>$ignore_url_2,'REPLY_URL'=>$reply_url,'TOPIC_URL'=>$topic,'POST'=>$post,'DESCRIPTION'=>$description,'TIME'=>$time,'TIME_RAW'=>strval($time_raw),'BY'=>$by,'PROFILE_URL'=>$profile_link,'TYPE'=>$type)));
+			$notifications->attach(do_template('OCF_NOTIFICATION',array(
+				'_GUID'=>'3b224ea3f4da2f8f869a505b9756970a',
+				'ADDITIONAL_POSTS'=>integer_format($additional_posts),
+				'_ADDITIONAL_POSTS'=>strval($additional_posts),
+				'ID'=>strval($unread_pp['id']),
+				'U_TITLE'=>$u_title,
+				'IGNORE_URL'=>$ignore_url,
+				'IGNORE_URL_2'=>$ignore_url_2,
+				'REPLY_URL'=>$reply_url,
+				'TOPIC_URL'=>$topic,
+				'POST'=>$post,
+				'DESCRIPTION'=>$description,
+				'TIME'=>$time,
+				'TIME_RAW'=>strval($time_raw),
+				'BY'=>$by,
+				'PROFILE_URL'=>$profile_link,
+				'TYPE'=>$type,
+			)));
 		}
 
 		require_code('caches2');

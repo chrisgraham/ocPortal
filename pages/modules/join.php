@@ -185,7 +185,17 @@ class Module_join
 			$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),'','email','',true));
 			$fields->attach(form_input_integer(do_lang_tempcode('CODE'),'','code',NULL,true));
 			$submit_name=do_lang_tempcode('PROCEED');
-			return do_template('FORM_SCREEN',array('_GUID'=>'e2c8c3762a308ac7489ec3fb32cc0cf8','TITLE'=>$title,'GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','URL'=>get_self_url(false,false,NULL,false,true),'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('MISSING_CONFIRM_CODE'),'SUBMIT_NAME'=>$submit_name));
+			return do_template('FORM_SCREEN',array(
+				'_GUID'=>'e2c8c3762a308ac7489ec3fb32cc0cf8',
+				'TITLE'=>$title,
+				'GET'=>true,
+				'SKIP_VALIDATION'=>true,
+				'HIDDEN'=>'',
+				'URL'=>get_self_url(false,false,NULL,false,true),
+				'FIELDS'=>$fields,
+				'TEXT'=>do_lang_tempcode('MISSING_CONFIRM_CODE'),
+				'SUBMIT_NAME'=>$submit_name,
+			));
 		}
 		$rows=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_validated'),array('m_validated_email_confirm_code'=>strval($code),'m_email_address'=>trim(get_param('email'))));
 		if (!array_key_exists(0,$rows))

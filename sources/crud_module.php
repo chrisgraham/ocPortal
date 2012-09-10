@@ -410,7 +410,17 @@ class standard_crud_module
 		$submit_name=do_lang_tempcode('PROCEED');
 		$hidden=build_keep_post_fields();
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'22812ac8056903811f444682d45ee448'.get_class($this),'GET'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>paragraph(do_lang_tempcode('CHOOSE_CATALOGUE')),'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'SKIP_VALIDATION'=>true));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'22812ac8056903811f444682d45ee448'.get_class($this),
+			'GET'=>true,
+			'HIDDEN'=>$hidden,
+			'TITLE'=>$title,
+			'TEXT'=>paragraph(do_lang_tempcode('CHOOSE_CATALOGUE')),
+			'URL'=>$post_url,
+			'FIELDS'=>$fields,
+			'SUBMIT_NAME'=>$submit_name,
+			'SKIP_VALIDATION'=>true,
+		));
 	}
 
 	/**
@@ -590,16 +600,46 @@ class standard_crud_module
 			}
 
 			$fields->attach($fields2);
-			return do_template('CATALOGUE_ADDING_SCREEN',array('_GUID'=>'adf73fdfccb387640340f15d5d6dae54'.get_class($this),'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$this->add_text,'URL'=>$post_url,'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,'FIELDS_NEW'=>$fields_new->evaluate()/*FUDGEFUDGE*/,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>$this->javascript));
+			return do_template('CATALOGUE_ADDING_SCREEN',array(
+				'_GUID'=>'adf73fdfccb387640340f15d5d6dae54'.get_class($this),
+				'HIDDEN'=>$hidden,
+				'TITLE'=>$title,
+				'TEXT'=>$this->add_text,
+				'URL'=>$post_url,
+				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
+				'FIELDS_NEW'=>$fields_new->evaluate()/*FUDGEFUDGE*/,
+				'SUBMIT_NAME'=>$submit_name,
+				'JAVASCRIPT'=>$this->javascript,
+			));
 		}
 		elseif (!is_null($this->posting_form_title))
 		{
 			$posting_form=get_posting_form($submit_name,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,$posting_form_tabindex,$this->posting_field_required);
-			return do_template('POSTING_SCREEN',array('_GUID'=>'15930ba8cc02634ed3a225c9714c3eac'.get_class($this),'TITLE'=>$title,'PREVIEW'=>$this->do_preview,'SEPARATE_PREVIEW'=>$this->second_stage_preview,'TEXT'=>$this->add_text,'POSTING_FORM'=>$posting_form->evaluate()/*FUDGEFUDGE*/,'JAVASCRIPT'=>$this->javascript));
+			return do_template('POSTING_SCREEN',array(
+				'_GUID'=>'15930ba8cc02634ed3a225c9714c3eac'.get_class($this),
+				'TITLE'=>$title,
+				'PREVIEW'=>$this->do_preview,
+				'SEPARATE_PREVIEW'=>$this->second_stage_preview,
+				'TEXT'=>$this->add_text,
+				'POSTING_FORM'=>$posting_form->evaluate()/*FUDGEFUDGE*/,
+				'JAVASCRIPT'=>$this->javascript,
+			));
 		} else
 		{
 			$fields->attach($fields2);
-			return do_template('FORM_SCREEN',array('_GUID'=>'1df73fdfccb387640340f15d5d6dae54'.get_class($this),'PREVIEW'=>$this->do_preview,'SEPARATE_PREVIEW'=>$this->second_stage_preview,'HIDDEN'=>$hidden,'TITLE'=>$title,'SKIP_VALIDATION'=>$this->skip_validation,'TEXT'=>$this->add_text,'URL'=>$post_url,'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>$this->javascript));
+			return do_template('FORM_SCREEN',array(
+				'_GUID'=>'1df73fdfccb387640340f15d5d6dae54'.get_class($this),
+				'PREVIEW'=>$this->do_preview,
+				'SEPARATE_PREVIEW'=>$this->second_stage_preview,
+				'HIDDEN'=>$hidden,
+				'TITLE'=>$title,
+				'SKIP_VALIDATION'=>$this->skip_validation,
+				'TEXT'=>$this->add_text,
+				'URL'=>$post_url,
+				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
+				'SUBMIT_NAME'=>$submit_name,
+				'JAVASCRIPT'=>$this->javascript,
+			));
 		}
 	}
 
@@ -858,7 +898,10 @@ class standard_crud_module
 				$text=paragraph(do_lang_tempcode('CHOOSE_EDIT_TABLE'));
 			}
 
-			return do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'3a3e7cf1bef6ca31f8c992c69a80449e','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>$has_ordering?do_lang_tempcode('ORDER'):NULL,'POST_URL'=>get_self_url()));
+			$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'3a3e7cf1bef6ca31f8c992c69a80449e','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>$has_ordering?do_lang_tempcode('ORDER'):NULL,'POST_URL'=>get_self_url()));
+
+			require_code('templates_internalise_screen');
+			return internalise_own_screen($tpl);
 		} else
 		{
 			$_entries=$this->nice_get_entries();
@@ -892,7 +935,18 @@ class standard_crud_module
 			$iframe_url.=$keep->evaluate();
 		}
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'228a05e24253f324ea286ea8ac3d8b02'.get_class($this),'GET'=>true,'IFRAME_URL'=>$iframe_url,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>$text,'URL'=>$post_url,'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,'SUBMIT_NAME'=>$submit_name,'SKIP_VALIDATION'=>true));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'228a05e24253f324ea286ea8ac3d8b02'.get_class($this),
+			'GET'=>true,
+			'IFRAME_URL'=>$iframe_url,
+			'HIDDEN'=>'',
+			'TITLE'=>$title,
+			'TEXT'=>$text,
+			'URL'=>$post_url,
+			'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
+			'SUBMIT_NAME'=>$submit_name,
+			'SKIP_VALIDATION'=>true,
+		));
 	}
 
 	/**
@@ -1099,17 +1153,52 @@ class standard_crud_module
 			}
 
 			$fields->attach($fields2);
-			return do_template('CATALOGUE_EDITING_SCREEN',array('_GUID'=>'584d7dc7c2c13939626102374f13f508'.get_class($this),'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$this->add_text,'URL'=>$post_url,'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,'FIELDS_EXISTING'=>$fields_existing->evaluate()/*FUDGEFUDGE*/,'FIELDS_NEW'=>$fields_new->evaluate()/*FUDGEFUDGE*/,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>$this->javascript));
+			return do_template('CATALOGUE_EDITING_SCREEN',array(
+				'_GUID'=>'584d7dc7c2c13939626102374f13f508'.get_class($this),
+				'HIDDEN'=>$hidden,
+				'TITLE'=>$title,
+				'TEXT'=>$this->add_text,
+				'URL'=>$post_url,
+				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
+				'FIELDS_EXISTING'=>$fields_existing->evaluate()/*FUDGEFUDGE*/,
+				'FIELDS_NEW'=>$fields_new->evaluate()/*FUDGEFUDGE*/,
+				'SUBMIT_NAME'=>$submit_name,
+				'JAVASCRIPT'=>$this->javascript,
+			));
 		}
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 		if (!is_null($this->posting_form_title))
 		{
 			$posting_form=get_posting_form($submit_name,$this->posting_form_text,$post_url,$hidden,$fields,$this->posting_form_title,'',$fields2,$this->posting_form_text_parsed,$this->javascript,NULL,$this->posting_field_required);
-			return do_template('POSTING_SCREEN',array('_GUID'=>'841b9af3aa80bcab86b907e4b942786a'.get_class($this),'PREVIEW'=>$this->do_preview,'TITLE'=>$title,'SEPARATE_PREVIEW'=>$this->second_stage_preview,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TEXT'=>$this->add_text,'POSTING_FORM'=>$posting_form->evaluate()/*FUDGEFUDGE*/,'JAVASCRIPT'=>$this->javascript));
+			return do_template('POSTING_SCREEN',array(
+				'_GUID'=>'841b9af3aa80bcab86b907e4b942786a'.get_class($this),
+				'PREVIEW'=>$this->do_preview,
+				'TITLE'=>$title,
+				'SEPARATE_PREVIEW'=>$this->second_stage_preview,
+				'PING_URL'=>$ping_url,
+				'WARNING_DETAILS'=>$warning_details,
+				'TEXT'=>$this->add_text,
+				'POSTING_FORM'=>$posting_form->evaluate()/*FUDGEFUDGE*/,
+				'JAVASCRIPT'=>$this->javascript,
+			));
 		} else
 		{
 			$fields->attach($fields2);
-			return do_template('FORM_SCREEN',array('_GUID'=>'2d70be34595a16c6f170d966b894bfe2'.get_class($this),'PREVIEW'=>$this->do_preview,'SEPARATE_PREVIEW'=>$this->second_stage_preview,'TITLE'=>$title,'SKIP_VALIDATION'=>$this->skip_validation,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'HIDDEN'=>$hidden,'TEXT'=>$this->edit_text,'URL'=>$post_url,'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,'SUBMIT_NAME'=>$submit_name,'JAVASCRIPT'=>$this->javascript));
+			return do_template('FORM_SCREEN',array(
+				'_GUID'=>'2d70be34595a16c6f170d966b894bfe2'.get_class($this),
+				'PREVIEW'=>$this->do_preview,
+				'SEPARATE_PREVIEW'=>$this->second_stage_preview,
+				'TITLE'=>$title,
+				'SKIP_VALIDATION'=>$this->skip_validation,
+				'PING_URL'=>$ping_url,
+				'WARNING_DETAILS'=>$warning_details,
+				'HIDDEN'=>$hidden,
+				'TEXT'=>$this->edit_text,
+				'URL'=>$post_url,
+				'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
+				'SUBMIT_NAME'=>$submit_name,
+				'JAVASCRIPT'=>$this->javascript,
+			));
 		}
 	}
 

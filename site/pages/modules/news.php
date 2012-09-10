@@ -326,9 +326,6 @@ class Module_news
 	{
 		$title=get_screen_title(($blogs===1)?'BLOGS':(($blogs===0)?'JUST_NEWS_CATEGORIES':'NEWS_CATEGORIES'));
 
-		inform_non_canonical_parameter('news_categories_max');
-		inform_non_canonical_parameter('news_categories_start');
-
 		$start=get_param_integer('news_categories_start',0);
 		$max=get_param_integer('news_categories_max',30);
 
@@ -398,7 +395,10 @@ class Module_news
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('NEWS_CATEGORIES'),$start,'news_categories_start',$max,'news_categories_max',$max_rows);
 
-		return do_template('PAGINATION_SCREEN',array('_GUID'=>'c61c945e0453c2145a819ca60e8faf09','TITLE'=>$title,'SUBMIT_URL'=>$submit_url,'CONTENT'=>$content,'PAGINATION'=>$pagination));
+		$tpl=do_template('PAGINATION_SCREEN',array('_GUID'=>'c61c945e0453c2145a819ca60e8faf09','TITLE'=>$title,'SUBMIT_URL'=>$submit_url,'CONTENT'=>$content,'PAGINATION'=>$pagination));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

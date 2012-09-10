@@ -290,7 +290,7 @@ function do_work()
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
 	// polls (remember to test poll archive)
-	require_code('polls');
+	require_code('polls2');
 	for ($i=$GLOBALS['SITE_DB']->query_select_value('poll','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		$poll_id=add_poll(random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),random_line(),10,0,0,0,0,'');
@@ -314,7 +314,7 @@ function do_work()
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
 	// quizzes
-	require_code('quiz');
+	require_code('quiz2');
 	for ($i=$GLOBALS['SITE_DB']->query_select_value('quizzes','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_quiz(random_line(),0,random_text(),random_text(),random_text(),'',0,time(),NULL,3,300,'SURVEY',1,'1) Some question');
@@ -339,7 +339,7 @@ function do_work()
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
 	// iotds
-	require_code('iotds');
+	require_code('iotds2');
 	for ($i=$GLOBALS['SITE_DB']->query_select_value('iotd','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_iotd(get_logo_url(),random_line(),random_text(),get_logo_url(),1,0,0,0,'');
@@ -376,7 +376,7 @@ function do_work()
 	if (function_exists('gc_collect_cycles')) gc_enable();
 
 	// blogs and news entries (remember to test both blogs [categories] list, and a list of all news entries)
-	require_code('news');
+	require_code('news2');
 	for ($i=$GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)');$i<$num_wanted;$i++)
 	{
 		add_news(random_line(),random_text(),'admin',1,1,1,1,'',random_text(),NULL,NULL,NULL,db_get_first_id()+$i);

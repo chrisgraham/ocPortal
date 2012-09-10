@@ -95,7 +95,7 @@
 				<p class="proceed_button">
 					<input type="hidden" name="confirm" value="1" />
 
-					<input class="button_pageitem" type="submit" value="{!DELETE}" onclick="window.fauxmodal_confirm('{!CONFIRM_DELETE;,{MENU_NAME*}}',function(answer) { if (answer) form.submit(); }); return false;" />
+					<input class="button_pageitem" type="submit" value="{!DELETE}" onclick="var form=this.form; window.fauxmodal_confirm('{!CONFIRM_DELETE;,{MENU_NAME*}}',function(answer) { if (answer) form.submit(); }); return false;" />
 				</p>
 			</form>
 		</div>

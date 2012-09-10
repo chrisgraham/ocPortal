@@ -155,14 +155,29 @@ class Block_side_users_online
 				foreach ($_birthdays as $_birthday)
 				{
 					$colour=get_group_colour(ocf_get_member_primary_group($_birthday['id']));
-					$birthday=do_template('OCF_USER_MEMBER',array('_GUID'=>'b2d355ff45f4b4170b937ef0753e6a78','COLOUR'=>$colour,'AGE'=>array_key_exists('age',$_birthday)?integer_format($_birthday['age']):NULL,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($_birthday['id'],false,true),'USERNAME'=>$_birthday['username']));
+					$birthday=do_template('OCF_USER_MEMBER',array(
+						'_GUID'=>'b2d355ff45f4b4170b937ef0753e6a78',
+						'COLOUR'=>$colour,
+						'AGE'=>array_key_exists('age',$_birthday)?integer_format($_birthday['age']):NULL,
+						'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($_birthday['id'],false,true),
+						'USERNAME'=>$_birthday['username'],
+					));
 					$birthdays->attach($birthday);
 				}
 				if (!$birthdays->is_empty()) $birthdays=do_template('OCF_BIRTHDAYS',array('_GUID'=>'080ed2e74efd6410bd6b83ec01962c04','BIRTHDAYS'=>$birthdays));
 			}
 		}
 
-		return do_template('BLOCK_SIDE_USERS_ONLINE',array('_GUID'=>'fdfa68dff479b4ea7d517585297ea6af','CONTENT'=>$out,'GUESTS'=>integer_format($guests),'MEMBERS'=>integer_format($_members),'_GUESTS'=>strval($guests),'_MEMBERS'=>strval($_members),'BIRTHDAYS'=>$birthdays,'NEWEST'=>$newest));
+		return do_template('BLOCK_SIDE_USERS_ONLINE',array(
+			'_GUID'=>'fdfa68dff479b4ea7d517585297ea6af',
+			'CONTENT'=>$out,
+			'GUESTS'=>integer_format($guests),
+			'MEMBERS'=>integer_format($_members),
+			'_GUESTS'=>strval($guests),
+			'_MEMBERS'=>strval($_members),
+			'BIRTHDAYS'=>$birthdays,
+			'NEWEST'=>$newest,
+		));
 	}
 
 }

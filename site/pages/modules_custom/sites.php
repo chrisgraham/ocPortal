@@ -387,7 +387,13 @@ class Module_sites
 
 		$install_url=$base_url.'install.php';
 
-		return do_template('OC_HOSTING_COPY_SUCCESS_PAGE',array('_GUID'=>'5946fe2252fe1a67ba54e2c20a1d4d63','TITLE'=>$title,'FTP_FOLDER'=>$path.(($extra_path=='')?'':($extra_path.'/')),'HIDDEN'=>build_keep_post_fields(array('path','extra_path')),'INSTALL_URL'=>$install_url));
+		return do_template('OC_HOSTING_COPY_SUCCESS_PAGE',array(
+			'_GUID'=>'5946fe2252fe1a67ba54e2c20a1d4d63',
+			'TITLE'=>$title,
+			'FTP_FOLDER'=>$path.(($extra_path=='')?'':($extra_path.'/')),
+			'HIDDEN'=>build_keep_post_fields(array('path','extra_path')),
+			'INSTALL_URL'=>$install_url,
+		));
 	}
 
 	/**
@@ -400,8 +406,6 @@ class Module_sites
 		require_lang('myocp');
 
 		$title=get_screen_title('MO_ADD_SITE');
-
-		$_GET['wide']='1';
 
 		$fields=new ocp_tempcode();
 		$fields->attach(form_input_line(do_lang_tempcode('MO_CODENAME'),do_lang('MO_CODENAME_DESCRIPTION'),'codename','',true));
@@ -424,8 +428,6 @@ class Module_sites
 		require_lang('myocp');
 
 		$title=get_screen_title('MO_ADD_SITE');
-
-		$_GET['wide']='1';
 
 		$codename=strtolower(post_param('codename'));
 		$name=post_param('name','');

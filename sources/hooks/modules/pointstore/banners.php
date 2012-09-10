@@ -158,7 +158,17 @@ class Hook_pointstore_banners
 		$keep->attach(form_input_hidden('notes',$notes));
 		$keep->attach(form_input_hidden('name',$name));
 
-		return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'6d5ac2177bd76e31b915d4358c0bbbf4','ACTION'=>'','COST'=>integer_format($cost),'POINTS_AFTER'=>integer_format($points_after),'TITLE'=>$title,'MESSAGE'=>$banner,'PROCEED_URL'=>$proceed_url,'CANCEL_URL'=>$cancel_url,'KEEP'=>$keep));
+		return do_template('POINTSTORE_CONFIRM_SCREEN',array(
+			'_GUID'=>'6d5ac2177bd76e31b915d4358c0bbbf4',
+			'ACTION'=>'',
+			'COST'=>integer_format($cost),
+			'POINTS_AFTER'=>integer_format($points_after),
+			'TITLE'=>$title,
+			'MESSAGE'=>$banner,
+			'PROCEED_URL'=>$proceed_url,
+			'CANCEL_URL'=>$cancel_url,
+			'KEEP'=>$keep,
+		));
 	}
 
 	/**
@@ -345,7 +355,17 @@ class Hook_pointstore_banners
 			$keep->attach(form_input_hidden('ord','1'));
 			$action=do_lang_tempcode('BANNER_UPGRADE_CONFIRM',integer_format($futimp),integer_format($futhit));
 
-			return do_template('POINTSTORE_CONFIRM_SCREEN',array('_GUID'=>'acdde0bd41ccd1459bbd7a1e9ca5ed68','TITLE'=>$title,'MESSAGE'=>$action,'ACTION'=>'','COST'=>integer_format($total_price),'POINTS_AFTER'=>integer_format($points_after),'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF'),'PROCEED_URL'=>$proceed_url,'KEEP'=>$keep));
+			return do_template('POINTSTORE_CONFIRM_SCREEN',array(
+				'_GUID'=>'acdde0bd41ccd1459bbd7a1e9ca5ed68',
+				'TITLE'=>$title,
+				'MESSAGE'=>$action,
+				'ACTION'=>'',
+				'COST'=>integer_format($total_price),
+				'POINTS_AFTER'=>integer_format($points_after),
+				'CANCEL_URL'=>build_url(array('page'=>'_SELF'),'_SELF'),
+				'PROCEED_URL'=>$proceed_url,
+				'KEEP'=>$keep,
+			));
 		}
 
 		// Our Query

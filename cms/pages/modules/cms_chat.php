@@ -147,7 +147,11 @@ class Module_cms_chat
 		if ($fields->is_empty()) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
 
 		$results_table=results_table(do_lang_tempcode('ROOMS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
-		return do_template('CHAT_MODERATE_SCREEN',array('_GUID'=>'c59cb6c8409d0e678b05628d92e423db','TITLE'=>$title,'INTRODUCTION'=>$introtext,'CONTENT'=>$results_table,'LINKS'=>array()));
+
+		$tpl=do_template('CHAT_MODERATE_SCREEN',array('_GUID'=>'c59cb6c8409d0e678b05628d92e423db','TITLE'=>$title,'INTRODUCTION'=>$introtext,'CONTENT'=>$results_table,'LINKS'=>array()));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -241,7 +245,9 @@ class Module_cms_chat
 
 		$delete_url=build_url(array('page'=>'_SELF','type'=>'mass_delete','room_id'=>$room_id,'start'=>$start,'max'=>$max),'_SELF');
 
-		return do_template('CHAT_MODERATE_SCREEN',array('_GUID'=>'940de7e8c9a0ac3c575892887c7ef3c0','URL'=>$delete_url,'TITLE'=>$title,'INTRODUCTION'=>'','CONTENT'=>$content,'LINKS'=>$links));
+		$tpl=do_template('CHAT_MODERATE_SCREEN',array('_GUID'=>'940de7e8c9a0ac3c575892887c7ef3c0','URL'=>$delete_url,'TITLE'=>$title,'INTRODUCTION'=>'','CONTENT'=>$content,'LINKS'=>$links));
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

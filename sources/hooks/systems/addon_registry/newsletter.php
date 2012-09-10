@@ -72,6 +72,7 @@ class Hook_addon_registry_newsletter
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/block_ui_renderers/newsletters.php',
 			'sources/hooks/modules/admin_setupwizard/newsletter.php',
 			'sources/hooks/systems/config_default/interest_levels.php',
 			'sources/hooks/systems/config_default/newsletter_text.php',

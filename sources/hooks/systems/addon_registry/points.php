@@ -282,7 +282,6 @@ class Hook_addon_registry_points
 			'POINTS_GAINED_GIVEN'=>placeholder_number(),
 			'POINTS_GAINED_RATING'=>placeholder_number(),
 			'POINTS_GAINED_VOTING'=>placeholder_number(),
-			'POINTS_GAINED_AUTO'=>placeholder_number(),
 			'POINTS_USED'=>placeholder_number(),
 			'REMAINING'=>placeholder_number(),
 			'GIFT_POINTS_USED'=>placeholder_number(),

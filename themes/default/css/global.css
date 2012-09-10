@@ -2016,6 +2016,14 @@ div.wysiwyg_toolbar_color_finder {
 	{$BETA_CSS_PROPERTY,opacity: 0.2;}
 }
 
+.ajax_loading_block {
+	padding: 2em 6em;
+	margin-top: -2em;
+	margin-left: -6em;
+	background: rgba(255,255,255,0.5);
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+}
+
 .ajax_tree_list_loading {
 	padding: 2em;
 	text-align: center;

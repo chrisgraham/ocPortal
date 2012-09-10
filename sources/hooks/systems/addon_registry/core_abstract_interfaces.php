@@ -138,10 +138,10 @@ class Hook_addon_registry_core_abstract_interfaces
 			'RESULTS_TABLE_FIELD_TITLE_SORTABLE.tpl',
 			'RESULTS_TABLE_TICK.tpl',
 			'JAVASCRIPT_PAGINATION.tpl',
-			'IFRAME_SCREEN.tpl',
+			'INTERNALISED_AJAX_SCREEN.tpl',
 			'MEMBER_TOOLTIP.tpl',
 			'SIMPLE_PREVIEW_BOX.tpl',
-			'JAVASCRIPT_IFRAME_SCREEN.tpl',
+			'JAVASCRIPT_INTERNALISED_AJAX_SCREEN.tpl',
 			'RESULTS_TABLE_SCREEN.tpl',
 			'sources/templates_interfaces.php',
 			'sources/templates_redirect_screen.php',
@@ -215,7 +215,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			'MAP_TABLE_FIELD_ABBR.tpl'=>'map_table',
 			'MAP_TABLE_FIELD_RAW.tpl'=>'map_table',
 			'MAP_TABLE_FIELD_RAW_ABBR.tpl'=>'map_table',
-			'IFRAME_SCREEN.tpl'=>'iframe_screen',
+			'INTERNALISED_AJAX_SCREEN.tpl'=>'internalised_ajax_screen',
 			'WARN_SCREEN.tpl'=>'warn_screen',
 			'DO_NEXT_SCREEN.tpl'=>'administrative__do_next_screen',
 			'DO_NEXT_ITEM.tpl'=>'administrative__do_next_screen',
@@ -506,12 +506,12 @@ class Hook_addon_registry_core_abstract_interfaces
 	function tpl_preview__iframe_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('IFRAME_SCREEN', array(
-				'TITLE'=>lorem_title(),
+			lorem_globalise(do_lorem_template('INTERNALISED_AJAX_SCREEN', array(
+				'SCREEN_CONTENT'=>lorem_placeholder_html(),
 				'REFRESH_IF_CHANGED'=>lorem_phrase(),
 				'CHANGE_DETECTION_URL'=>placeholder_url(),
 				'REFRESH_TIME'=>placeholder_date_raw(),
-				'IFRAME_URL'=>'http://ocportal.com'
+				'URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}

@@ -144,6 +144,7 @@ class Hook_addon_registry_catalogues
 			'sources/blocks/main_contact_catalogues.php',
 			'sources/hooks/systems/symbols/CATALOGUE_ENTRY_ALL_FIELD_VALUES.php',
 			'sources/hooks/systems/content_meta_aware/catalogue.php',
+			'sources/hooks/systems/block_ui_renderers/catalogues.php',
 		);
 	}
 

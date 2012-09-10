@@ -54,7 +54,7 @@ function init__files()
 function is_suexec_like()
 {
 	return (((function_exists('posix_getuid')) && (strpos(@ini_get('disable_functions'),'posix_getuid')===false) && (!isset($_SERVER['HTTP_X_MOSSO_DT'])) && (is_integer(@posix_getuid())) && (@posix_getuid()==@fileowner(get_file_base().'/'.(running_script('install')?'install.php':'index.php'))))
-	|| (is_writable_wrap(get_file_base().'/'.(running_script('index')?'index.php':'install.php'))));
+	|| (is_writable_wrap(get_file_base().'/'.(running_script('install')?'install.php':'index.php'))));
 }
 
 /**

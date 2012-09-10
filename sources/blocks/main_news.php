@@ -370,7 +370,14 @@ class Block_main_news
 				return new ocp_tempcode();
 			}
 
-			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'9d7065af4dd4026ffb34243fd931f99d','HIGH'=>false,'TITLE'=>$_title,'MESSAGE'=>do_lang_tempcode(($blogs==1)?'BLOG_NO_NEWS':'NO_NEWS'),'ADD_NAME'=>do_lang_tempcode(($blogs==1)?'ADD_NEWS_BLOG':'ADD_NEWS'),'SUBMIT_URL'=>$submit_url));
+			return do_template('BLOCK_NO_ENTRIES',array(
+				'_GUID'=>'9d7065af4dd4026ffb34243fd931f99d',
+				'HIGH'=>false,
+				'TITLE'=>$_title,
+				'MESSAGE'=>do_lang_tempcode(($blogs==1)?'BLOG_NO_NEWS':'NO_NEWS'),
+				'ADD_NAME'=>do_lang_tempcode(($blogs==1)?'ADD_NEWS_BLOG':'ADD_NEWS'),
+				'SUBMIT_URL'=>$submit_url,
+			));
 		}
 
 		// Pagination

@@ -330,7 +330,19 @@ function _do_next_section($list,$title)
 		}
 		$target=array_key_exists(4,$_option)?$_option[4]:NULL;
 		$auto_add=array_key_exists(5,$_option)?$_option[5]:NULL;
-		$next_items->attach(do_template('DO_NEXT_ITEM',array('_GUID'=>'f39b6055d1127edb452595e7eeaf2f01','AUTO_ADD'=>$auto_add,'I'=>strval($i),'I2'=>strval(mt_rand(0,32000)).'_'.strval($i),'NUM_SIBLINGS'=>strval($num_siblings),'TARGET'=>$target,'PICTURE'=>$option,'DESCRIPTION'=>$description,'LINK'=>$link,'DOC'=>$doc,'WARNING'=>array_key_exists(3,$url)?$url[3]:'')));
+		$next_items->attach(do_template('DO_NEXT_ITEM',array(
+			'_GUID'=>'f39b6055d1127edb452595e7eeaf2f01',
+			'AUTO_ADD'=>$auto_add,
+			'I'=>strval($i),
+			'I2'=>strval(mt_rand(0,32000)).'_'.strval($i),
+			'NUM_SIBLINGS'=>strval($num_siblings),
+			'TARGET'=>$target,
+			'PICTURE'=>$option,
+			'DESCRIPTION'=>$description,
+			'LINK'=>$link,
+			'DOC'=>$doc,
+			'WARNING'=>array_key_exists(3,$url)?$url[3]:'',
+		)));
 		$i++;
 	}
 

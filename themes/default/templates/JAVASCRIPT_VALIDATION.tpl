@@ -900,6 +900,7 @@ function disable_preview_scripts(under)
 	elements=under.getElementsByTagName('input');
 	for (i=0;i<elements.length;i++)
 		if ((elements[i].getAttribute('type')=='button') || (elements[i].getAttribute('type')=='image')) elements[i].onclick=no_go;
+	// Make sure links in the preview don't break it - put in a new window
 	elements=under.getElementsByTagName('a');
 	for (i=0;i<elements.length;i++)
 		elements[i].target='false_blank'; // Real _blank would trigger annoying CSS. This is better anyway.

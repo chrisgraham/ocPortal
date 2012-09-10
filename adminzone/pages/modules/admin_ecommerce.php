@@ -87,6 +87,7 @@ class Module_admin_ecommerce extends standard_crud_module
 	{
 		require_lang('ecommerce');
 		require_code('ecommerce');
+		require_code('ecommerce2');
 
 		if (get_value('unofficial_ecommerce')!='1')
 		{
@@ -247,7 +248,10 @@ class Module_admin_ecommerce extends standard_crud_module
 		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
 		breadcrumb_set_self(do_lang_tempcode('TRANSACTIONS'));
 
-		return do_template('ECOM_TRANSACTION_LOGS_SCREEN',array('_GUID'=>'a6ba07e4be36ecc85157511e3807df75','TITLE'=>$title,'PRODUCTS'=>$products,'URL'=>$post_url,'RESULTS_TABLE'=>$results_table));
+		$tpl=do_template('ECOM_TRANSACTION_LOGS_SCREEN',array('_GUID'=>'a6ba07e4be36ecc85157511e3807df75','TITLE'=>$title,'PRODUCTS'=>$products,'URL'=>$post_url,'RESULTS_TABLE'=>$results_table));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -408,7 +412,17 @@ class Module_admin_ecommerce extends standard_crud_module
 		$fields->attach(form_input_date(do_lang_tempcode('FROM'),'','from',false,false,false,$month_start,10,intval(date('Y'))-9));
 		$fields->attach(form_input_date(do_lang_tempcode('TO'),'','to',false,false,false,time(),10,intval(date('Y'))-9));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'92888622a3ed6b7edbd4d1e5e2b35986','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'FIELDS'=>$fields,'TEXT'=>'','HIDDEN'=>'','URL'=>get_self_url(false,false,NULL,false,true),'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE')));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'92888622a3ed6b7edbd4d1e5e2b35986',
+			'GET'=>true,
+			'SKIP_VALIDATION'=>true,
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>'',
+			'HIDDEN'=>'',
+			'URL'=>get_self_url(false,false,NULL,false,true),
+			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
+		));
 	}
 
 	/**
@@ -771,8 +785,6 @@ class Module_admin_ecommerce extends standard_crud_module
 		} else $text=NULL;
 
 		$title=post_param('title');
-//		if ((strpos($title,';')!==false) || (strpos($title,',')!==false) || (strpos($title,'=')!==false))
-//			warn_exit(do_lang_tempcode('PRODUCT_NAME_SPECIAL_CHARS'));
 
 		return array(strval(add_usergroup_subscription($title,post_param('description'),post_param('cost'),post_param_integer('length'),post_param('length_units'),post_param_integer('group_id'),post_param_integer('uses_primary',0),post_param_integer('enabled',0),post_param('mail_start'),post_param('mail_end'),post_param('mail_uhoh'))),$text);
 	}
@@ -785,8 +797,7 @@ class Module_admin_ecommerce extends standard_crud_module
 	function edit_actualisation($id)
 	{
 		$title=post_param('title');
-//		if ((strpos($title,';')!==false) || (strpos($title,',')!==false) || (strpos($title,'=')!==false))
-//			warn_exit(do_lang_tempcode('PRODUCT_NAME_SPECIAL_CHARS'));
+
 		edit_usergroup_subscription(intval($id),$title,post_param('description'),post_param('cost'),post_param_integer('length'),post_param('length_units'),post_param_integer('group_id'),post_param_integer('uses_primary',0),post_param_integer('enabled',0),post_param('mail_start'),post_param('mail_end'),post_param('mail_uhoh'));
 	}
 

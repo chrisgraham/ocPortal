@@ -71,7 +71,7 @@ class Block_main_code_documentor
 		if (substr($filename,-8)=='.php.php') $filename=substr($filename,0,strlen($filename)-4);
 
 		$full_path=((get_file_base()!='')?(get_file_base().'/'):'').filter_naughty($filename);
-		if (!file_exists($full_path)) return paragraph(do_lang_tempcode('MISSING_RESOURCE'));
+		if (!file_exists($full_path)) return paragraph(do_lang_tempcode('MISSING_RESOURCE'),'','red_alert');
 
 		$_classes=get_php_file_api($filename);
 

@@ -174,10 +174,6 @@ class Module_admin_actionlog
 
 		$title=get_screen_title('VIEW_ACTION_LOGS');
 
-		require_code('templates_internalise_screen');
-		$test_tpl=internalise_own_screen($title);
-		if (is_object($test_tpl)) return $test_tpl;
-
 		$id=get_param_integer('id',-1);
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
@@ -304,7 +300,10 @@ class Module_admin_actionlog
 		}
 		$table=results_table(do_lang_tempcode('ACTIONS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		return do_template('ACTION_LOGS_SCREEN',array('_GUID'=>'d75c813e372c3ca8d1204609e54c9d65','TABLE'=>$table,'TITLE'=>$title));
+		$tpl=do_template('ACTION_LOGS_SCREEN',array('_GUID'=>'d75c813e372c3ca8d1204609e54c9d65','TABLE'=>$table,'TITLE'=>$title));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -337,11 +336,12 @@ class Module_admin_actionlog
 		$type_str=do_lang($row['the_type'],$row['param_a'],$row['param_b'],NULL,NULL,false);
 		if (is_null($type_str)) $type_str=$row['the_type'];
 		$fields=array(
-						'USERNAME'=>$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['the_user']),
-						'DATE_TIME'=>get_timezoned_date($row['date_and_time']),
-						'TYPE'=>$type_str,
-						'PARAMETER_A'=>is_null($row['param_a'])?'':$row['param_a'],
-						'PARAMETER_B'=>is_null($row['param_b'])?'':$row['param_b']);
+			'USERNAME'=>$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['the_user']),
+			'DATE_TIME'=>get_timezoned_date($row['date_and_time']),
+			'TYPE'=>$type_str,
+			'PARAMETER_A'=>is_null($row['param_a'])?'':$row['param_a'],
+			'PARAMETER_B'=>is_null($row['param_b'])?'':$row['param_b'],
+		);
 		if (array_key_exists('ip',$row)) $fields['IP_ADDRESS']=escape_html($row['ip']);
 		if (array_key_exists('reason',$row)) $fields['REASON']=escape_html($row['reason']);
 		if (addon_installed('securitylogging'))
@@ -355,7 +355,11 @@ class Module_admin_actionlog
 					$fields['IP_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'eff2890f2193ece32df8ec8ee48b252d','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_ip_ban','id'=>$row['ip'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
 					if (get_option('stopforumspam_api_key').get_option('tornevall_api_username')!='')
 					{
-						$fields['SYNDICATE_TO_STOPFORUMSPAM']=do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'7d10045c6b3b48f256e2f8eb5535809c','LABEL'=>do_lang_tempcode('PROCEED'),'URL'=>build_url(array('page'=>'admin_ipban','type'=>'syndicate_ip_ban','ip'=>$row['ip'],'member_id'=>$row['the_user'],'reason'=>do_lang('BANNED_ADDRESSES'),'redirect'=>get_self_url(true)),get_module_zone('admin_ipban'))));
+						$fields['SYNDICATE_TO_STOPFORUMSPAM']=do_template('ACTION_LOGS_TOGGLE_LINK',array(
+							'_GUID'=>'7d10045c6b3b48f256e2f8eb5535809c',
+							'LABEL'=>do_lang_tempcode('PROCEED'),
+							'URL'=>build_url(array('page'=>'admin_ipban','type'=>'syndicate_ip_ban','ip'=>$row['ip'],'member_id'=>$row['the_user'],'reason'=>do_lang('BANNED_ADDRESSES'),'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')),
+						));
 					}
 				}
 			}

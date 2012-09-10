@@ -200,6 +200,7 @@ class Hook_addon_registry_galleries
 			'themes/default/images/audio_thumb.png',
 			'JAVASCRIPT_GALLERIES.tpl',
 			'OCF_MEMBER_PROFILE_GALLERIES.tpl',
+			'sources/hooks/systems/block_ui_renderers/galleries.php',
 		);
 	}
 

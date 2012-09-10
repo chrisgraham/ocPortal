@@ -737,7 +737,7 @@ class Hook_ocp_merge
 	 */
 	function import_iotds($db,$table_prefix,$file_base)
 	{
-		require_code('iotds');
+		require_code('iotds2');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'iotd',NULL,NULL,true);
 		if (is_null($rows)) return;
@@ -763,7 +763,7 @@ class Hook_ocp_merge
 	 */
 	function import_polls($db,$table_prefix,$file_base)
 	{
-		require_code('polls');
+		require_code('polls2');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'poll',NULL,NULL,true);
 		if (is_null($rows)) return;
@@ -846,7 +846,7 @@ class Hook_ocp_merge
 	 */
 	function import_news_and_categories($db,$table_prefix,$file_base)
 	{
-		require_code('news');
+		require_code('news2');
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'news_categories ORDER BY id',NULL,NULL,true);
 		if (is_null($rows)) return;

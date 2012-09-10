@@ -447,7 +447,17 @@ class Module_purchase
 			}
 			$tpl=($temp[$product][0]==PRODUCT_SUBSCRIPTION)?'PURCHASE_WIZARD_STAGE_SUBSCRIBE':'PURCHASE_WIZARD_STAGE_PAY';
 			$logos=method_exists($object,'get_logos')?$object->get_logos():new ocp_tempcode();
-			$result=do_template($tpl,array('LOGOS'=>$logos,'TRANSACTION_BUTTON'=>$transaction_button,'CURRENCY'=>get_option('currency'),'ITEM_NAME'=>$item_name,'TITLE'=>$title,'LENGTH'=>is_null($length)?'':strval($length),'LENGTH_UNITS'=>$length_units,'PURCHASE_ID'=>$purchase_id,'PRICE'=>float_to_raw_string(floatval($price))));
+			$result=do_template($tpl,array(
+				'LOGOS'=>$logos,
+				'TRANSACTION_BUTTON'=>$transaction_button,
+				'CURRENCY'=>get_option('currency'),
+				'ITEM_NAME'=>$item_name,
+				'TITLE'=>$title,
+				'LENGTH'=>is_null($length)?'':strval($length),
+				'LENGTH_UNITS'=>$length_units,
+				'PURCHASE_ID'=>$purchase_id,
+				'PRICE'=>float_to_raw_string(floatval($price)),
+			));
 		} else // Handle the transaction internally
 		{
 			if (((ocp_srv('HTTPS')=='') || (ocp_srv('HTTPS')=='off')) && (!ecommerce_test_mode()))

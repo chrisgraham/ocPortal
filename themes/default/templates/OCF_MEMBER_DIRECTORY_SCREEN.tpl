@@ -14,7 +14,7 @@
 
 <h2>{!SEARCH}</h2>
 
-<form title="{!SEARCH}" target="_self" method="get" action="{GET_URL*}" onsubmit="try { window.scrollTo(0,0); } catch(e) {};">
+<form title="{!SEARCH}" target="_self" method="get" action="{$URL_FOR_GET_FORM*,{GET_URL}}" onsubmit="try { window.scrollTo(0,0); } catch(e) {};">
 	<div>
 		{HIDDEN}
 

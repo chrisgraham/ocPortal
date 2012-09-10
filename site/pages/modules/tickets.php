@@ -295,10 +295,6 @@ class Module_tickets
 				set_feed_url(find_script('backend').'?mode=tickets&filter='.strval($ticket_type));
 			$tickets=get_tickets(get_member(),$ticket_type);
 
-			require_code('templates_internalise_screen');
-			$test_tpl=internalise_own_screen($title,30,$tickets);
-			if (is_object($test_tpl)) return $test_tpl;
-
 			// List (our?) tickets
 			if (!is_null($tickets))
 			{
@@ -344,7 +340,10 @@ class Module_tickets
 		if (get_param('default','')!='') $map['default']=get_param('default');
 		$add_ticket_url=build_url($map,'_SELF');
 
-		return do_template('SUPPORT_TICKETS_SCREEN',array('_GUID'=>'b208a9f1504d6b8a76400d89a8265d91','TITLE'=>$title,'MESSAGE'=>$message,'LINKS'=>$links,'ADD_TICKET_URL'=>$add_ticket_url,'TYPES'=>$this->build_types_list(get_param_integer('ticket_type',NULL))));
+		$tpl=do_template('SUPPORT_TICKETS_SCREEN',array('_GUID'=>'b208a9f1504d6b8a76400d89a8265d91','TITLE'=>$title,'MESSAGE'=>$message,'LINKS'=>$links,'ADD_TICKET_URL'=>$add_ticket_url,'TYPES'=>$this->build_types_list(get_param_integer('ticket_type',NULL))));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl,30,$tickets);
 	}
 
 	/**
@@ -411,6 +410,8 @@ class Module_tickets
 			{
 				$id=strval($member).'_'.$ticket_id;
 				$title=get_screen_title('ADD_TICKET');
+
+				$_comments=array();
 			} else
 			{
 				$ticket_type=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$id));
@@ -437,10 +438,6 @@ class Module_tickets
 
 			if (!$new)
 			{
-				require_code('templates_internalise_screen');
-				$test_tpl=internalise_own_screen($title,30,$_comments_all);
-				if (is_object($test_tpl)) return $test_tpl;
-
 				if (is_null($_comments)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 				if (has_privilege(get_member(),'support_operator'))
 					$staff_details=make_string_tempcode($GLOBALS['FORUM_DRIVER']->topic_url($topic_id,escape_html(get_option('ticket_forum_name'))));
@@ -509,7 +506,25 @@ class Module_tickets
 						generate_captcha();
 					}
 				} else $use_captcha=false;
-				$comment_form=do_template('COMMENTS_POSTING_FORM',array('_GUID'=>'aaa32620f3eb68d9cc820b18265792d7','JOIN_BITS'=>'','FIRST_POST_URL'=>'','FIRST_POST'=>'','USE_CAPTCHA'=>$use_captcha,'ATTACHMENTS'=>$attachments,'ATTACH_SIZE_FIELD'=>$attach_size_field,'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>is_guest(),'EMAIL_OPTIONAL'=>((is_guest()) && ($ticket_type_details['guest_emails_mandatory'])),'GET_TITLE'=>true,'EM'=>$em,'DISPLAY'=>'block','COMMENT_URL'=>'','SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST'),'TITLE'=>do_lang_tempcode($new?'CREATE_TICKET_MAKE_POST':'MAKE_POST')));
+				$comment_form=do_template('COMMENTS_POSTING_FORM',array(
+					'_GUID'=>'aaa32620f3eb68d9cc820b18265792d7',
+					'JOIN_BITS'=>'',
+					'FIRST_POST_URL'=>'',
+					'FIRST_POST'=>'',
+					'USE_CAPTCHA'=>$use_captcha,
+					'ATTACHMENTS'=>$attachments,
+					'ATTACH_SIZE_FIELD'=>$attach_size_field,
+					'POST_WARNING'=>'',
+					'COMMENT_TEXT'=>'',
+					'GET_EMAIL'=>is_guest(),
+					'EMAIL_OPTIONAL'=>((is_guest()) && ($ticket_type_details['guest_emails_mandatory'])),
+					'GET_TITLE'=>true,
+					'EM'=>$em,
+					'DISPLAY'=>'block',
+					'COMMENT_URL'=>'',
+					'SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST'),
+					'TITLE'=>do_lang_tempcode($new?'CREATE_TICKET_MAKE_POST':'MAKE_POST'),
+				));
 			} else
 			{
 				$comment_form=new ocp_tempcode();
@@ -568,7 +583,7 @@ class Module_tickets
 			if (get_param('default','')!='') $map['default']=get_param('default');
 			$add_ticket_url=build_url($map,'_SELF');
 
-			return do_template('SUPPORT_TICKET_SCREEN',array(
+			$tpl=do_template('SUPPORT_TICKET_SCREEN',array(
 				'_GUID'=>'d21a9d161008c6c44fe7309a14be2c5b',
 				'SERIALIZED_OPTIONS'=>$serialized_options,
 				'HASH'=>$hash,
@@ -592,6 +607,8 @@ class Module_tickets
 				'PAGINATION'=>$pagination,
 			));
 
+			require_code('templates_internalise_screen');
+			return internalise_own_screen($tpl,30,$_comments);
 		} else // Guest has posted ticket successfully. Actually, this code problem never runs (as they in fact see a separate screen from do_update_ticket), but it's here as a fail safe.
 		{
 			return inform_screen(get_screen_title('ADD_TICKET'),do_lang_tempcode('SUCCESS'));

@@ -159,7 +159,10 @@ class Module_admin_security
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'clean','start'=>$start,'max'=>$max),'_SELF');
 
-		return do_template('SECURITY_SCREEN',array('_GUID'=>'e0b5e6557686b2320a8ce8166df07328','TITLE'=>$title,'FAILED_LOGINS'=>$failed_logins,'ALERTS'=>$alerts,'URL'=>$post_url));
+		$tpl=do_template('SECURITY_SCREEN',array('_GUID'=>'e0b5e6557686b2320a8ce8166df07328','TITLE'=>$title,'FAILED_LOGINS'=>$failed_logins,'ALERTS'=>$alerts,'URL'=>$post_url));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -215,7 +218,18 @@ class Module_admin_security
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SECURITY_LOGGING'))));
 
-		return do_template('SECURITY_ALERT_SCREEN',array('_GUID'=>'6c5543151af09c79bf204bea5df61dde','TITLE'=>$title,'USER_AGENT'=>$row['user_agent'],'REFERER'=>$row['referer'],'USER_OS'=>$row['user_os'],'REASON'=>$reason,'IP'=>hyperlink($lookup_url,$row['ip']),'USERNAME'=>hyperlink($member_url,escape_html($username)),'POST'=>$post,'URL'=>$row['url']));
+		return do_template('SECURITY_ALERT_SCREEN',array(
+			'_GUID'=>'6c5543151af09c79bf204bea5df61dde',
+			'TITLE'=>$title,
+			'USER_AGENT'=>$row['user_agent'],
+			'REFERER'=>$row['referer'],
+			'USER_OS'=>$row['user_os'],
+			'REASON'=>$reason,
+			'IP'=>hyperlink($lookup_url,$row['ip']),
+			'USERNAME'=>hyperlink($member_url,escape_html($username)),
+			'POST'=>$post,
+			'URL'=>$row['url'],
+		));
 	}
 
 }

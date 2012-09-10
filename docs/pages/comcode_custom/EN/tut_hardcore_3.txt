@@ -141,7 +141,21 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
             $profile_link=$GLOBALS['OCF_DRIVER']->member_profile_url($unread_pp['p_poster']);
             $redirect_url=get_self_url(true,true);
             $ignore_url=build_url(array('page'=>'topics','type'=>'mark_read_topic','id'=>$unread_pp['p_topic_id'],'redirect'=>$redirect_url),get_module_zone('topics'));
-            $notifications->attach(do_template('OCF_NOTIFICATION',array('_GUID'=>'3b224ea3f4da2f8f869a505b9756970a','ID'=>strval($unread_pp['id']),'U_TITLE'=>$u_title,'IGNORE_URL'=>$ignore_url,'REPLY_URL'=>$reply_url,'TOPIC_URL'=>$topic,'POST'=>$post,'DESCRIPTION'=>$description,'TIME'=>$time,'TIME_RAW'=>strval($time_raw),'BY'=>$by,'PROFILE_LINK'=>$profile_link,'TYPE'=>$type)));
+            $notifications->attach(do_template('OCF_NOTIFICATION',array(
+					'_GUID'=>'3b224ea3f4da2f8f869a505b9756970a',
+					'ID'=>strval($unread_pp['id']),
+					'U_TITLE'=>$u_title,
+					'IGNORE_URL'=>$ignore_url,
+					'REPLY_URL'=>$reply_url,
+					'TOPIC_URL'=>$topic,
+					'POST'=>$post,
+					'DESCRIPTION'=>$description,
+					'TIME'=>$time,
+					'TIME_RAW'=>strval($time_raw),
+					'BY'=>$by,
+					'PROFILE_LINK'=>$profile_link,
+					'TYPE'=>$type,
+				)));
          }
 
          put_into_cache('_new_pp',60*60*24,$cache_identifier,array($notifications,$num_unread_pps));

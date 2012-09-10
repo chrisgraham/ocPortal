@@ -33,8 +33,8 @@ if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'.chr(10).'
 
 require_code('locations_geopositioning');
 
-header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+prepare_for_known_ajax_response();
+
 header('Content-type: text/plain');
 
 $lstring=get_param('lstring',NULL);

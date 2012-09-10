@@ -68,6 +68,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
+		require_code('news2');
 		require_css('news');
 		require_lang('news');
 

@@ -234,7 +234,24 @@ class Module_admin_themes
 				require_code('themewizard');
 				$seed=find_theme_seed($theme);
 			}
-			$themes->attach(do_template('THEME_MANAGE',array('_GUID'=>'c65c7f3f87d62ad425c7a104a6018840','SEED'=>$seed,'THEME_USAGE'=>$theme_usage,'DATE'=>$_date,'RAW_DATE'=>strval($date),'NAME'=>$theme,'DESCRIPTION'=>$details['description'],'AUTHOR'=>$details['author'],'TITLE'=>$details['title'],'CSS_URL'=>$css_url,'TEMPLATES_URL'=>$templates_url,'IMAGES_URL'=>$images_url,'DELETABLE'=>$deletable,'EDIT_URL'=>$edit_url,'DELETE_URL'=>$delete_url,'SCREEN_PREVIEW_URL'=>$screen_preview_url)));
+			$themes->attach(do_template('THEME_MANAGE',array(
+				'_GUID'=>'c65c7f3f87d62ad425c7a104a6018840',
+				'SEED'=>$seed,
+				'THEME_USAGE'=>$theme_usage,
+				'DATE'=>$_date,
+				'RAW_DATE'=>strval($date),
+				'NAME'=>$theme,
+				'DESCRIPTION'=>$details['description'],
+				'AUTHOR'=>$details['author'],
+				'TITLE'=>$details['title'],
+				'CSS_URL'=>$css_url,
+				'TEMPLATES_URL'=>$templates_url,
+				'IMAGES_URL'=>$images_url,
+				'DELETABLE'=>$deletable,
+				'EDIT_URL'=>$edit_url,
+				'DELETE_URL'=>$delete_url,
+				'SCREEN_PREVIEW_URL'=>$screen_preview_url,
+			)));
 		}
 
 		$zones=find_all_zones(false,true);
@@ -674,7 +691,17 @@ class Module_admin_themes
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'16dfd6f0d77889f2438c2371e90738a3','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),'TITLE'=>$title,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>do_lang_tempcode('CSS_CHOOSE_TO_EDIT')));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'16dfd6f0d77889f2438c2371e90738a3',
+			'GET'=>true,
+			'SKIP_VALIDATION'=>true,
+			'HIDDEN'=>'',
+			'SUBMIT_NAME'=>do_lang_tempcode('CHOOSE'),
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'URL'=>$post_url,
+			'TEXT'=>do_lang_tempcode('CSS_CHOOSE_TO_EDIT'),
+		));
 	}
 
 	/**
@@ -809,7 +836,22 @@ class Module_admin_themes
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:choose_css:theme='.$theme,do_lang_tempcode('CHOOSE'))));
 
-		return do_template('THEME_EDIT_CSS_SCREEN',array('_GUID'=>'3e34b2f44d7a73202f1bb475fd4ac593','PING_URL'=>$ping_url,'OLD_CONTENTS'=>$old_contents,'WARNING_DETAILS'=>$warning_details,'REVISION_HISTORY'=>$revision_history,'SWITCH_ICON'=>$switch_icon,'SWITCH_STRING'=>$switch_string,'SWITCH_URL'=>$switch_url,'TITLE'=>$title,'THEME'=>$theme,'CSS'=>$css,'URL'=>$url,'FILE'=>$file,'ENTRIES'=>$entries));
+		return do_template('THEME_EDIT_CSS_SCREEN',array(
+			'_GUID'=>'3e34b2f44d7a73202f1bb475fd4ac593',
+			'PING_URL'=>$ping_url,
+			'OLD_CONTENTS'=>$old_contents,
+			'WARNING_DETAILS'=>$warning_details,
+			'REVISION_HISTORY'=>$revision_history,
+			'SWITCH_ICON'=>$switch_icon,
+			'SWITCH_STRING'=>$switch_string,
+			'SWITCH_URL'=>$switch_url,
+			'TITLE'=>$title,
+			'THEME'=>$theme,
+			'CSS'=>$css,
+			'URL'=>$url,
+			'FILE'=>$file,
+			'ENTRIES'=>$entries,
+		));
 	}
 
 	/**

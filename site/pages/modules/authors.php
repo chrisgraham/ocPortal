@@ -254,7 +254,22 @@ class Module_authors
 			$edit_url=build_url(array('page'=>'cms_authors','type'=>'_ad','id'=>$author),'cms');
 		}
 
-		return do_template('AUTHOR_SCREEN',array('_GUID'=>'ea789367b15bc90fc28d1c586e6e6536','TAGS'=>get_loaded_tags(),'TITLE'=>$title,'EDIT_URL'=>$edit_url,'AUTHOR'=>$author,'NEWS_RELEASED'=>$news_released,'DOWNLOADS_RELEASED'=>$downloads_released,'STAFF_DETAILS'=>$staff_details,'POINT_DETAILS'=>$point_details,'SEARCH_DETAILS'=>$search_details,'URL_DETAILS'=>$url_details,'FORUM_DETAILS'=>$forum_details,'SKILLS'=>$skills,'DESCRIPTION'=>$description));
+		return do_template('AUTHOR_SCREEN',array(
+			'_GUID'=>'ea789367b15bc90fc28d1c586e6e6536',
+			'TAGS'=>get_loaded_tags(),
+			'TITLE'=>$title,
+			'EDIT_URL'=>$edit_url,
+			'AUTHOR'=>$author,
+			'NEWS_RELEASED'=>$news_released,
+			'DOWNLOADS_RELEASED'=>$downloads_released,
+			'STAFF_DETAILS'=>$staff_details,
+			'POINT_DETAILS'=>$point_details,
+			'SEARCH_DETAILS'=>$search_details,
+			'URL_DETAILS'=>$url_details,
+			'FORUM_DETAILS'=>$forum_details,
+			'SKILLS'=>$skills,
+			'DESCRIPTION'=>$description,
+		));
 	}
 
 }

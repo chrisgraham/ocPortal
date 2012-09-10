@@ -186,12 +186,24 @@ class Module_admin_menus
 
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
+		// Actualiser URL
 		$map=array('page'=>'_SELF','type'=>'edit','wide'=>1);
 		if (get_param('redirect','!')!='!') $map['redirect']=get_param('redirect');
 		$post_url=build_url($map,'_SELF',NULL,false,true);
+
 		$submit_name=do_lang_tempcode('CHOOSE');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'f3c04ea3fb5e429210c5e33e5a2f2092','GET'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'HIDDEN'=>'','TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'FIELDS'=>$fields,'URL'=>$post_url,'SUBMIT_NAME'=>$submit_name));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'f3c04ea3fb5e429210c5e33e5a2f2092',
+			'GET'=>true,
+			'SKIP_VALIDATION'=>true,
+			'TITLE'=>$title,
+			'HIDDEN'=>'',
+			'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),
+			'FIELDS'=>$fields,
+			'URL'=>$post_url,
+			'SUBMIT_NAME'=>$submit_name,
+		));
 	}
 
 	/**
@@ -213,14 +225,42 @@ class Module_admin_menus
 
 		// This will be a templates for branches created dynamically
 		$t_id='replace_me_with_random';
-		$branch=do_template('MENU_EDITOR_BRANCH',array('_GUID'=>'59d5c9bebecdac1440112ef8301d7c67','CLICKABLE_SECTIONS'=>$clickable_sections?'true':'false','I'=>$t_id,'CHILD_BRANCH_TEMPLATE'=>'','CHILD_BRANCHES'=>''));
-		$child_branch_template=do_template('MENU_EDITOR_BRANCH_WRAP',array('_GUID'=>'fb16265f553127b47dfdaf33a420136b','DISPLAY'=>$clickable_sections?'display: block':'display: none','CLICKABLE_SECTIONS'=>$clickable_sections,'ORDER'=>'replace_me_with_order','PARENT'=>'replace_me_with_parent','BRANCH_TYPE'=>'0','NEW_WINDOW'=>'0','CHECK_PERMS'=>'0','CAPTION_LONG'=>'','CAPTION'=>'','URL'=>'','PAGE_ONLY'=>'','THEME_IMG_CODE'=>'','I'=>$t_id,'BRANCH'=>$branch));
+		$branch=do_template('MENU_EDITOR_BRANCH',array(
+			'_GUID'=>'59d5c9bebecdac1440112ef8301d7c67',
+			'CLICKABLE_SECTIONS'=>$clickable_sections?'true':'false',
+			'I'=>$t_id,
+			'CHILD_BRANCH_TEMPLATE'=>'',
+			'CHILD_BRANCHES'=>'',
+		));
+		$child_branch_template=do_template('MENU_EDITOR_BRANCH_WRAP',array(
+			'_GUID'=>'fb16265f553127b47dfdaf33a420136b',
+			'DISPLAY'=>$clickable_sections?'display: block':'display: none',
+			'CLICKABLE_SECTIONS'=>$clickable_sections,
+			'ORDER'=>'replace_me_with_order',
+			'PARENT'=>'replace_me_with_parent',
+			'BRANCH_TYPE'=>'0',
+			'NEW_WINDOW'=>'0',
+			'CHECK_PERMS'=>'0',
+			'CAPTION_LONG'=>'',
+			'CAPTION'=>'',
+			'URL'=>''
+			'PAGE_ONLY'=>'',
+			'THEME_IMG_CODE'=>'',
+			'I'=>$t_id,
+			'BRANCH'=>$branch,
+		));
 
 		$order=0;
 		$menu_items=$GLOBALS['SITE_DB']->query_select('menu_items',array('*'),array('i_menu'=>$id),'ORDER BY i_parent,i_order');
 		$child_branches=$this->menu_branch($id,NULL,$order,$clickable_sections,$menu_items);
 
-		$root_branch=do_template('MENU_EDITOR_BRANCH',array('_GUID'=>'28009b66089c05744d2727ff4689e43e','CLICKABLE_SECTIONS'=>$clickable_sections?'true':'false','CHILD_BRANCH_TEMPLATE'=>$child_branch_template,'CHILD_BRANCHES'=>$child_branches,'I'=>''));
+		$root_branch=do_template('MENU_EDITOR_BRANCH',array(
+			'_GUID'=>'28009b66089c05744d2727ff4689e43e',
+			'CLICKABLE_SECTIONS'=>$clickable_sections?'true':'false',
+			'CHILD_BRANCH_TEMPLATE'=>$child_branch_template,
+			'CHILD_BRANCHES'=>$child_branches,
+			'I'=>'',
+		));
 
 		$map=array('page'=>'_SELF','type'=>'_edit','id'=>$id);
 		if (get_param('redirect','!')!='!') $map['redirect']=get_param('redirect');
@@ -272,7 +312,20 @@ class Module_admin_menus
 				$all_menus[]=$menu_row['i_menu'];
 		}
 
-		return do_template('MENU_EDITOR_SCREEN',array('_GUID'=>'d2bc26eaea38f3d5b3221be903ff541e','ALL_MENUS'=>$all_menus,'MENU_NAME'=>$id,'DELETE_URL'=>$delete_url,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'FIELDS_TEMPLATE'=>$fields_template,'HIGHEST_ORDER'=>strval($order),'URL'=>$post_url,'CHILD_BRANCH_TEMPLATE'=>$child_branch_template,'ROOT_BRANCH'=>$root_branch,'TITLE'=>$title));
+		return do_template('MENU_EDITOR_SCREEN',array(
+			'_GUID'=>'d2bc26eaea38f3d5b3221be903ff541e',
+			'ALL_MENUS'=>$all_menus,
+			'MENU_NAME'=>$id,
+			'DELETE_URL'=>$delete_url,
+			'PING_URL'=>$ping_url,
+			'WARNING_DETAILS'=>$warning_details,
+			'FIELDS_TEMPLATE'=>$fields_template,
+			'HIGHEST_ORDER'=>strval($order),
+			'URL'=>$post_url,
+			'CHILD_BRANCH_TEMPLATE'=>$child_branch_template,
+			'ROOT_BRANCH'=>$root_branch,
+			'TITLE'=>$title,
+		));
 	}
 
 	/**
@@ -313,7 +366,23 @@ class Module_admin_menus
 				$display=(($branch_type==0) && (!$clickable_sections))?'display: none':'';
 				$_child_branches=$this->menu_branch($id,$menu_item['id'],$order,$clickable_sections,$menu_items);
 				$_branch=do_template('MENU_EDITOR_BRANCH',array('_GUID'=>'381f5600da214b84e300bcf668f66570','CLICKABLE_SECTIONS'=>$clickable_sections?'true':'false','I'=>strval($menu_item['id']),'CHILD_BRANCHES'=>$_child_branches->evaluate()));
-				$_wrap=do_template('MENU_EDITOR_BRANCH_WRAP',array('_GUID'=>'1ace7da7a1d8a18f13305eec5069e4c5','DISPLAY'=>$display,'CLICKABLE_SECTIONS'=>$clickable_sections,'ORDER'=>strval($order),'PARENT'=>is_null($branch)?'':strval($branch),'BRANCH_TYPE'=>strval($branch_type),'NEW_WINDOW'=>strval($new_window),'CHECK_PERMS'=>strval($check_perms),'CAPTION'=>$caption,'CAPTION_LONG'=>$caption_long,'URL'=>$url,'PAGE_ONLY'=>$page_only,'THEME_IMG_CODE'=>$theme_img_code,'I'=>strval($menu_item['id']),'BRANCH'=>$_branch));
+				$_wrap=do_template('MENU_EDITOR_BRANCH_WRAP',array(
+					'_GUID'=>'1ace7da7a1d8a18f13305eec5069e4c5',
+					'DISPLAY'=>$display,
+					'CLICKABLE_SECTIONS'=>$clickable_sections,
+					'ORDER'=>strval($order),
+					'PARENT'=>is_null($branch)?'':strval($branch),
+					'BRANCH_TYPE'=>strval($branch_type),
+					'NEW_WINDOW'=>strval($new_window),
+					'CHECK_PERMS'=>strval($check_perms),
+					'CAPTION'=>$caption,
+					'CAPTION_LONG'=>$caption_long,
+					'URL'=>$url,
+					'PAGE_ONLY'=>$page_only,
+					'THEME_IMG_CODE'=>$theme_img_code,
+					'I'=>strval($menu_item['id']),
+					'BRANCH'=>$_branch,
+				));
 				$child_branches->attach($_wrap);
 				$order++;
 			}

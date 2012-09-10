@@ -94,7 +94,15 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 	}
 	if ((!is_guest($row['p_poster'])) && (!is_null($primary_group)))
 	{
-		$poster=do_template('OCF_POSTER_MEMBER',array('_GUID'=>($guid!='')?$guid:'ab1724a9d97f93e097cf49b50eeafa66','ONLINE'=>member_is_online($row['p_poster']),'ID'=>strval($row['p_poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($row['p_poster'],false,true),'POSTER_USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['p_poster']),'HIGHLIGHT_NAME'=>NULL));
+		$poster=do_template('OCF_POSTER_MEMBER',array(
+			'_GUID'=>($guid!='')?$guid:'ab1724a9d97f93e097cf49b50eeafa66',
+			'ONLINE'=>member_is_online($row['p_poster']),
+			'ID'=>strval($row['p_poster']),
+			'POSTER_DETAILS'=>$poster_details,
+			'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($row['p_poster'],false,true),
+			'POSTER_USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['p_poster']),
+			'HIGHLIGHT_NAME'=>NULL,
+		));
 	} else
 	{
 		$poster=do_template('OCF_POSTER_GUEST',array('_GUID'=>($guid!='')?$guid:'bb1724a9d97f93e097cf49b50eeafa66','LOOKUP_IP_URL'=>'','POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>($row['p_poster_name_if_guest']!='')?$row['p_poster_name_if_guest']:do_lang('GUEST')));
@@ -103,7 +111,13 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 	// Last edited
 	if (!is_null($row['p_last_edit_time']))
 	{
-		$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array('_GUID'=>($guid!='')?$guid:'cb1724a9d97f93e097cf49b50eeafa66','LAST_EDIT_DATE_RAW'=>is_null($row['p_last_edit_time'])?'':strval($row['p_last_edit_time']),'LAST_EDIT_DATE'=>get_timezoned_date($row['p_last_edit_time']),'LAST_EDIT_PROFILE_URL'=>is_null($row['p_last_edit_by'])?'':$GLOBALS['FORUM_DRIVER']->member_profile_url($row['p_last_edit_by'],false,true),'LAST_EDIT_USERNAME'=>is_null($row['p_last_edit_by'])?'':$GLOBALS['FORUM_DRIVER']->get_username($row['p_last_edit_by'])));
+		$last_edited=do_template('OCF_TOPIC_POST_LAST_EDITED',array(
+			'_GUID'=>($guid!='')?$guid:'cb1724a9d97f93e097cf49b50eeafa66',
+			'LAST_EDIT_DATE_RAW'=>is_null($row['p_last_edit_time'])?'':strval($row['p_last_edit_time']),
+			'LAST_EDIT_DATE'=>get_timezoned_date($row['p_last_edit_time']),
+			'LAST_EDIT_PROFILE_URL'=>is_null($row['p_last_edit_by'])?'':$GLOBALS['FORUM_DRIVER']->member_profile_url($row['p_last_edit_by'],false,true),
+			'LAST_EDIT_USERNAME'=>is_null($row['p_last_edit_by'])?'':$GLOBALS['FORUM_DRIVER']->get_username($row['p_last_edit_by']),
+		));
 	} else $last_edited=new ocp_tempcode();
 	$last_edited_raw=is_null($row['p_last_edit_time'])?'':strval($row['p_last_edit_time']);
 

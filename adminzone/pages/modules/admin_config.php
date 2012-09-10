@@ -465,13 +465,26 @@ class Module_admin_config
 			$_name=do_lang('CONFIG_CATEGORY_'.$myrow['the_page'],NULL,NULL,NULL,NULL,false);
 			if (is_null($_name)) continue;
 			$name=do_lang_tempcode('CONFIG_CATEGORY_'.$myrow['the_page']);
-//			if ($name->evaluate()=='') @exit($myrow['the_page']);
 
 			$count=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($myrow['cnt'])));
 
-			$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'6ba2b09432d06e7502c71e7aac2d3527','COUNT'=>$count,'TITLE'=>protect_from_escaping(do_lang('CONFIGURATION').': '.$_name),'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>do_lang_tempcode('CONFIG_CATEGORY_DESCRIPTION__'.$myrow['the_page']))));
+			$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array(
+				'_GUID'=>'6ba2b09432d06e7502c71e7aac2d3527',
+				'COUNT'=>$count,
+				'TITLE'=>protect_from_escaping(do_lang('CONFIGURATION').': '.$_name),
+				'URL'=>$url,
+				'NAME'=>$name,
+				'DESCRIPTION'=>do_lang_tempcode('CONFIG_CATEGORY_DESCRIPTION__'.$myrow['the_page']),
+			)));
 		}
-		$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'6fde99ae81367fb7405e94b6731a7d9a','COUNT'=>NULL,'TITLE'=>protect_from_escaping(do_lang('CONFIGURATION').': '.do_lang('BASE_CONFIGURATION')),'URL'=>get_base_url().'/config_editor.php','NAME'=>do_lang_tempcode('BASE_CONFIGURATION'),'DESCRIPTION'=>do_lang_tempcode('DOC_BASE_CONFIGURATION'))));
+		$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array(
+			'_GUID'=>'6fde99ae81367fb7405e94b6731a7d9a',
+			'COUNT'=>NULL,
+			'TITLE'=>protect_from_escaping(do_lang('CONFIGURATION').': '.do_lang('BASE_CONFIGURATION')),
+			'URL'=>get_base_url().'/config_editor.php',
+			'NAME'=>do_lang_tempcode('BASE_CONFIGURATION'),
+			'DESCRIPTION'=>do_lang_tempcode('DOC_BASE_CONFIGURATION'),
+		)));
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'c8fdb2b481625d58b0b228c897fda72f','PRE'=>paragraph(do_lang_tempcode('CHOOSE_A_CONFIG_CATEGORY')),'POST'=>'','TITLE'=>$title,'CONTENT'=>$content));
 	}
@@ -777,7 +790,17 @@ class Module_admin_config
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONFIGURATION'))));
 		breadcrumb_set_self(do_lang_tempcode('CONFIG_CATEGORY_'.$page));
 
-		return do_template('CONFIG_CATEGORY_SCREEN',array('_GUID'=>'d01b28b71c38bbb52b6aaf877c7f7b0e','CATEGORY_DESCRIPTION'=>$category_description,'_GROUPS'=>$_groups,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$title,'URL'=>$post_url,'GROUPS'=>$groups,'SUBMIT_NAME'=>do_lang_tempcode('SAVE')));
+		return do_template('CONFIG_CATEGORY_SCREEN',array(
+			'_GUID'=>'d01b28b71c38bbb52b6aaf877c7f7b0e',
+			'CATEGORY_DESCRIPTION'=>$category_description,
+			'_GROUPS'=>$_groups,
+			'PING_URL'=>$ping_url,
+			'WARNING_DETAILS'=>$warning_details,
+			'TITLE'=>$title,
+			'URL'=>$post_url,
+			'GROUPS'=>$groups,
+			'SUBMIT_NAME'=>do_lang_tempcode('SAVE'),
+		));
 	}
 
 	/**
@@ -956,7 +979,12 @@ class Module_admin_config
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_xml_fields'),'_SELF');
 
-		return do_template('XML_CONFIG_SCREEN',array('_GUID'=>'cc21f921ecbdbdf83e1e28d2b3f75a3a','TITLE'=>$title,'POST_URL'=>$post_url,'XML'=>file_exists(get_custom_file_base().'/data_custom/fields.xml')?file_get_contents(get_custom_file_base().'/data_custom/fields.xml'):''));
+		return do_template('XML_CONFIG_SCREEN',array(
+			'_GUID'=>'cc21f921ecbdbdf83e1e28d2b3f75a3a',
+			'TITLE'=>$title,
+			'POST_URL'=>$post_url,
+			'XML'=>file_exists(get_custom_file_base().'/data_custom/fields.xml')?file_get_contents(get_custom_file_base().'/data_custom/fields.xml'):'',
+		));
 	}
 
 	/**
@@ -993,7 +1021,12 @@ class Module_admin_config
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_xml_breadcrumbs'),'_SELF');
 
-		return do_template('XML_CONFIG_SCREEN',array('_GUID'=>'456f56149832d459bce72ca63a1578b9','TITLE'=>$title,'POST_URL'=>$post_url,'XML'=>file_exists(get_custom_file_base().'/data_custom/breadcrumbs.xml')?file_get_contents(get_custom_file_base().'/data_custom/breadcrumbs.xml'):''));
+		return do_template('XML_CONFIG_SCREEN',array(
+			'_GUID'=>'456f56149832d459bce72ca63a1578b9',
+			'TITLE'=>$title,
+			'POST_URL'=>$post_url,
+			'XML'=>file_exists(get_custom_file_base().'/data_custom/breadcrumbs.xml')?file_get_contents(get_custom_file_base().'/data_custom/breadcrumbs.xml'):'',
+		));
 	}
 
 	/**

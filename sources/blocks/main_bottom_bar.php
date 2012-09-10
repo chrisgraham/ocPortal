@@ -103,7 +103,13 @@ class Block_main_bottom_bar
 		foreach ($_birthdays as $_birthday)
 		{
 			$birthday_link=build_url(array('page'=>'topics','type'=>'birthday','id'=>$_birthday['username']),get_module_zone('topics'));
-			$birthday=do_template('OCF_BIRTHDAY_LINK',array('_GUID'=>'a98959187d37d80e134d47db7e3a52fa','AGE'=>array_key_exists('age',$_birthday)?integer_format($_birthday['age']):NULL,'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'],false,true),'USERNAME'=>$_birthday['username'],'BIRTHDAY_URL'=>$birthday_link));
+			$birthday=do_template('OCF_BIRTHDAY_LINK',array(
+				'_GUID'=>'a98959187d37d80e134d47db7e3a52fa',
+				'AGE'=>array_key_exists('age',$_birthday)?integer_format($_birthday['age']):NULL,
+				'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'],false,true),
+				'USERNAME'=>$_birthday['username'],
+				'BIRTHDAY_URL'=>$birthday_link,
+			));
 			$birthdays->attach($birthday);
 		}
 		if (!$birthdays->is_empty()) $birthdays=do_template('OCF_BIRTHDAYS',array('_GUID'=>'03da2c0d46e76407d63bff22aac354bd','BIRTHDAYS'=>$birthdays));

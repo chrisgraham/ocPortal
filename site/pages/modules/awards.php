@@ -156,7 +156,15 @@ class Module_awards
 						$awardee_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($myrow['member_id'],true,true);
 					}
 
-					$rendered=do_template('AWARDED_CONTENT',array('_GUID'=>'1a2a5b6e9b53a99e303b7ed17070cea9','AWARDEE_PROFILE_URL'=>$awardee_profile_url,'AWARDEE'=>$awardee,'AWARDEE_USERNAME'=>$awardee_username,'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time']),'CONTENT'=>$rendered_content));
+					$rendered=do_template('AWARDED_CONTENT',array(
+						'_GUID'=>'1a2a5b6e9b53a99e303b7ed17070cea9',
+						'AWARDEE_PROFILE_URL'=>$awardee_profile_url,
+						'AWARDEE'=>$awardee,
+						'AWARDEE_USERNAME'=>$awardee_username,
+						'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),
+						'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time']),
+						'CONTENT'=>$rendered_content,
+					));
 					$archive_url=build_url(array('page'=>'_SELF','type'=>'award','id'=>$award_type_row['id']),'_SELF');
 					$content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'edd7305b3a9e7777951d0cf04a9360a3','URL'=>$archive_url,'TITLE'=>$_title,'NAME'=>$_title,'DESCRIPTION'=>$rendered)));
 				}
@@ -216,13 +224,21 @@ class Module_awards
 					$awardee_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($myrow['member_id'],false,true);
 				}
 
-				$content->attach(do_template('AWARDED_CONTENT',array('_GUID'=>'67678ff081cb5996fd52cb369d946cf2','AWARDEE_PROFILE_URL'=>$awardee_profile_url,'AWARDEE'=>$awardee,'AWARDEE_USERNAME'=>$awardee_username,'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time'],false,false,false,true),'CONTENT'=>$rendered_content)));
+				$content->attach(do_template('AWARDED_CONTENT',array(
+					'_GUID'=>'67678ff081cb5996fd52cb369d946cf2',
+					'AWARDEE_PROFILE_URL'=>$awardee_profile_url,
+					'AWARDEE'=>$awardee,
+					'AWARDEE_USERNAME'=>$awardee_username,
+					'RAW_AWARD_DATE'=>strval($myrow['date_and_time']),
+					'AWARD_DATE'=>get_timezoned_date($myrow['date_and_time'],false,false,false,true),
+					'CONTENT'=>$rendered_content,
+				)));
 			}
 		}
 		if ($content->is_empty())
 		{
 			if (has_category_access(get_member(),'award',strval($id)))
-				inform_exit(do_lang_tempcode('NO_ENTRIES_AWARDS',do_lang_tempcode($info['title'])));
+				inform_exit(do_lang_tempcode('NO_ENTRIES_AWARDS',do_lang_tempcode($info['content_type_label'])));
 			inform_exit(do_lang_tempcode('NO_ENTRIES'));
 		}
 
@@ -231,7 +247,10 @@ class Module_awards
 
 		$sub_title=do_lang_tempcode('AWARD_HISTORY');
 
-		return do_template('PAGINATION_SCREEN',array('_GUID'=>'b9cf3a37300aced490003f79d7bb4914','TITLE'=>$title,'SUB_TITLE'=>$sub_title,'DESCRIPTION'=>$description,'CONTENT'=>$content,'PAGINATION'=>$pagination));
+		$tpl=do_template('PAGINATION_SCREEN',array('_GUID'=>'b9cf3a37300aced490003f79d7bb4914','TITLE'=>$title,'SUB_TITLE'=>$sub_title,'DESCRIPTION'=>$description,'CONTENT'=>$content,'PAGINATION'=>$pagination));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 }

@@ -864,16 +864,15 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 	if (!running_script('index'))
 	{
 		global $ATTACHED_MESSAGES;
-		$middle->handle_symbol_preprocessing();
-		$tpl=do_template('STANDALONE_HTML_WRAP',array(
+		$global=do_template('STANDALONE_HTML_WRAP',array(
 			'_GUID'=>'fe818a6fb0870f0b211e8e52adb23f26',
 			'TITLE'=>is_null($GLOBALS['DISPLAYED_TITLE'])?do_lang_tempcode('NA'):$GLOBALS['DISPLAYED_TITLE'],
 			'FRAME'=>running_script('iframe'),
 			'TARGET'=>'_self',
 			'CONTENT'=>$middle,
 		));
-		$tpl->handle_symbol_preprocessing();
-		return $tpl;
+		$global->handle_symbol_preprocessing();
+		return $global;
 	}
 
 	$global=new ocp_tempcode();

@@ -23,7 +23,7 @@ class newscategory_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		require_code('news');
+		require_code('news2');
 
 		$this->news_id=add_news_category('Today','news.gif','Headlines',NULL,NULL);
 

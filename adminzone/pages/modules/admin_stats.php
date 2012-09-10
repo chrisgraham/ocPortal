@@ -339,7 +339,10 @@ class Module_admin_stats
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('STATS_SCREEN',array('_GUID'=>'2e5a6a2f7317c80464c518996728d839','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'2e5a6a2f7317c80464c518996728d839','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -408,7 +411,10 @@ class Module_admin_stats
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('STATS_SCREEN',array('_GUID'=>'66e8534ef342c1d0197f4ddb8f767025','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'66e8534ef342c1d0197f4ddb8f767025','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -510,7 +516,10 @@ class Module_admin_stats
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('STATS_SCREEN',array('_GUID'=>'8f7c585bdbc0180ed116693723108e2b','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'8f7c585bdbc0180ed116693723108e2b','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -621,7 +630,10 @@ class Module_admin_stats
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('STATS_SCREEN',array('_GUID'=>'777bc5f8573a5cef54aa0bc9bdc0ee29','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'777bc5f8573a5cef54aa0bc9bdc0ee29','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -736,7 +748,10 @@ class Module_admin_stats
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('STATS_SCREEN',array('_GUID'=>'ab791072361184a05c7e60a3127ee439','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'ab791072361184a05c7e60a3127ee439','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -859,7 +874,10 @@ class Module_admin_stats
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('STATS_SCREEN',array('_GUID'=>'cfe7d5aee8aa3c0d3a54bd3bf2d09e7f','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'cfe7d5aee8aa3c0d3a54bd3bf2d09e7f','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -927,7 +945,10 @@ class Module_admin_stats
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('STATS_OVERVIEW_SCREEN',array('_GUID'=>'71be91ba0d83368e1e1ceaf39e506610','TITLE'=>$title,'STATS_VIEWS'=>$list_views,'GRAPH_VIEWS_MONTHLY'=>$graph_views_monthly,'STATS_VIEWS_MONTHLY'=>$list_views_monthly,));
+		$tpl=do_template('STATS_OVERVIEW_SCREEN',array('_GUID'=>'71be91ba0d83368e1e1ceaf39e506610','TITLE'=>$title,'STATS_VIEWS'=>$list_views,'GRAPH_VIEWS_MONTHLY'=>$graph_views_monthly,'STATS_VIEWS_MONTHLY'=>$list_views_monthly,));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -1174,7 +1195,34 @@ class Module_admin_stats
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('STATS_SCREEN_ISCREEN',array('_GUID'=>'1ac86992de9fc7095883ae23b900d84c','TITLE'=>$title,'GRAPH_REGIONALITY'=>$graph_regionality,'STATS_REGIONALITY'=>$list_regionality,'STATS_VIEWS'=>$list_views,'GRAPH_KEYWORDS'=>$graph_keywords,'STATS_KEYWORDS'=>$list_keywords,'GRAPH_VIEWS_HOURLY'=>$graph_views_hourly,'STATS_VIEWS_HOURLY'=>$list_views_hourly,'GRAPH_VIEWS_DAILY'=>$graph_views_daily,'STATS_VIEWS_DAILY'=>$list_views_daily,'GRAPH_VIEWS_WEEKLY'=>$graph_views_weekly,'STATS_VIEWS_WEEKLY'=>$list_views_weekly,'GRAPH_VIEWS_MONTHLY'=>$graph_views_monthly,'STATS_VIEWS_MONTHLY'=>$list_views_monthly,'GRAPH_IP'=>$graph_ip,'STATS_IP'=>$list_ip,'GRAPH_BROWSER'=>$graph_share_browser,'STATS_BROWSER'=>$list_share_browser,'GRAPH_REFERRER'=>$graph_share_referrer,'STATS_REFERRER'=>$list_share_referrer,'GRAPH_OS'=>$graph_share_os,'STATS_OS'=>$list_share_os));
+		$tpl=do_template('STATS_SCREEN_ISCREEN',array(
+			'_GUID'=>'1ac86992de9fc7095883ae23b900d84c',
+			'TITLE'=>$title,
+			'GRAPH_REGIONALITY'=>$graph_regionality,
+			'STATS_REGIONALITY'=>$list_regionality,
+			'STATS_VIEWS'=>$list_views,
+			'GRAPH_KEYWORDS'=>$graph_keywords,
+			'STATS_KEYWORDS'=>$list_keywords,
+			'GRAPH_VIEWS_HOURLY'=>$graph_views_hourly,
+			'STATS_VIEWS_HOURLY'=>$list_views_hourly,
+			'GRAPH_VIEWS_DAILY'=>$graph_views_daily,
+			'STATS_VIEWS_DAILY'=>$list_views_daily,
+			'GRAPH_VIEWS_WEEKLY'=>$graph_views_weekly,
+			'STATS_VIEWS_WEEKLY'=>$list_views_weekly,
+			'GRAPH_VIEWS_MONTHLY'=>$graph_views_monthly,
+			'STATS_VIEWS_MONTHLY'=>$list_views_monthly,
+			'GRAPH_IP'=>$graph_ip,
+			'STATS_IP'=>$list_ip,
+			'GRAPH_BROWSER'=>$graph_share_browser,
+			'STATS_BROWSER'=>$list_share_browser,
+			'GRAPH_REFERRER'=>$graph_share_referrer,
+			'STATS_REFERRER'=>$list_share_referrer,
+			'GRAPH_OS'=>$graph_share_os,
+			'STATS_OS'=>$list_share_os,
+		));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -1198,7 +1246,16 @@ class Module_admin_stats
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'82f3410d45e4d9ea53b2c033792a3207','SKIP_VALIDATION'=>true,'TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('CLEAR_STATISTICS'),'TEXT'=>paragraph(do_lang_tempcode('DESCRIPTION_CLEAR_STATISTICS')),'URL'=>build_url(array('page'=>'_SELF','type'=>'_clear'),'_SELF'),'HIDDEN'=>'','FIELDS'=>$fields));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'82f3410d45e4d9ea53b2c033792a3207',
+			'SKIP_VALIDATION'=>true,
+			'TITLE'=>$title,
+			'SUBMIT_NAME'=>do_lang_tempcode('CLEAR_STATISTICS'),
+			'TEXT'=>paragraph(do_lang_tempcode('DESCRIPTION_CLEAR_STATISTICS')),
+			'URL'=>build_url(array('page'=>'_SELF','type'=>'_clear'),'_SELF'),
+			'HIDDEN'=>'',
+			'FIELDS'=>$fields,
+		));
 	}
 
 	/**
@@ -1387,7 +1444,12 @@ class Module_admin_stats
 		$output=create_bar_chart($data,do_lang('DATE_TIME'),do_lang('COUNT_VIEWS'),'','');
 		$this->save_graph(strval($rows[0]['id']).'-Views-'.strval((integer)$hours).'_'.strval((integer)$start_date_and_time),$output);
 
-		$graph=do_template('STATS_GRAPH',array('_GUID'=>'b4cf5df74c012c2df5e3988a0ca0e622','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-Views-'.strval((integer)$hours).'_'.strval((integer)$start_date_and_time).'.xml','TITLE'=>do_lang_tempcode($graph_title),'TEXT'=>do_lang_tempcode($graph_description)));
+		$graph=do_template('STATS_GRAPH',array(
+			'_GUID'=>'b4cf5df74c012c2df5e3988a0ca0e622',
+			'GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-Views-'.strval((integer)$hours).'_'.strval((integer)$start_date_and_time).'.xml',
+			'TITLE'=>do_lang_tempcode($graph_title),
+			'TEXT'=>do_lang_tempcode($graph_description),
+		));
 
 		return array($graph,$list);
 	}

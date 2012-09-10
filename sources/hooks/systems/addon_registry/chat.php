@@ -118,7 +118,6 @@ class Hook_addon_registry_chat
 			'sources/hooks/systems/ocf_cpf_filter/points_chat.php',
 			'BLOCK_SIDE_SHOUTBOX_MESSAGE.tpl',
 			'BLOCK_SIDE_SHOUTBOX.tpl',
-			'BLOCK_SIDE_SHOUTBOX_IFRAME.tpl',
 			'CHAT_ROOM_SCREEN.tpl',
 			'CHATCODE_EDITOR_BUTTON.tpl',
 			'CHATCODE_EDITOR_MICRO_BUTTON.tpl',
@@ -160,10 +159,10 @@ class Hook_addon_registry_chat
 			'sources/hooks/systems/do_next_menus/chat.php',
 			'sources/hooks/systems/rss/chat.php',
 			'site/dllogs.php',
-			'data/shoutbox.php',
 			'site/messages.php',
 			'sources/blocks/side_shoutbox.php',
-			'OCF_MEMBER_PROFILE_FRIENDS.tpl'
+			'OCF_MEMBER_PROFILE_FRIENDS.tpl',
+			'sources/hooks/systems/block_ui_renderers/chat.php',
 		);
 	}
 
@@ -184,7 +183,6 @@ class Hook_addon_registry_chat
 			'CHAT_PRIVATE.tpl'=>'chat_private',
 			'CHAT_INVITE.tpl'=>'chat_invite',
 			'CHAT_SOUND.tpl'=>'chat_lobby_screen',
-			'BLOCK_SIDE_SHOUTBOX_IFRAME.tpl'=>'block_side_shoutbox_iframe',
 			'CHAT_LOBBY_IM_AREA.tpl'=>'chat_lobby_screen',
 			'CHAT_SITEWIDE_IM_POPUP.tpl'=>'chat_sitewide_im_popup',
 			'CHAT_LOBBY_IM_PARTICIPANT.tpl'=>'chat_lobby_screen',
@@ -374,7 +372,7 @@ class Hook_addon_registry_chat
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_shoutbox_iframe()
+	function tpl_preview__block_side_shoutbox()
 	{
 		$tpl=do_lorem_template('BLOCK_SIDE_SHOUTBOX_MESSAGE', array(
 			'USER'=>lorem_word(),
@@ -383,17 +381,14 @@ class Hook_addon_registry_chat
 			'TIME'=>placeholder_time()
 		));
 
-		$tpl=do_lorem_template('BLOCK_SIDE_SHOUTBOX', array(
-			'MESSAGES'=>$tpl,
-			'URL'=>placeholder_url()
-		));
-
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_SHOUTBOX_IFRAME', array(
-				'CONTENT'=>$tpl,
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_SHOUTBOX', array(
 				'ROOM_ID'=>placeholder_id(),
 				'NUM_MESSAGES'=>placeholder_number(),
 				'LAST_MESSAGE_ID'=>placeholder_id()
+				'MESSAGES'=>$tpl,
+				'URL'=>placeholder_url(),
+				'BLOCK_PARAMS'=>'',
 			)), NULL, '', true)
 		);
 	}

@@ -59,6 +59,14 @@ foreach ($groups as $group_id=>$group_name)
 	$fields->attach(form_input_integer('Points per month','','points_per_month_'.strval($group_id),$points['p_points_per_month'],true));
 }
 
-$form=do_template('FORM_SCREEN',array('_GUID'=>'8677d9f9c1c4ad969188ddff850a1b2c','TITLE'=>$title,'HIDDEN'=>'','TEXT'=>paragraph('Enter how many points being in each usergroup is worth. For the one-off bonuses, ocPortal will look at all the usergroups each member is in, and count these numbers within the point totals. The monthly points are assigned to members as system gifts, on the 1st of each month (the CRON scheduler must be enabled).'),'FIELDS'=>$fields,'SUBMIT_NAME'=>'Set points','URL'=>get_self_url()));
+$form=do_template('FORM_SCREEN',array(
+	'_GUID'=>'8677d9f9c1c4ad969188ddff850a1b2c',
+	'TITLE'=>$title,
+	'HIDDEN'=>'',
+	'TEXT'=>paragraph('Enter how many points being in each usergroup is worth. For the one-off bonuses, ocPortal will look at all the usergroups each member is in, and count these numbers within the point totals. The monthly points are assigned to members as system gifts, on the 1st of each month (the CRON scheduler must be enabled).'),
+	'FIELDS'=>$fields,
+	'SUBMIT_NAME'=>'Set points',
+	'URL'=>get_self_url(),
+));
 
 $form->evaluate_echo();

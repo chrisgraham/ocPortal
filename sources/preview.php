@@ -298,8 +298,6 @@ function build_preview($multi_return=false)
 			$output->attach(do_template('PREVIEW_SCRIPT_CODE',array('_GUID'=>'bc7432af91e1eaf212dc210f3bf2f756','NEW_POST_VALUE_HTML'=>$new_post_value_html,'NEW_POST_VALUE'=>$new_post_value)));
 	}
 
-	$output->handle_symbol_preprocessing();
-
 	if ($multi_return) return array($output,$validation,$keyword_density,$spelling);
 	return $output;
 }

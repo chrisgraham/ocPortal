@@ -542,7 +542,17 @@ class Module_admin_newsletter extends standard_crud_module
 			$post_url=get_self_url();
 
 			$prune_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_a'),'_SELF');
-			return do_template('FORM_SCREEN',array('_GUID'=>'0100ae6565474bca0669de1654b6efcf','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$title,'TEXT'=>do_lang_tempcode('NEWSLETTER_SUBSCRIBERS_FORM',escape_html($prune_url->evaluate())),'FIELDS'=>$fields,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+			return do_template('FORM_SCREEN',array(
+				'_GUID'=>'0100ae6565474bca0669de1654b6efcf',
+				'GET'=>true,
+				'SKIP_VALIDATION'=>true,
+				'HIDDEN'=>'',
+				'TITLE'=>$title,
+				'TEXT'=>do_lang_tempcode('NEWSLETTER_SUBSCRIBERS_FORM',escape_html($prune_url->evaluate())),
+				'FIELDS'=>$fields,
+				'SUBMIT_NAME'=>$submit_name,
+				'URL'=>$post_url,
+			));
 		}
 
 		// Send to CSV file?
@@ -707,7 +717,10 @@ class Module_admin_newsletter extends standard_crud_module
 			}
 		}
 
-		return do_template('NEWSLETTER_SUBSCRIBERS_SCREEN',array('_GUID'=>'52e5d97d451b622d59f87f021a5b8f01','DOMAINS'=>$domains,'SUBSCRIBERS'=>$outs,'TITLE'=>$title));
+		$tpl=do_template('NEWSLETTER_SUBSCRIBERS_SCREEN',array('_GUID'=>'52e5d97d451b622d59f87f021a5b8f01','DOMAINS'=>$domains,'SUBSCRIBERS'=>$outs,'TITLE'=>$title));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -830,7 +843,16 @@ class Module_admin_newsletter extends standard_crud_module
 				$fields->attach(form_input_list($periodic_choice_name,$periodic_choice_help,'periodic_choice',$periodic_options,NULL,false,false));
 			}
 
-			return do_template('FORM_SCREEN',array('_GUID'=>'ce1af424e01219c8dee2a7867c1647ef','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('SELECT_CATEGORIES_WANTED'),'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('NEXT'),'URL'=>get_self_url()));
+			return do_template('FORM_SCREEN',array(
+				'_GUID'=>'ce1af424e01219c8dee2a7867c1647ef',
+				'SKIP_VALIDATION'=>true,
+				'HIDDEN'=>$hidden,
+				'TITLE'=>$title,
+				'TEXT'=>do_lang_tempcode('SELECT_CATEGORIES_WANTED'),
+				'FIELDS'=>$fields,
+				'SUBMIT_NAME'=>do_lang_tempcode('NEXT'),
+				'URL'=>get_self_url(),
+			));
 		} else
 		{
 			$cutoff_time=get_input_date('cutoff');
@@ -1296,7 +1318,15 @@ class Module_admin_newsletter extends standard_crud_module
 			$fields->attach(form_input_radio(do_lang('CREATE_PERIODIC_FOR'),'','periodic_for',$radios,true));
 		}
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'0b2a4825ec586d9ff557026d9a1e0cca','TITLE'=>$title,'TEXT'=>(($periodic_action=='make' || $periodic_action=='replace')? do_lang_tempcode('PERIODIC_NO_EDIT') : do_lang_tempcode('NEWSLETTER_SEND_TEXT')),'HIDDEN'=>$hidden,'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,'SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'0b2a4825ec586d9ff557026d9a1e0cca',
+			'TITLE'=>$title,
+			'TEXT'=>(($periodic_action=='make' || $periodic_action=='replace')? do_lang_tempcode('PERIODIC_NO_EDIT') : do_lang_tempcode('NEWSLETTER_SEND_TEXT')),
+			'HIDDEN'=>$hidden,
+			'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
+			'SUBMIT_NAME'=>$submit_name,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**
@@ -1373,7 +1403,23 @@ class Module_admin_newsletter extends standard_crud_module
 		} else
 		{
 			$comcode_version=comcode_to_tempcode($message,get_member(),true);
-			$_preview=do_template('MAIL',array('_GUID'=>'b081cf9104748b090f63b6898027985e','TITLE'=>$subject,'CSS'=>css_tempcode(true,true,$comcode_version->evaluate()),'LANG'=>get_site_default_lang(),'LOGOURL'=>get_logo_url(''),'CONTENT'=>$comcode_version),NULL,false,NULL,'.tpl','templates',$GLOBALS['FORUM_DRIVER']->get_theme(''));
+			$_preview=do_template(
+				'MAIL',
+				array(
+					'_GUID'=>'b081cf9104748b090f63b6898027985e',
+					'TITLE'=>$subject,
+					'CSS'=>css_tempcode(true,true,$comcode_version->evaluate()),
+					'LANG'=>get_site_default_lang(),
+					'LOGOURL'=>get_logo_url(''),
+					'CONTENT'=>$comcode_version
+				),
+				NULL,
+				false,
+				NULL,
+				'.tpl',
+				'templates',
+				$GLOBALS['FORUM_DRIVER']->get_theme('')
+			);
 			$in_html=($html_only==1);
 		}
 		$text_preview=($html_only==1)?'':comcode_to_clean_text(static_evaluate_tempcode(template_to_tempcode($message)));

@@ -313,15 +313,8 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 	$post_url=get_self_url();
 	$form=do_template('FORM',array('_GUID'=>'207bad1252add775029b34ba36e02856','URL'=>$post_url,'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
 	$output=do_template('COMCODE_MISTAKE_SCREEN',array('_GUID'=>'0010230e6612b0775566d07ddf54305a','EDITABLE'=>!running_script('preview'),'FORM'=>$form,'TITLE'=>get_screen_title('ERROR_OCCURRED'),'LINE'=>integer_format($line),'MESSAGE'=>$message,'LINES'=>$lines));
-	$echo=new ocp_tempcode();
-	if (!running_script('preview'))
-	{
-		$echo=globalise($output,NULL,'',true);
-		$echo->handle_symbol_preprocessing();
-	} else
-	{
-		$echo->attach(do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'e8f40ff1e4fb29e9bf3aea955c1483a0','TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>running_script('preview'),'TARGET'=>'_top','CONTENT'=>$output)));
-	}
+	$echo=globalise($output,NULL,'',true);
+	$echo->handle_symbol_preprocessing();
 	$echo->evaluate_echo();
 	exit();
 	return new ocp_tempcode(); // to trick code checker
@@ -368,7 +361,7 @@ function test_url($url_full,$tag_type,$given_url,$source_member)
 			if (array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS))
 			{
 				$GLOBALS['COMCODE_BROKEN_URLS'][]=array($url_full,NULL);
-			} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')) && (!running_script('comcode_convert')) && (!running_script('preview')))
+			} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (running_script('index')))
 			{
 				$found_in_post=false; // We don't want to send email if someone's just posting it right now, because they'll see the error on their screen, and we don't want staff spammed by member mistakes
 				foreach ($_POST as $val)
@@ -1167,7 +1160,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if (is_null($owner)) // Missing attachment!
 				{
 					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'be1c9c26a8802a00955fbd7a55b08bd3','WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','attachment',escape_html(strval($__id)))));
-					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
+					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (running_script('index')))
 					{
 						require_code('failure');
 						relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','attachment',strval($__id)),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
@@ -1218,8 +1211,11 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$COMCODE_PARSE_TITLE=$temp_comcode_parse_title;
 			if ($temp->is_empty())
 			{
-				$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'1d617fd24b632640dddeeadd8432d7a9','WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','include',hyperlink(build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','page_link'=>$zone.':'.$codename),get_module_zone('cms_comcode_pages')),$zone.':'.$codename,false,true))));
-				if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
+				$temp_tpl=do_template('WARNING_BOX',array(
+					'_GUID'=>'1d617fd24b632640dddeeadd8432d7a9',
+					'WARNING'=>do_lang_tempcode('MISSING_RESOURCE_COMCODE','include',hyperlink(build_url(array('page'=>'cms_comcode_pages','type'=>'_ed','page_link'=>$zone.':'.$codename),get_module_zone('cms_comcode_pages')),$zone.':'.$codename,false,true)),
+				));
+				if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (running_script('index')))
 				{
 					require_code('failure');
 					relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','include',$zone.':'.$codename),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
@@ -1521,7 +1517,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					if (array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS))
 					{
 						$GLOBALS['COMCODE_BROKEN_URLS'][]=array($_embed,NULL);
-					} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
+					} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (running_script('index')))
 					{
 						require_code('failure');
 						relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','exp_ref',$_embed),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
@@ -1561,7 +1557,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					if (array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS))
 					{
 						$GLOBALS['COMCODE_BROKEN_URLS'][]=$_embed;
-					} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
+					} elseif ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (running_script('index')))
 					{
 						require_code('failure');
 						relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','exp_thumb',$_embed),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
@@ -1902,7 +1898,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if ($ptest===false)
 				{
 					//$temp_tpl->attach(' ['.do_lang('MISSING_RESOURCE').']');  // Don't want this as we might be making the page immediately
-					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
+					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (running_script('index')))
 					{
 						if ($ignore_if_hidden)
 						{

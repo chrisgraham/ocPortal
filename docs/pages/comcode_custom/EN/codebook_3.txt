@@ -213,8 +213,7 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]textmate[/tt] -- set this to '1' if you are developing on a local machine and use the Apple Mac TextMate editor. It will cause TextMate editing links to come up in stack traces.
  - [tt]disable_iconv[/tt] -- set this to '1' if your iconv extension causes PHP to crash
  - [tt]disable_mbstring[/tt] -- set this to '1' if your mbstring extension causes PHP to crash
- - [tt]no_frames[/tt] -- set this to '1' if you do not want ocPortal to use frames at all in public screens. Set to '2' if you are very anal and don't want them in admin UI's where they are there to improve usability.
- - [tt]xhtml_strict[/tt] -- set this to '1' to do some magic to make ocPortal's output XHTML strict. This is slow and not really advisable as it will degrade the user experience if Javascript is not available (new-window links would break). You must enable 'no_frames' also
+ - [tt]xhtml_strict[/tt] -- set this to '1' to do some magic to make ocPortal's output XHTML strict. This is slow and not really advisable as it will degrade the user experience if Javascript is not available (new-window links would break).
  - [tt]no_password_hashing[/tt] -- set this to '1' if you want passwords to be stored as plain-text in the database (not recommended)
  - [tt]agency_email_address[/tt] -- set this to a secondary e-mail address where you would like all error e-mails to go (the primary one being the staff address). Only set this if you are an agency and want to receive error e-mails in addition/instead of your client.
  - [tt]prefer_curl[/tt] -- set this to '1' if the server requires you to not use network sockets directly from PHP and instead use the CuRL extension (although if you need this it is likely you actually need to just configure the proxy settings instead, see further below).
@@ -222,7 +221,7 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]cdn[/tt] -- set this to a comma-separated list of domain name you'd like CSS and images to run from. A random name will be taken for each CSS file/image. You will want some kind of file mirroring setup across all CDN machines, such as an rsync setup or an ocPortal implementation via implementing 'sync_file'.
  - [tt]ntlm[/tt] -- set this to '1' if you want to allow automatic logins via NTLM. Note that this is not secure, so only really appropriate for low-security Windows intranets. It also does not work on all networks. If you want true NTLM support you can use the Apache module for it, or what is built into IIS -- but it'd be better to use Kerberos as NTLM is deprecated (if you can work your head around configuring it, as it's very hard, especially between Active Directory and the Apache module for it).
  - [tt]force_admin_auth[/tt] -- set this to '1' if you want any super-administrator to have to have some kind of authorisation-based login by redirecting them to http://base_url/admin_login/ which presumably you have configured to be a redirect-through that catches logins (Apache only).
- - [tt]no_base_check[/tt] -- set this to '1' if you do not want ocPortal to empty caches if the base URL gets changed (this is if the base URL is not defined, and someone accesses from something different). If you set this to '1', you also will want to disable frames (set no_frames to '1').
+ - [tt]no_base_check[/tt] -- set this to '1' if you do not want ocPortal to empty caches if the base URL gets changed (this is if the base URL is not defined, and someone accesses from something different).
  - [tt]allow_php_in_templates[/tt] -- set this to '1' to enable the undocumented Tempcode 'PHP' directive, and it's short-hand syntax (written like normal PHP long-tags). This allows you to write PHP code inside templates, but please aware there are strong risks associated with this. It means that themes you install may contain PHP code, or people submitting Comcode content may put in PHP code which you could accidentally unwittingly activate when validating content (as it would be validated against your own security credentials).
  - [tt]base64_emails[/tt] -- set this to '1' if you want base64 emails to be used. These are more robust (PHP's wordwrapping, which we use to make non-base-64 emails compliant, can be buggy) but some servers do not like them or consider them very slightly more spammy.
  - [tt]disable_sunk[/tt] -- set this to '1' if you want to disable the sunk-topics feature. This improves performance a little on MySQL
@@ -286,7 +285,6 @@ The 'keep' parameters available are:
  - [tt]keep_show_parse_errors[/tt] -- set this to '1' if you think you have a corrupt PHP file but you can't tell which as your PHP display errors option isn't on (and hence just get blank screens). This will allow ocPortal to generate stack traces for most corrupt files it tries to include. Note another cause of blank screens can be the PHP memory limit being exceeded.
  - [tt]keep_send_immediately[/tt] -- set this to '1' if you want to debug newsletter code, and not have newsletters sent in the background
  - [tt]keep_su_online[/tt] -- set this to '1' if you want the user '[tt]keep_su[/tt]' is used with to also show as online, and for their last online/submit statuses to be updated
- - [tt]keep_no_frames[/tt] -- set this to '1' if you do not want frames to be used
  - [tt]keep_no_minify[/tt] -- set this to '1' if you want to use a Javascript debugger and hence do not want the JS to be minified (unreadable)
  - [tt]keep_show_loading[/tt] -- set this to '1' if you want comments inside the HTML source showing memory usage taken up as server-side scripts load
  - [tt]keep_no_swfupload[/tt] -- set this to '1' if you don't want the flash uploader to be used
@@ -295,14 +293,15 @@ The 'keep' parameters available are:
  - [tt]keep_on_same_msn[/tt] -- set this to '0' if you are doing an ocPortal site merge import and want to force OCF content to import even if the importer thinks that you are on the same MSN as the other site
  - [tt]keep_theme_test[/tt] -- set this to '1' if you are testing lots of themes. It will cause installed theme addons to have their Comcode pages extracted with a special prefix, it will remove that prefix on addon packaging, and page detection will give preference to the prefix for the particular theme you are currently using (so use in conjunction with keep_theme).
  - [tt]keep_debug_notifications[/tt] -- set this to '1' if you are debugging the notifications system and therefore need them to be sent before the page output finishes
- - [tt]keep_devtest[/tt] -- Used during development mode to test URL building is working correctly, of no use manually
- - [tt]keep_debug_has_cookies[/tt] -- Useful for developers to tell ocPortal cookies are supported when Javascript may be off
- - [tt]keep_memory_limit_test[/tt] -- Set to a number of megabytes under 32 to reduce the memory limit to this value; useful for performance debugging
- - [tt]keep_no_chain[/tt] -- Useful when working with the XML forum driver, tells it to not do reads from the configured chain database
- - [tt]keep_realtime_test[/tt] -- Used for testing the realtime feature's display (it injects random data)
- - [tt]keep_simpleurls[/tt] -- Disable short URLs
- - [tt]keep_wide[/tt] -- Remove panels
- - [tt]keep_wide_high[/tt] -- Remove panels, as well as the header and footer
+ - [tt]keep_devtest[/tt] -- used during development mode to test URL building is working correctly, of no use manually
+ - [tt]keep_debug_has_cookies[/tt] -- useful for developers to tell ocPortal cookies are supported when Javascript may be off
+ - [tt]keep_memory_limit_test[/tt] -- set to a number of megabytes under 32 to reduce the memory limit to this value; useful for performance debugging
+ - [tt]keep_no_chain[/tt] -- useful when working with the XML forum driver, tells it to not do reads from the configured chain database
+ - [tt]keep_realtime_test[/tt] -- used for testing the realtime feature's display (it injects random data)
+ - [tt]keep_simpleurls[/tt] -- disable short URLs
+ - [tt]keep_wide[/tt] -- remove panels
+ - [tt]keep_wide_high[/tt] -- remove panels, as well as the header and footer
+ - [tt]keep_rating_test[/tt] -- set this to '1' if you are testing rating and don't want to be locked out for having already rated
 
 The following 'keep' parameters have interface triggers, but are also handy for manual activation:
  - [tt]keep_markers[/tt] -- set this to '1' if you want template start/end markers to be output in the page HTML source when viewed in ocPortal
@@ -317,11 +316,11 @@ The following 'keep' parameters have interface triggers, but are also handy for 
  - [tt]keep_session[/tt] -- this isn't useful for manual editing, but it is used to note session-IDs when [session-]cookies are not working
  - [tt]keep_timezone[/tt] -- this is the timezone code (tz style) to view in
  - [tt]keep_catalogue_<catalogue-name>_root[/tt] -- set to a category ID for the current viewed content type to trick the breadcrumbs into showing a 'virtual root'; this can also be activated by browsing to the category you'd like to be virtual root (as staff) and then clicking on the final link in the breacrumb chain (the link representing the current category)
- - [tt]keep_wiki_root[/tt] -- As above, but used to propagate Wiki+ virtual roots
- - [tt]keep_gallery_root[/tt] -- As above, but used to propagate gallery virtual roots
- - [tt]keep_download_root[/tt] -- As above, but used to propagate download virtual roots
- - [tt]keep_forum_root[/tt] -- As above, but used to propagate forum virtual roots
- - [tt]keep_page_root[/tt] -- As above, but used to propagate Comcode page virtual roots
+ - [tt]keep_wiki_root[/tt] -- as above, but used to propagate Wiki+ virtual roots
+ - [tt]keep_gallery_root[/tt] -- as above, but used to propagate gallery virtual roots
+ - [tt]keep_download_root[/tt] -- as above, but used to propagate download virtual roots
+ - [tt]keep_forum_root[/tt] -- as above, but used to propagate forum virtual roots
+ - [tt]keep_page_root[/tt] -- as above, but used to propagate Comcode page virtual roots
 
 The following aren't 'keep' parameters, but are still useful and otherwise behave in the same way:
  - [tt]auth[/tt] -- set to '1' to make ocPortal request HTTP authentication. This is useful for RSS URLs, if you want the feeds to be generated as authenticated.
@@ -329,7 +328,7 @@ The following aren't 'keep' parameters, but are still useful and otherwise behav
  - [tt]wide_high[/tt] -- set to '1' if you don't show to show panels or the TOP/BOTTOM
  - [tt]start[/tt] -- set to the start number in the result browsing
  - [tt]max[/tt] -- set to the maximum number of results to show per-page
- - [tt]page/type/id[/tt] -- I hope you know what these ones do ;)
+ - [tt]page/type/id[/tt] -- standard URL routing parameters
  - [tt]kfsXX[/tt] -- this isn't useful for manual editing but people ask what it's for; it's to preserve the browse positions in forumviews, such that when returning, the browse positions are remembered
 
 [title="3"]Hints for making websites for other people[/title]

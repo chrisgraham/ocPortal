@@ -439,7 +439,18 @@ function send_booking_emails($request)
 	dispatch_notification('booking_customer',NULL,do_lang('SUBJECT_BOOKING_CONFIRM',get_site_name()),static_evaluate_tempcode($receipt),array(get_member()),A_FROM_SYSTEM_PRIVILEGED);
 
 	// Send notice to staff
-	$notice=do_template('BOOKING_NOTICE_FCOMCODE',array('_GUID'=>'d223b42f024f853f63cd9908155667a8','EMAIL_ADDRESS'=>$customer_email,'MEMBER_ID'=>strval(get_member()),'USERNAME'=>$customer_name,'PRICE'=>float_format(find_booking_price($request)),'DETAILS'=>make_booking_request_printable($request)),get_site_default_lang());
+	$notice=do_template(
+		'BOOKING_NOTICE_FCOMCODE',
+		array(
+			'_GUID'=>'d223b42f024f853f63cd9908155667a8',
+			'EMAIL_ADDRESS'=>$customer_email,
+			'MEMBER_ID'=>strval(get_member()),
+			'USERNAME'=>$customer_name,
+			'PRICE'=>float_format(find_booking_price($request)),
+			'DETAILS'=>make_booking_request_printable($request)
+		),
+		get_site_default_lang()
+	);
 	dispatch_notification('booking_inform_staff',NULL,do_lang('SUBJECT_BOOKING_NOTICE',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),get_site_name()),static_evaluate_tempcode($notice),NULL,NULL,2);
 }
 

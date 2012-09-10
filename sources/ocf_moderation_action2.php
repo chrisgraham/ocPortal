@@ -150,7 +150,7 @@ function warnings_script()
 		$_title=post_param('title');
 		$GLOBALS['FORUM_DB']->query_delete('f_saved_warnings',array('s_title'=>$_title),'',1);
 		$content=paragraph(do_lang_tempcode('SUCCESS'));
-		$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'dc97492788a5049e697a296ca10a0390','TITLE'=>do_lang_tempcode('DELETE_SAVED_WARNING'),'CONTENT'=>$content));
+		$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'dc97492788a5049e697a296ca10a0390','TITLE'=>do_lang_tempcode('DELETE_SAVED_WARNING'),'POPUP'=>true,'CONTENT'=>$content));
 		$echo->evaluate_echo();
 		return;
 	}

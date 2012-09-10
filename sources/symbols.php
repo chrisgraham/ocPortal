@@ -633,16 +633,16 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'SHOW_HEADER':
-				$value=((get_param_integer('wide_high',get_param_integer('keep_wide_high',0))!=1) && (!running_script('preview')) && (!running_script('iframe'))/* && (is_null(get_param('zone',NULL)))*/)?'1':'0';
+				$value=(is_wide_high()==1)?'0':'1';
 				break;
 			case 'SHOW_FOOTER':
-				$value=((get_param_integer('wide_high',get_param_integer('keep_wide_high',0))!=1) && (!running_script('preview')))?'1':'0';
+				$value=(is_wide_high()==1)?'0':'1';
 				break;
 			case 'WIDE':
-				$value=((is_wide()==1) || (running_script('preview')))?'1':'0';
+				$value=(is_wide()==1)?'1':'0';
 				break;
 			case 'WIDE_HIGH':
-				$value=((is_wide_high()==1) || (running_script('preview')))?'1':'0';
+				$value=(is_wide_high()==1)?'1':'0';
 				break;
 
 			case 'LOGO_URL':

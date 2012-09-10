@@ -238,7 +238,7 @@ class Module_admin_lookup
 			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS')),array('_SELF:_SELF:misc',do_lang_tempcode('SEARCH'))));
 			breadcrumb_set_self(do_lang_tempcode('RESULT'));
 
-			return do_template(
+			$tpl=do_template(
 				'LOOKUP_SCREEN',
 				array(
 					'_GUID'=>'dc6effaa043949940b809f6aa5a1f944',
@@ -262,6 +262,9 @@ class Module_admin_lookup
 					'ACTION_LOG_URL'=>$action_log_url
 				)
 			);
+
+			require_code('templates_internalise_screen');
+			return internalise_own_screen($tpl);
 		}
 	}
 

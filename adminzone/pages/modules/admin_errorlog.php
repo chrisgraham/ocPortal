@@ -66,10 +66,6 @@ class Module_admin_errorlog
 
 		$title=get_screen_title('ERROR_LOG');
 
-		require_code('templates_internalise_screen');
-		$test_tpl=internalise_own_screen($title);
-		if (is_object($test_tpl)) return $test_tpl;
-
 		// Read in errors
 		if (is_readable(get_custom_file_base().'/data_custom/errorlog.php'))
 		{
@@ -163,7 +159,10 @@ class Module_admin_errorlog
 		// Put permssions into table
 		$permission=implode(chr(10),$lines);
 
-		return do_template('ERRORLOG_SCREEN',array('_GUID'=>'9186c7beb6b722a52f39e2cbe16aded6','TITLE'=>$title,'ERROR'=>$error,'PERMISSION'=>$permission));
+		$tpl=do_template('ERRORLOG_SCREEN',array('_GUID'=>'9186c7beb6b722a52f39e2cbe16aded6','TITLE'=>$title,'ERROR'=>$error,'PERMISSION'=>$permission));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 }

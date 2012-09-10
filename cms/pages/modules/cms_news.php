@@ -78,6 +78,7 @@ class Module_cms_news extends standard_crud_module
 		$this->cat_crud_module=new Module_cms_news_cat();
 		$this->posting_form_title=do_lang_tempcode('NEWS_ARTICLE');
 
+		require_code('news2');
 		require_css('news');
 
 		// Decide what to do

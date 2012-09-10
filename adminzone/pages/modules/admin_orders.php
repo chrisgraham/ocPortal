@@ -120,7 +120,6 @@ class Module_admin_orders
 		$title=get_screen_title('ORDER_LIST');
 
 		$filter=get_param('filter',NULL);
-
 		$search=get_param('search','',true);
 
 		$cond='WHERE 1=1';
@@ -144,18 +143,23 @@ class Module_admin_orders
 
 		$orders=array();
 
-		// Pagination
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',10);
 		require_code('templates_pagination');
 
 		require_code('templates_results_table');
 
-		$sortables=array('t1.id'=>do_lang_tempcode('ECOM_ORDER'),'t1.add_date'=>do_lang_tempcode('ORDERED_DATE'),'t1.c_member'=>do_lang_tempcode('ORDERED_BY'),
-		't1.tot_price'=>do_lang_tempcode('ORDER_PRICE_AMT'),'t3.included_tax'=>do_lang_tempcode('TAX_PAID'),'t1.order_status'=>do_lang_tempcode('STATUS'),'t1.transaction_id'=>do_lang_tempcode('TRANSACTION_ID'));
+		$sortables=array(
+			't1.id'=>do_lang_tempcode('ECOM_ORDER'),
+			't1.add_date'=>do_lang_tempcode('ORDERED_DATE'),
+			't1.c_member'=>do_lang_tempcode('ORDERED_BY'),
+			't1.tot_price'=>do_lang_tempcode('ORDER_PRICE_AMT'),
+			't3.included_tax'=>do_lang_tempcode('TAX_PAID'),
+			't1.order_status'=>do_lang_tempcode('STATUS'),
+			't1.transaction_id'=>do_lang_tempcode('TRANSACTION_ID'),
+		);
 
 		$query_sort=explode(' ',get_param('sort','t1.add_date ASC'),2);
-
 		if (count($query_sort)==1) $query_sort[]='ASC';
 
 		list($sortable,$sort_order)=$query_sort;		
@@ -212,7 +216,7 @@ class Module_admin_orders
 
 			$ordr_act_submit=build_url(array('page'=>'_SELF','type'=>'order_act','id'=>$row['id']),'_SELF');	
 
-			$actions=do_template('ECOM_ADMIN_ORDER_ACTIONS',array('_GUID'=>'19ad8393aa5dba3f2f768818f22d8837','ORDER_TITLE'=>$order_title,'ORDER_ACTUALISE_URL'=>$ordr_act_submit,'ORDER_STATUS'=>$order_status));	
+			$actions=do_template('ECOM_ADMIN_ORDER_ACTIONS',array('_GUID'=>'19ad8393aa5dba3f2f768818f22d8837','ORDER_TITLE'=>$order_title,'ORDER_ACTUALISE_URL'=>$ordr_act_submit,'ORDER_STATUS'=>$order_status));
 
 			$url=build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),'_SELF');
 
@@ -258,7 +262,20 @@ class Module_admin_orders
 
 		$search_url=get_self_url(true);
 
-		return do_template('ECOM_ADMIN_ORDERS_SCREEN',array('_GUID'=>'08afb0204c061644ec9c562b4eba24f4','TITLE'=>$title,'CURRENCY'=>get_option('currency'),'ORDERS'=>$orders,'PAGINATION'=>$pagination,'RESULTS_TABLE'=>$results_table,'SEARCH_URL'=>$search_url,'HIDDEN'=>$hidden,'SEARCH_VAL'=>$search));	
+		$tpl=do_template('ECOM_ADMIN_ORDERS_SCREEN',array(
+			'_GUID'=>'08afb0204c061644ec9c562b4eba24f4',
+			'TITLE'=>$title,
+			'CURRENCY'=>get_option('currency'),
+			'ORDERS'=>$orders,
+			'PAGINATION'=>$pagination,
+			'RESULTS_TABLE'=>$results_table,
+			'SEARCH_URL'=>$search_url,
+			'HIDDEN'=>$hidden,
+			'SEARCH_VAL'=>$search,
+		));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -274,7 +291,6 @@ class Module_admin_orders
 
 		$order_title=do_lang('CART_ORDER',$id);
 
-		// Pagination
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',10);
 		require_code('templates_pagination');
@@ -332,36 +348,61 @@ class Module_admin_orders
 
 		// Collecting order details
 		$rows=$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$id),'',1);
-
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-
 		$data=$rows[0];
 
 		$results_table=results_table(do_lang_tempcode('PRODUCTS'),0,'start',$max_rows,'max',$max_rows,$fields_title,$product_entries,$sortables,$sortable,$sort_order,'sort',NULL,NULL,'cart');
-
 		$ordered_by_member_id=$data['c_member'];
-
 		$ordered_by_username=$GLOBALS['FORUM_DRIVER']->get_username($data['c_member']);
-
 		$self_url=get_self_url(true,true);
-
 		$ordr_act_submit=build_url(array('page'=>'_SELF','type'=>'order_act','id'=>$id,'redirect'=>$self_url),'_SELF');	
-
-		$order_actions=do_template('ECOM_ADMIN_ORDER_ACTIONS',array('_GUID'=>'6a24f6fb7c23f60b049ebce0f9765736','ORDER_TITLE'=>$order_title,'ORDER_ACTUALISE_URL'=>$ordr_act_submit,'ORDER_STATUS'=>do_lang($data['order_status'])));
+		$order_actions=do_template('ECOM_ADMIN_ORDER_ACTIONS',array(
+			'_GUID'=>'6a24f6fb7c23f60b049ebce0f9765736',
+			'ORDER_TITLE'=>$order_title,
+			'ORDER_ACTUALISE_URL'=>$ordr_act_submit,
+			'ORDER_STATUS'=>do_lang($data['order_status'],
+		)));
 
 		// Shipping address display
 		$row=$GLOBALS['SITE_DB']->query_select('shopping_order_addresses',array('*'),array('order_id'=>$id),'',1);
-
 		if (array_key_exists(0,$row))
 		{
 			$address=$row[0];
-			$shipping_address=do_template('ECOM_SHIPPING_ADDRESS',array('_GUID'=>'332bc2e28a75cff64e6856bbeda6102e','ADDRESS_NAME'=>$address['address_name'],'ADDRESS_STREET'=>$address['address_street'],'ADDRESS_CITY'=>$address['address_city'],'ADDRESS_ZIP'=>$address['address_zip'],'ADDRESS_COUNTRY'=>$address['address_country'],'RECEIVER_EMAIL'=>$address['receiver_email']));	
+			$shipping_address=do_template('ECOM_SHIPPING_ADDRESS',array(
+				'_GUID'=>'332bc2e28a75cff64e6856bbeda6102e',
+				'ADDRESS_NAME'=>$address['address_name'],
+				'ADDRESS_STREET'=>$address['address_street'],
+				'ADDRESS_CITY'=>$address['address_city'],
+				'ADDRESS_ZIP'=>$address['address_zip'],
+				'ADDRESS_COUNTRY'=>$address['address_country'],
+				'RECEIVER_EMAIL'=>$address['receiver_email'],
+			));
 		} else
 		{
 			$shipping_address=new ocp_tempcode();
 		}
 
-		return do_template('ECOM_ADMIN_ORDERS_DETAILS_SCREEN',array('_GUID'=>'3ae59a343288eb6aa67e3627b5ea7eda','TITLE'=>$title,'TEXT'=>$text,'CURRENCY'=>get_option('currency'),'RESULTS_TABLE'=>$results_table,'PAGINATION'=>$pagination,'ORDER_NUMBER'=>strval($id),'ADD_DATE'=>get_timezoned_date($data['add_date'],true,false,true,true),'TOTAL_PRICE'=>strval($data['tot_price']),'ORDERED_BY_MEMBER_ID'=>strval($ordered_by_member_id),'ORDERED_BY_USERNAME'=>$ordered_by_username,'ORDER_STATUS'=>do_lang($data['order_status']),'NOTES'=>$data['notes'],'PURCHASED_VIA'=>$data['purchase_through'],'ORDER_ACTIONS'=>$order_actions,'SHIPPING_ADDRESS'=>$shipping_address));	
+		$tpl=do_template('ECOM_ADMIN_ORDERS_DETAILS_SCREEN',array(
+			'_GUID'=>'3ae59a343288eb6aa67e3627b5ea7eda',
+			'TITLE'=>$title,
+			'TEXT'=>$text,
+			'CURRENCY'=>get_option('currency'),
+			'RESULTS_TABLE'=>$results_table,
+			'PAGINATION'=>$pagination,
+			'ORDER_NUMBER'=>strval($id),
+			'ADD_DATE'=>get_timezoned_date($data['add_date'],true,false,true,true),
+			'TOTAL_PRICE'=>strval($data['tot_price']),
+			'ORDERED_BY_MEMBER_ID'=>strval($ordered_by_member_id),
+			'ORDERED_BY_USERNAME'=>$ordered_by_username,
+			'ORDER_STATUS'=>do_lang($data['order_status']),
+			'NOTES'=>$data['notes'],
+			'PURCHASED_VIA'=>$data['purchase_through'],
+			'ORDER_ACTIONS'=>$order_actions,
+			'SHIPPING_ADDRESS'=>$shipping_address,
+		));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -412,7 +453,15 @@ class Module_admin_orders
 			$fields->attach(form_input_text(do_lang_tempcode('DISPATCH_MAIL_PREVIEW'),do_lang_tempcode('DISPATCH_MAIL_PREVIEW_DESCRIPTION'),'dispatch_mail_content',$message,true));
 		}
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'a5bd2fd3e7f326fd7559e78015d70715','TITLE'=>$title,'TEXT'=>do_lang_tempcode('NOTE_DESCRIPTION'),'HIDDEN'=>'','FIELDS'=>$fields,'URL'=>$update_url,'SUBMIT_NAME'=>do_lang_tempcode('ADD_NOTE')));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'a5bd2fd3e7f326fd7559e78015d70715',
+			'TITLE'=>$title,
+			'TEXT'=>do_lang_tempcode('NOTE_DESCRIPTION'),
+			'HIDDEN'=>'',
+			'FIELDS'=>$fields,
+			'URL'=>$update_url,
+			'SUBMIT_NAME'=>do_lang_tempcode('ADD_NOTE'),
+		));
 	}
 
 	/**
@@ -581,7 +630,16 @@ class Module_admin_orders
 
 		$fields->attach(form_input_date(do_lang_tempcode('ST_END_PERIOD'),do_lang_tempcode('ST_END_PERIOD_DESCRIPTION'),'end_date',false,false,true,array($end_minute,$end_hour,$end_month,$end_day,$end_year)));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'e2e5097798c963f4977ba22b50ddf2f3','SKIP_VALIDATION'=>true,'TITLE'=>$title,'SUBMIT_NAME'=>do_lang_tempcode('EXPORT_ORDER_LIST'),'TEXT'=>paragraph(do_lang_tempcode('EXPORT_ORDER_LIST_TEXT')),'URL'=>build_url(array('page'=>'_SELF','type'=>'_order_export'),'_SELF'),'HIDDEN'=>'','FIELDS'=>$fields));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'e2e5097798c963f4977ba22b50ddf2f3',
+			'SKIP_VALIDATION'=>true,
+			'TITLE'=>$title,
+			'SUBMIT_NAME'=>do_lang_tempcode('EXPORT_ORDER_LIST'),
+			'TEXT'=>paragraph(do_lang_tempcode('EXPORT_ORDER_LIST_TEXT')),
+			'URL'=>build_url(array('page'=>'_SELF','type'=>'_order_export'),'_SELF'),
+			'HIDDEN'=>'',
+			'FIELDS'=>$fields,
+		));
 	}
 
 	/**

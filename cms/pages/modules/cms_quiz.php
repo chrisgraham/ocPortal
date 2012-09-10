@@ -73,6 +73,7 @@ class Module_cms_quiz extends standard_crud_module
 		set_helper_panel_tutorial('tut_quizzes');
 
 		require_code('quiz');
+		require_code('quiz2');
 
 		$this->add_one_label=do_lang_tempcode('ADD_QUIZ');
 		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_QUIZ');
@@ -233,7 +234,11 @@ class Module_cms_quiz extends standard_crud_module
 		$fields->attach(form_input_integer(do_lang_tempcode('NUM_WINNERS'),do_lang_tempcode('DESCRIPTION_NUM_WINNERS'),'num_winners',$num_winners,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT_FAIL'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT_FAIL'),'end_text_fail',$end_text_fail,false));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'00b9a6a21eab07864d41d5465d9569cd','SECTION_HIDDEN'=>is_null($redo_time) && is_null($timeout) && ((is_null($open_time)) || ($open_time<=time())) && is_null($close_time) && $points_for_passing==0 && is_null($tied_newsletter) && $notes=='','TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+			'_GUID'=>'00b9a6a21eab07864d41d5465d9569cd',
+			'SECTION_HIDDEN'=>is_null($redo_time) && is_null($timeout) && ((is_null($open_time)) || ($open_time<=time())) && is_null($close_time) && $points_for_passing==0 && is_null($tied_newsletter) && $notes=='',
+			'TITLE'=>do_lang_tempcode('ADVANCED'),
+		)));
 		$fields->attach(form_input_integer(do_lang_tempcode('REDO_TIME'),do_lang_tempcode('DESCRIPTION_REDO_TIME'),'redo_time',$redo_time,false));
 		$fields->attach(form_input_integer(do_lang_tempcode('TIMEOUT'),do_lang_tempcode('DESCRIPTION_QUIZ_TIMEOUT'),'timeout',$timeout,false));
 		$fields->attach(form_input_date(do_lang_tempcode('OPEN_TIME'),do_lang_tempcode('DESCRIPTION_OPEN_TIME'),'open_time',false,false,true,$open_time,2));

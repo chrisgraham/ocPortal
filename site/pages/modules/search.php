@@ -311,7 +311,10 @@ class Module_search
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'my'),'_SELF');
 
-		return do_template('SEARCH_SAVED_SCREEN',array('_GUID'=>'f9a7116b8525eb223bde50dfb991f39f','TITLE'=>$title,'SEARCHES'=>$searches,'URL'=>$post_url));
+		$tpl=do_template('SEARCH_SAVED_SCREEN',array('_GUID'=>'f9a7116b8525eb223bde50dfb991f39f','TITLE'=>$title,'SEARCHES'=>$searches,'URL'=>$post_url));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**
@@ -358,18 +361,6 @@ class Module_search
 
 			$under=get_param('search_under','!',true);
 			if ((!is_null($info)) && (method_exists($object,'get_tree'))) $object->get_tree($under);
-
-			if (!is_null($info))
-				$test_tpl=internalise_own_screen($title);
-			else $test_tpl=NULL;
-		} else
-		{
-			$test_tpl=internalise_own_screen($title);
-		}
-
-		if (is_object($test_tpl))
-		{
-			return $test_tpl;
 		}
 
 		require_javascript('javascript_ajax');
@@ -427,7 +418,20 @@ class Module_search
 				}
 
 				require_code('form_templates');
-				$tree=do_template('FORM_SCREEN_INPUT_TREE_LIST',array('_GUID'=>'25368e562be3b4b9c6163aa008b47c91','MULTI_SELECT'=>false,'TABINDEX'=>strval(get_form_field_tabindex()),'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,'END_OF_FORM'=>true,'REQUIRED'=>false,'USE_SERVER_ID'=>false,'NAME'=>'search_under','DEFAULT'=>$under,'HOOK'=>$ajax_hook,'ROOT_ID'=>'','OPTIONS'=>serialize($ajax_options)));
+				$tree=do_template('FORM_SCREEN_INPUT_TREE_LIST',array(
+					'_GUID'=>'25368e562be3b4b9c6163aa008b47c91',
+					'MULTI_SELECT'=>false,
+					'TABINDEX'=>strval(get_form_field_tabindex()),
+					'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,
+					'END_OF_FORM'=>true,
+					'REQUIRED'=>false,
+					'USE_SERVER_ID'=>false,
+					'NAME'=>'search_under',
+					'DEFAULT'=>$under,
+					'HOOK'=>$ajax_hook,
+					'ROOT_ID'=>'',
+					'OPTIONS'=>serialize($ajax_options),
+				));
 			} else
 			{
 				$ajax=false;
@@ -538,7 +542,33 @@ class Module_search
 			}
 		}
 
-		return do_template('SEARCH_FORM_SCREEN',array('_GUID'=>'8bb208185740183323a6fe6e89d55de5','SEARCH_TERM'=>is_null($content)?'':$content,'HAS_TEMPLATE_SEARCH'=>$has_template_search,'NUM_RESULTS'=>integer_format($num_results),'CAN_ORDER_BY_RATING'=>$can_order_by_rating,'EXTRA_SORT_FIELDS'=>$extra_sort_fields,'USER_LABEL'=>$user_label,'DAYS_LABEL'=>$days_label,'BOOLEAN_SEARCH'=>$this->_is_boolean_search(),'AND'=>$boolean_operator=='AND','ONLY_TITLES'=>$only_titles,'DAYS'=>strval($days),'SORT'=>$sort,'DIRECTION'=>$direction,'CONTENT'=>$content,'RESULTS'=>$out,'PAGINATION'=>$pagination,'HAS_FULLTEXT_SEARCH'=>$has_fulltext_search,'TITLE'=>$title,'AUTHOR'=>$author,'SPECIALISATION'=>$specialisation,'URL'=>$url));
+		$tpl=do_template('SEARCH_FORM_SCREEN',array(
+			'_GUID'=>'8bb208185740183323a6fe6e89d55de5',
+			'SEARCH_TERM'=>is_null($content)?'':$content,
+			'HAS_TEMPLATE_SEARCH'=>$has_template_search,
+			'NUM_RESULTS'=>integer_format($num_results),
+			'CAN_ORDER_BY_RATING'=>$can_order_by_rating,
+			'EXTRA_SORT_FIELDS'=>$extra_sort_fields,
+			'USER_LABEL'=>$user_label,
+			'DAYS_LABEL'=>$days_label,
+			'BOOLEAN_SEARCH'=>$this->_is_boolean_search(),
+			'AND'=>$boolean_operator=='AND',
+			'ONLY_TITLES'=>$only_titles,
+			'DAYS'=>strval($days),
+			'SORT'=>$sort,
+			'DIRECTION'=>$direction,
+			'CONTENT'=>$content,
+			'RESULTS'=>$out,
+			'PAGINATION'=>$pagination,
+			'HAS_FULLTEXT_SEARCH'=>$has_fulltext_search,
+			'TITLE'=>$title,
+			'AUTHOR'=>$author,
+			'SPECIALISATION'=>$specialisation,
+			'URL'=>$url,
+		));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

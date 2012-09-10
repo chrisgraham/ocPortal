@@ -358,8 +358,6 @@ function apply_tempcode_escaping($escaped,&$value)
 	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
 	foreach ($escaped as $escape)
 	{
-		//if ($escape==NL_ESCAPED) echo str_replace(chr(10),'',$value)."\n\n\n\n\n";
-
 		if ($escape==ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==FORCIBLY_ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==SQ_ESCAPED) $value=str_replace('&#039;','\&#039;',str_replace('\'','\\\'',str_replace('\\','\\\\',$value)));

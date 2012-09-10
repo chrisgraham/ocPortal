@@ -404,7 +404,18 @@ class Module_admin_setupwizard
 
 		$js='var cuz=document.getElementById("collapse_user_zones"); var cuz_func=function() { var gza=document.getElementById("guest_zone_access"); gza.disabled=cuz.checked; if (cuz.checked) gza.checked=true; }; cuz.onchange=cuz_func; cuz_func();';
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'f1e9a4d271c7d68ff9da6dc0438f6e3f','SKIP_VALIDATION'=>true,'JAVASCRIPT'=>$js,'TITLE'=>$title,'SKIPPABLE'=>'skip_5','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields())));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'f1e9a4d271c7d68ff9da6dc0438f6e3f',
+			'SKIP_VALIDATION'=>true,
+			'JAVASCRIPT'=>$js,
+			'TITLE'=>$title,
+			'SKIPPABLE'=>'skip_5',
+			'FIELDS'=>$fields,
+			'URL'=>$post_url,
+			'TEXT'=>$text,
+			'SUBMIT_NAME'=>$submit_name,
+			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
+		));
 	}
 
 	/**
@@ -522,7 +533,18 @@ class Module_admin_setupwizard
 
 		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'d463906b9e2cd8c37577d64783aa844c','SKIP_VALIDATION'=>true,'TITLE'=>$title,'SKIPPABLE'=>'skip_6','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'PREVIEW'=>true,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields())));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'d463906b9e2cd8c37577d64783aa844c',
+			'SKIP_VALIDATION'=>true,
+			'TITLE'=>$title,
+			'SKIPPABLE'=>'skip_6',
+			'FIELDS'=>$fields,
+			'URL'=>$post_url,
+			'TEXT'=>$text,
+			'PREVIEW'=>true,
+			'SUBMIT_NAME'=>$submit_name,
+			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
+		));
 	}
 
 	/**
@@ -599,7 +621,18 @@ class Module_admin_setupwizard
 
 		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'7ef31eb9712cff98da57a92fc173f7af','PREVIEW'=>true,'SKIP_VALIDATION'=>true,'TITLE'=>$title,'SKIPPABLE'=>'skip_8','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields())));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'7ef31eb9712cff98da57a92fc173f7af',
+			'PREVIEW'=>true,
+			'SKIP_VALIDATION'=>true,
+			'TITLE'=>$title,
+			'SKIPPABLE'=>'skip_8',
+			'FIELDS'=>$fields,
+			'URL'=>$post_url,
+			'TEXT'=>$text,
+			'SUBMIT_NAME'=>$submit_name,
+			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
+		));
 	}
 
 	/**
@@ -624,7 +657,18 @@ class Module_admin_setupwizard
 
 		//breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('START'))));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'c405a64a08328f78ac0e3f22a8365411','SKIP_VALIDATION'=>true,'TITLE'=>$title,'SKIPPABLE'=>'skip_9','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),'JAVASCRIPT'=>$javascript));
+		return do_template('FORM_SCREEN',array(
+			'_GUID'=>'c405a64a08328f78ac0e3f22a8365411',
+			'SKIP_VALIDATION'=>true,
+			'TITLE'=>$title,
+			'SKIPPABLE'=>'skip_9',
+			'FIELDS'=>$fields,
+			'URL'=>$post_url,
+			'TEXT'=>$text,
+			'SUBMIT_NAME'=>$submit_name,
+			'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),
+			'JAVASCRIPT'=>$javascript,
+		));
 	}
 
 	/**

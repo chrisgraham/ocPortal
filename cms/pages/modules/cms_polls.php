@@ -50,6 +50,7 @@ class Module_cms_polls extends standard_crud_module
 		set_helper_panel_tutorial('tut_feedback');
 
 		require_code('polls');
+		require_code('polls2');
 		require_lang('polls');
 		require_css('polls');
 

@@ -1,34 +1,40 @@
-<section id="tray_{!TIPS|}" class="box box___block_main_staff_tips">
-	<h3 class="toggleable_tray_title">
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!TIPS|}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{!TIPS}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
+{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
+<div id="{$GET*,wrapper_id}">
+	<section id="tray_{!TIPS|}" class="box box___block_main_staff_tips">
+		<h3 class="toggleable_tray_title">
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!TIPS|}');"><img alt="{!CONTRACT}: {$STRIP_TAGS,{!TIPS}}" title="{!CONTRACT}" src="{$IMG*,contract}" /></a>
 
-		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!TIPS|}');">{!TIPS}</a>
-	</h3>
+			<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode,false,'{!TIPS|}');">{!TIPS}</a>
+		</h3>
 
-	<div class="toggleable_tray">
-		<p>
-			{TIP}
-		</p>
+		<div class="toggleable_tray">
+			<p>
+				{TIP}
+			</p>
 
-		<div class="tips_trail">
-			{+START,IF_NON_EMPTY,{TIP_CODE}}
-				<ul class="horizontal_links associated_links_block_group">
-					{+START,IF,{$RUNNING_SCRIPT,staff_tips}}
-						<li><a href="{$FIND_SCRIPT*,staff_tips}?dismiss={TIP_CODE*}{$KEEP*}">{!DISMISS_TIP}</a></li>
-						<li><a accesskey="k" href="{$FIND_SCRIPT*,staff_tips}{$KEEP*,1}">{!ANOTHER_TIP}</a></li>
-					{+END}
-					{+START,IF,{$NOT,{$RUNNING_SCRIPT,staff_tips}}}
-						<li><a href="{$PAGE_LINK*,adminzone:start:dismiss={TIP_CODE}}">{!DISMISS_TIP}</a></li>
-						<li><a accesskey="k" href="{$PAGE_LINK*,adminzone:start}">{!ANOTHER_TIP}</a></li>
-					{+END}
-				</ul>
-			{+END}
+			<div class="tips_trail">
+				{+START,IF_NON_EMPTY,{TIP_CODE}}
+					<ul class="horizontal_links associated_links_block_group">
+						<li><a target="_self" href="{$PAGE_LINK*,adminzone:start:staff_tips_dismiss={TIP_CODE}}">{!DISMISS_TIP}</a></li>
+						<li><a target="_self" accesskey="k" href="{$PAGE_LINK*,adminzone:start}">{!ANOTHER_TIP}</a></li>
+					</ul>
+				{+END}
+			</div>
 		</div>
-	</div>
-</section>
+	</section>
 
-{+START,IF,{$JS_ON}}
+	{+START,IF,{$JS_ON}}
+		<script type="text/javascript">// <![CDATA[
+			handle_tray_cookie_setting('{!TIPS|}');
+		//]]></script>
+	{+END}
+
+	{$REQUIRE_JAVASCRIPT,javascript_ajax}
+	{$REQUIRE_JAVASCRIPT,javascript_validation}
+
 	<script type="text/javascript">// <![CDATA[
-		handle_tray_cookie_setting('{!TIPS|}');
+		add_event_listener_abstract(window,'load',function () {
+			internalise_ajax_block_wrapper_links('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}',document.getElementById('{$GET;,wrapper_id}'),['staff_tips_dismiss'],{ },false,true);
+		} );
 	//]]></script>
-{+END}
+</div>

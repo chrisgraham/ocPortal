@@ -118,7 +118,10 @@ class Hook_admin_stats_search
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SITE_STATISTICS'))));
 
-		return do_template('STATS_SCREEN',array('_GUID'=>'727a59e061727c4a1e24345cecb769aa','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'727a59e061727c4a1e24345cecb769aa','TITLE'=>$title,'GRAPH'=>$graph,'STATS'=>$list));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 }

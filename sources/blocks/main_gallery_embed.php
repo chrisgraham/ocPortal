@@ -293,7 +293,14 @@ class Block_main_gallery_embed
 			{
 				$submit_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>$cat,'redirect'=>SELF_REDIRECT),get_module_zone('cms_galleries'));
 			} else $submit_url=new ocp_tempcode();
-			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>($guid!='')?$guid:'bf84d65b8dd134ba6cd7b1b7bde99de2','HIGH'=>false,'TITLE'=>do_lang_tempcode('GALLERY'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),'SUBMIT_URL'=>$submit_url));
+			return do_template('BLOCK_NO_ENTRIES',array(
+				'_GUID'=>($guid!='')?$guid:'bf84d65b8dd134ba6cd7b1b7bde99de2',
+				'HIGH'=>false,
+				'TITLE'=>do_lang_tempcode('GALLERY'),
+				'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),
+				'ADD_NAME'=>do_lang_tempcode('ADD_IMAGE'),
+				'SUBMIT_URL'=>$submit_url,
+			));
 		}
 
 		// Pagination

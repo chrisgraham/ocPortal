@@ -341,7 +341,7 @@ class Hook_aef
 	 */
 	function import_news_and_categories($db,$table_prefix,$old_base_dir)
 	{
-		require_code('news');
+		require_code('news2');
 		$com=0; // we cannot comment the news
 
 		//get AEF news

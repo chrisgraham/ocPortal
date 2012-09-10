@@ -310,7 +310,22 @@ class Module_admin_zones
 			require_code('zones3');
 			$zone_list=($for==$current_for)?nice_get_zones($redirecting_to,array($id)):new ocp_tempcode() /*not simple so leave field out*/;
 
-			$editor[$for]=static_evaluate_tempcode(do_template('ZONE_EDITOR_PANEL',array('_GUID'=>'f32ac84fe18b90497acd4afa27698bf0','DEFAULT_PARSED'=>$default_parsed,'CLASS'=>$class,'CURRENT_ZONE'=>$current_zone,'ZONES'=>$zone_list,'COMCODE'=>$comcode,'PREVIEW'=>$_preview,'ZONE'=>$id,'ID'=>$for,'IS_PANEL'=>$is_panel,'TYPE'=>$type,'EDIT_URL'=>$edit_url,'SETTINGS'=>$settings,'COMCODE_EDITOR'=>$comcode_editor)));
+			$editor[$for]=static_evaluate_tempcode(do_template('ZONE_EDITOR_PANEL',array(
+				'_GUID'=>'f32ac84fe18b90497acd4afa27698bf0',
+				'DEFAULT_PARSED'=>$default_parsed,
+				'CLASS'=>$class,
+				'CURRENT_ZONE'=>$current_zone,
+				'ZONES'=>$zone_list,
+				'COMCODE'=>$comcode,
+				'PREVIEW'=>$_preview,
+				'ZONE'=>$id,
+				'ID'=>$for,
+				'IS_PANEL'=>$is_panel,
+				'TYPE'=>$type,
+				'EDIT_URL'=>$edit_url,
+				'SETTINGS'=>$settings,
+				'COMCODE_EDITOR'=>$comcode_editor,
+			)));
 		}
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:editor',do_lang_tempcode('CHOOSE'))));
@@ -322,7 +337,18 @@ class Module_admin_zones
 		set_helper_panel_tutorial('');
 		set_helper_panel_text(new ocp_tempcode());
 
-		return do_template('ZONE_EDITOR_SCREEN',array('_GUID'=>'3cb1aab6b16444484e82d22f2c8f1e9a','ID'=>$id,'LANG'=>$lang,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$title,'URL'=>$post_url,'LEFT_EDITOR'=>$editor['panel_left'],'RIGHT_EDITOR'=>$editor['panel_right'],'MIDDLE_EDITOR'=>$editor[$default_page]));
+		return do_template('ZONE_EDITOR_SCREEN',array(
+			'_GUID'=>'3cb1aab6b16444484e82d22f2c8f1e9a',
+			'ID'=>$id,
+			'LANG'=>$lang,
+			'PING_URL'=>$ping_url,
+			'WARNING_DETAILS'=>$warning_details,
+			'TITLE'=>$title,
+			'URL'=>$post_url,
+			'LEFT_EDITOR'=>$editor['panel_left'],
+			'RIGHT_EDITOR'=>$editor['panel_right'],
+			'MIDDLE_EDITOR'=>$editor[$default_page],
+		));
 	}
 
 	/**
@@ -676,7 +702,10 @@ class Module_admin_zones
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
 		$text=do_lang_tempcode('CHOOSE_EDIT_LIST');
-		return do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'a33d3ff1178e7898b42acd83b38b5dcb','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
+		$tpl=do_template('COLUMNED_TABLE_SCREEN',array('_GUID'=>'a33d3ff1178e7898b42acd83b38b5dcb','TITLE'=>$title,'TEXT'=>$text,'TABLE'=>$table,'SUBMIT_NAME'=>NULL,'POST_URL'=>get_self_url()));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 	/**

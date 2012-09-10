@@ -24,7 +24,7 @@ class quiz_test_set extends ocp_test_case
 	{
 		parent::setUp();
 
-		require_code('quiz');
+		require_code('quiz2');
 
 		$this->quiz_id=add_quiz('Quiz1',15,'Begin','End','','somethng',60,time(),NULL,1,0,'Test',1,'Questions',NULL,0,NULL);
 

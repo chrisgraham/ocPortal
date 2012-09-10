@@ -468,7 +468,17 @@ class Module_chat
 		$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url(-100,true,true);
 		if (is_object($profile_url)) $profile_url=$profile_url->evaluate();
 		$profile_url=str_replace('-100','__id__',$profile_url);
-		$im_participant_template=do_template('CHAT_LOBBY_IM_PARTICIPANT',array('_GUID'=>'9a36efe3a449dabac6ef9866d1f6f48a','PROFILE_URL'=>$profile_url,'ID'=>'__id__','ROOM_ID'=>'__room_id__','USERNAME'=>'__username__','ONLINE'=>'__online__','AVATAR_URL'=>'__avatar_url__','MAKE_FRIEND_URL'=>$make_friend_url,'BLOCK_MEMBER_URL'=>$block_member_url));
+		$im_participant_template=do_template('CHAT_LOBBY_IM_PARTICIPANT',array(
+			'_GUID'=>'9a36efe3a449dabac6ef9866d1f6f48a',
+			'PROFILE_URL'=>$profile_url,
+			'ID'=>'__id__',
+			'ROOM_ID'=>'__room_id__',
+			'USERNAME'=>'__username__',
+			'ONLINE'=>'__online__',
+			'AVATAR_URL'=>'__avatar_url__',
+			'MAKE_FRIEND_URL'=>$make_friend_url,
+			'BLOCK_MEMBER_URL'=>$block_member_url,
+		));
 
 		if (!is_guest())
 		{
@@ -483,7 +493,25 @@ class Module_chat
 			$add_room_url=build_url(array('page'=>'admin_chat','type'=>'ad'),get_module_zone('admin_chat'));
 		} else $add_room_url=new ocp_tempcode();
 
-		return do_template('CHAT_LOBBY_SCREEN',array('_GUID'=>'f82ddfd0dccbd25752dd05a1d87429e2','ADD_ROOM_URL'=>$add_room_url,'MESSAGE'=>$message,'CHAT_SOUND'=>get_chat_sound_tpl(),'IM_PARTICIPANT_TEMPLATE'=>$im_participant_template,'IM_AREA_TEMPLATE'=>$im_area_template,'FRIENDS'=>$friends,'CAN_IM'=>$can_im,'ONLINE_URL'=>$online_url,'URL_ADD_FRIEND'=>$post_url_add_friend,'URL_REMOVE_FRIENDS'=>$post_url_remove_friends,'TITLE'=>$title,'ROOMS'=>$fields,'PRIVATE_ROOM'=>$private_room,'MOD_LINK'=>$modlink,'BLOCKING_LINK'=>$blocking_link,'SETEFFECTS_LINK'=>$seteffectslink));
+		return do_template('CHAT_LOBBY_SCREEN',array(
+			'_GUID'=>'f82ddfd0dccbd25752dd05a1d87429e2',
+			'ADD_ROOM_URL'=>$add_room_url,
+			'MESSAGE'=>$message,
+			'CHAT_SOUND'=>get_chat_sound_tpl(),
+			'IM_PARTICIPANT_TEMPLATE'=>$im_participant_template,
+			'IM_AREA_TEMPLATE'=>$im_area_template,
+			'FRIENDS'=>$friends,
+			'CAN_IM'=>$can_im,
+			'ONLINE_URL'=>$online_url,
+			'URL_ADD_FRIEND'=>$post_url_add_friend,
+			'URL_REMOVE_FRIENDS'=>$post_url_remove_friends,
+			'TITLE'=>$title,
+			'ROOMS'=>$fields,
+			'PRIVATE_ROOM'=>$private_room,
+			'MOD_LINK'=>$modlink,
+			'BLOCKING_LINK'=>$blocking_link,
+			'SETEFFECTS_LINK'=>$seteffectslink,
+		));
 	}
 
 	/**
@@ -584,7 +612,29 @@ class Module_chat
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY_END_CHAT'))));
 
-		return do_template('CHAT_ROOM_SCREEN',array('_GUID'=>'867a0b050c050c81d33482d131783eb0','CHATTERS'=>get_chatters_in_room_tpl(get_chatters_in_room($room_id)),'CHAT_SOUND'=>get_chat_sound_tpl(),'ROOM_ID'=>strval($room_id),'DEBUG'=>$debug,'MESSAGES_PHP'=>$messages_php,'TEXT_COLOUR_DEFAULT'=>$user_colour,'FONT_NAME_DEFAULT'=>$line_contents,'OPTIONS_URL'=>$cs_post_url,'COMCODE_HELP'=>$comcode_help,'CHATCODE_HELP'=>$chatcode_help,'ROOM_NAME'=>get_chatroom_name(get_param_integer('id',1)),'MICRO_BUTTONS'=>$micro_buttons,'BUTTONS'=>$buttons,'YOUR_NAME'=>$yourname,'MESSAGES_URL'=>$messages_link,'POSTING_URL'=>$posting_url,'SUBMIT_VALUE'=>$posting_name,'INTRODUCTION'=>'','TITLE'=>$title,'LINKS'=>$links));
+		return do_template('CHAT_ROOM_SCREEN',array(
+			'_GUID'=>'867a0b050c050c81d33482d131783eb0',
+			'CHATTERS'=>get_chatters_in_room_tpl(get_chatters_in_room($room_id)),
+			'CHAT_SOUND'=>get_chat_sound_tpl(),
+			'ROOM_ID'=>strval($room_id),
+			'DEBUG'=>$debug,
+			'MESSAGES_PHP'=>$messages_php,
+			'TEXT_COLOUR_DEFAULT'=>$user_colour,
+			'FONT_NAME_DEFAULT'=>$line_contents,
+			'OPTIONS_URL'=>$cs_post_url,
+			'COMCODE_HELP'=>$comcode_help,
+			'CHATCODE_HELP'=>$chatcode_help,
+			'ROOM_NAME'=>get_chatroom_name(get_param_integer('id',1)),
+			'MICRO_BUTTONS'=>$micro_buttons,
+			'BUTTONS'=>$buttons,
+			'YOUR_NAME'=>$yourname,
+			'MESSAGES_URL'=>$messages_link,
+			'POSTING_URL'=>$posting_url,
+			'SUBMIT_VALUE'=>$posting_name,
+			'INTRODUCTION'=>'',
+			'TITLE'=>$title,
+			'LINKS'=>$links,
+		));
 	}
 
 	/**

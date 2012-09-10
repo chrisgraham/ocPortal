@@ -142,11 +142,33 @@ class Module_admin_redirects
 		{
 			$from_zones=($num_zones>50)?new ocp_tempcode():nice_get_zones($row['r_from_zone']);
 			$to_zones=($num_zones>50)?new ocp_tempcode():nice_get_zones($row['r_to_zone']);
-			$fields->attach(do_template('REDIRECTE_TABLE_REDIRECT',array('_GUID'=>'fd1ea392a98e588bb1f553464d315ef0','I'=>strval($i),'FROM_ZONE'=>$row['r_from_zone'],'TO_ZONE'=>$row['r_to_zone'],'TO_ZONES'=>$to_zones,'FROM_ZONES'=>$from_zones,'FROM_PAGE'=>$row['r_from_page'],'TO_PAGE'=>$row['r_to_page'],'TICKED'=>$row['r_is_transparent']==1,'NAME'=>'is_transparent_'.strval($i))));
+			$fields->attach(do_template('REDIRECTE_TABLE_REDIRECT',array(
+				'_GUID'=>'fd1ea392a98e588bb1f553464d315ef0',
+				'I'=>strval($i),
+				'FROM_ZONE'=>$row['r_from_zone'],
+				'TO_ZONE'=>$row['r_to_zone'],
+				'TO_ZONES'=>$to_zones,
+				'FROM_ZONES'=>$from_zones,
+				'FROM_PAGE'=>$row['r_from_page'],
+				'TO_PAGE'=>$row['r_to_page'],
+				'TICKED'=>$row['r_is_transparent']==1,
+				'NAME'=>'is_transparent_'.strval($i),
+			)));
 		}
 		$default=explode(':',get_param('page_link',':'),2);
 		$zones=($num_zones>50)?new ocp_tempcode():nice_get_zones($default[0]);
-		$new=do_template('REDIRECTE_TABLE_REDIRECT',array('_GUID'=>'cbf0eb4f745a6bf7b10e1f7d6d95d10f','I'=>'new','FROM_ZONE'=>'','TO_ZONE'=>'','TO_ZONES'=>$zones,'FROM_ZONES'=>$zones,'FROM_PAGE'=>$default[1],'TO_PAGE'=>'','TICKED'=>false,'NAME'=>'is_transparent_new'));
+		$new=do_template('REDIRECTE_TABLE_REDIRECT',array(
+			'_GUID'=>'cbf0eb4f745a6bf7b10e1f7d6d95d10f',
+			'I'=>'new',
+			'FROM_ZONE'=>'',
+			'TO_ZONE'=>'',
+			'TO_ZONES'=>$zones,
+			'FROM_ZONES'=>$zones,
+			'FROM_PAGE'=>$default[1],
+			'TO_PAGE'=>'',
+			'TICKED'=>false,
+			'NAME'=>'is_transparent_new',
+		));
 
 		require_code('form_templates');
 		list($warning_details,$ping_url)=handle_conflict_resolution();
@@ -154,7 +176,16 @@ class Module_admin_redirects
 		$notes=get_long_value('notes');
 		if (is_null($notes)) $notes='';
 
-		return do_template('REDIRECTE_TABLE_SCREEN',array('_GUID'=>'2a9add73f6dd0b8288c0c84fc7242763','NOTES'=>$notes,'PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$title,'FIELDS'=>$fields,'NEW'=>$new,'URL'=>$post_url));
+		return do_template('REDIRECTE_TABLE_SCREEN',array(
+			'_GUID'=>'2a9add73f6dd0b8288c0c84fc7242763',
+			'NOTES'=>$notes,
+			'PING_URL'=>$ping_url,
+			'WARNING_DETAILS'=>$warning_details,
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'NEW'=>$new,
+			'URL'=>$post_url,
+		));
 	}
 
 	/**

@@ -17,6 +17,7 @@
 <script type="text/javascript">// <![CDATA[
 	document.getElementById('saved__{TITLE|}').getElementsByTagName('input')[1].onclick=function()
 	{
+		var form=this.form;
 		window.fauxmodal_confirm('{!CONFIRM_DELETE;/,{TITLE}}',function(answer) { if (answer) form.submit(); });
 		return false;
 	};

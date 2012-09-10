@@ -87,8 +87,7 @@ function incoming_uploads_script()
 		}
 	} elseif (post_param('name','')!='') // less nice raw post, which most HTML5 browsers have to do
 	{
-		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+		prepare_for_known_ajax_response();
 
 		$name=post_param('name');
 

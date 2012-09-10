@@ -23,8 +23,7 @@
  */
 function site_tree_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	$root_perms=array('submit_cat_highrange_content'=>0,'edit_cat_highrange_content'=>0,'edit_own_cat_highrange_content'=>0,'delete_cat_highrange_content'=>0,'delete_own_cat_highrange_content'=>0,'submit_highrange_content'=>1,'bypass_validation_highrange_content'=>1,'edit_own_highrange_content'=>1,'edit_highrange_content'=>1,'delete_own_highrange_content'=>1,'delete_highrange_content'=>1,'submit_cat_midrange_content'=>0,'edit_cat_midrange_content'=>0,'edit_own_cat_midrange_content'=>0,'delete_cat_midrange_content'=>0,'delete_own_cat_midrange_content'=>0,'submit_midrange_content'=>1,'bypass_validation_midrange_content'=>1,'edit_own_midrange_content'=>1,'edit_midrange_content'=>1,'delete_own_midrange_content'=>1,'delete_midrange_content'=>1,'submit_cat_lowrange_content'=>0,'edit_cat_lowrange_content'=>0,'edit_own_cat_lowrange_content'=>0,'delete_cat_lowrange_content'=>0,'delete_own_cat_lowrange_content'=>0,'submit_lowrange_content'=>1,'bypass_validation_lowrange_content'=>1,'edit_own_lowrange_content'=>1,'edit_lowrange_content'=>1,'delete_own_lowrange_content'=>1,'delete_lowrange_content'=>1);
 

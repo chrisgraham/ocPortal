@@ -138,7 +138,22 @@ class Block_main_google_map_users
 			$update_url='';
 		}
 
-		return do_template('BLOCK_MAIN_GOOGLE_MAP_USERS',array('_GUID'=>'4c80efbd5d31183196ea0f6265f07921','TITLE'=>$map['title'],'GEOLOCATE_USER'=>$geolocate_user,'CLUSTER'=>$cluster,'SET_COORD_URL'=>$update_url,'REGION'=>$map['region'],'DATA'=>$member_data_js,'USERNAME_PREFIX'=>$map['username_prefix'],'WIDTH'=>$mapwidth, 'HEIGHT'=>$mapheight, 'LATITUDE'=>$map['latitude'], 'LONGITUDE'=>$map['longitude'], 'ZOOM'=>$set_zoom,'CENTER'=>$set_center));
+		return do_template('BLOCK_MAIN_GOOGLE_MAP_USERS',array(
+			'_GUID'=>'4c80efbd5d31183196ea0f6265f07921',
+			'TITLE'=>$map['title'],
+			'GEOLOCATE_USER'=>$geolocate_user,
+			'CLUSTER'=>$cluster,
+			'SET_COORD_URL'=>$update_url,
+			'REGION'=>$map['region'],
+			'DATA'=>$member_data_js,
+			'USERNAME_PREFIX'=>$map['username_prefix'],
+			'WIDTH'=>$mapwidth,
+			'HEIGHT'=>$mapheight,
+			'LATITUDE'=>$map['latitude'],
+			'LONGITUDE'=>$map['longitude'],
+			'ZOOM'=>$set_zoom,
+			'CENTER'=>$set_center,
+		));
 	}
 }
 

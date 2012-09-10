@@ -87,7 +87,7 @@ function may_view_content_behind_feedback_code($member_id,$content_type,$content
 	{
 		require_code('hooks/systems/content_meta_aware/'.$content_type);
 		$content_type_ob=object_factory('Hook_content_meta_aware_'.$content_type);
-		$info=$cma_hook_ob->info();
+		$info=$content_type_ob->info();
 		if (isset($info['category_field']))
 		{
 			list(,,,$content)=content_get_details($content_type,$content_id);
@@ -179,8 +179,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
  */
 function post_comment_script()
 {
-	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	prepare_for_known_ajax_response();
 
 	// Read in context of what we're doing
 	$options=post_param('options');
@@ -384,6 +383,9 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
  */
 function already_rated($rating_for_types,$content_id)
 {
+	if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_param_integer('keep_rating_test',0)==1))
+		return false;
+
 	$more=(!is_guest())?' OR rating_member='.strval((integer)get_member()):'';
 	$for_types='';
 	foreach ($rating_for_types as $rating_for_type)

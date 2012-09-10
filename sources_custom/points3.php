@@ -150,7 +150,6 @@ function points_profile($member_id_of,$member_id_viewing)
 		'POINTS_PER_DAY'=>integer_format($points_per_day),
 		'DAYS_JOINED'=>integer_format($days_joined),
 		'MULT_POINTS_PER_DAY'=>integer_format($points_per_day*$days_joined),
-		'POINTS_GAINED_AUTO'=>integer_format($points_gained_auto), // This isn't needed now, it is same as MULT_POINTS_PER_DAY
 
 		'WIKI_POST_COUNT'=>integer_format($wiki_post_count),
 		'POINTS_WIKI_POSTING'=>integer_format($points_wiki_posting),

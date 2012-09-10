@@ -176,7 +176,21 @@ class Block_side_calendar
 					$class='multiple';
 					$e_count=integer_format($entries[$j]);
 					$events_and_priority_lang=do_lang_tempcode('TOTAL_EVENTS_AND_HIGHEST_PRIORITY',make_string_tempcode($e_count),do_lang_tempcode('PRIORITY_'.strval($priorities[$j])));
-					$__entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array('_GUID'=>'2190cdba146d5d18c01033fd0d9a09a1','CURRENT'=>date('Y-m-d',utctime_to_usertime())==$date,'DAY_URL'=>$day_url,'DATE'=>$date_formatted,'TITLE'=>'','TIME'=>'','URL'=>'','ID'=>'','PRIORITY'=>strval($priorities[$j]),'DAY'=>strval($j),'ICON'=>'','COUNT'=>$e_count,'EVENTS_AND_PRIORITY_LANG'=>$events_and_priority_lang)));
+					$__entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array(
+						'_GUID'=>'2190cdba146d5d18c01033fd0d9a09a1',
+						'CURRENT'=>date('Y-m-d',utctime_to_usertime())==$date,
+						'DAY_URL'=>$day_url,
+						'DATE'=>$date_formatted,
+						'TITLE'=>'',
+						'TIME'=>'',
+						'URL'=>'',
+						'ID'=>'',
+						'PRIORITY'=>strval($priorities[$j]),
+						'DAY'=>strval($j),
+						'ICON'=>'',
+						'COUNT'=>$e_count,
+						'EVENTS_AND_PRIORITY_LANG'=>$events_and_priority_lang,
+					)));
 				}
 
 				if ($dotw==6)

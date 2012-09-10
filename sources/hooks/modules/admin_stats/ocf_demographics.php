@@ -143,7 +143,10 @@ class Hook_admin_stats_ocf_demographics
 
 		$graph=do_template('STATS_GRAPH',array('_GUID'=>'ae6e151806c83a6ac6df84b645de3f69','GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/Global-Demographics.xml','TITLE'=>do_lang_tempcode('DEMOGRAPHICS'),'TEXT'=>do_lang_tempcode('DESCRIPTION_DEMOGRAPHICS')));
 
-		return do_template('STATS_SCREEN',array('_GUID'=>'f60cb424d07969f1e74eb10bb6a5eeda','TITLE'=>$title,'NO_CSV'=>'1','GRAPH'=>$graph,'STATS'=>$list));
+		$tpl=do_template('STATS_SCREEN',array('_GUID'=>'f60cb424d07969f1e74eb10bb6a5eeda','TITLE'=>$title,'NO_CSV'=>'1','GRAPH'=>$graph,'STATS'=>$list));
+
+		require_code('templates_internalise_screen');
+		return internalise_own_screen($tpl);
 	}
 
 }

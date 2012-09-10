@@ -91,7 +91,22 @@ class Hook_rss_galleries
 			$enclosure_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries',array_key_exists('video_views',$row)?'videos':'images',$row['id']);
 			list($enclosure_length,$enclosure_type)=get_enclosure_details($row['url'],$enclosure_url);
 
-			$content->attach(do_template($prefix.'ENTRY',array('ENCLOSURE_URL'=>$enclosure_url,'ENCLOSURE_LENGTH'=>$enclosure_length,'ENCLOSURE_TYPE'=>$enclosure_type,'VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
+			$content->attach(do_template($prefix.'ENTRY',array(
+				'ENCLOSURE_URL'=>$enclosure_url,
+				'ENCLOSURE_LENGTH'=>$enclosure_length,
+				'ENCLOSURE_TYPE'=>$enclosure_type,
+				'VIEW_URL'=>$view_url,
+				'SUMMARY'=>$summary,
+				'EDIT_DATE'=>$edit_date,
+				'IF_COMMENTS'=>$if_comments,
+				'TITLE'=>$news_title,
+				'CATEGORY_RAW'=>$category_raw,
+				'CATEGORY'=>$category,
+				'AUTHOR'=>$author,
+				'ID'=>$id,
+				'NEWS'=>$news,
+				'DATE'=>$news_date,
+			)));
 		}
 
 		require_lang('galleries');

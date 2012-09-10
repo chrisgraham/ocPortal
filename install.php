@@ -202,7 +202,18 @@ $logo_url='install.php?type=logo';
 if (is_null($DEFAULT_FORUM)) $DEFAULT_FORUM='ocf'; // Shouldn't happen, but who knows
 require_code('tempcode_compiler');
 $css_nocache=_do_template('default','/css/','no_cache','no_cache','EN','.css');
-$out_final=do_template('INSTALLER_HTML_WRAP',array('_GUID'=>'29aa056c05fa360b72dbb01c46608c4b','CSS_NOCACHE'=>$css_nocache,'DEFAULT_FORUM'=>$DEFAULT_FORUM,'PASSWORD_PROMPT'=>$password_prompt,'CSS_URL'=>$css_url,'CSS_URL_2'=>$css_url_2,'LOGO_URL'=>$logo_url,'STEP'=>integer_format(intval($_GET['step'])),'CONTENT'=>$content,'VERSION'=>$VERSION_BEING_INSTALLED));
+$out_final=do_template('INSTALLER_HTML_WRAP',array(
+	'_GUID'=>'29aa056c05fa360b72dbb01c46608c4b',
+	'CSS_NOCACHE'=>$css_nocache,
+	'DEFAULT_FORUM'=>$DEFAULT_FORUM,
+	'PASSWORD_PROMPT'=>$password_prompt,
+	'CSS_URL'=>$css_url,
+	'CSS_URL_2'=>$css_url_2,
+	'LOGO_URL'=>$logo_url,
+	'STEP'=>integer_format(intval($_GET['step'])),
+	'CONTENT'=>$content,
+	'VERSION'=>$VERSION_BEING_INSTALLED,
+));
 unset($css_nocache);
 unset($content);
 $out_final->evaluate_echo();
@@ -659,7 +670,17 @@ function step_3()
 	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
 	$hidden=build_keep_post_fields();
-	return do_template('INSTALLER_STEP_3',array('_GUID'=>'af52ecea73e9a8e2a92c12adbabbf4ab','URL'=>$url,'JS'=>$js,'HIDDEN'=>$hidden,'SIMPLE_FORUMS'=>$simple_forums,'FORUM_PATH_DEFAULT'=>get_file_base().DIRECTORY_SEPARATOR.'forums','FORUMS'=>$tforums,'DATABASES'=>$tdatabase,'VERSION'=>$default_version));
+	return do_template('INSTALLER_STEP_3',array(
+		'_GUID'=>'af52ecea73e9a8e2a92c12adbabbf4ab',
+		'URL'=>$url,
+		'JS'=>$js,
+		'HIDDEN'=>$hidden,
+		'SIMPLE_FORUMS'=>$simple_forums,
+		'FORUM_PATH_DEFAULT'=>get_file_base().DIRECTORY_SEPARATOR.'forums',
+		'FORUMS'=>$tforums,
+		'DATABASES'=>$tdatabase,
+		'VERSION'=>$default_version,
+	));
 }
 
 /**
@@ -934,7 +955,18 @@ function step_4()
 	$url='install.php?step=5';
 	if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
-	return do_template('INSTALLER_STEP_4',array('_GUID'=>'73c3ac0a7108709b74b2e89cae30be12','URL'=>$url,'JS'=>$js,'MESSAGE'=>$message,'LANG'=>$INSTALL_LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>$forum_type,'BOARD_PATH'=>$board_path,'SECTIONS'=>$sections,'MAX'=>strval(post_param_integer('max',1000))));
+	return do_template('INSTALLER_STEP_4',array(
+		'_GUID'=>'73c3ac0a7108709b74b2e89cae30be12',
+		'URL'=>$url,
+		'JS'=>$js,
+		'MESSAGE'=>$message,
+		'LANG'=>$INSTALL_LANG,
+		'DB_TYPE'=>post_param('db_type'),
+		'FORUM_TYPE'=>$forum_type,
+		'BOARD_PATH'=>$board_path,
+		'SECTIONS'=>$sections,
+		'MAX'=>strval(post_param_integer('max',1000)),
+	));
 }
 
 /**
@@ -1022,7 +1054,16 @@ function step_5()
 			$url='install.php?step=5';
 			if (in_safe_mode()) $url.='&keep_safe_mode=1';
 
-			return do_template('INSTALLER_STEP_4',array('_GUID'=>'aaf0386966dd4b75c8027a6b1f7454c6','URL'=>$url,'MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE'),'LANG'=>$INSTALL_LANG,'DB_TYPE'=>post_param('db_type'),'FORUM_TYPE'=>post_param('forum_type'),'BOARD_PATH'=>post_param('board_path'),'SECTIONS'=>$sections));
+			return do_template('INSTALLER_STEP_4',array(
+				'_GUID'=>'aaf0386966dd4b75c8027a6b1f7454c6',
+				'URL'=>$url,
+				'MESSAGE'=>do_lang_tempcode('WARNING_DB_OVERWRITE'),
+				'LANG'=>$INSTALL_LANG,
+				'DB_TYPE'=>post_param('db_type'),
+				'FORUM_TYPE'=>post_param('forum_type'),
+				'BOARD_PATH'=>post_param('board_path'),
+				'SECTIONS'=>$sections,
+			));
 		}
 	}
 

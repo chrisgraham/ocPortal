@@ -123,7 +123,15 @@ function get_attachments($posting_field_name)
 	} else $max_attachments=100;
 
 	$attachment_template=do_template('ATTACHMENT',array('_GUID'=>'c3b38ca70cbd1c5f9cf91bcae9ed11dsds','POSTING_FIELD_NAME'=>$posting_field_name,'I'=>'__num_attachments__'));
-	$attachments=do_template('ATTACHMENTS',array('_GUID'=>'054921e7c09412be479676759accf222','POSTING_FIELD_NAME'=>$posting_field_name,'ATTACHMENT_TEMPLATE'=>$attachment_template,'IMAGE_TYPES'=>$image_types,'ATTACHMENTS'=>$attachments,'MAX_ATTACHMENTS'=>strval($max_attachments),'NUM_ATTACHMENTS'=>strval($num_attachments)));
+	$attachments=do_template('ATTACHMENTS',array(
+		'_GUID'=>'054921e7c09412be479676759accf222',
+		'POSTING_FIELD_NAME'=>$posting_field_name,
+		'ATTACHMENT_TEMPLATE'=>$attachment_template,
+		'IMAGE_TYPES'=>$image_types,
+		'ATTACHMENTS'=>$attachments,
+		'MAX_ATTACHMENTS'=>strval($max_attachments),
+		'NUM_ATTACHMENTS'=>strval($num_attachments),
+	));
 
 	return array($attachments,$attach_size_field);
 }
@@ -585,13 +593,33 @@ function form_input_line_multi($pretty_name,$description,$name,$default_array,$n
 	foreach ($default_array as $default)
 	{
 		$_required=($i<$num_required)?'_required':'';
-		$input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array('_GUID'=>'e2da34b7564cebfd83da2859e4abd020','CLASS'=>$class,'MAXLENGTH'=>get_field_restrict_property('maxlength',$name),'PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>$_required,'DEFAULT'=>$default)));
+		$input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array(
+			'_GUID'=>'e2da34b7564cebfd83da2859e4abd020',
+			'CLASS'=>$class,
+			'MAXLENGTH'=>get_field_restrict_property('maxlength',$name),
+			'PRETTY_NAME'=>$pretty_name,
+			'TABINDEX'=>strval($tabindex),
+			'NAME_STUB'=>$name,
+			'I'=>strval($i),
+			'REQUIRED'=>$_required,
+			'DEFAULT'=>$default,
+		)));
 		$i++;
 	}
 	$num_to_show_initially=has_js()?$num_required:max($num_required,10);
 	for (;$i<$num_to_show_initially;$i++)
 	{
-		$input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array('_GUID'=>'10fcbe72e80ea1be07c3dd1fd9e0719e','CLASS'=>$class,'MAXLENGTH'=>get_field_restrict_property('maxlength',$name),'PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>($i>=$num_required)?'':'_required','DEFAULT'=>'')));
+		$input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array(
+			'_GUID'=>'10fcbe72e80ea1be07c3dd1fd9e0719e',
+			'CLASS'=>$class,
+			'MAXLENGTH'=>get_field_restrict_property('maxlength',$name),
+			'PRETTY_NAME'=>$pretty_name,
+			'TABINDEX'=>strval($tabindex),
+			'NAME_STUB'=>$name,
+			'I'=>strval($i),
+			'REQUIRED'=>($i>=$num_required)?'':'_required',
+			'DEFAULT'=>'',
+		)));
 	}
 	return _form_input(preg_replace('#\[\]$#','',$name),$pretty_name,$description,$input,$num_required>0,false,$tabindex,false,true);
 }
@@ -752,7 +780,16 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
 		$default_parsed=new ocp_tempcode();
 	}
 
-	$input=do_template('FORM_SCREEN_INPUT_TEXT',array('_GUID'=>'ff53196e943e7b19bc72fc3bbb3238b5','SCROLLS'=>$scrolls,'ROWS'=>((is_object($description_side)) || ($description_side!=''))?'16':'8','TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'DEFAULT_PARSED'=>$default_parsed));
+	$input=do_template('FORM_SCREEN_INPUT_TEXT',array(
+		'_GUID'=>'ff53196e943e7b19bc72fc3bbb3238b5',
+		'SCROLLS'=>$scrolls,
+		'ROWS'=>((is_object($description_side)) || ($description_side!=''))?'16':'8',
+		'TABINDEX'=>strval($tabindex),
+		'REQUIRED'=>$_required,
+		'NAME'=>$name,
+		'DEFAULT'=>$default,
+		'DEFAULT_PARSED'=>$default_parsed,
+	));
 
 	return _form_input($name,$pretty_name,$description,$input,$required,true,$tabindex,$w,false,$description_side);
 }
@@ -799,7 +836,21 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 
 	$_comcode=do_template('COMCODE_MESSAGE',array('_GUID'=>'fbcf2413f754ca5829b9f4c908746843','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false))));
 
-	return do_template('FORM_SCREEN_INPUT_HUGE_COMCODE',array('_GUID'=>'b8231827be2f4a00e12fcd8986119588','SCROLLS'=>$scrolls,'DESCRIPTION_SIDE'=>$description_side,'REQUIRED'=>$required,'_REQUIRED'=>$_required,'TABINDEX'=>strval($tabindex),'COMCODE'=>$_comcode,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'NAME'=>$name,'DEFAULT'=>$default,'DEFAULT_PARSED'=>$default_parsed,'ROWS'=>strval($rows)));
+	return do_template('FORM_SCREEN_INPUT_HUGE_COMCODE',array(
+		'_GUID'=>'b8231827be2f4a00e12fcd8986119588',
+		'SCROLLS'=>$scrolls,
+		'DESCRIPTION_SIDE'=>$description_side,
+		'REQUIRED'=>$required,
+		'_REQUIRED'=>$_required,
+		'TABINDEX'=>strval($tabindex),
+		'COMCODE'=>$_comcode,
+		'PRETTY_NAME'=>$pretty_name,
+		'DESCRIPTION'=>$description,
+		'NAME'=>$name,
+		'DEFAULT'=>$default,
+		'DEFAULT_PARSED'=>$default_parsed,
+		'ROWS'=>strval($rows),
+	));
 }
 
 /**
@@ -825,7 +876,20 @@ function form_input_huge($pretty_name,$description,$name,$default,$required,$tab
 	$_required=($required)?'_required':'';
 	$default_parsed=new ocp_tempcode();
 
-	return do_template('FORM_SCREEN_INPUT_HUGE',array('_GUID'=>'9d51961cd53c3fcadb8f83b905b2bbea','RAW'=>true,'SCROLLS'=>$scrolls,'DESCRIPTION_SIDE'=>$description_side,'REQUIRED'=>$required,'_REQUIRED'=>$_required,'TABINDEX'=>strval($tabindex),'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'NAME'=>$name,'DEFAULT'=>$default,'ROWS'=>strval($rows)));
+	return do_template('FORM_SCREEN_INPUT_HUGE',array(
+		'_GUID'=>'9d51961cd53c3fcadb8f83b905b2bbea',
+		'RAW'=>true,
+		'SCROLLS'=>$scrolls,
+		'DESCRIPTION_SIDE'=>$description_side,
+		'REQUIRED'=>$required,
+		'_REQUIRED'=>$_required,
+		'TABINDEX'=>strval($tabindex),
+		'PRETTY_NAME'=>$pretty_name,
+		'DESCRIPTION'=>$description,
+		'NAME'=>$name,
+		'DEFAULT'=>$default,
+		'ROWS'=>strval($rows),
+	));
 }
 
 /**
@@ -957,7 +1021,18 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
 		$existing_url=$default;
 		if (url_is_local($existing_url)) $existing_url=get_custom_base_url().'/'.$existing_url;
 	}
-	$input=do_template('FORM_SCREEN_INPUT_UPLOAD',array('_GUID'=>'f493edcc5298bb32fff8635f2d316d21','FILTER'=>$filter,'PRETTY_NAME'=>$pretty_name,'EXISTING_URL'=>$existing_url,'IS_IMAGE'=>$is_image,'SWFUPLOAD'=>$swfupload,'EDIT'=>((!is_null($default)) && (!$required)),'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name));
+	$input=do_template('FORM_SCREEN_INPUT_UPLOAD',array(
+		'_GUID'=>'f493edcc5298bb32fff8635f2d316d21',
+		'FILTER'=>$filter,
+		'PRETTY_NAME'=>$pretty_name,
+		'EXISTING_URL'=>$existing_url,
+		'IS_IMAGE'=>$is_image,
+		'SWFUPLOAD'=>$swfupload,
+		'EDIT'=>((!is_null($default)) && (!$required)),
+		'TABINDEX'=>strval($tabindex),
+		'REQUIRED'=>$_required,
+		'NAME'=>$name,
+	));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
@@ -1070,7 +1145,19 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
 	$nice_label=$default;
 
 	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_TREE_LIST',array('_GUID'=>'21e9644eeac24356f38459ebe37f693a','MULTI_SELECT'=>$multi_select,'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,'USE_SERVER_ID'=>$use_server_id,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'REQUIRED'=>$_required,'DEFAULT'=>is_null($default)?'':$default,'HOOK'=>$hook,'ROOT_ID'=>is_null($root_id)?'':$root_id,'OPTIONS'=>serialize($options)));
+	$input=do_template('FORM_SCREEN_INPUT_TREE_LIST',array(
+		'_GUID'=>'21e9644eeac24356f38459ebe37f693a',
+		'MULTI_SELECT'=>$multi_select,
+		'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,
+		'USE_SERVER_ID'=>$use_server_id,
+		'TABINDEX'=>strval($tabindex),
+		'NAME'=>$name,
+		'REQUIRED'=>$_required,
+		'DEFAULT'=>is_null($default)?'':$default,
+		'HOOK'=>$hook,
+		'ROOT_ID'=>is_null($root_id)?'':$root_id,
+		'OPTIONS'=>serialize($options),
+	));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
@@ -1093,7 +1180,17 @@ function form_input_huge_list($pretty_name,$description,$name,$content,$tabindex
 
 	$_required=($required)?'_required':'';
 
-	return do_template('FORM_SCREEN_INPUT_HUGE_LIST',array('_GUID'=>'b29dbbaf09bb5c36410e22feafa2f968','TABINDEX'=>strval($tabindex),'SIZE'=>is_null($size)?NULL:strval($size),'REQUIRED'=>$_required,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'NAME'=>$name,'CONTENT'=>$content,'INLINE_LIST'=>$inline_list));
+	return do_template('FORM_SCREEN_INPUT_HUGE_LIST',array(
+		'_GUID'=>'b29dbbaf09bb5c36410e22feafa2f968',
+		'TABINDEX'=>strval($tabindex),
+		'SIZE'=>is_null($size)?NULL:strval($size),
+		'REQUIRED'=>$_required,
+		'PRETTY_NAME'=>$pretty_name,
+		'DESCRIPTION'=>$description,
+		'NAME'=>$name,
+		'CONTENT'=>$content,
+		'INLINE_LIST'=>$inline_list,
+	));
 }
 
 /**
@@ -1505,7 +1602,19 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
 		}
 	}
 	$years=ob_get_clean();
-	$input=do_template('FORM_SCREEN_INPUT_DATE',array('_GUID'=>'5ace58dd0f540f70fb3bd440fb02a430','NULL_OK'=>$null_ok,'DISABLED'=>$null_default,'TABINDEX'=>strval($tabindex),'YEARS'=>$years,'MONTHS'=>$months,'DAYS'=>$days,'STUB'=>$stub,'NULL'=>$null,'TIME'=>$time,'UNLIMITED'=>is_null($total_years_to_show)));
+	$input=do_template('FORM_SCREEN_INPUT_DATE',array(
+		'_GUID'=>'5ace58dd0f540f70fb3bd440fb02a430',
+		'NULL_OK'=>$null_ok,
+		'DISABLED'=>$null_default,
+		'TABINDEX'=>strval($tabindex),
+		'YEARS'=>$years,
+		'MONTHS'=>$months,
+		'DAYS'=>$days,
+		'STUB'=>$stub,
+		'NULL'=>$null,
+		'TIME'=>$time,
+		'UNLIMITED'=>is_null($total_years_to_show),
+	));
 	return _form_input($stub,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
 
@@ -1621,7 +1730,18 @@ function _form_input($name,$pretty_name,$description,$input,$required,$comcode=f
 	global $DOING_ALTERNATE_FIELDS_SET;
 	if ($DOING_ALTERNATE_FIELDS_SET!==NULL)
 	{
-		$tpl=do_template('FORM_SCREEN_FIELDS_SET_ITEM',array('_GUID'=>'23f2e2df7fcacc01d9f5158dc635e73d','SET_NAME'=>$DOING_ALTERNATE_FIELDS_SET,'REQUIRED'=>$required,'SKIP_LABEL'=>$skip_label,'NAME'=>$name,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'DESCRIPTION_SIDE'=>$description_side,'INPUT'=>$input,'COMCODE'=>$_comcode));
+		$tpl=do_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
+			'_GUID'=>'23f2e2df7fcacc01d9f5158dc635e73d',
+			'SET_NAME'=>$DOING_ALTERNATE_FIELDS_SET,
+			'REQUIRED'=>$required,
+			'SKIP_LABEL'=>$skip_label,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>$pretty_name,
+			'DESCRIPTION'=>$description,
+			'DESCRIPTION_SIDE'=>$description_side,
+			'INPUT'=>$input,
+			'COMCODE'=>$_comcode,
+		));
 		return $tpl;
 	}
 

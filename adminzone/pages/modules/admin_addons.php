@@ -167,7 +167,22 @@ class Module_admin_addons
 			$colour=$updated?'red':'green';
 			$description=$row['addon_description'];
 			$file_list=$row['addon_files'];
-			$_tpl_addons[$row['addon_name']]=do_template('ADDON_SCREEN_ADDON',array('_GUID'=>'9a06f5a9c9e3085c10ab7fb17c3efcd1','UPDATED_ADDONS'=>$updated,'DESCRIPTION'=>$description,'FILE_LIST'=>$file_list,'COLOUR'=>$colour,'STATUS'=>$status,'NAME'=>$row['addon_name'],'FILENAME'=>do_lang_tempcode('NA_EM'),'AUTHOR'=>$row['addon_author'],'ORGANISATION'=>$row['addon_organisation'],'VERSION'=>$row['addon_version'],'ACTIONS'=>$actions,'TYPE'=>'uninstall','PASSTHROUGH'=>$row['addon_name']));
+			$_tpl_addons[$row['addon_name']]=do_template('ADDON_SCREEN_ADDON',array(
+				'_GUID'=>'9a06f5a9c9e3085c10ab7fb17c3efcd1',
+				'UPDATED_ADDONS'=>$updated,
+				'DESCRIPTION'=>$description,
+				'FILE_LIST'=>$file_list,
+				'COLOUR'=>$colour,
+				'STATUS'=>$status,
+				'NAME'=>$row['addon_name'],
+				'FILENAME'=>do_lang_tempcode('NA_EM'),
+				'AUTHOR'=>$row['addon_author'],
+				'ORGANISATION'=>$row['addon_organisation'],
+				'VERSION'=>$row['addon_version'],
+				'ACTIONS'=>$actions,
+				'TYPE'=>'uninstall',
+				'PASSTHROUGH'=>$row['addon_name'],
+			));
 		}
 
 		// Show addons available for installation
@@ -180,7 +195,22 @@ class Module_admin_addons
 				$description=$addon['description'];
 				$file_list=$addon['files'];
 				if ($addon['version']=='(version-synched)') $addon['version']=float_to_raw_string(ocp_version_number());
-				$_tpl_addons[$addon['name']]=do_template('ADDON_SCREEN_ADDON',array('_GUID'=>'cb61bdb9ce0cef5cd520440c5f62008f','UPDATED_ADDONS'=>false,'DESCRIPTION'=>$description,'FILE_LIST'=>$file_list,'COLOUR'=>'orange','STATUS'=>$status,'NAME'=>$addon['name'],'FILENAME'=>$filename,'AUTHOR'=>$addon['author'],'ORGANISATION'=>$addon['organisation'],'VERSION'=>$addon['version'],'ACTIONS'=>$actions,'TYPE'=>'install','PASSTHROUGH'=>$filename));
+				$_tpl_addons[$addon['name']]=do_template('ADDON_SCREEN_ADDON',array(
+					'_GUID'=>'cb61bdb9ce0cef5cd520440c5f62008f',
+					'UPDATED_ADDONS'=>false,
+					'DESCRIPTION'=>$description,
+					'FILE_LIST'=>$file_list,
+					'COLOUR'=>'orange',
+					'STATUS'=>$status,
+					'NAME'=>$addon['name'],
+					'FILENAME'=>$filename,
+					'AUTHOR'=>$addon['author'],
+					'ORGANISATION'=>$addon['organisation'],
+					'VERSION'=>$addon['version'],
+					'ACTIONS'=>$actions,
+					'TYPE'=>'install',
+					'PASSTHROUGH'=>$filename,
+				));
 			}
 		}
 
@@ -413,7 +443,19 @@ class Module_admin_addons
 
 		$_description=comcode_to_tempcode(str_replace('\n',"\n",$info['description']),$GLOBALS['FORUM_DRIVER']->get_guest_id());
 		if ($info['version']=='(version-synched)') $info['version']=float_to_raw_string(ocp_version_number());
-		return do_template('ADDON_INSTALL_CONFIRM_SCREEN',array('_GUID'=>'79b8c0e900a498cfb166392163295a07','TITLE'=>$title,'FILE'=>$file,'URL'=>$url,'FILES'=>$files,'WARNINGS'=>$warnings,'NAME'=>$info['name'],'AUTHOR'=>$info['author'],'ORGANISATION'=>$info['organisation'],'VERSION'=>$info['version'],'DESCRIPTION'=>$_description));
+		return do_template('ADDON_INSTALL_CONFIRM_SCREEN',array(
+			'_GUID'=>'79b8c0e900a498cfb166392163295a07',
+			'TITLE'=>$title,
+			'FILE'=>$file,
+			'URL'=>$url,
+			'FILES'=>$files,
+			'WARNINGS'=>$warnings,
+			'NAME'=>$info['name'],
+			'AUTHOR'=>$info['author'],
+			'ORGANISATION'=>$info['organisation'],
+			'VERSION'=>$info['version'],
+			'DESCRIPTION'=>$_description,
+		));
 	}
 
 	/**
