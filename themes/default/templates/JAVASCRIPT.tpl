@@ -1785,7 +1785,7 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 {
 	if (typeof win=='undefined') var win=window;
 
-	if (!starting) // Real JS mousemove event, so we assume not a screen reader and have to remove natural tooltip
+	if ((!starting) || (browser_matches('opera'))) // Real JS mousemove event, so we assume not a screen reader and have to remove natural tooltip
 	{
 		if (ac.getAttribute('title')) ac.setAttribute('title','');
 		if ((ac.parentNode.nodeName.toLowerCase()=='a') && (ac.parentNode.getAttribute('title')) && ((ac.nodeName.toLowerCase()=='abbr') || (ac.parentNode.getAttribute('title').indexOf('{!LINK_NEW_WINDOW;^}')!=-1)))
