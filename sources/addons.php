@@ -45,9 +45,7 @@ function find_updated_addons()
 	if ($addon_data=='') warn_exit(do_lang('INTERNAL_ERROR'));
 
 	$available_addons=find_available_addons();
-	global $M_SORT_KEY;
-	$M_SORT_KEY='mtime'; // TODO: In v10 this syntax will change
-	usort($available_addons,'multi_sort');
+	sort_maps_by($available_addons,'mtime');
 	$available_addons=array_reverse($available_addons);
 
 	$updated_addons=array();

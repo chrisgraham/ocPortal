@@ -419,6 +419,8 @@ class Hook_addon_registry_core
 			'lang/EN/permissions.ini',
 			'sources/permissions.php',
 			'sources/permissions2.php',
+			'sources/hooks/systems/block_ui_renderers/.htaccess',
+			'sources/hooks/systems/block_ui_renderers/index.html',
 			'themes/default/images/arrow_box.png',
 			'themes/default/images/arrow_box_hover.png',
 			'themes/default/images/background_image.png',

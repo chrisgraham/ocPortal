@@ -119,9 +119,9 @@ function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=f
  * @param  AUTO_LINK			The poll ID
  * @param  ?integer			Vote to cast (NULL: forfeit vote)
  * @param  ?array				Poll row (NULL: lookup from DB)
- * @param  MEMBER				Who to vote
+ * @param  ?MEMBER			Who to vote (NULL: current user)
  * @param  ?IP					The IP to vote (NULL: no IP check)
- * @return boolean			Whether the current member may vote
+ * @return array				Amended poll row
  */
 function vote_in_poll($poll_id,$cast,$myrow=NULL,$member_id=NULL,$ip=NULL)
 {

@@ -87,25 +87,25 @@ class Hook_content_meta_aware_wiki_post
 			'actionlog_regexp'=>'\w+_WIKI_POST',
 		);
 
-		/**
-		 * Standard modular run function for award hooks. Renders a content box for an award/randomisation.
-		 *
-		 * @param  array		The database row for the content
-		 * @param  ID_TEXT	The zone to display in
-		 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
-		 * @param  boolean	Whether to include breadcrumbs (if there are any)
-		 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
-		 * @param  boolean	Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
-		 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
-		 * @return tempcode	Results
-		 */
-		function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-		{
-			require_code('wiki');
+	}
 
-			return render_wiki_post_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?NULL:intval($root),$guid);
-		}
+	/**
+	 * Standard modular run function for award hooks. Renders a content box for an award/randomisation.
+	 *
+	 * @param  array		The database row for the content
+	 * @param  ID_TEXT	The zone to display in
+	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
+	 * @param  boolean	Whether to include breadcrumbs (if there are any)
+	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
+	 * @param  boolean	Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
+	 * @return tempcode	Results
+	 */
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
+	{
+		require_code('wiki');
 
+		return render_wiki_post_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?NULL:intval($root),$guid);
 	}
 
 }

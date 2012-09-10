@@ -63,7 +63,7 @@ class specsettings_documented_test_set extends ocp_test_case
 				for ($i=0;$i<$num_matches;$i++)
 				{
 					$var=$matches[2][$i];
-					if ((/*AFM*/strpos($var,'ftp_')===false) && (/*myocp*/strpos($var,'throttle_')===false) && (/*myocp*/strpos($var,'custom_')===false) && (/*XML dev environment*/strpos($var,'_chain')===false) && ($var!='ocf_table_prefix'))
+					if ((/*AFM*/strpos($var,'ftp_')===false) && (/*myocp*/strpos($var,'throttle_')===false) && (/*myocp*/strpos($var,'custom_')===false) && (/*Legacy password name*/$var!='admin_password') && (/*XML dev environment*/strpos($var,'_chain')===false))
 					{
 						$found[$var]=1;
 					}

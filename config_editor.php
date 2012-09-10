@@ -162,11 +162,12 @@ function do_access($given_password)
 		'board_prefix'=>'<em>Forum:</em> This is the base-URL for the forums. If it is not correct, various links, such as links to topics, will not function correctly.',
 
 		'db_type'=>'<em>Database:</em> The database driver to use (code of PHP file in sources[_custom]/database/). Only mySQL supported officially.',
-		'table_prefix'=>'<em>Database:</em> The table prefix for ocPortals database tables.',
+		'table_prefix'=>'<em>Database:</em> The table prefix for ocPortal\'s database tables.',
 		'db_site'=>'<em>Database:</em> The database name of the ocPortal database.',
 		'db_site_host'=>'<em>Database:</em> The database hosting computer name (usually localhost) for the ocPortal database.',
 		'db_site_user'=>'<em>Database:</em> The database username for ocPortal to connect to the ocPortal database with.',
 		'db_site_password'=>'<em>Database:</em> The password for the ocPortal database username.',
+		'ocf_table_prefix'=>'<em>Database:</em> The table prefix for OCF, if OCF is being used.',
 		'db_forums'=>'<em>Database:</em> The database name for the forum driver to tie in to.',
 		'db_forums_host'=>'<em>Database:</em> The database hosting computer name (usually localhost) for the forum driver to tie in to.',
 		'db_forums_user'=>'<em>Database:</em> The database username for the forum driver to connect to the forum database with.',

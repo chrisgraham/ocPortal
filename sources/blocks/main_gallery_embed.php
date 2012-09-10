@@ -324,7 +324,6 @@ class Block_main_gallery_embed
 			'TITLE'=>$title,
 			'CAT'=>$cat,
 			'ENTRIES'=>$entries,
-			'ZONE'=>$zone,
 			'TOTAL_VIDEOS'=>strval($total_videos),
 			'TOTAL_IMAGES'=>strval($total_images),
 			'TOTAL'=>strval($total_videos+$total_images),

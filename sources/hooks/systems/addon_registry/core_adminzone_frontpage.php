@@ -373,7 +373,7 @@ class Hook_addon_registry_core_adminzone_frontpage
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_ACTIONS', array(
 				'BLOCK_PARAMS'=>'',
-				'CONTENT'=>lorem_placeholder_html(),
+				'CONTENT'=>lorem_paragraph_html(),
 			)), NULL, '', true)
 		);
 	}

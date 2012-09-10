@@ -360,8 +360,8 @@ class Module_admin_orders
 			'_GUID'=>'6a24f6fb7c23f60b049ebce0f9765736',
 			'ORDER_TITLE'=>$order_title,
 			'ORDER_ACTUALISE_URL'=>$ordr_act_submit,
-			'ORDER_STATUS'=>do_lang($data['order_status'],
-		)));
+			'ORDER_STATUS'=>do_lang($data['order_status']),
+		));
 
 		// Shipping address display
 		$row=$GLOBALS['SITE_DB']->query_select('shopping_order_addresses',array('*'),array('order_id'=>$id),'',1);

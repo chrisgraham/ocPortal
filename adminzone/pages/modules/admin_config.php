@@ -560,7 +560,7 @@ class Module_admin_config
 		$_groups=array();
 		foreach ($rows as $myrow)
 		{
-			if (($myrow['eval']!='') && ($myrow['the_name']!='detect_lang_forum')/*HACKHACK: works around old bug - once we have hook config it'll fix this*/)
+			if ($myrow['eval']!='')
 			{
 				if (defined('HIPHOP_PHP'))
 				{

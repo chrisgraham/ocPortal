@@ -37,7 +37,7 @@ class Block_main_friends_list
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('member_id','max','start');
+		$info['parameters']=array('member_id','max','start','mutual');
 		return $info;
 	}
 

@@ -272,7 +272,7 @@ class Hook_addon_registry_polls
 		}
 
 		$wrap_content=do_lorem_template('POLL_BOX', array(
-			'_GUID'=>($guid!='')?$guid:'4c6b026f7ed96f0b5b8408eb5e5affb5',
+			'_GUID'=>'4c6b026f7ed96f0b5b8408eb5e5affb5',
 			'VOTE_URL'=>placeholder_url(),
 			'GIVE_CONTEXT'=>true,
 			'SUBMITTER'=>placeholder_id(),

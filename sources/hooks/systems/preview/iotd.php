@@ -64,7 +64,7 @@ class Hook_Preview_iotd
 		}
 
 		$thumb_url=url_is_local($thumb_url)?(get_custom_base_url().'/'.$thumb_url):$thumb_url;
-		$image_url=url_is_local($image_url)?(get_custom_base_url().'/'.$url):$image_url;
+		$image_url=url_is_local($image_url)?(get_custom_base_url().'/'.$image_url):$image_url;
 		$thumb=do_image_thumb($thumb_url,'');
 
 		$choose_url=mixed();

@@ -24,21 +24,14 @@ class poll_test_set extends ocp_test_case
 	function setUp()
 	{
 		parent::setUp();
-		require_code('ocf_polls_action');
-		require_code('ocf_polls_action2');
-		require_code('ocf_topics_action');
-		require_code('ocf_topics_action2');
-		require_code('ocf_topics');
-		require_code('ocf_forums');
 
-		$this->establish_admin_session();
+		require_code('polls');
+		require_code('polls2');
 
-		$this->topic_id=ocf_make_topic(db_get_first_id(),'Test');
-
-		$this->poll_id=ocf_make_poll($this->topic_id,$question='Who are you ?',$is_private=0,$is_open=0,$minimum_selections=2,$maximum_selections=4,$requires_reply=0,$answers=array('a','b','c'),$check_permissions=true);
+		$this->poll_id=add_poll($question='Who are you ?','a','b','c');
 
 		// Test the forum was actually created
-		$this->assertTrue('Who are you ?'==$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question ',array('id'=>$this->poll_id)));
+		$this->assertTrue('Who are you ?'==get_translated_text($GLOBALS['FORUM_DB']->query_select_value('poll','question ',array('id'=>$this->poll_id))));
 	}
 
 	function testPollVote()
@@ -54,16 +47,15 @@ class poll_test_set extends ocp_test_case
 	function testEditPoll()
 	{
 		// Test the forum edits
-		ocf_edit_poll($poll_id=$this->poll_id,$question='Who am I?',$is_private=1,$is_open=1,$minimum_selections=1,$maximum_selections=4,$requires_reply=1,$answers=array(1,2,3),$reason='nothing');
+		edit_poll($poll_id=$this->poll_id,$question='Who am I?','a','b','c','','','','','','','',3,1,1,1,'');
 
 		// Test the forum was actually created
-		$this->assertTrue('Who am I?'==$GLOBALS['FORUM_DB']->query_select_value('f_polls','po_question ',array('id'=>$this->poll_id)));
+		$this->assertTrue('Who am I?'==get_translated_text($GLOBALS['FORUM_DB']->query_select_value('poll','question ',array('id'=>$this->poll_id))));
 	}
 
 	function tearDown()
 	{
-		ocf_delete_poll($poll_id=$this->poll_id,$reason='Simple');
-		ocf_delete_topic($this->topic_id);
+		delete_poll($poll_id=$this->poll_id);
 		parent::tearDown();
 	}
 }

@@ -274,7 +274,7 @@ function block_helper_script()
 				}
 
 				// Show field
-				foreach ($block_ui_renderers=>$block_ui_renderer)
+				foreach ($block_ui_renderers as $block_ui_renderer)
 				{
 					$test=$block_ui_renderer->render_block_ui($block,$parameter,$has_default,$default,$description);
 					if (!is_null($test))

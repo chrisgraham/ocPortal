@@ -5098,7 +5098,7 @@ function fstat($handle)
  * @param  resource	File handle.
  * @param  integer	Requested file permissions.
  * @param  PATH		Filepath.
- * @return ~integer	New file permissions.
+ * @return ~integer	New file permissions (false: error).
  */
 function ftp_chmod($ftp_stream,$mode,$filename)
 {

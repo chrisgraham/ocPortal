@@ -165,6 +165,7 @@ class Hook_addon_registry_core_abstract_interfaces
 	function tpl_previews()
 	{
 		return array(
+			'AJAX_PAGINATION.tpl'=>'ajax_pagination',
 			'RESULTS_TABLE_TICK.tpl'=>'result_table_screen',
 			'REDIRECT_SCREEN.tpl'=>'redirect_screen',
 			'CONFIRM_SCREEN.tpl'=>'confirm_screen',
@@ -230,6 +231,20 @@ class Hook_addon_registry_core_abstract_interfaces
 			'COLUMNED_TABLE_ACTION_TRANSLATE.tpl'=>'administrative__columned_table_action_translate',
 			'COLUMNED_TABLE_ROW_CELL_SELECT.tpl'=>'full_table_screen',
 			'COLUMNED_TABLE_SCREEN.tpl'=>'administrative__columned_table_screen'
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__ajax_pagination()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('AJAX_PAGINATION', array()), NULL, '', true)
 		);
 	}
 
@@ -503,11 +518,11 @@ class Hook_addon_registry_core_abstract_interfaces
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__iframe_screen()
+	function tpl_preview__internalised_ajax_screen()
 	{
 		return array(
 			lorem_globalise(do_lorem_template('INTERNALISED_AJAX_SCREEN', array(
-				'SCREEN_CONTENT'=>lorem_placeholder_html(),
+				'SCREEN_CONTENT'=>lorem_paragraph_html(),
 				'REFRESH_IF_CHANGED'=>lorem_phrase(),
 				'CHANGE_DETECTION_URL'=>placeholder_url(),
 				'REFRESH_TIME'=>placeholder_date_raw(),

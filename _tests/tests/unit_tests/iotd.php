@@ -24,7 +24,7 @@ class iotd_test_set extends ocp_test_case
 	{
 		parent::setUp();
 
-		require_code('iotds');
+		require_code('iotds2');
 
 		$this->iotd_id=add_iotd('google.com','welcome','Google','images/google.jpg',0,0,0,0,'Notes ?',NULL,NULL,0,NULL,0,NULL);
 

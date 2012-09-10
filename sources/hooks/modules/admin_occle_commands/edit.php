@@ -47,8 +47,8 @@ class Hook_edit
 				'UNIQ_ID'=>uniqid(''),
 				'FILE'=>$parameters[0],
 				'SUBMIT_URL'=>build_url(array('page'=>'admin_occle','command'=>'write "'.$parameters[0].'" "{0}" < :echo addslashes(get_param(\'edit_content\'));'),get_module_zone('admin_occle')),
-				'FILE_CONTENTS'=>$file_contents),
-			));
+				'FILE_CONTENTS'=>$file_contents,
+			)));
 		}
 	}
 

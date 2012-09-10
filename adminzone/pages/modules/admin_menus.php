@@ -243,7 +243,7 @@ class Module_admin_menus
 			'CHECK_PERMS'=>'0',
 			'CAPTION_LONG'=>'',
 			'CAPTION'=>'',
-			'URL'=>''
+			'URL'=>'',
 			'PAGE_ONLY'=>'',
 			'THEME_IMG_CODE'=>'',
 			'I'=>$t_id,

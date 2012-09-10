@@ -99,7 +99,7 @@ class Hook_content_meta_aware_group
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='',$guid)
+	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
 	{
 		require_code('ocf_groups');
 

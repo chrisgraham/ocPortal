@@ -34,7 +34,7 @@
  * @param  SHORT_TEXT		The eighth choice (blank means not a choice)
  * @param  SHORT_TEXT		The ninth choice (blank means not a choice)
  * @param  SHORT_TEXT		The tenth choice (blank means not a choice)
- * @param  integer			The number of choices
+ * @param  ?integer			The number of choices (NULL: calculate)
  * @range  2 5
  * @param  BINARY				Whether the poll is the current poll
  * @param  BINARY				Whether to allow rating of this poll
@@ -68,8 +68,21 @@
  * @param  ?TIME				The edit date (NULL: never)
  * @return AUTO_LINK			The poll ID of our new poll
  */
-function add_poll($question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_options,$current,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$time=NULL,$submitter=NULL,$use_time=NULL,$v1=0,$v2=0,$v3=0,$v4=0,$v5=0,$v6=0,$v7=0,$v8=0,$v9=0,$v10=0,$views=0,$edit_date=NULL)
+function add_poll($question,$a1,$a2,$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a9='',$a10='',$num_options=NULL,$current=0,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$time=NULL,$submitter=NULL,$use_time=NULL,$v1=0,$v2=0,$v3=0,$v4=0,$v5=0,$v6=0,$v7=0,$v8=0,$v9=0,$v10=0,$views=0,$edit_date=NULL)
 {
+	if (is_null($num_options))
+	{
+		$num_options=2;
+		if ($a3!='') $num_options++;
+		if ($a4!='') $num_options++;
+		if ($a5!='') $num_options++;
+		if ($a6!='') $num_options++;
+		if ($a7!='') $num_options++;
+		if ($a8!='') $num_options++;
+		if ($a9!='') $num_options++;
+		if ($a10!='') $num_options++;
+	}
+
 	if ($current==1)
 	{
 		persistent_cache_delete('POLL');

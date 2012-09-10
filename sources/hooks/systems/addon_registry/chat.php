@@ -273,32 +273,6 @@ class Hook_addon_registry_chat
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_shoutbox()
-	{
-		$tpl=do_lorem_template('BLOCK_SIDE_SHOUTBOX_MESSAGE', array(
-			'USER'=>lorem_word(),
-			'MESSAGE'=>lorem_phrase(),
-			'TIME_RAW'=>placeholder_time(),
-			'TIME'=>placeholder_time()
-		));
-
-		$tpl=do_lorem_template('BLOCK_SIDE_SHOUTBOX', array(
-			'MESSAGES'=>$tpl,
-			'URL'=>placeholder_url()
-		));
-
-		return array(
-			lorem_globalise($tpl, NULL, '', true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
 	function tpl_preview__chat_message()
 	{
 		require_lang('submitban');
@@ -385,7 +359,7 @@ class Hook_addon_registry_chat
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_SHOUTBOX', array(
 				'ROOM_ID'=>placeholder_id(),
 				'NUM_MESSAGES'=>placeholder_number(),
-				'LAST_MESSAGE_ID'=>placeholder_id()
+				'LAST_MESSAGE_ID'=>placeholder_id(),
 				'MESSAGES'=>$tpl,
 				'URL'=>placeholder_url(),
 				'BLOCK_PARAMS'=>'',
