@@ -41,12 +41,6 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 	$name=$info[0]['t_cache_first_title'];
 	$forum_id=$info[0]['t_forum_id'];
 
-	if (!is_null($title))
-	{
-		require_code('urls2');
-		suggest_new_idmoniker_for('topicview','misc',strval($topic_id),$title);
-	}
-
 	$update=array();
 
 	require_code('ocf_forums');
@@ -70,6 +64,12 @@ function ocf_edit_topic($topic_id,$description=NULL,$emoticon=NULL,$validated=NU
 		}
 
 		if ((!is_null($forum_id)) && (!has_specific_permission(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id)))) $validated=NULL;
+	}
+
+	if (!is_null($title))
+	{
+		require_code('urls2');
+		suggest_new_idmoniker_for('topicview','misc',strval($topic_id),$title);
 	}
 
 	if (!is_null($description)) $update['t_description']=$description;

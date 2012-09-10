@@ -1626,7 +1626,7 @@ function activateTooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,lig
 }
 function repositionTooltip(ac,event,bottom,starting,tooltipElement,force_width)
 {
-	if (!starting) // Real JS mousemove event, so we assume not a screen reader and have to remove natural tooltip
+	if ((!starting) || (browser_matches('opera'))) // Real JS mousemove event, so we assume not a screen reader and have to remove natural tooltip
 	{
 		if (ac.getAttribute('title')) ac.setAttribute('title','');
 		if ((ac.parentNode.nodeName.toLowerCase()=='a') && (ac.parentNode.getAttribute('title')) && ((ac.nodeName.toLowerCase()=='abbr') || (ac.parentNode.getAttribute('title').indexOf('{!LINK_NEW_WINDOW^;}')!=-1)))
