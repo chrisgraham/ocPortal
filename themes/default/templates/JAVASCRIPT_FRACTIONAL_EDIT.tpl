@@ -28,6 +28,8 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 		input.style.width=width+'px';
 		input.name=edit_param_name;
 		input.value=edit_text;
+		form.onsubmit=function(event) { return false; };
+
 		input.onkeypress=function (event)
 			{
 				if (typeof event=='undefined') var event=window.event;
@@ -40,7 +42,11 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 					}
 
 					var response=do_ajax_request(input.form.action,false,input.name+'='+window.encodeURIComponent(input.value));
-					input.form.parentNode.removeChild(input.form);
+					if (input.form.parentNode)
+					{
+						input.onblur=null;
+						input.form.parentNode.removeChild(input.form);
+					}
 					object.onclick=object.old_onclick;
 					object.onkeypress=object.old_onkeypress;
 					if ((response.responseText=='') || (response.responseText.length>200) || (!response.responseText))
@@ -115,13 +121,19 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 			{
 				if (form.parentNode)
 				{
+					input.onblur=null;
 					form.parentNode.removeChild(form);
 					window.fauxmodal_alert('{!FRACTIONAL_EDIT_CANCELLED^;}');
+
+					object.onclick=object.old_onclick;
+					object.onkeypress=object.old_onkeypress;
 				}
 			}
 
 		form.appendChild(input);
-		document.body.appendChild(form);
+		var website_inner=document.getElementById('body_inner'); // So x/y positioning is correct
+		if (!website_inner) website_inner=document.body;
+		website_inner.appendChild(form);
 		input.focus();
 		return false;
 	}
