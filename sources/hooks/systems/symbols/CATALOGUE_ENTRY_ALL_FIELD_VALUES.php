@@ -44,7 +44,7 @@ class Hook_symbol_CATALOGUE_ENTRY_ALL_FIELD_VALUES
 					$value=$display['FIELDS']->evaluate();
 				} else
 				{
-					$_value=do_template('CATALOGUE_'.$tpl_set.'_ENTRY',$display,NULL,false,'CATALOGUE_DEFAULT_ENTRY');
+					$_value=do_template('CATALOGUE_'.$tpl_set.'_FIELDMAP_ENTRY_WRAP',$display+array('ENTRY_SCREEN'=>true),NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
 					$value=$_value->evaluate();
 				}
 			}

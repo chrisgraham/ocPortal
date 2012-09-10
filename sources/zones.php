@@ -538,7 +538,7 @@ function module_installed($module)
 function _get_module_path($zone,$module)
 {
 	$module_path=zone_black_magic_filterer(($zone=='')?('pages/modules_custom/'.filter_naughty_harsh($module).'.php'):(filter_naughty($zone).'/pages/modules_custom/'.filter_naughty_harsh($module).'.php'),true);
-	if (!is_file(get_file_base().'/'.$module_path))
+	if ((in_safe_mode()) || (!is_file(get_file_base().'/'.$module_path)))
 	{
 		$module_path=zone_black_magic_filterer(($zone=='')?('pages/modules/'.filter_naughty_harsh($module).'.php'):(filter_naughty($zone).'/pages/modules/'.filter_naughty_harsh($module).'.php'),true);
 	}
@@ -827,7 +827,7 @@ function do_block_hunt_file($codename,$map=NULL)
 	$file_base=get_file_base();
 
 	global $_REQUIRED_CODE;
-	if (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/blocks/'.$codename.'.php'))))
+	if (((isset($BLOCKS_AT_CACHE[$codename])) && (!in_safe_mode()) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/blocks/'.$codename.'.php'))))
 	{
 		if (!isset($_REQUIRED_CODE['blocks/'.$codename])) require_once($file_base.'/sources_custom/blocks/'.$codename.'.php');
 		$_REQUIRED_CODE['blocks/'.$codename]=1;
@@ -851,7 +851,7 @@ function do_block_hunt_file($codename,$map=NULL)
 	}
 	else
 	{
-		if (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/miniblocks/'.$codename.'.php'))))
+		if (((isset($BLOCKS_AT_CACHE[$codename])) && (!in_safe_mode()) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/miniblocks/'.$codename.'.php'))))
 		{
 			require_code('developer_tools');
 			destrictify();
@@ -950,7 +950,7 @@ function do_block_get_cache_identifier($cache_on,$map)
 function _get_block_path($block)
 {
 	$block_path=get_file_base().'/sources_custom/blocks/'.filter_naughty_harsh($block).'.php';
-	if (!is_file($block_path))
+	if ((in_safe_mode()) || (!is_file($block_path)))
 	{
 		$block_path=get_file_base().'/sources/blocks/'.filter_naughty_harsh($block).'.php';
 		if (!is_file($block_path))

@@ -99,10 +99,10 @@ If you have multiple catalogues on your website and you wish for them to have cu
 
 It is possibly to achieve template customisation wholely within the default set of templates, by using template programming. The catalogue name is passed into every catalogue template meaning you can use template IF directives to differentiate against that name, producing different output accordingly.
 
-Whilst the main [tt]CATALOGUE_DEFAULT_ENTRY.tpl[/tt] template uses the [tt]FIELDS[/tt] parameter by default (which consists of precomposited template field rows, built using the other templates), it is also given special parameters correlating to each individual field row and each individual field value. You may thus entirely customise the catalogue look using these low level values to make very customised arrangements that are more complex than the simple tabular arrangement used by default.
+Whilst the main [tt]CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP.tpl[/tt] template uses the [tt]FIELDS[/tt] parameter by default (which consists of precomposited template field rows, built using the other templates), it is also given special parameters correlating to each individual field row and each individual field value. You may thus entirely customise the catalogue look using these low level values to make very customised arrangements that are more complex than the simple tabular arrangement used by default.
 
 
-For example, take the [tt]CATALOGUE_DEFAULT_ENTRY.tpl[/tt] template:
+For example, take the [tt]CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP.tpl[/tt] template:
 [codebox]
 <div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="wide_table results_table spaced_table">
 	<colgroup>
