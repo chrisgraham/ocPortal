@@ -362,7 +362,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 	$_file=$url_parts[count($url_parts)-1];
 	$dot_pos=strrpos($_file,'.');
 	$ext=substr($_file,$dot_pos+1);
-	if ((!is_saveable_image($_file)) && (get_file_extension($_file)!='svg')) $new_name.='.png';
+	if ((!is_saveable_image($_file)) && (get_file_extension($_file)!='svg')) $_file.='.png';
 	$_file=substr($_file,0,$dot_pos);
 	$thumb_path='';
 	do
@@ -501,7 +501,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 			copy($from,$to);
 			fix_permissions($to);
 			sync_file($to);
-			return;
+			return true;
 		}
 		$from_file=@file_get_contents($from);
 	} else
@@ -515,7 +515,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 				copy($file_path_stub,$to);
 				fix_permissions($to);
 				sync_file($to);
-				return;
+				return true;
 			}
 			$from_file=@file_get_contents($file_path_stub);
 		} else
@@ -533,7 +533,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 					fclose($myfile);
 					fix_permissions($to);
 					sync_file($to);
-					return;
+					return true;
 				}
 			}
 		}

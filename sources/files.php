@@ -294,7 +294,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 
 		// Cache files
 		'lcd'=>'lang_cached(/.*)?',
-		'gcd'=>'persistent_cache',
+		'gcd'=>'persistent_cache|persistant_cache', // LEGACY (persistant_cache)
 		'tcp'=>'themes/[^/]*/templates_cached/.*',
 		'tcd'=>'themes/[^/]*/templates_cached/.*',
 		'css'=>'themes/[^/]*/templates_cached/.*',
