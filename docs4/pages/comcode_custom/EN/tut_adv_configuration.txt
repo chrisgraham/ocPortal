@@ -60,7 +60,7 @@ ocPortal uses a "best of" permission system, meaning that a member has the best 
 
 [title="3"]Privileges[/title]
 
-Privileges allow the assignment of permissions to usergroups via check-boxes. By 'specific' we mean permissions that have a very specific meaning, rather than perform a higher level role of deciding whether something may be viewed.
+Privileges allow the assignment of permissions to usergroups via check-boxes. Privileges have a very specific meaning, rather than perform a higher level role of deciding whether something may be viewed.
 Broadly, privileges are used to grant things like 'whether a member can access the site when it is closed', as well as to define sweeping permissions for content classes.
 Sweeping permissions are there so that instead of making you specify who can control (edit/delete/etc) each/every content-item/type-of-content/category-contents individually, you can specify them by impact-class.
 The 'impact' scheme is used to classify content according to its impact to the website and prominence. The following privileges may be set for usergroups for each of adding, editing and deleting content:
