@@ -2929,7 +2929,7 @@ END;
 		$hidden->attach(build_keep_form_fields());
 
 		$set_name='destination';
-		$required=true;
+		$required=false;
 		$set_title=do_lang_tempcode('DESTINATION_TOPIC');
 		$field_set=alternate_fields_set__start($set_name);
 
