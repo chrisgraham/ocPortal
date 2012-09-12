@@ -2464,7 +2464,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				} else
 				{
 					// Going back up the tree, destroying levels that must have now closed off
-					while (($level<$past_level_stack[$levels-1]) && ($levels>2/* counting starts at 1, and level 2 is the level at which we cannot jump up a parent level because level 1 is semantically undefined */))
+					while (($level<$past_level_stack[$levels-1]) && ($levels>1/* counting starts at 1, and level 1 is the level at which we cannot jump up a parent level because level 0 is semantically undefined */))
 					{
 						array_pop($past_level_stack);
 						$subtree=array_pop($subtree_stack);
