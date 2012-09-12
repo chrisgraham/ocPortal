@@ -37,8 +37,12 @@ function find_updated_addons()
 	}
 
 	require_code('files');
-	$addon_data=http_download_file($url);
-	if ($addon_data=='') warn_exit(do_lang('INTERNAL_ERROR'));
+	$addon_data=http_download_file($url,NULL,false);
+	if ((is_null($addon_data)) || ($addon_data==''))
+	{
+		return array();
+		//warn_exit(do_lang('INTERNAL_ERROR'));
+	}
 
 	$available_addons=find_available_addons();
 	global $M_SORT_KEY;

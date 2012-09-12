@@ -179,6 +179,7 @@ function get_mapped_admin_group()
 	{
 		return 'admin';
 	}
+	require_code('lang'); // If in AJAX mode
 	return do_lang('ADMINISTRATORS');
 }
 

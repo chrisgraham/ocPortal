@@ -127,7 +127,7 @@ function server__create_forum_topic($forum_id,$topic_title,$post)
 	require_code('ocf_topics_action');
 	require_code('ocf_posts_action');
 	require_code('mantis'); // Defines LEAD_DEVELOPER_MEMBER_ID
-	$topic_id=ocf_make_topic($forum_id,'','',NULL,1,0,0,0,NULL,NULL,false);
+	$topic_id=ocf_make_topic($forum_id,'','',1,1,0,0,0,NULL,NULL,false);
 
 	$post_id=ocf_make_post($topic_id,$topic_title,$post,0,true,1,0,NULL,NULL,NULL,LEAD_DEVELOPER_MEMBER_ID,NULL,NULL,NULL,false);
 
