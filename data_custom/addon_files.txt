@@ -4083,3 +4083,8 @@ tester
  - lang_custom/EN/tester.ini
  - site/pages/modules_custom/tester.php
  - sources_custom/hooks/systems/content_meta_aware/tester.php
+
+promotion_stats
+---------------
+
+ - line_count.sh
