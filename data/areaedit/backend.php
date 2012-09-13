@@ -1,5 +1,8 @@
-<?php /*
- THIRD PARTY CODE
+<?php /**
+* THIRD PARTY CODE
+*
+* This script is designed to be able to run both standalone and from within ocPortal.
+* Hence ocPortal API functions are used - but defined here with simple implementations if this is being called standalone.
 */
 
 // [NOSTRIP

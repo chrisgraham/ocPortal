@@ -1,6 +1,11 @@
 <?php /**
 * THIRD PARTY CODE
 * <external entry point>
+*
+* This script is designed to be able to run both standalone and from within ocPortal.
+* Hence ocPortal API functions are used - but defined here with simple implementations if this is being called standalone.
+*
+*
 * SpellChecker backend, Heavily modified for ocPortal
 *
 * @package core_form_interfaces

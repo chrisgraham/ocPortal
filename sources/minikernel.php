@@ -24,6 +24,7 @@
 //	-- users.php
 //	--  things that depend on functionality of those that hasn't been emulated here
 // This file emulates cut-down versions of the code in those files, for the most part.
+// Once ocPortal is installed, this file is never used.
 
 /**
  * Standard code module initialisation function.
