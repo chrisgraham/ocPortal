@@ -306,8 +306,8 @@ function step_1()
 					if ($file=='data/files.dat') continue;
 					if ($file=='data/files_previous.dat') continue;
 					if ($file=='data/modules/admin_stats/IP_Country.txt') continue;
-					if ($file=='data/areaedit/plugins/SpellChecker/aspell/bin/aspell-15.dll') continue;
-					if ($file=='data/areaedit/plugins/SpellChecker/aspell/bin/en-only.rws') continue;
+					if ($file=='data/spelling/aspell/bin/aspell-15.dll') continue;
+					if ($file=='data/spelling/aspell/bin/en-only.rws') continue;
 					if (substr($file,-4)=='.ttf') continue;
 
 					$contents=@file_get_contents(get_file_base().'/'.$file);

@@ -2,7 +2,6 @@ echo "Trying old style first..."
 set user="NT AUTHORITY\NETWORK"
 cacls data_custom\modules\chat /e /g %user%:F
 cacls data_custom\modules\admin_backup /e /g %user%:F
-cacls data\areaedit\plugins\SpellChecker /e /g %user%:F
 cacls data_custom\spelling /e /g %user%:F
 cacls data_custom\spelling\personal_dicts /e /g %user%:F
 cacls themes /e /g %user%:F
@@ -142,7 +141,6 @@ echo "Trying new style..."
 set user="IUSR"
 icacls data_custom\modules\admin_backup /grant %user%:(M)
 icacls data_custom\modules\chat /grant %user%:(M)
-icacls data\areaedit\plugins\SpellChecker /grant %user%:(M)
 icacls data_custom\spelling /grant %user%:(M)
 icacls data_custom\spelling\personal_dicts /grant %user%:(M)
 icacls themes /grant %user%:(M)

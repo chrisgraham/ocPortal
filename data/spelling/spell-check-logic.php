@@ -24,6 +24,62 @@ if (strpos($_SERVER['PHP_SELF'],'spell-check-logic.php')!==false)
 	spellchecklogic();
 
 /**
+ * Get the file base for your installation of ocPortal
+ *
+ * @return PATH			The file base, without a trailing slash
+ */
+function sl_get_file_base()
+{
+	if (function_exists('get_file_base')) return get_file_base();
+
+	$file_base=realpath(__FILE__);
+	$file_base=str_replace('\\','/',str_replace('\\\\','\\',$file_base));
+	$bits=explode('/',$file_base);
+	array_pop($bits);
+	array_pop($bits);
+	array_pop($bits);
+	array_pop($bits);
+	array_pop($bits);
+	return implode(DIRECTORY_SEPARATOR,$bits).DIRECTORY_SEPARATOR;
+}
+
+/**
+ * Find the path to where WYSIWYG data is stored.
+ *
+ * @return string			Relative path
+ */
+function sl_get_custom_file_base()
+{
+	if (function_exists('get_custom_file_base')) return get_custom_file_base();
+
+	global $SITE_INFO;
+	return isset($SITE_INFO['custom_file_base'])?$SITE_INFO['custom_file_base']:sl_get_file_base();
+}
+
+/**
+ * This function is similar to filter_naughty, except it requires the parameter to be strictly alphanumeric. It is intended for use on text that will be put into an eval.
+ *
+ * @param  string			String to test
+ * @return string			Same as input string
+ */
+function sl_filter_naughty_harsh($in)
+{
+	if (preg_match('#^[a-zA-Z0-9_-]*$#',$in)!=0) return $in;
+	exit();
+	return ''; // trick to make Zend happy
+}
+
+/**
+ * Assign this to explicitly declare that a variable may be of mixed type, and initialise to NULL.
+ *
+ * @return ?mixed	Of mixed type (NULL: default)
+ */
+function sl_mixed()
+{
+	return NULL;
+}
+
+/**
  * Start the spellcheck process
  *
  * @param  ?string		The type of operation (NULL: look from params)
@@ -35,70 +91,6 @@ if (strpos($_SERVER['PHP_SELF'],'spell-check-logic.php')!==false)
 function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 {
 	error_reporting(E_ALL);
-
-	if (!function_exists('get_file_base'))
-	{
-		/**
-		 * Get the file base for your installation of ocPortal
-		 *
-		 * @return PATH			The file base, without a trailing slash
-		 */
-		function get_file_base()
-		{
-			$file_base=realpath(__FILE__);
-			$file_base=str_replace('\\','/',str_replace('\\\\','\\',$file_base));
-			$bits=explode('/',$file_base);
-			array_pop($bits);
-			array_pop($bits);
-			array_pop($bits);
-			array_pop($bits);
-			array_pop($bits);
-			return implode(DIRECTORY_SEPARATOR,$bits).DIRECTORY_SEPARATOR;
-		}
-	}
-
-	if (!function_exists('get_custom_file_base'))
-	{
-		/**
-		 * Find the path to where WYSIWYG data is stored.
-		 *
-		 * @return string			Relative path
-		 */
-		function get_custom_file_base()
-		{
-			global $SITE_INFO;
-			return isset($SITE_INFO['custom_file_base'])?$SITE_INFO['custom_file_base']:get_file_base();
-		}
-	}
-
-	if (!function_exists('_filter_naughty_harsh'))
-	{
-		/**
-		 * This function is similar to filter_naughty, except it requires the parameter to be strictly alphanumeric. It is intended for use on text that will be put into an eval.
-		 *
-		 * @param  string			String to test
-		 * @return string			Same as input string
-		 */
-		function _filter_naughty_harsh($in)
-		{
-			if (preg_match('#^[a-zA-Z0-9_-]*$#',$in)!=0) return $in;
-			exit();
-			return ''; // trick to make Zend happy
-		}
-	}
-
-	if (!function_exists('mixed'))
-	{
-		/**
-		 * Assign this to explicitly declare that a variable may be of mixed type, and initialise to NULL.
-		 *
-		 * @return ?mixed	Of mixed type (NULL: default)
-		 */
-		function mixed()
-		{
-			return NULL;
-		}
-	}
 
 	list($aspelldictionaries,$aspellcommand,$temptext,$lang)=aspell_init();
 
@@ -129,13 +121,13 @@ function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
  */
 function wrap_exec($cmd)
 {
-	//echo htmlentities($cmd.' > '.get_custom_file_base().'/data_custom/spelling/output.log').'<br />';
-	if (shell_exec($cmd.' > '.get_custom_file_base().'/data_custom/spelling/output.log')===false)
+	//echo htmlentities($cmd.' > '.sl_get_custom_file_base().'/data_custom/spelling/output.log').'<br />';
+	if (shell_exec($cmd.' > '.sl_get_custom_file_base().'/data_custom/spelling/output.log')===false)
 	{
 		return false;
 	}
 
-	$ret=rtrim(file_get_contents(get_custom_file_base().'/data_custom/spelling/output.log'));
+	$ret=rtrim(file_get_contents(sl_get_custom_file_base().'/data_custom/spelling/output.log'));
 
 	return $ret;
 }
@@ -156,7 +148,7 @@ function aspell_init()
 		$lang=$_REQUEST['dictionary'];
 	}
 
-	$aspellcommand=mixed();
+	$aspellcommand=sl_mixed();
 
 	$force_shell=false;
 	if ((!function_exists('pspell_check')) || ($force_shell))
@@ -165,13 +157,13 @@ function aspell_init()
 		if (strpos(@ini_get('disable_functions'),'shell_exec')!==false) exit('Spell Checker does not work on systems with shell_exec disabled that do not have direct pspell support into PHP');
 
 		// Our temporary spell check file
-		$temptext=tempnam((((ini_get('safe_mode')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'spell_');
+		$temptext=tempnam((((ini_get('safe_mode')=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?sl_get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'spell_');
 		if ($temptext===false)
-			$temptext=tempnam(get_custom_file_base().'/safe_mode_temp/','spell_');
+			$temptext=tempnam(sl_get_custom_file_base().'/safe_mode_temp/','spell_');
 
 		// Find aspell
 		$aspell='aspell';
-		$aspell_args='-a --lang='._filter_naughty_harsh($lang);
+		$aspell_args='-a --lang='.sl_filter_naughty_harsh($lang);
 		if (DIRECTORY_SEPARATOR=='\\') // Windows
 		{
 			// See if there is a local install of aspell here
@@ -246,8 +238,8 @@ function aspell_init()
 	if (!isset($SITE_INFO))
 		require_once('../../../../_config.php');
 	$cookie_member_id=$SITE_INFO['user_cookie'];
-	$p_dicts_name=(array_key_exists($cookie_member_id,$_COOKIE))?_filter_naughty_harsh($_COOKIE[$cookie_member_id]):'guest';
-	$p_dict_path=get_custom_file_base().'/data_custom/spelling/personal_dicts'.DIRECTORY_SEPARATOR.$p_dicts_name;
+	$p_dicts_name=(array_key_exists($cookie_member_id,$_COOKIE))?sl_filter_naughty_harsh($_COOKIE[$cookie_member_id]):'guest';
+	$p_dict_path=sl_get_custom_file_base().'/data_custom/spelling/personal_dicts'.DIRECTORY_SEPARATOR.$p_dicts_name;
 	if (!file_exists($p_dict_path))
 	{
 		mkdir($p_dict_path,02770);

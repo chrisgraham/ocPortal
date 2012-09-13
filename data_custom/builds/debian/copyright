@@ -318,7 +318,7 @@ Files: data/javaupload
 Copyright: 2006 Richard Johnson
 License: Apache-2.0
 
-Files: data/areaedit/*
+Files: data/spelling/*
 Copyright: 2002-2004 interactivetools.com inc., 2003-2004 dynarch.com
 License: htmlArea License (based on BSD license)
  All rights reserved.

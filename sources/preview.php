@@ -126,7 +126,7 @@ function build_preview($multi_return=false)
 		{
 			$words_skip=array();
 		}
-		require_once(get_file_base().'/data/areaedit/plugins/SpellChecker/spell-check-logic.php');
+		require_once(get_file_base().'/data/spelling/spell-check-logic.php');
 	}
 	$db=$forum_db?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 	$map_table_map=array();

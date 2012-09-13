@@ -75,10 +75,8 @@ Due to these problems, we would have to recommend that if you have a choice, tha
 
 It has been reported to us that some systems require PHP scripts to be given execute permissions. This is a very rare (and insecure) configuration, but if there is this requirement, the following files need to be given execute permission...
  - Any index.php file
- - All PHP files in the root directory, except _config.php
+ - All PHP files in the root directory, except [tt]_config.php[/tt]
  - All PHP files in the data directory
- - data/areaedit/ddt/ddt.php
- - data/areaedit/plugins/SpellChecker/backend.php
  - All PHP files in the main directory for a zone (e.g. /, and /adminzone) directories
 
 The quick installer handles this automatically.
