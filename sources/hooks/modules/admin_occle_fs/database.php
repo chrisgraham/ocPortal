@@ -121,7 +121,7 @@ class Hook_database
 				$field['m_type']=str_replace('?','',str_replace('*','',$field['m_type']));
 				if (!array_key_exists($field['m_name'],$where))
 				{
-					if (in_array($field['m_type'],array('AUTO','USER','INTEGER','UINTEGER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
+					if (in_array($field['m_type'],array('AUTO','MEMBER','INTEGER','UINTEGER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
 					{
 						$value=0;
 					}
@@ -191,7 +191,7 @@ class Hook_database
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('db_meta','m_type',array('m_table'=>$meta_dir[0],'m_name'=>$file_name));
 			if (is_null($test)) return false;
 			$test=str_replace('?','',str_replace('*','',$test));
-			if (in_array($test,array('AUTO','USER','INTEGER','UINTEGER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
+			if (in_array($test,array('AUTO','MEMBER','INTEGER','UINTEGER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
 			{
 				$GLOBALS['SITE_DB']->query_update($meta_dir[0],array($file_name=>0),$where);
 			}
@@ -259,7 +259,7 @@ class Hook_database
 			$accepts_null=(strpos($test,'?')!==false);
 			$test=str_replace('?','',str_replace('*','',$test));
 			$update=array();
-			if (in_array($test,array('AUTO','USER','INTEGER','UINTEGER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
+			if (in_array($test,array('AUTO','MEMBER','INTEGER','UINTEGER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
 			{
 				$update[$this->unescape_name($file_name)]=($contents=='')?NULL:intval($contents);
 				if ((is_null($update[$this->unescape_name($file_name)])) && (!$accepts_null)) $update[$this->unescape_name($file_name)]=0;
@@ -312,7 +312,7 @@ class Hook_database
 			}
 			if ((array_key_exists($pair[0],$_db_keys)) && (array_key_exists(1,$pair)))
 			{
-				if (in_array($_db_keys[$pair[0]],array('AUTO','USER','INTEGER','UINTEGER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME'))) $pair[1]=intval($pair[1]);
+				if (in_array($_db_keys[$pair[0]],array('AUTO','MEMBER','INTEGER','UINTEGER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME'))) $pair[1]=intval($pair[1]);
 				elseif ($_db_keys[$pair[0]]=='REAL') $pair[1]=floatval($pair[1]);
 				else $pair[1]=$this->unescape_name($pair[1]);
 				$where[$pair[0]]=$pair[1];

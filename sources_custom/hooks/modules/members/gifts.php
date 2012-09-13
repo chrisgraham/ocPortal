@@ -41,7 +41,7 @@ class Hook_members_gifts
 	function get_sections($member_id)
 	{
 		require_lang('ocgifts');
-		$rows=$GLOBALS['SITE_DB']->query_select('members_gifts',array('*'),array('to_user_id'=>$member_id),'',NULL,0,true);
+		$rows=$GLOBALS['SITE_DB']->query_select('members_gifts',array('*'),array('to_member_id'=>$member_id),'',NULL,0,true);
 		if (is_null($rows)) return array();
 
 		$gifts=array();
@@ -55,8 +55,8 @@ class Hook_members_gifts
 
 				if ($gift['is_anonymous']==0)
 				{
-					$sender_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_user_id']);
-					$sender_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($gift['from_user_id']);
+					$sender_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_member_id']);
+					$sender_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($gift['from_member_id']);
 					$gift_explanation=do_lang('GIFT_EXPLANATION1',$sender_name,$gift_info[0]['name'],$sender_link);
 				} else
 				{

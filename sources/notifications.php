@@ -108,7 +108,7 @@ function _get_notification_ob_for_code($notification_code)
  * @param  SHORT_TEXT	Message subject (in Comcode)
  * @param  LONG_TEXT		Message body (in Comcode)
  * @param  ?array			List of enabled members to limit sending to (NULL: everyone)
- * @param  ?integer		The member ID doing the sending. Either a USER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED) (NULL: current member)
+ * @param  ?integer		The member ID doing the sending. Either a MEMBER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED) (NULL: current member)
  * @param  integer		The message priority (1=urgent, 3=normal, 5=low)
  * @range  1 5
  * @param  boolean		Whether to create a topic for discussion (ignored if the staff_messaging addon not installed)
@@ -155,7 +155,7 @@ class Notification_dispatcher
 	 * @param  SHORT_TEXT	Message subject (in Comcode)
 	 * @param  LONG_TEXT		Message body (in Comcode)
 	 * @param  ?array			List of enabled members to limit sending to (NULL: everyone)
-	 * @param  ?integer		The member ID doing the sending. Either a USER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED) (NULL: current member)
+	 * @param  ?integer		The member ID doing the sending. Either a MEMBER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED) (NULL: current member)
 	 * @param  integer		The message priority (1=urgent, 3=normal, 5=low)
 	 * @range  1 5
 	 * @param  boolean		Whether to create a topic for discussion (ignored if the staff_messaging addon not installed)
@@ -355,7 +355,7 @@ function _find_member_statistical_notification_type($to_member_id)
  * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
  * @param  SHORT_TEXT	Message subject (in Comcode)
  * @param  LONG_TEXT		Message body (in Comcode)
- * @param  integer		The member ID doing the sending. Either a USER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED)
+ * @param  integer		The member ID doing the sending. Either a MEMBER or a negative number (e.g. A_FROM_SYSTEM_UNPRIVILEGED)
  * @param  integer		The message priority (1=urgent, 3=normal, 5=low)
  * @range  1 5
  * @param  boolean		Whether to NOT CC to the CC address

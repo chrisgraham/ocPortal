@@ -95,7 +95,7 @@ class Hook_rss_comments
 					$if_comments=new ocp_tempcode();
 
 					$id=strval($comment['id']);
-					$author=$GLOBALS['FORUM_DRIVER']->get_username($comment['user']);
+					$author=$GLOBALS['FORUM_DRIVER']->get_username($comment['member']);
 					if (is_null($author)) $author=do_lang('UNKNOWN');
 
 					$news_date=date($date_string,$datetime_raw);

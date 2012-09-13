@@ -106,7 +106,7 @@ class Module_cms_comcode_pages
 				'p_validated'=>'BINARY',
 				'p_edit_date'=>'?TIME',
 				'p_add_date'=>'TIME',
-				'p_submitter'=>'USER',
+				'p_submitter'=>'MEMBER',
 				'p_show_as_edit'=>'BINARY'
 			));
 			$GLOBALS['SITE_DB']->create_index('comcode_pages','p_submitter',array('p_submitter'));
@@ -658,7 +658,7 @@ class Module_cms_comcode_pages
 				list($filepath,$time)=$stuff;
 
 				// Find who did the revision
-				$editor=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'COMCODE_PAGE_EDIT','param_a'=>$file));
+				$editor=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','member_id',array('date_and_time'=>$time,'the_type'=>'COMCODE_PAGE_EDIT','param_a'=>$file));
 				if ((has_privilege(get_member(),'view_revision_history')) || ($editor==get_member()))
 				{
 					if (is_null($editor))

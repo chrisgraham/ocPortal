@@ -95,8 +95,8 @@ class Module_admin_ocgifts extends standard_crud_module
 
 			$GLOBALS['SITE_DB']->create_table('members_gifts',array(
 				'id'=>'*AUTO',
-				'to_user_id'=>'USER',
-				'from_user_id'=>'USER',
+				'to_member_id'=>'MEMBER',
+				'from_member_id'=>'MEMBER',
 				'gift_id'=>'AUTO_LINK',
 				'add_time'=>'TIME',
 				'is_anonymous'=>'BINARY',
@@ -115,6 +115,8 @@ class Module_admin_ocgifts extends standard_crud_module
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{
 			$GLOBALS['SITE_DB']->delete_table_field('members_gifts','topic_id');
+			$GLOBALS['SITE_DB']->alter_table_field('members_gifts','from_user_id','MEMBER','from_member_id');
+			$GLOBALS['SITE_DB']->alter_table_field('members_gifts','to_user_id','MEMBER','to_member_id');
 		}
 	}
 

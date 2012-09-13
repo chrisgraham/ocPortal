@@ -18,8 +18,6 @@
  */
 class user_banunban_test_set extends ocp_test_case
 {
-	var $user_id;
-
 	function setUp()
 	{
 		parent::setUp();

@@ -353,12 +353,34 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	}
 	$hack_threshold=5;
 	if ((array_key_exists('FORUM_DRIVER',$GLOBALS)) && (function_exists('get_member')) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) $count=0;
-	$new_row=array('user_agent'=>substr(get_browser_string(),0,255),'referer'=>substr(ocp_srv('HTTP_REFERER'),0,255),'user_os'=>substr(get_os_string(),0,255),'reason'=>$reason,'reason_param_a'=>substr($reason_param_a,0,255),'reason_param_b'=>substr($reason_param_b,0,255),'url'=>substr($url,0,255),'data_post'=>$post,'the_user'=>$id,'date_and_time'=>time(),'ip'=>$ip);
+	$new_row=array(
+		'user_agent'=>substr(get_browser_string(),0,255),
+		'referer'=>substr(ocp_srv('HTTP_REFERER'),0,255),
+		'user_os'=>substr(get_os_string(),0,255),
+		'reason'=>$reason,
+		'reason_param_a'=>substr($reason_param_a,0,255),
+		'reason_param_b'=>substr($reason_param_b,0,255),
+		'url'=>substr($url,0,255),
+		'data_post'=>$post,
+		'member_id'=>$id,
+		'date_and_time'=>time(),
+		'ip'=>$ip,
+	);
 	$ip_ban_todo=NULL;
 	if (($count>=$hack_threshold) && (get_option('autoban')!='0'))
 	{
 		// Test we're not banning a good bot
-		$se_ip_lists=array('http://www.iplists.com.nyud.net/nw/google.txt','http://www.iplists.com.nyud.net/nw/msn.txt','http://www.iplists.com.nyud.net/infoseek.txt','http://www.iplists.com.nyud.net/nw/inktomi.txt','http://www.iplists.com.nyud.net/nw/lycos.txt','http://www.iplists.com.nyud.net/nw/askjeeves.txt','http://www.iplists.com.nyud.net/northernlight.txt','http://www.iplists.com.nyud.net/nw/altavista.txt','http://www.iplists.com.nyud.net/nw/misc.txt');
+		$se_ip_lists=array(
+			'http://www.iplists.com.nyud.net/nw/google.txt',
+			'http://www.iplists.com.nyud.net/nw/msn.txt',
+			'http://www.iplists.com.nyud.net/infoseek.txt',
+			'http://www.iplists.com.nyud.net/nw/inktomi.txt',
+			'http://www.iplists.com.nyud.net/nw/lycos.txt',
+			'http://www.iplists.com.nyud.net/nw/askjeeves.txt',
+			'http://www.iplists.com.nyud.net/northernlight.txt',
+			'http://www.iplists.com.nyud.net/nw/altavista.txt',
+			'http://www.iplists.com.nyud.net/nw/misc.txt',
+		);
 		$ip_stack=array();
 		$ip_bits=explode((strpos($alt_ip?$ip2:$ip,'.')!==false)?'.':':',$alt_ip?$ip2:$ip);
 		foreach ($ip_bits as $i=>$ip_bit)

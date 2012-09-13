@@ -99,7 +99,7 @@ class Module_pointstore
 			$GLOBALS['SITE_DB']->create_table('sales',array(
 				'id'=>'*AUTO',
 				'date_and_time'=>'TIME',
-				'memberid'=>'USER',
+				'memberid'=>'MEMBER',
 				'purchasetype'=>'ID_TEXT',
 				'details'=>'SHORT_TEXT',
 				'details2'=>'SHORT_TEXT'

@@ -71,8 +71,8 @@
 	 {+START,IF_PASSED,ITEM}
 		 <input type="hidden" name="item" value="{ITEM*}" />
 	 {+END}
-	 {+START,IF_PASSED,USER}
-		 <input type="hidden" name="user" value="{USER*}" />
+	 {+START,IF_PASSED,MEMBER}
+		 <input type="hidden" name="user" value="{MEMBER*}" />
 	 {+END}
 
 	 <p class="proceed_button">

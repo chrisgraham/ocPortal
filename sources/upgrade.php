@@ -1472,6 +1472,12 @@ function version_specific()
 			$GLOBALS['SITE_DB']->rename_table('gsp','group_privileges');
 			$GLOBALS['SITE_DB']->rename_table('sp_list','privilege_list');
 			$GLOBALS['SITE_DB']->rename_table('usersubmitban_ip','banned_ip');
+			$GLOBALS['SITE_DB']->query_update('db_meta',array('m_type'=>'MEMBER'),array('m_type'=>'USER'));
+			$GLOBALS['SITE_DB']->query_update('db_meta',array('m_type'=>'?MEMBER'),array('m_type'=>'?USER'));
+			$GLOBALS['SITE_DB']->query_update('db_meta',array('m_type'=>'*MEMBER'),array('m_type'=>'*MEMBER'));
+
+			$GLOBALS['SITE_DB']->alter_table_field('adminlogs','the_user','MEMBER','member_id');
+			$GLOBALS['SITE_DB']->alter_table_field('sessions','the_user','MEMBER','member_id');
 		}
 		set_value('version',float_to_raw_string($version_files,10,true));
 

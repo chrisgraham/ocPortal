@@ -801,7 +801,7 @@ class Module_admin_themes
 		foreach ($filesarray as $time)
 		{
 			// Find who did the revision
-			$editor=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'EDIT_CSS','param_a'=>$theme));
+			$editor=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','member_id',array('date_and_time'=>$time,'the_type'=>'EDIT_CSS','param_a'=>$theme));
 			if (is_null($editor))
 			{
 				$editor=do_lang('UNKNOWN');
@@ -1257,7 +1257,7 @@ class Module_admin_themes
 			foreach ($filesarray as $time)
 			{
 				// Find who did the revision
-				$editor=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','the_user',array('date_and_time'=>$time,'the_type'=>'EDIT_TEMPLATES','param_a'=>$file));
+				$editor=$GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','member_id',array('date_and_time'=>$time,'the_type'=>'EDIT_TEMPLATES','param_a'=>$file));
 				if (is_null($editor))
 				{
 					$editor=do_lang('UNKNOWN');
@@ -1377,7 +1377,7 @@ class Module_admin_themes
 											array('MOBILE','0'),
 											array('SITE_NAME','0'),
 											array('STAFF_ADDRESS','0'),
-											array('USER','0'),
+											array('MEMBER','0'),
 											array('DATE_AND_TIME','0'),
 											array('DATE','0'),
 											array('TIME','0'),

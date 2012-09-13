@@ -69,7 +69,7 @@ class Module_admin_ipban
 			));
 
 			$GLOBALS['SITE_DB']->create_table('usersubmitban_member',array(
-				'the_member'=>'*USER',
+				'the_member'=>'*MEMBER',
 			));
 		}
 

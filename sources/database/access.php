@@ -108,7 +108,7 @@ class Database_Static_access
 			'SHORT_INTEGER'=>'byte',
 			'REAL'=>'real',
 			'BINARY'=>'byte',
-			'USER'=>'integer',
+			'MEMBER'=>'integer',
 			'GROUP'=>'integer',
 			'TIME'=>'integer',
 			'LONG_TRANS'=>'integer',

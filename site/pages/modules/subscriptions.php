@@ -71,7 +71,7 @@ class Module_subscriptions
 			$GLOBALS['SITE_DB']->create_table('subscriptions',array(
 				'id'=>'*AUTO', // linked to IPN with this
 				's_type_code'=>'ID_TEXT',
-				's_member_id'=>'USER',
+				's_member_id'=>'MEMBER',
 				's_state'=>'ID_TEXT', // new|pending|active|cancelled (pending means payment has been requested)
 				's_amount'=>'SHORT_TEXT', // can't always find this from s_type_code
 				's_special'=>'SHORT_TEXT', // depending on s_type_code, would trigger something special such as a key upgrade

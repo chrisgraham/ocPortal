@@ -81,14 +81,14 @@ class Module_tester
 			's_section'=>'SHORT_TEXT',
 			's_notes'=>'LONG_TEXT',
 			's_inheritable'=>'BINARY',
-			's_assigned_to'=>'?USER' // NULL: no assignee, as it's meant to be inherited
+			's_assigned_to'=>'?MEMBER' // NULL: no assignee, as it's meant to be inherited
 		));
 
 		$GLOBALS['SITE_DB']->create_table('tests',array(
 			'id'=>'*AUTO',
 			't_section'=>'AUTO_LINK',
 			't_test'=>'LONG_TEXT',
-			't_assigned_to'=>'?USER', // NULL: section assignee
+			't_assigned_to'=>'?MEMBER', // NULL: section assignee
 			't_enabled'=>'BINARY',
 			't_status'=>'INTEGER', // 0=not done, 1=success, 2=failure
 			't_inherit_section'=>'?AUTO_LINK' // NULL: none

@@ -1,4 +1,4 @@
-{+START,IF,{$EQ,{MEMBER_ID},{$USER}}}
+{+START,IF,{$EQ,{MEMBER_ID},{$MEMBER}}}
 	{$BLOCK,block=main_activities_state,member={MEMBER_ID},mode=some_members,param=}
 {+END}
 

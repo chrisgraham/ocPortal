@@ -102,19 +102,19 @@ class Module_admin_actionlog
 				}
 			}
 		}
-		if ($GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(DISTINCT the_user)')<5000)
+		if ($GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(DISTINCT member_id)')<5000)
 		{
-			$_staff=list_to_map('the_user',$GLOBALS['SITE_DB']->query_select('adminlogs',array('the_user','COUNT(*) AS cnt'),NULL,'GROUP BY the_user ORDER BY cnt DESC'));
+			$_staff=list_to_map('member_id',$GLOBALS['SITE_DB']->query_select('adminlogs',array('member_id','COUNT(*) AS cnt'),NULL,'GROUP BY member_id ORDER BY cnt DESC'));
 			foreach ($_staff as $staff)
 			{
-				$username=$GLOBALS['FORUM_DRIVER']->get_username($staff['the_user']);
-				if (is_null($username)) $username=strval($staff['the_user']);
-				if (!array_key_exists($staff['the_user'],$_member_choice_list))
+				$username=$GLOBALS['FORUM_DRIVER']->get_username($staff['member_id']);
+				if (is_null($username)) $username=strval($staff['member_id']);
+				if (!array_key_exists($staff['member_id'],$_member_choice_list))
 				{
-					$_member_choice_list[$staff['the_user']]=array($username,$staff['cnt']);
+					$_member_choice_list[$staff['member_id']]=array($username,$staff['cnt']);
 				} else
 				{
-					$_member_choice_list[$staff['the_user']][1]+=$staff['cnt'];
+					$_member_choice_list[$staff['member_id']][1]+=$staff['cnt'];
 				}
 			}
 		}
@@ -211,7 +211,7 @@ class Module_admin_actionlog
 			if ($id!=-1) $where.=' AND l_by='.strval($id);
 
 			// Fetch
-			$rows1=$GLOBALS['FORUM_DB']->query('SELECT l_reason,id,l_by AS the_user,l_date_and_time AS date_and_time,l_the_type AS the_type,l_param_a AS param_a,l_param_b AS param_b FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_moderator_logs WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max+$start);
+			$rows1=$GLOBALS['FORUM_DB']->query('SELECT l_reason,id,l_by AS member_id,l_date_and_time AS date_and_time,l_the_type AS the_type,l_param_a AS param_a,l_param_b AS param_b FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_moderator_logs WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max+$start);
 			$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_moderator_logs WHERE '.$where);
 		} else $rows1=array();
 
@@ -225,10 +225,10 @@ class Module_admin_actionlog
 				$where.=' AND param_a LIKE \''.db_encode_like('%'.$filter_param_a.'%').'\'';
 			if ($filter_param_b!='')
 				$where.=' AND param_b LIKE \''.db_encode_like('%'.$filter_param_b.'%').'\'';
-			if ($id!=-1) $where.=' AND the_user='.strval($id);
+			if ($id!=-1) $where.=' AND member_id='.strval($id);
 
 			// Fetch
-			$rows2=$GLOBALS['SITE_DB']->query('SELECT id,the_user,date_and_time,the_type,param_a,param_b,ip FROM '.get_table_prefix().'adminlogs WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max+$start);
+			$rows2=$GLOBALS['SITE_DB']->query('SELECT id,member_id,date_and_time,the_type,param_a,param_b,ip FROM '.get_table_prefix().'adminlogs WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max+$start);
 			$max_rows+=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'adminlogs WHERE '.$where);
 			$rows=array_merge($rows1,$rows2);
 		}
@@ -261,7 +261,7 @@ class Module_admin_actionlog
 			{
 				$myrow=$rows[$best];
 
-				$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['the_user']);
+				$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['member_id']);
 				$mode=array_key_exists('l_reason',$myrow)?'ocf':'ocp';
 				$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$myrow['id'],'mode'=>$mode),'_SELF');
 				$mode_nice=($mode=='ocp')?'ocPortal':'OCF';
@@ -285,8 +285,8 @@ class Module_admin_actionlog
 				if (addon_installed('securitylogging'))
 				{
 					$banned_test_1=array_key_exists('ip',$myrow)?ip_banned($myrow['ip'],true):false;
-					$banned_test_2=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$myrow['the_user'])));
-					$banned_test_3=$GLOBALS['FORUM_DRIVER']->is_banned($myrow['the_user']);
+					$banned_test_2=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$myrow['member_id'])));
+					$banned_test_3=$GLOBALS['FORUM_DRIVER']->is_banned($myrow['member_id']);
 					$banned=(((!$banned_test_1)) && ((!$banned_test_2)) && (!$banned_test_3))?do_lang_tempcode('NO'):do_lang_tempcode('YES');
 
 					$result_entry[]=$banned;
@@ -321,22 +321,22 @@ class Module_admin_actionlog
 
 		if ($mode=='ocf')
 		{
-			$rows=$GLOBALS['FORUM_DB']->query_select('f_moderator_logs',array('l_reason AS reason','id','l_by AS the_user','l_date_and_time AS date_and_time','l_the_type AS the_type','l_param_a AS param_a','l_param_b AS param_b'),array('id'=>$id),'',1);
+			$rows=$GLOBALS['FORUM_DB']->query_select('f_moderator_logs',array('l_reason AS reason','id','l_by AS member_id','l_date_and_time AS date_and_time','l_the_type AS the_type','l_param_a AS param_a','l_param_b AS param_b'),array('id'=>$id),'',1);
 		} else
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('adminlogs',array('id','the_user','date_and_time','the_type','param_a','param_b','ip'),array('id'=>$id),'',1);
+			$rows=$GLOBALS['SITE_DB']->query_select('adminlogs',array('id','member_id','date_and_time','the_type','param_a','param_b','ip'),array('id'=>$id),'',1);
 		}
 
 		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$row=$rows[0];
 
 		$title=get_screen_title('VIEW_ACTION_LOGS');
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['the_user']);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
 		$type_str=do_lang($row['the_type'],$row['param_a'],$row['param_b'],NULL,NULL,false);
 		if (is_null($type_str)) $type_str=$row['the_type'];
 		$fields=array(
-			'USERNAME'=>$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['the_user']),
+			'USERNAME'=>$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['member_id']),
 			'DATE_TIME'=>get_timezoned_date($row['date_and_time']),
 			'TYPE'=>$type_str,
 			'PARAMETER_A'=>is_null($row['param_a'])?'':$row['param_a'],
@@ -358,25 +358,25 @@ class Module_admin_actionlog
 						$fields['SYNDICATE_TO_STOPFORUMSPAM']=do_template('ACTION_LOGS_TOGGLE_LINK',array(
 							'_GUID'=>'7d10045c6b3b48f256e2f8eb5535809c',
 							'LABEL'=>do_lang_tempcode('PROCEED'),
-							'URL'=>build_url(array('page'=>'admin_ipban','type'=>'syndicate_ip_ban','ip'=>$row['ip'],'member_id'=>$row['the_user'],'reason'=>do_lang('BANNED_ADDRESSES'),'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')),
+							'URL'=>build_url(array('page'=>'admin_ipban','type'=>'syndicate_ip_ban','ip'=>$row['ip'],'member_id'=>$row['member_id'],'reason'=>do_lang('BANNED_ADDRESSES'),'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')),
 						));
 					}
 				}
 			}
-			$banned_test_2=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$row['the_user']));
+			$banned_test_2=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$row['member_id']));
 			$fields['SUBMITTER_BANNED']=is_null($banned_test_2)?do_lang_tempcode('NO'):do_lang_tempcode('YES');
-			if ((!is_guest($row['the_user'])) && ($row['the_user']!=get_member()))
+			if ((!is_guest($row['member_id'])) && ($row['member_id']!=get_member()))
 			{
-				$fields['SUBMITTER_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'f79fb00ef35d89381371a67bc9c4d69b','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_submitter_ban','id'=>$row['the_user'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
+				$fields['SUBMITTER_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'f79fb00ef35d89381371a67bc9c4d69b','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_submitter_ban','id'=>$row['member_id'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
 			}
-			$banned_test_3=$GLOBALS['FORUM_DRIVER']->is_banned($row['the_user']);
+			$banned_test_3=$GLOBALS['FORUM_DRIVER']->is_banned($row['member_id']);
 			$fields['MEMBER_BANNED']=$banned_test_3?do_lang_tempcode('YES'):do_lang_tempcode('NO');
-			if (((get_forum_type()=='ocf') && (!is_guest($row['the_user']))) && ($row['the_user']!=get_member()))
+			if (((get_forum_type()=='ocf') && (!is_guest($row['member_id']))) && ($row['member_id']!=get_member()))
 			{
-				$fields['MEMBER_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'6b192ecfad1afc67bb8c2f1e744cc3b1','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_member_ban','id'=>$row['the_user'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
+				$fields['MEMBER_BANNED']->attach(do_template('ACTION_LOGS_TOGGLE_LINK',array('_GUID'=>'6b192ecfad1afc67bb8c2f1e744cc3b1','URL'=>build_url(array('page'=>'admin_ipban','type'=>'toggle_member_ban','id'=>$row['member_id'],'redirect'=>get_self_url(true)),get_module_zone('admin_ipban')))));
 			}
 		}
-		$fields['INVESTIGATE_USER']=hyperlink(build_url(array('page'=>'admin_lookup','id'=>(array_key_exists('ip',$row))?$row['ip']:$row['the_user']),'_SELF'),do_lang_tempcode('PROCEED'));
+		$fields['INVESTIGATE_USER']=hyperlink(build_url(array('page'=>'admin_lookup','id'=>(array_key_exists('ip',$row))?$row['ip']:$row['member_id']),'_SELF'),do_lang_tempcode('PROCEED'));
 
 		require_code('templates_map_table');
 		return map_table($title,$fields);

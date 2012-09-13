@@ -223,18 +223,18 @@ function add_requirement_to_workflow($requirement_id,$workflow_id,$position=NULL
 
 /**
  * Approves the given point for the given piece of content. The optional
- * user argument will be set as the approver (ie. the one to blame if
+ * member argument will be set as the approver (ie. the one to blame if
  * this approval is in error) , otherwise the current user will be set.
  *
  * @param  AUTO_LINK		The *workflow content* ID (NOT the gallery, category, etc. ID!)
  * @param  AUTO_LINK		The approval point name (translation table ID)
- * @param  ?MEMBER		The user ID to use as the approver, (NULL: for current user)
+ * @param  ?MEMBER		The member ID to use as the approver, (NULL: for current user)
  */
-function approve_content_for_point($content_id,$approval_name,$user=NULL)
+function approve_content_for_point($content_id,$approval_name,$member=NULL)
 {
 	// TODO: Add some sanity checks here
 	// Grab the current user if we've not been given one
-	if (is_null($user)) $user=get_member();
+	if (is_null($member)) $member=get_member();
 
 	// Grab the current status of this point, firstly to see if we need
 	// to set it at all, but more importantly to make sure that the given
@@ -639,7 +639,7 @@ function get_workflow_form($workflow_content_id)
 	// Approval tick boxes //
 	/////////////////////////
 
-	$available_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member());		// What groups our user is in
+	$available_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member());		// What groups our member is in
 	$existing_status=array();		// This shows the current approval status, but is not editable
 	$approval_status=array();		// This holds tick-boxes for editing the approval status
 	$send_next=array();		// This holds the details for who to send this to next
@@ -669,7 +669,7 @@ function get_workflow_form($workflow_content_id)
 		// Go through each group allowed to modify this value...
 		foreach (get_groups_for_point($point) as $allowed_group)
 		{
-			// ... and check whether the user is in it
+			// ... and check whether the member is in it
 			if (!$approval_shown && in_array($allowed_group, $available_groups))
 			{
 				// If so then remember that we've handled this point
@@ -1313,16 +1313,16 @@ function get_workflow_of_content($type,$id)
 }
 
 /**
- * Returns whether the given user (default: current member) can choose the
+ * Returns whether the given member (default: current member) can choose the
  * workflow to apply to some content they're submitting/editing.
  *
  * @param  ?MEMBER		Member (NULL: current member)
- * @return boolean		Whether the user has permission or not
+ * @return boolean		Whether the member has permission or not
  */
-function can_choose_workflow($user=NULL)
+function can_choose_workflow($member=NULL)
 {
-	// Sort out the user
-	if (is_null($user)) $user=get_member();
+	// Sort out the member
+	if (is_null($member)) $member=get_member();
 
 	// We currently use access to the workflow management page as the defining
 	// criterion

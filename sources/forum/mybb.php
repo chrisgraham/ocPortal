@@ -543,7 +543,7 @@ class forum_driver_mybb extends forum_driver_base
 			$LAX_COMCODE=true;
 			$temp['message']=$myrow['message'];
 			$LAX_COMCODE=$temp2;
-			$temp['user']=$myrow['uid'];
+			$temp['member']=$myrow['uid'];
 			$temp['date']=$myrow['dateline'];
 
 			$out[]=$temp;

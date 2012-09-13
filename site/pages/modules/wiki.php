@@ -99,7 +99,7 @@ class Module_wiki
 				'the_page'=>'AUTO_LINK',
 				'date_and_time'=>'TIME',
 				'ip'=>'IP',
-				'the_user'=>'USER'
+				'member_id'=>'MEMBER'
 			));
 
 			$GLOBALS['SITE_DB']->create_table('wiki_children',array(
@@ -118,7 +118,7 @@ class Module_wiki
 				'edit_date'=>'?TIME',
 				'wiki_views'=>'INTEGER',
 				'hide_posts'=>'BINARY',
-				'submitter'=>'USER'
+				'submitter'=>'MEMBER'
 			));
 
 			$GLOBALS['SITE_DB']->create_index('wiki_pages','wiki_views',array('wiki_views'));
@@ -142,12 +142,12 @@ class Module_wiki
 				'date_and_time'=>'TIME',
 				'validated'=>'BINARY',
 				'wiki_views'=>'INTEGER',
-				'the_user'=>'USER',
+				'member_id'=>'MEMBER',
 				'edit_date'=>'?TIME'
 			));
 
 			$GLOBALS['SITE_DB']->create_index('wiki_posts','wiki_views',array('wiki_views'));
-			$GLOBALS['SITE_DB']->create_index('wiki_posts','spos',array('the_user'));
+			$GLOBALS['SITE_DB']->create_index('wiki_posts','spos',array('member_id'));
 			$GLOBALS['SITE_DB']->create_index('wiki_posts','posts_on_page',array('page_id'));
 			$GLOBALS['SITE_DB']->create_index('wiki_posts','cdate_and_time',array('date_and_time'));
 			$GLOBALS['SITE_DB']->create_index('wiki_posts','svalidated',array('validated'));
@@ -215,6 +215,9 @@ class Module_wiki
 					$GLOBALS['SITE_DB']->query_update($table,array('c_name'=>'_wiki_post'),array('c_name'=>'_seedy_post'));
 				}
 			}
+
+			$GLOBALS['SITE_DB']->alter_table_field('wiki_changes','the_user','MEMBER','member_id');
+			$GLOBALS['SITE_DB']->alter_table_field('wiki_posts','the_user','MEMBER','member_id');
 		}
 	}
 
@@ -498,7 +501,7 @@ class Module_wiki
 		foreach ($dbposts as $myrow)
 		{
 			// Work out posters details
-			$poster=$myrow['the_user'];
+			$poster=$myrow['member_id'];
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($poster);
 			if (is_null($username)) $username=do_lang('UNKNOWN');
 
@@ -674,10 +677,10 @@ class Module_wiki
 				$chain=is_null($id)?wiki_derive_chain($myrow['the_page']):$_id;
 				$l=wiki_breadcrumbs($chain,get_translated_text($l),true);
 
-				$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['the_user']);
+				$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['member_id']);
 				if (is_null($username)) $username=do_lang('UNKNOWN');
 				$_date_and_time=get_timezoned_date($myrow['date_and_time']);
-				$ml=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['the_user']);
+				$ml=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['member_id']);
 				$action=do_lang($myrow['the_action'],NULL,NULL,NULL,NULL,false);
 				if (is_null($action)) $action='?';
 
@@ -761,7 +764,7 @@ class Module_wiki
 
 		$message=post_param('post');
 		check_comcode($message,NULL,false,NULL,true);
-		$post_id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('edit_date'=>NULL,'the_message'=>0,'the_user'=>get_member(),'date_and_time'=>time(),'page_id'=>get_param_integer('id'),'validated'=>1,'wiki_views'=>0),true);
+		$post_id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('edit_date'=>NULL,'the_message'=>0,'member_id'=>get_member(),'date_and_time'=>time(),'page_id'=>get_param_integer('id'),'validated'=>1,'wiki_views'=>0),true);
 		require_code('attachments2');
 		$the_message=insert_lang_comcode_attachments(2,$message,'wiki_post',strval($post_id));
 		$GLOBALS['SITE_DB']->query_update('wiki_posts',array('the_message'=>$the_message),array('id'=>$post_id),'',1);
@@ -772,7 +775,7 @@ class Module_wiki
 			$GLOBALS['SITE_DB']->query_delete('wiki_posts',array('id'=>$id),'',1);
 		}
 
-		$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_page'=>get_param_integer('id'),'the_action'=>'MERGE_WIKI_POSTS','date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>get_member()));
+		$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_page'=>get_param_integer('id'),'the_action'=>'MERGE_WIKI_POSTS','date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>get_member()));
 
 		require_code('autosave');
 		clear_ocp_autosave();
@@ -795,7 +798,7 @@ class Module_wiki
 		$id=$_id[0];
 		$post_id=get_param_integer('post_id');
 
-		$original_poster=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','the_user',array('id'=>$post_id));
+		$original_poster=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','member_id',array('id'=>$post_id));
 
 		$true_page_id=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','page_id',array('id'=>$post_id));
 		if (!has_category_access(get_member(),'wiki_page',strval($true_page_id))) access_denied('CATEGORY_ACCESS');
@@ -840,7 +843,7 @@ class Module_wiki
 		$true_page_id=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','page_id',array('id'=>$post_id));
 		if (!has_category_access(get_member(),'wiki_page',strval($true_page_id))) access_denied('CATEGORY_ACCESS');
 
-		$original_poster=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','the_user',array('id'=>$post_id));
+		$original_poster=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','member_id',array('id'=>$post_id));
 		check_edit_permission('low',$original_poster,array('wiki_page',$true_page_id),'cms_wiki');
 
 		// Check user info
@@ -856,7 +859,7 @@ class Module_wiki
 		} else
 		{
 			$GLOBALS['SITE_DB']->query_update('wiki_posts',array('page_id'=>$target),array('id'=>$post_id),'',1);
-			$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_page'=>$target,'the_action'=>'WIKI_MOVE_POST','date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>$member));
+			$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_page'=>$target,'the_action'=>'WIKI_MOVE_POST','date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>$member));
 
 			// Show it worked / Refresh
 			$url=get_param('redirect');
@@ -891,7 +894,7 @@ class Module_wiki
 
 			if (!has_category_access(get_member(),'wiki_page',strval($myrow['page_id']))) access_denied('CATEGORY_ACCESS');
 
-			$original_poster=$myrow['the_user'];
+			$original_poster=$myrow['member_id'];
 			check_edit_permission('low',$original_poster,array('wiki_page',$myrow['page_id']),'cms_wiki');
 
 			$title=get_screen_title('WIKI_EDIT_POST');
@@ -1074,7 +1077,7 @@ class Module_wiki
 			$myrow=$rows[0];
 			if (!has_category_access(get_member(),'wiki_page',strval($myrow['page_id']))) access_denied('CATEGORY_ACCESS');
 
-			$original_poster=$myrow['the_user'];
+			$original_poster=$myrow['member_id'];
 
 			if (!has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki',array('wiki_page',$myrow['page_id'])))
 				$validated=0;

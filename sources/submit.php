@@ -149,10 +149,10 @@ function wrap_probe_ip($ip)
 {
 	if (strpos($ip,'*')!==false)
 	{
-		$a=$GLOBALS['SITE_DB']->query('SELECT DISTINCT the_user AS id FROM '.get_table_prefix().'adminlogs WHERE ip LIKE \''.db_encode_like(str_replace('*','%',$ip)).'\'');
+		$a=$GLOBALS['SITE_DB']->query('SELECT DISTINCT member_id AS id FROM '.get_table_prefix().'adminlogs WHERE ip LIKE \''.db_encode_like(str_replace('*','%',$ip)).'\'');
 	} else
 	{
-		$a=$GLOBALS['SITE_DB']->query_select('adminlogs',array('DISTINCT the_user AS id'),array('ip'=>$ip));
+		$a=$GLOBALS['SITE_DB']->query_select('adminlogs',array('DISTINCT member_id AS id'),array('ip'=>$ip));
 	}
 	$b=$GLOBALS['FORUM_DRIVER']->probe_ip($ip);
 	$r=array();

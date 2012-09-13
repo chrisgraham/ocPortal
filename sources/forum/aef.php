@@ -548,7 +548,7 @@ class forum_driver_aef extends forum_driver_base
 			$LAX_COMCODE=true;
 			$temp['message']=$myrow['post'];
 			$LAX_COMCODE=$temp2;
-			$temp['user']=$myrow['poster_id'];
+			$temp['member']=$myrow['poster_id'];
 			$temp['date']=$myrow['ptime'];
 
 			$out[]=$temp;

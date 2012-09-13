@@ -290,7 +290,7 @@ class Hook_addon_registry_chat
 				'OLD_MESSAGES'=>lorem_phrase(),
 				'AVATAR_URL'=>placeholder_avatar(),
 				'STAFF_ACTIONS'=>$chat_actions,
-				'USER'=>lorem_word(),
+				'MEMBER'=>lorem_word(),
 				'MESSAGE'=>lorem_phrase(),
 				'TIME'=>placeholder_time(),
 				'RAW_TIME'=>placeholder_time(),
@@ -313,7 +313,7 @@ class Hook_addon_registry_chat
 			lorem_globalise(do_lorem_template('CHAT_PRIVATE', array(
 				'SYSTEM_MESSAGE'=>lorem_phrase(),
 				'MESSAGE'=>lorem_phrase_html(),
-				'USER'=>lorem_word()
+				'MEMBER'=>lorem_word()
 			)), NULL, '', true)
 		);
 	}
@@ -349,7 +349,7 @@ class Hook_addon_registry_chat
 	function tpl_preview__block_side_shoutbox()
 	{
 		$tpl=do_lorem_template('BLOCK_SIDE_SHOUTBOX_MESSAGE', array(
-			'USER'=>lorem_word(),
+			'MEMBER'=>lorem_word(),
 			'MESSAGE'=>lorem_phrase(),
 			'TIME_RAW'=>placeholder_time(),
 			'TIME'=>placeholder_time()

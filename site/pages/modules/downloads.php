@@ -130,7 +130,7 @@ class Module_downloads
 				'download_views'=>'INTEGER',
 				'download_cost'=>'INTEGER',
 				'download_submitter_gets_points'=>'BINARY',
-				'submitter'=>'USER',
+				'submitter'=>'MEMBER',
 				'original_filename'=>'SHORT_TEXT',
 				'rep_image'=>'URLPATH',
 				'download_licence'=>'?AUTO_LINK',
@@ -156,7 +156,7 @@ class Module_downloads
 
 			$GLOBALS['SITE_DB']->create_table('download_logging',array(
 				'id'=>'*AUTO_LINK',
-				'the_user'=>'*USER',
+				'member_id'=>'*MEMBER',
 				'ip'=>'IP',
 				'date_and_time'=>'TIME'
 			));
@@ -194,6 +194,8 @@ class Module_downloads
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
 		{
 			$GLOBALS['SITE_DB']->alter_table_field('download_downloads','comments','LONG_TRANS','additional_details');
+
+			$GLOBALS['SITE_DB']->alter_table_field('download_logging','the_user','*MEMBER','member_id');
 		}
 	}
 

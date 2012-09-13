@@ -98,7 +98,7 @@ class Module_purchase
 				'id'=>'*ID_TEXT',
 				'e_purchase_id'=>'ID_TEXT',
 				'e_item_name'=>'SHORT_TEXT',
-				'e_member_id'=>'USER',
+				'e_member_id'=>'MEMBER',
 				'e_amount'=>'SHORT_TEXT',
 				'e_ip_address'=>'IP',
 				'e_session_id'=>'INTEGER',

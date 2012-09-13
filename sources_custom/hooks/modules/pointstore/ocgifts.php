@@ -159,7 +159,7 @@ class Hook_pointstore_ocgifts
 				//get gift points
 				charge_member($member_id,$gift_row[0]['price'],do_lang('GIFT_PURCHASING') . ' - ' .strval($gift_row[0]['price']).' point(-s).');
 
-				$gift_row_id=$GLOBALS['SITE_DB']->query_insert('members_gifts',array('to_user_id'=>$to_member_id,'from_user_id'=>$member_id,'gift_id'=>$gift_id,'add_time'=>time(),'is_anonymous'=>$anonymous,'gift_message'=>$gift_message),true);
+				$gift_row_id=$GLOBALS['SITE_DB']->query_insert('members_gifts',array('to_member_id'=>$to_member_id,'from_member_id'=>$member_id,'gift_id'=>$gift_id,'add_time'=>time(),'is_anonymous'=>$anonymous,'gift_message'=>$gift_message),true);
 			}
 
 			if (isset($gift_row[0]['id']) && $gift_row[0]['id']>0)

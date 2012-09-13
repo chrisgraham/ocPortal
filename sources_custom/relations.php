@@ -56,7 +56,7 @@ function get_innodb_table_sql($tables,$all_tables)
 			{
 				$relations[$table.'.'.$field]=$relation_map[$table.'.'.$field];
 			}
-			if (strpos($type,'USER')!==false)
+			if (strpos($type,'MEMBER')!==false)
 				$relations[$table.'.'.$field]='f_members.id';
 			if (strpos($type,'GROUP')!==false)
 				$relations[$table.'.'.$field]='f_groups.id';
@@ -109,7 +109,7 @@ function get_innodb_data_types()
 		'SHORT_INTEGER'=>'tinyint',
 		'REAL'=>'real',
 		'BINARY'=>'tinyint(1)',
-		'USER'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
+		'MEMBER'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
 		'GROUP'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
 		'TIME'=>'integer unsigned',
 		'LONG_TRANS'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
@@ -438,7 +438,7 @@ function get_code_to_fix_foreign_keys() //Temp code to help fixup AUTO/AUTO_LINK
 	The following do not work without fiddling, mostly due to allowed NULL's, so some manual changes need doing too.
 
 	ALTER TABLE ocp4_galleries ADD FOREIGN KEY `galleries.parent_id` (parent_id) REFERENCES ocp4_galleries (name);
-	ALTER TABLE ocp4_stats ADD FOREIGN KEY `stats.the_user` (the_user) REFERENCES ocp4_f_members (id);
+	ALTER TABLE ocp4_stats ADD FOREIGN KEY `stats.member_id` (member_id) REFERENCES ocp4_f_members (id);
 	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option3` (option3) REFERENCES ocp4_translate (id);
 	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option4` (option4) REFERENCES ocp4_translate (id);
 	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option5` (option5) REFERENCES ocp4_translate (id);

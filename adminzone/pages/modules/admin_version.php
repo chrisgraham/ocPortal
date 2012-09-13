@@ -127,7 +127,7 @@ class Module_admin_version
 			// TODO: Move these into sms addon_registry hook, once these hooks support installation (#354 on tracker)
 			$GLOBALS['SITE_DB']->create_table('sms_log',array(
 				'id'=>'*AUTO',
-				's_member_id'=>'USER',
+				's_member_id'=>'MEMBER',
 				's_time'=>'TIME',
 				's_trigger_ip'=>'IP'
 			));
@@ -150,11 +150,11 @@ class Module_admin_version
 				'm_priority'=>'SHORT_INTEGER',
 				'm_attachments'=>'LONG_TEXT',
 				'm_no_cc'=>'BINARY',
-				'm_as'=>'USER',
+				'm_as'=>'MEMBER',
 				'm_as_admin'=>'BINARY',
 				'm_in_html'=>'BINARY',
 				'm_date_and_time'=>'TIME',
-				'm_member_id'=>'USER',
+				'm_member_id'=>'MEMBER',
 				'm_url'=>'LONG_TEXT',
 				'm_queued'=>'BINARY',
 				'm_template'=>'ID_TEXT',
@@ -165,14 +165,14 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_table('link_tracker',array(
 				'id'=>'*AUTO',
 				'c_date_and_time'=>'TIME',
-				'c_member_id'=>'USER',
+				'c_member_id'=>'MEMBER',
 				'c_ip_address'=>'IP',
 				'c_url'=>'URLPATH',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('incoming_uploads',array(
 				'id'=>'*AUTO',
-				'i_submitter'=>'USER',
+				'i_submitter'=>'MEMBER',
 				'i_date_and_time'=>'TIME',
 				'i_orig_filename'=>'URLPATH',
 				'i_save_url'=>'URLPATH'
@@ -208,7 +208,7 @@ class Module_admin_version
 			if (!$GLOBALS['SITE_DB']->table_exists('f_group_member_timeouts'))
 			{
 				$GLOBALS['SITE_DB']->create_table('f_group_member_timeouts',array(
-					'member_id'=>'*USER',
+					'member_id'=>'*MEMBER',
 					'group_id'=>'*GROUP',
 					'timeout'=>'TIME',
 				));
@@ -255,7 +255,7 @@ class Module_admin_version
 
 			$GLOBALS['SITE_DB']->create_table('notifications_enabled',array(
 				'id'=>'*AUTO',
-				'l_member_id'=>'USER',
+				'l_member_id'=>'MEMBER',
 				'l_notification_code'=>'ID_TEXT',
 				'l_code_category'=>'SHORT_TEXT',
 				'l_setting'=>'INTEGER',
@@ -267,8 +267,8 @@ class Module_admin_version
 				'id'=>'*AUTO',
 				'd_subject'=>'LONG_TEXT',
 				'd_message'=>'LONG_TEXT',
-				'd_from_member_id'=>'?USER',
-				'd_to_member_id'=>'USER',
+				'd_from_member_id'=>'?MEMBER',
+				'd_to_member_id'=>'MEMBER',
 				'd_priority'=>'SHORT_INTEGER',
 				'd_no_cc'=>'BINARY',
 				'd_date_and_time'=>'TIME',
@@ -280,7 +280,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_frequency',array('d_frequency'));
 			$GLOBALS['SITE_DB']->create_index('digestives_tin','d_to_member_id',array('d_to_member_id'));
 			$GLOBALS['SITE_DB']->create_table('digestives_consumed',array(
-				'c_member_id'=>'*USER',
+				'c_member_id'=>'*MEMBER',
 				'c_frequency'=>'*INTEGER', // e.g. A_DAILY_EMAIL_DIGEST
 				'c_time'=>'TIME',
 			));
@@ -288,7 +288,7 @@ class Module_admin_version
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<15))
 		{
-			$GLOBALS['SITE_DB']->alter_table_field('digestives_tin','d_from_member_id','?USER');
+			$GLOBALS['SITE_DB']->alter_table_field('digestives_tin','d_from_member_id','?MEMBER');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<16))
@@ -348,7 +348,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('captchas','si_time',array('si_time'));
 
 			$GLOBALS['SITE_DB']->create_table('member_tracking',array(
-				'mt_member_id'=>'*USER',
+				'mt_member_id'=>'*MEMBER',
 				'mt_cache_username'=>'ID_TEXT',
 				'mt_time'=>'*TIME',
 				'mt_page'=>'*ID_TEXT',
@@ -374,7 +374,7 @@ class Module_admin_version
 				'the_type'=>'ID_TEXT',
 				'the_id'=>'ID_TEXT',
 				'the_time'=>'TIME',
-				'the_member'=>'USER'
+				'the_member'=>'MEMBER'
 			));
 
 			$GLOBALS['SITE_DB']->create_table('translate_history',array(
@@ -383,7 +383,7 @@ class Module_admin_version
 				'language'=>'*LANGUAGE_NAME',
 				'text_original'=>'LONG_TEXT',
 				'broken'=>'BINARY',
-				'action_member'=>'USER',
+				'action_member'=>'MEMBER',
 				'action_time'=>'TIME'
 			));
 
@@ -413,7 +413,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_table('member_zone_access',array(
 				'active_until'=>'*TIME',
 				'zone_name'=>'*ID_TEXT',
-				'member_id'=>'*USER'
+				'member_id'=>'*MEMBER'
 			));
 			$GLOBALS['SITE_DB']->create_index('member_zone_access','mzazone_name',array('zone_name'));
 			$GLOBALS['SITE_DB']->create_index('member_zone_access','mzamember_id',array('member_id'));
@@ -422,7 +422,7 @@ class Module_admin_version
 				'active_until'=>'*TIME',
 				'page_name'=>'*ID_TEXT',
 				'zone_name'=>'*ID_TEXT',
-				'member_id'=>'*USER'
+				'member_id'=>'*MEMBER'
 			));
 			$GLOBALS['SITE_DB']->create_index('member_page_access','mzaname',array('page_name','zone_name'));
 			$GLOBALS['SITE_DB']->create_index('member_page_access','mzamember_id',array('member_id'));
@@ -431,14 +431,14 @@ class Module_admin_version
 				'active_until'=>'*TIME',
 				'module_the_name'=>'*ID_TEXT',
 				'category_name'=>'*ID_TEXT',
-				'member_id'=>'*USER'
+				'member_id'=>'*MEMBER'
 			));
 			$GLOBALS['SITE_DB']->create_index('member_category_access','mcaname',array('module_the_name','category_name'));
 			$GLOBALS['SITE_DB']->create_index('member_category_access','mcamember_id',array('member_id'));
 
 			/*$GLOBALS['SITE_DB']->create_table('confirmed_mobiles',array(		Not currently implemented
 				'm_phone_number'=>'*SHORT_TEXT',
-				'm_member_id'=>'USER',
+				'm_member_id'=>'MEMBER',
 				'm_time'=>'TIME',
 				'm_confirm_code'=>'IP'
 			));*/
@@ -447,7 +447,7 @@ class Module_admin_version
 
 			$GLOBALS['SITE_DB']->create_table('autosave',array(
 				'id'=>'*AUTO',
-				'a_member_id'=>'USER',
+				'a_member_id'=>'MEMBER',
 				'a_key'=>'LONG_TEXT',
 				'a_value'=>'LONG_TEXT',
 				'a_time'=>'TIME',
@@ -473,7 +473,7 @@ class Module_admin_version
 				'id'=>'*AUTO',
 				'rating_for_type'=>'ID_TEXT',
 				'rating_for_id'=>'ID_TEXT',
-				'rating_member'=>'USER',
+				'rating_member'=>'MEMBER',
 				'rating_ip'=>'IP',
 				'rating_time'=>'TIME',
 				'rating'=>'SHORT_INTEGER'

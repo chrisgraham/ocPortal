@@ -83,7 +83,7 @@ class Module_banners
 			$GLOBALS['SITE_DB']->create_table('banners',array(
 				'name'=>'*ID_TEXT',
 				'expiry_date'=>'?TIME',
-				'submitter'=>'USER',
+				'submitter'=>'MEMBER',
 				'img_url'=>'URLPATH',
 				'the_type'=>'SHORT_INTEGER', // 0=permanent|1=campaign|2=default
 				'b_title_text'=>'SHORT_TEXT',
@@ -151,7 +151,7 @@ class Module_banners
 			$GLOBALS['SITE_DB']->create_table('banner_clicks',array(
 				'id'=>'*AUTO',
 				'c_date_and_time'=>'TIME',
-				'c_member_id'=>'USER',
+				'c_member_id'=>'MEMBER',
 				'c_ip_address'=>'IP',
 				'c_source'=>'ID_TEXT',
 				'c_banner_id'=>'ID_TEXT'

@@ -72,7 +72,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 			));
 
 			$GLOBALS['SITE_DB']->create_table('members_diseases',array(
-				'user_id'=>'*USER',
+				'member_id'=>'*MEMBER',
 				'disease_id'=>'*AUTO_LINK',
 				'sick'=>'BINARY',
 				'cure'=>'BINARY',
@@ -91,6 +91,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
 			$GLOBALS['SITE_DB']->alter_table_field('members_diseases','desease_id','AUTO_LINK','disease_id');
+			$GLOBALS['SITE_DB']->alter_table_field('members_diseases','user_id','*MEMBER','member_id');
 		}
 	}
 

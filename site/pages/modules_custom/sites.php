@@ -73,7 +73,7 @@ class Module_sites
 			's_category'=>'SHORT_TEXT', // Entertainment, Computers, Sport, Art, Music, Television/Movies, Businesses, Other, Informative/Factual, Political, Humour, Geographical/Regional, Games, Personal/Family, Hobbies, Culture/Community, Religious, Health
 			's_domain_name'=>'SHORT_TEXT',
 			's_server'=>'ID_TEXT',
-			's_member_id'=>'USER',
+			's_member_id'=>'MEMBER',
 			's_add_time'=>'TIME',
 			's_last_backup_time'=>'?TIME',
 			's_subscribed'=>'BINARY',

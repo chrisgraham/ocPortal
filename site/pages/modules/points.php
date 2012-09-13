@@ -90,7 +90,7 @@ class Module_points
 
 			$GLOBALS['SITE_DB']->create_table('chargelog',array(
 				'id'=>'*AUTO',
-				'user_id'=>'USER',
+				'member_id'=>'MEMBER',
 				'amount'=>'INTEGER',
 				'reason'=>'SHORT_TRANS',	// Comcode
 				'date_and_time'=>'TIME'
@@ -100,8 +100,8 @@ class Module_points
 				'id'=>'*AUTO',
 				'date_and_time'=>'TIME',
 				'amount'=>'INTEGER',
-				'gift_from'=>'USER',
-				'gift_to'=>'USER',
+				'gift_from'=>'MEMBER',
+				'gift_to'=>'MEMBER',
 				'reason'=>'SHORT_TRANS',	// Comcode
 				'anonymous'=>'BINARY'
 			));
@@ -131,6 +131,11 @@ class Module_points
 		{
 			add_config_option('POINTS_IF_LIKED','points_if_liked','integer','return \'5\';','POINTS','COUNT_POINTS_GIVEN');
 			add_config_option('POINTS_PER_CURRENCY_UNIT','points_per_currency_unit','integer','return addon_installed(\'ecommerce\')?\'100.0\':NULL;','POINTS','ECOMMERCE');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('chargelog','user_id','MEMBER','member_id');
 		}
 	}
 

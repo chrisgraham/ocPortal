@@ -156,7 +156,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 					case 'UINTEGER':
 					case 'INTEGER':
 					case 'TIME':
-					case 'USER':
+					case 'MEMBER':
 					case 'REAL':
 					case 'LONG_TEXT':
 					case 'SHORT_TEXT':
@@ -272,7 +272,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 						case 'GROUP':
 							$field_type='integer';
 							break;
-						case 'USER':
+						case 'MEMBER':
 							$field_type='username';
 							break;
 						case 'REAL':
@@ -549,7 +549,7 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
 			case 'GROUP':
 				$field_type='integer';
 				break;
-			case 'USER':
+			case 'MEMBER':
 				$field_type='integer';
 				if ((!is_numeric($filter_val)) && ($filter_val!=''))
 				{

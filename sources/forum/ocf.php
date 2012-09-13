@@ -1254,22 +1254,22 @@ class forum_driver_ocf extends forum_driver_base
 	{
 		require_code('ocf_members');
 
-		$user_id=$this->get_member_from_username($username);
-		if (((is_null($GLOBALS['LDAP_CONNECTION'])) || (!ocf_is_on_ldap($username))) && (is_null($user_id)))
+		$member_id=$this->get_member_from_username($username);
+		if (((is_null($GLOBALS['LDAP_CONNECTION'])) || (!ocf_is_on_ldap($username))) && (is_null($member_id)))
 		{
-			$user_id=$this->connection->query_select_value_if_there('f_members','id',array('m_email_address'=>$username));
-			if (is_null($user_id))
+			$member_id=$this->connection->query_select_value_if_there('f_members','id',array('m_email_address'=>$username));
+			if (is_null($member_id))
 			{
 				return '!'; // Invalid user logging in
 			}
 		}
 
-		if ((!ocf_is_ldap_member($user_id)) && (!is_null($user_id)))
+		if ((!ocf_is_ldap_member($member_id)) && (!is_null($member_id)))
 		{
 			return md5($password);
 		} else
 		{
-			return $password; //ocf_ldap_hash($user_id,$password); Can't do hash checks under all systems
+			return $password; //ocf_ldap_hash($member_id,$password); Can't do hash checks under all systems
 		}
 	}
 
@@ -1584,9 +1584,9 @@ class forum_driver_ocf extends forum_driver_base
 				$num_guests=0;
 				foreach ($SESSION_CACHE as $c)
 				{
-					if (!array_key_exists('the_user',$c)) continue; // Workaround to HipHop PHP weird bug
+					if (!array_key_exists('member_id',$c)) continue; // Workaround to HipHop PHP weird bug
 
-					if (($c['last_activity']>time()-60*4) && (is_guest($c['the_user']))) $num_guests++;
+					if (($c['last_activity']>time()-60*4) && (is_guest($c['member_id']))) $num_guests++;
 				}
 				$dif*=$num_guests;
 			} else $restrict_answer=0;

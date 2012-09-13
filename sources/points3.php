@@ -87,8 +87,8 @@ function points_profile($member_id_of,$member_id_viewing)
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
 
-		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chargelog','COUNT(*)',array('user_id'=>$member_id_of));
-		$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('user_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chargelog','COUNT(*)',array('member_id'=>$member_id_of));
+		$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('member_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$charges=new ocp_tempcode();
 		$fromname=get_site_name();
 		$toname=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
@@ -128,7 +128,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		{
 			// Show how many points are available also
 			$give_url=build_url(array('page'=>'points','type'=>'give','id'=>$member_id_of),get_module_zone('points'));
-			$give_template=do_template('POINTS_GIVE',array('_GUID'=>'fa1749d5a803d86b1efbcfde2ad81702','GIVE_URL'=>$give_url,'USER'=>strval($member_id_of),'VIEWER_GIFT_POINTS_AVAILABLE'=>$have_negative_gift_points?'':integer_format($viewer_gift_points_available)));
+			$give_template=do_template('POINTS_GIVE',array('_GUID'=>'fa1749d5a803d86b1efbcfde2ad81702','GIVE_URL'=>$give_url,'MEMBER'=>strval($member_id_of),'VIEWER_GIFT_POINTS_AVAILABLE'=>$have_negative_gift_points?'':integer_format($viewer_gift_points_available)));
 		}
 		else $give_template=do_lang_tempcode('PE_LACKING_GIFT_POINTS');
 		if (!$give_ok) $give_template=new ocp_tempcode();

@@ -247,9 +247,9 @@ class Module_login
 	{
 		$title=get_screen_title('CONCEDED_MODE');
 
-		$GLOBALS['SITE_DB']->query_update('sessions',array('session_confirmed'=>0),array('the_user'=>get_member(),'the_session'=>get_session_id()),'',1);
+		$GLOBALS['SITE_DB']->query_update('sessions',array('session_confirmed'=>0),array('member_id'=>get_member(),'the_session'=>get_session_id()),'',1);
 		global $SESSION_CACHE;
-		if ($SESSION_CACHE[get_session_id()]['the_user']==get_member()) // A little security
+		if ($SESSION_CACHE[get_session_id()]['member_id']==get_member()) // A little security
 		{
 			$SESSION_CACHE[get_session_id()]['session_confirmed']=0;
 			if (get_value('session_prudence')!=='1')
@@ -284,9 +284,9 @@ class Module_login
 
 		$title=get_screen_title($visible?'INVISIBLE':'BE_VISIBLE');
 
-		$GLOBALS['SITE_DB']->query_update('sessions',array('session_invisible'=>$visible?1:0),array('the_user'=>get_member(),'the_session'=>get_session_id()),'',1);
+		$GLOBALS['SITE_DB']->query_update('sessions',array('session_invisible'=>$visible?1:0),array('member_id'=>get_member(),'the_session'=>get_session_id()),'',1);
 		global $SESSION_CACHE;
-		if ($SESSION_CACHE[get_session_id()]['the_user']==get_member()) // A little security
+		if ($SESSION_CACHE[get_session_id()]['member_id']==get_member()) // A little security
 		{
 			$SESSION_CACHE[get_session_id()]['session_invisible']=$visible?1:0;
 			if (get_value('session_prudence')!=='1')

@@ -65,7 +65,7 @@ class Block_main_bottom_bar
 			$guests=0;
 			foreach ($members as $bits)
 			{
-				$member=$bits['the_user'];
+				$member=$bits['member_id'];
 				$username=$bits['cache_username'];
 
 				if ($member==$GLOBALS['OCF_DRIVER']->get_guest_id())

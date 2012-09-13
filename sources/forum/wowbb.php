@@ -517,7 +517,7 @@ class forum_driver_wowbb extends forum_driver_base
 			$LAX_COMCODE=true;
 			$temp['message']=comcode_to_tempcode($myrow['post_text'],$myrow['user_id']);
 			$LAX_COMCODE=$temp2;
-			$temp['user']=$myrow['user_id'];
+			$temp['member']=$myrow['user_id'];
 			$temp['date']=strtotime($myrow['post_date_time']);
 
 			$out[]=$temp;

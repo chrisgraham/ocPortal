@@ -42,8 +42,8 @@ class Hook_users_online
 			$valid_members=array();
 			foreach ($members as $member)
 			{
-				if ((is_guest($member['the_user'])) || (is_null($member['cache_username']))) $guests++;
-				else $valid_members[$member['cache_username']]=$member['the_user'];
+				if ((is_guest($member['member_id'])) || (is_null($member['cache_username']))) $guests++;
+				else $valid_members[$member['cache_username']]=$member['member_id'];
 			}
 
 			return array('',do_template('OCCLE_USERS_ONLINE',array('_GUID'=>'fcf779ef175895d425b706e40fb3252a','MEMBERS'=>$valid_members,'GUESTS'=>integer_format($guests))),'','');

@@ -65,7 +65,7 @@ class Module_authors
 			$GLOBALS['SITE_DB']->create_table('authors',array(
 				'author'=>'*ID_TEXT',
 				'url'=>'URLPATH',
-				'forum_handle'=>'?USER',
+				'forum_handle'=>'?MEMBER',
 				'description'=>'LONG_TRANS',	// Comcode
 				'skills'=>'LONG_TRANS'	// Comcode
 			));
@@ -74,7 +74,7 @@ class Module_authors
 		}
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
-			$GLOBALS['SITE_DB']->alter_table_field('authors','forum_handle','?USER');
+			$GLOBALS['SITE_DB']->alter_table_field('authors','forum_handle','?MEMBER');
 		}
 
 		// collab_features

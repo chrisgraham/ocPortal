@@ -82,7 +82,7 @@ class Module_booking
 			'calendar_type'=>'?AUTO_LINK', // (this is auto-added and synched on edits; type has no perms by default)
 			'add_date'=>'TIME',
 			'edit_date'=>'?TIME',
-			'submitter'=>'USER',
+			'submitter'=>'MEMBER',
 			'sort_order'=>'INTEGER',
 
 			'enabled'=>'BINARY',
@@ -136,7 +136,7 @@ class Module_booking
 		$GLOBALS['SITE_DB']->create_table('booking',array(
 			'id'=>'*AUTO',
 			'bookable_id'=>'AUTO_LINK',
-			'member_id'=>'USER',
+			'member_id'=>'MEMBER',
 			'b_day'=>'SHORT_INTEGER',
 			'b_month'=>'SHORT_INTEGER',
 			'b_year'=>'INTEGER',

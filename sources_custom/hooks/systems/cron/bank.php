@@ -36,7 +36,7 @@ class Hook_cron_bank
 				require_lang('bank');
 
 				$restore_amount=round(floatval($deposit['amount'])*(1.0+floatval($bank_dividend)/100.0));
-				system_gift_transfer(do_lang('RESTORED_DEPOSIT'),intval($restore_amount),$deposit['user_id']);
+				system_gift_transfer(do_lang('RESTORED_DEPOSIT'),intval($restore_amount),$deposit['member_id']);
 
 				$GLOBALS['SITE_DB']->query_delete('bank',array('id'=>$deposit['id']),'',1);
 			}

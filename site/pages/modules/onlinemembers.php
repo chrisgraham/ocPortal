@@ -79,7 +79,7 @@ class Module_onlinemembers
 		foreach ($members as $row)
 		{
 			$last_activity=$row['last_activity'];
-			$member=$row['the_user'];
+			$member=$row['member_id'];
 			$name=$row['cache_username'];
 			$location=$row['the_title'];
 			if (($location=='') && ($row['the_type']=='rss'))
@@ -104,7 +104,7 @@ class Module_onlinemembers
 				{
 					if (addon_installed('stats'))
 					{
-						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('stats','ip',array('the_user'=>-$row['the_session']));
+						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('stats','ip',array('member_id'=>-$row['the_session']));
 						if ((!is_null($test)) && ($test!=''))
 						{
 							$ip=$test;

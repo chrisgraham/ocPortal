@@ -374,7 +374,7 @@ function install_ocf($upgrade_from=NULL)
 		add_config_option('INVITES_PER_DAY','invites_per_day','float','return \'1\';','SECTION_FORUMS','GENERAL');
 
 		$GLOBALS['FORUM_DB']->create_table('f_member_cpf_perms',array(
-			'member_id'=>'*USER',
+			'member_id'=>'*MEMBER',
 			'field_id'=>'*AUTO_LINK',
 			'guest_view'=>'BINARY',
 			'member_view'=>'BINARY',
@@ -413,7 +413,7 @@ function install_ocf($upgrade_from=NULL)
 
 		// These don't need to be filled in. We just use default from custom field if they aren't
 		$GLOBALS['FORUM_DB']->create_table('f_member_custom_fields',array(
-			'mf_member_id'=>'*USER'
+			'mf_member_id'=>'*MEMBER'
 		));
 
 		ocf_make_boiler_custom_field('SELF_DESCRIPTION');
@@ -433,7 +433,7 @@ function install_ocf($upgrade_from=NULL)
 
 		$GLOBALS['FORUM_DB']->create_table('f_invites',array(
 			'id'=>'*AUTO',
-			'i_inviter'=>'USER',
+			'i_inviter'=>'MEMBER',
 			'i_email_address'=>'SHORT_TEXT',
 			'i_time'=>'TIME',
 			'i_taken'=>'BINARY'
@@ -441,7 +441,7 @@ function install_ocf($upgrade_from=NULL)
 
 		$GLOBALS['FORUM_DB']->create_table('f_group_members',array(
 			'gm_group_id'=>'*GROUP',
-			'gm_member_id'=>'*USER',
+			'gm_member_id'=>'*MEMBER',
 			'gm_validated'=>'BINARY'
 		));
 		$GLOBALS['FORUM_DB']->create_index('f_group_members','gm_validated',array('gm_validated'));
@@ -570,7 +570,7 @@ function install_ocf($upgrade_from=NULL)
 			'g_is_presented_at_install'=>'BINARY',
 			'g_is_super_admin'=>'BINARY',
 			'g_is_super_moderator'=>'BINARY',
-			'g_group_leader'=>'?USER',
+			'g_group_leader'=>'?MEMBER',
 			'g_title'=>'SHORT_TRANS',
 			'g_promotion_target'=>'?GROUP',
 			'g_promotion_threshold'=>'?INTEGER',
@@ -649,7 +649,7 @@ function install_ocf($upgrade_from=NULL)
 			'f_cache_last_title'=>'SHORT_TEXT',
 			'f_cache_last_time'=>'?TIME',
 			'f_cache_last_username'=>'SHORT_TEXT',
-			'f_cache_last_member_id'=>'?USER',
+			'f_cache_last_member_id'=>'?MEMBER',
 			'f_cache_last_forum_id'=>'?AUTO_LINK',
 			'f_redirection'=>'SHORT_TEXT',
 			'f_order'=>'ID_TEXT',
@@ -680,8 +680,8 @@ function install_ocf($upgrade_from=NULL)
 			't_sunk'=>'BINARY',
 			't_cascading'=>'BINARY', // Cascades to deeper forums, as an announcement
 			't_forum_id'=>'?AUTO_LINK', // Null if it's a Private Topic
-			't_pt_from'=>'?USER',
-			't_pt_to'=>'?USER',
+			't_pt_from'=>'?MEMBER',
+			't_pt_to'=>'?MEMBER',
 			't_pt_from_category'=>'SHORT_TEXT',
 			't_pt_to_category'=>'SHORT_TEXT',
 			't_description'=>'SHORT_TEXT',
@@ -696,12 +696,12 @@ function install_ocf($upgrade_from=NULL)
 			't_cache_first_title'=>'SHORT_TEXT',
 			't_cache_first_post'=>'?LONG_TRANS',	// Comcode
 			't_cache_first_username'=>'ID_TEXT',
-			't_cache_first_member_id'=>'?USER',
+			't_cache_first_member_id'=>'?MEMBER',
 			't_cache_last_post_id'=>'?AUTO_LINK',
 			't_cache_last_time'=>'?TIME',
 			't_cache_last_title'=>'SHORT_TEXT',
 			't_cache_last_username'=>'ID_TEXT',
-			't_cache_last_member_id'=>'?USER',
+			't_cache_last_member_id'=>'?MEMBER',
 			't_cache_num_posts'=>'INTEGER',
 		));
 		$GLOBALS['FORUM_DB']->create_index('f_topics','t_num_views',array('t_num_views'));
@@ -730,14 +730,14 @@ function install_ocf($upgrade_from=NULL)
 			'p_post'=>'LONG_TRANS',	// Comcode
 			'p_ip_address'=>'IP',
 			'p_time'=>'TIME',
-			'p_poster'=>'USER',
-			'p_intended_solely_for'=>'?USER',
+			'p_poster'=>'MEMBER',
+			'p_intended_solely_for'=>'?MEMBER',
 			'p_poster_name_if_guest'=>'ID_TEXT',
 			'p_validated'=>'BINARY',
 			'p_topic_id'=>'AUTO_LINK',
 			'p_cache_forum_id'=>'?AUTO_LINK', // Null if for a PT
 			'p_last_edit_time'=>'?TIME',
-			'p_last_edit_by'=>'?USER',
+			'p_last_edit_by'=>'?MEMBER',
 			'p_is_emphasised'=>'BINARY',
 			'p_skip_sig'=>'BINARY',
 			'p_parent_id'=>'?AUTO_LINK'
@@ -753,7 +753,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_posts','deletebyip',array('p_ip_address'));
 
 		$GLOBALS['FORUM_DB']->create_table('f_special_pt_access',array(
-			's_member_id'=>'*USER',
+			's_member_id'=>'*MEMBER',
 			's_topic_id'=>'*AUTO_LINK',
 		));
 
@@ -767,8 +767,8 @@ function install_ocf($upgrade_from=NULL)
 			'id'=>'*AUTO',
 			'h_create_date_and_time'=>'TIME',
 			'h_action_date_and_time'=>'TIME',
-			'h_owner_member_id'=>'USER',
-			'h_alterer_member_id'=>'USER',
+			'h_owner_member_id'=>'MEMBER',
+			'h_alterer_member_id'=>'MEMBER',
 			'h_post_id'=>'AUTO_LINK',
 			'h_topic_id'=>'AUTO_LINK',
 			'h_before'=>'LONG_TEXT',
@@ -783,7 +783,7 @@ function install_ocf($upgrade_from=NULL)
 
 		$GLOBALS['FORUM_DB']->create_table('f_forum_intro_member',array(
 			'i_forum_id'=>'*AUTO_LINK',
-			'i_member_id'=>'*USER'
+			'i_member_id'=>'*MEMBER'
 		));
 
 		$GLOBALS['FORUM_DB']->create_table('f_post_templates',array(
@@ -819,7 +819,7 @@ function install_ocf($upgrade_from=NULL)
 
 		$GLOBALS['FORUM_DB']->create_table('f_poll_votes',array(
 			'pv_poll_id'=>'*AUTO_LINK',
-			'pv_member_id'=>'*USER',
+			'pv_member_id'=>'*MEMBER',
 			'pv_answer_id'=>'*AUTO_LINK' // -1 means "forfeited". We'd use NULL, but we aren't allowed NULL fragments in keys
 		));
 
@@ -838,10 +838,10 @@ function install_ocf($upgrade_from=NULL)
 
 		$GLOBALS['FORUM_DB']->create_table('f_warnings',array(
 			'id'=>'*AUTO',
-			'w_member_id'=>'USER',
+			'w_member_id'=>'MEMBER',
 			'w_time'=>'TIME',
 			'w_explanation'=>'LONG_TEXT',
-			'w_by'=>'USER',
+			'w_by'=>'MEMBER',
 			'w_is_warning'=>'BINARY',
 			'p_silence_from_topic'=>'?AUTO_LINK',
 			'p_silence_from_forum'=>'?AUTO_LINK',
@@ -860,11 +860,11 @@ function install_ocf($upgrade_from=NULL)
 			'l_param_b'=>'SHORT_TEXT',
 			'l_date_and_time'=>'TIME',
 			'l_reason'=>'LONG_TEXT',
-			'l_by'=>'USER'
+			'l_by'=>'MEMBER'
 		));
 
 		$GLOBALS['FORUM_DB']->create_table('f_member_known_login_ips',array(
-			'i_member_id'=>'*USER',
+			'i_member_id'=>'*MEMBER',
 			'i_ip'=>'*IP',
 			'i_val_code'=>'SHORT_TEXT'
 		));
@@ -878,7 +878,7 @@ function install_ocf($upgrade_from=NULL)
 		ocf_make_member('test',post_param('ocf_admin_password','admin'),'',NULL,NULL,NULL,NULL,array(),NULL,$member_group_0,1,time(),time(),'',NULL,'',0,0,1,'','','',1,0,'',1,1,NULL,'',false);
 
 		$GLOBALS['FORUM_DB']->create_table('f_read_logs',array(
-			'l_member_id'=>'*USER',
+			'l_member_id'=>'*MEMBER',
 			'l_topic_id'=>'*AUTO_LINK',
 			'l_time'=>'TIME'
 		));

@@ -308,7 +308,7 @@ class Hook_Profiles_Tabs_about
 		$operating_system=NULL;
 		if ((has_privilege($member_id_viewing,'show_user_browsing')) && (addon_installed('stats')))
 		{
-			$last_stats=$GLOBALS['SITE_DB']->query_select('stats',array('browser','operating_system'),array('the_user'=>$member_id_of),'ORDER BY date_and_time DESC',1);
+			$last_stats=$GLOBALS['SITE_DB']->query_select('stats',array('browser','operating_system'),array('member_id'=>$member_id_of),'ORDER BY date_and_time DESC',1);
 			if (array_key_exists(0,$last_stats))
 			{
 				$user_agent=$last_stats[0]['browser'];

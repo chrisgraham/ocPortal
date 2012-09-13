@@ -181,7 +181,7 @@ function output_room_screen($member_id)
 		if (($mypic===false) || (imagesx($mypic)>430)) $width='width: 430px';
 	}
 
-	$other_person=post_param_integer('tuser',-1);
+	$other_person=post_param_integer('tmember',-1);
 	$rows=$GLOBALS['SITE_DB']->query_select('w_members',array('*'),array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm),'ORDER BY lastactive DESC');
 	$people_here=new ocp_tempcode();
 	foreach ($rows as $myrow)
@@ -245,7 +245,7 @@ function output_room_screen($member_id)
 			'_GUID'=>'c144fda9edfe61750aba4afbce7b9b02',
 			'ACTION'=>do_lang_tempcode('W_TAKE'),
 			'EDIT_ACCESS'=>$edit_item_copy_access,
-			'USER'=>strval($myrow['copy_owner']),
+			'MEMBER'=>strval($myrow['copy_owner']),
 			'DESCRIPTION'=>$myrow2['description'],
 			'PICTURE_URL'=>$picture_url,
 			'AUX'=>$aux,
@@ -277,7 +277,7 @@ function output_room_screen($member_id)
 			'ACTION'=>do_lang_tempcode('W_BUY'),
 			'SELLER'=>$seller,
 			'EDIT_ACCESS'=>$edit_item_copy_access,
-			'USER'=>strval($myrow['copy_owner']),
+			'MEMBER'=>strval($myrow['copy_owner']),
 			'DESCRIPTION'=>$myrow2['description'],
 			'PICTURE_URL'=>$myrow2['picture_url'],
 			'AUX'=>$aux,
@@ -292,7 +292,7 @@ function output_room_screen($member_id)
 	$hide_modifications=((array_key_exists('hideModifications',$_COOKIE)) && ($_COOKIE['hideModifications']==1))?'display: block;':'display: none;';
 
 	// PEOPLE HERE
-	$other_person=post_param_integer('user',-1);
+	$other_person=post_param_integer('member',-1);
 	$rows=$GLOBALS['SITE_DB']->query_select('w_members',array('*'),array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm),'ORDER BY lastactive DESC');
 	$people_here=new ocp_tempcode();
 	foreach ($rows as $myrow)

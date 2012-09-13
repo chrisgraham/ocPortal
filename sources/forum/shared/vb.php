@@ -408,7 +408,7 @@ class forum_driver_vb_shared extends forum_driver_base
 			$LAX_COMCODE=true;
 			$temp['message']=comcode_to_tempcode(@html_entity_decode($myrow['pagetext'],ENT_QUOTES,get_charset()),$myrow['userid']);
 			$LAX_COMCODE=$temp2;
-			$temp['user']=$myrow['userid'];
+			$temp['member']=$myrow['userid'];
 			$temp['date']=$myrow['dateline'];
 
 			$out[]=$temp;

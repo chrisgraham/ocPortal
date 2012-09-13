@@ -63,7 +63,7 @@ function dload_script()
 		access_denied('CATEGORY_ACCESS');
 
 	// Cost?
-	$got_before=$GLOBALS['SITE_DB']->query_select_value_if_there('download_logging','the_user',array('the_user'=>get_member(),'id'=>$id));
+	$got_before=$GLOBALS['SITE_DB']->query_select_value_if_there('download_logging','member_id',array('member_id'=>get_member(),'id'=>$id));
 	if (addon_installed('points'))
 	{
 		if ($myrow['download_cost']>0)
@@ -907,7 +907,7 @@ function log_download($id,$size,$got_before)
 {
 	// Log
 	if (!$got_before)
-		$GLOBALS['SITE_DB']->query_insert('download_logging',array('id'=>$id,'the_user'=>get_member(),'ip'=>get_ip_address(),'date_and_time'=>time()),false,true); // Supress errors in case of race condition
+		$GLOBALS['SITE_DB']->query_insert('download_logging',array('id'=>$id,'member_id'=>get_member(),'ip'=>get_ip_address(),'date_and_time'=>time()),false,true); // Supress errors in case of race condition
 
 	// Update download count
 	$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'download_downloads SET num_downloads=(num_downloads+1) WHERE id='.strval((integer)$id),1,NULL,true);

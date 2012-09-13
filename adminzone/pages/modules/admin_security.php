@@ -36,7 +36,7 @@ class Module_admin_security
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=3;
+		$info['version']=4;
 		$info['update_require_upgrade']=1;
 		$info['locked']=true;
 		return $info;
@@ -58,13 +58,6 @@ class Module_admin_security
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('hackattack','user_agent','SHORT_TEXT');
-			$GLOBALS['SITE_DB']->add_table_field('hackattack','referer','SHORT_TEXT');
-			$GLOBALS['SITE_DB']->add_table_field('hackattack','user_os','SHORT_TEXT');
-		}
-
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('hackattack',array(
@@ -74,7 +67,7 @@ class Module_admin_security
 				'user_agent'=>'SHORT_TEXT',
 				'referer'=>'SHORT_TEXT',
 				'user_os'=>'SHORT_TEXT',
-				'the_user'=>'USER',
+				'member_id'=>'MEMBER',
 				'date_and_time'=>'TIME',
 				'ip'=>'IP',
 				'reason'=>'ID_TEXT',
@@ -83,6 +76,18 @@ class Module_admin_security
 			));
 			$GLOBALS['SITE_DB']->create_index('hackattack','otherhacksby',array('ip'));
 			$GLOBALS['SITE_DB']->create_index('hackattack','h_date_and_time',array('date_and_time'));
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('hackattack','user_agent','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('hackattack','referer','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('hackattack','user_os','SHORT_TEXT');
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('hackattack','the_user','MEMBER','member_id');
 		}
 	}
 
@@ -154,7 +159,7 @@ class Module_admin_security
 		$failed_logins=results_table(do_lang_tempcode('FAILED_LOGINS'),$start,'failed_start',$max,'failed_max',$max_rows,$fields_title,$fields,$sortables,$_sortable,$sort_order,'failed_sort',new ocp_tempcode());
 
 		$member_id=post_param_integer('member_id',NULL);
-		$map=(!is_null($member_id))?array('the_user'=>$member_id):NULL;
+		$map=(!is_null($member_id))?array('member_id'=>$member_id):NULL;
 		$alerts=find_security_alerts($map);
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'clean','start'=>$start,'max'=>$max),'_SELF');
@@ -208,12 +213,12 @@ class Module_admin_security
 		$title=get_screen_title('VIEW_ALERT',true,array(escape_html($time)));
 
 		$lookup_url=build_url(array('page'=>'admin_lookup','param'=>$row['ip']),'_SELF');
-		$member_url=build_url(array('page'=>'admin_lookup','param'=>$row['the_user']),'_SELF');
+		$member_url=build_url(array('page'=>'admin_lookup','param'=>$row['member_id']),'_SELF');
 		$reason=do_lang($row['reason'],$row['reason_param_a'],$row['reason_param_b']);
 
 		$post=with_whitespace(unixify_line_format($row['data_post']));
 
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['the_user']);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('SECURITY_LOGGING'))));

@@ -161,7 +161,7 @@
 	<div class="ocf_quick_reply">
 		{QUICK_REPLY}
 
-		{+START,IF_EMPTY,{QUICK_REPLY}}{+START,IF,{$EQ,{LAST_POSTER},{$USER}}}{+START,IF,{$NOT,{$IS_GUEST}}}{+START,IF,{$NOT,{MAY_DOUBLE_POST}}}
+		{+START,IF_EMPTY,{QUICK_REPLY}}{+START,IF,{$EQ,{LAST_POSTER},{$MEMBER}}}{+START,IF,{$NOT,{$IS_GUEST}}}{+START,IF,{$NOT,{MAY_DOUBLE_POST}}}
 			<div class="box box___ocf_topic_screen"><div class="box_inner">
 				{!NO_DOUBLE_POST}
 			</div></div>

@@ -76,7 +76,7 @@ class Module_filedump
 				'name'=>'ID_TEXT',
 				'path'=>'URLPATH',
 				'description'=>'SHORT_TRANS',
-				'the_member'=>'USER'
+				'the_member'=>'MEMBER'
 			));
 
 			add_privilege('FILE_DUMP','upload_anything_filedump',false);

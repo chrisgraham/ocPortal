@@ -1585,7 +1585,7 @@ function get_members_viewing($page=NULL,$type=NULL,$id=NULL,$forum_layer=false)
 	if (($id!==NULL) && ($id!='')) $map['mt_id']=$id;
 	$map['session_invisible']=0;
 	$db=($forum_layer?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
-	$results=$db->query_select('member_tracking t LEFT JOIN '.$db->get_table_prefix().'sessions s ON t.mt_member_id=s.the_user',array('*'),$map,'ORDER BY mt_member_id',200);
+	$results=$db->query_select('member_tracking t LEFT JOIN '.$db->get_table_prefix().'sessions s ON t.mt_member_id=s.member_id',array('*'),$map,'ORDER BY mt_member_id',200);
 	if (count($results)==200) return NULL;
 
 	$results=remove_duplicate_rows($results,'mt_member_id');
@@ -1609,7 +1609,7 @@ function is_invisible()
 	$s=get_session_id();
 	foreach ($SESSION_CACHE as $row)
 	{
-		if (!array_key_exists('the_user',$row)) continue; // Workaround to HipHop PHP weird bug
+		if (!array_key_exists('member_id',$row)) continue; // Workaround to HipHop PHP weird bug
 
 		if (($row['the_session']==$s) && ($row['session_invisible']==1))
 		{

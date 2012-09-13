@@ -2425,7 +2425,7 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 				filename=url.replace(/^.*\//,'');
 			}
 
-			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash={$USER.;}&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
+			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash=dfdsfdsfsd4&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
 		};
 		edit_link.onclick=function()
 		{

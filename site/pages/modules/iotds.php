@@ -84,7 +84,7 @@ class Module_iotds
 				'used'=>'BINARY',
 				'date_and_time'=>'?TIME',
 				'iotd_views'=>'INTEGER',
-				'submitter'=>'USER',
+				'submitter'=>'MEMBER',
 				'add_date'=>'TIME',
 				'edit_date'=>'?TIME'
 			));

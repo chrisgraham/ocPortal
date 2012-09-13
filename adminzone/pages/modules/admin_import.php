@@ -694,7 +694,7 @@ class Module_admin_import
 	{
 		$out=new ocp_tempcode();
 
-		$todos=array('USER'=>array('member',db_get_first_id(),NULL),'GROUP'=>array('group',NULL,'group_id'));
+		$todos=array('MEMBER'=>array('member',db_get_first_id(),NULL),'GROUP'=>array('group',NULL,'group_id'));
 		foreach ($todos as $db_abstraction=>$definition)
 		{
 			list($import_code,$default_id,$field_name_also)=$definition;

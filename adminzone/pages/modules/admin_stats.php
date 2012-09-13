@@ -37,7 +37,7 @@ class Module_admin_stats
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=7;
+		$info['version']=8;
 		$info['locked']=true;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -71,7 +71,7 @@ class Module_admin_stats
 				'id'=>'*AUTO',
 				'the_page'=>'SHORT_TEXT',
 				'ip'=>'IP',
-				'the_user'=>'USER',
+				'member_id'=>'MEMBER',
 				'date_and_time'=>'TIME',
 				'referer'=>'URLPATH',
 				'get'=>'URLPATH',
@@ -82,7 +82,7 @@ class Module_admin_stats
 				'access_denied_counter'=>'INTEGER'
 			));
 
-			$GLOBALS['SITE_DB']->create_index('stats','member_track_1',array('the_user'));
+			$GLOBALS['SITE_DB']->create_index('stats','member_track_1',array('member_id'));
 			$GLOBALS['SITE_DB']->create_index('stats','member_track_2',array('ip'));
 			$GLOBALS['SITE_DB']->create_index('stats','pages',array('the_page'));
 			$GLOBALS['SITE_DB']->create_index('stats','date_and_time',array('date_and_time'));
@@ -107,6 +107,11 @@ class Module_admin_stats
 				'end_num'=>'UINTEGER',
 				'country'=>'SHORT_TEXT'
 			));
+		}
+
+		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('stats','the_user','MEMBER','member_id');
 		}
 	}
 

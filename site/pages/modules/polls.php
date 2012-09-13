@@ -98,7 +98,7 @@ class Module_polls
 				'num_options'=>'SHORT_INTEGER',
 				'is_current'=>'BINARY',
 				'date_and_time'=>'?TIME',
-				'submitter'=>'USER',
+				'submitter'=>'MEMBER',
 				'add_time'=>'INTEGER',
 				'poll_views'=>'INTEGER',
 				'edit_date'=>'?TIME'
@@ -128,7 +128,7 @@ class Module_polls
 			$GLOBALS['SITE_DB']->create_table('poll_votes',array(
 				'id'=>'*AUTO',
 				'v_poll_id'=>'AUTO_LINK',
-				'v_voter_id'=>'?USER',
+				'v_voter_id'=>'?MEMBER',
 				'v_voter_ip'=>'IP',
 				'v_vote_for'=>'?SHORT_INTEGER',
 			));

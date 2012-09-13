@@ -127,7 +127,7 @@ function output_ical()
 						foreach ($_comments as $comment)
 						{
 							if ($comment['title']!='') $comment['message']=$comment['title'].': '.$comment['message'];
-							echo "COMMENT:".ical_escape($comment['message'].' - '.$GLOBALS['FORUM_DRIVER']->get_username($comment['user']).' ('.get_timezoned_date($comment['date']).')')."\n";
+							echo "COMMENT:".ical_escape($comment['message'].' - '.$GLOBALS['FORUM_DRIVER']->get_username($comment['member']).' ('.get_timezoned_date($comment['date']).')')."\n";
 						}
 					}
 					$start+=1000;

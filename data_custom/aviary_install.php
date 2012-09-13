@@ -42,7 +42,7 @@ if (!$GLOBALS['SITE_DB']->table_exists('image_url_sub_for'))
 		'id'=>'*AUTO',
 		'url_from'=>'URLPATH',
 		'url_to'=>'URLPATH',
-		'member_id'=>'USER',
+		'member_id'=>'MEMBER',
 		'expire'=>'TIME',
 	));
 

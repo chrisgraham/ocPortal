@@ -679,9 +679,9 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			$user=$on_same_msn?$row['user_id']:import_id_remap_get('member',$row['user_id'],true);
-			if (is_null($user)) $user=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			add_to_charge_log($user,$row['amount'],$this->get_lang_string($db,$row['reason']),$row['date_and_time']);
+			$member=$on_same_msn?$row['user_id']:import_id_remap_get('member',$row['user_id'],true);
+			if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+			add_to_charge_log($member,$row['amount'],$this->get_lang_string($db,$row['reason']),$row['date_and_time']);
 		}
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'gifts',NULL,NULL,true);
 		if (is_null($rows)) $rows=array();
@@ -979,10 +979,10 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			$user_id=$on_same_msn?$row['user_id']:import_id_remap_get('member',$row['user_id'],true);
-			if (is_null($user_id)) $user_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+			$member=$on_same_msn?$row['user_id']:import_id_remap_get('member',$row['user_id'],true);
+			if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			unset($row['id']);
-			$GLOBALS['SITE_DB']->query_insert('text',array('user_id'=>$user_id,'the_message'=>insert_lang($this->get_lang_string($db,$row['the_message']),2),'days'=>$row['days'],'order_time'=>$row['order_time'],'activation_time'=>$row['activation_time'],'active_now'=>$row['active_now'],'notes'=>$row['notes']));
+			$GLOBALS['SITE_DB']->query_insert('text',array('user_id'=>$member,'the_message'=>insert_lang($this->get_lang_string($db,$row['the_message']),2),'days'=>$row['days'],'order_time'=>$row['order_time'],'activation_time'=>$row['activation_time'],'active_now'=>$row['active_now'],'notes'=>$row['notes']));
 		}
 	}
 
@@ -1048,10 +1048,10 @@ class Hook_ocp_merge
 		{
 			$id=import_id_remap_get('download',$row['id'],true);
 			if (is_null($id)) continue;
-			$user=$on_same_msn?$row['the_user']:import_id_remap_get('member',$row['the_user'],true);
-			if (is_null($user)) $user=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('download_logging','ip',array('id'=>$id,'the_user'=>$user));
-			if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('download_logging',array('id'=>$id,'the_user'=>$user,'ip'=>$row['ip'],'date_and_time'=>$row['date_and_time']));
+			$member=$on_same_msn?$row['member_id']:import_id_remap_get('member',$row['member_id'],true);
+			if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('download_logging','ip',array('id'=>$id,'member_id'=>$member));
+			if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('download_logging',array('id'=>$id,'member_id'=>$member,'ip'=>$row['ip'],'date_and_time'=>$row['date_and_time']));
 		}
 	}
 
@@ -1143,9 +1143,9 @@ class Hook_ocp_merge
 			$page_id=import_id_remap_get('wiki_page',$row['page_id'],true);
 			if (is_null($page_id)) $page_id=db_get_first_id();
 
-			$user=$on_same_msn?$row['the_user']:import_id_remap_get('member',$row['the_user'],true);
-			if (is_null($user)) $user=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			$id_new=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('wiki_views'=>array_key_exists('wiki_views',$row)?$row['wiki_views']:0,'validated'=>array_key_exists('validated',$row)?$row['validated']:1,'the_message'=>insert_lang_comcode($this->get_lang_string($db,$row['the_message']),2),'the_user'=>$user,'date_and_time'=>$row['date_and_time'],'page_id'=>$page_id,'edit_date'=>$row['edit_date']),true);
+			$member=$on_same_msn?$row['member_id']:import_id_remap_get('member',$row['member_id'],true);
+			if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+			$id_new=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('wiki_views'=>array_key_exists('wiki_views',$row)?$row['wiki_views']:0,'validated'=>array_key_exists('validated',$row)?$row['validated']:1,'the_message'=>insert_lang_comcode($this->get_lang_string($db,$row['the_message']),2),'member_id'=>$member,'date_and_time'=>$row['date_and_time'],'page_id'=>$page_id,'edit_date'=>$row['edit_date']),true);
 
 			import_id_remap_put('wiki_post',strval($row['id']),$id_new);
 		}
@@ -1155,9 +1155,9 @@ class Hook_ocp_merge
 			$page_id=import_id_remap_get('wiki_page',$row['the_page'],true);
 			if (is_null($page_id)) continue;
 
-			$user=$on_same_msn?$row['the_user']:import_id_remap_get('member',$row['the_user'],true);
-			if (is_null($user)) $user=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>$row['the_action'],'the_page'=>$page_id,'ip'=>$row['ip'],'the_user'=>$user,'date_and_time'=>$row['date_and_time']),false,true);
+			$member=$on_same_msn?$row['member_id']:import_id_remap_get('member',$row['member_id'],true);
+			if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+			$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>$row['the_action'],'the_page'=>$page_id,'ip'=>$row['ip'],'member_id'=>$member,'date_and_time'=>$row['date_and_time']),false,true);
 		}
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'wiki_children');
 		foreach ($rows as $row)
@@ -1333,8 +1333,8 @@ class Hook_ocp_merge
 			{
 				unset($row['regionality']);
 
-				$row['the_user']=$on_same_msn?$row['the_user']:import_id_remap_get('member',$row['the_user'],true);
-				if (is_null($row['the_user'])) $row['the_user']=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+				$row['member_id']=$on_same_msn?$row['member_id']:import_id_remap_get('member',$row['member_id'],true);
+				if (is_null($row['member_id'])) $row['member_id']=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 				unset($row['id']);
 				$GLOBALS['SITE_DB']->query_insert('stats',$row);
 			}

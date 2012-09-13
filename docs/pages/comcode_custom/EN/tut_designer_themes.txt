@@ -175,7 +175,7 @@ The "Tempcode symbol" is written like:
 [/code]
 As you can see there is no short-hand for skipping out 'param' in Tempcode, and the parameters are written in a different way, and the block name is also given as a parameter named [tt]block[/tt].
 
-Here is another Tempcode symbol... [tt]{$USER}[/tt]. It shows the member ID of the current logged in user.
+Here is another Tempcode symbol... [tt]{$MEMBER}[/tt]. It shows the member ID of the current logged in user.
 
 When ocPortal runs it actually converts the simple Comcode into the more complex Tempcode. And you can put Tempcode inside Comcode and it will work. But Comcode cannot be used in Templates because it's not processed in there.
 

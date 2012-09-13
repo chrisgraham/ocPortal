@@ -97,7 +97,7 @@ class Hook_search_wiki_posts
 		require_lang('wiki');
 
 		// Calculate our where clause (search)
-		$sq=build_search_submitter_clauses('the_user',$author_id,$author);
+		$sq=build_search_submitter_clauses('member_id',$author_id,$author);
 		if (is_null($sq)) return array(); else $where_clause.=$sq;
 		if (!is_null($cutoff))
 		{

@@ -53,8 +53,8 @@ class Block_main_activities
 	{
 		$GLOBALS['SITE_DB']->create_table('activities',array(
 			'id'=>'*AUTO',
-			'a_member_id'=>'*USER',
-			'a_also_involving'=>'?USER',
+			'a_member_id'=>'*MEMBER',
+			'a_also_involving'=>'?MEMBER',
 			'a_language_string_code'=>'*ID_TEXT',
 			'a_label_1'=>'SHORT_TEXT',
 			'a_label_2'=>'SHORT_TEXT',

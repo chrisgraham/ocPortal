@@ -259,7 +259,7 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 		<th>Purpose</th>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$USER}</td>
+		<td>{$MEMBER}</td>
 		<td>The Member-ID of the current user</td>
 	</tr>
 	<tr style="background: #DDFFDD">
@@ -1219,7 +1219,7 @@ Understanding of these symbols requires an understanding of basic boolean operat
 		<td>Make a decimal number look nice, with commas etc, to 2 decimal places (takes a Tempcode number)</td>
 	</tr>
 	<tr style="background: #DDFFDD">
-		<td>{$TEMPCODE,{$USER}}</td>
+		<td>{$TEMPCODE,{$MEMBER}}</td>
 		<td>Evaluates the given parameter as Tempcode (takes a string). This is useful for <strong>very</strong> rare situations where you want to write in symbols as parameters to Comcode tags where the parameter is treated as a plain-string. This is only useful in Comcode, when typing Tempcode you can nest Tempcode constructs almost however you like.</td>
 	</tr>
 	<tr style="background: #DDFFDD">

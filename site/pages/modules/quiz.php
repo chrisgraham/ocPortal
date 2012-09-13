@@ -84,7 +84,7 @@ class Module_quiz
 			$GLOBALS['SITE_DB']->create_table('quiz_member_last_visit',array(
 				'id'=>'*AUTO',
 				'v_time'=>'TIME',
-				'v_member_id'=>'USER',
+				'v_member_id'=>'MEMBER',
 				'v_quiz_id'=>'AUTO_LINK',
 			));
 
@@ -108,7 +108,7 @@ class Module_quiz
 				'q_type'=>'ID_TEXT', // COMPETITION, TEST, SURVEY
 				'q_add_date'=>'TIME',
 				'q_validated'=>'BINARY',
-				'q_submitter'=>'USER',
+				'q_submitter'=>'MEMBER',
 				'q_points_for_passing'=>'INTEGER',
 				'q_tied_newsletter'=>'?AUTO_LINK',
 				'q_end_text_fail'=>'LONG_TRANS',
@@ -143,7 +143,7 @@ class Module_quiz
 			$GLOBALS['SITE_DB']->create_table('quiz_entries',array(
 				'id'=>'*AUTO',
 				'q_time'=>'TIME',
-				'q_member'=>'USER',
+				'q_member'=>'MEMBER',
 				'q_quiz'=>'AUTO_LINK',
 				'q_results'=>'INTEGER',
 			));

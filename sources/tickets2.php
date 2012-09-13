@@ -119,7 +119,7 @@ function update_ticket_type_lead_times()
 
 			// Find the first post by someone other than the ticket owner
 			$i=$first_key+1;
-			while ((array_key_exists($i,$posts)) && ($posts[$i]['user']!=$posts[$first_key]['user'])) $i++;
+			while ((array_key_exists($i,$posts)) && ($posts[$i]['member']!=$posts[$first_key]['member'])) $i++;
 
 			if (array_key_exists($i,$posts))
 			{
@@ -319,7 +319,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 
 	if (($uid!=get_member()) && (!is_guest($uid)))
 	{
-		// Reply from staff, notification to user
+		// Reply from staff, notification to member
 		$ticket_type_text=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
 		$their_lang=get_lang($uid);
 		$subject=do_lang('TICKET_REPLY',$ticket_type_text,$ticket_type_text,($title=='')?do_lang('UNKNOWN'):$title,$their_lang);
@@ -332,7 +332,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 	}
 	elseif ($uid==get_member())
 	{
-		// Reply from user, notification to staff
+		// Reply from member, notification to staff
 		if (is_object($ticket_url)) $ticket_url=$ticket_url->evaluate();
 
 		if (is_null($ticket_type_text))
@@ -344,7 +344,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 		$message=do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($username),$post,comcode_escape($ticket_type_text)),get_site_default_lang());
 		dispatch_notification($new_ticket?'ticket_new_staff':'ticket_reply_staff',strval($ticket_type_id),$subject,$message);
 
-		// Tell user that their message was received
+		// Tell member that their message was received
 		if ($email!='')
 		{
 			require_code('mail');

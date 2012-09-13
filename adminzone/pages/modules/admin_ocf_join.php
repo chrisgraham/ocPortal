@@ -443,7 +443,7 @@ class Module_admin_ocf_join
 				{
 					if (in_array($g_id,$usergroups)) continue 2;
 				}
-				$num_actions=$GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(*)',array('the_user'=>$row['id']));
+				$num_actions=$GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(*)',array('member_id'=>$row['id']));
 				if ($num_actions>$max_logged_actions) continue;
 
 				if (count($out)==500)

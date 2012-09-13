@@ -42,10 +42,10 @@
 
 				{+START,IF,{$ADDON_INSTALLED,ocGiftGiver,1}}
 					<p class="associated_link">
-						{+START,IF,{$NEQ,{$USER},{MEMBER_ID}}}
+						{+START,IF,{$NEQ,{$MEMBER},{MEMBER_ID}}}
 							<a href="{$PAGE_LINK*,site:pointstore:action:ocgifts:username={$USERNAME,{MEMBER_ID}}}">{!ocgifts:GIVE_A_GIFT}</a>
 						{+END}
-						{+START,IF,{$EQ,{$USER},{MEMBER_ID}}}
+						{+START,IF,{$EQ,{$MEMBER},{MEMBER_ID}}}
 							<em>{!ocgifts:THIS_IS_YOU}</em>
 						{+END}
 					</p>

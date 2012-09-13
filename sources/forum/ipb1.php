@@ -293,7 +293,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 			$temp['title']=$myrow['post_title'];
 			if (is_null($temp['title'])) $temp['title']=''; else $temp['title']=$this->ipb_unescape($temp['title']);
 			$temp['message']=$myrow['post'];
-			$temp['user']=$myrow['author_id'];
+			$temp['member']=$myrow['author_id'];
 			$temp['date']=$myrow['post_date'];
 
 			$out[]=$temp;

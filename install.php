@@ -1605,7 +1605,7 @@ function step_5_core()
 		'text_original'=>'LONG_TEXT',
 		'text_parsed'=>'LONG_TEXT',
 		'broken'=>'BINARY',
-		'source_user'=>'USER'
+		'source_user'=>'MEMBER'
 	));
 	$GLOBALS['SITE_DB']->create_index('translate','#search',array('text_original'));
 	$GLOBALS['SITE_DB']->create_index('translate','importance_level',array('importance_level'));
@@ -1659,7 +1659,7 @@ function step_5_core()
 	$GLOBALS['SITE_DB']->drop_table_if_exists('attachments');
 	$GLOBALS['SITE_DB']->create_table('attachments',array(
 		'id'=>'*AUTO',
-		'a_member_id'=>'USER',
+		'a_member_id'=>'MEMBER',
 		'a_file_size'=>'?INTEGER', // NULL means non-local. Doesn't count to quota
 		'a_url'=>'SHORT_TEXT',
 		'a_description'=>'SHORT_TEXT',
@@ -1749,7 +1749,7 @@ function step_5_core_2()
 	$GLOBALS['SITE_DB']->create_table('sessions',array(
 		'the_session'=>'*INTEGER',
 		'last_activity'=>'TIME',
-		'the_user'=>'USER',
+		'member_id'=>'MEMBER',
 		'ip'=>'IP',
 		'session_confirmed'=>'BINARY',
 		'session_invisible'=>'BINARY',
@@ -1761,7 +1761,7 @@ function step_5_core_2()
 		'the_title'=>'SHORT_TEXT'
 	));
 	$GLOBALS['SITE_DB']->create_index('sessions','delete_old',array('last_activity'));
-	$GLOBALS['SITE_DB']->create_index('sessions','the_user',array('the_user'));
+	$GLOBALS['SITE_DB']->create_index('sessions','member_id',array('member_id'));
 	$GLOBALS['SITE_DB']->create_index('sessions','userat',array('the_zone','the_page','the_type','the_id'));
 
 	$GLOBALS['SITE_DB']->drop_table_if_exists('https_pages');

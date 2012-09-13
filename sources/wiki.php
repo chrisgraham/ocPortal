@@ -113,13 +113,13 @@ function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 	check_comcode($message,NULL,false,NULL,true);
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('validated'=>$validated,'edit_date'=>NULL,'the_message'=>0,'the_user'=>$member,'date_and_time'=>time(),'page_id'=>$page_id,'wiki_views'=>0),true);
+	$id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('validated'=>$validated,'edit_date'=>NULL,'the_message'=>0,'member_id'=>$member,'date_and_time'=>time(),'page_id'=>$page_id,'wiki_views'=>0),true);
 	require_code('attachments2');
 	$the_message=insert_lang_comcode_attachments(2,$message,'wiki_post',strval($id));
 	$GLOBALS['SITE_DB']->query_update('wiki_posts',array('the_message'=>$the_message),array('id'=>$id),'',1);
 
 	// Log
-	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_MAKE_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
+	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_MAKE_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'member_id'=>$member,'date_and_time'=>time()));
 
 	// Update post count
 	if (addon_installed('points'))
@@ -161,7 +161,7 @@ function wiki_edit_post($id,$message,$validated,$member=NULL)
 	$rows=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
-	$original_poster=$myrow['the_user'];
+	$original_poster=$myrow['member_id'];
 	$page_id=$myrow['page_id'];
 
 	$_message=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','the_message',array('id'=>$id));
@@ -180,7 +180,7 @@ function wiki_edit_post($id,$message,$validated,$member=NULL)
 
 	$GLOBALS['SITE_DB']->query_update('wiki_posts',array('validated'=>$validated,'edit_date'=>time(),'the_message'=>update_lang_comcode_attachments($_message,$message,'wiki_post',strval($id),NULL,true,$original_poster)),array('id'=>$id),'',1);
 
-	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
+	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'member_id'=>$member,'date_and_time'=>time()));
 
 	if (post_param_integer('send_notification',NULL)!==0)
 	{
@@ -204,7 +204,7 @@ function wiki_delete_post($post_id,$member=NULL)
 {
 	if (is_null($member)) $member=get_member();
 
-	$original_poster=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','the_user',array('id'=>$post_id));
+	$original_poster=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','member_id',array('id'=>$post_id));
 
 	$_message=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','the_message',array('id'=>$post_id));
 
@@ -215,7 +215,7 @@ function wiki_delete_post($post_id,$member=NULL)
 	$GLOBALS['SITE_DB']->query_delete('wiki_posts',array('id'=>$post_id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'wiki_post','rating_for_id'=>$post_id));
 
-	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_DELETE_POST','the_page'=>$post_id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
+	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_DELETE_POST','the_page'=>$post_id,'ip'=>get_ip_address(),'member_id'=>$member,'date_and_time'=>time()));
 
 	// Stat
 	update_stat('num_wiki_posts',-1);
@@ -251,7 +251,7 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL)
 
 	update_stat('num_wiki_pages',1);
 
-	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_ADD_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>$member));
+	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_ADD_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>$member));
 
 	require_code('seo2');
 	seo_meta_set_for_implicit('wiki_page',strval($id),array($title,$description),$description);
@@ -289,7 +289,7 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	require_code('attachments2');
 	require_code('attachments3');
 	$GLOBALS['SITE_DB']->query_update('wiki_pages',array('hide_posts'=>$hide_posts,'description'=>update_lang_comcode_attachments($_description,$description,'wiki_page',strval($id),NULL,true),'notes'=>$notes,'title'=>lang_remap($_title,$title),'edit_date'=>time()),array('id'=>$id),'',1);
-	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>$member));
+	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>$member));
 
 	require_code('seo2');
 	seo_meta_set_for_explicit('wiki_page',strval($id),$meta_keywords,$meta_description);

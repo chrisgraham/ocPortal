@@ -139,7 +139,7 @@ class Database_Static_sqlserver
 			'SHORT_INTEGER'=>'smallint',
 			'REAL'=>'real',
 			'BINARY'=>'smallint',
-			'USER'=>'integer',
+			'MEMBER'=>'integer',
 			'GROUP'=>'integer',
 			'TIME'=>'integer',
 			'LONG_TRANS'=>'integer',

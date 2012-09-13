@@ -104,7 +104,20 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 
 		// Store session
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		$new_session_row=array('the_session'=>$new_session,'last_activity'=>time(),'the_user'=>$member,'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed,'session_invisible'=>$invisible?1:0,'cache_username'=>$username,'the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>substr(get_page_name(),0,80),'the_type'=>substr(get_param('type','',true),0,80),'the_id'=>substr(either_param('id',''),0,80));
+		$new_session_row=array(
+			'the_session'=>$new_session,
+			'last_activity'=>time(),
+			'member_id'=>$member,
+			'ip'=>get_ip_address(3),
+			'session_confirmed'=>$session_confirmed,
+			'session_invisible'=>$invisible?1:0,
+			'cache_username'=>$username,
+			'the_title'=>'',
+			'the_zone'=>get_zone_name(),
+			'the_page'=>substr(get_page_name(),0,80),
+			'the_type'=>substr(get_param('type','',true),0,80),
+			'the_id'=>substr(either_param('id',''),0,80),
+		);
 		$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row,false,true);
 
 		$SESSION_CACHE[$new_session]=$new_session_row;
@@ -114,7 +127,16 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 	{
 		$new_session=$restored_session;
 		$prior_session_row=$SESSION_CACHE[$new_session];
-		$new_session_row=array('the_title'=>'','the_zone'=>get_zone_name(),'the_page'=>get_page_name(),'the_type'=>substr(either_param('type',''),0,80),'the_id'=>substr(either_param('id',''),0,80),'last_activity'=>time(),'ip'=>get_ip_address(3),'session_confirmed'=>$session_confirmed);
+		$new_session_row=array(
+			'the_title'=>'',
+			'the_zone'=>get_zone_name(),
+			'the_page'=>get_page_name(),
+			'the_type'=>substr(either_param('type',''),0,80),
+			'the_id'=>substr(either_param('id',''),0,80),
+			'last_activity'=>time(),
+			'ip'=>get_ip_address(3),
+			'session_confirmed'=>$session_confirmed,
+		);
 		$big_change=($prior_session_row['last_activity']<time()-10) || ($prior_session_row['session_confirmed']!=$session_confirmed) || ($prior_session_row['ip']!=$new_session_row['ip']);
 		if ($big_change)
 			$GLOBALS['SITE_DB']->query_update('sessions',$new_session_row,array('the_session'=>$new_session),'',1,NULL,false,true);
@@ -137,7 +159,7 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 		if ($points_per_daily_visit!=0)
 		{
 			// See if this is the first visit today
-			$test=$GLOBALS['SITE_DB']->query_select_value('stats','MAX(date_and_time)',array('the_user'=>$member));
+			$test=$GLOBALS['SITE_DB']->query_select_value('stats','MAX(date_and_time)',array('member_id'=>$member));
 			if ($test<time()-60*60*24)
 			{
 				require_code('points');

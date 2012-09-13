@@ -61,7 +61,7 @@ class Hook_content_meta_aware_wiki_post
 			'support_url_monikers'=>false,
 
 			'views_field'=>'wiki_views',
-			'submitter_field'=>'the_user',
+			'submitter_field'=>'member_id',
 			'add_time_field'=>'date_and_time',
 			'edit_time_field'=>'edit_date',
 			'date_field'=>'date_and_time',

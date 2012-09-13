@@ -36,7 +36,7 @@ class Hook_realtime_rain_stats
 		{
 			require_lang('stats');
 
-			$rows=$GLOBALS['SITE_DB']->query('SELECT browser,referer,the_page,ip,the_user AS member_id,date_and_time AS timestamp FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE date_and_time BETWEEN '.strval($from).' AND '.strval($to));
+			$rows=$GLOBALS['SITE_DB']->query('SELECT browser,referer,the_page,ip,member_id,date_and_time AS timestamp FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE date_and_time BETWEEN '.strval($from).' AND '.strval($to));
 
 			foreach ($rows as $row)
 			{

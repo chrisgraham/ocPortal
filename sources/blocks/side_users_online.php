@@ -103,7 +103,7 @@ class Block_side_users_online
 		$done_ips=array();
 		foreach ($members as $_member)
 		{
-			$member=$_member['the_user'];
+			$member=$_member['member_id'];
 			$name=$_member['cache_username'];
 			$ip=$_member['ip'];
 

@@ -94,7 +94,7 @@ class Module_calendar
 
 			$GLOBALS['SITE_DB']->create_table('calendar_events',array(
 				'id'=>'*AUTO',
-				'e_submitter'=>'USER',
+				'e_submitter'=>'MEMBER',
 				'e_views'=>'INTEGER',
 				'e_title'=>'SHORT_TRANS',
 				'e_content'=>'LONG_TRANS',
@@ -151,12 +151,12 @@ class Module_calendar
 			$GLOBALS['SITE_DB']->create_table('calendar_reminders',array(
 				'id'=>'*AUTO',
 				'e_id'=>'AUTO_LINK',
-				'n_member_id'=>'USER',
+				'n_member_id'=>'MEMBER',
 				'n_seconds_before'=>'INTEGER'
 			));
 
 			$GLOBALS['SITE_DB']->create_table('calendar_interests',array(
-				'i_member_id'=>'*USER',
+				'i_member_id'=>'*MEMBER',
 				't_type'=>'*AUTO_LINK'
 			));
 
@@ -166,7 +166,7 @@ class Module_calendar
 				'id'=>'*AUTO',
 				'j_time'=>'TIME',
 				'j_reminder_id'=>'?AUTO_LINK',
-				'j_member_id'=>'?USER',
+				'j_member_id'=>'?MEMBER',
 				'j_event_id'=>'AUTO_LINK'
 			));
 			$GLOBALS['SITE_DB']->create_index('calendar_jobs','applicablejobs',array('j_time'));

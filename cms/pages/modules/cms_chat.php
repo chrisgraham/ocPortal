@@ -191,7 +191,7 @@ class Module_cms_chat
 
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',50);
-		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'),'user_id'=>do_lang_tempcode('MEMBER'));
+		$sortables=array('date_and_time'=>do_lang_tempcode('DATE_TIME'),'member_id'=>do_lang_tempcode('MEMBER'));
 		$test=explode(' ',get_param('sort','date_and_time DESC'),2);
 		if (count($test)==1) $test[1]='DESC';
 		list($sortable,$sort_order)=$test;
@@ -210,7 +210,7 @@ class Module_cms_chat
 		{
 			$url=build_url(array('page'=>'_SELF','type'=>'ed','room_id'=>$room_id,'id'=>$myrow['id']),'_SELF');
 
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['user_id']);
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['member_id']);
 			if (is_null($username)) $username='';//do_lang('UNKNOWN');
 
 			$message=get_translated_tempcode($myrow['the_message']);

@@ -118,7 +118,7 @@ class Module_chat
 				'system_message'=>'BINARY',
 				'ip_address'=>'IP',
 				'room_id'=>'AUTO_LINK',
-				'user_id'=>'USER',
+				'member_id'=>'MEMBER',
 				'date_and_time'=>'TIME',
 				'the_message'=>'LONG_TRANS',	// Comcode
 				'text_colour'=>'SHORT_TEXT',
@@ -149,21 +149,21 @@ class Module_chat
 			add_config_option('USERNAME_CLICK_IM','username_click_im','tick','return \'0\';','FEATURE','SECTION_CHAT');
 
 			$GLOBALS['SITE_DB']->create_table('chat_blocking',array(
-				'member_blocker'=>'*USER',
-				'member_blocked'=>'*USER',
+				'member_blocker'=>'*MEMBER',
+				'member_blocked'=>'*MEMBER',
 				'date_and_time'=>'TIME'
 			));
 
 			$GLOBALS['SITE_DB']->create_table('chat_friends',array(
-				'member_likes'=>'*USER',
-				'member_liked'=>'*USER',
+				'member_likes'=>'*MEMBER',
+				'member_liked'=>'*MEMBER',
 				'date_and_time'=>'TIME'
 			));
 
 			$GLOBALS['SITE_DB']->create_table('chat_events',array(
 				'id'=>'*AUTO',
 				'e_type_code'=>'ID_TEXT', // BECOME_ACTIVE, BECOME_INACTIVE, PREINVITED_TO_IM, JOIN_IM, DEINVOLVE_IM, INVITED_TO_IM
-				'e_member_id'=>'USER',
+				'e_member_id'=>'MEMBER',
 				'e_room_id'=>'?AUTO_LINK',
 				'e_date_and_time'=>'TIME'
 			));
@@ -177,7 +177,7 @@ class Module_chat
 
 			$GLOBALS['SITE_DB']->create_table('chat_active',array(
 				'id'=>'*AUTO', // serves no purpose really, but needed as room_id can be NULL but is in compound key
-				'member_id'=>'USER',
+				'member_id'=>'MEMBER',
 				'room_id'=>'?AUTO_LINK',
 				'date_and_time'=>'TIME',
 			));
@@ -186,7 +186,7 @@ class Module_chat
 			$GLOBALS['SITE_DB']->create_index('chat_active','room_select',array('room_id'));
 
 			$GLOBALS['SITE_DB']->create_table('chat_sound_effects',array(
-				's_member'=>'*USER',
+				's_member'=>'*MEMBER',
 				's_effect_id'=>'*ID_TEXT',
 				's_url'=>'URLPATH'
 			));
@@ -219,6 +219,8 @@ class Module_chat
 		if ((!is_null($upgrade_from)) && ($upgrade_from<12))
 		{
 			$GLOBALS['SITE_DB']->rename_table('chat_buddies','chat_friends');
+
+			$GLOBALS['SITE_DB']->alter_table_field('chat_messages','user_id','MEMBER','member_id');
 		}
 	}
 

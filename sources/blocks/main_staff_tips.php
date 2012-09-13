@@ -56,7 +56,7 @@ class Block_main_staff_tips
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
 		$GLOBALS['SITE_DB']->create_table('staff_tips_dismissed',array(
-			't_member'=>'*USER',
+			't_member'=>'*MEMBER',
 			't_tip'=>'*ID_TEXT'
 		));
 	}

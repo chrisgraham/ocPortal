@@ -415,7 +415,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 				$value=($val=='')?NULL:strtotime($val);
 				break;
 			case 'GROUP':
-			case 'USER':
+			case 'MEMBER':
 			case 'BINARY':
 			case 'SHORT_INTEGER':
 			case 'INTEGER':
@@ -460,7 +460,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 						$value=($row_value=='')?NULL:strtotime($row_value);
 						break;
 					case 'GROUP':
-					case 'USER':
+					case 'MEMBER':
 					case 'BINARY':
 					case 'SHORT_INTEGER':
 					case 'INTEGER':

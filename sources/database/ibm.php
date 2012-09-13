@@ -106,7 +106,7 @@ class Database_Static_ibm
 			'SHORT_INTEGER'=>'smallint',
 			'REAL'=>'real',
 			'BINARY'=>'smallint',
-			'USER'=>'integer',
+			'MEMBER'=>'integer',
 			'GROUP'=>'integer',
 			'TIME'=>'integer',
 			'LONG_TRANS'=>'integer',

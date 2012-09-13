@@ -427,7 +427,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 			if (is_null($temp['title'])) $temp['title']='';
 			$post=preg_replace('#public/style_emoticons/<\#EMO_DIR\#>(.+?)\'#is',$emoticons_set_dir.'\\1\'',$myrow['post']);
 			$temp['message']=$post;
-			$temp['user']=$myrow['author_id'];
+			$temp['member']=$myrow['author_id'];
 			$temp['date']=$myrow['post_date'];
 
 			$out[]=$temp;

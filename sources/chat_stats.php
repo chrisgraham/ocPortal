@@ -30,7 +30,7 @@ function get_num_chatters()
 	{
 		define('CHAT_ACTIVITY_PRUNE',25);
 	}
-	return $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.the_user=a.member_id WHERE session_invisible=0 AND date_and_time>='.strval((integer)time()-CHAT_ACTIVITY_PRUNE).' GROUP BY member_id');
+	return $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.member_id=a.member_id WHERE session_invisible=0 AND date_and_time>='.strval((integer)time()-CHAT_ACTIVITY_PRUNE).' GROUP BY member_id');
 }
 
 /**

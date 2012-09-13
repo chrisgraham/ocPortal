@@ -45,7 +45,7 @@ class Hook_chat_bot_default
 				$site_members='';
 				foreach ($members as $member)
 				{
-					if ((is_guest($member['the_user'])) || (is_null($member['cache_username'])))
+					if ((is_guest($member['member_id'])) || (is_null($member['cache_username'])))
 					{
 						$guests++;
 					} else

@@ -551,7 +551,7 @@ class forum_driver_phpbb2 extends forum_driver_base
 			$LAX_COMCODE=true;
 			$temp['message']=($myrow['bbcode_uid']!='')?comcode_to_tempcode($myrow['post_text'],$myrow['poster_id']):$myrow['post_text'];
 			$LAX_COMCODE=$temp2;
-			$temp['user']=$myrow['poster_id'];
+			$temp['member']=$myrow['poster_id'];
 			$temp['date']=$myrow['post_time'];
 
 			$out[]=$temp;

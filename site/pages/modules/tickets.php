@@ -464,7 +464,7 @@ class Module_tickets
 
 				set_extra_request_metadata(array(
 					'created'=>date('Y-m-d',$_comments[0]['date']),
-					'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($_comments[0]['user']),
+					'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($_comments[0]['member']),
 					'publisher'=>'', // blank means same as creator
 					'modified'=>'',
 					'type'=>'Support ticket',

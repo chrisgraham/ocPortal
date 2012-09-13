@@ -78,7 +78,7 @@ function lookup_member_page($member,&$name,&$id,&$ip)
 		if (is_null($ip)) $ip='127.0.0.1';
 	}
 
-	return $GLOBALS['SITE_DB']->query('SELECT ip,MAX(date_and_time) AS date_and_time FROM '.get_table_prefix().'stats WHERE the_user='.strval((integer)$id).' GROUP BY ip ORDER BY date_and_time DESC');
+	return $GLOBALS['SITE_DB']->query('SELECT ip,MAX(date_and_time) AS date_and_time FROM '.get_table_prefix().'stats WHERE member_id='.strval((integer)$id).' GROUP BY ip ORDER BY date_and_time DESC');
 }
 
 /**
@@ -102,7 +102,7 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 
 	$query='';
 	if (!is_guest($member))
-		$query.='the_user='.strval((integer)$member).' OR ';
+		$query.='member_id='.strval((integer)$member).' OR ';
 	if (strpos($ip,'*')===false)
 	{
 		$query.=db_string_equal_to('ip',$ip);
@@ -173,13 +173,13 @@ function find_security_alerts($where)
 	{
 		$time=get_timezoned_date($row['date_and_time']);
 		$lookup_url=build_url(array('page'=>'admin_lookup','param'=>$row['ip']),'_SELF');
-		$member_url=build_url(array('page'=>'admin_lookup','param'=>$row['the_user']),'_SELF');
+		$member_url=build_url(array('page'=>'admin_lookup','param'=>$row['member_id']),'_SELF');
 		$full_url=build_url(array('page'=>'admin_security','type'=>'view','id'=>$row['id']),'_SELF');
 		$reason=do_lang($row['reason'],$row['reason_param_a'],$row['reason_param_b'],NULL,NULL,false);
 		if (is_null($reason)) $reason=$row['reason'];
 		$reason=symbol_truncator(array($reason,'50','1'),'left');
 
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['the_user']);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
 
 		$_row=array(hyperlink($member_url,$username),hyperlink($full_url,$time),hyperlink($lookup_url,$row['ip']),$reason);

@@ -36,7 +36,7 @@ class Hook_realtime_rain_chat
 		{
 			require_code('chat');
 
-			$rows=$GLOBALS['SITE_DB']->query('SELECT ip_address,the_message,user_id AS member_id,date_and_time AS timestamp,room_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_messages WHERE system_message=0 AND date_and_time BETWEEN '.strval($from).' AND '.strval($to));
+			$rows=$GLOBALS['SITE_DB']->query('SELECT ip_address,the_message,date_and_time AS timestamp,room_id,member_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_messages WHERE system_message=0 AND date_and_time BETWEEN '.strval($from).' AND '.strval($to));
 
 			foreach ($rows as $row)
 			{

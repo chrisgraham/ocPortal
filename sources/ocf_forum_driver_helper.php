@@ -427,7 +427,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 				}
 				$temp['message']=$message;
 				$temp['message_comcode']=get_translated_text($myrow['p_post'],$GLOBALS['FORUM_DB']);
-				$temp['user']=$myrow['p_poster'];
+				$temp['member']=$myrow['p_poster'];
 				if ($myrow['p_poster_name_if_guest']!='') $temp['username']=$myrow['p_poster_name_if_guest'];
 				$temp['date']=$myrow['p_time'];
 			}

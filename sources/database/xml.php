@@ -180,7 +180,7 @@ class Database_Static_xml
 			'SHORT_INTEGER'=>'SHORT_INTEGER',
 			'REAL'=>'REAL',
 			'BINARY'=>'BINARY',
-			'USER'=>'USER',
+			'MEMBER'=>'MEMBER',
 			'GROUP'=>'GROUP',
 			'TIME'=>'TIME',
 			'LONG_TRANS'=>'LONG_TRANS',
@@ -798,7 +798,7 @@ class Database_Static_xml
 
 			if (is_integer($val))
 			{
-				if (!in_array($schema_type,array('REAL','AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','USER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
+				if (!in_array($schema_type,array('REAL','AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','MEMBER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
 					$this->_bad_query($query,false,'Database type strictness error: '.$schema_type.' wanted for '.$key.' field, but integer was given');
 
 				if (($val<0) && ($schema_type=='UINTEGER'))
@@ -1229,7 +1229,7 @@ class Database_Static_xml
 				$type=$schema[$key];
 				$schema_type=preg_replace('#[^\w]#','',$type);
 
-				if (in_array($schema_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','USER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
+				if (in_array($schema_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','MEMBER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
 				{
 					if (((is_null($val)) || ($val==='')) && (substr($type,0,1)=='?'))
 					{
@@ -1262,7 +1262,7 @@ class Database_Static_xml
 			{
 				$schema_type=preg_replace('#[^\w]#','',$type);
 
-				if (in_array($schema_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','USER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
+				if (in_array($schema_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','MEMBER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
 				{
 					if (substr($type,0,1)=='?')
 					{
@@ -1583,7 +1583,7 @@ class Database_Static_xml
 						$default=NULL;
 					} else
 					{
-						if (in_array($data_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','USER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
+						if (in_array($data_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','MEMBER','GROUP','TIME','SHORT_TRANS','LONG_TRANS')))
 						{
 							return $this->_bad_query($query,false,'No DEFAULT given and NULL not allowed');
 						}

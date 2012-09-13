@@ -74,7 +74,7 @@ class Module_admin_community_billboard extends standard_crud_module
 		{
 			$GLOBALS['SITE_DB']->create_table('community_billboard',array(
 				'id'=>'*AUTO',
-				'user_id'=>'USER',
+				'member_id'=>'MEMBER',
 				'the_message'=>'SHORT_TRANS',	// Comcode
 				'days'=>'INTEGER',
 				'order_time'=>'TIME',
@@ -93,6 +93,8 @@ class Module_admin_community_billboard extends standard_crud_module
 			rename_config_option('system_flagrant','system_community_billboard');
 
 			$GLOBALS['SITE_DB']->rename_table('text','community_billboard');
+
+			$GLOBALS['SITE_DB']->alter_table_field('community_billboard','user_id','MEMBER','member_id');
 		}
 	}
 
@@ -164,7 +166,7 @@ class Module_admin_community_billboard extends standard_crud_module
 			'the_message'=>do_lang_tempcode('MESSAGE'),
 			'days'=>do_lang_tempcode('NUMBER_DAYS'),
 			'order_time'=>do_lang_tempcode('ORDER_DATE'),
-			'user_id'=>do_lang_tempcode('OWNER'),
+			'member_id'=>do_lang_tempcode('OWNER'),
 		);
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
@@ -187,7 +189,7 @@ class Module_admin_community_billboard extends standard_crud_module
 		{
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
-			$username=protect_from_escaping($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['user_id']));
+			$username=protect_from_escaping($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['member_id']));
 
 			$activation_time=$row['activation_time'];
 			$days=is_null($activation_time)?'':float_format(round((time()-$activation_time)/60/60/24,3));
@@ -237,7 +239,7 @@ class Module_admin_community_billboard extends standard_crud_module
 		$date_raw=$myrow['order_time'];
 		$fields=$this->get_form_fields(get_translated_text($myrow['the_message']),$myrow['days'],$myrow['notes'],$myrow['active_now']);
 
-		$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['user_id']);
+		$username=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['member_id']);
 
 		$text=do_template('COMMUNITY_BILLBOARD_DETAILS',array('_GUID'=>'dcc7a8b027d450a3c17c79b23b39cd87','USERNAME'=>$username,'DAYS_ORDERED'=>integer_format($myrow['days']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date));
 

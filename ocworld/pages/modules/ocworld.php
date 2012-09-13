@@ -104,7 +104,7 @@ class Module_ocworld
 			$GLOBALS['SITE_DB']->create_table('w_inventory',array(
 				'item_name'=>'*SHORT_TEXT',
 				'item_count'=>'INTEGER',
-				'item_owner'=>'*USER',
+				'item_owner'=>'*MEMBER',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('w_itemdef',array(
@@ -112,7 +112,7 @@ class Module_ocworld
 				'bribable'=>'BINARY',
 				'healthy'=>'BINARY',
 				'picture_url'=>'URLPATH',
-				'owner'=>'USER',
+				'owner'=>'MEMBER',
 				'replicateable'=>'BINARY',
 				'max_per_player'=>'INTEGER',
 				'description'=>'SHORT_TEXT',
@@ -126,11 +126,11 @@ class Module_ocworld
 				'not_infinite'=>'BINARY',
 				'cost'=>'INTEGER',
 				'i_count'=>'INTEGER',
-				'copy_owner'=>'*USER',
+				'copy_owner'=>'*MEMBER',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('w_members',array(
-				'id'=>'*INTEGER', // NOT USER because it can be negative for a troll
+				'id'=>'*INTEGER', // NOT MEMBER because it can be negative for a troll
 				'location_realm'=>'INTEGER',
 				'location_x'=>'INTEGER',
 				'location_y'=>'INTEGER',
@@ -145,9 +145,9 @@ class Module_ocworld
 				'location_x'=>'*INTEGER',
 				'location_y'=>'*INTEGER',
 				'm_message'=>'*SHORT_TEXT',
-				'originator_id'=>'*USER',
+				'originator_id'=>'*MEMBER',
 				'm_datetime'=>'*TIME',
-				'destination'=>'USER',
+				'destination'=>'MEMBER',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('w_portals',array(
@@ -159,7 +159,7 @@ class Module_ocworld
 				'end_location_realm'=>'*INTEGER',
 				'end_location_x'=>'INTEGER',
 				'end_location_y'=>'INTEGER',
-				'owner'=>'?USER',
+				'owner'=>'?MEMBER',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('w_rooms',array(
@@ -177,12 +177,12 @@ class Module_ocworld
 				'locked_right'=>'BINARY',
 				'locked_left'=>'BINARY',
 				'picture_url'=>'URLPATH',
-				'owner'=>'?USER',
+				'owner'=>'?MEMBER',
 				'allow_portal'=>'BINARY',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('w_travelhistory',array(
-				'member_id'=>'*USER',
+				'member_id'=>'*MEMBER',
 				'x'=>'*INTEGER',
 				'y'=>'*INTEGER',
 				'realm'=>'*INTEGER',
@@ -192,7 +192,7 @@ class Module_ocworld
 				'id'=>'*INTEGER',
 				'name'=>'SHORT_TEXT',
 				'troll_name'=>'SHORT_TEXT',
-				'owner'=>'?USER',
+				'owner'=>'?MEMBER',
 				'r_private'=>'BINARY',
 				'q1'=>'LONG_TEXT',
 				'q2'=>'LONG_TEXT',
@@ -292,7 +292,7 @@ class Module_ocworld
 		// Decide what functions to execute for this command
 		$command=either_param('type','room');
 		$param=either_param('param','');
-		$dest_member_id=either_param_integer('user',-1);
+		$dest_member_id=either_param_integer('member',-1);
 		$member_id=get_member();
 		if (is_guest($member_id))
 		{
@@ -435,10 +435,10 @@ class Module_ocworld
 			$url=build_url(array('page'=>'ocworld'),'_SELF');
 			$command2=either_param('btype','');
 			$item=either_param('item','');
-			$user=either_param_integer('user',-1);
+			$member=either_param_integer('member',-1);
 			$param=either_param('param','');
 
-			return do_template('W_CONFIRM_SCREEN',array('_GUID'=>'365870cb4c6cb4282ff6c7a11f4f8a5b','TITLE'=>get_screen_title('W_CONFIRM_TITLE'),'URL'=>$url,'COMMAND'=>$command2,'ITEM'=>$item,'USER'=>strval($user),'PARAM'=>$param));
+			return do_template('W_CONFIRM_SCREEN',array('_GUID'=>'365870cb4c6cb4282ff6c7a11f4f8a5b','TITLE'=>get_screen_title('W_CONFIRM_TITLE'),'URL'=>$url,'COMMAND'=>$command2,'ITEM'=>$item,'MEMBER'=>strval($member),'PARAM'=>$param));
 		}
 		if ($command=='reallocate')
 		{
@@ -508,7 +508,7 @@ class Module_ocworld
 		if ($command=='findperson') findperson(($param=='')?strval($dest_member_id):$param);
 		if ($command=='message')
 		{
-			message($member_id,post_param('post'),post_param_integer('tuser'));
+			message($member_id,post_param('post'),post_param_integer('tmember'));
 		}
 		if ($command=='emergency') basic_enter_room($member_id,0,0,0);
 		if ($command=='delete-message-by-person')
@@ -765,11 +765,11 @@ class Module_ocworld
 
 			if ($cost==-1)
 			{
-				$user=get_param_integer('user');
+				$member=get_param_integer('member');
 				list($realm,$x,$y)=get_loc_details($member_id);
 
-				$cost=$GLOBALS['SITE_DB']->query_select_value('w_items','cost',array('copy_owner'=>$user,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'name'=>get_param('item')));
-				$not_infinite=$GLOBALS['SITE_DB']->query_select_value('w_items','not_infinite',array('copy_owner'=>$user,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'name'=>get_param('item')));
+				$cost=$GLOBALS['SITE_DB']->query_select_value('w_items','cost',array('copy_owner'=>$member,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'name'=>get_param('item')));
+				$not_infinite=$GLOBALS['SITE_DB']->query_select_value('w_items','not_infinite',array('copy_owner'=>$member,'location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'name'=>get_param('item')));
 
 				$tpl=do_template('W_ITEMCOPY_SCREEN',array(
 					'_GUID'=>'a8d28f6516408dba96a8b57ddcd7cee6',
@@ -780,7 +780,7 @@ class Module_ocworld
 					'Y'=>strval($y),
 					'REALM'=>strval($realm),
 					'ITEM'=>get_param('item'),
-					'OWNER'=>strval($user),
+					'OWNER'=>strval($member),
 					'COST'=>strval($cost),
 				));
 				return $tpl;

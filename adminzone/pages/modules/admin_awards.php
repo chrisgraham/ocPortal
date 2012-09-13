@@ -76,7 +76,7 @@ class Module_admin_awards extends standard_crud_module
 				'a_type_id'=>'*AUTO_LINK',
 				'date_and_time'=>'*TIME',
 				'content_id'=>'ID_TEXT',
-				'member_id'=>'USER'
+				'member_id'=>'MEMBER'
 			));
 
 			$GLOBALS['SITE_DB']->create_index('award_archive','awardquicksearch',array('content_id'));

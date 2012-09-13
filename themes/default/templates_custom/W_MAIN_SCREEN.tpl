@@ -128,7 +128,7 @@
 				<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} title="{!MESSAGES}" src="{$FIND_SCRIPT*,wmessages}{$KEEP*,1}">{!MESSAGES}</iframe> {EMOTICON_CHOOSER}
 			</div>
 			<form method="post" id="posting_form" action="{$PAGE_LINK*,_SELF:_SELF}">
-				<div><input id="post" name="post" value="" type="text" /> <input name="type" type="hidden" value="message" /> <select name="tuser" size="1">
+				<div><input id="post" name="post" value="" type="text" /> <input name="type" type="hidden" value="message" /> <select name="tmember" size="1">
 					<option value="0">
 						{!W_EVERYONE}
 					</option>

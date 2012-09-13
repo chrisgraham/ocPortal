@@ -148,7 +148,7 @@ class Module_galleries
 				'allow_comments'=>'SHORT_INTEGER',
 				'allow_trackbacks'=>'BINARY',
 				'notes'=>'LONG_TEXT',
-				'submitter'=>'USER',
+				'submitter'=>'MEMBER',
 				'validated'=>'BINARY',
 				'add_date'=>'TIME',
 				'edit_date'=>'?TIME',
@@ -172,7 +172,7 @@ class Module_galleries
 				'allow_comments'=>'SHORT_INTEGER',
 				'allow_trackbacks'=>'BINARY',
 				'notes'=>'LONG_TEXT',
-				'submitter'=>'USER',
+				'submitter'=>'MEMBER',
 				'validated'=>'BINARY',
 				'add_date'=>'TIME',
 				'edit_date'=>'?TIME',
@@ -253,7 +253,7 @@ class Module_galleries
 			$GLOBALS['SITE_DB']->add_table_field('videos','title','SHORT_TRANS');
 			$GLOBALS['SITE_DB']->add_table_field('images','title','SHORT_TRANS');
 			$GLOBALS['SITE_DB']->add_table_field('galleries','gallery_views','INTEGER');
-			$GLOBALS['SITE_DB']->add_table_field('galleries','g_owner','?USER');
+			$GLOBALS['SITE_DB']->add_table_field('galleries','g_owner','?MEMBER');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<8))

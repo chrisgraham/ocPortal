@@ -231,7 +231,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
       // Users online
       $users_online=new ocp_tempcode();
       $members=get_online_members();
-      $members=collapse_2d_complexity('the_user','cache_username',$members);
+      $members=collapse_2d_complexity('member_id','cache_username',$members);
       $guests=0;
       foreach ($members as $member=>$username)
       {

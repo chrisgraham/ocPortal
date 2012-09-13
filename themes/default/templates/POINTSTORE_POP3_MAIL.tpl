@@ -6,7 +6,7 @@
 {!CREATE_HERE,[url="{!HERE#}"]{POP3_URL@}[/url]}
 
 {!WILL_COST_THEM@,{SUFFIX_PRICE}}
-{!COST_THEM_LINK,[url="{!HERE#}"]{$PAGE_LINK,adminzone:admin_points:charge:user={$USER}:amount={SUFFIX_PRICE}:reason={ENCODED_REASON&},0,1}}
+{!COST_THEM_LINK,[url="{!HERE#}"]{$PAGE_LINK,adminzone:admin_points:charge:member={$MEMBER}:amount={SUFFIX_PRICE}:reason={ENCODED_REASON&},0,1}}
 
 {!SEND_EMAIL,[url="{!EMAIL#}"]mailto:{EMAIL@}?subject=Re: {!MAIL_REQUEST_POP3@}[/url],{$USERNAME@}}
 

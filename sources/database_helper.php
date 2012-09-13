@@ -41,7 +41,7 @@ function _check_sizes($primary_key,$fields,$id_name,$skip_size_check=false,$skip
 					'REAL'=>4,
 					'SHORT_INTEGER'=>2,
 					'BINARY'=>1,
-					'USER'=>4,
+					'MEMBER'=>4,
 					'GROUP'=>4,
 					'TIME'=>4,
 					'LONG_TRANS'=>4,
@@ -309,7 +309,7 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 			case 'SHORT_INTEGER':
 			case 'REAL':
 			case 'BINARY':
-			case 'USER':
+			case 'MEMBER':
 			case 'GROUP':
 			case 'TIME':
 				$default=($_type[0]=='?')?NULL:1;

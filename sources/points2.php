@@ -159,6 +159,6 @@ function charge_member($member_id,$amount,$reason)
 function add_to_charge_log($member_id,$amount,$reason,$time=NULL)
 {
 	if (is_null($time)) $time=time();
-	$GLOBALS['SITE_DB']->query_insert('chargelog',array('user_id'=>$member_id,'amount'=>$amount,'reason'=>insert_lang_comcode($reason,4),'date_and_time'=>$time));
+	$GLOBALS['SITE_DB']->query_insert('chargelog',array('member_id'=>$member_id,'amount'=>$amount,'reason'=>insert_lang_comcode($reason,4),'date_and_time'=>$time));
 }
 

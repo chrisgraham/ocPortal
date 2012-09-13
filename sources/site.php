@@ -1587,7 +1587,7 @@ function log_stats($string,$pg_time)
 
 	if ((get_option('no_bot_stats',true)==='1') && ((strpos(strtolower($browser),'http:')!==false) || (strpos(strtolower($browser),'bot')!==false) || (get_bot_type()!==NULL))) return;
 
-	$GLOBALS['SITE_DB']->query_insert('stats',array('access_denied_counter'=>0,'browser'=>$browser,'operating_system'=>$os,'the_page'=>$page,'ip'=>$ip,'the_user'=>$member,'date_and_time'=>$time,'referer'=>$referer,'get'=>$get,'post'=>$post,'milliseconds'=>intval($pg_time*1000)),false,true);
+	$GLOBALS['SITE_DB']->query_insert('stats',array('access_denied_counter'=>0,'browser'=>$browser,'operating_system'=>$os,'the_page'=>$page,'ip'=>$ip,'member_id'=>$member,'date_and_time'=>$time,'referer'=>$referer,'get'=>$get,'post'=>$post,'milliseconds'=>intval($pg_time*1000)),false,true);
 	if (mt_rand(0,1000)==1) $GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE date_and_time<'.strval(time()-60*60*24*intval(get_option('stats_store_time'))));
 
 	global $SITE_INFO;

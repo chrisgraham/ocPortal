@@ -195,7 +195,7 @@ class Module_admin_points
 	{
 		$title=get_screen_title('CHARGE_USER');
 
-		$member=post_param_integer('user');
+		$member=post_param_integer('member');
 		$amount=post_param_integer('amount');
 		$reason=post_param('reason');
 

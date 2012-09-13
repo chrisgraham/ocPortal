@@ -519,7 +519,7 @@ class forum_driver_smf2 extends forum_driver_base
 			$LAX_COMCODE=true;
 			$temp['message']=comcode_to_tempcode(str_replace('<br />',chr(10),$myrow['body']),$myrow['id_member']);
 			$LAX_COMCODE=$temp2;
-			$temp['user']=$myrow['id_member'];
+			$temp['member']=$myrow['id_member'];
 			$temp['date']=$myrow['poster_time'];
 
 			$out[]=$temp;

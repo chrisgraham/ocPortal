@@ -47,11 +47,13 @@ class Hook_pointstore_bank
 		require_code('database_action');
 		$class=str_replace('hook_pointstore_','',strtolower(get_class($this)));
 
+		$fresh_install=false;
 		if (!$GLOBALS['SITE_DB']->table_exists('bank'))
 		{
+			$fresh_install=true;
 			$GLOBALS['SITE_DB']->create_table('bank',array(
 				'id'=>'*AUTO',
-				'user_id'=>'INTEGER',
+				'member_id'=>'INTEGER',
 				'amount'=>'INTEGER',
 				'dividend'=>'INTEGER',
 				'add_time'=>'?TIME',
@@ -63,6 +65,7 @@ class Hook_pointstore_bank
 		{
 			// Add option and default value
 			add_config_option('BANK_DIVIDEND','bank_dividend','integer','return \'40\';','POINTSTORE','BANKING');
+			if (!$fresh_install) $GLOBALS['SITE_DB']->alter_table_field('bank','user_id','MEMBER','member_id');
 			// IDEA: Make 30 days a config option too, or even have multiple products?
 			// IDEA: Send email saying bank returned money?
 			// IDEA: Have the bank do marketing to people? http://ocportal.com/forum/topicview/misc/addons/ocbank_4.htm?redirected=1#post_87711
@@ -123,7 +126,7 @@ class Hook_pointstore_bank
 		// Actuate
 		require_code('points2');
 		charge_member(get_member(),$amount,do_lang('BANKING'));
-		$GLOBALS['SITE_DB']->query_insert('bank',array('add_time'=>time(),'user_id'=>get_member(),'amount'=>strval($amount),'dividend'=>$bank_dividend));
+		$GLOBALS['SITE_DB']->query_insert('bank',array('add_time'=>time(),'member_id'=>get_member(),'amount'=>strval($amount),'dividend'=>$bank_dividend));
 
 		// Show message
 		$result=do_lang_tempcode('BANKING_CONGRATULATIONS',integer_format($amount),integer_format($bank_dividend));

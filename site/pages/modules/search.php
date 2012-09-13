@@ -65,7 +65,7 @@ class Module_search
 			$GLOBALS['SITE_DB']->create_table('searches_saved',array(
 				'id'=>'*AUTO',
 				's_title'=>'SHORT_TEXT',
-				's_member_id'=>'USER',
+				's_member_id'=>'MEMBER',
 				's_time'=>'TIME',
 				's_primary'=>'SHORT_TEXT',
 				's_auxillary'=>'LONG_TEXT',
@@ -73,7 +73,7 @@ class Module_search
 
 			$GLOBALS['SITE_DB']->create_table('searches_logged',array(
 				'id'=>'*AUTO',
-				's_member_id'=>'USER',
+				's_member_id'=>'MEMBER',
 				's_time'=>'TIME',
 				's_primary'=>'SHORT_TEXT',
 				's_auxillary'=>'LONG_TEXT',

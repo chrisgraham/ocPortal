@@ -81,12 +81,12 @@ class OCP_Topic
 	 * @param  ?mixed			The raw comment array (NULL: lookup). This is useful if we want to pass it through a filter
 	 * @param  boolean		Whether to skip permission checks
 	 * @param  boolean		Whether to reverse the posts
-	 * @param  ?MEMBER		User to highlight the posts of (NULL: none)
+	 * @param  ?MEMBER		Member to highlight the posts of (NULL: none)
 	 * @param  boolean		Whether to allow ratings along with the comment (like reviews)
 	 * @param  ?integer		Maximum to load (NULL: default)
 	 * @return tempcode		The tempcode for the comment topic
 	 */
-	function render_as_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum_name,$post_warning,$preloaded_comments,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews,$num_to_show_limit)
+	function render_as_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum_name,$post_warning,$preloaded_comments,$explicit_allow,$reverse,$highlight_by_member,$allow_reviews,$num_to_show_limit)
 	{
 		if ((get_forum_type()=='ocf') && (!addon_installed('ocf_forum'))) return new ocp_tempcode();
 
@@ -139,7 +139,7 @@ class OCP_Topic
 			$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 
 			// Posts
-			list($posts,$serialized_options,$hash)=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
+			list($posts,$serialized_options,$hash)=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id);
 
 			// Pagination
 			$pagination=NULL;
@@ -225,13 +225,13 @@ class OCP_Topic
 	 * @param  ?mixed			The raw comment array (NULL: lookup). This is useful if we want to pass it through a filter
 	 * @param  boolean		Whether to reverse the posts
 	 * @param  boolean		Whether the current user may reply to the topic (influences what buttons show)
-	 * @param  ?MEMBER		User to highlight the posts of (NULL: none)
+	 * @param  ?MEMBER		Member to highlight the posts of (NULL: none)
 	 * @param  boolean		Whether to allow ratings along with the comment (like reviews)
 	 * @param  array			List of post IDs to load
 	 * @param  AUTO_LINK		Parent node being loaded to
 	 * @return tempcode		The tempcode for the comment topic
 	 */
-	function render_posts_from_topic($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum_name,$preloaded_comments,$reverse,$may_reply,$highlight_by_user,$allow_reviews,$posts,$parent_id)
+	function render_posts_from_topic($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum_name,$preloaded_comments,$reverse,$may_reply,$highlight_by_member,$allow_reviews,$posts,$parent_id)
 	{
 		if ((get_forum_type()=='ocf') && (!addon_installed('ocf_forum'))) return new ocp_tempcode();
 
@@ -262,7 +262,7 @@ class OCP_Topic
 			$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 
 			// Render
-			$rendered=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id,$parent_id,true);
+			$rendered=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$parent_id,true);
 			$ret=$rendered[0];
 			return $ret;
 		}
@@ -352,14 +352,14 @@ class OCP_Topic
 	 * @param  ?integer		Number of posts to show initially (NULL: no limit)
 	 * @param  integer		Maximum thread depth
 	 * @param  boolean		Whether the current user may reply to the topic (influences what buttons show)
-	 * @param  ?MEMBER		User to highlight the posts of (NULL: none)
+	 * @param  ?MEMBER		Member to highlight the posts of (NULL: none)
 	 * @param  array			Review ratings rows
 	 * @param  AUTO_LINK		ID of forum this topic in in
 	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
 	 * @param  boolean		Whether to just render everything as flat (used when doing AJAX post loading). NOT actually used since we wrote better post-orphaning-fixing code.
 	 * @return array			Tuple: Rendered topic, serialized options to render more posts, secure hash of serialized options to prevent tampering
 	 */
-	function render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id,$parent_post_id=NULL,$maybe_missing_links=false)
+	function render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$parent_post_id=NULL,$maybe_missing_links=false)
 	{
 		require_code('feedback');
 
@@ -424,7 +424,7 @@ class OCP_Topic
 			$tree=array($posts);
 		}
 
-		$ret=$this->_render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
+		$ret=$this->_render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id);
 
 		$other_ids=mixed();
 		if ($this->is_threaded)
@@ -439,7 +439,7 @@ class OCP_Topic
 
 		if (!is_null($this->topic_id))
 		{
-			$serialized_options=serialize(array($this->topic_id,$num_to_show_limit,true,false,strval($forum_id),$this->reverse,$may_reply,$highlight_by_user,count($all_individual_review_ratings)!=0));
+			$serialized_options=serialize(array($this->topic_id,$num_to_show_limit,true,false,strval($forum_id),$this->reverse,$may_reply,$highlight_by_member,count($all_individual_review_ratings)!=0));
 			$hash=best_hash($serialized_options,get_site_salt());
 		} else
 		{
@@ -656,7 +656,7 @@ class OCP_Topic
 	 * @param  AUTO_LINK		ID of forum this topic in in
 	 * @return tempcode		Rendered tree structure
 	 */
-	function _render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id)
+	function _render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id)
 	{
 		list($rendered,)=$tree;
 		$sequence=new ocp_tempcode();
@@ -672,10 +672,10 @@ class OCP_Topic
 			// Misc details
 			$datetime_raw=$post['date'];
 			$datetime=get_timezoned_date($post['date']);
-			$poster_url=is_guest($post['user'])?new ocp_tempcode():$GLOBALS['FORUM_DRIVER']->member_profile_url($post['user'],false,true);
-			$poster_name=array_key_exists('username',$post)?$post['username']:$GLOBALS['FORUM_DRIVER']->get_username($post['user']);
+			$poster_url=is_guest($post['member'])?new ocp_tempcode():$GLOBALS['FORUM_DRIVER']->member_profile_url($post['member'],false,true);
+			$poster_name=array_key_exists('username',$post)?$post['username']:$GLOBALS['FORUM_DRIVER']->get_username($post['member']);
 			if (is_null($poster_name)) $poster_name=do_lang('UNKNOWN');
-			$highlight=($highlight_by_user===$post['user']);
+			$highlight=($highlight_by_member===$post['member']);
 
 			// Find review, if there is one
 			$individual_review_ratings=array();
@@ -820,7 +820,7 @@ class OCP_Topic
 				}
 				if ($this->is_threaded)
 				{
-					$children=$this->_render_post_tree($num_to_show_limit,$post['children'],$may_reply,$highlight_by_user,$all_individual_review_ratings,$forum_id);
+					$children=$this->_render_post_tree($num_to_show_limit,$post['children'],$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id);
 				}
 			}
 
@@ -828,7 +828,7 @@ class OCP_Topic
 			{
 				require_code('feedback');
 				actualise_rating(true,'post',strval($post['id']),get_self_url(),$post['title']);
-				$rating=display_rating(get_self_url(),$post['title'],'post',strval($post['id']),'RATING_INLINE_DYNAMIC',$post['user']);
+				$rating=display_rating(get_self_url(),$post['title'],'post',strval($post['id']),'RATING_INLINE_DYNAMIC',$post['member']);
 			} else
 			{
 				$rating=new ocp_tempcode();
@@ -848,7 +848,7 @@ class OCP_Topic
 				'TITLE'=>$post['title'],
 				'TIME_RAW'=>strval($datetime_raw),
 				'TIME'=>$datetime,
-				'POSTER_ID'=>strval($post['user']),
+				'POSTER_ID'=>strval($post['member']),
 				'POSTER_URL'=>$poster_url,
 				'POSTER_NAME'=>$poster_name,
 				'POSTER'=>$poster,

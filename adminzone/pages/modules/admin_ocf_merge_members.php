@@ -121,7 +121,7 @@ class Module_admin_ocf_merge_members
 
 		if ($to_id==$from_id) warn_exit(do_lang_tempcode('MERGE_SAME'));
 
-		$meta=$GLOBALS['SITE_DB']->query('SELECT m_table,m_name FROM '.get_table_prefix().'db_meta WHERE '.db_string_equal_to('m_type','USER').' OR '.db_string_equal_to('m_type','?USER').' OR '.db_string_equal_to('m_type','*USER'));
+		$meta=$GLOBALS['SITE_DB']->query('SELECT m_table,m_name FROM '.get_table_prefix().'db_meta WHERE '.db_string_equal_to('m_type','MEMBER').' OR '.db_string_equal_to('m_type','?MEMBER').' OR '.db_string_equal_to('m_type','*MEMBER'));
 		foreach ($meta as $m)
 		{
 			$db=(substr($m['m_table'],0,2)=='f_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];

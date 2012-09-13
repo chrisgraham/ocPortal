@@ -64,7 +64,7 @@ class Block_main_leader_board
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('leader_board',array(
-				'lb_member'=>'*USER',
+				'lb_member'=>'*MEMBER',
 				'lb_points'=>'INTEGER',
 				'date_and_time'=>'*TIME'
 			));

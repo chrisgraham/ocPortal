@@ -59,7 +59,7 @@ class Module_bookmarks
 	{
 		$GLOBALS['SITE_DB']->create_table('bookmarks',array(
 			'id'=>'*AUTO',
-			'b_owner'=>'USER',
+			'b_owner'=>'MEMBER',
 			'b_folder'=>'SHORT_TEXT',
 			'b_title'=>'SHORT_TEXT',
 			'b_page_link'=>'SHORT_TEXT',

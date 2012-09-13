@@ -60,7 +60,7 @@ class Module_invoices
 		$GLOBALS['SITE_DB']->create_table('invoices',array(
 			'id'=>'*AUTO', // linked to IPN with this
 			'i_type_code'=>'ID_TEXT',
-			'i_member_id'=>'USER',
+			'i_member_id'=>'MEMBER',
 			'i_state'=>'ID_TEXT', // new|pending|paid|delivered (pending means payment has been requested)
 			'i_amount'=>'SHORT_TEXT', // can't always find this from i_type_code
 			'i_special'=>'SHORT_TEXT', // depending on i_type_code, would trigger something special such as a key upgrade

@@ -905,7 +905,7 @@ function edit_item($name,$original_name,$bribable,$healthy,$picture_url,$new_own
  * @param  AUTO_LINK	The realm of the item copy
  * @param  MEMBER		The owner of the item copy source
  */
-function edit_item_wrap_copy($member_id,$name,$cost,$not_infinite,$new_x,$new_y,$new_realm,$user)
+function edit_item_wrap_copy($member_id,$name,$cost,$not_infinite,$new_x,$new_y,$new_realm,$member)
 {
 	if (!($cost>0)) $cost=0;
 
@@ -921,16 +921,16 @@ function edit_item_wrap_copy($member_id,$name,$cost,$not_infinite,$new_x,$new_y,
 	if (($x!=$new_x) || ($y!=$new_y) || ($realm!=$new_realm))
 	{
 		// Check we don't have a copy of this item at new dest already
-		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('w_items','name',array('location_x'=>$new_x,'location_y'=>$new_y,'location_realm'=>$new_realm,'copy_owner'=>$user,'name'=>$name));
+		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('w_items','name',array('location_x'=>$new_x,'location_y'=>$new_y,'location_realm'=>$new_realm,'copy_owner'=>$member,'name'=>$name));
 		if (!is_null($t)) ocw_refresh_with_message(do_lang_tempcode('W_COPY_SOURCE_ALREADY'),'warn');
 	}
 
 	// Fix infinity source thing... we can never make a non-infinite source into an infinite source
-	$old_not_infinite=$GLOBALS['SITE_DB']->query_select_value_if_there('w_items','not_infinite',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'copy_owner'=>$user,'name'=>$name));
+	$old_not_infinite=$GLOBALS['SITE_DB']->query_select_value_if_there('w_items','not_infinite',array('location_x'=>$x,'location_y'=>$y,'location_realm'=>$realm,'copy_owner'=>$member,'name'=>$name));
 	if (is_null($old_not_infinite)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	if ($old_not_infinite==1) $not_infinite=1; elseif ($not_infinite!=1) $not_infinite=0;
 
-	edit_item_copy($user,$name,$not_infinite,$cost,$new_x,$new_y,$new_realm,$x,$y,$realm);
+	edit_item_copy($member,$name,$not_infinite,$cost,$new_x,$new_y,$new_realm,$x,$y,$realm);
 	ocw_refresh_with_message(do_lang_tempcode('SUCCESS'));
 }
 

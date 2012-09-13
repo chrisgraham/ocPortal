@@ -36,7 +36,7 @@ class Hook_rss_admin_recent_actions
 	{
 		if (!has_actual_page_access(get_member(),'admin_actionlog')) return NULL;
 
-		$filters=ocfilter_to_sqlfragment($_filters,'the_user','f_members',NULL,'the_user','id');
+		$filters=ocfilter_to_sqlfragment($_filters,'member_id','f_members',NULL,'member_id','id');
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'adminlogs WHERE date_and_time>'.strval($cutoff).' AND '.$filters.' ORDER BY date_and_time DESC',$max);
 
@@ -46,7 +46,7 @@ class Hook_rss_admin_recent_actions
 		foreach ($rows as $row)
 		{
 			$id=strval($row['id']);
-			$author=$GLOBALS['FORUM_DRIVER']->get_username($row['the_user']);
+			$author=$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']);
 			if (is_null($author)) $author=do_lang('UNKNOWN');
 			$author.=' / '.$row['ip'];
 

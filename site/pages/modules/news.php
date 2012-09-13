@@ -90,7 +90,7 @@ class Module_news
 				'allow_trackbacks'=>'BINARY',
 				'notes'=>'LONG_TEXT',
 				'author'=>'ID_TEXT',
-				'submitter'=>'USER',
+				'submitter'=>'MEMBER',
 				'validated'=>'BINARY',
 				'edit_date'=>'?TIME',
 				'news_category'=>'AUTO_LINK',
@@ -107,7 +107,7 @@ class Module_news
 			$GLOBALS['SITE_DB']->create_table('news_categories',array(
 				'id'=>'*AUTO',
 				'nc_title'=>'SHORT_TRANS',
-				'nc_owner'=>'?USER',
+				'nc_owner'=>'?MEMBER',
 				'nc_img'=>'ID_TEXT',
 				'notes'=>'LONG_TEXT'
 			));

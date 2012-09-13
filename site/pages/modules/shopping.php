@@ -98,7 +98,7 @@ class Module_shopping
 			$GLOBALS['SITE_DB']->create_table('shopping_cart',array(
 				'id'=>'*AUTO',
 				'session_id'=>'INTEGER',
-				'ordered_by'=>'*USER',
+				'ordered_by'=>'*MEMBER',
 				'product_id'=>'*AUTO_LINK',
 				'product_name'=>'SHORT_TEXT',
 				'product_code'=>'SHORT_TEXT',
@@ -131,7 +131,7 @@ class Module_shopping
 
 			$GLOBALS['SITE_DB']->create_table('shopping_logging',array(
 				'id'=>'*AUTO',
-				'e_member_id'=>'*USER',
+				'e_member_id'=>'*MEMBER',
 				'session_id'=>'INTEGER',
 				'ip'=>'IP',
 				'last_action'=>'SHORT_TEXT',

@@ -264,7 +264,7 @@ class Hook_addon_registry_points
 
 		$give_template=do_lorem_template('POINTS_GIVE', array(
 			'GIVE_URL'=>placeholder_url(),
-			'USER'=>lorem_phrase(),
+			'MEMBER'=>lorem_phrase(),
 			'VIEWER_GIFT_POINTS_AVAILABLE'=>placeholder_number()
 		));
 

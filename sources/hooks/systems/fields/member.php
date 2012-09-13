@@ -18,7 +18,7 @@
  * @package		core_fields
  */
 
-class Hook_fields_user
+class Hook_fields_member
 {
 
 	// ==============

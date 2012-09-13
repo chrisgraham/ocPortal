@@ -311,7 +311,7 @@ function db_get_type_remap()
 		'SHORT_INTEGER'=>'tinyint',
 		'REAL'=>'real',
 		'BINARY'=>'tinyint(1)',
-		'USER'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
+		'MEMBER'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
 		'GROUP'=>'integer', // not unsigned because it's useful to have -ve for temporary usage whilst importing
 		'TIME'=>'integer unsigned',
 		'LONG_TRANS'=>'integer unsigned',

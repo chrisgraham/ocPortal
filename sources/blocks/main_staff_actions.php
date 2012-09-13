@@ -73,12 +73,12 @@ class Block_main_staff_actions
 			'the_type'=>'ID_TEXT',
 			'param_a'=>'ID_TEXT',
 			'param_b'=>'SHORT_TEXT',
-			'the_user'=>'USER',
+			'member_id'=>'MEMBER',
 			'ip'=>'IP',
 			'date_and_time'=>'TIME'
 		));
 
-		$GLOBALS['SITE_DB']->create_index('adminlogs','xas',array('the_user'));
+		$GLOBALS['SITE_DB']->create_index('adminlogs','xas',array('member_id'));
 		$GLOBALS['SITE_DB']->create_index('adminlogs','ts',array('date_and_time'));
 		$GLOBALS['SITE_DB']->create_index('adminlogs','aip',array('ip'));
 		$GLOBALS['SITE_DB']->create_index('adminlogs','athe_type',array('the_type'));
@@ -112,11 +112,11 @@ class Block_main_staff_actions
 		$fields_title=results_field_title(array(do_lang_tempcode('USERNAME'),/*do_lang_tempcode('IP_ADDRESS'),*/do_lang_tempcode('DATE_TIME'),do_lang_tempcode('ACTION'),do_lang_tempcode('PARAMETER_A'),do_lang_tempcode('PARAMETER_B')),$sortables,'sa_sort',$sortable.' '.$sort_order);
 
 		$max_rows=$max;//Don't want to encourage pagination (there's a better module they can go to) $GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(*)');
-		$rows=$GLOBALS['SITE_DB']->query_select('adminlogs',array('the_type','param_a','param_b','the_user','ip','date_and_time'),NULL,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+		$rows=$GLOBALS['SITE_DB']->query_select('adminlogs',array('the_type','param_a','param_b','member_id','ip','date_and_time'),NULL,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$fields=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['the_user']);
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['member_id']);
 			if (is_null($username)) $username=do_lang('UNKNOWN');
 			$date=get_timezoned_date($myrow['date_and_time']);
 

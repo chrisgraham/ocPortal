@@ -65,7 +65,7 @@ class Hook_pointstore_ocdeadpeople
 			$immunization_url=build_url(array('page'=>'pointstore','type'=>'action_done','id'=>'ocdeadpeople','disease'=>$disease['id'],'immunization'=>1),'_SEARCH');
 			$immunization_url=$immunization_url->evaluate();
 
-			$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>$member_id,'disease_id'=>$disease['id']));
+			$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('member_id'=>$member_id,'disease_id'=>$disease['id']));
 
 			$get_cure=true;
 			$get_immunization=true;
@@ -145,11 +145,11 @@ class Hook_pointstore_ocdeadpeople
 		$cure=($get_cure==1)?1:0;
 		$immunization=($get_immunization==1)?1:0;
 
-		$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>$member_id,'disease_id'=>$disease_id));
+		$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('member_id'=>$member_id,'disease_id'=>$disease_id));
 
 		$insert=true;
 
-		if (isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']!=0)
+		if (isset($member_rows[0]['member_id']) && $member_rows[0]['member_id']!=0)
 		{
 			//there is already a db member disease record
 			$insert=false;
@@ -191,11 +191,11 @@ class Hook_pointstore_ocdeadpeople
 
 		if ($insert)
 		{
-			$GLOBALS['SITE_DB']->query_insert('members_diseases',array('user_id'=>$member_id,'disease_id'=>$disease_id,'sick'=>strval($sick),'cure'=>strval($cure),'immunisation'=>strval($immunization)));
+			$GLOBALS['SITE_DB']->query_insert('members_diseases',array('member_id'=>$member_id,'disease_id'=>$disease_id,'sick'=>strval($sick),'cure'=>strval($cure),'immunisation'=>strval($immunization)));
 		}
 		else
 		{
-			$GLOBALS['SITE_DB']->query_update('members_diseases',array('user_id'=>$member_id,'disease_id'=>$disease_id,'sick'=>strval($sick),'cure'=>strval($cure),'immunisation'=>strval($immunization)),array('user_id'=>$member_id,'disease_id'=>$disease_id),'',1);
+			$GLOBALS['SITE_DB']->query_update('members_diseases',array('member_id'=>$member_id,'disease_id'=>$disease_id,'sick'=>strval($sick),'cure'=>strval($cure),'immunisation'=>strval($immunization)),array('member_id'=>$member_id,'disease_id'=>$disease_id),'',1);
 		}
 
 		if ($get_immunization==1)

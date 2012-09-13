@@ -105,7 +105,7 @@ class Database_Static_sqlite
 			'SHORT_INTEGER'=>'smallint unsigned',
 			'REAL'=>'real',
 			'BINARY'=>'bit',
-			'USER'=>'integer',
+			'MEMBER'=>'integer',
 			'GROUP'=>'integer',
 			'TIME'=>'integer',
 			'LONG_TRANS'=>'integer',

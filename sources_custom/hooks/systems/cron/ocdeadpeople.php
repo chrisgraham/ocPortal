@@ -36,13 +36,13 @@ class Hook_cron_ocdeadpeople
 		foreach ($diseases_to_spread as $disease)
 		{
 			// select infected by the disease members
-			$sick_by_disease_members=$GLOBALS['SITE_DB']->query('SELECT user_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'members_diseases WHERE sick=1 AND disease_id='.strval($disease['id']).' ',NULL, NULL,true);
+			$sick_by_disease_members=$GLOBALS['SITE_DB']->query('SELECT member_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'members_diseases WHERE sick=1 AND disease_id='.strval($disease['id']).' ',NULL, NULL,true);
 			if (is_null($sick_by_disease_members)) return;
 
 			$sick_members=array();
 			foreach ($sick_by_disease_members as $sick_member)
 			{
-				$sick_members[]=$sick_member['user_id'];
+				$sick_members[]=$sick_member['member_id'];
 			}
 			$sick_members[]=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
@@ -52,18 +52,18 @@ class Hook_cron_ocdeadpeople
 				require_lang('ocdeadpeople');
 
 				// charge disease points
-				charge_member($sick_member['user_id'],$disease['points_per_spread'],do_lang('DISEASE_GET') . ' "'.$disease['name'].'"');
+				charge_member($sick_member['member_id'],$disease['points_per_spread'],do_lang('DISEASE_GET') . ' "'.$disease['name'].'"');
 
 				// pick a random friend to infect
 				$friends_a=array();
 				if (addon_installed('chat'))
 				{
-					$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends WHERE member_likes='.strval(intval($sick_member['user_id'])).' OR member_liked='.strval(intval($sick_member['user_id'])).' ORDER BY date_and_time');
+					$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends WHERE member_likes='.strval(intval($sick_member['member_id'])).' OR member_liked='.strval(intval($sick_member['member_id'])).' ORDER BY date_and_time');
 
 					// get friends
 					foreach ($rows as $i=>$row)
 					{
-						if ($row['member_likes']!=$sick_member['user_id'])
+						if ($row['member_likes']!=$sick_member['member_id'])
 						{
 							$friends_a[$row['member_likes']]=$row['member_likes'];
 						}
@@ -86,11 +86,11 @@ class Hook_cron_ocdeadpeople
 
 				if (isset($friends_healthy[$to_infect]) && ($friends_healthy[$to_infect]!=0))
 				{
-					$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']));
+					$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('member_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']));
 
 					$insert=true;
 					$has_immunization=false;
-					if (isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']!=0)
+					if (isset($member_rows[0]['member_id']) && $member_rows[0]['member_id']!=0)
 					{
 						// there is already a db member disease record
 						$insert=false;
@@ -106,11 +106,11 @@ class Hook_cron_ocdeadpeople
 						if ($insert)
 						{
 							// infect the member for the first time
-							$GLOBALS['SITE_DB']->query_insert('members_diseases',array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0));
+							$GLOBALS['SITE_DB']->query_insert('members_diseases',array('member_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0));
 						} else
 						{
 							// infect the member again
-							$GLOBALS['SITE_DB']->query_update('members_diseases',array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0),array('user_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']),'',1);
+							$GLOBALS['SITE_DB']->query_update('members_diseases',array('member_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0),array('member_id'=>$friends_healthy[$to_infect],'disease_id'=>$disease['id']),'',1);
 						}
 
 						$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($friends_healthy[$to_infect]));
@@ -130,7 +130,7 @@ class Hook_cron_ocdeadpeople
 			$immunised_members=array();
 			foreach ($immunised_members_rows as  $im_member)
 			{
-				$immunised_members[]=$im_member['user_id'];
+				$immunised_members[]=$im_member['member_id'];
 			}
 
 			$sick_and_immunised_members=array();
@@ -145,10 +145,10 @@ class Hook_cron_ocdeadpeople
 			$random_member=$GLOBALS['SITE_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' AND id NOT IN ('.$avoid_members.') ORDER BY RAND()',1,NULL,true);
 			if (isset($random_member[0]['id']) && $random_member[0]['id']>0)
 			{
-				$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('user_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id']));
+				$member_rows=$GLOBALS['SITE_DB']->query_select('members_diseases',array('*'),array('member_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id']));
 
 				$insert=true;
-				if (isset($member_rows[0]['user_id']) && $member_rows[0]['user_id']>0)
+				if (isset($member_rows[0]['member_id']) && $member_rows[0]['member_id']>0)
 				{
 					// there is already a db member disease record
 					$insert=false;
@@ -162,11 +162,11 @@ class Hook_cron_ocdeadpeople
 				if ($insert)
 				{
 					// infect the member for the first time
-					$GLOBALS['SITE_DB']->query_insert('members_diseases',array('user_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0));
+					$GLOBALS['SITE_DB']->query_insert('members_diseases',array('member_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0));
 				} else
 				{
 					// infect the member again
-					$GLOBALS['SITE_DB']->query_update('members_diseases',array('user_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0),array('user_id'=>strval($random_member[0]['id']),'disease_id'=>strval($disease['id'])),'',1);
+					$GLOBALS['SITE_DB']->query_update('members_diseases',array('member_id'=>strval($random_member[0]['id']),'disease_id'=>$disease['id'],'sick'=>1,'cure'=>0,'immunisation'=>0),array('member_id'=>strval($random_member[0]['id']),'disease_id'=>strval($disease['id'])),'',1);
 				}
 
 				$message=do_lang('DISEASES_MAIL_MESSAGE',$disease['name'],$disease['name'],array($cure_url,get_site_name()),get_lang($random_member[0]['id']));

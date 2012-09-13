@@ -170,7 +170,7 @@ class Hook_pointstore_community_billboard
 		}
 
 		// Add this to the database
-		$GLOBALS['SITE_DB']->query_insert('community_billboard',array('notes'=>'','activation_time'=>NULL,'active_now'=>0,'user_id'=>$member_id,'the_message'=>insert_lang_comcode($message,2),'days'=>$days,'order_time'=>time()));
+		$GLOBALS['SITE_DB']->query_insert('community_billboard',array('notes'=>'','activation_time'=>NULL,'active_now'=>0,'member_id'=>$member_id,'the_message'=>insert_lang_comcode($message,2),'days'=>$days,'order_time'=>time()));
 
 		// Mail off the notice
 		require_code('notifications');

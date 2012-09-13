@@ -75,7 +75,7 @@ function init__users()
 		if ((get_forum_type()=='ocf') && (get_db_site()==get_db_forums()) && (get_db_site_host()==get_db_forums_host()))
 		{
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-			$_s=$GLOBALS['SITE_DB']->query('SELECT s.*,m.m_primary_group FROM '.get_table_prefix().'sessions s LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'f_members m ON m.id=s.the_user'.$where);
+			$_s=$GLOBALS['SITE_DB']->query('SELECT s.*,m.m_primary_group FROM '.get_table_prefix().'sessions s LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'f_members m ON m.id=s.member_id'.$where);
 			$SESSION_CACHE=list_to_map('the_session',$_s);
 			$GLOBALS['NO_DB_SCOPE_CHECK']=false;
 		} else
@@ -205,11 +205,18 @@ function get_member($quick_only=false)
 		$allow_unbound_guest=true; // Note: Guest sessions are not IP bound
 		$member_row=NULL;
 
-		if (($SESSION_CACHE!==NULL) && (array_key_exists($session,$SESSION_CACHE)) && ($SESSION_CACHE[$session]!==NULL) && (array_key_exists('the_user',$SESSION_CACHE[$session])) && ((get_option('ip_strict_for_sessions')=='0') || ($SESSION_CACHE[$session]['ip']==$ip) || ((is_guest($SESSION_CACHE[$session]['the_user'])) && ($allow_unbound_guest)) || (($SESSION_CACHE[$session]['session_confirmed']==0) && (!is_guest($SESSION_CACHE[$session]['the_user'])))) && ($SESSION_CACHE[$session]['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
+		if (
+			($SESSION_CACHE!==NULL) && 
+			(array_key_exists($session,$SESSION_CACHE)) && 
+			($SESSION_CACHE[$session]!==NULL) && 
+			(array_key_exists('member_id',$SESSION_CACHE[$session])) && 
+			((get_option('ip_strict_for_sessions')=='0') || ($SESSION_CACHE[$session]['ip']==$ip) || ((is_guest($SESSION_CACHE[$session]['member_id'])) && ($allow_unbound_guest)) || (($SESSION_CACHE[$session]['session_confirmed']==0) && (!is_guest($SESSION_CACHE[$session]['member_id'])))) && 
+			($SESSION_CACHE[$session]['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time'))))
+		)
 			$member_row=$SESSION_CACHE[$session];
-		if (($member_row!==NULL) && ((!array_key_exists($base,$_COOKIE)) || (!is_guest($member_row['the_user']))))
+		if (($member_row!==NULL) && ((!array_key_exists($base,$_COOKIE)) || (!is_guest($member_row['member_id']))))
 		{
-			$member=$member_row['the_user'];
+			$member=$member_row['member_id'];
 
 			if (($member!==NULL) && ((time()-$member_row['last_activity'])>10)) // Performance optimisation. Pointless re-storing the last_activity if less than 3 seconds have passed!
 			{
@@ -401,7 +408,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 	global $SESSION_CACHE;
 	foreach ($SESSION_CACHE as $_session=>$row)
 	{
-		if (!array_key_exists('the_user',$row)) continue; // Workaround to HipHop PHP weird bug
+		if (!array_key_exists('member_id',$row)) continue; // Workaround to HipHop PHP weird bug
 
 		// Delete expiry from cache
 		if ($row['last_activity']<time()-60*60*max(1,intval(get_option('session_expiry_time'))))
@@ -414,7 +421,7 @@ function delete_expired_sessions_or_recover($member=NULL)
 		// Get back to prior session if there was one
 		if ($member!==NULL)
 		{
-			if (($row['the_user']==$member) && (((get_option('ip_strict_for_sessions')=='0') && ($member!=$GLOBALS['FORUM_DRIVER']->get_guest_id())) || ($row['ip']==$ip)) && ($row['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
+			if (($row['member_id']==$member) && (((get_option('ip_strict_for_sessions')=='0') && ($member!=$GLOBALS['FORUM_DRIVER']->get_guest_id())) || ($row['ip']==$ip)) && ($row['last_activity']>time()-60*60*max(1,intval(get_option('session_expiry_time')))))
 			{
 				$new_session=$_session;
 			}
@@ -550,7 +557,7 @@ function get_online_members($longer_time,$filter,&$count)
 		// If we have multiple servers this many not be accurate as we probably turned replication off for the sessions table. The site design should be updated to not show this kind of info
 		$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds));
 		if (!is_null($filter))
-			return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds).' AND the_user='.strval($filter),1);
+			return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds).' AND member_id='.strval($filter),1);
 		return NULL;
 	}
 
@@ -561,11 +568,11 @@ function get_online_members($longer_time,$filter,&$count)
 	$members_online=0;
 	foreach ($SESSION_CACHE as $row)
 	{
-		if (!isset($row['the_user'])) continue; // Workaround to HipHop PHP weird bug
+		if (!isset($row['member_id'])) continue; // Workaround to HipHop PHP weird bug
 
 		if (($row['last_activity']>$cutoff) && ($row['session_invisible']==0))
 		{
-			if ($row['the_user']==$guest_id)
+			if ($row['member_id']==$guest_id)
 			{
 				$count++;
 				$members[]=$row;
@@ -573,13 +580,13 @@ function get_online_members($longer_time,$filter,&$count)
 				if ($members_online==200) // This is silly, don't display any
 				{
 					if (!is_null($filter)) // Unless we are filtering
-						return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds).' AND the_user='.strval($filter),1);
+						return $GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'sessions WHERE last_activity>'.strval($users_online_time_seconds).' AND member_id='.strval($filter),1);
 					return NULL;
 				}
-			} elseif (!member_blocked(get_member(),$row['the_user']))
+			} elseif (!member_blocked(get_member(),$row['member_id']))
 			{
 				$count++;
-				$members[-$row['the_user']]=$row; // - (minus) is just a hackerish thing to allow it to do a unique, without messing with the above
+				$members[-$row['member_id']]=$row; // - (minus) is just a hackerish thing to allow it to do a unique, without messing with the above
 			}
 		}
 	}
@@ -598,7 +605,7 @@ function member_is_online($member_id)
 	$online=get_online_members(false,$member_id,$count);
 	foreach ($online as $m)
 	{
-		if ($m['the_user']==$member_id) return true;
+		if ($m['member_id']==$member_id) return true;
 	}
 	return false;
 }

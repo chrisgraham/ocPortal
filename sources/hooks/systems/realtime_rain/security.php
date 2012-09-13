@@ -34,7 +34,7 @@ class Hook_realtime_rain_security
 
 		if (has_actual_page_access(get_member(),'admin_security'))
 		{
-			$rows=$GLOBALS['SITE_DB']->query('SELECT id,reason,ip,the_user AS member_id,date_and_time AS timestamp FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'hackattack WHERE date_and_time BETWEEN '.strval($from).' AND '.strval($to));
+			$rows=$GLOBALS['SITE_DB']->query('SELECT id,reason,ip,date_and_time AS timestamp,member_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'hackattack WHERE date_and_time BETWEEN '.strval($from).' AND '.strval($to));
 
 			foreach ($rows as $row)
 			{

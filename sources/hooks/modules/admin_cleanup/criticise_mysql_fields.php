@@ -192,7 +192,7 @@ class Hook_criticise_mysql_fields
 							}
 							elseif ((strpos($field,'user')!==false) || (strpos($field,'member')!==false))
 							{
-								$type='USER';
+								$type='MEMBER';
 							}
 							elseif (strpos($field,'_id')!==false)
 							{

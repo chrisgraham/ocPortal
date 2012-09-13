@@ -99,7 +99,7 @@ class Module_admin_workflow extends standard_crud_module
 			'source_id'=>'SHORT_TEXT',		// The ID of the source, wherever it happens to be
 			'workflow_name'=>'SHORT_TRANS',		// The name (and ID) of the workflow this content is in
 			'notes'=>'LONG_TEXT',		// No point translating the notes, since they're transient
-			'original_submitter'=>'USER'		// Save this here since there's no standard way to discover it later (eg. through content-meta-aware hooks)
+			'original_submitter'=>'MEMBER'		// Save this here since there's no standard way to discover it later (eg. through content-meta-aware hooks)
 		));
 
 		// The workflow_content_status table records the status of each
@@ -110,7 +110,7 @@ class Module_admin_workflow extends standard_crud_module
 			'workflow_content_id'=>'INTEGER',		// The ID of this content in the workflow_content table
 			'workflow_approval_name'=>'SHORT_TRANS',		// The name of the ID field in the source table
 			'status_code'=>'INTEGER',		// A code indicating the status TODO: Use TINY_INTEGER here? Can't find any other use of this type to investigate though.
-			'approved_by'=>'USER'		// Remember who set this status, if the need arises to investigate this later
+			'approved_by'=>'MEMBER'		// Remember who set this status, if the need arises to investigate this later
 		));
 
 	}

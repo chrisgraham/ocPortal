@@ -10,7 +10,7 @@
 {+START,IF,{$NOT,{$HAS_ACTUAL_PAGE_ACCESS,admin_points}}}
 	{$,Regular member}
 	<p class="points_give_box_header">
-		<span>{!GIVE_TO,{$USERNAME*,{USER}}}</span>
+		<span>{!GIVE_TO,{$USERNAME*,{MEMBER}}}</span>
 		{+START,IF_NON_EMPTY,{VIEWER_GIFT_POINTS_AVAILABLE}}
 			{!GIVE_TEXT,{VIEWER_GIFT_POINTS_AVAILABLE*}}
 		{+END}

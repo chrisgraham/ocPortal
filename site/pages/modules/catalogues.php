@@ -36,7 +36,7 @@ class Module_catalogues
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=7;
+		$info['version']=8;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -129,7 +129,7 @@ class Module_catalogues
 				'c_name'=>'ID_TEXT',
 				'cf_name'=>'SHORT_TRANS',
 				'cf_description'=>'LONG_TRANS',
-				'cf_type'=>'ID_TEXT', /* can be short_text,long_text,short_trans,long_trans,integer,float,picture,upload,url,email,user */
+				'cf_type'=>'ID_TEXT',
 				'cf_order'=>'INTEGER',
 				'cf_defines_order'=>'SHORT_INTEGER', // 0, 1, or 2
 				'cf_visible'=>'BINARY',
@@ -144,7 +144,7 @@ class Module_catalogues
 				'id'=>'*AUTO',
 				'c_name'=>'ID_TEXT',
 				'cc_id'=>'AUTO_LINK',
-				'ce_submitter'=>'USER',
+				'ce_submitter'=>'MEMBER',
 				'ce_add_date'=>'TIME',
 				'ce_edit_date'=>'?TIME',
 				'ce_views'=>'INTEGER',
@@ -252,7 +252,7 @@ class Module_catalogues
 			actual_add_catalogue('projects',lang_code_to_default_content('DEFAULT_CATALOGUE_PROJECTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PROJECTS_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',30);
 			$fields=array(
 				array('NAME','DESCRIPTION_NAME','short_trans',1,1),
-				array('MAINTAINER','DESCRIPTION_MAINTAINER','user',0,1),
+				array('MAINTAINER','DESCRIPTION_MAINTAINER','member',0,1),
 				array('DESCRIPTION','DESCRIPTION_DESCRIPTION','long_trans',0,1),
 				array('PROJECT_PROGRESS','DESCRIPTION_PROJECT_PROGRESS','integer',0,1)
 			);
@@ -433,7 +433,7 @@ class Module_catalogues
 
 			// Move floats and integers into their own new tables
 			if (function_exists('set_time_limit')) @set_time_limit(0);
-			$sql_integer=db_string_equal_to('cf_type','integer').' OR '.db_string_equal_to('cf_type','auto_increment').' OR '.db_string_equal_to('cf_type','random').' OR '.db_string_equal_to('cf_type','user').' OR '.db_string_equal_to('cf_type','tick');
+			$sql_integer=db_string_equal_to('cf_type','integer').' OR '.db_string_equal_to('cf_type','auto_increment').' OR '.db_string_equal_to('cf_type','random').' OR '.db_string_equal_to('cf_type','member').' OR '.db_string_equal_to('cf_type','tick');
 			$sql_float=db_string_equal_to('cf_type','float');
 			foreach (array($sql_float=>'float',$sql_integer=>'integer') as $where=>$new_type)
 			{
@@ -473,6 +473,12 @@ class Module_catalogues
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
 			add_config_option('CATALOGUES_SUBCAT_NARROWIN','catalogues_subcat_narrowin','tick','return \'0\';','FEATURE','CATALOGUES');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<8))
+		{
+			$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'member'),array('cf_type'=>'user'));
+			$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'member_multi'),array('cf_type'=>'user_multi'));
 		}
 	}
 

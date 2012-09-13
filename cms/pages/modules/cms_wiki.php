@@ -538,7 +538,7 @@ class Module_cms_wiki
 			$start=$start+$length+1;
 		}
 
-		$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_TREE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>$member));
+		$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_EDIT_TREE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>$member));
 
 		// Show it worked / Refresh
 		$url=get_param('redirect');

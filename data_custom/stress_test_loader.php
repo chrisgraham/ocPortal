@@ -164,7 +164,7 @@ function do_work()
 	for ($j=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)');$j<$num_wanted;$j++)
 	{
 		$_message_parsed=insert_lang_comcode(random_text(),4);
-		$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>'','room_id'=>$room_id,'user_id'=>db_get_first_id(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')));
+		$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>'','room_id'=>$room_id,'member_id'=>db_get_first_id(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')));
 	}
 	echo 'done chat stuff'.chr(10);
 
@@ -357,7 +357,7 @@ function do_work()
 			'user_agent'=>'',
 			'referer'=>'',
 			'user_os'=>'',
-			'the_user'=>db_get_first_id(),
+			'member_id'=>db_get_first_id(),
 			'date_and_time'=>time(),
 			'ip'=>uniqid(''),
 			'reason'=>'ASCII_ENTITY_URL_HACK',
