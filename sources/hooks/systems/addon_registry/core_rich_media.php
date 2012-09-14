@@ -1824,7 +1824,8 @@ class Hook_addon_registry_core_rich_media
 			'FIELD_NAME'=>lorem_phrase(),
 			'TPL'=>lorem_phrase(),
 			'DESCRIPTION'=>lorem_sentence(),
-			'ID'=>placeholder_id()
+			'ID'=>placeholder_id(),
+			'MAY_DELETE'=>true,
 		));
 
 		return array(

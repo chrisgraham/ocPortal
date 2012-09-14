@@ -267,7 +267,7 @@ function attachment_popup_script()
 	}
 
 	$field_name=get_param('field_name','post');
-	$keep=symbol_tempcode('KEEP',array(0,1));
+	$keep=symbol_tempcode('KEEP',array('0','1'));
 	$post_url=find_script('attachment_popup').'?field_name='.$field_name.$keep->evaluate();
 	if (get_param('utheme','')!='') $post_url.='&utheme='.get_param('utheme');
 
@@ -275,9 +275,25 @@ function attachment_popup_script()
 	$content=new ocp_tempcode();
 	foreach ($rows as $myrow)
 	{
+		$may_delete=(get_member()==$myrow['a_member_id']) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()));
+
+		if ((post_param_integer('delete_'.strval($myrow['id']),0)==1) && ($may_delete))
+		{
+			require_code('attachments3');
+			_delete_attachment($myrow['id'],$connection);
+			continue;
+		}
+
 		$myrow['description']=$myrow['a_description'];
 		$tpl=render_attachment('attachment',array(),$myrow,uniqid(''),get_member(),false,$connection,NULL,get_member());
-		$content->attach(do_template('ATTACHMENTS_BROWSER_ATTACHMENT',array('_GUID'=>'64356d30905c99325231d3bbee92128c','FIELD_NAME'=>$field_name,'TPL'=>$tpl,'DESCRIPTION'=>$myrow['a_description'],'ID'=>strval($myrow['id']))));
+		$content->attach(do_template('ATTACHMENTS_BROWSER_ATTACHMENT',array(
+			'_GUID'=>'64356d30905c99325231d3bbee92128c',
+			'FIELD_NAME'=>$field_name,
+			'TPL'=>$tpl,
+			'DESCRIPTION'=>$myrow['a_description'],
+			'ID'=>strval($myrow['id']),
+			'MAY_DELETE'=>$may_delete,
+		)));
 	}
 
 	$content=do_template('ATTACHMENTS_BROWSER',array('_GUID'=>'7773aad46fb0bfe563a142030beb1a36','LIST'=>$list,'CONTENT'=>$content,'URL'=>$post_url));
