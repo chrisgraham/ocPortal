@@ -2241,6 +2241,10 @@ div.wysiwyg_toolbar_color_finder {
 	border: 1px dashed {$GET,slightly_seeded_complement_text} !important;
 }
 
+.comments_wrapper .boxless_space .comment_wrapper .highlighted_post.box {
+	border-top: 1px dashed {$GET,slightly_seeded_complement_text} !important; /* Needs to be more explicit as boxless-space rules will remove borders */
+}
+
 .reviews_average {
 	font-size: 0.8em;
 	{$BETA_CSS_PROPERTY,opacity: 0.7;} display: inline-block;/*Needed for IE8*/
@@ -2763,6 +2767,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 }
 .button_micro {
 	background-image: none !important; /* Too loud for such a small space */
+	font-size: 0.8em;
 }
 
 /* This is used to overlay special out-of-flow edit buttons, for staff only */

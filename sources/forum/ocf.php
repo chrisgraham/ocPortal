@@ -262,12 +262,14 @@ class forum_driver_ocf extends forum_driver_base
 	 * @param  boolean		Whether to only load minimal details if it is a threaded topic
 	 * @param  ?array			List of post IDs to load (NULL: no filter)
 	 * @param  boolean		Whether to load spacer posts
+	 * @param  ID_TEXT		Preferred sort order (appropriate will use rating if threaded, other
+	 * @set date rating
 	 * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
 	 */
-	function get_forum_topic_posts($topic_id,&$count,$max=100,$start=0,$mark_read=true,$reverse=false,$light_if_threaded=false,$posts=NULL,$load_spacer_posts_too=false)
+	function get_forum_topic_posts($topic_id,&$count,$max=100,$start=0,$mark_read=true,$reverse=false,$light_if_threaded=false,$posts=NULL,$load_spacer_posts_too=false,$sort='date')
 	{
 		require_code('ocf_forum_driver_helper');
-		return _helper_get_forum_topic_posts($this,$topic_id,$count,$max,$start,$mark_read,$reverse,$light_if_threaded,$posts,$load_spacer_posts_too);
+		return _helper_get_forum_topic_posts($this,$topic_id,$count,$max,$start,$mark_read,$reverse,$light_if_threaded,$posts,$load_spacer_posts_too,$sort);
 	}
 
 	/**

@@ -188,7 +188,7 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 	{
 		$where.=' AND (nc_owner IS NULL OR nc_owner='.strval(get_member()).')';
 	}
-	$_cats=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'news_categories '.$where.' ORDER BY id');
+	$_cats=$GLOBALS['SITE_DB']->query('SELECT *,c.id as n_id FROM '.get_table_prefix().'news_categories c '.$where.' ORDER BY c.id',NULL,NULL,false,false,array('nc_title'));
 
 	foreach ($_cats as $i=>$cat)
 	{
@@ -211,17 +211,17 @@ function nice_get_news_categories($it=NULL,$show_all_personal_categories=false,$
 	{
 		if ($cat['nc_owner']==get_member()) $add_cat=false;
 
-		if (!has_category_access(get_member(),'news',strval($cat['id']))) continue;
-		if (($addable_filter) && (!has_submit_permission('high',get_member(),get_ip_address(),'cms_news',array('news',$cat['id'])))) continue;
+		if (!has_category_access(get_member(),'news',strval($cat['n_id']))) continue;
+		if (($addable_filter) && (!has_submit_permission('high',get_member(),get_ip_address(),'cms_news',array('news',$cat['n_id'])))) continue;
 
 		if (is_null($cat['nc_owner']))
 		{
-			$li=form_input_list_entry(strval($cat['id']),($it!=array(NULL)) && in_array($cat['id'],$it),$cat['nice_title'].' (#'.strval($cat['id']).')');
+			$li=form_input_list_entry(strval($cat['n_id']),($it!=array(NULL)) && in_array($cat['n_id'],$it),$cat['nice_title'].' (#'.strval($cat['n_id']).')');
 			$categories->attach($li);
 		} else
 		{
 			if ((((!is_null($cat['nc_owner'])) && (has_privilege(get_member(),'can_submit_to_others_categories'))) || (($cat['nc_owner']==get_member()) && (!is_guest()))) || ($show_all_personal_categories))
-				$categories->attach(form_input_list_entry(strval($cat['id']),(($cat['nc_owner']==get_member()) && ((!$prefer_not_blog_selected) && (in_array(NULL,$it)))) || (in_array($cat['id'],$it)),do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($cat['nc_owner'])).' (#'.strval($cat['id']).')'));
+				$categories->attach(form_input_list_entry(strval($cat['n_id']),(($cat['nc_owner']==get_member()) && ((!$prefer_not_blog_selected) && (in_array(NULL,$it)))) || (in_array($cat['n_id'],$it)),$cat['nice_title']/*Performance do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($cat['nc_owner']))*/.' (#'.strval($cat['n_id']).')'));
 		}
 	}
 

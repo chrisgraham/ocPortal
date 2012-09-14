@@ -216,11 +216,25 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 	{
 		$poster=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['p_poster']);
 		$date=get_timezoned_date($row['p_time']);
+		if (array_key_exists('t_cache_first_title',$row))
+		{
+			$topic_row=$row;
+		} else
+		{
+			$topic_rows=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$row['p_topic_id']),'',1);
+			if (array_key_exists(0,$topic_rows))
+			{
+				$topic_row=$topic_rows[0];
+			} else
+			{
+				$topic_row=array('t_cache_first_title'=>'');
+			}
+		}
 		if ($row['t_cache_first_title']=='')
 		{
 			$row['t_cache_first_title']=$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('p_topic_id'=>$row['p_topic_id']),'ORDER BY p_time ASC',1);
 		}
-		$link=hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($row['p_topic_id']),$row['t_cache_first_title']);
+		$link=hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($row['p_topic_id']),$topic_row['t_cache_first_title']);
 		$title=do_lang_tempcode('FORUM_POST_ISOLATED_RESULT',escape_html(strval($row['id'])),$poster,array(escape_html($date),$link));
 
 		return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'84ac17a5855ceed1c47c5d3ef6cf4f3d','TITLE'=>$title,'SUMMARY'=>$tpl));

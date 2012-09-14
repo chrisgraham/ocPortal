@@ -51,6 +51,9 @@ function init__permissions()
 
 	global $SPAM_REMOVE_VALIDATION;
 	$SPAM_REMOVE_VALIDATION=false;
+
+	global $USERSUBMITBAN_MEMBER_CACHE;
+	$USERSUBMITBAN_MEMBER_CACHE=NULL;
 }
 
 /**
@@ -636,7 +639,7 @@ function check_submit_permission($range,$cats=NULL,$page=NULL)
  */
 function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
 {
-	global $SUBMIT_PERMISSION_CACHE;
+	global $SUBMIT_PERMISSION_CACHE,$USERSUBMITBAN_MEMBER_CACHE;
 	if (isset($SUBMIT_PERMISSION_CACHE[$range][$member][$ip][$page][serialize($cats)]))
 		return $SUBMIT_PERMISSION_CACHE[$range][$member][$ip][$page][serialize($cats)];
 
@@ -644,8 +647,12 @@ function has_submit_permission($range,$member,$ip,$page,$cats=NULL)
 
 	if (addon_installed('securitylogging'))
 	{
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$member));
-		if (!is_null($test)) $result=false;
+		if (is_null($USERSUBMITBAN_MEMBER_CACHE))
+		{
+			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$member));
+			$USERSUBMITBAN_MEMBER_CACHE=!is_null($test);
+		}
+		if ($USERSUBMITBAN_MEMBER_CACHE) $result=false;
 	}
 
 	if (is_null($result))

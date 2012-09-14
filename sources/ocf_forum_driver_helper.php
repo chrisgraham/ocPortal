@@ -279,7 +279,8 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 	}
 	$max_rows=$this_ref->connection->query_value_if_there(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true);
 	if ($limit==0) return array();
-	$rows=$this_ref->connection->query($query.' ORDER BY '.(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC',$limit,$start,false,true);
+	$order_by=(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC';
+	$rows=$this_ref->connection->query($query.' ORDER BY '.$order_by,$limit,$start,false,true);
 	$out=array();
 	foreach ($rows as $i=>$r)
 	{
@@ -354,9 +355,11 @@ function not_like_spacer_posts($field)
  * @param  boolean		Whether to only load minimal details if it is a threaded topic
  * @param  ?array			List of post IDs to load (NULL: no filter)
  * @param  boolean		Whether to load spacer posts
+ * @param  ID_TEXT		Preferred sort order (appropriate will use rating if threaded, other
+ * @set date rating
  * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
  */
-function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$mark_read=true,$reverse=false,$light_if_threaded=false,$post_ids=NULL,$load_spacer_posts_too=false)
+function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$mark_read=true,$reverse=false,$light_if_threaded=false,$post_ids=NULL,$load_spacer_posts_too=false,$sort='date')
 {
 	if (is_null($topic_id)) return (-2);
 
@@ -385,9 +388,9 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	$index=(strpos(get_db_type(),'mysql')!==false && !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))))?'USE INDEX (in_topic)':'';
 
 	$order=$reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';
-	if (($is_threaded) && (db_has_subqueries($this_ref->connection->connection_read)))
+	if (($sort=='rating') && (db_has_subqueries($this_ref->connection->connection_read)))
 	{
-		$order=(($reverse?'compound_rating ASC':'compound_rating DESC').','.$order);
+		$order=(($reverse?'compound_rating DESC':'compound_rating ASC').','.$order);
 	}
 
 	if (($light_if_threaded) && ($is_threaded))

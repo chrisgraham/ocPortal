@@ -196,6 +196,7 @@ class OCP_Topic
 			}
 
 			// Show it all
+			$sort=$this->_get_sort_order($reverse);
 			return do_template('COMMENTS_WRAPPER',array(
 				'_GUID'=>'a89cacb546157d34vv0994ef91b2e707',
 				'PAGINATION'=>$pagination,
@@ -208,6 +209,7 @@ class OCP_Topic
 				'COMMENTS'=>$posts,
 				'HASH'=>$hash,
 				'SERIALIZED_OPTIONS'=>$serialized_options,
+				'SORT'=>$sort,
 			));
 		}
 
@@ -271,12 +273,35 @@ class OCP_Topic
 	}
 
 	/**
+	 * Get the sort order.
+	 *
+	 * @param  boolean		Whether to show in reverse date order (affects default search order only)
+	 * @return ID_TEXT		Sort order
+    * @set relevance rating newest oldest
+	 */
+	function _get_sort_order($reverse)
+	{
+		static $sort=NULL;
+
+		if ($sort===NULL)
+		{
+			$default_sort_order=($this->is_threaded && $reverse)?'relevance':($reverse?'newest':'oldest');
+
+			$sort=either_param('comments_sort',$default_sort_order);
+
+			if (!in_array($sort,array('relevance','newest','oldest','rating'))) $sort=$default_sort_order;
+		}
+
+		return $sort;
+	}
+
+	/**
 	 * Load from a given topic ID.
 	 *
 	 * @param  AUTO_LINK		Topic ID
 	 * @param  integer		Maximum to load
 	 * @param  integer		Pagination start if non-threaded
-	 * @param  boolean		Whether to show in reverse date order
+	 * @param  boolean		Whether to show in reverse date order (affects default search order only)
 	 * @param  ?array			List of post IDs to load (NULL: no filter)
 	 * @param  boolean		Whether to allow spacer posts to flow through the renderer
 	 * @return boolean		Success status
@@ -288,16 +313,35 @@ class OCP_Topic
 
 		$this->is_threaded=$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id);
 
+		$sort=$this->_get_sort_order($reverse);
+		$_sort=$sort; // Passed through forum layer, we need to run a translation...
+		if ($sort=='newest')
+		{
+			$_sort='date';
+			$reverse=true;
+		}
+		elseif ($sort=='oldest')
+		{
+			$_sort='date';
+			$reverse=false;
+		}
+		elseif (($sort=='relevance') || ($sort=='rating'))
+		{
+			$_sort='rating';
+			$reverse=true;
+		}
+
 		$posts=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts(
 			$topic_id,
 			$this->total_posts,
 			$this->is_threaded?5000:$num_to_show_limit,
 			$this->is_threaded?0:$start,
 			true,
-			($reverse && !$this->is_threaded),
+			$reverse,
 			true,
 			$posts,
-			$load_spacer_posts_too
+			$load_spacer_posts_too,
+			$_sort
 		);
 
 		if ($posts!==-1)
@@ -405,9 +449,21 @@ class OCP_Topic
 			$tree=$this->_arrange_posts_in_tree($parent_post_id,$posts/*passed by reference*/,$queue,$max_thread_depth);
 			if (count($posts)!=0) // E.g. if parent was deleted at some time
 			{
-				global $M_SORT_KEY;
-				$M_SORT_KEY='date';
-				usort($posts,'multi_sort');
+				$sort=$this->_get_sort_order($reverse);
+				switch ($sort)
+				{
+					case 'newest':
+						sort_maps_by($posts,'!date');
+						break;
+					case 'oldest':
+						sort_maps_by($posts,'date');
+						break;
+					case 'rating':
+					case 'relevance':
+						sort_maps_by($posts,'compound_rating,!date');
+						break;
+				}
+
 				while (count($posts)!=0)
 				{
 					$orphaned_post=array_shift($posts);
@@ -471,28 +527,32 @@ class OCP_Topic
 			$this->_grab_at_and_above_and_remove($post_id,$queue,$posts);
 		}
 
-		// Any posts by current member must be grabbed too (up to 3 root ones though - otherwise risks performance), and also first post
-		$num_poster_grabbed=0;
-		foreach ($queue as $i=>$q)
+		$sort=$this->_get_sort_order(false);
+		if ($sort=='relevance')
 		{
-			if ((($q['p_poster']==get_member()) && ($q['parent_id']===NULL) && ($num_poster_grabbed<3)) || ($q['id']===$this->first_post_id))
+			// Any posts by current member must be grabbed too (up to 3 root ones though - otherwise risks performance), and also first post
+			$num_poster_grabbed=0;
+			foreach ($queue as $i=>$q)
 			{
-				$this->replied=true;
-				if ($q['id']===$this->first_post_id) // First post must go first
+				if ((($q['p_poster']==get_member()) && ($q['parent_id']===NULL) && ($num_poster_grabbed<3)) || ($q['id']===$this->first_post_id))
 				{
-					$posts_backup=$posts;
-					$posts=array();
-					$posts['post_'.strval($q['id'])]=$q;
-					$posts+=$posts_backup;
-				} else
-				{
-					$posts['post_'.strval($q['id'])]=$q;
+					$this->replied=true;
+					if ($q['id']===$this->first_post_id) // First post must go first
+					{
+						$posts_backup=$posts;
+						$posts=array();
+						$posts['post_'.strval($q['id'])]=$q;
+						$posts+=$posts_backup;
+					} else
+					{
+						$posts['post_'.strval($q['id'])]=$q;
+					}
+					if ($q['p_poster']==get_member())
+					{
+						$num_poster_grabbed++;
+					}
+					unset($queue[$i]);
 				}
-				if ($q['p_poster']==get_member())
-				{
-					$num_poster_grabbed++;
-				}
-				unset($queue[$i]);
 			}
 		}
 

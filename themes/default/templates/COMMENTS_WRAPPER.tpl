@@ -21,13 +21,29 @@
 	{+END}
 
 	{+START,SET,COMMENT_BOX_TITLE}
-		<span class="right">
+		<span class="right float_separation">
 			{+START,INCLUDE,NOTIFICATION_BUTTONS}
 				NOTIFICATIONS_TYPE=comment_posted
 				NOTIFICATIONS_ID={TYPE}_{ID}
 				BUTTON_TYPE=pageitem
 			{+END}
 		</span>
+
+		<div class="inline right">
+			<form class="inline" action="{$SELF_URL*}" method="post">
+				<select onchange="this.form.submit();" id="comments_sort" name="comments_sort">
+					<option {+START,IF,{$EQ,{SORT},relevance}}selected="selected" {+END}value="relevance">{!RELEVANCE}</option>
+					<option {+START,IF,{$EQ,{SORT},newest}}selected="selected" {+END}value="newest">{!NEWEST_FIRST}</option>
+					<option {+START,IF,{$EQ,{SORT},oldest}}selected="selected" {+END}value="oldest">{!OLDEST_FIRST}</option>
+					<option {+START,IF,{$EQ,{SORT},rating}}selected="selected" {+END}value="rating">{!RATING}</option>
+				</select>
+
+				{+START,IF,{$NOT,{$JS_ON}}}
+					<input type="submit" value="{!SORT}" class="button_micro" />
+				{+END}
+			</form>
+		</div>
+
 		{$?,{$IS_NON_EMPTY,{REVIEW_RATING_CRITERIA}},{$GET,REVIEWS_TITLE},{!COMMENTS}}
 	{+END}
 

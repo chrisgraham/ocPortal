@@ -347,7 +347,8 @@ class Hook_addon_registry_polls
 			'REVIEW_RATING_CRITERIA'=>array(),
 			'AUTHORISED_FORUM_URL'=>placeholder_url(),
 			'FORM'=>placeholder_form(),
-			'COMMENTS'=>$comments
+			'COMMENTS'=>$comments,
+			'SORT'=>'relevance',
 		));
 
 		$poll_details=$this->poll('poll');

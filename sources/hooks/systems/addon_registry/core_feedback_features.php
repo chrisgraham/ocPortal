@@ -378,7 +378,8 @@ class Hook_addon_registry_core_feedback_features
 			'REVIEW_RATING_CRITERIA'=>$review_titles,
 			'AUTHORISED_FORUM_URL'=>placeholder_url(),
 			'FORM'=>$form,
-			'COMMENTS'=>$comments
+			'COMMENTS'=>$comments,
+			'SORT'=>'relevance',
 		));
 
 		$out->attach(do_lorem_template('COMMENT_AJAX_HANDLER', array(
