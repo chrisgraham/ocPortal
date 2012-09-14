@@ -1309,7 +1309,7 @@ function ocf_member_choose_title($new_title,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
-	if (ocp_mb_strlen($new_title)>intval(get_option('max_member_title_length'))) warn_exit(do_lang_tempcode('USER_TITLE_TOO_BIG'));
+	if (ocp_mb_strlen($new_title)>intval(get_option('max_member_title_length'))) warn_exit(do_lang_tempcode('MEMBER_TITLE_TOO_BIG'));
 
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_title'=>$new_title),array('id'=>$member_id),'',1);
 

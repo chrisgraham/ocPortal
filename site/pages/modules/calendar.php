@@ -66,7 +66,7 @@ class Module_calendar
 			delete_privilege($perm);
 		}
 
-		delete_menu_item_simple('_SEARCH:calendar:type=misc:member_id={$USER_OVERIDE}');
+		delete_menu_item_simple('_SEARCH:calendar:type=misc:member_id={$MEMBER_OVERRIDE}');
 
 		delete_config_option('calendar_show_stats_count_events');
 		delete_config_option('calendar_show_stats_count_events_this_week');

@@ -193,7 +193,7 @@ class Module_admin_points
 	 */
 	function points_charge()
 	{
-		$title=get_screen_title('CHARGE_USER');
+		$title=get_screen_title('CHARGE_MEMBER');
 
 		$member=post_param_integer('member');
 		$amount=post_param_integer('amount');
@@ -205,7 +205,7 @@ class Module_admin_points
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
-		$text=do_lang_tempcode('USER_HAS_BEEN_CHARGED',escape_html($username),escape_html(integer_format($amount)),escape_html(integer_format($left)));
+		$text=do_lang_tempcode('MEMBER_HAS_BEEN_CHARGED',escape_html($username),escape_html(integer_format($amount)),escape_html(integer_format($left)));
 
 		// Show it worked / Refresh
 		$url=get_param('redirect',NULL);

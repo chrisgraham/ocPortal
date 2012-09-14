@@ -55,7 +55,7 @@ class Hook_passwd
 			$update=array();
 			$update['m_password_change_code']='';
 			$salt=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_pass_salt');
-			if (is_null($salt)) return array('','','',do_lang('_USER_NO_EXIST',array_key_exists('username',$options)?$options['username']:$options['u']));
+			if (is_null($salt)) return array('','','',do_lang('_MEMBER_NO_EXIST',array_key_exists('username',$options)?$options['username']:$options['u']));
 
 			if (get_value('no_password_hashing')==='1')
 			{

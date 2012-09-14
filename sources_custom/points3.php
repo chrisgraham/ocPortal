@@ -36,7 +36,7 @@ function points_profile($member_id_of,$member_id_viewing)
 
 	// Get info about viewed user
 	$name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-	if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+	if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 	$title=get_screen_title('_POINTS',true,array(escape_html($name)));
 
 	$profile_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id_of,false,true);

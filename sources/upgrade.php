@@ -445,7 +445,7 @@ function upgrade_script()
 		} else
 		{
 			up_do_header();
-			up_do_login(do_lang('USER_BAD_PASSWORD'));
+			up_do_login(do_lang('MEMBER_BAD_PASSWORD'));
 		}
 	} else
 	{

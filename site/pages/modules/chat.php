@@ -77,7 +77,7 @@ class Module_chat
 		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'chat'));
 
 		delete_menu_item_simple('_SEARCH:chat:type=misc');
-		delete_menu_item_simple('_SEARCH:chat:type=misc:member_id={$USER_OVERIDE}');
+		delete_menu_item_simple('_SEARCH:chat:type=misc:member_id={$MEMBER_OVERRIDE}');
 	}
 
 	/**
@@ -774,7 +774,7 @@ class Module_chat
 		if ($username!='')
 		{
 			$_member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-			if (is_null($_member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+			if (is_null($_member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
 			require_code('chat2');
 			blocking_add(get_member(),$_member_id);
 		}
@@ -909,7 +909,7 @@ class Module_chat
 		{
 			$username=post_param('friend_username');
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-			if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+			if (is_null($member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
 		} else
 		{
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);

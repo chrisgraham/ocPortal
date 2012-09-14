@@ -906,20 +906,20 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 
 		if (!array_key_exists(0,$rows)) // All hands to lifeboats
 		{
-			$out['error']=do_lang_tempcode('_USER_NO_EXIST',$username);
+			$out['error']=do_lang_tempcode('_MEMBER_NO_EXIST',$username);
 			return $out;
 		}
 		$row=$rows[0];
 		if ($row['member_banned']==1) // All hands to the guns
 		{
-			$out['error']=do_lang_tempcode('USER_BANNED');
+			$out['error']=do_lang_tempcode('MEMBER_BANNED');
 			return $out;
 		}
 		if ($cookie_login)
 		{
 			if ($password_hashed!=$row['member_login_key'])
 			{
-				$out['error']=do_lang_tempcode('USER_BAD_PASSWORD');
+				$out['error']=do_lang_tempcode('MEMBER_BAD_PASSWORD');
 				return $out;
 			}
 
@@ -940,7 +940,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 				$stronghold=md5(md5(strval($row['member_id']).'-'.$ip_octets[0].'-'.$ip_octets[1].'-'.$row['member_login_key']).$crypt_salt);
 				if ($cookie!=$stronghold)
 				{
-					$out['error']=do_lang_tempcode('USER_BAD_STRONGHOLD');
+					$out['error']=do_lang_tempcode('MEMBER_BAD_STRONGHOLD');
 					return $out;
 				}
 			}
@@ -948,7 +948,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
 		{
 			if (!$this->_auth_hashed($row['member_id'],$password_hashed))
 			{
-				$out['error']=do_lang_tempcode('USER_BAD_PASSWORD');
+				$out['error']=do_lang_tempcode('MEMBER_BAD_PASSWORD');
 				return $out;
 			}
 		}

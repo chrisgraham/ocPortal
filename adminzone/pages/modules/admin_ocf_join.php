@@ -328,7 +328,7 @@ class Module_admin_ocf_join
 		$prefer_for_primary_group=false;//(post_param_integer('prefer_for_primary_group',0)==1); Don't promote this bad choice
 
 		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-		if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+		if (is_null($member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
 
 		require_code('group_member_timeouts');
 		bump_member_group_timeout($member_id,$group_id,$num_minutes,$prefer_for_primary_group);

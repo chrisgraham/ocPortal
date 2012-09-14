@@ -87,15 +87,15 @@ function site_tree_script()
 					if (!in_array($group,$admin_groups))
 					{
 						// Privileges
-						foreach (array_keys($root_perms) as $overide) // For all privileges supported here (some will be passed that aren't - so we can't work back from GET params)
+						foreach (array_keys($root_perms) as $override) // For all privileges supported here (some will be passed that aren't - so we can't work back from GET params)
 						{
-							$val=post_param_integer(strval($i).'group_privileges_'.$overide.'_'.strval($group),-2);
+							$val=post_param_integer(strval($i).'group_privileges_'.$override.'_'.strval($group),-2);
 							if ($val!=-2)
 							{
-								$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$overide,'group_id'=>$group,'the_page'=>'','module_the_name'=>'','category_name'=>''));
+								$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$override,'group_id'=>$group,'the_page'=>'','module_the_name'=>'','category_name'=>''));
 								if ($val!=-1)
 								{
-									$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>$overide,'group_id'=>$group,'module_the_name'=>'','category_name'=>'','the_page'=>'','the_value'=>$val));
+									$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>$override,'group_id'=>$group,'module_the_name'=>'','category_name'=>'','the_page'=>'','the_value'=>$val));
 								}
 							}
 						}
@@ -139,15 +139,15 @@ function site_tree_script()
 						}
 
 						// Privileges
-						foreach (array_keys($overridables) as $overide) // For all privileges supported here (some will be passed that aren't - so we can't work back from GET params)
+						foreach (array_keys($overridables) as $override) // For all privileges supported here (some will be passed that aren't - so we can't work back from GET params)
 						{
-							$val=post_param_integer(strval($i).'group_privileges_'.$overide.'_'.strval($group),-2);
+							$val=post_param_integer(strval($i).'group_privileges_'.$override.'_'.strval($group),-2);
 							if ($val!=-2)
 							{
-								$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$overide,'group_id'=>$group,'the_page'=>$privilege_page));
+								$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$override,'group_id'=>$group,'the_page'=>$privilege_page));
 								if ($val!=-1)
 								{
-									$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>$overide,'group_id'=>$group,'module_the_name'=>'','category_name'=>'','the_page'=>$privilege_page,'the_value'=>$val));
+									$GLOBALS['SITE_DB']->query_insert('group_privileges',array('privilege'=>$override,'group_id'=>$group,'module_the_name'=>'','category_name'=>'','the_page'=>$privilege_page,'the_value'=>$val));
 								}
 							}
 						}
@@ -174,18 +174,18 @@ function site_tree_script()
 						}
 
 						// Privileges
-						foreach ($overridables as $overide=>$cat_support) // For all privileges supported here (some will be passed that aren't - so we can't work back from GET params)
+						foreach ($overridables as $override=>$cat_support) // For all privileges supported here (some will be passed that aren't - so we can't work back from GET params)
 						{
 							if (is_array($cat_support)) $cat_support=$cat_support[0];
 							if ($cat_support==0) continue;
 
-							$val=post_param_integer(strval($i).'group_privileges_'.$overide.'_'.strval($group),-2);
+							$val=post_param_integer(strval($i).'group_privileges_'.$override.'_'.strval($group),-2);
 							if ($val!=-2)
 							{
-								$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$overide,'group_id'=>$group,'module_the_name'=>$module,'category_name'=>$category,'the_page'=>''));
+								$GLOBALS['SITE_DB']->query_delete('group_privileges',array('privilege'=>$override,'group_id'=>$group,'module_the_name'=>$module,'category_name'=>$category,'the_page'=>''));
 								if ($val!=-1)
 								{
-									$new_settings=array('privilege'=>$overide,'group_id'=>$group,'module_the_name'=>$module,'category_name'=>$category,'the_page'=>'','the_value'=>$val);
+									$new_settings=array('privilege'=>$override,'group_id'=>$group,'module_the_name'=>$module,'category_name'=>$category,'the_page'=>'','the_value'=>$val);
 									$GLOBALS['SITE_DB']->query_insert('group_privileges',$new_settings);
 								}
 							}

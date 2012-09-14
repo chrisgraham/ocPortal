@@ -234,7 +234,7 @@ function get_member($quick_only=false)
 
 			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) // All hands to the guns
 			{
-				warn_exit(do_lang_tempcode('USER_BANNED'));
+				warn_exit(do_lang_tempcode('MEMBER_BANNED'));
 			}
 
 			// Test this member still exists

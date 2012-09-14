@@ -38,7 +38,7 @@ class Hook_ocf_auth_smf
 		{
 			if ($row['m_pass_hash_salted']!=$password_hashed)
 			{
-				return do_lang_tempcode('USER_BAD_PASSWORD');
+				return do_lang_tempcode('MEMBER_BAD_PASSWORD');
 			}
 		} else
 		{
@@ -47,7 +47,7 @@ class Hook_ocf_auth_smf
 
 			if (sha1($usr.$passwrd)!=$row['m_pass_hash_salted'])
 			{
-				return do_lang_tempcode('USER_BAD_PASSWORD');
+				return do_lang_tempcode('MEMBER_BAD_PASSWORD');
 			}
 		}
 

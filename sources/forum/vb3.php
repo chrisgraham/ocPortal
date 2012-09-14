@@ -310,13 +310,13 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 
 		if (!array_key_exists(0,$rows)) // All hands to lifeboats
 		{
-			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
+			$out['error']=(do_lang_tempcode('_MEMBER_NO_EXIST',$username));
 			return $out;
 		}
 		$row=$rows[0];
 		if ($this->is_banned($row['userid'])) // All hands to the guns
 		{
-			$out['error']=(do_lang_tempcode('USER_BANNED'));
+			$out['error']=(do_lang_tempcode('MEMBER_BANNED'));
 			return $out;
 		}
 
@@ -324,7 +324,7 @@ class forum_driver_vb3 extends forum_driver_vb_shared
 		if (!(((md5($row['password'].$SITE_INFO['vb_unique_id'])==$password_hashed) && ($cookie_login))
 			|| ((!$cookie_login) && ($row['password']==md5($password_hashed.$row['salt'])))))
 		{
-			$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));
+			$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));
 			return $out;
 		}
 

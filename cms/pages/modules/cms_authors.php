@@ -52,7 +52,7 @@ class Module_cms_authors
 	}
 
 	/**
-	 * Standard modular privilege-overide finder function.
+	 * Standard modular privilege-override finder function.
 	 *
 	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */

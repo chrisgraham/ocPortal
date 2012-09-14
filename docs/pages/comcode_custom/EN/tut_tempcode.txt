@@ -914,7 +914,7 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 		<td>The major version of ocPortal being used</td>
 	</tr>
 	<tr style="background: #FFDDDD">
-		<td>{$USER_OVERIDE}</td>
+		<td>{$MEMBER_OVERRIDE}</td>
 		<td>The Member-ID of the Account being viewed (e.g. if you're staff looking in somebody else's Account then this would find the member ID, otherwise it is your own member ID</td>
 	</tr>
 	<tr style="background: #FFDDDD">

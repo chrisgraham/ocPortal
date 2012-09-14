@@ -242,7 +242,7 @@ function _generic_exit($text,$template)
 				set_http_status_code('400');
 			}
 		}
-		elseif (($text_eval==do_lang('MISSING_RESOURCE')) || ($text_eval==do_lang('USER_NO_EXIST')))
+		elseif (($text_eval==do_lang('MISSING_RESOURCE')) || ($text_eval==do_lang('MEMBER_NO_EXIST')))
 		{
 			if (!headers_sent())
 			{

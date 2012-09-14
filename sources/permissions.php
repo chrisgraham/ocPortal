@@ -419,7 +419,7 @@ function _get_where_clause_groups($member,$consider_clubs=true)
 		if ($out!='') $out.=' OR ';
 		$out.='group_id='.strval($id);
 	}
-	if ($out=='') fatal_exit(do_lang_tempcode('USER_NO_GROUP')); // Shouldn't happen
+	if ($out=='') fatal_exit(do_lang_tempcode('MEMBER_NO_GROUP')); // Shouldn't happen
 
 	return $out;
 }

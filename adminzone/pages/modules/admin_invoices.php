@@ -163,7 +163,7 @@ class Module_admin_invoices
 
 		$to=post_param('to');
 		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($to);
-		if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$to));
+		if (is_null($member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$to));
 
 		$id=$GLOBALS['SITE_DB']->query_insert('invoices',array(
 			'i_type_code'=>$product,

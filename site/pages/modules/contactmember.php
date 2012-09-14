@@ -84,7 +84,7 @@ class Module_contactmember
 	{
 		$member_id=get_param_integer('id');
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-		if (is_null($username)) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+		if (is_null($username)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
 		$title=get_screen_title('EMAIL_MEMBER',true,array(escape_html($username)));
 
@@ -158,7 +158,7 @@ class Module_contactmember
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMAIL_MEMBER',escape_html($to_name)))));
 
-		if (is_null($to_name)) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+		if (is_null($to_name)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
 		$from_email=trim(post_param('email_address'));
 		require_code('type_validation');

@@ -246,7 +246,7 @@ function try_su_login($member)
 		if (is_null($su))
 		{
 			require_code('site');
-			attach_message(do_lang_tempcode('_USER_NO_EXIST',escape_html($ks)),'warn');
+			attach_message(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($ks)),'warn');
 			return get_member();
 		}
 

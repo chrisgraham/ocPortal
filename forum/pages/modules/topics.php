@@ -52,7 +52,7 @@ class Module_topics
 	}
 
 	/**
-	 * Standard modular privilege-overide finder function.
+	 * Standard modular privilege-override finder function.
 	 *
 	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
@@ -1307,7 +1307,7 @@ class Module_topics
 
 			$username=mixed();
 			$username=($member_id==get_member())?false:$GLOBALS['FORUM_DRIVER']->get_username($member_id);
-			if (is_null($username)) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+			if (is_null($username)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
 			$staff_help_url=brand_base_url().'/docs'.strval(ocp_version()).'/pg/tut_correspondance';
 		} else
@@ -1877,7 +1877,7 @@ class Module_topics
 			if ($member_username!='')
 			{
 				$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($member_username);
-				if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$member_username));
+				if (is_null($member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$member_username));
 			}
 			foreach ($_POST as $key=>$_invited_member)
 			{
@@ -1890,7 +1890,7 @@ class Module_topics
 				$invited_member=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_invited_member);
 				if (is_null($invited_member))
 				{
-					attach_message(do_lang_tempcode('_USER_NO_EXIST',$_invited_member),'warn');
+					attach_message(do_lang_tempcode('_MEMBER_NO_EXIST',$_invited_member),'warn');
 				} else
 				{
 					$invited_members[]=intval($invited_member);
@@ -1943,7 +1943,7 @@ class Module_topics
 			} else
 			{
 				$intended_solely_for=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_intended_solely_for);
-				if (is_null($intended_solely_for)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$_intended_solely_for));
+				if (is_null($intended_solely_for)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$_intended_solely_for));
 			}
 		} else $intended_solely_for=NULL;
 
@@ -3089,7 +3089,7 @@ END;
 	{
 		$username=trim(post_param('username'));
 		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-		if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+		if (is_null($member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
 		$topic_id=get_param_integer('topic_id');
 
 		require_code('ocf_topics_action');
@@ -3585,9 +3585,9 @@ END;
 		$_a=post_param('a');
 		$_b=post_param('b');
 		$a=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_a);
-		if (is_null($a)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$_a));
+		if (is_null($a)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$_a));
 		$b=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_b);
-		if (is_null($b)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$_b));
+		if (is_null($b)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$_b));
 
 		$GLOBALS['FORUM_DB']->query_update('f_topics',array('t_pt_from'=>$a,'t_pt_to'=>$b,'t_forum_id'=>NULL),array('id'=>$topic_id),'',1);
 

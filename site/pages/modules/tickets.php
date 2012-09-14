@@ -301,7 +301,7 @@ class Module_tickets
 				if (has_privilege(get_member(),'support_operator'))
 					$message=do_lang_tempcode('TICKETS_STAFF');
 				else
-					$message=do_lang_tempcode('TICKETS_USER');
+					$message=do_lang_tempcode('TICKETS_MEMBER');
 
 				foreach ($tickets as $topic)
 				{

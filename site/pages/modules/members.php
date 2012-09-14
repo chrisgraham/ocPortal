@@ -295,11 +295,11 @@ class Module_members
 			if (is_guest($member_id))
 				access_denied('NOT_AS_GUEST');
 			$username=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_username');
-			if ((is_null($username)) || (is_guest($member_id))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+			if ((is_null($username)) || (is_guest($member_id))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 		} else
 		{
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-			if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+			if (is_null($member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
 		}
 
 		require_code('ocf_profiles');

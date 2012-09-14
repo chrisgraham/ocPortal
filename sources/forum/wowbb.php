@@ -1105,18 +1105,18 @@ class forum_driver_wowbb extends forum_driver_base
 
 		if (!array_key_exists(0,$rows)) // All hands to lifeboats
 		{
-			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
+			$out['error']=(do_lang_tempcode('_MEMBER_NO_EXIST',$username));
 			return $out;
 		}
 		$row=$rows[0];
 		if ($this->is_banned($row['user_id'])) // All hands to the guns
 		{
-			$out['error']=(do_lang_tempcode('USER_BANNED'));
+			$out['error']=(do_lang_tempcode('MEMBER_BANNED'));
 			return $out;
 		}
 		if ($row['user_password']!=$password_hashed)
 		{
-			$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));
+			$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));
 			return $out;
 		}
 

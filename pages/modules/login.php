@@ -199,7 +199,7 @@ class Module_login
 			return do_template('LOGIN_REDIRECT_SCREEN',array('_GUID'=>'82e056de9150bbed185120eac3571f40','REFRESH'=>$refresh,'TITLE'=>$title,'TEXT'=>do_lang_tempcode('_LOGIN_TEXT'),'URL'=>$url,'POST'=>$post));
 		} else
 		{
-			$title=get_screen_title('USER_LOGIN_ERROR');
+			$title=get_screen_title('MEMBER_LOGIN_ERROR');
 
 			$text=$feedback['error'];
 

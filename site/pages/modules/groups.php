@@ -536,7 +536,7 @@ class Module_groups
 			access_denied('I_ERROR');
 
 		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-		if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+		if (is_null($member_id)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
 
 		$test=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
 		if (in_array($id,$test))

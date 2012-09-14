@@ -847,7 +847,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
-			case 'USER_OVERIDE':
+			case 'MEMBER_OVERRIDE':
 				$value=get_param('id','');
 				if ((!is_numeric($value)) || ($value=='')) $value=strval(get_member());
 				break;

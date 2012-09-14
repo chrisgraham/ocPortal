@@ -72,7 +72,7 @@ class Module_points
 		delete_privilege('use_points');
 		delete_privilege('trace_anonymous_gifts');
 
-		delete_menu_item_simple('_SEARCH:points:type=member:id={$USER_OVERIDE}');
+		delete_menu_item_simple('_SEARCH:points:type=member:id={$MEMBER_OVERRIDE}');
 		delete_menu_item_simple('_SEARCH:points:type=member');
 	}
 
@@ -146,7 +146,7 @@ class Module_points
 	 */
 	function get_entry_points()
 	{
-		return array('member'=>'POINTS','browser'=>'BROWSE_POINT_PROFILES','misc'=>'USER_POINT_FIND');
+		return array('member'=>'POINTS','browser'=>'BROWSE_POINT_PROFILES','misc'=>'MEMBER_POINT_FIND');
 	}
 
 	/**
@@ -181,7 +181,7 @@ class Module_points
 	{
 		set_feed_url(find_script('backend').'?mode=points&filter=');
 
-		$title=get_screen_title('USER_POINT_FIND');
+		$title=get_screen_title('MEMBER_POINT_FIND');
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_search'),'_SELF',NULL,false,true);
 		require_code('form_templates');
@@ -220,11 +220,11 @@ class Module_points
 		$rows=$GLOBALS['FORUM_DRIVER']->get_matching_members($username,100);
 		if (!array_key_exists(0,$rows))
 		{
-			$title=get_screen_title('USER_POINT_FIND');
+			$title=get_screen_title('MEMBER_POINT_FIND');
 			return warn_screen($title,do_lang_tempcode('NO_RESULTS'));
 		}
 
-		$title=get_screen_title('USER_POINT_FIND');
+		$title=get_screen_title('MEMBER_POINT_FIND');
 
 		$results=new ocp_tempcode();
 		foreach ($rows as $myrow)
@@ -239,7 +239,7 @@ class Module_points
 			}
 		}
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBER_POINT_FIND'))));
 
 		return do_template('POINTS_SEARCH_SCREEN',array('_GUID'=>'659af8a012d459db09dad0325a75ac70','TITLE'=>$title,'RESULTS'=>$results));
 	}
@@ -255,7 +255,7 @@ class Module_points
 		if (is_null($member_id_of)) $member_id_of=get_param_integer('id',get_member());
 
 		$name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-		if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+		if ((is_null($name)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 		$title=get_screen_title('_POINTS',true,array(escape_html($name)));
 
 		if (get_forum_type()=='ocf')
@@ -267,7 +267,7 @@ class Module_points
 
 		set_feed_url(find_script('backend').'?mode=points&filter='.strval($member_id_of));
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND'))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBER_POINT_FIND'))));
 
 		require_code('points3');
 		$content=points_profile($member_id_of,get_member());
@@ -284,7 +284,7 @@ class Module_points
 	{
 		$member_id_of=get_param_integer('id');
 
-		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('USER_POINT_FIND')),array('_SELF:_SELF:member:id='.strval($member_id_of),do_lang_tempcode('_POINTS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of))))));
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MEMBER_POINT_FIND')),array('_SELF:_SELF:member:id='.strval($member_id_of),do_lang_tempcode('_POINTS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member_id_of))))));
 
 		$title=get_screen_title('POINTS');
 
@@ -361,7 +361,7 @@ class Module_points
 
 					$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 					if (is_null($username)) $username=do_lang('UNKNOWN');
-					$message=do_lang_tempcode('USER_HAS_BEEN_CHARGED',escape_html($username),escape_html(integer_format($amount)),escape_html(integer_format($left)));
+					$message=do_lang_tempcode('MEMBER_HAS_BEEN_CHARGED',escape_html($username),escape_html(integer_format($amount)),escape_html(integer_format($left)));
 
 					$worked=true;
 				} else

@@ -397,7 +397,7 @@ class Module_admin_ipban
 	 */
 	function multi_ban()
 	{
-		$title=get_screen_title('BAN_USER');
+		$title=get_screen_title('BAN_MEMBER');
 
 		$id=either_param('id',NULL);
 		$_ip=explode(':',strrev($id),2);
@@ -406,7 +406,7 @@ class Module_admin_ipban
 
 		if (post_param_integer('confirm',0)==0)
 		{
-			$preview=do_lang_tempcode('BAN_USER_DESCRIPTION',is_null($member)?do_lang_tempcode('NA_EM'):make_string_tempcode(strval($member)),make_string_tempcode(escape_html($ip)));
+			$preview=do_lang_tempcode('BAN_MEMBER_DESCRIPTION',is_null($member)?do_lang_tempcode('NA_EM'):make_string_tempcode(strval($member)),make_string_tempcode(escape_html($ip)));
 			$url=get_self_url(false,false);
 			return do_template('CONFIRM_SCREEN',array('_GUID'=>'3840c52b23d9034cb6f9dd529b236c97','TITLE'=>$title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
 		}

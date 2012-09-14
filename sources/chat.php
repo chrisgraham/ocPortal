@@ -936,7 +936,7 @@ function get_chatters_in_room($room_id)
 	{
 		$extra2='room_id='.strval($room_id);
 	}
-	$active=$GLOBALS['SITE_DB']->query('SELECT DISTINCT member_id FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.member_id=a.member_id WHERE (session_invisible=0 OR session_invisible IS NULL) AND date_and_time>='.strval((integer)time()-60*10).' AND '.$extra2);
+	$active=$GLOBALS['SITE_DB']->query('SELECT DISTINCT a.member_id FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.member_id=a.member_id WHERE (session_invisible=0 OR session_invisible IS NULL) AND date_and_time>='.strval((integer)time()-60*10).' AND '.$extra2);
 
 	$found_users=array();
 	foreach ($active as $values)

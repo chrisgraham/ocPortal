@@ -1155,7 +1155,7 @@ function make_member_gallery_if_needed($cat)
 		$parent_info=$_parent_info[0];
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		if (is_null($username)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+		if (is_null($username)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
 		$member_gallery_title=do_lang('PERSONAL_GALLERY_OF',$username,get_translated_text($parent_info['fullname']));
 		add_gallery($cat,$member_gallery_title,'','',$parent_id,$parent_info['accept_images'],$parent_info['accept_videos'],0,$parent_info['flow_mode_interface']);
 

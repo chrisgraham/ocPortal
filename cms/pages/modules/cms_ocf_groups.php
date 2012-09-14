@@ -228,7 +228,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 		if ($_group_leader!='')
 		{
 			$group_leader=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_group_leader);
-			if (is_null($group_leader)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$_group_leader));
+			if (is_null($group_leader)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$_group_leader));
 		} else $group_leader=NULL;
 
 		$name=post_param('name');
@@ -326,7 +326,7 @@ class Module_cms_ocf_groups extends standard_crud_module
 		if ($_group_leader!='')
 		{
 			$group_leader=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_group_leader);
-			if (is_null($group_leader)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$_group_leader));
+			if (is_null($group_leader)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$_group_leader));
 		} else $group_leader=NULL;
 
 		$name=post_param('name');

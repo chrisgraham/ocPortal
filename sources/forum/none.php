@@ -843,13 +843,13 @@ class forum_driver_none extends forum_driver_base
 
 		if (($username!=$this->get_admin_username()) && ($userid!=1)) // All hands to lifeboats
 		{
-			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
+			$out['error']=(do_lang_tempcode('_MEMBER_NO_EXIST',$username));
 			return $out;
 		}
 
 		if (!check_master_password($password_raw))
 		{
-			$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));
+			$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));
 			return $out;
 		}
 

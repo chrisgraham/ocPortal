@@ -111,13 +111,13 @@ class Module_admin_ocf_merge_members
 
 		$to_username=post_param('to');
 		$to_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($to_username);
-		if ((is_null($to_id)) || (is_guest($to_id))) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$to_username));
+		if ((is_null($to_id)) || (is_guest($to_id))) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$to_username));
 		$from_username=post_param('from');
 		$from_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($from_username);
 
 		if (is_guest($from_id)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-		if ((is_null($from_id)) || (is_guest($from_id))) warn_exit(do_lang_tempcode('_USER_NO_EXIST',$from_username));
+		if ((is_null($from_id)) || (is_guest($from_id))) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$from_username));
 
 		if ($to_id==$from_id) warn_exit(do_lang_tempcode('MERGE_SAME'));
 

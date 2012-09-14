@@ -1087,13 +1087,13 @@ class forum_driver_smf extends forum_driver_base
 
 		if (!array_key_exists(0,$rows)) // All hands to lifeboats
 		{
-			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',$username));
+			$out['error']=(do_lang_tempcode('_MEMBER_NO_EXIST',$username));
 			return $out;
 		}
 		$row=$rows[0];
 		if ($this->is_banned($row['ID_MEMBER'])) // All hands to the guns
 		{
-			$out['error']=(do_lang_tempcode('USER_BANNED'));
+			$out['error']=(do_lang_tempcode('MEMBER_BANNED'));
 			return $out;
 		}
 
@@ -1106,7 +1106,7 @@ class forum_driver_smf extends forum_driver_base
 		$test2=($GLOBALS['SMF_NEW']) && ((($from_cookie) && (sha1($row['passwd'].$row['passwordSalt'])==$bits[1])) || ((!$from_cookie) && ($row['passwd']==$bits[1])));
 		if ((!$test1) && (!$test2))
 		{
-			$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));
+			$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));
 			return $out;
 		}
 

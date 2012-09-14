@@ -38,13 +38,13 @@ class Hook_ocf_auth_converge
 		{
 			if ($row['m_pass_hash_salted']!=$password_hashed)
 			{
-				return do_lang_tempcode('USER_BAD_PASSWORD');
+				return do_lang_tempcode('MEMBER_BAD_PASSWORD');
 			}
 		} else
 		{
 			if (md5(md5($row['m_pass_salt']).$password_hashed)!=$row['m_pass_hash_salted'])
 			{
-				return do_lang_tempcode('USER_BAD_PASSWORD');
+				return do_lang_tempcode('MEMBER_BAD_PASSWORD');
 			}
 		}
 

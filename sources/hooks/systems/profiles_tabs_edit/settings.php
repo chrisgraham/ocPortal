@@ -207,7 +207,7 @@ class Hook_Profiles_Tabs_Edit_settings
 		$title=do_lang_tempcode('SETTINGS');
 
 		$myrow=$GLOBALS['FORUM_DRIVER']->get_member_row($member_id_of);
-		if (is_null($myrow)) warn_exit(do_lang_tempcode('USER_NO_EXIST'));
+		if (is_null($myrow)) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
 
 		require_code('ocf_members_action2');
 		list($fields,$hidden)=ocf_get_member_fields_settings(false,$member_id_of,NULL,$myrow['m_email_address'],$myrow['m_preview_posts'],$myrow['m_dob_day'],$myrow['m_dob_month'],$myrow['m_dob_year'],get_users_timezone($member_id_of),$myrow['m_theme'],$myrow['m_reveal_age'],$myrow['m_views_signatures'],$myrow['m_auto_monitor_contrib_content'],$myrow['m_language'],$myrow['m_allow_emails'],$myrow['m_allow_emails_from_staff'],$myrow['m_validated'],$myrow['m_primary_group'],$myrow['m_username'],$myrow['m_is_perm_banned'],'',$myrow['m_zone_wide'],$myrow['m_highlighted_name'],$myrow['m_pt_allow'],get_translated_text($myrow['m_pt_rules_text'],$GLOBALS['FORUM_DB']),$myrow['m_on_probation_until']);

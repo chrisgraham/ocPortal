@@ -180,7 +180,7 @@ class Module_forumview
 	function uninstall()
 	{
 		delete_menu_item_simple('_SEARCH:forumview:type=misc');
-		delete_menu_item_simple('_SEARCH:forumview:type=pt:id={$USER_OVERIDE}');
+		delete_menu_item_simple('_SEARCH:forumview:type=pt:id={$MEMBER_OVERRIDE}');
 		delete_menu_item_simple('_SEARCH:forumview:type=pt');
 		delete_menu_item_simple('_SEARCH:vforums:type=misc');
 		delete_menu_item_simple('_SEARCH:vforums:type=unread');
