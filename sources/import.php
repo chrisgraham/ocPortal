@@ -46,12 +46,12 @@ function ocf_over_msn()
 }
 
 /**
- * Get the remapping for the id in the specified type. Whether it returns NULL or gives an error message depends on $fail_ok.
+ * Returns the NEW ID of an imported old ID, for the specified importation type. Whether it returns NULL or gives an error message depends on $fail_ok.
  *
- * @param  ID_TEXT		An importation type code, from those ocPortal has defined
+ * @param  ID_TEXT		An importation type code, from those ocPortal has defined (E.g. 'download', 'news', ...)
  * @param  string			The source (old, original) ID of the mapping
  * @param  boolean		If it is okay to fail to find a mapping
- * @return ?AUTO_LINK	The remapping (NULL: not found)
+ * @return ?AUTO_LINK	The new ID (NULL: not found)
  */
 function import_id_remap_get($type,$id_old,$fail_ok=false)
 {
@@ -82,7 +82,7 @@ function import_check_if_imported($type,$id_old)
 }
 
 /**
- * Set a mapping, indicating completion of importing some kind of content. This mapping may be used later for importing related content that requires a remapped identifier.
+ * Set the NEW ID for an imported old ID, which also tacitly indicates completion of importing an item of some type of content. This mapping (old ID to new ID) may be used later for importing related content that requires the new identifier. import_id_remap_get is the inverse of this function.
  *
  * @param  ID_TEXT		An importation type code, from those ocPortal has defined
  * @param  string			The source (old, original) ID of the mapping
