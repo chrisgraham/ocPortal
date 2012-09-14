@@ -1,5 +1,7 @@
 <section class="box box___block_no_entries_{$LCASE|,{TITLE}}"><div class="box_inner">
-	<h3>{TITLE*}</h3>
+	{+START,IF_NON_EMPTY,{TITLE}}
+		<h3>{TITLE*}</h3>
+	{+END}
 
 	<p class="nothing_here">{MESSAGE*}</p>
 
