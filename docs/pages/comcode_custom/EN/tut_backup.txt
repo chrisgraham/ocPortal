@@ -1,6 +1,6 @@
 [title sub="Written by Steven Gilson, and Chris Graham of ocProducts"]ocPortal Tutorial: Backing up your site[/title]
 
-This tutorial will describe and explain ocPortal's in-built backup system, including all its features, and the necessity of backups.
+This tutorial will describe and explain ocPortal's in-built backup addon, including all its features, and the necessity of backups.
 
 [contents]decimal,lower-alpha[/contents]
 
@@ -16,9 +16,11 @@ Unfortunately disasters occur all the time, and to think it 'will not happen to 
 [box="Important note" width="25em" float="right"]Do not leave backups such that others might get a-hold of them, as this would be a big security risk due to sensitive data stored upon them. Keep backup CDs in a locked drawer, for example.[/box]
 A good backup strategy will automatically and regularly backup all, or all changed/new, files, with months of history, and store them all twice in two different geographical regions. This is not realistic for most ocPortal users, but should drum home the fact that at the very least you should keep off-server backups to allow both roll-back and disk corruption/destruction recovery.
 [/surround]
-[title="2"]The ocPortal backup system[/title]
+[title="2"]The ocPortal backup addon[/title]
 
-The backup system provided by ocPortal is a system where the website makes a backup of itself when instructed to do so. You may set up the system to perform backups on a schedule, or activate themself yourself manually.
+The backup addon provided by ocPortal is a system where the website makes a backup of itself when instructed to do so. You may set up the addon to perform backups on a schedule, or activate themself yourself manually.
+
+[i]Note that we only recommend using the ocPortal backup addon if you really have to, because it is limited to what PHP is allowed to do on the server. See the "Alternative backup strategies" section below.[/i]
 
 Depending on the options that are specified by the user (which will be discussed later), the site will put a copy of every single file and folder stored within the ocPortal installation directory into a .tar file. It will also keep the entire file structure intact as well.
 
@@ -29,7 +31,7 @@ The options for a backup are the following:
 
 Each backup option will contain a script that can restore your SQL database in the event that you loose your SQL database. Note however that it will not backup your forum tables, irrespective of whether they are in the same database as ocPortal.
 
-To access this backup system, enter the Admin Zone. As shown in the screen-shot, there are two links to create a backup.
+To access this backup addon, enter the Admin Zone. As shown in the screen-shot, there are two links to create a backup. The addon must be installed first (it is a bundled addon, but not kept on by default in the Setup Wizard).
 
 [exp_thumb="Locating the backup facility" float="left"]backup_1[/exp_thumb]
 
