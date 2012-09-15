@@ -217,6 +217,12 @@ class Block_side_calendar
 			if ((!is_null($to)) && ($to<$period_start)) continue;
 			if ($real_from!=$from) continue; // We won't render continuations
 
+			// Because we looked 100 days before (to find stuff that might be doing a span), we need to do an extra check to see if stuff is actually in our true window
+			$starts_within=(($real_from>=$period_start) && ($real_from<$period_end));
+			$ends_within=((!is_null($to)) && ($real_to>$period_start) && ($real_to<=$period_end));
+			$spans=((!is_null($to)) && ($real_from<$period_start) && ($real_to>$period_end));
+			if (!$starts_within && !$ends_within && !$spans) continue;
+
 			$__day=date('Y-m-d',$from);
 			$bits=explode('-',$__day);
 			$day_start=mktime(12,0,0,intval($bits[1]),intval($bits[2]),intval($bits[0]));
