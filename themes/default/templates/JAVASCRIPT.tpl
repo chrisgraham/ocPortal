@@ -1228,7 +1228,7 @@ function illustrate_frame_load(pf,frame)
 		{
 			try
 			{
-				if ((typeof document.styleSheets[i].href!='undefined') && (document.styleSheets[i].href) && (document.styleSheets[i].href.indexOf('/global')==-1)) continue;
+				if ((typeof document.styleSheets[i].href!='undefined') && (document.styleSheets[i].href) && (document.styleSheets[i].href.indexOf('/global')==-1) && (document.styleSheets[i].href.indexOf('/merged')==-1)) continue;
 				if (typeof document.styleSheets[i].cssText!='undefined')
 				{
 					cssText+=document.styleSheets[i].cssText;

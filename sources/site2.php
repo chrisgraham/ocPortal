@@ -39,6 +39,24 @@ function get_staff_actions_list()
 			'code'=>do_lang_tempcode('VALIDATION'),
 			'site_tree'=>do_lang_tempcode('FIND_IN_SITE_TREE'),
 	);
+	if (get_param_integer('keep_no_minify',0)==0) // When minification on we need to hard-code CSS list as cannot be auto-detected
+	{
+		$is_admin=$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member());
+		$zone_name=get_zone_name();
+		$grouping_codename='merged__';
+		$grouping_codename.=$zone_name;
+		if ($is_admin) $grouping_codename.='__admin';
+		$value=get_value_newer_than($grouping_codename.'.css',time()-60*60*24);
+		if ($value!==NULL)
+		{
+			$_value=explode('::',$value);
+			$resources=explode(',',$_value[0]);
+			foreach ($resources as $resource)
+			{
+				$list[$resource.'.css']=($resource=='global')?do_lang_tempcode('CONTEXTUAL_CSS_EDITING_GLOBAL','global.css'):do_lang_tempcode('CONTEXTUAL_CSS_EDITING',escape_html($resource.'.css'));
+			}
+		}
+	}
 	require_code('lang2');
 	$list+=array(
 		'spacer_2'=>do_lang_tempcode('LANGUAGE'),

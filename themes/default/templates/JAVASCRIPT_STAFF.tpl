@@ -230,7 +230,7 @@ function find_css_sheets(win)
 					} else
 					{
 						var l=win.document.styleSheets[i].href.lastIndexOf('/templates_cached/'+ocp_lang+'/');
-						if (l!=-1)
+						if ((l!=-1) && (win.document.styleSheets[i].href.indexOf('merged__')==-1))
 						{
 							sheet=win.document.styleSheets[i].href.substring(l+('/templates_cached/'+ocp_lang+'/').length,win.document.styleSheets[i].href.length).replace('_non_minified','').replace('_ssl','').replace('_mobile','').replace(/\?\d+/,'').replace('.css','');
 							possibilities.push(sheet);

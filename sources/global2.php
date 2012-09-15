@@ -1646,68 +1646,17 @@ function javascript_tempcode($position=NULL)
 	$https=((get_option('enable_https',true)=='1') && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())));
 	$mobile=is_mobile();
 
-	// Special merge operation for staff. In truth it's to get a better score on Google Page Speed ;)
-	$to_merge=array('javascript_staff','javascript_button_occle','javascript_fractional_edit');
-	$good_to_merge=$minify;
-	foreach ($to_merge as $j)
-		if (!array_key_exists($j,$JAVASCRIPTS)) $good_to_merge=false;
-	if ($good_to_merge)
+	$grouping_codename=_handle_web_resource_merging('.js',$JAVASCRIPTS,$minify,$https,$mobile);
+
+	// Fix order, so our main Javascript runs first
+	$arr_backup=$JAVASCRIPTS;
+	$JAVASCRIPTS=array();
+	$JAVASCRIPTS[($grouping_codename=='')?'javascript':$grouping_codename]=($grouping_codename=='')?1:0;
+	$JAVASCRIPTS+=$arr_backup;
+
+	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_button_realtime_rain'=>1,'javascript_fractional_edit'=>1,'javascript_transitions'=>1); // These are all framework ones that add niceities
+	foreach ($JAVASCRIPTS as $j=>$do_enforce)
 	{
-		$j='javascript_staff___merged';
-		if (!$minify) $j.='_non_minified';
-		if ($https) $j.='_ssl';
-		if ($mobile) $j.='_mobile';
-
-		$theme=filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme());
-		$dir=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.filter_naughty(user_lang());
-		$write_path=$dir.'/'.filter_naughty_harsh($j);
-		$write_path.='.js';
-
-		/*$rebuild=false;	Performance hit			Just turn off minification for better debugging
-		foreach ($to_merge as $j2)
-		{
-			$merge_from=javascript_enforce($j2);
-			if (filemtime($merge_from)==time()) $rebuild=true; // Hmm, just recalculated
-		}*/
-		if (!is_file($write_path)/* || $rebuild*/) // Merging algorithm
-		{
-			$data='';
-			foreach ($to_merge as $j2)
-			{
-				$merge_from=javascript_enforce($j2);
-				if (is_file($merge_from))
-				{
-					$data.=unixify_line_format(file_get_contents($merge_from));
-				} else // race condition
-				{
-					$good_to_merge=false;
-					break;
-				}
-			}
-
-			if ($good_to_merge)
-			{
-				$myfile=@fopen($write_path,'wb') OR intelligent_write_error($write_path); // Intentionally wb to stop line ending conversions on Windows
-				fwrite($myfile,$data);
-				fclose($myfile);
-				fix_permissions($write_path,0777);
-				sync_file($write_path);
-			}
-		}
-
-		if ($good_to_merge)
-		{
-			if ($position!='header')
-				$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'12e3bd481b7d24d9d999acce95f33916','CODE'=>$j)));
-		}
-	}
-
-	// Our main loop
-	$bottom_ones=array('javascript_staff'=>1,'javascript_button_occle'=>1,'javascript_fractional_edit'=>1,'javascript_transitions'=>1,'javascript_button_realtime_rain'=>1);
-	foreach (array_keys($JAVASCRIPTS) as $j)
-	{
-		if (($good_to_merge) && (in_array($j,$to_merge))) continue;
-
 		if ($position!==NULL)
 		{
 			$bottom=(isset($bottom_ones[$j]));
@@ -1715,8 +1664,8 @@ function javascript_tempcode($position=NULL)
 			if (($position=='footer') && (!$bottom)) continue;
 		}
 
-		$temp=javascript_enforce($j);
-		if ($temp!='')
+		$temp=($do_enforce==1)?javascript_enforce($j):'';
+		if (($temp!='') || ($do_enforce==0))
 		{
 			if (!$minify) $j.='_non_minified';
 			if ($https) $j.='_ssl';
@@ -1724,7 +1673,7 @@ function javascript_tempcode($position=NULL)
 
 			global $SITE_INFO;
 			$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
-			$sup=($support_smart_decaching)?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
+			$sup=($support_smart_decaching && $temp!='')?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
 
 			$js->attach(do_template('JAVASCRIPT_NEED',array('_GUID'=>'b5886d9dfc4d528b7e1b0cd6f0eb1670','CODE'=>$j,'SUP'=>$sup)));
 		}
@@ -1843,11 +1792,14 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 	$https=((get_option('enable_https',true)=='1') && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(),get_page_name())));
 	$mobile=is_mobile();
 
+	if (!$only_global)
+		_handle_web_resource_merging('.css',$CSSS,$minify,$https,$mobile);
+
 	$css=new ocp_tempcode();
 	$css_need_inline=new ocp_tempcode();
-	$css_to_do=$only_global?array('global','no_cache'):array_keys($CSSS);
+	$css_to_do=$only_global?array('global'=>1,'no_cache'=>1):$CSSS;
 
-	foreach ($css_to_do as $c)
+	foreach ($css_to_do as $c=>$do_enforce)
 	{
 		if ($seed!='')
 		{
@@ -1873,15 +1825,15 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 			}
 		} else
 		{
-			$temp=css_enforce($c,$theme);
+			$temp=($do_enforce==1)?css_enforce($c,$theme):'';
 			if (!$minify) $c.='_non_minified';
 			if ($https) $c.='_ssl';
 			if ($mobile) $c.='_mobile';
-			if ($temp!='')
+			if (($temp!='') || ($do_enforce==0))
 			{
 				global $SITE_INFO;
 				$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
-				$sup=($support_smart_decaching)?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
+				$sup=($support_smart_decaching && $temp!='')?strval(filemtime($temp)):NULL; // Tweaks caching so that upgrades work without needing emptying browser cache; only runs if smart decaching is on because otherwise we won't have the mtime and don't want to introduce an extra filesystem hit
 
 				$css->attach(do_template('CSS_NEED',array('_GUID'=>'ed35fac857214000f69a1551cd483096','CODE'=>$c,'SUP'=>$sup),user_lang(),false,NULL,'.tpl','templates',$theme));
 			}
@@ -1901,6 +1853,157 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 function require_css($css)
 {
 	$GLOBALS['CSSS'][$css]=1;
+}
+
+/**
+ * Handle web resource merging optimisation, for merging groups of CSS/Javascript files that are used across the site, to reduce request quantity.
+ *
+ * @param  ID_TEXT			Resource type
+ * @set .css .js
+ * @param  array				Resources (map of keys to 1), passed by reference as we alter it
+ * @param  BINARY				If we are minifying
+ * @param  BINARY				If we are using HTTPs
+ * @param  BINARY				If we are using mobile
+ * @return ?ID_TEXT			Resource name for merged file, which we assume is compiled (as this function makes it) (NULL: we don't know what is required / race condition)
+ */
+function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
+{
+	if (!$minify) return; // Optimisation disabled if no minification. Turn off minificiation when debugging Javascript/CSS, as smart caching won't work with the merge system.
+
+	$is_admin=$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member());
+	$zone_name=get_zone_name();
+
+	$grouping_codename_welcome='merged__';
+	$grouping_codename_welcome.='';
+	if ($is_admin) $grouping_codename_welcome.='__admin';
+
+	$grouping_codename='merged__';
+	$grouping_codename.=$zone_name;
+	if ($is_admin) $grouping_codename.='__admin';
+
+	$value=get_value_newer_than($grouping_codename.$type,time()-60*60*24);
+
+	if ($zone_name!='')
+	{
+		$welcome_value=get_value_newer_than($grouping_codename_welcome.$type,time()-60*60*24);
+		if (is_null($welcome_value)) return NULL; // Don't do this if we haven't got for welcome zone yet (we try and make all same as welcome zone if possible - so we need it to compare against)
+	} else
+	{
+		$welcome_value=$value;
+	}
+
+	// If not set yet, work out what merge situaton would be and save it
+	if ((is_null($value)) || (strpos($value,'::')===false))
+	{
+		$is_guest=is_guest();
+
+		// If is zone front page
+		if (get_zone_default_page($zone_name)==get_page_name())
+		{
+			// If in guest group or admin group
+			if (($is_guest) || ($is_admin))
+			{
+				// Work out a hash (checksum) for cache busting on this merged file. Does it using an mtime has chain for performance (better than reading and hashing all the file contents)
+				$hash='';
+				$resources=array_keys($arr);
+				foreach ($resources as $resource)
+				{
+					if ($resource=='no_cache') continue;
+
+					if ($type=='.js')
+					{
+						$merge_from=javascript_enforce($resource);
+					} else // .css
+					{
+						$merge_from=css_enforce($resource);
+					}
+					if ($merge_from!='') $hash=substr(md5($hash.@strval(filemtime($merge_from))),0,5);
+				}
+
+				$value=implode(',',$resources).'::'.$hash;
+				set_value($grouping_codename.$type,$value);
+			}
+		}
+	}
+
+	// If set, ensure merged resources file exists, and apply it
+	if (!is_null($value))
+	{
+		if ($welcome_value==$value) // Optimisation, if same as welcome zone, use that -- so user does not need to download multiple identical merged resources
+		{
+			$grouping_codename=$grouping_codename_welcome;
+		}
+
+		$_value=explode('::',$value);
+		$resources=explode(',',$_value[0]);
+		$hash=$_value[1];
+
+		// Find merged file path
+		$theme=filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme());
+		$dir=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.filter_naughty(user_lang());
+		$grouping_codename.='_'.$hash; // Add cache buster component
+		$file=$grouping_codename;
+		if (!$minify) $file.='_non_minified';
+		if ($https) $file.='_ssl';
+		if ($mobile) $file.='_mobile';
+		$write_path=$dir.'/'.filter_naughty_harsh($file);
+		$write_path.=$type;
+
+		if (!is_file($write_path))
+		{
+			// Create merged resource...
+
+			$data='';
+			$good_to_go=true;
+			foreach ($resources as $resource)
+			{
+				if ($resource=='no_cache') continue;
+
+				if ($type=='.js')
+				{
+					$merge_from=javascript_enforce($resource);
+				} else // .css
+				{
+					$merge_from=css_enforce($resource);
+				}
+				if (is_file($merge_from))
+				{
+					$data.=unixify_line_format(file_get_contents($merge_from)).chr(10).chr(10);
+				} else // race condition
+				{
+					$good_to_go=false;
+					break;
+				}
+			}
+
+			if ($good_to_go)
+			{
+				$myfile=@fopen($write_path,'wb') OR intelligent_write_error($write_path); // Intentionally 'wb' to stop line ending conversions on Windows
+				fwrite($myfile,$data);
+				fclose($myfile);
+				fix_permissions($write_path,0777);
+				sync_file($write_path);
+			}
+		} else
+		{
+			$good_to_go=true;
+		}
+
+		if ($good_to_go)
+		{
+			foreach ($resources as $resource)
+			{
+				if ($resource=='no_cache') continue;
+
+				unset($arr[$resource]); // Don't load up if unit already individually requested
+			}
+			$arr[$grouping_codename]=0; // Add in merge one to load instead
+
+			return $grouping_codename;
+		}
+	}
+
+	return NULL;
 }
 
 /**
