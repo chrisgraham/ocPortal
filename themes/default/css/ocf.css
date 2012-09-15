@@ -1093,43 +1093,14 @@ table.ocf_profile_statistics th {
 	}
 {+END}
 
-ul.ocf_profile_friends {
+.ocf_profile_friends {
 	overflow: hidden;
-	list-style-type: none;
-	display: block;
-	margin: 1em;
-	padding: 0;
 }
 
-ul.ocf_profile_friends li {
-	{+START,IF,{$MOBILE}}
-		margin: 1em 0 0 0;
-		padding: 1em;
-	{+END}
-
-	{+START,IF,{$NOT,{$MOBILE}}}
-		float: left;
-		margin: 1em 1em 0 0;
-		padding: 0.5em;
-		width: 10.5em;
-	{+END}
-	list-style-type: none;
+.ocf_profile_friends>.box {
+	margin: 0.5em 0 1em 0;
 	border: 1px solid {$GET,standard_border};
 	background: {$GET,area_background};
-	display: block;
-	min-height: 3.6em;
-}
-
-ul.ocf_profile_friends li a {
-	text-decoration: none;
-}
-
-ul.ocf_profile_friends li:hover {
-	background-color: {$GET,area_hover_3_background};
-}
-
-ul.ocf_profile_friends li .associated_details {
-	display: block;
 }
 
 /*
@@ -1212,8 +1183,8 @@ ul.ocf_profile_friends li .associated_details {
 }
 
 .ocf_member_box_avatar {
-	float: left;
-	margin-right: 1em;
+	float: right;
+	margin-left: 0.5em;
 	max-width: 245px; /* Based on tooltip size */
 }
 

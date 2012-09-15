@@ -34,9 +34,10 @@ function hide_the_evidence($html)
  *
  * @param  string			The XHTML string to convert to XHTML
  * @param  boolean		Whether to force a repair even if we aren't enforcing XHTML strictness
+ * @param  boolean		Whether this is a partial snippet of HTML, embeddable in some unknown context
  * @return string			The converted string
  */
-function xhtmlise_html($html,$definitely_want=false)
+function xhtmlise_html($html,$definitely_want=false,$snippet=false)
 {
 	// Tests...
 	// echo xhtmlise_html('test<a></a><br /><po></p><p></po>'); // expect: test<a></a><br /><po><p></p></po>
@@ -91,37 +92,40 @@ function xhtmlise_html($html,$definitely_want=false)
 				if (($term===false) && (!isset($MUST_SELFCLOSE_TAGS[$basis_token]))) // Opening a tag
 				{
 					// Fix nesting
-					if (($basis_token=='li') && (!in_array('ul',$TAG_STACK)) && (!in_array('ol',$TAG_STACK)) && (!in_array('dl',$TAG_STACK)) && (!in_array('dd',$TAG_STACK)) && (!in_array('dt',$TAG_STACK)) && (!in_array('dir',$TAG_STACK)) && (!in_array('menu',$TAG_STACK)))
+					if (!$snippet)
 					{
-						array_push($TAG_STACK,'ul');
-						$new.='<ul>';
-					}
-					if ((($basis_token=='tr') || ($basis_token=='colgroup') || ($basis_token=='col') || ($basis_token=='tbody') || ($basis_token=='tfoot') || ($basis_token=='thead') || ($basis_token=='caption')) && (!in_array('table',$TAG_STACK)))
-					{
-						array_push($TAG_STACK,'table');
-						$new.='<table>';
-					}
-					if ((($basis_token=='td') || ($basis_token=='th')) && (!in_array('table',$TAG_STACK)))
-					{
-						array_push($TAG_STACK,'table');
-						$new.='<table>';
-						array_push($TAG_STACK,'tr');
-						$new.='<tr>';
-					}
-					if (($basis_token=='param') && (!in_array('object',$TAG_STACK)))
-					{
-						array_push($TAG_STACK,'object');
-						$new.='<object>';
-					}
-					if (($basis_token=='option') && (!in_array('select',$TAG_STACK)))
-					{
-						array_push($TAG_STACK,'select');
-						$new.='<select>';
-					}
-					if (($basis_token=='noembed') && (!in_array('map',$TAG_STACK)))
-					{
-						array_push($TAG_STACK,'map');
-						$new.='<map>';
+						if (($basis_token=='li') && (!in_array('ul',$TAG_STACK)) && (!in_array('ol',$TAG_STACK)) && (!in_array('dl',$TAG_STACK)) && (!in_array('dd',$TAG_STACK)) && (!in_array('dt',$TAG_STACK)) && (!in_array('dir',$TAG_STACK)) && (!in_array('menu',$TAG_STACK)))
+						{
+							array_push($TAG_STACK,'ul');
+							$new.='<ul>';
+						}
+						if ((($basis_token=='tr') || ($basis_token=='colgroup') || ($basis_token=='col') || ($basis_token=='tbody') || ($basis_token=='tfoot') || ($basis_token=='thead') || ($basis_token=='caption')) && (!in_array('table',$TAG_STACK)))
+						{
+							array_push($TAG_STACK,'table');
+							$new.='<table>';
+						}
+						if ((($basis_token=='td') || ($basis_token=='th')) && (!in_array('table',$TAG_STACK)))
+						{
+							array_push($TAG_STACK,'table');
+							$new.='<table>';
+							array_push($TAG_STACK,'tr');
+							$new.='<tr>';
+						}
+						if (($basis_token=='param') && (!in_array('object',$TAG_STACK)))
+						{
+							array_push($TAG_STACK,'object');
+							$new.='<object>';
+						}
+						if (($basis_token=='option') && (!in_array('select',$TAG_STACK)))
+						{
+							array_push($TAG_STACK,'select');
+							$new.='<select>';
+						}
+						if (($basis_token=='noembed') && (!in_array('map',$TAG_STACK)))
+						{
+							array_push($TAG_STACK,'map');
+							$new.='<map>';
+						}
 					}
 
 					array_push($TAG_STACK,$basis_token);

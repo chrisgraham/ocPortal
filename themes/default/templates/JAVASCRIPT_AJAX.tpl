@@ -10,6 +10,7 @@ var AJAX_TIMEOUTS=[];
 
 var block_data_cache={};
 
+var infinite_scroll_pending=false;
 var infinite_scroll_blocked=false;
 function infinite_scrolling_block(event)
 {
@@ -41,25 +42,41 @@ function infinite_scrolling_block_unhold(infinite_scrolling)
 }
 function internalise_infinite_scrolling(url_stem,wrapper)
 {
+	if (infinite_scroll_blocked) return false; // Already waiting for a result
+
 	var _pagination=get_elements_by_class_name(wrapper,'pagination');
+
 	if (typeof _pagination[0]=='undefined') return false;
 	var pagination=_pagination[0];
 
-	if (pagination.style.display!='none')
-	{
-		pagination.style.display='none';
+	var more_links=pagination.getElementsByTagName('a');
 
+	if (pagination.parentNode)
+	{
+		// Replace pagination with AJAX load more link
 		var load_more_link=document.createElement('div');
 		load_more_link.className='pagination_load_more';
 		var load_more_link_a=document.createElement('a');
 		set_inner_html(load_more_link_a,'{!LOAD_MORE;}');
 		load_more_link_a.href='#';
-		load_more_link_a.onclick=function() { internalise_infinite_scrolling_go(url_stem,wrapper,pagination); return false; };
+		load_more_link_a.onclick=function() { internalise_infinite_scrolling_go(url_stem,wrapper,more_links); return false; }; // Click link -- load
 		load_more_link.appendChild(load_more_link_a);
 		pagination.parentNode.insertBefore(load_more_link,pagination.nextSibling);
-	}
 
-	if (infinite_scroll_blocked) return false;
+		// Remove pagination, now we've grabbed the links from it and replaced with AJAX load more link
+		var pagination_parent=pagination.parentNode;
+		pagination_parent.removeChild(pagination.nextSibling);
+		pagination_parent.removeChild(pagination);
+		var num_node_children=0;
+		for (var i=0;i<pagination_parent.childNodes.length;i++)
+		{
+			if (pagination_parent.childNodes[i].nodeName!='#text') num_node_children++;
+		}
+		if (num_node_children==0) // Remove empty pagination wrapper
+		{
+			pagination_parent.parentNode.removeChild(pagination_parent);
+		}
+	}
 
 	var wrapper_pos_y=find_pos_y(wrapper);
 	var wrapper_height=find_height(wrapper);
@@ -68,19 +85,17 @@ function internalise_infinite_scrolling(url_stem,wrapper)
 	var page_height=get_window_scroll_height();
 	var scroll_y=get_window_scroll_y();
 
+	// Scroll down -- load
 	if ((scroll_y+window_height>wrapper_bottom-window_height/2) && (scroll_y+window_height<page_height-30)) // If within window_height/2 pixels of load area and not within 30 pixels of window bottom (so you can press End key)
 	{
-		return internalise_infinite_scrolling_go(url_stem,wrapper,pagination);
+		return internalise_infinite_scrolling_go(url_stem,wrapper,more_links);
 	}
 
 	return false;
 }
-function internalise_infinite_scrolling_go(url_stem,wrapper,pagination)
+function internalise_infinite_scrolling_go(url_stem,wrapper,more_links)
 {
-	var more_links=pagination.getElementsByTagName('a');
-
-	pagination.parentNode.removeChild(pagination.nextSibling);
-	pagination.parentNode.removeChild(pagination);
+	if (infinite_scroll_pending) return false;
 
 	for (var i=0;i<more_links.length;i++)
 	{
@@ -95,10 +110,12 @@ function internalise_infinite_scrolling_go(url_stem,wrapper,pagination)
 				url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
 				url_stub+=matches[1]+'='+matches[2];
 				url_stub+='&raw=1';
-				return call_block(url_stem+url_stub,'',wrapper,true);
+
+				return call_block(url_stem+url_stub,'',wrapper,true,function() { window.infinite_scroll_pending=false; internalise_infinite_scrolling(url_stem,wrapper); } );
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -245,7 +262,7 @@ function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,
 	var ajax_loading=get_elements_by_class_name(target_div,'ajax_loading');
 	if (typeof ajax_loading[0]!='undefined')
 	{
-		ajax_loading[0].parentNode.removeChild(ajax_loading[0]);
+		ajax_loading[0].parentNode.parentNode.removeChild(ajax_loading[0].parentNode);
 	}
 
 	// Put in HTML

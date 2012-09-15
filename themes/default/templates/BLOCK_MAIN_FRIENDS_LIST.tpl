@@ -4,20 +4,22 @@
 		<p>{!DESCRIPTION_FRIENDS,{$USERNAME*,{MEMBER_ID}}}</p>
 
 		{+START,IF_NON_EMPTY,{FRIENDS}}
-			<ul class="ocf_profile_friends actions_list raw_ajax_grow_spot">
+			<div class="ocf_profile_friends raw_ajax_grow_spot">
 				{+START,LOOP,FRIENDS}
-					<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');"><a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span></li>
+					<div class="box"><div class="box_inner">
+						{BOX}
+					</div></div>
 				{+END}
-			</ul>
+			</div>
+
+			{+START,IF_NON_EMPTY,{PAGINATION}}
+				<div class="pagination_spacing float_surrounder ajax_block_wrapper_links">
+					{PAGINATION}
+				</div>
+			{+END}
 		{+END}
 		{+START,IF_EMPTY,{FRIENDS}}
 			<p class="nothing_here">{!NO_ENTRIES}</p>
-		{+END}
-
-		{+START,IF_NON_EMPTY,{PAGINATION}}
-			<div class="float_surrounder ajax_block_wrapper_links">
-				{PAGINATION}
-			</div>
 		{+END}
 
 		{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
@@ -26,7 +28,9 @@
 
 {+START,IF,{$EQ,{$COMMA_LIST_GET,{BLOCK_PARAMS},raw},1}}
 	{+START,LOOP,FRIENDS}
-		<li onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX*;~}','500px');"><a href="{URL*}">{USERNAME*}</a> <span class="associated_details">{USERGROUP*}</span></li>
+		<div class="box"><div class="box_inner">
+			{BOX}
+		</div></div>
 	{+END}
 
 	{PAGINATION}
