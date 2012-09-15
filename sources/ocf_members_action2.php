@@ -1478,23 +1478,37 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	if (((get_base_url()!=get_forum_base_url()) || ((array_key_exists('on_msn',$GLOBALS['SITE_INFO'])) && ($GLOBALS['SITE_INFO']['on_msn']=='1'))) && ($urls[0]!='') && (url_is_local($urls[0]))) $urls[0]=get_base_url().'/'.$urls[0];
 	if (((get_base_url()!=get_forum_base_url()) || ((array_key_exists('on_msn',$GLOBALS['SITE_INFO'])) && ($GLOBALS['SITE_INFO']['on_msn']=='1'))) && ($urls[1]!='') && (url_is_local($urls[1]))) $urls[1]=get_base_url().'/'.$urls[1];
 
+	ocf_member_choose_photo_concrete($urls[0],$urls[1],$member_id);
+}
+
+/**
+ * Edit a member's photo.
+ *
+ * @param  URLPATH	URL to photo.
+ * @param  URLPATH	URL to thumbnail photo.
+ * @param  ?MEMBER	The member (NULL: the current member).
+ */
+function ocf_member_choose_photo_concrete($url,$thumb_url,$member_id=NULL)
+{
+	if (is_null($member_id)) $member_id=get_member();
+
 	// Cleanup old photo
 	$old=$GLOBALS['FORUM_DB']->query_select_value('f_members','m_photo_url',array('id'=>$member_id));
-	if ($old==$urls[0]) return;
+	if ($old==$url) return;
 	if ((url_is_local($old)) && ((substr($old,0,19)=='uploads/ocf_photos/') || (substr($old,0,15)=='uploads/photos/')))
 		@unlink(get_custom_file_base().'/'.rawurldecode($old));
 
-	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_photo_url'=>$urls[0],'m_photo_thumb_url'=>$urls[1]),array('id'=>$member_id),'',1);
+	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_photo_url'=>$url,'m_photo_thumb_url'=>$thumb_url),array('id'=>$member_id),'',1);
 
 	require_code('notifications');
-	dispatch_notification('ocf_choose_photo',NULL,do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$urls[0],$urls[1],$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)));
+	dispatch_notification('ocf_choose_photo',NULL,do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,NULL,get_lang($member_id)),do_lang('CHOOSE_PHOTO_BODY',$url,$thumb_url,$GLOBALS['FORUM_DRIVER']->get_username($member_id),get_lang($member_id)));
 
 	// If Avatars addon not installed, use photo for it
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 	$default_avatar_url=find_theme_image('ocf_default_avatars/default',true,true);
 	if (!addon_installed('ocf_avatars'))
 	{
-		$avatar_url=$urls[0];
+		$avatar_url=$url;
 		if ((get_option('is_on_gd')=='1') && (function_exists('imagetypes')))
 		{
 			$stub=url_is_local($avatar_url)?(get_complex_base_url($avatar_url).'/'):'';

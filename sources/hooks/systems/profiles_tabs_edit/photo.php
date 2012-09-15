@@ -47,8 +47,17 @@ class Hook_Profiles_Tabs_Edit_photo
 
 		$order=30;
 
+		// Special delete actualliser
+		if (post_param_integer('delete_photo',0)==1)
+		{
+			require_code('ocf_members_action');
+			require_code('ocf_members_action2');
+			ocf_member_choose_photo_concrete('','',$member_id_of);
+
+			attach_message(do_lang_tempcode('SUCCESS_SAVE'),'inform');
+		}
 		// Actualiser
-		if (post_param_integer('submitting_photo_tab',0)==1)
+		elseif (post_param_integer('submitting_photo_tab',0)==1)
 		{
 			require_code('ocf_members_action');
 			require_code('ocf_members_action2');
