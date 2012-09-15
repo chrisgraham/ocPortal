@@ -2240,7 +2240,6 @@ div.wysiwyg_toolbar_color_finder {
 	padding: 0 1em !important;
 	border: 1px dashed {$GET,slightly_seeded_complement_text} !important;
 }
-
 .comments_wrapper .boxless_space .comment_wrapper .highlighted_post.box {
 	border-top: 1px dashed {$GET,slightly_seeded_complement_text} !important; /* Needs to be more explicit as boxless-space rules will remove borders */
 }
