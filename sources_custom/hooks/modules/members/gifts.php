@@ -46,13 +46,11 @@ class Hook_members_gifts
 
 		$gifts=array();
 
-		foreach($rows as $gift)
+		foreach ($rows as $gift)
 		{
 			$gift_info=$GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id'=>$gift['gift_id']));
 			if (strlen($gift_info[0]['name'])>0)
 			{
-				$gift_url='';
-
 				if ($gift['is_anonymous']==0)
 				{
 					$sender_name=$GLOBALS['FORUM_DRIVER']->get_username($gift['from_user_id']);
@@ -64,20 +62,19 @@ class Hook_members_gifts
 				}
 
 				$image_url='';
-				if (is_file(get_file_base().'/'.$gift_info[0]['image']))
+				if (is_file(get_file_base().'/'.urldecode($gift_info[0]['image'])))
 				{
 					$image_url=get_base_url().'/'.$gift_info[0]['image'];
 				}
 
 				$gifts[]=array(
-					'GIFT_URL'=>$gift_url,
 					'GIFT_EXPLANATION'=>$gift_explanation,
 					'IMAGE_URL'=>$image_url,
 				);
 			}
 		}
 
-		$gifts_block=do_template('OCF_MEMBER_SCREEN_GIFTS_WRAP',array('GIFTS'=>$gifts));
+		$gifts_block=do_template('OCF_MEMBER_SCREEN_GIFTS_WRAP',array('_GUID'=>'fd4b5344b3b16cdf129e49bae903cbb2','GIFTS'=>$gifts));
 		return array($gifts_block);
 	}
 }

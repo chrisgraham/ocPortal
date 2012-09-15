@@ -108,7 +108,7 @@ class Hook_pointstore_ocgifts
 		require_code('form_templates');
 		$fields=new ocp_tempcode();
 
-		$fields->attach(form_input_username(do_lang_tempcode('TO_USERNAME'),do_lang_tempcode('MEMBER_TO_GIVE'),'username',get_param('username',''),false));
+		$fields->attach(form_input_username(do_lang_tempcode('TO_USERNAME'),do_lang_tempcode('MEMBER_TO_GIVE'),'username',get_param('username',''),true));
 
 		$fields->attach(form_input_text(do_lang_tempcode('GIFT_MESSAGE'),do_lang_tempcode('DESCRIPTION_GIFT_MESSAGE'),'gift_message','',true));
 
@@ -168,14 +168,14 @@ class Hook_pointstore_ocgifts
 				if ($anonymous==0)
 				{
 					$subject=do_lang('GOT_GIFT');
-					$message=do_lang('GIFT_EXPLANATION1',$GLOBALS['FORUM_DRIVER']->get_username($member_id),$gift_row[0]['name']) . '.  '."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
+					$message='[html]'.do_lang('GIFT_EXPLANATION1',$GLOBALS['FORUM_DRIVER']->get_username($member_id),$gift_row[0]['name']).'[/html].'."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
 
 					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id));
 				}
 				else
 				{
 					$subject=do_lang('GOT_GIFT',NULL,NULL,NULL,get_lang($to_member_id));
-					$message=do_lang('GIFT_EXPLANATION2',$gift_row[0]['name'],NULL,NULL,get_lang($to_member_id))."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
+					$message='[html]'.do_lang('GIFT_EXPLANATION2',$gift_row[0]['name'],NULL,NULL,get_lang($to_member_id)).'[/html].'."\n\n".'[img]'.get_base_url().'/'.$gift_row[0]['image'].'[/img]'."\n\n".$gift_message;
 
 					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id),A_FROM_SYSTEM_UNPRIVILEGED);
 				}
