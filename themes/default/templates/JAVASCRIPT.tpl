@@ -3,7 +3,10 @@
 "use strict";
 
 /* Startup */
-var page_loaded=false,page_fully_loaded=false;
+if (typeof window.page_loaded==='undefined') // To stop problem if JS file loaded more than once
+{
+	var page_loaded=false,page_fully_loaded=false;
+}
 function script_load_stuff()
 {
 	if (page_loaded) return; // Been called twice for some reason
@@ -54,15 +57,15 @@ function script_load_stuff()
 	}
 
 	/* Staff functionality */
-	if (typeof window.script_load_stuffStaff!='undefined') script_load_stuffStaff();
+	if (typeof window.script_load_stuff_staff!='undefined') script_load_stuff_staff();
 
 	/* Mouse/keyboard listening */
-	window.mouseX=0;
-	window.mouseY=0;
-	window.ctrlPressed=false;
-	window.altPressed=false;
-	window.metaPressed=false;
-	window.shiftPressed=false;
+	window.mouse_x=0;
+	window.mouse_y=0;
+	window.ctrl_pressed=false;
+	window.alt_pressed=false;
+	window.meta_pressed=false;
+	window.shift_pressed=false;
 	add_event_listener_abstract(document.body,'mousemove',get_mouse_xy);
 	if (typeof window.addEventListener!='undefined')
 		window.addEventListener('click',capture_click_key_states,true); /* Workaround for a dodgy firefox extension */
@@ -1374,12 +1377,12 @@ function change_class(box,theId,to,from)
 function get_mouse_xy(e,win)
 {
 	if (typeof win=='undefined') var win=window;
-	win.mouseX=get_mouse_x(e,win);
-	win.mouseY=get_mouse_y(e,win);
-	win.ctrlPressed=e.ctrlKey;
-	win.altPressed=e.altKey;
-	win.metaPressed=e.metaKey;
-	win.shiftPressed=e.shiftKey;
+	win.mouse_x=get_mouse_x(e,win);
+	win.mouse_y=get_mouse_y(e,win);
+	win.ctrl_pressed=e.ctrlKey;
+	win.alt_pressed=e.altKey;
+	win.meta_pressed=e.metaKey;
+	win.shift_pressed=e.shiftKey;
 	return true
 }
 function get_mouse_x(event,win)
@@ -1774,8 +1777,8 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		if (!no_delay)
 		{
 			// If delayed we will sub in what the currently known global mouse coordinate is
-			myevent_copy.pageX=win.mouseX;
-			myevent_copy.pageY=win.mouseY;
+			myevent_copy.pageX=win.mouse_x;
+			myevent_copy.pageY=win.mouse_y;
 		}
 
 		reposition_tooltip(ac,myevent_copy,bottom,true,tooltip_element,force_width,win);
@@ -1830,8 +1833,8 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 			{
 				if (((typeof event.target!='undefined')?event.target:event.srcElement).ownerDocument!=win.document)
 				{
-					x=win.mouseX+style__offset_x;
-					y=win.mouseY+style__offset_y;
+					x=win.mouse_x+style__offset_x;
+					y=win.mouse_y+style__offset_y;
 				}
 			}
 		}

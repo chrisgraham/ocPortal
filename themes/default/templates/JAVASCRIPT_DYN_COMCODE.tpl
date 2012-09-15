@@ -307,8 +307,8 @@ function jumper_tick(id)
 
 function crazy_tick()
 {
-	if (typeof window.mouseX=='undefined') return;
-	if (typeof window.mouseY=='undefined') return;
+	if (typeof window.mouse_x=='undefined') return;
+	if (typeof window.mouse_y=='undefined') return;
 
 	var e,i,s_width,biasx,biasy;
 	for (i=0;i<window.crazy_criters.length;i++)
@@ -316,10 +316,10 @@ function crazy_tick()
 		e=document.getElementById(window.crazy_criters[i]);
 		s_width=e.clientWidth;
 
-		biasx=window.mouseX-e.offsetLeft;
+		biasx=window.mouse_x-e.offsetLeft;
 		if (biasx>0) biasx=2; else biasx=-1;
 		if (Math.random()*4<1) biasx=0;
-		biasy=window.mouseY-e.offsetTop;
+		biasy=window.mouse_y-e.offsetTop;
 		if (biasy>0) biasy=2; else biasy=-1;
 		if (Math.random()*4<1) biasy=0;
 

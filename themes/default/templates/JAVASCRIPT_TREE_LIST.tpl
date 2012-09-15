@@ -270,7 +270,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			node_self.appendChild(new_html);
 
 			// Auto-expand
-			if (window.ctrlPressed || window.altPressed || window.metaPressed || window.shiftPressed)
+			if (window.ctrl_pressed || window.alt_pressed || window.meta_pressed || window.shift_pressed)
 			{
 				if (!initially_expanded)
 					img.onmousedown();

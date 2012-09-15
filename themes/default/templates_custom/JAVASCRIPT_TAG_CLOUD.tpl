@@ -274,8 +274,8 @@ function load_tag_cloud(container)
 		var width=find_width(container);
 		var height=find_height(container);
 
-		var mouseX = window.mouseX - offsetX - (width / 2);
-		var mouseY = window.mouseY - offsetY - (height / 2);
+		var mouseX = window.mouse_x - offsetX - (width / 2);
+		var mouseY = window.mouse_y - offsetY - (height / 2);
 
 		if ((Math.abs(mouseX)*2<width) && (Math.abs(mouseY)*2<height) && (!container.readyToClick)) // Only re-render if mouse is there
 		{

@@ -216,7 +216,7 @@ function time_now()
 
 function timeline_click(timeline,prospective)
 {
-	var pos=window.mouseX-find_pos_x(document.getElementById('time_line_image'),true);
+	var pos=window.mouse_x-find_pos_x(document.getElementById('time_line_image'),true);
 	var timeline_length=808;
 	var min_time=window.min_time;
 	var max_time=time_now();
