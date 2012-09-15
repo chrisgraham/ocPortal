@@ -568,7 +568,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	}
 
 	if ($where!='') $where.=' AND ';
-	$where.='(((e_start_month>='.strval(intval(date('m',$period_start))-1).' OR e_start_year>'.date('Y',$period_start).') AND (e_end_month<='.strval(intval(date('m',$period_end))+1).' OR e_end_year<'.date('Y',$period_end).')) OR '.db_string_not_equal_to('e_recurrence','').')';
+	$where.='(((e_start_month>='.strval(intval(date('m',$period_start))-1).' AND e_start_year='.date('Y',$period_start).' OR e_start_year>'.date('Y',$period_start).') AND (e_end_month<='.strval(intval(date('m',$period_end))+1).' AND e_end_year='.date('Y',$period_end).' OR e_end_year<'.date('Y',$period_end).')) OR '.db_string_not_equal_to('e_recurrence','').')';
 
 	$where=' WHERE '.$where;
 	$event_count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);

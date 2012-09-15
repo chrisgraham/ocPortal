@@ -33,12 +33,12 @@ function init__comcode_renderer()
 }
 
 /**
- * Check the specified URL for potentially malicious JavaScript. If any is found, the hack attack is logged, and an error is returned.
+ * Check the specified URL for potentially malicious JavaScript/etc. If any is found, the hack attack is logged if in an active post request by the submitting member otherwise filtered out.
  *
  * @param  MEMBER			The member who submitted the URL
  * @param  URLPATH		The URL to check
  * @param  boolean		Whether to check as arbitrary admin
- * @return URLPATH		This is the same as the input (if something was wrong, it would never return). It's here so that the function may be used as a filter.
+ * @return URLPATH		Filtered input URL.
  */
 function check_naughty_javascript_url($source_member,$url,$as_admin)
 {
@@ -57,7 +57,9 @@ function check_naughty_javascript_url($source_member,$url,$as_admin)
 				$matched_entity=intval($matches[1][$i]);
 				if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
 				{
-					log_hack_attack_and_exit('ASCII_ENTITY_URL_HACK',$url);
+					if ((count($_POST)!=0) && (get_member()==$source_member))
+						log_hack_attack_and_exit('ASCII_ENTITY_URL_HACK',$url);
+					return '';
 				}
 			}
 		}
@@ -69,16 +71,23 @@ function check_naughty_javascript_url($source_member,$url,$as_admin)
 				$matched_entity=intval(base_convert($matches[1][$i],16,10));
 				if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
 				{
-					log_hack_attack_and_exit('ASCII_ENTITY_URL_HACK',$url);
+					if ((count($_POST)!=0) && (get_member()==$source_member))
+						log_hack_attack_and_exit('ASCII_ENTITY_URL_HACK',$url);
+					return '';
 				}
 			}
 		}
 
 		$bad=(strpos($url2,'script:')!==false) || (strpos($url2,'data:')!==false);
-		if ($bad) log_hack_attack_and_exit('SCRIPT_URL_HACK',$url2);
+		if ($bad)
+		{
+			if ((count($_POST)!=0) && (get_member()==$source_member))
+				log_hack_attack_and_exit('SCRIPT_URL_HACK',$url2);
+			return '';
+		}
 	}
 
-	return $url; // To allow functional embedding
+	return $url;
 }
 
 /**
@@ -1619,7 +1628,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 		case 'thumb':
 			$_embed=$embed->evaluate();
 			$_embed=remove_url_mistakes($_embed);
-			check_naughty_javascript_url($source_member,$_embed,$as_admin);
+			$_embed=check_naughty_javascript_url($source_member,$_embed,$as_admin);
 			if (substr($_embed,0,1)=='/') $_embed=substr($_embed,1);
 			if (url_is_local($_embed))
 			{
@@ -1678,7 +1687,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$given_url=$_embed;
 			$_embed=remove_url_mistakes($_embed);
 			if (substr($_embed,0,1)=='/') $_embed=substr($_embed,1);
-			check_naughty_javascript_url($source_member,$_embed,$as_admin);
+			$_embed=check_naughty_javascript_url($source_member,$_embed,$as_admin);
 			if (url_is_local($_embed))
 			{
 				if ((file_exists(get_file_base().'/'.$_embed)) && (!file_exists(get_custom_file_base().'/'.$_embed)))
@@ -1724,7 +1733,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$given_url=$_embed;
 			$_embed=remove_url_mistakes($_embed);
 			if (substr($_embed,0,1)=='/') $_embed=substr($_embed,1);
-			check_naughty_javascript_url($source_member,$_embed,$as_admin);
+			$_embed=check_naughty_javascript_url($source_member,$_embed,$as_admin);
 			$url_full=url_is_local($_embed)?(get_custom_base_url().'/'.$_embed):$_embed;
 			$temp_tpl=test_url($url_full,'flash',@html_entity_decode($given_url,ENT_QUOTES,get_charset()),$source_member);
 			if (($attributes['param']=='') || (strpos($attributes['param'],'x')===false))
@@ -1793,7 +1802,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$url=fixup_protocolless_urls($url);
 
 			// Integrity and security
-			check_naughty_javascript_url($source_member,$url,$as_admin);
+			$url=check_naughty_javascript_url($source_member,$url,$as_admin);
 
 			// More URL tidying
 			$local=(url_is_local($url)) || (strpos($url,get_domain())!==false);
@@ -1852,7 +1861,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if ((array_key_exists('type',$attributes)) && ($attributes['type']=='url'))
 			{
 				$_embed=$embed->evaluate();
-				check_naughty_javascript_url($source_member,$_embed,$as_admin);
+				$_embed=check_naughty_javascript_url($source_member,$_embed,$as_admin);
 				if (!array_key_exists('title',$attributes)) $attributes['title']=$attributes['param'];
 				if ((is_object($attributes['title'])) || ($attributes['title']!=''))
 				{
@@ -1872,7 +1881,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$__caption=$_caption->evaluate();
 			} else $__caption=$_embed;
 			$url=get_custom_base_url().'/'.$type.'/'.rawurlencode($_embed);
-			check_naughty_javascript_url($source_member,$url,$as_admin);
+			$url=check_naughty_javascript_url($source_member,$url,$as_admin);
 			$temp_tpl=test_url($url,'upload',$_embed,$source_member);
 			$temp_tpl->attach(hyperlink($url,$__caption));
 			break;

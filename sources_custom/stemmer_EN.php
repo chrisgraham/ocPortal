@@ -596,7 +596,7 @@ class Stemmer_EN
      */
     function count_vc( $word )
     {
-        $m = 0;
+        $m = 0.0;
         $length = strlen($word);
         $prev_c = false;
         for ( $i = 0; $i < $length; $i++ ) {
