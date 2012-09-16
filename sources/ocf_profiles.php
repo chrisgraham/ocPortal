@@ -35,6 +35,8 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 
 	$tabs=array();
 
+	$only_tab=get_param('only_tab',NULL);
+
 	$hooks=find_all_hooks('systems','profiles_tabs');
 	if (isset($hooks['edit'])) // Editing must go first, so changes reflect in the renders of the tabs
 	{
@@ -42,11 +44,14 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 	}
 	foreach (array_keys($hooks) as $hook)
 	{
-		require_code('hooks/systems/profiles_tabs/'.$hook);
-		$ob=object_factory('Hook_Profiles_Tabs_'.$hook);
-		if ($ob->is_active($member_id_of,$member_id_viewing))
+		if (($only_tab===NULL) || ($only_tab==$hook))
 		{
-			$tabs[$hook]=$ob->render_tab($member_id_of,$member_id_viewing,!browser_matches('ie6') && !browser_matches('ie7') && has_js());
+			require_code('hooks/systems/profiles_tabs/'.$hook);
+			$ob=object_factory('Hook_Profiles_Tabs_'.$hook);
+			if ($ob->is_active($member_id_of,$member_id_viewing))
+			{
+				$tabs[$hook]=$ob->render_tab($member_id_of,$member_id_viewing,$only_tab!==$hook && !browser_matches('ie6') && !browser_matches('ie7') && has_js());
+			}
 		}
 	}
 
@@ -70,6 +75,12 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 	$i=0;
 	foreach ($tabs as $hook=>$tab)
 	{
+		if ($only_tab===$hook)
+		{
+			$title=get_screen_title($tab[0],false);
+		}
+
+		$tab[1]->handle_symbol_preprocessing();
 		$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_CODE'=>$hook,'TAB_CONTENT'=>$tab[1],'TAB_FIRST'=>$i==0,'TAB_LAST'=>!array_key_exists($i+1,$tabs));
 		$i++;
 	}

@@ -3,7 +3,7 @@
 <div class="vcard" itemscope="itemscope" itemtype="http://schema.org/ProfilePage">
 	{TITLE}
 
-	<div>
+	{+START,IF,{$GT,{TABS},1}}
 		<div class="float_surrounder"><div class="tabs" role="tablist">
 			{+START,LOOP,TABS}
 				<a aria-controls="g_{TAB_CODE*}" role="tab" href="#" id="t_{TAB_CODE*}" class="tab{+START,IF,{TAB_FIRST}} tab_active tab_first{+END}{+START,IF,{TAB_LAST}} tab_last{+END}" onclick="event.returnValue=false; select_tab('g','{TAB_CODE*}'); return false;">{TAB_TITLE*}</a>
@@ -38,11 +38,21 @@
 				</div>
 			{+END}
 		</div>
-	</div>
+	{+END}
+
+	{+START,IF,{$EQ,{TABS},1}}
+		{+START,LOOP,TABS}
+			{+START,IF_PASSED,TAB_CONTENT}
+				{TAB_CONTENT}
+			{+END}
+		{+END}
+	{+END}
 </div>
 
-<script type="text/javascript">// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
-		find_url_tab();
-	} );
-//]]></script>
+{+START,IF,{$GT,{TABS},1}}
+	<script type="text/javascript">// <![CDATA[
+		add_event_listener_abstract(window,'load',function () {
+			find_url_tab();
+		} );
+	//]]></script>
+{+END}

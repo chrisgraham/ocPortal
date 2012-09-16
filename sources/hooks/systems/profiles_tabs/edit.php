@@ -62,6 +62,8 @@ class Hook_Profiles_Tabs_edit
 
 		$order=200;
 
+		$only_tab=get_param('only_subtab',NULL);
+
 		if (($leave_to_ajax_if_possible) && (strtoupper(ocp_srv('REQUEST_METHOD'))!='POST')) return array($title,NULL,$order);
 
 		if (function_exists('set_time_limit')) @set_time_limit(60); // Raise time limit, as can be slow
@@ -75,11 +77,21 @@ class Hook_Profiles_Tabs_edit
 		}
 		foreach (array_keys($hooks) as $hook)
 		{
-			require_code('hooks/systems/profiles_tabs_edit/'.$hook);
-			$ob=object_factory('Hook_Profiles_Tabs_Edit_'.$hook);
-			if ($ob->is_active($member_id_of,$member_id_viewing))
+			if (($only_tab===NULL) || ($only_tab==$hook))
 			{
-				$tabs[]=$ob->render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible);
+				require_code('hooks/systems/profiles_tabs_edit/'.$hook);
+				$ob=object_factory('Hook_Profiles_Tabs_Edit_'.$hook);
+				if ($ob->is_active($member_id_of,$member_id_viewing))
+				{
+					$tab=$ob->render_tab($member_id_of,$member_id_viewing,$only_tab!==$hook && $leave_to_ajax_if_possible);
+
+					if ($only_tab===$hook)
+					{
+						$title=$tab[0];
+					}
+
+					$tabs[]=$tab;
+				}
 			}
 		}
 
