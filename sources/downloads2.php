@@ -622,7 +622,7 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
 
 	if (strlen($mash)>1024*1024*3) $mash=substr($mash,0,1024*1024*3);
 	$mash=preg_replace('# +#',' ',preg_replace('#[^\w\d-\-\']#',' ',$mash));
-	if (strlen($mash)>1024*1024*1*0.4) $mash=substr($mash,0,1024*1024*0.4);
+	if (strlen($mash)>intval(1024*1024*1*0.4)) $mash=substr($mash,0,intval(1024*1024*0.4));
 
 	return $mash;
 }
