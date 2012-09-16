@@ -139,6 +139,8 @@ function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_para
 			_links=_link_wrappers[i].getElementsByTagName('form');
 			for (var j=0;j<_links.length;j++)
 				links.push(_links[j]);
+			if (_link_wrappers[i].nodeName.toLowerCase()=='form')
+				links.push(_link_wrappers[i]);
 		}
 	}
 	for (var i=0;i<links.length;i++)
@@ -168,7 +170,7 @@ function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_para
 				}
 
 				// Any POST parameters?
-				var post_params=null;
+				var post_params=null,param;
 				if (this.nodeName.toLowerCase()=='form')
 				{
 					post_params='';
@@ -176,8 +178,17 @@ function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_para
 					{
 						if (this.elements[j].name)
 						{
-							if (post_params!='') post_params+='&';
-							post_params+=this.elements[j].name+'='+window.encodeURIComponent(clever_find_value(this,this.elements[j]));
+							param=this.elements[j].name+'='+window.encodeURIComponent(clever_find_value(this,this.elements[j]));
+
+							if ((!this.method) || (this.method.toLowerCase()!='get'))
+							{
+								if (post_params!='') post_params+='&';
+								post_params+=param;
+							} else
+							{
+								url_stub+=(url_stem.indexOf('?')==-1)?'?':'&';
+								url_stub+=param;
+							}
 						}
 					}
 				}
@@ -222,7 +233,7 @@ function call_block(url,new_block_params,target_div,append,callback,scroll_to_to
 	// Show loading animation
 	var loading_wrapper=target_div;
 	var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
-	if (typeof raw_ajax_grow_spot[0]!='undefined') loading_wrapper=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
+	if (typeof raw_ajax_grow_spot[0]!='undefined' && append) loading_wrapper=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
 	var loading_wrapper_inner=document.createElement('div');
 	loading_wrapper_inner.style.position='relative';
 	var loading_image=document.createElement('img');
@@ -285,7 +296,7 @@ function _call_block_render(raw_ajax_result,ajax_url,target_div,append,callback,
 function show_block_html(new_html,target_div,append)
 {
 	var raw_ajax_grow_spot=get_elements_by_class_name(target_div,'raw_ajax_grow_spot');
-	if (typeof raw_ajax_grow_spot[0]!='undefined') target_div=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
+	if (typeof raw_ajax_grow_spot[0]!='undefined' && append) target_div=raw_ajax_grow_spot[0]; // If we actually are embedding new results a bit deeper
 
 	set_inner_html(target_div,new_html,append);
 }

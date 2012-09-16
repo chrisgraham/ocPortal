@@ -61,13 +61,27 @@ class Block_main_friends_list
 		$blocked=collapse_1d_complexity('member_blocked',$GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker'=>$member_id)));
 		$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
 
+		$where='';
+		$friends_search=get_param('friends_search','');
+
+		$dbsc=$GLOBALS['NO_DB_SCOPE_CHECK'];
+		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
+
+		$msn=($GLOBALS['FORUM_DB']->connection_write!=$GLOBALS['SITE_DB']->connection_write);
+
 		if (!$mutual)
 		{
-			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends a LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends b ON a.member_liked=b.member_likes AND a.member_liked='.strval($member_id).' WHERE (a.member_likes='.strval(intval($member_id)).' OR a.member_liked='.strval(intval($member_id)).') AND b.member_liked IS NULL';
+			if (($friends_search!='') && (!$msn))
+				$where.=' AND (m1.m_username LIKE \''.db_encode_like('%'.$friends_search.'%').'\' OR m2.m_username LIKE \''.db_encode_like('%'.$friends_search.'%').'\')';
+
+			$query=get_table_prefix().'chat_friends a LEFT JOIN '.get_table_prefix().'f_members m1 ON m1.id=a.member_likes LEFT JOIN '.get_table_prefix().'f_members m2 ON m2.id=a.member_liked LEFT JOIN '.get_table_prefix().'chat_friends b ON a.member_liked=b.member_likes AND a.member_liked='.strval($member_id).' WHERE (a.member_likes='.strval(intval($member_id)).' OR a.member_liked='.strval(intval($member_id)).') AND b.member_liked IS NULL'.$where;
 			$rows=$GLOBALS['SITE_DB']->query('SELECT a.* FROM '.$query.' ORDER BY date_and_time',$max,$start);
 		} else
 		{
-			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends WHERE member_likes='.strval(intval($member_id));
+			if (($friends_search!='') && (!$msn))
+				$where.=' AND m.m_username LIKE \''.db_encode_like('%'.$friends_search.'%').'\'';
+
+			$query=$GLOBALS['SITE_DB']->get_table_prefix().'chat_friends LEFT JOIN '.get_table_prefix().'f_members m ON m.id=a.member_likes WHERE member_likes='.strval(intval($member_id)).$where;
 			$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$query.' ORDER BY date_and_time',$max,$start);
 		}
 		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$query);
@@ -79,6 +93,11 @@ class Block_main_friends_list
 
 			if (($f_id==$row['member_likes']) || (!in_array($f_id,$blocked)))
 			{
+				$friend_username=$GLOBALS['FORUM_DRIVER']->get_username($f_id);
+
+				if (($friends_search!='') && ($msn) && (strpos($friend_username,$friends_search)===false))
+					continue;
+
 				$appears_twice=false;
 				foreach ($rows as $j=>$row2)
 				{
@@ -93,7 +112,6 @@ class Block_main_friends_list
 				require_code('ocf_members2');
 				require_lang('ocf');
 
-				$friend_username=$GLOBALS['FORUM_DRIVER']->get_username($f_id);
 				$friend_usergroup_id=$GLOBALS['FORUM_DRIVER']->get_member_row_field($f_id,'m_primary_group');
 				$friend_usergroup=array_key_exists($friend_usergroup_id,$all_usergroups)?$all_usergroups[$friend_usergroup_id]:do_lang_tempcode('UNKNOWN');
 				$mutual_label=do_lang('MUTUAL_FRIEND');
@@ -113,6 +131,8 @@ class Block_main_friends_list
 
 		require_code('templates_pagination');
 		$pagination=pagination($text_id,$start,$block_id.'_start',$max,$block_id.'_max',$max_rows);
+
+		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbsc;
 
 		return do_template('BLOCK_MAIN_FRIENDS_LIST',array(
 			'_GUID'=>'70b11d3c01ff551be42a0472d27dd207',

@@ -36,7 +36,7 @@ class Hook_profile_tab
 		$keep_get=array();
 		foreach (array_keys($_GET) as $key)
 		{
-			if (in_array($key,array('snippet','tab','url','title','member_id'))) continue;
+			if (in_array($key,array('snippet','tab','url','title','member_id','utheme'))) continue;
 			$keep_get[$key]=get_param($key,NULL,true);
 		}
 		set_execution_context(array('page'=>'members','type'=>'view','id'=>$member_id_of)+$keep_get);

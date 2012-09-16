@@ -1,6 +1,16 @@
+{$REQUIRE_JAVASCRIPT,javascript_validation}
+
 {+START,IF,{$NEQ,{$COMMA_LIST_GET,{BLOCK_PARAMS},raw},1}}
 	{$SET,wrapper_id,ajax_block_wrapper_{$RAND%}}
 	<div id="{$GET*,wrapper_id}">
+		<form target="_self" class="right" role="search" title="{!FRIENDS}, {!SEARCH}" action="{$URL_FOR_GET_FORM*,{$SELF_URL}}#tab__friends" method="get">
+			{$HIDDENS_FOR_GET_FORM,{$SELF_URL}}
+
+			<label class="accessibility_hidden" for="friends_search">{!SEARCH}</label>
+			<input autocomplete="off" maxlength="255" onkeyup="update_ajax_search_list(this,event);" type="search" id="friends_search" name="friends_search" value="{$_GET*,friends_search}" />
+			<input class="button_micro" type="submit" value="{!FILTER}" />
+		</form>
+
 		<p>{!DESCRIPTION_FRIENDS,{$USERNAME*,{MEMBER_ID}}}</p>
 
 		{+START,IF_NON_EMPTY,{FRIENDS}}
@@ -22,6 +32,9 @@
 			<p class="nothing_here">{!NO_ENTRIES}</p>
 		{+END}
 
+		<script type="text/javascript">// <![CDATA[
+			internalise_ajax_block_wrapper_links('{$FACILITATE_AJAX_BLOCK_CALL;,{BLOCK_PARAMS}}',document.getElementById('{$GET;,wrapper_id}'),['.*'],{ },false,true);
+		//]]></script>
 		{+START,INCLUDE,AJAX_PAGINATION}ALLOW_INFINITE_SCROLL=1{+END}
 	</div>
 {+END}
