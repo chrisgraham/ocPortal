@@ -426,10 +426,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 	{
 		$g_or=_get_where_clause_groups(get_member());
 
-// this destroys mysqls query optimiser by forcing complexed OR's into the join, so we'll do this in PHP code
-//		$table.=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access z ON ('.db_string_equal_to('z.module_the_name',$permissions_module).' AND z.category_name='.$permissions_field.(($g_or!='')?(' AND '.str_replace('group_id','z.group_id',$g_or)):'').')';
-//		$where_clause.=' AND ';
-//		$where_clause.='z.category_name IS NOT NULL';
+		// this destroys mysqls query optimiser by forcing complexed OR's into the join, so we'll do this in PHP code
+		//		$table.=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access z ON ('.db_string_equal_to('z.module_the_name',$permissions_module).' AND z.category_name='.$permissions_field.(($g_or!='')?(' AND '.str_replace('group_id','z.group_id',$g_or)):'').')';
+		//		$where_clause.=' AND ';
+		//		$where_clause.='z.category_name IS NOT NULL';
 
 		$cat_access=list_to_map('category_name',$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name',$permissions_module).(($g_or!='')?(' AND ('.$g_or.')'):'')));
 	}
@@ -448,11 +448,17 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 	$t_count=0;
 
 	// Rating ordering, via special encoding
-	if (substr($order,0,7)=='_rating')
+	if (strpos($order,'compound_rating:')!==false)
 	{
 		list(,$rating_type,$meta_rating_id_field)=explode(':',$order);
-		$select.=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$rating_type).' AND rating_for_id='.$meta_rating_id_field.') AS compound_rating';
+		$select.=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$rating_type).' AND rating_for_id='.$meta_rating_id_field.') AS compound_rating';
 		$order='compound_rating';
+	}
+	if (strpos($order,'average_rating:')!==false)
+	{
+		list(,$rating_type,$meta_rating_id_field)=explode(':',$order);
+		$select.=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$rating_type).' AND rating_for_id='.$meta_rating_id_field.') AS average_rating';
+		$order='average_rating';
 	}
 
 	$translate_join_type=(get_value('alternate_search_join_type')==='1')?'LEFT JOIN':'JOIN';

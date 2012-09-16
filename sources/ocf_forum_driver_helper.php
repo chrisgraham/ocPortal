@@ -356,7 +356,7 @@ function not_like_spacer_posts($field)
  * @param  ?array			List of post IDs to load (NULL: no filter)
  * @param  boolean		Whether to load spacer posts
  * @param  ID_TEXT		Preferred sort order (appropriate will use rating if threaded, other
- * @set date rating
+ * @set date compound_rating average_rating
  * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
  */
 function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$mark_read=true,$reverse=false,$light_if_threaded=false,$post_ids=NULL,$load_spacer_posts_too=false,$sort='date')
@@ -388,9 +388,16 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	$index=(strpos(get_db_type(),'mysql')!==false && !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))))?'USE INDEX (in_topic)':'';
 
 	$order=$reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';
-	if (($sort=='rating') && (db_has_subqueries($this_ref->connection->connection_read)))
+	if (db_has_subqueries($this_ref->connection->connection_read))
 	{
-		$order=(($reverse?'compound_rating DESC':'compound_rating ASC').','.$order);
+		if ($sort=='compound_rating')
+		{
+			$order=(($reverse?'compound_rating DESC':'compound_rating ASC').','.$order);
+		}
+		elseif ($sort=='average_rating')
+		{
+			$order=(($reverse?'average_rating DESC':'average_rating ASC').','.$order);
+		}
 	}
 
 	if (($light_if_threaded) && ($is_threaded))
@@ -402,7 +409,8 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	}
 	if (($is_threaded) && (db_has_subqueries($this_ref->connection->connection_read)))
 	{
-		$select.=',COALESCE((SELECT AVG(rating) FROM '.$this_ref->connection->get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','post').' AND rating_for_id=p.id),5) AS compound_rating';
+		$select.=',COALESCE((SELECT AVG(rating) FROM '.$this_ref->connection->get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','post').' AND rating_for_id=p.id),5) AS average_rating';
+		$select.=',COALESCE((SELECT SUM(rating-1) FROM '.$this_ref->connection->get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','post').' AND rating_for_id=p.id),0) AS compound_rating';
 	}
 	$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start);
 	$count=$this_ref->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where);

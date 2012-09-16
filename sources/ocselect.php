@@ -109,6 +109,9 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 		{
 			$db_fields['compound_rating']='INTEGER';
 			$types['compound_rating']='rating';
+
+			$db_fields['average_rating']='INTEGER';
+			$types['average_rating']='rating';
 		}
 
 		if (isset($info['seo_type_code']))
@@ -225,7 +228,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 					$extra=array();
 					if (!is_null($table))
 					{
-						if (($field_name!='meta_keywords') && ($field_name!='meta_description') && ($field_name!='compound_rating'))
+						if (($field_name!='meta_keywords') && ($field_name!='meta_description') && ($field_name!='compound_rating') && ($field_name!='average_rating'))
 						{
 							$_extra=$db->query_select($table,array('DISTINCT '.filter_naughty_harsh($field_name)),NULL,'ORDER BY '.filter_naughty_harsh($field_name));
 							foreach ($_extra as $e)
@@ -508,6 +511,12 @@ function _default_conv_func($db,$info,$unused,&$extra_join,&$extra_select,$filte
 {
 	// Special case for ratings
 	if ($filter_key=='compound_rating')
+	{
+		$clause='(SELECT SUM(rating-1) FROM '.$db->get_table_prefix().'rating rat WHERE '.db_string_equal_to('rat.rating_for_type','catalogues').' AND rat.rating_for_id=r.id)';
+		$extra_select[$filter_key]=', '.$clause.' AS compound_rating';
+		return array($clause,'',$filter_val);
+	}
+	if ($filter_key=='average_rating')
 	{
 		$clause='(SELECT AVG(rating) FROM '.$db->get_table_prefix().'rating rat WHERE '.db_string_equal_to('rat.rating_for_type','catalogues').' AND rat.rating_for_id=r.id)';
 		$extra_select[$filter_key]=', '.$clause.' AS compound_rating';

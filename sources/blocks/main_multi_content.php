@@ -35,7 +35,7 @@ class Block_main_multi_content
 		$info['hack_version']=NULL;
 		$info['version']=2;
 		$info['locked']=false;
-		$info['parameters']=array('ocselect','param','efficient','filter','filter_b','title','zone','mode','days','lifetime','pinned','no_links','give_context','include_breadcrumbs','max','start','pagination','root','attach_to_url_filter','render_if_empty','guid');
+		$info['parameters']=array('ocselect','param','efficient','filter','filter_b','title','zone','sort','days','lifetime','pinned','no_links','give_context','include_breadcrumbs','max','start','pagination','root','attach_to_url_filter','render_if_empty','guid');
 		return $info;
 	}
 
@@ -47,7 +47,7 @@ class Block_main_multi_content
 	function cacheing_environment()
 	{
 		$info=array();
-		$info['cache_on']='array(array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array():$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',((array_key_exists(\'attach_to_url_filter\',$map)?$map[\'attach_to_url_filter\']:\'0\')==\'1\'),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'keep_\'.(array_key_exists(\'param\',$map)?$map[\'param\']:\'download\').\'_root\',NULL),(array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'mode\',$map)?$map[\'mode\']:\'recent\')';
+		$info['cache_on']='array(array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array():$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',((array_key_exists(\'attach_to_url_filter\',$map)?$map[\'attach_to_url_filter\']:\'0\')==\'1\'),get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'keep_\'.(array_key_exists(\'param\',$map)?$map[\'param\']:\'download\').\'_root\',NULL),(array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),array_key_exists(\'max\',$map)?intval($map[\'max\']):10,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'recent\')';
 		$info['ttl']=30;
 		return $info;
 	}
@@ -109,7 +109,9 @@ class Block_main_multi_content
 		$root=((array_key_exists('root',$map)) && ($map['root']!=''))?intval($map['root']):get_param_integer('keep_'.$content_type.'_root',NULL);
 
 		$guid=array_key_exists('guid',$map)?$map['guid']:'';
-		$mode=array_key_exists('mode',$map)?$map['mode']:'recent'; // recent|top|views|random|all or some manually typed sort order
+		$sort=array_key_exists('sort',$map)?$map['sort']:'recent'; // recent|top|views|random|title or some manually typed sort order
+		if ($sort=='all') $sort='title'; // LEGACY
+		if ($sort=='rating') $sort='average_rating'; // LEGACY
 		$filter=array_key_exists('filter',$map)?$map['filter']:'';
 		$filter_b=array_key_exists('filter_b',$map)?$map['filter_b']:'';
 		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
@@ -268,7 +270,7 @@ class Block_main_multi_content
 		}
 
 		// Need to pull in title?
-		if (($mode=='all') || (strpos($mode,'t.text_original')!==false))
+		if (($sort=='title') || (strpos($sort,'t.text_original')!==false))
 		{
 			if ((array_key_exists('title_field',$info)) && (strpos($info['title_field'],':')===false))
 			{
@@ -285,14 +287,15 @@ class Block_main_multi_content
 			if ($x2!='') $query.=' AND ('.$x2.')';
 		}
 
-		if (($mode=='top') && (array_key_exists('feedback_type',$info)) && (is_null($info['feedback_type']))) $mode='all';
+		if ((($sort=='average_rating') || ($sort=='compound_rating')) && (array_key_exists('feedback_type_code',$info)) && (is_null($info['feedback_type_code'])))
+			$sort='title';
 
 		// Find what kind of query to run and run it
-		switch ($mode)
+		switch ($sort)
 		{
 			case 'random':
-				$cnt=$info['connection']->query_value_if_there('SELECT COUNT(*) as cnt '.$query);
-				$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query,$max,mt_rand(0,max(0,$cnt-$max)));
+			case 'fixed_random ASC':
+				$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.',(MOD(CAST(r.'.$info['id_field'].' AS SIGNED),'.date('d').')) AS fixed_random '.$query.' ORDER BY fixed_random',$max,$start);
 				break;
 			case 'recent':
 				if ((array_key_exists('date_field',$info)) && (!is_null($info['date_field'])))
@@ -300,20 +303,42 @@ class Block_main_multi_content
 					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['date_field'].' DESC',$max,$start);
 					break;
 				}
+				$sort=$info['id_field'];
 			case 'views':
 				if ((array_key_exists('views_field',$info)) && (!is_null($info['views_field'])))
 				{
 					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['views_field'].' DESC',$max,$start);
 					break;
 				}
-			case 'top':
-				if ((array_key_exists('feedback_type',$info)) && (!is_null($info['feedback_type'])))
+				$sort=$info['id_field'];
+			case 'average_rating':
+			case 'average_rating ASC':
+			case 'average_rating DESC':
+				if ((array_key_exists('feedback_type_code',$info)) && (!is_null($info['feedback_type_code'])))
 				{
-					$select_rating=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type']).' AND rating_for_id='.$info['id_field'].') AS compound_rating';
-					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,$start,'ORDER BY compound_rating DESC');
+					if ($sort=='average_rating')  $sort.=' DESC';
+
+					$select_rating=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type_code']).' AND rating_for_id='.$info['id_field'].') AS average_rating';
+					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,$start,'ORDER BY '.$sort);
 					break;
 				}
-			case 'all':
+				$sort=$info['id_field'];
+			case 'compound_rating':
+			case 'compound_rating ASC':
+			case 'compound_rating DESC':
+				if ((array_key_exists('feedback_type_code',$info)) && (!is_null($info['feedback_type_code'])))
+				{
+					if ($sort=='compound_rating')  $sort.=' DESC';
+
+					$select_rating=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$info['feedback_type_code']).' AND rating_for_id='.$info['id_field'].') AS compound_rating';
+					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.$select_rating.' '.$query,$max,$start,'ORDER BY '.$sort);
+					break;
+				}
+				$sort=$info['id_field'];
+			default: // Some manual order
+				$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY '.$sort,$max,$start);
+				break;
+			case 'title':
 				if ((array_key_exists('title_field',$info)) && (strpos($info['title_field'],':')===false))
 				{
 					if ($info['title_field_dereference'])
@@ -327,9 +352,6 @@ class Block_main_multi_content
 				{
 					$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['id_field'].' ASC',$max,$start);
 				}
-				break;
-			default: // Some manual order
-				$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY '.$mode,$max,$start);
 				break;
 		}
 
@@ -418,7 +440,7 @@ class Block_main_multi_content
 			}
 			else
 			{
-				switch ($mode)
+				switch ($sort)
 				{
 					case 'recent':
 						if (array_key_exists('date_field',$info))

@@ -70,8 +70,9 @@ class Hook_search_polls
 		$remapped_orderer='';
 		switch ($sort)
 		{
-			case 'rating':
-				$remapped_orderer='_rating:polls:id';
+			case 'average_rating':
+			case 'compound_rating':
+				$remapped_orderer=$sort.':polls:id';
 				break;
 
 			case 'title':
@@ -104,7 +105,7 @@ class Hook_search_polls
 		{
 			$out[$i]['data']=$row;
 			unset($rows[$i]);
-			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
+			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
 		}
 
 		return $out;

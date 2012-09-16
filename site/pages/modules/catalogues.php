@@ -1131,7 +1131,7 @@ class Module_catalogues
 		}
 
 		// Get category contents
-		$subcategories=do_block('main_multi_content',array('param'=>'catalogue_category','filter'=>strval($id).'>','efficient'=>'0','zone'=>'_SELF','mode'=>'all','max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','render_if_empty'=>'0'));
+		$subcategories=do_block('main_multi_content',array('param'=>'catalogue_category','filter'=>strval($id).'>','efficient'=>'0','zone'=>'_SELF','sort'=>'title','max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','render_if_empty'=>'0'));
 		if (get_option('catalogues_subcat_narrowin')=='1')
 		{
 			$filter=strval($id).'*';

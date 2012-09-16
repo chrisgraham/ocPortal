@@ -378,17 +378,23 @@ class Module_downloads
 				$order='t.text_original ASC';
 			}
 		}
-		if ((strtoupper($order)!=strtoupper('t.text_original ASC')) && (strtoupper($order)!=strtoupper('t.text_original DESC')) && (strtoupper($order)!=strtoupper('file_size ASC')) && (strtoupper($order)!=strtoupper('file_size DESC'))
+		if ((strtoupper($order)!=strtoupper('t.text_original ASC')) && (strtoupper($order)!=strtoupper('t.text_original DESC'))
+			&& (strtoupper($order)!=strtoupper('file_size ASC')) && (strtoupper($order)!=strtoupper('file_size DESC'))
 			&& (strtoupper($order)!=strtoupper('num_downloads DESC')) && (strtoupper($order)!=strtoupper('add_date ASC'))
+			&& (strtoupper($order)!=strtoupper('compound_rating DESC')) && (strtoupper($order)!=strtoupper('compound_rating ASC'))
+			&& (strtoupper($order)!=strtoupper('average_rating DESC')) && (strtoupper($order)!=strtoupper('average_rating ASC'))
+			&& (strtoupper($order)!=strtoupper('fixed_random ASC'))
 			&& (strtoupper($order)!=strtoupper('add_date DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');
 		$_selectors=array(
-			't.text_original ASC'=>'ALPHABETICAL_FORWARD',
-			't.text_original DESC'=>'ALPHABETICAL_BACKWARD',
+			't.text_original ASC'=>'TITLE',
 			'file_size ASC'=>'SMALLEST_FIRST',
 			'file_size DESC'=>'LARGEST_FIRST',
-			'num_downloads DESC'=>'POPULARITY',
+			'num_downloads DESC'=>'MOST_DOWNLOADED',
+			'average_rating DESC'=>'RATING',
+			'compound_rating DESC'=>'POPULARITY',
 			'add_date ASC'=>'OLDEST_FIRST',
-			'add_date DESC'=>'NEWEST_FIRST'
+			'add_date DESC'=>'NEWEST_FIRST',
+			'fixed_random ASC'=>'RANDOM',
 		);
 		$selectors=new ocp_tempcode();
 		foreach ($_selectors as $selector_value=>$selector_name)
@@ -401,7 +407,7 @@ class Module_downloads
 		inform_non_canonical_parameter('order');
 
 		// Get category contents
-		$subcategories=do_block('main_multi_content',array('param'=>'download_category','filter'=>strval($category_id).'>','efficient'=>'0','zone'=>'_SELF','mode'=>'all','max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','render_if_empty'=>'0'));
+		$subcategories=do_block('main_multi_content',array('param'=>'download_category','filter'=>strval($category_id).'>','efficient'=>'0','zone'=>'_SELF','sort'=>'title','max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','render_if_empty'=>'0'));
 		if (get_option('downloads_subcat_narrowin')=='1')
 		{
 			$filter=strval($category_id).'*';
@@ -410,7 +416,7 @@ class Module_downloads
 			$filter=strval($category_id);
 		}
 		$ocselect=either_param('active_filter','');
-		$entries=do_block('main_multi_content',array('param'=>'download','filter'=>$filter,'efficient'=>'0','zone'=>'_SELF','mode'=>$order,'max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','ocselect'=>$ocselect));
+		$entries=do_block('main_multi_content',array('param'=>'download','filter'=>$filter,'efficient'=>'0','zone'=>'_SELF','sort'=>$order,'max'=>'30','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0','attach_to_url_filter'=>'1','ocselect'=>$ocselect));
 
 		// Title
 		$title_to_use=get_translated_text($category['category']);

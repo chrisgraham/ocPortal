@@ -630,6 +630,7 @@ class Module_galleries
 		// Sorting
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
 		$_selectors=array(
+			'average_rating DESC'=>'RATING',
 			'compound_rating DESC'=>'POPULARITY',
 			'url ASC'=>'FILENAME',
 			'add_date ASC'=>'OLDEST_FIRST',
@@ -1571,18 +1572,22 @@ class Module_galleries
 
 		$sort=get_param('sort','add_date DESC');
 		if ($sort=='random ASC') $sort='add_date ASC';
-		if (($sort!='fixed_random ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC') && ($sort!='title DESC') && ($sort!='title ASC'))
+		if (($sort!='fixed_random ASC') && ($sort!='average_rating DESC') && ($sort!='average_rating ASC') && ($sort!='compound_rating DESC') && ($sort!='compound_rating ASC') && ($sort!='add_date DESC') && ($sort!='add_date ASC') && ($sort!='url DESC') && ($sort!='url ASC') && ($sort!='title DESC') && ($sort!='title ASC'))
 			log_hack_attack_and_exit('ORDERBY_HACK');
 		list($_sort,$_dir)=explode(' ',$sort,2);
 		$sort_backwards=$_sort.' '.(($_dir=='ASC')?'DESC':'ASC');
 		if (($sort=='compound_rating ASC') || ($sort=='compound_rating DESC'))
 		{
-			$suffix_images=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=r.id) AS compound_rating';
-			$suffix_videos=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','videos').' AND rating_for_id=r.id) AS compound_rating';
+			$suffix_images=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=r.id) AS compound_rating';
+			$suffix_videos=',(SELECT SUM(rating-1) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','videos').' AND rating_for_id=r.id) AS compound_rating';
+		} elseif (($sort=='average_rating ASC') || ($sort=='average_rating DESC'))
+		{
+			$suffix_images=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=r.id) AS average_rating';
+			$suffix_videos=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','videos').' AND rating_for_id=r.id) AS average_rating';
 		} elseif ($sort=='fixed_random ASC')
 		{
-			$suffix_images=',(MOD(id,3.142)) AS fixed_random';
-			$suffix_videos=',(MOD(id,3.142)) AS fixed_random';
+			$suffix_images=',(MOD(id,'.date('d').')) AS fixed_random';
+			$suffix_videos=',(MOD(id,'.date('d').')) AS fixed_random';
 		} else
 		{
 			$suffix_images='';

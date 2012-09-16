@@ -201,7 +201,13 @@ function internalise_ajax_block_wrapper_links(url_stem,block,look_for,extra_para
 				links[i].onclick=submit_func;
 			} else
 			{
-				links[i].onsubmit=submit_func;
+				if (links[i].onsubmit)
+				{
+					links[i].onsubmit=function(old_onsubmit) { return function(event) { return old_onsubmit(event) && submit_func(event); } }(links[i].onsubmit);
+				} else
+				{
+					links[i].onsubmit=submit_func;
+				}
 			}
 		}
 	}

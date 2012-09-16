@@ -47,8 +47,8 @@ class Hook_symbol_CATALOGUE_ENTRY_BACKREFS
 
 				if ($rating_type!='')
 				{
-					$select[]='(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$rating_type).' AND rating_for_id=content_id) AS compound_rating';
-					$order_by='ORDER BY compound_rating DESC';
+					$select[]='(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type',$rating_type).' AND rating_for_id=content_id) AS average_rating';
+					$order_by='ORDER BY average_rating DESC';
 				}
 			}
 			$results=$GLOBALS['SITE_DB']->query_select($table,$select,array('cv_value'=>$param[0]),$order_by);

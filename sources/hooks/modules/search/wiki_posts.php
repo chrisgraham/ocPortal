@@ -80,8 +80,9 @@ class Hook_search_wiki_posts
 		$remapped_orderer='';
 		switch ($sort)
 		{
-			case 'rating':
-				$remapped_orderer='_rating:wiki_post:id';
+			case 'average_rating':
+			case 'compound_rating':
+				$remapped_orderer=$sort':wiki_post:id';
 				break;
 
 			case 'title':
@@ -119,7 +120,7 @@ class Hook_search_wiki_posts
 		{
 			$out[$i]['data']=$row;
 			unset($rows[$i]);
-			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
+			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
 		}
 
 		return $out;

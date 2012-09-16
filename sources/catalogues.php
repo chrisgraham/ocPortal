@@ -297,7 +297,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		} else
 		{	
 			list($order_by,$direction)=explode(' ',$_order_by);
-			if (($order_by!='rating') && ($order_by!='add_date') && ($order_by!='distance'))
+			if (($order_by!='fixed_random') && ($order_by!='average_rating') && ($order_by!='compound_rating') && ($order_by!='add_date') && ($order_by!='distance'))
 			{
 				$found=false;
 				foreach ($fields as $i=>$field)
@@ -360,7 +360,7 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 				}
 			}
 		}
-		foreach (array('add_date'=>'ADDED','rating'=>'RATING') as $extra_sort_code=>$extra_sort_lang)
+		foreach (array('add_date'=>'ADDED','average_rating'=>'RATING','compound_rating'=>'POPULARITY','fixed_random'=>'RANDOM') as $extra_sort_code=>$extra_sort_lang)
 		{
 			foreach (array('ASC'=>'_ASCENDING','DESC'=>'_DESCENDING') as $dir_code=>$dir_lang)
 			{
@@ -626,9 +626,9 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 		{
 			$virtual_order_by='r.ce_add_date';
 		}
-		elseif ($order_by=='rating')
+		elseif (($order_by=='compound_rating') || ($order_by=='average_rating') || ($order_by=='fixed_random'))
 		{
-			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,'compound_rating','',array());
+			$bits=_catalogues_ocselect($GLOBALS['SITE_DB'],array(),$catalogue_name,$extra_join,$extra_select,$order_by,'',array());
 			if (!is_null($bits)) list($virtual_order_by,)=$bits;
 		} elseif (is_numeric($order_by)) // Ah, so it's saying the nth field of this catalogue
 		{

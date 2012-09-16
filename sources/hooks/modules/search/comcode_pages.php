@@ -146,7 +146,7 @@ class Hook_search_comcode_pages
 			if (array_key_exists($row['the_zone'].':'.$row['the_page'],$pages_found)) continue;
 			$pages_found[$row['the_zone'].':'.$row['the_page']]=1;
 			$out[$i]['data']=$row+array('extra'=>array($row['the_zone'],$row['the_page'],$limit_to));
-			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
+			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
 
 			if (!has_page_access(get_member(),$row['the_page'],$row['the_zone'])) $out[$i]['restricted']=true;
 		}

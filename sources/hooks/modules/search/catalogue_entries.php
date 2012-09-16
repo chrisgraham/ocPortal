@@ -163,8 +163,9 @@ class Hook_search_catalogue_entries
 		$remapped_orderer='';
 		switch ($sort)
 		{
-			case 'rating':
-				$remapped_orderer='_rating:catalogues:id';
+			case 'average_rating':
+			case 'compound_rating':
+				$remapped_orderer=$sort.':catalogues:id';
 				break;
 
 			case 'title':
@@ -376,7 +377,7 @@ class Hook_search_catalogue_entries
 					}
 				}
 
-				if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
+				if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
 			}
 		} else
 		{
@@ -384,7 +385,7 @@ class Hook_search_catalogue_entries
 			{
 				$out[$i]['data']=$row;
 				unset($rows[$i]);
-				if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (substr($remapped_orderer,0,7)=='_rating') $out[$i]['orderer']=$row['compound_rating'];
+				if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
 			}	
 		}
 

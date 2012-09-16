@@ -289,7 +289,7 @@ class OCP_Topic
 
 			$sort=either_param('comments_sort',$default_sort_order);
 
-			if (!in_array($sort,array('relevance','newest','oldest','rating'))) $sort=$default_sort_order;
+			if (!in_array($sort,array('relevance','newest','oldest','average_rating','compound_rating'))) $sort=$default_sort_order;
 		}
 
 		return $sort;
@@ -325,9 +325,14 @@ class OCP_Topic
 			$_sort='date';
 			$reverse=false;
 		}
-		elseif (($sort=='relevance') || ($sort=='rating'))
+		elseif (($sort=='relevance') || ($sort=='average_rating'))
 		{
-			$_sort='rating';
+			$_sort='average_rating';
+			$reverse=true;
+		}
+		elseif ($sort=='compound_rating')
+		{
+			$_sort='compound_rating';
 			$reverse=true;
 		}
 
@@ -458,9 +463,12 @@ class OCP_Topic
 					case 'oldest':
 						sort_maps_by($posts,'date');
 						break;
-					case 'rating':
-					case 'relevance':
+					case 'compound_rating':
 						sort_maps_by($posts,'compound_rating,!date');
+						break;
+					case 'average_rating':
+					case 'relevance':
+						sort_maps_by($posts,'average_rating,!date');
 						break;
 				}
 

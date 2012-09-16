@@ -19,7 +19,8 @@ In this example, the first is an '=' comparison, and the second is an '>' compar
 [title="2"]The full language[/title]
 
 [box="Security note" width="25em" float="right"]For security reasons, some fields are not available to ocSelect, such as password fields[/box]The field names must match field names in the content type's main database table, or one of the following special values:
- - [tt]compound_rating[/tt] (the rating)
+ - [tt]average_rating[/tt] (the rating)
+ - [tt]compound_rating[/tt] (popularity: what has been given most likes/stars by summing up all ratings -- something with lots of 2 star ratings would be more 'popular' than something with only a few 5 star ratings)
  - [tt]meta_keywords[/tt] (the SEO keywords / tagging)
  - [tt]meta_description[/tt] (the SEO description)
  - [tt]field_<id>[/tt] (custom fields, where [tt]<id>[/tt] is the field ID of the custom field)
@@ -72,12 +73,12 @@ Once you have built a default form for a content type, inspect the HTML to get t
 
 In our case the auto-generated ocSelect filter string was:
 [codebox]
-allow_comments<allow_comments_op><allow_comments>,allow_rating<allow_rating_op><allow_rating>,allow_trackbacks<allow_trackbacks_op><allow_trackbacks>,author<author_op><author>,date_and_time<date_and_time_op><date_and_time>,edit_date<edit_date_op><edit_date>,news<news_op><news>,news_article<news_article_op><news_article>,news_views<news_views_op><news_views>,notes<notes_op><notes>,submitter<submitter_op><submitter>,title<title_op><title>,validated<validated_op><validated>,compound_rating<compound_rating_op><compound_rating>,meta_keywords<meta_keywords_op><meta_keywords>,meta_description<meta_description_op><meta_description>
+allow_comments<allow_comments_op><allow_comments>,allow_rating<allow_rating_op><allow_rating>,allow_trackbacks<allow_trackbacks_op><allow_trackbacks>,author<author_op><author>,date_and_time<date_and_time_op><date_and_time>,edit_date<edit_date_op><edit_date>,news<news_op><news>,news_article<news_article_op><news_article>,news_views<news_views_op><news_views>,notes<notes_op><notes>,submitter<submitter_op><submitter>,title<title_op><title>,validated<validated_op><validated>,average_rating<average_rating_op><average_rating>,meta_keywords<meta_keywords_op><meta_keywords>,meta_description<meta_description_op><meta_description>
 [/codebox]
 
 We will take that and modify it. In this case I think the following filter is much better:
 [codebox]
-author~=<author>,date_and_time><date_and_time>,news|news_article|title|meta_keywords|meta_description~=<news>,submitter=<submitter>,compound_rating>=<compound_rating>
+author~=<author>,date_and_time><date_and_time>,news|news_article|title|meta_keywords|meta_description~=<news>,submitter=<submitter>,average_rating>=<average_rating>
 [/codebox]
 
 [exp_thumb="A refined filter form" float="right"]ocselect_refined_filter[/exp_thumb]We then feed into the block's "param" setting to get our refined filter form (see the image below).
@@ -93,14 +94,14 @@ We'll assume we'll continue to use the [tt]main_content_filtering[/tt] block for
 
 If you want to place a filter on the news page, with it shown in a panel only on the news page, you'd put something like this into your panel's Comcode:
 [codebox]
-{+START,IF,{$MATCH_KEY_MATCH,site:news}}[block="author~=<author>,date_and_time><date_and_time>,news|news_article|title|meta_keywords|meta_description~=<news>,submitter=<submitter>,compound_rating>=<compound_rating>" content_type="news" labels="date_and_time=Newer than,news=Containing,submitter=Submitted by,compound_rating=Minimum rating" types="date_and_time=days"]main_content_filtering[/block]{+END}
+{+START,IF,{$MATCH_KEY_MATCH,site:news}}[block="author~=<author>,date_and_time><date_and_time>,news|news_article|title|meta_keywords|meta_description~=<news>,submitter=<submitter>,average_rating>=<average_rating>" content_type="news" labels="date_and_time=Newer than,news=Containing,submitter=Submitted by,average_rating=Minimum rating" types="date_and_time=days"]main_content_filtering[/block]{+END}
 [/codebox]
 
 [title="3"]Putting into a news template[/title]
 
 If you wanted it on the news archive screen, you'd edit the [tt]NEWS_ARCHIVE_SCREEN[/tt] template and add:
 [codebox]
-{$BLOCK,block=main_content_filtering,param=author~=<author>\,date_and_time><date_and_time>\,news|news_article|title|meta_keywords|meta_description~=<news>\,submitter=<submitter>\,compound_rating>=<compound_rating>,content_type=news,labels=date_and_time=Newer than\,news=Containing\,submitter=Submitted by\,compound_rating=Minimum rating,types=date_and_time=days}
+{$BLOCK,block=main_content_filtering,param=author~=<author>\,date_and_time><date_and_time>\,news|news_article|title|meta_keywords|meta_description~=<news>\,submitter=<submitter>\,average_rating>=<average_rating>,content_type=news,labels=date_and_time=Newer than\,news=Containing\,submitter=Submitted by\,average_rating=Minimum rating,types=date_and_time=days}
 [/codebox]
 
 [concepts

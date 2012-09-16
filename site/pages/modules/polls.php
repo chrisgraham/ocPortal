@@ -241,7 +241,7 @@ class Module_polls
 	{
 		$title=get_screen_title('POLL_ARCHIVE');
 
-		$content=do_block('main_multi_content',array('param'=>'poll','efficient'=>'0','zone'=>'_SELF','mode'=>'date_and_time DESC','max'=>'20','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0'));
+		$content=do_block('main_multi_content',array('param'=>'poll','efficient'=>'0','zone'=>'_SELF','sort'=>'recent','max'=>'20','no_links'=>'1','pagination'=>'1','give_context'=>'0','include_breadcrumbs'=>'0'));
 
 		return do_template('PAGINATION_SCREEN',array('_GUID'=>'bed3e31c98b35fea52a991e381e6cfaa','TITLE'=>$title,'CONTENT'=>$content));
 	}
