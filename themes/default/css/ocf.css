@@ -1028,6 +1028,7 @@ table.ocf_profile_fields {
 table.ocf_profile_fields th {
 	color: {$GET,heading_text};
 	border-right: 1px solid {$GET,pale_border};
+	vertical-align: middle;
 }
 
 {+START,IF,{$MOBILE}}
@@ -1047,6 +1048,7 @@ table.ocf_profile_fields th {
 table.ocf_profile_fields td {
 	padding: 1em 0 1em 1em;
 	font-size: 0.9em;
+	vertical-align: middle;
 }
 
 table.ocf_profile_fields th, table.ocf_profile_fields td {

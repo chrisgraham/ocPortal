@@ -4,6 +4,8 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 {
 	if (typeof was_double_click=='undefined') var was_double_click=false;
 
+	if (raw_text.length>255) return null; // Cannot process this
+
 	if ((magic_keypress(event)) || (was_double_click))
 	{
 		cancel_bubbling(event);
@@ -11,7 +13,7 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 
 		// Position form
 		var width=find_width(object);
-		if (width<180) width=180;
+		if (width<160) width=160;
 		var x=find_pos_x(object);
 		var y=find_pos_y(object);
 
@@ -26,6 +28,7 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 		form.action=url;
 		form.style.display='inline';
 		var input=document.createElement('input');
+		input.setAttribute('maxlength','255');
 		input.style.position='absolute';
 		input.style.left=(x)+'px';
 		input.style.top=(y)+'px';
@@ -145,6 +148,6 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 		return false;
 	}
 
-	return true;
+	return null;
 }
 

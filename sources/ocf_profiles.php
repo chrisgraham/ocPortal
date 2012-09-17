@@ -69,7 +69,7 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 	} else $awards=array();
 
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-	$title=get_screen_title('MEMBER_PROFILE',true,array(escape_html($username)),NULL,$awards);
+	$title=get_screen_title('MEMBER_PROFILE',true,array(make_fractionable_editable('member',$member_id_of,$username)),NULL,$awards);
 
 	$_tabs=array();
 	$i=0;

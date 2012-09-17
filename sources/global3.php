@@ -2606,8 +2606,8 @@ function make_fractionable_editable($content_type,$id,$title)
 
 	$parameters=array(
 		is_object($title)?$title->evaluate():$title,
-		preg_replace('#^\w\w?_#','',$info['title_field']),
-		str_replace('_WILD',is_integer($id)?strval($id):$id,preg_replace('#:_(.*)#',':__${1}',$info['edit_pagelink_pattern'])),
+		array_key_exists('edit_pagelink_field',$info)?$info['edit_pagelink_field']:preg_replace('#^\w\w?_#','',$info['title_field']),
+		str_replace('_WILD',is_integer($id)?strval($id):$id,array_key_exists('edit_pagelink_pattern_post',$info)?$info['edit_pagelink_pattern_post']:preg_replace('#:_(.*)#',':__${1}',$info['edit_pagelink_pattern'])),
 		(array_key_exists('title_field_supports_comcode',$info) && $info['title_field_supports_comcode'])?'1':'0',
 	);
 	return directive_tempcode('FRACTIONAL_EDITABLE',is_object($title)?$title:escape_html($title),$parameters);

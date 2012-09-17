@@ -46,7 +46,7 @@ class Hook_Profiles_Tabs_Edit_settings
 		$order=0;
 
 		// Actualiser
-		if (post_param('submitting_settings_tab',NULL)!==NULL)
+		if ((post_param('submitting_settings_tab',NULL)!==NULL) || (fractional_edit()))
 		{
 			require_code('ocf_members_action2');
 
@@ -59,8 +59,11 @@ class Hook_Profiles_Tabs_Edit_settings
 				$password=NULL;
 			} else
 			{
-				$password=post_param('edit_password');
-				if ($password=='') $password=NULL; else
+				$password=post_param('edit_password','');
+				if ($password=='')
+				{
+					$password=NULL;
+				} else
 				{
 					$password_confirm=trim(post_param('password_confirm'));
 					if ($password!=$password_confirm) warn_exit(make_string_tempcode(escape_html(do_lang('PASSWORD_MISMATCH'))));
@@ -75,21 +78,28 @@ class Hook_Profiles_Tabs_Edit_settings
 			);
 			$actual_custom_fields=ocf_read_in_custom_fields($custom_fields,$member_id_of);
 
-			$pt_allow=array_key_exists('pt_allow',$_POST)?implode(',',$_POST['pt_allow']):'';
-			$tmp_groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
-			$all_pt_allow='';
-			foreach (array_keys($tmp_groups) as $key)
+			if (!fractional_edit())
 			{
-				if ($key!=db_get_first_id())
+				$pt_allow=array_key_exists('pt_allow',$_POST)?implode(',',$_POST['pt_allow']):'';
+				$tmp_groups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
+				$all_pt_allow='';
+				foreach (array_keys($tmp_groups) as $key)
 				{
-					if ($all_pt_allow!='') $all_pt_allow.=',';
-					$all_pt_allow.=strval($key);
+					if ($key!=db_get_first_id())
+					{
+						if ($all_pt_allow!='') $all_pt_allow.=',';
+						$all_pt_allow.=strval($key);
+					}
 				}
+				if ($pt_allow==$all_pt_allow) $pt_allow='*';
+				$pt_rules_text=post_param('pt_rules_text',NULL);
+			} else
+			{
+				$pt_allow=NULL;
+				$pt_rules_text=NULL;
 			}
-			if ($pt_allow==$all_pt_allow) $pt_allow='*';
-			$pt_rules_text=post_param('pt_rules_text',NULL);
 
-			if (has_privilege($member_id_viewing,'member_maintenance'))
+			if ((!fractional_edit()) && (has_privilege($member_id_viewing,'member_maintenance')))
 			{
 				$validated=post_param_integer('validated',0);
 				$primary_group=(($is_ldap) || (!has_privilege($member_id_viewing,'assume_any_member')))?NULL:post_param_integer('primary_group',NULL);
@@ -134,7 +144,7 @@ class Hook_Profiles_Tabs_Edit_settings
 			}
 			if ((has_actual_page_access($member_id_viewing,'admin_ocf_join')) || (has_privilege($member_id_of,'rename_self')))
 			{
-				$username=($is_ldap||$is_remote)?NULL:post_param('edit_username');
+				$username=($is_ldap||$is_remote)?NULL:post_param('edit_username',NULL);
 			} else $username=NULL;
 
 			$email=post_param('email_address',NULL);
@@ -142,7 +152,7 @@ class Hook_Profiles_Tabs_Edit_settings
 
 			$theme=post_param('theme',NULL);
 
-			if ($is_remote)
+			if (($is_remote) || (fractional_edit()))
 			{
 				$preview_posts=NULL;
 				$zone_wide=NULL;
@@ -160,44 +170,47 @@ class Hook_Profiles_Tabs_Edit_settings
 
 			ocf_edit_member($member_id_of,$email,$preview_posts,post_param_integer('dob_day',NULL),post_param_integer('dob_month',NULL),post_param_integer('dob_year',NULL),$timezone,$primary_group,$actual_custom_fields,$theme,post_param_integer('reveal_age',0),$views_signatures,$auto_monitor_contrib_content,post_param('language',NULL),post_param_integer('allow_emails',0),post_param_integer('allow_emails_from_staff',0),$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 
-			// Secondary groups
-			//if (array_key_exists('secondary_groups',$_POST)) Can't use this line, because deselecting all will result in it not being passed
+			if (!fractional_edit())
 			{
-				if (!array_key_exists('secondary_groups',$_POST)) $_POST['secondary_groups']=array();
-
-				require_code('ocf_groups_action2');
-				$members_groups=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id_of);
-				$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
-				$groups=list_to_map('id',$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),($group_count>200)?array('g_is_private_club'=>0):NULL));
-				foreach ($_POST['secondary_groups'] as $group_id)
+				// Secondary groups
+				//if (array_key_exists('secondary_groups',$_POST)) Can't use this line, because deselecting all will result in it not being passed
 				{
-					$group=$groups[intval($group_id)];
+					if (!array_key_exists('secondary_groups',$_POST)) $_POST['secondary_groups']=array();
 
-					if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_privilege($member_id_viewing,'see_hidden_groups'))) continue;
-
-					if ((!in_array($group['id'],$members_groups)) && ((has_privilege($member_id_viewing,'assume_any_member')) || ($group['g_open_membership']==1)))
+					require_code('ocf_groups_action2');
+					$members_groups=$GLOBALS['OCF_DRIVER']->get_members_groups($member_id_of);
+					$group_count=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
+					$groups=list_to_map('id',$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),($group_count>200)?array('g_is_private_club'=>0):NULL));
+					foreach ($_POST['secondary_groups'] as $group_id)
 					{
-						ocf_add_member_to_group($member_id_of,$group['id']);
+						$group=$groups[intval($group_id)];
+
+						if (($group['g_hidden']==1) && (!in_array($group['id'],$members_groups)) && (!has_privilege($member_id_viewing,'see_hidden_groups'))) continue;
+
+						if ((!in_array($group['id'],$members_groups)) && ((has_privilege($member_id_viewing,'assume_any_member')) || ($group['g_open_membership']==1)))
+						{
+							ocf_add_member_to_group($member_id_of,$group['id']);
+						}
+					}
+					foreach ($members_groups as $group_id)
+					{
+						if (!in_array(strval($group_id),$_POST['secondary_groups']))
+						{
+							ocf_member_leave_group($group_id,$member_id_of);
+						}
 					}
 				}
-				foreach ($members_groups as $group_id)
+
+				$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_known_login_ips WHERE i_member_id='.strval($member_id_of).' AND '.db_string_not_equal_to('i_val_code','')); // So any re-confirms can happen
+
+				if (addon_installed('awards'))
 				{
-					if (!in_array(strval($group_id),$_POST['secondary_groups']))
-					{
-						ocf_member_leave_group($group_id,$member_id_of);
-					}
+					require_code('awards');
+					handle_award_setting('member',strval($member_id_of));
 				}
+
+				attach_message(do_lang_tempcode('SUCCESS_SAVE'),'inform');
 			}
-
-			$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_known_login_ips WHERE i_member_id='.strval($member_id_of).' AND '.db_string_not_equal_to('i_val_code','')); // So any re-confirms can happen
-
-			if (addon_installed('awards'))
-			{
-				require_code('awards');
-				handle_award_setting('member',strval($member_id_of));
-			}
-
-			attach_message(do_lang_tempcode('SUCCESS_SAVE'),'inform');
 		}
 
 		if ($leave_to_ajax_if_possible) return NULL;

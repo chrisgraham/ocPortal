@@ -185,7 +185,7 @@ function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=N
  * @param  ?BINARY	That are to be shown in post previews (NULL: don't care).
  * @param  BINARY		That start 'ocp_'
  * @param  ?boolean	That are to go on the join form (NULL: don't care).
- * @return array		A mapping of field title to a map of details: 'RAW' as the raw field value, 'RENDERED' as the rendered field value.
+ * @return array		A mapping of field title to a map of details: 'RAW' as the raw field value, 'RENDERED' as the rendered field value, 'FIELD_ID' to the field ID, 'EDITABILITY' defining if fractional editing can work on this
  */
 function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$owner_view=NULL,$owner_set=NULL,$encrypted=NULL,$required=NULL,$show_in_posts=NULL,$show_in_post_previews=NULL,$special_start=0,$show_on_join_form=NULL)
 {
@@ -270,7 +270,16 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 		{
 			$rendered_value=$ob->render_field_value($field_to_show,$member_value,$i,NULL);
 
-			$custom_fields[$field_to_show['trans_name']]=array('RAW'=>$member_value,'RENDERED'=>$rendered_value);
+			$editability=mixed(); // If stays as NULL, not editable
+			if (in_array($field_to_show['cf_type'],array('short_trans'))) $editability=true; // Editable: Supports Comcode
+			elseif (in_array($field_to_show['cf_type'],array('short_text'))) $editability=false; // Editable: Does not support Comcode
+
+			$custom_fields[$field_to_show['trans_name']]=array(
+				'RAW'=>$member_value,
+				'RENDERED'=>$rendered_value,
+				'FIELD_ID'=>strval($field_to_show['id']),
+				'EDITABILITY'=>$editability,
+			);
 		}
 	}
 

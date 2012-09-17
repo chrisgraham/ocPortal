@@ -129,7 +129,12 @@
 									<td>
 										<span{+START,IF,{$EQ,{NAME},{!SPECIAL_CPF__ocp_fullname}}} class="fn given-name"{+END}>
 											{+START,IF_EMPTY,{ENCRYPTED_VALUE}}
-												{VALUE}
+												{+START,IF_PASSED,EDITABILITY}
+													{+START,FRACTIONAL_EDITABLE,{VALUE},field_{FIELD_ID},_SEARCH:members:type=view:id={MEMBER_ID}:only_tab=edit:only_subtab=settings,{EDITABILITY}}{VALUE}{+END}
+												{+END}
+												{+START,IF_NON_PASSED,EDITABILITY}
+													{VALUE}
+												{+END}
 											{+END}
 											{+START,IF_NON_EMPTY,{ENCRYPTED_VALUE}}
 												{+START,IF,{$JS_ON}}{!encryption:DATA_ENCRYPTED} <a href="javascript:decrypt_data('{ENCRYPTED_VALUE;}');" title="{!encryption:DECRYPT_DATA}: {!encryption:DESCRIPTION_DECRYPT_DATA=}">{!encryption:DECRYPT_DATA}</a>{+END}
@@ -215,7 +220,7 @@
 						{+START,IF,{$HAS_PRIVILEGE,member_maintenance}}{+START,IF_NON_EMPTY,{EMAIL_ADDRESS}}
 							<tr>
 								<th class="de_th">{!EMAIL_ADDRESS}:</th>
-								<td><a class="email" href="mailto:{EMAIL_ADDRESS*}">{EMAIL_ADDRESS*}</a></td>
+								<td><a class="email" href="mailto:{EMAIL_ADDRESS*}">{+START,FRACTIONAL_EDITABLE,{EMAIL_ADDRESS},email_address,_SEARCH:members:type=view:id={MEMBER_ID}:only_tab=edit:only_subtab=settings,0}{EMAIL_ADDRESS*}{+END}</a></td>
 							</tr>
 						{+END}{+END}
 

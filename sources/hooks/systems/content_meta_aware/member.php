@@ -53,6 +53,8 @@ class Hook_content_meta_aware_member
 
 			'view_pagelink_pattern'=>'_SEARCH:members:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:members:view:_WILD',
+			'edit_pagelink_pattern_post'=>'_SEARCH:members:view:_WILD:only_tab=edit:only_subtab=settings',
+			'edit_pagelink_field'=>'edit_username',
 			'view_category_pagelink_pattern'=>NULL,
 			'add_url'=>new ocp_tempcode(),
 			'archive_url'=>build_url(array('page'=>'members'),(!is_null($zone))?$zone:get_module_zone('members')),
