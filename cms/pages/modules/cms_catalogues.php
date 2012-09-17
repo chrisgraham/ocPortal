@@ -1729,7 +1729,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 		$notes=post_param('notes',STRING_MAGIC_NULL);
 		$submit_points=post_param_integer('submit_points',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$ecommerce=post_param_integer('ecommerce',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$send_view_reports=post_param('send_view_reports');
+		$send_view_reports=post_param('send_view_reports',STRING_MAGIC_NULL);
 		if (!fractional_edit())
 		{
 			if (post_param_integer('reset_category_permissions',0)==1)
@@ -1753,7 +1753,7 @@ class Module_cms_catalogues_alt extends standard_aed_module
 
 		$was_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$old_name));
 		if (is_null($was_tree)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$is_tree=post_param_integer('is_tree',0);
+		$is_tree=post_param_integer('is_tree',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
 		if (!fractional_edit())
 		{

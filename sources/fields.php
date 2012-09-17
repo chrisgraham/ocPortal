@@ -224,6 +224,8 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden)
  */
 function save_form_custom_fields($content_type,$id)
 {
+	if (fractional_edit()) return;
+
 	$existing=get_bound_content_entry($content_type,$id);
 
 	require_code('catalogues');
