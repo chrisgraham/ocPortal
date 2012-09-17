@@ -411,7 +411,7 @@ class Module_chat
 				$users=get_chatters_in_room($myrow['id']);
 				$usernames=get_chatters_in_room_tpl($users);
 				$url=build_url(array('page'=>'_SELF','type'=>'room','id'=>$myrow['id']),'_SELF');
-				$room_link=do_template('CHAT_ROOM_LINK',array('_GUID'=>'7a7c65df7fbb6b27c1ef8ce30eb55654','PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>$myrow['room_name'],'USERNAMES'=>$usernames,'URL'=>$url));
+				$room_link=do_template('CHAT_ROOM_LINK',array('_GUID'=>'7a7c65df7fbb6b27c1ef8ce30eb55654','PRIVATE'=>$myrow['allow_list']!='' || $myrow['allow_list_groups']!='','ID'=>strval($myrow['id']),'NAME'=>make_fractionable_editable('chat',$row['id'],$myrow['room_name']),'USERNAMES'=>$usernames,'URL'=>$url));
 				$fields->attach($room_link);
 			}
 		}

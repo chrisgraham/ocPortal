@@ -150,6 +150,8 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 		'SUMMARY'=>$content,
 		'ENTRY_DETAILS'=>$entry_details,
 		'URL'=>$url,
+		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'title',
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_catalogues:type=__edit_category:id='.strval($row['id']),
 	));
 }
 
@@ -183,7 +185,15 @@ function render_catalogue_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']));
 	$entry_details=do_lang_tempcode(($row['c_is_tree']==1)?'CATEGORY_SUBORDINATE':'CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'8d7eaf6bb3170a92fd6a4876462e6f2e','TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array(
+		'_GUID'=>($guid!='')?$guid:'8d7eaf6bb3170a92fd6a4876462e6f2e',
+		'TITLE'=>$title,
+		'SUMMARY'=>$summary,
+		'ENTRY_DETAILS'=>$entry_details,
+		'URL'=>$url,
+		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'title',
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_catalogues:type=__edit_catalogue:id='.strval($row['id']),
+	));
 }
 
 /**
@@ -1648,7 +1658,7 @@ function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter
 	$title_to_use_2=do_lang($catalogue_name.'__CATALOGUE_ENTRY',$map['FIELD_0_PLAIN'],NULL,NULL,NULL,false);
 	if (is_null($title_to_use_2))
 	{
-		$title_to_use=do_lang_tempcode('DEFAULT__CATALOGUE_ENTRY',$map['FIELD_0']);
+		$title_to_use=do_lang_tempcode('DEFAULT__CATALOGUE_ENTRY',make_fractionable_editable('catalogue_entry',$id,$map['FIELD_0']));
 		$title_to_use_2=do_lang('DEFAULT__CATALOGUE_ENTRY',$map['FIELD_0_PLAIN']);
 	}
 	if ($no_title)

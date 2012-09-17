@@ -1534,7 +1534,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 		$move_days_higher=post_param_integer('move_days_higher',INTEGER_MAGIC_NULL);
 		$move_target=post_param_integer('move_target',INTEGER_MAGIC_NULL);
 		if ($move_target==-1) $move_target=NULL;
-		if (!is_null($move_target))
+		if ((!is_null($move_target)) && ($move_target!=INTEGER_MAGIC_NULL))
 		{
 			if (!has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues',array('catalogues_catalogue',$catalogue_name,'catalogues_category',$move_target)))
 				access_denied('CATEGORY_ACCESS');
@@ -1970,7 +1970,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 		$notes=post_param('notes',STRING_MAGIC_NULL);
 		$submit_points=post_param_integer('submit_points',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$ecommerce=post_param_integer('ecommerce',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$send_view_reports=post_param('send_view_reports');
+		$send_view_reports=post_param('send_view_reports',STRING_MAGIC_NULL);
 		if (!fractional_edit())
 		{
 			if (post_param_integer('reset_category_permissions',0)==1)
@@ -1994,7 +1994,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 
 		$was_tree=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_is_tree',array('c_name'=>$old_name));
 		if (is_null($was_tree)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$is_tree=post_param_integer('is_tree',0);
+		$is_tree=post_param_integer('is_tree',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
 		if (!fractional_edit())
 		{

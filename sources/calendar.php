@@ -76,7 +76,15 @@ function render_calendar_type_box($row,$zone='_SEARCH',$give_context=true,$guid=
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)',array('e_type'=>$row['id'],'validated'=>1));
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'0eaa10d9fab32599ff095e1121d41c49','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array(
+		'_GUID'=>($guid!='')?$guid:'0eaa10d9fab32599ff095e1121d41c49',
+		'TITLE'=>$title,
+		'SUMMARY'=>'',
+		'ENTRY_DETAILS'=>$entry_details,
+		'URL'=>$url,
+		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'title',
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_catalogues:type=__ec:id='.strval($row['id']),
+	));
 }
 
 /**

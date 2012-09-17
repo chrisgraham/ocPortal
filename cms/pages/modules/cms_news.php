@@ -474,6 +474,7 @@ class Module_cms_news extends standard_crud_module
 		if (post_param('main_news_category')!='personal') $main_news_category=post_param_integer('main_news_category',INTEGER_MAGIC_NULL);
 		else warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
+		$news_category=mixed();
 		$news_category=array();
 		if (array_key_exists('news_category',$_POST))
 		{
@@ -482,6 +483,7 @@ class Module_cms_news extends standard_crud_module
 				$news_category[]=intval($val);
 			}
 		}
+		if (fractional_edit()) $news_category=NULL;
 
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
@@ -508,7 +510,7 @@ class Module_cms_news extends standard_crud_module
 		$schedule=get_input_date('schedule');
 		$add_time=is_null($schedule)?mixed():$schedule;
 
-		if ((addon_installed('calendar')) && (has_privilege(get_member(),'scheduled_publication_times')))
+		if ((addon_installed('calendar')) && (!fractional_edit()) && (has_privilege(get_member(),'scheduled_publication_times')))
 		{
 			require_code('calendar2');
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'_EVENT_TIMESTAMP\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
@@ -535,7 +537,7 @@ class Module_cms_news extends standard_crud_module
 
 		$title=post_param('title',STRING_MAGIC_NULL);
 
-		if (($validated==1) && ($main_news_category!=INTEGER_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_select_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
 		{
 			$is_blog=!is_null($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_owner',array('id'=>$main_news_category)));
 
@@ -1010,6 +1012,7 @@ class Module_cms_news_cat extends standard_crud_module
 		$notes=post_param('notes',STRING_MAGIC_NULL);
 		$_owner=post_param('owner',fractional_edit()?STRING_MAGIC_NULL:NULL);
 		$owner=is_null($_owner)?NULL:$GLOBALS['FORUM_DRIVER']->get_member_from_username($_owner);
+		if (fractional_edit()) $owner=INTEGER_MAGIC_NULL;
 
 		edit_news_category(intval($id),$title,$img,$notes,$owner);
 		$this->set_permissions(intval($id));

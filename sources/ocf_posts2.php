@@ -237,7 +237,11 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 		$link=hyperlink($GLOBALS['FORUM_DRIVER']->topic_url($row['p_topic_id']),$topic_row['t_cache_first_title']);
 		$title=do_lang_tempcode('FORUM_POST_ISOLATED_RESULT',escape_html(strval($row['id'])),$poster,array(escape_html($date),$link));
 
-		return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'84ac17a5855ceed1c47c5d3ef6cf4f3d','TITLE'=>$title,'SUMMARY'=>$tpl));
+		return do_template('SIMPLE_PREVIEW_BOX',array(
+			'_GUID'=>($guid!='')?$guid:'84ac17a5855ceed1c47c5d3ef6cf4f3d',
+			'TITLE'=>$title,
+			'SUMMARY'=>$tpl,
+		));
 	}
 
 	return $tpl;

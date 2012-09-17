@@ -417,7 +417,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	);
 	$content=do_template('OCF_FORUM',$map);
 
-	$ltitle=do_lang_tempcode('NAMED_FORUM',escape_html($details['name']));
+	$ltitle=do_lang_tempcode('NAMED_FORUM',is_null($id)?make_string_tempcode(escape_html($details['name'])):make_fractionable_editable('forum',$id,$details['name']));
 
 	return array($content,$ltitle,$breadcrumbs,$forum_name);
 }

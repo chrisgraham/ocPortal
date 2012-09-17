@@ -74,7 +74,16 @@ function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	$entry_details->attach(do_lang_tempcode('LIST_SEP'));
 	$entry_details->attach(do_lang_tempcode('FORUM_NUM_POSTS',escape_html(integer_format($num_posts))));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'f61cd0ea4c2ac496da958a36f118495d','TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url,'ENTRY_DETAILS'=>protect_from_escaping($entry_details),'BREADCRUMBS'=>$breadcrumbs));
+	return do_template('SIMPLE_PREVIEW_BOX',array(
+		'_GUID'=>($guid!='')?$guid:'f61cd0ea4c2ac496da958a36f118495d',
+		'TITLE'=>$title,
+		'SUMMARY'=>$summary,
+		'URL'=>$url,
+		'ENTRY_DETAILS'=>protect_from_escaping($entry_details),
+		'BREADCRUMBS'=>$breadcrumbs,
+		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'name',
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:admin_ocf_forums:type=__ed:'.strval($row['id']),
+	));
 }
 
 /**

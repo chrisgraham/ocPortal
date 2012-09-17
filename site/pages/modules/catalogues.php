@@ -773,7 +773,7 @@ class Module_catalogues
 		$description_2=get_translated_text($catalogue['c_description']);
 
 		// Title
-		$title_to_use=do_lang_tempcode($catalogue_name.'__CATALOGUE_INDEX',escape_html(get_translated_text($catalogue['c_title'])));
+		$title_to_use=do_lang_tempcode($catalogue_name.'__CATALOGUE_INDEX',make_fractionable_editable('catalogue',$catalogue_name,get_translated_text($catalogue['c_title'])));
 		$title_to_use_2=do_lang($catalogue_name.'__CATALOGUE_INDEX',escape_html(get_translated_text($catalogue['c_title'])),NULL,NULL,NULL,false);
 		if (is_null($title_to_use_2))
 			$title_to_use=do_lang_tempcode('DEFAULT__CATALOGUE_INDEX',escape_html(get_translated_text($catalogue['c_title'])));
@@ -1033,7 +1033,7 @@ class Module_catalogues
 		}
 
 		// Screen title
-		$title_to_use=do_lang_tempcode($catalogue_name.'__CATALOGUE_CATEGORY',escape_html($_title));
+		$title_to_use=do_lang_tempcode($catalogue_name.'__CATALOGUE_CATEGORY',make_fractionable_editable('catalogue_category',$id,$_title));
 		$title_to_use_2=do_lang($catalogue_name.'__CATALOGUE_CATEGORY',$_title,NULL,NULL,NULL,false);
 		if (is_null($title_to_use_2))
 		{

@@ -187,7 +187,16 @@ function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$i
 	$num_entries=$child_counts['num_downloads_children'];
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'4074a20248289c28cde8201272627129','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'SUMMARY'=>$summary,'ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array(
+		'_GUID'=>($guid!='')?$guid:'4074a20248289c28cde8201272627129',
+		'BREADCRUMBS'=>$breadcrumbs,
+		'TITLE'=>$title,
+		'SUMMARY'=>$summary,
+		'ENTRY_DETAILS'=>$entry_details,
+		'URL'=>$url,
+		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'title',
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_downloads:type=__ec:id='.strval($row['id']),
+	));
 }
 
 /**

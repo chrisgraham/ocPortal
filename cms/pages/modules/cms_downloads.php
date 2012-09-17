@@ -743,7 +743,7 @@ class Module_cms_downloads extends standard_crud_module
 
 		edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL));
 
-		if (addon_installed('galleries'))
+		if ((addon_installed('galleries')) && (!fractional_edit()))
 		{
 			require_code('permissions2');
 			set_category_permissions_from_environment('galleries','download_'.strval($id));

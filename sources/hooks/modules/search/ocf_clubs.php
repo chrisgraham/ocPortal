@@ -122,7 +122,12 @@ class Hook_search_ocf_clubs
 
 		$url=build_url(array('page'=>'groups','type'=>'view','id'=>$row['id']),get_module_zone('groups'));
 
-		return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'2f7814a2e1f868d2ac73fba69f3aeee1','TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url));
+		return do_template('SIMPLE_PREVIEW_BOX',array(
+			'_GUID'=>'2f7814a2e1f868d2ac73fba69f3aeee1',
+			'TITLE'=>$title,
+			'SUMMARY'=>$summary,
+			'URL'=>$url,
+		));
 	}
 
 }

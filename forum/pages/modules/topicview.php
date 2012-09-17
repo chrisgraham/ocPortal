@@ -765,7 +765,7 @@ class Module_topicview
 					$awards=find_awards_for('topic',strval($id));
 				} else $awards=array();
 
-				$title=get_screen_title(do_lang_tempcode('NAMED_TOPIC',escape_html($topic_info['title'])),false,NULL,NULL,$awards);
+				$title=get_screen_title(do_lang_tempcode('NAMED_TOPIC',make_fractionable_editable('topic',$id,$topic_info['title'])),false,NULL,NULL,$awards);
 			}
 		}
 

@@ -239,7 +239,7 @@ class Module_groups
 			$name=$row['text_original'];
 			$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 			$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
-			$staff->attach(results_entry(array(hyperlink($url,escape_html($name)),escape_html($num_members))));
+			$staff->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$name)),escape_html($num_members))));
 			$i++;
 		}
 		$staff=results_table(do_lang_tempcode('STAFF'),$start,'staff_start',$max,'staff_max',$max_rows,$fields_title,$staff,$sortables,$sortable,$sort_order,'staff_sort',NULL,array('200'));
@@ -270,7 +270,7 @@ class Module_groups
 				{
 					$p_t=do_lang_tempcode('PROMOTION_TO',escape_html(integer_format($_p_t)),escape_html($_rank[$row['g_promotion_target']]['text_original']));
 				}
-				$rank->attach(results_entry(array(hyperlink($url,escape_html($name)),escape_html($num_members),$p_t)));
+				$rank->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$name)),escape_html($num_members),$p_t)));
 			}
 			$rank=results_table(do_lang_tempcode('RANK_SETS'),$start,'rank_start_'.strval($g_id),$max,'rank_max_'.strval($g_id),$max_rows,$fields_title,$rank,$sortables,$sortable,$sort_order,'rank_sort_'.strval($g_id),NULL,array('200'));
 			$ranks[]=$rank;
@@ -293,7 +293,7 @@ class Module_groups
 			$name=$row['text_original'];
 			$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 			$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
-			$others->attach(results_entry(array(hyperlink($url,escape_html($name)),escape_html($num_members))));
+			$others->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$name)),escape_html($num_members))));
 		}
 		$others=results_table(do_lang_tempcode('OTHER_USERGROUPS'),$start,'others_start',$max,'others_max',$max_rows,$fields_title,$others,$sortables,$sortable,$sort_order,'others_sort',NULL,array('200'));
 
@@ -322,7 +322,7 @@ class Module_groups
 		$club=($group['g_is_private_club']==1);
 		$name=get_translated_text($group['g_name'],$GLOBALS['FORUM_DB']);
 
-		$title=get_screen_title($club?'CLUB':'USERGROUP',true,array(escape_html($name)));
+		$title=get_screen_title($club?'CLUB':'USERGROUP',true,array(make_fractionable_editable('group',$id,$name)));
 
 		// Leadership
 		if ((!is_null($group['g_group_leader'])) && (!is_null($GLOBALS['FORUM_DRIVER']->get_username($group['g_group_leader']))))
@@ -405,6 +405,7 @@ class Module_groups
 		foreach ($_secondary_members as $secondary_member)
 		{
 			$m_username=$GLOBALS['FORUM_DRIVER']->get_member_row_field($secondary_member['gm_member_id'],'m_username');
+			if (is_null($m_username)) continue;
 			if ($secondary_member['gm_validated']==1)
 			{
 				$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($secondary_member['gm_member_id'],false,true);

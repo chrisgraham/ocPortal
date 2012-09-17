@@ -1,14 +1,13 @@
 "use strict";
 
-function fractional_edit(event,object,url,edit_text,edit_param_name)
+function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_click)
 {
-	if (magic_keypress(event))
-	{
-		// Bubbling needs to be stopped because shift+click will open a new window on some lower event handler (in firefox anyway)
-		cancel_bubbling(event);
+	if (typeof was_double_click=='undefined') var was_double_click=false;
 
-		// We'll need AJAX
-		require_javascript('javascript_ajax');
+	if ((magic_keypress(event)) || (was_double_click))
+	{
+		cancel_bubbling(event);
+		if (typeof event.preventDefault!='undefined') event.preventDefault();
 
 		// Position form
 		var width=find_width(object);
@@ -16,8 +15,9 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 		var x=find_pos_x(object);
 		var y=find_pos_y(object);
 
-		// Record possible old JS events
+		// Record old JS events
 		object.old_onclick=object.onclick;
+		object.old_ondblclick=object.ondblclick;
 		object.old_onkeypress=object.onkeypress;
 
 		// Create form
@@ -27,108 +27,112 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 		form.style.display='inline';
 		var input=document.createElement('input');
 		input.style.position='absolute';
-		input.style.left=(x-1)+'px';
-		input.style.top=(y-1)+'px';
+		input.style.left=(x)+'px';
+		input.style.top=(y)+'px';
 		input.style.width=width+'px';
+		input.style.margin=0;
+		var to_copy=['border','padding-top','border-top','border-right','border-bottom','padding-left','border-left','font-size','font-weight','font-style'];
+		for (var i=0;i<to_copy.length;i++)
+		{
+			input.style[to_copy[i]]=abstract_get_computed_style(object.parentNode,to_copy[i]);
+		}
 		input.name=edit_param_name;
-		input.value=edit_text;
+		if (typeof object.raw_text!='undefined')
+		{
+			input.value=object.raw_text; // Our previous text edited in this JS session
+		} else
+		{
+			object.raw_text=raw_text;
+			input.value=raw_text; // What was in the DB when the screen loaded
+		}
 		form.onsubmit=function(event) { return false; };
 
-		// Activate
-		object.onkeypress=function() { };
-		object.onclick=function(event)
+		var cleanup_function=function() {
+			object.onclick=object.old_onclick;
+			object.ondblclick=object.old_ondblclick;
+			object.onkeypress=object.old_onkeypress;
+
+			if (input.form.parentNode)
+			{
+				input.onblur=null; // So don't get recursion
+				input.form.parentNode.removeChild(input.form);
+			}
+		};
+
+		var cancel_function=function() {
+			cleanup_function();
+
+			window.fauxmodal_alert('{!FRACTIONAL_EDIT_CANCELLED;^}',null,'{!FRACTIONAL_EDIT;^}');
+
+			return false;
+		};
+
+		var save_function=function() {
+			// Call AJAX request
+			var response=do_ajax_request(input.form.action,false,input.name+'='+window.encodeURIComponent(input.value));
+
+			// Some kind of error?
+			if ((response.responseText=='') || (response.responseText.length>200) || (!response.responseText))
+			{
+				var session_test_url='{$FIND_SCRIPT_NOHTTP;,confirm_session}';
+				var session_test_ret=do_ajax_request(session_test_url+keep_stub(true));
+
+				if ((session_test_ret.responseText!='') && (session_test_ret.responseText!=null)) // If it failed, see if it is due to a non-confirmed session
+				{
+					confirm_session(
+						function(result)
+						{
+							if (result)	save_function();
+						}
+					);
+				} else
+				{
+					window.fauxmodal_alert('{!ERROR_FRACTIONAL_EDIT;^}',null,'{!FRACTIONAL_EDIT;^}');
+				}
+			} else // Success
+			{
+				object.raw_text=input.value;
+				set_inner_html(object,response.responseText);
+			}
+
+			cleanup_function();
+
+			return false;
+		};
+
+		// If we activate it again, we actually treat this as a cancellation
+		object.onclick=object.ondblclick=function(event)
 			{
 				if (typeof event=='undefined') var event=window.event;
 
-				// Bubbling needs to be stopped because shift+click will open a new window on some lower event handler (in firefox anyway)
 				cancel_bubbling(event);
+				if (typeof event.preventDefault!='undefined') event.preventDefault();
 
-				if (magic_keypress(event))
-				{
-					object.onclick=object.old_onclick;
-					object.onkeypress=object.old_onkeypress;
-				}
+				if (magic_keypress(event)) cleanup_function();
 
 				return false;
 			}
 
-		// Save (if enter_pressed)
-		input.onkeypress=function(event)
-			{
-				if (typeof event=='undefined') var event=window.event;
-				if ((enter_pressed(event)) && (this.value!=''))
-				{
-					if (typeof window.do_ajax_request=='undefined') // Load up AJAX if not loaded yet
-					{
-						window.setTimeout(function() { input.onkeypress(event); } ,100);
-						return false;
-					}
-
-					// Call AJAX request
-					var response=do_ajax_request(input.form.action,false,input.name+'='+window.encodeURIComponent(input.value));
-					if (input.form.parentNode)
-					{
-						input.onblur=null;
-						input.form.parentNode.removeChild(input.form);
-					}
-					object.onclick=object.old_onclick;
-					object.onkeypress=object.old_onkeypress;
-
-					// Some kind of error?
-					if ((response.responseText=='') || (response.responseText.length>200) || (!response.responseText))
-					{
-						var session_test_url='{$FIND_SCRIPT_NOHTTP;,confirm_session}';
-						var session_test_ret=do_ajax_request(session_test_url+keep_stub(true));
-
-						if ((session_test_ret.responseText!='') && (session_test_ret.responseText!=null)) // If it failed, see if it is due to a non-confirmed session
-						{
-							confirm_session(
-								false,
-								function(result)
-								{
-									if (result)
-										input.onkeypress(event);
-								}
-							);
-						} else
-						{
-							window.fauxmodal_alert('{!ERROR_FRACTIONAL_EDIT;^}');
-						}
-					} else // Success
-					{
-						set_inner_html(object,response.responseText);
-					}
-
-					return false;
-				}
-
-				return true;
-			}
-
-		// Cancel
-		var remove_function=function(event)
+		// Cancel or save actions
+		input.onkeyup=function(event) // Not using onkeypress because that only works for actual represented characters in the input box
 			{
 				if (typeof event=='undefined') var event=window.event;
 
-				if (magic_keypress(event))
+				if ((key_pressed(event,[27],true)) && (this.value!='')) // Cancel (escape key)
 				{
-					form.parentNode.removeChild(form);
+					return cancel_function();
 				}
 
-				return true;
+				if ((enter_pressed(event)) && (this.value!='')) // Save
+				{
+					return save_function();
+				}
+
+				return null;
 			}
-		input.onclick=remove_function; // Remove old one
 		input.onblur=function(event)
 			{
-				if (form.parentNode)
-				{
-					input.onblur=null;
-					form.parentNode.removeChild(form);
-					window.fauxmodal_alert('{!FRACTIONAL_EDIT_CANCELLED;^}'); 
-
-					object.onclick=object.old_onclick;
-					object.onkeypress=object.old_onkeypress;
-				}
+				if (this.value!='') save_function(); else cancel_function();
 			}
 
 		// Add in form

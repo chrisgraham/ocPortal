@@ -51,6 +51,7 @@ class Hook_content_meta_aware_news
 
 			'title_field'=>'title',
 			'title_field_dereference'=>true,
+			'title_field_supports_comcode'=>true,
 
 			'view_pagelink_pattern'=>'_SEARCH:news:view:_WILD',
 			'edit_pagelink_pattern'=>'_SEARCH:cms_news:_ed:_WILD',

@@ -2589,3 +2589,26 @@ function member_personal_links_and_details($member_id)
 
 	return array($links,$details,$num_unread_pps);
 }
+
+/**
+ * Make some text fractionably editable (i.e. inline editable).
+ *
+ * @param  ID_TEXT			Content type
+ * @param  mixed				Content ID
+ * @param  mixed				Content title (either unescaped string, or Compiled Comcode [i.e. Tempcode])
+ * @return tempcode			Inline editable HTML to put into output
+ */
+function make_fractionable_editable($content_type,$id,$title)
+{
+	require_code('hooks/systems/content_meta_aware/'.filter_naughty($content_type));
+	$ob=object_factory('Hook_content_meta_aware_'.$content_type);
+	$info=$ob->info();
+
+	$parameters=array(
+		is_object($title)?$title->evaluate():$title,
+		preg_replace('#^\w\w?_#','',$info['title_field']),
+		str_replace('_WILD',is_integer($id)?strval($id):$id,preg_replace('#:_(.*)#',':__${1}',$info['edit_pagelink_pattern'])),
+		(array_key_exists('title_field_supports_comcode',$info) && $info['title_field_supports_comcode'])?'1':'0',
+	);
+	return directive_tempcode('FRACTIONAL_EDITABLE',is_object($title)?$title:escape_html($title),$parameters);
+}

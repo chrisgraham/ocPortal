@@ -211,7 +211,8 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
 	function edit_actualisation($id)
 	{
 		ocf_edit_forum_grouping(intval($id),post_param('title'),post_param('description',STRING_MAGIC_NULL),post_param_integer('expanded_by_default',fractional_edit()?INTEGER_MAGIC_NULL:0));
-		$this->extra_donext_whatever=					array(
+		$this->extra_donext_whatever=
+					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('admin_ocf_forums',array('type'=>'ad','forum_grouping_id'=>$id),get_module_zone('admin_ocf_forums'))),
 						array('edit_one',array('admin_ocf_forums',array('type'=>'ed'),get_module_zone('admin_ocf_forums'))),

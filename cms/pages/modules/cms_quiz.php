@@ -351,14 +351,15 @@ class Module_cms_quiz extends standard_crud_module
 	{
 		$id=intval($_id);
 
-		$open_time=get_input_date('open_time');
-		$close_time=get_input_date('close_time');
+		$open_time=fractional_edit()?INTEGER_MAGIC_NULL:get_input_date('open_time');
+		$close_time=fractional_edit()?INTEGER_MAGIC_NULL:get_input_date('close_time');
 
 		$_tied_newsletter=post_param('tied_newsletter','');
 		$tied_newsletter=($_tied_newsletter=='')?NULL:intval($_tied_newsletter);
+		if (fractional_edit()) $tied_newsletter=INTEGER_MAGIC_NULL;
 
-		$name=post_param('name');
-		$validated=post_param_integer('validated',0);
+		$name=post_param('name',STRING_MAGIC_NULL);
+		$validated=post_param_integer('validated',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
 		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('quizzes','q_validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
 		{
@@ -368,7 +369,27 @@ class Module_cms_quiz extends standard_crud_module
 				syndicate_described_activity(($submitter!=get_member())?'quiz:ACTIVITY_VALIDATE_QUIZ':'quiz:ACTIVITY_ADD_QUIZ',$name,'','','_SEARCH:quiz:view:'.strval($id),'','','quizzes',1,$submitter);
 		}
 
-		edit_quiz($id,$name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),$validated,post_param('text'),post_param('meta_keywords',''),post_param('meta_description',''),post_param_integer('points_for_passing',0),$tied_newsletter);
+		edit_quiz(
+			$id,
+			$name,
+			post_param_integer('timeout',fractional_edit()?INTEGER_MAGIC_NULL:NULL),
+			post_param('start_text',STRING_MAGIC_NULL),
+			post_param('end_text',STRING_MAGIC_NULL),
+			post_param('end_text_fail',STRING_MAGIC_NULL),
+			post_param('notes',fractional_edit()?STRING_MAGIC_NULL:''),
+			post_param_integer('percentage',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			$open_time,
+			$close_time,
+			post_param_integer('num_winners',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('redo_time',fractional_edit()?INTEGER_MAGIC_NULL:NULL),
+			post_param('type',STRING_MAGIC_NULL),
+			$validated,
+			post_param('text',STRING_MAGIC_NULL),
+			post_param('meta_keywords',fractional_edit()?STRING_MAGIC_NULL:''),
+			post_param('meta_description',fractional_edit()?STRING_MAGIC_NULL:''),
+			post_param_integer('points_for_passing',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			$tied_newsletter
+		);
 	}
 
 	/**

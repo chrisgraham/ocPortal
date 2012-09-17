@@ -425,7 +425,7 @@ class Module_downloads
 			require_code('awards');
 			$awards=find_awards_for('download_category',strval($category_id));
 		} else $awards=array();
-		$title=get_screen_title('_DOWNLOAD_CATEGORY',true,array($title_to_use),NULL,$awards);
+		$title=get_screen_title('_DOWNLOAD_CATEGORY',true,array(make_fractionable_editable('download_category',$category_id,$title_to_use)),NULL,$awards);
 
 		// Breadcrumbs
 		$breadcrumbs=download_breadcrumbs($category_id,$root,true,get_zone_name(),true);
@@ -619,7 +619,7 @@ class Module_downloads
 		}
 
 		// Title
-		$title_to_use=do_lang_tempcode('DOWNLOAD_TITLE',escape_html($name));
+		$title_to_use=do_lang_tempcode('DOWNLOAD_TITLE',make_fractionable_editable('download',$id,$name));
 		$title_to_use_2=do_lang('DOWNLOAD_TITLE',$name);
 		if (addon_installed('awards'))
 		{

@@ -525,7 +525,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
-		ocf_edit_forum(intval($id),post_param('name'),post_param('description',STRING_MAGIC_NULL),post_param_integer('forum_grouping_id',INTEGER_MAGIC_NULL),post_param_integer('parent_forum',INTEGER_MAGIC_NULL),post_param_integer('position',INTEGER_MAGIC_NULL),post_param_integer('post_count_increment',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param_integer('order_sub_alpha',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param('intro_question',STRING_MAGIC_NULL),post_param('intro_answer',STRING_MAGIC_NULL),post_param('redirection',STRING_MAGIC_NULL),post_param('order',STRING_MAGIC_NULL),post_param_integer('is_threaded',0),post_param_integer('reset_intro_acceptance',0)==1);
+		ocf_edit_forum(intval($id),post_param('name'),post_param('description',STRING_MAGIC_NULL),post_param_integer('forum_grouping_id',INTEGER_MAGIC_NULL),post_param_integer('parent_forum',INTEGER_MAGIC_NULL),post_param_integer('position',INTEGER_MAGIC_NULL),post_param_integer('post_count_increment',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param_integer('order_sub_alpha',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param('intro_question',STRING_MAGIC_NULL),post_param('intro_answer',STRING_MAGIC_NULL),post_param('redirection',STRING_MAGIC_NULL),post_param('order',STRING_MAGIC_NULL),post_param_integer('is_threaded',fractional_edit()?INTEGER_MAGIC_NULL:0),post_param_integer('reset_intro_acceptance',0)==1);
 
 		if (!fractional_edit())
 		{

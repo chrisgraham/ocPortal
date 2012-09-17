@@ -35,7 +35,12 @@ function render_author_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('AUTHOR'),$row['author']):$row['author'];
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'e597aef1818f5610402d6e5f478735a1','TITLE'=>$title,'SUMMARY'=>get_translated_text($row['description']),'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array(
+		'_GUID'=>($guid!='')?$guid:'e597aef1818f5610402d6e5f478735a1',
+		'TITLE'=>$title,
+		'SUMMARY'=>get_translated_text($row['description']),
+		'URL'=>$url,
+	));
 }
 
 /**

@@ -2001,9 +2001,7 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .fractional_edit {
-	margin: -3px;
-	border: 1px dashed {$GET,point_of_interest_border};
-	padding: 2px;
+	outline: 1px dashed {$GET,point_of_interest_border};
 }
 .fractional_edit_nonover {
 }

@@ -576,8 +576,8 @@ class Module_cms_calendar extends standard_crud_module
 
 		if ($recurrence!='monthly')
 		{
-			$start_monthly_spec_type='day_of_month';
-			$end_monthly_spec_type='day_of_month';
+			$start_monthly_spec_type=fractional_edit()?STRING_MAGIC_NULL:'day_of_month';
+			$end_monthly_spec_type=fractional_edit()?STRING_MAGIC_NULL:'day_of_month';
 		}
 
 		return array($type,$recurrence,$recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv);
@@ -1196,7 +1196,7 @@ class Module_cms_calendar_cat extends standard_crud_module
 	{
 		require_code('themes2');
 
-		edit_event_type(intval($id),post_param('title'),get_theme_img_code('calendar'),post_param('external_feed'));
+		edit_event_type(intval($id),post_param('title'),fractional_edit()?STRING_MAGIC_NULL:get_theme_img_code('calendar'),post_param('external_feed',STRING_MAGIC_NULL));
 		if (!fractional_edit())
 		{
 			$this->set_permissions(strval($id));

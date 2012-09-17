@@ -55,7 +55,14 @@ function render_chat_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	$_title=$row['room_name'];
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('ROOM'),$_title):$_title;
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'dacd41bad78b545f179582f83209c070','TITLE'=>$title,'SUMMARY'=>'','URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array(
+		'_GUID'=>($guid!='')?$guid:'dacd41bad78b545f179582f83209c070',
+		'TITLE'=>$title,
+		'SUMMARY'=>'',
+		'URL'=>$url,
+		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'room_name',
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:admin_chat:type=__ed:id='.strval($row['id']),
+	));
 }
 
 /**
@@ -736,7 +743,7 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 	{
 		require_lang('chat');
 		$the_message=do_lang('BANNED_FROM_CHAT');
-		$_message=array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'member_id'=>get_member(),'date_and_time'=>time(),'member_id'=>get_member(),'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font'));
+		$_message=array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'date_and_time'=>time(),'member_id'=>get_member(),'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font'));
 		$template=do_template('CHAT_MESSAGE',array(
 			'_GUID'=>'f0eb6b037a7cb4b70a114e7e96bde36d',
 			'SYSTEM_MESSAGE'=>strval($_message['system_message']),

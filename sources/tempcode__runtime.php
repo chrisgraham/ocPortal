@@ -669,6 +669,7 @@ function handle_symbol_preprocessing($bit,&$children)
 			return;
 
 		case 'FRACTIONAL_EDITABLE':
+			require_javascript('javascript_ajax');
 			require_javascript('javascript_fractional_edit');
 			return;
 	}

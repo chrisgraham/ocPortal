@@ -48,7 +48,14 @@ function render_banner_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 
 	$summary=show_banner($row['name'],$row['b_title_text'],get_translated_tempcode($row['caption']),$row['b_direct_code'],$row['img_url'],'',$row['url'],$row['the_type'],$row['submitter']);
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'aaea5f7f64297ab46aa3b3182fb57c37','TITLE'=>$title,'SUMMARY'=>$summary,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array(
+		'_GUID'=>($guid!='')?$guid:'aaea5f7f64297ab46aa3b3182fb57c37',
+		'TITLE'=>$title,
+		'SUMMARY'=>$summary,
+		'URL'=>$url,
+		'FRACTIONAL_EDIT_FIELD_NAME'=>$give_context?NULL:'name',
+		'FRACTIONAL_EDIT_FIELD_URL'=>$give_context?NULL:'_SEARCH:cms_banners:type=__ed:id='.strval($row['id']),
+	));
 }
 
 /**
@@ -66,8 +73,6 @@ function render_banner_type_box($row,$zone='_SEARCH',$give_context=true,$guid=''
 
 	$url=new ocp_tempcode();
 
-	require_lang('banners');
-
 	$_title=$row['id'];
 	if ($_title=='') $_title=do_lang('GENERAL');
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('_BANNER_TYPE'),$_title):$_title;
@@ -75,7 +80,13 @@ function render_banner_type_box($row,$zone='_SEARCH',$give_context=true,$guid=''
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('banners','COUNT(*)',array('validated'=>1));
 	$entry_details=do_lang_tempcode('CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)));
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>($guid!='')?$guid:'ba1f8d9da6b65415483d0d235f29c3d4','TITLE'=>$title,'SUMMARY'=>'','ENTRY_DETAILS'=>$entry_details,'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array(
+		'_GUID'=>($guid!='')?$guid:'ba1f8d9da6b65415483d0d235f29c3d4',
+		'TITLE'=>$title,
+		'SUMMARY'=>'',
+		'ENTRY_DETAILS'=>$entry_details,
+		'URL'=>$url,
+	));
 }
 
 /**

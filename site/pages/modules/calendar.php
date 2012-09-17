@@ -1372,7 +1372,7 @@ class Module_calendar
 			$awards=find_awards_for('event',strval($id));
 		} else $awards=array();
 		$_title=get_translated_text($event['e_title']);
-		$title_to_use=do_lang_tempcode('CALENDAR_EVENT_VCAL',escape_html($_title));
+		$title_to_use=do_lang_tempcode('CALENDAR_EVENT_VCAL',make_fractionable_editable('event',$id,$_title));
 		$title_to_use_2=do_lang('CALENDAR_EVENT',$_title);
 		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 

@@ -542,16 +542,17 @@ class Module_admin_ocf_groups extends standard_crud_module
 	 */
 	function read_in_data()
 	{
-		$_group_leader=post_param('group_leader');
+		$_group_leader=post_param('group_leader','');
 		if ($_group_leader!='')
 		{
 			$group_leader=$GLOBALS['FORUM_DRIVER']->get_member_from_username($_group_leader);
 			if (is_null($group_leader)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$_group_leader));
 		} else $group_leader=NULL;
+		if (fractional_edit()) $group_leader=INTEGER_MAGIC_NULL;
 
-		$promotion_target=post_param_integer('promotion_target',-1);
+		$promotion_target=post_param_integer('promotion_target',fractional_edit()?INTEGER_MAGIC_NULL:-1);
 		if ($promotion_target==-1) $promotion_target=NULL;
-		$promotion_threshold=post_param_integer('promotion_threshold',-1);
+		$promotion_threshold=post_param_integer('promotion_threshold',fractional_edit()?INTEGER_MAGIC_NULL:-1);
 		if ($promotion_threshold==-1) $promotion_threshold=NULL;
 
 		return array($group_leader,$promotion_target,$promotion_threshold);
@@ -608,7 +609,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 		require_code('themes2');
 
 		list($group_leader,$promotion_target,$promotion_threshold)=$this->read_in_data();
-		if ((!is_null($group_leader)) && (post_param_integer('confirm',0)==0) && (!in_array(intval($id),$GLOBALS['FORUM_DRIVER']->get_members_groups($group_leader))))
+		if ((!is_null($group_leader)) && ($group_leader!=INTEGER_MAGIC_NULL) && (post_param_integer('confirm',0)==0) && (!in_array(intval($id),$GLOBALS['FORUM_DRIVER']->get_members_groups($group_leader))))
 		{
 			require_code('templates_confirm_screen');
 			return confirm_screen(get_screen_title('EDIT_GROUP'),paragraph(do_lang_tempcode('MAKE_MEMBER_GROUP_LEADER',post_param('group_leader'))),'__ed','_ed',array('confirm'=>1));
@@ -616,8 +617,36 @@ class Module_admin_ocf_groups extends standard_crud_module
 
 		$was_club=($GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_private_club',array('id'=>intval($id)))==1);
 
-		$rank_img=get_theme_img_code('ocf_rank_images',true,'file','theme_img_code',$GLOBALS['FORUM_DB']);
-		ocf_edit_group(intval($id),post_param('name'),post_param_integer('is_default',0),post_param_integer('is_super_admin',0),post_param_integer('is_super_moderator',0),post_param('title'),$rank_img,$promotion_target,$promotion_threshold,$group_leader,post_param_integer('flood_control_submit_secs'),post_param_integer('flood_control_access_secs'),post_param_integer('max_daily_upload_mb'),post_param_integer('max_attachments_per_post'),post_param_integer('max_avatar_width',100),post_param_integer('max_avatar_height',100),post_param_integer('max_post_length_comcode'),post_param_integer('max_sig_length_comcode',10000),post_param_integer('gift_points_base',0),post_param_integer('gift_points_per_day',0),post_param_integer('enquire_on_new_ips',0),post_param_integer('is_presented_at_install',0),post_param_integer('hidden',0),post_param_integer('order'),post_param_integer('rank_image_pri_only',0),post_param_integer('open_membership',0),post_param_integer('is_private_club',0));
+		$rank_img=fractional_edit()?STRING_MAGIC_NULL:get_theme_img_code('ocf_rank_images',true,'file','theme_img_code',$GLOBALS['FORUM_DB']);
+		ocf_edit_group(
+			intval($id),
+			post_param('name'),
+			post_param_integer('is_default',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('is_super_admin',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('is_super_moderator',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param('title',STRING_MAGIC_NULL),
+			$rank_img,
+			$promotion_target,
+			$promotion_threshold,
+			$group_leader,
+			post_param_integer('flood_control_submit_secs',INTEGER_MAGIC_NULL),
+			post_param_integer('flood_control_access_secs',INTEGER_MAGIC_NULL),
+			post_param_integer('max_daily_upload_mb',INTEGER_MAGIC_NULL),
+			post_param_integer('max_attachments_per_post',INTEGER_MAGIC_NULL),
+			post_param_integer('max_avatar_width',fractional_edit()?INTEGER_MAGIC_NULL:100),
+			post_param_integer('max_avatar_height',fractional_edit()?INTEGER_MAGIC_NULL:100),
+			post_param_integer('max_post_length_comcode',INTEGER_MAGIC_NULL),
+			post_param_integer('max_sig_length_comcode',fractional_edit()?INTEGER_MAGIC_NULL:10000),
+			post_param_integer('gift_points_base',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('gift_points_per_day',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('enquire_on_new_ips',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('is_presented_at_install',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('hidden',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('order',INTEGER_MAGIC_NULL),
+			post_param_integer('rank_image_pri_only',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('open_membership',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('is_private_club',fractional_edit()?INTEGER_MAGIC_NULL:0)
+		);
 
 		if (addon_installed('ecommerce'))
 		{
@@ -628,19 +657,23 @@ class Module_admin_ocf_groups extends standard_crud_module
 			$this->extra_donext_whatever_title=do_lang_tempcode('MODULE_TRANS_NAME_subscriptions');
 		}
 
-		if ((!is_null($group_leader)) && (!in_array(intval($id),$GLOBALS['FORUM_DRIVER']->get_members_groups($group_leader))))
+		if ((!is_null($group_leader)) && ($group_leader!=INTEGER_MAGIC_NULL) && (!in_array(intval($id),$GLOBALS['FORUM_DRIVER']->get_members_groups($group_leader))))
 			ocf_add_member_to_group($group_leader,intval($id));
 
-		$absorb=post_param_integer('absorb',-1);
-		if ($absorb!=-1) ocf_group_absorb_privileges_of(intval($id),$absorb);
-
-		if ((post_param_integer('is_private_club',0)==1) && (!$was_club))
+		if (!fractional_edit())
 		{
-			$GLOBALS['SITE_DB']->query_delete('group_privileges',array('group_id'=>intval($id)));
-			$GLOBALS['SITE_DB']->query_delete('group_zone_access',array('group_id'=>intval($id)));
-			$GLOBALS['SITE_DB']->query_delete('group_category_access',array('group_id'=>intval($id)));
-			$GLOBALS['SITE_DB']->query_delete('group_page_access',array('group_id'=>intval($id)));
+			$absorb=post_param_integer('absorb',-1);
+			if ($absorb!=-1) ocf_group_absorb_privileges_of(intval($id),$absorb);
+
+			if ((post_param_integer('is_private_club',0)==1) && (!$was_club))
+			{
+				$GLOBALS['SITE_DB']->query_delete('group_privileges',array('group_id'=>intval($id)));
+				$GLOBALS['SITE_DB']->query_delete('group_zone_access',array('group_id'=>intval($id)));
+				$GLOBALS['SITE_DB']->query_delete('group_category_access',array('group_id'=>intval($id)));
+				$GLOBALS['SITE_DB']->query_delete('group_page_access',array('group_id'=>intval($id)));
+			}
 		}
+
 		return NULL;
 	}
 

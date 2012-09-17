@@ -1034,34 +1034,44 @@ class Module_cms_galleries extends standard_crud_module
 	{
 		$id=intval($_id);
 
-		$cat=post_param('cat');
-		if (can_submit_to_gallery($cat)===false) access_denied('SUBMIT_HERE');
-		make_member_gallery_if_needed($cat);
-		$this->check_images_allowed($cat);
-		$this->handle_resizing_and_watermarking();
-		$validated=post_param_integer('validated',0);
-		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true,'thumb_url','file2');
-		if ($urls[0]=='')
+		$cat=post_param('cat',STRING_MAGIC_NULL);
+		if ($cat!=STRING_MAGIC_NULL)
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url'),array('id'=>$id),'',1);
-			$urls=$rows[0];
+			if (can_submit_to_gallery($cat)===false) access_denied('SUBMIT_HERE');
+			make_member_gallery_if_needed($cat);
+			$this->check_images_allowed($cat);
+			$this->handle_resizing_and_watermarking();
+		}
+		$validated=post_param_integer('validated',fractional_edit()?INTEGER_MAGIC_NULL:0);
+		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true,'thumb_url','file2');
+		if (!fractional_edit())
+		{
+			if ($urls[0]=='')
+			{
+				$rows=$GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url'),array('id'=>$id),'',1);
+				$urls=$rows[0];
 
-			$url=$urls['url'];
-			$thumb_url=$urls['thumb_url'];
+				$url=$urls['url'];
+				$thumb_url=$urls['thumb_url'];
+			} else
+			{
+				$url=$urls[0];
+				$thumb_url=$urls[1];
+			}
 		} else
 		{
-			$url=$urls[0];
-			$thumb_url=$urls[1];
+			$url=STRING_MAGIC_NULL;
+			$thumb_url=STRING_MAGIC_NULL;
 		}
 
 		if ((substr($urls[0],0,8)!='uploads/') && ($urls[0]!='') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 
-		$description=post_param('description');
-		$allow_rating=post_param_integer('allow_rating',0);
-		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes','');
-		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
+		$description=post_param('description',STRING_MAGIC_NULL);
+		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
+		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
+		$notes=post_param('notes',fractional_edit()?STRING_MAGIC_NULL:'');
+		$allow_trackbacks=post_param_integer('allow_trackbacks',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$title=post_param('title');
 
 		$this->donext_type=$cat;
@@ -1076,7 +1086,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,post_param('meta_keywords',''),post_param('meta_description',''));
 
-		if ((has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))) && (post_param_integer('rep_image',0)==1))
+		if ((!fractional_edit()) && (has_edit_permission('cat_mid',get_member(),get_member_id_from_gallery_name($cat),'cms_galleries',array('galleries',$cat))) && (post_param_integer('rep_image',0)==1))
 		{
 			$GLOBALS['SITE_DB']->query_update('galleries',array('rep_image'=>$thumb_url),array('name'=>$cat),'',1);
 		}
@@ -1460,24 +1470,35 @@ class Module_cms_galleries_alt extends standard_crud_module
 	{
 		$id=intval($_id);
 
-		$cat=post_param('cat');
-		if (can_submit_to_gallery($cat)===false) access_denied('SUBMIT_HERE');
-		make_member_gallery_if_needed($cat);
-		$this->check_videos_allowed($cat);
-		$validated=post_param_integer('validated',0);
-		$title=post_param('title');
-		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_VIDEO,true,'thumb_url','file2');
-		if ($urls[0]=='')
+		$cat=post_param('cat',STRING_MAGIC_NULL);
+		if ($cat!=STRING_MAGIC_NULL)
 		{
-			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+			if (can_submit_to_gallery($cat)===false) access_denied('SUBMIT_HERE');
+			make_member_gallery_if_needed($cat);
+			$this->check_videos_allowed($cat);
 		}
-		$url=$urls[0];
-		if ((!array_key_exists(1,$urls)) || ($urls[1]==''))
+		$validated=post_param_integer('validated',fractional_edit()?INTEGER_MAGIC_NULL:0);
+		$title=post_param('title');
+
+		if (!fractional_edit())
 		{
-			$thumb_url='';
+			$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_VIDEO,true,'thumb_url','file2');
+			if ($urls[0]=='')
+			{
+				warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+			}
+			$url=$urls[0];
+			if ((!array_key_exists(1,$urls)) || ($urls[1]==''))
+			{
+				$thumb_url='';
+			} else
+			{
+				$thumb_url=$urls[1];
+			}
 		} else
 		{
-			$thumb_url=$urls[1];
+			$url=STRING_MAGIC_NULL;
+			$thumb_url=STRING_MAGIC_NULL;
 		}
 
 		if ((substr($url,0,8)!='uploads/') && ($url!='') && (is_null(http_download_file($url,0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
@@ -1497,12 +1518,18 @@ class Module_cms_galleries_alt extends standard_crud_module
 			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
 		}
 
-		$description=post_param('description');
-		$allow_rating=post_param_integer('allow_rating',0);
-		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes','');
-		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
-		list($video_width,$video_height,$video_length)=$this->get_special_video_info();
+		$description=post_param('description',STRING_MAGIC_NULL);
+		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
+		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
+		$notes=post_param('notes',fractional_edit()?STRING_MAGIC_NULL:'');
+		$allow_trackbacks=post_param_integer('allow_trackbacks',fractional_edit()?INTEGER_MAGIC_NULL:0);
+		if (!fractional_edit())
+		{
+			list($video_width,$video_height,$video_length)=$this->get_special_video_info();
+		} else
+		{
+			list($video_width,$video_height,$video_length)=array(INTEGER_MAGIC_NULL,INTEGER_MAGIC_NULL,INTEGER_MAGIC_NULL);
+		}
 
 		$this->donext_type=$cat;
 
@@ -1754,10 +1781,10 @@ class Module_cms_galleries_cat extends standard_crud_module
 		} else
 		{
 			$url=STRING_MAGIC_NULL;
-			$watermark_top_left=NULL;
-			$watermark_top_right=NULL;
-			$watermark_bottom_left=NULL;
-			$watermark_bottom_right=NULL;
+			$watermark_top_left=STRING_MAGIC_NULL;
+			$watermark_top_right=STRING_MAGIC_NULL;
+			$watermark_bottom_left=STRING_MAGIC_NULL;
+			$watermark_bottom_right=STRING_MAGIC_NULL;
 		}
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
@@ -1766,8 +1793,30 @@ class Module_cms_galleries_cat extends standard_crud_module
 			$g_owner=$GLOBALS['SITE_DB']->query_select_value('galleries','g_owner',array('name'=>$name));
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
+		if (fractional_edit()) $g_owner=INTEGER_MAGIC_NULL;
 
-		edit_gallery($id,$name,post_param('fullname'),post_param('description',STRING_MAGIC_NULL),post_param('notes',STRING_MAGIC_NULL),$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$allow_rating,$allow_comments,$g_owner);
+		edit_gallery(
+			$id,
+			$name,
+			post_param('fullname'),
+			post_param('description',STRING_MAGIC_NULL),
+			post_param('notes',STRING_MAGIC_NULL),
+			$parent_id,
+			$accept_images,
+			$accept_videos,
+			$is_member_synched,
+			$flow_mode_interface,
+			$url,
+			$watermark_top_left[0],
+			$watermark_top_right[0],
+			$watermark_bottom_left[0],
+			$watermark_bottom_right[0],
+			post_param('meta_keywords',STRING_MAGIC_NULL),
+			post_param('meta_description',STRING_MAGIC_NULL),
+			$allow_rating,
+			$allow_comments,
+			$g_owner
+		);
 
 		$this->new_id=$name;
 

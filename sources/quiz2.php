@@ -26,7 +26,7 @@
  * @param  ID_TEXT		The type
  * @set COMPETITION TEST SURVEY
  */
-function handle_quiz_answers($id,$text,$type)
+function _save_available_quiz_answers($id,$text,$type)
 {
 	$_existing=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY q_order');
 
@@ -273,7 +273,7 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 		'q_tied_newsletter'=>$tied_newsletter,
 	),true);
 
-	handle_quiz_answers($id,$text,$type);
+	_save_available_quiz_answers($id,$text,$type);
 
 	require_code('seo2');
 	seo_meta_set_for_implicit('quiz',strval($id),array($name,$start_text),$start_text);
@@ -346,7 +346,8 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 		'q_tied_newsletter'=>$tied_newsletter,
 	),array('id'=>$id));
 
-	handle_quiz_answers($id,$text,$type);
+	if (!fractional_edit())
+		_save_available_quiz_answers($id,$text,$type);
 
 	require_code('urls2');
 	suggest_new_idmoniker_for('quiz','do',strval($id),$name);

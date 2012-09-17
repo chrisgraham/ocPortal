@@ -426,7 +426,7 @@ class Module_news
 				if (array_key_exists(0,$news_cat_title))
 				{
 					$news_cat_title[0]['text_original']=get_translated_text($news_cat_title[0]['nc_title']);
-					$title=get_screen_title($news_cat_title[0]['text_original'],false);
+					$title=get_screen_title(make_fractionable_editable('news_category',$filter,$news_cat_title[0]['text_original']),false);
 				} else
 				{
 					$title=get_screen_title('NEWS_ARCHIVE');
@@ -535,7 +535,7 @@ class Module_news
 			$awards=find_awards_for('news',strval($id));
 		} else $awards=array();
 		$_title=get_translated_tempcode($myrow['title']);
-		$title_to_use=do_lang_tempcode(($blog===1)?'BLOG__NEWS':'_NEWS',$_title);
+		$title_to_use=do_lang_tempcode(($blog===1)?'BLOG__NEWS':'_NEWS',make_fractionable_editable('news',$id,$_title));
 		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 
 		// SEO

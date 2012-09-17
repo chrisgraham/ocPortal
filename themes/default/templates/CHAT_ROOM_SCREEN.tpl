@@ -6,7 +6,7 @@
 
 <div class="chat_you_are">{!LOGGED_IN_AS,{YOUR_NAME*}}</div>
 
-<h2>{ROOM_NAME*}</h2>
+<h2>{+START,FRACTIONAL_EDITABLE,{ROOM_NAME},room_name,_SEARCH:admin_chat:type=__ed:id={ROOM_ID}}{ROOM_NAME*}{+END}</h2>
 
 <div class="chat_posting_area">
 	<div class="float_surrounder">

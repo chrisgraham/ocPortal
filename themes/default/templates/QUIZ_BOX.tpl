@@ -5,7 +5,7 @@
 		{+END}
 
 		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
-			{NAME*}
+			{+START,FRACTIONAL_EDITABLE,{NAME},title,_SEARCH:cms_quiz:type=__ed:id={ID},0}{NAME*}{+END}
 		{+END}
 	</h3>
 

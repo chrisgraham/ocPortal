@@ -344,7 +344,7 @@ class Module_quiz
 		} else $awards=array();
 
 		$quiz_name=get_translated_text($quiz['q_name']);
-		$title_to_use=do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html($quiz_name)));
+		$title_to_use=do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$id,$quiz_name));
 		$title_to_use_2=do_lang('THIS_WITH_SIMPLE',do_lang($quiz['q_type']),$quiz_name);
 		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 		seo_meta_load_for('quiz',strval($id),$title_to_use_2);
