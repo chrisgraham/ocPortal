@@ -51,7 +51,7 @@ function is_swf_upload($fake_prepopulation=false)
 
 		if ((preg_match('#^hidFileID\_#i',$key)!=0) && ($value!='-1'))
 		{
-			//get the incoming uploads appropiate db table row
+			// Get the incoming uploads appropiate database table row
 			if (substr($value,-4)=='.dat') // By .dat name
 			{
 				$filename=post_param(str_replace('hidFileID','hidFileName',$key),'');
@@ -96,6 +96,7 @@ function is_swf_upload($fake_prepopulation=false)
 			}
 		}
 	}
+
 	return $swfupload;
 }
 

@@ -647,7 +647,7 @@
 				return $1 === ' ' && $2 === ' ' ? ' ' : '';
 			});
 		},
-    
+
 		/**
 		 * Returns a given computed style of a DOM element.
 		 *
@@ -728,7 +728,7 @@
 			});
 		},
 
-		
+
 		/**
 		 * Remove event handler from the specified object. If third argument (callback)
 		 * is not specified remove all events with the specified name.
@@ -755,7 +755,7 @@
 				return;
 			}
 
-				
+
 			for (var i=type.length-1; i>=0; i--) {
 				// undefined or not, key should match			
 				if (type[i].key === key || type[i].orig === callback) {
@@ -796,7 +796,7 @@
 			}
 		},
 
-		
+
 		/**
 		 * Remove all kind of events from the specified object
 		 *
@@ -822,20 +822,20 @@
 	 *
 	 * @example
 	 * var uploader = new plupload.Uploader({
-	 *     runtimes : 'gears,html5,flash',
-	 *     browse_button : 'button_id'
+	 *		 runtimes : 'gears,html5,flash',
+	 *		 browse_button : 'button_id'
 	 * });
 	 *
 	 * uploader.bind('Init', function(up) {
-	 *     alert('Supports drag/drop: ' + (!!up.features.dragdrop));
+	 *		 alert('Supports drag/drop: ' + (!!up.features.dragdrop));
 	 * });
 	 *
 	 * uploader.bind('FilesAdded', function(up, files) {
-	 *     alert('Selected files: ' + files.length);
+	 *		 alert('Selected files: ' + files.length);
 	 * });
 	 *
 	 * uploader.bind('QueueChanged', function(up) {
-	 *     alert('Queued files: ' + uploader.files.length);
+	 *		 alert('Queued files: ' + uploader.files.length);
 	 * });
 	 *
 	 * uploader.init();
@@ -1894,7 +1894,7 @@
 
 				uploader.bind("UploadFile", function(up, file) {
 					var nativeFile = browserPlusFiles[file.id], reqParams = {},
-					    chunkSize = up.settings.chunk_size, loadProgress, chunkStack = [];
+							chunkSize = up.settings.chunk_size, loadProgress, chunkStack = [];
 
 					function uploadFile(chunk, chunks) {
 						var chunkFile;
@@ -1912,7 +1912,7 @@
 							reqParams.chunks = "" + chunks;
 						}
 
-					    chunkFile = chunkStack.shift();
+							chunkFile = chunkStack.shift();
 
 						browserPlus.Uploader.upload({
 							url : up.settings.url,
@@ -1947,10 +1947,10 @@
 									});
 								}
 
-							    if (chunkStack.length > 0) {
+									if (chunkStack.length > 0) {
 									// More chunks to be uploaded
 									uploadFile(++chunk, chunks);
-							    } else {
+									} else {
 									file.status = plupload.DONE;
 
 									up.trigger('FileUploaded', file, {
@@ -1967,7 +1967,7 @@
 											status : httpStatus
 										});
 									}
-							    }
+									}
 							} else {
 								up.trigger('Error', {
 									code : plupload.GENERIC_ERROR,
@@ -2201,7 +2201,7 @@
 					html += 'classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" '
 				}
 
-				html += 'width="100%" height="100%" style="outline:0">'  +
+				html += 'width="100%" height="100%" style="outline:0">'	+
 					'<param name="movie" value="' + uploader.settings.flash_swf_url + '" />' +
 					'<param name="flashvars" value="id=' + escape(uploader.id) + '" />' +
 					'<param name="wmode" value="transparent" />' +
@@ -2415,12 +2415,12 @@
 					}
 				});
 
-				
+
 				uploader.bind('Flash:ExifData', function(up, obj) {
 					uploader.trigger('ExifData', uploader.getFile(lookup[obj.id]), obj.data);
 				});
 
-				
+
 				uploader.bind('Flash:GpsData', function(up, obj) {
 					uploader.trigger('GpsData', uploader.getFile(lookup[obj.id]), obj.data);
 				});
@@ -2501,14 +2501,14 @@
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-//  1. Redistributions of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//  2. Redistributions in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//  3. Neither the name of Google Inc. nor the names of its contributors may be
-//     used to endorse or promote products derived from this software without
-//     specific prior written permission.
+//	1. Redistributions of source code must retain the above copyright notice,
+//		 this list of conditions and the following disclaimer.
+//	2. Redistributions in binary form must reproduce the above copyright notice,
+//		 this list of conditions and the following disclaimer in the documentation
+//		 and/or other materials provided with the distribution.
+//	3. Neither the name of Google Inc. nor the names of its contributors may be
+//		 used to endorse or promote products derived from this software without
+//		 specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
 // WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -2531,66 +2531,66 @@
 // when that happens.
 
 (function() {
-  // We are already defined. Hooray!
-  if (window.google && google.gears) {
-    return;
-  }
+	// We are already defined. Hooray!
+	if (window.google && google.gears) {
+		return;
+	}
 
-  var factory = null;
+	var factory = null;
 
-  // Firefox
-  if (typeof window.GearsFactory != 'undefined') {
-    factory = new GearsFactory();
-  } else {
-    function safariMethod()
-    {
-      // Safari
-      if ((typeof navigator.mimeTypes != 'undefined') && navigator.mimeTypes["application/x-googlegears"]) {
-        factory = document.createElement("object");
-        factory.style.display = "none";
-        factory.width = 0;
-        factory.height = 0;
-        factory.type = "application/x-googlegears";
-        document.documentElement.appendChild(factory);
-      }
-    }
+	// Firefox
+	if (typeof window.GearsFactory != 'undefined') {
+		factory = new GearsFactory();
+	} else {
+		function safariMethod()
+		{
+			// Safari
+			if ((typeof navigator.mimeTypes != 'undefined') && navigator.mimeTypes["application/x-googlegears"]) {
+				factory = document.createElement("object");
+				factory.style.display = "none";
+				factory.width = 0;
+				factory.height = 0;
+				factory.type = "application/x-googlegears";
+				document.documentElement.appendChild(factory);
+			}
+		}
 
-    if (typeof window.ActiveXObject!='undefined')
-    {
-      // IE
-      try {
-        factory = new ActiveXObject('Gears.Factory');
-        // privateSetGlobalObject is only required and supported on WinCE.
-        if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
-          factory.privateSetGlobalObject(this);
-        }
-      } catch (e) {
-        safariMethod();
-      }
-    } else
-    {
-      safariMethod();
-    }
-  }
+		if (typeof window.ActiveXObject!='undefined')
+		{
+			// IE
+			try {
+				factory = new ActiveXObject('Gears.Factory');
+				// privateSetGlobalObject is only required and supported on WinCE.
+				if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
+					factory.privateSetGlobalObject(this);
+				}
+			} catch (e) {
+				safariMethod();
+			}
+		} else
+		{
+			safariMethod();
+		}
+	}
 
-  // *Do not* define any objects if Gears is not installed. This mimics the
-  // behavior of Gears defining the objects in the future.
-  if (!factory) {
-    return;
-  }
+	// *Do not* define any objects if Gears is not installed. This mimics the
+	// behavior of Gears defining the objects in the future.
+	if (!factory) {
+		return;
+	}
 
-  // Now set up the objects, being careful not to overwrite anything.
-  //
-  // Note: In Internet Explorer for Windows Mobile, you can't add properties to
-  // the window object. However, global objects are automatically added as
-  // properties of the window object in all browsers.
-  if (!window.google) {
-    window.google = {};
-  }
+	// Now set up the objects, being careful not to overwrite anything.
+	//
+	// Note: In Internet Explorer for Windows Mobile, you can't add properties to
+	// the window object. However, global objects are automatically added as
+	// properties of the window object in all browsers.
+	if (!window.google) {
+		window.google = {};
+	}
 
-  if (!google.gears) {
-    google.gears = {factory: factory};
-  }
+	if (!google.gears) {
+		google.gears = {factory: factory};
+	}
 })();
 
 (function(window, document, plupload, undef) {
@@ -2822,7 +2822,7 @@
 					}
 
 					// Setup current chunk size
-					curChunkSize = Math.min(chunkSize, file.size - (chunk  * chunkSize));
+					curChunkSize = Math.min(chunkSize, file.size - (chunk	* chunkSize));
 
 					if (!multipart) {
 						url = plupload.buildUrl(up.settings.url, reqArgs);
@@ -3196,7 +3196,7 @@
 					form.parentNode.removeChild(form);
 				});
 
-				
+
 
 				up.bind('FileUploaded', function(up) {
 					up.refresh(); // just to get the form back on top of browse_button
@@ -3299,7 +3299,7 @@
 					}
 				});
 
-				
+
 				// Completely destroy the runtime
 				uploader.bind("Destroy", function(up) {
 					var name, element, form,
@@ -3746,7 +3746,7 @@
 									position : 'relative'
 								});
 							}
-              
+
 							plupload.extend(dropInputElm.style, {
 								position : 'absolute',
 								display : 'block',
@@ -3932,7 +3932,7 @@
 								}
 							};
 
-	
+
 							// Build multipart request
 							if (up.settings.multipart && features.multipart) {
 
@@ -3945,7 +3945,7 @@
 									xhr.setRequestHeader(name, value);
 								});
 
-								
+
 								// if has FormData support like Chrome 6+, Safari 5+, Firefox 4, use it
 								if (typeof(bin) !== 'string' && !!window.FormData) {
 									formData = new FormData();
@@ -3960,9 +3960,9 @@
 									xhr.send(formData);
 
 									return;
-								}  // if no FormData we can still try to send it directly as last resort (see below)
+								}	// if no FormData we can still try to send it directly as last resort (see below)
 
-								
+
 								if (typeof(bin) === 'string') {
 									// Trying to send the whole thing as binary...
 
@@ -3989,7 +3989,7 @@
 									multipartDeltaSize = multipartBlob.length - bin.length;
 									bin = multipartBlob;
 
-							
+
 									if (xhr.sendAsBinary) { // Gecko
 										xhr.sendAsBinary(bin);
 									} else if (features.canSendBinary) { // WebKit with typed arrays support
@@ -4088,7 +4088,7 @@
 				}
 			});
 
-			
+
 			uploader.bind('Destroy', function(up) {
 				var name, element, container = document.body,
 					elements = {
@@ -4232,7 +4232,7 @@
 			},
 			headers = [], read, idx, marker = undef, length = 0, limit;
 
-		
+
 		read = new BinaryReader();
 		read.init(data);
 
@@ -4344,7 +4344,7 @@
 		};		
 	}
 
-	
+
 	function ExifParser() {
 		// Private ExifParser fields
 		var data, tags, offsets = {}, tagDescs;
@@ -5115,7 +5115,7 @@
 					);
 				});
 
-				
+
 				uploader.bind('Silverlight:MouseEnter', function(up) {
 					var browseButton, hoverClass;
 
@@ -5198,20 +5198,20 @@ function plUploadLoaded(ob) {
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
 	var old_onclick=btnSubmit.onclick;
 	ob.originalClickHandler = old_onclick;
-	btnSubmit.onclick = function(event) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob); };
+	btnSubmit.onclick = function(event,_ob,form,recurse) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob,recurse); };
 
 	// Preview button too
 	var btnSubmit2 = document.getElementById('preview_button');
 	if (btnSubmit2)
 	{
 		var old_onclick2=btnSubmit2.onclick;
-		btnSubmit2.onclick = function(event) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick2; return doSubmit(event,ob); };
+		btnSubmit2.onclick = function(event,_ob,form,recurse) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick2; return doSubmit(event,ob,recurse); };
 	}
 }
 
 // Called by the submit button to start the upload
-function doSubmit(e,ob) {
-	window.just_checking_requirements=false;
+function doSubmit(e,ob,recurse) {
+	window.just_checking_requirements=true;
 
 	ob.submitting=true;
 
@@ -5223,22 +5223,22 @@ function doSubmit(e,ob) {
 		var ret=true;
 		if (ob.settings.required)
 		{
-			setFieldError(document.getElementById(ob.settings.txtName),"{!REQUIRED_NOT_FILLED_IN^#}");
+			set_field_error(document.getElementById(ob.settings.txtName),"{!REQUIRED_NOT_FILLED_IN^#}");
 			ret=false;
-			window.just_checking_requirements=true;
 		}
 		window.form_submitting=btnSubmit.form; // For IE
 		if (typeof ob.originalClickHandler=='undefined')
 		{
 			if ((btnSubmit.form.onsubmit) && (false===btnSubmit.form.onsubmit())) return false;
 			if (!ret) return false;
-			btnSubmit.form.submit();
+			if (!recurse) btnSubmit.form.submit();
 			return true;
 		}
 
-		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form);
+		var ret2=ob.originalClickHandler(e,ob,btnSubmit.form,true);
 		if (ret2 && !ret)
 			window.fauxmodal_alert("{!REQUIRED_NOT_FILLED_IN^#}");
+		if (!recurse && ret && ret2) btnSubmit.form.submit();
 		return ret && ret2;
 	}
 
@@ -5254,7 +5254,7 @@ function doSubmit(e,ob) {
 	{
 		btnSubmit.disabled = true;
 		ob.start();
-		smoothScroll(findPosY(txtFileName,true));
+		smooth_scroll(find_pos_y(txtFileName,true));
 	} else
 	{
 		window.form_submitting=btnSubmit.form; // For IE
@@ -5262,13 +5262,13 @@ function doSubmit(e,ob) {
 		if (typeof ob.originalClickHandler=='undefined')
 		{
 			if ((btnSubmit.form.onsubmit) && (false===btnSubmit.form.onsubmit())) return false;
-			btnSubmit.form.submit();
+			if (!recurse) btnSubmit.form.submit();
 			return true;
 		}
 
-		if (ob.originalClickHandler(e,ob,btnSubmit.form))
+		if (ob.originalClickHandler(e,ob,btnSubmit.form,true))
 		{
-			btnSubmit.form.submit();
+			if (!recurse) btnSubmit.form.submit();
 			return true;
 		}
 	}
@@ -5283,7 +5283,7 @@ function dispatch_for_page_type(page_type,name,file_name,posting_field_name)
 	if (page_type=="attachment")
 	{
 		var current_num=name.replace('file', '');
-		setAttachment(posting_field_name,current_num,file_name);
+		set_attachment(posting_field_name,current_num,file_name);
 		document.getElementById(name).onchange=null;
 	}
 }
@@ -5510,7 +5510,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		filenameField.setAttribute('id','txtFileName_'+name);
 		filenameField.setAttribute('type','text');
 		filenameField.value='';
-		filenameField.className='inline_image';
+		filenameField.className='top_vertical_alignment button_micro';
 		filenameField.name='txtFileName_'+name;
 		filenameField.disabled=true;
 		subdiv.appendChild(filenameField);
@@ -5536,23 +5536,23 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		var colorAt=rep.parentNode,backgroundColor;
 		do
 		{
-			backgroundColor=abstractGetComputedStyle(colorAt,'background-color');
+			backgroundColor=abstract_get_computed_style(colorAt,'background-color');
 			colorAt=colorAt.parentNode;
 		}
 		while ((colorAt) && (backgroundColor) && (backgroundColor=='transparent'));
 		if ((!backgroundColor) || (backgroundColor=='transparent')) backgroundColor='#FFFFFF';
-		var foregroundColor=abstractGetComputedStyle(rep.parentNode,'color');
+		var foregroundColor=abstract_get_computed_style(rep.parentNode,'color');
 		if (!foregroundColor) foregroundColor='#000000';
 		var matches;
-		function decToHex(number)
+		function dec_to_hex(number)
 		{
 			var hexbase="0123456789ABCDEF";
 			return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 		}
 		matches=backgroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
-		if (matches) backgroundColor='#'+decToHex(matches[1])+decToHex(matches[2])+decToHex(matches[3]);
+		if (matches) backgroundColor='#'+dec_to_hex(matches[1])+dec_to_hex(matches[2])+dec_to_hex(matches[3]);
 		matches=foregroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
-		if (matches) foregroundColor='#'+decToHex(matches[1])+decToHex(matches[2])+decToHex(matches[3]);
+		if (matches) foregroundColor='#'+dec_to_hex(matches[1])+dec_to_hex(matches[2])+dec_to_hex(matches[3]);
 
 		var out='';
 		var maxLength=(typeof btnSubmit.form.elements['MAX_FILE_SIZE']=='undefined')?'2000000000':(btnSubmit.form.elements['MAX_FILE_SIZE'].value);
@@ -5575,22 +5575,22 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		out+='	<param name="posting_field_name" value="'+posting_field_name+'" />';
 		out+='	<param name="_btnSubmitID" value="'+_btnSubmitID+'" />';
 		out+='	<param name="types" value="'+escape_html(filter)+'" />';
-		out+='	<param name="fail_message" value="{$REPLACE*, />,\\n,{!JAVA_FTP_fail_message^;}}" />';
-		out+='	<param name="uploaded_message" value="{!JAVA_FTP_uploaded_message^;*}" />';
-		out+='	<param name="reverting_title" value="{!JAVA_FTP_reverting_title^;*}" />';
-		out+='	<param name="valid_types_label" value="{!JAVA_FTP_valid_types_label^;*}" />';
-		out+='	<param name="refused_connection" value="{!JAVA_FTP_refused_connection^;*}" />';
-		out+='	<param name="output_complete" value="{!JAVA_FTP_output_complete^;*}" />';
-		out+='	<param name="transfer_error" value="{!JAVA_FTP_transfer_error^;*}" />';
-		out+='	<param name="file_name_label" value="{!JAVA_FTP_file_name_label^;*}" />';
-		out+='	<param name="browse_label" value="{!JAVA_FTP_browse_label^;*}" />';
-		out+='	<param name="upload_label" value="{!JAVA_FTP_upload_label^;*}" />';
-		out+='	<param name="please_choose_file" value="{!JAVA_FTP_please_choose_file^;*}" />';
-		out+='	<param name="wrong_path" value="{!JAVA_FTP_wrong_path^;*}" />';
-		out+='	<param name="max_size_label" value="{!JAVA_FTP_max_size_label^;*}" />';
-		out+='	<param name="too_large" value="{!JAVA_FTP_too_large^;*}" />';
+		out+='	<param name="fail_message" value="{$REPLACE*, />,\\n,{!JAVA_FTP_fail_message;^}}" />';
+		out+='	<param name="uploaded_message" value="{!JAVA_FTP_uploaded_message*;^}" />';
+		out+='	<param name="reverting_title" value="{!JAVA_FTP_reverting_title*;^}" />';
+		out+='	<param name="valid_types_label" value="{!JAVA_FTP_valid_types_label*;^}" />';
+		out+='	<param name="refused_connection" value="{!JAVA_FTP_refused_connection*;^}" />';
+		out+='	<param name="output_complete" value="{!JAVA_FTP_output_complete*;^}" />';
+		out+='	<param name="transfer_error" value="{!JAVA_FTP_transfer_error*;^}" />';
+		out+='	<param name="file_name_label" value="{!JAVA_FTP_file_name_label*;^}" />';
+		out+='	<param name="browse_label" value="{!JAVA_FTP_browse_label*;^}" />';
+		out+='	<param name="upload_label" value="{!JAVA_FTP_upload_label*;^}" />';
+		out+='	<param name="please_choose_file" value="{!JAVA_FTP_please_choose_file*;^}" />';
+		out+='	<param name="wrong_path" value="{!JAVA_FTP_wrong_path*;^}" />';
+		out+='	<param name="max_size_label" value="{!JAVA_FTP_max_size_label*;^}" />';
+		out+='	<param name="too_large" value="{!JAVA_FTP_too_large*;^}" />';
 		out+='	<comment>';
-		out+='		<embed width="430" height="29" fail_message="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message^;}}" uploaded_message="{!JAVA_FTP_uploaded_message^;*}" reverting_title="{!JAVA_FTP_reverting_title^;*}" valid_types_label="{!JAVA_FTP_valid_types_label^;*}" refused_connection="{!JAVA_FTP_refused_connection^;*}" output_complete="{!JAVA_FTP_output_complete^;*}" transfer_error="{!JAVA_FTP_transfer_error^;*}" file_name_label="{!JAVA_FTP_file_name_label^;*}" browse_label="{!JAVA_FTP_browse_label^;*}" upload_label="{!JAVA_FTP_upload_label^;*}" please_choose_file="{!JAVA_FTP_please_choose_file^;*}" wrong_path="{!JAVA_FTP_wrong_path^;*}" max_size_label="{!JAVA_FTP_max_size_label^;*}" too_large="{!JAVA_FTP_too_large^;*}" _btnSubmitID="'+_btnSubmitID+'" page_type="'+page_type+'" nameID="'+name+'" types="{$CONFIG_OPTION,valid_types}" maxLength="'+maxLength+'" fileNameID="hidFileName_'+name+'" address="{$CONFIG_OPTION*;,java_ftp_host}" username="{$CONFIG_OPTION*;,java_username}" password="{$CONFIG_OPTION*;,java_password}" uploadedFileName="'+base+random+'.dat" backgroundColor="'+backgroundColor+'" foregroundColor="'+foregroundColor+'" scriptable="true" mayscript="true" codebase="{$BASE_URL*;}/data/javaupload/" code="Uploader.class" archive="{$BASE_URL*;}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL*;}/data/javaupload/Net.jar" type="application/x-java-applet" pluginspage="http://java.sun.com/products/plugin/index.html#download">';
+		out+='		<embed width="430" height="29" fail_message="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message;^}}" uploaded_message="{!JAVA_FTP_uploaded_message*;^}" reverting_title="{!JAVA_FTP_reverting_title*;^}" valid_types_label="{!JAVA_FTP_valid_types_label*;^}" refused_connection="{!JAVA_FTP_refused_connection*;^}" output_complete="{!JAVA_FTP_output_complete*;^}" transfer_error="{!JAVA_FTP_transfer_error*;^}" file_name_label="{!JAVA_FTP_file_name_label*;^}" browse_label="{!JAVA_FTP_browse_label*;^}" upload_label="{!JAVA_FTP_upload_label*;^}" please_choose_file="{!JAVA_FTP_please_choose_file*;^}" wrong_path="{!JAVA_FTP_wrong_path*;^}" max_size_label="{!JAVA_FTP_max_size_label*;^}" too_large="{!JAVA_FTP_too_large*;^}" _btnSubmitID="'+_btnSubmitID+'" page_type="'+page_type+'" nameID="'+name+'" types="{$CONFIG_OPTION,valid_types}" maxLength="'+maxLength+'" fileNameID="hidFileName_'+name+'" address="{$CONFIG_OPTION*;,java_ftp_host}" username="{$CONFIG_OPTION*;,java_username}" password="{$CONFIG_OPTION*;,java_password}" uploadedFileName="'+base+random+'.dat" backgroundColor="'+backgroundColor+'" foregroundColor="'+foregroundColor+'" scriptable="true" mayscript="true" codebase="{$BASE_URL*;}/data/javaupload/" code="Uploader.class" archive="{$BASE_URL*;}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL*;}/data/javaupload/Net.jar" type="application/x-java-applet" pluginspage="http://java.sun.com/products/plugin/index.html#download">';
 		out+='		</embed>';
 		out+='	</comment>';
 		out+='</object>';
@@ -5606,7 +5606,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 				old_onclick();
 				return;
 			}
-			window.fauxmodal_alert('{!UPLOAD_FIRST^;}');
+			window.fauxmodal_alert('{!UPLOAD_FIRST;^}');
 			btnSubmit.disabled=true;
 			var timer=window.setInterval(function() {
 				if (rep2.value=='1')
@@ -5622,14 +5622,14 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		return;
 	}
 
-	var ios=navigator.userAgent.match(/iOS|iPhone|iPad|iPod/);
+	var ios=false;//navigator.userAgent.match(/iOS|iPhone|iPad|iPod/);  ios6 fixes this
 
 	if (!ios)
 	{
 		var uploadButton=document.createElement('input');
 		uploadButton.type='button';
 		uploadButton.value='{!BROWSE;}';
-		uploadButton.className='inline_image';
+		uploadButton.className='top_vertical_alignment button_micro';
 		uploadButton.id='uploadButton_'+name;
 		uploadButton.onclick=function() { return false; };
 		subdiv.appendChild(uploadButton,rep);
@@ -5784,11 +5784,14 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	if (clearBtn) clearBtn.style.display='none';
 	var newClearBtn=document.createElement('input');
 	newClearBtn.id='fsClear_'+name;
-	newClearBtn.type='image';
-	newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
+	//newClearBtn.type='image';
+	newClearBtn.type='button';
+	newClearBtn.className='button_micro';
+	//newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
 	newClearBtn.style.marginLeft='8px';
 	newClearBtn.style.verticalAlign='top';
-	newClearBtn.value='{+START,IF,{$VALUE_OPTION,aviary}}{!UPLOAD^;} {+END}{!CLEAR^;}';
+	newClearBtn.alt='{+START,IF,{$VALUE_OPTION,aviary}}{!UPLOAD;^} {+END}{!CLEAR;^}';
+	newClearBtn.value='{!CLEAR;^}';
 	subdiv.appendChild(newClearBtn);
 
 	newClearBtn.onclick=function() {
@@ -5796,20 +5799,15 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		txtFileName.value = "";
 		if ((typeof rep.form.elements[posting_field_name]!='undefined') && (name.indexOf('file')!=-1))
 		{
-			var new_contents=getTextbox(rep.form.elements[posting_field_name]);
+			var new_contents=get_textbox(rep.form.elements[posting_field_name]);
 			new_contents=new_contents.replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_'+name.replace(/^file/,'')+'\\[/(attachment|attachment_safe)\\]'),'');
 			new_contents=new_contents.replace(new RegExp('<input[^<>]* class="ocp_keep_ui_controlled"[^<>]* title="[^<>]*" value="[^"]+"[^<>]* />'),''); // Shell of the above
-			setTextbox(rep.form.elements[posting_field_name],new_contents,new_contents);
+			set_textbox(rep.form.elements[posting_field_name],new_contents,new_contents);
 		}
 		fireFakeChangeFor(name,'');
 		document.getElementById(ob.settings.txtFileDbID).value='-1';
 		return false;
 	};
-}
-
-function initialise_dragdrop_upload(key,key2)
-{
-	// We don't need this for plupload, as we can drag into component
 }
 
 /*
@@ -5920,7 +5918,7 @@ FileProgress.prototype.appear = function () {
 		try {
 			this.fileProgressWrapper.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 100;
 		} catch (e) {
-			// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+			// If it is not set initially, the browser will throw an error.	This will set it if it is not set yet.
 			this.fileProgressWrapper.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=100)";
 		}
 	} else {
@@ -5950,7 +5948,7 @@ FileProgress.prototype.disappear = function () {
 			try {
 				this.fileProgressWrapper.filters.item("DXImageTransform.Microsoft.Alpha").opacity = this.opacity;
 			} catch (e) {
-				// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+				// If it is not set initially, the browser will throw an error.	This will set it if it is not set yet.
 				this.fileProgressWrapper.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + this.opacity + ")";
 			}
 		} else {
@@ -6038,7 +6036,7 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 				filename=url.replace(/^.*\//,'');
 			}
 
-			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash={$USER.;}&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
+			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash=dfdsfdsfsd4&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
 		};
 		edit_link.onclick=function()
 		{
@@ -6057,3 +6055,241 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 	}
 }
 {+END}
+
+
+/* HTML5 UPLOAD */
+
+function initialise_dragdrop_upload(key,key2)
+{
+	var ob=document.getElementById(key);
+	ob.ondragover=function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancelBubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
+	ob.ondrop=function(event) { if (typeof event=='undefined') var event=window.event; html5_upload(event,key2); };
+}
+
+function html5_upload(event,field_name,files)
+{
+	var dt = event.dataTransfer;
+	if (typeof dt=='undefined') return;
+	if (!files) files = dt.files;
+	if (typeof files=='undefined') return;
+	var count = files.length;
+
+	if (count>0)
+	{
+		cancelBubbling(event);
+		if (typeof event.preventDefault!='undefined') event.preventDefault();
+	}
+
+	if (typeof window.extraAttachmentBase=='undefined') window.extraAttachmentBase=1000;
+
+	var boundary = '------multipartformboundary' + (new Date).getTime();
+	var dashdash = '--';
+	var crlf	= '\r\n';
+
+	var valid_types='{$CONFIG_OPTION;,valid_types}'.split(/\s*,\s*/g);
+
+	for (var i = 0; i < count; i++)
+	{
+		var file=files.item(i);
+
+		if ((typeof file.size!='undefined') && (file.size>3000000))
+		{
+			window.fauxmodal_alert('{!FILE_TOO_LARGE_DRAGANDDROP^;}');
+			continue;
+		}
+
+		var request = new XMLHttpRequest();
+		var fileUpload = request.upload;
+
+		// File type check
+		var good_type=false;
+		var file_ext=file.name.substr(file.name.indexOf('.')+1);
+		for (var j=0;j<valid_types.length;j++)
+		{
+			if (valid_types[j]==file_ext)
+			{
+				good_type=true;
+				break;
+			}
+		}
+		if (!good_type)
+		{
+			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL^;}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
+			continue;
+		}
+
+		fileUpload.fileProgress={
+			id: 'progress_'+window.extraAttachmentBase,
+			name: file.name
+		};
+
+		fileUpload.addEventListener("progress", function(e) { if (typeof e=='undefined') var e=window.event; html5_upload_progress(e,field_name); }, false);
+		request.onreadystatechange = build_upload_handler(request,fileUpload.fileProgress,window.extraAttachmentBase,field_name);
+
+		/* Generate headers. */
+		var data='';
+		data+=(dashdash);
+		data+=(boundary);
+		data+=(crlf);
+		data+=('Content-Disposition: form-data; name="file"');
+		if (file.name) {
+			data+=('; filename="' + file.name + '"');
+		}
+		data+=(crlf);
+
+		data+=('Content-Type: application/octet-stream');
+		data+=(crlf);
+		data+=(crlf); 
+
+		/* Append binary data. */
+		var file_data;
+		if (typeof file.getAsBinaryString!='undefined') file_data=file.getAsBinaryString();
+		else if (typeof file.getAsBinary!='undefined') file_data=file.getAsBinary();
+		else if (typeof file.readAsBinaryString!='undefined') file_data=file.readAsBinaryString();
+		else
+		{
+			if (typeof window.FileReader!='undefined') // Chrome sends differently, so we cheat and patch it to behave like Firefox
+			{
+				var file_reader=new FileReader();
+				file_reader.readAsBinaryString(file);
+				var main_event=event;
+				file_reader.onloadend=function(){
+					file_data=file_reader.result;
+					file.getAsBinaryString=function()
+					{
+						return file_data;
+					}
+					html5_upload(main_event,field_name,files);
+				};
+				continue;
+			} else
+			return; // :(. Probably old Chrome
+		}
+		if (typeof request.sendAsBinary=='undefined')
+		{
+			file_data=base64_encode(file_data);
+		}
+		data+=file_data;
+		data+=(crlf);
+
+		/* Write boundary. */
+		data+=(dashdash);
+		data+=(boundary);
+		data+=(crlf);
+
+		if (typeof request.sendAsBinary=='undefined')
+		{
+			request.open("POST", "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true)+"&base64=1");
+		} else
+		{
+			request.open("POST", "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true));
+		}
+		request.overrideMimeType('multipart/form-data; boundary=' + boundary);
+		request.setRequestHeader('content-type','multipart/form-data; boundary=' + boundary);
+		if (typeof request.sendAsBinary!='undefined')
+		{
+			request.sendAsBinary(data);
+		} else
+		{
+			request.send(data);
+		}
+
+		/* HTML hidden fields */
+		var hidfileid=document.createElement('input');
+		hidfileid.type='hidden';
+		hidfileid.name='hidFileID_file'+window.extraAttachmentBase;
+		hidfileid.id=hidfileid.name;
+		hidfileid.value='-1';
+		document.getElementById('container_for_'+field_name).appendChild(hidfileid);
+		var hidfilename=document.createElement('input');
+		hidfilename.type='hidden';
+		hidfilename.name='txtFileName_file'+window.extraAttachmentBase;
+		hidfilename.id=hidfilename.name;
+		hidfilename.value=file.name;
+		document.getElementById('container_for_'+field_name).appendChild(hidfilename);
+
+		var progress = new FileProgress(fileUpload.fileProgress, 'container_for_'+field_name);
+		progress.setProgress(0);
+		progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
+
+		/* Keep tabs of it */
+		window.extraAttachmentBase++;
+	}
+}
+
+function html5_upload_progress(event,field_name)
+{
+	if (event.lengthComputable) {
+		var percentage = Math.round((event.loaded * 100) / event.total);
+		if (percentage < 100) {
+			var progress = new FileProgress(event.target.fileProgress, 'container_for_'+field_name);
+			progress.setProgress(percentage);
+			progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
+		}
+	}
+}
+
+function build_upload_handler(request,fileProgress,attachmentBase,field_name)
+{
+	return function() {
+		switch(request.readyState) {
+			case 4:
+				if (request.responseText=='') {
+					/* We should have got an ID back */
+
+					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
+					progress.setProgress(100);
+					progress.setStatus("{!SWFUPLOAD_FAILED^#}");
+				} else
+				{
+					insertTextbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name+"\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n");
+
+					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
+					progress.setProgress(100);
+					progress.setComplete();
+					progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
+
+					var decodedData = eval('(' + request.responseText + ')');
+					document.getElementById('hidFileID_file'+attachmentBase).value = decodedData['upload_id'];
+				}
+
+				break;
+		}
+	};
+}
+
+function base64_encode(input) // Based on http://www.webtoolkit.info/javascript-base64.html
+{
+	var output = "";
+	var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+	var i = 0;
+
+	//input = _utf8_encode(input);
+
+	var _keyStr="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+	while (i < input.length) {
+
+		chr1 = input.charCodeAt(i++);
+		chr2 = input.charCodeAt(i++);
+		chr3 = input.charCodeAt(i++);
+
+		enc1 = chr1 >> 2;
+		enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+		enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+		enc4 = chr3 & 63;
+
+		if (isNaN(chr2)) {
+			enc3 = enc4 = 64;
+		} else if (isNaN(chr3)) {
+			enc4 = 64;
+		}
+
+		output = output +
+		_keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+		_keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+
+	}
+
+	return output;
+}
