@@ -181,7 +181,7 @@ class Block_main_google_map
 
 						$details['ENTRY_TITLE']=$entry_title;
 
-						$entry_content=do_template('CATALOGUE_googlemap_FIELDMAP_ENTRY_FIELD',$details,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD');
+						$entry_content=do_template('CATALOGUE_googlemap_FIELDMAP_ENTRY_WRAP',$details,NULL,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
 						$details['ENTRY_CONTENT']=$entry_content;
 
 						$details['STAR']='0';
