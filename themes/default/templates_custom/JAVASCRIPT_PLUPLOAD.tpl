@@ -5622,7 +5622,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		return;
 	}
 
-	var ios=navigator.userAgent.match(/iOS|iPhone|iPad|iPod/);
+	var ios=false;//navigator.userAgent.match(/iOS|iPhone|iPad|iPod/);  ios6 fixes this
 
 	if (!ios)
 	{
@@ -5808,11 +5808,6 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		document.getElementById(ob.settings.txtFileDbID).value='-1';
 		return false;
 	};
-}
-
-function initialise_dragdrop_upload(key,key2)
-{
-	// We don't need this for plupload, as we can drag into component
 }
 
 /*
@@ -6041,7 +6036,7 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 				filename=url.replace(/^.*\//,'');
 			}
 
-			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash={$USER.;}&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
+			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash=dfdsfdsfsd4&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
 		};
 		edit_link.onclick=function()
 		{
@@ -6060,3 +6055,241 @@ function implement_aviary(url,filename,field,recalculate_url_on_click)
 	}
 }
 {+END}
+
+
+/* HTML5 UPLOAD */
+
+function initialise_dragdrop_upload(key,key2)
+{
+	var ob=document.getElementById(key);
+	ob.ondragover=function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancel_bubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
+	ob.ondrop=function(event) { if (typeof event=='undefined') var event=window.event; html5_upload(event,key2); };
+}
+
+function html5_upload(event,field_name,files)
+{
+	var dt = event.dataTransfer;
+	if (typeof dt=='undefined') return;
+	if (!files) files = dt.files;
+	if (typeof files=='undefined') return;
+	var count = files.length;
+
+	if (count>0)
+	{
+		cancel_bubbling(event);
+		if (typeof event.preventDefault!='undefined') event.preventDefault();
+	}
+
+	if (typeof window.extraAttachmentBase=='undefined') window.extraAttachmentBase=1000;
+
+	var boundary = '------multipartformboundary' + (new Date).getTime();
+	var dashdash = '--';
+	var crlf	= '\r\n';
+
+	var valid_types='{$CONFIG_OPTION;,valid_types}'.split(/\s*,\s*/g);
+
+	for (var i = 0; i < count; i++)
+	{
+		var file=files.item(i);
+
+		if ((typeof file.size!='undefined') && (file.size>3000000))
+		{
+			window.fauxmodal_alert('{!FILE_TOO_LARGE_DRAGANDDROP;^}');
+			continue;
+		}
+
+		var request = new XMLHttpRequest();
+		var fileUpload = request.upload;
+
+		// File type check
+		var good_type=false;
+		var file_ext=file.name.substr(file.name.indexOf('.')+1);
+		for (var j=0;j<valid_types.length;j++)
+		{
+			if (valid_types[j]==file_ext)
+			{
+				good_type=true;
+				break;
+			}
+		}
+		if (!good_type)
+		{
+			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL;^}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
+			continue;
+		}
+
+		fileUpload.fileProgress={
+			id: 'progress_'+window.extraAttachmentBase,
+			name: file.name
+		};
+
+		fileUpload.addEventListener("progress", function(e) { if (typeof e=='undefined') var e=window.event; html5_upload_progress(e,field_name); }, false);
+		request.onreadystatechange = build_upload_handler(request,fileUpload.fileProgress,window.extraAttachmentBase,field_name);
+
+		/* Generate headers. */
+		var data='';
+		data+=(dashdash);
+		data+=(boundary);
+		data+=(crlf);
+		data+=('Content-Disposition: form-data; name="file"');
+		if (file.name) {
+			data+=('; filename="' + file.name + '"');
+		}
+		data+=(crlf);
+
+		data+=('Content-Type: application/octet-stream');
+		data+=(crlf);
+		data+=(crlf); 
+
+		/* Append binary data. */
+		var file_data;
+		if (typeof file.getAsBinaryString!='undefined') file_data=file.getAsBinaryString();
+		else if (typeof file.getAsBinary!='undefined') file_data=file.getAsBinary();
+		else if (typeof file.readAsBinaryString!='undefined') file_data=file.readAsBinaryString();
+		else
+		{
+			if (typeof window.FileReader!='undefined') // Chrome sends differently, so we cheat and patch it to behave like Firefox
+			{
+				var file_reader=new FileReader();
+				file_reader.readAsBinaryString(file);
+				var main_event=event;
+				file_reader.onloadend=function(){
+					file_data=file_reader.result;
+					file.getAsBinaryString=function()
+					{
+						return file_data;
+					}
+					html5_upload(main_event,field_name,files);
+				};
+				continue;
+			} else
+			return; // :(. Probably old Chrome
+		}
+		if (typeof request.sendAsBinary=='undefined')
+		{
+			file_data=base64_encode(file_data);
+		}
+		data+=file_data;
+		data+=(crlf);
+
+		/* Write boundary. */
+		data+=(dashdash);
+		data+=(boundary);
+		data+=(crlf);
+
+		if (typeof request.sendAsBinary=='undefined')
+		{
+			request.open("POST", "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true)+"&base64=1");
+		} else
+		{
+			request.open("POST", "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true));
+		}
+		request.overrideMimeType('multipart/form-data; boundary=' + boundary);
+		request.setRequestHeader('content-type','multipart/form-data; boundary=' + boundary);
+		if (typeof request.sendAsBinary!='undefined')
+		{
+			request.sendAsBinary(data);
+		} else
+		{
+			request.send(data);
+		}
+
+		/* HTML hidden fields */
+		var hidfileid=document.createElement('input');
+		hidfileid.type='hidden';
+		hidfileid.name='hidFileID_file'+window.extraAttachmentBase;
+		hidfileid.id=hidfileid.name;
+		hidfileid.value='-1';
+		document.getElementById('container_for_'+field_name).appendChild(hidfileid);
+		var hidfilename=document.createElement('input');
+		hidfilename.type='hidden';
+		hidfilename.name='txtFileName_file'+window.extraAttachmentBase;
+		hidfilename.id=hidfilename.name;
+		hidfilename.value=file.name;
+		document.getElementById('container_for_'+field_name).appendChild(hidfilename);
+
+		var progress = new FileProgress(fileUpload.fileProgress, 'container_for_'+field_name);
+		progress.setProgress(0);
+		progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
+
+		/* Keep tabs of it */
+		window.extraAttachmentBase++;
+	}
+}
+
+function html5_upload_progress(event,field_name)
+{
+	if (event.lengthComputable) {
+		var percentage = Math.round((event.loaded * 100) / event.total);
+		if (percentage < 100) {
+			var progress = new FileProgress(event.target.fileProgress, 'container_for_'+field_name);
+			progress.setProgress(percentage);
+			progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
+		}
+	}
+}
+
+function build_upload_handler(request,fileProgress,attachmentBase,field_name)
+{
+	return function() {
+		switch(request.readyState) {
+			case 4:
+				if (request.responseText=='') {
+					/* We should have got an ID back */
+
+					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
+					progress.setProgress(100);
+					progress.setStatus("{!SWFUPLOAD_FAILED^#}");
+				} else
+				{
+					insert_textbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name.replace(/"/g,'\'')+"\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n");
+
+					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
+					progress.setProgress(100);
+					progress.setComplete();
+					progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
+
+					var decodedData = eval('(' + request.responseText + ')');
+					document.getElementById('hidFileID_file'+attachmentBase).value = decodedData['upload_id'];
+				}
+
+				break;
+		}
+	};
+}
+
+function base64_encode(input) // Based on http://www.webtoolkit.info/javascript-base64.html
+{
+	var output = "";
+	var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+	var i = 0;
+
+	//input = _utf8_encode(input);
+
+	var _keyStr="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+	while (i < input.length) {
+
+		chr1 = input.charCodeAt(i++);
+		chr2 = input.charCodeAt(i++);
+		chr3 = input.charCodeAt(i++);
+
+		enc1 = chr1 >> 2;
+		enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+		enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+		enc4 = chr3 & 63;
+
+		if (isNaN(chr2)) {
+			enc3 = enc4 = 64;
+		} else if (isNaN(chr3)) {
+			enc4 = 64;
+		}
+
+		output = output +
+		_keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+		_keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+
+	}
+
+	return output;
+}

@@ -67,7 +67,7 @@ Templates are composed together into a tree structure, and then the tree structu
 
 [title="2"]Placing theme images[/title]
 
-To insert an image into your template, use ocPortal's image parameter: [tt]{$IMG,codename}[/tt]. Replace [tt]codename[/tt] with the image code for the image you want to use. This will turn into the image's path. Be aware that this does not insert any HTML for you, so to use it fully:
+To insert an image into your template, use ocPortal's image parameter: [tt]{$IMG,codename}[/tt]. Replace [tt]codename[/tt] with the image code for the image you want to use. This will turn into the image's URL. Be aware that this does not insert any HTML for you, so to use it fully:
 [code]<img src="{$IMG,page/delete}" alt="Delete This" title="Delete This" />[/code]
 This would insert the image [tt]http://www.mywebsite.com/themes/default/images/page/EN/delete.png[/tt] into your page.
 [staff_note][html]<img src="[/html]{$IMG,page/delete}[html]" alt="Delete This" title="Delete This" />[/html][/staff_note]
@@ -635,7 +635,7 @@ You are very unlikely to ever want to use rows in red, as they are intended for 
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$IMG,bottom}</td>
-		<td>Find a named theme image code's URL (takes the theme image code)</td>
+		<td>Find a named theme image code's URL (takes the theme image code). Note that this gets the image URL, it does not write the HTML out for an image element based upon it (you need to do that yourself).</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$IMG_WIDTH,bottom}</td>

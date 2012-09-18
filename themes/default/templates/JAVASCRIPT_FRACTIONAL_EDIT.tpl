@@ -83,7 +83,6 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 						if ((session_test_ret.responseText!='') && (session_test_ret.responseText!=null)) // If it failed, see if it is due to a non-confirmed session
 						{
 							confirm_session(
-								false,
 								function(result)
 								{
 									if (result)

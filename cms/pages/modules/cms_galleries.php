@@ -1813,10 +1813,10 @@ class Module_cms_galleries_cat extends standard_aed_module
 		} else
 		{
 			$url=STRING_MAGIC_NULL;
-			$watermark_top_left=NULL;
-			$watermark_top_right=NULL;
-			$watermark_bottom_left=NULL;
-			$watermark_bottom_right=NULL;
+			$watermark_top_left=STRING_MAGIC_NULL;
+			$watermark_top_right=STRING_MAGIC_NULL;
+			$watermark_bottom_left=STRING_MAGIC_NULL;
+			$watermark_bottom_right=STRING_MAGIC_NULL;
 		}
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
@@ -1825,7 +1825,7 @@ class Module_cms_galleries_cat extends standard_aed_module
 			$g_owner=$GLOBALS['SITE_DB']->query_value('galleries','g_owner',array('name'=>$name));
 		else
 			$g_owner=$GLOBALS['FORUM_DRIVER']->get_member_from_username($g_owner_name);
-
+		if (fractional_edit()) $g_owner=INTEGER_MAGIC_NULL;
 
 		edit_gallery($id,$name,post_param('fullname'),post_param('description',STRING_MAGIC_NULL),post_param('teaser',STRING_MAGIC_NULL),post_param('notes',STRING_MAGIC_NULL),$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$url,$watermark_top_left[0],$watermark_top_right[0],$watermark_bottom_left[0],$watermark_bottom_right[0],post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$allow_rating,$allow_comments,$g_owner);
 

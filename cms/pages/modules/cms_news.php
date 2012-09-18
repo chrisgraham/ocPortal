@@ -476,6 +476,7 @@ class Module_cms_news extends standard_aed_module
 		if (post_param('main_news_category')!='personal') $main_news_category=post_param_integer('main_news_category',INTEGER_MAGIC_NULL);
 		else warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
+		$news_category=mixed();
 		$news_category=array();
 		if (array_key_exists('news_category',$_POST))
 		{
@@ -484,6 +485,7 @@ class Module_cms_news extends standard_aed_module
 				$news_category[]=intval($val);
 			}
 		}
+		if (fractional_edit()) $news_category=NULL;
 
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);

@@ -403,6 +403,7 @@ class Module_groups
 		foreach ($_secondary_members as $secondary_member)
 		{
 			$m_username=$GLOBALS['FORUM_DRIVER']->get_member_row_field($secondary_member['gm_member_id'],'m_username');
+			if (is_null($m_username)) continue;
 			if ($secondary_member['gm_validated']==1)
 			{
 				$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($secondary_member['gm_member_id'],false,true);
