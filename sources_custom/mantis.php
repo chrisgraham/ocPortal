@@ -36,6 +36,31 @@ function create_tracker_issue($version,$tracker_title,$tracker_message,$tracker_
 		)
 	",NULL,NULL,false,true,NULL,'',false);
 
+	if (is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT version FROM mantis_project_version_table WHERE '.db_string_equal_to('version',$version))))
+	{
+		$GLOBALS['SITE_DB']->_query("
+			INSERT INTO
+			`mantis_project_version_table`
+			(
+			  `project_id`,
+			  `version`,
+			  `description`,
+			  `released`,
+			  `obsolete`,
+			  `date_order`
+			)
+			VALUES
+			(
+				1,
+				'".db_escape_string($version)."',
+				'',
+				0,
+				0,
+				".strval(time())."
+			)
+		",NULL,NULL,true);
+	}
+
 	return $GLOBALS['SITE_DB']->_query("
 		INSERT INTO
 		`mantis_bug_table`

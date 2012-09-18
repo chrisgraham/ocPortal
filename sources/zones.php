@@ -538,7 +538,7 @@ function module_installed($module)
 function _get_module_path($zone,$module)
 {
 	$module_path=zone_black_magic_filterer(($zone=='')?('pages/modules_custom/'.filter_naughty_harsh($module).'.php'):(filter_naughty($zone).'/pages/modules_custom/'.filter_naughty_harsh($module).'.php'),true);
-	if (!is_file(get_file_base().'/'.$module_path))
+	if ((in_safe_mode()) || (!is_file(get_file_base().'/'.$module_path)))
 	{
 		$module_path=zone_black_magic_filterer(($zone=='')?('pages/modules/'.filter_naughty_harsh($module).'.php'):(filter_naughty($zone).'/pages/modules/'.filter_naughty_harsh($module).'.php'),true);
 	}
@@ -961,7 +961,7 @@ function do_block_get_cache_identifier($cache_on,$map)
 function _get_block_path($block)
 {
 	$block_path=get_file_base().'/sources_custom/blocks/'.filter_naughty_harsh($block).'.php';
-	if (!is_file($block_path))
+	if ((in_safe_mode()) || (!is_file($block_path)))
 	{
 		$block_path=get_file_base().'/sources/blocks/'.filter_naughty_harsh($block).'.php';
 		if (!is_file($block_path))

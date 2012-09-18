@@ -1,6 +1,13 @@
 {+START,IF_NON_EMPTY,{$USER_FB_CONNECT,{MEMBER_ID}}}
 	<div class="wide_table_wrap">
-		<table class="wide_table ocf_profile_details autosized_table" summary="{!MAP_TABLE}">
+		<table class="wide_table ocf_profile_fields" summary="{!MAP_TABLE}">
+			{+START,IF,{$NOT,{$MOBILE}}}
+				<colgroup>
+					<col class="ocf_profile_about_field_name_column" />
+					<col class="ocf_profile_about_field_value_column" />
+				</colgroup>
+			{+END}
+
 			<tbody>
 				<tr>
 					<th class="de_th">Facebook:</th>

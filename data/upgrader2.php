@@ -137,12 +137,14 @@ if ($file_offset<count($todo))
 	$next_offset_url='upgrader2.php?';
 	foreach ($_GET as $key=>$val)
 	{
+		if (get_magic_quotes_gpc()) $val=stripslashes($val);
+
 		if ($key!='file_offset')
 			$next_offset_url.=urlencode($key).'='.urlencode($val).'&';
 	}
 	$next_offset_url.='file_offset='.urlencode(strval($file_offset+20));
 }
-up2_do_header($next_offset_url);
+up2_do_header($next_offset_url.'#progress');
 if ($next_offset_url=='')
 {
 	echo '<p><strong>'.htmlentities($_GET['done']).'!</strong></p>';
@@ -156,7 +158,10 @@ else
 echo '<ol>';
 foreach ($todo as $i=>$target_file)
 {
-	echo '<li><input id="file_'.strval($i).'" name="file_'.strval($i).'" type="checkbox" value="1" disabled="disabled"'.(($i<$file_offset)?' checked="checked"':'').' /> <label for="file_'.strval($i).'">'.htmlentities($target_file[0]).'</label></li>';
+	echo '<li>';
+	echo '<input id="file_'.strval($i).'" name="file_'.strval($i).'" type="checkbox" value="1" disabled="disabled"'.(($i<$file_offset)?' checked="checked"':'').' /> <label for="file_'.strval($i).'">'.htmlentities($target_file[0]).'</label>';
+	if ($i==$file_offset) echo '<a name="progress" id="progress"></a>';
+	echo '</li>';
 }
 echo '</ol>';
 echo '<script type="text/javascript">// <![CDATA[

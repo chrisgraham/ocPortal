@@ -51,7 +51,7 @@ function is_swf_upload($fake_prepopulation=false)
 
 		if ((preg_match('#^hidFileID\_#i',$key)!=0) && ($value!='-1'))
 		{
-			//get the incoming uploads appropiate db table row
+			// Get the incoming uploads appropiate database table row
 			if (substr($value,-4)=='.dat') // By .dat name
 			{
 				$filename=post_param(str_replace('hidFileID','hidFileName',$key),'');
@@ -96,6 +96,7 @@ function is_swf_upload($fake_prepopulation=false)
 			}
 		}
 	}
+
 	return $swfupload;
 }
 
@@ -408,7 +409,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 
 			if ($gd)
 			{
-				if (!is_saveable_image($url[0])) $ext='.png'; else $ext='';
+				if ((!is_saveable_image($url[0])) && (get_file_extension($url[0])!='svg')) $ext='.png'; else $ext='';
 				$file=basename($url[0]);
 				$_file=$file;
 				$place=get_custom_file_base().'/'.$thumb_folder.'/'.$_file.$ext;

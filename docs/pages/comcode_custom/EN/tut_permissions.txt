@@ -66,7 +66,7 @@ The process is the same for editing the permissions of any type of category.
 [exp_thumb="Choosing a privilege section to edit permissions within" float="right"]permissions_Choose-specific-access[/exp_thumb]
 {!permissions:DOC_PRIVILEGES}
 
-The privileges are accessed through the "privileges" page. On this page is a list of permission sections; all the privileges are grouped into related sections for ease-of-configuration. Choose a section, and submit the form to see and change the related privileges. The page shows a checkbox-grid of the usergroups and the specific access permissions in your selected section. Set up the privileges as appropriate, and submit the form to change them.
+The privileges are accessed through the "privileges" page. On this page is a list of permission sections; all the privileges are grouped into related sections for ease-of-configuration. Choose a section, and submit the form to see and change the related privileges. The page shows a checkbox-grid of the usergroups and the privileges in your selected section. Set up the privileges as appropriate, and submit the form to change them.
 
 For a good real-world example of how to set up privileges, see the 'Setting bypass-validation access' section of the [page="tut_forums"]organising discussion forums[/page] tutorial.
 

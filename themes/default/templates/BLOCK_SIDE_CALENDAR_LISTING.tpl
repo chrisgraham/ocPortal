@@ -10,6 +10,12 @@
 
 			<div class="wide_table_wrap">
 				<table summary="{!MAP_TABLE}" class="results_table wide_table events_listing_table autosized_table">
+					<colgroup>
+						<col class="event_listing_col_1" />
+						<col class="event_listing_col_2" />
+						<col class="event_listing_col_3" />
+					</colgroup>
+
 					<tbody>
 						{+START,LOOP,EVENTS}
 							<tr class="vevent" itemscope="itemscope" itemtype="http://schema.org/Event">

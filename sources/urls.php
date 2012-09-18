@@ -466,7 +466,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 		if (!$avoid_remap) $USE_REWRITE_PARAMS_CACHE=$use_rewrite_params;
 	} else $use_rewrite_params=$USE_REWRITE_PARAMS_CACHE;
 	$test_rewrite=NULL;
-	$self_page=((!isset($vars['page'])) || ($vars['page']=='_SELF') || ($vars['page']==get_page_name())) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='_top') && (!$KNOWN_AJAX);
+	$self_page=((!isset($vars['page'])) || ((get_zone_name()==$zone_name) && (($vars['page']=='_SELF') || ($vars['page']==get_page_name())))) && ((!isset($vars['type'])) || ($vars['type']==get_param('type',''))) && ($hash!='_top') && (!$KNOWN_AJAX);
 	if ($use_rewrite_params)
 	{
 		if ((!$self_page) || ($WHAT_IS_RUNNING_CACHE==='index'))
@@ -476,7 +476,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	}
 	if ($test_rewrite===NULL)
 	{
-		$url=(($self_page) && (($zone_name=='_SEARCH') || ($zone_name=='_SELF')) && ($WHAT_IS_RUNNING_CACHE!=='index'))?find_script($WHAT_IS_RUNNING_CACHE):($stub.'index.php');
+		$url=(($self_page) && ($WHAT_IS_RUNNING_CACHE!=='index'))?find_script($WHAT_IS_RUNNING_CACHE):($stub.'index.php');
 
 		// Fix sort order
 		if (isset($vars['id']))

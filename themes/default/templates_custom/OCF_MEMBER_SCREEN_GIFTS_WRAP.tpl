@@ -14,12 +14,6 @@
 				<div>
 					{GIFT_EXPLANATION}
 				</div>
-
-				{+START,IF_NON_EMPTY,{GIFT_URL}}
-					<p class="right">
-						<span class="associated_link"><a title="{!OCGIFTS_TITLE}: {!SEE_MORE}" href="{GIFT_URL*}">{!SEE_MORE}</a></span>
-					</p>
-				{+END}
 			</div></div>
 		{+END}
 

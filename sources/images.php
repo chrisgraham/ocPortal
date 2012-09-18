@@ -289,7 +289,7 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
 	{	
 		$new_name=strval($width).'_'.strval($height).'_'.url_to_filename($url);
 
-		if (!is_saveable_image($new_name)) $new_name.='.png';
+		if ((!is_saveable_image($new_name)) && (get_file_extension($new_name)!='svg')) $new_name.='.png';
 
 		$file_thumb=get_custom_file_base().'/uploads/auto_thumbs/'.$new_name;
 
@@ -362,7 +362,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 	$_file=$url_parts[count($url_parts)-1];
 	$dot_pos=strrpos($_file,'.');
 	$ext=substr($_file,$dot_pos+1);
-	if (!is_saveable_image($_file)) $ext='png';
+	if ((!is_saveable_image($_file)) && (get_file_extension($_file)!='svg')) $_file.='.png';
 	$_file=substr($_file,0,$dot_pos);
 	$thumb_path='';
 	do
@@ -496,6 +496,13 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 	if ($using_path)
 	{
 		if (!check_memory_limit_for($from,$exit_on_error)) return false;
+		if ($ext=='svg') // SVG is pass-through
+		{
+			copy($from,$to);
+			fix_permissions($to);
+			sync_file($to);
+			return true;
+		}
 		$from_file=@file_get_contents($from);
 	} else
 	{
@@ -503,11 +510,32 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 		if (!is_null($file_path_stub))
 		{
 			if (!check_memory_limit_for($file_path_stub,$exit_on_error)) return false;
+			if ($ext=='svg') // SVG is pass-through
+			{
+				copy($file_path_stub,$to);
+				fix_permissions($to);
+				sync_file($to);
+				return true;
+			}
 			$from_file=@file_get_contents($file_path_stub);
 		} else
 		{
 			$from_file=http_download_file($from,1024*1024*20/*reasonable limit*/,false);
-			if (is_null($from_file)) $from_file=false;
+			if (is_null($from_file))
+			{
+				$from_file=false;
+			} else
+			{
+				if ($ext=='svg') // SVG is pass-through
+				{
+					$myfile=fopen($to,'wb');
+					fwrite($myfile,$from_file);
+					fclose($myfile);
+					fix_permissions($to);
+					sync_file($to);
+					return true;
+				}
+			}
 		}
 	}
 	if ($from_file===false)

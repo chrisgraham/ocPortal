@@ -991,8 +991,8 @@ function form_input_various_ticks($options,$description,$_tabindex=NULL,$_pretty
  * @param  mixed			A human intelligible name for this input field
  * @param  mixed			A description for this input field
  * @param  ID_TEXT		The name which this input field is for
- * @param  boolean		Whether this is a required input field
- * @param  ?string		The default value for the field (NULL: none) (blank: none)
+ * @param  boolean		Whether this is a required input field. Set this to false if you are using this field on an edit form and already have an uploaded file -- therefore you'd know no new file would mean not to replace the existing file
+ * @param  ?string		The default value for the field (NULL: none) (blank: none). Should only be passed if $required is false, because it creates a delete button for the existing file, implying that leaving it with no file is valid
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  boolean		Whether swf-upload-style is preferred
  * @param  string			File-type filter to limit to, comma-separated file extensions (might not be supported)

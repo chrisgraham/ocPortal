@@ -124,7 +124,7 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 		require_code('ocf_topics_action');
 		$topic_id=ocf_make_topic($forum_id,$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'',$topic_validated,1,0,0,0,NULL,NULL,false,0,NULL,$content_url);
 
-		if (strpos($topic_identifier,'_')!==false)
+		if (strpos($topic_identifier,':')!==false)
 		{
 			// Sync comment_posted ones to also monitor the forum ones; no need for opposite way as comment ones already trigger forum ones
 			$start=0;

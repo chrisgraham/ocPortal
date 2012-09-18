@@ -416,6 +416,23 @@ abbr.dtstart, abbr.dtend {
 	width: 14.29%;
 }
 
+.event_listing_col_1 {
+	width: 32px;
+}
+.global_side_panel .event_listing_col_1 {
+	width: 28px;
+}
+
+.event_listing_col_2 {
+	width: 6em;
+}
+.global_side_panel .event_listing_col_2 {
+	width: 4em;
+}
+
+.event_listing_col_3 {
+}
+
 .events_listing_table th, .events_listing_table td {
 	vertical-align: middle;
 }
@@ -424,7 +441,7 @@ abbr.dtstart, abbr.dtend {
 	padding: 0;
 }
 .global_side_panel .events_listing_table th img {
-	width: 25px;
+	width: 23px;
 }
 
 .event_listing_day {

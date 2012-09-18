@@ -1946,222 +1946,14 @@ function _isValidJVM(checker)
 	);
 }
 
+/* HTML5 UPLOAD */
+
 function initialise_dragdrop_upload(key,key2)
 {
 	var ob=document.getElementById(key);
 	ob.ondragover=function(event) { if (typeof event=='undefined') var event=window.event; if ((typeof event.dataTransfer!='undefined') && (typeof event.dataTransfer.types!='undefined') && (event.dataTransfer.types[0].indexOf('text')==-1)) { cancel_bubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); event.returnValue=false; } }; // NB: don't use dropEffect, prevents drop on Firefox.
-	if ((typeof window.google!='undefined') && (typeof window.google.gears!='undefined') && (typeof window.google.gears.factory!='undefined') && (typeof window.google.gears.factory.create!='undefined') && (typeof window.gears_upload!='undefined'))
-	{
-		/* Google Gears support. */
-		ob.ondrop=function(event) { if (typeof event=='undefined') var event=window.event; gears_upload(event,key2); };
-	} else
-	{
-		ob.ondrop=function(event) { if (typeof event=='undefined') var event=window.event; html5_upload(event,key2); };
-	}
+	ob.ondrop=function(event) { if (typeof event=='undefined') var event=window.event; html5_upload(event,key2); };
 }
-
-/* GOOGLE GEARS UPLOAD */
-/* Based on code from http://www.appelsiini.net/2009/10/drag-and-drop-file-upload-with-google-gears */
-
-(function() {
-	// We are already defined. Hooray!
-	if (typeof window.google!='undefined' && typeof window.google.gears!='undefined') {
-		return;
-	}
-
-	var factory = null;
-
-	// Firefox
-	if (typeof window.windowGearsFactory != 'undefined') {
-		factory = new GearsFactory();
-	} else if ((typeof window.ActiveXObject!='undefined') || ((typeof navigator.mimeTypes != 'undefined') && navigator.mimeTypes["application/x-googlegears"])) {
-		// IE
-		try {
-			if (typeof window.ActiveXObject!='undefined')
-			{
-				factory = new ActiveXObject('Gears.Factory');
-				// privateSetGlobalObject is only required and supported on IE Mobile on
-				// WinCE.
-				if (factory.getBuildInfo().indexOf('ie_mobile') != -1) {
-					factory.privateSetGlobalObject(this);
-				}
-			} else
-			{
-				// Safari
-				if ((typeof navigator.mimeTypes != 'undefined') && navigator.mimeTypes["application/x-googlegears"]) {
-					factory = document.createElement("object");
-					factory.style.display = "none";
-					factory.width = 0;
-					factory.height = 0;
-					factory.type = "application/x-googlegears";
-					document.documentElement.appendChild(factory);
-				}
-			}
-		} catch (e) {}
-	}
-
-	// *Do not* define any objects if Gears is not installed. This mimics the
-	// behavior of Gears defining the objects in the future.
-	if (!factory) {
-		return;
-	}
-
-	// Now set up the objects, being careful not to overwrite anything.
-	//
-	// Note: In Internet Explorer for Windows Mobile, you can't add properties to
-	// the window object. However, global objects are automatically added as
-	// properties of the window object in all browsers.
-	if (!window.google) {
-		google = {};
-	}
-
-	if (!google.gears) {
-		google.gears = {factory: factory};
-	}
-})();
-
-function gears_upload(event,field_name)
-{
-	if (typeof window.extraAttachmentBase=='undefined') window.extraAttachmentBase=1000;
-
-	var desktop = google.gears.factory.create('beta.desktop');
-	var data = desktop.getDragData(event, 'application/x-gears-files');
-	if (typeof data=='undefined') return;
-
-	var boundary = '------multipartformboundary' + (new Date).getTime();
-	var dashdash = '--';
-	var crlf = '\r\n';
-
-	var total=0;
-	var nameBuildup='';
-	for (var i=0;i<data.files.length;i++)
-	{
-		var file = data.files[i];
-
-		if ((typeof file.size!='undefined') && (file.size>3000000))
-		{
-			window.fauxmodal_alert('{!FILE_TOO_LARGE_DRAGANDDROP;^}');
-			continue;
-		}
-
-		// File type check
-		var good_type=false;
-		var valid_types='{$CONFIG_OPTION;,valid_types}'.split(/\s*,\s*/g);
-		var file_ext=file.name.substr(file.name.indexOf('.')+1);
-		for (var j=0;j<valid_types.length;j++)
-		{
-			if (valid_types[j]==file_ext)
-			{
-				good_type=true;
-				break;
-			}
-		}
-		if (!good_type)
-		{
-			window.fauxmodal_alert('{!INVALID_FILE_TYPE_GENERAL;^}'.replace(/\\{1\\}/g,file_ext).replace(/\\{2\\}/g,valid_types.join(', ')));
-			continue;
-		}
-
-		/* Build RFC2388 string. */
-		var builder = google.gears.factory.create('beta.blobbuilder');
-
-		builder.append(dashdash);
-		builder.append(boundary);
-		builder.append(crlf);
-
-		/* Generate headers. */
-		builder.append('Content-Disposition: form-data; name="file"');
-		if (file.name) {
-			builder.append('; filename="' + file.name + '"');
-		}
-		builder.append(crlf);
-
-		builder.append('Content-Type: application/octet-stream');
-		builder.append(crlf);
-		builder.append(crlf); 
-
-		/* Append binary data. */
-		builder.append(file.blob);
-		builder.append(crlf);
-
-		/* Write boundary. */
-		builder.append(dashdash);
-		builder.append(boundary);
-		builder.append(crlf);
-
-		/* HTML hidden fields */
-		var hidfileid=document.createElement('input');
-		hidfileid.type='hidden';
-		hidfileid.name='hidFileID_file'+window.extraAttachmentBase;
-		hidfileid.id=hidfileid.name;
-		hidfileid.value='-1';
-		document.getElementById('container_for_'+field_name).appendChild(hidfileid);
-		var hidfilename=document.createElement('input');
-		hidfilename.type='hidden';
-		hidfilename.name='txtFileName_file'+window.extraAttachmentBase;
-		hidfilename.id=hidfilename.name;
-		hidfilename.value=file.name;
-		document.getElementById('container_for_'+field_name).appendChild(hidfilename);
-
-
-		var fileProgress={
-			id: 'progress_'+window.extraAttachmentBase,
-			name: file.name
-		};
-
-		var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
-		progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
-
-		/* Mark end of the request. */
-		builder.append(dashdash);
-		builder.append(boundary);
-		builder.append(dashdash);
-		builder.append(crlf);
-
-		var request = google.gears.factory.create('beta.httprequest');
-		request.onreadystatechange = build_gears_upload_handler(request,fileProgress,window.extraAttachmentBase,field_name);
-
-		/* Use Gears to submit the data. */
-		request.open("POST", "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true));
-		request.setRequestHeader('content-type','multipart/form-data; boundary=' + boundary);
-		request.send(builder.getAsBlob());
-
-		/* Prevent FireFox opening the dragged file. */
-		if (typeof event.stopPropagation!='undefined') event.stopPropagation();
-
-		/* Keep tabs of it */
-		window.extraAttachmentBase++;
-	}
-}
-
-function build_gears_upload_handler(request,fileProgress,attachmentBase,field_name)
-{
-	return function() {
-		switch(request.readyState) {
-			case 4:
-				if (request.responseText=='') {
-					/* We should have got an ID back */
-
-					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
-					progress.setProgress(100);
-					progress.setStatus("{!SWFUPLOAD_FAILED^#}");
-				} else
-				{
-					insert_textbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name+"\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n");
-
-					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
-					progress.setProgress(100);
-					progress.setComplete();
-					progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
-					document.getElementById('hidFileID_file'+attachmentBase).value = request.responseText;
-				}
-
-				break;
-		}
-	};
-}
-
-/* HTML5 UPLOAD */
 
 function html5_upload(event,field_name,files)
 {
@@ -2221,7 +2013,7 @@ function html5_upload(event,field_name,files)
 		};
 
 		fileUpload.addEventListener("progress", function(e) { if (typeof e=='undefined') var e=window.event; html5_upload_progress(e,field_name); }, false);
-		request.onreadystatechange = build_gears_upload_handler(request,fileUpload.fileProgress,window.extraAttachmentBase,field_name);
+		request.onreadystatechange = build_upload_handler(request,fileUpload.fileProgress,window.extraAttachmentBase,field_name);
 
 		/* Generate headers. */
 		var data='';
@@ -2324,6 +2116,35 @@ function html5_upload_progress(event,field_name)
 			progress.setStatus("{!SWFUPLOAD_UPLOADING^#}");
 		}
 	}
+}
+
+function build_upload_handler(request,fileProgress,attachmentBase,field_name)
+{
+	return function() {
+		switch(request.readyState) {
+			case 4:
+				if (request.responseText=='') {
+					/* We should have got an ID back */
+
+					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
+					progress.setProgress(100);
+					progress.setStatus("{!SWFUPLOAD_FAILED^#}");
+				} else
+				{
+					insert_textbox(document.getElementById(field_name),"[attachment description=\""+fileProgress.name.replace(/"/g,'\'')+"\" thumb=\"1\" type=\"island\"]new_"+attachmentBase+"[/attachment]\n");
+
+					var progress = new FileProgress(fileProgress, 'container_for_'+field_name);
+					progress.setProgress(100);
+					progress.setComplete();
+					progress.setStatus("{!SWFUPLOAD_COMPLETE^#}");
+
+					var decodedData = eval('(' + request.responseText + ')');
+					document.getElementById('hidFileID_file'+attachmentBase).value = decodedData['upload_id'];
+				}
+
+				break;
+		}
+	};
 }
 
 function base64_encode(input) // Based on http://www.webtoolkit.info/javascript-base64.html

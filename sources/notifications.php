@@ -170,7 +170,7 @@ class Notification_dispatcher
 		$this->subject=$subject;
 		$this->message=$message;
 		$this->to_member_ids=$to_member_ids;
-		$this->from_member_id=$from_member_id;
+		$this->from_member_id=is_null($from_member_id)?get_member():$from_member_id;
 		$this->priority=$priority;
 		$this->store_in_staff_messaging_system=$store_in_staff_messaging_system;
 		$this->no_cc=$no_cc;
@@ -341,6 +341,7 @@ function _find_member_statistical_notification_type($to_member_id)
 		arsort($possible_settings);
 		reset($possible_settings);
 		$setting=key($possible_settings);
+		if (is_null($setting)) $setting=A_INSTANT_EMAIL; // Nothing available, so save as an e-mail notification even though it cannot be received
 	}
 	$cache[$to_member_id]=$setting;
 	return $setting;
@@ -491,6 +492,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 function enable_notifications($notification_code,$notification_category,$member_id=NULL,$setting=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
+	if (is_guest($member_id)) return;
 
 	if (is_null($setting))
 	{
@@ -535,6 +537,7 @@ function enable_notifications($notification_code,$notification_category,$member_
 function disable_notifications($notification_code,$notification_category,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
+	if (is_guest($member_id)) return;
 
 	$db=(substr($notification_code,0,4)=='ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 

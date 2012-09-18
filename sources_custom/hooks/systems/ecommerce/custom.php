@@ -26,10 +26,11 @@ function handle_custom_purchase($purchase_id,$details,$product)
 
 	$rows=$GLOBALS['SITE_DB']->query_select('pstore_customs',array('id','c_title','c_cost'),array('id'=>$id));
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+	$row=$rows[0];
 
-	$c_title=get_translated_text($rows[0]['c_title']);
+	$c_title=get_translated_text($row['c_title']);
 
-	$sale_id=$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>$purchase_id,'purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details'=>$c_title,'details2'=>strval($rows[0]['id'])),true);
+	$sale_id=$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>time(),'memberid'=>$purchase_id,'purchasetype'=>'PURCHASE_CUSTOM_PRODUCT','details'=>$c_title,'details2'=>strval($row['id'])),true);
 
 	require_lang('pointstore');
 	require_code('notifications');

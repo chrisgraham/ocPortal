@@ -684,7 +684,7 @@ class database_driver
 	}
 
 	/**
-	 * Get the specified value from the database. This is a first value of the first row returned.
+	 * Get the specified value from the database. This is the specified value of the first row returned. A fatal error is produced if there is no matching row.
 	 *
 	 * @param  string			The table name
 	 * @param  string			The field to select
@@ -692,11 +692,11 @@ class database_driver
 	 * @param  string			Something to tack onto the end
 	 * @return mixed			The first value of the first row returned
 	 */
-	function query_select_value($table,$select,$where_map=NULL,$end='')
+	function query_select_value($table,$selected_value,$where_map=NULL,$end='')
 	{
-		$values=$this->query_select($table,array($select),$where_map,$end,1,NULL);
+		$values=$this->query_select($table,array($selected_value),$where_map,$end,1,NULL);
 		if ($values===NULL) return NULL; // error
-		if (!array_key_exists(0,$values)) fatal_exit(do_lang_tempcode('QUERY_NULL',escape_html($this->_get_where_expand($this->table_prefix.$table,array($select),$where_map,$end)))); // No result found
+		if (!array_key_exists(0,$values)) fatal_exit(do_lang_tempcode('QUERY_NULL',escape_html($this->_get_where_expand($this->table_prefix.$table,array($selected_value),$where_map,$end)))); // No result found
 		return $this->_query_select_value($values);
 	}
 
@@ -715,7 +715,7 @@ class database_driver
 	}
 
 	/**
-	 * Get the specified value from the database, or NULL if it is not there (or if the value itself is NULL). This is good for detection existence of records, or for use if they might may or may not be present.
+	 * Get the specified value from the database, or NULL if there is no matching row (or if the value itself is NULL). This is good for detection existence of records, or for use if they might may or may not be present.
 	 *
 	 * @param  string			The table name
 	 * @param  string			The field to select
@@ -747,7 +747,7 @@ class database_driver
 	}
 
 	/**
-	 * Get the DB results found from the specified parameters.
+	 * Get the database rows found matching the specified parameters. Unlike 'query', it doesn't take raw SQL -- it assembles SQL based the parameters requested.
 	 *
 	 * @param  string			The table name
 	 * @param  ?array			The SELECT map (NULL: all fields)
@@ -837,7 +837,7 @@ class database_driver
 	}
 
 	/**
-	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available (see below).
+	 * This function is a raw query executor. It shouldn't usually be used unless you need to write SQL involving 'OR' statements or other complexities. There are abstracted versions available which you probably want instead (mainly, query_select).
 	 *
 	 * @param  string			The complete SQL query
 	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)

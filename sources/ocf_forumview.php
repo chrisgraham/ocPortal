@@ -552,7 +552,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 					'USERNAME'=>$topic['last_username'],
 					'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($topic['last_member_id'],false,true)
 				));
-			} else $poster=protect_from_escaping(escape_html($topic['last_username']));
+			} else $poster=protect_from_escaping(escape_html(($topic['last_username']=='')?do_lang('SYSTEM'):$topic['last_username']));
 		} else
 		{
 			$poster=do_lang_tempcode('NA');

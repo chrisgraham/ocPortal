@@ -61,7 +61,7 @@ function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_pos
 	if ($max<$max_rows) // If they don't all fit on one page
 	{
 		$parts=new ocp_tempcode();
-		$get_url=get_base_url().((get_zone_name()=='')?'':'/').get_zone_name().'/index.php';
+		$get_url=get_self_url(true);
 		$num_pages=($max==0)?1:intval(ceil(floatval($max_rows)/floatval($max)));
 
 		// How many to show per page

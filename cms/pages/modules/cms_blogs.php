@@ -460,7 +460,7 @@ class Module_cms_blogs extends standard_crud_module
 			$url=STRING_MAGIC_NULL;
 		}
 
-		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // null_ok in case somehow category setting corrupted
+		$owner=$GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','nc_owner',array('id'=>$main_news_category)); // if_there in case somehow category setting corrupted
 		if ((!is_null($owner)) && ($owner!=get_member())) check_privilege('can_submit_to_others_categories',array('news',$main_news_category));
 
 		$schedule=get_input_date('schedule');
@@ -493,7 +493,7 @@ class Module_cms_blogs extends standard_crud_module
 
 		$title=post_param('title',STRING_MAGIC_NULL);
 
-		if (($validated==1) && ($main_news_category!=STRING_MAGIC_NULL) && ($GLOBALS['SITE_DB']->query_select_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
+		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('news','validated',array('id'=>intval($id)))==0)) // Just became validated, syndicate as just added
 		{
 			$is_blog=true;
 

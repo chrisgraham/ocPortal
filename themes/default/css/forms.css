@@ -97,7 +97,12 @@ Curved borders would be cool, but it does not work well with the carefully defin
 */
 
 .form_table_field_name {
-	text-align: right;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		text-align: right;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		text-align: left;
+	{+END}
 	color: {$GET,slightly_seeded_text};
 }
 

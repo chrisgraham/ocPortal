@@ -33,12 +33,12 @@ function init__comcode_renderer()
 }
 
 /**
- * Check the specified URL for potentially malicious JavaScript. If any is found, the hack attack is logged, and an error is returned.
+ * Check the specified URL for potentially malicious JavaScript/etc. If any is found, the hack attack is logged if in an active post request by the submitting member otherwise filtered out.
  *
  * @param  MEMBER			The member who submitted the URL
  * @param  URLPATH		The URL to check
  * @param  boolean		Whether to check as arbitrary admin
- * @return URLPATH		This is the same as the input (if something was wrong, it would never return). It's here so that the function may be used as a filter.
+ * @return URLPATH		Filtered input URL.
  */
 function check_naughty_javascript_url($source_member,$url,$as_admin)
 {
@@ -57,7 +57,9 @@ function check_naughty_javascript_url($source_member,$url,$as_admin)
 				$matched_entity=intval($matches[1][$i]);
 				if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
 				{
-					log_hack_attack_and_exit('ASCII_ENTITY_URL_HACK',$url);
+					if ((count($_POST)!=0) && (get_member()==$source_member))
+						log_hack_attack_and_exit('ASCII_ENTITY_URL_HACK',$url);
+					return '';
 				}
 			}
 		}
@@ -69,16 +71,23 @@ function check_naughty_javascript_url($source_member,$url,$as_admin)
 				$matched_entity=intval(base_convert($matches[1][$i],16,10));
 				if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
 				{
-					log_hack_attack_and_exit('ASCII_ENTITY_URL_HACK',$url);
+					if ((count($_POST)!=0) && (get_member()==$source_member))
+						log_hack_attack_and_exit('ASCII_ENTITY_URL_HACK',$url);
+					return '';
 				}
 			}
 		}
 
 		$bad=(strpos($url2,'script:')!==false) || (strpos($url2,'data:')!==false);
-		if ($bad) log_hack_attack_and_exit('SCRIPT_URL_HACK',$url2);
+		if ($bad)
+		{
+			if ((count($_POST)!=0) && (get_member()==$source_member))
+				log_hack_attack_and_exit('SCRIPT_URL_HACK',$url2);
+			return '';
+		}
 	}
 
-	return $url; // To allow functional embedding
+	return $url;
 }
 
 /**
@@ -1597,7 +1606,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 		case 'thumb':
 			$_embed=$embed->evaluate();
 			$_embed=remove_url_mistakes($_embed);
-			check_naughty_javascript_url($source_member,$_embed,$as_admin);
+			$_embed=check_naughty_javascript_url($source_member,$_embed,$as_admin);
 			if (substr($_embed,0,1)=='/') $_embed=substr($_embed,1);
 			if (url_is_local($_embed))
 			{
@@ -1656,7 +1665,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$given_url=$_embed;
 			$_embed=remove_url_mistakes($_embed);
 			if (substr($_embed,0,1)=='/') $_embed=substr($_embed,1);
-			check_naughty_javascript_url($source_member,$_embed,$as_admin);
+			$_embed=check_naughty_javascript_url($source_member,$_embed,$as_admin);
 			if (url_is_local($_embed))
 			{
 				if ((file_exists(get_file_base().'/'.$_embed)) && (!file_exists(get_custom_file_base().'/'.$_embed)))
@@ -1702,7 +1711,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$given_url=$_embed;
 			$_embed=remove_url_mistakes($_embed);
 			if (substr($_embed,0,1)=='/') $_embed=substr($_embed,1);
-			check_naughty_javascript_url($source_member,$_embed,$as_admin);
+			$_embed=check_naughty_javascript_url($source_member,$_embed,$as_admin);
 			$url_full=url_is_local($_embed)?(get_custom_base_url().'/'.$_embed):$_embed;
 			$temp_tpl=test_url($url_full,'flash',@html_entity_decode($given_url,ENT_QUOTES,get_charset()),$source_member);
 			if (($attributes['param']=='') || (strpos($attributes['param'],'x')===false))
@@ -1771,7 +1780,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$url=fixup_protocolless_urls($url);
 
 			// Integrity and security
-			check_naughty_javascript_url($source_member,$url,$as_admin);
+			$url=check_naughty_javascript_url($source_member,$url,$as_admin);
 
 			// More URL tidying
 			$local=(url_is_local($url)) || (strpos($url,get_domain())!==false);
@@ -1824,7 +1833,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if ((array_key_exists('type',$attributes)) && ($attributes['type']=='url'))
 			{
 				$_embed=$embed->evaluate();
-				check_naughty_javascript_url($source_member,$_embed,$as_admin);
+				$_embed=check_naughty_javascript_url($source_member,$_embed,$as_admin);
 				if (!array_key_exists('title',$attributes)) $attributes['title']=$attributes['param'];
 				if ((is_object($attributes['title'])) || ($attributes['title']!=''))
 				{
@@ -1844,7 +1853,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$__caption=$_caption->evaluate();
 			} else $__caption=$_embed;
 			$url=get_custom_base_url().'/'.$type.'/'.rawurlencode($_embed);
-			check_naughty_javascript_url($source_member,$url,$as_admin);
+			$url=check_naughty_javascript_url($source_member,$url,$as_admin);
 			$temp_tpl=test_url($url,'upload',$_embed,$source_member);
 			$temp_tpl->attach(hyperlink($url,$__caption));
 			break;
@@ -2013,66 +2022,115 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				$base=array_key_exists('base',$attributes)?intval($attributes['base']):2;
 			}
 
-			$list_types=($embed->evaluate()=='')?array():explode(',',$embed->evaluate());
+			$_embed=$embed->evaluate();
+			if (preg_match('#^test\d+$#',$_embed)!=0) // Little bit of inbuilt test code, for a particularly dangerously wrong tree
+			{
+				if ($_embed=='test1')
+				{
+					$test_data=array(
+						2,
+						3,
+						2,
+						3,
+						4,
+						4,
+						4,
+						2,
+						3,
+						2,
+						1,
+						1,
+					);
+				}
+				elseif ($_embed=='test2')
+				{
+					$test_data=array(
+						1,
+						2,
+						3,
+						1,
+						2,
+						3,
+					);
+				} elseif ($_embed=='test3')
+				{
+					$test_data=array(
+						1,
+						4,
+						6,
+						1,
+						4,
+						6,
+					);
+				}
+				else {
+					$test_data=array(
+						6,
+						4,
+						1,
+						6,
+						4,
+						1,
+					);
+				}
+				$STRUCTURE_LIST=array();
+				foreach ($test_data as $t)
+				{
+					$STRUCTURE_LIST[]=array($t,make_string_tempcode(strval($t)),uniqid(''));
+				}
+				$list_types=array();
+			} else
+			{
+				$list_types=($embed->evaluate()=='')?array():explode(',',$_embed);
+			}
 			$list_types+=array('decimal','lower-alpha','lower-roman','upper-alpha','upper-roman','disc');
 
 			$levels_allowed=array_key_exists('levels',$attributes)?intval($attributes['levels']):NULL;
 
 			// Convert the list structure into a tree structure
-			$past_level_stack=array(1);
-			$subtree_stack=array(array());
-			$levels=1;
+			$past_level_stack=array();
+			$subtree_stack=array(array('','','',array())); // Children will be gathered into a 4th entry in the tuple by the end of the stack unravelling process -- our result
+			$actual_past_stack_levels=0;
 			foreach ($STRUCTURE_LIST as $i=>$struct) // Really complex stack of trees algorithm
 			{
 				$level=$struct[0];
 				$title=$struct[1];
+				$_title=$title->evaluate();
 				$uniq_id=$struct[2];
 				$url=array_key_exists($i,$urls_for)?$urls_for[$i]:'';
 
-				if (($level>$levels_allowed) && (!is_null($levels_allowed))) continue;
+				if ((!is_null($levels_allowed)) && ($level>$levels_allowed)) continue;
+
+				// Going back up the tree, destroying levels that must have now closed off
+				while (($actual_past_stack_levels>0) && ($level<=$past_level_stack[$actual_past_stack_levels-1]))
+				{
+					array_pop($past_level_stack); // Value useless now, as the $actual_past_stack_levels is the true indicator and the $past_level_stack is just used as a navigation reference point for stack control
+					$subtree=array_pop($subtree_stack);
+					$actual_past_stack_levels--;
+
+					// Alter the last of the next level on stack so it is actually taking the closed off level as children
+					$subtree_stack[count($subtree_stack)-1][3][]=$subtree;
+				}
 
 				// Going down the tree
-				if ($level>$past_level_stack[$levels-1])
-				{
-					array_push($past_level_stack,$level);
-					array_push($subtree_stack,array(array($uniq_id,$title->evaluate(),$url)));
-					$levels++;
-				} else
-				{
-					// Going back up the tree, destroying levels that must have now closed off
-					while (($level<$past_level_stack[$levels-1]) && ($levels>2/* counting starts at 1, and level 2 is the level at which we cannot jump up a parent level because level 1 is semantically undefined */))
-					{
-						array_pop($past_level_stack);
-						$subtree=array_pop($subtree_stack);
-						$levels--;
-
-						// Alter the last of the next level on stack so it is actually taking the closed off level as children, and changing from a property list to a pair: property list & children
-						$subtree_stack[$levels-1][count($subtree_stack[$levels-1])-1]=array($subtree_stack[$levels-1][count($subtree_stack[$levels-1])-1],$subtree);
-					}
-
-					// Store the title where we are
-					$subtree_stack[$levels-1][]=array($uniq_id,$title->evaluate(),$url);
-				}
+				array_push($past_level_stack,$level);
+				array_push($subtree_stack,array($uniq_id,$_title,$url,array()));
+				$actual_past_stack_levels++;
 			}
 
-			// Clean up... going up until we're with 1
-			while ($levels>1)
+			// Close off all levels still open
+			while ($actual_past_stack_levels>0) // Pretty much the same as the while loop above
 			{
-				array_pop($past_level_stack);
+				array_pop($past_level_stack); // Value useless now, as the $actual_past_stack_levels is the true indicator and the $past_level_stack is just used as a navigation reference point for stack control
 				$subtree=array_pop($subtree_stack);
-				$levels--;
-				$parent_level_start_index=count($subtree_stack[$levels-1])-1;
-				if ($parent_level_start_index<0)
-				{
-					$subtree_stack[$levels-1]=$subtree;
-				} else
-				{
-					$subtree_stack[$levels-1][$parent_level_start_index]=array($subtree_stack[$levels-1][$parent_level_start_index],$subtree);
-				}
+				$actual_past_stack_levels--;
+
+				// Alter the last of the next level on stack so it is actually taking the closed off level as children
+				$subtree_stack[count($subtree_stack)-1][3][]=$subtree;
 			}
 
 			// Now we have the structure to display
-			$levels_t=_do_contents_level($subtree_stack[0],$list_types,$base-1);
+			$levels_t=_do_contents_level($subtree_stack[0][3],$list_types,$base-1);
 
 			$temp_tpl=do_template('COMCODE_CONTENTS',array('_GUID'=>'ca2f5320fa930e2257a2e74e4f98e5a0','LEVELS'=>$levels_t));
 
@@ -2125,15 +2183,12 @@ function _do_contents_level($tree_structure,$list_types,$base,$the_level=0)
 	$lines=new ocp_tempcode();
 	foreach ($tree_structure as $level)
 	{
-		if ((is_array($level)) && (!is_string($level[0]))) // A pair: title array and subtree
+		$_line=do_template('COMCODE_CONTENTS_LINE_FINAL',array('_GUID'=>'a3dd1bf2e16080993cf72edccb7f3608','ID'=>$level[0],'LINE'=>$level[1],'URL'=>$level[2]));
+		if (array_key_exists(3,$level))
 		{
-			$_line=do_template('COMCODE_CONTENTS_LINE_FINAL',array('_GUID'=>'a3dd1bf2e16080993cf72edccb7f3608','URL'=>$level[0][2],'LINE'=>$level[0][1],'ID'=>$level[0][0]));
-			$under=_do_contents_level($level[1],$list_types,$base,$the_level+1);
+			$under=_do_contents_level($level[3],$list_types,$base,$the_level+1);
 			if ($the_level+1==$base-1) return $under; // Top level not assembled because it has top level title, above contents
 			$_line->attach($under);
-		} else
-		{
-			$_line=do_template('COMCODE_CONTENTS_LINE_FINAL',array('_GUID'=>'b675a34f6a950d0e27f163b4b9227b05','URL'=>$level[2],'LINE'=>$level[1],'ID'=>$level[0]));
 		}
 
 		$lines->attach(do_template('COMCODE_CONTENTS_LINE',array('_GUID'=>'f6891cb85d93facbc37f7fd3ef403950','LINE'=>$_line)));
