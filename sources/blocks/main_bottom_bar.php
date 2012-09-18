@@ -47,6 +47,8 @@ class Block_main_bottom_bar
 	 */
 	function run($map)
 	{
+		if (get_forum_type()!='ocf') return new ocp_tempcode();
+
 		require_code('ocf_general');
 		require_code('ocf_groups');
 		require_css('ocf');

@@ -47,6 +47,8 @@ class Block_main_member_bar
 	 */
 	function run($map)
 	{
+		if (get_forum_type()!='ocf') return new ocp_tempcode();
+
 		require_css('ocf');
 		require_lang('ocf');
 
