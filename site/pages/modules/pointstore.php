@@ -97,11 +97,11 @@ class Module_pointstore
 		if (($upgrade_from<3) || (is_null($upgrade_from)))
 		{
 			//  Highlighted names
-				add_config_option('ENABLE_PURCHASE','is_on_highlight_name_buy','tick','return (get_forum_type()!=\'ocf\')?false:\'1\';','POINTSTORE','NAME_HIGHLIGHTING');
-				add_config_option('COST_highlight_name','highlight_name','integer','return (get_forum_type()!=\'ocf\')?false:\'2000\';','POINTSTORE','NAME_HIGHLIGHTING');
+				add_config_option('ENABLE_PURCHASE','is_on_highlight_name_buy','tick','return (get_forum_type()!=\'ocf\')?NULL:\'1\';','POINTSTORE','NAME_HIGHLIGHTING');
+				add_config_option('COST_highlight_name','highlight_name','integer','return (get_forum_type()!=\'ocf\')?NULL:\'2000\';','POINTSTORE','NAME_HIGHLIGHTING');
 			//  Topic pinning
-				add_config_option('ENABLE_PURCHASE','is_on_topic_pin_buy','tick','return (!addon_installed(\'ocf_forum\'))?false:\'1\';','POINTSTORE','TOPIC_PINNING');
-				add_config_option('COST_topic_pin','topic_pin','integer','return (!addon_installed(\'ocf_forum\'))?false:\'180\';','POINTSTORE','TOPIC_PINNING');
+				add_config_option('ENABLE_PURCHASE','is_on_topic_pin_buy','tick','return (!addon_installed(\'ocf_forum\'))?NULL:\'1\';','POINTSTORE','TOPIC_PINNING');
+				add_config_option('COST_topic_pin','topic_pin','integer','return (!addon_installed(\'ocf_forum\'))?NULL:\'180\';','POINTSTORE','TOPIC_PINNING');
 			//  Gambling
 				add_config_option('ENABLE_PURCHASE','is_on_gambling_buy','tick','return \'1\';','POINTSTORE','GAMBLING');
 				add_config_option('MINIMUM_GAMBLE_AMOUNT','minimum_gamble_amount','integer','return \'6\';','POINTSTORE','GAMBLING');
@@ -109,13 +109,13 @@ class Module_pointstore
 				add_config_option('MAXIMUM_GAMBLE_MULTIPLIER','maximum_gamble_multiplier','integer','return \'200\';','POINTSTORE','GAMBLING');
 				add_config_option('AVERAGE_GAMBLE_MULTIPLIER','average_gamble_multiplier','integer','return \'85\';','POINTSTORE','GAMBLING');
 			//  Banners
-				add_config_option('COST_banner_setup','banner_setup','integer','return (!addon_installed(\'banners\'))?false:\'750\';','POINTSTORE','BANNERS');
-				add_config_option('COST_banner_imp','banner_imp','integer','return (!addon_installed(\'banners\'))?false:\'700\';','POINTSTORE','BANNERS');
-				add_config_option('COST_banner_hit','banner_hit','integer','return (!addon_installed(\'banners\'))?false:\'20\';','POINTSTORE','BANNERS');
+				add_config_option('COST_banner_setup','banner_setup','integer','return (!addon_installed(\'banners\'))?NULL:\'750\';','POINTSTORE','BANNERS');
+				add_config_option('COST_banner_imp','banner_imp','integer','return (!addon_installed(\'banners\'))?NULL:\'700\';','POINTSTORE','BANNERS');
+				add_config_option('COST_banner_hit','banner_hit','integer','return (!addon_installed(\'banners\'))?NULL:\'20\';','POINTSTORE','BANNERS');
 			//  POP3
 				add_config_option('COST_quota','quota','integer','return \'2\';','POINTSTORE','POP3');
 			//  Flagrant
-				add_config_option('COST_text','text','integer','return (!addon_installed(\'flagrant\'))?false:\'700\';','POINTSTORE','FLAGRANT_MESSAGE');
+				add_config_option('COST_text','text','integer','return (!addon_installed(\'flagrant\'))?NULL:\'700\';','POINTSTORE','FLAGRANT_MESSAGE');
 			// Custom
 				$GLOBALS['SITE_DB']->create_table('pstore_customs',array(
 					'id'=>'*AUTO',
@@ -160,8 +160,8 @@ class Module_pointstore
 
 			// Pointstore Options
 			//  Banners
-				add_config_option('ENABLE_PURCHASE','is_on_banner_buy','tick','return (!addon_installed(\'banners\'))?false:\'1\';','POINTSTORE','BANNERS');
-				add_config_option('HITS_ALLOCATED','initial_banner_hits','integer','return (!addon_installed(\'banners\'))?false:\'100\';','POINTSTORE','BANNERS');
+				add_config_option('ENABLE_PURCHASE','is_on_banner_buy','tick','return (!addon_installed(\'banners\'))?NULL:\'1\';','POINTSTORE','BANNERS');
+				add_config_option('HITS_ALLOCATED','initial_banner_hits','integer','return (!addon_installed(\'banners\'))?NULL:\'100\';','POINTSTORE','BANNERS');
 			//  POP3
 				add_config_option('ENABLE_PURCHASE','is_on_pop3_buy','tick','return \'0\';','POINTSTORE','POP3',1);
 				add_config_option('QUOTA','initial_quota','integer','return \'200\';','POINTSTORE','POP3',1);
@@ -173,7 +173,7 @@ class Module_pointstore
 				add_config_option('ENABLE_PURCHASE','is_on_forw_buy','tick','return \'0\';','POINTSTORE','FORWARDING',1);
 				add_config_option('FORW_MAINTAIN_URL','forw_url','line','return \'http://\'.get_domain().\':2082/frontend/x/mail/addfwd.html\';','POINTSTORE','FORWARDING',1);
 			//  Flagrant
-				add_config_option('ENABLE_PURCHASE','is_on_flagrant_buy','tick','return (!addon_installed(\'flagrant\'))?false:\'1\';','POINTSTORE','FLAGRANT_MESSAGE');
+				add_config_option('ENABLE_PURCHASE','is_on_flagrant_buy','tick','return (!addon_installed(\'flagrant\'))?NULL:\'1\';','POINTSTORE','FLAGRANT_MESSAGE');
 
 			require_lang('pointstore');
 			add_menu_item_simple('main_community',NULL,'POINT_STORE','_SEARCH:pointstore:type=misc');
