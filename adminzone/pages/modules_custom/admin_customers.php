@@ -56,6 +56,8 @@ class Module_admin_customers
 	{
 		require_lang('customers');
 
+		if (get_forum_type()!='ocf') return;
+
 		/* CPFs */
 		require_code('ocf_members_action');
 		ocf_make_custom_field('ocp_support_credits',1,'','',0,0,0,0,'integer');
