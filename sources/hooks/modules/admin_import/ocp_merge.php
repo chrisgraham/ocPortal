@@ -356,7 +356,8 @@ class Hook_ocp_merge
 		{
 			if (import_check_if_imported('quiz_question',strval($row['id']))) continue;
 
-			$quiz=import_id_remap_get('quiz',strval($row['q_quiz']));
+			$quiz=import_id_remap_get('quiz',strval($row['q_quiz']),true);
+			if (is_null($quiz)) continue;
 
 			$id_new=$GLOBALS['SITE_DB']->query_insert('quiz_questions',array(
 				'q_order'=>array_key_exists('q_order',$row)?$row['q_order']:$i,
@@ -373,7 +374,8 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'quiz_question_answers');
 		foreach ($rows as $i=>$row)
 		{
-			$question=import_id_remap_get('quiz_question',strval($row['q_question']));
+			$question=import_id_remap_get('quiz_question',strval($row['q_question']),true);
+			if (is_null($question)) continue;
 
 			$GLOBALS['SITE_DB']->query_insert('quiz_question_answers',array(
 				'q_order'=>array_key_exists('q_order',$row)?$row['q_order']:$i,
@@ -390,7 +392,8 @@ class Hook_ocp_merge
 		{
 			if (import_check_if_imported('quiz_entry',strval($row['id']))) continue;
 
-			$quiz=import_id_remap_get('quiz',strval($row['q_quiz']));
+			$quiz=import_id_remap_get('quiz',strval($row['q_quiz']),true);
+			if (is_null($quiz)) continue;
 			$member=$on_same_msn?$row['q_member']:import_id_remap_get('member',$row['q_member'],true);
 			if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
@@ -407,7 +410,8 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'quiz_entry_answer');
 		foreach ($rows as $row)
 		{
-			$question=import_id_remap_get('quiz_question',strval($row['q_question']));
+			$question=import_id_remap_get('quiz_question',strval($row['q_question']),true);
+			if (is_null($question)) continue;
 			$entry=import_id_remap_get('quiz_entry',strval($row['q_entry']));
 
 			$GLOBALS['SITE_DB']->query_insert('quiz_entry_answer',array('q_entry'=>$entry,'q_question'=>$question,'q_answer'=>$row['q_answer']));
@@ -416,8 +420,10 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'quiz_winner');
 		foreach ($rows as $row)
 		{
-			$quiz=import_id_remap_get('quiz',strval($row['q_quiz']));
-			$entry=import_id_remap_get('quiz_entry',strval($row['q_entry']));
+			$quiz=import_id_remap_get('quiz',strval($row['q_quiz']),true);
+			if (is_null($quiz)) continue;
+			$entry=import_id_remap_get('quiz_entry',strval($row['q_entry']),true);
+			if (is_null($entry)) continue;
 
 			$GLOBALS['SITE_DB']->query_insert('quiz_winner',array('q_quiz'=>$quiz,'q_entry'=>$entry,'q_winner_level'=>$row['q_winner_level']));
 		}
@@ -456,7 +462,8 @@ class Hook_ocp_merge
 			{
 				if (import_check_if_imported('usergroup_sub',strval($row['id']))) continue;
 
-				$group_id=$on_same_msn?$row['s_group_id']:import_id_remap_get('group',strval($row['s_group_id']));
+				$group_id=$on_same_msn?$row['s_group_id']:import_id_remap_get('group',strval($row['s_group_id']),true);
+				if (is_null($group_id)) continue;
 
 				$id_new=$GLOBALS['SITE_DB']->query_insert('f_usergroup_subs',array(
 					's_title'=>insert_lang($this->get_lang_string($db,$row['s_title']),2),
@@ -932,7 +939,8 @@ class Hook_ocp_merge
 		foreach ($rows as $row)
 		{
 			$newsletter_id=$row['newsletter_id'];
-			if (!$old_format) $newsletter_id=import_id_remap_get('newsletter',$newsletter_id);
+			if (!$old_format) $newsletter_id=import_id_remap_get('newsletter',$newsletter_id,true);
+			if (is_null($newsletter_id)) continue;
 			$GLOBALS['SITE_DB']->query_insert('newsletter_subscribe',array('newsletter_id'=>$newsletter_id,'email'=>$row['email'],'the_level'=>$row['the_level']),false,true);
 		}
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'newsletter_archive');
@@ -1263,7 +1271,8 @@ class Hook_ocp_merge
 		{
 			$member=$on_same_msn?$row['i_member_id']:import_id_remap_get('member',$row['i_member_id'],true);
 			if (is_null($member)) continue;
-			$type=import_id_remap_get('event_type',strval($row['t_type']));
+			$type=import_id_remap_get('event_type',strval($row['t_type']),true);
+			if (is_null($type)) continue;
 			$GLOBALS['SITE_DB']->query_delete('calendar_interests',array('i_member_id'=>$member,'t_type'=>$type),'',1);
 			$GLOBALS['SITE_DB']->query_insert('calendar_interests',array('i_member_id'=>$member,'t_type'=>$type));
 		}
@@ -1274,7 +1283,8 @@ class Hook_ocp_merge
 
 			$submitter=$on_same_msn?$row['e_submitter']:import_id_remap_get('member',strval($row['e_submitter']),true);
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			$type=import_id_remap_get('event_type',strval($row['e_type']));
+			$type=import_id_remap_get('event_type',strval($row['e_type']),true);
+			if (is_null($type)) continue;
 
 			if (!array_key_exists('validated',$row)) $row['validated']=1;
 			if (!array_key_exists('notes',$row)) $row['notes']='';
@@ -1289,7 +1299,8 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'calendar_reminders');
 		foreach ($rows as $row)
 		{
-			$event=import_id_remap_get('event',strval($row['e_id']));
+			$event=import_id_remap_get('event',strval($row['e_id']),true);
+			if (is_null($event)) continue;
 			$member=$on_same_msn?$row['n_member_id']:import_id_remap_get('member',strval($row['n_member_id']),true);
 			if (is_null($member)) continue;
 			$GLOBALS['SITE_DB']->query_insert('calendar_reminders',array('e_id'=>$event,'n_member_id'=>$member,'n_seconds_before'=>$row['n_seconds_before']));
@@ -1648,7 +1659,8 @@ class Hook_ocp_merge
 
 			$row['member_id']=$on_same_msn?$row['member_id']:import_id_remap_get('member',$row['member_id'],true);
 			if (is_null($row['member_id'])) $row['member_id']=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			if (!is_string($row['content_id'])) $row['content_id']=import_id_remap_get($content_types[$row['a_type_id']],$row['content_id']);
+			if (!is_string($row['content_id'])) $row['content_id']=import_id_remap_get($content_types[$row['a_type_id']],$row['content_id'],true);
+			if (is_null($row['content_id'])) continue;
 			$row['a_type_id']=import_id_remap_get('award_type',strval($row['a_type_id']));
 			$GLOBALS['SITE_DB']->query_insert('award_archive',$row);
 
@@ -1864,7 +1876,8 @@ class Hook_ocp_merge
 		{
 			if (!is_null($row['g_promotion_target']))
 			{
-				$row_promotion_target=import_id_remap_get('group',strval($row['g_promotion_target']));
+				$row_promotion_target=import_id_remap_get('group',strval($row['g_promotion_target']),true);
+				if (is_null($row_promotion_target)) continue;
 				$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_promotion_target'=>$row_promotion_target),array('id'=>import_id_remap_get('group',strval($row['id']))),'',1);
 			}
 		}
@@ -1919,7 +1932,8 @@ class Hook_ocp_merge
 						if (is_null($val)) $val='';
 						if (substr($key,0,6)=='field_')
 						{
-							$cpf_id=import_id_remap_get('cpf',substr($key,6));
+							$cpf_id=import_id_remap_get('cpf',substr($key,6),true);
+							if (is_null($cpf_id)) continue;
 							$cpf_type=$cpf_types[$cpf_id];
 							if (($cpf_type=='short_trans') || ($cpf_type=='long_trans'))
 								$val=strval(insert_lang($this->get_lang_string($db,intval($val)),3));
@@ -1944,8 +1958,10 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_group_members');
 		foreach ($rows as $row)
 		{
-			$row['gm_group_id']=import_id_remap_get('group',strval($row['gm_group_id']));
-			$row['gm_member_id']=import_id_remap_get('member',strval($row['gm_member_id']));
+			$row['gm_group_id']=import_id_remap_get('group',strval($row['gm_group_id']),true);
+			if (is_null($row['gm_group_id'])) continue;
+			$row['gm_member_id']=import_id_remap_get('member',strval($row['gm_member_id']),true);
+			if (is_null($row['gm_member_id'])) continue;
 			$GLOBALS['SITE_DB']->query_insert('f_group_members',$row,false,true);
 		}
 
@@ -1953,7 +1969,8 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_member_known_login_ips');
 		foreach ($rows as $row)
 		{
-			$row['i_member_id']=import_id_remap_get('member',strval($row['i_member_id']));
+			$row['i_member_id']=import_id_remap_get('member',strval($row['i_member_id']),true);
+			if (is_null($row['i_member_id'])) continue;
 			$GLOBALS['SITE_DB']->query_insert('f_member_known_login_ips',$row);
 		}
 	}
@@ -1985,7 +2002,9 @@ class Hook_ocp_merge
 					foreach (explode(',',$only_group) as $_only_group)
 					{
 						if ($only_group2!='') $only_group2.=',';
-						$only_group2.=strval(import_id_remap_get('group',$_only_group));
+						$group=import_id_remap_get('group',$_only_group,true);
+						if (is_null($group)) continue;
+						$only_group2.=strval($group);
 					}
 					$only_group2=$only_group;
 				}
@@ -2067,7 +2086,8 @@ class Hook_ocp_merge
 		foreach ($rows as $row)
 		{
 			if (is_null($row['f_parent_forum'])) continue;
-			$parent_id=import_id_remap_get('forum',strval($row['f_parent_forum']));
+			$parent_id=import_id_remap_get('forum',strval($row['f_parent_forum']),true);
+			if (is_null($parent_id)) $parent_id=db_get_first_id();
 			$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_parent_forum'=>$parent_id),array('id'=>import_id_remap_get('forum',strval($row['id']))),'',1);
 		}
 
@@ -2075,14 +2095,16 @@ class Hook_ocp_merge
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_forum_intro_ip');
 		foreach ($rows as $row)
 		{
-			$row['i_forum_id']=import_id_remap_get('forum',strval($row['i_forum_id']));
+			$row['i_forum_id']=import_id_remap_get('forum',strval($row['i_forum_id']),true);
+			if (is_null($row['i_forum_id'])) continue;
 			$GLOBALS['FORUM_DB']->query_delete('f_forum_intro_ip',$row,'',1);
 			$GLOBALS['FORUM_DB']->query_insert('f_forum_intro_ip',$row);
 		}
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_forum_intro_member');
 		foreach ($rows as $row)
 		{
-			$row['i_forum_id']=import_id_remap_get('forum',strval($row['i_forum_id']));
+			$row['i_forum_id']=import_id_remap_get('forum',strval($row['i_forum_id']),true);
+			if (is_null($row['i_forum_id'])) continue;
 			$GLOBALS['FORUM_DB']->query_delete('f_forum_intro_member',$row,'',1);
 			$GLOBALS['FORUM_DB']->query_insert('f_forum_intro_member',$row);
 		}
@@ -2239,7 +2261,8 @@ class Hook_ocp_merge
 		{
 			if (import_check_if_imported('poll',strval($row['id']))) continue;
 
-			$topic_id=import_id_remap_get('topic',strval($row['tid']));
+			$topic_id=import_id_remap_get('topic',strval($row['tid']),true);
+			if (is_null($topic_id)) continue;
 
 			$rows2=$db->query('SELECT * FROM '.$table_prefix.'f_poll_votes WHERE pv_poll_id='.strval($row['id']));
 			foreach ($rows2 as $i=>$row2)
@@ -2354,7 +2377,7 @@ class Hook_ocp_merge
 			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_multi_moderations m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON m.mm_name=t.id','m.id',array('text_original'=>$name));
 			if (is_null($test))
 			{
-				$move_to=is_null($row['mm_move_to'])?NULL:import_id_remap_get('forum',strval($row['mm_move_to']));
+				$move_to=is_null($row['mm_move_to'])?NULL:import_id_remap_get('forum',strval($row['mm_move_to']),true);
 				$multi_code=$this->convert_multi_code($row['mm_forum_multi_code']);
 				ocf_make_multi_moderation($name,$row['mm_post_text'],$move_to,$row['mm_pin_state'],array_key_exists('mm_sink_state',$row)?$row['mm_sink_state']:NULL,$row['mm_open_state'],$multi_code,array_key_exists('mm_title_suffix',$row)?$row['mm_title_suffix']:'');
 			}
