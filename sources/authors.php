@@ -37,6 +37,7 @@ function render_author_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'e597aef1818f5610402d6e5f478735a1',
+		'ID'=>$row['author'],
 		'TITLE'=>$title,
 		'SUMMARY'=>get_translated_text($row['description']),
 		'URL'=>$url,

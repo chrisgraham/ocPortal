@@ -50,6 +50,7 @@ function render_banner_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'aaea5f7f64297ab46aa3b3182fb57c37',
+		'ID'=>$row['name'],
 		'TITLE'=>$title,
 		'SUMMARY'=>$summary,
 		'URL'=>$url,
@@ -82,6 +83,7 @@ function render_banner_type_box($row,$zone='_SEARCH',$give_context=true,$guid=''
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'ba1f8d9da6b65415483d0d235f29c3d4',
+		'ID'=>$row['id'],
 		'TITLE'=>$title,
 		'SUMMARY'=>'',
 		'ENTRY_DETAILS'=>$entry_details,

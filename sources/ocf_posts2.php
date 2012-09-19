@@ -239,6 +239,7 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 
 		return do_template('SIMPLE_PREVIEW_BOX',array(
 			'_GUID'=>($guid!='')?$guid:'84ac17a5855ceed1c47c5d3ef6cf4f3d',
+			'ID'=>strval($row['id']),
 			'TITLE'=>$title,
 			'SUMMARY'=>$tpl,
 		));

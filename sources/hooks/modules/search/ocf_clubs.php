@@ -124,6 +124,7 @@ class Hook_search_ocf_clubs
 
 		return do_template('SIMPLE_PREVIEW_BOX',array(
 			'_GUID'=>'2f7814a2e1f868d2ac73fba69f3aeee1',
+			'ID'=>strval($row['id']),
 			'TITLE'=>$title,
 			'SUMMARY'=>$summary,
 			'URL'=>$url,

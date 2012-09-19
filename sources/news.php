@@ -147,6 +147,7 @@ function render_news_category_box($row,$zone='_SEARCH',$give_context=true,$attac
 	// Render
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'49e9c7022f9171fdff02d84ee968bb52',
+		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
 		'_REP_IMAGE'=>$_rep_image,
 		'REP_IMAGE'=>$rep_image,

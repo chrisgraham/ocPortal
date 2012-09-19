@@ -54,6 +54,7 @@ function render_topic_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'85727b71bebcab45977363c8cb0a3ee6',
+		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
 		'SUMMARY'=>$row['t_description'],
 		'URL'=>$url,

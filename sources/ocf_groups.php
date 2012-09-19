@@ -61,6 +61,7 @@ function render_group_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'efeac1c8465974edd27bb0d805c4fbe0',
+		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
 		'SUMMARY'=>$summary,
 		'ENTRY_DETAILS'=>$entry_details,

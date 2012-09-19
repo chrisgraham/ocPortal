@@ -57,6 +57,7 @@ function render_chat_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'dacd41bad78b545f179582f83209c070',
+		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
 		'SUMMARY'=>'',
 		'URL'=>$url,

@@ -189,6 +189,7 @@ function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$i
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'4074a20248289c28cde8201272627129',
+		'ID'=>strval($row['id']),
 		'BREADCRUMBS'=>$breadcrumbs,
 		'TITLE'=>$title,
 		'SUMMARY'=>$summary,

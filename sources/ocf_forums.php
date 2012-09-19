@@ -76,6 +76,7 @@ function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'f61cd0ea4c2ac496da958a36f118495d',
+		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
 		'SUMMARY'=>$summary,
 		'URL'=>$url,

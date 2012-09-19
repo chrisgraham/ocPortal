@@ -78,6 +78,7 @@ function render_calendar_type_box($row,$zone='_SEARCH',$give_context=true,$guid=
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'0eaa10d9fab32599ff095e1121d41c49',
+		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
 		'SUMMARY'=>'',
 		'ENTRY_DETAILS'=>$entry_details,

@@ -142,7 +142,8 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 
 	// Render
 	return do_template('SIMPLE_PREVIEW_BOX',array(
-		'_GUID'=>($guid!='')?$guid:'e3fbbe807f75c0aa24626e06082ae731',
+		'_GUID'=>($guid!='')?$guid:('e3fbbe807f75c0aa24626e06082ae731_'.$row['c_name']),
+		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
 		'_REP_IMAGE'=>$_rep_image,
 		'REP_IMAGE'=>$rep_image,
@@ -186,7 +187,8 @@ function render_catalogue_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	$entry_details=do_lang_tempcode(($row['c_is_tree']==1)?'CATEGORY_SUBORDINATE':'CATEGORY_SUBORDINATE_2',escape_html(integer_format($num_entries)),escape_html(integer_format($num_children)));
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
-		'_GUID'=>($guid!='')?$guid:'8d7eaf6bb3170a92fd6a4876462e6f2e',
+		'_GUID'=>($guid!='')?$guid:('8d7eaf6bb3170a92fd6a4876462e6f2e_'.$row['c_name']),
+		'ID'=>$row['c_name'],
 		'TITLE'=>$title,
 		'SUMMARY'=>$summary,
 		'ENTRY_DETAILS'=>$entry_details,
