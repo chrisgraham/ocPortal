@@ -25,6 +25,8 @@ $manual_changes['maybe_delete']=array();
 $manual_changes['css_diff']=array();
 $manual_changes['install_diff']=array();
 
+disable_php_memory_limit();
+
 if ($type=='auto_probe')
 {
 	$probe_dir=post_param('probe_dir');

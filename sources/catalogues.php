@@ -1101,7 +1101,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 				}
 				break;
 			case 'short_text':
-				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,$only_field_ids);
+				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,'short',$only_field_ids);
 				$fields[$i]['effective_value']=$fields[$i]['effective_value_pure'];
 				if (is_null($fields[$i]['effective_value']))
 				{

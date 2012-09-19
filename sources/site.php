@@ -26,9 +26,6 @@ function init__site()
 	global $REQUEST_PAGE_NEST_LEVEL;
 	$REQUEST_PAGE_NEST_LEVEL=0;
 
-	global $REDIRECT_CACHE;
-	$REDIRECT_CACHE=array();
-
 	global $REDIRECTED_TO_CACHE;
 	$REDIRECTED_TO_CACHE=NULL;
 
@@ -64,9 +61,92 @@ function init__site()
 	global $ATTACH_MESSAGE_CALLED;
 	$ATTACH_MESSAGE_CALLED=0;
 
+	$real_zone=load_zone_data();
+
+	// SEO redirection
+	require_code('urls');
+	if (can_try_mod_rewrite())
+	{
+		$ruri=ocp_srv('REQUEST_URI');
+
+		$old_style=get_option('htm_short_urls')!='1';
+
+		if ((!headers_sent()) && (running_script('index')) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
+		{
+			set_http_status_code('301');
+			header('HTTP/1.0 301 Moved Permanently'); // Direct ascending for short URLs - not possible, so should give 404's to avoid indexing
+			header('Location: '.get_self_url(true));
+			exit();
+		}
+	}
+
+	// Search engine having session in URL, we don't like this
+	if ((get_bot_type()!==NULL) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
+	{
+		set_http_status_code('301');
+		header('Location: '.get_self_url(true,false,array('keep_session'=>NULL,'keep_print'=>NULL)));
+		exit();
+	}
+
+	// Detect bad access domain
+	global $SITE_INFO;
+	$access_host=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
+	if (($access_host!='') && (isset($_SERVER['HTTP_HOST'])))
+	{
+		$parsed_base_url=parse_url(get_base_url());
+		if ((array_key_exists('host',$parsed_base_url)) && (strtolower($parsed_base_url['host'])!=strtolower($access_host)))
+		{
+			if (!array_key_exists('ZONE_MAPPING_'.get_zone_name(),$SITE_INFO))
+			{
+				if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+				{
+					attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
+				}
+
+				header('Location: '.str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()));
+				exit();
+			}
+		}
+	}
+
+	// The most important security check
+	global $SESSION_CONFIRMED_CACHE;
+	get_member(); // Make sure we've loaded our backdoor if installed
+	require_code('permissions');
+	global $ZONE;
+	if ($ZONE['zone_require_session']==1) header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
+	if (($ZONE['zone_name']!='') && (!is_httpauth_login()) && ((get_session_id()==-1) || ($SESSION_CONFIRMED_CACHE==0)) && ($ZONE['zone_require_session']==1) && (get_page_name()!='login'))
+	{
+		access_denied((($real_zone=='data') || (has_zone_access(get_member(),$ZONE['zone_name'])))?'ZONE_ACCESS_SESSION':'ZONE_ACCESS',$ZONE['zone_name'],true);
+	} else
+	{
+		if (($real_zone=='data') || (has_zone_access(get_member(),$ZONE['zone_name'])))
+		{
+			if ((running_script('index')) && /*Actually we will allow Guest denying to the front page even though that is a bit weird ((get_page_name()!=$ZONE['zone_default_page']) || ($real_zone!='')) && */(!has_page_access(get_member(),get_page_name(),$ZONE['zone_name'],true)))
+			{
+				access_denied('PAGE_ACCESS');
+			}
+		}
+		else
+		{
+			if (get_page_name()!='login') access_denied('ZONE_ACCESS',$ZONE['zone_name'],true);
+		}
+	}
+}
+
+/**
+ * Load up details for the current zone.
+ *
+ * @return  ID_TEXT		The "real" zone name (not actually the zone name, but the zone name wants details to load for).
+ */
+function load_zone_data()
+{
+	global $REDIRECT_CACHE;
+	$REDIRECT_CACHE=array();
+
 	global $ZONE,$RELATIVE_PATH;
-	$zone=get_zone_name();
-	$real_zone=(($RELATIVE_PATH=='_tests') || ($RELATIVE_PATH=='data') || ($RELATIVE_PATH=='data_custom'))?get_param('zone',''):$zone;
+	$zone_name=get_zone_name();
+	$real_zone=(($RELATIVE_PATH=='_tests') || ($RELATIVE_PATH=='data') || ($RELATIVE_PATH=='data_custom'))?get_param('zone',''):$zone_name;
 	/** A map of the current zone that is running.
 	 * @global array $ZONE
 	 */
@@ -120,74 +200,7 @@ function init__site()
 		}
 	}
 
-	// SEO redirection
-	require_code('urls');
-	if (can_try_mod_rewrite())
-	{
-		$ruri=ocp_srv('REQUEST_URI');
-
-		$old_style=get_option('htm_short_urls')!='1';
-
-		if ((!headers_sent()) && (running_script('index')) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && ((strpos($ruri,'/pg/')===false) || (!$old_style)) && ((strpos($ruri,'.htm')===false) || ($old_style)))
-		{
-			set_http_status_code('301');
-			header('HTTP/1.0 301 Moved Permanently'); // Direct ascending for short URLs - not possible, so should give 404's to avoid indexing
-			header('Location: '.get_self_url(true));
-			exit();
-		}
-	}
-
-	// Search engine having session in URL, we don't like this
-	if ((get_bot_type()!==NULL) && (isset($_SERVER['HTTP_HOST'])) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
-	{
-		set_http_status_code('301');
-		header('Location: '.get_self_url(true,false,array('keep_session'=>NULL,'keep_print'=>NULL)));
-		exit();
-	}
-
-	// Detect bad access domain
-	global $SITE_INFO;
-	$access_host=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
-	if (($access_host!='') && (isset($_SERVER['HTTP_HOST'])))
-	{
-		$parsed_base_url=parse_url(get_base_url());
-		if ((array_key_exists('host',$parsed_base_url)) && (strtolower($parsed_base_url['host'])!=strtolower($access_host)))
-		{
-			if (!array_key_exists('ZONE_MAPPING_'.get_zone_name(),$SITE_INFO))
-			{
-				if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
-				{
-					attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
-				}
-
-				header('Location: '.str_replace($access_host,$parsed_base_url['host'],get_self_url_easy()));
-				exit();
-			}
-		}
-	}
-
-	// The most important security check
-	global $SESSION_CONFIRMED_CACHE;
-	get_member(); // Make sure we've loaded our backdoor if installed
-	require_code('permissions');
-	if ($ZONE['zone_require_session']==1) header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
-	if (($ZONE['zone_name']!='') && (!is_httpauth_login()) && ((get_session_id()==-1) || ($SESSION_CONFIRMED_CACHE==0)) && ($ZONE['zone_require_session']==1) && (get_page_name()!='login'))
-	{
-		access_denied((($real_zone=='data') || (has_zone_access(get_member(),$ZONE['zone_name'])))?'ZONE_ACCESS_SESSION':'ZONE_ACCESS',$ZONE['zone_name'],true);
-	} else
-	{
-		if (($real_zone=='data') || (has_zone_access(get_member(),$ZONE['zone_name'])))
-		{
-			if ((running_script('index')) && /*Actually we will allow Guest denying to the front page even though that is a bit weird ((get_page_name()!=$ZONE['zone_default_page']) || ($real_zone!='')) && */(!has_page_access(get_member(),get_page_name(),$ZONE['zone_name'],true)))
-			{
-				access_denied('PAGE_ACCESS');
-			}
-		}
-		else
-		{
-			if (get_page_name()!='login') access_denied('ZONE_ACCESS',$ZONE['zone_name'],true);
-		}
-	}
+	return $real_zone;
 }
 
 /**

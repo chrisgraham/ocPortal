@@ -313,7 +313,7 @@ function install_ocf($upgrade_from=NULL)
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<10.0))
 	{
-		$GLOBALS['FORUM_DB']->rename_table('f_forum_categories','f_forum_groupings');
+		$GLOBALS['FORUM_DB']->rename_table('f_categories','f_forum_groupings');
 		$GLOBALS['FORUM_DB']->alter_table_field('f_forums','f_category_id','AUTO_LINK','f_forum_grouping_id');
 		$GLOBALS['SITE_DB']->query_update('config',array('the_type'=>'forum_grouping','the_name'=>'club_forum_parent_forum_grouping'),array('the_name'=>'club_forum_parent_category'),'',1);
 		$privileges=array('moderate_private_topic'=>'moderate_private_topic','edit_private_topic_posts'=>'edit_private_topic_posts','delete_private_topic_posts'=>'delete_private_topic_posts');

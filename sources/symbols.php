@@ -594,10 +594,8 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 			case 'HEADER_TEXT':
 				global $ZONE,$SHORT_TITLE,$DISPLAYED_TITLE;
-				if ($ZONE===NULL)
-				{
-					warn_exit(do_lang_tempcode('ZONE_NOT_INSTALLED'));
-				}
+				if ($ZONE===NULL) load_zone_data();
+				if ($ZONE===NULL) warn_exit(do_lang_tempcode('ZONE_NOT_INSTALLED'));
 				if ($SHORT_TITLE===NULL) // Take from either zone header or screen title
 				{
 					if ($DISPLAYED_TITLE!==NULL) $_displayed_title=$DISPLAYED_TITLE->evaluate();
