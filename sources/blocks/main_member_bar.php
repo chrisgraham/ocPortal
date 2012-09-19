@@ -121,4 +121,3 @@ class Block_main_member_bar
 
 }
 
-

@@ -2309,8 +2309,14 @@ function member_personal_links_and_details($member_id)
 	if (!is_httpauth_login())
 		$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT',array('_GUID'=>'d1caacba272a7ee3bf5b2a758e4e54ee','NAME'=>do_lang_tempcode('LOGOUT'),'URL'=>$url)));
 
-	require_code('ocf_notifications');
-	list(,$num_unread_pps)=generate_notifications($member_id);
+	if (get_forum_type()=='ocf')
+	{
+		require_code('ocf_notifications');
+		list(,$num_unread_pps)=generate_notifications($member_id);
+	} else
+	{
+		$num_unread_pps=0;
+	}
 
 	return array($links,$details,$num_unread_pps);
 }
