@@ -1496,7 +1496,7 @@ function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_
 	$map=array('page'=>'catalogues','type'=>'category','id'=>$category_id);
 
 	if (get_page_name()=='catalogues') $map+=propagate_ocselect();
-   $url=build_url($map,get_module_zone('catalogues'));
+	$url=build_url($map,get_module_zone('catalogues'));
 
 	if (is_null($category_id)) return new ocp_tempcode();
 
