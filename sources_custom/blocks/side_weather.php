@@ -145,31 +145,77 @@ class Block_side_weather
 			return do_template('INLINE_WIP_MESSAGE',array('_GUID'=>'046c437a5c3799838155b5c5fbe3be26','MESSAGE'=>htmlentities($rss->error)));
 		}
 
-		foreach ($rss->gleamed_items as $item)
-		{
-			if (array_key_exists('title',$item))
-				$title=$item['title'];
+		$location_city=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'][0]['CITY'];
+		$location_region=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'][0]['REGION'];
+		$location_country=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'][0]['COUNTRY'];
+		$wind_chill=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:WIND'][0]['CHILL'];
+		$wind_direction=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:WIND'][0]['DIRECTION'];
+		$wind_speed=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:WIND'][0]['SPEED'];
+		$humidity=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:ATMOSPHERE'][0]['HUMIDITY'];
+		$visibility=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:ATMOSPHERE'][0]['VISIBILITY'];
+		$pressure=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:ATMOSPHERE'][0]['PRESSURE'];
+		$pressure_rising=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:ATMOSPHERE'][0]['RISING'];
+		$sunrise=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:ASTRONOMY'][0]['SUNRISE'];
+		$sunset=$rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:ASTRONOMY'][0]['SUNSET'];
 
-			if (array_key_exists('news',$item))
-			{	
-				$out=array();
-				$content=$item['news'];
-				if (preg_match('/<img src="(.*)"\/?'.'>/Usm',$item['news'],$out)!=0)
-					$image=$out[1];
-				else
-					$image='';
-				if (preg_match('/Current Conditions:<\/b><br \/>(.*)<BR \/>/Uism',$item['news'],$out)!=0)
-					$cur_conditions=$out[1];
-				else
-					$cur_conditions='';
-				if (preg_match('/Forecast:<\/b><BR \/>(.*)<br \/>/ism',$item['news'],$out)!=0)
-					$forecast=$out[1];
-				else
-					$forecast='';
-			}
+		$item=$rss->gleamed_items[0];
+
+		$title=$item['title'];
+
+		$content=$item['news'];
+		$matches=array();
+		$image='';
+		if (preg_match('/<img src="(.*)"\/?'.'>/Usm',$item['news'],$matches)!=0)
+			$image=$matches[1];
+		$cur_conditions='';
+		if (preg_match('/Current Conditions:<\/b><br \/>(.*)<BR \/>/Uism',$item['news'],$matches)!=0)
+			$cur_conditions=$matches[1];
+		$forecast='';
+		if (preg_match('/Forecast:<\/b><BR \/>(.*)<br \/>/ism',$item['news'],$matches)!=0)
+			$forecast=$matches[1];
+
+		$lat=$item['HTTP://WWW.W3.ORG/2003/01/GEO/WGS84_POS#:LAT'][0]['_'];
+		$long=$item['HTTP://WWW.W3.ORG/2003/01/GEO/WGS84_POS#:LONG'][0]['_'];
+		$full_link=$item['full_url'];
+		$prepared_date=$item['add_date'];
+		$dates=array();
+		foreach ($item['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:FORECAST'] as $forecast)
+		{
+			$dates[]=array(
+				'DATE'=>strtotime($forecast['DATE']),
+				'DAY'=>$forecast['DAY'],
+				'LOW'=>$forecast['LOW'],
+				'HIGH'=>$forecast['HIGH'],
+				'TEXT'=>$forecast['TEXT'],
+				'CODE'=>$forecast['CODE'],
+			);
 		}
 
-		return do_template('BLOCK_SIDE_WEATHER',array('_GUID'=>'8b46b3437fbe05e587b11dd3347fa195','TITLE'=>$title,'LOC_CODE'=>strval($loc_code),'IMAGE'=>$image,'COND'=>$cur_conditions,'FORECAST'=>$forecast));
+		return do_template('BLOCK_SIDE_WEATHER',array(
+			'_GUID'=>'8b46b3437fbe05e587b11dd3347fa195',
+			'TITLE'=>$title,
+			'LOC_CODE'=>$loc_code,
+			'IMAGE'=>$image,
+			'COND'=>$cur_conditions,
+			'FORECAST'=>$forecast,
+			'LOCATION_CITY'=>$location_city,
+			'LOCATION_REGION'=>$location_region,
+			'LOCATION_COUNTRY'=>$location_country,
+			'WIND_CHILL'=>$wind_chill,
+			'WIND_DIRECTION'=>$wind_direction,
+			'WIND_SPEED'=>$wind_speed,
+			'HUMIDITY'=>$humidity,
+			'VISIBILITY'=>$visibility,
+			'PRESSURE'=>$pressure,
+			'PRESSURE_RISING'=>$pressure_rising,
+			'SUNRISE'=>$sunrise,
+			'SUNSET'=>$sunset,
+			'LAT'=>$lat,
+			'LONG'=>$long,
+			'FULL_LINK'=>$full_link,
+			'PREPARED_DATE'=>$prepared_date,
+			'DATES'=>$dates,
+		));
 	}
 }
 

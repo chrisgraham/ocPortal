@@ -1634,8 +1634,9 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[0]))
 				{
 					$timestamp=isset($param[1])?intval($param[1]):time();
+					$timezone_convert=(!isset($param[2])) || ($param[2]=='1');
 					$value=locale_filter(my_strftime($param[0],$timestamp));
-					if ($value==$param[0]) $value=date($param[0],utctime_to_usertime($timestamp));
+					if ($value==$param[0]) $value=date($param[0],$timezone_convert?utctime_to_usertime($timestamp):$timestamp);
 				} else $value=strval(time());
 				break;
 

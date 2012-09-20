@@ -384,6 +384,10 @@ class rss
 
 								$this->gleamed_feed['cloud']=$cloud;
 								break;
+							default:
+								if (!array_key_exists($last_tag,$this->gleamed_feed)) $this->gleamed_feed[$last_tag]=array();
+								$this->gleamed_feed[$last_tag][]=$attributes+array('_'=>$data);
+								break;
 						}
 						break;
 					case 'ITEM':
@@ -476,6 +480,10 @@ class rss
 								if ((!array_key_exists('ISPERMALINK',$attributes)) || ($attributes['ISPERMALINK']=='true'))
 									$current_item['guid']=$data;
 								break;
+							default:
+								if (!array_key_exists($last_tag,$current_item)) $current_item[$last_tag]=array();
+								$current_item[$last_tag][]=$attributes+array('_'=>$data);
+								break;
 						}
 						break;
 				}
@@ -565,6 +573,10 @@ class rss
 							case $prefix.'TAGLINE':
 								$this->gleamed_feed['description']=$data;
 								break;
+							default:
+								if (!array_key_exists($last_tag,$this->gleamed_feed)) $this->gleamed_feed[$last_tag]=array();
+								$this->gleamed_feed[$last_tag][]=$attributes+array('_'=>$data);
+								break;
 						}
 						break;
 					case $prefix.'ENTRY':
@@ -636,6 +648,10 @@ class rss
 								{
 									$current_item['rep_image']=$attributes['URL'];
 								}
+								break;
+							default:
+								if (!array_key_exists($last_tag,$current_item)) $current_item[$last_tag]=array();
+								$current_item[$last_tag][]=$attributes+array('_'=>$data);
 								break;
 						}
 						break;
