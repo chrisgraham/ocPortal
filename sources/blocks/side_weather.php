@@ -169,7 +169,7 @@ class Block_side_weather
 			}
 		}
 
-		return do_template('BLOCK_SIDE_WEATHER',array('TITLE'=>$title,'LOC_CODE'=>strval($loc_code),'IMAGE'=>$image,'COND'=>$cur_conditions,'FORECAST'=>$forecast));
+		return do_template('BLOCK_SIDE_WEATHER',array('TITLE'=>$title,'LOC_CODE'=>$loc_code,'IMAGE'=>$image,'COND'=>$cur_conditions,'FORECAST'=>$forecast));
 	}
 }
 
