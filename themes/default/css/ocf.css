@@ -1157,7 +1157,6 @@ ul.ocf_profile_friends li .associated_details {
 
 .ocf_emoticon_cell {
 	float: {!en_left};
-	width: 12.5%;
 	text-align: center;
 	padding: 0.5em 0;
 }

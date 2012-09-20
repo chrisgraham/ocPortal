@@ -915,8 +915,22 @@ function emoticons_script()
 
 	$extra=has_specific_permission(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
 	$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_emoticons WHERE e_relevance_level<3'.$extra);
+
+	// Work out what grid spacing to use
+	$max_emoticon_width=0;
+	require_code('images');
+	foreach ($rows as $myrow)
+	{
+		list($_width,)=_symbol_image_dims(array(find_theme_image($myrow['e_theme_img_code'],true)));
+		$max_emoticon_width=max($max_emoticon_width,intval($_width));
+	}
+	if ($max_emoticon_width==0) $max_emoticon_width=36;
+	$padding=2;
+	$window_width=300;
+	$cols=intval(floor(floatval($window_width)/floatval($max_emoticon_width+$padding)));
+
+	// Render UI
 	$content=new ocp_tempcode();
-	$cols=8;
 	$current_row=new ocp_tempcode();
 	foreach ($rows as $i=>$myrow)
 	{
@@ -927,7 +941,7 @@ function emoticons_script()
 		}
 
 		$code_esc=$myrow['e_code'];
-		$current_row->attach(do_template('OCF_EMOTICON_CELL',array('_GUID'=>'ddb838e6fa296df41299c8758db92f8d','FIELD_NAME'=>get_param('field_name','post'),'CODE_ESC'=>$code_esc,'THEME_IMG_CODE'=>$myrow['e_theme_img_code'],'CODE'=>$myrow['e_code'])));
+		$current_row->attach(do_template('OCF_EMOTICON_CELL',array('_GUID'=>'ddb838e6fa296df41299c8758db92f8d','COLS'=>strval($cols),'FIELD_NAME'=>get_param('field_name','post'),'CODE_ESC'=>$code_esc,'THEME_IMG_CODE'=>$myrow['e_theme_img_code'],'CODE'=>$myrow['e_code'])));
 	}
 	if (!$current_row->is_empty())
 		$content->attach(do_template('OCF_EMOTICON_ROW',array('_GUID'=>'d13e74f7febc560dc5fc241dc7914a03','CELLS'=>$current_row)));
