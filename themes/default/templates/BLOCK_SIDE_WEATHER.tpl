@@ -2,16 +2,16 @@
 	<h3>{!WEATHER_REPORT}</h3>
 
 	{+START,IF_NON_EMPTY,{IMAGE}}
-		<img src="{IMAGE`}" alt="{!WEATHER_IMAGE}"/>
+		<img src="{IMAGE`}" alt="{!WEATHER_IMAGE}" />
 	{+END}
 
 	<p><strong>{TITLE`}</strong></p>
 
 	{+START,IF_NON_EMPTY,{COND}}
-		{COND`}
+		<div>{COND`}</div>
 	{+END}
 
 	{+START,IF_NON_EMPTY,{FORECAST}}
-		{FORECAST`}
+		<div>{FORECAST`}</div>
 	{+END}
 </div></section>
