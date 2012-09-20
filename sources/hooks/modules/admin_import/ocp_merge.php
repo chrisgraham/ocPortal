@@ -819,7 +819,7 @@ class Hook_ocp_merge
 									$row['edit_date']);
 
 			// Who has voted in the poll?
-			$votes=$db->query('SELECT * FROM '.$table_prefix.'poll_votes WHERE pollID='.strval($row['id']),NULL,NULL,true);
+			$votes=$db->query('SELECT * FROM '.$table_prefix.'poll_votes WHERE v_poll_id='.strval($row['id']),NULL,NULL,true);
 			if (is_null($votes)) // Old ocPortal-style
 			{
 				$voters=explode('-',$row['ip']);
