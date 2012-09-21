@@ -138,6 +138,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		}
 		else $give_template=do_lang_tempcode('PE_LACKING_GIFT_POINTS');
 		if (!$give_ok) $give_template=new ocp_tempcode();
+		if (!has_specific_permission($member_id_of,'use_points')) $give_template=new ocp_tempcode();
 	}
 
 	return do_template('POINTS_PROFILE',array(
