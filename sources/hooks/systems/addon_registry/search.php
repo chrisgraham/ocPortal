@@ -163,7 +163,7 @@ class Hook_addon_registry_search
 				'CONJUNCTIVE_OPERATOR'=>'AND',
 				'LIMIT_TO'=>placeholder_array(),
 				'URL'=>placeholder_url(),
-				'FULL_LOGIN_URL'=>placeholder_url()
+				'FULL_SEARCH_URL'=>placeholder_url()
 			)), NULL, '', true)
 		);
 	}

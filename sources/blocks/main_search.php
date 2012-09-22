@@ -151,7 +151,7 @@ class Block_main_search
 			'CONJUNCTIVE_OPERATOR'=>$conjunctive_operator,
 			'LIMIT_TO'=>$limit_to,
 			'URL'=>$url,
-			'FULL_LOGIN_URL'=>$full_link,
+			'FULL_SEARCH_URL'=>$full_link,
 		));
 	}
 
