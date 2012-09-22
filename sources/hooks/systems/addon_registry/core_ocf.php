@@ -680,6 +680,7 @@ class Hook_addon_registry_core_ocf
 			}
 			$current_row->attach(do_lorem_template('OCF_EMOTICON_CELL', array(
 				'FIELD_NAME'=>lorem_word(),
+				'COLS'=>strval($cols),
 				'CODE_ESC'=>'',
 				'THEME_IMG_CODE'=>'ocf_emoticons/smile',
 				'CODE'=>':)'

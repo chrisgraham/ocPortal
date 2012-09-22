@@ -142,4 +142,3 @@ class Block_main_bottom_bar
 
 }
 
-
