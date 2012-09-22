@@ -2496,7 +2496,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$t=$param[0]->evaluate();
-					if ((isset($param['vars'][$t])) && ($param['vars'][$t]!='0') && ($param['vars'][$t]!=''))
+					if ((isset($param['vars'][$t])) && ($param['vars'][$t]!==false) && ($param['vars'][$t]!=='0') && ($param['vars'][$t]!==''))
 					{
 						$value=$param[1]->evaluate();
 					}
@@ -2507,7 +2507,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$t=$param[0]->evaluate();
-					if ((!isset($param['vars'][$t])) || ($param['vars'][$t]=='0') || ($param['vars'][$t]==''))
+					if ((!isset($param['vars'][$t])) || ($param['vars'][$t]===false) || ($param['vars'][$t]==='0') || ($param['vars'][$t]===''))
 					{
 						$value=$param[1]->evaluate();
 					}
