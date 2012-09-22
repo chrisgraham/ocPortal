@@ -90,7 +90,9 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 		$radios->attach(form_input_radio_entry('the_type',strval(BANNER_DEFAULT),($the_type==BANNER_DEFAULT),do_lang_tempcode('BANNER_DEFAULT')));
 		$fields->attach(form_input_radio(do_lang_tempcode('DEPLOYMENT_AGREEMENT'),do_lang_tempcode('DESCRIPTION_BANNER_TYPE'),'the_type',$radios));
 		$fields->attach(form_input_integer(do_lang_tempcode('HITS_ALLOCATED'),do_lang_tempcode('DESCRIPTION_HITS_ALLOCATED'),'campaignremaining',$campaignremaining,false));
-		$fields->attach(form_input_integer(do_lang_tempcode('IMPORTANCE_MODULUS'),do_lang_tempcode('DESCRIPTION_IMPORTANCE_MODULUS',strval($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT SUM(importance_modulus) FROM '.get_table_prefix().'banners WHERE '.db_string_not_equal_to('name',$name))),strval($importancemodulus)),'importancemodulus',$importancemodulus,true));
+		$total_importance=$GLOBALS['SITE_DB']->query_value_null_ok('SELECT SUM(importance_modulus) FROM '.get_table_prefix().'banners WHERE '.db_string_not_equal_to('name',$name));
+		if (is_null($total_importance)) $total_importance=0;
+		$fields->attach(form_input_integer(do_lang_tempcode('IMPORTANCE_MODULUS'),do_lang_tempcode('DESCRIPTION_IMPORTANCE_MODULUS',strval($total_importance),strval($importancemodulus)),'importancemodulus',$importancemodulus,true));
 	}
 	$fields->attach(form_input_date(do_lang_tempcode('EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_EXPIRY_DATE'),'expiry_date',true,is_null($expiry_date),true,$expiry_date,2));
 
