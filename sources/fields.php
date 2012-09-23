@@ -70,7 +70,7 @@ function manage_custom_fields_donext_link($content_type)
 		$ob=object_factory('Hook_awards_'.$content_type);
 		$info=$ob->info();
 
-		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']))
+		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']) && (has_specific_permission(get_member(),'submit_cat_highrange_content','cms_catalogues')) && (has_specific_permission(get_member(),'edit_cat_highrange_content','cms_catalogues')))
 		{
 			$exists=!is_null($GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>'_'.$content_type)));
 
@@ -270,7 +270,7 @@ function save_form_custom_fields($content_type,$id)
  * @param  ID_TEXT		Award hook codename
  * @param  ID_TEXT		Content entry ID
  */
-function	delete_form_custom_fields($content_type,$id)
+function delete_form_custom_fields($content_type,$id)
 {
 	require_code('catalogues2');
 
