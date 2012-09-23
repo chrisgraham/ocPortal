@@ -722,7 +722,7 @@ class Module_topicview
 				{
 					$num_members++;
 					$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
-					$map=array('PROFILE_URL'=>$profile_url,'USERNAME'=>$username);
+					$map=array('FIRST'=>$members_viewing->is_empty(),'PROFILE_URL'=>$profile_url,'USERNAME'=>$username);
 					if ((has_privilege(get_member(),'show_user_browsing')) || ((in_array($at_details['the_page'],array('topics','topicview'))) && ($at_details['the_id']==strval($id))))
 					{
 						$map['AT']=escape_html($at_details['the_title']);

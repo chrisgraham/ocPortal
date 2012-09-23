@@ -1341,7 +1341,6 @@ class Module_admin_themes
 											array('IF_NON_EMPTY','1'),
 											array('IF_EMPTY','1'),
 											array('IF','1'),
-											array('IF_ADJACENT','1'),
 											array('SET','1'),
 											array('LOOP','1'), // To simplify things, we won't throw all options at the user
 									);
@@ -1512,7 +1511,7 @@ class Module_admin_themes
 		$theme=filter_naughty(post_param('theme'));
 		erase_cached_templates();
 		require_code('view_modes');
-		erase_tempcode_cache();
+		erase_block_cache();
 
 		$title=get_screen_title('EDIT_TEMPLATES');
 

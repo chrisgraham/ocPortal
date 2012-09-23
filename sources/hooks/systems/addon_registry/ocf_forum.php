@@ -938,6 +938,7 @@ class Hook_addon_registry_ocf_forum
 			$emoticon->attach(do_lorem_template('OCF_TOPIC_EMOTICON_NONE', array()));
 
 			$b=do_lorem_template('OCF_USER_MEMBER', array(
+				'FIRST'=>true,
 				'COLOUR'=>lorem_word(),
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_word(),
@@ -988,6 +989,7 @@ class Hook_addon_registry_ocf_forum
 			foreach (placeholder_array() as $_k=>$_v)
 			{
 				$poster=do_lorem_template('OCF_USER_MEMBER', array(
+					'FIRST'=>true,
 					'USERNAME'=>lorem_word(),
 					'PROFILE_URL'=>placeholder_url(),
 					'AT'=>lorem_phrase()
@@ -1242,6 +1244,7 @@ class Hook_addon_registry_ocf_forum
 				));
 
 				$b=do_lorem_template('OCF_USER_MEMBER', array(
+					'FIRST'=>true,
 					'COLOUR'=>lorem_word(),
 					'PROFILE_URL'=>placeholder_url(),
 					'USERNAME'=>lorem_word(),
@@ -1361,6 +1364,7 @@ class Hook_addon_registry_ocf_forum
 			foreach (placeholder_array() as $_k=>$_v)
 			{
 				$members_viewing->attach(do_lorem_template('OCF_USER_MEMBER', array(
+					'FIRST'=>$members_viewing->is_empty(),
 					'PROFILE_URL'=>placeholder_url(),
 					'USERNAME'=>lorem_word(),
 					'AT'=>lorem_phrase(),

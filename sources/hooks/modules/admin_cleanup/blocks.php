@@ -43,8 +43,8 @@ class Hook_blocks
 	 */
 	function run()
 	{
-		$GLOBALS['SITE_DB']->query_delete('cache_on');
-		$GLOBALS['SITE_DB']->query_delete('cache');
+		require_code('view_modes');
+		erase_block_cache();
 		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
 
 		return new ocp_tempcode();

@@ -157,6 +157,7 @@ class Block_side_users_online
 					$colour=get_group_colour(ocf_get_member_primary_group($_birthday['id']));
 					$birthday=do_template('OCF_USER_MEMBER',array(
 						'_GUID'=>'b2d355ff45f4b4170b937ef0753e6a78',
+						'FIRST'=>$birthdays->is_empty(),
 						'COLOUR'=>$colour,
 						'AGE'=>array_key_exists('age',$_birthday)?integer_format($_birthday['age']):NULL,
 						'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($_birthday['id'],false,true),

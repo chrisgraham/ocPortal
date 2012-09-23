@@ -948,7 +948,7 @@ class Module_admin_config
 		require_code('zones2');
 		require_code('zones3');
 		erase_comcode_page_cache();
-		erase_tempcode_cache();
+		erase_block_cache();
 		//persistent_cache_delete('OPTIONS');  Done by set_option
 		persistent_cache_empty();
 		erase_cached_templates();

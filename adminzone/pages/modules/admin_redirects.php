@@ -234,7 +234,7 @@ class Module_admin_redirects
 		}
 
 		require_code('view_modes');
-		erase_tempcode_cache();
+		erase_block_cache();
 
 		// Personal notes
 		if (!is_null(post_param('notes',NULL)))

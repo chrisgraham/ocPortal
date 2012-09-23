@@ -366,17 +366,6 @@
 	</p>
 {+END}
 
-{+START,IF_ADJACENT}
-	<p>
-		Adjacent to own codenamed template
-	</p>
-{+END}
-{+START,IF_NON_ADJACENT}
-	<p>
-		NOT Adjacent to own codenamed template (but adjacent/under something)
-	</p>
-{+END}
-
 {+START,SET,foo}bar{+END}{$GET,foo}
 
 {+START,IF,1}

@@ -648,6 +648,7 @@ class Hook_addon_registry_core_ocf
 	{
 		return array(
 			lorem_globalise(do_lorem_template('OCF_USER_MEMBER', array(
+				'FIRST'=>true,
 				'COLOUR'=>'',
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_word(),

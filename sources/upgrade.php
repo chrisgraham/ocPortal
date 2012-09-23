@@ -650,7 +650,7 @@ function clear_caches_2()
 	require_code('zones2');
 	require_code('zones3');
 	erase_comcode_cache();
-	erase_tempcode_cache();
+	erase_block_cache();
 	erase_comcode_page_cache();
 	persistent_cache_empty();
 }

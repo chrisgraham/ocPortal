@@ -121,6 +121,7 @@ class Hook_addon_registry_users_online_block
 			$newest->attach(lorem_phrase());
 
 			$birthday=do_lorem_template('OCF_USER_MEMBER', array(
+				'FIRST'=>$birthdays->is_empty(),
 				'COLOUR'=>lorem_word(),
 				'AGE'=>placeholder_number(),
 				'PROFILE_URL'=>placeholder_url(),

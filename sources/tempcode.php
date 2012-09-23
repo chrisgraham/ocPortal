@@ -937,9 +937,8 @@ function handle_symbol_preprocessing($bit,&$children)
 class ocp_tempcode
 {
 	var $code_to_preexecute;
-	var $seq_parts; // List of closure pairs: (0) function name, and (1) parameters, (2) type, (3) name, and also (4) last attach
+	var $seq_parts; // List of closure pairs: (0) function name, and (1) parameters, (2) type, (3) name
 	var $preprocessable_bits; // List of tuples: escape (ignored), type (e.g. TC_SYMBOL), name, parameters
-	var $last_attach;
 	var $pure_lang;
 
 	var $codename=':container'; // The name of the template it came from
@@ -999,7 +998,7 @@ class ocp_tempcode
 				{
 					if (is_object($param))
 					{
-						array_splice($pp_bits,-1,0,$param->preprocessable_bits);
+						foreach ($param->preprocessable_bits as $b) $pp_bits[]=$b;
 					}
 				}
 			}
@@ -1021,7 +1020,7 @@ class ocp_tempcode
 	 */
 	function __sleep()
 	{
-		return array('code_to_preexecute','seq_parts','preprocessable_bits','last_attach','pure_lang','codename');
+		return array('code_to_preexecute','seq_parts','preprocessable_bits','pure_lang','codename');
 	}
 
 	/**
@@ -1098,31 +1097,26 @@ class ocp_tempcode
 
 		if (is_object($attach)) // Consider it another piece of tempcode
 		{
-			foreach ($attach->seq_parts as $seq)
-			{
-				$seq[4]=$this->last_attach;
-				$this->seq_parts[]=$seq;
-			}
+			foreach ($attach->seq_parts as $b) $this->seq_parts[]=$b;
 
 			if (((strpos($this->code_to_preexecute,'/'.$attach->codename.'.')===false) && (strpos($this->code_to_preexecute,'$TPL_FUNCS[\'tcpfunc_'.$attach->codename.'\']')===false)) || ($GLOBALS['KEEP_MARKERS'])) // Optimisation for memory.
 			{
 				$this->code_to_preexecute.=$attach->code_to_preexecute;
 			}
-			array_splice($this->preprocessable_bits,-1,0,$attach->preprocessable_bits);
+
+			foreach ($attach->preprocessable_bits as $b) $this->preprocessable_bits[]=$b;
 
 			if ((!$avoid_child_merge) && ($GLOBALS['RECORD_TEMPLATES_TREE']))
 			{
 				$this->children[]=array($attach->codename,isset($attach->children)?$attach->children:array(),isset($attach->fresh)?$attach->fresh:false);
 			}
 
-			$this->last_attach=$attach->codename;
-
 		} else // Consider it a string
 		{
-			$cnt=count($this->seq_parts);
-			if (($cnt!=0) && ($this->seq_parts[$cnt-1][2]==TC_KNOWN) && ($this->seq_parts[$cnt-1][1]==array()))
+			$end=end($this->seq_parts);
+			if (($end!==false) && ($end[2]==TC_KNOWN) && ($end[1]==array())) // Optimisation to save memory/storage-space/evaluation-time -- we can just append text
 			{
-				$myfunc=$this->seq_parts[count($this->seq_parts)-1][0];
+				$myfunc=$end[0];
 				$code=$this->code_to_preexecute;
 				$pos=strpos($code,"\$TPL_FUNCS['$myfunc']=\"echo ");
 				if ($pos!==false)
@@ -1138,8 +1132,6 @@ class ocp_tempcode
 			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\"echo \\\"".php_addslashes_twice($attach)."\\\";\";\n";
 			$this->code_to_preexecute.=$funcdef;
 			$this->seq_parts[]=array($myfunc,array(),TC_KNOWN,'','');
-
-			$this->last_attach='';
 		}
 
 		$this->codename='(mixed)';
@@ -1219,6 +1211,7 @@ class ocp_tempcode
 			{
 				//$PROFILING_LOG_FILE=fopen(get_custom_file_base().'/../test.log','wt'); fwrite($PROFILING_LOG_FILE,$this->code_to_preexecute); fclose($PROFILING_LOG_FILE);
 
+				//eval_log($this->code_to_preexecute);
 				if (eval($this->code_to_preexecute)===false) fatal_exit(@strval($php_errormsg));
 				if (!isset($TPL_FUNCS[$bit_0])) $TPL_FUNCS[$bit_0]=' '; // Fudge to stop error. Actually caused by a race condition and output will be incomplete
 			}
@@ -1228,7 +1221,6 @@ class ocp_tempcode
 			} else
 			{
 				$parameters=$bit[1];
-				$last_attach=$bit[4];
 				if (eval($TPL_FUNCS[$bit_0])===false) fatal_exit(@strval($php_errormsg));
 			}
 
@@ -1283,7 +1275,7 @@ class ocp_tempcode
 	 */
 	function to_assembly()
 	{
-		return 'return unserialize("'.php_addslashes(serialize(array($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->last_attach,$this->pure_lang,$this->code_to_preexecute))).'");'.chr(10);
+		return 'return unserialize("'.php_addslashes(serialize(array($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->pure_lang,$this->code_to_preexecute))).'");'.chr(10);
 	}
 
 	/**
@@ -1305,14 +1297,14 @@ class ocp_tempcode
 		if (!is_array($result)) return false; // May never get here, as PHP fatal errors can't be supressed or skipped over
 
 		$this->cached_output=NULL;
-		list($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->last_attach,$this->pure_lang,$this->code_to_preexecute)=$result;
+		list($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->pure_lang,$this->code_to_preexecute)=$result;
 
 		if ($forced_reload_details[6]===NULL) $forced_reload_details[6]='';
 		if ((isset($this->code_to_preexecute[800])) && ($GLOBALS['CACHE_TEMPLATES']))
 		{
 			// We don't actually use $code_to_preexecute, because it uses too much RAM and DB space throwing full templates into the cacheing. Instead we rewrite to custom load it whenever it's needed. This isn't inefficient due to normal opcode cacheing and optimizer opcode cacheing, and because we cache Tempcode object's evaluations at runtime so it can only happen once per screen view.
 			$this->code_to_preexecute='if (($result=@include(\''.php_addslashes($file).'\'))===false) { $tmp=do_template(\''.php_addslashes($forced_reload_details[0]).'\',NULL,\''.php_addslashes($forced_reload_details[2]).'\',false,\''.(($forced_reload_details[6]=='')?'':php_addslashes($forced_reload_details[6])).'\',\''.($forced_reload_details[4]).'\',\''.($forced_reload_details[5]).'\'); clearstatcache(); if (mt_rand(0,100)==1 || !is_file(\''.php_addslashes($file).'\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } eval($tmp->code_to_preexecute); unset($tmp); }
-			else { eval($result[5]); unset($result); }';
+			else { eval($result[4]); unset($result); }';
 		}
 
 		if ($GLOBALS['XSS_DETECT'])
@@ -1369,7 +1361,7 @@ class ocp_tempcode
 		}
 
 		$this->cached_output=NULL;
-		list($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->last_attach,$this->pure_lang,$this->code_to_preexecute)=$result;
+		list($this->seq_parts,$this->preprocessable_bits,$this->codename,$this->pure_lang,$this->code_to_preexecute)=$result;
 
 		if ($GLOBALS['XSS_DETECT'])
 		{
@@ -1398,7 +1390,7 @@ class ocp_tempcode
 			$this->seq_parts[$i]=$bit;
 		}
 
-		array_splice($this->preprocessable_bits,-1,0,$value->preprocessable_bits);
+		foreach ($value->preprocessable_bits as $b) $this->preprocessable_bits[]=$b;
 	}
 
 	/**
@@ -1460,7 +1452,7 @@ class ocp_tempcode
 			{
 				if (isset($parameter->preprocessable_bits[0]))
 				{
-					array_splice($out->preprocessable_bits,-1,0,$parameter->preprocessable_bits);
+					foreach ($parameter->preprocessable_bits as $b) $out->preprocessable_bits[]=$b;
 				} elseif (!isset($parameter->seq_parts[0])) $parameters[$key]=''; // Little optimisation to save memory
 			}
 			elseif ($p_type=='boolean')
@@ -1533,7 +1525,6 @@ class ocp_tempcode
 			} else
 			{
 				$parameters=$bit[1];
-				$last_attach=$bit[4];
 				//eval_log($TPL_FUNCS[$bit_0]);
 				if (eval($TPL_FUNCS[$bit_0])===false) fatal_exit(@strval($php_errormsg));
 			}
@@ -1641,7 +1632,6 @@ class ocp_tempcode
 			} else
 			{
 				$parameters=$bit[1];
-				$last_attach=$bit[4];
 
 				/*$code=$TPL_FUNCS[$bit_0];		Debug code to find good stack traces but unfortunately it never worked
 				$file=get_custom_file_base().'/uploads/website_specific/'.substr(md5($code),0,10).'.php';
@@ -1749,4 +1739,5 @@ f unction eval_log($in)
 	global $SLOGFILE;
 	if (!isset($SLOGFILE)) $SLOGFILE=fopen(get_custom_file_base().'/data_custom/tempcode.log','wt');
 	fwrite($SLOGFILE,$in."\n\n\n\n");
-}*/
+}
+*/

@@ -196,7 +196,8 @@ function site_tree_script()
 		}
 
 		decache('main_sitemap');
-		$GLOBALS['SITE_DB']->query_delete('cache');
+		require_code('view_modes');
+		erase_block_cache();
 		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
 
 		// Tra la la tada

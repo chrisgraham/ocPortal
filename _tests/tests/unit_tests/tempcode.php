@@ -383,11 +383,6 @@ class tempcode_test_set extends ocp_test_case
 
 
 
-	<p>
-		NOT Adjacent to own codenamed template (but adjacent/under something)
-	</p>
-
-
 bar
 
 

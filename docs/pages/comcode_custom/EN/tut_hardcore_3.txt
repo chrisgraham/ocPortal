@@ -27,7 +27,7 @@ Knowing how to program, I now have written my code, with my modified files saved
 
 [box="OCF_USER_MEMBER.tpl"]
 [codebox]
-{+START,IF_ADJACENT,OCF_USER_MEMBER}, {+END}{+START,IF_PASSED,AT}<a {+START,IF_PASSED,COLOUR}style="color: {COLOUR}" {+END}title="{AT#}" href="{PROFILE_URL*}">{USERNAME*}</a>{+END}{+START,IF_NON_PASSED,AT}<a {+START,IF_PASSED,COLOUR}style="color: {COLOUR}" {+END}title="{!MEMBER}" href="{PROFILE_URL*}">{USERNAME*}</a>{+END}<span class="accessibility_hidden">, </span>[/codebox]
+{+START,IF_PASSED,AT}<a {+START,IF_PASSED,COLOUR}style="color: {COLOUR}" {+END}title="{AT#}" href="{PROFILE_URL*}">{USERNAME*}</a>{+END}{+START,IF_NON_PASSED,AT}<a {+START,IF_PASSED,COLOUR}style="color: {COLOUR}" {+END}title="{!MEMBER}" href="{PROFILE_URL*}">{USERNAME*}</a>{+END}<span class="accessibility_hidden">, </span>[/codebox]
 [/box]
 
 [box="OCF_STATS.tpl"]
@@ -243,7 +243,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
          if (is_null($username)) continue;
          $url=$GLOBALS['OCF_DRIVER']->member_profile_url($member);
          $pgid=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_primary_group');
-         $users_online->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'a9cb1af2a04b14edd70749c944495bff','COLOUR'=>$all_colours[$pgid],'PROFILE_URL'=>$url,'USERNAME'=>$username)));
+         $users_online->attach(do_template('OCF_USER_MEMBER',array('_GUID'=>'a9cb1af2a04b14edd70749c944495bff','FIRST'=>$users_online->is_empty(),'COLOUR'=>$all_colours[$pgid],'PROFILE_URL'=>$url,'USERNAME'=>$username)));
       }
       if ($guests!=0)
       {
@@ -256,7 +256,7 @@ function ocf_wrapper($title,$content,$show_personal_bar=true,$show_stats=true,$f
       $birthdays=new ocp_tempcode();
       foreach ($_birthdays as $_birthday)
       {
-         $birthday=do_template('OCF_USER_MEMBER',array('_GUID'=>'a98959187d37d80e134d47db7e3a52fa','PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id']),'USERNAME'=>$_birthday['username']));
+         $birthday=do_template('OCF_USER_MEMBER',array('_GUID'=>'a98959187d37d80e134d47db7e3a52fa','FIRST'=>$birthdays->is_empty(),'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id']),'USERNAME'=>$_birthday['username']));
          if (array_key_exists('age',$_birthday)) $birthday->attach(' ('.$_birthday['age'].')');
          $birthdays->attach($birthday);
       }

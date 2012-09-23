@@ -330,7 +330,6 @@ It has to achieve a number of key design goals (these are implemented in ocPorta
  - It must be preprocessable.
   - For example, a template might include a block, which might require some CSS -- this CSS would need to be included in the HTML <head> before the block itself was output
   - The Shift encoding feature ('SHIFT_ENCODE' directive to set, 'SHIFT_ENCODING' symbol to get) has to work. Shift encoding provides the ability to define things in one template, and have them used in another: clearly something rather difficult for a template engine to implement.
-  - The 'IF_ADJACENT' symbol has to work, so templates can detect their neighbours (complex to implement!)
 
 Tempcode in ocPortal 4+ works via a very elaborate concept that we call the 'closure tree'. Essentially Tempcode objects link to form a tree structure via parameters. If you pass some Tempcode to a template as a parameter, that parameter is encoded into the Tempcode tree of the result of the template call.
 

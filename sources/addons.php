@@ -630,7 +630,7 @@ function install_addon($file,$files=NULL)
 	require_code('zones2');
 	require_code('zones3');
 	erase_comcode_page_cache();
-	erase_tempcode_cache();
+	erase_block_cache();
 	persistent_cache_empty();
 	erase_cached_templates();
 	erase_cached_language();
@@ -689,7 +689,7 @@ function uninstall_addon($name)
 	require_code('zones2');
 	require_code('zones3');
 	erase_comcode_page_cache();
-	erase_tempcode_cache();
+	erase_block_cache();
 	persistent_cache_empty();
 	erase_cached_templates();
 	erase_cached_language();

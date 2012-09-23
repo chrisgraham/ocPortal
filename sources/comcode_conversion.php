@@ -1482,32 +1482,18 @@ class ocp_tempcode_static
 
 			foreach ($attach->bits as $bit)
 			{
-				if (($bit[1]==TC_DIRECTIVE) && (($bit[2]=='IF_NON_ADJACENT') || ($bit[2]=='IF_ADJACENT')))
-				{
-					if (!isset($this->last_attach)) $this->last_attach='';
-					if ((($bit[2]=='IF_NON_ADJACENT') && ($this->last_attach!=$bit[3][0]->evaluate()))
-						|| (($bit[2]=='IF_ADJACENT') && ($this->last_attach==$bit[3][0]->evaluate())))
-					{
-						$this->attach($bit[3][1],$avoid_children_merge);
-						$last=count($this->bits)-1;
-					}
-				} else
-				{
-					if ($escape!=array()) $bit[0]=array_merge($escape,$bit[0]);
+				if ($escape!=array()) $bit[0]=array_merge($escape,$bit[0]);
 
-					// Can we add into another string at our edge
-					if (($last==-1) || ($bit[1]!=TC_KNOWN) || ($this->bits[$last][1]!=TC_KNOWN) || (($this->bits[$last][0]!=$bit[0]) && (((array_merge($bit[0],$this->bits[$last][0]))!=$simple_escaped) || (preg_match('#[&<>"\']#',$bit[2])!=0)))) // No
-					{
-						$this->bits[]=$bit;
-						$last++;
-					} else // Yes
-					{
-						$this->bits[$last][2].=$bit[2];
-					}
+				// Can we add into another string at our edge
+				if (($last==-1) || ($bit[1]!=TC_KNOWN) || ($this->bits[$last][1]!=TC_KNOWN) || (($this->bits[$last][0]!=$bit[0]) && (((array_merge($bit[0],$this->bits[$last][0]))!=$simple_escaped) || (preg_match('#[&<>"\']#',$bit[2])!=0)))) // No
+				{
+					$this->bits[]=$bit;
+					$last++;
+				} else // Yes
+				{
+					$this->bits[$last][2].=$bit[2];
 				}
 			}
-
-			$this->last_attach=$attach->codename;
 
 		} else // Consider it a string
 		{

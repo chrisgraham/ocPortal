@@ -446,13 +446,13 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								$current_level_data[]='(('.$first_directive_param.'==\'\')?('.implode('.',$past_level_data).'):\'\')';
 								break;
 							case 'WHILE':
-								$current_level_data[]='closure_while_loop(array($parameters,$cl,$last_attach),'.chr(10).'create_function(\'$parameters,$cl,$last_attach\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return ('.php_addslashes($first_directive_param).')==\"1\";"),'.chr(10).'create_function(\'$parameters,$cl,$last_attach\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
+								$current_level_data[]='closure_while_loop(array($parameters,$cl),'.chr(10).'create_function(\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return ('.php_addslashes($first_directive_param).')==\"1\";"),'.chr(10).'create_function(\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
 								break;
 							case 'PHP':
 								$current_level_data[]='closure_eval('.implode('.',$past_level_data).',$parameters)';
 								break;
 							case 'LOOP':
-								$current_level_data[]='closure_loop(array('.$directive_params.',\'vars\'=>$parameters),array($parameters,$cl,$last_attach),'.chr(10).'create_function(\'$parameters,$cl,$last_attach\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
+								$current_level_data[]='closure_loop(array('.$directive_params.',\'vars\'=>$parameters),array($parameters,$cl),'.chr(10).'create_function(\'$parameters,$cl\',"extract(\$parameters,EXTR_PREFIX_ALL,\'bound\'); return '.php_addslashes(implode('.',$past_level_data)).';"))';
 								break;
 							case 'IF_NON_EMPTY':
 								$current_level_data[]='(('.$first_directive_param.'!=\'\')?('.implode('.',$past_level_data).'):\'\')';
@@ -466,12 +466,6 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 								$eval=@eval('return '.$first_directive_param.';');
 								if (!is_string($eval)) $eval='';
 								$current_level_data[]='(!isset($bound_'.preg_replace('#[^\w\d\_]#','',$eval).')?('.implode('.',$past_level_data).'):\'\')';
-								break;
-							case 'IF_ADJACENT':
-								$current_level_data[]='(($last_attach=="'.php_addslashes($template_name).'")?('.implode('.',$past_level_data).'):\'\')';
-								break;
-							case 'IF_NON_ADJACENT':
-								$current_level_data[]='(($last_attach!="'.php_addslashes($template_name).'")?('.implode('.',$past_level_data).'):\'\')';
 								break;
 							case 'INCLUDE':
 								global $FILE_ARRAY;
@@ -699,10 +693,10 @@ function build_closure_function($myfunc,$parts)
 	{
 		if (strpos($code,'$bound')===false)
 		{
-			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=create_function('\$parameters,\$cl,\$last_attach',\"echo ".php_addslashes($code).";\");\n";
+			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=create_function('\$parameters,\$cl',\"echo ".php_addslashes($code).";\");\n";
 		} else
 		{
-			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=create_function('\$parameters,\$cl,\$last_attach',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo ".php_addslashes($code).";\");\n";
+			$funcdef=/*Not needed and faster to do not do it    if (!isset(\$TPL_FUNCS['$myfunc']))\n\t*/"\$TPL_FUNCS['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=create_function('\$parameters,\$cl',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo ".php_addslashes($code).";\");\n";
 		}
 	} else
 	{

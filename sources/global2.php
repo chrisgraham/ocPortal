@@ -332,7 +332,7 @@ function init__global2()
 		if ((running_script('index')) && ((is_browser_decacheing()) || ($changed_base_url)))
 		{
 			require_code('view_modes');
-			erase_tempcode_cache();
+			erase_block_cache();
 			erase_cached_templates(!$changed_base_url);
 			erase_cached_language();
 			persistent_cache_empty();

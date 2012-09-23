@@ -662,7 +662,8 @@ class Module_admin_permissions
 		breadcrumb_set_self(do_lang_tempcode('DONE'));
 
 		decache('main_sitemap');
-		$GLOBALS['SITE_DB']->query_delete('cache');
+		require_code('view_modes');
+		erase_block_cache();
 		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
 
 		// Show it worked / Refresh
@@ -979,7 +980,8 @@ class Module_admin_permissions
 		breadcrumb_set_parents(array(array('_SELF:_SELF:privileges',do_lang_tempcode('CHOOSE'))));
 
 		decache('main_sitemap');
-		$GLOBALS['SITE_DB']->query_delete('cache');
+		require_code('view_modes');
+		erase_block_cache();
 		if (function_exists('persistent_cache_empty')) persistent_cache_empty();
 
 		// Show it worked / Refresh

@@ -1135,7 +1135,13 @@ class database_driver
 
 		if ($where_map===NULL)
 		{
-			$this->_query('DELETE FROM '.$this->table_prefix.$table.' '.$end,$max,$start,$fail_ok);
+			if (($end=='') && (is_null($max)) && (is_null($start)) && (strpos(get_db_type(),'mysql')!==false))
+			{
+				$this->_query('TRUNCATE '.$this->table_prefix.$table,NULL,NULL,$fail_ok);
+			} else
+			{
+				$this->_query('DELETE FROM '.$this->table_prefix.$table.' '.$end,$max,$start,$fail_ok);
+			}
 			return;
 		}
 

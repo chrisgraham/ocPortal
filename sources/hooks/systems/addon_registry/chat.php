@@ -429,6 +429,7 @@ class Hook_addon_registry_chat
 
 			foreach ($users as $user)
 				$usernames->attach(do_lorem_template('OCF_USER_MEMBER', array(
+					'FIRST'=>$usernames->is_empty(),
 					'PROFILE_URL'=>placeholder_url(),
 					'USERNAME'=>$user,
 					'COLOUR'=>'black',
@@ -538,6 +539,7 @@ class Hook_addon_registry_chat
 		$usernames=new ocp_tempcode();
 		foreach ($users as $user)
 			$usernames->attach(do_lorem_template('OCF_USER_MEMBER', array(
+				'FIRST'=>$usernames->is_empty(),
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>$user,
 				'COLOUR'=>'black',

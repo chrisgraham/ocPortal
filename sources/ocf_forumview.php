@@ -110,6 +110,7 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 							{
 								$poster=do_template('OCF_USER_MEMBER',array(
 									'_GUID'=>'39r932rwefldjfldjlf',
+									'FIRST'=>true,
 									'USERNAME'=>$subforum['last_username'],
 									'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($subforum['last_member_id'],false,true)
 								));
@@ -549,6 +550,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 			{
 				$poster=do_template('OCF_USER_MEMBER',array(
 					'_GUID'=>'8cf92d50e26ed25fcb2a551419ce6c82',
+					'FIRST'=>true,
 					'USERNAME'=>$topic['last_username'],
 					'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($topic['last_member_id'],false,true)
 				));
@@ -590,6 +592,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 		$poster_profile_url=$GLOBALS['OCF_DRIVER']->member_profile_url($topic['first_member_id'],false,true);
 		$poster=do_template('OCF_USER_MEMBER',array(
 			'_GUID'=>'75e8ae20f2942f898f45df6013678a72',
+			'FIRST'=>true,
 			'PROFILE_URL'=>$poster_profile_url,
 			'USERNAME'=>$topic['first_username']
 		));
@@ -605,6 +608,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 		$colour=get_group_colour(ocf_get_member_primary_group($with));
 		$b=do_template('OCF_USER_MEMBER',array(
 			'_GUID'=>'e7806e13ba51edd88c8b090ee4b31444',
+			'FIRST'=>true,
 			'COLOUR'=>$colour,
 			'PROFILE_URL'=>$GLOBALS['OCF_DRIVER']->member_profile_url($with,false,true),
 			'USERNAME'=>$with_username

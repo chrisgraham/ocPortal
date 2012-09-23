@@ -417,7 +417,7 @@ class Module_admin_lang
 		log_it('TRANSLATE_CONTENT');
 
 		require_code('view_modes');
-		erase_tempcode_cache();
+		erase_block_cache();
 		persistent_cache_empty();
 
 		if (get_param_integer('contextual',0)==1)
@@ -758,7 +758,7 @@ msgstr ""
 	{
 		decache('side_language');
 		require_code('view_modes');
-		erase_tempcode_cache();
+		erase_block_cache();
 
 		$lang=get_param('lang');
 		$lang_file=get_param('lang_file');

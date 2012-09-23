@@ -139,7 +139,7 @@ class Module_admin_xml_storage
 		require_code('zones3');
 		erase_comcode_page_cache();
 		require_code('view_modes');
-		erase_tempcode_cache();
+		erase_block_cache();
 		persistent_cache_empty();
 
 		breadcrumb_set_self(do_lang_tempcode('_RESULTS'));

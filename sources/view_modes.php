@@ -538,9 +538,9 @@ function ocportal_cleanup($caches=NULL)
 }
 
 /**
- * Erase the tempcode cache.
+ * Erase the block cache.
  */
-function erase_tempcode_cache()
+function erase_block_cache()
 {
 	$GLOBALS['SITE_DB']->query_delete('cache_on',NULL,'',NULL,NULL,true);
 	$GLOBALS['SITE_DB']->query_delete('cache');
