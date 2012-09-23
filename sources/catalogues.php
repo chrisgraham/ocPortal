@@ -915,7 +915,7 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 	$map['EDIT_DATE']=get_timezoned_date($entry['ce_edit_date']);
 	$map['ID']=strval($id);
 	$map['CATALOGUE']=$catalogue_name;
-	$map['CATALOGUE_TITLE']=get_translated_text($catalogue['c_title']);
+	$map['CATALOGUE_TITLE']=array_key_exists('c_title',$catalogue)?get_translated_text($catalogue['c_title']):'';
 	$map['CAT']=strval($entry['cc_id']);
 	if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($entry['allow_comments']>=1)) $map['COMMENT_COUNT']='1';
 

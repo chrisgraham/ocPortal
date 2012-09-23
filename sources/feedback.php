@@ -38,6 +38,9 @@ function init__feedback()
 	$RATINGS_STRUCTURE=array();
 	global $REVIEWS_STRUCTURE;
 	$REVIEWS_STRUCTURE=array();
+
+	global $RATING_DETAILS_CACHE;
+	$RATING_DETAILS_CACHE=array();
 }
 
 /**
@@ -255,12 +258,16 @@ function display_rating($content_url,$content_title,$content_type,$content_id,$d
  * @param  ID_TEXT		The ID of the type that this rating is for
  * @param  ID_TEXT		The template to use to display the rating box
  * @param  ?MEMBER		Content owner (NULL: none)
- * @return ?array			Current rating information (ready to be passed into a template). RATING is the rating (out of 10), NUM_RATINGS s the number of ratings so far, RATING_FORM is the tempcode of the rating box (NULL: rating disabled)
+ * @return ?array			Current rating information (ready to be passed into a template). RATING is the rating (out of 10), NUM_RATINGS is the number of ratings so far, RATING_FORM is the tempcode of the rating box (NULL: rating disabled)
  */
 function get_rating_simple_array($content_url,$content_title,$content_type,$content_id,$form_tpl='RATING_FORM',$submitter=NULL)
 {
 	if (get_option('is_on_rating')=='1')
 	{
+		global $RATING_DETAILS_CACHE;
+		if (isset($RATING_DETAILS_CACHE[$content_type][$content_id][$form_tpl]))
+			return $RATING_DETAILS_CACHE[$content_type][$content_id][$form_tpl];
+
 		$liked_by=mixed();
 
 		// Work out structure first
@@ -367,9 +374,11 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 			'LIKED_BY'=>$liked_by,
 		);
 		$rating_form=do_template($form_tpl,$tpl_params);
-		return $tpl_params+array(
+		$ret=$tpl_params+array(
 			'RATING_FORM'=>$rating_form,
 		);
+		$RATING_DETAILS_CACHE[$content_type][$content_id][$form_tpl]=$ret;
+		return $ret;
 	}
 	return NULL;
 }

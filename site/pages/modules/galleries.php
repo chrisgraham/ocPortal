@@ -1408,13 +1408,13 @@ class Module_galleries
 		if ($days!='') $where.=' AND add_date>='.strval(time()-intval($days)*60*60*24);
 
 		require_code('ocfiltering');
-		$image_select_sql=ocfilter_to_sqlfragment($image_select,'e.id');
+		$image_select_sql=ocfilter_to_sqlfragment($image_select,'r.id');
 		$where_images=$where.' AND '.$image_select_sql;
-		$video_select_sql=ocfilter_to_sqlfragment($video_select,'e.id');
+		$video_select_sql=ocfilter_to_sqlfragment($video_select,'r.id');
 		$where_videos=$where.' AND '.$video_select_sql;
 
-		$total_images=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where_images);
-		$total_videos=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where_videos);
+		$total_images=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'images r'.$join.' WHERE '.$where_images);
+		$total_videos=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'videos r'.$join.' WHERE '.$where_videos);
 
 		// These will hopefully be replaced with proper values
 		$position=1;
@@ -1428,8 +1428,8 @@ class Module_galleries
 		$total=$total_videos+$total_images;
 		if ($total<500) // Not too many to navigate through
 		{
-			$rows_images=$GLOBALS['SITE_DB']->query('SELECT e.id,add_date,url'.$sql_suffix_images.',title FROM '.get_table_prefix().'images e'.$join.' WHERE '.$where_images.' ORDER BY '.$sort);
-			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT e.id,add_date,url'.$sql_suffix_videos.',title FROM '.get_table_prefix().'videos e'.$join.' WHERE '.$where_videos.' ORDER BY '.$sort);
+			$rows_images=$GLOBALS['SITE_DB']->query('SELECT r.id,add_date,url'.$sql_suffix_images.',title FROM '.get_table_prefix().'images r'.$join.' WHERE '.$where_images.' ORDER BY '.$sort);
+			$rows_videos=$GLOBALS['SITE_DB']->query('SELECT r.id,add_date,url'.$sql_suffix_videos.',title FROM '.get_table_prefix().'videos r'.$join.' WHERE '.$where_videos.' ORDER BY '.$sort);
 
 			list($_sort,$_dir)=explode(' ',$sort,2);
 
