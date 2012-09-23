@@ -4076,6 +4076,7 @@ testing_platform
  - _tests/tests/unit_tests/welcome_emails.php
  - _tests/tests/unit_tests/bot_list_sync.php
  - _tests/tests/unit_tests/installsql.php
+ - _tests/tests/unit_tests/override_issues.php
 
 youtube_channel_integration_block
 ---------------------------------
