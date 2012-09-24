@@ -157,7 +157,7 @@ function js_compile($j,$js_cache_path,$minify=true)
 	if ($minify)
 		$out=js_minify($out);
 
-	if ($out=='')
+	if (($out=='') || ($minify))
 	{
 		$contents=$out;
 	} else
@@ -297,7 +297,7 @@ function _css_compile($active_theme,$theme,$c,$fullpath,$minify=true)
 	$SHOW_EDIT_LINKS=$show_edit_links;
 	if ($c!='no_cache')
 	{
-		if ($out!='')
+		if (($out!='') && (!$minify))
 		{
 			$out='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'.chr(10).'INSTEAD EDIT THE CSS FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A CSS_CUSTOM OVERRIDE. */'.chr(10).chr(10).$out;
 		}

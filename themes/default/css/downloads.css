@@ -73,7 +73,7 @@
 
 .download_now {
 	padding-left: 47px;
-	background: url('{$IMG;,bigicons/downloads}') no-repeat;
+	background: url('{$IMG_INLINE;,bigicons/downloads}') no-repeat;
 	text-align: center;
 	min-height: 55px;
 }

@@ -113,21 +113,6 @@
 	</script>
 {+END}{+END}
 
-{$,CSS includes from ocPortal page}
-{$CSS_TEMPCODE}
-
-{$,Javascript code (usually) from ocPortal page}
-{$EXTRA_HEAD}
-
-{$,Javascript includes from ocPortal page}
-{$JS_TEMPCODE,header}
-<!--[if lt IE 9]>
-<script src="{$BASE_URL*}/data/html5.js"></script>
-<![endif]-->
-
-{$,jQuery fan? Just uncomment the below and start using all the jQuery plugins you love in the normal way}
-{$,<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>}
-
 {$,Detecting of Timezones and Javascript support}
 <script type="text/javascript">// <![CDATA[
 	{+START,IF,{$CONFIG_OPTION,detect_javascript}}
@@ -139,6 +124,21 @@
 	{+START,IF,{$NOT,{$BROWSER_MATCHES,ie}}}{+START,IF,{$HAS_PRIVILEGE,sees_javascript_error_alerts}}window.take_errors=true;{+END}{+END}
 	var {+START,IF,{$CONFIG_OPTION,is_on_timezone_detection}}server_timestamp={$FROM_TIMESTAMP%},{+END}ocp_lang='{$LANG;}',ocp_theme='{$THEME;}',ocp_username='{$USERNAME;}'{+START,IF,{$IS_STAFF}},ocp_is_staff=true{+END};
 //]]></script>
+
+{$,Javascript code (usually) from ocPortal page}
+{$EXTRA_HEAD}
+
+{$,CSS includes from ocPortal page}
+{$CSS_TEMPCODE}
+
+{$,Javascript includes from ocPortal page}
+{$JS_TEMPCODE,header}
+<!--[if lt IE 9]>
+<script src="{$BASE_URL*}/data/html5.js"></script>
+<![endif]-->
+
+{$,jQuery fan? Just uncomment the below and start using all the jQuery plugins you love in the normal way}
+{$,<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>}
 
 {$,If the page is doing a refresh include the markup for that}
 {$REFRESH}

@@ -94,6 +94,7 @@ function init__site()
 	if (($access_host!='') && (isset($_SERVER['HTTP_HOST'])))
 	{
 		$parsed_base_url=parse_url(get_base_url());
+
 		if ((array_key_exists('host',$parsed_base_url)) && (strtolower($parsed_base_url['host'])!=strtolower($access_host)))
 		{
 			if (!array_key_exists('ZONE_MAPPING_'.get_zone_name(),$SITE_INFO))
@@ -747,7 +748,7 @@ function do_site()
 	// Load up our frames into strings. Note that the header and the footer are fixed already.
 	$middle=request_page(get_page_name(),true);
 	restore_output_state(true); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
-	if (($middle===NULL) || ($middle->is_definitely_empty()))
+	if (($middle===NULL) || ($middle->is_empty_shell()))
 	{
 		set_http_status_code('404');
 
@@ -1408,7 +1409,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 	}
 	$LAST_COMCODE_PARSED_TITLE=$title_to_use;
 
-	if (($html->is_definitely_empty()) && ($being_included)) return $html;
+	if (($html->is_empty_shell()) && ($being_included)) return $html;
 
 	if ((has_actual_page_access(get_member(),'cms_comcode_pages',NULL,NULL,(($comcode_page_row['p_submitter']==get_member()) && (!is_guest()))?'edit_own_highrange_content':'edit_highrange_content')))
 	{
@@ -1454,7 +1455,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		));
 	}
 
-	if (($html->is_definitely_empty()) && ($is_panel)) return $html;
+	if (($html->is_empty_shell()) && ($is_panel)) return $html;
 
 	global $SCREEN_TEMPLATE_CALLED;
 	$st=$SCREEN_TEMPLATE_CALLED;

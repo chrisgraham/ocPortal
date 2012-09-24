@@ -1172,31 +1172,21 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Tests to see if something would evaluate to empty or not
+	 * Find whether the tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty
 	 *
-	 * @return boolean		Whether it is really empty
+	 * @return boolean		Whether it is entirely empty
 	 */
-	function is_definitely_empty()
+	function is_empty_shell()
 	{
 		return count($this->bits)==0;
 	}
 
 	/**
-	 * Find whether the current tempcode object is empty or not.
+	 * Find whether the tempcode object is empty or not.
 	 *
 	 * @return boolean		Whether the tempcode object is empty
 	 */
 	function is_empty()
-	{
-		return $this->is_really_empty();
-	}
-
-	/**
-	 * Tests to see if something would evaluate to empty or not
-	 *
-	 * @return boolean		Whether it is really empty
-	 */
-	function is_really_empty()
 	{
 		foreach ($this->bits as $bit)
 		{

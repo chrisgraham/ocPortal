@@ -957,13 +957,14 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 
 				if (is_null($write_to_file)) $input.=$line; else fwrite($write_to_file,$line);
 				$input_len+=strlen($line);
+
 				if ((!is_null($byte_limit)) && ($input_len>=$byte_limit))
 				{
 					$input=substr($input,0,$byte_limit);
 					break;
 				}
 			}
-			else
+			elseif ($line!='')
 			{
 				$old_line=$line;
 				$lines=explode("\r\n",$line);

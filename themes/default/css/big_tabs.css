@@ -20,19 +20,19 @@
 }
 
 .big_tab_inactive a {
-	background: url('{$IMG;,big_tabs_controller_button}') no-repeat !important;
+	background: url('{$IMG_INLINE;,big_tabs_controller_button}') no-repeat !important;
 }
 
 .big_tab_active a, .big_tab_inactive a:hover {
-	background: url('{$IMG;,big_tabs_controller_button_active}') no-repeat !important;
+	background: url('{$IMG_INLINE;,big_tabs_controller_button_active}') no-repeat !important;
 }
 
 .big_tab_first.big_tab_inactive a {
-	background: url('{$IMG;,big_tabs_controller_button_top}') no-repeat !important;
+	background: url('{$IMG_INLINE;,big_tabs_controller_button_top}') no-repeat !important;
 }
 
 .big_tab_first.big_tab_active a, .big_tab_first.big_tab_inactive a:hover {
-	background: url('{$IMG;,big_tabs_controller_button_top_active}') no-repeat !important;
+	background: url('{$IMG_INLINE;,big_tabs_controller_button_top_active}') no-repeat !important;
 }
 
 .comcode_big_tab {

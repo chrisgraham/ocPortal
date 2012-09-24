@@ -206,7 +206,7 @@ textarea, input, code {
 
 /* Our little 'typing' effect */
 input[type="text"]:focus, input[type="password"]:focus {
-	background: url('{$IMG;,keyboard}') right center no-repeat white;
+	background: url('{$IMG_INLINE;,keyboard}') right center no-repeat white;
 }
 
 /* Normally a browser default, but gets inherited on some phones */
@@ -373,7 +373,7 @@ body.website_body.frame {
 			Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
 			Find how to edit the referenced "outer_background" theme image by doing an Admin Zone search for "outer_background"
 		*/
-		background: url('{$IMG;,outer_background}');
+		background: url('{$IMG_INLINE;,outer_background}');
 	}
 	#main_website #main_website_inner {
 		width: 980px;
@@ -443,7 +443,7 @@ header h1 {
 		width: 980px;
 		height: 100px;
 		float: left;
-		background: url('{$IMG;,header}') no-repeat !important;
+		background: url('{$IMG_INLINE;,header}') no-repeat !important;
 	}
 
 	.logo_outer * {
@@ -467,7 +467,7 @@ header h1 {
 		text-align: right;
 		margin-top: 60px;
 		padding: 5px 5px 0 0;
-		background: url('{$IMG;,zone_gradient}') repeat-x;
+		background: url('{$IMG_INLINE;,zone_gradient}') repeat-x;
 		min-height: 24px;
 	{+END}
 	font-weight: bold;
@@ -595,7 +595,7 @@ body#main_website #main_website_inner, html>body div.global_middle_faux {
 		Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
 		Find how to edit the referenced "inner_background" theme image by doing an Admin Zone search for "inner_background"
 	*/
-	/*background: url('{$IMG;,inner_background}');*/
+	/*background: url('{$IMG_INLINE;,inner_background}');*/
 }
 
 .global_middle_outer {
@@ -921,7 +921,7 @@ body .accessibility_hidden { /* Contents should be made visible (or interpreted)
 	padding-{!en_left}: 15px;
 	margin: 1.5em;
 	margin-{!en_left}: 10px;
-	background-image: url('{$IMG;,cannot_show}');
+	background-image: url('{$IMG_INLINE;,cannot_show}');
 	background-position: {!en_left} 5px;
 	background-repeat: no-repeat;
 }
@@ -1190,7 +1190,7 @@ th.meta_data_title {
 		Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
 		Find how to edit the referenced "block_background" theme image by doing an Admin Zone search for "block_background"
 	*/
-	background: url('{$IMG;,block_background}') {$GET,area_background};
+	background: url('{$IMG_INLINE;,block_background}') {$GET,area_background};
 	/* If the browser supports gradients, we'll put a nice box-filling gradient in here instead */
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_4_background});}
 
@@ -1227,7 +1227,7 @@ th.meta_data_title {
 	{$BETA_CSS_PROPERTY,border-top-left-radius: 3px;}
 	{$BETA_CSS_PROPERTY,border-top-right-radius: 3px;}
 	background-color: {$GET,box_title_background};
-	background-image: url('{$IMG;,gradient}');
+	background-image: url('{$IMG_INLINE;,gradient}');
 	background-repeat: repeat-x;
 	color: {$GET,box_title_text};
 	text-align: center;
@@ -1286,7 +1286,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	margin: 0;
 }
 .boxless_space .box>.box_inner>h1, .boxless_space .box>.box_inner>h2, .boxless_space .box>.box_inner>h3, .boxless_space .box>.box_inner>h4, .boxless_space .box>.box_inner>h5, .boxless_space .box>.box_inner>h6, .boxless_space .box>.toggleable_tray_title {
-	background: url('{$IMG;,boxless_title_leadin_rightcomp}') no-repeat !important;
+	background: url('{$IMG_INLINE;,boxless_title_leadin_rightcomp}') no-repeat !important;
 	color: {$GET,slightly_seeded_right_complement_text} !important;
 	text-align: {!en_left};
 	font-size: 15px;
@@ -1299,7 +1299,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	{$BETA_CSS_PROPERTY,border-radius: 0;}
 }
 .global_side_panel .boxless_space .box>.box_inner>h1, .global_side_panel .boxless_space .box>.box_inner>h2, .global_side_panel .boxless_space .box>.box_inner>h3, .global_side_panel .boxless_space .box>.box_inner>h4, .global_side_panel .boxless_space .box>.box_inner>h5, .global_side_panel .boxless_space .box>.box_inner>h6 {
-	background: url('{$IMG;,boxless_title_leadin_leftcomp}') no-repeat !important;
+	background: url('{$IMG_INLINE;,boxless_title_leadin_leftcomp}') no-repeat !important;
 	color: {$GET,slightly_seeded_left_complement_text} !important;
 }
 .boxless_space .buttons_group, .boxless_space .associated_links_block_group, .boxless_space .media_box, .boxless_space .proceed_button {
@@ -1962,7 +1962,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 	font-weight: bold;
 	margin-bottom: 0.3em;
 	padding: 0 0 0 18px;
-	background: url('{$IMG;,action_link}') 0 5px no-repeat;
+	background: url('{$IMG_INLINE;,action_link}') 0 5px no-repeat;
 }
 .index_screen_fancier_entry_count {
 	font-size: 0.9em;
@@ -2410,11 +2410,11 @@ ul.actions_list {
 }
 ul.actions_list>li {
 	padding: 1px 0 2px 18px;
-	background: url('{$IMG;,action_link}') left 5px no-repeat;
+	background: url('{$IMG_INLINE;,action_link}') left 5px no-repeat;
 }
 ul.actions_list_compact>li, ul.actions_list_super_compact>li {
 	padding: 0 0 0 18px;
-	background: url('{$IMG;,action_link}') left 2px no-repeat;
+	background: url('{$IMG_INLINE;,action_link}') left 2px no-repeat;
 }
 ul.actions_list>li, ul.actions_list_compact>li, ul.actions_list_super_compact>li {
 	margin: 0;
@@ -2506,7 +2506,7 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 	font-size: 0.95em;
 	{$BETA_CSS_PROPERTY,opacity: 0.4;}
 	{$BETA_CSS_PROPERTY,transition: opacity 0.6s linear;}
-	background: url('{$IMG;,action}') right 3px no-repeat;
+	background: url('{$IMG_INLINE;,action}') right 3px no-repeat;
 	padding-right: 5px;
 	background-origin: content-box;
 }
@@ -2765,7 +2765,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 	background-color: {$GET,lgrad};
 	color: {$GET,native_ui_button_foreground};
 	{$BETA_CSS_PROPERTY,border-radius: 6px;}
-	background-image: url('{$IMG;,gradient}');
+	background-image: url('{$IMG_INLINE;,gradient}');
 	text-shadow: 1px 1px 1px {$GET,dark_shadow};
 	margin: 0 2px;
 }
@@ -3328,7 +3328,7 @@ ul.nl, .nl ul {
 /* Give Admin Zones special icon */
 .menu_type__zone li a[href*="/cms/"], .menu_type__zone li a[href*="/adminzone/"] {
 	padding-right: 17px;
-	background: url('{$IMG;,action_small}') right top no-repeat;
+	background: url('{$IMG_INLINE;,action_small}') right top no-repeat;
 }
 
 .menu_type__zone li * {

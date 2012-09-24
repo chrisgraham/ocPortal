@@ -222,6 +222,23 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'IMG_INLINE':
+				if ((isset($param[0])) && (isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0) && ($GLOBALS['FORUM_DRIVER']!==NULL))
+				{
+					$value=find_theme_image($param[0],true,true,(array_key_exists(2,$param) && $param[2]!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
+					if ($value!='')
+					{
+						$file_path=((substr($value,0,22)=='themes/default/images/')?get_file_base():get_custom_file_base()).'/'.$value;
+						$file_size=@filesize($file_path);
+						if (($file_size!==false) && ($file_size<32768))
+						{
+							require_code('mime_types');
+							$value='data:'.get_mime_type(get_file_extension($file_path)).';base64,'.base64_encode(file_get_contents($file_path));
+							break;
+						}
+					}
+				}
+
 			case 'IMG':
 				if ((isset($param[0])) && (isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && ($GLOBALS['IN_MINIKERNEL_VERSION']==0) && ($GLOBALS['FORUM_DRIVER']!==NULL))
 				{
@@ -2453,7 +2470,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IF_NON_EMPTY':
 				if (isset($param[1]))
 				{
-					if (!$param[0]->is_really_empty())
+					if (!$param[0]->is_empty())
 					{
 						$value=$param[1]->evaluate();
 					}
@@ -2507,7 +2524,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 			case 'IF_EMPTY':
 				if (isset($param[1]))
 				{
-					if ($param[0]->is_really_empty())
+					if ($param[0]->is_empty())
 					{
 						$value=$param[1]->evaluate();
 					}

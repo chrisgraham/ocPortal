@@ -33,6 +33,17 @@ class Hook_symbol_BETA_CSS_PROPERTY
 
 		if (isset($param[0]))
 		{
+			$is_supported=array( // No prefixing needed for these
+				'-webkit-'=>array(
+					'border-top-left-radius'=>true,
+					'border-top-right-radius'=>true,
+					'border-bottom-left-radius'=>true,
+					'border-bottom-right-radius'=>true,
+					'border-radius'=>true,
+					'box-sizing'=>true,
+				),
+			);
+
 			$value='';
 			$matches=array();
 			if (preg_match('#^opacity:\s*(.*)$#s',$param[0],$matches)!=0) // Opacity, supported by all except IE8, which is done using a special filter
@@ -43,6 +54,8 @@ class Hook_symbol_BETA_CSS_PROPERTY
 				$vendors=array('','-o-','-webkit-','-ms-','-moz-');
 				foreach ($vendors as $prefix)
 				{
+					if ((strpos($param[0],':')!==false) && (isset($is_supported[$prefix][substr($param[0],0,strpos($param[0],':'))]))) continue;
+
 					if (substr(trim($param[0]),-1)!=';') $value.='; ';
 					if (preg_match('#^background-image:\s*(\w+-gradient)(.*)$#s',$param[0],$matches)!=0) // CSS gradients aren't a new property as such, they're a prefixed extension to an existing one
 					{

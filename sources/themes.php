@@ -260,8 +260,12 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
  */
 function cdn_filter($path)
 {
-	$cdn=get_value('cdn');
-	if (isset($cdn))
+	static $cdn=NULL;
+	if ($cdn===NULL) $cdn=get_option('cdn');
+	static $knm=NULL;
+	if ($knm===NULL) $knm=get_param_integer('keep_no_minify',0);
+
+	if (($cdn!='') && ($knm==0))
 	{
 		global $CDN_CONSISTENCY_CHECK;
 
@@ -275,10 +279,10 @@ function cdn_filter($path)
 
 		$cdn_part=$cdn_parts[$sum_asc%count($cdn_parts)]; // To make a consistent but fairly even distribution we do some modular arithmetic against the total of the ascii values
 		$out=preg_replace('#(^https?://)'.str_replace('#','#',preg_quote(get_domain())).'(/)#','${1}'.$cdn_part.'${2}',$path);
-
 		$CDN_CONSISTENCY_CHECK[$path]=$out;
 		return $out;
 	}
+
 	return $path;
 }
 

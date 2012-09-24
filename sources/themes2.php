@@ -19,6 +19,54 @@
  */
 
 /**
+ * Try and find some CDNs to use.
+ *
+ * @return string				List of CDNs
+ */
+function autoprobe_cdns()
+{
+	require_code('files');
+
+	$base_url=get_base_url();
+	$parsed=parse_url($base_url);
+	if (!array_key_exists('path',$parsed)) $parsed['path']='';
+	$domain_name=$parsed['host'];
+	$try=array(
+		ocp_srv('REMOTE_ADDR'),
+		(substr($domain_name,0,4)=='www.')?preg_replace('#^www\.#','',$domain_name):('www'.'.'.$domain_name),
+		'ftp'.'.'.$domain_name,
+		'mail'.'.'.$domain_name,
+		/*'smtp'.'.'.$domain_name,	Let's be at least somewhat reasonable ;-)
+		'imap'.'.'.$domain_name,
+		'pop'.'.'.$domain_name,
+		'webmail'.'.'.$domain_name,*/
+		'cdn'.'.'.$domain_name,
+	);
+
+	$detected_cdns='';
+	$expected=file_get_contents(get_file_base().'/themes/default/images/comcode.png');
+	foreach ($try as $t)
+	{
+		if (preg_match('#^'.preg_quote($t,'#').'($|\.|/|:)#',$domain_name)==0) // Don't use it if it is in the base URL
+		{
+			$test_url='http://'.$t.$parsed['path'].'/themes/default/images/comcode.png';
+
+			$test_result=http_download_file($test_url,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.25,false,NULL);
+
+			if ((!is_null($test_result)) && ($test_result==$expected))
+			{
+				if ($detected_cdns!='') $detected_cdns.=',';
+				$detected_cdns.=$t;
+			}
+		}
+	}
+
+	require_code('config2');
+	set_option('cdn',$detected_cdns);
+	return $detected_cdns;
+}
+
+/**
  * Edit a theme image.
  *
  * @param  SHORT_TEXT		The current theme image ID

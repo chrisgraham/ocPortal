@@ -11,7 +11,7 @@
 	text-align: center;
 	width: 80%;
 	margin: 0 auto;
-	background: url('{$IMG;,background_image}') no-repeat 20px 44px;
+	background: url('{$IMG_INLINE;,background_image}') no-repeat 20px 44px;
 	padding: 5px;
 }
 

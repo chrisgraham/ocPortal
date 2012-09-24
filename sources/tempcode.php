@@ -1091,7 +1091,7 @@ class ocp_tempcode
 	{
 		if ($attach==='') return;
 
-		unset($this->is_really_empty);
+		unset($this->is_empty);
 
 		$this->cached_output=NULL;
 
@@ -1138,38 +1138,28 @@ class ocp_tempcode
 	}
 
 	/**
-	 * Find whether the current tempcode object is definitely blank, by doing a very quick check.
+	 * Find whether the tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty
 	 *
-	 * @return boolean		Whether the tempcode object is empty
+	 * @return boolean		Whether it is entirely empty
 	 */
-	function is_definitely_empty()
+	function is_empty_shell()
 	{
 		return !isset($this->seq_parts[0]);
 	}
 
 	/**
-	 * Find whether the current tempcode object is blank or not.
+	 * Find whether the tempcode object is blank or not.
 	 *
 	 * @return boolean		Whether the tempcode object is empty
 	 */
 	function is_empty()
 	{
-		return $this->is_really_empty();
-	}
-
-	/**
-	 * Tests to see if something would evaluate to blank or not
-	 *
-	 * @return boolean		Whether it is really empty
-	 */
-	function is_really_empty()
-	{
 		if ($this->cached_output!==NULL) return strlen($this->cached_output)==0;
-		if (isset($this->is_really_empty)) return $this->is_really_empty;
+		if (isset($this->is_empty)) return $this->is_empty;
 
 		if (!isset($this->seq_parts[0]))
 		{
-			$this->is_really_empty=true;
+			$this->is_empty=true;
 			return true;
 		}
 
@@ -1224,7 +1214,7 @@ class ocp_tempcode
 				if (eval($TPL_FUNCS[$bit_0])===false) fatal_exit(@strval($php_errormsg));
 			}
 
-			//@ob_end_flush();@ob_end_flush();@ob_end_flush();print('<!-- tempcode-eval-is_really_empty: '.htmlentities($this->codename).' ('.clean_file_size(memory_get_usage()-$before).' used, now at '.number_format(memory_get_usage()).') -->'."\n");flush();
+			//@ob_end_flush();@ob_end_flush();@ob_end_flush();print('<!-- tempcode-eval-is_empty: '.htmlentities($this->codename).' ('.clean_file_size(memory_get_usage()-$before).' used, now at '.number_format(memory_get_usage()).') -->'."\n");flush();
 
 			if ((($first_of_long) || ($MEMORY_OVER_SPEED)) && (ob_get_length()>0)) // We only quick exit on the first iteration, as we know we likely didn't spend much time getting to it- anything more and we finish so that we can cache for later use by evaluate/evaluate_echo
 			{
@@ -1236,7 +1226,7 @@ class ocp_tempcode
 					$NO_EVAL_CACHE=$no_eval_cache_before;
 				if ($XSS_DETECT)
 					@ini_set('ocproducts.xss_detect',$before);
-				$this->is_really_empty=false;
+				$this->is_empty=false;
 				return false;
 			}
 
@@ -1254,7 +1244,7 @@ class ocp_tempcode
 			if (!$no_eval_cache_before)
 				$NO_EVAL_CACHE=$no_eval_cache_before;
 			$ret=($tmp=='');
-			$this->is_really_empty=$ret;
+			$this->is_empty=$ret;
 			return $ret;
 		}
 
@@ -1264,7 +1254,7 @@ class ocp_tempcode
 		if ($XSS_DETECT)
 			@ini_set('ocproducts.xss_detect',$before);
 		$ret=($this->cached_output=='');
-		$this->is_really_empty=$ret;
+		$this->is_empty=$ret;
 		return $ret;
 	}
 

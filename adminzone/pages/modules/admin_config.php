@@ -77,6 +77,7 @@ class Module_admin_config
 										'spam_check_usernames','implied_spammer_confidence','spam_blackhole_detection','honeypot_url','honeypot_phrase',
 										'filetype_icons','infinite_scrolling',
 										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
+										'cdn',
 										);
 
 		foreach ($config_options as $option)
@@ -171,6 +172,7 @@ class Module_admin_config
 		if ((is_null($upgrade_from)) || ($upgrade_from<15))
 		{
 			add_config_option('INFINITE_SCROLLING','infinite_scrolling','tick','return \'1\';','SITE','GENERAL');
+			add_config_option('CDN','cdn','line','require_code(\'themes2\'); return autoprobe_cdns();','SITE','ADVANCED');
 		}
 
 		if (is_null($upgrade_from))

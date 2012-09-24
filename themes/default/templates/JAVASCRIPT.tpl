@@ -18,13 +18,13 @@ function script_load_stuff()
 	/* Dynamic images need preloading */
 	var preloader=new Image();
 	var images=[];
-	images[0]='{$IMG;,menus/menu_bullet_hover}'.replace(/^http:/,window.location.protocol);
-	images[1]='{$IMG;,menus/menu_bullet_expand_hover}'.replace(/^http:/,window.location.protocol);
-	images[2]='{$IMG;,expand}'.replace(/^http:/,window.location.protocol);
-	images[3]='{$IMG;,contract}'.replace(/^http:/,window.location.protocol);
-	images[4]='{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol);
-	images[5]='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
-	for(i=0;i<images.length;i++) preloader.src=images[i];
+	/*images.push('{$IMG;,menus/menu_bullet_hover}'.replace(/^http:/,window.location.protocol));	Menu type no longer on by default
+	images.push('{$IMG;,menus/menu_bullet_expand_hover}'.replace(/^http:/,window.location.protocol));*/
+	/*images.push('{$IMG;,expand}'.replace(/^http:/,window.location.protocol)); Expanders and contracters no longer prominent in UI
+	images.push('{$IMG;,contract}'.replace(/^http:/,window.location.protocol));
+	images.push('{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol));*/
+	images.push('{$IMG;,loading}'.replace(/^http:/,window.location.protocol));
+	for (i=0;i<images.length;i++) preloader.src=images[i];
 
 	/* Textarea scroll support */
 	handle_textarea_scrolling();

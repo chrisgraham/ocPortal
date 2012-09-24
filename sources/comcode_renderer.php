@@ -2140,7 +2140,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 	}
 
 	// Last ditch effort: custom tags
-	if ($temp_tpl->is_definitely_empty())
+	if ($temp_tpl->is_empty_shell())
 	{
 		global $CUSTOM_COMCODE_REPLACE_TARGETS_CACHE;
 		if (array_key_exists($tag,$CUSTOM_COMCODE_REPLACE_TARGETS_CACHE))
