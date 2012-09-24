@@ -628,7 +628,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		}
 		$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>($topic_info['is_threaded']==1)?'reply':'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
 	}
-	if ((addon_installed('points')) && (!is_guest()) && (!is_guest($_postdetails['poster'])))
+	if ((addon_installed('points')) && (!is_guest()) && (!is_guest($_postdetails['poster'])) && (has_specific_permission($_postdetails['poster'],'use_points'))
 	{
 		$action_url=build_url(array('page'=>'points','type'=>'member','id'=>$_postdetails['poster']),get_module_zone('points'));
 		$_title=do_lang_tempcode('POINTS_THANKS');

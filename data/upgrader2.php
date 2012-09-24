@@ -232,5 +232,7 @@ function upgrader2_check_master_password($password_given_hashed)
 	global $SITE_INFO;
 	$actual_password_hashed=$SITE_INFO['admin_password'];
 
+	if ($password_given_hashed==md5($actual_password_hashed)) return true; // LEGACY: Upgrade from v7 where hashed input password given even if plain-text password is in use
+
 	return ($password_given_hashed==$actual_password_hashed);
 }

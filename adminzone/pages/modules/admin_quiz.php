@@ -147,7 +147,7 @@ class Module_admin_quiz
 	/**
 	 * Standard aed_module delete actualiser.
 	 */
-	function	_export_quiz()
+	function _export_quiz()
 	{
 		require_code('files2');
 		$quiz_id=post_param_integer('quiz_id');

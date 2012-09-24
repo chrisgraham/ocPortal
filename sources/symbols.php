@@ -1650,15 +1650,22 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[0]))
 				{
 					$timestamp=isset($param[1])?intval($param[1]):time();
+					if ((!array_key_exists(2,$param)) || ($param[2]=='1')) $timestamp=utctime_to_usertime($timestamp);
 					$value=locale_filter(my_strftime($param[0],$timestamp));
-					if ($value==$param[0]) $value=date($param[0],utctime_to_usertime($timestamp));
-				} else $value=strval(time());
+					if ($value==$param[0]) // If no conversion happened then the syntax must have been for 'date' not 'strftime'
+						$value=date($param[0],$timestamp);
+				} else
+				{
+					$timestamp=time();
+					$value=strval($timestamp);
+				}
 				break;
 
 			case 'TO_TIMESTAMP':
 				if (isset($param[0]))
 				{
 					$value=strval(strtotime($param[0]));
+					if ((array_key_exists(1,$param)) && ($param[1]=='1')) $value=strval(usertime_to_utctime(intval($value))); // '1' means date was in user-time so needs converting to a UTC timestamp
 				} else $value=strval(time());
 				break;
 

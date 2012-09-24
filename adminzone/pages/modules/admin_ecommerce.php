@@ -88,7 +88,7 @@ class Module_admin_ecommerce extends standard_aed_module
 		require_lang('ecommerce');
 		require_code('ecommerce');
 
-		if (get_value('unofficial_ecommerce')!='1')
+		if ((get_value('unofficial_ecommerce')!='1') && (count(find_all_hooks('systems','ecommerce'))==8))
 		{
 			if (get_forum_type()!='ocf') warn_exit(do_lang_tempcode('NO_OCF')); else ocf_require_all_forum_stuff();
 		}
@@ -111,7 +111,10 @@ class Module_admin_ecommerce extends standard_aed_module
 		if ($type=='trigger') return $this->trigger();
 		if ($type=='_trigger') return $this->_trigger();
 
-		breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+		if (get_forum_type()=='ocf')
+		{
+			breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_join:menu',do_lang_tempcode('MEMBERS'))));
+		}
 
 		return new ocp_tempcode();
 	}

@@ -165,7 +165,7 @@ function require_code($codename,$light_exit=false)
 				$overlaps=false;
 				foreach ($functions_diff as $function) // Go through override's functions and make sure original doesn't have them: rename original's to non_overrided__ equivs.
 				{
-					if (strpos($orig,'function '.$function.'(')!==false)
+					if (strpos($orig,'function '.$function.'(')!==false) // NB: If this fails, it may be that "function\t" is in the file (you can't tell with a three-width proper tab)
 					{
 						$orig=str_replace('function '.$function.'(','function non_overrided__'.$function.'(',$orig);
 						$overlaps=true;

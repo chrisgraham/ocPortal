@@ -975,8 +975,8 @@ class virtual_bash
 				$this->output[STREAM_STDCOMMAND]=$hook_return[0];
 				if (is_object($hook_return[1])) $this->output[STREAM_STDHTML]=$hook_return[1]->evaluate();
 				else $this->output[STREAM_STDHTML]=$hook_return[1];
-				$this->output[STREAM_STDOUT]=$hook_return[2];
-				$this->output[STREAM_STDERR]=$hook_return[3];
+				$this->output[STREAM_STDOUT]=array_key_exists(2,$hook_return)?$hook_return[2]:'';
+				$this->output[STREAM_STDERR]=array_key_exists(2,$hook_return)?$hook_return[3]:'';
 			}
 			else
 			{
