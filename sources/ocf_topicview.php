@@ -173,7 +173,8 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		}
 
 		// Any custom fields to show?
-		$post['custom_fields']=ocf_get_all_custom_fields_match_member($_postdetails['p_poster'],((get_member()!=$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,((get_member()==$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,NULL,NULL,NULL,NULL,NULL,0,true);
+		$post['custom_fields']=ocf_get_all_custom_fields_match_member($_postdetails['p_poster'],((get_member()!=$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,((get_member()==$_postdetails['p_poster']) && (!has_specific_permission(get_member(),'view_any_profile_field')))?1:NULL,NULL,NULL,NULL,1);
+		function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$owner_view=NULL,$owner_set=NULL,$encrypted=NULL,$required=NULL,$show_in_posts=NULL,$show_in_post_previews=NULL,$special_start=0,$show_on_join_form=NULL)
 
 		// Usergroup
 		$post['primary_group']=$primary_group;

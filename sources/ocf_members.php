@@ -176,7 +176,7 @@ function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=N
  * Gets all a member's custom fields that match certain parameters.
  *
  * @param  MEMBER		The member.
- * @param  ?BINARY	That are publically viewable (NULL: don't care).
+ * @param  ?BINARY	That are publicly viewable (NULL: don't care).
  * @param  ?BINARY	That are owner viewable (NULL: don't care).
  * @param  ?BINARY	That are owner settable (NULL: don't care).
  * @param  ?BINARY	That are encrypted (NULL: don't care).
