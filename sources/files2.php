@@ -927,7 +927,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 					break;
 				}
 			}
-			else
+			elseif ($line!='')
 			{
 				$old_line=$line;
 				$lines=explode("\r\n",$line);
