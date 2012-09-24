@@ -167,8 +167,11 @@ function actual_add_theme($name)
 		$path='themes/'.$name.'/'.$dir;
 		afm_make_directory($path,true);
 		$path='themes/'.$name.'/'.(($dir=='')?'':($dir.'/')).'index.html';
-		if (file_exists(get_file_base().'/themes/default/templates_cached/index.html'))
-			afm_copy('themes/default/templates_cached/index.html',$path,false);
+		if (file_exists(get_file_base().'/themes/default/'.(($dir=='')?'':($dir.'/')).'index.html'))
+			afm_copy('themes/default/'.(($dir=='')?'':($dir.'/')).'index.html',$path,false);
+		$path='themes/'.$name.'/'.(($dir=='')?'':($dir.'/')).'.htaccess';
+		if (file_exists(get_file_base().'/themes/default/'.(($dir=='')?'':($dir.'/')).'.htaccess'))
+			afm_copy('themes/default/'.(($dir=='')?'':($dir.'/')).'.htaccess',$path,false);
 	}
 	afm_copy('themes/default/theme.ini','themes/'.$name.'/theme.ini',true);
 

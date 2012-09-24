@@ -556,6 +556,13 @@ function ecv($lang,$escaped,$type,$name,$param)
 
 				break;
 
+			case 'CDN_FILTER':
+				if (isset($param[0]))
+				{
+					$value=cdn_filter($param[0]);
+				}
+				break;
+
 			case 'LOAD_PANEL':
 				foreach ($param as $i=>$p)
 					if (is_object($p)) $param[$i]=$p->evaluate();

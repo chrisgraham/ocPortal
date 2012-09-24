@@ -838,6 +838,8 @@ function do_site()
 		} else
 		{
 			$GLOBALS['FINISHING_OUTPUT']=true;
+			/*if (get_option('gzip_output')=='1')	Does not work well
+				ob_start('_compress_html_output');*/
 			$out->evaluate_echo();
 		}
 	}
@@ -1608,3 +1610,13 @@ function log_stats($string,$pg_time)
 	if (isset($SITE_INFO['throttle_bandwidth_views_per_meg'])) set_value('page_views',strval(intval(get_value('page_views'))+1));
 }
 
+/* *
+ * Output filter to compress HTML.
+ *
+ * @param  string			The HTML to filter
+ * @return string			Compressed HTML
+ */
+/*f unction _compress_html_output($data)
+{
+	return preg_replace(array('#>[ \t]+#','#[ \t]+<#','#\n[ \t]+\n#','#\n+#'),array('> ',' <',chr(10),chr(10)),$data);
+}*/

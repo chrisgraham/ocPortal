@@ -349,7 +349,16 @@ function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$u
 		}
 		elseif (($url!='') || (is_image($img_url))) // Image; Can't rely on image check, because often they have script-generated URLs
 		{
-			if (url_is_local($img_url)) $img_url=get_custom_base_url().'/'.$img_url;
+			if (url_is_local($img_url))
+			{
+				if (substr($img_url,0,12)=='data/images/')
+				{
+					$img_url=cdn_filter(get_base_url().'/'.$img_url);
+				} else
+				{
+					$img_url=get_custom_base_url().'/'.$img_url;
+				}
+			}
 			$_banner_type_row=$GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id'=>$b_type),'',1);
 			if (array_key_exists(0,$_banner_type_row))
 			{

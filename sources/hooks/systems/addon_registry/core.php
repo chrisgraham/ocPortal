@@ -556,6 +556,7 @@ class Hook_addon_registry_core
 			'data/images/index.html',
 			'data/images/.htaccess',
 			'data_custom/images/index.html',
+			'data_custom/images/.htaccess',
 			'data/index.html',
 			'data/javascript.php',
 			'data/modules/index.html',

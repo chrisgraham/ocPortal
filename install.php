@@ -2598,6 +2598,13 @@ $clauses[]=<<<END
 php_value open_basedir "{$file_base}"
 END;
 */
+
+$clauses[]=<<<END
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript
+</IfModule>
+END;
+
 $clauses[]=<<<END
 <IfModule mod_rewrite.c>
 # Needed for mod_rewrite
