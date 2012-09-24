@@ -48,8 +48,7 @@ class Hook_config_default_cdn
 	 */
 	function get_default()
 	{
-		require_code('themes2');
-		return autoprobe_cdns();
+		return '<autodetect>';
 	}
 
 }

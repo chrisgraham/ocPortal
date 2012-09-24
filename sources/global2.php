@@ -331,6 +331,7 @@ function init__global2()
 		$changed_base_url=!array_key_exists('base_url',$SITE_INFO) && get_long_value('last_base_url')!==get_base_url(false);
 		if ((running_script('index')) && ((is_browser_decacheing()) || ($changed_base_url)))
 		{
+			delete_value('cdn');
 			require_code('view_modes');
 			erase_block_cache();
 			erase_cached_templates(!$changed_base_url);

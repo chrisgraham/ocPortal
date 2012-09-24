@@ -172,7 +172,7 @@ class Module_admin_config
 		if ((is_null($upgrade_from)) || ($upgrade_from<15))
 		{
 			add_config_option('INFINITE_SCROLLING','infinite_scrolling','tick','return \'1\';','SITE','GENERAL');
-			add_config_option('CDN','cdn','line','require_code(\'themes2\'); return autoprobe_cdns();','SITE','ADVANCED');
+			add_config_option('CDN','cdn','line','return \'<autodetect>\';','SITE','ADVANCED');
 		}
 
 		if (is_null($upgrade_from))

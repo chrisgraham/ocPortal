@@ -32,6 +32,7 @@ function autoprobe_cdns()
 	if (!array_key_exists('path',$parsed)) $parsed['path']='';
 	$domain_name=$parsed['host'];
 	$try=array(
+		'cdn'.'.'.$domain_name,
 		ocp_srv('REMOTE_ADDR'),
 		(substr($domain_name,0,4)=='www.')?preg_replace('#^www\.#','',$domain_name):('www'.'.'.$domain_name),
 		'ftp'.'.'.$domain_name,
@@ -40,7 +41,6 @@ function autoprobe_cdns()
 		'imap'.'.'.$domain_name,
 		'pop'.'.'.$domain_name,
 		'webmail'.'.'.$domain_name,*/
-		'cdn'.'.'.$domain_name,
 	);
 
 	$detected_cdns='';
@@ -61,8 +61,7 @@ function autoprobe_cdns()
 		}
 	}
 
-	require_code('config2');
-	set_option('cdn',$detected_cdns);
+	set_value('cdn',$detected_cdns);
 	return $detected_cdns;
 }
 

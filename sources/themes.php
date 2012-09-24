@@ -267,6 +267,16 @@ function cdn_filter($path)
 
 	if (($cdn!='') && ($knm==0))
 	{
+		if ($cdn=='<autodetect>')
+		{
+			$cdn=get_value('cdn');
+			if ($cdn==NULL)
+			{
+				require_code('themes2');
+				$cdn=autoprobe_cdns();
+			}
+		}
+
 		global $CDN_CONSISTENCY_CHECK;
 
 		if (isset($CDN_CONSISTENCY_CHECK[$path])) return $CDN_CONSISTENCY_CHECK[$path];
