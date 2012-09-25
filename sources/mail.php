@@ -646,10 +646,10 @@ function mail_wrap($subject_tag,$message_raw,$to_email=NULL,$to_name=NULL,$from_
 			//if (function_exists('mb_language')) mb_language('en');	Stop overridden mbstring mail function from messing and base64'ing stuff. Actually we don't need this as we make sure to pass through as headers with blank message, bypassing any filtering.
 			if (ini_get('safe_mode')=='1')
 			{
-				$worked=mail($to_line,$tightened_subject,'',$headers.$line_term.$sending_message);
+				$worked=mail($to_line,$tightened_subject,$sending_message,$headers);
 			} else
 			{
-				$worked=mail($to_line,$tightened_subject,'',$headers.$line_term.$sending_message,$additional);
+				$worked=mail($to_line,$tightened_subject,$sending_message,$headers,$additional);
 			}
 			$GLOBALS['SUPRESS_ERROR_DEATH']=false;
 		}
