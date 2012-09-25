@@ -103,8 +103,14 @@ foreach ($todo as $i=>$_target_file)
 {
 	list($target_file,,$offset,$length,)=$_target_file;
 
-	if ($i<$file_offset) continue;
-	if ($i>$file_offset+20) break;
+	if ($_target_file=='data/upgrader2.php')
+	{
+		if ($file_offset+20<count($todo)) continue; // Only extract on last step, to avoid possible transitionary bugs between versions of this file (this is the file running and refreshing now, i.e this file!)
+	} else
+	{
+		if ($i<$file_offset) continue;
+		if ($i>$file_offset+20) break;
+	}
 
 	// Make any needed directories
 	$build_up=$FILE_BASE;
@@ -132,7 +138,7 @@ fclose($myfile);
 
 // Show HTML
 $next_offset_url='';
-if ($file_offset<count($todo))
+if ($file_offset+20<count($todo))
 {
 	$next_offset_url='upgrader2.php?';
 	foreach ($_GET as $key=>$val)
@@ -143,8 +149,9 @@ if ($file_offset<count($todo))
 			$next_offset_url.=urlencode($key).'='.urlencode($val).'&';
 	}
 	$next_offset_url.='file_offset='.urlencode(strval($file_offset+20));
+	$next_offset_url.='#progress';
 }
-up2_do_header($next_offset_url.'#progress');
+up2_do_header($next_offset_url);
 if ($next_offset_url=='')
 {
 	echo '<p><strong>'.htmlentities($_GET['done']).'!</strong></p>';
