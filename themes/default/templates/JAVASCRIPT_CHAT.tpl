@@ -427,7 +427,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 				cloned_message=doc.createElement('div');
 				set_inner_html(cloned_message,_cloned_message.xml); // Fixes IE bug
 			} else cloned_message=_cloned_message.cloneNode(true);
-			if (!cloned_message.className)
+			if (browser_matches('safari'))
 			{
 				cloned_message=doc.createElement('div');
 				set_inner_html(cloned_message,get_outer_html(_cloned_message)); // Fixes Chrome bug

@@ -1057,12 +1057,12 @@ function get_chatroom_id($room_name,$must_not_be_im=false)
 /**
  * Enter a message into the database for the specified room, and with the specified parameters. The message is filtered for banned words, and is compressed into a tempcode storage format.
  *
- * @param  AUTO_LINK		The room ID for the message to be posted in
- * @param  LONG_TEXT		The message body
- * @param  SHORT_TEXT	The font name for the message
- * @param  SHORT_TEXT	The text colour for the message
- * @param  SHORT_INTEGER  The wrap position for the message
- * @return boolean		Whether the message was successfully posted or not
+ * @param  AUTO_LINK			The room ID for the message to be posted in
+ * @param  LONG_TEXT			The message body
+ * @param  SHORT_TEXT		The font name for the message
+ * @param  SHORT_TEXT		The text colour for the message
+ * @param  SHORT_INTEGER	The wrap position for the message
+ * @return boolean			Whether the message was successfully posted or not
 */
 function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=60)
 {
@@ -1071,7 +1071,7 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 
 	// Have we been blocked by flood control?
 	$is_im=$GLOBALS['SITE_DB']->query_value('chat_rooms','is_im',array('id'=>$room_id));
-	if ($is_im) // No flood control for IMs
+	if ($is_im==1) // No flood control for IMs
 	{
 		$time_last_message=NULL;
 	} else
