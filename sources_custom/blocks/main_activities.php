@@ -164,16 +164,6 @@ class Block_main_activities
 					list($message,$memberpic,$datetime,$member_url,$lang_string)=render_activity($row);
 					$content[]=array('LANG_STRING'=>$lang_string,'ADDON_ICON'=>find_addon_icon($row['a_addon']),'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']),'DATETIME'=>strval($datetime),'MEMBER_URL'=>$member_url,'LIID'=>strval($row['id']),'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'1':'0');
 				}
-
-				return do_template('BLOCK_MAIN_ACTIVITIES',array(
-					'TITLE'=>$title,
-					'MODE'=>strval($mode),
-					'MEMBER_IDS'=>implode(',',$member_ids),
-					'CONTENT'=>$content,
-					'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
-					'PAGINATION'=>$pagination,
-					'MAX'=>($start==0)?strval($max):NULL,
-				));
 			}
 		} else
 		{
@@ -183,9 +173,9 @@ class Block_main_activities
 		// No entries
 		return do_template('BLOCK_MAIN_ACTIVITIES',array(
 			'TITLE'=>$title,
-			'MODE'=>$mode,
+			'MODE'=>strval($mode),
+			'MEMBER_IDS'=>implode(',',$member_ids),
 			'CONTENT'=>$content,
-			'MEMBER_IDS'=>'',
 			'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
 			'PAGINATION'=>$pagination,
 			'MAX'=>($start==0)?strval($max):NULL,

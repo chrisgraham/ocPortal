@@ -400,7 +400,7 @@ function get_cpf_storage_for($type)
  * @param  BINARY			Whether the field is locked (i.e. cannot be deleted from the system).
  * @param  SHORT_TEXT 	Description of the field.
  * @param  LONG_TEXT  	The default value for the field.
- * @param  BINARY			Whether the field is publically viewable.
+ * @param  BINARY			Whether the field is publicly viewable.
  * @param  BINARY			Whether the field is viewable by the owner.
  * @param  BINARY			Whether the field may be set by the owner.
  * @param  BINARY			Whether the field is encrypted.
@@ -426,7 +426,7 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 	require_code('encryption');
 	//if (!is_encryption_enabled()) $encrypted=0;
 
-	// Can't have publically-viewable encrypted fields
+	// Can't have publicly-viewable encrypted fields
 	if ($encrypted==1)
 	{
 		$public_view=0;

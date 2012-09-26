@@ -1155,8 +1155,8 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 															}
 														}
 														$GLOBALS['SITE_DB']->query_insert('url_title_cache',array(
-															't_url'=>$auto_link,
-															't_title'=>$link_captions_title,
+															't_url'=>substr($auto_link,0,255),
+															't_title'=>substr($link_captions_title,0,255),
 														),false,true); // To stop weird race-like conditions
 													}
 												}

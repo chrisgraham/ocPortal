@@ -1012,7 +1012,7 @@ function ocf_unban_member($member_id)
  * @param  SHORT_TEXT 	Name of the field.
  * @param  SHORT_TEXT 	Description of the field.
  * @param  LONG_TEXT  	The default value for the field.
- * @param  BINARY			Whether the field is publically viewable.
+ * @param  BINARY			Whether the field is publicly viewable.
  * @param  BINARY			Whether the field is viewable by the owner.
  * @param  BINARY			Whether the field may be set by the owner.
  * @param  BINARY			Whether the field should be encrypted.
