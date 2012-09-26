@@ -1057,12 +1057,12 @@ function get_chatroom_id($room_name,$must_not_be_im=false)
 /**
  * Enter a message into the database for the specified room, and with the specified parameters. The message is filtered for banned words, and is compressed into a tempcode storage format.
  *
- * @param  AUTO_LINK		The room ID for the message to be posted in
- * @param  LONG_TEXT		The message body
- * @param  SHORT_TEXT	The font name for the message
- * @param  SHORT_TEXT	The text colour for the message
- * @param  SHORT_INTEGER  The wrap position for the message
- * @return boolean		Whether the message was successfully posted or not
+ * @param  AUTO_LINK			The room ID for the message to be posted in
+ * @param  LONG_TEXT			The message body
+ * @param  SHORT_TEXT		The font name for the message
+ * @param  SHORT_TEXT		The text colour for the message
+ * @param  SHORT_INTEGER	The wrap position for the message
+ * @return boolean			Whether the message was successfully posted or not
 */
 function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=60)
 {
@@ -1071,7 +1071,7 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 
 	// Have we been blocked by flood control?
 	$is_im=$GLOBALS['SITE_DB']->query_value('chat_rooms','is_im',array('id'=>$room_id));
-	if ($is_im) // No flood control for IMs
+	if ($is_im==1) // No flood control for IMs
 	{
 		$time_last_message=NULL;
 	} else
@@ -1116,6 +1116,42 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 					fwrite($myfile,strval($bot_message_id));
 					fclose($myfile);
 					sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_msg.dat');
+				}
+			}
+		}
+
+		// Mirror to private topic, if an IM
+		if (($is_im==1) && (get_forum_type()=='ocf') && (addon_installed('ocf_forum')))
+		{
+			$members=array_map('intval',explode(',',$GLOBALS['SITE_DB']->query_value('chat_rooms','allow_list',array('id'=>$room_id))));
+			if (count($members)>=2)
+			{
+				require_lang('chat');
+				$table='f_topics t';
+				for ($i=2;$i<count($members);$i++)
+				{
+					$table.=' JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_special_pt_access a'.strval($i).' ON a'.strval($i).'.s_topic_id=t.id AND a'.strval($i).'.s_member_id='.strval($members[$i]);
+				}
+				$topic_id=$GLOBALS['FORUM_DB']->query_value_null_ok($table,'id',array('t_cache_first_title'=>do_lang('INSTANT_MESSAGING_CONVO'),'t_pt_from'=>$members[0],'t_pt_to'=>$members[1]));
+				if (is_null($topic_id))
+				{
+					require_code('ocf_topics_action');
+					$topic_id=ocf_make_topic(NULL,'','',1,0,0,0,0,$members[0],$members[1],false);
+					for ($i=2;$i<count($members);$i++)
+					{
+						$GLOBALS['FORUM_DB']->query_insert('f_special_pt_access',array('s_member_id'=>$members[$i],'s_topic_id'=>$topic_id));
+					}
+					$is_starter=true;
+				} else
+				{
+					$is_starter=false;
+				}
+				require_code('ocf_posts_action');
+				ocf_make_post($topic_id,$is_starter?do_lang('INSTANT_MESSAGING_CONVO'):'',$message,0,$is_starter,1,0,NULL,NULL,NULL,get_member(),NULL,NULL,NULL,false,true,NULL,false,'',0,NULL,false,true);
+				require_code('ocf_topics');
+				for ($i=0;$i<count($members);$i++)
+				{
+					ocf_ping_topic_read($topic_id,$members[$i]);
 				}
 			}
 		}

@@ -427,7 +427,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 				cloned_message=doc.createElement('div');
 				set_inner_html(cloned_message,_cloned_message.xml); // Fixes IE bug
 			} else cloned_message=_cloned_message.cloneNode(true);
-			if (!cloned_message.className)
+			if (browser_matches('safari'))
 			{
 				cloned_message=doc.createElement('div');
 				set_inner_html(cloned_message,get_outer_html(_cloned_message)); // Fixes Chrome bug
@@ -808,6 +808,7 @@ function find_im_convo_room_ids()
 
 function close_chat_conversation(ob,room_id)
 {
+	{+START,IF,{$OR,{$NOT,{$ADDON_INSTALLED,ocf_forum}},{$NOT,{$OCF}}}}
 	generate_question_ui(
 		'{!WANT_TO_DOWNLOAD_LOGS*;^}',
 		{cancel: '{!INPUTSYSTEM_CANCEL*;^}',ok: '{!YES*;^}',no: '{!NO*;^}'},
@@ -821,11 +822,14 @@ function close_chat_conversation(ob,room_id)
 				{
 					window.open('{$FIND_SCRIPT*;,dllogs}?room='+room_id+'{$KEEP*;^}');
 				}
+	{+END}
 				deinvolve_im(room_id,logs=='{!YES*;^}',true);
 				window.setTimeout(function() { if (document.body.className.indexOf('sitewide_im_popup_body')!=-1) window.close(); } ,1000);
+	{+START,IF,{$OR,{$NOT,{$ADDON_INSTALLED,ocf_forum}},{$NOT,{$OCF}}}}
 			}
 		}
 	);
+	{+END}
 }
 
 function deinvolve_im(room,logs,is_not_window)
