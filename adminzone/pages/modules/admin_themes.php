@@ -509,7 +509,7 @@ class Module_admin_themes
 		$theme=get_param('theme',false,true);
 
 		$ini_file=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.$theme.'/theme.ini';
-		if (!file_exists($ini_file)) warn_exit(do_lang('MISSING_RESOURCE').' [theme.ini]');
+		if (!file_exists($ini_file)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$details=better_parse_ini_file($ini_file);
 		if (!array_key_exists('title',$details)) $details['title']='?';
 		if (!array_key_exists('description',$details)) $details['description']='?';
