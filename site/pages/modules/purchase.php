@@ -204,7 +204,7 @@ class Module_purchase
 	{
 		if (is_guest())
 		{
-			attach_message(do_lang_tempcode('PURCHASE_NOT_LOGGED_IN'),'warn');
+			attach_message(do_lang_tempcode('PURCHASE_NOT_LOGGED_IN'),'notice');
 
 			access_denied('NOT_AS_GUEST');
 		}

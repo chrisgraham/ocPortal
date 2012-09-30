@@ -106,7 +106,7 @@ class Module_admin_setupwizard
 			if (!addon_installed($aa))
 			{
 				$addon_management=build_url(array('page'=>'admin_addons'),get_module_zone('admin_addons'));
-				attach_message(do_lang_tempcode('ADDONS_NOT_INSTALLED_IN_SETUP_WIZARD',escape_html($addon_management->evaluate())),'warn');
+				attach_message(do_lang_tempcode('ADDONS_NOT_INSTALLED_IN_SETUP_WIZARD',escape_html($addon_management->evaluate())),'notice');
 				break;
 			}
 		}
