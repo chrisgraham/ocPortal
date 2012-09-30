@@ -1098,7 +1098,7 @@ class Module_cms_comcode_pages
 		{
 			if ((strpos($_new['html'],'<h1')===false) && (strpos($_new['comcode'],'[title]')===false) && (strpos($_new['comcode'],'[title="1"]')===false))
 			{
-				attach_message(do_lang_tempcode('NO_LEVEL_1_HEADERS'),'warn');
+				attach_message(do_lang_tempcode('NO_LEVEL_1_HEADERS'),'notice');
 			}
 			$matches=array();
 			if ((strpos($_new['html'],'<h2')===false) && (preg_match_all('#\n\[(b|font|size)\][^\.]+\[/(b|font|size)\]\n#',$_new['comcode'],$matches)>=2))

@@ -233,7 +233,7 @@ function init__site()
  *
  * @param  mixed			The type of special message
  * @param  ID_TEXT		The template to use
- * @set    inform warn
+ * @set    inform notice warn
  * @return string			Blank string so it can be chained in the Tempcode compiler. You will rarely want to use this return value. It's kind of a failsafe.
  */
 function attach_message($message,$type='inform')

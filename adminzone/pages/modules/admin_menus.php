@@ -199,7 +199,7 @@ class Module_admin_menus
 		if (($id=='zone_menu') && (get_option('use_custom_zone_menu')=='0'))
 		{
 			$config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'THEME'),get_module_zone('admin_config'));
-			attach_message(do_lang_tempcode('EDITING_UNUSED_MENU',escape_html($config_url->evaluate())),'warn');
+			attach_message(do_lang_tempcode('EDITING_UNUSED_MENU',escape_html($config_url->evaluate())),'notice');
 		}
 
 		$title=get_page_title('_EDIT_MENU',true,array(escape_html($id)));

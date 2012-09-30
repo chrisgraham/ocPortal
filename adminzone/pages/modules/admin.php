@@ -84,7 +84,7 @@ class Module_admin
 			{
 				$setup_wizard_url=build_url(array('page'=>'admin_setupwizard'),get_module_zone('admin_setupwizard'));
 				$cancel_sw_url=get_self_url(false,false,array('cancel_sw_warn'=>1));
-				attach_message(do_lang_tempcode('SETUP_WIZARD_NOT_RUN',escape_html($setup_wizard_url->evaluate()),escape_html($cancel_sw_url->evaluate())),'warn');
+				attach_message(do_lang_tempcode('SETUP_WIZARD_NOT_RUN',escape_html($setup_wizard_url->evaluate()),escape_html($cancel_sw_url->evaluate())),'notice');
 			}
 		}
 

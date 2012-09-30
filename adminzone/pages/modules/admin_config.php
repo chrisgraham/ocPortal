@@ -729,7 +729,7 @@ class Module_admin_config
 								} else
 								{
 									$current_setting=strval(db_get_first_id());
-									attach_message(do_lang_tempcode('FORUM_CURRENTLY_UNSET',$name_tempcode),'warn');
+									attach_message(do_lang_tempcode('FORUM_CURRENTLY_UNSET',$name_tempcode),'notice');
 								}
 							} else
 							{
