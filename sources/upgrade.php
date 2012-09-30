@@ -588,13 +588,14 @@ function up_do_header()
 	$upgrader_intro=do_lang('FU_UPGRADER_INTRO');
 	$charset=get_charset();
 	$lang=user_lang();
+	$dir=do_lang('dir');
 
 	@ob_end_clean();
 	echo <<<END
 <!DOCTYPE html>
-	<html xml:lang="{$lang}" lang="{$lang}">
+	<html lang="{$lang}" dir="{$dir}">
 	<head>
-		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$charset}" />
+		<meta http-equiv="Content-Type" content="text/html; charset={$charset}" />
 
 		<title>{$upgrader_title}</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />

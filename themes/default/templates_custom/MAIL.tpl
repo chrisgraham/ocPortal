@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html xml:lang="{LANG*}" lang="{LANG*}">
+<html lang="{$LANG*}" dir="{!dir}">
 <head>
-<meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$CHARSET*}" />
-<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
 <title>{TITLE*}</title>
 {CSS}
 </head>

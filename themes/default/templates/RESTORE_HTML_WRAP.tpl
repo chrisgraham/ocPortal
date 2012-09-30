@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 
-<html lang="{$LANG*}">
+<html lang="{$LANG*}" dir="{!dir}">
 	<head>
-		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$CHARSET*}" />
-		<meta http-equiv="Content-Script-Type" content="text/javascript" />
-		<meta http-equiv="Content-Style-Type" content="text/css" />
+		<meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
 		<meta name="language" content="{$LANG*}" />
 		<link href="restore.php?type=css" rel="stylesheet" type="text/css" />
 		{+START,IF_NON_EMPTY,{CSS_NOCACHE}}
