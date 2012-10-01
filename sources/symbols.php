@@ -614,7 +614,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if ($DISPLAYED_TITLE!==NULL) $_displayed_title=$DISPLAYED_TITLE->evaluate();
 					if (($DISPLAYED_TITLE!==NULL) && (strip_tags($_displayed_title)!=''))
 					{
-						$value=html_entity_decode(strip_tags(str_replace(array('&ndash;','&mdash;','&middot;','&ldquo;','&rdquo;','&lsquo;','&rsquo;'),array('-','-','|','"','"',"'","'"),$_displayed_title)),ENT_QUOTES,get_charset());
+						$value=strip_html($_displayed_title);
 					} else
 					{
 						$value=$ZONE['zone_header_text_trans'];
@@ -2776,7 +2776,7 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 	$is_html=((isset($param[3])) && ($param[3]=='1'));
 	if ($is_html)
 	{
-		$not_html=@html_entity_decode(strip_tags($param[0]),ENT_QUOTES,get_charset()); // In case it contains HTML. This is imperfect, but having to cut something up is imperfect from the offset.
+		$not_html=strip_html($param[0]); // In case it contains HTML. This is imperfect, but having to cut something up is imperfect from the offset.
 		$html=$param[0];
 		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($html);
 		if (($html==$not_html) && (strpos($html,'&')===false) && (strpos($html,'<')===false)) $is_html=false; // Conserve memory

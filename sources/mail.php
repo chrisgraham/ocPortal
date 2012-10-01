@@ -140,7 +140,7 @@ function comcode_to_clean_text($message_plain)
 
 	$message_plain=preg_replace("#\[img(.*)\]([^\[\]]*)\[/img\]#",'',$message_plain);
 
-	$message_plain=@html_entity_decode(strip_tags($message_plain),ENT_QUOTES,get_charset());
+	$message_plain=strip_html($message_plain);
 
 	$message_plain=str_replace(']http',']'.chr(10).'http',str_replace('[/url]',chr(10).'[/url]',$message_plain));
 	$message_plain=preg_replace('#\[random [^=]*="([^"]*)"[^\]]*\].*\[/random\]#Us','${1}',$message_plain);

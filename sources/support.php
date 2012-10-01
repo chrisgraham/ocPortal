@@ -2320,3 +2320,22 @@ function member_personal_links_and_details($member_id)
 
 	return array($links,$details,$num_unread_pps);
 }
+
+/**
+ * Convert some HTML to plain text.
+ *
+ * @param  string				HTML
+ * @return string				Plain text
+ */
+function strip_html($in)
+{
+	$search=array(
+		'#<script[^>]*?>.*?</script>#si',	// Strip out Javascript
+		'#<style[^>]*?>.*?</style>#siU',		// Strip style tags properly
+		'#<![\s\S]*?--[ \t\n\r]*>#',			// Strip multi-line comments including CDATA
+	);
+	$in=preg_replace($search,'',$in);
+	$in=str_replace(array('&ndash;','&mdash;','&middot;','&ldquo;','&rdquo;','&lsquo;','&rsquo;'),array('-','-','|','"','"',"'","'"),$in);
+	$in=strip_tags($in);
+	return @html_entity_decode($in,ENT_QUOTES,get_charset());
+}
