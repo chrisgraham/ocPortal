@@ -83,7 +83,9 @@ There is a module in the Admin Zone for sales inventory management. It should be
 [surround]
 {!flagrant:DOC_FLAGRANT}
 
-The queue is accessed via the Staff Checklist on the Admin Zone front page.
+The queue is accessed via the Staff Checklist on the Admin Zone front page. Note that the queue is not self-managed, you need to control which message is active, as they won't automatically rotate or expire.
+
+Messages may be manually added in the Admin Zone, but regular users will be adding them via the Point Store. When that happens, you are notified of the new message have been added.
 
 [exp_thumb="Managing flagrant text messages in the queue" float="left"]points_flagrant_manage[/exp_thumb]
 [exp_thumb="Adding a flagrant text message from the Admin Zone" float="left"]points_flagrant_add[/exp_thumb]

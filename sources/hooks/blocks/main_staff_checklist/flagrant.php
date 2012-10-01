@@ -32,6 +32,8 @@ class Hook_checklist_flagrant
 
 		require_lang('flagrant');
 
+		$num_queue=$this->get_num_flagrant_queue();
+
 		$rows=$GLOBALS['SITE_DB']->query_select('text',array('activation_time','days'),array('active_now'=>1),'',NULL,NULL,true);
 		if (is_null($rows)) return array();
 		$seconds_due_in=mixed();
@@ -46,13 +48,14 @@ class Hook_checklist_flagrant
 			$status=($seconds_due_in<=0)?0:1;
 		} else
 		{
-			$status=1;
+			$status=($num_queue==0)?1:0; // If none set, but one waiting, task is not done
+
+			if ($num_queue!=0) $seconds_due_in=0;
 		}
 
 		$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 
 		$url=build_url(array('page'=>'admin_flagrant','type'=>'misc'),'adminzone');
-		$num_queue=$this->get_num_flagrant_queue();
 		list($info,$seconds_due_in)=staff_checklist_time_ago_and_due($seconds_due_in);
 		$info->attach(do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($num_queue))));
 		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'820e0e3cd80754dc7dfd9a0d05a43ec0','URL'=>$url,'STATUS'=>$_status,'TASK'=>do_lang_tempcode('CHOOSE_FLAGRANT'),'INFO'=>$info));
