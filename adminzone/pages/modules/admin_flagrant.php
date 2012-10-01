@@ -131,7 +131,7 @@ class Module_admin_flagrant extends standard_aed_module
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_FLAGRANT')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('FLAGRANT_MANAGE')),
+						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_FLAGRANT')),
 					),
 					do_lang('FLAGRANT_TEXT')
 		);
