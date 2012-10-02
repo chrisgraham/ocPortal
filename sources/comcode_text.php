@@ -1292,6 +1292,12 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 						if (count($tag_stack)==0)
 						{
+							if ($current_tag=='semihtml') // Ignore, as people in WYSIWYG often incorrectly try and nest semihtml tags
+							{
+								$status=CCP_NO_MANS_LAND;
+								break;
+							}
+
 							if ($lax)
 							{
 								$status=CCP_NO_MANS_LAND;
