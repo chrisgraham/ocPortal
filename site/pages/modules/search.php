@@ -706,7 +706,7 @@ class Module_search
 				$ret_maybe=$this->results($id,$author,$author_id,-1,$sort,$direction,$only_titles,$search_under);
 				if (!$ret_maybe[0]->is_empty())
 				{
-					attach_message(do_lang_tempcode('NO_RESULTS_DAYS',escape_html(integer_format($days))),'warn');
+					attach_message(do_lang_tempcode('NO_RESULTS_DAYS',escape_html(integer_format($days))),'notice');
 					return $ret_maybe;
 				}
 			}

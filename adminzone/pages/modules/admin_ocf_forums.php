@@ -425,7 +425,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 				$_edit_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>$f['the_page']),get_module_zone('admin_config'));
 				$edit_url=$_edit_url->evaluate();
 				$edit_url.='#group_'.$f['section'];
-				attach_message(do_lang_tempcode('CANNOT_DELETE_FORUM_OPTION',escape_html($edit_url),escape_html(do_lang_tempcode($f['human_name']))),'inform');
+				attach_message(do_lang_tempcode('CANNOT_DELETE_FORUM_OPTION',escape_html($edit_url),escape_html(do_lang_tempcode($f['human_name']))),'notice');
 				return false;
 			}
 		}
@@ -510,7 +510,7 @@ class Module_admin_ocf_forums extends standard_aed_module
 			}
 			if (!$parent_has_full_access)
 			{
-				attach_message(do_lang_tempcode('ANOMALOUS_FORUM_ACCESS'),'warn');
+				attach_message(do_lang_tempcode('ANOMALOUS_FORUM_ACCESS'),'notice');
 			}
 		}
 
