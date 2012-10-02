@@ -505,9 +505,6 @@ header h1 {
 	margin-bottom: 0.8em;
 	min-width: 300px;
 	padding-bottom: 6px; /* For better alignment with breadcrumbs to the right */
-	{+START,IF,{$CONFIG_OPTION,fixed_width}}
-		overflow: hidden; /* No space for breadcrumbs so intentionally break away from adjacent floats */
-	{+END}
 }
 .screen_title li span {
 	display: block;
@@ -546,7 +543,12 @@ header h1 {
 .global_breadcrumbs {
 	padding: 7px 0 0 0;
 	{+START,IF,{$NOT,{$MOBILE}}}
-		float: {!en_right};
+		{+START,IF,{$CONFIG_OPTION,fixed_width}}
+			text-align: {!en_right};
+		{+END}
+		{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
+			float: {!en_right};
+		{+END}
 		margin-left: 0.5em;
 	{+END}
 }
