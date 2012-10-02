@@ -290,6 +290,7 @@ function wysiwyg_editor_init_for(element)
 
 	{+START,INCLUDE,WYSIWYG_SETTINGS}{+END}
 
+	if (typeof CKEDITOR.instances[element.id]!='undefined' && CKEDITOR.instances[element.id])	delete CKEDITOR.instances[element.id]; // Workaround "The instance "xxx" already exists" error in Google Chrome
 	var editor=CKEDITOR.replace(element.id,editor_settings);
 	if (!editor) return; // Not supported on this platform
 
