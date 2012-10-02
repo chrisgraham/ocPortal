@@ -33,7 +33,7 @@ var editor_settings={
 	extraPlugins: ''+(use_ocportal_toolbar?'ocportal':''),
 	customConfig : '',
 	bodyId : 'htmlarea',
-	baseHref : get_base_url(),
+	baseHref : get_base_url()+'/',
 	linkShowAdvancedTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 	imageShowAdvancedTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 	imageShowLinkTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
