@@ -53,6 +53,7 @@ class Block_side_friends
 			return new ocp_tempcode();
 
 		require_code('chat');
+		require_code('chat_lobby');
 		require_lang('chat');
 		require_css('chat');
 		require_javascript('javascript_chat');

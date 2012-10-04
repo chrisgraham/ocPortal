@@ -83,7 +83,11 @@ class Block_side_shoutbox
 		}
 
 		$content=NULL;
-		if (get_value('no_frames')==='1') $content=shoutbox_script(true,$room_id,$num_messages);
+		if (get_value('no_frames')==='1')
+		{
+			require_code('chat_shoutbox');
+			$content=shoutbox_script(true,$room_id,$num_messages);
+		}
 
 		return do_template('BLOCK_SIDE_SHOUTBOX_IFRAME',array('_GUID'=>'dd737145479155961a1252162a43d4ef','CONTENT'=>$content,'ROOM_ID'=>strval($room_id),'NUM_MESSAGES'=>strval($num_messages)));
 	}

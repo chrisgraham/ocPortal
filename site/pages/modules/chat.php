@@ -360,13 +360,13 @@ class Module_chat
 		require_code('chat');
 		require_css('chat');
 
+		if ($type=='misc') return $this->chat_lobby();
 		if ($type=='room') return $this->chat_room();
-		if ($type=='options') return $this->chat_options();
+		if ($type=='options') return $this->chat_save_options();
 		if ($type=='private') return $this->chat_private();
 		if ($type=='_private') return $this->_chat_private();
 		if ($type=='download_logs') return $this->chat_download_logs();
 		if ($type=='_download_logs') return $this->_chat_download_logs();
-		if ($type=='misc') return $this->chat_lobby();
 		if ($type=='blocking_interface') return $this->blocking_interface();
 		if ($type=='blocking_set') return $this->blocking_set();
 		if ($type=='blocking_add') return $this->blocking_add();
@@ -388,6 +388,8 @@ class Module_chat
 	 */
 	function chat_lobby()
 	{
+		require_code('chat_lobby');
+
 		require_javascript('javascript_ajax_people_lists');
 
 		// Who are we viewing the lobby of?
@@ -499,7 +501,25 @@ class Module_chat
 			$add_room_url=build_url(array('page'=>'admin_chat','type'=>'ad'),get_module_zone('admin_chat'));
 		} else $add_room_url=new ocp_tempcode();
 
-		return do_template('CHAT_LOBBY_SCREEN',array('_GUID'=>'f82ddfd0dccbd25752dd05a1d87429e2','TITLE'=>$title,'ADD_ROOM_URL'=>$add_room_url,'MESSAGE'=>$message,'CHAT_SOUND'=>get_chat_sound_tpl(),'IM_PARTICIPANT_TEMPLATE'=>$im_participant_template,'IM_AREA_TEMPLATE'=>$im_area_template,'ROOMS'=>$fields,'PRIVATE_ROOM'=>$private_room,'MOD_LINK'=>$mod_link,'BLOCKING_LINK'=>$blocking_link,'SETEFFECTS_LINK'=>$seteffects_link,'CAN_IM'=>$can_im,'FRIENDS'=>$friends,'URL_ADD_FRIEND'=>$post_url_add_friend,'URL_REMOVE_FRIENDS'=>$post_url_remove_friends));
+		return do_template('CHAT_LOBBY_SCREEN',array(
+			'_GUID'=>'f82ddfd0dccbd25752dd05a1d87429e2',
+			'TITLE'=>$title,
+			'ADD_ROOM_URL'=>$add_room_url,
+			'MESSAGE'=>$message,
+			'CHAT_SOUND'=>get_chat_sound_tpl(),
+			'IM_PARTICIPANT_TEMPLATE'=>$im_participant_template,
+			'IM_AREA_TEMPLATE'=>$im_area_template,
+			'ROOMS'=>$fields,
+			'PRIVATE_ROOM'=>$private_room,
+			'MOD_LINK'=>$mod_link,
+			'BLOCKING_LINK'=>$blocking_link,
+			'SETEFFECTS_LINK'=>$seteffects_link,
+			'CAN_IM'=>$can_im,
+			'FRIENDS'=>$friends,
+			'URL_ADD_FRIEND'=>$post_url_add_friend,
+			'URL_REMOVE_FRIENDS'=>$post_url_remove_friends,
+			'MEMBER_ID'=>strval($member_id),
+		));
 	}
 
 	/**
@@ -879,7 +899,8 @@ class Module_chat
 		{
 			$username=post_param('friend_username');
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-			if (is_null($member_id)) warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+			if ((is_null($member_id)) || (is_guest($member_id)))
+				warn_exit(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
 		} else
 		{
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
@@ -1020,7 +1041,7 @@ class Module_chat
 	 *
 	 * @return tempcode		The UI
 	 */
-	function chat_options()
+	function chat_save_options()
 	{
 		$title=get_screen_title('ROOM');
 
@@ -1098,6 +1119,8 @@ class Module_chat
 	function set_effects()
 	{
 		$title=get_screen_title('CHAT_SET_EFFECTS');
+
+		require_code('chat_sounds');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 
@@ -1182,6 +1205,8 @@ class Module_chat
 	function _set_effects()
 	{
 		$title=get_screen_title('CHAT_SET_EFFECTS');
+
+		require_code('chat_sounds');
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 

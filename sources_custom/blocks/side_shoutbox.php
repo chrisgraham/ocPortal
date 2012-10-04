@@ -71,7 +71,11 @@ class Block_side_shoutbox
 		}
 
 		$content=NULL;
-		if (get_value('no_frames')==='1') $content=shoutbox_script(true,$room_id);
+		if (get_value('no_frames')==='1')
+		{
+			require_code('chat_shoutbox');
+			$content=shoutbox_script(true,$room_id);
+		}
 
 		$last_message_id=$GLOBALS['SITE_DB']->query_value('chat_messages','MAX(id)',array('room_id'=>$room_id));
 		if (is_null($last_message_id)) $last_message_id=-1;

@@ -85,7 +85,9 @@
 
 					{+START,IF_NON_EMPTY,{FRIENDS}}
 						<form autocomplete="off" title="{!FRIEND_LIST}" method="post" action="{$?,{$IS_EMPTY,{URL_REMOVE_FRIENDS}},index.php,{URL_REMOVE_FRIENDS*}}">
-							{FRIENDS}
+							<div id="friends_wrap">
+								{FRIENDS}
+							</div>
 
 							<div class="friend_actions">
 								{+START,IF,{CAN_IM}}
@@ -102,9 +104,10 @@
 					{+START,IF_NON_EMPTY,{URL_ADD_FRIEND}}
 						<p>{!MUST_ADD_CONTACTS}</p>
 
-						<form autocomplete="off" title="{!ADD}: {!FRIEND_LIST}" method="post" action="{URL_ADD_FRIEND*}">
-							<label class="accessibility_hidden" for="friend_username">{!USERNAME}: </label><input size="18" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" onfocus="if (this.value=='{!USERNAME*;}') { this.value=''; this.className='field_input_filled'; }" onblur="if (this.value=='') { this.value='{!USERNAME*;}'; this.className='field_input_non_filled'; }" class="field_input_non_filled" value="{!USERNAME}" id="friend_username" name="friend_username" />
-							<input onclick="disable_button_just_clicked(this);" class="button_pageitem" type="submit" value="{!ADD}" />
+						<form onsubmit="var _this=this; load_snippet('im_friends_rejig&amp;member_id={MEMBER_ID%}','add='+window.encodeURIComponent(this.elements['friend_username'].value),function(ajax_result) { set_inner_html(document.getElementById('friends_wrap'),ajax_result.responseText); _this.elements['friend_username'].value=''; }); return false;" autocomplete="off" title="{!ADD}: {!FRIEND_LIST}" method="post" action="{URL_ADD_FRIEND*}">
+							<label class="accessibility_hidden" for="friend_username">{!USERNAME}: </label>
+							<input size="18" maxlength="80" onkeyup="update_ajax_member_list(this,null,false,event);" type="text" onfocus="if (this.value=='{!USERNAME*;}') { this.value=''; this.className='field_input_filled'; }" onblur="if (this.value=='') { this.value='{!USERNAME*;}'; this.className='field_input_non_filled'; }" class="field_input_non_filled" value="{!USERNAME}" id="friend_username" name="friend_username" />
+							<input class="button_pageitem" type="submit" value="{!ADD}" />
 						</form>
 					{+END}
 

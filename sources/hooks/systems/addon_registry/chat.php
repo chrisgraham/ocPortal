@@ -72,6 +72,11 @@ class Hook_addon_registry_chat
 	function get_file_list()
 	{
 		return array(
+			'sources/chat_shoutbox.php',
+			'sources/chat_sounds.php',
+			'sources/chat_lobby.php',
+			'sources/chat_logs.php',
+			'sources/hooks/systems/snippets/im_friends_rejig.php',
 			'site/pages/comcode/EN/popup_blockers.txt',
 			'sources/blocks/side_friends.php',
 			'BLOCK_SIDE_FRIENDS.tpl',
@@ -577,7 +582,8 @@ class Hook_addon_registry_chat
 				'MOD_LINK'=>placeholder_link(),
 				'BLOCKING_LINK'=>placeholder_link(),
 				'SETEFFECTS_LINK'=>placeholder_link(),
-				'ADD_ROOM_URL'=>placeholder_url()
+				'ADD_ROOM_URL'=>placeholder_url(),
+				'MEMBER_ID'=>placeholder_id(),
 			)), NULL, '', true)
 		);
 	}
