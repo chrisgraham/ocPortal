@@ -242,7 +242,7 @@ function filter_invites_for_blocking($people)
  */
 function chat_room_prune($room_id,$room_row=NULL)
 {
-	if (is_null($room_row))
+	if ((is_null($room_row)) && ($room_id!=-1))
 	{
 		$_room_row=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id'=>$room_id),'',1);
 		if (!array_key_exists(0,$_room_row)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));

@@ -744,7 +744,8 @@ class Hook_addon_registry_chat
 		));
 		return array(
 			lorem_globalise(do_lorem_template('CHAT_SITEWIDE_IM_POPUP', array(
-				'CONTENT'=>$im_area_template
+				'CONTENT'=>$im_area_template,
+				'CHAT_SOUND'=>'',
 			)), NULL, '', true)
 		);
 	}

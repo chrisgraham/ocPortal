@@ -15,3 +15,5 @@
 		detect_if_chat_window_closed();
 	},5);
 //]]></script>
+
+{CHAT_SOUND}

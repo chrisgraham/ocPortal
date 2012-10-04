@@ -91,7 +91,10 @@ function script_load_stuff()
 				var stuck_nav_height=(typeof stuck_nav.real_height=='undefined')?find_height(stuck_nav,true,true):stuck_nav.real_height;
 				stuck_nav.real_height=stuck_nav_height;
 				var pos_y=find_pos_y(stuck_nav.parentNode);
-				if (stuck_nav_height<get_window_height()-260) /* 260 leaves space for footer */
+				var footer_height=find_height(document.getElementsByTagName('footer')[0]);
+				var panel_bottom=document.getElementById('panel_bottom');
+				if (panel_bottom) footer_height+=find_height(panel_bottom);
+				if (stuck_nav_height<get_window_height()-footer_height)
 				{
 					var extra_height=(get_window_scroll_y()-pos_y);
 					if (extra_height>0)
