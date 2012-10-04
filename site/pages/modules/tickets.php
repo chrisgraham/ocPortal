@@ -355,7 +355,7 @@ class Module_tickets
 					}
 					$unclosed=(!$GLOBALS['FORUM_DRIVER']->is_staff($topic['lastmemberid']));
 
-					$params=array('NUM_POSTS'=>integer_format($topic['num']),'CLOSED'=>strval($topic['closed']),'URL'=>$url,'TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>strval($topic['lasttime']),'PROFILE_URL'=>$profile_link,'LAST_POSTER'=>$last_poster,'UNCLOSED'=>$unclosed);
+					$params=array('NUM_POSTS'=>integer_format($topic['num']-1),'CLOSED'=>strval($topic['closed']),'URL'=>$url,'TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>strval($topic['lasttime']),'PROFILE_URL'=>$profile_link,'LAST_POSTER'=>$last_poster,'UNCLOSED'=>$unclosed);
 
 					$links->attach(do_template('SUPPORT_TICKET_LINK',$params));
 				}
