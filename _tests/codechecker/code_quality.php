@@ -1645,10 +1645,6 @@ function check_assignment($c,$c_pos,$function_guard='')
 function check_expression($e,$assignment=false,$equate_false=false,$function_guard='')
 {
 	$c_pos=$e[count($e)-1];
-	if ($e[0]=='CREATE_ARRAY')
-	{
-		return 'array';
-	}
 	if ($e[0]=='VARIABLE_REFERENCE')
 	{
 		$e=$e[1];

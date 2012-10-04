@@ -265,9 +265,6 @@ if (!$WITHIN_PHP)
 		$_SERVER['argv']=array_merge($_SERVER['argv'],$extra);
 
 		if (array_key_exists('path',$_SERVER['argv'])) $GLOBALS['OCPORTAL_PATH']=$_SERVER['argv']['path'];
-	} else
-	{
-		$_SERVER['argv']=array();
 	}
 
 	require_once('lib.php');
@@ -276,6 +273,9 @@ if (!$WITHIN_PHP)
 
 	$to_use=isset($_SERVER['argv'][1])?$_SERVER['argv'][1]:$_GET['to_use'];
 }
+
+if (!isset($_SERVER['argv']))
+	$_SERVER['argv']=array();
 
 if (!function_exists('init__validation'))
 {

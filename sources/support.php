@@ -2330,8 +2330,8 @@ function member_personal_links_and_details($member_id)
 function strip_html($in)
 {
 	$search=array(
-		'#<script[^>]*?>.*?</script>#si',	// Strip out Javascript
-		'#<style[^>]*?>.*?</style>#siU',		// Strip style tags properly
+		'#<script[^>]*?'.'>.*?</script>#si',	// Strip out Javascript
+		'#<style[^>]*?'.'>.*?</style>#siU',		// Strip style tags properly
 		'#<![\s\S]*?--[ \t\n\r]*>#',			// Strip multi-line comments including CDATA
 	);
 	$in=preg_replace($search,'',$in);
