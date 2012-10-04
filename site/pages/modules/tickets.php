@@ -735,7 +735,10 @@ class Module_tickets
 
 		// Send email
 		if (!$staff_only)
+		{
+			if ($email=='') $email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 			send_ticket_email($id,$__title,$post,$home_url,$email,$ticket_type);
+		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id),'_SELF');
 		if (is_guest()) $url=build_url(array('page'=>'_SELF'),'_SELF');
