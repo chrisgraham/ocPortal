@@ -18,7 +18,7 @@
 				<em class="loading">{!LOADING}</em>
 			</div>
 			<div class="im_close_button">
-				<input id="close_button_{ROOM_ID*}" class="button_micro" type="button" value="{!END_CHAT}" onclick="close_chat_conversation(this,{ROOM_ID%});" />
+				<input id="close_button_{ROOM_ID*}" class="button_micro" type="button" value="{!END_CHAT}" onclick="close_chat_conversation({ROOM_ID%});" />
 			</div>
 		</div>
 

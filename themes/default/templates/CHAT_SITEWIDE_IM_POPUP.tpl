@@ -11,7 +11,7 @@
 </ul>
 
 <script type="text/javascript">// <![CDATA[
-	window.setInterval(function() {
-			detect_if_chat_window_closed();
+	window.detect_if_chat_window_closed_checker=window.setInterval(function() {
+		detect_if_chat_window_closed();
 	},5);
 //]]></script>

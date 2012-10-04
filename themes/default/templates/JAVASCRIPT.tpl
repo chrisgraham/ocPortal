@@ -2097,6 +2097,9 @@ function maintain_theme_in_link(url)
 /* Get URL stub to propagate keep_* parameters */
 function keep_stub(starting_query_string) // starting_query_string means "Put a '?' for the first parameter"
 {
+	if (!window) return '';
+	if (typeof window.location=='undefined') return ''; // Can happen, in a document.write'd popup
+
 	var to_add='',i;
 	var search=(window.location.search=='')?'?':window.location.search.substr(1);
 	var bits=search.split('&');
