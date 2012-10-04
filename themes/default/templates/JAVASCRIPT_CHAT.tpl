@@ -2,7 +2,13 @@
 
 // Constants
 window.MESSAGE_CHECK_INTERVAL=10000;
-window.ALERT_PRESENCE_INTERVAL=7000;
+{+START,IF_NON_EMPTY,{$VALUE_OPTION,chat_message_check_interval}}
+	window.MESSAGE_CHECK_INTERVAL={$ROUND%,{$VALUE_OPTION,chat_message_check_interval}};
+{+END}
+window.TRANSITORY_ALERT_TIME=7000;
+{+START,IF_NON_EMPTY,{$VALUE_OPTION,chat_transitory_alert_time}}
+	window.TRANSITORY_ALERT_TIME={$ROUND%,{$VALUE_OPTION,chat_transitory_alert_time}};
+{+END}
 window.LOGS_DOWNLOAD_INTERVAL=10000;
 
 // Tracking variables
@@ -486,7 +492,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 						window.setTimeout(function () {
 							if (document.getElementById('alert_box')) // If the alert box is still there, remove it
 								alert_box_wrap.style.display='none';
-						} , window.ALERT_PRESENCE_INTERVAL);
+						} , window.TRANSITORY_ALERT_TIME);
 					} else if (!document.getElementById('chat_lobby_convos_tabs'))
 					{
 						create_overlay_event(member_id,'{!NOW_ONLINE;^}'.replace('{'+'1}',username),function() { start_im(member_id); return false; } ,avatar_url);
