@@ -124,16 +124,17 @@ function fauxmodal_confirm(question,callback,title)
 	{+END}
 }
 
-function fauxmodal_alert(notice,callback,title)
+function fauxmodal_alert(notice,callback,title,unescaped)
 {
 	if ((typeof callback=='undefined') || (!callback)) var callback=function() {};
 
-	if (typeof title=='undefined') var title='{!MESSAGE;}';
+	if (typeof title=='undefined' || title===null) var title='{!MESSAGE;}';
+	if (typeof unescaped=='undefined') var unescaped=false;
 
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		var myAlert={
 			type: "alert",
-			text: escape_html(notice),
+			text: unescaped?notice:escape_html(notice),
 			yes_button: "{!INPUTSYSTEM_OK#}",
 			width: 600,
 			yes: callback,

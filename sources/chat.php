@@ -629,7 +629,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 
 					$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($room['room_owner']);
 
-					$invitations_output.='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.(is_null($room['room_owner'])?'':strval($room['room_owner'])).'" participants="'.xmlentities($participants).'" room_name="'.xmlentities($room['room_name']).'" avatar_url="'.xmlentities($avatar_url).'">'.strval($room['id']).'</chat_invite>';
+					$invitations_output.='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.(is_null($room['room_owner'])?'':strval($room['room_owner'])).'" participants="'.xmlentities($participants).'" room_name="'.xmlentities($room['room_name']).'" avatar_url="'.xmlentities($avatar_url).'">'.strval($room['id']).'</chat_invite>'.chr(10);
 				}
 			}
 		}
@@ -667,20 +667,20 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 					$username=$GLOBALS['FORUM_DRIVER']->get_username($event['e_member_id']);
 					$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($event['e_member_id']);
 					if (!is_null($username))
-						$events_output.='<chat_event away="'.(chatter_active($event['e_member_id'])?'0':'1').'" event_type="'.$event['e_type_code'].'" member_id="'.strval($event['e_member_id']).'" username="'.xmlentities($username).'" avatar_url="'.xmlentities($avatar_url).'" room_id="'.(is_null($event['e_room_id'])?'':strval($event['e_room_id'])).'">'.strval($event['id']).'</chat_event>';
+						$events_output.='<chat_event away="'.(chatter_active($event['e_member_id'])?'0':'1').'" event_type="'.$event['e_type_code'].'" member_id="'.strval($event['e_member_id']).'" username="'.xmlentities($username).'" avatar_url="'.xmlentities($avatar_url).'" room_id="'.(is_null($event['e_room_id'])?'':strval($event['e_room_id'])).'">'.strval($event['id']).'</chat_event>'.chr(10);
 				}
 			}
 		} else
 		{
 			$max_id=$GLOBALS['SITE_DB']->query_value('chat_events','MAX(id)');
 			if (is_null($max_id)) $max_id=db_get_first_id()-1;
-			$events_output.='<chat_event type="NULL">'.strval($max_id).'</chat_event>';
+			$events_output.='<chat_event type="NULL">'.strval($max_id).'</chat_event>'.chr(10);
 		}
 	}
 
 	if ($messages_output=='')
 	{
-		$messages_output='<chat_null>'.strval($room_id).'</chat_null>';
+		$messages_output='<chat_null>'.strval($room_id).'</chat_null>'.chr(10);
 	}
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
@@ -714,7 +714,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 
 <response>
 	<result>
-		'.$events_output.$invitations_output.$messages_output.'
+'.$events_output.$invitations_output.$messages_output.'
 	</result>
 </response>';
 	echo $output;
@@ -777,7 +777,7 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 		$the_message=do_lang('BANNED_FROM_CHAT');
 		$_message=array('system_message'=>1,'ip_address'=>get_ip_address(),'room_id'=>$room_id,'user_id'=>get_member(),'date_and_time'=>time(),'member_id'=>get_member(),'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font'));
 		$template=do_template('CHAT_MESSAGE',array('SYSTEM_MESSAGE'=>strval($_message['system_message']),'STAFF'=>false,'OLD_MESSAGES'=>false,'AVATAR_URL'=>'','STAFF_ACTIONS'=>'','USER'=>strval($_message['member_id']),'MESSAGE'=>$the_message,'TIME'=>get_timezoned_date($_message['date_and_time']),'RAW_TIME'=>strval($_message['date_and_time']),'FONT_COLOUR'=>$_message['text_colour'],'FONT_FACE'=>$_message['font_name']));
-		$messages_output='<div sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="123456789" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
+		$messages_output='<div sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="123456789" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>'.chr(10);
 
 		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
@@ -1806,4 +1806,79 @@ function get_effect_settings($full_urls=false,$for_member=NULL,$all_members=fals
 function get_chat_sound_tpl()
 {
 	return do_template('CHAT_SOUND',array('SOUND_EFFECTS'=>get_effect_settings(true,NULL,true)));
+}
+
+/**
+ * Show IM contacts, with online/offline status and clickability to initiate IM sessions.
+ *
+ * @param  ?MEMBER		The member ID (NULL: current user).
+ * @param  boolean		Whether to show a simpler, more compact, UI.
+ * @param  integer		Maximum to show.
+ * @return tempcode		The contact UI.
+*/
+function show_im_contacts($member_id=NULL,$simpler=false,$max=15)
+{
+	if (is_null($member_id)) $member_id=get_member();
+
+	$can_im=has_specific_permission(get_member(),'start_im');
+
+	$online_url=$GLOBALS['FORUM_DRIVER']->online_members_url();
+	$friends_offline=array();
+	$friends_online=array();
+	$friend_rows=$GLOBALS['SITE_DB']->query_select('chat_buddies',array('member_liked'),array('member_likes'=>$member_id),'ORDER BY date_and_time',300);
+	$friend_active=get_chatters_in_room(NULL);
+	global $SESSION_CACHE;
+	$users_online_time_seconds=CHAT_ACTIVITY_PRUNE;
+	foreach ($friend_rows as $friend)
+	{
+		if ((array_key_exists($friend['member_liked'],$friend_active)) && (!member_blocked(get_member(),$friend['member_liked'])))
+		{
+			$online_text=do_lang_tempcode('ACTIVE');
+			$online=true;
+		} else
+		{
+			$online=member_is_online($friend['member_liked']);
+			$online_text=$online?do_lang_tempcode('ONLINE'):do_lang_tempcode('OFFLINE');
+		}
+		$username=array_key_exists($friend['member_liked'],$friend_active)?$friend_active[$friend['member_liked']]:$GLOBALS['FORUM_DRIVER']->get_username($friend['member_liked']);
+		if (!is_null($username))
+		{
+			$member_profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($friend['member_liked'],true,true);
+
+			$friend=array(
+				/*'DATE_AND_TIME_RAW'=>strval($friend['date_and_time']),
+				'DATE_AND_TIME'=>get_timezoned_date($friend['date_and_time'],false),*/
+				'MEMBER_PROFILE_URL'=>$member_profile_url,
+				'MEMBER_ID'=>strval($friend['member_liked']),
+				'USERNAME'=>$username,
+				'ONLINE_TEXT'=>$online_text,
+				'ONLINE'=>$online,
+			);
+
+			if ($online)
+			{
+				$friends_online[]=$friend;
+			} else
+			{
+				$friends_offline[]=$friend;
+			}
+		}
+	}
+
+	if (count($friends_online)+count($friends_offline)>$max)
+	{
+		$friends=$friends_online;
+	} else
+	{
+		$friends=array_merge($friends_offline,$friends_online);
+	}
+
+	return do_template('CHAT_FRIENDS',array(
+		'FRIENDS'=>$friends,
+		'FRIENDS_ONLINE'=>$friends_online,
+		'FRIENDS_OFFLINE'=>$friends_offline,
+		'CAN_IM'=>$can_im,
+		'ONLINE_URL'=>$online_url,
+		'SIMPLER'=>$simpler,
+	));
 }

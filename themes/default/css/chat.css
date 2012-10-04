@@ -273,6 +273,18 @@
 	height: 20em;
 }
 
+.chat_friends_column {
+	width: 25px;
+}
+
+.chat_name_column, .chat_online_column {
+	width: auto;
+}
+
+.chat_choose_column {
+	width: 25px;
+}
+
 .im_post_bits {
 }
 
@@ -342,22 +354,23 @@
 
 /* Instant messaging (site-wide) */
 
-.sitewide_im_popup_body, .sitewide_im_popup {
-	background-color: {$GET,area_background};
+.sitewide_im_popup_body {
+	background-color: {$GET,area_background} !important;
 }
 
-.sitewide_im_popup {
-	padding: 1em;
-	height: 100%;
+.chat_sound_effects_checkbox {
+	margin-top: -2.2em;
 }
 
 .im_event {
-	position: absolute;
+	position: fixed;
 	width: 25em;
 	overflow: hidden;
 	background-color: {$GET,floating_alert_background};
 	color: {$GET,native_ui_foreground};
 	border: 1px solid {$GET,pale_border};
+	{$BETA_CSS_PROPERTY,box-shadow: 0px 0px 20px {$GET,dark_shadow};}
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 	padding: 1em;
 }
 
@@ -373,18 +386,8 @@
 	margin-{!en_right}: 10px;
 }
 
-.im_event .im_popup_link {
-	margin-top: 0.5em;
-}
-
-.im_event .im_event_lobby_link {
-	margin-top: 1em;
-}
-
-.im_event .im_popup_link, .im_event .im_event_lobby_link {
-	display: block;
-	font-size: 0.9em;
-	text-align: {!en_right};
+.im_event .actions_list {
+	float: right;
 }
 
 /* Shoutbox */
@@ -396,3 +399,17 @@
 	margin: 0;
 }
 
+/* Friends block */
+
+.global_side_panel {
+	position: relative;
+}
+
+.block_side_friends {
+	/*position: fixed;	Useful start for tying to bottom, but you probably want to leave a footer gap so you can move it fully down
+	bottom: 7.5em;
+	background-color: {$GET,main_background};
+	width: 13em;
+	padding: 0 1em;
+	margin-left: -1em;*/
+}

@@ -85,36 +85,7 @@
 
 					{+START,IF_NON_EMPTY,{FRIENDS}}
 						<form autocomplete="off" title="{!FRIEND_LIST}" method="post" action="{$?,{$IS_EMPTY,{URL_REMOVE_FRIENDS}},index.php,{URL_REMOVE_FRIENDS*}}">
-							<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
-								<thead>
-									<tr>
-										<th></th>
-										<th>{!NAME}</th>
-										<th><a target="_blank" title="{!ONLINE}: {!LINK_NEW_WINDOW}" href="{ONLINE_URL*}">{!ONLINE}</a></th>
-										<th>{!CHOOSE}</th>
-									</tr>
-								</thead>
-								<tbody>
-									{+START,LOOP,FRIENDS}
-										<tr>
-											<td><img id="friend_img_{MEMBER_ID*}" alt="" src="{$IMG*,menu_items/community_navigation/members}" /></td>
-											<td>
-												{+START,IF,{CAN_IM}}
-													<a rel="friend" title="{USERNAME*}: {!START_IM}" href="#" onclick="start_im('{MEMBER_ID*}'); return false;">{USERNAME*}</a>
-												{+END}
-												{+START,IF,{$NOT,{CAN_IM}}}
-													{USERNAME*}
-												{+END}
-											</td>
-											<td id="online_{MEMBER_ID*}">{ONLINE_TEXT*}</td>
-											<td>
-												<label class="accessibility_hidden" for="select_{MEMBER_ID*}">{!CHOOSE}</label>
-												<input type="checkbox" id="select_{MEMBER_ID*}" value="1" name="select_{MEMBER_ID*}" />
-											</td>
-										</tr>
-									{+END}
-								</tbody>
-							</table></div>
+							{FRIENDS}
 
 							<div class="friend_actions">
 								{+START,IF,{CAN_IM}}
@@ -126,20 +97,6 @@
 								{+END}
 							</div>
 						</form>
-					{+END}
-
-					<script type="text/javascript">
-					// <![CDATA[
-						{+START,LOOP,FRIENDS}
-							{+START,IF,{$NEQ,{ONLINE_TEXT*},{!ACTIVE}}}
-								document.getElementById('friend_img_{MEMBER_ID;^/}').className='friend_inactive';
-							{+END}
-						{+END}
-					// ]]>
-					</script>
-
-					{+START,IF_EMPTY,{FRIENDS}}
-						<p class="nothing_here">{!NO_FRIEND_ENTRIES}</p>
 					{+END}
 
 					{+START,IF_NON_EMPTY,{URL_ADD_FRIEND}}

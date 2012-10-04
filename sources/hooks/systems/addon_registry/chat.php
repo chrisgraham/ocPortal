@@ -72,6 +72,10 @@ class Hook_addon_registry_chat
 	function get_file_list()
 	{
 		return array(
+			'site/pages/comcode/EN/popup_blockers.txt',
+			'sources/blocks/side_friends.php',
+			'BLOCK_SIDE_FRIENDS.tpl',
+			'CHAT_FRIENDS.tpl',
 			'themes/default/images/menu_items/community_navigation/chat.png',
 			'sources/hooks/systems/notifications/im_invited.php',
 			'sources/hooks/systems/notifications/new_friend.php',
@@ -197,7 +201,9 @@ class Hook_addon_registry_chat
 			'CHAT_SET_EFFECTS_SETTING_BLOCK.tpl'=>'chat_set_effects_screen',
 			'CHAT_SET_EFFECTS_SCREEN.tpl'=>'chat_set_effects_screen',
 			'CHAT_FRIENDS_LIST_SCREEN.tpl'=>'chat_friends_list_screen',
-			'OCF_MEMBER_PROFILE_FRIENDS.tpl'=>'ocf_member_profile_friends'
+			'OCF_MEMBER_PROFILE_FRIENDS.tpl'=>'ocf_member_profile_friends',
+			'CHAT_FRIENDS'=>'chat_lobby_screen',
+			'BLOCK_SIDE_FRIENDS'=>'block_side_friends',
 		);
 	}
 
@@ -438,6 +444,45 @@ class Hook_addon_registry_chat
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
+	function tpl_preview__block_side_friends()
+	{
+		$friends=array();
+		foreach (placeholder_array() as $key=>$friend)
+		{
+			$friends[]=array(
+				'DATE_AND_TIME_RAW'=>placeholder_time(),
+				'DATE_AND_TIME'=>placeholder_time(),
+				'MEMBER_PROFILE_URL'=>placeholder_url(),
+				'MEMBER_ID'=>strval($key),
+				'USERNAME'=>lorem_word(),
+				'ONLINE_TEXT'=>lorem_phrase(),
+				'ONLINE'=>false,
+			);
+		}
+
+		$friends=do_lorem_template('CHAT_FRIENDS', array(
+			'FRIENDS_ONLINE'=>$friends,
+			'FRIENDS_OFFLINE'=>$friends,
+			'FRIENDS'=>$friends,
+			'CAN_IM'=>true,
+			'ONLINE_URL'=>placeholder_url(),
+			'SIMPLER'=>true,
+		));
+
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_SIDE_FRIENDS', array(
+				'FRIENDS'=>$friends,
+			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__chat_lobby_screen()
 	{
 		$chat_sound=do_lorem_template('CHAT_SOUND', array(
@@ -493,6 +538,7 @@ class Hook_addon_registry_chat
 
 		$friends=array();
 		foreach (placeholder_array() as $key=>$friend)
+		{
 			$friends[]=array(
 				'DATE_AND_TIME_RAW'=>placeholder_time(),
 				'DATE_AND_TIME'=>placeholder_time(),
@@ -501,19 +547,29 @@ class Hook_addon_registry_chat
 				'USERNAME'=>lorem_word(),
 				'ONLINE_TEXT'=>lorem_phrase()
 			);
+		}
+
+		$friends=do_lorem_template('CHAT_FRIENDS', array(
+			'FRIENDS_ONLINE'=>$friends,
+			'FRIENDS_OFFLINE'=>$friends,
+			'FRIENDS'=>$friends,
+			'CAN_IM'=>true,
+			'ONLINE_URL'=>placeholder_url(),
+			'ONLINE'=>false,
+			'SIMPLER'=>false,
+		));
 
 		return array(
 			lorem_globalise(do_lorem_template('CHAT_LOBBY_SCREEN', array(
+				'TITLE'=>lorem_title(),
 				'MESSAGE'=>lorem_phrase(),
 				'CHAT_SOUND'=>$chat_sound,
 				'IM_PARTICIPANT_TEMPLATE'=>$im_participant_template,
 				'IM_AREA_TEMPLATE'=>$im_area_template,
-				'FRIENDS'=>$friends,
 				'CAN_IM'=>true,
-				'ONLINE_URL'=>placeholder_url(),
+				'FRIENDS'=>$friends,
 				'URL_ADD_FRIEND'=>placeholder_url(),
 				'URL_REMOVE_FRIENDS'=>placeholder_url(),
-				'TITLE'=>lorem_title(),
 				'ROOMS'=>$fields,
 				'PRIVATE_ROOM'=>placeholder_link(),
 				'ROOM_URL'=>placeholder_url(),

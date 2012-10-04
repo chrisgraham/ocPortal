@@ -88,7 +88,8 @@ function script_load_stuff()
 			for (var i=0;i<stuck_navs.length;i++)
 			{
 				var stuck_nav=stuck_navs[i];
-				var stuck_nav_height=find_height(stuck_nav,true,true);
+				var stuck_nav_height=(typeof stuck_nav.real_height=='undefined')?find_height(stuck_nav,true,true):stuck_nav.real_height;
+				stuck_nav.real_height=stuck_nav_height;
 				var pos_y=find_pos_y(stuck_nav.parentNode);
 				if (stuck_nav_height<get_window_height()-260) /* 260 leaves space for footer */
 				{
