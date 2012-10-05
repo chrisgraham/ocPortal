@@ -1829,6 +1829,8 @@ class Module_admin_themes
 		$url=get_param('url','');
 		if ($url!='')
 		{
+			$url=preg_replace('#\.pagespeed\..*$#','',$url); // Support for working around https://developers.google.com/speed/docs/mod_pagespeed/filter-cache-extend
+
 			$theme=get_param('theme',''); // Editing like this happens in the theme the user is using
 			if ($theme=='') $theme=$GLOBALS['FORUM_DRIVER']->get_theme('');
 			if (substr($url,0,strlen(get_base_url()))==get_base_url()) $url=substr($url,strlen(get_base_url()));
