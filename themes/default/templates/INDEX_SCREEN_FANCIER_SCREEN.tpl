@@ -24,7 +24,7 @@
 				</p>
 			{+END}
 		{+END}
-		{+START,IF_NON_PASSED_OR_FALSE,EMPTY}
+		{+START,IF_NON_PASSED_OR_FALSE,CONTENT}
 			{CONTENT}
 		{+END}
 	</div>
