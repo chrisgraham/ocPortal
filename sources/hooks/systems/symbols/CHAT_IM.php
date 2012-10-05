@@ -38,9 +38,11 @@ class Hook_symbol_CHAT_IM
 
 			$messages_php=find_script('messages');
 
+			$title=$GLOBALS['IS_ACTUALLY_ADMIN']?do_lang('SU_CHATTING_AS',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))):'__room_name__';
+
 			$im_area_template=do_template('CHAT_LOBBY_IM_AREA',array('_GUID'=>'38de4f030d5980790d6d1db1a7e2ff39','MESSAGES_PHP'=>$messages_php,'ROOM_ID'=>'__room_id__'));
 			$im_area_template=do_template('CHAT_SITEWIDE_IM_POPUP',array('_GUID'=>'e520e557f86d0dd4e32d25a208d8f154','CONTENT'=>$im_area_template,'CHAT_SOUND'=>get_chat_sound_tpl()));
-			$im_area_template=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'5032bfa802af3fe14e610d09078ef849','CSS'=>'sitewide_im_popup_body','TITLE'=>'__room_name__','TARGET'=>'_site_opener','CONTENT'=>$im_area_template,'POPUP'=>true));
+			$im_area_template=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'5032bfa802af3fe14e610d09078ef849','CSS'=>'sitewide_im_popup_body','TITLE'=>$title,'TARGET'=>'_site_opener','CONTENT'=>$im_area_template,'POPUP'=>true));
 
 			$make_friend_url=build_url(array('page'=>'_SELF','type'=>'friend_add','member_id'=>'__id__'),'_SELF');
 

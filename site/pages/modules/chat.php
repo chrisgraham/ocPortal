@@ -427,7 +427,7 @@ class Module_chat
 		enter_chat_lobby();
 
 		// Generic stuff: Title, feed URL
-		$title=get_screen_title('CHAT_LOBBY');
+		$title=get_screen_title($GLOBALS['IS_ACTUALLY_ADMIN']?'SU_CHATTING_AS':'CHAT_LOBBY',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
 		$GLOBALS['FEED_URL']=find_script('backend').'?mode=chat&filter=';
 
 		// Rooms
