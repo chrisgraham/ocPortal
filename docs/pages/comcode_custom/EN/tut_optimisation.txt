@@ -299,6 +299,21 @@ We have tried in the past to support:
  - Project Zero
 But after quite a lot of work we have concluded these projects are too buggy to be realistic, and not well maintained.
 
+[title="2"]mod_pagespeed[/title]
+
+Google's mod_pagespeed adds some nice micro optimisations. ocPortal doesn't do these itself because they would hurt CPU performance and modularity, but applying them in a fast Apache module is useful. To be honest, this will not really result in any particularly noticeable performance gain, but if you've got a good budget for trying lots of small things at once, every little bit helps and we thought it worth mentioning and documenting against.
+
+mod_pagespeed is not supplied with Apache, but can be installed on most Linux servers. However you would need server access or for the web host to do this for you.
+
+Interesting optimisations include:
+ - https://developers.google.com/speed/docs/mod_pagespeed/filter-trim-urls (this breaks modularity -- but that is fine for primary output streams)
+ - https://developers.google.com/speed/docs/mod_pagespeed/filter-quote-remove and https://developers.google.com/speed/docs/mod_pagespeed/filter-attribute-elide (ocPortal is XHTML-compliant, this breaks that -- but that is fine for primary output streams)
+ - https://developers.google.com/speed/docs/mod_pagespeed/filter-whitespace-collapse (this will save some bytes, although not nearly as many as you think if you already have gzip encoding on)
+ - https://developers.google.com/speed/docs/mod_pagespeed/filter-image-optimize (mod_pagespeed may do a better job that your manual optimisation, and its support of WebP is very interesting)
+ - https://developers.google.com/speed/docs/mod_pagespeed/filter-js-defer (this will improve performance initial rendering time, but at the expensive of delaying interaction time -- this may be a fairly good idea for very non-interactive sites, but a terrible idea for very-interactive sites -- use with great care)
+
+Google's work with SPDY is also interesting, and SDCH is [i]extremely interesting[/i]. At this time of writing it is too early to really think about these, but they should provide automatic optimisations to ocPortal.
+
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_moving"]Moving servers (including copying themes manually)[/page]
