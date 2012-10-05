@@ -1767,7 +1767,8 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	window.setTimeout(function() {
 		if (!ac.is_over) return;
 
-		if (!ac.tooltip_on) set_inner_html(tooltip_element,tooltip,true);
+		if ((!ac.tooltip_on) || (tooltip_element.childNodes.length==0 /* Some other tooltip jumped in and wiped out tooltip on a delayed-show yet never triggers due to losing focus during that delay */))
+			set_inner_html(tooltip_element,tooltip,true);
 
 		ac.tooltip_on=true;
 		tooltip_element.style.display='block';
