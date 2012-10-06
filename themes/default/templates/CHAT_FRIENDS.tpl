@@ -47,7 +47,7 @@
 						{+END}
 
 						{+START,IF,{CAN_IM}}
-							<a rel="friend" title="{USERNAME*}: {!START_IM}" href="{$PAGE_LINK*,_SEARCH:chat:enter_im={MEMBER_ID}}" onclick="if (typeof window.start_im=='undefined') return true; start_im('{MEMBER_ID*}'); return false;">{USERNAME*}</a>
+							<a rel="friend" title="{USERNAME*}: {!START_IM}" href="{$PAGE_LINK*,_SEARCH:chat:enter_im={MEMBER_ID}}" onclick="if (typeof window.start_im=='undefined') return true; start_im('{MEMBER_ID*}',true{$,{$?,{SIMPLER},true,false}}); return false;">{USERNAME*}</a>
 						{+END}
 						{+START,IF,{$NOT,{CAN_IM}}}
 							{USERNAME*}

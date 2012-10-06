@@ -137,7 +137,7 @@ The values you might want to manually change are:
  - [tt]mails_per_send[/tt] -- set this to the number of e-mails to send out in each e-mail send batch (default is 60).
  - [tt]primary_paypal_email[/tt] -- set this to your primary PayPal email address, if you have set up PayPal to work against a secondary PayPal address instead. Without it ocPortal will fail to validate payments, causing all eCommerce to fail.
  - [tt]simplify_wysiwyg_by_permissions[/tt] -- set this to '1' if you want to show a simpler WYSIWYG editor to members with limited Comcode permissions.
- - [tt]chat_message_check_interval[/tt] -- the default time (in milliseconds) between checks for new chat messages/events (default is 5000, meaning a message takes on average just over 2.5 seconds to be found). A lower time raises server resources used.
+ - [tt]chat_message_check_interval[/tt] -- the default time (in milliseconds) between checks for new chat messages/events (default is 5000, meaning a message takes on average just over 2.5 seconds to be found). A lower time raises server resources used. It uses roughly 10% of a servers resources if 160 users are using the chat at once.
  - [tt]chat_transitory_alert_time[/tt] -- the time (in milliseconds) to display popup "user has come online" alerts for (default is 7000).
 
 We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:

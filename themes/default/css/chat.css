@@ -364,7 +364,7 @@
 
 .im_event {
 	position: fixed;
-	width: 25em;
+	width: 11em;
 	overflow: hidden;
 	background-color: {$GET,floating_alert_background};
 	color: {$GET,native_ui_foreground};
@@ -372,6 +372,10 @@
 	{$BETA_CSS_PROPERTY,box-shadow: 0px 0px 20px {$GET,dark_shadow};}
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 	padding: 1em;
+}
+
+.im_event p {
+	margin-top: 0;
 }
 
 .im_event .im_popup_close_button {

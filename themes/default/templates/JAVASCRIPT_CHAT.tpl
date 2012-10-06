@@ -9,7 +9,7 @@ window.TRANSITORY_ALERT_TIME=7000;
 {+START,IF_NON_EMPTY,{$VALUE_OPTION,chat_transitory_alert_time}}
 	window.TRANSITORY_ALERT_TIME={$ROUND%,{$VALUE_OPTION,chat_transitory_alert_time}};
 {+END}
-window.LOGS_DOWNLOAD_INTERVAL=10000;
+window.LOGS_DOWNLOAD_INTERVAL=3000;
 
 // Tracking variables
 var last_message_id=-1;
@@ -21,8 +21,10 @@ var picker,picker_node,text_colour;
 var opened_popups={};
 var load_from_room_id=null;
 var already_received_room_invites={};
+var already_received_contact_alert={};
 var instant_go=false;
 var is_shutdown=false;
+var all_conversations={};
 
 // Code...
 
@@ -541,7 +543,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 						}
 					} else if (!document.getElementById('chat_lobby_convos_tabs'))
 					{
-						create_overlay_event(skip_incoming_sound,member_id,'{!NOW_ONLINE;^}'.replace('{'+'1}',username),function() { start_im(member_id); return false; } ,avatar_url);
+						create_overlay_event(skip_incoming_sound,member_id,'{!NOW_ONLINE;^}'.replace('{'+'1}',username),function() { start_im(member_id,true); return false; } ,avatar_url);
 					}
 
 					rooms=find_im_convo_room_ids();
@@ -673,7 +675,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 				var is_new=(messages[i].getAttribute('num_posts')=='0');
 				var by_you=(messages[i].getAttribute('inviter')==messages[i].getAttribute('you'));
 
-				if (((is_new) || (!by_you)) && (!window.instant_go) && (!document.getElementById('chat_lobby_convos_tabs')))
+				if ((!by_you) && (!window.instant_go) && (!document.getElementById('chat_lobby_convos_tabs')))
 				{
 					create_overlay_event(skip_incoming_sound,messages[i].getAttribute('inviter'),'{!IM_INFO_CHAT_WITH;^}'.replace('{'+'1}',room_name),function() { window.last_message_id=-1 /*Ensure messages re-processed*/; detected_conversation(room_id,room_name,participants); return false; } ,avatar_url,room_id);
 				} else
@@ -748,12 +750,22 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 
 function create_overlay_event(skip_incoming_sound,member_id,message,click_event,avatar_url,room_id)
 {
+	if (typeof room_id=='undefined') var room_id=null;
+
 	if (window!=top_window) return; // Can't display in an autonomous popup
 
 	// Make sure to not show multiple equiv ones, which could happen in various situations
-	if ((typeof window.already_received_room_invites[room_id]!='undefined') && (window.already_received_room_invites[room_id]))
-		return;
-	window.already_received_room_invites[room_id]=true;
+	if (room_id!==null)
+	{
+		if ((typeof window.already_received_room_invites[room_id]!='undefined') && (window.already_received_room_invites[room_id]))
+			return;
+		window.already_received_room_invites[room_id]=true;
+	} else
+	{
+		if ((typeof window.already_received_contact_alert[member_id]!='undefined') && (window.already_received_contact_alert[member_id]))
+			return;
+		window.already_received_contact_alert[member_id]=true;
+	}
 
 	// Ping!
 	if (!skip_incoming_sound)
@@ -764,7 +776,8 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 	// Start DOM stuff
 	var div=document.createElement('div');
 	div.className='im_event';
-	div.style.left=(get_window_width()/2-140)+'px';
+	//div.style.left=(get_window_width()/2-140)+'px';
+	div.style.right='1em';
 	div.style.bottom=((get_elements_by_class_name(document.body,'im_event').length)*120+20)+'px';
 	var links=document.createElement('ul');
 	links.className='actions_list';
@@ -814,9 +827,9 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 	}
 
 	// Message
-	var div_message=document.createElement('div');
-	set_inner_html(div_message,message);
-	div.appendChild(div_message);
+	var p_message=document.createElement('p');
+	set_inner_html(p_message,message);
+	div.appendChild(p_message);
 
 	// Open link
 	var a_popup_open=document.createElement('a');
@@ -844,35 +857,57 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 	// Add it all in
 	div.appendChild(links);
 	document.body.appendChild(div);
+	
+	// Contact ones disappear after a time
+	if (room_id===null)
+	{
+		window.setTimeout(function () {
+			close_popup();
+		} , window.TRANSITORY_ALERT_TIME);
+	}
 }
 
-function start_im(people)
+function start_im(people,just_refocus)
 {
 	var message=(people.indexOf(',')==-1)?'{!ALREADY_HAVE_THIS_SINGLE;^}':'{!ALREADY_HAVE_THIS;^}';
-	if (all_conversations[people])
+	if ((typeof top_window.all_conversations[people]!='undefined') && (top_window.all_conversations[people]!==null))
 	{
+		if (just_refocus)
+		{
+			try
+			{
+				var room_id=top_window.all_conversations[people];
+				if (document.getElementById('tab_'+room_id))
+				{
+					chat_select_tab(document.getElementById('tab_'+room_id));
+				} else
+				{
+					top_window.opened_popups['room_'+room_id].focus();
+				}
+				return;
+			}
+			catch (e) {}
+		}
+
 		window.fauxmodal_confirm(
 			message,
 			function(answer) {
-				if (answer) _start_im(people);
+				if (answer) _start_im(people,false); // false, because can't recycle if its already open
 			}
 		);
-
-		return;
+	} else
+	{
+		_start_im(people,true); // true, because an IM may exist we don't have open, so let that be recycled
 	}
-
-	_start_im(people);
 }
 
-function _start_im(people)
+function _start_im(people,may_recycle)
 {
-	all_conversations[people]=1;
-
 	var div=document.createElement('div');
 	div.className='loading_overlay';
 	set_inner_html(div,'{!LOADING;^}');
 	document.body.appendChild(div);
-	var result=do_ajax_request(maintain_theme_in_link('{$FIND_SCRIPT;,messages}?action=start_im&people='+people+'&message_id='+window.encodeURIComponent(top_window.last_message_id)+'&event_id='+window.encodeURIComponent(top_window.last_event_id)+keep_stub(false)));
+	var result=do_ajax_request(maintain_theme_in_link('{$FIND_SCRIPT;,messages}?action=start_im&people='+people+'&message_id='+window.encodeURIComponent(top_window.last_message_id)+'&may_recycle='+(may_recycle?'1':'0')+'&event_id='+window.encodeURIComponent(top_window.last_event_id)+keep_stub(false)));
 	var responses=result.responseXML.getElementsByTagName('result');
 	if (responses[0])
 	{
@@ -970,7 +1005,7 @@ function deinvolve_im(room_id,logs,is_popup) // is_popup means that we show a pr
 		}
 	}
 
-	var element;
+	var element,participants=null;
 	var tabs=document.getElementById('chat_lobby_convos_tabs');
 	if (tabs)
 	{
@@ -980,21 +1015,29 @@ function deinvolve_im(room_id,logs,is_popup) // is_popup means that we show a pr
 		var tab_element=document.getElementById('tab_'+room_id);
 		element.style.display='none';
 		tab_element.style.display='none';
+
+		participants=tab_element.participants;
+	} else
+	{
+		if (is_popup)
+			participants=((typeof window.already_autonomous!='undefined') && (window.already_autonomous))?window.participants:top_window.opened_popups['room_'+room_id].participants;
 	}
 
 	top_window.already_received_room_invites[room_id]=false;
 	if (is_popup) window.is_shutdown=true;
 
-	window.setTimeout(function() // Give time for any logs to download
+	window.setTimeout(function() // Give time for any logs to download (download does not need to have finished - but must have loaded into a request response on the server side)
 	{
 		top_window.do_ajax_request('{$FIND_SCRIPT;,messages}?action=deinvolve_im&room_id='+window.encodeURIComponent(room_id)+top_window.keep_stub(false),null); // Has to be on top_window or it will be lost if the window was explicitly closed (it is unloading mode and doesn't want to make a new request)
+
+		if (participants)
+			top_window.all_conversations[participants]=null;
 
 		if (tabs)
 		{
 			if ((element) && (element.parentNode)) element.parentNode.removeChild(element);
 			if (!tab_element.parentNode) return;
 
-			all_conversations[tab_element.participants]=false;
 			tab_element.parentNode.removeChild(tab_element);
 
 			// All gone?
@@ -1041,7 +1084,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 		lobby=false;
 	}
 
-	all_conversations[participants]=1;
+	top_window.all_conversations[participants]=room_id;
 
 	var url='{$FIND_SCRIPT_NOHTTP;,messages}?action=join_im&room_id='+window.encodeURIComponent(room_id)+'&event_id='+top_window.last_event_id+top_window.keep_stub(false);
 
@@ -1097,10 +1140,13 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 				{
 					if (!new_window.document) return;
 
+					new_window.participants=participants;
+
 					new_window.document.title=get_inner_html(new_window.document.getElementsByTagName('title')[0]); // For Safari
 
 					new_window.onbeforeunload=function() {
-						new_window.close_chat_conversation(room_id);
+						return '{!CLOSE_VIA_END_CHAT_BUTTON;}';
+						//new_window.close_chat_conversation(room_id);
 					};
 
 					try

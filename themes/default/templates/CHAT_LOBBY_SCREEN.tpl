@@ -68,7 +68,6 @@
 					<script type="text/javascript"> // <![CDATA[
 						var im_area_template='{IM_AREA_TEMPLATE;^/}';
 						var im_participant_template='{IM_PARTICIPANT_TEMPLATE;^/}';
-						var all_conversations=[];
 						var top_window=window;
 
 						function begin_im_chatting()

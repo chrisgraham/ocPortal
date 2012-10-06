@@ -73,20 +73,44 @@ function messages_script()
 	elseif ($action=='start_im')
 	{
 		require_lang('chat');
+
 		$people=get_param('people');
 		if ($people=='') exit();
-		require_code('chat2');
-		if (strpos($people,',')===false)
+
+		$room=mixed();
+		$may_recycle=(get_param_integer('may_recycle',0)==1);
+		if ($may_recycle)
 		{
-			$room_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+			if (strpos($people,',')===false)
+			{
+				// See if we can find a room to recycle
+				$room=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'chat_rooms WHERE '.db_string_equal_to('allow_list',$people.','.strval(get_member())).' OR '.db_string_equal_to('allow_list',strval(get_member()).','.$people));
+			}
+		}
+
+		$extra_xml='';
+
+		if (!array_key_exists(0,$room)) // No room to recycle
+		{
+			require_code('chat2');
+			if (strpos($people,',')===false)
+			{
+				$room_name=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+			} else
+			{
+				$room_name=do_lang('IM_MULTI',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			}
+			add_chatroom('',$room_name,get_member(),filter_invites_for_blocking(strval(get_member()).','.$people),'','','',user_lang(),1);
 		} else
 		{
-			$room_name=do_lang('IM_MULTI',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
+			// Resend invite (this is a self-invite)
+			$room['room_name']=$GLOBALS['FORUM_DRIVER']->get_username(intval($people));
+			$num_posts=$GLOBALS['SITE_DB']->query_value('chat_messages','COUNT(*)',array('room_id'=>$room['id']));
+			$extra_xml='<chat_invite num_posts="'.strval($num_posts).'" you="'.strval(get_member()).'" inviter="'.strval(get_member()).'" participants="'.xmlentities($people.','.strval(get_member())).'" room_name="'.xmlentities($room['room_name']).'" avatar_url="">'.strval($room['id']).'</chat_invite>'.chr(10);
 		}
-		add_chatroom('',$room_name,get_member(),filter_invites_for_blocking(strval(get_member()).','.$people),'','','',user_lang(),1);
 
 		// Send response of new messages, so we get instant result
-		_chat_messages_script_ajax(-2,false,either_param_integer('message_id'),either_param_integer('event_id'));
+		_chat_messages_script_ajax(-2,false,either_param_integer('message_id'),either_param_integer('event_id'),$extra_xml);
 	}
 	elseif ($action=='join_im')
 	{
