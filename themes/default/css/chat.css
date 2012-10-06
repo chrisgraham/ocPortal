@@ -175,9 +175,6 @@
 .chat_message_by {
 	font-style: italic;
 }
-.chat_lobby_convos_area_messages .chat_message>div {
-	font-size: 0.8em; /* Space extra tight for IMs */
-}
 
 /* Instant messaging */
 
@@ -386,8 +383,9 @@
 
 .im_event .im_popup_avatar {
 	float: {!en_left};
-	width: 70px;
-	margin-{!en_right}: 10px;
+	width: 25px;
+	height: 25px;
+	margin-{!en_right}: 0.5em;
 }
 
 .im_event .actions_list {

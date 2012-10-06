@@ -12,7 +12,7 @@
 
 <script type="text/javascript">// <![CDATA[
 	window.detect_if_chat_window_closed_checker=window.setInterval(function() {
-		detect_if_chat_window_closed();
+		if (typeof detect_if_chat_window_closed!='undefined') detect_if_chat_window_closed();
 	},5);
 //]]></script>
 

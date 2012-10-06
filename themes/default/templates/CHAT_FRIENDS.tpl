@@ -2,9 +2,16 @@
 	<div class="wide_table_wrap"><table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
 		<colgroup>
 			<col class="chat_friends_column" />
+
 			<col class="chat_name_column" />
-			<col class="chat_online_column" />
-			<col class="chat_choose_column" />
+
+			{+START,IF,{$NOT,{SIMPLER}}}
+				<col class="chat_online_column" />
+			{+END}
+
+			{+START,IF,{$NOT,{SIMPLER}}}
+				<col class="chat_choose_column" />
+			{+END}
 		</colgroup>
 
 		<thead>

@@ -291,19 +291,24 @@ function chat_room_prune($room_id,$room_row=NULL)
 			// Have they left the lobby? (or site, if it's site-wide IM)
 			if (is_null($p['room_id']))
 			{
-				$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
-					'e_type_code'=>'BECOME_INACTIVE',
-					'e_member_id'=>$p['member_id'],
-					'e_room_id'=>NULL,
-					'e_date_and_time'=>time()
-				),true);
+				$last_become_active=$GLOBALS['SITE_DB']->query_value_null_ok('chat_events','MAX(e_date_and_time)',array('e_member_id'=>$p['member_id'],'e_type_code'=>'BECOME_ACTIVE','e_room_id'=>NULL));
+				$last_become_inactive=$GLOBALS['SITE_DB']->query_value_null_ok('chat_events','MAX(e_date_and_time)',array('e_member_id'=>$p['member_id'],'e_type_code'=>'BECOME_INACTIVE','e_room_id'=>NULL));
+				if ((is_null($last_become_inactive)) || ($last_become_active>$last_become_inactive)) // If not already marked inactive
+				{
+					$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
+						'e_type_code'=>'BECOME_INACTIVE',
+						'e_member_id'=>$p['member_id'],
+						'e_room_id'=>NULL,
+						'e_date_and_time'=>time()
+					),true);
 
-				if (!file_exists(get_custom_file_base().'/data_custom/modules/chat'))
-					@mkdir(get_custom_file_base().'/data_custom/modules/chat',0777);
-				$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
-				fwrite($myfile,strval($event_id));
-				fclose($myfile);
-				sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+					if (!file_exists(get_custom_file_base().'/data_custom/modules/chat'))
+						@mkdir(get_custom_file_base().'/data_custom/modules/chat',0777);
+					$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+					fwrite($myfile,strval($event_id));
+					fclose($myfile);
+					sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+				}
 			} else
 			{
 				// Make "left room" message

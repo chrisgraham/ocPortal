@@ -291,10 +291,7 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 			}
 
 			// Reschedule the next check (cc_timer was reset already higher up in function)
-			if (window==top_window) // If we're autonomous
-			{
-				top_window.cc_timer=top_window.setTimeout(function() { chat_check(false,top_window.last_message_id,top_window.last_event_id); },window.MESSAGE_CHECK_INTERVAL);
-			}
+			top_window.cc_timer=top_window.setTimeout(function() { top_window.chat_check(false,top_window.last_message_id,top_window.last_event_id); },window.MESSAGE_CHECK_INTERVAL);
 
 			try
 			{
@@ -468,12 +465,12 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 
 			// Clone the node so that we may insert it
 			cloned_message=doc.createElement('div');
-			set_inner_html(cloned_message,get_outer_html(messages[i].childNodes[0]));
+			set_inner_html(cloned_message,(typeof messages[i].xml!='undefined')?messages[i].xml/*IE-only optimisation*/:get_outer_html(messages[i].childNodes[0]));
 			cloned_message=cloned_message.childNodes[0];
 			cloned_message.id='chat_message__'+id;
 
 			// Non-first message
-			if ((message_container.childNodes.length>0) && (get_inner_html(message_container).length>6))
+			if (message_container.childNodes.length>0)
 			{
 				message_container.insertBefore(cloned_message,message_container.childNodes[0]);
 
@@ -1112,9 +1109,9 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 	} else
 	{
 		// Open popup
-		var im_popup_window_options='width=370,height=415,menubar=no,toolbar=no,location=no,resizable=no,scrollbars=yes,top='+((screen.height-520)/2)+',left='+((screen.width-440)/2);
-		var new_window=window.open('{$BASE_URL;,0}'.replace(/^http:/,window.location.protocol)+'/data/empty.html','room_'+room_id,im_popup_window_options);
-		if (!new_window)
+		var im_popup_window_options='width=370,height=420,menubar=no,toolbar=no,location=no,resizable=no,scrollbars=yes,top='+((screen.height-520)/2)+',left='+((screen.width-440)/2);
+		var new_window=window.open('{$BASE_URL;,0}'.replace(/^http:/,window.location.protocol)+'/data/empty.html?instant_messaging','room_'+room_id,im_popup_window_options); // The "?instant_messaging" is just to make the location bar less surprising to the user ;-) [modern browsers always show the location bar for security, even if we try and disable it]
+		if ((!new_window) || (typeof new_window.window=='undefined' /*BetterPopupBlocker for Chrome returns a fake new window but won't have this defined in it*/))
 		{
 			fauxmodal_alert('{!chat:_FAILED_TO_OPEN_POPUP;,{$PAGE_LINK*,_SEARCH:popup_blockers:failure=1,0,1}}',null,'{!chat:FAILED_TO_OPEN_POPUP;}',true);
 		}
@@ -1130,7 +1127,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 			if ((new_window) && (typeof new_window.document!='undefined'))
 			{
 				new_window.document.open();
-				new_window.document.write(new_one);
+				new_window.document.write(new_one); // This causes a blocking on Firefox while files download/parse. It's annoying, you'll see the popup freezes. But it works after a few seconds.
 				new_window.document.close()
 				new_window.top_window=window;
 				new_window.room_id=room_id;
@@ -1141,8 +1138,6 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 					if (!new_window.document) return;
 
 					new_window.participants=participants;
-
-					new_window.document.title=get_inner_html(new_window.document.getElementsByTagName('title')[0]); // For Safari
 
 					new_window.onbeforeunload=function() {
 						return '{!CLOSE_VIA_END_CHAT_BUTTON;}';
@@ -1157,7 +1152,13 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 
 					// Tell server we've joined
 					do_ajax_request(url,function(ajax_result_frame,ajax_result) { process_chat_xml_messages(ajax_result,true); },false);
-				},60);
+
+					// Set title
+					var dom_title=new_window.document.getElementsByTagName('title')[0];
+					if (dom_title!='')
+						new_window.document.title=get_inner_html(dom_title); // For Safari
+
+				},500); /* Could be 60 except for Firefox which is slow */
 			}
 		},60);
 	}

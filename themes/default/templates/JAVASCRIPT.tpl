@@ -2455,11 +2455,15 @@ function set_inner_html(element,tHTML,append)
 			}
 
 			window.setTimeout(function() {
-				var elements=element.getElementsByTagName('*');
-				for (var i=already_offset;i<elements.length;i++)
+				try
 				{
-					new_html__initialise(elements[i]);
+					var elements=element.getElementsByTagName('*');
+					for (var i=already_offset;i<elements.length;i++)
+					{
+						new_html__initialise(elements[i]);
+					}
 				}
+				catch (e) {}; /* In case something has changed before the timeout called back */
 			}, 0); // Delayed so we know DOM has loaded
 
 			if (tHTML.toLowerCase().indexOf('<script')!=-1)

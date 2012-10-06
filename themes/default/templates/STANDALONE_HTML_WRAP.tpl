@@ -20,7 +20,6 @@
 		{$JS_TEMPCODE,footer}
 
 		<script type="text/javascript">// <![CDATA[
-
 			{+START,IF_PASSED_AND_TRUE,FRAME}
 				add_event_listener_abstract(window,'real_load',function () {
 					if (typeof window.trigger_resize!='undefined') trigger_resize();
@@ -30,7 +29,8 @@
 				} );
 			{+END}
 
-			script_load_stuff();
+			{$,The typeof bit is working around a document.write problem in the chat IM system for IE8}
+			if (typeof script_load_stuff!='undefined') script_load_stuff();
 
 			{+START,IF,{$RUNNING_SCRIPT,preview}}
 				disable_preview_scripts();
