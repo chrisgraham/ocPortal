@@ -71,9 +71,9 @@ class Module_members
 			$start=0;
 			do
 			{
-				$groups=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username AS title','m_join_time'),NULL,'',500,$start);
+				$members=$GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username AS title','m_join_time'),NULL,'',500,$start);
 
-				foreach ($groups as $row)
+				foreach ($members as $row)
 				{
 					if ($row['id']!=db_get_first_id())
 					{
@@ -84,7 +84,7 @@ class Module_members
 
 				$start+=500;
 			}
-			while (array_key_exists(0,$groups));
+			while (array_key_exists(0,$members));
 		}
 	}
 
