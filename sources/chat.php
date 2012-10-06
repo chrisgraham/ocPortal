@@ -31,7 +31,7 @@ function init__chat()
 
 	if (!defined('CHAT_ACTIVITY_PRUNE'))
 	{
-		define('CHAT_ACTIVITY_PRUNE',25);
+		define('CHAT_ACTIVITY_PRUNE',25); // NB: This define is duplicated in chat_poller.php for performance
 		define('CHAT_BACKLOG_TIME',60*5); // 5 minutes of messages if you enter an existing room
 		define('CHAT_EVENT_PRUNE',60*60*24);
 	}
@@ -540,10 +540,10 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		}
 	}
 
-	if ($messages_output=='')
-	{
-		$messages_output='<chat_null>'.strval($room_id).'</chat_null>'.chr(10);
-	}
+	$last_msg=$GLOBALS['SITE_DB']->query_value('chat_messages','MAX(id)');
+	$last_event=$GLOBALS['SITE_DB']->query_value('chat_events','MAX(id)');
+	$tracking_output='<chat_tracking last_msg="'.strval($last_msg).'" last_event="'.strval($last_event).'">'.strval($room_id).'</chat_tracking>'.chr(10);
+
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 	header('Content-Type: application/xml');
@@ -576,7 +576,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 
 <response>
 	<result>
-'.$events_output.$invitations_output.$messages_output.'
+'.$tracking_output.$events_output.$invitations_output.$messages_output.'
 	</result>
 </response>';
 	echo $output;

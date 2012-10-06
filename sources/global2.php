@@ -23,6 +23,12 @@
  */
 function init__global2()
 {
+	if ((running_script('messages')) && (get_param('action','new')=='new') && (get_param_integer('routine_refresh',0)==0)) // Architecturally hackerish chat message precheck (for extra efficiency)
+	{
+		require_code('chat_poller');
+		chat_poller();
+	}
+
 	global $BOOTSTRAPPING,$CHECKING_SAFEMODE,$BAD_WORD_CHARS,$FIXED_WORD_CHARS,$FIXED_WORD_CHARS_HTML,$BROWSER_DECACHEING,$CHARSET,$TEMP_CHARSET,$RELATIVE_PATH,$CURRENTLY_HTTPS,$RUNNING_SCRIPT_CACHE,$SERVER_TIMEZONE,$HAS_SET_ERROR_HANDLER,$DYING_BADLY,$XSS_DETECT,$SITE_INFO,$JAVASCRIPTS,$JAVASCRIPT,$CSSS,$IN_MINIKERNEL_VERSION,$EXITING,$FILE_BASE,$MOBILE,$CACHE_TEMPLATES,$BASE_URL_HTTP,$BASE_URL_HTTPS,$WORDS_TO_FILTER,$FIELD_RESTRICTIONS,$VALID_ENCODING,$CONVERTED_ENCODING,$MICRO_BOOTUP,$MICRO_AJAX_BOOTUP,$QUERY_LOG,$_CREATED_FILES,$CURRENT_SHARE_USER,$CACHE_FIND_SCRIPT,$WHAT_IS_RUNNING;
 
 	if (ini_get('output_buffering')=='1') @ob_end_clean();
@@ -303,11 +309,6 @@ function init__global2()
 	require_code('config'); // Config is needed for much active stuff
 	require_code('support2');
 	if (ip_banned(get_ip_address())) critical_error('BANNED');
-	if ((running_script('messages')) && (get_param('action','new')=='new') && (get_param_integer('routine_refresh',0)==0)) // Architecturally unsound chat message precheck (for extra efficiency)
-	{
-		require_code('chat_poller');
-		chat_poller();
-	}
 	if ($MICRO_BOOTUP==0)
 	{
 		load_user_stuff();

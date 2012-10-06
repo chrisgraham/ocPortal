@@ -1,7 +1,7 @@
 "use strict";
 
 // Constants
-window.MESSAGE_CHECK_INTERVAL=10000;
+window.MESSAGE_CHECK_INTERVAL=5000;
 {+START,IF_NON_EMPTY,{$VALUE_OPTION,chat_message_check_interval}}
 	window.MESSAGE_CHECK_INTERVAL={$ROUND%,{$VALUE_OPTION,chat_message_check_interval}};
 {+END}
@@ -370,7 +370,6 @@ function chat_check_response(ajax_result_frame,ajax_result,skip_incoming_sound)
 
 	var temp=process_chat_xml_messages(ajax_result,skip_incoming_sound);
 	if (temp==-2) return false;
-	//if (!window.current_room_id) window.current_room_id=temp;
 
 	// Schedule the next check
 	if (window.cc_timer) {	window.clearTimeout(window.cc_timer); window.cc_timer=null; }
@@ -391,22 +390,18 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 	var message_container=document.getElementById('messages_window');
 	var message_container_global=(message_container!=null);
 	var _cloned_message,cloned_message;
-	var current_room_id=-1;
+	var current_room_id=window.load_from_room_id;
 	var tab_element;
 	var flashable_alert=false;
 	var username,room_name,room_id,event_type,member_id,tmp_element,rooms,avatar_url,participants;
 	var id,timestamp;
 	var first_set=false;
 	var newest_id_here=null,newest_timestamp_here=null;
+	var cannot_process_all=false;
 
 	// Look through our messages
 	for (var i=0;i<messages.length;i++)
 	{
-		if (messages[i].nodeName=='chat_null') // VARIABLE PACKET
-		{
-			current_room_id=merge_text_nodes(messages[i].childNodes);
-		} else
-
 		if (messages[i].nodeName=='div') // MESSAGE
 		{
 			// Find out about our message
@@ -437,6 +432,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 				message_container=opened_popups['room_'+current_room_id].document.getElementById('messages_window_'+current_room_id);
 			} else if (!message_container_global)
 			{
+				cannot_process_all=true;
 				continue; // Still no luck
 			}
 
@@ -448,7 +444,11 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 			if (typeof opened_popups['room_'+current_room_id]!='undefined')
 			{
 				var popup_win=opened_popups['room_'+current_room_id];
-				if (!popup_win.document) continue; // We have nowhere to put the message
+				if (!popup_win.document) // We have nowhere to put the message
+				{
+					cannot_process_all=true;
+					continue;
+				}
 				doc=popup_win.document;
 
 				// Feed in details, so if it becomes autonomous, it knows what to run with
@@ -462,13 +462,13 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 					popup_win.last_timestamp=newest_timestamp_here;
 			}
 
-			if (doc.getElementById('chat_message_id'+id)) continue; // Already there
+			if (doc.getElementById('chat_message__'+id)) continue; // Already there
 
 			// Clone the node so that we may insert it
 			cloned_message=doc.createElement('div');
 			set_inner_html(cloned_message,get_outer_html(messages[i].childNodes[0]));
 			cloned_message=cloned_message.childNodes[0];
-			cloned_message.id='chat_message_id'+id;
+			cloned_message.id='chat_message__'+id;
 
 			// Non-first message
 			if ((message_container.childNodes.length>0) && (get_inner_html(message_container).length>6))
@@ -506,7 +506,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 			if (members_element) set_inner_html(members_element,merge_text_nodes(messages[i].childNodes));
 		}
 
-		else if ((messages[i].nodeName=='chat_event') && (window.im_participant_template)) // Some kind of transitory event
+		else if ((messages[i].nodeName=='chat_event') && (typeof window.im_participant_template!='undefined')) // Some kind of transitory event
 		{
 			event_type=messages[i].getAttribute('event_type');
 			room_id=messages[i].getAttribute('room_id');
@@ -515,7 +515,6 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 			avatar_url=messages[i].getAttribute('avatar_url');
 
 			id=merge_text_nodes(messages[i].childNodes);
-			if (id!='') top_window.last_event_id=id;
 
 			switch (event_type)
 			{
@@ -660,9 +659,9 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 					}
 					break;
 			}
-
 		} else // INVITES
-		if ((messages[i].nodeName=='chat_invite') && (window.im_participant_template))
+
+		if ((messages[i].nodeName=='chat_invite') && (typeof window.im_participant_template!='undefined'))
 		{
 			room_id=merge_text_nodes(messages[i].childNodes);
 
@@ -683,10 +682,16 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 				}
 				flashable_alert=true;
 			}
+		} else
+
+		if (messages[i].nodeName=='chat_tracking') // TRACKING
+		{
+			top_window.last_message_id=messages[i].getAttribute('last_msg');
+			top_window.last_event_id=messages[i].getAttribute('last_event');
 		}
 	}
 
-	// Get attention, as something happening
+	// Get attention, to indicate something has happened
 	if (flashable_alert)
 	{
 		if ((room_id) && (typeof opened_popups['room_'+room_id]!='undefined') && (!opened_popups['room_'+room_id].is_shutdown))
@@ -735,10 +740,6 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 		}
 	}
 
-	if ((newest_id_here) && ((top_window.last_message_id==null) || (top_window.last_message_id<newest_id_here)))
-	{
-		top_window.last_message_id=newest_id_here;
-	}
 	if (top_window.last_timestamp<newest_timestamp_here)
 		top_window.last_timestamp=newest_timestamp_here;
 
