@@ -669,9 +669,8 @@ hr.ocf_sig_barrier {
 
 .ocf_notification {
 	margin: 1em;
-	padding: 0 1em;
+	padding: 0 0.2em;
 	font-size: 0.95em;
-	{$BETA_CSS_PROPERTY,background-image: radial-gradient(50% 50%\, circle closest-corner\, {$GET,area_3_background}\, {$GET,area_current_background}) !important;}
 	border: 0px solid !important;
 	{$BETA_CSS_PROPERTY,border-radius: 15px !important;}
 }

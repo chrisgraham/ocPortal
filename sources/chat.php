@@ -129,30 +129,34 @@ function messages_script()
 	{
 		$room_id=get_param_integer('room_id');
 		$room_check=$GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','c_welcome','allow_list_groups','disallow_list_groups','allow_list','disallow_list','room_owner'),array('id'=>$room_id),'',1);
-		if (!array_key_exists(0,$room_check)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		if (!check_chatroom_access($room_check[0],true,NULL,true)) return; // Possibly the room was closed already
-		$allow_list=str_replace(','.strval(get_member()).',',',',','.$room_check[0]['allow_list'].',');
-		$allow_list=substr($allow_list,1,strlen($allow_list)-2);
-		$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
-			'e_type_code'=>'DEINVOLVE_IM',
-			'e_member_id'=>get_member(),
-			'e_room_id'=>$room_id,
-			'e_date_and_time'=>time()
-		),true);
-		$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
-		fwrite($myfile,strval($event_id));
-		fclose($myfile);
-		sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
-		if ($allow_list=='')
+		if (array_key_exists(0,$room_check))
 		{
-			require_code('chat2');
-			delete_chatroom($room_id);
-		} else
-		{
-			$peoplea=explode(',',$allow_list);
-			$room_owner=$room_check[0]['room_owner'];
-			if ($room_owner==get_member()) $room_owner=intval($peoplea[0]);
-			$GLOBALS['SITE_DB']->query_update('chat_rooms',array('room_owner'=>$room_owner,'allow_list'=>$allow_list),array('id'=>$room_id),'',1);
+			if (check_chatroom_access($room_check[0],true,NULL,true))
+			{
+				$allow_list=str_replace(','.strval(get_member()).',',',',','.$room_check[0]['allow_list'].',');
+				$allow_list=substr($allow_list,1,strlen($allow_list)-2);
+				$event_id=$GLOBALS['SITE_DB']->query_insert('chat_events',array(
+					'e_type_code'=>'DEINVOLVE_IM',
+					'e_member_id'=>get_member(),
+					'e_room_id'=>$room_id,
+					'e_date_and_time'=>time()
+				),true);
+				$myfile=@fopen(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat','wb') OR intelligent_write_error(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+				fwrite($myfile,strval($event_id));
+				fclose($myfile);
+				sync_file(get_custom_file_base().'/data_custom/modules/chat/chat_last_event.dat');
+				if ($allow_list=='')
+				{
+					require_code('chat2');
+					delete_chatroom($room_id);
+				} else
+				{
+					$peoplea=explode(',',$allow_list);
+					$room_owner=$room_check[0]['room_owner'];
+					if ($room_owner==get_member()) $room_owner=intval($peoplea[0]);
+					$GLOBALS['SITE_DB']->query_update('chat_rooms',array('room_owner'=>$room_owner,'allow_list'=>$allow_list),array('id'=>$room_id),'',1);
+				}
+			}
 		}
 	}
 	elseif ($action=='invite_im')
@@ -353,6 +357,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		// Note that *we are still here*
 		$GLOBALS['SITE_DB']->query_delete('chat_active',array('member_id'=>get_member(),'room_id'=>($room_id==-1)?NULL:$room_id));
 		$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>($room_id==-1)?NULL:$room_id),'',1);
+		chat_room_prune(-1);
 	}
 
 	if (is_null($room_check))
@@ -456,10 +461,18 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 					delete_chatroom($room['id']);
 				} else
 				{
-					$people_in_room=explode(',',$room['allow_list']);
-					if ($room['room_name']==$GLOBALS['FORUM_DRIVER']->get_username(get_member()) && (count($people_in_room)>1)) // If room named after us, try and switch name to that of second person
+					$people_in_room=array_map('intval',explode(',',$room['allow_list']));
+					if (($room['room_name']==$GLOBALS['FORUM_DRIVER']->get_username(get_member()) || ($room['room_owner']==get_member())) && (count($people_in_room)>0)) // If room named after us, try and switch reported owner/name to that of other person
 					{
-						$test=$GLOBALS['FORUM_DRIVER']->get_username(intval($people_in_room[1]));
+						if ($people_in_room[0]!=get_member())
+						{
+							$room['room_owner']=$people_in_room[0];
+						} else
+						{
+							if (array_key_exists(1,$people_in_room))
+								$room['room_owner']=$people_in_room[1];
+						}
+						$test=$GLOBALS['FORUM_DRIVER']->get_username($room['room_owner']);
 						if (!is_null($test)) $room['room_name']=$test;
 					}
 
@@ -467,10 +480,10 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 					$participants='';
 					foreach ($people_in_room as $person)
 					{
-						if (intval($person)!=get_member())
+						if ($person!=get_member())
 						{
 							if ($participants!='') $participants.='';
-							$participants.=$person;
+							$participants.=strval($person);
 						}
 					}
 

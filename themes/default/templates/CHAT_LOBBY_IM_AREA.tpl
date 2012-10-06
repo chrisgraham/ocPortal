@@ -32,11 +32,11 @@
 			add_event_listener_abstract(window,'real_load',function () {
 				try
 				{
-					document.getElementById("post_{ROOM_ID#}").focus();
+					document.getElementById('post_{ROOM_ID;}').focus();
 				} catch (e)
 				{
 				}
-				document.getElementById("post_{ROOM_ID#}").value=read_cookie('last_chat_msg_{ROOM_ID;}');
+				document.getElementById('post_{ROOM_ID;}').value=read_cookie('last_chat_msg_{ROOM_ID;}');
 			} );
 		}, 1000);
 	// ]]></script>

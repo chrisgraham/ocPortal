@@ -12,15 +12,17 @@ window.TRANSITORY_ALERT_TIME=7000;
 window.LOGS_DOWNLOAD_INTERVAL=10000;
 
 // Tracking variables
-var last_message_id=0;
+var last_message_id=-1;
 var last_timestamp=0;
-var last_event_id=0;
+var last_event_id=-1;
 var message_checking=false;
 var no_im_html='';
 var picker,picker_node,text_colour;
-var opened_popups=[];
-var top_zindex=800;
+var opened_popups={};
 var load_from_room_id=null;
+var already_received_room_invites={};
+var instant_go=false;
+var is_shutdown=false;
 
 // Code...
 
@@ -55,6 +57,11 @@ function play_chat_sound(s_id,for_member)
 		}
 	}
 
+	if (typeof top_window.console!='undefined')
+	{
+		top_window.console.log('Playing '+s_id+' sound'); // Useful when debugging sounds when testing using SU, otherwise you don't know which window they came from
+	}
+
 	top_window.soundManager.play(s_id);
 }
 
@@ -87,7 +94,7 @@ function begin_chatting(room_id)
 	if (typeof window.do_ajax_request!='undefined')
 	{
 		chat_check(true,0);
-		if (typeof window.play_chat_sound!='undefined') play_chat_sound('you_connect');
+		play_chat_sound('you_connect');
 	} else
 	{
 		window.setTimeout(begin_chatting,10);
@@ -253,10 +260,10 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 			if (top_window.cc_timer) {	top_window.clearTimeout(top_window.cc_timer); top_window.cc_timer=null; }
 
 			// Reinvite last left member if necessary
-			if (typeof element.force_invite!='undefined')
+			if ((typeof element.force_invite!='undefined') && (element.force_invite!==null))
 			{
 				invite_im(element.force_invite);
-				element.force_invite=undefined;
+				element.force_invite=null;
 			}
 
 			// Send it through XMLHttpRequest, and append the results.
@@ -275,7 +282,7 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 				window.setTimeout(function() { element.value=''; },20);
 				element.style.height='auto';
 
-				if (typeof window.play_chat_sound!='undefined') play_chat_sound('message_sent');
+				play_chat_sound('message_sent');
 			} else
 			{
 				window.fauxmodal_alert('{!MESSAGE_POSTING_ERROR^;}');
@@ -328,7 +335,7 @@ function chat_check(backlog,message_id,event_id)
 				url='{$FIND_SCRIPT;,messages}?action=all&room_id='+window.encodeURIComponent(window.load_from_room_id);
 			} else
 			{
-				url='{$FIND_SCRIPT;,messages}?action=new&room_id='+window.encodeURIComponent(window.load_from_room_id)+'&message_id='+window.encodeURIComponent(message_id)+'&event_id='+window.encodeURIComponent(event_id);
+				url='{$FIND_SCRIPT;,messages}?action=new&room_id='+window.encodeURIComponent(window.load_from_room_id)+'&message_id='+window.encodeURIComponent(message_id?message_id:-1)+'&event_id='+window.encodeURIComponent(event_id);
 			}
 			if (window.location.href.indexOf('no_reenter_message=1')!=-1) url=url+'&no_reenter_message=1';
 			do_ajax_request(maintain_theme_in_link(url+keep_stub(false)),function(ajax_result_frame,ajax_result) { chat_check_response(ajax_result_frame,ajax_result,backlog/*backlog = skip_incoming_sound*/); },false);
@@ -390,28 +397,25 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 	var username,room_name,room_id,event_type,member_id,tmp_element,rooms,avatar_url,participants;
 	var id,timestamp;
 	var first_set=false;
-	var play_chat_sound;
 	var newest_id_here=null,newest_timestamp_here=null;
 
 	// Look through our messages
 	for (var i=0;i<messages.length;i++)
 	{
-		if (messages[i].nodeName=='chat_null')
+		if (messages[i].nodeName=='chat_null') // VARIABLE PACKET
 		{
 			current_room_id=merge_text_nodes(messages[i].childNodes);
 		} else
-		if (messages[i].nodeName=='div')
+
+		if (messages[i].nodeName=='div') // MESSAGE
 		{
 			// Find out about our message
 			id=messages[i].getAttribute('id');
 			timestamp=messages[i].getAttribute('timestamp');
 			if (!id) id=messages[i].id; // Weird fix for Opera
 			if (((top_window.last_message_id) && (parseInt(id)<=top_window.last_message_id)) && ((top_window.last_timestamp) && (parseInt(timestamp)<=top_window.last_timestamp))) continue;
-			newest_id_here=parseInt(id);
-			if ((newest_timestamp_here=null) || (newest_timestamp_here<parseInt(timestamp))) newest_timestamp_here=parseInt(timestamp);
 
 			// Find container to place message
-			play_chat_sound=window.play_chat_sound;
 			if (!message_container_global)
 			{
 				room_id=messages[i].getAttribute('room_id');
@@ -428,14 +432,17 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 				{
 					tab_element.className=((tab_element.className.indexOf('chat_lobby_convos_tab_first')!=-1)?'chat_lobby_convos_tab_first ':'')+'chat_lobby_convos_tab_new_messages';
 				}
-			} else if ((typeof opened_popups['room_'+current_room_id]!='undefined') && (opened_popups['room_'+current_room_id].document)) // Popup
+			} else if ((typeof opened_popups['room_'+current_room_id]!='undefined') && (!opened_popups['room_'+current_room_id].is_shutdown) && (opened_popups['room_'+current_room_id].document)) // Popup
 			{
 				message_container=opened_popups['room_'+current_room_id].document.getElementById('messages_window_'+current_room_id);
-				play_chat_sound=opened_popups['room_'+current_room_id].play_chat_sound;
 			} else if (!message_container_global)
 			{
 				continue; // Still no luck
 			}
+
+			// If we got this far, recognise the message as received
+			newest_id_here=parseInt(id);
+			if ((newest_timestamp_here=null) || (newest_timestamp_here<parseInt(timestamp))) newest_timestamp_here=parseInt(timestamp);
 
 			var doc=document;
 			if (typeof opened_popups['room_'+current_room_id]!='undefined')
@@ -447,7 +454,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 				// Feed in details, so if it becomes autonomous, it knows what to run with
 				popup_win.last_timestamp=window.last_timestamp;
 				popup_win.last_event_id=window.last_event_id;
-				if ((popup_win.last_message_id==null) || (popup_win.last_message_id<newest_id_here))
+				if ((newest_id_here) && ((popup_win.last_message_id==null) || (popup_win.last_message_id<newest_id_here)))
 				{
 					popup_win.last_message_id=newest_id_here;
 				}
@@ -455,11 +462,13 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 					popup_win.last_timestamp=newest_timestamp_here;
 			}
 
+			if (doc.getElementById('chat_message_id'+id)) continue; // Already there
+
 			// Clone the node so that we may insert it
 			cloned_message=doc.createElement('div');
 			set_inner_html(cloned_message,get_outer_html(messages[i].childNodes[0]));
 			cloned_message=cloned_message.childNodes[0];
-			cloned_message.setAttribute('id','chat_message_id'+id);
+			cloned_message.id='chat_message_id'+id;
 
 			// Non-first message
 			if ((message_container.childNodes.length>0) && (get_inner_html(message_container).length>6))
@@ -468,7 +477,10 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 
 				if (!first_set) // Only if no other message sound already for this event update
 				{
-					if (!skip_incoming_sound) if (typeof window.play_chat_sound!='undefined') play_chat_sound(window.has_focus?'message_received':'message_background',messages[i].getAttribute('sender_id'));
+					if (!skip_incoming_sound)
+					{
+						play_chat_sound(window.has_focus?'message_received':'message_background',messages[i].getAttribute('sender_id'));
+					}
 					flashable_alert=true;
 				}
 			} else // First message
@@ -476,7 +488,10 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 				set_inner_html(message_container,'');
 				message_container.appendChild(cloned_message);
 				first_set=true; // Let the code know the first set of messages has started, squashing any extra sounds for this event update
-				if (!skip_incoming_sound) if (typeof window.play_chat_sound!='undefined') play_chat_sound('message_initial');
+				if (!skip_incoming_sound)
+				{
+					play_chat_sound('message_initial');
+				}
 			}
 
 			if (!message_container_global)
@@ -484,12 +499,14 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 				current_room_id=-1; // We'll be gathering for all rooms we're in now, because this messaging is coming through the master control window
 			}
 		}
-		else if (messages[i].nodeName=='chat_members_update')
+
+		else if (messages[i].nodeName=='chat_members_update') // UPDATE MEMBERS LIST IN ROOM
 		{
 			var members_element=document.getElementById('chat_members_update');
 			if (members_element) set_inner_html(members_element,merge_text_nodes(messages[i].childNodes));
 		}
-		else if ((messages[i].nodeName=='chat_event') && (window.im_participant_template))
+
+		else if ((messages[i].nodeName=='chat_event') && (window.im_participant_template)) // Some kind of transitory event
 		{
 			event_type=messages[i].getAttribute('event_type');
 			room_id=messages[i].getAttribute('room_id');
@@ -507,7 +524,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 					tmp_element=document.getElementById('online_'+member_id);
 					if (tmp_element)
 					{
-						if (get_inner_html(tmp_element)=='{!ACTIVE;^}') break;
+						if (get_inner_html(tmp_element).toLowerCase()=='{!ACTIVE;^}'.toLowerCase()) break;
 						set_inner_html(tmp_element,'{!ACTIVE;^}');
 						document.getElementById('friend_img_'+member_id).className='friend_active';
 						var alert_box_wrap=document.getElementById('alert_box_wrap');
@@ -518,16 +535,22 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 							if (document.getElementById('alert_box')) // If the alert box is still there, remove it
 								alert_box_wrap.style.display='none';
 						} , window.TRANSITORY_ALERT_TIME);
+
+						if (!skip_incoming_sound)
+						{
+							play_chat_sound('contact_on',member_id);
+						}
 					} else if (!document.getElementById('chat_lobby_convos_tabs'))
 					{
-						create_overlay_event(member_id,'{!NOW_ONLINE;^}'.replace('{'+'1}',username),function() { start_im(member_id); return false; } ,avatar_url);
+						create_overlay_event(skip_incoming_sound,member_id,'{!NOW_ONLINE;^}'.replace('{'+'1}',username),function() { start_im(member_id); return false; } ,avatar_url);
 					}
+
 					rooms=find_im_convo_room_ids();
 					for (var r in rooms)
 					{
 						room_id=rooms[r];
 						var doc=document;
-						if (typeof opened_popups['room_'+room_id]!='undefined')
+						if ((typeof opened_popups['room_'+room_id]!='undefined') && (!opened_popups['room_'+room_id].is_shutdown))
 						{
 							if (!opened_popups['room_'+room_id].document) continue;
 							doc=opened_popups['room_'+room_id].document;
@@ -538,17 +561,19 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 							set_inner_html(tmp_element,'{!ACTIVE;^}');
 						}
 					}
-					play_chat_sound=window.play_chat_sound;
-					if (typeof window.play_chat_sound!='undefined') play_chat_sound('contact_on',member_id);
 					break;
+
 				case 'BECOME_INACTIVE':
+					var friend_being_tracked=false;
 					tmp_element=document.getElementById('online_'+member_id);
 					if (tmp_element)
 					{
-						if (get_inner_html(tmp_element)=='{!INACTIVE;^}') break;
+						if (get_inner_html(tmp_element).toLowerCase()=='{!INACTIVE;^}'.toLowerCase()) break;
 						set_inner_html(tmp_element,'{!INACTIVE;^}');
 						document.getElementById('friend_img_'+member_id).className='friend_inactive';
+						friend_being_tracked=true;
 					}
+
 					rooms=find_im_convo_room_ids();
 					for (var r in rooms)
 					{
@@ -561,68 +586,97 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 						}
 						tmp_element=doc.getElementById('participant_online__'+room_id+'__'+member_id);
 						if (tmp_element) set_inner_html(tmp_element,'{!INACTIVE;^}');
+						friend_being_tracked=true;
 					}
-					play_chat_sound=window.play_chat_sound;
-					if (typeof window.play_chat_sound!='undefined') play_chat_sound('contact_off',member_id);
+
+					if (!skip_incoming_sound)
+					{
+						if (friend_being_tracked)
+							play_chat_sound('contact_off',member_id);
+					}
 					break;
+
 				case 'JOIN_IM':
-					play_chat_sound=window.play_chat_sound;
-					if (typeof opened_popups['room_'+room_id]!='undefined') play_chat_sound=opened_popups['room_'+room_id].play_chat_sound;
 					add_im_member(room_id,member_id,username,messages[i].getAttribute('away')=='1',avatar_url);
-					if (typeof window.play_chat_sound!='undefined') play_chat_sound('contact_on',member_id);
+
+					var doc=document;
+					if ((typeof opened_popups['room_'+room_id]!='undefined') && (!opened_popups['room_'+room_id].is_shutdown))
+					{
+						if (!opened_popups['room_'+room_id].document) break;
+						doc=opened_popups['room_'+room_id].document;
+					}
+					tmp_element=doc.getElementById('participant_online__'+room_id+'__'+member_id);
+					if (tmp_element)
+					{
+						if (get_inner_html(tmp_element).toLowerCase()=='{!ACTIVE;^}'.toLowerCase()) break;
+						set_inner_html(tmp_element,'{!ACTIVE;^}');
+						document.getElementById('friend_img_'+member_id).className='friend_active';
+					}
+
+					if (!skip_incoming_sound)
+					{
+						play_chat_sound('contact_on',member_id);
+					}
 					break;
+
 				case 'PREINVITED_TO_IM':
 					add_im_member(room_id,member_id,username,messages[i].getAttribute('away')=='1',avatar_url);
 					break;
+
 				case 'DEINVOLVE_IM':
-					play_chat_sound=window.play_chat_sound;
-					if (typeof opened_popups['room_'+room_id]!='undefined') play_chat_sound=opened_popups['room_'+room_id].play_chat_sound;
 					tmp_element=document.getElementById('participant__'+room_id+'__'+member_id);
 					if ((tmp_element) && (tmp_element.parentNode))
 					{
 						var parent=tmp_element.parentNode;
-						if (parent.childNodes.length==1) // Don't really let them go - we'll reinvite them upon next post
+						if (parent.childNodes.length==1) // Don't really let them go, flag them merely as away - we'll reinvite them upon next post
 						{
-							tmp_element=document.getElementById('online_'+member_id);
-							if (get_inner_html(tmp_element)=='{!INACTIVE;^}') break;
-							set_inner_html(tmp_element,'{!INACTIVE;^}');
-							document.getElementById('friend_img_'+member_id).className='friend_inactive';
 							document.getElementById('post_'+room_id).force_invite=member_id;
+
+							var doc=document;
+							if (typeof opened_popups['room_'+room_id]!='undefined')
+							{
+								if (!opened_popups['room_'+room_id].document) break;
+								doc=opened_popups['room_'+room_id].document;
+							}
+							tmp_element=doc.getElementById('participant_online__'+room_id+'__'+member_id);
+							if (tmp_element)
+							{
+								if (get_inner_html(tmp_element).toLowerCase()=='{!INACTIVE;^}'.toLowerCase()) break;
+								set_inner_html(tmp_element,'{!INACTIVE;^}');
+							}
 						} else
 						{
 							parent.removeChild(tmp_element);
 						}
-						/*if (parent.childNodes.length==0)
+						/*if (parent.childNodes.length==0)		Don't set to none, as we want to allow the 'force_invite' IM re-activation feature, to draw the other guy back -- above we pretended they're merely 'away', not just left
 						{
 							set_inner_html(parent,'<em class="none">{!NONE;^}</em>');
 						}*/
-						if (typeof window.play_chat_sound!='undefined') play_chat_sound('contact_off',member_id);
+
+						if (!skip_incoming_sound)
+						{
+							play_chat_sound('contact_off',member_id);
+						}
 					}
 					break;
 			}
 
-		} else
+		} else // INVITES
 		if ((messages[i].nodeName=='chat_invite') && (window.im_participant_template))
 		{
 			room_id=merge_text_nodes(messages[i].childNodes);
-			if ((!document.getElementById('room_'+room_id)) && (typeof opened_popups['room_'+room_id]=='undefined'))
-			{
-				play_chat_sound=window.play_chat_sound;
-				if (typeof opened_popups['room_'+room_id]!='undefined') play_chat_sound=opened_popups['room_'+room_id].play_chat_sound;
 
+			if ((!document.getElementById('room_'+room_id)) && ((typeof opened_popups['room_'+room_id]=='undefined') || (opened_popups['room_'+room_id].is_shutdown)))
+			{
 				room_name=messages[i].getAttribute('room_name');
 				avatar_url=messages[i].getAttribute('avatar_url');
 				participants=messages[i].getAttribute('participants');
 				var is_new=(messages[i].getAttribute('num_posts')=='0');
-				var by_you=messages[i].getAttribute('inviter')!=messages[i].getAttribute('you');
-				if (((is_new) || (by_you)) && (!window.instant_go) && (!document.getElementById('chat_lobby_convos_tabs')))
-				{
-					create_overlay_event(messages[i].getAttribute('inviter'),'{!IM_INFO_CHAT_WITH;^}'.replace('{'+'1}',room_name),function() { detected_conversation(room_id,room_name,participants); return false; } ,avatar_url,room_id);
+				var by_you=(messages[i].getAttribute('inviter')==messages[i].getAttribute('you'));
 
-					if (!skip_incoming_sound)
-					{
-						if (typeof window.play_chat_sound!='undefined') play_chat_sound('invited',messages[i].getAttribute('inviter'));
-					}
+				if (((is_new) || (!by_you)) && (!window.instant_go) && (!document.getElementById('chat_lobby_convos_tabs')))
+				{
+					create_overlay_event(skip_incoming_sound,messages[i].getAttribute('inviter'),'{!IM_INFO_CHAT_WITH;^}'.replace('{'+'1}',room_name),function() { window.last_message_id=-1 /*Ensure messages re-processed*/; detected_conversation(room_id,room_name,participants); return false; } ,avatar_url,room_id);
 				} else
 				{
 					detected_conversation(room_id,room_name,participants);
@@ -635,7 +689,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 	// Get attention, as something happening
 	if (flashable_alert)
 	{
-		if ((room_id) && (typeof opened_popups['room_'+room_id]!='undefined'))
+		if ((room_id) && (typeof opened_popups['room_'+room_id]!='undefined') && (!opened_popups['room_'+room_id].is_shutdown))
 		{
 			if (typeof opened_popups['room_'+room_id].getAttention!='undefined') opened_popups['room_'+room_id].getAttention();
 			if (typeof opened_popups['room_'+room_id].focus!='undefined')
@@ -681,7 +735,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 		}
 	}
 
-	if ((top_window.last_message_id==null) || (top_window.last_message_id<newest_id_here))
+	if ((newest_id_here) && ((top_window.last_message_id==null) || (top_window.last_message_id<newest_id_here)))
 	{
 		top_window.last_message_id=newest_id_here;
 	}
@@ -691,10 +745,30 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 	return current_room_id;
 }
 
-function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
+function create_overlay_event(skip_incoming_sound,member_id,message,click_event,avatar_url,room_id)
 {
-	if (window!=top_window) return;
+	if (window!=top_window) return; // Can't display in an autonomous popup
 
+	// Make sure to not show multiple equiv ones, which could happen in various situations
+	if ((typeof window.already_received_room_invites[room_id]!='undefined') && (window.already_received_room_invites[room_id]))
+		return;
+	window.already_received_room_invites[room_id]=true;
+
+	// Ping!
+	if (!skip_incoming_sound)
+	{
+		play_chat_sound('invited',member_id);
+	}
+
+	// Start DOM stuff
+	var div=document.createElement('div');
+	div.className='im_event';
+	div.style.left=(get_window_width()/2-140)+'px';
+	div.style.bottom=((get_elements_by_class_name(document.body,'im_event').length)*120+20)+'px';
+	var links=document.createElement('ul');
+	links.className='actions_list';
+
+	// Close link
 	var close_popup=function() {
 		if (div)
 		{
@@ -723,19 +797,13 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 			}
 		}
 	};
-
-	var div=document.createElement('div');
-	div.className='im_event';
-	div.style.left=(get_window_width()/2-140)+'px';
-	div.style.bottom=((window.top_zindex-800)*100+20)+'px';
-	div.style.zIndex=window.top_zindex++;
-
 	var imgclose=document.createElement('img');
 	imgclose.setAttribute('src','{$IMG;,tableitem/delete}'.replace(/^http:/,window.location.protocol));
 	imgclose.className='im_popup_close_button blend';
 	imgclose.onclick=close_popup;
 	div.appendChild(imgclose);
 
+	// Avatar
 	if (avatar_url)
 	{
 		var img1=document.createElement('img');
@@ -744,29 +812,26 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 		div.appendChild(img1);
 	}
 
+	// Message
 	var div_message=document.createElement('div');
 	set_inner_html(div_message,message);
 	div.appendChild(div_message);
 
-	var links=document.createElement('ul');
-	links.className='actions_list';
-
+	// Open link
 	var a_popup_open=document.createElement('a');
-	a_popup_open.onclick=function() { click_event(); document.body.removeChild(div); div=null; return false; };
+	a_popup_open.onclick=function() {
+		click_event();
+		document.body.removeChild(div);
+		div=null;
+		return false;
+	};
 	a_popup_open.href='#';
 	set_inner_html(a_popup_open,'{!OPEN_IM_POPUP;^}');
-	var opened_popups_cnt=0;
-	for (var i=0;i<opened_popups.length;i++)
-	{
-		if (typeof opened_popups[i]!='undefined') opened_popups_cnt++;
-	}
-	if (opened_popups_cnt==0)
-	{
-		var li_popup_open=document.createElement('li');
-		li_popup_open.appendChild(a_popup_open);
-		links.appendChild(li_popup_open);
-	}
+	var li_popup_open=document.createElement('li');
+	li_popup_open.appendChild(a_popup_open);
+	links.appendChild(li_popup_open);
 
+	// Lobby link
 	var a_goto_lobby=document.createElement('a');
 	a_goto_lobby.href=window.lobby_link.replace('%21%21',member_id);
 	a_goto_lobby.onclick=close_popup;
@@ -775,6 +840,7 @@ function create_overlay_event(member_id,message,click_event,avatar_url,room_id)
 	li_goto_lobby.appendChild(a_goto_lobby);
 	links.appendChild(li_goto_lobby);
 
+	// Add it all in
 	div.appendChild(links);
 	document.body.appendChild(div);
 }
@@ -865,6 +931,7 @@ function find_im_convo_room_ids()
 
 function close_chat_conversation(room_id)
 {
+	var is_popup=(document.body.className.indexOf('sitewide_im_popup_body')!=-1);
 	{+START,IF,{$OR,{$NOT,{$ADDON_INSTALLED,ocf_forum}},{$NOT,{$OCF}}}}
 	generate_question_ui(
 		'{!WANT_TO_DOWNLOAD_LOGS*;^}',
@@ -878,12 +945,11 @@ function close_chat_conversation(room_id)
 				if (logs.toLowerCase()=='{!YES*;^}'.toLowerCase())
 				{
 					window.open('{$FIND_SCRIPT*;,dllogs}?room='+room_id+'{$KEEP*;^}');
-					deinvolve_im(room_id,true,false);
+					deinvolve_im(room_id,true,is_popup);
 					return;
 				}
 	{+END}
-				var is_window=(document.body.className.indexOf('sitewide_im_popup_body')!=-1);
-				deinvolve_im(room_id,false,is_window);
+				deinvolve_im(room_id,false,is_popup);
 	{+START,IF,{$OR,{$NOT,{$ADDON_INSTALLED,ocf_forum}},{$NOT,{$OCF}}}}
 			}
 		}
@@ -891,9 +957,9 @@ function close_chat_conversation(room_id)
 	{+END}
 }
 
-function deinvolve_im(room_id,logs,is_window) // is_window means that we show a progress indicator over it, then kill the window after deinvolvement
+function deinvolve_im(room_id,logs,is_popup) // is_popup means that we show a progress indicator over it, then kill the window after deinvolvement
 {
-	if (is_window)
+	if (is_popup)
 	{
 		var body=document.getElementsByTagName('body');
 		if (typeof body[0]!='undefined')
@@ -915,9 +981,12 @@ function deinvolve_im(room_id,logs,is_window) // is_window means that we show a 
 		tab_element.style.display='none';
 	}
 
+	top_window.already_received_room_invites[room_id]=false;
+	if (is_popup) window.is_shutdown=true;
+
 	window.setTimeout(function() // Give time for any logs to download
 	{
-		do_ajax_request('{$FIND_SCRIPT;,messages}?action=deinvolve_im&room_id='+window.encodeURIComponent(room_id)+top_window.keep_stub(false));
+		top_window.do_ajax_request('{$FIND_SCRIPT;,messages}?action=deinvolve_im&room_id='+window.encodeURIComponent(room_id)+top_window.keep_stub(false),null); // Has to be on top_window or it will be lost if the window was explicitly closed (it is unloading mode and doesn't want to make a new request)
 
 		if (tabs)
 		{
@@ -939,7 +1008,7 @@ function deinvolve_im(room_id,logs,is_window) // is_window means that we show a 
 			{
 				chat_select_tab(document.getElementById('tab_'+find_im_convo_room_ids().pop()));
 			}
-		} else if (is_window)
+		} else if (is_popup)
 		{
 			window.onbeforeunload=null;
 			window.close();
@@ -1007,7 +1076,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 		}
 		window.setTimeout(function() // Needed for Safari to set the right domain, and also to give window an opportunity to attach itself on its own accord
 		{
-			if (typeof opened_popups['room_'+room_id]!='undefined') // It's been reattached already
+			if ((typeof opened_popups['room_'+room_id]!='undefined') && (!opened_popups['room_'+room_id].is_shutdown)) // It's been reattached already
 			{
 				return;
 			}
@@ -1030,7 +1099,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 					new_window.document.title=get_inner_html(new_window.document.getElementsByTagName('title')[0]); // For Safari
 
 					new_window.onbeforeunload=function() {
-						close_chat_conversation(room_id);
+						new_window.close_chat_conversation(room_id);
 					};
 
 					try
@@ -1053,13 +1122,14 @@ function add_im_member(room_id,member_id,username,away,avatar_url)
 		var doc=document;
 		if (typeof opened_popups['room_'+room_id]!='undefined')
 		{
+			if (opened_popups['room_'+room_id].is_shutdown) return;
 			if (!opened_popups['room_'+room_id].document) return;
 			doc=opened_popups['room_'+room_id].document;
 		}
 		if (away)
 		{
 			var tmp_element=doc.getElementById('online_'+member_id);
-			if ((tmp_element) && (get_inner_html(tmp_element)=='{!ACTIVE;^}')) away=false;
+			if ((tmp_element) && (get_inner_html(tmp_element).toLowerCase()=='{!ACTIVE;^}'.toLowerCase())) away=false;
 		}
 		if (doc.getElementById('participant__'+room_id+'__'+member_id)) return; // They're already put in it
 		var new_participant=doc.createElement('div');
@@ -1177,6 +1247,7 @@ function detect_if_chat_window_closed(die_on_lost,become_autonomous_on_lost)
 		}
 		else if (die_on_lost)
 		{
+			window.is_shutdown=true;
 			window.onbeforeunload=null;
 			window.close();
 		} else
