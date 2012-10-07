@@ -484,7 +484,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 		{
 			if (check_chatroom_access($room,true,NULL,true))
 			{
-				if (($room['allow_list']==strval(get_member())) && (is_null($event_id))) // If it's just you in the room, close that room down
+				if ((($room['allow_list']==strval(get_member()).','.strval(get_member())/*Opened room with self? Weird*/) || ($room['allow_list']==strval(get_member()))) && (is_null($event_id)/*Only on fresh start, not repeat AJAX requests*/)) // If it's just you in the room, close that room down
 				{
 					require_code('chat2');
 					delete_chatroom($room['id']);
@@ -543,7 +543,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 						break;
 					case 'PREINVITED_TO_IM':
 					case 'JOIN_IM':
-						if ((array_key_exists($event['e_room_id'],$room_check)) && (check_chatroom_access($room_check[$event['e_room_id']],true,NULL,true)))
+						if ((array_key_exists($event['e_room_id'],$room_check)) && (/*Check inviter not left*/check_chatroom_access($room_check[$event['e_room_id']],true,$event['e_member_id'],true)) && (check_chatroom_access($room_check[$event['e_room_id']],true,NULL,true)))
 							$send_out=true;
 						break;
 					case 'DEINVOLVE_IM':

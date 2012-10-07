@@ -362,6 +362,7 @@
 .im_event {
 	position: fixed;
 	width: 11em;
+	z-index: 1000;
 	overflow: hidden;
 	background-color: {$GET,floating_alert_background};
 	color: {$GET,native_ui_foreground};
