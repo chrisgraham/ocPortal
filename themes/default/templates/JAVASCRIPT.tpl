@@ -2629,7 +2629,7 @@ function handle_comments_posting_form_submit(button,event)
 		form=button.form;
 	}
 
-	form.setAttribute('target','_top');
+	form.setAttribute('target','_self');
 	if (typeof form.old_action!='undefined') form.setAttribute('action',form.old_action);
 	if (form.onsubmit.call(form,event))
 	{
