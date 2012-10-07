@@ -42,6 +42,8 @@ class Block_side_shoutbox
 	 */
 	function run($map)
 	{
+		if (!addon_installed('chat')) return paragraph('The chat addon must be installed','','inline_wip_message');
+
 		require_lang('chat');
 		require_css('chat');
 
