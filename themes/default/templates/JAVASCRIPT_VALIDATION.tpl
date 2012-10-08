@@ -429,10 +429,10 @@ function checkForm(theForm,forPreview)
 		checkResult=checkField(theElement,theForm,forPreview);
 		if (checkResult!=null)
 		{
-			erroneous=checkResult[0] | erroneous;
+			erroneous=checkResult[0] || erroneous;
 			if (!errorElement) errorElement=checkResult[1];
 			totalFileSize+=checkResult[2];
-			alerted=checkResult[3] | alerted;
+			alerted=checkResult[3] || alerted;
 
 			if (checkResult[0])
 			{
@@ -900,7 +900,7 @@ function findIfChildrenSet(container)
 		theElement=elements[i];
 		if (((theElement.type=='hidden') || ((theElement.style.display=='none') && ((typeof window.isWYSIWYGField=='undefined') || (!isWYSIWYGField(theElement))))) && ((!theElement.className) || (theElement.className.indexOf('hidden_but_needed')==-1))) continue;
 		value=cleverFindValue(theElement.form,theElement);
-		blank=blank & (value=='');
+		blank=blank && (value=='');
 	}
 	return !blank;
 }
