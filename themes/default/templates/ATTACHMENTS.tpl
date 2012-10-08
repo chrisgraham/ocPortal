@@ -16,8 +16,8 @@
 
 {+START,IF,{$JS_ON}}
 	<script type="text/javascript">// <![CDATA[
-		var maxAttachments={MAX_ATTACHMENTS#};
-		var numAttachments={NUM_ATTACHMENTS#};
+		var max_attachments={MAX_ATTACHMENTS#};
+		var num_attachments={NUM_ATTACHMENTS#};
 	//]]></script>
 {+END}
 
