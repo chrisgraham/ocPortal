@@ -17,7 +17,7 @@ function choose_page_jump(ob,max,url_stub,message,num_pages)
 				}
 			}
 		},
-		"{!JUMP_TO_PAGE^#}"
+		'{!JUMP_TO_PAGE;^}'
 	);
 	return false;
 }

@@ -6,7 +6,7 @@
 
 function dec_to_hex(number)
 {
-	var hexbase="0123456789ABCDEF";
+	var hexbase='0123456789ABCDEF';
 	return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 }
 
@@ -213,14 +213,14 @@ function make_colour_chooser(name,color,context,tabindex,label,className)
 	t=t+'	<div class="css_colour_chooser_name">';
 	t=t+'		<label class="field_name" for="'+name+'"> '+label+'</label>';
 	t=t+'		<input type="button" '+(tabindex?('tabindex="'+tabindex+'" '):'')+'value="#" onclick="update_chooser(\''+name+'\'); return false;" />';
-	t=t+    '<input '+className+'alt="{!COLOUR;^}" type="text" value="'+color.substr(1)+'" maxlength="6" id="'+name+'" name="'+name+'" size="6" />';
+	t=t+    '<input '+className+'alt="{!themes:COLOUR;^}" type="text" value="'+color.substr(1)+'" maxlength="6" id="'+name+'" name="'+name+'" size="6" />';
 	t=t+'	</div>';
 	t=t+'	<div class="css_colour_chooser_fixed">';
 	t=t+'	<div class="css_colour_chooser_from" style="background-color: '+((color=='')?'#000':color)+'" id="cc_source_'+name+'">';
-	t=t+"		{!FROM_COLOUR^#}";
+	t=t+"		{!themes:FROM_COLOUR^#}";
 	t=t+'	</div>';
 	t=t+'	<div class="css_colour_chooser_to" style="background-color: '+((color=='')?'#000':color)+'" id="cc_target_'+name+'">';
-	t=t+"		{!TO_COLOUR^#}";
+	t=t+"		{!themes:TO_COLOUR^#}";
 	t=t+'	</div>';
 	t=t+'	<div class="css_colour_chooser_colour">';
 	t=t+'		<div id="cc_0_'+name+'"></div>';

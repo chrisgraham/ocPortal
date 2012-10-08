@@ -26,7 +26,9 @@ class Hook_stats_external
 		$map=array();
 		$url=get_base_url();
 		list($rank,$links,$speed)=getAlexaRank($url);
-		$map['Google PageRank']=getPageRank($url);
+		$page_rank=getPageRank($url);
+		if ($page_rank=='') $page_rank='?';
+		$map['Google PageRank']=$page_rank;
 		$map['Alexa rank']=$rank;
 		$map['Back links']=protect_from_escaping('<a title="Show back links" href="http://www.google.co.uk/search?as_lq='.urlencode($url).'">'.$links.'</a>');
 		$map['Speed']=$speed;

@@ -148,12 +148,12 @@ function disable_wysiwyg(forms,so,so2,discard)
 					var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?from_html=1'+keep_stub());
 					if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
 					var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(window.wysiwyg_editors[id].getData().replace(new RegExp(String.fromCharCode(8203),'g'),'')));
-					if ((!request.responseXML) || (!request.responseXML.documentElement.getElementsByTagName("result")[0]))
+					if ((!request.responseXML) || (!request.responseXML.documentElement.getElementsByTagName('result')[0]))
 					{
 						textarea.value='[semihtml]'+wysiwyg_editors[id].getData()+'[/semihtml]';
 					} else
 					{
-						var result_tags=request.responseXML.documentElement.getElementsByTagName("result");
+						var result_tags=request.responseXML.documentElement.getElementsByTagName('result');
 						var result=result_tags[0];
 						textarea.value=merge_text_nodes(result.childNodes).replace(/\s*$/,'');
 					}
@@ -163,8 +163,8 @@ function disable_wysiwyg(forms,so,so2,discard)
 					set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'{!ENABLE_WYSIWYG;^}');
 
 				// Unload editor
-				window.wysiwyg_editors[id].elementMode=CKEDITOR.ELEMENT_MODE_NONE;
-				CKEDITOR.remove(window.wysiwyg_editors[id]);
+				window.wysiwyg_editors[id].elementMode=window.CKEDITOR.ELEMENT_MODE_NONE;
+				window.CKEDITOR.remove(window.wysiwyg_editors[id]);
 				delete window.wysiwyg_editors[id];
 				var wysiwyg_node=document.getElementById('cke_'+id);
 				wysiwyg_node.parentNode.removeChild(wysiwyg_node);
@@ -237,8 +237,8 @@ function load_html_edit(posting_form,ajax_copy)
 			window.wysiwyg_original_comcode[id]=e.value;
 			if (!ajax_copy)
 			{
-				if ((typeof posting_form.elements[id+"_parsed"]!='undefined') && (posting_form.elements[id+"_parsed"].value!='') && (e.defaultValue==e.value)) // The extra conditionals are for if back button used
-					e.value=posting_form.elements[id+"_parsed"].value;
+				if ((typeof posting_form.elements[id+'_parsed']!='undefined') && (posting_form.elements[id+'_parsed'].value!='') && (e.defaultValue==e.value)) // The extra conditionals are for if back button used
+					e.value=posting_form.elements[id+'_parsed'].value;
 			} else
 			{
 				var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?semihtml=1&from_html=0'+keep_stub());
@@ -249,7 +249,7 @@ function load_html_edit(posting_form,ajax_copy)
 					posting_form.elements[counter].value='';
 				} else
 				{
-					var result_tags=request.responseXML.documentElement.getElementsByTagName("result");
+					var result_tags=request.responseXML.documentElement.getElementsByTagName('result');
 					if ((!result_tags) || (result_tags.length==0))
 					{
 						posting_form.elements[counter].value='';
@@ -290,8 +290,8 @@ function wysiwyg_editor_init_for(element)
 
 	{+START,INCLUDE,WYSIWYG_SETTINGS}{+END}
 
-	if (typeof CKEDITOR.instances[element.id]!='undefined' && CKEDITOR.instances[element.id])	delete CKEDITOR.instances[element.id]; // Workaround "The instance "xxx" already exists" error in Google Chrome
-	var editor=CKEDITOR.replace(element.id,editor_settings);
+	if (typeof window.CKEDITOR.instances[element.id]!='undefined' && window.CKEDITOR.instances[element.id]) delete window.CKEDITOR.instances[element.id]; // Workaround "The instance "xxx" already exists" error in Google Chrome
+	var editor=window.CKEDITOR.replace(element.id,editor_settings);
 	if (!editor) return; // Not supported on this platform
 
 	linked_sheets=document.getElementsByTagName('style');
@@ -400,11 +400,11 @@ function find_tags_in_editor(editor,element)
 				if (event.altKey)
 				{
 					// Mouse cursor to start
-					var range=selection.getRanges()[0];
+					var range=document.selection.getRanges()[0];
 					range.startOffset=0;
 					range.endOffset=0;
 					range.select()
-					selection.selectRanges([range]);
+					document.selection.selectRanges([range]);
 				}
 			}
 			if (comcodes[i].nodeName.toLowerCase()=='input')
@@ -422,11 +422,11 @@ function find_tags_in_editor(editor,element)
 						var block_name=this.title.replace(/\[\/block\]$/,'').replace(/^(.|\s)*\]/,'');
 						var url='{$FIND_SCRIPT;,block_helper}?type=step2&block='+window.encodeURIComponent(block_name)+'&field_name='+field_name+'&parse_defaults='+window.encodeURIComponent(this.title)+'&save_to_id='+window.encodeURIComponent(this.id)+keep_stub();
 						url=url+'&block_type='+(((field_name.indexOf('edit_panel_')==-1) && (window.location.href.indexOf(':panel_')==-1))?'main':'side');
-						window.faux_open(maintain_theme_in_link(url),'','width=750,height=520,status=no,resizable=yes,scrollbars=yes',null,"{!INPUTSYSTEM_CANCEL#}");
+						window.faux_open(maintain_theme_in_link(url),'','width=750,height=520,status=no,resizable=yes,scrollbars=yes',null,'{!INPUTSYSTEM_CANCEL;^}');
 					} else
 					{
 						var url='{$FIND_SCRIPT;,comcode_helper}?type=step2&tag='+window.encodeURIComponent(tag_type)+'&field_name='+field_name+'&parse_defaults='+window.encodeURIComponent(this.title)+'&save_to_id='+window.encodeURIComponent(this.id)+keep_stub();
-						window.faux_open(maintain_theme_in_link(url),'','width=750,height=520,status=no,resizable=yes,scrollbars=yes',null,"{!INPUTSYSTEM_CANCEL#}");
+						window.faux_open(maintain_theme_in_link(url),'','width=750,height=520,status=no,resizable=yes,scrollbars=yes',null,'{!INPUTSYSTEM_CANCEL;^}');
 					}
 					return false;
 				}
@@ -520,7 +520,7 @@ function convert_xml(name)
 	var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?to_comcode_xml=1'+keep_stub());
 	if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
 	var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(old_text).replace(new RegExp(String.fromCharCode(8203),'g'),''));
-	var result=((request) && (request.responseXML) && (request.responseXML.documentElement))?request.responseXML.documentElement.getElementsByTagName("result")[0]:null;
+	var result=((request) && (request.responseXML) && (request.responseXML.documentElement))?request.responseXML.documentElement.getElementsByTagName('result')[0]:null;
 	if ((result) && (result.childNodes[0].data)) element.value=merge_text_nodes(result.childNodes);
 	else
 	{
@@ -605,7 +605,7 @@ function get_textbox(element)
 	if (is_wysiwyg_field(element))
 	{
 		var ret=wysiwyg_editors[element.id].getData();
-		if ((ret=="\n") || (ret=="<br />")) ret="";
+		if ((ret=='\n') || (ret=='<br />')) ret='';
 		return ret;
 	}
 	return element.value;
@@ -665,7 +665,7 @@ function insert_textbox(element,text,sel,plain_insert,html)
 			var before=editor.getData();
 
 			if (!browser_matches('opera')) editor.focus(); // Needed on some browsers, but on Opera will defocus our selection
-			var selectedHTML=get_selected_html(editor);
+			var selected_html=get_selected_html(editor);
 			if (browser_matches('opera')) editor.getSelection().getNative().getRangeAt(0).deleteContents();
 
 			if ((editor.getSelection()) && (editor.getSelection().getStartElement().getName()=='kbd')) // Danger Danger - don't want to insert into another Comcode tag. Put it after. They can cut+paste back if they need.
@@ -677,7 +677,7 @@ function insert_textbox(element,text,sel,plain_insert,html)
 			}
 
 			var after=editor.getData();
-			if (after==before) throw "Failed to insert";
+			if (after==before) throw 'Failed to insert';
 
 			find_tags_in_editor(editor,element);
 		}
@@ -692,8 +692,8 @@ function insert_textbox(element,text,sel,plain_insert,html)
 
 	element.focus();
 
-	if (typeof sel=='undefined') var sel=false;
-	if (sel) sel=document.selection?document.selection:null;
+	if (typeof sel=='undefined') var sel=null;
+	if (sel===null) sel=document.selection?document.selection:null;
 
 	if (typeof element.selectionEnd!='undefined') // Mozilla style
 	{
@@ -737,39 +737,39 @@ function insert_textbox_opener(element,text,sel,plain_insert,html)
 
 function get_selected_html(editor)
 {
-	var mySelection=editor.getSelection();
-	if (!mySelection || mySelection.getType()==CKEDITOR.SELECTION_NONE) return '';
+	var my_selection=editor.getSelection();
+	if (!my_selection || my_selection.getType()==window.CKEDITOR.SELECTION_NONE) return '';
 
-	var selectedText='';
-	if (CKEDITOR.env.ie)
+	var selected_text='';
+	if (window.CKEDITOR.env.ie)
 	{
-		mySelection.unlock(true);
-		selectedText=mySelection.getNative().createRange().htmlText;
+		my_selection.unlock(true);
+		selected_text=my_selection.getNative().createRange().htmlText;
 	} else
 	{
 		try
 		{
-			selectedText=get_inner_html(mySelection.getNative().getRangeAt(0).cloneContents());
+			selected_text=get_inner_html(my_selection.getNative().getRangeAt(0).cloneContents());
 		}
 		catch (e) {};
 	}
-	return selectedText;
+	return selected_text;
 }
 
-function insert_textbox_wrapping(element,beforeWrapTag,afterWrapTag)
+function insert_textbox_wrapping(element,before_wrap_tag,after_wrap_tag)
 {
 	var from,to;
 
-	if (afterWrapTag=="")
+	if (after_wrap_tag=='')
 	{
 		if (!is_comcode_xml(element))
 		{
-			afterWrapTag="[/"+beforeWrapTag+"]";
-			beforeWrapTag="["+beforeWrapTag+"]";
+			after_wrap_tag='[/'+before_wrap_tag+']';
+			before_wrap_tag='['+before_wrap_tag+']';
 		} else
 		{
-			afterWrapTag="</"+beforeWrapTag+">";
-			beforeWrapTag="<"+beforeWrapTag+">";
+			after_wrap_tag='</'+before_wrap_tag+'>';
+			before_wrap_tag='<'+before_wrap_tag+'>';
 		}
 	}
 
@@ -778,12 +778,12 @@ function insert_textbox_wrapping(element,beforeWrapTag,afterWrapTag)
 		var editor=wysiwyg_editors[element.id];
 
 		if (!browser_matches('opera')) editor.focus(); // Needed on some browsers, but on Opera will defocus our selection
-		var selectedHTML=get_selected_html(editor);
+		var selected_html=get_selected_html(editor);
 		if (browser_matches('opera')) editor.getSelection().getNative().getRangeAt(0).deleteContents();
 
-		if (selectedHTML=='') selectedHTML='{!comcode:TEXT_OR_COMCODE_GOES_HERE;}'.toUpperCase();
+		if (selected_html=='') selected_html='{!comcode:TEXT_OR_COMCODE_GOES_HERE;}'.toUpperCase();
 
-		var new_html='&#8203;<kbd title="'+escape_html(beforeWrapTag.replace(/^\[/,'').replace(/[ \]].*$/,'').replace(/=.*$/,''))+'" class="ocp_keep">'+beforeWrapTag+selectedHTML+afterWrapTag+'</kbd>&#8203;';
+		var new_html='&#8203;<kbd title="'+escape_html(before_wrap_tag.replace(/^\[/,'').replace(/[ \]].*$/,'').replace(/=.*$/,''))+'" class="ocp_keep">'+before_wrap_tag+selected_html+after_wrap_tag+'</kbd>&#8203;';
 		if ((editor.getSelection()) && (editor.getSelection().getStartElement().getName()=='kbd')) // Danger Danger - don't want to insert into another Comcode tag. Put it after. They can cut+paste back if they need.
 		{
 			editor.document.getBody().appendHtml(new_html);
@@ -807,12 +807,12 @@ function insert_textbox_wrapping(element,beforeWrapTag,afterWrapTag)
 
 		if (to>from)
 		{
-			element.value=start+beforeWrapTag+element.value.substring(from,to)+afterWrapTag+end;
+			element.value=start+before_wrap_tag+element.value.substring(from,to)+after_wrap_tag+end;
 		} else
 		{
-			element.value=start+beforeWrapTag+afterWrapTag+end;
+			element.value=start+before_wrap_tag+after_wrap_tag+end;
 		}
-		set_selection_range(element,from,to+beforeWrapTag.length+afterWrapTag.length);
+		set_selection_range(element,from,to+before_wrap_tag.length+after_wrap_tag.length);
 	} else
 	if (typeof document.selection!='undefined') // IE style
 	{
@@ -822,14 +822,14 @@ function insert_textbox_wrapping(element,beforeWrapTag,afterWrapTag)
 		if ((ourRange.moveToElementText) || (ourRange.parentElement()==element))
 		{
 			if (ourRange.parentElement()!=element) ourRange.moveToElementText(element);
-			ourRange.text=beforeWrapTag+ourRange.text+afterWrapTag;
-		} else element.value+=beforeWrapTag+afterWrapTag;
+			ourRange.text=before_wrap_tag+ourRange.text+after_wrap_tag;
+		} else element.value+=before_wrap_tag+after_wrap_tag;
 	}
 	else
 	{
 		// :(
-		element.value+=beforeWrapTag+afterWrapTag;
-		set_selection_range(element,from,to+beforeWrapTag.length+afterWrapTag.length);
+		element.value+=before_wrap_tag+after_wrap_tag;
+		set_selection_range(element,from,to+before_wrap_tag.length+after_wrap_tag.length);
 	}
 }
 

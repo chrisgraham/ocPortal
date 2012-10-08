@@ -23,7 +23,7 @@ function find_text_nodes(e)
 
 function dec_to_hex(number)
 {
-	var hexbase="0123456789ABCDEF";
+	var hexbase='0123456789ABCDEF';
 	return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
 }
 

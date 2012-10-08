@@ -1,6 +1,6 @@
 "use strict";
 
-var tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_nodes_selectable,use_server_id)
+window.tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_nodes_selectable,use_server_id)
 {
 	if (typeof window.do_ajax_request=='undefined') return;
 
@@ -19,7 +19,7 @@ var tree_list=function(name,hook,root_id,options,multi_selection,tabindex,all_no
 
 	// Initial rendering
 	do_ajax_request('{$BASE_URL_NOHTTP;}/'+hook+'&id='+window.encodeURIComponent(root_id)+'&options='+options+'&default='+window.encodeURIComponent(document.getElementById(name).value),this,false);
-}
+};
 
 tree_list.prototype.tree_list_data='';
 tree_list.prototype.busy=false;
@@ -39,7 +39,7 @@ tree_list.prototype.getElementByIdHack=function(id,type,ob,serverid)
 			var results=ob.getElementsByTagName((type=='c')?'category':'entry');
 			for (i=0;i<results.length;i++)
 			{
-				if ((typeof results[i].getAttribute!="undefined") && (typeof results[i].getAttribute!="unknown") && (results[i].getAttribute(serverid?'serverid':'id')==id))
+				if ((typeof results[i].getAttribute!='undefined') && (typeof results[i].getAttribute!='unknown') && (results[i].getAttribute(serverid?'serverid':'id')==id))
 				{
 					return results[i];
 				}
@@ -322,7 +322,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 				node_self.style.position='absolute';
 			node_self_wrap.style.height=find_height(node_self)+'px';*/
 			master_html=document.getElementById('tree_list__root_'+this.name);
-			fixUpNodePosition(node_self);
+			fix_up_node_position(node_self);
 			node_self.ocp_draggable=node.getAttribute('draggable');
 			Drag.init(node_self,null,find_pos_x(master_html,true),find_pos_x(master_html,true)+find_width(master_html)-find_width(node_self)-5,find_pos_y(master_html,true));
 			node_self.onDragEnd=function(x,y)
@@ -360,7 +360,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 						}
 					}
 
-					fixUpNodePosition(this);
+					fix_up_node_position(this);
 				}
 			node_self.onDragStart=function(x,y)
 				{
@@ -399,11 +399,11 @@ function fixup_node_positions(name)
 	var i;
 	for (i=0;i<toFix.length;i++)
 	{
-		if (toFix[i].style.position=='absolute') fixUpNodePosition(toFix[i]);
+		if (toFix[i].style.position=='absolute') fix_up_node_position(toFix[i]);
 	}
 }
 
-function fixUpNodePosition(node_self)
+function fix_up_node_position(node_self)
 {
 	node_self.style.left=find_pos_x(node_self.parentNode,true)+'px';
 	node_self.style.top=find_pos_y(node_self.parentNode,true)+'px';

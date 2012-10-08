@@ -1135,7 +1135,7 @@ class Module_admin
 			return $this->search();
 		}
 
-		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('TITLE'=>get_screen_title('ADMIN_ZONE_SEARCH_RESULTS'),'EMPTY'=>$found_some?NULL:true,'ARRAY'=>true,'CONTENT'=>$content,'PRE'=>$pre,'POST'=>$post));
+		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('TITLE'=>get_screen_title('ADMIN_ZONE_SEARCH_RESULTS'),'EMPTY'=>$found_some?NULL:true,'ARRAY'=>true,'CONTENT'=>$found_some?$content:array(),'PRE'=>$pre,'POST'=>$post));
 	}
 
 }

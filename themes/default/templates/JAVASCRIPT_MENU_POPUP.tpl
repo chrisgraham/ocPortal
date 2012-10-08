@@ -1,18 +1,19 @@
 "use strict";
 
-var menu_hold_time=500;
+window.menu_hold_time=500;
 
-var clean_menus_timeout=null;
-var active_menu=null,last_active_menu=null;
+window.clean_menus_timeout=null;
+window.active_menu=null;
+window.last_active_menu=null;
 
 function clean_menus()
 {
-	clean_menus_timeout=null;
+	window.clean_menus_timeout=null;
 
-	var m=document.getElementById('r_'+last_active_menu);
+	var m=document.getElementById('r_'+window.last_active_menu);
 	if (!m) return;
 	var tags=m.getElementsByTagName('ul');
-	var e=(active_menu==null)?null:document.getElementById(active_menu),t;
+	var e=(window.active_menu==null)?null:document.getElementById(window.active_menu),t;
 	var i,hideable;
 	for (i=tags.length-1;i>=0;i--)
 	{
@@ -27,11 +28,11 @@ function clean_menus()
 				if (tags[i].id==t.id) hideable=false;
 				t=t.parentNode.parentNode;
 			}
-			while (t.id!='r_'+last_active_menu);
+			while (t.id!='r_'+window.last_active_menu);
 		}
 		if (hideable)
 		{
-			tags[i].style.left="-999px";
+			tags[i].style.left='-999px';
 			tags[i].style.display='none';
 		}
 	}
@@ -39,24 +40,24 @@ function clean_menus()
 
 function set_active_menu(id,menu)
 {
-	active_menu=id;
-	if (menu!=null) last_active_menu=menu;
+	window.active_menu=id;
+	if (menu!=null) window.last_active_menu=menu;
 }
 
 function deset_active_menu()
 {
-	active_menu=null;
+	window.active_menu=null;
 
 	recreate_clean_timeout();
 }
 
 function recreate_clean_timeout()
 {
-	if (clean_menus_timeout)
+	if (window.clean_menus_timeout)
 	{
-		window.clearTimeout(clean_menus_timeout);
+		window.clearTimeout(window.clean_menus_timeout);
 	}
-	clean_menus_timeout=window.setTimeout(clean_menus,menu_hold_time);
+	window.clean_menus_timeout=window.setTimeout(clean_menus,window.menu_hold_time);
 }
 
 function pop_up_menu(id,place,menu,event)
@@ -65,9 +66,9 @@ function pop_up_menu(id,place,menu,event)
 
 	var e=document.getElementById(id);
 
-	if (clean_menus_timeout)
+	if (window.clean_menus_timeout)
 	{
-		window.clearTimeout(clean_menus_timeout);
+		window.clearTimeout(window.clean_menus_timeout);
 	}
 
 	if (e.style.display=='block')
@@ -75,8 +76,8 @@ function pop_up_menu(id,place,menu,event)
 		return false;
 	}
 
-	active_menu=id;
-	last_active_menu=menu;
+	window.active_menu=id;
+	window.last_active_menu=menu;
 	clean_menus();
 
 	var l=0;

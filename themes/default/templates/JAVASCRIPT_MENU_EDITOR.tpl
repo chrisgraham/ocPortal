@@ -25,11 +25,11 @@ function menu_editor_add_new_page()
 							form.elements['url'].value=zone+':'+page;
 						}
 					},
-					"{!SPECIFYING_NEW_PAGE^#}"
+					'{!menus:SPECIFYING_NEW_PAGE;^}'
 				);
 			}
 		},
-		"{!SPECIFYING_NEW_PAGE^#}"
+		'{!menus:SPECIFYING_NEW_PAGE;^}'
 	);
 }
 
@@ -221,66 +221,6 @@ function handle_ordering(t,up,down)
 		}
 	}
 	return; // Ignore old code below
-
-	if (((up) || (down)) && (best!=-1))
-	{
-		// Swap names (how it saves)
-		swap_names('up',bestindex,index);
-		swap_names('down',bestindex,index);
-		swap_names('caption',bestindex,index);
-		swap_names('caption_long',bestindex,index);
-		swap_names('url',bestindex,index);
-		swap_names('match_tags',bestindex,index);
-		swap_names('theme_img_code',bestindex,index);
-		swap_names('new_window',bestindex,index);
-		swap_names('check_perms',bestindex,index);
-		swap_names('branch_type',bestindex,index);
-		swap_names('order',bestindex,index,null,true);
-		swap_names('parent',bestindex,index);
-		swap_names('del',bestindex,index);
-		swap_names('branch_wrap',bestindex,index);
-		swap_names('branch',bestindex,index);
-		swap_names('branches_go_before',bestindex,index);
-		swap_names('add_new_menu_linka',bestindex,index);
-		swap_names('add_new_menu_linkb',bestindex,index);
-		swap_names('branch',bestindex,index,'_follow_1');
-		swap_names('branch',bestindex,index,'_follow_2');
-
-		// Swap any children parent-referencing-IDs
-		var index_a=document.getElementById('branch_wrap_'+index);
-		var bestindex_a=document.getElementById('branch_wrap_'+bestindex);
-		for (i=0;i<form.elements.length;i++)
-		{
-			if ((form.elements[i].name.substr(0,7)=='parent_') &&
-				 (form.elements[i].value==index))
-			{
-				form.elements[i].value=bestindex;
-			}
-			else
-			if ((form.elements[i].name.substr(0,7)=='parent_') &&
-				 (form.elements[i].value==bestindex))
-			{
-				form.elements[i].value=index;
-			}
-		}
-
-		// Move DOM branch (how it displays)
-		if (up)
-		{
-			bestindex_a.parentNode.removeChild(bestindex_a);
-			index_a.parentNode.insertBefore(bestindex_a,index_a);
-		}
-		if (down)
-		{
-			bestindex_a.parentNode.removeChild(bestindex_a);
-			var ref=index_a.nextSibling;
-			index_a.parentNode.insertBefore(bestindex_a,ref);
-		}
-
-		return false; // Cancel event (we do not want cursor to move)
-	}
-
-	return true;
 }
 
 function swap_names(t,a,b,t2,values_also)
@@ -475,18 +415,18 @@ function delete_menu_branch(ob)
 
 	if ((typeof window.showModalDialog!='undefined'{+START,IF,{$CONFIG_OPTION,js_overlays}} || true{+END}) || (ob.form.elements['branch_type_'+id]!='page'))
 	{
-		var choices=['{!INPUTSYSTEM_CANCEL;^}','{!DELETE;^}','{!MOVETO_MENU;^}'];
+		var choices=['{!INPUTSYSTEM_CANCEL;^}','{!DELETE;^}','{!menus:MOVETO_MENU;^}'];
 		generate_question_ui(
 			'{!CONFIRM_DELETE_LINK_NICE;^,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
 			choices,
-			'{!DELETE_MENU_ITEM;^}',
+			'{!menus:DELETE_MENU_ITEM;^}',
 			null,
 			function(result)
 			{
 				if (result.toLowerCase()=='{!DELETE;^}'.toLowerCase())
 				{
 					delete_branch('branch_wrap_'+ob.name.substr(4,ob.name.length));
-				} else if (result.toLowerCase()=='{!MOVETO_MENU;^}'.toLowerCase())
+				} else if (result.toLowerCase()=='{!menus:MOVETO_MENU;^}'.toLowerCase())
 				{
 					var choices=['{!INPUTSYSTEM_CANCEL;^}'];
 					for (var i=0;i<window.all_menus.length;i++)
@@ -494,9 +434,9 @@ function delete_menu_branch(ob)
 						choices.push(window.all_menus[i]);
 					}
 					generate_question_ui(
-						'{!CONFIRM_MOVE_LINK_NICE;^,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
+						'{!menus:CONFIRM_MOVE_LINK_NICE;^,xxxx}'.replace('xxxx',document.getElementById('caption_'+id).value),
 						choices,
-						'{!MOVE_MENU_ITEM;^}',
+						'{!menus:MOVE_MENU_ITEM;^}',
 						null,
 						function(result)
 						{
@@ -506,7 +446,7 @@ function delete_menu_branch(ob)
 								for (var i=0;i<ob.form.elements.length;i++)
 								{
 									name=ob.form.elements[i].name;
-									if (name.substr(name.length-('_'+id).length)=='_'+id)
+									if (name.substr(name.length-(('_'+id).length))=='_'+id)
 									{
 										if (ob.nodeName.toLowerCase()=='select')
 										{

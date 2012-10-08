@@ -145,9 +145,9 @@ class Module_admin_config
 			add_config_option('VALIDATION_XHTML','validation_xhtml','tick','return \'1\';','SITE','VALIDATION',1);
 			add_config_option('VALIDATION_WCAG','validation_wcag','tick','return \'1\';','SITE','VALIDATION',1);
 			add_config_option('VALIDATION_CSS','validation_css','tick','return \'0\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_JAVASCRIPT','validation_javascript','tick','return \'0\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_COMPAT','validation_compat','tick','return \'0\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_EXT_FILES','validation_ext_files','tick','return \'0\';','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_JAVASCRIPT','validation_javascript','tick','return NULL;','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_COMPAT','validation_compat','tick','return NULL;','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_EXT_FILES','validation_ext_files','tick','return NULL;','SITE','VALIDATION',1);
 			add_config_option('MAX_SIZE','max_download_size','integer','return \'20000\';','SITE','UPLOAD');
 		}
 		if ((is_null($upgrade_from)) || ($upgrade_from<8))

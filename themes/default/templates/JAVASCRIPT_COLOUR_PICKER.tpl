@@ -502,8 +502,8 @@ YAHOO.util.Color = function() {
 	 * @final
 	 */
 	proto.IMAGE = {
-		PICKER_THUMB: "{$IMG#,colour_picker/picker_thumb}".replace(/^http:/,window.location.protocol),
-		HUE_THUMB: "{$IMG#,colour_picker/hue_thumb}".replace(/^http:/,window.location.protocol)
+		PICKER_THUMB: '{$IMG;,colour_picker/picker_thumb}'.replace(/^http:/,window.location.protocol),
+		HUE_THUMB: '{$IMG;,colour_picker/hue_thumb}'.replace(/^http:/,window.location.protocol)
 	};
 
 	/*
