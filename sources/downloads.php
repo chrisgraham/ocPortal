@@ -64,11 +64,17 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	// Details
 	$filesize=$row['file_size'];
 	$filesize=($filesize>0)?clean_file_size($filesize):do_lang('UNKNOWN');
-	$description=get_translated_tempcode($row['description']);
+	$description=is_string($row['description'])?comcode_to_tempcode($row['description']):get_translated_tempcode($row['description']);
 	$root=get_param_integer('root',db_get_first_id(),true);
-	$map=array('page'=>'downloads','type'=>'entry','id'=>$row['id'],'root'=>($root==db_get_first_id())?NULL:$root);
-	if (get_page_name()=='downloads') $map+=propagate_ocselect();
-	$download_url=build_url($map,$zone);
+	if (array_key_exists('id',$row))
+	{
+		$map=array('page'=>'downloads','type'=>'entry','id'=>$row['id'],'root'=>($root==db_get_first_id())?NULL:$root);
+		if (get_page_name()=='downloads') $map+=propagate_ocselect();
+		$download_url=build_url($map,$zone);
+	} else
+	{
+		$download_url=new ocp_tempcode();
+	}
 	$date=get_timezoned_date($row['add_date'],false);
 	$date_raw=$row['add_date'];
 
@@ -77,7 +83,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	$pic_suffix='';
 	$thumb_url='';
 	$full_img_url='';
-	if ((addon_installed('galleries')) && ($pic))
+	if ((addon_installed('galleries')) && ($pic) && (array_key_exists('id',$row)))
 	{
 		// Images
 		$rows=$GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url','id'),array('cat'=>'download_'.strval($row['id'])),'',1,$row['default_pic']-1);
@@ -92,7 +98,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	} else $imgcode=new ocp_tempcode();
 
 	require_code('feedback');
-	$rating=($row['allow_rating']==1)?display_rating($download_url,get_translated_text($row['name']),'downloads',strval($row['id']),'RATING_INLINE_STATIC',$row['submitter']):NULL;
+	$rating=($row['allow_rating']==1 && array_key_exists('id',$row))?display_rating($download_url,is_string($row['name'])?$row['name']:get_translated_text($row['name']),'downloads',strval($row['id']),'RATING_INLINE_STATIC',$row['submitter']):NULL;
 	if (!is_null($rating))
 		if (trim($rating->evaluate())=='') $rating=NULL;
 
@@ -116,7 +122,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 
 	// Final template
 	if (($full_img_url!='') && (url_is_local($full_img_url))) $full_img_url=get_custom_base_url().'/'.$full_img_url;
-	return do_template('DOWNLOAD_BOX',array('_GUID'=>'7a4737e21bdb4bd15ac5fe8570915d08','TEXT_SUMMARY'=>$text_summary,'AUTHOR'=>$row['author'],'ID'=>strval($row['id']),'RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>get_translated_text($row['name']),'BREADCRUMBS'=>$breadcrumbs,'IMG_URL'=>$thumb_url,'FULL_IMG_URL'=>$full_img_url,'IMGCODE'=>$imgcode,'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink));
+	return do_template('DOWNLOAD_BOX',array('_GUID'=>'7a4737e21bdb4bd15ac5fe8570915d08','TEXT_SUMMARY'=>$text_summary,'AUTHOR'=>$row['author'],'ID'=>array_key_exists('id',$row)?strval($row['id']):'','RATING'=>$rating,'VIEWS'=>integer_format($row['download_views']),'SUBMITTER'=>strval($row['submitter']),'DESCRIPTION'=>$description,'FILE_SIZE'=>$filesize,'DOWNLOADS'=>integer_format($row['num_downloads']),'DATE_RAW'=>strval($date_raw),'DATE'=>$date,'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),'SIZE'=>$filesize,'URL'=>$download_url,'NAME'=>is_string($row['name'])?$row['name']:get_translated_text($row['name']),'BREADCRUMBS'=>$breadcrumbs,'IMG_URL'=>$thumb_url,'FULL_IMG_URL'=>$full_img_url,'IMGCODE'=>$imgcode,'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink));
 }
 
 /**

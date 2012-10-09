@@ -562,6 +562,9 @@ class Module_cms_downloads extends standard_aed_module
 		require_code('feedback2');
 		$fields->attach(feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2));
 
+		if (!is_null($id))
+			$hidden->attach(form_input_hidden('id',strval($id)));
+
 		return array($fields,$hidden);
 	}
 
