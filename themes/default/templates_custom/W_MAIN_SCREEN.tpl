@@ -4,15 +4,17 @@
 	<h3>{!NAVIGATION}</h3>
 
 	<section class="box box__realm_main"><div class="box_inner">
-		<h3>&ldquo;{REALM_NAME*</h3>
-&rdquo;\, &lsquo;{ROOM_NAME*}&rsquo;\, <kbd>{REALM*}:{X*}:{Y*}</kbd>,,light}
+		<h3>&ldquo;{REALM_NAME*}&rdquo;, &lsquo;{ROOM_NAME*}&rsquo;, <kbd>{REALM*}:{X*}:{Y*}</kbd></h3>
+
 		<div class="ocw_navigation">
 			<table summary="{!W_MOVEMENT_TABLE}" class="results_table">
-				<tr>
-					<th colspan="3">
-						{!NAVIGATION}
-					</th>
-				</tr>
+				<thead>
+					<tr>
+						<th colspan="3" style="text-align: center">
+							{!NAVIGATION}
+						</th>
+					</tr>
+				</thead>
 				<tbody>
 					<tr>
 						<td>
@@ -256,6 +258,13 @@
 
 		<div class="toggleable_tray" style="{$JS_ON,{HIDE_ACTIONS*},}"{+START,IF,{HIDE_ACTIONS}} aria-expanded="false"{+END}>
 			<table summary="{!COLUMNED_TABLE}" class="results_table wide_table autosized_table">
+				<colgroup>
+					<col style="width: 20%" />
+					<col style="width: 20%" />
+					<col style="width: 20%" />
+					<col style="width: 20%" />
+					<col style="width: 20%" />
+				</colgroup>
 				<tr class="ocw_posttop">
 					<th>
 						{!ACTION}
@@ -277,6 +286,13 @@
 			{+START,IF_NON_EMPTY,{ITEMS_HELD}}
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_DROP}
@@ -299,6 +315,13 @@
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_GIVE}
@@ -321,6 +344,13 @@
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF:type=confirm}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_PICKPOCKET}
@@ -343,6 +373,13 @@
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_USE}
@@ -365,6 +402,13 @@
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF:type=confirm}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_DELETE_MATCHING_MESSAGES}
@@ -388,6 +432,13 @@
 			{+END}
 			<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 				<table summary="" class="results_table wide_table autosized_table">
+					<colgroup>
+						<col style="width: 20%" />
+						<col style="width: 20%" />
+						<col style="width: 20%" />
+						<col style="width: 20%" />
+						<col style="width: 20%" />
+					</colgroup>
 					<tr>
 						<td>
 							{!W_FIND_PERSON}
@@ -418,6 +469,13 @@
 				</table>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_TELEPORT_PERSON}
@@ -440,6 +498,13 @@
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_IMPRISON_PERSON}
@@ -462,6 +527,13 @@
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_HURT_PERSON}
@@ -484,6 +556,13 @@
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_HEAL_PERSON}
@@ -506,6 +585,13 @@
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_BAN_PERSON}
@@ -528,6 +614,13 @@
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_UNBAN_PERSON}
@@ -550,6 +643,13 @@
 				</form>
 				<form method="post" class="inline" action="{$PAGE_LINK*,_SELF:_SELF}">
 					<table summary="" class="results_table wide_table autosized_table">
+						<colgroup>
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+							<col style="width: 20%" />
+						</colgroup>
 						<tr>
 							<td>
 								{!W_TAKE_FROM_PERSON}

@@ -9,8 +9,6 @@
 	{$PARAGRAPH,{TEXT}}
 {+END}
 
-<p>{!W_ABOUT_PORTALS}</p>
-
 <form method="post" enctype="multipart/form-data" action="{$PAGE_LINK*,_SELF:_SELF}">
 	 <input type="hidden" name="type" value="{PAGE_TYPE*}" />
 	 {+START,IF_PASSED,PARAM}
