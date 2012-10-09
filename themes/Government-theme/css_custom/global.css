@@ -83,9 +83,9 @@ body {font-family:Tahoma, Arial, Verdana; font-size:100%; color:#000; padding:30
 .news li { list-style:none;  padding:0 0 10px 0;}
 .news li b { width:100%; float:left; padding-bottom:10px; }
 
-.twitter { width:150px; float:left; text-align:center; margin-top:25px;}
-.twitter h4 { font-weight:normal; margin:0; padding:0;}
-.twitter span{ font-weight:bold; font-size:1.30em; padding-top:5px; display:block;}
+.col1 .twitter { width:150px; float:left; text-align:center; margin-top:25px;}
+.col1 .twitter h4 { font-weight:normal; margin:0; padding:0;}
+.col1 .twitter span{ font-weight:bold; font-size:1.30em; padding-top:5px; display:block;}
 .border1 { border-right:1px solid #ccc;}
 
 .welcome { border-bottom:1px solid #ebebeb;}
@@ -621,7 +621,7 @@ form { /* For IE6 */
 
 .overlay.medborder {
 	padding: 5px;
-	background-color: #232323;
+	background-color: #EEE;
 }
 
 .boxes_together_follower { /* boxes_together_follower is just for IE6, which does not support +, we have to go to extra effort in our templates to add this class */
@@ -2876,7 +2876,7 @@ a.tab:link, a.tab:visited, a.tab:hover, a.tab:active {
 }
 
 .menu_type__embossed a:hover, .menu_type__top a:hover, .menu_type__dropdown a.toplevel_link:hover {
-	background-color: #232323 !important; /* {$,hover_bg, 93% (mm_c_tab sat_to 15) + 7% !W/B} */
+	text-decoration: underline;
 }
 
 .menu_type__embossed a, .menu_type__top a, .menu_type__dropdown a.toplevel_link {
