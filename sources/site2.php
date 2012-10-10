@@ -288,17 +288,16 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 	// Fix bad unicode
 	if (get_charset()=='utf-8')
 	{
-		if (preg_match('%^(?:
-			[\x09\x0A\x0D\x20-\x7E]					# ASCII
-			| [\xC2-\xDF][\x80-\xBF]				# non-overlong 2-byte
-			|  \xE0[\xA0-\xBF][\x80-\xBF]			# excluding overlongs
-			| [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}	# straight 3-byte
-			|  \xED[\x80-\x9F][\x80-\xBF]			# excluding surrogates
-			|  \xF0[\x90-\xBF][\x80-\xBF]{2}		# planes 1-3
-			| [\xF1-\xF3][\x80-\xBF]{3}			# planes 4-15
-			|  \xF4[\x80-\x8F][\x80-\xBF]{2}		# plane 16
-			)*$%xs',
-		$result)==0) $result=utf8_encode($result);
+		$test_string=$result; // avoid being destructive 
+		$test_string=preg_replace('#[\x09\x0A\x0D\x20-\x7E]#','',$test_string); // ASCII 
+		$test_string=preg_replace('#[\xC2-\xDF][\x80-\xBF]#','',$test_string); // non-overlong 2-byte 
+		$test_string=preg_replace('#\xE0[\xA0-\xBF][\x80-\xBF]#','',$test_string); // excluding overlongs 
+		$test_string=preg_replace('#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#','',$test_string); // straight 3-byte 
+		$test_string=preg_replace('#\xED[\x80-\x9F][\x80-\xBF]#','',$test_string); // excluding surrogates 
+		$test_string=preg_replace('#\xF0[\x90-\xBF][\x80-\xBF]{2}#','',$test_string); // planes 1-3 
+		$test_string=preg_replace('#[\xF1-\xF3][\x80-\xBF]{3}#','',$test_string); //  planes 4-15 
+		$test_string=preg_replace('#\xF4[\x80-\x8F][\x80-\xBF]{2}#','',$test_string); // plane 16 
+		if ($test_string!='') $result=utf8_encode($result);
 	}
 
 	if (is_null($new_comcode_page_row['p_submitter']))
