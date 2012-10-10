@@ -567,7 +567,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		// Special admin options
 		if (has_specific_permission(get_member(),'member_maintenance'))
 		{
-			if ($validated==0)
+	//		if ($validated==0)
 			{
 				$validated=get_param_integer('validated',0);
 				if ($validated==1) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
