@@ -1259,6 +1259,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		$https=$CURRENTLY_HTTPS;
 		if ($https===NULL)
 		{
+			require_code('urls');
 			if ((get_option('enable_https',true)=='0') || (!running_script('index')))
 			{
 				$https=false;
