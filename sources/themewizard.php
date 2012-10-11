@@ -232,6 +232,12 @@ function find_theme_image_themewizard_preview($id)
 		attach_message(do_lang_tempcode('SEED_IS',escape_html($_GET['keep_theme_seed'])),'inform');
 	}
 
+	$tseed=$_GET['keep_theme_seed'];
+	unset($_GET['keep_theme_seed']);
+	$test=find_theme_image($id);
+	$_GET['keep_theme_seed']=$tseed;
+	if ($test=='') return NULL;
+
 	global $THEME_WIZARD_IMAGES,$THEME_WIZARD_IMAGES_NO_WILD;
 	if (!in_array($id,$THEME_WIZARD_IMAGES_NO_WILD))
 	{

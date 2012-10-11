@@ -1620,7 +1620,7 @@ function key_pressed(event,key,no_error_if_bad)
 function convert_tooltip(element)
 {
 	var title=element.title;
-	if (title!='')
+	if ((title!='') && ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && (element.childNodes[0].title==''))))
 	{
 		element.title='';
 
