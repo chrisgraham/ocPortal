@@ -154,7 +154,7 @@ function edit_award_type($id,$title,$description,$points,$content_type,$hide_awa
 	if (is_null($_title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$_description=$GLOBALS['SITE_DB']->query_value('award_types','a_description',array('id'=>$id));
 	$GLOBALS['SITE_DB']->query_update('award_types',array('a_title'=>lang_remap_comcode($_title,$title),'a_description'=>lang_remap($_description,$description),'a_points'=>$points,'a_content_type'=>filter_naughty_harsh($content_type),'a_hide_awardee'=>$hide_awardee,'a_update_time_hours'=>$update_time_hours),array('id'=>$id));
-	log_it('EDIT_AWARD_TYPE',strval($id),$_title);
+	log_it('EDIT_AWARD_TYPE',strval($id),$title);
 }
 
 /**
