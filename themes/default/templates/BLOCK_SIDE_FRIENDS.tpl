@@ -1,4 +1,4 @@
-<div class="force_normal_margin block_side_friends">
+<div class="force_normal_margin block_side_friends boxless_space"><div class="box"><div class="box_inner">
 	<h3>{!_INSTANT_MESSAGING}</h3>
 
 	{FRIENDS}
@@ -8,4 +8,4 @@
 			<li><a href="{$PAGE_LINK*,_SEARCH:popup_blockers}">{!ENABLE_POPUPS}</a></li>
 		</ul>
 	</div></div>}
-</div>
+</div></div></div>
