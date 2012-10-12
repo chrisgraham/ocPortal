@@ -1411,7 +1411,6 @@ class forum_driver_ocf extends forum_driver_base
 			$password_compatibility_scheme=$row['m_password_compat_scheme'];
 			switch ($password_compatibility_scheme)
 			{
-				case 'remote': // This will work too - we're logging in with the username of a remote profile, so no resynching will happen
 				case '': // ocPortal style salted MD5 algorithm
 					if ($cookie_login)
 					{

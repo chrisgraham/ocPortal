@@ -52,15 +52,17 @@ class Hook_Profiles_Tabs_Edit_settings
 
 			$is_ldap=ocf_is_ldap_member($member_id_of);
 			$is_httpauth=ocf_is_httpauth_member($member_id_of);
-			$is_remote=($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_password_compat_scheme')=='remote');
 
-			if (($is_ldap) || ($is_httpauth) || ($is_remote) || (($member_id_of!=$member_id_viewing) && (!has_specific_permission($member_id_viewing,'assume_any_member'))))
+			if (($is_ldap) || ($is_httpauth) || (($member_id_of!=$member_id_viewing) && (!has_specific_permission($member_id_viewing,'assume_any_member'))))
 			{
 				$password=NULL;
 			} else
 			{
-				$password=post_param('edit_password');
-				if ($password=='') $password=NULL; else
+				$password=post_param('edit_password','');
+				if ($password=='')
+				{
+					$password=NULL;
+				} else
 				{
 					$password_confirm=trim(post_param('password_confirm'));
 					if ($password!=$password_confirm) warn_exit(make_string_tempcode(escape_html(do_lang('PASSWORD_MISMATCH'))));

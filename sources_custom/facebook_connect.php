@@ -150,7 +150,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 			//if (($username!=$member[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member[0]['m_timezone_offset'])) || ($email_address!=$member[0]['m_email_address']))
 			{
 				$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
-				if (!is_null($test)) // Make sure there's no conflict
+				if (!is_null($test)) // Make sure there's no conflict yet the name has changed
 				{
 					$update_map=array('m_username'=>$username,'m_dob_day'=>$dob_day,'m_dob_month'=>$dob_month,'m_dob_year'=>$dob_year);
 					if ($email_address!='') $update_map['m_email_address']=$email_address;
@@ -207,9 +207,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 
 		$completion_form_submitted=post_param('email_address','')!='';
 
-		// If there's a conflicting username, we may need to change it (suffix a number)
 		require_code('ocf_members_action2');
-		$username=get_username_from_human_name($username);
 
 		// Ask ocP to finish off the profile from the information presented in the POST environment (a standard mechanism in ocPortal, for third party logins of various kinds)
 		require_lang('ocf');
@@ -226,6 +224,9 @@ function handle_facebook_connection_login($current_logged_in_member)
 			exit();
 		} else // Actualiser
 		{
+			// If there's a conflicting username, we may need to change it (suffix a number)  [we don't do in code branch above, as ocf_member_external_linker_ask already handles it]
+			$username=get_username_from_human_name($username);
+
 			// Check RBL's/stopforumspam
 			$spam_check_level=get_option('spam_check_level',true);
 			if (($spam_check_level==='EVERYTHING') || ($spam_check_level==='ACTIONS') || ($spam_check_level==='GUESTACTIONS') || ($spam_check_level==='JOINING'))
