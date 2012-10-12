@@ -19,7 +19,7 @@
 	<h2>{!POINTS_EARNED}</h2>
 
 	<p>
-		{!VIEWING_POINTS_PROFILE_OF,<a href="{PROFILE_LINK*}">{NAME*}</a>}
+		{!VIEWING_POINTS_PROFILE_OF,<a href="{PROFILE_URL*}">{NAME*}</a>}
 	</p>
 
 	<table summary="{!COLUMNED_TABLE}" class="variable_table points_summary_table">

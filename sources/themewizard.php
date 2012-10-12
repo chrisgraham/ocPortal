@@ -232,6 +232,12 @@ function find_theme_image_themewizard_preview($id)
 		attach_message(do_lang_tempcode('SEED_IS',escape_html($_GET['keep_theme_seed'])),'inform');
 	}
 
+	$tseed=$_GET['keep_theme_seed'];
+	unset($_GET['keep_theme_seed']);
+	$test=find_theme_image($id);
+	$_GET['keep_theme_seed']=$tseed;
+	if ($test=='') return NULL;
+
 	global $THEME_WIZARD_IMAGES,$THEME_WIZARD_IMAGES_NO_WILD;
 	if (!in_array($id,$THEME_WIZARD_IMAGES_NO_WILD))
 	{
@@ -1157,7 +1163,7 @@ function fix_colour($x,$hue=false)
 }
 
 /**
- * Convert an RGB colour to HSV colour components. Based on publically distributed code fragments which were themselves based on others: reasonably assumed as public domain.
+ * Convert an RGB colour to HSV colour components. Based on publicly distributed code fragments which were themselves based on others: reasonably assumed as public domain.
  *
  * @param  string	RRGGBB colour.
  * @return array	Triplet of (0-255) components: H, S, V
@@ -1210,7 +1216,7 @@ function rgb_to_hsv($rgb)
 }
 
 /**
- * Convert HSV colour components to an RGB colour. Based on publically distributed code fragments which were themselves based on others: reasonably assumed as public domain.
+ * Convert HSV colour components to an RGB colour. Based on publicly distributed code fragments which were themselves based on others: reasonably assumed as public domain.
  *
  * @param  float	H component
  * @param  float	S component

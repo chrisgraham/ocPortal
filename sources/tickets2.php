@@ -169,7 +169,7 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 			if (is_null($ticket_type))
 			{
 				require_code('ocf_forums');
-				$forums=ocf_get_all_subordinate_forums($fid);
+				$forums=ocf_get_all_subordinate_forums($fid,NULL,NULL,true);
 			}
 			else
 			{

@@ -1,4 +1,5 @@
 {$REQUIRE_JAVASCRIPT,javascript_ocf_forum}
+{$REQUIRE_JAVASCRIPT,javascript_ajax}
 
 <div class="box ocf_notification"><div class="box_inner">
 	<p>

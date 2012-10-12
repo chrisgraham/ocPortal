@@ -946,6 +946,12 @@ It should also be stressed as a last point that [b]Javascript is not secure[/b];
 
 [title="2"]Online tools and references[/title]
 
+[title="3"]General web platform references[/title]
+
+ - http://webplatform.org
+ - http://w3.org
+ - http://caniuse.com/
+
 [title="3"]XHTML tools/references[/title]
 
  - http://www.yourhtmlsource.com/

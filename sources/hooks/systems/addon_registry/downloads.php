@@ -72,6 +72,7 @@ class Hook_addon_registry_downloads
 	function get_file_list()
 	{
 		return array(
+			'sources/hooks/systems/preview/download.php',
 			'sources/hooks/modules/admin_import/downloads.php',
 			'sources/hooks/systems/notifications/download.php',
 			'sources/hooks/systems/config_default/download_gallery_root.php',

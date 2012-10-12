@@ -625,7 +625,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					if ($DISPLAYED_TITLE!==NULL) $_displayed_title=$DISPLAYED_TITLE->evaluate();
 					if (($DISPLAYED_TITLE!==NULL) && (strip_tags($_displayed_title)!=''))
 					{
-						$value=html_entity_decode(strip_tags(str_replace(array('&hellip;','&ndash;','&mdash;','&middot;','&ldquo;','&rdquo;','&lsquo;','&rsquo;'),array('...','-','-','|','"','"',"'","'"),$_displayed_title)),ENT_QUOTES,get_charset());
+						$value=strip_html($_displayed_title);
 					} else
 					{
 						$value=$ZONE['zone_header_text_trans'];
@@ -1658,16 +1658,22 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[0]))
 				{
 					$timestamp=isset($param[1])?intval($param[1]):time();
-					$timezone_convert=(!isset($param[2])) || ($param[2]=='1');
+					if ((!array_key_exists(2,$param)) || ($param[2]=='1')) $timestamp=utctime_to_usertime($timestamp);
 					$value=locale_filter(my_strftime($param[0],$timestamp));
-					if ($value==$param[0]) $value=date($param[0],$timezone_convert?utctime_to_usertime($timestamp):$timestamp);
-				} else $value=strval(time());
+					if ($value==$param[0]) // If no conversion happened then the syntax must have been for 'date' not 'strftime'
+						$value=date($param[0],$timestamp);
+				} else
+				{
+					$timestamp=time();
+					$value=strval($timestamp);
+				}
 				break;
 
 			case 'TO_TIMESTAMP':
 				if (isset($param[0]))
 				{
 					$value=strval(strtotime($param[0]));
+					if ((array_key_exists(1,$param)) && ($param[1]=='1')) $value=strval(usertime_to_utctime(intval($value))); // '1' means date was in user-time so needs converting to a UTC timestamp
 				} else $value=strval(time());
 				break;
 
@@ -2510,7 +2516,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$t=$param[0]->evaluate();
-					if ((isset($param['vars'][$t])) && ($param['vars'][$t]!='0') && ($param['vars'][$t]!=''))
+					if ((isset($param['vars'][$t])) && ($param['vars'][$t]!==false) && ($param['vars'][$t]!=='0') && ($param['vars'][$t]!==''))
 					{
 						$value=$param[1]->evaluate();
 					}
@@ -2521,7 +2527,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				if (isset($param[1]))
 				{
 					$t=$param[0]->evaluate();
-					if ((!isset($param['vars'][$t])) || ($param['vars'][$t]=='0') || ($param['vars'][$t]==''))
+					if ((!isset($param['vars'][$t])) || ($param['vars'][$t]===false) || ($param['vars'][$t]==='0') || ($param['vars'][$t]===''))
 					{
 						$value=$param[1]->evaluate();
 					}
@@ -2781,7 +2787,7 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 	$is_html=((isset($param[3])) && ($param[3]=='1'));
 	if ($is_html)
 	{
-		$not_html=@html_entity_decode(strip_tags($param[0]),ENT_QUOTES,get_charset()); // In case it contains HTML. This is imperfect, but having to cut something up is imperfect from the offset.
+		$not_html=strip_html($param[0]); // In case it contains HTML. This is imperfect, but having to cut something up is imperfect from the offset.
 		$html=$param[0];
 		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($html);
 		if (($html==$not_html) && (strpos($html,'&')===false) && (strpos($html,'<')===false)) $is_html=false; // Conserve memory

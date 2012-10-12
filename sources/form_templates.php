@@ -1329,12 +1329,12 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 	// Add in the 'N/A' option
 	if (($allow_none) && (!array_key_exists('',$categories)))
 	{
-		if (count($categories)==0)
+		if (count($categories)==1)
 		{
-			$categories=array(''=>array(''));
+			array_unshift($categories[$current_path],'');
 		} else
 		{
-			$categories['']=array('');
+			$categories[do_lang('NA')]=array('');
 		}
 	}
 
@@ -1389,7 +1389,7 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 			$i++;
 		}
 
-		$_category=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array('_GUID'=>'c2f429315b73bcaacc3bff8db11c0056','DISPLAY'=>$category_expanded?'block':'none','CATEGORY'=>$_category,'CATEGORY_NAME'=>$cat));
+		$_category=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array('_GUID'=>'c2f429315b73bcaacc3bff8db11c0056','DISPLAY'=>$category_expanded?'block':'none','CATEGORY'=>$_category,'CATEGORY_NAME'=>(count($categories)==1)?'':$cat));
 		$content->attach($_category);
 	}
 

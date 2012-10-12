@@ -20,7 +20,7 @@ function ocworld_messages_script()
 {
 	require_lang('ocworld');
 	require_lang('chat');
-	reqiore_css('ocworld');
+	require_css('ocworld');
 
 	$member_id=get_member();
 	$rows=$GLOBALS['SITE_DB']->query_select('w_members',array('location_realm','location_x','location_y'),array('id'=>$member_id),'',1);

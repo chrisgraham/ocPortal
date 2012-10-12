@@ -543,8 +543,13 @@ header h1 {
 .global_breadcrumbs {
 	padding: 7px 0 0 0;
 	{+START,IF,{$NOT,{$MOBILE}}}
-		float: {!en_right};
-		margin-left: 5px;
+		{+START,IF,{$CONFIG_OPTION,fixed_width}}
+			text-align: {!en_right};
+		{+END}
+		{+START,IF,{$NOT,{$CONFIG_OPTION,fixed_width}}}
+			float: {!en_right};
+		{+END}
+		margin-left: 0.5em;
 	{+END}
 }
 .global_breadcrumbs abbr {
@@ -2173,6 +2178,7 @@ div.wysiwyg_toolbar_color_finder {
 	float: right;
 	margin: 1em 0 0 2em;
 	width: 60px;
+	height: 60px;
 }
 
 .post .post_subline {

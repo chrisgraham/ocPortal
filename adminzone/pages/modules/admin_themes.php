@@ -452,7 +452,7 @@ class Module_admin_themes
 		$theme=get_param('theme',false,true);
 
 		$ini_file=(($theme=='default')?get_file_base():get_custom_file_base()).'/themes/'.$theme.'/theme.ini';
-		if (!file_exists($ini_file)) warn_exit(do_lang('MISSING_RESOURCE').' [theme.ini]');
+		if (!file_exists($ini_file)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$details=better_parse_ini_file($ini_file);
 		if (!array_key_exists('title',$details)) $details['title']='?';
 		if (!array_key_exists('description',$details)) $details['description']='?';
@@ -1775,6 +1775,8 @@ class Module_admin_themes
 		$url=get_param('url','');
 		if ($url!='')
 		{
+			$url=preg_replace('#\.pagespeed\..*$#','',$url); // Support for working around https://developers.google.com/speed/docs/mod_pagespeed/filter-cache-extend
+
 			$theme=get_param('theme',''); // Editing like this happens in the theme the user is using
 			if ($theme=='') $theme=$GLOBALS['FORUM_DRIVER']->get_theme('');
 			if (substr($url,0,strlen(get_base_url()))==get_base_url()) $url=substr($url,strlen(get_base_url()));

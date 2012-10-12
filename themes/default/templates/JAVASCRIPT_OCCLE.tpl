@@ -1,43 +1,43 @@
 "use strict";
 
-var previous_commands=[];
-var current_command=null;
+window.previous_commands=[];
+window.current_command=null;
 
 // Deal with OcCLE history
-function occle_handle_history(element,keyCode,e)
+function occle_handle_history(element,key_code,e)
 {
-	if ((keyCode==38) && (previous_commands.length>0)) // Up button
+	if ((key_code==38) && (window.previous_commands.length>0)) // Up button
 	{
 		cancel_bubbling(e);
 		if (typeof e.preventDefault!='undefined') e.preventDefault();
 
-		if (current_command==null)
+		if (window.current_command==null)
 		{
-			current_command=previous_commands.length-1;
-			element.value=previous_commands[current_command];
+			window.current_command=window.previous_commands.length-1;
+			element.value=window.previous_commands[window.current_command];
 		}
-		else if (current_command>0)
+		else if (window.current_command>0)
 		{
-			current_command--;
-			element.value=previous_commands[current_command];
+			window.current_command--;
+			element.value=window.previous_commands[window.current_command];
 		}
 		return false;
 	}
-	else if ((keyCode==40) && (previous_commands.length>0)) // Down button
+	else if ((key_code==40) && (window.previous_commands.length>0)) // Down button
 	{
 		cancel_bubbling(e);
 		if (typeof e.preventDefault!='undefined') e.preventDefault();
 
-		if (current_command!=null)
+		if (window.current_command!=null)
 		{
-			if (current_command<previous_commands.length-1)
+			if (window.current_command<window.previous_commands.length-1)
 			{
-				current_command++;
-				element.value=previous_commands[current_command];
+				window.current_command++;
+				element.value=window.previous_commands[window.current_command];
 			}
 			else
 			{
-				current_command=null;
+				window.current_command=null;
 				element.value='';
 			}
 		}
@@ -45,7 +45,7 @@ function occle_handle_history(element,keyCode,e)
 	}
 	else
 	{
-		current_command=null;
+		window.current_command=null;
 		return true;
 	}
 }
@@ -71,7 +71,7 @@ function occle_form_submission(command)
 				window.disable_timeout=null;
 			}
 		} , 5000);
-		previous_commands.push(command);
+		window.previous_commands.push(command);
 
 		return false;
 	} else
@@ -106,7 +106,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 
 	if (!ajax_result)
 	{
-		var stderr_text=document.createTextNode('{!ERROR_NON_TERMINAL;^}\n{!INTERNAL_ERROR;^}');
+		var stderr_text=document.createTextNode('{!occle:ERROR_NON_TERMINAL;^}\n{!INTERNAL_ERROR;^}');
 		var stderr_text_p=document.createElement('p');
 		stderr_text_p.setAttribute('class','error_output');
 		stderr_text_p.appendChild(stderr_text);
@@ -138,7 +138,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 		// Handle notifications
 		var notifications_block=document.createElement('div');
 		var notification,notification_p,notification_p_text;
-		for(var i=0;i<stdnotifications.childNodes.length;i++)
+		for (var i=0;i<stdnotifications.childNodes.length;i++)
 		{
 			notification=document.createElement('div');
 			notification.setAttribute('class','occle_notification');
@@ -146,7 +146,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 			notification_p_text=document.createTextNode('{!NOTIFICATION_SECTION;^} '+stdnotifications.childNodes[i].getAttribute('section')+'{!NOTIFICATION_TYPE;^} '+stdnotifications.childNodes[i].getAttribute('type'));
 			notification_p.appendChild(notification_p_text);
 			notification.appendChild(notification_p);
-			for(var a=0;a<stdnotifications.childNodes[i].childNodes.length;a++)
+			for (var a=0;a<stdnotifications.childNodes[i].childNodes.length;a++)
 			{
 				notification.appendChild(careful_import_node(stdnotifications.childNodes[i].childNodes[a]));
 			}
@@ -170,7 +170,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 	if (stdhtml.childNodes)
 	{
 		var child_node,new_child,cloned_node;
-		for(i=0;i<stdhtml.childNodes.length;i++)
+		for (i=0;i<stdhtml.childNodes.length;i++)
 		{
 			child_node=stdhtml.childNodes[i];
 			new_child=careful_import_node(child_node);
@@ -211,7 +211,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 	}
 	else if (stderr!='')
 	{
-		var stderr_text=document.createTextNode('{!ERROR_NON_TERMINAL;^}\n'+stderr);
+		var stderr_text=document.createTextNode('{!occle:ERROR_NON_TERMINAL;^}\n'+stderr);
 		var stderr_text_p=document.createElement('p');
 		stderr_text_p.setAttribute('class','error_output');
 		stderr_text_p.appendChild(stderr_text);
@@ -235,13 +235,14 @@ function clear_cl()
 	var command_line=document.getElementById('commands_go_here');
 	var elements=get_elements_by_class_name(command_line,'command');
 
-	for(var i=0;i<elements.length;i++)
+	for (var i=0;i<elements.length;i++)
 	{
 		command_line.removeChild(elements[i]);
 	}
 }
 
-// Fun stuff
+// Fun stuff...
+
 var occle_foxy_textnodes=[];
 
 function bsod()

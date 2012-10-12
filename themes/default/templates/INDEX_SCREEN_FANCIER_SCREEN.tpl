@@ -8,7 +8,7 @@
 
 {+START,IF_NON_EMPTY,{CONTENT}}
 	<div class="index_screen_fancier_screen_entries" itemprop="significantLinks">
-		{+START,IF_PASSED,ARRAY}
+		{+START,IF_PASSED_AND_TRUE,ARRAY}
 			{+START,LOOP,CONTENT}
 				{+START,IF_NON_EMPTY,{_loop_var}}
 					<h2>{_loop_key}</h2>
@@ -24,7 +24,7 @@
 				</p>
 			{+END}
 		{+END}
-		{+START,IF_NON_PASSED_OR_FALSE,EMPTY}
+		{+START,IF_NON_PASSED_OR_FALSE,ARRAY}
 			{CONTENT}
 		{+END}
 	</div>

@@ -133,7 +133,7 @@ class Module_admin_community_billboard extends standard_crud_module
 					array(
 						/*	 type							  page	 params													 zone	  */
 						array('add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_COMMUNITY_BILLBOARD')),
-						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('COMMUNITY_BILLBOARD_MANAGE')),
+						array('edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_COMMUNITY_BILLBOARD')),
 					),
 					do_lang('COMMUNITY_BILLBOARD_TEXT')
 		);

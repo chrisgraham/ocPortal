@@ -1,6 +1,6 @@
 "use strict";
 
-var current_list_for;
+window.current_list_for=null;
 
 function update_ajax_admin_search_list(target,e)
 {
@@ -59,7 +59,7 @@ function update_ajax_member_list(target,special,delayed,e)
 
 	var v=target.value;
 
-	current_list_for=target;
+	window.current_list_for=target;
 	var url='{$BASE_URL_NOHTTP}/data/namelike.php?id='+encodeURIComponent(v);
 	if (special) url=url+'&special='+special;
 
@@ -69,7 +69,7 @@ function update_ajax_member_list(target,special,delayed,e)
 function update_ajax_member_list_response(result,list_contents)
 {
 	if (!list_contents) return;
-	if (current_list_for==null) return;
+	if (window.current_list_for==null) return;
 
 	close_down();
 
@@ -85,8 +85,8 @@ function update_ajax_member_list_response(result,list_contents)
 	}
 	list.setAttribute('id','ajax_list');
 	list.style.position='absolute';
-	list.style.left=(find_pos_x(current_list_for))+'px';
-	list.style.top=(find_pos_y(current_list_for)+find_height(current_list_for))+'px';
+	list.style.left=(find_pos_x(window.current_list_for))+'px';
+	list.style.top=(find_pos_y(window.current_list_for)+find_height(window.current_list_for))+'px';
 	setTimeout(function() { list.style.zIndex++; } ,100); // Fixes Opera by causing a refresh
 
 	if (list_contents.childNodes.length==0) return;
@@ -105,19 +105,19 @@ function update_ajax_member_list_response(result,list_contents)
 	item.text='{!SUGGESTIONS_ONLY;}'.toUpperCase();
 	item.innerText='{!SUGGESTIONS_ONLY;}'.toUpperCase();
 	list.appendChild(item);
-	current_list_for.parentNode.appendChild(list);
+	window.current_list_for.parentNode.appendChild(list);
 	if (typeof window.fade_transition!='undefined')
 	{
 		set_opacity(list,0.0);
 		fade_transition(list,100,30,8);
 	}
 
-	var current_list_for_copy=current_list_for;
+	var current_list_for_copy=window.current_list_for;
 
-	if (typeof current_list_for.old_onkeyup=='undefined')
-		current_list_for.old_onkeyup=current_list_for.onkeyup;
-	if (typeof current_list_for.old_onchange=='undefined')
-		current_list_for.old_onchange=current_list_for.onchange;
+	if (typeof window.current_list_for.old_onkeyup=='undefined')
+		window.current_list_for.old_onkeyup=window.current_list_for.onkeyup;
+	if (typeof window.current_list_for.old_onchange=='undefined')
+		window.current_list_for.old_onchange=window.current_list_for.onchange;
 
 	var make_selection=function(e)
 	{
@@ -137,7 +137,7 @@ function update_ajax_member_list_response(result,list_contents)
 		}, 300);
 	};
 
-	current_list_for.down_once=false;
+	window.current_list_for.down_once=false;
 	var handle_arrow_usage=function(event) {
 		if (typeof event=='undefined') var event=window.event;
 		if (key_pressed(event,40,true)) // DOWN
@@ -182,14 +182,14 @@ function update_ajax_member_list_response(result,list_contents)
 		}
 		return null;
 	}
-	current_list_for.onkeyup=function(event)
+	window.current_list_for.onkeyup=function(event)
 	{
 		if (typeof event=='undefined') var event=window.event;
 		var ret=handle_arrow_usage(event);
 		if (ret!=null) return ret;
 		return update_ajax_member_list(current_list_for_copy,current_list_for_copy.special,false,event);
 	}
-	current_list_for.onchange=function(event)
+	window.current_list_for.onchange=function(event)
 	{
 		current_list_for_copy.onkeyup=current_list_for_copy.old_onkeyup;
 		current_list_for_copy.onchange=current_list_for_copy.old_onchange;
@@ -216,7 +216,7 @@ function update_ajax_member_list_response(result,list_contents)
 		}
 		return null;
 	}
-	current_list_for.onkeypress=function(event)
+	window.current_list_for.onkeypress=function(event)
 	{
 		if (typeof event=='undefined') var event=window.event;
 
@@ -241,6 +241,6 @@ function update_ajax_member_list_response(result,list_contents)
 
 	add_event_listener_abstract(list,'click',make_selection,false);
 
-	current_list_for=null;
+	window.current_list_for=null;
 }
 

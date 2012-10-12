@@ -593,24 +593,25 @@ function up_do_header()
 	$upgrader_intro=do_lang('FU_UPGRADER_INTRO');
 	$charset=get_charset();
 	$lang=user_lang();
+	$dir=do_lang('dir');
 
 	@ob_end_clean();
 	echo <<<END
 <!DOCTYPE html>
-	<html xml:lang="{$lang}" lang="{$lang}">
+	<html lang="{$lang}" dir="{$dir}">
 	<head>
-		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$charset}" />
+		<meta http-equiv="Content-Type" content="text/html; charset={$charset}" />
 
 		<title>{$upgrader_title}</title>
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
 
-		<style type="text/css">
+		<style type="text/css"><![CDATA[
 END;
 @print(file_get_contents(css_enforce('global','default',false)));
 echo <<<END
 			.screen_title { text-decoration: underline; display: block; background: url('themes/default/images/bigicons/ocp-logo.png') top left no-repeat; min-height: 42px; padding: 3px 0 0 60px; }
 			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-		</style>
+		]]></style>
 
 		<meta name="robots" content="noindex, nofollow" />
 	</head>

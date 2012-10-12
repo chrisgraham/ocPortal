@@ -173,7 +173,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 		}
 
 		// Any custom fields to show?
-		$post['custom_fields']=ocf_get_all_custom_fields_match_member($_postdetails['p_poster'],((get_member()!=$_postdetails['p_poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,((get_member()==$_postdetails['p_poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,NULL,NULL,NULL,NULL,NULL,0,true);
+		$post['custom_fields']=ocf_get_all_custom_fields_match_member($_postdetails['p_poster'],((get_member()!=$_postdetails['p_poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,((get_member()==$_postdetails['p_poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL,NULL,NULL,NULL,1);
 
 		// Usergroup
 		$post['primary_group']=$primary_group;
@@ -633,7 +633,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 			$buttons->attach(do_template('SCREEN_ITEM_BUTTON',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>'quote','TITLE'=>$_title,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
 		}
 	}
-	if ((addon_installed('points')) && (!is_guest()) && (!is_guest($_postdetails['poster'])))
+	if ((addon_installed('points')) && (!is_guest()) && (!is_guest($_postdetails['poster'])) && (has_specific_permission($_postdetails['poster'],'use_points')))
 	{
 		$action_url=build_url(array('page'=>'points','type'=>'member','id'=>$_postdetails['poster']),get_module_zone('points'));
 		$_title=do_lang_tempcode('POINTS_THANKS');

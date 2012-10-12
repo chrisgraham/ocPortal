@@ -9,8 +9,6 @@
 	{$PARAGRAPH,{TEXT}}
 {+END}
 
-<p>{!W_PORTAL_HELP}</p>
-
 <form method="post" enctype="multipart/form-data" action="{$PAGE_LINK*,_SELF:_SELF:uploading=1}">
 	 <div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="autosized_table results_table wide_table"><tbody>
 		  <tr>

@@ -75,7 +75,7 @@ function set_field_error(the_element,error_msg)
 
 					// Need to switch tab?
 					var p=error_element;
-					while (p)
+					while (p!==null)
 					{
 						p=p.parentNode;
 						if ((error_msg.substr(0,5)!='{!DISABLED_FORM_FIELD;}'.substr(0,5)) && (p) && (typeof p.getAttribute!='undefined') && (p.getAttribute('id')) && (p.getAttribute('id').substr(0,2)=='g_') && (p.style.display=='none'))
@@ -336,7 +336,7 @@ function check_field(the_element,the_form,for_preview)
 		}
 		if (!type_ok)
 		{
-			error_msg='{!INVALID_FILE_TYPE;^,xx1xx,{$VALID_FILE_TYPES}}'.replace(/xx1xx/g,theFileType).replace(/<[^>]*>/g,'').replace(/&[lr][sd]quo;/g,"'").replace(/,/g,', ');
+			error_msg='{!INVALID_FILE_TYPE;^,xx1xx,{$VALID_FILE_TYPES}}'.replace(/xx1xx/g,theFileType).replace(/<[^>]*>/g,'').replace(/&[lr][sd]quo;/g,'\'').replace(/,/g,', ');
 			if (!alerted) window.fauxmodal_alert(error_msg);
 			alerted=true;
 		}
@@ -346,7 +346,7 @@ function check_field(the_element,the_form,for_preview)
 	if ((browser_matches('ie')) && (the_element.value) && (the_element.nodeName.toLowerCase()!='select'))
 	{
 		var bad_word_chars=[8216,8217,8220,8221];
-		var fixed_word_chars=["'","'",'"','"'];
+		var fixed_word_chars=['\'','\'','"','"'];
 		for (i=0;i<bad_word_chars.length;i++)
 		{
 			regexp=new RegExp(String.fromCharCode(bad_word_chars[i]),'gm');
@@ -432,10 +432,10 @@ function check_form(the_form,for_preview)
 		check_result=check_field(the_element,the_form,for_preview);
 		if (check_result!=null)
 		{
-			erroneous=check_result[0] | erroneous;
+			erroneous=check_result[0] || erroneous;
 			if (!error_element) error_element=check_result[1];
 			total_file_size+=check_result[2];
-			alerted=check_result[3] | alerted;
+			alerted=check_result[3] || alerted;
 
 			if (check_result[0])
 			{
@@ -625,7 +625,7 @@ function _standard_alternate_fields_get_object(field_name)
 	if (field) return field;
 
 	// A radio field, so we need to create a virtual field object to return that will hold our value
-	var radio_buttons=[],i,j,e;
+	var radio_buttons=[],i,j,e; /*JSLINT: Ignore errors*/
 	radio_buttons['name']=field_name;
 	radio_buttons['value']='';
 	for (i=0;i<document.forms.length;i++)
@@ -793,7 +793,7 @@ function toggle_subordinate_fields(pic,help_id)
 
 	var next=field_input.nextSibling;
 	if (!next) return;
-	while (!element_has_class(next,'field_input')) // Sometimes divs or whatever may have errornously been put in a table by a programmer, skip past them
+	while (element_has_class(next,'field_input')!==null) // Sometimes divs or whatever may have errornously been put in a table by a programmer, skip past them
 	{
 		next=next.nextSibling;
 		if (!next) break;
@@ -824,7 +824,7 @@ function toggle_subordinate_fields(pic,help_id)
 
 	// Hide everything until we hit end of section
 	var count=0;
-	while (field_input.nextSibling)
+	while (field_input.nextSibling!==null)
 	{
 		field_input=field_input.nextSibling;
 		if (typeof field_input.className=='undefined') continue; // E.g. a #text node
@@ -844,7 +844,7 @@ function toggle_subordinate_fields(pic,help_id)
 	}
 	if (typeof help_id=='undefined') var help_id=pic.parentNode.id+'_help';
 	var help=document.getElementById(help_id);
-	while (help)
+	while (help!==null)
 	{
 		help.style.display=new_state_2;
 		help=help.nextSibling;
@@ -947,7 +947,7 @@ function find_if_children_set(container)
 		the_element=elements[i];
 		if (((the_element.type=='hidden') || ((the_element.style.display=='none') && ((typeof window.is_wysiwyg_field=='undefined') || (!is_wysiwyg_field(the_element))))) && ((!the_element.className) || (!element_has_class(the_element,'hidden_but_needed')))) continue;
 		value=clever_find_value(the_element.form,the_element);
-		blank=blank & (value=='');
+		blank=blank && (value=='');
 	}
 	return !blank;
 }

@@ -10,7 +10,7 @@
 }
 
 .gallery_entry_field_name_column {
-	width: 8.5em.
+	width: 8.5em;
 }
 
 .gallery_entry_field_value_column {
@@ -201,6 +201,17 @@
 
 #tease_scrolling_text {
 	width: 23em;
+}
+
+/* Make sure it fits okay on the side panel */
+.global_side_panel .gallery_tease_pic {
+	width: auto;
+}
+.global_side_panel .gallery_tease_pic_wrap h2, .global_side_panel .gallery_tease_pic_wrap h3 {
+	display: none;
+}
+.global_side_panel .img_thumb_wrap .img_thumb {
+	max-width: 100%;
 }
 
 /* Miscellaneous media handling */

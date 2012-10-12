@@ -97,7 +97,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	 * @param  SHORT_TEXT	The name of the custom profile field
 	 * @param  LONG_TEXT		The description of the field
 	 * @param  LONG_TEXT		The default value of the field
-	 * @param  BINARY			Whether the field is publically viewable
+	 * @param  BINARY			Whether the field is publicly viewable
 	 * @param  BINARY			Whether the field may be viewed by the owner
 	 * @param  BINARY			Whether the owner may set the value of the field
 	 * @param  BINARY			Whether the field is encrypted

@@ -140,7 +140,7 @@ function comcode_to_clean_text($message_plain)
 
 	$message_plain=preg_replace("#\[img(.*)\]([^\[\]]*)\[/img\]#",'',$message_plain);
 
-	$message_plain=@html_entity_decode(strip_tags($message_plain),ENT_QUOTES,get_charset());
+	$message_plain=strip_html($message_plain);
 
 	$message_plain=str_replace(']http',']'.chr(10).'http',str_replace('[/url]',chr(10).'[/url]',$message_plain));
 	$message_plain=preg_replace('#\[random [^=]*="([^"]*)"[^\]]*\].*\[/random\]#Us','${1}',$message_plain);
@@ -367,7 +367,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$headers='From: "'.$from_name.'" <'.$website_email.'>'.$line_term;
 	} else
 	{
-		$headers='From: <'.$from_email.'>'.$line_term;
+		$headers='From: "'.$from_name.'" <'.$from_email.'>'.$line_term;
 	}
 	$headers.='Reply-To: <'.$from_email.'>'.$line_term;
 	$headers.='Return-Path: <'.$website_email.'>'.$line_term;
@@ -644,13 +644,16 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 				$to_line='"'.(is_array($to_name)?$to_name[$i]:$to_name).'" <'.$to.'>';
 			}
 			//if (function_exists('mb_language')) mb_language('en');	Stop overridden mbstring mail function from messing and base64'ing stuff. Actually we don't need this as we make sure to pass through as headers with blank message, bypassing any filtering.
+			$php_errormsg=mixed();
 			if (ini_get('safe_mode')=='1')
 			{
-				$worked=mail($to_line,$tightened_subject,'',$headers.$line_term.$sending_message);
+				$worked=mail($to_line,$tightened_subject,$sending_message,$headers);
 			} else
 			{
-				$worked=mail($to_line,$tightened_subject,'',$headers.$line_term.$sending_message,$additional);
+				$worked=mail($to_line,$tightened_subject,$sending_message,$headers,$additional);
 			}
+			if ((!$worked) && (isset($php_errormsg)) && (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($GLOBALS['IS_ACTUALLY_ADMIN'])))
+				$error=$php_errormsg;
 			$GLOBALS['SUPRESS_ERROR_DEATH']=false;
 		}
 	}

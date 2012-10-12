@@ -654,7 +654,7 @@ function _fatal_exit($text,$return=false)
 		<command>'.xmlentities(post_param('command','')).'</command>
 		<stdcommand></stdcommand>
 		<stdhtml><div xmlns="http://www.w3.org/1999/xhtml">'.((get_param_integer('keep_fatalistic',0)==1)?static_evaluate_tempcode(get_html_trace()):'').'</div></stdhtml>
-		<stdout>'.xmlentities(is_object($text)?str_replace(array('&ldquo;','&rdquo;'),array('"','"'),html_entity_decode(strip_tags($text->evaluate()),ENT_QUOTES,get_charset())):$text).'</stdout>
+		<stdout>'.xmlentities(is_object($text)?strip_html($text->evaluate()):$text).'</stdout>
 		<stderr>'.xmlentities(do_lang('EVAL_ERROR')).'</stderr>
 		<stdnotifications><div xmlns="http://www.w3.org/1999/xhtml"></div></stdnotifications>
 	</result>

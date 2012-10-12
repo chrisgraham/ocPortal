@@ -5,7 +5,12 @@
 		{+END}
 
 		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
-			<a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:type=__ed:id={ID}}{NAME*}{+END}</a>
+			{+START,IF_NON_EMPTY,{ID}}
+				<a href="{URL*}">{+START,FRACTIONAL_EDITABLE,{NAME},name,_SEARCH:cms_downloads:type=__ed:id={ID}}{NAME*}{+END}</a>
+			{+END}
+			{+START,IF_EMPTY,{ID}}
+				{NAME*}
+			{+END}
 		{+END}
 	</h3>
 
@@ -50,13 +55,15 @@
 		{+END}
 	</div>
 
-	<ul class="horizontal_links associated_links_block_group">
-		{+START,IF_PASSED,LICENCE}
-			<li><a href="{URL*}">{!VIEW}</a></li>
-		{+END}
-		{+START,IF_NON_PASSED,LICENCE}
-			<li><a href="{URL*}">{!MORE_INFO}</a></li>
-			<li><a title="{!DOWNLOAD_NOW}: {$CLEAN_FILE_SIZE*,{FILE_SIZE}}" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}">{!DOWNLOAD_NOW}</a></li>
-		{+END}
-	</ul>
+	{+START,IF_NON_EMPTY,{URL}}
+		<ul class="horizontal_links associated_links_block_group">
+			{+START,IF_PASSED,LICENCE}
+				<li><a href="{URL*}">{!VIEW}</a></li>
+			{+END}
+			{+START,IF_NON_PASSED,LICENCE}
+				<li><a href="{URL*}">{!MORE_INFO}</a></li>
+				<li><a title="{!DOWNLOAD_NOW}: {$CLEAN_FILE_SIZE*,{FILE_SIZE}}" href="{$FIND_SCRIPT*,dload}?id={ID*}{$KEEP*}{+START,IF,{$EQ,{$CONFIG_OPTION,anti_leech},1}}&amp;for_session={$SESSION_HASHED*}{+END}">{!DOWNLOAD_NOW}</a></li>
+			{+END}
+		</ul>
+	{+END}
 </div></div>

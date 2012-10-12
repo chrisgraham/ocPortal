@@ -4,6 +4,8 @@
 	{MESSAGES}
 
 	<form target="_self" action="{URL*}&amp;posted=1" method="post" title="{!SHOUTBOX}">
+		{$INSERT_SPAMMER_BLACKHOLE}
+
 		<div>
 			<p class="accessibility_hidden"><label for="shoutbox_message">{!MESSAGE}</label></p>
 			<p class="constrain_field"><input value="" type="text" onfocus="if (this.value=='{!MESSAGE;}') this.value='';" id="shoutbox_message" name="shoutbox_message" alt="{!MESSAGE}" class="wide_field" /></p>

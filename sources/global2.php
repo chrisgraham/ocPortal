@@ -428,6 +428,8 @@ function init__global2()
 	$default_memory_limit=get_value('memory_limit');
 	if ((is_null($default_memory_limit)) || ($default_memory_limit=='') || ($default_memory_limit=='0') || ($default_memory_limit=='-1'))
 		$default_memory_limit='64M';
+	if (substr($default_memory_limit,-2)=='MB') $default_memory_limit=substr($default_memory_limit,0,strlen($default_memory_limit)-1);
+	if ((is_numeric($default_memory_limit)) && (intval($default_memory_limit)<1024*1024*16)) $default_memory_limit.='M';
 	@ini_set('memory_limit',$default_memory_limit);
 	if ((isset($GLOBALS['FORUM_DRIVER'])) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 	{
@@ -943,12 +945,12 @@ function log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='')
 */
 function handle_has_checked_recently($id_code)
 {
-	$last_check_test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>'!'.$id_code));
+	$last_check_test=$GLOBALS['SITE_DB']->query_select_value_if_there('url_title_cache','t_title',array('t_url'=>substr('!'.$id_code,0,255)));
 	if ((is_null($last_check_test)) || (substr($last_check_test,0,1)!='!') || (intval(substr($last_check_test,1))+60*60*24*30<time())) // only re-checks every 30 days
 	{
 		// Show when it was last tested
-		$GLOBALS['SITE_DB']->query_delete('url_title_cache',array('t_url'=>'!'.$id_code),'',1); // To make sure it can insert below
-		$GLOBALS['SITE_DB']->query_insert('url_title_cache',array('t_title'=>'!'.strval(time()),'t_url'=>'!'.$id_code),false,true); // To stop weird race-like conditions
+		$GLOBALS['SITE_DB']->query_delete('url_title_cache',array('t_url'=>substr('!'.$id_code,0,255)),'',1); // To make sure it can insert below
+		$GLOBALS['SITE_DB']->query_insert('url_title_cache',array('t_title'=>'!'.strval(time()),'t_url'=>substr('!'.$id_code,0,255)),false,true); // To stop weird race-like conditions
 
 		return false;
 	}
@@ -1170,6 +1172,7 @@ function get_base_url($https=NULL,$zone_for=NULL)
 		$https=$CURRENTLY_HTTPS_CACHE;
 		if ($https===NULL)
 		{
+			require_code('urls');
 			if ((get_option('enable_https',true)=='0') || (!running_script('index')))
 			{
 				$https=tacit_https();

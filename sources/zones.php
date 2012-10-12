@@ -1039,14 +1039,15 @@ function find_all_modules($zone)
  * @param  PATH			The path to the module
  * @param  array			Array of functions to be executing
  * @param  ?array			A list of parameters to pass to our functions (NULL: none)
+ * @param  boolean		Whether to do this "properly" (via proper OOP), which will consume more memory
  * @return array			A list of pieces of code to do the equivalent of executing the requested functions with the requested parameters
  */
-function extract_module_functions($path,$functions,$params=NULL)
+function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_code_call=false)
 {
 	if ($params===NULL) $params=array();
 
 	global $SITE_INFO;
-	$prefer_direct_code_call=(isset($SITE_INFO['prefer_direct_code_call'])) && ($SITE_INFO['prefer_direct_code_call']=='1');
+	$prefer_direct_code_call=$prefer_direct_code_call || ((isset($SITE_INFO['prefer_direct_code_call'])) && ($SITE_INFO['prefer_direct_code_call']=='1'));
 	$hphp=defined('HIPHOP_PHP');
 	if ((($hphp) && (!function_exists('quercus_version'))) || ($prefer_direct_code_call))
 	{
@@ -1093,6 +1094,12 @@ function extract_module_functions($path,$functions,$params=NULL)
 
 	if (!is_file($path)) return array(NULL);
 	$file=unixify_line_format(file_get_contents($path),NULL,false,true);
+
+	if (strpos($file,'class Mx_')!==false)
+	{
+		return extract_module_functions($path,$functions,$params,true);
+	}
+
 	global $ARB_COUNTER;
 
 	$r=preg_replace('#[^\w]#','',basename($path,'.php')).strval(mt_rand(0,100000)).'_'.strval($ARB_COUNTER);

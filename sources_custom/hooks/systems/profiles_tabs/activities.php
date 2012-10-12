@@ -55,8 +55,6 @@ class Hook_Profiles_Tabs_activities
 
 		$order=70;
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
-
 		// Allow user to link up things for syndication
 		$syndications=array();
 		if ($member_id_of==$member_id_viewing)
@@ -87,6 +85,8 @@ class Hook_Profiles_Tabs_activities
 				}
 			}
 		}
+
+		if ($leave_to_ajax_if_possible) return array($title,NULL,$order);
 
 		$content=do_template('OCF_MEMBER_PROFILE_ACTIVITIES',array('_GUID'=>'9fe3b8bb9a4975fa19631c43472b4539','MEMBER_ID'=>strval($member_id_of),'SYNDICATIONS'=>$syndications));
 

@@ -229,10 +229,10 @@ function find_css_sheets(win)
 						possibilities.push(sheet);
 					} else
 					{
-						var l=win.document.styleSheets[i].href.lastIndexOf('/templates_cached/'+ocp_lang+'/');
+						var l=win.document.styleSheets[i].href.lastIndexOf('/templates_cached/'+window.ocp_lang+'/');
 						if ((l!=-1) && (win.document.styleSheets[i].href.indexOf('merged__')==-1))
 						{
-							sheet=win.document.styleSheets[i].href.substring(l+('/templates_cached/'+ocp_lang+'/').length,win.document.styleSheets[i].href.length).replace('_non_minified','').replace('_ssl','').replace('_mobile','').replace(/\?\d+/,'').replace('.css','');
+							sheet=win.document.styleSheets[i].href.substring(l+('/templates_cached/'+window.ocp_lang+'/').length,win.document.styleSheets[i].href.length).replace('_non_minified','').replace('_ssl','').replace('_mobile','').replace(/\?\d+/,'').replace('.css','');
 							possibilities.push(sheet);
 						}
 					}
@@ -477,8 +477,8 @@ function load_management_menu(type,no_confirm_needed)
 		tmp_element.src='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
 		img.parentNode.appendChild(tmp_element);
 
-		require_javascript("javascript_ajax");
-		require_javascript("javascript_menu_popup");
+		require_javascript('javascript_ajax');
+		require_javascript('javascript_menu_popup');
 		window.setTimeout(function() { load_management_menu(type,no_confirm_needed); },200);
 
 		return false;
@@ -557,9 +557,9 @@ function load_ocpchat(event)
 		box.style.height='420px';
 		box.style.position='absolute';
 		box.style.zIndex=2000;
-		box.style.left=(get_window_width()-650)/2+"px";
+		box.style.left=(get_window_width()-650)/2+'px';
 		var top_temp=100;
-		box.style.top=top_temp+"px";
+		box.style.top=top_temp+'px';
 
 		set_inner_html(box,html);
 		document.body.appendChild(box);

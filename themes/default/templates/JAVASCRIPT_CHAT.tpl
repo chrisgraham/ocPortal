@@ -166,13 +166,13 @@ function do_input_private_message(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	window.fauxmodal_prompt(
-		"{!ENTER_RECIPIENT^#}",
+		'{!ENTER_RECIPIENT;^}',
 		'',
 		function(va)
 		{
 			if (va!=null) insert_textbox(document.getElementById(field_name),"[private=\""+va+"\"][/private]");
 		},
-		"{!chat:INPUT_CHATCODE_private_message^#}"
+		'{!chat:INPUT_CHATCODE_private_message;^}'
 	);
 }
 
@@ -180,14 +180,14 @@ function do_input_invite(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	window.fauxmodal_prompt(
-		"{!ENTER_RECIPIENT^#}",
+		'{!ENTER_RECIPIENT;^}',
 		'',
 		function(va)
 		{
 			if (va!=null)
 			{
 				var vb=window.fauxmodal_prompt(
-					"{!ENTER_ROOM^#}",
+					'{!ENTER_ROOM;^}',
 					'',
 					function(vb)
 					{
@@ -196,7 +196,7 @@ function do_input_invite(field_name)
 				);
 			}
 		},
-		"{!chat:INPUT_CHATCODE_invite^#}"
+		'{!chat:INPUT_CHATCODE_invite;^}'
 	);
 }
 
@@ -204,14 +204,14 @@ function do_input_new_room(field_name)
 {
 	if (typeof window.insert_textbox=='undefined') return;
 	window.fauxmodal_prompt(
-		"{!ENTER_ROOM^#}",
+		'{!ENTER_ROOM;^}',
 		'',
 		function(va)
 		{
 			if (va!=null)
 			{
 				var vb=window.prompt(
-					"{!ENTER_ALLOW^#}",
+					'{!ENTER_ALLOW;^}',
 					'',
 					function(vb)
 					{
@@ -220,7 +220,7 @@ function do_input_new_room(field_name)
 				);
 			}
 		},
-		"{!chat:INPUT_CHATCODE_new_room^#}"
+		'{!chat:INPUT_CHATCODE_new_room;^}'
 	);
 }
 
@@ -257,7 +257,7 @@ function chat_post(event,current_room_id,field_name,font_name,font_colour)
 				if (typeof window.play_chat_sound!='undefined') play_chat_sound('message_sent');
 			} else
 			{
-				window.fauxmodal_alert("{!MESSAGE_POSTING_ERROR^#}");
+				window.fauxmodal_alert('{!MESSAGE_POSTING_ERROR;^}');
 			}
 
 			// Reschedule the next check
@@ -432,7 +432,7 @@ function _handle_signals(not_ajax_direct,skip_incoming_sound,ajax_result)
 				cloned_message=doc.createElement('div');
 				set_inner_html(cloned_message,_cloned_message.xml); // Fixes IE bug
 			} else cloned_message=_cloned_message.cloneNode(true);
-			if (!cloned_message.className)
+			if ((browser_matches('safari')) || (!_cloned_message.className))
 			{
 				cloned_message=doc.createElement('div');
 				set_inner_html(cloned_message,get_outer_html(_cloned_message)); // Fixes Chrome bug

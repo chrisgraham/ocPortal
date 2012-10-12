@@ -231,6 +231,8 @@ Be aware that the '[tt]get_option[/tt]' function always returns a string regardl
 The code in the [tt]install[/tt] function needs to analyse the parameters passed to see if an upgrade is being performed (and from what version) or if a new install is being performed. The code is then structured to act accordingly.
 For a new module there is no need to consider how upgrades would happen.
 
+See the note above about [tt]update_require_upgrade[/tt] needing to be set for the upgrade details to be passed.
+
 [title="5"]The '[tt]uninstall[/tt]' function[/title]
 
 The [tt]uninstall[/tt] function is usually very simple, with calls to the [tt]drop_table_if_exists[/tt] function of a database object, and calls to the [tt]delete_config_option[/tt] API function. Uninstall function takes no parameters and doesn't return a value.

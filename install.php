@@ -344,6 +344,9 @@ function step_1()
 			}
 		}
 	}
+	$test=ini_get('mbstring.func_overload');
+	if (($test!==false) && ($test!=='') && ($test!=='0'))
+		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_MBSTRING_FUNC_OVERLOAD'))));
 	$disk_space=@disk_free_space(get_file_base());
 	if ((is_integer($disk_space)) && ($disk_space<25*1024*1024))
 		$warnings->attach(do_template('INSTALLER_WARNING',array('MESSAGE'=>do_lang_tempcode('WARNING_DISK_SPACE'))));

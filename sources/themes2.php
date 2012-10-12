@@ -98,8 +98,11 @@ function actual_edit_theme_image($old_id,$theme,$lang,$id,$path,$quick=false)
 
 		if (($old_url!=$path) && ($old_url!=''))
 		{
-			require_code('themes3');
-			cleanup_theme_images($old_url);
+			if (($theme=='default') || (strpos($old_url,'themes/default/')===false))
+			{
+				require_code('themes3');
+				cleanup_theme_images($old_url);
+			}
 		}
 	} else
 	{

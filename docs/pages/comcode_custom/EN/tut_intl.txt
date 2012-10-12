@@ -239,7 +239,7 @@ If you're having problems getting things working a good early diagnosis step is 
 [code]
 <html lang="EN" dir="ltr">
 <head>
-	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 [/code]
 
 Here you can see the site is running for you with the language "EN" which is specifying a charset of "ISO-8859-1" and a text direction of "ltr" (left to right).

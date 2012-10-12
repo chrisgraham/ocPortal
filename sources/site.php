@@ -266,7 +266,7 @@ function inform_non_canonical_parameter($param)
  *
  * @param  mixed			The type of special message
  * @param  ID_TEXT		The template to use
- * @set    inform warn
+ * @set    inform notice warn
  * @return string			Blank string so it can be chained in the Tempcode compiler. You will rarely want to use this return value. It's kind of a failsafe.
  */
 function attach_message($message,$type='inform')
@@ -817,12 +817,12 @@ function do_site()
 	if (in_safe_mode())
 	{
 		$disable_safe_mode_url=get_self_url(true,true,array('keep_safe_mode'=>NULL));
-		attach_message(do_lang_tempcode('CURRENTLY_HAS_KEEP_SAFE_MODE',escape_html($disable_safe_mode_url)),'inform');
+		attach_message(do_lang_tempcode('CURRENTLY_HAS_KEEP_SAFE_MODE',escape_html($disable_safe_mode_url)),'notice');
 	}
 	if (get_param_integer('keep_fatalistic',0)==1)
 	{
 		$disable_fatalistic_url=get_self_url(true,true,array('keep_fatalistic'=>NULL));
-		attach_message(do_lang_tempcode('CURRENTLY_HAS_KEEP_FATALISTIC',escape_html($disable_fatalistic_url)),'inform');
+		attach_message(do_lang_tempcode('CURRENTLY_HAS_KEEP_FATALISTIC',escape_html($disable_fatalistic_url)),'notice');
 	}
 
 	// We calculated the time before outputting so that latency and bandwidth do not adversely affect the result

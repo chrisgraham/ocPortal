@@ -91,7 +91,8 @@ function script_load_stuff()
 			for (var i=0;i<stuck_navs.length;i++)
 			{
 				var stuck_nav=stuck_navs[i];
-				var stuck_nav_height=find_height(stuck_nav,true,true);
+				var stuck_nav_height=(typeof stuck_nav.real_height=='undefined')?find_height(stuck_nav,true,true):stuck_nav.real_height;
+				stuck_nav.real_height=stuck_nav_height;
 				var pos_y=find_pos_y(stuck_nav.parentNode);
 				if (stuck_nav_height<get_window_height()-260) /* 260 leaves space for footer */
 				{
@@ -309,10 +310,10 @@ function undo_staff_unload_action()
 	var bi=document.getElementById('main_website_inner');
 	if (bi)
 	{
-		if ((typeof window.fade_transition_timers!='undefined') && (fade_transition_timers[bi.fader_key]))
+		if ((typeof window.fade_transition_timers!='undefined') && (window.fade_transition_timers[bi.fader_key]))
 		{
-			window.clearTimeout(fade_transition_timers[bi.fader_key]);
-			fade_transition_timers[bi.fader_key]=null;
+			window.clearTimeout(window.fade_transition_timers[bi.fader_key]);
+			window.fade_transition_timers[bi.fader_key]=null;
 		}
 		bi.className=bi.className.replace(' site_unloading','');
 	}
@@ -1320,7 +1321,7 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 	var scroll_y=get_window_scroll_y();
 	if (typeof dest_y=='string') dest_y=find_pos_y(document.getElementById(dest_y));
 	if (dest_y<0) dest_y=0;
-	if ((typeof expected_scroll_y!="undefined") && (expected_scroll_y!=null) && (expected_scroll_y!=scroll_y)) return; /* We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already */
+	if ((typeof expected_scroll_y!='undefined') && (expected_scroll_y!=null) && (expected_scroll_y!=scroll_y)) return; /* We must terminate, as the user has scrolled during our animation and we do not want to interfere with their action -- or because our last scroll failed, due to us being on the last scroll screen already */
 	if (typeof dir=='undefined' || !null) var dir=(dest_y>scroll_y)?1:-1;
 	var dist=dir*17;
 
@@ -1616,13 +1617,13 @@ function key_pressed(event,key,no_error_if_bad)
 		if ((event.keyCode) && (event.keyCode>=96) && (event.keyCode<106) && (key>=48) && (key<58)) key+=48; /* Numeric keypad special case */
 	}
 
-	return ((typeof event.keyCode!="undefined") && (event.keyCode==key));
+	return ((typeof event.keyCode!='undefined') && (event.keyCode==key));
 }
 
 function convert_tooltip(element)
 {
 	var title=element.title;
-	if (title!='')
+	if ((title!='') && ((element.childNodes.length==0) || ((!element.childNodes[0].onmouseover) && (element.childNodes[0].title==''))))
 	{
 		element.title='';
 
@@ -1769,7 +1770,8 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 	window.setTimeout(function() {
 		if (!ac.is_over) return;
 
-		if (!ac.tooltip_on) set_inner_html(tooltip_element,tooltip,true);
+		if ((!ac.tooltip_on) || (tooltip_element.childNodes.length==0 /* Some other tooltip jumped in and wiped out tooltip on a delayed-show yet never triggers due to losing focus during that delay */))
+			set_inner_html(tooltip_element,tooltip,true);
 
 		ac.tooltip_on=true;
 		tooltip_element.style.display='block';
@@ -1916,7 +1918,7 @@ function trigger_resize(and_subframes)
 
 	for (var i=0;i<frames.length;i++)
 	{
-		if ((frames[i].src==window.location.href) || (frames[i].contentWindow==window) || ((typeof window.parent.frames[frames[i].id]!="undefined") && (window.parent.frames[frames[i].id]==window)))
+		if ((frames[i].src==window.location.href) || (frames[i].contentWindow==window) || ((typeof window.parent.frames[frames[i].id]!='undefined') && (window.parent.frames[frames[i].id]==window)))
 		{
 			if (frames[i].style.height=='900px') frames[i].style.height='auto';
 			window.parent.resize_frame(frames[i].name);
@@ -1996,14 +1998,14 @@ function mark_all_topics(event)
 /* Set opacity, without interfering with the thumbnail timer */
 function set_opacity(element,fraction)
 {
-	if ((typeof element.fader_key!='undefined') && (element.fader_key) && (typeof window.fade_transition_timers!='undefined') && (fade_transition_timers[element.fader_key]))
+	if ((typeof element.fader_key!='undefined') && (element.fader_key) && (typeof window.fade_transition_timers!='undefined') && (window.fade_transition_timers[element.fader_key]))
 	{
 		try // Cross-frame issues may cause error
 		{
-			window.clearTimeout(fade_transition_timers[element.fader_key]);
+			window.clearTimeout(window.fade_transition_timers[element.fader_key]);
 		}
 		catch (e) {};
-		fade_transition_timers[element.fader_key]=null;
+		window.fade_transition_timers[element.fader_key]=null;
 	}
 
 	if (typeof element.style.opacity!='undefined')
@@ -2135,7 +2137,7 @@ function get_inner_html(element,outerToo)
 	function inner_html_copy(src_dom_node,level) {
 		var out='';
 
-		if (typeof level=="undefined") level=1;
+		if (typeof level=='undefined') level=1;
 		if (level>1) {
 
 			if (src_dom_node.nodeType==1) {
@@ -2266,7 +2268,7 @@ function entities_to_unicode(din)
 /* load the HTML as XHTML */
 function inner_html_load(xml_string) {
 	var xml;
-	if (typeof DOMParser!="undefined") xml=(new DOMParser()).parseFromString(xml_string,"application/xml");
+	if (typeof DOMParser!='undefined') xml=(new DOMParser()).parseFromString(xml_string,"application/xml");
 	else {
 		var ieDOM=["MSXML2.DOMDocument","MSXML.DOMDocument","Microsoft.XMLDOM"];
 		for (var i=0;i<ieDOM.length && !xml;i++) {
@@ -2280,7 +2282,7 @@ function inner_html_load(xml_string) {
 
 /* recursively copy the XML (from xml_doc) into the DOM (under dom_node) */
 function inner_html_copy(dom_node,xml_doc,level,script_tag_dependencies) {
-	if (typeof level=="undefined") level=1;
+	if (typeof level=='undefined') level=1;
 	if (level>1) {
 		var node_upper=xml_doc.nodeName.toUpperCase();
 
@@ -2437,7 +2439,7 @@ function set_inner_html(element,tHTML,append)
 	/* Parser hint: .innerHTML okay */
 	if (typeof tHTML=='number') tHTML=tHTML+'';
 
-	if ((document.write) && (typeof element.innerHTML!="undefined") && (!document.xmlVersion) && (tHTML.toLowerCase().indexOf('<script type="text/javascript src="')==-1) && (tHTML.toLowerCase().indexOf('<link')==-1))
+	if ((document.write) && (typeof element.innerHTML!='undefined') && (!document.xmlVersion) && (tHTML.toLowerCase().indexOf('<script type="text/javascript src="')==-1) && (tHTML.toLowerCase().indexOf('<link')==-1))
 	{
 		var clone=element.cloneNode(true);
 		try
@@ -2550,7 +2552,7 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 					// Find where the
 					var template='';
 					var replace_spot=bit;
-					while (replace_spot)
+					while (replace_spot!==null)
 					{
 						replace_spot=replace_spot.parentNode;
 						if (replace_spot.className.match(/^RATING_BOX( |$)/))
@@ -2862,7 +2864,7 @@ function setup_word_counter(post,count_element)
 		{
 			try
 			{
-				var text_value=CKEDITOR.instances['post'].getData();
+				var text_value=window.CKEDITOR.instances['post'].getData();
 				var matches=text_value.replace(/<[^<|>]+?>|&nbsp;/gi,' ').match(/\b/g);
 				var count=0;
 				if(matches) count=matches.length/2;

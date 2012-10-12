@@ -684,9 +684,9 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
  * @param  AUTO_LINK			The ID of the member.
  * @param  ?SHORT_TEXT		The e-mail address. (NULL: don't change)
  * @param  ?BINARY			Whether posts are previewed before they are made. (NULL: don't change)
- * @param  ?integer			Day of date of birth. (NULL: don't change)
- * @param  ?integer			Month of date of birth. (NULL: don't change)
- * @param  ?integer			Year of date of birth. (NULL: don't change)
+ * @param  ?integer			Day of date of birth. (NULL: don't change) (-1: deset)
+ * @param  ?integer			Month of date of birth. (NULL: don't change) (-1: deset)
+ * @param  ?integer			Year of date of birth. (NULL: don't change) (-1: deset)
  * @param  ?ID_TEXT			The member timezone. (NULL: don't change)
  * @param  ?GROUP				The members primary (NULL: don't change).
  * @param  array				A map of custom fields values (field-id=>value).
@@ -778,9 +778,9 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	$update=array();
 	if (!is_null($theme)) $update['m_theme']=$theme;
 	if (!is_null($preview_posts)) $update['m_preview_posts']=$preview_posts;
-	if (!is_null($dob_day)) $update['m_dob_day']=$dob_day;
-	if (!is_null($dob_month)) $update['m_dob_month']=$dob_month;
-	if (!is_null($dob_year)) $update['m_dob_year']=$dob_year;
+	if (!is_null($dob_day)) $update['m_dob_day']=($dob_day==-1)?NULL:$dob_day;
+	if (!is_null($dob_month)) $update['m_dob_month']=($dob_month==-1)?NULL:$dob_month;
+	if (!is_null($dob_year)) $update['m_dob_year']=($dob_year==-1)?NULL:$dob_year;
 	if (!is_null($timezone)) $update['m_timezone_offset']=$timezone;
 	if (!is_null($reveal_age)) $update['m_reveal_age']=$reveal_age;
 	if (!is_null($email_address)) $update['m_email_address']=$email_address;
@@ -1009,7 +1009,7 @@ function ocf_unban_member($member_id)
  * @param  SHORT_TEXT 	Name of the field.
  * @param  SHORT_TEXT 	Description of the field.
  * @param  LONG_TEXT  	The default value for the field.
- * @param  BINARY			Whether the field is publically viewable.
+ * @param  BINARY			Whether the field is publicly viewable.
  * @param  BINARY			Whether the field is viewable by the owner.
  * @param  BINARY			Whether the field may be set by the owner.
  * @param  BINARY			Whether the field should be encrypted.

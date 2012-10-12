@@ -12,9 +12,7 @@
 					<xsl:attribute name="content"><xsl:value-of select="/rss/channel/title" /></xsl:attribute>
 				</xsl:element>
 				{$CSS_TEMPCODE}
-				<meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$CHARSET*}" />
-				<meta http-equiv="Content-Script-Type" content="text/javascript" />
-				<meta http-equiv="Content-Style-Type" content="text/css" />
+				<meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
 			</head>
 			<body class="website_body" onload="go_decoding();">
 				<div id="cometestme" style="display: none">

@@ -160,7 +160,7 @@ class Module_authors
 			$forum_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('_GUID'=>'b90b606f263eeabeba38e06eef40a21e','ACTION'=>hyperlink($GLOBALS['FORUM_DRIVER']->member_profile_url($handle,false,true),do_lang_tempcode('AUTHOR_PROFILE'),false,false,'',NULL,NULL,'me')));
 			if (addon_installed('points'))
 			{
-				$give_points_url=build_url(array('page'=>'points','id'=>$handle),get_module_zone('points'));
+				$give_points_url=build_url(array('page'=>'points','type'=>'member','id'=>$handle),get_module_zone('points'));
 				$point_details=do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array('_GUID'=>'2bfb9bf9b5fdf1dad34102abd4bc4648','ACTION'=>hyperlink($give_points_url,do_lang_tempcode('AUTHOR_POINTS'))));
 			}
 			else $point_details=new ocp_tempcode();

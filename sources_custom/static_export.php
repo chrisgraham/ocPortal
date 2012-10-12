@@ -39,8 +39,11 @@ function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$pr
 		$date=time();
 		if (get_param_integer('dir',0)==0) // For dir export we actually use times to represent overall change times, to benefit upload
 		{
-			if (!is_null($add_date)) $date=$add_date;
-			if (!is_null($edit_date)) $date=$edit_date;
+			if (get_param_integer('guess_dates',0)==1) // Bad idea actually, aggregate data can easily make the dates wrong
+			{
+				if (!is_null($add_date)) $date=$add_date;
+				if (!is_null($edit_date)) $date=$edit_date;
+			}
 		}
 
 		$langs=find_all_langs();

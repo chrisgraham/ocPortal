@@ -3,7 +3,6 @@
 function handle_bookmark_selection(ob,id,event)
 {
 	var form=document.getElementById('selected_actions').getElementsByTagName('form')[0];
-	form.action='{FORM_URL;}';
 
 	var fields=document.getElementsByTagName('input'),i,some_checked=false;
 	for (i=0;i<fields.length;i++)

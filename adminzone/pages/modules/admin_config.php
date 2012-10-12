@@ -200,9 +200,9 @@ class Module_admin_config
 			add_config_option('VALIDATION_XHTML','validation_xhtml','tick','return \'1\';','SITE','VALIDATION',1);
 			add_config_option('VALIDATION_WCAG','validation_wcag','tick','return \'1\';','SITE','VALIDATION',1);
 			add_config_option('VALIDATION_CSS','validation_css','tick','return \'0\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_JAVASCRIPT','validation_javascript','tick','return \'0\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_COMPAT','validation_compat','tick','return \'0\';','SITE','VALIDATION',1);
-			add_config_option('VALIDATION_EXT_FILES','validation_ext_files','tick','return \'0\';','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_JAVASCRIPT','validation_javascript','tick','return NULL;','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_COMPAT','validation_compat','tick','return NULL;','SITE','VALIDATION',1);
+			add_config_option('VALIDATION_EXT_FILES','validation_ext_files','tick','return NULL;','SITE','VALIDATION',1);
 
 			// TODO: Move these into sms addon_registry hook, once these hooks support installation (#354 on tracker)
 			add_config_option('USERNAME','sms_username','line','return addon_installed(\'sms\')?\'\':NULL;','FEATURE','SMS');
@@ -730,7 +730,7 @@ class Module_admin_config
 								} else
 								{
 									$current_setting=strval(db_get_first_id());
-									attach_message(do_lang_tempcode('FORUM_CURRENTLY_UNSET',$name_tempcode),'warn');
+									attach_message(do_lang_tempcode('FORUM_CURRENTLY_UNSET',$name_tempcode),'notice');
 								}
 							} else
 							{

@@ -68,10 +68,16 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	// Details
 	$filesize=$row['file_size'];
 	$filesize=($filesize>0)?clean_file_size($filesize):do_lang('UNKNOWN');
-	$description=get_translated_tempcode($row['description']);
-	$map=array('page'=>'downloads','type'=>'entry','id'=>$row['id']);
-	if (!is_null($root)) $map['keep_download_root']=($root==db_get_first_id())?NULL:$root;
-	$download_url=build_url($map,$zone);
+	$description=is_string($row['description'])?comcode_to_tempcode($row['description']):get_translated_tempcode($row['description']);
+	if (array_key_exists('id',$row))
+	{
+		$map=array('page'=>'downloads','type'=>'entry','id'=>$row['id']);
+		if (!is_null($root)) $map['keep_download_root']=($root==db_get_first_id())?NULL:$root;
+		$download_url=build_url($map,$zone);
+	} else
+	{
+		$download_url=new ocp_tempcode();
+	}
 	$date=get_timezoned_date($row['add_date'],false);
 	$date_raw=$row['add_date'];
 
@@ -81,7 +87,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	$pic_suffix='';
 	$thumb_url='';
 	$full_img_url='';
-	if ((addon_installed('galleries')) && ($pic))
+	if ((addon_installed('galleries')) && ($pic) && (array_key_exists('id',$row)))
 	{
 		// Images
 		$rows=$GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url','id'),array('cat'=>'download_'.strval($row['id'])),'',1,$row['default_pic']-1);
@@ -97,7 +103,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 
 	// Rating
 	require_code('feedback');
-	$rating=($row['allow_rating']==1)?display_rating($download_url,get_translated_text($row['name']),'downloads',strval($row['id']),'RATING_INLINE_STATIC',$row['submitter']):NULL;
+	$rating=($row['allow_rating']==1 && array_key_exists('id',$row))?display_rating($download_url,is_string($row['name'])?$row['name']:get_translated_text($row['name']),'downloads',strval($row['id']),'RATING_INLINE_STATIC',$row['submitter']):NULL;
 	if (!is_null($rating))
 		if (trim($rating->evaluate())=='') $rating=NULL;
 
@@ -127,7 +133,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 		'GIVE_CONTEXT'=>$give_context,
 		'TEXT_SUMMARY'=>$text_summary,
 		'AUTHOR'=>$row['author'],
-		'ID'=>strval($row['id']),
+		'ID'=>array_key_exists('id',$row)?strval($row['id']):'',
 		'RATING'=>$rating,
 		'VIEWS'=>integer_format($row['download_views']),
 		'SUBMITTER'=>strval($row['submitter']),
@@ -139,7 +145,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 		'EDIT_DATE_RAW'=>is_null($row['edit_date'])?'':strval($row['edit_date']),
 		'SIZE'=>$filesize,
 		'URL'=>$download_url,
-		'NAME'=>get_translated_text($row['name']),
+		'NAME'=>is_string($row['name'])?$row['name']:get_translated_text($row['name']),
 		'BREADCRUMBS'=>$breadcrumbs,
 		'IMG_URL'=>$thumb_url,
 		'FULL_IMG_URL'=>$full_img_url,

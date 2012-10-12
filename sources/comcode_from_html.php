@@ -48,14 +48,34 @@ function _img_tag_fixup($matches)
 	}
 	$params=str_replace(' ismap','',$params);
 
-	$referer=post_param('http_referer',ocp_srv('HTTP_REFERER'));
-	$caller_url=looks_like_url($referer)?preg_replace('#/[^/]*$#','',$referer):get_base_url();
+	/*$referer=post_param('http_referer',ocp_srv('HTTP_REFERER'));*/ // CKEditor allows us to specify the base, so we know get_base_url() is right
+	$caller_url=/*looks_like_url($referer)?preg_replace('#/[^/]*$#','',$referer):*/get_base_url();
 
-	if ((strpos($matches[0],'{$FIND_SCRIPT')===false) && (strpos($matches[0],'{$IMG')===false))
+	if ((strpos($matches[2],'{$FIND_SCRIPT')===false) && (strpos($matches[2],'{$IMG')===false))
 		$new_url=qualify_url($matches[2],$caller_url);
 	else $new_url=$matches[2];
 
 	return '[img'.rtrim($params).']'.$new_url.'[/img]';
+}
+
+/**
+ * Used by semihtml_to_comcode to turn fix URLs in <img> to be absolute. preg_replace_callback callback
+ *
+ * @param  array			Array of matches
+ * @return string			Substituted text
+ */
+function _img_tag_fixup_raw($matches)
+{
+	/*$referer=post_param('http_referer',ocp_srv('HTTP_REFERER'));*/ // CKEditor allows us to specify the base, so we know get_base_url() is right
+	$caller_url=/*looks_like_url($referer)?preg_replace('#/[^/]*$#','',$referer):*/get_base_url();
+
+	if ((strpos($matches[2],'{$FIND_SCRIPT')===false) && (strpos($matches[2],'{$IMG')===false))
+		$new_url=qualify_url($matches[2],$caller_url);
+	else $new_url=$matches[2];
+
+	$ret='<img'.$matches[1].' src="'.escape_html($new_url).'"'.$matches[3].' />';
+
+	return $ret;
 }
 
 /**
@@ -221,6 +241,34 @@ function debuttonise($matches)
 }
 
 /**
+ * Convert HTML headers to Comcode titles
+ *
+ * @param  string			Semi-HTML
+ * @return string			Semi-HTML, with headers converted to titles
+ */
+function convert_html_headers_to_titles($semihtml)
+{
+	$array_html_preg_replace=array();
+	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title"[^<>]*><span class="inner">(.*)</span></h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$array_html_preg_replace[]=array('#^\s*<h1 class="screen_title"[^<>]*><span class="inner">(.*)</span></h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title" class="screen_title"><span class="inner">(.*)</span></h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title"[^<>]*>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$array_html_preg_replace[]=array('#^\s*<h1 class="screen_title"[^<>]*>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$array_html_preg_replace[]=array('#^\s*<h1 id="screen_title" class="screen_title"[^<>]*>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$array_html_preg_replace[]=array('#^\s*<h1>(.*)</h1>\s*$#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10));
+	$semihtml=array_html_preg_replace('h1',$array_html_preg_replace,$semihtml);
+	$semihtml=preg_replace('#^\s*<h1[^>]+>(.*)</h1>\s*#siU',chr(10).chr(10).'[title="1"]${1}[/title]'.chr(10).chr(10),$semihtml);
+	for ($i=2;$i<=4;$i++)
+	{
+		$array_html_preg_replace=array();
+		$array_html_preg_replace[]=array('#^\s*<h'.strval($i).'><span class="inner">(.*)</span></h'.strval($i).'>\s*$#siU',chr(10).chr(10).'[title="'.strval($i).'"]${1}[/title]'.chr(10).chr(10));
+		$array_html_preg_replace[]=array('#^\s*<h'.strval($i).'>(.*)</h'.strval($i).'>\s*$#siU',chr(10).chr(10).'[title="'.strval($i).'"]${1}[/title]'.chr(10).chr(10));
+		$semihtml=array_html_preg_replace('h'.strval($i).'',$array_html_preg_replace,$semihtml);
+	}
+	return $semihtml;
+}
+
+/**
  * Convert Semi-HTML into comcode. Cleanup where possible
  *
  * @param  LONG_TEXT		The Semi-HTML to converted
@@ -248,12 +296,20 @@ function semihtml_to_comcode($semihtml,$force=false)
 	$semihtml=preg_replace('#(\[[\w\_]+)&nbsp;#','${1} ',$semihtml);
 
 	$matches=array();
-	if ((!$force) && ((get_option('eager_wysiwyg')=='0') && ((substr_count($semihtml,'://')==preg_match_all('#(href|src)="[^"]*://[^"]*"#',$semihtml,$matches)) || (count(find_all_hooks('systems','comcode_link_handlers'))==0)) && (has_privilege(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
+	if ((!$force) && ((get_option('eager_wysiwyg')=='0') && ((substr_count($semihtml,'://')<=preg_match_all('#(href|src)="[^"]*://[^"]*"#',$semihtml,$matches)) || (count(find_all_hooks('systems','comcode_link_handlers'))==0)) && (has_privilege(get_member(),'allow_html'))) || (strpos($semihtml,'{$,page hint: no_smart_conversion}')!==false))
 	{
+		$semihtml=preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*) />#siU','_img_tag_fixup_raw',$semihtml); // Resolve relative URLs
+		$semihtml=preg_replace_callback('#<img([^>]*) src="([^"]*)"([^>]*)>#siU','_img_tag_fixup_raw',$semihtml); // Resolve relative URLs
+
+		if (strpos($semihtml,'[contents')!==false) // Contents tag needs proper Comcode titles
+		{
+			$semihtml=convert_html_headers_to_titles($semihtml);
+		}
+
 		$count=substr_count($semihtml,'[/')+substr_count($semihtml,'{')+substr_count($semihtml,'[[')+substr_count($semihtml,'<h1');
 		if ($count==0) return ($semihtml=='')?'':('[html]'.$semihtml.'[/html]');
 		$count2=substr_count($semihtml,'[/attachment]')+substr_count($semihtml,'<h1');
-		if ($count2==$count) // All HTML or attachments or headers, so we can encode mostly as 'html'
+		if ($count2==$count) // All HTML or attachments or headers, so we can encode mostly as 'html' (as opposed to 'semihtml')
 		{
 			if ($semihtml!='') $semihtml='[html]'.$semihtml.'[/html]';
 			$semihtml=preg_replace('#<h1[^>]*><span class="inner">(.*)</span></h1>#U','[/html][semihtml][title]${1}[/title][/semihtml][html]',$semihtml);
@@ -374,44 +430,12 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 	do
 	{
 		$old_semihtml=$semihtml;
-		$semihtml=preg_replace('#(<[^>]* style="(?U)[^">]*(?-U))-moz-[^";>]*(;\s*)?#s','${1}',$semihtml);
+		$semihtml=preg_replace('#(<[^>]* style="(?U)[^">]*(?-U))-\w+-[^";>]*(;\s*)?#s','${1}',$semihtml);
 	}
 	while ($semihtml!=$old_semihtml);
 
 	// Perform lots of conversions. We can't convert everything. Sometimes we reverse-convert what Comcode forward-converts; sometimes we match generic HTML; sometimes we match Microsoft Word or Open Office; sometimes we do lossy match
-	$array_html_preg_replace=array();
-	$array_html_preg_replace[]=array('#^<h1 id="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 class="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 class="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1>(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$semihtml=array_html_preg_replace('h1',$array_html_preg_replace,$semihtml);
-	$semihtml=preg_replace('#^\s*<h1[^>]+>(.*)</h1>#siU','[title="1"]${1}[/title]',$semihtml);
-	for ($i=2;$i<=4;$i++)
-	{
-		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<h'.strval($i).'><span class="inner">(.*)</span></h'.strval($i).'>$#siU','[title="'.strval($i).'"]${1}[/title]');
-		$array_html_preg_replace[]=array('#^<h'.strval($i).'>(.*)</h'.strval($i).'>$#siU','[title="'.strval($i).'"]${1}[/title]');
-		$semihtml=array_html_preg_replace('h'.strval($i).'',$array_html_preg_replace,$semihtml);
-	}
-	$array_html_preg_replace=array();
-	$array_html_preg_replace[]=array('#^<h1 id="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 class="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 class="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
-	$semihtml=array_html_preg_replace('h1',$array_html_preg_replace,$semihtml);
-	$semihtml=preg_replace('#^\s*<h1[^>]+>(.*)</h1>#siU','[title="1"]${1}[/title]',$semihtml);
-	for ($i=2;$i<=4;$i++)
-	{
-		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<h'.strval($i).'><span class="inner">(.*)</span></h'.strval($i).'>$#siU','[title="'.strval($i).'"]${1}[/title]');
-		$array_html_preg_replace[]=array('#^<h'.strval($i).'>(.*)</h'.strval($i).'>$#siU','[title="'.strval($i).'"]${1}[/title]');
-		$semihtml=array_html_preg_replace('h'.strval($i),$array_html_preg_replace,$semihtml);
-	}
+	$semihtml=convert_html_headers_to_titles($semihtml);
 	$array_html_preg_replace=array();
 	$array_html_preg_replace[]=array('#^<span>(.*)</span>$#siU','${1}');
 	$array_html_preg_replace[]=array('#^<span( charset="[^"]*")?( content="[^"]*")?( name="[^"]*")?'.'>(.*)</span>$#siU','${4}');
@@ -745,9 +769,9 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 
 	$semihtml=str_replace('<ocpbr />',chr(10),$semihtml);
 
-	// Make it look slightly reasonable first
+	// Make it look slightly reasonable first (to the reader of the Comcode)
+	$semihtml=str_replace('<br  />','<br />',$semihtml);
 	$semihtml=str_replace('<br />','<br />'.chr(10),$semihtml);
-	$semihtml=str_replace('<br  />','<br />'.chr(10),$semihtml);
 	$semihtml=str_replace('</p>','</p>'.chr(10),$semihtml);
 	$semihtml=str_replace('[/align]','[/align]'.chr(10),$semihtml);
 

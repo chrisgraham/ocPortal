@@ -22,36 +22,54 @@ class css_and_js_test_set extends ocp_test_case
 	{
 		if (function_exists('set_time_limit')) set_time_limit(0);
 
+		$_GET['keep_no_minify']='1';
+
 		require_code('validation');
 		require_code('validation2');
-		require_code('js_validator');
 		require_lang('validation');
 
-		global $VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL;
-		$VALIDATION_COMPAT=false;
-		$VALIDATION_EXT_FILES=false;
+		global $VALIDATION_JAVASCRIPT,$VALIDATION_CSS,$VALIDATION_WCAG,$VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL,$MAIL_MODE;
+		$VALIDATION_JAVASCRIPT=true;
+		$VALIDATION_CSS=true;
+		$VALIDATION_WCAG=true;
+		$VALIDATION_COMPAT=true;
+		$VALIDATION_EXT_FILES=true;
 		$VALIDATION_MANUAL=false;
+		$MAIL_MODE=false;
 
 		//@set_time_limit(0);
 
 		parent::setUp();
 	}
 
-	/*function testJavascript()		Too messy
+	function testJavascript()
 	{
+		require_code('js_validator');
+
 		$dh=opendir(get_file_base().'/themes/default/templates');
 		while (($f=readdir($dh))!==false)
 		{
-			if ((substr($f,-4)=='.tpl') && (substr($f,0,11)=='JAVASCRIPT_') && (strpos($f,'COLOUR_PICKER')===false) && (strpos($f,'YAHOO')===false) && ($f!='JAVASCRIPT_NEED.tpl') && ($f!='JAVASCRIPT_NEED_INLINE.tpl'))
+			if ((substr($f,-4)=='.tpl') && (substr($f,0,11)=='JAVASCRIPT_') && (strpos($f,'JWPLAYER')===false) && (strpos($f,'SOUND')===false) && (strpos($f,'COLOUR_PICKER')===false) && (strpos($f,'YAHOO')===false) && ($f!='JAVASCRIPT_NEED.tpl') && ($f!='JAVASCRIPT_NEED_INLINE.tpl'))
 			{
 				$path=javascript_enforce(basename($f,'.tpl'),'default',false);
 				$contents=file_get_contents($path);
 				$errors=check_js($contents);
+				if (!is_null($errors))
+				{
+					foreach ($vars['errors'] as $i=>$e)
+					{
+						$e['line']+=3;
+						$vars['errors'][$i]=$e;
+					}
+				}
 				if ((!is_null($errors)) && ($errors['errors']==array())) $errors=NULL; // Normalise
 				$this->assertTrue(is_null($errors),'Bad JS in '.$f);
 				if (!is_null($errors))
 				{
-					var_dump($errors['errors']);
+					//unset($errors['tag_ranges']);
+					//unset($errors['value_ranges']);
+					//unset($errors['level_ranges']);
+					//var_dump($errors['errors']);
 				} else
 				{
 					//echo 'Ok: '.$f."\n";
@@ -59,7 +77,7 @@ class css_and_js_test_set extends ocp_test_case
 				}
 			}
 		}
-	}*/
+	}
 
 	function testCSS()
 	{

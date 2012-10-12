@@ -89,6 +89,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 	if (!isset($details['name'])) return $current_logged_in_member;
 	$username=$details['name'];
 	$photo_url=array_key_exists('picture',$details)?$details['picture']:'';
+	if (is_array($photo_url)) $photo_url=$photo_url['data']['url'];
 	$avatar_url=($photo_url=='')?mixed():$photo_url;
 	$photo_thumb_url='';
 	if ($photo_url!='') $photo_thumb_url=$photo_url;

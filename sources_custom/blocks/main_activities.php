@@ -158,22 +158,6 @@ class Block_main_activities
 					list($message,$memberpic,$datetime,$member_url,$lang_string)=render_activity($row);
 					$content[]=array('LANG_STRING'=>$lang_string,'ADDON_ICON'=>find_addon_icon($row['a_addon']),'BITS'=>$message,'MEMPIC'=>$memberpic,'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']),'DATETIME'=>strval($datetime),'MEMBER_URL'=>$member_url,'LIID'=>strval($row['id']),'ALLOW_REMOVE'=>(($row['a_member_id']==$viewer_id) || $can_remove_others)?'1':'0');
 				}
-
-				return do_template('BLOCK_MAIN_ACTIVITIES',array(
-					'_GUID'=>'62010121868c2761ae9f074a0c9c4d7c',
-					'BLOCK_PARAMS'=>block_params_arr_to_str($map),
-					'TITLE'=>$title,
-					'MODE'=>strval($mode),
-					'MEMBER_IDS'=>implode(',',$member_ids),
-					'CONTENT'=>$content,
-					'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
-					'PAGINATION'=>$pagination,
-
-					'START'=>strval($start),
-					'MAX'=>strval($max),
-					'START_PARAM'=>$block_id.'_start',
-					'MAX_PARAM'=>$block_id.'_max',
-				));
 			}
 		} else
 		{
@@ -186,8 +170,8 @@ class Block_main_activities
 			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
 			'TITLE'=>$title,
 			'MODE'=>$mode,
+			'MEMBER_IDS'=>implode(',',$member_ids),
 			'CONTENT'=>$content,
-			'MEMBER_IDS'=>'',
 			'GROW'=>(array_key_exists('grow',$map)? $map['grow']=='1' : true),
 			'PAGINATION'=>$pagination,
 

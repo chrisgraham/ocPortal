@@ -110,7 +110,7 @@ class Module_cms_banners extends standard_crud_module
 		{
 			require_javascript('javascript_ajax');
 			$script=find_script('snippet');
-			$this->cat_crud_module->javascript.="
+			$this->cat_crud_module->javascript="
 				var form=document.getElementById('main_form');
 				form.old_submit=form.onsubmit;
 				form.onsubmit=function()

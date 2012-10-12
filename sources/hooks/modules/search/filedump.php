@@ -114,10 +114,11 @@ class Hook_search_filedump
 					$i2++;
 				}
 				if (!$file_breadcrumbs->is_empty()) $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$file_breadcrumbs)));
+
 				$out[$i]['template']=do_template('SIMPLE_PREVIEW_BOX',array(
 					'_GUID'=>'51bc0cf751f4ccbd0b7f1a247b092368',
 					'ID'=>$_path,
-					'TITLE'=>$file,
+					'TITLE'=>basename($_path),
 					'SUMMARY'=>$tpl,
 				));
 

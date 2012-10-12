@@ -301,6 +301,8 @@ function init__validation()
  */
 function check_xhtml($out,$well_formed_only=false,$is_fragment=false,$validation_javascript=true,$validation_css=true,$validation_wcag=true,$validation_compat=true,$validation_ext_files=true,$validation_manual=false)
 {
+	if (function_exists('set_time_limit')) @set_time_limit(0);
+
 	global $XHTML_VALIDATOR_OFF,$WELL_FORMED_ONLY,$VALIDATION_JAVASCRIPT,$VALIDATION_CSS,$VALIDATION_WCAG,$VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL,$UNDER_XMLNS;
 	if (function_exists('mixed')) $XHTML_VALIDATOR_OFF=mixed();
 	$XHTML_VALIDATOR_OFF=NULL;

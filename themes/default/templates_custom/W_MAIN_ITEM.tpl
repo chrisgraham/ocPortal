@@ -1,6 +1,6 @@
 <tr>
 	<td>
-		{+START,IF_NON_EMPTY,{PICTURE_URL}}<a title="{NAME*}: {!LINK_NEW_WINDOW}" target="_blank" href="{PICTURE_URL*}">{+END}{NAME*}{+START,IF_NON_EMPTY,{PICTURE_URL}}</a>{+END}{AUX*} <span class="associated_details">({COUNT*})</span>
+		{+START,IF_NON_EMPTY,{PICTURE_URL}}<a title="{NAME*}: {!LINK_NEW_WINDOW}" target="_blank" onclick="return open_link_as_overlay(this);" href="{PICTURE_URL*}">{+END}{NAME*}{+START,IF_NON_EMPTY,{PICTURE_URL}}</a>{+END}{AUX*} <span class="associated_details">({COUNT*})</span>
 	</td>
 	{+START,IF_PASSED,COST}
 	<td>

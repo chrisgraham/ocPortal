@@ -12,7 +12,7 @@
 if [ "$1" != "continue" ]
 then
 	echo "ocP: Finding files to compile..."
-	find . -name "*.php" -not -name errorlog.php -not -name phpstub.php -not -name caches_wincache.php -not -name caches_xcache.php -not -name caches_eaccelerator.php -not -name install.php -not -name minikernel.php -not -name phpbb3.php -not -name tempcode.php -not -name tempcode_compiler.php -not -name mysqli.php -not -name access.php -not -name sqlite.php -not -name mysql_dbx.php -not -name postgresql.php -not -name oracle.php -not -name sqlserver.php -not -name ibm.php | egrep -v '/_tests' | egrep -v '/adminzone/pages/minimodules_custom/' | egrep -v '/sources/hooks/modules/admin_import/' | egrep -v '/sources/forum/' | egrep -v '/sources_custom/hooks/systems/addon_registry/' > hphp.files.list
+	find . -name "*.php" -not -name errorlog.php -not -name phpstub.php -not -name caches_wincache.php -not -name caches_xcache.php -not -name caches_eaccelerator.php -not -name install.php -not -name minikernel.php -not -name phpbb3.php -not -name tempcode.php -not -name tempcode_compiler.php -not -name mysqli.php -not -name access.php -not -name sqlite.php -not -name mysql_dbx.php -not -name postgresql.php -not -name oracle.php -not -name sqlserver.php -not -name ibm.php | egrep -v '/servers' | egrep -v '/tracker/' | egrep -v '/_tests/' | egrep -v '/adminzone/pages/minimodules_custom/' | egrep -v '/sources/hooks/modules/admin_import/' | egrep -v '/sources/forum/' | egrep -v '/sources_custom/hooks/systems/addon_registry/' > hphp.files.list
 	echo "./sources/forum/ocf.php" >> hphp.files.list
 
 	# compile_in_ocportal_includes.php is an ocPortal hook for additional specification of what files to include in hphp.files.list

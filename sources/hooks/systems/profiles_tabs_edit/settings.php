@@ -168,7 +168,7 @@ class Hook_Profiles_Tabs_Edit_settings
 				$timezone=post_param('timezone',get_site_timezone());
 			}
 
-			ocf_edit_member($member_id_of,$email,$preview_posts,post_param_integer('dob_day',NULL),post_param_integer('dob_month',NULL),post_param_integer('dob_year',NULL),$timezone,$primary_group,$actual_custom_fields,$theme,post_param_integer('reveal_age',0),$views_signatures,$auto_monitor_contrib_content,post_param('language',NULL),post_param_integer('allow_emails',0),post_param_integer('allow_emails_from_staff',0),$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+			ocf_edit_member($member_id_of,$email,$preview_posts,post_param_integer('dob_day',-1),post_param_integer('dob_month',-1),post_param_integer('dob_year',-1),$timezone,$primary_group,$actual_custom_fields,$theme,post_param_integer('reveal_age',0),$views_signatures,$auto_monitor_contrib_content,post_param('language',NULL),post_param_integer('allow_emails',0),post_param_integer('allow_emails_from_staff',0),$validated,$username,$password,$zone_wide,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
 
 			if (!fractional_edit())
 			{

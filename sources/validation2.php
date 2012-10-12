@@ -818,6 +818,7 @@ function init__validation2()
 	define('CSS_IN_CLASS',1);
 	define('CSS_EXPECTING_SEP_OR_IDENTIFIER_OR_CLASS',2);
 	define('CSS_IN_IDENTIFIER',3);
+	define('CSS_IN_PSEUDOCLASS_EXPRESSION',6);
 
 	define('_CSS_NO_MANS_LAND',0);
 	define('_CSS_IN_PROPERTY_KEY',1);
@@ -1791,7 +1792,19 @@ function _validate_css_sheet($data)
 				}
 				break;
 
+			case CSS_IN_PSEUDOCLASS_EXPRESSION:
+				if ($next==')')
+				{
+					$status=CSS_IN_IDENTIFIER;
+				}
+				break;
+
 			case CSS_IN_IDENTIFIER:
+				if ($next=='(')
+				{
+					$status=CSS_IN_PSEUDOCLASS_EXPRESSION;
+					break;
+				}
 				if (($alpha_numeric) || ($next==':') || ($next=='#'))
 				{
 					$class_name.=$next;
@@ -1801,9 +1814,14 @@ function _validate_css_sheet($data)
 					$cnt=substr_count($class_name,':');
 					if ($cnt>0)
 					{
-						$pseudo=substr($class_name,strpos($class_name,':')+1);
-						if (($GLOBALS['VALIDATION_COMPAT']) && (!in_array($pseudo,array('active','hover','link','visited','first-letter','first-line','first-child','last-child'))))
-							$errors[]=array(0=>'CSS_BAD_PSEUDO_CLASS',1=>$pseudo,'pos'=>$i);
+						$matches=array();
+						$num_matches=preg_match_all('#:([\w-]+)#',$class_name,$matches);
+						for ($j=0;$j<$num_matches;$j++)
+						{
+							$pseudo=$matches[1][$j];
+							if (($GLOBALS['VALIDATION_COMPAT']) && (!in_array($pseudo,array('active','hover','link','visited','first-letter','first-line','first-child','last-child','before','after','disabled','focus'))))
+								$errors[]=array(0=>'CSS_BAD_PSEUDO_CLASS',1=>$pseudo,'pos'=>$i);
+						}
 					}
 
 					if ($whitespace)

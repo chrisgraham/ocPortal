@@ -32,6 +32,8 @@ class Hook_checklist_community_billboard
 
 		require_lang('community_billboard');
 
+		$num_queue=$this->get_num_flagrant_queue();
+
 		$rows=$GLOBALS['SITE_DB']->query_select('community_billboard',array('activation_time','days'),array('active_now'=>1),'',NULL,NULL,true);
 		if (is_null($rows)) return array();
 		$seconds_due_in=mixed();
@@ -46,7 +48,9 @@ class Hook_checklist_community_billboard
 			$status=($seconds_due_in<=0)?0:1;
 		} else
 		{
-			$status=1;
+			$status=($num_queue==0)?1:0; // If none set, but one waiting, task is not done
+
+			if ($num_queue!=0) $seconds_due_in=0;
 		}
 
 		$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');

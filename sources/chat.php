@@ -553,7 +553,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 			'FONT_COLOUR'=>$_message['text_colour'],
 			'FONT_FACE'=>$_message['font_name'],
 		));
-		$messages_output.='<div sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="'.strval($_message['id']).'" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
+		$messages_output.='<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="'.strval($_message['id']).'" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
 	}
 
 	// Members update, but only for the room interface
@@ -759,7 +759,7 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 			'FONT_COLOUR'=>$_message['text_colour'],
 			'FONT_FACE'=>$_message['font_name'],
 		));
-		$messages_output='<div sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="123456789" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
+		$messages_output='<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" sender_id="'.strval($_message['member_id']).'" room_id="'.strval($_message['room_id']).'" id="123456789" timestamp="'.strval($_message['date_and_time']).'">'.$template->evaluate().'</div>';
 
 		prepare_for_known_ajax_response();
 
@@ -1030,12 +1030,12 @@ function get_chatroom_id($room_name,$must_not_be_im=false)
 /**
  * Enter a message into the database for the specified room, and with the specified parameters. The message is filtered for banned words, and is compressed into a tempcode storage format.
  *
- * @param  AUTO_LINK		The room ID for the message to be posted in
- * @param  LONG_TEXT		The message body
- * @param  SHORT_TEXT	The font name for the message
- * @param  SHORT_TEXT	The text colour for the message
- * @param  SHORT_INTEGER  The wrap position for the message
- * @return boolean		Whether the message was successfully posted or not
+ * @param  AUTO_LINK			The room ID for the message to be posted in
+ * @param  LONG_TEXT			The message body
+ * @param  SHORT_TEXT		The font name for the message
+ * @param  SHORT_TEXT		The text colour for the message
+ * @param  SHORT_INTEGER	The wrap position for the message
+ * @return boolean			Whether the message was successfully posted or not
 */
 function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=60)
 {
@@ -1044,7 +1044,7 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos=6
 
 	// Have we been blocked by flood control?
 	$is_im=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','is_im',array('id'=>$room_id));
-	if ($is_im) // No flood control for IMs
+	if ($is_im==1) // No flood control for IMs
 	{
 		$time_last_message=NULL;
 	} else

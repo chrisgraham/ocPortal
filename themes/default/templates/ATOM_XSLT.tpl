@@ -11,9 +11,7 @@
 					<xsl:attribute name="name"><xsl:text>description</xsl:text></xsl:attribute>
 					<xsl:attribute name="content"><xsl:value-of select="/atom:feed/atom:subtitle" /></xsl:attribute>
 				</xsl:element>
-				<meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$CHARSET*}" />
-				<meta http-equiv="Content-Script-Type" content="text/javascript" />
-				<meta http-equiv="Content-Style-Type" content="text/css" />
+				<meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
 				{$CSS_TEMPCODE}
 			</head>
 			<body class="website_body" onload="go_decoding();">

@@ -1,6 +1,6 @@
 "use strict";
 
-var fade_transition_timers=[];
+window.fade_transition_timers=[];
 
 function fade_transition(fade_element,dest_percent_opacity,period_in_msecs,increment,destroy_after)
 {
@@ -11,13 +11,13 @@ function fade_transition(fade_element,dest_percent_opacity,period_in_msecs,incre
 		return;
 	{+END}
 
-	if (typeof fade_transition_timers=='undefined') return;
+	if (typeof window.fade_transition_timers=='undefined') return;
 	if (typeof fade_element.fader_key=='undefined') fade_element.fader_key=fade_element.id+'_'+Math.round(Math.random()*1000000);
 
-	if (fade_transition_timers[fade_element.fader_key])
+	if (window.fade_transition_timers[fade_element.fader_key])
 	{
-		window.clearTimeout(fade_transition_timers[fade_element.fader_key]);
-		fade_transition_timers[fade_element.fader_key]=null;
+		window.clearTimeout(window.fade_transition_timers[fade_element.fader_key]);
+		window.fade_transition_timers[fade_element.fader_key]=null;
 	}
 
 	var again;
@@ -50,7 +50,7 @@ function fade_transition(fade_element,dest_percent_opacity,period_in_msecs,incre
 
 	if (again)
 	{
-		fade_transition_timers[fade_element.fader_key]=window.setTimeout(function() { fade_transition(fade_element,dest_percent_opacity,period_in_msecs,increment,destroy_after); },period_in_msecs);
+		window.fade_transition_timers[fade_element.fader_key]=window.setTimeout(function() { fade_transition(fade_element,dest_percent_opacity,period_in_msecs,increment,destroy_after); },period_in_msecs);
 	} else
 	{
 		if (destroy_after) fade_element.parentNode.removeChild(fade_element);
