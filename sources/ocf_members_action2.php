@@ -90,8 +90,8 @@ function validate_ip_script()
  */
 function get_username_from_human_name($username)
 {
+	$username=preg_replace('# \(\d+\)$#','',$username);
 	$_username=$username;
-	$_username=preg_replace('# \(\d+\)$#','',$username);
 	$i=1;
 	do
 	{
@@ -357,7 +357,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$fields=new ocp_tempcode();
 
 	// Human name / Username
-	if (($special_type!='ldap') && ($special_type!='remote'))
+	if (($special_type!='ldap') && ($special_type!='remote') && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='facebook'))
 	{
 		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self')))
 		{
