@@ -30,7 +30,7 @@ function check_input_field($name,$val)
 	{
 		log_hack_attack_and_exit('SCRIPT_URL_HACK_2',$val);
 	}
-	if (((!function_exists('is_guest')) || (is_guest())) && (strpos($val,'[link')!==false) && (strpos($val,'<a ')!==false))
+	if (((!function_exists('is_guest')) || (is_guest())) && ((strpos($val,'[url=')!==false) || (strpos($val,'[link')!==false)) && (strpos($val,'<a ')!==false))
 	{
 		log_hack_attack_and_exit('LAME_SPAM_HACK',$val);
 	}
