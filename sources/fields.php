@@ -93,7 +93,7 @@ function manage_custom_fields_donext_link($content_type)
 		$ob=object_factory('Hook_content_meta_aware_'.$content_type);
 		$info=$ob->info();
 
-		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']) && (has_specific_permission(get_member(),'submit_cat_highrange_content','cms_catalogues')) && (has_specific_permission(get_member(),'edit_cat_highrange_content','cms_catalogues')))
+		if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']) && (has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')) && (has_privilege(get_member(),'edit_cat_highrange_content','cms_catalogues')))
 		{
 			$exists=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name'=>'_'.$content_type)));
 
