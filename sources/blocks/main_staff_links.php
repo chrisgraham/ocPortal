@@ -96,7 +96,6 @@ class Block_main_staff_links
 				'Kompozer (Web design tool)'=>'http://www.kompozer.net/',
 				'DiffMerge'=>'http://www.sourcegear.com/diffmerge/',
 				'Jing (record screencasts)'=>'http://www.jingproject.com/',
-				'Elief hosting (quality shared hosting)'=>'http://www.elief.com/billing/aff.php?aff=035',
 				'Rackspace Cloud hosting'=>'http://www.rackspacecloud.com/1043-0-3-13.html',
 				'GoDaddy (Domains and SSL certificates)'=>'http://www.jdoqocy.com/click-3972552-10378406',
 				'SiteRay (site quality auditing)'=>'http://www.silktide.com/siteray',

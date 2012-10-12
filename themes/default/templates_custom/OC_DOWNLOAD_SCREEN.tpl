@@ -2,7 +2,7 @@
 
 <p style="font-size:.85em; color: #6f757d; text-align:center">Looking for addons and themes? Go to our <a href="{$PAGE_LINK*,site:community}">community section</a>.</p>
 <p><strong>Thanks for choosing ocPortal.</strong> The next step is to transfer the installation files to your server. We can do this automatically with our &ldquo;instant transfer&rdquo; option, or you can save the files and upload them yourself.</p>
-<p class="associated_details">If you don't already have hosting we recommend <a href="http://www.elief.com/billing/aff.php?aff=035">Elief</a>. They have a one-click installer.</p>
+<p class="associated_details">If you don't already have hosting, requirements are detailed in our <a href="{$PAGE_LINK*,docs:tut_web_hosting}">hosting tutorial</a>.</p>
 
 <div class="downloadoptions">
 	<div class="float_surrounder_downloads" id="s_choice">
