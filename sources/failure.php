@@ -381,8 +381,9 @@ function ip_cidr_check($ip,$cidr)
  * @param  ID_TEXT		The reason for the hack attack. This has to be a language string codename
  * @param  SHORT_TEXT	A parameter for the hack attack language string (this should be based on a unique ID, preferably)
  * @param  SHORT_TEXT	A more illustrative parameter, which may be anything (e.g. a title)
+ * @param  boolean		Whether to silently log the hack rather than also exiting
  */
-function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='')
+function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='',$silent=false)
 {
 	if (function_exists('set_time_limit')) @set_time_limit(4);
 
@@ -391,13 +392,16 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	$EXTRA_HEAD->attach('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
 	$GLOBALS['HTTP_STATUS_CODE']='403';
-	if (!headers_sent())
+	if ((!headers_sent()) && (!$silent))
 	{
 		if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS')===false)) header('HTTP/1.0 403 Forbidden'); // Stop spiders ever storing the URL that caused this
 	}
 
 	if (!addon_installed('securitylogging'))
+	{
+		if ($silent) return;
 		warn_exit(do_lang_tempcode('HACK_ATTACK_USER'));
+	}
 
 	$ip=get_ip_address();
 	$ip2=ocp_srv('REMOTE_ADDR');
@@ -552,6 +556,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		}
 	}
 
+	if ($silent) return;
 	if ((preg_match('#^localhost[\.\:$]#',ocp_srv('HTTP_HOST'))!=0) && (substr(get_base_url(),0,17)=='http://localhost/')) fatal_exit(do_lang('HACK_ATTACK'));
 	warn_exit(do_lang_tempcode('HACK_ATTACK_USER'));
 }

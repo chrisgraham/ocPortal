@@ -360,6 +360,13 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 				if (!$ret) generate_captcha();
 			}
 		}
+		if (!$ret)
+		{
+			if (mt_rand(1,10)==5)
+			{
+				log_hack_attack_and_exit('CAPTCHAFAIL_HACK','','',true);
+			}
+		}
 		return $ret;
 	}
 	return true;
