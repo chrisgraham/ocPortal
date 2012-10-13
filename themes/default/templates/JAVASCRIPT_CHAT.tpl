@@ -829,23 +829,27 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 	div.appendChild(p_message);
 
 	// Open link
-	var a_popup_open=document.createElement('a');
-	a_popup_open.onclick=function() {
-		click_event();
-		document.body.removeChild(div);
-		div=null;
-		return false;
-	};
-	a_popup_open.href='#';
-	set_inner_html(a_popup_open,'{!OPEN_IM_POPUP;^}');
-	var li_popup_open=document.createElement('li');
-	li_popup_open.appendChild(a_popup_open);
-	links.appendChild(li_popup_open);
+	if (!browser_matches('ios')) // Can't do on iOS due to not being able to run windows/tabs concurrently - so for iOS we only show a lobby link
+	{
+		var a_popup_open=document.createElement('a');
+		a_popup_open.onclick=function() {
+			click_event();
+			document.body.removeChild(div);
+			div=null;
+			return false;
+		};
+		a_popup_open.href='#';
+		set_inner_html(a_popup_open,'{!OPEN_IM_POPUP;^}');
+		var li_popup_open=document.createElement('li');
+		li_popup_open.appendChild(a_popup_open);
+		links.appendChild(li_popup_open);
+	}
 
 	// Lobby link
 	var a_goto_lobby=document.createElement('a');
 	a_goto_lobby.href=window.lobby_link.replace('%21%21',member_id);
 	a_goto_lobby.onclick=close_popup;
+	a_goto_lobby.target='_blank';
 	set_inner_html(a_goto_lobby,'{!GOTO_CHAT_LOBBY;^}');
 	var li_goto_lobby=document.createElement('li');
 	li_goto_lobby.appendChild(a_goto_lobby);
@@ -866,6 +870,8 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 
 function start_im(people,just_refocus)
 {
+	if ((browser_matches('ios')) && (!document.getElementById('chat_lobby_convos_tabs'))) return true; // Let it navigate to chat lobby
+
 	var message=(people.indexOf(',')==-1)?'{!ALREADY_HAVE_THIS_SINGLE;^}':'{!ALREADY_HAVE_THIS;^}';
 	if ((typeof top_window.all_conversations[people]!='undefined') && (top_window.all_conversations[people]!==null))
 	{
@@ -881,7 +887,7 @@ function start_im(people,just_refocus)
 				{
 					top_window.opened_popups['room_'+room_id].focus();
 				}
-				return;
+				return false;
 			}
 			catch (e) {}
 		}
@@ -896,6 +902,7 @@ function start_im(people,just_refocus)
 	{
 		_start_im(people,true); // true, because an IM may exist we don't have open, so let that be recycled
 	}
+	return false;
 }
 
 function _start_im(people,may_recycle)
@@ -1244,6 +1251,11 @@ function detect_if_chat_window_closed(die_on_lost,become_autonomous_on_lost)
 	var lost_connection=false;
 	try
 	{
+		/*if (browser_matches('ios'))	Pointless as document.write doesn't work on iOS without tabbing back and forth, so initial load is horribly slow in first place
+		{
+			throw 'No multi-process on iOS';
+		}*/
+
 		if ((!window.opener) || (!window.opener.document))
 		{
 			lost_connection=true;
@@ -1286,12 +1298,7 @@ function detect_if_chat_window_closed(die_on_lost,become_autonomous_on_lost)
 
 		if (become_autonomous_on_lost) // Becoming autonomous means allowing to work with a master window
 		{
-			if ((typeof window.already_autonomous=='undefined') || (!window.already_autonomous))
-			{
-				window.top_window=window;
-				chat_check(false,window.last_message_id,window.last_event_id);
-				window.already_autonomous=true;
-			}
+			chat_window_become_autonomous();
 		}
 		else if (die_on_lost)
 		{
@@ -1308,4 +1315,12 @@ function detect_if_chat_window_closed(die_on_lost,become_autonomous_on_lost)
 	}
 }
 
-
+function chat_window_become_autonomous()
+{
+	if ((typeof window.already_autonomous=='undefined') || (!window.already_autonomous))
+	{
+		window.top_window=window;
+		chat_check(false,window.last_message_id,window.last_event_id);
+		window.already_autonomous=true;
+	}
+}

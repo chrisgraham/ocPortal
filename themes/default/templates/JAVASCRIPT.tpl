@@ -828,7 +828,7 @@ function browser_matches(code)
 	switch (code)
 	{
 		case 'ios':
-			return browser.indexOf('iphone')!=-1;
+			return browser.indexOf('iphone')!=-1 || browser.indexOf('ipad')!=-1;
 		case 'android':
 			return browser.indexOf('android')!=-1;
 		case 'wysiwyg':
