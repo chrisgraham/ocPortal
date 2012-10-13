@@ -768,7 +768,7 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 							$subject=do_lang('IM_INVITED_SUBJECT',NULL,NULL,NULL,get_lang($allow));
 							$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 							$username2=$GLOBALS['FORUM_DRIVER']->get_username($allow);
-							$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username,array($lobby_url,$username2,$message),get_lang($allow));
+							$message=do_lang('IM_INVITED_MESSAGE',get_timezoned_date(time(),true),$username2,array($lobby_url,$username,$message),get_lang($allow));
 
 							require_code('notifications');
 							dispatch_notification('im_invited',NULL,$subject,$message,array($allow),$room_check[0]['room_owner'],1);
