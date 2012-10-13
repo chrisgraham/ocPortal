@@ -362,7 +362,13 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 		}
 		if (!$ret)
 		{
-			if (mt_rand(1,10)==5)
+			$data=serialize($_POST);
+
+			if (
+				(strpos($data,'[url=http://')!==false) ||
+				(strpos($data,'[link=')!==false) ||
+				((strpos($data,' href="')!==false) && (strpos($data,'[html')===false) && (strpos($data,'[semihtml')===false) && (strpos($data,'__is_wysiwyg')===false))
+			)
 			{
 				log_hack_attack_and_exit('CAPTCHAFAIL_HACK','','',true);
 			}
