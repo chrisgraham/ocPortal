@@ -829,7 +829,7 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 	div.appendChild(p_message);
 
 	// Open link
-	if (!browser_matches('ios')) // Can't do on iOS due to not being able to run windows/tabs concurrently - so for iOS we only show a lobby link
+	if (!browser_matches('non_concurrent')) // Can't do on iOS due to not being able to run windows/tabs concurrently - so for iOS we only show a lobby link
 	{
 		var a_popup_open=document.createElement('a');
 		a_popup_open.onclick=function() {
@@ -870,7 +870,7 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 
 function start_im(people,just_refocus)
 {
-	if ((browser_matches('ios')) && (!document.getElementById('chat_lobby_convos_tabs'))) return true; // Let it navigate to chat lobby
+	if ((browser_matches('non_concurrent')) && (!document.getElementById('chat_lobby_convos_tabs'))) return true; // Let it navigate to chat lobby
 
 	var message=(people.indexOf(',')==-1)?'{!ALREADY_HAVE_THIS_SINGLE;^}':'{!ALREADY_HAVE_THIS;^}';
 	if ((typeof top_window.all_conversations[people]!='undefined') && (top_window.all_conversations[people]!==null))
@@ -1251,7 +1251,7 @@ function detect_if_chat_window_closed(die_on_lost,become_autonomous_on_lost)
 	var lost_connection=false;
 	try
 	{
-		/*if (browser_matches('ios'))	Pointless as document.write doesn't work on iOS without tabbing back and forth, so initial load is horribly slow in first place
+		/*if (browser_matches('non_concurrent'))	Pointless as document.write doesn't work on iOS without tabbing back and forth, so initial load is horribly slow in first place
 		{
 			throw 'No multi-process on iOS';
 		}*/

@@ -827,6 +827,8 @@ function browser_matches(code)
 
 	switch (code)
 	{
+		case 'non_concurrent':
+			return browser.indexOf('iphone')!=-1 || browser.indexOf('ipad')!=-1 || browser.indexOf('android')!=-1 || browser.indexOf('phone')!=-1 || browser.indexOf('tablet')!=-1;
 		case 'ios':
 			return browser.indexOf('iphone')!=-1 || browser.indexOf('ipad')!=-1;
 		case 'android':
