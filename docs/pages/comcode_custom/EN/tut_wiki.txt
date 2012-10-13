@@ -52,6 +52,10 @@ On a Wiki+ page with a lot of thumb-nailed images, you may wish to click the exp
 
 Please note that when you do this you view with guest access -- so some pages may be missing from the view.
 
+[title="2"]Revision history[/title]
+
+You can see the edits a page has gone through via the revision history on the edit screen of a page. Changes are shown in a tooltip, plus you can revert to earlier versions.
+
 [concepts
  1_key="Wiki+"   1_value="A collaborative hierarchical database system in ocPortal"
 ]Concepts[/concepts]

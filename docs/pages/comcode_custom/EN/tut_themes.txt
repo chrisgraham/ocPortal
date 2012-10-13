@@ -66,6 +66,14 @@ At the bottom, there is also an "Switch to Advanced CSS" link. Clicking this wil
 
 You should be able to see your changes right away.
 
+[title="4"]Contextual CSS editing[/title]
+
+You can edit CSS contextually, via the edit links in the Page Rendering Tools dropdown in the footer (assuming this still exists in your theme).
+
+The contextual editor allows you to make live changes, to preview on the fly, then save them.
+
+You may want to add [tt]?keep_no_minify=1[/tt] to the URL before using these tools as it will make the live previews more accurate. The ocPortal minificiation features will sometimes prevent the contextual editor from being able to interactively remove styles you remove in the CSS editor.
+
 [title="3"]Revision history[/title]
 
 If you have made any edits to your file's CSS, they will show up in a list underneath the CSS. You'll see the dates they were made, who edited them, and a link to restore it if you choose.
