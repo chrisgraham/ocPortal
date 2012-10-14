@@ -370,7 +370,7 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 				((strpos($data,' href="')!==false) && (strpos($data,'[html')===false) && (strpos($data,'[semihtml')===false) && (strpos($data,'__is_wysiwyg')===false))
 			)
 			{
-				log_hack_attack_and_exit('CAPTCHAFAIL_HACK','','',true);
+				log_hack_attack_and_exit('CAPTCHAFAIL_HACK','','',true); // This is done to stop spammers hogging server resources via repeatedly re-trying CAPTCHAs
 			}
 		}
 		return $ret;
