@@ -136,7 +136,7 @@ class Hook_Profiles_Tabs_Edit_settings
 			}
 			if ((has_actual_page_access($member_id_viewing,'admin_ocf_join')) || (has_specific_permission($member_id_of,'rename_self')))
 			{
-				$username=($is_ldap||$is_remote)?NULL:post_param('edit_username',NULL/*May not be passed if username not editable for member type*/);
+				$username=($is_ldap)?NULL:post_param('edit_username',NULL/*May not be passed if username not editable for member type*/);
 			} else $username=NULL;
 
 			$email=post_param('email_address',NULL);
@@ -144,7 +144,7 @@ class Hook_Profiles_Tabs_Edit_settings
 
 			$theme=post_param('theme',NULL);
 
-			if ($is_remote)
+			if (fractional_edit())
 			{
 				$preview_posts=NULL;
 				$zone_wide=NULL;
