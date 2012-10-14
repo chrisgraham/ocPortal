@@ -11,7 +11,7 @@
 
 			<h2>{!MEDIA}</h2>
 
-			<div class="gallery_tease_pic_teaser left" id="image_fader_scrolling_text_{$GET,RAND}">
+			<div class="gallery_tease_pic_teaser" id="image_fader_scrolling_text_{$GET,RAND}">
 			</div>
 		</div>
 	</div></div>
@@ -38,7 +38,7 @@
 		{+START,LOOP,HTML}
 			var html{_loop_key%}='{_loop_var;^}';
 			{+START,IF,{$EQ,{_loop_key},0}}
-				set_inner_html(tease_scrolling_text,html{_loop_key%});
+				if (tease_scrolling_text) set_inner_html(tease_scrolling_text,html{_loop_key%});
 			{+END}
 		{+END}
 		{+START,LOOP,IMAGES}
