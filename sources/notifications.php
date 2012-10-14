@@ -1077,10 +1077,9 @@ class Hook_Notification__Staff extends Hook_Notification
 		$new_rows=array();
 		foreach ($rows as $row)
 		{
-			$test=notifications_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$GLOBALS['FORUM_DRIVER']->pname_id($row));
-			if (is_null($test)) $test=$initial_setting;
+			$test=notifications_setting($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$GLOBALS['FORUM_DRIVER']->pname_id($row));
 
-			if ($test)
+			if ($test!=A_NA)
 				$new_rows[$GLOBALS['FORUM_DRIVER']->pname_id($row)]=$test;
 		}
 
