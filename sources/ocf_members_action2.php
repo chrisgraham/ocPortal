@@ -811,13 +811,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		$mail=do_lang('STAFF_USERNAME_CHANGED_MAIL',comcode_escape(get_site_name()),comcode_escape($username),comcode_escape($old_username),get_site_default_lang());
 		dispatch_notification('ocf_username_changed_staff',NULL,$subject,$mail);
 
-		// Fix cacheing for usernames
-		$to_fix=array('f_forums/f_cache_last_username','f_posts/p_poster_name_if_guest','f_topics/t_cache_first_username','f_topics/t_cache_last_username');
-		foreach ($to_fix as $fix)
-		{
-			list($table,$field)=explode('/',$fix);
-			$GLOBALS['FORUM_DB']->query_update($table,array($field=>$username),array($field=>$old_username));
-		}
+		update_member_username_caching($member_id,$username);
 	}
 	if (!is_null($password))
 	{
@@ -1513,5 +1507,22 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
 	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
+}
+
+/**
+ * Update cacheing against a member's username. This doesn't change the username in the actual member record -- it is assumed that this will be done elsewhere.
+ *
+ * @param  MEMBER		The member ID.
+ * @param  ID_TEXT	The new username that is being set for them.
+ */
+function update_member_username_caching($member_id,$username)
+{
+	// Fix cacheing for usernames
+	$to_fix=array('f_forums/f_cache_last_username/f_cache_last_member_id','f_posts/p_poster_name_if_guest/p_poster','f_topics/t_cache_first_username/t_cache_first_member_id','f_topics/t_cache_last_username/t_cache_last_member_id');
+	foreach ($to_fix as $fix)
+	{
+		list($table,$field,$updating_field)=explode('/',$fix,3);
+		$GLOBALS['FORUM_DB']->query_update($table,array($field=>$username),array($updating_field=>$member_id));
+	}
 }
 

@@ -124,30 +124,30 @@ function handle_facebook_connection_login($current_logged_in_member)
 
 	// See if they have logged in before - i.e. have a synched account
 	$member_row=$GLOBALS['FORUM_DB']->query_select('f_members',array('*'),array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>$facebook_uid),'ORDER BY id DESC',1);
-	$member=array_key_exists(0,$member_row)?$member_row[0]['id']:NULL;
-	if (is_guest($member)) $member=NULL;
+	$member_id=array_key_exists(0,$member_row)?$member_row[0]['id']:NULL;
+	if (is_guest($member_id)) $member_id=NULL;
 
-	/*if (!is_null($member)) // Useful for debugging
+	/*if (!is_null($member_id)) // Useful for debugging
 	{
 		require_code('ocf_members_action2');
-		ocf_delete_member($member);
-		$member=NULL;
+		ocf_delete_member($member_id);
+		$member_id=NULL;
 	}*/
 
 	// If logged in before using Facebook, see if they've changed their name or email or timezone on Facebook -- if so, try and update locally to match
-	if (!is_null($member))
+	if (!is_null($member_id))
 	{
-		if ((!is_null($current_logged_in_member)) && ($current_logged_in_member!==NULL) && (!is_guest($current_logged_in_member)) && ($current_logged_in_member!=$member))
+		if (($current_logged_in_member!==NULL) && (!is_guest($current_logged_in_member)) && ($current_logged_in_member!=$member_id))
 			return $current_logged_in_member; // User has an active login, and the Facebook account is bound to a DIFFERENT login. Take precedence to the other login that is active on top of this
 
-		$last_visit_time=$member[0]['m_last_visit_time'];
+		$last_visit_time=$member_id[0]['m_last_visit_time'];
 		//if ($last_visit_time>5*60*60)		No need, this is only happening for a new session
 		{
 			if ($timezone!==NULL)
 			{
-				if (tz_time(time(),$timezone)==tz_time(time(),$member[0]['m_timezone_offset'])) $timezone=$member[0]['m_timezone_offset']; // If equivalent, don't change
+				if (tz_time(time(),$timezone)==tz_time(time(),$member_row[0]['m_timezone_offset'])) $timezone=$member_row[0]['m_timezone_offset']; // If equivalent, don't change
 			}
-			//if (($username!=$member[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member[0]['m_timezone_offset'])) || ($email_address!=$member[0]['m_email_address']))
+			//if (($username!=$member_row[0]['m_username']) || (($timezone!==NULL) && ($timezone!=$member_row[0]['m_timezone_offset'])) || ($email_address!=$member_row[0]['m_email_address']))
 			{
 				$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_members','id',array('m_username'=>$username));
 				if (!is_null($test)) // Make sure there's no conflict yet the name has changed
@@ -164,15 +164,10 @@ function handle_facebook_connection_login($current_logged_in_member)
 					}
 					$GLOBALS['FORUM_DB']->query_update('f_members',$update_map,array('m_password_compat_scheme'=>'facebook','m_pass_hash_salted'=>strval($facebook_uid)),'',1);
 
-					if ($username!=$member[0]['m_username'])
+					if ($username!=$member_row[0]['m_username'])
 					{
-						// Fix cacheing for usernames
-						$to_fix=array('f_forums/f_cache_last_username','f_posts/p_poster_name_if_guest','f_topics/t_cache_first_username','f_topics/t_cache_last_username');
-						foreach ($to_fix as $fix)
-						{
-							list($table,$field)=explode('/',$fix);
-							$GLOBALS['FORUM_DB']->query_update($table,array($field=>$username),array($field=>$member[0]['m_username']));
-						}
+						require_code('ocf_members_action2');
+						update_member_username_caching($member_id,$username);
 					}
 				}
 			}
@@ -181,7 +176,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 
 	// Not logged in before using Facebook, so we need to create an account, or bind to the active ocPortal login if there is one
 	$in_a_sane_place=(get_page_name()!='login') && ((running_script('index')) || (running_script('execute_temp'))); // If we're in some weird script, or the login module UI, it's not a sane place, don't be doing account creation yet
-	if ((is_null($member)) && ($in_a_sane_place))
+	if ((is_null($member_id)) && ($in_a_sane_place))
 	{
 		// Bind to existing ocPortal login?
 		if (!is_null($current_logged_in_member))
@@ -236,15 +231,15 @@ function handle_facebook_connection_login($current_logged_in_member)
 				check_stopforumspam(post_param('username',$username),$email_address);
 			}
 
-			$member=ocf_member_external_linker(post_param('username',$username)/*user may have customised username*/,$facebook_uid,'facebook',false,$email_address,$dob_day,$dob_month,$dob_year,$timezone,$language,$avatar_url,$photo_url,$photo_thumb_url);
+			$member_id=ocf_member_external_linker(post_param('username',$username)/*user may have customised username*/,$facebook_uid,'facebook',false,$email_address,$dob_day,$dob_month,$dob_year,$timezone,$language,$avatar_url,$photo_url,$photo_thumb_url);
 		}
 	}
 
-	if (!is_null($member))
+	if (!is_null($member_id))
 	{
 		require_code('users_inactive_occasionals');
-		create_session($member,1,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1')); // This will mark it as confirmed
+		create_session($member_id,1,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1')); // This will mark it as confirmed
 	}
 
-	return $member;
+	return $member_id;
 }
