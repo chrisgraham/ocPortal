@@ -88,10 +88,13 @@ function get_quiz_data_for_csv($quiz_id)
 	foreach ($member_answers as $member_bits=>$member_answers)
 	{
 		list($member,)=explode('_',$member_bits);
-		$member_name=$GLOBALS['FORUM_DRIVER']->get_username($member);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 		$member_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member);
 
-		$member_answers_csv=array('Member'=>$member_name,'Email'=>$member_email);
+		$member_answers_csv=array();
+		$member_answers_csv[do_lang('IDENTIFIER')]=$member;
+		$member_answers_csv[do_lang('USERNAME')]=$username;
+		$member_answers_csv[do_lang('EMAIL')]=$member_email;
 		foreach ($questions_rows as $i=>$question_row)
 		{
 			$member_answer=array_key_exists($question_row['id'],$member_answers)?$member_answers[$question_row['id']]:'';

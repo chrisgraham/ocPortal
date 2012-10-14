@@ -134,19 +134,50 @@ class Module_admin_points
 
 		$total_gained_points=0;
 
-		$members=$GLOBALS['FORUM_DRIVER']->get_matching_members('');
+		$quizzes=array();
+		if (addon_installed('quizzes'))
+		{
+			require_lang('quiz');
+			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('id','q_name'),NULL,'ORDER BY q_add_date DESC',100);
+		}
+
+		$members=$GLOBALS['FORUM_DRIVER']->get_matching_members('',10000/*reasonable limit -- works via returning 'most active' first*/);
+		$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 		foreach ($members as $member)
 		{
 			$member_id=$GLOBALS['FORUM_DRIVER']->pname_id($member);
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+			$email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id);
+
+			$usergroups='';
+			$_usergroups=$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id);
+			foreach ($_usergroups as $_usergroup)
+			{
+				if ($usergroups!='') $usergroups.=', ';
+				$usergroups.=$all_usergroups[$_usergroup];
+			}
 
 			$points_gained=total_points($member_id,$to)-total_points($member_id,$from);
 			$points_now=total_points($member_id);
 
 			$data_point=array();
+
+			$data_point[do_lang('IDENTIFIER')]=$member_id;
 			$data_point[do_lang('USERNAME')]=$username;
 			$data_point[$label]=$points_gained;
 			$data_point[do_lang('POINTS_NOW')]=$points_now;
+			$data_point[do_lang('GROUPS')]=$usergroups;
+			$data_point[do_lang('EMAIL')]=$email;
+
+			if (addon_installed('quizzes'))
+			{
+				foreach ($quizzes as $quiz)
+				{
+					$entered=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('quiz_entries','id',array('q_member'=>$member_id,'q_quiz'=>$quiz['id'])));
+					$data_point[do_lang('ENTERED_THIS_QUIZ',get_translated_text($quiz['q_name']))]=do_lang($entered?'YES':'NO');
+				}
+			}
+
 			$data[]=$data_point;
 
 			$total_gained_points+=$points_gained;
