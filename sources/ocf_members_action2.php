@@ -90,8 +90,8 @@ function validate_ip_script()
  */
 function get_username_from_human_name($username)
 {
+	$username=preg_replace('# \(\d+\)$#','',$username);
 	$_username=$username;
-	$_username=preg_replace('# \(\d+\)$#','',$username);
 	$i=1;
 	do
 	{
@@ -129,10 +129,8 @@ function ocf_member_external_linker_ask($username,$type,$email_address='',$dob_d
 
 	$title=get_screen_title('FINISH_PROFILE');
 
-	if (($username!='') && ($type!='ldap'))
-	{
+	if ($username!='')
 		$username=get_username_from_human_name($username);
-	}
 
 	list($fields,$hidden)=ocf_get_member_fields(true,NULL,NULL,$email_address,1,$dob_day,$dob_month,$dob_year,$timezone,NULL,NULL,1,0,NULL,$language,1,1,1,NULL,$username,0,$type);
 	$hidden->attach(build_keep_post_fields());
@@ -346,7 +344,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	{
 		if (ocf_is_ldap_member($member_id)) $special_type='ldap';
 		if (ocf_is_httpauth_member($member_id)) $special_type='httpauth';
-		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='remote')
+		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='facebook')
 		{
 			$special_type='remote';
 		}
@@ -357,7 +355,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$fields=new ocp_tempcode();
 
 	// Human name / Username
-	if (($special_type!='ldap') && ($special_type!='remote'))
+	if (($special_type!='ldap') && ($special_type!='remote') && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='facebook'))
 	{
 		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_privilege($member_id,'rename_self')))
 		{
@@ -390,7 +388,8 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 
 	// E-mail address
 	if ($email_address=='') $email_address=trim(get_param('email_address',''));
-	if ($special_type!='remote')
+	$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_specific_permission(get_member(),'member_maintenance')));
+	if ((is_null($member_id)) && ($email_address=='') && (get_option('skip_email_confirm_join')=='0'))
 	{
 		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('skip_email_confirm_join')=='1')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_privilege(get_member(),'member_maintenance')));
 		if ((is_null($member_id)) && ($email_address=='') && (get_option('skip_email_confirm_join')=='0'))
@@ -411,16 +410,16 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	}
 
 	// Work out what options we need to present
-	$doing_international=(get_option('allow_international')=='1') && ($special_type!='remote');
+	$doing_international=(get_option('allow_international')=='1');
 	$_langs=find_all_langs();
-	$doing_langs=(multi_lang()) && ($special_type!='remote');
+	$doing_langs=multi_lang();
 	$doing_email_option=(get_option('allow_email_disable')=='1');
 	$doing_email_from_staff_option=(get_option('allow_email_from_staff_disable')=='1');
 	$unspecced_width_zone_exists=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_name',array('zone_wide'=>NULL));
 	$unspecced_theme_zone_exists=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'zones WHERE '.db_string_equal_to('zone_theme','').' OR '.db_string_equal_to('zone_theme','-1'));
-	$doing_wide_option=($special_type!='remote') && (!is_null($unspecced_width_zone_exists)) && (!$mini_mode);
+	$doing_wide_option=(!is_null($unspecced_width_zone_exists)) && (!$mini_mode);
 	$doing_theme_option=($unspecced_theme_zone_exists!=0) && (!$mini_mode);
-	$doing_local_forum_options=(addon_installed('ocf_forum')) && ($special_type!='remote') && (!$mini_mode);
+	$doing_local_forum_options=(addon_installed('ocf_forum')) && (!$mini_mode);
 
 	if (($doing_international) || ($doing_langs) || ($doing_email_option) || ($doing_wide_option) || ($doing_theme_option) || ($doing_local_forum_options))
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3cd79bbea084ec1fe148edddad7d52b4','FORCE_OPEN'=>is_null($member_id)?true:NULL,'TITLE'=>do_lang_tempcode('SETTINGS'))));
@@ -478,31 +477,28 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		// Various forum options
 		if (addon_installed('ocf_forum'))
 		{
-			if ($special_type!='remote')
+			if (get_option('forced_preview_option')=='1')
+				$fields->attach(form_input_tick(do_lang_tempcode('PREVIEW_POSTS'),do_lang_tempcode('DESCRIPTION_PREVIEW_POSTS'),'preview_posts',$preview_posts==1));
+			if (get_value('disable_views_sigs_option')!=='1')
 			{
-				if (get_option('forced_preview_option')=='1')
-					$fields->attach(form_input_tick(do_lang_tempcode('PREVIEW_POSTS'),do_lang_tempcode('DESCRIPTION_PREVIEW_POSTS'),'preview_posts',$preview_posts==1));
-				if (get_value('disable_views_sigs_option')!=='1')
-				{
-					if (addon_installed('ocf_signatures'))
-						$fields->attach(form_input_tick(do_lang_tempcode('VIEWS_SIGNATURES'),do_lang_tempcode('DESCRIPTION_VIEWS_SIGNATURES'),'views_signatures',$views_signatures==1));
-				} else
-				{
-					$hidden->attach(form_input_hidden('views_signatures','1'));
-				}
-				//$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));	Now on notifications tab, even though it is technically an account setting
-				$usergroup_list=new ocp_tempcode();
-				$lgroups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
-				foreach ($lgroups as $key=>$val)
-				{
-					if ($key!=db_get_first_id())
-						$usergroup_list->attach(form_input_list_entry(strval($key),($pt_allow=='*') || count(array_intersect(array(strval($key)),explode(',',$pt_allow)))!=0,$val));
-				}
-				if (get_value('disable_pt_restrict')!=='1')
-				{
-					$fields->attach(form_input_multi_list(do_lang_tempcode('PT_ALLOW'),addon_installed('chat')?do_lang_tempcode('PT_ALLOW_DESCRIPTION_CHAT'):do_lang_tempcode('PT_ALLOW_DESCRIPTION'),'pt_allow',$usergroup_list));
-					$fields->attach(form_input_text_comcode(do_lang_tempcode('PT_RULES_TEXT'),do_lang_tempcode('PT_RULES_TEXT_DESCRIPTION'),'pt_rules_text',$pt_rules_text,false));
-				}
+				if (addon_installed('ocf_signatures'))
+					$fields->attach(form_input_tick(do_lang_tempcode('VIEWS_SIGNATURES'),do_lang_tempcode('DESCRIPTION_VIEWS_SIGNATURES'),'views_signatures',$views_signatures==1));
+			} else
+			{
+				$hidden->attach(form_input_hidden('views_signatures','1'));
+			}
+			//$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));	Now on notifications tab, even though it is technically an account setting
+			$usergroup_list=new ocp_tempcode();
+			$lgroups=$GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
+			foreach ($lgroups as $key=>$val)
+			{
+				if ($key!=db_get_first_id())
+					$usergroup_list->attach(form_input_list_entry(strval($key),($pt_allow=='*') || count(array_intersect(array(strval($key)),explode(',',$pt_allow)))!=0,$val));
+			}
+			if (get_value('disable_pt_restrict')!=='1')
+			{
+				$fields->attach(form_input_multi_list(do_lang_tempcode('PT_ALLOW'),addon_installed('chat')?do_lang_tempcode('PT_ALLOW_DESCRIPTION_CHAT'):do_lang_tempcode('PT_ALLOW_DESCRIPTION'),'pt_allow',$usergroup_list));
+				$fields->attach(form_input_text_comcode(do_lang_tempcode('PT_RULES_TEXT'),do_lang_tempcode('PT_RULES_TEXT_DESCRIPTION'),'pt_rules_text',$pt_rules_text,false));
 			}
 		}
 
@@ -727,7 +723,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 			warn_exit(do_lang_tempcode('_INVALID_EMAIL_ADDRESS',escape_html($email_address)));
 	}
 
-	if ((!is_null($username)) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')!='remote'))
+	if (!is_null($username))
 	{
 		if (!$skip_checks)
 		{
@@ -816,13 +812,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		$mail=do_lang('STAFF_USERNAME_CHANGED_MAIL',comcode_escape(get_site_name()),comcode_escape($username),comcode_escape($old_username),get_site_default_lang());
 		dispatch_notification('ocf_username_changed_staff',NULL,$subject,$mail);
 
-		// Fix cacheing for usernames
-		$to_fix=array('f_forums/f_cache_last_username','f_posts/p_poster_name_if_guest','f_topics/t_cache_first_username','f_topics/t_cache_last_username');
-		foreach ($to_fix as $fix)
-		{
-			list($table,$field)=explode('/',$fix);
-			$GLOBALS['FORUM_DB']->query_update($table,array($field=>$username),array($field=>$old_username));
-		}
+		update_member_username_caching($member_id,$username);
 	}
 	if (!is_null($password))
 	{
@@ -1532,5 +1522,22 @@ function ocf_member_choose_photo_concrete($url,$thumb_url,$member_id=NULL)
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
 	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
+}
+
+/**
+ * Update cacheing against a member's username. This doesn't change the username in the actual member record -- it is assumed that this will be done elsewhere.
+ *
+ * @param  MEMBER		The member ID.
+ * @param  ID_TEXT	The new username that is being set for them.
+ */
+function update_member_username_caching($member_id,$username)
+{
+	// Fix cacheing for usernames
+	$to_fix=array('f_forums/f_cache_last_username/f_cache_last_member_id','f_posts/p_poster_name_if_guest/p_poster','f_topics/t_cache_first_username/t_cache_first_member_id','f_topics/t_cache_last_username/t_cache_last_member_id');
+	foreach ($to_fix as $fix)
+	{
+		list($table,$field,$updating_field)=explode('/',$fix,3);
+		$GLOBALS['FORUM_DB']->query_update($table,array($field=>$username),array($updating_field=>$member_id));
+	}
 }
 

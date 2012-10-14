@@ -83,7 +83,7 @@ You may also choose to use one of the forums from our list of [page="_SEARCH:tut
 We feel Linux is more suited for PHP purposes than Windows. ocPortal will work fine on Windows, however setting file permissions remotely can be very tricky and non-standard between different Windows servers.
 
 [b]Do you recommend any web hosts / provide your own hosting?[/b]
-We emphatically recommend [url="Elief"]http://www.elief.com/billing/aff.php?aff=035[/url]: it's fast, secure, feature-rich, well configured, and [page="_SEARCH:tut_web_hosting"]ideally suited to hosting ocPortal[/page].
+At this time, no. Read about ocPortal's minimum requirements in our [page="_SEARCH:tut_web_hosting"]hosting tutorial[/page]. ocPortal is designed to run well on almost all web hosts.
 
 [b]Does ocPortal support (some forum vendor and version)?[/b]
 Compatible forum software is listed in the [page="_SEARCH:tut_web_hosting"]web hosting requirements tutorial[/page], and any issues are listed in the [page="_SEARCH:tut_nuances"]nuances of forum integration tutorial[/page].

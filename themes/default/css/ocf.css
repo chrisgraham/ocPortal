@@ -64,7 +64,7 @@
 }
 
 .ocf_forum_grouping_column5 {
-	width: 27em;
+	width: 17em;
 }
 
 .dropdown_actions {
@@ -959,6 +959,9 @@ h2.ocf_post_history_header {
 		font-size: 0.9em;
 	}
 
+	.ocf_profile_column h2:first-child {
+		margin-top: 0;
+	}
 	.ocf_profile_column h2 {
 		margin-top: 2em;
 	}

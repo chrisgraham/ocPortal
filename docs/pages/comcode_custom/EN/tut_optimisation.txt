@@ -263,8 +263,10 @@ To activate you would type a command like this into OcCLE:
 
 As you can see, it is a comma-separated list of domain names. These domain names must be serving your files from a directory structure that mirrors that of your normal domain precisely.
 
-ocPortal will randomise what CDN's it uses, so parallisation can work more efficiently (this is the only reason for the comma-separation). Web browsers have a limit on how many parallel web requests may come from a single server, and this works around that.
+ocPortal will randomise what CDN's it uses, so parallelisation can work more efficiently (this is the only reason for the comma-separation). Web browsers have a limit on how many parallel web requests may come from a single server, and this works around that.
 DNS may be used to route the CDN servers based on geographic location.
+
+There are many commercial CDN services available that can be configured in via this option.
 
 [title="2"]Facebook's HipHop PHP (hphp)[/title]
 
@@ -312,6 +314,8 @@ Interesting optimisations include:
  - https://developers.google.com/speed/docs/mod_pagespeed/filter-js-defer (this will improve performance initial rendering time, but at the expensive of delaying interaction time -- this may be a fairly good idea for very non-interactive sites, but a terrible idea for very-interactive sites -- use with great care)
 
 Google's work with SPDY is also interesting, and SDCH is [i]extremely interesting[/i]. At this time of writing it is too early to really think about these, but they should provide automatic optimisations to ocPortal.
+
+The CloudFlare service provides some of the same optimisations that mod_pagespeed does, as well as a CDN. However personally I'd opt to use mod_pagespeed and a custom CDN, as it is a more straight-forward configuration that doesn't require proxying your traffic (which itself will impact performance). That said, CloudFlare does provide nice anti-spam and traffic filtering, so if you have a big spam/DOS problem, it can be a very useful tool. CloudFlare's preloading feature also looks interesting, but it is not likely to result in noticeable speedup for most sites.
 
 [title="2"]See also[/title]
 

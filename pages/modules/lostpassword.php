@@ -130,10 +130,6 @@ class Module_lostpassword
 		{
 			warn_exit(do_lang_tempcode('NO_RESET_ACCESS'));
 		}
-		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='remote')
-		{
-			warn_exit(do_lang_tempcode('NO_PASSWORD_RESET_REMOTE',ocp_srv('HTTP_HOST')));
-		}
 		if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme')=='httpauth')
 		{
 			warn_exit(do_lang_tempcode('NO_PASSWORD_RESET_HTTPAUTH'));

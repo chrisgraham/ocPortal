@@ -52,9 +52,8 @@ class Hook_Profiles_Tabs_Edit_settings
 
 			$is_ldap=ocf_is_ldap_member($member_id_of);
 			$is_httpauth=ocf_is_httpauth_member($member_id_of);
-			$is_remote=($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_password_compat_scheme')=='remote');
 
-			if (($is_ldap) || ($is_httpauth) || ($is_remote) || (($member_id_of!=$member_id_viewing) && (!has_privilege($member_id_viewing,'assume_any_member'))))
+			if (($is_ldap) || ($is_httpauth) || (($member_id_of!=$member_id_viewing) && (!has_privilege($member_id_viewing,'assume_any_member'))))
 			{
 				$password=NULL;
 			} else
@@ -144,7 +143,7 @@ class Hook_Profiles_Tabs_Edit_settings
 			}
 			if ((has_actual_page_access($member_id_viewing,'admin_ocf_join')) || (has_privilege($member_id_of,'rename_self')))
 			{
-				$username=($is_ldap||$is_remote)?NULL:post_param('edit_username',NULL);
+				$username=($is_ldap)?NULL:post_param('edit_username',NULL/*May not be passed if username not editable for member type*/);
 			} else $username=NULL;
 
 			$email=post_param('email_address',NULL);
@@ -152,7 +151,7 @@ class Hook_Profiles_Tabs_Edit_settings
 
 			$theme=post_param('theme',NULL);
 
-			if (($is_remote) || (fractional_edit()))
+			if (fractional_edit())
 			{
 				$preview_posts=NULL;
 				$zone_wide=NULL;

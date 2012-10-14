@@ -966,7 +966,7 @@ class Hook_Notification
 	}
 
 	/**
-	 * Find whether someone has permisson to view any notifications (yes) and possibly if they actually are.
+	 * Find whether someone has permission to view any notifications (yes) and possibly if they actually are.
 	 *
 	 * @param  ?ID_TEXT		Notification code (NULL: don't check if they are)
 	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
@@ -1075,10 +1075,9 @@ class Hook_Notification__Staff extends Hook_Notification
 		$new_rows=array();
 		foreach ($rows as $row)
 		{
-			$test=notifications_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$GLOBALS['FORUM_DRIVER']->pname_id($row));
-			if (is_null($test)) $test=$initial_setting;
+			$test=notifications_setting($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$GLOBALS['FORUM_DRIVER']->pname_id($row));
 
-			if ($test)
+			if ($test!=A_NA)
 				$new_rows[$GLOBALS['FORUM_DRIVER']->pname_id($row)]=$test;
 		}
 
@@ -1086,7 +1085,7 @@ class Hook_Notification__Staff extends Hook_Notification
 	}
 
 	/**
-	 * Find whether someone has permisson to view staff notifications and possibly if they actually are.
+	 * Find whether someone has permission to view staff notifications and possibly if they actually are.
 	 *
 	 * @param  ?ID_TEXT		Notification code (NULL: don't check if they are)
 	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)

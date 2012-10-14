@@ -299,23 +299,89 @@ function _generic_exit($text,$template)
 }
 
 /**
+ * Normalise an IPv6 address.
+ *
+ * @param  IP				IP address
+ * @return IP				Normalised address
+ */
+function _inet_pton($ip)
+{
+	$_ip=explode(':',$ip);
+	$normalised_ip='';
+	$normalised_ip.=str_pad('',(4*(8-count($_ip))),'0000',STR_PAD_LEFT); // Fill out trimmed 0's on left
+	foreach ($_ip as $seg) // Copy rest in
+		$normalised_ip.=str_pad($seg,4,'0',STR_PAD_LEFT); // Pad out each component in full, building up $normalised_ip
+	return $normalised_ip;
+}
+
+/**
+ * Find if an IP address is within a CIDR range. Based on comment in PHP manual: http://php.net/manual/en/ref.network.php
+ *
+ * @param  IP				IP address
+ * @param  SHORT_TEXT	CIDR range (e.g. 204.93.240.0/24)
+ * @return boolean		Whether it is
+ */
+function ip_cidr_check($ip,$cidr)
+{
+	if ((strpos($ip,':')===false)!==(strpos($cidr,':')===false)) return false; // Different IP address type
+
+	if (strpos($ip,':')===false)
+	{
+		// IPv4...
+
+		list($net,$maskbits)=explode('/',$cidr,2);
+
+		$ip_net=ip2long($net);
+		$ip_mask=~((1<<(32-intval($maskbits)))-1);
+
+		$ip_ip=ip2long($ip);
+
+		return (($ip_ip&$ip_mask)==$ip_net);
+	}
+
+	// IPv6...
+
+	$unpacked=unpack('A16',_inet_pton($ip));
+	$unpacked=str_split($unpacked[1]);
+	$binaryip='';
+	foreach ($unpacked as $char)
+		$binaryip.=str_pad(decbin(ord($char)),8,'0',STR_PAD_LEFT);
+
+	list($net,$maskbits)=explode('/',$cidr,2);
+	$unpacked=unpack('A16',_inet_pton($net));
+	$unpacked=str_split($unpacked[1]);
+	$binarynet='';
+	foreach ($unpacked as $char)
+		$binarynet.=str_pad(decbin(ord($char)),8,'0',STR_PAD_LEFT);
+
+	$ip_net_bits=substr($binaryip,0,intval($maskbits));
+	$net_bits=substr($binarynet,0,intval($maskbits));
+	return ($ip_net_bits==$net_bits);
+}
+
+/**
  * Log a hackattack, then displays an error message. It also attempts to send an e-mail to the staff alerting them of the hackattack.
  *
  * @param  ID_TEXT		The reason for the hack attack. This has to be a language string codename
  * @param  SHORT_TEXT	A parameter for the hack attack language string (this should be based on a unique ID, preferably)
  * @param  SHORT_TEXT	A more illustrative parameter, which may be anything (e.g. a title)
+ * @param  boolean		Whether to silently log the hack rather than also exiting
  */
-function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='')
+function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b='',$silent=false)
 {
 	if (function_exists('set_time_limit')) @set_time_limit(4);
 
 	require_code('site');
 	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
-	set_http_status_code('403'); // Stop spiders ever storing the URL that caused this
+	if (!$silent)
+		set_http_status_code('403'); // Stop spiders ever storing the URL that caused this
 
 	if (!addon_installed('securitylogging'))
+	{
+		if ($silent) return;
 		warn_exit(do_lang_tempcode('HACK_ATTACK_USER'));
+	}
 
 	$ip=get_ip_address();
 	$ip2=ocp_srv('REMOTE_ADDR');
@@ -371,16 +437,19 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 	{
 		// Test we're not banning a good bot
 		$se_ip_lists=array(
-			'http://www.iplists.com.nyud.net/nw/google.txt',
-			'http://www.iplists.com.nyud.net/nw/msn.txt',
-			'http://www.iplists.com.nyud.net/infoseek.txt',
-			'http://www.iplists.com.nyud.net/nw/inktomi.txt',
-			'http://www.iplists.com.nyud.net/nw/lycos.txt',
-			'http://www.iplists.com.nyud.net/nw/askjeeves.txt',
-			'http://www.iplists.com.nyud.net/northernlight.txt',
-			'http://www.iplists.com.nyud.net/nw/altavista.txt',
-			'http://www.iplists.com.nyud.net/nw/misc.txt',
+			'http://www.iplists.com.nyud.net/nw/google.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/msn.txt'=>false,
+			'http://www.iplists.com.nyud.net/infoseek.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/inktomi.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/lycos.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/askjeeves.txt'=>false,
+			'http://www.iplists.com.nyud.net/northernlight.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/altavista.txt'=>false,
+			'http://www.iplists.com.nyud.net/nw/misc.txt'=>false,
+			'https://www.cloudflare.com/ips-v4'=>true,
+			'https://www.cloudflare.com/ips-v6'=>true,
 		);
+		$se_ip_lists[get_base_url().'/data_custom/no_banning.txt']=false;
 		$ip_stack=array();
 		$ip_bits=explode((strpos($alt_ip?$ip2:$ip,'.')!==false)?'.':':',$alt_ip?$ip2:$ip);
 		foreach ($ip_bits as $i=>$ip_bit)
@@ -394,7 +463,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 			$ip_stack[]=$buildup;
 		}
 		$is_se=false;
-		foreach ($se_ip_lists as $ip_list)
+		foreach ($se_ip_lists as $ip_list=>$is_proxy)
 		{
 			$ip_list_file=http_download_file($ip_list,NULL,false);
 			if (is_string($ip_list_file))
@@ -402,7 +471,16 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 				$ip_list_array=explode(chr(10),$ip_list_file);
 				foreach ($ip_stack as $ip_s)
 				{
-					if (in_array($ip_s,$ip_list_array)) $is_se=true;
+					foreach ($ip_list_array as $_ip_list_array)
+					{
+						if (strpos($ip_s,'/')===false)
+						{
+							if ($ip_s==$_ip_list_array) $is_se=true;
+						} else
+						{
+							if (ip_cidr_check($ip_s,$_ip_list_array)) $is_se=true;
+						}
+					}
 				}
 				if ($is_se) break;
 			}
@@ -478,8 +556,11 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 
 		require_code('notifications');
 
-		$subject=do_lang('HACK_ATTACK_SUBJECT',$ip,NULL,NULL,get_site_default_lang());
-		dispatch_notification('hack_attack',NULL,$subject,$message->evaluate(get_site_default_lang(),false),NULL,A_FROM_SYSTEM_PRIVILEGED);
+		if (($reason!='CAPTCHAFAIL_HACK') && ($reason!='LAME_SPAM_HACK'))
+		{
+			$subject=do_lang('HACK_ATTACK_SUBJECT',$ip,NULL,NULL,get_site_default_lang());
+			dispatch_notification('hack_attack',NULL,$subject,$message->evaluate(get_site_default_lang(),false),NULL,A_FROM_SYSTEM_PRIVILEGED);
+		}
 
 		if (!is_null($ip_ban_todo))
 		{
@@ -488,6 +569,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 		}
 	}
 
+	if ($silent) return;
 	if ((preg_match('#^localhost[\.\:$]#',ocp_srv('HTTP_HOST'))!=0) && (substr(get_base_url(),0,17)=='http://localhost/')) fatal_exit(do_lang('HACK_ATTACK'));
 	warn_exit(do_lang_tempcode('HACK_ATTACK_USER'));
 }

@@ -669,7 +669,7 @@ function _get_preview_environment_comcode($tag)
 	} else
 	{
 		$_params=$custom_tag_list[$tag];
-		$parameters=explode(",",$_params['tag_parameters']);
+		$parameters=explode(',',$_params['tag_parameters']);
 	}
 
 	if (in_array('param',$parameters))
@@ -755,15 +755,15 @@ function _get_preview_environment_comcode($tag)
 			$name=post_param('name_'.strval($i));
 			if($default==($i+1))
 			{
-				$def=" default=\"1\"";
+				$def=' default="1"';
 			}
 			$comcode.="[section=\"$name\"$def]".$content."[/section]";
 			$controller[]=$name;
 			$bparameters.="<section=\"$name\"$def>".$content."</section>";
 			$i++;
 		}
-		$comcode.="[section_controller]".implode(",", $controller)."[/section_controller]";
-		$bparameters.="<section_controller>".implode(",", $controller)."</section_controller>";
+		$comcode.='[section_controller]'.implode(',',$controller).'[/section_controller]';
+		$bparameters.='<section_controller>'.implode(',',$controller).'</section_controller>';
 	}
 	elseif ($tag=='big_tabs')
 	{
@@ -779,15 +779,15 @@ function _get_preview_environment_comcode($tag)
 			$name=post_param('name_'.strval($i));
 			if($default==($i+1))
 			{
-				$def=" default=\"1\"";
+				$def=' default="1"';
 			}
 			$comcode.="[big_tab=\"$name\"$def]".$content."[/big_tab]";
 			$controller[]=$name;
 			$bparameters.="<big_tab=\"$name\"$def>".$content."</big_tab>";
 			$i++;
 		}
-		$comcode="[surround][big_tab_controller switch_time=\"$time\"]".implode(",", $controller)."[/big_tab_controller]".$comcode."[/surround]";
-		$bparameters.="[surround]<big_tab_controller switch_time=\"$time\">".implode(",", $controller)."</big_tab_controller>[/surround]";
+		$comcode='[surround][big_tab_controller switch_time="'.strval($time).'"]'.implode(',',$controller).'[/big_tab_controller]'.$comcode.'[/surround]';
+		$bparameters.='[surround]<big_tab_controller switch_time="'.strval($time).'">'.implode(',',$controller).'</big_tab_controller>[/surround]';
 	}
 	elseif ($tag=='tabs')
 	{
@@ -802,15 +802,15 @@ function _get_preview_environment_comcode($tag)
 			$name=post_param('name_'.strval($i));
 			if($default==($i+1))
 			{
-				$def=" default=\"1\"";
+				$def=' default="1"';
 			}
 			$comcode.="[tab=\"$name\"$def]".$content."[/tab]";
 			$controller[]=$name;
 			$bparameters.="<tab=\"$name\"$def>".$content."</tab>";
 			$i++;
 		}
-		$comcode="[tabs=\"".implode(",", $controller)."\"]".$comcode."[/tabs]";
-		$bparameters="<tabs=\"".implode(",", $controller)."\">".$bparameters."</tabs>";
+		$comcode='[tabs="'.implode(',',$controller).'"]'.$comcode.'[/tabs]';
+		$bparameters='<tabs="'.implode(',',$controller).'">'.$bparameters.'</tabs>';
 	}
 	elseif ($tag=='list')
 	{

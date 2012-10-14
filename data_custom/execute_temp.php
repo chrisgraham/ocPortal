@@ -53,4 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('failure');
+	echo ip_cidr_check('204.93.177.0','204.93.177.0/24')?'true':'false';
 }

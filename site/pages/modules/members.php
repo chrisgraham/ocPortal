@@ -48,7 +48,7 @@ class Module_members
 	 */
 	function get_entry_points()
 	{
-		$ret=array('misc'=>'MEMBERS'/*,'remote'=>'LEARN_ABOUT_REMOTE_LOGINS'*/);
+		$ret=array('misc'=>'MEMBERS');
 		if (!is_guest()) $ret['view']='MY_PROFILE';
 		return $ret;
 	}
