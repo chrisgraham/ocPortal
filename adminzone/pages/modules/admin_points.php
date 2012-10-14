@@ -115,6 +115,8 @@ class Module_admin_points
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINTS'))));
 		breadcrumb_set_self(do_lang_tempcode('EXPORT'));
 
+		set_helper_panel_text(comcode_lang_string('DOC_EXPORT_POINTS'));
+
 		disable_php_memory_limit();
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
