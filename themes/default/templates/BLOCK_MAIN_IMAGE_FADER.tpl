@@ -38,7 +38,7 @@
 		{+START,LOOP,HTML}
 			var html{_loop_key%}='{_loop_var;^}';
 			{+START,IF,{$EQ,{_loop_key},0}}
-				set_inner_html(tease_scrolling_text,html{_loop_key%});
+				if (tease_scrolling_text) set_inner_html(tease_scrolling_text,html{_loop_key%});
 			{+END}
 		{+END}
 		{+START,LOOP,IMAGES}
