@@ -968,7 +968,7 @@ class Hook_Notification
 	}
 
 	/**
-	 * Find whether someone has permisson to view any notifications (yes) and possibly if they actually are.
+	 * Find whether someone has permission to view any notifications (yes) and possibly if they actually are.
 	 *
 	 * @param  ?ID_TEXT		Notification code (NULL: don't check if they are)
 	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
@@ -1087,7 +1087,7 @@ class Hook_Notification__Staff extends Hook_Notification
 	}
 
 	/**
-	 * Find whether someone has permisson to view staff notifications and possibly if they actually are.
+	 * Find whether someone has permission to view staff notifications and possibly if they actually are.
 	 *
 	 * @param  ?ID_TEXT		Notification code (NULL: don't check if they are)
 	 * @param  ?SHORT_TEXT	The category within the notification code (NULL: none)
