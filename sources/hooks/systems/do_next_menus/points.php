@@ -32,7 +32,8 @@ class Hook_do_next_menus_points
 		if (!addon_installed('points')) return array();
 
 		return array(
-			array('usage','pointslog',array('admin_points',array('type'=>'misc'),get_module_zone('admin_points')),do_lang_tempcode('GIFT_TRANSACTIONS'),('DOC_POINTS')),
+			array('usage','pointslog',array('admin_points',array('type'=>'logs'),get_module_zone('admin_points')),do_lang_tempcode('GIFT_TRANSACTIONS'),('DOC_POINTS')),
+			array('usage','points',array('admin_points',array('type'=>'export'),get_module_zone('admin_points')),do_lang_tempcode('EXPORT_POINTS'),('DOC_EXPORT_POINTS')),
 		);
 	}
 

@@ -67,11 +67,112 @@ class Module_admin_points
 
 		$type=get_param('type','misc');
 
+		if ($type=='export') return $this->points_export();
 		if ($type=='charge') return $this->points_charge();
 		if ($type=='reverse') return $this->reverse();
 		if ($type=='misc') return $this->points_log();
 
 		return new ocp_tempcode();
+	}
+
+	/**
+	 * An interface for choosing between dates.
+	 *
+	 * @param  tempcode	The title to display.
+	 * @return tempcode	The result of execution.
+	 */
+	function _get_between($title)
+	{
+		require_code('form_templates');
+
+		$fields=new ocp_tempcode();
+		$time_start=filectime(get_file_base().'/_config.php')-60*60*24*365*5; // 5 years before site start time, so that the default is "beginning"
+
+		$fields->attach(form_input_date(do_lang_tempcode('FROM'),'','from',false,false,false,$time_start,10,intval(date('Y'))-9));
+		$fields->attach(form_input_date(do_lang_tempcode('TO'),'','to',false,false,false,time(),10,intval(date('Y'))-9));
+
+		return do_template('FORM_SCREEN',array(
+			'GET'=>true,
+			'SKIP_VALIDATION'=>true,
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>'',
+			'HIDDEN'=>'',
+			'URL'=>get_self_url(false,false,NULL,false,true),
+			'SUBMIT_NAME'=>do_lang_tempcode('EXPORT'),
+		));
+	}
+
+	/**
+	 * Show a cash flow diagram.
+	 *
+	 * @return tempcode	The result of execution.
+	 */
+	function points_export()
+	{
+		$title=get_screen_title('EXPORT_POINTS');
+
+		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POINTS'))));
+		breadcrumb_set_self(do_lang_tempcode('EXPORT'));
+
+		disable_php_memory_limit();
+		if (function_exists('set_time_limit')) @set_time_limit(0);
+
+		set_helper_panel_pic('pagepics/points');
+
+		$d=array(get_input_date('from',true),get_input_date('to',true));
+		if (is_null($d[0])) return $this->_get_between($title);
+		list($from,$to)=$d;
+
+		require_code('points');
+
+		$label=do_lang('POINTS_GAINED_BETWEEN',get_timezoned_date($from,false,false,false,true),get_timezoned_date($to,false,false,false,true));
+
+		$data=array();
+
+		$total_gained_points=0;
+
+		$members=$GLOBALS['FORUM_DRIVER']->get_matching_members('');
+		foreach ($members as $member)
+		{
+			$member_id=$GLOBALS['FORUM_DRIVER']->pname_id($member);
+			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+
+			$points_gained=total_points($member_id,$to)-total_points($member_id,$from);
+			$points_now=total_points($member_id);
+
+			$data_point=array();
+			$data_point[do_lang('USERNAME')]=$username;
+			$data_point[$label]=$points_gained;
+			$data_point[do_lang('POINTS_NOW')]=$points_now;
+			$data[]=$data_point;
+
+			$total_gained_points+=$points_gained;
+		}
+
+		// Ordering for automatic 'lottery'
+		$winner_data=array();
+		while (count($data)!=0)
+		{
+			$rand=mt_rand(0,$total_gained_points);
+			$so_far=0;
+			foreach ($data as $i=>$data_point)
+			{
+				$so_far+=$data_point[$label];
+
+				if (($rand<$so_far) || (($rand==$so_far) && ($so_far==$total_gained_points)))
+				{
+					$winner_data[]=$data_point;
+					unset($data[$i]);
+					$total_gained_points-=$data_point[$label];
+
+					break;
+				}
+			}
+		}
+
+		require_code('files2');
+		make_csv($winner_data,'points_log.csv');
 	}
 
 	/**

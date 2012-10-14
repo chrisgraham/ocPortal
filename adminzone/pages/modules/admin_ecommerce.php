@@ -406,7 +406,7 @@ class Module_admin_ecommerce extends standard_crud_module
 	 * @param  tempcode	The title to display.
 	 * @return tempcode	The result of execution.
 	 */
-	function get_between($title)
+	function _get_between($title)
 	{
 		require_code('form_templates');
 
@@ -560,7 +560,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
 
 		$d=array(get_input_date('from',true),get_input_date('to',true));
-		if (is_null($d[0])) return $this->get_between($title);
+		if (is_null($d[0])) return $this->_get_between($title);
 		list($from,$to)=$d;
 
 		$types=$this->get_types($from,$to);
@@ -586,7 +586,7 @@ class Module_admin_ecommerce extends standard_crud_module
 		breadcrumb_set_parents(array(array('_SELF:_SELF:ecom_usage',do_lang_tempcode('ECOMMERCE'))));
 
 		$d=array(get_input_date('from',true),get_input_date('to',true));
-		if (is_null($d[0])) return $this->get_between($title);
+		if (is_null($d[0])) return $this->_get_between($title);
 		list($from,$to)=$d;
 
 		$types=$this->get_types($from,$to,true);
