@@ -11,7 +11,7 @@
 
 			<h2>{!MEDIA}</h2>
 
-			<div class="gallery_tease_pic_teaser left" id="image_fader_scrolling_text_{$GET,RAND}">
+			<div class="gallery_tease_pic_teaser" id="image_fader_scrolling_text_{$GET,RAND}">
 			</div>
 		</div>
 	</div></div>

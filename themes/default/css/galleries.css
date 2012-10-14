@@ -178,6 +178,7 @@
 
 .gallery_tease_pic_pic {
 	float: {!en_right};
+	margin-{!en_left}: 0.5em;
 	text-align: {!en_right};
 }
 
