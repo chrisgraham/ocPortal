@@ -1,5 +1,3 @@
-{REFRESH}
-
 {TITLE}
 
 {$REQUIRE_CSS,messages}
@@ -20,3 +18,4 @@
 	</div>
 </div>
 
+{REFRESH}
