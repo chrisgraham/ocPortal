@@ -3732,17 +3732,16 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 		padding: 0 22px 5px 0;
 	}
 
-	a[target="_blank"] {
+	a[target="_blank"] { /* Detected external links have styling */
 		background: url('{$IMG;,filetypes/external_link}') no-repeat right top;
 		padding-right: 10px;
 	}
-
-	a[onclick$="window.open"], body div a.external_link {
+	body div a.external_link { /* Explicitly marked external links must show the styling with precedence */
 		background: url('{$IMG;,filetypes/external_link}') no-repeat right top !important;
 		padding-right: 10px !important;
 	}
 
-	body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"] {
+	body a.link_exempt, body link_exempt_wrap a, body a[href*=".php"] { /* Turn off the "new window" icon for URLs containing ".php" because usually in ocPortal these are used for system pages that don't warrant these icons */
 		background-image: none;
 		padding: 0px;
 	}

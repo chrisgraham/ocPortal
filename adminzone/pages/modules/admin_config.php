@@ -289,6 +289,7 @@ class Module_admin_config
 			add_config_option('HONEYPOT_URL','honeypot_url','line','return \'\';','SECURITY','SPAMMER_DETECTION');
 			add_config_option('HONEYPOT_PHRASE','honeypot_phrase','line','return \'\';','SECURITY','SPAMMER_DETECTION');
 			add_config_option('RULES_LINK','bottom_show_rules_link','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
+			add_config_option('FILETYPE_ICONS','filetype_icons','tick','return \'1\';','THEME','GENERAL');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
@@ -304,7 +305,6 @@ class Module_admin_config
 			delete_config_option('panel_width_spaced');
 			delete_config_option('tray_support');
 			delete_config_option('enable_image_fading');
-			add_config_option('FILETYPE_ICONS','filetype_icons','tick','return \'1\';','THEME','GENERAL');
 		}
 
 		if (is_null($upgrade_from))
