@@ -3,10 +3,14 @@
 "use strict";
 
 /* Startup */
-var page_loaded=false,page_fully_loaded=false;
+if (typeof window.page_loaded=='undefined')
+{
+	window.page_loaded=false;
+	window.page_fully_loaded=false;
+}
 function script_load_stuff()
 {
-	if (page_loaded) return; // Been called twice for some reason
+	if (window.page_loaded) return; // Been called twice for some reason
 
 	var i;
 
@@ -21,7 +25,7 @@ function script_load_stuff()
 	images[3]='{$IMG;,contract}'.replace(/^http:/,window.location.protocol);
 	images[4]='{$IMG;,exp_con}'.replace(/^http:/,window.location.protocol);
 	images[5]='{$IMG;,loading}'.replace(/^http:/,window.location.protocol);
-	for(i=0;i<images.length;i++) preloader.src=images[i];
+	for (i=0;i<images.length;i++) preloader.src=images[i];
 
 	/* Textarea scroll support */
 	handle_textarea_scrolling();

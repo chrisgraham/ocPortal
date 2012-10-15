@@ -282,7 +282,7 @@ function shocker_tick(id,time,min_color,max_color)
 	window.setInterval(function() { process_wave(e_left); },window['comcodeshocker'+id+'_left'][3]);
 }
 
-var tick_pos=[];
+window.tick_pos=[];
 function ticker_tick(id,width)
 {
 	if (!window.focused) return;
@@ -295,7 +295,8 @@ function ticker_tick(id,width)
 	if (tick_pos[id]<-1.1*find_width(e.childNodes[0])) tick_pos[id]=width;
 }
 
-var jumper_pos=[],jumper_parts=[];
+window.jumper_pos=[];
+window.jumper_parts=[];
 function jumper_tick(id)
 {
 	if (jumper_pos[id]==jumper_parts[id].length-1) jumper_pos[id]=0;
