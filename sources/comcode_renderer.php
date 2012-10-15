@@ -436,7 +436,7 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
 		if (class_exists('GeSHi'))
 		{
 			require_code('developer_tools');
-			destrictify();
+			destrictify(false);
 			$geshi=new GeSHi($evaluated,($type=='HTML')?'html4strict':strtolower($type));
 			$geshi->set_header_type(GESHI_HEADER_DIV);
 			if ($numbers) $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
