@@ -217,9 +217,13 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true,
 		}
 	}
 
+	$require_new_member_validation=get_option('require_new_member_validation')=='1';
+	$validated=$require_new_member_validation?0:1;
+	attach_message(do_lang_tempcode('AWAITING_MEMBER_VALIDATION'),'notice');
+
 	// Add member
 	require_code('ocf_members_action');
-	$ret=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,NULL,1,time(),time(),'',$avatar_url,'',0,1,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,$allow_emails_from_staff,'',get_ip_address(),'',false,$type,'');
+	$ret=ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,NULL,$validated,time(),time(),'',$avatar_url,'',0,1,$reveal_age,'',$photo_url,$photo_thumb_url,1,1,$language,$allow_emails,$allow_emails_from_staff,'',get_ip_address(),'',false,$type,'');
 	return $ret;
 }
 
