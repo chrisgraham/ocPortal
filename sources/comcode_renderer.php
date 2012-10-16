@@ -1779,6 +1779,10 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if ($switch_over)
 			{
 				$url=$attributes['param'];
+				if ((strpos($url,'[')!==false) || (strpos($url,'{')!==false)) // Extra Comcode parsing wanted?
+				{
+					$url=static_evaluate_tempcode(comcode_to_tempcode($url,$source_member,$as_admin,60,NULL,$connection,false,false,true,false,false,$highlight_bits,$on_behalf_of_member));
+				}
 				$caption=$embed;
 			}
 
