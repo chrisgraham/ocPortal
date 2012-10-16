@@ -29,6 +29,13 @@
 					{+START,INCLUDE,MEMBER_BAR_SEARCH}{+END}
 				</div>
 			{+END}{+END}
+
+			<nav class="ocf_guest_column ocf_guest_column_b" role="navigation">
+				{$,<p class="ocf_member_column_title">{!VIEW}:</p>}
+				<ul role="navigation" class="actions_list">
+					<li><a href="{NEW_POSTS_URL*}">{!POSTS_SINCE}</a></li>
+				</ul>
+			</nav>
 		</div>
 	</div>
 </section>

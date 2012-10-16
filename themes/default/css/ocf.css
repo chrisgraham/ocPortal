@@ -567,7 +567,6 @@ hr.ocf_sig_barrier {
 
 .ocf_information_bar { /* {$,either OCF_GUEST_BAR.tpl or OCF_MEMBER_BAR.tpl} */
 	font-size: 0.9em;
-	margin-bottom: 1em !important;
 }
 
 .ocf_information_bar_outer>.toggleable_tray {
@@ -651,10 +650,6 @@ hr.ocf_sig_barrier {
 
 .ocf_member_column_d {
 	white-space: nowrap;
-}
-
-.ocf_member_column_d .actions_list {
-	margin: 5px 0 0 0;
 }
 
 .ocf_member_column_title {

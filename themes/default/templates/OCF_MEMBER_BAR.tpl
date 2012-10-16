@@ -41,14 +41,16 @@
 				</div>
 			</div>
 
-			<nav{+START,IF,{$NOT,{$MOBILE}}}  style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_d" role="navigation">
+			<nav{+START,IF,{$NOT,{$MOBILE}}} style="min-height: {$MAX,100,{MAX_AVATAR_HEIGHT|}}px"{+END} class="ocf_member_column ocf_member_column_d" role="navigation">
 				{$,<p class="ocf_member_column_title">{!VIEW}:</p>}
 				<ul role="navigation" class="actions_list">
-					<li><a href="{PRIVATE_TOPIC_URL*}">{!PRIVATE_TOPICS}{+START,IF_NON_EMPTY,{PT_EXTRA}} <span class="ocf_member_column_pts">{PT_EXTRA}</span>{+END}</a></li>
-					<li><a href="{NEW_POSTS_URL*}">{!POSTS_SINCE_LAST_VISIT}</a></li>
+					<!--<li><a href="{PRIVATE_TOPIC_URL*}">{!PRIVATE_TOPICS}{+START,IF_NON_EMPTY,{PT_EXTRA}} <span class="ocf_member_column_pts">{PT_EXTRA}</span>{+END}</a></li>-->
+					<li><a href="{NEW_POSTS_URL*}">{!POSTS_SINCE}</a></li>
 					<li><a href="{UNREAD_TOPICS_URL*}">{!TOPICS_UNREAD}</a></li>
 					<li><a href="{RECENTLY_READ_URL*}">{!RECENTLY_READ}</a></li>
 					<li><a href="{INLINE_PERSONAL_POSTS_URL*}">{!INLINE_PERSONAL_POSTS}</a></li>
+					<li><a href="{UNANSWERED_TOPICS_URL*}">{!UNANSWERED_TOPICS}</a></li>
+					<li><a href="{INVOLVED_TOPICS_URL*}">{!INVOLVED_TOPICS}</a></li>
 				</ul>
 			</nav>
 		</div>
