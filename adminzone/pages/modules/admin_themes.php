@@ -1093,7 +1093,7 @@ class Module_admin_themes
 			{
 				if ($files_tmp!='')
 				{
-					$temp=form_input_list_group($new_stub,make_string_tempcode($files_tmp));
+					$temp=form_input_list_group($stub,make_string_tempcode($files_tmp));
 					$files.=$temp->evaluate(); // XHTMLXHTML
 				}
 				$files_tmp='';
