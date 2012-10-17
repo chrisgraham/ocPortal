@@ -291,7 +291,7 @@ class Module_filedump
 		} else $upload_form=new ocp_tempcode();
 
 		// Do a form so people can make folders
-		if (get_option('is_on_folder_create')=='1')
+		if ((get_option('is_on_folder_create')=='1') && (has_specific_permission(get_member(),'upload_filedump')))
 		{
 			$post_url=build_url(array('page'=>'_SELF','type'=>'ac'),'_SELF');
 			require_code('form_templates');
@@ -404,6 +404,8 @@ class Module_filedump
 	function module_do_add_folder()
 	{
 		$title=get_screen_title('FILEDUMP_CREATE_FOLDER');
+
+		if (!has_specific_permission(get_member(),'upload_filedump')) access_denied('I_ERROR');
 
 		$name=filter_naughty(post_param('name'));
 		$place=filter_naughty(post_param('place'));
