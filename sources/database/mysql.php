@@ -121,7 +121,8 @@ class Database_Static_mysql extends Database_super_mysql
 			@mysql_query('SET NAMES "'.addslashes($SITE_INFO['database_charset']).'"',$db);
 		}
 		@mysql_query('SET SQL_BIG_SELECTS=1',$db);
-		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @mysql_query('SET sql_mode=STRICT_ALL_TABLES',$db); else @mysql_query('SET sql_mode=MYSQL40',$db);
+		if ((get_forum_type()=='ocf') && ($GLOBALS['IN_MINIKERNEL_VERSION']==0)) @mysql_query('SET sql_mode=\'STRICT_ALL_TABLES\'',$db); else @mysql_query('SET sql_mode=\'MYSQL40\'',$db);
+		// NB: Can add ,ONLY_FULL_GROUP_BY for testing on what other DBs will do, but can_arbitrary_groupby() would need to be made to return false
 
 		/*$mysql_version=mysql_get_server_info($db);
 		if (($mysql_version[0]=='3') && (!file_exists(get_file_base().'/old_mysql'))) exit('The mySQL version used is too old (Version '.$mysql_version.' used, whilst at least Version 4.0 is required)');*/

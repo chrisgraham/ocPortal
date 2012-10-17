@@ -1,8 +1,10 @@
 <div class="vertical_align">
 	<form title="{!ACTION}: {ORDER_TITLE*}" method="post" action="{ORDER_ACTUALISE_URL*}" onsubmit="return confirm_admin_order_actions(this.elements['action'].value,this);">
-		<label for="action">{!ACTION}</label>
+		<label class="accessibility_hidden" for="action">{!ACTION}</label>
 
-		<select name="action" id="action" class="orders_actions_dropdown">
+		<select onchange="if (this.selectedIndex!=0) this.form.submit();" name="action" id="action" class="orders_actions_dropdown">
+			<option value="">{!CHOOSE}&hellip;</option>
+
 			<option value="add_note">{!ADD_NOTE}</option>
 
 			<option value="del_order">{!CANCEL}</option>
@@ -20,6 +22,8 @@
 			{+END}
 		</select>
 
-		<input class="button_pageitem" type="submit" name="action_button" title="{!PROCEED}: {ORDER_TITLE*}" value="{!GO_BUTTON_TEXT}" />	
+		{+START,IF,{$NOT,{$JS_ON}}}
+			<input class="button_pageitem" type="submit" name="action_button" title="{!PROCEED}: {ORDER_TITLE*}" value="{!GO_BUTTON_TEXT}" />
+		{+END}
 	</form>
 </div>
