@@ -21,7 +21,7 @@
 			</select>
 
 			{+START,IF,{$NOT,{$JS_ON}}}
-				<input type="submit" value="{!FILTER}" />
+				<input type="submit" class="button_micro" value="{!FILTER}" />
 			{+END}
 		</p>
 	</form>
