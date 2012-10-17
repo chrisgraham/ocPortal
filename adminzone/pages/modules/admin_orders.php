@@ -185,7 +185,7 @@ class Module_admin_orders
 
 		$results_browser	=	results_browser(do_lang_tempcode('ORDERS'),NULL,$start,'start',$max,'max',$max_rows,NULL,'show_orders',true,true);
 
-		$rows		=	$GLOBALS['SITE_DB']->query('SELECT t1.*,sum(t3.p_quantity*t3.included_tax) as tax FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond.' GROUP BY t1.id ORDER BY '.db_string_equal_to('t1.order_status','ORDER_STATUS_cancelled').','.$sortable.' '.$sort_order,$max,$start);
+		$rows		=	$GLOBALS['SITE_DB']->query('SELECT t1.*,(t3.p_quantity*t3.included_tax) as tax FROM '.get_table_prefix().'shopping_order t1'.$extra_join.' LEFT JOIN '.get_table_prefix().'shopping_order_details t3 ON t1.id=t3.order_id '.$cond.' GROUP BY t1.id ORDER BY '.db_string_equal_to('t1.order_status','ORDER_STATUS_cancelled').','.$sortable.' '.$sort_order,$max,$start);
 
 		$order_entries	=	new ocp_tempcode();
 
@@ -620,7 +620,7 @@ class Module_admin_orders
 		if($order_status!='all')
 				$cond		.=	" AND t1.order_status='".db_escape_string($order_status)."'";
 
-		$qry				=	"SELECT t1.*,sum(t2.included_tax*t2.p_quantity) as 	
+		$qry				=	"SELECT t1.*,(t2.included_tax*t2.p_quantity) as 	
 								tax_amt,t3.address_name,t3.address_street,t3.address_city,t3.address_zip,
 								t3.address_country,t3.receiver_email
 								FROM ".get_table_prefix()."shopping_order t1
