@@ -70,7 +70,7 @@ function attachments_script()
 	{
 		$full=$myrow['a_thumb_url'];
 		require_code('images');
-		$myrow['a_thumb_url']=ensure_thumbnail($myrow['a_url'],$myrow['a_thumb_url'],'attachments','attachments',intval($myrow['id']),'a_thumb_url');
+		$myrow['a_thumb_url']=ensure_thumbnail($myrow['a_url'],$myrow['a_thumb_url'],'attachments','attachments',intval($myrow['id']),'a_thumb_url',NULL,true);
 	}
 	else
 	{
@@ -430,7 +430,7 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 			{
 				if (($type=='inline') || ($type=='left_inline') || ($type=='right_inline')) $attachment['mini']='1';
 				require_code('images');
-				ensure_thumbnail($attachment['a_url'],$attachment['a_thumb_url'],'attachments','attachments',intval($attachment['id']),'a_thumb_url');
+				ensure_thumbnail($attachment['a_url'],$attachment['a_thumb_url'],'attachments','attachments',intval($attachment['id']),'a_thumb_url',NULL,true);
 
 				$temp_tpl=do_template('ATTACHMENT_IMG'.(((array_key_exists('mini',$attachment)) && ($attachment['mini']=='1'))?'_MINI':''),map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				if (($type=='left') || ($type=='left_inline'))

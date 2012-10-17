@@ -161,6 +161,7 @@ function new_html__initialise(element)
 						open_image_into_lightbox(element);
 						return false;
 					} }(element);
+					element.title=element.title.replace('{!LINK_NEW_WINDOW;}','');
 				}
 			{+END}
 
@@ -1641,7 +1642,7 @@ function convert_tooltip(element)
 		if (!element.onmousemove) element.onmouseover=function() {};
 
 		// And now define nice listeners for it all...
-		var win=get_main_ocp_window();
+		var win=get_main_ocp_window(true);
 
 		win.add_event_listener_abstract(
 			element,

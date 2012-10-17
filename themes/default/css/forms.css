@@ -413,6 +413,10 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	width: 18em;
 }
 
+.box .attachments_field_name_column {
+	width: 14em;
+}
+
 .attachments_field_input_column {
 	width: 100%;
 }

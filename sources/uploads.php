@@ -115,9 +115,10 @@ function is_swf_upload($fake_prepopulation=false)
  * @param  boolean		Whether to copy a URL (if a URL) to the server, and return a local reference
  * @param  boolean		Whether to accept upload errors
  * @param  boolean		Whether to give a (deferred?) error if no file was given at all
+ * @param  boolean		Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
  * @return array			An array of 4 URL bits (URL, thumb URL, URL original filename, thumb original filename)
  */
-function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false)
+function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false,$only_make_smaller=false)
 {
 	require_code('files2');
 
@@ -421,7 +422,8 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 					$i++;
 				}
 				$url_full=url_is_local($url[0])?get_custom_base_url().'/'.$url[0]:$url[0];
-				convert_image($url_full,$place,-1,-1,intval(get_option('thumb_width')));
+
+				convert_image($url_full,$place,-1,-1,intval(get_option('thumb_width')),true,NULL,false,$only_make_smaller);
 
 				$thumb=$thumb_folder.'/'.rawurlencode($_file).$ext;
 			} else
