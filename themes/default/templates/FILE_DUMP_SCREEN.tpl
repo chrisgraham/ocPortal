@@ -18,11 +18,13 @@
 
 <p class="required_field_warning"><span class="required_star">*</span> {!REQUIRED}</p>
 
-<div class="box box___file_dump_screen"><div class="box_inner">
-	<h2>{!FILEDUMP_UPLOAD}</h2>
+{+START,IF_NON_EMPTY,{UPLOAD_FORM}}
+	<div class="box box___file_dump_screen"><div class="box_inner">
+		<h2>{!FILEDUMP_UPLOAD}</h2>
 
-	{UPLOAD_FORM}
-</div></div>
+		{UPLOAD_FORM}
+	</div></div>
+{+END}
 
 {+START,IF_NON_EMPTY,{CREATE_FOLDER_FORM}}
 	<div class="box box___file_dump_screen">

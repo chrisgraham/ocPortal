@@ -53,6 +53,7 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('failure');
-	echo ip_cidr_check('204.93.177.0','204.93.177.0/24')?'true':'false';
+	header('Content-Type: text/plain');
+	require_code('css_and_js');
+	@print(js_minify(http_download_file('http://portalcearamirim.com.br/themes/Portal_Cear_mirim/templates_cached/EN/javascript_validation_non_minified.js?1350491190')));
 }

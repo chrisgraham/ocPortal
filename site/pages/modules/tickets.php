@@ -523,7 +523,7 @@ class Module_tickets
 					'DISPLAY'=>'block',
 					'COMMENT_URL'=>'',
 					'SUBMIT_NAME'=>do_lang_tempcode('MAKE_POST'),
-					'TITLE'=>do_lang_tempcode($new?'CREATE_TICKET_MAKE_POST':'MAKE_POST'),
+					'TITLE'=>do_lang_tempcode($new?'CREATE_TICKET_MAKE_POST':'REPLY'),
 				));
 			} else
 			{

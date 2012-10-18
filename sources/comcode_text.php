@@ -1863,7 +1863,7 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
 		$in_separate_parse_section=false;
 	}
 
-	if ($current_tag=='quote')
+	if (($current_tag=='quote') && (count($attribute_map)>0))
 	{
 		$comcode_dangerous=false;
 		$comcode_dangerous_html=false;

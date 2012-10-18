@@ -904,6 +904,8 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 
 	if ($zone===NULL) $zone=get_zone_name();
 
+	if (($zone=='site') && (get_option('collapse_user_zones')=='1')) $zone=''; // Might have been explicitly said in Tempcode, for example
+
 	$details=persistent_cache_get(array('PAGE_INFO',$codename,$required,$zone));
 	if (($details===NULL) || ($details===false))
 	{

@@ -40,9 +40,8 @@ function init__facebook_connect()
 	$appid=get_option('facebook_appid',true);
 	if (is_null($appid)) return;
 	$appsecret=get_option('facebook_secret_code',true);
-	if (is_null($appid)) return;
-	if (($appsecret!='') && ($appid!=''))
-		$FACEBOOK_CONNECT=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
+	if (is_null($appsecret)) return;
+	$FACEBOOK_CONNECT=new ocpFacebook(array('appId'=>$appid,'secret'=>$appsecret));
 
 	require_code('site');
 	attach_to_screen_footer(do_template('FACEBOOK_FOOTER',NULL,NULL,true,NULL,'.tpl','templates','default'));
@@ -239,6 +238,14 @@ function handle_facebook_connection_login($current_logged_in_member)
 		require_code('users_inactive_occasionals');
 		create_session($member_id,1,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1')); // This will mark it as confirmed
 	}
+
+	/*
+	Uncomment this if you want Facebook login to also automatically store syndication possibility for the user. ocPortal separates these by default, for privacy/control reasons.
+	if (!is_null($member_id))
+	{
+		set_long_value('facebook_oauth_token__'.strval($member_id),$FACEBOOK_CONNECT->getUserAccessToken());
+	}
+	*/
 
 	return $member_id;
 }

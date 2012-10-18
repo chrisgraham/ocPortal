@@ -119,8 +119,8 @@ function select_ze_tab(id,tab)
 	}
 }
 
-var ze_timer=[];
-var ze_delay_function=[];
+window.ze_timer=[];
+window.ze_delay_function=[];
 function ze_animate_to(ob,amount,towards_expanded,now)
 {
 	{+START,IF,{$VALUE_OPTION,disable_animations}}

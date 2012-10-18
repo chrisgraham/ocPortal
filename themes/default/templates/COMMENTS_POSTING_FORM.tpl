@@ -172,14 +172,13 @@
 								<div id="error_post" style="display: none" class="input_error_here"></div>
 							</td>
 						</tr>
+
+						{$GET,EXTRA_COMMENTS_FIELDS_1}
+						{$GET,EXTRA_COMMENTS_FIELDS_2}
 					</tbody>
 				</table></div>
 
-				{$GET,EXTRA_COMMENTS_FIELDS_2}
-
 				<div class="comments_posting_form_end">
-					{$GET,EXTRA_COMMENTS_FIELDS_1}
-
 					{+START,IF_PASSED,USE_CAPTCHA}
 						{+START,IF,{USE_CAPTCHA}}
 							<div class="comments_captcha">
@@ -199,14 +198,14 @@
 
 					<div class="proceed_button buttons_group">
 						{+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}{+START,IF,{$NOT,{$VALUE_OPTION,xhtml_strict}}}
-							<button onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; if (do_form_preview(form,maintain_theme_in_link('{$PREVIEW_URL*;}{$KEEP*;}'))) form.submit();" id="preview_button" accesskey="p" tabindex="250" class="button_pageitem" type="button">{!PREVIEW}</button>
+							<button onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; if (do_form_preview(form,maintain_theme_in_link('{$PREVIEW_URL*;}{$KEEP*;}'))) form.submit();" id="preview_button" accesskey="p" tabindex="250" class="{$?,{$IS_EMPTY,{COMMENT_URL}},button_page,button_pageitem}" type="button">{!PREVIEW}</button>
 						{+END}{+END}{+END}
 						{+START,IF_PASSED,MORE_URL}
 							{+START,IF,{$JS_ON}}
-								<button tabindex="5" accesskey="y" onclick="move_to_full_editor(this,'{MORE_URL*;}');" class="button_pageitem" type="button">{!FULL_EDITOR}</button>
+								<button tabindex="5" accesskey="y" onclick="move_to_full_editor(this,'{MORE_URL*;}');" class="{$?,{$IS_EMPTY,{COMMENT_URL}},button_page,button_pageitem}" type="button">{!FULL_EDITOR}</button>
 							{+END}
 						{+END}
-						<button onclick="handle_comments_posting_form_submit(this,event);" tabindex="4" accesskey="u" id="submit_button" class="button_pageitem" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
+						<button onclick="handle_comments_posting_form_submit(this,event);" tabindex="4" accesskey="u" id="submit_button" class="{$?,{$IS_EMPTY,{COMMENT_URL}},button_page,button_pageitem}" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END}><strong>{+START,IF_PASSED,SUBMIT_NAME}{SUBMIT_NAME*}{+END}{+START,IF_NON_PASSED,SUBMIT_NAME}{+START,IF_NON_EMPTY,{TITLE}}{TITLE*}{+END}{+START,IF_EMPTY,{TITLE}}{!SEND}{+END}{+END}</strong></button>
 					</div>
 				</div>
 			</div>

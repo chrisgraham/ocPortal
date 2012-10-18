@@ -34,11 +34,12 @@ function init__uploads($old)
  * @param  boolean		Whether to copy a URL (if a URL) to the server, and return a local reference
  * @param  boolean		Whether to accept upload errors
  * @param  boolean		Whether to give a (deferred?) error if no file was given at all
+ * @param  boolean		Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
  * @return array			An array of 4 URL bits (URL, thumb, URL original filename, thumb original filename)
  */
-function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false)
+function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false,$only_make_smaller=false)
 {
-	$urls=non_overridden__get_url($specify_name,$attach_name,$upload_folder,$obfuscate,$enforce_type,$make_thumbnail,$thumb_specify_name,$thumb_attach_name,$copy_to_server,$accept_errors,$should_get_something);
+	$urls=non_overridden__get_url($specify_name,$attach_name,$upload_folder,$obfuscate,$enforce_type,$make_thumbnail,$thumb_specify_name,$thumb_attach_name,$copy_to_server,$accept_errors,$should_get_something,$only_make_smaller);
 
 	if (!$GLOBALS['SITE_DB']->table_exists('image_url_sub_for')) return $urls;
 

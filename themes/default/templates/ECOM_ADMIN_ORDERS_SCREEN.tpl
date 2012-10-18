@@ -10,7 +10,7 @@
 	{+END}
 </div>
 
-<h2>{!SEARCH}</h2>
+<h2 class="force_margin">{!SEARCH}</h2>
 
 <form title="{!SEARCH}" target="_self" method="get" action="{SEARCH_URL*}" onsubmit="try { window.scrollTo(0,0); } catch(e) {};">
 	<div>
@@ -24,7 +24,7 @@
 	</div>
 </form>
 
-<h2>{!MORE} / {!ADVANCED}</h2>
+<h2 class="force_margin">{!MORE} / {!ADVANCED}</h2>
 
 <p class="lonely_label">
 	{!ACTIONS}:

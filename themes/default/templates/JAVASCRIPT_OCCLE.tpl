@@ -243,7 +243,7 @@ function clear_cl()
 
 // Fun stuff...
 
-var occle_foxy_textnodes=[];
+window.occle_foxy_textnodes=[];
 
 function bsod()
 {

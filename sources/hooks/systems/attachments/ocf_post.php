@@ -36,6 +36,8 @@ class Hook_attachments_ocf_post
 		$info=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_cache_forum_id','p_intended_solely_for','p_poster','p_topic_id'),array('id'=>intval($id)),'',1);
 		if (!array_key_exists(0,$info)) return false;
 		$forum_id=$info[0]['p_cache_forum_id'];
+		$forum_id_parent=$GLOBALS['FORUM_DB']->query_value('f_forums','f_parent_forum',array('id'=>$forum_id));
+		$forum_id_parent_parent=$GLOBALS['FORUM_DB']->query_value('f_forums','f_parent_forum',array('id'=>$forum_id_parent));
 		$poster=$info[0]['p_poster'];
 		$intended_solely_for=$info[0]['p_intended_solely_for'];
 		if ((!is_null($intended_solely_for)) && ($poster!=get_member()) && ($intended_solely_for!=get_member())) return false;
@@ -46,7 +48,7 @@ class Hook_attachments_ocf_post
 		}
 		$tf=get_option('ticket_forum_name',true);
 		if (!is_null($tf)) $forum2=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($tf); else $forum2=NULL;
-		if ($forum2==$forum_id)
+		if (($forum2==$forum_id) || ($forum2==$forum_id_parent) || ($forum2==$forum_id_parent_parent))
 		{
 			$title=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id'=>$info[0]['p_topic_id']));
 			if (substr($title,0,strlen(strval(get_member()))+1)==strval(get_member()).'_') return true;

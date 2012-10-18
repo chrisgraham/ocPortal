@@ -321,9 +321,10 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
  * @param  AUTO_LINK		The ID of the table record that is storing what we are doing the thumbnail for
  * @param  ID_TEXT		The name of the table field where thumbnails are saved
  * @param  ?integer		The thumbnail width to use (NULL: default)
+ * @param  boolean		Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
  * @return URLPATH		The URL to the thumbnail
  */
-function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_field_name='thumb_url',$thumb_width=NULL)
+function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_field_name='thumb_url',$thumb_width=NULL,$only_make_smaller=false)
 {
 	if (is_null($thumb_width)) $thumb_width=intval(get_option('thumb_width'));
 

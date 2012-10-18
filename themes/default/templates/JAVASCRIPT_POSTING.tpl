@@ -52,7 +52,7 @@ function set_attachment(field_name,number,filename)
 	}
 
 	var post_value=get_textbox(post);
-	var done=attachment_present(post.value,number) || attachment_present(post_value,number);
+	var done=attachment_present(post.value,number) || attachment_present(post_value,number) || (tmp_form.getAttribute('itemtype')=='http://schema.org/ContactPage');
 	if (!done)
 	{
 		var filepath=filename;

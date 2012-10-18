@@ -1083,6 +1083,9 @@ function ocf_delete_custom_field($id)
 	$GLOBALS['FORUM_DB']->query_delete('f_custom_fields',array('id'=>$id),'',1);
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;
+
+	global $TABLE_LANG_FIELDS;
+	unset($TABLE_LANG_FIELDS['f_member_custom_fields']);
 }
 
 /**

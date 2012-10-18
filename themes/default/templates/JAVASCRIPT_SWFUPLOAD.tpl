@@ -1638,8 +1638,21 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	set_inner_html(disable_link,'{!SWITCH_TO_REGULAR_UPLOADER;}');
 	disable_link.setAttribute('href',window.location+(((window.location+'').indexOf('?')==-1)?'?':'&')+'keep_no_swfupload=1');
 	disable_link.className='associated_details';
+	disable_link.target='_blank';
 	disable_link.onclick=function(e) {
-		if ((window.handle_form_saving) && document.getElementById('post')) handle_form_saving(e,document.getElementById('post'),true);
+		if ((window.handle_form_saving) && document.getElementById(posting_field_name)) handle_form_saving(e,document.getElementById(posting_field_name),true);
+
+		window.fauxmodal_confirm(
+			'{!DISABLE_SWFUPLOAD_CONFIRM;}',
+			function(proceeding)
+			{
+				if (proceeding)
+					click_link(disable_link);
+			},
+			'{!Q_SURE;}'
+		);
+
+		return false;
 	}
 	maindiv.appendChild(disable_link);
 

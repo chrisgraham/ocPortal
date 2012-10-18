@@ -418,7 +418,7 @@ function do_code_box($type,$embed,$numbers=true,$in_semihtml=false,$is_all_semih
 		if (class_exists('GeSHi'))
 		{
 			require_code('developer_tools');
-			destrictify();
+			destrictify(false);
 			$geshi=new GeSHi($evaluated,($type=='HTML')?'html4strict':strtolower($type));
 			$geshi->set_header_type(GESHI_HEADER_DIV);
 			if ($numbers) $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
@@ -1076,7 +1076,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$attributes['type']=post_param('attachmenttype'.$_id,array_key_exists('type',$attributes)?$attributes['type']:'auto');
 					if (substr($attributes['type'],-8)=='_extract') $attributes['type']=substr($attributes['type'],0,strlen($attributes['type'])-8);
 
-					$urls=get_url('','file'.$_id,'uploads/attachments',2,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true,true,true);
+					$urls=get_url('','file'.$_id,'uploads/attachments',2,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($thumb_url==''),'','',true,true,true,true);
 					if ($urls[0]=='') return new ocp_tempcode();//warn_exit(do_lang_tempcode('ERROR_UPLOADING'));  Can't do this, because this might not be post-calculated if something went wrong once
 					is_swf_upload(true);
 					$_size=$_FILES['file'.$_id]['size'];
@@ -1757,6 +1757,10 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if ($switch_over)
 			{
 				$url=$attributes['param'];
+				if ((strpos($url,'[')!==false) || (strpos($url,'{')!==false)) // Extra Comcode parsing wanted?
+				{
+					$url=static_evaluate_tempcode(comcode_to_tempcode($url,$source_member,$as_admin,60,NULL,$connection,false,false,true,false,false,$highlight_bits,$on_behalf_of_member));
+				}
 				$caption=$embed;
 			}
 

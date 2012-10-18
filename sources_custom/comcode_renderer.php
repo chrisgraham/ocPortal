@@ -17,12 +17,12 @@ if (!function_exists('init__comcode_renderer'))
 		$after='if ((isset($DANGEROUS_TAGS[$tag])) && (!$comcode_dangerous) && (!comcode_white_listed($tag,$marker,$comcode)))';
 		$in=str_replace($before,$after,$in);
 
-		$before='$urls=get_url(\'\',\'file\'.$_id,\'uploads/attachments\',2,OCP_UPLOAD_ANYTHING,(!array_key_exists(\'thumb\',$attributes)) || ($attributes[\'thumb\']!=\'0\'),\'\',\'\',true,true,true);';
+		$before='$urls=get_url(\'\',\'file\'.$_id,\'uploads/attachments\',2,OCP_UPLOAD_ANYTHING,(!array_key_exists(\'thumb\',$attributes)) || ($attributes[\'thumb\']!=\'0\'),\'\',\'\',true,true,true,true);';
 		$after=$before."
 			\$gallery=post_param('gallery'.\$_id,'');
 			if (\$gallery!='')
 			{
-				\$urls_gal=get_url('','file'.\$_id,'uploads/galleries',0,OCP_UPLOAD_ANYTHING,true,'','',true,true,true);
+				\$urls_gal=get_url('','file'.\$_id,'uploads/galleries',0,OCP_UPLOAD_ANYTHING,true,'','',true,true,true,true);
 				require_code('galleries2');
 
 				\$description=post_param('caption'.\$_id,array_key_exists('description',\$attributes)?\$attributes['description']:'');

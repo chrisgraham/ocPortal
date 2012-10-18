@@ -40,7 +40,7 @@
 }
 
 .display_type_GRID .catalogue_entry_box_thumbnail {
-	min-height: {$CONFIG_OPTION,thumb_width}px;
+	min-height: {$ADD,4,{$CONFIG_OPTION,thumb_width}}px;
 	text-align: center;
 }
 
