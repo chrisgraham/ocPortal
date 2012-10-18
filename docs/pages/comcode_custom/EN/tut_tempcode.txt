@@ -304,7 +304,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$CPF_VALUE,Some Custom Field}</td>
-		<td>Find the value of a custom profile field (pass in the ID number of a custom profile field, which can be found from the URL of where you to edit it -- or pass in the human-readable name of the field; if you pass a name it can also interpret translated/Comcode text fields properly)</td>
+		<td>Find the value of a custom profile field (pass in the ID number of a custom profile field, which can be found from the URL of where you to edit it -- or pass in the human-readable name of the field; if you pass a name it can also interpret translated/Comcode text fields properly). If you pass a second parameter, it will specify the member ID to use (if not passed, it will default to the current member).</td>
 	</tr>
 </tbody></table>
 [/html]
