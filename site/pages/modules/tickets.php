@@ -355,7 +355,7 @@ class Module_tickets
 					}
 					$unclosed=(!$GLOBALS['FORUM_DRIVER']->is_staff($topic['lastmemberid']));
 
-					$params=array('NUM_POSTS'=>integer_format($topic['num']),'CLOSED'=>strval($topic['closed']),'URL'=>$url,'TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>strval($topic['lasttime']),'PROFILE_LINK'=>$profile_link,'LAST_POSTER'=>$last_poster,'UNCLOSED'=>$unclosed);
+					$params=array('NUM_POSTS'=>integer_format($topic['num']-1),'CLOSED'=>strval($topic['closed']),'URL'=>$url,'TITLE'=>$_title,'DATE'=>$date,'DATE_RAW'=>strval($topic['lasttime']),'PROFILE_LINK'=>$profile_link,'LAST_POSTER'=>$last_poster,'UNCLOSED'=>$unclosed);
 
 					$links->attach(do_template('SUPPORT_TICKET_LINK',$params));
 				}
@@ -735,7 +735,10 @@ class Module_tickets
 
 		// Send email
 		if (!$staff_only)
+		{
+			if ($email=='') $email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 			send_ticket_email($id,$__title,$post,$home_url,$email,$ticket_type);
+		}
 
 		$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id),'_SELF');
 		if (is_guest()) $url=build_url(array('page'=>'_SELF'),'_SELF');

@@ -67,17 +67,7 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('catalogues2');
-
-	for ($i=0;$i<2000;$i++)
-	{
-		$map=array(
-			// HACKHACK: Hard-coded IDs
-			14=>uniqid(''),
-			15=>'http://www.google.com/',
-			16=>uniqid(''),
-		);
-
-		$entry_id=actual_add_catalogue_entry(3,1,'',0,0,0,$map);
-	}
+	require_code('zones');
+	require_code('zones2');
+	@var_dump(extract_module_functions(_get_module_path('site','chat'),array('install')));
 }

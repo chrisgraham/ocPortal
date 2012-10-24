@@ -548,28 +548,29 @@ function doInput_email(field_name,va)
 			if ((va!=null) && (va.indexOf('@')==-1))
 			{
 				window.fauxmodal_alert("{!NOT_A_EMAIL^#}");
-				return doInput_email(field_name,va);
+				doInput_email(field_name,va);
+				return;
+			}
 
-				if (va!==null)
-				{
-					window.fauxmodal_prompt(
-						"{!ENTER_CAPTION^#}",
-						'',
-						function(vb)
+			if (va!==null)
+			{
+				window.fauxmodal_prompt(
+					"{!ENTER_CAPTION^#}",
+					'',
+					function(vb)
+					{
+						var element=document.getElementById(field_name);
+						element=ensure_true_id(element,field_name);
+						if (is_comcode_xml(element))
 						{
-							var element=document.getElementById(field_name);
-							element=ensure_true_id(element,field_name);
-							if (is_comcode_xml(element))
-							{
-								if (vb!==null) insertTextbox(element,"<email address=\""+escape_html(va)+"\">"+escape_html(vb)+"</email>");
-							} else
-							{
-								if (vb!==null) insertTextbox(element,"[email=\""+escape_comcode(vb)+"\"]"+escape_comcode(va)+"[/email]");
-							}
-						},
-						"{!comcode:INPUT_COMCODE_email^#}"
-					);
-				}
+							if (vb!==null) insertTextbox(element,"<email address=\""+escape_html(va)+"\">"+escape_html(vb)+"</email>");
+						} else
+						{
+							if (vb!==null) insertTextbox(element,"[email=\""+escape_comcode(vb)+"\"]"+escape_comcode(va)+"[/email]");
+						}
+					},
+					"{!comcode:INPUT_COMCODE_email^#}"
+				);
 			}
 		},
 		"{!comcode:INPUT_COMCODE_email^#}"

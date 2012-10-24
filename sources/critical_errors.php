@@ -159,7 +159,7 @@ if (!function_exists('critical_error'))
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN">
 <head>
 	<title>Critical error</title>
-	<style type="text/css">
+	<style type="text/css"><![CDATA[
 END;
 if (strpos($error,'Allowed memory')===false)
 {
@@ -173,7 +173,7 @@ echo htmlentities($css);
 echo <<<END
 		.main_page_title { text-decoration: underline; display: block; min-height: 42px; padding: 3px 0 0 0; }
 		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-	</style>
+	]]></style>
 </head>
 <body><div class="global_middle">
 END;

@@ -90,8 +90,8 @@ function validate_ip_script()
  */
 function get_username_from_human_name($username)
 {
+	$username=preg_replace('# \(\d+\)$#','',$username);
 	$_username=$username;
-	$_username=preg_replace('# \(\d+\)$#','',$username);
 	$i=1;
 	do
 	{
@@ -357,7 +357,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 	$fields=new ocp_tempcode();
 
 	// Human name / Username
-	if (($special_type!='ldap') && ($special_type!='remote'))
+	if (($special_type!='ldap') && ($special_type!='remote') && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme')=='facebook'))
 	{
 		if ((is_null($member_id)) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self')))
 		{
@@ -687,9 +687,9 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
  * @param  AUTO_LINK			The ID of the member.
  * @param  ?SHORT_TEXT		The e-mail address. (NULL: don't change)
  * @param  ?BINARY			Whether posts are previewed before they are made. (NULL: don't change)
- * @param  ?integer			Day of date of birth. (NULL: don't change)
- * @param  ?integer			Month of date of birth. (NULL: don't change)
- * @param  ?integer			Year of date of birth. (NULL: don't change)
+ * @param  ?integer			Day of date of birth. (NULL: don't change) (-1: deset)
+ * @param  ?integer			Month of date of birth. (NULL: don't change) (-1: deset)
+ * @param  ?integer			Year of date of birth. (NULL: don't change) (-1: deset)
  * @param  ?ID_TEXT			The member timezone. (NULL: don't change)
  * @param  ?GROUP				The members primary (NULL: don't change).
  * @param  array				A map of custom fields values (field-id=>value).
@@ -781,9 +781,9 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	$update=array();
 	if (!is_null($theme)) $update['m_theme']=$theme;
 	if (!is_null($preview_posts)) $update['m_preview_posts']=$preview_posts;
-	if (!is_null($dob_day)) $update['m_dob_day']=$dob_day;
-	if (!is_null($dob_month)) $update['m_dob_month']=$dob_month;
-	if (!is_null($dob_year)) $update['m_dob_year']=$dob_year;
+	if (!is_null($dob_day)) $update['m_dob_day']=($dob_day==-1)?NULL:$dob_day;
+	if (!is_null($dob_month)) $update['m_dob_month']=($dob_month==-1)?NULL:$dob_month;
+	if (!is_null($dob_year)) $update['m_dob_year']=($dob_year==-1)?NULL:$dob_year;
 	if (!is_null($timezone)) $update['m_timezone_offset']=$timezone;
 	if (!is_null($reveal_age)) $update['m_reveal_age']=$reveal_age;
 	if (!is_null($email_address)) $update['m_email_address']=$email_address;

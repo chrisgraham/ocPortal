@@ -108,6 +108,8 @@ class Module_admin_addons
 		require_code('addons');
 		require_code('menus2');
 
+		disable_php_memory_limit(); // Choice of what to export, or tricky import
+
 		// Decide what we're doing
 		$type=get_param('type','misc');
 

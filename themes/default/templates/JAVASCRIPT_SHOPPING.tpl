@@ -25,7 +25,6 @@ function confirm_empty(message,action_url,form)
 	window.fauxmodal_confirm(
 		message,
 		function() {
-		{
 			form.action=action_url;
 			form.submit();
 		}

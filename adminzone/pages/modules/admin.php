@@ -84,7 +84,7 @@ class Module_admin
 			{
 				$setup_wizard_url=build_url(array('page'=>'admin_setupwizard'),get_module_zone('admin_setupwizard'));
 				$cancel_sw_url=get_self_url(false,false,array('cancel_sw_warn'=>1));
-				attach_message(do_lang_tempcode('SETUP_WIZARD_NOT_RUN',escape_html($setup_wizard_url->evaluate()),escape_html($cancel_sw_url->evaluate())),'warn');
+				attach_message(do_lang_tempcode('SETUP_WIZARD_NOT_RUN',escape_html($setup_wizard_url->evaluate()),escape_html($cancel_sw_url->evaluate())),'notice');
 			}
 		}
 
@@ -207,7 +207,7 @@ class Module_admin
 	{
 		$bad=array('the','of','to','and','a','in','is','it','you','that','he','was','for','on','are',
 			'with','as','I','his','they','be','at','this','or','had','by','but','what','some','we','can',
-			'out','other','were','all','there','when','your','how','an','which','do','like','so','these','has','go',
+			'out','other','were','all','there','when','your','how','an','which','do','so','these','has','go',
 			'come','did','no','my','where','me','our','thing','site','website');
 		$_words=array();
 		foreach ($words as $i=>$b)
@@ -322,6 +322,10 @@ class Module_admin
 		}
 		if ($current_word!='') $_keywords[]=$current_word;
 		$_keywords=$this->_strip_junk_words($_keywords);
+		if (count($_keywords)==0)
+		{
+			return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('TITLE'=>get_page_title('ADMIN_ZONE_SEARCH_RESULTS'),'EMPTY'=>true,'ARRAY'=>true,'CONTENT'=>'','PRE'=>'','POST'=>''));
+		}
 		$keywords=array();
 		$synonym_rows=$this->_synonyms(); // Only in English by default. To do for another language, override this file using inheritance
 		$section_limitations=array();

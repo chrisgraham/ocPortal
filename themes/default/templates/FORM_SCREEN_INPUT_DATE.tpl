@@ -55,6 +55,7 @@
 		year_field.onchange=function() {
 			if (this.options[this.selectedIndex].value=='-')
 			{
+				var _this=this;
 				window.fauxmodal_prompt(
 					'{!CHOOSE_YEAR;}',
 					'',
@@ -62,15 +63,15 @@
 					{
 						if ((!year) || (!year.match(/\-?\d+/)))
 						{
-							this.selectedIndex=0;
+							_this.selectedIndex=0;
 						} else
 						{
 							year=year.replace(/^0+/,'');
 							var custom_option=document.createElement('option');
 							custom_option.value=year;
 							setInnerHTML(custom_option,year);
-							this.appendChild(custom_option);
-							this.selectedIndex=this.options.length-1;
+							_this.appendChild(custom_option);
+							_this.selectedIndex=_this.options.length-1;
 						}
 					}
 				);

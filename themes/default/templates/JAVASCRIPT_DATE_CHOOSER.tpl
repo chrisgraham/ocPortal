@@ -71,7 +71,7 @@ if (typeof window.YAHOO != 'undefined')
 				var date = dates[0];
 				var year = document.getElementById(stub + '_year');
 				var new_year_index = date.getFullYear() - year.options[1].value + 1;
-				if ((new_year_index >= year.options.length) || (year.options[new_year_index].value != date.getFullYear()) || (new_year_index<0))
+				if ((new_year_index >= year.options.length) || (new_year_index<0) || (year.options[new_year_index].value != date.getFullYear()))
 				{
 					var new_option = document.createElement('option');
 					new_option.value = date.getFullYear();
@@ -95,6 +95,7 @@ if (typeof window.YAHOO != 'undefined')
 			container.style.position = 'absolute';
 			container.style.width = '150px';
 			container.style.display = 'block';
+			container.style.zIndex = 150;
 			window[calob].render();
 			window.a_date_field_is_on = true;
 		}
