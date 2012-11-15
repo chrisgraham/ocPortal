@@ -94,7 +94,7 @@ class Hook_search_polls
 		if (!is_null($cutoff))
 		{
 			$where_clause.=' AND ';
-			$where_clause.='add_time>'.strval((integer)$cutoff);
+			$where_clause.='add_time>'.strval($cutoff);
 		}
 
 		// Calculate and perform query

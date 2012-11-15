@@ -196,7 +196,7 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason)
 	foreach ($posts as $post)
 	{
 		if ($or_list!='') $or_list.=' OR ';
-		$or_list.='id='.strval((integer)$post);
+		$or_list.='id='.strval($post);
 	}
 
 	// Check access
@@ -324,7 +324,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 	foreach ($posts as $post)
 	{
 		if ($or_list!='') $or_list.=' OR ';
-		$or_list.='id='.strval((integer)$post);
+		$or_list.='id='.strval($post);
 	}
 
 	// Check access
@@ -337,7 +337,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 		if ($post['p_cache_forum_id']!=$from_forum_id) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	}
 
-	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.strval((integer)$to_forum_id).', p_topic_id='.strval((integer)$to_topic_id).' WHERE '.$or_list);
+	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts SET p_cache_forum_id='.strval($to_forum_id).', p_topic_id='.strval($to_topic_id).' WHERE '.$or_list);
 
 	// Update cacheing
 	require_code('ocf_posts_action2');
@@ -352,7 +352,7 @@ function ocf_move_posts($from_topic_id,$to_topic_id,$posts,$reason,$to_forum_id=
 			ocf_force_update_forum_cacheing($to_forum_id,0,$num_posts_counted);
 
 			// Update member post counts if we've switched between post-count countable forums
-			$post_count_info=$GLOBALS['FORUM_DB']->query('SELECT id,f_post_count_increment FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval((integer)$from_forum_id).' OR id='.strval((integer)$to_forum_id),2);
+			$post_count_info=$GLOBALS['FORUM_DB']->query('SELECT id,f_post_count_increment FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($from_forum_id).' OR id='.strval($to_forum_id),2);
 			if ($post_count_info[0]['id']==$from_forum_id)
 			{
 				$from=$post_count_info[0]['f_post_count_increment'];

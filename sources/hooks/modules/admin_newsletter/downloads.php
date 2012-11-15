@@ -54,7 +54,7 @@ class Hook_whats_news_downloads
 
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'category_id');
-		$rows=$GLOBALS['SITE_DB']->query('SELECT name,description,id,add_date,submitter FROM '.get_table_prefix().'download_downloads WHERE validated=1 AND add_date>'.strval((integer)$cutoff_time).' AND ('.$or_list.') ORDER BY add_date DESC',300);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT name,description,id,add_date,submitter FROM '.get_table_prefix().'download_downloads WHERE validated=1 AND add_date>'.strval($cutoff_time).' AND ('.$or_list.') ORDER BY add_date DESC',300);
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
 		{

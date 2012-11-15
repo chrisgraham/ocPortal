@@ -42,7 +42,7 @@ function ocf_member_handle_promotion($member_id=NULL)
 		if ($or_list!='') $or_list.=' OR ';
 		$or_list.='id='.strval($id);
 	}
-	$promotions=$GLOBALS['FORUM_DB']->query('SELECT id,g_promotion_target FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE ('.$or_list.') AND g_promotion_target IS NOT NULL AND g_promotion_threshold<='.strval((integer)$total_points));
+	$promotions=$GLOBALS['FORUM_DB']->query('SELECT id,g_promotion_target FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE ('.$or_list.') AND g_promotion_target IS NOT NULL AND g_promotion_threshold<='.strval($total_points));
 	$promotes_today=array();
 	foreach ($promotions as $promotion)
 	{
@@ -177,7 +177,7 @@ function ocf_force_update_topic_cacheing($topic_id,$post_count_dif=NULL,$last=tr
 		}
 		if ($last) // We're updating cacheing of the last
 		{
-			$posts=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_intended_solely_for IS NULL AND p_topic_id='.strval((integer)$topic_id).' ORDER BY p_time DESC,id DESC',1);
+			$posts=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_intended_solely_for IS NULL AND p_topic_id='.strval($topic_id).' ORDER BY p_time DESC,id DESC',1);
 			if (!array_key_exists(0,$posts))
 			{
 				$last_post_id=NULL;
@@ -207,19 +207,19 @@ function ocf_force_update_topic_cacheing($topic_id,$post_count_dif=NULL,$last=tr
 	if ($first_title=='') $first_title=do_lang('NO_TOPIC_TITLE',strval($topic_id));
 
 	if ($first) $update_first=
-		't_cache_first_post_id='.(is_null($first_post_id)?'NULL':strval((integer)$first_post_id)).',
+		't_cache_first_post_id='.(is_null($first_post_id)?'NULL':strval($first_post_id)).',
 		'.(($first_title=='')?'':('t_cache_first_title=\''.db_escape_string($first_title).'\'').',').'
-		t_cache_first_time='.(is_null($first_time)?'NULL':strval((integer)$first_time)).',
-		t_cache_first_post='.(is_null($first_post)?'NULL':strval((integer)$first_post)).',
+		t_cache_first_time='.(is_null($first_time)?'NULL':strval($first_time)).',
+		t_cache_first_post='.(is_null($first_post)?'NULL':strval($first_post)).',
 		t_cache_first_username=\''.db_escape_string($first_username).'\',
-		t_cache_first_member_id='.(is_null($first_member_id)?'NULL':strval((integer)$first_member_id)).',';
+		t_cache_first_member_id='.(is_null($first_member_id)?'NULL':strval($first_member_id)).',';
 
 	if ($last) $update_last=
-		't_cache_last_post_id='.(is_null($last_post_id)?'NULL':strval((integer)$last_post_id)).',
+		't_cache_last_post_id='.(is_null($last_post_id)?'NULL':strval($last_post_id)).',
 		t_cache_last_title=\''.db_escape_string($last_title).'\',
-		t_cache_last_time='.(is_null($last_time)?'NULL':strval((integer)$last_time)).',
+		t_cache_last_time='.(is_null($last_time)?'NULL':strval($last_time)).',
 		t_cache_last_username=\''.db_escape_string($last_username).'\',
-		t_cache_last_member_id='.(is_null($last_member_id)?'NULL':strval((integer)$last_member_id)).',';
+		t_cache_last_member_id='.(is_null($last_member_id)?'NULL':strval($last_member_id)).',';
 
 	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET '.
 		($first?$update_first:'').
@@ -287,12 +287,12 @@ function ocf_force_update_forum_cacheing($forum_id,$num_topics_increment=NULL,$n
 
 	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums SET '.
 		(!is_null($num_posts_increment)?('
-		f_cache_num_topics=(f_cache_num_topics+'.strval((integer)$num_topics_increment).'),
-		f_cache_num_posts=(f_cache_num_posts+'.strval((integer)$num_posts_increment).'),')
+		f_cache_num_topics=(f_cache_num_topics+'.strval($num_topics_increment).'),
+		f_cache_num_posts=(f_cache_num_posts+'.strval($num_posts_increment).'),')
 		:
 		('
-		f_cache_num_topics='.strval((integer)$num_topics).',
-		f_cache_num_posts='.strval((integer)$num_posts).',
+		f_cache_num_topics='.strval($num_topics).',
+		f_cache_num_posts='.strval($num_posts).',
 		')).
 		'f_cache_last_topic_id='.(!is_null($last_topic_id)?strval($last_topic_id):'NULL').',
 		f_cache_last_title=\''.db_escape_string($last_title).'\',
@@ -300,7 +300,7 @@ function ocf_force_update_forum_cacheing($forum_id,$num_topics_increment=NULL,$n
 		f_cache_last_username=\''.db_escape_string($last_username).'\',
 		f_cache_last_member_id='.(!is_null($last_member_id)?strval($last_member_id):'NULL').',
 		f_cache_last_forum_id='.(!is_null($last_forum_id)?strval($last_forum_id):'NULL').'
-			WHERE id='.strval((integer)$forum_id),1);
+			WHERE id='.strval($forum_id),1);
 
 	// Now, are there any parents who need updating?
 	if (!is_null($forum_id))

@@ -33,7 +33,7 @@ function find_post_id_url($post_id)
 	if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 	// What page is it on?
-	$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval((integer)$post_id).' AND '.ocf_get_topic_where($id));
+	$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval($post_id).' AND '.ocf_get_topic_where($id));
 	$start=intval(floor(floatval($before)/floatval($max)))*$max;
 
 	// Now redirect accordingly
@@ -62,17 +62,17 @@ function find_first_unread_url($id)
 	if (is_null($last_read_time))
 	{
 		// Assumes that everything made in the last two weeks has not been read
-		$unread_details=$GLOBALS['FORUM_DB']->query('SELECT id,p_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval((integer)$id).' AND p_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).' ORDER BY id',1);
+		$unread_details=$GLOBALS['FORUM_DB']->query('SELECT id,p_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval($id).' AND p_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).' ORDER BY id',1);
 		if (array_key_exists(0,$unread_details))
 		{
 			$last_read_time=$unread_details[0]['p_time']-1;
 		} else $last_read_time=0;
 	}
-	$first_unread_id=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval((integer)$id).' AND p_time>'.strval((integer)$last_read_time).' ORDER BY id');
+	$first_unread_id=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_topic_id='.strval($id).' AND p_time>'.strval($last_read_time).' ORDER BY id');
 	if (!is_null($first_unread_id))
 	{
 		// What page is it on?
-		$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval((integer)$first_unread_id).' AND '.ocf_get_topic_where($id));
+		$before=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE id<'.strval($first_unread_id).' AND '.ocf_get_topic_where($id));
 		$start=intval(floor(floatval($before)/floatval($max)))*$max;
 	} else
 	{
@@ -529,7 +529,7 @@ function ocf_cache_member_details($members)
 	foreach ($members as $member)
 	{
 		if ($member_or_list!='') $member_or_list.=' OR ';
-		$member_or_list.='m.id='.strval((integer)$member);
+		$member_or_list.='m.id='.strval($member);
 	}
 	if ($member_or_list!='')
 	{

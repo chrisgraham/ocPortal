@@ -133,7 +133,7 @@ function has_zone_access($member,$zone)
 	$groups=_get_where_clause_groups($member);
 	if ($groups===NULL) return true;
 
-	$rows=$GLOBALS['SITE_DB']->query('SELECT DISTINCT zone_name FROM '.get_table_prefix().'group_zone_access WHERE ('.$groups.') UNION ALL SELECT DISTINCT zone_name FROM '.get_table_prefix().'member_zone_access WHERE member_id='.strval((integer)$member).' AND active_until>'.strval(time()),NULL,NULL,false,true);
+	$rows=$GLOBALS['SITE_DB']->query('SELECT DISTINCT zone_name FROM '.get_table_prefix().'group_zone_access WHERE ('.$groups.') UNION ALL SELECT DISTINCT zone_name FROM '.get_table_prefix().'member_zone_access WHERE member_id='.strval($member).' AND active_until>'.strval(time()),NULL,NULL,false,true);
 	$ZONE_ACCESS_CACHE[$member]=array();
 	foreach ($rows as $row)
 	{
@@ -285,7 +285,7 @@ function has_page_access($member,$page,$zone,$at_now=false)
 
 	if (count($denied_groups)==count($groups2))
 	{
-		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM '.get_table_prefix().'member_page_access WHERE ('.$pg_where.') AND (member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')');
+		$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM '.get_table_prefix().'member_page_access WHERE ('.$pg_where.') AND (member_id='.strval($member).' AND active_until>'.strval(time()).')');
 		if (!is_null($test))
 		{
 			$result=true;
@@ -345,7 +345,7 @@ function load_up_all_module_category_permissions($member,$module=NULL)
 	}
 	$db=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB'];
 	if ($db->query_value_if_there('SELECT COUNT(*) FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.')')>1000) return; // Performance issue
-	$perhaps=$db->query('SELECT '.$select.' FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.') UNION ALL SELECT '.$select.' FROM '.$db->get_table_prefix().'member_category_access WHERE '.$catclause.'(member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',NULL,NULL,false,true);
+	$perhaps=$db->query('SELECT '.$select.' FROM '.$db->get_table_prefix().'group_category_access WHERE '.$catclause.'('.$groups.') UNION ALL SELECT '.$select.' FROM '.$db->get_table_prefix().'member_category_access WHERE '.$catclause.'(member_id='.strval($member).' AND active_until>'.strval(time()).')',NULL,NULL,false,true);
 
 	$LOADED_ALL_CATEGORY_PERMISSIONS_FOR_CACHE[$module]=true;
 
@@ -393,7 +393,7 @@ function has_category_access($member,$module,$category)
 	$_category=db_string_equal_to('category_name',$category);
 
 	$db=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB'];
-	$perhaps=$db->query('SELECT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.') UNION ALL SELECT category_name FROM '.$db->get_table_prefix().'member_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND (member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',1,NULL,false,true);
+	$perhaps=$db->query('SELECT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.') UNION ALL SELECT category_name FROM '.$db->get_table_prefix().'member_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND (member_id='.strval($member).' AND active_until>'.strval(time()).')',1,NULL,false,true);
 
 	$result=(count($perhaps)>0);
 	handle_permission_check_logging($member,'has_category_access',array($module,$category),$result);
@@ -590,10 +590,10 @@ function has_privilege($member,$permission,$page=NULL,$cats=NULL)
 
 	$where='';
 	if ($member!=get_member()) $where.=' AND '.db_string_equal_to('privilege',$permission);
-	$perhaps=$GLOBALS['SITE_DB']->query('SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_privileges WHERE ('.$groups.')'.$where.' UNION ALL SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'member_privileges WHERE member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true);
+	$perhaps=$GLOBALS['SITE_DB']->query('SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'group_privileges WHERE ('.$groups.')'.$where.' UNION ALL SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'member_privileges WHERE member_id='.strval($member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true);
 	if ((isset($GLOBALS['FORUM_DB'])) && ($GLOBALS['SITE_DB']->connection_write!=$GLOBALS['FORUM_DB']->connection_write) && (get_forum_type()=='ocf'))
 	{
-		$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_privileges WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').$where.' UNION ALL SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_privileges WHERE '.db_string_equal_to('module_the_name','forums').' AND member_id='.strval((integer)$member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true));
+		$perhaps=array_merge($perhaps,$GLOBALS['FORUM_DB']->query('SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_privileges WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').$where.' UNION ALL SELECT privilege,the_page,module_the_name,category_name,the_value FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_privileges WHERE '.db_string_equal_to('module_the_name','forums').' AND member_id='.strval($member).' AND active_until>'.strval(time()).$where,NULL,NULL,false,true));
 	}
 	$PRIVILEGE_CACHE[$member]=array();
 	foreach ($perhaps as $p)

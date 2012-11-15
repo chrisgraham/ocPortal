@@ -78,7 +78,7 @@ function lookup_member_page($member,&$name,&$id,&$ip)
 		if (is_null($ip)) $ip='127.0.0.1';
 	}
 
-	return $GLOBALS['SITE_DB']->query('SELECT ip,MAX(date_and_time) AS date_and_time FROM '.get_table_prefix().'stats WHERE member_id='.strval((integer)$id).' GROUP BY ip ORDER BY date_and_time DESC');
+	return $GLOBALS['SITE_DB']->query('SELECT ip,MAX(date_and_time) AS date_and_time FROM '.get_table_prefix().'stats WHERE member_id='.strval($id).' GROUP BY ip ORDER BY date_and_time DESC');
 }
 
 /**
@@ -102,7 +102,7 @@ function get_stats_track($member,$ip,$start=0,$max=50,$sortable='date_and_time',
 
 	$query='';
 	if (!is_guest($member))
-		$query.='member_id='.strval((integer)$member).' OR ';
+		$query.='member_id='.strval($member).' OR ';
 	if (strpos($ip,'*')===false)
 	{
 		$query.=db_string_equal_to('ip',$ip);

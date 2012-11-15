@@ -54,7 +54,7 @@ class Hook_whats_news_catalogues
 
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'c_name',NULL,NULL,NULL,NULL,false);
-		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries WHERE ce_validated=1 AND ce_add_date>'.strval((integer)$cutoff_time).' AND ('.$or_list.') ORDER BY ce_add_date DESC',300);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT cc_id,id,ce_submitter FROM '.get_table_prefix().'catalogue_entries WHERE ce_validated=1 AND ce_add_date>'.strval($cutoff_time).' AND ('.$or_list.') ORDER BY ce_add_date DESC',300);
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
 		{

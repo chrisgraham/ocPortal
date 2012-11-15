@@ -259,8 +259,8 @@ class Module_quiz
 		$start=get_param_integer('quizzes_start',0);
 		$max=get_param_integer('quizzes_max',20);
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).') ORDER BY q_type ASC,id DESC',$max,$start);
-		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?'q_validated=1 AND ':'').'q_open_time<'.strval((integer)time()).' AND (q_close_time IS NULL OR q_close_time>'.strval((integer)time()).')');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?'q_validated=1 AND ':'').'q_open_time<'.strval(time()).' AND (q_close_time IS NULL OR q_close_time>'.strval(time()).') ORDER BY q_type ASC,id DESC',$max,$start);
+		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?'q_validated=1 AND ':'').'q_open_time<'.strval(time()).' AND (q_close_time IS NULL OR q_close_time>'.strval(time()).')');
 		if (count($rows)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 		$content_tests=new ocp_tempcode();
 		$content_competitions=new ocp_tempcode();

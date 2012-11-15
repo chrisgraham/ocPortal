@@ -221,7 +221,7 @@ function ocf_get_forum_parent_or_list($forum_id,$parent_id=-1)
 	if ($parent_id==-1) $parent_id=$GLOBALS['FORUM_DB']->query_select_value('f_forums','f_parent_forum',array('id'=>$forum_id));
 
 	$from_below=ocf_get_forum_parent_or_list($parent_id);
-	$term='t_forum_id='.strval((integer)$forum_id);
+	$term='t_forum_id='.strval($forum_id);
 
 	return $term.(($from_below!='')?(' OR '.$from_below):'');
 }

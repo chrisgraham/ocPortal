@@ -912,11 +912,11 @@ function log_download($id,$size,$got_before)
 		$GLOBALS['SITE_DB']->query_insert('download_logging',array('id'=>$id,'member_id'=>get_member(),'ip'=>get_ip_address(),'date_and_time'=>time()),false,true); // Supress errors in case of race condition
 
 	// Update download count
-	$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'download_downloads SET num_downloads=(num_downloads+1) WHERE id='.strval((integer)$id),1,NULL,true);
+	$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'download_downloads SET num_downloads=(num_downloads+1) WHERE id='.strval($id),1,NULL,true);
 
 	// Update stats
 	$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'values SET the_value=(the_value+1) WHERE the_name=\'num_downloads_downloaded\'',1,NULL,true);
-	if ($size!=0) $GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'values SET the_value=(the_value+'.strval((integer)$size).') WHERE the_name=\'download_bandwidth\'',1,NULL,true);
+	if ($size!=0) $GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'values SET the_value=(the_value+'.strval($size).') WHERE the_name=\'download_bandwidth\'',1,NULL,true);
 }
 
 

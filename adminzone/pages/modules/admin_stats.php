@@ -459,7 +459,7 @@ class Module_admin_stats
 		$title=get_screen_title('LOAD_TIMES_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
 
 		// We calculate MIN not AVG, because data can be made very dirty by slow clients or if the server is having trouble at one specfic point. It's a shame.
-		$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,MIN(milliseconds) AS avg FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end).' GROUP BY the_page');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT the_page,MIN(milliseconds) AS avg FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end).' GROUP BY the_page');
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
 
 		$data=array();
@@ -566,7 +566,7 @@ class Module_admin_stats
 		$non_local_filter='referer NOT LIKE \''.db_encode_like(get_custom_base_url().'%').'\'';
 		if (get_param_integer('debug',0)==1) $non_local_filter='1=1';
 
-		$where=$non_local_filter.' AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end);
+		$where=$non_local_filter.' AND date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end);
 
 		$rows=$GLOBALS['SITE_DB']->query('SELECT COUNT(*) AS cnt,referer FROM '.get_table_prefix().'stats WHERE '.$where.' GROUP BY referer');
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
@@ -685,7 +685,7 @@ class Module_admin_stats
 			log_hack_attack_and_exit('ORDERBY_HACK');
 		inform_non_canonical_parameter('sort');
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT referer FROM '.get_table_prefix().'stats WHERE referer LIKE \''.db_encode_like('http://www.google.%q=%').'\' AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end).' ORDER BY '.$sortable.' '.$sort_order);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT referer FROM '.get_table_prefix().'stats WHERE referer LIKE \''.db_encode_like('http://www.google.%q=%').'\' AND date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end).' ORDER BY '.$sortable.' '.$sort_order);
 		if (count($rows)<1) return warn_screen($title,do_lang_tempcode('NO_DATA'));
 
 		$keywords=array();
@@ -814,7 +814,7 @@ class Module_admin_stats
 				{
 					$where=db_string_equal_to('the_page',$page);
 					if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-					$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND get LIKE \''.db_encode_like("<param>page=catalogues</param>\n<param>type=category</param>\n<param>id=".strval($cat['id'])."</param>%").'\' AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end));
+					$count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND get LIKE \''.db_encode_like("<param>page=catalogues</param>\n<param>type=category</param>\n<param>id=".strval($cat['id'])."</param>%").'\' AND date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end));
 					$views[do_lang('CATALOGUE_CATEGORY').': '.get_translated_text($cat['cc_title'])]=array($count,$page);
 					$total+=$count;
 				}
@@ -826,7 +826,7 @@ class Module_admin_stats
 			}
 			$where=db_string_equal_to('the_page',$page);
 			if (substr($page,0,6)=='pages/') $where.=' OR '.db_string_equal_to('the_page','/'.$page); // Legacy compatibility
-			$views[$page2]=array($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND date_and_time>'.strval((integer)$time_start).' AND date_and_time<'.strval((integer)$time_end)),$page);
+			$views[$page2]=array($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE ('.$where.') AND date_and_time>'.strval($time_start).' AND date_and_time<'.strval($time_end)),$page);
 			$total+=$views[$page2][0];
 		}
 		$views[do_lang('_ALL')]=array($total,NULL);
@@ -1447,11 +1447,11 @@ class Module_admin_stats
 		$list=results_table(do_lang_tempcode('PAGES_STATISTICS',escape_html($page)),$start,'start_'.$type,$max,'max_'.$type,$i,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort_'.$type);
 
 		$output=create_bar_chart($data,do_lang('DATE_TIME'),do_lang('COUNT_VIEWS'),'','');
-		$this->save_graph(strval($rows[0]['id']).'-Views-'.strval((integer)$hours).'_'.strval((integer)$start_date_and_time),$output);
+		$this->save_graph(strval($rows[0]['id']).'-Views-'.strval($hours).'_'.strval($start_date_and_time),$output);
 
 		$graph=do_template('STATS_GRAPH',array(
 			'_GUID'=>'b4cf5df74c012c2df5e3988a0ca0e622',
-			'GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-Views-'.strval((integer)$hours).'_'.strval((integer)$start_date_and_time).'.xml',
+			'GRAPH'=>get_custom_base_url().'/data_custom/modules/admin_stats/'.strval($rows[0]['id']).'-Views-'.strval($hours).'_'.strval($start_date_and_time).'.xml',
 			'TITLE'=>do_lang_tempcode($graph_title),
 			'TEXT'=>do_lang_tempcode($graph_description),
 		));

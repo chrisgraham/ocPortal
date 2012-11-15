@@ -137,7 +137,7 @@ class Hook_search_ocf_posts
 		$where_clause.=' AND ';
 		$where_clause.='t_forum_id IS NOT NULL AND (p_intended_solely_for IS NULL';
 		if (!is_guest())
-			$where_clause.=' OR (p_intended_solely_for='.strval((integer)get_member()).' OR p_poster='.strval((integer)get_member()).')';
+			$where_clause.=' OR (p_intended_solely_for='.strval(get_member()).' OR p_poster='.strval(get_member()).')';
 		$where_clause.=')';
 
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))

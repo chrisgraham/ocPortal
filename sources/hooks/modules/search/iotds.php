@@ -94,7 +94,7 @@ class Hook_search_iotds
 		if (!is_null($cutoff))
 		{
 			$where_clause.=' AND ';
-			$where_clause.='add_date>'.strval((integer)$cutoff);
+			$where_clause.='add_date>'.strval($cutoff);
 		}
 
 		// Calculate and perform query

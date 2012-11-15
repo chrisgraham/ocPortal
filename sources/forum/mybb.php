@@ -618,19 +618,19 @@ class forum_driver_mybb extends forum_driver_base
 	 */
 	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
 	{
-		if (is_integer($name)) $id_list='fid='.strval((integer)$name);
+		if (is_integer($name)) $id_list='fid='.strval($name);
 		elseif (!is_array($name))
 		{
 			$id=$this->forum_id_from_name($name);
 			if (is_null($id)) return NULL;
-			$id_list='fid='.strval((integer)$id);
+			$id_list='fid='.strval($id);
 		} else
 		{
 			$id_list='';
 			foreach (array_keys($name) as $id)
 			{
 				if ($id_list!='') $id_list.=' OR ';
-				$id_list.='fid='.strval((integer)$id);
+				$id_list.='fid='.strval($id);
 			}
 			if ($id_list=='') return NULL;
 		}
@@ -660,7 +660,7 @@ class forum_driver_mybb extends forum_driver_base
 
 			$firsttime[$id]=$r['dateline'];
 
-			$post_rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p WHERE tid='.strval((integer)$id).' AND message NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY dateline DESC',1);
+			$post_rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p WHERE tid='.strval($id).' AND message NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY dateline DESC',1);
 
 			if (!array_key_exists(0,$post_rows))
 			{
@@ -700,7 +700,7 @@ class forum_driver_mybb extends forum_driver_base
 					$out[$i]['lasttime']=$r['lastpost'];
 					$out[$i]['closed']=($r['visible']==1);
 
-					$fp_rows=$this->connection->query('SELECT subject,message,uid FROM '.$this->connection->get_table_prefix().'posts p WHERE message NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' AND dateline='.strval((integer)$firsttime[$id]).' AND tid='.strval((integer)$id),1);
+					$fp_rows=$this->connection->query('SELECT subject,message,uid FROM '.$this->connection->get_table_prefix().'posts p WHERE message NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' AND dateline='.strval($firsttime[$id]).' AND tid='.strval($id),1);
 
 					if (!array_key_exists(0,$fp_rows))
 					{
@@ -741,7 +741,7 @@ class forum_driver_mybb extends forum_driver_base
 		foreach ($groups as $group)
 		{
 			if ($_groups!='') $_groups.=' OR ';
-			$_groups.='u.usergroup='.strval((integer)$group);
+			$_groups.='u.usergroup='.strval($group);
 		}
 		if ($_groups=='') return array();
 
@@ -756,7 +756,7 @@ class forum_driver_mybb extends forum_driver_base
 	 */
 	function get_previous_member($member)
 	{
-		$tempid=$this->connection->query_value_if_there('SELECT uid FROM '.$this->connection->get_table_prefix().'users WHERE uid<'.strval((integer)$member).' AND uid>0 ORDER BY uid DESC');
+		$tempid=$this->connection->query_value_if_there('SELECT uid FROM '.$this->connection->get_table_prefix().'users WHERE uid<'.strval($member).' AND uid>0 ORDER BY uid DESC');
 		return $tempid;
 	}
 
@@ -769,7 +769,7 @@ class forum_driver_mybb extends forum_driver_base
 	 */
 	function get_next_member($member)
 	{
-		$tempid=$this->connection->query_value_if_there('SELECT uid FROM '.$this->connection->get_table_prefix().'users WHERE uid>'.strval((integer)$member).' ORDER BY uid');
+		$tempid=$this->connection->query_value_if_there('SELECT uid FROM '.$this->connection->get_table_prefix().'users WHERE uid>'.strval($member).' ORDER BY uid');
 		return $tempid;
 	}
 

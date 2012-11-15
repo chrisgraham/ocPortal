@@ -250,7 +250,7 @@ class Hook_phpbb2
 				}
 
 				$primary_group=$default_group;
-				$rows2=$db->query('SELECT * FROM '.$table_prefix.'user_group WHERE user_id='.strval((integer)$row['user_id']),200,$row_start);
+				$rows2=$db->query('SELECT * FROM '.$table_prefix.'user_group WHERE user_id='.strval($row['user_id']),200,$row_start);
 				$secondary_groups=array();
 				foreach ($rows2 as $row2)
 				{
@@ -486,7 +486,7 @@ class Hook_phpbb2
 			$access_mapping=array();
 			if ($row['forum_status']==0)
 			{
-				$permissions=$db->query('SELECT * FROM '.$table_prefix.'auth_access WHERE forum_id='.strval((integer)$row['forum_id']));
+				$permissions=$db->query('SELECT * FROM '.$table_prefix.'auth_access WHERE forum_id='.strval($row['forum_id']));
 //				$row['group_id']=-1;
 //				$permissions[]=$row;
 				foreach ($permissions as $p)
@@ -575,7 +575,7 @@ class Hook_phpbb2
 				$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
 
 				$title='';
-				$topics=$db->query('SELECT topic_title,topic_time FROM '.$table_prefix.'topics WHERE topic_id='.strval((integer)$row['topic_id']));
+				$topics=$db->query('SELECT topic_title,topic_time FROM '.$table_prefix.'topics WHERE topic_id='.strval($row['topic_id']));
 				$first_post=$topics[0]['topic_time']==$row['post_time'];
 				if ($first_post)
 				{

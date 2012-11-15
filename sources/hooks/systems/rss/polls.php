@@ -39,7 +39,7 @@ class Hook_rss_polls
 		if (!has_actual_page_access(get_member(),'polls')) return NULL;
 
 		$content=new ocp_tempcode();
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'poll WHERE add_time>'.strval((integer)$cutoff).' AND (votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10<>0 OR is_current=1) ORDER BY add_time DESC',$max);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'poll WHERE add_time>'.strval($cutoff).' AND (votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10<>0 OR is_current=1) ORDER BY add_time DESC',$max);
 		foreach ($rows as $row)
 		{
 			$id=strval($row['id']);

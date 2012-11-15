@@ -164,9 +164,9 @@ class Module_tester
 			$t_username=$GLOBALS['FORUM_DRIVER']->get_username($tester);
 			if (is_null($t_username)) continue;
 
-			$num_tests_successful=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=1 AND (t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))');
-			$num_tests_failed=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=2 AND (t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))');
-			$num_tests_incomplete=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=0 AND (t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))');
+			$num_tests_successful=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=1 AND (t.t_assigned_to='.strval($tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval($tester).'))');
+			$num_tests_failed=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=2 AND (t.t_assigned_to='.strval($tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval($tester).'))');
+			$num_tests_incomplete=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'tests t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'test_sections s ON t.t_section=s.id WHERE t.t_enabled=1 AND t.t_status=0 AND (t.t_assigned_to='.strval($tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval($tester).'))');
 			$num_tests=$num_tests_successful+$num_tests_failed+$num_tests_incomplete;
 
 			$t=do_template('TESTER_STATISTICS_MEMBER',array(
@@ -208,7 +208,7 @@ class Module_tester
 		$tester=get_member();
 		if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) $tester=get_param_integer('tester',get_member());
 		if ($show_for_all==0)
-			$where='(t.t_assigned_to='.strval((integer)$tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval((integer)$tester).'))';
+			$where='(t.t_assigned_to='.strval($tester).' OR (t.t_assigned_to IS NULL AND s.s_assigned_to='.strval($tester).'))';
 		else $where='s.id IS NOT NULL';
 		if ($show_successful==0) $where.=' AND t.t_status<>1';
 		$where.=' AND s.s_inheritable=0';

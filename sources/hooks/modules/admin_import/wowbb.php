@@ -416,7 +416,7 @@ class Hook_wowbb
 			$parent_forum=db_get_first_id();
 
 			$access_mapping=array();
-			$permissions=$db->query('SELECT * FROM '.$table_prefix.'forum_permissions WHERE forum_id='.strval((integer)$row['forum_id']));
+			$permissions=$db->query('SELECT * FROM '.$table_prefix.'forum_permissions WHERE forum_id='.strval($row['forum_id']));
 			foreach ($permissions as $p)
 			{
 				$v=0;
@@ -501,7 +501,7 @@ class Hook_wowbb
 				$first_post=$test==$row['post_id'];
 				if ($first_post)
 				{
-					$topics=$db->query('SELECT topic_name,topic_starter_id FROM '.$table_prefix.'topics WHERE topic_id='.strval((integer)$row['topic_id']));
+					$topics=$db->query('SELECT topic_name,topic_starter_id FROM '.$table_prefix.'topics WHERE topic_id='.strval($row['topic_id']));
 					$title=$topics[0]['topic_name'];
 				}
 				$post=$this->fix_links($row['post_text'],$db,$table_prefix,$file_base);
@@ -682,7 +682,7 @@ class Hook_wowbb
 
 			$is_open=$row['poll_ends']<time();
 
-			$rows2=$db->query('SELECT * FROM '.$table_prefix.'poll_options WHERE poll_id='.strval((integer)$row['poll_id']).' ORDER BY poll_option_id');
+			$rows2=$db->query('SELECT * FROM '.$table_prefix.'poll_options WHERE poll_id='.strval($row['poll_id']).' ORDER BY poll_option_id');
 			$answers=array();
 			$answer_map=array();
 			foreach ($rows2 as $answer)

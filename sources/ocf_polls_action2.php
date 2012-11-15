@@ -159,9 +159,9 @@ function ocf_vote_in_poll($poll_id,$votes,$member_id=NULL,$topic_info=NULL)
 			'pv_answer_id'=>$vote
 		));
 
-		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_poll_answers SET pa_cache_num_votes=(pa_cache_num_votes+1) WHERE id='.strval((integer)$vote),1);
+		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_poll_answers SET pa_cache_num_votes=(pa_cache_num_votes+1) WHERE id='.strval($vote),1);
 	}
-	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_polls SET po_cache_total_votes=(po_cache_total_votes+1) WHERE id='.strval((integer)$poll_id),1);
+	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_polls SET po_cache_total_votes=(po_cache_total_votes+1) WHERE id='.strval($poll_id),1);
 }
 
 

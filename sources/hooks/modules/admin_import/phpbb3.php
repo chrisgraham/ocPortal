@@ -281,7 +281,7 @@ class Hook_phpbb3
 				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,5,0,5,5,$row['group_avatar_width'],$row['group_avatar_height'],30000,$row['group_sig_chars']);
 			}
 
-			$permissions=$db->query('SELECT * FROM '.$table_prefix.'acl_groups WHERE group_id='.strval((integer)$row['group_id']));
+			$permissions=$db->query('SELECT * FROM '.$table_prefix.'acl_groups WHERE group_id='.strval($row['group_id']));
 			foreach ($permissions as $p)
 			{
 				if ($p['auth_role_id']!=0) // Do role
@@ -367,7 +367,7 @@ class Hook_phpbb3
 				}
 
 				$primary_group=import_id_remap_get('group',strval($row['group_id']));
-				$rows2=$db->query('SELECT * FROM '.$table_prefix.'user_group WHERE user_id='.strval((integer)$row['user_id']),200,$row_start);
+				$rows2=$db->query('SELECT * FROM '.$table_prefix.'user_group WHERE user_id='.strval($row['user_id']),200,$row_start);
 				$secondary_groups=array();
 				foreach ($rows2 as $row2)
 				{
@@ -419,7 +419,7 @@ class Hook_phpbb3
 
 				// CPF values
 				$cpf_rows=collapse_2d_complexity('field_name','field_type',$db->query('SELECT field_name,field_type FROM '.$table_prefix.'profile_fields f'));
-				$rows2=$db->query('SELECT * FROM '.$table_prefix.'profile_fields_data WHERE user_id='.strval((integer)$row['user_id']),1);
+				$rows2=$db->query('SELECT * FROM '.$table_prefix.'profile_fields_data WHERE user_id='.strval($row['user_id']),1);
 				$row2=array();
 				if (array_key_exists(0,$rows2))
 				{
@@ -623,7 +623,7 @@ class Hook_phpbb3
 
 			$id_new=ocf_make_forum($name,$description,$category_id,NULL,$parent_forum,$position,$post_count_increment,0,$rules,$answer,$row['forum_link']);
 
-			$permissions=$db->query('SELECT * FROM '.$table_prefix.'acl_groups WHERE forum_id='.strval((integer)$row['forum_id']));
+			$permissions=$db->query('SELECT * FROM '.$table_prefix.'acl_groups WHERE forum_id='.strval($row['forum_id']));
 			foreach ($permissions as $p)
 			{
 				$group_id=import_id_remap_get('group',strval($p['group_id']),true);
@@ -834,7 +834,7 @@ class Hook_phpbb3
 				$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
 
 				$title='';
-				$topics=$db->query('SELECT topic_title,topic_time FROM '.$table_prefix.'topics WHERE topic_id='.strval((integer)$row['topic_id']));
+				$topics=$db->query('SELECT topic_title,topic_time FROM '.$table_prefix.'topics WHERE topic_id='.strval($row['topic_id']));
 				$first_post=$topics[0]['topic_time']==$row['post_time'];
 				if ($first_post)
 				{

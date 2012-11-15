@@ -162,7 +162,7 @@ function delete_message($member_id,$dest_member_id,$message)
 {
 	list($realm,$x,$y)=get_loc_details($member_id);
 
-	$query='DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_messages WHERE originator_id='.strval((integer)$dest_member_id).' AND location_x='.strval((integer)$x).' AND location_y='.strval((integer)$y).' AND location_realm='.strval((integer)$realm).' AND m_message LIKE \'%'.db_encode_like($message).'%\'';
+	$query='DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_messages WHERE originator_id='.strval($dest_member_id).' AND location_x='.strval($x).' AND location_y='.strval($y).' AND location_realm='.strval($realm).' AND m_message LIKE \'%'.db_encode_like($message).'%\'';
 	$GLOBALS['SITE_DB']->query($query);
 }
 
@@ -349,7 +349,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 	basic_enter_room($member_id,$realm,$_x,$_y);
 
 	// Is there a troll here?
-	$troll_id=$GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_members WHERE location_x='.strval((integer)$_x).' AND location_y='.strval((integer)$_y).' AND location_realm='.strval((integer)$realm).' AND id<0');
+	$troll_id=$GLOBALS['SITE_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_members WHERE location_x='.strval($_x).' AND location_y='.strval($_y).' AND location_realm='.strval($realm).' AND id<0');
 	if (!is_null($troll_id))
 	{
 		// Are they unlucky enough for an encounter?

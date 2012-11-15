@@ -39,7 +39,7 @@ class Hook_whats_news_quiz
 
 		$new=new ocp_tempcode();
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE q_add_date>'.strval((integer)$cutoff_time).' ORDER BY q_add_date DESC',300);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE q_add_date>'.strval($cutoff_time).' ORDER BY q_add_date DESC',300);
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
 		{

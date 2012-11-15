@@ -43,7 +43,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_top_posters($limit)
 	{
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE user_id<>'.strval((integer)$this->get_guest_id()).' ORDER BY user_posts DESC',$limit);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE user_id<>'.strval($this->get_guest_id()).' ORDER BY user_posts DESC',$limit);
 	}
 
 	/**
@@ -435,7 +435,7 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);
-		$query='SELECT tid FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval((integer)$forum_id);
+		$query='SELECT tid FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval($forum_id);
 		$query.=' AND ('.db_string_equal_to('topic_description',$topic_identifier).' OR topic_description LIKE \'%: #'.db_encode_like($topic_identifier).'\')';
 
 		return $this->connection->query_value_if_there($query);
@@ -481,8 +481,8 @@ class forum_driver_wowbb extends forum_driver_base
 
 		$post_id=$this->connection->query_insert('posts',array('forum_id'=>$forum_id,'topic_id'=>$topic_id,'post_date_time'=>$this->_timestamp_to_date($time),'attachment_id'=>0,'user_id'=>$member,'post_user_name'=>$this->get_username($member),'post_ip'=>get_ip_address(),'post_last_edited_on'=>0,'post_last_edited_by'=>0),true);
 		$this->connection->query_insert('post_texts',array('post_id'=>$post_id,'post_text'=>$post));
-		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_posts=(forum_posts+1), forum_topics=(forum_topics+1), forum_last_post_id='.strval((integer)$post_id).', forum_recent_topics=\''.db_escape_string(serialize(array($topic_id=>$time))).'\' WHERE forum_id='.strval((integer)$forum_id),1);
-		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET topic_last_post_id='.strval((integer)$post_id).',topic_replies=(topic_replies+1) WHERE topic_id='.strval((integer)$topic_id),1);
+		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_posts=(forum_posts+1), forum_topics=(forum_topics+1), forum_last_post_id='.strval($post_id).', forum_recent_topics=\''.db_escape_string(serialize(array($topic_id=>$time))).'\' WHERE forum_id='.strval($forum_id),1);
+		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET topic_last_post_id='.strval($post_id).',topic_replies=(topic_replies+1) WHERE topic_id='.strval($topic_id),1);
 
 		$this->connection->query_delete('cache',array('cache_id'=>'forum index'));
 
@@ -504,8 +504,8 @@ class forum_driver_wowbb extends forum_driver_base
 	{
 		if (is_null($topic_id)) return (-2);
 		$order=$reverse?'post_date_time DESC':'post_date_time';
-		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts d ON p.post_id=d.post_id WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
-		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts d ON p.post_id=d.post_id WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_date_time');
+		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts d ON p.post_id=d.post_id WHERE topic_id='.strval($topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
+		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts d ON p.post_id=d.post_id WHERE topic_id='.strval($topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_date_time');
 		$out=array();
 		foreach ($rows as $myrow)
 		{
@@ -577,19 +577,19 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
 	{
-		if (is_integer($name)) $id_list='forum_id='.strval((integer)$name);
+		if (is_integer($name)) $id_list='forum_id='.strval($name);
 		elseif (!is_array($name))
 		{
 			$id=$this->forum_id_from_name($name);
 			if (is_null($id)) return NULL;
-			$id_list='forum_id='.strval((integer)$id);
+			$id_list='forum_id='.strval($id);
 		} else
 		{
 			$id_list='';
 			foreach (array_keys($name) as $id)
 			{
 				if ($id_list!='') $id_list.=' OR ';
-				$id_list.='forum_id='.strval((integer)$id);
+				$id_list.='forum_id='.strval($id);
 			}
 			if ($id_list=='') return NULL;
 		}
@@ -612,7 +612,7 @@ class forum_driver_wowbb extends forum_driver_base
 
 			$id=$r['topic_id'];
 
-			$post_rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts t ON p.post_id=t.post_id WHERE topic_id='.strval((integer)$id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_date_time DESC',1);
+			$post_rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts t ON p.post_id=t.post_id WHERE topic_id='.strval($id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_date_time DESC',1);
 			$r2=$post_rows[0];
 
 			$username[$id]=$this->get_username($r2['user_id']);
@@ -645,7 +645,7 @@ class forum_driver_wowbb extends forum_driver_base
 				$out[$i]['firsttime']=$first_datetimes[$id];
 				$out[$i]['closed']=($r['topic_status']==1);
 
-				$fp_rows=$this->connection->query('SELECT post_text,user_id FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts t ON p.post_id=t.post_id WHERE post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' AND post_date_time=\''.$this->_timestamp_to_date($first_datetimes[$id]).'\' AND topic_id='.strval((integer)$id),1);
+				$fp_rows=$this->connection->query('SELECT post_text,user_id FROM '.$this->connection->get_table_prefix().'posts p LEFT JOIN '.$this->connection->get_table_prefix().'post_texts t ON p.post_id=t.post_id WHERE post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' AND post_date_time=\''.$this->_timestamp_to_date($first_datetimes[$id]).'\' AND topic_id='.strval($id),1);
 				if (!array_key_exists(0,$fp_rows))
 				{
 					unset($out[$i]);
@@ -699,7 +699,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_previous_member($member)
 	{
-		$tempid=$this->connection->query_value_if_there('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id<'.strval((integer)$member).' ORDER BY user_id DESC');
+		$tempid=$this->connection->query_value_if_there('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id<'.strval($member).' ORDER BY user_id DESC');
 		return $tempid;
 	}
 
@@ -712,7 +712,7 @@ class forum_driver_wowbb extends forum_driver_base
 	 */
 	function get_next_member($member)
 	{
-		$tempid=$this->connection->query_value_if_there('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id>'.strval((integer)$member).' ORDER BY user_id');
+		$tempid=$this->connection->query_value_if_there('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id>'.strval($member).' ORDER BY user_id');
 		return $tempid;
 	}
 

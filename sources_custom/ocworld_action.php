@@ -484,8 +484,8 @@ function delete_item_wrap($name)
 	if ((!has_privilege($attempt_member,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_itemdef','owner',array('name'=>$name))!=$attempt_member)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 	//if (!has_privilege($attempt_member,'administer_ocworld'))
 	//{
-	if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_inventory WHERE '.db_string_equal_to('item_name',$name).' AND item_owner<>'.strval((integer)$attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_CONFISCATE_1'),'warn');
-	if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_items WHERE '.db_string_equal_to('name',$name).' AND copy_owner<>'.strval((integer)$attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_CONFISCATE_2'),'warn');
+	if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_inventory WHERE '.db_string_equal_to('item_name',$name).' AND item_owner<>'.strval($attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_CONFISCATE_1'),'warn');
+	if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_items WHERE '.db_string_equal_to('name',$name).' AND copy_owner<>'.strval($attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_CONFISCATE_2'),'warn');
 	//}
 
 	// Refund them
@@ -601,7 +601,7 @@ function delete_realm_wrap($member_id)
 
 	if ((!has_privilege($attempt_member,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$realm))!=$attempt_member)) ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
 
-	if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_rooms WHERE location_realm='.strval((integer)$realm).' AND owner<>'.strval((integer)$attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_DEL_OTHERS_ROOMS_REALM'),'warn');
+	if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_rooms WHERE location_realm='.strval($realm).' AND owner<>'.strval($attempt_member))>0) ocw_refresh_with_message(do_lang_tempcode('W_NO_DEL_OTHERS_ROOMS_REALM'),'warn');
 
 	// Refund them
 	require_code('points2');

@@ -734,7 +734,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 			$child_or_list=ocf_get_all_subordinate_forums($forum_id,'t_forum_id',$tree);
 		} else $child_or_list='';
 		if ($child_or_list!='') $child_or_list.=' AND ';
-		$query='SELECT DISTINCT t_forum_id,t.id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (t.id=l_topic_id AND l_member_id='.strval((integer)get_member()).') WHERE '.$child_or_list.'t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND (l_time<t_cache_last_time OR l_time IS NULL)';
+		$query='SELECT DISTINCT t_forum_id,t.id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (t.id=l_topic_id AND l_member_id='.strval(get_member()).') WHERE '.$child_or_list.'t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND (l_time<t_cache_last_time OR l_time IS NULL)';
 		if ((!has_privilege(get_member(),'jump_to_unvalidated')) && (addon_installed('unvalidated'))) $query.=' AND t_validated=1';
 		$unread_forums=collapse_2d_complexity('t_forum_id','id',$GLOBALS['FORUM_DB']->query($query));
 	}
@@ -757,7 +757,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		{
 			$forum_groupings[$forum_grouping_id]=array('subforums'=>array());
 			if ($or_list!='') $or_list.=' OR ';
-			$or_list.='id='.strval((integer)$forum_grouping_id);
+			$or_list.='id='.strval($forum_grouping_id);
 		}
 	}
 	if ($or_list!='')
@@ -842,7 +842,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')) && (!ocf_may_moderate_forum($forum_id,$member_id))) $extra='t_validated=1 AND ';
 	if (is_null($forum_info[0]['f_parent_forum']))
 	{
-		$where=$extra.' (t_forum_id='.strval((integer)$forum_id).')';
+		$where=$extra.' (t_forum_id='.strval($forum_id).')';
 	} else
 	{
 		$extra2='';
@@ -851,7 +851,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		{
 			$extra2='AND ('.$parent_or_list.')';
 		}
-		$where=$extra.' (t_forum_id='.strval((integer)$forum_id).' OR (t_cascading=1 '.$extra2.'))';
+		$where=$extra.' (t_forum_id='.strval($forum_id).' OR (t_cascading=1 '.$extra2.'))';
 	}
 	$order=get_param('order',$forum_info[0]['f_order']);
 	$order2='t_cache_last_time DESC';
@@ -864,7 +864,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		$query='SELECT ttop.*,t.text_parsed AS _trans_post,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
 	} else
 	{
-		$query='SELECT ttop.*,t.text_parsed AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
+		$query='SELECT ttop.*,t.text_parsed AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
 	}
 	$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start);
 	if (($start==0) && (count($topic_rows)<$max)) $max_rows=$max; // We know that they're all on this screen
@@ -875,11 +875,11 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	foreach ($topic_rows as $topic_row)
 	{
 		if ($or_list!='') $or_list.=' OR ';
-		$or_list.='p_topic_id='.strval((integer)$topic_row['id']);
+		$or_list.='p_topic_id='.strval($topic_row['id']);
 	}
 	if (($or_list!='') && (!is_guest()))
 	{
-		$involved=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE ('.$or_list.') AND p_poster='.strval((integer)get_member()));
+		$involved=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE ('.$or_list.') AND p_poster='.strval(get_member()));
 		$involved=collapse_1d_complexity('p_topic_id',$involved);
 	} else $involved=array();
 	foreach ($topic_rows as $topic_row)

@@ -177,7 +177,7 @@ class Block_main_multi_content
 			foreach ($_groups as $group)
 			{
 				if ($groups!='') $groups.=' OR ';
-				$groups.='a.group_id='.strval((integer)$group);
+				$groups.='a.group_id='.strval($group);
 			}
 
 			if (!is_null($category_field_access))

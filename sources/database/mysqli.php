@@ -208,9 +208,9 @@ class Database_Static_mysqli extends Database_super_mysql
 			$this->last_select_db=array($db,$db_name);
 		}
 
-		if ((!is_null($max)) && (!is_null($start))) $query.=' LIMIT '.strval((integer)$start).','.strval((integer)$max);
-		elseif (!is_null($max)) $query.=' LIMIT '.strval((integer)$max);
-		elseif (!is_null($start)) $query.=' LIMIT '.strval((integer)$start).',30000000';
+		if ((!is_null($max)) && (!is_null($start))) $query.=' LIMIT '.strval($start).','.strval($max);
+		elseif (!is_null($max)) $query.=' LIMIT '.strval($max);
+		elseif (!is_null($start)) $query.=' LIMIT '.strval($start).',30000000';
 
 		$results=@mysqli_query($db,$query);
 		if (($results===false) && ((!$fail_ok) || (strpos(mysqli_error($db),'is marked as crashed and should be repaired')!==false)))

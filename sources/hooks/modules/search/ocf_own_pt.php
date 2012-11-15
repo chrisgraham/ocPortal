@@ -91,7 +91,7 @@ class Hook_search_ocf_own_pt
 
 		// Calculate our where clause (search)
 		$where_clause.=' AND ';
-		$where_clause.='t_forum_id IS NULL AND (t_pt_from='.strval((integer)get_member()).' OR t_pt_to='.strval((integer)get_member()).')';
+		$where_clause.='t_forum_id IS NULL AND (t_pt_from='.strval(get_member()).' OR t_pt_to='.strval(get_member()).')';
 		$sq=build_search_submitter_clauses('p_poster',$author_id,$author);
 		if (is_null($sq)) return array(); else $where_clause.=$sq;
 		if (!is_null($cutoff))

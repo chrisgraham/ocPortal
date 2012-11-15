@@ -2472,7 +2472,7 @@ END;
 			foreach ($perhaps as $row)
 			{
 				if ($or_list!='') $or_list.=' OR ';
-				$or_list.='t.t_forum_id='.strval((integer)$row['category_name']);
+				$or_list.='t.t_forum_id='.strval($row['category_name']);
 			}
 			if ($or_list!='')
 			{

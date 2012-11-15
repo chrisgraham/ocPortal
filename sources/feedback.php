@@ -395,7 +395,7 @@ function already_rated($rating_for_types,$content_id)
 	if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_param_integer('keep_rating_test',0)==1))
 		return false;
 
-	$more=(!is_guest())?' OR rating_member='.strval((integer)get_member()):'';
+	$more=(!is_guest())?' OR rating_member='.strval(get_member()):'';
 	$for_types='';
 	foreach ($rating_for_types as $rating_for_type)
 	{

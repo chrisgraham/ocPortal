@@ -999,7 +999,7 @@ class database_driver
 		if ($QUERY_LOG)
 		{
 			$after=microtime(false);
-			$text=(!is_null($max))?$query.' ('.strval((integer)$start).'-'.strval((integer)$start+$max).')':$query;
+			$text=(!is_null($max))?$query.' ('.strval($start).'-'.strval($start+$max).')':$query;
 			$out=array('time'=>microtime_diff($after,$before),'text'=>$text);
 			$QUERY_LIST[]=$out;
 		}

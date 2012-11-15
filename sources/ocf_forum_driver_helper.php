@@ -222,19 +222,19 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
  */
 function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$filter_topic_title,$filter_topic_description,$show_first_posts,$date_key,$hot)
 {
-	if (is_integer($name)) $id_list='t_forum_id='.strval((integer)$name);
+	if (is_integer($name)) $id_list='t_forum_id='.strval($name);
 	elseif (!is_array($name))
 	{
 		$id=$this_ref->forum_id_from_name($name);
 		if (is_null($id)) return NULL;
-		$id_list='t_forum_id='.strval((integer)$id);
+		$id_list='t_forum_id='.strval($id);
 	} else
 	{
 		$id_list='';
 		foreach (array_keys($name) as $id)
 		{
 			if ($id_list!='') $id_list.=' OR ';
-			$id_list.='t_forum_id='.strval((integer)$id);
+			$id_list.='t_forum_id='.strval($id);
 		}
 		if ($id_list=='') return NULL;
 	}
@@ -299,7 +299,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$out[$i]['forum_id']=$r['t_forum_id'];
 
 		$select='p.p_title,t.text_parsed,t.id,p.p_poster,p.p_poster_name_if_guest';
-		$where='p_validated=1 AND p_topic_id='.strval((integer)$out[$i]['id']).' '.not_like_spacer_posts('t.text_original');
+		$where='p_validated=1 AND p_topic_id='.strval($out[$i]['id']).' '.not_like_spacer_posts('t.text_original');
 		$fp_rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where.' ORDER BY p_time,p.id',1);
 		if (!array_key_exists(0,$fp_rows))
 		{
@@ -384,7 +384,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	if (!$load_spacer_posts_too)
 		$where.=not_like_spacer_posts('t.text_original');
 	$where.=$extra_where;
-	if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)get_member()).'))';
+	if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval(get_member()).'))';
 	$index=(strpos(get_db_type(),'mysql')!==false && !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))))?'USE INDEX (in_topic)':'';
 
 	$order=$reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';

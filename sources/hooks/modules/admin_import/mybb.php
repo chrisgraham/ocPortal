@@ -679,7 +679,7 @@ class Hook_mybb
 			$access_mapping=array();
 			if ($row['status']==1)
 			{
-				$permissions=$db->query('SELECT * FROM '.$table_prefix.'forumpermissions WHERE fid='.strval((integer)$row['fid']));
+				$permissions=$db->query('SELECT * FROM '.$table_prefix.'forumpermissions WHERE fid='.strval($row['fid']));
 
 				foreach ($permissions as $p)
 				{
@@ -761,7 +761,7 @@ class Hook_mybb
 				$forum_id=import_id_remap_get('forum',strval($row['fid']),true);
 
 				$title='';
-				$topics=$db->query('SELECT subject FROM '.$table_prefix.'threads WHERE tid='.strval((integer)$row['tid']));
+				$topics=$db->query('SELECT subject FROM '.$table_prefix.'threads WHERE tid='.strval($row['tid']));
 				$first_post=$row['dateline'];
 				if ($first_post)
 				{

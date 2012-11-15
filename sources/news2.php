@@ -88,7 +88,7 @@ function delete_news_category($id)
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
 
-	$min=$GLOBALS['SITE_DB']->query_value_if_there('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval((integer)$id));
+	$min=$GLOBALS['SITE_DB']->query_value_if_there('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval($id));
 	if (is_null($min))
 	{
 		warn_exit(do_lang_tempcode('YOU_MUST_KEEP_ONE_NEWS_CAT'));

@@ -152,7 +152,7 @@ class Block_main_content
 				foreach ($_groups as $group)
 				{
 					if ($groups!='') $groups.=' OR ';
-					$groups.='a.group_id='.strval((integer)$group);
+					$groups.='a.group_id='.strval($group);
 				}
 
 				$query='FROM '.get_table_prefix().$info['table'].' g';

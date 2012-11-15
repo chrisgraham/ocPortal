@@ -493,7 +493,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 	if ($restrict)
 	{
 		if ($where!='') $where.=' AND ';
-		$where.='(e_submitter='.strval((integer)$member_id).' OR e_is_public=1)';
+		$where.='(e_submitter='.strval($member_id).' OR e_is_public=1)';
 	}
 	if (!is_null($filter))
 	{
@@ -502,7 +502,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 			if ($b==0)
 			{
 				if ($where!='') $where.=' AND ';
-				$where.='e_type<>'.strval((integer)substr($a,4));
+				$where.='e_type<>'.strval(substr($a,4));
 			}
 		}
 	}
@@ -980,7 +980,7 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 	if ($restrict)
 	{
 		if ($where!='') $where.=' AND ';
-		$where.='(e_submitter='.strval((integer)$member_id).' OR e_is_public=1)';
+		$where.='(e_submitter='.strval($member_id).' OR e_is_public=1)';
 	}
 	if ($where!='') $where.=' AND ';
 	$where.='(validated=1 OR e_is_public=0)';

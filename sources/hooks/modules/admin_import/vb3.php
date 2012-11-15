@@ -314,7 +314,7 @@ class Hook_vb3
 				$language='';
 				if ($row['languageid']!=0)
 				{
-					$rows2=$db->query('SELECT languagecode FROM '.$table_prefix.'language WHERE languageid='.strval((integer)$row['languageid']));
+					$rows2=$db->query('SELECT languagecode FROM '.$table_prefix.'language WHERE languageid='.strval($row['languageid']));
 					if (array_key_exists(0,$rows2))
 					{
 						$language=strtoupper($rows2[0]['languagecode']);
@@ -364,7 +364,7 @@ class Hook_vb3
 				$type='vb3';
 				$salt=$row['salt'];
 
-				$requests=$db->query('SELECT * FROM '.$table_prefix.'usergrouprequest WHERE userid='.strval((integer)$row['userid']));
+				$requests=$db->query('SELECT * FROM '.$table_prefix.'usergrouprequest WHERE userid='.strval($row['userid']));
 				foreach ($requests as $i=>$request)
 				{
 					$requests[$i]['usergroupid']=import_id_remap_get('group',strval($request['usergroupid']));
@@ -434,7 +434,7 @@ class Hook_vb3
 				{
 					if ($row['avatarid']!=0)
 					{
-						$avatar_rows=$db->query('SELECT * FROM '.$table_prefix.'avatar WHERE avatarid='.strval((integer)$row['avatarid']));
+						$avatar_rows=$db->query('SELECT * FROM '.$table_prefix.'avatar WHERE avatarid='.strval($row['avatarid']));
 						$setting_row=$db->query('SELECT value,defaultvalue FROM '.$table_prefix.'setting WHERE varname=\'avatarpath\'');
 						$setting=($setting_row[0]['value']=='')?$setting_row[0]['defaultvalue']:$setting_row[0]['value'];
 						if (array_key_exists(0,$avatar_rows))
@@ -561,7 +561,7 @@ class Hook_vb3
 			if (is_null($category_id)) $category_id=db_get_first_id();
 			$parent_forum=db_get_first_id();
 
-			$permissions=$db->query('SELECT usergroupid,forumpermissions FROM '.$table_prefix.'forumpermission WHERE forumid='.strval((integer)$row['forumid']));
+			$permissions=$db->query('SELECT usergroupid,forumpermissions FROM '.$table_prefix.'forumpermission WHERE forumid='.strval($row['forumid']));
 			$access_mapping=array();
 			foreach ($permissions as $p)
 			{

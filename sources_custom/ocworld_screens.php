@@ -254,7 +254,7 @@ function output_room_screen($member_id)
 		)));
 	}
 
-	$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_items WHERE location_x='.strval((integer)$x).' AND location_y='.strval((integer)$y).' AND location_realm='.strval((integer)$realm).' AND cost>0');
+	$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_items WHERE location_x='.strval($x).' AND location_y='.strval($y).' AND location_realm='.strval($realm).' AND cost>0');
 	$items_sale=new ocp_tempcode();
 	foreach ($rows as $myrow)
 	{
@@ -311,7 +311,7 @@ function output_room_screen($member_id)
 	if (has_privilege($member_id,'administer_ocworld'))
 	{
 		$people_here->attach(do_template('W_MAIN_PEOPLE_SEP'));
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_members WHERE location_x<>'.strval((integer)$x).' AND location_y<>'.strval((integer)$y).' AND location_realm<>'.strval((integer)$realm).' ORDER BY lastactive DESC',30);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_members WHERE location_x<>'.strval($x).' AND location_y<>'.strval($y).' AND location_realm<>'.strval($realm).' ORDER BY lastactive DESC',30);
 		foreach ($rows as $myrow)
 		{
 			if ($myrow['id']>=0)
@@ -352,7 +352,7 @@ function output_room_screen($member_id)
 	{
 		$_items_owned->attach(do_template('W_MAIN_ITEM_OWNED_SEP'));
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_itemdef WHERE owner<>'.strval((integer)$member_id).' ORDER BY name');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_itemdef WHERE owner<>'.strval($member_id).' ORDER BY name');
 		foreach ($rows as $myrow)
 		{
 			$selected=$myrow['name']==$item;

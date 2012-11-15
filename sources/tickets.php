@@ -86,7 +86,7 @@ function is_ticket_forum($forum_id)
 	$root_forum_id=get_ticket_forum_id(NULL,NULL,false,true);
 	if ($forum_id===$root_forum_id) return true;
 
-	$query='SELECT COUNT(*) AS cnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval((integer)$forum_id).' AND f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval((integer)$root_forum_id).' OR f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval((integer)$root_forum_id).'))';
+	$query='SELECT COUNT(*) AS cnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($forum_id).' AND f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($root_forum_id).' OR f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($root_forum_id).'))';
 
 	$rows=$GLOBALS['FORUM_DB']->query($query);
 	return ($rows[0]['cnt']!=0);

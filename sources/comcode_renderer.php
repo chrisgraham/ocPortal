@@ -957,7 +957,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 				if (!is_null($daily_quota))
 				{
-					$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval((integer)$source_member).' AND a_add_time>'.strval(time()-60*60*24));
+					$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval($source_member).' AND a_add_time>'.strval(time()-60*60*24));
 					if (is_null($_size_uploaded_today[0]['the_answer'])) $_size_uploaded_today[0]['the_answer']=0;
 					$size_uploaded_today=ceil(((float)$_size_uploaded_today[0]['the_answer'])/1024.0/1024.0);
 					$attach_size=0;
@@ -1265,7 +1265,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			}
 
 			$embed=$embed->evaluate();
-			$temp_tpl=do_template('COMCODE_JUMPING',array('_GUID'=>'85e9f83ed134868436a7db7692f56047','UNIQID'=>uniqid(''),'FULL'=>implode(', ',$attributes),'TIME'=>strval((integer)$embed),'PARTS'=>$_parts));
+			$temp_tpl=do_template('COMCODE_JUMPING',array('_GUID'=>'85e9f83ed134868436a7db7692f56047','UNIQID'=>uniqid(''),'FULL'=>implode(', ',$attributes),'TIME'=>strval($embed),'PARTS'=>$_parts));
 			break;
 		case 'shocker':
 			$_parts=new ocp_tempcode();
@@ -1288,7 +1288,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if (substr($max_color,0,1)=='#') $max_color=substr($max_color,1);
 
 			$embed=$embed->evaluate();
-			$temp_tpl=do_template('COMCODE_SHOCKER',array('_GUID'=>'d648de0a5e3b5f84d82d781f4964e04a','UNIQID'=>uniqid(''),'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'FULL'=>implode(', ',$attributes),'TIME'=>strval((integer)$embed),'PARTS'=>$_parts));
+			$temp_tpl=do_template('COMCODE_SHOCKER',array('_GUID'=>'d648de0a5e3b5f84d82d781f4964e04a','UNIQID'=>uniqid(''),'MIN_COLOR'=>$min_color,'MAX_COLOR'=>$max_color,'FULL'=>implode(', ',$attributes),'TIME'=>strval($embed),'PARTS'=>$_parts));
 			break;
 		case 'ticker':
 			$width=$attributes['param'];

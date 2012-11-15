@@ -76,7 +76,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function get_top_posters($limit)
 	{
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'f_members WHERE id<>'.strval((integer)$this->get_guest_id()).' ORDER BY m_cache_num_posts DESC',$limit);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'f_members WHERE id<>'.strval($this->get_guest_id()).' ORDER BY m_cache_num_posts DESC',$limit);
 	}
 
 	/**
@@ -692,7 +692,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);
-		$query='SELECT t.id,f_is_threaded FROM '.$this->connection->get_table_prefix().'f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id WHERE t_forum_id='.strval((integer)$forum_id).' AND ('.db_string_equal_to('t_description',$topic_identifier).' OR t_description LIKE \'%: #'.db_encode_like($topic_identifier).'\')';
+		$query='SELECT t.id,f_is_threaded FROM '.$this->connection->get_table_prefix().'f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id WHERE t_forum_id='.strval($forum_id).' AND ('.db_string_equal_to('t_description',$topic_identifier).' OR t_description LIKE \'%: #'.db_encode_like($topic_identifier).'\')';
 
 		$_result=$this->connection->query($query,1);
 		if (array_key_exists(0,$_result))
@@ -763,7 +763,7 @@ class forum_driver_ocf extends forum_driver_base
 		foreach ($groups as $group)
 		{
 			if ($_groups!='') $_groups.=' OR ';
-			$_groups.='gm_group_id='.strval((integer)$group);
+			$_groups.='gm_group_id='.strval($group);
 		}
 		if ($_groups=='') return array();
 		$a=$this->connection->query('SELECT u.* FROM '.$this->connection->get_table_prefix().'f_group_members g LEFT JOIN '.$this->connection->get_table_prefix().'f_members u ON u.id=g.gm_member_id WHERE ('.$_groups.') AND gm_validated=1 ORDER BY g.gm_group_id ASC',$max,$start);
@@ -771,7 +771,7 @@ class forum_driver_ocf extends forum_driver_base
 		foreach ($groups as $group)
 		{
 			if ($_groups!='') $_groups.=' OR ';
-			$_groups.='m_primary_group='.strval((integer)$group);
+			$_groups.='m_primary_group='.strval($group);
 		}
 		$b=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'f_members WHERE '.$_groups.' ORDER BY m_primary_group ASC',$max,$start);
 		$out=array();
@@ -808,7 +808,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function get_previous_member($member)
 	{
-		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'f_members WHERE id<'.strval((integer)$member).' AND id>0 ORDER BY id DESC');
+		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'f_members WHERE id<'.strval($member).' AND id>0 ORDER BY id DESC');
 		if ($tempid==$this->get_guest_id()) return NULL;
 		return $tempid;
 	}
@@ -822,7 +822,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function get_next_member($member)
 	{
-		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'f_members WHERE id>'.strval((integer)$member).' ORDER BY id');
+		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'f_members WHERE id>'.strval($member).' ORDER BY id');
 		return $tempid;
 	}
 

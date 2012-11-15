@@ -418,7 +418,7 @@ function chat_room_prune($room_id,$room_row=NULL)
 	}
 
 	// Prune 'active' indication (delete's us, and anything that needs pruning)
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'chat_active WHERE (member_id='.strval((integer)get_member()).' AND '.$extra2.')'.$extra);
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'chat_active WHERE (member_id='.strval(get_member()).' AND '.$extra2.')'.$extra);
 
 	// Note that *we are still here*
 	$GLOBALS['SITE_DB']->query_insert('chat_active',array('member_id'=>get_member(),'date_and_time'=>time(),'room_id'=>($room_id==-1)?NULL:$room_id));
@@ -607,7 +607,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 
 		if (!is_null($event_id))
 		{
-			$events=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'chat_events WHERE id>'.strval((integer)$event_id));
+			$events=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'chat_events WHERE id>'.strval($event_id));
 			foreach ($events as $event)
 			{
 				if ($event['e_member_id']==get_member()) continue;
@@ -705,7 +705,7 @@ function chatter_active($member_id,$room_id=NULL)
 	{
 		$room_clause='room_id='.strval($room_id);
 	}
-	$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM '.get_table_prefix().'chat_active WHERE '.$room_clause.' AND date_and_time>='.strval((integer)time()-CHAT_ACTIVITY_PRUNE).' AND member_id='.(string)$member_id);
+	$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM '.get_table_prefix().'chat_active WHERE '.$room_clause.' AND date_and_time>='.strval(time()-CHAT_ACTIVITY_PRUNE).' AND member_id='.(string)$member_id);
 	return !is_null($test);
 }
 
@@ -944,7 +944,7 @@ function get_chatters_in_room($room_id)
 	{
 		$extra2='room_id='.strval($room_id);
 	}
-	$active=$GLOBALS['SITE_DB']->query('SELECT DISTINCT a.member_id FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.member_id=a.member_id WHERE (session_invisible=0 OR session_invisible IS NULL) AND date_and_time>='.strval((integer)time()-60*10).' AND '.$extra2);
+	$active=$GLOBALS['SITE_DB']->query('SELECT DISTINCT a.member_id FROM '.get_table_prefix().'chat_active a LEFT JOIN '.get_table_prefix().'sessions s ON s.member_id=a.member_id WHERE (session_invisible=0 OR session_invisible IS NULL) AND date_and_time>='.strval(time()-60*10).' AND '.$extra2);
 
 	$found_users=array();
 	foreach ($active as $values)
@@ -1196,12 +1196,12 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 		$where='';
 		if ($room_id!=-1)
 		{
-			$where.='room_id='.strval((integer)$room_id);
+			$where.='room_id='.strval($room_id);
 		}
 		if ($downloading)
 		{
 			if ($where!='') $where.=' AND ';
-			$where.='date_and_time>='.strval((integer)$start).' AND date_and_time<='.strval((integer)$finish);
+			$where.='date_and_time>='.strval($start).' AND date_and_time<='.strval($finish);
 		}
 		if ((!is_null($uptoid)) && ($uptoid!=-1))
 		{
@@ -1210,17 +1210,17 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 				$timestamp=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_messages','date_and_time',array('id'=>$uptoid));
 				if (is_null($timestamp)) $timestamp=0;
 				if ($where!='') $where.=' AND ';
-				$where.='main.date_and_time>'.strval((integer)$timestamp);
+				$where.='main.date_and_time>'.strval($timestamp);
 			} else
 			{
 				if ($where!='') $where.=' AND ';
-				$where.='main.id>'.strval((integer)$uptoid);
+				$where.='main.id>'.strval($uptoid);
 			}
 		}
 		if (!$return_my_messages)
 		{
 			if ($where!='') $where.=' AND ';
-			$where.='member_id!='.strval((integer)get_member());
+			$where.='member_id!='.strval(get_member());
 		}
 		if (!$return_system_messages)
 		{

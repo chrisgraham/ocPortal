@@ -41,8 +41,8 @@ function init__ocf_members()
  */
 function ocf_get_filter_cats($only_exists_now=false)
 {
-	$filter_rows_a=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT t_pt_from_category FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_from='.strval((integer)get_member()));
-	$filter_rows_b=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT t_pt_to_category FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_to='.strval((integer)get_member()));
+	$filter_rows_a=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT t_pt_from_category FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_from='.strval(get_member()));
+	$filter_rows_b=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT t_pt_to_category FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_pt_to='.strval(get_member()));
 	$filter_cats=array(''=>1);
 	if (!$only_exists_now)
 		$filter_cats[do_lang('TRASH')]=1;
@@ -132,14 +132,14 @@ function ocf_get_all_custom_fields_match($groups,$public_view=NULL,$owner_view=N
 		}
 
 		$where='WHERE 1=1 ';
-		if (!is_null($public_view)) $where.=' AND cf_public_view='.strval((integer)$public_view);
-		if (!is_null($owner_view)) $where.=' AND cf_owner_view='.strval((integer)$owner_view);
-		if (!is_null($owner_set)) $where.=' AND cf_owner_set='.strval((integer)$owner_set);
-		if (!is_null($required)) $where.=' AND cf_required='.strval((integer)$required);
-		if (!is_null($show_in_posts)) $where.=' AND cf_show_in_posts='.strval((integer)$show_in_posts);
-		if (!is_null($show_in_post_previews)) $where.=' AND cf_show_in_post_previews='.strval((integer)$show_in_post_previews);
+		if (!is_null($public_view)) $where.=' AND cf_public_view='.strval($public_view);
+		if (!is_null($owner_view)) $where.=' AND cf_owner_view='.strval($owner_view);
+		if (!is_null($owner_set)) $where.=' AND cf_owner_set='.strval($owner_set);
+		if (!is_null($required)) $where.=' AND cf_required='.strval($required);
+		if (!is_null($show_in_posts)) $where.=' AND cf_show_in_posts='.strval($show_in_posts);
+		if (!is_null($show_in_post_previews)) $where.=' AND cf_show_in_post_previews='.strval($show_in_post_previews);
 		if ($special_start==1) $where.=' AND tx.text_original LIKE \''.db_encode_like('ocp_%').'\'';
-		if (!is_null($show_on_join_form)) $where.=' AND cf_show_on_join_form='.strval((integer)$show_on_join_form);
+		if (!is_null($show_on_join_form)) $where.=' AND cf_show_on_join_form='.strval($show_on_join_form);
 
 		global $TABLE_LANG_FIELDS_CACHE;
 		$_result=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate tx ON (tx.id=f.cf_name AND '.db_string_equal_to('tx.language',get_site_default_lang()).') '.$where.' ORDER BY cf_order',NULL,NULL,false,false,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_custom_fields']:array());

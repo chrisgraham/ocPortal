@@ -688,7 +688,7 @@ function do_site()
 		}
 		if (count($messages)!=0)
 		{
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'messages_to_render WHERE r_session_id='.strval((integer)get_session_id()).' OR r_time<'.strval(time()-60*60));
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'messages_to_render WHERE r_session_id='.strval(get_session_id()).' OR r_time<'.strval(time()-60*60));
 		}
 	}
 

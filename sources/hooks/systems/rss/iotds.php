@@ -39,7 +39,7 @@ class Hook_rss_iotds
 		if (!has_actual_page_access(get_member(),'iotds')) return NULL;
 
 		$content=new ocp_tempcode();
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'iotd WHERE add_date>'.strval((integer)$cutoff).' AND (used=1 OR is_current=1) ORDER BY add_date DESC',$max);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'iotd WHERE add_date>'.strval($cutoff).' AND (used=1 OR is_current=1) ORDER BY add_date DESC',$max);
 		foreach ($rows as $row)
 		{
 			$id=strval($row['id']);

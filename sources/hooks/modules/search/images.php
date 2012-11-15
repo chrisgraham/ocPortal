@@ -104,7 +104,7 @@ class Hook_search_images
 		if (!is_null($cutoff))
 		{
 			$where_clause.=' AND ';
-			$where_clause.='add_date>'.strval((integer)$cutoff);
+			$where_clause.='add_date>'.strval($cutoff);
 		}
 
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))

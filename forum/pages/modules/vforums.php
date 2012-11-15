@@ -87,7 +87,7 @@ class Module_vforums
 	{
 		$title=do_lang('POSTS_SINCE_LAST_VISIT');
 		if (!array_key_exists('last_visit',$_COOKIE)) warn_exit(do_lang_tempcode('NO_LAST_VISIT'));
-		$condition='t_cache_last_time>'.strval((integer)$_COOKIE['last_visit']);
+		$condition='t_cache_last_time>'.strval($_COOKIE['last_visit']);
 
 		$order2='t_cache_last_time DESC';
 
@@ -152,16 +152,16 @@ class Module_vforums
 			foreach ($groups as $group)
 			{
 				if ($group_or_list!='') $group_or_list.=' OR ';
-				$group_or_list.='group_id='.strval((integer)$group);
+				$group_or_list.='group_id='.strval($group);
 			}
 
 			if ($extra!='') $extra.=' AND ';
 			$or_list='';
-			$forum_access=$GLOBALS['FORUM_DB']->query('SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$group_or_list.') AND '.db_string_equal_to('module_the_name','forums').' UNION ALL SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval((integer)get_member()).' AND active_until>'.strval(time()).') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
+			$forum_access=$GLOBALS['FORUM_DB']->query('SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$group_or_list.') AND '.db_string_equal_to('module_the_name','forums').' UNION ALL SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval(get_member()).' AND active_until>'.strval(time()).') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
 			foreach ($forum_access as $access)
 			{
 				if ($or_list!='') $or_list.=' OR ';
-				$or_list.='t_forum_id='.strval((integer)$access['category_name']);
+				$or_list.='t_forum_id='.strval($access['category_name']);
 			}
 			$extra.='('.$or_list.')';
 		}
@@ -170,7 +170,7 @@ class Module_vforums
 		$topic_rows=array();
 		foreach (is_array($condition)?$condition:array($condition) as $_condition)
 		{
-			$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (top.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND top.t_cache_first_post=t.id WHERE (('.$_condition.')'.$extra.') AND t_forum_id IS NOT NULL ORDER BY '.$order;
+			$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (top.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND top.t_cache_first_post=t.id WHERE (('.$_condition.')'.$extra.') AND t_forum_id IS NOT NULL ORDER BY '.$order;
 			$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,t.text_parsed AS _trans_post,l_time'.$query,$max,$start));
 			//if (($start==0) && (count($topic_rows)<$max)) $max_rows+=$max; // We know that they're all on this screen
 			/*else */$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query);
@@ -180,11 +180,11 @@ class Module_vforums
 		foreach ($topic_rows as $topic_row)
 		{
 			if ($or_list!='') $or_list.=' OR ';
-			$or_list.='p_topic_id='.strval((integer)$topic_row['id']);
+			$or_list.='p_topic_id='.strval($topic_row['id']);
 		}
 		if ($or_list!='')
 		{
-			$involved=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE ('.$or_list.') AND p_poster='.strval((integer)get_member()));
+			$involved=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE ('.$or_list.') AND p_poster='.strval(get_member()));
 			$involved=collapse_1d_complexity('p_topic_id',$involved);
 		}
 		$topics_array=array();

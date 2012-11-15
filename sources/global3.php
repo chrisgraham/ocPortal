@@ -1571,7 +1571,7 @@ function member_tracking_update()
 	if ($type=='/') $type='';
 	if ($id=='/') $id='';
 
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'member_tracking WHERE mt_time<'.strval(time()-60*intval(get_option('users_online_time'))).' OR (mt_member_id='.strval((integer)get_member()).' AND '.db_string_equal_to('mt_type',$type).' AND '.db_string_equal_to('mt_id',$id).' AND '.db_string_equal_to('mt_page',$page).')');
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'member_tracking WHERE mt_time<'.strval(time()-60*intval(get_option('users_online_time'))).' OR (mt_member_id='.strval(get_member()).' AND '.db_string_equal_to('mt_type',$type).' AND '.db_string_equal_to('mt_id',$id).' AND '.db_string_equal_to('mt_page',$page).')');
 
 	$GLOBALS['SITE_DB']->query_insert('member_tracking',array(
 		'mt_member_id'=>get_member(),

@@ -56,7 +56,7 @@ class Hook_whats_news_news
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'news_category');
 		$or_list_2=ocfilter_to_sqlfragment($filter,'news_entry_category');
-		$rows=$GLOBALS['SITE_DB']->query('SELECT title,news,news_article,id,date_and_time,submitter FROM '.get_table_prefix().'news LEFT JOIN '.get_table_prefix().'news_category_entries ON news_entry=id WHERE validated=1 AND date_and_time>'.strval((integer)$cutoff_time).' AND (('.$or_list.') OR ('.$or_list_2.')) ORDER BY date_and_time DESC',300);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT title,news,news_article,id,date_and_time,submitter FROM '.get_table_prefix().'news LEFT JOIN '.get_table_prefix().'news_category_entries ON news_entry=id WHERE validated=1 AND date_and_time>'.strval($cutoff_time).' AND (('.$or_list.') OR ('.$or_list_2.')) ORDER BY date_and_time DESC',300);
 		if (count($rows)==300) return array();
 		$rows=remove_duplicate_rows($rows,'id');
 		foreach ($rows as $row)

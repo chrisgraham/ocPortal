@@ -679,7 +679,7 @@ class Hook_smf
 			$permissions_on_groups=$db->query('SELECT DISTINCT ID_GROUP FROM '.$table_prefix.'board_permissions');
 			foreach ($permissions_on_groups as $gid)
 			{
-				$permissions=$db->query('SELECT * FROM '.$table_prefix.'board_permissions WHERE ID_GROUP='.strval((integer)$gid).' AND ID_BOARD='.strval((integer)$row['ID_BOARD']));
+				$permissions=$db->query('SELECT * FROM '.$table_prefix.'board_permissions WHERE ID_GROUP='.strval($gid).' AND ID_BOARD='.strval($row['ID_BOARD']));
 
 				$v=0;
 				foreach ($permissions as $p)

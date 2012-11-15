@@ -177,7 +177,7 @@ class Hook_ipb2 extends Hook_ipb_base
 			$description=strip_tags(@html_entity_decode($row['description'],ENT_QUOTES,get_charset()));
 
 			// To determine whether parent_id specifies category or parent, we must check status of what it is pointing at
-			$parent_test=$db->query('SELECT use_ibc,parent_id FROM '.$table_prefix.'forums WHERE id='.strval((integer)$row['parent_id']));
+			$parent_test=$db->query('SELECT use_ibc,parent_id FROM '.$table_prefix.'forums WHERE id='.strval($row['parent_id']));
 			if ($parent_test[0]['parent_id']!=-1) // Pointing to parent
 			{
 				$parent_forum=import_id_remap_get('forum',strval($row['parent_id']),true);

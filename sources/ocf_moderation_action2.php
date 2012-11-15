@@ -199,7 +199,7 @@ function ocf_make_warning($member_id,$explanation,$by=NULL,$time=NULL,$is_warnin
 
 	if ($is_warning==1)
 	{
-		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_warnings=(m_cache_warnings+1) WHERE id='.strval((integer)$member_id),1);
+		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_warnings=(m_cache_warnings+1) WHERE id='.strval($member_id),1);
 	}
 
 	return $GLOBALS['FORUM_DB']->query_insert('f_warnings',array(
@@ -252,7 +252,7 @@ function ocf_delete_warning($warning_id)
 	$member_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_warnings','w_member_id',array('id'=>$warning_id));
 	if (is_null($member_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_warnings=(m_cache_warnings-1) WHERE id='.strval((integer)$member_id),1);
+	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_warnings=(m_cache_warnings-1) WHERE id='.strval($member_id),1);
 
 	$GLOBALS['FORUM_DB']->query_delete('f_warnings',array('id'=>$warning_id),'',1);
 }

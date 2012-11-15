@@ -552,7 +552,7 @@ class Module_ocworld
 			$name=post_param('name','');
 			if ($name=='')
 			{
-				$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_itemdef WHERE replicateable=1 OR owner='.strval((integer)get_member()).' ORDER BY name');
+				$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'w_itemdef WHERE replicateable=1 OR owner='.strval(get_member()).' ORDER BY name');
 				$items='';
 				foreach ($rows as $myrow)
 				{

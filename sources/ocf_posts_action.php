@@ -305,7 +305,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 				{
 					/*if ($sunk==1)		Don't hide posts to sunk topics actually, it's too weird
 					{
-						$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums SET f_cache_num_topics=(f_cache_num_topics+'.(($is_starter)?'1':'0').'),f_cache_num_posts=(f_cache_num_posts+1) WHERE id='.strval((integer)$topic_id));
+						$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums SET f_cache_num_topics=(f_cache_num_topics+'.(($is_starter)?'1':'0').'),f_cache_num_posts=(f_cache_num_posts+1) WHERE id='.strval($topic_id));
 					} else*/
 					{
 						require_code('ocf_posts_action2');
@@ -377,11 +377,11 @@ function ocf_force_update_member_post_count($member_id,$member_post_count_dif=NU
 			}
 		}
 		$member_post_count+=$GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)',array('p_poster'=>$member_id,'p_cache_forum_id'=>NULL));
-		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_num_posts='.strval((integer)$member_post_count).' WHERE id='.strval((integer)$member_id));
+		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_num_posts='.strval($member_post_count).' WHERE id='.strval($member_id));
 	}
 	else
 	{
-		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_num_posts=(m_cache_num_posts+'.strval((integer)$member_post_count_dif).') WHERE id='.strval((integer)$member_id));
+		$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_num_posts=(m_cache_num_posts+'.strval($member_post_count_dif).') WHERE id='.strval($member_id));
 	}
 }
 

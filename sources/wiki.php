@@ -494,7 +494,7 @@ function wiki_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 			foreach ($wiki_seen as $seen)
 			{
 				if ($where!='') $where.=' AND ';
-				$where.='p.id<>'.strval((integer)$seen);
+				$where.='p.id<>'.strval($seen);
 			}
 
 			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/);

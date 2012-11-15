@@ -43,7 +43,7 @@ class Hook_rss_points
 		require_lang('points');
 
 		$content=new ocp_tempcode();
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gifts WHERE '.$filters.' AND date_and_time>'.strval((integer)$cutoff).' ORDER BY date_and_time DESC',$max);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'gifts WHERE '.$filters.' AND date_and_time>'.strval($cutoff).' ORDER BY date_and_time DESC',$max);
 		foreach ($rows as $row)
 		{
 			$id=strval($row['id']);

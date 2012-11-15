@@ -259,12 +259,12 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 			$topic_id=$this->connection->query_insert('topics',array('title'=>$this->ipb_escape($content_title.', '.$topic_identifier_encapsulation_prefix.': #'.$topic_identifier),'state'=>'open','posts'=>1,'starter_id'=>$member,'start_date'=>$time,'icon_id'=>0,'starter_name'=>$username,'poll_state'=>0,'last_vote'=>0,'forum_id'=>$forum_id,'approved'=>1,'author_mode'=>1),true);
 			$home_link=hyperlink($content_url,escape_html($content_title));
 			$this->connection->query_insert('posts',array('author_id'=>0,'author_name'=>do_lang('SYSTEM','','','',get_site_default_lang()),'ip_address'=>'127.0.0.1','post_date'=>$time,'icon_id'=>0,'post'=>do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()),'queued'=>0,'topic_id'=>$topic_id,'forum_id'=>$forum_id,'attach_id'=>'','attach_hits'=>0,'attach_type'=>'','attach_file'=>'','post_title'=>'','new_topic'=>1));
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET topics=(topics+1) WHERE id='.strval((integer)$forum_id),1);
+			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET topics=(topics+1) WHERE id='.strval($forum_id),1);
 		}
 		if ($post=='') return array($topic_id,false);
 		$this->connection->query_insert('posts',array('author_id'=>$member,'author_name'=>$this->ipb_escape($username),'ip_address'=>$ip,'post_date'=>$time,'icon_id'=>0,'post'=>$post,'queued'=>0,'topic_id'=>$topic_id,'forum_id'=>$forum_id,'attach_id'=>'','attach_hits'=>0,'attach_type'=>'','attach_file'=>'','post_title'=>$this->ipb_escape($post_title),'new_topic'=>0));
-		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET posts=(posts+1), last_post='.strval($time).', last_poster_id='.strval((integer)$member).', last_poster_name=\''.db_escape_string($this->ipb_escape($username)).'\', last_id='.strval((integer)$topic_id).', last_title=\''.db_escape_string($this->ipb_escape($post_title)).'\' WHERE id='.strval((integer)$forum_id),1);
-		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET posts=(posts+1), last_post='.strval($time).', last_poster_id='.strval((integer)$member).', last_poster_name=\''.db_escape_string($this->ipb_escape($username)).'\' WHERE tid='.strval((integer)$topic_id),1);
+		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET posts=(posts+1), last_post='.strval($time).', last_poster_id='.strval($member).', last_poster_name=\''.db_escape_string($this->ipb_escape($username)).'\', last_id='.strval($topic_id).', last_title=\''.db_escape_string($this->ipb_escape($post_title)).'\' WHERE id='.strval($forum_id),1);
+		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET posts=(posts+1), last_post='.strval($time).', last_poster_id='.strval($member).', last_poster_name=\''.db_escape_string($this->ipb_escape($username)).'\' WHERE tid='.strval($topic_id),1);
 
 		return array($topic_id,false);
 	}
@@ -284,8 +284,8 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	{
 		if (is_null($topic_id)) return (-2);
 		$order=$reverse?'post_date DESC':'post_date';
-		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval((integer)$topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
-		$count=$this->connection->query_value_if_there('SELECT COUNT(*) '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval((integer)$topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
+		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval($topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
+		$count=$this->connection->query_value_if_there('SELECT COUNT(*) '.$this->connection->get_table_prefix().'posts WHERE topic_id='.strval($topic_id).' AND post NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
 		$out=array();
 		foreach ($rows as $myrow)
 		{
@@ -326,19 +326,19 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 	 */
 	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
 	{
-		if (is_integer($name)) $id_list='forum_id='.strval((integer)$name);
+		if (is_integer($name)) $id_list='forum_id='.strval($name);
 		elseif (!is_array($name))
 		{
 			$id=$this->forum_id_from_name($name);
 			if (is_null($id)) return NULL;
-			$id_list='forum_id='.strval((integer)$id);
+			$id_list='forum_id='.strval($id);
 		} else
 		{
 			$id_list='';
 			foreach (array_keys($name) as $id)
 			{
 				if ($id_list!='') $id_list.=' OR ';
-				$id_list.='forum_id='.strval((integer)$id);
+				$id_list.='forum_id='.strval($id);
 			}
 			if ($id_list=='') return NULL;
 		}
@@ -361,7 +361,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
 			$out[$i]['firsttime']=$r['start_date'];
 			$out[$i]['lasttime']=$r['last_post'];
 			$out[$i]['closed']=($r['state']=='closed');
-			$fp_rows=$this->connection->query('SELECT post_title,post FROM '.$this->connection->get_table_prefix().'posts WHERE post NOT LIKE \''.db_encode_like(do_lang('SPACER_POST','','','',get_site_default_lang()).'%').'\' AND topic_id='.strval((integer)$out[$i]['id']).' ORDER BY post_date',1);
+			$fp_rows=$this->connection->query('SELECT post_title,post FROM '.$this->connection->get_table_prefix().'posts WHERE post NOT LIKE \''.db_encode_like(do_lang('SPACER_POST','','','',get_site_default_lang()).'%').'\' AND topic_id='.strval($out[$i]['id']).' ORDER BY post_date',1);
 			if (!array_key_exists(0,$fp_rows))
 			{
 				unset($out[$i]);

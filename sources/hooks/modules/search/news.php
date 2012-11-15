@@ -112,7 +112,7 @@ class Hook_search_news
 		if (!is_null($cutoff))
 		{
 			$where_clause.=' AND ';
-			$where_clause.='date_and_time>'.strval((integer)$cutoff);
+			$where_clause.='date_and_time>'.strval($cutoff);
 		}
 
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))

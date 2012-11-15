@@ -46,7 +46,7 @@ class Hook_rss_ocf_topicview
 		if (!is_guest()) $filters.=' AND (p_poster<>'.strval(get_member()).')';
 
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_time>'.strval($cutoff).(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND p_validated=1 ':'').' AND '.$filters.' ORDER BY p_time DESC,id DESC',$max);
-		$categories=collapse_2d_complexity('id','t_cache_first_title',$GLOBALS['FORUM_DB']->query('SELECT id,t_cache_first_title FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_cache_last_time>'.strval((integer)$cutoff)));
+		$categories=collapse_2d_complexity('id','t_cache_first_title',$GLOBALS['FORUM_DB']->query('SELECT id,t_cache_first_title FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_cache_last_time>'.strval($cutoff)));
 
 		$content=new ocp_tempcode();
 		foreach ($rows as $row)

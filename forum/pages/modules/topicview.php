@@ -110,7 +110,7 @@ class Module_topicview
 				$GLOBALS['FORUM_DB']->query_delete('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$id),'',1);
 				$GLOBALS['FORUM_DB']->query_insert('f_read_logs',array('l_member_id'=>get_member(),'l_topic_id'=>$id,'l_time'=>time()),false,true); // race condition
 			}
-			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET t_num_views=(t_num_views+1) WHERE id='.strval((integer)$id),1,NULL,true);
+			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics SET t_num_views=(t_num_views+1) WHERE id='.strval($id),1,NULL,true);
 		}
 
 		// Load up topic info

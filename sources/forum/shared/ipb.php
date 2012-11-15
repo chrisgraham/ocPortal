@@ -43,7 +43,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function get_top_posters($limit)
 	{
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'members WHERE id<>'.strval((integer)$this->get_guest_id()).' ORDER BY posts DESC',$limit);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'members WHERE id<>'.strval($this->get_guest_id()).' ORDER BY posts DESC',$limit);
 	}
 
 	/**
@@ -330,7 +330,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	{
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);
-		$query='SELECT tid FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval((integer)$forum_id);
+		$query='SELECT tid FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval($forum_id);
 		$query.=' AND ('.db_string_equal_to('description',$topic_identifier).' OR description LIKE \'%: #'.db_encode_like($topic_identifier).'\')';
 
 		return $this->connection->query_value_if_there($query);
@@ -377,7 +377,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 		foreach ($groups as $group)
 		{
 			if ($_groups!='') $_groups.=' OR ';
-			$_groups.='mgroup='.strval((integer)$group);
+			$_groups.='mgroup='.strval($group);
 		}
 		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'members WHERE '.$_groups.' ORDER BY mgroup,id ASC',$max,$start);
 	}
@@ -390,7 +390,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function get_previous_member($member)
 	{
-		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'members WHERE id<'.strval((integer)$member).' AND id<>0 ORDER BY id DESC');
+		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'members WHERE id<'.strval($member).' AND id<>0 ORDER BY id DESC');
 		return $tempid;
 	}
 
@@ -403,7 +403,7 @@ class forum_driver_ipb_shared extends forum_driver_base
 	 */
 	function get_next_member($member)
 	{
-		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'members WHERE id>'.strval((integer)$member).' ORDER BY id');
+		$tempid=$this->connection->query_value_if_there('SELECT id FROM '.$this->connection->get_table_prefix().'members WHERE id>'.strval($member).' ORDER BY id');
 		return $tempid;
 	}
 

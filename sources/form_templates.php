@@ -1764,7 +1764,7 @@ function handle_conflict_resolution($id=NULL,$only_staff=false)
 	if (is_null($id)) $id=get_param('id','',true);
 
 	require_javascript('javascript_ajax');
-	$last_edit_screen_time=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'edit_pings WHERE '.db_string_equal_to('the_page',get_page_name()).' AND '.db_string_equal_to('the_type',get_param('type','misc')).' AND '.db_string_equal_to('the_id',$id).' AND the_member<>'.strval((integer)get_member()).' ORDER BY the_time DESC',1);
+	$last_edit_screen_time=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'edit_pings WHERE '.db_string_equal_to('the_page',get_page_name()).' AND '.db_string_equal_to('the_type',get_param('type','misc')).' AND '.db_string_equal_to('the_id',$id).' AND the_member<>'.strval(get_member()).' ORDER BY the_time DESC',1);
 	if ((array_key_exists(0,$last_edit_screen_time)) && ($last_edit_screen_time[0]['the_time']>time()-20))
 	{
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($last_edit_screen_time[0]['the_member']);

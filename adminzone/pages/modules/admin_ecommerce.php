@@ -459,7 +459,7 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		require_code('currency');
 
-		$transactions=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'transactions WHERE t_time<'.strval((integer)$to).' AND '.db_string_equal_to('status','Completed').' ORDER BY t_time');
+		$transactions=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'transactions WHERE t_time<'.strval($to).' AND '.db_string_equal_to('status','Completed').' ORDER BY t_time');
 		foreach ($transactions as $transaction)
 		{
 			if ($transaction['t_time']>$from)
@@ -511,7 +511,7 @@ class Module_admin_ecommerce extends standard_crud_module
 
 		if ($unpaid_invoices_count)
 		{
-			$invoices=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'invoices WHERE '.db_string_equal_to('i_state','new').' AND i_time<'.strval((integer)$to).' ORDER BY i_time');
+			$invoices=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'invoices WHERE '.db_string_equal_to('i_state','new').' AND i_time<'.strval($to).' ORDER BY i_time');
 			foreach ($invoices as $invoice)
 			{
 				$product=$invoice['i_type_code'];

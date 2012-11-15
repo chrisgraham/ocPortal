@@ -65,7 +65,7 @@ class Hook_whats_news_galleries
 		} else $galleries=array();
 		require_code('ocfiltering');
 		$or_list=ocfilter_to_sqlfragment($filter,'cat',NULL,NULL,NULL,NULL,false);
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos WHERE add_date>'.strval((integer)$cutoff_time).' AND validated=1 AND ('.$or_list.') ORDER BY add_date DESC',300/*reasonable limit*/);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'videos WHERE add_date>'.strval($cutoff_time).' AND validated=1 AND ('.$or_list.') ORDER BY add_date DESC',300/*reasonable limit*/);
 		if (count($rows)==300) return array();
 		foreach ($rows as $row)
 		{

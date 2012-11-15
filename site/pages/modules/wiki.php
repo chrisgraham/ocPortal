@@ -457,14 +457,14 @@ class Module_wiki
 		$breadcrumbs=wiki_breadcrumbs($chain,$current_title,has_privilege(get_member(),'open_virtual_roots'),true,true);
 
 		// Children Links
-		$dbchildren=$GLOBALS['SITE_DB']->query('SELECT child_id FROM '.get_table_prefix().'wiki_children c LEFT JOIN '.get_table_prefix().'wiki_pages p ON c.child_id=p.id WHERE c.parent_id='.strval((integer)$id).' ORDER BY c.the_order');
+		$dbchildren=$GLOBALS['SITE_DB']->query('SELECT child_id FROM '.get_table_prefix().'wiki_children c LEFT JOIN '.get_table_prefix().'wiki_pages p ON c.child_id=p.id WHERE c.parent_id='.strval($id).' ORDER BY c.the_order');
 		$num_children=0;
 		$children=new ocp_tempcode();
 		$or_list='';
 		foreach ($dbchildren as $myrow)
 		{
 			if ($or_list!='') $or_list.=' OR ';
-			$or_list.='id='.strval((integer)$myrow['child_id']);
+			$or_list.='id='.strval($myrow['child_id']);
 		}
 		$_subpage=($or_list=='')?array():list_to_map('id',$GLOBALS['SITE_DB']->query('SELECT id,title,hide_posts FROM '.get_table_prefix().'wiki_pages WHERE '.$or_list));
 		foreach ($dbchildren as $myrow)

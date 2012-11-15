@@ -36,7 +36,7 @@ class Hook_Notification_chat
 
 			if (is_null($timestamp)) $timestamp=time();
 			$room=intval(get_value('occle_watched_chatroom'));
-			$room_messages=$GLOBALS['SITE_DB']->query('SELECT COUNT(*) AS cnt FROM '.get_table_prefix().'chat_messages WHERE room_id='.strval($room).' AND date_and_time>='.strval((integer)$timestamp));
+			$room_messages=$GLOBALS['SITE_DB']->query('SELECT COUNT(*) AS cnt FROM '.get_table_prefix().'chat_messages WHERE room_id='.strval($room).' AND date_and_time>='.strval($timestamp));
 			if (!array_key_exists(0,$room_messages)) return false;
 
 			if ($room_messages[0]['cnt']>0)

@@ -153,7 +153,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function get_top_posters($limit)
 	{
-		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE user_id<>'.strval((integer)$this->get_guest_id()).' ORDER BY user_posts DESC',$limit);
+		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'users WHERE user_id<>'.strval($this->get_guest_id()).' ORDER BY user_posts DESC',$limit);
 	}
 
 	/**
@@ -631,8 +631,8 @@ class forum_driver_phpbb3 extends forum_driver_base
 			$map=array('topic_id'=>$topic_id,'forum_id'=>$forum_id,'poster_id'=>-1,'post_text'=>do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()),'post_time'=>$time,'poster_ip'=>$local_ip_address,'post_username'=>$this->get_username($member),'enable_bbcode'=>1,'enable_smilies'=>1,'enable_sig'=>1,'post_edit_time'=>0,'post_edit_count'=>0);
 			if ($fm) $map=array_merge($map,array('post_attachment'=>0,'post_edit_user'=>NULL,'post_icon'=>0,'post_bluecard'=>NULL,'rating_rank_id'=>0,'user_avatar'=>NULL,'user_avatar_type'=>0,'urgent_post'=>0));
 			$post_id=$this->connection->query_insert('posts',$map,true);
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET topic_first_post_id='.strval((integer)$post_id).' WHERE topic_id='.strval((integer)$topic_id),1);
-			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_topics_real=(forum_topics_real+1),forum_topics=(forum_topics+1),forum_posts=(forum_posts+1) WHERE forum_id='.strval((integer)$forum_id),1);
+			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET topic_first_post_id='.strval($post_id).' WHERE topic_id='.strval($topic_id),1);
+			$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_topics_real=(forum_topics_real+1),forum_topics=(forum_topics+1),forum_posts=(forum_posts+1) WHERE forum_id='.strval($forum_id),1);
 		}
 
 		if ($post=='') return array($topic_id,false);
@@ -640,8 +640,8 @@ class forum_driver_phpbb3 extends forum_driver_base
 		$map=array('topic_id'=>$topic_id,'forum_id'=>$forum_id,'poster_id'=>$member,'post_text'=>$post,'post_time'=>$time,'poster_ip'=>$ip_address,'post_username'=>$this->get_username($member),'enable_bbcode'=>1,'enable_smilies'=>1,'enable_sig'=>1,'post_edit_time'=>0,'post_edit_count'=>0);
 		if ($fm) $map=array_merge($map,array('post_attachment'=>0,'post_edit_user'=>NULL,'post_icon'=>0,'post_bluecard'=>NULL,'rating_rank_id'=>0,'user_avatar'=>NULL,'user_avatar_type'=>0,'urgent_post'=>0));
 		$post_id=$this->connection->query_insert('posts',$map,true);
-		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_posts=(forum_posts+1), forum_last_post_id='.strval((integer)$post_id).' WHERE forum_id='.strval((integer)$forum_id),1);
-		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET topic_replies=(topic_replies+1), topic_replies_real=(topic_replies_real+1), topic_last_post_id='.strval((integer)$post_id).' WHERE topic_id='.strval((integer)$topic_id),1);
+		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'forums SET forum_posts=(forum_posts+1), forum_last_post_id='.strval($post_id).' WHERE forum_id='.strval($forum_id),1);
+		$this->connection->query('UPDATE '.$this->connection->get_table_prefix().'topics SET topic_replies=(topic_replies+1), topic_replies_real=(topic_replies_real+1), topic_last_post_id='.strval($post_id).' WHERE topic_id='.strval($topic_id),1);
 
 		return array($topic_id,false);
 	}
@@ -661,8 +661,8 @@ class forum_driver_phpbb3 extends forum_driver_base
 	{
 		if (is_null($topic_id)) return (-2);
 		$order=$reverse?'post_time DESC':'post_time';
-		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
-		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts p WHERE topic_id='.strval((integer)$topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
+		$rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p WHERE topic_id='.strval($topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY '.$order,$max,$start);
+		$count=$this->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this->connection->get_table_prefix().'posts p WHERE topic_id='.strval($topic_id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\'');
 		$out=array();
 		foreach ($rows as $myrow)
 		{
@@ -721,7 +721,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 	{
 		if (is_integer($forum)) $forum_id=$forum;
 		else $forum_id=$this->forum_id_from_name($forum);
-		return $this->connection->query_value_if_there('SELECT topic_id FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval((integer)$forum_id).' AND ('.db_string_equal_to('topic_title',$topic_identifier).' OR topic_title LIKE \'%: #'.db_encode_like($topic_identifier).'\')');
+		return $this->connection->query_value_if_there('SELECT topic_id FROM '.$this->connection->get_table_prefix().'topics WHERE forum_id='.strval($forum_id).' AND ('.db_string_equal_to('topic_title',$topic_identifier).' OR topic_title LIKE \'%: #'.db_encode_like($topic_identifier).'\')');
 	}
 
 	/**
@@ -748,19 +748,19 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title='',$show_first_posts=false,$date_key='lasttime',$hot=false,$filter_topic_description='')
 	{
-		if (is_integer($name)) $id_list='forum_id='.strval((integer)$name);
+		if (is_integer($name)) $id_list='forum_id='.strval($name);
 		elseif (!is_array($name))
 		{
 			$id=$this->forum_id_from_name($name);
 			if (is_null($id)) return NULL;
-			$id_list='forum_id='.strval((integer)$id);
+			$id_list='forum_id='.strval($id);
 		} else
 		{
 			$id_list='';
 			foreach (array_keys($name) as $id)
 			{
 				if ($id_list!='') $id_list.=' OR ';
-				$id_list.='forum_id='.strval((integer)$id);
+				$id_list.='forum_id='.strval($id);
 			}
 			if ($id_list=='') return NULL;
 		}
@@ -782,7 +782,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 			$id=$r['topic_id'];
 			$firsttime[$id]=$r['topic_time'];
 
-			$post_rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p WHERE topic_id='.strval((integer)$id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_time DESC',1);
+			$post_rows=$this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'posts p WHERE topic_id='.strval($id).' AND post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' ORDER BY post_time DESC',1);
 			if (!array_key_exists(0,$post_rows))
 			{
 				$i++;
@@ -821,7 +821,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 					$out[$i]['lasttime']=$datetime;
 					$out[$i]['closed']=($r['topic_status']==1);
 
-					$fp_rows=$this->connection->query('SELECT post_subject,post_text,bbcode_uid,poster_id FROM '.$this->connection->get_table_prefix().'posts p WHERE post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' AND post_time='.strval((integer)$firsttime[$id]).' AND topic_id='.strval((integer)$id),1);
+					$fp_rows=$this->connection->query('SELECT post_subject,post_text,bbcode_uid,poster_id FROM '.$this->connection->get_table_prefix().'posts p WHERE post_text NOT LIKE \''.db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20).'%').'\' AND post_time='.strval($firsttime[$id]).' AND topic_id='.strval($id),1);
 					if (!array_key_exists(0,$fp_rows))
 					{
 						unset($out[$i]);
@@ -876,7 +876,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 		foreach ($groups as $group)
 		{
 			if ($_groups!='') $_groups.=' OR ';
-			$_groups.='g.group_id='.strval((integer)$group);
+			$_groups.='g.group_id='.strval($group);
 		}
 		if ($_groups=='') return array();
 		return $this->connection->query('SELECT * FROM '.$this->connection->get_table_prefix().'user_group g LEFT JOIN '.$this->connection->get_table_prefix().'users u ON u.user_id=g.user_id WHERE '.$_groups.' AND user_pending=0 ORDER BY g.group_id ASC',$max,$start);
@@ -890,7 +890,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function get_previous_member($member)
 	{
-		$tempid=$this->connection->query_value_if_there('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id<'.strval((integer)$member).' AND user_id>0 ORDER BY user_id DESC');
+		$tempid=$this->connection->query_value_if_there('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id<'.strval($member).' AND user_id>0 ORDER BY user_id DESC');
 		return $tempid;
 	}
 
@@ -903,7 +903,7 @@ class forum_driver_phpbb3 extends forum_driver_base
 	 */
 	function get_next_member($member)
 	{
-		$tempid=$this->connection->query_value_if_there('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id>'.strval((integer)$member).' ORDER BY user_id');
+		$tempid=$this->connection->query_value_if_there('SELECT user_id FROM '.$this->connection->get_table_prefix().'users WHERE user_id>'.strval($member).' ORDER BY user_id');
 		return $tempid;
 	}
 

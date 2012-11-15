@@ -548,7 +548,7 @@ class Hook_aef
 			$access_mapping=array();
 			if ($row['status']==0)
 			{
-				$permissions=$db->query('SELECT * FROM '.$table_prefix.'forumpermissions WHERE fpfid='.strval((integer)$row['fid']));
+				$permissions=$db->query('SELECT * FROM '.$table_prefix.'forumpermissions WHERE fpfid='.strval($row['fid']));
 
 				foreach ($permissions as $p)
 				{
@@ -631,7 +631,7 @@ class Hook_aef
 				$forum_id=import_id_remap_get('forum',strval($row['post_fid']),true);
 
 				$title='';
-				$topics=$db->query('SELECT topic FROM '.$table_prefix.'topics WHERE tid='.strval((integer)$row['post_tid']));
+				$topics=$db->query('SELECT topic FROM '.$table_prefix.'topics WHERE tid='.strval($row['post_tid']));
 				$first_post=$row['ptime'];
 				if ($first_post)
 				{
@@ -830,7 +830,7 @@ class Hook_aef
 
 			$is_open=($row['poll_expiry']<time()&&$row['poll_expiry']!=0)?1:0;
 
-			$rows2=$db->query('SELECT * FROM '.$table_prefix.'poll_options WHERE poo_poid='.strval((integer)$row['poid']).' ORDER BY pooid');
+			$rows2=$db->query('SELECT * FROM '.$table_prefix.'poll_options WHERE poo_poid='.strval($row['poid']).' ORDER BY pooid');
 			$answers=array();
 			$answer_map=array();
 			foreach ($rows2 as $answer)
